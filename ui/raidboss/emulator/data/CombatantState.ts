@@ -1,0 +1,76 @@
+import { PluginCombatantState } from '../../../../types/event';
+
+import Combatant from './Combatant';
+
+export default class CombatantState {
+  posX: number;
+  posY: number;
+  posZ: number;
+  heading: number;
+  targetable: boolean;
+  hp: number;
+  maxHp: number;
+  mp: number;
+  maxMp: number;
+
+  // This is a temporary variable used during CombatantTracker initialization and is `delete`d
+  // after the combatant states have been determined to keep memory usage low.
+  json?: string;
+
+  constructor(
+    posX: number,
+    posY: number,
+    posZ: number,
+    heading: number,
+    targetable: boolean,
+    hp: number,
+    maxHp: number,
+    mp: number,
+    maxMp: number,
+  ) {
+    this.posX = posX;
+    this.posY = posY;
+    this.posZ = posZ;
+    this.heading = heading;
+    this.targetable = targetable;
+    this.hp = hp;
+    this.maxHp = maxHp;
+    this.mp = mp;
+    this.maxMp = maxMp;
+    this.json = JSON.stringify(this);
+  }
+
+  partialClone(props: Partial<CombatantState>): CombatantState {
+    return new CombatantState(
+      props.posX ?? this.posX,
+      props.posY ?? this.posY,
+      props.posZ ?? this.posZ,
+      props.heading ?? this.heading,
+      props.targetable ?? this.targetable,
+      props.hp ?? this.hp,
+      props.maxHp ?? this.maxHp,
+      props.mp ?? this.mp,
+      props.maxMp ?? this.maxMp,
+    );
+  }
+
+  toPluginState(combatant: Combatant): PluginCombatantState {
+    return {
+      ID: parseInt(combatant.id, 16),
+      Name: combatant.name,
+      Level: combatant.level,
+      Job: combatant.jobId,
+      PosX: this.posX,
+      PosY: this.posY,
+      PosZ: this.posZ,
+      Heading: this.heading,
+      CurrentHP: this.hp,
+      MaxHP: this.maxHp,
+      CurrentMP: this.mp,
+      MaxMP: this.maxMp,
+      OwnerID: combatant.ownerId,
+      BNpcNameID: combatant.npcNameId,
+      BNpcID: combatant.npcBaseId,
+    };
+  }
+}
