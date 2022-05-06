@@ -1,3 +1,4 @@
+import Conditions from '../../../../../resources/conditions';
 import NetRegexes from '../../../../../resources/netregexes';
 import { UnreachableCode } from '../../../../../resources/not_reached';
 import Outputs from '../../../../../resources/outputs';
@@ -444,7 +445,7 @@ const triggerSet: TriggerSet<Data> = {
       netRegexCn: NetRegexes.ability({ id: '63D3', source: '骑神托尔丹', capture: false }),
       netRegexKo: NetRegexes.ability({ id: '63D3', source: '기사신 토르당', capture: false }),
       condition: (data) => data.phase === 'thordan',
-      delaySeconds: 4.7,
+      delaySeconds: 4.5,
       promise: async (data) => {
         // Collect Ser Vellguine (3636), Ser Paulecrain (3637), Ser Ignasse (3638) entities
         const vellguineLocaleNames: LocaleText = {
@@ -941,9 +942,7 @@ const triggerSet: TriggerSet<Data> = {
       id: 'DSR Darkdragon Dive Single Tower',
       type: 'Ability',
       netRegex: NetRegexes.ability({ id: '6711', source: 'Nidhogg' }),
-      condition: (data, matches) => {
-        return data.me === matches?.target;
-      },
+      condition: Conditions.targetIsYou(),
       suppressSeconds: 1,
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
