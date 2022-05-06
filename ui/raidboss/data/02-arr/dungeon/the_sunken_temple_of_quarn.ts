@@ -21,6 +21,7 @@ const triggerSet: TriggerSet<Data> = {
           de: 'Auf der leuchtende Platte stehen',
           fr: 'Marchez sur la plaque qui brille',
           cn: '??ÎÃò¢÷ù',
+          ko: 'ºû³ª´Â ¹ßÆÇ ¹â±â',
         },
       },
     },
