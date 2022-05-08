@@ -2214,6 +2214,16 @@ const templateOptions: OptionsTemplate = {
       type: 'checkbox',
       default: false,
     },
+    {
+      id: 'prsDsrMarker',
+      name: {
+        en: '드래곤송 마커: 0=기본, 1=고정팀용, 2=일반파티용',
+        ja: '絶竜詩戦争マーカー: 0=デフォルト, 1=固定用, 2=野良用',
+        ko: '절용시전쟁 마커: 0=기본, 1=고정팀용, 2=일반파티용',
+      },
+      type: 'integer',
+      default: 1,
+    },
   ],
 };
 

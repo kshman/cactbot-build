@@ -14,7 +14,7 @@ import { LocaleText, TriggerSet } from '../../../../../types/trigger';
 // TODO: "move" call after you take your Brightwing cleave?
 // TODO: Meteor "run" call?
 
-type Phase = 'doorboss' | 'thordan';
+type Phase = 'doorboss' | 'thordan' | 'niddhog' | 'haurchefant' | 'thordan2' | 'niddhog2' | 'dragon-king';
 
 export interface Data extends RaidbossData {
   phase: Phase;
@@ -59,10 +59,9 @@ const headmarkers = {
   'dot3': '0141',
 } as const;
 
-const firstMarker: { [phase in Phase]: string } = {
-  'doorboss': headmarkers.hyperdimensionalSlash,
-  'thordan': headmarkers.skywardLeap,
-} as const;
+const firstMarker = (phase: Phase) => {
+  return phase === 'doorboss' ? headmarkers.hyperdimensionalSlash : headmarkers.skywardLeap;
+};
 
 const getHeadmarkerId = (data: Data, matches: NetMatches['HeadMarker'], firstDecimalMarker?: number) => {
   // If we naively just check !data.decOffset and leave it, it breaks if the first marker is 00DA.
@@ -127,9 +126,9 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '곧 라바나, MT팀 제피란으로!',
-          ja: '聖杖、1/2マーカー確認！',
-          ko: '곧 성장, 마커와 제피란 확인!',
+          en: '곧 라바나, 제피란을 찾아욧!',
+          ja: '聖杖、ゼフィランが北！',
+          ko: '곧 성장, 제피란이 북쪽!',
         },
       },
     },
@@ -140,7 +139,12 @@ const triggerSet: TriggerSet<Data> = {
       type: 'StartsUsing',
       // 62D4 = Holiest of Holy
       // 63C8 = Ascalon's Mercy Concealed
-      netRegex: NetRegexes.startsUsing({ id: ['62D4', '63C8'], capture: true }),
+      // 6708 = Final Chorus
+      // 62E2 = Spear of the Fury
+      // 6B87 = the Dragon's Eye
+      // 6667 = unknown_6667
+      // 7438 = Alternative End
+      netRegex: NetRegexes.startsUsing({ id: ['62D4', '63C8', '6708', '62E2', '6B87', '6667', '7438'], capture: true }),
       run: (data, matches) => {
         switch (matches.id) {
           case '62D4':
@@ -148,6 +152,21 @@ const triggerSet: TriggerSet<Data> = {
             break;
           case '63C8':
             data.phase = 'thordan';
+            break;
+          case '6708':
+            data.phase = 'niddhog';
+            break;
+          case '62E2':
+            data.phase = 'haurchefant';
+            break;
+          case '6B87':
+            data.phase = 'thordan2';
+            break;
+          case '6667':
+            data.phase = 'niddhog2';
+            break;
+          case '7438':
+            data.phase = 'dragon-king';
             break;
         }
       },
@@ -159,7 +178,7 @@ const triggerSet: TriggerSet<Data> = {
       condition: (data) => data.decOffset === undefined,
       // Unconditionally set the first headmarker here so that future triggers are conditional.
       run: (data, matches) => {
-        const firstHeadmarker: number = parseInt(firstMarker[data.phase], 16);
+        const firstHeadmarker: number = parseInt(firstMarker(data.phase), 16);
         getHeadmarkerId(data, matches, firstHeadmarker);
       },
     },
@@ -454,7 +473,7 @@ const triggerSet: TriggerSet<Data> = {
       netRegexCn: NetRegexes.ability({ id: '63D3', source: '骑神托尔丹', capture: false }),
       netRegexKo: NetRegexes.ability({ id: '63D3', source: '기사신 토르당', capture: false }),
       condition: (data) => data.phase === 'thordan',
-      delaySeconds: 4.5,
+      delaySeconds: 4.7,
       promise: async (data) => {
         // Collect Ser Vellguine (3636), Ser Paulecrain (3637), Ser Ignasse (3638) entities
         const vellguineLocaleNames: LocaleText = {
@@ -550,31 +569,67 @@ const triggerSet: TriggerSet<Data> = {
           console.error(`Spiral Thrusts: expected 2 safe zones got ${data.spiralThrustSafeZones.length}`);
           return;
         }
+        // 고정팀 전용 콜링콜링
+        if (data.options.prsDsrMarker === 1) {
+          const clrs: { [clr: number]: string } = {
+            0: '보라',
+            1: '빨강',
+            2: '노랑',
+            3: '파랑',
+            4: '보라',
+            5: '빨강',
+            6: '노랑',
+            7: '파랑',
+            8: output.unknown!(),
+          };
+          const mrks: { [mrk: number]: string } = {
+            0: '4',
+            1: 'A',
+            2: 'B',
+            3: 'C',
+            4: 'D',
+            5: '1',
+            6: '2',
+            7: '3',
+            8: output.unknown!(),
+          };
+          return output.safeSpotsStatic!({
+            clr: clrs[data.spiralThrustSafeZones[0] ?? 8],
+            mrk1: mrks[data.spiralThrustSafeZones[0] ?? 8],
+            mrk2: mrks[data.spiralThrustSafeZones[1] ?? 8],
+          });
+        }
+        // 일반 파티용 A 1 B 2...
+        if (data.options.prsDsrMarker === 2) {
+          const pfms: { [pfm: number]: string } = {
+            0: '4',
+            1: 'A',
+            2: '1',
+            3: 'B',
+            4: '2',
+            5: 'C',
+            6: '3',
+            7: 'D',
+            8: output.unknown!(),
+          };
+          return output.safeSpotsForPf!({
+            pfm1: pfms[data.spiralThrustSafeZones[0] ?? 8],
+            pfm2: pfms[data.spiralThrustSafeZones[1] ?? 8],
+          });
+        }
         // Map of directions
-        const clrs: { [clr: number]: string } = {
-          0: '보라',
-          1: '빨강',
-          2: '노랑',
-          3: '파랑',
-          4: '보라',
-          5: '빨강',
-          6: '노랑',
-          7: '파랑',
-          8: output.unknown!(),
-        };
         const dirs: { [dir: number]: string } = {
-          0: '4',
-          1: 'A',
-          2: 'B',
-          3: 'C',
-          4: 'D',
-          5: '1',
-          6: '2',
-          7: '3',
+          0: output.northwest!(),
+          1: output.north!(),
+          2: output.northeast!(),
+          3: output.east!(),
+          4: output.southeast!(),
+          5: output.south!(),
+          6: output.southwest!(),
+          7: output.west!(),
           8: output.unknown!(),
         };
         return output.safeSpots!({
-          clr: clrs[data.spiralThrustSafeZones[0] ?? 8],
           dir1: dirs[data.spiralThrustSafeZones[0] ?? 8],
           dir2: dirs[data.spiralThrustSafeZones[1] ?? 8],
         });
@@ -591,12 +646,28 @@ const triggerSet: TriggerSet<Data> = {
         northwest: Outputs.northwest,
         unknown: Outputs.unknown,
         safeSpots: {
-          en: '${clr} [${dir1}] / [${dir2}]',
-          de: '${clr} [${dir1}] / [${dir2}]',
-          fr: '${clr} [${dir1}] / [${dir2}]',
-          ja: '${clr} [${dir1}] / [${dir2}]',
-          cn: '${clr} [${dir1}] / [${dir2}]',
-          ko: '${clr} [${dir1}] / [${dir2}]',
+          en: '${dir1} / ${dir2}',
+          de: '${dir1} / ${dir2}',
+          fr: '${dir1} / ${dir2}',
+          ja: '${dir1} / ${dir2}',
+          cn: '${dir1} / ${dir2}',
+          ko: '${dir1} / ${dir2}',
+        },
+        safeSpotsStatic: {
+          en: '${clr} [${mrk1}] / [${mrk2}]',
+          de: '${clr} [${mrk1}] / [${mrk2}]',
+          fr: '${clr} [${mrk1}] / [${mrk2}]',
+          ja: '${clr} [${mrk1}] / [${mrk2}]',
+          cn: '${clr} [${mrk1}] / [${mrk2}]',
+          ko: '${clr} [${mrk1}] / [${mrk2}]',
+        },
+        safeSpotsForPf: {
+          en: '[${pfm1}] / [${pfm2}]',
+          de: '[${pfm1}] / [${pfm2}]',
+          fr: '[${pfm1}] / [${pfm2}]',
+          ja: '[${pfm1}] / [${pfm2}]',
+          cn: '[${pfm1}] / [${pfm2}]',
+          ko: '[${pfm1}] / [${pfm2}]',
         },
       },
     },
@@ -643,16 +714,50 @@ const triggerSet: TriggerSet<Data> = {
         data.thordanDir = matchedPositionTo8Dir(thordan);
       },
       infoText: (data, _matches, output) => {
+        // 고정팀 전용 콜링콜링
+        if (data.options.prsDsrMarker === 1) {
+          const mrks: { [mrk: number]: string } = {
+            0: '4',
+            1: 'A',
+            2: 'B',
+            3: 'C',
+            4: 'D',
+            5: '1',
+            6: '2',
+            7: '3',
+            8: output.unknown!(),
+          };
+          return output.thordanLocationStatic!({
+            mrk: mrks[data.thordanDir ?? 8],
+          });
+        }
+        // 일반 파티용 A 1 B 2...
+        if (data.options.prsDsrMarker === 2) {
+          const pfms: { [pfm: number]: string } = {
+            0: '4',
+            1: 'A',
+            2: '1',
+            3: 'B',
+            4: '2',
+            5: 'C',
+            6: '3',
+            7: 'D',
+            8: output.unknown!(),
+          };
+          return output.thordanLocationForPf!({
+            pfm: pfms[data.thordanDir ?? 8],
+          });
+        }
         // Map of directions
         const dirs: { [dir: number]: string } = {
-          0: '4',
-          1: 'A',
-          2: 'B',
-          3: 'C',
-          4: 'D',
-          5: '1',
-          6: '2',
-          7: '3',
+          0: output.northwest!(),
+          1: output.north!(),
+          2: output.northeast!(),
+          3: output.east!(),
+          4: output.southeast!(),
+          5: output.south!(),
+          6: output.southwest!(),
+          7: output.west!(),
           8: output.unknown!(),
         };
         return output.thordanLocation!({
@@ -671,10 +776,22 @@ const triggerSet: TriggerSet<Data> = {
         northwest: Outputs.northwest,
         unknown: Outputs.unknown,
         thordanLocation: {
-          en: '[${dir}]에 토르당',
+          en: '${dir}에 토르당',
           de: '${dir} Thordan',
-          ja: '[${dir}] トールダン',
-          ko: '토르당: [${dir}]',
+          ja: '${dir} トールダン',
+          ko: '토르당: ${dir}',
+        },
+        thordanLocationStatic: {
+          en: '[${mrk}]에 토르당',
+          de: '${mrk} Thordan',
+          ja: '[${mrk}] トールダン',
+          ko: '토르당: [${mrk}]',
+        },
+        thordanLocationForPf: {
+          en: '[${pfm}]에 토르당',
+          de: '${pfm} Thordan',
+          ja: '[${pfm}] トールダン',
+          ko: '토르당: [${pfm}]',
         },
       },
     },
@@ -815,13 +932,13 @@ const triggerSet: TriggerSet<Data> = {
           en: '1번! 제피란 반대쪽으로!!!',
           de: '1',
           ja: '1マーカー！ ゼフィラン反対側！',
-          ko: '1',
+          ko: '1번! 제피란 반대쪽으로!!!',
         },
         sword2: {
           en: '2번! 제피란 뒤로!!!',
           de: '2',
           ja: '2マーカー！ ゼフィランおしり！',
-          ko: '2',
+          ko: '2번! 제피란 뒤로!!!',
         },
       },
     },
@@ -853,16 +970,18 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         tankHealerMeteors: {
-          en: '탱/힐 메테오',
+          en: '탱/힐 운석',
           de: 'Tank/Heiler Meteore',
           fr: 'Météores Tank/Healer',
-          ko: '탱/힐 메테오',
+          ja: 'タンヒラ 隕石',
+          ko: '탱/힐 운석',
         },
         dpsMeteors: {
-          en: 'DPS 메테오',
+          en: 'DPS 운석',
           de: 'DDs Meteore',
           fr: 'Météores DPS',
-          ko: 'DPS 메테오',
+          ja: 'DPS 隕石',
+          ko: 'DPS 운석',
         },
       },
     },
@@ -894,6 +1013,8 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: '뒤에서 → 오른쪽',
           de: 'Hinter ihn => Rechts',
+          ja: '後ろ → 右',
+          ko: '뒤에서 → 오른쪽',
         },
       },
     },
@@ -909,8 +1030,10 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '뒤에서 ← 왼쪽',
+          en: '뒤에서 → 왼쪽',
           de: 'Hinter ihn => Links',
+          ja: '後ろ → 左',
+          ko: '뒤에서 → 왼쪽',
         },
       },
     },
@@ -980,6 +1103,7 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: '내가 미끼라니',
           de: 'Ködern',
+          ko: '내가 미끼',
         },
       },
     },
