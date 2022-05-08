@@ -115,6 +115,8 @@ const defaultRaidbossConfigOptions = {
   AlarmRumbleStrong: 0.75,
   cactbotWormholeStrat: false,
   cactbote8sUptimeKnockbackStrat: false,
+  // PRs
+  prsDsrMarker: 1,
 };
 type RaidbossConfigOptions = typeof defaultRaidbossConfigOptions;
 
