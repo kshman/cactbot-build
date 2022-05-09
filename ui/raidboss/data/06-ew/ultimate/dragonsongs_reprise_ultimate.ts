@@ -11,10 +11,9 @@ import { NetMatches } from '../../../../../types/net_matches';
 import { LocaleText, TriggerSet } from '../../../../../types/trigger';
 
 // TODO: Ser Adelphel left/right movement after initial charge
-// TODO: "move" call after you take your Brightwing cleave?
 // TODO: Meteor "run" call?
 
-type Phase = 'doorboss' | 'thordan' | 'niddhog' | 'haurchefant' | 'thordan2' | 'niddhog2' | 'dragon-king';
+type Phase = 'doorboss' | 'thordan' | 'niddhogg' | 'haurchefant' | 'thordan2' | 'niddhogg2' | 'dragon-king';
 
 export interface Data extends RaidbossData {
   phase: Phase;
@@ -154,7 +153,7 @@ const triggerSet: TriggerSet<Data> = {
             data.phase = 'thordan';
             break;
           case '6708':
-            data.phase = 'niddhog';
+            data.phase = 'niddhogg';
             break;
           case '62E2':
             data.phase = 'haurchefant';
@@ -163,7 +162,7 @@ const triggerSet: TriggerSet<Data> = {
             data.phase = 'thordan2';
             break;
           case '6667':
-            data.phase = 'niddhog2';
+            data.phase = 'niddhogg2';
             break;
           case '7438':
             data.phase = 'dragon-king';
@@ -451,6 +450,16 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
+      id: 'DSR Skyblind',
+      // 631A Skyblind (2.2s cast) is a targetted ground aoe where A65 Skyblind
+      // effect expired on the player.
+      type: 'GainsEffect',
+      netRegex: NetRegexes.gainsEffect({ effectId: 'A65' }),
+      condition: Conditions.targetIsYou(),
+      delaySeconds: (_data, matches) => parseFloat(matches.duration),
+      response: Responses.moveAway(),
+    },
+    {
       id: 'DSR Ascalon\'s Mercy Concealed',
       type: 'StartsUsing',
       netRegex: NetRegexes.startsUsing({ id: '63C8', source: 'King Thordan', capture: true }),
@@ -473,7 +482,7 @@ const triggerSet: TriggerSet<Data> = {
       netRegexCn: NetRegexes.ability({ id: '63D3', source: '骑神托尔丹', capture: false }),
       netRegexKo: NetRegexes.ability({ id: '63D3', source: '기사신 토르당', capture: false }),
       condition: (data) => data.phase === 'thordan',
-      delaySeconds: 4.7,
+      delaySeconds: 4.8,
       promise: async (data) => {
         // Collect Ser Vellguine (3636), Ser Paulecrain (3637), Ser Ignasse (3638) entities
         const vellguineLocaleNames: LocaleText = {
@@ -1180,16 +1189,20 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         circleAllCircles: {
-          en: '#${num} 모든 서클',
+          en: '#${num} 서클 전부',
+          ko: '#${num} 전부 하이점프',
         },
         circleWithArrows: {
           en: '#${num} 서클 (화살표도)',
+          ko: '#${num} 하이점프 (다른사람 화살표)',
         },
         upArrow: {
           en: '#${num} 위 화살표',
+          ko: '#${num} 위 화살표 (척추 강타)',
         },
         downArrow: {
           en: '#${num} 아래 화살표',
+          ko: '#${num} 아래 화살표 (교묘한 점프)',
         },
       },
     },
@@ -1437,6 +1450,52 @@ const triggerSet: TriggerSet<Data> = {
         'The Dragon\'s Glory': '邪竜の眼光',
         'The Dragon\'s Rage': '邪竜の魔炎',
         'Ultimate End': 'アルティメットエンド',
+      },
+    },
+    {
+      'locale': 'cn',
+      'missingTranslations': true,
+      'replaceSync': {
+        'King Thordan': '骑神托尔丹',
+        'Nidhogg': '尼德霍格',
+        'Right Eye': '巨龙右眼',
+        'Ser Adelphel': '圣骑士阿代尔斐尔',
+        'Ser Charibert': '圣骑士沙里贝尔',
+        'Ser Grinnaux': '圣骑士格里诺',
+        'Ser Guerrique': '圣骑士盖里克',
+        'Ser Haumeric': '圣骑士奥默里克',
+        'Ser Hermenost': '圣骑士埃尔姆诺斯特',
+        'Ser Ignasse': '圣骑士伊尼亚斯',
+        'Ser Janlenoux': '圣骑士让勒努',
+        'Ser Noudenet': '圣骑士努德内',
+        'Ser Zephirin': '圣骑士泽菲兰',
+      },
+      'replaceText': {
+        'Aetheric Burst': '以太爆发',
+        'The Dragon\'s Gaze': '龙眼之邪',
+      },
+    },
+    {
+      'locale': 'ko',
+      'missingTranslations': true,
+      'replaceSync': {
+        'King Thordan': '기사신 토르당',
+        'Nidhogg': '니드호그',
+        'Right Eye': '용의 오른눈',
+        'Ser Adelphel': '성기사 아델펠',
+        'Ser Charibert': '성기사 샤리베르',
+        'Ser Grinnaux': '성기사 그리노',
+        'Ser Guerrique': '성기사 게리크',
+        'Ser Haumeric': '성기사 오메리크',
+        'Ser Hermenost': '성기사 에르메노',
+        'Ser Ignasse': '성기사 이냐스',
+        'Ser Janlenoux': '성기사 장르누',
+        'Ser Noudenet': '성기사 누데네',
+        'Ser Zephirin': '성기사 제피랭',
+      },
+      'replaceText': {
+        'Aetheric Burst': '에테르 분출',
+        'The Dragon\'s Gaze': '용의 마안',
       },
     },
   ],
