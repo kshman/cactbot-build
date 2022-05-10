@@ -13,7 +13,7 @@ import { LocaleText, TriggerSet } from '../../../../../types/trigger';
 // TODO: Ser Adelphel left/right movement after initial charge
 // TODO: Meteor "run" call?
 
-type Phase = 'doorboss' | 'thordan' | 'niddhogg' | 'haurchefant' | 'thordan2' | 'niddhogg2' | 'dragon-king';
+type Phase = 'doorboss' | 'thordan' | 'nidhogg' | 'haurchefant' | 'thordan2' | 'nidhogg2' | 'dragon-king';
 
 export interface Data extends RaidbossData {
   phase: Phase;
@@ -127,7 +127,7 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: '곧 라바나, 제피란을 찾아욧!',
           ja: '聖杖、ゼフィランが北！',
-          ko: '곧 성장, 제피란이 북쪽!',
+          ko: '곧 성스런 지팡이, 제피란이 북쪽!',
         },
       },
     },
@@ -153,7 +153,7 @@ const triggerSet: TriggerSet<Data> = {
             data.phase = 'thordan';
             break;
           case '6708':
-            data.phase = 'niddhogg';
+            data.phase = 'nidhogg';
             break;
           case '62E2':
             data.phase = 'haurchefant';
@@ -162,7 +162,7 @@ const triggerSet: TriggerSet<Data> = {
             data.phase = 'thordan2';
             break;
           case '6667':
-            data.phase = 'niddhogg2';
+            data.phase = 'nidhogg2';
             break;
           case '7438':
             data.phase = 'dragon-king';
@@ -468,7 +468,7 @@ const triggerSet: TriggerSet<Data> = {
       netRegexJa: NetRegexes.startsUsing({ id: '63C8', source: '騎神トールダン', capture: true }),
       netRegexCn: NetRegexes.startsUsing({ id: '63C8', source: '骑神托尔丹', capture: true }),
       netRegexKo: NetRegexes.startsUsing({ id: '63C8', source: '기사신 토르당', capture: true }),
-      delaySeconds: (_data, matches) => parseFloat(matches.castTime) - 1,
+      delaySeconds: (_data, matches) => parseFloat(matches.castTime) - 0.5,
       response: Responses.moveAway(),
     },
     {
@@ -787,8 +787,8 @@ const triggerSet: TriggerSet<Data> = {
         thordanLocation: {
           en: '${dir}에 토르당',
           de: '${dir} Thordan',
-          ja: '${dir} トールダン',
-          ko: '토르당: ${dir}',
+          ja: 'トールダンが${dir}で',
+          ko: '토르당 ${dir}',
         },
         thordanLocationStatic: {
           en: '[${mrk}]에 토르당',
@@ -820,7 +820,7 @@ const triggerSet: TriggerSet<Data> = {
           de: 'Sprung auf DIR',
           fr: 'Saut sur VOUS',
           ja: 'リープマーカー',
-          ko: '리프 마커!',
+          ko: '광역 대상자',
         },
       },
     },
@@ -913,13 +913,13 @@ const triggerSet: TriggerSet<Data> = {
           en: '<==== 왼쪽!',
           de: 'Im Uhrzeigersinn',
           ja: '時計回り',
-          ko: '<==== 시계방향',
+          ko: '시계방향',
         },
         counterclock: {
           en: '오른쪽! ====>',
           de: 'Gegen den Uhrzeigersinn',
           ja: '反時計回り',
-          ko: '반시계방향 ====>',
+          ko: '반시계방향',
         },
         unknown: Outputs.unknown,
       },
@@ -940,14 +940,14 @@ const triggerSet: TriggerSet<Data> = {
         sword1: {
           en: '1번! 제피란 반대쪽으로!!!',
           de: '1',
-          ja: '1マーカー！ ゼフィラン反対側！',
-          ko: '1번! 제피란 반대쪽으로!!!',
+          ja: '1',
+          ko: '1',
         },
         sword2: {
           en: '2번! 제피란 뒤로!!!',
           de: '2',
-          ja: '2マーカー！ ゼフィランおしり！',
-          ko: '2번! 제피란 뒤로!!!',
+          ja: '2',
+          ko: '2',
         },
       },
     },
@@ -983,14 +983,14 @@ const triggerSet: TriggerSet<Data> = {
           de: 'Tank/Heiler Meteore',
           fr: 'Météores Tank/Healer',
           ja: 'タンヒラ 隕石',
-          ko: '탱/힐 운석',
+          ko: '탱/힐 메테오',
         },
         dpsMeteors: {
           en: 'DPS 운석',
           de: 'DDs Meteore',
           fr: 'Météores DPS',
           ja: 'DPS 隕石',
-          ko: 'DPS 운석',
+          ko: '딜러 메테오',
         },
       },
     },
@@ -1022,8 +1022,8 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: '뒤에서 → 오른쪽',
           de: 'Hinter ihn => Rechts',
-          ja: '後ろ → 右',
-          ko: '뒤에서 → 오른쪽',
+          ja: '後ろ => 右',
+          ko: '뒤 => 오른쪽',
         },
       },
     },
@@ -1041,8 +1041,8 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: '뒤에서 → 왼쪽',
           de: 'Hinter ihn => Links',
-          ja: '後ろ → 左',
-          ko: '뒤에서 → 왼쪽',
+          ja: '後ろ => 左',
+          ko: '뒤 => 왼쪽',
         },
       },
     },
@@ -1112,7 +1112,8 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: '내가 미끼라니',
           de: 'Ködern',
-          ko: '내가 미끼',
+          ja: '誘導',
+          ko: '공격 유도',
         },
       },
     },
