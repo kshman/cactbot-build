@@ -5,15 +5,15 @@
 # 참고로 에뮬을 돌릴땐
 # npm run start
 
-function time 
-{ 
-        $Command = "$args"; 
-        Measure-Command { Invoke-Expression $Command 2>&1 | out-default} 
+function time
+{
+        $Command = "$args";
+        Measure-Command { Invoke-Expression $Command 2>&1 | out-default}
 }
 
 function New-QuestionYesNo([string] $msg)
 {
-	do 
+	do
 	{
 		$m = "{0} ('Y0 '은 앞으로 'N'은 그만둠)" -f $msg
 		$in = Read-Host $m
@@ -35,41 +35,55 @@ function Remove-Directory([string] $path)
 	}
 }
 
-# 디스트 삭제
-Get-ChildItem .\dist\* | Remove-Item -Recurse
+#
+# 여기가 시작
+#
 
+$dest = $env:APPDATA + "\Advanced Combat Tracker\Plugins\cactbot";
+"대상 디렉터리: $dest"
+
+# NPM
 ''
-'NPM 빌드'
-$yn = New-QuestionYesNo "NPM 빌드 할거임?"
-if ($yn -eq $TRUE)
+$npmbuild = New-QuestionYesNo "NPM 빌드 할거임?"
+if ($npmbuild -eq $TRUE)
 {
+  Get-ChildItem .\dist\* | Remove-Item -Recurse
 	& npm run build
+
+  ''
+  'NPM빌드했음.'
 }
 
 ''
-'빌드가 성공했다면 계속하면 되능것'
-$yn = New-QuestionYesNo "빌드가 성공했다면 진행해도 됨"
+$yn = New-QuestionYesNo "복사하실랑까요?"
 if ($yn -eq $FALSE) { exit 0 }
-
-# 대상 디렉터리 삭제
-Remove-Directory "D:\FF14\act\Plugins\cactbot\dist" 
-Remove-Directory "D:\FF14\act\Plugins\cactbot\resources"
-Remove-Directory "D:\FF14\act\Plugins\cactbot\ui"
-Remove-Directory "D:\FF14\act\Plugins\cactbot\util"
-Remove-Directory "D:\FF14\act\Plugins\cactbot\zh"
-Remove-Item "D:\FF14\act\Plugins\cactbot\*.js"
-Remove-Item "D:\FF14\act\Plugins\cactbot\*.dll"
 
 # 플러그인 복사
 '플러그인 복사'
-Copy-Item ".\bin\x64\Release\Cactbot*.dll" -Destination "D:\FF14\act\Plugins\cactbot" -Force
-#Copy-Item ".\bin\x64\Release\zh" -Destination "D:\FF14\act\Plugins\cactbot" -Recurse -Force
+Remove-Item "$dest\*.dll"
+Copy-Item ".\bin\x64\Release\Cactbot*.dll" -Destination "$dest" -Force
 
 # 데이터 복사
-'데이터 복사'
-Copy-Item ".\dist\*" -Destination "D:\FF14\act\Plugins\cactbot" -Recurse -Force
+if ($npmbuild -eq $TRUE)
+{
+  'DIST 복사'
+  Remove-Directory "$dest\dist"
+  Remove-Directory "$dest\resources"
+  Remove-Directory "$dest\ui"
+  Remove-Directory "$dest\util"
+  Remove-Directory "$dest\zh"
+  Remove-Item "$dest\*.js"
+  Copy-Item ".\dist\*" -Destination "$dest" -Recurse -Force
+}
 
 ''
 '끗!!!'
-Read-Host "아무거나 누르면 나갈거임..."
+
+''
+$yn = New-QuestionYesNo "실행도할까요?"
+if ($yn -eq $TRUE)
+{
+  Start-Process -FilePath "$dest\Advanced Combat Tracker.exe"
+}
+
 exit 0
