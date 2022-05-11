@@ -114,7 +114,7 @@ const triggerSet: TriggerSet<Data> = {
         w: Outputs.west,
         s: Outputs.south,
         nc: {
-          en: '북쪽 구석',
+          en: 'North Corners',
           de: 'nördliche Ecken',
           fr: 'Au coin nord',
           ja: '北の角へ',
@@ -122,7 +122,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '북쪽 모서리',
         },
         ec: {
-          en: '동쪽 구석',
+          en: 'East Corners',
           de: 'östliche Ecken',
           fr: 'Au coin est',
           ja: '東の角へ',
@@ -130,7 +130,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '동쪽 모서리',
         },
         sc: {
-          en: '남쪽 구석',
+          en: 'South Corners',
           de: 'südliche Ecken',
           fr: 'Au coin sud',
           ja: '南の角へ',
@@ -138,7 +138,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '남쪽 모서리',
         },
         wc: {
-          en: '서쪽 구석',
+          en: 'West Corners',
           de: 'westliche Ecken',
           fr: 'Au coin ouest',
           ja: '西の角へ',
@@ -190,7 +190,7 @@ const triggerSet: TriggerSet<Data> = {
       run: (data, matches) => data.flareTarget = matches.target,
       outputStrings: {
         text: {
-          en: '내게 플레어!',
+          en: 'Flare on YOU',
           de: 'Flare auf DIR',
           fr: 'Brasier sur VOUS',
           ja: '自分にフレア',
@@ -208,7 +208,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (data, matches, output) => output.lineStackOn!({ player: data.ShortName(matches.target) }),
       outputStrings: {
         lineStackOn: {
-          en: '한줄로 쏴욧: ${player}',
+          en: 'Line stack on ${player}',
           de: 'In einer Linie auf ${player} sammeln',
           fr: 'Packez-vous en ligne sur ${player}',
           ja: '${player}に直線頭割り',

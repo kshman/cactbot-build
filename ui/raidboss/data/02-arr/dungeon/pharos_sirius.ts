@@ -15,10 +15,10 @@ const triggerSet: TriggerSet<Data> = {
       type: 'StartsUsing',
       netRegex: NetRegexes.startsUsing({ id: '5CF', source: 'Siren', capture: false }),
       netRegexDe: NetRegexes.startsUsing({ id: '5CF', source: 'Sirene', capture: false }),
-      netRegexFr: NetRegexes.startsUsing({ id: '5CF', source: 'Sirene', capture: false }),
-      netRegexJa: NetRegexes.startsUsing({ id: '5CF', source: '«»«¤«ì?«ó', capture: false }),
-      netRegexCn: NetRegexes.startsUsing({ id: '5CF', source: 'ßİìó', capture: false }),
-      netRegexKo: NetRegexes.startsUsing({ id: '5CF', source: '¼¼ÀÌ·»', capture: false }),
+      netRegexFr: NetRegexes.startsUsing({ id: '5CF', source: 'SirÃ¨ne', capture: false }),
+      netRegexJa: NetRegexes.startsUsing({ id: '5CF', source: 'ã‚»ã‚¤ãƒ¬ãƒ¼ãƒ³', capture: false }),
+      netRegexCn: NetRegexes.startsUsing({ id: '5CF', source: 'å¡å£¬', capture: false }),
+      netRegexKo: NetRegexes.startsUsing({ id: '5CF', source: 'ì„¸ì´ë Œ', capture: false }),
       response: Responses.getIn(),
     },
     {
@@ -26,10 +26,10 @@ const triggerSet: TriggerSet<Data> = {
       type: 'StartsUsing',
       netRegex: NetRegexes.startsUsing({ id: '5CC', source: 'Siren', capture: false }),
       netRegexDe: NetRegexes.startsUsing({ id: '5CC', source: 'Sirene', capture: false }),
-      netRegexFr: NetRegexes.startsUsing({ id: '5CC', source: 'Sirene', capture: false }),
-      netRegexJa: NetRegexes.startsUsing({ id: '5CC', source: '«»«¤«ì?«ó', capture: false }),
-      netRegexCn: NetRegexes.startsUsing({ id: '5CC', source: 'ßİìó', capture: false }),
-      netRegexKo: NetRegexes.startsUsing({ id: '5CC', source: '¼¼ÀÌ·»', capture: false }),
+      netRegexFr: NetRegexes.startsUsing({ id: '5CC', source: 'SirÃ¨ne', capture: false }),
+      netRegexJa: NetRegexes.startsUsing({ id: '5CC', source: 'ã‚»ã‚¤ãƒ¬ãƒ¼ãƒ³', capture: false }),
+      netRegexCn: NetRegexes.startsUsing({ id: '5CC', source: 'å¡å£¬', capture: false }),
+      netRegexKo: NetRegexes.startsUsing({ id: '5CC', source: 'ì„¸ì´ë Œ', capture: false }),
       response: Responses.getOut(),
     },
     {
@@ -70,25 +70,25 @@ const triggerSet: TriggerSet<Data> = {
     {
       'locale': 'fr',
       'replaceSync': {
-        'Siren': 'sirene',
+        'Siren': 'sirÃ¨ne',
       },
     },
     {
       'locale': 'ja',
       'replaceSync': {
-        'Siren': '«»«¤«ì?«ó',
+        'Siren': 'ã‚»ã‚¤ãƒ¬ãƒ¼ãƒ³',
       },
     },
     {
       'locale': 'cn',
       'replaceSync': {
-        'Siren': 'ßİìó',
+        'Siren': 'å¡å£¬',
       },
     },
     {
       'locale': 'ko',
       'replaceSync': {
-        'Siren': '¼¼ÀÌ·»',
+        'Siren': 'ì„¸ì´ë Œ',
       },
     },
   ],

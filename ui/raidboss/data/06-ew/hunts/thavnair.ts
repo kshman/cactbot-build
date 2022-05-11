@@ -46,7 +46,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.knockbackStack!(),
       outputStrings: {
         knockbackStack: {
-          en: '넉백+모여맞기',
+          en: 'Knockback Stack',
           de: 'Rückstoß sammeln',
           fr: 'Package + Poussée',
           cn: '集合击退',
@@ -109,7 +109,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '강제 이동: 앞으로',
+          en: 'Forward March Away',
           de: 'Geistlenkung vorwärts',
           fr: 'Marche forcée en avant',
           cn: '强制移动: 前',
@@ -131,7 +131,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '강제 이동: 뒤로',
+          en: 'Backwards March Away',
           de: 'Geistlenkung rückwärts',
           fr: 'Marche forcée en arrière',
           cn: '强制移动: 后',
@@ -152,7 +152,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '강제 이동: 왼쪽으로',
+          en: 'Left March Away',
           de: 'Geistlenkung links',
           fr: 'Marche forcée à gauche',
           cn: '强制移动: 左',
@@ -173,7 +173,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '강제 이동: 오른쪽으로',
+          en: 'Right March Away',
           de: 'Geistlenkung rechts',
           fr: 'Marche forcée à droite',
           cn: '强制移动: 右',
