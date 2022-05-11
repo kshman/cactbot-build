@@ -36,6 +36,9 @@ export interface Data extends RaidbossData {
   diveFromGraceFire?: boolean;
   // PRs 스페샬
   holiestHallowing?: number;
+  thordanRavana1?: string;
+  thordanRavana2?: string;
+  thordanRavanaCount?: number;
 }
 
 // Due to changes introduced in patch 5.2, overhead markers now have a random offset
@@ -970,16 +973,38 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: 'DSR Sanctity of the Ward Swords',
+      id: 'DSR Sanctity of the Ward Swords+',
       type: 'HeadMarker',
       netRegex: NetRegexes.headMarker(),
-      condition: (data, matches) => data.phase === 'thordan' && data.me === matches.target,
-      alarmText: (data, matches, output) => {
+      condition: (data) => data.phase === 'thordan',
+      preRun: (data, matches, _output) => {
         const id = getHeadmarkerId(data, matches);
-        if (id === headmarkers.sword1)
+        if (id === headmarkers.sword1) {
+          data.thordanRavana1 = matches.target;
+          data.thordanRavanaCount = (data.thordanRavanaCount ?? 0) + 1;
+        } else if (id === headmarkers.sword2) {
+          data.thordanRavana2 = matches.target;
+          data.thordanRavanaCount = (data.thordanRavanaCount ?? 0) + 1;
+        }
+      },
+      alarmText: (data, _matches, output) => {
+        if ((data.thordanRavanaCount ?? 0) !== 2 || data.thordanRavana1 === undefined || data.thordanRavana2 === undefined)
+          return;
+        if (data.thordanRavana1 === data.me)
           return output.sword1!();
-        if (id === headmarkers.sword2)
+        if (data.thordanRavana2 === data.me)
           return output.sword2!();
+        return output.swords!({
+          far: data.ShortName(data.thordanRavana1),
+          near: data.ShortName(data.thordanRavana2),
+        });
+      },
+      run: (data) => {
+        if ((data.thordanRavanaCount ?? 0) === 2) {
+          delete data.thordanRavana1;
+          delete data.thordanRavana2;
+          delete data.thordanRavanaCount;
+        }
       },
       outputStrings: {
         sword1: {
@@ -993,6 +1018,10 @@ const triggerSet: TriggerSet<Data> = {
           de: '2',
           ja: '2',
           ko: '2',
+        },
+        swords: {
+          en: '1번 ${far} / 2번 ${near}',
+          ko: '1번 ${far} / 2번 ${near}',
         },
       },
     },
@@ -1047,7 +1076,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '딜러 메테오 (${player1}, ${player2})', // FIXME
         },
         unknownMeteors: {
-          en: '??? 운석 (${player1}, ${player2})',
+          en: '랜덤 운석 (${player1}, ${player2})',
         },
       },
     },
@@ -1109,6 +1138,11 @@ const triggerSet: TriggerSet<Data> = {
       netRegex: NetRegexes.startsUsing({ id: '63C7', source: 'King Thordan', capture: false }),
       netRegexJa: NetRegexes.startsUsing({ id: '63C7', source: '騎神トールダン', capture: false }),
       response: Responses.tankBuster(),
+      run: (data) => {
+        delete data.thordanRavana1;
+        delete data.thordanRavana2;
+        delete data.thordanRavanaCount;
+      },
     },
     {
       id: 'DSR Gnash and Lash',
