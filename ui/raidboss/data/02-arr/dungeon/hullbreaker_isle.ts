@@ -13,18 +13,61 @@ const triggerSet: TriggerSet<Data> = {
       id: 'Hullbreaker Isle Stool Pelt',
       type: 'StartsUsing',
       netRegex: NetRegexes.startsUsing({ id: '89E', source: 'Sasquatch', capture: false }),
+      netRegexDe: NetRegexes.startsUsing({ id: '89E', source: 'Sasquatch', capture: false }),
+      netRegexFr: NetRegexes.startsUsing({ id: '89E', source: 'Sasquatch', capture: false }),
+      netRegexJa: NetRegexes.startsUsing({ id: '89E', source: '«µ«¹«««Ã«Á', capture: false }),
+      netRegexCn: NetRegexes.startsUsing({ id: '89E', source: 'ÓÞÊÅËÝê»', capture: false }),
+      netRegexKo: NetRegexes.startsUsing({ id: '89E', source: '»ç½ºÄâÄ¡', capture: false }),
       response: Responses.aoe(),
     },
     {
       id: 'Hullbreaker Isle Chest Thump',
       type: 'Ability',
       netRegex: NetRegexes.ability({ id: '89F', source: 'Sasquatch', capture: false }),
+      netRegexDe: NetRegexes.ability({ id: '89F', source: 'Sasquatch', capture: false }),
+      netRegexFr: NetRegexes.ability({ id: '89F', source: 'Sasquatch', capture: false }),
+      netRegexJa: NetRegexes.ability({ id: '89F', source: '«µ«¹«««Ã«Á', capture: false }),
+      netRegexCn: NetRegexes.ability({ id: '89F', source: 'ÓÞÊÅËÝê»', capture: false }),
+      netRegexKo: NetRegexes.ability({ id: '89F', source: '»ç½ºÄâÄ¡', capture: false }),
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
           en: 'Shake Banana tree',
+          de: 'Bananenbaum schutteln',
           fr: 'Secouez le bananier',
         },
+      },
+    },
+  ],
+  timelineReplace: [
+    {
+      'locale': 'de',
+      'replaceSync': {
+        'Sasquatch': 'Sasquatch',
+      },
+    },
+    {
+      'locale': 'fr',
+      'replaceSync': {
+        'Sasquatch': 'Sasquatch',
+      },
+    },
+    {
+      'locale': 'ja',
+      'replaceSync': {
+        'Sasquatch': '«µ«¹«««Ã«Á',
+      },
+    },
+    {
+      'locale': 'cn',
+      'replaceSync': {
+        'Sasquatch': 'ÓÞÊÅËÝê»',
+      },
+    },
+    {
+      'locale': 'ko',
+      'replaceSync': {
+        'Sasquatch': '»ç½ºÄâÄ¡',
       },
     },
   ],
