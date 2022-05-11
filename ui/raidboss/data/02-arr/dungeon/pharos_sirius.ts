@@ -14,12 +14,22 @@ const triggerSet: TriggerSet<Data> = {
       id: 'Pharos Sirius Deathly Cadenza',
       type: 'StartsUsing',
       netRegex: NetRegexes.startsUsing({ id: '5CF', source: 'Siren', capture: false }),
+      netRegexDe: NetRegexes.startsUsing({ id: '5CF', source: 'Sirene', capture: false }),
+      netRegexFr: NetRegexes.startsUsing({ id: '5CF', source: 'Sirene', capture: false }),
+      netRegexJa: NetRegexes.startsUsing({ id: '5CF', source: '«»«¤«ì?«ó', capture: false }),
+      netRegexCn: NetRegexes.startsUsing({ id: '5CF', source: 'ßÝìó', capture: false }),
+      netRegexKo: NetRegexes.startsUsing({ id: '5CF', source: '¼¼ÀÌ·»', capture: false }),
       response: Responses.getIn(),
     },
     {
       id: 'Pharos Sirius Feral Lunge',
       type: 'StartsUsing',
       netRegex: NetRegexes.startsUsing({ id: '5CC', source: 'Siren', capture: false }),
+      netRegexDe: NetRegexes.startsUsing({ id: '5CC', source: 'Sirene', capture: false }),
+      netRegexFr: NetRegexes.startsUsing({ id: '5CC', source: 'Sirene', capture: false }),
+      netRegexJa: NetRegexes.startsUsing({ id: '5CC', source: '«»«¤«ì?«ó', capture: false }),
+      netRegexCn: NetRegexes.startsUsing({ id: '5CC', source: 'ßÝìó', capture: false }),
+      netRegexKo: NetRegexes.startsUsing({ id: '5CC', source: '¼¼ÀÌ·»', capture: false }),
       response: Responses.getOut(),
     },
     {
@@ -31,6 +41,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Spread: Stacks Explode Soon',
+          de: 'Verteilen: Kristallstacks explodieren bald',
         },
       },
     },
@@ -43,8 +54,41 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Heal ${player} to full',
+          de: 'Heile ${player} voll',
           fr: 'Soin complet sur ${player}',
         },
+      },
+    },
+  ],
+  timelineReplace: [
+    {
+      'locale': 'de',
+      'replaceSync': {
+        'Siren': 'Sirene',
+      },
+    },
+    {
+      'locale': 'fr',
+      'replaceSync': {
+        'Siren': 'sirene',
+      },
+    },
+    {
+      'locale': 'ja',
+      'replaceSync': {
+        'Siren': '«»«¤«ì?«ó',
+      },
+    },
+    {
+      'locale': 'cn',
+      'replaceSync': {
+        'Siren': 'ßÝìó',
+      },
+    },
+    {
+      'locale': 'ko',
+      'replaceSync': {
+        'Siren': '¼¼ÀÌ·»',
       },
     },
   ],
