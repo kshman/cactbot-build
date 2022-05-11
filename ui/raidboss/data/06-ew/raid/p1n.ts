@@ -94,7 +94,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         red: {
-          en: '빨강으로!',
+          en: 'Get hit by red',
           de: 'Von Rot treffen lassen',
           fr: 'Faites-vous toucher par le rouge',
           ja: '炎に当たる',
@@ -102,7 +102,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '빨간색 맞기',
         },
         blue: {
-          en: '파랑으로!',
+          en: 'Get hit by blue',
           de: 'Von Blau treffen lassen',
           fr: 'Faites-vous toucher par le bleu',
           ja: '氷に当たる',
@@ -134,7 +134,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         fire: {
-          en: '빨간 바닥으로!',
+          en: 'Stand on fire',
           de: 'Auf der Feuerfläche stehen',
           fr: 'Placez-vous sur le feu',
           ja: '炎の床へ',
@@ -142,7 +142,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '빨간색 바닥 위에 서기',
         },
         light: {
-          en: '하얀 바닥으로!',
+          en: 'Stand on light',
           de: 'Auf der Lichtfläche stehen',
           fr: 'Placez-vous sur la lumière',
           ja: '光の床へ',

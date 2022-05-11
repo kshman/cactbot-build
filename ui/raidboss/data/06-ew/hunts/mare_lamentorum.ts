@@ -99,7 +99,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '오른쪽 옆 공격 피해욧',
+          en: 'Away from Right Flank',
           de: 'Weg von der rechten Flanke',
           fr: 'Éloignez-vous du flanc droit',
           cn: '远离右侧',
@@ -120,7 +120,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '뒤에 있으면 안되욧',
+          en: 'Away from Back',
           de: 'Weg von hinter ihr',
           fr: 'Éloignez-vous de l\'arrière',
           cn: '远离后方',
@@ -141,7 +141,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '왼쪽 옆 공격 피해욧',
+          en: 'Away from Left Flank',
           de: 'Weg von der linker Flanke',
           fr: 'Éloignez-vous du flanc gauche',
           cn: '远离左侧',
@@ -162,7 +162,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '앞에 있으면 안되욧',
+          en: 'Away from Front',
           de: 'Weg von Vorne',
           fr: 'Éloignez-vous du devant',
           cn: '远离前方',

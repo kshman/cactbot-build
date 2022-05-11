@@ -15,9 +15,9 @@ const triggerSet: TriggerSet<Data> = {
       netRegex: NetRegexes.startsUsing({ id: '89E', source: 'Sasquatch', capture: false }),
       netRegexDe: NetRegexes.startsUsing({ id: '89E', source: 'Sasquatch', capture: false }),
       netRegexFr: NetRegexes.startsUsing({ id: '89E', source: 'Sasquatch', capture: false }),
-      netRegexJa: NetRegexes.startsUsing({ id: '89E', source: '«µ«¹«««Ã«Á', capture: false }),
-      netRegexCn: NetRegexes.startsUsing({ id: '89E', source: 'ÓŞÊÅËİê»', capture: false }),
-      netRegexKo: NetRegexes.startsUsing({ id: '89E', source: '»ç½ºÄâÄ¡', capture: false }),
+      netRegexJa: NetRegexes.startsUsing({ id: '89E', source: 'ã‚µã‚¹ã‚«ãƒƒãƒ', capture: false }),
+      netRegexCn: NetRegexes.startsUsing({ id: '89E', source: 'å¤§è„šå·¨çŒ¿', capture: false }),
+      netRegexKo: NetRegexes.startsUsing({ id: '89E', source: 'ì‚¬ìŠ¤ì½°ì¹˜', capture: false }),
       response: Responses.aoe(),
     },
     {
@@ -26,14 +26,14 @@ const triggerSet: TriggerSet<Data> = {
       netRegex: NetRegexes.ability({ id: '89F', source: 'Sasquatch', capture: false }),
       netRegexDe: NetRegexes.ability({ id: '89F', source: 'Sasquatch', capture: false }),
       netRegexFr: NetRegexes.ability({ id: '89F', source: 'Sasquatch', capture: false }),
-      netRegexJa: NetRegexes.ability({ id: '89F', source: '«µ«¹«««Ã«Á', capture: false }),
-      netRegexCn: NetRegexes.ability({ id: '89F', source: 'ÓŞÊÅËİê»', capture: false }),
-      netRegexKo: NetRegexes.ability({ id: '89F', source: '»ç½ºÄâÄ¡', capture: false }),
+      netRegexJa: NetRegexes.ability({ id: '89F', source: 'ã‚µã‚¹ã‚«ãƒƒãƒ', capture: false }),
+      netRegexCn: NetRegexes.ability({ id: '89F', source: 'å¤§è„šå·¨çŒ¿', capture: false }),
+      netRegexKo: NetRegexes.ability({ id: '89F', source: 'ì‚¬ìŠ¤ì½°ì¹˜', capture: false }),
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
           en: 'Shake Banana tree',
-          de: 'Bananenbaum schutteln',
+          de: 'Bananenbaum schÃ¼tteln',
           fr: 'Secouez le bananier',
         },
       },
@@ -55,19 +55,19 @@ const triggerSet: TriggerSet<Data> = {
     {
       'locale': 'ja',
       'replaceSync': {
-        'Sasquatch': '«µ«¹«««Ã«Á',
+        'Sasquatch': 'ã‚µã‚¹ã‚«ãƒƒãƒ',
       },
     },
     {
       'locale': 'cn',
       'replaceSync': {
-        'Sasquatch': 'ÓŞÊÅËİê»',
+        'Sasquatch': 'å¤§è„šå·¨çŒ¿',
       },
     },
     {
       'locale': 'ko',
       'replaceSync': {
-        'Sasquatch': '»ç½ºÄâÄ¡',
+        'Sasquatch': 'ì‚¬ìŠ¤ì½°ì¹˜',
       },
     },
   ],

@@ -24,7 +24,7 @@ const triggerSet: TriggerSet<Data> = {
       alarmText: (_data, _matches, output) => output.rightThenLeft!(),
       outputStrings: {
         rightThenLeft: {
-          en: '오른쪽 → 왼쪽',
+          en: 'Right => Left',
           de: 'Rechts => Links',
           fr: 'À droite => À gauche',
           cn: '右 => 左',
@@ -44,7 +44,7 @@ const triggerSet: TriggerSet<Data> = {
       alarmText: (_data, _matches, output) => output.leftThenRight!(),
       outputStrings: {
         leftThenRight: {
-          en: '왼쪽 → 오른쪽',
+          en: 'Left => Right',
           de: 'Links => Rechts',
           fr: 'À gauche => À droite',
           cn: '左 => 右',
@@ -110,14 +110,14 @@ const triggerSet: TriggerSet<Data> = {
         // cactbot-builtin-response
         output.responseOutputStrings = {
           waterOnYou: {
-            en: '혼자 맞아!',
+            en: 'GTFO with water',
             de: 'Geh mit Wasser raus',
             fr: 'Partez avec l\'eau',
             cn: '快躲开水',
             ko: '나에게 물징 멀리 빠지기',
           },
           waterMarker: {
-            en: '물을 피해!',
+            en: 'Away from water marker',
             de: 'Weg vom Wasser Marker',
             fr: 'Éloignez-vous du marquage eau',
             cn: '躲开水标记',

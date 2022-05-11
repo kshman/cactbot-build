@@ -25,7 +25,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.startMiddle!(),
       outputStrings: {
         startMiddle: {
-          en: '동글 장판! 우선 가운데 시작!',
+          en: 'Start Middle',
           de: 'Starte mittig',
           fr: 'Commencez au milieu',
           ja: '中央から',
@@ -47,7 +47,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.outOfMiddle!(),
       outputStrings: {
         outOfMiddle: {
-          en: '곧 가운데가 위험해욧!',
+          en: 'Out Of Middle Soon',
           de: 'Bald raus aus der Mitte',
           fr: 'Sortez du milieu bientôt',
           ja: '中央から離れて',
@@ -87,7 +87,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         text: {
-          en: '깜장 불 위로 가욧!',
+          en: 'Stand on Darkened Fire',
           de: 'Auf einer Schwarzen Lohe stehen',
           fr: 'Placez-vous sur une flamme sombre',
           ja: '黒い炎の上へ',
@@ -130,7 +130,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         avoidCharge: {
-          en: '돌진이 옵니다, 피해욧!',
+          en: 'Avoid Charge',
           de: 'Charge ausweichen',
           fr: 'Évitez les charges',
           ja: '突進避けて',
@@ -155,7 +155,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         tank: {
-          en: '둥근 장판을 멀리멀리!',
+          en: 'Pull add circles apart',
           de: 'Zieh die Kreise der Adds auseinander',
           fr: 'Attaquez les adds séparément',
           ja: '雑魚を離れさせる',
@@ -255,7 +255,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         text: {
-          en: '비스듬하게 나눠 흩어 뭉쳐욧!',
+          en: 'Split Intercardinals',
           de: 'Interkardinal aufteilen',
           fr: 'Dispersez-vous en intercardinal',
           ja: 'フィールド十字分断',

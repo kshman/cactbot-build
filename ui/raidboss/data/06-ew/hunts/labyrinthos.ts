@@ -32,7 +32,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.followCharge!(),
       outputStrings: {
         followCharge: {
-          en: '돌진 따라가욧',
+          en: 'Follow charge',
           de: 'Folge dem Ansturm',
           fr: 'Suivez la charge',
           cn: '跟随冲锋',
