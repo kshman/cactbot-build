@@ -26,10 +26,14 @@ export interface Data extends RaidbossData {
   thordanJumpCounter?: number;
   thordanDir?: number;
   sanctityWardDir?: string;
+  thordanMeteorMarkers: string[];
   // mapping of player name to 1, 2, 3 dot.
   diveFromGraceNum: { [name: string]: number };
   // mapping of 1, 2, 3 to whether that group has seen an arrow.
   diveFromGraceHasArrow: { [num: number]: boolean };
+  diveFromGraceTowerCounter?: number;
+  eyeOfTheTyrantCounter?: number;
+  diveFromGraceFire?: boolean;
   // PRs 스페샬
   holiestHallowing?: number;
 }
@@ -114,11 +118,51 @@ const triggerSet: TriggerSet<Data> = {
     return {
       phase: 'doorboss',
       firstAdelphelJump: true,
+      thordanMeteorMarkers: [],
       diveFromGraceNum: {},
       diveFromGraceHasArrow: { 1: false, 2: false, 3: false },
     };
   },
   timelineTriggers: [
+    {
+      id: 'DSR Eye of the Tyrant Stack',
+      // Calls out which numbers stack prior to Eye of the Tyrant
+      // Players marked 1 will get a stack call if they bait second towers
+      regex: /Eye of the Tyrant/,
+      beforeSeconds: 6,
+      condition: (data) => {
+        data.eyeOfTheTyrantCounter = (data.eyeOfTheTyrantCounter ?? 0) + 1;
+        const num = data.diveFromGraceNum[data.me];
+        if (!num) {
+          console.error(`Eye of Tyrant Stack: missing number: ${JSON.stringify(data.diveFromGraceNum)}`);
+          // Default to true as stack needs more players
+          return true;
+        }
+
+        // First stack requires players numbered 2 and 3
+        if ((num === 2 || num === 3) && data.eyeOfTheTyrantCounter === 1)
+          return true;
+        // Second stack requires players numbered 1 and 2
+        if (num === 2 && data.eyeOfTheTyrantCounter === 2)
+          return true;
+        // Could get who the last 1 player is by collecting which 1 does not have fire resistance down
+        return false;
+      },
+      durationSeconds: 6,
+      alertText: (data, _matches, output) => {
+        if (data.eyeOfTheTyrantCounter === 1)
+          return output.stackNums!({ num1: output.num2!(), num2: output.num3!() });
+        return output.stackNums!({ num1: output.num1!(), num2: output.num2!() });
+      },
+      outputStrings: {
+        num1: Outputs.num1,
+        num2: Outputs.num2,
+        num3: Outputs.num3,
+        stackNums: {
+          en: '${num1}번과 ${num2}번 뭉쳐욧!',
+        },
+      },
+    },
     {
       id: 'DSR+ 또르당 라바나 식별 주의',
       regex: /Sanctity of the Ward/,
@@ -140,10 +184,10 @@ const triggerSet: TriggerSet<Data> = {
       // 63C8 = Ascalon's Mercy Concealed
       // 6708 = Final Chorus
       // 62E2 = Spear of the Fury
-      // 6B87 = the Dragon's Eye
+      // 6B86 = Incarnation
       // 6667 = unknown_6667
-      // 7438 = Alternative End
-      netRegex: NetRegexes.startsUsing({ id: ['62D4', '63C8', '6708', '62E2', '6B87', '6667', '7438'], capture: true }),
+      // 71E4 = Shockwave
+      netRegex: NetRegexes.startsUsing({ id: ['62D4', '63C8', '6708', '62E2', '6B86', '6667', '7438'], capture: true }),
       run: (data, matches) => {
         switch (matches.id) {
           case '62D4':
@@ -158,13 +202,13 @@ const triggerSet: TriggerSet<Data> = {
           case '62E2':
             data.phase = 'haurchefant';
             break;
-          case '6B87':
+          case '6B86':
             data.phase = 'thordan2';
             break;
           case '6667':
             data.phase = 'nidhogg2';
             break;
-          case '7438':
+          case '71E4':
             data.phase = 'dragon-king';
             break;
         }
@@ -224,7 +268,7 @@ const triggerSet: TriggerSet<Data> = {
       netRegexCn: NetRegexes.startsUsing({ id: '62DA', source: '圣骑士格里诺', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ id: '62DA', source: '성기사 그리노', capture: false }),
       alertText: (data, _matches, output) => {
-        return data.seenEmptyDimension ? output.in!() : output.inAndTether!();
+        return data.phase !== 'doorboss' || data.seenEmptyDimension ? output.in!() : output.inAndTether!();
       },
       run: (data) => data.seenEmptyDimension = true,
       outputStrings: {
@@ -233,7 +277,7 @@ const triggerSet: TriggerSet<Data> = {
           de: 'Rein + Tank-Verbindung',
           fr: 'Intérieur + Liens tanks',
           ja: '中へ + タンク線取り',
-          ko: '안으로 + 탱크줄!',
+          ko: '안으로 + 탱커 선 가로채기',
         },
         in: Outputs.in,
       },
@@ -277,7 +321,7 @@ const triggerSet: TriggerSet<Data> = {
           de: 'Schlag auf DIR',
           fr: 'Slash sur VOUS',
           ja: 'スラシュ！',
-          ko: '내게 슬래시가! 흩어져!',
+          ko: '고차원 대상자',
         },
       },
     },
@@ -424,28 +468,28 @@ const triggerSet: TriggerSet<Data> = {
           de: 'Roter Kreis',
           fr: 'Cercle rouge',
           ja: '赤 ○',
-          ko: '빨강 ○',
+          ko: '빨강 원형징',
         },
         triangle: {
           en: '녹색 △',
           de: 'Grünes Dreieck',
           fr: 'Triangle vert',
           ja: '緑 ○',
-          ko: '녹색 △',
+          ko: '초록 세모징',
         },
         square: {
           en: '보라 ■',
           de: 'Lilanes Viereck',
           fr: 'Carré violet',
           ja: '紫 ■',
-          ko: '보라 ■',
+          ko: '보라 네모징',
         },
         x: {
           en: '파랑 Ⅹ',
           de: 'Blaues X',
           fr: 'Croix bleue',
           ja: '青 Ⅹ',
-          ko: '파랑 Ⅹ',
+          ko: '파랑 X징',
         },
       },
     },
@@ -461,14 +505,14 @@ const triggerSet: TriggerSet<Data> = {
     },
     {
       id: 'DSR Ascalon\'s Mercy Concealed',
-      type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ id: '63C8', source: 'King Thordan', capture: true }),
-      netRegexDe: NetRegexes.startsUsing({ id: '63C8', source: 'Thordan', capture: true }),
-      netRegexFr: NetRegexes.startsUsing({ id: '63C8', source: 'Roi Thordan', capture: true }),
-      netRegexJa: NetRegexes.startsUsing({ id: '63C8', source: '騎神トールダン', capture: true }),
-      netRegexCn: NetRegexes.startsUsing({ id: '63C8', source: '骑神托尔丹', capture: true }),
-      netRegexKo: NetRegexes.startsUsing({ id: '63C8', source: '기사신 토르당', capture: true }),
-      delaySeconds: (_data, matches) => parseFloat(matches.castTime) - 0.5,
+      type: 'Ability',
+      netRegex: NetRegexes.ability({ id: '63C8', source: 'King Thordan', capture: false }),
+      netRegexDe: NetRegexes.ability({ id: '63C8', source: 'Thordan', capture: false }),
+      netRegexFr: NetRegexes.ability({ id: '63C8', source: 'Roi Thordan', capture: false }),
+      netRegexJa: NetRegexes.ability({ id: '63C8', source: '騎神トールダン', capture: false }),
+      netRegexCn: NetRegexes.ability({ id: '63C8', source: '骑神托尔丹', capture: false }),
+      netRegexKo: NetRegexes.ability({ id: '63C8', source: '기사신 토르당', capture: false }),
+      suppressSeconds: 5,
       response: Responses.moveAway(),
     },
     {
@@ -482,7 +526,8 @@ const triggerSet: TriggerSet<Data> = {
       netRegexCn: NetRegexes.ability({ id: '63D3', source: '骑神托尔丹', capture: false }),
       netRegexKo: NetRegexes.ability({ id: '63D3', source: '기사신 토르당', capture: false }),
       condition: (data) => data.phase === 'thordan',
-      delaySeconds: 4.8,
+      // It appears that these adds can be in place at ~4.5s, but with latency this may fail for some.
+      delaySeconds: 5,
       promise: async (data) => {
         // Collect Ser Vellguine (3636), Ser Paulecrain (3637), Ser Ignasse (3638) entities
         const vellguineLocaleNames: LocaleText = {
@@ -968,29 +1013,41 @@ const triggerSet: TriggerSet<Data> = {
       type: 'HeadMarker',
       netRegex: NetRegexes.headMarker(),
       condition: (data) => data.phase === 'thordan',
-      suppressSeconds: 1,
       infoText: (data, matches, output) => {
         const id = getHeadmarkerId(data, matches);
         if (id !== headmarkers.meteor)
           return;
-        if (data.party.isDPS(matches.target))
-          return output.dpsMeteors!();
-        return output.tankHealerMeteors!();
+        data.thordanMeteorMarkers.push(matches.target);
+        const [p1, p2] = data.thordanMeteorMarkers.sort();
+        if (data.thordanMeteorMarkers.length !== 2 || p1 === undefined || p2 === undefined)
+          return;
+
+        const p1dps = data.party.isDPS(p1);
+        const p2dps = data.party.isDPS(p2);
+
+        if (p1dps && p2dps)
+          return output.dpsMeteors!({ player1: data.ShortName(p1), player2: data.ShortName(p2) });
+        if (!p1dps && !p2dps)
+          return output.tankHealerMeteors!({ player1: data.ShortName(p1), player2: data.ShortName(p2) });
+        return output.unknownMeteors!({ player1: data.ShortName(p1), player2: data.ShortName(p2) });
       },
       outputStrings: {
         tankHealerMeteors: {
-          en: '탱/힐 운석',
-          de: 'Tank/Heiler Meteore',
-          fr: 'Météores Tank/Healer',
-          ja: 'タンヒラ 隕石',
-          ko: '탱/힐 메테오',
+          en: '탱/힐 운석 (${player1}, ${player2})',
+          de: 'Tank/Heiler Meteore (${player1}, ${player2})', // FIXME
+          fr: 'Météores Tank/Healer (${player1}, ${player2})', // FIXME
+          ja: 'タンヒラ 隕石 (${player1}, ${player2})', // FIXME
+          ko: '탱/힐 메테오 (${player1}, ${player2})', // FIXME
         },
         dpsMeteors: {
-          en: 'DPS 운석',
-          de: 'DDs Meteore',
-          fr: 'Météores DPS',
-          ja: 'DPS 隕石',
-          ko: '딜러 메테오',
+          en: 'DPS 운석 (${player1}, ${player2})',
+          de: 'DDs Meteore (${player1}, ${player2})', // FIXME
+          fr: 'Météores DPS (${player1}, ${player2})', // FIXME
+          ja: 'DPS 隕石 (${player1}, ${player2})', // FIXME
+          ko: '딜러 메테오 (${player1}, ${player2})', // FIXME
+        },
+        unknownMeteors: {
+          en: '??? 운석 (${player1}, ${player2})',
         },
       },
     },
@@ -1097,6 +1154,70 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
+      id: 'DSR Dive From Grace Tower Soaks',
+      // 670E Dark High Jump
+      // 670F Dark Spineshatter Dive
+      // 6710 Dark Elusive Jump
+      type: 'Ability',
+      netRegex: NetRegexes.ability({ id: ['670E', '670F', '6710'], source: 'Nidhogg', capture: false }),
+      netRegexDe: NetRegexes.ability({ id: ['670E', '670F', '6710'], source: 'Nidhogg', capture: false }),
+      netRegexFr: NetRegexes.ability({ id: ['670E', '670F', '6710'], source: 'Nidhogg', capture: false }),
+      netRegexJa: NetRegexes.ability({ id: ['670E', '670F', '6710'], source: 'ニーズヘッグ', capture: false }),
+      netRegexCn: NetRegexes.ability({ id: ['670E', '670F', '6710'], source: '尼德霍格', capture: false }),
+      netRegexKo: NetRegexes.ability({ id: ['670E', '670F', '6710'], source: '니드호그', capture: false }),
+      condition: (data) => {
+        // Increment tower count on detection of Jump/Dive
+        data.diveFromGraceTowerCounter = (data.diveFromGraceTowerCounter ?? 0) + 1;
+        const num = data.diveFromGraceNum[data.me];
+        if (!num) {
+          console.error(`DFG Tower Soaks: missing number: ${JSON.stringify(data.diveFromGraceNum)}`);
+          return;
+        }
+
+        // Callout to players marked 3 to soak
+        if (num === 3 && data.diveFromGraceTowerCounter === 1)
+          return true;
+        // Callout to players marked 2 to soak
+        if (num === 2 && data.diveFromGraceTowerCounter === 3)
+          return true;
+        // Callout to players marked 1 to soak
+        if (num === 1 && data.diveFromGraceTowerCounter !== 1)
+          return true;
+      },
+      suppressSeconds: 1,
+      infoText: (data, _matches, output) => {
+        const num = data.diveFromGraceNum[data.me];
+        if (!num) {
+          console.error(`DFG Tower Soaks: missing number: ${JSON.stringify(data.diveFromGraceNum)}`);
+          return;
+        }
+
+        if (num === 1) {
+          // Num1 soaks tower 3 if they did not soak num2's towers
+          if (data.diveFromGraceTowerCounter === 3 && !data.diveFromGraceFire)
+            return output.numsSoakTowers!({ num1: output.num1!(), num2: output.num2!() });
+          // TODO: A callout for second towers can only be a guess, but make an
+          // educated guess for the case of single high jump where most strats
+          // have the Spine/Elusive 1s do 2nd tower soaks?
+        }
+        if (num === 2 && data.diveFromGraceTowerCounter === 3)
+          return output.numsSoakTowers!({ num1: output.num1!(), num2: output.num2!() });
+        if (num === 3 && data.diveFromGraceTowerCounter === 2)
+          return output.numSoakTowers!({ num: output.num3!() });
+      },
+      outputStrings: {
+        num1: Outputs.num1,
+        num2: Outputs.num2,
+        num3: Outputs.num3,
+        numSoakTowers: {
+          en: '${num}번 타워 흡수',
+        },
+        numsSoakTowers: {
+          en: '${num1}번과 ${num2}번 타워 흡수',
+        },
+      },
+    },
+    {
       id: 'DSR Darkdragon Dive Single Tower',
       type: 'Ability',
       netRegex: NetRegexes.ability({ id: '6711', source: 'Nidhogg' }),
@@ -1107,8 +1228,18 @@ const triggerSet: TriggerSet<Data> = {
       netRegexKo: NetRegexes.ability({ id: '6711', source: '니드호그' }),
       condition: Conditions.targetIsYou(),
       suppressSeconds: 1,
-      infoText: (_data, _matches, output) => output.text!(),
+      infoText: (data, _matches, output) => {
+        // eyeOfTheTyrantCounter set at 7 seconds before, meaning about ~2.2s
+        // before this trigger fires, the counter should be at 2
+        if (data.eyeOfTheTyrantCounter === 2)
+          return output.baitThenStack!({ num: output.num2!() });
+        return output.text!();
+      },
       outputStrings: {
+        num2: Outputs.num2,
+        baitThenStack: {
+          en: '미끼 => ${num}번과 뭉쳐욧!',
+        },
         text: {
           en: '내가 미끼라니',
           de: 'Ködern',
@@ -1206,6 +1337,96 @@ const triggerSet: TriggerSet<Data> = {
           ko: '#${num} 아래 화살표 (교묘한 점프)',
         },
       },
+    },
+    {
+      id: 'DSR Dive From Grace Position',
+      type: 'GainsEffect',
+      // AC3 = High Jump Target
+      // AC4 = Spineshatter Dive Target
+      // AC5 = Elusive Jump Target
+      // Defaults:
+      //   Spineshatter West, Elusive East, All Face East
+      //   High Jump North if solo, no assignment if all circle
+      //   2s Southeast/Southwest, no assignment if circle
+      //   Assumes North Party Stack
+      //
+      // Spineshatter and Elusive elusive come together
+      // Circle never paired with single Spine/Elusive
+      netRegex: NetRegexes.gainsEffect({ effectId: ['AC3', 'AC4', 'AC5'] }),
+      condition: Conditions.targetIsYou(),
+      delaySeconds: (_data, matches) => parseFloat(matches.duration) - 5,
+      alertText: (data, matches, output) => {
+        const num = data.diveFromGraceNum[data.me];
+        if (!num) {
+          console.error(`DFG Position: missing number: ${JSON.stringify(data.diveFromGraceNum)}`);
+          return;
+        }
+
+        // Output no direction when all circles
+        if (!data.diveFromGraceHasArrow[num]) {
+          if (num === 2)
+            return output.diveCircles2!();
+          return output.diveCircles!();
+        }
+
+        // Output West or East
+        if (num === 1 || num === 3) {
+          if (matches.effectId === 'AC3')
+            return output.diveCircle!();
+          if (matches.effectId === 'AC4')
+            return output.diveSpineshatter!();
+          return output.diveElusive!();
+        }
+
+        // By the time 2s turn, they will be stacked, facing boss,
+        // so calls are relative to the boss
+        if (num === 2) {
+          if (matches.effectId === 'AC4')
+            return output.diveSpineshatter2!();
+          return output.diveElusive2!();
+        }
+      },
+      outputStrings: {
+        diveCircles: {
+          en: '다이브 위치',
+        },
+        diveCircle: {
+          en: '남쪽 다이브',
+        },
+        diveCircles2: {
+          en: '비스듬한쪽 다이브',
+        },
+        diveSpineshatter: {
+          en: '서쪽 다이브, 보스 보기',
+        },
+        diveElusive: {
+          en: '동쪽 다이브, 보스 안보기',
+        },
+        diveSpineshatter2: {
+          en: '뒤/오른쪽 다이브, 동쪽 보기',
+        },
+        diveElusive2: {
+          en: '뒤/왼쪽 다이브, 동쪽 보기',
+        },
+      },
+    },
+    {
+      id: 'DSR Dive From Grace Fire Collect',
+      type: 'GainsEffect',
+      // B56 = Fire Resistance Down II
+      // This only matches for num1s
+      netRegex: NetRegexes.gainsEffect({ effectId: ['B56'] }),
+      condition: (data, matches) => data.phase === 'nidhogg' && matches.target === data.me && data.diveFromGraceNum[data.me] === 1,
+      run: (data) => data.diveFromGraceFire = true,
+    },
+    {
+      id: 'DSR Dive From Grace Fire Remove',
+      type: 'LosesEffect',
+      // B56 = Fire Resistance Down II
+      // This only matches for num1s
+      netRegex: NetRegexes.losesEffect({ effectId: ['B56'] }),
+      condition: (data, matches) => data.phase === 'nidhogg' && matches.target === data.me && data.diveFromGraceNum[data.me] === 1,
+      run: (data) => delete data.diveFromGraceFire,
     },
   ],
   timelineReplace: [

@@ -20,11 +20,11 @@ const triggerSet: TriggerSet<Data> = {
       netRegexFr: NetRegexes.startsUsing({ id: '6B65', source: 'Gurangatch', capture: false }),
       netRegexJa: NetRegexes.startsUsing({ id: '6B65', source: 'グランガチ', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ id: '6B65', source: '固兰盖奇', capture: false }),
-      netRegexKo: NetRegexes.startsUsing({ id: '6B65', source: '그란갓치', capture: false }),
+      netRegexKo: NetRegexes.startsUsing({ id: '6B65', source: '구랑가치', capture: false }),
       alarmText: (_data, _matches, output) => output.rightThenLeft!(),
       outputStrings: {
         rightThenLeft: {
-          en: '오른쪽 → 왼쪽',
+          en: 'Right => Left',
           de: 'Rechts => Links',
           fr: 'À droite => À gauche',
           cn: '右 => 左',
@@ -40,11 +40,11 @@ const triggerSet: TriggerSet<Data> = {
       netRegexFr: NetRegexes.startsUsing({ id: '6B66', source: 'Gurangatch', capture: false }),
       netRegexJa: NetRegexes.startsUsing({ id: '6B66', source: 'グランガチ', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ id: '6B66', source: '固兰盖奇', capture: false }),
-      netRegexKo: NetRegexes.startsUsing({ id: '6B66', source: '그란갓치', capture: false }),
+      netRegexKo: NetRegexes.startsUsing({ id: '6B66', source: '구랑가치', capture: false }),
       alarmText: (_data, _matches, output) => output.leftThenRight!(),
       outputStrings: {
         leftThenRight: {
-          en: '왼쪽 → 오른쪽',
+          en: 'Left => Right',
           de: 'Links => Rechts',
           fr: 'À gauche => À droite',
           cn: '左 => 右',
@@ -60,7 +60,7 @@ const triggerSet: TriggerSet<Data> = {
       netRegexFr: NetRegexes.startsUsing({ id: '6B78', source: 'Gurangatch', capture: false }),
       netRegexJa: NetRegexes.startsUsing({ id: '6B78', source: 'グランガチ', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ id: '6B78', source: '固兰盖奇', capture: false }),
-      netRegexKo: NetRegexes.startsUsing({ id: '6B78', source: '그란갓치', capture: false }),
+      netRegexKo: NetRegexes.startsUsing({ id: '6B78', source: '구랑가치', capture: false }),
       response: Responses.aoe(),
     },
     {
@@ -71,6 +71,7 @@ const triggerSet: TriggerSet<Data> = {
       netRegexFr: NetRegexes.startsUsing({ id: '69B7', source: 'Petalodus' }),
       netRegexJa: NetRegexes.startsUsing({ id: '69B7', source: 'ペタロドゥス' }),
       netRegexCn: NetRegexes.startsUsing({ id: '69B7', source: '瓣齿鲨' }),
+      netRegexKo: NetRegexes.startsUsing({ id: '69B7', source: '페탈로두스' }),
       condition: (data) => data.CanSilence(),
       response: Responses.interrupt(),
     },
@@ -82,6 +83,7 @@ const triggerSet: TriggerSet<Data> = {
       netRegexFr: NetRegexes.startsUsing({ id: '69BC', source: 'Petalodus', capture: false }),
       netRegexJa: NetRegexes.startsUsing({ id: '69BC', source: 'ペタロドゥス', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ id: '69BC', source: '瓣齿鲨', capture: false }),
+      netRegexKo: NetRegexes.startsUsing({ id: '69BC', source: '페탈로두스', capture: false }),
       response: Responses.getOut(),
     },
     {
@@ -92,6 +94,7 @@ const triggerSet: TriggerSet<Data> = {
       netRegexFr: NetRegexes.startsUsing({ id: '69BD', source: 'Petalodus', capture: false }),
       netRegexJa: NetRegexes.startsUsing({ id: '69BD', source: 'ペタロドゥス', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ id: '69BD', source: '瓣齿鲨', capture: false }),
+      netRegexKo: NetRegexes.startsUsing({ id: '69BD', source: '페탈로두스', capture: false }),
       response: Responses.awayFromFront(),
     },
     {
@@ -102,18 +105,19 @@ const triggerSet: TriggerSet<Data> = {
       netRegexFr: NetRegexes.startsUsing({ id: '69BB', source: 'Petalodus' }),
       netRegexJa: NetRegexes.startsUsing({ id: '69BB', source: 'ペタロドゥス' }),
       netRegexCn: NetRegexes.startsUsing({ id: '69BB', source: '瓣齿鲨' }),
+      netRegexKo: NetRegexes.startsUsing({ id: '69BB', source: '페탈로두스' }),
       response: (data, matches, output) => {
         // cactbot-builtin-response
         output.responseOutputStrings = {
           waterOnYou: {
-            en: '혼자 맞아!',
+            en: 'GTFO with water',
             de: 'Geh mit Wasser raus',
             fr: 'Partez avec l\'eau',
             cn: '快躲开水',
             ko: '나에게 물징 멀리 빠지기',
           },
           waterMarker: {
-            en: '물을 피해!',
+            en: 'Away from water marker',
             de: 'Weg vom Wasser Marker',
             fr: 'Éloignez-vous du marquage eau',
             cn: '躲开水标记',

@@ -39,8 +39,10 @@ function Remove-Directory([string] $path)
 # 여기가 시작
 #
 
-$dest = $env:APPDATA + "\Advanced Combat Tracker\Plugins\cactbot";
-"대상 디렉터리: $dest"
+$act = $env:APPDATA + "\Advanced Combat Tracker"
+$dest = "$act\Plugins\cactbot"
+"ACT 디렉터리: $act"
+"cactbot 디렉터리: $dest"
 
 # NPM
 ''
@@ -77,13 +79,14 @@ if ($npmbuild -eq $TRUE)
 }
 
 ''
-'끗!!!'
-
-''
 $yn = New-QuestionYesNo "실행도할까요?"
 if ($yn -eq $TRUE)
 {
-  Start-Process -FilePath "$dest\Advanced Combat Tracker.exe"
+  $actexe = "$act\Advanced Combat Tracker.exe"
+  Start-Process -FilePath $actexe
 }
+
+''
+'끗!!!'
 
 exit 0

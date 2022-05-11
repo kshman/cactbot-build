@@ -19,6 +19,7 @@ const triggerSet: TriggerSet<Data> = {
       netRegexFr: NetRegexes.startsUsing({ id: '6A85', source: 'Arch-Êta', capture: false }),
       netRegexJa: NetRegexes.startsUsing({ id: '6A85', source: 'アーチイータ', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ id: '6A85', source: '伊塔总领', capture: false }),
+      netRegexKo: NetRegexes.startsUsing({ id: '6A85', source: '아치 에타', capture: false }),
       response: Responses.awayFromFront(),
     },
     {
@@ -29,6 +30,7 @@ const triggerSet: TriggerSet<Data> = {
       netRegexFr: NetRegexes.startsUsing({ id: '6A88', source: 'Arch-Êta', capture: false }),
       netRegexJa: NetRegexes.startsUsing({ id: '6A88', source: 'アーチイータ', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ id: '6A88', source: '伊塔总领', capture: false }),
+      netRegexKo: NetRegexes.startsUsing({ id: '6A88', source: '아치 에타', capture: false }),
       response: Responses.aoe(),
     },
     {
@@ -39,10 +41,11 @@ const triggerSet: TriggerSet<Data> = {
       netRegexFr: NetRegexes.startsUsing({ id: '6A86', source: 'Arch-Êta', capture: false }),
       netRegexJa: NetRegexes.startsUsing({ id: '6A86', source: 'アーチイータ', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ id: '6A86', source: '伊塔总领', capture: false }),
+      netRegexKo: NetRegexes.startsUsing({ id: '6A86', source: '아치 에타', capture: false }),
       alertText: (_data, _matches, output) => output.getFront!(),
       outputStrings: {
         getFront: {
-          en: '앞쪽으로',
+          en: 'Get Front',
           de: 'Geh nach Vorne',
           fr: 'Allez devant',
           cn: '去正面',
@@ -59,10 +62,11 @@ const triggerSet: TriggerSet<Data> = {
       netRegexFr: NetRegexes.ability({ id: '6A8A', source: 'Arch-Êta', capture: false }),
       netRegexJa: NetRegexes.ability({ id: '6A8A', source: 'アーチイータ', capture: false }),
       netRegexCn: NetRegexes.ability({ id: '6A8A', source: '伊塔总领', capture: false }),
+      netRegexKo: NetRegexes.ability({ id: '6A8A', source: '아치 에타', capture: false }),
       alarmText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '점프 피해욧',
+          en: 'Away from jump',
           de: 'Weg vom Sprung',
           fr: 'Éloignez-vous du saut',
           cn: '躲开跳跃',
@@ -78,6 +82,7 @@ const triggerSet: TriggerSet<Data> = {
       netRegexFr: NetRegexes.startsUsing({ id: '6A89', source: 'Arch-Êta' }),
       netRegexJa: NetRegexes.startsUsing({ id: '6A89', source: 'アーチイータ' }),
       netRegexCn: NetRegexes.startsUsing({ id: '6A89', source: '伊塔总领' }),
+      netRegexKo: NetRegexes.startsUsing({ id: '6A89', source: '아치 에타' }),
       response: Responses.tankBuster('info'),
     },
     {
@@ -88,6 +93,7 @@ const triggerSet: TriggerSet<Data> = {
       netRegexFr: NetRegexes.startsUsing({ id: '6AF4', source: 'Fan Ail', capture: false }),
       netRegexJa: NetRegexes.startsUsing({ id: '6AF4', source: 'ファン・アイル', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ id: '6AF4', source: '凡·艾尔', capture: false }),
+      netRegexKo: NetRegexes.startsUsing({ id: '6AF4', source: '판 아일', capture: false }),
       response: Responses.aoe(),
     },
     {
@@ -98,6 +104,7 @@ const triggerSet: TriggerSet<Data> = {
       netRegexFr: NetRegexes.startsUsing({ id: '6AF2', source: 'Fan Ail', capture: false }),
       netRegexJa: NetRegexes.startsUsing({ id: '6AF2', source: 'ファン・アイル', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ id: '6AF2', source: '凡·艾尔', capture: false }),
+      netRegexKo: NetRegexes.startsUsing({ id: '6AF2', source: '판 아일', capture: false }),
       response: Responses.awayFromFront(),
     },
     {
@@ -108,6 +115,7 @@ const triggerSet: TriggerSet<Data> = {
       netRegexFr: NetRegexes.startsUsing({ id: '6AED', source: 'Fan Ail' }),
       netRegexJa: NetRegexes.startsUsing({ id: '6AED', source: 'ファン・アイル' }),
       netRegexCn: NetRegexes.startsUsing({ id: '6AED', source: '凡·艾尔' }),
+      netRegexKo: NetRegexes.startsUsing({ id: '6AED', source: '판 아일' }),
       alertText: (data, matches, output) => {
         if (data.me === matches.target)
           return output.divebombOnYou!();
@@ -115,14 +123,14 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         divebombOnYou: {
-          en: '나한테 내려찍기!',
+          en: 'Divebomb on YOU',
           de: 'Sturzflug auf DIR',
           fr: 'Bombe plongeante sur VOUS',
           cn: '俯冲点名',
           ko: '나에게 초록징',
         },
         divebombMarker: {
-          en: '내려찍기 마커를 피해욧',
+          en: 'Away from Divebomb Marker',
           de: 'Weg von dem Sturzflug-Marker',
           fr: 'Éloignez-vous de la bombe plongeante',
           cn: '躲开俯冲点名',

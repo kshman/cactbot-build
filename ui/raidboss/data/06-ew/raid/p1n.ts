@@ -23,6 +23,7 @@ const triggerSet: TriggerSet<Data> = {
       netRegexFr: NetRegexes.startsUsing({ id: '6DA2', source: 'Érichthonios', capture: false }),
       netRegexJa: NetRegexes.startsUsing({ id: '6DA2', source: 'エリクトニオス', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ id: '6DA2', source: '埃里克特翁尼亚斯', capture: false }),
+      netRegexKo: NetRegexes.startsUsing({ id: '6DA2', source: '에리크토니오스', capture: false }),
       response: Responses.goLeft(),
     },
     {
@@ -34,6 +35,7 @@ const triggerSet: TriggerSet<Data> = {
       netRegexFr: NetRegexes.startsUsing({ id: '6DA3', source: 'Érichthonios', capture: false }),
       netRegexJa: NetRegexes.startsUsing({ id: '6DA3', source: 'エリクトニオス', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ id: '6DA3', source: '埃里克特翁尼亚斯', capture: false }),
+      netRegexKo: NetRegexes.startsUsing({ id: '6DA3', source: '에리크토니오스', capture: false }),
       response: Responses.goRight(),
     },
     {
@@ -44,6 +46,7 @@ const triggerSet: TriggerSet<Data> = {
       netRegexFr: NetRegexes.startsUsing({ id: '65F4', source: 'Érichthonios', capture: false }),
       netRegexJa: NetRegexes.startsUsing({ id: '65F4', source: 'エリクトニオス', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ id: '65F4', source: '埃里克特翁尼亚斯', capture: false }),
+      netRegexKo: NetRegexes.startsUsing({ id: '65F4', source: '에리크토니오스', capture: false }),
       response: Responses.aoe(),
     },
     {
@@ -54,6 +57,7 @@ const triggerSet: TriggerSet<Data> = {
       netRegexFr: NetRegexes.startsUsing({ id: '65E9', source: 'Érichthonios', capture: false }),
       netRegexJa: NetRegexes.startsUsing({ id: '65E9', source: 'エリクトニオス', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ id: '65E9', source: '埃里克特翁尼亚斯', capture: false }),
+      netRegexKo: NetRegexes.startsUsing({ id: '65E9', source: '에리크토니오스', capture: false }),
       response: Responses.aoe(),
     },
     {
@@ -64,6 +68,7 @@ const triggerSet: TriggerSet<Data> = {
       netRegexFr: NetRegexes.startsUsing({ id: '65EA', source: 'Érichthonios', capture: false }),
       netRegexJa: NetRegexes.startsUsing({ id: '65EA', source: 'エリクトニオス', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ id: '65EA', source: '埃里克特翁尼亚斯', capture: false }),
+      netRegexKo: NetRegexes.startsUsing({ id: '65EA', source: '에리크토니오스', capture: false }),
       response: Responses.aoe(),
     },
     {
@@ -89,7 +94,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         red: {
-          en: '빨강으로!',
+          en: 'Get hit by red',
           de: 'Von Rot treffen lassen',
           fr: 'Faites-vous toucher par le rouge',
           ja: '炎に当たる',
@@ -97,7 +102,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '빨간색 맞기',
         },
         blue: {
-          en: '파랑으로!',
+          en: 'Get hit by blue',
           de: 'Von Blau treffen lassen',
           fr: 'Faites-vous toucher par le bleu',
           ja: '氷に当たる',
@@ -114,6 +119,7 @@ const triggerSet: TriggerSet<Data> = {
       netRegexFr: NetRegexes.startsUsing({ id: '65F3', source: 'Érichthonios' }),
       netRegexJa: NetRegexes.startsUsing({ id: '65F3', source: 'エリクトニオス' }),
       netRegexCn: NetRegexes.startsUsing({ id: '65F3', source: '埃里克特翁尼亚斯' }),
+      netRegexKo: NetRegexes.startsUsing({ id: '65F3', source: '에리크토니오스' }),
       condition: Conditions.caresAboutPhysical(),
       response: Responses.tankBuster(),
     },
@@ -128,7 +134,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         fire: {
-          en: '빨간 바닥으로!',
+          en: 'Stand on fire',
           de: 'Auf der Feuerfläche stehen',
           fr: 'Placez-vous sur le feu',
           ja: '炎の床へ',
@@ -136,7 +142,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '빨간색 바닥 위에 서기',
         },
         light: {
-          en: '하얀 바닥으로!',
+          en: 'Stand on light',
           de: 'Auf der Lichtfläche stehen',
           fr: 'Placez-vous sur la lumière',
           ja: '光の床へ',
@@ -256,6 +262,13 @@ const triggerSet: TriggerSet<Data> = {
         'Slam Shut': '监狱封闭',
         'True Holy': '纯正神圣',
         'Warder\'s Wrath': '魔锁乱流',
+      },
+    },
+    {
+      'locale': 'ko',
+      'missingTranslations': true,
+      'replaceSync': {
+        'Erichthonios': '에리크토니오스',
       },
     },
   ],

@@ -20,11 +20,12 @@ const triggerSet: TriggerSet<Data> = {
       netRegexFr: NetRegexes.startsUsing({ id: '6C3C', source: 'Ægeiros', capture: false }),
       netRegexJa: NetRegexes.startsUsing({ id: '6C3C', source: 'アイゲイロス', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ id: '6C3C', source: '黑杨树精', capture: false }),
+      netRegexKo: NetRegexes.startsUsing({ id: '6C3C', source: '아이게이로스', capture: false }),
       // Alarm text mostly because this one kills so many people.
       alarmText: (_data, _matches, output) => output.outAndBehind!(),
       outputStrings: {
         outAndBehind: {
-          en: '뒤로 그리고 밖으로!',
+          en: 'Get Behind and Out',
           de: 'Geh hinter ihn und dann raus',
           fr: 'Passez derrière et à l\'extérieur',
           cn: '去背后',
@@ -40,10 +41,11 @@ const triggerSet: TriggerSet<Data> = {
       netRegexFr: NetRegexes.startsUsing({ id: '6C40', source: 'Ægeiros', capture: false }),
       netRegexJa: NetRegexes.startsUsing({ id: '6C40', source: 'アイゲイロス', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ id: '6C40', source: '黑杨树精', capture: false }),
+      netRegexKo: NetRegexes.startsUsing({ id: '6C40', source: '아이게이로스', capture: false }),
       alertText: (_data, _matches, output) => output.getFront!(),
       outputStrings: {
         getFront: {
-          en: '앞으로!',
+          en: 'Get Front',
           de: 'Geh nach Vorne',
           fr: 'Allez devant',
           cn: '去正面',
@@ -59,18 +61,19 @@ const triggerSet: TriggerSet<Data> = {
       netRegexFr: NetRegexes.startsUsing({ id: '6B7D', source: 'Minerva' }),
       netRegexJa: NetRegexes.startsUsing({ id: '6B7D', source: 'ミネルウァ' }),
       netRegexCn: NetRegexes.startsUsing({ id: '6B7D', source: '密涅瓦' }),
+      netRegexKo: NetRegexes.startsUsing({ id: '6B7D', source: '미네르바' }),
       response: (data, matches, output) => {
         // cactbot-builtin-response
         output.responseOutputStrings = {
           missleOnYou: {
-            en: '혼자 맞아!',
+            en: 'GTFO with marker',
             de: 'Geh raus mit dem Marker',
             fr: 'Partez avec le marquage',
             cn: '快躲开标记',
             ko: '나에게 징 멀리 빠지기',
           },
           missleMarker: {
-            en: '마커를 피해!',
+            en: 'Away from marker',
             de: 'Weg vom Marker',
             fr: 'Éloignez-vous du marquage',
             cn: '躲开标记',
@@ -91,18 +94,19 @@ const triggerSet: TriggerSet<Data> = {
       netRegexFr: NetRegexes.startsUsing({ id: '6B7E', source: 'Minerva' }),
       netRegexJa: NetRegexes.startsUsing({ id: '6B7E', source: 'ミネルウァ' }),
       netRegexCn: NetRegexes.startsUsing({ id: '6B7E', source: '密涅瓦' }),
+      netRegexKo: NetRegexes.startsUsing({ id: '6B7E', source: '미네르바' }),
       response: (data, matches, output) => {
         // cactbot-builtin-response
         output.responseOutputStrings = {
           missleOnYou: {
-            en: '도넛 마커 밑으로!',
+            en: 'Place donut marker under',
             de: 'Platziere Donut-Marker unter ihm',
             fr: 'En dessous le marquage du donut',
             cn: '放置环形标记',
             ko: '나에게 도넛 장판',
           },
           missleMarker: {
-            en: '마커와 함께 맞기!',
+            en: 'Stack on marker',
             de: 'Auf dem Marker sammeln',
             fr: 'Packez-vous sur les marquages',
             cn: '标记处集合',

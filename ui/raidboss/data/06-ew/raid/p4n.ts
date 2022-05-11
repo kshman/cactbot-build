@@ -32,7 +32,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '구석으로 가욧!',
+          en: 'Go to Corner',
           de: 'In eine Ecke gehen',
           fr: 'Allez dans un coin',
           ja: '角へ',
@@ -53,7 +53,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '가운데서 넉백',
+          en: 'Middle Knockback',
           de: 'Rückstoß von der Mitte',
           fr: 'Poussée au milieu',
           ja: '真ん中からノックバック',
@@ -124,7 +124,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '다른 롤 탑으로 들어가욧',
+          en: 'Get Other Role Tower',
           de: 'Geh in einen Turm einer anderen Rolle',
           fr: 'Prenez la tour d\'un autre rôle',
           ja: '他のロールの塔を処理',
@@ -144,7 +144,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '북쪽 끝으로!',
+          en: 'Go North Edge',
           de: 'Geh zur nördlichen Kante',
           fr: 'Allez au bord nord',
           ja: '北側へ',
@@ -164,7 +164,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '동쪽 끝으로!',
+          en: 'Go East Edge',
           de: 'Geh zur östlichen Kante',
           fr: 'Allez au bord est',
           ja: '東側へ',
@@ -184,7 +184,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '남쪽 끝으로!',
+          en: 'Go South Edge',
           de: 'Geh zur südlichen Kante',
           fr: 'Allez au bord sud',
           ja: '南側へ',
@@ -204,7 +204,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '서쪽 끝으로!',
+          en: 'Go West Edge',
           de: 'Geh zur westlichen Kante',
           fr: 'Allez au bord ouest',
           ja: '西側へ',
@@ -225,7 +225,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '북쪽에서 넉백!',
+          en: 'North Knockback',
           de: 'Rückstoß vom Norden',
           fr: 'Poussée au nord',
           ja: '北側からノックバック',
@@ -246,7 +246,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '동쪽에서 넉백!',
+          en: 'East Knockback',
           de: 'Rückstoß vom Osten',
           fr: 'Poussée à l\'est',
           ja: '東側からノックバック',
@@ -267,7 +267,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '남쪽에서 넉백!',
+          en: 'South Knockback',
           de: 'Rückstoß vom Süden',
           fr: 'Poussée au sud',
           ja: '南側からノックバック',
@@ -288,7 +288,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '서쪽에서 넉백!',
+          en: 'West Knockback',
           de: 'Rückstoß vom Westen',
           fr: 'Poussée à l\'ouest',
           ja: '西側からノックバック',
@@ -308,7 +308,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '다른 롤 구슬을 처리해줘욧!',
+          en: 'Pop other role orbs',
           de: 'Nimm einen Orb einer anderen Rolle',
           fr: 'Éclatez l\'orbe d\'un autre rôle',
           ja: '他のロールの玉に当たる',
