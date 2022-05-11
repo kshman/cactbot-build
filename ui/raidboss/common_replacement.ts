@@ -60,7 +60,7 @@ export const commonReplacement: CommonReplacement = {
       fr: 'Fermeture d(?:e|u|es) (?:l\'|la |les? )?$1 dans',
       ja: '$1の封鎖まであと',
       cn: '距$1被封锁还有',
-      ko: '15초 후에 $1(?:이|가) 봉쇄됩니다',
+      ko: '15초 후에 $1[이가] 봉쇄됩니다',
     },
     [syncKeys.unseal]: {
       en: 'is no longer sealed',
@@ -454,13 +454,3 @@ export const partialCommonReplacementKeys = [
   textKeys.Healer,
   textKeys.DPS,
 ];
-
-// Replacement when using Korean language in the parser, as the Korean version
-// does not have the 6.x changes from Ravahn yet.
-// These are applied after other translations and don't count for collisions.
-// TODO: this misses a few things like 1A lines in a7s/o7n/o7s.
-export const backCompatParsedSyncReplace: { [replaceKey: string]: string } = {
-  ' 00:\\[\\^:\\]\\*:': ' 00:',
-  ' 00:0839::': ' 00:0839:',
-  ' 14:\\[\\^:\\]\\*:([^:]*):([^:]*):': ':$2:$1',
-};
