@@ -1,4 +1,6 @@
-﻿'하.. 힘들다'
+﻿# Requires -RunAsAdministrator
+
+'하.. 힘들다'
 '빌드하고 복사를 하자고'
 ''
 
@@ -83,7 +85,7 @@ $yn = New-QuestionYesNo "실행도할까요?"
 if ($yn -eq $TRUE)
 {
   $actexe = "$act\Advanced Combat Tracker.exe"
-  Start-Process -FilePath $actexe
+  Start-Process -FilePath $actexe -Verb runAs
 }
 
 ''
