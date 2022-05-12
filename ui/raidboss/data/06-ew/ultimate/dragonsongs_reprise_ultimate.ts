@@ -31,6 +31,7 @@ export interface Data extends RaidbossData {
   diveFromGraceNum: { [name: string]: number };
   // mapping of 1, 2, 3 to whether that group has seen an arrow.
   diveFromGraceHasArrow: { [num: number]: boolean };
+  diveFromGraceDir: { [name: string]: string };
   diveFromGraceTowerCounter?: number;
   eyeOfTheTyrantCounter?: number;
   diveFromGraceFire?: boolean;
@@ -124,20 +125,21 @@ const triggerSet: TriggerSet<Data> = {
       thordanMeteorMarkers: [],
       diveFromGraceNum: {},
       diveFromGraceHasArrow: { 1: false, 2: false, 3: false },
+      diveFromGraceDir: {},
     };
   },
   timelineTriggers: [
     {
       id: 'DSR Eye of the Tyrant Stack',
       // Calls out which numbers stack prior to Eye of the Tyrant
-      // Players marked 1 will get a stack call if they bait second towers
+      // Predicting Num1 Player timing may vary based on debuffs
       regex: /Eye of the Tyrant/,
       beforeSeconds: 6,
       condition: (data) => {
         data.eyeOfTheTyrantCounter = (data.eyeOfTheTyrantCounter ?? 0) + 1;
         const num = data.diveFromGraceNum[data.me];
         if (!num) {
-          console.error(`Eye of Tyrant Stack: missing number: ${JSON.stringify(data.diveFromGraceNum)}`);
+          console.error(`Eye of The Tyrant Stack: missing number: ${JSON.stringify(data.diveFromGraceNum)}`);
           // Default to true as stack needs more players
           return true;
         }
@@ -146,9 +148,15 @@ const triggerSet: TriggerSet<Data> = {
         if ((num === 2 || num === 3) && data.eyeOfTheTyrantCounter === 1)
           return true;
         // Second stack requires players numbered 1 and 2
-        if (num === 2 && data.eyeOfTheTyrantCounter === 2)
-          return true;
-        // Could get who the last 1 player is by collecting which 1 does not have fire resistance down
+        if (data.eyeOfTheTyrantCounter === 2) {
+          if (num === 2)
+            return true;
+          // Can resolve a num1 player early when they are solo High Jump
+          if (num === 1 && data.diveFromGraceHasArrow[1] && data.diveFromGraceDir[data.me] === 'AC3')
+            return true;
+          // Cactbot will also know last player within ~5s by fire resistance
+          // down debuffs, which would require a separate trigger due to timing
+        }
         return false;
       },
       durationSeconds: 6,
@@ -162,7 +170,33 @@ const triggerSet: TriggerSet<Data> = {
         num2: Outputs.num2,
         num3: Outputs.num3,
         stackNums: {
-          en: '${num1}번과 ${num2}번 뭉쳐욧!',
+          en: '${num1} and ${num2} Stack',
+        },
+      },
+    },
+    {
+      id: 'DSR Eye of the Tyrant Stack Late',
+      // Later stack call for the Num1 player when all are circles
+      regex: /Eye of the Tyrant/,
+      beforeSeconds: 4.5, // Could be up to 5s, but less for latency
+      condition: (data) => {
+        const num = data.diveFromGraceNum[data.me];
+        if (!num) {
+          console.error(`Eye of The Tyrant Stack 1: missing number: ${JSON.stringify(data.diveFromGraceNum)}`);
+          return false;
+        }
+        // Num1s have all circles and this num1 did not soak towers
+        if (num === 1 && !data.diveFromGraceHasArrow[1] && !data.diveFromGraceFire && data.eyeOfTheTyrantCounter === 2)
+          return true;
+        return false;
+      },
+      durationSeconds: 4.5,
+      alertText: (_data, _matches, output) => output.stackNums!({ num1: output.num1!(), num2: output.num2!() }),
+      outputStrings: {
+        num1: Outputs.num1,
+        num2: Outputs.num2,
+        stackNums: {
+          en: '${num1} and ${num2} Stack',
         },
       },
     },
@@ -508,14 +542,14 @@ const triggerSet: TriggerSet<Data> = {
     },
     {
       id: 'DSR Ascalon\'s Mercy Concealed',
-      type: 'Ability',
-      netRegex: NetRegexes.ability({ id: '63C8', source: 'King Thordan', capture: false }),
-      netRegexDe: NetRegexes.ability({ id: '63C8', source: 'Thordan', capture: false }),
-      netRegexFr: NetRegexes.ability({ id: '63C8', source: 'Roi Thordan', capture: false }),
-      netRegexJa: NetRegexes.ability({ id: '63C8', source: '騎神トールダン', capture: false }),
-      netRegexCn: NetRegexes.ability({ id: '63C8', source: '骑神托尔丹', capture: false }),
-      netRegexKo: NetRegexes.ability({ id: '63C8', source: '기사신 토르당', capture: false }),
-      suppressSeconds: 5,
+      type: 'StartsUsing',
+      netRegex: NetRegexes.startsUsing({ id: '63C8', source: 'King Thordan', capture: true }),
+      netRegexDe: NetRegexes.startsUsing({ id: '63C8', source: 'Thordan', capture: true }),
+      netRegexFr: NetRegexes.startsUsing({ id: '63C8', source: 'Roi Thordan', capture: true }),
+      netRegexJa: NetRegexes.startsUsing({ id: '63C8', source: '騎神トールダン', capture: true }),
+      netRegexCn: NetRegexes.startsUsing({ id: '63C8', source: '骑神托尔丹', capture: true }),
+      netRegexKo: NetRegexes.startsUsing({ id: '63C8', source: '기사신 토르당', capture: true }),
+      delaySeconds: (_data, matches) => parseFloat(matches.castTime) - 0.5,
       response: Responses.moveAway(),
     },
     {
@@ -990,14 +1024,14 @@ const triggerSet: TriggerSet<Data> = {
       alarmText: (data, _matches, output) => {
         if ((data.thordanRavanaCount ?? 0) !== 2 || data.thordanRavana1 === undefined || data.thordanRavana2 === undefined)
           return;
+        const fs = data.ShortName(data.thordanRavana1);
+        const ns = data.ShortName(data.thordanRavana2);
+        console.log('라바나: 1-' + fs + ' / 2-' + ns);
         if (data.thordanRavana1 === data.me)
           return output.sword1!();
         if (data.thordanRavana2 === data.me)
           return output.sword2!();
-        return output.swords!({
-          far: data.ShortName(data.thordanRavana1),
-          near: data.ShortName(data.thordanRavana2),
-        });
+        return output.swords!({ far: fs, near: ns });
       },
       run: (data) => {
         if ((data.thordanRavanaCount ?? 0) === 2) {
@@ -1192,6 +1226,11 @@ const triggerSet: TriggerSet<Data> = {
       // 670E Dark High Jump
       // 670F Dark Spineshatter Dive
       // 6710 Dark Elusive Jump
+      // Defaults: (as players will be coming from stack)
+      //   Spineshatter Left, Elusive Right, All Face East
+      //   High Jump North if solo, no assignment if all circle
+      //   2s Southeast/Southwest, no assignment if circle
+      //   Assumes North Party Stack
       type: 'Ability',
       netRegex: NetRegexes.ability({ id: ['670E', '670F', '6710'], source: 'Nidhogg', capture: false }),
       netRegexDe: NetRegexes.ability({ id: ['670E', '670F', '6710'], source: 'Nidhogg', capture: false }),
@@ -1227,27 +1266,75 @@ const triggerSet: TriggerSet<Data> = {
         }
 
         if (num === 1) {
-          // Num1 soaks tower 3 if they did not soak num2's towers
+          // Num1 must soak 2nd or 3rd tower set
+          if (data.diveFromGraceTowerCounter === 2) {
+            // Num1 High Jump Tower
+            // Unable to call with this, requires player priority as one of the
+            // three Num1 players needs to save themself for 3rd tower set
+
+            // Num1 Spineshatter Tower 2
+            if (data.diveFromGraceDir[data.me] === 'AC4')
+              return output.spineshatterTower2!({ num: output.num1!() });
+            // Num1 Elusive Tower 2
+            if (data.diveFromGraceDir[data.me] === 'AC5')
+              return output.elusiveTower2!({ num: output.num1!() });
+          }
+          // Num1 soaks middle tower 3 if they did not soak num2's towers
           if (data.diveFromGraceTowerCounter === 3 && !data.diveFromGraceFire)
-            return output.numsSoakTowers!({ num1: output.num1!(), num2: output.num2!() });
-          // TODO: A callout for second towers can only be a guess, but make an
-          // educated guess for the case of single high jump where most strats
-          // have the Spine/Elusive 1s do 2nd tower soaks?
+            return output.circleTower!({ num: output.num1!() });
+        } else if (num === 2 && data.diveFromGraceTowerCounter === 3) {
+          // Num2 High Jump Tower 3
+          // Requires player priority to know Left/Right
+          if (data.diveFromGraceDir[data.me] === 'AC3')
+            return output.circleTowers3!({ num: output.num2!() });
+
+          // Num2 Spineshatter Tower 3
+          if (data.diveFromGraceDir[data.me] === 'AC4')
+            return output.spineshatterTower!({ num: output.num2!() });
+          // Num2 Elusive Tower 3
+          if (data.diveFromGraceDir[data.me] === 'AC5')
+            return output.elusiveTower!({ num: output.num2!() });
+        } else if (num === 3 && data.diveFromGraceTowerCounter === 2) {
+          // Num3 High Jump Tower 1
+          if (data.diveFromGraceDir[data.me] === 'AC3') {
+            // Solo High Jump Tower 1
+            if (!data.diveFromGraceHasArrow[3])
+              return output.circleTower!({ num: output.num3!() });
+            return output.circleTowers!({ num: output.num3!() });
+          }
+
+          // Num3 Spineshatter Tower 1
+          if (data.diveFromGraceDir[data.me] === 'AC4')
+            return output.spineshatterTower!({ num: output.num3!() });
+          // Num3 Elusive Tower 1
+          if (data.diveFromGraceDir[data.me] === 'AC5')
+            return output.elusiveTower!({ num: output.num3!() });
         }
-        if (num === 2 && data.diveFromGraceTowerCounter === 3)
-          return output.numsSoakTowers!({ num1: output.num1!(), num2: output.num2!() });
-        if (num === 3 && data.diveFromGraceTowerCounter === 2)
-          return output.numSoakTowers!({ num: output.num3!() });
       },
       outputStrings: {
         num1: Outputs.num1,
         num2: Outputs.num2,
         num3: Outputs.num3,
-        numSoakTowers: {
-          en: '${num}번 타워 흡수',
+        circleTower: {
+          en: '#${num} 남쪽 타워',
         },
-        numsSoakTowers: {
-          en: '${num1}번과 ${num2}번 타워 흡수',
+        circleTowers: {
+          en: '#${num} 십자 타워',
+        },
+        circleTowers3: {
+          en: '#${num} 왼쪽/오른쪽 타워',
+        },
+        spineshatterTower: {
+          en: '#${num} 왼쪽 타워',
+        },
+        spineshatterTower2: {
+          en: '#${num} 뒤/왼쪽 타워',
+        },
+        elusiveTower: {
+          en: '#${num} 오른쪽 타워',
+        },
+        elusiveTower2: {
+          en: '#${num} 뒤/오른쪽 타워',
         },
       },
     },
@@ -1315,17 +1402,20 @@ const triggerSet: TriggerSet<Data> = {
       // AC3 = High Jump Target
       // AC4 = Spineshatter Dive Target
       // AC5 = Elusive Jump Target
-      // This only matches on non-circles.
-      netRegex: NetRegexes.gainsEffect({ effectId: ['AC4', 'AC5'] }),
+      netRegex: NetRegexes.gainsEffect({ effectId: ['AC3', 'AC4', 'AC5'] }),
       run: (data, matches) => {
-        const duration = parseFloat(matches.duration);
-        // These come out in 9, 19, 30 seconds.
-        if (duration < 15)
-          data.diveFromGraceHasArrow[1] = true;
-        else if (duration < 25)
-          data.diveFromGraceHasArrow[2] = true;
-        else
-          data.diveFromGraceHasArrow[3] = true;
+        if (matches.effectId === 'AC4' || matches.effectId === 'AC5') {
+          const duration = parseFloat(matches.duration);
+          // These come out in 9, 19, 30 seconds.
+          if (duration < 15)
+            data.diveFromGraceHasArrow[1] = true;
+          else if (duration < 25)
+            data.diveFromGraceHasArrow[2] = true;
+          else
+            data.diveFromGraceHasArrow[3] = true;
+        }
+        // Store result for position callout
+        data.diveFromGraceDir[matches.target] = matches.effectId;
       },
     },
     {
@@ -1422,13 +1512,13 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         diveCircles: {
-          en: '다이브 위치',
+          en: '십자 다이브',
         },
         diveCircle: {
           en: '남쪽 다이브',
         },
         diveCircles2: {
-          en: '비스듬한쪽 다이브',
+          en: '비스듬한 다이브',
         },
         diveSpineshatter: {
           en: '서쪽 다이브, 보스 보기',
