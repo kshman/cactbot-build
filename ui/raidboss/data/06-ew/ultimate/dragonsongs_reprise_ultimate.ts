@@ -170,7 +170,7 @@ const triggerSet: TriggerSet<Data> = {
         num2: Outputs.num2,
         num3: Outputs.num3,
         stackNums: {
-          en: '${num1} and ${num2} Stack',
+          en: '${num1}번과 ${num2}번 뭉쳐욧!',
         },
       },
     },
@@ -196,7 +196,7 @@ const triggerSet: TriggerSet<Data> = {
         num1: Outputs.num1,
         num2: Outputs.num2,
         stackNums: {
-          en: '${num1} and ${num2} Stack',
+          en: '${num1}번과 ${num2}번 뭉쳐욧!',
         },
       },
     },
