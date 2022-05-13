@@ -5,7 +5,7 @@ UserConfig.registerOptions('eureka', {
     {
       id: 'Debug',
       name: {
-        en: 'Enable debug mode',
+        en: '디버그 모드 사용',
         de: 'Aktiviere Debugmodus',
         fr: 'Activer le mode debug',
         ja: 'デバッグモードを有効にする',
@@ -19,7 +19,7 @@ UserConfig.registerOptions('eureka', {
     {
       id: 'FlagTimeoutSeconds',
       name: {
-        en: 'Duration of flags on the map (seconds)',
+        en: '지도에 플래그가 보이는 시간 (초단위)',
         de: 'Zeit der Flaggen auf der Karte (in Sekunden)',
         fr: 'Durée des drapeaux sur la carte en (s)',
         ja: 'マップにマーカーの表示時間 (秒)',
@@ -42,7 +42,7 @@ UserConfig.registerOptions('eureka', {
     {
       id: 'CompleteNamesSTQ',
       name: {
-        en: 'Prefer complete names for Skirmishes/Critical Engagements',
+        en: '스커미시/CE 표시할 때 전체 이름으로 보여주기',
         de: 'Bevorzuge komplette Namen für Scharmützel/Kritische Gefechte',
         fr: 'Préférer les noms complet pour les Escarmouches/Affrontements Cruciaux',
         ja: 'スカーミッシュ/CEにフールネームを表示する',
@@ -55,7 +55,7 @@ UserConfig.registerOptions('eureka', {
     {
       id: 'EnrichedSTQ',
       name: {
-        en: 'Add information about Field Notes',
+        en: '필드 노트 정보 추가',
         de: 'Füge Informationen über Frontberichte hinzu',
         fr: 'Ajouter les informations relatives aux Rapports du Front Bozjien',
         ja: 'フィールドノートに戦果記録情報を追加する',
@@ -68,7 +68,7 @@ UserConfig.registerOptions('eureka', {
     {
       id: 'PopNoiseForNM',
       name: {
-        en: 'Play pop sound for NMs',
+        en: '노토몹 나타날때 소리내기',
         de: 'Spiele Pop-Sound ab für NMs',
         fr: 'Jouer un son pour l\'apparition des NMs',
         ja: 'NM通知機能を有効にする',
@@ -81,7 +81,7 @@ UserConfig.registerOptions('eureka', {
     {
       id: 'PopNoiseForBunny',
       name: {
-        en: 'Play pop sound for bunny fates',
+        en: '토끼 페이트 나타날때 소리내기',
         de: 'Spiele Pop-Sound ab für Bunny-Fates',
         fr: 'Jouer un son pour l\'apparition de l\'aléa des lapins',
         ja: 'しあわせうさぎ通知機能を有効にする',
@@ -94,7 +94,7 @@ UserConfig.registerOptions('eureka', {
     {
       id: 'PopNoiseForSkirmish',
       name: {
-        en: 'Play pop sound for skirmishes',
+        en: '스커미시 나타날때 소리내기',
         de: 'Spiele Pop-Sound ab für Scharmützel',
         fr: 'Jouer un son pour l\'apparition des escarmouches',
         ja: 'スカーミッシュ通知機能を有効にする',
@@ -107,7 +107,7 @@ UserConfig.registerOptions('eureka', {
     {
       id: 'PopNoiseForCriticalEngagement',
       name: {
-        en: 'Play pop sound for critical engagements',
+        en: 'CE 나타날때 소리내기',
         de: 'Spiele Pop-Sound ab für Kritische Gefechte',
         fr: 'Jouer un son pour l\'apparition des affrontement cruciaux',
         ja: 'CE通知機能を有効にする',
@@ -120,7 +120,7 @@ UserConfig.registerOptions('eureka', {
     {
       id: 'PopNoiseForDuel',
       name: {
-        en: 'Play pop sound for duels',
+        en: '일대일 듀얼 나타날때 소리내기',
         de: 'Spiele Pop-Sound ab für Duelle',
         fr: 'Jouer un son pour l\'apparition des duels',
         ja: '一騎打ち通知機能を有効にする',
@@ -133,7 +133,7 @@ UserConfig.registerOptions('eureka', {
     {
       id: 'PopVolume',
       name: {
-        en: 'Volume of the nm pop sound (0-1)',
+        en: '노토 나타날때 소리 크기 (0-1)',
         de: 'Lautstärke des Popsounds bei erscheinen eines NM (0-1)',
         fr: 'Volume du son d\'apparition d\'un NM (0-1)',
         ja: 'NM出現音量 (0-1)',
@@ -146,7 +146,7 @@ UserConfig.registerOptions('eureka', {
     {
       id: 'BunnyPopVolume',
       name: {
-        en: 'Volume of the bunny pop sound (0-1)',
+        en: '토끼 나타날때 소리크기 (0-1)',
         de: 'Lautstärke des Bunny Pop Sounds (0-1)',
         fr: 'Volume du son d\'apparition des lapins (0-1)',
         ja: 'しあわせうさぎ出現音量 (0-1)',
@@ -159,7 +159,7 @@ UserConfig.registerOptions('eureka', {
     {
       id: 'CriticalPopVolume',
       name: {
-        en: 'Volume of the critical engagement pop sound (0-1)',
+        en: 'CE 나타날때 소리크기 (0-1)',
         de: 'Lautstärke des Kritischen Gefecht Sounds (0-1)',
         fr: 'Volume du son d\'apparition des affrontements cruciaux (0-1)',
         ja: 'CE通知音量 (0-1)',
@@ -172,7 +172,7 @@ UserConfig.registerOptions('eureka', {
     {
       id: 'RefreshRateSeconds',
       name: {
-        en: 'Update rate of nm cooldowns (seconds)',
+        en: '노토 쿨다운 업데이트 주기 (초단위)',
         de: 'Aktualisierung der NM cooldowns (in Sekunden)',
         fr: 'Rafraîchissement du temps de réapparition d\'un NM (s)',
         ja: 'NMの再沸き時間のリフレッシュ間隔 (秒)',

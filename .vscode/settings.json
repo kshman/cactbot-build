@@ -28,6 +28,11 @@
       */
     "editor.formatOnSaveMode": "file"
   },
+  "[css]": {
+    "editor.tabSize": 2,
+    "editor.formatOnSave": false,
+    "editor.suggest.insertMode": "replace"
+  },
   "typescript.tsdk": "node_modules/typescript/lib",
   "explorer.fileNesting.enabled": true,
   "explorer.fileNesting.patterns": {

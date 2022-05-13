@@ -30,7 +30,7 @@ import './config.css';
 
 // Text in the butter bar, to prompt the user to reload after a config change.
 const kReloadText = {
-  en: 'To apply configuration changes, reload cactbot overlays.',
+  en: 'cactbot 오버레이를 새로 고쳐야 바뀐 설정이 적용됩니다.',
   de: 'Um die Änderungen zu aktivieren, aktualisiere bitte die Cactbot Overlays.',
   fr: 'Afin d\'appliquer les modifications, il faut recharger l\'overlay Cactbot.',
   ja: '設定を有効にする為、Cactbotオーバーレイを再読み込みしてください',
@@ -40,7 +40,7 @@ const kReloadText = {
 
 // Text in the butter bar reload button.
 const kReloadButtonText = {
-  en: 'Reload',
+  en: '새로 고침',
   de: 'Aktualisieren',
   fr: 'Recharger',
   ja: '再読み込み',
@@ -50,7 +50,7 @@ const kReloadButtonText = {
 
 // Text on the directory choosing button.
 const kDirectoryChooseButtonText = {
-  en: 'Choose Directory',
+  en: '디렉터리 선택',
   de: 'Wähle ein Verzeichnis',
   fr: 'Choix du répertoire',
   ja: 'ディレクトリを選択',
@@ -60,7 +60,7 @@ const kDirectoryChooseButtonText = {
 
 // What to show when a directory hasn't been chosen.
 const kDirectoryDefaultText = {
-  en: '(Default)',
+  en: '(기본)',
   de: '(Standard)',
   fr: '(Défaut)',
   ja: '(初期設定)',
@@ -71,7 +71,7 @@ const kDirectoryDefaultText = {
 // Translating data folders to a category name.
 const kPrefixToCategory = {
   '00-misc': {
-    en: 'General Triggers',
+    en: '일반 트리거',
     de: 'General Trigger',
     fr: 'Général Triggers',
     ja: '汎用',
@@ -119,7 +119,7 @@ const kPrefixToCategory = {
     ko: '효월의 종언 (6.x)',
   },
   'user': {
-    en: 'User Triggers',
+    en: '사용자 트리거',
     de: 'Benutzer Trigger',
     fr: 'Triggers personnalisés',
     ja: 'ユーザートリガー',
@@ -131,7 +131,7 @@ const kPrefixToCategory = {
 // Translating data subfolders to encounter type.
 const kDirectoryToCategory = {
   alliance: {
-    en: 'Alliance Raid',
+    en: '얼라이언스 레이드',
     de: 'Allianz-Raid',
     fr: 'Raid en Alliance',
     ja: 'アライアンスレイド',
@@ -139,7 +139,7 @@ const kDirectoryToCategory = {
     ko: '연합 레이드',
   },
   dungeon: {
-    en: 'Dungeon',
+    en: '던전',
     de: 'Dungeon',
     fr: 'Donjon',
     ja: 'ダンジョン',
@@ -147,7 +147,7 @@ const kDirectoryToCategory = {
     ko: '던전',
   },
   eureka: {
-    en: 'Adventuring Forays',
+    en: '어드벤쳐링 탐색',
     de: 'Feldexkursion',
     fr: 'Missions d\'exploration',
     ja: '特殊フィールド探索',
@@ -155,7 +155,7 @@ const kDirectoryToCategory = {
     ko: '특수 필드 임무',
   },
   raid: {
-    en: 'Raid',
+    en: '레이드',
     de: 'Raid',
     fr: 'Raid',
     ja: 'レイド',
@@ -171,7 +171,7 @@ const kDirectoryToCategory = {
     ko: 'PvP',
   },
   trial: {
-    en: 'Trial',
+    en: '트라이얼',
     de: 'Prüfung',
     fr: 'Défi',
     ja: '討伐・討滅戦',
@@ -179,7 +179,7 @@ const kDirectoryToCategory = {
     ko: '토벌전',
   },
   ultimate: {
-    en: 'Ultimate',
+    en: '얼티밋',
     de: 'Fatale Raids',
     fr: 'Raid fatal',
     ja: '絶シリーズ',
@@ -384,7 +384,7 @@ export class CactbotConfigurator {
   // the value 3.
   getOption(group: string, path: string | string[], defaultValue: ConfigValue): ConfigValue {
     const objOrValue = this._getOptionLeafHelper(group, path);
-    if (!objOrValue)
+    if (objOrValue === undefined)
       return defaultValue;
 
     // At the leaf node.

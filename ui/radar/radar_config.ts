@@ -5,7 +5,7 @@ UserConfig.registerOptions('radar', {
     {
       id: 'BRankEnabled',
       name: {
-        en: 'B-Rank enabled',
+        en: 'B몹 표시',
         de: 'B-Rank aktiviert',
         fr: 'Rang-B activé',
         ja: 'ランクBモブ',
@@ -18,7 +18,7 @@ UserConfig.registerOptions('radar', {
     {
       id: 'DetectionRange',
       name: {
-        en: 'Minimum distance to detect mobs (yalms)',
+        en: '몹 감지 최소 거리 (얄름)',
         de: 'Minimum Entfernung um Mobs zu erkennen (in Yalms)',
         fr: 'Distance minimale de détection des mobs (yalms)',
         ja: '最短探測距離 (ヤルム)',
@@ -31,7 +31,7 @@ UserConfig.registerOptions('radar', {
     {
       id: 'TTS',
       name: {
-        en: 'Announce new mobs with text to speech',
+        en: '새몹이 나타나면 TTS로 알려주기',
         de: 'Kündige neue Mobs mit TTS an',
         fr: 'Annoncer les nouveaux mobs via TTS',
         ja: '沸きモブを探知したらTTSで知らせる',
@@ -44,7 +44,7 @@ UserConfig.registerOptions('radar', {
     {
       id: 'PopSoundAlert',
       name: {
-        en: 'Announce new mobs with a sound',
+        en: '새몹이 나타나면 소리로 알려주기',
         de: 'Kündige neue Mobs mit einem Sound an',
         fr: 'Annoncer les nouveaux mobs avec un son',
         ja: '沸きモブを探知したら音声で知らせる',
@@ -57,7 +57,7 @@ UserConfig.registerOptions('radar', {
     {
       id: 'PopVolume',
       name: {
-        en: 'Volume to play pop sound (0-1)',
+        en: '알림 소리 크기 (0-1)',
         de: 'Lautstärke für den Popsound (0-1)',
         fr: 'Volume du son lors d\'une apparition (0-1)',
         ja: 'お知らせ音声の音量 (0-1)',
@@ -70,7 +70,7 @@ UserConfig.registerOptions('radar', {
     {
       id: 'PullSoundAlert',
       name: {
-        en: 'Play sound when S rank is pulled',
+        en: 'S몹 잡기 시작하면 소리로 알려주기',
         de: 'Spiele Ton ab, wenn ein S-Rank gepullt wurde',
         cn: 'S级开怪时播放提示音',
         ko: 'S급 몬스터가 풀링되면 소리로 알림',
@@ -81,7 +81,7 @@ UserConfig.registerOptions('radar', {
     {
       id: 'PullVolume',
       name: {
-        en: 'Volume to play pull sound (0-1)',
+        en: '잡기 시작 알림 소리 크기 (0-1)',
         de: 'Lautstärke für den Pullsound (0-1)',
         cn: '开怪提示音量 (0-1)',
         ko: '풀링 알림 소리 크기 (0-1)',
@@ -92,7 +92,7 @@ UserConfig.registerOptions('radar', {
     {
       id: 'Puller',
       name: {
-        en: 'Show puller of mob',
+        en: '몹 선타한 사람 표시',
         de: 'Zeige den ersten Angreifer eines Mobs an',
         fr: 'Afficher le puller du mob',
         ja: '最初にタゲ取った人の名前を表示',
@@ -105,7 +105,7 @@ UserConfig.registerOptions('radar', {
     {
       id: 'Position',
       name: {
-        en: 'Show position of mob',
+        en: '몹 위치 표시',
         de: 'Zeige die Position eines Mobs',
         fr: 'Afficher la position du mob',
         ja: '沸きモブの位置を表示',

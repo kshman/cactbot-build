@@ -63,12 +63,12 @@ type ProcessedTriggerSet = LooseTriggerSet & {
 // There should be (at most) six lines of instructions.
 const raidbossInstructions: { [lang in Lang]: string[] } = {
   en: [
-    'Instructions as follows:',
-    'This is debug text for resizing.',
-    'It goes away when you lock the overlay',
-    'along with the blue background.',
-    'Timelines and triggers will show up in supported zones.',
-    'Test raidboss with a /countdown in Summerford Farms.',
+    '사용 방법:',
+    '이 안내문은 크기 조정을 위한 디버그 메시지예요.',
+    '파란 배경과 이 안내문은',
+    '오버레이를 잠그면, 바로 안보입니다.',
+    '타임라인과 트리거는 지원 구역에서 표시됩니다.',
+    '테스트로 Summerford Farms에서 /countdown 을 입력해보세요.',
   ],
   de: [
     'Anweisungen wie folgt:',

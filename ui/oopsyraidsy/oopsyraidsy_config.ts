@@ -27,7 +27,7 @@ const oopsyHelpers: (keyof LooseOopsyTriggerSet)[] = [
 const kTriggerOptions = {
   default: {
     label: {
-      en: '✔ Defaults',
+      en: '✔ 기본',
       de: '✔ Standards',
       fr: '✔ Défauts',
       ja: '✔ 初期設定',
@@ -37,7 +37,7 @@ const kTriggerOptions = {
   },
   disabled: {
     label: {
-      en: '❌ Disabled',
+      en: '❌ 사용안함',
       de: '❌ Deaktiviert',
       fr: '❌ Désactivé',
       ja: '❌ 無効',
@@ -176,7 +176,7 @@ class OopsyConfigurator {
       fileKey: '00-misc-buffs',
       filename: 'buff_map.ts',
       title: this.base.translate({
-        en: 'Missed Buffs',
+        en: '놓친 버프',
         de: 'Verfehlte Buffs',
         fr: 'Buffs manqués',
         ja: '欠けバフ',
@@ -254,7 +254,7 @@ const templateOptions: OptionsTemplate = {
     {
       id: 'Debug',
       name: {
-        en: 'Enable debug mode',
+        en: '디버그 모드 사용',
         de: 'Aktiviere Debugmodus',
         fr: 'Activer le mode debug',
         ja: 'デバッグモードを有効にする',
@@ -268,7 +268,7 @@ const templateOptions: OptionsTemplate = {
     {
       id: 'NumLiveListItemsInCombat',
       name: {
-        en: 'Number of mistakes to show in combat',
+        en: '전투 중에 표시할 미스의 개수',
         de: 'Anzahl der Fehler, die während des Kampfes angezeigt werden',
         fr: 'Nombre de fautes à afficher en combat',
         ja: '戦闘中に表示するミスをした回数',
@@ -281,7 +281,7 @@ const templateOptions: OptionsTemplate = {
     {
       id: 'MinimumTimeForPullMistake',
       name: {
-        en: 'Minimum time to show early pull (seconds)',
+        en: '선타로 처리할 최소 시간 (초단위)',
         de: 'Minimum Zeit in der Early-Pulls angezeigt werden (in Sekunden)',
         fr: 'Durée minimale pour afficher l\'early pull (secondes)',
         ja: 'タゲ取るのが早かったら、ミスとして表示する、カウントダウンとの最短時間 (秒)',
@@ -294,7 +294,7 @@ const templateOptions: OptionsTemplate = {
     {
       id: 'TimeToShowDeathReportSeconds',
       name: {
-        en: 'Seconds to show death report on death (0=none)',
+        en: '죽었을 때 데스 리포트를 표시할 시간 (초단위, 0=사용안함)',
         de: 'Sekunden um den Todesreport beim Tot anzuzeigen (0=niemals)',
         fr: 'Durée d’affichage (en secondes) du rapport de mort (0 = aucun)',
         ja: '倒れた時にデスレポートを表示 (0=非表示)',
@@ -317,7 +317,7 @@ const templateOptions: OptionsTemplate = {
     {
       id: 'DeathReportSide',
       name: {
-        en: 'How to show the death report',
+        en: '데스 리포트 표시 방법',
         de: 'Wie zeige ich den Todesreport an',
         fr: 'Où afficher le rapport de mort',
         ja: 'デスレポートの表示方法',
@@ -327,9 +327,9 @@ const templateOptions: OptionsTemplate = {
       type: 'select',
       options: {
         en: {
-          'Left Side': 'left',
-          'Right Side': 'right',
-          '❌ Disabled': 'disabled',
+          '왼쪽': 'left',
+          '오른쪽': 'right',
+          '❌ 사용안함': 'disabled',
         },
         de: {
           'Left Side': 'links',

@@ -21,12 +21,12 @@ const kBig = 1000000000; // Something bigger than any fight length in seconds.
 
 const timelineInstructions = {
   en: [
-    'These lines are',
-    'debug timeline entries.',
-    'If you lock the overlay,',
-    'they will disappear!',
-    'Real timelines automatically',
-    'appear when supported.',
+    '이 줄들은',
+    '디버그 타임라인 항목이예요.',
+    '오버레이를 잠금하면,',
+    '바로 사라집니다!',
+    '실제 타임라인이 자동적으로',
+    '지원 구역에서는 보여집니다.',
   ],
   de: [
     'Diese Zeilen sind',
@@ -71,7 +71,7 @@ const timelineInstructions = {
 };
 
 const activeText = {
-  en: 'Active:',
+  en: '진행:',
   de: 'Aktiv:',
   fr: 'Active :',
   ja: '(進行):',

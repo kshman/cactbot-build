@@ -81,7 +81,7 @@ if ($npmbuild -eq $TRUE)
 }
 
 ''
-$yn = New-QuestionYesNo "실행도할까요?"
+$yn = New-QuestionYesNo "실행도 할까요? (runas 뜰지도 모름)"
 if ($yn -eq $TRUE)
 {
   $actexe = "$act\Advanced Combat Tracker.exe"
