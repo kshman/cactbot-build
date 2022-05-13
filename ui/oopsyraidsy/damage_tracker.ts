@@ -48,7 +48,7 @@ import { PlayerStateTracker } from './player_state_tracker';
 const actorControlFadeInCommand = '40000010';
 
 const partyWipeText = {
-  en: 'Party Wipe',
+  en: '와이쁘',
   de: 'Gruppe ausgelöscht',
   fr: 'Party Wipe',
   ja: 'ワイプ',
@@ -57,7 +57,7 @@ const partyWipeText = {
 };
 
 const earlyPullText = {
-  en: 'early pull',
+  en: '선타',
   de: 'zu früh angegriffen',
   fr: 'early pull',
   ja: 'タゲ取り早い',
@@ -66,7 +66,7 @@ const earlyPullText = {
 };
 
 const latePullText = {
-  en: 'late pull',
+  en: '늦었타',
   de: 'zu spät angegriffen',
   fr: 'late pull',
   ja: 'タゲ取り遅い',

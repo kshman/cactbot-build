@@ -513,7 +513,7 @@ export class PlayerStateTracker {
         blame: sourceName,
         triggerType: 'Buff',
         text: {
-          en: `${collected.buffName} missed ${nameList}`,
+          en: `${collected.buffName} 버프가 ${nameList}에게 안들어감`,
           de: `${collected.buffName} verfehlt ${nameList}`,
           fr: `${collected.buffName} manqué(e) sur ${nameList}`,
           ja: `(${nameList}) が${collected.buffName}を受けなかった`,
@@ -531,7 +531,7 @@ export class PlayerStateTracker {
       blame: sourceName,
       triggerType: 'Buff',
       text: {
-        en: `${collected.buffName} missed ${missedNames.length} people`,
+        en: `${collected.buffName} 버프가 ${missedNames.length}명에게 안들어감`,
         de: `${collected.buffName} verfehlte ${missedNames.length} Personen`,
         fr: `${collected.buffName} manqué(e) sur ${missedNames.length} personnes`,
         ja: `${missedNames.length}人が${collected.buffName}を受けなかった`,
