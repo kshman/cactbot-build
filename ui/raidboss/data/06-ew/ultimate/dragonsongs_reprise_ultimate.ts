@@ -360,10 +360,6 @@ const triggerSet: TriggerSet<Data> = {
           console.error(`Ser Adelphel: null data`);
           return;
         }
-        if (!adelphelData.combatants) {
-          console.error(`Ser Adelphel: null combatants`);
-          return;
-        }
         const adelphelDataLength = adelphelData.combatants.length;
         if (adelphelDataLength !== 1) {
           console.error(`Ser Adelphel: expected 1 combatants got ${adelphelDataLength}`);
@@ -580,10 +576,6 @@ const triggerSet: TriggerSet<Data> = {
             console.error(`Spiral Thrust: null data`);
             return;
           }
-          if (!combatantData.combatants) {
-            console.error(`Spiral Thrust: null combatants`);
-            return;
-          }
           const combatantDataLength = combatantData.combatants.length;
           if (combatantDataLength !== 1) {
             console.error(`Spiral Thrust: expected 1 combatants got ${combatantDataLength}`);
@@ -750,10 +742,6 @@ const triggerSet: TriggerSet<Data> = {
         // trigger will not work, so just resume promise here
         if (thordanData === null) {
           console.error(`King Thordan: null data`);
-          return;
-        }
-        if (!thordanData.combatants) {
-          console.error(`King Thordan: null combatants`);
           return;
         }
         const thordanDataLength = thordanData.combatants.length;
@@ -927,10 +915,6 @@ const triggerSet: TriggerSet<Data> = {
         // trigger will not work, so just resume promise here
         if (combatantDataJanlenoux === null) {
           console.error(`Ser Janlenoux: null data`);
-          return;
-        }
-        if (!combatantDataJanlenoux.combatants) {
-          console.error(`Ser Janlenoux: null combatants`);
           return;
         }
         const combatantDataJanlenouxLength = combatantDataJanlenoux.combatants.length;
@@ -1355,19 +1339,19 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         move: Outputs.moveAway,
         circleTower3: {
-          en: '뭉쳤다가 => 남쪽 타워',
+          en: '모였다가 => 남쪽 타워',
         },
         spineshatterTower2: {
-          en: '뒤/왼쪽 타워',
+          en: '아래/왼쪽 타워',
         },
         spineshatterTower3: {
-          en: '뭉쳤다가 => 왼쪽 타워',
+          en: '모였다가 => 왼쪽 타워',
         },
         elusiveTower2: {
-          en: '뒤/오른쪽 타워',
+          en: '아래/오른쪽 타워',
         },
         elusiveTower3: {
-          en: '뭉쳤다가 => 오른쪽 타워',
+          en: '모였다가 => 오른쪽 타워',
         },
       },
     },
@@ -1578,19 +1562,19 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         circleAllCircles: {
-          en: '#${num} 서클 전부',
+          en: '#${num} 전부 동그라미/하이점프 ',
           ko: '#${num} 전부 하이점프',
         },
         circleWithArrows: {
-          en: '#${num} 서클 (화살표도)',
+          en: '#${num} 동그라미/하이점프 (+화살표)',
           ko: '#${num} 하이점프 (다른사람 화살표)',
         },
         upArrow: {
-          en: '#${num} 위 화살표',
+          en: '#${num} 위 화살표/스파인셔터',
           ko: '#${num} 위 화살표 (척추 강타)',
         },
         downArrow: {
-          en: '#${num} 아래 화살표',
+          en: '#${num} 아래 화살표/엘루시브',
           ko: '#${num} 아래 화살표 (교묘한 점프)',
         },
       },
@@ -1662,10 +1646,10 @@ const triggerSet: TriggerSet<Data> = {
           en: '동쪽 다이브, 보스 안보기',
         },
         diveSpineshatter2: {
-          en: '뒤/오른쪽 다이브, 동쪽 보기',
+          en: '아래/오른쪽 다이브, 동쪽 보기',
         },
         diveElusive2: {
-          en: '뒤/왼쪽 다이브, 동쪽 보기',
+          en: '아래/왼쪽 다이브, 동쪽 보기',
         },
       },
     },

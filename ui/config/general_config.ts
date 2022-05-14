@@ -19,7 +19,7 @@ UserConfig.registerOptions('general', {
     {
       id: 'ShowDeveloperOptions',
       name: {
-        en: '개발용 설정 표시',
+        en: '디버그 설정 표시',
         de: 'Zeige Entwickleroptionen',
         fr: 'Afficher les options développeur',
         ja: '開発者向けオプション',
@@ -42,7 +42,7 @@ UserConfig.registerOptions('general', {
       type: 'select',
       options: {
         en: {
-          'FFXIV Plugin 언어로 사용': 'default',
+          'FFXIV Plugin 설정 언어': 'default',
           'English': 'en',
           '中文': 'cn',
           'Deutsch': 'de',
