@@ -216,7 +216,7 @@ const kDetailKeys = {
   },
   'alertText': {
     label: {
-      en: '알러트',
+      en: '얼러트',
       de: 'alert',
       fr: 'alerte',
       ja: '警告',
@@ -1603,7 +1603,7 @@ const templateOptions: OptionsTemplate = {
     {
       id: 'Coverage',
       name: {
-        en: '지원하는 콘텐츠 (최신 버전)',
+        en: '지원 콘텐츠 URL',
         de: 'Unterstützte Inhalte (aktuellste Version)',
         fr: 'Contenu supporté (dernière version)',
         ja: '対応コンテンツ一覧 (最新バージョン)',
@@ -1639,7 +1639,7 @@ const templateOptions: OptionsTemplate = {
     {
       id: 'DefaultAlertOutput',
       name: {
-        en: '기본 알러트 출력',
+        en: '기본 얼러트 출력',
         de: 'Standard Alert Ausgabe',
         fr: 'Alerte par défaut',
         ja: '警告情報出力既定値',
@@ -1773,7 +1773,7 @@ const templateOptions: OptionsTemplate = {
       type: 'select',
       options: {
         en: {
-          'FFXIV Plugin 언어 사용': 'default',
+          'FFXIV Plugin 설정 언어': 'default',
           '영어': 'en',
           '中文': 'cn',
           'Deutsch': 'de',
@@ -1890,7 +1890,7 @@ const templateOptions: OptionsTemplate = {
     {
       id: 'AlertsEnabled',
       name: {
-        en: '알러트 사용하기',
+        en: '얼러트 사용하기',
         de: 'Alerts aktiviert',
         fr: 'Alertes activées',
         ja: '警告情報を有効にする',
@@ -1968,7 +1968,7 @@ const templateOptions: OptionsTemplate = {
     {
       id: 'DisplayAlertTextForSeconds',
       name: {
-        en: '알러트 텍스트 표시 시간 (초단위)',
+        en: '얼러트 텍스트 표시 시간 (초단위)',
         de: 'Alert-Text Anzeigedauer (in Sekunden)',
         fr: 'Durée d\'affichage du texte d\'alerte (secondes)',
         ja: '警告テキスト表示時間の長さ (秒)',
@@ -2007,7 +2007,7 @@ const templateOptions: OptionsTemplate = {
     {
       id: 'AlertSoundVolume',
       name: {
-        en: '알러트 소리 크기 (0-1)',
+        en: '얼러트 소리 크기 (0-1)',
         de: 'Alert Lautstärke (0-1)',
         fr: 'Volume de l\'alerte (0-1)',
         ja: '警告音声の音量 (0-1)',
@@ -2111,7 +2111,7 @@ const templateOptions: OptionsTemplate = {
     {
       id: 'AlertRumbleDuration',
       name: {
-        en: '알러트 트리거의 진동 시간 (밀리초)',
+        en: '얼러트 트리거의 진동 시간 (밀리초)',
         de: 'Zeit (in Millisekunden) der Vibration bei alert trigger',
         fr: 'Durée (millisecondes) de la vibration pour les triggers d\'alertes',
         ja: '警告トリガーによる振動の長さ (ミリ秒)',
@@ -2124,7 +2124,7 @@ const templateOptions: OptionsTemplate = {
     {
       id: 'AlertRumbleWeak',
       name: {
-        en: '알러트 트리거의 약한쪽 진동 세기 (0-1)',
+        en: '얼러트 트리거의 약한쪽 진동 세기 (0-1)',
         de: 'Stärke (0-1) der leichten Vibration bei alert trigger',
         fr: 'Intensité de la vibration faible pour les triggers d\'alertes (0-1)',
         ja: '警告トリガーによる振動にモーターの弱い方の強さ (0-1)',
@@ -2137,7 +2137,7 @@ const templateOptions: OptionsTemplate = {
     {
       id: 'AlertRumbleStrong',
       name: {
-        en: '알러트 트리거의 강한쪽 진동 세기 (0-1)',
+        en: '얼러트 트리거의 강한쪽 진동 세기 (0-1)',
         de: 'Stärke (0-1) der starken Vibration bei alert trigger',
         fr: 'Intensité de la vibration forte pour les triggers d\'alertes (0-1)',
         ja: '警告トリガーによる振動にモーターの強い方の強さ (0-1)',
