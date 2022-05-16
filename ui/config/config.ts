@@ -79,7 +79,7 @@ const kPrefixToCategory = {
     ko: '공용 트리거',
   },
   '02-arr': {
-    en: 'A Realm Reborn (ARR 2.x)',
+    en: '렐름 리본 (ARR 2.x)',
     de: 'A Realm Reborn (ARR 2.x)',
     fr: 'A Realm Reborn (ARR 2.x)',
     ja: '新生エオルゼア (2.x)',
@@ -87,7 +87,7 @@ const kPrefixToCategory = {
     ko: '신생 에오르제아 (2.x)',
   },
   '03-hw': {
-    en: 'Heavensward (HW 3.x)',
+    en: '헤븐즈워드 (HW 3.x)',
     de: 'Heavensward (HW 3.x)',
     fr: 'Heavensward (HW 3.x)',
     ja: '蒼天のイシュガルド (3.x)',
@@ -95,7 +95,7 @@ const kPrefixToCategory = {
     ko: '창천의 이슈가르드 (3.x)',
   },
   '04-sb': {
-    en: 'Stormblood (SB 4.x)',
+    en: '스텀블러드 (SB 4.x)',
     de: 'Stormblood (SB 4.x)',
     fr: 'Stormblood (SB 4.x)',
     ja: '紅蓮のリベレーター (4.x)',
@@ -103,7 +103,7 @@ const kPrefixToCategory = {
     ko: '홍련의 해방자 (4.x)',
   },
   '05-shb': {
-    en: 'Shadowbringers (ShB 5.x)',
+    en: '샤도브링어즈 (ShB 5.x)',
     de: 'Shadowbringers (ShB 5.x)',
     fr: 'Shadowbringers (ShB 5.x)',
     ja: '漆黒のヴィランズ (5.x)',
@@ -111,7 +111,7 @@ const kPrefixToCategory = {
     ko: '칠흑의 반역자 (5.x)',
   },
   '06-ew': {
-    en: 'Endwalker (EW 6.x)',
+    en: '엔드워커 (EW 6.x)',
     de: 'Endwalker (EW 6.x)',
     fr: 'Endwalker (EW 6.x)',
     ja: '暁月のフィナーレ (6.x)',
@@ -302,9 +302,7 @@ export class CactbotConfigurator {
     if (textObj === null || typeof textObj !== 'object' || !textObj['en'])
       throw new Error(`Invalid config: ${JSON.stringify(textObj)}`);
     const t = textObj[this.lang];
-    if (t)
-      return t;
-    return textObj['en'];
+    return t ?? textObj['en'];
   }
 
   getBooleanOption(group: string, path: string | string[], defaultValue: boolean): boolean {
@@ -414,7 +412,7 @@ export class CactbotConfigurator {
     defaultValue: SavedConfigEntry,
   ): SavedConfigEntry {
     const objOrValue = this._getOptionLeafHelper(group, path);
-    return objOrValue ? objOrValue : defaultValue;
+    return objOrValue ?? defaultValue;
   }
 
   // Sets an option in the config at a variable level of nesting.
@@ -744,7 +742,7 @@ export class CactbotConfigurator {
       let zoneId: number | undefined = undefined;
 
       // Make assumptions about trigger structure here to try to get the zoneId out.
-      if (triggerSet && typeof triggerSet.zoneId === 'number') {
+      if (typeof triggerSet.zoneId === 'number') {
         zoneId = triggerSet.zoneId;
         // Use the translatable zone info name, if possible.
         const zoneInfo = ZoneInfo[zoneId];
@@ -769,8 +767,6 @@ export class CactbotConfigurator {
     const userMap: ConfigProcessedFileMap<T> = {};
     let userFileIdx = 0;
     for (const triggerSet of userTriggerSets || []) {
-      if (!triggerSet)
-        continue;
       // TODO: pass in userTriggerSets as a filename -> triggerSet map as well
       // so we don't need to read this added value.
       if (!triggerSet.filename)

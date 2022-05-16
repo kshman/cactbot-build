@@ -476,7 +476,7 @@ class UserConfig {
   }
   addUnlockText(lang: Lang) {
     const unlockText = {
-      en: '🔓 Unlocked (lock overlay before using)',
+      en: '🔓 풀려있음 (쓰기전에 먼저 잠궈야해요)',
       de: '🔓 Entsperrt (Sperre das Overlay vor der Nutzung)',
       fr: '🔓 Débloqué (Bloquez l\'overlay avant utilisation)',
       ja: '🔓 ロック解除 (オーバーレイを使用する前にロックしてください)',
