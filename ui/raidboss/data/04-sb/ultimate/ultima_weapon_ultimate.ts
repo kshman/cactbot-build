@@ -327,6 +327,7 @@ const triggerSet: TriggerSet<Data> = {
         if (data.titanGaols?.length !== 3)
           return;
         if (data.titanShorts?.length === 3) {
+          console.log('감옥: ' + data.titanShorts.join(' / '));
           return output.text!({
             player1: data.titanShorts[0],
             player2: data.titanShorts[1],
