@@ -1046,20 +1046,21 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         tankHealerMeteors: {
           en: '탱/힐 운석 (${player1}, ${player2})',
-          de: 'Tank/Heiler Meteore (${player1}, ${player2})', // FIXME
+          de: 'Tank/Heiler Meteore (${player1}, ${player2})',
           fr: 'Météores Tank/Healer (${player1}, ${player2})', // FIXME
           ja: 'タンヒラ 隕石 (${player1}, ${player2})', // FIXME
           ko: '탱/힐 메테오 (${player1}, ${player2})', // FIXME
         },
         dpsMeteors: {
           en: 'DPS 운석 (${player1}, ${player2})',
-          de: 'DDs Meteore (${player1}, ${player2})', // FIXME
+          de: 'DDs Meteore (${player1}, ${player2})',
           fr: 'Météores DPS (${player1}, ${player2})', // FIXME
           ja: 'DPS 隕石 (${player1}, ${player2})', // FIXME
           ko: '딜러 메테오 (${player1}, ${player2})', // FIXME
         },
         unknownMeteors: {
           en: '랜덤 운석 (${player1}, ${player2})',
+          de: '??? Meteore (${player1}, ${player2})',
         },
       },
     },
@@ -1572,18 +1573,22 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         circleAllCircles: {
           en: '#${num} 전부 동그라미/하이점프 ',
+          de: '#${num} Alle Kreise',
           ko: '#${num} 전부 하이점프',
         },
         circleWithArrows: {
           en: '#${num} 동그라미/하이점프 (+화살표)',
+          de: '#${num} Kreise (mit Pfeilen)',
           ko: '#${num} 하이점프 (다른사람 화살표)',
         },
         upArrow: {
           en: '#${num} 위 화살표/오른쪽/스파인셔터',
+          de: '#${num} Pfeil nach Vorne',
           ko: '#${num} 위 화살표 (척추 강타)',
         },
         downArrow: {
           en: '#${num} 아래 화살표/왼쪽/엘루시브',
+          de: '#${num} Pfeil nach Hinten',
           ko: '#${num} 아래 화살표 (교묘한 점프)',
         },
       },
@@ -1713,7 +1718,7 @@ const triggerSet: TriggerSet<Data> = {
       netRegex: NetRegexes.gainsEffect({ effectId: ['B52'] }),
       condition: Conditions.targetIsYou(),
       // Boiling lasts 10.96s, after which Pyretic is applied provide warning
-      delaySeconds: (_data, matches) => parseFloat(matches.duration) - 9.5,
+      delaySeconds: (_data, matches) => parseFloat(matches.duration) - 1,
       // Player will have Pyretic for about 3s before hit by Cauterize
       durationSeconds: 4,
       infoText: (_data, _matches, output) => output.text!(),
