@@ -214,8 +214,7 @@ class Radar {
     this.regexes = {
       abilityFull: NetRegexes.abilityFull(),
       addedCombatantFull: NetRegexes.addedCombatantFull(),
-      instanceChanged: instanceChangedRegexes[this.options.ParserLanguage] ||
-        instanceChangedRegexes['en'],
+      instanceChanged: instanceChangedRegexes[this.options.ParserLanguage],
       wasDefeated: NetRegexes.wasDefeated(),
     };
 
@@ -235,8 +234,6 @@ class Radar {
 
   AddMonster(log: string, hunt: HuntEntry, matches: NetMatches['AddedCombatant']) {
     if (!this.playerPos)
-      return;
-    if (!matches)
       return;
     if (
       matches.id === undefined ||
