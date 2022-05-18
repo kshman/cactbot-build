@@ -12,6 +12,9 @@ import { LocaleText, TriggerSet } from '../../../../../types/trigger';
 
 // TODO: Ser Adelphel left/right movement after initial charge
 // TODO: Meteor "run" call?
+// TODO: Wyrmsbreath 2 cardinal positions for Cauterize and adjust delay
+// TODO: Intercard instead of left/right for Hallowed Wings with Cauterize
+// TODO: Trigger for Hallowed Wings with Hot Tail/Hot Wings
 
 type Phase = 'doorboss' | 'thordan' | 'nidhogg' | 'haurchefant' | 'thordan2' | 'nidhogg2' | 'dragon-king';
 
@@ -230,22 +233,12 @@ const triggerSet: TriggerSet<Data> = {
       id: 'DSR Holiest of Holy',
       type: 'StartsUsing',
       netRegex: NetRegexes.startsUsing({ id: '62D4', source: 'Ser Adelphel', capture: false }),
-      netRegexDe: NetRegexes.startsUsing({ id: '62D4', source: 'Adelphel', capture: false }),
-      netRegexFr: NetRegexes.startsUsing({ id: '62D4', source: 'Sire Adelphel', capture: false }),
-      netRegexJa: NetRegexes.startsUsing({ id: '62D4', source: '聖騎士アデルフェル', capture: false }),
-      netRegexCn: NetRegexes.startsUsing({ id: '62D4', source: '圣骑士阿代尔斐尔', capture: false }),
-      netRegexKo: NetRegexes.startsUsing({ id: '62D4', source: '성기사 아델펠', capture: false }),
       response: Responses.aoe(),
     },
     {
       id: 'DSR Holiest Hallowing',
       type: 'StartsUsing',
       netRegex: NetRegexes.startsUsing({ id: '62D0', source: 'Ser Adelphel' }),
-      netRegexDe: NetRegexes.startsUsing({ id: '62D0', source: 'Adelphel' }),
-      netRegexFr: NetRegexes.startsUsing({ id: '62D0', source: 'Sire Adelphel' }),
-      netRegexJa: NetRegexes.startsUsing({ id: '62D0', source: '聖騎士アデルフェル' }),
-      netRegexCn: NetRegexes.startsUsing({ id: '62D0', source: '圣骑士阿代尔斐尔' }),
-      netRegexKo: NetRegexes.startsUsing({ id: '62D0', source: '성기사 아델펠' }),
       // response: Responses.interrupt(),
       alertText: (data, _matches, output) => {
         data.holiestHallowing = (data.holiestHallowing ?? 0) + 1;
@@ -263,11 +256,6 @@ const triggerSet: TriggerSet<Data> = {
       id: 'DSR Empty Dimension',
       type: 'StartsUsing',
       netRegex: NetRegexes.startsUsing({ id: '62DA', source: 'Ser Grinnaux', capture: false }),
-      netRegexDe: NetRegexes.startsUsing({ id: '62DA', source: 'Grinnaux', capture: false }),
-      netRegexFr: NetRegexes.startsUsing({ id: '62DA', source: 'Sire Grinnaux', capture: false }),
-      netRegexJa: NetRegexes.startsUsing({ id: '62DA', source: '聖騎士グリノー', capture: false }),
-      netRegexCn: NetRegexes.startsUsing({ id: '62DA', source: '圣骑士格里诺', capture: false }),
-      netRegexKo: NetRegexes.startsUsing({ id: '62DA', source: '성기사 그리노', capture: false }),
       alertText: (data, _matches, output) => {
         return data.phase !== 'doorboss' || data.seenEmptyDimension ? output.in!() : output.inAndTether!();
       },
@@ -287,22 +275,12 @@ const triggerSet: TriggerSet<Data> = {
       id: 'DSR Full Dimension',
       type: 'StartsUsing',
       netRegex: NetRegexes.startsUsing({ id: '62DB', source: 'Ser Grinnaux', capture: false }),
-      netRegexDe: NetRegexes.startsUsing({ id: '62DB', source: 'Grinnaux', capture: false }),
-      netRegexFr: NetRegexes.startsUsing({ id: '62DB', source: 'Sire Grinnaux', capture: false }),
-      netRegexJa: NetRegexes.startsUsing({ id: '62DB', source: '聖騎士グリノー', capture: false }),
-      netRegexCn: NetRegexes.startsUsing({ id: '62DB', source: '圣骑士格里诺', capture: false }),
-      netRegexKo: NetRegexes.startsUsing({ id: '62DB', source: '성기사 그리노', capture: false }),
       response: Responses.getOut(),
     },
     {
       id: 'DSR Faith Unmoving',
       type: 'StartsUsing',
       netRegex: NetRegexes.startsUsing({ id: '62DC', source: 'Ser Grinnaux', capture: false }),
-      netRegexDe: NetRegexes.startsUsing({ id: '62DC', source: 'Grinnaux', capture: false }),
-      netRegexFr: NetRegexes.startsUsing({ id: '62DC', source: 'Sire Grinnaux', capture: false }),
-      netRegexJa: NetRegexes.startsUsing({ id: '62DC', source: '聖騎士グリノー', capture: false }),
-      netRegexCn: NetRegexes.startsUsing({ id: '62DC', source: '圣骑士格里诺', capture: false }),
-      netRegexKo: NetRegexes.startsUsing({ id: '62DC', source: '성기사 그리노', capture: false }),
       condition: (data) => data.phase !== 'doorboss' || data.adelphelDir === undefined,
       response: Responses.knockback(),
     },
@@ -331,11 +309,6 @@ const triggerSet: TriggerSet<Data> = {
       // 62D2 Is Ser Adelphel's Holy Bladedance, casted once during the encounter
       type: 'Ability',
       netRegex: NetRegexes.ability({ id: '62D2', source: 'Ser Adelphel' }),
-      netRegexDe: NetRegexes.ability({ id: '62D2', source: 'Adelphel' }),
-      netRegexFr: NetRegexes.ability({ id: '62D2', source: 'Sire Adelphel' }),
-      netRegexJa: NetRegexes.ability({ id: '62D2', source: '聖騎士アデルフェル' }),
-      netRegexCn: NetRegexes.ability({ id: '62D2', source: '圣骑士阿代尔斐尔' }),
-      netRegexKo: NetRegexes.ability({ id: '62D2', source: '성기사 아델펠' }),
       run: (data, matches) => data.adelphelId = matches.sourceId,
     },
     {
@@ -401,48 +374,6 @@ const triggerSet: TriggerSet<Data> = {
         },
       },
     },
-    /*
-    {
-      id: 'DSR Adelphel Move Direction',
-      type: 'Ability',
-      netRegex: NetRegexes.ability({ id: '62CE', source: 'Ser Adelphel' }),
-      netRegexDe: NetRegexes.ability({ id: '62CE', source: 'Adelphel' }),
-      netRegexFr: NetRegexes.ability({ id: '62CE', source: 'Sire Adelphel' }),
-      netRegexJa: NetRegexes.ability({ id: '62CE', source: '聖騎士アデルフェル' }),
-      netRegexCn: NetRegexes.ability({ id: '62CE', source: '圣骑士阿代尔斐尔' }),
-      netRegexKo: NetRegexes.ability({ id: '62CE', source: '성기사 아델펠' }),
-      suppressSeconds: 10,
-      infoText: (data, matches, output) => {
-        const heading = parseFloat(matches.heading);
-        // There's probably a better way to handle this...
-        switch (data.adelphelDir) {
-          case 0: // North
-            if (heading < 0)
-              return output.left!();
-            return output.right!();
-          case 1: // East
-            if (heading < -1.57)
-              return output.left!();
-            return output.right!();
-          case 2: // South
-            if (heading > 0)
-              return output.left!();
-            return output.right!();
-          case 3: // West
-            if (heading > 1.57)
-              return output.left!();
-            return output.right!();
-        }
-        return output.unknown!();
-      },
-      run: (data) => delete data.adelphelDir,
-      outputStrings: {
-        left: Outputs.left,
-        right: Outputs.right,
-        unknown: Outputs.unknown,
-      },
-    },
-    */
     {
       id: 'DSR Playstation Fire Chains',
       type: 'HeadMarker',
@@ -504,12 +435,7 @@ const triggerSet: TriggerSet<Data> = {
       id: 'DSR Ascalon\'s Mercy Concealed',
       type: 'StartsUsing',
       netRegex: NetRegexes.startsUsing({ id: '63C8', source: 'King Thordan', capture: true }),
-      netRegexDe: NetRegexes.startsUsing({ id: '63C8', source: 'Thordan', capture: true }),
-      netRegexFr: NetRegexes.startsUsing({ id: '63C8', source: 'Roi Thordan', capture: true }),
-      netRegexJa: NetRegexes.startsUsing({ id: '63C8', source: '騎神トールダン', capture: true }),
-      netRegexCn: NetRegexes.startsUsing({ id: '63C8', source: '骑神托尔丹', capture: true }),
-      netRegexKo: NetRegexes.startsUsing({ id: '63C8', source: '기사신 토르당', capture: true }),
-      delaySeconds: (_data, matches) => parseFloat(matches.castTime) - 0.5,
+      delaySeconds: (_data, matches) => parseFloat(matches.castTime),
       response: Responses.moveAway(),
     },
     {
@@ -517,11 +443,6 @@ const triggerSet: TriggerSet<Data> = {
       // 63D3 Strength of the Ward
       type: 'Ability',
       netRegex: NetRegexes.ability({ id: '63D3', source: 'King Thordan', capture: false }),
-      netRegexDe: NetRegexes.ability({ id: '63D3', source: 'Thordan', capture: false }),
-      netRegexFr: NetRegexes.ability({ id: '63D3', source: 'Roi Thordan', capture: false }),
-      netRegexJa: NetRegexes.ability({ id: '63D3', source: '騎神トールダン', capture: false }),
-      netRegexCn: NetRegexes.ability({ id: '63D3', source: '骑神托尔丹', capture: false }),
-      netRegexKo: NetRegexes.ability({ id: '63D3', source: '기사신 토르당', capture: false }),
       condition: (data) => data.phase === 'thordan',
       // It appears that these adds can be in place at ~4.5s, but with latency this may fail for some.
       delaySeconds: 5,
@@ -723,11 +644,6 @@ const triggerSet: TriggerSet<Data> = {
       // 63C4 Is Thordan's --middle-- action, thordan jumps again and becomes untargetable, shortly after the 2nd 6C34 action
       type: 'Ability',
       netRegex: NetRegexes.ability({ id: '63C4', source: 'King Thordan' }),
-      netRegexDe: NetRegexes.ability({ id: '63C4', source: 'Thordan' }),
-      netRegexFr: NetRegexes.ability({ id: '63C4', source: 'Roi Thordan' }),
-      netRegexJa: NetRegexes.ability({ id: '63C4', source: '騎神トールダン' }),
-      netRegexCn: NetRegexes.ability({ id: '63C4', source: '骑神托尔丹' }),
-      netRegexKo: NetRegexes.ability({ id: '63C4', source: '기사신 토르당' }),
       condition: (data) => (data.phase === 'thordan' && (data.thordanJumpCounter = (data.thordanJumpCounter ?? 0) + 1) === 2),
       delaySeconds: 0.5,
       promise: async (data, matches) => {
@@ -862,25 +778,15 @@ const triggerSet: TriggerSet<Data> = {
       id: 'DSR Ancient Quaga',
       type: 'StartsUsing',
       netRegex: NetRegexes.startsUsing({ id: '63C6', source: 'King Thordan', capture: false }),
-      netRegexDe: NetRegexes.startsUsing({ id: '63C6', source: 'Thordan', capture: false }),
-      netRegexFr: NetRegexes.startsUsing({ id: '63C6', source: 'Roi Thordan', capture: false }),
-      netRegexJa: NetRegexes.startsUsing({ id: '63C6', source: '騎神トールダン', capture: false }),
-      netRegexCn: NetRegexes.startsUsing({ id: '63C6', source: '骑神托尔丹', capture: false }),
-      netRegexKo: NetRegexes.startsUsing({ id: '63C6', source: '기사신 토르당', capture: false }),
       response: Responses.aoe(),
     },
     {
       id: 'DSR Sanctity of the Ward Direction',
       type: 'Ability',
       netRegex: NetRegexes.ability({ id: '63E1', source: 'King Thordan', capture: false }),
-      netRegexDe: NetRegexes.ability({ id: '63E1', source: 'Thordan', capture: false }),
-      netRegexFr: NetRegexes.ability({ id: '63E1', source: 'Roi Thordan', capture: false }),
-      netRegexJa: NetRegexes.ability({ id: '63E1', source: '騎神トールダン', capture: false }),
-      netRegexCn: NetRegexes.ability({ id: '63E1', source: '骑神托尔丹', capture: false }),
-      netRegexKo: NetRegexes.ability({ id: '63E1', source: '기사신 토르당', capture: false }),
       condition: (data) => data.phase === 'thordan',
       delaySeconds: 4.7,
-      durationSeconds: 8,
+      durationSeconds: 9,
       promise: async (data, _matches, output) => {
         // The two gladiators spawn in one of two positions: West (95, 100) or East (105, 100).
         // This triggers uses east/west location of the white knight, Ser Janlennoux (3635) to
@@ -1012,11 +918,6 @@ const triggerSet: TriggerSet<Data> = {
       id: 'DSR Dragon\'s Gaze',
       type: 'StartsUsing',
       netRegex: NetRegexes.startsUsing({ id: '63D0', source: 'King Thordan', capture: false }),
-      netRegexDe: NetRegexes.startsUsing({ id: '63D0', source: 'Thordan', capture: false }),
-      netRegexFr: NetRegexes.startsUsing({ id: '63D0', source: 'Roi Thordan', capture: false }),
-      netRegexJa: NetRegexes.startsUsing({ id: '63D0', source: '騎神トールダン', capture: false }),
-      netRegexCn: NetRegexes.startsUsing({ id: '63D0', source: '骑神托尔丹', capture: false }),
-      netRegexKo: NetRegexes.startsUsing({ id: '63D0', source: '기사신 토르당', capture: false }),
       durationSeconds: 5,
       response: Responses.lookAway('alert'),
     },
@@ -1056,11 +957,12 @@ const triggerSet: TriggerSet<Data> = {
           de: 'DDs Meteore (${player1}, ${player2})',
           fr: 'Météores DPS (${player1}, ${player2})', // FIXME
           ja: 'DPS 隕石 (${player1}, ${player2})', // FIXME
-          ko: '딜러 메테오 (${player1}, ${player2})', // FIXME
+          ko: '딜러 메테오 (${player1}, ${player2})',
         },
         unknownMeteors: {
           en: '랜덤 운석 (${player1}, ${player2})',
           de: '??? Meteore (${player1}, ${player2})',
+          ko: '??? 메테오 (${player1}, ${player2})',
         },
       },
     },
@@ -1082,11 +984,6 @@ const triggerSet: TriggerSet<Data> = {
       id: 'DSR Broad Swing Right',
       type: 'StartsUsing',
       netRegex: NetRegexes.startsUsing({ id: '63C0', source: 'King Thordan', capture: false }),
-      netRegexDe: NetRegexes.startsUsing({ id: '63C0', source: 'Thordan', capture: false }),
-      netRegexFr: NetRegexes.startsUsing({ id: '63C0', source: 'Roi Thordan', capture: false }),
-      netRegexJa: NetRegexes.startsUsing({ id: '63C0', source: '騎神トールダン', capture: false }),
-      netRegexCn: NetRegexes.startsUsing({ id: '63C0', source: '骑神托尔丹', capture: false }),
-      netRegexKo: NetRegexes.startsUsing({ id: '63C0', source: '기사신 토르당', capture: false }),
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
@@ -1101,11 +998,6 @@ const triggerSet: TriggerSet<Data> = {
       id: 'DSR Broad Swing Left',
       type: 'StartsUsing',
       netRegex: NetRegexes.startsUsing({ id: '63C1', source: 'King Thordan', capture: false }),
-      netRegexDe: NetRegexes.startsUsing({ id: '63C1', source: 'Thordan', capture: false }),
-      netRegexFr: NetRegexes.startsUsing({ id: '63C1', source: 'Roi Thordan', capture: false }),
-      netRegexJa: NetRegexes.startsUsing({ id: '63C1', source: '騎神トールダン', capture: false }),
-      netRegexCn: NetRegexes.startsUsing({ id: '63C1', source: '骑神托尔丹', capture: false }),
-      netRegexKo: NetRegexes.startsUsing({ id: '63C1', source: '기사신 토르당', capture: false }),
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
@@ -1120,18 +1012,12 @@ const triggerSet: TriggerSet<Data> = {
       id: 'DSR+ 또르당 Heavenly Heel',
       type: 'StartsUsing',
       netRegex: NetRegexes.startsUsing({ id: '63C7', source: 'King Thordan', capture: false }),
-      netRegexJa: NetRegexes.startsUsing({ id: '63C7', source: '騎神トールダン', capture: false }),
       response: Responses.tankBuster(),
     },
     {
       id: 'DSR Gnash and Lash',
       type: 'StartsUsing',
       netRegex: NetRegexes.startsUsing({ id: '6712', source: 'Nidhogg', capture: false }),
-      netRegexDe: NetRegexes.startsUsing({ id: '6712', source: 'Nidhogg', capture: false }),
-      netRegexFr: NetRegexes.startsUsing({ id: '6712', source: 'Nidhogg', capture: false }),
-      netRegexJa: NetRegexes.startsUsing({ id: '6712', source: 'ニーズヘッグ', capture: false }),
-      netRegexCn: NetRegexes.startsUsing({ id: '6712', source: '尼德霍格', capture: false }),
-      netRegexKo: NetRegexes.startsUsing({ id: '6712', source: '니드호그', capture: false }),
       durationSeconds: 8,
       response: Responses.getOutThenIn(),
     },
@@ -1139,11 +1025,6 @@ const triggerSet: TriggerSet<Data> = {
       id: 'DSR Lash and Gnash',
       type: 'StartsUsing',
       netRegex: NetRegexes.startsUsing({ id: '6713', source: 'Nidhogg', capture: false }),
-      netRegexDe: NetRegexes.startsUsing({ id: '6713', source: 'Nidhogg', capture: false }),
-      netRegexFr: NetRegexes.startsUsing({ id: '6713', source: 'Nidhogg', capture: false }),
-      netRegexJa: NetRegexes.startsUsing({ id: '6713', source: 'ニーズヘッグ', capture: false }),
-      netRegexCn: NetRegexes.startsUsing({ id: '6713', source: '尼德霍格', capture: false }),
-      netRegexKo: NetRegexes.startsUsing({ id: '6713', source: '니드호그', capture: false }),
       durationSeconds: 8,
       response: Responses.getInThenOut(),
     },
@@ -1153,11 +1034,6 @@ const triggerSet: TriggerSet<Data> = {
       // 6715 = Gnashing Wheel
       // 6716 = Lashing Wheel
       netRegex: NetRegexes.ability({ id: ['6715', '6716'], source: 'Nidhogg' }),
-      netRegexDe: NetRegexes.ability({ id: ['6715', '6716'], source: 'Nidhogg' }),
-      netRegexFr: NetRegexes.ability({ id: ['6715', '6716'], source: 'Nidhogg' }),
-      netRegexJa: NetRegexes.ability({ id: ['6715', '6716'], source: 'ニーズヘッグ' }),
-      netRegexCn: NetRegexes.ability({ id: ['6715', '6716'], source: '尼德霍格' }),
-      netRegexKo: NetRegexes.ability({ id: ['6715', '6716'], source: '니드호그' }),
       // These are ~3s apart.  Only call after the first (and ignore multiple people getting hit).
       suppressSeconds: 6,
       infoText: (_data, matches, output) => matches.id === '6715' ? output.in!() : output.out!(),
@@ -1174,11 +1050,6 @@ const triggerSet: TriggerSet<Data> = {
       // Collect players hit by dive
       type: 'Ability',
       netRegex: NetRegexes.ability({ id: ['670E', '670F', '6710'], source: 'Nidhogg' }),
-      netRegexDe: NetRegexes.ability({ id: ['670E', '670F', '6710'], source: 'Nidhogg' }),
-      netRegexFr: NetRegexes.ability({ id: ['670E', '670F', '6710'], source: 'Nidhogg' }),
-      netRegexJa: NetRegexes.ability({ id: ['670E', '670F', '6710'], source: 'ニーズヘッグ' }),
-      netRegexCn: NetRegexes.ability({ id: ['670E', '670F', '6710'], source: '尼德霍格' }),
-      netRegexKo: NetRegexes.ability({ id: ['670E', '670F', '6710'], source: '니드호그' }),
       run: (data, matches) => {
         const PosX = parseFloat(matches.targetX);
         const PosY = parseFloat(matches.targetY);
@@ -1197,11 +1068,6 @@ const triggerSet: TriggerSet<Data> = {
       //   Assumes North Party Stack
       type: 'Ability',
       netRegex: NetRegexes.ability({ id: ['670E', '670F', '6710'], source: 'Nidhogg', capture: false }),
-      netRegexDe: NetRegexes.ability({ id: ['670E', '670F', '6710'], source: 'Nidhogg', capture: false }),
-      netRegexFr: NetRegexes.ability({ id: ['670E', '670F', '6710'], source: 'Nidhogg', capture: false }),
-      netRegexJa: NetRegexes.ability({ id: ['670E', '670F', '6710'], source: 'ニーズヘッグ', capture: false }),
-      netRegexCn: NetRegexes.ability({ id: ['670E', '670F', '6710'], source: '尼德霍格', capture: false }),
-      netRegexKo: NetRegexes.ability({ id: ['670E', '670F', '6710'], source: '니드호그', capture: false }),
       preRun: (data) => data.diveFromGraceTowerCounter = (data.diveFromGraceTowerCounter ?? 0) + 1,
       delaySeconds: 0.1,
       suppressSeconds: 1,
@@ -1337,6 +1203,11 @@ const triggerSet: TriggerSet<Data> = {
             return output.move!();
         }
       },
+      run: (data) => {
+        // Empty the collector
+        for (const player in data.diveFromGracePositions)
+          delete data.diveFromGracePositions[player];
+      },
       outputStrings: {
         move: Outputs.moveAway,
         stackNorth: {
@@ -1361,11 +1232,6 @@ const triggerSet: TriggerSet<Data> = {
       // Triggered on first instance of Eye of the Tyrant (6714)
       type: 'Ability',
       netRegex: NetRegexes.ability({ id: '6714', source: 'Nidhogg', capture: false }),
-      netRegexDe: NetRegexes.ability({ id: '6714', source: 'Nidhogg', capture: false }),
-      netRegexFr: NetRegexes.ability({ id: '6714', source: 'Nidhogg', capture: false }),
-      netRegexJa: NetRegexes.ability({ id: '6714', source: 'ニーズヘッグ', capture: false }),
-      netRegexCn: NetRegexes.ability({ id: '6714', source: '尼德霍格', capture: false }),
-      netRegexKo: NetRegexes.ability({ id: '6714', source: '니드호그', capture: false }),
       // Ignore targetIsYou() incase player misses stack
       condition: (data) => data.eyeOfTheTyrantCounter === undefined,
       suppressSeconds: 1,
@@ -1394,7 +1260,7 @@ const triggerSet: TriggerSet<Data> = {
             return output.elusiveTower!();
         }
       },
-      run: (data) => data.eyeOfTheTyrantCounter = 2,
+      run: (data) => data.eyeOfTheTyrantCounter = 1,
       outputStrings: {
         num3: Outputs.num3,
         circleTower: {
@@ -1412,17 +1278,12 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: 'DSR Dive From Grace Tower 3 Reminder',
+      id: 'DSR Dive From Grace Tower 3',
       // Triggered on second instance of Eye of the Tyrant (6714)
       type: 'Ability',
       netRegex: NetRegexes.ability({ id: '6714', source: 'Nidhogg', capture: false }),
-      netRegexDe: NetRegexes.ability({ id: '6714', source: 'Nidhogg', capture: false }),
-      netRegexFr: NetRegexes.ability({ id: '6714', source: 'Nidhogg', capture: false }),
-      netRegexJa: NetRegexes.ability({ id: '6714', source: 'ニーズヘッグ', capture: false }),
-      netRegexCn: NetRegexes.ability({ id: '6714', source: '尼德霍格', capture: false }),
-      netRegexKo: NetRegexes.ability({ id: '6714', source: '니드호그', capture: false }),
       // Ignore targetIsYou() incase player misses stack
-      condition: (data) => data.eyeOfTheTyrantCounter === 2,
+      condition: (data) => data.eyeOfTheTyrantCounter === 1,
       suppressSeconds: 1,
       infoText: (data, _matches, output) => {
         const num = data.diveFromGraceNum[data.me];
@@ -1444,6 +1305,7 @@ const triggerSet: TriggerSet<Data> = {
         if (num !== 3)
           return output.circleTowers!();
       },
+      run: (data) => data.eyeOfTheTyrantCounter === 2,
       outputStrings: {
         circleTower: {
           en: '남쪽 타워',
@@ -1463,11 +1325,6 @@ const triggerSet: TriggerSet<Data> = {
       id: 'DSR Darkdragon Dive Single Tower',
       type: 'Ability',
       netRegex: NetRegexes.ability({ id: '6711', source: 'Nidhogg' }),
-      netRegexDe: NetRegexes.ability({ id: '6711', source: 'Nidhogg' }),
-      netRegexFr: NetRegexes.ability({ id: '6711', source: 'Nidhogg' }),
-      netRegexJa: NetRegexes.ability({ id: '6711', source: 'ニーズヘッグ' }),
-      netRegexCn: NetRegexes.ability({ id: '6711', source: '尼德霍格' }),
-      netRegexKo: NetRegexes.ability({ id: '6711', source: '니드호그' }),
       condition: Conditions.targetIsYou(),
       suppressSeconds: 1,
       infoText: (data, _matches, output) => {
@@ -1476,7 +1333,7 @@ const triggerSet: TriggerSet<Data> = {
           console.error(`DFG Dive Single Tower: missing number: ${JSON.stringify(data.diveFromGraceNum)}`);
           return output.text!();
         }
-        if (data.eyeOfTheTyrantCounter === 2 && num === 1)
+        if (data.eyeOfTheTyrantCounter === 1 && num === 1)
           return output.baitThenStack!({ num: output.num2!() });
         return output.text!();
       },
@@ -1572,22 +1429,22 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         circleAllCircles: {
-          en: '#${num} 전부 동그라미/하이점프 ',
+          en: '#${num} 전부 동그라미',
           de: '#${num} Alle Kreise',
           ko: '#${num} 전부 하이점프',
         },
         circleWithArrows: {
-          en: '#${num} 동그라미/하이점프 (+화살표)',
+          en: '#${num} 동그라미 (+화살표)',
           de: '#${num} Kreise (mit Pfeilen)',
           ko: '#${num} 하이점프 (다른사람 화살표)',
         },
         upArrow: {
-          en: '#${num} 위 화살표/오른쪽/스파인셔터',
+          en: '#${num} 위 화살표/오른쪽',
           de: '#${num} Pfeil nach Vorne',
           ko: '#${num} 위 화살표 (척추 강타)',
         },
         downArrow: {
-          en: '#${num} 아래 화살표/왼쪽/엘루시브',
+          en: '#${num} 아래 화살표/왼쪽',
           de: '#${num} Pfeil nach Hinten',
           ko: '#${num} 아래 화살표 (교묘한 점프)',
         },
@@ -1651,19 +1508,19 @@ const triggerSet: TriggerSet<Data> = {
           en: '남쪽 다이브',
         },
         diveCircles2: {
-          en: '비스듬 다이브',
+          en: '윗쪽 좌우 다이브',
         },
         diveSpineshatter: {
-          en: '오른쪽 다이브, 보스 보면 안댐!',
+          en: '오른쪽 다이브, 보스 봐야댐!',
         },
         diveElusive: {
-          en: '왼쪽 다이브, 보스 봐야댐!',
+          en: '왼쪽 다이브, 보스 보면 안댐!',
         },
         diveSpineshatter2: {
-          en: '뒷쪽/오른쪽 다이브, 동쪽 보기',
+          en: '뒷쪽/오른쪽 다이브, 서쪽 보기',
         },
         diveElusive2: {
-          en: '뒷쪽/왼쪽 다이브, 동쪽 보기',
+          en: '뒷쪽/왼쪽 다이브, 서쪽 보기',
         },
       },
     },
@@ -1681,6 +1538,68 @@ const triggerSet: TriggerSet<Data> = {
           ja: '大竜巻',
           cn: '旋风',
           ko: '회오리',
+        },
+      },
+    },
+    {
+      id: 'DSR Hallowed Wings and Plume',
+      // 6D23 Head Down, Left Wing
+      // 6D24 Head Up, Left Wing
+      // 6D26 Head Down, Right Wing
+      // 6D27 Head Up, Right Wing
+      // Head Up = Tanks Far
+      // Head Down = Tanks Near
+      type: 'StartsUsing',
+      netRegex: NetRegexes.startsUsing({ id: ['6D23', '6D24', '6D26', '6D27'], source: 'Hraesvelgr' }),
+      alertText: (data, matches, output) => {
+        let head;
+        let wings;
+        switch (matches.id) {
+          case '6D23':
+            wings = output.right!();
+            head = data.role === 'tank' ? output.near!() : output.far!();
+            break;
+          case '6D24':
+            wings = output.right!();
+            head = data.role === 'tank' ? output.far!() : output.near!();
+            break;
+          case '6D26':
+            wings = output.left!();
+            head = data.role === 'tank' ? output.near!() : output.far!();
+            break;
+          case '6D27':
+            wings = output.left!();
+            head = data.role === 'tank' ? output.far!() : output.near!();
+            break;
+        }
+        return output.text!({ wings: wings, head: head });
+      },
+      outputStrings: {
+        left: Outputs.left,
+        right: Outputs.right,
+        near: {
+          en: '흐레스벨그 가까이 (탱크버스터)',
+        },
+        far: {
+          en: '흐레스벨그와 멀리 (탱크버스터)',
+        },
+        text: {
+          en: '${wings}, ${head}',
+        },
+      },
+    },
+    {
+      id: 'DSR Akh Afah',
+      // 6D41 Akh Afah from Hraesvelgr, and 64D2 is immediately after
+      // 6D43 Akh Afah from Nidhogg, and 6D44 is immediately after
+      // Hits highest emnity target
+      type: 'StartsUsing',
+      netRegex: NetRegexes.startsUsing({ id: ['6D41', '6D43'], source: ['Hraesvelgr', 'Nidhogg'], capture: false }),
+      suppressSeconds: 2,
+      infoText: (_data, _matches, output) => output.groups!(),
+      outputStrings: {
+        groups: {
+          en: '탱크 둘이서 버스터!',
         },
       },
     },
@@ -1703,9 +1622,11 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         nidhogg: {
           en: '니드호그에게 맞아욧!',
+          ko: '니드호그에게 맞기',
         },
         hraesvelgr: {
           en: '흐레스벨그에게 맞아욧!',
+          ko: '흐레스벨그에게 맞기',
         },
       },
     },

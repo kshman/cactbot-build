@@ -54,24 +54,16 @@ const triggerSet: TriggerSet<Data> = {
       id: 'P3S Scorched Exaltation',
       type: 'StartsUsing',
       netRegex: NetRegexes.startsUsing({ id: '6706', source: 'Phoinix', capture: false }),
-      netRegexDe: NetRegexes.startsUsing({ id: '6706', source: 'Phoinix', capture: false }),
-      netRegexFr: NetRegexes.startsUsing({ id: '6706', source: 'Protophénix', capture: false }),
-      netRegexJa: NetRegexes.startsUsing({ id: '6706', source: 'フェネクス', capture: false }),
-      netRegexCn: NetRegexes.startsUsing({ id: '6706', source: '菲尼克司', capture: false }),
       response: Responses.aoe(),
     },
     {
       id: 'P3S Darkened Fire',
       type: 'StartsUsing',
       netRegex: NetRegexes.startsUsing({ id: '66B9', source: 'Phoinix', capture: false }),
-      netRegexDe: NetRegexes.startsUsing({ id: '66B9', source: 'Phoinix', capture: false }),
-      netRegexFr: NetRegexes.startsUsing({ id: '66B9', source: 'Protophénix', capture: false }),
-      netRegexJa: NetRegexes.startsUsing({ id: '66B9', source: 'フェネクス', capture: false }),
-      netRegexCn: NetRegexes.startsUsing({ id: '66B9', source: '菲尼克司', capture: false }),
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '불꽃 놓는 위치로!',
+          en: 'Fire Positions',
           de: 'Feuer-Positionen',
           fr: 'Positions pour les flammes',
           ja: '黒い炎の位置に散開',
@@ -84,14 +76,10 @@ const triggerSet: TriggerSet<Data> = {
       id: 'P3S Heat of Condemnation',
       type: 'StartsUsing',
       netRegex: NetRegexes.startsUsing({ id: '6700', source: 'Phoinix', capture: false }),
-      netRegexDe: NetRegexes.startsUsing({ id: '6700', source: 'Phoinix', capture: false }),
-      netRegexFr: NetRegexes.startsUsing({ id: '6700', source: 'Protophénix', capture: false }),
-      netRegexJa: NetRegexes.startsUsing({ id: '6700', source: 'フェネクス', capture: false }),
-      netRegexCn: NetRegexes.startsUsing({ id: '6700', source: '菲尼克司', capture: false }),
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '탱크는 줄잡아!',
+          en: 'Tank Tethers',
           de: 'Tank-Verbindungen',
           fr: 'Liens Tank',
           ja: 'タンク線取り',
@@ -104,14 +92,10 @@ const triggerSet: TriggerSet<Data> = {
       id: 'P3S Experimental Fireplume Rotating Cast',
       type: 'StartsUsing',
       netRegex: NetRegexes.startsUsing({ id: '66C0', source: 'Phoinix', capture: false }),
-      netRegexDe: NetRegexes.startsUsing({ id: '66C0', source: 'Phoinix', capture: false }),
-      netRegexFr: NetRegexes.startsUsing({ id: '66C0', source: 'Protophénix', capture: false }),
-      netRegexJa: NetRegexes.startsUsing({ id: '66C0', source: 'フェネクス', capture: false }),
-      netRegexCn: NetRegexes.startsUsing({ id: '66C0', source: '菲尼克司', capture: false }),
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '가운데 → 작은 구슬, 시바',
+          en: 'Get Middle (then rotate)',
           de: 'Geh in die Mitte (und rotiere dann)',
           fr: 'Placez-vous au milieu (puis tournez)',
           ja: '中央 → 小玉・ぐるぐる',
@@ -124,14 +108,10 @@ const triggerSet: TriggerSet<Data> = {
       id: 'P3S Experimental Fireplume Out Cast',
       type: 'StartsUsing',
       netRegex: NetRegexes.startsUsing({ id: '66BE', source: 'Phoinix', capture: false }),
-      netRegexDe: NetRegexes.startsUsing({ id: '66BE', source: 'Phoinix', capture: false }),
-      netRegexFr: NetRegexes.startsUsing({ id: '66BE', source: 'Protophénix', capture: false }),
-      netRegexJa: NetRegexes.startsUsing({ id: '66BE', source: 'フェネクス', capture: false }),
-      netRegexCn: NetRegexes.startsUsing({ id: '66BE', source: '菲尼克司', capture: false }),
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '가운데 → 큰 구슬, 밖으로',
+          en: 'Get Middle (then out)',
           de: 'Geh in die Mitte (und dann raus)',
           fr: 'Placez-vous au milieu (puis sortez)',
           ja: '中央 → 大玉・離れる',
@@ -144,10 +124,6 @@ const triggerSet: TriggerSet<Data> = {
       id: 'P3S Experimental Fireplume Out Marker',
       type: 'Ability',
       netRegex: NetRegexes.ability({ id: '66BE', source: 'Phoinix', capture: false }),
-      netRegexDe: NetRegexes.ability({ id: '66BE', source: 'Phoinix', capture: false }),
-      netRegexFr: NetRegexes.ability({ id: '66BE', source: 'Protophénix', capture: false }),
-      netRegexJa: NetRegexes.ability({ id: '66BE', source: 'フェネクス', capture: false }),
-      netRegexCn: NetRegexes.ability({ id: '66BE', source: '菲尼克司', capture: false }),
       // goldfish brain needs an extra "get out" call
       response: Responses.getOut(),
     },
@@ -155,34 +131,22 @@ const triggerSet: TriggerSet<Data> = {
       id: 'P3S Right Cinderwing',
       type: 'StartsUsing',
       netRegex: NetRegexes.startsUsing({ id: '6702', source: 'Phoinix', capture: false }),
-      netRegexDe: NetRegexes.startsUsing({ id: '6702', source: 'Phoinix', capture: false }),
-      netRegexFr: NetRegexes.startsUsing({ id: '6702', source: 'Protophénix', capture: false }),
-      netRegexJa: NetRegexes.startsUsing({ id: '6702', source: 'フェネクス', capture: false }),
-      netRegexCn: NetRegexes.startsUsing({ id: '6702', source: '菲尼克司', capture: false }),
       response: Responses.goLeft(),
     },
     {
       id: 'P3S Left Cinderwing',
       type: 'StartsUsing',
       netRegex: NetRegexes.startsUsing({ id: '6703', source: 'Phoinix', capture: false }),
-      netRegexDe: NetRegexes.startsUsing({ id: '6703', source: 'Phoinix', capture: false }),
-      netRegexFr: NetRegexes.startsUsing({ id: '6703', source: 'Protophénix', capture: false }),
-      netRegexJa: NetRegexes.startsUsing({ id: '6703', source: 'フェネクス', capture: false }),
-      netRegexCn: NetRegexes.startsUsing({ id: '6703', source: '菲尼克司', capture: false }),
       response: Responses.goRight(),
     },
     {
       id: 'P3S Flare of Condemnation',
       type: 'StartsUsing',
       netRegex: NetRegexes.startsUsing({ id: '66FB', source: 'Phoinix', capture: false }),
-      netRegexDe: NetRegexes.startsUsing({ id: '66FB', source: 'Phoinix', capture: false }),
-      netRegexFr: NetRegexes.startsUsing({ id: '66FB', source: 'Protophénix', capture: false }),
-      netRegexJa: NetRegexes.startsUsing({ id: '66FB', source: 'フェネクス', capture: false }),
-      netRegexCn: NetRegexes.startsUsing({ id: '66FB', source: '菲尼克司', capture: false }),
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '바깥쪽에서 산개',
+          en: 'Sides + Spread',
           de: 'Seiten + Verteilen',
           fr: 'Côtés + Dispersez-vous',
           ja: '横側安置：散開',
@@ -195,14 +159,10 @@ const triggerSet: TriggerSet<Data> = {
       id: 'P3S Spark of Condemnation',
       type: 'StartsUsing',
       netRegex: NetRegexes.startsUsing({ id: '66FC', source: 'Phoinix', capture: false }),
-      netRegexDe: NetRegexes.startsUsing({ id: '66FC', source: 'Phoinix', capture: false }),
-      netRegexFr: NetRegexes.startsUsing({ id: '66FC', source: 'Protophénix', capture: false }),
-      netRegexJa: NetRegexes.startsUsing({ id: '66FC', source: 'フェネクス', capture: false }),
-      netRegexCn: NetRegexes.startsUsing({ id: '66FC', source: '菲尼克司', capture: false }),
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '가운데서 짝짝쿵',
+          en: 'Middle Pairs',
           de: 'Mittlere Paare',
           fr: 'Paires au milieu',
           ja: '中央直線安置：二人組で頭割り',
@@ -238,10 +198,10 @@ const triggerSet: TriggerSet<Data> = {
         num2: Outputs.num2,
         num3: Outputs.num3,
         num4: Outputs.num4,
-        num5: '1 ◁ 5',
-        num6: '2 ◁ 6',
-        num7: '3 ◁ 7',
-        num8: '4 ◁ 8',
+        num5: Outputs.num5,
+        num6: Outputs.num6,
+        num7: Outputs.num7,
+        num8: Outputs.num8,
         east: Outputs.east,
         west: Outputs.west,
         south: Outputs.south,
@@ -255,10 +215,6 @@ const triggerSet: TriggerSet<Data> = {
       // TODO: in general, it seems like the tethers are picked to start unstretched,
       // but plausibly you could create a scenario where one starts stretched?
       netRegex: NetRegexes.tether({ source: 'Sunbird', id: ['0039', '0001'] }),
-      netRegexDe: NetRegexes.tether({ source: 'Spross Des Phoinix', id: ['0039', '0001'] }),
-      netRegexFr: NetRegexes.tether({ source: 'Oiselet Étincelant', id: ['0039', '0001'] }),
-      netRegexJa: NetRegexes.tether({ source: '陽炎鳥', id: ['0039', '0001'] }),
-      netRegexCn: NetRegexes.tether({ source: '阳炎鸟', id: ['0039', '0001'] }),
       run: (data, matches) => data.sunbirdTethers.push(matches),
     },
     {
@@ -325,7 +281,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         playerTether: {
-          en: '${dir} (멀어지기: ${player})',
+          en: '${dir} (away from ${player})',
           de: '${dir} (weg von ${player})',
           fr: '${dir} (éloignez-vous de ${player})',
           ja: '${dir} (${player}と繋がる)',
@@ -333,7 +289,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '${dir} (${player}에게서 멀리 떨어지기)',
         },
         birdTether: {
-          en: '${dir} (새한테 멀어지기)',
+          en: '${dir} (away from bird)',
           de: '${dir} (weg vom Vogel)',
           fr: '${dir} (éloignez-vous de l\'oiseau)',
           ja: '${dir} (鳥と繋がる)',
@@ -354,10 +310,6 @@ const triggerSet: TriggerSet<Data> = {
       id: 'P3S Dead Rebirth',
       type: 'StartsUsing',
       netRegex: NetRegexes.startsUsing({ id: '66E4', source: 'Phoinix', capture: false }),
-      netRegexDe: NetRegexes.startsUsing({ id: '66E4', source: 'Phoinix', capture: false }),
-      netRegexFr: NetRegexes.startsUsing({ id: '66E4', source: 'Protophénix', capture: false }),
-      netRegexJa: NetRegexes.startsUsing({ id: '66E4', source: 'フェネクス', capture: false }),
-      netRegexCn: NetRegexes.startsUsing({ id: '66E4', source: '菲尼克司', capture: false }),
       response: Responses.bigAoe(),
     },
     {
@@ -365,14 +317,10 @@ const triggerSet: TriggerSet<Data> = {
       type: 'StartsUsing',
       // 66CA (self) -> 66CB (rotating) -> etc
       netRegex: NetRegexes.startsUsing({ id: '66CA', source: 'Phoinix', capture: false }),
-      netRegexDe: NetRegexes.startsUsing({ id: '66CA', source: 'Phoinix', capture: false }),
-      netRegexFr: NetRegexes.startsUsing({ id: '66CA', source: 'Protophénix', capture: false }),
-      netRegexJa: NetRegexes.startsUsing({ id: '66CA', source: 'フェネクス', capture: false }),
-      netRegexCn: NetRegexes.startsUsing({ id: '66CA', source: '菲尼克司', capture: false }),
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '가운데 → 작은 구슬, 시바',
+          en: 'Get Middle (then rotate)',
           de: 'Geh in die Mitte (und rotiere dann)',
           fr: 'Placez-vous au milieu (puis tournez)',
           ja: '中央 → 小玉・ぐるぐる',
@@ -386,14 +334,10 @@ const triggerSet: TriggerSet<Data> = {
       type: 'StartsUsing',
       // 66C6 (self) -> 66C7 (middle) -> etc
       netRegex: NetRegexes.startsUsing({ id: '66C6', source: 'Phoinix', capture: false }),
-      netRegexDe: NetRegexes.startsUsing({ id: '66C6', source: 'Phoinix', capture: false }),
-      netRegexFr: NetRegexes.startsUsing({ id: '66C6', source: 'Protophénix', capture: false }),
-      netRegexJa: NetRegexes.startsUsing({ id: '66C6', source: 'フェネクス', capture: false }),
-      netRegexCn: NetRegexes.startsUsing({ id: '66C6', source: '菲尼克司', capture: false }),
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '가운데 → 큰 구슬, 밖으로',
+          en: 'Get Middle (then out)',
           de: 'Geh in die Mitte (und dann raus)',
           fr: 'Placez-vous au milieu (puis sortez)',
           ja: '中央 → 大玉・離れる',
@@ -407,10 +351,6 @@ const triggerSet: TriggerSet<Data> = {
       type: 'Ability',
       // 66C6 (self) -> 66C7 (middle) -> etc
       netRegex: NetRegexes.ability({ id: '66C6', source: 'Phoinix', capture: false }),
-      netRegexDe: NetRegexes.ability({ id: '66C6', source: 'Phoinix', capture: false }),
-      netRegexFr: NetRegexes.ability({ id: '66C6', source: 'Protophénix', capture: false }),
-      netRegexJa: NetRegexes.ability({ id: '66C6', source: 'フェネクス', capture: false }),
-      netRegexCn: NetRegexes.ability({ id: '66C6', source: '菲尼克司', capture: false }),
       // If you hang around to wait for the spread/stack, you will get killed.
       // It's easy to get complacement by the end of the fight, so make this loud.
       response: Responses.getOut('alarm'),
@@ -421,14 +361,10 @@ const triggerSet: TriggerSet<Data> = {
       // 66CA (self) -> 66CB (rotating) -> 66CC (instant) -> 66CD (stacks)
       // 66C6 (self) -> 66C7 (middle) -> 66CC (instant) -> 66CD (stacks)
       netRegex: NetRegexes.ability({ id: '66CC', source: 'Phoinix', capture: false }),
-      netRegexDe: NetRegexes.ability({ id: '66CC', source: 'Phoinix', capture: false }),
-      netRegexFr: NetRegexes.ability({ id: '66CC', source: 'Protophénix', capture: false }),
-      netRegexJa: NetRegexes.ability({ id: '66CC', source: 'フェネクス', capture: false }),
-      netRegexCn: NetRegexes.ability({ id: '66CC', source: '菲尼克司', capture: false }),
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '그다음 뭉쳐욧',
+          en: 'Stacks After',
           de: 'Danach sammeln',
           fr: 'Packez-vous après',
           ja: 'あとは頭割り',
@@ -443,14 +379,10 @@ const triggerSet: TriggerSet<Data> = {
       // 66CA (self) -> 66CB (rotating) -> 66C8 (instant) -> 66C9 (spread)
       // 66C6 (self) -> 66C7 (middle) -> 66C8 (instant) -> 66C9 (spread)
       netRegex: NetRegexes.ability({ id: '66C8', source: 'Phoinix', capture: false }),
-      netRegexDe: NetRegexes.ability({ id: '66C8', source: 'Phoinix', capture: false }),
-      netRegexFr: NetRegexes.ability({ id: '66C8', source: 'Protophénix', capture: false }),
-      netRegexJa: NetRegexes.ability({ id: '66C8', source: 'フェネクス', capture: false }),
-      netRegexCn: NetRegexes.ability({ id: '66C8', source: '菲尼克司', capture: false }),
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '그다음 흩어져욧',
+          en: 'Spread After',
           de: 'Danach verteilen',
           fr: 'Dispersez-vous après',
           ja: 'あとは散開',
@@ -467,7 +399,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '흩어지고 → 새의 줄',
+          en: 'Spread => Bird Tether',
           de: 'Verteilen => Vogel-Verbindungen',
           fr: 'Dispersez-vous => Liens oiseaux',
           ja: '散開 => 鳥の線',
@@ -480,10 +412,6 @@ const triggerSet: TriggerSet<Data> = {
       id: 'P3S Firestorms of Asphodelos',
       type: 'StartsUsing',
       netRegex: NetRegexes.startsUsing({ id: '66F0', source: 'Phoinix', capture: false }),
-      netRegexDe: NetRegexes.startsUsing({ id: '66F0', source: 'Phoinix', capture: false }),
-      netRegexFr: NetRegexes.startsUsing({ id: '66F0', source: 'Protophénix', capture: false }),
-      netRegexJa: NetRegexes.startsUsing({ id: '66F0', source: 'フェネクス', capture: false }),
-      netRegexCn: NetRegexes.startsUsing({ id: '66F0', source: '菲尼克司', capture: false }),
       response: Responses.bigAoe(),
     },
     {
@@ -491,14 +419,10 @@ const triggerSet: TriggerSet<Data> = {
       type: 'Ability',
       // 66C2 cast -> 66C3 stacks damage
       netRegex: NetRegexes.ability({ id: '66C2', source: 'Phoinix', capture: false }),
-      netRegexDe: NetRegexes.ability({ id: '66C2', source: 'Phoinix', capture: false }),
-      netRegexFr: NetRegexes.ability({ id: '66C2', source: 'Protophénix', capture: false }),
-      netRegexJa: NetRegexes.ability({ id: '66C2', source: 'フェネクス', capture: false }),
-      netRegexCn: NetRegexes.ability({ id: '66C2', source: '菲尼克司', capture: false }),
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '함께 맞아욧',
+          en: 'Stacks',
           de: 'Sammeln',
           fr: 'Packez-vous',
           ja: '頭割り',
@@ -512,14 +436,10 @@ const triggerSet: TriggerSet<Data> = {
       type: 'Ability',
       // 66C4 cast -> 66C5 spread damage
       netRegex: NetRegexes.ability({ id: '66C4', source: 'Phoinix', capture: false }),
-      netRegexDe: NetRegexes.ability({ id: '66C4', source: 'Phoinix', capture: false }),
-      netRegexFr: NetRegexes.ability({ id: '66C4', source: 'Protophénix', capture: false }),
-      netRegexJa: NetRegexes.ability({ id: '66C4', source: 'フェネクス', capture: false }),
-      netRegexCn: NetRegexes.ability({ id: '66C4', source: '菲尼克司', capture: false }),
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '흩어져욧',
+          en: 'Spread',
           de: 'Verteilen',
           fr: 'Dispersez-vous',
           ja: '散開',
@@ -550,7 +470,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         middle: Outputs.middle,
         outIntercards: {
-          en: '두개의 모서리로!',
+          en: 'Intercards + Out',
           de: 'Interkardinal + Raus',
           fr: 'Intercadinal + Extérieur',
           ja: '斜め + 外側',
@@ -558,7 +478,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '대각선 + 바깥',
         },
         outCardinals: {
-          en: '십자 바깥으로!',
+          en: 'Out + Cardinals',
           de: 'Raus + Kardinal',
           fr: 'Extérieur + Cardinal',
           ja: '外側 + 十字',

@@ -30,7 +30,7 @@ const flailDirections = {
 
 const fireLightOutputStrings = {
   fire: {
-    en: '빨간 바닥으로!',
+    en: 'Stand on fire',
     de: 'Auf der Feuerfläche stehen',
     fr: 'Placez-vous sur le feu',
     ja: '炎の床へ',
@@ -38,7 +38,7 @@ const fireLightOutputStrings = {
     ko: '빨간 바닥으로',
   },
   light: {
-    en: '하얀 바닥으로!',
+    en: 'Stand on light',
     de: 'Auf der Lichtfläche stehen',
     fr: 'Placez-vous sur la lumière',
     ja: '光の床へ',
@@ -58,7 +58,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.positions!(),
       outputStrings: {
         positions: {
-          en: '타일 위치로!',
+          en: 'Tile Positions',
           de: 'Flächen-Positionen',
           fr: 'Positions sur les cases',
           ja: '自分の担当マスへ',
@@ -73,11 +73,6 @@ const triggerSet: TriggerSet<Data> = {
       id: 'P1S Warder\'s Wrath',
       type: 'StartsUsing',
       netRegex: NetRegexes.startsUsing({ id: '662A', source: 'Erichthonios', capture: false }),
-      netRegexDe: NetRegexes.startsUsing({ id: '662A', source: 'Erichthonios', capture: false }),
-      netRegexFr: NetRegexes.startsUsing({ id: '662A', source: 'Érichthonios', capture: false }),
-      netRegexJa: NetRegexes.startsUsing({ id: '662A', source: 'エリクトニオス', capture: false }),
-      netRegexCn: NetRegexes.startsUsing({ id: '662A', source: '埃里克特翁尼亚斯', capture: false }),
-      netRegexKo: NetRegexes.startsUsing({ id: '662A', source: '에리크토니오스', capture: false }),
       response: Responses.aoe(),
     },
     {
@@ -92,7 +87,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         closeShacklesOnYou: {
-          en: '내게 안쪽 쇠사슬이!',
+          en: 'Close Shackles on YOU',
           de: 'Nahe Fesseln auf DIR',
           fr: 'Chaînes proches sur VOUS',
           ja: '紫鎖（近い方）',
@@ -113,7 +108,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         farShacklesOnYou: {
-          en: '내게 바깥쪽 쇠사슬이!',
+          en: 'Far Shackles on YOU',
           de: 'Entfernte Fesseln auf DIR',
           fr: 'Chaînes éloignées sur VOUS',
           ja: '赤鎖（遠い方）',
@@ -147,7 +142,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         closeShacklesOn: {
-          en: '안쪽 쇠사슬: ${close}',
+          en: 'Close Shackles on ${close}',
           de: 'Nahe Fesseln auf ${close}',
           fr: 'Chaînes proches sur ${close}',
           ja: '紫鎖（近い方）：${close}',
@@ -155,7 +150,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '안쪽 쇠사슬: ${close}',
         },
         farShacklesOn: {
-          en: '바깥쪽 쇠사슬: ${far}',
+          en: 'Far Shackles on ${far}',
           de: 'Entfernte Fesseln auf ${far}',
           fr: 'Chaînes éloignées sur ${far}',
           ja: '赤鎖（遠い方）：${far}',
@@ -163,7 +158,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '바깥쪽 쇠사슬: ${far}',
         },
         shacklesOn: {
-          en: '안쪽: ${close}, 바깥쪽: ${far}',
+          en: 'Close: ${close}, Far: ${far}',
           de: 'Nahe: ${close}, Entfernt: ${far}',
           fr: 'Proches : ${close}, Éloignées : ${far}',
           ja: '紫鎖（近い方）：${close}、赤鎖（遠い方）：${far}',
@@ -176,33 +171,18 @@ const triggerSet: TriggerSet<Data> = {
       id: 'P1S Shining Cells',
       type: 'StartsUsing',
       netRegex: NetRegexes.startsUsing({ id: '6616', source: 'Erichthonios', capture: false }),
-      netRegexDe: NetRegexes.startsUsing({ id: '6616', source: 'Erichthonios', capture: false }),
-      netRegexFr: NetRegexes.startsUsing({ id: '6616', source: 'Érichthonios', capture: false }),
-      netRegexJa: NetRegexes.startsUsing({ id: '6616', source: 'エリクトニオス', capture: false }),
-      netRegexCn: NetRegexes.startsUsing({ id: '6616', source: '埃里克特翁尼亚斯', capture: false }),
-      netRegexKo: NetRegexes.startsUsing({ id: '6616', source: '에리크토니오스', capture: false }),
       response: Responses.aoe(),
     },
     {
       id: 'P1S Slam Shut',
       type: 'StartsUsing',
       netRegex: NetRegexes.startsUsing({ id: '6617', source: 'Erichthonios', capture: false }),
-      netRegexDe: NetRegexes.startsUsing({ id: '6617', source: 'Erichthonios', capture: false }),
-      netRegexFr: NetRegexes.startsUsing({ id: '6617', source: 'Érichthonios', capture: false }),
-      netRegexJa: NetRegexes.startsUsing({ id: '6617', source: 'エリクトニオス', capture: false }),
-      netRegexCn: NetRegexes.startsUsing({ id: '6617', source: '埃里克特翁尼亚斯', capture: false }),
-      netRegexKo: NetRegexes.startsUsing({ id: '6617', source: '에리크토니오스', capture: false }),
       response: Responses.aoe(),
     },
     {
       id: 'P1S Gaoler\'s Flail Left => Right',
       type: 'StartsUsing',
       netRegex: NetRegexes.startsUsing({ id: '65F6', source: 'Erichthonios', capture: false }),
-      netRegexDe: NetRegexes.startsUsing({ id: '65F6', source: 'Erichthonios', capture: false }),
-      netRegexFr: NetRegexes.startsUsing({ id: '65F6', source: 'Érichthonios', capture: false }),
-      netRegexJa: NetRegexes.startsUsing({ id: '65F6', source: 'エリクトニオス', capture: false }),
-      netRegexCn: NetRegexes.startsUsing({ id: '65F6', source: '埃里克特翁尼亚斯', capture: false }),
-      netRegexKo: NetRegexes.startsUsing({ id: '65F6', source: '에리크토니오스', capture: false }),
       alertText: (_data, _matches, output) => output.combo!({ first: output.l!(), second: output.r!() }),
       outputStrings: flailDirections,
     },
@@ -210,11 +190,6 @@ const triggerSet: TriggerSet<Data> = {
       id: 'P1S Gaoler\'s Flail Right => Left',
       type: 'StartsUsing',
       netRegex: NetRegexes.startsUsing({ id: '65F7', source: 'Erichthonios', capture: false }),
-      netRegexDe: NetRegexes.startsUsing({ id: '65F7', source: 'Erichthonios', capture: false }),
-      netRegexFr: NetRegexes.startsUsing({ id: '65F7', source: 'Érichthonios', capture: false }),
-      netRegexJa: NetRegexes.startsUsing({ id: '65F7', source: 'エリクトニオス', capture: false }),
-      netRegexCn: NetRegexes.startsUsing({ id: '65F7', source: '埃里克特翁尼亚斯', capture: false }),
-      netRegexKo: NetRegexes.startsUsing({ id: '65F7', source: '에리크토니오스', capture: false }),
       alertText: (_data, _matches, output) => output.combo!({ first: output.r!(), second: output.l!() }),
       outputStrings: flailDirections,
     },
@@ -222,11 +197,6 @@ const triggerSet: TriggerSet<Data> = {
       id: 'P1S Gaoler\'s Flail Out => In',
       type: 'StartsUsing',
       netRegex: NetRegexes.startsUsing({ id: ['65F8', '65F9'], source: 'Erichthonios', capture: false }),
-      netRegexDe: NetRegexes.startsUsing({ id: ['65F8', '65F9'], source: 'Erichthonios', capture: false }),
-      netRegexFr: NetRegexes.startsUsing({ id: ['65F8', '65F9'], source: 'Érichthonios', capture: false }),
-      netRegexJa: NetRegexes.startsUsing({ id: ['65F8', '65F9'], source: 'エリクトニオス', capture: false }),
-      netRegexCn: NetRegexes.startsUsing({ id: ['65F8', '65F9'], source: '埃里克特翁尼亚斯', capture: false }),
-      netRegexKo: NetRegexes.startsUsing({ id: ['65F8', '65F9'], source: '에리크토니오스', capture: false }),
       alertText: (_data, _matches, output) => output.outThenIn!(),
       outputStrings: {
         outThenIn: Outputs.outThenIn,
@@ -236,11 +206,6 @@ const triggerSet: TriggerSet<Data> = {
       id: 'P1S Gaoler\'s Flail In => Out',
       type: 'StartsUsing',
       netRegex: NetRegexes.startsUsing({ id: ['65FA', '65FB'], source: 'Erichthonios', capture: false }),
-      netRegexDe: NetRegexes.startsUsing({ id: ['65FA', '65FB'], source: 'Erichthonios', capture: false }),
-      netRegexFr: NetRegexes.startsUsing({ id: ['65FA', '65FB'], source: 'Érichthonios', capture: false }),
-      netRegexJa: NetRegexes.startsUsing({ id: ['65FA', '65FB'], source: 'エリクトニオス', capture: false }),
-      netRegexCn: NetRegexes.startsUsing({ id: ['65FA', '65FB'], source: '埃里克特翁尼亚斯', capture: false }),
-      netRegexKo: NetRegexes.startsUsing({ id: ['65FA', '65FB'], source: '에리크토니오스', capture: false }),
       alertText: (_data, _matches, output) => output.inThenOut!(),
       outputStrings: {
         inThenOut: Outputs.inThenOut,
@@ -250,11 +215,6 @@ const triggerSet: TriggerSet<Data> = {
       id: 'P1S Heavy Hand',
       type: 'StartsUsing',
       netRegex: NetRegexes.startsUsing({ id: '6629', source: 'Erichthonios' }),
-      netRegexDe: NetRegexes.startsUsing({ id: '6629', source: 'Erichthonios' }),
-      netRegexFr: NetRegexes.startsUsing({ id: '6629', source: 'Érichthonios' }),
-      netRegexJa: NetRegexes.startsUsing({ id: '6629', source: 'エリクトニオス' }),
-      netRegexCn: NetRegexes.startsUsing({ id: '6629', source: '埃里克特翁尼亚斯' }),
-      netRegexKo: NetRegexes.startsUsing({ id: '6629', source: '에리크토니오스' }),
       condition: Conditions.caresAboutPhysical(),
       response: Responses.tankBuster(),
     },
@@ -262,15 +222,10 @@ const triggerSet: TriggerSet<Data> = {
       id: 'P1S Pitiless Flail of Grace',
       type: 'StartsUsing',
       netRegex: NetRegexes.startsUsing({ id: '660E', source: 'Erichthonios', capture: false }),
-      netRegexDe: NetRegexes.startsUsing({ id: '660E', source: 'Erichthonios', capture: false }),
-      netRegexFr: NetRegexes.startsUsing({ id: '660E', source: 'Érichthonios', capture: false }),
-      netRegexJa: NetRegexes.startsUsing({ id: '660E', source: 'エリクトニオス', capture: false }),
-      netRegexCn: NetRegexes.startsUsing({ id: '660E', source: '埃里克特翁尼亚斯', capture: false }),
-      netRegexKo: NetRegexes.startsUsing({ id: '660E', source: '에리크토니오스', capture: false }),
       alertText: (_data, _matches, output) => output.directions!(),
       outputStrings: {
         directions: {
-          en: '탱크 버스터 + 넉백 → 함께 맞기',
+          en: 'Tankbuster+Knockback => Stack',
           de: 'Tankbuster+Rückstoß => Sammeln',
           fr: 'Tank buster + Poussée => Packez-vous',
           ja: 'タンクバスター+ノックバック => 頭割り',
@@ -283,15 +238,10 @@ const triggerSet: TriggerSet<Data> = {
       id: 'P1S Pitiless Flail of Purgation',
       type: 'StartsUsing',
       netRegex: NetRegexes.startsUsing({ id: '660F', source: 'Erichthonios', capture: false }),
-      netRegexDe: NetRegexes.startsUsing({ id: '660F', source: 'Erichthonios', capture: false }),
-      netRegexFr: NetRegexes.startsUsing({ id: '660F', source: 'Érichthonios', capture: false }),
-      netRegexJa: NetRegexes.startsUsing({ id: '660F', source: 'エリクトニオス', capture: false }),
-      netRegexCn: NetRegexes.startsUsing({ id: '660F', source: '埃里克特翁尼亚斯', capture: false }),
-      netRegexKo: NetRegexes.startsUsing({ id: '660F', source: '에리크토니오스', capture: false }),
       alertText: (_data, _matches, output) => output.directions!(),
       outputStrings: {
         directions: {
-          en: '탱크 버스터 + 넉백 → 혼자 플레어',
+          en: 'Tankbuster+Knockback => Flare',
           de: 'Tankbuster+Rückstoß => Flare',
           fr: 'Tank buster + Poussée => Brasier',
           ja: 'タンクバスター+ノックバック => フレア',
@@ -304,15 +254,10 @@ const triggerSet: TriggerSet<Data> = {
       id: 'P1S Intemperate Torment Bottom',
       type: 'StartsUsing',
       netRegex: NetRegexes.startsUsing({ id: '661F', source: 'Erichthonios', capture: false }),
-      netRegexDe: NetRegexes.startsUsing({ id: '661F', source: 'Erichthonios', capture: false }),
-      netRegexFr: NetRegexes.startsUsing({ id: '661F', source: 'Érichthonios', capture: false }),
-      netRegexJa: NetRegexes.startsUsing({ id: '661F', source: 'エリクトニオス', capture: false }),
-      netRegexCn: NetRegexes.startsUsing({ id: '661F', source: '埃里克特翁尼亚斯', capture: false }),
-      netRegexKo: NetRegexes.startsUsing({ id: '661F', source: '에리크토니오스', capture: false }),
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '아래부터 터짐',
+          en: 'Bottom First',
           de: 'Unten zuerst',
           fr: 'Cube inférieur en premier',
           ja: '下から',
@@ -325,15 +270,10 @@ const triggerSet: TriggerSet<Data> = {
       id: 'P1S Intemperate Torment Top',
       type: 'StartsUsing',
       netRegex: NetRegexes.startsUsing({ id: '6620', source: 'Erichthonios', capture: false }),
-      netRegexDe: NetRegexes.startsUsing({ id: '6620', source: 'Erichthonios', capture: false }),
-      netRegexFr: NetRegexes.startsUsing({ id: '6620', source: 'Érichthonios', capture: false }),
-      netRegexJa: NetRegexes.startsUsing({ id: '6620', source: 'エリクトニオス', capture: false }),
-      netRegexCn: NetRegexes.startsUsing({ id: '6620', source: '埃里克特翁尼亚斯', capture: false }),
-      netRegexKo: NetRegexes.startsUsing({ id: '6620', source: '에리크토니오스', capture: false }),
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '위부터 터짐',
+          en: 'Top First',
           de: 'Oben zuerst',
           fr: 'Cube supérieur en premier',
           ja: '上から',
@@ -353,7 +293,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         red: {
-          en: '빨강으로!',
+          en: 'Get hit by red',
           de: 'Von Rot treffen lassen',
           fr: 'Faites-vous toucher par le rouge',
           ja: '炎に当たる',
@@ -361,7 +301,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '빨간색 맞기',
         },
         blue: {
-          en: '파랑으로!',
+          en: 'Get hit by blue',
           de: 'Von Blau treffen lassen',
           fr: 'Faites-vous toucher par le bleu',
           ja: '氷に当たる',
@@ -391,7 +331,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         oppositePlayer: {
-          en: '바닥 폭파: ${player}',
+          en: 'Opposite color of ${player}',
           de: 'Gegenteilige Farbe von ${player}',
           fr: 'Couleur opposée de ${player}',
           ja: '${player}と反対の色へ',
@@ -399,7 +339,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '${player}의 반대 색으로',
         },
         oppositeParty: {
-          en: '내가 바닥 폭파!',
+          en: 'Opposite color of Party',
           de: 'Gegenteilige Farbe von der Party',
           fr: 'Couleur opposée à l\'équipe',
           ja: '他のメンバーと反対の色へ',
@@ -417,7 +357,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '안쪽 1 ▶ 3초',
+          en: 'Close (3s)',
           de: 'Nahe (3s)',
           fr: 'Proches (3s)',
           ja: '紫鎖（近い方） (3s)',
@@ -435,7 +375,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '안쪽2 ▶ 8초',
+          en: 'Close (8s)',
           de: 'Nahe (8s)',
           fr: 'Proches (8s)',
           ja: '紫鎖（近い方） (8s)',
@@ -453,7 +393,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '안쪽3 ▶ 13초',
+          en: 'Close (13s)',
           de: 'Nahe (13s)',
           fr: 'Proches (13s)',
           ja: '紫鎖（近い方） (13s)',
@@ -471,7 +411,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '안쪽4 ▶ 18초',
+          en: 'Close (18s)',
           de: 'Nahe (18s)',
           fr: 'Proches (18s)',
           ja: '紫鎖（近い方） (18s)',
@@ -489,7 +429,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '바깥1 ▷ 3초',
+          en: 'Far (3s)',
           de: 'Entfernt (3s)',
           fr: 'Éloignées (3s)',
           ja: '赤鎖（遠い方） (3s)',
@@ -507,7 +447,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '바깥2 ▷ 8초',
+          en: 'Far (8s)',
           de: 'Entfernt (8s)',
           fr: 'Éloignées (8s)',
           ja: '赤鎖（遠い方） (8s)',
@@ -525,7 +465,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '바깥3 ▷ 13초',
+          en: 'Far (13s)',
           de: 'Entfernt (13s)',
           fr: 'Éloignées (13s)',
           ja: '赤鎖（遠い方） (13s)',
@@ -543,7 +483,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '바깥4 ▷ 18초',
+          en: 'Far (18s)',
           de: 'Entfernt (18s)',
           fr: 'Éloignées (18s)',
           ja: '赤鎖（遠い方） (18s)',

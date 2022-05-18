@@ -215,27 +215,6 @@ const triggerSet: TriggerSet<Data> = {
       suppressSeconds: 1,
       response: Responses.tankBuster(),
     },
-    {
-      id: 'UCU 리퀴드 헬',
-      regex: /Liquid Hell x5/,
-      beforeSeconds: 3,
-      // suppressSeconds: 1,
-      infoText: '리퀴드 장판!!',
-    },
-    /*
-    {
-      id: 'UCU 메가플레어 내가 처리',
-      regex: /Megaflare @@/,
-      beforeSeconds: 3,
-      alertText: '넬에게 ADDLE을!!!',
-    },
-    {
-      id: 'UCU 몬아파 내가 처리',
-      regex: /Morn Afah #(3|5)/,
-      beforeSeconds: 3,
-      alertText: '바하뭇에게 ADDLE을!!!',
-    },
-    */
   ],
   triggers: [
     // --- State ---
@@ -271,11 +250,6 @@ const triggerSet: TriggerSet<Data> = {
       id: 'UCU Fireball Counter',
       type: 'Ability',
       netRegex: NetRegexes.ability({ id: '26C5', source: 'Firehorn' }),
-      netRegexDe: NetRegexes.ability({ id: '26C5', source: 'Feuerhorn' }),
-      netRegexFr: NetRegexes.ability({ id: '26C5', source: 'Corne-De-Feu' }),
-      netRegexJa: NetRegexes.ability({ id: '26C5', source: 'ファイアホーン' }),
-      netRegexCn: NetRegexes.ability({ id: '26C5', source: '火角' }),
-      netRegexKo: NetRegexes.ability({ id: '26C5', source: '화염뿔' }),
       run: (data, matches) => {
         (data.fireballs[data.naelFireballCount] ??= []).push(matches.target);
       },
@@ -284,77 +258,42 @@ const triggerSet: TriggerSet<Data> = {
       id: 'UCU Quickmarch Phase',
       type: 'StartsUsing',
       netRegex: NetRegexes.startsUsing({ id: '26E2', source: 'Bahamut Prime', capture: false }),
-      netRegexDe: NetRegexes.startsUsing({ id: '26E2', source: 'Prim-Bahamut', capture: false }),
-      netRegexFr: NetRegexes.startsUsing({ id: '26E2', source: 'Primo-Bahamut', capture: false }),
-      netRegexJa: NetRegexes.startsUsing({ id: '26E2', source: 'バハムート・プライム', capture: false }),
-      netRegexCn: NetRegexes.startsUsing({ id: '26E2', source: '至尊巴哈姆特', capture: false }),
-      netRegexKo: NetRegexes.startsUsing({ id: '26E2', source: '바하무트 프라임', capture: false }),
       run: (data) => resetTrio(data, 'quickmarch'),
     },
     {
       id: 'UCU Blackfire Phase',
       type: 'StartsUsing',
       netRegex: NetRegexes.startsUsing({ id: '26E3', source: 'Bahamut Prime', capture: false }),
-      netRegexDe: NetRegexes.startsUsing({ id: '26E3', source: 'Prim-Bahamut', capture: false }),
-      netRegexFr: NetRegexes.startsUsing({ id: '26E3', source: 'Primo-Bahamut', capture: false }),
-      netRegexJa: NetRegexes.startsUsing({ id: '26E3', source: 'バハムート・プライム', capture: false }),
-      netRegexCn: NetRegexes.startsUsing({ id: '26E3', source: '至尊巴哈姆特', capture: false }),
-      netRegexKo: NetRegexes.startsUsing({ id: '26E3', source: '바하무트 프라임', capture: false }),
       run: (data) => resetTrio(data, 'blackfire'),
     },
     {
       id: 'UCU Fellruin Phase',
       type: 'StartsUsing',
       netRegex: NetRegexes.startsUsing({ id: '26E4', source: 'Bahamut Prime', capture: false }),
-      netRegexDe: NetRegexes.startsUsing({ id: '26E4', source: 'Prim-Bahamut', capture: false }),
-      netRegexFr: NetRegexes.startsUsing({ id: '26E4', source: 'Primo-Bahamut', capture: false }),
-      netRegexJa: NetRegexes.startsUsing({ id: '26E4', source: 'バハムート・プライム', capture: false }),
-      netRegexCn: NetRegexes.startsUsing({ id: '26E4', source: '至尊巴哈姆特', capture: false }),
-      netRegexKo: NetRegexes.startsUsing({ id: '26E4', source: '바하무트 프라임', capture: false }),
       run: (data) => resetTrio(data, 'fellruin'),
     },
     {
       id: 'UCU Heavensfall Phase',
       type: 'StartsUsing',
       netRegex: NetRegexes.startsUsing({ id: '26E5', source: 'Bahamut Prime', capture: false }),
-      netRegexDe: NetRegexes.startsUsing({ id: '26E5', source: 'Prim-Bahamut', capture: false }),
-      netRegexFr: NetRegexes.startsUsing({ id: '26E5', source: 'Primo-Bahamut', capture: false }),
-      netRegexJa: NetRegexes.startsUsing({ id: '26E5', source: 'バハムート・プライム', capture: false }),
-      netRegexCn: NetRegexes.startsUsing({ id: '26E5', source: '至尊巴哈姆特', capture: false }),
-      netRegexKo: NetRegexes.startsUsing({ id: '26E5', source: '바하무트 프라임', capture: false }),
       run: (data) => resetTrio(data, 'heavensfall'),
     },
     {
       id: 'UCU Tenstrike Phase',
       type: 'StartsUsing',
       netRegex: NetRegexes.startsUsing({ id: '26E6', source: 'Bahamut Prime', capture: false }),
-      netRegexDe: NetRegexes.startsUsing({ id: '26E6', source: 'Prim-Bahamut', capture: false }),
-      netRegexFr: NetRegexes.startsUsing({ id: '26E6', source: 'Primo-Bahamut', capture: false }),
-      netRegexJa: NetRegexes.startsUsing({ id: '26E6', source: 'バハムート・プライム', capture: false }),
-      netRegexCn: NetRegexes.startsUsing({ id: '26E6', source: '至尊巴哈姆特', capture: false }),
-      netRegexKo: NetRegexes.startsUsing({ id: '26E6', source: '바하무트 프라임', capture: false }),
       run: (data) => resetTrio(data, 'tenstrike'),
     },
     {
       id: 'UCU Octet Phase',
       type: 'StartsUsing',
       netRegex: NetRegexes.startsUsing({ id: '26E7', source: 'Bahamut Prime', capture: false }),
-      netRegexDe: NetRegexes.startsUsing({ id: '26E7', source: 'Prim-Bahamut', capture: false }),
-      netRegexFr: NetRegexes.startsUsing({ id: '26E7', source: 'Primo-Bahamut', capture: false }),
-      netRegexJa: NetRegexes.startsUsing({ id: '26E7', source: 'バハムート・プライム', capture: false }),
-      netRegexCn: NetRegexes.startsUsing({ id: '26E7', source: '至尊巴哈姆特', capture: false }),
-      netRegexKo: NetRegexes.startsUsing({ id: '26E7', source: '바하무트 프라임', capture: false }),
       run: (data) => resetTrio(data, 'octet'),
     },
     {
       id: 'UCU Ragnarok Party Tracker',
       type: 'Ability',
       netRegex: NetRegexes.ability({ id: '26B8', source: 'Ragnarok' }),
-      netRegexDe: NetRegexes.ability({ id: '26B8', source: 'Ragnarök' }),
-      netRegexFr: NetRegexes.ability({ id: '26B8', source: 'Ragnarok' }),
-      netRegexJa: NetRegexes.ability({ id: '26B8', source: 'ラグナロク' }),
-      netRegexCn: NetRegexes.ability({ id: '26B8', source: '诸神黄昏' }),
-      netRegexKo: NetRegexes.ability({ id: '26B8', source: '라그나로크' }),
       run: (data, matches) => {
         // This happens once during the nael transition and again during
         // the heavensfall trio.  This should proooobably hit all 8
@@ -368,15 +307,10 @@ const triggerSet: TriggerSet<Data> = {
       id: 'UCU Twisters',
       type: 'StartsUsing',
       netRegex: NetRegexes.startsUsing({ id: '26AA', source: 'Twintania', capture: false }),
-      netRegexDe: NetRegexes.startsUsing({ id: '26AA', source: 'Twintania', capture: false }),
-      netRegexFr: NetRegexes.startsUsing({ id: '26AA', source: 'Gémellia', capture: false }),
-      netRegexJa: NetRegexes.startsUsing({ id: '26AA', source: 'ツインタニア', capture: false }),
-      netRegexCn: NetRegexes.startsUsing({ id: '26AA', source: '双塔尼亚', capture: false }),
-      netRegexKo: NetRegexes.startsUsing({ id: '26AA', source: '트윈타니아', capture: false }),
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '트위스터',
+          en: 'Twisters',
           de: 'Wirbelstürme',
           fr: 'Tornades',
           ja: '大竜巻',
@@ -389,15 +323,10 @@ const triggerSet: TriggerSet<Data> = {
       id: 'UCU Death Sentence',
       type: 'StartsUsing',
       netRegex: NetRegexes.startsUsing({ id: '26A9', source: 'Twintania', capture: false }),
-      netRegexDe: NetRegexes.startsUsing({ id: '26A9', source: 'Twintania', capture: false }),
-      netRegexFr: NetRegexes.startsUsing({ id: '26A9', source: 'Gémellia', capture: false }),
-      netRegexJa: NetRegexes.startsUsing({ id: '26A9', source: 'ツインタニア', capture: false }),
-      netRegexCn: NetRegexes.startsUsing({ id: '26A9', source: '双塔尼亚', capture: false }),
-      netRegexKo: NetRegexes.startsUsing({ id: '26A9', source: '트윈타니아', capture: false }),
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '데스센텐스',
+          en: 'Death Sentence',
           de: 'Todesurteil',
           fr: 'Peine de mort',
           ja: 'デスセンテンス',
@@ -423,7 +352,7 @@ const triggerSet: TriggerSet<Data> = {
       alarmText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '까만공이 내게로!',
+          en: 'Hatch on YOU',
           de: 'Ausbrüten auf DIR',
           fr: 'Éclosion sur VOUS',
           ja: '自分に魔力爆散',
@@ -446,7 +375,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         text: {
-          en: '까만공: ${players}',
+          en: 'Hatch: ${players}',
           de: 'Ausbrüten: ${players}',
           fr: 'Éclosion : ${players}',
           ja: '魔力爆散${players}',
@@ -467,11 +396,6 @@ const triggerSet: TriggerSet<Data> = {
       type: 'StartsUsing',
       // On Twister or Generate.
       netRegex: NetRegexes.startsUsing({ id: '26A[AE]', source: 'Twintania' }),
-      netRegexDe: NetRegexes.startsUsing({ id: '26A[AE]', source: 'Twintania' }),
-      netRegexFr: NetRegexes.startsUsing({ id: '26A[AE]', source: 'Gémellia' }),
-      netRegexJa: NetRegexes.startsUsing({ id: '26A[AE]', source: 'ツインタニア' }),
-      netRegexCn: NetRegexes.startsUsing({ id: '26A[AE]', source: '双塔尼亚' }),
-      netRegexKo: NetRegexes.startsUsing({ id: '26A[AE]', source: '트윈타니아' }),
       condition: (data) => !data.monitoringHP && data.hpThresholds[data.currentPhase] !== undefined,
       preRun: (data) => data.monitoringHP = true,
       promise: (data, matches) =>
@@ -491,7 +415,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         text: {
-          en: '페이즈 ${num}',
+          en: 'Phase ${num} Push',
           de: 'Phase ${num} Stoß',
           fr: 'Phase ${num} poussée',
           ja: 'フェーズ${num}',
@@ -507,16 +431,11 @@ const triggerSet: TriggerSet<Data> = {
       id: 'UCU Nael Quote 1',
       type: 'GameLog',
       netRegex: NetRegexes.dialog({ line: 'From on high I descend, the hallowed moon to call.*?', capture: false }),
-      netRegexDe: NetRegexes.dialog({ line: 'Seht, ich steige herab, vom rotglühenden Monde.*?', capture: false }),
-      netRegexFr: NetRegexes.dialog({ line: 'Des cieux je vais descendre et révérer la lune.*?', capture: false }),
-      netRegexJa: NetRegexes.dialog({ line: '我、舞い降りて\\s*月を仰がん！.*?', capture: false }),
-      netRegexCn: NetRegexes.dialog({ line: '我降临于此，\\s*对月长啸！.*?', capture: false }),
-      netRegexKo: NetRegexes.dialog({ line: '흉조가 내려와 달을 올려다보리라!.*?', capture: false }),
       durationSeconds: 6,
-      alertText: (_data, _matches, output) => output.text!(),
+      infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '흩어져 → 안',
+          en: 'Spread => In',
           de: 'Verteilen => Rein',
           fr: 'Dispersez-vous => Intérieur',
           ja: '散開 => 密着',
@@ -530,16 +449,11 @@ const triggerSet: TriggerSet<Data> = {
       id: 'UCU Nael Quote 2',
       type: 'GameLog',
       netRegex: NetRegexes.dialog({ line: 'From on high I descend, the iron path to walk.*?', capture: false }),
-      netRegexDe: NetRegexes.dialog({ line: 'Seht, ich steige herab, um euch zu beherrschen.*?', capture: false }),
-      netRegexFr: NetRegexes.dialog({ line: 'Du haut des cieux, je vais descendre pour conquérir.*?', capture: false }),
-      netRegexJa: NetRegexes.dialog({ line: '我、舞い降りて\\s*鉄の覇道を征く！.*?', capture: false }),
-      netRegexCn: NetRegexes.dialog({ line: '我降临于此，\\s*征战铁血霸道！.*?', capture: false }),
-      netRegexKo: NetRegexes.dialog({ line: '흉조가 내려와 강철의 패도를 걸으리라!.*?', capture: false }),
       durationSeconds: 6,
-      alertText: (_data, _matches, output) => output.text!(),
+      infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '흩어져 → 밖',
+          en: 'Spread => Out',
           de: 'Verteilen => Raus',
           fr: 'Dispersez-vous => Extérieur',
           ja: '散開 => 離れ',
@@ -553,16 +467,11 @@ const triggerSet: TriggerSet<Data> = {
       id: 'UCU Nael Quote 3',
       type: 'GameLog',
       netRegex: NetRegexes.dialog({ line: 'Take fire, O hallowed moon.*?', capture: false }),
-      netRegexDe: NetRegexes.dialog({ line: 'Flammender Pfad, geschaffen vom roten Mond.*?', capture: false }),
-      netRegexFr: NetRegexes.dialog({ line: 'Baignez dans la bénédiction de la lune incandescente.*?', capture: false }),
-      netRegexJa: NetRegexes.dialog({ line: '赤熱せし\\s*月の祝福を！.*?', capture: false }),
-      netRegexCn: NetRegexes.dialog({ line: '炽热燃烧！\\s*给予我月亮的祝福！.*?', capture: false }),
-      netRegexKo: NetRegexes.dialog({ line: '붉게 타오른 달의 축복을!.*?', capture: false }),
       durationSeconds: 6,
-      alertText: (_data, _matches, output) => output.text!(),
+      infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '뭉쳐 → 안',
+          en: 'Stack => In',
           de: 'Stack => Rein',
           fr: 'Packez-vous => Intérieur',
           ja: '頭割り => 密着',
@@ -576,15 +485,10 @@ const triggerSet: TriggerSet<Data> = {
       id: 'UCU Nael Quote 4',
       type: 'GameLog',
       netRegex: NetRegexes.dialog({ line: 'Blazing path, lead me to iron rule.*?', capture: false }),
-      netRegexDe: NetRegexes.dialog({ line: 'Umloderter Pfad, führe mich zur Herrschaft.*?', capture: false }),
-      netRegexFr: NetRegexes.dialog({ line: 'La voie marquée par l\'incandescence mène à la domination.*?', capture: false }),
-      netRegexJa: NetRegexes.dialog({ line: '赤熱し、焼かれし道を\\s*鉄の覇道と成す！.*?', capture: false }),
-      netRegexCn: NetRegexes.dialog({ line: '被炽热灼烧过的轨迹\\s*乃成铁血霸道！.*?', capture: false }),
-      netRegexKo: NetRegexes.dialog({ line: '붉게 타오른 길을 강철의 패도로 만들겠노라!.*?', capture: false }),
-      alertText: (_data, _matches, output) => output.text!(),
+      infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '뭉쳐 → 밖',
+          en: 'Stack => Out',
           de: 'Stack => Raus',
           fr: 'Packez-vous => Extérieur',
           ja: '頭割り => 離れ',
@@ -598,15 +502,10 @@ const triggerSet: TriggerSet<Data> = {
       id: 'UCU Nael Quote 5',
       type: 'GameLog',
       netRegex: NetRegexes.dialog({ line: 'O hallowed moon, take fire and scorch my foes.*?', capture: false }),
-      netRegexDe: NetRegexes.dialog({ line: 'O roter Mond! Umlodere meinen Pfad.*?', capture: false }),
-      netRegexFr: NetRegexes.dialog({ line: 'Que l\'incandescence de la lune brûle mes ennemis.*?', capture: false }),
-      netRegexJa: NetRegexes.dialog({ line: '月よ！\\s*赤熱し、神敵を焼け！.*?', capture: false }),
-      netRegexCn: NetRegexes.dialog({ line: '月光啊！\\s*用你的炽热烧尽敌人！.*?', capture: false }),
-      netRegexKo: NetRegexes.dialog({ line: '달이여! 붉게 타올라 신의 적을 태워버려라!.*?', capture: false }),
-      alertText: (_data, _matches, output) => output.text!(),
+      infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '안 → 뭉쳐',
+          en: 'In => Stack',
           de: 'Rein => Stack',
           fr: 'Intérieur => Packez-vous',
           ja: '密着 => 頭割り',
@@ -620,15 +519,10 @@ const triggerSet: TriggerSet<Data> = {
       id: 'UCU Nael Quote 6',
       type: 'GameLog',
       netRegex: NetRegexes.dialog({ line: 'O hallowed moon, shine you the iron path.*?', capture: false }),
-      netRegexDe: NetRegexes.dialog({ line: 'O roter Mond! Führe mich zur Herrschaft.*?', capture: false }),
-      netRegexFr: NetRegexes.dialog({ line: 'Ô lune! Éclaire la voie de la domination.*?', capture: false }),
-      netRegexJa: NetRegexes.dialog({ line: '月よ！\\s*鉄の覇道を照らせ！.*?', capture: false }),
-      netRegexCn: NetRegexes.dialog({ line: '月光啊！\\s*照亮铁血霸道！.*?', capture: false }),
-      netRegexKo: NetRegexes.dialog({ line: '달이여! 강철의 패도를 비춰라!.*?', capture: false }),
-      alertText: (_data, _matches, output) => output.text!(),
+      infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '안 → 밖',
+          en: 'In => Out',
           de: 'Rein => Raus',
           fr: 'Intérieur => Extérieur',
           ja: '密着 => 離れ',
@@ -642,18 +536,13 @@ const triggerSet: TriggerSet<Data> = {
       id: 'UCU Nael Quote 7',
       type: 'GameLog',
       netRegex: NetRegexes.dialog({ line: 'Fleeting light! \'Neath the red moon, scorch you the earth.*?', capture: false }),
-      netRegexDe: NetRegexes.dialog({ line: 'Neues Gestirn! Glühe herab und umlodere meinen Pfad.*?', capture: false }),
-      netRegexFr: NetRegexes.dialog({ line: 'Supernova, brille de tout ton feu et irradie la terre rougie.*?', capture: false }),
-      netRegexJa: NetRegexes.dialog({ line: '超新星よ、輝きを増せ！\\s*紅月下の赤熱せし地を照らせ！.*?', capture: false }),
-      netRegexCn: NetRegexes.dialog({ line: '超新星啊，更加闪耀吧！\\s*照亮红月下炽热之地！.*?', capture: false }),
-      netRegexKo: NetRegexes.dialog({ line: '초신성이여, 빛을 더하라! 붉은 달 아래, 붉게 타오르는 땅을 비춰라!.*?', capture: false }),
       delaySeconds: 4,
       durationSeconds: 6,
       // Make this alert so it doesn't overlap with the dive infoText occuring here.
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '탱크 피해 → 뭉쳐',
+          en: 'Away from Tank => Stack',
           de: 'Weg vom Tank => Stack',
           fr: 'Éloignez-vous du tank => Packez-vous',
           ja: 'タンクから離れ => 頭割り',
@@ -667,18 +556,13 @@ const triggerSet: TriggerSet<Data> = {
       id: 'UCU Nael Quote 8',
       type: 'GameLog',
       netRegex: NetRegexes.dialog({ line: 'Fleeting light! Amid a rain of stars, exalt you the red moon.*?', capture: false }),
-      netRegexDe: NetRegexes.dialog({ line: 'Neues Gestirn! Überstrahle jede Sternschnuppe.*?', capture: false }),
-      netRegexFr: NetRegexes.dialog({ line: 'Supernova, brille de tout ton feu et glorifie la lune rouge.*?', capture: false }),
-      netRegexJa: NetRegexes.dialog({ line: '超新星よ、輝きを増せ！\\s*星降りの夜に、紅月を称えよ！.*?', capture: false }),
-      netRegexCn: NetRegexes.dialog({ line: '超新星啊，更加闪耀吧！\\s*在星降之夜，称赞红月！.*?', capture: false }),
-      netRegexKo: NetRegexes.dialog({ line: '초신성이여, 빛을 더하라! 유성이 쏟아지는 밤에, 붉은 달을 우러러보라!.*?', capture: false }),
       delaySeconds: 4,
       durationSeconds: 6,
       // Make this alert so it doesn't overlap with the dive infoText occuring here.
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '흩어져 → 탱크 피해',
+          en: 'Spread => Away from Tank',
           de: 'Verteilen => Weg vom Tank',
           fr: 'Dispersez-vous => Éloignez-vous du Tank',
           ja: '散開 => タンクから離れ',
@@ -692,16 +576,11 @@ const triggerSet: TriggerSet<Data> = {
       id: 'UCU Nael Quote 9',
       type: 'GameLog',
       netRegex: NetRegexes.dialog({ line: 'From on high I descend, the moon and stars to bring.*?', capture: false }),
-      netRegexDe: NetRegexes.dialog({ line: 'Ich steige herab zu Ehre des roten Mondes! Einer Sternschnuppe gleich.*?', capture: false }),
-      netRegexFr: NetRegexes.dialog({ line: 'Du haut des cieux, j\'appelle une pluie d\'étoiles.*?', capture: false }),
-      netRegexJa: NetRegexes.dialog({ line: '我、舞い降りて月を仰ぎ\\s*星降りの夜を招かん！.*?', capture: false }),
-      netRegexCn: NetRegexes.dialog({ line: '我降临于此对月长啸！\\s*召唤星降之夜！.*?', capture: false }),
-      netRegexKo: NetRegexes.dialog({ line: '흉조가 내려와, 달을 올려다보니 유성이 쏟아지는 밤이 도래하리라!.*?', capture: false }),
       durationSeconds: 9,
-      alertText: (_data, _matches, output) => output.text!(),
+      infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '흩어져 → 안',
+          en: 'Spread => In',
           de: 'Verteilen => Rein',
           fr: 'Dispersez-vous => Intérieur',
           ja: '散開 => 密着',
@@ -715,16 +594,11 @@ const triggerSet: TriggerSet<Data> = {
       id: 'UCU Nael Quote 10',
       type: 'GameLog',
       netRegex: NetRegexes.dialog({ line: 'From hallowed moon I descend, a rain of stars to bring.*?', capture: false }),
-      netRegexDe: NetRegexes.dialog({ line: 'O roter Mond, sieh mich herabsteigen! Einer Sternschnuppe gleich.*?', capture: false }),
-      netRegexFr: NetRegexes.dialog({ line: 'Depuis la lune, j\'invoque une pluie d\'étoiles.*?', capture: false }),
-      netRegexJa: NetRegexes.dialog({ line: '我、月より舞い降りて\\s*星降りの夜を招かん！.*?', capture: false }),
-      netRegexCn: NetRegexes.dialog({ line: '我自月而来降临于此，\\s*召唤星降之夜！.*?', capture: false }),
-      netRegexKo: NetRegexes.dialog({ line: '달로부터 흉조가 내려와 유성이 쏟아지는 밤이 도래하리라!.*?', capture: false }),
       durationSeconds: 9,
-      alertText: (_data, _matches, output) => output.text!(),
+      infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '안 → 흩어져',
+          en: 'In => Spread',
           de: 'Rein => Verteilen',
           fr: 'Intérieur => Dispersez-vous',
           ja: '密着 => 散開',
@@ -738,16 +612,11 @@ const triggerSet: TriggerSet<Data> = {
       id: 'UCU Nael Quote 11',
       type: 'GameLog',
       netRegex: NetRegexes.dialog({ line: 'From hallowed moon I bare iron, in my descent to wield.*?', capture: false }),
-      netRegexDe: NetRegexes.dialog({ line: 'O roter Mond, als Künder deiner Herrschaft stieg ich herab.*?', capture: false }),
-      netRegexFr: NetRegexes.dialog({ line: 'De la lune je m\'arme d\'acier et descends.*?', capture: false }),
-      netRegexJa: NetRegexes.dialog({ line: '我、月より鉄を備え\\s*舞い降りん！.*?', capture: false }),
-      netRegexCn: NetRegexes.dialog({ line: '我自月而来携钢铁降临于此！.*?', capture: false }),
-      netRegexKo: NetRegexes.dialog({ line: '달로부터 강철의 패도를 거쳐 흉조가 내려오리라!.*?', capture: false }),
       durationSeconds: 9,
-      alertText: (_data, _matches, output) => output.text!(),
+      infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '안 → 밖 → 흩어져',
+          en: 'In => Out => Spread',
           de: 'Rein => Raus => Verteilen',
           fr: 'Intérieur => Extérieur => Dispersion',
           ja: '密着 => 離れ => 散開',
@@ -761,16 +630,11 @@ const triggerSet: TriggerSet<Data> = {
       id: 'UCU Nael Quote 12',
       type: 'GameLog',
       netRegex: NetRegexes.dialog({ line: 'From hallowed moon I descend, upon burning earth to tread.*?', capture: false }),
-      netRegexDe: NetRegexes.dialog({ line: 'O roter Mond! Ich stieg herab, um deine Herrschaft zu bringen.*?', capture: false }),
-      netRegexFr: NetRegexes.dialog({ line: 'De la lune, je descends et marche sur la terre ardente.*?', capture: false }),
-      netRegexJa: NetRegexes.dialog({ line: '我、月より舞い降りて\\s*赤熱せし地を歩まん！.*?', capture: false }),
-      netRegexCn: NetRegexes.dialog({ line: '我自月而来降临于此，\\s*踏过炽热之地！.*?', capture: false }),
-      netRegexKo: NetRegexes.dialog({ line: '달로부터 흉조가 내려와 붉게 타오르는 땅을 걸으리라!.*?', capture: false }),
       durationSeconds: 9,
-      alertText: (_data, _matches, output) => output.text!(),
+      infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '안 → 흩어져 → 뭉쳐',
+          en: 'In => Spread => Stack',
           de: 'Rein => Verteilen => Stack',
           fr: 'Intérieur => Dispersion => Package',
           ja: '密着 => 散開 => 頭割り',
@@ -784,16 +648,11 @@ const triggerSet: TriggerSet<Data> = {
       id: 'UCU Nael Quote 13',
       type: 'GameLog',
       netRegex: NetRegexes.dialog({ line: 'Unbending iron, take fire and descend.*?', capture: false }),
-      netRegexDe: NetRegexes.dialog({ line: 'Zur Herrschaft führt mein umloderter Pfad! Auf diesen steige ich herab.*?', capture: false }),
-      netRegexFr: NetRegexes.dialog({ line: 'Ô noble acier! Rougis ardemment et deviens ma lame transperçante.*?', capture: false }),
-      netRegexJa: NetRegexes.dialog({ line: '鉄よ、赤熱せよ！\\s*舞い降りし我が刃となれ！.*?', capture: false }),
-      netRegexCn: NetRegexes.dialog({ line: '钢铁燃烧吧！\\s*成为我降临于此的刀剑吧！.*?', capture: false }),
-      netRegexKo: NetRegexes.dialog({ line: '강철이여, 붉게 타올라라! 흉조가 내려오니 그 칼날이 되어라!.*?', capture: false }),
       durationSeconds: 9,
-      alertText: (_data, _matches, output) => output.text!(),
+      infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '밖 → 뭉쳐 → 흩어져',
+          en: 'Out => Stack => Spread',
           de: 'Raus => Stack => Verteilen',
           fr: 'Extérieur => Package => Dispersion',
           ja: '離れ => 頭割り => 散開',
@@ -807,16 +666,11 @@ const triggerSet: TriggerSet<Data> = {
       id: 'UCU Nael Quote 14',
       type: 'GameLog',
       netRegex: NetRegexes.dialog({ line: 'Unbending iron, descend with fiery edge.*?', capture: false }),
-      netRegexDe: NetRegexes.dialog({ line: 'Zur Herrschaft steige ich herab, auf umlodertem Pfad.*?', capture: false }),
-      netRegexFr: NetRegexes.dialog({ line: 'Fier acier! Sois ma lame plongeante et deviens incandescent.*?', capture: false }),
-      netRegexJa: NetRegexes.dialog({ line: '鉄よ、舞い降りし\\s*我の刃となり赤熱せよ！.*?', capture: false }),
-      netRegexCn: NetRegexes.dialog({ line: '钢铁成为我降临于此的燃烧之剑！.*?', capture: false }),
-      netRegexKo: NetRegexes.dialog({ line: '강철이여, 흉조가 내려오는도다! 그 칼날이 되어 붉게 타올라라!.*?', capture: false }),
       durationSeconds: 9,
-      alertText: (_data, _matches, output) => output.text!(),
+      infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '밖 → 흩어져 → 뭉쳐',
+          en: 'Out => Spread => Stack',
           de: 'Raus => Verteilen => Stack',
           fr: 'Extérieur => Dispersion => Package',
           ja: '離れ => 散開 => 頭割り',
@@ -831,16 +685,11 @@ const triggerSet: TriggerSet<Data> = {
       // Note: The 0A event happens before 'gains the effect' and 'starts
       // casting on' only includes one person.
       netRegex: NetRegexes.ability({ source: 'Thunderwing', id: '26C7' }),
-      netRegexDe: NetRegexes.ability({ source: 'Donnerschwinge', id: '26C7' }),
-      netRegexFr: NetRegexes.ability({ source: 'Aile-De-Foudre', id: '26C7' }),
-      netRegexJa: NetRegexes.ability({ source: 'サンダーウィング', id: '26C7' }),
-      netRegexCn: NetRegexes.ability({ source: '雷翼', id: '26C7' }),
-      netRegexKo: NetRegexes.ability({ source: '번개날개', id: '26C7' }),
       condition: Conditions.targetIsYou(),
       alarmText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '내가 번개라니!!!',
+          en: 'Thunder on YOU',
           de: 'Blitz auf DIR',
           fr: 'Foudre sur VOUS',
           ja: '自分にサンダー',
@@ -884,7 +733,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         doom1: {
-          en: '둠두르 #1',
+          en: 'Doom #1 on YOU',
           de: 'Verhängnis #1 auf DIR',
           fr: 'Glas #1 sur VOUS',
           ja: '自分に一番目死の宣告',
@@ -892,7 +741,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '죽음의 선고 1번',
         },
         doom2: {
-          en: '둠두르 #2',
+          en: 'Doom #2 on YOU',
           de: 'Verhängnis #2 auf DIR',
           fr: 'Glas #2 sur VOUS',
           ja: '自分に二番目死の宣告',
@@ -900,7 +749,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '죽음의 선고 2번',
         },
         doom3: {
-          en: '둠두르 #3',
+          en: 'Doom #3 on YOU',
           de: 'Verhängnis #3 auf DIR',
           fr: 'Glas #3 sur VOUS',
           ja: '自分に三番目死の宣告',
@@ -951,11 +800,6 @@ const triggerSet: TriggerSet<Data> = {
       id: 'UCU Nael Cleanse Callout',
       type: 'Ability',
       netRegex: NetRegexes.ability({ source: 'Fang Of Light', id: '26CA', capture: false }),
-      netRegexDe: NetRegexes.ability({ source: 'Lichtklaue', id: '26CA', capture: false }),
-      netRegexFr: NetRegexes.ability({ source: 'Croc De Lumière', id: '26CA', capture: false }),
-      netRegexJa: NetRegexes.ability({ source: 'ライトファング', id: '26CA', capture: false }),
-      netRegexCn: NetRegexes.ability({ source: '光牙', id: '26CA', capture: false }),
-      netRegexKo: NetRegexes.ability({ source: '빛의 송곳니', id: '26CA', capture: false }),
       infoText: (data, _matches, output) => {
         data.doomCount ??= 0;
         let name;
@@ -967,7 +811,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         text: {
-          en: '둠지워욧 #${num}: ${player}',
+          en: 'Cleanse #${num}: ${player}',
           de: 'Medica #${num}: ${player}',
           fr: 'Purifiez #${num}: ${player}',
           ja: '解除に番目${num}: ${player}',
@@ -980,18 +824,13 @@ const triggerSet: TriggerSet<Data> = {
       id: 'UCU Nael Fireball 1',
       type: 'Ability',
       netRegex: NetRegexes.ability({ source: 'Ragnarok', id: '26B8', capture: false }),
-      netRegexDe: NetRegexes.ability({ source: 'Ragnarök', id: '26B8', capture: false }),
-      netRegexFr: NetRegexes.ability({ source: 'Ragnarok', id: '26B8', capture: false }),
-      netRegexJa: NetRegexes.ability({ source: 'ラグナロク', id: '26B8', capture: false }),
-      netRegexCn: NetRegexes.ability({ source: '诸神黄昏', id: '26B8', capture: false }),
-      netRegexKo: NetRegexes.ability({ source: '라그나로크', id: '26B8', capture: false }),
       delaySeconds: 35,
       suppressSeconds: 99999,
       infoText: (_data, _matches, output) => output.text!(),
       run: (data) => data.naelFireballCount = 1,
       outputStrings: {
         text: {
-          en: '모여서 파이어볼',
+          en: 'Fire IN',
           de: 'Feuer INNEN',
           fr: 'Feu à l\'INTÉRIEUR',
           ja: 'ファイアボールは密着',
@@ -1004,11 +843,6 @@ const triggerSet: TriggerSet<Data> = {
       id: 'UCU Nael Fireball 2',
       type: 'Ability',
       netRegex: NetRegexes.ability({ source: 'Ragnarok', id: '26B8', capture: false }),
-      netRegexDe: NetRegexes.ability({ source: 'Ragnarök', id: '26B8', capture: false }),
-      netRegexFr: NetRegexes.ability({ source: 'Ragnarok', id: '26B8', capture: false }),
-      netRegexJa: NetRegexes.ability({ source: 'ラグナロク', id: '26B8', capture: false }),
-      netRegexCn: NetRegexes.ability({ source: '诸神黄昏', id: '26B8', capture: false }),
-      netRegexKo: NetRegexes.ability({ source: '라그나로크', id: '26B8', capture: false }),
       delaySeconds: 51,
       suppressSeconds: 99999,
       alertText: (data, _matches, output) => {
@@ -1027,7 +861,7 @@ const triggerSet: TriggerSet<Data> = {
       run: (data) => data.naelFireballCount = 2,
       outputStrings: {
         fireOut: {
-          en: '파이어볼 홀로 맞기!',
+          en: 'Fire OUT',
           de: 'Feuer AUßEN',
           fr: 'Feu à l\'EXTÉRIEUR',
           ja: 'ファイアボールは離れ',
@@ -1035,7 +869,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '불 대상자 밖으로',
         },
         fireOutBeInIt: {
-          en: '뭉쳐욧!!! (파이어볼이 도망침)',
+          en: 'Fire OUT: Be in it',
           de: 'Feuer AUßEN: Drin sein',
           fr: 'Feu à l\'EXTÉRIEUR : Allez dessus',
           ja: 'ファイアボールは離れ: 自分に密着',
@@ -1048,11 +882,6 @@ const triggerSet: TriggerSet<Data> = {
       id: 'UCU Nael Fireball 3',
       type: 'Ability',
       netRegex: NetRegexes.ability({ source: 'Ragnarok', id: '26B8', capture: false }),
-      netRegexDe: NetRegexes.ability({ source: 'Ragnarök', id: '26B8', capture: false }),
-      netRegexFr: NetRegexes.ability({ source: 'Ragnarok', id: '26B8', capture: false }),
-      netRegexJa: NetRegexes.ability({ source: 'ラグナロク', id: '26B8', capture: false }),
-      netRegexCn: NetRegexes.ability({ source: '诸神黄昏', id: '26B8', capture: false }),
-      netRegexKo: NetRegexes.ability({ source: '라그나로크', id: '26B8', capture: false }),
       delaySeconds: 77,
       suppressSeconds: 99999,
       alertText: (data, _matches, output) => {
@@ -1077,7 +906,7 @@ const triggerSet: TriggerSet<Data> = {
       run: (data) => data.naelFireballCount = 3,
       outputStrings: {
         fireIn: {
-          en: '모여서 파이어볼',
+          en: 'Fire IN',
           de: 'Feuer INNEN',
           fr: 'Feu à l\'INTÉRIEUR',
           ja: 'ファイアボールは密着',
@@ -1085,7 +914,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '불 같이맞기',
         },
         fireInPlayersOut: {
-          en: '모여서 파이어볼 (홀로: ${players})',
+          en: 'Fire IN (${players} out)',
           de: 'Feuer INNEN (${players} raus)',
           fr: 'Feu à l\'INTÉRIEUR (${players} évitez)',
           ja: 'ファイアボールは密着 (${players}は外へ)',
@@ -1093,7 +922,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '불 같이맞기 (${players} 는 피하기)',
         },
         fireInAvoid: {
-          en: '피해욧!!! 파이어볼은 위험!',
+          en: 'Fire IN: AVOID!',
           de: 'Feuer INNEN: AUSWEICHEN!',
           fr: 'Feu à l\'INTÉRIEUR : ÉVITEZ !',
           ja: 'ファイアボールは密着: 自分に離れ',
@@ -1106,11 +935,6 @@ const triggerSet: TriggerSet<Data> = {
       id: 'UCU Nael Fireball 4',
       type: 'Ability',
       netRegex: NetRegexes.ability({ source: 'Ragnarok', id: '26B8', capture: false }),
-      netRegexDe: NetRegexes.ability({ source: 'Ragnarök', id: '26B8', capture: false }),
-      netRegexFr: NetRegexes.ability({ source: 'Ragnarok', id: '26B8', capture: false }),
-      netRegexJa: NetRegexes.ability({ source: 'ラグナロク', id: '26B8', capture: false }),
-      netRegexCn: NetRegexes.ability({ source: '诸神黄昏', id: '26B8', capture: false }),
-      netRegexKo: NetRegexes.ability({ source: '라그나로크', id: '26B8', capture: false }),
       delaySeconds: 98,
       suppressSeconds: 99999,
       alertText: (data, _matches, output) => {
@@ -1134,7 +958,7 @@ const triggerSet: TriggerSet<Data> = {
       run: (data) => data.naelFireballCount = 4,
       outputStrings: {
         fireIn: {
-          en: '모여서 파이어볼',
+          en: 'Fire IN',
           de: 'Feuer INNEN',
           fr: 'Feu à l\'INTÉRIEUR',
           ja: 'ファイアボール密着',
@@ -1142,7 +966,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '불 같이맞기',
         },
         fireInAvoid: {
-          en: '피해욧!!! 파이어볼을!!',
+          en: 'Fire IN: AVOID!',
           de: 'Feuer INNEN: AUSWEICHEN!',
           fr: 'Feu à l\'INTÉRIEUR : ÉVITEZ !',
           ja: 'ファイアボールは密着: 自分に離れ',
@@ -1155,13 +979,8 @@ const triggerSet: TriggerSet<Data> = {
       id: 'UCU Dragon Tracker',
       type: 'Ability',
       netRegex: NetRegexes.abilityFull({ source: ['Iceclaw', 'Thunderwing', 'Fang Of Light', 'Tail Of Darkness', 'Firehorn'], id: ['26C6', '26C7', '26CA', '26C9', '26C5'] }),
-      netRegexDe: NetRegexes.abilityFull({ source: ['Eisklaue', 'Donnerschwinge', 'Lichtklaue', 'Dunkelschweif', 'Feuerhorn'], id: ['26C6', '26C7', '26CA', '26C9', '26C5'] }),
-      netRegexFr: NetRegexes.abilityFull({ source: ['Griffe-De-Glace', 'Aile-De-Foudre', 'Croc De Lumière', 'Queue De Ténèbres', 'Corne-De-Feu'], id: ['26C6', '26C7', '26CA', '26C9', '26C5'] }),
-      netRegexJa: NetRegexes.abilityFull({ source: ['アイスクロウ', 'サンダーウィング', 'ライトファング', 'ダークテイル', 'ファイアホーン'], id: ['26C6', '26C7', '26CA', '26C9', '26C5'] }),
-      netRegexCn: NetRegexes.abilityFull({ source: ['冰爪', '雷翼', '光牙', '暗尾', '火角'], id: ['26C6', '26C7', '26CA', '26C9', '26C5'] }),
-      netRegexKo: NetRegexes.abilityFull({ source: ['얼음발톱', '번개날개', '빛의 송곳니', '어둠의 꼬리', '화염뿔'], id: ['26C6', '26C7', '26CA', '26C9', '26C5'] }),
       condition: (data, matches) => !(matches.source in data.seenDragon),
-      preRun: (data, matches) => {
+      run: (data, matches) => {
         data.seenDragon[matches.source] = true;
 
         const x = parseFloat(matches.x);
@@ -1179,7 +998,7 @@ const triggerSet: TriggerSet<Data> = {
         const result = findDragonMarks(data.naelDragons);
         if (!result)
           return;
-        const dirNames = ['12', '1', '3', '5', '6', '7', '9', '11'];
+        const dirNames = ['dirN', 'dirNE', 'dirE', 'dirSE', 'dirS', 'dirSW', 'dirW', 'dirNW'];
         data.naelMarks = result.marks.map((i) => {
           return dirNames[i] ?? 'unknown';
         });
@@ -1187,24 +1006,13 @@ const triggerSet: TriggerSet<Data> = {
         data.unsafeThirdMark = result.unsafeThirdMark;
         // In case you forget, print marks in the log.
         // TODO: Maybe only if Options.Debug?
-        console.log(data.naelMarks.join(', ') + (data.wideThirdDive ? ' (넓게)' : ''));
-      },
-      durationSeconds: 10,
-      // eslint-disable-next-line rulesdir/cactbot-output-strings
-      infoText: (data, _m, _o) => {
-        if (typeof data.naelMarks !== 'undefined' && data.naelMarks !== null)
-          return '미리 다이브: ' + data.naelMarks.join(', ') + (data.wideThirdDive ? ' (넓게)' : '');
+        console.log(data.naelMarks.join(', ') + (data.wideThirdDive ? ' (WIDE)' : ''));
       },
     },
     {
       id: 'UCU Nael Ravensbeak',
       type: 'StartsUsing',
       netRegex: NetRegexes.startsUsing({ source: 'Nael deus Darnus', id: '26B6' }),
-      netRegexDe: NetRegexes.startsUsing({ source: 'Nael deus Darnus', id: '26B6' }),
-      netRegexFr: NetRegexes.startsUsing({ source: 'Nael deus Darnus', id: '26B6' }),
-      netRegexJa: NetRegexes.startsUsing({ source: 'ネール・デウス・ダーナス', id: '26B6' }),
-      netRegexCn: NetRegexes.startsUsing({ source: '奈尔·神·达纳斯', id: '26B6' }),
-      netRegexKo: NetRegexes.startsUsing({ source: '넬 데우스 다르누스', id: '26B6' }),
       response: Responses.tankBusterSwap('alert'),
     },
     {
@@ -1212,11 +1020,6 @@ const triggerSet: TriggerSet<Data> = {
       id: 'UCU Nael Dragon Placement',
       type: 'Ability',
       netRegex: NetRegexes.ability({ source: 'Nael deus Darnus', id: '26B6', capture: false }),
-      netRegexDe: NetRegexes.ability({ source: 'Nael deus Darnus', id: '26B6', capture: false }),
-      netRegexFr: NetRegexes.ability({ source: 'Nael deus Darnus', id: '26B6', capture: false }),
-      netRegexJa: NetRegexes.ability({ source: 'ネール・デウス・ダーナス', id: '26B6', capture: false }),
-      netRegexCn: NetRegexes.ability({ source: '奈尔·神·达纳斯', id: '26B6', capture: false }),
-      netRegexKo: NetRegexes.ability({ source: '넬 데우스 다르누스', id: '26B6', capture: false }),
       condition: (data) => data.naelMarks && !data.calledNaelDragons,
       durationSeconds: 10,
       infoText: (data, _matches, output) => {
@@ -1232,7 +1035,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         marks: {
-          en: '다이브: ${dive1}, ${dive2}, ${dive3}',
+          en: 'Marks: ${dive1}, ${dive2}, ${dive3}',
           de: 'Markierungen : ${dive1}, ${dive2}, ${dive3}',
           fr: 'Marque : ${dive1}, ${dive2}, ${dive3}',
           ja: 'マーカー: ${dive1}, ${dive2}, ${dive3}',
@@ -1240,7 +1043,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '징: ${dive1}, ${dive2}, ${dive3}',
         },
         marksWide: {
-          en: '다이브: ${dive1}, ${dive2}, ${dive3} (넓게)',
+          en: 'Marks: ${dive1}, ${dive2}, ${dive3} (WIDE)',
           de: 'Markierungen : ${dive1}, ${dive2}, ${dive3} (GROß)',
           fr: 'Marque : ${dive1}, ${dive2}, ${dive3} (LARGE)',
           ja: 'マーカー: ${dive1}, ${dive2}, ${dive3} (広)',
@@ -1271,7 +1074,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         text: {
-          en: '다이브 깔기: ${dir} ',
+          en: 'Go To ${dir} with marker',
           de: 'Gehe nach ${dir} mit dem Marker',
           fr: 'Allez direction ${dir} avec le marqueur',
           ja: 'マーカー付いたまま${dir}へ',
@@ -1302,7 +1105,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         text: {
-          en: '다이브 #${num}: ${player}',
+          en: 'Dive #${num}: ${player}',
           de: 'Sturz #${num} : ${player}',
           fr: 'Plongeon #${num} : ${player}',
           ja: 'ダイブ${num}番目:${player}',
@@ -1373,7 +1176,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         text: {
-          en: '${num}: ${player} (넬)',
+          en: '${num}: ${player} (nael)',
           de: '${num}: ${player} (nael)',
           fr: '${num} : ${player} (nael)',
           ja: '${num}: ${player} (ネール)',
@@ -1413,7 +1216,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         text: {
-          en: '${num}: ${player} (바하)',
+          en: '${num}: ${player} (baha)',
           de: '${num}: ${player} (baha)',
           fr: '${num} : ${player} (baha)',
           ja: '${num}: ${player} (バハ)',
@@ -1447,7 +1250,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         twinOnYou: {
-          en: '트윈타니아 뭉치기가 내게로!',
+          en: 'YOU Stack for Twin',
           de: 'DU stackst für Twintania',
           fr: 'Packez-vous pour Gémellia',
           ja: '自分にタニアには頭割り',
@@ -1455,7 +1258,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '내가 트윈징 대상자',
         },
         twinOnPlayer: {
-          en: '8: ${player} (트윈타니아)',
+          en: '8: ${player} (twin)',
           de: '8: ${player} (Twintania)',
           fr: '8 : ${player} (Gémellia)',
           ja: '8: ${player} (ツインタニア)',
@@ -1463,7 +1266,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '8: ${player} (트윈타니아)',
         },
         twinOnUnknown: {
-          en: '8: ??? (트윈타니아)',
+          en: '8: ??? (twin)',
           de: '8: ??? (Twintania)',
           fr: '8 : ??? (Gémellia)',
           ja: '8: ??? (ツインタニア)',
@@ -1471,7 +1274,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '8: ??? (트윈타니아)',
         },
         stackTTS: {
-          en: '트윈타니아 함께맞기',
+          en: 'stack for twin',
           de: 'stek für twintania',
           fr: 'Packez-vous pour Gémellia',
           ja: '頭割り',
@@ -1484,16 +1287,11 @@ const triggerSet: TriggerSet<Data> = {
       id: 'UCU Twister Dives',
       type: 'Ability',
       netRegex: NetRegexes.ability({ source: 'Twintania', id: '26B2', capture: false }),
-      netRegexDe: NetRegexes.ability({ source: 'Twintania', id: '26B2', capture: false }),
-      netRegexFr: NetRegexes.ability({ source: 'Gémellia', id: '26B2', capture: false }),
-      netRegexJa: NetRegexes.ability({ source: 'ツインタニア', id: '26B2', capture: false }),
-      netRegexCn: NetRegexes.ability({ source: '双塔尼亚', id: '26B2', capture: false }),
-      netRegexKo: NetRegexes.ability({ source: '트윈타니아', id: '26B2', capture: false }),
       suppressSeconds: 2,
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '트위스터',
+          en: 'Twisters',
           de: 'Wirbelstürme',
           fr: 'Tornades',
           ja: 'ツイスター',
@@ -1506,15 +1304,10 @@ const triggerSet: TriggerSet<Data> = {
       id: 'UCU Bahamut Gigaflare',
       type: 'StartsUsing',
       netRegex: NetRegexes.startsUsing({ id: '26D6', source: 'Bahamut Prime', capture: false }),
-      netRegexDe: NetRegexes.startsUsing({ id: '26D6', source: 'Prim-Bahamut', capture: false }),
-      netRegexFr: NetRegexes.startsUsing({ id: '26D6', source: 'Primo-Bahamut', capture: false }),
-      netRegexJa: NetRegexes.startsUsing({ id: '26D6', source: 'バハムート・プライム', capture: false }),
-      netRegexCn: NetRegexes.startsUsing({ id: '26D6', source: '至尊巴哈姆特', capture: false }),
-      netRegexKo: NetRegexes.startsUsing({ id: '26D6', source: '바하무트 프라임', capture: false }),
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '기가플레어',
+          en: 'Gigaflare',
           de: 'Gigaflare',
           fr: 'GigaBrasier',
           ja: 'ギガフレア',
@@ -1531,7 +1324,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '메가플레어 함께맞기',
+          en: 'Megaflare Stack',
           de: 'Megaflare Stack',
           fr: 'Mégabrasier, packez-vous',
           ja: 'メガフレア頭割り',
@@ -1550,7 +1343,7 @@ const triggerSet: TriggerSet<Data> = {
       id: 'UCU Megaflare Tower',
       type: 'HeadMarker',
       netRegex: NetRegexes.headMarker({ id: '0027', capture: false }),
-      alertText: (data, _matches, output) => {
+      infoText: (data, _matches, output) => {
         if (data.trio !== 'blackfire' && data.trio !== 'octet' || data.megaStack.length !== 4)
           return;
 
@@ -1574,7 +1367,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         blackfireTower: {
-          en: '타워!!! 하이퍼노바는 피해',
+          en: 'Tower, bait hypernova',
           de: 'Turm, Hypernova ködern',
           fr: 'Tour, attirez la Supernova',
           ja: 'タワーやスーパーノヴァ',
@@ -1582,7 +1375,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '초신성 피하고 기둥 밟기',
         },
         octetTowerPlusTwin: {
-          en: '트윈타니아 유도!!! 그리고 타워',
+          en: 'Bait Twin, then tower',
           de: 'Twintania in Turm locken',
           fr: 'Attirez Gémellia, puis tour',
           ja: 'タニアダイブやタワー',
@@ -1590,7 +1383,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '트윈타니아 유도 후 기둥 밟기',
         },
         octetTower: {
-          en: '멀리 있는 타워',
+          en: 'Get in a far tower',
           de: 'Geh in entfernten Turm',
           fr: 'Aller dans une tour lointaine',
           ja: '遠いタワー',
@@ -1598,7 +1391,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '기둥 밟기',
         },
         towerTTS: {
-          en: '타워',
+          en: 'tower',
           de: 'Turm',
           fr: 'Tour',
           ja: 'タワー',
@@ -1613,7 +1406,7 @@ const triggerSet: TriggerSet<Data> = {
       netRegex: NetRegexes.headMarker({ id: '0027', capture: false }),
       delaySeconds: 0.5,
       suppressSeconds: 1,
-      alertText: (data, _matches, output) => {
+      infoText: (data, _matches, output) => {
         if (data.trio !== 'blackfire' && data.trio !== 'octet' || data.megaStack.length !== 4)
           return;
         if (!data.lastOctetMarker || data.lastOctetMarker === data.me)
@@ -1627,7 +1420,7 @@ const triggerSet: TriggerSet<Data> = {
       tts: null,
       outputStrings: {
         twinHasMegaflare: {
-          en: '${player} (트윈타니아) 메가플레어 함께맞기',
+          en: '${player} (twin) has megaflare',
           de: '${player} (Twin) hat Megaflare',
           fr: '${player} (Gémellia) a mégabrasier',
           ja: '${player} (ツインタニア) メガ頭割り',
@@ -1635,7 +1428,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '${player} (트윈 징 대상자) => 쉐어',
         },
         twinHasTower: {
-          en: '${player} (트윈타니아) 타워로!!!',
+          en: '${player} (twin) needs tower',
           de: '${player} (Twin) braucht einen Turm',
           fr: '${player} (Gémellia) ont besoin d\'une tour',
           ja: '${player} (ツインタニア) 塔を踏む',
@@ -1686,7 +1479,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         quickmarchTankTether: {
-          en: '줄 잡아가기',
+          en: 'Pick up tether',
           de: 'Verbindung holen',
           fr: 'Prenez un lien',
           ja: 'テンペストウィング線',
@@ -1694,7 +1487,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '줄 가로채기',
         },
         quickmarchNotOnYou: {
-          en: '세이커 없음; 함께맞기.',
+          en: 'No shaker; stack south.',
           de: 'Kein Erdstoß; im süden sammeln',
           fr: 'Pas de Secousse; packez-vous au Sud.',
           ja: 'シェイカーない；頭割りで南',
@@ -1702,7 +1495,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '징 없음, 모여서 쉐어',
         },
         tenstrikeNotOnYou: {
-          en: '안전지대에서 함께맞기',
+          en: 'Stack on safe spot',
           de: 'In Sicherheit steken',
           fr: 'Packez-vous au point safe',
           ja: '頭割りで安全',
@@ -1715,11 +1508,6 @@ const triggerSet: TriggerSet<Data> = {
       id: 'UCU Morn Afah',
       type: 'StartsUsing',
       netRegex: NetRegexes.startsUsing({ id: '26EC', source: 'Bahamut Prime' }),
-      netRegexDe: NetRegexes.startsUsing({ id: '26EC', source: 'Prim-Bahamut' }),
-      netRegexFr: NetRegexes.startsUsing({ id: '26EC', source: 'Primo-Bahamut' }),
-      netRegexJa: NetRegexes.startsUsing({ id: '26EC', source: 'バハムート・プライム' }),
-      netRegexCn: NetRegexes.startsUsing({ id: '26EC', source: '至尊巴哈姆特' }),
-      netRegexKo: NetRegexes.startsUsing({ id: '26EC', source: '바하무트 프라임' }),
       preRun: (data) => data.mornAfahCount++,
       alertText: (data, matches, output) => {
         if (matches.target === data.me)
@@ -1731,7 +1519,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         mornAfahYou: {
-          en: '몬아파 #${num} (나한테!)',
+          en: 'Morn Afah #${num} (YOU)',
           de: 'Morn Afah #${num} (DU)',
           fr: 'Morn Afah #${num} (VOUS)',
           ja: 'モーン・アファー${num}回 (自分)',
@@ -1739,7 +1527,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '몬 아파 ${num} (나에게)',
         },
         mornAfahPlayer: {
-          en: '몬아파 #${num} (${player})',
+          en: 'Morn Afah #${num} (${player})',
           de: 'Morn Afah #${num} (${player})',
           fr: 'Morn Afah #${num} (${player})',
           ja: 'モーン・アファー${num}回 (${player})',
@@ -1752,18 +1540,13 @@ const triggerSet: TriggerSet<Data> = {
       id: 'UCU Akh Morn',
       type: 'StartsUsing',
       netRegex: NetRegexes.startsUsing({ id: '26EA', source: 'Bahamut Prime', capture: false }),
-      netRegexDe: NetRegexes.startsUsing({ id: '26EA', source: 'Prim-Bahamut', capture: false }),
-      netRegexFr: NetRegexes.startsUsing({ id: '26EA', source: 'Primo-Bahamut', capture: false }),
-      netRegexJa: NetRegexes.startsUsing({ id: '26EA', source: 'バハムート・プライム', capture: false }),
-      netRegexCn: NetRegexes.startsUsing({ id: '26EA', source: '至尊巴哈姆特', capture: false }),
-      netRegexKo: NetRegexes.startsUsing({ id: '26EA', source: '바하무트 프라임', capture: false }),
       preRun: (data) => {
         data.akhMornCount++;
       },
       infoText: (data, _matches, output) => output.text!({ num: data.akhMornCount }),
       outputStrings: {
         text: {
-          en: '아크몬 #${num}',
+          en: 'Akh Morn #${num}',
           de: 'Akh Morn #${num}',
           fr: 'Akh Morn #${num}',
           ja: 'アク・モーン #${num}',
@@ -1776,16 +1559,11 @@ const triggerSet: TriggerSet<Data> = {
       id: 'UCU Exaflare',
       type: 'StartsUsing',
       netRegex: NetRegexes.startsUsing({ id: '26EF', source: 'Bahamut Prime', capture: false }),
-      netRegexDe: NetRegexes.startsUsing({ id: '26EF', source: 'Prim-Bahamut', capture: false }),
-      netRegexFr: NetRegexes.startsUsing({ id: '26EF', source: 'Primo-Bahamut', capture: false }),
-      netRegexJa: NetRegexes.startsUsing({ id: '26EF', source: 'バハムート・プライム', capture: false }),
-      netRegexCn: NetRegexes.startsUsing({ id: '26EF', source: '至尊巴哈姆特', capture: false }),
-      netRegexKo: NetRegexes.startsUsing({ id: '26EF', source: '바하무트 프라임', capture: false }),
       preRun: (data) => data.exaflareCount++,
       infoText: (data, _matches, output) => output.text!({ num: data.exaflareCount }),
       outputStrings: {
         text: {
-          en: '엑사플레어 #${num}',
+          en: 'Exaflare #${num}',
           de: 'Exaflare #${num}',
           fr: 'ExaBrasier #${num}',
           ja: 'エクサフレア${num}回',

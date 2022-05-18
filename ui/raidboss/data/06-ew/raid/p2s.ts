@@ -50,45 +50,29 @@ const triggerSet: TriggerSet<Data> = {
       id: 'P2S Murky Depths',
       type: 'StartsUsing',
       netRegex: NetRegexes.startsUsing({ id: '6833', source: 'Hippokampos', capture: false }),
-      netRegexDe: NetRegexes.startsUsing({ id: '6833', source: 'Hippokampos', capture: false }),
-      netRegexFr: NetRegexes.startsUsing({ id: '6833', source: 'Hippokampos', capture: false }),
-      netRegexJa: NetRegexes.startsUsing({ id: '6833', source: 'ヒッポカムポス', capture: false }),
-      netRegexCn: NetRegexes.startsUsing({ id: '6833', source: '鱼尾海马怪', capture: false }),
       response: Responses.aoe(),
     },
     {
       id: 'P2S Doubled Impact',
       type: 'StartsUsing',
       netRegex: NetRegexes.startsUsing({ id: '6832', source: 'Hippokampos' }),
-      netRegexDe: NetRegexes.startsUsing({ id: '6832', source: 'Hippokampos' }),
-      netRegexFr: NetRegexes.startsUsing({ id: '6832', source: 'Hippokampos' }),
-      netRegexJa: NetRegexes.startsUsing({ id: '6832', source: 'ヒッポカムポス' }),
-      netRegexCn: NetRegexes.startsUsing({ id: '6832', source: '鱼尾海马怪' }),
       response: Responses.sharedTankBuster(),
     },
     {
       id: 'P2S Sewage Deluge',
       type: 'StartsUsing',
       netRegex: NetRegexes.startsUsing({ id: '6810', source: 'Hippokampos', capture: false }),
-      netRegexDe: NetRegexes.startsUsing({ id: '6810', source: 'Hippokampos', capture: false }),
-      netRegexFr: NetRegexes.startsUsing({ id: '6810', source: 'Hippokampos', capture: false }),
-      netRegexJa: NetRegexes.startsUsing({ id: '6810', source: 'ヒッポカムポス', capture: false }),
-      netRegexCn: NetRegexes.startsUsing({ id: '6810', source: '鱼尾海马怪', capture: false }),
       response: Responses.bigAoe(),
     },
     {
       id: 'P2S Spoken Cataract',
       type: 'StartsUsing',
       netRegex: NetRegexes.startsUsing({ id: ['6817', '6811', '6812', '6813'], source: 'Hippokampos', capture: false }),
-      netRegexDe: NetRegexes.startsUsing({ id: ['6817', '6811', '6812', '6813'], source: 'Hippokampos', capture: false }),
-      netRegexFr: NetRegexes.startsUsing({ id: ['6817', '6811', '6812', '6813'], source: 'Hippokampos', capture: false }),
-      netRegexJa: NetRegexes.startsUsing({ id: ['6817', '6811', '6812', '6813'], source: 'ヒッポカムポス', capture: false }),
-      netRegexCn: NetRegexes.startsUsing({ id: ['6817', '6811', '6812', '6813'], source: '鱼尾海马怪', capture: false }),
       suppressSeconds: 1,
       alertText: (_data, _matches, output) => output.directions!(),
       outputStrings: {
         directions: {
-          en: '뒤통수 쪽이 안전!',
+          en: 'Back of head',
           de: 'Zur Rückseite des Kopfes',
           fr: 'Derrière la tête',
           ja: '頭の後ろへ',
@@ -101,15 +85,11 @@ const triggerSet: TriggerSet<Data> = {
       id: 'P2S Winged Cataract',
       type: 'StartsUsing',
       netRegex: NetRegexes.startsUsing({ id: ['6814', '6815', '6818', '6816'], source: 'Hippokampos', capture: false }),
-      netRegexDe: NetRegexes.startsUsing({ id: ['6814', '6815', '6818', '6816'], source: 'Hippokampos', capture: false }),
-      netRegexFr: NetRegexes.startsUsing({ id: ['6814', '6815', '6818', '6816'], source: 'Hippokampos', capture: false }),
-      netRegexJa: NetRegexes.startsUsing({ id: ['6814', '6815', '6818', '6816'], source: 'ヒッポカムポス', capture: false }),
-      netRegexCn: NetRegexes.startsUsing({ id: ['6814', '6815', '6818', '6816'], source: '鱼尾海马怪', capture: false }),
       suppressSeconds: 1,
       alertText: (_data, _matches, output) => output.directions!(),
       outputStrings: {
         directions: {
-          en: '바라보는 쪽이 안전!',
+          en: 'Front of head',
           de: 'Zur Vorderseite des Kopfes',
           fr: 'Devant la tête',
           ja: '頭の前へ',
@@ -122,15 +102,11 @@ const triggerSet: TriggerSet<Data> = {
       id: 'P2S Ominous Bubbling',
       type: 'StartsUsing',
       netRegex: NetRegexes.startsUsing({ id: '682B', source: 'Hippokampos', capture: false }),
-      netRegexDe: NetRegexes.startsUsing({ id: '682B', source: 'Hippokampos', capture: false }),
-      netRegexFr: NetRegexes.startsUsing({ id: '682B', source: 'Hippokampos', capture: false }),
-      netRegexJa: NetRegexes.startsUsing({ id: '682B', source: 'ヒッポカムポス', capture: false }),
-      netRegexCn: NetRegexes.startsUsing({ id: '682B', source: '鱼尾海马怪', capture: false }),
       suppressSeconds: 1,
       infoText: (_data, _matches, output) => output.groups!(),
       outputStrings: {
         groups: {
-          en: '힐러와 뭉치기',
+          en: 'Healer Groups',
           de: 'Heiler-Gruppen',
           fr: 'Groupes sur les heals',
           ja: 'ヒラに頭割り',
@@ -155,7 +131,7 @@ const triggerSet: TriggerSet<Data> = {
         // cactbot-builtin-response
         output.responseOutputStrings = {
           marks: {
-            en: '해일: ${player1}, ${player2}',
+            en: 'Marks: ${player1}, ${player2}',
             de: 'Marker: ${player1}, ${player2}',
             fr: 'Marques sur : ${player1}, ${player2}',
             ja: 'マーカー: ${player1}, ${player2}',
@@ -163,7 +139,7 @@ const triggerSet: TriggerSet<Data> = {
             ko: '징: ${player1}, ${player2}',
           },
           avariceOnYou: {
-            en: '내가 해일이라니',
+            en: 'Avarice on YOU',
             de: 'Marker auf DIR',
             fr: 'Marque sur VOUS',
             ja: 'マーカーついた',
@@ -227,7 +203,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         arrowFirst: {
-          en: '화살표 먼저 처리해욧!',
+          en: 'Arrow First',
           de: 'Pfeil zuerst',
           fr: 'Flèches en premières',
           ja: '突進→散開',
@@ -235,7 +211,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '화살표 돌진 먼저',
         },
         spreadFirst: {
-          en: '먼저 기믹, 흩어져욧!',
+          en: 'Spread First',
           de: 'Verteilen zuerst',
           fr: 'Dispersez-vous en premier',
           ja: '散開→突進',
@@ -249,10 +225,6 @@ const triggerSet: TriggerSet<Data> = {
       id: 'P2S Dissociation',
       type: 'StartsUsing',
       netRegex: NetRegexes.startsUsing({ id: '682E', source: 'Hippokampos' }),
-      netRegexDe: NetRegexes.startsUsing({ id: '682E', source: 'Hippokampos' }),
-      netRegexFr: NetRegexes.startsUsing({ id: '682E', source: 'Hippokampos' }),
-      netRegexJa: NetRegexes.startsUsing({ id: '682E', source: 'ヒッポカムポス' }),
-      netRegexCn: NetRegexes.startsUsing({ id: '682E', source: '鱼尾海马怪' }),
       alertText: (_data, matches, output) => {
         const xCoord = parseFloat(matches.x);
         if (xCoord > 100)
@@ -270,10 +242,6 @@ const triggerSet: TriggerSet<Data> = {
       id: 'P2S Tainted Flood',
       type: 'StartsUsing',
       netRegex: NetRegexes.startsUsing({ id: '6838', source: 'Hippokampos' }),
-      netRegexDe: NetRegexes.startsUsing({ id: '6838', source: 'Hippokampos' }),
-      netRegexFr: NetRegexes.startsUsing({ id: '6838', source: 'Hippokampos' }),
-      netRegexJa: NetRegexes.startsUsing({ id: '6838', source: 'ヒッポカムポス' }),
-      netRegexCn: NetRegexes.startsUsing({ id: '6838', source: '鱼尾海马怪' }),
       condition: (data, matches) => matches.target === data.me,
       response: Responses.spread(),
     },
@@ -282,16 +250,12 @@ const triggerSet: TriggerSet<Data> = {
       type: 'Tether',
       // Whoever has tether when cast of 681B ends will be flared
       netRegex: NetRegexes.tether({ id: '0054', source: 'Hippokampos' }),
-      netRegexDe: NetRegexes.tether({ id: '0054', source: 'Hippokampos' }),
-      netRegexFr: NetRegexes.tether({ id: '0054', source: 'Hippokampos' }),
-      netRegexJa: NetRegexes.tether({ id: '0054', source: 'ヒッポカムポス' }),
-      netRegexCn: NetRegexes.tether({ id: '0054', source: '鱼尾海马怪' }),
       condition: Conditions.targetIsYou(),
       infoText: (_data, _matches, output) => output.text!(),
       run: (data, matches) => data.flareTarget = matches.target,
       outputStrings: {
         text: {
-          en: '내게 줄이!',
+          en: 'Flare Tether',
           de: 'Flare Verbindung',
           fr: 'Lien Brasier',
           ja: 'フレアの線',
@@ -304,10 +268,6 @@ const triggerSet: TriggerSet<Data> = {
       id: 'P2S Coherence Stack',
       type: 'StartsUsing',
       netRegex: NetRegexes.startsUsing({ id: '681B', source: 'Hippokampos' }),
-      netRegexDe: NetRegexes.startsUsing({ id: '681B', source: 'Hippokampos' }),
-      netRegexFr: NetRegexes.startsUsing({ id: '681B', source: 'Hippokampos' }),
-      netRegexJa: NetRegexes.startsUsing({ id: '681B', source: 'ヒッポカムポス' }),
-      netRegexCn: NetRegexes.startsUsing({ id: '681B', source: '鱼尾海马怪' }),
       condition: (data) => data.flareTarget !== data.me,
       // 12 second cast, delay for tether to settle
       delaySeconds: (_data, matches) => parseFloat(matches.castTime) - 6,
@@ -318,7 +278,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         flareLineStack: {
-          en: '탱크 뒤로 한줄로 뭉쳐욧',
+          en: 'Line Stack (behind tank)',
           de: 'Linien-Sammeln (hinter dem Tank)',
           fr: 'Package en ligne (derrière le tank)',
           ja: '直線頭割り（タンクより後ろ）',
@@ -326,7 +286,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '탱커 뒤로 직선 쉐어',
         },
         flareLineTank: {
-          en: '줄 맨 앞에 서욧! (플레어면 튀셈)',
+          en: 'Line Stack (be in front)',
           de: 'Linien-Sammeln (vorne sein)',
           fr: 'Package en ligne (Placez-vous devant)',
           ja: '直線頭割り（みんなの前に）',
@@ -340,10 +300,6 @@ const triggerSet: TriggerSet<Data> = {
       id: 'P2S Shockwave',
       type: 'StartsUsing',
       netRegex: NetRegexes.startsUsing({ id: '682F', source: 'Hippokampos' }),
-      netRegexDe: NetRegexes.startsUsing({ id: '682F', source: 'Hippokampos' }),
-      netRegexFr: NetRegexes.startsUsing({ id: '682F', source: 'Hippokampos' }),
-      netRegexJa: NetRegexes.startsUsing({ id: '682F', source: 'ヒッポカムポス' }),
-      netRegexCn: NetRegexes.startsUsing({ id: '682F', source: '鱼尾海马怪' }),
       // 7.7 cast time, delay for proper arm's length
       delaySeconds: (_data, matches) => parseFloat(matches.castTime) - 5,
       response: Responses.knockback(),
@@ -357,7 +313,7 @@ const triggerSet: TriggerSet<Data> = {
         // cactbot-builtin-response
         output.responseOutputStrings = {
           squareAcross: {
-            en: '#${num} ■, 반대쪽 발판으로',
+            en: '#${num} Square, go across',
             de: '#${num} Viereck, geh gegenüber',
             fr: '#${num} Carré, allez à l\'opposé',
             ja: '四角 #${num}：ボスの対角へ',
@@ -366,7 +322,7 @@ const triggerSet: TriggerSet<Data> = {
           },
           // Trying not to confuse with boss/across
           squareBoss: {
-            en: '#${num} ■, 보스 발판으로',
+            en: '#${num} Square, boss tile',
             de: '#${num} Viereck, Boss Fläche',
             fr: '#${num} Carré, case du boss',
             ja: '四角 #${num}：ボスの下へ',
@@ -374,7 +330,7 @@ const triggerSet: TriggerSet<Data> = {
             ko: '#${num} 네모, 보스 발판으로',
           },
           triangle: {
-            en: '#${num} ▲, 숫자 마커로!',
+            en: '#${num} Triangle',
             de: '#${num} Dreieck',
             fr: '#${num} Triangle',
             ja: '三角 #${num}',
