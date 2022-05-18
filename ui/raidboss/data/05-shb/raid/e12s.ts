@@ -75,7 +75,7 @@ const primalOutputStrings = {
   '008F': Outputs.sides,
   '0090': Outputs.out,
   '0091': {
-    en: '비스듬히',
+    en: 'Intercards',
     de: 'Interkardinale Himmelsrichtungen',
     fr: 'Intercardinal',
     ja: '斜め',
@@ -84,7 +84,7 @@ const primalOutputStrings = {
   },
   // Tether combos.
   '008E008F': {
-    en: '안으로 + 동서로',
+    en: 'Under + Sides',
     de: 'Runter + Seiten',
     fr: 'En dessous + côtés',
     ja: '真ん中 + 横へ',
@@ -92,7 +92,7 @@ const primalOutputStrings = {
     ko: '보스 안쪽 + 양옆',
   },
   '008E0090': {
-    en: '밖으로 + 남북으로',
+    en: 'North/South + Out',
     de: 'Norden/Süden + Raus',
     fr: 'Nord/Sud + Extérieur',
     ja: '北/南 + 外へ',
@@ -100,7 +100,7 @@ const primalOutputStrings = {
     ko: '남/북 + 바깥',
   },
   '008E0091': {
-    en: '안으로 + 비스듬히',
+    en: 'Under + Intercards',
     de: 'Runter + Interkardinale Himmerlsrichtungen',
     fr: 'En dessous + Intercardinal',
     ja: '真ん中 + 斜め',
@@ -117,7 +117,7 @@ const primalOutputStrings = {
     ko: '${safespot1} + ${safespot2}',
   },
   'stock': {
-    en: '저장: ${text}',
+    en: 'Stock: ${text}',
     de: 'Sammeln: ${text}',
     fr: 'Stocker : ${text}',
     ja: 'ストック: ${text}',
@@ -135,7 +135,7 @@ const primalOutputStrings = {
   // Junctions.
   'spread': {
     // Shiva spread.
-    en: '산개',
+    en: 'spread',
     de: 'verteilen',
     fr: 'dispersez-vous',
     ja: '散開',
@@ -144,7 +144,7 @@ const primalOutputStrings = {
   },
   'stacks': {
     // Titan healer stacks.
-    en: '뭉쳐모이기',
+    en: 'stacks',
     de: 'sammeln',
     fr: 'packez-vous',
     ja: 'ヒラ頭割り',
@@ -154,7 +154,7 @@ const primalOutputStrings = {
   'stack': {
     // Obliterate whole group laser stack.
     // This is deliberately "stack" singular (vs Titan "stacks").
-    en: '뭉치기',
+    en: 'group stack',
     de: 'In Gruppen sammeln',
     fr: 'package en groupe',
     ja: '頭割り',
@@ -193,7 +193,7 @@ const effectIdToOutputStringKey: { [effectId: string]: string } = {
 // but also the individual alerts.  These are kept short and snappy.
 const intermediateRelativityOutputStringsRaw = {
   flare: {
-    en: '플레어/밖으로',
+    en: 'Flare',
     de: 'Flare',
     fr: 'Brasier',
     ja: 'フレア',
@@ -201,7 +201,7 @@ const intermediateRelativityOutputStringsRaw = {
     ko: '플레어',
   },
   stack: {
-    en: '언홀리/뭉치기',
+    en: 'Stack',
     de: 'Sammeln',
     fr: 'Packez-vous',
     ja: '頭割り',
@@ -209,23 +209,16 @@ const intermediateRelativityOutputStringsRaw = {
     ko: '쉐어',
   },
   shadoweye: {
-    en: '눈동자/바깥보기',
+    en: 'Gaze',
     de: 'Blick',
     fr: 'Regard',
     ja: 'シャドウアイ',
     cn: '暗黑眼',
     ko: '마안',
   },
-  eruption: {
-    en: '이럽션/산개',
-    de: 'Verteilen',
-    fr: 'Dispersez-vous',
-    ja: '散開',
-    cn: '散开',
-    ko: '산개',
-  },
+  eruption: Outputs.spread,
   blizzard: {
-    en: '아이스/뭉치기',
+    en: 'Ice',
     de: 'Eis',
     fr: 'Glace',
     ja: 'ブリザガ',
@@ -233,7 +226,7 @@ const intermediateRelativityOutputStringsRaw = {
     ko: '블리자가',
   },
   aero: {
-    en: '에어로/밖으로',
+    en: 'Aero',
     de: 'Wind',
     fr: 'Vent',
     ja: 'エアロガ',
@@ -296,7 +289,7 @@ const triggerSet: TriggerSet<Data> = {
         // cactbot-builtin-response
         output.responseOutputStrings = {
           formlessBusterAndSwap: {
-            en: '탱크버스터 + 교대!!!',
+            en: 'Tank Buster + Swap',
             de: 'Tankbuster + Wechsel',
             fr: 'Tank buster + Swap',
             ja: 'タンクバスター + スイッチ',
@@ -340,7 +333,7 @@ const triggerSet: TriggerSet<Data> = {
         output.responseOutputStrings = {
           // The first round has only one blue.
           titanBlueSingular: {
-            en: '파란색',
+            en: 'Blue Weight',
             de: 'Blau - Gewicht',
             fr: 'Poids bleu',
             ja: '青、重圧',
@@ -351,7 +344,7 @@ const triggerSet: TriggerSet<Data> = {
           // The third is technically fixed by role with a standard party (one dps, one !dps),
           // but call out your partner anyway in case you've got 8 blus or something.
           titanBlueWithPartner: {
-            en: '파란색 (↔${player})',
+            en: 'Blue (with ${player})',
             de: 'Blau (mit ${player})',
             fr: 'Bleu (avec ${player})',
             ja: '青、重圧 (${player}と)',
@@ -359,7 +352,7 @@ const triggerSet: TriggerSet<Data> = {
             ko: '파랑 (다른 대상자: ${player})',
           },
           titanOrangeStack: {
-            en: '뭉치기 / 오렌지색',
+            en: 'Orange Stack',
             de: 'Orange - versammeln',
             fr: 'Orange, packez-vous',
             ja: '橙、頭割り',
@@ -367,7 +360,7 @@ const triggerSet: TriggerSet<Data> = {
             ko: '주황: 집합',
           },
           titanYellowSpread: {
-            en: '홀로 / 노란색',
+            en: 'Yellow Spread',
             de: 'Gelb - Verteilen',
             fr: 'Jaune, dispersez-vous',
             ja: '黄、散開',
@@ -441,11 +434,6 @@ const triggerSet: TriggerSet<Data> = {
       type: 'Tether',
       // This always directly follows the 1B: headmarker line.
       netRegex: NetRegexes.tether({ target: 'Chiseled Sculpture', id: '0011' }),
-      netRegexDe: NetRegexes.tether({ target: 'Abbild Eines Mannes', id: '0011' }),
-      netRegexFr: NetRegexes.tether({ target: 'Création Masculine', id: '0011' }),
-      netRegexJa: NetRegexes.tether({ target: '創られた男', id: '0011' }),
-      netRegexCn: NetRegexes.tether({ target: '被创造的男性', id: '0011' }),
-      netRegexKo: NetRegexes.tether({ target: '창조된 남자', id: '0011' }),
       condition: (data, matches) => matches.source === data.me,
       durationSeconds: (data) => {
         // Handle laser #1 differently to not collide with the rapturous reach.
@@ -528,7 +516,7 @@ const triggerSet: TriggerSet<Data> = {
         laser3: Outputs.num3,
         laser4: Outputs.num4,
         inner: {
-          en: '#${num} (가운데쪽)',
+          en: '#${num} (Inner)',
           de: '#${num} (innen)',
           fr: '#${num} (Intérieur)',
           ja: '#${num} (中)',
@@ -536,7 +524,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '#${num} (안쪽)',
         },
         outer: {
-          en: '#${num} (바깥쪽)',
+          en: '#${num} (Outer)',
           de: '#${num} (außen)',
           fr: '#${num} (Extérieur)',
           ja: '#${num} (外)',
@@ -557,16 +545,11 @@ const triggerSet: TriggerSet<Data> = {
       id: 'E12S Promise Palm Of Temperance SE',
       type: 'StartsUsing',
       netRegex: NetRegexes.startsUsing({ source: 'Guardian Of Eden', id: '58B4', capture: false }),
-      netRegexDe: NetRegexes.startsUsing({ source: 'Wächter Von Eden', id: '58B4', capture: false }),
-      netRegexFr: NetRegexes.startsUsing({ source: 'Gardien D\'Éden', id: '58B4', capture: false }),
-      netRegexJa: NetRegexes.startsUsing({ source: 'ガーディアン・オブ・エデン', id: '58B4', capture: false }),
-      netRegexCn: NetRegexes.startsUsing({ source: '伊甸守卫', id: '58B4', capture: false }),
-      netRegexKo: NetRegexes.startsUsing({ source: '에덴의 수호자', id: '58B4', capture: false }),
       durationSeconds: 10,
       infoText: (_data, _matches, output) => output.knockback!(),
       outputStrings: {
         knockback: {
-          en: '남동으로 넉백',
+          en: 'SE Knockback',
           de: 'SO Rückstoß',
           fr: 'SE Poussée',
           ja: '東南ノックバック',
@@ -579,16 +562,11 @@ const triggerSet: TriggerSet<Data> = {
       id: 'E12S Promise Palm Of Temperance SW',
       type: 'StartsUsing',
       netRegex: NetRegexes.startsUsing({ source: 'Guardian Of Eden', id: '58B5', capture: false }),
-      netRegexDe: NetRegexes.startsUsing({ source: 'Wächter Von Eden', id: '58B5', capture: false }),
-      netRegexFr: NetRegexes.startsUsing({ source: 'Gardien D\'Éden', id: '58B5', capture: false }),
-      netRegexJa: NetRegexes.startsUsing({ source: 'ガーディアン・オブ・エデン', id: '58B5', capture: false }),
-      netRegexCn: NetRegexes.startsUsing({ source: '伊甸守卫', id: '58B5', capture: false }),
-      netRegexKo: NetRegexes.startsUsing({ source: '에덴의 수호자', id: '58B5', capture: false }),
       durationSeconds: 10,
       infoText: (_data, _matches, output) => output.knockback!(),
       outputStrings: {
         knockback: {
-          en: '남서로 넉백',
+          en: 'SW Knockback',
           de: 'SW Rückstoß',
           fr: 'SO Poussée',
           ja: '西南ノックバック',
@@ -601,11 +579,6 @@ const triggerSet: TriggerSet<Data> = {
       id: 'E12S Promise Statue 2nd/3rd/4th Laser',
       type: 'Ability',
       netRegex: NetRegexes.ability({ source: 'Chiseled Sculpture', id: '58B3', capture: false }),
-      netRegexDe: NetRegexes.ability({ source: 'Abbild Eines Mannes', id: '58B3', capture: false }),
-      netRegexFr: NetRegexes.ability({ source: 'Création Masculine', id: '58B3', capture: false }),
-      netRegexJa: NetRegexes.ability({ source: '創られた男', id: '58B3', capture: false }),
-      netRegexCn: NetRegexes.ability({ source: '被创造的男性', id: '58B3', capture: false }),
-      netRegexKo: NetRegexes.ability({ source: '창조된 남자', id: '58B3', capture: false }),
 
       condition: (data) => !data.statueLaserCount || data.statueLaserCount < 4,
       durationSeconds: 3,
@@ -618,7 +591,7 @@ const triggerSet: TriggerSet<Data> = {
           laser3: Outputs.num3,
           laser4: Outputs.num4,
           baitInner: {
-            en: '가운데로 유도 #${num}',
+            en: 'Bait Inner #${num}',
             de: 'Köder innen #${num}',
             fr: 'Orientez vers l\'intérieur #${num}',
             ja: '中へ誘導 #${num}',
@@ -626,7 +599,7 @@ const triggerSet: TriggerSet<Data> = {
             ko: '내부 유도 #${num}',
           },
           baitOuter: {
-            en: '바깥으로 유도 #${num}',
+            en: 'Bait Outer #${num}',
             de: 'Köder außen #${num}',
             fr: 'Orientez vers l\'extérieur #${num}',
             ja: '外へ誘導 #${num}',
@@ -634,7 +607,7 @@ const triggerSet: TriggerSet<Data> = {
             ko: '외부 유도 #${num}',
           },
           baitUnknown: {
-            en: '유도 #${num}',
+            en: 'Bait #${num}',
             de: 'Köder #${num}',
             fr: 'Orientez #${num}',
             ja: '誘導 #${num}',
@@ -676,11 +649,6 @@ const triggerSet: TriggerSet<Data> = {
       id: 'E12S Promise Weight Cleanup',
       type: 'StartsUsing',
       netRegex: NetRegexes.startsUsing({ source: 'Eden\'s Promise', id: '58A5', capture: false }),
-      netRegexDe: NetRegexes.startsUsing({ source: 'Edens Verheißung', id: '58A5', capture: false }),
-      netRegexFr: NetRegexes.startsUsing({ source: 'Promesse D\'Éden', id: '58A5', capture: false }),
-      netRegexJa: NetRegexes.startsUsing({ source: 'プロミス・オブ・エデン', id: '58A5', capture: false }),
-      netRegexCn: NetRegexes.startsUsing({ source: '伊甸之约', id: '58A5', capture: false }),
-      netRegexKo: NetRegexes.startsUsing({ source: '에덴의 약속', id: '58A5', capture: false }),
       run: (data) => {
         delete data.weightTargets;
         data.seenFirstBombs = true;
@@ -690,16 +658,11 @@ const triggerSet: TriggerSet<Data> = {
       id: 'E12S Promise Formless Judgment',
       type: 'StartsUsing',
       netRegex: NetRegexes.startsUsing({ source: 'Eden\'s Promise', id: '58A9', capture: false }),
-      netRegexDe: NetRegexes.startsUsing({ source: 'Edens Verheißung', id: '58A9', capture: false }),
-      netRegexFr: NetRegexes.startsUsing({ source: 'Promesse D\'Éden', id: '58A9', capture: false }),
-      netRegexJa: NetRegexes.startsUsing({ source: 'プロミス・オブ・エデン', id: '58A9', capture: false }),
-      netRegexCn: NetRegexes.startsUsing({ source: '伊甸之约', id: '58A9', capture: false }),
-      netRegexKo: NetRegexes.startsUsing({ source: '에덴의 약속', id: '58A9', capture: false }),
       response: (data, _matches, output) => {
         // cactbot-builtin-response
         output.responseOutputStrings = {
           formlessBusterAndSwap: {
-            en: '탱크버스터 + 교대!!!',
+            en: 'Tank Buster + Swap',
             de: 'Tankbuster + Wechsel',
             fr: 'Tank buster + Swap',
             ja: 'タンクバスター + スイッチ',
@@ -729,17 +692,12 @@ const triggerSet: TriggerSet<Data> = {
       id: 'E12S Promise Rapturous Reach Left',
       type: 'StartsUsing',
       netRegex: NetRegexes.startsUsing({ source: 'Eden\'s Promise', id: '58AD', capture: false }),
-      netRegexDe: NetRegexes.startsUsing({ source: 'Edens Verheißung', id: '58AD', capture: false }),
-      netRegexFr: NetRegexes.startsUsing({ source: 'Promesse D\'Éden', id: '58AD', capture: false }),
-      netRegexJa: NetRegexes.startsUsing({ source: 'プロミス・オブ・エデン', id: '58AD', capture: false }),
-      netRegexCn: NetRegexes.startsUsing({ source: '伊甸之约', id: '58AD', capture: false }),
-      netRegexKo: NetRegexes.startsUsing({ source: '에덴의 약속', id: '58AD', capture: false }),
       response: (data, _matches, output) => {
         // cactbot-builtin-response
         output.responseOutputStrings = {
           goLeft: Outputs.left,
           goLeftBaitInner: {
-            en: '왼쪽 + 가운데로 유도 #1',
+            en: 'Left + Bait Inner #1',
             de: 'Links + Köder innen #1',
             fr: 'À gauche + Orientez vers l\'intérieur #1',
             ja: '左 + 中へ誘導 #1',
@@ -747,7 +705,7 @@ const triggerSet: TriggerSet<Data> = {
             ko: '왼쪽 + 내부 유도 #1',
           },
           goLeftBaitOuter: {
-            en: '왼쪽 + 바깥으로 유도 #1',
+            en: 'Left + Bait Outer #1',
             de: 'Links + Köder außen #1',
             fr: 'À gauche + Orientez vers l\'extérieur #1',
             ja: '左 + 外へ誘導 #1',
@@ -755,7 +713,7 @@ const triggerSet: TriggerSet<Data> = {
             ko: '왼쪽 + 외부 유도 #1',
           },
           goLeftBaitUnknown: {
-            en: '왼쪽 + 유도 #1',
+            en: 'Left + Bait #1',
             de: 'Links + Köder #1',
             fr: 'À gauche + Orientez #1',
             ja: '左 + 誘導 #1',
@@ -779,17 +737,12 @@ const triggerSet: TriggerSet<Data> = {
       id: 'E12S Promise Rapturous Reach Right',
       type: 'StartsUsing',
       netRegex: NetRegexes.startsUsing({ source: 'Eden\'s Promise', id: '58AE', capture: false }),
-      netRegexDe: NetRegexes.startsUsing({ source: 'Edens Verheißung', id: '58AE', capture: false }),
-      netRegexFr: NetRegexes.startsUsing({ source: 'Promesse D\'Éden', id: '58AE', capture: false }),
-      netRegexJa: NetRegexes.startsUsing({ source: 'プロミス・オブ・エデン', id: '58AE', capture: false }),
-      netRegexCn: NetRegexes.startsUsing({ source: '伊甸之约', id: '58AE', capture: false }),
-      netRegexKo: NetRegexes.startsUsing({ source: '에덴의 약속', id: '58AE', capture: false }),
       response: (data, _matches, output) => {
         // cactbot-builtin-response
         output.responseOutputStrings = {
           goRight: Outputs.right,
           goRightBaitInner: {
-            en: '오른쪽 + 가운데로 유도 #1',
+            en: 'Right + Bait Inner #1',
             de: 'Rechts + Köder innen #1',
             fr: 'À droite + Orientez vers l\'intérieur #1',
             ja: '右 + 中へ誘導 #1',
@@ -797,7 +750,7 @@ const triggerSet: TriggerSet<Data> = {
             ko: '오른쪽 + 내부 유도 #1',
           },
           goRightBaitOuter: {
-            en: '오른쪽 + 바깥으로 유도 #1',
+            en: 'Right + Bait Outer #1',
             de: 'Rechts + Köder außen #1',
             fr: 'À droite + Orientez vers l\'extérieur #1',
             ja: '右 + 外へ誘導 #1',
@@ -805,7 +758,7 @@ const triggerSet: TriggerSet<Data> = {
             ko: '오른쪽 + 외부 유도 #1',
           },
           goRightBaitUnknown: {
-            en: '오른쪽 + 유도 #1',
+            en: 'Right + Bait #1',
             de: 'Rechts + Köder #1',
             fr: 'À droite + Orientez #1',
             ja: '右 + 誘導 #1',
@@ -829,11 +782,6 @@ const triggerSet: TriggerSet<Data> = {
       id: 'E12S Promise Maleficium',
       type: 'StartsUsing',
       netRegex: NetRegexes.startsUsing({ source: 'Eden\'s Promise', id: '58A8', capture: false }),
-      netRegexDe: NetRegexes.startsUsing({ source: 'Edens Verheißung', id: '58A8', capture: false }),
-      netRegexFr: NetRegexes.startsUsing({ source: 'Promesse D\'Éden', id: '58A8', capture: false }),
-      netRegexJa: NetRegexes.startsUsing({ source: 'プロミス・オブ・エデン', id: '58A8', capture: false }),
-      netRegexCn: NetRegexes.startsUsing({ source: '伊甸之约', id: '58A8', capture: false }),
-      netRegexKo: NetRegexes.startsUsing({ source: '에덴의 약속', id: '58A8', capture: false }),
       response: Responses.aoe(),
     },
     {
@@ -859,7 +807,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         junctionWithCast: Outputs.spread,
         diamondDust: {
-          en: '커다란 장판, 미끄러지니 중앙으로',
+          en: 'Big AOE, Get Middle',
           de: 'Große AoE, geh in die Mitte',
           fr: 'Grosse AoE, allez au milieu',
           ja: '大ダメージ、中へ',
@@ -890,7 +838,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         junctionWithCast: {
-          en: '힐러에게 모여욧',
+          en: 'Healer Stacks',
           de: 'Heiler-Gruppen',
           fr: 'Packages sur les Heals',
           ja: 'ヒラ頭割り',
@@ -898,7 +846,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '힐러 쉐어',
         },
         earthenFury: {
-          en: '커다란 장판, 이어서 돌 떨어져욧',
+          en: 'Big AOE, Bombs Soon',
           de: 'Große AoE, bald Bomben',
           fr: 'Grosse AoE, Bombes bientôt',
           ja: '大ダメージ、まもなく岩落とし',
@@ -920,11 +868,6 @@ const triggerSet: TriggerSet<Data> = {
       id: 'E12S Promise Stock',
       type: 'StartsUsing',
       netRegex: NetRegexes.startsUsing({ source: 'Eden\'s Promise', id: '5892', capture: false }),
-      netRegexDe: NetRegexes.startsUsing({ source: 'Edens Verheißung', id: '5892', capture: false }),
-      netRegexFr: NetRegexes.startsUsing({ source: 'Promesse D\'Éden', id: '5892', capture: false }),
-      netRegexJa: NetRegexes.startsUsing({ source: 'プロミス・オブ・エデン', id: '5892', capture: false }),
-      netRegexCn: NetRegexes.startsUsing({ source: '伊甸之约', id: '5892', capture: false }),
-      netRegexKo: NetRegexes.startsUsing({ source: '에덴의 약속', id: '5892', capture: false }),
       infoText: (data, _matches, output) => {
         data.stockedTethers = data.tethers;
         delete data.tethers;
@@ -940,11 +883,6 @@ const triggerSet: TriggerSet<Data> = {
       id: 'E12S Promise Cast Release',
       type: 'StartsUsing',
       netRegex: NetRegexes.startsUsing({ source: 'Eden\'s Promise', id: ['4E43', '5893'] }),
-      netRegexDe: NetRegexes.startsUsing({ source: 'Edens Verheißung', id: ['4E43', '5893'] }),
-      netRegexFr: NetRegexes.startsUsing({ source: 'Promesse D\'Éden', id: ['4E43', '5893'] }),
-      netRegexJa: NetRegexes.startsUsing({ source: 'プロミス・オブ・エデン', id: ['4E43', '5893'] }),
-      netRegexCn: NetRegexes.startsUsing({ source: '伊甸之约', id: ['4E43', '5893'] }),
-      netRegexKo: NetRegexes.startsUsing({ source: '에덴의 약속', id: ['4E43', '5893'] }),
       preRun: (data) => data.castCount = (data.castCount ?? 0) + 1,
       // The pattern is cast - cast - release - release - cast - release.
       // #4 (the 2nd release) starts casting just before the second lion fire breath.
@@ -988,11 +926,6 @@ const triggerSet: TriggerSet<Data> = {
       type: 'StartsUsing',
       // This has a 9 second cast. :eyes:
       netRegex: NetRegexes.startsUsing({ source: 'Eden\'s Promise', id: '589D', capture: false }),
-      netRegexDe: NetRegexes.startsUsing({ source: 'Edens Verheißung', id: '589D', capture: false }),
-      netRegexFr: NetRegexes.startsUsing({ source: 'Promesse D\'Éden', id: '589D', capture: false }),
-      netRegexJa: NetRegexes.startsUsing({ source: 'プロミス・オブ・エデン', id: '589D', capture: false }),
-      netRegexCn: NetRegexes.startsUsing({ source: '伊甸之约', id: '589D', capture: false }),
-      netRegexKo: NetRegexes.startsUsing({ source: '에덴의 약속', id: '589D', capture: false }),
       delaySeconds: 4,
       response: Responses.knockback(),
     },
@@ -1009,11 +942,6 @@ const triggerSet: TriggerSet<Data> = {
       id: 'E12S Promise Small Lion Tether',
       type: 'Tether',
       netRegex: NetRegexes.tether({ source: 'Beastly Sculpture', id: '0011' }),
-      netRegexDe: NetRegexes.tether({ source: 'Abbild Eines Löwen', id: '0011' }),
-      netRegexFr: NetRegexes.tether({ source: 'Création Léonine', id: '0011' }),
-      netRegexJa: NetRegexes.tether({ source: '創られた獅子', id: '0011' }),
-      netRegexCn: NetRegexes.tether({ source: '被创造的狮子', id: '0011' }),
-      netRegexKo: NetRegexes.tether({ source: '창조된 사자', id: '0011' }),
       condition: Conditions.targetIsYou(),
       // Don't collide with reach left/right call.
       delaySeconds: 0.5,
@@ -1021,7 +949,7 @@ const triggerSet: TriggerSet<Data> = {
         // cactbot-builtin-response
         output.responseOutputStrings = {
           lionTetherOnYou: {
-            en: '사자가 나한테 줄을 쏘다니!',
+            en: 'Lion Tether on YOU',
             de: 'Löwen-Verbindung auf DIR',
             fr: 'Lien lion sur VOUS',
             ja: '自分にライオン線',
@@ -1029,28 +957,28 @@ const triggerSet: TriggerSet<Data> = {
             ko: '작은 사자 대상자',
           },
           northEastLion: {
-            en: '1시 사자',
+            en: 'NE Lion Tether',
             de: 'NO Löwen-Verbindung',
             fr: 'NE Lien lion',
             cn: '右上(东北)狮子连线',
             ko: '1시 사자 연결됨',
           },
           northWestLion: {
-            en: '11시 사자',
+            en: 'NW Lion Tether',
             de: 'NW Löwen-Verbindung',
             fr: 'NO Lien lion',
             cn: '左上(西北)狮子连线',
             ko: '11시 사자 연결됨',
           },
           southEastLion: {
-            en: '5시 사자',
+            en: 'SE Lion Tether',
             de: 'SO Löwen-Verbindung',
             fr: 'SE Lien lion',
             cn: '右下(东南)狮子连线',
             ko: '5시 사자 연결됨',
           },
           southWestLion: {
-            en: '7시 사자',
+            en: 'SW Lion Tether',
             de: 'SW Löwen-Verbindung',
             fr: 'SO Lien lion',
             cn: '左下(西南)狮子连线',
@@ -1086,22 +1014,12 @@ const triggerSet: TriggerSet<Data> = {
       id: 'E12S Oracle Shockwave Pulsar',
       type: 'StartsUsing',
       netRegex: NetRegexes.startsUsing({ source: 'Oracle Of Darkness', id: '58F0', capture: false }),
-      netRegexDe: NetRegexes.startsUsing({ source: 'Orakel Der Dunkelheit', id: '58F0', capture: false }),
-      netRegexFr: NetRegexes.startsUsing({ source: 'Prêtresse Des Ténèbres', id: '58F0', capture: false }),
-      netRegexJa: NetRegexes.startsUsing({ source: '闇の巫女', id: '58F0', capture: false }),
-      netRegexCn: NetRegexes.startsUsing({ source: '暗之巫女', id: '58F0', capture: false }),
-      netRegexKo: NetRegexes.startsUsing({ source: '어둠의 무녀', id: '58F0', capture: false }),
       response: Responses.aoe(),
     },
     {
       id: 'E12S Relativity Phase',
       type: 'StartsUsing',
       netRegex: NetRegexes.startsUsing({ source: 'Oracle Of Darkness', id: '58E[0-3]' }),
-      netRegexDe: NetRegexes.startsUsing({ source: 'Orakel Der Dunkelheit', id: '58E[0-3]' }),
-      netRegexFr: NetRegexes.startsUsing({ source: 'Prêtresse Des Ténèbres', id: '58E[0-3]' }),
-      netRegexJa: NetRegexes.startsUsing({ source: '闇の巫女', id: '58E[0-3]' }),
-      netRegexCn: NetRegexes.startsUsing({ source: '暗之巫女', id: '58E[0-3]' }),
-      netRegexKo: NetRegexes.startsUsing({ source: '어둠의 무녀', id: '58E[0-3]' }),
       run: (data, matches) => {
         const phaseMap: { [id: string]: string } = {
           '58E0': 'basic',
@@ -1116,44 +1034,24 @@ const triggerSet: TriggerSet<Data> = {
       id: 'E12S Oracle Basic Relativity',
       type: 'StartsUsing',
       netRegex: NetRegexes.startsUsing({ source: 'Oracle Of Darkness', id: '58E0', capture: false }),
-      netRegexDe: NetRegexes.startsUsing({ source: 'Orakel Der Dunkelheit', id: '58E0', capture: false }),
-      netRegexFr: NetRegexes.startsUsing({ source: 'Prêtresse Des Ténèbres', id: '58E0', capture: false }),
-      netRegexJa: NetRegexes.startsUsing({ source: '闇の巫女', id: '58E0', capture: false }),
-      netRegexCn: NetRegexes.startsUsing({ source: '暗之巫女', id: '58E0', capture: false }),
-      netRegexKo: NetRegexes.startsUsing({ source: '어둠의 무녀', id: '58E0', capture: false }),
       response: Responses.bigAoe(),
     },
     {
       id: 'E12S Oracle Intermediate Relativity',
       type: 'StartsUsing',
       netRegex: NetRegexes.startsUsing({ source: 'Oracle Of Darkness', id: '58E1', capture: false }),
-      netRegexDe: NetRegexes.startsUsing({ source: 'Orakel Der Dunkelheit', id: '58E1', capture: false }),
-      netRegexFr: NetRegexes.startsUsing({ source: 'Prêtresse Des Ténèbres', id: '58E1', capture: false }),
-      netRegexJa: NetRegexes.startsUsing({ source: '闇の巫女', id: '58E1', capture: false }),
-      netRegexCn: NetRegexes.startsUsing({ source: '暗之巫女', id: '58E1', capture: false }),
-      netRegexKo: NetRegexes.startsUsing({ source: '어둠의 무녀', id: '58E1', capture: false }),
       response: Responses.bigAoe(),
     },
     {
       id: 'E12S Oracle Advanced Relativity',
       type: 'StartsUsing',
       netRegex: NetRegexes.startsUsing({ source: 'Oracle Of Darkness', id: '58E2', capture: false }),
-      netRegexDe: NetRegexes.startsUsing({ source: 'Orakel Der Dunkelheit', id: '58E2', capture: false }),
-      netRegexFr: NetRegexes.startsUsing({ source: 'Prêtresse Des Ténèbres', id: '58E2', capture: false }),
-      netRegexJa: NetRegexes.startsUsing({ source: '闇の巫女', id: '58E2', capture: false }),
-      netRegexCn: NetRegexes.startsUsing({ source: '暗之巫女', id: '58E2', capture: false }),
-      netRegexKo: NetRegexes.startsUsing({ source: '어둠의 무녀', id: '58E2', capture: false }),
       response: Responses.bigAoe(),
     },
     {
       id: 'E12S Oracle Terminal Relativity',
       type: 'StartsUsing',
       netRegex: NetRegexes.startsUsing({ source: 'Oracle Of Darkness', id: '58E3', capture: false }),
-      netRegexDe: NetRegexes.startsUsing({ source: 'Orakel Der Dunkelheit', id: '58E3', capture: false }),
-      netRegexFr: NetRegexes.startsUsing({ source: 'Prêtresse Des Ténèbres', id: '58E3', capture: false }),
-      netRegexJa: NetRegexes.startsUsing({ source: '闇の巫女', id: '58E3', capture: false }),
-      netRegexCn: NetRegexes.startsUsing({ source: '暗之巫女', id: '58E3', capture: false }),
-      netRegexKo: NetRegexes.startsUsing({ source: '어둠의 무녀', id: '58E3', capture: false }),
       response: Responses.bigAoe(),
     },
     {
@@ -1161,11 +1059,6 @@ const triggerSet: TriggerSet<Data> = {
       type: 'StartsUsing',
       // Darkest and Somber Dance both.
       netRegex: NetRegexes.startsUsing({ source: 'Oracle Of Darkness', id: ['58BE', '58BD'], capture: false }),
-      netRegexDe: NetRegexes.startsUsing({ source: 'Orakel Der Dunkelheit', id: ['58BE', '58BD'], capture: false }),
-      netRegexFr: NetRegexes.startsUsing({ source: 'Prêtresse Des Ténèbres', id: ['58BE', '58BD'], capture: false }),
-      netRegexJa: NetRegexes.startsUsing({ source: '闇の巫女', id: ['58BE', '58BD'], capture: false }),
-      netRegexCn: NetRegexes.startsUsing({ source: '暗之巫女', id: ['58BE', '58BD'], capture: false }),
-      netRegexKo: NetRegexes.startsUsing({ source: '어둠의 무녀', id: ['58BE', '58BD'], capture: false }),
       infoText: (data, _matches, output) => {
         if (data.role === 'tank')
           return output.tankBait!();
@@ -1173,7 +1066,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         tankBait: {
-          en: '떨어져서 미끼 역할',
+          en: 'Bait Far',
           de: 'Ködern - Weit weg',
           fr: 'Attirez au loin',
           ja: '遠くに誘導',
@@ -1181,7 +1074,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '멀리 유도하기',
         },
         partyUnder: {
-          en: '보스 바로 밑으로',
+          en: 'Get Under',
           de: 'Unter ihn',
           fr: 'En dessous',
           ja: 'ボスと貼り付く',
@@ -1195,11 +1088,6 @@ const triggerSet: TriggerSet<Data> = {
       type: 'Ability',
       // Call for second hit of somber dance after first hit lands.
       netRegex: NetRegexes.ability({ source: 'Oracle Of Darkness', id: '58BD', capture: false }),
-      netRegexDe: NetRegexes.ability({ source: 'Orakel Der Dunkelheit', id: '58BD', capture: false }),
-      netRegexFr: NetRegexes.ability({ source: 'Prêtresse Des Ténèbres', id: '58BD', capture: false }),
-      netRegexJa: NetRegexes.ability({ source: '闇の巫女', id: '58BD', capture: false }),
-      netRegexCn: NetRegexes.ability({ source: '暗之巫女', id: '58BD', capture: false }),
-      netRegexKo: NetRegexes.ability({ source: '어둠의 무녀', id: '58BD', capture: false }),
       suppressSeconds: 5,
       infoText: (data, _matches, output) => {
         if (data.role === 'tank')
@@ -1208,7 +1096,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         tankBait: {
-          en: '가까이 유도',
+          en: 'Bait Close',
           de: 'Köder nah',
           fr: 'Attirez proche',
           ja: '近い誘導',
@@ -1216,7 +1104,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '가까이 붙기',
         },
         partyOut: {
-          en: '파티는 멀리서',
+          en: 'Party Out',
           de: 'Gruppe raus',
           fr: 'Groupe au loin',
           ja: '全員離れる',
@@ -1229,11 +1117,6 @@ const triggerSet: TriggerSet<Data> = {
       id: 'E12S Oracle Cataclysm',
       type: 'StartsUsing',
       netRegex: NetRegexes.startsUsing({ source: 'Oracle Of Darkness', id: '58C2' }),
-      netRegexDe: NetRegexes.startsUsing({ source: 'Orakel Der Dunkelheit', id: '58C2' }),
-      netRegexFr: NetRegexes.startsUsing({ source: 'Prêtresse Des Ténèbres', id: '58C2' }),
-      netRegexJa: NetRegexes.startsUsing({ source: '闇の巫女', id: '58C2' }),
-      netRegexCn: NetRegexes.startsUsing({ source: '暗之巫女', id: '58C2' }),
-      netRegexKo: NetRegexes.startsUsing({ source: '어둠의 무녀', id: '58C2' }),
       delaySeconds: 0.5,
       promise: async (data, matches, output) => {
         // select the Oracle Of Darkness with same source id
@@ -1286,11 +1169,6 @@ const triggerSet: TriggerSet<Data> = {
       id: 'E12S Shell Crusher',
       type: 'StartsUsing',
       netRegex: NetRegexes.startsUsing({ source: 'Oracle Of Darkness', id: '58C3', capture: false }),
-      netRegexDe: NetRegexes.startsUsing({ source: 'Orakel Der Dunkelheit', id: '58C3', capture: false }),
-      netRegexFr: NetRegexes.startsUsing({ source: 'Prêtresse Des Ténèbres', id: '58C3', capture: false }),
-      netRegexJa: NetRegexes.startsUsing({ source: '闇の巫女', id: '58C3', capture: false }),
-      netRegexCn: NetRegexes.startsUsing({ source: '暗之巫女', id: '58C3', capture: false }),
-      netRegexKo: NetRegexes.startsUsing({ source: '어둠의 무녀', id: '58C3', capture: false }),
       response: Responses.getTogether(),
     },
     {
@@ -1299,11 +1177,6 @@ const triggerSet: TriggerSet<Data> = {
       // Spirit Taker always comes after Shell Crusher, so trigger on Shell Crusher damage
       // to warn people a second or two earlier than `starts using Spirit Taker` would occur.
       netRegex: NetRegexes.ability({ source: 'Oracle Of Darkness', id: '58C3', capture: false }),
-      netRegexDe: NetRegexes.ability({ source: 'Orakel Der Dunkelheit', id: '58C3', capture: false }),
-      netRegexFr: NetRegexes.ability({ source: 'Prêtresse Des Ténèbres', id: '58C3', capture: false }),
-      netRegexJa: NetRegexes.ability({ source: '闇の巫女', id: '58C3', capture: false }),
-      netRegexCn: NetRegexes.ability({ source: '暗之巫女', id: '58C3', capture: false }),
-      netRegexKo: NetRegexes.ability({ source: '어둠의 무녀', id: '58C3', capture: false }),
       suppressSeconds: 1,
       response: Responses.spread(),
     },
@@ -1311,11 +1184,6 @@ const triggerSet: TriggerSet<Data> = {
       id: 'E12S Black Halo',
       type: 'StartsUsing',
       netRegex: NetRegexes.startsUsing({ source: 'Oracle Of Darkness', id: '58C7' }),
-      netRegexDe: NetRegexes.startsUsing({ source: 'Orakel Der Dunkelheit', id: '58C7' }),
-      netRegexFr: NetRegexes.startsUsing({ source: 'Prêtresse Des Ténèbres', id: '58C7' }),
-      netRegexJa: NetRegexes.startsUsing({ source: '闇の巫女', id: '58C7' }),
-      netRegexCn: NetRegexes.startsUsing({ source: '暗之巫女', id: '58C7' }),
-      netRegexKo: NetRegexes.startsUsing({ source: '어둠의 무녀', id: '58C7' }),
       response: Responses.tankBuster(),
     },
     {
@@ -1331,7 +1199,7 @@ const triggerSet: TriggerSet<Data> = {
         // cactbot-builtin-response
         output.responseOutputStrings = {
           shadoweye: {
-            en: '나한테 눈',
+            en: 'Eye on YOU',
             de: 'Auge auf DIR',
             fr: 'Œil sur VOUS',
             ja: '自分に目',
@@ -1340,7 +1208,7 @@ const triggerSet: TriggerSet<Data> = {
           },
           water: intermediateRelativityOutputStrings.stack,
           longFire: {
-            en: '나중 장판 / 긴 불',
+            en: 'Long Fire',
             de: 'langes Feuer',
             fr: 'Feu long',
             ja: 'ファイガ(遅い)',
@@ -1348,7 +1216,7 @@ const triggerSet: TriggerSet<Data> = {
             ko: '느린 파이가',
           },
           shortFire: {
-            en: '빠른 장판 / 짧은 불',
+            en: 'Short Fire',
             de: 'kurzes Feuer',
             fr: 'Feu court',
             ja: 'ファイガ(早い)',
@@ -1356,7 +1224,7 @@ const triggerSet: TriggerSet<Data> = {
             ko: '빠른 파이가',
           },
           longIce: {
-            en: '먼저 레이저 처리 / 긴 얼음',
+            en: 'Long Ice',
             de: 'langes Eis',
             fr: 'Glace longue',
             ja: 'ブリザガ(遅い)',
@@ -1364,7 +1232,7 @@ const triggerSet: TriggerSet<Data> = {
             ko: '느린 블리자가',
           },
           shortIce: {
-            en: '먼저 레이저 처리 / 짧은 얼음',
+            en: 'Short Ice',
             de: 'kurzes Eis',
             fr: 'Glace courte',
             ja: 'ブリザガ(早い)',
@@ -1463,7 +1331,7 @@ const triggerSet: TriggerSet<Data> = {
         // cactbot-builtin-response
         output.responseOutputStrings = Object.assign({
           moveAway: {
-            en: '도망쳐욧!',
+            en: 'Move!',
             de: 'Bewegen!',
             fr: 'Bougez !',
             ja: '避けて！',
@@ -1520,7 +1388,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         lookAwayFromPlayers: {
-          en: '보면안되욧: ${player1}, ${player2}',
+          en: 'Look Away from ${player1} and ${player2}',
           de: 'Schau weg von ${player1} und ${player2}',
           fr: 'Ne regardez pas ${player1} et ${player2}',
           ja: '${player1}と${player2}を見ない',
@@ -1541,7 +1409,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '바깥쪽을 봐욧!',
+          en: 'Look Outside',
           de: 'Nach draußen schauen',
           fr: 'Regardez vers l\'extérieur',
           ja: '外に向け',
@@ -1571,7 +1439,7 @@ const triggerSet: TriggerSet<Data> = {
         west: Outputs.west,
         northwest: Outputs.northwest,
         hourglass: {
-          en: '노란색: ${dir}',
+          en: 'Yellow: ${dir}',
           de: 'Gelb: ${dir}',
           fr: 'Jaune : ${dir}',
           ja: '黄色: ${dir}',
@@ -1624,7 +1492,7 @@ const triggerSet: TriggerSet<Data> = {
         west: Outputs.west,
         northwest: Outputs.northwest,
         hourglass: {
-          en: '노란색: ${dir1} / ${dir2}',
+          en: 'Yellow: ${dir1} / ${dir2}',
           de: 'Gelb: ${dir1} / ${dir2}',
           fr: 'Jaune : ${dir1} / ${dir2}',
           ja: '黄色: ${dir1} / ${dir2}',
@@ -1652,7 +1520,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         stackGroups: {
-          en: '뭉쳐 모여욧',
+          en: 'Stack Groups',
           de: 'In Gruppen sammeln',
           fr: 'Packez-vous en groupe',
           ja: '頭割り',
@@ -1660,7 +1528,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '쉐어',
         },
         knockbackIntoStackGroups: {
-          en: '넉백하고 뭉쳐 모여욧',
+          en: 'Knockback Into Stack Groups',
           de: 'Rückstoß, dann in Gruppen sammeln',
           fr: 'Poussée puis packez-vous en groupe',
           ja: '頭割り位置に向かってノックバックを',
@@ -1689,7 +1557,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         spread: Outputs.spread,
         knockbackIntoSpread: {
-          en: '넉백하고 산개해욧',
+          en: 'Knockback Into Spread',
           de: 'Rückstoß dann verteilen',
           fr: 'Poussée puis dispersez-vous',
           ja: '散開のためノックバックを',
@@ -1715,7 +1583,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '뭉쳐 모여욧',
+          en: 'Stack Groups',
           de: 'In Gruppen sammeln',
           fr: 'Packez-vous en groupe',
           ja: '集合',
@@ -1744,7 +1612,7 @@ const triggerSet: TriggerSet<Data> = {
       tts: null,
       outputStrings: {
         text: {
-          en: '바람 두개: ${name1}, ${name2}',
+          en: 'Double Aero: ${name1}, ${name2}',
           de: 'Doppel Windga: ${name1}, ${name2}',
           fr: 'Double Vent : ${name1}, ${name2}',
           ja: 'エアロガ×2: ${name1}, ${name2}',
@@ -1778,7 +1646,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         shadoweye: {
-          en: '내게 눈',
+          en: 'Eye on YOU',
           de: 'Auge auf DIR',
           fr: 'Œil sur VOUS',
           ja: '自分に目',
@@ -1786,7 +1654,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '시선징 대상자',
         },
         doubleAero: {
-          en: '내게 바람 두개',
+          en: 'Double Aero on YOU',
           de: 'Doppel Windga auf DIR',
           fr: 'Double Vent sur VOUS',
           ja: '自分にエアロガ×2',
@@ -1794,7 +1662,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '더블 에어로가 대상자',
         },
         spread: {
-          en: '내게 산개',
+          en: 'Spread on YOU',
           de: 'Verteilen auf DIR',
           fr: 'Dispersion sur VOUS',
           ja: '自分に散開',

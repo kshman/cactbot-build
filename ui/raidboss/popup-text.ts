@@ -119,12 +119,10 @@ const triggerUpperCase = (str: string): string => {
   return str.replace(/[^αβγδ]/g, (x) => x.toUpperCase());
 };
 
-// Disable no-explicit-any due to catch clauses requiring any
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const onTriggerException = (trigger: ProcessedTrigger, e: any) => {
+const onTriggerException = (trigger: ProcessedTrigger, e: unknown) => {
   // When a fight ends and there are open promises, from delaySeconds or promise itself,
   // all promises will be rejected.  In this case there is no error; simply return without logging.
-  if (!e)
+  if (e === null || typeof e !== 'object')
     return;
 
   let str = 'Error in trigger: ' + (trigger.id ? trigger.id : '[unknown trigger id]');
@@ -336,8 +334,13 @@ class TriggerOutputProxy {
     template: { [lang: string]: unknown } | string | undefined,
     params: TriggerParams,
     name: string,
-    id: string): string | undefined {
-    if (template === undefined)
+    id: string,
+  ): string | undefined {
+    // If an output strings entry is edited in the config UI and then blanked,
+    // the entry will still exist in the config file as an empty string.
+    // These should be ignored as not being an override.
+    // TODO: maybe blanked/default entries should be deleted from the config?
+    if (template === undefined || template === '')
       return;
 
     let value: unknown;
@@ -698,13 +701,19 @@ export class PopupText {
           const triggerObject: { [key: string]: unknown } = trigger;
 
           // `regex` and `regexDe` (etc) are deprecated, however they may still be used
-          // by user triggers, and so are still checked here.  As these aren't used
-          // by cactbot itself, they are never auto-translated.
+          // by user triggers, and so are still checked here.  `regexDe` and friends
+          // will never be auto-translated and are assumed to be correct.
           // TODO: maybe we could consider removing these once timelines don't need parsed lines?
           if (isRegexTrigger(trigger)) {
-            const regex = triggerObject[regexParserLang] ?? trigger.regex;
-            if (regex instanceof RegExp) {
-              trigger.localRegex = Regexes.parse(regex);
+            const defaultRegex = trigger.regex;
+            const localeRegex = triggerObject[regexParserLang];
+            if (localeRegex instanceof RegExp) {
+              trigger.localRegex = Regexes.parse(localeRegex);
+              orderedTriggers.push(trigger);
+              found = true;
+            } else if (defaultRegex) {
+              const trans = translateRegex(defaultRegex, this.parserLang, set.timelineReplace);
+              trigger.localRegex = Regexes.parse(trans);
               orderedTriggers.push(trigger);
               found = true;
             }
@@ -764,6 +773,7 @@ export class PopupText {
         replacements.push(...set.timelineReplace);
       if (set.timelineTriggers) {
         for (const trigger of set.timelineTriggers) {
+          // Timeline triggers are never translated.
           this.ProcessTrigger(trigger);
           trigger.isTimelineTrigger = true;
           orderedTriggers.push(trigger);
