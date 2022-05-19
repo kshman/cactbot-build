@@ -34,17 +34,16 @@ export interface Data extends RaidbossData {
   diveFromGraceNum: { [name: string]: number };
   // mapping of 1, 2, 3 to whether that group has seen an arrow.
   diveFromGraceHasArrow: { [num: number]: boolean };
-  diveFromGraceDir: { [name: string]: string };
-  // mapping of player name to cartesian (x, y)
-  diveFromGracePositions: { [name: string]: number[] };
+  diveFromGraceDir: { [name: string]: 'circle' | 'up' | 'down' };
+  // mapping of player name to x coordinate
+  diveFromGracePositions: { [name: string]: number };
   diveFromGraceTowerCounter?: number;
   eyeOfTheTyrantCounter?: number;
-  diveFromGracePreviousPosition: { [num: string]: string };
+  diveFromGracePreviousPosition: { [num: string]: 'middle' | 'west' | 'east' };
   // PRs 스페샬
-  holiestHallowing?: number;
-  thordanRavana1?: string;
-  thordanRavana2?: string;
-  thordanRavanaCount?: number;
+  prsRavana1?: string;
+  prsRavana2?: string;
+  prsRavanaCount?: number;
 }
 
 // Due to changes introduced in patch 5.2, overhead markers now have a random offset
@@ -135,51 +134,6 @@ const triggerSet: TriggerSet<Data> = {
       diveFromGracePreviousPosition: {},
     };
   },
-  timelineTriggers: [
-    {
-      id: 'DSR First Eye of the Tyrant Stack',
-      // Calls out which numbers stack prior to Eye of the Tyrant
-      regex: /Eye of the Tyrant/,
-      beforeSeconds: 6,
-      condition: (data) => {
-        data.eyeOfTheTyrantCounter = (data.eyeOfTheTyrantCounter ?? 0) + 1;
-        // Second stack handled by DFG Tower Soaks and DFG Baits
-        if (data.eyeOfTheTyrantCounter !== 1)
-          return false;
-        const num = data.diveFromGraceNum[data.me];
-        if (!num) {
-          console.error(`Eye of The Tyrant Stack: missing number: ${JSON.stringify(data.diveFromGraceNum)}`);
-          // Default to true as stack needs more players
-          return true;
-        }
-
-        // First stack requires players numbered 2 and 3
-        if ((num === 2 || num === 3) && data.eyeOfTheTyrantCounter === 1)
-          return true;
-      },
-      durationSeconds: 6,
-      alertText: (_data, _matches, output) => output.stackNums!({ num1: output.num2!(), num2: output.num3!() }),
-      outputStrings: {
-        num2: Outputs.num2,
-        num3: Outputs.num3,
-        stackNums: {
-          en: '${num1}번과 ${num2}번 뭉쳐욧!',
-        },
-      },
-    },
-    {
-      id: 'DSR+ 또르당 라바나 식별 주의',
-      regex: /Sanctity of the Ward/,
-      infoText: (_data, _matches, output) => output.text!(),
-      outputStrings: {
-        text: {
-          en: '곧 라바나, 제피란을 찾아욧!',
-          ja: '聖杖、ゼフィランが北！',
-          ko: '곧 성스런 지팡이, 제피란이 북쪽!',
-        },
-      },
-    },
-  ],
   triggers: [
     {
       id: 'DSR Phase Tracker',
@@ -239,18 +193,7 @@ const triggerSet: TriggerSet<Data> = {
       id: 'DSR Holiest Hallowing',
       type: 'StartsUsing',
       netRegex: NetRegexes.startsUsing({ id: '62D0', source: 'Ser Adelphel' }),
-      // response: Responses.interrupt(),
-      alertText: (data, _matches, output) => {
-        data.holiestHallowing = (data.holiestHallowing ?? 0) + 1;
-        return output.text!({ num: data.holiestHallowing });
-      },
-      outputStrings: {
-        text: {
-          en: '인터럽트#${num}',
-          ja: 'インテラプト#${num}',
-          ko: '인터럽트#${num}',
-        },
-      },
+      response: Responses.interrupt(),
     },
     {
       id: 'DSR Empty Dimension',
@@ -402,7 +345,7 @@ const triggerSet: TriggerSet<Data> = {
           en: '녹색 △',
           de: 'Grünes Dreieck',
           fr: 'Triangle vert',
-          ja: '緑 ○',
+          ja: '緑 △',
           ko: '초록 세모징',
         },
         square: {
@@ -537,7 +480,7 @@ const triggerSet: TriggerSet<Data> = {
           console.error(`Spiral Thrusts: expected 2 safe zones got ${data.spiralThrustSafeZones.length}`);
           return;
         }
-        // 고정팀 전용 콜링콜링
+        // PRs / 색깔로 콜링콜링
         if (data.options.prsDsrMarker === 1) {
           const clrs: { [clr: number]: string } = {
             0: '보라',
@@ -550,24 +493,9 @@ const triggerSet: TriggerSet<Data> = {
             7: '파랑',
             8: output.unknown!(),
           };
-          const mrks: { [mrk: number]: string } = {
-            0: '4',
-            1: 'A',
-            2: 'B',
-            3: 'C',
-            4: 'D',
-            5: '1',
-            6: '2',
-            7: '3',
-            8: output.unknown!(),
-          };
-          return output.safeSpotsStatic!({
-            clr: clrs[data.spiralThrustSafeZones[0] ?? 8],
-            mrk1: mrks[data.spiralThrustSafeZones[0] ?? 8],
-            mrk2: mrks[data.spiralThrustSafeZones[1] ?? 8],
-          });
+          return output.safeSpotsColor!({ clr: clrs[data.spiralThrustSafeZones[0] ?? 8] });
         }
-        // 일반 파티용 A 1 B 2...
+        // PRs / 일반 파티용 A 1 B 2...
         if (data.options.prsDsrMarker === 2) {
           const pfms: { [pfm: number]: string } = {
             0: '4',
@@ -580,9 +508,9 @@ const triggerSet: TriggerSet<Data> = {
             7: 'D',
             8: output.unknown!(),
           };
-          return output.safeSpotsForPf!({
-            pfm1: pfms[data.spiralThrustSafeZones[0] ?? 8],
-            pfm2: pfms[data.spiralThrustSafeZones[1] ?? 8],
+          return output.safeSpots!({
+            dir1: pfms[data.spiralThrustSafeZones[0] ?? 8],
+            dir2: pfms[data.spiralThrustSafeZones[1] ?? 8],
           });
         }
         // Map of directions
@@ -621,21 +549,8 @@ const triggerSet: TriggerSet<Data> = {
           cn: '${dir1} / ${dir2}',
           ko: '${dir1} / ${dir2}',
         },
-        safeSpotsStatic: {
-          en: '${clr} [${mrk1}] / [${mrk2}]',
-          de: '${clr} [${mrk1}] / [${mrk2}]',
-          fr: '${clr} [${mrk1}] / [${mrk2}]',
-          ja: '${clr} [${mrk1}] / [${mrk2}]',
-          cn: '${clr} [${mrk1}] / [${mrk2}]',
-          ko: '${clr} [${mrk1}] / [${mrk2}]',
-        },
-        safeSpotsForPf: {
-          en: '[${pfm1}] / [${pfm2}]',
-          de: '[${pfm1}] / [${pfm2}]',
-          fr: '[${pfm1}] / [${pfm2}]',
-          ja: '[${pfm1}] / [${pfm2}]',
-          cn: '[${pfm1}] / [${pfm2}]',
-          ko: '[${pfm1}] / [${pfm2}]',
+        safeSpotsColor: {
+          en: '${clr}',
         },
       },
     },
@@ -672,8 +587,8 @@ const triggerSet: TriggerSet<Data> = {
           throw new UnreachableCode();
         data.thordanDir = matchedPositionTo8Dir(thordan);
       },
-      infoText: (data, _matches, output) => {
-        // 고정팀 전용 콜링콜링
+      alertText: (data, _matches, output) => {
+        // PRs / 알파벳-숫자 콜링콜링
         if (data.options.prsDsrMarker === 1) {
           const mrks: { [mrk: number]: string } = {
             0: '4',
@@ -686,11 +601,11 @@ const triggerSet: TriggerSet<Data> = {
             7: '3',
             8: output.unknown!(),
           };
-          return output.thordanLocationStatic!({
-            mrk: mrks[data.thordanDir ?? 8],
+          return output.thordanLocation!({
+            dir: mrks[data.thordanDir ?? 8],
           });
         }
-        // 일반 파티용 A 1 B 2...
+        // PRs / A 1 B 2...
         if (data.options.prsDsrMarker === 2) {
           const pfms: { [pfm: number]: string } = {
             0: '4',
@@ -703,8 +618,8 @@ const triggerSet: TriggerSet<Data> = {
             7: 'D',
             8: output.unknown!(),
           };
-          return output.thordanLocationForPf!({
-            pfm: pfms[data.thordanDir ?? 8],
+          return output.thordanLocation!({
+            dir: pfms[data.thordanDir ?? 8],
           });
         }
         // Map of directions
@@ -739,18 +654,6 @@ const triggerSet: TriggerSet<Data> = {
           de: '${dir} Thordan',
           ja: 'トールダンが${dir}で',
           ko: '토르당 ${dir}',
-        },
-        thordanLocationStatic: {
-          en: '[${mrk}]에 토르당',
-          de: '${mrk} Thordan',
-          ja: '[${mrk}] トールダン',
-          ko: '토르당: [${mrk}]',
-        },
-        thordanLocationForPf: {
-          en: '[${pfm}]에 토르당',
-          de: '${pfm} Thordan',
-          ja: '[${pfm}] トールダン',
-          ko: '토르당: [${pfm}]',
         },
       },
     },
@@ -841,7 +744,7 @@ const triggerSet: TriggerSet<Data> = {
         if (combatantJanlenoux.PosX > 100)
           data.sanctityWardDir = output.counterclock!();
       },
-      alertText: (data, _matches, output) => {
+      alarmText: (data, _matches, output) => {
         return data.sanctityWardDir ?? output.unknown!();
       },
       run: (data) => delete data.sanctityWardDir,
@@ -869,30 +772,30 @@ const triggerSet: TriggerSet<Data> = {
       preRun: (data, matches, _output) => {
         const id = getHeadmarkerId(data, matches);
         if (id === headmarkers.sword1) {
-          data.thordanRavana1 = matches.target;
-          data.thordanRavanaCount = (data.thordanRavanaCount ?? 0) + 1;
+          data.prsRavana1 = matches.target;
+          data.prsRavanaCount = (data.prsRavanaCount ?? 0) + 1;
         } else if (id === headmarkers.sword2) {
-          data.thordanRavana2 = matches.target;
-          data.thordanRavanaCount = (data.thordanRavanaCount ?? 0) + 1;
+          data.prsRavana2 = matches.target;
+          data.prsRavanaCount = (data.prsRavanaCount ?? 0) + 1;
         }
       },
       alarmText: (data, _matches, output) => {
-        if ((data.thordanRavanaCount ?? 0) !== 2 || data.thordanRavana1 === undefined || data.thordanRavana2 === undefined)
+        if ((data.prsRavanaCount ?? 0) !== 2 || data.prsRavana1 === undefined || data.prsRavana2 === undefined)
           return;
-        const fs = data.ShortName(data.thordanRavana1);
-        const ns = data.ShortName(data.thordanRavana2);
+        const fs = data.ShortName(data.prsRavana1);
+        const ns = data.ShortName(data.prsRavana2);
         console.log('라바나: 1-' + fs + ' / 2-' + ns);
-        if (data.thordanRavana1 === data.me)
+        if (data.prsRavana1 === data.me)
           return output.sword1!();
-        if (data.thordanRavana2 === data.me)
+        if (data.prsRavana2 === data.me)
           return output.sword2!();
         return output.swords!({ far: fs, near: ns });
       },
       run: (data) => {
-        if ((data.thordanRavanaCount ?? 0) === 2) {
-          delete data.thordanRavana1;
-          delete data.thordanRavana2;
-          delete data.thordanRavanaCount;
+        if ((data.prsRavanaCount ?? 0) === 2) {
+          delete data.prsRavana1;
+          delete data.prsRavana2;
+          delete data.prsRavanaCount;
         }
       },
       outputStrings: {
@@ -950,7 +853,7 @@ const triggerSet: TriggerSet<Data> = {
           de: 'Tank/Heiler Meteore (${player1}, ${player2})',
           fr: 'Météores Tank/Healer (${player1}, ${player2})', // FIXME
           ja: 'タンヒラ 隕石 (${player1}, ${player2})', // FIXME
-          ko: '탱/힐 메테오 (${player1}, ${player2})', // FIXME
+          ko: '탱/힐 메테오 (${player1}, ${player2})',
         },
         dpsMeteors: {
           en: 'DPS 운석 (${player1}, ${player2})',
@@ -960,7 +863,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '딜러 메테오 (${player1}, ${player2})',
         },
         unknownMeteors: {
-          en: '랜덤 운석 (${player1}, ${player2})',
+          en: '??? 운석 (${player1}, ${player2})',
           de: '??? Meteore (${player1}, ${player2})',
           ko: '??? 메테오 (${player1}, ${player2})',
         },
@@ -1036,7 +939,7 @@ const triggerSet: TriggerSet<Data> = {
       netRegex: NetRegexes.ability({ id: ['6715', '6716'], source: 'Nidhogg' }),
       // These are ~3s apart.  Only call after the first (and ignore multiple people getting hit).
       suppressSeconds: 6,
-      infoText: (_data, matches, output) => matches.id === '6715' ? output.in!() : output.out!(),
+      alertText: (_data, matches, output) => matches.id === '6715' ? output.in!() : output.out!(),
       outputStrings: {
         out: Outputs.out,
         in: Outputs.in,
@@ -1051,9 +954,8 @@ const triggerSet: TriggerSet<Data> = {
       type: 'Ability',
       netRegex: NetRegexes.ability({ id: ['670E', '670F', '6710'], source: 'Nidhogg' }),
       run: (data, matches) => {
-        const PosX = parseFloat(matches.targetX);
-        const PosY = parseFloat(matches.targetY);
-        data.diveFromGracePositions[matches.target] = [PosX, PosY];
+        const posX = parseFloat(matches.targetX);
+        data.diveFromGracePositions[matches.target] = posX;
       },
     },
     {
@@ -1061,10 +963,8 @@ const triggerSet: TriggerSet<Data> = {
       // 670E Dark High Jump
       // 670F Dark Spineshatter Dive
       // 6710 Dark Elusive Jump
-      // Defaults: (as players will be coming from stack)
-      //   Spineshatter Right, Elusive Left, All Face East
-      //   High Jump North if solo, no assignment if all circle
-      //   2s Southeast/Southwest, no assignment if circle
+      // Defaults:
+      //   High Jump South if solo, no assignment if all circle
       //   Assumes North Party Stack
       type: 'Ability',
       netRegex: NetRegexes.ability({ id: ['670E', '670F', '6710'], source: 'Nidhogg', capture: false }),
@@ -1078,82 +978,66 @@ const triggerSet: TriggerSet<Data> = {
           return;
         }
 
-        // With two Cartesian Coordinates, calculate distance
-        const distance = (a?: number[], b?: number[]) => {
-          if (
-            a === undefined || a[0] === undefined || a[1] === undefined ||
-            b === undefined || b[0] === undefined || b[1] === undefined
-          ) {
-            console.error(`DFG Tower 2 and 3: Missing targetX, targetY`);
-            return -1;
-          }
-          const x = a[0] - b[0];
-          const y = a[1] - b[1];
-          return Math.sqrt(x * x + y * y);
-        };
-
         // Map position values and player name keys to arrays
-        let [posA, posB, posC] = Object.values(data.diveFromGracePositions);
+        const [posA, posB, posC] = Object.values(data.diveFromGracePositions);
         let [nameA, nameB, nameC] = Object.keys(data.diveFromGracePositions);
 
         // If undefined position, will not be able to predict position
-        if (posA === undefined)
-          posA = [];
-        if (posB === undefined)
-          posB = [];
-        if (posC === undefined)
-          posC = [];
-        const posAX = posA[0] ?? 0;
-        const posBX = posB[0] ?? 0;
-        const posCX = posC[0] ?? 0;
+        const posAX = posA ?? 0;
+        const posBX = posB ?? 0;
+        const posCX = posC ?? 0;
 
         // If undefined keys, map to non-player names
         if (nameA === undefined)
-          nameA = '???';
+          nameA = output.unknown!();
         if (nameB === undefined)
-          nameB = '???';
+          nameB = output.unknown!();
         if (nameC === undefined)
-          nameC = '???';
+          nameC = output.unknown!();
 
         // Dive 1 and Dive 3 have 3 players
         if (data.diveFromGraceTowerCounter !== 2) {
-          // Get Distances of assumed "Triangle" pattern created by 3 players
-          const distanceAB = distance(posA, posB);
-          const distanceAC = distance(posA, posC);
-          const distanceBC = distance(posB, posC);
-          const distances = [distanceAB, distanceAC, distanceBC];
+          // Get the posX of each player hitby dive
+          const positionsX = [posAX, posBX, posCX];
 
-          // Sort the distances, largest to smallest
-          const sorted = distances.sort((a, b) => b - a);
+          // Sort the the posX values, highest to lowest
+          const sorted = positionsX.sort((a, b) => b - a);
 
-          // Assuming the two players furthest apart are the left/right players
-          if (distanceAB === sorted[0]) {
-            data.diveFromGracePreviousPosition[nameC] = 'middle';
-            if (posAX < posBX) {
-              data.diveFromGracePreviousPosition[nameA] = 'west';
-              data.diveFromGracePreviousPosition[nameB] = 'east';
-            } else {
-              data.diveFromGracePreviousPosition[nameB] = 'west';
+          // Highest value = east
+          switch (sorted[0]) {
+            case posAX:
               data.diveFromGracePreviousPosition[nameA] = 'east';
-            }
-          } else if (distanceAC === sorted[0]) {
-            data.diveFromGracePreviousPosition[nameB] = 'middle';
-            if (posAX < posCX) {
-              data.diveFromGracePreviousPosition[nameA] = 'west';
-              data.diveFromGracePreviousPosition[nameC] = 'east';
-            } else {
-              data.diveFromGracePreviousPosition[nameC] = 'west';
-              data.diveFromGracePreviousPosition[nameA] = 'east';
-            }
-          } else if (distanceBC === sorted[0]) {
-            data.diveFromGracePreviousPosition[nameA] = 'middle';
-            if (posAX < posCX) {
-              data.diveFromGracePreviousPosition[nameB] = 'west';
-              data.diveFromGracePreviousPosition[nameC] = 'east';
-            } else {
-              data.diveFromGracePreviousPosition[nameC] = 'west';
+              break;
+            case posBX:
               data.diveFromGracePreviousPosition[nameB] = 'east';
-            }
+              break;
+            case posCX:
+              data.diveFromGracePreviousPosition[nameC] = 'east';
+              break;
+          }
+          // Middle value = middle
+          switch (sorted[1]) {
+            case posAX:
+              data.diveFromGracePreviousPosition[nameA] = 'middle';
+              break;
+            case posBX:
+              data.diveFromGracePreviousPosition[nameB] = 'middle';
+              break;
+            case posCX:
+              data.diveFromGracePreviousPosition[nameC] = 'middle';
+              break;
+          }
+          // Lowest value = west
+          switch (sorted[2]) {
+            case posAX:
+              data.diveFromGracePreviousPosition[nameA] = 'west';
+              break;
+            case posBX:
+              data.diveFromGracePreviousPosition[nameB] = 'west';
+              break;
+            case posCX:
+              data.diveFromGracePreviousPosition[nameC] = 'west';
+              break;
           }
         } else {
           // Only comparing X values for Dive 2
@@ -1173,8 +1057,6 @@ const triggerSet: TriggerSet<Data> = {
             // Stack => Predict Tower 3
             if (data.diveFromGracePreviousPosition[data.me] === 'middle')
               return output.stackNorth!();
-            // Other players just move so 3s can get tower
-            return output.move!();
           }
         }
 
@@ -1183,47 +1065,37 @@ const triggerSet: TriggerSet<Data> = {
           // Stack => Predict Tower 3 (based on previous position)
           if (num === 2) {
             if (data.diveFromGracePreviousPosition[data.me] === 'west')
-              return output.spineshatterTower3!();
+              return output.westTower3!();
             if (data.diveFromGracePreviousPosition[data.me] === 'east')
-              return output.elusiveTower3!();
+              return output.eastTower3!();
           }
 
           // Call Tower 2 Soak (based on previous position)
           if (num === 1) {
             if (data.diveFromGracePreviousPosition[data.me] === 'west')
-              return output.spineshatterTower2!();
+              return output.northwestTower2!();
             if (data.diveFromGracePreviousPosition[data.me] === 'east')
-              return output.elusiveTower2!();
+              return output.northeastTower2!();
           }
         }
-        // Third Dive, on num3s
-        if (data.diveFromGraceTowerCounter === 3) {
-          // Num3s need to move out of tower 3
-          if (num === 3)
-            return output.move!();
-        }
       },
-      run: (data) => {
-        // Empty the collector
-        for (const player in data.diveFromGracePositions)
-          delete data.diveFromGracePositions[player];
-      },
+      run: (data) => data.diveFromGracePositions = {},
       outputStrings: {
-        move: Outputs.moveAway,
+        unknown: Outputs.unknown,
         stackNorth: {
-          en: '북에서 모여욧',
+          en: '북에서 뭉쳐욧',
         },
-        spineshatterTower2: {
-          en: '뒷쪽/오른쪽 타워',
+        northwestTower2: {
+          en: '북동 타워 흡수',
         },
-        spineshatterTower3: {
-          en: '모였다가 => 오른쪽 타워',
+        westTower3: {
+          en: '뭉쳐있다 => 동쪽 타워 흡수',
         },
-        elusiveTower2: {
-          en: '뒷쪽/왼쪽 타워',
+        northeastTower2: {
+          en: '북서 타워 흡수',
         },
-        elusiveTower3: {
-          en: '모였다가 => 왼쪽 타워',
+        eastTower3: {
+          en: '뭉쳐있다 => 서쪽 타워 흡수',
         },
       },
     },
@@ -1245,35 +1117,34 @@ const triggerSet: TriggerSet<Data> = {
         // Call 1st Tower Soak (Must be based on debuffs?)
         if (num === 3) {
           // Num3 High Jump Tower 1
-          if (data.diveFromGraceDir[data.me] === 'AC3') {
+          if (data.diveFromGraceDir[data.me] === 'circle') {
             // Solo High Jump Tower 1
             if (!data.diveFromGraceHasArrow[3])
-              return output.circleTower!();
+              return output.southTower!();
             // All High Jumps, unknown exact position
-            return output.circleTowers!({ num: output.num3!() });
+            return output.circleTowers!();
           }
           // Num3 Spineshatter Tower 1
-          if (data.diveFromGraceDir[data.me] === 'AC4')
-            return output.spineshatterTower!();
+          if (data.diveFromGraceDir[data.me] === 'up')
+            return output.westTower!();
           // Num3 Elusive Tower 1
-          if (data.diveFromGraceDir[data.me] === 'AC5')
-            return output.elusiveTower!();
+          if (data.diveFromGraceDir[data.me] === 'down')
+            return output.eastTower!();
         }
       },
       run: (data) => data.eyeOfTheTyrantCounter = 1,
       outputStrings: {
-        num3: Outputs.num3,
-        circleTower: {
-          en: '남쪽 타워',
+        southTower: {
+          en: '남쪽 타워 흡수',
         },
         circleTowers: {
-          en: '${num}번 십자 타워',
+          en: '타워 흡수 (셋다 동글)',
         },
-        spineshatterTower: {
-          en: '오른쪽 타워',
+        westTower: {
+          en: '동쪽 타워 흡수',
         },
-        elusiveTower: {
-          en: '왼쪽 타워',
+        eastTower: {
+          en: '서쪽 타워 흡수',
         },
       },
     },
@@ -1293,13 +1164,13 @@ const triggerSet: TriggerSet<Data> = {
         }
         // Call Tower 3 Soak for num1 (based on previous position)
         if (num === 1 && data.diveFromGracePreviousPosition[data.me] === 'middle')
-          return output.circleTower!();
+          return output.southTower!();
         // Call Tower 3 Soak for num2s (based on previous position)
         if (num === 2) {
           if (data.diveFromGracePreviousPosition[data.me] === 'west')
-            return output.spineshatterTower!();
+            return output.westTower!();
           if (data.diveFromGracePreviousPosition[data.me] === 'east')
-            return output.elusiveTower!();
+            return output.eastTower!();
         }
         // If failed to get positions, call Towers in general
         if (num !== 3)
@@ -1307,17 +1178,17 @@ const triggerSet: TriggerSet<Data> = {
       },
       run: (data) => data.eyeOfTheTyrantCounter === 2,
       outputStrings: {
-        circleTower: {
-          en: '남쪽 타워',
+        southTower: {
+          en: '남쪽 타워 흡수',
         },
         circleTowers: {
-          en: '십자 타워',
+          en: '타워 흡수 (모두 동글)',
         },
-        spineshatterTower: {
-          en: '오른쪽 타워',
+        westTower: {
+          en: '동쪽 타워 흡수',
         },
-        elusiveTower: {
-          en: '왼쪽 타워',
+        eastTower: {
+          en: '서쪽 타워 흡수',
         },
       },
     },
@@ -1327,23 +1198,22 @@ const triggerSet: TriggerSet<Data> = {
       netRegex: NetRegexes.ability({ id: '6711', source: 'Nidhogg' }),
       condition: Conditions.targetIsYou(),
       suppressSeconds: 1,
-      infoText: (data, _matches, output) => {
+      alertText: (data, _matches, output) => {
         const num = data.diveFromGraceNum[data.me];
         if (!num) {
           console.error(`DFG Dive Single Tower: missing number: ${JSON.stringify(data.diveFromGraceNum)}`);
           return output.text!();
         }
         if (data.eyeOfTheTyrantCounter === 1 && num === 1)
-          return output.baitThenStack!({ num: output.num2!() });
+          return output.baitThenStack!();
         return output.text!();
       },
       outputStrings: {
-        num2: Outputs.num2,
         baitThenStack: {
-          en: '미끼 => ${num}번과 뭉쳐욧!',
+          en: '미끼 => 뭉쳐욧',
         },
         text: {
-          en: '내가 미끼라니',
+          en: '미끼가 나네!!',
           de: 'Ködern',
           ja: '誘導',
           ko: '공격 유도',
@@ -1376,7 +1246,7 @@ const triggerSet: TriggerSet<Data> = {
         num2: Outputs.num2,
         num3: Outputs.num3,
         stackNorthNum: {
-          en: '${num}번, 북에서 모여욧!',
+          en: '${num}번, 북에서 뭉쳐욧!',
         },
       },
     },
@@ -1399,7 +1269,17 @@ const triggerSet: TriggerSet<Data> = {
             data.diveFromGraceHasArrow[3] = true;
         }
         // Store result for position callout
-        data.diveFromGraceDir[matches.target] = matches.effectId;
+        switch (matches.effectId) {
+          case 'AC3':
+            data.diveFromGraceDir[matches.target] = 'circle';
+            break;
+          case 'AC4':
+            data.diveFromGraceDir[matches.target] = 'up';
+            break;
+          case 'AC5':
+            data.diveFromGraceDir[matches.target] = 'down';
+            break;
+        }
       },
     },
     {
@@ -1429,22 +1309,22 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         circleAllCircles: {
-          en: '#${num} 전부 동그라미',
+          en: '#${num} 모두 동글',
           de: '#${num} Alle Kreise',
           ko: '#${num} 전부 하이점프',
         },
         circleWithArrows: {
-          en: '#${num} 동그라미 (+화살표)',
+          en: '#${num} 나만 동글',
           de: '#${num} Kreise (mit Pfeilen)',
           ko: '#${num} 하이점프 (다른사람 화살표)',
         },
         upArrow: {
-          en: '#${num} 위 화살표/오른쪽',
+          en: '#${num} 위/동쪽',
           de: '#${num} Pfeil nach Vorne',
           ko: '#${num} 위 화살표 (척추 강타)',
         },
         downArrow: {
-          en: '#${num} 아래 화살표/왼쪽',
+          en: '#${num} 아래/서쪽',
           de: '#${num} Pfeil nach Hinten',
           ko: '#${num} 아래 화살표 (교묘한 점프)',
         },
@@ -1457,9 +1337,7 @@ const triggerSet: TriggerSet<Data> = {
       // AC4 = Spineshatter Dive Target
       // AC5 = Elusive Jump Target
       // Defaults:
-      //   Spineshatter West, Elusive East, All Face East
-      //   High Jump North if solo, no assignment if all circle
-      //   2s Southeast/Southwest, no assignment if circle
+      //   High Jump South if solo, no assignment if all circle
       //   Assumes North Party Stack
       //
       // Spineshatter and Elusive elusive come together
@@ -1477,50 +1355,50 @@ const triggerSet: TriggerSet<Data> = {
         // Output no direction when all circles
         if (!data.diveFromGraceHasArrow[num]) {
           if (num === 2)
-            return output.diveCircles2!();
+            return output.circlesDive2!();
 
           // Can predict where num3s will go based on Darkdragon Dive targeting
-          return output.diveCircles!();
+          return output.circlesDive!();
         }
 
         // Output West or East
         if (num === 1 || num === 3) {
           if (matches.effectId === 'AC3')
-            return output.diveCircle!();
+            return output.southDive!();
           if (matches.effectId === 'AC4')
-            return output.diveSpineshatter!();
-          return output.diveElusive!();
+            return output.upArrowDive!();
+          return output.downArrowDive!();
         }
 
         // By the time 2s turn, they will be stacked, facing boss,
         // so calls are relative to the boss
         if (num === 2) {
           if (matches.effectId === 'AC4')
-            return output.diveSpineshatter2!();
-          return output.diveElusive2!();
+            return output.upArrowDive2!();
+          return output.downArrowDive2!();
         }
       },
       outputStrings: {
-        diveCircles: {
-          en: '십자 다이브',
+        circlesDive: {
+          en: '다이브 (셋다 동글)',
         },
-        diveCircle: {
+        southDive: {
           en: '남쪽 다이브',
         },
-        diveCircles2: {
-          en: '윗쪽 좌우 다이브',
+        circlesDive2: {
+          en: '북쪽 동서 다이브 (둘다 동글)',
         },
-        diveSpineshatter: {
-          en: '오른쪽 다이브, 보스 봐야댐!',
+        upArrowDive: {
+          en: '동쪽 다이브',
         },
-        diveElusive: {
-          en: '왼쪽 다이브, 보스 보면 안댐!',
+        downArrowDive: {
+          en: '서쪽 다이브',
         },
-        diveSpineshatter2: {
-          en: '뒷쪽/오른쪽 다이브, 서쪽 보기',
+        upArrowDive2: {
+          en: '북동 다이브',
         },
-        diveElusive2: {
-          en: '뒷쪽/왼쪽 다이브, 서쪽 보기',
+        downArrowDive2: {
+          en: '북서 다이브',
         },
       },
     },
@@ -1538,6 +1416,21 @@ const triggerSet: TriggerSet<Data> = {
           ja: '大竜巻',
           cn: '旋风',
           ko: '회오리',
+        },
+      },
+    },
+    {
+      id: 'DSR Akh Afah',
+      // 6D41 Akh Afah from Hraesvelgr, and 64D2 is immediately after
+      // 6D43 Akh Afah from Nidhogg, and 6D44 is immediately after
+      // Hits highest emnity target
+      type: 'StartsUsing',
+      netRegex: NetRegexes.startsUsing({ id: ['6D41', '6D43'], source: ['Hraesvelgr', 'Nidhogg'], capture: false }),
+      suppressSeconds: 2,
+      infoText: (_data, _matches, output) => output.groups!(),
+      outputStrings: {
+        groups: {
+          en: '탱크와 뭉쳐욧',
         },
       },
     },
@@ -1578,28 +1471,13 @@ const triggerSet: TriggerSet<Data> = {
         left: Outputs.left,
         right: Outputs.right,
         near: {
-          en: '흐레스벨그 가까이 (탱크버스터)',
+          en: '흐레스벨그랑 붙어욧 (탱크버스터)',
         },
         far: {
-          en: '흐레스벨그와 멀리 (탱크버스터)',
+          en: '흐레스벨그와 떨어져욧 (탱크버스터)',
         },
         text: {
           en: '${wings}, ${head}',
-        },
-      },
-    },
-    {
-      id: 'DSR Akh Afah',
-      // 6D41 Akh Afah from Hraesvelgr, and 64D2 is immediately after
-      // 6D43 Akh Afah from Nidhogg, and 6D44 is immediately after
-      // Hits highest emnity target
-      type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ id: ['6D41', '6D43'], source: ['Hraesvelgr', 'Nidhogg'], capture: false }),
-      suppressSeconds: 2,
-      infoText: (_data, _matches, output) => output.groups!(),
-      outputStrings: {
-        groups: {
-          en: '탱크 둘이서 버스터!',
         },
       },
     },

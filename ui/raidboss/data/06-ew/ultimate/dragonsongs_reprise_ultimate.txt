@@ -268,8 +268,8 @@ hideall "--sync--"
 # 6D24 => 6D25 Head Up, Left Wing
 # 6D26 => 6D28 Head Down, Right Wing
 # 6D27 => 6D28 Head Up, Right Wing
-# 6D2D => 6D2E Hot Tail
-# 6D2B => 6D2C Hot Wing
+# 6D2D => 6D2E Hot Tail 
+# 6D2B => 6D2C Hot Wing 
 3500.0 "--sync--" sync / 1[56]:[^:]*:King Thordan:6667:/ window 500,0
 3535.0 "Great Wyrmsbreath" sync / 1[56]:[^:]*:Hraesvelgr:6D35:/
 3535.0 "Dread Wyrmsbreath" #sync / 1[56]:[^:]*:Nidhogg:6D33:/
