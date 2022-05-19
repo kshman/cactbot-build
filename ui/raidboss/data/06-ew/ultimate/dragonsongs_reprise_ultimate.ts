@@ -134,6 +134,14 @@ const triggerSet: TriggerSet<Data> = {
       diveFromGracePreviousPosition: {},
     };
   },
+  timelineTriggers: [
+    {
+      id: 'DSR Eye of the Tyrant Counter',
+      regex: /Eye of the Tyrant/,
+      beforeSeconds: 1,
+      run: (data) => data.eyeOfTheTyrantCounter = data.eyeOfTheTyrantCounter ?? 0 + 1,
+    },
+  ],
   triggers: [
     {
       id: 'DSR Phase Tracker',
@@ -242,7 +250,7 @@ const triggerSet: TriggerSet<Data> = {
           en: '슬래시! 흩어지자고!',
           de: 'Schlag auf DIR',
           fr: 'Slash sur VOUS',
-          ja: 'スラシュ！',
+          ja: '自分にハイパーディメンション',
           ko: '고차원 대상자',
         },
       },
@@ -311,9 +319,9 @@ const triggerSet: TriggerSet<Data> = {
         adelphelLocation: {
           en: '${dir}으로!',
           de: 'Geh ${dir} (Rückstoß)',
-          ja: '${dir}へ！',
+          ja: '${dir}へ (ノックバック)',
           cn: '去 ${dir} (击退)',
-          ko: '${dir} (넉백)',
+          ko: '${dir}으로 (넉백)',
         },
       },
     },
@@ -339,28 +347,28 @@ const triggerSet: TriggerSet<Data> = {
           de: 'Roter Kreis',
           fr: 'Cercle rouge',
           ja: '赤 ○',
-          ko: '빨강 원형징',
+          ko: '빨강 ○',
         },
         triangle: {
           en: '녹색 △',
           de: 'Grünes Dreieck',
           fr: 'Triangle vert',
           ja: '緑 △',
-          ko: '초록 세모징',
+          ko: '초록 △',
         },
         square: {
           en: '보라 ■',
           de: 'Lilanes Viereck',
           fr: 'Carré violet',
           ja: '紫 ■',
-          ko: '보라 네모징',
+          ko: '보라 ■',
         },
         x: {
           en: '파랑 Ⅹ',
           de: 'Blaues X',
           fr: 'Croix bleue',
           ja: '青 Ⅹ',
-          ko: '파랑 X징',
+          ko: '파랑 Ⅹ',
         },
       },
     },
@@ -652,7 +660,7 @@ const triggerSet: TriggerSet<Data> = {
         thordanLocation: {
           en: '${dir}에 토르당',
           de: '${dir} Thordan',
-          ja: 'トールダンが${dir}で',
+          ja: 'トールダン ${dir}',
           ko: '토르당 ${dir}',
         },
       },
@@ -672,7 +680,7 @@ const triggerSet: TriggerSet<Data> = {
           en: '파란거네!',
           de: 'Sprung auf DIR',
           fr: 'Saut sur VOUS',
-          ja: 'リープマーカー',
+          ja: '自分に青マーカー',
           ko: '광역 대상자',
         },
       },
@@ -852,14 +860,14 @@ const triggerSet: TriggerSet<Data> = {
           en: '탱/힐 운석 (${player1}, ${player2})',
           de: 'Tank/Heiler Meteore (${player1}, ${player2})',
           fr: 'Météores Tank/Healer (${player1}, ${player2})', // FIXME
-          ja: 'タンヒラ 隕石 (${player1}, ${player2})', // FIXME
+          ja: 'タンヒラ 隕石 (${player1}, ${player2})',
           ko: '탱/힐 메테오 (${player1}, ${player2})',
         },
         dpsMeteors: {
           en: 'DPS 운석 (${player1}, ${player2})',
           de: 'DDs Meteore (${player1}, ${player2})',
           fr: 'Météores DPS (${player1}, ${player2})', // FIXME
-          ja: 'DPS 隕石 (${player1}, ${player2})', // FIXME
+          ja: 'DPS 隕石 (${player1}, ${player2})',
           ko: '딜러 메테오 (${player1}, ${player2})',
         },
         unknownMeteors: {
@@ -1105,7 +1113,7 @@ const triggerSet: TriggerSet<Data> = {
       type: 'Ability',
       netRegex: NetRegexes.ability({ id: '6714', source: 'Nidhogg', capture: false }),
       // Ignore targetIsYou() incase player misses stack
-      condition: (data) => data.eyeOfTheTyrantCounter === undefined,
+      condition: (data) => data.eyeOfTheTyrantCounter === 1,
       suppressSeconds: 1,
       infoText: (data, _matches, output) => {
         // No callout if missing numbers
@@ -1119,7 +1127,7 @@ const triggerSet: TriggerSet<Data> = {
           // Num3 High Jump Tower 1
           if (data.diveFromGraceDir[data.me] === 'circle') {
             // Solo High Jump Tower 1
-            if (!data.diveFromGraceHasArrow[3])
+            if (data.diveFromGraceHasArrow[3])
               return output.southTower!();
             // All High Jumps, unknown exact position
             return output.circleTowers!();
@@ -1132,7 +1140,6 @@ const triggerSet: TriggerSet<Data> = {
             return output.eastTower!();
         }
       },
-      run: (data) => data.eyeOfTheTyrantCounter = 1,
       outputStrings: {
         southTower: {
           en: '남쪽 타워 흡수',
@@ -1154,7 +1161,7 @@ const triggerSet: TriggerSet<Data> = {
       type: 'Ability',
       netRegex: NetRegexes.ability({ id: '6714', source: 'Nidhogg', capture: false }),
       // Ignore targetIsYou() incase player misses stack
-      condition: (data) => data.eyeOfTheTyrantCounter === 1,
+      condition: (data) => data.eyeOfTheTyrantCounter === 2,
       suppressSeconds: 1,
       infoText: (data, _matches, output) => {
         const num = data.diveFromGraceNum[data.me];
@@ -1176,7 +1183,6 @@ const triggerSet: TriggerSet<Data> = {
         if (num !== 3)
           return output.circleTowers!();
       },
-      run: (data) => data.eyeOfTheTyrantCounter === 2,
       outputStrings: {
         southTower: {
           en: '남쪽 타워 흡수',
@@ -1210,10 +1216,10 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         baitThenStack: {
-          en: '미끼 => 뭉쳐욧',
+          en: '장판 유도 => 뭉쳐욧',
         },
         text: {
-          en: '미끼가 나네!!',
+          en: '장판 유도해욧!!',
           de: 'Ködern',
           ja: '誘導',
           ko: '공격 유도',
@@ -1311,22 +1317,26 @@ const triggerSet: TriggerSet<Data> = {
         circleAllCircles: {
           en: '#${num} 모두 동글',
           de: '#${num} Alle Kreise',
-          ko: '#${num} 전부 하이점프',
+          ja: '#${num} みんなハイジャンプ',
+          ko: '#${num} 모두 하이점프',
         },
         circleWithArrows: {
           en: '#${num} 나만 동글',
           de: '#${num} Kreise (mit Pfeilen)',
-          ko: '#${num} 하이점프 (다른사람 화살표)',
+          ja: '#${num} 自分のみハイジャンプ',
+          ko: '#${num} 나만 하이점프',
         },
         upArrow: {
           en: '#${num} 위/동쪽',
           de: '#${num} Pfeil nach Vorne',
-          ko: '#${num} 위 화살표 (척추 강타)',
+          ja: '#${num} ↑ / スパインダイブ',
+          ko: '#${num} 위 화살표 / 척추 강타',
         },
         downArrow: {
           en: '#${num} 아래/서쪽',
           de: '#${num} Pfeil nach Hinten',
-          ko: '#${num} 아래 화살표 (교묘한 점프)',
+          ja: '#${num} ↓ / イルーシヴジャンプ',
+          ko: '#${num} 아래 화살표 / 교묘한 점프',
         },
       },
     },
@@ -1431,6 +1441,8 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         groups: {
           en: '탱크와 뭉쳐욧',
+          ja: 'タンクと頭割り',
+          ko: '탱커와 그룹 쉐어',
         },
       },
     },
@@ -1472,12 +1484,18 @@ const triggerSet: TriggerSet<Data> = {
         right: Outputs.right,
         near: {
           en: '흐레스벨그랑 붙어욧 (탱크버스터)',
+          ja: 'フレースヴェルグに近づく (タンクバスター)',
+          ko: '흐레스벨그 부근으로 (탱버)',
         },
         far: {
           en: '흐레스벨그와 떨어져욧 (탱크버스터)',
+          ja: 'フレースヴェルグから離れる (タンクバスター)',
+          ko: '흐레스벨그와 멀어지기 (탱버)',
         },
         text: {
           en: '${wings}, ${head}',
+          ja: '${wings}, ${head}',
+          ko: '${wings}, ${head}',
         },
       },
     },
@@ -1500,10 +1518,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         nidhogg: {
           en: '니드호그에게 맞아욧!',
+          ja: 'ニーズヘッグに当たる',
           ko: '니드호그에게 맞기',
         },
         hraesvelgr: {
           en: '흐레스벨그에게 맞아욧!',
+          ja: 'フレースヴェルグに当たる',
           ko: '흐레스벨그에게 맞기',
         },
       },
