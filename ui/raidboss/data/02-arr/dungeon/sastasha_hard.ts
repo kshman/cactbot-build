@@ -1,5 +1,5 @@
 import NetRegexes from '../../../../../resources/netregexes';
-import { Responses } from '../../../../../resources/responses';
+import Outputs from '../../../../../resources/outputs';
 import ZoneId from '../../../../../resources/zone_id';
 import { RaidbossData } from '../../../../../types/data';
 import { TriggerSet } from '../../../../../types/trigger';
@@ -30,7 +30,52 @@ const triggerSet: TriggerSet<Data> = {
       id: 'Sastasha Hard Tail Screw',
       type: 'StartsUsing',
       netRegex: NetRegexes.startsUsing({ id: 'BF4', source: 'Karlabos' }),
-      response: Responses.tankBuster(),
+      alertText: (data, matches, output) => {
+        if (data.CanStun())
+          return output.stun!({ name: matches.source });
+      },
+      infoText: (data, matches, output) => {
+        return output.tailScrewOn!({ player: data.ShortName(matches.target) });
+      },
+      outputStrings: {
+        stun: Outputs.stunTarget,
+        tailScrewOn: {
+          en: 'Tail Screw on ${player}',
+          de: 'Schweifschraube auf ${player}',
+        },
+      },
+    },
+  ],
+  timelineReplace: [
+    {
+      'locale': 'de',
+      'replaceSync': {
+        'Karlabos': 'Karlabos',
+      },
+    },
+    {
+      'locale': 'fr',
+      'replaceSync': {
+        'Karlabos': 'Karlabos',
+      },
+    },
+    {
+      'locale': 'ja',
+      'replaceSync': {
+        'Karlabos': 'カーラボス',
+      },
+    },
+    {
+      'locale': 'cn',
+      'replaceSync': {
+        'Karlabos': '真红龙虾',
+      },
+    },
+    {
+      'locale': 'ko',
+      'replaceSync': {
+        'Karlabos': '칼라보스',
+      },
     },
   ],
 };

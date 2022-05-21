@@ -23,8 +23,9 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (data, matches, output) => output.text!({ player: data.ShortName(matches.target) }),
       outputStrings: {
         text: {
-          en: 'Heal ${player} to full : Doom',
-          fr: 'Soin complet sur ${player} : Glas',
+          en: 'Heal ${player} to full',
+          de: 'Heile ${player} voll',
+          fr: 'Soin complet sur ${player}',
         },
       },
     },
@@ -33,6 +34,38 @@ const triggerSet: TriggerSet<Data> = {
       type: 'StartsUsing',
       netRegex: NetRegexes.startsUsing({ id: 'C9E', source: 'Slithy Zolool Ja', capture: false }),
       response: Responses.lookAway(),
+    },
+  ],
+  timelineReplace: [
+    {
+      'locale': 'de',
+      'replaceSync': {
+        'Slithy Zolool Ja': 'Zolool Ja',
+      },
+    },
+    {
+      'locale': 'fr',
+      'replaceSync': {
+        'Slithy Zolool Ja': 'Zolool Ja',
+      },
+    },
+    {
+      'locale': 'ja',
+      'replaceSync': {
+        'Slithy Zolool Ja': '濡肌のゾルージャ',
+      },
+    },
+    {
+      'locale': 'cn',
+      'replaceSync': {
+        'Slithy Zolool Ja': '湿皮妖师 佐尔加',
+      },
+    },
+    {
+      'locale': 'ko',
+      'replaceSync': {
+        'Slithy Zolool Ja': '축축한 졸루쟈',
+      },
     },
   ],
 };

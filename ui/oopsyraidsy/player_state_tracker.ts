@@ -86,6 +86,7 @@ export type TrackedEventType = TrackedEvent['type'];
 // * Tracks events in `trackedEvents` that can be handed to DeathReports for processing.
 export class PlayerStateTracker {
   public partyTracker: PartyTracker;
+
   private missedBuffCollector;
   private triggerSets: ProcessedOopsyTriggerSet[] = [];
   private partyIds: Set<string> = new Set();
