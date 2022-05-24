@@ -142,6 +142,23 @@ const triggerSet: TriggerSet<Data> = {
       beforeSeconds: 1,
       run: (data) => data.eyeOfTheTyrantCounter = data.eyeOfTheTyrantCounter ?? 0 + 1,
     },
+    {
+      id: 'DSR Resentment',
+      regex: /Resentment/,
+      beforeSeconds: 5.7,
+      condition: (data) => data.phase === 'nidhogg',
+      infoText: (_data, _matches, output) => output.text!(),
+      outputStrings: {
+        text: {
+          en: 'aoe + dot',
+          de: 'AoE + DoT',
+          fr: 'AoE + dot',
+          ja: 'AoE + DoT',
+          cn: 'AOE + dot',
+          ko: '전체공격 + 도트뎀',
+        },
+      },
+    },
   ],
   triggers: [
     {

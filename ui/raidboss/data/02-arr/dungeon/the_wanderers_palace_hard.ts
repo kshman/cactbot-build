@@ -26,6 +26,8 @@ const triggerSet: TriggerSet<Data> = {
           en: 'Heal ${player} to full',
           de: 'Heile ${player} voll',
           fr: 'Soin complet sur ${player}',
+          cn: '奶满${player}',
+          ko: '완전 회복: ${player}',
         },
       },
     },
