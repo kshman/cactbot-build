@@ -168,12 +168,11 @@ export const GetSoloMistakeText = (ability: string): LocaleText => {
 
 export const GetShareMistakeText = (ability: string, numTargets: number): LocaleText => {
   return {
-    // en: `${ability} (뭉쳐서)`,
-    en: `${ability} (${numTargets}번 뭉쳐서)`,
+    en: `${ability} (${numTargets}명 뭉쳐서)`,
     de: `${ability} (geteilt mit ${numTargets})`,
     fr: `${ability} (partage)`, // FIXME
     ja: `${ability} (頭割り)`, // FIXME
-    cn: `${ability} (重叠)`, // FIXME
-    ko: `${ability} (${numTargets}번 같이 맞음)`,
+    cn: `${ability} (重叠: ${numTargets}次)`,
+    ko: `${ability} (같이 맞음: ${numTargets}명)`,
   };
 };
