@@ -1861,6 +1861,17 @@ const data: ZoneInfoType = {
     'sizeFactor': 100,
     'weatherRate': 22,
   },
+  340: {
+    'exVersion': 0,
+    'name': {
+      'en': 'The Lavender Beds',
+      'ko': '라벤더 베즈',
+    },
+    'offsetX': 0,
+    'offsetY': 0,
+    'sizeFactor': 200,
+    'weatherRate': 8,
+  },
   348: {
     'contentType': 4,
     'exVersion': 0,

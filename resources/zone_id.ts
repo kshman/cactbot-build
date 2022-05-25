@@ -381,6 +381,7 @@ const data = {
   'TheJadeStoaExtreme': 758,
   'TheKeeperOfTheLake': 150,
   'TheKillingArt': 1021,
+  'TheLavenderBeds': 340,
   'TheLabyrinthOfTheAncients': 174,
   'TheLimitlessBlueExtreme': 447,
   'TheLimitlessBlueHard': 436,
