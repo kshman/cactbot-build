@@ -35,6 +35,7 @@ export interface Data extends RaidbossData {
   // mapping of 1, 2, 3 to whether that group has seen an arrow.
   diveFromGraceHasArrow: { [num: number]: boolean };
   diveFromGraceDir: { [name: string]: 'circle' | 'up' | 'down' };
+  diveFromGraceLashGnashKey: string;
   // mapping of player name to x coordinate
   diveFromGracePositions: { [name: string]: number };
   diveFromGraceTowerCounter?: number;
@@ -120,6 +121,24 @@ const matchedPositionTo4Dir = (combatant: PluginCombatantState) => {
   return (Math.round(2 - 2 * Math.atan2(x, y) / Math.PI) % 4);
 };
 
+const diveFromGraceTowerOutputStrings = {
+  unknown: Outputs.unknown,
+  in: Outputs.in,
+  out: Outputs.out,
+  southTower: {
+    en: '남쪽 밟아욧 (${inout})',
+  },
+  circleTowers: {
+    en: '밟아욧 (모두 동글, ${inout})',
+  },
+  westTower: {
+    en: '동쪽 밟아욧 (${inout})',
+  },
+  eastTower: {
+    en: '서쪽 밟아욧 (${inout})',
+  },
+};
+
 const triggerSet: TriggerSet<Data> = {
   zoneId: ZoneId.DragonsongsRepriseUltimate,
   timelineFile: 'dragonsongs_reprise_ultimate.txt',
@@ -130,6 +149,7 @@ const triggerSet: TriggerSet<Data> = {
       thordanMeteorMarkers: [],
       diveFromGraceNum: {},
       diveFromGraceHasArrow: { 1: false, 2: false, 3: false },
+      diveFromGraceLashGnashKey: 'unknown',
       diveFromGracePositions: {},
       diveFromGraceDir: {},
       diveFromGracePreviousPosition: {},
@@ -140,12 +160,12 @@ const triggerSet: TriggerSet<Data> = {
       id: 'DSR Eye of the Tyrant Counter',
       regex: /Eye of the Tyrant/,
       beforeSeconds: 1,
-      run: (data) => data.eyeOfTheTyrantCounter = data.eyeOfTheTyrantCounter ?? 0 + 1,
+      run: (data) => data.eyeOfTheTyrantCounter = (data.eyeOfTheTyrantCounter ?? 0) + 1,
     },
     {
       id: 'DSR Resentment',
       regex: /Resentment/,
-      beforeSeconds: 5.7,
+      beforeSeconds: 5,
       condition: (data) => data.phase === 'nidhogg',
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
@@ -493,7 +513,7 @@ const triggerSet: TriggerSet<Data> = {
             (data.spiralThrustSafeZones ??= []).push(dirNum);
         });
       },
-      alarmText: (data, _matches, output) => {
+      infoText: (data, _matches, output) => {
         data.spiralThrustSafeZones ??= [];
         if (data.spiralThrustSafeZones.length !== 2) {
           console.error(`Spiral Thrusts: expected 2 safe zones got ${data.spiralThrustSafeZones.length}`);
@@ -606,7 +626,7 @@ const triggerSet: TriggerSet<Data> = {
           throw new UnreachableCode();
         data.thordanDir = matchedPositionTo8Dir(thordan);
       },
-      alertText: (data, _matches, output) => {
+      infoText: (data, _matches, output) => {
         // PRs / 알파벳-숫자 콜링콜링
         if (data.options.prsDsrMarker === 1) {
           const mrks: { [mrk: number]: string } = {
@@ -763,7 +783,7 @@ const triggerSet: TriggerSet<Data> = {
         if (combatantJanlenoux.PosX > 100)
           data.sanctityWardDir = output.counterclock!();
       },
-      alarmText: (data, _matches, output) => {
+      infoText: (data, _matches, output) => {
         return data.sanctityWardDir ?? output.unknown!();
       },
       run: (data) => delete data.sanctityWardDir,
@@ -798,17 +818,17 @@ const triggerSet: TriggerSet<Data> = {
           data.prsRavanaCount = (data.prsRavanaCount ?? 0) + 1;
         }
       },
-      alarmText: (data, _matches, output) => {
+      response: (data, _matches, output) => {
         if ((data.prsRavanaCount ?? 0) !== 2 || data.prsRavana1 === undefined || data.prsRavana2 === undefined)
           return;
         const fs = data.ShortName(data.prsRavana1);
         const ns = data.ShortName(data.prsRavana2);
-        console.log('라바나: 1-' + fs + ' / 2-' + ns);
+        console.log('라바나: ' + fs + ' / ' + ns);
         if (data.prsRavana1 === data.me)
-          return output.sword1!();
+          return { alarmText: output.sword1!() };
         if (data.prsRavana2 === data.me)
-          return output.sword2!();
-        return output.swords!({ far: fs, near: ns });
+          return { alarmText: output.sword2!() };
+        return { infoText: output.swords!({ far: fs, near: ns }) };
       },
       run: (data) => {
         if ((data.prsRavanaCount ?? 0) === 2) {
@@ -819,7 +839,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         sword1: {
-          en: '1번! 제피란 반대쪽으로!!!',
+          en: '1번! 제피란 없는데로!!!',
           de: '1',
           ja: '1',
           ko: '1',
@@ -831,8 +851,8 @@ const triggerSet: TriggerSet<Data> = {
           ko: '2',
         },
         swords: {
-          en: '1번 ${far} / 2번 ${near}',
-          ko: '1번 ${far} / 2번 ${near}',
+          en: '라바나: ${far} / ${near}',
+          ko: '라바나: ${far} / ${near}',
         },
       },
     },
@@ -848,7 +868,7 @@ const triggerSet: TriggerSet<Data> = {
       type: 'HeadMarker',
       netRegex: NetRegexes.headMarker(),
       condition: (data) => data.phase === 'thordan',
-      alertText: (data, matches, output) => {
+      infoText: (data, matches, output) => {
         const id = getHeadmarkerId(data, matches);
         if (id !== headmarkers.meteor)
           return;
@@ -943,6 +963,7 @@ const triggerSet: TriggerSet<Data> = {
       netRegex: NetRegexes.startsUsing({ id: '6712', source: 'Nidhogg', capture: false }),
       durationSeconds: 8,
       response: Responses.getOutThenIn(),
+      run: (data) => data.diveFromGraceLashGnashKey = 'out',
     },
     {
       id: 'DSR Lash and Gnash',
@@ -950,6 +971,7 @@ const triggerSet: TriggerSet<Data> = {
       netRegex: NetRegexes.startsUsing({ id: '6713', source: 'Nidhogg', capture: false }),
       durationSeconds: 8,
       response: Responses.getInThenOut(),
+      run: (data) => data.diveFromGraceLashGnashKey = 'in',
     },
     {
       id: 'DSR Lash Gnash Followup',
@@ -959,10 +981,38 @@ const triggerSet: TriggerSet<Data> = {
       netRegex: NetRegexes.ability({ id: ['6715', '6716'], source: 'Nidhogg' }),
       // These are ~3s apart.  Only call after the first (and ignore multiple people getting hit).
       suppressSeconds: 6,
-      alertText: (_data, matches, output) => matches.id === '6715' ? output.in!() : output.out!(),
+      infoText: (data, matches, output) => {
+        let num = data.diveFromGraceNum[data.me];
+        if (!num) {
+          console.error(`DSR Lash Gnash Followup: missing number: ${JSON.stringify(data.diveFromGraceNum)}`);
+          // Set to 0 to output default in/out
+          num = 0;
+        }
+        if (matches.id === '6715') {
+          data.diveFromGraceLashGnashKey = 'in';
+          if (data.eyeOfTheTyrantCounter === 1 && num === 3)
+            return output.inOutThenBait!({ inout: output.in!() });
+          if (data.eyeOfTheTyrantCounter === 2) {
+            if (num === 2 || (num === 1 && data.diveFromGracePreviousPosition[data.me] === 'middle'))
+              return output.inOutThenBait!({ inout: output.in!() });
+          }
+          return output.in!();
+        }
+        data.diveFromGraceLashGnashKey = 'out';
+        if (data.eyeOfTheTyrantCounter === 1 && num === 3)
+          return output.inOutThenBait!({ inout: output.out!() });
+        if (data.eyeOfTheTyrantCounter === 2) {
+          if (num === 2 || (num === 1 && data.diveFromGracePreviousPosition[data.me] === 'middle'))
+            return output.inOutThenBait!({ inout: output.out!() });
+        }
+        return output.out!();
+      },
       outputStrings: {
         out: Outputs.out,
         in: Outputs.in,
+        inOutThenBait: {
+          en: '${inout} => 유도해욧',
+        },
       },
     },
     {
@@ -1109,13 +1159,13 @@ const triggerSet: TriggerSet<Data> = {
           en: '북동 타워 밟아욧',
         },
         westTower3: {
-          en: '뭉쳐있다 => 동쪽 타워 밟아욧',
+          en: '뭉쳤다 => 동쪽 타워 밟아욧',
         },
         northeastTower2: {
           en: '북서 타워 밟아욧',
         },
         eastTower3: {
-          en: '뭉쳐있다 => 서쪽 타워 밟아욧',
+          en: '뭉쳤다 => 서쪽 타워 밟아욧',
         },
       },
     },
@@ -1134,38 +1184,32 @@ const triggerSet: TriggerSet<Data> = {
           console.error(`DFG Tower 1 Reminder: missing number: ${JSON.stringify(data.diveFromGraceNum)}`);
           return;
         }
+        // Map for In/Out Output Lookups
+        const gnashLash: { [inout: string]: string } = {
+          'unknown': output.unknown!(),
+          'in': output.in!(),
+          'out': output.out!(),
+        };
+
         // Call 1st Tower Soak (Must be based on debuffs?)
         if (num === 3) {
           // Num3 High Jump Tower 1
           if (data.diveFromGraceDir[data.me] === 'circle') {
             // Solo High Jump Tower 1
             if (data.diveFromGraceHasArrow[3])
-              return output.southTower!();
+              return output.southTower!({ inout: gnashLash[data.diveFromGraceLashGnashKey] });
             // All High Jumps, unknown exact position
-            return output.circleTowers!();
+            return output.circleTowers!({ inout: gnashLash[data.diveFromGraceLashGnashKey] });
           }
           // Num3 Spineshatter Tower 1
           if (data.diveFromGraceDir[data.me] === 'up')
-            return output.westTower!();
+            return output.westTower!({ inout: gnashLash[data.diveFromGraceLashGnashKey] });
           // Num3 Elusive Tower 1
           if (data.diveFromGraceDir[data.me] === 'down')
-            return output.eastTower!();
+            return output.eastTower!({ inout: gnashLash[data.diveFromGraceLashGnashKey] });
         }
       },
-      outputStrings: {
-        southTower: {
-          en: '남쪽 타워 밟아욧',
-        },
-        circleTowers: {
-          en: '타워 밟아욧 (셋다 동글)',
-        },
-        westTower: {
-          en: '동쪽 타워 밟아욧',
-        },
-        eastTower: {
-          en: '서쪽 타워 밟아욧',
-        },
-      },
+      outputStrings: diveFromGraceTowerOutputStrings,
     },
     {
       id: 'DSR Dive From Grace Tower 3',
@@ -1181,34 +1225,28 @@ const triggerSet: TriggerSet<Data> = {
           console.error(`DFG Tower 3 Reminder: missing number: ${JSON.stringify(data.diveFromGraceNum)}`);
           return;
         }
+        // Map for In/Out Output Lookups
+        const gnashLash: { [inout: string]: string } = {
+          'unknown': output.unknown!(),
+          'in': output.in!(),
+          'out': output.out!(),
+        };
+
         // Call Tower 3 Soak for num1 (based on previous position)
         if (num === 1 && data.diveFromGracePreviousPosition[data.me] === 'middle')
-          return output.southTower!();
+          return output.southTower!({ inout: gnashLash[data.diveFromGraceLashGnashKey] });
         // Call Tower 3 Soak for num2s (based on previous position)
         if (num === 2) {
           if (data.diveFromGracePreviousPosition[data.me] === 'west')
-            return output.westTower!();
+            return output.westTower!({ inout: gnashLash[data.diveFromGraceLashGnashKey] });
           if (data.diveFromGracePreviousPosition[data.me] === 'east')
-            return output.eastTower!();
+            return output.eastTower!({ inout: gnashLash[data.diveFromGraceLashGnashKey] });
         }
         // If failed to get positions, call Towers in general
         if (num !== 3)
-          return output.circleTowers!();
+          return output.circleTowers!({ inout: gnashLash[data.diveFromGraceLashGnashKey] });
       },
-      outputStrings: {
-        southTower: {
-          en: '남쪽 타워 밟아욧',
-        },
-        circleTowers: {
-          en: '타워 밟아욧 (모두 동글)',
-        },
-        westTower: {
-          en: '동쪽 타워 밟아욧',
-        },
-        eastTower: {
-          en: '서쪽 타워 밟아욧',
-        },
-      },
+      outputStrings: diveFromGraceTowerOutputStrings,
     },
     {
       id: 'DSR Darkdragon Dive Single Tower',
@@ -1216,7 +1254,7 @@ const triggerSet: TriggerSet<Data> = {
       netRegex: NetRegexes.ability({ id: '6711', source: 'Nidhogg' }),
       condition: Conditions.targetIsYou(),
       suppressSeconds: 1,
-      alertText: (data, _matches, output) => {
+      infoText: (data, _matches, output) => {
         const num = data.diveFromGraceNum[data.me];
         if (!num) {
           console.error(`DFG Dive Single Tower: missing number: ${JSON.stringify(data.diveFromGraceNum)}`);
@@ -1246,22 +1284,22 @@ const triggerSet: TriggerSet<Data> = {
       run: (data) => data.waitingForGeirskogul = true,
       outputStrings: {
         baitThenStack: {
-          en: '장판 유도 => 뭉쳐욧',
+          en: '유도했다 => 뭉쳐욧',
         },
         baitThenSouthDive: {
-          en: '장판 유도 => 남쪽 다이브',
+          en: '유도했다 => 남쪽 다이브',
         },
         baitThenCirclesDive: {
-          en: '장판 유도 => 다이브 (모두 동글)',
+          en: '유도했다 => 다이브 (모두 동글)',
         },
         baitThenUpArrowDive: {
-          en: '장판 유도 => 동쪽 다이브',
+          en: '유도했다 => 동쪽 다이브',
         },
         baitThenDownArrowDive: {
-          en: '장판 유도 => 서쪽 다이브',
+          en: '유도했다 => 서쪽 다이브',
         },
         text: {
-          en: '장판 유도해욧!!',
+          en: '유도해욧!!',
           de: 'Ködern',
           ja: '誘導',
           ko: '공격 유도',
@@ -1450,7 +1488,7 @@ const triggerSet: TriggerSet<Data> = {
           en: '남쪽 다이브',
         },
         circlesDive2: {
-          en: '북쪽 동서 다이브 (둘다 동글)',
+          en: '북쪽 다이브 (둘다 동글)',
         },
         upArrowDive: {
           en: '동쪽 다이브',
