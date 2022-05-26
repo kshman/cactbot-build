@@ -25,6 +25,7 @@ export interface Data extends RaidbossData {
   adelphelId?: string;
   firstAdelphelJump: boolean;
   adelphelDir?: number;
+  brightwingCounter: number;
   spiralThrustSafeZones?: number[];
   thordanJumpCounter?: number;
   thordanDir?: number;
@@ -42,6 +43,10 @@ export interface Data extends RaidbossData {
   eyeOfTheTyrantCounter?: number;
   diveFromGracePreviousPosition: { [num: string]: 'middle' | 'west' | 'east' };
   waitingForGeirskogul?: boolean;
+  diveCounter: number;
+  // names of players with chain lightning during wrath.
+  thunderstruck: string[];
+  hasDoom: { [name: string]: boolean };
   // PRs 스페샬
   prsRavana1?: string;
   prsRavana2?: string;
@@ -60,7 +65,7 @@ const headmarkers = {
   'firechainSquare': '011B',
   'firechainX': '011C',
   // vfx/lockon/eff/r1fz_skywl_s9x.avfx
-  'skywardLeap': '014A',
+  'skywardTriple': '014A',
   // vfx/lockon/eff/m0244trg_a1t.avfx and a2t
   'sword1': '0032',
   'sword2': '0033',
@@ -70,10 +75,14 @@ const headmarkers = {
   'dot1': '013F',
   'dot2': '0140',
   'dot3': '0141',
+  // vfx/lockon/eff/m0005sp_19o0t.avfx
+  'skywardSingle': '000E',
+  // vfx/lockon/eff/bahamut_wyvn_glider_target_02tm.avfx
+  'cauterize': '0014',
 } as const;
 
 const firstMarker = (phase: Phase) => {
-  return phase === 'doorboss' ? headmarkers.hyperdimensionalSlash : headmarkers.skywardLeap;
+  return phase === 'doorboss' ? headmarkers.hyperdimensionalSlash : headmarkers.skywardTriple;
 };
 
 const getHeadmarkerId = (data: Data, matches: NetMatches['HeadMarker'], firstDecimalMarker?: number) => {
@@ -146,6 +155,7 @@ const triggerSet: TriggerSet<Data> = {
     return {
       phase: 'doorboss',
       firstAdelphelJump: true,
+      brightwingCounter: 1,
       thordanMeteorMarkers: [],
       diveFromGraceNum: {},
       diveFromGraceHasArrow: { 1: false, 2: false, 3: false },
@@ -153,6 +163,9 @@ const triggerSet: TriggerSet<Data> = {
       diveFromGracePositions: {},
       diveFromGraceDir: {},
       diveFromGracePreviousPosition: {},
+      diveCounter: 1,
+      thunderstruck: [],
+      hasDoom: {},
     };
   },
   timelineTriggers: [
@@ -193,6 +206,9 @@ const triggerSet: TriggerSet<Data> = {
       // 71E4 = Shockwave
       netRegex: NetRegexes.startsUsing({ id: ['62D4', '63C8', '6708', '62E2', '6B86', '6667', '7438'], capture: true }),
       run: (data, matches) => {
+        // On the unlikely chance that somebody proceeds directly from the checkpoint into the next phase.
+        data.brightwingCounter = 1;
+
         switch (matches.id) {
           case '62D4':
             data.phase = 'doorboss';
@@ -270,7 +286,12 @@ const triggerSet: TriggerSet<Data> = {
       id: 'DSR Faith Unmoving',
       type: 'StartsUsing',
       netRegex: NetRegexes.startsUsing({ id: '62DC', source: 'Ser Grinnaux', capture: false }),
-      condition: (data) => data.phase !== 'doorboss' || data.adelphelDir === undefined,
+      condition: (data) => {
+        // Drop the knockback call during Playstation2 as there is too much going on.
+        if (data.phase === 'thordan2')
+          return false;
+        return data.phase !== 'doorboss' || data.adelphelDir === undefined;
+      },
       response: Responses.knockback(),
     },
     {
@@ -377,7 +398,7 @@ const triggerSet: TriggerSet<Data> = {
         if (id === headmarkers.firechainSquare)
           return output.square!();
         if (id === headmarkers.firechainX)
-          return output.x!();
+          return output.cross!();
       },
       outputStrings: {
         circle: {
@@ -401,7 +422,7 @@ const triggerSet: TriggerSet<Data> = {
           ja: '紫しかく',
           ko: '보라 사각',
         },
-        x: {
+        cross: {
           en: '파랑 Ⅹ',
           de: 'Blaues X',
           fr: 'Croix bleue',
@@ -411,8 +432,32 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
+      id: 'DSR Brightwing Counter',
+      type: 'Ability',
+      netRegex: NetRegexes.ability({ id: '6319', source: 'Ser Charibert', capture: false }),
+      // One ability for each player hit (hopefully only two??)
+      suppressSeconds: 1,
+      infoText: (data, _matches, output) => output[`dive${data.brightwingCounter}`]!(),
+      run: (data) => data.brightwingCounter++,
+      outputStrings: {
+        // Ideally folks can customize this with who needs to run in.
+        dive1: Outputs.num1,
+        dive2: Outputs.num2,
+        dive3: Outputs.num3,
+        dive4: Outputs.num4,
+      },
+    },
+    {
+      id: 'DSR Brightwing Move',
+      type: 'Ability',
+      netRegex: NetRegexes.ability({ id: '6319', source: 'Ser Charibert' }),
+      condition: Conditions.targetIsYou(),
+      // Once hit, drop your Skyblind puddle somewhere else.
+      response: Responses.moveAway('alert'),
+    },
+    {
       id: 'DSR Skyblind',
-      // 631A Skyblind (2.2s cast) is a targetted ground aoe where A65 Skyblind
+      // 631A Skyblind (2.2s cast) is a targeted ground aoe where A65 Skyblind
       // effect expired on the player.
       type: 'GainsEffect',
       netRegex: NetRegexes.gainsEffect({ effectId: 'A65' }),
@@ -703,7 +748,7 @@ const triggerSet: TriggerSet<Data> = {
       condition: (data, matches) => data.phase === 'thordan' && data.me === matches.target,
       alertText: (data, matches, output) => {
         const id = getHeadmarkerId(data, matches);
-        if (id === headmarkers.skywardLeap)
+        if (id === headmarkers.skywardTriple)
           return output.leapOnYou!();
       },
       outputStrings: {
@@ -1505,6 +1550,109 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
+      id: 'DSR Right Eye Blue Tether',
+      type: 'Tether',
+      netRegex: NetRegexes.tether({ id: '0033' }),
+      condition: (data, matches) => matches.source === data.me,
+      // Have blue/red be different alert/info to differentiate.
+      // Since dives are usually blue people dropping off their blue tether
+      // to a red person (who needs to run in), make the blue tether
+      // the higher severity one.
+      alertText: (_data, _matches, output) => output.text!(),
+      outputStrings: {
+        text: {
+          en: '파랑',
+        },
+      },
+    },
+    {
+      id: 'DSR Left Eye Red tether',
+      type: 'Tether',
+      netRegex: NetRegexes.tether({ id: '0034' }),
+      condition: (data, matches) => matches.source === data.me,
+      // See note above on Right Eye Blue Tether.
+      infoText: (_data, _matches, output) => output.text!(),
+      outputStrings: {
+        text: {
+          en: '빨강',
+        },
+      },
+    },
+    {
+      id: 'DSR Eyes Dive Cast',
+      type: 'StartsUsing',
+      netRegex: NetRegexes.startsUsing({ id: '68C3', source: ['Right Eye', 'Left Eye'], capture: false }),
+      // One cast for each dive.  68C3 is the initial cast/self-targeted ability.
+      // 68C4 is the damage on players.
+      suppressSeconds: 1,
+      infoText: (_data, _matches, output) => output.text!(),
+      outputStrings: {
+        text: {
+          en: '곧 다이브!!',
+        },
+      },
+    },
+    {
+      id: 'DSR Eyes Dive Counter',
+      type: 'Ability',
+      // TODO: should this call out who it was on? some strats involve the
+      // first dive targets swapping with the third dive targets.
+      netRegex: NetRegexes.ability({ id: '68C4', source: 'Nidhogg', capture: false }),
+      // One ability for each player hit.
+      suppressSeconds: 1,
+      infoText: (data, _matches, output) => output[`dive${data.diveCounter}`]!(),
+      run: (data) => data.diveCounter++,
+      outputStrings: {
+        dive1: Outputs.num1,
+        dive2: Outputs.num2,
+        dive3: Outputs.num3,
+        dive4: Outputs.num4,
+      },
+    },
+    {
+      id: 'DSR Eyes Steep in Rage',
+      type: 'StartsUsing',
+      netRegex: NetRegexes.startsUsing({ id: '68BD', source: ['Right Eye', 'Left Eye'], capture: false }),
+      // Each of the eyes (if alive) will start this aoe.  It has the same id from each eye.
+      suppressSeconds: 1,
+      response: Responses.bigAoe('alert'),
+    },
+    {
+      id: 'DSR Right Eye Reminder',
+      type: 'StartsUsing',
+      // If the Right Eye is dead and the Left Eye gets the aoe off, then the Right Eye
+      // will be revived and you shouldn't forget about it.
+      netRegex: NetRegexes.startsUsing({ id: '68BD', source: 'Left Eye' }),
+      delaySeconds: (_data, matches) => parseFloat(matches.castTime),
+      infoText: (_data, _matches, output) => output.text!(),
+      outputStrings: {
+        text: {
+          en: '오른쪽 눈깔 잡아욧!',
+        },
+      },
+    },
+    {
+      id: 'DSR Spear of the Fury Limit Break',
+      type: 'StartsUsing',
+      netRegex: NetRegexes.startsUsing({ id: '62E2', source: 'Ser Zephirin', capture: false }),
+      condition: (data) => data.role === 'tank',
+      // This is a 10 second cast, and (from video) my understanding is to
+      // hit tank LB when the cast bar gets to the "F" in "Fury", which is
+      // roughly 2.8 seconds before it ends.
+      delaySeconds: 10 - 2.8,
+      alarmText: (_data, _matches, output) => output.text!(),
+      outputStrings: {
+        text: {
+          en: '탱크 리미트브레이크!!',
+          de: 'TANK LB!!',
+          fr: 'LB TANK !!',
+          ja: 'タンクLB!!',
+          cn: '坦克LB！！',
+          ko: '리미트 브레이크!!',
+        },
+      },
+    },
+    {
       id: 'DSR Twisting Dive',
       type: 'Ability',
       netRegex: NetRegexes.ability({ id: '6B8B', source: 'Vedrfolnir', capture: false }),
@@ -1518,6 +1666,189 @@ const triggerSet: TriggerSet<Data> = {
           ja: '大竜巻',
           cn: '旋风',
           ko: '회오리',
+        },
+      },
+    },
+    {
+      id: 'DSR Wrath Spiral Pierce',
+      type: 'Tether',
+      netRegex: NetRegexes.tether({ id: '0005' }),
+      condition: Conditions.targetIsYou(),
+      alertText: (_data, _matches, output) => output.text!(),
+      outputStrings: {
+        text: {
+          en: '내게 줄이!!',
+        },
+      },
+    },
+    {
+      id: 'DSR Wrath Skyward Leap',
+      type: 'HeadMarker',
+      netRegex: NetRegexes.headMarker(),
+      condition: Conditions.targetIsYou(),
+      alarmText: (data, matches, output) => {
+        const id = getHeadmarkerId(data, matches);
+        // The Wrath of the Heavens skyward leap is a different headmarker.
+        if (id === headmarkers.skywardSingle)
+          return output.leapOnYou!();
+      },
+      outputStrings: {
+        leapOnYou: {
+          en: '파란거네!!',
+          de: 'Sprung auf DIR',
+          fr: 'Saut sur VOUS',
+          ja: '自分に青マーカー',
+          ko: '광역 대상자',
+        },
+      },
+    },
+    {
+      id: 'DSR Wrath Thunderstruck',
+      // This is effectId B11, but the timing is somewhat inconsistent based on statuses rolling out.
+      // Use the Chain Lightning ability instead.
+      type: 'Ability',
+      netRegex: NetRegexes.ability({ id: '6B8F', source: 'Darkscale' }),
+      // Call this after, which is ~2.3s after this ability.
+      // This avoids people with itchy feet running when they hear something.
+      delaySeconds: 2.5,
+      alertText: (data, matches, output) => {
+        if (data.me === matches.target)
+          return output.text!();
+      },
+      run: (data, matches) => data.thunderstruck.push(matches.target),
+      outputStrings: {
+        text: {
+          en: '내게 번개가!!',
+        },
+      },
+    },
+    {
+      id: 'DSR Wrath Thunderstruck Targets',
+      type: 'Ability',
+      netRegex: NetRegexes.ability({ id: '6B8F', source: 'Darkscale', capture: false }),
+      delaySeconds: 2.8,
+      suppressSeconds: 1,
+      // This is just pure extra info, no need to make noise for people.
+      sound: '',
+      infoText: (data, _matches, output) => {
+        // In case somebody wants to do some "go in the order cactbot tells you" sort of strat.
+        const [fullName1, fullName2] = data.thunderstruck.sort();
+        const name1 = fullName1 ? data.ShortName(fullName1) : output.unknown!();
+        const name2 = fullName2 ? data.ShortName(fullName2) : output.unknown!();
+        return output.text!({ name1: name1, name2: name2 });
+      },
+      // Sorry tts players, but "Thunder on YOU" and "Thunder: names" are too similar.
+      tts: null,
+      outputStrings: {
+        text: {
+          en: '번개: ${name1}, ${name2}',
+        },
+        unknown: Outputs.unknown,
+      },
+    },
+    {
+      id: 'DSR Wrath Cauterize Marker',
+      type: 'HeadMarker',
+      netRegex: NetRegexes.headMarker(),
+      condition: Conditions.targetIsYou(),
+      alarmText: (data, matches, output) => {
+        const id = getHeadmarkerId(data, matches);
+        if (id === headmarkers.cauterize)
+          return output.diveOnYou!();
+      },
+      outputStrings: {
+        diveOnYou: {
+          en: '다이브 폭탄 (전사 반대쪽)',
+        },
+      },
+    },
+    {
+      id: 'DSR Doom Gain',
+      type: 'GainsEffect',
+      netRegex: NetRegexes.gainsEffect({ effectId: 'BA0' }),
+      alertText: (data, matches, output) => {
+        if (data.me === matches.target)
+          return output.text!();
+      },
+      run: (data, matches) => data.hasDoom[matches.target] = true,
+      outputStrings: {
+        text: {
+          en: '내게 둠이!!',
+        },
+      },
+    },
+    {
+      id: 'DSR Playstation2 Fire Chains',
+      type: 'HeadMarker',
+      netRegex: NetRegexes.headMarker(),
+      condition: (data, matches) => data.phase === 'thordan2' && data.me === matches.target,
+      alertText: (data, matches, output) => {
+        const id = getHeadmarkerId(data, matches);
+
+        // Note: in general, both circles should always have Doom and both crosses
+        // should not have Doom, but who knows what happens if there's people dead.
+        // For example, in P1 tanks can get circles if enough people are dead.
+
+        const hasDoom = data.hasDoom[data.me];
+        if (hasDoom) {
+          if (id === headmarkers.firechainCircle)
+            return output.circleWithDoom!();
+          if (id === headmarkers.firechainTriangle)
+            return output.triangleWithDoom!();
+          if (id === headmarkers.firechainSquare)
+            return output.squareWithDoom!();
+          if (id === headmarkers.firechainX)
+            return output.crossWithDoom!();
+        }
+        if (id === headmarkers.firechainCircle)
+          return output.circle!();
+        if (id === headmarkers.firechainTriangle)
+          return output.triangle!();
+        if (id === headmarkers.firechainSquare)
+          return output.square!();
+        if (id === headmarkers.firechainX)
+          return output.cross!();
+      },
+      outputStrings: {
+        circle: {
+          en: '빨강 ○',
+          de: 'Roter Kreis',
+          fr: 'Cercle rouge',
+          ja: '赤まる',
+          ko: '빨강 동그라미',
+        },
+        triangle: {
+          en: '녹색 △',
+          de: 'Grünes Dreieck',
+          fr: 'Triangle vert',
+          ja: '緑さんかく',
+          ko: '초록 삼각',
+        },
+        square: {
+          en: '보라 ■',
+          de: 'Lilanes Viereck',
+          fr: 'Carré violet',
+          ja: '紫しかく',
+          ko: '보라 사각',
+        },
+        cross: {
+          en: '파랑 Ⅹ',
+          de: 'Blaues X',
+          fr: 'Croix bleue',
+          ja: '青バツ',
+          ko: '파랑 X',
+        },
+        circleWithDoom: {
+          en: '빨강 ○ (둠)',
+        },
+        triangleWithDoom: {
+          en: '녹색 △ (둠)',
+        },
+        squareWithDoom: {
+          en: '보라 ■ (둠)',
+        },
+        crossWithDoom: {
+          en: '파랑 Ⅹ (둠)',
         },
       },
     },
@@ -1661,6 +1992,7 @@ const triggerSet: TriggerSet<Data> = {
     },
     {
       'locale': 'de',
+      'missingTranslations': true,
       'replaceSync': {
         'Darkscale': 'Dunkelschuppe',
         'Dragon-king Thordan': 'König Thordan',
