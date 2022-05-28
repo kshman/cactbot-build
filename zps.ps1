@@ -17,7 +17,7 @@ function New-QuestionYesNo([string] $msg)
 {
 	do
 	{
-		$m = "{0} ('Y0 '은 앞으로 'N'은 그만둠)" -f $msg
+		$m = "{0} ('Y0 '은 앞으로 'N.'은 그만둠)" -f $msg
 		$in = Read-Host $m
 		$in = $in.ToUpper()
 
@@ -25,6 +25,7 @@ function New-QuestionYesNo([string] $msg)
 		if ($in -eq '0') { return $TRUE }
 		if ($in -eq ' ') { return $TRUE }
 		if ($in -eq 'N') { return $FALSE }
+		if ($in -eq '.') { return $FALSE }
 	} while ($TRUE)
 }
 

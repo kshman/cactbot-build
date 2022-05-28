@@ -882,8 +882,9 @@ const triggerSet: TriggerSet<Data> = {
           ko: '2',
         },
         swords: {
-          en: '라바나: ${far} / ${near}',
-          ko: '라바나: ${far} / ${near}',
+          en: '칼: ${far} / ${near}',
+          ja: '剣: ${far} / ${near}',
+          ko: '칼: ${far} / ${near}',
         },
       },
     },
@@ -1015,6 +1016,7 @@ const triggerSet: TriggerSet<Data> = {
         num3: Outputs.num3,
         stackNorthNum: {
           en: '${num}번, 북에서 뭉쳐욧!',
+          de: '${num}, Im Norden sammeln',
         },
       },
     },
@@ -1089,13 +1091,13 @@ const triggerSet: TriggerSet<Data> = {
           ko: '#${num} 나만 하이점프',
         },
         upArrow: {
-          en: '#${num} 동쪽 (위)',
+          en: '#${num} 위 화살 (동쪽)',
           de: '#${num} Pfeil nach Vorne',
           ja: '#${num} 上矢印 / スパインダイブ',
           ko: '#${num} 위 화살표 / 척추 강타',
         },
         downArrow: {
-          en: '#${num} 서쪽 (아래)',
+          en: '#${num} 아래 화살 (서쪽)',
           de: '#${num} Pfeil nach Hinten',
           ja: '#${num} 下矢印 / イルーシヴジャンプ',
           ko: '#${num} 아래 화살표 / 교묘한 점프',
@@ -1110,7 +1112,9 @@ const triggerSet: TriggerSet<Data> = {
       netRegex: NetRegexes.startsUsing({ id: ['6712', '6713'], source: 'Nidhogg' }),
       durationSeconds: 8,
       alertText: (data, matches, output) => {
-        const inout = matches.id === '6712' ? output.out!() : output.in!();
+        const key = matches.id === '6712' ? 'out' : 'in';
+        const inout = output[key]!();
+        data.diveFromGraceLashGnashKey = key;
 
         const num = data.diveFromGraceNum[data.me];
         if (num !== 1 && num !== 2 && num !== 3) {
@@ -1157,7 +1161,6 @@ const triggerSet: TriggerSet<Data> = {
         // If things have gone awry, at least output something.
         return inout;
       },
-      run: (data) => data.diveFromGraceLashGnashKey = 'out',
       // The 2 dives are called after the in/out occurs.
       // The 1+3 dives get separate output strings here in case somebody has a weird strat
       // that does different things for them and want better output strings.
@@ -1169,33 +1172,43 @@ const triggerSet: TriggerSet<Data> = {
         out: Outputs.out,
         stackInOut: {
           en: '뭉쳐욧 => ${inout}',
+          de: 'Sammeln => ${inout}',
         },
         baitStackInOut: {
           en: '유도 => 뭉쳐욧 => ${inout}',
+          de: 'Ködern => Sammeln => ${inout}',
         },
         circlesDive1: {
-          en: '다이브 (동글) => ${inout}',
+          en: '다이브 (모두 동글) => ${inout}',
+          de: 'Sturz (alle Kreise) => ${inout}',
         },
         circlesDive3: {
-          en: '다이브 (동글) => ${inout}',
+          en: '다이브 (모두 동글) => ${inout}',
+          de: 'Sturz (alle Kreise) => ${inout}',
         },
         southDive1: {
           en: '남쪽 다이브 => ${inout}',
+          de: 'Südlicher Sturz => ${inout}',
         },
         southDive3: {
           en: '남쪽 다이브 => ${inout}',
+          de: 'Südlicher Sturz => ${inout}',
         },
         upArrowDive1: {
-          en: '동쪽 다이브 (위) => ${inout}',
+          en: '위 화살 다이브 => ${inout}',
+          de: 'Vorne-Pfeil-Sturz => ${inout}',
         },
         upArrowDive3: {
-          en: '동쪽 다이브 (위) => ${inout}',
+          en: '위 화살 다이브 => ${inout}',
+          de: 'Vorne-Pfeil-Sturz => ${inout}',
         },
         downArrowDive1: {
-          en: '서쪽 다이브 (아래) => ${inout}',
+          en: '아래 화살 다이브 => ${inout}',
+          de: 'Hinten-Pfeil-Sturz => ${inout}',
         },
         downArrowDive3: {
-          en: '서쪽 다이브 (아래) => ${inout}',
+          en: '아래 화살 다이브 => ${inout}',
+          de: 'Hinten-Pfeil-Sturz => ${inout}',
         },
       },
     },
@@ -1214,15 +1227,19 @@ const triggerSet: TriggerSet<Data> = {
           in: Outputs.in,
           inOutAndBait: {
             en: '${inout} + 유도',
+            de: '${inout} + Ködern',
           },
           circlesDive2: {
-            en: '${inout} => 다이브 (동글)',
+            en: '${inout} => 다이브 (모두 동글)',
+            de: '${inout} => Sturz (alle Kreise)',
           },
           upArrowDive2: {
-            en: '${inout} => 동쪽 다이브 (위)',
+            en: '${inout} => 위 화살 다이브',
+            de: '${inout} => Vorne-Pfeil-Sturz',
           },
           downArrowDive2: {
-            en: '${inout} => 서쪽 다이브 (아래)',
+            en: '${inout} => 아래 화살 다이브',
+            de: '${inout} => Hinten-Pfeil-Sturz',
           },
         };
 
@@ -1243,9 +1260,9 @@ const triggerSet: TriggerSet<Data> = {
             if (!data.diveFromGraceHasArrow[num])
               return { alertText: output.circlesDive2!({ inout: inout }) };
             if (data.diveFromGraceDir[data.me] === 'up')
-              return { alertText: output.upArrowDive2!() };
+              return { alertText: output.upArrowDive2!({ inout: inout }) };
             if (data.diveFromGraceDir[data.me] === 'down')
-              return { alertText: output.downArrowDive2!() };
+              return { alertText: output.downArrowDive2!({ inout: inout }) };
           } else if (num === 3) {
             return { alertText: output.inOutAndBait!({ inout: inout }) };
           }
@@ -1327,36 +1344,47 @@ const triggerSet: TriggerSet<Data> = {
         out: Outputs.out,
         unknownTower: {
           en: '타워 (${inout})',
+          de: 'Turm (${inout})',
         },
         southTower1: {
           en: '남쪽 타워 (${inout})',
+          de: 'Südlicher Turm (${inout})',
         },
         southTower3: {
           en: '남쪽 타워 (${inout})',
+          de: 'Südlicher Turm (${inout})',
         },
         circleTowers1: {
-          en: '타워 (동글, ${inout})',
+          en: '타워 (모두 동글, ${inout})',
+          de: 'Türme (alle Kreise, ${inout})',
         },
         circleTowers3: {
-          en: '타워 (동글, ${inout})',
+          en: '타워 (모두 동글, ${inout})',
+          de: 'Türme (alle Kreise, ${inout})',
         },
         upArrowTower1: {
-          en: '동쪽 타워 (위, ${inout})',
+          en: '위 화살 타워 (${inout})',
+          de: 'Vorne-Pfeil-Turm (${inout})',
         },
         downArrowTower1: {
-          en: '서쪽 타워 (아래, ${inout})',
+          en: '아래 화살 타워 ( ${inout})',
+          de: 'Hinten-Pfeil-Turm (${inout})',
         },
         upArrowTower3: {
-          en: '동쪽 타워 (위, ${inout})',
+          en: '위 화살 타워 (${inout})',
+          de: 'Vorne-Pfeil-Turm (${inout})',
         },
         downArrowTower3: {
-          en: '서쪽 타워 (아래, ${inout})',
+          en: '아래 화살 타워 ( ${inout})',
+          de: 'Hinten-Pfeil-Turm (${inout})',
         },
         westTower3: {
           en: '동쪽 타워 (${inout})',
+          de: 'Westlicher Turm (${inout})',
         },
         eastTower3: {
           en: '서쪽 타워 (${inout})',
+          de: 'Östlicher Turm (${inout})',
         },
       },
     },
@@ -1419,12 +1447,15 @@ const triggerSet: TriggerSet<Data> = {
         unknown: Outputs.unknown,
         unknownTower: {
           en: '타워',
+          de: 'Turm',
         },
         northwestTower2: {
           en: '북동 타워',
+          de: 'Nordwestlicher Turm',
         },
         northeastTower2: {
           en: '북서 타워',
+          de: 'Nordöstlicher Turm',
         },
       },
     },
@@ -1483,6 +1514,7 @@ const triggerSet: TriggerSet<Data> = {
         unknown: Outputs.unknown,
         stackInOut: {
           en: '뭉쳐욧 => ${inout}',
+          de: 'Sammeln => ${inout}',
         },
         move: Outputs.moveAway,
       },
@@ -1500,6 +1532,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: '파랑',
+          de: 'Blau',
         },
       },
     },
@@ -1513,6 +1546,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: '빨강',
+          de: 'Rot',
         },
       },
     },
@@ -1527,6 +1561,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: '곧 다이브!!',
+          de: 'Stürze bald',
         },
       },
     },
@@ -1566,6 +1601,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: '오른쪽 눈깔 잡아욧!',
+          de: 'Besiege Rechtes Auge',
         },
       },
     },
@@ -1992,7 +2028,6 @@ const triggerSet: TriggerSet<Data> = {
     },
     {
       'locale': 'de',
-      'missingTranslations': true,
       'replaceSync': {
         'Darkscale': 'Dunkelschuppe',
         'Dragon-king Thordan': 'König Thordan',
