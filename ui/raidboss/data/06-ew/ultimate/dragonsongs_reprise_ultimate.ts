@@ -179,11 +179,13 @@ const triggerSet: TriggerSet<Data> = {
     {
       id: 'DSR+ 눈깔 선 안내',
       regex: /Soul of Devotion/,
-      condition: (data) => data.role === 'tank',
-      infoText: (_data, _matches, output) => output.text!(),
+      infoText: (data, _matches, output) => data.role === 'dps' ? output.red!() : output.blue!(),
       outputStrings: {
-        text: {
+        blue: {
           en: '첨엔 파란줄 챙겨욧!',
+        },
+        red: {
+          en: '첨엔 빨간줄 챙겨욧!',
         },
       },
     },
@@ -865,7 +867,7 @@ const triggerSet: TriggerSet<Data> = {
           return;
         const fs = data.ShortName(data.thordanSword1);
         const ns = data.ShortName(data.thordanSword2);
-        console.log('칼: ' + fs + ' / ' + ns);
+        console.log(`칼: ${fs} / ${ns}`);
         if (data.thordanSword1 === data.me)
           return { alarmText: output.sword1!() };
         if (data.thordanSword2 === data.me)
