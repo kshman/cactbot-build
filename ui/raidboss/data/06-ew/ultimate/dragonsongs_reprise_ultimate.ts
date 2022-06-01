@@ -767,6 +767,12 @@ const triggerSet: TriggerSet<Data> = {
       response: Responses.aoe(),
     },
     {
+      id: 'DSR Heavenly Heel',
+      type: 'StartsUsing',
+      netRegex: NetRegexes.startsUsing({ id: '63C7', source: 'King Thordan' }),
+      response: Responses.tankBusterSwap('alert', 'alert'),
+    },
+    {
       id: 'DSR Sanctity of the Ward Direction',
       type: 'Ability',
       netRegex: NetRegexes.ability({ id: '63E1', source: 'King Thordan', capture: false }),
@@ -913,6 +919,8 @@ const triggerSet: TriggerSet<Data> = {
       type: 'HeadMarker',
       netRegex: NetRegexes.headMarker(),
       condition: (data) => data.phase === 'thordan',
+      // Keep this up through the first tower.
+      durationSeconds: 10,
       infoText: (data, matches, output) => {
         const id = getHeadmarkerId(data, matches);
         if (id !== headmarkers.meteor)
@@ -975,7 +983,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '뒤에서 → 오른쪽',
+          en: '→→→ 오른쪽',
           de: 'Hinter ihn => Rechts',
           ja: '後ろ => 右',
           ko: '뒤 => 오른쪽',
@@ -989,18 +997,12 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '뒤에서 → 왼쪽',
+          en: '왼쪽 ←←←',
           de: 'Hinter ihn => Links',
           ja: '後ろ => 左',
           ko: '뒤 => 왼쪽',
         },
       },
-    },
-    {
-      id: 'DSR+ 또르당 Heavenly Heel',
-      type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ id: '63C7', source: 'King Thordan', capture: false }),
-      response: Responses.tankBuster(),
     },
     {
       id: 'DSR Dive From Grace Number',
@@ -1029,7 +1031,8 @@ const triggerSet: TriggerSet<Data> = {
         num3: Outputs.num3,
         stackNorthNum: {
           en: '${num}번, 북에서 뭉쳐욧!',
-          de: '${num}, Im Norden sammeln',
+          de: '${num} (Im Norden sammeln)',
+          ko: '${num} (북쪽에서 쉐어)',
         },
       },
     },
@@ -1074,6 +1077,7 @@ const triggerSet: TriggerSet<Data> = {
       netRegex: NetRegexes.gainsEffect({ effectId: ['AC3', 'AC4', 'AC5'] }),
       condition: Conditions.targetIsYou(),
       delaySeconds: 0.5,
+      durationSeconds: 5,
       alertText: (data, _matches, output) => {
         const num = data.diveFromGraceNum[data.me];
         if (!num) {
@@ -1123,7 +1127,7 @@ const triggerSet: TriggerSet<Data> = {
       // 6712 = Gnash and Lash (out then in)
       // 6713 = Lash and Gnash (in then out)
       netRegex: NetRegexes.startsUsing({ id: ['6712', '6713'], source: 'Nidhogg' }),
-      durationSeconds: 8,
+      durationSeconds: 5,
       alertText: (data, matches, output) => {
         const key = matches.id === '6712' ? 'out' : 'in';
         const inout = output[key]!();
@@ -1186,42 +1190,52 @@ const triggerSet: TriggerSet<Data> = {
         stackInOut: {
           en: '뭉쳐욧 => ${inout}',
           de: 'Sammeln => ${inout}',
+          ko: '쉐어 => ${inout}',
         },
         baitStackInOut: {
           en: '유도 => 뭉쳐욧 => ${inout}',
           de: 'Ködern => Sammeln => ${inout}',
+          ko: '공격 유도 => 쉐어 => ${inout}',
         },
         circlesDive1: {
           en: '다이브 (모두 동글) => ${inout}',
           de: 'Sturz (alle Kreise) => ${inout}',
+          ko: '다이브 (모두 하이점프) => ${inout}',
         },
         circlesDive3: {
           en: '다이브 (모두 동글) => ${inout}',
           de: 'Sturz (alle Kreise) => ${inout}',
+          ko: '다이브 (모두 하이점프) => ${inout}',
         },
         southDive1: {
           en: '남쪽 다이브 => ${inout}',
           de: 'Südlicher Sturz => ${inout}',
+          ko: '남쪽 다이브 => ${inout}',
         },
         southDive3: {
           en: '남쪽 다이브 => ${inout}',
           de: 'Südlicher Sturz => ${inout}',
+          ko: '남쪽 다이브 => ${inout}',
         },
         upArrowDive1: {
           en: '위 화살 다이브 => ${inout}',
           de: 'Vorne-Pfeil-Sturz => ${inout}',
+          ko: '위 화살표 => ${inout}',
         },
         upArrowDive3: {
           en: '위 화살 다이브 => ${inout}',
           de: 'Vorne-Pfeil-Sturz => ${inout}',
+          ko: '위 화살표 => ${inout}',
         },
         downArrowDive1: {
           en: '아래 화살 다이브 => ${inout}',
           de: 'Hinten-Pfeil-Sturz => ${inout}',
+          ko: '아래 화살표 => ${inout}',
         },
         downArrowDive3: {
           en: '아래 화살 다이브 => ${inout}',
           de: 'Hinten-Pfeil-Sturz => ${inout}',
+          ko: '아래 화살표 => ${inout}',
         },
       },
     },
@@ -1241,18 +1255,22 @@ const triggerSet: TriggerSet<Data> = {
           inOutAndBait: {
             en: '${inout} + 유도',
             de: '${inout} + Ködern',
+            ko: '${inout} + 공격 유도',
           },
           circlesDive2: {
             en: '${inout} => 다이브 (모두 동글)',
             de: '${inout} => Sturz (alle Kreise)',
+            ko: '${inout} => 다이브 (모두 하이점프)',
           },
           upArrowDive2: {
             en: '${inout} => 위 화살 다이브',
             de: '${inout} => Vorne-Pfeil-Sturz',
+            ko: '${inout} => 위 화살표',
           },
           downArrowDive2: {
             en: '${inout} => 아래 화살 다이브',
             de: '${inout} => Hinten-Pfeil-Sturz',
+            ko: '${inout} => 아래 화살표',
           },
         };
 
@@ -1265,7 +1283,7 @@ const triggerSet: TriggerSet<Data> = {
           // Don't print a console error here because this response gets eval'd as part
           // of the config ui and testing.  We'll get errors elsewhere if needed.
           // TODO: maybe have a better way to know if we're in the middle of testing?
-          return { intoText: inout };
+          return { infoText: inout };
         }
 
         if (data.eyeOfTheTyrantCounter === 1) {
@@ -1331,6 +1349,9 @@ const triggerSet: TriggerSet<Data> = {
             }
             return output.unknownTower!({ inout: inout });
           }
+          // Folks who could be placing a two tower here just get
+          // the normal "in" or "out" below, and the Lash Gnash Followup
+          // will say "In => Up Arrow Tower" as a reminder.
         } else if (data.eyeOfTheTyrantCounter === 2) {
           // Tower 3 soaks based on debuffs and previous positions.
           const pos = data.diveFromGracePreviousPosition[data.me];
@@ -1350,6 +1371,9 @@ const triggerSet: TriggerSet<Data> = {
           }
           return output.unknownTower!({ inout: inout });
         }
+
+        // Anybody who isn't placing or taking a tower here just gets a "in/out" reminder.
+        return inout;
       },
       outputStrings: {
         unknown: Outputs.unknown,
@@ -1358,46 +1382,57 @@ const triggerSet: TriggerSet<Data> = {
         unknownTower: {
           en: '타워 (${inout})',
           de: 'Turm (${inout})',
+          ko: '기둥 (${inout})',
         },
         southTower1: {
           en: '남쪽 타워 (${inout})',
           de: 'Südlicher Turm (${inout})',
+          ko: '남쪽 기둥 (${inout})',
         },
         southTower3: {
           en: '남쪽 타워 (${inout})',
           de: 'Südlicher Turm (${inout})',
+          ko: '남쪽 기둥 (${inout})',
         },
         circleTowers1: {
           en: '타워 (모두 동글, ${inout})',
           de: 'Türme (alle Kreise, ${inout})',
+          ko: '기둥 (모두 하이점프, ${inout})',
         },
         circleTowers3: {
           en: '타워 (모두 동글, ${inout})',
           de: 'Türme (alle Kreise, ${inout})',
+          ko: '기둥 (모두 하이점프, ${inout})',
         },
         upArrowTower1: {
           en: '위 화살 타워 (${inout})',
           de: 'Vorne-Pfeil-Turm (${inout})',
+          ko: '위 화살표 기둥 (${inout})',
         },
         downArrowTower1: {
           en: '아래 화살 타워 ( ${inout})',
           de: 'Hinten-Pfeil-Turm (${inout})',
+          ko: '아래 화살표 기둥 (${inout})',
         },
         upArrowTower3: {
           en: '위 화살 타워 (${inout})',
           de: 'Vorne-Pfeil-Turm (${inout})',
+          ko: '위 화살표 기둥 (${inout})',
         },
         downArrowTower3: {
           en: '아래 화살 타워 ( ${inout})',
           de: 'Hinten-Pfeil-Turm (${inout})',
+          ko: '아래 화살표 기둥 (${inout})',
         },
         westTower3: {
           en: '동쪽 타워 (${inout})',
           de: 'Westlicher Turm (${inout})',
+          ko: '서쪽 기둥 (${inout})',
         },
         eastTower3: {
           en: '서쪽 타워 (${inout})',
           de: 'Östlicher Turm (${inout})',
+          ko: '동쪽 기둥 (${inout})',
         },
       },
     },
@@ -1461,14 +1496,17 @@ const triggerSet: TriggerSet<Data> = {
         unknownTower: {
           en: '타워',
           de: 'Turm',
+          ko: '기둥',
         },
         northwestTower2: {
           en: '북동 타워',
           de: 'Nordwestlicher Turm',
+          ko: '북서쪽 기둥',
         },
         northeastTower2: {
           en: '북서 타워',
           de: 'Nordöstlicher Turm',
+          ko: '북동쪽 기둥',
         },
       },
     },
@@ -1528,9 +1566,17 @@ const triggerSet: TriggerSet<Data> = {
         stackInOut: {
           en: '뭉쳐욧 => ${inout}',
           de: 'Sammeln => ${inout}',
+          ko: '쉐어 => ${inout}',
         },
         move: Outputs.moveAway,
       },
+    },
+    {
+      id: 'DSR Drachenlance',
+      type: 'StartsUsing',
+      netRegex: NetRegexes.startsUsing({ id: '670C', source: 'Nidhogg', capture: false }),
+      // This could be "out of front" as sides are safe but this is urgent, so be more clear.
+      response: Responses.getBehind(),
     },
     {
       id: 'DSR Right Eye Blue Tether',
@@ -1546,6 +1592,7 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: '파랑',
           de: 'Blau',
+          ko: '파랑',
         },
       },
     },
@@ -1560,6 +1607,7 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: '빨강',
           de: 'Rot',
+          ko: '빨강',
         },
       },
     },
@@ -1575,6 +1623,7 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: '곧 다이브!!',
           de: 'Stürze bald',
+          ko: '곧 다이브',
         },
       },
     },
@@ -1615,6 +1664,7 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: '오른쪽 눈깔 잡아욧!',
           de: 'Besiege Rechtes Auge',
+          ko: '오른눈 잡기',
         },
       },
     },
@@ -1636,7 +1686,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: 'LB TANK !!',
           ja: 'タンクLB!!',
           cn: '坦克LB！！',
-          ko: '리미트 브레이크!!',
+          ko: '탱리밋!!',
         },
       },
     },
@@ -1970,27 +2020,33 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: 'Spreading Flame',
+      id: 'DSR Spreading Flame',
       type: 'GainsEffect',
-      netRegex: NetRegexes.gainsEffect({ effectId: 'AC6' }),
+      netRegex: NetRegexes.gainsEffect({
+        effectId: 'AC6',
+      }),
       condition: (data, matches) => data.me === matches.target,
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
           en: '내게 흩어지라니!',
+          de: 'Verteilen',
           ko: '산개징 대상자',
         },
       },
     },
     {
-      id: 'Entangled Flame',
+      id: 'DSR Entangled Flame',
       type: 'GainsEffect',
-      netRegex: NetRegexes.gainsEffect({ effectId: 'AC7' }),
+      netRegex: NetRegexes.gainsEffect({
+        effectId: 'AC7',
+      }),
       condition: (data, matches) => data.me === matches.target,
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
           en: '내게 뭉치라니!',
+          de: 'Sammeln',
           ko: '집합징 대상자',
         },
       },
@@ -1999,16 +2055,20 @@ const triggerSet: TriggerSet<Data> = {
       id: 'DSR Trinity Tank Dark Resistance',
       type: 'GainsEffect',
       // C40 = Dark Resistance Down, highest enmity target
-      netRegex: NetRegexes.gainsEffect({ effectId: 'C40', count: '02' }),
+      netRegex: NetRegexes.gainsEffect({
+        effectId: 'C40',
+        count: '02',
+      }),
       condition: (data, matches) => data.me === matches.target,
       alertText: (_data, matches, output) => {
-        if (Number(matches.duration) > 10)
+        if (parseFloat(matches.duration) > 10)
           return output.text!();
       },
       outputStrings: {
         text: {
           // Only showing 'swap' is really confusing, in my opinion
           en: '헤이트 둘째 유지해욧!',
+          de: 'Sei 2. in der Aggro',
           ko: '적개심 2순위 잡기',
         },
       },
@@ -2017,16 +2077,22 @@ const triggerSet: TriggerSet<Data> = {
       id: 'DSR Trinity Tank Light Resistance',
       type: 'GainsEffect',
       // C3F = Light Resistance Down, 2nd highest enmity target
-      netRegex: NetRegexes.gainsEffect({ effectId: 'C3F', count: '02' }),
+      netRegex: NetRegexes.gainsEffect({
+        effectId: 'C3F',
+        count: '02',
+      }),
       condition: (data, matches) => data.me === matches.target,
+      // To prevent boss rotating around before Exaflare
+      delaySeconds: 2.5,
       alertText: (_data, matches, output) => {
-        if (Number(matches.duration) > 10)
+        if (parseFloat(matches.duration) > 10)
           return output.text!();
       },
       outputStrings: {
         text: {
-          en: '헤이트 첫째 유지해욧!',
-          ko: '적개심 1순위 잡기',
+          en: '프로보크!',
+          de: 'Herausforderung',
+          ko: '도발하기',
         },
       },
     },
@@ -2041,6 +2107,7 @@ const triggerSet: TriggerSet<Data> = {
     },
     {
       'locale': 'de',
+      'missingTranslations': true,
       'replaceSync': {
         'Darkscale': 'Dunkelschuppe',
         'Dragon-king Thordan': 'König Thordan',
