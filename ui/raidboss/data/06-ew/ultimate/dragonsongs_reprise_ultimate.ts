@@ -167,7 +167,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'aoe + dot',
+          en: '전체공격 + DOT',
           de: 'AoE + DoT',
           fr: 'AoE + dot',
           ja: 'AoE + DoT',
@@ -839,13 +839,13 @@ const triggerSet: TriggerSet<Data> = {
       run: (data) => delete data.sanctityWardDir,
       outputStrings: {
         clockwise: {
-          en: '<==== 왼쪽!',
+          en: '<==== 왼쪽으로',
           de: 'Im Uhrzeigersinn',
           ja: '時計回り',
           ko: '시계방향',
         },
         counterclock: {
-          en: '오른쪽! ====>',
+          en: '오른쪽으로 ====>',
           de: 'Gegen den Uhrzeigersinn',
           ja: '反時計回り',
           ko: '반시계방향',
@@ -983,7 +983,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '→→→ 오른쪽',
+          en: '→→→ 오른쪽으로',
           de: 'Hinter ihn => Rechts',
           ja: '後ろ => 右',
           ko: '뒤 => 오른쪽',
@@ -997,7 +997,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '왼쪽 ←←←',
+          en: '왼쪽으로 ←←←',
           de: 'Hinter ihn => Links',
           ja: '後ろ => 左',
           ko: '뒤 => 왼쪽',
@@ -1193,7 +1193,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '쉐어 => ${inout}',
         },
         baitStackInOut: {
-          en: '유도 => 뭉쳐욧 => ${inout}',
+          en: '게이른 미끼 => 뭉쳐욧 => ${inout}',
           de: 'Ködern => Sammeln => ${inout}',
           ko: '공격 유도 => 쉐어 => ${inout}',
         },
@@ -1253,7 +1253,7 @@ const triggerSet: TriggerSet<Data> = {
           out: Outputs.out,
           in: Outputs.in,
           inOutAndBait: {
-            en: '${inout} + 유도',
+            en: '${inout} + 게이른 미끼',
             de: '${inout} + Ködern',
             ko: '${inout} + 공격 유도',
           },
@@ -1532,7 +1532,7 @@ const triggerSet: TriggerSet<Data> = {
       run: (data) => data.waitingForGeirskogul = true,
       outputStrings: {
         text: {
-          en: '게이른 유도!',
+          en: '게이른 미끼!',
           de: 'Ködern',
           ja: '誘導',
           ko: '공격 유도',
@@ -1673,7 +1673,8 @@ const triggerSet: TriggerSet<Data> = {
       type: 'StartsUsing',
       netRegex: NetRegexes.startsUsing({ id: '62E2', source: 'Ser Zephirin', capture: false }),
       // This ability also happens in doorboss phase.
-      condition: (data) => data.role === 'tank' && data.phase === 'haurchefant',
+      // condition: (data) => data.role === 'tank' && data.phase === 'haurchefant',
+      condition: (data) => data.role === 'tank',
       // This is a 10 second cast, and (from video) my understanding is to
       // hit tank LB when the cast bar gets to the "F" in "Fury", which is
       // roughly 2.8 seconds before it ends.
@@ -1716,6 +1717,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: '내게 줄이!!',
+          ko: '선 대상자',
         },
       },
     },
@@ -1757,6 +1759,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: '내게 번개가!!',
+          ko: '번개 대상자',
         },
       },
     },
@@ -1780,6 +1783,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: '번개: ${name1}, ${name2}',
+          ko: '번개: ${name1}, ${name2}',
         },
         unknown: Outputs.unknown,
       },
@@ -1796,7 +1800,8 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         diveOnYou: {
-          en: '다이브 폭탄 (전사 반대쪽)',
+          en: '내게 카탈라이즈! (전사 반대쪽)',
+          ko: '카탈 대상자 (도끼 든 성기사 반대편)',
         },
       },
     },
@@ -1812,6 +1817,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: '내게 둠이!!',
+          ko: '선고 대상자',
         },
       },
     },
@@ -1878,15 +1884,19 @@ const triggerSet: TriggerSet<Data> = {
         },
         circleWithDoom: {
           en: '빨강 ○ (둠)',
+          ko: '빨강 동그라미 (선고)',
         },
         triangleWithDoom: {
           en: '녹색 △ (둠)',
+          ko: '초록 삼각 (선고)',
         },
         squareWithDoom: {
           en: '보라 ■ (둠)',
+          ko: '보라 사각 (선고)',
         },
         crossWithDoom: {
           en: '파랑 Ⅹ (둠)',
+          ko: '파랑 X (선고)',
         },
       },
     },
