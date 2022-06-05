@@ -5,7 +5,7 @@ import { OopsyTriggerSet } from '../../../../../types/oopsy';
 import { kFlagInstantDeath, playerDamageFields } from '../../../oopsy_common';
 
 // TODO: 63DD Skyward Leap during Strength of the Heavens should ignore invulning tanks
-// TODO: track missing towers during 니드호그
+// TODO: track missing towers during Nidhogg
 
 export interface Data extends OopsyData {
   towerAbility?: string;
