@@ -176,19 +176,6 @@ const triggerSet: TriggerSet<Data> = {
         },
       },
     },
-    {
-      id: 'DSR+ 눈깔 선 안내',
-      regex: /Soul of Devotion/,
-      infoText: (data, _matches, output) => data.role === 'dps' ? output.red!() : output.blue!(),
-      outputStrings: {
-        blue: {
-          en: '첨엔 파란줄 챙겨욧!',
-        },
-        red: {
-          en: '첨엔 빨간줄 챙겨욧!',
-        },
-      },
-    },
   ],
   triggers: [
     {
@@ -839,13 +826,13 @@ const triggerSet: TriggerSet<Data> = {
       run: (data) => delete data.sanctityWardDir,
       outputStrings: {
         clockwise: {
-          en: '<==== 왼쪽으로',
+          en: '←←← 왼쪽으로',
           de: 'Im Uhrzeigersinn',
           ja: '時計回り',
           ko: '시계방향',
         },
         counterclock: {
-          en: '오른쪽으로 ====>',
+          en: '오른쪽으로 →→→',
           de: 'Gegen den Uhrzeigersinn',
           ja: '反時計回り',
           ko: '반시계방향',
@@ -1800,7 +1787,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         diveOnYou: {
-          en: '내게 카탈라이즈! (전사 반대쪽)',
+          en: '내게 카탈라이즈!',
           ko: '카탈 대상자 (도끼 든 성기사 반대편)',
         },
       },
@@ -1883,19 +1870,19 @@ const triggerSet: TriggerSet<Data> = {
           ko: '파랑 X',
         },
         circleWithDoom: {
-          en: '빨강 ○ (둠)',
+          en: '☠☠ 빨강 ○',
           ko: '빨강 동그라미 (선고)',
         },
         triangleWithDoom: {
-          en: '녹색 △ (둠)',
+          en: '☠☠ 녹색 △',
           ko: '초록 삼각 (선고)',
         },
         squareWithDoom: {
-          en: '보라 ■ (둠)',
+          en: '☠☠ 보라 ■',
           ko: '보라 사각 (선고)',
         },
         crossWithDoom: {
-          en: '파랑 Ⅹ (둠)',
+          en: '☠☠ 파랑 Ⅹ',
           ko: '파랑 X (선고)',
         },
       },
@@ -1920,6 +1907,7 @@ const triggerSet: TriggerSet<Data> = {
     },
     {
       id: 'DSR Hallowed Wings and Plume',
+      // Calls left and right while looking at Hraesvelgr.
       // 6D23 Head Down, Left Wing
       // 6D24 Head Up, Left Wing
       // 6D26 Head Down, Right Wing
@@ -1933,19 +1921,19 @@ const triggerSet: TriggerSet<Data> = {
         let wings;
         switch (matches.id) {
           case '6D23':
-            wings = output.right!();
+            wings = output.left!();
             head = data.role === 'tank' ? output.near!() : output.far!();
             break;
           case '6D24':
-            wings = output.right!();
+            wings = output.left!();
             head = data.role === 'tank' ? output.far!() : output.near!();
             break;
           case '6D26':
-            wings = output.left!();
+            wings = output.right!();
             head = data.role === 'tank' ? output.near!() : output.far!();
             break;
           case '6D27':
-            wings = output.left!();
+            wings = output.right!();
             head = data.role === 'tank' ? output.far!() : output.near!();
             break;
         }
@@ -1986,7 +1974,7 @@ const triggerSet: TriggerSet<Data> = {
       // Lasts 10.96s, but bosses do not cast Cauterize until 7.5s after debuff
       delaySeconds: (_data, matches) => parseFloat(matches.duration) - 6,
       infoText: (_data, matches, output) => {
-        if (matches.id === 'B52')
+        if (matches.effectId === 'B52')
           return output.hraesvelgr!();
         return output.nidhogg!();
       },
@@ -2077,7 +2065,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           // Only showing 'swap' is really confusing, in my opinion
-          en: '헤이트 둘째 유지해욧!',
+          en: '헤이트 2위욧!',
           de: 'Sei 2. in der Aggro',
           ko: '적개심 2순위 잡기',
         },
@@ -2384,9 +2372,9 @@ const triggerSet: TriggerSet<Data> = {
         'Haurchefant': 'オルシュファン',
         'Hraesvelgr': 'フレースヴェルグ',
         '(?<!Dragon-)King Thordan': '騎神トールダン',
-        'Left Eye': '竜の左眼',
+        'Left Eye': '邪竜の左眼',
         'Nidhogg': 'ニーズヘッグ',
-        'Right Eye': '竜の右眼',
+        'Right Eye': '邪竜の右眼',
         'Ser Adelphel': '聖騎士アデルフェル',
         'Ser Charibert': '聖騎士シャリベル',
         'Ser Grinnaux': '聖騎士グリノー',
