@@ -74,7 +74,7 @@ try {
     }
   }
 
-  if (($dllbuild -eq $TRUE) || ($npmbuild -eq $TRUE)) {
+  if ($dllbuild -eq $TRUE -Or $npmbuild -eq $TRUE) {
     ''
     $yn = New-QuestionYesNo "빌드한거 복사하실랑까요?"
     if ($yn -eq $TRUE) {
