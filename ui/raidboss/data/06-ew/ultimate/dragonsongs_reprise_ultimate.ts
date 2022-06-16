@@ -860,30 +860,16 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: 'DSR+ Sanctity of the Ward Swords',
+      id: 'DSR Sanctity of the Ward Swords',
       type: 'HeadMarker',
       netRegex: NetRegexes.headMarker(),
-      condition: (data) => data.phase === 'thordan',
-      preRun: (data, matches, _output) => {
+      condition: (data, matches) => data.phase === 'thordan' && data.me === matches.target,
+      alarmText: (data, matches, output) => {
         const id = getHeadmarkerId(data, matches);
         if (id === headmarkers.sword1)
-          data.sanctitySword1 = matches.target;
-        else if (id === headmarkers.sword2)
-          data.sanctitySword2 = matches.target;
-      },
-      response: (data, _matches, output) => {
-        if (data.sanctitySword1 === undefined || data.sanctitySword2 === undefined)
-          return;
-
-        const fs = data.ShortName(data.sanctitySword1);
-        const ns = data.ShortName(data.sanctitySword2);
-        console.log(`Sanctity 칼: ${fs} / ${ns}`);
-
-        if (data.sanctitySword1 === data.me)
-          return { alarmText: output.sword1!() };
-        if (data.sanctitySword2 === data.me)
-          return { alarmText: output.sword2!() };
-        return { infoText: output.swords!({ far: fs, near: ns }) };
+          return output.sword1!();
+        if (id === headmarkers.sword2)
+          return output.sword2!();
       },
       outputStrings: {
         sword1: {
@@ -898,10 +884,37 @@ const triggerSet: TriggerSet<Data> = {
           ja: '2',
           ko: '2',
         },
-        swords: {
-          en: '칼: ${far} / ${near}',
-          ja: '剣: ${far} / ${near}',
-          ko: '칼: ${far} / ${near}',
+      },
+    },
+    {
+      id: 'DSR Sanctity of the Ward Sword Names',
+      type: 'HeadMarker',
+      netRegex: NetRegexes.headMarker(),
+      condition: (data) => data.phase === 'thordan',
+      sound: '',
+      infoText: (data, matches, output) => {
+        const id = getHeadmarkerId(data, matches);
+        if (id === headmarkers.sword1)
+          data.sanctitySword1 = matches.target;
+        else if (id === headmarkers.sword2)
+          data.sanctitySword2 = matches.target;
+        else
+          return;
+
+        if (data.sanctitySword1 === undefined || data.sanctitySword2 === undefined)
+          return;
+
+        const name1 = data.ShortName(data.sanctitySword1);
+        const name2 = data.ShortName(data.sanctitySword2);
+        return output.text!({ name1: name1, name2: name2 });
+      },
+      // Don't collide with the more important 1/2 call.
+      tts: '',
+      outputStrings: {
+        text: {
+          en: '칼: ${name1}, ${name2}',
+          ja: '剣: ${name1} / ${name2}',
+          ko: '칼: ${name1} / ${name2}',
         },
       },
     },
@@ -1588,7 +1601,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '파랑',
+          en: '파란줄',
           de: 'Blau',
           ko: '파랑',
         },
@@ -1603,7 +1616,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '빨강',
+          en: '빨간줄',
           de: 'Rot',
           ko: '빨강',
         },
@@ -1671,8 +1684,7 @@ const triggerSet: TriggerSet<Data> = {
       type: 'StartsUsing',
       netRegex: NetRegexes.startsUsing({ id: '62E2', source: 'Ser Zephirin', capture: false }),
       // This ability also happens in doorboss phase.
-      // condition: (data) => data.role === 'tank' && data.phase === 'haurchefant',
-      condition: (data) => data.role === 'tank',
+      condition: (data) => data.role === 'tank' && data.phase === 'haurchefant',
       // This is a 10 second cast, and (from video) my understanding is to
       // hit tank LB when the cast bar gets to the "F" in "Fury", which is
       // roughly 2.8 seconds before it ends.
@@ -1798,7 +1810,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         diveOnYou: {
-          en: '내게 카탈라이즈!',
+          en: '내게 카탈라이즈! 몽둥이 뒤로!',
           ko: '카탈 대상자 (도끼 든 성기사 반대편)',
         },
       },
@@ -1825,7 +1837,7 @@ const triggerSet: TriggerSet<Data> = {
         },
         noDoom: {
           en: '둠 없음',
-          ko: '둠 없음',
+          ko: '선고 없음',
         },
       },
     },
@@ -1891,19 +1903,19 @@ const triggerSet: TriggerSet<Data> = {
           ko: '파랑 X',
         },
         circleWithDoom: {
-          en: '☠☠ 빨강 ○',
+          en: '☠ / 빨강 ○',
           ko: '빨강 동그라미 (선고)',
         },
         triangleWithDoom: {
-          en: '☠☠ 녹색 △',
+          en: '☠ / 녹색 △',
           ko: '초록 삼각 (선고)',
         },
         squareWithDoom: {
-          en: '☠☠ 보라 ■',
+          en: '☠ / 보라 ■',
           ko: '보라 사각 (선고)',
         },
         crossWithDoom: {
-          en: '☠☠ 파랑 Ⅹ',
+          en: '☠ / 파랑 Ⅹ',
           ko: '파랑 X (선고)',
         },
       },
@@ -1965,13 +1977,13 @@ const triggerSet: TriggerSet<Data> = {
         left: Outputs.left,
         right: Outputs.right,
         near: {
-          en: '흐레스벨그랑 붙어욧 (탱크버스터)',
+          en: '흐레스벨그 가까이서 탱크버스터욧!',
           de: 'Nahe Hraesvelgr (Tankbuster)',
           ja: 'フレースヴェルグに近づく (タンクバスター)',
           ko: '흐레스벨그 부근으로 (탱버)',
         },
         far: {
-          en: '흐레스벨그와 떨어져욧 (탱크버스터)',
+          en: '흐레스벨그 멀리서 탱크버스터욧!',
           de: 'Weit weg von Hraesvelgr (Tankbusters)',
           ja: 'フレースヴェルグから離れる (タンクバスター)',
           ko: '흐레스벨그와 멀어지기 (탱버)',
@@ -2087,7 +2099,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           // Only showing 'swap' is really confusing, in my opinion
-          en: '헤이트 2위욧!',
+          en: '다크! 헤이트 2위욧!',
           de: 'Sei 2. in der Aggro',
           ko: '적개심 2순위 잡기',
         },
@@ -2110,7 +2122,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         text: {
-          en: '프로보크!',
+          en: '라이트! 프로보크!',
           de: 'Herausforderung',
           ko: '도발하기',
         },

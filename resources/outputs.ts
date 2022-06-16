@@ -142,7 +142,7 @@ export default {
   },
   stackMarker: {
     // for stack marker situations
-    en: '뭉쳐모이기',
+    en: '뭉쳐요',
     de: 'Sammeln',
     fr: 'Packez-vous',
     ja: '頭割り',
@@ -151,7 +151,7 @@ export default {
   },
   getTogether: {
     // for getting together without stack marker
-    en: '뭉쳐모이기',
+    en: '뭉쳐요',
     de: 'Sammeln',
     fr: 'Packez-vous',
     ja: '集合',
@@ -167,7 +167,7 @@ export default {
     ko: '쉐어징 대상자',
   },
   stackOnPlayer: {
-    en: '모여뭉쳐욧: ${player}',
+    en: '뭉쳐욧: ${player}',
     de: 'Auf ${player} sammeln',
     fr: 'Packez-vous sur ${player}',
     ja: '${player}に集合',
@@ -175,7 +175,7 @@ export default {
     ko: '"${player}" 쉐어징',
   },
   stackMiddle: {
-    en: '가운데쪽에서 모여뭉쳐욧',
+    en: '가운데쪽에서 뭉쳐욧',
     de: 'In der Mitte sammeln',
     fr: 'Packez-vous au milieu',
     ja: '中央で集合',
