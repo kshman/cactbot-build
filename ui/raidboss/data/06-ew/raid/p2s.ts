@@ -72,12 +72,12 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.directions!(),
       outputStrings: {
         directions: {
-          en: 'Back of head',
+          en: '뒤통수로!',
           de: 'Zur Rückseite des Kopfes',
           fr: 'Derrière la tête',
           ja: '頭の後ろへ',
           cn: '去头的后面',
-          ko: '뒤통수 쪽으로',
+          ko: '머리 뒤쪽으로',
         },
       },
     },
@@ -89,12 +89,12 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.directions!(),
       outputStrings: {
         directions: {
-          en: 'Front of head',
+          en: '앞으로!',
           de: 'Zur Vorderseite des Kopfes',
           fr: 'Devant la tête',
           ja: '頭の前へ',
           cn: '去头的前面',
-          ko: '바라보는 쪽으로',
+          ko: '머리 앞쪽으로',
         },
       },
     },
@@ -106,7 +106,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.groups!(),
       outputStrings: {
         groups: {
-          en: 'Healer Groups',
+          en: '힐러 뭉치기',
           de: 'Heiler-Gruppen',
           fr: 'Groupes sur les heals',
           ja: 'ヒラに頭割り',
@@ -131,7 +131,7 @@ const triggerSet: TriggerSet<Data> = {
         // cactbot-builtin-response
         output.responseOutputStrings = {
           marks: {
-            en: 'Marks: ${player1}, ${player2}',
+            en: '해일: ${player1}, ${player2}',
             de: 'Marker: ${player1}, ${player2}',
             fr: 'Marques sur : ${player1}, ${player2}',
             ja: 'マーカー: ${player1}, ${player2}',
@@ -139,7 +139,7 @@ const triggerSet: TriggerSet<Data> = {
             ko: '징: ${player1}, ${player2}',
           },
           avariceOnYou: {
-            en: 'Avarice on YOU',
+            en: '내가 해일이라니',
             de: 'Marker auf DIR',
             fr: 'Marque sur VOUS',
             ja: 'マーカーついた',
@@ -203,15 +203,15 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         arrowFirst: {
-          en: 'Arrow First',
+          en: '화살표 먼저!',
           de: 'Pfeil zuerst',
           fr: 'Flèches en premières',
           ja: '突進→散開',
           cn: '先对冲',
-          ko: '화살표 돌진 먼저',
+          ko: '화살표 처리 먼저',
         },
         spreadFirst: {
-          en: 'Spread First',
+          en: '기믹 먼저! 흩어져욧!',
           de: 'Verteilen zuerst',
           fr: 'Dispersez-vous en premier',
           ja: '散開→突進',
@@ -255,7 +255,7 @@ const triggerSet: TriggerSet<Data> = {
       run: (data, matches) => data.flareTarget = matches.target,
       outputStrings: {
         text: {
-          en: 'Flare Tether',
+          en: '내게 줄이!',
           de: 'Flare Verbindung',
           fr: 'Lien Brasier',
           ja: 'フレアの線',
@@ -278,20 +278,20 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         flareLineStack: {
-          en: 'Line Stack (behind tank)',
+          en: '탱크 뒤로 한줄로!',
           de: 'Linien-Sammeln (hinter dem Tank)',
           fr: 'Package en ligne (derrière le tank)',
           ja: '直線頭割り（タンクより後ろ）',
           cn: '直线分摊（站坦克后面）',
-          ko: '탱커 뒤로 직선 쉐어',
+          ko: '직선 쉐어 (탱커 뒤로)',
         },
         flareLineTank: {
-          en: 'Line Stack (be in front)',
+          en: '줄 앞에서 막아욧!',
           de: 'Linien-Sammeln (vorne sein)',
           fr: 'Package en ligne (Placez-vous devant)',
           ja: '直線頭割り（みんなの前に）',
           cn: '直线分摊（坦克站前面）',
-          ko: '직선 쉐어 맨 앞으로',
+          ko: '직선 쉐어 (맨 앞으로)',
         },
       },
     },
@@ -313,7 +313,7 @@ const triggerSet: TriggerSet<Data> = {
         // cactbot-builtin-response
         output.responseOutputStrings = {
           squareAcross: {
-            en: '#${num} Square, go across',
+            en: '#${num} ■, 저쪽 발판',
             de: '#${num} Viereck, geh gegenüber',
             fr: '#${num} Carré, allez à l\'opposé',
             ja: '四角 #${num}：ボスの対角へ',
@@ -322,7 +322,7 @@ const triggerSet: TriggerSet<Data> = {
           },
           // Trying not to confuse with boss/across
           squareBoss: {
-            en: '#${num} Square, boss tile',
+            en: '#${num} ■, 보스 발판',
             de: '#${num} Viereck, Boss Fläche',
             fr: '#${num} Carré, case du boss',
             ja: '四角 #${num}：ボスの下へ',
@@ -330,7 +330,7 @@ const triggerSet: TriggerSet<Data> = {
             ko: '#${num} 네모, 보스 발판으로',
           },
           triangle: {
-            en: '#${num} Triangle',
+            en: '#${num} ▲, 숫자로',
             de: '#${num} Dreieck',
             fr: '#${num} Triangle',
             ja: '三角 #${num}',
@@ -515,9 +515,37 @@ const triggerSet: TriggerSet<Data> = {
     },
     {
       'locale': 'ko',
-      'missingTranslations': true,
       'replaceSync': {
         'Hippokampos': '히포캄포스',
+      },
+      'replaceText': {
+        '\\(knockback\\)': '(넉백)',
+        '\\(short\\)': '(13초)',
+        '\\(long\\)': '(28초)',
+        'Channeling Flow': '방향성 흐름',
+        'Channeling Overflow': '방향성 급류',
+        'Coherence(?! [FL])': '간섭 공격',
+        'Coherence Flare': '간섭 공격 (플레어)',
+        'Coherence Line': '간섭 공격 (쉐어)',
+        'Crash': '충돌',
+        'Deadly Current': '격류 충돌',
+        'Dissociation(?! Dive)': '머리 분리',
+        'Dissociation Dive': '머리 분리 (돌진)',
+        'Doubled Impact': '이중 충격',
+        'Great Typhoon': '황파',
+        'Hard Water': '무거운 물덩어리',
+        'Kampeos Harma': '바다괴물 전차',
+        'Murky Depths': '짙은 탁류',
+        'Ominous Bubbling(?! Groups)': '불길한 물방울',
+        'Ominous Bubbling Groups': '불길한 물방울 (쉐어)',
+        'Predatory Avarice': '다중 각인',
+        'Predatory Sight': '먹잇감 각인',
+        'Sewage Deluge': '하수 범람',
+        'Sewage Eruption': '하수 분출',
+        'Shockwave': '충격 파동',
+        'Spoken Cataract/Winged Cataract': '숨결/날갯짓 홍수',
+        'Tainted Flood': '오염 침수',
+        'Winged Cataract/Spoken Cataract': '날갯짓/숨결 홍수',
       },
     },
   ],

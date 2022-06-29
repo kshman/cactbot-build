@@ -157,7 +157,7 @@ export const IsTriggerEnabled = (options: OopsyOptions, id: string): boolean => 
 
 export const GetSoloMistakeText = (ability: string): LocaleText => {
   return {
-    en: `${ability} (홀로)`,
+    en: `${ability} (홀로 맞았슴)`,
     de: `${ability} (allein)`,
     fr: `${ability} (seul(e))`,
     ja: `${ability} (一人)`,
@@ -168,7 +168,7 @@ export const GetSoloMistakeText = (ability: string): LocaleText => {
 
 export const GetShareMistakeText = (ability: string, numTargets: number): LocaleText => {
   return {
-    en: `${ability} (${numTargets}명 뭉쳐서)`,
+    en: `${ability} (${numTargets}명이 같이 맞았슴)`,
     de: `${ability} (geteilt mit ${numTargets})`,
     fr: `${ability} (partage)`, // FIXME
     ja: `${ability} (頭割り)`, // FIXME

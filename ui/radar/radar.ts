@@ -344,7 +344,7 @@ class Radar {
   }
 
   UpdateMonsterPuller(monster: Monster, puller: string) {
-    if (monster.puller || monster.alreadyPulled)
+    if (monster.puller !== undefined || monster.alreadyPulled)
       return;
 
     PlayPullSound(monster, this.options);

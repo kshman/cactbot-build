@@ -11,9 +11,11 @@ import { NetMatches } from '../../types/net_matches';
 import { LogUtilArgParse, TimelineArgs } from './arg_parser';
 import { printCollectedFights, printCollectedZones } from './encounter_printer';
 import { EncounterCollector, FightEncInfo, TLFuncs } from './encounter_tools';
+import FFLogs, { ffLogsEventEntry } from './fflogs';
 
-// TODO: Add support for auto-commenting repeated abilities
-// that can't be synced but should be visible.
+// TODO: Repeated abilities that need to be auto-commented may not get the comment marker
+// if there's an intervening entry between the repeated entries.
+// Figure out a more robust way to auto-comment lines that should be visible but unsynced.
 
 // TODO: Add support for assigning sync windows to specific abilities,
 // with or without phase conditions.
@@ -68,6 +70,9 @@ class ExtendedArgsNamespace extends Namespace implements ExtendedArgs {
   'only_combatant': string[] | null;
   'phase': string | null;
   'include_targetable': string[] | null;
+  'report_id': string | null;
+  'report_fight': number | null;
+  'key': string | null;
 }
 
 // Some NPCs can be picked up by our entry processor.
@@ -141,6 +146,7 @@ timelineParse.parser.addArgument(['--include_targetable', '-it'], {
   nargs: '+',
   help: 'Set this flag to include "34" log lines when making the timeline',
 });
+
 const args = new ExtendedArgsNamespace({});
 timelineParse.parser.parseArgs(undefined, args);
 
@@ -151,18 +157,25 @@ const printHelpAndExit = (errString: string): void => {
 };
 
 // TODO: Revisit this logic when we re-add FFLogs support.
-if (args.file === null)
-  printHelpAndExit('Error: Must specify -f\n');
-if (!args.file?.includes('.log'))
+if (
+  args.file === null && args.report_id === null ||
+  (args.file !== null && args.report_id !== null)
+)
+  printHelpAndExit('Error: Must specify exactly one of -f or -r\n');
+if (args.file !== null && !args.file?.includes('.log'))
   printHelpAndExit('Error: Must specify an FFXIV ACT log file, as log.log\n');
+if (args.report_fight !== null && args.report_id === '')
+  printHelpAndExit('Error: Must specify a report ID.');
 let numExclusiveArgs = 0;
-const exclusiveArgs = ['search_fights', 'search_zones'] as const;
+const exclusiveArgs = ['search_fights', 'search_zones', 'report_fight'] as const;
 for (const opt of exclusiveArgs) {
   if (args[opt] !== null)
     numExclusiveArgs++;
 }
 if (numExclusiveArgs !== 1)
-  printHelpAndExit('Error: Must specify exactly one of -lf or -lz\n');
+  printHelpAndExit('Error: Must specify exactly one of -lf, -lz, or -rf\n');
+if (args.report_id !== null && (args.report_fight === null || args.report_fight < 0))
+  printHelpAndExit('Error: Must specify a report fight index of 0 or greater');
 if (args.fight_regex === '-1')
   printHelpAndExit('Error: Timeline generation does not currently support -fr\n');
 if (args.zone_regex === '-1')
@@ -205,7 +218,86 @@ const parseAbilityToEntry = (matches: NetMatches['Ability']): TimelineEntry => {
   return entry;
 };
 
-const extractRawLines = async (
+const parseFFLogsEventToEntry = (
+  event: ffLogsEventEntry,
+  enemies: { [index: string]: string },
+  startTime: number,
+): TimelineEntry => {
+  const timestamp = startTime + event.timestamp;
+
+  let combatant: string | undefined;
+  if (event.source !== undefined)
+    combatant = enemies[event.source.id];
+  else if (event.sourceID !== undefined)
+    combatant = enemies[event.sourceID];
+  else
+    combatant = 'Unknown';
+
+  const abilityId = event.ability.guid.toString(16).toUpperCase();
+  let ability = event.ability.name;
+  if (event.ability.name.toLowerCase().startsWith('unknown_'))
+    ability = '--sync--';
+
+  const entry: TimelineEntry = {
+    time: new Date(timestamp).toISOString(),
+    combatant: combatant,
+    abilityId: abilityId,
+    abilityName: ability,
+    lineType: 'ability',
+  };
+  return entry;
+};
+
+const parseReport = async (
+  reportId: string,
+  fightIndex: number,
+  apiKey: string,
+): Promise<{ 'entries': TimelineEntry[]; 'abilityTimes': { [abilityId: string]: number[] } }> => {
+  const rawReportData = await FFLogs.getFightInfo(reportId, apiKey);
+  const reportStartTime = rawReportData.start;
+  // First we verify that the user entered a valid index
+  let chosenFight;
+  for (const fight of rawReportData.fights) {
+    if (fight.id === fightIndex)
+      chosenFight = fight;
+  }
+  if (chosenFight === undefined) {
+    console.error('No encounter found in the report at that fight index.');
+    process.exit(-2);
+  }
+
+  // Knowing that the encounter exists in the report,
+  // we next assemble the list of all hostile entities in the report.
+  // Unfortunately, entity data is not present in the data for individual encounters,
+  // so we have to do some matching magic.
+  const enemies = FFLogs.extractEnemiesFromReport(rawReportData);
+  const rawFightData = await FFLogs.getEventData(
+    reportId,
+    apiKey,
+    chosenFight.start_time,
+    chosenFight.end_time,
+  );
+
+  const entries: TimelineEntry[] = [];
+  const abilityTimeMap: { [abilityId: string]: number[] } = {};
+
+  for (const event of rawFightData) {
+    // FFLogs mixes 14 StartsUsing lines in with 15/16 Ability lines.
+    if (event.type !== 'cast')
+      continue;
+    entries.push(parseFFLogsEventToEntry(event, enemies, chosenFight.start_time + reportStartTime));
+
+    // Store off exact times for each ability's usages for later sync commenting
+    const abilityId = event.ability.guid.toString(16).toUpperCase();
+    const abilityTimeStamp = chosenFight.start_time + reportStartTime + event.timestamp;
+    abilityTimeMap[abilityId] ??= [];
+    if (!abilityTimeMap[abilityId]?.includes(abilityTimeStamp))
+      abilityTimeMap[abilityId]?.push(abilityTimeStamp);
+  }
+  return { entries: entries, abilityTimes: abilityTimeMap };
+};
+
+const extractRawLinesFromLog = async (
   fileName: string,
   start: string | Date,
   end: string | Date,
@@ -234,11 +326,12 @@ const extractRawLines = async (
   return lines;
 };
 
-const extractTLEntries = (
+const extractTLEntriesFromLog = (
   lines: string[],
   targetArray: string[] | null,
-): TimelineEntry[] => {
+): { 'entries': TimelineEntry[]; 'abilityTimes': { [abilityId: string]: number[] } } => {
   const entries: TimelineEntry[] = [];
+  const abilityTimeMap: { [abilityId: string]: number[] } = {};
   for (const line of lines) {
     const targetable = NetRegexes.nameToggle().exec(line)?.groups;
     const ability = NetRegexes.ability().exec(line)?.groups;
@@ -264,6 +357,12 @@ const extractTLEntries = (
         continue;
       const abilityEntry = parseAbilityToEntry(ability);
       entries.push(abilityEntry);
+
+      // Store off exact times for each ability's usages for later sync commenting
+      abilityTimeMap[ability.id] ??= [];
+      const timestamp = Date.parse(ability.timestamp);
+      if (!abilityTimeMap[ability.id]?.includes(timestamp))
+        abilityTimeMap[ability.id]?.push(timestamp);
       continue;
     }
 
@@ -277,9 +376,9 @@ const extractTLEntries = (
 
   if (entries.length === 0) {
     console.error('Fight not found');
-    process.exit(-1);
+    process.exit(-2);
   } else {
-    return entries;
+    return { entries: entries, abilityTimes: abilityTimeMap };
   }
 };
 
@@ -297,23 +396,23 @@ const ignoreTimelineAbilityEntry = (entry: TimelineEntry, args: ExtendedArgs): b
     return true;
 
   // Ignore abilities from NPC allies.
-  if (combatant && ignoredCombatants.includes(combatant))
+  if (combatant !== undefined && ignoredCombatants.includes(combatant))
     return true;
 
   // Ignore abilities by name.
-  if (abilityName && ia !== null && ia.includes(abilityName))
+  if (abilityName !== undefined && ia !== null && ia.includes(abilityName))
     return true;
 
   // Ignore abilities by ID
-  if (abilityId && ii !== null && ii.includes(abilityId))
+  if (abilityId !== undefined && ii !== null && ii.includes(abilityId))
     return true;
 
   // Ignore combatants by name
-  if (combatant && ic !== null && ic.includes(combatant))
+  if (combatant !== undefined && ic !== null && ic.includes(combatant))
     return true;
 
   // If only-combatants was specified, ignore all combatants not in the list.
-  if (combatant && oc !== null && !oc.includes(combatant))
+  if (combatant !== undefined && oc !== null && !oc.includes(combatant))
     return true;
   return false;
 };
@@ -349,16 +448,17 @@ const findTimeDifferences = (lastTimeDiff: number): { diffSeconds: number; drift
 };
 
 const assembleTimelineStrings = (
-  fight: FightEncInfo,
   entries: TimelineEntry[],
+  abilityTimes: { [abilityId: string]: number[] },
   start: Date,
   args: ExtendedArgs,
+  fight?: FightEncInfo,
 ): string[] => {
   const assembled: string[] = [];
   let lastAbilityTime = (start.getTime());
   let timelinePosition = 0;
   let lastEntry: TimelineEntry = { time: lastAbilityTime.toString(), lineType: 'None' };
-  if (fight.sealName) {
+  if (fight !== undefined && fight.sealName !== undefined) {
     const zoneMessage = SFuncs.toProperCase(fight.sealName);
     const tlString = `0.0 "--sync--" sync / 00:0839::${zoneMessage} will be sealed off/ window 0,1`;
     assembled.push(tlString);
@@ -369,11 +469,11 @@ const assembleTimelineStrings = (
   // If the user entered phase information,
   // process it and store it off.
   const phases: { [name: string]: number } = {};
-  if (args.phase) {
+  if (args.phase !== null) {
     for (const phase of args.phase) {
       const ability = phase.split(':')[0];
       const time = phase.split(':')[1];
-      if (ability && time)
+      if (ability !== undefined && time !== undefined)
         phases[ability] = parseInt(time);
     }
   }
@@ -385,7 +485,11 @@ const assembleTimelineStrings = (
 
     // Ignore AoE spam
     if (lastEntry.time === entry.time) {
-      if (entry.abilityId && lastEntry.abilityId && entry.abilityId === lastEntry.abilityId)
+      if (
+        entry.abilityId !== undefined &&
+        lastEntry.abilityId !== undefined &&
+        entry.abilityId === lastEntry.abilityId
+      )
         continue;
     }
 
@@ -413,12 +517,22 @@ const assembleTimelineStrings = (
     // We're done manipulating time, so save where we are for the next loop.
     lastAbilityTime = lineTime;
 
+    // If a given use of an ability is within 2.5 seconds of another use,
+    // we want to comment it by default.
+    const checkAbilityTime = (element: number) => Math.abs(lineTime - element) <= 2500;
+    const lineAbilityTimeList = abilityTimes[abilityId];
+    let commentSync = '';
+    if (lineAbilityTimeList !== undefined && lineAbilityTimeList.length > 1) {
+      const overlaps = lineAbilityTimeList.filter(checkAbilityTime).length > 1;
+      commentSync = overlaps ? '#' : '';
+    }
+
     if (entry.lineType !== 'nameToggle') {
       const ability = entry.abilityName ?? 'Unknown';
       const combatant = entry.combatant ?? 'Unknown';
       const newEntry = `${
         timelinePosition.toFixed(1)
-      } "${ability}" sync / 1[56]:[^:]*:${combatant}:${abilityId}:/`;
+      } "${ability}" ${commentSync}sync / 1[56]:[^:]*:${combatant}:${abilityId}:/`;
       assembled.push(newEntry);
     } else {
       const targetable = entry.targetable ? '--targetable--' : '--untargetable--';
@@ -427,6 +541,40 @@ const assembleTimelineStrings = (
     }
     lastEntry = entry;
   }
+  return assembled;
+};
+
+const parseTimelineFromFile = async (args: ExtendedArgs, file: string, fight: FightEncInfo) => {
+  const startTime = fight.startTime;
+  const endTime = fight.endTime;
+  // All encounters on a collector will guaranteed have a start/end time,
+  // but Typescript doesn't know that.
+  if (!(startTime && endTime)) {
+    console.error('Missing start or end time at specified index.');
+    process.exit(1);
+  }
+  // This logic can probably be split out once we re-enable support for raw start/end times.
+  let lines: string[];
+  if (fight.logLines !== undefined) {
+    lines = fight.logLines;
+  } else {
+    lines = await extractRawLinesFromLog(
+      file,
+      TLFuncs.timeFromDate(startTime),
+      TLFuncs.timeFromDate(endTime),
+    );
+  }
+  const baseEntries = extractTLEntriesFromLog(
+    lines,
+    args.include_targetable,
+  );
+  const assembled = assembleTimelineStrings(
+    baseEntries.entries,
+    baseEntries.abilityTimes,
+    startTime,
+    args,
+    fight,
+  );
   return assembled;
 };
 
@@ -452,7 +600,24 @@ const writeTimelineToFile = (entryList: string[], fileName: string, force: boole
 };
 
 const makeTimeline = async () => {
-  if (args.file) {
+  let assembled: string[] = [];
+  if (args.report_id !== null && args.report_fight !== null && args.key !== null) {
+    const rawEntries = await parseReport(args.report_id, args.report_fight, args.key);
+    // Account for the possibility of a malformed response that somehow
+    // ends up with a defined encounter but produces bogus or no entries.
+    if (rawEntries.entries.length === 0 || rawEntries.entries[0] === undefined) {
+      console.error('No encounter found in the report at that fight index.');
+      process.exit(-2);
+    }
+    const startTime = new Date(rawEntries.entries[0].time);
+    assembled = assembleTimelineStrings(
+      rawEntries.entries,
+      rawEntries.abilityTimes,
+      startTime,
+      args,
+    );
+  }
+  if (args.file !== null && args.file.length > 0) {
     const store = (args.search_fights !== null && (args.search_fights > 0));
     const collector = await makeCollectorFromPrepass(args.file, store);
     if (args['search_fights'] === -1) {
@@ -467,43 +632,20 @@ const makeTimeline = async () => {
     // so we subtract 1 from the user's 1-indexed selection.
     if (args.search_fights) {
       const fight = collector.fights[args.search_fights - 1];
-      if (!fight) {
+      if (fight === undefined) {
         console.error('No fight found at specified index');
-        process.exit(-1);
+        process.exit(-2);
       }
-      const startTime = fight.startTime;
-      const endTime = fight.endTime;
-      // All encounters on a collector will guaranteed have a start/end time,
-      // but Typescript doesn't know that.
-      if (!(startTime && endTime)) {
-        console.error('Missing start or end time at specified index.');
-        process.exit(1);
-      }
-      // This logic can probably be split out once we re-enable support for raw start/end times.
-      let lines: string[];
-      if (fight.logLines !== undefined) {
-        lines = fight.logLines;
-      } else {
-        lines = await extractRawLines(
-          args.file,
-          TLFuncs.timeFromDate(startTime),
-          TLFuncs.timeFromDate(endTime),
-        );
-      }
-      const baseEntries = extractTLEntries(
-        lines,
-        args.include_targetable,
-      );
-      const assembled = assembleTimelineStrings(fight, baseEntries, startTime, args);
-      if (typeof args.output_file === 'string') {
-        const force = args.force !== null;
-        writeTimelineToFile(assembled, args.output_file, force);
-      }
-      if (args.output_file === null)
-        printTimelineToConsole(assembled);
-      process.exit(0);
+      assembled = await parseTimelineFromFile(args, args.file, fight);
     }
   }
+  if (typeof args.output_file === 'string') {
+    const force = args.force !== null;
+    writeTimelineToFile(assembled, args.output_file, force);
+  }
+  if (args.output_file === null)
+    printTimelineToConsole(assembled);
+  process.exit(0);
 };
 
 void makeTimeline();

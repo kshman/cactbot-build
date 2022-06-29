@@ -17,6 +17,9 @@ class SplitLogArgs extends Namespace implements TimelineArgs {
   'search_zones': number | null;
   'fight_regex': string | null;
   'zone_regex': string | null;
+  'report_id': string | null;
+  'report_fight': number | null;
+  'key': string | null;
 }
 
 // TODO: add options for not splitting / not anonymizing.
@@ -165,10 +168,10 @@ void (async function() {
     process.exit(exitCode);
   }
 
-  if (args['fight_regex']) {
+  if (args['fight_regex'] !== null) {
     const regex = new RegExp(args['fight_regex'], 'i');
     for (const fight of collector.fights) {
-      if (fight.sealName) {
+      if (fight.sealName !== undefined) {
         if (!fight.sealName.match(regex))
           continue;
       } else if (!fight.fightName?.match(regex)) {
@@ -177,7 +180,7 @@ void (async function() {
       await writeFile(TLFuncs.generateFileName(fight), fight.startLine, fight.endLine);
     }
     process.exit(exitCode);
-  } else if (args['zone_regex']) {
+  } else if (args['zone_regex'] !== null) {
     const regex = new RegExp(args['zone_regex'], 'i');
     for (const zone of collector.zones) {
       if (!zone.zoneName?.match(regex))

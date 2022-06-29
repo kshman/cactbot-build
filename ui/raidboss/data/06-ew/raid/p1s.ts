@@ -30,7 +30,7 @@ const flailDirections = {
 
 const fireLightOutputStrings = {
   fire: {
-    en: 'Stand on fire',
+    en: '빨간 바닥!',
     de: 'Auf der Feuerfläche stehen',
     fr: 'Placez-vous sur le feu',
     ja: '炎の床へ',
@@ -38,7 +38,7 @@ const fireLightOutputStrings = {
     ko: '빨간 바닥으로',
   },
   light: {
-    en: 'Stand on light',
+    en: '하얀 바닥!',
     de: 'Auf der Lichtfläche stehen',
     fr: 'Placez-vous sur la lumière',
     ja: '光の床へ',
@@ -58,7 +58,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.positions!(),
       outputStrings: {
         positions: {
-          en: 'Tile Positions',
+          en: '타일 위치로!',
           de: 'Flächen-Positionen',
           fr: 'Positions sur les cases',
           ja: '自分の担当マスへ',
@@ -87,12 +87,12 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         closeShacklesOnYou: {
-          en: 'Close Shackles on YOU',
+          en: '내가 안쪽이라니!',
           de: 'Nahe Fesseln auf DIR',
           fr: 'Chaînes proches sur VOUS',
           ja: '紫鎖（近い方）',
           cn: '紫锁（近）点名',
-          ko: '안쪽 쇠사슬(자주색)',
+          ko: '안쪽 쇠사슬(보라색)',
         },
       },
     },
@@ -108,7 +108,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         farShacklesOnYou: {
-          en: 'Far Shackles on YOU',
+          en: '내가 바깥쪽이라니!',
           de: 'Entfernte Fesseln auf DIR',
           fr: 'Chaînes éloignées sur VOUS',
           ja: '赤鎖（遠い方）',
@@ -142,7 +142,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         closeShacklesOn: {
-          en: 'Close Shackles on ${close}',
+          en: '안쪽: ${close}',
           de: 'Nahe Fesseln auf ${close}',
           fr: 'Chaînes proches sur ${close}',
           ja: '紫鎖（近い方）：${close}',
@@ -150,7 +150,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '안쪽 쇠사슬: ${close}',
         },
         farShacklesOn: {
-          en: 'Far Shackles on ${far}',
+          en: '바깥쪽: ${far}',
           de: 'Entfernte Fesseln auf ${far}',
           fr: 'Chaînes éloignées sur ${far}',
           ja: '赤鎖（遠い方）：${far}',
@@ -158,7 +158,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '바깥쪽 쇠사슬: ${far}',
         },
         shacklesOn: {
-          en: 'Close: ${close}, Far: ${far}',
+          en: '안쪽: ${close}, 바깥쪽: ${far}',
           de: 'Nahe: ${close}, Entfernt: ${far}',
           fr: 'Proches : ${close}, Éloignées : ${far}',
           ja: '紫鎖（近い方）：${close}、赤鎖（遠い方）：${far}',
@@ -225,7 +225,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.directions!(),
       outputStrings: {
         directions: {
-          en: 'Tankbuster+Knockback => Stack',
+          en: 'MT 버스터 → ST 함께 맞기',
           de: 'Tankbuster+Rückstoß => Sammeln',
           fr: 'Tank buster + Poussée => Packez-vous',
           ja: 'タンクバスター+ノックバック => 頭割り',
@@ -241,7 +241,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.directions!(),
       outputStrings: {
         directions: {
-          en: 'Tankbuster+Knockback => Flare',
+          en: 'MT 버스터 → ST 홀로 플레어',
           de: 'Tankbuster+Rückstoß => Flare',
           fr: 'Tank buster + Poussée => Brasier',
           ja: 'タンクバスター+ノックバック => フレア',
@@ -257,7 +257,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Bottom First',
+          en: '아래부터 터짐',
           de: 'Unten zuerst',
           fr: 'Cube inférieur en premier',
           ja: '下から',
@@ -273,7 +273,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Top First',
+          en: '위부터 터짐',
           de: 'Oben zuerst',
           fr: 'Cube supérieur en premier',
           ja: '上から',
@@ -293,7 +293,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         red: {
-          en: 'Get hit by red',
+          en: '빨강!!!',
           de: 'Von Rot treffen lassen',
           fr: 'Faites-vous toucher par le rouge',
           ja: '炎に当たる',
@@ -301,7 +301,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '빨간색 맞기',
         },
         blue: {
-          en: 'Get hit by blue',
+          en: '파랑!!!',
           de: 'Von Blau treffen lassen',
           fr: 'Faites-vous toucher par le bleu',
           ja: '氷に当たる',
@@ -331,7 +331,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         oppositePlayer: {
-          en: 'Opposite color of ${player}',
+          en: '바닥 폭파: ${player}',
           de: 'Gegenteilige Farbe von ${player}',
           fr: 'Couleur opposée de ${player}',
           ja: '${player}と反対の色へ',
@@ -339,7 +339,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '${player}의 반대 색으로',
         },
         oppositeParty: {
-          en: 'Opposite color of Party',
+          en: '내가 바닥 폭파라니!',
           de: 'Gegenteilige Farbe von der Party',
           fr: 'Couleur opposée à l\'équipe',
           ja: '他のメンバーと反対の色へ',
@@ -357,7 +357,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Close (3s)',
+          en: '안쪽 1 ▶ 3초',
           de: 'Nahe (3s)',
           fr: 'Proches (3s)',
           ja: '紫鎖（近い方） (3s)',
@@ -375,7 +375,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Close (8s)',
+          en: '안쪽2 ▶ 8초',
           de: 'Nahe (8s)',
           fr: 'Proches (8s)',
           ja: '紫鎖（近い方） (8s)',
@@ -393,7 +393,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Close (13s)',
+          en: '안쪽3 ▶ 13초',
           de: 'Nahe (13s)',
           fr: 'Proches (13s)',
           ja: '紫鎖（近い方） (13s)',
@@ -411,7 +411,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Close (18s)',
+          en: '안쪽4 ▶ 18초',
           de: 'Nahe (18s)',
           fr: 'Proches (18s)',
           ja: '紫鎖（近い方） (18s)',
@@ -429,7 +429,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Far (3s)',
+          en: '바깥1 ▷ 3초',
           de: 'Entfernt (3s)',
           fr: 'Éloignées (3s)',
           ja: '赤鎖（遠い方） (3s)',
@@ -447,7 +447,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Far (8s)',
+          en: '바깥2 ▷ 8초',
           de: 'Entfernt (8s)',
           fr: 'Éloignées (8s)',
           ja: '赤鎖（遠い方） (8s)',
@@ -465,7 +465,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Far (13s)',
+          en: '바깥3 ▷ 13초',
           de: 'Entfernt (13s)',
           fr: 'Éloignées (13s)',
           ja: '赤鎖（遠い方） (13s)',
@@ -483,7 +483,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Far (18s)',
+          en: '바깥4 ▷ 18초',
           de: 'Entfernt (18s)',
           fr: 'Éloignées (18s)',
           ja: '赤鎖（遠い方） (18s)',
@@ -636,9 +636,35 @@ const triggerSet: TriggerSet<Data> = {
     },
     {
       'locale': 'ko',
-      'missingTranslations': true,
       'replaceSync': {
         'Erichthonios': '에리크토니오스',
+      },
+      'replaceText': {
+        'Aetherchain': '폭쇄',
+        'Aetherial Shackles': '결박 사슬',
+        'Chain Pain': '결박 집행',
+        'First Element': '큐브 폭발 #1',
+        'Fourfold Shackles': '4연속 결박 사슬',
+        'Gaoler\'s Flail(?! [IO])': '징벌격',
+        'Gaoler\'s Flail In/Out': '징벌격 안/밖',
+        'Gaoler\'s Flail Out/In': '징벌격 밖/안',
+        'Heavy Hand': '통격',
+        'Inevitable Flame/Inevitable Light': '시한 염폭/광폭',
+        'Intemperance': '얼음불 침식',
+        'Intemperate Torment': '침식 집행',
+        'Lethe': '변옥 수감',
+        'Pitiless Flail of Grace(?!/)': '징벌 연격: 신성',
+        'Pitiless Flail of Grace/Pitiless Flail of Purgation': '징벌 연격: 신성/화염',
+        'Powerful Fire': '염폭',
+        'Powerful Light': '광폭',
+        'Second Element': '큐브 폭발 #2',
+        'Shackles of Time(?!/)': '시한부 사슬',
+        'Shackles of Time/Aetherial Shackles': '시한부/결박 사슬',
+        'Shining Cells': '광염 감옥',
+        'Slam Shut': '감옥 폐쇄',
+        'Third Element': '큐브 폭발 #3',
+        'True Flare/True Holy': '진 플레어/홀리',
+        'Warder\'s Wrath': '사슬난류',
       },
     },
   ],

@@ -11,8 +11,6 @@ export interface Data extends RaidbossData {
   phase?: string;
   titanGaols?: string[];
   titanBury?: NetMatches['AddedCombatant'][];
-  // PRs
-  titanShorts?: string[];
 }
 
 // Ultima Weapon Ultimate
@@ -33,7 +31,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '움직여욧!',
+          en: 'Move!',
           de: 'Bewegen',
           fr: 'Bougez !',
           ja: 'フェザーレイン',
@@ -67,7 +65,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '슬립 스트림',
+          en: 'Slipstream',
           de: 'Wirbelströmung',
           fr: 'Sillage',
           ja: 'スリップストリーム',
@@ -84,7 +82,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '내게 미스트랄 송!',
+          en: 'Mistral on YOU',
           de: 'Mistral-Song',
           fr: 'Mistral sur VOUS',
           ja: 'ミストラルソング',
@@ -102,7 +100,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '미스트랄 송',
+          en: 'Mistral Song',
           de: 'Mistral-Song',
           fr: 'Chant du mistral',
           ja: 'ミストラルソング',
@@ -119,7 +117,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '스파이니 플럼 나옴',
+          en: 'Spiny Plume Add',
           de: 'Dorniger Federsturm',
           fr: 'Add Plume perforante',
           ja: 'スパイニープルーム',
@@ -137,7 +135,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '내게 사슬!',
+          en: 'Fetters on YOU',
           de: 'Fesseln auf DIR',
           fr: 'Chaînes sur VOUS',
           ja: '自分に炎獄の鎖',
@@ -154,7 +152,7 @@ const triggerSet: TriggerSet<Data> = {
       alarmText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '내게 작열!',
+          en: 'Searing Wind on YOU',
           de: 'Versengen auf DIR',
           fr: 'Carbonisation sur VOUS',
           ja: '自分に灼熱',
@@ -170,7 +168,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '뭉쳐 맞아욧',
+          en: 'Stack',
           de: 'Stack',
           fr: 'Packez-vous',
           ja: '頭割り',
@@ -261,14 +259,9 @@ const triggerSet: TriggerSet<Data> = {
       preRun: (data, matches) => {
         data.titanGaols ??= [];
         data.titanGaols.push(matches.target);
-        data.titanShorts ??= [];
-        data.titanShorts.push(data.ShortName(matches.target));
-        if (data.titanGaols.length === 3) {
+        if (data.titanGaols.length === 3)
           data.titanGaols.sort();
-          data.titanShorts.sort();
-        }
       },
-      durationSeconds: 6,
       alertText: (data, _matches, output) => {
         if (data.titanGaols?.length !== 3)
           return;
@@ -281,14 +274,6 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (data, _matches, output) => {
         if (data.titanGaols?.length !== 3)
           return;
-        if (data.titanShorts?.length === 3) {
-          console.log('감옥: ' + data.titanShorts.join(' / '));
-          return output.text!({
-            player1: data.titanShorts[0],
-            player2: data.titanShorts[1],
-            player3: data.titanShorts[2],
-          });
-        }
         return output.text!({
           player1: data.ShortName(data.titanGaols[0]),
           player2: data.ShortName(data.titanGaols[1]),
@@ -297,7 +282,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         num: {
-          en: '${num}번째!',
+          en: '${num}',
           de: '${num}',
           fr: '${num}',
           ja: '${num}',
@@ -305,7 +290,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '${num}',
         },
         text: {
-          en: '순서: ${player1}, ${player2}, ${player3}',
+          en: '${player1}, ${player2}, ${player3}',
           de: '${player1}, ${player2}, ${player3}',
           fr: '${player1}, ${player2}, ${player3}',
           ja: '${player1}, ${player2}, ${player3}',
@@ -328,7 +313,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         text: {
-          en: '${player} 쥬금 ㅠ_ㅜ',
+          en: '${player} died',
           de: '${player} gestorben',
           fr: '${player} est mort(e)',
           ja: '${player} 死にました',
@@ -342,10 +327,7 @@ const triggerSet: TriggerSet<Data> = {
       type: 'Ability',
       netRegex: NetRegexes.ability({ id: ['2B6C', '2B6B'], source: ['Garuda', 'Titan'], capture: false }),
       delaySeconds: 15,
-      run: (data) => {
-        delete data.titanGaols;
-        delete data.titanShorts;
-      },
+      run: (data) => delete data.titanGaols,
     },
     {
       id: 'UWU Suppression Gaol',
@@ -355,7 +337,7 @@ const triggerSet: TriggerSet<Data> = {
       alarmText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '내가 감옥이라니!',
+          en: 'Gaol on YOU',
           de: 'Granitgefängnis',
           fr: 'Geôle sur VOUS',
           ja: 'ジェイル',
@@ -371,7 +353,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '가운데로 레이저',
+          en: 'Middle Laser',
           de: 'Laser (Mitte)',
           fr: 'Laser (Milieu)',
           ja: 'レーザー (中央)',
@@ -387,7 +369,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '북쪽에 레이저',
+          en: 'North Laser',
           de: 'Laser (Norden)',
           fr: 'Laser (Nord)',
           ja: 'レーザー (北)',
@@ -403,7 +385,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '동쪽에 레이저',
+          en: 'East Laser',
           de: 'Laser (Osten)',
           fr: 'Laser (Est)',
           ja: 'レーザー (東)',
@@ -417,10 +399,10 @@ const triggerSet: TriggerSet<Data> = {
       type: 'Ability',
       netRegex: NetRegexes.ability({ source: 'The Ultima Weapon', id: '2CD3', capture: false }),
       condition: (data) => data.phase === 'finale',
-      alarmText: (_data, _matches, output) => output.text!(),
+      infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '다음 가루다',
+          en: 'Garuda',
           de: 'Garuda',
           fr: 'Garuda',
           ja: 'ガルーダ',
@@ -434,10 +416,10 @@ const triggerSet: TriggerSet<Data> = {
       type: 'Ability',
       netRegex: NetRegexes.ability({ source: 'The Ultima Weapon', id: '2CD4', capture: false }),
       condition: (data) => data.phase === 'finale',
-      alarmText: (_data, _matches, output) => output.text!(),
+      infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '다음 아프리트',
+          en: 'Ifrit',
           de: 'Ifrit',
           fr: 'Ifrit',
           ja: 'イフリート',
@@ -451,10 +433,10 @@ const triggerSet: TriggerSet<Data> = {
       type: 'Ability',
       netRegex: NetRegexes.ability({ source: 'The Ultima Weapon', id: '2CD5', capture: false }),
       condition: (data) => data.phase === 'finale',
-      alarmText: (_data, _matches, output) => output.text!(),
+      infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '다음 타이탄',
+          en: 'Titan',
           de: 'Titan',
           fr: 'Titan',
           ja: 'タイタン',

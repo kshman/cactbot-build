@@ -352,7 +352,7 @@ export class DeathReport {
       return;
 
     const text = Translate(this.lang, {
-      en: `${buffName}을 놓쳤음 (${sourceName})`,
+      en: `${buffName} 놓쳤음 (${sourceName})`,
       de: `${buffName} verfehlte (${sourceName})`,
       fr: `${buffName} manqué(e) (${sourceName})`,
       ja: `${buffName}をミスした (${sourceName}から)`,

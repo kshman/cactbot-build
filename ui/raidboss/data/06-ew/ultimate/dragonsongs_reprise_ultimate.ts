@@ -19,6 +19,9 @@ import { LocaleObject, LocaleText, TriggerSet } from '../../../../../types/trigg
 
 type Phase = 'doorboss' | 'thordan' | 'nidhogg' | 'haurchefant' | 'thordan2' | 'nidhogg2' | 'dragon-king';
 
+const playstationMarkers = ['circle', 'cross', 'triangle', 'square'] as const;
+type PlaystationMarker = typeof playstationMarkers[number];
+
 export interface Data extends RaidbossData {
   combatantData: PluginCombatantState[];
   phase: Phase;
@@ -50,6 +53,12 @@ export interface Data extends RaidbossData {
   // names of players with chain lightning during wrath.
   thunderstruck: string[];
   hasDoom: { [name: string]: boolean };
+  deathMarker: { [name: string]: PlaystationMarker };
+  hraesvelgrGlowing?: boolean;
+  addsPhaseNidhoggId?: string;
+  hallowedWingsCount: number;
+  // PRs
+  prsTwister: number;
 }
 
 // Due to changes introduced in patch 5.2, overhead markers now have a random offset
@@ -78,6 +87,20 @@ const headmarkers = {
   'skywardSingle': '000E',
   // vfx/lockon/eff/bahamut_wyvn_glider_target_02tm.avfx
   'cauterize': '0014',
+} as const;
+
+const playstationHeadmarkerIds: readonly string[] = [
+  headmarkers.firechainCircle,
+  headmarkers.firechainTriangle,
+  headmarkers.firechainSquare,
+  headmarkers.firechainX,
+] as const;
+
+const playstationMarkerMap: { [id: string]: PlaystationMarker } = {
+  [headmarkers.firechainCircle]: 'circle',
+  [headmarkers.firechainTriangle]: 'triangle',
+  [headmarkers.firechainSquare]: 'square',
+  [headmarkers.firechainX]: 'cross',
 } as const;
 
 const firstMarker = (phase: Phase) => {
@@ -149,6 +172,10 @@ const triggerSet: TriggerSet<Data> = {
       diveCounter: 1,
       thunderstruck: [],
       hasDoom: {},
+      deathMarker: {},
+      hallowedWingsCount: 0,
+      // PRs
+      prsTwister: 0,
     };
   },
   timelineTriggers: [
@@ -860,30 +887,16 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: 'DSR+ Sanctity of the Ward Swords',
+      id: 'DSR Sanctity of the Ward Swords',
       type: 'HeadMarker',
       netRegex: NetRegexes.headMarker(),
-      condition: (data) => data.phase === 'thordan',
-      preRun: (data, matches, _output) => {
+      condition: (data, matches) => data.phase === 'thordan' && data.me === matches.target,
+      alarmText: (data, matches, output) => {
         const id = getHeadmarkerId(data, matches);
         if (id === headmarkers.sword1)
-          data.sanctitySword1 = matches.target;
-        else if (id === headmarkers.sword2)
-          data.sanctitySword2 = matches.target;
-      },
-      response: (data, _matches, output) => {
-        if (data.sanctitySword1 === undefined || data.sanctitySword2 === undefined)
-          return;
-
-        const fs = data.ShortName(data.sanctitySword1);
-        const ns = data.ShortName(data.sanctitySword2);
-        console.log(`Sanctity 칼: ${fs} / ${ns}`);
-
-        if (data.sanctitySword1 === data.me)
-          return { alarmText: output.sword1!() };
-        if (data.sanctitySword2 === data.me)
-          return { alarmText: output.sword2!() };
-        return { infoText: output.swords!({ far: fs, near: ns }) };
+          return output.sword1!();
+        if (id === headmarkers.sword2)
+          return output.sword2!();
       },
       outputStrings: {
         sword1: {
@@ -898,10 +911,38 @@ const triggerSet: TriggerSet<Data> = {
           ja: '2',
           ko: '2',
         },
-        swords: {
-          en: '칼: ${far} / ${near}',
-          ja: '剣: ${far} / ${near}',
-          ko: '칼: ${far} / ${near}',
+      },
+    },
+    {
+      id: 'DSR Sanctity of the Ward Sword Names',
+      type: 'HeadMarker',
+      netRegex: NetRegexes.headMarker(),
+      condition: (data) => data.phase === 'thordan',
+      sound: '',
+      infoText: (data, matches, output) => {
+        const id = getHeadmarkerId(data, matches);
+        if (id === headmarkers.sword1)
+          data.sanctitySword1 = matches.target;
+        else if (id === headmarkers.sword2)
+          data.sanctitySword2 = matches.target;
+        else
+          return;
+
+        if (data.sanctitySword1 === undefined || data.sanctitySword2 === undefined)
+          return;
+
+        const name1 = data.ShortName(data.sanctitySword1);
+        const name2 = data.ShortName(data.sanctitySword2);
+        console.log(`칼: ${name1} / ${name2}`);
+        return output.text!({ name1: name1, name2: name2 });
+      },
+      // Don't collide with the more important 1/2 call.
+      tts: '',
+      outputStrings: {
+        text: {
+          en: '칼: ${name1}, ${name2}',
+          ja: '剣: ${name1} / ${name2}',
+          ko: '칼: ${name1} / ${name2}',
         },
       },
     },
@@ -931,11 +972,15 @@ const triggerSet: TriggerSet<Data> = {
         const p1dps = data.party.isDPS(p1);
         const p2dps = data.party.isDPS(p2);
 
+        const s1 = data.ShortName(p1);
+        const s2 = data.ShortName(p2);
+        console.log(`운석: ${s1} / ${s2}`);
+
         if (p1dps && p2dps)
-          return output.dpsMeteors!({ player1: data.ShortName(p1), player2: data.ShortName(p2) });
+          return output.dpsMeteors!({ player1: s1, player2: s2 });
         if (!p1dps && !p2dps)
-          return output.tankHealerMeteors!({ player1: data.ShortName(p1), player2: data.ShortName(p2) });
-        return output.unknownMeteors!({ player1: data.ShortName(p1), player2: data.ShortName(p2) });
+          return output.tankHealerMeteors!({ player1: s1, player2: s2 });
+        return output.unknownMeteors!({ player1: s1, player2: s2 });
       },
       outputStrings: {
         tankHealerMeteors: {
@@ -1588,7 +1633,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '파랑',
+          en: '파란줄',
           de: 'Blau',
           ko: '파랑',
         },
@@ -1603,7 +1648,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '빨강',
+          en: '빨간줄',
           de: 'Rot',
           ko: '빨강',
         },
@@ -1671,8 +1716,7 @@ const triggerSet: TriggerSet<Data> = {
       type: 'StartsUsing',
       netRegex: NetRegexes.startsUsing({ id: '62E2', source: 'Ser Zephirin', capture: false }),
       // This ability also happens in doorboss phase.
-      // condition: (data) => data.role === 'tank' && data.phase === 'haurchefant',
-      condition: (data) => data.role === 'tank',
+      condition: (data) => data.role === 'tank' && data.phase === 'haurchefant',
       // This is a 10 second cast, and (from video) my understanding is to
       // hit tank LB when the cast bar gets to the "F" in "Fury", which is
       // roughly 2.8 seconds before it ends.
@@ -1694,7 +1738,12 @@ const triggerSet: TriggerSet<Data> = {
       type: 'Ability',
       netRegex: NetRegexes.ability({ id: '6B8B', source: 'Vedrfolnir', capture: false }),
       suppressSeconds: 1,
-      alertText: (_data, _matches, output) => output.text!(),
+      alertText: (data, _matches, output) => {
+        data.prsTwister++;
+        if (data.prsTwister === 1)
+          return output.withAscalon!();
+        return output.text!();
+      },
       outputStrings: {
         text: {
           en: '트위스터!',
@@ -1703,6 +1752,10 @@ const triggerSet: TriggerSet<Data> = {
           ja: '大竜巻',
           cn: '旋风',
           ko: '회오리',
+        },
+        withAscalon: {
+          en: '트위스터 + 아스칼론!!!',
+          ko: '회오리 + 아스칼론',
         },
       },
     },
@@ -1798,7 +1851,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         diveOnYou: {
-          en: '내게 카탈라이즈!',
+          en: '내게 카탈라이즈! 몽둥이 뒤로!',
           ko: '카탈 대상자 (도끼 든 성기사 반대편)',
         },
       },
@@ -1825,7 +1878,7 @@ const triggerSet: TriggerSet<Data> = {
         },
         noDoom: {
           en: '둠 없음',
-          ko: '둠 없음',
+          ko: '선고 없음',
         },
       },
     },
@@ -1833,33 +1886,42 @@ const triggerSet: TriggerSet<Data> = {
       id: 'DSR Playstation2 Fire Chains',
       type: 'HeadMarker',
       netRegex: NetRegexes.headMarker(),
-      condition: (data, matches) => data.phase === 'thordan2' && data.me === matches.target,
+      condition: (data) => data.phase === 'thordan2',
       alertText: (data, matches, output) => {
         const id = getHeadmarkerId(data, matches);
+        const marker = playstationMarkerMap[id];
+        if (marker === undefined)
+          return;
+
+        data.deathMarker[matches.target] = marker;
+
+        if (data.me !== matches.target)
+          return;
 
         // Note: in general, both circles should always have Doom and both crosses
-        // should not have Doom, but who knows what happens if there's people dead.
-        // For example, in P1 tanks can get circles if enough people are dead.
+        // should not have Doom.  If one doom dies, it seems that crosses are
+        // removed and there's a double triangle non-doom.  If enough people die,
+        // anything can happen.  For example, in P1 tanks can get circles if enough people are dead.
 
-        const hasDoom = data.hasDoom[data.me];
-        if (hasDoom) {
-          if (id === headmarkers.firechainCircle)
+        if (data.hasDoom[data.me]) {
+          if (marker === 'circle')
             return output.circleWithDoom!();
-          if (id === headmarkers.firechainTriangle)
+          else if (marker === 'triangle')
             return output.triangleWithDoom!();
-          if (id === headmarkers.firechainSquare)
+          else if (marker === 'square')
             return output.squareWithDoom!();
-          if (id === headmarkers.firechainX)
+          else if (marker === 'cross')
             return output.crossWithDoom!();
+        } else {
+          if (marker === 'circle')
+            return output.circle!();
+          else if (marker === 'triangle')
+            return output.triangle!();
+          else if (marker === 'square')
+            return output.square!();
+          else if (marker === 'cross')
+            return output.cross!();
         }
-        if (id === headmarkers.firechainCircle)
-          return output.circle!();
-        if (id === headmarkers.firechainTriangle)
-          return output.triangle!();
-        if (id === headmarkers.firechainSquare)
-          return output.square!();
-        if (id === headmarkers.firechainX)
-          return output.cross!();
       },
       outputStrings: {
         circle: {
@@ -1891,38 +1953,254 @@ const triggerSet: TriggerSet<Data> = {
           ko: '파랑 X',
         },
         circleWithDoom: {
-          en: '☠☠ 빨강 ○',
+          en: '☠ / 빨강 ○',
           ko: '빨강 동그라미 (선고)',
         },
         triangleWithDoom: {
-          en: '☠☠ 녹색 △',
+          en: '☠ / 녹색 △',
           ko: '초록 삼각 (선고)',
         },
         squareWithDoom: {
-          en: '☠☠ 보라 ■',
+          en: '☠ / 보라 ■',
           ko: '보라 사각 (선고)',
         },
         crossWithDoom: {
-          en: '☠☠ 파랑 Ⅹ',
+          en: '☠ / 파랑 Ⅹ',
           ko: '파랑 X (선고)',
         },
       },
     },
     {
+      // If one doom person dies, then there will be an unmarked non-doom player (cross)
+      // and two non-doom players who will get the same symbol (triangle OR square).
+      // If there's more than two symbols missing this is probably a wipe,
+      // so don't bother trying to call out "unmarked circle or square".
+      // TODO: should we run this on Playstation1 as well (and consolidate triggers?)
+      id: 'DSR Playstation2 Fire Chains No Marker',
+      type: 'HeadMarker',
+      netRegex: NetRegexes.headMarker(),
+      condition: (data, matches) => data.phase === 'thordan2' && playstationHeadmarkerIds.includes(getHeadmarkerId(data, matches)),
+      delaySeconds: 0.5,
+      suppressSeconds: 5,
+      alarmText: (data, _matches, output) => {
+        if (data.deathMarker[data.me] !== undefined)
+          return;
+
+        const seenMarkers = Object.values(data.deathMarker);
+        const markers = [...playstationMarkers].filter((x) => !seenMarkers.includes(x));
+
+        const [marker] = markers;
+        if (marker === undefined || markers.length !== 1)
+          return;
+
+        // Note: this will still call out for the dead doom person, but it seems better
+        // in case they somehow got insta-raised.
+        if (data.hasDoom[data.me]) {
+          if (marker === 'circle')
+            return output.circleWithDoom!();
+          else if (marker === 'triangle')
+            return output.triangleWithDoom!();
+          else if (marker === 'square')
+            return output.squareWithDoom!();
+          else if (marker === 'cross')
+            return output.crossWithDoom!();
+        } else {
+          if (marker === 'circle')
+            return output.circle!();
+          else if (marker === 'triangle')
+            return output.triangle!();
+          else if (marker === 'square')
+            return output.square!();
+          else if (marker === 'cross')
+            return output.cross!();
+        }
+      },
+      outputStrings: {
+        circle: {
+          en: '마커없는 빨강 ○',
+        },
+        triangle: {
+          en: '마커없는 녹색 △',
+        },
+        square: {
+          en: '마커없는 보라 ■',
+        },
+        cross: {
+          en: '마커없는 파랑 Ⅹ',
+        },
+        circleWithDoom: {
+          en: '☠ / 마커없는 빨강 ○',
+        },
+        triangleWithDoom: {
+          en: '☠ / 마커없는 녹색 △',
+        },
+        squareWithDoom: {
+          en: '☠ / 마커없는 보라 ■',
+        },
+        crossWithDoom: {
+          en: '☠ / 마커없는 파랑 Ⅹ',
+        },
+      },
+    },
+    {
+      // This will only fire if you got a marker, so that it's mutually exclusive
+      // with the "No Marker" trigger above.
+      id: 'DSR Playstation2 Fire Chains Unexpected Pair',
+      type: 'HeadMarker',
+      netRegex: NetRegexes.headMarker(),
+      condition: (data, matches) => {
+        if (data.phase !== 'thordan2')
+          return false;
+        if (data.me !== matches.target)
+          return false;
+        return playstationHeadmarkerIds.includes(getHeadmarkerId(data, matches));
+      },
+      delaySeconds: 0.5,
+      alarmText: (data, matches, output) => {
+        const id = getHeadmarkerId(data, matches);
+        const myMarker = playstationMarkerMap[id];
+        if (myMarker === undefined)
+          return;
+
+        // Find person with the same mark.
+        let partner: string | undefined = undefined;
+        for (const [player, marker] of Object.entries(data.deathMarker)) {
+          if (player !== data.me && marker === myMarker) {
+            partner = player;
+            break;
+          }
+        }
+        if (partner === undefined)
+          return;
+
+        // If a circle ends up with a non-doom or a cross ends up with a doom,
+        // I think you're in serious unrecoverable trouble.  These people also
+        // already need to look and adjust to the other person, vs the triangle
+        // and square which can have a fixed position based on doom vs non-doom.
+        if (myMarker === 'circle' || myMarker === 'cross')
+          return;
+
+        // I think circles fill out with doom first, so it should be impossible
+        // to have two doom triangles or two doom squares as well.
+        if (data.hasDoom[data.me] || data.hasDoom[partner])
+          return;
+
+        if (myMarker === 'triangle')
+          return output.doubleTriangle!({ player: data.ShortName(partner) });
+        if (myMarker === 'square')
+          return output.doubleSquare!({ player: data.ShortName(partner) });
+      },
+      outputStrings: {
+        // In case users want to have triangle vs square say something different.
+        doubleTriangle: {
+          en: '이중 ☠ 없음: ${player}',
+        },
+        doubleSquare: {
+          en: '이중 ☠ 없음: ${player}',
+        },
+      },
+    },
+    {
+      id: 'DSR Great Wyrmsbreath Hraesvelgr Not Glowing',
+      type: 'StartsUsing',
+      netRegex: NetRegexes.startsUsing({ id: '6D34', source: 'Hraesvelgr', capture: false }),
+      alertText: (data, _matches, output) => {
+        if (data.role === 'tank')
+          return output.tanksApart!();
+      },
+      infoText: (data, _matches, output) => {
+        if (data.role !== 'tank')
+          return output.hraesvelgrTankbuster!();
+      },
+      run: (data) => data.hraesvelgrGlowing = false,
+      outputStrings: {
+        tanksApart: {
+          en: '탱크 분리!!! (흐레스 버스터)',
+        },
+        hraesvelgrTankbuster: {
+          en: '흐레스벨그 버스터',
+        },
+      },
+    },
+    {
+      id: 'DSR Great Wyrmsbreath Hraesvelgr Glowing',
+      type: 'StartsUsing',
+      netRegex: NetRegexes.startsUsing({ id: '6D35', source: 'Hraesvelgr', capture: false }),
+      condition: (data) => data.role === 'tank',
+      run: (data) => data.hraesvelgrGlowing = true,
+    },
+    {
+      id: 'DSR Great Wyrmsbreath Nidhogg Not Glowing',
+      type: 'StartsUsing',
+      netRegex: NetRegexes.startsUsing({ id: '6D32', source: 'Nidhogg', capture: false }),
+      alertText: (data, _matches, output) => {
+        if (data.role === 'tank')
+          return output.tanksApart!();
+      },
+      infoText: (data, _matches, output) => {
+        if (data.role !== 'tank')
+          return output.hraesvelgrTankbuster!();
+      },
+      run: (data) => data.hraesvelgrGlowing = false,
+      outputStrings: {
+        tanksApart: {
+          en: '탱크 분리!!! (니드호그 버스터)',
+        },
+        hraesvelgrTankbuster: {
+          en: '니드호그 버스터',
+        },
+      },
+    },
+    {
+      // Great Wyrmsbreath ids
+      //   6D32 Nidhogg not glowing
+      //   6D33 Nidhogg glowing
+      //   6D34 Hraesvelgr not glowing
+      //   6D35 Hraesvelgr glowing
+      // Hraesvelgr always comes first, so set `hraesvelgrGlowing` in Hrae lines and
+      // unset it after any Nidhogg lines.
+      id: 'DSR Great Wyrmsbreath Nidhogg Glowing',
+      type: 'StartsUsing',
+      netRegex: NetRegexes.startsUsing({ id: '6D33', source: 'Nidhogg', capture: false }),
+      alertText: (data, _matches, output) => {
+        if (data.hraesvelgrGlowing && data.role === 'tank')
+          return output.sharedBuster!();
+      },
+      infoText: (data, _matches, output) => {
+        if (data.hraesvelgrGlowing && data.role !== 'tank')
+          return output.sharedBuster!();
+      },
+      run: (data) => delete data.hraesvelgrGlowing,
+      outputStrings: {
+        sharedBuster: {
+          en: '탱크 둘이 맞기!!!',
+        },
+      },
+    },
+    {
+      id: 'DSR Adds Phase Nidhogg',
+      type: 'AddedCombatant',
+      // There are many Nidhoggs, but the real one (and the one that moves for cauterize) is npcBaseId=12612.
+      netRegex: NetRegexes.addedCombatantFull({ npcNameId: '3458', npcBaseId: '12612' }),
+      run: (data, matches) => data.addsPhaseNidhoggId = matches.id,
+    },
+    {
       id: 'DSR Akh Afah',
       // 6D41 Akh Afah from Hraesvelgr, and 64D2 is immediately after
       // 6D43 Akh Afah from Nidhogg, and 6D44 is immediately after
-      // Hits highest emnity target
+      // Hits the two healers.  If a healer is dead, then the target is random.
       type: 'StartsUsing',
       netRegex: NetRegexes.startsUsing({ id: ['6D41', '6D43'], source: ['Hraesvelgr', 'Nidhogg'], capture: false }),
       suppressSeconds: 2,
-      infoText: (_data, _matches, output) => output.groups!(),
+      alertText: (_data, _matches, output) => output.groups!(),
       outputStrings: {
         groups: {
-          en: '탱크와 뭉쳐욧',
-          de: 'Tank Gruppen',
-          ja: 'タンクと頭割り',
-          ko: '탱커와 그룹 쉐어',
+          en: '힐러랑 뭉쳐욧!!!',
+          de: 'Heiler-Gruppen',
+          fr: 'Groupes sur les heals',
+          ja: 'ヒラに頭割り',
+          cn: '与治疗分摊',
+          ko: '힐러 그룹 쉐어',
         },
       },
     },
@@ -1937,50 +2215,94 @@ const triggerSet: TriggerSet<Data> = {
       // Head Down = Tanks Near
       type: 'StartsUsing',
       netRegex: NetRegexes.startsUsing({ id: ['6D23', '6D24', '6D26', '6D27'], source: 'Hraesvelgr' }),
+      preRun: (data) => data.hallowedWingsCount++,
       durationSeconds: 6,
+      promise: async (data) => {
+        data.combatantData = [];
+
+        // TODO: implement Hot Tail/Hot Wing combination here
+        if (data.hallowedWingsCount !== 1)
+          return;
+
+        // If we have missed the Nidhogg id (somehow?), we'll handle it later.
+        const id = data.addsPhaseNidhoggId;
+        if (id === undefined)
+          return;
+
+        data.combatantData = (await callOverlayHandler({
+          call: 'getCombatants',
+          ids: [parseInt(id, 16)],
+        })).combatants;
+
+        if (data.combatantData.length === 0)
+          console.error(`Hallowed: no Nidhoggs found`);
+        else if (data.combatantData.length > 1)
+          console.error(`Hallowed: unexpected number of Nidhoggs: ${JSON.stringify(data.combatantData)}`);
+      },
       alertText: (data, matches, output) => {
+        const wings = (matches.id === '6D23' || matches.id === '6D24') ? output.left!() : output.right!();
         let head;
-        let wings;
-        switch (matches.id) {
-          case '6D23':
-            wings = output.left!();
-            head = data.role === 'tank' ? output.near!() : output.far!();
-            break;
-          case '6D24':
-            wings = output.left!();
-            head = data.role === 'tank' ? output.far!() : output.near!();
-            break;
-          case '6D26':
-            wings = output.right!();
-            head = data.role === 'tank' ? output.near!() : output.far!();
-            break;
-          case '6D27':
-            wings = output.right!();
-            head = data.role === 'tank' ? output.far!() : output.near!();
-            break;
+        if (matches.id === '6D24' || matches.id === '6D26')
+          head = data.role === 'tank' ? output.tanksNear!() : output.partyFar!();
+        else
+          head = data.role === 'tank' ? output.tanksFar!() : output.partyNear!();
+
+        const [nidhogg] = data.combatantData;
+        if (nidhogg !== undefined && data.combatantData.length === 1) {
+          // Nidhogg is at x = 100 +/- 11, y = 100 +/- 34
+          const quadrant = nidhogg.PosX < 100 ? output.nearQuadrant!() : output.farQuadrant!();
+          return output.wingsQuadrantHead!({ wings: wings, quadrant: quadrant, head: head });
         }
-        return output.text!({ wings: wings, head: head });
+
+        // If something has gone awry, call out what we can.
+        return output.wingsHead!({ wings: wings, head: head });
       },
       outputStrings: {
+        // The calls here assume that all players are looking at Hraesvelgr, and thus
+        // "Near Quadrant" means east and "Far Quadrant" means west, and "Left" means
+        // north and "Right" means south.  The cactbot UI could rename them if this
+        // wording is awkward to some people.
+        //
+        // It *is* a little confusing to have "Near Quadrant" and "Party Near" which both use
+        // the word "Near", and so hopefully the extra words distinguish which is which.
+        //
+        // Also, in case somebody is raid calling, differentiate "Party Near" vs "Tanks Near".
+        // This will also help in a rare edge case bug where sometimes people don't have the
+        // right job, see: https://github.com/quisquous/cactbot/issues/4237.
+        //
+        // Yes, these are also tank busters, but there's too many things to call out here,
+        // and this is a case of "tanks and healers need to know what's going on ahead of time".
         left: Outputs.left,
         right: Outputs.right,
-        near: {
-          en: '흐레스벨그랑 붙어욧 (탱크버스터)',
-          de: 'Nahe Hraesvelgr (Tankbuster)',
-          ja: 'フレースヴェルグに近づく (タンクバスター)',
-          ko: '흐레스벨그 부근으로 (탱버)',
+        partyNear: {
+          en: '파티 안쪽으로',
         },
-        far: {
-          en: '흐레스벨그와 떨어져욧 (탱크버스터)',
-          de: 'Weit weg von Hraesvelgr (Tankbusters)',
-          ja: 'フレースヴェルグから離れる (タンクバスター)',
-          ko: '흐레스벨그와 멀어지기 (탱버)',
+        tanksNear: {
+          en: '앞에서 버스터!!!',
         },
-        text: {
+        partyFar: {
+          en: '파티 바깥쪽으로',
+        },
+        tanksFar: {
+          en: '뒤에서 버스터!!!',
+        },
+        nearQuadrant: {
+          en: '흐레스쪽',
+        },
+        farQuadrant: {
+          en: '흐레스 멀리',
+        },
+        wingsHead: {
           en: '${wings}, ${head}',
           de: '${wings}, ${head}',
           ja: '${wings}, ${head}',
           ko: '${wings}, ${head}',
+        },
+        wingsQuadrantHead: {
+          en: '${wings}, ${quadrant}, ${head}',
+          de: '${wings}, ${quadrant}, ${head}',
+          ja: '${wings}, ${quadrant}, ${head}',
+          ko: '${wings}, ${quadrant}, ${head}',
         },
       },
     },
@@ -2042,14 +2364,12 @@ const triggerSet: TriggerSet<Data> = {
     {
       id: 'DSR Spreading Flame',
       type: 'GainsEffect',
-      netRegex: NetRegexes.gainsEffect({
-        effectId: 'AC6',
-      }),
+      netRegex: NetRegexes.gainsEffect({ effectId: 'AC6' }),
       condition: (data, matches) => data.me === matches.target,
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '내게 흩어지라니!',
+          en: '혼자 맞아야되욧!!!',
           de: 'Verteilen',
           ko: '산개징 대상자',
         },
@@ -2058,18 +2378,28 @@ const triggerSet: TriggerSet<Data> = {
     {
       id: 'DSR Entangled Flame',
       type: 'GainsEffect',
-      netRegex: NetRegexes.gainsEffect({
-        effectId: 'AC7',
-      }),
+      netRegex: NetRegexes.gainsEffect({ effectId: 'AC7' }),
       condition: (data, matches) => data.me === matches.target,
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '내게 뭉치라니!',
+          en: '함께 맞아야되욧!!!',
           de: 'Sammeln',
-          ko: '집합징 대상자',
+          ko: '쉐어징 대상자',
         },
       },
+    },
+    {
+      id: 'DSR Flames of Ascalon',
+      type: 'GainsEffect',
+      netRegex: NetRegexes.gainsEffect({ effectId: '808', count: '12A', capture: false }),
+      response: Responses.getOut(),
+    },
+    {
+      id: 'DSR Ice of Ascalon',
+      type: 'GainsEffect',
+      netRegex: NetRegexes.gainsEffect({ effectId: '808', count: '12B', capture: false }),
+      response: Responses.getIn(),
     },
     {
       id: 'DSR Trinity Tank Dark Resistance',
@@ -2087,7 +2417,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           // Only showing 'swap' is really confusing, in my opinion
-          en: '헤이트 2위욧!',
+          en: '다크! 스탠스 꺼욧!',
           de: 'Sei 2. in der Aggro',
           ko: '적개심 2순위 잡기',
         },
@@ -2110,9 +2440,9 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         text: {
-          en: '프로보크!',
+          en: '라이트! 프로보크!',
           de: 'Herausforderung',
-          ko: '도발하기',
+          ko: '도발',
         },
       },
     },
@@ -2123,6 +2453,7 @@ const triggerSet: TriggerSet<Data> = {
       'replaceText': {
         'Empty Dimension/Full Dimension': 'Empty/Full Dimension',
         'Lash and Gnash/Gnash and Lash': 'Lash and Gnash',
+        'Ice of Ascalon/Flames of Ascalon': 'Ice/Flames of Ascalon',
       },
     },
     {
