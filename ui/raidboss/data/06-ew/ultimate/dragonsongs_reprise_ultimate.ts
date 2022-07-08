@@ -13,7 +13,6 @@ import { LocaleObject, LocaleText, TriggerSet } from '../../../../../types/trigg
 // TODO: Ser Adelphel left/right movement after initial charge
 // TODO: Meteor "run" call?
 // TODO: Wyrmsbreath 2 cardinal positions for Cauterize and adjust delay
-// TODO: Intercard instead of left/right for Hallowed Wings with Cauterize
 // TODO: Trigger for Hallowed Wings with Hot Tail/Hot Wings
 // TODO: Phase 6 Resentment callout?
 
@@ -54,9 +53,12 @@ export interface Data extends RaidbossData {
   thunderstruck: string[];
   hasDoom: { [name: string]: boolean };
   deathMarker: { [name: string]: PlaystationMarker };
-  hraesvelgrGlowing?: boolean;
   addsPhaseNidhoggId?: string;
+  hraesvelgrGlowing?: boolean;
+  nidhoggGlowing?: boolean;
   hallowedWingsCount: number;
+  spreadingFlame: string[];
+  entangledFlame: string[];
   // PRs
   prsTwister: number;
 }
@@ -174,6 +176,8 @@ const triggerSet: TriggerSet<Data> = {
       hasDoom: {},
       deathMarker: {},
       hallowedWingsCount: 0,
+      spreadingFlame: [],
+      entangledFlame: [],
       // PRs
       prsTwister: 0,
     };
@@ -597,10 +601,10 @@ const triggerSet: TriggerSet<Data> = {
             0: '4',
             1: 'A',
             2: '1',
-            3: 'B',
-            4: '2',
-            5: 'C',
-            6: '3',
+            3: 'ⓑ',
+            4: '②',
+            5: 'ⓒ',
+            6: '③',
             7: 'D',
             8: output.unknown!(),
           };
@@ -872,13 +876,13 @@ const triggerSet: TriggerSet<Data> = {
       run: (data) => delete data.sanctityWardDir,
       outputStrings: {
         clockwise: {
-          en: '←←← 왼쪽으로',
+          en: '시계 ←←←',
           de: 'Im Uhrzeigersinn',
           ja: '時計回り',
           ko: '시계방향',
         },
         counterclock: {
-          en: '오른쪽으로 →→→',
+          en: '→→→ 반시계',
           de: 'Gegen den Uhrzeigersinn',
           ja: '反時計回り',
           ko: '반시계방향',
@@ -933,7 +937,7 @@ const triggerSet: TriggerSet<Data> = {
 
         const name1 = data.ShortName(data.sanctitySword1);
         const name2 = data.ShortName(data.sanctitySword2);
-        console.log(`칼: ${name1} / ${name2}`);
+        // console.log(`칼: ${name1} / ${name2}`);
         return output.text!({ name1: name1, name2: name2 });
       },
       // Don't collide with the more important 1/2 call.
@@ -942,7 +946,7 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: '칼: ${name1}, ${name2}',
           ja: '剣: ${name1} / ${name2}',
-          ko: '칼: ${name1} / ${name2}',
+          ko: '돌진 대상자: ${name1}, ${name2}',
         },
       },
     },
@@ -974,7 +978,7 @@ const triggerSet: TriggerSet<Data> = {
 
         const s1 = data.ShortName(p1);
         const s2 = data.ShortName(p2);
-        console.log(`운석: ${s1} / ${s2}`);
+        // console.log(`운석: ${s1} / ${s2}`);
 
         if (p1dps && p2dps)
           return output.dpsMeteors!({ player1: s1, player2: s2 });
@@ -2018,27 +2022,35 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         circle: {
           en: '마커없는 빨강 ○',
+          ko: '무징 빨강 동그라미',
         },
         triangle: {
           en: '마커없는 녹색 △',
+          ko: '무징 초록 삼각',
         },
         square: {
           en: '마커없는 보라 ■',
+          ko: '무징 보라 사각',
         },
         cross: {
           en: '마커없는 파랑 Ⅹ',
+          ko: '무징 파랑 X',
         },
         circleWithDoom: {
           en: '☠ / 마커없는 빨강 ○',
+          ko: '무징 빨강 동그라미 (선고)',
         },
         triangleWithDoom: {
           en: '☠ / 마커없는 녹색 △',
+          ko: '무징 초록 삼각 (선고)',
         },
         squareWithDoom: {
           en: '☠ / 마커없는 보라 ■',
+          ko: '무징 보라 사각 (선고)',
         },
         crossWithDoom: {
           en: '☠ / 마커없는 파랑 Ⅹ',
+          ko: '무징 파랑 X (선고)',
         },
       },
     },
@@ -2093,10 +2105,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         // In case users want to have triangle vs square say something different.
         doubleTriangle: {
-          en: '이중 ☠ 없음: ${player}',
+          en: '둘다 ☠ 없음: ${player}',
+          ko: '둘 다 선고 없음 (${player})',
         },
         doubleSquare: {
-          en: '이중 ☠ 없음: ${player}',
+          en: '둘다 ☠ 없음: ${player}',
+          ko: '둘 다 선고 없음 (${player})',
         },
       },
     },
@@ -2104,22 +2118,22 @@ const triggerSet: TriggerSet<Data> = {
       id: 'DSR Great Wyrmsbreath Hraesvelgr Not Glowing',
       type: 'StartsUsing',
       netRegex: NetRegexes.startsUsing({ id: '6D34', source: 'Hraesvelgr', capture: false }),
-      alertText: (data, _matches, output) => {
+      response: (data, _matches, output) => {
+        // cactbot-builtin-response
+        output.responseOutputStrings = {
+          tanksApart: {
+            en: '탱크 분리!!! (흐레스 버스터)',
+            ko: '떨어지기 (흐레스벨그 탱버)',
+          },
+          hraesvelgrTankbuster: {
+            en: '흐레스벨그 버스터',
+            ko: '흐레스벨그 탱버',
+          },
+        };
+
         if (data.role === 'tank')
-          return output.tanksApart!();
-      },
-      infoText: (data, _matches, output) => {
-        if (data.role !== 'tank')
-          return output.hraesvelgrTankbuster!();
-      },
-      run: (data) => data.hraesvelgrGlowing = false,
-      outputStrings: {
-        tanksApart: {
-          en: '탱크 분리!!! (흐레스 버스터)',
-        },
-        hraesvelgrTankbuster: {
-          en: '흐레스벨그 버스터',
-        },
+          return { alertText: output.tanksApart!() };
+        return { infoText: output.hraesvelgrTankbuster!() };
       },
     },
     {
@@ -2133,23 +2147,30 @@ const triggerSet: TriggerSet<Data> = {
       id: 'DSR Great Wyrmsbreath Nidhogg Not Glowing',
       type: 'StartsUsing',
       netRegex: NetRegexes.startsUsing({ id: '6D32', source: 'Nidhogg', capture: false }),
-      alertText: (data, _matches, output) => {
+      response: (data, _matches, output) => {
+        // cactbot-builtin-response
+        output.responseOutputStrings = {
+          tanksApart: {
+            en: '탱크 분리!!! (니드호그 버스터)',
+            ko: '떨어지기 (니드호그 탱버)',
+          },
+          nidTankbuster: {
+            en: '니드호그 버스터',
+            ko: '니드호그 탱버',
+          },
+        };
+
         if (data.role === 'tank')
-          return output.tanksApart!();
+          return { alertText: output.tanksApart!() };
+        return { infoText: output.nidTankbuster!() };
       },
-      infoText: (data, _matches, output) => {
-        if (data.role !== 'tank')
-          return output.hraesvelgrTankbuster!();
-      },
-      run: (data) => data.hraesvelgrGlowing = false,
-      outputStrings: {
-        tanksApart: {
-          en: '탱크 분리!!! (니드호그 버스터)',
-        },
-        hraesvelgrTankbuster: {
-          en: '니드호그 버스터',
-        },
-      },
+    },
+    {
+      id: 'DSR Great Wyrmsbreath Nidhogg Glowing',
+      type: 'StartsUsing',
+      netRegex: NetRegexes.startsUsing({ id: '6D33', source: 'Nidhogg', capture: false }),
+      condition: (data) => data.role === 'tank',
+      run: (data) => data.nidhoggGlowing = true,
     },
     {
       // Great Wyrmsbreath ids
@@ -2157,32 +2178,31 @@ const triggerSet: TriggerSet<Data> = {
       //   6D33 Nidhogg glowing
       //   6D34 Hraesvelgr not glowing
       //   6D35 Hraesvelgr glowing
-      // Hraesvelgr always comes first, so set `hraesvelgrGlowing` in Hrae lines and
-      // unset it after any Nidhogg lines.
-      id: 'DSR Great Wyrmsbreath Nidhogg Glowing',
+      // Hraesvelger and Nidhogg are different actors so can go in either order.
+      id: 'DSR Great Wyrmsbreath Both Glowing',
       type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ id: '6D33', source: 'Nidhogg', capture: false }),
-      alertText: (data, _matches, output) => {
-        if (data.hraesvelgrGlowing && data.role === 'tank')
-          return output.sharedBuster!();
+      netRegex: NetRegexes.startsUsing({ id: ['6D33', '6D35'], source: ['Hraesvelgr', 'Nidhogg'], capture: false }),
+      delaySeconds: 0.3,
+      suppressSeconds: 1,
+      response: (data, _matches, output) => {
+        // cactbot-builtin-response
+        output.responseOutputStrings = {
+          sharedBuster: {
+            en: '탱크 둘이 맞기!!!',
+            ko: '쉐어 탱버',
+          },
+        };
+
+        if (!data.hraesvelgrGlowing || !data.nidhoggGlowing)
+          return;
+        if (data.role === 'tank')
+          return { alertText: output.sharedBuster!() };
+        return { infoText: output.sharedBuster!() };
       },
-      infoText: (data, _matches, output) => {
-        if (data.hraesvelgrGlowing && data.role !== 'tank')
-          return output.sharedBuster!();
+      run: (data) => {
+        delete data.hraesvelgrGlowing;
+        delete data.nidhoggGlowing;
       },
-      run: (data) => delete data.hraesvelgrGlowing,
-      outputStrings: {
-        sharedBuster: {
-          en: '탱크 둘이 맞기!!!',
-        },
-      },
-    },
-    {
-      id: 'DSR Adds Phase Nidhogg',
-      type: 'AddedCombatant',
-      // There are many Nidhoggs, but the real one (and the one that moves for cauterize) is npcBaseId=12612.
-      netRegex: NetRegexes.addedCombatantFull({ npcNameId: '3458', npcBaseId: '12612' }),
-      run: (data, matches) => data.addsPhaseNidhoggId = matches.id,
     },
     {
       id: 'DSR Akh Afah',
@@ -2203,6 +2223,13 @@ const triggerSet: TriggerSet<Data> = {
           ko: '힐러 그룹 쉐어',
         },
       },
+    },
+    {
+      id: 'DSR Adds Phase Nidhogg',
+      type: 'AddedCombatant',
+      // There are many Nidhoggs, but the real one (and the one that moves for cauterize) is npcBaseId=12612.
+      netRegex: NetRegexes.addedCombatantFull({ npcNameId: '3458', npcBaseId: '12612' }),
+      run: (data, matches) => data.addsPhaseNidhoggId = matches.id,
     },
     {
       id: 'DSR Hallowed Wings and Plume',
@@ -2242,7 +2269,8 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (data, matches, output) => {
         const wings = (matches.id === '6D23' || matches.id === '6D24') ? output.left!() : output.right!();
         let head;
-        if (matches.id === '6D24' || matches.id === '6D26')
+        const isHeadDown = matches.id === '6D23' || matches.id === '6D26';
+        if (isHeadDown)
           head = data.role === 'tank' ? output.tanksNear!() : output.partyFar!();
         else
           head = data.role === 'tank' ? output.tanksFar!() : output.partyNear!();
@@ -2250,21 +2278,18 @@ const triggerSet: TriggerSet<Data> = {
         const [nidhogg] = data.combatantData;
         if (nidhogg !== undefined && data.combatantData.length === 1) {
           // Nidhogg is at x = 100 +/- 11, y = 100 +/- 34
-          const quadrant = nidhogg.PosX < 100 ? output.nearQuadrant!() : output.farQuadrant!();
-          return output.wingsQuadrantHead!({ wings: wings, quadrant: quadrant, head: head });
+          const dive = nidhogg.PosX < 100 ? output.forward!() : output.backward!();
+          return output.wingsDiveHead!({ wings: wings, dive: dive, head: head });
         }
 
-        // If something has gone awry, call out what we can.
+        // If something has gone awry (or this is the second hallowed), call out what we can.
         return output.wingsHead!({ wings: wings, head: head });
       },
       outputStrings: {
         // The calls here assume that all players are looking at Hraesvelgr, and thus
-        // "Near Quadrant" means east and "Far Quadrant" means west, and "Left" means
+        // "Forward" means east and "Backward" means west, and "Left" means
         // north and "Right" means south.  The cactbot UI could rename them if this
         // wording is awkward to some people.
-        //
-        // It *is* a little confusing to have "Near Quadrant" and "Party Near" which both use
-        // the word "Near", and so hopefully the extra words distinguish which is which.
         //
         // Also, in case somebody is raid calling, differentiate "Party Near" vs "Tanks Near".
         // This will also help in a rare edge case bug where sometimes people don't have the
@@ -2274,23 +2299,29 @@ const triggerSet: TriggerSet<Data> = {
         // and this is a case of "tanks and healers need to know what's going on ahead of time".
         left: Outputs.left,
         right: Outputs.right,
+        forward: {
+          en: '앞쪽',
+          ko: '앞쪽으로',
+        },
+        backward: {
+          en: '뒤쪽',
+          ko: '뒤쪽으로',
+        },
         partyNear: {
-          en: '파티 안쪽으로',
+          en: '파티가 앞쪽으로',
+          ko: '본대가 가까이',
         },
         tanksNear: {
-          en: '앞에서 버스터!!!',
+          en: '탱크가 앞으로!!!',
+          ko: '탱커가 가까이',
         },
         partyFar: {
-          en: '파티 바깥쪽으로',
+          en: '파티가 뒤쪽으로',
+          ko: '본대가 멀리',
         },
         tanksFar: {
-          en: '뒤에서 버스터!!!',
-        },
-        nearQuadrant: {
-          en: '흐레스쪽',
-        },
-        farQuadrant: {
-          en: '흐레스 멀리',
+          en: '탱크가 뒤로!!!',
+          ko: '탱커가 멀리',
         },
         wingsHead: {
           en: '${wings}, ${head}',
@@ -2298,11 +2329,37 @@ const triggerSet: TriggerSet<Data> = {
           ja: '${wings}, ${head}',
           ko: '${wings}, ${head}',
         },
-        wingsQuadrantHead: {
-          en: '${wings}, ${quadrant}, ${head}',
-          de: '${wings}, ${quadrant}, ${head}',
-          ja: '${wings}, ${quadrant}, ${head}',
-          ko: '${wings}, ${quadrant}, ${head}',
+        wingsDiveHead: {
+          en: '${wings} + ${dive}, ${head}',
+          de: '${wings} + ${dive}, ${head}',
+          ja: '${wings} + ${dive}, ${head}',
+          ko: '${wings} + ${dive}, ${head}',
+        },
+      },
+    },
+    {
+      id: 'DSR Nidhogg Hot Wing',
+      type: 'StartsUsing',
+      netRegex: NetRegexes.startsUsing({ id: '6D2B', source: 'Nidhogg', capture: false }),
+      alertText: (_data, _matches, output) => output.text!(),
+      outputStrings: {
+        text: {
+          // Often cactbot uses "in" and "out", but that's usually hitbox relative vs
+          // anything else.  Because this is more arena-relative.
+          en: '날개! 안쪽으로!!!',
+          ko: '중앙쪽으로',
+        },
+      },
+    },
+    {
+      id: 'DSR Nidhogg Hot Tail',
+      type: 'StartsUsing',
+      netRegex: NetRegexes.startsUsing({ id: '6D2D', source: 'Nidhogg', capture: false }),
+      alertText: (_data, _matches, output) => output.text!(),
+      outputStrings: {
+        text: {
+          en: '꼬리! 옆쪽으로!!!',
+          ko: '바깥쪽으로',
         },
       },
     },
@@ -2362,30 +2419,42 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: 'DSR Spreading Flame',
+      id: 'DSR Spreading/Entangled Flame',
       type: 'GainsEffect',
-      netRegex: NetRegexes.gainsEffect({ effectId: 'AC6' }),
-      condition: (data, matches) => data.me === matches.target,
-      infoText: (_data, _matches, output) => output.text!(),
+      netRegex: NetRegexes.gainsEffect({ effectId: ['AC6', 'AC7'] }),
+      preRun: (data, matches) => {
+        if (matches.effectId === 'AC6')
+          data.spreadingFlame.push(matches.target);
+
+        if (matches.effectId === 'AC7')
+          data.entangledFlame.push(matches.target);
+      },
+      infoText: (data, _matches, output) => {
+        if (data.spreadingFlame.length < 4)
+          return;
+        if (data.entangledFlame.length < 2)
+          return;
+
+        if (data.spreadingFlame.includes(data.me))
+          return output.spread!();
+        if (data.entangledFlame.includes(data.me))
+          return output.stack!();
+        return output.nodebuff!();
+      },
       outputStrings: {
-        text: {
-          en: '혼자 맞아야되욧!!!',
+        spread: {
+          en: '흩어져 혼자 맞아욧!!!',
           de: 'Verteilen',
           ko: '산개징 대상자',
         },
-      },
-    },
-    {
-      id: 'DSR Entangled Flame',
-      type: 'GainsEffect',
-      netRegex: NetRegexes.gainsEffect({ effectId: 'AC7' }),
-      condition: (data, matches) => data.me === matches.target,
-      infoText: (_data, _matches, output) => output.text!(),
-      outputStrings: {
-        text: {
+        stack: {
           en: '함께 맞아야되욧!!!',
           de: 'Sammeln',
           ko: '쉐어징 대상자',
+        },
+        nodebuff: {
+          en: '함께 맞아줘야되욧!!! (암것도 안달림)',
+          ko: '무징 (쉐어)',
         },
       },
     },
