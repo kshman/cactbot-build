@@ -64,6 +64,7 @@ export interface Data extends RaidbossData {
   prsSkyLeap: boolean;
   prsSkyList: string[];
   prsTwister: number;
+  prsParty: string[];
 }
 
 // Due to changes introduced in patch 5.2, overhead markers now have a random offset
@@ -186,6 +187,7 @@ const triggerSet: TriggerSet<Data> = {
       prsSkyLeap: false,
       prsSkyList: [],
       prsTwister: 0,
+      prsParty: [],
     };
   },
   timelineTriggers: [
@@ -1056,7 +1058,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '딜러 메테오 (${player1}, ${player2})',
         },
         unknownMeteors: {
-          en: '??? 운석 (${player1}, ${player2})',
+          en: '??? (${player1}, ${player2})',
           de: '??? Meteore (${player1}, ${player2})',
           ja: '??? 隕石 (${player1}, ${player2})',
           ko: '??? 메테오 (${player1}, ${player2})',
@@ -1186,6 +1188,13 @@ const triggerSet: TriggerSet<Data> = {
           return;
         }
 
+        const teams: string[] = [];
+        Object.entries(data.diveFromGraceNum).forEach(([kn, vn]) => {
+          if (vn === num)
+            teams.push(data.ShortName(kn));
+          data.prsParty.push(kn);
+        });
+
         if (data.diveFromGraceDir[data.me] === 'up')
           return output.upArrow!({ num: num });
         else if (data.diveFromGraceDir[data.me] === 'down')
@@ -1194,17 +1203,7 @@ const triggerSet: TriggerSet<Data> = {
         if (data.diveFromGraceHasArrow[num])
           return output.circleWithArrows!({ num: num });
 
-        // 시작
-        const teams: string[] = [];
-        Object.entries(data.diveFromGraceNum).forEach(([kn, vn]) => {
-          if (vn === num) {
-            // teams.push(data.party.jobName(kn) ?? data.ShortName(kn));
-            teams.push(data.ShortName(kn));
-          }
-        });
         const sts = teams.sort().join(', ');
-        // 끝
-
         return output.circleAllCircles!({ num: num, sts: sts });
       },
       outputStrings: {
@@ -1949,6 +1948,34 @@ const triggerSet: TriggerSet<Data> = {
         noDoom: {
           en: '둠 없음',
           ko: '선고 없음',
+        },
+      },
+    },
+    {
+      // Death of the Heavens + 12초
+      id: 'DSR+ 헤븐데스 순번 찾기',
+      type: 'Ability',
+      netRegex: NetRegexes.ability({ id: '6B92', source: 'King Thordan', capture: false }),
+      delaySeconds: 9,
+      infoText: (data, _matches, output) => {
+        const dooms = data.prsParty.filter((x) => data.hasDoom[x]);
+        if (dooms.length !== 4)
+          return;
+
+        const teams: string[] = [];
+        if (dooms.includes(data.me)) {
+          for (const i of dooms)
+            teams.push(data.ShortName(i));
+        } else {
+          const nodms = data.prsParty.filter((x) => !data.hasDoom[x]);
+          for (const i of nodms)
+            teams.push(data.ShortName(i));
+        }
+        return output.teams!({ teams: teams.sort().join(', ') });
+      },
+      outputStrings: {
+        teams: {
+          en: '${teams}',
         },
       },
     },
