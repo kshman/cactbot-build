@@ -7,11 +7,15 @@ import { kFlagInstantDeath, playerDamageFields } from '../../../oopsy_common';
 // TODO: 63DD Skyward Leap during Strength of the Heavens should ignore invulning tanks
 // TODO: track vulns from Wrath tethers/blue marker in case they take a (deadly) liquid fire tick
 // TODO: Akh Morn puddle damage is effectId=0 0x18 lines from Bleeding B87, but everybody gets this effect temporarily?
+//       it is the only non-zero player dot damage between wroth flames and hot wing and hot-tail, though?
+// TODO: Getting hit by the wrong cauterize at the end of adds phase
+// TODO: trinity autos on wrong people, based on debuffs
 
 export interface Data extends OopsyData {
   towerAbility?: string;
   convictionTower?: { [name: string]: boolean };
   hasDoom?: { [name: string]: boolean };
+  seenWrothFlames?: boolean;
 }
 
 const triggerSet: OopsyTriggerSet<Data> = {
@@ -61,8 +65,9 @@ const triggerSet: OopsyTriggerSet<Data> = {
     'DSR Holy Comet Holy Impact': '63EA', // meteor explosion from being too close
     'DSR King Thordan Ascalon\'s Mercy Concealed': '63C9', // protean 2nd hit
     'DSR Nidhogg Darkdragon Dive Miss': '671B', // tower failure
-    'DSR Nidhogg Cauterize': '6D3E', // cauterize during Hallowed Wings
-    'DSR Hraesvelgr Cauterize': '6D3F', // cauterize during Wroth Flames
+    'DSR Dragon-King Thordan Flames of Ascalon': '6D91', // final phase "get out"
+    'DSR Dragon-King Thordan Ice of Ascalon': '6D92', // final phase "get in"
+    'DSR Dragon-King Thordan Exaflare\'s Edge': '6D9D', // final phase exaflares
   },
   gainsEffectFail: {
     'DSR Burns': 'B81', // fire puddles during Sanctity of the Ward
@@ -92,12 +97,15 @@ const triggerSet: OopsyTriggerSet<Data> = {
     'DSR Staggering Breath': '6D3D', // solo tank buster from Nidhogg/Hrae during adds phase tethers
     'DSR Hallowed Plume': '6D29', // Hallowed Wings tankbusters
     'DSR Nidhogg Spreading Flames': '742B', // Wroth Flames spread
+    'DSR King Thordan Trinity Highest Enmity': '6D9F', // Trinity auto
+    'DSR King Thordan Trinity Second Enmity': '6DA0', // Trinity auto
+    'DSR King Thordan Trinity Nearest': '6DA1', // Trinity auto
   },
   soloWarn: {
     'DSR Ser Haumeric Hiemal Storm': '63E7', // Sanctity of the Ward ice pair stacks
   },
   soloFail: {
-    'DSR Nidhogg Dark Orb': '63D9', // shared tank buster during adds phase tethers
+    'DSR Nidhogg Dark Orb': '6D39', // shared tank buster during adds phase tethers
     'DSR Hraesvelgr Holy Orb': '6D3A', // shared tank buster during adds phase tethers
     'DSR Nidhogg Entangled Flames': '742C', // Wroth Flames stack
   },
@@ -149,18 +157,11 @@ const triggerSet: OopsyTriggerSet<Data> = {
             blame: name,
             text: {
               en: 'Missed Tower',
+              cn: '错过塔',
               ko: '기둥 놓침',
             },
           };
         });
-      },
-    },
-    {
-      id: 'DSR Ser Adelphel Holiest Hallowing',
-      type: 'Ability',
-      netRegex: NetRegexes.ability({ id: '62D0' }),
-      mistake: (_data, matches) => {
-        return { type: 'fail', blame: matches.target, text: matches.ability };
       },
     },
     {
@@ -235,6 +236,46 @@ const triggerSet: OopsyTriggerSet<Data> = {
           id: matches.targetId,
           name: matches.target,
           text: matches.effect,
+        };
+      },
+    },
+    {
+      id: 'DSR Wroth Flames',
+      // Wroth Flames cast happens, then cauterize that nobody should be hit by,
+      // then at the end is the first Hot Wing / Hot Tail, marking the end of Wroth Flames.
+      // Cauterize after this is intentionally hit.
+      // 6D2B = Hot Wing (self-casted)
+      // 6D2D = Hot Tail (self-casted)
+      type: 'StartsUsing',
+      netRegex: NetRegexes.startsUsing({ id: ['6D2B', '6D2D'], capture: false }),
+      run: (data) => data.seenWrothFlames = true,
+    },
+    {
+      id: 'DSR Hraesvelgr Nidhogg Cauterize',
+      // During the first hallowed and wroth flames, there are cauterize casts.
+      // 6D3E = Nidhogg (during Wroth Flames and before Touchdown)
+      // 6D3F = Hraesvelgr (during the first Hallowed Wings and before Touchdown)
+      type: 'Ability',
+      netRegex: NetRegexes.ability({ id: ['6D3E', '6D3F'], ...playerDamageFields }),
+      condition: (data) => !data.seenWrothFlames,
+      mistake: (_data, matches) => {
+        return { type: 'fail', blame: matches.target, reportId: matches.targetId, text: matches.ability };
+      },
+    },
+    {
+      id: 'DSR Pyretic',
+      type: 'NetworkDoT',
+      // Amazingly, the dot/hot line has the effect id for pyretic here.  Most dots don't.
+      netRegex: NetRegexes.networkDoT({ effectId: '3C0' }),
+      mistake: (_data, matches) => {
+        return {
+          type: 'fail',
+          blame: matches.name,
+          reportId: matches.id,
+          text: {
+            en: 'Pyretic',
+            ko: '열병',
+          },
         };
       },
     },

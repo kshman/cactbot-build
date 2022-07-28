@@ -60,7 +60,11 @@ export interface Data extends RaidbossData {
   spreadingFlame: string[];
   entangledFlame: string[];
   // PRs
+  prsHolyHallow: number;
+  prsSkyLeap: boolean;
+  prsSkyList: string[];
   prsTwister: number;
+  prsParty: string[];
 }
 
 // Due to changes introduced in patch 5.2, overhead markers now have a random offset
@@ -179,7 +183,11 @@ const triggerSet: TriggerSet<Data> = {
       spreadingFlame: [],
       entangledFlame: [],
       // PRs
+      prsHolyHallow: 0,
+      prsSkyLeap: false,
+      prsSkyList: [],
       prsTwister: 0,
+      prsParty: [],
     };
   },
   timelineTriggers: [
@@ -271,7 +279,28 @@ const triggerSet: TriggerSet<Data> = {
       id: 'DSR Holiest Hallowing',
       type: 'StartsUsing',
       netRegex: NetRegexes.startsUsing({ id: '62D0', source: 'Ser Adelphel' }),
-      response: Responses.interrupt(),
+      response: (data, _matches, output) => {
+        // cactbot-builtin-response
+        output.responseOutputStrings = {
+          intrs: {
+            en: '아델펠 인터럽트: ${num}번',
+          },
+          intr2: {
+            en: '내가 아델펠 인터럽트: 2번!!!',
+          },
+        };
+
+        data.prsHolyHallow++;
+
+        if (data.prsHolyHallow === 2) {
+          if (data.role !== 'tank' && data.CanSilence())
+            return { alarmText: output.intr2!() };
+        } else {
+          if (data.role === 'tank')
+            return { alarmText: output.intrs!({ num: data.prsHolyHallow }) };
+        }
+        return { infoText: output.intrs!({ num: data.prsHolyHallow }) };
+      },
     },
     {
       id: 'DSR Empty Dimension',
@@ -450,7 +479,10 @@ const triggerSet: TriggerSet<Data> = {
     {
       id: 'DSR Brightwing Counter',
       type: 'Ability',
-      netRegex: NetRegexes.ability({ id: '6319', source: 'Ser Charibert', capture: false }),
+      // Visually, this comes from Ser Charibert.  However, ~30% of the time
+      // the first set of Brightwing cleaves come from King Thordan/Ser Hermonst
+      // entities.  This is likely just stale combatant data from the ffxiv plugin.
+      netRegex: NetRegexes.ability({ id: '6319', capture: false }),
       // One ability for each player hit (hopefully only two??)
       suppressSeconds: 1,
       infoText: (data, _matches, output) => output[`dive${data.brightwingCounter}`]!(),
@@ -780,11 +812,17 @@ const triggerSet: TriggerSet<Data> = {
       id: 'DSR Skyward Leap',
       type: 'HeadMarker',
       netRegex: NetRegexes.headMarker(),
-      condition: (data, matches) => data.phase === 'thordan' && data.me === matches.target,
+      // condition: (data, matches) => data.phase === 'thordan' && data.me === matches.target,
+      condition: (data, _matches) => data.phase === 'thordan',
       alertText: (data, matches, output) => {
         const id = getHeadmarkerId(data, matches);
-        if (id === headmarkers.skywardTriple)
-          return output.leapOnYou!();
+        if (id === headmarkers.skywardTriple) {
+          data.prsSkyList.push(matches.target);
+          if (data.me === matches.target) {
+            data.prsSkyLeap = true;
+            return output.leapOnYou!();
+          }
+        }
       },
       outputStrings: {
         leapOnYou: {
@@ -793,6 +831,24 @@ const triggerSet: TriggerSet<Data> = {
           fr: 'Saut sur VOUS',
           ja: '自分に青マーカー',
           ko: '광역 대상자',
+        },
+      },
+    },
+    {
+      id: 'DSR+ 또르당 마커 확인',
+      type: 'Ability',
+      netRegex: NetRegexes.ability({ id: '63DA', source: 'Ser Guerrique', capture: false }),
+      alertText: (data, _matches, output) => {
+        if (!data.prsSkyLeap)
+          return;
+        const sls: string[] = [];
+        for (const i of data.prsSkyList)
+          sls.push(data.ShortName(i));
+        return output.leaps!({ leaps: sls.sort().join(', ') });
+      },
+      outputStrings: {
+        leaps: {
+          en: '${leaps}',
         },
       },
     },
@@ -944,7 +1000,7 @@ const triggerSet: TriggerSet<Data> = {
       tts: '',
       outputStrings: {
         text: {
-          en: '칼: ${name1}, ${name2}',
+          en: '칼: ${name1} / ${name2}',
           ja: '剣: ${name1} / ${name2}',
           ko: '돌진 대상자: ${name1}, ${name2}',
         },
@@ -988,21 +1044,21 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         tankHealerMeteors: {
-          en: '탱/힐 운석 (${player1}, ${player2})',
+          en: '탱힐: ${player1} / ${player2}',
           de: 'Tank/Heiler Meteore (${player1}, ${player2})',
           fr: 'Météores Tank/Healer (${player1}, ${player2})', // FIXME
           ja: 'タンヒラ 隕石 (${player1}, ${player2})',
           ko: '탱/힐 메테오 (${player1}, ${player2})',
         },
         dpsMeteors: {
-          en: 'DPS 운석 (${player1}, ${player2})',
+          en: 'DPS: ${player1} / ${player2}',
           de: 'DDs Meteore (${player1}, ${player2})',
           fr: 'Météores DPS (${player1}, ${player2})', // FIXME
           ja: 'DPS 隕石 (${player1}, ${player2})',
           ko: '딜러 메테오 (${player1}, ${player2})',
         },
         unknownMeteors: {
-          en: '??? 운석 (${player1}, ${player2})',
+          en: '??? (${player1}, ${player2})',
           de: '??? Meteore (${player1}, ${player2})',
           ja: '??? 隕石 (${player1}, ${player2})',
           ko: '??? 메테오 (${player1}, ${player2})',
@@ -1132,6 +1188,13 @@ const triggerSet: TriggerSet<Data> = {
           return;
         }
 
+        const teams: string[] = [];
+        Object.entries(data.diveFromGraceNum).forEach(([kn, vn]) => {
+          if (vn === num)
+            teams.push(data.ShortName(kn));
+          data.prsParty.push(kn);
+        });
+
         if (data.diveFromGraceDir[data.me] === 'up')
           return output.upArrow!({ num: num });
         else if (data.diveFromGraceDir[data.me] === 'down')
@@ -1139,14 +1202,16 @@ const triggerSet: TriggerSet<Data> = {
 
         if (data.diveFromGraceHasArrow[num])
           return output.circleWithArrows!({ num: num });
-        return output.circleAllCircles!({ num: num });
+
+        const sts = teams.sort().join(', ');
+        return output.circleAllCircles!({ num: num, sts: sts });
       },
       outputStrings: {
         circleAllCircles: {
-          en: '#${num} 모두 동글',
-          de: '#${num} Alle Kreise',
-          ja: '#${num} みんなハイジャンプ',
-          ko: '#${num} 모두 하이점프',
+          en: '#${num} 모두 동글 / ${sts}',
+          de: '#${num} Alle Kreise / ${sts}',
+          ja: '#${num} みんなハイジャンプ / ${sts}',
+          ko: '#${num} 모두 하이점프 / ${sts}',
         },
         circleWithArrows: {
           en: '#${num} 나만 동글',
@@ -1887,6 +1952,34 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
+      // Death of the Heavens + 12초
+      id: 'DSR+ 헤븐데스 순번 찾기',
+      type: 'Ability',
+      netRegex: NetRegexes.ability({ id: '6B92', source: 'King Thordan', capture: false }),
+      delaySeconds: 9,
+      infoText: (data, _matches, output) => {
+        const dooms = data.prsParty.filter((x) => data.hasDoom[x]);
+        if (dooms.length !== 4)
+          return;
+
+        const teams: string[] = [];
+        if (dooms.includes(data.me)) {
+          for (const i of dooms)
+            teams.push(data.ShortName(i));
+        } else {
+          const nodms = data.prsParty.filter((x) => !data.hasDoom[x]);
+          for (const i of nodms)
+            teams.push(data.ShortName(i));
+        }
+        return output.teams!({ teams: teams.sort().join(', ') });
+      },
+      outputStrings: {
+        teams: {
+          en: '${teams}',
+        },
+      },
+    },
+    {
       id: 'DSR Playstation2 Fire Chains',
       type: 'HeadMarker',
       netRegex: NetRegexes.headMarker(),
@@ -2478,7 +2571,7 @@ const triggerSet: TriggerSet<Data> = {
         effectId: 'C40',
         count: '02',
       }),
-      condition: (data, matches) => data.me === matches.target,
+      condition: (data, matches) => data.me === matches.target && data.role === 'tank',
       alertText: (_data, matches, output) => {
         if (parseFloat(matches.duration) > 10)
           return output.text!();
@@ -2500,7 +2593,7 @@ const triggerSet: TriggerSet<Data> = {
         effectId: 'C3F',
         count: '02',
       }),
-      condition: (data, matches) => data.me === matches.target,
+      condition: (data, matches) => data.me === matches.target && data.role === 'tank',
       // To prevent boss rotating around before Exaflare
       delaySeconds: 2.5,
       alertText: (_data, matches, output) => {
