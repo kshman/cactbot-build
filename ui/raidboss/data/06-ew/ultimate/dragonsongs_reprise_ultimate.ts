@@ -59,6 +59,7 @@ export interface Data extends RaidbossData {
   hallowedWingsCount: number;
   spreadingFlame: string[];
   entangledFlame: string[];
+  mortalVowPlayer?: string;
   // PRs
   prsHolyHallow: number;
   prsSkyLeap: boolean;
@@ -211,6 +212,31 @@ const triggerSet: TriggerSet<Data> = {
           ja: 'AoE + DoT',
           cn: 'AOE + dot',
           ko: '전체공격 + 도트뎀',
+        },
+      },
+    },
+    {
+      id: 'DSR Mortal Vow',
+      regex: /Mortal Vow/,
+      // 3.7s to avoid early movement at Touchdown and last Mortal Vow
+      beforeSeconds: 3.7,
+      durationSeconds: 3.7,
+      infoText: (data, _matches, output) => {
+        if (data.me === data.mortalVowPlayer)
+          return output.vowOnYou!();
+        if (data.mortalVowPlayer)
+          return output.vowOn!({ player: data.mortalVowPlayer });
+        return output.vowSoon!();
+      },
+      outputStrings: {
+        vowOnYou: {
+          en: '내가 멸살이네!!!',
+        },
+        vowOn: {
+          en: '멸살: ${player}',
+        },
+        vowSoon: {
+          en: '곧 멸살! 흩어져욧!!!',
         },
       },
     },
@@ -2296,6 +2322,13 @@ const triggerSet: TriggerSet<Data> = {
         delete data.hraesvelgrGlowing;
         delete data.nidhoggGlowing;
       },
+    },
+    {
+      id: 'DSR Mortal Vow Collect',
+      type: 'GainsEffect',
+      netRegex: NetRegexes.gainsEffect({ effectId: 'B50' }),
+      suppressSeconds: 1,
+      run: (data, matches) => data.mortalVowPlayer = data.ShortName(matches.target),
     },
     {
       id: 'DSR Akh Afah',

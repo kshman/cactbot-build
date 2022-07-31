@@ -1307,7 +1307,8 @@ export class PopupText {
         if (result)
           triggerHelper.ttsText = result?.toString();
       } else {
-        triggerHelper.ttsText = triggerHelper.defaultTTSText;
+        if (triggerHelper.spokenAlertsEnabled)
+          triggerHelper.ttsText = triggerHelper.defaultTTSText;
       }
     }
   }
@@ -1336,7 +1337,8 @@ export class PopupText {
     // of infoText triggers without tts entries by turning
     // on (speech=true, text=true, sound=true) but this will
     // not cause tts to play over top of sounds or noises.
-    if (triggerHelper.ttsText && triggerHelper.spokenAlertsEnabled) {
+      if (triggerHelper.ttsText &&
+        (triggerHelper.spokenAlertsEnabled || triggerHelper.soundAlertsEnabled)) {
       // Heuristics for auto tts.
       // * In case this is an integer.
       triggerHelper.ttsText = triggerHelper.ttsText.toString();

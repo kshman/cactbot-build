@@ -1,7 +1,8 @@
 {
   "editor.tabSize": 2,
   "files.associations": {
-    "**/data/**/*.txt": "cactbot-timeline"
+    "**/data/**/*.txt": "cactbot-timeline",
+    "**/@prs/**/*.txt": "cactbot-timeline"
   },
   "files.exclude": {
     ".git": true,
