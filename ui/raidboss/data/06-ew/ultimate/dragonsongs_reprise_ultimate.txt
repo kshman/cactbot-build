@@ -312,12 +312,12 @@ hideall "--sync--"
 3535.8 "Holy Breath" #sync / 1[56]:[^:]*:Hraesvelgr:6D3C:/
 3535.8 "Flame Breath" #sync / 1[56]:[^:]*:Nidhogg:6D36:/
 3535.8 "Staggering Breath" #sync / 1[56]:[^:]*:Nidhogg:6D3D:/
-3543.0 "Mortal Vow (랜덤)" sync / 1[56]:[^:]*:Nidhogg:6D30:/
+3543.0 "Mortal Vow" sync / 1[56]:[^:]*:Nidhogg:6D30:/
 3554.3 "Akh Afah" sync / 1[56]:[^:]*:Hraesvelgr:6D42:/
 3567.4 "Hallowed Wings" sync / 1[56]:[^:]*:Hraesvelgr:(6D23|6D24|6D26|6D27):/
 3568.2 "Hallowed Plume" #sync / 1[56]:[^:]*:Hraesvelgr:6D29:/
 3568.5 "Cauterize" sync / 1[56]:[^:]*:Nidhogg:6D3E:/
-3577.0 "Mortal Vow (MT받기)" sync / 1[56]:[^:]*:Nidhogg:6D31:/
+3577.0 "Mortal Vow" sync / 1[56]:[^:]*:Nidhogg:6D31:/
 3582.4 "Wroth Flames" sync / 1[56]:[^:]*:Nidhogg:6D45:/
 3593.2 "Akh Morn 1" sync / 1[56]:[^:]*:Nidhogg:6D46:/
 3593.3 "Cauterize" sync / 1[56]:[^:]*:Hraesvelgr:6D3F:/
@@ -329,12 +329,12 @@ hideall "--sync--"
 3607.2 "Entangled Flames" #sync / 1[56]:[^:]*:Nidhogg:742C:/
 3607.2 "Spreading Flames" #sync / 1[56]:[^:]*:Nidhogg:742B:/
 3607.2 "Entangled Flames" #sync / 1[56]:[^:]*:Nidhogg:742C:/
-3611.1 "Mortal Vow (ST에게)" sync / 1[56]:[^:]*:Nidhogg:6D31:/
+3611.1 "Mortal Vow" sync / 1[56]:[^:]*:Nidhogg:6D31:/
 3623.4 "Akh Afah" sync / 1[56]:[^:]*:Hraesvelgr:6D42:/
 3635.4 "Hallowed Wings" sync / 1[56]:[^:]*:Hraesvelgr:(6D23|6D24|6D26|6D27):/
 3635.4 "Hot Tail/Hot Wing" #sync / 1[56]:[^:]*:Nidhogg:(6D2D|6D2B):/
 3635.5 "Hallowed Plume" #sync / 1[56]:[^:]*:Hraesvelgr:6D29:/
-3645.1 "Mortal Vow (디피)" sync / 1[56]:[^:]*:Nidhogg:6D31:/
+3645.1 "Mortal Vow" sync / 1[56]:[^:]*:Nidhogg:6D31:/
 3655.1 "Great Wyrmsbreath" sync / 1[56]:[^:]*:Hraesvelgr:6D35:/
 3655.1 "Dread Wyrmsbreath" #sync / 1[56]:[^:]*:Nidhogg:6D33:/
 3655.8 "Swirling Blizzard" #sync / 1[56]:[^:]*:Hraesvelgr:6D38:/
@@ -345,7 +345,7 @@ hideall "--sync--"
 3668.4 "Cauterize" sync / 1[56]:[^:]*:Hraesvelgr:6D3F:/
 3674.5 "--sync--" sync / 1[56]:[^:]*:Hraesvelgr:6D40:/
 3675.4 "Touchdown" sync / 1[56]:[^:]*:(Hraesvelgr|Nidhogg):70E7:/
-3679.1 "Mortal Vow (마지막)" sync / 1[56]:[^:]*:Nidhogg:6D31:/
+3679.1 "Mortal Vow" sync / 1[56]:[^:]*:Nidhogg:6D31:/
 3701.8 "Revenge of the Horde (enrage)" sync / 1[56]:[^:]*:(Hraesvelgr|Nidhogg):6D21:/
 
 3711.8 "Resentment?"
