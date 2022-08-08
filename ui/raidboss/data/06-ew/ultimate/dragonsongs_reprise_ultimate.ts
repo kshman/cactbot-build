@@ -225,7 +225,7 @@ const triggerSet: TriggerSet<Data> = {
         if (data.me === data.mortalVowPlayer)
           return output.vowOnYou!();
         if (data.mortalVowPlayer)
-          return output.vowOn!({ player: data.mortalVowPlayer });
+          return output.vowOn!({ player: data.ShortName(data.mortalVowPlayer) });
         return output.vowSoon!();
       },
       outputStrings: {
@@ -309,10 +309,10 @@ const triggerSet: TriggerSet<Data> = {
         // cactbot-builtin-response
         output.responseOutputStrings = {
           intrs: {
-            en: '아델펠 인터럽트: ${num}번',
+            en: '${num}번째 아델펠 인터럽트',
           },
           intr2: {
-            en: '내가 아델펠 인터럽트: 2번!!!',
+            en: '2번째 아델펠 인터럽트',
           },
         };
 
@@ -480,7 +480,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '빨강 동그라미',
         },
         triangle: {
-          en: '녹색 △',
+          en: '초록 △',
           de: 'Grünes Dreieck',
           fr: 'Triangle vert',
           ja: '緑さんかく',
@@ -838,7 +838,6 @@ const triggerSet: TriggerSet<Data> = {
       id: 'DSR Skyward Leap',
       type: 'HeadMarker',
       netRegex: NetRegexes.headMarker(),
-      // condition: (data, matches) => data.phase === 'thordan' && data.me === matches.target,
       condition: (data, _matches) => data.phase === 'thordan',
       alertText: (data, matches, output) => {
         const id = getHeadmarkerId(data, matches);
@@ -958,13 +957,13 @@ const triggerSet: TriggerSet<Data> = {
       run: (data) => delete data.sanctityWardDir,
       outputStrings: {
         clockwise: {
-          en: '시계 ←←←',
+          en: '시계 ◀◁◀',
           de: 'Im Uhrzeigersinn',
           ja: '時計回り',
           ko: '시계방향',
         },
         counterclock: {
-          en: '→→→ 반시계',
+          en: '▶▷▶ 반시계',
           de: 'Gegen den Uhrzeigersinn',
           ja: '反時計回り',
           ko: '반시계방향',
@@ -1019,7 +1018,6 @@ const triggerSet: TriggerSet<Data> = {
 
         const name1 = data.ShortName(data.sanctitySword1);
         const name2 = data.ShortName(data.sanctitySword2);
-        // console.log(`칼: ${name1} / ${name2}`);
         return output.text!({ name1: name1, name2: name2 });
       },
       // Don't collide with the more important 1/2 call.
@@ -1027,6 +1025,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: '칼: ${name1} / ${name2}',
+          de: 'Schwerter: ${name1}, ${name2}',
           ja: '剣: ${name1} / ${name2}',
           ko: '돌진 대상자: ${name1}, ${name2}',
         },
@@ -1058,15 +1057,11 @@ const triggerSet: TriggerSet<Data> = {
         const p1dps = data.party.isDPS(p1);
         const p2dps = data.party.isDPS(p2);
 
-        const s1 = data.ShortName(p1);
-        const s2 = data.ShortName(p2);
-        // console.log(`운석: ${s1} / ${s2}`);
-
         if (p1dps && p2dps)
-          return output.dpsMeteors!({ player1: s1, player2: s2 });
+          return output.dpsMeteors!({ player1: data.ShortName(p1), player2: data.ShortName(p2) });
         if (!p1dps && !p2dps)
-          return output.tankHealerMeteors!({ player1: s1, player2: s2 });
-        return output.unknownMeteors!({ player1: s1, player2: s2 });
+          return output.tankHealerMeteors!({ player1: data.ShortName(p1), player2: data.ShortName(p2) });
+        return output.unknownMeteors!({ player1: data.ShortName(p1), player2: data.ShortName(p2) });
       },
       outputStrings: {
         tankHealerMeteors: {
@@ -1112,7 +1107,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '→→→ 오른쪽으로',
+          en: '▶▷▶ 오른쪽으로',
           de: 'Hinter ihn => Rechts',
           ja: '後ろ => 右',
           ko: '뒤 => 오른쪽',
@@ -1126,7 +1121,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '왼쪽으로 ←←←',
+          en: '왼쪽으로 ◀◁◀',
           de: 'Hinter ihn => Links',
           ja: '後ろ => 左',
           ko: '뒤 => 왼쪽',
@@ -1863,6 +1858,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: '내게 줄이!!',
+          de: 'Verbindung auf DIR',
           ko: '선 대상자',
         },
       },
@@ -1905,6 +1901,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: '내게 번개가!!',
+          de: 'Blitz auf DIR',
           ko: '번개 대상자',
         },
       },
@@ -1929,6 +1926,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: '번개: ${name1}, ${name2}',
+          de: 'Blitz: ${name1}, ${name2}',
           ko: '번개: ${name1}, ${name2}',
         },
         unknown: Outputs.unknown,
@@ -1947,6 +1945,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         diveOnYou: {
           en: '내게 카탈라이즈! 몽둥이 뒤로!',
+          de: 'Sturz (gegenüber des Kriegers)',
           ko: '카탈 대상자 (도끼 든 성기사 반대편)',
         },
       },
@@ -1969,10 +1968,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         doomOnYou: {
           en: '내게 둠이!!',
+          de: 'Verhängnis auf DIR',
           ko: '선고 대상자',
         },
         noDoom: {
           en: '둠 없음',
+          de: 'Kein Verhängnis',
           ko: '선고 없음',
         },
       },
@@ -2055,7 +2056,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '빨강 동그라미',
         },
         triangle: {
-          en: '녹색 △',
+          en: '초록 △',
           de: 'Grünes Dreieck',
           fr: 'Triangle vert',
           ja: '緑さんかく',
@@ -2077,18 +2078,22 @@ const triggerSet: TriggerSet<Data> = {
         },
         circleWithDoom: {
           en: '☠ / 빨강 ○',
+          de: 'Roter Kreis (Verhängnis)',
           ko: '빨강 동그라미 (선고)',
         },
         triangleWithDoom: {
-          en: '☠ / 녹색 △',
+          en: '☠ / 초록 △',
+          de: 'Grünes Dreieck (Verhängnis)',
           ko: '초록 삼각 (선고)',
         },
         squareWithDoom: {
           en: '☠ / 보라 ■',
+          de: 'Lilanes Viereck (Verhängnis)',
           ko: '보라 사각 (선고)',
         },
         crossWithDoom: {
           en: '☠ / 파랑 Ⅹ',
+          de: 'Blaues X (Verhängnis)',
           ko: '파랑 X (선고)',
         },
       },
@@ -2141,34 +2146,42 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         circle: {
           en: '마커없는 빨강 ○',
+          de: 'Unmarkierter roter Kreis',
           ko: '무징 빨강 동그라미',
         },
         triangle: {
-          en: '마커없는 녹색 △',
+          en: '마커없는 초록 △',
+          de: 'Unmarkiertes grünes Dreieck',
           ko: '무징 초록 삼각',
         },
         square: {
           en: '마커없는 보라 ■',
+          de: 'Unmarkiertes lilanes Viereck',
           ko: '무징 보라 사각',
         },
         cross: {
           en: '마커없는 파랑 Ⅹ',
+          de: 'Unmarkiertes blaues X ',
           ko: '무징 파랑 X',
         },
         circleWithDoom: {
           en: '☠ / 마커없는 빨강 ○',
+          de: 'Unmarkierter roter Kreis (Verhängnis)',
           ko: '무징 빨강 동그라미 (선고)',
         },
         triangleWithDoom: {
-          en: '☠ / 마커없는 녹색 △',
+          en: '☠ / 마커없는 초록 △',
+          de: 'Unmarkiertes grünes Dreieck (Verhängnis)',
           ko: '무징 초록 삼각 (선고)',
         },
         squareWithDoom: {
           en: '☠ / 마커없는 보라 ■',
+          de: 'Unmarkiertes lilanes Viereck (Verhängnis)',
           ko: '무징 보라 사각 (선고)',
         },
         crossWithDoom: {
           en: '☠ / 마커없는 파랑 Ⅹ',
+          de: 'Unmarkiertes blaues X (Verhängnis)',
           ko: '무징 파랑 X (선고)',
         },
       },
@@ -2225,10 +2238,12 @@ const triggerSet: TriggerSet<Data> = {
         // In case users want to have triangle vs square say something different.
         doubleTriangle: {
           en: '둘다 ☠ 없음: ${player}',
+          de: 'Doppeltes Nicht-Verhängnis (${player})',
           ko: '둘 다 선고 없음 (${player})',
         },
         doubleSquare: {
           en: '둘다 ☠ 없음: ${player}',
+          de: 'Doppeltes Nicht-Verhängnis (${player})',
           ko: '둘 다 선고 없음 (${player})',
         },
       },
@@ -2241,11 +2256,13 @@ const triggerSet: TriggerSet<Data> = {
         // cactbot-builtin-response
         output.responseOutputStrings = {
           tanksApart: {
-            en: '탱크 분리!!! (흐레스 버스터)',
+            en: '니드호그로, ST 버스터!!!',
+            de: 'Auseinander (Hrae-buster)',
             ko: '떨어지기 (흐레스벨그 탱버)',
           },
           hraesvelgrTankbuster: {
             en: '흐레스벨그 버스터',
+            de: 'Hrae Tankbuster',
             ko: '흐레스벨그 탱버',
           },
         };
@@ -2270,11 +2287,13 @@ const triggerSet: TriggerSet<Data> = {
         // cactbot-builtin-response
         output.responseOutputStrings = {
           tanksApart: {
-            en: '탱크 분리!!! (니드호그 버스터)',
+            en: '니드호그로, 나한테 버스터!!!',
+            de: 'Auseinander (Nid-buster)',
             ko: '떨어지기 (니드호그 탱버)',
           },
           nidTankbuster: {
             en: '니드호그 버스터',
+            de: 'Nid Tankbuster',
             ko: '니드호그 탱버',
           },
         };
@@ -2307,7 +2326,8 @@ const triggerSet: TriggerSet<Data> = {
         // cactbot-builtin-response
         output.responseOutputStrings = {
           sharedBuster: {
-            en: '탱크 둘이 맞기!!!',
+            en: '가운데서 함께 버스터!!!',
+            de: 'geteilter Tankbuster',
             ko: '쉐어 탱버',
           },
         };
@@ -2328,7 +2348,7 @@ const triggerSet: TriggerSet<Data> = {
       type: 'GainsEffect',
       netRegex: NetRegexes.gainsEffect({ effectId: 'B50' }),
       suppressSeconds: 1,
-      run: (data, matches) => data.mortalVowPlayer = data.ShortName(matches.target),
+      run: (data, matches) => data.mortalVowPlayer = matches.target,
     },
     {
       id: 'DSR Akh Afah',
@@ -2341,7 +2361,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.groups!(),
       outputStrings: {
         groups: {
-          en: '힐러랑 뭉쳐욧!!!',
+          en: '아크아파! 힐러랑 뭉쳐욧!!!',
           de: 'Heiler-Gruppen',
           fr: 'Groupes sur les heals',
           ja: 'ヒラに頭割り',
@@ -2409,7 +2429,27 @@ const triggerSet: TriggerSet<Data> = {
         }
 
         // If something has gone awry (or this is the second hallowed), call out what we can.
+        if (data.hallowedWingsCount === 2) {
+          if (isHeadDown)
+            head = data.role === 'tank' ? output.tanksFront!() : output.partyFar!();
+          else
+            head = data.role === 'tank' ? output.tanksBehind!() : output.partyNear!();
+          return output.wingsHeadLine!({ wings: wings, head: head });
+        }
         return output.wingsHead!({ wings: wings, head: head });
+      },
+      tts: (data, matches, output) => {
+        if (data.role !== 'tank')
+          return;
+        const isHeadDown = matches.id === '6D23' || matches.id === '6D26';
+        if (data.hallowedWingsCount === 1) {
+          if (isHeadDown)
+            return output.tts1stNear!();
+          return output.tts1stFar!();
+        }
+        if (isHeadDown)
+          return output.tts2ndNear!();
+        return output.tts2ndFar!();
       },
       outputStrings: {
         // The calls here assume that all players are looking at Hraesvelgr, and thus
@@ -2423,31 +2463,53 @@ const triggerSet: TriggerSet<Data> = {
         //
         // Yes, these are also tank busters, but there's too many things to call out here,
         // and this is a case of "tanks and healers need to know what's going on ahead of time".
-        left: Outputs.left,
-        right: Outputs.right,
+        left: {
+          en: '◀◀',
+          ja: '左',
+          ko: '왼쪽',
+        },
+        right: {
+          en: '▶▶',
+          ja: '右',
+          ko: '오른쪽',
+        },
         forward: {
-          en: '앞쪽',
+          en: '▲▲',
+          de: 'Vorwärts',
+          ja: '前',
           ko: '앞쪽으로',
         },
         backward: {
-          en: '뒤쪽',
+          en: '▼▼',
+          de: 'Rückwärts',
+          ja: '後',
           ko: '뒤쪽으로',
         },
         partyNear: {
-          en: '파티가 앞쪽으로',
+          en: '파티는 가까이',
+          de: 'Party nahe',
           ko: '본대가 가까이',
         },
         tanksNear: {
-          en: '탱크가 앞으로!!!',
+          en: '가까이서 나란히',
+          de: 'Tanks nahe',
           ko: '탱커가 가까이',
         },
         partyFar: {
-          en: '파티가 뒤쪽으로',
+          en: '파티는 멀리',
+          de: 'Party weit weg',
           ko: '본대가 멀리',
         },
         tanksFar: {
-          en: '탱크가 뒤로!!!',
+          en: '멀리서 나란히',
+          de: 'Tanks weit weg',
           ko: '탱커가 멀리',
+        },
+        tanksFront: {
+          en: '맨 앞으로',
+        },
+        tanksBehind: {
+          en: '맨 뒤로',
         },
         wingsHead: {
           en: '${wings}, ${head}',
@@ -2456,10 +2518,28 @@ const triggerSet: TriggerSet<Data> = {
           ko: '${wings}, ${head}',
         },
         wingsDiveHead: {
-          en: '${wings} + ${dive}, ${head}',
+          en: '${wings}/${dive}, ${head}',
           de: '${wings} + ${dive}, ${head}',
           ja: '${wings} + ${dive}, ${head}',
           ko: '${wings} + ${dive}, ${head}',
+        },
+        wingsHeadLine: {
+          en: '한줄: ${wings}, ${head}',
+          de: '${wings}, ${head}',
+          ja: '${wings}, ${head}',
+          ko: '${wings}, ${head}',
+        },
+        tts1stNear: {
+          en: '近くで並んで',
+        },
+        tts1stFar: {
+          en: '遠くに並んで',
+        },
+        tts2ndNear: {
+          en: 'いちばん前',
+        },
+        tts2ndFar: {
+          en: 'いちばん後ろ',
         },
       },
     },
@@ -2468,12 +2548,17 @@ const triggerSet: TriggerSet<Data> = {
       type: 'StartsUsing',
       netRegex: NetRegexes.startsUsing({ id: '6D2B', source: 'Nidhogg', capture: false }),
       alertText: (_data, _matches, output) => output.text!(),
+      tts: (_data, _matches, output) => output.tts!(),
       outputStrings: {
         text: {
           // Often cactbot uses "in" and "out", but that's usually hitbox relative vs
           // anything else.  Because this is more arena-relative.
-          en: '날개! 안쪽으로!!!',
+          en: '안으로!!! 날개!!!',
+          de: 'Rein',
           ko: '중앙쪽으로',
+        },
+        tts: {
+          en: '内側',
         },
       },
     },
@@ -2482,10 +2567,15 @@ const triggerSet: TriggerSet<Data> = {
       type: 'StartsUsing',
       netRegex: NetRegexes.startsUsing({ id: '6D2D', source: 'Nidhogg', capture: false }),
       alertText: (_data, _matches, output) => output.text!(),
+      tts: (_data, _matches, output) => output.tts!(),
       outputStrings: {
         text: {
-          en: '꼬리! 옆쪽으로!!!',
+          en: '바깥으로!!! 꼬리!!!',
+          de: 'Raus',
           ko: '바깥쪽으로',
+        },
+        tts: {
+          en: '外側',
         },
       },
     },
@@ -2555,7 +2645,7 @@ const triggerSet: TriggerSet<Data> = {
         if (matches.effectId === 'AC7')
           data.entangledFlame.push(matches.target);
       },
-      infoText: (data, _matches, output) => {
+      alarmText: (data, _matches, output) => {
         if (data.spreadingFlame.length < 4)
           return;
         if (data.entangledFlame.length < 2)
@@ -2569,17 +2659,18 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         spread: {
-          en: '흩어져 혼자 맞아욧!!!',
+          en: '검정색! 혼자욧!!!',
           de: 'Verteilen',
           ko: '산개징 대상자',
         },
         stack: {
-          en: '함께 맞아야되욧!!!',
+          en: '흰색! 함께예욧!!!',
           de: 'Sammeln',
           ko: '쉐어징 대상자',
         },
         nodebuff: {
-          en: '함께 맞아줘야되욧!!! (암것도 안달림)',
+          en: '무직이네!!!',
+          de: 'Kein Debuff (Sammeln)',
           ko: '무징 (쉐어)',
         },
       },
@@ -2612,7 +2703,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           // Only showing 'swap' is really confusing, in my opinion
-          en: '다크! 스탠스 꺼욧!',
+          en: '스탠스 꺼욧! 다크!!!',
           de: 'Sei 2. in der Aggro',
           ko: '적개심 2순위 잡기',
         },
@@ -2629,15 +2720,34 @@ const triggerSet: TriggerSet<Data> = {
       condition: (data, matches) => data.me === matches.target && data.role === 'tank',
       // To prevent boss rotating around before Exaflare
       delaySeconds: 2.5,
+      // 원래 alert
+      alarmText: (_data, matches, output) => {
+        if (parseFloat(matches.duration) > 10)
+          return output.text!();
+      },
+      outputStrings: {
+        text: {
+          en: '프로보크! 라이트!!!',
+          de: 'Herausforderung',
+          ko: '도발',
+        },
+      },
+    },
+    {
+      id: 'DSR+ Trinity 스탠스 켜기',
+      type: 'GainsEffect',
+      netRegex: NetRegexes.gainsEffect({
+        effectId: 'C3F',
+        count: '02',
+      }),
+      condition: (data, matches) => data.me === matches.target && data.role === 'tank',
       alertText: (_data, matches, output) => {
         if (parseFloat(matches.duration) > 10)
           return output.text!();
       },
       outputStrings: {
         text: {
-          en: '라이트! 프로보크!',
-          de: 'Herausforderung',
-          ko: '도발',
+          en: '스탠스 켜욧!',
         },
       },
     },
@@ -2653,7 +2763,6 @@ const triggerSet: TriggerSet<Data> = {
     },
     {
       'locale': 'de',
-      'missingTranslations': true,
       'replaceSync': {
         'Darkscale': 'Dunkelschuppe',
         'Dragon-king Thordan': 'König Thordan',
@@ -2662,6 +2771,7 @@ const triggerSet: TriggerSet<Data> = {
         'Hraesvelgr': 'Hraesvelgr',
         '(?<!Dragon-)King Thordan': 'Thordan',
         'Left Eye': 'Linkes Drachenauge',
+        'Meteor Circle': 'Meteorsiegel',
         'Nidhogg': 'Nidhogg',
         'Right Eye': 'Rechtes Drachenauge',
         'Ser Adelphel': 'Adelphel',
@@ -2674,6 +2784,7 @@ const triggerSet: TriggerSet<Data> = {
         'Ser Janlenoux': 'Janlenoux',
         'Ser Noudenet': 'Noudenet',
         'Ser Zephirin': 'Zephirin',
+        'Spear of the Fury': 'Speer der Furie',
         'Vedrfolnir': 'Vedrfölnir',
         'Ysayle': 'Ysayle',
       },
@@ -2732,6 +2843,7 @@ const triggerSet: TriggerSet<Data> = {
         'Holy Bladedance': 'Geweihter Schwerttanz',
         'Holy Breath': 'Heiliger Atem',
         'Holy Comet': 'Heiliger Komet',
+        'Holy Meteor': 'Heiliger Meteor',
         'Holy Orb': 'Heiliger Orbis',
         'Holy Shield Bash': 'Heiliger Schildschlag',
         'Hot Tail': 'Schwelender Schweif',
@@ -2744,6 +2856,7 @@ const triggerSet: TriggerSet<Data> = {
         'Lash and Gnash': 'Beißen und Reißen',
         'Lightning Storm': 'Blitzsturm',
         'Liquid Heaven': 'Himmlisches Fluid',
+        'Meteor Impact': 'Meteoreinschlag',
         'Mirage Dive': 'Illusionssprung',
         'Mortal Vow': 'Schwur der Vergeltung',
         'Morn Afah\'s Edge': 'Morn Afahs Klinge',
@@ -2792,6 +2905,7 @@ const triggerSet: TriggerSet<Data> = {
         'Hraesvelgr': 'Hraesvelgr',
         '(?<!Dragon-)King Thordan': 'roi Thordan',
         'Left Eye': 'Œil gauche',
+        'Meteor Circle': 'sceau du météore',
         'Nidhogg': 'Nidhogg',
         'Right Eye': 'Œil droit',
         'Ser Adelphel': 'sire Adelphel',
@@ -2804,6 +2918,7 @@ const triggerSet: TriggerSet<Data> = {
         'Ser Janlenoux': 'sire Janlenoux',
         'Ser Noudenet': 'sire Noudenet',
         'Ser Zephirin': 'sire Zéphirin',
+        'Spear of the Fury': 'Lance de la Conquérante',
         'Vedrfolnir': 'Vedrfolnir',
         'Ysayle': 'Ysayle',
       },
@@ -2862,6 +2977,7 @@ const triggerSet: TriggerSet<Data> = {
         'Holy Bladedance': 'Danse de la lame céleste',
         'Holy Breath': 'Souffle miraculeux',
         'Holy Comet': 'Comète miraculeuse',
+        'Holy Meteor': 'Météore sacré',
         'Holy Orb': 'Orbe miraculeux',
         'Holy Shield Bash': 'Coup de bouclier saint',
         'Hot Tail': 'Queue calorifique',
@@ -2874,6 +2990,7 @@ const triggerSet: TriggerSet<Data> = {
         'Lash and Gnash': 'Torsion grinçante',
         'Lightning Storm': 'Pluie d\'éclairs',
         'Liquid Heaven': 'Paradis liquide',
+        'Meteor Impact': 'Impact de météore',
         'Mirage Dive': 'Piqué mirage',
         'Mortal Vow': 'Vœu d\'anéantissement',
         'Morn Afah\'s Edge': 'Lame de Morn Afah',
@@ -2921,6 +3038,7 @@ const triggerSet: TriggerSet<Data> = {
         'Hraesvelgr': 'フレースヴェルグ',
         '(?<!Dragon-)King Thordan': '騎神トールダン',
         'Left Eye': '邪竜の左眼',
+        'Meteor Circle': '流星の聖紋',
         'Nidhogg': 'ニーズヘッグ',
         'Right Eye': '邪竜の右眼',
         'Ser Adelphel': '聖騎士アデルフェル',
@@ -2933,6 +3051,7 @@ const triggerSet: TriggerSet<Data> = {
         'Ser Janlenoux': '聖騎士ジャンルヌ',
         'Ser Noudenet': '聖騎士ヌドゥネー',
         'Ser Zephirin': '聖騎士ゼフィラン',
+        'Spear of the Fury': 'スピア・オブ・ハルオーネ',
         'Vedrfolnir': 'ヴェズルフェルニル',
         'Ysayle': 'イゼル',
       },
@@ -2991,6 +3110,7 @@ const triggerSet: TriggerSet<Data> = {
         'Holy Bladedance': 'ホーリーブレードダンス',
         'Holy Breath': 'ホーリーブレス',
         'Holy Comet': 'ホーリーコメット',
+        'Holy Meteor': 'ホーリーメテオ',
         'Holy Orb': 'ホーリーオーブ',
         'Holy Shield Bash': 'ホーリーシールドバッシュ',
         'Hot Tail': 'ヒートテイル',
@@ -3003,6 +3123,7 @@ const triggerSet: TriggerSet<Data> = {
         'Lash and Gnash': '尾牙の連旋',
         'Lightning Storm': '百雷',
         'Liquid Heaven': 'ヘブンリキッド',
+        'Meteor Impact': 'メテオインパクト',
         'Mirage Dive': 'ミラージュダイブ',
         'Mortal Vow': '滅殺の誓い',
         'Morn Afah\'s Edge': '騎竜剣モーン・アファー',
@@ -3067,6 +3188,7 @@ const triggerSet: TriggerSet<Data> = {
         'Aetheric Burst': '以太爆发',
         'Hallowed Wings': '神圣之翼',
         'Hot Tail': '燃烧之尾',
+        'Meteor Impact': '陨石冲击',
         'The Dragon\'s Gaze': '龙眼之邪',
       },
     },
@@ -3098,6 +3220,7 @@ const triggerSet: TriggerSet<Data> = {
         'Aetheric Burst': '에테르 분출',
         'Hallowed Wings': '신성한 날개',
         'Hot Tail': '뜨거운 꼬리',
+        'Meteor Impact': '운석 낙하',
         'The Dragon\'s Gaze': '용의 마안',
       },
     },
