@@ -72,7 +72,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.directions!(),
       outputStrings: {
         directions: {
-          en: '뒤통수로!',
+          en: 'Back of head',
           de: 'Zur Rückseite des Kopfes',
           fr: 'Derrière la tête',
           ja: '頭の後ろへ',
@@ -89,7 +89,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.directions!(),
       outputStrings: {
         directions: {
-          en: '앞으로!',
+          en: 'Front of head',
           de: 'Zur Vorderseite des Kopfes',
           fr: 'Devant la tête',
           ja: '頭の前へ',
@@ -106,7 +106,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.groups!(),
       outputStrings: {
         groups: {
-          en: '힐러 뭉치기',
+          en: 'Healer Groups',
           de: 'Heiler-Gruppen',
           fr: 'Groupes sur les heals',
           ja: 'ヒラに頭割り',
@@ -131,7 +131,7 @@ const triggerSet: TriggerSet<Data> = {
         // cactbot-builtin-response
         output.responseOutputStrings = {
           marks: {
-            en: '해일: ${player1}, ${player2}',
+            en: 'Marks: ${player1}, ${player2}',
             de: 'Marker: ${player1}, ${player2}',
             fr: 'Marques sur : ${player1}, ${player2}',
             ja: 'マーカー: ${player1}, ${player2}',
@@ -139,7 +139,7 @@ const triggerSet: TriggerSet<Data> = {
             ko: '징: ${player1}, ${player2}',
           },
           avariceOnYou: {
-            en: '내가 해일이라니',
+            en: 'Avarice on YOU',
             de: 'Marker auf DIR',
             fr: 'Marque sur VOUS',
             ja: 'マーカーついた',
@@ -203,7 +203,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         arrowFirst: {
-          en: '화살표 먼저!',
+          en: 'Arrow First',
           de: 'Pfeil zuerst',
           fr: 'Flèches en premières',
           ja: '突進→散開',
@@ -211,7 +211,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '화살표 처리 먼저',
         },
         spreadFirst: {
-          en: '기믹 먼저! 흩어져욧!',
+          en: 'Spread First',
           de: 'Verteilen zuerst',
           fr: 'Dispersez-vous en premier',
           ja: '散開→突進',
@@ -255,7 +255,7 @@ const triggerSet: TriggerSet<Data> = {
       run: (data, matches) => data.flareTarget = matches.target,
       outputStrings: {
         text: {
-          en: '내게 줄이!',
+          en: 'Flare Tether',
           de: 'Flare Verbindung',
           fr: 'Lien Brasier',
           ja: 'フレアの線',
@@ -278,7 +278,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         flareLineStack: {
-          en: '탱크 뒤로 한줄로!',
+          en: 'Line Stack (behind tank)',
           de: 'Linien-Sammeln (hinter dem Tank)',
           fr: 'Package en ligne (derrière le tank)',
           ja: '直線頭割り（タンクより後ろ）',
@@ -286,7 +286,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '직선 쉐어 (탱커 뒤로)',
         },
         flareLineTank: {
-          en: '줄 앞에서 막아욧!',
+          en: 'Line Stack (be in front)',
           de: 'Linien-Sammeln (vorne sein)',
           fr: 'Package en ligne (Placez-vous devant)',
           ja: '直線頭割り（みんなの前に）',
@@ -313,7 +313,7 @@ const triggerSet: TriggerSet<Data> = {
         // cactbot-builtin-response
         output.responseOutputStrings = {
           squareAcross: {
-            en: '#${num} ■, 저쪽 발판',
+            en: '#${num} Square, go across',
             de: '#${num} Viereck, geh gegenüber',
             fr: '#${num} Carré, allez à l\'opposé',
             ja: '四角 #${num}：ボスの対角へ',
@@ -322,7 +322,7 @@ const triggerSet: TriggerSet<Data> = {
           },
           // Trying not to confuse with boss/across
           squareBoss: {
-            en: '#${num} ■, 보스 발판',
+            en: '#${num} Square, boss tile',
             de: '#${num} Viereck, Boss Fläche',
             fr: '#${num} Carré, case du boss',
             ja: '四角 #${num}：ボスの下へ',
@@ -330,7 +330,7 @@ const triggerSet: TriggerSet<Data> = {
             ko: '#${num} 네모, 보스 발판으로',
           },
           triangle: {
-            en: '#${num} ▲, 숫자로',
+            en: '#${num} Triangle',
             de: '#${num} Dreieck',
             fr: '#${num} Triangle',
             ja: '三角 #${num}',
