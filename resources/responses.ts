@@ -420,8 +420,10 @@ export const Responses = {
   getUnder: (sev?: Severity) => staticResponse(defaultInfoText(sev), Outputs.getUnder),
   // .getIn() is more like "get close but maybe even melee range is fine"
   getIn: (sev?: Severity) => staticResponse(defaultAlertText(sev), Outputs.in),
+  getInAlarm: (sev?: Severity) => staticResponse(defaultAlarmText(sev), Outputs.in),
   // .getOut() means get far away
   getOut: (sev?: Severity) => staticResponse(defaultAlertText(sev), Outputs.out),
+  getOutAlarm: (sev?: Severity) => staticResponse(defaultAlarmText(sev), Outputs.out),
   outOfMelee: (sev?: Severity) => staticResponse(defaultInfoText(sev), Outputs.outOfMelee),
   getInThenOut: (sev?: Severity) => staticResponse(defaultInfoText(sev), Outputs.inThenOut),
   getOutThenIn: (sev?: Severity) => staticResponse(defaultInfoText(sev), Outputs.outThenIn),

@@ -133,7 +133,7 @@ export default {
     ko: '탱 교대',
   },
   spread: {
-    en: '산개',
+    en: '흩어져요',
     de: 'Verteilen',
     fr: 'Dispersez-vous',
     ja: '散開',

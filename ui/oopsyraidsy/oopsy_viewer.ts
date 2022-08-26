@@ -17,9 +17,11 @@ import './oopsy_summary.css';
 import './oopsy_viewer.css';
 
 const fileDropText: LocaleText = {
-  en: '³×Æ®¿öÅ© ·Î±× ÆÄÀÏ ¿©±â¿¡ ³õ±â',
-  cn: '???ìíò¤ÙşËìöéÛ¯Óğó®?',
-  ko: '¿©±â·Î ·Î±× ÆÄÀÏ ²ø¾î´Ù ³õ±â',
+  en: 'ë„¤íŠ¸ì›Œí¬ ë¡œê·¸ íŒŒì¼ ì—¬ê¸°ì— ë†“ê¸°',
+  de: 'Lege Netzwerk-Log hier ab',
+  fr: 'DÃ©posez votre fichier log ici',
+  cn: 'å°†ç½‘ç»œæ—¥å¿—æ–‡ä»¶æ‹–æ”¾åˆ°æ­¤å¤„',
+  ko: 'ì—¬ê¸°ë¡œ ë¡œê·¸ íŒŒì¼ ëŒì–´ë‹¤ ë†“ê¸°',
 };
 
 // TODO: fake the partyTracker somehow (or get it from log lines) for missed buffs
