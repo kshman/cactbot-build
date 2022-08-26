@@ -231,14 +231,17 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         vowOnYou: {
           en: '내가 멸살이네!!!',
+          de: 'Schwur auf DIR',
           ko: '멸살의 맹세 대상자',
         },
         vowOn: {
           en: '멸살: ${player}',
+          de: 'Schwur auf ${player}',
           ko: '${player} 멸살의 맹세',
         },
         vowSoon: {
           en: '곧 멸살! 흩어져욧!!!',
+          de: 'Schwur bald (verteilen)',
           ko: '곧 멸살의 맹세 (산개)',
         },
       },

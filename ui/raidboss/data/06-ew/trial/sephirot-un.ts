@@ -170,7 +170,7 @@ const triggerSet: TriggerSet<Data> = {
       id: 'Sephirot Unreal Yesod Move',
       type: 'StartsUsing',
       netRegex: NetRegexes.startsUsing({ id: '76AB', source: 'Sephirot', capture: false }),
-      response: Responses.moveAway('alarm'), // This *will* kill if a non-tank takes 2+.
+      response: Responses.moveAway('alert'), // This *will* kill if a non-tank takes 2+.
     },
     {
       // 3ED is Force Against Might orange, 3EE is Force Against Magic, green.
