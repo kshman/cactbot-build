@@ -15,6 +15,8 @@ const directions = {
 export interface Data extends RaidbossData {
   target?: string;
   topazRays: { [time: number]: (keyof typeof directions | undefined)[] };
+  //
+  prsRays: string[];
 }
 
 const convertAbilityIdToTopazRayIndex = (id: string): number => {
@@ -36,6 +38,8 @@ const triggerSet: TriggerSet<Data> = {
   initData: () => {
     return {
       topazRays: {},
+      //
+      prsRays: [],
     };
   },
   triggers: [
@@ -112,18 +116,17 @@ const triggerSet: TriggerSet<Data> = {
       netRegex: NetRegexes.startsUsing({ id: '771[67]', source: 'Proto-Carbuncle' }),
       durationSeconds: 5,
       alertText: (_data, matches, output) => {
-        const spread = output.spread!();
-        const healerGroups = output.healerGroups!();
         // Venom Squall
         if (matches.id === '7716')
-          return output.text!({ dir1: spread, dir2: healerGroups });
-        return output.text!({ dir1: healerGroups, dir2: spread });
+          return output.spreadToHeal!();
+        return output.healToSpread!();
       },
       outputStrings: {
-        healerGroups: Outputs.healerGroups,
-        spread: Outputs.spread,
-        text: {
-          en: '${dir1} -> 유도 -> ${dir2}',
+        spreadToHeal: {
+          en: '흩어졌다 -> 장판깔고 -> 힐러랑 붙어욧',
+        },
+        healToSpread: {
+          en: '힐러랑 있다가 -> 장판깔고 -> 흩어져욧',
         },
       },
     },
@@ -160,7 +163,7 @@ const triggerSet: TriggerSet<Data> = {
       // 7703: 3.7s, 7704: 6.2s, 7705: 8.7s, 7706: 11.2s
       netRegex: NetRegexes.startsUsing({ id: '770[3456]', source: 'Proto-Carbuncle' }),
       delaySeconds: (_data, matches) => parseFloat(matches.castTime) - 2.5,
-      infoText: (data, matches, output) => {
+      response: (data, matches, output) => {
         // 770[34] cast 2 times, 770[56] cast 3 times
         const expectedArrayLength = ['7705', '7706'].includes(matches.id) ? 3 : 2;
         const index = convertAbilityIdToTopazRayIndex(matches.id);
@@ -176,8 +179,12 @@ const triggerSet: TriggerSet<Data> = {
           return;
 
         const dirStr = `dir${dirs[0]}`;
-        if (dirs.length === 1 || !dirs[1])
-          return output[dirStr]!();
+        data.prsRays.push(output[dirStr]!());
+
+        if (data.prsRays.length === 4)
+          return { alertText: data.prsRays.slice(1).join(' - ') };
+        if (data.prsRays.length !== 1 || dirs.length === 1 || !dirs[1])
+          return;
 
         const dirMap = {
           'NE': output.dirNE!(),
@@ -185,15 +192,22 @@ const triggerSet: TriggerSet<Data> = {
           'SW': output.dirSW!(),
           'NW': output.dirNW!(),
         };
-
-        return output.two!({ dir1: dirMap[dirs[0]], dir2: dirMap[dirs[1]] });
+        return { infoText: output.two!({ dir1: dirMap[dirs[0]], dir2: dirMap[dirs[1]] }) };
       },
       run: (data, matches) => delete data.topazRays[convertAbilityIdToTopazRayIndex(matches.id)],
       outputStrings: {
-        dirNE: Outputs.dirNE,
-        dirSE: Outputs.dirSE,
-        dirSW: Outputs.dirSW,
-        dirNW: Outputs.dirNW,
+        dirNE: {
+          en: '↗',
+        },
+        dirSE: {
+          en: '↘',
+        },
+        dirSW: {
+          en: '↙',
+        },
+        dirNW: {
+          en: '↖',
+        },
         two: {
           en: '${dir1} 또는 ${dir2}',
         },
@@ -205,7 +219,10 @@ const triggerSet: TriggerSet<Data> = {
       // Topaz Cluster
       netRegex: NetRegexes.ability({ id: '7702', source: 'Proto-Carbuncle', capture: false }),
       delaySeconds: 10,
-      run: (data) => data.topazRays = {},
+      run: (data) => {
+        data.topazRays = {};
+        data.prsRays = [];
+      },
     },
   ],
   timelineReplace: [
