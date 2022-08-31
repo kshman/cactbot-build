@@ -59,6 +59,10 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: '밖으로 떨어져욧',
+          de: 'Raus und Weg',
+          fr: 'Extérieur et derrière',
+          ja: '外へ',
+          ko: '밖으로',
         },
       },
     },
@@ -83,6 +87,10 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: '벽으로!',
+          de: 'Wand',
+          fr: 'Mur',
+          ja: '壁へ',
+          ko: '벽으로',
         },
       },
     },
@@ -152,7 +160,9 @@ const triggerSet: TriggerSet<Data> = {
           en: '가운데 깔고 => 밖으로 흩어져욧',
           de: 'In der Mitte Ködern => Raus (verteilen)',
           fr: 'Posez au centre -> Écartez-vous à l\'extérieur',
+          ja: '真ん中で誘導 => 8方向散開',
           cn: '中间集合然后八方分散',
+          ko: '중앙에 장판 유도 => 밖으로 산개',
         },
       },
     },
@@ -169,7 +179,9 @@ const triggerSet: TriggerSet<Data> = {
           en: '내게 줄이!',
           de: 'Grausame Hatz Verbindung auf DIR',
           fr: 'Lien de Ruée brutale sur VOUS',
+          ja: '自分に突進',
           cn: '拳击点名',
+          ko: '나에게 선 연결',
         },
       },
     },
@@ -206,6 +218,10 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         partnerStack: {
           en: '짝꿍과 뭉쳐욧',
+          de: 'Mit Partner sammeln',
+          fr: 'Package partenaire',
+          ja: '2人で頭割り',
+          ko: '2인 쉐어',
         },
       },
     },
@@ -224,6 +240,10 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         partnerStack: {
           en: '짝궁을 찾아서 뭉처욧. 마커가 없어요',
+          de: 'Mit Partner sammeln (nicht markiert)',
+          fr: 'Package partenaire (sans marque)',
+          ja: '2人で頭割り (マーカーなし)',
+          ko: '2인 쉐어 (징 없음)',
         },
       },
     },
@@ -335,6 +355,10 @@ const triggerSet: TriggerSet<Data> = {
         'Stiff Breeze': 'Föhn',
       },
       'replaceText': {
+        'ground': 'Boden',
+        'line': 'Linie',
+        'donut': 'Donut',
+        'protean': 'Himmelsrichtungen',
         'Blow Away': 'Hauerwelle',
         'Blustery Ruler': 'Tosende Herrin',
         'Bold Boulder': 'Feister Fels',

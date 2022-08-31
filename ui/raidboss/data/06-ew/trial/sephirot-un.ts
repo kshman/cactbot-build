@@ -25,46 +25,48 @@ const triggerSet: TriggerSet<Data> = {
   },
   timelineTriggers: [
     {
-      id: 'Sephirot Unreal Tiferet',
+      id: 'SephirotUn Tiferet',
       regex: /Tiferet/,
       beforeSeconds: 4,
       suppressSeconds: 2, // Timeline syncs can otherwise make this extra-noisy
       response: Responses.aoe(),
     },
     {
-      id: 'Sephirot Unreal Triple Trial',
+      id: 'SephirotUn Triple Trial',
       regex: /Triple Trial/,
       beforeSeconds: 4,
       response: Responses.tankCleave(),
     },
     {
-      id: 'Sephirot Unreal Ein Sof Rage',
+      id: 'SephirotUn Ein Sof Rage',
       regex: /Ein Sof \(4 puddles\)/,
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
           en: 'Move to safe quadrant',
           de: 'Beweg dich in den sicheren Quadranten',
+          ja: '安置へ移動',
           cn: '移动到安全区域',
           ko: '안전한 지역으로 이동',
         },
       },
     },
     {
-      id: 'Sephirot Unreal Ein Sof Ratzon',
+      id: 'SephirotUn Ein Sof Ratzon',
       regex: /Ein Sof \(1 puddle\)/,
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
           en: 'Bait toward puddle',
           de: 'In Richtung Fläche ködern',
+          ja: '緑ドームの方へ誘導',
           cn: '靠近圈圈集合诱导AOE',
           ko: '장판 쪽으로 아인 유도',
         },
       },
     },
     {
-      id: 'Sephirot Unreal Yesod Bait',
+      id: 'SephirotUn Yesod Bait',
       regex: /Yesod/,
       beforeSeconds: 6,
       alertText: (data, _matches, output) => {
@@ -76,32 +78,34 @@ const triggerSet: TriggerSet<Data> = {
         noPillar: {
           en: 'Bait Yesod',
           de: 'Yesod ködern',
+          ja: 'イェソドクラッシュ誘導',
           cn: '集合诱导基盘碎击',
           ko: '예소드 붕괴 유도',
         },
         withPillar: {
           en: 'Bait Yesod inside puddle',
           de: 'Yesod in die Fläche ködern',
+          ja: '青いサークルの中でイェソドクラッシュ誘導',
           cn: '圈圈内集合诱导基盘碎击',
           ko: '장판 안에 예소드 유도하기',
         },
       },
     },
     {
-      id: 'Sephirot Unreal Pillar Activate',
+      id: 'SephirotUn Pillar Activate',
       regex: /Pillar of Mercy 1/,
       beforeSeconds: 10,
       run: (data) => data.pillarActive = true,
     },
     {
-      id: 'Sephirot Unreal Pillar Deactivate',
+      id: 'SephirotUn Pillar Deactivate',
       regex: /Pillar of Mercy 3/,
       run: (data) => data.pillarActive = false,
     },
   ],
   triggers: [
     {
-      id: 'Sephirot Unreal Main Tank',
+      id: 'SephirotUn Main Tank',
       type: 'Ability',
       netRegex: NetRegexes.ability({ id: '368', source: 'Sephirot' }),
       // We make this conditional to avoid constant noise in the raid emulator.
@@ -109,27 +113,47 @@ const triggerSet: TriggerSet<Data> = {
       run: (data, matches) => data.mainTank = matches.target,
     },
     {
-      id: 'Sephirot Unreal Chesed Buster',
+      id: 'SephirotUn Chesed Buster',
       type: 'StartsUsing',
       netRegex: NetRegexes.startsUsing({ id: '7694', source: 'Sephirot' }),
       response: Responses.tankBuster(),
     },
     {
-      id: 'Sephirot Unreal Ein',
+      id: 'SephirotUn Ein',
       type: 'StartsUsing',
       netRegex: NetRegexes.startsUsing({ id: '7696', source: 'Sephirot', capture: false }),
 
       response: Responses.getBehind(),
     },
     {
-      id: 'Sephirot Unreal Ratzon Spread',
+      id: 'SephirotUn Ratzon Spread',
       type: 'HeadMarker',
       netRegex: NetRegexes.headMarker({ id: ['0046', '0047'] }),
       condition: Conditions.targetIsYou(),
-      response: Responses.spread(),
+      infoText: (_data, matches, output) => {
+        if (matches.id === '0046')
+          return output.green!();
+        return output.purple!();
+      },
+      outputStrings: {
+        purple: {
+          en: 'Purple spread',
+          de: 'Lila verteilen',
+          ja: '紫散会',
+          cn: '紫圈分散',
+          ko: '보라색 징 산개',
+        },
+        green: {
+          en: 'Green spread',
+          de: 'Grün verteilen',
+          ja: '緑散会',
+          cn: '绿圈分散',
+          ko: '초록색 징 산개',
+        },
+      },
     },
     {
-      id: 'Sephirot Unreal Fiendish Rage',
+      id: 'SephirotUn Fiendish Rage',
       type: 'HeadMarker',
       netRegex: NetRegexes.headMarker({ id: '0048', capture: false }),
       condition: (data) => data.phase === 1,
@@ -143,38 +167,41 @@ const triggerSet: TriggerSet<Data> = {
         noStack: {
           en: 'Don\'t Stack!',
           de: 'Nicht sammeln!',
+          ja: '頭割りに参加しないで',
           cn: '不要重合！',
           ko: '겹치면 안됨!',
         },
         stack: {
           en: 'Group Stacks',
           de: 'In der Gruppe sammeln',
+          ja: 'グループ頭割り',
           cn: '分组集合',
           ko: '그룹 쉐어',
         },
       },
     },
     {
-      id: 'Sephirot Unreal Da\'at Spread',
+      id: 'SephirotUn Da\'at Spread',
       type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ id: '76A0', source: 'Sephirot', capture: false }),
+      netRegex: NetRegexes.startsUsing({ id: '769F', source: 'Sephirot', capture: false }),
       response: Responses.spread(),
     },
     {
-      id: 'Sephirot Unreal Malkuth',
+      id: 'SephirotUn Malkuth',
       type: 'StartsUsing',
       netRegex: NetRegexes.startsUsing({ id: '76AF', source: 'Sephirot', capture: false }),
       response: Responses.knockback(),
     },
     {
-      id: 'Sephirot Unreal Yesod Move',
+      id: 'SephirotUn Yesod Move',
       type: 'StartsUsing',
       netRegex: NetRegexes.startsUsing({ id: '76AB', source: 'Sephirot', capture: false }),
+      suppressSeconds: 2,
       response: Responses.moveAway('alert'), // This *will* kill if a non-tank takes 2+.
     },
     {
       // 3ED is Force Against Might orange, 3EE is Force Against Magic, green.
-      id: 'Sephirot Unreal Force Against Gain',
+      id: 'SephirotUn Force Against Gain',
       type: 'GainsEffect',
       netRegex: NetRegexes.gainsEffect({ effectId: ['3ED', '3EE'] }),
       condition: Conditions.targetIsYou(),
@@ -184,6 +211,7 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: '${force} on you',
           de: '${force} auf dir',
+          ja: '自分に${force}',
           cn: '${force}点名',
           ko: '나에게 ${force}',
         },
@@ -191,7 +219,7 @@ const triggerSet: TriggerSet<Data> = {
     },
     {
       // Orange left, Green right. Match color to Force debuff.
-      id: 'Sephirot Unreal Gevurah Chesed',
+      id: 'SephirotUn Gevurah Chesed',
       type: 'StartsUsing',
       netRegex: NetRegexes.startsUsing({ id: '76A5', capture: false }),
       alertText: (data, _matches, output) => {
@@ -211,7 +239,7 @@ const triggerSet: TriggerSet<Data> = {
     },
     {
       // Green left, Orange right. Match color to Force debuff.
-      id: 'Sephirot Unreal Chesed Gevurah',
+      id: 'SephirotUn Chesed Gevurah',
       type: 'StartsUsing',
       netRegex: NetRegexes.startsUsing({ id: '76A6', capture: false }),
       alertText: (data, _matches, output) => {
@@ -226,7 +254,7 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: 'Sephirot Unreal Fiendish Wail',
+      id: 'SephirotUn Fiendish Wail',
       type: 'Ability',
       netRegex: NetRegexes.ability({ id: '76A2', source: 'Sephirot', capture: false }),
       alertText: (data, _matches, output) => {
@@ -238,19 +266,21 @@ const triggerSet: TriggerSet<Data> = {
         getTower: {
           en: 'Get a tower',
           de: 'Nimm einen Turm',
+          ja: '塔を踏む',
           cn: '踩塔',
           ko: '기둥 밟기',
         },
         avoidTower: {
           en: 'Avoid towers',
           de: 'Turm meiden',
+          ja: '塔から離れる',
           cn: '躲塔',
           ko: '기둥 피하기',
         },
       },
     },
     {
-      id: 'Sephirot Unreal Da\'at Tethers',
+      id: 'SephirotUn Da\'at Tethers',
       type: 'Tether',
       netRegex: NetRegexes.tether({ id: '0030', capture: false }),
       suppressSeconds: 30, // The tethers jump around a lot
@@ -263,25 +293,27 @@ const triggerSet: TriggerSet<Data> = {
         might: {
           en: 'Get Away, Avoid Puddles + Tethers',
           de: 'Geh weg, weiche Flächen und Verbindungen aus',
+          ja: '離れる、AOEと線回避',
           cn: '远离, 躲避圈圈 + 连线',
           ko: '멀리 떨어지고, 장판 + 선 피하기',
         },
         magic: {
           en: 'Go Front; Get Tether',
           de: 'Geh nach Vorne; Nimm eine Verbindung',
+          ja: '前へ、線取り',
           cn: '去前面; 接线',
           ko: '앞으로 가서 선 가로채기',
         },
       },
     },
     {
-      id: 'Sephirot Unreal Force Against Lose',
+      id: 'SephirotUn Force Against Lose',
       type: 'LosesEffect',
       netRegex: NetRegexes.losesEffect({ effectId: ['3ED', '3EE'], capture: false }),
       run: (data) => delete data.force,
     },
     {
-      id: 'Sephirot Unreal Earth Shaker Collect',
+      id: 'SephirotUn Earth Shaker Collect',
       type: 'HeadMarker',
       netRegex: NetRegexes.headMarker({ id: '0028' }),
       run: (data, matches) => {
@@ -290,7 +322,7 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: 'Sephirot Unreal Earth Shaker Call',
+      id: 'SephirotUn Earth Shaker Call',
       type: 'HeadMarker',
       netRegex: NetRegexes.headMarker({ id: '0028', capture: false }),
       delaySeconds: 0.5,
@@ -303,41 +335,44 @@ const triggerSet: TriggerSet<Data> = {
         shakerTarget: {
           en: 'Earth Shaker (Max Melee)',
           de: 'Erdstoß (Max Nahkampf)',
+          ja: 'アスシェイカー',
           cn: '大地摇动 (最远近战距离)',
           ko: '어스징 (칼끝딜 거리)',
         },
         shakerAvoid: {
           en: 'Avoid Earth Shakers',
           de: 'Weiche Erdstoß aus',
+          ja: 'アスシェイカー回避',
           cn: '躲避大地摇动',
           ko: '어스징 피하기',
         },
       },
     },
     {
-      id: 'Sephirot Unreal Earth Shaker Cleanup',
+      id: 'SephirotUn Earth Shaker Cleanup',
       type: 'HeadMarker',
       netRegex: NetRegexes.headMarker({ id: '0028', capture: false }),
       delaySeconds: 5,
       run: (data) => delete data.shakerTargets,
     },
     {
-      id: 'Sephirot Unreal Storm of Words Revelation',
+      id: 'SephirotUn Storm of Words Revelation',
       type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ id: '76B0', source: 'Storm of Words', capture: false }),
+      netRegex: NetRegexes.startsUsing({ id: '7680', source: 'Storm of Words', capture: false }),
       alarmText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
           en: 'Kill Storm of Words or die',
           de: 'Wörtersturm besiegen',
           fr: 'Tuez Tempête de mots ou mourrez',
+          ja: 'ストーム・オブ・ワードから攻撃',
           cn: '击杀言语风暴!',
           ko: '신언의 폭풍 제거',
         },
       },
     },
     {
-      id: 'Sephirot Unreal Ascension',
+      id: 'SephirotUn Ascension',
       type: 'HeadMarker',
       netRegex: NetRegexes.headMarker({ id: '003E', capture: false }),
       response: Responses.stackMarker(),
@@ -354,6 +389,8 @@ const triggerSet: TriggerSet<Data> = {
       'replaceText': {
         'Tethers': 'Verbindungen',
         'spread': 'verteilen',
+        'puddles': 'Flächen',
+        'puddle(?!s)': 'Fläche',
         'Adds Spawn': 'Adds erscheinen',
         'Ascension': 'Himmelfahrt',
         'Chesed': 'Chesed',
