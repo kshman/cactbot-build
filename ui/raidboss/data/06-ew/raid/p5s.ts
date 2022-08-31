@@ -124,9 +124,11 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         spreadToHeal: {
           en: '흩어졌다 -> 장판깔고 -> 힐러랑 붙어욧',
+          ja: '散会 -> 真ん中 -> ヒーラと頭割り',
         },
         healToSpread: {
           en: '힐러랑 있다가 -> 장판깔고 -> 흩어져욧',
+          ja: 'ヒーラと頭割り -> 真ん中 -> 散会',
         },
       },
     },
@@ -163,7 +165,7 @@ const triggerSet: TriggerSet<Data> = {
       // 7703: 3.7s, 7704: 6.2s, 7705: 8.7s, 7706: 11.2s
       netRegex: NetRegexes.startsUsing({ id: '770[3456]', source: 'Proto-Carbuncle' }),
       delaySeconds: (_data, matches) => parseFloat(matches.castTime) - 2.5,
-      response: (data, matches, output) => {
+      alertText: (data, matches, output) => {
         // 770[34] cast 2 times, 770[56] cast 3 times
         const expectedArrayLength = ['7705', '7706'].includes(matches.id) ? 3 : 2;
         const index = convertAbilityIdToTopazRayIndex(matches.id);
@@ -182,7 +184,7 @@ const triggerSet: TriggerSet<Data> = {
         data.prsRays.push(output[dirStr]!());
 
         if (data.prsRays.length === 4)
-          return { alertText: data.prsRays.slice(1).join(' - ') };
+          return data.prsRays.slice(1).join(' - ');
         if (data.prsRays.length !== 1 || dirs.length === 1 || !dirs[1])
           return;
 
@@ -192,24 +194,25 @@ const triggerSet: TriggerSet<Data> = {
           'SW': output.dirSW!(),
           'NW': output.dirNW!(),
         };
-        return { infoText: output.two!({ dir1: dirMap[dirs[0]], dir2: dirMap[dirs[1]] }) };
+        return output.two!({ dir1: dirMap[dirs[0]], dir2: dirMap[dirs[1]] });
       },
       run: (data, matches) => delete data.topazRays[convertAbilityIdToTopazRayIndex(matches.id)],
       outputStrings: {
         dirNE: {
-          en: '↗',
+          en: '↗↗',
         },
         dirSE: {
-          en: '↘',
+          en: '↘↘',
         },
         dirSW: {
-          en: '↙',
+          en: '↙↙',
         },
         dirNW: {
-          en: '↖',
+          en: '↖↖',
         },
         two: {
           en: '${dir1} 또는 ${dir2}',
+          ja: '${dir1} まだは ${dir2}',
         },
       },
     },
@@ -229,58 +232,103 @@ const triggerSet: TriggerSet<Data> = {
     {
       'locale': 'de',
       'replaceSync': {
+        'Lively Bait': 'zappelnd(?:e|er|es|en) Köder',
         'Proto-Carbuncle': 'Proto-Karfunkel',
       },
       'replaceText': {
-        '(?<!Toxic )Crunch': 'Quetscher',
+        '--towers--': '--Türme--',
+        'Acidic Slaver': 'Säurespeichel',
+        'Claw to Tail': 'Kralle und Schwanz',
+        'Devour': 'Verschlingen',
+        'Double Rush': 'Doppelsturm',
+        'Impact': 'Impakt',
+        'Raging Claw': 'Wütende Kralle',
+        'Raging Tail': 'Wütender Schwanz',
         'Ruby Glow': 'Rubinlicht',
-        'Searing Ray': 'Sengender Strahl',
+        'Ruby Reflection': 'Rubinspiegelung',
+        'Scatterbait': 'Streuköder',
         'Sonic Howl': 'Schallheuler',
+        'Sonic Shatter': 'Schallbrecher',
+        'Spit': 'Hypersekretion',
         'Starving Stampede': 'Hungerstampede',
+        'Tail to Claw': 'Schwanz und Kralle',
         'Topaz Cluster': 'Topasbündel',
+        'Topaz Ray': 'Topasstrahl',
         'Topaz Stones': 'Topasstein',
         'Toxic Crunch': 'Giftquetscher',
+        'Venom(?!( |ous))': 'Toxinspray',
+        'Venom Drops': 'Gifttropfen',
         'Venom Pool': 'Giftschwall',
         'Venom Rain': 'Giftregen',
         'Venom Squall': 'Giftwelle',
+        'Venom Surge': 'Giftwallung',
+        'Venomous Mass': 'Giftmasse',
       },
     },
     {
       'locale': 'fr',
+      'missingTranslations': true,
       'replaceSync': {
+        'Lively Bait': 'amuse-gueule',
         'Proto-Carbuncle': 'Proto-Carbuncle',
       },
       'replaceText': {
-        '(?<!Toxic )Crunch': 'Croqueur',
+        'Acidic Slaver': 'Salive acide',
+        'Devour': 'Dévoration',
+        'Impact': 'Impact',
+        'Raging Claw': 'Griffes enragées',
+        'Raging Tail': 'Queue enragée',
         'Ruby Glow': 'Lumière rubis',
-        'Searing Ray': 'Rayon irradiant',
+        'Ruby Reflection': 'Réflexion rubis',
+        'Scatterbait': 'Éclate-appât',
         'Sonic Howl': 'Hurlement sonique',
+        'Sonic Shatter': 'Pulvérisation sonique',
+        'Spit': 'Crachat',
         'Starving Stampede': 'Charge affamée',
         'Topaz Cluster': 'Chaîne de topazes',
+        'Topaz Ray': 'Rayon topaze',
         'Topaz Stones': 'Topazes',
         'Toxic Crunch': 'Croqueur venimeux',
+        'Venom(?!( |ous))': 'Venin',
+        'Venom Drops': 'Crachin de venin',
         'Venom Pool': 'Giclée de venin',
         'Venom Rain': 'Pluie de venin',
         'Venom Squall': 'Crachat de venin',
+        'Venom Surge': 'Déferlante de venin',
+        'Venomous Mass': 'Masse venimeuse',
       },
     },
     {
       'locale': 'ja',
+      'missingTranslations': true,
       'replaceSync': {
+        'Lively Bait': 'ライブリー・ベイト',
         'Proto-Carbuncle': 'プロトカーバンクル',
       },
       'replaceText': {
-        '(?<!Toxic )Crunch': 'クランチ',
+        'Acidic Slaver': 'アシッドスレイバー',
+        'Devour': '捕食',
+        'Impact': '衝撃',
+        'Raging Claw': 'レイジングクロウ',
+        'Raging Tail': 'レイジングテイル',
         'Ruby Glow': 'ルビーの光',
-        'Searing Ray': 'シアリングレイ',
+        'Ruby Reflection': 'ルビーリフレクション',
+        'Scatterbait': 'スキャッターベイト',
         'Sonic Howl': 'ソニックハウル',
+        'Sonic Shatter': 'ソニックシャッター',
+        'Spit': '放出',
         'Starving Stampede': 'スターヴィング・スタンピード',
         'Topaz Cluster': 'トパーズクラスター',
+        'Topaz Ray': 'トパーズレイ',
         'Topaz Stones': 'トパーズストーン',
         'Toxic Crunch': 'ベノムクランチ',
+        'Venom(?!( |ous))': '毒液',
+        'Venom Drops': 'ベノムドロップ',
         'Venom Pool': 'ベノムスプラッシュ',
         'Venom Rain': 'ベノムレイン',
         'Venom Squall': 'ベノムスコール',
+        'Venom Surge': 'ベノムサージ',
+        'Venomous Mass': 'ベノムマス',
       },
     },
   ],
