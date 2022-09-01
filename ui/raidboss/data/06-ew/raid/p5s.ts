@@ -14,6 +14,7 @@ const directions = {
 
 export interface Data extends RaidbossData {
   target?: string;
+  clawCount: number;
   topazRays: { [time: number]: (keyof typeof directions | undefined)[] };
   //
   prsRays: string[];
@@ -37,6 +38,7 @@ const triggerSet: TriggerSet<Data> = {
   timelineFile: 'p5s.txt',
   initData: () => {
     return {
+      clawCount: 0,
       topazRays: {},
       //
       prsRays: [],
@@ -62,6 +64,13 @@ const triggerSet: TriggerSet<Data> = {
       id: 'P5S Sonic Howl',
       type: 'StartsUsing',
       netRegex: NetRegexes.startsUsing({ id: '7720', source: 'Proto-Carbuncle', capture: false }),
+      response: Responses.aoe(),
+    },
+    {
+      id: 'P5S Ruby Glow',
+      type: 'StartsUsing',
+      netRegex: NetRegexes.startsUsing({ id: '76F[34]', source: 'Proto-Carbuncle', capture: false }),
+      suppressSeconds: 1,
       response: Responses.aoe(),
     },
     {
@@ -133,6 +142,20 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
+      id: 'P5S Venom Pool with Crystals',
+      // TODO: Callout safe quadrant/half
+      type: 'StartsUsing',
+      netRegex: NetRegexes.startsUsing({ id: '79E2', source: 'Proto-Carbuncle', capture: false }),
+      infoText: (_data, _matches, output) => {
+        return output.groups!();
+      },
+      outputStrings: {
+        groups: {
+          en: '보석 위에서 힐러랑 뭉쳐욧',
+        },
+      },
+    },
+    {
       id: 'P5S Tail to Claw',
       type: 'StartsUsing',
       netRegex: NetRegexes.startsUsing({ id: '7712', source: 'Proto-Carbuncle', capture: false }),
@@ -140,11 +163,57 @@ const triggerSet: TriggerSet<Data> = {
       response: Responses.getFrontThenBack(),
     },
     {
+      id: 'P5S Raging Tail Move',
+      type: 'Ability',
+      netRegex: NetRegexes.ability({ id: '7A0C', source: 'Proto-Carbuncle', capture: false }),
+      infoText: (_data, _matches, output) => output.moveBehind!(),
+      outputStrings: {
+        moveBehind: {
+          en: '엉댕이로 가욧',
+          de: 'Nach Hinten bewegen',
+        },
+      },
+    },
+    {
       id: 'P5S Claw to Tail',
       type: 'StartsUsing',
       netRegex: NetRegexes.startsUsing({ id: '770E', source: 'Proto-Carbuncle', capture: false }),
       durationSeconds: 5,
       response: Responses.getBackThenFront(),
+    },
+    {
+      id: 'P5S Raging Claw Move',
+      type: 'Ability',
+      netRegex: NetRegexes.ability({ id: '7710', source: 'Proto-Carbuncle', capture: false }),
+      condition: (data) => {
+        data.clawCount = data.clawCount + 1;
+        return data.clawCount === 6;
+      },
+      infoText: (_data, _matches, output) => output.moveFront!(),
+      run: (data) => {
+        data.clawCount = 0;
+      },
+      outputStrings: {
+        moveFront: {
+          en: '앞으로 가욧!',
+          de: 'Nach Vorne bewegen',
+        },
+      },
+    },
+    {
+      id: 'P5S Searing Ray',
+      type: 'StartsUsing',
+      netRegex: NetRegexes.startsUsing({ id: '76[DF]7', source: 'Proto-Carbuncle', capture: false }),
+      alertText: (_data, _matches, output) => output.text!(),
+      outputStrings: {
+        text: Outputs.goFront,
+      },
+    },
+    {
+      id: 'P5S Raging Claw',
+      type: 'StartsUsing',
+      netRegex: NetRegexes.startsUsing({ id: '76FA', source: 'Proto-Carbuncle', capture: false }),
+      response: Responses.getBehind(),
     },
     {
       id: 'P5S Topaz Ray Collect',
@@ -231,6 +300,7 @@ const triggerSet: TriggerSet<Data> = {
   timelineReplace: [
     {
       'locale': 'de',
+      'missingTranslations': true,
       'replaceSync': {
         'Lively Bait': 'zappelnd(?:e|er|es|en) Köder',
         'Proto-Carbuncle': 'Proto-Karfunkel',
