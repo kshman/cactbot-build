@@ -52,7 +52,7 @@ const triggerSet: TriggerSet<Data> = {
       id: 'P6S Chelic Synergy',
       type: 'StartsUsing',
       netRegex: NetRegexes.startsUsing({ id: '788A', source: 'Hegemone' }),
-      response: Responses.sharedTankBuster(),
+      response: Responses.sharedOrInvinTankBuster(),
     },
     {
       id: 'P6S Synergy',
@@ -63,8 +63,9 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '나눠서 탱크버스터',
+          en: '따로 따로 탱크버스터',
           de: 'Geteilter Tankbuster',
+          fr: 'Séparez les Tankbusters',
         },
       },
     },
@@ -121,7 +122,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (data, _matches, output) => output.text!({ num: data.pathogenicCellsNumber }),
       outputStrings: {
         text: {
-          en: '#${num}번째',
+          en: '주사위 ${num}번',
           de: '#${num}',
           fr: '#${num}',
           ja: '${num}番',
@@ -135,23 +136,23 @@ const triggerSet: TriggerSet<Data> = {
       type: 'HeadMarker',
       netRegex: NetRegexes.headMarker({}),
       condition: (data, matches) => {
-        return data.me === matches.target && !(/(00(?:4F|5[0-6]))|013E|0148|0065/).test(getHeadmarkerId(data, matches));
+        return data.me === matches.target;
       },
-      alertText: (data, matches, output) => {
+      infoText: (data, matches, output) => {
         const correctedMatch = getHeadmarkerId(data, matches);
         switch (correctedMatch) {
           case '0163':
           case '0167':
+          case '0169':
             return output.stackOnYou!();
           case '0164':
           case '0165':
           case '016A':
-            return output.goCorner!();
+            return output.spreadCorner!();
+          case '0166':
           case '0168':
           case '016E':
             return output.donut!();
-          default:
-            return output.unknown!();
         }
       },
       outputStrings: {
@@ -164,15 +165,11 @@ const triggerSet: TriggerSet<Data> = {
           cn: '集合放月环',
           ko: '도넛 장판, 쉐어',
         },
-        goCorner: {
-          en: '모서리로 가욧!',
-          de: 'Geh in die Ecken',
-          fr: 'Allez dans un coin',
+        spreadCorner: {
+          en: '구석으로 가욧!',
+          fr: 'Écartez-vous dans le coin',
           ja: 'コーナーへ',
-          cn: '去角落',
-          ko: '구석으로',
         },
-        unknown: Outputs.unknown,
       },
     },
     {
@@ -182,8 +179,9 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '동글배기 유도해욧',
+          en: '돔 장판 유도예욧!',
           de: 'Kreise ködern',
+          fr: 'Attirez les cercles',
         },
       },
     },
