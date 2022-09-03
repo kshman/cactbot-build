@@ -195,6 +195,7 @@ const triggerSet: TriggerSet<Data> = {
         },
         text: {
           en: '${dir1} -> ${dir2} -> ${dir3} -> ${dir4}',
+          de: '${dir1} -> ${dir2} -> ${dir3} -> ${dir4}',
           fr: '${dir1} -> ${dir2} -> ${dir3} -> ${dir4}',
         },
       },
@@ -232,6 +233,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         groups: {
           en: '보석 위에서 힐러랑 뭉쳐욧',
+          de: 'Heilergruppen auf Topassteine',
           fr: 'Groupes heal sur les Topazes',
         },
       },
@@ -302,7 +304,6 @@ const triggerSet: TriggerSet<Data> = {
   timelineReplace: [
     {
       'locale': 'de',
-      'missingTranslations': true,
       'replaceSync': {
         'Lively Bait': 'zappelnd(?:e|er|es|en) Köder',
         'Proto-Carbuncle': 'Proto-Karfunkel',

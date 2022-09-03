@@ -1,3 +1,4 @@
+import Conditions from '../../../../../resources/conditions';
 import NetRegexes from '../../../../../resources/netregexes';
 import { UnreachableCode } from '../../../../../resources/not_reached';
 import Outputs from '../../../../../resources/outputs';
@@ -6,9 +7,15 @@ import ZoneId from '../../../../../resources/zone_id';
 import { RaidbossData } from '../../../../../types/data';
 import { TriggerSet } from '../../../../../types/trigger';
 
+// TODO: Tether plant locations via OverlayPlugin X, Y and bird headings?
+
 export interface Data extends RaidbossData {
   purgationDebuffs: { [role: string]: { [name: string]: number } };
   purgationDebuffCount: number;
+  tetherCollect: string[];
+  stopTethers?: boolean;
+  tetherCollectPhase?: string;
+  rootsCounter?: boolean;
 }
 
 // effect ids for inviolate purgation
@@ -29,6 +36,7 @@ const triggerSet: TriggerSet<Data> = {
   initData: () => ({
     purgationDebuffs: { 'dps': {}, 'support': {} },
     purgationDebuffCount: 0,
+    tetherCollect: [],
   }),
   triggers: [
     {
@@ -43,9 +51,82 @@ const triggerSet: TriggerSet<Data> = {
       netRegex: NetRegexes.startsUsing({ id: '7835', source: 'Agdistis', capture: false }),
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
-        en: '따로 따로 탱크버스터',
-        de: 'Geteilter Tankbuster',
+        text: {
+          en: '따로 따로 탱크버스터',
+          de: 'Geteilter Tankbuster',
+        },
       },
+    },
+    {
+      id: 'P7S Bough of Attis Left Arrows',
+      type: 'StartsUsing',
+      netRegex: NetRegexes.startsUsing({ id: '7824', source: 'Agdistis', capture: false }),
+      response: Responses.goLeft(),
+    },
+    {
+      id: 'P7S Bough of Attis Right Arrows',
+      type: 'StartsUsing',
+      netRegex: NetRegexes.startsUsing({ id: '7823', source: 'Agdistis', capture: false }),
+      response: Responses.goRight(),
+    },
+    {
+      // First breaks north bridge for upcoming, South Knockback Spreads Soon
+      // Second breaks remaining bridges, Separate Healer Groups
+      // Third breaks all bridges, Bait on Empty Platform
+      id: 'P7S Roots of Attis 1',
+      type: 'StartsUsing',
+      netRegex: NetRegexes.startsUsing({ id: '780E', source: 'Agdistis', capture: false }),
+      condition: (data) => data.rootsCounter === undefined,
+      delaySeconds: 0.1, // Slight delay to prevent duplicate callout
+      infoText: (_data, _matches, output) => output.knockbackSpreadSoon!(),
+      run: (data) => data.rootsCounter = true,
+      outputStrings: {
+        knockbackSpreadSoon: {
+          en: '윗쪽 다리가 끊어져요!',
+        },
+      },
+    },
+    {
+      id: 'P7S Roots of Attis 2',
+      type: 'StartsUsing',
+      netRegex: NetRegexes.startsUsing({ id: '780E', source: 'Agdistis', capture: false }),
+      condition: (data) => data.rootsCounter,
+      delaySeconds: 0.1, // Slight delay to prevent duplicate callout
+      infoText: (_data, _matches, output) => output.separateHealerGroups!(),
+      run: (data) => data.rootsCounter = false,
+      outputStrings: {
+        separateHealerGroups: {
+          en: '힐러 중심으로 뭉쳐욧',
+        },
+      },
+    },
+    {
+      id: 'P7S Roots of Attis 3',
+      type: 'StartsUsing',
+      netRegex: NetRegexes.startsUsing({ id: '780E', source: 'Agdistis', capture: false }),
+      condition: (data) => data.rootsCounter === false,
+      infoText: (_data, _matches, output) => output.baitSoon!(),
+      outputStrings: {
+        baitSoon: {
+          en: '빈 곳에서 시작해욧',
+        },
+      },
+    },
+    {
+      id: 'P7S Hemitheos\'s Aero IV',
+      type: 'StartsUsing',
+      netRegex: NetRegexes.startsUsing({ id: '7A0B', source: 'Agdistis', capture: false }),
+      response: Responses.knockback(),
+    },
+    {
+      id: 'P7S Immature Stymphalide Tether',
+      type: 'Tether',
+      netRegex: NetRegexes.tether({ id: '0011', source: 'Immature Stymphalide', capture: false }),
+      // ~9s between tether and Bronze Bellows (no cast) in all cases.
+      delaySeconds: 4,
+      // Just give this to everyone.  People in towers or elsewhere can be safe.
+      suppressSeconds: 1,
+      response: Responses.knockback(),
     },
     {
       id: 'P7S Spark of Life',
@@ -54,7 +135,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '레이드와이드 + 출혈',
+          en: '전체공격 + 출혈',
         },
       },
     },
@@ -64,7 +145,7 @@ const triggerSet: TriggerSet<Data> = {
       // CEC/D45 = Inviolate Winds
       // CED/D56 = Holy Bonds
       netRegex: NetRegexes.gainsEffect({ effectId: ['CEC', 'D45'] }),
-      condition: (data, matches) => matches.target === data.me,
+      condition: Conditions.targetIsYou(),
       durationSeconds: 20,
       response: (_data, matches, output) => {
         // cactbot-builtin-response
@@ -77,6 +158,93 @@ const triggerSet: TriggerSet<Data> = {
         if (longTimer)
           return { infoText: output.stackThenSpread!() };
         return { infoText: output.spreadThenStack!() };
+      },
+    },
+    {
+      id: 'P7S Bull and Minotaur Tethers',
+      // 0006 Immature Io (Bull) Tether
+      // 0039 Immature Minotaur Tether
+      // Forbidden Fruit 4 has 4 Bull, 2 Minotaur Tethers, 1 Non-tethered Minotaur
+      // Famine has 4 Minotaur Tethers and 2 Non-tethered Minotaurs
+      // Death has 8 Bull Tethers /w Static Birds
+      // War has 4 Bull Tethers, 2 Minotaur Tethers, 2 Bird Tethers
+      // TODO: Get locations with OverlayPlugin via X, Y and bird headings?
+      type: 'Tether',
+      netRegex: NetRegexes.tether({ id: ['0006', '0039'] }),
+      condition: (data) => !data.stopTethers,
+      preRun: (data, matches) => data.tetherCollect.push(matches.target),
+      delaySeconds: 0.1,
+      infoText: (data, matches, output) => {
+        if (data.me === matches.target) {
+          // Bull Tethers
+          if (matches.id === '0006')
+            return output.bullTether!({ location: output.lineAoE!() });
+
+          // Minotaur Tethers
+          if (matches.id === '0039')
+            return output.minotaurTether!({ location: output.bigCleave!() });
+        }
+
+        // No Tethers
+        if (!data.tetherCollect.includes(data.me)) {
+          // Prevent duplicate callout
+          data.tetherCollect.push(data.me);
+          if (!data.tetherCollectPhase)
+            return output.baitMinotaur!({ location: output.middle!() });
+          if (data.tetherCollectPhase === 'famine')
+            return output.baitMinotaur!({ location: '' });
+        }
+      },
+      outputStrings: {
+        bullTether: {
+          en: '소에서 줄 ${location}',
+        },
+        minotaurTether: {
+          en: '미노에서 줄 ${location}',
+        },
+        baitMinotaur: {
+          en: '줄 없네, 미노 클레브 유도해욧 ${location}',
+        },
+        middle: {
+          en: '(가운데서)',
+        },
+        lineAoE: {
+          en: '(파란 줄)',
+        },
+        bigCleave: {
+          en: '(쭉쭉 늘려)',
+        },
+      },
+    },
+    {
+      id: 'P7S Bull and Minotaur Tethers Stop Collection',
+      // 0001 Tether also goes off on players that get 0039 Tethers which leads
+      // to 0039 possibly reapplying. This trigger is used to only collect tethers
+      // during a defined window.
+      type: 'Tether',
+      netRegex: NetRegexes.tether({ id: ['0006', '0039'], capture: false }),
+      delaySeconds: 0.2,
+      suppressSeconds: 6,
+      run: (data) => data.stopTethers = true,
+    },
+    {
+      id: 'P7S Bull and Minotaur Tethers Phase Tracker',
+      type: 'StartsUsing',
+      netRegex: NetRegexes.startsUsing({ id: ['7A4F', '7A50', '7451'] }),
+      run: (data, matches) => {
+        data.stopTethers = false;
+        data.tetherCollect = [];
+        switch (matches.id) {
+          case '7A4F':
+            data.tetherCollectPhase = 'famine';
+            break;
+          case '7A50':
+            data.tetherCollectPhase = 'death';
+            break;
+          case '7451':
+            data.tetherCollectPhase = 'war';
+            break;
+        }
       },
     },
     {
@@ -95,7 +263,10 @@ const triggerSet: TriggerSet<Data> = {
         data.purgationDebuffCount += 1;
 
         const role = data.party.isDPS(matches.target) ? 'dps' : 'support';
-        data.purgationDebuffs[role]![matches.effectId.toUpperCase()] = parseFloat(matches.duration);
+        const debuff = data.purgationDebuffs[role];
+        if (!debuff)
+          return;
+        debuff[matches.effectId.toUpperCase()] = parseFloat(matches.duration);
       },
       durationSeconds: 55,
       infoText: (data, _matches, output) => {
@@ -103,8 +274,8 @@ const triggerSet: TriggerSet<Data> = {
           return;
 
         // Sort effects ascending by duration
-        const role = (data.role === 'tank' || data.role === 'healer') ? 'support' : 'dps';
-        const unsortedDebuffs = Object.keys(data.purgationDebuffs[role]!);
+        const role = data.role === 'dps' ? 'dps' : 'support';
+        const unsortedDebuffs = Object.keys(data.purgationDebuffs[role] ?? {});
         const sortedDebuffs = unsortedDebuffs.sort((a, b) => (data.purgationDebuffs[role]?.[a] ?? 0) - (data.purgationDebuffs[role]?.[b] ?? 0));
 
         // get stack or spread from effectId
@@ -124,12 +295,13 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         comboText: {
           en: '${effect1} => ${effect2} => ${effect3} => ${effect4}',
+          de: '${effect1} => ${effect2} => ${effect3} => ${effect4}',
         },
         spread: {
-          en: '흩어졋',
+          en: '흩어지고',
         },
         stack: {
-          en: '뭉쳣',
+          en: '뭉쳤다',
         },
       },
     },
@@ -139,6 +311,115 @@ const triggerSet: TriggerSet<Data> = {
       'locale': 'en',
       'replaceText': {
         'Condensed Aero II/Dispersed Aero II': 'Condensed/Dispersed Aero II',
+      },
+    },
+    {
+      'locale': 'de',
+      'missingTranslations': true,
+      'replaceSync': {
+        'Agdistis': 'Agdistis',
+        'Immature Io': 'unreif(?:e|er|es|en) Io',
+        'Immature Minotaur': 'unreif(?:e|er|es|en) Minotaurus',
+        'Immature Stymphalide': 'unreif(?:e|er|es|en) Stymphalides',
+      },
+      'replaceText': {
+        '--chasing aoe--': '--verfolgende AoEs--',
+        '--eggs--': '--Eier--',
+        'arrow': 'Pfeil',
+        'close': 'Nahe',
+        'far': 'Entfernt',
+        'Blades of Attis': 'Schwertblatt des Attis',
+        'Bough of Attis': 'Ast des Attis',
+        'Bronze Bellows': 'Böenschlag',
+        'Bullish Slash': 'Bullenansturm',
+        'Bullish Swipe': 'Bullenfeger',
+        'Condensed Aero II': 'Gehäuftes Windra',
+        'Dispersed Aero II': 'Flächiges Windra',
+        'Forbidden Fruit': 'Frucht des Lebens',
+        'Hemitheos\'s Aero III': 'Hemitheisches Windga',
+        'Hemitheos\'s Aero IV': 'Hemitheisches Windka',
+        'Hemitheos\'s Glare(?! III)': 'Hemitheische Blendung',
+        'Hemitheos\'s Glare III': 'Hemitheisches Blendga',
+        'Hemitheos\'s Holy(?! III)': 'Hemitheisches Sanctus',
+        'Hemitheos\'s Holy III': 'Hemitheisches Sanctga',
+        'Hemitheos\'s Tornado': 'Hemitheischer Tornado',
+        'Immortal\'s Obol': 'Zweig des Lebens und des Todes',
+        'Inviolate Bonds': 'Siegelschaffung',
+        'Light of Life': 'Aurora des Lebens',
+        'Multicast': 'Multizauber',
+        'Roots of Attis': 'Wurzel des Attis',
+        'Shadow of Attis': 'Lichttropfen des Attis',
+        'Spark of Life': 'Schein des Lebens',
+        'Static Path': 'Statischer Pfad',
+        'Stymphalian Strike': 'Vogelschlag',
+      },
+    },
+    {
+      'locale': 'fr',
+      'missingTranslations': true,
+      'replaceSync': {
+        'Agdistis': 'Agdistis',
+        'Immature Io': 'io immature',
+        'Immature Minotaur': 'minotaure immature',
+        'Immature Stymphalide': 'stymphalide immature',
+      },
+      'replaceText': {
+        'Blades of Attis': 'Lames d\'Attis',
+        'Bough of Attis': 'Grandes branches d\'Attis',
+        'Bronze Bellows': 'Frappe rafale',
+        'Bullish Slash': 'Taillade catabatique',
+        'Bullish Swipe': 'Balayage catabatique',
+        'Condensed Aero II': 'Extra Vent concentré',
+        'Dispersed Aero II': 'Extra vent étendu',
+        'Forbidden Fruit': 'Fruits de la vie',
+        'Hemitheos\'s Aero III': 'Méga Vent d\'hémithéos',
+        'Hemitheos\'s Aero IV': 'Giga Vent d\'hémithéos',
+        'Hemitheos\'s Glare(?! III)': 'Chatoiement d\'hémithéos',
+        'Hemitheos\'s Glare III': 'Méga Chatoiement d\'hémithéos',
+        'Hemitheos\'s Holy(?! III)': 'Miracle d\'hémithéos',
+        'Hemitheos\'s Holy III': 'Méga Miracle d\'hémithéos',
+        'Hemitheos\'s Tornado': 'Tornade d\'hémithéos',
+        'Immortal\'s Obol': 'Branche de vie et de mort',
+        'Light of Life': 'Éclair de vie',
+        'Roots of Attis': 'Racines d\'Attis',
+        'Shadow of Attis': 'Rai d\'Attis',
+        'Spark of Life': 'Étincelle de vie',
+        'Static Path': 'Chemin statique',
+        'Stymphalian Strike': 'Assaut stymphalide',
+      },
+    },
+    {
+      'locale': 'ja',
+      'missingTranslations': true,
+      'replaceSync': {
+        'Agdistis': 'アグディスティス',
+        'Immature Io': 'イマチュア・イーオー',
+        'Immature Minotaur': 'イマチュア・タウロス',
+        'Immature Stymphalide': 'イマチュア・ステュムパリデス',
+      },
+      'replaceText': {
+        'Blades of Attis': 'アッティスの刃葉',
+        'Bough of Attis': 'アッティスの巨枝',
+        'Bronze Bellows': 'ガストストライク',
+        'Bullish Slash': 'ブルスラッシュ',
+        'Bullish Swipe': 'ブルスワイプ',
+        'Condensed Aero II': 'アグリゲート・エアロラ',
+        'Dispersed Aero II': 'スプレッド・エアロラ',
+        'Forbidden Fruit': '生命の果実',
+        'Hemitheos\'s Aero III': 'ヘーミテオス・エアロガ',
+        'Hemitheos\'s Aero IV': 'ヘーミテオス・エアロジャ',
+        'Hemitheos\'s Glare(?! III)': 'ヘーミテオス・グレア',
+        'Hemitheos\'s Glare III': 'ヘーミテオス・グレアガ',
+        'Hemitheos\'s Holy(?! III)': 'ヘーミテオス・ホーリー',
+        'Hemitheos\'s Holy III': 'ヘーミテオス・ホーリガ',
+        'Hemitheos\'s Tornado': 'ヘーミテオス・トルネド',
+        'Immortal\'s Obol': '生滅の導枝',
+        'Light of Life': '生命の極光',
+        'Roots of Attis': 'アッティスの根',
+        'Shadow of Attis': 'アッティスの光雫',
+        'Spark of Life': '生命の光芒',
+        'Static Path': 'スタティックパース',
+        'Stymphalian Strike': 'バードストライク',
       },
     },
   ],
