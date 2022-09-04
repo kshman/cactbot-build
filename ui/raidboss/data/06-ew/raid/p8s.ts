@@ -49,6 +49,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: '(파트너랑 뭉침, 나중에)',
+          de: '(Partner-Stacks, für später)',
         },
       },
     },
@@ -61,6 +62,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: '(흩어짐, 나중에)',
+          de: '(Verteilen, für später)',
         },
       },
     },
@@ -183,18 +185,23 @@ const triggerSet: TriggerSet<Data> = {
         },
         insideSquare: {
           en: '사각 안쪽',
+          de: 'Inneres Viereck',
         },
         cornerNW: {
           en: '↖↖ 구석',
+          de: 'NW Ecke',
         },
         cornerNE: {
           en: '↗↗ 구석',
+          de: 'NO Ecke',
         },
         cornerSE: {
           en: '↘↘ 구석',
+          de: 'SO Ecke',
         },
         cornerSW: {
           en: '↙↙ 구석',
+          de: 'SW Ecke',
         },
         outsideNorth: {
           en: '▲▲ 바깥',
@@ -330,6 +337,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: '(프로틴 피하기)',
+          de: '(weiche Himmelsrichtungen aus)',
         },
       },
     },
@@ -346,6 +354,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: '안으로, 프로틴 옴',
+          de: 'rein für Himmelsrichtungen',
         },
       },
     },
@@ -356,6 +365,24 @@ const triggerSet: TriggerSet<Data> = {
       'replaceText': {
         'Conceptual Octaflare/Conceptual Tetraflare': 'Conceptual Octa/Tetraflare',
         'Emergent Octaflare/Emergent Tetraflare': 'Emergent Octa/Tetraflare',
+      },
+    },
+    {
+      'locale': 'de',
+      'replaceSync': {
+        'Hephaistos': 'Hephaistos',
+      },
+    },
+    {
+      'locale': 'fr',
+      'replaceSync': {
+        'Hephaistos': 'Héphaïstos',
+      },
+    },
+    {
+      'locale': 'ja',
+      'replaceSync': {
+        'Hephaistos': 'ヘファイストス',
       },
     },
   ],

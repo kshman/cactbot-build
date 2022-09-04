@@ -5,18 +5,39 @@ import Outputs from '../../../../../resources/outputs';
 import { Responses } from '../../../../../resources/responses';
 import ZoneId from '../../../../../resources/zone_id';
 import { RaidbossData } from '../../../../../types/data';
+import { NetMatches } from '../../../../../types/net_matches';
 import { TriggerSet } from '../../../../../types/trigger';
 
 // TODO: Tether plant locations via OverlayPlugin X, Y and bird headings?
 
 export interface Data extends RaidbossData {
+  decOffset?: number;
+  previousBondsDebuff?: string;
   purgationDebuffs: { [role: string]: { [name: string]: number } };
   purgationDebuffCount: number;
+  purgationEffects?: string[];
+  purgationEffectIndex: number;
   tetherCollect: string[];
   stopTethers?: boolean;
   tetherCollectPhase?: string;
-  rootsCounter?: boolean;
+  secondRoots?: boolean;
 }
+
+// Due to changes introduced in patch 5.2, overhead markers now have a random offset
+// added to their ID. This offset currently appears to be set per instance, so
+// we can determine what it is from the first overhead marker we see.
+// The first 1B marker in the encounter is an Hemitheos's Holy III stack marker (013E).
+const firstHeadmarker = parseInt('013E', 16);
+const getHeadmarkerId = (data: Data, matches: NetMatches['HeadMarker']) => {
+  // If we naively just check !data.decOffset and leave it, it breaks if the first marker is 013E.
+  // (This makes the offset 0, and !0 is true.)
+  if (typeof data.decOffset === 'undefined')
+    data.decOffset = parseInt(matches.id, 16) - firstHeadmarker;
+  // The leading zeroes are stripped when converting back to string, so we re-add them here.
+  // Fortunately, we don't have to worry about whether or not this is robust,
+  // since we know all the IDs that will be present in the encounter.
+  return (parseInt(matches.id, 16) - data.decOffset).toString(16).toUpperCase().padStart(4, '0');
+};
 
 // effect ids for inviolate purgation
 const effectIdToOutputStringKey: { [effectId: string]: string } = {
@@ -36,9 +57,34 @@ const triggerSet: TriggerSet<Data> = {
   initData: () => ({
     purgationDebuffs: { 'dps': {}, 'support': {} },
     purgationDebuffCount: 0,
+    purgationEffectIndex: 0,
     tetherCollect: [],
   }),
   triggers: [
+    {
+      id: 'P7S Headmarker Tracker',
+      type: 'HeadMarker',
+      netRegex: NetRegexes.headMarker({}),
+      condition: (data) => data.decOffset === undefined,
+      // Unconditionally set the first headmarker here so that future triggers are conditional.
+      run: (data, matches) => {
+        getHeadmarkerId(data, matches);
+      },
+    },
+    {
+      id: 'P7S Hemitheos\'s Holy III Healer Groups',
+      type: 'HeadMarker',
+      netRegex: NetRegexes.headMarker({}),
+      suppressSeconds: 1,
+      infoText: (data, matches, output) => {
+        const correctedMatch = getHeadmarkerId(data, matches);
+        if (correctedMatch === '013E')
+          return output.healerGroups!();
+      },
+      outputStrings: {
+        healerGroups: Outputs.healerGroups,
+      },
+    },
     {
       id: 'P7S Condensed Aero II',
       type: 'StartsUsing',
@@ -70,19 +116,14 @@ const triggerSet: TriggerSet<Data> = {
       response: Responses.goRight(),
     },
     {
-      // First breaks north bridge for upcoming, South Knockback Spreads Soon
-      // Second breaks remaining bridges, Separate Healer Groups
-      // Third breaks all bridges, Bait on Empty Platform
-      id: 'P7S Roots of Attis 1',
+      id: 'P7S Roots of Attis 3',
       type: 'StartsUsing',
       netRegex: NetRegexes.startsUsing({ id: '780E', source: 'Agdistis', capture: false }),
-      condition: (data) => data.rootsCounter === undefined,
-      delaySeconds: 0.1, // Slight delay to prevent duplicate callout
-      infoText: (_data, _matches, output) => output.knockbackSpreadSoon!(),
-      run: (data) => data.rootsCounter = true,
+      condition: (data) => data.secondRoots === false,
+      infoText: (_data, _matches, output) => output.baitSoon!(),
       outputStrings: {
-        knockbackSpreadSoon: {
-          en: '윗쪽 다리가 끊어져요!',
+        baitSoon: {
+          en: '빈 곳에서 시작해욧',
         },
       },
     },
@@ -90,25 +131,28 @@ const triggerSet: TriggerSet<Data> = {
       id: 'P7S Roots of Attis 2',
       type: 'StartsUsing',
       netRegex: NetRegexes.startsUsing({ id: '780E', source: 'Agdistis', capture: false }),
-      condition: (data) => data.rootsCounter,
-      delaySeconds: 0.1, // Slight delay to prevent duplicate callout
+      condition: (data) => data.secondRoots,
       infoText: (_data, _matches, output) => output.separateHealerGroups!(),
-      run: (data) => data.rootsCounter = false,
+      run: (data) => data.secondRoots = false,
       outputStrings: {
         separateHealerGroups: {
-          en: '힐러 중심으로 뭉쳐욧',
+          en: '각각 그룹으로 모여 맞아요',
         },
       },
     },
     {
-      id: 'P7S Roots of Attis 3',
+      // First breaks north bridge for upcoming South Knockback Spreads
+      // Second breaks remaining bridges, Separate Healer Groups
+      // Third breaks all bridges, Bait on Empty Platform
+      id: 'P7S Roots of Attis 1',
       type: 'StartsUsing',
       netRegex: NetRegexes.startsUsing({ id: '780E', source: 'Agdistis', capture: false }),
-      condition: (data) => data.rootsCounter === false,
-      infoText: (_data, _matches, output) => output.baitSoon!(),
+      condition: (data) => data.secondRoots === undefined,
+      infoText: (_data, _matches, output) => output.knockbackSpreadSoon!(),
+      run: (data) => data.secondRoots = true,
       outputStrings: {
-        baitSoon: {
-          en: '빈 곳에서 시작해욧',
+        knockbackSpreadSoon: {
+          en: '윗쪽 다리가 끊어져요!',
         },
       },
     },
@@ -147,12 +191,15 @@ const triggerSet: TriggerSet<Data> = {
       netRegex: NetRegexes.gainsEffect({ effectId: ['CEC', 'D45'] }),
       condition: Conditions.targetIsYou(),
       durationSeconds: 20,
-      response: (_data, matches, output) => {
+      response: (data, matches, output) => {
         // cactbot-builtin-response
         output.responseOutputStrings = {
           stackThenSpread: Outputs.stackThenSpread,
           spreadThenStack: Outputs.spreadThenStack,
         };
+
+        // Strore debuff for reminders
+        data.previousBondsDebuff = matches.effectId;
 
         const longTimer = parseFloat(matches.duration) > 9;
         if (longTimer)
@@ -161,28 +208,100 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
+      id: 'P7S Inviolate Bonds Reminders',
+      // First trigger is ~4s after debuffs callout
+      // These happen 6s before cast
+      type: 'HeadMarker',
+      netRegex: NetRegexes.headMarker({}),
+      suppressSeconds: 1,
+      infoText: (data, matches, output) => {
+        const correctedMatch = getHeadmarkerId(data, matches);
+        if (correctedMatch === '00A6' && data.purgationDebuffCount === 0) {
+          switch (data.previousBondsDebuff) {
+            case 'CEC':
+              data.previousBondsDebuff = 'D45';
+              return output.spread!();
+            case 'D45':
+              data.previousBondsDebuff = 'CEC';
+              return output.stackMarker!();
+          }
+        }
+      },
+      outputStrings: {
+        spread: Outputs.spread,
+        stackMarker: Outputs.stackMarker,
+      },
+    },
+    {
       id: 'P7S Bull and Minotaur Tethers',
       // 0006 Immature Io (Bull) Tether
       // 0039 Immature Minotaur Tether
-      // Forbidden Fruit 4 has 4 Bull, 2 Minotaur Tethers, 1 Non-tethered Minotaur
-      // Famine has 4 Minotaur Tethers and 2 Non-tethered Minotaurs
-      // Death has 8 Bull Tethers /w Static Birds
-      // War has 4 Bull Tethers, 2 Minotaur Tethers, 2 Bird Tethers
+      // Forbidden Fruit 4: 4 Bull Tethers, 2 Minotaur Tethers, 1 Non-tethered Minotaur
+      // Famine: 4 Minotaur Tethers, 2 Non-tethered Minotaurs, 2 Static Birds
+      // Death: 2 Bulls with Tethers, 1 Bull casting Puddle AoE, 2 Static Birds
+      // War: 4 Bull Tethers, 2 Minotaur Tethers, 2 Bird Tethers
       // TODO: Get locations with OverlayPlugin via X, Y and bird headings?
       type: 'Tether',
       netRegex: NetRegexes.tether({ id: ['0006', '0039'] }),
       condition: (data) => !data.stopTethers,
       preRun: (data, matches) => data.tetherCollect.push(matches.target),
       delaySeconds: 0.1,
-      infoText: (data, matches, output) => {
+      response: (data, matches, output) => {
+        // cactbot-builtin-response
+        output.responseOutputStrings = {
+          bullTether: {
+            en: '소에서 줄 ${location}',
+          },
+          deathBullTether: {
+            en: '소에서 줄 ${location}',
+          },
+          warBullTether: {
+            en: '소에서 줄 ${location}',
+          },
+          minotaurTether: {
+            en: '반대쪽 미노로 땡기는 줄 ${location}',
+          },
+          famineMinotaurTethers: {
+            en: '크로스로 땡기는 미노 줄 ${location}',
+          },
+          warMinotaurTethers: {
+            en: '미노에서 땡기는 줄 ${location}',
+          },
+          noTether: {
+            en: '줄 없네, 미노 클레브 ${location}',
+          },
+          famineNoTether: {
+            en: '줄 없네, 미노 클레브 ${location}',
+          },
+          middle: {
+            en: '(가운데로)',
+          },
+          lineAoE: {
+            en: '(파란줄)',
+          },
+          bigCleave: {
+            en: '(쭉쭉 늘려)',
+          },
+        };
+
         if (data.me === matches.target) {
           // Bull Tethers
-          if (matches.id === '0006')
-            return output.bullTether!({ location: output.lineAoE!() });
+          if (matches.id === '0006') {
+            if (data.tetherCollectPhase === 'death')
+              return { infoText: output.deathBullTether!({ location: '' }) };
+            if (data.tetherCollectPhase === 'war')
+              return { infoText: output.warBullTether!({ location: '' }) };
+            return { infoText: output.bullTether!({ location: output.lineAoE!() }) };
+          }
 
           // Minotaur Tethers
-          if (matches.id === '0039')
-            return output.minotaurTether!({ location: output.bigCleave!() });
+          if (matches.id === '0039') {
+            if (data.tetherCollectPhase === 'famine')
+              return { infoText: output.famineMinotaurTethers!({ location: '' }) };
+            if (data.tetherCollectPhase === 'war')
+              return { infoText: output.warMinotaurTethers!({ location: '' }) };
+            return { infoText: output.minotaurTether!({ location: output.bigCleave!() }) };
+          }
         }
 
         // No Tethers
@@ -190,30 +309,10 @@ const triggerSet: TriggerSet<Data> = {
           // Prevent duplicate callout
           data.tetherCollect.push(data.me);
           if (!data.tetherCollectPhase)
-            return output.baitMinotaur!({ location: output.middle!() });
+            return { infoText: output.noTether!({ location: output.middle!() }) };
           if (data.tetherCollectPhase === 'famine')
-            return output.baitMinotaur!({ location: '' });
+            return { alertText: output.famineNoTether!({ location: '' }) };
         }
-      },
-      outputStrings: {
-        bullTether: {
-          en: '소에서 줄 ${location}',
-        },
-        minotaurTether: {
-          en: '미노에서 줄 ${location}',
-        },
-        baitMinotaur: {
-          en: '줄 없네, 미노 클레브 유도해욧 ${location}',
-        },
-        middle: {
-          en: '(가운데서)',
-        },
-        lineAoE: {
-          en: '(파란 줄)',
-        },
-        bigCleave: {
-          en: '(쭉쭉 늘려)',
-        },
       },
     },
     {
@@ -241,7 +340,7 @@ const triggerSet: TriggerSet<Data> = {
           case '7A50':
             data.tetherCollectPhase = 'death';
             break;
-          case '7451':
+          case '7A51':
             data.tetherCollectPhase = 'war';
             break;
         }
@@ -285,6 +384,9 @@ const triggerSet: TriggerSet<Data> = {
         if (!effect1 || !effect2 || !effect3 || !effect4)
           throw new UnreachableCode();
 
+        // Store effects for reminders later
+        data.purgationEffects = [effect1, effect2, effect3, effect4];
+
         return output.comboText!({
           effect1: output[effect1]!(),
           effect2: output[effect2]!(),
@@ -302,6 +404,50 @@ const triggerSet: TriggerSet<Data> = {
         },
         stack: {
           en: '뭉쳤다',
+        },
+      },
+    },
+    {
+      id: 'P7S Inviolate Purgation Reminders',
+      // First trigger is ~4s after debuffs callout
+      // These happen 6s before cast
+      type: 'HeadMarker',
+      netRegex: NetRegexes.headMarker({}),
+      suppressSeconds: 1,
+      alertText: (data, matches, output) => {
+        // Return if we are missing effects
+        if (data.purgationEffects === undefined)
+          return;
+
+        const correctedMatch = getHeadmarkerId(data, matches);
+        if (correctedMatch === '00A6' && data.purgationDebuffCount !== 0) {
+          const text = data.purgationEffects[data.purgationEffectIndex];
+          data.purgationEffectIndex = data.purgationEffectIndex + 1;
+          if (text === undefined)
+            return;
+          return output[text]!();
+        }
+      },
+      outputStrings: {
+        spread: Outputs.spread,
+        stack: Outputs.stackMarker,
+      },
+    },
+    {
+      id: 'P7S Light of Life',
+      type: 'StartsUsing',
+      netRegex: NetRegexes.startsUsing({ id: '78E2', source: 'Agdistis', capture: false }),
+      // ~5s castTime, but boss cancels it and ability goes off 26s after start
+      delaySeconds: 20,
+      alertText: (_data, _matches, output) => output.bigAoEMiddle!(),
+      outputStrings: {
+        bigAoEMiddle: {
+          en: '엄청 아픈 전체 공격',
+          de: 'Große AoE, geh in die Mitte',
+          fr: 'Grosse AoE, allez au milieu',
+          ja: '大ダメージ、中へ',
+          cn: '超大伤害，去中间',
+          ko: '아픈 광뎀, 중앙으로',
         },
       },
     },

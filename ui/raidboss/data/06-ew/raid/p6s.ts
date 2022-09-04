@@ -77,6 +77,7 @@ const triggerSet: TriggerSet<Data> = {
           en: '따로 따로 탱크버스터',
           de: 'Geteilter Tankbuster',
           fr: 'Séparez les Tankbusters',
+          ko: '따로맞는 탱버',
         },
       },
     },
@@ -163,6 +164,9 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
+      // Each head marker is for each scenario.
+      // There are markers for: stack, no exchange; spread exchanged to donut; spread exchanged to stack; etc.
+      // Therefore, there is no need to keep track of tethers as well.
       id: 'P6S Exchange of Agonies Markers',
       type: 'HeadMarker',
       netRegex: NetRegexes.headMarker({}),
@@ -199,6 +203,7 @@ const triggerSet: TriggerSet<Data> = {
           de: 'In Ecken Verteilen',
           fr: 'Écartez-vous dans le coin',
           ja: 'コーナーへ',
+          ko: '구석으로 산개',
         },
       },
     },
@@ -212,6 +217,7 @@ const triggerSet: TriggerSet<Data> = {
           en: '돔 장판 유도예욧!',
           de: 'Kreise ködern',
           fr: 'Attirez les cercles',
+          ko: '장판 유도',
         },
       },
     },
@@ -267,24 +273,38 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: '${dir}, ${bait}',
+          de: '${dir}, ${bait}',
+          ko: '${dir}, ${bait}',
         },
         left: {
           en: '왼쪽 (날개)',
+          de: 'Links (Flügel-Seite)',
+          ko: '왼쪽 (날개쪽)',
         },
         right: {
           en: '오른쪽 (뱀)',
+          de: 'Rechts (Schlangen-Seite)',
+          ko: '오른쪽 (뱀쪽)',
         },
         firstBait: {
           en: '첫번째/20초',
+          de: 'Köder als 1. (20s)',
+          ko: '유도 1번 (20초)',
         },
         secondBait: {
           en: '두번째/8초',
+          de: 'Köder als 2. (8s)',
+          ko: '유도 2번 (8초)',
         },
         thirdBait: {
           en: '세번째/12초',
+          de: 'Köder als 3. (12s)',
+          ko: '유도 3번 (12초)',
         },
         fourthBait: {
           en: '네번째/16초',
+          de: 'Köder als 4. (16s)',
+          ko: '유도 4번 (16초)',
         },
       },
     },
@@ -300,6 +320,8 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         inFirstBait: {
           en: '안으로, 첫번째예욧',
+          de: 'Rein (Köder als 1.)',
+          ko: '안으로 (유도 1번)',
         },
       },
     },
@@ -340,12 +362,18 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         inSecondBait: {
           en: '안으로, 두번째예욧',
+          de: 'Rein (Köder als 2.)',
+          ko: '안으로 (유도 2번)',
         },
         inThirdBait: {
           en: '안으로, 세번째예욧',
+          de: 'Rein (Köder als 3.)',
+          ko: '안으로 (유도 3번)',
         },
         inFourthBait: {
           en: '안으로, 마지막이예욧',
+          de: 'Rein (Köder als 4.)',
+          ko: '안으로 (유도 4번)',
         },
       },
     },
@@ -367,9 +395,13 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         left: {
           en: '왼쪽 (날개)',
+          de: 'Links (Flügel-Seite)',
+          ko: '왼쪽 (날개쪽)',
         },
         right: {
           en: '오른쪽 (뱀)',
+          de: 'Rechts (Schlangen-Seite)',
+          ko: '오른쪽 (뱀쪽)',
         },
       },
     },
