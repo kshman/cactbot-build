@@ -2,9 +2,11 @@ import Conditions from '../../../../../resources/conditions';
 import NetRegexes from '../../../../../resources/netregexes';
 import { UnreachableCode } from '../../../../../resources/not_reached';
 import Outputs from '../../../../../resources/outputs';
+import { callOverlayHandler } from '../../../../../resources/overlay_plugin_api';
 import { Responses } from '../../../../../resources/responses';
 import ZoneId from '../../../../../resources/zone_id';
 import { RaidbossData } from '../../../../../types/data';
+import { PluginCombatantState } from '../../../../../types/event';
 import { NetMatches } from '../../../../../types/net_matches';
 import { TriggerSet } from '../../../../../types/trigger';
 
@@ -12,7 +14,11 @@ import { TriggerSet } from '../../../../../types/trigger';
 
 export interface Data extends RaidbossData {
   decOffset?: number;
-  previousBondsDebuff?: string;
+  rootsCount: number;
+  fruitCount: number;
+  hatchedEggs?: PluginCombatantState[];
+  unhatchedEggs?: PluginCombatantState[];
+  bondsDebuff?: string;
   purgationDebuffs: { [role: string]: { [name: string]: number } };
   purgationDebuffCount: number;
   purgationEffects?: string[];
@@ -20,7 +26,6 @@ export interface Data extends RaidbossData {
   tetherCollect: string[];
   stopTethers?: boolean;
   tetherCollectPhase?: string;
-  secondRoots?: boolean;
 }
 
 // Due to changes introduced in patch 5.2, overhead markers now have a random offset
@@ -39,6 +44,20 @@ const getHeadmarkerId = (data: Data, matches: NetMatches['HeadMarker']) => {
   return (parseInt(matches.id, 16) - data.decOffset).toString(16).toUpperCase().padStart(4, '0');
 };
 
+// Calculate combatant position in an all 8 cards/intercards
+const matchedPositionTo8Dir = (combatant: PluginCombatantState) => {
+  // Positions are moved up 100 and right 100
+  const y = combatant.PosY - 100;
+  const x = combatant.PosX - 100;
+
+  // Majority of mechanics center around three circles:
+  // NW at 0, NE at 2, South at 5
+  // Map NW = 0, N = 1, ..., W = 7
+
+  return (Math.round(5 - 4 * Math.atan2(x, y) / Math.PI) % 8);
+};
+
+
 // effect ids for inviolate purgation
 const effectIdToOutputStringKey: { [effectId: string]: string } = {
   'CEE': 'spread',
@@ -55,6 +74,8 @@ const triggerSet: TriggerSet<Data> = {
   zoneId: ZoneId.AbyssosTheSeventhCircleSavage,
   timelineFile: 'p7s.txt',
   initData: () => ({
+    rootsCount: 0,
+    fruitCount: 0,
     purgationDebuffs: { 'dps': {}, 'support': {} },
     purgationDebuffCount: 0,
     purgationEffectIndex: 0,
@@ -69,6 +90,118 @@ const triggerSet: TriggerSet<Data> = {
       // Unconditionally set the first headmarker here so that future triggers are conditional.
       run: (data, matches) => {
         getHeadmarkerId(data, matches);
+      },
+    },
+    {
+      id: 'P7S Egg Tracker',
+      // Collects combatantData of the eggs
+      // combatant.BNpcNameID Mapping:
+      //   11375 => Immature Io
+      //   11376 => Immature Stymphalide
+      //   11377 => Immature Minotaur
+      // unhatchedEggs Mapping:
+      //   0-5 are Minotaurs
+      //   6-9 are Birds
+      //   10-12 are Ios
+      type: 'Ability',
+      netRegex: NetRegexes.ability({ id: '7811', source: 'Agdistis', capture: false }),
+      preRun: (data) => data.fruitCount = data.fruitCount + 1,
+      delaySeconds: 0.5,
+      promise: async (data) => {
+        const combatantData = await callOverlayHandler({
+          call: 'getCombatants',
+          names: ['Forbidden Fruit'],
+        });
+        // if we could not retrieve combatant data, the
+        // trigger will not work, so just resume promise here
+        if (combatantData === null) {
+          console.error(`Forbidden Fruit: null data`);
+          return;
+        }
+        const combatantDataLength = combatantData.combatants.length;
+        if (combatantDataLength < 13) {
+          console.error(`Forbidden Fruit: expected at least 13 combatants got ${combatantDataLength}`);
+          return;
+        }
+
+        // Sort the combatants for parsing its role in the encounter
+        const sortCombatants = (a: PluginCombatantState, b: PluginCombatantState) => (a.ID ?? 0) - (b.ID ?? 0);
+        const sortedCombatantData = combatantData.combatants.sort(sortCombatants);
+        data.unhatchedEggs = sortedCombatantData;
+      },
+      response: (data, _matches, output) => {
+        // cactbot-builtin-response
+        output.responseOutputStrings = {
+          left: Outputs.left,
+          right: Outputs.right,
+          south: Outputs.south,
+          twoPlatforms: {
+            en: '${platform1} / ${platform2}',
+          },
+        };
+        // Platforms are at 0 NW, 2 NE, 5 S
+        const safeSpots: { [bird: number]: string } = {
+          0: 'left',
+          2: 'right',
+          5: 'south',
+        };
+
+        if (data.fruitCount === 1) {
+          // Find location of the north-most bird
+          // Forbidden Fruit 1 uses last two birds
+          if (data.unhatchedEggs === undefined || data.unhatchedEggs[8] === undefined || data.unhatchedEggs[9] === undefined) {
+            console.error(`Forbidden Fruit 1: Missing egg data.`);
+            return;
+          }
+          const bird1 = data.unhatchedEggs[8];
+          const bird2 = data.unhatchedEggs[9];
+
+          // Lower PosY = more north
+          const northBird = (bird1.PosY < bird2.PosY ? bird1 : bird2);
+
+          // Check north bird's side
+          if (northBird.PosX < 100)
+            return { alertText: output.left!() };
+          return { alertText: output.right!() };
+        }
+        if (data.fruitCount === 6) {
+          // Check where bull is
+          // Forbidden Fruit 6 uses birds 1 and 4, bull 3
+          if (data.unhatchedEggs === undefined || data.unhatchedEggs[12] === undefined) {
+            console.error(`Forbidden Fruit 6: Missing egg data.`);
+            return;
+          }
+          const bullPosition = matchedPositionTo8Dir(data.unhatchedEggs[12]);
+
+          delete safeSpots[bullPosition];
+
+          if (Object.keys(safeSpots).length === 2) {
+            const safePlatform1 = Object.values(safeSpots)[0];
+            const safePlatform2 = Object.values(safeSpots)[1];
+            if (safePlatform1 !== undefined && safePlatform2 !== undefined)
+              return { infoText: output.twoPlatforms!({ platform1: output[safePlatform1]!(), platform2: output[safePlatform2]!() }) };
+          }
+        }
+        if (data.fruitCount === 7) {
+          // Check each location for bird, safe spot is where there is no bird
+          // Forbidden Fruit 7 uses last two birds
+          if (data.unhatchedEggs === undefined || data.unhatchedEggs[8] === undefined || data.unhatchedEggs[9] === undefined) {
+            console.error(`Forbidden Fruit 7: Missing egg data.`);
+            return;
+          }
+          const birdPosition1 = matchedPositionTo8Dir(data.unhatchedEggs[8]);
+          const birdPosition2 = matchedPositionTo8Dir(data.unhatchedEggs[9]);
+
+          delete safeSpots[birdPosition1];
+          delete safeSpots[birdPosition2];
+
+          if (Object.keys(safeSpots).length === 1) {
+            const safeSpot = Object.values(safeSpots)[0];
+            if (safeSpot !== undefined)
+              return { infoText: output[safeSpot]!() };
+            console.error(`Forbidden Fruit 7: Invalid positions.`);
+          }
+        }
       },
     },
     {
@@ -119,7 +252,7 @@ const triggerSet: TriggerSet<Data> = {
       id: 'P7S Roots of Attis 3',
       type: 'StartsUsing',
       netRegex: NetRegexes.startsUsing({ id: '780E', source: 'Agdistis', capture: false }),
-      condition: (data) => data.secondRoots === false,
+      condition: (data) => data.rootsCount === 2,
       infoText: (_data, _matches, output) => output.baitSoon!(),
       outputStrings: {
         baitSoon: {
@@ -131,9 +264,9 @@ const triggerSet: TriggerSet<Data> = {
       id: 'P7S Roots of Attis 2',
       type: 'StartsUsing',
       netRegex: NetRegexes.startsUsing({ id: '780E', source: 'Agdistis', capture: false }),
-      condition: (data) => data.secondRoots,
+      condition: (data) => data.rootsCount === 1,
       infoText: (_data, _matches, output) => output.separateHealerGroups!(),
-      run: (data) => data.secondRoots = false,
+      run: (data) => data.rootsCount = data.rootsCount + 1,
       outputStrings: {
         separateHealerGroups: {
           en: '각각 그룹으로 모여 맞아요',
@@ -147,9 +280,9 @@ const triggerSet: TriggerSet<Data> = {
       id: 'P7S Roots of Attis 1',
       type: 'StartsUsing',
       netRegex: NetRegexes.startsUsing({ id: '780E', source: 'Agdistis', capture: false }),
-      condition: (data) => data.secondRoots === undefined,
+      condition: (data) => data.rootsCount === 0,
       infoText: (_data, _matches, output) => output.knockbackSpreadSoon!(),
-      run: (data) => data.secondRoots = true,
+      run: (data) => data.rootsCount = data.rootsCount + 1,
       outputStrings: {
         knockbackSpreadSoon: {
           en: '윗쪽 다리가 끊어져요!',
@@ -199,7 +332,7 @@ const triggerSet: TriggerSet<Data> = {
         };
 
         // Strore debuff for reminders
-        data.previousBondsDebuff = matches.effectId;
+        data.bondsDebuff = (matches.effectId === 'CEC' ? 'spread' : 'stackMarker');
 
         const longTimer = parseFloat(matches.duration) > 9;
         if (longTimer)
@@ -216,33 +349,27 @@ const triggerSet: TriggerSet<Data> = {
       suppressSeconds: 1,
       infoText: (data, matches, output) => {
         const correctedMatch = getHeadmarkerId(data, matches);
-        if (correctedMatch === '00A6' && data.purgationDebuffCount === 0) {
-          switch (data.previousBondsDebuff) {
-            case 'CEC':
-              data.previousBondsDebuff = 'D45';
-              return output.spread!();
-            case 'D45':
-              data.previousBondsDebuff = 'CEC';
-              return output.stackMarker!();
-          }
-        }
+        if (correctedMatch === '00A6' && data.purgationDebuffCount === 0 && data.bondsDebuff)
+          return output[data.bondsDebuff]!();
       },
+      run: (data) => data.bondsDebuff = (data.bondsDebuff === 'spread' ? 'stackMarker' : 'spread'),
       outputStrings: {
         spread: Outputs.spread,
         stackMarker: Outputs.stackMarker,
       },
     },
     {
-      id: 'P7S Bull and Minotaur Tethers',
+      id: 'P7S Forbidden Fruit 4 and Harvest Tethers',
       // 0006 Immature Io (Bull) Tether
       // 0039 Immature Minotaur Tether
+      // 0011 Immature Stymphalide (Bird) Tether
       // Forbidden Fruit 4: 4 Bull Tethers, 2 Minotaur Tethers, 1 Non-tethered Minotaur
       // Famine: 4 Minotaur Tethers, 2 Non-tethered Minotaurs, 2 Static Birds
       // Death: 2 Bulls with Tethers, 1 Bull casting Puddle AoE, 2 Static Birds
       // War: 4 Bull Tethers, 2 Minotaur Tethers, 2 Bird Tethers
       // TODO: Get locations with OverlayPlugin via X, Y and bird headings?
       type: 'Tether',
-      netRegex: NetRegexes.tether({ id: ['0006', '0039'] }),
+      netRegex: NetRegexes.tether({ id: ['0006', '0039', '0011'] }),
       condition: (data) => !data.stopTethers,
       preRun: (data, matches) => data.tetherCollect.push(matches.target),
       delaySeconds: 0.1,
@@ -250,37 +377,31 @@ const triggerSet: TriggerSet<Data> = {
         // cactbot-builtin-response
         output.responseOutputStrings = {
           bullTether: {
-            en: '소에서 줄 ${location}',
+            en: '소에서 파란 줄',
           },
           deathBullTether: {
-            en: '소에서 줄 ${location}',
+            en: '소에서 파란 줄',
           },
           warBullTether: {
-            en: '소에서 줄 ${location}',
+            en: '소에서 파란 줄',
           },
           minotaurTether: {
-            en: '반대쪽 미노로 땡기는 줄 ${location}',
+            en: '반대쪽 미노로 쭉쭉 땡기는 줄',
           },
-          famineMinotaurTethers: {
-            en: '크로스로 땡기는 미노 줄 ${location}',
+          famineMinotaurTether: {
+            en: '크로스로 쭉쭉 땡기는 미노 줄',
           },
-          warMinotaurTethers: {
-            en: '미노에서 땡기는 줄 ${location}',
+          warMinotaurTether: {
+            en: '미노에서 쭉쭉 땡기는 줄',
+          },
+          warBirdTether: {
+            en: '새에서 돌진 줄',
           },
           noTether: {
-            en: '줄 없네, 미노 클레브 ${location}',
+            en: '줄 없네, 가운데서 미노 클레브',
           },
           famineNoTether: {
-            en: '줄 없네, 미노 클레브 ${location}',
-          },
-          middle: {
-            en: '(가운데로)',
-          },
-          lineAoE: {
-            en: '(파란줄)',
-          },
-          bigCleave: {
-            en: '(쭉쭉 늘려)',
+            en: '줄 없네, 두 마리 있는데서 미노 클레브',
           },
         };
 
@@ -288,20 +409,24 @@ const triggerSet: TriggerSet<Data> = {
           // Bull Tethers
           if (matches.id === '0006') {
             if (data.tetherCollectPhase === 'death')
-              return { infoText: output.deathBullTether!({ location: '' }) };
+              return { infoText: output.deathBullTether!() };
             if (data.tetherCollectPhase === 'war')
-              return { infoText: output.warBullTether!({ location: '' }) };
-            return { infoText: output.bullTether!({ location: output.lineAoE!() }) };
+              return { infoText: output.warBullTether!() };
+            return { infoText: output.bullTether!() };
           }
 
           // Minotaur Tethers
           if (matches.id === '0039') {
             if (data.tetherCollectPhase === 'famine')
-              return { infoText: output.famineMinotaurTethers!({ location: '' }) };
+              return { infoText: output.famineMinotaurTether!() };
             if (data.tetherCollectPhase === 'war')
-              return { infoText: output.warMinotaurTethers!({ location: '' }) };
-            return { infoText: output.minotaurTether!({ location: output.bigCleave!() }) };
+              return { infoText: output.warMinotaurTether!() };
+            return { infoText: output.minotaurTether!() };
           }
+
+          // Bird Tethers
+          if (matches.id === '0011')
+            return { infoText: output.warBirdTether!() };
         }
 
         // No Tethers
@@ -309,14 +434,14 @@ const triggerSet: TriggerSet<Data> = {
           // Prevent duplicate callout
           data.tetherCollect.push(data.me);
           if (!data.tetherCollectPhase)
-            return { infoText: output.noTether!({ location: output.middle!() }) };
+            return { infoText: output.noTether!() };
           if (data.tetherCollectPhase === 'famine')
-            return { alertText: output.famineNoTether!({ location: '' }) };
+            return { alertText: output.famineNoTether!() };
         }
       },
     },
     {
-      id: 'P7S Bull and Minotaur Tethers Stop Collection',
+      id: 'P7S Forbidden Fruit 4 and Harvest Stop Collection',
       // 0001 Tether also goes off on players that get 0039 Tethers which leads
       // to 0039 possibly reapplying. This trigger is used to only collect tethers
       // during a defined window.
@@ -327,9 +452,9 @@ const triggerSet: TriggerSet<Data> = {
       run: (data) => data.stopTethers = true,
     },
     {
-      id: 'P7S Bull and Minotaur Tethers Phase Tracker',
+      id: 'P7S Harvest Phase Tracker',
       type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ id: ['7A4F', '7A50', '7451'] }),
+      netRegex: NetRegexes.startsUsing({ id: ['7A4F', '7A50', '7A51'] }),
       run: (data, matches) => {
         data.stopTethers = false;
         data.tetherCollect = [];
@@ -414,7 +539,7 @@ const triggerSet: TriggerSet<Data> = {
       type: 'HeadMarker',
       netRegex: NetRegexes.headMarker({}),
       suppressSeconds: 1,
-      alertText: (data, matches, output) => {
+      infoText: (data, matches, output) => {
         // Return if we are missing effects
         if (data.purgationEffects === undefined)
           return;
@@ -448,6 +573,22 @@ const triggerSet: TriggerSet<Data> = {
           ja: '大ダメージ、中へ',
           cn: '超大伤害，去中间',
           ko: '아픈 광뎀, 중앙으로',
+        },
+      },
+    },
+    {
+      id: 'P7S Chaser Baits',
+      type: 'HeadMarker',
+      netRegex: NetRegexes.headMarker({}),
+      suppressSeconds: 1,
+      infoText: (data, matches, output) => {
+        const correctedMatch = getHeadmarkerId(data, matches);
+        if (correctedMatch === '00C5')
+          return output.baitOnEdge!();
+      },
+      outputStrings: {
+        baitOnEdge: {
+          en: '빈 곳으로 끌고 가욧',
         },
       },
     },
