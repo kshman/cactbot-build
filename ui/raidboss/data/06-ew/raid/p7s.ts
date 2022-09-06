@@ -57,7 +57,6 @@ const matchedPositionTo8Dir = (combatant: PluginCombatantState) => {
   return (Math.round(5 - 4 * Math.atan2(x, y) / Math.PI) % 8);
 };
 
-
 // effect ids for inviolate purgation
 const effectIdToOutputStringKey: { [effectId: string]: string } = {
   'CEE': 'spread',

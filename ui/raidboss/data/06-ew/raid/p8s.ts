@@ -69,7 +69,7 @@ const triggerSet: TriggerSet<Data> = {
           en: '밖으로 + 흩어져욧',
         },
         outAndStacks: {
-          en: '밖으로 + 뭉쳐욧',
+          en: '밖에서 + 뭉쳐욧',
         },
       },
     },
@@ -90,10 +90,10 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         in: Outputs.in,
         inAndSpread: {
-          en: '안으로 + 흩어져욧',
+          en: '안에서 + 흩어져욧',
         },
         inAndStacks: {
-          en: '안으로 + 뭉쳐욧',
+          en: '안에서 + 뭉쳐욧',
         },
       },
     },
@@ -178,10 +178,10 @@ const triggerSet: TriggerSet<Data> = {
       run: (data) => delete data.illusory,
       outputStrings: {
         inAndStacks: {
-          en: '안으로 + 뭉쳐욧',
+          en: '안에서 + 뭉쳐욧',
         },
         outAndStacks: {
-          en: '밖으로 + 뭉쳐욧',
+          en: '밖에서 + 뭉쳐욧',
         },
         stacks: {
           en: '파트너랑 뭉쳐욧',
@@ -204,7 +204,7 @@ const triggerSet: TriggerSet<Data> = {
       run: (data) => delete data.illusory,
       outputStrings: {
         inAndProtean: {
-          en: '안으로 + 프로틴',
+          en: '안에서 + 프로틴',
         },
         outAndProtean: {
           en: '밖으로 + 프로틴',
@@ -334,77 +334,82 @@ const triggerSet: TriggerSet<Data> = {
         insideSquare: {
           en: '안쪽 사각형',
           de: 'Inneres Viereck',
+          ja: '内側の四角',
         },
         cornerNW: {
-          en: '↖↖ 구석',
+          en: '① 왼쪽위',
           de: 'NW Ecke',
+          ja: '① 左上',
         },
         cornerNE: {
-          en: '↗↗ 구석',
+          en: '② 오른쪽위',
           de: 'NO Ecke',
+          ja: '② 右上',
         },
         cornerSE: {
-          en: '↘↘ 구석',
+          en: '③ 오른쪽아래',
           de: 'SO Ecke',
+          ja: '③ 右下',
         },
         cornerSW: {
-          en: '↙↙ 구석',
+          en: '④ 왼쪽아래',
           de: 'SW Ecke',
+          ja: '④ 左下',
         },
         outsideNorth: {
           en: '▲▲ 바깥',
           de: 'Im Norden raus',
           fr: 'Nord Extérieur',
-          ja: '北、外側',
+          ja: '北の外側',
           ko: '북쪽, 바깥',
         },
         insideNorth: {
           en: '▲▲ 안',
           de: 'Im Norden rein',
           fr: 'Nord Intérieur',
-          ja: '北、内側',
+          ja: '北の内側',
           ko: '북쪽, 안',
         },
         outsideEast: {
           en: '▶▶ 바깥',
           de: 'Im Osten raus',
           fr: 'Est Extérieur',
-          ja: '東、外側',
+          ja: '東の外側',
           ko: '동쪽, 바깥',
         },
         insideEast: {
           en: '▶▶ 안',
           de: 'Im Osten rein',
           fr: 'Est Intérieur',
-          ja: '東、内側',
+          ja: '東の内側',
           ko: '동쪽, 안',
         },
         outsideSouth: {
           en: '▼▼ 바깥',
           de: 'Im Süden raus',
           fr: 'Sud Extérieur',
-          ja: '南、外側',
+          ja: '南の外側',
           ko: '남쪽, 바깥',
         },
         insideSouth: {
           en: '▼▼ 안',
           de: 'Im Süden rein',
           fr: 'Sud Intérieur',
-          ja: '南、内側',
+          ja: '南の内側',
           ko: '남쪽, 안',
         },
         outsideWest: {
           en: '◀◀ 바깥',
           de: 'Im Westen raus',
           fr: 'Ouest Extérieur',
-          ja: '西、外側',
+          ja: '西の外側',
           ko: '서쪽, 바깥',
         },
         insideWest: {
           en: '◀◀ 안',
           de: 'Im Westen rein',
           fr: 'Ouest Intérieur',
-          ja: '西、内側',
+          ja: '西の内側',
           ko: '서쪽, 안',
         },
       },
@@ -421,14 +426,26 @@ const triggerSet: TriggerSet<Data> = {
       // There is 6.4 seconds between this Reforged Reflection ability and the Footprint (7109) ability.
       netRegex: NetRegexes.ability({ id: '794B', source: 'Hephaistos', capture: false }),
       delaySeconds: 1.5,
-      response: Responses.knockback(),
+      alertText: (_data, _matches, output) => output.knockback!(),
+      outputStrings: {
+        knockback: {
+          en: '넉백! 그리고 4연속 돌!',
+          ja: 'ノックバック => 4足歩行',
+        },
+      },
     },
     {
       id: 'P8S Snaking Kick',
       type: 'StartsUsing',
       // This is the Reforged Reflection cast.
       netRegex: NetRegexes.startsUsing({ id: '794C', source: 'Hephaistos', capture: false }),
-      response: Responses.getOut(),
+      alertText: (_data, _matches, output) => output.out!(),
+      outputStrings: {
+        out: {
+          en: '밖으로! 그리고 비암!',
+          ja: '外へ => 蛇腕',
+        },
+      },
     },
     {
       id: 'P8S Uplift Counter',
@@ -443,7 +460,7 @@ const triggerSet: TriggerSet<Data> = {
       tts: null,
       outputStrings: {
         text: {
-          en: '${num}번',
+          en: '${num}번째',
           de: '${num}',
           fr: '${num}',
           ja: '${num}',
@@ -464,7 +481,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (data, _matches, output) => output.text!({ num: data.upliftCounter }),
       outputStrings: {
         text: {
-          en: '${num}번',
+          en: '나는 ${num}번째',
           de: '${num}',
           fr: '${num}',
           ja: '${num}',
@@ -524,10 +541,10 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         northSouth: {
-          en: '남북에 새',
+          en: '남북에 새 → 위아래 깜선 바깥으로',
         },
         eastWest: {
-          en: '동서에 새',
+          en: '동서에 새 → 옆 깜선 바깥으로',
         },
       },
     },
@@ -650,42 +667,42 @@ const triggerSet: TriggerSet<Data> = {
           en: '${dir1} / ${dir2}',
         },
         north: {
-          en: '▲▲',
+          en: '▲▲ 윗쪽',
           ja: '北',
           ko: '북쪽',
         },
         east: {
-          en: '▶▶',
+          en: '▶▶ 오른쪽',
           ja: '東',
           ko: '동쪽',
         },
         south: {
-          en: '▼▼',
+          en: '▼▼ 아래쪽',
           ja: '南',
           ko: '남쪽',
         },
         west: {
-          en: '◀◀',
+          en: '◀◀ 왼쪽',
           ja: '西',
           ko: '서쪽',
         },
         dirNE: {
-          en: '↗↗',
+          en: '② 오른쪽위',
           ja: '北東',
           ko: '북동',
         },
         dirSE: {
-          en: '↘↘',
+          en: '③ 오른쪽아래',
           ja: '南東',
           ko: '남동',
         },
         dirSW: {
-          en: '↙↙',
+          en: '④ 왼쪽아래',
           ja: '南西',
           ko: '남서',
         },
         dirNW: {
-          en: '↖↖',
+          en: '① 왼쪽위',
           ja: '北西',
           ko: '북서',
         },
