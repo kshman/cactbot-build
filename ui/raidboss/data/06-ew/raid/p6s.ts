@@ -11,6 +11,7 @@ export interface Data extends RaidbossData {
   decOffset?: number;
   pathogenicCellsNumber?: number;
   pathogenicCellsDelay?: number;
+  pathogenicCellsCounter: number;
   secondExocleavers?: boolean;
   aetheronecrosisDuration: number;
   predationCount: number;
@@ -38,6 +39,7 @@ const triggerSet: TriggerSet<Data> = {
   timelineFile: 'p6s.txt',
   initData: () => {
     return {
+      pathogenicCellsCounter: 0,
       aetheronecrosisDuration: 0,
       predationCount: 0,
     };
@@ -77,6 +79,8 @@ const triggerSet: TriggerSet<Data> = {
           en: '따로 따로 탱크버스터',
           de: 'Geteilter Tankbuster',
           fr: 'Séparez les Tankbusters',
+          ja: '2人同時タンク強攻撃',
+          cn: '坦克分摊死刑',
           ko: '따로맞는 탱버',
         },
       },
@@ -151,15 +155,35 @@ const triggerSet: TriggerSet<Data> = {
         // show the number until you are done.
         return data.pathogenicCellsDelay;
       },
-      infoText: (data, _matches, output) => output.text!({ num: data.pathogenicCellsNumber }),
+      alertText: (data, _matches, output) => output.text!({ num: data.pathogenicCellsNumber }),
       outputStrings: {
         text: {
-          en: '주사위 ${num}번',
+          en: '내 주사위 ${num}번',
           de: '#${num}',
           fr: '#${num}',
           ja: '${num}番',
           cn: '#${num}',
           ko: '${num}번째',
+        },
+      },
+    },
+    {
+      id: 'P6S Pathogenic Cells Counter',
+      type: 'Ability',
+      netRegex: NetRegexes.ability({ id: '7865', source: 'Hegemone', capture: false }),
+      preRun: (data, _matches) => data.pathogenicCellsCounter++,
+      suppressSeconds: 1,
+      sound: '',
+      infoText: (data, _matches, output) => output.text!({ num: data.pathogenicCellsCounter }),
+      tts: null,
+      outputStrings: {
+        text: {
+          en: '현재 주사위: ${num}번',
+          de: '${num}',
+          fr: '${num}',
+          ja: '${num}',
+          cn: '${num}',
+          ko: '${num}',
         },
       },
     },
@@ -202,7 +226,8 @@ const triggerSet: TriggerSet<Data> = {
           en: '구석으로 가욧!',
           de: 'In Ecken Verteilen',
           fr: 'Écartez-vous dans le coin',
-          ja: 'コーナーへ',
+          ja: '隅で散会',
+          cn: '去角落',
           ko: '구석으로 산개',
         },
       },
@@ -216,7 +241,9 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: '돔 장판 유도예욧!',
           de: 'Kreise ködern',
-          fr: 'Attirez les cercles',
+          fr: 'Posez les cercles',
+          ja: 'ゆか誘導',
+          cn: '集合放圈',
           ko: '장판 유도',
         },
       },
@@ -274,36 +301,50 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: '${dir}, ${bait}',
           de: '${dir}, ${bait}',
+          fr: '${dir}, ${bait}',
+          ja: '${dir}, ${bait}',
           ko: '${dir}, ${bait}',
         },
         left: {
           en: '왼쪽 (날개)',
           de: 'Links (Flügel-Seite)',
+          fr: 'Gauche (Côté Aile)',
+          ja: '左 (翼)',
           ko: '왼쪽 (날개쪽)',
         },
         right: {
           en: '오른쪽 (뱀)',
           de: 'Rechts (Schlangen-Seite)',
+          fr: 'Droite (Côté Serpent)',
+          ja: '右 (蛇)',
           ko: '오른쪽 (뱀쪽)',
         },
         firstBait: {
           en: '첫번째/20초',
           de: 'Köder als 1. (20s)',
+          fr: 'Dépose en 1er (20s)',
+          ja: '1番目 (20秒)',
           ko: '유도 1번 (20초)',
         },
         secondBait: {
           en: '두번째/8초',
           de: 'Köder als 2. (8s)',
+          fr: 'Dépose en 2ème (8s)',
+          ja: '2番目 (8秒)',
           ko: '유도 2번 (8초)',
         },
         thirdBait: {
           en: '세번째/12초',
           de: 'Köder als 3. (12s)',
+          fr: 'Dépose en 3ème (12s)',
+          ja: '3番目 (12秒)',
           ko: '유도 3번 (12초)',
         },
         fourthBait: {
           en: '네번째/16초',
           de: 'Köder als 4. (16s)',
+          fr: 'Dépose en 4ème (16s)',
+          ja: '4番目 (16秒)',
           ko: '유도 4번 (16초)',
         },
       },
@@ -321,6 +362,8 @@ const triggerSet: TriggerSet<Data> = {
         inFirstBait: {
           en: '안으로, 첫번째예욧',
           de: 'Rein (Köder als 1.)',
+          fr: 'À l\'intérieur (1er)',
+          ja: '内側へ (1番目)',
           ko: '안으로 (유도 1번)',
         },
       },
@@ -363,16 +406,22 @@ const triggerSet: TriggerSet<Data> = {
         inSecondBait: {
           en: '안으로, 두번째예욧',
           de: 'Rein (Köder als 2.)',
+          fr: 'À l\'intérieur (2ème)',
+          ja: '内側へ (2番目)',
           ko: '안으로 (유도 2번)',
         },
         inThirdBait: {
           en: '안으로, 세번째예욧',
           de: 'Rein (Köder als 3.)',
+          fr: 'À l\'intérieur (3ème)',
+          ja: '内側へ (3番目)',
           ko: '안으로 (유도 3번)',
         },
         inFourthBait: {
           en: '안으로, 마지막이예욧',
           de: 'Rein (Köder als 4.)',
+          fr: 'À l\'intérieur (4ème)',
+          ja: '内側へ (4番目)',
           ko: '안으로 (유도 4번)',
         },
       },
@@ -396,11 +445,15 @@ const triggerSet: TriggerSet<Data> = {
         left: {
           en: '왼쪽 (날개)',
           de: 'Links (Flügel-Seite)',
+          fr: 'Gauche (Côté Aile)',
+          ja: '左 (翼)',
           ko: '왼쪽 (날개쪽)',
         },
         right: {
           en: '오른쪽 (뱀)',
           de: 'Rechts (Schlangen-Seite)',
+          fr: 'Droite (Côté Serpent)',
+          ja: '右 (蛇)',
           ko: '오른쪽 (뱀쪽)',
         },
       },
@@ -448,16 +501,21 @@ const triggerSet: TriggerSet<Data> = {
       'replaceText': {
         'Aetherial Exchange': 'Changement éthéréen',
         'Aetheric Polyominoid': 'Polyomino éthéré',
+        'Aetheronecrosis': 'Cellules magiques actives',
+        'Cachexia': 'Cachexie',
         'Chelic Claw': 'Griffe chélique',
         'Choros Ixou': 'Choros Ixou',
         'Dark Ashes': 'Cendres ténébreuses',
         'Dark Dome': 'Dôme ténébreux',
         'Dark Sphere': 'Sphère sombre',
+        'Dual Predation': 'Double attaque parasitaire',
+        'Exchange Of Agonies': 'Panaché ténébreux',
         'Exocleaver': 'Exo-couperet',
         'Hemitheos\'s Dark IV': 'Giga Ténèbres d\'hémithéos',
         'Pathogenic Cells': 'Souffle de cellules parasites',
         'Polyominoid Sigma': 'Polyomino éthéré Σ',
         'Polyominous Dark IV': 'Polyomino Giga Ténèbres',
+        'Ptera Ixou': 'Ptera Ixou',
         'Reek Havoc': 'Exhalaison',
         'Synergy': 'Synergie',
         'Transmission': 'Parasitage',
@@ -474,16 +532,21 @@ const triggerSet: TriggerSet<Data> = {
       'replaceText': {
         'Aetherial Exchange': 'エーテルチェンジ',
         'Aetheric Polyominoid': 'エーテル・ポリオミノ',
+        'Aetheronecrosis': '魔活細胞',
+        'Cachexia': 'カヘキシー',
         'Chelic Claw': '爪撃',
         'Choros Ixou': 'ホロス・イクソス',
         'Dark Ashes': 'ダークアッシュ',
         'Dark Dome': 'ダークドーム',
         'Dark Sphere': 'ダークスフィア',
+        'Dual Predation': '甲軟双撃',
+        'Exchange Of Agonies': 'チェンジバースト',
         'Exocleaver': 'エクソークリーバー',
         'Hemitheos\'s Dark IV': 'ヘーミテオス・ダージャ',
         'Pathogenic Cells': '軟体細胞流',
         'Polyominoid Sigma': 'エーテル・ポリオミノΣ',
         'Polyominous Dark IV': 'ダージャ・ポリオミノ',
+        'Ptera Ixou': 'プテラ・イクソス',
         'Reek Havoc': '噴気',
         'Synergy': 'シュネルギア',
         'Transmission': '寄生',

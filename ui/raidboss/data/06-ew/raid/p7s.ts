@@ -10,22 +10,22 @@ import { PluginCombatantState } from '../../../../../types/event';
 import { NetMatches } from '../../../../../types/net_matches';
 import { TriggerSet } from '../../../../../types/trigger';
 
-// TODO: Tether plant locations via OverlayPlugin X, Y and bird headings?
+// TODO: Tether locations, and/or additional egg locations
 
 export interface Data extends RaidbossData {
   decOffset?: number;
-  rootsCount: number;
   fruitCount: number;
   hatchedEggs?: PluginCombatantState[];
-  unhatchedEggs?: PluginCombatantState[];
   bondsDebuff?: string;
+  rootsCount: number;
+  tetherCollect: string[];
+  stopTethers?: boolean;
+  tetherCollectPhase?: string;
+  unhatchedEggs?: PluginCombatantState[];
   purgationDebuffs: { [role: string]: { [name: string]: number } };
   purgationDebuffCount: number;
   purgationEffects?: string[];
   purgationEffectIndex: number;
-  tetherCollect: string[];
-  stopTethers?: boolean;
-  tetherCollectPhase?: string;
 }
 
 // Due to changes introduced in patch 5.2, overhead markers now have a random offset
@@ -74,11 +74,11 @@ const triggerSet: TriggerSet<Data> = {
   timelineFile: 'p7s.txt',
   initData: () => ({
     rootsCount: 0,
+    tetherCollect: [],
     fruitCount: 0,
     purgationDebuffs: { 'dps': {}, 'support': {} },
     purgationDebuffCount: 0,
     purgationEffectIndex: 0,
-    tetherCollect: [],
   }),
   triggers: [
     {
@@ -137,19 +137,38 @@ const triggerSet: TriggerSet<Data> = {
           twoPlatforms: {
             en: '${platform1} / ${platform2}',
           },
+          orientation: {
+            en: '줄 달린 소: ${location}',
+          },
+          famineOrientation: {
+            en: '미노만 있는 곳: ${location}', // 맹
+          },
+          deathOrientation: {
+            en: '소가 있는 곳: ${location}', // 흉
+          },
+          warOrientation: {
+            en: '새랑 미노가 있는 곳: ${location}', // 란
+          },
         };
-        // Platforms are at 0 NW, 2 NE, 5 S
-        const safeSpots: { [bird: number]: string } = {
+
+        // Map of dirs to Platform locations
+        // Note: Eggs may spawn in additional cardinals/intercardinals
+        const dirToPlatform: { [dir: number]: string } = {
           0: 'left',
           2: 'right',
+          3: 'right',
           5: 'south',
+          7: 'left',
         };
+
+        // Platforms array used to filter for new platforms
+        const platforms = ['right', 'left', 'south'];
 
         if (data.fruitCount === 1) {
           // Find location of the north-most bird
           // Forbidden Fruit 1 uses last two birds
           if (data.unhatchedEggs === undefined || data.unhatchedEggs[8] === undefined || data.unhatchedEggs[9] === undefined) {
-            console.error(`Forbidden Fruit 1: Missing egg data.`);
+            console.error(`Forbidden Fruit ${data.fruitCount}: Missing egg data.`);
             return;
           }
           const bird1 = data.unhatchedEggs[8];
@@ -163,42 +182,96 @@ const triggerSet: TriggerSet<Data> = {
             return { alertText: output.left!() };
           return { alertText: output.right!() };
         }
-        if (data.fruitCount === 6) {
+
+        if (data.fruitCount === 4 || data.fruitCount === 6) {
           // Check where bull is
-          // Forbidden Fruit 6 uses birds 1 and 4, bull 3
+          // Forbidden Fruit 4 and 6 use last bull
           if (data.unhatchedEggs === undefined || data.unhatchedEggs[12] === undefined) {
-            console.error(`Forbidden Fruit 6: Missing egg data.`);
+            console.error(`Forbidden Fruit ${data.fruitCount}: Missing egg data.`);
             return;
           }
-          const bullPosition = matchedPositionTo8Dir(data.unhatchedEggs[12]);
+          const bullDir = matchedPositionTo8Dir(data.unhatchedEggs[12]);
+          const platform = dirToPlatform[bullDir];
 
-          delete safeSpots[bullPosition];
-
-          if (Object.keys(safeSpots).length === 2) {
-            const safePlatform1 = Object.values(safeSpots)[0];
-            const safePlatform2 = Object.values(safeSpots)[1];
-            if (safePlatform1 !== undefined && safePlatform2 !== undefined)
-              return { infoText: output.twoPlatforms!({ platform1: output[safePlatform1]!(), platform2: output[safePlatform2]!() }) };
+          if (data.fruitCount === 4) {
+            // Call out orientation based on bull's platform
+            if (platform !== undefined)
+              return { infoText: output.orientation!({ location: output[platform]!() }) };
           }
+          if (data.fruitCount === 6) {
+            // Callout where bull is not
+            // Remove platform from platforms
+            const newPlatforms = platforms.filter((val) => val !== platform);
+
+            if (newPlatforms.length === 2) {
+              const safePlatform1 = newPlatforms[0];
+              const safePlatform2 = newPlatforms[1];
+              if (safePlatform1 !== undefined && safePlatform2 !== undefined)
+                return { infoText: output.twoPlatforms!({ platform1: output[safePlatform1]!(), platform2: output[safePlatform2]!() }) };
+            }
+          }
+          console.error(`Forbidden Fruit ${data.fruitCount}: Invalid positions.`);
         }
-        if (data.fruitCount === 7) {
-          // Check each location for bird, safe spot is where there is no bird
-          // Forbidden Fruit 7 uses last two birds
-          if (data.unhatchedEggs === undefined || data.unhatchedEggs[8] === undefined || data.unhatchedEggs[9] === undefined) {
-            console.error(`Forbidden Fruit 7: Missing egg data.`);
+
+        if (data.fruitCount === 10) {
+          // Check where minotaurs are to determine middle bird
+          // Forbidden Fruit 10 uses last two minotaurs
+          if (data.unhatchedEggs === undefined || data.unhatchedEggs[4] === undefined || data.unhatchedEggs[5] === undefined) {
+            console.error(`Forbidden Fruit ${data.fruitCount}: Missing egg data.`);
             return;
           }
-          const birdPosition1 = matchedPositionTo8Dir(data.unhatchedEggs[8]);
-          const birdPosition2 = matchedPositionTo8Dir(data.unhatchedEggs[9]);
+          const minotaurDir1 = matchedPositionTo8Dir(data.unhatchedEggs[4]);
+          const minotaurDir2 = matchedPositionTo8Dir(data.unhatchedEggs[5]);
 
-          delete safeSpots[birdPosition1];
-          delete safeSpots[birdPosition2];
+          // Return if received bad data
+          const validDirs = [1, 4, 6];
+          if (!validDirs.includes(minotaurDir1) || !validDirs.includes(minotaurDir2)) {
+            console.error(`Forbidden Fruit ${data.fruitCount}: Expected minotaurs at 1, 4, or 6. Got ${minotaurDir1} and ${minotaurDir2}.`);
+            return;
+          }
 
-          if (Object.keys(safeSpots).length === 1) {
-            const safeSpot = Object.values(safeSpots)[0];
-            if (safeSpot !== undefined)
-              return { infoText: output[safeSpot]!() };
-            console.error(`Forbidden Fruit 7: Invalid positions.`);
+          // Add the two positions to calculate platform between
+          // Minotaurs spawn at dirs 1 (N), 4 (SE), or 6 (SW)
+          const bridgeDirsToPlatform: { [dir: number]: string } = {
+            5: 'right', // N + SE
+            7: 'left', // N + SW
+            10: 'south', // SE + SW
+          };
+
+          const platform = bridgeDirsToPlatform[minotaurDir1 + minotaurDir2];
+          if (platform !== undefined)
+            return { infoText: output.warOrientation!({ location: output[platform]!() }) };
+        }
+
+        if (data.fruitCount > 6 && data.fruitCount < 10) {
+          // Check each location for bird, call out where there is no bird
+          // Forbidden Fruit 7 - 10 use last two birds
+          if (data.unhatchedEggs === undefined || data.unhatchedEggs[8] === undefined || data.unhatchedEggs[9] === undefined) {
+            console.error(`Forbidden Fruit ${data.fruitCount}: Missing egg data.`);
+            return;
+          }
+          const birdDir1 = matchedPositionTo8Dir(data.unhatchedEggs[8]);
+          const birdDir2 = matchedPositionTo8Dir(data.unhatchedEggs[9]);
+
+          const birdPlatform1 = dirToPlatform[birdDir1];
+          const birdPlatform2 = dirToPlatform[birdDir2];
+
+          // Remove platform from platforms
+          const newPlatforms = platforms.filter((val) => val !== birdPlatform1 && val !== birdPlatform2);
+
+          if (newPlatforms.length === 1) {
+            const platform = newPlatforms[0];
+            if (platform !== undefined) {
+              switch (data.fruitCount) {
+                case 7:
+                  return { infoText: output[platform]!() };
+                case 8:
+                  return { infoText: output.famineOrientation!({ location: output[platform]!() }) };
+                case 9:
+                  return { infoText: output.deathOrientation!({ location: output[platform]!() }) };
+              }
+            }
+            console.error(`Forbidden Fruit ${data.fruitCount}: Invalid positions.`);
           }
         }
       },
@@ -232,6 +305,8 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: '따로 따로 탱크버스터',
           de: 'Geteilter Tankbuster',
+          ja: '2人同時タンク強攻撃',
+          ko: '따로맞는 탱버',
         },
       },
     },
@@ -256,6 +331,9 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         baitSoon: {
           en: '빈 곳에서 시작해욧',
+          de: 'Bald auf freier Plattform ködern',
+          ja: '果実がない空きの円盤へ移動',
+          ko: '빈 플랫폼에서 장판 유도 준비',
         },
       },
     },
@@ -269,6 +347,9 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         separateHealerGroups: {
           en: '각각 그룹으로 모여 맞아요',
+          de: 'Heiler-Gruppen Plattformen',
+          ja: '円盤の内でヒーラーと頭割り',
+          ko: '힐러 그룹별로 플랫폼',
         },
       },
     },
@@ -312,6 +393,9 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: '전체공격 + 출혈',
+          de: 'AoE + Blutung',
+          ja: 'AOE + 出血',
+          ko: '전체 공격 + 도트',
         },
       },
     },
@@ -330,7 +414,7 @@ const triggerSet: TriggerSet<Data> = {
           spreadThenStack: Outputs.spreadThenStack,
         };
 
-        // Strore debuff for reminders
+        // Store debuff for reminders
         data.bondsDebuff = (matches.effectId === 'CEC' ? 'spread' : 'stackMarker');
 
         const longTimer = parseFloat(matches.duration) > 9;
@@ -340,25 +424,8 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: 'P7S Inviolate Bonds Reminders',
-      // First trigger is ~4s after debuffs callout
-      // These happen 6s before cast
-      type: 'HeadMarker',
-      netRegex: NetRegexes.headMarker({}),
-      suppressSeconds: 1,
-      infoText: (data, matches, output) => {
-        const correctedMatch = getHeadmarkerId(data, matches);
-        if (correctedMatch === '00A6' && data.purgationDebuffCount === 0 && data.bondsDebuff)
-          return output[data.bondsDebuff]!();
-      },
-      run: (data) => data.bondsDebuff = (data.bondsDebuff === 'spread' ? 'stackMarker' : 'spread'),
-      outputStrings: {
-        spread: Outputs.spread,
-        stackMarker: Outputs.stackMarker,
-      },
-    },
-    {
       id: 'P7S Forbidden Fruit 4 and Harvest Tethers',
+      // 0001 Immature Minotaur Spike Tether
       // 0006 Immature Io (Bull) Tether
       // 0039 Immature Minotaur Tether
       // 0011 Immature Stymphalide (Bird) Tether
@@ -368,7 +435,7 @@ const triggerSet: TriggerSet<Data> = {
       // War: 4 Bull Tethers, 2 Minotaur Tethers, 2 Bird Tethers
       // TODO: Get locations with OverlayPlugin via X, Y and bird headings?
       type: 'Tether',
-      netRegex: NetRegexes.tether({ id: ['0006', '0039', '0011'] }),
+      netRegex: NetRegexes.tether({ id: ['0001', '0006', '0039', '0011'] }),
       condition: (data) => !data.stopTethers,
       preRun: (data, matches) => data.tetherCollect.push(matches.target),
       delaySeconds: 0.1,
@@ -377,30 +444,57 @@ const triggerSet: TriggerSet<Data> = {
         output.responseOutputStrings = {
           bullTether: {
             en: '소에서 파란 줄',
+            de: 'Stier-Verbindung (Linien AoE)',
+            ja: '牛から直線',
+            ko: '소 (직선 장판)',
           },
           deathBullTether: {
             en: '소에서 파란 줄',
+            de: 'Stier-Verbindung (Linien AoE)',
+            ja: '牛から直線',
+            ko: '소 (직선 장판)',
           },
           warBullTether: {
             en: '소에서 파란 줄',
+            de: 'Stier-Verbindung (Linien AoE)',
+            ja: '牛から直線',
+            ko: '소 (직선 장판)',
           },
           minotaurTether: {
             en: '반대쪽 미노로 쭉쭉 땡기는 줄',
+            de: 'Minotaurus-Verbindung (Große Kegel-AoE)',
+            ja: 'ミノから扇',
+            ko: '미노타우로스 (부채꼴 장판)',
           },
           famineMinotaurTether: {
             en: '크로스로 쭉쭉 땡기는 미노 줄',
+            de: 'Überkreuze Minotaurus-Verbindung (Große Kegel-AoE)',
+            ja: 'ミノからの扇を交える',
+            ko: '미노타우로스 선 교차하기 (부채꼴 장판)',
           },
           warMinotaurTether: {
             en: '미노에서 쭉쭉 땡기는 줄',
+            de: 'Minotaurus-Verbindung (Große Kegel-AoE)',
+            ja: 'ミノから扇',
+            ko: '미노타우로스 (부채꼴 장판)',
           },
           warBirdTether: {
-            en: '새에서 돌진 줄',
+            en: '새가 돌진해 오네',
+            de: 'Vogel-Verbindung',
+            ja: '鳥から線',
+            ko: '새',
           },
           noTether: {
             en: '줄 없네, 가운데서 미노 클레브',
+            de: 'Keine Verbindung, Minotaurus-Verbindung ködern (Mitte)',
+            ja: '線なし、中央で扇を誘導',
+            ko: '선 없음, 미노타우로스 유도 (중앙)',
           },
           famineNoTether: {
             en: '줄 없네, 두 마리 있는데서 미노 클레브',
+            de: 'Keine Verbindung, Minotaurus-Verbindung ködern',
+            ja: '線なし、ミノからの扇を誘導',
+            ko: '선 없음, 미노타우로스 유도',
           },
         };
 
@@ -415,7 +509,7 @@ const triggerSet: TriggerSet<Data> = {
           }
 
           // Minotaur Tethers
-          if (matches.id === '0039') {
+          if (matches.id === '0001' || matches.id === '0039') {
             if (data.tetherCollectPhase === 'famine')
               return { infoText: output.famineMinotaurTether!() };
             if (data.tetherCollectPhase === 'war')
@@ -471,6 +565,24 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
+      id: 'P7S Inviolate Bonds Reminders',
+      // First trigger is ~4s after debuffs callout
+      // These happen 6s before cast
+      type: 'HeadMarker',
+      netRegex: NetRegexes.headMarker({}),
+      suppressSeconds: 1,
+      infoText: (data, matches, output) => {
+        const correctedMatch = getHeadmarkerId(data, matches);
+        if (correctedMatch === '00A6' && data.purgationDebuffCount === 0 && data.bondsDebuff)
+          return output[data.bondsDebuff]!();
+      },
+      run: (data) => data.bondsDebuff = (data.bondsDebuff === 'spread' ? 'stackMarker' : 'spread'),
+      outputStrings: {
+        spread: Outputs.spread,
+        stackMarker: Outputs.stackMarker,
+      },
+    },
+    {
       id: 'P7S Inviolate Purgation',
       type: 'GainsEffect',
       // CEE = Purgatory Winds I
@@ -522,12 +634,17 @@ const triggerSet: TriggerSet<Data> = {
         comboText: {
           en: '${effect1} => ${effect2} => ${effect3} => ${effect4}',
           de: '${effect1} => ${effect2} => ${effect3} => ${effect4}',
+          fr: '${effect1} => ${effect2} => ${effect3} => ${effect4}',
+          ja: '${effect1} => ${effect2} => ${effect3} => ${effect4}',
+          ko: '${effect1} => ${effect2} => ${effect3} => ${effect4}',
         },
         spread: {
           en: '흩어지고',
+          ja: '散会',
         },
         stack: {
           en: '뭉쳤다',
+          ja: '頭割り',
         },
       },
     },
@@ -569,7 +686,7 @@ const triggerSet: TriggerSet<Data> = {
           en: '엄청 아픈 전체 공격',
           de: 'Große AoE, geh in die Mitte',
           fr: 'Grosse AoE, allez au milieu',
-          ja: '大ダメージ、中へ',
+          ja: '強力なAOE、真ん中へ',
           cn: '超大伤害，去中间',
           ko: '아픈 광뎀, 중앙으로',
         },
@@ -601,7 +718,6 @@ const triggerSet: TriggerSet<Data> = {
     },
     {
       'locale': 'de',
-      'missingTranslations': true,
       'replaceSync': {
         'Agdistis': 'Agdistis',
         'Immature Io': 'unreif(?:e|er|es|en) Io',
@@ -620,7 +736,9 @@ const triggerSet: TriggerSet<Data> = {
         'Bullish Slash': 'Bullenansturm',
         'Bullish Swipe': 'Bullenfeger',
         'Condensed Aero II': 'Gehäuftes Windra',
+        'Death\'s Harvest': 'Unheilvolle Wucherung des Lebens',
         'Dispersed Aero II': 'Flächiges Windra',
+        'Famine\'s Harvest': 'Wilde Wucherung des Lebens',
         'Forbidden Fruit': 'Frucht des Lebens',
         'Hemitheos\'s Aero III': 'Hemitheisches Windga',
         'Hemitheos\'s Aero IV': 'Hemitheisches Windka',
@@ -631,6 +749,7 @@ const triggerSet: TriggerSet<Data> = {
         'Hemitheos\'s Tornado': 'Hemitheischer Tornado',
         'Immortal\'s Obol': 'Zweig des Lebens und des Todes',
         'Inviolate Bonds': 'Siegelschaffung',
+        'Inviolate Purgation': 'Siegelschaffung der Hölle',
         'Light of Life': 'Aurora des Lebens',
         'Multicast': 'Multizauber',
         'Roots of Attis': 'Wurzel des Attis',
@@ -638,6 +757,7 @@ const triggerSet: TriggerSet<Data> = {
         'Spark of Life': 'Schein des Lebens',
         'Static Path': 'Statischer Pfad',
         'Stymphalian Strike': 'Vogelschlag',
+        'War\'s Harvest': 'Chaotische Wucherung des Lebens',
       },
     },
     {
@@ -656,7 +776,9 @@ const triggerSet: TriggerSet<Data> = {
         'Bullish Slash': 'Taillade catabatique',
         'Bullish Swipe': 'Balayage catabatique',
         'Condensed Aero II': 'Extra Vent concentré',
+        'Death\'s Harvest': 'Bourgeonnement de vie morbide',
         'Dispersed Aero II': 'Extra vent étendu',
+        'Famine\'s Harvest': 'Bourgeonnement de vie féroce',
         'Forbidden Fruit': 'Fruits de la vie',
         'Hemitheos\'s Aero III': 'Méga Vent d\'hémithéos',
         'Hemitheos\'s Aero IV': 'Giga Vent d\'hémithéos',
@@ -666,12 +788,16 @@ const triggerSet: TriggerSet<Data> = {
         'Hemitheos\'s Holy III': 'Méga Miracle d\'hémithéos',
         'Hemitheos\'s Tornado': 'Tornade d\'hémithéos',
         'Immortal\'s Obol': 'Branche de vie et de mort',
+        'Inviolate Bonds': 'Tracé de sigil',
+        'Inviolate Purgation': 'Tracé de sigils multiples',
         'Light of Life': 'Éclair de vie',
+        'Multicast': 'Multisort',
         'Roots of Attis': 'Racines d\'Attis',
         'Shadow of Attis': 'Rai d\'Attis',
         'Spark of Life': 'Étincelle de vie',
         'Static Path': 'Chemin statique',
         'Stymphalian Strike': 'Assaut stymphalide',
+        'War\'s Harvest': 'Bourgeonnement de vie chaotique',
       },
     },
     {
@@ -690,7 +816,9 @@ const triggerSet: TriggerSet<Data> = {
         'Bullish Slash': 'ブルスラッシュ',
         'Bullish Swipe': 'ブルスワイプ',
         'Condensed Aero II': 'アグリゲート・エアロラ',
+        'Death\'s Harvest': '生命の繁茂【凶】',
         'Dispersed Aero II': 'スプレッド・エアロラ',
+        'Famine\'s Harvest': '生命の繁茂【猛】',
         'Forbidden Fruit': '生命の果実',
         'Hemitheos\'s Aero III': 'ヘーミテオス・エアロガ',
         'Hemitheos\'s Aero IV': 'ヘーミテオス・エアロジャ',
@@ -700,12 +828,16 @@ const triggerSet: TriggerSet<Data> = {
         'Hemitheos\'s Holy III': 'ヘーミテオス・ホーリガ',
         'Hemitheos\'s Tornado': 'ヘーミテオス・トルネド',
         'Immortal\'s Obol': '生滅の導枝',
+        'Inviolate Bonds': '魔印創成',
+        'Inviolate Purgation': '魔印創成・獄',
         'Light of Life': '生命の極光',
+        'Multicast': 'マルチキャスト',
         'Roots of Attis': 'アッティスの根',
         'Shadow of Attis': 'アッティスの光雫',
         'Spark of Life': '生命の光芒',
         'Static Path': 'スタティックパース',
         'Stymphalian Strike': 'バードストライク',
+        'War\'s Harvest': '生命の繁茂【乱】',
       },
     },
   ],
