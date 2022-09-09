@@ -8,20 +8,19 @@ import ZoneId from '../../../../../resources/zone_id';
 import { RaidbossData } from '../../../../../types/data';
 import { PluginCombatantState } from '../../../../../types/event';
 import { NetMatches } from '../../../../../types/net_matches';
-import { TriggerSet } from '../../../../../types/trigger';
+import { LocaleText, TriggerSet } from '../../../../../types/trigger';
 
 // TODO: Tether locations, and/or additional egg locations
 
 export interface Data extends RaidbossData {
   decOffset?: number;
   fruitCount: number;
-  hatchedEggs?: PluginCombatantState[];
+  unhatchedEggs?: PluginCombatantState[];
   bondsDebuff?: string;
   rootsCount: number;
   tetherCollect: string[];
   stopTethers?: boolean;
   tetherCollectPhase?: string;
-  unhatchedEggs?: PluginCombatantState[];
   purgationDebuffs: { [role: string]: { [name: string]: number } };
   purgationDebuffCount: number;
   purgationEffects?: string[];
@@ -73,9 +72,9 @@ const triggerSet: TriggerSet<Data> = {
   zoneId: ZoneId.AbyssosTheSeventhCircleSavage,
   timelineFile: 'p7s.txt',
   initData: () => ({
+    fruitCount: 0,
     rootsCount: 0,
     tetherCollect: [],
-    fruitCount: 0,
     purgationDebuffs: { 'dps': {}, 'support': {} },
     purgationDebuffCount: 0,
     purgationEffectIndex: 0,
@@ -107,9 +106,15 @@ const triggerSet: TriggerSet<Data> = {
       preRun: (data) => data.fruitCount = data.fruitCount + 1,
       delaySeconds: 0.5,
       promise: async (data) => {
+        const fruitLocaleNames: LocaleText = {
+          en: 'Forbidden Fruit',
+        };
+
+        // Select the Forbidden Fruits
+        const combatantNameFruits = [fruitLocaleNames[data.parserLang] ?? fruitLocaleNames['en']];
         const combatantData = await callOverlayHandler({
           call: 'getCombatants',
-          names: ['Forbidden Fruit'],
+          names: combatantNameFruits,
         });
         // if we could not retrieve combatant data, the
         // trigger will not work, so just resume promise here
@@ -305,6 +310,7 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: '따로 따로 탱크버스터',
           de: 'Geteilter Tankbuster',
+          fr: 'Séparez des Tankbusters',
           ja: '2人同時タンク強攻撃',
           ko: '따로맞는 탱버',
         },
@@ -332,6 +338,7 @@ const triggerSet: TriggerSet<Data> = {
         baitSoon: {
           en: '빈 곳에서 시작해욧',
           de: 'Bald auf freier Plattform ködern',
+          fr: 'Déposez sur une plateforme vide bientôt',
           ja: '果実がない空きの円盤へ移動',
           ko: '빈 플랫폼에서 장판 유도 준비',
         },
@@ -348,6 +355,7 @@ const triggerSet: TriggerSet<Data> = {
         separateHealerGroups: {
           en: '각각 그룹으로 모여 맞아요',
           de: 'Heiler-Gruppen Plattformen',
+          fr: 'Groupes heals Plateforme',
           ja: '円盤の内でヒーラーと頭割り',
           ko: '힐러 그룹별로 플랫폼',
         },
@@ -394,6 +402,7 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: '전체공격 + 출혈',
           de: 'AoE + Blutung',
+          fr: 'AoE + Saignement',
           ja: 'AOE + 出血',
           ko: '전체 공격 + 도트',
         },
@@ -445,54 +454,63 @@ const triggerSet: TriggerSet<Data> = {
           bullTether: {
             en: '소에서 파란 줄',
             de: 'Stier-Verbindung (Linien AoE)',
+            fr: 'Lien Taureau (AoE en ligne)',
             ja: '牛から直線',
             ko: '소 (직선 장판)',
           },
           deathBullTether: {
             en: '소에서 파란 줄',
             de: 'Stier-Verbindung (Linien AoE)',
+            fr: 'Lien Taureau (AoE en ligne)',
             ja: '牛から直線',
             ko: '소 (직선 장판)',
           },
           warBullTether: {
             en: '소에서 파란 줄',
             de: 'Stier-Verbindung (Linien AoE)',
+            fr: 'Lien Taureau (AoE en ligne)',
             ja: '牛から直線',
             ko: '소 (직선 장판)',
           },
           minotaurTether: {
             en: '반대쪽 미노로 쭉쭉 땡기는 줄',
             de: 'Minotaurus-Verbindung (Große Kegel-AoE)',
+            fr: 'Lien Minotaure (Gros Cleave)',
             ja: 'ミノから扇',
             ko: '미노타우로스 (부채꼴 장판)',
           },
           famineMinotaurTether: {
             en: '크로스로 쭉쭉 땡기는 미노 줄',
             de: 'Überkreuze Minotaurus-Verbindung (Große Kegel-AoE)',
+            fr: 'Lien Minotaure en croix (Gros Cleave)',
             ja: 'ミノからの扇を交える',
             ko: '미노타우로스 선 교차하기 (부채꼴 장판)',
           },
           warMinotaurTether: {
             en: '미노에서 쭉쭉 땡기는 줄',
             de: 'Minotaurus-Verbindung (Große Kegel-AoE)',
+            fr: 'Lien Minotaure (Gros Cleave)',
             ja: 'ミノから扇',
             ko: '미노타우로스 (부채꼴 장판)',
           },
           warBirdTether: {
             en: '새가 돌진해 오네',
             de: 'Vogel-Verbindung',
+            fr: 'Lien Oiseau',
             ja: '鳥から線',
             ko: '새',
           },
           noTether: {
             en: '줄 없네, 가운데서 미노 클레브',
             de: 'Keine Verbindung, Minotaurus-Verbindung ködern (Mitte)',
+            fr: 'Aucun lien, encaissez le cleave du Minotaure (Milieu)',
             ja: '線なし、中央で扇を誘導',
             ko: '선 없음, 미노타우로스 유도 (중앙)',
           },
           famineNoTether: {
             en: '줄 없네, 두 마리 있는데서 미노 클레브',
             de: 'Keine Verbindung, Minotaurus-Verbindung ködern',
+            fr: 'Aucun lien, encaissez le cleave du Minotaure',
             ja: '線なし、ミノからの扇を誘導',
             ko: '선 없음, 미노타우로스 유도',
           },
