@@ -317,6 +317,52 @@ export const Responses = {
       return combined;
     };
   },
+  sharedOrInvinTankBuster: (targetSev?: Severity, otherSev?: Severity) => {
+    const outputStrings = {
+      sharedOrInvinTankbusterOnYou: Outputs.sharedOrInvinTankbusterOnYou,
+      sharedOrInvinTankbusterOnPlayer: Outputs.sharedOrInvinTankbusterOnPlayer,
+      sharedTankbuster: Outputs.sharedTankbuster,
+      avoidCleave: Outputs.avoidTankCleave,
+    };
+    const targetFunc = (data: Data, matches: TargetedMatches, output: Output) => {
+      const target = getTarget(matches);
+      if (target === undefined) {
+        if (data.role !== 'tank' && data.role !== 'healer')
+          return;
+        return output.sharedTankbuster?.();
+      }
+
+      if (target === data.me)
+        return output.sharedOrInvinTankbusterOnYou?.();
+      if (data.role === 'tank' || data.role === 'healer')
+        return output.sharedOrInvinTankbusterOnPlayer?.({ player: data.ShortName(target) });
+    };
+
+    const otherFunc = (data: Data, matches: TargetedMatches, output: Output) => {
+      const target = getTarget(matches);
+      if (target === undefined) {
+        if (data.role === 'tank' || data.role === 'healer')
+          return;
+        return output.avoidCleave?.();
+      }
+      if (target === data.me || data.role === 'tank' || data.role === 'healer')
+        return;
+
+      return output.avoidCleave?.();
+    };
+
+    const combined = combineFuncs(
+      defaultAlertText(targetSev),
+      targetFunc,
+      defaultInfoText(otherSev),
+      otherFunc,
+    );
+    return (_data: unknown, _matches: unknown, output: Output): TargetedResponseOutput => {
+      // cactbot-builtin-response
+      output.responseOutputStrings = outputStrings;
+      return combined;
+    };
+  },
   miniBuster: (sev?: Severity) => staticResponse(defaultInfoText(sev), Outputs.miniBuster),
   aoe: (sev?: Severity) => staticResponse(defaultInfoText(sev), Outputs.aoe),
   bigAoe: (sev?: Severity) => staticResponse(defaultInfoText(sev), Outputs.bigAoe),

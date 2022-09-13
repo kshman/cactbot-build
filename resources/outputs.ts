@@ -103,13 +103,13 @@ export default {
     ko: '나에게 광역 탱버',
   },
   sharedTankbuster: {
-    en: '함께 맞는 탱크버스터',
+    en: '둘이서 맞는 탱크버스터',
     fr: 'Partagez le Tank buster',
     cn: '分摊死刑',
     ko: '쉐어 탱버',
   },
   sharedTankbusterOnYou: {
-    en: '내게 함께 맞는 탱크버스터',
+    en: '내게 둘이서 맞는 탱크버스터',
     de: 'geteilter Tankbuster auf DIR',
     fr: 'Tank buster à partager sur VOUS',
     ja: '自分にタンクシェア',
@@ -117,12 +117,20 @@ export default {
     ko: '쉐어 탱버 대상자',
   },
   sharedTankbusterOnPlayer: {
-    en: '${player}: 함께 맞는 탱크버스터',
+    en: '${player}: 둘이서 맞는 탱크버스터',
     de: 'geteilter Tankbuster on ${player}',
     fr: 'Tank buster à partager sur ${player}',
     ja: '${player} にタンクシェア',
     cn: '分摊死刑点 ${player}',
     ko: '"${player}" 쉐어 탱버',
+  },
+  sharedOrInvinTankbusterOnYou: {
+    en: '내게 탱크버스터, 무적 또는 둘이서',
+    ja: '自分にタンクシェア',
+  },
+  sharedOrInvinTankbusterOnPlayer: {
+    en: '${player}: 탱크버스터, 무적 또는 둘이서',
+    ja: '${player} にタンクシェア',
   },
   tankSwap: {
     en: '탱크 스왑!',

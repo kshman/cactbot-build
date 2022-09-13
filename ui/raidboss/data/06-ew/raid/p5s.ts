@@ -1,9 +1,12 @@
 import NetRegexes from '../../../../../resources/netregexes';
 import Outputs from '../../../../../resources/outputs';
+import { callOverlayHandler } from '../../../../../resources/overlay_plugin_api';
 import { Responses } from '../../../../../resources/responses';
 import ZoneId from '../../../../../resources/zone_id';
 import { RaidbossData } from '../../../../../types/data';
 import { TriggerSet } from '../../../../../types/trigger';
+
+// TODO: Callout safe quadrant/half for Venom Pool with Crystals
 
 const directions = {
   'NE': true,
@@ -14,28 +17,19 @@ const directions = {
 
 export interface Data extends RaidbossData {
   target?: string;
-  topazRays: { [time: number]: (keyof typeof directions | undefined)[] };
+  topazClusterCombatantIdToAbilityId: { [id: number]: string };
+  topazRays: { [time: number]: (keyof typeof directions)[] };
+  clawCount: number;
 }
-
-const convertAbilityIdToTopazRayIndex = (id: string): number => {
-  // 7703 is the Topaz Ray cast with the lowest cast time
-  return parseInt(id, 16) - parseInt('7703', 16);
-};
-
-const convertCoordinatesToDirection = (x: number, y: number): keyof typeof directions | undefined => {
-  if (x > 100)
-    return y < 100 ? 'NE' : 'SE';
-  if (x < 100)
-    return y < 100 ? 'NW' : 'SW';
-  return undefined;
-};
 
 const triggerSet: TriggerSet<Data> = {
   zoneId: ZoneId.AbyssosTheFifthCircleSavage,
   timelineFile: 'p5s.txt',
   initData: () => {
     return {
+      topazClusterCombatantIdToAbilityId: {},
       topazRays: {},
+      clawCount: 0,
     };
   },
   triggers: [
@@ -58,6 +52,12 @@ const triggerSet: TriggerSet<Data> = {
       id: 'P5S Sonic Howl',
       type: 'StartsUsing',
       netRegex: NetRegexes.startsUsing({ id: '7720', source: 'Proto-Carbuncle', capture: false }),
+      response: Responses.aoe(),
+    },
+    {
+      id: 'P5S Ruby Glow',
+      type: 'StartsUsing',
+      netRegex: NetRegexes.startsUsing({ id: '76F3', source: 'Proto-Carbuncle', capture: false }),
       response: Responses.aoe(),
     },
     {
@@ -107,23 +107,138 @@ const triggerSet: TriggerSet<Data> = {
       response: Responses.knockback(),
     },
     {
+      // Collect CombatantIds for the Topaz Stone Proto-Carbuncles
+      id: 'P5S Topaz Cluster Collect',
+      type: 'StartsUsing',
+      // 7703: 3.7s, 7704: 6.2s, 7705: 8.7s, 7706: 11.2s
+      netRegex: NetRegexes.startsUsing({ id: '770[3456]', source: 'Proto-Carbuncle' }),
+      run: (data, matches) => data.topazClusterCombatantIdToAbilityId[parseInt(matches.sourceId, 16)] = matches.id,
+    },
+    {
+      id: 'P5S Topaz Cluster',
+      type: 'Ability',
+      netRegex: NetRegexes.ability({ id: '7702', source: 'Proto-Carbuncle', capture: false }),
+      durationSeconds: 12,
+      promise: async (data) => {
+        // Log position data can be stale, call OverlayPlugin
+        const result = await callOverlayHandler({
+          call: 'getCombatants',
+          ids: Object.keys(data.topazClusterCombatantIdToAbilityId).map(Number),
+        });
+
+        // For each topaz stone combatant, determine the quadrant
+        for (const combatant of result.combatants) {
+          if (combatant.ID === undefined)
+            continue;
+          const abilityId = data.topazClusterCombatantIdToAbilityId[combatant.ID];
+          if (abilityId === undefined)
+            continue;
+
+          // Convert from ability id to [0-3] index
+          // 7703 is the Topaz Ray cast with the lowest cast time
+          const index = parseInt(abilityId, 16) - parseInt('7703', 16);
+          data.topazRays[index] ??= [];
+
+          // Map from coordinate position to intercardinal quadrant
+          const convertCoordinatesToDirection = (x: number, y: number): keyof typeof directions => {
+            if (x > 100)
+              return y < 100 ? 'NE' : 'SE';
+            return y < 100 ? 'NW' : 'SW';
+          };
+          const direction = convertCoordinatesToDirection(combatant.PosX, combatant.PosY);
+          data.topazRays[index]?.push(direction);
+        }
+      },
+      infoText: (data, _matches, output) => {
+        const remainingDirections: { [index: string]: Set<keyof typeof directions> } = {};
+        for (const [index, directions] of Object.entries(data.topazRays)) {
+          remainingDirections[index] = new Set(['NE', 'SE', 'SW', 'NW']);
+          for (const direction of directions)
+            remainingDirections[index]?.delete(direction);
+        }
+
+        // 770[34] cast 2 times, 770[56] cast 3 times
+        const expectedLengths = [2, 2, 1, 1];
+        const safeDirs = [];
+        for (let i = 0; i < 4; i++) {
+          if (remainingDirections[i]?.size !== expectedLengths[i])
+            return;
+
+          const tmpDirs = [...remainingDirections[i] ?? []];
+          if (!tmpDirs[0])
+            return;
+
+          // If there's one safe location, print that
+          let dirStr = tmpDirs[0];
+          // If there's multiple, prefer south
+          if (tmpDirs.length === 2 && tmpDirs[1])
+            dirStr = ['SE', 'SW'].includes(tmpDirs[0]) ? tmpDirs[0] : tmpDirs[1];
+          safeDirs.push(output[dirStr]!());
+        }
+
+        if (safeDirs.length !== 4)
+          return;
+        return output.text!({ dir1: safeDirs[0], dir2: safeDirs[1], dir3: safeDirs[2], dir4: safeDirs[3] });
+      },
+      outputStrings: {
+        NE: {
+          en: '↗↗',
+        },
+        SE: {
+          en: '↘↘',
+        },
+        SW: {
+          en: '↙↙',
+        },
+        NW: {
+          en: '↖↖',
+        },
+        text: {
+          en: '${dir1} -> ${dir2} -> ${dir3} -> ${dir4}',
+          de: '${dir1} -> ${dir2} -> ${dir3} -> ${dir4}',
+          fr: '${dir1} -> ${dir2} -> ${dir3} -> ${dir4}',
+          ja: '${dir1} -> ${dir2} -> ${dir3} -> ${dir4}',
+          ko: '${dir1} -> ${dir2} -> ${dir3} -> ${dir4}',
+        },
+      },
+    },
+    {
       id: 'P5S Venom Squall/Surge',
       type: 'StartsUsing',
       netRegex: NetRegexes.startsUsing({ id: '771[67]', source: 'Proto-Carbuncle' }),
       durationSeconds: 5,
       alertText: (_data, matches, output) => {
-        const spread = output.spread!();
-        const healerGroups = output.healerGroups!();
         // Venom Squall
         if (matches.id === '7716')
-          return output.text!({ dir1: spread, dir2: healerGroups });
-        return output.text!({ dir1: healerGroups, dir2: spread });
+          return output.spreadToHeal!();
+        return output.healToSpread!();
       },
       outputStrings: {
-        healerGroups: Outputs.healerGroups,
-        spread: Outputs.spread,
-        text: {
-          en: '${dir1} -> 유도 -> ${dir2}',
+        spreadToHeal: {
+          en: '흩어졌다 -> 장판깔고 -> 힐러랑 붙어욧',
+          ja: '散会 -> 真ん中 -> ヒーラと頭割り',
+        },
+        healToSpread: {
+          en: '힐러랑 있다가 -> 장판깔고 -> 흩어져욧',
+          ja: 'ヒーラと頭割り -> 真ん中 -> 散会',
+        },
+      },
+    },
+    {
+      id: 'P5S Venom Pool with Crystals',
+      // TODO: Callout safe quadrant/half
+      type: 'StartsUsing',
+      netRegex: NetRegexes.startsUsing({ id: '79E2', source: 'Proto-Carbuncle', capture: false }),
+      infoText: (_data, _matches, output) => {
+        return output.groups!();
+      },
+      outputStrings: {
+        groups: {
+          en: '보석에서 힐러랑 뭉쳐욧',
+          de: 'Heilergruppen auf Topassteine',
+          fr: 'Groupes heal sur les Topazes',
+          ja: 'トパーズの上でヒーラーと頭割り',
+          ko: '돌 위에서 힐러 그룹 쉐어',
         },
       },
     },
@@ -135,6 +250,21 @@ const triggerSet: TriggerSet<Data> = {
       response: Responses.getFrontThenBack(),
     },
     {
+      id: 'P5S Raging Tail Move',
+      type: 'Ability',
+      netRegex: NetRegexes.ability({ id: '7A0C', source: 'Proto-Carbuncle', capture: false }),
+      infoText: (_data, _matches, output) => output.moveBehind!(),
+      outputStrings: {
+        moveBehind: {
+          en: '엉댕이로 가욧',
+          de: 'Nach Hinten bewegen',
+          fr: 'Allez derrière',
+          ja: '背面へ',
+          ko: '보스 뒤로',
+        },
+      },
+    },
+    {
       id: 'P5S Claw to Tail',
       type: 'StartsUsing',
       netRegex: NetRegexes.startsUsing({ id: '770E', source: 'Proto-Carbuncle', capture: false }),
@@ -142,128 +272,153 @@ const triggerSet: TriggerSet<Data> = {
       response: Responses.getBackThenFront(),
     },
     {
-      id: 'P5S Topaz Ray Collect',
-      type: 'StartsUsing',
-      // 7703: 3.7s, 7704: 6.2s, 7705: 8.7s, 7706: 11.2s
-      netRegex: NetRegexes.startsUsing({ id: '770[3456]', source: 'Proto-Carbuncle' }),
-      run: (data, matches) => {
-        const index = convertAbilityIdToTopazRayIndex(matches.id);
-        if (data.topazRays[index] === undefined)
-          data.topazRays[index] = [];
-        const direction = convertCoordinatesToDirection(parseFloat(matches.x), parseFloat(matches.y));
-        data.topazRays[index]?.push(direction);
+      id: 'P5S Raging Claw Move',
+      type: 'Ability',
+      netRegex: NetRegexes.ability({ id: '7710', source: 'Proto-Carbuncle', capture: false }),
+      condition: (data) => {
+        data.clawCount = data.clawCount + 1;
+        return data.clawCount === 6;
       },
-    },
-    {
-      id: 'P5S Topaz Ray',
-      type: 'StartsUsing',
-      // 7703: 3.7s, 7704: 6.2s, 7705: 8.7s, 7706: 11.2s
-      netRegex: NetRegexes.startsUsing({ id: '770[3456]', source: 'Proto-Carbuncle' }),
-      delaySeconds: (_data, matches) => parseFloat(matches.castTime) - 2.5,
-      infoText: (data, matches, output) => {
-        // 770[34] cast 2 times, 770[56] cast 3 times
-        const expectedArrayLength = ['7705', '7706'].includes(matches.id) ? 3 : 2;
-        const index = convertAbilityIdToTopazRayIndex(matches.id);
-        if (data.topazRays[index]?.length !== expectedArrayLength)
-          return;
-        const safeDirs = new Set<keyof typeof directions | undefined>(['NE', 'SE', 'SW', 'NW']);
-        for (const dir of data.topazRays[index] ?? [])
-          safeDirs.delete(dir);
-        const dirs = [...safeDirs];
-        if (dirs.length !== (4 - expectedArrayLength))
-          return;
-        if (!dirs[0])
-          return;
-
-        const dirStr = `dir${dirs[0]}`;
-        if (dirs.length === 1 || !dirs[1])
-          return output[dirStr]!();
-
-        const dirMap = {
-          'NE': output.dirNE!(),
-          'SE': output.dirSE!(),
-          'SW': output.dirSW!(),
-          'NW': output.dirNW!(),
-        };
-
-        return output.two!({ dir1: dirMap[dirs[0]], dir2: dirMap[dirs[1]] });
+      infoText: (_data, _matches, output) => output.moveFront!(),
+      run: (data) => {
+        data.clawCount = 0;
       },
-      run: (data, matches) => delete data.topazRays[convertAbilityIdToTopazRayIndex(matches.id)],
       outputStrings: {
-        dirNE: Outputs.dirNE,
-        dirSE: Outputs.dirSE,
-        dirSW: Outputs.dirSW,
-        dirNW: Outputs.dirNW,
-        two: {
-          en: '${dir1} 또는 ${dir2}',
+        moveFront: {
+          en: '앞으로 가욧!',
+          de: 'Nach Vorne bewegen',
+          fr: 'Allez devant',
+          ja: '前へ',
+          ko: '보스 앞으로',
         },
       },
     },
     {
-      id: 'P5S Topaz Ray Cleanup',
-      type: 'Ability',
-      // Topaz Cluster
-      netRegex: NetRegexes.ability({ id: '7702', source: 'Proto-Carbuncle', capture: false }),
-      delaySeconds: 10,
-      run: (data) => data.topazRays = {},
+      id: 'P5S Searing Ray',
+      type: 'StartsUsing',
+      netRegex: NetRegexes.startsUsing({ id: '76[DF]7', source: 'Proto-Carbuncle', capture: false }),
+      alertText: (_data, _matches, output) => output.text!(),
+      outputStrings: {
+        text: Outputs.goFront,
+      },
+    },
+    {
+      id: 'P5S Raging Claw',
+      type: 'StartsUsing',
+      netRegex: NetRegexes.startsUsing({ id: '76FA', source: 'Proto-Carbuncle', capture: false }),
+      response: Responses.getBehind(),
     },
   ],
   timelineReplace: [
     {
       'locale': 'de',
       'replaceSync': {
+        'Lively Bait': 'zappelnd(?:e|er|es|en) Köder',
         'Proto-Carbuncle': 'Proto-Karfunkel',
       },
       'replaceText': {
-        '(?<!Toxic )Crunch': 'Quetscher',
+        '--towers--': '--Türme--',
+        'Acidic Slaver': 'Säurespeichel',
+        'Claw to Tail': 'Kralle und Schwanz',
+        'Devour': 'Verschlingen',
+        'Double Rush': 'Doppelsturm',
+        'Impact': 'Impakt',
+        'Raging Claw': 'Wütende Kralle',
+        'Raging Tail': 'Wütender Schwanz',
         'Ruby Glow': 'Rubinlicht',
+        'Ruby Reflection': 'Rubinspiegelung',
+        'Scatterbait': 'Streuköder',
         'Searing Ray': 'Sengender Strahl',
         'Sonic Howl': 'Schallheuler',
+        'Sonic Shatter': 'Schallbrecher',
+        'Spit': 'Hypersekretion',
         'Starving Stampede': 'Hungerstampede',
+        'Tail to Claw': 'Schwanz und Kralle',
         'Topaz Cluster': 'Topasbündel',
+        'Topaz Ray': 'Topasstrahl',
         'Topaz Stones': 'Topasstein',
         'Toxic Crunch': 'Giftquetscher',
+        'Venom(?!( |ous))': 'Toxinspray',
+        'Venom Drops': 'Gifttropfen',
         'Venom Pool': 'Giftschwall',
         'Venom Rain': 'Giftregen',
         'Venom Squall': 'Giftwelle',
+        'Venom Surge': 'Giftwallung',
+        'Venomous Mass': 'Giftmasse',
       },
     },
     {
       'locale': 'fr',
+      'missingTranslations': true,
       'replaceSync': {
+        'Lively Bait': 'amuse-gueule',
         'Proto-Carbuncle': 'Proto-Carbuncle',
       },
       'replaceText': {
-        '(?<!Toxic )Crunch': 'Croqueur',
+        'Acidic Slaver': 'Salive acide',
+        'Claw to Tail': 'Griffes et queue',
+        'Devour': 'Dévoration',
+        'Double Rush': 'Double ruée',
+        'Impact': 'Impact',
+        'Raging Claw': 'Griffes enragées',
+        'Raging Tail': 'Queue enragée',
         'Ruby Glow': 'Lumière rubis',
+        'Ruby Reflection': 'Réflexion rubis',
+        'Scatterbait': 'Éclate-appât',
         'Searing Ray': 'Rayon irradiant',
         'Sonic Howl': 'Hurlement sonique',
+        'Sonic Shatter': 'Pulvérisation sonique',
+        'Spit': 'Crachat',
         'Starving Stampede': 'Charge affamée',
+        'Tail to Claw': 'Queue et griffes',
         'Topaz Cluster': 'Chaîne de topazes',
+        'Topaz Ray': 'Rayon topaze',
         'Topaz Stones': 'Topazes',
         'Toxic Crunch': 'Croqueur venimeux',
+        'Venom(?!( |ous))': 'Venin',
+        'Venom Drops': 'Crachin de venin',
         'Venom Pool': 'Giclée de venin',
         'Venom Rain': 'Pluie de venin',
         'Venom Squall': 'Crachat de venin',
+        'Venom Surge': 'Déferlante de venin',
+        'Venomous Mass': 'Masse venimeuse',
       },
     },
     {
       'locale': 'ja',
+      'missingTranslations': true,
       'replaceSync': {
+        'Lively Bait': 'ライブリー・ベイト',
         'Proto-Carbuncle': 'プロトカーバンクル',
       },
       'replaceText': {
-        '(?<!Toxic )Crunch': 'クランチ',
+        'Acidic Slaver': 'アシッドスレイバー',
+        'Claw to Tail': 'クロウ・アンド・テイル',
+        'Devour': '捕食',
+        'Double Rush': 'ダブルラッシュ',
+        'Impact': '衝撃',
+        'Raging Claw': 'レイジングクロウ',
+        'Raging Tail': 'レイジングテイル',
         'Ruby Glow': 'ルビーの光',
+        'Ruby Reflection': 'ルビーリフレクション',
+        'Scatterbait': 'スキャッターベイト',
         'Searing Ray': 'シアリングレイ',
         'Sonic Howl': 'ソニックハウル',
+        'Sonic Shatter': 'ソニックシャッター',
+        'Spit': '放出',
         'Starving Stampede': 'スターヴィング・スタンピード',
+        'Tail to Claw': 'テイル・アンド・クロウ',
         'Topaz Cluster': 'トパーズクラスター',
+        'Topaz Ray': 'トパーズレイ',
         'Topaz Stones': 'トパーズストーン',
         'Toxic Crunch': 'ベノムクランチ',
+        'Venom(?!( |ous))': '毒液',
+        'Venom Drops': 'ベノムドロップ',
         'Venom Pool': 'ベノムスプラッシュ',
         'Venom Rain': 'ベノムレイン',
         'Venom Squall': 'ベノムスコール',
+        'Venom Surge': 'ベノムサージ',
+        'Venomous Mass': 'ベノムマス',
       },
     },
   ],
