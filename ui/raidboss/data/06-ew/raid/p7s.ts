@@ -108,6 +108,7 @@ const triggerSet: TriggerSet<Data> = {
       promise: async (data) => {
         const fruitLocaleNames: LocaleText = {
           en: 'Forbidden Fruit',
+          de: 'Frucht des Lebens',
         };
 
         // Select the Forbidden Fruits
@@ -141,22 +142,27 @@ const triggerSet: TriggerSet<Data> = {
           south: Outputs.south,
           twoPlatforms: {
             en: '${platform1} / ${platform2}',
+            de: '${platform1} / ${platform2}',
             ko: '${platform1} / ${platform2}',
           },
           orientation: {
             en: '줄 달린 소: ${location}',
+            de: 'Bullen-Linie: ${location}',
             ko: '줄 달린 소: ${location}',
           },
           famineOrientation: {
             en: '미노만 있는 곳: ${location}', // 맹
+            de: 'Minotauren ohne Vögel: ${location}',
             ko: '새 없는 곳: ${location}',
           },
           deathOrientation: {
             en: '소가 있는 곳: ${location}', // 흉
+            de: 'Blitz-Bulle: ${location}',
             ko: '줄 안달린 소: ${location}',
           },
           warOrientation: {
             en: '새랑 미노가 있는 곳: ${location}', // 란
+            de: 'Vögel mit Minotauren : ${location}',
             ko: '새 + 미노타우로스: ${location}',
           },
         };
@@ -314,7 +320,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: '따로 따로 탱크버스터',
-          de: 'Geteilter Tankbuster',
+          de: 'getrennte Tankbuster',
           fr: 'Séparez des Tankbusters',
           ja: '2人同時タンク強攻撃',
           ko: '따로맞는 탱버',
