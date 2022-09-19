@@ -50,8 +50,14 @@ export interface Data extends RaidbossData {
   concept: { [name: string]: InitialConcept };
   splicer: { [name: string]: Splicer };
   alignmentTargets: string[];
+  burstCounter: number;
+  myTower?: number;
+  flareCounter: number;
   inverseMagics: { [name: string]: boolean };
   deformationTargets: string[];
+  // prs Final
+  prsHighConcept?: number;
+  prsTwat?: number;
 }
 
 export const prsStrings = {
@@ -322,6 +328,8 @@ const triggerSet: TriggerSet<Data> = {
       concept: {},
       splicer: {},
       alignmentTargets: [],
+      burstCounter: 0,
+      flareCounter: 0,
       inverseMagics: {},
       deformationTargets: [],
     };
@@ -343,6 +351,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: '탱크 오토 어택! 아프다!',
+          de: 'Tank Auto-Angriffe',
           ja: 'タンクへのオートアタック',
           ko: '탱커 평타',
         },
@@ -429,13 +438,9 @@ const triggerSet: TriggerSet<Data> = {
       netRegex: NetRegexes.startsUsing({ id: '7917', source: 'Hephaistos', capture: false }),
       durationSeconds: 11,
       infoText: (_data, _matches, output) => output.healerGroups!(),
-      run: (data, _matches, output) => data.footfallsConcept = output.short!(),
+      run: (data, _matches, output) => data.footfallsConcept = output.healerGroups!(),
       outputStrings: {
         healerGroups: Outputs.healerGroups,
-        short: {
-          en: '힐러랑 뭉쳐욧',
-          ja: 'ヒーラと',
-        },
       },
     },
     {
@@ -446,17 +451,13 @@ const triggerSet: TriggerSet<Data> = {
       netRegex: NetRegexes.startsUsing({ id: '7916', source: 'Hephaistos', capture: false }),
       durationSeconds: 11,
       infoText: (_data, _matches, output) => output.text!(),
-      run: (data, _matches, output) => data.footfallsConcept = output.short!(),
+      run: (data, _matches, output) => data.footfallsConcept = output.text!(),
       outputStrings: {
         text: {
           en: '파트너랑 맞아욧',
           de: 'Mit Partner sammeln',
           ja: '2人頭割り',
           ko: '2인 쉐어',
-        },
-        short: {
-          en: '파트너랑 맞아욧',
-          ja: '2人で',
         },
       },
     },
@@ -822,15 +823,21 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         cardinals: {
           en: '십자 봐욧! Ⅹ고르곤',
+          de: 'Schaue Kardinal',
           ja: '視線を十字に',
+          ko: '시선을 동서남북쪽으로',
         },
         intercards: {
           en: '모서리 봐욧! ╋고르곤',
+          de: 'Schaue Interkardinal',
           ja: '視線を斜めに',
+          ko: '시선을 대각선쪽으로',
         },
         gorgons: {
           en: '고르곤: ${dir1} / ${dir2}',
-          ja: 'ゴルゴン：${dir1} / ${dir2}',
+          de: '${dir1}/${dir2} Gorgone',
+          ja: 'ゴルゴン：${dir1}/${dir2}',
+          ko: '${dir1}/${dir2} 고르곤',
         },
         dirN: prsStrings.dirN,
         dirNE: prsStrings.dirNE,
@@ -878,21 +885,25 @@ const triggerSet: TriggerSet<Data> = {
         output.responseOutputStrings = {
           firstGaze: {
             en: '첫째 게이즈! (+${player})',
+            de: 'Erster Blick (+ ${player})',
             ja: '先の石化 (+${player})',
             ko: '첫번째 석화 (+ ${player})',
           },
           secondGaze: {
             en: '둘째 게이즈! (+${player})',
+            de: 'Zweiter Blick (+ ${player})',
             ja: '後の石化 (+${player})',
             ko: '두번째 석화 (+ ${player})',
           },
           firstPoison: {
             en: '첫째 독 바닥! (+${player})',
+            de: 'Erstes Gift (+ ${player})',
             ja: '先の毒 (+${player})',
             ko: '첫번째 독장판 (+ ${player})',
           },
           secondPoison: {
             en: '둘째 독 바닥! (+${player})',
+            de: 'Zweites Gift (+ ${player})',
             ja: '後の毒 (+${player})',
             ko: '두번째 독장판 (+ ${player})',
           },
@@ -965,26 +976,31 @@ const triggerSet: TriggerSet<Data> = {
         output.responseOutputStrings = {
           firstGaze: {
             en: '첫째 게이즈',
+            de: 'Erster Blick',
             ja: '先の石化',
             ko: '첫번째 석화',
           },
           secondGaze: {
             en: '둘째 게이즈',
+            de: 'Zweiter Blick',
             ja: '後の石化',
             ko: '두번째 석화',
           },
           shriek: {
             en: '나중에 내가 마안 (+${player})',
+            de: 'Schrei später (mit ${player})',
             ja: '自分に全体石化 (+${player})',
             ko: '나중에 마안 (+ ${player})',
           },
           stack: {
             en: '나중에 내게 뭉쳐욧 (+${player})',
+            de: 'Später sammeln (mit ${player})',
             ja: '自分に頭割り (+${player})',
             ko: '나중에 쉐어 (+ ${player})',
           },
           noDebuff: {
             en: '무직이네 (${player1}, ${player2}, ${player3})',
+            de: 'Kein Debuff (+ ${player1}, ${player2}, ${player3})',
             ja: '無職 (${player1}, ${player2}, ${player3})',
             ko: '디버프 없음 (+ ${player1}, ${player2}, ${player3})',
           },
@@ -1097,10 +1113,10 @@ const triggerSet: TriggerSet<Data> = {
         if (!hephaistos)
           return;
 
-        // Boss faces 3.14159274 when North
+        // Boss faces 3.14159274 or -3.13727832 when North
         // Flip callout if crush (7A05)
         const epsilon = 0.1;
-        if (Math.abs(hephaistos.Heading - 3.14) < epsilon)
+        if (Math.abs(Math.abs(hephaistos.Heading) - 3.14) < epsilon)
           data.crushImpactSafeZone = (matches.id === '7A05' ? 'south' : 'north');
         // Boss will be facing South
         else
@@ -1121,10 +1137,12 @@ const triggerSet: TriggerSet<Data> = {
         impactDir: {
           en: '${dir}로 따라가욧! (넉백)',
           ja: '${dir} (ノックバック)',
+          ko: '${dir}으로 따라가기 (넉백)',
         },
         crushDir: {
           en: '${dir}로 피해욧! (푹찍쾅)',
           ja: '${dir} (クラッシュ)',
+          ko: '${dir}으로 피하기',
         },
         crush: {
           en: '점프에서 멀어져욧 (푹찍쾅)',
@@ -1256,15 +1274,19 @@ const triggerSet: TriggerSet<Data> = {
         // cactbot-builtin-response
         output.responseOutputStrings = {
           trailblaze: {
-            en: '[푹찍쾅] ${dir} 마커쪽으로!!!',
+            en: '[푹찍쾅] ${dir}쪽으로!!!',
+            ja: 'クラッシュ: ${dir}',
+          },
+          trailblazeTo: {
+            en: '[푹찍쾅] ${dir}쪽 방향이 안전해욧!!!',
             ja: 'クラッシュ: ${dir}',
           },
           trailblazeKnockback: {
-            en: '[넉백 주의] ${dir1} 마커로!!!',
+            en: '[넉백] ${dir1} 마커로!!!',
             ja: 'ノックバック: ${dir1}',
           },
           trailblazeKnockbackTo: {
-            en: '[넉백 주의] ${dir1} 마커로! 그리고 ${dir2}으로',
+            en: '[넉백] ${dir1} 마커로!!! ${dir2}쪽으로 당해욧!!!',
             ja: 'ノックバック: ${dir1} => ${dir2}',
           },
           left: Outputs.left,
@@ -1313,37 +1335,36 @@ const triggerSet: TriggerSet<Data> = {
               return { alertText: output.trailblazeKnockback!({ dir1: dirToCard[dir], dir2: dirToCard[data.footfallsDirs[1]] }) };
           }
 
-          // Second trailblze should call torch location
-          if (data.footfallsOrder[data.trailblazeCount] === 'impact') {
-            if (
-              (data.trailblazeTorchSafeZone === 'east' && dir === 0) ||
-              (data.trailblazeTorchSafeZone === 'west' && dir === 2)
-            )
+          // prs: 피하는 곳 마커로 표시, 여기서 안걸릴리 없지만 혹시 안걸리면 원래 루틴
+          const safedir = data.trailblazeTorchSafeZone === 'east' ? 1 : 3;
+          if (data.footfallsOrder[data.trailblazeCount] === 'impact')
+            return { alertText: output.trailblazeKnockbackTo!({ dir1: dirToCard[dir], dir2: dirToCard[safedir] }) };
+          if (data.footfallsOrder[data.trailblazeCount] === 'crush')
+            return { alertText: output.trailblazeTo!({ dir: dirToCard[safedir] }) };
+
+          // Dir is flipped for crush, thus matching knockback direction
+          if (
+            (data.trailblazeTorchSafeZone === 'east' && dir === 0) ||
+            (data.trailblazeTorchSafeZone === 'west' && dir === 2)
+          ) {
+            if (data.footfallsOrder[data.trailblazeCount] === 'impact')
               return { alertText: output.trailblazeKnockbackTo!({ dir1: dirToCard[dir], dir2: output.left!() }) };
-            if (
-              (data.trailblazeTorchSafeZone === 'west' && dir === 0) ||
-              (data.trailblazeTorchSafeZone === 'east' && dir === 2)
-            )
-              return { alertText: output.trailblazeKnockbackTo!({ dir1: dirToCard[dir], dir2: output.right!() }) };
-
-            // Unable to determine direction, output only knockback
-            return { alertText: output.trailblazeKnockback!({ dir1: dirToCard[dir] }) };
-          }
-
-          // Output torch location during crush
-          if (data.footfallsOrder[data.trailblazeCount] === 'crush' && data.trailblazeTorchSafeZone) {
-            if (
-              (data.trailblazeTorchSafeZone === 'east' && dir === 0) ||
-              (data.trailblazeTorchSafeZone === 'west' && dir === 2)
-            )
-              return { infoText: output.right!() };
-            if (
-              (data.trailblazeTorchSafeZone === 'west' && dir === 0) ||
-              (data.trailblazeTorchSafeZone === 'east' && dir === 2)
-            )
+            if (data.footfallsOrder[data.trailblazeCount] === 'crush')
               return { infoText: output.left!() };
-            // Unable to determine direction, no output
           }
+
+          if (
+            (data.trailblazeTorchSafeZone === 'west' && dir === 0) ||
+            (data.trailblazeTorchSafeZone === 'east' && dir === 2)
+          ) {
+            if (data.footfallsOrder[data.trailblazeCount] === 'impact')
+              return { alertText: output.trailblazeKnockbackTo!({ dir1: dirToCard[dir], dir2: output.right!() }) };
+            if (data.footfallsOrder[data.trailblazeCount] === 'crush')
+              return { infoText: output.right!() };
+          }
+          // Unable to determine direction, output only knockback
+          if (data.footfallsOrder[data.trailblazeCount] === 'impact')
+            return { alertText: output.trailblazeKnockback!({ dir1: dirToCard[dir] }) };
         }
       },
       run: (data) => data.trailblazeCount++,
@@ -1647,7 +1668,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: '따로 따로 탱크버스터',
-          de: 'Geteilter Tankbuster',
+          de: 'getrennte Tankbuster',
           ja: '2人同時タンク強攻撃',
           ko: '따로맞는 탱버',
         },
@@ -1669,11 +1690,13 @@ const triggerSet: TriggerSet<Data> = {
         right: Outputs.right,
         rightAndSpread: {
           en: '오른쪽 + 흩어져욧',
+          de: 'Rechts + Verteilen',
           ja: '右 + 散会',
           ko: '오른쪽 + 산개',
         },
         rightAndStack: {
           en: '오른쪽 + 뭉쳐욧',
+          de: 'Rechts + Sammeln',
           ja: '右 + 頭割り',
           ko: '오른쪽 + 쉐어',
         },
@@ -1695,11 +1718,13 @@ const triggerSet: TriggerSet<Data> = {
         left: Outputs.left,
         leftAndSpread: {
           en: '왼쪽 + 흩어져욧',
+          de: 'Links + Verteilen',
           ja: '左 + 散会',
           ko: '왼쪽 + 산개',
         },
         leftAndStack: {
           en: '왼쪽 + 뭉쳐욧',
+          de: 'Links + Sammeln',
           ja: '左 + 頭割り',
           ko: '왼쪽 + 쉐어',
         },
@@ -1716,21 +1741,86 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
+      id: 'P8S Tyrant\'s Fire III Counter',
+      type: 'Ability',
+      netRegex: NetRegexes.ability({ id: '75F0', source: 'Hephaistos', capture: false }),
+      preRun: (data) => data.burstCounter++,
+      durationSeconds: 2,
+      suppressSeconds: 1,
+      sound: '',
+      infoText: (data, _matches, output) => output.text!({ num: data.burstCounter }),
+      tts: null,
+      outputStrings: {
+        text: {
+          en: '${num}번째',
+          de: '${num}',
+          fr: '${num}',
+          ja: '${num}番目',
+          cn: '${num}',
+          ko: '${num}',
+        },
+      },
+    },
+    {
+      id: 'P8S Tyrant\'s Fire III Bait then Tower',
+      type: 'Ability',
+      netRegex: NetRegexes.ability({ id: '75F0', source: 'Hephaistos' }),
+      condition: Conditions.targetIsYou(),
+      durationSeconds: 7.9,
+      infoText: (data, _matches, output) => output.text!({ num: data.burstCounter }),
+      run: (data) => data.myTower = data.burstCounter,
+      outputStrings: {
+        text: {
+          en: '내가 ${num}번째',
+          ja: '自分は${num}番目',
+        },
+      },
+    },
+    {
+      id: 'P8S Tyrant\'s Flare II Soak Tower',
+      type: 'StartsUsing',
+      netRegex: NetRegexes.startsUsing({ id: '7A88', source: 'Hephaistos', capture: false }),
+      preRun: (data) => data.flareCounter++,
+      suppressSeconds: 1,
+      alertText: (data, _matches, output) => {
+        if (data.flareCounter === data.myTower)
+          return output.text!({ num: data.myTower });
+      },
+      outputStrings: {
+        text: {
+          en: '${num}번째 타워에 들어가욧',
+          ja: '${num}番目の塔へ入って',
+        },
+      },
+    },
+    {
       id: 'P8S Inverse Magics',
       type: 'GainsEffect',
       // This gets recast a lot on the same people, but shouldn't cause an issue.
       // This also only happens once on the second time through, so no need to reset.
       netRegex: NetRegexes.gainsEffect({ effectId: 'D15' }),
-      infoText: (data, matches, output) => {
-        if (!data.inverseMagics[matches.target])
-          return output.reversed!({ player: data.ShortName(matches.target) });
+      response: (data, matches, output) => {
+        if (!data.inverseMagics[matches.target]) {
+          if (data.me === matches.target)
+            return { alarmText: output.reversedme!() };
+          return { infoText: output.reversed!({ player: data.ShortName(matches.target) }) };
+        }
+      },
+      tts: (data, matches, _output) => {
+        if (!data.inverseMagics[matches.target] && data.me === matches.target)
+          return 'わたしが反転';
       },
       run: (data, matches) => data.inverseMagics[matches.target] = true,
       outputStrings: {
         reversed: {
           en: '반전: ${player}',
-          ja: 'マジックインヴァージョン：${player}',
+          de: '${player} umgekehrt',
+          ja: '反転：${player}',
           ko: '${player} 반전',
+        },
+        reversedme: {
+          en: '내가 반전!!! 제자리 점프!!!',
+          ja: 'わたしが反転',
         },
       },
     },
@@ -1746,6 +1836,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: '내게 보라 동글이가!',
+          de: 'Anpassung auf DIR',
           ja: '自分に紫丸',
           ko: '원판 대상자',
         },
@@ -1767,6 +1858,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: '보라 동글이: ${player1}, ${player2}',
+          de: 'Anpassung auf ${player1}, ${player2}',
           ja: '紫丸：${player1}, ${player2}',
           ko: '${player1}, ${player2} 원판',
         },
@@ -1782,31 +1874,37 @@ const triggerSet: TriggerSet<Data> = {
         output.responseOutputStrings = {
           ice: {
             en: '먼저 얼음!! 3:3으로 뭉쳐욧',
+            de: 'Eis Gruppen zuerst',
             ja: '氷の頭割りから',
             ko: '얼음 쉐어 먼저',
           },
           fire: {
             en: '먼저 불!! 둘씩 뭉쳐욧',
+            de: 'Feuer Partner zuerst',
             ja: '火の2人頭割りから',
             ko: '불 2인쉐어 먼저',
           },
           stack: {
             en: '먼저 뭉쳐욧',
+            de: 'Zuerst sammeln',
             ja: '頭割りから',
             ko: '쉐어 먼저',
           },
           spread: {
             en: '먼저 흩어져욧',
+            de: 'Zuerst verteilen',
             ja: '散会から',
             ko: '산개 먼저',
           },
           baitAndStack: {
             en: '가운데 유도하고 => 뭉쳐욧',
+            de: 'Ködern => Sammeln',
             ja: '誘導 => 頭割り',
             ko: '장판 유도 => 쉐어',
           },
           baitAndSpread: {
             en: '가운데 유도하고 => 흩어져욧',
+            de: 'Ködern => Verteilen',
             ja: '誘導 => 散会',
             ko: '장판 유도 => 산개',
           },
@@ -1884,11 +1982,13 @@ const triggerSet: TriggerSet<Data> = {
         spread: Outputs.spread,
         ice: {
           en: '얼음!! 3:3으로 뭉쳐욧',
+          de: 'Eis Gruppen',
           ja: '氷の頭割り',
           ko: '얼음 그룹 쉐어',
         },
         fire: {
           en: '불!! 둘씩 뭉쳐욧',
+          de: 'Feuer Partner',
           ja: '火の2人頭割り',
           ko: '불 2인 쉐어',
         },
@@ -1915,11 +2015,21 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         row1: {
           en: '맨 앞 줄로!!!',
+          de: 'Vordere Reihe',
+          ko: '첫번째 줄',
         },
         row2: {
           en: '두번째 줄로!!!',
+          de: 'Zweite Reihe',
+          ko: '두번째 줄',
         },
       },
+    },
+    {
+      id: 'P8S+ 하이 컨셉 체크',
+      type: 'StartsUsing',
+      netRegex: NetRegexes.startsUsing({ id: '710A', source: 'Hephaistos', capture: false }),
+      run: (data, _match, _output) => data.prsHighConcept = (data.prsHighConcept ?? 0) + 1,
     },
     {
       id: 'P8S High Concept Collect',
@@ -1963,66 +2073,83 @@ const triggerSet: TriggerSet<Data> = {
         output.responseOutputStrings = {
           noDebuff: {
             en: '무직이야!',
+            de: 'Kein Debuff',
             ja: '無職',
             ko: '디버프 없음',
           },
+          noDebuffSplicer: {
+            en: '무직이야! + ${splicer}',
+            ja: '無職 + ${splicer}',
+            ko: '디버프 없음 + ${splicer}',
+          },
           shortAlpha: {
-            en: '짧은 알파',
-            ja: '短いアルファ',
+            en: '빠른 알파',
+            de: 'kurzes Alpha',
+            ja: '早アルファ',
             ko: '짧은 알파',
           },
           longAlpha: {
-            en: '긴 알파',
-            ja: '長いアルファ',
+            en: '느린 알파',
+            de: 'langes Alpha',
+            ja: '遅アルファ',
             ko: '긴 알파',
           },
           longAlphaSplicer: {
-            en: '긴 알파 + ${splicer}',
-            ja: '長いアルファ + ${splicer}',
+            en: '느린 알파 + ${splicer}',
+            de: 'langes Alpha + ${splicer}',
+            ja: '遅アルファ + ${splicer}',
             ko: '긴 알파 + ${splicer}',
           },
           shortBeta: {
-            en: '짧은 베타',
-            ja: '短いベータ',
+            en: '빠른 베타',
+            de: 'kurzes Beta',
+            ja: '早ベータ',
             ko: '짧은 베타',
           },
           longBeta: {
-            en: '긴 베타',
-            ja: '長いベータ',
+            en: '느린 베타',
+            de: 'langes Beta',
+            ja: '遅ベータ',
             ko: '긴 베타',
           },
           longBetaSplicer: {
-            en: '긴 베타 + ${splicer}',
-            ja: '長いベータ + ${splicer}',
+            en: '느린 베타 + ${splicer}',
+            de: 'langes Beta + ${splicer}',
+            ja: '遅ベータ + ${splicer}',
             ko: '긴 베타 + ${splicer}',
           },
           shortGamma: {
-            en: '짧은 감마',
-            ja: '短いガンマ',
+            en: '빠른 감마',
+            de: 'kurzes Gamma',
+            ja: '早ガンマ',
             ko: '짧은 감마',
           },
           longGamma: {
-            en: '긴 감마',
-            ja: '長いガンマ',
+            en: '느린 감마',
+            de: 'langes Gamma',
+            ja: '遅ガンマ',
             ko: '긴 감마',
           },
           longGammaSplicer: {
-            en: '긴 감마 + ${splicer}',
-            ja: '長いガンマ + ${splicer}',
+            en: '느린 감마 + ${splicer}',
+            de: 'langes Gamma + ${splicer}',
+            ja: '遅ガンマ + ${splicer}',
             ko: '긴 감마 + ${splicer}',
           },
           soloSplice: {
-            en: '혼자 처리해욧',
+            en: '혼자 처리!',
+            de: 'Einzelnes Sammeln',
             ja: '1人受け',
             ko: '1인징',
           },
           multiSplice: {
-            en: '둘이 뭉쳐욧',
+            en: '둘이 뭉쳐욧!',
             ja: '2人頭割り',
             ko: '2인징',
           },
           superSplice: {
-            en: '셋이 뭉쳐욧',
+            en: '셋이 뭉쳐욧!',
+            de: 'Drei sammeln',
             ja: '3人頭割り',
             ko: '3인징',
           },
@@ -2032,6 +2159,13 @@ const triggerSet: TriggerSet<Data> = {
 
         const concept = data.concept[data.me];
         const splicer = data.splicer[data.me];
+
+        if (splicer === undefined && concept === undefined)
+          data.prsTwat = 2;
+        else if (concept === undefined || concept.startsWith('short'))
+          data.prsTwat = 1;
+        else
+          data.prsTwat = 0;
 
         const singleConceptMap: { [key in InitialConcept]: string } = {
           shortalpha: output.shortAlpha!(),
@@ -2060,7 +2194,7 @@ const triggerSet: TriggerSet<Data> = {
         };
         const splicerStr = splicerMap[splicer];
         if (concept === undefined)
-          return { infoText: splicerStr };
+          return { alarmText: output.noDebuffSplicer!({ splicer: splicerStr }) };
         else if (concept === 'longalpha')
           return { alertText: output.longAlphaSplicer!({ splicer: splicerStr }) };
         else if (concept === 'longbeta')
@@ -2081,12 +2215,26 @@ const triggerSet: TriggerSet<Data> = {
       // TODO: it'd be nice to know the tower here so this could just say
       // "take tower" or "avoid tower" with different severity or even
       // who to merge with (!), but without that this is the best we got.
-      infoText: (_data, _matches, output) => output.text!(),
+      infoText: (data, _matches, output) => {
+        let at;
+        if (data.prsTwat === 2)
+          at = output.none!();
+        else if (data.prsTwat === 1)
+          at = output.south!();
+        else
+          at = output.north!();
+        return output.text!({ at: at });
+      },
       outputStrings: {
         text: {
-          en: '초록/파랑 타워',
-          ja: '緑・青の塔',
+          en: '${at} [초록/파랑]',
+          ja: '${at}で　緑・青',
         },
+        none: {
+          en: '무직',
+        },
+        north: Outputs.north,
+        south: Outputs.south,
       },
     },
     {
@@ -2094,12 +2242,26 @@ const triggerSet: TriggerSet<Data> = {
       type: 'GainsEffect',
       netRegex: NetRegexes.gainsEffect({ effectId: 'D06' }),
       condition: Conditions.targetIsYou(),
-      infoText: (_data, _matches, output) => output.text!(),
+      infoText: (data, _matches, output) => {
+        let at;
+        if (data.prsTwat === 2)
+          at = output.none!();
+        else if (data.prsTwat === 1)
+          at = output.south!();
+        else
+          at = output.north!();
+        return output.text!({ at: at });
+      },
       outputStrings: {
         text: {
-          en: '초록/보라 타워',
-          ja: '緑・紫の塔',
+          en: '${at} [초록/보라]',
+          ja: '${at}で　緑・紫',
         },
+        none: {
+          en: '무직',
+        },
+        north: Outputs.north,
+        south: Outputs.south,
       },
     },
     {
@@ -2107,12 +2269,26 @@ const triggerSet: TriggerSet<Data> = {
       type: 'GainsEffect',
       netRegex: NetRegexes.gainsEffect({ effectId: 'D07' }),
       condition: Conditions.targetIsYou(),
-      infoText: (_data, _matches, output) => output.text!(),
+      infoText: (data, _matches, output) => {
+        let at;
+        if (data.prsTwat === 2)
+          at = output.none!();
+        else if (data.prsTwat === 1)
+          at = output.south!();
+        else
+          at = output.north!();
+        return output.text!({ at: at });
+      },
       outputStrings: {
         text: {
-          en: '보라/파랑 타워',
-          ja: '紫・青の塔',
+          en: '${at} [보라/파랑]',
+          ja: '${at}で　紫・青',
         },
+        none: {
+          en: '무직',
+        },
+        north: Outputs.north,
+        south: Outputs.south,
       },
     },
     {
@@ -2139,8 +2315,10 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         text: {
-          en: '두번째 타워',
+          en: '두번째 타워로',
+          de: 'Zweite Türme',
           ja: '2回目の塔',
+          ko: '두번째 기둥',
         },
       },
     },
@@ -2156,8 +2334,10 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         text: {
-          en: '첫번째 타워',
+          en: '첫번째 타워로',
+          de: 'Erste Türme',
           ja: '1回目の塔',
+          ko: '첫번째 기둥',
         },
       },
     },
@@ -2169,6 +2349,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: '아픈 전체공격 + 출혈',
+          de: 'große AoE + Blutung',
           ja: '全体攻撃 + 出血',
           ko: '아픈 전체공격 + 도트',
         },
