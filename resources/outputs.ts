@@ -167,7 +167,7 @@ export default {
     ko: '모이기',
   },
   healerGroups: {
-    en: '힐러 중심으로 뭉쳐요',
+    en: '힐러랑 뭉쳐요',
     de: 'Heiler-Gruppen',
     fr: 'Groupes sur les heals',
     ja: 'ヒラに頭割り',

@@ -12,6 +12,11 @@ function time {
   Measure-Command { Invoke-Expression $Command 2>&1 | out-default }
 }
 
+function Get-LineWithMesg([string] $msg) {
+  $in = Read-Host $msg
+  return $in
+}
+
 function New-QuestionYesNo([string] $msg) {
   do {
     $m = "{0} ('Y0 ' 앞으로 / 'N.' 그만)" -f $msg
@@ -49,14 +54,14 @@ try {
   if ($dllbuild -eq $TRUE) {
     $vspath = $Env:VS_PATH
     if (-not (Test-Path "$vspath")) {
-      'DLL 빌드하려면 VS_PATH 환경 변수를 미리 지정해야함요...'
+      Get-LineWithMesg "DLL 빌드하려면 VS_PATH 환경 변수를 미리 지정해야함요..."
       exit 1
     }
     else {
       $ENV:PATH = "$vspath\MSBuild\Current\Bin;${ENV:PATH}";
       msbuild -p:Configuration=Release -p:Platform=x64 "plugin\Cactbot.sln" -t:rebuild
       if (-not $?) {
-        '엇.... msbuild 오류가 있네요'
+        Get-LineWithMesg "엇.... msbuild 오류가 있네요"
         exit 1
       }
     }
@@ -69,7 +74,7 @@ try {
     Get-ChildItem .\dist\* | Remove-Item -Recurse
     npm run build
     if (-not $?) {
-      '엇.... npm 오류가 있네요'
+      Get-LineWithMesg "엇.... npm 오류가 있네요"
       exit 1
     }
   }
@@ -114,6 +119,7 @@ catch {
   '오류가 나쓰요!!!'
 
   Write-Error $Error[0]
+  Get-LineWithMesg "확인하기 위해 멈췄스요"
 }
 
 exit 0

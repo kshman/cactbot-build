@@ -16,6 +16,8 @@ export interface Data extends RaidbossData {
   aetheronecrosisDuration: number;
   predationCount: number;
   predationDebuff?: string;
+  //
+  prsSigma?: number;
 }
 
 // Due to changes introduced in patch 5.2, overhead markers now have a random offset
@@ -172,13 +174,14 @@ const triggerSet: TriggerSet<Data> = {
       type: 'Ability',
       netRegex: NetRegexes.ability({ id: '7865', source: 'Hegemone', capture: false }),
       preRun: (data, _matches) => data.pathogenicCellsCounter++,
+      durationSeconds: 1.5,
       suppressSeconds: 1,
       sound: '',
       infoText: (data, _matches, output) => output.text!({ num: data.pathogenicCellsCounter }),
       tts: null,
       outputStrings: {
         text: {
-          en: '현재 주사위: ${num}번',
+          en: '${num}번',
           de: '${num}',
           fr: '${num}',
           ja: '${num}',
