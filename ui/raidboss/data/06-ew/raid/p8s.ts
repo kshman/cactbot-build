@@ -2208,6 +2208,61 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
+      // 원래 퍼펙트가 바뀌기 전에 이걸로 통합
+      id: 'P8S+ 퍼펙트 알파/베타/감마 (임시)',
+      type: 'GainsEffect',
+      netRegex: NetRegexes.gainsEffect({ effectId: 'D0[5-7]' }),
+      condition: Conditions.targetIsYou(),
+      response: (data, matches, output) => {
+        // cactbot-builtin-response
+        output.responseOutputStrings = {
+          mesg: {
+            en: '${at} [${color}]',
+            ja: '${at} [${color}]',
+          },
+          greenBlue: {
+            en: '초록/파랑',
+            ja: '緑・青',
+          },
+          greenPuple: {
+            en: '초록/보라',
+            ja: '緑・紫',
+          },
+          pupleBlue: {
+            en: '보라/파랑',
+            ja: '紫・青',
+          },
+          baeksu: {
+            en: '무직 조합!!',
+            ja: '無職',
+          },
+          north: Outputs.north,
+          south: Outputs.south,
+          unknown: Outputs.unknown,
+        };
+
+        const atToDo: { [at: number]: string } = {
+          0: output.north!(),
+          1: output.south!(),
+          2: output.baeksu!(),
+          3: output.unknown!(),
+        };
+        const idToDebuff: { [id: string]: string } = {
+          'D05': output.greenBlue!(),
+          'D06': output.greenPuple!(),
+          'D07': output.pupleBlue!(),
+        };
+
+        const at = atToDo[data.prsTwat ?? 3];
+        const color = idToDebuff[matches.effectId];
+
+        if (data.prsTwat === 2)
+          return { alertText: output.mesg!({ at: at, color: color }) };
+        return { infoText: output.mesg!({ at: at, color: color }) };
+      },
+    },
+    /*
+    {
       id: 'P8S Perfected Alpha',
       type: 'GainsEffect',
       netRegex: NetRegexes.gainsEffect({ effectId: 'D05' }),
@@ -2215,26 +2270,14 @@ const triggerSet: TriggerSet<Data> = {
       // TODO: it'd be nice to know the tower here so this could just say
       // "take tower" or "avoid tower" with different severity or even
       // who to merge with (!), but without that this is the best we got.
-      infoText: (data, _matches, output) => {
-        let at;
-        if (data.prsTwat === 2)
-          at = output.none!();
-        else if (data.prsTwat === 1)
-          at = output.south!();
-        else
-          at = output.north!();
-        return output.text!({ at: at });
-      },
+      infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '${at} [초록/파랑]',
-          ja: '${at}で　緑・青',
+          en: 'Green/Blue Tower',
+          de: 'Grüner/Blauer Turm',
+          ja: '緑・青',
+          ko: '초록/파랑 기둥',
         },
-        none: {
-          en: '무직',
-        },
-        north: Outputs.north,
-        south: Outputs.south,
       },
     },
     {
@@ -2242,26 +2285,14 @@ const triggerSet: TriggerSet<Data> = {
       type: 'GainsEffect',
       netRegex: NetRegexes.gainsEffect({ effectId: 'D06' }),
       condition: Conditions.targetIsYou(),
-      infoText: (data, _matches, output) => {
-        let at;
-        if (data.prsTwat === 2)
-          at = output.none!();
-        else if (data.prsTwat === 1)
-          at = output.south!();
-        else
-          at = output.north!();
-        return output.text!({ at: at });
-      },
+      infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '${at} [초록/보라]',
-          ja: '${at}で　緑・紫',
+          en: 'Green/Purple Tower',
+          de: 'Grüner/Lilaner Turm',
+          ja: '緑・紫',
+          ko: '초록/보라 기둥',
         },
-        none: {
-          en: '무직',
-        },
-        north: Outputs.north,
-        south: Outputs.south,
       },
     },
     {
@@ -2269,28 +2300,17 @@ const triggerSet: TriggerSet<Data> = {
       type: 'GainsEffect',
       netRegex: NetRegexes.gainsEffect({ effectId: 'D07' }),
       condition: Conditions.targetIsYou(),
-      infoText: (data, _matches, output) => {
-        let at;
-        if (data.prsTwat === 2)
-          at = output.none!();
-        else if (data.prsTwat === 1)
-          at = output.south!();
-        else
-          at = output.north!();
-        return output.text!({ at: at });
-      },
+      infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '${at} [보라/파랑]',
-          ja: '${at}で　紫・青',
+          en: 'Purple/Blue Tower',
+          de: 'Lilaner/Blauer Turm',
+          ja: '紫・青',
+          ko: '보라/파랑 기둥',
         },
-        none: {
-          en: '무직',
-        },
-        north: Outputs.north,
-        south: Outputs.south,
       },
     },
+    */
     {
       id: 'P8S Limitless Desolation',
       type: 'StartsUsing',
