@@ -1819,10 +1819,10 @@ const triggerSet: TriggerSet<Data> = {
         output.responseOutputStrings = {
           ice: {
             en: '먼저 얼음!! 3:3으로 뭉쳐욧 (${adj})',
-            de: 'Eis Gruppen zuerst (${adj})',
-            fr: 'Groupe Glace en 1er (${adj})',
+            de: 'Eis Gruppen zuerst',
+            fr: 'Groupe Glace en 1er',
             ja: '氷の頭割りから (${adj})',
-            ko: '얼음 쉐어 먼저 (${adj})',
+            ko: '얼음 쉐어 먼저',
           },
           fire: {
             en: '먼저 불!! 둘씩 뭉쳐욧',
