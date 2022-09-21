@@ -1937,7 +1937,7 @@ const triggerSet: TriggerSet<Data> = {
           en: '얼음!! 3:3으로 뭉쳐욧 (${adj})',
           de: 'Eis Gruppen',
           fr: 'Groupe de glace',
-          ja: '氷の頭割り',
+          ja: '氷の頭割り (${adj})',
           ko: '얼음 그룹 쉐어',
         },
         fire: {
