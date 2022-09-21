@@ -109,6 +109,7 @@ const triggerSet: TriggerSet<Data> = {
         const fruitLocaleNames: LocaleText = {
           en: 'Forbidden Fruit',
           de: 'Frucht des Lebens',
+          fr: 'Fruits de la vie',
         };
 
         // Select the Forbidden Fruits
@@ -143,26 +144,31 @@ const triggerSet: TriggerSet<Data> = {
           twoPlatforms: {
             en: '${platform1} / ${platform2}',
             de: '${platform1} / ${platform2}',
+            fr: '${platform1} / ${platform2}',
             ko: '${platform1} / ${platform2}',
           },
           orientation: {
             en: '줄 달린 소: ${location}',
             de: 'Bullen-Linie: ${location}',
+            fr: 'Taureau Ligne : ${location}',
             ko: '줄 달린 소: ${location}',
           },
           famineOrientation: {
             en: '미노만 있는 곳: ${location}', // 맹
             de: 'Minotauren ohne Vögel: ${location}',
+            fr: 'Minotaure sans oiseau : ${location}',
             ko: '새 없는 곳: ${location}',
           },
           deathOrientation: {
             en: '소가 있는 곳: ${location}', // 흉
             de: 'Blitz-Bulle: ${location}',
+            fr: 'Taureau éclair : ${location}',
             ko: '줄 안달린 소: ${location}',
           },
           warOrientation: {
             en: '새랑 미노가 있는 곳: ${location}', // 란
             de: 'Vögel mit Minotauren : ${location}',
+            fr: 'Oiseau sans Minotaure : ${location}',
             ko: '새 + 미노타우로스: ${location}',
           },
         };
@@ -364,7 +370,7 @@ const triggerSet: TriggerSet<Data> = {
       run: (data) => data.rootsCount = data.rootsCount + 1,
       outputStrings: {
         separateHealerGroups: {
-          en: '각각 그룹으로 모여 맞아요',
+          en: '모여 맞아요! 나눠진건 아쉽네',
           de: 'Heiler-Gruppen Plattformen',
           fr: 'Groupes heals Plateforme',
           ja: '円盤の内でヒーラーと頭割り',
@@ -794,9 +800,9 @@ const triggerSet: TriggerSet<Data> = {
       'missingTranslations': true,
       'replaceSync': {
         'Agdistis': 'Agdistis',
-        'Immature Io': 'io immature',
-        'Immature Minotaur': 'minotaure immature',
-        'Immature Stymphalide': 'stymphalide immature',
+        'Immature Io': 'Io immature',
+        'Immature Minotaur': 'Minotaure immature',
+        'Immature Stymphalide': 'Stymphalide immature',
       },
       'replaceText': {
         'Blades of Attis': 'Lames d\'Attis',

@@ -58,6 +58,7 @@ export interface Data extends RaidbossData {
   // prs Final
   prsHighConcept?: number;
   prsTwat?: number;
+  prsTyrantTank?: number;
 }
 
 export const prsStrings = {
@@ -352,7 +353,8 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: '탱크 오토 어택! 아프다!',
           de: 'Tank Auto-Angriffe',
-          ja: 'タンクへのオートアタック',
+          fr: 'Auto sur le tank',
+          ja: 'タンクオートアタック',
           ko: '탱커 평타',
         },
       },
@@ -383,12 +385,14 @@ const triggerSet: TriggerSet<Data> = {
         outAndSpread: {
           en: '깜선 바깥쪽 + 흩어져욧',
           de: 'Raus + Verteilen',
+          fr: 'Extérieur + Écartez-vous',
           ja: '黒線の外側 + 散会',
           ko: '밖으로 + 산개',
         },
         outAndStacks: {
           en: '숫자 마커 + 파트너랑 맞아욧',
           de: 'Raus + Sammeln',
+          fr: 'Extérieur + Package',
           ja: '黒線の外側 + 2人頭割り',
           ko: '밖으로 + 쉐어',
         },
@@ -413,12 +417,14 @@ const triggerSet: TriggerSet<Data> = {
         inAndSpread: {
           en: '깜선 안쪽 + 흩어져욧',
           de: 'Rein + Verteilen',
+          fr: 'Intérieur + Écartez-vous',
           ja: '黒線の内側 + 散会',
           ko: '안으로 + 산개',
         },
         inAndStacks: {
           en: '깜선 안쪽 + 파트너랑 맞아욧',
           de: 'Rein + Sammeln',
+          fr: 'Intérieur + Package',
           ja: '黒線の内側 + 2人頭割り',
           ko: '안으로 + 쉐어',
         },
@@ -456,6 +462,7 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: '파트너랑 맞아욧',
           de: 'Mit Partner sammeln',
+          fr: 'Package avec votre partenaire',
           ja: '2人頭割り',
           ko: '2인 쉐어',
         },
@@ -473,6 +480,7 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: '(나중에 파트너랑 맞아욧)',
           de: '(Partner-Stacks, für später)',
+          fr: '(Package partenaire, pour après)',
           ja: '(後で2人頭割り)',
           ko: '(곧 2인 쉐어)',
         },
@@ -488,6 +496,7 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: '(나중에 흩어져욧)',
           de: '(Verteilen, für später)',
+          fr: '(Écartez-vous, pour après)',
           ja: '(後で散会)',
           ko: '(곧 산개)',
         },
@@ -523,18 +532,21 @@ const triggerSet: TriggerSet<Data> = {
         inAndStacks: {
           en: '깜선 안쪽 + 파트너랑 맞아욧',
           de: 'Rein + Sammeln',
+          fr: 'Intérieur + Package',
           ja: '黒線の内側 + 2人頭割り',
           ko: '안으로 + 쉐어',
         },
         outAndStacks: {
           en: '숫자 마커 + 파트너랑 맞아욧',
           de: 'Raus + Sammeln',
+          fr: 'Extérieur + Package',
           ja: '黒線の外側 + 2人頭割り',
           ko: '밖으로 + 쉐어',
         },
         stacks: {
           en: '파트너랑 맞아욧',
           de: 'Mit Partner sammeln',
+          fr: 'Package avec votre partenaire',
           ja: '2人頭割り',
           ko: '2인 쉐어',
         },
@@ -563,24 +575,28 @@ const triggerSet: TriggerSet<Data> = {
         inAndProtean: {
           en: '깜선 안쪽 + 기본산개 + 프로틴',
           de: 'Rein + Himmelsrichtung',
+          fr: 'Intérieur + Positions',
           ja: '黒線の内側 + 基本散会',
           ko: '안으로 + 산개',
         },
         outAndProteanMelee: {
           en: '숫자 마커로 ← 깜선 바깥 + 프로틴', // 밀리 안으로
           de: 'Raus + Himmelsrichtung',
+          fr: 'Extérieur + Positions',
           ja: '黒線の外側 + 数字マーカー',
           ko: '밖으로 + 산개',
         },
         outAndProteanHeRaCa: {
           en: '숫자 바깥 끝으로 ← 깜선 바깥 + 프로틴', // 원격 밖으로
           de: 'Raus + Himmelsrichtung',
+          fr: 'Extérieur + Positions',
           ja: '黒線の外側 + 散会',
           ko: '밖으로 + 산개',
         },
         protean: {
           en: '프로틴',
           de: 'Himmelsrichtung',
+          fr: 'Positions',
           ja: '散会',
           ko: '산개',
         },
@@ -710,6 +726,7 @@ const triggerSet: TriggerSet<Data> = {
         combo: {
           en: '${dir1} / ${dir2}',
           de: '${dir1} / ${dir2}',
+          fr: '${dir1} / ${dir2}',
           ja: '${dir1} / ${dir2}',
           ko: '${dir1} / ${dir2}',
         },
@@ -824,18 +841,21 @@ const triggerSet: TriggerSet<Data> = {
         cardinals: {
           en: '십자 봐욧! Ⅹ고르곤',
           de: 'Schaue Kardinal',
+          fr: 'Regardez en cardinal',
           ja: '視線を十字に',
           ko: '시선을 동서남북쪽으로',
         },
         intercards: {
           en: '모서리 봐욧! ╋고르곤',
           de: 'Schaue Interkardinal',
+          fr: 'Regardez en intercardinal',
           ja: '視線を斜めに',
           ko: '시선을 대각선쪽으로',
         },
         gorgons: {
           en: '고르곤: ${dir1} / ${dir2}',
           de: '${dir1}/${dir2} Gorgone',
+          fr: '${dir1}/${dir2} Gorgone',
           ja: 'ゴルゴン：${dir1}/${dir2}',
           ko: '${dir1}/${dir2} 고르곤',
         },
@@ -886,24 +906,28 @@ const triggerSet: TriggerSet<Data> = {
           firstGaze: {
             en: '첫째 게이즈! (+${player})',
             de: 'Erster Blick (+ ${player})',
+            fr: 'Premier Regard (+ ${player})',
             ja: '先の石化 (+${player})',
             ko: '첫번째 석화 (+ ${player})',
           },
           secondGaze: {
             en: '둘째 게이즈! (+${player})',
             de: 'Zweiter Blick (+ ${player})',
+            fr: 'Second Regard (+ ${player})',
             ja: '後の石化 (+${player})',
             ko: '두번째 석화 (+ ${player})',
           },
           firstPoison: {
             en: '첫째 독 바닥! (+${player})',
             de: 'Erstes Gift (+ ${player})',
+            fr: 'Premier Poison (+ ${player})',
             ja: '先の毒 (+${player})',
             ko: '첫번째 독장판 (+ ${player})',
           },
           secondPoison: {
             en: '둘째 독 바닥! (+${player})',
             de: 'Zweites Gift (+ ${player})',
+            fr: 'Second Poison (+ ${player})',
             ja: '後の毒 (+${player})',
             ko: '두번째 독장판 (+ ${player})',
           },
@@ -977,30 +1001,35 @@ const triggerSet: TriggerSet<Data> = {
           firstGaze: {
             en: '첫째 게이즈',
             de: 'Erster Blick',
+            fr: 'Premier Regard',
             ja: '先の石化',
             ko: '첫번째 석화',
           },
           secondGaze: {
             en: '둘째 게이즈',
             de: 'Zweiter Blick',
+            fr: 'Second Regard',
             ja: '後の石化',
             ko: '두번째 석화',
           },
           shriek: {
             en: '나중에 내가 마안 (+${player})',
             de: 'Schrei später (mit ${player})',
+            fr: 'Cri plus tard (avec ${player})',
             ja: '自分に全体石化 (+${player})',
             ko: '나중에 마안 (+ ${player})',
           },
           stack: {
             en: '나중에 내게 뭉쳐욧 (+${player})',
             de: 'Später sammeln (mit ${player})',
+            fr: 'Package plus tard (avec ${player})',
             ja: '自分に頭割り (+${player})',
             ko: '나중에 쉐어 (+ ${player})',
           },
           noDebuff: {
             en: '무직이네 (${player1}, ${player2}, ${player3})',
             de: 'Kein Debuff (+ ${player1}, ${player2}, ${player3})',
+            fr: 'Aucun debuff (+ ${player1}, ${player2}, ${player3})',
             ja: '無職 (${player1}, ${player2}, ${player3})',
             ko: '디버프 없음 (+ ${player1}, ${player2}, ${player3})',
           },
@@ -1136,23 +1165,27 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         impactDir: {
           en: '${dir}로 따라가욧! (넉백)',
+          fr: 'Allez vers ${dir} (Poussée)',
           ja: '${dir} (ノックバック)',
           ko: '${dir}으로 따라가기 (넉백)',
         },
         crushDir: {
           en: '${dir}로 피해욧! (푹찍쾅)',
+          fr: 'Loin de ${dir}',
           ja: '${dir} (クラッシュ)',
           ko: '${dir}으로 피하기',
         },
         crush: {
           en: '점프에서 멀어져욧 (푹찍쾅)',
           de: 'Weg vom Sprung',
+          fr: 'Éloignez-vous du saut',
           ja: '離れる',
           ko: '멀리 떨어지기',
         },
         impact: {
           en: '점프 따라가욧 (넉백)',
           de: 'Sprung folgen',
+          fr: 'Suivez le saut',
           ja: '近づく',
           ko: '보스 따라가기',
         },
@@ -1409,12 +1442,14 @@ const triggerSet: TriggerSet<Data> = {
         northSouth: {
           en: '남북으로 피닉스!',
           de: 'Norden/Süden Vogel',
+          fr: 'Oiseau Nord/Sud',
           ja: '南北フェニックス',
           ko: '새 남/북쪽',
         },
         eastWest: {
           en: '동서로 피닉스!',
           de: 'Osten/Westen Vogel',
+          fr: 'Oiseau Est/Ouest',
           ja: '東西フェニックス',
           ko: '새 동/서쪽',
         },
@@ -1423,7 +1458,7 @@ const triggerSet: TriggerSet<Data> = {
     {
       id: 'P8S Illusory Hephaistos Scorched Pinion Second',
       type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ id: '7953', source: 'Illusory Hephaistos', capture: false }),
+      netRegex: NetRegexes.startsUsing({ id: '7953', capture: false }),
       condition: (data) => data.flareTargets.length > 0,
       suppressSeconds: 1,
       run: (data) => data.illusory = 'bird',
@@ -1431,7 +1466,7 @@ const triggerSet: TriggerSet<Data> = {
     {
       id: 'P8S Illusory Hephaistos Scorching Fang Second',
       type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ id: '7952', source: 'Illusory Hephaistos', capture: false }),
+      netRegex: NetRegexes.startsUsing({ id: '7952', capture: false }),
       condition: (data) => data.flareTargets.length > 0,
       suppressSeconds: 1,
       run: (data) => data.illusory = 'snake',
@@ -1449,6 +1484,7 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: '(십자로! 프로틴 피해욧)',
           de: '(weiche Himmelsrichtungen aus)',
+          fr: '(évitez les positions)',
           ja: '(十字で回避)',
           ko: '(피하기)',
         },
@@ -1468,6 +1504,7 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: '안쪽 크로스로! 프로틴 받아욧',
           de: 'rein für Himmelsrichtungen',
+          fr: 'Intérieur pour les positions',
           ja: '内側のクロスで誘導散会',
           ko: '안에서 장판 유도',
         },
@@ -1614,12 +1651,16 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         northSouth: {
           en: 'ⒶⒸ 가운데-남북',
+          de: 'Norden / Süden',
+          fr: 'Nord / Sud',
           ja: 'ⒶⒸ 南北',
           ko: '남/북쪽',
         },
         eastWest: {
-          en: 'ⒷⒹ 가운데-동서',
-          ja: 'ⒷⒹ 東西',
+          en: 'ⒹⒷ 가운데-동서',
+          de: 'Osten / Westen',
+          fr: 'Est / Ouest',
+          ja: 'ⒹⒷ 東西',
           ko: '동/서쪽',
         },
         north: {
@@ -1654,6 +1695,7 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: '전체공격 + 출혈',
           de: 'AoE + Blutung',
+          fr: 'AoE + Saignement',
           ja: 'AOE + 出血',
           ko: '전체 공격 + 도트',
         },
@@ -1669,6 +1711,7 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: '따로 따로 탱크버스터',
           de: 'getrennte Tankbuster',
+          fr: 'Séparez les Tankbuster',
           ja: '2人同時タンク強攻撃',
           ko: '따로맞는 탱버',
         },
@@ -1689,14 +1732,16 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         right: Outputs.right,
         rightAndSpread: {
-          en: '오른쪽 + 흩어져욧',
+          en: '▷▶▶▶▷ + 흩어져욧',
           de: 'Rechts + Verteilen',
+          fr: 'Gauche + Écartez-vous',
           ja: '右 + 散会',
           ko: '오른쪽 + 산개',
         },
         rightAndStack: {
-          en: '오른쪽 + 뭉쳐욧',
+          en: '▷▶▶▶▷ + 뭉쳐욧',
           de: 'Rechts + Sammeln',
+          fr: 'Gauche + Package',
           ja: '右 + 頭割り',
           ko: '오른쪽 + 쉐어',
         },
@@ -1717,14 +1762,16 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         left: Outputs.left,
         leftAndSpread: {
-          en: '왼쪽 + 흩어져욧',
+          en: '◁◀◀◀◁ + 흩어져욧',
           de: 'Links + Verteilen',
+          fr: 'Droite + Écartez-vous',
           ja: '左 + 散会',
           ko: '왼쪽 + 산개',
         },
         leftAndStack: {
-          en: '왼쪽 + 뭉쳐욧',
+          en: '◁◀◀◀◁ + 뭉쳐욧',
           de: 'Links + Sammeln',
+          fr: 'Droite + Package',
           ja: '左 + 頭割り',
           ko: '왼쪽 + 쉐어',
         },
@@ -1815,6 +1862,7 @@ const triggerSet: TriggerSet<Data> = {
         reversed: {
           en: '반전: ${player}',
           de: '${player} umgekehrt',
+          fr: '${player} inversé',
           ja: '反転：${player}',
           ko: '${player} 반전',
         },
@@ -1837,6 +1885,7 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: '내게 보라 동글이가!',
           de: 'Anpassung auf DIR',
+          fr: 'Alignement sur VOUS',
           ja: '自分に紫丸',
           ko: '원판 대상자',
         },
@@ -1859,6 +1908,7 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: '보라 동글이: ${player1}, ${player2}',
           de: 'Anpassung auf ${player1}, ${player2}',
+          fr: 'Alignement sur ${player1}, ${player2}',
           ja: '紫丸：${player1}, ${player2}',
           ko: '${player1}, ${player2} 원판',
         },
@@ -1875,36 +1925,42 @@ const triggerSet: TriggerSet<Data> = {
           ice: {
             en: '먼저 얼음!! 3:3으로 뭉쳐욧',
             de: 'Eis Gruppen zuerst',
+            fr: 'Groupe Glace en 1er',
             ja: '氷の頭割りから',
             ko: '얼음 쉐어 먼저',
           },
           fire: {
             en: '먼저 불!! 둘씩 뭉쳐욧',
             de: 'Feuer Partner zuerst',
+            fr: 'Partenaires de feu en 1er',
             ja: '火の2人頭割りから',
             ko: '불 2인쉐어 먼저',
           },
           stack: {
             en: '먼저 뭉쳐욧',
             de: 'Zuerst sammeln',
+            fr: 'Package en 1er',
             ja: '頭割りから',
             ko: '쉐어 먼저',
           },
           spread: {
             en: '먼저 흩어져욧',
             de: 'Zuerst verteilen',
+            fr: 'Écartement en 1er',
             ja: '散会から',
             ko: '산개 먼저',
           },
           baitAndStack: {
             en: '가운데 유도하고 => 뭉쳐욧',
             de: 'Ködern => Sammeln',
+            fr: 'Déposez -> Package',
             ja: '誘導 => 頭割り',
             ko: '장판 유도 => 쉐어',
           },
           baitAndSpread: {
             en: '가운데 유도하고 => 흩어져욧',
             de: 'Ködern => Verteilen',
+            fr: 'Déposez -> Écartez-vous',
             ja: '誘導 => 散会',
             ko: '장판 유도 => 산개',
           },
@@ -1983,12 +2039,14 @@ const triggerSet: TriggerSet<Data> = {
         ice: {
           en: '얼음!! 3:3으로 뭉쳐욧',
           de: 'Eis Gruppen',
+          fr: 'Groupe de glace',
           ja: '氷の頭割り',
           ko: '얼음 그룹 쉐어',
         },
         fire: {
           en: '불!! 둘씩 뭉쳐욧',
           de: 'Feuer Partner',
+          fr: 'Partenaires de feu',
           ja: '火の2人頭割り',
           ko: '불 2인 쉐어',
         },
@@ -2016,11 +2074,15 @@ const triggerSet: TriggerSet<Data> = {
         row1: {
           en: '맨 앞 줄로!!!',
           de: 'Vordere Reihe',
+          fr: 'Première rangée',
+          ja: '1列目',
           ko: '첫번째 줄',
         },
         row2: {
           en: '두번째 줄로!!!',
           de: 'Zweite Reihe',
+          fr: 'Deuxième rangée',
+          ja: '2列目',
           ko: '두번째 줄',
         },
       },
@@ -2072,8 +2134,9 @@ const triggerSet: TriggerSet<Data> = {
         // cactbot-builtin-response
         output.responseOutputStrings = {
           noDebuff: {
-            en: '무직이야!',
+            en: '무직이야! ▲△▲',
             de: 'Kein Debuff',
+            fr: 'Aucun debuff',
             ja: '無職',
             ko: '디버프 없음',
           },
@@ -2083,73 +2146,86 @@ const triggerSet: TriggerSet<Data> = {
             ko: '디버프 없음 + ${splicer}',
           },
           shortAlpha: {
-            en: '빠른 알파',
+            en: '빠른 알파 ▲△▲',
             de: 'kurzes Alpha',
+            fr: 'Alpha court',
             ja: '早アルファ',
             ko: '짧은 알파',
           },
           longAlpha: {
-            en: '느린 알파',
+            en: '느린 알파 ▲△▲',
             de: 'langes Alpha',
+            fr: 'Alpha long',
             ja: '遅アルファ',
             ko: '긴 알파',
           },
           longAlphaSplicer: {
-            en: '느린 알파 + ${splicer}',
+            en: '느린 알파 ▲△▲ + ${splicer}',
             de: 'langes Alpha + ${splicer}',
+            fr: 'Alpha long + ${splicer}',
             ja: '遅アルファ + ${splicer}',
             ko: '긴 알파 + ${splicer}',
           },
           shortBeta: {
-            en: '빠른 베타',
+            en: '빠른 베타 ▶▷▶',
             de: 'kurzes Beta',
+            fr: 'Beta court',
             ja: '早ベータ',
             ko: '짧은 베타',
           },
           longBeta: {
-            en: '느린 베타',
+            en: '느린 베타 ▶▷▶',
             de: 'langes Beta',
+            fr: 'Beta long',
             ja: '遅ベータ',
             ko: '긴 베타',
           },
           longBetaSplicer: {
-            en: '느린 베타 + ${splicer}',
+            en: '느린 베타 ▶▷▶ + ${splicer}',
             de: 'langes Beta + ${splicer}',
+            fr: 'Beta long + ${splicer}',
             ja: '遅ベータ + ${splicer}',
             ko: '긴 베타 + ${splicer}',
           },
           shortGamma: {
-            en: '빠른 감마',
+            en: '빠른 감마 ▼▽▼',
             de: 'kurzes Gamma',
+            fr: 'Gamma court',
             ja: '早ガンマ',
             ko: '짧은 감마',
           },
           longGamma: {
-            en: '느린 감마',
+            en: '느린 감마 ▼▽▼',
             de: 'langes Gamma',
+            fr: 'Gamma long',
             ja: '遅ガンマ',
             ko: '긴 감마',
           },
           longGammaSplicer: {
-            en: '느린 감마 + ${splicer}',
+            en: '느린 감마 ▼▽▼ + ${splicer}',
             de: 'langes Gamma + ${splicer}',
+            fr: 'Gamma long + ${splicer}',
             ja: '遅ガンマ + ${splicer}',
             ko: '긴 감마 + ${splicer}',
           },
           soloSplice: {
             en: '혼자 처리!',
             de: 'Einzelnes Sammeln',
+            fr: 'Package solo',
             ja: '1人受け',
             ko: '1인징',
           },
           multiSplice: {
             en: '둘이 뭉쳐욧!',
+            de: 'Zwei sammeln',
+            fr: 'Package à 2',
             ja: '2人頭割り',
             ko: '2인징',
           },
           superSplice: {
             en: '셋이 뭉쳐욧!',
             de: 'Drei sammeln',
+            fr: 'Package à 3',
             ja: '3人頭割り',
             ko: '3인징',
           },
@@ -2275,6 +2351,7 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: 'Green/Blue Tower',
           de: 'Grüner/Blauer Turm',
+          fr: 'Tour Verte/Bleue',
           ja: '緑・青',
           ko: '초록/파랑 기둥',
         },
@@ -2290,6 +2367,7 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: 'Green/Purple Tower',
           de: 'Grüner/Lilaner Turm',
+          fr: 'Tour Verte/Violette',
           ja: '緑・紫',
           ko: '초록/보라 기둥',
         },
@@ -2305,6 +2383,7 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: 'Purple/Blue Tower',
           de: 'Lilaner/Blauer Turm',
+          fr: 'Tour Violette/Bleue',
           ja: '紫・青',
           ko: '보라/파랑 기둥',
         },
@@ -2337,6 +2416,7 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: '두번째 타워로',
           de: 'Zweite Türme',
+          fr: 'Secondes tours',
           ja: '2回目の塔',
           ko: '두번째 기둥',
         },
@@ -2356,6 +2436,7 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: '첫번째 타워로',
           de: 'Erste Türme',
+          fr: 'Premières tours',
           ja: '1回目の塔',
           ko: '첫번째 기둥',
         },
@@ -2370,6 +2451,7 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: '아픈 전체공격 + 출혈',
           de: 'große AoE + Blutung',
+          fr: 'Grosse AoE + Saignement',
           ja: '全体攻撃 + 出血',
           ko: '아픈 전체공격 + 도트',
         },
@@ -2404,6 +2486,7 @@ const triggerSet: TriggerSet<Data> = {
         'Suneater': 'Schlund des Phoinix',
       },
       'replaceText': {
+        'line': 'Linie',
         '--auto--': '--auto--',
         'Abyssal Fires': 'Feuersturm',
         'Aionagonia': 'Eiserne Agonie',
@@ -2482,9 +2565,9 @@ const triggerSet: TriggerSet<Data> = {
       'missingTranslations': true,
       'replaceSync': {
         '(?<!Illusory )Hephaistos': 'Héphaïstos',
-        'Gorgon': 'gorgone',
+        'Gorgon': 'Gorgone',
         'Illusory Hephaistos': 'spectre d\'Héphaïstos',
-        'Suneater': 'serpent en flammes',
+        'Suneater': 'Serpent en flammes',
       },
       'replaceText': {
         'Abyssal Fires': 'Tempête enflammée',
