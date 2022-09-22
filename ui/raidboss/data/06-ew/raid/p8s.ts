@@ -11,13 +11,12 @@ import { NetMatches } from '../../../../../types/net_matches';
 import { Output, TriggerSet } from '../../../../../types/trigger';
 
 // TODO: call out shriek specifically again when debuff soon? (or maybe even gaze/poison/stack too?)
-// TODO: make the torch call say left/right during 2nd beast
 // TODO: better vent callouts
 // TODO: initial tank auto call on final boss as soon as boss pulled
 // TODO: figure out how to handle towers during HC1/HC2
 
 export type InitialConcept = 'shortalpha' | 'longalpha' | 'shortbeta' | 'longbeta' | 'shortgamma' | 'longgamma';
-export type Splicer = 'solosplice' | 'multisplice' | 'supersplice';
+export type Splicer = 'solosplice' | 'multisplice1st' | 'supersplice' | 'multisplice2nd';
 
 export interface Data extends RaidbossData {
   // Door Boss
@@ -55,12 +54,13 @@ export interface Data extends RaidbossData {
   flareCounter: number;
   inverseMagics: { [name: string]: boolean };
   deformationTargets: string[];
-  // prs Final
-  prsAlignMt?: boolean; // 누케놈 조정 방식 구현용
+  // prs Final -> 사실 전부 누케놈 기믹처리용
+  prsAlignMt?: boolean;
   prsHighConcept?: number;
-  prsConcept?: number;
+  prsMyConcept?: InitialConcept;
 }
 
+// prs string
 export const prsStrings = {
   unknown: Outputs.unknown,
   north: {
@@ -96,12 +96,12 @@ export const prsStrings = {
     ja: 'ノックバック',
   },
   adjMt: {
-    en: 'MT가 조정',
-    ja: 'MTが調整',
+    en: 'MT 조정',
+    ja: 'MT調整',
   },
   adjD1: {
-    en: 'D1이 조정',
-    ja: 'D1が調整',
+    en: 'D1 조정',
+    ja: 'D1調整',
   },
 } as const;
 
@@ -196,11 +196,11 @@ const triggerSet: TriggerSet<Data> = {
       flareTargets: [],
       upliftCounter: 0,
       ventCasts: [],
-      gorgons: [],
-      gorgonCount: 0,
       footfallsDirs: [],
       footfallsOrder: [],
       trailblazeCount: 0,
+      gorgons: [],
+      gorgonCount: 0,
       firstSnakeOrder: {},
       firstSnakeDebuff: {},
       secondSnakeGazeFirst: {},
@@ -388,7 +388,7 @@ const triggerSet: TriggerSet<Data> = {
       response: Responses.spread('alarm'),
     },
     {
-      id: 'P8S Clean Tetraflare & Nest of Flamevipers',
+      id: 'P8S+ 테트라&플렘바이퍼 상태 지우기',
       type: 'StartsUsing',
       netRegex: NetRegexes.startsUsing({ id: ['791E', '791F'], source: 'Hephaistos', capture: false }),
       delaySeconds: 0.5,
@@ -573,9 +573,11 @@ const triggerSet: TriggerSet<Data> = {
         // Blazing Foothills will have 4 safe spots
         // However, it will only be East or West
         if (data.trailblazeCount === 1) {
-          if (safe2 === 'outsideEast')
+          if (safeKeys.length !== 3)
+            return;
+          if (safe0 === 'cornerNE' && safe1 === 'cornerSE' && safe2 === 'outsideEast')
             data.trailblazeTorchSafeZone = 'east';
-          if (safe2 === 'outsideWest')
+          if (safe0 === 'cornerNW' && safe1 === 'cornerSW' && safe2 === 'outsideWest')
             data.trailblazeTorchSafeZone = 'west';
           return;
         }
@@ -610,62 +612,67 @@ const triggerSet: TriggerSet<Data> = {
           ko: '${dir1} / ${dir2}',
         },
         insideSquare: {
-          en: '가운데 사각 안쪽',
+          en: '가운데 사각[안]',
           de: 'Inneres Viereck',
+          fr: 'Intérieur carré',
           ja: '内側の四角の中',
           ko: '중앙',
         },
+        cornerNW: prsStrings.northWest,
+        cornerNE: prsStrings.northEast,
+        cornerSE: prsStrings.southEast,
+        cornerSW: prsStrings.southWest,
         outsideNorth: {
-          en: '북-바깥으로',
+          en: '북[바깥]',
           de: 'Im Norden raus',
           fr: 'Nord Extérieur',
           ja: '北の外側',
           ko: '북쪽 바깥',
         },
         insideNorth: {
-          en: '북-안으로',
+          en: '북[안]',
           de: 'Im Norden rein',
           fr: 'Nord Intérieur',
           ja: '北の内側',
           ko: '북쪽 안',
         },
         outsideEast: {
-          en: '동-바깥으로',
+          en: '동[바깥]',
           de: 'Im Osten raus',
           fr: 'Est Extérieur',
           ja: '東の外側',
           ko: '동쪽 바깥',
         },
         insideEast: {
-          en: '동-안으로',
+          en: '동[안]',
           de: 'Im Osten rein',
           fr: 'Est Intérieur',
           ja: '東の内側',
           ko: '동쪽 안',
         },
         outsideSouth: {
-          en: '남-바깥으로',
+          en: '남[바깥]',
           de: 'Im Süden raus',
           fr: 'Sud Extérieur',
           ja: '南の外側',
           ko: '남쪽 바깥',
         },
         insideSouth: {
-          en: '남-안으로',
+          en: '남[안]',
           de: 'Im Süden rein',
           fr: 'Sud Intérieur',
           ja: '南の内側',
           ko: '남쪽 안',
         },
         outsideWest: {
-          en: '서-바깥으로',
+          en: '서[바깥]',
           de: 'Im Westen raus',
           fr: 'Ouest Extérieur',
           ja: '西の外側',
           ko: '서쪽 바깥',
         },
         insideWest: {
-          en: '서-안으로',
+          en: '서[안]',
           de: 'Im Westen rein',
           fr: 'Ouest Intérieur',
           ja: '西の内側',
@@ -767,14 +774,14 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         cardinals: {
-          en: '십자 봐욧! Ⅹ고르곤',
+          en: '십자 봐욧! X고르곤',
           de: 'Schaue Kardinal',
           fr: 'Regardez en cardinal',
           ja: '視線を十字に',
           ko: '시선을 동서남북쪽으로',
         },
         intercards: {
-          en: '모서리 봐욧! ╋고르곤',
+          en: '모서리 봐욧! +고르곤',
           de: 'Schaue Interkardinal',
           fr: 'Regardez en intercardinal',
           ja: '視線を斜めに',
@@ -1098,13 +1105,13 @@ const triggerSet: TriggerSet<Data> = {
           ko: '${dir}으로 따라가기 (넉백)',
         },
         crushDir: {
-          en: '${dir}로 피해욧! (푹찍쾅)',
+          en: '${dir}로 피해욧! (푹찍)',
           fr: 'Loin de ${dir}',
           ja: '${dir} (クラッシュ)',
           ko: '${dir}으로 피하기',
         },
         crush: {
-          en: '점프에서 멀어져욧 (푹찍쾅)',
+          en: '점프에서 멀어져욧 (푹찍)',
           de: 'Weg vom Sprung',
           fr: 'Éloignez-vous du saut',
           ja: '離れる',
@@ -1235,20 +1242,24 @@ const triggerSet: TriggerSet<Data> = {
         // cactbot-builtin-response
         output.responseOutputStrings = {
           trailblaze: {
-            en: '[푹찍쾅] ${dir}쪽으로!',
-            ja: 'クラッシュ: ${dir}',
-          },
-          trailblazeTo: {
-            en: '[푹/파] ${dir}쪽이예욧!',
-            ja: 'クラッシュ: ${dir}',
+            en: '[푹찍] 기다렸다가 => ${dir}',
+            ja: '待機 => ${dir}',
           },
           trailblazeKnockback: {
-            en: '[넉백] ${dir1} 마커로!',
-            ja: 'ノックバック: ${dir1}',
+            en: '[넉백] ${dir}',
+            ja: 'ノックバック: ${dir}',
           },
-          trailblazeKnockbackTo: {
-            en: '[넉/파] ${dir1} 마커로! ${dir2}쪽이예욧!',
+          trailblazeKnockbackToDir: {
+            en: '[넉백] ${dir1} => {dir2}',
             ja: 'ノックバック: ${dir1} => ${dir2}',
+          },
+          trailblazeKnockbackSide: {
+            en: '[넉백/파랑] ${dir}쪽',
+            ja: 'ノックバック: ${dir}',
+          },
+          trailblazeCrushSide: {
+            en: '[푹찍/파랑] ${dir}쪽으로 달려욧',
+            ja: '${dir}へ走れ',
           },
           left: Outputs.left,
           right: Outputs.right,
@@ -1289,19 +1300,19 @@ const triggerSet: TriggerSet<Data> = {
             // Call move to next push back side if Crush
             // Only need to call this out if there is an upcoming pushback
             if (data.footfallsOrder[data.trailblazeCount] === 'crush')
-              return { alertText: output.trailblaze!({ dir: dirToCard[data.footfallsDirs[1]] }) };
+              return { infoText: output.trailblaze!({ dir: dirToCard[data.footfallsDirs[1]] }) };
 
             // Call future push location if knockback
             if (data.footfallsOrder[data.trailblazeCount] === 'impact')
-              return { alertText: output.trailblazeKnockback!({ dir1: dirToCard[dir], dir2: dirToCard[data.footfallsDirs[1]] }) };
+              return { infoText: output.trailblazeKnockbackToDir!({ dir1: dirToCard[dir], dir2: dirToCard[data.footfallsDirs[1]] }) };
           }
 
           // prs: 피하는 곳 마커로 표시, 여기서 안걸릴리 없지만 혹시 안걸리면 원래 루틴
           const safedir = data.trailblazeTorchSafeZone === 'east' ? 1 : 3;
           if (data.footfallsOrder[data.trailblazeCount] === 'impact')
-            return { alertText: output.trailblazeKnockbackTo!({ dir1: dirToCard[dir], dir2: dirToCard[safedir] }) };
+            return { alertText: output.trailblazeKnockbackSide!({ dir: dirToCard[safedir] }) };
           if (data.footfallsOrder[data.trailblazeCount] === 'crush')
-            return { alertText: output.trailblazeTo!({ dir: dirToCard[safedir] }) };
+            return { alertText: output.trailblazeCrushSide!({ dir: dirToCard[safedir] }) };
 
           // Dir is flipped for crush, thus matching knockback direction
           if (
@@ -1309,19 +1320,18 @@ const triggerSet: TriggerSet<Data> = {
             (data.trailblazeTorchSafeZone === 'west' && dir === 2)
           ) {
             if (data.footfallsOrder[data.trailblazeCount] === 'impact')
-              return { alertText: output.trailblazeKnockbackTo!({ dir1: dirToCard[dir], dir2: output.left!() }) };
+              return { alertText: output.trailblazeKnockbackSide!({ dir: output.left!() }) };
             if (data.footfallsOrder[data.trailblazeCount] === 'crush')
-              return { infoText: output.left!() };
+              return { infoText: output.trailblazeCrushSide!({ dir: output.left!() }) };
           }
-
           if (
             (data.trailblazeTorchSafeZone === 'west' && dir === 0) ||
             (data.trailblazeTorchSafeZone === 'east' && dir === 2)
           ) {
             if (data.footfallsOrder[data.trailblazeCount] === 'impact')
-              return { alertText: output.trailblazeKnockbackTo!({ dir1: dirToCard[dir], dir2: output.right!() }) };
+              return { alertText: output.trailblazeKnockbackSide!({ dir: output.right!() }) };
             if (data.footfallsOrder[data.trailblazeCount] === 'crush')
-              return { infoText: output.right!() };
+              return { infoText: output.trailblazeCrushSide!({ dir: output.right!() }) };
           }
           // Unable to determine direction, output only knockback
           if (data.footfallsOrder[data.trailblazeCount] === 'impact')
@@ -1410,7 +1420,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         text: {
-          en: '(십자로! 프로틴 피해욧)',
+          en: '(피해욧! 십자로!)',
           de: '(weiche Himmelsrichtungen aus)',
           fr: '(évitez les positions)',
           ja: '(十字で回避)',
@@ -1430,7 +1440,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         text: {
-          en: '안쪽 크로스로! 프로틴 받아욧',
+          en: '크로스 안쪽! 프로틴을 몸으로!',
           de: 'rein für Himmelsrichtungen',
           fr: 'Intérieur pour les positions',
           ja: '内側のクロスで誘導散会',
@@ -1446,6 +1456,9 @@ const triggerSet: TriggerSet<Data> = {
         data.ventCasts.push(matches);
         return data.ventCasts.length === 2;
       },
+      // Sometimes these initial positions are incorrect, so compensate with some delay.
+      // TODO: can we detect/ignore these incorrect initial positions??
+      delaySeconds: 0.5,
       promise: async (data: Data) => {
         data.combatantData = [];
 
@@ -1473,6 +1486,9 @@ const triggerSet: TriggerSet<Data> = {
         data.ventCasts.push(matches);
         return data.ventCasts.length === 2;
       },
+      // Sometimes these initial positions are incorrect, so compensate with some delay.
+      // TODO: can we detect/ignore these incorrect initial positions??
+      delaySeconds: 0.5,
       promise: async (data: Data) => {
         data.combatantData = [];
 
@@ -1578,37 +1594,37 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         northSouth: {
-          en: 'ⒶⒸ 가운데-남북',
+          en: '위아래 ⒶⒸ',
           de: 'Norden / Süden',
           fr: 'Nord / Sud',
-          ja: 'ⒶⒸ 南北',
+          ja: '南北 ⒶⒸ',
           ko: '남/북쪽',
         },
         eastWest: {
-          en: 'ⒹⒷ 가운데-동서',
+          en: '옆으로 ⒹⒷ',
           de: 'Osten / Westen',
           fr: 'Est / Ouest',
-          ja: 'ⒹⒷ 東西',
+          ja: '東西 ⒹⒷ',
           ko: '동/서쪽',
         },
         north: {
-          en: '⓵⓶ 북-동서',
-          ja: '⓵⓶ 北',
+          en: '북 ⓵⓶',
+          ja: '北 ⓵⓶',
           ko: '북쪽',
         },
         east: {
-          en: '⓶⓷ 동-남북',
-          ja: '⓶⓷ 東',
+          en: '동 ⓶⓷',
+          ja: '東 ⓶⓷',
           ko: '동쪽',
         },
         south: {
-          en: '⓸⓷ 남-동서',
-          ja: '⓸⓷ 南',
+          en: '남 ⓸⓷',
+          ja: '南 ⓸⓷',
           ko: '남쪽',
         },
         west: {
-          en: '⓵⓸ 서-남북',
-          ja: '⓵⓸ 西',
+          en: '서 ⓵⓸',
+          ja: '西 ⓵⓸',
           ko: '서쪽',
         },
       },
@@ -1659,19 +1675,19 @@ const triggerSet: TriggerSet<Data> = {
       run: (data) => delete data.firstAlignmentSecondAbility,
       outputStrings: {
         right: {
-          en: '▶▶▷▶▶',
+          en: '▶▷▶오른쪽',
           ja: '右へ',
           ko: '오른쪽',
         },
         rightAndSpread: {
-          en: '흩어져욧 + ▶▶▷▶▶',
+          en: '흩어져욧 + ▶▷▶오른쪽',
           de: 'Rechts + Verteilen',
           fr: 'Gauche + Écartez-vous',
           ja: '右 + 散会',
           ko: '오른쪽 + 산개',
         },
         rightAndStack: {
-          en: '뭉쳐욧 + ▶▶▷▶▶',
+          en: '뭉쳐욧 + ▶▷▶오른쪽',
           de: 'Rechts + Sammeln',
           fr: 'Gauche + Package',
           ja: '右 + 頭割り',
@@ -1693,19 +1709,19 @@ const triggerSet: TriggerSet<Data> = {
       run: (data) => delete data.firstAlignmentSecondAbility,
       outputStrings: {
         left: {
-          en: '◀◀◁◀◀',
+          en: '왼쪽◀◁◀',
           ja: '左へ',
           ko: '왼쪽',
         },
         leftAndSpread: {
-          en: '◀◀◁◀◀ + 흩어져욧',
+          en: '왼쪽◀◁◀ + 흩어져욧',
           de: 'Links + Verteilen',
           fr: 'Droite + Écartez-vous',
           ja: '左 + 散会',
           ko: '왼쪽 + 산개',
         },
         leftAndStack: {
-          en: '◀◀◁◀◀ + 뭉쳐욧',
+          en: '왼쪽◀◁◀ + 뭉쳐욧',
           de: 'Links + Sammeln',
           fr: 'Droite + Package',
           ja: '左 + 頭割り',
@@ -1721,6 +1737,9 @@ const triggerSet: TriggerSet<Data> = {
       run: (data) => {
         data.concept = {};
         data.splicer = {};
+
+        data.prsHighConcept = (data.prsHighConcept ?? 0) + 1;
+        delete data.prsMyConcept;
       },
     },
     {
@@ -1786,8 +1805,11 @@ const triggerSet: TriggerSet<Data> = {
       sound: '',
       infoText: (data, _matches, output) => {
         const [name1, name2] = data.alignmentTargets.sort();
-        const target = data.prsAlignMt ? output.targetDps!() : output.targetTh!();
-        return output.text!({ player1: data.ShortName(name1), player2: data.ShortName(name2), target: target });
+        return output.text!({
+          player1: data.ShortName(name1),
+          player2: data.ShortName(name2),
+          target: data.prsAlignMt ? output.targetDps!() : output.targetTh!(),
+        });
       },
       tts: null,
       run: (data) => data.alignmentTargets = [],
@@ -1987,12 +2009,6 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: 'P8S+ 하이 컨셉 체크',
-      type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ id: '710A', source: 'Hephaistos', capture: false }),
-      run: (data, _match, _output) => data.prsHighConcept = (data.prsHighConcept ?? 0) + 1,
-    },
-    {
       id: 'P8S High Concept Collect',
       // D02 = Imperfection: Alpha
       // D03 = Imperfection: Beta
@@ -2017,8 +2033,10 @@ const triggerSet: TriggerSet<Data> = {
           data.concept[matches.target] = isLong ? 'longgamma' : 'shortgamma';
         else if (id === 'D11')
           data.splicer[matches.target] = 'solosplice';
-        else if (id === 'D12')
-          data.splicer[matches.target] = 'multisplice';
+        else if (id === 'D12' && data.prsHighConcept === 1)
+          data.splicer[matches.target] = 'multisplice1st';
+        else if (id === 'D12' && data.prsHighConcept === 2)
+          data.splicer[matches.target] = 'multisplice2nd';
         else if (id === 'D13')
           data.splicer[matches.target] = 'supersplice';
       },
@@ -2033,14 +2051,14 @@ const triggerSet: TriggerSet<Data> = {
         // cactbot-builtin-response
         output.responseOutputStrings = {
           noDebuff: {
-            en: '무직이야! ▲△▲',
+            en: '무직 ▲△▲',
             de: 'Kein Debuff',
             fr: 'Aucun debuff',
-            ja: '無職',
+            ja: '無職 ▲△▲',
             ko: '디버프 없음',
           },
           noDebuffSplicer: {
-            en: '무직이야! [${splicer}]',
+            en: '무직 + ${splicer}',
             ja: '無職 + ${splicer}',
             ko: '디버프 없음 + ${splicer}',
           },
@@ -2048,85 +2066,92 @@ const triggerSet: TriggerSet<Data> = {
             en: '빠른 알파 ▲△▲',
             de: 'kurzes Alpha',
             fr: 'Alpha court',
-            ja: '早アルファ',
+            ja: '早アルファ ▲△▲',
             ko: '짧은 알파',
           },
           longAlpha: {
             en: '느린 알파 ▲△▲',
             de: 'langes Alpha',
             fr: 'Alpha long',
-            ja: '遅アルファ',
+            ja: '遅アルファ ▲△▲',
             ko: '긴 알파',
           },
           longAlphaSplicer: {
-            en: '느린 알파 ▲△▲ [${splicer}]',
+            en: '느린 알파 ▲△▲ + ${splicer}',
             de: 'langes Alpha + ${splicer}',
             fr: 'Alpha long + ${splicer}',
-            ja: '遅アルファ + ${splicer}',
+            ja: '遅アルファ ▲△▲ + ${splicer}',
             ko: '긴 알파 + ${splicer}',
           },
           shortBeta: {
             en: '빠른 베타 ▶▷▶',
             de: 'kurzes Beta',
             fr: 'Beta court',
-            ja: '早ベータ',
+            ja: '早ベータ ▶▷▶',
             ko: '짧은 베타',
           },
           longBeta: {
             en: '느린 베타 ▶▷▶',
             de: 'langes Beta',
             fr: 'Beta long',
-            ja: '遅ベータ',
+            ja: '遅ベータ ▶▷▶',
             ko: '긴 베타',
           },
           longBetaSplicer: {
-            en: '느린 베타 ▶▷▶ [${splicer}]',
+            en: '느린 베타 ▶▷▶ + ${splicer}',
             de: 'langes Beta + ${splicer}',
             fr: 'Beta long + ${splicer}',
-            ja: '遅ベータ + ${splicer}',
+            ja: '遅ベータ ▶▷▶ + ${splicer}',
             ko: '긴 베타 + ${splicer}',
           },
           shortGamma: {
             en: '빠른 감마 ▼▽▼',
             de: 'kurzes Gamma',
             fr: 'Gamma court',
-            ja: '早ガンマ',
+            ja: '早ガンマ ▼▽▼',
             ko: '짧은 감마',
           },
           longGamma: {
             en: '느린 감마 ▼▽▼',
             de: 'langes Gamma',
             fr: 'Gamma long',
-            ja: '遅ガンマ',
+            ja: '遅ガンマ ▼▽▼',
             ko: '긴 감마',
           },
           longGammaSplicer: {
-            en: '느린 감마 ▼▽▼ [${splicer}]',
+            en: '느린 감마 ▼▽▼ + ${splicer}',
             de: 'langes Gamma + ${splicer}',
             fr: 'Gamma long + ${splicer}',
-            ja: '遅ガンマ + ${splicer}',
+            ja: '遅ガンマ ▼▽▼ + ${splicer}',
             ko: '긴 감마 + ${splicer}',
           },
           soloSplice: {
-            en: '혼자 처리!',
+            en: '홀로 처리(위로)',
             de: 'Einzelnes Sammeln',
             fr: 'Package solo',
-            ja: '1人受け',
+            ja: '1人受け(上)',
             ko: '1인징',
           },
-          multiSplice: {
-            en: '둘이 뭉쳐욧!',
+          multiSplice1st: {
+            en: '둘이 뭉쳐욧(위로)',
             de: 'Zwei sammeln',
             fr: 'Package à 2',
-            ja: '2人頭割り',
+            ja: '2人頭割り(上)',
             ko: '2인징',
           },
           superSplice: {
-            en: '셋이 뭉쳐욧!',
+            en: '셋이 뭉쳐욧(아래로)',
             de: 'Drei sammeln',
             fr: 'Package à 3',
-            ja: '3人頭割り',
+            ja: '3人頭割り(下)',
             ko: '3인징',
+          },
+          multiSplice2nd: {
+            en: '둘이 뭉쳐욧(아래로)',
+            de: 'Zwei sammeln',
+            fr: 'Package à 2',
+            ja: '2人頭割り(下)',
+            ko: '2인징',
           },
         };
 
@@ -2134,13 +2159,7 @@ const triggerSet: TriggerSet<Data> = {
 
         const concept = data.concept[data.me];
         const splicer = data.splicer[data.me];
-
-        if (splicer === undefined && concept === undefined)
-          data.prsConcept = 2;
-        else if (concept === undefined || concept.startsWith('short'))
-          data.prsConcept = 1;
-        else
-          data.prsConcept = 0;
+        data.prsMyConcept = concept;
 
         const singleConceptMap: { [key in InitialConcept]: string } = {
           shortalpha: output.shortAlpha!(),
@@ -2164,8 +2183,9 @@ const triggerSet: TriggerSet<Data> = {
 
         const splicerMap: { [key in Splicer]: string } = {
           solosplice: output.soloSplice!(),
-          multisplice: output.multiSplice!(),
+          multisplice1st: output.multiSplice1st!(),
           supersplice: output.superSplice!(),
+          multisplice2nd: output.multiSplice2nd!(),
         };
         const splicerStr = splicerMap[splicer];
         if (concept === undefined)
@@ -2192,8 +2212,8 @@ const triggerSet: TriggerSet<Data> = {
         // cactbot-builtin-response
         output.responseOutputStrings = {
           mesg: {
-            en: '${where} [${color}]',
-            ja: '${where} [${color}]',
+            en: '${where}에서 조합 [${color}]',
+            ja: '${where}で合成 [${color}]',
           },
           greenBlue: {
             en: '초록/파랑',
@@ -2207,32 +2227,50 @@ const triggerSet: TriggerSet<Data> = {
             en: '보라/파랑',
             ja: '紫・青',
           },
-          baeksu: {
-            en: '무직 조합!!',
-            ja: '無職',
+          baeksu2nd: {
+            en: '이프리트 조합 => 나중에 녹색이랑 부비부비',
+            ja: 'イフリート合成 => 後で緑と合成 ',
           },
           north: Outputs.north,
           south: Outputs.south,
           unknown: Outputs.unknown,
         };
 
-        const atToWhere: { [at: number]: string } = {
-          0: output.north!(),
-          1: output.south!(),
-          2: output.baeksu!(),
-          3: output.unknown!(),
-        };
         const idToColor: { [id: string]: string } = {
           'D05': output.greenBlue!(),
           'D06': output.greenPuple!(),
           'D07': output.pupleBlue!(),
         };
+        // 첫번째: 느림-북쪽, 빨리/무직-남쪽
+        const conTo1stMap: { [key in InitialConcept]: string } = {
+          shortalpha: output.south!(),
+          longalpha: output.north!(),
+          shortbeta: output.south!(),
+          longbeta: output.north!(),
+          shortgamma: output.south!(),
+          longgamma: output.north!(),
+        };
+        // 두번째: 느림-북쪽, 빨리/느림감마-남쪽, 무직-둘이서이프
+        const conTo2ndMap: { [key in InitialConcept]: string } = {
+          shortalpha: output.south!(),
+          longalpha: output.north!(),
+          shortbeta: output.south!(),
+          longbeta: output.north!(),
+          shortgamma: output.south!(),
+          longgamma: output.south!(),
+        };
 
-        const where = atToWhere[data.prsConcept ?? 3];
+        const stage = data.prsHighConcept;
+        const mycon = data.prsMyConcept;
         const color = idToColor[matches.effectId];
 
-        if (data.prsConcept === 2)
-          return { alertText: output.mesg!({ where: where, color: color }) };
+        if (mycon === undefined) {
+          if (stage === 1)
+            return { alertText: output.mesg!({ where: output.south!(), color: color }) };
+          return { alertText: output.baeksu2nd!() };
+        }
+
+        const where = (stage === 1) ? conTo1stMap[mycon] : conTo2ndMap[mycon];
         return { infoText: output.mesg!({ where: where, color: color }) };
       },
     },
@@ -2369,7 +2407,7 @@ const triggerSet: TriggerSet<Data> = {
           en: '둘째 타워로',
           de: 'Zweite Türme',
           fr: 'Secondes tours',
-          ja: '2回目の塔',
+          ja: '2番目で入る',
           ko: '두번째 기둥',
         },
       },
@@ -2389,7 +2427,7 @@ const triggerSet: TriggerSet<Data> = {
           en: '첫째 타워로',
           de: 'Erste Türme',
           fr: 'Premières tours',
-          ja: '1回目の塔',
+          ja: '先に入る',
           ko: '첫번째 기둥',
         },
       },
