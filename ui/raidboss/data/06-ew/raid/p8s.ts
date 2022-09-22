@@ -11,13 +11,12 @@ import { NetMatches } from '../../../../../types/net_matches';
 import { Output, TriggerSet } from '../../../../../types/trigger';
 
 // TODO: call out shriek specifically again when debuff soon? (or maybe even gaze/poison/stack too?)
-// TODO: make the torch call say left/right during 2nd beast
 // TODO: better vent callouts
 // TODO: initial tank auto call on final boss as soon as boss pulled
 // TODO: figure out how to handle towers during HC1/HC2
 
 export type InitialConcept = 'shortalpha' | 'longalpha' | 'shortbeta' | 'longbeta' | 'shortgamma' | 'longgamma';
-export type Splicer = 'solosplice' | 'multisplice' | 'supersplice';
+export type Splicer = 'solosplice' | 'multisplice1st' | 'supersplice' | 'multisplice2nd';
 
 export interface Data extends RaidbossData {
   // Door Boss
@@ -55,98 +54,38 @@ export interface Data extends RaidbossData {
   flareCounter: number;
   inverseMagics: { [name: string]: boolean };
   deformationTargets: string[];
-  // prs Final
+  // prs Final -> 사실 전부 누케놈 기믹처리용
+  prsAlignMt?: boolean;
   prsHighConcept?: number;
-  prsTwat?: number;
+  prsMyConcept?: InitialConcept;
 }
 
+// prs string
 export const prsStrings = {
   unknown: Outputs.unknown,
-  dirN: {
+  north: {
     en: 'Ⓐ',
   },
-  dirE: {
+  east: {
     en: 'Ⓑ',
   },
-  dirS: {
+  south: {
     en: 'Ⓒ',
   },
-  dirW: {
+  west: {
     en: 'Ⓓ',
   },
-  dirNE: {
+  northEast: {
     en: '⓶',
   },
-  dirSE: {
+  southEast: {
     en: '⓷',
   },
-  dirSW: {
+  southWest: {
     en: '⓸',
   },
-  dirNW: {
+  northWest: {
     en: '⓵',
-  },
-  insideSquare: {
-    en: '가운데 사각 안쪽',
-    de: 'Inneres Viereck',
-    ja: '内側の四角の中',
-    ko: '중앙',
-  },
-  outsideNorth: {
-    en: '북-바깥으로',
-    de: 'Im Norden raus',
-    fr: 'Nord Extérieur',
-    ja: '北の外側',
-    ko: '북쪽 바깥',
-  },
-  insideNorth: {
-    en: '북-안으로',
-    de: 'Im Norden rein',
-    fr: 'Nord Intérieur',
-    ja: '北の内側',
-    ko: '북쪽 안',
-  },
-  outsideEast: {
-    en: '동-바깥으로',
-    de: 'Im Osten raus',
-    fr: 'Est Extérieur',
-    ja: '東の外側',
-    ko: '동쪽 바깥',
-  },
-  insideEast: {
-    en: '동-안으로',
-    de: 'Im Osten rein',
-    fr: 'Est Intérieur',
-    ja: '東の内側',
-    ko: '동쪽 안',
-  },
-  outsideSouth: {
-    en: '남-바깥으로',
-    de: 'Im Süden raus',
-    fr: 'Sud Extérieur',
-    ja: '南の外側',
-    ko: '남쪽 바깥',
-  },
-  insideSouth: {
-    en: '남-안으로',
-    de: 'Im Süden rein',
-    fr: 'Sud Intérieur',
-    ja: '南の内側',
-    ko: '남쪽 안',
-  },
-  outsideWest: {
-    en: '서-바깥으로',
-    de: 'Im Westen raus',
-    fr: 'Ouest Extérieur',
-    ja: '西の外側',
-    ko: '서쪽 바깥',
-  },
-  insideWest: {
-    en: '서-안으로',
-    de: 'Im Westen rein',
-    fr: 'Ouest Intérieur',
-    ja: '西の内側',
-    ko: '서쪽 안',
   },
   crush: {
     en: '푹찍쾅',
@@ -156,73 +95,14 @@ export const prsStrings = {
     en: '넉백',
     ja: 'ノックバック',
   },
-  // 안쓰게 될듯
-  /*
-  north: {
-    en: 'Ⓐ 북쪽',
-    ja: 'Ⓐ 北',
+  adjMt: {
+    en: 'MT 조정',
+    ja: 'MT調整',
   },
-  east: {
-    en: 'Ⓑ 동쪽',
-    ja: 'Ⓑ 東',
+  adjD1: {
+    en: 'D1 조정',
+    ja: 'D1調整',
   },
-  south: {
-    en: 'Ⓒ 남쪽',
-    ja: 'Ⓒ 南',
-  },
-  west: {
-    en: 'Ⓓ 서쪽',
-    ja: 'Ⓓ 西',
-  },
-  cornerNW: {
-    en: '⓵ 서쪽-위',
-    de: 'NW Ecke',
-    ja: '⓵ 左上',
-    ko: '북서쪽 구석',
-  },
-  cornerNE: {
-    en: '⓶ 동쪽-위',
-    de: 'NO Ecke',
-    ja: '⓶ 右上',
-    ko: '북동쪽 구석',
-  },
-  cornerSE: {
-    en: '⓷ 동쪽-아래',
-    de: 'SO Ecke',
-    ja: '⓷ 右下',
-    ko: '남동쪽 구석',
-  },
-  cornerSW: {
-    en: '⓸ 서쪽-아래',
-    de: 'SW Ecke',
-    ja: '⓸ 左下',
-    ko: '남서쪽 구석',
-  },
-  gorgonN: {
-    en: 'Ⓐ↑',
-  },
-  gorgonE: {
-    en: 'Ⓑ→',
-  },
-  gorgonS: {
-    en: 'Ⓒ↓',
-  },
-  gorgonW: {
-    en: 'Ⓓ←',
-  },
-  gorgonNE: {
-    en: '⓶↗',
-  },
-  gorgonSE: {
-    en: '⓷↘',
-  },
-  gorgonSW: {
-    en: '⓸↙',
-  },
-  gorgonNW: {
-    en: '⓵↖',
-  },
-  */
 } as const;
 
 const centerX = 100;
@@ -256,14 +136,14 @@ export const ventOutputStrings = {
     ja: '${dir1} / ${dir2}',
     ko: '${dir1} / ${dir2}',
   },
-  north: prsStrings.dirN,
-  east: prsStrings.dirE,
-  south: prsStrings.dirS,
-  west: prsStrings.dirW,
-  dirNE: prsStrings.dirNE,
-  dirSE: prsStrings.dirSE,
-  dirSW: prsStrings.dirSW,
-  dirNW: prsStrings.dirNW,
+  north: prsStrings.north,
+  east: prsStrings.east,
+  south: prsStrings.south,
+  west: prsStrings.west,
+  dirNE: prsStrings.northEast,
+  dirSE: prsStrings.southEast,
+  dirSW: prsStrings.southWest,
+  dirNW: prsStrings.northWest,
   unknown: Outputs.unknown,
 } as const;
 
@@ -316,11 +196,11 @@ const triggerSet: TriggerSet<Data> = {
       flareTargets: [],
       upliftCounter: 0,
       ventCasts: [],
-      gorgons: [],
-      gorgonCount: 0,
       footfallsDirs: [],
       footfallsOrder: [],
       trailblazeCount: 0,
+      gorgons: [],
+      gorgonCount: 0,
       firstSnakeOrder: {},
       firstSnakeDebuff: {},
       secondSnakeGazeFirst: {},
@@ -350,9 +230,10 @@ const triggerSet: TriggerSet<Data> = {
       run: (data) => data.seenFirstTankAutos = true,
       outputStrings: {
         text: {
-          en: '탱크 오토 어택! 아프다!',
+          en: '탱크 오토 어택! 아프당!',
           de: 'Tank Auto-Angriffe',
-          ja: 'タンクへのオートアタック',
+          fr: 'Auto sur le tank',
+          ja: 'タンクオートアタック',
           ko: '탱커 평타',
         },
       },
@@ -383,12 +264,14 @@ const triggerSet: TriggerSet<Data> = {
         outAndSpread: {
           en: '깜선 바깥쪽 + 흩어져욧',
           de: 'Raus + Verteilen',
+          fr: 'Extérieur + Écartez-vous',
           ja: '黒線の外側 + 散会',
           ko: '밖으로 + 산개',
         },
         outAndStacks: {
           en: '숫자 마커 + 파트너랑 맞아욧',
           de: 'Raus + Sammeln',
+          fr: 'Extérieur + Package',
           ja: '黒線の外側 + 2人頭割り',
           ko: '밖으로 + 쉐어',
         },
@@ -413,12 +296,14 @@ const triggerSet: TriggerSet<Data> = {
         inAndSpread: {
           en: '깜선 안쪽 + 흩어져욧',
           de: 'Rein + Verteilen',
+          fr: 'Intérieur + Écartez-vous',
           ja: '黒線の内側 + 散会',
           ko: '안으로 + 산개',
         },
         inAndStacks: {
           en: '깜선 안쪽 + 파트너랑 맞아욧',
           de: 'Rein + Sammeln',
+          fr: 'Intérieur + Package',
           ja: '黒線の内側 + 2人頭割り',
           ko: '안으로 + 쉐어',
         },
@@ -456,6 +341,7 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: '파트너랑 맞아욧',
           de: 'Mit Partner sammeln',
+          fr: 'Package avec votre partenaire',
           ja: '2人頭割り',
           ko: '2인 쉐어',
         },
@@ -473,6 +359,7 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: '(나중에 파트너랑 맞아욧)',
           de: '(Partner-Stacks, für später)',
+          fr: '(Package partenaire, pour après)',
           ja: '(後で2人頭割り)',
           ko: '(곧 2인 쉐어)',
         },
@@ -488,6 +375,7 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: '(나중에 흩어져욧)',
           de: '(Verteilen, für später)',
+          fr: '(Écartez-vous, pour après)',
           ja: '(後で散会)',
           ko: '(곧 산개)',
         },
@@ -500,7 +388,7 @@ const triggerSet: TriggerSet<Data> = {
       response: Responses.spread('alarm'),
     },
     {
-      id: 'P8S Clean Tetraflare & Nest of Flamevipers',
+      id: 'P8S+ 테트라&플렘바이퍼 상태 지우기',
       type: 'StartsUsing',
       netRegex: NetRegexes.startsUsing({ id: ['791E', '791F'], source: 'Hephaistos', capture: false }),
       delaySeconds: 0.5,
@@ -523,18 +411,21 @@ const triggerSet: TriggerSet<Data> = {
         inAndStacks: {
           en: '깜선 안쪽 + 파트너랑 맞아욧',
           de: 'Rein + Sammeln',
+          fr: 'Intérieur + Package',
           ja: '黒線の内側 + 2人頭割り',
           ko: '안으로 + 쉐어',
         },
         outAndStacks: {
           en: '숫자 마커 + 파트너랑 맞아욧',
           de: 'Raus + Sammeln',
+          fr: 'Extérieur + Package',
           ja: '黒線の外側 + 2人頭割り',
           ko: '밖으로 + 쉐어',
         },
         stacks: {
           en: '파트너랑 맞아욧',
           de: 'Mit Partner sammeln',
+          fr: 'Package avec votre partenaire',
           ja: '2人頭割り',
           ko: '2인 쉐어',
         },
@@ -563,24 +454,28 @@ const triggerSet: TriggerSet<Data> = {
         inAndProtean: {
           en: '깜선 안쪽 + 기본산개 + 프로틴',
           de: 'Rein + Himmelsrichtung',
+          fr: 'Intérieur + Positions',
           ja: '黒線の内側 + 基本散会',
           ko: '안으로 + 산개',
         },
         outAndProteanMelee: {
           en: '숫자 마커로 ← 깜선 바깥 + 프로틴', // 밀리 안으로
           de: 'Raus + Himmelsrichtung',
+          fr: 'Extérieur + Positions',
           ja: '黒線の外側 + 数字マーカー',
           ko: '밖으로 + 산개',
         },
         outAndProteanHeRaCa: {
           en: '숫자 바깥 끝으로 ← 깜선 바깥 + 프로틴', // 원격 밖으로
           de: 'Raus + Himmelsrichtung',
+          fr: 'Extérieur + Positions',
           ja: '黒線の外側 + 散会',
           ko: '밖으로 + 산개',
         },
         protean: {
           en: '프로틴',
           de: 'Himmelsrichtung',
+          fr: 'Positions',
           ja: '散会',
           ko: '산개',
         },
@@ -678,9 +573,11 @@ const triggerSet: TriggerSet<Data> = {
         // Blazing Foothills will have 4 safe spots
         // However, it will only be East or West
         if (data.trailblazeCount === 1) {
-          if (safe2 === 'outsideEast')
+          if (safeKeys.length !== 3)
+            return;
+          if (safe0 === 'cornerNE' && safe1 === 'cornerSE' && safe2 === 'outsideEast')
             data.trailblazeTorchSafeZone = 'east';
-          if (safe2 === 'outsideWest')
+          if (safe0 === 'cornerNW' && safe1 === 'cornerSW' && safe2 === 'outsideWest')
             data.trailblazeTorchSafeZone = 'west';
           return;
         }
@@ -710,22 +607,77 @@ const triggerSet: TriggerSet<Data> = {
         combo: {
           en: '${dir1} / ${dir2}',
           de: '${dir1} / ${dir2}',
+          fr: '${dir1} / ${dir2}',
           ja: '${dir1} / ${dir2}',
           ko: '${dir1} / ${dir2}',
         },
-        insideSquare: prsStrings.insideSquare,
-        cornerNW: prsStrings.dirNW,
-        cornerNE: prsStrings.dirNE,
-        cornerSE: prsStrings.dirSE,
-        cornerSW: prsStrings.dirSW,
-        outsideNorth: prsStrings.outsideNorth,
-        insideNorth: prsStrings.insideNorth,
-        outsideEast: prsStrings.outsideEast,
-        insideEast: prsStrings.insideEast,
-        outsideSouth: prsStrings.outsideSouth,
-        insideSouth: prsStrings.insideSouth,
-        outsideWest: prsStrings.outsideWest,
-        insideWest: prsStrings.insideWest,
+        insideSquare: {
+          en: '가운데 사각[안]',
+          de: 'Inneres Viereck',
+          fr: 'Intérieur carré',
+          ja: '内側の四角の中',
+          ko: '중앙',
+        },
+        cornerNW: prsStrings.northWest,
+        cornerNE: prsStrings.northEast,
+        cornerSE: prsStrings.southEast,
+        cornerSW: prsStrings.southWest,
+        outsideNorth: {
+          en: '북[바깥]',
+          de: 'Im Norden raus',
+          fr: 'Nord Extérieur',
+          ja: '北の外側',
+          ko: '북쪽 바깥',
+        },
+        insideNorth: {
+          en: '북[안]',
+          de: 'Im Norden rein',
+          fr: 'Nord Intérieur',
+          ja: '北の内側',
+          ko: '북쪽 안',
+        },
+        outsideEast: {
+          en: '동[바깥]',
+          de: 'Im Osten raus',
+          fr: 'Est Extérieur',
+          ja: '東の外側',
+          ko: '동쪽 바깥',
+        },
+        insideEast: {
+          en: '동[안]',
+          de: 'Im Osten rein',
+          fr: 'Est Intérieur',
+          ja: '東の内側',
+          ko: '동쪽 안',
+        },
+        outsideSouth: {
+          en: '남[바깥]',
+          de: 'Im Süden raus',
+          fr: 'Sud Extérieur',
+          ja: '南の外側',
+          ko: '남쪽 바깥',
+        },
+        insideSouth: {
+          en: '남[안]',
+          de: 'Im Süden rein',
+          fr: 'Sud Intérieur',
+          ja: '南の内側',
+          ko: '남쪽 안',
+        },
+        outsideWest: {
+          en: '서[바깥]',
+          de: 'Im Westen raus',
+          fr: 'Ouest Extérieur',
+          ja: '西の外側',
+          ko: '서쪽 바깥',
+        },
+        insideWest: {
+          en: '서[안]',
+          de: 'Im Westen rein',
+          fr: 'Ouest Intérieur',
+          ja: '西の内側',
+          ko: '서쪽 안',
+        },
       },
     },
     {
@@ -822,31 +774,34 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         cardinals: {
-          en: '십자 봐욧! Ⅹ고르곤',
+          en: '십자 봐욧! X고르곤',
           de: 'Schaue Kardinal',
+          fr: 'Regardez en cardinal',
           ja: '視線を十字に',
           ko: '시선을 동서남북쪽으로',
         },
         intercards: {
-          en: '모서리 봐욧! ╋고르곤',
+          en: '모서리 봐욧! +고르곤',
           de: 'Schaue Interkardinal',
+          fr: 'Regardez en intercardinal',
           ja: '視線を斜めに',
           ko: '시선을 대각선쪽으로',
         },
         gorgons: {
           en: '고르곤: ${dir1} / ${dir2}',
           de: '${dir1}/${dir2} Gorgone',
+          fr: '${dir1}/${dir2} Gorgone',
           ja: 'ゴルゴン：${dir1}/${dir2}',
           ko: '${dir1}/${dir2} 고르곤',
         },
-        dirN: prsStrings.dirN,
-        dirNE: prsStrings.dirNE,
-        dirE: prsStrings.dirE,
-        dirSE: prsStrings.dirSE,
-        dirS: prsStrings.dirS,
-        dirSW: prsStrings.dirSW,
-        dirW: prsStrings.dirW,
-        dirNW: prsStrings.dirNW,
+        dirN: prsStrings.north,
+        dirNE: prsStrings.northEast,
+        dirE: prsStrings.east,
+        dirSE: prsStrings.southEast,
+        dirS: prsStrings.south,
+        dirSW: prsStrings.southWest,
+        dirW: prsStrings.west,
+        dirNW: prsStrings.northWest,
         unknown: Outputs.unknown,
       },
     },
@@ -886,24 +841,28 @@ const triggerSet: TriggerSet<Data> = {
           firstGaze: {
             en: '첫째 게이즈! (+${player})',
             de: 'Erster Blick (+ ${player})',
+            fr: 'Premier Regard (+ ${player})',
             ja: '先の石化 (+${player})',
             ko: '첫번째 석화 (+ ${player})',
           },
           secondGaze: {
             en: '둘째 게이즈! (+${player})',
             de: 'Zweiter Blick (+ ${player})',
+            fr: 'Second Regard (+ ${player})',
             ja: '後の石化 (+${player})',
             ko: '두번째 석화 (+ ${player})',
           },
           firstPoison: {
             en: '첫째 독 바닥! (+${player})',
             de: 'Erstes Gift (+ ${player})',
+            fr: 'Premier Poison (+ ${player})',
             ja: '先の毒 (+${player})',
             ko: '첫번째 독장판 (+ ${player})',
           },
           secondPoison: {
             en: '둘째 독 바닥! (+${player})',
             de: 'Zweites Gift (+ ${player})',
+            fr: 'Second Poison (+ ${player})',
             ja: '後の毒 (+${player})',
             ko: '두번째 독장판 (+ ${player})',
           },
@@ -977,30 +936,35 @@ const triggerSet: TriggerSet<Data> = {
           firstGaze: {
             en: '첫째 게이즈',
             de: 'Erster Blick',
+            fr: 'Premier Regard',
             ja: '先の石化',
             ko: '첫번째 석화',
           },
           secondGaze: {
             en: '둘째 게이즈',
             de: 'Zweiter Blick',
+            fr: 'Second Regard',
             ja: '後の石化',
             ko: '두번째 석화',
           },
           shriek: {
             en: '나중에 내가 마안 (+${player})',
             de: 'Schrei später (mit ${player})',
+            fr: 'Cri plus tard (avec ${player})',
             ja: '自分に全体石化 (+${player})',
             ko: '나중에 마안 (+ ${player})',
           },
           stack: {
             en: '나중에 내게 뭉쳐욧 (+${player})',
             de: 'Später sammeln (mit ${player})',
+            fr: 'Package plus tard (avec ${player})',
             ja: '自分に頭割り (+${player})',
             ko: '나중에 쉐어 (+ ${player})',
           },
           noDebuff: {
             en: '무직이네 (${player1}, ${player2}, ${player3})',
             de: 'Kein Debuff (+ ${player1}, ${player2}, ${player3})',
+            fr: 'Aucun debuff (+ ${player1}, ${player2}, ${player3})',
             ja: '無職 (${player1}, ${player2}, ${player3})',
             ko: '디버프 없음 (+ ${player1}, ${player2}, ${player3})',
           },
@@ -1136,28 +1100,32 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         impactDir: {
           en: '${dir}로 따라가욧! (넉백)',
+          fr: 'Allez vers ${dir} (Poussée)',
           ja: '${dir} (ノックバック)',
           ko: '${dir}으로 따라가기 (넉백)',
         },
         crushDir: {
-          en: '${dir}로 피해욧! (푹찍쾅)',
+          en: '${dir}로 피해욧! (푹찍)',
+          fr: 'Loin de ${dir}',
           ja: '${dir} (クラッシュ)',
           ko: '${dir}으로 피하기',
         },
         crush: {
-          en: '점프에서 멀어져욧 (푹찍쾅)',
+          en: '점프에서 멀어져욧 (푹찍)',
           de: 'Weg vom Sprung',
+          fr: 'Éloignez-vous du saut',
           ja: '離れる',
           ko: '멀리 떨어지기',
         },
         impact: {
           en: '점프 따라가욧 (넉백)',
           de: 'Sprung folgen',
+          fr: 'Suivez le saut',
           ja: '近づく',
           ko: '보스 따라가기',
         },
-        north: prsStrings.dirN,
-        south: prsStrings.dirS,
+        north: prsStrings.north,
+        south: prsStrings.south,
       },
     },
     {
@@ -1216,10 +1184,10 @@ const triggerSet: TriggerSet<Data> = {
           en: '${dir} 깜선으로 => ${concept}',
           ja: '${dir}の黒線 => ${concept}',
         },
-        north: prsStrings.dirN,
-        east: prsStrings.dirE,
-        south: prsStrings.dirS,
-        west: prsStrings.dirW,
+        north: prsStrings.north,
+        east: prsStrings.east,
+        south: prsStrings.south,
+        west: prsStrings.west,
       },
     },
     {
@@ -1257,10 +1225,10 @@ const triggerSet: TriggerSet<Data> = {
         },
         crush: prsStrings.crush,
         impact: prsStrings.impact,
-        north: prsStrings.dirN,
-        east: prsStrings.dirE,
-        south: prsStrings.dirS,
-        west: prsStrings.dirW,
+        north: prsStrings.north,
+        east: prsStrings.east,
+        south: prsStrings.south,
+        west: prsStrings.west,
       },
     },
     {
@@ -1274,27 +1242,31 @@ const triggerSet: TriggerSet<Data> = {
         // cactbot-builtin-response
         output.responseOutputStrings = {
           trailblaze: {
-            en: '[푹찍쾅] ${dir}쪽으로!!!',
-            ja: 'クラッシュ: ${dir}',
-          },
-          trailblazeTo: {
-            en: '[푹찍쾅] ${dir}쪽 방향이 안전해욧!!!',
-            ja: 'クラッシュ: ${dir}',
+            en: '[푹찍] 기다렸다가 => ${dir}',
+            ja: '待機 => ${dir}',
           },
           trailblazeKnockback: {
-            en: '[넉백] ${dir1} 마커로!!!',
-            ja: 'ノックバック: ${dir1}',
+            en: '[넉백] ${dir}',
+            ja: 'ノックバック: ${dir}',
           },
-          trailblazeKnockbackTo: {
-            en: '[넉백] ${dir1} 마커로!!! ${dir2}쪽으로 당해욧!!!',
+          trailblazeKnockbackToDir: {
+            en: '[넉백] ${dir1} => {dir2}',
             ja: 'ノックバック: ${dir1} => ${dir2}',
+          },
+          trailblazeKnockbackSide: {
+            en: '[넉백/파랑] ${dir}쪽',
+            ja: 'ノックバック: ${dir}',
+          },
+          trailblazeCrushSide: {
+            en: '[푹찍/파랑] ${dir}쪽으로 달려욧',
+            ja: '${dir}へ走れ',
           },
           left: Outputs.left,
           right: Outputs.right,
-          north: prsStrings.dirN,
-          east: prsStrings.dirE,
-          south: prsStrings.dirS,
-          west: prsStrings.dirW,
+          north: prsStrings.north,
+          east: prsStrings.east,
+          south: prsStrings.south,
+          west: prsStrings.west,
         };
         if (
           data.footfallsDirs[0] !== undefined &&
@@ -1328,19 +1300,19 @@ const triggerSet: TriggerSet<Data> = {
             // Call move to next push back side if Crush
             // Only need to call this out if there is an upcoming pushback
             if (data.footfallsOrder[data.trailblazeCount] === 'crush')
-              return { alertText: output.trailblaze!({ dir: dirToCard[data.footfallsDirs[1]] }) };
+              return { infoText: output.trailblaze!({ dir: dirToCard[data.footfallsDirs[1]] }) };
 
             // Call future push location if knockback
             if (data.footfallsOrder[data.trailblazeCount] === 'impact')
-              return { alertText: output.trailblazeKnockback!({ dir1: dirToCard[dir], dir2: dirToCard[data.footfallsDirs[1]] }) };
+              return { infoText: output.trailblazeKnockbackToDir!({ dir1: dirToCard[dir], dir2: dirToCard[data.footfallsDirs[1]] }) };
           }
 
           // prs: 피하는 곳 마커로 표시, 여기서 안걸릴리 없지만 혹시 안걸리면 원래 루틴
           const safedir = data.trailblazeTorchSafeZone === 'east' ? 1 : 3;
           if (data.footfallsOrder[data.trailblazeCount] === 'impact')
-            return { alertText: output.trailblazeKnockbackTo!({ dir1: dirToCard[dir], dir2: dirToCard[safedir] }) };
+            return { alertText: output.trailblazeKnockbackSide!({ dir: dirToCard[safedir] }) };
           if (data.footfallsOrder[data.trailblazeCount] === 'crush')
-            return { alertText: output.trailblazeTo!({ dir: dirToCard[safedir] }) };
+            return { alertText: output.trailblazeCrushSide!({ dir: dirToCard[safedir] }) };
 
           // Dir is flipped for crush, thus matching knockback direction
           if (
@@ -1348,19 +1320,18 @@ const triggerSet: TriggerSet<Data> = {
             (data.trailblazeTorchSafeZone === 'west' && dir === 2)
           ) {
             if (data.footfallsOrder[data.trailblazeCount] === 'impact')
-              return { alertText: output.trailblazeKnockbackTo!({ dir1: dirToCard[dir], dir2: output.left!() }) };
+              return { alertText: output.trailblazeKnockbackSide!({ dir: output.left!() }) };
             if (data.footfallsOrder[data.trailblazeCount] === 'crush')
-              return { infoText: output.left!() };
+              return { infoText: output.trailblazeCrushSide!({ dir: output.left!() }) };
           }
-
           if (
             (data.trailblazeTorchSafeZone === 'west' && dir === 0) ||
             (data.trailblazeTorchSafeZone === 'east' && dir === 2)
           ) {
             if (data.footfallsOrder[data.trailblazeCount] === 'impact')
-              return { alertText: output.trailblazeKnockbackTo!({ dir1: dirToCard[dir], dir2: output.right!() }) };
+              return { alertText: output.trailblazeKnockbackSide!({ dir: output.right!() }) };
             if (data.footfallsOrder[data.trailblazeCount] === 'crush')
-              return { infoText: output.right!() };
+              return { infoText: output.trailblazeCrushSide!({ dir: output.right!() }) };
           }
           // Unable to determine direction, output only knockback
           if (data.footfallsOrder[data.trailblazeCount] === 'impact')
@@ -1409,12 +1380,14 @@ const triggerSet: TriggerSet<Data> = {
         northSouth: {
           en: '남북으로 피닉스!',
           de: 'Norden/Süden Vogel',
+          fr: 'Oiseau Nord/Sud',
           ja: '南北フェニックス',
           ko: '새 남/북쪽',
         },
         eastWest: {
           en: '동서로 피닉스!',
           de: 'Osten/Westen Vogel',
+          fr: 'Oiseau Est/Ouest',
           ja: '東西フェニックス',
           ko: '새 동/서쪽',
         },
@@ -1423,7 +1396,7 @@ const triggerSet: TriggerSet<Data> = {
     {
       id: 'P8S Illusory Hephaistos Scorched Pinion Second',
       type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ id: '7953', source: 'Illusory Hephaistos', capture: false }),
+      netRegex: NetRegexes.startsUsing({ id: '7953', capture: false }),
       condition: (data) => data.flareTargets.length > 0,
       suppressSeconds: 1,
       run: (data) => data.illusory = 'bird',
@@ -1431,7 +1404,7 @@ const triggerSet: TriggerSet<Data> = {
     {
       id: 'P8S Illusory Hephaistos Scorching Fang Second',
       type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ id: '7952', source: 'Illusory Hephaistos', capture: false }),
+      netRegex: NetRegexes.startsUsing({ id: '7952', capture: false }),
       condition: (data) => data.flareTargets.length > 0,
       suppressSeconds: 1,
       run: (data) => data.illusory = 'snake',
@@ -1447,8 +1420,9 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         text: {
-          en: '(십자로! 프로틴 피해욧)',
+          en: '(피해욧! 십자로!)',
           de: '(weiche Himmelsrichtungen aus)',
+          fr: '(évitez les positions)',
           ja: '(十字で回避)',
           ko: '(피하기)',
         },
@@ -1466,8 +1440,9 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         text: {
-          en: '안쪽 크로스로! 프로틴 받아욧',
+          en: '크로스 안쪽! 프로틴을 몸으로!',
           de: 'rein für Himmelsrichtungen',
+          fr: 'Intérieur pour les positions',
           ja: '内側のクロスで誘導散会',
           ko: '안에서 장판 유도',
         },
@@ -1481,6 +1456,9 @@ const triggerSet: TriggerSet<Data> = {
         data.ventCasts.push(matches);
         return data.ventCasts.length === 2;
       },
+      // Sometimes these initial positions are incorrect, so compensate with some delay.
+      // TODO: can we detect/ignore these incorrect initial positions??
+      delaySeconds: 0.5,
       promise: async (data: Data) => {
         data.combatantData = [];
 
@@ -1508,6 +1486,9 @@ const triggerSet: TriggerSet<Data> = {
         data.ventCasts.push(matches);
         return data.ventCasts.length === 2;
       },
+      // Sometimes these initial positions are incorrect, so compensate with some delay.
+      // TODO: can we detect/ignore these incorrect initial positions??
+      delaySeconds: 0.5,
       promise: async (data: Data) => {
         data.combatantData = [];
 
@@ -1613,33 +1594,37 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         northSouth: {
-          en: 'ⒶⒸ 가운데-남북',
-          ja: 'ⒶⒸ 南北',
+          en: '위아래 ⒶⒸ',
+          de: 'Norden / Süden',
+          fr: 'Nord / Sud',
+          ja: '南北 ⒶⒸ',
           ko: '남/북쪽',
         },
         eastWest: {
-          en: 'ⒷⒹ 가운데-동서',
-          ja: 'ⒷⒹ 東西',
+          en: '옆으로 ⒹⒷ',
+          de: 'Osten / Westen',
+          fr: 'Est / Ouest',
+          ja: '東西 ⒹⒷ',
           ko: '동/서쪽',
         },
         north: {
-          en: '⓵⓶ 북-동서',
-          ja: '⓵⓶ 北',
+          en: '북 ⓵⓶',
+          ja: '北 ⓵⓶',
           ko: '북쪽',
         },
         east: {
-          en: '⓶⓷ 동-남북',
-          ja: '⓶⓷ 東',
+          en: '동 ⓶⓷',
+          ja: '東 ⓶⓷',
           ko: '동쪽',
         },
         south: {
-          en: '⓸⓷ 남-동서',
-          ja: '⓸⓷ 南',
+          en: '남 ⓸⓷',
+          ja: '南 ⓸⓷',
           ko: '남쪽',
         },
         west: {
-          en: '⓵⓸ 서-남북',
-          ja: '⓵⓸ 西',
+          en: '서 ⓵⓸',
+          ja: '西 ⓵⓸',
           ko: '서쪽',
         },
       },
@@ -1654,6 +1639,7 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: '전체공격 + 출혈',
           de: 'AoE + Blutung',
+          fr: 'AoE + Saignement',
           ja: 'AOE + 出血',
           ko: '전체 공격 + 도트',
         },
@@ -1669,6 +1655,7 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: '따로 따로 탱크버스터',
           de: 'getrennte Tankbuster',
+          fr: 'Séparez les Tankbuster',
           ja: '2人同時タンク強攻撃',
           ko: '따로맞는 탱버',
         },
@@ -1687,16 +1674,22 @@ const triggerSet: TriggerSet<Data> = {
       },
       run: (data) => delete data.firstAlignmentSecondAbility,
       outputStrings: {
-        right: Outputs.right,
+        right: {
+          en: '▶▷▶오른쪽',
+          ja: '右へ',
+          ko: '오른쪽',
+        },
         rightAndSpread: {
-          en: '오른쪽 + 흩어져욧',
+          en: '흩어져욧 + ▶▷▶오른쪽',
           de: 'Rechts + Verteilen',
+          fr: 'Gauche + Écartez-vous',
           ja: '右 + 散会',
           ko: '오른쪽 + 산개',
         },
         rightAndStack: {
-          en: '오른쪽 + 뭉쳐욧',
+          en: '뭉쳐욧 + ▶▷▶오른쪽',
           de: 'Rechts + Sammeln',
+          fr: 'Gauche + Package',
           ja: '右 + 頭割り',
           ko: '오른쪽 + 쉐어',
         },
@@ -1715,16 +1708,22 @@ const triggerSet: TriggerSet<Data> = {
       },
       run: (data) => delete data.firstAlignmentSecondAbility,
       outputStrings: {
-        left: Outputs.left,
+        left: {
+          en: '왼쪽◀◁◀',
+          ja: '左へ',
+          ko: '왼쪽',
+        },
         leftAndSpread: {
-          en: '왼쪽 + 흩어져욧',
+          en: '왼쪽◀◁◀ + 흩어져욧',
           de: 'Links + Verteilen',
+          fr: 'Droite + Écartez-vous',
           ja: '左 + 散会',
           ko: '왼쪽 + 산개',
         },
         leftAndStack: {
-          en: '왼쪽 + 뭉쳐욧',
+          en: '왼쪽◀◁◀ + 뭉쳐욧',
           de: 'Links + Sammeln',
+          fr: 'Droite + Package',
           ja: '左 + 頭割り',
           ko: '왼쪽 + 쉐어',
         },
@@ -1738,7 +1737,601 @@ const triggerSet: TriggerSet<Data> = {
       run: (data) => {
         data.concept = {};
         data.splicer = {};
+
+        data.prsHighConcept = (data.prsHighConcept ?? 0) + 1;
+        delete data.prsMyConcept;
       },
+    },
+    {
+      id: 'P8S Inverse Magics',
+      type: 'GainsEffect',
+      // This gets recast a lot on the same people, but shouldn't cause an issue.
+      // This also only happens once on the second time through, so no need to reset.
+      netRegex: NetRegexes.gainsEffect({ effectId: 'D15' }),
+      response: (data, matches, output) => {
+        if (!data.inverseMagics[matches.target]) {
+          if (data.me === matches.target)
+            return { alarmText: output.reversedme!() };
+          return { infoText: output.reversed!({ player: data.ShortName(matches.target) }) };
+        }
+      },
+      tts: (data, matches, _output) => {
+        if (!data.inverseMagics[matches.target] && data.me === matches.target)
+          return 'わたしが反転';
+      },
+      run: (data, matches) => data.inverseMagics[matches.target] = true,
+      outputStrings: {
+        reversed: {
+          en: '반전: ${player}',
+          de: '${player} umgekehrt',
+          fr: '${player} inversé',
+          ja: '反転：${player}',
+          ko: '${player} 반전',
+        },
+        reversedme: {
+          en: '내가 반전!!! 제자리 점프!!!',
+          ja: 'わたしが反転',
+        },
+      },
+    },
+    {
+      id: 'P8S Natural Alignment Purple on You',
+      type: 'GainsEffect',
+      netRegex: NetRegexes.gainsEffect({ effectId: '9F8', count: '209' }),
+      preRun: (data, matches) => {
+        data.alignmentTargets.push(matches.target);
+        data.prsAlignMt = data.party.isDPS(matches.target);
+      },
+      alertText: (data, matches, output) => {
+        if (data.me === matches.target)
+          return output.text!();
+      },
+      outputStrings: {
+        text: {
+          en: '내게 보라 동글이가!',
+          de: 'Anpassung auf DIR',
+          fr: 'Alignement sur VOUS',
+          ja: '自分に紫丸',
+          ko: '원판 대상자',
+        },
+      },
+    },
+    {
+      id: 'P8S Natural Alignment Purple Targets',
+      type: 'GainsEffect',
+      netRegex: NetRegexes.gainsEffect({ effectId: '9F8', count: '209', capture: false }),
+      delaySeconds: 0.3,
+      suppressSeconds: 5,
+      sound: '',
+      infoText: (data, _matches, output) => {
+        const [name1, name2] = data.alignmentTargets.sort();
+        return output.text!({
+          player1: data.ShortName(name1),
+          player2: data.ShortName(name2),
+          target: data.prsAlignMt ? output.targetDps!() : output.targetTh!(),
+        });
+      },
+      tts: null,
+      run: (data) => data.alignmentTargets = [],
+      outputStrings: {
+        text: {
+          en: '동글: ${player1}, ${player2} (${target})',
+          de: 'Anpassung auf ${player1}, ${player2}',
+          fr: 'Alignement sur ${player1}, ${player2}',
+          ja: '紫丸：${player1}, ${player2} (${target})',
+          ko: '${player1}, ${player2} 원판',
+        },
+        targetTh: {
+          en: '탱힐 당첨, D1 조정',
+          ja: 'TH',
+        },
+        targetDps: {
+          en: 'DPS 당첨, MT 조정',
+          ja: 'DPS',
+        },
+      },
+    },
+    {
+      id: 'P8S Natural Alignment First',
+      type: 'GainsEffect',
+      // This is a magic effectId with a statusloopvfx count, like 808 elsewhere.
+      netRegex: NetRegexes.gainsEffect({ effectId: '9F8' }),
+      response: (data, matches, output) => {
+        // cactbot-builtin-response
+        output.responseOutputStrings = {
+          ice: {
+            en: '먼저 얼음!! 3:3으로 뭉쳐욧 (${adj})',
+            de: 'Eis Gruppen zuerst',
+            fr: 'Groupe Glace en 1er',
+            ja: '氷の頭割りから (${adj})',
+            ko: '얼음 쉐어 먼저',
+          },
+          fire: {
+            en: '먼저 불!! 둘씩 뭉쳐욧',
+            de: 'Feuer Partner zuerst',
+            fr: 'Partenaires de feu en 1er',
+            ja: '火の2人頭割りから',
+            ko: '불 2인쉐어 먼저',
+          },
+          stack: {
+            en: '먼저 뭉쳐욧',
+            de: 'Zuerst sammeln',
+            fr: 'Package en 1er',
+            ja: '頭割りから',
+            ko: '쉐어 먼저',
+          },
+          spread: {
+            en: '먼저 흩어져욧',
+            de: 'Zuerst verteilen',
+            fr: 'Écartement en 1er',
+            ja: '散会から',
+            ko: '산개 먼저',
+          },
+          baitAndStack: {
+            en: '가운데 유도하고 => 뭉쳐욧',
+            de: 'Ködern => Sammeln',
+            fr: 'Déposez -> Package',
+            ja: '誘導 => 頭割り',
+            ko: '장판 유도 => 쉐어',
+          },
+          baitAndSpread: {
+            en: '가운데 유도하고 => 흩어져욧',
+            de: 'Ködern => Verteilen',
+            fr: 'Déposez -> Écartez-vous',
+            ja: '誘導 => 散会',
+            ko: '장판 유도 => 산개',
+          },
+          adjMt: prsStrings.adjMt,
+          adjD1: prsStrings.adjD1,
+        };
+        const isReversed = data.inverseMagics[matches.target] === true;
+        const id = matches.count;
+
+        // Huge credit to Aya for this.  Also note `209` is the purple swirl.
+        const ids = {
+          fireThenIce: '1DC',
+          iceThenFire: '1DE',
+          stackThenSpread: '1E0',
+          spreadThenStack: '1E2',
+        } as const;
+
+        // The first time through, use the "bait" version to avoid people running off
+        // as soon as they hear the beepy boops.
+        if (!data.seenFirstAlignmentStackSpread) {
+          // The first one can't be reversed.
+          // Store the follow-up ability so it can be used with the left/right Ashing Blaze.
+          if (id === ids.stackThenSpread) {
+            data.firstAlignmentSecondAbility = 'spread';
+            return { alertText: output.baitAndStack!() };
+          }
+          if (id === ids.spreadThenStack) {
+            data.firstAlignmentSecondAbility = 'stack';
+            return { alertText: output.baitAndSpread!() };
+          }
+        }
+
+        const key = isReversed ? 'alarmText' : 'alertText';
+        if (!isReversed && id === ids.fireThenIce || isReversed && id === ids.iceThenFire)
+          return { [key]: output.fire!() };
+        if (!isReversed && id === ids.iceThenFire || isReversed && id === ids.fireThenIce)
+          return { [key]: output.ice!({ adj: data.prsAlignMt ? output.adjMt!() : output.adjD1!() }) };
+        if (!isReversed && id === ids.spreadThenStack || isReversed && id === ids.stackThenSpread)
+          return { [key]: output.spread!() };
+        if (!isReversed && id === ids.stackThenSpread || isReversed && id === ids.spreadThenStack)
+          return { [key]: output.stack!() };
+      },
+    },
+    {
+      id: 'P8S Natural Alignment Second',
+      type: 'Ability',
+      netRegex: NetRegexes.ability({ id: ['79C0', '79BF', '79BD', '79BE'], source: 'Hephaistos' }),
+      suppressSeconds: 8,
+      alertText: (data, matches, output) => {
+        // Due to the way suppress works, put this check here and not in the condition field.
+        // This callout will get merged with the left/right which happens at the same time.
+        if (!data.seenFirstAlignmentStackSpread)
+          return;
+
+        const id = matches.id;
+        const ids = {
+          spread: '79C0',
+          stack: '79BF',
+          fire: '79BD',
+          ice: '79BE',
+        } as const;
+
+        // TODO: Should the left/right call (or some future "front row"/"2nd row") call be combined
+        // with the followup here?
+        if (id === ids.spread)
+          return output.stack!();
+        if (id === ids.stack)
+          return output.spread!();
+        if (id === ids.ice)
+          return output.fire!();
+        if (id === ids.fire)
+          return output.ice!({ adj: data.prsAlignMt ? output.adjMt!() : output.adjD1!() });
+      },
+      run: (data) => data.seenFirstAlignmentStackSpread = true,
+      outputStrings: {
+        stack: Outputs.stackMarker,
+        spread: Outputs.spread,
+        ice: {
+          en: '얼음!! 3:3으로 뭉쳐욧 (${adj})',
+          de: 'Eis Gruppen',
+          fr: 'Groupe de glace',
+          ja: '氷の頭割り (${adj})',
+          ko: '얼음 그룹 쉐어',
+        },
+        fire: {
+          en: '불!! 둘씩 뭉쳐욧',
+          de: 'Feuer Partner',
+          fr: 'Partenaires de feu',
+          ja: '火の2人頭割り',
+          ko: '불 2인 쉐어',
+        },
+        adjMt: prsStrings.adjMt,
+        adjD1: prsStrings.adjD1,
+      },
+    },
+    {
+      id: 'P8S Illusory Hephaistos End of Days',
+      type: 'StartsUsing',
+      netRegex: NetRegexes.startsUsing({ id: '7A8B' }),
+      infoText: (_data, matches, output) => {
+        // Illusory Hephaistos are at x=(80 or 120), y=(85 or 95 or 105 or 115).
+        // Either the first or second row is always free.
+        const y = parseFloat(matches.y);
+        const epsilon = 2;
+        const row1y = 85;
+        const row2y = 95;
+
+        // TODO: combine this with the ice/fire/stack/spread calls too?
+        if (Math.abs(y - row1y) < epsilon)
+          return output.row2!();
+        if (Math.abs(y - row2y) < epsilon)
+          return output.row1!();
+      },
+      outputStrings: {
+        row1: {
+          en: '첫째 줄로!!!',
+          de: 'Vordere Reihe',
+          fr: 'Première rangée',
+          ja: '1列目',
+          ko: '첫번째 줄',
+        },
+        row2: {
+          en: '둘째 줄로!!!',
+          de: 'Zweite Reihe',
+          fr: 'Deuxième rangée',
+          ja: '2列目',
+          ko: '두번째 줄',
+        },
+      },
+    },
+    {
+      id: 'P8S High Concept Collect',
+      // D02 = Imperfection: Alpha
+      // D03 = Imperfection: Beta
+      // D04 = Imperfection: Gamma
+      // D05 = Perfection: Alpha
+      // D06 = Perfection: Beta
+      // D07 = Perfection: Gamma
+      // D11 = Solosplice
+      // D12 = Multisplice
+      // D13 = Supersplice
+      type: 'GainsEffect',
+      netRegex: NetRegexes.gainsEffect({ effectId: ['D0[2-4]', 'D1[1-3]'] }),
+      run: (data, matches) => {
+        const id = matches.effectId;
+        // 8 and 26s second debuffs.
+        const isLong = parseFloat(matches.duration) > 10;
+        if (id === 'D02')
+          data.concept[matches.target] = isLong ? 'longalpha' : 'shortalpha';
+        else if (id === 'D03')
+          data.concept[matches.target] = isLong ? 'longbeta' : 'shortbeta';
+        else if (id === 'D04')
+          data.concept[matches.target] = isLong ? 'longgamma' : 'shortgamma';
+        else if (id === 'D11')
+          data.splicer[matches.target] = 'solosplice';
+        else if (id === 'D12' && data.prsHighConcept === 1)
+          data.splicer[matches.target] = 'multisplice1st';
+        else if (id === 'D12' && data.prsHighConcept === 2)
+          data.splicer[matches.target] = 'multisplice2nd';
+        else if (id === 'D13')
+          data.splicer[matches.target] = 'supersplice';
+      },
+    },
+    {
+      id: 'P8S High Concept Debuffs',
+      type: 'GainsEffect',
+      netRegex: NetRegexes.gainsEffect({ effectId: ['D0[2-4]', 'D1[1-3]'], capture: false }),
+      delaySeconds: 0.5,
+      suppressSeconds: 1,
+      response: (data, _matches, output) => {
+        // cactbot-builtin-response
+        output.responseOutputStrings = {
+          noDebuff: {
+            en: '무직 ▲△▲',
+            de: 'Kein Debuff',
+            fr: 'Aucun debuff',
+            ja: '無職 ▲△▲',
+            ko: '디버프 없음',
+          },
+          noDebuffSplicer: {
+            en: '무직 + ${splicer}',
+            ja: '無職 + ${splicer}',
+            ko: '디버프 없음 + ${splicer}',
+          },
+          shortAlpha: {
+            en: '빠른 알파 ▲△▲',
+            de: 'kurzes Alpha',
+            fr: 'Alpha court',
+            ja: '早アルファ ▲△▲',
+            ko: '짧은 알파',
+          },
+          longAlpha: {
+            en: '느린 알파 ▲△▲',
+            de: 'langes Alpha',
+            fr: 'Alpha long',
+            ja: '遅アルファ ▲△▲',
+            ko: '긴 알파',
+          },
+          longAlphaSplicer: {
+            en: '느린 알파 ▲△▲ + ${splicer}',
+            de: 'langes Alpha + ${splicer}',
+            fr: 'Alpha long + ${splicer}',
+            ja: '遅アルファ ▲△▲ + ${splicer}',
+            ko: '긴 알파 + ${splicer}',
+          },
+          shortBeta: {
+            en: '빠른 베타 ▶▷▶',
+            de: 'kurzes Beta',
+            fr: 'Beta court',
+            ja: '早ベータ ▶▷▶',
+            ko: '짧은 베타',
+          },
+          longBeta: {
+            en: '느린 베타 ▶▷▶',
+            de: 'langes Beta',
+            fr: 'Beta long',
+            ja: '遅ベータ ▶▷▶',
+            ko: '긴 베타',
+          },
+          longBetaSplicer: {
+            en: '느린 베타 ▶▷▶ + ${splicer}',
+            de: 'langes Beta + ${splicer}',
+            fr: 'Beta long + ${splicer}',
+            ja: '遅ベータ ▶▷▶ + ${splicer}',
+            ko: '긴 베타 + ${splicer}',
+          },
+          shortGamma: {
+            en: '빠른 감마 ▼▽▼',
+            de: 'kurzes Gamma',
+            fr: 'Gamma court',
+            ja: '早ガンマ ▼▽▼',
+            ko: '짧은 감마',
+          },
+          longGamma: {
+            en: '느린 감마 ▼▽▼',
+            de: 'langes Gamma',
+            fr: 'Gamma long',
+            ja: '遅ガンマ ▼▽▼',
+            ko: '긴 감마',
+          },
+          longGammaSplicer: {
+            en: '느린 감마 ▼▽▼ + ${splicer}',
+            de: 'langes Gamma + ${splicer}',
+            fr: 'Gamma long + ${splicer}',
+            ja: '遅ガンマ ▼▽▼ + ${splicer}',
+            ko: '긴 감마 + ${splicer}',
+          },
+          soloSplice: {
+            en: '홀로 처리(위로)',
+            de: 'Einzelnes Sammeln',
+            fr: 'Package solo',
+            ja: '1人受け(上)',
+            ko: '1인징',
+          },
+          multiSplice1st: {
+            en: '둘이 뭉쳐욧(위로)',
+            de: 'Zwei sammeln',
+            fr: 'Package à 2',
+            ja: '2人頭割り(上)',
+            ko: '2인징',
+          },
+          superSplice: {
+            en: '셋이 뭉쳐욧(아래로)',
+            de: 'Drei sammeln',
+            fr: 'Package à 3',
+            ja: '3人頭割り(下)',
+            ko: '3인징',
+          },
+          multiSplice2nd: {
+            en: '둘이 뭉쳐욧(아래로)',
+            de: 'Zwei sammeln',
+            fr: 'Package à 2',
+            ja: '2人頭割り(下)',
+            ko: '2인징',
+          },
+        };
+
+        // General thought here: alarm => EXPLOSION GO, alert/info => go to safe corner
+
+        const concept = data.concept[data.me];
+        const splicer = data.splicer[data.me];
+        data.prsMyConcept = concept;
+
+        const singleConceptMap: { [key in InitialConcept]: string } = {
+          shortalpha: output.shortAlpha!(),
+          longalpha: output.longAlpha!(),
+          shortbeta: output.shortBeta!(),
+          longbeta: output.longBeta!(),
+          shortgamma: output.shortGamma!(),
+          longgamma: output.longGamma!(),
+        };
+
+        if (splicer === undefined) {
+          if (concept === undefined)
+            return { alarmText: output.noDebuff!() };
+
+          const isShort = concept === 'shortalpha' || concept === 'shortbeta' || concept === 'shortgamma';
+          const conceptStr = singleConceptMap[concept];
+          if (isShort)
+            return { alarmText: conceptStr };
+          return { alertText: conceptStr };
+        }
+
+        const splicerMap: { [key in Splicer]: string } = {
+          solosplice: output.soloSplice!(),
+          multisplice1st: output.multiSplice1st!(),
+          supersplice: output.superSplice!(),
+          multisplice2nd: output.multiSplice2nd!(),
+        };
+        const splicerStr = splicerMap[splicer];
+        if (concept === undefined)
+          return { alarmText: output.noDebuffSplicer!({ splicer: splicerStr }) };
+        else if (concept === 'longalpha')
+          return { alertText: output.longAlphaSplicer!({ splicer: splicerStr }) };
+        else if (concept === 'longbeta')
+          return { alertText: output.longBetaSplicer!({ splicer: splicerStr }) };
+        else if (concept === 'longgamma')
+          return { alertText: output.longGammaSplicer!({ splicer: splicerStr }) };
+
+        // If we get here then we have a short concept with a splicer which shouldn't be possible,
+        // but at least return *something* just in case.
+        return { alarmText: singleConceptMap[concept] };
+      },
+    },
+    {
+      // 원래 퍼펙트가 바뀌기 전에 이걸로 통합
+      id: 'P8S+ 퍼펙트 알파/베타/감마 (임시)',
+      type: 'GainsEffect',
+      netRegex: NetRegexes.gainsEffect({ effectId: 'D0[5-7]' }),
+      condition: Conditions.targetIsYou(),
+      response: (data, matches, output) => {
+        // cactbot-builtin-response
+        output.responseOutputStrings = {
+          mesg: {
+            en: '${where}에서 조합 [${color}]',
+            ja: '${where}で合成 [${color}]',
+          },
+          greenBlue: {
+            en: '초록/파랑',
+            ja: '緑・青',
+          },
+          greenPuple: {
+            en: '초록/보라',
+            ja: '緑・紫',
+          },
+          pupleBlue: {
+            en: '보라/파랑',
+            ja: '紫・青',
+          },
+          baeksu2nd: {
+            en: '이프리트 조합 => 나중에 녹색이랑 부비부비',
+            ja: 'イフリート合成 => 後で緑と合成 ',
+          },
+          north: Outputs.north,
+          south: Outputs.south,
+          unknown: Outputs.unknown,
+        };
+
+        const idToColor: { [id: string]: string } = {
+          'D05': output.greenBlue!(),
+          'D06': output.greenPuple!(),
+          'D07': output.pupleBlue!(),
+        };
+        // 첫번째: 느림-북쪽, 빨리/무직-남쪽
+        const conTo1stMap: { [key in InitialConcept]: string } = {
+          shortalpha: output.south!(),
+          longalpha: output.north!(),
+          shortbeta: output.south!(),
+          longbeta: output.north!(),
+          shortgamma: output.south!(),
+          longgamma: output.north!(),
+        };
+        // 두번째: 느림-북쪽, 빨리/느림감마-남쪽, 무직-둘이서이프
+        const conTo2ndMap: { [key in InitialConcept]: string } = {
+          shortalpha: output.south!(),
+          longalpha: output.north!(),
+          shortbeta: output.south!(),
+          longbeta: output.north!(),
+          shortgamma: output.south!(),
+          longgamma: output.south!(),
+        };
+
+        const stage = data.prsHighConcept;
+        const mycon = data.prsMyConcept;
+        const color = idToColor[matches.effectId];
+
+        if (mycon === undefined) {
+          if (stage === 1)
+            return { alertText: output.mesg!({ where: output.south!(), color: color }) };
+          return { alertText: output.baeksu2nd!() };
+        }
+
+        const where = (stage === 1) ? conTo1stMap[mycon] : conTo2ndMap[mycon];
+        return { infoText: output.mesg!({ where: where, color: color }) };
+      },
+    },
+    /*
+    {
+      id: 'P8S Perfected Alpha',
+      type: 'GainsEffect',
+      netRegex: NetRegexes.gainsEffect({ effectId: 'D05' }),
+      condition: Conditions.targetIsYou(),
+      // TODO: it'd be nice to know the tower here so this could just say
+      // "take tower" or "avoid tower" with different severity or even
+      // who to merge with (!), but without that this is the best we got.
+      infoText: (_data, _matches, output) => output.text!(),
+      outputStrings: {
+        text: {
+          en: 'Green/Blue Tower',
+          de: 'Grüner/Blauer Turm',
+          fr: 'Tour Verte/Bleue',
+          ja: '緑・青',
+          ko: '초록/파랑 기둥',
+        },
+      },
+    },
+    {
+      id: 'P8S Perfected Beta',
+      type: 'GainsEffect',
+      netRegex: NetRegexes.gainsEffect({ effectId: 'D06' }),
+      condition: Conditions.targetIsYou(),
+      infoText: (_data, _matches, output) => output.text!(),
+      outputStrings: {
+        text: {
+          en: 'Green/Purple Tower',
+          de: 'Grüner/Lilaner Turm',
+          fr: 'Tour Verte/Violette',
+          ja: '緑・紫',
+          ko: '초록/보라 기둥',
+        },
+      },
+    },
+    {
+      id: 'P8S Perfected Gamma',
+      type: 'GainsEffect',
+      netRegex: NetRegexes.gainsEffect({ effectId: 'D07' }),
+      condition: Conditions.targetIsYou(),
+      infoText: (_data, _matches, output) => output.text!(),
+      outputStrings: {
+        text: {
+          en: 'Purple/Blue Tower',
+          de: 'Lilaner/Blauer Turm',
+          fr: 'Tour Violette/Bleue',
+          ja: '紫・青',
+          ko: '보라/파랑 기둥',
+        },
+      },
+    },
+    */
+    {
+      id: 'P8S Limitless Desolation',
+      type: 'StartsUsing',
+      netRegex: NetRegexes.startsUsing({ id: '75ED', source: 'Hephaistos', capture: false }),
+      response: Responses.spread('alert'),
     },
     {
       id: 'P8S Tyrant\'s Fire III Counter',
@@ -1789,533 +2382,9 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: '${num}번째 타워에 들어가욧',
-          ja: '${num}番目の塔へ入って',
+          ja: '${num}番目の塔に入って',
         },
       },
-    },
-    {
-      id: 'P8S Inverse Magics',
-      type: 'GainsEffect',
-      // This gets recast a lot on the same people, but shouldn't cause an issue.
-      // This also only happens once on the second time through, so no need to reset.
-      netRegex: NetRegexes.gainsEffect({ effectId: 'D15' }),
-      response: (data, matches, output) => {
-        if (!data.inverseMagics[matches.target]) {
-          if (data.me === matches.target)
-            return { alarmText: output.reversedme!() };
-          return { infoText: output.reversed!({ player: data.ShortName(matches.target) }) };
-        }
-      },
-      tts: (data, matches, _output) => {
-        if (!data.inverseMagics[matches.target] && data.me === matches.target)
-          return 'わたしが反転';
-      },
-      run: (data, matches) => data.inverseMagics[matches.target] = true,
-      outputStrings: {
-        reversed: {
-          en: '반전: ${player}',
-          de: '${player} umgekehrt',
-          ja: '反転：${player}',
-          ko: '${player} 반전',
-        },
-        reversedme: {
-          en: '내가 반전!!! 제자리 점프!!!',
-          ja: 'わたしが反転',
-        },
-      },
-    },
-    {
-      id: 'P8S Natural Alignment Purple on You',
-      type: 'GainsEffect',
-      netRegex: NetRegexes.gainsEffect({ effectId: '9F8', count: '209' }),
-      preRun: (data, matches) => data.alignmentTargets.push(matches.target),
-      alertText: (data, matches, output) => {
-        if (data.me === matches.target)
-          return output.text!();
-      },
-      outputStrings: {
-        text: {
-          en: '내게 보라 동글이가!',
-          de: 'Anpassung auf DIR',
-          ja: '自分に紫丸',
-          ko: '원판 대상자',
-        },
-      },
-    },
-    {
-      id: 'P8S Natural Alignment Purple Targets',
-      type: 'GainsEffect',
-      netRegex: NetRegexes.gainsEffect({ effectId: '9F8', count: '209', capture: false }),
-      delaySeconds: 0.3,
-      suppressSeconds: 5,
-      sound: '',
-      infoText: (data, _matches, output) => {
-        const [name1, name2] = data.alignmentTargets.sort();
-        return output.text!({ player1: data.ShortName(name1), player2: data.ShortName(name2) });
-      },
-      tts: null,
-      run: (data) => data.alignmentTargets = [],
-      outputStrings: {
-        text: {
-          en: '보라 동글이: ${player1}, ${player2}',
-          de: 'Anpassung auf ${player1}, ${player2}',
-          ja: '紫丸：${player1}, ${player2}',
-          ko: '${player1}, ${player2} 원판',
-        },
-      },
-    },
-    {
-      id: 'P8S Natural Alignment First',
-      type: 'GainsEffect',
-      // This is a magic effectId with a statusloopvfx count, like 808 elsewhere.
-      netRegex: NetRegexes.gainsEffect({ effectId: '9F8' }),
-      response: (data, matches, output) => {
-        // cactbot-builtin-response
-        output.responseOutputStrings = {
-          ice: {
-            en: '먼저 얼음!! 3:3으로 뭉쳐욧',
-            de: 'Eis Gruppen zuerst',
-            ja: '氷の頭割りから',
-            ko: '얼음 쉐어 먼저',
-          },
-          fire: {
-            en: '먼저 불!! 둘씩 뭉쳐욧',
-            de: 'Feuer Partner zuerst',
-            ja: '火の2人頭割りから',
-            ko: '불 2인쉐어 먼저',
-          },
-          stack: {
-            en: '먼저 뭉쳐욧',
-            de: 'Zuerst sammeln',
-            ja: '頭割りから',
-            ko: '쉐어 먼저',
-          },
-          spread: {
-            en: '먼저 흩어져욧',
-            de: 'Zuerst verteilen',
-            ja: '散会から',
-            ko: '산개 먼저',
-          },
-          baitAndStack: {
-            en: '가운데 유도하고 => 뭉쳐욧',
-            de: 'Ködern => Sammeln',
-            ja: '誘導 => 頭割り',
-            ko: '장판 유도 => 쉐어',
-          },
-          baitAndSpread: {
-            en: '가운데 유도하고 => 흩어져욧',
-            de: 'Ködern => Verteilen',
-            ja: '誘導 => 散会',
-            ko: '장판 유도 => 산개',
-          },
-        };
-        const isReversed = data.inverseMagics[matches.target] === true;
-        const id = matches.count;
-
-        // Huge credit to Aya for this.  Also note `209` is the purple swirl.
-        const ids = {
-          fireThenIce: '1DC',
-          iceThenFire: '1DE',
-          stackThenSpread: '1E0',
-          spreadThenStack: '1E2',
-        } as const;
-
-        // The first time through, use the "bait" version to avoid people running off
-        // as soon as they hear the beepy boops.
-        if (!data.seenFirstAlignmentStackSpread) {
-          // The first one can't be reversed.
-          // Store the follow-up ability so it can be used with the left/right Ashing Blaze.
-          if (id === ids.stackThenSpread) {
-            data.firstAlignmentSecondAbility = 'spread';
-            return { alertText: output.baitAndStack!() };
-          }
-          if (id === ids.spreadThenStack) {
-            data.firstAlignmentSecondAbility = 'stack';
-            return { alertText: output.baitAndSpread!() };
-          }
-        }
-
-        const key = isReversed ? 'alarmText' : 'alertText';
-        if (!isReversed && id === ids.fireThenIce || isReversed && id === ids.iceThenFire)
-          return { [key]: output.fire!() };
-        if (!isReversed && id === ids.iceThenFire || isReversed && id === ids.fireThenIce)
-          return { [key]: output.ice!() };
-        if (!isReversed && id === ids.spreadThenStack || isReversed && id === ids.stackThenSpread)
-          return { [key]: output.spread!() };
-        if (!isReversed && id === ids.stackThenSpread || isReversed && id === ids.spreadThenStack)
-          return { [key]: output.stack!() };
-      },
-    },
-    {
-      id: 'P8S Natural Alignment Second',
-      type: 'Ability',
-      netRegex: NetRegexes.ability({ id: ['79C0', '79BF', '79BD', '79BE'], source: 'Hephaistos' }),
-      suppressSeconds: 8,
-      alertText: (data, matches, output) => {
-        // Due to the way suppress works, put this check here and not in the condition field.
-        // This callout will get merged with the left/right which happens at the same time.
-        if (!data.seenFirstAlignmentStackSpread)
-          return;
-
-        const id = matches.id;
-        const ids = {
-          spread: '79C0',
-          stack: '79BF',
-          fire: '79BD',
-          ice: '79BE',
-        } as const;
-
-        // TODO: Should the left/right call (or some future "front row"/"2nd row") call be combined
-        // with the followup here?
-        if (id === ids.spread)
-          return output.stack!();
-        if (id === ids.stack)
-          return output.spread!();
-        if (id === ids.ice)
-          return output.fire!();
-        if (id === ids.fire)
-          return output.ice!();
-      },
-      run: (data) => data.seenFirstAlignmentStackSpread = true,
-      outputStrings: {
-        stack: Outputs.stackMarker,
-        spread: Outputs.spread,
-        ice: {
-          en: '얼음!! 3:3으로 뭉쳐욧',
-          de: 'Eis Gruppen',
-          ja: '氷の頭割り',
-          ko: '얼음 그룹 쉐어',
-        },
-        fire: {
-          en: '불!! 둘씩 뭉쳐욧',
-          de: 'Feuer Partner',
-          ja: '火の2人頭割り',
-          ko: '불 2인 쉐어',
-        },
-      },
-    },
-    {
-      id: 'P8S Illusory Hephaistos End of Days',
-      type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ id: '7A8B' }),
-      infoText: (_data, matches, output) => {
-        // Illusory Hephaistos are at x=(80 or 120), y=(85 or 95 or 105 or 115).
-        // Either the first or second row is always free.
-        const y = parseFloat(matches.y);
-        const epsilon = 2;
-        const row1y = 85;
-        const row2y = 95;
-
-        // TODO: combine this with the ice/fire/stack/spread calls too?
-        if (Math.abs(y - row1y) < epsilon)
-          return output.row2!();
-        if (Math.abs(y - row2y) < epsilon)
-          return output.row1!();
-      },
-      outputStrings: {
-        row1: {
-          en: '맨 앞 줄로!!!',
-          de: 'Vordere Reihe',
-          ko: '첫번째 줄',
-        },
-        row2: {
-          en: '두번째 줄로!!!',
-          de: 'Zweite Reihe',
-          ko: '두번째 줄',
-        },
-      },
-    },
-    {
-      id: 'P8S+ 하이 컨셉 체크',
-      type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ id: '710A', source: 'Hephaistos', capture: false }),
-      run: (data, _match, _output) => data.prsHighConcept = (data.prsHighConcept ?? 0) + 1,
-    },
-    {
-      id: 'P8S High Concept Collect',
-      // D02 = Imperfection: Alpha
-      // D03 = Imperfection: Beta
-      // D04 = Imperfection: Gamma
-      // D05 = Perfection: Alpha
-      // D06 = Perfection: Beta
-      // D07 = Perfection: Gamma
-      // D11 = Solosplice
-      // D12 = Multisplice
-      // D13 = Supersplice
-      type: 'GainsEffect',
-      netRegex: NetRegexes.gainsEffect({ effectId: ['D0[2-4]', 'D1[1-3]'] }),
-      run: (data, matches) => {
-        const id = matches.effectId;
-        // 8 and 26s second debuffs.
-        const isLong = parseFloat(matches.duration) > 10;
-        if (id === 'D02')
-          data.concept[matches.target] = isLong ? 'longalpha' : 'shortalpha';
-        else if (id === 'D03')
-          data.concept[matches.target] = isLong ? 'longbeta' : 'shortbeta';
-        else if (id === 'D04')
-          data.concept[matches.target] = isLong ? 'longgamma' : 'shortgamma';
-        else if (id === 'D11')
-          data.splicer[matches.target] = 'solosplice';
-        else if (id === 'D12')
-          data.splicer[matches.target] = 'multisplice';
-        else if (id === 'D13')
-          data.splicer[matches.target] = 'supersplice';
-      },
-    },
-    {
-      id: 'P8S High Concept Debuffs',
-      type: 'GainsEffect',
-      netRegex: NetRegexes.gainsEffect({ effectId: ['D0[2-4]', 'D1[1-3]'], capture: false }),
-      delaySeconds: 0.5,
-      suppressSeconds: 1,
-      response: (data, _matches, output) => {
-        // cactbot-builtin-response
-        output.responseOutputStrings = {
-          noDebuff: {
-            en: '무직이야!',
-            de: 'Kein Debuff',
-            ja: '無職',
-            ko: '디버프 없음',
-          },
-          noDebuffSplicer: {
-            en: '무직이야! + ${splicer}',
-            ja: '無職 + ${splicer}',
-            ko: '디버프 없음 + ${splicer}',
-          },
-          shortAlpha: {
-            en: '빠른 알파',
-            de: 'kurzes Alpha',
-            ja: '早アルファ',
-            ko: '짧은 알파',
-          },
-          longAlpha: {
-            en: '느린 알파',
-            de: 'langes Alpha',
-            ja: '遅アルファ',
-            ko: '긴 알파',
-          },
-          longAlphaSplicer: {
-            en: '느린 알파 + ${splicer}',
-            de: 'langes Alpha + ${splicer}',
-            ja: '遅アルファ + ${splicer}',
-            ko: '긴 알파 + ${splicer}',
-          },
-          shortBeta: {
-            en: '빠른 베타',
-            de: 'kurzes Beta',
-            ja: '早ベータ',
-            ko: '짧은 베타',
-          },
-          longBeta: {
-            en: '느린 베타',
-            de: 'langes Beta',
-            ja: '遅ベータ',
-            ko: '긴 베타',
-          },
-          longBetaSplicer: {
-            en: '느린 베타 + ${splicer}',
-            de: 'langes Beta + ${splicer}',
-            ja: '遅ベータ + ${splicer}',
-            ko: '긴 베타 + ${splicer}',
-          },
-          shortGamma: {
-            en: '빠른 감마',
-            de: 'kurzes Gamma',
-            ja: '早ガンマ',
-            ko: '짧은 감마',
-          },
-          longGamma: {
-            en: '느린 감마',
-            de: 'langes Gamma',
-            ja: '遅ガンマ',
-            ko: '긴 감마',
-          },
-          longGammaSplicer: {
-            en: '느린 감마 + ${splicer}',
-            de: 'langes Gamma + ${splicer}',
-            ja: '遅ガンマ + ${splicer}',
-            ko: '긴 감마 + ${splicer}',
-          },
-          soloSplice: {
-            en: '혼자 처리!',
-            de: 'Einzelnes Sammeln',
-            ja: '1人受け',
-            ko: '1인징',
-          },
-          multiSplice: {
-            en: '둘이 뭉쳐욧!',
-            ja: '2人頭割り',
-            ko: '2인징',
-          },
-          superSplice: {
-            en: '셋이 뭉쳐욧!',
-            de: 'Drei sammeln',
-            ja: '3人頭割り',
-            ko: '3인징',
-          },
-        };
-
-        // General thought here: alarm => EXPLOSION GO, alert/info => go to safe corner
-
-        const concept = data.concept[data.me];
-        const splicer = data.splicer[data.me];
-
-        if (splicer === undefined && concept === undefined)
-          data.prsTwat = 2;
-        else if (concept === undefined || concept.startsWith('short'))
-          data.prsTwat = 1;
-        else
-          data.prsTwat = 0;
-
-        const singleConceptMap: { [key in InitialConcept]: string } = {
-          shortalpha: output.shortAlpha!(),
-          longalpha: output.longAlpha!(),
-          shortbeta: output.shortBeta!(),
-          longbeta: output.longBeta!(),
-          shortgamma: output.shortGamma!(),
-          longgamma: output.longGamma!(),
-        };
-
-        if (splicer === undefined) {
-          if (concept === undefined)
-            return { alarmText: output.noDebuff!() };
-
-          const isShort = concept === 'shortalpha' || concept === 'shortbeta' || concept === 'shortgamma';
-          const conceptStr = singleConceptMap[concept];
-          if (isShort)
-            return { alarmText: conceptStr };
-          return { alertText: conceptStr };
-        }
-
-        const splicerMap: { [key in Splicer]: string } = {
-          solosplice: output.soloSplice!(),
-          multisplice: output.multiSplice!(),
-          supersplice: output.superSplice!(),
-        };
-        const splicerStr = splicerMap[splicer];
-        if (concept === undefined)
-          return { alarmText: output.noDebuffSplicer!({ splicer: splicerStr }) };
-        else if (concept === 'longalpha')
-          return { alertText: output.longAlphaSplicer!({ splicer: splicerStr }) };
-        else if (concept === 'longbeta')
-          return { alertText: output.longBetaSplicer!({ splicer: splicerStr }) };
-        else if (concept === 'longgamma')
-          return { alertText: output.longGammaSplicer!({ splicer: splicerStr }) };
-
-        // If we get here then we have a short concept with a splicer which shouldn't be possible,
-        // but at least return *something* just in case.
-        return { alarmText: singleConceptMap[concept] };
-      },
-    },
-    {
-      // 원래 퍼펙트가 바뀌기 전에 이걸로 통합
-      id: 'P8S+ 퍼펙트 알파/베타/감마 (임시)',
-      type: 'GainsEffect',
-      netRegex: NetRegexes.gainsEffect({ effectId: 'D0[5-7]' }),
-      condition: Conditions.targetIsYou(),
-      response: (data, matches, output) => {
-        // cactbot-builtin-response
-        output.responseOutputStrings = {
-          mesg: {
-            en: '${at} [${color}]',
-            ja: '${at} [${color}]',
-          },
-          greenBlue: {
-            en: '초록/파랑',
-            ja: '緑・青',
-          },
-          greenPuple: {
-            en: '초록/보라',
-            ja: '緑・紫',
-          },
-          pupleBlue: {
-            en: '보라/파랑',
-            ja: '紫・青',
-          },
-          baeksu: {
-            en: '무직 조합!!',
-            ja: '無職',
-          },
-          north: Outputs.north,
-          south: Outputs.south,
-          unknown: Outputs.unknown,
-        };
-
-        const atToDo: { [at: number]: string } = {
-          0: output.north!(),
-          1: output.south!(),
-          2: output.baeksu!(),
-          3: output.unknown!(),
-        };
-        const idToDebuff: { [id: string]: string } = {
-          'D05': output.greenBlue!(),
-          'D06': output.greenPuple!(),
-          'D07': output.pupleBlue!(),
-        };
-
-        const at = atToDo[data.prsTwat ?? 3];
-        const color = idToDebuff[matches.effectId];
-
-        if (data.prsTwat === 2)
-          return { alertText: output.mesg!({ at: at, color: color }) };
-        return { infoText: output.mesg!({ at: at, color: color }) };
-      },
-    },
-    /*
-    {
-      id: 'P8S Perfected Alpha',
-      type: 'GainsEffect',
-      netRegex: NetRegexes.gainsEffect({ effectId: 'D05' }),
-      condition: Conditions.targetIsYou(),
-      // TODO: it'd be nice to know the tower here so this could just say
-      // "take tower" or "avoid tower" with different severity or even
-      // who to merge with (!), but without that this is the best we got.
-      infoText: (_data, _matches, output) => output.text!(),
-      outputStrings: {
-        text: {
-          en: 'Green/Blue Tower',
-          de: 'Grüner/Blauer Turm',
-          ja: '緑・青',
-          ko: '초록/파랑 기둥',
-        },
-      },
-    },
-    {
-      id: 'P8S Perfected Beta',
-      type: 'GainsEffect',
-      netRegex: NetRegexes.gainsEffect({ effectId: 'D06' }),
-      condition: Conditions.targetIsYou(),
-      infoText: (_data, _matches, output) => output.text!(),
-      outputStrings: {
-        text: {
-          en: 'Green/Purple Tower',
-          de: 'Grüner/Lilaner Turm',
-          ja: '緑・紫',
-          ko: '초록/보라 기둥',
-        },
-      },
-    },
-    {
-      id: 'P8S Perfected Gamma',
-      type: 'GainsEffect',
-      netRegex: NetRegexes.gainsEffect({ effectId: 'D07' }),
-      condition: Conditions.targetIsYou(),
-      infoText: (_data, _matches, output) => output.text!(),
-      outputStrings: {
-        text: {
-          en: 'Purple/Blue Tower',
-          de: 'Lilaner/Blauer Turm',
-          ja: '紫・青',
-          ko: '보라/파랑 기둥',
-        },
-      },
-    },
-    */
-    {
-      id: 'P8S Limitless Desolation',
-      type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ id: '75ED', source: 'Hephaistos', capture: false }),
-      response: Responses.spread('alert'),
     },
     {
       id: 'P8S Dominion',
@@ -2335,9 +2404,10 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         text: {
-          en: '두번째 타워로',
+          en: '둘째 타워로',
           de: 'Zweite Türme',
-          ja: '2回目の塔',
+          fr: 'Secondes tours',
+          ja: '2番目で入る',
           ko: '두번째 기둥',
         },
       },
@@ -2354,9 +2424,10 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         text: {
-          en: '첫번째 타워로',
+          en: '첫째 타워로',
           de: 'Erste Türme',
-          ja: '1回目の塔',
+          fr: 'Premières tours',
+          ja: '先に入る',
           ko: '첫번째 기둥',
         },
       },
@@ -2370,6 +2441,7 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: '아픈 전체공격 + 출혈',
           de: 'große AoE + Blutung',
+          fr: 'Grosse AoE + Saignement',
           ja: '全体攻撃 + 出血',
           ko: '아픈 전체공격 + 도트',
         },
@@ -2404,6 +2476,7 @@ const triggerSet: TriggerSet<Data> = {
         'Suneater': 'Schlund des Phoinix',
       },
       'replaceText': {
+        'line': 'Linie',
         '--auto--': '--auto--',
         'Abyssal Fires': 'Feuersturm',
         'Aionagonia': 'Eiserne Agonie',
@@ -2482,9 +2555,9 @@ const triggerSet: TriggerSet<Data> = {
       'missingTranslations': true,
       'replaceSync': {
         '(?<!Illusory )Hephaistos': 'Héphaïstos',
-        'Gorgon': 'gorgone',
+        'Gorgon': 'Gorgone',
         'Illusory Hephaistos': 'spectre d\'Héphaïstos',
-        'Suneater': 'serpent en flammes',
+        'Suneater': 'Serpent en flammes',
       },
       'replaceText': {
         'Abyssal Fires': 'Tempête enflammée',

@@ -27,6 +27,7 @@ const triggerSet: OopsyTriggerSet<Data> = {
   },
   damageFail: {
     'P5S Starving Stampede': '7A03', // large circle during Starving Stampede jumps
+    'P5S Lively Bait Scatterbait': '770D', // add created by missing a tower getting its cast off
   },
   gainsEffectFail: {
     'P5S Toxicosis 1': 'C0A', // 15s debuff (poison puddle)

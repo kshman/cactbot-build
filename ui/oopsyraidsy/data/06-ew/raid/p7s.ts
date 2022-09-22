@@ -51,7 +51,7 @@ const triggerSet: OopsyTriggerSet<Data> = {
           id: matches.targetId,
           name: matches.target,
           text: {
-            en: '넉백됐네',
+            en: 'Knocked off',
             de: 'Runtergefallen',
             fr: 'Renversé(e)',
             ja: 'ノックバック',
