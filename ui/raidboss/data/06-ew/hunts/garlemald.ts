@@ -21,7 +21,7 @@ const triggerSet: TriggerSet<Data> = {
       alarmText: (_data, _matches, output) => output.outAndBehind!(),
       outputStrings: {
         outAndBehind: {
-          en: 'Get Behind and Out',
+          en: '보스 뒤쪽 바깥으로',
           de: 'Geh hinter ihn und dann raus',
           fr: 'Passez derrière et à l\'extérieur',
           ja: '後ろの外側へ',
@@ -38,7 +38,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.getFront!(),
       outputStrings: {
         getFront: {
-          en: 'Get Front',
+          en: '앞쪽으로',
           de: 'Geh nach Vorne',
           fr: 'Allez devant',
           ja: '前へ',
@@ -56,7 +56,7 @@ const triggerSet: TriggerSet<Data> = {
         // cactbot-builtin-response
         output.responseOutputStrings = {
           missleOnYou: {
-            en: 'GTFO with marker',
+            en: '범위 달렷네, 도망가욧',
             de: 'Geh raus mit dem Marker',
             fr: 'Partez avec le marquage',
             ja: 'ボスから離れる',
@@ -64,7 +64,7 @@ const triggerSet: TriggerSet<Data> = {
             ko: '나에게 징 멀리 빠지기',
           },
           missleMarker: {
-            en: 'Away from marker',
+            en: '범위 달린 사람 피해욧',
             de: 'Weg vom Marker',
             fr: 'Éloignez-vous du marquage',
             ja: 'マーカー付きから離れる',
@@ -87,7 +87,7 @@ const triggerSet: TriggerSet<Data> = {
         // cactbot-builtin-response
         output.responseOutputStrings = {
           missleOnYou: {
-            en: 'Place donut marker under',
+            en: '도넛 범위가 달렸네, 걍 도망가욧!',
             de: 'Platziere Donut-Marker unter ihm',
             fr: 'En dessous le marquage du donut',
             ja: 'ボスから離れる',
@@ -95,7 +95,7 @@ const triggerSet: TriggerSet<Data> = {
             ko: '나에게 도넛 장판',
           },
           missleMarker: {
-            en: 'Stack on marker',
+            en: '도넛 달린 사람 피해욧 (원래 뭉쳐야하지만)',
             de: 'Auf dem Marker sammeln',
             fr: 'Packez-vous sur les marquages',
             ja: 'マーカー付きから離れる',

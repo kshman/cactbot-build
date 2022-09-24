@@ -45,7 +45,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.knockbackStack!(),
       outputStrings: {
         knockbackStack: {
-          en: 'Knockback Stack',
+          en: '넉백 기술이네, 뭉쳐욧',
           de: 'Rückstoß sammeln',
           fr: 'Package + Poussée',
           ja: 'ノックバック＋頭割り',
@@ -92,7 +92,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Forward March Away',
+          en: '강제이동: 앞으로',
           de: 'Geistlenkung vorwärts',
           fr: 'Marche forcée en avant',
           ja: '強制移動：前',
@@ -110,7 +110,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Backwards March Away',
+          en: '강제이동: 뒤로',
           de: 'Geistlenkung rückwärts',
           fr: 'Marche forcée en arrière',
           ja: '強制移動：後ろ',
@@ -127,7 +127,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Left March Away',
+          en: '강제이동: 왼쪽으로',
           de: 'Geistlenkung links',
           fr: 'Marche forcée à gauche',
           ja: '強制移動：左',
@@ -144,7 +144,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Right March Away',
+          en: '강제이동: 오른쪽으로',
           de: 'Geistlenkung rechts',
           fr: 'Marche forcée à droite',
           ja: '強制移動：右',
@@ -207,7 +207,6 @@ const triggerSet: TriggerSet<Data> = {
           'B16': ['left', 'right'],
         };
         const dirs = map[matches.effectId];
-        console.log(`BEARING: ${dirs?.toString() ?? 'undefined'}`);
         if (dirs === undefined)
           return;
 
@@ -215,18 +214,11 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: 'Hunt Sphatika Lickwhip Debug',
-      type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ id: '6BE8', source: 'Sphatika', capture: false }),
-      run: (data) => console.log(`FINAL BEARING: ${JSON.stringify(data.sphatikaBearing)}`),
-    },
-    {
       id: 'Hunt Sphatika Whiplick Reverse',
       type: 'StartsUsing',
       netRegex: NetRegexes.startsUsing({ id: '6BE9', source: 'Sphatika', capture: false }),
       run: (data) => {
         // Whiplick does the directions in reverse, so reverse here so we can have a single logic path.
-        console.log(`PREVIOUS BEARING: ${JSON.stringify(data.sphatikaBearing)}`);
         data.sphatikaBearing = data.sphatikaBearing.map((x) => {
           if (x === 'front')
             return 'back';
@@ -236,7 +228,6 @@ const triggerSet: TriggerSet<Data> = {
             return 'right';
           return 'left';
         });
-        console.log(`FINAL BEARING: ${JSON.stringify(data.sphatikaBearing)}`);
       },
     },
     {
@@ -251,9 +242,8 @@ const triggerSet: TriggerSet<Data> = {
         const [dir1, dir2, dir3, dir4] = data.sphatikaBearing;
         if (dir1 === undefined || dir2 === undefined || dir3 === undefined || dir4 === undefined)
           return;
-        console.log(data.inCombat);
-        // if (!data.inCombat)
-        //  return;
+        if (!data.inCombat)
+          return;
         return output.text!({ dir1: dir1, dir2: dir2, dir3: dir3, dir4: dir4 });
       },
       tts: null,
@@ -264,6 +254,7 @@ const triggerSet: TriggerSet<Data> = {
         right: Outputs.right,
         text: {
           en: '${dir1} => ${dir2} => ${dir3} => ${dir4}',
+          de: '${dir1} => ${dir2} => ${dir3} => ${dir4}',
         },
       },
     },
@@ -277,9 +268,8 @@ const triggerSet: TriggerSet<Data> = {
         const key = data.sphatikaBearing.shift();
         if (key === undefined)
           return;
-        console.log(data.inCombat);
-        // if (!data.inCombat)
-        //  return;
+        if (!data.inCombat)
+          return;
         return output[key]!();
       },
       outputStrings: {
@@ -299,9 +289,8 @@ const triggerSet: TriggerSet<Data> = {
         const key = data.sphatikaBearing.shift();
         if (key === undefined)
           return;
-        console.log(data.inCombat);
-        // if (!data.inCombat)
-        //  return;
+        if (!data.inCombat)
+          return;
         return output[key]!();
       },
       outputStrings: {
@@ -315,40 +304,40 @@ const triggerSet: TriggerSet<Data> = {
   timelineReplace: [
     {
       'locale': 'de',
-      'missingTranslations': true,
       'replaceSync': {
+        'Sphatika': 'Sphatika',
         'Sugriva': 'Sugriva',
         'Yilan': 'Yilan',
       },
     },
     {
       'locale': 'fr',
-      'missingTranslations': true,
       'replaceSync': {
+        'Sphatika': 'Sphatika',
         'Sugriva': 'Sugriva',
         'Yilan': 'yilan',
       },
     },
     {
       'locale': 'ja',
-      'missingTranslations': true,
       'replaceSync': {
+        'Sphatika': 'スパティカ',
         'Sugriva': 'スグリーヴァ',
         'Yilan': 'ユラン',
       },
     },
     {
       'locale': 'cn',
-      'missingTranslations': true,
       'replaceSync': {
+        'Sphatika': '颇胝迦',
         'Sugriva': '须羯里婆',
         'Yilan': '尤兰',
       },
     },
     {
       'locale': 'ko',
-      'missingTranslations': true,
       'replaceSync': {
+        'Sphatika': '스파티카',
         'Sugriva': '수그리바',
         'Yilan': '윌란',
       },

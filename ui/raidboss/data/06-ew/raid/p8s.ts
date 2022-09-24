@@ -459,14 +459,14 @@ const triggerSet: TriggerSet<Data> = {
           ko: '안으로 + 산개',
         },
         outAndProteanMelee: {
-          en: '숫자 마커로 ← 깜선 바깥 + 프로틴', // 밀리 안으로
+          en: '숫자 마커로 ← 프로틴', // 밀리 안으로
           de: 'Raus + Himmelsrichtung',
           fr: 'Extérieur + Positions',
           ja: '黒線の外側 + 数字マーカー',
           ko: '밖으로 + 산개',
         },
         outAndProteanHeRaCa: {
-          en: '숫자 바깥 끝으로 ← 깜선 바깥 + 프로틴', // 원격 밖으로
+          en: '숫자 바깥 끝으로 ← 프로틴', // 원격 밖으로
           de: 'Raus + Himmelsrichtung',
           fr: 'Extérieur + Positions',
           ja: '黒線の外側 + 散会',
@@ -695,7 +695,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.knockback!(),
       outputStrings: {
         knockback: {
-          en: '넉백! 그리고 쿵쾅이',
+          en: '넉백! [쿵쾅이]',
           ja: 'ノックバック => 4足歩行',
         },
       },
@@ -708,7 +708,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.out!(),
       outputStrings: {
         out: {
-          en: '서클 밖으로! 그리고 뱀이다~앙',
+          en: '서클 밖으로! [뱀이다~앙]',
           ja: '外へ => 蛇腕',
         },
       },
@@ -774,14 +774,14 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         cardinals: {
-          en: '십자 봐욧! X고르곤',
+          en: '십자 봐욧! [❌고르곤]',
           de: 'Schaue Kardinal',
           fr: 'Regardez en cardinal',
           ja: '視線を十字に',
           ko: '시선을 동서남북쪽으로',
         },
         intercards: {
-          en: '모서리 봐욧! +고르곤',
+          en: '모서리 봐욧! [➕고르곤]',
           de: 'Schaue Interkardinal',
           fr: 'Regardez en intercardinal',
           ja: '視線を斜めに',
@@ -839,28 +839,28 @@ const triggerSet: TriggerSet<Data> = {
         // cactbot-builtin-response
         output.responseOutputStrings = {
           firstGaze: {
-            en: '첫째 게이즈! (+${player})',
+            en: '첫째 게이즈 (+${player})',
             de: 'Erster Blick (+ ${player})',
             fr: 'Premier Regard (+ ${player})',
             ja: '先の石化 (+${player})',
             ko: '첫번째 석화 (+ ${player})',
           },
           secondGaze: {
-            en: '둘째 게이즈! (+${player})',
+            en: '둘째 게이즈 (+${player})',
             de: 'Zweiter Blick (+ ${player})',
             fr: 'Second Regard (+ ${player})',
             ja: '後の石化 (+${player})',
             ko: '두번째 석화 (+ ${player})',
           },
           firstPoison: {
-            en: '첫째 독 바닥! (+${player})',
+            en: '첫째 독 바닥 (+${player})',
             de: 'Erstes Gift (+ ${player})',
             fr: 'Premier Poison (+ ${player})',
             ja: '先の毒 (+${player})',
             ko: '첫번째 독장판 (+ ${player})',
           },
           secondPoison: {
-            en: '둘째 독 바닥! (+${player})',
+            en: '둘째 독 바닥 (+${player})',
             de: 'Zweites Gift (+ ${player})',
             fr: 'Second Poison (+ ${player})',
             ja: '後の毒 (+${player})',
@@ -1099,26 +1099,28 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         impactDir: {
-          en: '${dir}로 따라가욧! (넉백)',
+          en: '[넉백] ${dir}로 따라가욧',
+          de: 'Nach ${dir} folgen (Rückstoß)',
           fr: 'Allez vers ${dir} (Poussée)',
-          ja: '${dir} (ノックバック)',
+          ja: '${dir}に近づく (ノックバック)',
           ko: '${dir}으로 따라가기 (넉백)',
         },
         crushDir: {
-          en: '${dir}로 피해욧! (푹찍)',
+          en: '[푹찍] ${dir}로 피해욧',
+          de: 'Weg von ${dir}',
           fr: 'Loin de ${dir}',
-          ja: '${dir} (クラッシュ)',
+          ja: '${dir}が安置 (クラッシュ)',
           ko: '${dir}으로 피하기',
         },
         crush: {
-          en: '점프에서 멀어져욧 (푹찍)',
+          en: '[푹찍] 점프에서 멀어져욧',
           de: 'Weg vom Sprung',
           fr: 'Éloignez-vous du saut',
           ja: '離れる',
           ko: '멀리 떨어지기',
         },
         impact: {
-          en: '점프 따라가욧 (넉백)',
+          en: '[넉백] 점프 따라가욧',
           de: 'Sprung folgen',
           fr: 'Suivez le saut',
           ja: '近づく',
@@ -1182,6 +1184,8 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         firstTrailblaze: {
           en: '${dir} 깜선으로 => ${concept}',
+          de: '${dir} Schwarze Linie => ${concept}',
+          fr: '${dir} Ligne noire -> ${concept}',
           ja: '${dir}の黒線 => ${concept}',
         },
         north: prsStrings.north,
@@ -1221,6 +1225,8 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         trailblaze: {
           en: '${dir} 깜선으로 => ${action}',
+          de: '${dir} Schwarze Linie => ${action}',
+          fr: '${dir} Ligne noire -> ${action}',
           ja: '${dir}の黒線 => ${action}',
         },
         crush: prsStrings.crush,
@@ -1243,22 +1249,32 @@ const triggerSet: TriggerSet<Data> = {
         output.responseOutputStrings = {
           trailblaze: {
             en: '[푹찍] 기다렸다가 => ${dir}',
+            de: 'Warte => ${dir}',
+            fr: 'Attendez -> ${dir}',
             ja: '待機 => ${dir}',
           },
           trailblazeKnockback: {
             en: '[넉백] ${dir}',
+            de: '${dir} Rückstoß',
+            fr: '${dir} Poussée',
             ja: 'ノックバック: ${dir}',
           },
           trailblazeKnockbackToDir: {
             en: '[넉백] ${dir1} => {dir2}',
+            de: '${dir1} Rückstoß ${dir2}',
+            fr: '${dir1} Poussée ${dir2}',
             ja: 'ノックバック: ${dir1} => ${dir2}',
           },
           trailblazeKnockbackSide: {
             en: '[넉백/파랑] ${dir}쪽',
+            de: 'Rückstoß ${dir}',
+            fr: 'Poussée ${dir}',
             ja: 'ノックバック: ${dir}',
           },
           trailblazeCrushSide: {
             en: '[푹찍/파랑] ${dir}쪽으로 달려욧',
+            de: 'Renne nach ${dir}',
+            fr: 'Courez ${dir}',
             ja: '${dir}へ走れ',
           },
           left: Outputs.left,
@@ -1637,7 +1653,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '전체공격 + 출혈',
+          en: '전체공격 + 출혈 [아이오니오]',
           de: 'AoE + Blutung',
           fr: 'AoE + Saignement',
           ja: 'AOE + 出血',
@@ -1675,19 +1691,19 @@ const triggerSet: TriggerSet<Data> = {
       run: (data) => delete data.firstAlignmentSecondAbility,
       outputStrings: {
         right: {
-          en: '▶▷▶오른쪽',
+          en: '▶오른쪽',
           ja: '右へ',
           ko: '오른쪽',
         },
         rightAndSpread: {
-          en: '흩어져욧 + ▶▷▶오른쪽',
+          en: '▶오른쪽 + 흩어져욧',
           de: 'Rechts + Verteilen',
           fr: 'Gauche + Écartez-vous',
           ja: '右 + 散会',
           ko: '오른쪽 + 산개',
         },
         rightAndStack: {
-          en: '뭉쳐욧 + ▶▷▶오른쪽',
+          en: '▶오른쪽 + 뭉쳐욧',
           de: 'Rechts + Sammeln',
           fr: 'Gauche + Package',
           ja: '右 + 頭割り',
@@ -1709,19 +1725,19 @@ const triggerSet: TriggerSet<Data> = {
       run: (data) => delete data.firstAlignmentSecondAbility,
       outputStrings: {
         left: {
-          en: '왼쪽◀◁◀',
+          en: '왼쪽◀',
           ja: '左へ',
           ko: '왼쪽',
         },
         leftAndSpread: {
-          en: '왼쪽◀◁◀ + 흩어져욧',
+          en: '왼쪽◀ + 흩어져욧',
           de: 'Links + Verteilen',
           fr: 'Droite + Écartez-vous',
           ja: '左 + 散会',
           ko: '왼쪽 + 산개',
         },
         leftAndStack: {
-          en: '왼쪽◀◁◀ + 뭉쳐욧',
+          en: '왼쪽◀ + 뭉쳐욧',
           de: 'Links + Sammeln',
           fr: 'Droite + Package',
           ja: '左 + 頭割り',
@@ -1811,7 +1827,10 @@ const triggerSet: TriggerSet<Data> = {
           target: data.prsAlignMt ? output.targetDps!() : output.targetTh!(),
         });
       },
-      tts: null,
+      tts: (data, _matches, _output) => {
+        if (data.role === 'tank' && data.prsAlignMt)
+          return 'タンクが調整役';
+      },
       run: (data) => data.alignmentTargets = [],
       outputStrings: {
         text: {
@@ -1822,11 +1841,11 @@ const triggerSet: TriggerSet<Data> = {
           ko: '${player1}, ${player2} 원판',
         },
         targetTh: {
-          en: '탱힐 당첨, D1 조정',
+          en: '탱힐 → D1 조정',
           ja: 'TH',
         },
         targetDps: {
-          en: 'DPS 당첨, MT 조정',
+          en: 'DPS → MT 조정',
           ja: 'DPS',
         },
       },
@@ -2051,10 +2070,10 @@ const triggerSet: TriggerSet<Data> = {
         // cactbot-builtin-response
         output.responseOutputStrings = {
           noDebuff: {
-            en: '무직 ▲△▲',
+            en: '무직▲',
             de: 'Kein Debuff',
             fr: 'Aucun debuff',
-            ja: '無職 ▲△▲',
+            ja: '無職▲',
             ko: '디버프 없음',
           },
           noDebuffSplicer: {
@@ -2063,66 +2082,66 @@ const triggerSet: TriggerSet<Data> = {
             ko: '디버프 없음 + ${splicer}',
           },
           shortAlpha: {
-            en: '빠른 알파 ▲△▲',
+            en: '빠른 알파▲',
             de: 'kurzes Alpha',
             fr: 'Alpha court',
-            ja: '早アルファ ▲△▲',
+            ja: '早アルファ▲',
             ko: '짧은 알파',
           },
           longAlpha: {
-            en: '느린 알파 ▲△▲',
+            en: '느린 알파▲',
             de: 'langes Alpha',
             fr: 'Alpha long',
-            ja: '遅アルファ ▲△▲',
+            ja: '遅アルファ▲',
             ko: '긴 알파',
           },
           longAlphaSplicer: {
-            en: '느린 알파 ▲△▲ + ${splicer}',
+            en: '느린 알파▲ + ${splicer}',
             de: 'langes Alpha + ${splicer}',
             fr: 'Alpha long + ${splicer}',
-            ja: '遅アルファ ▲△▲ + ${splicer}',
+            ja: '遅アルファ▲ + ${splicer}',
             ko: '긴 알파 + ${splicer}',
           },
           shortBeta: {
-            en: '빠른 베타 ▶▷▶',
+            en: '빠른 베타▶',
             de: 'kurzes Beta',
             fr: 'Beta court',
-            ja: '早ベータ ▶▷▶',
+            ja: '早ベータ▶',
             ko: '짧은 베타',
           },
           longBeta: {
-            en: '느린 베타 ▶▷▶',
+            en: '느린 베타▶',
             de: 'langes Beta',
             fr: 'Beta long',
-            ja: '遅ベータ ▶▷▶',
+            ja: '遅ベータ▶',
             ko: '긴 베타',
           },
           longBetaSplicer: {
-            en: '느린 베타 ▶▷▶ + ${splicer}',
+            en: '느린 베타▶ + ${splicer}',
             de: 'langes Beta + ${splicer}',
             fr: 'Beta long + ${splicer}',
-            ja: '遅ベータ ▶▷▶ + ${splicer}',
+            ja: '遅ベータ▶ + ${splicer}',
             ko: '긴 베타 + ${splicer}',
           },
           shortGamma: {
-            en: '빠른 감마 ▼▽▼',
+            en: '빠른 감마▼',
             de: 'kurzes Gamma',
             fr: 'Gamma court',
-            ja: '早ガンマ ▼▽▼',
+            ja: '早ガンマ▼',
             ko: '짧은 감마',
           },
           longGamma: {
-            en: '느린 감마 ▼▽▼',
+            en: '느린 감마▼',
             de: 'langes Gamma',
             fr: 'Gamma long',
-            ja: '遅ガンマ ▼▽▼',
+            ja: '遅ガンマ▼',
             ko: '긴 감마',
           },
           longGammaSplicer: {
-            en: '느린 감마 ▼▽▼ + ${splicer}',
+            en: '느린 감마▼ + ${splicer}',
             de: 'langes Gamma + ${splicer}',
             fr: 'Gamma long + ${splicer}',
-            ja: '遅ガンマ ▼▽▼ + ${splicer}',
+            ja: '遅ガンマ▼ + ${splicer}',
             ko: '긴 감마 + ${splicer}',
           },
           soloSplice: {
@@ -2365,6 +2384,8 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: '내가 ${num}번째',
+          de: '${num}',
+          fr: '${num}',
           ja: '自分は${num}番目',
         },
       },
@@ -2382,6 +2403,8 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: '${num}번째 타워에 들어가욧',
+          de: 'Turm ${num} nehmen',
+          fr: 'Prenez la tour ${num}',
           ja: '${num}番目の塔に入って',
         },
       },
@@ -2404,7 +2427,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         text: {
-          en: '둘째 타워로',
+          en: '나중에 타워 밟아야 해욧',
           de: 'Zweite Türme',
           fr: 'Secondes tours',
           ja: '2番目で入る',
@@ -2424,7 +2447,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         text: {
-          en: '첫째 타워로',
+          en: '먼저 타워 밟아야 해욧',
           de: 'Erste Türme',
           fr: 'Premières tours',
           ja: '先に入る',
@@ -2439,7 +2462,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '아픈 전체공격 + 출혈',
+          en: '아픈 전체공격 + 출혈 [어서오고]',
           de: 'große AoE + Blutung',
           fr: 'Grosse AoE + Saignement',
           ja: '全体攻撃 + 出血',
@@ -2465,6 +2488,7 @@ const triggerSet: TriggerSet<Data> = {
         'Forcible Difreeze/Forcible Trifire': 'Forcible Difreeze/Trifire',
         'Forcible Fire III/Forcible Fire II': 'Forcible Fire III/II',
         'Forcible Fire II/Forcible Fire III': 'Forcible Fire II/III',
+        'Tyrant\'s Unholy Darkness': '타이런츠 아픈거',
       },
     },
     {

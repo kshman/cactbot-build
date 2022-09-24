@@ -78,6 +78,38 @@ const triggerSet: TriggerSet<Data> = {
       response: Responses.goRight(),
     },
   ],
+  timelineReplace: [
+    {
+      'locale': 'de',
+      'replaceSync': {
+        'Ker': 'Ker',
+      },
+    },
+    {
+      'locale': 'fr',
+      'replaceSync': {
+        'Ker': 'Ker',
+      },
+    },
+    {
+      'locale': 'ja',
+      'replaceSync': {
+        'Ker': '«±?«ë',
+      },
+    },
+    {
+      'locale': 'cn',
+      'replaceSync': {
+        'Ker': 'Ðº?',
+      },
+    },
+    {
+      'locale': 'ko',
+      'replaceSync': {
+        'Ker': 'ÄÉ¸£',
+      },
+    },
+  ],
 };
 
 export default triggerSet;

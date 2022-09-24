@@ -132,8 +132,15 @@ export default {
     en: '${player}: 탱크버스터, 무적 또는 둘이서',
     ja: '${player} にタンクシェア',
   },
+  splitTankBuster: {
+    en: '따로 따로 탱크버스터',
+    de: 'getrennte Tankbuster',
+    fr: 'Séparez les Tankbuster',
+    ja: '2人同時タンク強攻撃',
+    ko: '따로맞는 탱버',
+  },
   tankSwap: {
-    en: '탱크 스왑!',
+    en: '탱크 스위치!',
     de: 'Tankwechsel!',
     fr: 'Tank swap !',
     ja: 'タンクスイッチ!',
@@ -191,7 +198,7 @@ export default {
     ko: '"${player}" 쉐어징',
   },
   stackMiddle: {
-    en: '가운데쪽에서 뭉쳐욧',
+    en: '맨 가운데서 뭉쳐욧',
     de: 'In der Mitte sammeln',
     fr: 'Packez-vous au milieu',
     ja: '中央で集合',
@@ -199,7 +206,7 @@ export default {
     ko: '중앙에서 모이기',
   },
   doritoStack: {
-    en: '삼각 마커끼리 뭉쳐욧',
+    en: '마커끼리 뭉쳐욧',
     de: 'Mit Marker sammeln',
     fr: 'Packez les marquages',
     ja: 'マーカー付けた人と集合',
@@ -207,7 +214,7 @@ export default {
     ko: '징끼리 모이기',
   },
   spreadThenStack: {
-    en: '산개 → 뭉치기',
+    en: '흩어졌다 => 뭉치기',
     de: 'Verteilen => Sammeln',
     fr: 'Dispersion => Package',
     ja: '散開 => 集合',
@@ -215,7 +222,7 @@ export default {
     ko: '산개 => 집합',
   },
   stackThenSpread: {
-    en: '뭉쳤다 → 산개',
+    en: '뭉쳤다 => 흩어져요',
     de: 'Sammeln => Verteilen',
     fr: 'Package => Dispersion',
     ja: 'スタック => 散開',
@@ -224,7 +231,7 @@ export default {
   },
   drawIn: {
     // Opposite of a knockback.
-    en: '안으로',
+    en: '빨려가욧',
     de: 'Einzug',
     fr: 'Attraction',
     ja: '吸込み',
@@ -347,7 +354,7 @@ export default {
     ko: '근접범위 밖으로',
   },
   inThenOut: {
-    en: '안에서 → 밖으로',
+    en: '안에서 => 밖으로',
     de: 'Rein, dann raus',
     fr: 'Intérieur, puis extérieur',
     ja: '中 => 外',
@@ -355,7 +362,7 @@ export default {
     ko: '안으로 => 밖으로',
   },
   outThenIn: {
-    en: '밖에서 → 안으로',
+    en: '밖에서 => 안으로',
     de: 'Raus, dann rein',
     fr: 'Extérieur, puis intérieur',
     ja: '外 => 中',
@@ -363,7 +370,7 @@ export default {
     ko: '밖으로 => 안으로',
   },
   backThenFront: {
-    en: '뒤에서 → 앞으로',
+    en: '뒤에서 => 앞으로',
     de: 'Nach Hinten, danach nach Vorne',
     fr: 'Derrière puis devant',
     ja: '後ろ => 前',
@@ -371,7 +378,7 @@ export default {
     ko: '뒤로 => 앞으로',
   },
   frontThenBack: {
-    en: '앞에서 → 뒤로',
+    en: '앞에서 => 뒤로',
     de: 'Nach Vorne, danach nach Hinten',
     fr: 'Devant puis derrière',
     ja: '前 => 後ろ',
@@ -379,7 +386,7 @@ export default {
     ko: '앞으로 => 뒤로',
   },
   goIntoMiddle: {
-    en: '가운데쪽으로',
+    en: '맨 가운데로',
     de: 'in die Mitte gehen',
     fr: 'Allez au milieu',
     ja: '中へ',
@@ -441,7 +448,7 @@ export default {
     ko: '양옆으로',
   },
   middle: {
-    en: '가운데쪽',
+    en: '맨 가운데쪽',
     de: 'Mitte',
     fr: 'Milieu',
     ja: '中へ',
@@ -539,7 +546,7 @@ export default {
     ko: '나에게 메테오징',
   },
   stopMoving: {
-    en: '움직이지마!',
+    en: '움직이지마욧!',
     de: 'Bewegung stoppen!',
     fr: 'Ne bougez pas !',
     ja: '移動禁止！',
@@ -547,7 +554,7 @@ export default {
     ko: '이동 멈추기!',
   },
   stopEverything: {
-    en: '행동하지마!',
+    en: '그냥 멈춰욧!',
     de: 'Stoppe Alles!',
     fr: 'Arrêtez TOUT !',
     ja: '行動禁止！',
@@ -556,7 +563,7 @@ export default {
   },
   moveAway: {
     // move away to dodge aoes
-    en: '움직여!',
+    en: '도망가욧!',
     de: 'Bewegen!',
     fr: 'Bougez !',
     ja: '避けて！',
@@ -565,7 +572,7 @@ export default {
   },
   moveAround: {
     // move around (e.g. jumping) to avoid being frozen
-    en: '움직여!',
+    en: '움직여욧!',
     de: 'Bewegen!',
     fr: 'Bougez !',
     ja: '動く！',
@@ -573,7 +580,7 @@ export default {
     ko: '움직이기!',
   },
   breakChains: {
-    en: '줄 끊어',
+    en: '줄 끊어욧',
     de: 'Kette zerbrechen',
     fr: 'Brisez les chaines',
     ja: '線を切る',
@@ -581,7 +588,7 @@ export default {
     ko: '선 끊기',
   },
   moveChainsTogether: {
-    en: '줄 달린채 움직여',
+    en: '줄 달린채 움직여욧',
     de: 'Ketten zusammen bewegen',
     fr: 'Bougez les chaines ensemble',
     ja: '線同士一緒に移動',

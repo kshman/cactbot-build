@@ -20,7 +20,7 @@ const triggerSet: TriggerSet<Data> = {
       alarmText: (_data, _matches, output) => output.rightThenLeft!(),
       outputStrings: {
         rightThenLeft: {
-          en: 'Right => Left',
+          en: '오른쪽 => 왼쪽',
           de: 'Rechts => Links',
           fr: 'À droite => À gauche',
           ja: '右 => 左',
@@ -37,7 +37,7 @@ const triggerSet: TriggerSet<Data> = {
       alarmText: (_data, _matches, output) => output.leftThenRight!(),
       outputStrings: {
         leftThenRight: {
-          en: 'Left => Right',
+          en: '왼쪽 => 오른쪽',
           de: 'Links => Rechts',
           fr: 'À gauche => À droite',
           ja: '左 => 右',
@@ -83,7 +83,7 @@ const triggerSet: TriggerSet<Data> = {
         // cactbot-builtin-response
         output.responseOutputStrings = {
           waterOnYou: {
-            en: 'GTFO with water',
+            en: '물이다! 도망가욧!',
             de: 'Geh mit Wasser raus',
             fr: 'Partez avec l\'eau',
             ja: 'ボスから離れる',
@@ -91,7 +91,7 @@ const triggerSet: TriggerSet<Data> = {
             ko: '나에게 물징 멀리 빠지기',
           },
           waterMarker: {
-            en: 'Away from water marker',
+            en: '물 걸린 사람 피해욧',
             de: 'Weg vom Wasser Marker',
             fr: 'Éloignez-vous du marquage eau',
             cn: '躲开水标记',
@@ -149,6 +149,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: '폴짝 뛰면 => 따라가서 밑으로',
+          de: 'Sprung folgen => Unter den Boss',
         },
       },
     },
@@ -161,7 +162,8 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Away From Jump',
+          en: '착지점에서 떨어져욧',
+          de: 'Weg vom Sprung',
         },
       },
     },
@@ -169,41 +171,41 @@ const triggerSet: TriggerSet<Data> = {
   timelineReplace: [
     {
       'locale': 'de',
-      'missingTranslations': true,
       'replaceSync': {
         'Gurangatch': 'Gurangatch',
+        'Ophioneus': 'Ophioneus',
         'Petalodus': 'Petalodus',
       },
     },
     {
       'locale': 'fr',
-      'missingTranslations': true,
       'replaceSync': {
         'Gurangatch': 'Gurangatch',
+        'Ophioneus': 'Ophion',
         'Petalodus': 'petalodus',
       },
     },
     {
       'locale': 'ja',
-      'missingTranslations': true,
       'replaceSync': {
         'Gurangatch': 'グランガチ',
+        'Ophioneus': 'オピオネウス',
         'Petalodus': 'ペタロドゥス',
       },
     },
     {
       'locale': 'cn',
-      'missingTranslations': true,
       'replaceSync': {
         'Gurangatch': '固兰盖奇',
+        'Ophioneus': '俄菲翁尼厄斯',
         'Petalodus': '瓣齿鲨',
       },
     },
     {
       'locale': 'ko',
-      'missingTranslations': true,
       'replaceSync': {
         'Gurangatch': '구랑가치',
+        'Ophioneus': '오피오네우스',
         'Petalodus': '페탈로두스',
       },
     },
