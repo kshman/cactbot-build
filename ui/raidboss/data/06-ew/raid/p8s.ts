@@ -459,14 +459,14 @@ const triggerSet: TriggerSet<Data> = {
           ko: '안으로 + 산개',
         },
         outAndProteanMelee: {
-          en: '숫자 마커로 ← 깜선 바깥 + 프로틴', // 밀리 안으로
+          en: '숫자 마커로 ← 프로틴', // 밀리 안으로
           de: 'Raus + Himmelsrichtung',
           fr: 'Extérieur + Positions',
           ja: '黒線の外側 + 数字マーカー',
           ko: '밖으로 + 산개',
         },
         outAndProteanHeRaCa: {
-          en: '숫자 바깥 끝으로 ← 깜선 바깥 + 프로틴', // 원격 밖으로
+          en: '숫자 바깥 끝으로 ← 프로틴', // 원격 밖으로
           de: 'Raus + Himmelsrichtung',
           fr: 'Extérieur + Positions',
           ja: '黒線の外側 + 散会',
@@ -1100,14 +1100,16 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         impactDir: {
           en: '[넉백] ${dir}로 따라가욧',
+          de: 'Nach ${dir} folgen (Rückstoß)',
           fr: 'Allez vers ${dir} (Poussée)',
-          ja: '${dir} (ノックバック)',
+          ja: '${dir}に近づく (ノックバック)',
           ko: '${dir}으로 따라가기 (넉백)',
         },
         crushDir: {
           en: '[푹찍] ${dir}로 피해욧',
+          de: 'Weg von ${dir}',
           fr: 'Loin de ${dir}',
-          ja: '${dir} (クラッシュ)',
+          ja: '${dir}が安置 (クラッシュ)',
           ko: '${dir}으로 피하기',
         },
         crush: {
@@ -1182,6 +1184,8 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         firstTrailblaze: {
           en: '${dir} 깜선으로 => ${concept}',
+          de: '${dir} Schwarze Linie => ${concept}',
+          fr: '${dir} Ligne noire -> ${concept}',
           ja: '${dir}の黒線 => ${concept}',
         },
         north: prsStrings.north,
@@ -1221,6 +1225,8 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         trailblaze: {
           en: '${dir} 깜선으로 => ${action}',
+          de: '${dir} Schwarze Linie => ${action}',
+          fr: '${dir} Ligne noire -> ${action}',
           ja: '${dir}の黒線 => ${action}',
         },
         crush: prsStrings.crush,
@@ -1243,22 +1249,32 @@ const triggerSet: TriggerSet<Data> = {
         output.responseOutputStrings = {
           trailblaze: {
             en: '[푹찍] 기다렸다가 => ${dir}',
+            de: 'Warte => ${dir}',
+            fr: 'Attendez -> ${dir}',
             ja: '待機 => ${dir}',
           },
           trailblazeKnockback: {
             en: '[넉백] ${dir}',
+            de: '${dir} Rückstoß',
+            fr: '${dir} Poussée',
             ja: 'ノックバック: ${dir}',
           },
           trailblazeKnockbackToDir: {
             en: '[넉백] ${dir1} => {dir2}',
+            de: '${dir1} Rückstoß ${dir2}',
+            fr: '${dir1} Poussée ${dir2}',
             ja: 'ノックバック: ${dir1} => ${dir2}',
           },
           trailblazeKnockbackSide: {
             en: '[넉백/파랑] ${dir}쪽',
+            de: 'Rückstoß ${dir}',
+            fr: 'Poussée ${dir}',
             ja: 'ノックバック: ${dir}',
           },
           trailblazeCrushSide: {
             en: '[푹찍/파랑] ${dir}쪽으로 달려욧',
+            de: 'Renne nach ${dir}',
+            fr: 'Courez ${dir}',
             ja: '${dir}へ走れ',
           },
           left: Outputs.left,
@@ -2368,6 +2384,8 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: '내가 ${num}번째',
+          de: '${num}',
+          fr: '${num}',
           ja: '自分は${num}番目',
         },
       },
@@ -2385,6 +2403,8 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: '${num}번째 타워에 들어가욧',
+          de: 'Turm ${num} nehmen',
+          fr: 'Prenez la tour ${num}',
           ja: '${num}番目の塔に入って',
         },
       },

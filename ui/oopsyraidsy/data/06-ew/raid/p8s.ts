@@ -39,6 +39,7 @@ const purpleMistake = (): OopsyFunc<Data, NetMatches['Ability'], OopsyMistake> =
       blame: matches.target,
       text: {
         en: `${matches.ability} (purple)`,
+        de: `${matches.ability} (lila)`,
       },
     };
   };
@@ -212,6 +213,8 @@ const triggerSet: OopsyTriggerSet<Data> = {
         // This is all just "Splicer", so rename it here.
         // Also sure this could just be in shareFail, but it fits with the other splicers.
         en: 'Single Splicer',
+        de: 'Einzelne Konzeptreflektion',
+        fr: 'Réaction conceptuelle simple',
       }),
     },
     {
@@ -220,6 +223,8 @@ const triggerSet: OopsyTriggerSet<Data> = {
       netRegex: NetRegexes.ability({ id: '79B3' }),
       mistake: stackMistake('fail', 1, {
         en: 'Double Splicer',
+        de: 'Doppelte Konzeptreflektion',
+        fr: 'Réaction conceptuelle double',
       }),
     },
     {
@@ -228,6 +233,8 @@ const triggerSet: OopsyTriggerSet<Data> = {
       netRegex: NetRegexes.ability({ id: '79B4' }),
       mistake: stackMistake('fail', 1, {
         en: 'Triple Splicer',
+        de: 'Dreifache Konzeptreflektion',
+        fr: 'Réaction conceptuelle triple',
       }),
     },
   ],

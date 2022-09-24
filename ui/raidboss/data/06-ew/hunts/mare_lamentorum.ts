@@ -78,7 +78,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Away from Right Flank',
+          en: '오른쪽 휘두르니 피해욧',
           de: 'Weg von der rechten Flanke',
           fr: 'Éloignez-vous du flanc droit',
           ja: '右が危険',
@@ -96,7 +96,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Away from Back',
+          en: '뒷쪽 휘두르니 피해욧',
           de: 'Weg von hinter ihr',
           fr: 'Éloignez-vous de l\'arrière',
           ja: '後ろが危険',
@@ -114,7 +114,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Away from Left Flank',
+          en: '왼쪽 휘두르니 피해욧',
           de: 'Weg von der linker Flanke',
           fr: 'Éloignez-vous du flanc gauche',
           ja: '左が危険',
@@ -132,7 +132,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Away from Front',
+          en: '앞쪽 휘두르니 피해욧',
           de: 'Weg von Vorne',
           fr: 'Éloignez-vous du devant',
           ja: '前方が危険',
@@ -227,6 +227,7 @@ const triggerSet: TriggerSet<Data> = {
         in: Outputs.in,
         joiner: {
           en: ' => ',
+          de: ' => ',
         },
         unknown: Outputs.unknown,
       },
@@ -278,42 +279,42 @@ const triggerSet: TriggerSet<Data> = {
   timelineReplace: [
     {
       'locale': 'de',
-      'missingTranslations': true,
       'replaceSync': {
         'Lunatender Queen': 'Lunatender-Königin',
         'Mousse Princess': 'Mousse-Prinzessin',
+        'Ruminator': 'Grübler',
       },
     },
     {
       'locale': 'fr',
-      'missingTranslations': true,
       'replaceSync': {
         'Lunatender Queen': 'pampa sélénienne reine',
         'Mousse Princess': 'princesse mousse',
+        'Ruminator': 'ruminateur',
       },
     },
     {
       'locale': 'ja',
-      'missingTranslations': true,
       'replaceSync': {
         'Lunatender Queen': 'ルナテンダー・クイーン',
         'Mousse Princess': 'ムースプリンセス',
+        'Ruminator': 'ルミネイター',
       },
     },
     {
       'locale': 'cn',
-      'missingTranslations': true,
       'replaceSync': {
         'Lunatender Queen': '月面仙人刺女王',
         'Mousse Princess': '慕斯公主',
+        'Ruminator': '沉思之物',
       },
     },
     {
       'locale': 'ko',
-      'missingTranslations': true,
       'replaceSync': {
         'Lunatender Queen': '루나텐더 여왕',
         'Mousse Princess': '무스 공주',
+        'Ruminator': '되새기는 자',
       },
     },
   ],

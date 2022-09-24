@@ -40,7 +40,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.getFront!(),
       outputStrings: {
         getFront: {
-          en: 'Get Front',
+          en: '꼬리치기! 앞으로',
           de: 'Geh nach Vorne',
           fr: 'Allez devant',
           ja: '前へ',
@@ -58,7 +58,7 @@ const triggerSet: TriggerSet<Data> = {
       alarmText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Away from jump',
+          en: '착지점에서 멀리가욧',
           de: 'Weg vom Sprung',
           fr: 'Éloignez-vous du saut',
           ja: '着地点から離れる',

@@ -45,7 +45,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.knockbackStack!(),
       outputStrings: {
         knockbackStack: {
-          en: 'Knockback Stack',
+          en: '넉백 기술이네, 뭉쳐욧',
           de: 'Rückstoß sammeln',
           fr: 'Package + Poussée',
           ja: 'ノックバック＋頭割り',
@@ -92,7 +92,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Forward March Away',
+          en: '강제이동: 앞으로',
           de: 'Geistlenkung vorwärts',
           fr: 'Marche forcée en avant',
           ja: '強制移動：前',
@@ -110,7 +110,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Backwards March Away',
+          en: '강제이동: 뒤로',
           de: 'Geistlenkung rückwärts',
           fr: 'Marche forcée en arrière',
           ja: '強制移動：後ろ',
@@ -127,7 +127,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Left March Away',
+          en: '강제이동: 왼쪽으로',
           de: 'Geistlenkung links',
           fr: 'Marche forcée à gauche',
           ja: '強制移動：左',
@@ -144,7 +144,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Right March Away',
+          en: '강제이동: 오른쪽으로',
           de: 'Geistlenkung rechts',
           fr: 'Marche forcée à droite',
           ja: '強制移動：右',
@@ -254,6 +254,7 @@ const triggerSet: TriggerSet<Data> = {
         right: Outputs.right,
         text: {
           en: '${dir1} => ${dir2} => ${dir3} => ${dir4}',
+          de: '${dir1} => ${dir2} => ${dir3} => ${dir4}',
         },
       },
     },
@@ -303,40 +304,40 @@ const triggerSet: TriggerSet<Data> = {
   timelineReplace: [
     {
       'locale': 'de',
-      'missingTranslations': true,
       'replaceSync': {
+        'Sphatika': 'Sphatika',
         'Sugriva': 'Sugriva',
         'Yilan': 'Yilan',
       },
     },
     {
       'locale': 'fr',
-      'missingTranslations': true,
       'replaceSync': {
+        'Sphatika': 'Sphatika',
         'Sugriva': 'Sugriva',
         'Yilan': 'yilan',
       },
     },
     {
       'locale': 'ja',
-      'missingTranslations': true,
       'replaceSync': {
+        'Sphatika': 'スパティカ',
         'Sugriva': 'スグリーヴァ',
         'Yilan': 'ユラン',
       },
     },
     {
       'locale': 'cn',
-      'missingTranslations': true,
       'replaceSync': {
+        'Sphatika': '颇胝迦',
         'Sugriva': '须羯里婆',
         'Yilan': '尤兰',
       },
     },
     {
       'locale': 'ko',
-      'missingTranslations': true,
       'replaceSync': {
+        'Sphatika': '스파티카',
         'Sugriva': '수그리바',
         'Yilan': '윌란',
       },
