@@ -19,7 +19,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Avoid Eye Lasers',
+          en: '눈에서 빔 피해욧',
           de: 'Weiche dem Augenlaser aus',
           fr: 'Évitez les lasers',
           ja: '目からビーム',
@@ -42,7 +42,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Kill One Eye',
+          en: '눈깔 하나 잡아욧',
           de: 'Besiege ein Auge',
           fr: 'Tuez une tête',
           ja: '安置になる目を攻撃',
@@ -65,7 +65,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Look Away from Rings',
+          en: '고리 시선에서 잘 피해봐욧',
           de: 'Schau von den Ringen weg',
           fr: 'Ne regardez pas l\'anneau',
           ja: '輪の目から視線回避',
@@ -80,7 +80,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Away From Exploding Lines',
+          en: '터지는 선 순서 보고 피해욧',
           de: 'Weg von den explodierenden Linien',
           fr: 'Éloignez-vous des lignes explosives',
           ja: '線から離れる',
@@ -121,7 +121,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'aoe + bleed',
+          en: '전체공격 + 출혈',
           de: 'AoE + Blutung',
           fr: 'AoE + Saignement',
           ja: 'AoE + 出血',
@@ -144,7 +144,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Knockback Into Wall',
+          en: '벽으로 넉백 당해욧',
           de: 'Rückstoß in eine Wand',
           fr: 'Faites-vous pousser sur un mur',
           ja: '壁にノックバック',
@@ -159,7 +159,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Get Behind and Out',
+          en: '뒤로 그리고 밖으로',
           de: 'Geh nach Hinten und Raus',
           fr: 'Passez derrière et extérieur',
           ja: '後ろの外側へ',

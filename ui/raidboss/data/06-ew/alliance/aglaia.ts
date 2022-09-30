@@ -58,7 +58,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Knockback (with lightning)',
+          en: '넉백 (번개 조심)',
           de: 'Rückstoß (mit Blitzen)',
           fr: 'Poussée (avec éclair)',
           ja: 'ノックバック (雷)',
@@ -80,7 +80,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Dodge normal -> glowing row',
+          en: '늦게 오는데에서 -> 지나간 곳으로',
           de: 'Normal ausweichen -> leuchtende Reihe',
           fr: 'Évitez normal -> ligne brillante',
           ja: '安置 -> ひかり',
@@ -130,7 +130,7 @@ const triggerSet: TriggerSet<Data> = {
         output.responseOutputStrings = {
           tankCleaveOnYou: Outputs.tankCleaveOnYou,
           tankCleaves: {
-            en: 'Avoid Tank Cleaves',
+            en: '탱크 클레브 피해욧',
             de: 'Weiche Tank-Cleaves aus',
             fr: 'Évitez le cleave sur le tank',
             ja: 'タンク範囲攻撃回避',
@@ -158,7 +158,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         knockback: Outputs.knockback,
         knockbackOrbs: {
-          en: 'Knockback (avoid orbs)',
+          en: '넉백 (구슬 피해욧)',
           de: 'Rückstoßs (weiche den Orbs aus)',
           fr: 'Poussée (évitez les orbes)',
           ja: 'ノックバック (玉回避)',
@@ -198,7 +198,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         redSide: {
-          en: 'Be on red half',
+          en: '빨간쪽이 안전',
           de: 'Geh zur roten Seite',
           fr: 'Placez-vous sur la moitié rouge',
           ja: '赤い安置',
@@ -206,7 +206,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '빨간색 쪽으로',
         },
         redSideAway: {
-          en: 'Be on red half (away from portal)',
+          en: '빨간쪽이 안전 (포탈에서 떨어져욧)',
           de: 'Geh zur roten Seite (weg vom Portal)',
           fr: 'Placez-vous sur la moitié rouge (loin du portail)',
           ja: '赤い安置 (ポータルから離れる)',
@@ -222,7 +222,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.blueSide!(),
       outputStrings: {
         blueSide: {
-          en: 'Be on blue half',
+          en: '파란쪽이 안전',
           de: 'Geh zur blauen Seite',
           fr: 'Placez-vous sur la moitié bleue',
           ja: '青い安置',
@@ -238,7 +238,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.nearRed!(),
       outputStrings: {
         nearRed: {
-          en: 'Go near red portal',
+          en: '빨간쪽 포탈로 가욧',
           de: 'Geh zum roten Portal',
           fr: 'Allez sur le portail rouge',
           ja: '赤いポータルへ',
@@ -260,7 +260,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Under Lioness => Out',
+          en: '사자 밑에 있다가 => 밖으로',
           de: 'Unter Löwin => Raus',
           fr: 'Sous la Lionne => Extérieur',
           ja: 'ライオンの下 => 外へ',
@@ -276,7 +276,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Out => Under Lioness',
+          en: '밖에 있다가 => 사자 밑',
           de: 'Raus => Unter Löwin',
           fr: 'Extérieur => Sous la lionne',
           ja: '外 => ライオンの下へ',
@@ -314,7 +314,7 @@ const triggerSet: TriggerSet<Data> = {
         output.responseOutputStrings = {
           tankCleaveOnYou: Outputs.tankCleaveOnYou,
           tankCleaves: {
-            en: 'Avoid Tank Cleaves',
+            en: '탱크 클레브 피해욧',
             de: 'Weiche Tank-Cleaves aus',
             fr: 'Évitez les cleaves sur le tank',
             ja: 'タンク範囲攻撃回避',
@@ -342,7 +342,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Away from Orb',
+          en: '구슬에서 멀어져욧',
           de: 'Weg vom Orb',
           fr: 'Éloignez-vous de l\'orbe',
           ja: '玉から離れる',
@@ -384,7 +384,7 @@ const triggerSet: TriggerSet<Data> = {
       run: (data, matches) => data.naldSmeltingSpread.push(matches.target),
       outputStrings: {
         text: {
-          en: 'Protean Spread on YOU',
+          en: '내게 프로틴이니깐 흩어져욧',
           de: 'Protean verteilen auf DIR',
           fr: 'Position sur VOUS',
           ja: '自分に散会マーカー',
@@ -433,7 +433,7 @@ const triggerSet: TriggerSet<Data> = {
         // cactbot-builtin-response
         output.responseOutputStrings = {
           dropMarkerOutside: {
-            en: 'Drop marker outside',
+            en: '바깥 쪽에서 버려욧',
             de: 'Marker draußen ablegen',
             fr: 'Déposez les marqueurs à l\'extérieur',
             ja: '外側で捨てる',
@@ -441,7 +441,7 @@ const triggerSet: TriggerSet<Data> = {
             ko: '밖에서 징 처리',
           },
           ignoreLineStack: {
-            en: 'Ignore fake stack',
+            en: '가짜 뭉침 표식이네',
             de: 'Falsches Sammeln ignorieren',
             fr: 'Ignorez le faux marqueur de package',
             cn: '忽略假点名',
@@ -474,7 +474,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         ignoreArrow: {
-          en: 'Ignore fake arrow',
+          en: '가짜 화살표네',
           de: 'Falschen Pfeil ignorieren',
           fr: 'Ignorez la fausse flèche',
           ja: '矢印は偽物',
@@ -497,7 +497,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         lineStackOn: {
-          en: 'Line stack on ${player}',
+          en: '한줄 뭉치기: ${player}',
           de: 'In einer Linie auf ${player} sammeln',
           fr: 'Packez-vous en ligne sur ${player}',
           ja: '${player}に直線頭割り',
@@ -517,7 +517,7 @@ const triggerSet: TriggerSet<Data> = {
       run: (data) => data.naldLastColor = 'orange',
       outputStrings: {
         text: {
-          en: 'Go to Blue Quadrant',
+          en: '파란 쪽으로!',
           de: 'Geh zum blauen Quadrant',
           fr: 'Allez sur le quart bleu',
           ja: '青い安置',
@@ -537,7 +537,7 @@ const triggerSet: TriggerSet<Data> = {
       run: (data) => data.naldLastColor = 'blue',
       outputStrings: {
         text: {
-          en: 'Go to Orange Quadrant',
+          en: '빨간 쪽으로!',
           de: 'Geh zum orangenen Quadrant',
           fr: 'Allez sur le quart orange',
           ja: '赤い安置',
@@ -569,7 +569,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Stack groups',
+          en: '그룹끼리 뭉쳐요',
           de: 'Sammel Gruppen',
           fr: 'Package en groupe',
           ja: 'グループで頭割り',
@@ -595,7 +595,7 @@ const triggerSet: TriggerSet<Data> = {
         output.responseOutputStrings = {
           tankCleaveOnYou: Outputs.tankCleaveOnYou,
           tankCleaves: {
-            en: 'Avoid Tank Cleaves',
+            en: '탱크 클레브 피해욧',
             de: 'Weiche den Tank-Cleaves aus',
             fr: 'Évitez les cleaves sur le tank',
             ja: 'タンク範囲攻撃回避',
@@ -621,7 +621,7 @@ const triggerSet: TriggerSet<Data> = {
         // cactbot-builtin-response
         output.responseOutputStrings = {
           dropMarkerOutside: {
-            en: 'Under => Drop marker outside',
+            en: '밑에 있다가 => 바깥쪽에다 버려욧',
             de: 'Unter ihn => Marker drausen ablegen',
             fr: 'Dessous => Déposez le marqueur à l\'extérieur',
             ja: 'ボスの下 => 外側で捨てる',
@@ -629,7 +629,7 @@ const triggerSet: TriggerSet<Data> = {
             ko: '보스 밑 => 밖에서 화살표징 처리',
           },
           ignoreLineStack: {
-            en: 'Under (ignore fake stack)',
+            en: '밑에 있으면 되욧 (뭉치기가 페이크임)',
             de: 'Unter ihn (falsches Sammeln ignorieren)',
             fr: 'Dessous (ignorez le faux package)',
             ja: 'ボスの下 (頭割りは偽物)',
@@ -665,7 +665,7 @@ const triggerSet: TriggerSet<Data> = {
       run: (data) => data.naldLastColor = 'orange',
       outputStrings: {
         ignoreArrow: {
-          en: 'Out (ignore fake arrow)',
+          en: '밖으로 (화살표는 페이크임)',
           de: 'Raus (falschen Pfeil ignorieren)',
           fr: 'Extérieur (ignorez la fausse flèche)',
           ja: '外側へ (矢印は偽物)',

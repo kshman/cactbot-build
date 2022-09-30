@@ -18,28 +18,14 @@ export interface Data extends RaidbossData {
 
 const storedMechanicsOutputStrings = {
   spread: Outputs.spread,
-  groups: {
-    en: 'Healer Groups',
-    de: 'Heiler-Gruppen',
-    fr: 'Groupes sur les heals',
-    ja: 'ヒラに頭割り',
-    cn: '治疗分组分摊',
-    ko: '힐러 그룹 쉐어',
-  },
-  stack: {
-    en: 'Party Stack',
-    de: 'Mit der Party sammeln',
-    fr: 'Package en équipe',
-    ja: '全員集合',
-    cn: '全体分摊',
-    ko: '파티 전체 쉐어',
-  },
+  groups: Outputs.healerGroups,
+  stack: Outputs.getTogether,
 };
 
 const crystallizeOutputStrings = {
   ...storedMechanicsOutputStrings,
   crystallize: {
-    en: 'Crystallize: ${name}',
+    en: '크리스탈라이즈: ${name}',
     de: 'Kristalisieren: ${name}',
     fr: 'Cristallisation : ${name}',
     ja: 'クリスタライズ: ${name}',
@@ -79,7 +65,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         ...comboOutputStrings,
         intercards: {
-          en: 'Intercards',
+          en: '비스듬하게 피해욧',
           de: 'Interkardinal',
           fr: 'Intercardinal',
           ja: '斜めへ',
@@ -267,14 +253,14 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         dirCrystals: {
-          en: '${dir} Crystals first',
+          en: '${dir} 크리스탈부터',
           de: 'Kristall im ${dir} zuerst',
           fr: 'Premiers cristaux au ${dir} ',
           cn: '先攻击 ${dir} 水晶',
           ko: '${dir} 크리스탈 먼저',
         },
         dirEchoes: {
-          en: 'Move Echoes ${dir} first',
+          en: '먼저 ${dir}로 데려가욧',
           de: 'Bewege Echoes zuerst nach ${dir}',
           fr: 'Déplacez les échos au ${dir} en premier',
           cn: '先拉回声到 ${dir} ',
@@ -318,7 +304,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.rolePositions!(),
       outputStrings: {
         rolePositions: {
-          en: 'Role positions',
+          en: '롤 위치로 흩어져욧',
           de: 'Rollenposition',
           fr: 'Positions par rôle',
           ja: 'ロール特定位置へ',
@@ -346,7 +332,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         ...comboOutputStrings,
         avoid: {
-          en: 'Avoid Line Ends',
+          en: '줄 끝 쪽 피해욧',
           de: 'Weiche den Enden der Linien aus',
           fr: 'Évitez les fins de lignes',
           ja: '線の端から離れる',
@@ -362,7 +348,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Stack 5x',
+          en: '뭉쳐맞기 5번',
           de: '5x Sammeln',
           fr: '5x Packages',
           ja: '頭割り５回',

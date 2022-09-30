@@ -143,7 +143,7 @@ export default (
                 [
                   '@babel/preset-env',
                   {
-                    targets: { chrome: '75' },
+                    targets: { chrome: '95' },
                   },
                 ],
                 [
@@ -154,7 +154,7 @@ export default (
             */
             loader: 'esbuild-loader',
             options: {
-              target: 'chrome75',
+              target: 'chrome95',
               loader: 'ts',
             },
           },
@@ -196,14 +196,7 @@ export default (
         },
         {
           test: /data[\\\/](?!\w*_manifest\.txt).*\.txt$/,
-          use: [
-            {
-              loader: 'raw-loader',
-            },
-            {
-              loader: './webpack/loaders/timeline-loader.ts',
-            },
-          ],
+          type: 'asset/source',
         },
       ],
     },

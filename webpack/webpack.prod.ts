@@ -20,7 +20,7 @@ const optimizationOverride = {
       new CssMinimizerPlugin(),
       */
       new ESBuildMinifyPlugin({
-        target: 'chrome75',
+        target: 'chrome95',
         css: true, // Apply minification to CSS assets
       }),
       // new CssMinimizerPlugin(),
