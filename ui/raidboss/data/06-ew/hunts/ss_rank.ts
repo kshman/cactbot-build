@@ -88,25 +88,25 @@ const triggerSet: TriggerSet<Data> = {
     {
       'locale': 'fr',
       'replaceSync': {
-        'Ker': 'Ker',
+        'Ker': 'KÃ¨r',
       },
     },
     {
       'locale': 'ja',
       'replaceSync': {
-        'Ker': '«±?«ë',
+        'Ker': 'ã‚±ãƒ¼ãƒ«',
       },
     },
     {
       'locale': 'cn',
       'replaceSync': {
-        'Ker': 'Ðº?',
+        'Ker': 'å…‹å°”',
       },
     },
     {
       'locale': 'ko',
       'replaceSync': {
-        'Ker': 'ÄÉ¸£',
+        'Ker': 'ì¼€ë¥´',
       },
     },
   ],

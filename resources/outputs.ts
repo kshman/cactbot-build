@@ -198,7 +198,7 @@ export default {
     ko: '"${player}" 쉐어징',
   },
   stackMiddle: {
-    en: '맨 가운데서 뭉쳐욧',
+    en: '한가운데서 뭉쳐욧',
     de: 'In der Mitte sammeln',
     fr: 'Packez-vous au milieu',
     ja: '中央で集合',
@@ -386,7 +386,7 @@ export default {
     ko: '앞으로 => 뒤로',
   },
   goIntoMiddle: {
-    en: '맨 가운데로',
+    en: '한가운데로',
     de: 'in die Mitte gehen',
     fr: 'Allez au milieu',
     ja: '中へ',
@@ -395,9 +395,11 @@ export default {
   },
   front: {
     en: '앞쪽',
+    ko: '앞',
   },
   back: {
     en: '뒷쪽',
+    ko: '뒤',
   },
   right: {
     en: '오른쪽',
@@ -448,7 +450,7 @@ export default {
     ko: '양옆으로',
   },
   middle: {
-    en: '맨 가운데쪽',
+    en: '한가운데쪽',
     de: 'Mitte',
     fr: 'Milieu',
     ja: '中へ',

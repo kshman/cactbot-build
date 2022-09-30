@@ -24,7 +24,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Avoid tentacle explosions',
+          en: '촉수가 터지는 곳에서 도망쳐욧',
           de: 'Weiche Tentakel-Explosion aus',
           fr: 'Évitez les explostions des tentacules',
           ja: '触手の爆発から離れる',
@@ -40,7 +40,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Dodge 3 to 1',
+          en: '3번째에서 1번째로',
           de: 'Weiche von 3 auf 1 aus',
           fr: 'Esquivez de 3 vers 1',
           ja: '3から1へ',
@@ -69,7 +69,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Avoid bit lasers',
+          en: '비트 레이저 피해욧',
           de: 'Weiche Drohnen-Laser aus',
           fr: 'Évitez les lasers',
           ja: 'レーザー回避',
@@ -99,7 +99,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Steer away from spikes',
+          en: '가시 피해서 운전 잘해욧',
           de: 'Weg von den Stacheln lenken',
           fr: 'Ne tournez pas dans les pics',
           ja: 'スパイクのないマスへ移動',
@@ -115,7 +115,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Avoid tethered color',
+          en: '연결된 선과 반대쪽이 안전',
           de: 'Weiche der verbundenen Farbe aus',
           fr: 'Allez sous la couleur non liée',
           ja: '逆の色へ',
