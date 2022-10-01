@@ -43,7 +43,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '안전 지대로 움직여욧',
+          en: '구슬 없는 곳으로 갑시다',
           de: 'Beweg dich in den sicheren Quadranten',
           fr: 'Allez sur un quart safe',
           ja: '安置へ移動',
@@ -55,10 +55,10 @@ const triggerSet: TriggerSet<Data> = {
     {
       id: 'SephirotUn Ein Sof Ratzon',
       regex: /Ein Sof \(1 puddle\)/,
-      infoText: (_data, _matches, output) => output.text!(),
+      alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '장판 쪽으로 유도해욧',
+          en: '구슬 쪽으로 모여서 유도합시다',
           de: 'In Richtung Fläche ködern',
           fr: 'Attendez devant la zone au sol',
           ja: '緑ドームの方へ誘導',
@@ -78,7 +78,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         noPillar: {
-          en: '예소스 유도해야해욧',
+          en: '예소드 유도해야죠',
           de: 'Yesod ködern',
           fr: 'Attirez Yesod',
           ja: 'イェソドクラッシュ誘導',
@@ -86,7 +86,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '예소드 붕괴 유도',
         },
         withPillar: {
-          en: '파란 원 안으로 들어가 예소드를 유도해욧',
+          en: '파란 원 안으로 예소드를 유도하세요',
           de: 'Yesod in die Fläche ködern',
           fr: 'Attirez Yesod dans une zone au sol',
           ja: '青いサークルの中でイェソドクラッシュ誘導',
@@ -208,21 +208,38 @@ const triggerSet: TriggerSet<Data> = {
       response: Responses.moveAway('alarm'), // This *will* kill if a non-tank takes 2+.
     },
     {
-      // 3ED is Force Against Might orange, 3EE is Force Against Magic, green.
-      id: 'SephirotUn Force Against Gain',
+      id: 'SephirotUn Force Against Might',
       type: 'GainsEffect',
-      netRegex: NetRegexes.gainsEffect({ effectId: ['3ED', '3EE'] }),
+      netRegex: NetRegexes.gainsEffect({ effectId: '3ED' }),
       condition: Conditions.targetIsYou(),
       alertText: (_data, matches, output) => output.text!({ force: matches.effect }),
       run: (data, matches) => data.force = matches.effectId,
       outputStrings: {
         text: {
-          en: '내게 ${force}',
-          de: '${force} auf dir',
-          fr: '${force} sur vous',
-          ja: '自分に${force}',
-          cn: '${force}点名',
-          ko: '나에게 ${force}',
+          en: '노랑/바닥담당 (${force})',
+          de: '${force} auf dir', // FIXME
+          fr: '${force} sur vous', // FIXME
+          ja: '自分に${force}', // FIXME
+          cn: '${force}点名', // FIXME
+          ko: '나에게 ${force}', // FIXME
+        },
+      },
+    },
+    {
+      id: 'SephirotUn Force Against Magic',
+      type: 'GainsEffect',
+      netRegex: NetRegexes.gainsEffect({ effectId: ['3EE'] }),
+      condition: Conditions.targetIsYou(),
+      alertText: (_data, matches, output) => output.text!({ force: matches.effect }),
+      run: (data, matches) => data.force = matches.effectId,
+      outputStrings: {
+        text: {
+          en: '초록/선담당 (${force})',
+          de: '${force} auf dir', // FIXME
+          fr: '${force} sur vous', // FIXME
+          ja: '自分に${force}', // FIXME
+          cn: '${force}点名', // FIXME
+          ko: '나에게 ${force}', // FIXME
         },
       },
     },
@@ -339,6 +356,7 @@ const triggerSet: TriggerSet<Data> = {
       type: 'HeadMarker',
       netRegex: NetRegexes.headMarker({ id: '0028', capture: false }),
       delaySeconds: 0.5,
+      suppressSeconds: 1,
       alertText: (data, _matches, output) => {
         if (data.shakerTargets?.includes(data.me))
           return output.shakerTarget!();

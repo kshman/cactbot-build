@@ -14,7 +14,7 @@ export type Mechanic = 'aoe' | 'donut' | 'safeN' | 'safeE' | 'safeS' | 'safeW' |
 const echoesOutputStrings = {
   stack: Outputs.stackOnYou,
   donut: {
-    en: 'Stack Donut',
+    en: '도넛 안에서 뭉쳐요',
     de: 'Sammeln Donut',
     fr: 'Packez-vous, donut',
     ja: '頭割り',
@@ -23,7 +23,7 @@ const echoesOutputStrings = {
   },
   spread: Outputs.spread,
   flare: {
-    en: 'Flare',
+    en: '플레어',
     de: 'Flare',
     fr: 'Brasier',
     ja: 'フレア',
@@ -151,7 +151,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Towers',
+          en: '타워 밟아요',
           de: 'Türme',
           fr: 'Tours',
           ja: '塔を踏む',
@@ -208,7 +208,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.groups!(),
       outputStrings: {
         groups: {
-          en: 'Healer Groups',
+          en: '힐러랑 뭉쳐요',
           de: 'Heiler-Gruppen',
           fr: 'Groupes sur les heals',
           ja: 'ヒラに頭割り',

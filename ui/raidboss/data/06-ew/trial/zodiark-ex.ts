@@ -68,7 +68,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         underQuetz: {
-          en: 'Under NW Quetzalcoatl',
+          en: '북동쪽 케찰코아틀 아래로',
           de: 'Unter NW Quetzalcoatl',
           ja: '北東の鳥の下',
           cn: '站在左上 (西北) 鸟',
@@ -84,7 +84,7 @@ const triggerSet: TriggerSet<Data> = {
       run: (data) => data.styxCount = Math.min(data.styxCount + 1, 9),
       outputStrings: {
         text: {
-          en: 'Stack x${num}',
+          en: '${num}번 모여 맞아요',
           de: 'Sammeln x${num}',
           ja: '頭割り x${num}',
           cn: '${num}次分摊',
@@ -134,28 +134,28 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         northCone: {
-          en: 'North Cone',
+          en: '북쪽 삼각 공격',
           de: 'Nördliche Kegel-AoE',
           ja: '北のさんかく',
           cn: '上 (北) 扇形',
           ko: '북쪽 삼각형',
         },
         eastCone: {
-          en: 'East Cone',
+          en: '동쪽 삼각 공격',
           de: 'Östliche Kegel-AoE',
           ja: '東のさんかく',
           cn: '右 (东) 扇形',
           ko: '동쪽 삼각형',
         },
         westCone: {
-          en: 'West Cone',
+          en: '서쪽 삼각 공격',
           de: 'Westliche Kegel-AoE',
           ja: '西のさんかく',
           cn: '左 (西) 扇形',
           ko: '서쪽 삼각형',
         },
         southCone: {
-          en: 'South Cone',
+          en: '남쪽 삼각 공격',
           de: 'Südliche Kegel-AoE',
           ja: '南のさんかく',
           cn: '下 (南) 扇形',
@@ -206,7 +206,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: Outputs.killAdds.en + '(back first)',
+          en: Outputs.killAdds.en + '(뒤에꺼 먼저)',
           de: Outputs.killAdds.de + '(hinten zuerst)',
           ja: Outputs.killAdds.ja + '(下の雑魚から)',
           cn: Outputs.killAdds.cn + '(先打后方的)',
@@ -258,21 +258,21 @@ const triggerSet: TriggerSet<Data> = {
         south: Outputs.south,
         north: Outputs.north,
         frontsides: {
-          en: 'front sides',
+          en: '보스쪽 양옆',
           de: 'Vorne Seiten',
           ja: '前の横側',
           cn: '前方两边',
           ko: '앞쪽 양옆',
         },
         backmiddle: {
-          en: 'back middle',
+          en: '뒷쪽 가운데',
           de: 'Hinten Mitte',
           ja: '後ろの真ん中',
           cn: '后方中间',
           ko: '뒤쪽 중앙',
         },
         frontmiddle: {
-          en: 'front middle',
+          en: '보스쪽 가운데',
           de: 'Vorne Mitte',
           cn: '前方中间',
           ko: '앞쪽 중앙',
@@ -280,14 +280,14 @@ const triggerSet: TriggerSet<Data> = {
         sides: {
           // Specify "for laser" to disambiguate with the astral eclipse going on at the same time.
           // Similarly, there's a algodon knockback call too.
-          en: 'sides (for laser)',
+          en: '옆으로 (레이저 피해요)',
           de: 'Seiten (für die Laser)',
           ja: '横側 (レーザー回避)',
           cn: '两边 (躲避激光)',
           ko: '양옆 (레이저 피하기)',
         },
         middle: {
-          en: 'middle (for laser)',
+          en: '가운데 (레이저 피해요)',
           de: 'Mitte (für die Laser)',
           ja: '真ん中 (レーザー回避)',
           cn: '中间 (躲避激光)',
@@ -316,7 +316,7 @@ const triggerSet: TriggerSet<Data> = {
         southeast: Outputs.dirSE,
         southwest: Outputs.dirSW,
         combo: {
-          en: 'Go ${first} / ${second} (knockback)',
+          en: '${first}/${second}으로 가세요 (넉백)',
           de: 'Geh ${first} / ${second} (Rückstoß)',
           ja: '${first} / ${second} (ノックバック)',
           cn: '去 ${first} / ${second} (击退)',
@@ -334,14 +334,14 @@ const triggerSet: TriggerSet<Data> = {
       run: (data) => data.seenAdikia = true,
       outputStrings: {
         adikia1: {
-          en: 'Double fists (look for pythons)',
+          en: '더블 피스트 (옆에 있는 파이튼도 확인)',
           de: 'Doppel-Fäuste (halt Ausschau nach den Pythons)',
           ja: 'ダブルフィスト (ヘビー確認)',
           cn: '双拳 (找蛇)',
           ko: '양 옆 큰 원형 장판 (뱀 위치 확인)',
         },
         adikia2: {
-          en: 'Double fists',
+          en: '더블 피스트',
           de: 'Doppel-Fäuste',
           ja: 'ダブルフィスト',
           cn: '双拳',
@@ -356,7 +356,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Heavy DoT',
+          en: '아픈 DOT',
           de: 'Starker DoT',
           ja: '痛いDOT',
           cn: '超痛流血AOE',
