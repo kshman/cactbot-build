@@ -776,4 +776,29 @@ export default {
   num7: numberToOutputString(7),
   num8: numberToOutputString(8),
   num9: numberToOutputString(9),
+  // 화살표
+  arrowN: {
+    en: '🡹',
+  },
+  arrowNE: {
+    en: '🡽',
+  },
+  arrowE: {
+    en: '🡺',
+  },
+  arrowSE: {
+    en: '🡾',
+  },
+  arrowS: {
+    en: '🡻',
+  },
+  arrowSW: {
+    en: '🡿',
+  },
+  arrowW: {
+    en: '🡸',
+  },
+  arrowNW: {
+    en: '🡼',
+  },
 } as const;

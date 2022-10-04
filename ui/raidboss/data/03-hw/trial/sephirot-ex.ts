@@ -193,7 +193,7 @@ const triggerSet: TriggerSet<Data> = {
     {
       id: 'SephirotEx Force Against Magic',
       type: 'GainsEffect',
-      netRegex: NetRegexes.gainsEffect({ effectId: ['3EE'] }),
+      netRegex: NetRegexes.gainsEffect({ effectId: '3EE' }),
       condition: Conditions.targetIsYou(),
       alertText: (_data, matches, output) => output.text!({ force: matches.effect }),
       run: (data, matches) => data.force = matches.effectId,

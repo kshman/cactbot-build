@@ -28,7 +28,7 @@ const triggerSet: TriggerSet<Data> = {
       id: 'SephirotUn Tiferet',
       regex: /Tiferet/,
       beforeSeconds: 4,
-      suppressSeconds: 2, // Timeline syncs can otherwise make this extra-noisy
+      suppressSeconds: 5, // Timeline syncs can otherwise make this extra-noisy
       response: Responses.aoe(),
     },
     {
@@ -228,7 +228,7 @@ const triggerSet: TriggerSet<Data> = {
     {
       id: 'SephirotUn Force Against Magic',
       type: 'GainsEffect',
-      netRegex: NetRegexes.gainsEffect({ effectId: ['3EE'] }),
+      netRegex: NetRegexes.gainsEffect({ effectId: '3EE' }),
       condition: Conditions.targetIsYou(),
       alertText: (_data, matches, output) => output.text!({ force: matches.effect }),
       run: (data, matches) => data.force = matches.effectId,

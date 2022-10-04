@@ -131,7 +131,7 @@ export const headingTo4Dir = (heading: number) => {
 
 export const ventOutputStrings = {
   comboDir: {
-    en: '${dir1} / ${dir2}',
+    en: '${dir1}${dir2} ${arr1}${arr2}',
     de: '${dir1} / ${dir2}',
     ja: '${dir1} / ${dir2}',
     ko: '${dir1} / ${dir2}',
@@ -144,6 +144,10 @@ export const ventOutputStrings = {
   dirSE: prsStrings.southEast,
   dirSW: prsStrings.southWest,
   dirNW: prsStrings.northWest,
+  arrNE: Outputs.arrowNE,
+  arrSE: Outputs.arrowSE,
+  arrSW: Outputs.arrowSW,
+  arrNW: Outputs.arrowNW,
   unknown: Outputs.unknown,
 } as const;
 
@@ -180,10 +184,18 @@ export const ventOutput = (unsafeSpots: number[], output: Output) => {
     5: output.dirSE!(),
     7: output.dirSW!(),
   } as const;
+  const safeArrowMap: { [dir: number]: string } = {
+    1: output.arrNW!(),
+    3: output.arrNE!(),
+    5: output.arrSE!(),
+    7: output.arrSW!(),
+  } as const;
 
   const safeStr0 = safeIntercardMap[unsafe0] ?? output.unknown!();
   const safeStr1 = safeIntercardMap[unsafe1] ?? output.unknown!();
-  return output.comboDir!({ dir1: safeStr0, dir2: safeStr1 });
+  const safeArr0 = safeArrowMap[unsafe0] ?? output.unknown!();
+  const safeArr1 = safeArrowMap[unsafe1] ?? output.unknown!();
+  return output.comboDir!({ dir1: safeStr0, dir2: safeStr1, arr1: safeArr0, arr2: safeArr1 });
 };
 
 const triggerSet: TriggerSet<Data> = {
@@ -325,7 +337,7 @@ const triggerSet: TriggerSet<Data> = {
       // 7915 normally
       // 7916 during Blazing Footfalls
       netRegex: NetRegexes.startsUsing({ id: '7917', source: 'Hephaistos', capture: false }),
-      durationSeconds: 11,
+      durationSeconds: 12,
       infoText: (_data, _matches, output) => output.healerGroups!(),
       run: (data, _matches, output) => data.footfallsConcept = output.healerGroups!(),
       outputStrings: {
@@ -338,7 +350,7 @@ const triggerSet: TriggerSet<Data> = {
       // 7915 normally
       // 7916 during Blazing Footfalls
       netRegex: NetRegexes.startsUsing({ id: '7916', source: 'Hephaistos', capture: false }),
-      durationSeconds: 11,
+      durationSeconds: 12,
       infoText: (_data, _matches, output) => output.text!(),
       run: (data, _matches, output) => data.footfallsConcept = output.text!(),
       outputStrings: {
@@ -641,7 +653,7 @@ const triggerSet: TriggerSet<Data> = {
           de: 'Im Norden raus',
           fr: 'Nord Extérieur',
           ja: '北の外側',
-          cn: '北 外侧',
+          cn: '北 外侧',
           ko: '북쪽 바깥',
         },
         insideNorth: {
@@ -790,9 +802,21 @@ const triggerSet: TriggerSet<Data> = {
           6: output.dirW!(),
           7: output.dirNW!(),
         };
+        const arrowMap: { [dir: number]: string } = {
+          0: output.arrN!(),
+          1: output.arrNE!(),
+          2: output.arrE!(),
+          3: output.arrSE!(),
+          4: output.arrS!(),
+          5: output.arrSW!(),
+          6: output.arrW!(),
+          7: output.arrNW!(),
+        };
         const dir1 = outputMap[d0] ?? output.unknown!();
         const dir2 = outputMap[d1] ?? output.unknown!();
-        return output.gorgons!({ dir1: dir1, dir2: dir2 });
+        const arr1 = arrowMap[d0] ?? output.unknown!();
+        const arr2 = arrowMap[d1] ?? output.unknown!();
+        return output.gorgons!({ dir1: dir1, dir2: dir2, arr1: arr1, arr2: arr2 });
       },
       outputStrings: {
         cardinals: {
@@ -812,7 +836,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '시선을 대각선쪽으로',
         },
         gorgons: {
-          en: '고르곤: ${dir1} / ${dir2}',
+          en: '고르곤: ${dir1}${dir2} ${arr1}${arr2}',
           de: '${dir1}/${dir2} Gorgone',
           fr: '${dir1}/${dir2} Gorgone',
           ja: 'ゴルゴン：${dir1}/${dir2}',
@@ -827,6 +851,14 @@ const triggerSet: TriggerSet<Data> = {
         dirSW: prsStrings.southWest,
         dirW: prsStrings.west,
         dirNW: prsStrings.northWest,
+        arrN: Outputs.arrowN,
+        arrNE: Outputs.arrowNE,
+        arrE: Outputs.arrowE,
+        arrSE: Outputs.arrowSE,
+        arrS: Outputs.arrowS,
+        arrSW: Outputs.arrowSW,
+        arrW: Outputs.arrowW,
+        arrNW: Outputs.arrowNW,
         unknown: Outputs.unknown,
       },
     },
@@ -1739,19 +1771,19 @@ const triggerSet: TriggerSet<Data> = {
       run: (data) => delete data.firstAlignmentSecondAbility,
       outputStrings: {
         right: {
-          en: '▶오른쪽',
+          en: '🡺오른쪽',
           ja: '右へ',
           ko: '오른쪽',
         },
         rightAndSpread: {
-          en: '▶오른쪽 + 흩어져욧',
+          en: '🡺오른쪽 + 흩어져욧',
           de: 'Rechts + Verteilen',
           fr: 'Gauche + Écartez-vous',
           ja: '右 + 散会',
           ko: '오른쪽 + 산개',
         },
         rightAndStack: {
-          en: '▶오른쪽 + 뭉쳐욧',
+          en: '🡺오른쪽 + 뭉쳐욧',
           de: 'Rechts + Sammeln',
           fr: 'Gauche + Package',
           ja: '右 + 頭割り',
@@ -1773,19 +1805,19 @@ const triggerSet: TriggerSet<Data> = {
       run: (data) => delete data.firstAlignmentSecondAbility,
       outputStrings: {
         left: {
-          en: '왼쪽◀',
+          en: '왼쪽🡸',
           ja: '左へ',
           ko: '왼쪽',
         },
         leftAndSpread: {
-          en: '왼쪽◀ + 흩어져욧',
+          en: '왼쪽🡸 + 흩어져욧',
           de: 'Links + Verteilen',
           fr: 'Droite + Écartez-vous',
           ja: '左 + 散会',
           ko: '왼쪽 + 산개',
         },
         leftAndStack: {
-          en: '왼쪽◀ + 뭉쳐욧',
+          en: '왼쪽🡸 + 뭉쳐욧',
           de: 'Links + Sammeln',
           fr: 'Droite + Package',
           ja: '左 + 頭割り',
@@ -2118,10 +2150,10 @@ const triggerSet: TriggerSet<Data> = {
         // cactbot-builtin-response
         output.responseOutputStrings = {
           noDebuff: {
-            en: '무직▲',
+            en: '무직🡹',
             de: 'Kein Debuff',
             fr: 'Aucun debuff',
-            ja: '無職▲',
+            ja: '無職🡹',
             ko: '디버프 없음',
           },
           noDebuffSplicer: {
@@ -2130,66 +2162,66 @@ const triggerSet: TriggerSet<Data> = {
             ko: '디버프 없음 + ${splicer}',
           },
           shortAlpha: {
-            en: '빠른 알파▲',
+            en: '빠른 알파🡹',
             de: 'kurzes Alpha',
             fr: 'Alpha court',
-            ja: '早アルファ▲',
+            ja: '早アルファ🡹',
             ko: '짧은 알파',
           },
           longAlpha: {
-            en: '느린 알파▲',
+            en: '느린 알파🡹',
             de: 'langes Alpha',
             fr: 'Alpha long',
-            ja: '遅アルファ▲',
+            ja: '遅アルファ🡹',
             ko: '긴 알파',
           },
           longAlphaSplicer: {
-            en: '느린 알파▲ + ${splicer}',
+            en: '느린 알파🡹 + ${splicer}',
             de: 'langes Alpha + ${splicer}',
             fr: 'Alpha long + ${splicer}',
-            ja: '遅アルファ▲ + ${splicer}',
+            ja: '遅アルファ🡹 + ${splicer}',
             ko: '긴 알파 + ${splicer}',
           },
           shortBeta: {
-            en: '빠른 베타▶',
+            en: '빠른 베타🡺',
             de: 'kurzes Beta',
             fr: 'Beta court',
-            ja: '早ベータ▶',
+            ja: '早ベータ🡺',
             ko: '짧은 베타',
           },
           longBeta: {
-            en: '느린 베타▶',
+            en: '느린 베타🡺',
             de: 'langes Beta',
             fr: 'Beta long',
-            ja: '遅ベータ▶',
+            ja: '遅ベータ🡺',
             ko: '긴 베타',
           },
           longBetaSplicer: {
-            en: '느린 베타▶ + ${splicer}',
+            en: '느린 베타🡺 + ${splicer}',
             de: 'langes Beta + ${splicer}',
             fr: 'Beta long + ${splicer}',
-            ja: '遅ベータ▶ + ${splicer}',
+            ja: '遅ベータ🡺 + ${splicer}',
             ko: '긴 베타 + ${splicer}',
           },
           shortGamma: {
-            en: '빠른 감마▼',
+            en: '빠른 감마🡻',
             de: 'kurzes Gamma',
             fr: 'Gamma court',
-            ja: '早ガンマ▼',
+            ja: '早ガンマ🡻',
             ko: '짧은 감마',
           },
           longGamma: {
-            en: '느린 감마▼',
+            en: '느린 감마🡻',
             de: 'langes Gamma',
             fr: 'Gamma long',
-            ja: '遅ガンマ▼',
+            ja: '遅ガンマ🡻',
             ko: '긴 감마',
           },
           longGammaSplicer: {
-            en: '느린 감마▼ + ${splicer}',
+            en: '느린 감마🡻 + ${splicer}',
             de: 'langes Gamma + ${splicer}',
             fr: 'Gamma long + ${splicer}',
-            ja: '遅ガンマ▼ + ${splicer}',
+            ja: '遅ガンマ🡻 + ${splicer}',
             ko: '긴 감마 + ${splicer}',
           },
           soloSplice: {
@@ -2475,7 +2507,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         text: {
-          en: '나중에 타워 밟아야 해욧',
+          en: '나중에 타워 밟아욧',
           de: 'Zweite Türme',
           fr: 'Secondes tours',
           ja: '2番目で入る',
