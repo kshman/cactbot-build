@@ -181,20 +181,12 @@ const triggerSet: TriggerSet<Data> = {
         return output.text!({ dir1: safeDirs[0], dir2: safeDirs[1], dir3: safeDirs[2], dir4: safeDirs[3] });
       },
       outputStrings: {
-        NE: {
-          en: '↗↗',
-        },
-        SE: {
-          en: '↘↘',
-        },
-        SW: {
-          en: '↙↙',
-        },
-        NW: {
-          en: '↖↖',
-        },
+        NE: Outputs.arrowNE,
+        SE: Outputs.arrowSE,
+        SW: Outputs.arrowSW,
+        NW: Outputs.arrowNW,
         text: {
-          en: '${dir1} -> ${dir2} -> ${dir3} -> ${dir4}',
+          en: '안전: ${dir1} ${dir2} ${dir3} ${dir4}',
           de: '${dir1} -> ${dir2} -> ${dir3} -> ${dir4}',
           fr: '${dir1} -> ${dir2} -> ${dir3} -> ${dir4}',
           ja: '${dir1} -> ${dir2} -> ${dir3} -> ${dir4}',

@@ -14,7 +14,7 @@ export type Mechanic = 'aoe' | 'donut' | 'safeN' | 'safeE' | 'safeS' | 'safeW' |
 const echoesOutputStrings = {
   stack: Outputs.stackOnYou,
   donut: {
-    en: 'Stack Donut',
+    en: '도넛 안에서 뭉쳐요',
     de: 'Sammeln Donut',
     fr: 'Packez-vous, donut',
     ja: '頭割り',
@@ -23,7 +23,7 @@ const echoesOutputStrings = {
   },
   spread: Outputs.spread,
   flare: {
-    en: 'Flare',
+    en: '플레어',
     de: 'Flare',
     fr: 'Brasier',
     ja: 'フレア',
@@ -151,7 +151,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Towers',
+          en: '타워 밟아요',
           de: 'Türme',
           fr: 'Tours',
           ja: '塔を踏む',
@@ -208,7 +208,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.groups!(),
       outputStrings: {
         groups: {
-          en: 'Healer Groups',
+          en: '힐러랑 뭉쳐요',
           de: 'Heiler-Gruppen',
           fr: 'Groupes sur les heals',
           ja: 'ヒラに頭割り',
@@ -756,16 +756,33 @@ const triggerSet: TriggerSet<Data> = {
     },
     {
       'locale': 'ko',
-      'missingTranslations': true,
       'replaceSync': {
         'Azure Star': '청색천체',
         'Fiery Star': '적색천체',
         'The Endsinger': '종언을 노래하는 자',
       },
       'replaceText': {
+        '\\(big\\)': '(강)',
+        '\\(cast\\)': '(시전)',
+        '\\(small\\)': '(약)',
+        'Befoulment': '고름탄',
+        'Benevolence': '박애',
+        'Despair Unforgotten': '절망 침식: 현상 기록',
+        'Diairesis': '디아이레시스',
+        'Eironeia': '에이로네이아',
+        'Elegeia Unforgotten': '엘레게이아: 현상 기록',
         'Elenchos': '엘렝코스',
-        'Fatalism': '운명론',
+        'Endsong\'s Aporrhoia': '발출: 절망 돌림노래',
+        'Endsong(?!\')': '절망 돌림노래',
+        '(?<! )Fatalism': '운명론',
+        'Grip of Despair': '절망의 사슬',
+        'Hubris': '휴브리스',
+        'Star Collision': '천체 충돌',
         'Telomania': '텔로스마니아',
+        'Telos': '텔로스',
+        'Tower Explosion': '기둥 폭발',
+        'Theological Fatalism': '신학적 운명론',
+        'Twinsong\'s Aporrhoia': '발출: 절망 합창',
         'Ultimate Fate': '종언의 운명',
       },
     },
