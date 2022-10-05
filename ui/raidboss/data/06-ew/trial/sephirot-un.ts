@@ -221,7 +221,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: '${force} sur vous', // FIXME
           ja: '自分に${force}', // FIXME
           cn: '${force}点名', // FIXME
-          ko: '나에게 ${force}', // FIXME
+          ko: '노랑 (${force})',
         },
       },
     },
@@ -239,7 +239,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: '${force} sur vous', // FIXME
           ja: '自分に${force}', // FIXME
           cn: '${force}点名', // FIXME
-          ko: '나에게 ${force}', // FIXME
+          ko: '초록 (${force})',
         },
       },
     },
