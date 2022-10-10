@@ -49,7 +49,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (data, matches, output) => output.text!({ player: data.ShortName(matches.target) }),
       outputStrings: {
         text: {
-          en: 'Esuna ${player}',
+          en: '에스나: ${player}',
           de: 'Medica ${player}',
           fr: 'Guérison sur ${player}',
           ja: '${player} にエスナ',
@@ -91,7 +91,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Stand Between Bits',
+          en: '비트 사이로 가세요',
           de: 'Zwichen den Satelliten stehen',
           fr: 'Placez-vous entre les drones',
           ja: '自動殺傷兵器の間に',
@@ -115,7 +115,7 @@ const triggerSet: TriggerSet<Data> = {
         // cactbot-builtin-response
         output.responseOutputStrings = {
           tankLaserOnYou: {
-            en: 'Tank Laser on YOU',
+            en: '내게 탱크 레이저',
             de: 'Tank Laser auf DIR',
             fr: 'Tank laser sur VOUS',
             ja: '自分に対人光線',
@@ -123,7 +123,7 @@ const triggerSet: TriggerSet<Data> = {
             ko: '탱커 레이저',
           },
           tankLaserOnPlayer: {
-            en: 'Tank Laser on ${player}',
+            en: '탱크 레이저: ${player}',
             de: 'Tank Laser auf ${player}',
             fr: 'Tank laser sur ${player}',
             ja: '${player} に対人光線',
@@ -131,7 +131,7 @@ const triggerSet: TriggerSet<Data> = {
             ko: '탱커 레이저: ${player}',
           },
           avoidLaserOnPlayer: {
-            en: 'Avoid Laser on ${player}',
+            en: '탱크 레이저 피해요: ${player}',
             de: 'Weiche dem Laser von ${player} aus',
             fr: 'Évitez le laser sur ${player}',
             ja: '${player} への対人光線を避ける',
@@ -206,7 +206,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (data, matches, output) => output.cleanse!({ player: data.ShortName(matches.target) }),
       outputStrings: {
         cleanse: {
-          en: 'Heal ${player} to Full',
+          en: '완전 회복: ${player}',
           de: 'Heile ${player} voll',
           fr: 'Soignez ${player} complètement',
           ja: '${player} をフル回復',

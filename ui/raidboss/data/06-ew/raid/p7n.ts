@@ -26,7 +26,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Get towers',
+          en: '타워에 들어가욧',
           de: 'Türme nehmen',
           fr: 'Prenez les tours',
           ja: '塔へ',
@@ -75,7 +75,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Move center when safe',
+          en: '가운데 안전지대가 생기면 들어가세요',
           de: 'Geh in die Mitte, wenn es sicher ist',
           fr: 'Allez au centre quand il est sûr',
           ja: '安置に入る',
@@ -90,7 +90,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Get to edge (in circle)',
+          en: '서클 안으로 들어가욧 (바깥쪽)',
           de: 'Geh zum Rand (in den Kreisen)',
           fr: 'Allez sur le bord (dans le cercle)',
           ja: '外側の隅へ (円の中)',
@@ -141,7 +141,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Avoid Behemoths',
+          en: '베이모스는 위험해욧!',
           de: 'Behemoths ausweichen',
           fr: 'Évitez les Behemoths',
           ja: 'ベヒーモスから離れる',
@@ -157,7 +157,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Avoid line dashes',
+          en: '돌진 피하세요',
           de: 'Linien Anstürme ausweichen',
           fr: 'Évitez les ruées en ligne',
           ja: '突進回避',
@@ -173,7 +173,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Avoid Exaflares',
+          en: '엑사플레어 피하세요',
           de: 'Exaflares ausweichen',
           fr: 'Évitez les brasiers',
           ja: 'エクサプレア',

@@ -19,13 +19,9 @@ import { TriggerSet } from '../../../../../types/trigger';
 export interface Data extends RaidbossData {
   actingRole?: string;
   decOffset?: number;
-  tetherRole?: string[];
-  debuffRole?: string[];
   hasRoleCall?: boolean;
-  ignoreChlamys?: boolean;
   pinaxCount?: number;
   wellShiftKnockback?: boolean;
-  beloneCoilsTwo?: boolean;
   bloodrakeCounter?: number;
   act?: string;
   actHeadmarkers: { [name: string]: string };
@@ -36,11 +32,15 @@ export interface Data extends RaidbossData {
   fleetingImpulseCounter?: number;
   curtainCallGroup?: number;
   curtainCallTracker?: number;
+  // YPP
+  yppTetherRole?: string;
+  yppDebuffRole?: string;
+  yppBeloneCoilsCounter?: number;
 }
 
 const roleOutputStrings = {
   tankHealer: {
-    en: 'Tank/Healer',
+    en: '탱&힐',
     de: 'Tank/Heiler',
     fr: 'Tank/Healer',
     ja: 'タンク＆ヒーラ',
@@ -56,7 +56,7 @@ const roleOutputStrings = {
     ko: '딜러',
   },
   roleTethers: {
-    en: '${role} Tethers',
+    en: '줄 받기: ${role}',
     de: '${role} Verbindung',
     fr: 'Liens ${role}',
     ja: '線もらう: ${role}',
@@ -64,7 +64,7 @@ const roleOutputStrings = {
     ko: '줄 받기: ${role}',
   },
   roleDebuffs: {
-    en: '${role} Role Calls',
+    en: '점박이 받기: ${role}',
     de: '${role} Dreifäulenoper',
     fr: 'Debuffs ${role}',
     ja: 'デバフもらう: ${role}',
@@ -72,7 +72,7 @@ const roleOutputStrings = {
     ko: '디버프 받기: ${role}',
   },
   roleEverything: {
-    en: '${role} Everything',
+    en: '${role} 전부예욧!',
     de: '${role} Alles',
     fr: '${role} pour tout',
     ja: '${role} 全てもらう',
@@ -80,7 +80,7 @@ const roleOutputStrings = {
     ko: '${role} 전부 받기',
   },
   roleTowers: {
-    en: '${role} Towers',
+    en: '타워: ${role}',
     de: '${role} Türme',
     fr: 'Tours ${role}',
     ja: '塔: ${role}',
@@ -88,11 +88,33 @@ const roleOutputStrings = {
     ko: '기둥: ${role}',
   },
   unknown: Outputs.unknown,
+  // YPP
+  getTether: {
+    en: '줄 받아욧!!!',
+  },
+  getRoleCall: {
+    en: '점박이 받아욧!!!',
+  },
+  passRoleCall: {
+    en: '점박이 건네욧!!!',
+  },
+  haveRoleCall: {
+    en: '점박이 안 받아도 되욧!!!',
+  },
+  stackTankHealer: {
+    en: '북쪽에서 뭉쳐욧!',
+  },
+  stackDps: {
+    en: '남쪽에서 뭉쳐욧!',
+  },
+  getTower: {
+    en: '타워로!',
+  },
 };
 
 const curtainCallOutputStrings = {
   group: {
-    en: 'Group ${num}',
+    en: '그룹: ${num}',
     de: 'Group ${num}',
     fr: 'Groupe ${num}',
     ja: '${num} 組',
@@ -136,7 +158,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Stack for Puddle AOEs',
+          en: '메테오 기다려요',
           de: 'Stacken (Pfützen)',
           fr: 'Packez les zones au sol d\'AoEs',
           ja: 'AoEを誘導',
@@ -163,7 +185,7 @@ const triggerSet: TriggerSet<Data> = {
       run: (data) => data.kickTwo = true,
       outputStrings: {
         baitJumpDir: {
-          en: 'Bait Jump ${dir}?',
+          en: 'MT 점프 유도: ${dir}?',
           de: 'Sprung ködern ${dir}?',
           fr: 'Attirez le saut à l\'${dir}?',
           ja: 'ジャンプ誘導?: ${dir}',
@@ -171,7 +193,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '점프 유도?: ${dir}',
         },
         baitJump: {
-          en: 'Bait Jump?',
+          en: 'MT 점프 유도',
           de: 'Sprung ködern?',
           fr: 'Attirez le saut ?',
           ja: 'ジャンプ誘導?',
@@ -190,7 +212,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Bait Earthshakers?',
+          en: '어스세이커 유도',
           de: 'Erdstoß ködern?',
           fr: 'Orientez les secousses ?',
           ja: 'アスシェイカー誘導?',
@@ -206,7 +228,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Middle Knockback',
+          en: '물 넉백! 저항해욧!!!',
           de: 'Rückstoß von der Mitte',
           fr: 'Poussée au milieu',
           ja: '真ん中でノックバック',
@@ -255,34 +277,24 @@ const triggerSet: TriggerSet<Data> = {
           'tank/healer': output.tankHealer!(),
         };
 
-        const roleRaked = data.party.isDPS(matches.target) ? 'dps' : 'tank/healer';
         const roleOther = data.party.isDPS(matches.target) ? 'tank/healer' : 'dps';
+        const counter = (data.bloodrakeCounter ?? 0);
 
         // Second bloodrake = Debuffs later
-        if ((data.bloodrakeCounter ?? 0) === 2) {
-          if (roleRaked === 'dps') {
-            (data.debuffRole ??= []).push('healer');
-            data.debuffRole.push('tank');
-          } else {
-            (data.debuffRole ??= []).push(roleOther);
-          }
+        if (counter === 2) {
+          data.yppDebuffRole = roleOther;
 
           // May end up needing both tether and debuff
-          const tetherRole = data.tetherRole ??= [];
-          const debuffRole = data.debuffRole ??= [];
-          if (tetherRole[0] === debuffRole[0])
+          if (data.yppTetherRole === data.yppDebuffRole)
             return output.roleEverything!({ role: roles[roleOther] });
           return output.roleDebuffs!({ role: roles[roleOther] });
         }
 
         // First bloodrake = Tethers later
-        if (roleRaked === 'dps') {
-          (data.tetherRole ??= []).push('healer');
-          data.tetherRole.push('tank');
-        } else {
-          (data.tetherRole ??= []).push(roleOther);
+        if (counter === 1) {
+          data.yppTetherRole = roleOther;
+          return output.roleTethers!({ role: roles[roleOther] });
         }
-        return output.roleTethers!({ role: roles[roleOther] });
       },
       outputStrings: roleOutputStrings,
     },
@@ -292,16 +304,7 @@ const triggerSet: TriggerSet<Data> = {
       // 69DF is No DPS Belone Coils
       type: 'StartsUsing',
       netRegex: NetRegexes.startsUsing({ id: ['69DE', '69DF', '69E0', '69E1'], source: 'Hesperos' }),
-      preRun: (data) => {
-        if (!data.beloneCoilsTwo) {
-          delete data.debuffRole;
-          delete data.tetherRole;
-          data.hasRoleCall = false;
-          data.ignoreChlamys = true;
-        } else {
-          data.ignoreChlamys = false;
-        }
-      },
+      preRun: (data) => data.yppBeloneCoilsCounter = (data.yppBeloneCoilsCounter ?? 0) + 1,
       suppressSeconds: 1,
       response: (data, matches, output) => {
         // cactbot-builtin-response
@@ -314,70 +317,46 @@ const triggerSet: TriggerSet<Data> = {
 
         const roleTowers = matches.id === '69DE' ? 'dps' : 'tank/healer';
         const roleOther = matches.id === '69DE' ? 'tank/healer' : 'dps';
+        const counter = data.yppBeloneCoilsCounter ?? 0;
 
         // Second Coils = Debuffs later
-        if (data.beloneCoilsTwo) {
-          if (roleTowers === 'dps') {
-            (data.debuffRole ??= []).push('healer');
-            data.debuffRole.push('tank');
-          } else {
-            (data.debuffRole ??= []).push('dps');
-          }
+        if (counter === 2) {
+          data.yppDebuffRole = roleOther;
 
           // For second coils, if you are not in the debuff list here you are tower
-          if (!data.debuffRole.includes(data.role))
-            return { ['alertText']: output.roleTowers!({ role: roles[roleTowers] }) };
+          if (!(data.yppDebuffRole ?? '').includes(data.role))
+            return { alertText: output.roleTowers!({ role: roles[roleTowers] }) };
 
           // If you have tethers and debuff, you need everything
-          const tetherRole = data.tetherRole ??= [];
-          const debuffRole = data.debuffRole ??= [];
-          if (debuffRole[0] === tetherRole[0])
-            return { ['infoText']: output.roleEverything!({ role: roles[roleOther] }) };
-          return { ['infoText']: output.roleDebuffs!({ role: roles[roleOther] }) };
+          if (data.yppTetherRole === data.yppDebuffRole)
+            return { infoText: output.roleEverything!({ role: roles[roleOther] }) };
+          return { alertText: output.roleDebuffs!({ role: roles[roleOther] }) };
         }
 
         // First Coils = Tethers later
-        if (roleTowers === 'dps') {
-          (data.tetherRole ??= []).push('healer');
-          data.tetherRole.push('tank');
-        } else {
-          (data.tetherRole ??= []).push('dps');
+        if (counter === 1) {
+          data.yppTetherRole = roleOther;
+
+          // For first coils, there are tower and tethers
+          if ((data.yppTetherRole ?? '').includes(data.role))
+            return { alertText: output.roleTethers!({ role: roles[roleOther] }) };
+          return { alertText: output.roleTowers!({ role: roles[roleTowers] }) };
         }
 
-        // For first coils, there are tower and tethers
-        if (data.tetherRole.includes(data.role))
-          return { ['alertText']: output.roleTethers!({ role: roles[roleOther] }) };
-        return { ['alertText']: output.roleTowers!({ role: roles[roleTowers] }) };
+        // 디버그
+        return { infoText: 'beloneCoilsCounter: ' + String(data.yppBeloneCoilsCounter) };
       },
-      run: (data) => data.beloneCoilsTwo = true,
     },
     {
       id: 'P4S Role Call',
       type: 'GainsEffect',
       netRegex: NetRegexes.gainsEffect({ effectId: ['AF2', 'AF3'], capture: true }),
       condition: Conditions.targetIsYou(),
-      infoText: (data, matches, output) => {
-        const debuffRole = (data.debuffRole ??= []).includes(data.role);
-        if (matches.effectId === 'AF2') {
-          // Call Pass Role Call if not in the debuff role
-          if (!debuffRole)
-            return output.passRoleCall!();
+      run: (data, matches) => {
+        if (matches.effectId === 'AF2')
           data.hasRoleCall = true;
-        }
-
-        // AF3 is obtained after passing Role Call (AF2)
         if (matches.effectId === 'AF3')
           data.hasRoleCall = false;
-      },
-      outputStrings: {
-        passRoleCall: {
-          en: 'Pass Role Call',
-          de: 'Dreifäulenoper weitergeben',
-          fr: 'Passez votre debuff',
-          ja: 'デバフ渡す',
-          cn: '传毒',
-          ko: '디버프 건네기',
-        },
       },
     },
     {
@@ -387,40 +366,36 @@ const triggerSet: TriggerSet<Data> = {
       // Delay callout until debuffs are out
       delaySeconds: 1.4,
       alertText: (data, _matches, output) => {
-        const debuffRole = (data.debuffRole ??= []).includes(data.role);
-        if (!data.hasRoleCall && debuffRole)
-          return output.text!();
+        if ((data.yppDebuffRole ?? '').includes(data.role)) {
+          if (data.hasRoleCall)
+            return; // output.haveRoleCall!();
+          return output.getRoleCall!();
+        }
+
+        if ((data.bloodrakeCounter ?? 0) < 3) {
+          if (data.role === 'dps')
+            return output.stackDps!();
+          return output.stackTankHealer!();
+        }
       },
-      outputStrings: {
-        text: {
-          en: 'Get Role Call',
-          de: 'Nimm Dreifäulenoper',
-          fr: 'Prenez un debuff',
-          ja: 'デバフもらう',
-          cn: '拿毒',
-          ko: '디버프 받기',
-        },
-      },
+      outputStrings: roleOutputStrings,
     },
     {
       id: 'P4S Inversive Chlamys',
       // Possible a player still has not yet passed debuff
       type: 'StartsUsing',
       netRegex: NetRegexes.startsUsing({ id: '69ED', source: 'Hesperos', capture: false }),
-      condition: (data) => !data.ignoreChlamys,
       alertText: (data, _matches, output) => {
-        const dps = (data.tetherRole ??= []).includes('dps');
-        if (dps)
-          return output.roleTethers!({ role: output.dps!() });
-        if (data.tetherRole.length)
-          return output.roleTethers!({ role: output.tankHealer!() });
-        return output.roleTethers!({ role: output.unknown!() });
-      },
-      run: (data) => {
-        if (!data.beloneCoilsTwo) {
-          delete data.tetherRole;
-          data.hasRoleCall = false;
-        }
+        const tetherRole = data.yppTetherRole ?? '???';
+        if (tetherRole.includes(data.role))
+          return output.getTether!();
+        if (tetherRole === '???')
+          return output.unknown!();
+        if ((data.yppBeloneCoilsCounter ?? 0) === 1)
+          return output.getTower!();
+        if (data.role === 'dps')
+          return output.stackDps!();
+        return output.stackTankHealer!();
       },
       outputStrings: roleOutputStrings,
     },
@@ -441,7 +416,7 @@ const triggerSet: TriggerSet<Data> = {
       alarmText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Thunder',
+          en: '[번개] 멀리멀리!',
           de: 'Blitz',
           fr: 'Foudre',
           ja: '雷',
@@ -463,7 +438,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         text: {
-          en: 'Well Pinax',
+          en: '[물] 넉백!',
           de: 'Brunnen-Pinax',
           fr: 'Pinax d\'eau',
           ja: '水',
@@ -471,7 +446,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '물',
         },
         shiftWell: {
-          en: 'Well => Shift',
+          en: '[물] => 동서남북',
           de: 'Brunnen => Schwingen',
           fr: 'Eau => Frappe mouvante',
           ja: '水 => シフティング',
@@ -496,7 +471,7 @@ const triggerSet: TriggerSet<Data> = {
         output.responseOutputStrings = {
           knockback: Outputs.knockback,
           middleKnockback: {
-            en: 'Middle Knockback',
+            en: '가운데서 걍 넉백 당해욧!',
             de: 'Rückstoß von der Mitte',
             fr: 'Poussée au milieu',
             ja: '真ん中でノックバック',
@@ -506,8 +481,8 @@ const triggerSet: TriggerSet<Data> = {
         };
 
         if (data.wellShiftKnockback)
-          return { ['alertText']: output.knockback!() };
-        return { ['infoText']: output.middleKnockback!() };
+          return { alertText: output.knockback!() };
+        return { infoText: output.middleKnockback!() };
       },
     },
     {
@@ -523,7 +498,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.groups!(),
       outputStrings: {
         groups: {
-          en: 'Healer Groups',
+          en: '[불] 힐러와 뭉치기',
           de: 'Heiler-Gruppen',
           fr: 'Groupes sur les heals',
           ja: 'ヒラに頭割り',
@@ -539,7 +514,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'North Cleave',
+          en: '[북/A] 칼질 클레브!',
           de: 'Cleave -> Geh in den Norden',
           fr: 'Cleave au nord',
           ja: '北の横',
@@ -555,7 +530,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'East Cleave',
+          en: '[동/B] 칼질 클레브!',
           de: 'Cleave -> Geh in den Osten',
           fr: 'Cleave à l\'est',
           ja: '東の横',
@@ -571,7 +546,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'South Cleave',
+          en: '[남/C] 칼질 클레브!',
           de: 'Cleave -> Geh in den Süden',
           fr: 'Cleave au sud',
           ja: '南の横',
@@ -587,7 +562,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'West Cleave',
+          en: '[서/D] 칼질 클레브!',
           de: 'Cleave -> Geh in den Westen',
           fr: 'Cleave à l\'ouest',
           ja: '西の横',
@@ -603,7 +578,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'North Cape',
+          en: '[북/A] 망토 넉백!',
           de: 'Rückstoß -> Geh in den Norden',
           fr: 'Poussée au nord',
           ja: '北でノックバック',
@@ -619,7 +594,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'East Cape',
+          en: '[동/B] 망토 넉백!',
           de: 'Rückstoß -> Geh in den Osten',
           fr: 'Poussée à l\'est',
           ja: '東でノックバック',
@@ -635,7 +610,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'South Cape',
+          en: '[남/C] 망토 넉백!',
           de: 'Rückstoß -> Geh in den Süden',
           fr: 'Poussée au sud',
           ja: '南でノックバック',
@@ -651,7 +626,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'West Cape',
+          en: '[서/D] 망토 넉백!',
           de: 'Rückstoß -> Geh in den Westen',
           fr: 'Poussée à l\'ouest',
           ja: '西でノックバック',
@@ -685,7 +660,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         text: {
-          en: 'Acting ${actingRole}',
+          en: '역할: ${actingRole}',
           de: 'Handel ale ${actingRole}',
           fr: 'Rôle ${actingRole}',
           ja: 'ロール: ${actingRole}',
@@ -694,7 +669,7 @@ const triggerSet: TriggerSet<Data> = {
         },
         dps: roleOutputStrings.dps,
         healer: {
-          en: 'Healer',
+          en: '힐러',
           de: 'Heiler',
           fr: 'Healer',
           ja: 'ヒーラ',
@@ -702,7 +677,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '힐러',
         },
         tank: {
-          en: 'Tank',
+          en: '탱크',
           de: 'Tank',
           fr: 'Tank',
           ja: 'タンク',
@@ -718,7 +693,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.rolePositions!(),
       outputStrings: {
         rolePositions: {
-          en: 'Orb role positions',
+          en: '구슬처리 위치로 가욧!',
           de: 'Orb Rollenposition',
           fr: 'Positions pour les orbes de rôles',
           ja: '玉、ロール散開',
@@ -742,7 +717,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         text: {
-          en: '${pinax} safe',
+          en: '안전: ${pinax}',
           de: '${pinax} sicher',
           fr: '${pinax} safe',
           ja: '安置: ${pinax}',
@@ -750,7 +725,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '안전한 곳: ${pinax}',
         },
         acid: {
-          en: 'Acid',
+          en: '독/녹색',
           de: 'Gift',
           fr: 'Poison',
           ja: '毒/緑',
@@ -758,7 +733,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '독/녹색',
         },
         lava: {
-          en: 'Lava',
+          en: '불/빨강',
           de: 'Lava',
           fr: 'Feu',
           ja: '炎/赤',
@@ -766,7 +741,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '불/빨강',
         },
         well: {
-          en: 'Well',
+          en: '물/하양',
           de: 'Brunnen',
           fr: 'Eau',
           ja: '水/白',
@@ -774,7 +749,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '물/하양',
         },
         thunder: {
-          en: 'Thunder',
+          en: '번개/파랑',
           de: 'Blitz',
           fr: 'Foudre',
           ja: '雷/青',
@@ -851,11 +826,11 @@ const triggerSet: TriggerSet<Data> = {
       condition: (data) => data.act === '1',
       // Tethers come out Cardinals (0 seconds), (3s) Towers, (6s) Other Cardinals
       suppressSeconds: 7,
-      infoText: (data, matches, output) => {
+      alertText: (data, matches, output) => {
         const thorn = (data.thornIds ??= []).indexOf(parseInt(matches.sourceId, 16));
         const thornMap: { [thorn: number]: string } = {
-          4: output.text!({ dir1: output.north!(), dir2: output.south!() }),
-          5: output.text!({ dir1: output.north!(), dir2: output.south!() }),
+          4: output.text!({ dir1: output.south!(), dir2: output.north!() }),
+          5: output.text!({ dir1: output.south!(), dir2: output.north!() }),
           6: output.text!({ dir1: output.east!(), dir2: output.west!() }),
           7: output.text!({ dir1: output.east!(), dir2: output.west!() }),
         };
@@ -863,7 +838,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         text: {
-          en: '${dir1}/${dir2} first',
+          en: '${dir1}/${dir2} 먼저예욧!',
           de: '${dir1}/${dir2} zuerst',
           fr: '${dir1}/${dir2} en premier',
           ja: '${dir1}/${dir2}から',
@@ -883,7 +858,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (data, _matches, output) => data.role === 'tank' ? output.tankbustersIn!() : output.getOut!(),
       outputStrings: {
         tankbustersIn: {
-          en: 'In (Tankbusters)',
+          en: '안쪽에서 탱크버스터!!!',
           de: 'Rein (Tankbusters)',
           fr: 'À l\'intérieur (Tank busters)',
           ja: 'タンク近づく',
@@ -900,7 +875,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (data, _matches, output) => data.role === 'tank' ? output.tankbustersOut!() : output.getIn!(),
       outputStrings: {
         tankbustersOut: {
-          en: 'Out (Tankbusters)',
+          en: '바깥쪽에서 탱크버스터!!!',
           de: 'Raus, Tankbuster',
           fr: 'À l\'extérieur (Tank busters)',
           ja: 'タンク離れる',
@@ -915,7 +890,21 @@ const triggerSet: TriggerSet<Data> = {
       type: 'StartsUsing',
       netRegex: NetRegexes.startsUsing({ id: '6E78', source: 'Hesperos' }),
       condition: Conditions.caresAboutPhysical(),
-      response: Responses.sharedTankBuster(),
+      response: (data, matches, output) => {
+        // response: Responses.sharedTankBuster(),
+        if (matches.target === data.me)
+          return { alertText: output.invulnerable!() };
+        if (!matches.target)
+          return { infoText: output.tankBuster!() };
+        return { infoText: output.tankBusterOnPlayer!({ player: data.ShortName(matches.target) }) };
+      },
+      outputStrings: {
+        tankBuster: Outputs.tankBuster,
+        tankBusterOnPlayer: Outputs.tankBusterOnPlayer,
+        invulnerable: {
+          en: '내게 탱크버스터! 무적을 써욧!!!',
+        },
+      },
     },
     {
       id: 'P4S Act Two Safe Spots',
@@ -924,13 +913,13 @@ const triggerSet: TriggerSet<Data> = {
       condition: (data) => data.act === '2',
       // Tethers come out Cardinals (0 seconds), (3s) Other Cardinals
       suppressSeconds: 4,
-      infoText: (data, matches, output) => {
+      alertText: (data, matches, output) => {
         const thorn = (data.thornIds ??= []).indexOf(parseInt(matches.sourceId, 16));
         const thornMap: { [thorn: number]: string } = {
-          0: output.text!({ dir1: output.north!(), dir2: output.south!() }),
-          1: output.text!({ dir1: output.north!(), dir2: output.south!() }),
-          2: output.text!({ dir1: output.north!(), dir2: output.south!() }),
-          3: output.text!({ dir1: output.north!(), dir2: output.south!() }),
+          0: output.text!({ dir1: output.south!(), dir2: output.north!() }),
+          1: output.text!({ dir1: output.south!(), dir2: output.north!() }),
+          2: output.text!({ dir1: output.south!(), dir2: output.north!() }),
+          3: output.text!({ dir1: output.south!(), dir2: output.north!() }),
           4: output.text!({ dir1: output.east!(), dir2: output.west!() }),
           5: output.text!({ dir1: output.east!(), dir2: output.west!() }),
           6: output.text!({ dir1: output.east!(), dir2: output.west!() }),
@@ -940,7 +929,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         text: {
-          en: '${dir1}/${dir2} first',
+          en: '${dir1}/${dir2} 먼저예욧!',
           de: '${dir1}/${dir2} zuerst',
           fr: '${dir1}/${dir2} en premier',
           ja: '${dir1}/${dir2}から',
@@ -988,7 +977,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         purpleTether: {
-          en: 'Purple (with ${player})',
+          en: '다쟈, 연결: ${player}',
           de: 'Lila (mit ${player})',
           fr: 'Violet (avec ${player})',
           ja: 'ダージャ (${player})',
@@ -996,7 +985,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '다쟈 (${player})',
         },
         orangeTether: {
-          en: 'Fire (with ${player})',
+          en: '파이가, 연결: ${player}',
           de: 'Feuer (mit ${player})',
           fr: 'Feu (avec ${player})',
           ja: 'ファイガ (${player})',
@@ -1004,7 +993,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '파이가 (${player})',
         },
         greenTether: {
-          en: 'Air (with ${player})',
+          en: '에어로가, 연결: ${player}',
           de: 'Luft (mit ${player})',
           fr: 'Air (avec ${player})',
           ja: 'エアロガ (${player})',
@@ -1038,7 +1027,7 @@ const triggerSet: TriggerSet<Data> = {
         // cactbot-builtin-response
         output.responseOutputStrings = {
           blueTether: {
-            en: 'Blue Tether',
+            en: '워터가, 파랑',
             de: 'Blaue Verbindung',
             fr: 'Lien bleu',
             ja: 'ワタガ (青)',
@@ -1046,7 +1035,7 @@ const triggerSet: TriggerSet<Data> = {
             ko: '워터가 (파랑)',
           },
           purpleTether: {
-            en: 'Purple Tether',
+            en: '다쟈, 보라',
             de: 'Lila Verbindung',
             fr: 'lien violet',
             ja: 'ダージャ(紫)',
@@ -1054,14 +1043,14 @@ const triggerSet: TriggerSet<Data> = {
             ko: '다쟈 (보라색)',
           },
           blueTetherDir: {
-            en: 'Blue Tether (${dir})',
+            en: '파란줄 (${dir})',
             de: 'Blaue Verbindung (${dir})',
             fr: 'Lien bleu direction (${dir})',
             cn: '蓝标连线 (${dir})',
             ko: '워터가 (파랑) (${dir})',
           },
           purpleTetherDir: {
-            en: 'Purple Tether (${dir})',
+            en: '보라줄 (${dir})',
             de: 'Lilane Verbindung (${dir})',
             fr: 'lien violet direction (${dir})',
             cn: '紫标连线 (${dir})',
@@ -1127,7 +1116,7 @@ const triggerSet: TriggerSet<Data> = {
       condition: (data) => data.act === '3',
       // Tethers come out East or West (0 seconds), (3s) Middle knockack, (6) Opposite Cardinal
       suppressSeconds: 7,
-      infoText: (data, matches, output) => {
+      alertText: (data, matches, output) => {
         const thorn = (data.thornIds ??= []).indexOf(parseInt(matches.sourceId, 16));
 
         const thornMapDirs: { [thorn: number]: string } = {
@@ -1146,7 +1135,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         text: {
-          en: 'Bait Jump ${dir1} first',
+          en: '${dir1}으로 점프시켜욧!',
           de: 'Köder Sprung ${dir1} zuerst',
           fr: 'Attirez le saut à l\'${dir1} en premier',
           ja: 'ジャンプ誘導: ${dir1}',
@@ -1172,7 +1161,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Spread at tethered thorn',
+          en: '연결된 깃털 부근에서 흩어지기',
           de: 'Verteilen bei der Dornenhecke',
           fr: 'Dispersez-vous vers une épine liée',
           ja: '結ばれた羽の方で散開',
@@ -1198,7 +1187,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         text: {
-          en: '${num}',
+          en: '깃털 ${num}번째',
           de: '${num}',
           fr: '${num}',
           ja: '羽: ${num}番目',
@@ -1222,7 +1211,7 @@ const triggerSet: TriggerSet<Data> = {
         data.curtainCallGroup = Math.ceil(((parseFloat(matches.duration)) - 2) / 10);
 
         if (data.curtainCallGroup === 1)
-          return { alarmText: output.group!({ num: data.curtainCallGroup }) };
+          return { alertText: output.group!({ num: data.curtainCallGroup }) };
         return { infoText: output.group!({ num: data.curtainCallGroup }) };
       },
     },
@@ -1259,12 +1248,39 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.protean!(),
       outputStrings: {
         protean: {
-          en: 'Protean',
+          en: '하데스 비-임!!!!',
           de: 'Himmelsrichtungen',
           fr: 'Positions',
           ja: '8方向散開',
           cn: '分散站位',
           ko: '정해진 위치로 산개',
+        },
+      },
+    },
+    {
+      id: 'P4S Wreath of Thorns 4',
+      type: 'StartsUsing',
+      netRegex: NetRegexes.startsUsing({ id: '6A32', source: 'Hesperos' }),
+      alarmText: (_data, _matches, output) => output.text!(),
+      outputStrings: {
+        text: {
+          en: '파랑: 반대편 한칸, 보라: 가까이 한칸',
+        },
+      },
+    },
+    {
+      id: 'P4S Curtain Call Debuffs Original',
+      type: 'GainsEffect',
+      netRegex: NetRegexes.gainsEffect({ effectId: 'AF4', capture: true }),
+      condition: (data, matches) => data.me === matches?.target && data.act === 'curtain',
+      delaySeconds: (data, matches) => {
+        const duration = parseFloat(matches.duration);
+        return (data.role === 'dps' ? duration - 12 : duration - 6);
+      },
+      alarmText: (_data, _matches, output) => output.text!(),
+      outputStrings: {
+        text: {
+          en: '뒤로 당겨서 줄 끊어욧!',
         },
       },
     },

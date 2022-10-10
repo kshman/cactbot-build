@@ -48,6 +48,10 @@ export interface Data extends RaidbossData {
   seenFirstAlignmentStackSpread?: boolean;
   concept: { [name: string]: InitialConcept };
   splicer: { [name: string]: Splicer };
+  perfectionLong: { [name: string]: string };
+  perfectionShort: { [name: string]: string };
+  arcaneChannelCount: number;
+  arcaneChannelColor: { [color: string]: boolean };
   alignmentTargets: string[];
   burstCounter: number;
   myTower?: number;
@@ -198,6 +202,8 @@ export const ventOutput = (unsafeSpots: number[], output: Output) => {
   return output.comboDir!({ dir1: safeStr0, dir2: safeStr1, arr1: safeArr0, arr2: safeArr1 });
 };
 
+const arcaneChannelFlags = '00020001'; // mapEffect flags for tower tile effect
+
 const triggerSet: TriggerSet<Data> = {
   zoneId: ZoneId.AbyssosTheEighthCircleSavage,
   timelineFile: 'p8s.txt',
@@ -219,6 +225,10 @@ const triggerSet: TriggerSet<Data> = {
       secondSnakeDebuff: {},
       concept: {},
       splicer: {},
+      perfectionLong: {},
+      perfectionShort: {},
+      arcaneChannelCount: 0,
+      arcaneChannelColor: {},
       alignmentTargets: [],
       burstCounter: 0,
       flareCounter: 0,
@@ -242,7 +252,7 @@ const triggerSet: TriggerSet<Data> = {
       run: (data) => data.seenFirstTankAutos = true,
       outputStrings: {
         text: {
-          en: '탱크 오토 어택! 아프당!',
+          en: '탱크 오토 어택!',
           de: 'Tank Auto-Angriffe',
           fr: 'Auto sur le tank',
           ja: 'タンクオートアタック',
@@ -274,7 +284,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         out: Outputs.out,
         outAndSpread: {
-          en: '깜선 바깥쪽 + 흩어져욧',
+          en: '깜선 바깥 + 흩어져욧',
           de: 'Raus + Verteilen',
           fr: 'Extérieur + Écartez-vous',
           ja: '黒線の外側 + 散会',
@@ -308,7 +318,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         in: Outputs.in,
         inAndSpread: {
-          en: '깜선 안쪽 + 흩어져욧',
+          en: '깜선 안 + 흩어져욧',
           de: 'Rein + Verteilen',
           fr: 'Intérieur + Écartez-vous',
           ja: '黒線の内側 + 散会',
@@ -316,7 +326,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '안으로 + 산개',
         },
         inAndStacks: {
-          en: '깜선 안쪽 + 파트너랑 맞아욧',
+          en: '깜선 안 + 파트너랑 맞아욧',
           de: 'Rein + Sammeln',
           fr: 'Intérieur + Package',
           ja: '黒線の内側 + 2人頭割り',
@@ -355,7 +365,7 @@ const triggerSet: TriggerSet<Data> = {
       run: (data, _matches, output) => data.footfallsConcept = output.text!(),
       outputStrings: {
         text: {
-          en: '파트너랑 맞아욧',
+          en: '파트너랑 맞아요',
           de: 'Mit Partner sammeln',
           fr: 'Package avec votre partenaire',
           ja: '2人頭割り',
@@ -374,7 +384,7 @@ const triggerSet: TriggerSet<Data> = {
       run: (data) => data.conceptual = 'tetra',
       outputStrings: {
         text: {
-          en: '(나중에 파트너랑 맞아욧)',
+          en: '(나중에 파트너랑 맞아요)',
           de: '(Partner-Stacks, für später)',
           fr: '(Package partenaire, pour après)',
           ja: '(後で2人頭割り)',
@@ -391,7 +401,7 @@ const triggerSet: TriggerSet<Data> = {
       run: (data) => data.conceptual = 'octa',
       outputStrings: {
         text: {
-          en: '(나중에 흩어져욧)',
+          en: '(나중에 흩어져요)',
           de: '(Verteilen, für später)',
           fr: '(Écartez-vous, pour après)',
           ja: '(後で散会)',
@@ -428,7 +438,7 @@ const triggerSet: TriggerSet<Data> = {
       // run: (data) => delete data.illusory,
       outputStrings: {
         inAndStacks: {
-          en: '깜선 안쪽 + 파트너랑 맞아욧',
+          en: '깜선 안 + 파트너랑 맞아욧',
           de: 'Rein + Sammeln',
           fr: 'Intérieur + Package',
           ja: '黒線の内側 + 2人頭割り',
@@ -474,7 +484,7 @@ const triggerSet: TriggerSet<Data> = {
       // run: (data) => delete data.illusory,
       outputStrings: {
         inAndProtean: {
-          en: '깜선 안쪽 + 기본산개 + 프로틴',
+          en: '깜선 안 + 기본산개 + 프로틴',
           de: 'Rein + Himmelsrichtung',
           fr: 'Intérieur + Positions',
           ja: '黒線の内側 + 基本散会',
@@ -820,7 +830,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         cardinals: {
-          en: '십자 봐욧! [❌고르곤]',
+          en: '십자 보세요 [❌고르곤]',
           de: 'Schaue Kardinal',
           fr: 'Regardez en cardinal',
           ja: '視線を十字に',
@@ -828,7 +838,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '시선을 동서남북쪽으로',
         },
         intercards: {
-          en: '모서리 봐욧! [➕고르곤]',
+          en: '모서리 보세요 [➕고르곤]',
           de: 'Schaue Interkardinal',
           fr: 'Regardez en intercardinal',
           ja: '視線を斜めに',
@@ -1019,7 +1029,7 @@ const triggerSet: TriggerSet<Data> = {
             ko: '나중에 마안 (+ ${player})',
           },
           stack: {
-            en: '나중에 내게 뭉쳐욧 (+${player})',
+            en: '나중에 내게 뭉쳐요 (+${player})',
             de: 'Später sammeln (mit ${player})',
             fr: 'Package plus tard (avec ${player})',
             ja: '自分に頭割り (+${player})',
@@ -1083,7 +1093,7 @@ const triggerSet: TriggerSet<Data> = {
       tts: null,
       outputStrings: {
         text: {
-          en: '${num}번째',
+          en: '${num}번',
           de: '${num}',
           fr: '${num}',
           ja: '${num}',
@@ -1104,7 +1114,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (data, _matches, output) => output.text!({ num: data.upliftCounter }),
       outputStrings: {
         text: {
-          en: '나는 ${num}번째',
+          en: '나: ${num}번',
           de: '${num}',
           fr: '${num}',
           ja: '${num}',
@@ -1164,7 +1174,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         impactDir: {
-          en: '[넉백] ${dir}로 따라가욧',
+          en: '[넉백] ${dir}로 따라가요',
           de: 'Nach ${dir} folgen (Rückstoß)',
           fr: 'Allez vers ${dir} (Poussée)',
           ja: '${dir}に近づく (ノックバック)',
@@ -1172,15 +1182,15 @@ const triggerSet: TriggerSet<Data> = {
           ko: '${dir}으로 따라가기 (넉백)',
         },
         crushDir: {
-          en: '[푹찍] ${dir}로 피해욧',
-          de: 'Weg von ${dir}',
+          en: '[푹찍] ${dir}로 피해요',
+          de: 'Weg nach ${dir}',
           fr: 'Loin de ${dir}',
           ja: '${dir}が安置 (クラッシュ)',
           cn: '去 ${dir}',
           ko: '${dir}으로 피하기',
         },
         crush: {
-          en: '[푹찍] 점프에서 멀어져욧',
+          en: '[푹찍] 점프에서 멀어져요',
           de: 'Weg vom Sprung',
           fr: 'Éloignez-vous du saut',
           ja: '離れる',
@@ -1188,7 +1198,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '멀리 떨어지기',
         },
         impact: {
-          en: '[넉백] 점프 따라가욧',
+          en: '[넉백] 점프 따라가요',
           de: 'Sprung folgen',
           fr: 'Suivez le saut',
           ja: '近づく',
@@ -1347,7 +1357,7 @@ const triggerSet: TriggerSet<Data> = {
             ko: '${dir} 넉백',
           },
           trailblazeCrushSide: {
-            en: '[푹찍/파랑] ${dir}쪽으로 달려욧',
+            en: '[푹찍/파랑] ${dir}쪽으로 달려요',
             de: 'Renne nach ${dir}',
             fr: 'Courez ${dir}',
             ja: '${dir}へ走れ',
@@ -1882,6 +1892,10 @@ const triggerSet: TriggerSet<Data> = {
         if (data.me === matches.target)
           return output.text!();
       },
+      tts: (data, matches, _output) => {
+        if (data.me === matches.target)
+          return 'わたしが紫丸';
+      },
       outputStrings: {
         text: {
           en: '내게 보라 동글이가!',
@@ -2124,20 +2138,34 @@ const triggerSet: TriggerSet<Data> = {
         const id = matches.effectId;
         // 8 and 26s second debuffs.
         const isLong = parseFloat(matches.duration) > 10;
-        if (id === 'D02')
+        if (id === 'D02') {
           data.concept[matches.target] = isLong ? 'longalpha' : 'shortalpha';
-        else if (id === 'D03')
+          if (isLong)
+            data.perfectionLong[matches.target] = 'alpha';
+          else
+            data.perfectionShort[matches.target] = 'alpha';
+        } else if (id === 'D03') {
           data.concept[matches.target] = isLong ? 'longbeta' : 'shortbeta';
-        else if (id === 'D04')
+          if (isLong)
+            data.perfectionLong[matches.target] = 'beta';
+          else
+            data.perfectionShort[matches.target] = 'beta';
+        } else if (id === 'D04') {
           data.concept[matches.target] = isLong ? 'longgamma' : 'shortgamma';
-        else if (id === 'D11')
+          if (isLong)
+            data.perfectionLong[matches.target] = 'gamma';
+          else
+            data.perfectionShort[matches.target] = 'gamma';
+        } else if (id === 'D11') {
           data.splicer[matches.target] = 'solosplice';
-        else if (id === 'D12' && data.prsHighConcept === 1)
-          data.splicer[matches.target] = 'multisplice1st';
-        else if (id === 'D12' && data.prsHighConcept === 2)
-          data.splicer[matches.target] = 'multisplice2nd';
-        else if (id === 'D13')
+        } else if (id === 'D12') {
+          if (data.prsHighConcept === 1)
+            data.splicer[matches.target] = 'multisplice1st';
+          else
+            data.splicer[matches.target] = 'multisplice2nd';
+        } else if (id === 'D13') {
           data.splicer[matches.target] = 'supersplice';
+        }
       },
     },
     {
@@ -2305,7 +2333,7 @@ const triggerSet: TriggerSet<Data> = {
       // 원래 퍼펙트가 바뀌기 전에 이걸로 통합
       id: 'P8S+ 퍼펙트 알파/베타/감마 (임시)',
       type: 'GainsEffect',
-      netRegex: NetRegexes.gainsEffect({ effectId: 'D0[5-7]' }),
+      netRegex: NetRegexes.gainsEffect({ effectId: ['D05', 'D06', 'D07'] }),
       condition: Conditions.targetIsYou(),
       response: (data, matches, output) => {
         // cactbot-builtin-response
@@ -2373,59 +2401,280 @@ const triggerSet: TriggerSet<Data> = {
         return { infoText: output.mesg!({ where: where, color: color }) };
       },
     },
-    /*
     {
-      id: 'P8S Perfected Alpha',
+      id: 'P8S Perfection Splicer Collect',
+      // Record what the splicers chose as they will marge with unused short player
       type: 'GainsEffect',
-      netRegex: NetRegexes.gainsEffect({ effectId: 'D05' }),
-      condition: Conditions.targetIsYou(),
-      // TODO: it'd be nice to know the tower here so this could just say
-      // "take tower" or "avoid tower" with different severity or even
-      // who to merge with (!), but without that this is the best we got.
-      infoText: (_data, _matches, output) => output.text!(),
-      outputStrings: {
-        text: {
-          en: 'Green/Blue Tower',
-          de: 'Grüner/Blauer Turm',
-          fr: 'Tour Verte/Bleue',
-          ja: '緑・青',
-          ko: '초록/파랑 기둥',
-        },
+      netRegex: NetRegexes.gainsEffect({ effectId: ['D05', 'D06', 'D07'] }),
+      condition: (data, matches) => {
+        // Ignore Imperfection players, and do not collect on HC2
+        if (data.perfectionLong[matches.target] || data.perfectionShort[matches.target] || data.arcaneChannelCount > 1)
+          return false;
+        return true;
+      },
+      run: (data, matches) => {
+        let letter;
+        if (matches.effectId === 'D05')
+          letter = 'alpha';
+        else if (matches.effectId === 'D06')
+          letter = 'beta';
+        else
+          letter = 'gamma';
+
+        data.perfectionShort[matches.target] = letter;
       },
     },
     {
-      id: 'P8S Perfected Beta',
+      id: 'P8S Perfection Remove',
+      // Remove player from perfection lists when they merge
       type: 'GainsEffect',
-      netRegex: NetRegexes.gainsEffect({ effectId: 'D06' }),
-      condition: Conditions.targetIsYou(),
-      infoText: (_data, _matches, output) => output.text!(),
-      outputStrings: {
-        text: {
-          en: 'Green/Purple Tower',
-          de: 'Grüner/Lilaner Turm',
-          fr: 'Tour Verte/Violette',
-          ja: '緑・紫',
-          ko: '초록/보라 기둥',
-        },
+      netRegex: NetRegexes.gainsEffect({ effectId: ['D09', 'D0A', 'D0B', 'D0C'] }),
+      run: (data, matches) => {
+        delete data.perfectionLong[matches.target];
+        delete data.perfectionShort[matches.target];
       },
     },
     {
-      id: 'P8S Perfected Gamma',
-      type: 'GainsEffect',
-      netRegex: NetRegexes.gainsEffect({ effectId: 'D07' }),
-      condition: Conditions.targetIsYou(),
-      infoText: (_data, _matches, output) => output.text!(),
-      outputStrings: {
-        text: {
-          en: 'Purple/Blue Tower',
-          de: 'Lilaner/Blauer Turm',
-          fr: 'Tour Violette/Bleue',
-          ja: '紫・青',
-          ko: '보라/파랑 기둥',
-        },
+      id: 'P8S Arcane Channel Collect',
+      type: 'MapEffect',
+      netRegex: NetRegexes.mapEffect({ flags: arcaneChannelFlags }),
+      condition: (data) => data.seenFirstTankAutos,
+      run: (data, matches) => {
+        const colorInt = parseInt(matches.location, 16);
+
+        if (colorInt >= 0x1A && colorInt <= 0x23)
+          data.arcaneChannelColor['purple'] = true;
+        if (colorInt >= 0x24 && colorInt <= 0x2D)
+          data.arcaneChannelColor['blue'] = true;
+        if (colorInt >= 0x2E && colorInt <= 0x37)
+          data.arcaneChannelColor['green'] = true;
       },
     },
-    */
+    {
+      id: 'P8S Arcane Channel Color',
+      type: 'MapEffect',
+      netRegex: NetRegexes.mapEffect({ flags: arcaneChannelFlags }),
+      condition: (data, matches) => {
+        if (data.seenFirstTankAutos) {
+          const colorInt = parseInt(matches.location, 16);
+          if (colorInt >= 0x1A && colorInt <= 0x37)
+            return true;
+        }
+        return false;
+      },
+      delaySeconds: 0.1,
+      suppressSeconds: 1,
+      response: (data, _matches, output) => {
+        // cactbot-builtin-response
+        output.responseOutputStrings = {
+          colorTower1MergePlayer: {
+            en: '${color} 타워, 파트너: ${player}',
+          },
+          colorTower1MergeLetter: {
+            en: '${color} 타워, 파트너: ${letter}',
+          },
+          colorTowerAvoid: {
+            en: '피해요: ${color}',
+          },
+          colorTowersAvoid: {
+            en: '피해요: ${color1}/${color2}',
+          },
+          alpha: {
+            en: '알파🡹',
+          },
+          beta: {
+            en: '베타🡺',
+          },
+          gamma: {
+            en: '감마🡻',
+          },
+          purple: {
+            en: '보라',
+          },
+          blue: {
+            en: '파랑',
+          },
+          green: {
+            en: '초록',
+          },
+        };
+
+        // Get the player with corresponding perfection
+        const getMergePlayer = (perfectionList: { [name: string]: string }, perfection: string) => {
+          let mergePlayer;
+          Object.entries(perfectionList).find(([key, value]) => {
+            if (value === perfection) {
+              mergePlayer = key;
+              return;
+            }
+            return false;
+          });
+          return mergePlayer;
+        };
+
+        let perfectionList;
+        let finalTowers;
+        let mergePerfection;
+        let color;
+        let letter;
+        let mergePlayer;
+        const towerColors = [];
+
+        if (data.arcaneChannelCount === 1) {
+          // HC1 Second Towers could use long or short player
+          // with short players including the splicers and unused short
+          if (data.perfectionShort[data.me])
+            perfectionList = data.perfectionShort;
+          if (data.perfectionLong[data.me])
+            perfectionList = data.perfectionLong;
+        } else if (data.arcaneChannelCount === 3) {
+          // Unused Short merge with gamma
+          if (data.perfectionShort[data.me] !== undefined || data.perfectionLong[data.me] === 'gamma') {
+            const tempLong = data.perfectionLong;
+            // Remove players matching alpha and beta from long list
+            const alphaPlayer = getMergePlayer(data.perfectionLong, 'alpha');
+            const betaPlayer = getMergePlayer(data.perfectionLong, 'beta');
+            if (alphaPlayer !== undefined)
+              delete tempLong[alphaPlayer];
+            if (betaPlayer !== undefined)
+              delete tempLong[betaPlayer];
+
+            finalTowers = { ...tempLong, ...data.perfectionShort };
+          }
+          if (data.perfectionLong[data.me] === 'alpha' || data.perfectionLong[data.me] === 'beta') {
+            const tempLong = data.perfectionLong;
+            // Remove player matching gamma value from long list
+            const gammaPlayer = getMergePlayer(data.perfectionLong, 'gamma');
+            if (gammaPlayer !== undefined)
+              delete tempLong[gammaPlayer];
+            finalTowers = tempLong;
+          }
+        } else {
+          // HC1 and HC2 First Towers use short debuffs
+          perfectionList = data.perfectionShort;
+        }
+
+        // Narrow down to single player
+        if (data.arcaneChannelColor['purple']) {
+          // Gamma/Beta Players
+          if (perfectionList !== undefined) {
+            if (perfectionList[data.me] === 'gamma')
+              mergePerfection = 'beta';
+            if (perfectionList[data.me] === 'beta')
+              mergePerfection = 'gamma';
+          }
+          towerColors.push('purple');
+        }
+        if (data.arcaneChannelColor['blue']) {
+          // Alpha/Gamma Players
+          if (perfectionList !== undefined) {
+            if (perfectionList[data.me] === 'alpha')
+              mergePerfection = 'gamma';
+            if (perfectionList[data.me] === 'gamma')
+              mergePerfection = 'alpha';
+          }
+          towerColors.push('blue');
+        }
+        if (data.arcaneChannelColor['green']) {
+          // Alpha/Beta Players
+          if (perfectionList !== undefined) {
+            if (perfectionList[data.me] === 'alpha')
+              mergePerfection = 'beta';
+            if (perfectionList[data.me] === 'beta')
+              mergePerfection = 'alpha';
+          }
+          towerColors.push('green');
+        }
+
+        // Failed to find tower color
+        if (towerColors[0] === undefined)
+          return;
+
+        // Find corresponding player(s) or perfection in HC1 and HC2 First Towers
+        if (mergePerfection !== undefined && perfectionList !== undefined) {
+          // HC1 Towers and HC2 First Towers
+          mergePlayer = getMergePlayer(perfectionList, mergePerfection);
+          color = towerColors[0];
+
+          // If fail to find player, output the corresponding perfection
+          if (mergePlayer === undefined)
+            letter = mergePerfection;
+        }
+
+        // HC2 Second Towers
+        if (finalTowers !== undefined) {
+          // Remove self from list to get partner info
+          delete finalTowers[data.me];
+
+          // Find corresponding player, else corresponding letters
+          if (Object.keys(finalTowers).length === 1 && Object.keys(finalTowers)[0] !== undefined) {
+            mergePlayer = Object.keys(finalTowers)[0];
+            if (mergePlayer === undefined)
+              return;
+
+            // Long alpha and long beta are always partners and green
+            if (data.perfectionLong[mergePlayer] === 'alpha' || data.perfectionLong[mergePlayer] === 'beta')
+              color = 'green';
+
+            // Short and Gamma are Blue/Purple, short player determines the color
+            if (data.perfectionShort[mergePlayer] === 'alpha' || data.perfectionShort[data.me] === 'alpha')
+              color = 'blue';
+            if (data.perfectionShort[mergePlayer] === 'beta' || data.perfectionShort[data.me] === 'beta')
+              color = 'purple';
+          }
+
+          // Failed to find a corresponding player, output corresponding perfections instead
+          const shortPlayerPerfection = data.perfectionShort[data.me];
+          // Unused short is always alpha or beta because wind is not created in first and we thus match with gamma
+          if (shortPlayerPerfection !== undefined) {
+            color = (shortPlayerPerfection === 'alpha' ? 'blue' : 'purple');
+            letter = 'gamma';
+          }
+
+          const longPlayerPerfection = data.perfectionLong[data.me];
+          if (longPlayerPerfection === 'gamma') {
+            if (towerColors[0] === 'blue' || towerColors[1] === 'blue') {
+              color = 'blue';
+              letter = 'alpha';
+            }
+            if (towerColors[0] === 'purple' || towerColors[1] === 'purple') {
+              color = 'purple';
+              letter = 'beta';
+            }
+          }
+          if (longPlayerPerfection === 'beta') {
+            color = 'green';
+            letter = 'alpha';
+          }
+          if (longPlayerPerfection === 'alpha') {
+            color = 'green';
+            letter = 'beta';
+          }
+        }
+
+        if (color !== undefined && letter !== undefined)
+          return { alertText: output.colorTower1MergeLetter!({ color: output[color]!(), letter: output[letter]!() }) };
+
+        if (color !== undefined && mergePlayer !== undefined)
+          return { alertText: output.colorTower1MergePlayer!({ color: output[color]!(), player: data.ShortName(mergePlayer) }) };
+
+        // Avoid tower(s)
+        if (data.arcaneChannelCount !== 3)
+          return { infoText: output.colorTowerAvoid!({ color: output[towerColors[0]]!() }) };
+        if (towerColors[1] !== undefined)
+          return { infoText: output.colorTowersAvoid!({ color1: output[towerColors[0]]!(), color2: output[towerColors[1]]!() }) };
+      },
+      run: (data) => {
+        data.arcaneChannelColor = {};
+
+        // Reset unused perfections between HC1 and HC2 after second channel
+        data.arcaneChannelCount = data.arcaneChannelCount + 1;
+        if (data.arcaneChannelCount === 2) {
+          data.perfectionLong = {};
+          data.perfectionShort = {};
+        }
+      },
+    },
     {
       id: 'P8S Limitless Desolation',
       type: 'StartsUsing',
@@ -2444,7 +2693,7 @@ const triggerSet: TriggerSet<Data> = {
       tts: null,
       outputStrings: {
         text: {
-          en: '${num}번째',
+          en: '${num}번',
           de: '${num}',
           fr: '${num}',
           ja: '${num}番目',
@@ -2463,10 +2712,10 @@ const triggerSet: TriggerSet<Data> = {
       run: (data) => data.myTower = data.burstCounter,
       outputStrings: {
         text: {
-          en: '내가 ${num}번째',
+          en: '나: ${num}번',
           de: '${num}',
           fr: '${num}',
-          ja: '自分は${num}番目',
+          ja: '自分: {num}番目',
         },
       },
     },

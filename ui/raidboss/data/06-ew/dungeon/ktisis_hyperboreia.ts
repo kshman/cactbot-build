@@ -90,7 +90,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Hide behind unbroken meteor',
+          en: '안 부서진 메테오 뒤에 숨어요',
           de: 'Hinter einem nicht zerbrochenen Meteor verstecken',
           fr: 'Cachez-vous derrière le météore intact',
           ja: '壊れていないメテオの後ろへ',

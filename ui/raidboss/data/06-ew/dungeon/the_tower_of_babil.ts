@@ -57,7 +57,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         close: {
-          en: 'Close to boss',
+          en: '보스 가까이로',
           de: 'Nahe am Boss',
           fr: 'Allez près du boss',
           ja: 'ボスに近づく',
@@ -65,7 +65,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '보스 가까이 붙기',
         },
         far: {
-          en: 'Away from boss',
+          en: '보스에서 도망가요',
           de: 'Weg am Boss',
           fr: 'Éloignez-vous du boss',
           ja: 'ボスから離れる',
@@ -99,14 +99,14 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         close: {
-          en: 'Go center next to Scrapline',
+          en: '한가운데 스크랩라인 옆으로 가세요',
           de: 'Geh zur mitte, nahe der Rollschlinge',
           fr: 'Allez au centre, près de la zone de frappe',
           cn: '去中间，靠近AOE',
           ko: '장판 중앙부분 옆으로',
         },
         far: {
-          en: 'Go sides away from Scrapline',
+          en: '스크랩라인 옆쪽으로 도망가세요',
           de: 'Geh seidlich der Rollschlinge',
           fr: 'Allez sur les côtes, loin de la zone de frappe',
           cn: '去场边，远离AOE',
@@ -134,7 +134,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, outputs) => outputs.text!(),
       outputStrings: {
         text: {
-          en: 'Purple pad to shrink',
+          en: '보라 밟고 작아지세요',
           de: 'Lilane Fläche zum schrumpfen',
           fr: 'Zone violette pour rétrécir',
           ja: '紫',
@@ -150,7 +150,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, outputs) => outputs.text!(),
       outputStrings: {
         text: {
-          en: 'Green pad for frog',
+          en: '초록 밟고 개구리가 되어요',
           de: 'Grüne Fläsche für Frosch',
           fr: 'Zone verte pour transormation en grenouille',
           ja: '緑',
@@ -172,7 +172,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, outputs) => outputs.text!(),
       outputStrings: {
         text: {
-          en: 'Avoid bomb lines',
+          en: '폭탄 선형 범위 피해요',
           de: 'Weiche den Bombenlinien aus',
           fr: 'Évitez la ligne de bombes',
           cn: '躲开炸弹十字AOE',
@@ -189,7 +189,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, outputs) => outputs.text!(),
       outputStrings: {
         text: {
-          en: 'Go to safe quadrant',
+          en: '안전한 사분면으로 가세요',
           de: 'Geh in das sichere Feld',
           fr: 'Allez dans le quart safe',
           cn: '去安全角落',
@@ -212,7 +212,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, outputs) => outputs.text!(),
       outputStrings: {
         text: {
-          en: 'Away from your tether add',
+          en: '연결된 선을 늘려 멀어지세요',
           de: 'Weg von dem mit dir verbundenem Add',
           fr: 'Éloignez-vous de votre add lié',
           cn: '远离连线黑洞',
@@ -227,7 +227,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, outputs) => outputs.text!(),
       outputStrings: {
         text: {
-          en: 'Get to a corner!',
+          en: '구석으로 가세욧!',
           de: 'Geh in eine Ecke!',
           fr: 'Allez dans un coin !',
           cn: '快去角落!',
@@ -243,7 +243,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, outputs) => outputs.text!(),
       outputStrings: {
         text: {
-          en: '5x chasing puddles on you!',
+          en: '내게 5연 추적 장판이!',
           de: '5x verfolgende Flächen auf dir!',
           fr: '5x zones au sol chainées sur vous !',
           cn: '5连追踪AOE点名!',

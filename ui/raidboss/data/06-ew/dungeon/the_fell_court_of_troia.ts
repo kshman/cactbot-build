@@ -80,7 +80,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '터지는 선 순서 보고 피해욧',
+          en: '터지는 선 순서 보고 피해요',
           de: 'Weg von den explodierenden Linien',
           fr: 'Éloignez-vous des lignes explosives',
           ja: '線から離れる',

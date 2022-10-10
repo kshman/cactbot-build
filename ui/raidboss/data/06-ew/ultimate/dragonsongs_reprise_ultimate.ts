@@ -2869,13 +2869,13 @@ const triggerSet: TriggerSet<Data> = {
       id: 'DSR Flames of Ascalon',
       type: 'GainsEffect',
       netRegex: NetRegexes.gainsEffect({ effectId: '808', count: '12A', capture: false }),
-      response: Responses.getOutAlarm(),
+      response: Responses.getOut(),
     },
     {
       id: 'DSR Ice of Ascalon',
       type: 'GainsEffect',
       netRegex: NetRegexes.gainsEffect({ effectId: '808', count: '12B', capture: false }),
-      response: Responses.getInAlarm(),
+      response: Responses.getIn(),
     },
     {
       id: 'DSR Trinity Tank Dark Resistance',
