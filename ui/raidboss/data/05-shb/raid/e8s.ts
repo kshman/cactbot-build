@@ -70,7 +70,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         text: {
-          en: 'Tether ${num}',
+          en: '줄: ${num}',
           de: 'Verbindung ${num}',
           fr: 'Lien ${num}',
           ja: '線 ${num}',
@@ -103,7 +103,7 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           // Sorry, there are no mirror colors in the logs (YET),
           // and so this is the best that can be done.
-          en: 'Go Back, Red Mirror Side',
+          en: '뒤로, 빨간 거울 쪽으로',
           de: 'Nach Hinten gehen, Seite des roten Spiegels',
           fr: 'Allez derrière, côté miroir rouge',
           ja: '後ろに、赤い鏡の横へ',
@@ -122,7 +122,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Go Front, Green Mirror Side',
+          en: '앞으로, 녹색 거울 쪽으로',
           de: 'Nach Vorne gehen, Seite des grünen Spiegels',
           fr: 'Allez devant, côté miroir vert',
           ja: '前に、赤い鏡の横へ',
@@ -139,7 +139,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Swap Sides',
+          en: '반대쪽으로',
           de: 'Seiten wechseln',
           fr: 'Changez de côté',
           ja: '反対側へ',
@@ -179,7 +179,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         bitingFrostNext: {
-          en: 'Biting Frost Next',
+          en: '다음: 바이팅 프로스트',
           de: 'Frosthieb als nächstes',
           fr: 'Taillade de givre bientôt',
           ja: '次はフロストスラッシュ',
@@ -187,7 +187,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '다음: 서리 참격',
         },
         drivingFrostNext: {
-          en: 'Driving Frost Next',
+          en: '다음: 드라이빙 프로스트',
           de: 'Froststoß als nächstes',
           fr: 'Percée de givre bientôt',
           ja: '次はフロストスラスト',
@@ -216,7 +216,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         northSouth: {
-          en: 'North / South',
+          en: '남쪽 / 북쪽',
           de: 'Norden / Süden',
           fr: 'Nord / Sud',
           ja: '南 / 北',
@@ -224,7 +224,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '남 / 북',
         },
         eastWest: {
-          en: 'East / West',
+          en: '동쪽 / 서쪽',
           de: 'Osten / Westen',
           fr: 'Est / Ouest',
           ja: '東 / 西',
@@ -242,7 +242,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Cleanse',
+          en: '에스나',
           de: 'Reinigen',
           fr: 'Guérison',
           ja: 'エスナ',
@@ -284,7 +284,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Chain on YOU',
+          en: '내게 사슬!!!',
           de: 'Kette auf DIR',
           fr: 'Chaîne sur VOUS',
           ja: '自分に鎖',
@@ -301,7 +301,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Orb on YOU',
+          en: '내게 구슬!!!',
           de: 'Orb auf DIR',
           fr: 'Orbe sur VOUS',
           ja: '自分に玉',
@@ -334,7 +334,7 @@ const triggerSet: TriggerSet<Data> = {
         // cactbot-builtin-response
         output.responseOutputStrings = {
           akhMornOnYou: {
-            en: 'Akh Morn on YOU',
+            en: '내게 아크몬!!!',
             de: 'Akh Morn auf DIR',
             fr: 'Akh Morn sur VOUS',
             ja: '自分にアク・モーン',
@@ -342,7 +342,7 @@ const triggerSet: TriggerSet<Data> = {
             ko: '아크몬 대상자',
           },
           akhMornOn: {
-            en: 'Akh Morn: ${players}',
+            en: '아크몬: ${players}',
             de: 'Akh Morn: ${players}',
             fr: 'Akh Morn : ${players}',
             ja: 'アク・モーン: ${players}',
@@ -382,7 +382,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         mornAfahOnYou: {
-          en: 'Morn Afah on YOU',
+          en: '내게 몬아파!!!',
           de: 'Morn Afah auf DIR',
           fr: 'Morn Afah sur VOUS',
           ja: '自分にモーン・アファー',
@@ -390,7 +390,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '몬아파 대상자',
         },
         mornAfahOn: {
-          en: 'Morn Afah on ${player}',
+          en: '몬아파: ${player}',
           de: 'Morn Afah auf ${player}',
           fr: 'Morn Afah sur ${player}',
           ja: '${player}にモーン・アファー',
@@ -459,7 +459,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (data, _matches, output) => output.text!({ num: data.wyrmclawNumber }),
       outputStrings: {
         text: {
-          en: 'Red #${num}',
+          en: '빨강 #${num}',
           de: 'Rot #${num}',
           fr: 'Rouge #${num}',
           ja: '赤 #${num}',
@@ -494,7 +494,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (data, _matches, output) => output.text!({ num: data.wyrmfangNumber }),
       outputStrings: {
         text: {
-          en: 'Blue #${num}',
+          en: '파랑 #${num}',
           de: 'Blau #${num}',
           fr: 'Bleu #${num}',
           ja: '青 #${num}',
@@ -560,7 +560,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Cleanse DPS Only',
+          en: 'DPS 에스나!',
           de: 'Nur DPS reinigen',
           fr: 'Guérison => DPS seulement',
           ja: 'エスナ (DPSのみ)',
@@ -577,7 +577,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Tank Stack in Tower',
+          en: '타워! 탱크 둘이 함께!!!',
           de: 'Auf Tank im Turm sammeln',
           fr: 'Package tanks dans la tour',
           ja: 'タンクは塔に頭割り',
@@ -594,7 +594,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Tank Spread in Tower',
+          en: '타워! 탱크 산개!!!',
           de: 'Tank im Turm verteilen',
           fr: 'Dispersion tanks dans la tour',
           ja: 'タンクは塔に散開',

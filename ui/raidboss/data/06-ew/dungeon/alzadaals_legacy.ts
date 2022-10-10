@@ -24,7 +24,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '촉수가 터지는 곳에서 도망쳐욧',
+          en: '촉수가 멈추는 곳이 터져욧',
           de: 'Weiche Tentakel-Explosion aus',
           fr: 'Évitez les explostions des tentacules',
           ja: '触手の爆発から離れる',
@@ -115,7 +115,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '연결된 선과 반대쪽이 안전',
+          en: '연결된 선과 반대 색이 안전',
           de: 'Weiche der verbundenen Farbe aus',
           fr: 'Allez sous la couleur non liée',
           ja: '逆の色へ',

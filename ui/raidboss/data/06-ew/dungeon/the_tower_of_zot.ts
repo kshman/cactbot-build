@@ -92,7 +92,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         fireOrb: {
-          en: 'Under Orb ${num}',
+          en: '${num}번 오브 아래로',
           de: 'Unter den ${num}. Orb',
           fr: 'En dessous l\'orbe ${num}',
           ja: '${num}番目の玉へ',
@@ -100,7 +100,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '${num}번 구슬 밑으로',
         },
         bioOrb: {
-          en: 'Behind Orb ${num}',
+          en: '${num}번 오브 뒤로',
           de: 'Hinter den ${num}. Orb',
           fr: 'Allez derrière l\'orbe ${num}',
           ja: '${num}番目の玉の後ろへ',
@@ -108,7 +108,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '${num}번 구슬 뒤로',
         },
         fireThenBio: {
-          en: 'Get Under => Behind Orb ${num}',
+          en: '밑에 있다가 => ${num}번 오브 뒤로',
           de: 'Unter ihn => Hinter den ${num}. Orb',
           fr: 'En dessous => Allez derrière l\'orbe ${num}',
           ja: 'ボスに貼り付く=> ${num}番目の玉の後ろへ',
@@ -116,7 +116,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '보스 아래로 => ${num}번 구슬 뒤로',
         },
         bioThenFire: {
-          en: 'Get Behind => Under Orb ${num}',
+          en: '뒤에 있다가 => ${num}번 오브 밑으로',
           de: 'Hinter ihn => Unter den ${num}. Orb',
           fr: 'Passez derrière => En dessous l\'orbe ${num}',
           ja: '背面へ => ${num}番目の玉へ',
@@ -152,7 +152,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Go behind empty spot',
+          en: '빈 스팟 벽쪽으로',
           de: 'Hinter den leeren Spot gehen',
           fr: 'Allez derrière un espace vide',
           ja: '玉のない箇所へ',
@@ -168,7 +168,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Go behind still clone',
+          en: '움직이지 않는 클론 뒤로',
           de: 'Geh hinter den ruhigen Klon',
           fr: 'Allez derrière le vrai clone',
           ja: '動いていないドグの後ろへ',

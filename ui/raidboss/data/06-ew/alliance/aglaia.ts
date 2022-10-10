@@ -80,7 +80,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '늦게 오는데에서 -> 지나간 곳으로',
+          en: '늦게 오는데 있다가 -> 지나간 곳으로',
           de: 'Normal ausweichen -> leuchtende Reihe',
           fr: 'Évitez normal -> ligne brillante',
           ja: '安置 -> ひかり',
@@ -130,7 +130,7 @@ const triggerSet: TriggerSet<Data> = {
         output.responseOutputStrings = {
           tankCleaveOnYou: Outputs.tankCleaveOnYou,
           tankCleaves: {
-            en: '탱크 클레브 피해욧',
+            en: '탱크클레브 피해욧',
             de: 'Weiche Tank-Cleaves aus',
             fr: 'Évitez le cleave sur le tank',
             ja: 'タンク範囲攻撃回避',
@@ -314,7 +314,7 @@ const triggerSet: TriggerSet<Data> = {
         output.responseOutputStrings = {
           tankCleaveOnYou: Outputs.tankCleaveOnYou,
           tankCleaves: {
-            en: '탱크 클레브 피해욧',
+            en: '탱크클레브 피해욧',
             de: 'Weiche Tank-Cleaves aus',
             fr: 'Évitez les cleaves sur le tank',
             ja: 'タンク範囲攻撃回避',
