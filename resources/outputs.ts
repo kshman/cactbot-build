@@ -124,21 +124,6 @@ export default {
     cn: '分摊死刑点 ${player}',
     ko: '"${player}" 쉐어 탱버',
   },
-  sharedOrInvinTankbusterOnYou: {
-    en: '내게 탱크버스터, 무적 또는 둘이서',
-    ja: '自分にタンクシェア',
-  },
-  sharedOrInvinTankbusterOnPlayer: {
-    en: '${player}: 탱크버스터, 무적 또는 둘이서',
-    ja: '${player} にタンクシェア',
-  },
-  splitTankBuster: {
-    en: '따로 따로 탱크버스터',
-    de: 'getrennte Tankbuster',
-    fr: 'Séparez les Tankbuster',
-    ja: '2人同時タンク強攻撃',
-    ko: '따로맞는 탱버',
-  },
   tankSwap: {
     en: '탱크 스위치!',
     de: 'Tankwechsel!',
@@ -565,7 +550,7 @@ export default {
   },
   moveAway: {
     // move away to dodge aoes
-    en: '도망가욧!',
+    en: '지금 자리 피해요!',
     de: 'Bewegen!',
     fr: 'Bougez !',
     ja: '避けて！',
@@ -776,6 +761,22 @@ export default {
   num7: numberToOutputString(7),
   num8: numberToOutputString(8),
   num9: numberToOutputString(9),
+  // 쉐어 탱크버스터
+  sharedOrInvinTankbusterOnYou: {
+    en: '내게 탱크버스터, 무적 또는 둘이서',
+    ja: '自分にタンクシェア',
+  },
+  sharedOrInvinTankbusterOnPlayer: {
+    en: '${player}: 탱크버스터, 무적 또는 둘이서',
+    ja: '${player} にタンクシェア',
+  },
+  splitTankBuster: {
+    en: '따로 따로 탱크버스터',
+    de: 'getrennte Tankbuster',
+    fr: 'Séparez les Tankbuster',
+    ja: '2人同時タンク強攻撃',
+    ko: '따로맞는 탱버',
+  },
   // 화살표
   arrowN: {
     en: '🡹',
