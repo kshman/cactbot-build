@@ -26,7 +26,6 @@ export interface Data extends RaidbossData {
   poly5SideTile?: string;
   darkSpheres: NetMatches['StartsUsing'][];
   poly6SafeSide?: string;
-  transmissionAlertDelay: number;
   //
   prsSigma?: number;
 }
@@ -63,7 +62,6 @@ const triggerSet: TriggerSet<Data> = {
       mapEffects: [],
       combatantData: [],
       darkSpheres: [],
-      transmissionAlertDelay: 0,
     };
   },
   triggers: [
@@ -108,7 +106,7 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: 'P6S Polyominoid Tether Collect',
+      id: 'P6S Polyominoid Tether Collect (테스트)',
       type: 'Tether',
       netRegex: NetRegexes.tether({ id: '00CF' }),
       run: (data, matches) => {
@@ -116,7 +114,7 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: 'P6S Polyominoid MapEffect Collect',
+      id: 'P6S Polyominoid MapEffect Collect (테스트)',
       type: 'MapEffect',
       netRegex: NetRegexes.mapEffect({ flags: [crossTileFlags, diagonalTileFlags] }),
       run: (data, matches) => {
@@ -129,7 +127,7 @@ const triggerSet: TriggerSet<Data> = {
       // Use a single trigger for Aetherial Polyominod (7866) and
       // Polyominoid Sigma (7868).  Both use MapEffects, but only
       // 7868 uses tethers to hidden actors to "swap" tiles.
-      id: 'P6S Polyominoid All',
+      id: 'P6S Polyominoid All (테스트)',
       type: 'Ability',
       netRegex: NetRegexes.ability({ id: '786[68]', source: 'Hegemone', capture: false }),
       delaySeconds: 2, // relevant mapeffect and trigger lines are consistently sent ~1.83s after the cast
@@ -466,7 +464,7 @@ const triggerSet: TriggerSet<Data> = {
       response: Responses.moveAway(),
     },
     {
-      id: 'P6S Polyominoid Healer Groups',
+      id: 'P6S Polyominoid Healer Groups (테스트)',
       type: 'StartsUsing',
       netRegex: NetRegexes.startsUsing({ id: '7892', source: 'Hegemone', capture: false }),
       // Should not be fired during Poly 1, since the Unholy Darkness headmarkers there
@@ -479,7 +477,7 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: 'P6S Choros Ixou Front Back',
+      id: 'P6S Choros Ixou Front Back (테스트)',
       type: 'StartsUsing',
       netRegex: NetRegexes.startsUsing({ id: '7883', source: 'Hegemone', capture: false }),
       alertText: (data, _matches, output) => {
@@ -496,7 +494,7 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: 'P6S Choros Ixou Sides',
+      id: 'P6S Choros Ixou Sides (테스트)',
       type: 'StartsUsing',
       netRegex: NetRegexes.startsUsing({ id: '7881', source: 'Hegemone', capture: false }),
       alertText: (data, _matches, output) => {
@@ -843,7 +841,7 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: 'P6S Ptera Ixou',
+      id: 'P6S Ptera Ixou (테스트)',
       type: 'StartsUsing',
       netRegex: NetRegexes.startsUsing({ id: '787C', source: 'Hegemone', capture: false }),
       condition: (data) => data.polyInstance !== 6, // do not run during Poly 6/Cachexia 2 - this is handled by P6S Cachexia 2 Dark Spheres
@@ -868,13 +866,13 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: 'P6S Dark Spheres Collect',
+      id: 'P6S Dark Spheres Collect (테스트)',
       type: 'StartsUsing',
       netRegex: NetRegexes.startsUsing({ id: '7880', source: 'Hegemone' }),
       run: (data, matches) => data.darkSpheres.push(matches),
     },
     {
-      id: 'P6S Cachexia 2 Dark Spheres',
+      id: 'P6S Cachexia 2 Dark Spheres (테스트)',
       type: 'StartsUsing',
       netRegex: NetRegexes.startsUsing({ id: '7880', source: 'Hegemone', capture: false }),
       delaySeconds: 0.5,
@@ -906,14 +904,10 @@ const triggerSet: TriggerSet<Data> = {
       // D48 Glossomorph (Snake icon - cleave in front of player)
       netRegex: NetRegexes.gainsEffect({ effectId: ['CF3', 'D48'] }),
       condition: Conditions.targetIsYou(),
-      preRun: (data, matches) => {
+      delaySeconds: (_data, matches) => {
         // 1st transmission has 11s duration, 2nd has 25s duration
         // in either case, trigger should fire 3s before debuff expires
-        const duration = parseFloat(matches.duration);
-        data.transmissionAlertDelay = duration > 3 ? duration - 3 : 0;
-      },
-      delaySeconds: (data) => {
-        return data.transmissionAlertDelay;
+        return parseFloat(matches.duration) - 3;
       },
       infoText: (_data, matches, output) => {
         return matches.effectId === 'D48' ? output.forwardCleave!() : output.backwardCleave!();

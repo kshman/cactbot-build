@@ -372,7 +372,7 @@ const triggerSet: TriggerSet<Data> = {
         separateHealerGroups: {
           en: '모여 맞아요! 나눠진건 아쉽네',
           de: 'Heiler-Gruppen Plattformen',
-          fr: 'Groupes heals Plateforme',
+          fr: 'Groupes heals sur les plateformes',
           ja: '円盤の内でヒーラーと頭割り',
           ko: '힐러 그룹별로 플랫폼',
         },
