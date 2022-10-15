@@ -128,13 +128,8 @@ export const positionTo8Dir = (combatant: PluginCombatantState) => {
   return Math.round(4 - 4 * Math.atan2(x, y) / Math.PI) % 8;
 };
 
-export const headingTo4Dir = (heading: number) => {
-  // N = 0, E = 1, etc
-  return Math.round(2 - 2 * heading / Math.PI) % 4;
-};
-
 export const headingTo8Dir = (heading: number) => {
-  // Dirs: N = 0, N = 1, ..., W = 7
+  // Dirs: N = 0, NE = 1, ..., NW = 7
   return ((2 - Math.round(heading * 8 / Math.PI) / 2) + 2) % 8;
 };
 
@@ -142,7 +137,9 @@ export const ventOutputStrings = {
   comboDir: {
     en: '${dir1}${dir2} ${arr1}${arr2}',
     de: '${dir1} / ${dir2}',
+    fr: '${dir1} / ${dir2}',
     ja: '${dir1} / ${dir2}',
+    cn: '${dir1} / ${dir2}',
     ko: '${dir1} / ${dir2}',
   },
   north: prsStrings.north,
@@ -218,10 +215,10 @@ const triggerSet: TriggerSet<Data> = {
       torches: [],
       flareTargets: [],
       upliftCounter: 0,
-      ventCasts: [],
       footfallsDirs: [],
       footfallsOrder: [],
       trailblazeCount: 0,
+      ventCasts: [],
       gorgons: [],
       gorgonCount: 0,
       firstSnakeOrder: {},
@@ -1560,7 +1557,7 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: 'P8S Suneater Cthonic Vent Initial (테스트)',
+      id: 'P8S Suneater Cthonic Vent Initial',
       type: 'StartsUsing',
       netRegex: NetRegexes.startsUsing({ id: '7925' }),
       condition: (data, matches) => {
@@ -1590,7 +1587,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: ventOutputStrings,
     },
     {
-      id: 'P8S Suneater Cthonic Vent Later (테스트)',
+      id: 'P8S Suneater Cthonic Vent Later',
       type: 'Ability',
       netRegex: NetRegexes.ability({ id: ['7923', '7924'] }),
       condition: (data, matches) => {
@@ -1615,7 +1612,7 @@ const triggerSet: TriggerSet<Data> = {
         for (const c of data.combatantData) {
           const originalPos = positionTo8Dir(c);
           const heading = headingTo8Dir(c.Heading);
-          console.error(`Vent Later: Vent with heading ${heading} and position ${originalPos}`);
+
           // There's maybe some way to do this more generally, but I don't see it.
           // Also, if this fails for some reason, it will just not call anything below.
           if ((originalPos === 7 && heading === 2) || (originalPos === 3 && heading === 0) || (originalPos === 5 && heading === 1)) {
