@@ -866,6 +866,32 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
+      id: 'P6S Transmission',
+      type: 'GainsEffect',
+      // CF3 Chelomorph (Wing icon - cleave behind player)
+      // D48 Glossomorph (Snake icon - cleave in front of player)
+      netRegex: NetRegexes.gainsEffect({ effectId: ['CF3', 'D48'] }),
+      condition: Conditions.targetIsYou(),
+      delaySeconds: (_data, matches) => {
+        // 1st transmission has 11s duration, 2nd has 25s duration
+        // in either case, trigger should fire 3s before debuff expires
+        return parseFloat(matches.duration) - 3;
+      },
+      infoText: (_data, matches, output) => {
+        return matches.effectId === 'D48' ? output.forwardCleave!() : output.backwardCleave!();
+      },
+      outputStrings: {
+        forwardCleave: {
+          en: '입에서 트림',
+          ja: '口からおくび',
+        },
+        backwardCleave: {
+          en: '방구 뽕',
+          ja: '尻からおなら',
+        },
+      },
+    },
+    {
       id: 'P6S Dark Spheres Collect',
       type: 'StartsUsing',
       netRegex: NetRegexes.startsUsing({ id: '7880', source: 'Hegemone' }),
@@ -894,32 +920,6 @@ const triggerSet: TriggerSet<Data> = {
         stackSide: {
           en: '뭉쳐욧 ${dir1}',
           ja: '頭割り ${dir1}',
-        },
-      },
-    },
-    {
-      id: 'P6S Transmission',
-      type: 'GainsEffect',
-      // CF3 Chelomorph (Wing icon - cleave behind player)
-      // D48 Glossomorph (Snake icon - cleave in front of player)
-      netRegex: NetRegexes.gainsEffect({ effectId: ['CF3', 'D48'] }),
-      condition: Conditions.targetIsYou(),
-      delaySeconds: (_data, matches) => {
-        // 1st transmission has 11s duration, 2nd has 25s duration
-        // in either case, trigger should fire 3s before debuff expires
-        return parseFloat(matches.duration) - 3;
-      },
-      infoText: (_data, matches, output) => {
-        return matches.effectId === 'D48' ? output.forwardCleave!() : output.backwardCleave!();
-      },
-      outputStrings: {
-        forwardCleave: {
-          en: '입에서 트림',
-          ja: '口からおくび',
-        },
-        backwardCleave: {
-          en: '방구 뽕',
-          ja: '尻からおなら',
         },
       },
     },
