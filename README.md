@@ -1,10 +1,13 @@
 # cactbot (ffxiv raiding overlay)
 
-오리지날은 여기로 → https://github.com/quisquous/cactbot
+For visit official repo: <https://github.com/quisquous/cactbot>
+Here is cactbot's test & modify repo.
 
+---
+오리지날을 찾으신다면 위 리포 URL로 가세요
 
-cactbot 실험 기능 & 테스트 기능을 해보는 저장소입니다용.
-거의 모든 영어 리소스를 한국말로 바꿔쓰기 땜시 영어 사용자를... 지원하지 않슴다... 😭
+대개 cactbot 실험 기능을 테스트하는 실험실 리포입니다. 일부 콘텐츠는 오리지날과 호환되지 않습니다. 한편, EN 출력을 한국말로 바꿔두기 때문에 영어 사용자는... 사용할 수 없을것 같아요. 😭
 
+종종 동작하지 않는 업뎃이 흘러들어가기 때문에 멈출 때도 있어요!
 
-실험 기능 일단 다 넣어보기 땜시 동작 안할 때도 많습니다;;;
+오버레이 플러그인도 최신으로 사용해야할 거예요 <https://github.com/OverlayPlugin/OverlayPlugin>
