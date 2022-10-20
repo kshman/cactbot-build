@@ -2415,54 +2415,67 @@ const triggerSet: TriggerSet<Data> = {
         output.responseOutputStrings = {
           colorTowerMergePlayer: {
             en: '${color} 타워로 (➕${player})',
+            de: '${color} Turm (mit ${player})',
             ja: '${color}塔 (➕${player})',
           },
           colorTowerMergeLetter: {
             en: '${color} 타워로 (✨${letter})',
+            de: '${color} Turm (mit ${letter})',
             ja: '${color}塔 (✨${letter})',
           },
           colorTowerMergePlayers: {
             en: '${color} 타워로 (➕${player1} 또는 ${player2})',
+            de: '${color} Turm (mit ${player1} oder ${player2})',
             ja: '${color}塔 (➕${player1}又は${player2})',
           },
           towerMergeLetters: {
             en: '타워로 (✨${letter1} 또는 ${letter2})',
+            de: 'Turm (mit ${letter1} oder ${letter2})',
             ja: '塔 (✨${letter1}又は${letter2})',
           },
           towerMergePlayers: {
             en: '타워로 (➕${player1} 또는 ${player2})',
+            de: 'Turm (mit ${player1} oder ${player2})',
             ja: '塔 (➕${player1}又は${player2})',
           },
           colorTowerAvoid: {
             en: '조합하지 말고 피해요: ${color}',
+            de: 'Vermeide ${color} Turm',
             ja: '組合せずに逃げて: ${color}',
           },
           cloneTether: {
-            en: '연결 줄을 복제해요 (부비부비인가?)',
-            ja: '連結線をコピーしてね (イフリートかな?)',
+            en: '선 달고 도망가요!',
+            de: 'Nimm Klon Verbindung',
+            ja: '線を付けて散開位置へ',
           },
           alpha: {
             en: '알파🡹',
+            de: 'Alpha',
             ja: 'アルファ🡹',
           },
           beta: {
             en: '베타🡺',
+            de: 'Beta',
             ja: 'ベータ🡺',
           },
           gamma: {
             en: '감마🡻',
+            de: 'Gamma',
             ja: 'ガンマ🡻',
           },
           purple: {
             en: '보라🟣',
+            de: 'Lila',
             ja: '紫🟣',
           },
           blue: {
             en: '파랑🔵',
+            de: 'Blau',
             ja: '青🔵',
           },
           green: {
             en: '초록🟢',
+            de: 'Grün',
             ja: '緑🟢',
           },
         };
@@ -2515,10 +2528,10 @@ const triggerSet: TriggerSet<Data> = {
             throw new UnreachableCode();
           const [name1, name2] = conceptToPlayers[otherConcept].map((x) => data.ShortName(x));
           if (name1 === undefined)
-            return { alertText: output.colorTowerMergeLetter!({ color: color, letter: output[otherConcept]!() }) };
+            return { infoText: output.colorTowerMergeLetter!({ color: color, letter: output[otherConcept]!() }) };
           if (name2 === undefined)
             return { alertText: output.colorTowerMergePlayer!({ color: color, player: name1 }) };
-          return { alertText: output.colorTowerMergePlayers!({ color: color, player1: name1, player2: name2 }) };
+          return { infoText: output.colorTowerMergePlayers!({ color: color, player1: name1, player2: name2 }) };
         }
 
         // HC2 (final towers), in order to solve this, you need a 2nd beta or gamma
@@ -2533,8 +2546,8 @@ const triggerSet: TriggerSet<Data> = {
             throw new UnreachableCode();
           const [name1, name2] = [...conceptToPlayers[concept1], ...conceptToPlayers[concept2]].map((x) => data.ShortName(x));
           if (name1 === undefined || name2 === undefined)
-            return { alertText: output.towerMergeLetters!({ letter1: output[concept1]!(), letter2: output[concept2]!() }) };
-          return { alertText: output.towerMergePlayers!({ player1: name1, player2: name2 }) };
+            return { infoText: output.towerMergeLetters!({ letter1: output[concept1]!(), letter2: output[concept2]!() }) };
+          return { infoText: output.towerMergePlayers!({ player1: name1, player2: name2 }) };
         }
 
         // If not doubled, merge with one of the doubled folks (because they can't merge together).
@@ -2544,8 +2557,8 @@ const triggerSet: TriggerSet<Data> = {
           throw new UnreachableCode();
         const color = output[tower]!();
         if (name1 === undefined || name2 === undefined)
-          return { alertText: output.colorTowerMergeLetter!({ color: color, letter: output[doubled]!() }) };
-        return { alertText: output.colorTowerMergePlayers!({ color: color, player1: name1, player2: name2 }) };
+          return { infoText: output.colorTowerMergeLetter!({ color: color, letter: output[doubled]!() }) };
+        return { infoText: output.colorTowerMergePlayers!({ color: color, player1: name1, player2: name2 }) };
       },
       run: (data) => {
         data.arcaneChannelColor.clear();
