@@ -8,6 +8,8 @@ import { RaidbossData } from '../../../../../types/data';
 import { NetMatches } from '../../../../../types/net_matches';
 import { TriggerSet } from '../../../../../types/trigger';
 
+export type Banishment = 'redLeft' | 'redRight' | 'blueLeft' | 'blueRight';
+
 export interface Data extends RaidbossData {
   silkieSuds?: 'green' | 'blue' | 'yellow';
   silkieSoap: number;
@@ -21,6 +23,10 @@ export interface Data extends RaidbossData {
   gladThunder?: string;
   gladVisage?: 'hateful' | 'accursed';
   gladExplosion: number;
+  gahBrandPhase: number;
+  gahMyBrand: number;
+  gahMagicv: string[];
+  gahBanishment?: Banishment;
 }
 
 export const getRushOffset = (x: number) => {
@@ -46,6 +52,9 @@ const triggerSet: TriggerSet<Data> = {
       gladRushNum: [],
       gladRushCast: [],
       gladExplosion: 0,
+      gahBrandPhase: 0,
+      gahMyBrand: 0,
+      gahMagicv: [],
     };
   },
   triggers: [
@@ -781,17 +790,245 @@ const triggerSet: TriggerSet<Data> = {
     },
 
     // ///////////////////////////////////////////////////////////////////////////////
+    //
     {
       id: 'AS+ 젤레스가 Show of Strength',
       type: 'StartsUsing',
       netRegex: NetRegexes.startsUsing({ id: '74AF', source: 'Shadowcaster Zeless Gah', capture: false }),
       response: Responses.aoe(),
     },
+    //
     {
       id: 'AS+ 젤레스가 Firesteel Fracture',
       type: 'StartsUsing',
       netRegex: NetRegexes.startsUsing({ id: '74AD', source: 'Shadowcaster Zeless Gah' }),
       response: Responses.tankCleave(),
+    },
+    //
+    {
+      id: 'AS+ 젤레스가 Infern Brand',
+      type: 'StartsUsing',
+      netRegex: NetRegexes.startsUsing({ id: '7491', source: 'Shadowcaster Zeless Gah' }),
+      infoText: (data, _matches, output) => {
+        data.gahBrandPhase++;
+        if (data.gahBrandPhase === 1)
+          return output.p1!();
+        if (data.gahBrandPhase === 2)
+          return output.p2!();
+        if (data.gahBrandPhase === 3)
+          return output.p3!();
+        if (data.gahBrandPhase === 4)
+          return output.p4!();
+        if (data.gahBrandPhase === 5)
+          return output.p5!();
+      },
+      outputStrings: {
+        p1: '돌아가는 기둥, 안전지대 찾아요',
+        p2: '마법진 위치 → 북:🟥 / 서:🟦',
+        p3: '전이 기둥에서 놀아요',
+        p4: '카드 전이, 안전지대를 찾아요',
+        p5: '12번→가운데, 34번→파란선 지팡',
+      },
+    },
+    /* //
+    {
+      id: 'AS+ 젤레스가 Cryptic Portal',
+      type: 'StartsUsing',
+      netRegex: NetRegexes.startsUsing({ id: '7494', source: 'Shadowcaster Zeless Gah' }),
+    },*/
+    //
+    {
+      id: 'AS+ 젤레스가 Firesteel Strike',
+      type: 'StartsUsing',
+      netRegex: NetRegexes.startsUsing({ id: '74B0', source: 'Shadowcaster Zeless Gah' }),
+      response: Responses.spread(),
+      run: (data) => data.gahMagicv = [],
+    },
+    //
+    {
+      id: 'AS+ 젤레스가 Firesteel Strike Collect',
+      type: 'Ability',
+      netRegex: NetRegexes.ability({ id: ['74B1', '74B2'], source: 'Shadowcaster Zeless Gah' }),
+      run: (data, matches) => data.gahMagicv.push(matches.target),
+    },
+    //
+    {
+      id: 'AS+ 젤레스가 Blessed Beacon',
+      type: 'StartsUsing',
+      netRegex: NetRegexes.startsUsing({ id: '74B3', source: 'Shadowcaster Zeless Gah' }),
+      infoText: (data, _matches, output) => {
+        if (data.gahMagicv.length === 0)
+          return output.text!();
+
+        if (data.gahMagicv.includes(data.me))
+          return output.behind!();
+
+        const players: string[] = [];
+        data.gahMagicv.forEach((value) => players.push(data.ShortName(value)));
+        return output.front!({ players: players.join(', ') });
+      },
+      outputStrings: {
+        text: '두 번 내려치기',
+        front: '앞에서 막아줘요 (${players})',
+        behind: '뒤에 숨어요',
+      },
+    },
+    //
+    {
+      id: 'AS+ 젤레스가 Brands',
+      type: 'GainsEffect',
+      netRegex: NetRegexes.gainsEffect({ effectId: 'CC[4-7]' }),
+      condition: Conditions.targetIsYou(),
+      durationSeconds: (_data, matches) => parseFloat(matches.duration),
+      infoText: (data, matches, output) => {
+        if (matches.effectId === 'CC4')
+          data.gahMyBrand = 1;
+        else if (matches.effectId === 'CC5')
+          data.gahMyBrand = 2;
+        else if (matches.effectId === 'CC6')
+          data.gahMyBrand = 3;
+        else if (matches.effectId === 'CC7')
+          data.gahMyBrand = 4;
+        else
+          throw new UnreachableCode();
+        return output.text!({ num: output['num' + data.gahMyBrand.toString()]!() });
+      },
+      outputStrings: {
+        text: '내 브랜드: ${num}',
+        num1: Outputs.cnum1,
+        num2: Outputs.cnum2,
+        num3: Outputs.cnum3,
+        num4: Outputs.cnum4,
+      },
+    },
+    //
+    {
+      id: 'AS+ 젤레스가 Frames',
+      type: 'GainsEffect',
+      netRegex: NetRegexes.gainsEffect({ effectId: 'CC[89AB]' }),
+      condition: Conditions.targetIsYou(),
+      durationSeconds: (_data, matches) => parseFloat(matches.duration),
+      infoText: (data, matches, output) => {
+        if (matches.effectId === 'CC8')
+          data.gahMyBrand = 1;
+        else if (matches.effectId === 'CC9')
+          data.gahMyBrand = 2;
+        else if (matches.effectId === 'CCA')
+          data.gahMyBrand = 3;
+        else if (matches.effectId === 'CCB')
+          data.gahMyBrand = 4;
+        else
+          throw new UnreachableCode();
+        return output.text!({ num: output['num' + data.gahMyBrand.toString()]!() });
+      },
+      outputStrings: {
+        text: '내 플레임: ${num}',
+        num1: Outputs.cnum1,
+        num2: Outputs.cnum2,
+        num3: Outputs.cnum3,
+        num4: Outputs.cnum4,
+      },
+    },
+    //
+    {
+      id: 'AS+ 젤레스가 Frames Over',
+      type: 'GainsEffect',
+      netRegex: NetRegexes.gainsEffect({ effectId: 'CC[89AB]' }),
+      condition: Conditions.targetIsYou(),
+      delaySeconds: (_data, matches) => parseFloat(matches.duration) - 5,
+      alertText: '안전 지대로 찾아 가욧',
+    },
+    /* 당장 안끊어도 된다 위에 플레임되면 끊기기 시작함
+    //
+    {
+      id: 'AS+ 젤레스가 Cryptic Flames',
+      type: 'Ability',
+      netRegex: NetRegexes.ability({ id: '74B6', source: 'Shadowcaster Zeless Gah' }),
+      alertText: (data, _matches, output) => output.text!({ num: data.gahMyBrand }),
+      outputStrings: {
+        text: '선 끊어요. 내 번호는 ${num}번',
+      },
+    },*/
+    // 캐스트 샤도 (749Ax1, 749Ex6, 749Cx6) 이중에 뭘 골라야하지
+    {
+      id: 'AS+ 젤레스가 Cast Shadow',
+      type: 'StartsUsing',
+      netRegex: NetRegexes.startsUsing({ id: '749A', source: 'Shadowcaster Zeless Gah' }),
+      alertText: '방사 장판 피하면서, 안전지대로',
+    },
+    //
+    {
+      id: 'AS+ 젤레스가 Banishment',
+      type: 'Ability',
+      netRegex: NetRegexes.ability({ id: '74BC', source: 'Shadowcaster Zeless Gah' }),
+      delaySeconds: 4,
+      infoText: '안쪽으로 회전하는 곳에 위치하세요',
+    },
+    //
+    {
+      id: 'AS+ 젤레스가 Call of the Portal Collect',
+      type: 'GainsEffect',
+      netRegex: NetRegexes.gainsEffect({ effectId: 'CCC' }),
+      condition: Conditions.targetIsYou(),
+      delaySeconds: (_data, matches) => parseFloat(matches.duration) + 1,
+      alertText: '포탈 전이: 같은 줄의 마커로 가욧',
+    },
+    //
+    {
+      id: 'AS+ 젤레스가 Rite of Passage Collect',
+      type: 'GainsEffect',
+      netRegex: NetRegexes.gainsEffect({ effectId: 'CCD' }),
+      condition: Conditions.targetIsYou(),
+      delaySeconds: (_data, matches) => parseFloat(matches.duration) + 1,
+      alertText: '자가 전이: 같은 줄의 마커로 가욧',
+    },
+    //
+    {
+      id: 'AS+ 젤레스가 빨강파랑/왼쪽오른쪽',
+      type: 'GainsEffect',
+      netRegex: NetRegexes.gainsEffect({ effectId: 'B9A' }),
+      condition: Conditions.targetIsYou(),
+      infoText: (data, matches, output) => {
+        if (matches.count === '1D2')
+          data.gahBanishment = 'redRight';
+        else if (matches.count === '1D3')
+          data.gahBanishment = 'blueLeft';
+        else if (matches.count === '1CD')
+          data.gahBanishment = 'blueRight';
+        else if (matches.count === '1CE')
+          data.gahBanishment = 'redLeft';
+        else
+          throw new UnreachableCode();
+
+        return output[data.gahBanishment]!();
+      },
+      outputStrings: {
+        redLeft: '🡸 첫째줄',
+        redRight: '둘째줄 🡺',
+        blueRight: '셋째줄 🡺',
+        blueLeft: '🡸 맨아랫줄',
+      },
+    },
+    //
+    {
+      id: 'AS+ 젤레스가 Brands P5',
+      type: 'GainsEffect',
+      netRegex: NetRegexes.gainsEffect({ effectId: 'CC[4-7]' }),
+      condition: Conditions.targetIsYou(),
+      delaySeconds: (_data, matches) => parseFloat(matches.duration) - 3,
+      durationSeconds: 11,
+      infoText: (data, _matches, output) => {
+        if (data.gahBrandPhase !== 5)
+          return;
+        if (data.gahMyBrand === 1 || data.gahMyBrand === 1)
+          return output.f12!();
+        if (data.gahMyBrand === 3 || data.gahMyBrand === 4)
+          return output.f34!();
+      },
+      outputStrings: {
+        f12: '줄끊고 → 34번 줄 보고 → 지팡이 불꽃 → 장판깔기',
+        f34: '지팡이 불꽃 → 줄끊고 → 원위치 → 장판깔기',
+      },
     },
   ],
   timelineReplace: [
