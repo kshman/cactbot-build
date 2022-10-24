@@ -15,13 +15,10 @@ hideall "--sync--"
 38.4 "Fresh Puff" sync / 1[56]:[^:]*:Silkie:7766:/
 43.5 "Bracing Suds" sync / 1[56]:[^:]*:Silkie:7757:/
 50.1 "Squeaky Clean" sync / 1[56]:[^:]*:Silkie:(7751|7752):/
-51.6 "Squeaky Clean 1" sync / 1[56]:[^:]*:Silkie:7753:/
-53.3 "Squeaky Clean 2" sync / 1[56]:[^:]*:Silkie:7754:/
-54.8 "Squeaky Clean 3" sync / 1[56]:[^:]*:Silkie:(7755|7756):/
+51.6 "Squeaky Clean x3" duration 3 sync / 1[56]:[^:]*:Silkie:7753:/
 61.9 "Chilling Suds" sync / 1[56]:[^:]*:Silkie:7758:/
 64.0 "--sync--" sync / 1[56]:[^:]*:Silkie:79FB:/
 69.0 "Slippery Soap" sync / 1[56]:[^:]*:Silkie:775E:/
-69.4 "Slippery Soap" sync / 1[56]:[^:]*:Silkie:7760:/
 73.0 "Chilling Duster" sync / 1[56]:[^:]*:Silkie:7763:/
 80.6 "Carpet Beater" sync / 1[56]:[^:]*:Silkie:774F:/
 89.7 "Soaping Spree" sync / 1[56]:[^:]*:Silkie:7767:/
@@ -35,7 +32,6 @@ hideall "--sync--"
 134.6 "Fizzling Suds" sync / 1[56]:[^:]*:Silkie:7759:/
 136.7 "--sync--" sync / 1[56]:[^:]*:Silkie:79FB:/
 141.7 "Slippery Soap" sync / 1[56]:[^:]*:Silkie:775E:/
-142.1 "Slippery Soap" #sync / 1[56]:[^:]*:Silkie:7762:/
 145.7 "Fizzling Duster" sync / 1[56]:[^:]*:Silkie:7765:/
 146.0 "Soapsud Static" #sync / 1[56]:[^:]*:Silkie:77ED:/
 160.1 "Total Wash" sync / 1[56]:[^:]*:Silkie:7750:/
@@ -48,7 +44,6 @@ hideall "--sync--"
 202.3 "Carpet Beater" sync / 1[56]:[^:]*:Silkie:774F:/
 204.4 "--sync--" sync / 1[56]:[^:]*:Eastern Ewer:79FB:/
 209.4 "Slippery Soap" sync / 1[56]:[^:]*:Silkie:775E:/
-209.8 "Slippery Soap" sync / 1[56]:[^:]*:Silkie:7760:/
 213.4 "Chilling Duster" sync / 1[56]:[^:]*:Silkie:7763:/
 225.9 "Bracing Suds" sync / 1[56]:[^:]*:Silkie:7757:/
 233.0 "Soaping Spree" sync / 1[56]:[^:]*:Silkie:7767:/
@@ -57,22 +52,18 @@ hideall "--sync--"
 249.6 "Bracing Suds" sync / 1[56]:[^:]*:Silkie:7757:/
 255.7 "Fresh Puff" sync / 1[56]:[^:]*:Silkie:7766:/
 262.3 "Squeaky Clean" sync / 1[56]:[^:]*:Silkie:(7751|7752):/
-263.8 "Squeaky Clean 1" sync / 1[56]:[^:]*:Silkie:7753:/
-265.5 "Squeaky Clean 2" sync / 1[56]:[^:]*:Silkie:7754:/
+263.8 "Squeaky Clean x3" duration 3 sync / 1[56]:[^:]*:Silkie:7753:/
 266.9 "Puff and Tumble" #sync / 1[56]:[^:]*:Silken Puff:7771:/
-266.9 "Squeaky Clean 3" sync / 1[56]:[^:]*:Silkie:(7755|7756):/
 276.0 "Soaping Spree" sync / 1[56]:[^:]*:Silkie:7767:/
 276.0 "Chilling Duster and Bracing Duster" #sync / 1[56]:[^:]*:Silken Puff:(7768|7769):/
 283.1 "Total Wash" sync / 1[56]:[^:]*:Silkie:7750:/
 292.3 "Chilling Suds" sync / 1[56]:[^:]*:Silkie:7758:/
 294.4 "--sync--" sync / 1[56]:[^:]*:Silkie:79FB:/
 299.4 "Slippery Soap" sync / 1[56]:[^:]*:Silkie:775E:/
-299.9 "Slippery Soap" sync / 1[56]:[^:]*:Silkie:7760:/
 303.5 "Chilling Duster" sync / 1[56]:[^:]*:Silkie:7763:/
 309.0 "Chilling Suds" sync / 1[56]:[^:]*:Silkie:7758:/
 311.1 "--sync--" sync / 1[56]:[^:]*:Silkie:79FB:/
 316.1 "Slippery Soap" sync / 1[56]:[^:]*:Silkie:775E:/
-316.4 "Slippery Soap" sync / 1[56]:[^:]*:Silkie:7760:/
 320.0 "Chilling Duster" sync / 1[56]:[^:]*:Silkie:7763:/
 332.9 "Total Wash (enrage)" sync / 1[56]:[^:]*:Silkie:79E0:/
 338.1 "Total Wash (enrage)" sync / 1[56]:[^:]*:Silkie:79F9:/
@@ -85,7 +76,6 @@ hideall "--sync--"
 1042.8 "Specter of Might" sync / 1[56]:[^:]*:Gladiator of Sil'dih:7673:/
 1062.0 "--sync--" sync / 1[56]:[^:]*:Gladiator of Sil'dih:6854:/
 1067.0 "Sculptor's Passion" sync / 1[56]:[^:]*:Gladiator of Sil'dih:766C:/
-1067.3 "Sculptor's Passion" sync / 1[56]:[^:]*:Gladiator of Sil'dih:79F3:/
 1082.4 "Mighty Smite" sync / 1[56]:[^:]*:Gladiator of Sil'dih:7672:/
 1095.5 "Curse of the Fallen" sync / 1[56]:[^:]*:Gladiator of Sil'dih:7674:/
 1097.6 "--sync--" sync / 1[56]:[^:]*:Gladiator of Sil'dih:7639:/
@@ -106,10 +96,6 @@ hideall "--sync--"
 1206.6 "--sync--" sync / 1[56]:[^:]*:Gladiator of Sil'dih:7639:/
 1212.7 "Curse of the Monument" sync / 1[56]:[^:]*:Gladiator of Sil'dih:7666:/
 1219.9 "Sundered Remains" sync / 1[56]:[^:]*:Gladiator of Sil'dih:7668:/
-1220.5 "Sundered Remains" sync / 1[56]:[^:]*:Gladiator of Sil'dih:7668:/
-1221.1 "Sundered Remains" sync / 1[56]:[^:]*:Gladiator of Sil'dih:7668:/
-1221.7 "Sundered Remains" sync / 1[56]:[^:]*:Gladiator of Sil'dih:7668:/
-1222.3 "Sundered Remains" sync / 1[56]:[^:]*:Gladiator of Sil'dih:7668:/
 1224.9 "--sync--" sync / 1[56]:[^:]*:Gladiator of Sil'dih:7639:/
 1232.9 "Scream of the Fallen" sync / 1[56]:[^:]*:Gladiator of Sil'dih:7678:/
 1233.3 "Colossal Wreck" sync / 1[56]:[^:]*:Gladiator of Sil'dih:7669:/
@@ -121,7 +107,6 @@ hideall "--sync--"
 1278.3 "Specter of Might" sync / 1[56]:[^:]*:Gladiator of Sil'dih:7673:/
 1297.5 "--sync--" sync / 1[56]:[^:]*:Gladiator of Sil'dih:6854:/
 1260.0 "Sculptor's Passion" sync / 1[56]:[^:]*:Gladiator of Sil'dih:766C:/
-1260.3 "Sculptor's Passion" sync / 1[56]:[^:]*:Gladiator of Sil'dih:79F3:/
 
 # 젤레스 가
 2000.0 "--sync--" sync / 00:0839::The Trial of Balance will be sealed off/ window 2000,1
@@ -129,9 +114,7 @@ hideall "--sync--"
 2011.5 "Show of Strength" sync / 1[56]:[^:]*:Shadowcaster Zeless Gah:74AF:/
 2023.7 "Infern Brand" sync / 1[56]:[^:]*:Shadowcaster Zeless Gah:7491:/
 2030.9 "Cryptic Portal" sync / 1[56]:[^:]*:Shadowcaster Zeless Gah:7494:/
-2042.0 "Firesteel Strike" sync / 1[56]:[^:]*:Shadowcaster Zeless Gah:74B0:/
-2042.4 "Firesteel Strike" sync / 1[56]:[^:]*:Shadowcaster Zeless Gah:74B1:/
-2043.8 "Firesteel Strike" sync / 1[56]:[^:]*:Shadowcaster Zeless Gah:74B2:/
+2042.0 "Firesteel Strike x3" duration 1.8 sync / 1[56]:[^:]*:Shadowcaster Zeless Gah:74B0:/
 2051.8 "Blessed Beacon" sync / 1[56]:[^:]*:Shadowcaster Zeless Gah:74B3:/
 2052.2 "Blessed Beacon" sync / 1[56]:[^:]*:Shadowcaster Zeless Gah:74B4:/
 2054.3 "Blessed Beacon" sync / 1[56]:[^:]*:Shadowcaster Zeless Gah:74B5:/
