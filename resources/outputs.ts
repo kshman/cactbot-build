@@ -167,7 +167,7 @@ export default {
     ko: '힐러 그룹 쉐어',
   },
   stackOnYou: {
-    en: '나한테 모일듯',
+    en: '내게 뭉쳐욧',
     de: 'Auf DIR sammeln',
     fr: 'Package sur VOUS',
     ja: '自分に集合',
@@ -805,5 +805,33 @@ export default {
   },
   arrowNW: {
     en: '🡼',
+  },
+  // 서클 넘버
+  cnum1: {
+    en: '①',
+  },
+  cnum2: {
+    en: '②',
+  },
+  cnum3: {
+    en: '③',
+  },
+  cnum4: {
+    en: '④',
+  },
+  cnum5: {
+    en: '⑤',
+  },
+  cnum6: {
+    en: '⑥',
+  },
+  cnum7: {
+    en: '⑦',
+  },
+  cnum8: {
+    en: '⑧',
+  },
+  cnum9: {
+    en: '⑨',
   },
 } as const;
