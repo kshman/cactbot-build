@@ -8,6 +8,7 @@ import { TriggerSet } from '../../../../../types/trigger';
 
 export interface Data extends RaidbossData {
   silkieSuds?: 'green' | 'blue' | 'yellow';
+  silkieSoap: number;
   silkieFreshPuff: number;
   gladRushes: number[];
   gladMyTime: number;
@@ -21,6 +22,7 @@ const triggerSet: TriggerSet<Data> = {
   zoneId: ZoneId.AnotherSildihnSubterrane,
   initData: () => {
     return {
+      silkieSoap: 0,
       silkieFreshPuff: 0,
       gladRushes: [],
       gladMyTime: 0,
@@ -85,11 +87,11 @@ const triggerSet: TriggerSet<Data> = {
       netRegex: NetRegexes.startsUsing({ id: '7959' }),
       infoText: (data, matches, output) => {
         if (matches.target !== undefined)
-          return output.aoewho!({ who: data.ShortName(matches.target) });
+          return output.aoewho!({ player: data.ShortName(matches.target) });
         return output.aoecmn!();
       },
       outputStrings: {
-        aoewho: '장판 깔았네: ${who}',
+        aoewho: '장판 깔았네: ${player}',
         aoecmn: '아무에게 장판 깔았네',
       },
     },
@@ -163,7 +165,7 @@ const triggerSet: TriggerSet<Data> = {
       id: 'AS+ 실키 Total Wash',
       type: 'StartsUsing',
       netRegex: NetRegexes.startsUsing({ id: '7750', source: 'Silkie', capture: false }),
-      response: Responses.aoe(),
+      infoText: '전체 공격 + 출혈',
     },
     // 실키: Bracing Suds
     {
@@ -232,8 +234,39 @@ const triggerSet: TriggerSet<Data> = {
     // 실키: Slippery Soap
     {
       id: 'AS+ 실키 Slippery Soap',
+      type: 'Ability',
+      netRegex: NetRegexes.ability({ id: '79FB', source: 'Silkie' }),
+      preRun: (data) => data.silkieSoap++,
+      alertText: (data, matches, output) => {
+        if (data.silkieSuds === 'green') {
+          if (matches.target === data.me)
+            return output.kbFront!({ player: data.ShortName(matches.target) });
+          return output.kbBack!();
+        }
+        if (matches.target === data.me) {
+          if (data.silkieSoap === 1)
+            return output.puff!();
+          if (data.silkieSoap === 3)
+            return output.puffEw!();
+          return output.behind!();
+        }
+        return output.front!({ player: data.ShortName(matches.target) });
+      },
+      outputStrings: {
+        kbFront: '넉백! ${player} 앞에 서주세요',
+        kbBack: '넉백! 맨 뒤에 서주세요',
+        puff: '구슬과 맨 뒤에 서주세요',
+        puffEw: '구슬과 맨 뒤에 서주세요 (동서)',
+        behind: '맨 뒤에 서주세요',
+        front: '${player} 앞에 서주세요',
+      },
+    },
+    // 실키: Slippery Soap Blue
+    {
+      id: 'AS+ 실키 Slippery Soap Blue',
       type: 'StartsUsing',
       netRegex: NetRegexes.startsUsing({ id: '775E', source: 'Silkie' }),
+      delaySeconds: (_data, matches) => parseFloat(matches.castTime) - 2,
       alertText: (data, _matches, outputs) => {
         if (data.silkieSuds === 'blue')
           return outputs.blue!();
@@ -247,9 +280,8 @@ const triggerSet: TriggerSet<Data> = {
     // 실키: Slippery Soap Run
     {
       id: 'AS+ 실키 Slippery Soap Run',
-      type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ id: '775E', source: 'Silkie' }),
-      delaySeconds: 7,
+      type: 'Ability',
+      netRegex: NetRegexes.ability({ id: '775E', source: 'Silkie', capture: false }),
       alertText: (data, _matches, outputs) => {
         if (data.silkieSuds === 'blue')
           return outputs.blue!();
@@ -290,12 +322,20 @@ const triggerSet: TriggerSet<Data> = {
       netRegex: NetRegexes.startsUsing({ id: '7671', source: 'Gladiator of Sil\'dih', capture: false }),
       response: Responses.aoe(),
     },
-    // 그라디아토르: Sculptor's Passion
+    // 그라디아토르: Sculptor's Passion(766C), 대상자(6854)
     {
       id: 'AS++ 그라디아토르 Sculptor\'s Passion',
-      type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ id: '766C', source: 'Gladiator of Sil\'dih', capture: false }),
-      alertText: '보스 엉댕이에 한줄로 서욧',
+      type: 'Ability',
+      netRegex: NetRegexes.ability({ id: '6854', source: 'Gladiator of Sil\'dih' }),
+      alertText: (data, matches, output) => {
+        if (matches.target === data.me)
+          return output.itsme!();
+        return output.target!({ player: data.ShortName(matches.target) });
+      },
+      outputStrings: {
+        target: '${player}에게 돌진! 보스 엉댕이에 한줄로 서욧',
+        itsme: '내게 돌진! 보스 엉댕이에 한줄로 서욧',
+      },
     },
     // 그라디아토르: Mighty Smite
     {
@@ -347,54 +387,54 @@ const triggerSet: TriggerSet<Data> = {
         unknown: Outputs.unknown,
       },
     },
-    // 그라디아토르: Curse of the Fallen
+    /* // 그라디아토르: Curse of the Fallen
     {
       id: 'AS+ 그라디아토르 Curse of the Fallen',
       type: 'StartsUsing',
       netRegex: NetRegexes.startsUsing({ id: '7674', source: 'Gladiator of Sil\'dih', capture: false }),
       infoText: '저주 디버프 확인하세요',
-    },
+    },*/
     //
     {
-      id: 'AS+ 그라디아토르: Lingering Echoes',
+      id: 'AS+ 그라디아토르 Lingering Echoes Collect',
       type: 'GainsEffect',
       netRegex: NetRegexes.gainsEffect({ effectId: 'CDC' }),
       run: (data, matches) => data.gladLinger = matches.target,
     },
     //
     {
-      id: 'AS+ 그라디아토르: Thunderous Echo',
+      id: 'AS+ 그라디아토르 Thunderous Echo Collect',
       type: 'GainsEffect',
       netRegex: NetRegexes.gainsEffect({ effectId: 'CDD' }),
-      delaySeconds: 0.2,
       run: (data, matches) => data.gladThunder = matches.target,
     },
     //
     {
-      id: 'AS+ 그라디아토르: Thunderous Echo Stack',
+      id: 'AS+ 그라디아토르 Thunderous Echo Stack',
       type: 'GainsEffect',
       netRegex: NetRegexes.gainsEffect({ effectId: 'CDD' }),
       delaySeconds: (_data, matches) => parseFloat(matches.duration) - 3,
       durationSeconds: 3,
-      infoText: (data, _matches, output) => {
+      infoText: (data, matches, output) => {
         if (data.gladLinger === data.me)
-          return;
-        if (data.gladThunder === data.me)
+          return output.spread!();
+        if (matches.target === data.me)
           return output.itsme!();
-        return output.text!({ who: data.ShortName(data.gladThunder) });
+        return output.stack!({ player: data.ShortName(data.gladThunder) });
       },
       outputStrings: {
-        text: '뭉쳐요: ${who}',
-        itsme: '내게 뭉쳐요',
+        stack: Outputs.stackOnPlayer,
+        itsme: Outputs.stackOnYou,
+        spread: Outputs.spread,
       },
     },
     //
     {
-      id: 'AS+ 그라디아토르: Echo of the Fallen',
+      id: 'AS+ 그라디아토르 Echo of the Fallen',
       type: 'GainsEffect',
       netRegex: NetRegexes.gainsEffect({ effectId: 'CDA' }),
       condition: Conditions.targetIsYou(),
-      delaySeconds: 0.4,
+      delaySeconds: 0.2,
       durationSeconds: 17,
       alertText: (data, matches, output) => {
         if (data.gladLinger === data.me)
@@ -402,34 +442,28 @@ const triggerSet: TriggerSet<Data> = {
         const thun = (data.gladThunder === data.me) ? output.itsme!() : data.ShortName(data.gladThunder);
         data.gladMyTime = parseInt(matches.duration);
         if (data.gladMyTime === 17)
-          return output.s17!({ who: thun });
+          return output.s17!({ player: thun });
         if (data.gladMyTime === 14)
-          return output.s14!({ who: thun });
+          return output.s14!({ player: thun });
         return output.unknown!();
       },
       outputStrings: {
-        s17: '뭉쳤다 → 흩어져요 (${who})',
-        s14: '흩어졌다 → 뭉쳐요 (${who})',
+        s17: '뭉쳤다 → 흩어져요 (${player})',
+        s14: '흩어졌다 → 뭉쳐요 (${player})',
         itsme: '내가 뭉치기',
-        spread: '내가 링거, 🡺오른쪽에서 홀로',
+        spread: '내가 링거, 홀로 있어야 해요',
         unknown: Outputs.unknown,
       },
     },
     //
     {
-      id: 'AS+ 그라디아토르: Echo of the Fallen Spread',
+      id: 'AS+ 그라디아토르 Echo of the Fallen Spread',
       type: 'GainsEffect',
       netRegex: NetRegexes.gainsEffect({ effectId: 'CDA' }),
       condition: Conditions.targetIsYou(),
       delaySeconds: (_data, matches) => parseFloat(matches.duration) - 3,
       durationSeconds: 3,
-      infoText: (data, _matches, output) => {
-        if (data.gladLinger !== data.me)
-          return output.spread!();
-      },
-      outputStrings: {
-        spread: Outputs.spread,
-      },
+      response: Responses.spread(),
     },
     // 그라디아토르: Ring of Might
     {
@@ -547,15 +581,15 @@ const triggerSet: TriggerSet<Data> = {
       condition: (data, matches) => matches.source === data.me || matches.target === data.me,
       alertText: (data, matches, output) => {
         const who = matches.source === data.me ? matches.target : matches.source;
-        return output.run!({ who: data.ShortName(who) });
+        return output.run!({ player: data.ShortName(who) });
       },
       outputStrings: {
-        run: '줄 끊어요 (+${who})',
+        run: '줄 끊어요 (+${player})',
       },
     },
     //
     {
-      id: 'AS+ 그라디아토르: Scream of the Fallen',
+      id: 'AS+ 그라디아토르 Scream of the Fallen',
       type: 'GainsEffect',
       netRegex: NetRegexes.gainsEffect({ effectId: 'CDB' }),
       condition: Conditions.targetIsYou(),
@@ -586,6 +620,14 @@ const triggerSet: TriggerSet<Data> = {
         boom: '벽쪽에 붙어 폭파시켜요',
         tower: '타워 밟아요',
       },
+    },
+
+    // ///////////////////////////////////////////////////////////////////////////////
+    {
+      id: 'AS+ 젤레스가 Show of Strength',
+      type: 'StartsUsing',
+      netRegex: NetRegexes.startsUsing({ id: '74AF', source: 'Shadowcaster Zeless Gah', capture: false }),
+      response: Responses.aoe(),
     },
   ],
   timelineReplace: [

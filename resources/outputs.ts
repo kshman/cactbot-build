@@ -167,7 +167,7 @@ export default {
     ko: '힐러 그룹 쉐어',
   },
   stackOnYou: {
-    en: '나한테 모일듯',
+    en: '내게 뭉쳐욧',
     de: 'Auf DIR sammeln',
     fr: 'Package sur VOUS',
     ja: '自分に集合',

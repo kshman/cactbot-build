@@ -10,6 +10,7 @@ import { TriggerSet } from '../../../../../types/trigger';
 // 검색: StartsCasting 14:([^:]*):Gladiator of Sil'dih:([^:]*)
 // 검색: StartsCasting 14:([^:]*):シラディハ・グラディアトル:([^:]*)
 // 검색: StartsCasting 14:([^:]*):Shadowcaster Zeless Gah:([^:]*)
+// 검색: StartsCasting 14:([^:]*):影火のゼレズ・ガー:([^:]*)
 // 검색: StartsCasting 14:([^:]*):Thorne Knight:([^:]*)
 
 export interface Data extends RaidbossData {
