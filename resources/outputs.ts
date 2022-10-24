@@ -806,4 +806,32 @@ export default {
   arrowNW: {
     en: '🡼',
   },
+  // 서클 넘버
+  cnum1: {
+    en: '①',
+  },
+  cnum2: {
+    en: '②',
+  },
+  cnum3: {
+    en: '③',
+  },
+  cnum4: {
+    en: '④',
+  },
+  cnum5: {
+    en: '⑤',
+  },
+  cnum6: {
+    en: '⑥',
+  },
+  cnum7: {
+    en: '⑦',
+  },
+  cnum8: {
+    en: '⑧',
+  },
+  cnum9: {
+    en: '⑨',
+  },
 } as const;

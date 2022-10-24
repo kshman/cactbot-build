@@ -8,6 +8,7 @@ import { TriggerSet } from '../../../../../types/trigger';
 // 검색: StartsCasting 14:([^:]*):Geryon the Steer:([^:]*)
 // 검색: StartsCasting 14:([^:]*):Silkie:([^:]*)
 // 검색: StartsCasting 14:([^:]*):Gladiator of Sil'dih:([^:]*)
+// 검색: StartsCasting 14:([^:]*):シラディハ・グラディアトル:([^:]*)
 // 검색: StartsCasting 14:([^:]*):Shadowcaster Zeless Gah:([^:]*)
 // 검색: StartsCasting 14:([^:]*):Thorne Knight:([^:]*)
 

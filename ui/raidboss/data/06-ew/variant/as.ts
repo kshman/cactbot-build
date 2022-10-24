@@ -8,25 +8,23 @@ import { TriggerSet } from '../../../../../types/trigger';
 
 export interface Data extends RaidbossData {
   silkieSuds?: 'green' | 'blue' | 'yellow';
+  silkieFreshPuff: number;
   gladRushes: number[];
-  gladMyEcho: number;
-  gladLingWho?: string;
-  gladThunWho?: string;
+  gladMyTime: number;
+  gladLinger?: string;
+  gladThunder?: string;
+  gladVisage?: 'hateful' | 'accursed';
+  gladExplosion: number;
 }
-
-export const vaStrings = {
-  unknown: Outputs.unknown,
-  num1: '①',
-  num2: '②',
-  num3: '③',
-} as const;
 
 const triggerSet: TriggerSet<Data> = {
   zoneId: ZoneId.AnotherSildihnSubterrane,
   initData: () => {
     return {
+      silkieFreshPuff: 0,
       gladRushes: [],
-      gladMyEcho: 0,
+      gladMyTime: 0,
+      gladExplosion: 0,
     };
   },
   triggers: [
@@ -196,8 +194,26 @@ const triggerSet: TriggerSet<Data> = {
     {
       id: 'AS+ 실키 Fresh Puff',
       type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ id: '7766', source: 'Silkie', capture: false }),
-      infoText: '솜털 나와요~',
+      netRegex: NetRegexes.startsUsing({ id: '7766', source: 'Silkie' }),
+      preRun: (data) => data.silkieFreshPuff++,
+      infoText: (data, _matches, output) => {
+        if (data.silkieFreshPuff === 1)
+          return output.p1!();
+        else if (data.silkieFreshPuff === 2)
+          return output.p2!();
+        else if (data.silkieFreshPuff === 3)
+          return output.p3!();
+        else if (data.silkieFreshPuff === 4)
+          return output.p4!();
+        return output.px!();
+      },
+      outputStrings: {
+        p1: '솜털 세개 → 꼬리치기',
+        p2: '솜털 네개, 안전지대 만들어요',
+        p3: '솜털 여덟개, 화이팅이요',
+        p4: '솜털 네개 → 꼬리 방향으로 유도',
+        px: '솜털 나와요',
+      },
     },
     // 실키: Eastern Ewers
     {
@@ -211,7 +227,7 @@ const triggerSet: TriggerSet<Data> = {
       id: 'AS+ 실키 Fizzling:Soaps',
       type: 'StartsUsing',
       netRegex: NetRegexes.startsUsing({ id: '775A', source: 'Silkie' }),
-      alertText: '비스듬히 부채꼴🟡',
+      alertText: '🟡비스듬한 부채꼴',
     },
     // 실키: Slippery Soap
     {
@@ -225,7 +241,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         text: '한줄로 서요',
-        blue: '한줄로 서고, 계속 움직여요!',
+        blue: '한줄로 서고, 🔵계속 움직여요!',
       },
     },
     // 실키: Slippery Soap Run
@@ -245,9 +261,9 @@ const triggerSet: TriggerSet<Data> = {
       },
       run: (data) => delete data.silkieSuds,
       outputStrings: {
-        blue: '십자 장판 피해요',
-        green: '보스 아래로 들어가요',
-        yellow: '비스듬 부채꼴 → 위치로!',
+        blue: '🔵십자 장판 피해요',
+        green: '🟢보스 아래로 들어가요',
+        yellow: '🟡비스듬 부채꼴 → 위치로!',
         none: '색깔 기믹 처리해요',
       },
     },
@@ -316,6 +332,7 @@ const triggerSet: TriggerSet<Data> = {
           return output.unknown!();
 
         const n2s: { [id: number]: string } = {
+          0: output.unknown!(),
           1: output.num1!(),
           2: output.num2!(),
           3: output.num3!(),
@@ -324,25 +341,25 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         rush: '${num1} + ${num2}',
-        num1: vaStrings.num1,
-        num2: vaStrings.num2,
-        num3: vaStrings.num3,
-        unknown: vaStrings.unknown,
+        num1: Outputs.cnum1,
+        num2: Outputs.cnum2,
+        num3: Outputs.cnum3,
+        unknown: Outputs.unknown,
       },
     },
-    /* // 그라디아토르: Curse of the Fallen
+    // 그라디아토르: Curse of the Fallen
     {
       id: 'AS+ 그라디아토르 Curse of the Fallen',
       type: 'StartsUsing',
       netRegex: NetRegexes.startsUsing({ id: '7674', source: 'Gladiator of Sil\'dih', capture: false }),
-      infoText: '저주 확인',
-    },*/
+      infoText: '저주 디버프 확인하세요',
+    },
     //
     {
       id: 'AS+ 그라디아토르: Lingering Echoes',
       type: 'GainsEffect',
       netRegex: NetRegexes.gainsEffect({ effectId: 'CDC' }),
-      run: (data, matches) => data.gladLingWho = matches.target,
+      run: (data, matches) => data.gladLinger = matches.target,
     },
     //
     {
@@ -350,7 +367,7 @@ const triggerSet: TriggerSet<Data> = {
       type: 'GainsEffect',
       netRegex: NetRegexes.gainsEffect({ effectId: 'CDD' }),
       delaySeconds: 0.2,
-      run: (data, matches) => data.gladThunWho = matches.target,
+      run: (data, matches) => data.gladThunder = matches.target,
     },
     //
     {
@@ -360,11 +377,11 @@ const triggerSet: TriggerSet<Data> = {
       delaySeconds: (_data, matches) => parseFloat(matches.duration) - 3,
       durationSeconds: 3,
       infoText: (data, _matches, output) => {
-        if (data.gladLingWho === data.me)
+        if (data.gladLinger === data.me)
           return;
-        if (data.gladThunWho === data.me)
+        if (data.gladThunder === data.me)
           return output.itsme!();
-        return output.text!({ who: data.ShortName(data.gladThunWho) });
+        return output.text!({ who: data.ShortName(data.gladThunder) });
       },
       outputStrings: {
         text: '뭉쳐요: ${who}',
@@ -380,22 +397,22 @@ const triggerSet: TriggerSet<Data> = {
       delaySeconds: 0.4,
       durationSeconds: 17,
       alertText: (data, matches, output) => {
-        if (data.gladLingWho === data.me)
+        if (data.gladLinger === data.me)
           return output.spread!();
-        const thun = (data.gladThunWho === data.me) ? output.itsme!() : data.ShortName(data.gladThunWho);
-        data.gladMyEcho = parseInt(matches.duration);
-        if (data.gladMyEcho > 16) // 정확히는 17초
+        const thun = (data.gladThunder === data.me) ? output.itsme!() : data.ShortName(data.gladThunder);
+        data.gladMyTime = parseInt(matches.duration);
+        if (data.gladMyTime === 17)
           return output.s17!({ who: thun });
-        if (data.gladMyEcho > 13) // 정확히는 14초
+        if (data.gladMyTime === 14)
           return output.s14!({ who: thun });
         return output.unknown!();
       },
       outputStrings: {
-        s17: '🡸뭉쳤다 → 흩어져요 (${who})',
-        s14: '흩어졌다 → 뭉쳐요🡸 (${who})',
+        s17: '뭉쳤다 → 흩어져요 (${who})',
+        s14: '흩어졌다 → 뭉쳐요 (${who})',
         itsme: '내가 뭉치기',
         spread: '내가 링거, 🡺오른쪽에서 홀로',
-        unknown: vaStrings.unknown,
+        unknown: Outputs.unknown,
       },
     },
     //
@@ -407,7 +424,7 @@ const triggerSet: TriggerSet<Data> = {
       delaySeconds: (_data, matches) => parseFloat(matches.duration) - 3,
       durationSeconds: 3,
       infoText: (data, _matches, output) => {
-        if (data.gladLingWho !== data.me)
+        if (data.gladLinger !== data.me)
           return output.spread!();
       },
       outputStrings: {
@@ -424,33 +441,169 @@ const triggerSet: TriggerSet<Data> = {
         const i2s: { [id: string]: string } = {
           '765D': output.num1!(),
           '765E': output.num2!(),
-          '765F': output.num2!(),
+          '765F': output.num3!(),
         };
         return output.ring!({ num: i2s[matches.id] });
       },
       outputStrings: {
         ring: '링 차지 ${num}',
-        num1: vaStrings.num1,
-        num2: vaStrings.num2,
-        num3: vaStrings.num3,
+        num1: Outputs.cnum1,
+        num2: Outputs.cnum2,
+        num3: Outputs.cnum3,
       },
     },
-    /* // 그라디아토르: Hateful Visage
+    // 그라디아토르: Hateful Visage
     {
       id: 'AS++ 그라디아토르 Hateful Visage',
       type: 'StartsUsing',
       netRegex: NetRegexes.startsUsing({ id: '766E', source: 'Gladiator of Sil\'dih', capture: false }),
-      infoText: '얼굴들 나와요',
-    },*/
+      preRun: (data) => data.gladVisage = 'hateful',
+      infoText: '얼굴들 나와요 (▦만)',
+    },
+    // 그라디아토르: Accursed Visage
+    {
+      id: 'AS++ 그라디아토르 Accursed Visage',
+      type: 'StartsUsing',
+      netRegex: NetRegexes.startsUsing({ id: '768D', source: 'Gladiator of Sil\'dih', capture: false }),
+      preRun: (data) => {
+        data.gladVisage = 'accursed';
+        data.gladMyTime = 0;
+      },
+      infoText: '얼굴들 나와요 (▦와 금은 디버프)',
+    },
     // 그라디아토르: Wrath of Ruin
     {
       id: 'AS++ 그라디아토르 Wrath of Ruin',
       type: 'StartsUsing',
       netRegex: NetRegexes.startsUsing({ id: '7663', source: 'Gladiator of Sil\'dih', capture: false }),
-      alertText: '얼굴 빔 + ▦ 피해요',
+      alertText: (data, _matches, output) => {
+        if (data.gladVisage === 'hateful')
+          return output.hateful!();
+        else if (data.gladVisage === 'accursed')
+          return output.accursed!();
+      },
+      outputStrings: {
+        hateful: '얼굴 빔 피해요',
+        accursed: '얼굴 빔 맞을 위치 찾아요',
+      },
     },
-    // [19:37:17.096] StartsCasting 14:4000F858:Gladiator of Sil'dih:768B:Nothing beside Remains:4000F858:Gladiator of Sil'dih:4.700:-35.02:-271.02:521.00:3.14
-    // [19:37:17.096] StartsCasting 14:4000F86A:Gladiator of Sil'dih:768C:Nothing beside Remains:1034C993:Pu Ru:4.700:-35.00:-271.00:521.00:-3.14
+    // 그라디아토르: Gilded/Silvered Fate
+    {
+      id: 'AS+ 그라디아토르 Gilded/Silvered Fate',
+      type: 'GainsEffect',
+      netRegex: NetRegexes.gainsEffect({ effectId: ['CDF', 'CE0'] }),
+      condition: Conditions.targetIsYou(),
+      durationSeconds: 8,
+      infoText: (data, matches, output) => {
+        data.gladMyTime++;
+        if (data.gladMyTime > 1)
+          return;
+
+        // 금
+        if (matches.effectId === 'CDF') {
+          if (matches.count === '02')
+            return output.g2!();
+          return output.gs!();
+        }
+
+        // 은
+        if (matches.count === '02')
+          return output.s2!();
+        return output.gs!();
+      },
+      outputStrings: {
+        g2: '은🥈 두개 맞아요',
+        s2: '금🥇 두개 맞아요',
+        gs: '금🥇은🥈 하나씩 맞아요',
+      },
+    },
+    // 그라디아토르: Curse of the Monument(7666)
+    {
+      id: 'AS+ 그라디아토르 Curse of the Monument',
+      type: 'StartsUsing',
+      netRegex: NetRegexes.startsUsing({ id: '7666', source: 'Gladiator of Sil\'dih' }),
+      infoText: (data, _matches, output) => {
+        if (data.role === 'tank' || data.CanFeint())
+          return output.east!();
+        else if (data.role === 'healer' || data.CanAddle() || data.CanSilence())
+          return output.west!();
+        return output.move!();
+      },
+      run: (data) => {
+        data.gladMyTime = 0;
+        data.gladExplosion = 0;
+      },
+      outputStrings: {
+        east: '🡺오른쪽에서 줄 기다려요',
+        west: '왼쪽🡸에서 줄 기다려요',
+        move: '옆에서 둘씩 뭉쳐 줄 기다려요',
+      },
+    },
+    // 그라디아토르: Curse of the Monument 줄
+    {
+      id: 'AS++ 그라디아토르 Curse of the Monument Tether',
+      type: 'Tether',
+      netRegex: NetRegexes.tether({ id: '00A3' }),
+      condition: (data, matches) => matches.source === data.me || matches.target === data.me,
+      alertText: (data, matches, output) => {
+        const who = matches.source === data.me ? matches.target : matches.source;
+        return output.run!({ who: data.ShortName(who) });
+      },
+      outputStrings: {
+        run: '줄 끊어요 (+${who})',
+      },
+    },
+    //
+    {
+      id: 'AS+ 그라디아토르: Scream of the Fallen',
+      type: 'GainsEffect',
+      netRegex: NetRegexes.gainsEffect({ effectId: 'CDB' }),
+      condition: Conditions.targetIsYou(),
+      durationSeconds: 12.5,
+      infoText: (data, matches, output) => {
+        data.gladMyTime = parseInt(matches.duration); // 19초와 23초
+        return data.gladMyTime === 19 ? output.boom!() : output.tower!();
+      },
+      outputStrings: {
+        boom: '먼저 폭파',
+        tower: '먼저 타워',
+      },
+    },
+    // 그라디아토르: Explosion(766A)
+    // Colossal Wreck(7669)도 여기서 표시
+    {
+      id: 'AS+ 그라디아토르 Explosion',
+      type: 'StartsUsing',
+      netRegex: NetRegexes.startsUsing({ id: '766A', source: 'Gladiator of Sil\'dih' }),
+      preRun: (data) => data.gladExplosion++,
+      infoText: (data, _matches, output) => {
+        if (data.gladExplosion === 1)
+          return data.gladMyTime === 19 ? output.boom!() : output.tower!();
+        else if (data.gladExplosion === 3)
+          return data.gladMyTime === 23 ? output.boom!() : output.tower!();
+      },
+      outputStrings: {
+        boom: '벽쪽에 붙어 폭파시켜요',
+        tower: '타워 밟아요',
+      },
+    },
+  ],
+  timelineReplace: [
+    {
+      'locale': 'en',
+      'replaceText': {},
+    },
+    {
+      'locale': 'ja',
+      'missingTranslations': true,
+      'replaceSync': {
+        'Gladiator of Sil\'dih': 'シラディハ・グラディアトル',
+        'Gladiator Mirage': 'ミラージュ・グラディアトル',
+        'Silkie': 'シルキー',
+        'Shadowcaster Zeless Gah': '影火のゼレズ・ガー',
+      },
+      'replaceText': {},
+    },
   ],
 };
 
