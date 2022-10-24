@@ -1,22 +1,36 @@
 import Conditions from '../../../../../resources/conditions';
 import NetRegexes from '../../../../../resources/netregexes';
+import { UnreachableCode } from '../../../../../resources/not_reached';
 import Outputs from '../../../../../resources/outputs';
 import { Responses } from '../../../../../resources/responses';
 import ZoneId from '../../../../../resources/zone_id';
 import { RaidbossData } from '../../../../../types/data';
+import { NetMatches } from '../../../../../types/net_matches';
 import { TriggerSet } from '../../../../../types/trigger';
 
 export interface Data extends RaidbossData {
   silkieSuds?: 'green' | 'blue' | 'yellow';
   silkieSoap: number;
   silkieFreshPuff: number;
-  gladRushes: number[];
   gladMyTime: number;
+  gladRushCount: number;
+  gladRushNum: number[];
+  gladRushCast: (NetMatches['StartsUsing'])[];
   gladLinger?: string;
   gladThunder?: string;
   gladVisage?: 'hateful' | 'accursed';
   gladExplosion: number;
 }
+
+export const getRushOffset = (x: number) => {
+  if ((x > -46 && x < -43) || (x > -27 && x < -24))
+    return 3;
+  if ((x > -41 && x < -38) || (x > -32 && x < -29))
+    return 2;
+  if (x > -37 && x < -33)
+    return 1;
+  return x;
+};
 
 const triggerSet: TriggerSet<Data> = {
   zoneId: ZoneId.AnotherSildihnSubterrane,
@@ -24,8 +38,10 @@ const triggerSet: TriggerSet<Data> = {
     return {
       silkieSoap: 0,
       silkieFreshPuff: 0,
-      gladRushes: [],
       gladMyTime: 0,
+      gladRushCount: 0,
+      gladRushNum: [],
+      gladRushCast: [],
       gladExplosion: 0,
     };
   },
@@ -349,26 +365,27 @@ const triggerSet: TriggerSet<Data> = {
       id: 'AS++ 그라디아토르 Specter of Might',
       type: 'StartsUsing',
       netRegex: NetRegexes.startsUsing({ id: '7673', source: 'Gladiator of Sil\'dih', capture: false }),
-      infoText: '러시 미라쥬 순번 확인 하셈!',
-      run: (data) => data.gladRushes = [],
+      // infoText: '러시 미라쥬 순번 확인 하셈!',
+      run: (data) => data.gladRushNum = [],
     },
     // 그라디아토르: Rush of Might
     {
       id: 'AS+ 그라디아토르 Rush of Might',
       type: 'StartsUsing',
       netRegex: NetRegexes.startsUsing({ id: ['7658', '7659', '765A'], source: 'Gladiator Mirage' }),
-      durationSeconds: 8,
+      preRun: (data) => data.gladRushCount++,
+      durationSeconds: 9.4,
       infoText: (data, matches, output) => {
         const i2n: { [id: string]: number } = {
           '7658': 1,
           '7659': 2,
           '765A': 3,
         };
-        data.gladRushes.push(i2n[matches.id] ?? 0);
-        if (data.gladRushes.length !== 2)
+        data.gladRushNum.push(i2n[matches.id] ?? 0);
+        if (data.gladRushNum.length !== 2)
           return;
 
-        if (data.gladRushes[0] === undefined || data.gladRushes[1] === undefined)
+        if (data.gladRushNum[0] === undefined || data.gladRushNum[1] === undefined)
           return output.unknown!();
 
         const n2s: { [id: number]: string } = {
@@ -377,7 +394,7 @@ const triggerSet: TriggerSet<Data> = {
           2: output.num2!(),
           3: output.num3!(),
         };
-        return output.rush!({ num1: n2s[data.gladRushes[0]], num2: n2s[data.gladRushes[1]] });
+        return output.rush!({ num1: n2s[data.gladRushNum[0]], num2: n2s[data.gladRushNum[1]] });
       },
       outputStrings: {
         rush: '${num1} + ${num2}',
@@ -386,6 +403,107 @@ const triggerSet: TriggerSet<Data> = {
         num3: Outputs.cnum3,
         unknown: Outputs.unknown,
       },
+    },
+    // 그라디아토르: Rush of Might 위치
+    {
+      id: 'AS+ 그라디아토르 Rush of Might Collect',
+      type: 'StartsUsing',
+      netRegex: NetRegexes.startsUsing({ id: ['765C', '765B'], source: 'Gladiator of Sil\'dih' }),
+      preRun: (data, matches) => data.gladRushCast.push(matches),
+    },
+    // 그라디아토르: Rush of Might 1
+    {
+      id: 'AS+ 그라디아토르 Rush of Might 1',
+      type: 'StartsUsing',
+      netRegex: NetRegexes.startsUsing({ id: ['765C', '765B'], source: 'Gladiator of Sil\'dih', capture: false }),
+      delaySeconds: 0.1,
+      durationSeconds: 9.5,
+      suppressSeconds: 1,
+      infoText: (data, _matches, output) => {
+        if (data.gladRushCast.length !== 4)
+          return;
+
+        const mirage1 = data.gladRushCast[0];
+        const unkmir1 = data.gladRushCast[1];
+        const unkmir2 = data.gladRushCast[2];
+        if (mirage1 === undefined || unkmir1 === undefined || unkmir2 === undefined)
+          throw new UnreachableCode();
+        const mirage2 = (mirage1.x === unkmir1.x && mirage1.y === unkmir1.y) ? unkmir2 : unkmir1;
+
+        const x1 = parseFloat(mirage1.x);
+        const y1 = parseFloat(mirage1.y);
+        const x2 = parseFloat(mirage2.x);
+        const y2 = parseFloat(mirage2.y);
+        const o1 = getRushOffset(x1);
+        const o2 = getRushOffset(x2);
+        const line = o1 > o2 ? o1 : o2;
+
+        let dir;
+        if (y1 < -271) {
+          const x = y1 < y2 ? x1 : x2;
+          dir = x < -35 ? 'west' : 'east';
+        } else {
+          const x = y1 > y2 ? x1 : x2;
+          dir = x < -35 ? 'west' : 'east';
+        }
+
+        const dir2left: { [id: number]: string } = {
+          1: output.l1!(),
+          2: output.l2!(),
+          3: output.l3!(),
+        };
+        const dir2right: { [id: number]: string } = {
+          1: output.r1!(),
+          2: output.r2!(),
+          3: output.r3!(),
+        };
+        const even = (data.gladRushCount % 4) === 0;
+
+        let arrow;
+        let side;
+        if ((o1 === 2 && o2 === 3) || (o1 === 3 && o2 === 2)) {
+          if (dir === 'west') {
+            side = 'east';
+            arrow = even ? dir2right[line] : dir2left[line];
+          } else {
+            side = 'west';
+            arrow = even ? dir2left[line] : dir2right[line];
+          }
+        } else {
+          if (dir === 'west') {
+            side = 'west';
+            arrow = even ? dir2right[line] : dir2left[line];
+          } else {
+            side = 'east';
+            arrow = even ? dir2left[line] : dir2right[line];
+          }
+        }
+
+        if (even)
+          return output.rushrev!({ arrow: arrow, side: output[side]!() });
+        return output.rush!({ arrow: arrow, side: output[side]!() });
+      },
+      run: (data) => data.gladRushCast = [],
+      outputStrings: {
+        rush: '${arrow} ${side}',
+        rushrev: '${arrow} ${side} (남쪽보고)',
+        east: Outputs.right,
+        west: Outputs.left,
+        l1: '🡸',
+        l2: '🡸🡸',
+        l3: '🡸🡸🡸',
+        r1: '🡺',
+        r2: '🡺🡺',
+        r3: '🡺🡺🡺',
+      },
+    },
+    // 그라디아토르: Rush of Might 2
+    {
+      id: 'AS+ 그라디아토르 Rush of Might 2',
+      type: 'Ability',
+      netRegex: NetRegexes.ability({ id: '765B', source: 'Gladiator of Sil\'dih', capture: false }),
+      suppressSeconds: 1,
+      response: Responses.moveAway(),
     },
     /* // 그라디아토르: Curse of the Fallen
     {
