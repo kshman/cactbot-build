@@ -11,6 +11,7 @@ import { TriggerSet } from '../../../../../types/trigger';
 export interface Data extends RaidbossData {
   silkieSuds?: 'green' | 'blue' | 'yellow';
   silkieSoap: number;
+  silkieClean: number;
   silkieFreshPuff: number;
   gladMyTime: number;
   gladRushCount: number;
@@ -34,10 +35,12 @@ export const getRushOffset = (x: number) => {
 
 const triggerSet: TriggerSet<Data> = {
   zoneId: ZoneId.AnotherSildihnSubterrane,
+  timelineFile: 'as.txt',
   initData: () => {
     return {
       silkieSoap: 0,
       silkieFreshPuff: 0,
+      silkieClean: 0,
       gladMyTime: 0,
       gladRushCount: 0,
       gladRushNum: [],
@@ -47,69 +50,124 @@ const triggerSet: TriggerSet<Data> = {
   },
   triggers: [
     // ///////////////////////////////////////////////////////////////////////////////
-    // 쫄: 왼쪽으로
+    // Aqueduct Kaluk: 왼쪽으로
     {
-      id: 'AS+ 쫄 왼쪽으로',
+      id: 'AS+ Aqueduct Kaluk 왼쪽으로',
       type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ id: ['7963', '795C'], capture: false }),
+      netRegex: NetRegexes.startsUsing({ id: '7963', source: 'Aqueduct Kaluk', capture: false }),
       infoText: '왼쪽🡸',
     },
-    // 쫄: 오른쪽으로
+    // Aqueduct Kaluk: 오른쪽으로
     {
-      id: 'AS+ 쫄 오른쪽으로',
+      id: 'AS+ Aqueduct Kaluk 오른쪽으로',
       type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ id: ['7964', '795B'], capture: false }),
+      netRegex: NetRegexes.startsUsing({ id: '7964', source: 'Aqueduct Kaluk', capture: false }),
       infoText: '🡺오른쪽',
     },
-    // 쫄: 전방 범위
+    // Aqueduct Kaluk: 전방 범위
     {
-      id: 'AS+ 쫄 전방범위',
+      id: 'AS+ Aqueduct Kaluk 전방범위',
       type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ id: ['7965', '795D'], capture: false }),
+      netRegex: NetRegexes.startsUsing({ id: '7965', source: 'Aqueduct Kaluk', capture: false }),
       infoText: '앞쪽 범위 공격',
     },
-    // 쫄: 발밑으로
+    // Aqueduct Udumbara: 왼쪽으로
     {
-      id: 'AS+ 쫄 발밑으로',
+      id: 'AS+ Aqueduct Udumbara 왼쪽으로',
       type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ id: '7960', capture: false }),
-      infoText: '발 밑으로',
+      netRegex: NetRegexes.startsUsing({ id: '795C', source: 'Aqueduct Udumbara', capture: false }),
+      infoText: '왼쪽🡸',
     },
-    // 쫄: 시선 주의
+    // Aqueduct Udumbara: 오른쪽으로
     {
-      id: 'AS+ 쫄 시선주의',
+      id: 'AS+ Aqueduct Udumbara 오른쪽으로',
       type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ id: '7961', capture: false }),
-      alertText: '시선 조심!',
+      netRegex: NetRegexes.startsUsing({ id: '795B', source: 'Aqueduct Udumbara', capture: false }),
+      infoText: '🡺오른쪽',
     },
-    // 쫄: 버스터
+    // Aqueduct Udumbara: 전방 범위
     {
-      id: 'AS+ 쫄 버스터',
+      id: 'AS+ Aqueduct Udumbara 전방범위',
       type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ id: '7962' }),
+      netRegex: NetRegexes.startsUsing({ id: '795D', source: 'Aqueduct Udumbara', capture: false }),
+      infoText: '앞쪽 범위 공격',
+    },
+    // Aqueduct Belladonna: 발밑으로
+    {
+      id: 'AS+ Aqueduct Belladonna 발밑으로',
+      type: 'StartsUsing',
+      netRegex: NetRegexes.startsUsing({ id: '7960', source: 'Aqueduct Belladonna', capture: false }),
+      response: Responses.getIn(),
+    },
+    // Aqueduct Belladonna: 시선 주의
+    {
+      id: 'AS+ Aqueduct Belladonna 시선주의',
+      type: 'StartsUsing',
+      netRegex: NetRegexes.startsUsing({ id: '7961', source: 'Aqueduct Belladonna', capture: false }),
+      response: Responses.lookAway(),
+    },
+    // Aqueduct Belladonna: 버스터
+    {
+      id: 'AS+ Aqueduct Belladonna 버스터',
+      type: 'StartsUsing',
+      netRegex: NetRegexes.startsUsing({ id: '7962', source: 'Aqueduct Belladonna' }),
       response: Responses.tankBuster(),
     },
-    // 쫄: 원형범위
+    // Aqueduct Dryad: 원형범위
     {
-      id: 'AS+ 쫄 원형범위',
+      id: 'AS+ Aqueduct Dryad 원형범위',
       type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ id: ['7957', '7966'], capture: false }),
+      netRegex: NetRegexes.startsUsing({ id: '7957', source: 'Aqueduct Dryad', capture: false }),
       response: Responses.getOut(),
+    },
+    // Sil'dihn Dullahan 원형범위
+    {
+      id: 'AS+ Sil\'dihn Dullahan 원형범위',
+      type: 'StartsUsing',
+      netRegex: NetRegexes.startsUsing({ id: '7966', source: 'Sil\'dihn Dullahan', capture: false }),
+      response: Responses.getOut(),
+    },
+    // Sil'dihn Dullahan: 전체 페인
+    {
+      id: 'AS+ Sil\'dihn Dullahan 전체 페인',
+      type: 'StartsUsing',
+      netRegex: NetRegexes.startsUsing({ id: '7969', source: 'Sil\'dihn Dullahan', capture: false }),
+      alertText: '전체 공격 + 출혈',
+    },
+    // Sil'dihn Dullahan: 자기 강화
+    {
+      id: 'AS+ Sil\'dihn Dullahan 자기 강화',
+      type: 'StartsUsing',
+      netRegex: NetRegexes.startsUsing({ id: '7968', source: 'Sil\'dihn Dullahan', capture: false }),
+      infoText: '자기 강화',
+    },
+    // Aqueduct Armor: 헤비
+    {
+      id: 'AS+ Aqueduct Armor 헤비',
+      type: 'StartsUsing',
+      netRegex: NetRegexes.startsUsing({ id: '796B', source: 'Aqueduct Armor', capture: false }),
+      alertText: '헤비, 발 밑으로',
+    },
+    // Aqueduct Armor: 체력 1로
+    {
+      id: 'AS+ Aqueduct Armor HP1로',
+      type: 'StartsUsing',
+      netRegex: NetRegexes.startsUsing({ id: '796C', source: 'Aqueduct Armor', capture: false }),
+      alarmText: '체력을 1로!',
+    },
+    // Aqueduct Armor: 슬래시
+    {
+      id: 'AS+ Aqueduct Armor 슬래시',
+      type: 'StartsUsing',
+      netRegex: NetRegexes.startsUsing({ id: '796A', source: 'Aqueduct Armor', capture: false }),
+      response: Responses.getBehind(),
     },
     // 쫄: 란타게범위
     {
       id: 'AS+ 쫄 란타게 범위',
       type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ id: '7959' }),
-      infoText: (data, matches, output) => {
-        if (matches.target !== undefined)
-          return output.aoewho!({ player: data.ShortName(matches.target) });
-        return output.aoecmn!();
-      },
-      outputStrings: {
-        aoewho: '장판 깔았네: ${player}',
-        aoecmn: '아무에게 장판 깔았네',
-      },
+      netRegex: NetRegexes.startsUsing({ id: '7959', capture: false }),
+      infoText: '아무에게 장판 깔았네',
     },
     // 쫄: 범위
     {
@@ -118,49 +176,35 @@ const triggerSet: TriggerSet<Data> = {
       netRegex: NetRegexes.startsUsing({ id: '795A', capture: false }),
       infoText: '쫄 범위 공격',
     },
-    // 쫄: 자기 강화
-    {
-      id: 'AS+ 쫄 자기 강화',
-      type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ id: '7968', capture: false }),
-      infoText: '자기 강화',
-    },
-    // 쫄: 전체 페인
-    {
-      id: 'AS+ 쫄 전체 페인',
-      type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ id: '7969', capture: false }),
-      alertText: '전체 아픈 도트',
-    },
-    // 쫄:
-    {
-      id: 'AS+ 쫄 헤비',
-      type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ id: '796B', capture: false }),
-      alertText: '헤비',
-    },
-    // 쫄: 체력 1로
-    {
-      id: 'AS+ 쫄 HP1로',
-      type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ id: '796C', capture: false }),
-      alarmText: '체력을 1로!',
-    },
 
     // ///////////////////////////////////////////////////////////////////////////////
     // 실키: 왼쪽으로
     {
       id: 'AS+ 실키 Squeaky Clean Right',
       type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ id: '7755', source: 'Silkie', capture: false }),
-      infoText: '왼쪽🡸',
+      netRegex: NetRegexes.startsUsing({ id: ['7751', '7755'], source: 'Silkie', capture: false }),
+      infoText: (data, _matches, output) => {
+        data.silkieClean++;
+        if (data.silkieClean === 1)
+          return output.left!();
+      },
+      outputStrings: {
+        left: '왼쪽🡸',
+      },
     },
     // 실키: 오른쪽으로
     {
       id: 'AS+ 실키 Squeaky Clean Left',
       type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ id: '7756', source: 'Silkie', capture: false }),
-      infoText: '🡺오른쪽',
+      netRegex: NetRegexes.startsUsing({ id: ['7752', '7756'], source: 'Silkie', capture: false }),
+      infoText: (data, _matches, output) => {
+        data.silkieClean++;
+        if (data.silkieClean === 1)
+          return output.right!();
+      },
+      outputStrings: {
+        right: '🡺오른쪽',
+      },
     },
     // 실키: Dust Bluster
     {
@@ -213,7 +257,10 @@ const triggerSet: TriggerSet<Data> = {
       id: 'AS+ 실키 Fresh Puff',
       type: 'StartsUsing',
       netRegex: NetRegexes.startsUsing({ id: '7766', source: 'Silkie' }),
-      preRun: (data) => data.silkieFreshPuff++,
+      preRun: (data) => {
+        data.silkieClean = 0;
+        data.silkieFreshPuff++;
+      },
       infoText: (data, _matches, output) => {
         if (data.silkieFreshPuff === 1)
           return output.p1!();
@@ -256,8 +303,8 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (data, matches, output) => {
         if (data.silkieSuds === 'green') {
           if (matches.target === data.me)
-            return output.kbFront!({ player: data.ShortName(matches.target) });
-          return output.kbBack!();
+            return output.kbBack!();
+          return output.kbFront!({ player: data.ShortName(matches.target) });
         }
         if (matches.target === data.me) {
           if (data.silkieSoap === 1)
@@ -282,7 +329,7 @@ const triggerSet: TriggerSet<Data> = {
       id: 'AS+ 실키 Slippery Soap Blue',
       type: 'StartsUsing',
       netRegex: NetRegexes.startsUsing({ id: '775E', source: 'Silkie' }),
-      delaySeconds: (_data, matches) => parseFloat(matches.castTime) - 2,
+      delaySeconds: (_data, matches) => parseFloat(matches.castTime) - 1,
       alertText: (data, _matches, outputs) => {
         if (data.silkieSuds === 'blue')
           return outputs.blue!();
@@ -349,8 +396,8 @@ const triggerSet: TriggerSet<Data> = {
         return output.target!({ player: data.ShortName(matches.target) });
       },
       outputStrings: {
-        target: '${player}에게 돌진! 보스 엉댕이에 한줄로 서욧',
-        itsme: '내게 돌진! 보스 엉댕이에 한줄로 서욧',
+        target: '${player}에게 돌진! 보스 엉댕이에 한줄로',
+        itsme: '내게 돌진! 보스 엉댕이에 한줄로',
       },
     },
     // 그라디아토르: Mighty Smite
@@ -505,13 +552,6 @@ const triggerSet: TriggerSet<Data> = {
       suppressSeconds: 1,
       response: Responses.moveAway(),
     },
-    /* // 그라디아토르: Curse of the Fallen
-    {
-      id: 'AS+ 그라디아토르 Curse of the Fallen',
-      type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ id: '7674', source: 'Gladiator of Sil\'dih', capture: false }),
-      infoText: '저주 디버프 확인하세요',
-    },*/
     //
     {
       id: 'AS+ 그라디아토르 Lingering Echoes Collect',
@@ -747,6 +787,12 @@ const triggerSet: TriggerSet<Data> = {
       netRegex: NetRegexes.startsUsing({ id: '74AF', source: 'Shadowcaster Zeless Gah', capture: false }),
       response: Responses.aoe(),
     },
+    {
+      id: 'AS+ 젤레스가 Firesteel Fracture',
+      type: 'StartsUsing',
+      netRegex: NetRegexes.startsUsing({ id: '74AD', source: 'Shadowcaster Zeless Gah' }),
+      response: Responses.tankCleave(),
+    },
   ],
   timelineReplace: [
     {
@@ -759,6 +805,7 @@ const triggerSet: TriggerSet<Data> = {
       'replaceSync': {
         'Gladiator of Sil\'dih': 'シラディハ・グラディアトル',
         'Gladiator Mirage': 'ミラージュ・グラディアトル',
+        'Infern Brand': 'アマルジャの呪具',
         'Silkie': 'シルキー',
         'Shadowcaster Zeless Gah': '影火のゼレズ・ガー',
       },
