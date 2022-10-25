@@ -186,6 +186,10 @@ const kDirectoryToCategory = {
     cn: '绝境战',
     ko: '절 난이도',
   },
+  variant: {
+    en: '바리언트 던전',
+    ja: 'ヴァリアント',
+  },
 };
 
 // TODO: maybe we should also sort all the filenames properly too?
