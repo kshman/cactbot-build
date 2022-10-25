@@ -1,3 +1,4 @@
+import NetRegexes from '../../../../resources/netregexes';
 import outputs from '../../../../resources/outputs';
 import Util from '../../../../resources/util';
 import ZoneId from '../../../../resources/zone_id';
@@ -101,12 +102,13 @@ const triggerSet: TriggerSet<Data> = {
       delaySeconds: 10,
       promise: (data) => {
         data.delayedDummyTimestampBefore = Date.now();
-        return new Promise<void>((res) => {
+        const p = new Promise<void>((res) => {
           window.setTimeout(() => {
             data.delayedDummyTimestampAfter = Date.now();
             res();
           }, 3000);
         });
+        return p;
       },
       infoText: (data, _matches, output) => {
         const elapsed = data.delayedDummyTimestampAfter - data.delayedDummyTimestampBefore;
@@ -128,7 +130,7 @@ const triggerSet: TriggerSet<Data> = {
     {
       id: 'Test Poke',
       type: 'GameLog',
-      netRegex: { line: 'You poke the striking dummy.*?', capture: false },
+      netRegex: NetRegexes.gameNameLog({ line: 'You poke the striking dummy.*?', capture: false }),
       preRun: (data) => ++data.pokes,
       infoText: (data, _matches, output) => output.poke!({ numPokes: data.pokes }),
       outputStrings: {
@@ -145,7 +147,7 @@ const triggerSet: TriggerSet<Data> = {
     {
       id: 'Test Psych',
       type: 'GameLog',
-      netRegex: { line: 'You psych yourself up alongside the striking dummy.*?', capture: false },
+      netRegex: NetRegexes.gameNameLog({ line: 'You psych yourself up alongside the striking dummy.*?', capture: false }),
       alertText: (_data, _matches, output) => output.text!(),
       tts: {
         en: 'psych',
@@ -169,7 +171,7 @@ const triggerSet: TriggerSet<Data> = {
     {
       id: 'Test Laugh',
       type: 'GameLog',
-      netRegex: { line: 'You burst out laughing at the striking dummy.*?', capture: false },
+      netRegex: NetRegexes.gameNameLog({ line: 'You burst out laughing at the striking dummy.*?', capture: false }),
       suppressSeconds: 5,
       alarmText: (_data, _matches, output) => output.text!(),
       tts: {
@@ -194,7 +196,7 @@ const triggerSet: TriggerSet<Data> = {
     {
       id: 'Test Clap',
       type: 'GameLog',
-      netRegex: { line: 'You clap for the striking dummy.*?', capture: false },
+      netRegex: NetRegexes.gameNameLog({ line: 'You clap for the striking dummy.*?', capture: false }),
       sound: '../../resources/sounds/freesound/power_up.webm',
       soundVolume: 0.3,
       tts: (_data, _matches, output) => output.text!(),
@@ -213,7 +215,7 @@ const triggerSet: TriggerSet<Data> = {
       id: 'Test Lang',
       type: 'GameLog',
       // In game: /echo cactbot lang
-      netRegex: { line: 'cactbot lang.*?', capture: false },
+      netRegex: NetRegexes.echo({ line: 'cactbot lang.*?', capture: false }),
       infoText: (data, _matches, output) => output.text!({ lang: data.parserLang }),
       outputStrings: {
         text: {
@@ -229,7 +231,7 @@ const triggerSet: TriggerSet<Data> = {
     {
       id: 'Test Response',
       type: 'GameLog',
-      netRegex: { line: 'cactbot test response.*?', capture: false },
+      netRegex: NetRegexes.echo({ line: 'cactbot test response.*?', capture: false }),
       response: (_data, _matches, output) => {
         // cactbot-builtin-response
         output.responseOutputStrings = {
@@ -249,7 +251,7 @@ const triggerSet: TriggerSet<Data> = {
     {
       id: 'Test Watch',
       type: 'GameLog',
-      netRegex: { line: 'cactbot test watch.*?', capture: false },
+      netRegex: NetRegexes.echo({ line: 'cactbot test watch.*?', capture: false }),
       promise: (data) =>
         Util.watchCombatant({
           names: [
