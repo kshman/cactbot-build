@@ -29,6 +29,7 @@ export interface Data extends RaidbossData {
   gahBanishment?: Banishment;
 }
 
+// https://github.com/quisquous/cactbot/pull/4967
 export const getRushOffset = (x: number) => {
   if ((x > -46 && x < -43) || (x > -27 && x < -24))
     return 3;
@@ -193,6 +194,8 @@ const triggerSet: TriggerSet<Data> = {
       type: 'StartsUsing',
       netRegex: NetRegexes.startsUsing({ id: ['7751', '7755'], source: 'Silkie', capture: false }),
       infoText: (data, _matches, output) => {
+        // 왼쪽도 그렇지만 엄청 패다보면(!) 기믹이 스킵되는데 7755, 7756이 스킵되버린다.
+        // 두번 나오게하기 싫어서 이런짓...
         data.silkieClean++;
         if (data.silkieClean === 1)
           return output.left!();
@@ -261,7 +264,6 @@ const triggerSet: TriggerSet<Data> = {
       run: (data) => data.silkieSuds = 'yellow',
     },
     // 실키: Fresh Puff
-    // 1=3, 2=4, 3=8, 4=4
     {
       id: 'AS+ 실키 Fresh Puff',
       type: 'StartsUsing',
@@ -317,20 +319,20 @@ const triggerSet: TriggerSet<Data> = {
         }
         if (matches.target === data.me) {
           if (data.silkieSoap === 1)
-            return output.puff!();
+            return output.behindPuff!();
           if (data.silkieSoap === 3)
-            return output.puffEw!();
-          return output.behind!();
+            return output.behindPuffEw!();
+          return output.mostBehind!();
         }
-        return output.front!({ player: data.ShortName(matches.target) });
+        return output.frontOf!({ player: data.ShortName(matches.target) });
       },
       outputStrings: {
         kbFront: '넉백! ${player} 앞에 서주세요',
         kbBack: '넉백! 맨 뒤에 서주세요',
-        puff: '구슬과 맨 뒤에 서주세요',
-        puffEw: '구슬과 맨 뒤에 서주세요 (동서)',
-        behind: '맨 뒤에 서주세요',
-        front: '${player} 앞에 서주세요',
+        behindPuff: '구슬과 맨 뒤에 서주세요',
+        behindPuffEw: '구슬과 맨 뒤에 서주세요 (동서)',
+        mostBehind: '맨 뒤에 서주세요',
+        frontOf: '${player} 앞에 서주세요',
       },
     },
     // 실키: Slippery Soap Blue
@@ -357,9 +359,9 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (data, _matches, outputs) => {
         if (data.silkieSuds === 'blue')
           return outputs.blue!();
-        else if (data.silkieSuds === 'green')
+        if (data.silkieSuds === 'green')
           return outputs.green!();
-        else if (data.silkieSuds === 'yellow')
+        if (data.silkieSuds === 'yellow')
           return outputs.yellow!();
         return outputs.none!();
       },
@@ -467,9 +469,9 @@ const triggerSet: TriggerSet<Data> = {
       netRegex: NetRegexes.startsUsing({ id: ['765C', '765B'], source: 'Gladiator of Sil\'dih' }),
       preRun: (data, matches) => data.gladRushCast.push(matches),
     },
-    // 그라디아토르: Rush of Might 1
+    // 그라디아토르: Rush of Might
     {
-      id: 'AS+ 그라디아토르 Rush of Might 1',
+      id: 'AS+ 그라디아토르 Rush of Might',
       type: 'StartsUsing',
       netRegex: NetRegexes.startsUsing({ id: ['765C', '765B'], source: 'Gladiator of Sil\'dih', capture: false }),
       delaySeconds: 0.1,
@@ -553,9 +555,9 @@ const triggerSet: TriggerSet<Data> = {
         r3: '🡺🡺🡺',
       },
     },
-    // 그라디아토르: Rush of Might 2
+    // 그라디아토르: Rush of Might Move
     {
-      id: 'AS+ 그라디아토르 Rush of Might 2',
+      id: 'AS+ 그라디아토르 Rush of Might Move',
       type: 'Ability',
       netRegex: NetRegexes.ability({ id: '765B', source: 'Gladiator of Sil\'dih', capture: false }),
       suppressSeconds: 1,
@@ -809,8 +811,8 @@ const triggerSet: TriggerSet<Data> = {
       id: 'AS+ 젤레스가 Infern Brand',
       type: 'StartsUsing',
       netRegex: NetRegexes.startsUsing({ id: '7491', source: 'Shadowcaster Zeless Gah' }),
+      preRun: (data) => data.gahBrandPhase++,
       infoText: (data, _matches, output) => {
-        data.gahBrandPhase++;
         if (data.gahBrandPhase === 1)
           return output.p1!();
         if (data.gahBrandPhase === 2)
@@ -827,7 +829,7 @@ const triggerSet: TriggerSet<Data> = {
         p2: '마법진 위치 → 북:🟥 / 서:🟦',
         p3: '전이 기둥에서 놀아요',
         p4: '카드 전이, 안전지대를 찾아요',
-        p5: '12번→가운데, 34번→파란선 지팡',
+        p5: '1/2번→가운데, 3/4번→파란선 지팡이',
       },
     },
     /* //
@@ -971,7 +973,7 @@ const triggerSet: TriggerSet<Data> = {
       netRegex: NetRegexes.gainsEffect({ effectId: 'CCC' }),
       condition: Conditions.targetIsYou(),
       delaySeconds: (_data, matches) => parseFloat(matches.duration) + 1,
-      alertText: '포탈 전이: 같은 줄의 마커로 가욧',
+      alertText: '포탈 전이: 옆쪽에 보이는 마커로 가욧',
     },
     //
     {
@@ -980,7 +982,7 @@ const triggerSet: TriggerSet<Data> = {
       netRegex: NetRegexes.gainsEffect({ effectId: 'CCD' }),
       condition: Conditions.targetIsYou(),
       delaySeconds: (_data, matches) => parseFloat(matches.duration) + 1,
-      alertText: '자가 전이: 같은 줄의 마커로 가욧',
+      alertText: '자가 전이: 옆쪽에 보이는 마커로 가욧',
     },
     //
     {
@@ -1026,7 +1028,7 @@ const triggerSet: TriggerSet<Data> = {
           return output.f34!();
       },
       outputStrings: {
-        f12: '줄끊고 → 34번 줄 보고 → 지팡이 불꽃 → 장판깔기',
+        f12: '줄끊고 → 3/4번 기다렸다 → 지팡이 불꽃 → 장판깔기',
         f34: '지팡이 불꽃 → 줄끊고 → 원위치 → 장판깔기',
       },
     },
@@ -1034,7 +1036,12 @@ const triggerSet: TriggerSet<Data> = {
   timelineReplace: [
     {
       'locale': 'en',
-      'replaceText': {},
+      'replaceText': {
+        'Bracing Suds / Fizzling Suds': 'Bracing/Fizzling Suds',
+        'Bracing Duster / Fizzling Duster': 'Bracing/Fizzling Duster',
+        'Bracing Duster / Chilling Duster / Fizzling Duster': 'Duster',
+        'Bracing Suds / Chilling Suds / Fizzling Suds': 'Suds',
+      },
     },
     {
       'locale': 'ja',
@@ -1045,8 +1052,76 @@ const triggerSet: TriggerSet<Data> = {
         'Infern Brand': 'アマルジャの呪具',
         'Silkie': 'シルキー',
         'Shadowcaster Zeless Gah': '影火のゼレズ・ガー',
+        'Thunderous Echo': '重怨の残響',
+        'Lingering Echoes': '連呪の残響',
+        'Echo of the Fallen': '呪怨の残響',
+        'Gilded Fate': '黄金の呪い',
+        'Silvered Fate': '白銀の呪い',
+        'Golden Flame': '黄金の閃火',
+        'Silver Flame': '白銀の閃火',
+        'Scream of the Fallen': '呪怨の大残響',
       },
-      'replaceText': {},
+      'replaceText': {
+        'Accursed Visage': '呪怨呪像',
+        'Banishment': '強制転移の呪',
+        'Blazing Benifice': '聖火砲',
+        'Blessed Beacon': '天の聖火',
+        'Bracing Duster / Chilling Duster / Fizzling Duster': 'ダスター',
+        'Bracing Duster / Fizzling Duster': 'そよそよ/ぱちぱちダスター',
+        'Bracing Suds / Chilling Suds / Fizzling Suds': 'シャンプー',
+        'Bracing Suds / Fizzling Suds': 'そよそよ/ぱちぱちシャンプー',
+        'Bracing Suds': 'そよそよシャンプー',
+        'Burn': '火球',
+        'Carpet Beater': 'カーペットビーター',
+        'Cast Shadow': '影火呪式',
+        'Chilling Suds': 'ひえひえシャンプー',
+        'Colossal Wreck': '亡国の霊塔',
+        'Cryptic Flames': '火焔の呪印',
+        'Cryptic Portal': '転移の呪印',
+        'Curse of the Fallen': '呪怨の咆哮',
+        'Curse of the Monument': '呪怨の連撃',
+        'Dust Bluster': 'ダストブロワー',
+        'Eastern Ewers': '洗い壺',
+        'Echo of the Fallen': '呪怨の咆哮',
+        'Explosion': '爆発',
+        'Firesteel Fracture': '石火豪打',
+        'Firesteel Strike': '石火豪衝',
+        'Fizzling Suds': 'ぱちぱちシャンプー',
+        'Flash of Steel': '闘人の波動',
+        'Fresh Puff': 'ポンポン創出',
+        'Gold Flame': '黄金の閃火',
+        'Hateful Visage': '呪像起動',
+        'Infern Brand': '呪具設置',
+        'Infern Ward': '呪具警陣',
+        'Infern Wave': '呪具流火',
+        'Mighty Smite': '闘人の斬撃',
+        'Nothing beside Remains': '座下隆起',
+        'Pure Fire': '劫火',
+        'Ring of Might': '大剛の旋撃',
+        'Rush of Might': '大剛の突撃',
+        'Scream of the Fallen': '呪怨の大残響',
+        'Sculptor\'s Passion': '闘人砲',
+        'Show of Strength': '勇士の咆哮',
+        'Silver Flame': '白銀の閃火',
+        'Slippery Soap': 'すべってシャンプーボム',
+        'Soap\'s Up': 'シャンプーボム',
+        'Soaping Spree': 'みんなでシャンプーボム',
+        'Specter of Might': '亡念幻身',
+        'Total Wash': '水拭き',
+        'Wrath of Ruin': '亡念励起',
+        /*
+        실키
+        'Bracing Duster': '',
+        'Chilling Duster': '',
+        'Fizzling Duster': '',
+        'Puff and Tumble': '',
+        'Rinse': '',
+        'Soapsud Static': '',
+        'Squeaky Clean': '',
+        그라
+        'Sundered Remains': '',
+        */
+      },
     },
   ],
 };
