@@ -31,3 +31,8 @@ venv/
 
 # PRs
 @prs
+actions-latest.json
+signatures-global-latest.json
+statuses-latest.json
+structures-global-latest.json
+zones-latest.json

@@ -587,6 +587,7 @@ const testTriggerFile = (file: string) => {
       const triggers = triggerSet.triggers;
       for (const trigger of triggers ?? []) {
         const origRegex = trigger.netRegex?.source.toLowerCase();
+
         if (origRegex === undefined)
           continue;
 

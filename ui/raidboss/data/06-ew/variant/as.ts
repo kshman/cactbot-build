@@ -1,99 +1,182 @@
 import Conditions from '../../../../../resources/conditions';
 import NetRegexes from '../../../../../resources/netregexes';
+import { UnreachableCode } from '../../../../../resources/not_reached';
 import Outputs from '../../../../../resources/outputs';
 import { Responses } from '../../../../../resources/responses';
 import ZoneId from '../../../../../resources/zone_id';
 import { RaidbossData } from '../../../../../types/data';
+import { NetMatches } from '../../../../../types/net_matches';
 import { TriggerSet } from '../../../../../types/trigger';
+
+export type Banishment = 'redLeft' | 'redRight' | 'blueLeft' | 'blueRight';
 
 export interface Data extends RaidbossData {
   silkieSuds?: 'green' | 'blue' | 'yellow';
   silkieSoap: number;
+  silkieClean: number;
   silkieFreshPuff: number;
-  gladRushes: number[];
   gladMyTime: number;
+  gladRushCount: number;
+  gladRushNum: number[];
+  gladRushCast: (NetMatches['StartsUsing'])[];
   gladLinger?: string;
   gladThunder?: string;
   gladVisage?: 'hateful' | 'accursed';
   gladExplosion: number;
+  gahBrandPhase: number;
+  gahMyBrand: number;
+  gahMagicv: string[];
+  gahBanishment?: Banishment;
 }
+
+export const getRushOffset = (x: number) => {
+  if ((x > -46 && x < -43) || (x > -27 && x < -24))
+    return 3;
+  if ((x > -41 && x < -38) || (x > -32 && x < -29))
+    return 2;
+  if (x > -37 && x < -33)
+    return 1;
+  return x;
+};
 
 const triggerSet: TriggerSet<Data> = {
   zoneId: ZoneId.AnotherSildihnSubterrane,
+  timelineFile: 'as.txt',
   initData: () => {
     return {
       silkieSoap: 0,
       silkieFreshPuff: 0,
-      gladRushes: [],
+      silkieClean: 0,
       gladMyTime: 0,
+      gladRushCount: 0,
+      gladRushNum: [],
+      gladRushCast: [],
       gladExplosion: 0,
+      gahBrandPhase: 0,
+      gahMyBrand: 0,
+      gahMagicv: [],
     };
   },
   triggers: [
     // ///////////////////////////////////////////////////////////////////////////////
-    // 쫄: 왼쪽으로
+    // Aqueduct Kaluk: 왼쪽으로
     {
-      id: 'AS+ 쫄 왼쪽으로',
+      id: 'AS+ Aqueduct Kaluk 왼쪽으로',
       type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ id: ['7963', '795C'], capture: false }),
+      netRegex: NetRegexes.startsUsing({ id: '7963', source: 'Aqueduct Kaluk', capture: false }),
       infoText: '왼쪽🡸',
     },
-    // 쫄: 오른쪽으로
+    // Aqueduct Kaluk: 오른쪽으로
     {
-      id: 'AS+ 쫄 오른쪽으로',
+      id: 'AS+ Aqueduct Kaluk 오른쪽으로',
       type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ id: ['7964', '795B'], capture: false }),
+      netRegex: NetRegexes.startsUsing({ id: '7964', source: 'Aqueduct Kaluk', capture: false }),
       infoText: '🡺오른쪽',
     },
-    // 쫄: 전방 범위
+    // Aqueduct Kaluk: 전방 범위
     {
-      id: 'AS+ 쫄 전방범위',
+      id: 'AS+ Aqueduct Kaluk 전방범위',
       type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ id: ['7965', '795D'], capture: false }),
+      netRegex: NetRegexes.startsUsing({ id: '7965', source: 'Aqueduct Kaluk', capture: false }),
       infoText: '앞쪽 범위 공격',
     },
-    // 쫄: 발밑으로
+    // Aqueduct Udumbara: 왼쪽으로
     {
-      id: 'AS+ 쫄 발밑으로',
+      id: 'AS+ Aqueduct Udumbara 왼쪽으로',
       type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ id: '7960', capture: false }),
-      infoText: '발 밑으로',
+      netRegex: NetRegexes.startsUsing({ id: '795C', source: 'Aqueduct Udumbara', capture: false }),
+      infoText: '왼쪽🡸',
     },
-    // 쫄: 시선 주의
+    // Aqueduct Udumbara: 오른쪽으로
     {
-      id: 'AS+ 쫄 시선주의',
+      id: 'AS+ Aqueduct Udumbara 오른쪽으로',
       type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ id: '7961', capture: false }),
-      alertText: '시선 조심!',
+      netRegex: NetRegexes.startsUsing({ id: '795B', source: 'Aqueduct Udumbara', capture: false }),
+      infoText: '🡺오른쪽',
     },
-    // 쫄: 버스터
+    // Aqueduct Udumbara: 전방 범위
     {
-      id: 'AS+ 쫄 버스터',
+      id: 'AS+ Aqueduct Udumbara 전방범위',
       type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ id: '7962' }),
+      netRegex: NetRegexes.startsUsing({ id: '795D', source: 'Aqueduct Udumbara', capture: false }),
+      infoText: '앞쪽 범위 공격',
+    },
+    // Aqueduct Belladonna: 발밑으로
+    {
+      id: 'AS+ Aqueduct Belladonna 발밑으로',
+      type: 'StartsUsing',
+      netRegex: NetRegexes.startsUsing({ id: '7960', source: 'Aqueduct Belladonna', capture: false }),
+      response: Responses.getIn(),
+    },
+    // Aqueduct Belladonna: 시선 주의
+    {
+      id: 'AS+ Aqueduct Belladonna 시선주의',
+      type: 'StartsUsing',
+      netRegex: NetRegexes.startsUsing({ id: '7961', source: 'Aqueduct Belladonna', capture: false }),
+      response: Responses.lookAway(),
+    },
+    // Aqueduct Belladonna: 버스터
+    {
+      id: 'AS+ Aqueduct Belladonna 버스터',
+      type: 'StartsUsing',
+      netRegex: NetRegexes.startsUsing({ id: '7962', source: 'Aqueduct Belladonna' }),
       response: Responses.tankBuster(),
     },
-    // 쫄: 원형범위
+    // Aqueduct Dryad: 원형범위
     {
-      id: 'AS+ 쫄 원형범위',
+      id: 'AS+ Aqueduct Dryad 원형범위',
       type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ id: ['7957', '7966'], capture: false }),
+      netRegex: NetRegexes.startsUsing({ id: '7957', source: 'Aqueduct Dryad', capture: false }),
       response: Responses.getOut(),
+    },
+    // Sil'dihn Dullahan 원형범위
+    {
+      id: 'AS+ Sil\'dihn Dullahan 원형범위',
+      type: 'StartsUsing',
+      netRegex: NetRegexes.startsUsing({ id: '7966', source: 'Sil\'dihn Dullahan', capture: false }),
+      response: Responses.getOut(),
+    },
+    // Sil'dihn Dullahan: 전체 페인
+    {
+      id: 'AS+ Sil\'dihn Dullahan 전체 페인',
+      type: 'StartsUsing',
+      netRegex: NetRegexes.startsUsing({ id: '7969', source: 'Sil\'dihn Dullahan', capture: false }),
+      alertText: '전체 공격 + 출혈',
+    },
+    // Sil'dihn Dullahan: 자기 강화
+    {
+      id: 'AS+ Sil\'dihn Dullahan 자기 강화',
+      type: 'StartsUsing',
+      netRegex: NetRegexes.startsUsing({ id: '7968', source: 'Sil\'dihn Dullahan', capture: false }),
+      infoText: '자기 강화',
+    },
+    // Aqueduct Armor: 헤비
+    {
+      id: 'AS+ Aqueduct Armor 헤비',
+      type: 'StartsUsing',
+      netRegex: NetRegexes.startsUsing({ id: '796B', source: 'Aqueduct Armor', capture: false }),
+      alertText: '헤비, 발 밑으로',
+    },
+    // Aqueduct Armor: 체력 1로
+    {
+      id: 'AS+ Aqueduct Armor HP1로',
+      type: 'StartsUsing',
+      netRegex: NetRegexes.startsUsing({ id: '796C', source: 'Aqueduct Armor', capture: false }),
+      alarmText: '체력을 1로!',
+    },
+    // Aqueduct Armor: 슬래시
+    {
+      id: 'AS+ Aqueduct Armor 슬래시',
+      type: 'StartsUsing',
+      netRegex: NetRegexes.startsUsing({ id: '796A', source: 'Aqueduct Armor', capture: false }),
+      response: Responses.getBehind(),
     },
     // 쫄: 란타게범위
     {
       id: 'AS+ 쫄 란타게 범위',
       type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ id: '7959' }),
-      infoText: (data, matches, output) => {
-        if (matches.target !== undefined)
-          return output.aoewho!({ player: data.ShortName(matches.target) });
-        return output.aoecmn!();
-      },
-      outputStrings: {
-        aoewho: '장판 깔았네: ${player}',
-        aoecmn: '아무에게 장판 깔았네',
-      },
+      netRegex: NetRegexes.startsUsing({ id: '7959', capture: false }),
+      infoText: '아무에게 장판 깔았네',
     },
     // 쫄: 범위
     {
@@ -102,49 +185,35 @@ const triggerSet: TriggerSet<Data> = {
       netRegex: NetRegexes.startsUsing({ id: '795A', capture: false }),
       infoText: '쫄 범위 공격',
     },
-    // 쫄: 자기 강화
-    {
-      id: 'AS+ 쫄 자기 강화',
-      type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ id: '7968', capture: false }),
-      infoText: '자기 강화',
-    },
-    // 쫄: 전체 페인
-    {
-      id: 'AS+ 쫄 전체 페인',
-      type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ id: '7969', capture: false }),
-      alertText: '전체 아픈 도트',
-    },
-    // 쫄:
-    {
-      id: 'AS+ 쫄 헤비',
-      type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ id: '796B', capture: false }),
-      alertText: '헤비',
-    },
-    // 쫄: 체력 1로
-    {
-      id: 'AS+ 쫄 HP1로',
-      type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ id: '796C', capture: false }),
-      alarmText: '체력을 1로!',
-    },
 
     // ///////////////////////////////////////////////////////////////////////////////
     // 실키: 왼쪽으로
     {
       id: 'AS+ 실키 Squeaky Clean Right',
       type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ id: '7755', source: 'Silkie', capture: false }),
-      infoText: '왼쪽🡸',
+      netRegex: NetRegexes.startsUsing({ id: ['7751', '7755'], source: 'Silkie', capture: false }),
+      infoText: (data, _matches, output) => {
+        data.silkieClean++;
+        if (data.silkieClean === 1)
+          return output.left!();
+      },
+      outputStrings: {
+        left: '왼쪽🡸',
+      },
     },
     // 실키: 오른쪽으로
     {
       id: 'AS+ 실키 Squeaky Clean Left',
       type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ id: '7756', source: 'Silkie', capture: false }),
-      infoText: '🡺오른쪽',
+      netRegex: NetRegexes.startsUsing({ id: ['7752', '7756'], source: 'Silkie', capture: false }),
+      infoText: (data, _matches, output) => {
+        data.silkieClean++;
+        if (data.silkieClean === 1)
+          return output.right!();
+      },
+      outputStrings: {
+        right: '🡺오른쪽',
+      },
     },
     // 실키: Dust Bluster
     {
@@ -197,7 +266,10 @@ const triggerSet: TriggerSet<Data> = {
       id: 'AS+ 실키 Fresh Puff',
       type: 'StartsUsing',
       netRegex: NetRegexes.startsUsing({ id: '7766', source: 'Silkie' }),
-      preRun: (data) => data.silkieFreshPuff++,
+      preRun: (data) => {
+        data.silkieClean = 0;
+        data.silkieFreshPuff++;
+      },
       infoText: (data, _matches, output) => {
         if (data.silkieFreshPuff === 1)
           return output.p1!();
@@ -240,8 +312,8 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (data, matches, output) => {
         if (data.silkieSuds === 'green') {
           if (matches.target === data.me)
-            return output.kbFront!({ player: data.ShortName(matches.target) });
-          return output.kbBack!();
+            return output.kbBack!();
+          return output.kbFront!({ player: data.ShortName(matches.target) });
         }
         if (matches.target === data.me) {
           if (data.silkieSoap === 1)
@@ -266,7 +338,7 @@ const triggerSet: TriggerSet<Data> = {
       id: 'AS+ 실키 Slippery Soap Blue',
       type: 'StartsUsing',
       netRegex: NetRegexes.startsUsing({ id: '775E', source: 'Silkie' }),
-      delaySeconds: (_data, matches) => parseFloat(matches.castTime) - 2,
+      delaySeconds: (_data, matches) => parseFloat(matches.castTime) - 1,
       alertText: (data, _matches, outputs) => {
         if (data.silkieSuds === 'blue')
           return outputs.blue!();
@@ -333,8 +405,8 @@ const triggerSet: TriggerSet<Data> = {
         return output.target!({ player: data.ShortName(matches.target) });
       },
       outputStrings: {
-        target: '${player}에게 돌진! 보스 엉댕이에 한줄로 서욧',
-        itsme: '내게 돌진! 보스 엉댕이에 한줄로 서욧',
+        target: '${player}에게 돌진! 보스 엉댕이에 한줄로',
+        itsme: '내게 돌진! 보스 엉댕이에 한줄로',
       },
     },
     // 그라디아토르: Mighty Smite
@@ -349,26 +421,27 @@ const triggerSet: TriggerSet<Data> = {
       id: 'AS++ 그라디아토르 Specter of Might',
       type: 'StartsUsing',
       netRegex: NetRegexes.startsUsing({ id: '7673', source: 'Gladiator of Sil\'dih', capture: false }),
-      infoText: '러시 미라쥬 순번 확인 하셈!',
-      run: (data) => data.gladRushes = [],
+      // infoText: '러시 미라쥬 순번 확인 하셈!',
+      run: (data) => data.gladRushNum = [],
     },
     // 그라디아토르: Rush of Might
     {
       id: 'AS+ 그라디아토르 Rush of Might',
       type: 'StartsUsing',
       netRegex: NetRegexes.startsUsing({ id: ['7658', '7659', '765A'], source: 'Gladiator Mirage' }),
-      durationSeconds: 8,
+      preRun: (data) => data.gladRushCount++,
+      durationSeconds: 9.4,
       infoText: (data, matches, output) => {
         const i2n: { [id: string]: number } = {
           '7658': 1,
           '7659': 2,
           '765A': 3,
         };
-        data.gladRushes.push(i2n[matches.id] ?? 0);
-        if (data.gladRushes.length !== 2)
+        data.gladRushNum.push(i2n[matches.id] ?? 0);
+        if (data.gladRushNum.length !== 2)
           return;
 
-        if (data.gladRushes[0] === undefined || data.gladRushes[1] === undefined)
+        if (data.gladRushNum[0] === undefined || data.gladRushNum[1] === undefined)
           return output.unknown!();
 
         const n2s: { [id: number]: string } = {
@@ -377,7 +450,7 @@ const triggerSet: TriggerSet<Data> = {
           2: output.num2!(),
           3: output.num3!(),
         };
-        return output.rush!({ num1: n2s[data.gladRushes[0]], num2: n2s[data.gladRushes[1]] });
+        return output.rush!({ num1: n2s[data.gladRushNum[0]], num2: n2s[data.gladRushNum[1]] });
       },
       outputStrings: {
         rush: '${num1} + ${num2}',
@@ -387,13 +460,107 @@ const triggerSet: TriggerSet<Data> = {
         unknown: Outputs.unknown,
       },
     },
-    /* // 그라디아토르: Curse of the Fallen
+    // 그라디아토르: Rush of Might 위치
     {
-      id: 'AS+ 그라디아토르 Curse of the Fallen',
+      id: 'AS+ 그라디아토르 Rush of Might Collect',
       type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ id: '7674', source: 'Gladiator of Sil\'dih', capture: false }),
-      infoText: '저주 디버프 확인하세요',
-    },*/
+      netRegex: NetRegexes.startsUsing({ id: ['765C', '765B'], source: 'Gladiator of Sil\'dih' }),
+      preRun: (data, matches) => data.gladRushCast.push(matches),
+    },
+    // 그라디아토르: Rush of Might 1
+    {
+      id: 'AS+ 그라디아토르 Rush of Might 1',
+      type: 'StartsUsing',
+      netRegex: NetRegexes.startsUsing({ id: ['765C', '765B'], source: 'Gladiator of Sil\'dih', capture: false }),
+      delaySeconds: 0.1,
+      durationSeconds: 9.5,
+      suppressSeconds: 1,
+      infoText: (data, _matches, output) => {
+        if (data.gladRushCast.length !== 4)
+          return;
+
+        const mirage1 = data.gladRushCast[0];
+        const unkmir1 = data.gladRushCast[1];
+        const unkmir2 = data.gladRushCast[2];
+        if (mirage1 === undefined || unkmir1 === undefined || unkmir2 === undefined)
+          throw new UnreachableCode();
+        const mirage2 = (mirage1.x === unkmir1.x && mirage1.y === unkmir1.y) ? unkmir2 : unkmir1;
+
+        const x1 = parseFloat(mirage1.x);
+        const y1 = parseFloat(mirage1.y);
+        const x2 = parseFloat(mirage2.x);
+        const y2 = parseFloat(mirage2.y);
+        const o1 = getRushOffset(x1);
+        const o2 = getRushOffset(x2);
+        const line = o1 > o2 ? o1 : o2;
+
+        let dir;
+        if (y1 < -271) {
+          const x = y1 < y2 ? x1 : x2;
+          dir = x < -35 ? 'west' : 'east';
+        } else {
+          const x = y1 > y2 ? x1 : x2;
+          dir = x < -35 ? 'west' : 'east';
+        }
+
+        const dir2left: { [id: number]: string } = {
+          1: output.l1!(),
+          2: output.l2!(),
+          3: output.l3!(),
+        };
+        const dir2right: { [id: number]: string } = {
+          1: output.r1!(),
+          2: output.r2!(),
+          3: output.r3!(),
+        };
+        const even = (data.gladRushCount % 4) === 0;
+
+        let arrow;
+        let side;
+        if ((o1 === 2 && o2 === 3) || (o1 === 3 && o2 === 2)) {
+          if (dir === 'west') {
+            side = 'east';
+            arrow = even ? dir2right[line] : dir2left[line];
+          } else {
+            side = 'west';
+            arrow = even ? dir2left[line] : dir2right[line];
+          }
+        } else {
+          if (dir === 'west') {
+            side = 'west';
+            arrow = even ? dir2right[line] : dir2left[line];
+          } else {
+            side = 'east';
+            arrow = even ? dir2left[line] : dir2right[line];
+          }
+        }
+
+        if (even)
+          return output.rushrev!({ arrow: arrow, side: output[side]!() });
+        return output.rush!({ arrow: arrow, side: output[side]!() });
+      },
+      run: (data) => data.gladRushCast = [],
+      outputStrings: {
+        rush: '${arrow} ${side}',
+        rushrev: '${arrow} ${side} (남쪽보고)',
+        east: Outputs.right,
+        west: Outputs.left,
+        l1: '🡸',
+        l2: '🡸🡸',
+        l3: '🡸🡸🡸',
+        r1: '🡺',
+        r2: '🡺🡺',
+        r3: '🡺🡺🡺',
+      },
+    },
+    // 그라디아토르: Rush of Might 2
+    {
+      id: 'AS+ 그라디아토르 Rush of Might 2',
+      type: 'Ability',
+      netRegex: NetRegexes.ability({ id: '765B', source: 'Gladiator of Sil\'dih', capture: false }),
+      suppressSeconds: 1,
+      response: Responses.moveAway(),
+    },
     //
     {
       id: 'AS+ 그라디아토르 Lingering Echoes Collect',
@@ -623,11 +790,245 @@ const triggerSet: TriggerSet<Data> = {
     },
 
     // ///////////////////////////////////////////////////////////////////////////////
+    //
     {
       id: 'AS+ 젤레스가 Show of Strength',
       type: 'StartsUsing',
       netRegex: NetRegexes.startsUsing({ id: '74AF', source: 'Shadowcaster Zeless Gah', capture: false }),
       response: Responses.aoe(),
+    },
+    //
+    {
+      id: 'AS+ 젤레스가 Firesteel Fracture',
+      type: 'StartsUsing',
+      netRegex: NetRegexes.startsUsing({ id: '74AD', source: 'Shadowcaster Zeless Gah' }),
+      response: Responses.tankCleave(),
+    },
+    //
+    {
+      id: 'AS+ 젤레스가 Infern Brand',
+      type: 'StartsUsing',
+      netRegex: NetRegexes.startsUsing({ id: '7491', source: 'Shadowcaster Zeless Gah' }),
+      infoText: (data, _matches, output) => {
+        data.gahBrandPhase++;
+        if (data.gahBrandPhase === 1)
+          return output.p1!();
+        if (data.gahBrandPhase === 2)
+          return output.p2!();
+        if (data.gahBrandPhase === 3)
+          return output.p3!();
+        if (data.gahBrandPhase === 4)
+          return output.p4!();
+        if (data.gahBrandPhase === 5)
+          return output.p5!();
+      },
+      outputStrings: {
+        p1: '돌아가는 기둥, 안전지대 찾아요',
+        p2: '마법진 위치 → 북:🟥 / 서:🟦',
+        p3: '전이 기둥에서 놀아요',
+        p4: '카드 전이, 안전지대를 찾아요',
+        p5: '12번→가운데, 34번→파란선 지팡',
+      },
+    },
+    /* //
+    {
+      id: 'AS+ 젤레스가 Cryptic Portal',
+      type: 'StartsUsing',
+      netRegex: NetRegexes.startsUsing({ id: '7494', source: 'Shadowcaster Zeless Gah' }),
+    },*/
+    //
+    {
+      id: 'AS+ 젤레스가 Firesteel Strike',
+      type: 'StartsUsing',
+      netRegex: NetRegexes.startsUsing({ id: '74B0', source: 'Shadowcaster Zeless Gah' }),
+      response: Responses.spread(),
+      run: (data) => data.gahMagicv = [],
+    },
+    //
+    {
+      id: 'AS+ 젤레스가 Firesteel Strike Collect',
+      type: 'Ability',
+      netRegex: NetRegexes.ability({ id: ['74B1', '74B2'], source: 'Shadowcaster Zeless Gah' }),
+      run: (data, matches) => data.gahMagicv.push(matches.target),
+    },
+    //
+    {
+      id: 'AS+ 젤레스가 Blessed Beacon',
+      type: 'StartsUsing',
+      netRegex: NetRegexes.startsUsing({ id: '74B3', source: 'Shadowcaster Zeless Gah' }),
+      infoText: (data, _matches, output) => {
+        if (data.gahMagicv.length === 0)
+          return output.text!();
+
+        if (data.gahMagicv.includes(data.me))
+          return output.behind!();
+
+        const players: string[] = [];
+        data.gahMagicv.forEach((value) => players.push(data.ShortName(value)));
+        return output.front!({ players: players.join(', ') });
+      },
+      outputStrings: {
+        text: '두 번 내려치기',
+        front: '앞에서 막아줘요 (${players})',
+        behind: '뒤에 숨어요',
+      },
+    },
+    //
+    {
+      id: 'AS+ 젤레스가 Brands',
+      type: 'GainsEffect',
+      netRegex: NetRegexes.gainsEffect({ effectId: 'CC[4-7]' }),
+      condition: Conditions.targetIsYou(),
+      durationSeconds: (_data, matches) => parseFloat(matches.duration),
+      infoText: (data, matches, output) => {
+        if (matches.effectId === 'CC4')
+          data.gahMyBrand = 1;
+        else if (matches.effectId === 'CC5')
+          data.gahMyBrand = 2;
+        else if (matches.effectId === 'CC6')
+          data.gahMyBrand = 3;
+        else if (matches.effectId === 'CC7')
+          data.gahMyBrand = 4;
+        else
+          throw new UnreachableCode();
+        return output.text!({ num: output['num' + data.gahMyBrand.toString()]!() });
+      },
+      outputStrings: {
+        text: '내 브랜드: ${num}',
+        num1: Outputs.cnum1,
+        num2: Outputs.cnum2,
+        num3: Outputs.cnum3,
+        num4: Outputs.cnum4,
+      },
+    },
+    //
+    {
+      id: 'AS+ 젤레스가 Frames',
+      type: 'GainsEffect',
+      netRegex: NetRegexes.gainsEffect({ effectId: 'CC[89AB]' }),
+      condition: Conditions.targetIsYou(),
+      durationSeconds: (_data, matches) => parseFloat(matches.duration),
+      infoText: (data, matches, output) => {
+        if (matches.effectId === 'CC8')
+          data.gahMyBrand = 1;
+        else if (matches.effectId === 'CC9')
+          data.gahMyBrand = 2;
+        else if (matches.effectId === 'CCA')
+          data.gahMyBrand = 3;
+        else if (matches.effectId === 'CCB')
+          data.gahMyBrand = 4;
+        else
+          throw new UnreachableCode();
+        return output.text!({ num: output['num' + data.gahMyBrand.toString()]!() });
+      },
+      outputStrings: {
+        text: '내 플레임: ${num}',
+        num1: Outputs.cnum1,
+        num2: Outputs.cnum2,
+        num3: Outputs.cnum3,
+        num4: Outputs.cnum4,
+      },
+    },
+    //
+    {
+      id: 'AS+ 젤레스가 Frames Over',
+      type: 'GainsEffect',
+      netRegex: NetRegexes.gainsEffect({ effectId: 'CC[89AB]' }),
+      condition: Conditions.targetIsYou(),
+      delaySeconds: (_data, matches) => parseFloat(matches.duration) - 5,
+      alertText: '안전 지대로 찾아 가욧',
+    },
+    /* 당장 안끊어도 된다 위에 플레임되면 끊기기 시작함
+    //
+    {
+      id: 'AS+ 젤레스가 Cryptic Flames',
+      type: 'Ability',
+      netRegex: NetRegexes.ability({ id: '74B6', source: 'Shadowcaster Zeless Gah' }),
+      alertText: (data, _matches, output) => output.text!({ num: data.gahMyBrand }),
+      outputStrings: {
+        text: '선 끊어요. 내 번호는 ${num}번',
+      },
+    },*/
+    // 캐스트 샤도 (749Ax1, 749Ex6, 749Cx6) 이중에 뭘 골라야하지
+    {
+      id: 'AS+ 젤레스가 Cast Shadow',
+      type: 'StartsUsing',
+      netRegex: NetRegexes.startsUsing({ id: '749A', source: 'Shadowcaster Zeless Gah' }),
+      alertText: '방사 장판 피하면서, 안전지대로',
+    },
+    //
+    {
+      id: 'AS+ 젤레스가 Banishment',
+      type: 'Ability',
+      netRegex: NetRegexes.ability({ id: '74BC', source: 'Shadowcaster Zeless Gah' }),
+      delaySeconds: 4,
+      infoText: '안쪽으로 회전하는 곳에 위치하세요',
+    },
+    //
+    {
+      id: 'AS+ 젤레스가 Call of the Portal Collect',
+      type: 'GainsEffect',
+      netRegex: NetRegexes.gainsEffect({ effectId: 'CCC' }),
+      condition: Conditions.targetIsYou(),
+      delaySeconds: (_data, matches) => parseFloat(matches.duration) + 1,
+      alertText: '포탈 전이: 같은 줄의 마커로 가욧',
+    },
+    //
+    {
+      id: 'AS+ 젤레스가 Rite of Passage Collect',
+      type: 'GainsEffect',
+      netRegex: NetRegexes.gainsEffect({ effectId: 'CCD' }),
+      condition: Conditions.targetIsYou(),
+      delaySeconds: (_data, matches) => parseFloat(matches.duration) + 1,
+      alertText: '자가 전이: 같은 줄의 마커로 가욧',
+    },
+    //
+    {
+      id: 'AS+ 젤레스가 빨강파랑/왼쪽오른쪽',
+      type: 'GainsEffect',
+      netRegex: NetRegexes.gainsEffect({ effectId: 'B9A' }),
+      condition: Conditions.targetIsYou(),
+      infoText: (data, matches, output) => {
+        if (matches.count === '1D2')
+          data.gahBanishment = 'redRight';
+        else if (matches.count === '1D3')
+          data.gahBanishment = 'blueLeft';
+        else if (matches.count === '1CD')
+          data.gahBanishment = 'blueRight';
+        else if (matches.count === '1CE')
+          data.gahBanishment = 'redLeft';
+        else
+          throw new UnreachableCode();
+
+        return output[data.gahBanishment]!();
+      },
+      outputStrings: {
+        redLeft: '🡸 첫째줄',
+        redRight: '둘째줄 🡺',
+        blueRight: '셋째줄 🡺',
+        blueLeft: '🡸 맨아랫줄',
+      },
+    },
+    //
+    {
+      id: 'AS+ 젤레스가 Brands P5',
+      type: 'GainsEffect',
+      netRegex: NetRegexes.gainsEffect({ effectId: 'CC[4-7]' }),
+      condition: Conditions.targetIsYou(),
+      delaySeconds: (_data, matches) => parseFloat(matches.duration) - 3,
+      durationSeconds: 11,
+      infoText: (data, _matches, output) => {
+        if (data.gahBrandPhase !== 5)
+          return;
+        if (data.gahMyBrand === 1 || data.gahMyBrand === 1)
+          return output.f12!();
+        if (data.gahMyBrand === 3 || data.gahMyBrand === 4)
+          return output.f34!();
+      },
+      outputStrings: {
+        f12: '줄끊고 → 34번 줄 보고 → 지팡이 불꽃 → 장판깔기',
+        f34: '지팡이 불꽃 → 줄끊고 → 원위치 → 장판깔기',
+      },
     },
   ],
   timelineReplace: [
@@ -641,6 +1042,7 @@ const triggerSet: TriggerSet<Data> = {
       'replaceSync': {
         'Gladiator of Sil\'dih': 'シラディハ・グラディアトル',
         'Gladiator Mirage': 'ミラージュ・グラディアトル',
+        'Infern Brand': 'アマルジャの呪具',
         'Silkie': 'シルキー',
         'Shadowcaster Zeless Gah': '影火のゼレズ・ガー',
       },

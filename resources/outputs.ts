@@ -248,7 +248,7 @@ export default {
     ko: '"${player}" 넉백징',
   },
   lookTowardsBoss: {
-    en: '보스 쳐다봐욧',
+    en: '쳐다 봐욧',
     de: 'Anschauen Boss',
     fr: 'Regardez le boss',
     ja: 'ボスを見る',
@@ -256,7 +256,7 @@ export default {
     ko: '쳐다보기',
   },
   lookAway: {
-    en: '보스 쳐다보면 안되욧',
+    en: '쳐다 보면 안되욧',
     de: 'Wegschauen',
     fr: 'Regardez ailleurs',
     ja: 'ボスを見ない',
@@ -264,7 +264,7 @@ export default {
     ko: '뒤돌기',
   },
   lookAwayFromPlayer: {
-    en: '쳐다보면 안되욧: ${player}',
+    en: '쳐다 보면 안되욧: ${player}',
     de: 'Schau weg von ${player}',
     fr: 'Ne regardez pas ${player}',
     ja: '${player}を見ない',
@@ -272,7 +272,7 @@ export default {
     ko: '${player}에게서 뒤돌기',
   },
   lookAwayFromTarget: {
-    en: '쳐다보면 안되욧: ${name}',
+    en: '쳐다 보면 안되욧: ${name}',
     de: 'Schau weg von ${name}',
     fr: 'Ne regardez pas ${name}',
     ja: '${name}を見ない',

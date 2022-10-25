@@ -127,6 +127,7 @@ export type BaseTrigger<Data extends RaidbossData, Type extends TriggerTypes> = 
   outputStrings?: OutputStrings;
 };
 
+// new trigger type, regex is build by core.
 type PartialNetRegexTrigger<T extends TriggerTypes> = {
   type?: T;
   netRegex: CactbotBaseRegExp<T>;
