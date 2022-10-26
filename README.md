@@ -2,7 +2,7 @@
 
 For visit official repo: <https://github.com/quisquous/cactbot>
 
-Here is cactbot's test & modify repo. No English output support.
+This repo is for cactbot's test & modify. No English output support.
 
 ---
 오리지날을 찾으신다면 위 리포 URL로 가세요
