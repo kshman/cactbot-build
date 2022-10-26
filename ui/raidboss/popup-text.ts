@@ -1,11 +1,14 @@
 import { Lang } from '../../resources/languages';
-import { commonNetRegex } from '../../resources/netregexes';
+import { buildRegex, commonNetRegex } from '../../resources/netregexes';
 import { UnreachableCode } from '../../resources/not_reached';
 import { callOverlayHandler, addOverlayListener } from '../../resources/overlay_plugin_api';
 import PartyTracker from '../../resources/party';
-import { addPlayerChangedOverrideListener, PlayerChangedDetail } from '../../resources/player_override';
+import {
+  addPlayerChangedOverrideListener,
+  PlayerChangedDetail,
+} from '../../resources/player_override';
 import Regexes from '../../resources/regexes';
-import { translateRegex } from '../../resources/translations';
+import { translateRegex, translateRegexBuildParam } from '../../resources/translations';
 import Util from '../../resources/util';
 import ZoneId from '../../resources/zone_id';
 import { RaidbossData } from '../../types/data';
@@ -605,7 +608,7 @@ export class PopupText {
 
     // Recursively/iteratively process timeline entries for triggers.
     // Functions get called with data, arrays get iterated, strings get appended.
-    const addTimeline = (function(this: PopupText, obj: TimelineField | TimelineFunc | undefined) {
+    const addTimeline = function(this: PopupText, obj: TimelineField | TimelineFunc | undefined) {
       if (Array.isArray(obj)) {
         for (const objVal of obj)
           addTimeline(objVal);
@@ -614,7 +617,7 @@ export class PopupText {
       } else if (obj) {
         timelines.push(obj);
       }
-    }).bind(this);
+    }.bind(this);
 
     // construct something like regexDe or regexFr.
     const langSuffix = this.parserLang.charAt(0).toUpperCase() + this.parserLang.slice(1);
@@ -727,14 +730,31 @@ export class PopupText {
             const defaultNetRegex = trigger.netRegex;
             const localeNetRegex = triggerObject[netRegexParserLang];
             if (localeNetRegex instanceof RegExp) {
+              // localized regex don't need to handle net-regex auto build
               trigger.localNetRegex = Regexes.parse(localeNetRegex);
               orderedTriggers.push(trigger);
               found = true;
             } else if (defaultNetRegex) {
-              const trans = translateRegex(defaultNetRegex, this.parserLang, set.timelineReplace);
-              trigger.localNetRegex = Regexes.parse(trans);
-              orderedTriggers.push(trigger);
-              found = true;
+              // simple netRegex trigger, need to build netRegex and translate
+              if (defaultNetRegex instanceof RegExp) {
+                const trans = translateRegex(defaultNetRegex, this.parserLang, set.timelineReplace);
+                trigger.localNetRegex = Regexes.parse(trans);
+                orderedTriggers.push(trigger);
+                found = true;
+              } else {
+                if (trigger.type === undefined) {
+                  console.error(`Trigger ${id}: without type property need RegExp as netRegex`);
+                  continue;
+                }
+
+                const re = buildRegex(
+                  trigger.type,
+                  translateRegexBuildParam(defaultNetRegex, this.parserLang, set.timelineReplace),
+                );
+                trigger.localNetRegex = Regexes.parse(re);
+                orderedTriggers.push(trigger);
+                found = true;
+              }
             }
           }
 
@@ -1178,7 +1198,7 @@ export class PopupText {
     if (typeof suppress !== 'number')
       return;
     if (triggerHelper.trigger.id && suppress > 0)
-      this.triggerSuppress[triggerHelper.trigger.id] = triggerHelper.now + (suppress * 1000);
+      this.triggerSuppress[triggerHelper.trigger.id] = triggerHelper.now + suppress * 1000;
   }
 
   _onTriggerInternalPromise(triggerHelper: TriggerHelper): Promise<void> | undefined {

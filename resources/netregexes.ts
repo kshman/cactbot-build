@@ -20,13 +20,17 @@ const matchDefault = '[^|]*';
 // If issue #1306 is ever resolved, we can remove this.
 const magicTranslationString = `^^`;
 const magicStringRegex = /^\^\^/;
-const keysThatRequireTranslation = [
+
+// can't simply export this, see https://github.com/quisquous/cactbot/pull/4957#discussion_r1002590589
+const keysThatRequireTranslationAsConst = [
   'ability',
   'name',
   'source',
   'target',
   'line',
-];
+] as const;
+export const keysThatRequireTranslation: readonly string[] = keysThatRequireTranslationAsConst;
+export type KeysThatRequireTranslation = typeof keysThatRequireTranslationAsConst[number];
 
 const defaultParams = <
   T extends LogDefinitionTypes,
@@ -220,26 +224,18 @@ export default class NetRegexes {
     return parseHelper(
       params,
       'AddedCombatant',
-      defaultParams('AddedCombatant', NetRegexes.logVersion, [
-        'type',
-        'timestamp',
-        'id',
-        'name',
-      ]),
+      defaultParams('AddedCombatant', NetRegexes.logVersion),
     );
   }
 
   /**
    * matches: https://github.com/quisquous/cactbot/blob/main/docs/LogGuide.md#line-03-0x03-addcombatant
+   * @deprecated Use `addedCombatant` instead
    */
   static addedCombatantFull(
     params?: NetParams['AddedCombatant'],
   ): CactbotBaseRegExp<'AddedCombatant'> {
-    return parseHelper(
-      params,
-      'AddedCombatantFull',
-      defaultParams('AddedCombatant', NetRegexes.logVersion),
-    );
+    return NetRegexes.addedCombatant(params);
   }
 
   /**
@@ -300,7 +296,7 @@ export default class NetRegexes {
   /**
    * matches: https://github.com/quisquous/cactbot/blob/main/docs/LogGuide.md#line-00-0x00-logline
    */
-  static echo(params?: NetParams['GameLog']): CactbotBaseRegExp<'GameLog'> {
+  static echo(params?: Omit<NetParams['GameLog'], 'code'>): CactbotBaseRegExp<'GameLog'> {
     if (typeof params === 'undefined')
       params = {};
     Regexes.validateParams(
@@ -308,14 +304,14 @@ export default class NetRegexes {
       'Echo',
       ['type', 'timestamp', 'code', 'name', 'line', 'capture'],
     );
-    params.code = '0038';
-    return NetRegexes.gameLog(params);
+
+    return NetRegexes.gameLog({ ...params, code: '0038' });
   }
 
   /**
    * matches: https://github.com/quisquous/cactbot/blob/main/docs/LogGuide.md#line-00-0x00-logline
    */
-  static dialog(params?: NetParams['GameLog']): CactbotBaseRegExp<'GameLog'> {
+  static dialog(params?: Omit<NetParams['GameLog'], 'code'>): CactbotBaseRegExp<'GameLog'> {
     if (typeof params === 'undefined')
       params = {};
     Regexes.validateParams(
@@ -323,14 +319,14 @@ export default class NetRegexes {
       'Dialog',
       ['type', 'timestamp', 'code', 'name', 'line', 'capture'],
     );
-    params.code = '0044';
-    return NetRegexes.gameLog(params);
+
+    return NetRegexes.gameLog({ ...params, code: '0044' });
   }
 
   /**
    * matches: https://github.com/quisquous/cactbot/blob/main/docs/LogGuide.md#line-00-0x00-logline
    */
-  static message(params?: NetParams['GameLog']): CactbotBaseRegExp<'GameLog'> {
+  static message(params?: Omit<NetParams['GameLog'], 'code'>): CactbotBaseRegExp<'GameLog'> {
     if (typeof params === 'undefined')
       params = {};
     Regexes.validateParams(
@@ -338,8 +334,8 @@ export default class NetRegexes {
       'Message',
       ['type', 'timestamp', 'code', 'name', 'line', 'capture'],
     );
-    params.code = '0839';
-    return NetRegexes.gameLog(params);
+
+    return NetRegexes.gameLog({ ...params, code: '0839' });
   }
 
   /**
