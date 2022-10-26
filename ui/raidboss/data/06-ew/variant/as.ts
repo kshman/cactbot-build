@@ -59,9 +59,9 @@ const triggerSet: TriggerSet<Data> = {
   },
   triggers: [
     // ///////////////////////////////////////////////////////////////////////////////
-    // Aqueduct Kaluk: 왼쪽으로
+    // Aqueduct Kaluk: Left Sweep
     {
-      id: 'AS+ Aqueduct Kaluk 왼쪽으로',
+      id: 'AS+ Aqueduct Kaluk Left Sweep',
       type: 'StartsUsing',
       netRegex: { id: '7963', source: 'Aqueduct Kaluk', capture: false },
       infoText: (_data, _matches, output) => output.text!(),
@@ -72,9 +72,9 @@ const triggerSet: TriggerSet<Data> = {
         },
       },
     },
-    // Aqueduct Kaluk: 오른쪽으로
+    // Aqueduct Kaluk: Right Sweep
     {
-      id: 'AS+ Aqueduct Kaluk 오른쪽으로',
+      id: 'AS+ Aqueduct Kaluk Right Sweep',
       type: 'StartsUsing',
       netRegex: { id: '7964', source: 'Aqueduct Kaluk', capture: false },
       infoText: (_data, _matches, output) => output.text!(),
@@ -85,9 +85,9 @@ const triggerSet: TriggerSet<Data> = {
         },
       },
     },
-    // Aqueduct Kaluk: 전방 범위
+    // Aqueduct Kaluk: Creeping Ivy
     {
-      id: 'AS+ Aqueduct Kaluk 전방범위',
+      id: 'AS+ Aqueduct Kaluk Creeping Ivy',
       type: 'StartsUsing',
       netRegex: { id: '7965', source: 'Aqueduct Kaluk', capture: false },
       infoText: (_data, _matches, output) => output.text!(),
@@ -98,9 +98,9 @@ const triggerSet: TriggerSet<Data> = {
         },
       },
     },
-    // Aqueduct Udumbara: 왼쪽으로
+    // Aqueduct Udumbara: Honeyed Right
     {
-      id: 'AS+ Aqueduct Udumbara 왼쪽으로',
+      id: 'AS+ Aqueduct Udumbara Honeyed Right',
       type: 'StartsUsing',
       netRegex: { id: '795C', source: 'Aqueduct Udumbara', capture: false },
       infoText: (_data, _matches, output) => output.text!(),
@@ -111,9 +111,9 @@ const triggerSet: TriggerSet<Data> = {
         },
       },
     },
-    // Aqueduct Udumbara: 오른쪽으로
+    // Aqueduct Udumbara: Honeyed Left
     {
-      id: 'AS+ Aqueduct Udumbara 오른쪽으로',
+      id: 'AS+ Aqueduct Udumbara Honeyed Left',
       type: 'StartsUsing',
       netRegex: { id: '795B', source: 'Aqueduct Udumbara', capture: false },
       infoText: (_data, _matches, output) => output.text!(),
@@ -137,30 +137,30 @@ const triggerSet: TriggerSet<Data> = {
         },
       },
     },
-    // Aqueduct Belladonna: 발밑으로
+    // Aqueduct Belladonna: Atropine Spore
     {
-      id: 'AS+ Aqueduct Belladonna 발밑으로',
+      id: 'AS+ Aqueduct Belladonna Atropine Spore',
       type: 'StartsUsing',
       netRegex: { id: '7960', source: 'Aqueduct Belladonna', capture: false },
       response: Responses.getIn(),
     },
-    // Aqueduct Belladonna: 시선 주의
+    // Aqueduct Belladonna: Frond Affront
     {
-      id: 'AS+ Aqueduct Belladonna 시선주의',
+      id: 'AS+ Aqueduct Belladonna Frond Affront',
       type: 'StartsUsing',
       netRegex: { id: '7961', source: 'Aqueduct Belladonna', capture: false },
       response: Responses.lookAway(),
     },
-    // Aqueduct Belladonna: 버스터
+    // Aqueduct Belladonna: Deracinator
     {
-      id: 'AS+ Aqueduct Belladonna 버스터',
+      id: 'AS+ Aqueduct Belladonna Deracinator',
       type: 'StartsUsing',
       netRegex: { id: '7962', source: 'Aqueduct Belladonna' },
       response: Responses.tankBuster(),
     },
-    // Aqueduct Dryad: 원형범위
+    // Aqueduct Dryad: Aqueduct Dryad
     {
-      id: 'AS+ Aqueduct Dryad 원형범위',
+      id: 'AS+ Aqueduct Dryad Aqueduct Dryad',
       type: 'StartsUsing',
       netRegex: { id: '7957', source: 'Aqueduct Dryad', capture: false },
       response: Responses.getOut(),
@@ -231,11 +231,11 @@ const triggerSet: TriggerSet<Data> = {
       netRegex: { id: '796A', source: 'Aqueduct Armor', capture: false },
       response: Responses.getBehind(),
     },
-    // 쫄: 란타게범위
+    // Aqueduct Odqan: Gelid Gale
     {
-      id: 'AS+ 쫄 랜덤 장판',
+      id: 'AS+ Aqueduct Odqan Gelid Gale',
       type: 'StartsUsing',
-      netRegex: { id: '7959', capture: false },
+      netRegex: { id: '7959', source: 'Aqueduct Odqan', capture: false },
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
@@ -244,11 +244,11 @@ const triggerSet: TriggerSet<Data> = {
         },
       },
     },
-    // 쫄: 범위
+    // Aqueduct Odqan: Uproot
     {
-      id: 'AS+ 쫄 범위',
+      id: 'AS+ Aqueduct Odqan Uproot',
       type: 'StartsUsing',
-      netRegex: { id: '795A', capture: false },
+      netRegex: { id: '795A', source: 'Aqueduct Odqan', capture: false },
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
@@ -261,7 +261,7 @@ const triggerSet: TriggerSet<Data> = {
     // ///////////////////////////////////////////////////////////////////////////////
     // 실키: 왼쪽으로
     {
-      id: 'AS+ 실키 Squeaky Clean Right',
+      id: 'AS+ Silkie Squeaky Clean Right',
       type: 'StartsUsing',
       netRegex: { id: ['7751', '7755'], source: 'Silkie', capture: false },
       infoText: (data, _matches, output) => {
@@ -280,7 +280,7 @@ const triggerSet: TriggerSet<Data> = {
     },
     // 실키: 오른쪽으로
     {
-      id: 'AS+ 실키 Squeaky Clean Left',
+      id: 'AS+ Silkie Squeaky Clean Left',
       type: 'StartsUsing',
       netRegex: { id: ['7752', '7756'], source: 'Silkie', capture: false },
       infoText: (data, _matches, output) => {
@@ -297,21 +297,21 @@ const triggerSet: TriggerSet<Data> = {
     },
     // 실키: Dust Bluster
     {
-      id: 'AS+ 실키 Dust Bluster',
+      id: 'AS+ Silkie Dust Bluster',
       type: 'StartsUsing',
       netRegex: { id: '776C', source: 'Silkie', capture: false },
       response: Responses.knockback(),
     },
     // 실키: Carpet Beater
     {
-      id: 'AS+ 실키 Carpet Beater',
+      id: 'AS+ Silkie Carpet Beater',
       type: 'StartsUsing',
       netRegex: { id: '774F', source: 'Silkie' },
       response: Responses.tankBuster(),
     },
     // 실키: Total Wash
     {
-      id: 'AS+ 실키 Total Wash',
+      id: 'AS+ Silkie Total Wash',
       type: 'StartsUsing',
       netRegex: { id: '7750', source: 'Silkie', capture: false },
       infoText: (_data, _matches, output) => output.text!(),
@@ -324,7 +324,7 @@ const triggerSet: TriggerSet<Data> = {
     },
     // 실키: Bracing Suds
     {
-      id: 'AS+ 실키 Bracing Suds',
+      id: 'AS+ Silkie Bracing Suds',
       type: 'StartsUsing',
       netRegex: { id: '7757', source: 'Silkie' },
       infoText: (_data, _matches, output) => output.text!(),
@@ -338,7 +338,7 @@ const triggerSet: TriggerSet<Data> = {
     },
     // 실키: Chilling Suds
     {
-      id: 'AS+ 실키 Chilling Suds',
+      id: 'AS+ Silkie Chilling Suds',
       type: 'StartsUsing',
       netRegex: { id: '7758', source: 'Silkie' },
       infoText: (_data, _matches, output) => output.text!(),
@@ -352,7 +352,7 @@ const triggerSet: TriggerSet<Data> = {
     },
     // 실키: Fizzling Suds
     {
-      id: 'AS+ 실키 Fizzling Suds',
+      id: 'AS+ Silkie Fizzling Suds',
       type: 'StartsUsing',
       netRegex: { id: '7759', source: 'Silkie' },
       infoText: (_data, _matches, output) => output.text!(),
@@ -366,7 +366,7 @@ const triggerSet: TriggerSet<Data> = {
     },
     // 실키: Fresh Puff
     {
-      id: 'AS+ 실키 Fresh Puff',
+      id: 'AS+ Silkie Fresh Puff',
       type: 'StartsUsing',
       netRegex: { id: '7766', source: 'Silkie' },
       preRun: (data) => {
@@ -386,7 +386,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         p1: {
-          en: '솜털 세개 → 꼬리치기',
+          en: '솜털 세개 → 꼬리 휘두르기',
           ja: 'たま3個 → 水拭き',
         },
         p2: {
@@ -409,7 +409,7 @@ const triggerSet: TriggerSet<Data> = {
     },
     // 실키: Eastern Ewers
     {
-      id: 'AS+ 실키 Eastern Ewers',
+      id: 'AS+ Silkie Eastern Ewers',
       type: 'StartsUsing',
       netRegex: { id: '776D', source: 'Silkie' },
       infoText: (_data, _matches, output) => output.text!(),
@@ -422,7 +422,7 @@ const triggerSet: TriggerSet<Data> = {
     },
     // 실키: Soap's Up <- Fizzling Suds (775Dx4가 부채꼴)
     {
-      id: 'AS+ 실키 Fizzling:Soaps',
+      id: 'AS+ Silkie Fizzling:Soaps',
       type: 'StartsUsing',
       netRegex: { id: '775A', source: 'Silkie' },
       alertText: (_data, _matches, output) => output.text!(),
@@ -435,7 +435,7 @@ const triggerSet: TriggerSet<Data> = {
     },
     // 실키: Slippery Soap
     {
-      id: 'AS+ 실키 Slippery Soap',
+      id: 'AS+ Silkie Slippery Soap',
       type: 'Ability',
       netRegex: { id: '79FB', source: 'Silkie' },
       preRun: (data) => data.silkieSoap++,
@@ -483,7 +483,7 @@ const triggerSet: TriggerSet<Data> = {
     },
     // 실키: Slippery Soap Blue
     {
-      id: 'AS+ 실키 Slippery Soap Blue',
+      id: 'AS+ Silkie Slippery Soap Blue',
       type: 'StartsUsing',
       netRegex: { id: '775E', source: 'Silkie' },
       delaySeconds: (_data, matches) => parseFloat(matches.castTime) - 1,
@@ -503,74 +503,53 @@ const triggerSet: TriggerSet<Data> = {
         },
       },
     },
-    // 실키: Slippery Soap Run
+    // 실키: Slippery Soap(775E) / Soaping Spree(7767)
     {
-      id: 'AS+ 실키 Slippery Soap Run',
+      id: 'AS+ Silkie Slippery & Spree',
       type: 'Ability',
-      netRegex: { id: '775E', source: 'Silkie', capture: false },
-      alertText: (data, _matches, output) => {
+      netRegex: { id: ['775E', '7767'], source: 'Silkie' },
+      alertText: (data, matches, output) => {
         if (data.silkieSuds === 'blue')
           return output.blue!();
         if (data.silkieSuds === 'green')
           return output.green!();
         if (data.silkieSuds === 'yellow')
           return output.yellow!();
-        return output.none!();
+        if (matches.id === '775E')
+          return output.slippery!();
+        return output.spree!();
       },
-      run: (data) => delete data.silkieSuds,
+      // run: (data) => delete data.silkieSuds,
       outputStrings: {
         blue: {
           en: '🔵십자 장판',
           ja: '🔵十字, 避けて',
         },
         green: {
-          en: '🟢아래로',
+          en: '🟢바로 밑으로',
           ja: '🟢貼り付く',
         },
         yellow: {
           en: '🟡비스듬 → 흩어져요➕',
           ja: '🟡斜め → 散会➕',
         },
-        none: {
+        slippery: {
           en: '색깔 기믹 처리해요',
           ja: '色ギミック処理',
         },
-      },
-    },
-    // 실키: Soaping Spree
-    {
-      id: 'AS+ 실키 Soaping Spree',
-      type: 'StartsUsing',
-      netRegex: { id: '7767', source: 'Silkie', capture: false },
-      alertText: (data, _matches, output) => {
-        if (data.silkieSuds === 'blue')
-          return output.blue!();
-        if (data.silkieSuds === 'green')
-          return output.green!();
-        return output.none!();
-      },
-      outputStrings: {
-        blue: {
-          en: '🔵십자 장판',
-          ja: '🔵十字, 避けて',
-        },
-        green: {
-          en: '🟢아래로',
-          ja: '🟢貼り付く',
-        },
-        none: {
+        spree: {
           en: '곧 샴푸가 터져요!',
           ja: 'まもなくシャンプー',
         },
       },
     },
-    // 실키: Bracing Duster
+    /* // 실키: Bracing Duster
     {
-      id: 'AS+ 실키 Bracing Duster',
+      id: 'AS+ Silkie Bracing Duster',
       type: 'StartsUsing',
       netRegex: { id: '7769', source: 'Silkie', capture: false },
       response: Responses.getUnder(),
-    },
+    },*/
 
     // ///////////////////////////////////////////////////////////////////////////////
     // 그라디아토르: Flash of Steel
@@ -610,14 +589,14 @@ const triggerSet: TriggerSet<Data> = {
     },
     // 그라디아토르: Specter of Might
     {
-      id: 'AS++ 그라디아토르 Specter of Might Collect',
+      id: 'AS++ 그라디아토르 Specter of Might',
       type: 'StartsUsing',
       netRegex: { id: '7673', source: 'Gladiator of Sil\'dih', capture: false },
       run: (data) => data.gladRushNum = [],
     },
-    // 그라디아토르: Rush of Might
+    // 그라디아토르: Rush of Might Number
     {
-      id: 'AS+ 그라디아토르 Rush of Might',
+      id: 'AS+ 그라디아토르 Rush of Might Number',
       type: 'StartsUsing',
       netRegex: { id: ['7658', '7659', '765A'], source: 'Gladiator Mirage' },
       preRun: (data) => data.gladRushCount++,
