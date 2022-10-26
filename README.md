@@ -13,3 +13,8 @@ Here is cactbot's test & modify repo. No English output support.
 * 또한 종종 동작하지 않는 업뎃을 테스트하기에 플러그인 동작이 멈출 때도 있어요.
 
 오버레이 플러그인도 최신으로 사용해야할 거예요 <https://github.com/OverlayPlugin/OverlayPlugin>
+
+---
+언제까지 이걸 고쳐야하능가... 14를 때려치던가 칵밧이 안나오던가 둘중 하나겟쥬...
+
+![엉엉엉 작게](https://user-images.githubusercontent.com/7216647/197848468-b615cd85-ee8c-4a92-9ac2-e987229c7741.gif)
