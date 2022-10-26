@@ -8,10 +8,17 @@
     "type": "git",
     "url": "https://github.com/kshman/cactbot-build"
   },
+  "files": [
+    "./ui",
+    "./types",
+    "./util",
+    "./resources",
+    "package.json"
+  ],
   "scripts": {
-    "build": "cross-env TS_NODE_PROJECT=\"tsconfig-for-webpack.json\" webpack --progress --config webpack/webpack.prod.ts",
-    "build-gh-pages": "cross-env TS_NODE_PROJECT=\"tsconfig-for-webpack.json\" webpack --config webpack/webpack.ghpages.ts",
-    "start": "cross-env TS_NODE_PROJECT=\"tsconfig-for-webpack.json\" webpack serve --config webpack/webpack.dev.ts",
+    "build": "webpack --progress --config webpack/webpack.prod.ts",
+    "build-gh-pages": " webpack --config webpack/webpack.ghpages.ts",
+    "start": "webpack serve --config webpack/webpack.dev.ts",
     "fetch-deps": "ts-node ./util/fetch_deps.ts",
     "tsc-no-emit": "tsc --noEmit",
     "lint": "eslint --max-warnings=0 ./",
@@ -30,6 +37,7 @@
     "generate-log-guide": "ts-node util/gen_log_guide.ts"
   },
   "devDependencies": {
+    "@actions/exec": "^1.1.1",
     "@actions/github": "^5.0.0",
     "@actions/http-client": "^1.0.11",
     "@babel/core": "^7.14.5",
@@ -72,6 +80,7 @@
     "eslint-plugin-tsc": "^2.0.0",
     "fast-levenshtein": "^3.0.0",
     "fork-ts-checker-webpack-plugin": "^7.2.11",
+    "fs-extra": "^10.1.0",
     "html-webpack-plugin": "^5.5.0",
     "husky": "^4.2.5",
     "is-ci": "^3.0.1",
@@ -129,5 +138,8 @@
     "inquirer": "^8.1.1",
     "inquirer-fuzzy-path": "^2.3.0",
     "lodash": "^4.14.170"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }

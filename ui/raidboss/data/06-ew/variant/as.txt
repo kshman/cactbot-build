@@ -1,5 +1,6 @@
 # Another Sil'dihn Subterrane
 # Legend0's timeline '06-ew/dungeon/another_sildihn_subterrane.txt'
+# -> https://github.com/quisquous/cactbot/pull/4967
 
 hideall "--Reset--"
 hideall "--sync--"
@@ -26,21 +27,21 @@ hideall "--sync--"
 73.0 "Chilling Duster" sync / 1[56]:[^:]*:Silkie:7763:/
 80.6 "Carpet Beater" sync / 1[56]:[^:]*:Silkie:774F:/
 89.7 "Soaping Spree" sync / 1[56]:[^:]*:Silkie:7767:/
-89.7 "Fizzling Duster?" #sync / 1[56]:[^:]*:Silken Puff:776A:/
-89.7 "Bracing Duster?" #sync / 1[56]:[^:]*:Silken Puff:7769:/
-89.7 "Chilling Duster?" #sync / 1[56]:[^:]*:Silken Puff:7768:/
+89.7 "Chilling Duster / Fizzling Duster" #sync / 1[56]:[^:]*:Silken Puff:(7768|776A):/
+89.7 "Bracing Duster" #sync / 1[56]:[^:]*:Silken Puff:7769:/
+89.7 "Chilling Duster" #sync / 1[56]:[^:]*:Silken Puff:7768:/
 100.9 "Total Wash" sync / 1[56]:[^:]*:Silkie:7750:/
-106.0 "Chilling Suds" sync / 1[56]:[^:]*:Silkie:7758:/
+106.0 "Bracing Suds / Chilling Suds" sync / 1[56]:[^:]*:Silkie:(7757|7758):/
 112.1 "Fresh Puff" sync / 1[56]:[^:]*:Silkie:7766:/
 123.1 "Puff and Tumble" duration 0.7 #sync / 1[56]:[^:]*:Silken Puff:7771:/
 129.5 "Soaping Spree" sync / 1[56]:[^:]*:Silkie:7767:/
 129.5 "Fizzling Duster x2" #sync / 1[56]:[^:]*:Silken Puff:776A:/
 129.5 "Chilling Duster x2" #sync / 1[56]:[^:]*:Silken Puff:7768:/
+129.5 "Bracing Duster / Chilling Duster" #sync / 1[56]:[^:]*:Silkie:(7769|7768):/
 134.6 "Bracing Suds / Fizzling Suds" sync / 1[56]:[^:]*:Silkie:(7757|7759):/
 136.7 "--sync--" sync / 1[56]:[^:]*:Silkie:79FB:/
 141.7 "Slippery Soap" sync / 1[56]:[^:]*:Silkie:775E:/
 145.7 "Bracing Duster / Fizzling Duster" sync / 1[56]:[^:]*:Silkie:(7764|7765):/
-146.0 "Soapsud Static?" #sync / 1[56]:[^:]*:Silkie:77ED:/
 160.1 "Total Wash" sync / 1[56]:[^:]*:Silkie:7750:/
 166.2 "Fresh Puff" sync / 1[56]:[^:]*:Silkie:7766:/
 172.3 "Eastern Ewers" sync / 1[56]:[^:]*:Silkie:776D:/
@@ -55,9 +56,8 @@ hideall "--sync--"
 213.4 "Chilling Duster" sync / 1[56]:[^:]*:Silkie:7763:/
 225.9 "Bracing Suds" sync / 1[56]:[^:]*:Silkie:7757:/
 233.0 "Soaping Spree" sync / 1[56]:[^:]*:Silkie:7767:/
-233.0 "Chilling Duster?" #sync / 1[56]:[^:]*:Silken Puff:7768:/
-233.0 "Bracing Duster?" #sync / 1[56]:[^:]*:Silken Puff:7769:/
-233.0 "Fizzling Duster?" #sync / 1[56]:[^:]*:Silken Puff:776A:/
+233.0 "Chilling Duster x6" #sync / 1[56]:[^:]*:Silken Puff:7768:/
+233.0 "Bracing Duster" #sync / 1[56]:[^:]*:Silkie:7769:/
 244.2 "Dust Bluster" sync / 1[56]:[^:]*:Silkie:776C:/
 249.6 "Bracing Suds" sync / 1[56]:[^:]*:Silkie:7757:/
 255.7 "Fresh Puff" sync / 1[56]:[^:]*:Silkie:7766:/
@@ -67,16 +67,13 @@ hideall "--sync--"
 266.9 "Puff and Tumble x4" duration 0.7 #sync / 1[56]:[^:]*:Silken Puff:7771:/
 266.9 "Squeaky Clean 3" sync / 1[56]:[^:]*:Silkie:(7755|7756):/
 276.0 "Soaping Spree" sync / 1[56]:[^:]*:Silkie:7767:/
-276.0 "Chilling Duster x4?" #sync / 1[56]:[^:]*:Silken Puff:7768:/
+276.0 "Chilling Duster x4" #sync / 1[56]:[^:]*:Silken Puff:7768:/
 276.0 "Bracing Duster" #sync / 1[56]:[^:]*:Silkie:7769:/
-# 276.0 "Fizzling Duster?" #sync / 1[56]:[^:]*:Silken Puff:776A:/ # Possible here, but means a mechanic failed
-# 276.0 "Bracing Duster?" sync / 1[56]:[^:]*:Silken Puff:7769:/ # Possible here, but means a mechanic failed
 283.1 "Total Wash" sync / 1[56]:[^:]*:Silkie:7750:/
 292.3 "Bracing Suds / Chilling Suds / Fizzling Suds" sync / 1[56]:[^:]*:Silkie:(7757|7758|7759):/
 294.4 "--sync--" sync / 1[56]:[^:]*:Silkie:79FB:/
 299.4 "Slippery Soap" sync / 1[56]:[^:]*:Silkie:775E:/
 303.5 "Bracing Duster / Chilling Duster / Fizzling Duster" sync / 1[56]:[^:]*:Silkie:(7764|7763|7765):/
-303.8 "Soapsud Static?" #sync / 1[56]:[^:]*:Silken Puff:77ED:/
 309.0 "Bracing Suds / Chilling Suds / Fizzling Suds" sync / 1[56]:[^:]*:Silkie:(7757|7758|7759):/
 311.1 "--sync--" sync / 1[56]:[^:]*:Silkie:79FB:/
 316.1 "Slippery Soap" sync / 1[56]:[^:]*:Silkie:775E:/
@@ -98,7 +95,6 @@ hideall "--sync--"
 1059.6 "Rush of Might 2" sync / 1[56]:[^:]*:Gladiator of Sil'dih:765C:/
 1062.0 "--sync--" sync / 1[56]:[^:]*:Gladiator of Sil'dih:6854:/
 1067.0 "Sculptor's Passion" sync / 1[56]:[^:]*:Gladiator of Sil'dih:766C:/
-1067.3 "Sculptor's Passion" sync / 1[56]:[^:]*:Gladiator of Sil'dih:79F3:/
 1082.4 "Mighty Smite" sync / 1[56]:[^:]*:Gladiator of Sil'dih:7672:/
 1095.5 "Curse of the Fallen" sync / 1[56]:[^:]*:Gladiator of Sil'dih:7674:/
 1097.6 "--sync--" sync / 1[56]:[^:]*:Gladiator of Sil'dih:7639:/
@@ -108,13 +104,13 @@ hideall "--sync--"
 1131.5 "--sync--" sync / 1[56]:[^:]*:Gladiator of Sil'dih:7639:/
 1136.6 "Hateful Visage" sync / 1[56]:[^:]*:Gladiator of Sil'dih:766E:/
 1141.7 "Wrath of Ruin" sync / 1[56]:[^:]*:Gladiator of Sil'dih:7663:/
-1150.7 "Gold Flame x4" sync / 1[56]:[^:]*:Hateful Visage:766F:/
+1150.7 "Golden Flame x4" sync / 1[56]:[^:]*:Hateful Visage:766F:/
 1150.7 "Silver Flame x4" #sync / 1[56]:[^:]*:Hateful Visage:7670:/
 1152.3 "Nothing beside Remains" sync / 1[56]:[^:]*:Gladiator of Sil'dih:(768B|768C):/
 1161.4 "Flash of Steel" sync / 1[56]:[^:]*:Gladiator of Sil'dih:7671:/
 1171.6 "Accursed Visage" sync / 1[56]:[^:]*:Gladiator of Sil'dih:768D:/
 1176.7 "Wrath of Ruin" sync / 1[56]:[^:]*:Gladiator of Sil'dih:7663:/
-1185.7 "Gold Flame x4" sync / 1[56]:[^:]*:Hateful Visage:766F:/
+1185.7 "Golden Flame x4" sync / 1[56]:[^:]*:Hateful Visage:766F:/
 1185.7 "Silver Flame x4" #sync / 1[56]:[^:]*:Hateful Visage:7670:/
 1187.3 "Nothing beside Remains" sync / 1[56]:[^:]*:Gladiator of Sil'dih:(768B|768C):/
 1196.4 "Flash of Steel" sync / 1[56]:[^:]*:Gladiator of Sil'dih:7671:/
@@ -140,7 +136,6 @@ hideall "--sync--"
 1295.1 "Rush of Might 2" sync / 1[56]:[^:]*:Gladiator of Sil'dih:765C:/
 1297.5 "--sync--" sync / 1[56]:[^:]*:Gladiator of Sil'dih:6854:/
 1260.0 "Sculptor's Passion" sync / 1[56]:[^:]*:Gladiator of Sil'dih:766C:/
-1260.3 "Sculptor's Passion" sync / 1[56]:[^:]*:Gladiator of Sil'dih:79F3:/
 1268.8 "--sync--" sync / 1[56]:[^:]*:Gladiator of Sil'dih:7639:/
 1276.1 "Flash of Steel" sync / 1[56]:[^:]*:Gladiator of Sil'dih:7671:/
 1278.2 "--sync--" sync / 14:[^:]*:Gladiator of Sil'dih:7679:/ window 15,5

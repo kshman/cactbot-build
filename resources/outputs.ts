@@ -117,7 +117,7 @@ export default {
     ko: '쉐어 탱버 대상자',
   },
   sharedTankbusterOnPlayer: {
-    en: '${player}: 둘이서 맞는 탱크버스터',
+    en: '둘이서 맞는 탱크버스터: ${player}',
     de: 'geteilter Tankbuster on ${player}',
     fr: 'Tank buster à partager sur ${player}',
     ja: '${player} にタンクシェア',
@@ -199,7 +199,7 @@ export default {
     ko: '징끼리 모이기',
   },
   spreadThenStack: {
-    en: '흩어졌다 => 뭉치기',
+    en: '흩어졌다 => 뭉처요',
     de: 'Verteilen => Sammeln',
     fr: 'Dispersion => Package',
     ja: '散開 => 集合',
@@ -280,7 +280,7 @@ export default {
     ko: '${name}에게서 뒤돌기',
   },
   getBehind: {
-    en: '보스 엉댕이로',
+    en: '엉댕이로',
     de: 'Hinter ihn',
     fr: 'Passez derrière',
     ja: '背面へ',
@@ -288,7 +288,7 @@ export default {
     ko: '보스 뒤로',
   },
   goFrontOrSides: {
-    en: '보스 엉댕이를 피해 앞이나 옆으로',
+    en: '엉댕이를 피해 앞이나 옆으로',
     de: 'Gehe nach Vorne/ zu den Seiten',
     fr: 'Allez Devant / Côtés',
     ja: '前／横へ',
@@ -296,7 +296,7 @@ export default {
     ko: '보스 후방 피하기',
   },
   goFront: {
-    en: '보스 앞으로',
+    en: '앞으로',
     de: 'Geh nach vorn',
     fr: 'Allez Devant',
     ja: '前へ',
@@ -305,7 +305,7 @@ export default {
   },
   // getUnder is used when you have to get into the bosses hitbox
   getUnder: {
-    en: '보스 바로 밑으로',
+    en: '바로 밑으로',
     de: 'Unter ihn',
     fr: 'En dessous',
     ja: 'ボスに貼り付く',
@@ -465,7 +465,7 @@ export default {
     ko: '쫄 잡기',
   },
   awayFromFront: {
-    en: '보스 앞은 위험해',
+    en: '앞쪽은 위험해',
     de: 'Weg von Vorne',
     fr: 'Éloignez-vous du devant',
     ja: '前方から離れる',
@@ -473,7 +473,7 @@ export default {
     ko: '보스 전방 피하기',
   },
   sleepTarget: {
-    en: '슬리플: ${name}',
+    en: '재워요: ${name}',
     de: 'Schlaf auf ${name}',
     fr: 'Sommeil sur ${name}',
     ja: '${name} にスリプル',
@@ -529,7 +529,7 @@ export default {
     ko: '"${player}"에게서 멀어지기',
   },
   meteorOnYou: {
-    en: '나한테 메테오',
+    en: '내게 메테오',
     de: 'Meteor auf DIR',
     fr: 'Météore sur VOUS',
     ja: '自分にメテオ',
@@ -587,7 +587,7 @@ export default {
     ko: '선 붙어서 같이 움직이기',
   },
   earthshakerOnYou: {
-    en: '나한테 어스세이커',
+    en: '내게 어스세이커',
     de: 'Erdstoß auf DIR',
     fr: 'Marque de terre sur VOUS',
     ja: '自分にアースシェイカー',
@@ -771,7 +771,7 @@ export default {
     ja: '自分にタンクシェア',
   },
   sharedOrInvinTankbusterOnPlayer: {
-    en: '${player}: 탱크버스터, 무적 또는 둘이서',
+    en: '탱크버스터, 무적 또는 둘이서: ${player}',
     ja: '${player} にタンクシェア',
   },
   splitTankBuster: {

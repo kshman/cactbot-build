@@ -23,7 +23,6 @@ const optimizationOverride = {
         target: 'chrome95',
         css: true, // Apply minification to CSS assets
       }),
-      // new CssMinimizerPlugin(),
     ],
   },
 };
