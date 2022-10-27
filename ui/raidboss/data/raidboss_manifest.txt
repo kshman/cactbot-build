@@ -464,3 +464,5 @@
 06-ew/ultimate/dragonsongs_reprise_ultimate.ts
 06-ew/ultimate/dragonsongs_reprise_ultimate.txt
 06-ew/variant/ss.ts
+06-ew/variant/ass.ts
+06-ew/variant/ass.txt
