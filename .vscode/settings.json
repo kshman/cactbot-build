@@ -29,10 +29,11 @@
       */
     "editor.formatOnSaveMode": "file"
   },
-  "[css]": {
-    "editor.tabSize": 2,
-    "editor.formatOnSave": false,
-    "editor.suggest.insertMode": "replace"
+  "[javascript]": {
+    "editor.defaultFormatter": "dprint.dprint"
+  },
+  "[typescript]": {
+    "editor.defaultFormatter": "dprint.dprint"
   },
   "typescript.tsdk": "node_modules/typescript/lib",
   "explorer.fileNesting.enabled": true,

@@ -305,7 +305,7 @@ export default {
   },
   // getUnder is used when you have to get into the bosses hitbox
   getUnder: {
-    en: '바로 밑으로',
+    en: '◎바로 밑으로',
     de: 'Unter ihn',
     fr: 'En dessous',
     ja: 'ボスに貼り付く',
@@ -314,7 +314,7 @@ export default {
   },
   // in is more like "get close but maybe even melee range is fine"
   in: {
-    en: '안으로',
+    en: '⊙안으로',
     de: 'Rein',
     fr: 'Intérieur',
     ja: '中へ',
@@ -323,7 +323,7 @@ export default {
   },
   // out means get far away
   out: {
-    en: '밖으로',
+    en: '⊗밖으로',
     de: 'Raus',
     fr: 'Extérieur',
     ja: '外へ',
@@ -379,19 +379,19 @@ export default {
     ko: '중앙으로',
   },
   front: {
-    en: '앞쪽',
+    en: '🡹앞쪽',
     fr: 'Devant',
     cn: '前',
     ko: '앞',
   },
   back: {
-    en: '뒷쪽',
+    en: '뒷쪽🡻',
     fr: 'Derrière',
     cn: '后',
     ko: '뒤',
   },
   right: {
-    en: '오른쪽',
+    en: '🡺오른쪽',
     de: 'Rechts',
     fr: 'À droite',
     ja: '右へ',
@@ -399,7 +399,7 @@ export default {
     ko: '오른쪽',
   },
   left: {
-    en: '왼쪽',
+    en: '왼쪽🡸',
     de: 'Links',
     fr: 'À gauche',
     ja: '左へ',
@@ -423,7 +423,7 @@ export default {
     ko: '오른쪽으로 =>',
   },
   goFrontBack: {
-    en: '앞/뒤로',
+    en: '🡹앞/뒤로🡻',
     de: 'Geh nach Vorne/Hinten',
     fr: 'Allez Devant/Derrière',
     ja: '縦へ',
@@ -431,7 +431,7 @@ export default {
     ko: '앞/뒤로',
   },
   sides: {
-    en: '옆으로',
+    en: '🡸옆으로🡺',
     de: 'Seiten',
     fr: 'Côtés',
     ja: '横へ',
@@ -439,7 +439,7 @@ export default {
     ko: '양옆으로',
   },
   middle: {
-    en: '한가운데쪽',
+    en: '⊙한가운데쪽',
     de: 'Mitte',
     fr: 'Milieu',
     ja: '中へ',
@@ -554,7 +554,7 @@ export default {
   },
   moveAway: {
     // move away to dodge aoes
-    en: '지금 자리 피해요!',
+    en: '다른 데로 피해요!',
     de: 'Bewegen!',
     fr: 'Bougez !',
     ja: '避けて！',
