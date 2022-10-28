@@ -4,55 +4,58 @@ import Outputs from '../../../../../resources/outputs';
 import { Responses } from '../../../../../resources/responses';
 import ZoneId from '../../../../../resources/zone_id';
 import { RaidbossData } from '../../../../../types/data';
-import { NetMatches } from '../../../../../types/net_matches';
+import { PluginCombatantState } from '../../../../../types/event';
 import { TriggerSet } from '../../../../../types/trigger';
 
-// AS를 ASS로 고치고 있음
+// TODO: Silkie specify which puff to get behind in first Slippery Soap
+// TODO: Silkie specify where to point puff's tether
+// TODO: Silkie call puff to go to for safety
+// TODO: Additional Gladiator triggers and adjustments to timeline
+// TODO: Additional Shadowcaster triggers and adjustments to timeline
+
+type RushVec = { x: number; y: number; l: number };
 
 export type Banishment = 'redLeft' | 'redRight' | 'blueLeft' | 'blueRight';
 
 export interface Data extends RaidbossData {
   suds?: string;
-  cleanCounter: 0;
   soapCounter: number;
-  freshPuff: number;
   beaterCounter: number;
+  mightCasts: PluginCombatantState[];
+  mightDir?: string;
   hasLingering?: boolean;
   thunderousEchoPlayer?: string;
   arcaneFontCounter: number;
   myFlame?: number;
   brandEffects: { [effectId: number]: string };
   brandCounter: number;
-  flameCounter: number;
+  myLastCut?: number;
   //
+  cleanSeen?: boolean;
+  freshPuff: number;
   rushCounter: number;
-  rushNumbers: number[];
-  rushCasts: (NetMatches['StartsUsing'])[];
-  visageType?: 'hateful' | 'accursed';
-  visageCounter?: number;
-  explosionCounter?: number;
-  explosionTime?: number;
+  rushVecs: RushVec[];
+  fateSeen?: boolean;
   firesteelStrikes?: string[];
   banishment?: Banishment;
 }
 
 const triggerSet: TriggerSet<Data> = {
   zoneId: ZoneId.AnotherSildihnSubterraneSavage,
-  timelineFile: 'ass.txt',
+  timelineFile: 'another_sildihn_subterrane-savage.txt',
   initData: () => {
     return {
-      cleanCounter: 0,
       soapCounter: 0,
-      freshPuff: 0,
       beaterCounter: 0,
+      mightCasts: [],
       arcaneFontCounter: 0,
       brandEffects: {},
       brandCounter: 0,
       flameCounter: 0,
       //
+      freshPuff: 0,
       rushCounter: 0,
-      rushNumbers: [],
-      rushCasts: [],
+      rushVecs: [],
     };
   },
   triggers: [
@@ -79,25 +82,13 @@ const triggerSet: TriggerSet<Data> = {
       id: 'ASSS Left Sweep',
       type: 'StartsUsing',
       netRegex: { id: '797C', source: 'Aqueduct Kaluk', capture: false },
-      infoText: (_data, _matches, output) => output.text!(),
-      outputStrings: {
-        text: {
-          en: '🡺오른쪽',
-          ja: '🡺右',
-        },
-      },
+      response: Responses.goRight(),
     },
     {
       id: 'ASSS Right Sweep',
       type: 'StartsUsing',
       netRegex: { id: '797B', source: 'Aqueduct Kaluk', capture: false },
-      infoText: (_data, _matches, output) => output.text!(),
-      outputStrings: {
-        text: {
-          en: '왼쪽🡸',
-          ja: '左🡸',
-        },
-      },
+      response: Responses.goLeft(),
     },
     {
       id: 'ASSS Creeping Ivy',
@@ -109,25 +100,13 @@ const triggerSet: TriggerSet<Data> = {
       id: 'ASSS Honeyed Left',
       type: 'StartsUsing',
       netRegex: { id: '7973', source: 'Aqueduct Udumbara', capture: false },
-      infoText: (_data, _matches, output) => output.text!(),
-      outputStrings: {
-        text: {
-          en: '🡺오른쪽',
-          ja: '🡺右',
-        },
-      },
+      response: Responses.goRight(),
     },
     {
       id: 'ASSS Honeyed Right',
       type: 'StartsUsing',
       netRegex: { id: '7974', source: 'Aqueduct Udumbara', capture: false },
-      infoText: (_data, _matches, output) => output.text!(),
-      outputStrings: {
-        text: {
-          en: '왼쪽🡸',
-          ja: '左🡸',
-        },
-      },
+      response: Responses.goLeft(),
     },
     {
       id: 'ASSS Honeyed Front',
@@ -176,6 +155,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: '🟡비스듬 → 십자➕로',
+          de: 'Kardinal',
           ja: '🟡斜め → 十字➕で',
         },
       },
@@ -183,58 +163,60 @@ const triggerSet: TriggerSet<Data> = {
     {
       id: 'ASSS Dust Bluster',
       type: 'StartsUsing',
-      netRegex: { id: '778F', source: 'Silkie', capture: false },
+      netRegex: { id: '776C', source: 'Silkie', capture: false },
       response: Responses.knockback(),
     },
     {
       id: 'ASSS Squeaky Clean Right',
       type: 'StartsUsing',
       netRegex: { id: ['7774', '7778'], source: 'Silkie', capture: false },
-      infoText: (data, _matches, output) => {
-        data.cleanCounter++;
-        if (data.cleanCounter === 1)
-          return output.left!();
+      condition: (data) => {
+        // 왼쪽도 그렇지만 엄청 패다보면(!) 기믹이 스킵되는데 7755, 7756이 스킵되버린다.
+        if (data.cleanSeen)
+          return false;
+        data.cleanSeen = true;
+        return true;
       },
-      outputStrings: {
-        left: {
-          en: '왼쪽🡸',
-          ja: '左🡸',
-        },
-      },
+      response: Responses.goLeft(),
     },
     {
       id: 'ASSS Squeaky Clean Left',
       type: 'StartsUsing',
       netRegex: { id: ['7775', '7779'], source: 'Silkie', capture: false },
-      infoText: (data, _matches, output) => {
-        data.cleanCounter++;
-        if (data.cleanCounter === 1)
-          return output.right!();
+      condition: (data) => {
+        if (data.cleanSeen)
+          return false;
+        data.cleanSeen = true;
+        return true;
       },
-      outputStrings: {
-        right: {
-          en: '🡺오른쪽',
-          ja: '🡺右',
-        },
-      },
+      response: Responses.goRight(),
     },
     {
-      id: 'ASSS Suds Collect',
-      // 777A Bracing Suds (Wind / Donut)
-      // 777B Chilling Suds (Ice / Cardinal)
-      // 777C Fizzling Suds (Lightning / Intercardinal)
-      type: 'StartsUsing',
-      netRegex: { id: ['777A', '777B', '777C'], source: 'Silkie' },
-      run: (data, matches) => data.suds = matches.id,
+      id: 'ASSS Suds Gain',
+      // CE1 Bracing Suds (Wind / Donut)
+      // CE2 Chilling Suds (Ice / Cardinal)
+      // CE3 Fizzling Suds (Lightning / Intercardinal)
+      type: 'GainsEffect',
+      netRegex: { effectId: 'CE[1-3]', target: 'Silkie' },
+      run: (data, matches) => data.suds = matches.effectId,
+    },
+    {
+      id: 'ASSS Suds Lose',
+      // CE1 Bracing Suds (Wind / Donut)
+      // CE2 Chilling Suds (Ice / Cardinal)
+      // CE3 Fizzling Suds (Lightning / Intercardinal)
+      type: 'LosesEffect',
+      netRegex: { effectId: 'CE[1-3]', target: 'Silkie', capture: false },
+      run: (data) => delete data.suds,
     },
     {
       id: 'ASSS Slippery Soap',
       // Happens 5 times in the encounter
       type: 'Ability',
-      netRegex: { id: '79FB', source: 'Silkie' },
+      netRegex: { id: '79FB', source: ['Silkie', 'Eastern Ewer'] },
       preRun: (data) => data.soapCounter++,
       alertText: (data, matches, output) => {
-        if (data.suds === '777A') {
+        if (data.suds === 'CE1') {
           // Does not happen on first or third Slippery Soap
           if (matches.target === data.me)
             return output.getBehindPartyKnockback!();
@@ -251,27 +233,33 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         getBehindPuff: {
-          en: '구슬의 맨 뒤로',
+          en: '솜털의 맨 뒤로',
+          de: 'Hinter Puschel und Gruppe',
           ja: 'たまの一番後ろへ',
         },
         getBehindPuffs: {
-          en: '구슬의 맨 뒤로 (동서)',
+          en: '솜털의 맨 뒤로 (동서)',
+          de: 'Hinter Puschel und Gruppe (Osten/Westen)',
           ja: 'たまの一番後ろへ (東西)',
         },
         getBehindParty: {
           en: '맨 뒤로',
+          de: 'Hinter Gruppe',
           ja: '一番後ろへ',
         },
         getBehindPartyKnockback: {
           en: '넉백! 맨 뒤로',
+          de: 'Hinter Gruppe (Rückstoß)',
           ja: 'ノックバック！ 一番後ろへ',
         },
         getInFrontOfPlayer: {
           en: '${player} 앞으로',
+          de: 'Sei vor ${player}',
           ja: '${player}の前へ',
         },
         getInFrontOfPlayerKnockback: {
           en: '넉백! ${player} 앞으로',
+          de: 'Sei vor ${player} (Rückstoß)',
           ja: 'ノックバック! ${player}の前へ',
         },
       },
@@ -280,7 +268,7 @@ const triggerSet: TriggerSet<Data> = {
       id: 'ASSS Slippery Soap with Chilling Suds',
       type: 'StartsUsing',
       netRegex: { id: '7781', source: 'Silkie' },
-      condition: (data) => data.suds === '777B',
+      condition: (data) => data.suds === 'CE2',
       delaySeconds: (_data, matches) => parseFloat(matches.castTime) - 1,
       response: Responses.moveAround(),
     },
@@ -290,11 +278,11 @@ const triggerSet: TriggerSet<Data> = {
       netRegex: { id: '7781', source: 'Silkie', capture: false },
       infoText: (data, _matches, output) => {
         switch (data.suds) {
-          case '777A':
+          case 'CE1':
             return output.getUnder!();
-          case '777B':
+          case 'CE2':
             return output.intercards!();
-          case '777C':
+          case 'CE3':
             return output.spreadCardinals!();
         }
       },
@@ -324,7 +312,8 @@ const triggerSet: TriggerSet<Data> = {
           busterOnYou: Outputs.tankBusterOnYou,
           busterOnTarget: Outputs.tankBusterOnPlayer,
           busterOnYouPuffs: {
-            en: '내게 탱크버스터, 동서 구슬 사이로 유도',
+            en: '내게 탱크버스터, 동서로 유도',
+            de: 'Tank Buster auf DIR, Osten/Westen zwischen Puschel',
             ja: '自分にタンクバスタ、東西で誘導',
           },
         };
@@ -348,10 +337,14 @@ const triggerSet: TriggerSet<Data> = {
       netRegex: { id: '778A', source: 'Silkie', capture: false },
       infoText: (data, _matches, output) => {
         switch (data.suds) {
-          case '777A':
+          case 'CE1':
             return output.getUnder!();
-          case '777B':
+          case 'CE2':
             return output.intercards!();
+          default:
+            if (data.soapCounter === 1)
+              return output.underPuff!();
+            return output.avoidPuffs!();
         }
       },
       outputStrings: {
@@ -362,6 +355,14 @@ const triggerSet: TriggerSet<Data> = {
         intercards: {
           en: '🔵십자 장판',
           ja: '🔵十字, 避けて',
+        },
+        underPuff: {
+          en: '🟢바로 밑으로',
+          ja: '🟢貼り付く',
+        },
+        avoidPuffs: {
+          en: '솜털 장판 피해요',
+          ja: 'たまからのゆか避けて',
         },
       },
     },
@@ -382,11 +383,11 @@ const triggerSet: TriggerSet<Data> = {
     },
     // 실키: Fresh Puff
     {
-      id: 'ASSS+ Fresh Puff',
+      id: 'ASS+ Fresh Puff',
       type: 'StartsUsing',
       netRegex: { id: '7789', source: 'Silkie' },
       preRun: (data) => {
-        data.cleanCounter = 0;
+        data.cleanSeen = false;
         data.freshPuff++;
       },
       infoText: (data, _matches, output) => {
@@ -402,19 +403,19 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         p1: {
-          en: '솜털 세개 → 꼬리 휘두르기',
+          en: '솜털 세개 → 꼬리',
           ja: 'たま3個 → 水拭き',
         },
         p2: {
-          en: '솜털 네개, 안전지대 만들어요',
+          en: '솜털 네개 → 안전지대 ',
           ja: 'たま4個, 安置を作りましょう',
         },
         p3: {
-          en: '솜털 여덟개, 화이팅이요',
+          en: '솜털 여덟개 → 항아리',
           ja: 'たま8個, がんばれ！！',
         },
         p4: {
-          en: '솜털 네개 → 꼬리 방향으로 유도',
+          en: '솜털 네개 → 꼬리 유도',
           ja: 'たま4個 → しっぽ誘導',
         },
         px: {
@@ -494,9 +495,12 @@ const triggerSet: TriggerSet<Data> = {
     {
       id: 'ASSS Flash of Steel',
       type: 'StartsUsing',
-      netRegex: { id: '7671', source: 'Gladiator of Sil\'dih', capture: false },
+      netRegex: { id: '77B3', source: 'Gladiator of Sil\'dih', capture: false },
       response: Responses.aoe(),
     },
+    /*
+      id: 'ASSS Rush of Might 1',
+    */
     {
       id: 'ASSS Sculptor\'s Passion',
       // This is a wild charge, player in front takes most damage
@@ -529,7 +533,7 @@ const triggerSet: TriggerSet<Data> = {
     {
       id: 'ASSS Mighty Smite',
       type: 'StartsUsing',
-      netRegex: { id: '7672', source: 'Gladiator of Sil\'dih' },
+      netRegex: { id: '77B4', source: 'Gladiator of Sil\'dih' },
       response: Responses.tankBuster(),
     },
     {
@@ -540,7 +544,6 @@ const triggerSet: TriggerSet<Data> = {
       condition: Conditions.targetIsYou(),
       preRun: (data) => data.hasLingering = true,
       delaySeconds: (_data, matches) => parseFloat(matches.duration) - 2,
-      // response: Responses.moveAway(),
     },
     {
       id: 'ASSS Thunderous Echo Collect',
@@ -584,24 +587,29 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         stackThenSpread: Outputs.stackThenSpread,
         stackOnThenSpread: {
-          en: '뭉쳤다 → 흩어져요 (${player})',
-          ja: '頭割り → 散会 (${player})',
+          en: '뭉쳤다 => 흩어져요 (${player})',
+          de: 'Auf ${player} sammeln => Verteilen',
+          ja: '頭割り => 散会 (${player})',
         },
         stackOnYouThenSpread: {
-          en: '내게 뭉쳤다 → 흩어져요',
-          ja: '自分に頭割り → 散会',
+          en: '내게 뭉쳤다 => 흩어져요',
+          de: 'Auf DIR sammeln => Verteilen',
+          ja: '自分に頭割り => 散会',
         },
         spreadThenStack: Outputs.spreadThenStack,
         spreadThenStackOn: {
-          en: '흩어졌다 → 뭉쳐요 (${player})',
-          ja: '散会 → 頭割り (${player})',
+          en: '흩어졌다 => 뭉쳐요 (${player})',
+          de: 'Verteilen => Auf ${player} sammeln',
+          ja: '散会 => 頭割り (${player})',
         },
         spreadThenStackOnYou: {
-          en: '흩어졌다 → 내게 뭉쳐요',
-          ja: '散会 → 自分に頭割り',
+          en: '흩어졌다 => 내게 뭉쳐요',
+          de: 'Verteilen => Auf DIR sammeln',
+          ja: '散会 => 自分に頭割り',
         },
         spreadThenSpread: {
           en: '내가 링거, 홀로 있어야 해요',
+          de: 'Verteilen => Sammeln',
           ja: '自分に連呪、ひとりぼっちでずっと',
         },
       },
@@ -609,12 +617,12 @@ const triggerSet: TriggerSet<Data> = {
     {
       id: 'ASSS Ring of Might',
       // There are 6 spells:
-      //   Ring 1: 765D (9.7s) / 7660 (11.7s)
-      //   Ring 2: 765E (9.7s) / 7661 (11.7s)
-      //   Ring 3: 765F (9.7s) / 7662 (11.7s)
+      //   Ring 1: 779F (9.7s) / 77A2 (11.7s)
+      //   Ring 2: 77A0 (9.7s) / 77A3 (11.7s)
+      //   Ring 3: 77A1 (9.7s) / 77A4 (11.7s)
       // Only tracking the 11.7s spell
       type: 'StartsUsing',
-      netRegex: { id: ['7660', '7661', '7662'], source: 'Gladiator of Sil\'dih' },
+      netRegex: { id: '77A[2-4]', source: 'Gladiator of Sil\'dih' },
       infoText: (_data, matches, output) => {
         if (matches.id === '7660')
           return output.outsideInner!();
@@ -625,14 +633,17 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         outsideInner: {
           en: '링 차지 ①',
+          de: 'Außerhalb des inneren Ringes',
           ja: 'リングチャージ ①',
         },
         outsideMiddle: {
           en: '링 차지 ②',
+          de: 'Außerhalb des mittleren Ringes',
           ja: 'リングチャージ ②',
         },
         outsideOuter: {
           en: '링 차지 ③',
+          de: 'Außerhalb des äußeren Ringes',
           ja: 'リングチャージ ③',
         },
       },
@@ -667,336 +678,24 @@ const triggerSet: TriggerSet<Data> = {
         stackOn: Outputs.stackOnPlayer,
       },
     },
-    {
-      id: 'ASSS Curse of the Monument',
-      type: 'StartsUsing',
-      netRegex: { id: '7666', source: 'Gladiator of Sil\'dih' },
-      infoText: (data, _matches, output) => {
-        if (data.role === 'tank' || data.CanFeint())
-          return output.east!();
-        else if (data.role === 'healer' || data.CanAddle() || data.CanSilence())
-          return output.west!();
-        return output.move!();
-      },
-      run: (data) => {
-        data.explosionCounter = 0;
-        data.explosionTime = 0;
-      },
-      outputStrings: {
-        east: {
-          en: '🡺오른쪽에서 기둘',
-          ja: '🡺右で線待つ',
-        },
-        west: {
-          en: '왼쪽🡸에서 기둘',
-          ja: '左🡸で線待つ',
-        },
-        move: {
-          en: '옆에서 기둘',
-          ja: '横でで線待つ',
-        },
-      },
-    },
-    {
-      id: 'ASSS Curse of the Monument Break Chains',
-      type: 'Ability',
-      netRegex: { id: '7666', source: 'Gladiator of Sil\'dih', capture: false },
-      response: Responses.breakChains(),
-    },
-    /* {
-      id: 'ASSS+ Curse of the Monument Tether',
-      type: 'Tether',
-      netRegex: { id: '00A3' },
-      condition: (data, matches) => matches.source === data.me || matches.target === data.me,
-      alertText: (data, matches, output) => {
-        const who = matches.source === data.me ? matches.target : matches.source;
-        return output.run!({ player: data.ShortName(who) });
-      },
-      outputStrings: {
-        run: {
-          en: '줄 끊어요 (+${player})',
-          ja: '線切 (+${player})',
-        },
-      },
-    }, */
-    //
-    {
-      id: 'ASSS+ Scream of the Fallen',
-      type: 'GainsEffect',
-      netRegex: { effectId: 'CDB' },
-      condition: Conditions.targetIsYou(),
-      preRun: (data, matches) => data.explosionTime = parseInt(matches.duration),
-      durationSeconds: 12.5,
-      infoText: (data, _matches, output) => {
-        return data.explosionTime === 19 ? output.boom!() : output.tower!(); // 19초와 23초
-      },
-      outputStrings: {
-        boom: {
-          en: '먼저 폭파 (벽쪽에 대기)',
-          ja: '先に爆発',
-        },
-        tower: {
-          en: '먼저 타워 (한가운데로)',
-          ja: '先に塔',
-        },
-      },
-    },
-    // 그라디아토르: Explosion(766A), Colossal Wreck(7669)도 여기서 표시
-    {
-      id: 'ASSS+ Explosion',
-      type: 'StartsUsing',
-      netRegex: { id: '766A', source: 'Gladiator of Sil\'dih' },
-      preRun: (data) => data.explosionCounter = (data.explosionCounter ?? 0) + 1,
-      infoText: (data, _matches, output) => {
-        if (data.explosionCounter === 1)
-          return data.explosionTime === 19 ? output.boom!() : output.tower!();
-        else if (data.explosionCounter === 3)
-          return data.explosionTime === 23 ? output.boom!() : output.tower!();
-      },
-      outputStrings: {
-        boom: {
-          en: '벽쪽에서 터뜨려요',
-          ja: '外側で爆発',
-        },
-        tower: {
-          en: '타워 밟아요',
-          ja: '塔踏み',
-        },
-      },
-    },
-    // 그라디아토르: Specter of Might
-    {
-      id: 'ASSS+ Specter of Might',
-      type: 'StartsUsing',
-      netRegex: { id: '7673', source: 'Gladiator of Sil\'dih', capture: false },
-      run: (data) => {
-        data.rushNumbers = [];
-        data.rushCasts = [];
-      },
-    },
-    // 그라디아토르: Rush of Might Number
-    {
-      id: 'ASSS+ Rush of Might Number',
-      type: 'StartsUsing',
-      netRegex: { id: ['7658', '7659', '765A'], source: 'Gladiator Mirage' },
-      preRun: (data) => data.rushCounter++,
-      durationSeconds: 9.4,
-      infoText: (data, matches, output) => {
-        const i2n: { [id: string]: number } = {
-          '7658': 1,
-          '7659': 2,
-          '765A': 3,
-        };
-        data.rushNumbers.push(i2n[matches.id] ?? 0);
-        if (data.rushNumbers.length !== 2)
-          return;
-
-        if (data.rushNumbers[0] === undefined || data.rushNumbers[1] === undefined)
-          return output.unknown!();
-
-        const n2s: { [id: number]: string } = {
-          0: output.unknown!(),
-          1: output.num1!(),
-          2: output.num2!(),
-          3: output.num3!(),
-        };
-        return output.rush!({ num1: n2s[data.rushNumbers[0]], num2: n2s[data.rushNumbers[1]] });
-      },
-      outputStrings: {
-        rush: {
-          en: '${num1} + ${num2}',
-          ja: '${num1} + ${num2}',
-        },
-        num1: Outputs.cnum1,
-        num2: Outputs.cnum2,
-        num3: Outputs.cnum3,
-        unknown: Outputs.unknown,
-      },
-    },
-    // 그라디아토르: Rush of Might 위치
-    {
-      id: 'ASSS+ Rush of Might Collect',
-      type: 'StartsUsing',
-      netRegex: { id: ['765C', '765B'], source: 'Gladiator of Sil\'dih' },
-      preRun: (data, matches) => data.rushCasts.push(matches),
-    },
-    // 그라디아토르: Rush of Might
-    {
-      id: 'ASSS+ Rush of Might',
-      type: 'StartsUsing',
-      netRegex: { id: ['765C', '765B'], source: 'Gladiator of Sil\'dih', capture: false },
-      delaySeconds: 0.1,
-      durationSeconds: 9.5,
-      suppressSeconds: 1,
-      infoText: (data, _matches, output) => {
-        if (data.rushCasts.length !== 4)
-          return;
-
-        const mirage1 = data.rushCasts[0];
-        const unkmir1 = data.rushCasts[1];
-        const unkmir2 = data.rushCasts[2];
-        if (mirage1 === undefined || unkmir1 === undefined || unkmir2 === undefined)
-          throw new UnreachableCode();
-        const mirage2 = mirage1.x === unkmir1.x && mirage1.y === unkmir1.y ? unkmir2 : unkmir1;
-
-        const x1 = parseFloat(mirage1.x);
-        const y1 = parseFloat(mirage1.y);
-        const x2 = parseFloat(mirage2.x);
-        const y2 = parseFloat(mirage2.y);
-        const getRushOffset = (x: number) => {
-          if (x > -46 && x < -43 || x > -27 && x < -24)
-            return 3;
-          if (x > -41 && x < -38 || x > -32 && x < -29)
-            return 2;
-          if (x > -37 && x < -33)
-            return 1;
-          return x;
-        };
-        const o1 = getRushOffset(x1);
-        const o2 = getRushOffset(x2);
-        const line = o1 > o2 ? o1 : o2;
-
-        let dir;
-        if (y1 < -271) {
-          const x = y1 < y2 ? x1 : x2;
-          dir = x < -35 ? 'west' : 'east';
-        } else {
-          const x = y1 > y2 ? x1 : x2;
-          dir = x < -35 ? 'west' : 'east';
-        }
-
-        const dir2left: { [id: number]: string } = {
-          1: output.l1!(),
-          2: output.l2!(),
-          3: output.l3!(),
-        };
-        const dir2right: { [id: number]: string } = {
-          1: output.r1!(),
-          2: output.r2!(),
-          3: output.r3!(),
-        };
-        const even = data.rushCounter % 4 === 0;
-
-        let arrow;
-        let side;
-        if (o1 === 2 && o2 === 3 || o1 === 3 && o2 === 2) {
-          if (dir === 'west') {
-            side = 'east';
-            arrow = even ? dir2right[line] : dir2left[line];
-          } else {
-            side = 'west';
-            arrow = even ? dir2left[line] : dir2right[line];
-          }
-        } else {
-          if (dir === 'west') {
-            side = 'west';
-            arrow = even ? dir2right[line] : dir2left[line];
-          } else {
-            side = 'east';
-            arrow = even ? dir2left[line] : dir2right[line];
-          }
-        }
-
-        if (even)
-          return output.rushrev!({ arrow: arrow, side: output[side]!() });
-        return output.rush!({ arrow: arrow, side: output[side]!() });
-      },
-      run: (data) => data.rushCasts = [],
-      outputStrings: {
-        rush: {
-          en: '${arrow} ${side}',
-          ja: '${arrow} ${side}',
-        },
-        rushrev: {
-          en: '${arrow} ${side} (남쪽 보고)',
-          ja: '${arrow} ${side} (南向き)',
-        },
-        east: Outputs.right,
-        west: Outputs.left,
-        l1: {
-          en: '🡸',
-          ja: '🡸',
-        },
-        l2: {
-          en: '🡸🡸',
-          ja: '🡸🡸',
-        },
-        l3: {
-          en: '🡸🡸🡸',
-          ja: '🡸🡸🡸',
-        },
-        r1: {
-          en: '🡺',
-          ja: '🡺',
-        },
-        r2: {
-          en: '🡺🡺',
-          ja: '🡺🡺',
-        },
-        r3: {
-          en: '🡺🡺🡺',
-          ja: '🡺🡺🡺',
-        },
-      },
-    },
-    // 그라디아토르: Rush of Might Move
-    {
-      id: 'ASSS+ Rush of Might Move',
-      type: 'Ability',
-      netRegex: { id: '765B', source: 'Gladiator of Sil\'dih', capture: false },
-      suppressSeconds: 1,
-      response: Responses.moveAway(),
-    },
-    // 그라디아토르: Hateful Visage Collect
-    {
-      id: 'ASSS+ Hateful Visage',
-      type: 'StartsUsing',
-      netRegex: { id: '766E', source: 'Gladiator of Sil\'dih', capture: false },
-      run: (data) => data.visageType = 'hateful',
-    },
-    // 그라디아토르: Accursed Visage Collect
-    {
-      id: 'ASSS+ Accursed Visage',
-      type: 'StartsUsing',
-      netRegex: { id: '768D', source: 'Gladiator of Sil\'dih', capture: false },
-      run: (data) => {
-        data.visageType = 'accursed';
-        data.visageCounter = 0;
-      },
-    },
-    // 그라디아토르: Wrath of Ruin
-    {
-      id: 'ASSS+ Wrath of Ruin',
-      type: 'StartsUsing',
-      netRegex: { id: '7663', source: 'Gladiator of Sil\'dih', capture: false },
-      infoText: (data, _matches, output) => {
-        if (data.visageType === 'hateful')
-          return output.hateful!();
-        /* else if (data.visageType === 'accursed')
-          return output.accursed!();*/
-      },
-      outputStrings: {
-        hateful: {
-          en: '얼굴 빔 피해요',
-          ja: '顔からビーム',
-        },
-        accursed: {
-          en: '얼굴 빔 맞아야죠',
-          ja: '顔からのビームに当たって',
-        },
-      },
-    },
+    /* 아래는 흔적만 남김
+      id: 'ASSS Nothing beside Remains',
+    */
+   /* 아래는 내께 더 좋다 → ASS+ Gilded/Silvered Fate
+      id: 'ASSS Accursed Visage Collect',
+      id: 'ASSS Golden/Silver Flame',
+    */
     // 그라디아토르: Gilded/Silvered Fate
     {
-      id: 'ASSS+ Gilded/Silvered Fate',
+      id: 'ASS+ Gilded/Silvered Fate',
       type: 'GainsEffect',
       netRegex: { effectId: ['CDF', 'CE0'] },
       condition: Conditions.targetIsYou(),
       durationSeconds: 8,
       infoText: (data, matches, output) => {
-        data.visageCounter = (data.visageCounter ?? 0) + 1;
-        if (data.visageCounter > 1)
+        if (data.fateSeen)
           return;
+        data.fateSeen = true;
         if (matches.effectId === 'CDF') {
           if (matches.count === '02')
             return output.g2!();
@@ -1021,22 +720,183 @@ const triggerSet: TriggerSet<Data> = {
         },
       },
     },
+    {
+      id: 'ASSS Sundered Remains',
+      // Using 77A8 Curse of the Monument
+      type: 'StartsUsing',
+      netRegex: { id: '77A8', source: 'Gladiator of Sil\'dih', capture: false },
+      infoText: (data, _matches, output) => {
+        if (data.role === 'tank' || data.CanFeint())
+          return output.east!();
+        else if (data.role === 'healer' || data.CanAddle() || data.CanSilence())
+          return output.west!();
+        return output.center!();
+      },
+      outputStrings: {
+        east: Outputs.right,
+        west: Outputs.left,
+        center: Outputs.goIntoMiddle,
+      },
+    },
+    /* 아래는 내께 더 좋다 → ASS+ Curse of the Monument Tether
+      id: 'ASSS Curse of the Monument',
+    */
+    {
+      id: 'ASS+ Curse of the Monument Tether',
+      type: 'Tether',
+      netRegex: { id: '00A3' },
+      condition: (data, matches) => matches.source === data.me || matches.target === data.me,
+      alertText: (data, matches, output) => {
+        const who = matches.source === data.me ? matches.target : matches.source;
+        return output.run!({ player: data.ShortName(who) });
+      },
+      outputStrings: {
+        run: {
+          en: '줄 끊어요 (+${player})',
+          ja: '線切 (+${player})',
+        },
+      },
+    },
+    {
+      id: 'ASSS Scream of the Fallen',
+      // CDB = Scream of the Fallen (defamation)
+      // BBC = First in Line
+      // BBD = Second in Line
+      // First/Second in Line are only used once all dungeon so we can just trigger off of them
+      type: 'GainsEffect',
+      netRegex: { effectId: 'BB[CD]' },
+      condition: Conditions.targetIsYou(),
+      infoText: (_data, matches, output) => {
+        const id = matches.effectId;
+        if (id === 'BBD')
+          return output.soakThenSpread!();
+        return output.spreadThenSoak!();
+      },
+      outputStrings: {
+        soakThenSpread: {
+          en: '먼저 타워 들어갔다 => 벽으로 흩어져요',
+        },
+        spreadThenSoak: {
+          en: '벽으로 흩어졌다 => 타워 들어가요',
+        },
+      },
+    },
+    // 그라디아토르: Specter of Might
+    {
+      id: 'ASS+ Specter of Might',
+      type: 'StartsUsing',
+      // 안맞을거 같은데... 고쳐야함
+      netRegex: { id: '7673', source: 'Gladiator of Sil\'dih', capture: false },
+      run: (data) => {
+        data.rushCounter++;
+        data.rushVecs = [];
+      },
+    },
+    // 그라디아토르: Rush of Might
+    {
+      id: 'ASS+ Rush of Might',
+      type: 'StartsUsing',
+      // 안맞을거 같은데... 고쳐야함
+      netRegex: { id: ['7658', '7659', '765A'], source: 'Gladiator Mirage' },
+      durationSeconds: 9.4,
+      infoText: (data, matches, output) => {
+        const i2n: { [id: string]: number } = {
+          '7658': 1,
+          '7659': 2,
+          '765A': 3,
+        };
+
+        data.rushVecs.push({
+          x: parseInt(matches.x),
+          y: parseInt(matches.y),
+          l: i2n[matches.id] ?? 0
+        });
+        if (data.rushVecs.length !== 2)
+          return;
+
+        // 가로: -20, -50
+        // 세로: -256, -286
+        let r1;
+        let r2;
+        for (const v of data.rushVecs) {
+          if (v === undefined)
+            return output.unknown!();
+
+          if (v.y > -270) { // 북쪽
+            if (v.x < -35) // 서쪽
+              r2 = v.l;
+            else
+              r1 = v.l;
+          } else {
+            if (v.x < -35)
+              r1 = v.l;
+            else
+              r2 = v.l;
+          }
+        }
+
+        if (r1 === undefined || r2 === undefined)
+          return output.unknown!();
+
+        const c1 = output['r' + r1.toString()]!();
+        const c2 = output['r' + (r2 + 3).toString()]!();
+        if (data.rushCounter % 2 === 0)
+          return output.revs!({ left: c1, right: c2 });
+        return output.rush!({ left: c1, right: c2 });
+      },
+      outputStrings: {
+        rush: {
+          en: '${left} + ${right}',
+          ja: '${left} + ${right}',
+        },
+        revs: {
+          en: '${left} + ${right} 💫',
+          ja: '${left} + ${right} 💫',
+        },
+        r1: {
+          en: '❱',
+          ja: '❱',
+        },
+        r2: {
+          en: '❱❱',
+          ja: '❱❱',
+        },
+        r3: {
+          en: '❱❱❱',
+          ja: '❱❱❱',
+        },
+        r4: {
+          en: '❰',
+          ja: '❰',
+        },
+        r5: {
+          en: '❰❰',
+          ja: '❰❰',
+        },
+        r6: {
+          en: '❰❰❰',
+          ja: '❰❰❰',
+        },
+        unknown: Outputs.unknown,
+      },
+    },
     // ---------------- Shadowcaster Zeless Gah ----------------
     {
       id: 'ASSS Show of Strength',
       type: 'StartsUsing',
-      netRegex: { id: '74AF', source: 'Shadowcaster Zeless Gah', capture: false },
+      netRegex: { id: '76C5', source: 'Shadowcaster Zeless Gah', capture: false },
       response: Responses.aoe(),
     },
     {
       id: 'ASSS Firesteel Fracture',
       type: 'StartsUsing',
-      netRegex: { id: '74AD', source: 'Shadowcaster Zeless Gah' },
+      netRegex: { id: '76C4', source: 'Shadowcaster Zeless Gah' },
       response: Responses.tankCleave(),
     },
     {
       id: 'ASSS Infern Brand Counter',
       type: 'StartsUsing',
+      // 안맞을거 같은데... 고쳐야함
       netRegex: { id: '7491', source: 'Shadowcaster Zeless Gah', capture: false },
       preRun: (data) => {
         data.brandCounter++;
@@ -1091,7 +951,7 @@ const triggerSet: TriggerSet<Data> = {
     {
       id: 'ASSS Infern Brand Collect',
       // Count field on 95D on Infern Brand indicates Brand's number:
-      //   1C2 - IC5, Orange 1 - 4
+      //   1C2 - 1C5, Orange 1 - 4
       //   1C6 - 1C9, Blue 1 - 4
       type: 'GainsEffect',
       netRegex: { effectId: '95D', target: 'Infern Brand' },
@@ -1105,7 +965,7 @@ const triggerSet: TriggerSet<Data> = {
       // CC7 Fourth Brand
       type: 'GainsEffect',
       netRegex: { effectId: ['CC4', 'CC5', 'CC6', 'CC7'] },
-      condition: (data, matches) => data.me === matches.target,
+      condition: (data, matches) => data.me === matches.target && data.brandCounter === 2,
       delaySeconds: 0.1, // Delay to collect all Infern Brand Effects
       durationSeconds: (_data, matches) => parseFloat(matches.duration) - 0.1,
       infoText: (data, matches, output) => {
@@ -1118,10 +978,11 @@ const triggerSet: TriggerSet<Data> = {
         const myNum = brandMap[matches.effectId];
         if (myNum === undefined)
           throw new UnreachableCode();
+        const cNum = output['num' + myNum.toString()]!();
 
         // 5번일때
         if (data.brandCounter === 5)
-          return output.brandNum!({ num: output['num' + myNum.toString()]!() });
+          return output.brandNum!({ num: cNum });
 
         // 2번일때
         if (data.brandCounter !== 2)
@@ -1132,7 +993,11 @@ const triggerSet: TriggerSet<Data> = {
 
         if (Object.keys(data.brandEffects).length !== 8) {
           // Missing Infern Brands, output number
-          return output.brandNum!({ num: output['num' + myNum.toString()]!() });
+          if (data.arcaneFontCounter === 3)
+            return output.blueBrandNum!({ num: cNum });
+          if (data.arcaneFontCounter === 2)
+            return output.orangeBrandNum!({ num: cNum });
+          return output.brandNum!({ num: cNum });
         }
 
         // Brands are located along East and South wall and in order by id
@@ -1175,14 +1040,14 @@ const triggerSet: TriggerSet<Data> = {
         const x = orangeBrands.indexOf(myNumToOrange[myNum]);
         const y = blueBrands.indexOf(myNumToBlue[myNum]) + 4;
         const indexToCardinal: { [num: number]: string } = {
-          0: 'north',
-          1: 'north',
-          2: 'south',
-          3: 'south',
-          4: 'west',
-          5: 'west',
-          6: 'east',
-          7: 'east',
+          0: 'south',
+          1: 'south',
+          2: 'north',
+          3: 'north',
+          4: 'east',
+          5: 'east',
+          6: 'west',
+          7: 'west',
         };
 
         const cardX = indexToCardinal[x];
@@ -1192,12 +1057,29 @@ const triggerSet: TriggerSet<Data> = {
         if (cardX === undefined || cardY === undefined)
           throw new UnreachableCode();
 
-        return output.text!({ num: output['num' + myNum.toString()]!(), corner: output[cardX + cardY]!() });
+        // Check color of brand that will be cut
+        if (data.arcaneFontCounter === 3)
+          return output.blueBrandNumCorner!({ num: cNum, corner: output[cardX + cardY]!() });
+        if (data.arcaneFontCounter === 2)
+          return output.orangeBrandNumCorner!({ num: cNum, corner: output[cardX + cardY]!() });
+        return output.brandNumCorner!({ num: cNum, corner: output[cardX + cardY]!() });
       },
       run: (data) => data.brandEffects = {},
       outputStrings: {
-        text: {
+        blueBrandNumCorner: {
+          en: '🟦파랑 브렌드 ${num}: ${corner}',
+        },
+        orangeBrandNumCorner: {
+          en: '🟥빨강 브렌드 ${num}: ${corner}',
+        },
+        brandNumCorner: {
           en: '내 브렌드 ${num}: ${corner}',
+        },
+        blueBrandNum: {
+          en: '🟦파랑 브렌드 ${num}',
+        },
+        orangeBrandNum: {
+          en: '🟥빨강 브렌드 ${num}',
         },
         brandNum: {
           en: '내 브렌드 ${num}',
@@ -1239,111 +1121,139 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         cutBlueOne: {
-          en: '🟦파랑① 잘라요',
+          en: '🟦파랑 ①',
         },
         cutOrangeOne: {
-          en: '🟥빨강① 잘라요',
+          en: '🟥빨강 ①',
         },
         firstCut: {
-          en: '먼저 잘라요',
+          en: '컷팅하세요',
         },
       },
     },
     {
-      id: 'ASSS Infern Brand 2 First Cuts',
-      // This method works safely for cuts 2,3 and 4 by tracking Infern Brand losing debuff
-      // Player receives Magic Vulnerability Up afterward which we need to wait on for safety
-      // However, it is also possible to receive the same Magic Vulnerability Up for Cast Shadow
-      // Alternative method would use Cryptic Flames hit +8s to trigger second cut callout, which is safe
-      // but may be unreliable if cuts are made out of order
+      id: 'ASSS Infern Brand 2 Remaining Flames',
+      // Player receives Magic Vulnerability Up from Cryptic Flame for 7.96s after cutting
+      // Trigger will delay for this Magic Vulnerability Up for safety
+      // No exception for time remaining on debuff to sacrafice to cut the line
       type: 'LosesEffect',
       netRegex: { effectId: '95D', target: 'Infern Brand', count: '1C[2-9]' },
-      condition: (data) => data.myFlame !== undefined && data.brandCounter === 2,
-      preRun: (data) => data.flameCounter++,
-      response: (data, matches, output) => {
-        // cactbot-builtin-response
-        output.responseOutputStrings = {
-          cutOrangeNum: {
-            en: '🟥빨강${num} 잘라요',
-          },
-          cutBlueNum: {
-            en: '🟦파랑${num} 잘라요',
-          },
-          orangeNum: {
-            en: '🟥빨강${num}',
-          },
-          blueNum: {
-            en: '🟦파랑${num}',
-          },
-          num1: Outputs.cnum1,
-          num2: Outputs.cnum2,
-          num3: Outputs.cnum3,
-          num4: Outputs.cnum4,
-        };
+      condition: (data, matches) => {
+        if (data.myFlame !== undefined && data.brandCounter === 2) {
+          const countToNum: { [count: string]: number } = {
+            '1C9': 4,
+            '1C8': 3,
+            '1C7': 2,
+            '1C6': 1,
+            '1C5': 4,
+            '1C4': 3,
+            '1C3': 2,
+            '1C2': 1,
+          };
 
-        const countToNum: { [count: string]: number } = {
-          '1C9': 4,
-          '1C8': 3,
-          '1C7': 2,
-          '1C6': 1,
-          '1C5': 4,
-          '1C4': 3,
-          '1C3': 2,
-          '1C2': 1,
-        };
+          // Check which flame order this is
+          const flameCut = countToNum[matches.count];
+          if (flameCut === undefined)
+            return false;
 
-        const flameCut = countToNum[matches.count];
-        if (flameCut === undefined)
+          // Wraparound and add 1 as we need next flame to cut
+          // Check if not our turn to cut
+          if (flameCut % 4 + 1 !== data.myFlame)
+            return false;
+
+          return true;
+        }
+        return false;
+      },
+      delaySeconds: (data, matches) => {
+        if (data.myLastCut === undefined)
+          return 0;
+
+        // Check if we still need to delay for Magic Vulnerability Up to expire
+        // Magic Vulnerability Up lasts 7.96 from last cut
+        const delay = 7.96 - (Date.parse(matches.timestamp) - data.myLastCut) / 1000;
+        if (delay > 0)
+          return delay;
+        return 0;
+      },
+      alertText: (data, matches, output) => {
+        if (data.myFlame === undefined)
           return;
-
-        // Wraparound and add 1 as we need next flame to cut
-        if (flameCut % 4 + 1 !== data.myFlame)
-          return;
-
         const cnum = output['num' + data.myFlame.toString()]!();
-        if (data.arcaneFontCounter === 3 && matches.count.match(/1C[6-9]/)) {
+
+        if (data.arcaneFontCounter === 3 && matches.count.match(/1C[6-8]/)) {
           // Expected Blue and count is Blue
           data.arcaneFontCounter = 2;
-          if (data.flameCounter < 4)
-            return { alertText: output.cutBlueNum!({ num: cnum }) };
-          return { infoText: output.blueNum!({ num: cnum }) };
+          return output.cutBlueNum!({ num: cnum });
         }
-        if (data.arcaneFontCounter === 2 && matches.count.match(/1C[2-5]/)) {
+        if (data.arcaneFontCounter === 2 && matches.count.match(/1C[2-4]/)) {
           // Expected Orange and count is Orange
           data.arcaneFontCounter = 3;
-          if (data.flameCounter < 4)
-            return { alertText: output.cutOrangeNum!({ num: cnum }) };
-          return { infoText: output.orangeNum!({ num: cnum }) };
+          return output.cutOrangeNum!({ num: cnum });
+        }
+
+        // Exception for First Flame on second set
+        if (data.myFlame === 1) {
+          if (data.arcaneFontCounter === 3 && matches.count === '1C5')
+            return output.cutBlueNum!({ num: cnum });
+          if (data.arcaneFontCounter === 2 && matches.count === '1C9')
+            return output.cutOrangeNum!({ num: cnum });
         }
         // Unexpected result, mechanic is likely failed at this point
       },
       run: (data) => data.brandEffects = {},
+      outputStrings: {
+        cutOrangeNum: {
+          en: '🟥빨강 ${num}',
+        },
+        cutBlueNum: {
+          en: '🟦파랑 ${num}',
+        },
+        num1: Outputs.cnum1,
+        num2: Outputs.cnum2,
+        num3: Outputs.cnum3,
+        num4: Outputs.cnum4,
+      },
     },
-    /* //
+    {
+      id: 'ASSS Infern Brand Cryptic Flame Collect',
+      // Collect timestamp for when last cut flame
+      type: 'Ability',
+      netRegex: { id: '74B7', source: 'Infern Brand' },
+      condition: Conditions.targetIsYou(),
+      run: (data, matches) => data.myLastCut = Date.parse(matches.timestamp),
+    },
+    /*
+    //
     {
       id: 'AS+ 젤레스가 Cryptic Portal',
       type: 'StartsUsing',
+      // 안맞을거 같은데... 고쳐야함
       netRegex: { id: '7494', source: 'Shadowcaster Zeless Gah' },
-    },*/
+    },
+    */
     //
     {
-      id: 'ASSS+ Firesteel Strike',
+      id: 'ASS+ Firesteel Strike',
       type: 'StartsUsing',
+      // 안맞을거 같은데... 고쳐야함
       netRegex: { id: '74B0', source: 'Shadowcaster Zeless Gah' },
       response: Responses.spread(),
       run: (data) => data.firesteelStrikes = [],
     },
     //
     {
-      id: 'ASSS+ Firesteel Strike Collect',
+      id: 'ASS+ Firesteel Strike Collect',
       type: 'Ability',
+      // 안맞을거 같은데... 고쳐야함
       netRegex: { id: ['74B1', '74B2'], source: 'Shadowcaster Zeless Gah' },
       run: (data, matches) => data.firesteelStrikes?.push(matches.target),
     },
     //
     {
-      id: 'ASSS+ Blessed Beacon',
+      id: 'ASS+ Blessed Beacon',
       type: 'StartsUsing',
+      // 안맞을거 같은데... 고쳐야함
       netRegex: { id: '74B3', source: 'Shadowcaster Zeless Gah' },
       response: (data, _matches, output) => {
         if (data.firesteelStrikes === undefined || data.firesteelStrikes.length === 0)
@@ -1373,7 +1283,7 @@ const triggerSet: TriggerSet<Data> = {
     },
     //
     {
-      id: 'ASSS+ Banishment Debuff',
+      id: 'ASS+ Banishment Debuff',
       type: 'GainsEffect',
       netRegex: { effectId: 'B9A' },
       condition: Conditions.targetIsYou(),
@@ -1412,7 +1322,7 @@ const triggerSet: TriggerSet<Data> = {
     },
     //
     {
-      id: 'ASSS+ Brands P5',
+      id: 'ASS+ Brands P5',
       type: 'GainsEffect',
       netRegex: { effectId: 'CC[4-7]' },
       condition: Conditions.targetIsYou(),
@@ -1443,23 +1353,181 @@ const triggerSet: TriggerSet<Data> = {
       'locale': 'en',
       'replaceText': {
         '(?<!/ )Chilling Duster / Fizzling Duster': 'Chilling/Fizzling Duster',
-        'Bracing Suds / Chilling Suds(?! )': 'Bracing/Chilling Suds',
-        'Bracing Duster / Chilling Duster(?! )': 'Bracing/Chilling Duster',
-        'Bracing Suds / Fizzling Suds': 'Bracing/Fizzling Suds',
-        'Bracing Duster / Fizzling Duster': 'Bracing/Fizzling Duster',
         'Bracing Duster / Chilling Duster / Fizzling Duster': 'Duster',
+        'Bracing Duster / Chilling Duster(?! )': 'Bracing/Chilling Duster',
+        'Bracing Duster / Fizzling Duster': 'Bracing/Fizzling Duster',
         'Bracing Suds / Chilling Suds / Fizzling Suds': 'Suds',
+        'Bracing Suds / Chilling Suds(?! )': 'Bracing/Chilling Suds',
+        'Bracing Suds / Fizzling Suds': 'Bracing/Fizzling Suds',
+      },
+    },
+    {
+      'locale': 'de',
+      'replaceSync': {
+        'Aqueduct Armor': 'Aquädukt-Kampfmaschine',
+        'Aqueduct Belladonna': 'Aquädukt-Belladonna',
+        'Aqueduct Dryad': 'Aquädukt-Dryade',
+        'Aqueduct Kaluk': 'Aquädukt-Kaluk',
+        'Aqueduct Udumbara': 'Aquädukt-Udumbara',
+        'Arcane Font': 'arkan(?:e|er|es|en) Tafel',
+        'Ball of Fire': 'Feuerball',
+        'Eastern Ewer': 'Waschkrug',
+        'Gladiator of Sil\'dih': 'Gladiator von Sil\'dih',
+        'Hateful Visage': 'Hassendes Haupt',
+        'Infern Brand': 'Infernales Mal',
+        'Shadowcaster Zeless Gah': 'Schattenwirker Zeless Gah',
+        'Sil\'dihn Dullahan': 'Sil\'dih-Dullahan',
+        'Silkie': 'Silkie',
+        'The Trial of Balance': 'Prüfung der Gerechtigkeit',
+        'The Trial of Knowledge': 'Prüfung der Weisheit',
+        'The Trial of Might': 'Prüfung der Macht',
+      },
+      'replaceText': {
+        'Accursed Visage': 'Verdammtes Haupt',
+        'Banishment': 'Verbannung',
+        'Blazing Benifice': 'Heiliger Feuereifer',
+        'Blessed Beacon': 'Himmelsfeuer',
+        'Bracing Duster': 'Spritziger Wedel',
+        'Bracing Suds': 'Spritziger Schaum',
+        'Burn': 'Verbrennung',
+        'Carpet Beater': 'Teppichklopfer',
+        'Cast Shadow': 'Schattenfall',
+        'Chilling Duster': 'Kalter Wedel',
+        'Chilling Suds': 'Kalter Schaum',
+        'Colossal Wreck': 'Riesig Trümmerbild',
+        'Cryptic Flames': 'Kryptische Flammen',
+        'Cryptic Portal': 'Kryptisches Portal',
+        'Curse of the Fallen': 'Fluch des Zerfallenen',
+        'Curse of the Monument': 'Fluch des Denkmals',
+        'Dust Bluster': 'Staubbläser',
+        'Eastern Ewers': 'Waschkrug',
+        'Echo of the Fallen': 'Fluch des Äons',
+        'Explosion': 'Explosion',
+        'Firesteel Fracture': 'Feuerstahl-Brecher',
+        'Firesteel Strike': 'Feuerstahl-Schlag',
+        'Fizzling Duster': 'Prickelnder Wedel',
+        'Fizzling Suds': 'Prickelnder Schaum',
+        'Flash of Steel': 'Blitzender Stahl',
+        'Fresh Puff': 'Frischer Puschel',
+        'Gold Flame': 'Goldene Flamme',
+        'Hateful Visage': 'Hassendes Haupt',
+        'Infern Brand': 'Infernales Mal',
+        'Infern Ward': 'Infernale Wehr',
+        'Infern Wave': 'Infernale Welle',
+        'Mighty Smite': 'Mächtiger Streich',
+        'Nothing beside Remains': 'Nichts weiter blieb',
+        'Puff and Tumble': 'Puschelputz',
+        'Pure Fire': 'Reines Feuer',
+        'Rinse': 'Spülung',
+        'Rush of Might': 'Rausch der Macht',
+        'Scream of the Fallen': 'Fluch der Ewigkeit',
+        'Sculptor\'s Passion': 'Bildners Hohn',
+        'Show of Strength': 'Kraftakt',
+        'Silver Flame': 'Silberne Flamme',
+        'Slippery Soap': 'Schmierige Seife',
+        'Soap\'s Up': 'Einseifen',
+        'Soaping Spree': 'Seifentaumel',
+        'Specter of Might': 'Schemen der Macht',
+        'Squeaky Clean': 'Blitzeblank',
+        'Sundered Remains': 'Tote Trümmer',
+        'Total Wash': 'Vollwäsche',
+        'Wrath of Ruin': 'Düster Zorn',
+      },
+    },
+    {
+      'locale': 'fr',
+      'replaceSync': {
+        'Aqueduct Armor': 'armure maléfique des aqueducs',
+        'Aqueduct Belladonna': 'belladone des aqueducs',
+        'Aqueduct Dryad': 'dryade des aqueducs',
+        'Aqueduct Kaluk': 'kaluk des aqueducs',
+        'Aqueduct Udumbara': 'udumbara des aqueducs',
+        'Arcane Font': 'sphère arcanique',
+        'Ball of Fire': 'Boule de flammes',
+        'Eastern Ewer': 'cruche orientale',
+        'Gladiator of Sil\'dih': 'gladiateur sildien',
+        'Hateful Visage': 'Visage de haine',
+        'Infern Brand': 'Étendard sacré',
+        'Shadowcaster Zeless Gah': 'Zeless Gah la Flamme ombrée',
+        'Sil\'dihn Dullahan': 'dullahan sildien',
+        'Silkie': 'Silkie',
+        'The Trial of Balance': 'Épreuve de la Justice',
+        'The Trial of Knowledge': 'Épreuve de la Sagesse',
+        'The Trial of Might': 'Épreuve de la Puissance',
+      },
+      'replaceText': {
+        'Accursed Visage': 'Visage d\'exécration',
+        'Banishment': 'Bannissement',
+        'Blazing Benifice': 'Canon des flammes sacrées',
+        'Blessed Beacon': 'Flamme sacrée céleste',
+        'Bracing Duster': 'Plumeau tonifiant',
+        'Bracing Suds': 'Mousse tonifiante',
+        'Burn': 'Combustion',
+        'Carpet Beater': 'Tapette à tapis',
+        'Cast Shadow': 'Ombre crépitante',
+        'Chilling Duster': 'Plumeau givré',
+        'Chilling Suds': 'Mousse givrée',
+        'Colossal Wreck': 'Ruine colossale',
+        'Cryptic Flames': 'Flammes cryptiques',
+        'Cryptic Portal': 'Portail cryptique',
+        'Curse of the Fallen': 'Malédiction hurlante',
+        'Curse of the Monument': 'Malédiction monumentale',
+        'Dust Bluster': 'Dépoussiérage',
+        'Eastern Ewers': 'Aiguière aqueuse',
+        'Echo of the Fallen': 'Écho déchu',
+        'Explosion': 'Explosion',
+        'Firesteel Fracture': 'Choc brasero',
+        'Firesteel Strike': 'Frappe brasero',
+        'Fizzling Duster': 'Plumeau pétillant',
+        'Fizzling Suds': 'Mousse pétillante',
+        'Flash of Steel': 'Éclair d\'acier',
+        'Fresh Puff': 'Pompon lustré',
+        'Gold Flame': 'Flamme dorée',
+        'Hateful Visage': 'Visage de haine',
+        'Infern Brand': 'Étendard sacré',
+        'Infern Ward': 'Barrière infernale',
+        'Infern Wave': 'Vague infernale',
+        'Mighty Smite': 'Taillade belliqueuse',
+        'Nothing beside Remains': 'Soulèvement général',
+        'Puff and Tumble': 'Pompon culbuteur',
+        'Pure Fire': 'Feu immaculé',
+        'Rinse': 'Rinçage',
+        'Rush of Might': 'Déferlement de puissance',
+        'Scream of the Fallen': 'Grand écho déchu',
+        'Sculptor\'s Passion': 'Canon belliqueux',
+        'Show of Strength': 'Cri du guerrier',
+        'Silver Flame': 'Flamme argentée',
+        'Slippery Soap': 'Bain moussant glissant',
+        'Soap\'s Up': 'Bain moussant explosif',
+        'Soaping Spree': 'Bain moussant public',
+        'Specter of Might': 'Spectre immémorial',
+        'Squeaky Clean': 'Frottage',
+        'Sundered Remains': 'Soulèvement belliqueux',
+        'Total Wash': 'Lavage intégral',
+        'Wrath of Ruin': 'Colère immémoriale',
       },
     },
     {
       'locale': 'ja',
-      'missingTranslations': true,
       'replaceSync': {
+        'Aqueduct Armor': 'アクアダクト・イビルアーマー',
+        'Aqueduct Belladonna': 'アクアダクト・ベラドンナ',
+        'Aqueduct Dryad': 'アクアダクト・ドライアド',
+        'Aqueduct Kaluk': 'アクアダクト・カルク',
+        'Aqueduct Udumbara': 'アクアダクト・ウドンゲ',
+        'Arcane Font': '立体魔法陣',
+        'Ball of Fire': '火炎球',
+        'Eastern Ewer': '洗い壺',
         'Gladiator of Sil\'dih': 'シラディハ・グラディアトル',
         'Gladiator Mirage': 'ミラージュ・グラディアトル',
-        'Infern Brand': 'アマルジャの呪具',
-        'Silkie': 'シルキー',
+        'Hateful Visage': '呪像起動',
+        'Infern Brand': '呪具設置',
         'Shadowcaster Zeless Gah': '影火のゼレズ・ガー',
+        'Sil\'dihn Dullahan': 'シラディハ・デュラハン',
+        'Silkie': 'シルキー',
+        'The Trial of Balance': '参の試練',
+        'The Trial of Knowledge': '壱の試練',
+        'The Trial of Might': '弐の試練',
         'Thunderous Echo': '重怨の残響',
         'Lingering Echoes': '連呪の残響',
         'Echo of the Fallen': '呪怨の残響',
@@ -1470,21 +1538,16 @@ const triggerSet: TriggerSet<Data> = {
         'Scream of the Fallen': '呪怨の大残響',
       },
       'replaceText': {
-        '(?<!/ )Chilling Duster / Fizzling Duster': 'ひえひえ/ぱちぱちダスター',
         'Accursed Visage': '呪怨呪像',
         'Banishment': '強制転移の呪',
         'Blazing Benifice': '聖火砲',
         'Blessed Beacon': '天の聖火',
-        'Bracing Suds / Chilling Suds(?! )': 'そよそよ/ひえひえシャンプー',
-        'Bracing Duster / Chilling Duster(?! )': 'そよそよ/ひえひえダスター',
-        'Bracing Suds / Fizzling Suds': 'そよそよ/ぱちぱちシャンプー',
-        'Bracing Duster / Fizzling Duster': 'そよそよ/ぱちぱちダスター',
-        'Bracing Duster / Chilling Duster / Fizzling Duster': 'ダスター',
-        'Bracing Suds / Chilling Suds / Fizzling Suds': 'シャンプー',
+        'Bracing Duster': 'そよそよダスター',
         'Bracing Suds': 'そよそよシャンプー',
-        'Burn': '火球',
+        'Burn': '燃焼',
         'Carpet Beater': 'カーペットビーター',
         'Cast Shadow': '影火呪式',
+        'Chilling Duster': 'ひえひえダスター',
         'Chilling Suds': 'ひえひえシャンプー',
         'Colossal Wreck': '亡国の霊塔',
         'Cryptic Flames': '火焔の呪印',
@@ -1493,10 +1556,11 @@ const triggerSet: TriggerSet<Data> = {
         'Curse of the Monument': '呪怨の連撃',
         'Dust Bluster': 'ダストブロワー',
         'Eastern Ewers': '洗い壺',
-        'Echo of the Fallen': '呪怨の咆哮',
+        'Echo of the Fallen': '呪怨の残響',
         'Explosion': '爆発',
         'Firesteel Fracture': '石火豪打',
         'Firesteel Strike': '石火豪衝',
+        'Fizzling Duster': 'ぱちぱちダスター',
         'Fizzling Suds': 'ぱちぱちシャンプー',
         'Flash of Steel': '闘人の波動',
         'Fresh Puff': 'ポンポン創出',
@@ -1507,8 +1571,9 @@ const triggerSet: TriggerSet<Data> = {
         'Infern Wave': '呪具流火',
         'Mighty Smite': '闘人の斬撃',
         'Nothing beside Remains': '座下隆起',
+        'Puff and Tumble': 'ポンポンはたきがけ',
         'Pure Fire': '劫火',
-        'Ring of Might': '大剛の旋撃',
+        'Rinse': 'すすぎ洗い',
         'Rush of Might': '大剛の突撃',
         'Scream of the Fallen': '呪怨の大残響',
         'Sculptor\'s Passion': '闘人砲',
@@ -1518,20 +1583,10 @@ const triggerSet: TriggerSet<Data> = {
         'Soap\'s Up': 'シャンプーボム',
         'Soaping Spree': 'みんなでシャンプーボム',
         'Specter of Might': '亡念幻身',
-        'Total Wash': '水拭き',
+        'Squeaky Clean': '水拭き',
+        'Sundered Remains': '闘場隆起',
+        'Total Wash': '水洗い',
         'Wrath of Ruin': '亡念励起',
-        /*
-        실키
-        'Bracing Duster': '',
-        'Chilling Duster': '',
-        'Fizzling Duster': '',
-        'Puff and Tumble': '',
-        'Rinse': '',
-        'Soapsud Static': '',
-        'Squeaky Clean': '',
-        그라
-        'Sundered Remains': '',
-        */
       },
     },
   ],

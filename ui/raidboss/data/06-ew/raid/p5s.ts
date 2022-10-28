@@ -114,6 +114,7 @@ const triggerSet: TriggerSet<Data> = {
         NW: Outputs.arrowNW,
         safeCorner: {
           en: '${dir1} 구석으로 (독은 피해요)',
+          de: '${dir1} Ecke (vermeide das Gift)',
           ko: '${dir1} 구석 (독 피하기)',
         },
       },

@@ -384,6 +384,8 @@
 06-ew/dungeon/alzadaals_legacy.txt
 06-ew/dungeon/another_sildihn_subterrane.ts
 06-ew/dungeon/another_sildihn_subterrane.txt
+06-ew/dungeon/another_sildihn_subterrane-savage.ts
+06-ew/dungeon/another_sildihn_subterrane-savage.txt
 06-ew/dungeon/ktisis_hyperboreia.ts
 06-ew/dungeon/ktisis_hyperboreia.txt
 06-ew/dungeon/smileton.ts
@@ -464,5 +466,3 @@
 06-ew/ultimate/dragonsongs_reprise_ultimate.ts
 06-ew/ultimate/dragonsongs_reprise_ultimate.txt
 06-ew/variant/ss.ts
-06-ew/variant/ass.ts
-06-ew/variant/ass.txt
