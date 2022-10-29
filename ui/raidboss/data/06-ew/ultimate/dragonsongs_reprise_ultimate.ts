@@ -16,7 +16,14 @@ import { LocaleObject, LocaleText, TriggerSet } from '../../../../../types/trigg
 // TODO: Trigger for Hallowed Wings with Hot Tail/Hot Wings
 // TODO: Phase 6 Resentment callout?
 
-type Phase = 'doorboss' | 'thordan' | 'nidhogg' | 'haurchefant' | 'thordan2' | 'nidhogg2' | 'dragon-king';
+type Phase =
+  | 'doorboss'
+  | 'thordan'
+  | 'nidhogg'
+  | 'haurchefant'
+  | 'thordan2'
+  | 'nidhogg2'
+  | 'dragon-king';
 
 const playstationMarkers = ['circle', 'cross', 'triangle', 'square'] as const;
 type PlaystationMarker = typeof playstationMarkers[number];
@@ -114,7 +121,11 @@ const firstMarker = (phase: Phase) => {
   return phase === 'doorboss' ? headmarkers.hyperdimensionalSlash : headmarkers.skywardTriple;
 };
 
-const getHeadmarkerId = (data: Data, matches: NetMatches['HeadMarker'], firstDecimalMarker?: number) => {
+const getHeadmarkerId = (
+  data: Data,
+  matches: NetMatches['HeadMarker'],
+  firstDecimalMarker?: number,
+) => {
   // If we naively just check !data.decOffset and leave it, it breaks if the first marker is 00DA.
   // (This makes the offset 0, and !0 is true.)
   if (data.decOffset === undefined) {
@@ -355,7 +366,9 @@ const triggerSet: TriggerSet<Data> = {
       type: 'StartsUsing',
       netRegex: { id: '62DA', source: 'Ser Grinnaux', capture: false },
       alertText: (data, _matches, output) => {
-        return data.phase !== 'doorboss' || data.seenEmptyDimension ? output.in!() : output.inAndTether!();
+        return data.phase !== 'doorboss' || data.seenEmptyDimension
+          ? output.in!()
+          : output.inAndTether!();
       },
       run: (data) => data.seenEmptyDimension = true,
       outputStrings: {
@@ -420,7 +433,8 @@ const triggerSet: TriggerSet<Data> = {
       id: 'DSR Adelphel KB Direction',
       type: 'NameToggle',
       netRegex: { toggle: '01' },
-      condition: (data, matches) => data.phase === 'doorboss' && matches.id === data.adelphelId && data.firstAdelphelJump,
+      condition: (data, matches) =>
+        data.phase === 'doorboss' && matches.id === data.adelphelId && data.firstAdelphelJump,
       // Delay 0.1s here to prevent any race condition issues with getCombatants
       delaySeconds: 0.1,
       promise: async (data, matches) => {
@@ -613,8 +627,12 @@ const triggerSet: TriggerSet<Data> = {
 
         // Select the knights
         const combatantNameKnights: string[] = [];
-        combatantNameKnights.push(vellguineLocaleNames[data.parserLang] ?? vellguineLocaleNames['en']);
-        combatantNameKnights.push(paulecrainLocaleNames[data.parserLang] ?? paulecrainLocaleNames['en']);
+        combatantNameKnights.push(
+          vellguineLocaleNames[data.parserLang] ?? vellguineLocaleNames['en'],
+        );
+        combatantNameKnights.push(
+          paulecrainLocaleNames[data.parserLang] ?? paulecrainLocaleNames['en'],
+        );
         combatantNameKnights.push(ignasseLocaleNames[data.parserLang] ?? ignasseLocaleNames['en']);
 
         const spiralThrusts = [];
@@ -663,7 +681,9 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (data, _matches, output) => {
         data.spiralThrustSafeZones ??= [];
         if (data.spiralThrustSafeZones.length !== 2) {
-          console.error(`Spiral Thrusts: expected 2 safe zones got ${data.spiralThrustSafeZones.length}`);
+          console.error(
+            `Spiral Thrusts: expected 2 safe zones got ${data.spiralThrustSafeZones.length}`,
+          );
           return;
         }
         // PRs / 색깔로 콜링콜링
@@ -790,7 +810,9 @@ const triggerSet: TriggerSet<Data> = {
         // After the above adjustment to handle modular math wrapping,
         // d1 and d2 should be exactly two spaces apart.
         if (d2 - d1 !== 2 && d1 - d2 !== 2) {
-          console.error(`DragonsRage: bad dirs: ${d1}, ${d2}, ${JSON.stringify(data.combatantData)}`);
+          console.error(
+            `DragonsRage: bad dirs: ${d1}, ${d2}, ${JSON.stringify(data.combatantData)}`,
+          );
           return;
         }
 
@@ -965,12 +987,15 @@ const triggerSet: TriggerSet<Data> = {
         }
         const combatantDataJanlenouxLength = combatantDataJanlenoux.combatants.length;
         if (combatantDataJanlenouxLength < 1) {
-          console.error(`Ser Janlenoux: expected at least 1 combatants got ${combatantDataJanlenouxLength}`);
+          console.error(
+            `Ser Janlenoux: expected at least 1 combatants got ${combatantDataJanlenouxLength}`,
+          );
           return;
         }
 
         // Sort to retreive last combatant in list
-        const sortCombatants = (a: PluginCombatantState, b: PluginCombatantState) => (a.ID ?? 0) - (b.ID ?? 0);
+        const sortCombatants = (a: PluginCombatantState, b: PluginCombatantState) =>
+          (a.ID ?? 0) - (b.ID ?? 0);
         const combatantJanlenoux = combatantDataJanlenoux.combatants.sort(sortCombatants).shift();
         if (!combatantJanlenoux)
           throw new UnreachableCode();
@@ -1095,7 +1120,10 @@ const triggerSet: TriggerSet<Data> = {
         if (p1dps && p2dps)
           return output.dpsMeteors!({ player1: data.ShortName(p1), player2: data.ShortName(p2) });
         if (!p1dps && !p2dps)
-          return output.tankHealerMeteors!({ player1: data.ShortName(p1), player2: data.ShortName(p2) });
+          return output.tankHealerMeteors!({
+            player1: data.ShortName(p1),
+            player2: data.ShortName(p2),
+          });
         return output.unknownMeteors!({ player1: data.ShortName(p1), player2: data.ShortName(p2) });
       },
       outputStrings: {
@@ -1314,12 +1342,17 @@ const triggerSet: TriggerSet<Data> = {
 
         const num = data.diveFromGraceNum[data.me];
         if (num !== 1 && num !== 2 && num !== 3) {
-          console.error(`DSR Gnash and Lash: missing number: ${JSON.stringify(data.diveFromGraceNum)}`);
+          console.error(
+            `DSR Gnash and Lash: missing number: ${JSON.stringify(data.diveFromGraceNum)}`,
+          );
           return inout;
         }
 
         // Special case for side ones baiting the two towers.
-        if (data.eyeOfTheTyrantCounter === 1 && num === 1 && data.diveFromGracePreviousPosition[data.me] !== 'middle')
+        if (
+          data.eyeOfTheTyrantCounter === 1 && num === 1 &&
+          data.diveFromGracePreviousPosition[data.me] !== 'middle'
+        )
           return output.baitStackInOut!({ inout: inout });
 
         // Filter out anybody who needs to be stacking.
@@ -1536,7 +1569,9 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (data, _matches, output) => {
         const num = data.diveFromGraceNum[data.me];
         if (!num) {
-          console.error(`DFG Tower 1 Reminder: missing number: ${JSON.stringify(data.diveFromGraceNum)}`);
+          console.error(
+            `DFG Tower 1 Reminder: missing number: ${JSON.stringify(data.diveFromGraceNum)}`,
+          );
           return;
         }
 
@@ -1681,7 +1716,9 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (data, _matches, output) => {
         const num = data.diveFromGraceNum[data.me];
         if (!num) {
-          console.error(`DFG Tower 1 and 2: missing number: ${JSON.stringify(data.diveFromGraceNum)}`);
+          console.error(
+            `DFG Tower 1 and 2: missing number: ${JSON.stringify(data.diveFromGraceNum)}`,
+          );
           return;
         }
 
@@ -1754,7 +1791,9 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (data, _matches, output) => {
         const num = data.diveFromGraceNum[data.me];
         if (!num) {
-          console.error(`DFG Dive Single Tower: missing number: ${JSON.stringify(data.diveFromGraceNum)}`);
+          console.error(
+            `DFG Dive Single Tower: missing number: ${JSON.stringify(data.diveFromGraceNum)}`,
+          );
           return output.text!();
         }
         // To condense messages, two tower baiters get this call during the gnash and lash.
@@ -2245,7 +2284,9 @@ const triggerSet: TriggerSet<Data> = {
       id: 'DSR Playstation2 Fire Chains No Marker',
       type: 'HeadMarker',
       netRegex: {},
-      condition: (data, matches) => data.phase === 'thordan2' && playstationHeadmarkerIds.includes(getHeadmarkerId(data, matches)),
+      condition: (data, matches) =>
+        data.phase === 'thordan2' &&
+        playstationHeadmarkerIds.includes(getHeadmarkerId(data, matches)),
       delaySeconds: 0.5,
       suppressSeconds: 5,
       alarmText: (data, _matches, output) => {
@@ -2578,10 +2619,14 @@ const triggerSet: TriggerSet<Data> = {
         if (data.combatantData.length === 0)
           console.error(`Hallowed: no Nidhoggs found`);
         else if (data.combatantData.length > 1)
-          console.error(`Hallowed: unexpected number of Nidhoggs: ${JSON.stringify(data.combatantData)}`);
+          console.error(
+            `Hallowed: unexpected number of Nidhoggs: ${JSON.stringify(data.combatantData)}`,
+          );
       },
       alertText: (data, matches, output) => {
-        const wings = matches.id === '6D23' || matches.id === '6D24' ? output.left!() : output.right!();
+        const wings = matches.id === '6D23' || matches.id === '6D24'
+          ? output.left!()
+          : output.right!();
         let head;
         const isHeadDown = matches.id === '6D23' || matches.id === '6D26';
         if (isHeadDown)
