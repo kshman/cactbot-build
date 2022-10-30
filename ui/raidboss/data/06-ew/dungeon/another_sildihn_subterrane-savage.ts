@@ -19,6 +19,7 @@ export interface Data extends RaidbossData {
   suds?: string;
   soapCounter: number;
   beaterCounter: number;
+  spreeCounter: number;
   mightCasts: PluginCombatantState[];
   mightDir?: string;
   hasLingering?: boolean;
@@ -47,6 +48,7 @@ const triggerSet: TriggerSet<Data> = {
     return {
       soapCounter: 0,
       beaterCounter: 0,
+      spreeCounter: 0,
       mightCasts: [],
       arcaneFontCounter: 0,
       brandEffects: {},
@@ -156,16 +158,16 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '🟡비스듬 → 십자➕로',
+          en: '🟡비스듬 → 흩어져요',
           de: 'Kardinal',
-          ja: '🟡斜め → 十字➕で',
+          ja: '🟡斜め → 散会',
         },
       },
     },
     {
       id: 'ASSS Dust Bluster',
       type: 'StartsUsing',
-      netRegex: { id: '776C', source: 'Silkie', capture: false },
+      netRegex: { id: '778F', source: 'Silkie', capture: false },
       response: Responses.knockback(),
     },
     {
@@ -235,12 +237,12 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         getBehindPuff: {
-          en: '솜털의 맨 뒤로',
+          en: '솜털🔘의 맨 뒤로',
           de: 'Hinter Puschel und Gruppe',
           ja: 'たまの一番後ろへ',
         },
         getBehindPuffs: {
-          en: '솜털의 맨 뒤로 (동서)',
+          en: '솜털🔘의 맨 뒤로 (동서)',
           de: 'Hinter Puschel und Gruppe (Osten/Westen)',
           ja: 'たまの一番後ろへ (東西)',
         },
@@ -337,6 +339,7 @@ const triggerSet: TriggerSet<Data> = {
       // Boss does not cast Fizzling Duster with Soaping Spree
       type: 'StartsUsing',
       netRegex: { id: '778A', source: 'Silkie', capture: false },
+      preRun: (data) => ++data.spreeCounter,
       infoText: (data, _matches, output) => {
         switch (data.suds) {
           case 'CE1':
@@ -344,7 +347,7 @@ const triggerSet: TriggerSet<Data> = {
           case 'CE2':
             return output.intercards!();
           default:
-            if (data.soapCounter === 1)
+            if (data.spreeCounter === 1)
               return output.underPuff!();
             return output.avoidPuffs!();
         }
@@ -356,14 +359,20 @@ const triggerSet: TriggerSet<Data> = {
         },
         intercards: {
           en: '🔵십자 장판',
+          de: 'Interkardinal',
+          fr: 'Intercardinal',
           ja: '🔵十字, 避けて',
+          cn: '四角',
+          ko: '대각선 쪽으로',
         },
         underPuff: {
           en: '🟢바로 밑으로',
+          de: 'Unter grünem Puschel',
           ja: '🟢貼り付く',
         },
         avoidPuffs: {
-          en: '솜털 장판 피해요',
+          en: '솜털🔘장판 피해요',
+          de: 'Weiche den Puschel AoEs aus',
           ja: 'たまからのゆか避けて',
         },
       },
@@ -457,6 +466,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: '헤비, 발 밑으로',
+          de: 'AoE + Rein',
           ja: 'ヘビィ, 足元へ',
         },
       },
@@ -500,9 +510,6 @@ const triggerSet: TriggerSet<Data> = {
       netRegex: { id: '77B3', source: 'Gladiator of Sil\'dih', capture: false },
       response: Responses.aoe(),
     },
-    /*
-      id: 'ASSS Rush of Might 1',
-    */
     {
       id: 'ASSS Sculptor\'s Passion',
       // This is a wild charge, player in front takes most damage
@@ -546,6 +553,7 @@ const triggerSet: TriggerSet<Data> = {
       condition: Conditions.targetIsYou(),
       preRun: (data) => data.hasLingering = true,
       delaySeconds: (_data, matches) => parseFloat(matches.duration) - 2,
+      // response: Responses.moveAway(),
     },
     {
       id: 'ASSS Thunderous Echo Collect',
@@ -626,9 +634,9 @@ const triggerSet: TriggerSet<Data> = {
       type: 'StartsUsing',
       netRegex: { id: '77A[2-4]', source: 'Gladiator of Sil\'dih' },
       infoText: (_data, matches, output) => {
-        if (matches.id === '7660')
+        if (matches.id === '77A2')
           return output.outsideInner!();
-        if (matches.id === '7661')
+        if (matches.id === '77A3')
           return output.outsideMiddle!();
         return output.outsideOuter!();
       },
@@ -680,12 +688,67 @@ const triggerSet: TriggerSet<Data> = {
         stackOn: Outputs.stackOnPlayer,
       },
     },
-    /* 아래는 흔적만 남김
-      id: 'ASSS Nothing beside Remains',
+    /* 아래는 안씀
+    {
+      id: 'ASS Nothing beside Remains',
+      type: 'StartsUsing',
+      netRegex: { id: '77BC', source: 'Gladiator of Sil\'dih', capture: false },
+      suppressSeconds: 1,
+      response: Responses.spread(),
+    },
     */
-   /* 아래는 내께 더 좋다 → ASS+ Gilded/Silvered Fate
-      id: 'ASSS Accursed Visage Collect',
-      id: 'ASSS Golden/Silver Flame',
+    /* 아래는 안씀 → ASS+ Gilded/Silvered Fate
+    {
+      id: 'ASS Accursed Visage Collect',
+      // CDF = Gilded Fate
+      // CE0 = Silvered Fate
+      type: 'GainsEffect',
+      netRegex: { effectId: ['CDF', 'CE0'] },
+      condition: Conditions.targetIsYou(),
+      run: (data, matches) => {
+        const id = matches.effectId;
+        if (id === 'CDF')
+          ++data.gildedCounter;
+        else if (id === 'CE0')
+          ++data.silveredCounter;
+      },
+    },
+    {
+      id: 'ASS Golden/Silver Flame',
+      // 77B1 = Golden Flame
+      // 77B2 = Silver Flame
+      type: 'StartsUsing',
+      netRegex: { id: '77B[12]', source: 'Hateful Visage', capture: false },
+      suppressSeconds: 1,
+      infoText: (data, _matches, output) => {
+        if (data.gildedCounter > 0) {
+          if (data.silveredCounter > 0)
+            return output.bothFates!();
+          return output.gildedFate!();
+        }
+        if (data.silveredCounter > 0)
+          return output.silveredFate!();
+        return output.neitherFate!();
+      },
+      outputStrings: {
+        bothFates: {
+          en: 'Get hit by silver and gold',
+          de: 'Von Silber und Gold treffen lassen',
+        },
+        gildedFate: {
+          en: 'Get hit by two silver',
+          de: 'Von 2 Silber treffen lassen',
+        },
+        silveredFate: {
+          en: 'Get hit by two gold',
+          de: 'Von 2 Gold treffen lassen',
+        },
+        neitherFate: {
+          en: 'Avoid silver and gold',
+          de: 'Vermeide Silber und Gold',
+        },
+      },
+    },
     */
     // 그라디아토르: Gilded/Silvered Fate
     {
@@ -740,8 +803,13 @@ const triggerSet: TriggerSet<Data> = {
         center: Outputs.goIntoMiddle,
       },
     },
-    /* 아래는 내께 더 좋다 → ASS+ Curse of the Monument Tether
-      id: 'ASSS Curse of the Monument',
+    /* 아래는 안씀 → ASS+ Curse of the Monument Tether
+    {
+      id: 'ASS Curse of the Monument',
+      type: 'Ability',
+      netRegex: { id: '77A8', source: 'Gladiator of Sil\'dih', capture: false },
+      response: Responses.breakChains(),
+    },
     */
     {
       id: 'ASS+ Curse of the Monument Tether',
@@ -777,9 +845,11 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         soakThenSpread: {
           en: '먼저 타워 들어갔다 => 벽으로 흩어져요',
+          de: 'Türme zuerst nehmen => verteilen',
         },
         spreadThenSoak: {
           en: '벽으로 흩어졌다 => 타워 들어가요',
+          de: 'Verteilen => zweite Türme nehmen',
         },
       },
     },
@@ -787,8 +857,7 @@ const triggerSet: TriggerSet<Data> = {
     {
       id: 'ASS+ Specter of Might',
       type: 'StartsUsing',
-      // 안맞을거 같은데... 고쳐야함
-      netRegex: { id: '7673', source: 'Gladiator of Sil\'dih', capture: false },
+      netRegex: { id: '77B5', source: 'Gladiator of Sil\'dih', capture: false },
       run: (data) => {
         data.rushCounter++;
         data.rushVecs = [];
@@ -798,14 +867,13 @@ const triggerSet: TriggerSet<Data> = {
     {
       id: 'ASS+ Rush of Might',
       type: 'StartsUsing',
-      // 안맞을거 같은데... 고쳐야함
-      netRegex: { id: ['7658', '7659', '765A'], source: 'Gladiator Mirage' },
+      netRegex: { id: ['779A', '779B', '779C'], source: 'Gladiator Mirage' },
       durationSeconds: 9.4,
       infoText: (data, matches, output) => {
         const i2n: { [id: string]: number } = {
-          '7658': 1,
-          '7659': 2,
-          '765A': 3,
+          '779A': 1,
+          '779B': 2,
+          '779C': 3,
         };
 
         data.rushVecs.push({
@@ -898,7 +966,6 @@ const triggerSet: TriggerSet<Data> = {
     {
       id: 'ASSS Infern Brand Counter',
       type: 'StartsUsing',
-      // 안맞을거 같은데... 고쳐야함
       netRegex: { id: '7491', source: 'Shadowcaster Zeless Gah', capture: false },
       preRun: (data) => {
         data.brandCounter++;
@@ -922,11 +989,11 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         p1: {
           en: '① 돌아가는 동글동글',
-          ja: '回る杖、安置探せ',
+          ja: '回る杖',
         },
         p2: {
           en: '② 마법진 컷팅식',
-          ja: '魔法陣: 北→🟥 / 西→🟦',
+          ja: '魔法陣',
         },
         p3: {
           en: '③ 전이 기둥과 놀아요',
@@ -934,11 +1001,11 @@ const triggerSet: TriggerSet<Data> = {
         },
         p4: {
           en: '④ 카드 전이 놀이',
-          ja: 'カード転移、安置探せ',
+          ja: 'カード転移',
         },
         p5: {
-          en: '⑤ 1/2→가운데, 3/4→파란선 지팡이',
-          ja: '1/2→真ん中, 3/4→青線つき杖',
+          en: '⑤ 줄끊고 부채 유도',
+          ja: '線切と扇誘導',
         },
       },
     },
@@ -1060,22 +1127,23 @@ const triggerSet: TriggerSet<Data> = {
       run: (data) => data.brandEffects = {},
       outputStrings: {
         blueBrandNumCorner: {
-          en: '🟦파랑 ${num}번: ${corner}',
+          en: '파랑🟦 ${num}번: ${corner}',
         },
         orangeBrandNumCorner: {
-          en: '🟥빨강 ${num}번: ${corner}',
+          en: '빨강🟥 ${num}번: ${corner}',
         },
         brandNumCorner: {
           en: '내가 ${num}번: ${corner}',
         },
         blueBrandNum: {
-          en: '컷팅: 🟦파랑 ${num}번',
+          en: '컷팅: 파랑🟦 ${num}번',
         },
         orangeBrandNum: {
-          en: '컷팅: 🟥빨강 ${num}번',
+          en: '컷팅: 빨강🟥 ${num}번',
         },
         brandNum: {
           en: '컷팅: ${num}번',
+          de: 'Kryptogramm ${num}',
         },
         northwest: Outputs.arrowNW,
         northeast: Outputs.arrowNE,
@@ -1110,11 +1178,11 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         cutBlueOne: {
-          en: '컷팅: 🟦파랑 1번',
+          en: '컷팅: 파랑🟦 1번',
           de: 'Blau 1 durchtrennen',
         },
         cutOrangeOne: {
-          en: '컷팅: 🟥빨강 1번',
+          en: '컷팅: 빨강🟥 1번',
           de: 'Orange 1 durchtrennen',
         },
         firstCut: {
@@ -1195,11 +1263,11 @@ const triggerSet: TriggerSet<Data> = {
       run: (data) => data.brandEffects = {},
       outputStrings: {
         cutOrangeNum: {
-          en: '컷팅: 🟥빨강 ${num}번',
+          en: '컷팅: 빨강🟥 ${num}번',
           de: 'Orange ${num} durchtrennen',
         },
         cutBlueNum: {
-          en: '컷팅: 🟦파랑 ${num}번',
+          en: '컷팅: 파랑🟦 ${num}번',
           de: 'Blau ${num} durchtrennen',
         },
       },
@@ -1208,13 +1276,39 @@ const triggerSet: TriggerSet<Data> = {
       id: 'ASSS Infern Brand Cryptic Flame Collect',
       // Collect timestamp for when last cut flame
       type: 'Ability',
-      netRegex: { id: '74B7', source: 'Infern Brand' },
+      netRegex: { id: '76CA', source: 'Infern Brand' },
       condition: Conditions.targetIsYou(),
       run: (data, matches) => data.myLastCut = Date.parse(matches.timestamp),
     },
-    //
     {
       id: 'ASS Banishment',
+      // Players receive invisible effect that indicates rotation and direction
+      // of their teleport attached teleport pad
+      //
+      // At the same time, two teleports on North and South are also marked:
+      // one rotates outside the arena, the other rotates towards the inner rows
+      // Players have 12s to teleport using the safe teleports prior to Call of
+      // the Portal (CCC) expiration
+      //
+      // The first teleports occur at ~11.4s after these debuff go out
+      // After first teleport, lasers block rows but can be teleported over
+      // Hitting a laser results in stun and likely death
+      //
+      // Seconds after first teleport, two wards will go off that target the
+      // two nearest players. Players need to have teleported close enough
+      // to the ward to bait the ward away from other players
+      //
+      // Following the first set of baits, the player's teleport will go off
+      // which should have been positioned to teleport across the laser to bait
+      // the final ward away from other players
+      //
+      // 1CD Blue (Counterclockwise) Teleporting East
+      // 1CE Orange (Clockwise) Teleporting West
+      // 1D2 Orange (Clockwise) Teleporting East
+      // 1D3 Blue (Counterclockwise) Teleporting West
+      //
+      // There are multiple strategies, so this only describes what you have,
+      // from there you can create a personal call of where to go
       type: 'GainsEffect',
       netRegex: { effectId: 'B9A' },
       condition: Conditions.targetIsYou(),
@@ -1231,14 +1325,6 @@ const triggerSet: TriggerSet<Data> = {
         }
       },
       outputStrings: {
-        orangeWest: {
-          en: '🡸 첫째줄',
-          ja: '🡸 1列',
-        },
-        orangeEast: {
-          en: '둘째줄 🡺',
-          ja: '2列 🡺',
-        },
         blueEast: {
           en: '셋째줄 🡺',
           ja: '3列 🡺',
@@ -1247,11 +1333,51 @@ const triggerSet: TriggerSet<Data> = {
           en: '🡸 맨아랫줄',
           ja: '🡸 一番下列',
         },
+        orangeEast: {
+          en: '둘째줄 🡺',
+          ja: '2列 🡺',
+        },
+        orangeWest: {
+          en: '🡸 첫째줄',
+          ja: '🡸 1列',
+        },
       },
     },
     /* 아래는 안씀
+    {
       id: 'ASS Banishment First Ward',
+      // This debuff expires 4.7s before the first bait, but there is a slight
+      // animation lock from the teleport that occurs
+      // Repositioning may be required to bait the active ward's Infern Wave
+      // Using Call of the Portal (CCC) expiration for trigger
+      type: 'LosesEffect',
+      netRegex: { effectId: 'CCC' },
+      condition: Conditions.targetIsYou(),
+      delaySeconds: 0.75, // Delay for animation lock from teleport to complete
+      infoText: (_data, _matches, output) => output.text!(),
+      outputStrings: {
+        text: {
+          en: 'Bait First Ward',
+        },
+      },
+    },
+    {
       id: 'ASS Banishment Bait Second Ward',
+      // After the second teleport and stun expiring, there is 2s before the
+      // the last ward casts Infern Wave that must be baited
+      // Rite of Passage (CCD) debuff is tied to the player's teleport going
+      // off
+      type: 'LosesEffect',
+      netRegex: { effectId: 'CCD' },
+      condition: Conditions.targetIsYou(),
+      delaySeconds: 2, // Delay for stun to complete
+      infoText: (_data, _matches, output) => output.text!(),
+      outputStrings: {
+        text: {
+          en: 'Bait Second Ward',
+        },
+      },
+    },
     */
     {
       id: 'ASS Infern Brand 5 Starting Position',
@@ -1355,18 +1481,18 @@ const triggerSet: TriggerSet<Data> = {
         // cactbot-builtin-response
         output.responseOutputStrings = {
           cutOrangeNum: {
-            en: '컷팅: 🟥빨강 ${num}번',
+            en: '컷팅: 빨강🟥 ${num}번',
             de: 'Orange ${num} durchtrennen',
           },
           cutBlueNum: {
-            en: '컷팅: 🟦파랑 ${num}번',
+            en: '컷팅: 파랑🟦 ${num}번',
             de: 'Blau ${num} durchtrennen',
           },
           moveOrange: {
-            en: '컷팅준비: 🟥빨강 ${num}번',
+            en: '컷팅준비: 빨강🟥 ${num}번',
           },
           moveBlue: {
-            en: '컷팅준비: 🟦파랑 ${num}번',
+            en: '컷팅준비: 파랑🟦 ${num}번',
           },
         };
 
@@ -1425,18 +1551,18 @@ const triggerSet: TriggerSet<Data> = {
             en: '장판 깔아요',
           },
           cutOrangeNum: {
-            en: '컷팅: 🟥빨강 ${num}번',
+            en: '컷팅: 빨강🟥 ${num}번',
             de: 'Orange ${num} durchtrennen',
           },
           cutBlueNum: {
-            en: '컷팅: 🟦파랑 ${num}번',
+            en: '컷팅: 파랑🟦 ${num}번',
             de: 'Blau ${num} durchtrennen',
           },
           moveOrangeNum: {
-            en: '컷팅준비: 🟥빨강 ${num}번',
+            en: '컷팅준비: 빨강🟥 ${num}번',
           },
           moveBlueNum: {
-            en: '컷팅준비: 🟦파랑 ${num}번',
+            en: '컷팅준비: 파랑🟦 ${num}번',
           },
         };
 
@@ -1493,7 +1619,7 @@ const triggerSet: TriggerSet<Data> = {
       id: 'ASS+ Firesteel Strike',
       type: 'StartsUsing',
       // 안맞을거 같은데... 고쳐야함
-      netRegex: { id: '74B0', source: 'Shadowcaster Zeless Gah' },
+      netRegex: { id: '76C5', source: 'Shadowcaster Zeless Gah' },
       response: Responses.spread(),
       run: (data) => data.firesteelStrikes = [],
     },
@@ -1501,16 +1627,16 @@ const triggerSet: TriggerSet<Data> = {
     {
       id: 'ASS+ Firesteel Strike Collect',
       type: 'Ability',
-      // 안맞을거 같은데... 고쳐야함
-      netRegex: { id: ['74B1', '74B2'], source: 'Shadowcaster Zeless Gah' },
+      netRegex: { id: ['76C6', '76C7'], source: 'Shadowcaster Zeless Gah' },
       run: (data, matches) => data.firesteelStrikes.push(matches.target),
     },
+    /*
     //
     {
       id: 'ASS+ Blessed Beacon',
       type: 'StartsUsing',
       // 안맞을거 같은데... 고쳐야함
-      netRegex: { id: '74B3', source: 'Shadowcaster Zeless Gah' },
+      netRegex: { id: '76C7', source: 'Shadowcaster Zeless Gah' },
       response: (data, _matches, output) => {
         if (data.firesteelStrikes.length === 0)
           return { infoText: output.text!() };
@@ -1537,6 +1663,7 @@ const triggerSet: TriggerSet<Data> = {
         },
       },
     },
+    */
   ],
   timelineReplace: [
     {
