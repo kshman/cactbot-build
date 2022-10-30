@@ -2096,7 +2096,7 @@ const triggerSet: TriggerSet<Data> = {
     {
       id: 'DSR Wrath Cauterize Marker',
       type: 'HeadMarker',
-      netRegex: NetRegexes.headMarker(),
+      netRegex: {},
       condition: Conditions.targetIsYou(),
       alarmText: (data, matches, output) => {
         const id = getHeadmarkerId(data, matches);
