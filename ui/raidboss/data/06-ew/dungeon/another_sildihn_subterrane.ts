@@ -11,8 +11,10 @@ import { TriggerSet } from '../../../../../types/trigger';
 // TODO: Silkie specify which puff to get behind in first Slippery Soap
 // TODO: Silkie specify where to point puff's tether
 // TODO: Silkie call puff to go to for safety
-// TODO: Additional Gladiator triggers and adjustments to timeline
-// TODO: Additional Shadowcaster triggers and adjustments to timeline
+// TODO: Gladiator triggers for gold/silver location using OverlayPlugin?
+// TODO: Gladiator adjustments to timeline
+// TODO: Shadowcaster Infern Brand 1 and 4 safe location triggers if possible
+// TODO: Shadowcaster adjustments to timeline
 
 type RushVec = { x: number; y: number; l: number };
 
@@ -140,6 +142,7 @@ const triggerSet: TriggerSet<Data> = {
           en: '🟡비스듬 → 흩어져요',
           de: 'Kardinal',
           ja: '🟡斜め → 散会',
+          ko: '십자방향으로',
         },
       },
     },
@@ -219,31 +222,37 @@ const triggerSet: TriggerSet<Data> = {
           en: '솜털🔘의 맨 뒤로',
           de: 'Hinter Puschel und Gruppe',
           ja: 'たまの一番後ろへ',
+          ko: '구슬 맨 뒤로',
         },
         getBehindPuffs: {
           en: '솜털🔘의 맨 뒤로 (동서)',
           de: 'Hinter Puschel und Gruppe (Osten/Westen)',
           ja: 'たまの一番後ろへ (東西)',
+          ko: '구슬 맨 뒤로 (동/서)',
         },
         getBehindParty: {
           en: '맨 뒤로',
           de: 'Hinter Gruppe',
           ja: '一番後ろへ',
+          ko: '맨 뒤로',
         },
         getBehindPartyKnockback: {
           en: '넉백! 맨 뒤로',
           de: 'Hinter Gruppe (Rückstoß)',
           ja: 'ノックバック！ 一番後ろへ',
+          ko: '맨 뒤로 (넉백)',
         },
         getInFrontOfPlayer: {
           en: '${player} 앞으로',
           de: 'Sei vor ${player}',
           ja: '${player}の前へ',
+          ko: '${player} 앞으로',
         },
         getInFrontOfPlayerKnockback: {
           en: '넉백! ${player} 앞으로',
           de: 'Sei vor ${player} (Rückstoß)',
           ja: 'ノックバック! ${player}の前へ',
+          ko: '${player} 앞으로 (넉백)',
         },
       },
     },
@@ -277,10 +286,12 @@ const triggerSet: TriggerSet<Data> = {
         spreadCardinals: {
           en: '🟡비스듬 → 흩어져요',
           ja: '🟡斜め → 散会',
+          ko: '십자방향으로 산개',
         },
         intercards: {
           en: '🔵십자 장판',
           ja: '🔵十字, 避けて',
+          ko: '대각선 쪽으로',
         },
       },
     },
@@ -298,6 +309,7 @@ const triggerSet: TriggerSet<Data> = {
             en: '내게 탱크버스터, 동서로 유도',
             de: 'Tank Buster auf DIR, Osten/Westen zwischen Puschel',
             ja: '自分にタンクバスタ、東西で誘導',
+            ko: '나에게 탱버, 동/서쪽 구슬 사이로',
           },
         };
 
@@ -348,11 +360,13 @@ const triggerSet: TriggerSet<Data> = {
           en: '🟢바로 밑으로',
           de: 'Unter grünem Puschel',
           ja: '🟢貼り付く',
+          ko: '초록색 구슬 밑으로',
         },
         avoidPuffs: {
           en: '솜털🔘장판 피해요',
           de: 'Weiche den Puschel AoEs aus',
           ja: 'たまからのゆか避けて',
+          ko: '구슬 장판 피하기',
         },
       },
     },
@@ -438,6 +452,30 @@ const triggerSet: TriggerSet<Data> = {
       response: Responses.getOut(),
     },
     {
+      id: 'ASS King\'s Will',
+      type: 'StartsUsing',
+      netRegex: { id: '7968', source: 'Sil\'dihn Dullahan', capture: false },
+      alertText: (_data, _matches, output) => output.text!(),
+      outputStrings: {
+        text: {
+          en: '자기 강화',
+          ja: '自己強化',
+        },
+      },
+    },
+    {
+      id: 'ASS Hells\' Nebula',
+      type: 'StartsUsing',
+      netRegex: { id: '796C', source: 'Aqueduct Armor', capture: false },
+      alarmText: (_data, _matches, output) => output.text!(),
+      outputStrings: {
+        text: {
+          en: '체력이 1이네!',
+          ja: '体力１!',
+        },
+      },
+    },
+    {
       id: 'ASS Infernal Weight',
       type: 'StartsUsing',
       netRegex: { id: '796B', source: 'Aqueduct Armor', capture: false },
@@ -456,32 +494,6 @@ const triggerSet: TriggerSet<Data> = {
       netRegex: { id: '796A', source: 'Aqueduct Armor', capture: false },
       response: Responses.getBehind(),
     },
-    // Sil'dihn Dullahan: King's Will
-    {
-      id: 'ASS+ King\'s Will',
-      type: 'StartsUsing',
-      netRegex: { id: '7968', source: 'Sil\'dihn Dullahan', capture: false },
-      alertText: (_data, _matches, output) => output.text!(),
-      outputStrings: {
-        text: {
-          en: '자기 강화',
-          ja: '自己強化',
-        },
-      },
-    },
-    // Aqueduct Armor: Hells' Nebula
-    {
-      id: 'ASS+ Hells\' Nebula',
-      type: 'StartsUsing',
-      netRegex: { id: '796C', source: 'Aqueduct Armor', capture: false },
-      alarmText: (_data, _matches, output) => output.text!(),
-      outputStrings: {
-        text: {
-          en: '체력이 1이네!',
-          ja: '体力１!',
-        },
-      },
-    },
     // ---------------- Gladiator of Sil'dih ----------------
     {
       id: 'ASS Flash of Steel',
@@ -489,6 +501,150 @@ const triggerSet: TriggerSet<Data> = {
       netRegex: { id: '7671', source: 'Gladiator of Sil\'dih', capture: false },
       response: Responses.aoe(),
     },
+    /* 안씀
+    {
+      id: 'ASS Rush of Might 1',
+      // Boss casts 765C (12.2s) and 765B (10.2s), twice
+      // Gladiator of Mirage casts 7659, 7658, 765A, these target the environment
+      // North
+      //                East               West
+      //   Line 1: (-34.14, -270.14) (-35.86, -270.14)
+      //   Line 2: (-39.45, -275.45) (-30.55, -275.45)
+      //   Line 3: (-44.75, -280.75) (-25.25, -280.75)
+      // South
+      //                East               West
+      //   Line 1: (-34.14, -271.86) (-35.86, -271.86)
+      //   Line 2: (-39.45, -266.55) (-30.55, -266.55)
+      //   Line 3: (-44.75, -261.25) (-25.25, -261.25)
+      // Center is at (-35, -271)
+      type: 'StartsUsing',
+      netRegex: { id: '765C', source: 'Gladiator of Sil\'dih' },
+      delaySeconds: 0.4,
+      promise: async (data, matches) => {
+        if (data.mightCasts.length === 2)
+          data.mightCasts = [];
+
+        // select the Gladiator with same source id
+        let gladiatorData = null;
+        gladiatorData = await callOverlayHandler({
+          call: 'getCombatants',
+          ids: [parseInt(matches.sourceId, 16)],
+        });
+
+        // if we could not retrieve combatant data, the
+        // trigger will not work, so just resume promise here
+        if (gladiatorData === null) {
+          console.error(`Gladiator of Sil'dih: null data`);
+          return;
+        }
+        if (gladiatorData.combatants.length !== 1) {
+          console.error(`Gladiator of Sil'dih: expected 1, got ${gladiatorData.combatants.length}`);
+          return;
+        }
+
+        const gladiator = gladiatorData.combatants[0];
+        if (!gladiator)
+          return;
+        data.mightCasts.push(gladiator);
+      },
+      infoText: (data, _matches, output) => {
+        if (data.mightCasts.length !== 2)
+          return;
+        const mirage1 = data.mightCasts[0];
+        const mirage2 = data.mightCasts[1];
+
+        if (mirage1 === undefined || mirage2 === undefined)
+          throw new UnreachableCode();
+
+        const x1 = mirage1.PosX;
+        const y1 = mirage1.PosY;
+        const x2 = mirage2.PosX;
+        const y2 = mirage2.PosY;
+
+        const getLine = (x: number) => {
+          // Round values to be easier to read:
+          //   1    2    3
+          // [-35, -40, -45]
+          // [-35, -30, -25]
+          const roundX = Math.round(x / 5) * 5;
+          if (roundX === -45 || roundX === -25)
+            return 3;
+          else if (roundX === -40 || roundX === -30)
+            return 2;
+          else if (roundX === -35)
+            return 1;
+          return undefined;
+        };
+        const line1 = getLine(x1);
+        const line2 = getLine(x2);
+        if (line1 === undefined || line2 === undefined) {
+          console.error(`Rush of Might 1: Failed to determine line from ${x1} or ${x2}`);
+          return;
+        }
+
+        const line = line1 > line2 ? line1 : line2;
+
+        // Get card and greatest relative x value
+        let card;
+        const roundY = Math.round(y1 / 3) * 3;
+        // Round values to be easier to read:
+        //          1     2     3
+        // North [-270, -276, -282]
+        // South [-273, -267, -261]
+        if (roundY === -270 || roundY === -276 || roundY === -282) {
+          // Get the x value of farthest north mirage
+          const x = y1 < y2 ? x1 : x2;
+          card = x < -35 ? 'west' : 'east';
+          data.mightDir = 'north';
+        } else if (roundY === -273 || roundY === -267 || roundY === -261) {
+          // Get the x value of farthest south mirage
+          const x = y1 > y2 ? x1 : x2;
+          card = x < -35 ? 'west' : 'east';
+          data.mightDir = 'south';
+        } else {
+          console.error(`Rush of Might 1: Failed to determine card from ${y1}`);
+          return;
+        }
+
+        // When one is 2 and one is 3 we need to be inside (towards middle)
+        if (line1 === 2 && line2 === 3 || line1 === 3 && line2 === 2)
+          return output.insideLine!({ card: output[card]!() });
+        return output.outsideLine!({ card: output[card]!(), line: line });
+      },
+      outputStrings: {
+        outsideLine: {
+          en: 'Outside ${card}, above line ${line}',
+          ko: '${card} 바깥, ${line}번 줄 위로',
+        },
+        insideLine: {
+          en: 'Inside ${card}, above line 3',
+          ko: '${card} 안, 3번 줄 위로',
+        },
+        east: Outputs.east,
+        west: Outputs.west,
+      },
+    },
+    {
+      id: 'ASS Rush of Might 2',
+      type: 'Ability',
+      netRegex: { id: '765B', source: 'Gladiator of Sil\'dih', capture: false },
+      suppressSeconds: 1,
+      infoText: (data, _matches, output) => {
+        if (data.mightDir === undefined)
+          return output.move!();
+        return output.text!({ dir: output[data.mightDir]!() });
+      },
+      outputStrings: {
+        text: {
+          en: 'Move ${dir}',
+          ko: '${dir}으로',
+        },
+        north: Outputs.north,
+        south: Outputs.south,
+        move: Outputs.moveAway,
+      },
+    },
+    */
     {
       id: 'ASS Sculptor\'s Passion',
       // This is a wild charge, player in front takes most damage
@@ -506,7 +662,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: 'Charge sur ${player}',
           ja: '${player}に突進！',
           cn: '蓝球点${player}',
-          ko: '"${player}" 야성의 돌진 대상',
+          ko: '"${player}" 돌진 대상',
         },
         chargeOnYou: {
           en: '내게 돌진!',
@@ -514,7 +670,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: 'Charge sur VOUS',
           ja: '自分に突進！',
           cn: '蓝球点名',
-          ko: '야성의 돌진 대상자',
+          ko: '돌진 대상자',
         },
       },
     },
@@ -579,27 +735,32 @@ const triggerSet: TriggerSet<Data> = {
           en: '뭉쳤다 => 흩어져요 (${player})',
           de: 'Auf ${player} sammeln => Verteilen',
           ja: '頭割り => 散会 (${player})',
+          ko: '${player} 쉐어 => 산개',
         },
         stackOnYouThenSpread: {
           en: '내게 뭉쳤다 => 흩어져요',
           de: 'Auf DIR sammeln => Verteilen',
           ja: '自分に頭割り => 散会',
+          ko: '나에게 쉐어 => 산개',
         },
         spreadThenStack: Outputs.spreadThenStack,
         spreadThenStackOn: {
           en: '흩어졌다 => 뭉쳐요 (${player})',
           de: 'Verteilen => Auf ${player} sammeln',
           ja: '散会 => 頭割り (${player})',
+          ko: '산개 => ${player} 쉐어',
         },
         spreadThenStackOnYou: {
           en: '흩어졌다 => 내게 뭉쳐요',
           de: 'Verteilen => Auf DIR sammeln',
           ja: '散会 => 自分に頭割り',
+          ko: '산개 => 나에게 쉐어',
         },
         spreadThenSpread: {
           en: '내가 링거, 홀로 있어야 해요',
           de: 'Verteilen => Sammeln',
           ja: '自分に連呪、ひとりぼっちでずっと',
+          ko: '산개 => 쉐어',
         },
       },
     },
@@ -624,16 +785,19 @@ const triggerSet: TriggerSet<Data> = {
           en: '링 차지 ①',
           de: 'Außerhalb des inneren Ringes',
           ja: 'リングチャージ ①',
+          ko: '안쪽 고리 바깥',
         },
         outsideMiddle: {
           en: '링 차지 ②',
           de: 'Außerhalb des mittleren Ringes',
           ja: 'リングチャージ ②',
+          ko: '중간 고리 바깥',
         },
         outsideOuter: {
           en: '링 차지 ③',
           de: 'Außerhalb des äußeren Ringes',
           ja: 'リングチャージ ③',
+          ko: '바깥쪽 고리 바깥',
         },
       },
     },
@@ -782,29 +946,11 @@ const triggerSet: TriggerSet<Data> = {
         center: Outputs.goIntoMiddle,
       },
     },
-    /* 아래는 안씀 → ASS+ Curse of the Monument Tether
     {
       id: 'ASS Curse of the Monument',
       type: 'Ability',
       netRegex: { id: '7666', source: 'Gladiator of Sil\'dih', capture: false },
       response: Responses.breakChains(),
-    },
-    */
-    {
-      id: 'ASS+ Curse of the Monument Tether',
-      type: 'Tether',
-      netRegex: { id: '00A3' },
-      condition: (data, matches) => matches.source === data.me || matches.target === data.me,
-      alertText: (data, matches, output) => {
-        const who = matches.source === data.me ? matches.target : matches.source;
-        return output.run!({ player: data.ShortName(who) });
-      },
-      outputStrings: {
-        run: {
-          en: '줄 끊어요 (+${player})',
-          ja: '線切 (+${player})',
-        },
-      },
     },
     {
       id: 'ASS Scream of the Fallen',
@@ -825,10 +971,12 @@ const triggerSet: TriggerSet<Data> = {
         soakThenSpread: {
           en: '먼저 타워 들어갔다 => 벽으로 흩어져요',
           de: 'Türme zuerst nehmen => verteilen',
+          ko: '첫번째 기둥 밟기 => 산개',
         },
         spreadThenSoak: {
           en: '벽으로 흩어졌다 => 타워 들어가요',
           de: 'Verteilen => zweite Türme nehmen',
+          ko: '산개 => 두번째 기둥 밟기',
         },
       },
     },
@@ -1107,22 +1255,29 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         blueBrandNumCorner: {
           en: '파랑🟦 ${num}번: ${corner}',
+          ko: '파란색 선 ${num}: ${corner} 구석',
         },
         orangeBrandNumCorner: {
           en: '빨강🟥 ${num}번: ${corner}',
+          ko: '주황색 선 ${num}: ${corner} 구석',
         },
         brandNumCorner: {
           en: '내가 ${num}번: ${corner}',
+          de: 'Kryptogramm ${num}: ${corner} Ecke',
+          ko: '선 ${num}: ${corner} 구석',
         },
         blueBrandNum: {
           en: '컷팅: 파랑🟦 ${num}번',
+          ko: '파란색 선 ${num}',
         },
         orangeBrandNum: {
           en: '컷팅: 빨강🟥 ${num}번',
+          ko: '주황색 선 ${num}',
         },
         brandNum: {
           en: '컷팅: ${num}번',
           de: 'Kryptogramm ${num}',
+          ko: '선 ${num}',
         },
         northwest: Outputs.arrowNW,
         northeast: Outputs.arrowNE,
@@ -1159,14 +1314,17 @@ const triggerSet: TriggerSet<Data> = {
         cutBlueOne: {
           en: '컷팅: 파랑🟦 1번',
           de: 'Blau 1 durchtrennen',
+          ko: '파란색 1 끊기',
         },
         cutOrangeOne: {
           en: '컷팅: 빨강🟥 1번',
           de: 'Orange 1 durchtrennen',
+          ko: '주황색 1 끊기',
         },
         firstCut: {
           en: '컷팅하세요',
           de: 'Als Erster durchtrennen',
+          ko: '첫번째 선 끊기',
         },
       },
     },
@@ -1216,9 +1374,6 @@ const triggerSet: TriggerSet<Data> = {
         return 0;
       },
       alertText: (data, matches, output) => {
-        if (data.myFlame === undefined)
-          return;
-
         if (data.arcaneFontCounter === 3 && matches.count.match(/1C[6-8]/)) {
           // Expected Blue and count is Blue
           data.arcaneFontCounter = 2;
@@ -1244,10 +1399,12 @@ const triggerSet: TriggerSet<Data> = {
         cutOrangeNum: {
           en: '컷팅: 빨강🟥 ${num}번',
           de: 'Orange ${num} durchtrennen',
+          ko: '주황색 ${num} 끊기',
         },
         cutBlueNum: {
           en: '컷팅: 파랑🟦 ${num}번',
           de: 'Blau ${num} durchtrennen',
+          ko: '파란색 ${num} 끊기',
         },
       },
     },
@@ -1307,18 +1464,22 @@ const triggerSet: TriggerSet<Data> = {
         blueEast: {
           en: '셋째줄 🡺',
           ja: '3列 🡺',
+          ko: '파란색 동쪽 텔레포트',
         },
         blueWest: {
           en: '🡸 맨아랫줄',
           ja: '🡸 一番下列',
+          ko: '파란색 서쪽 텔레포트',
         },
         orangeEast: {
           en: '둘째줄 🡺',
           ja: '2列 🡺',
+          ko: '주황색 동쪽 텔레포트',
         },
         orangeWest: {
           en: '🡸 첫째줄',
           ja: '🡸 1列',
+          ko: '주황색 서쪽 텔레포트',
         },
       },
     },
@@ -1403,16 +1564,18 @@ const triggerSet: TriggerSet<Data> = {
 
         // Generic output unless we find a method to determine which way to cut
         if (myNum === 1 || myNum === 2)
-          return output.middle!({ num: data.myFlame });
-        return output.outThenBait!({ num: data.myFlame });
+          return output.middle!({ num: myNum });
+        return output.outThenBait!({ num: myNum });
       },
       run: (data) => data.brandEffects = {},
       outputStrings: {
         middle: {
           en: '내가 ${num}번: ⊙한가운데로',
+          ko: '선 ${num}: 중앙으로',
         },
         outThenBait: {
           en: '내가 ${num}번: ☥기둥으로',
+          ko: '선 ${num}: 밖으로, 지팡이 유도',
         },
       },
     },
@@ -1431,6 +1594,7 @@ const triggerSet: TriggerSet<Data> = {
         firstCut: {
           en: '컷팅하세요',
           de: 'Als Erster durchtrennen',
+          ko: '첫번째 선 끊기',
         },
       },
     },
@@ -1461,16 +1625,20 @@ const triggerSet: TriggerSet<Data> = {
           cutOrangeNum: {
             en: '컷팅: 빨강🟥 ${num}번',
             de: 'Orange ${num} durchtrennen',
+            ko: '주황색 ${num} 끊기',
           },
           cutBlueNum: {
             en: '컷팅: 파랑🟦 ${num}번',
             de: 'Blau ${num} durchtrennen',
+            ko: '파란색 ${num} 끊기',
           },
           moveOrange: {
             en: '컷팅준비: 빨강🟥 ${num}번',
+            ko: '주황색 ${num} 끊을 준비',
           },
           moveBlue: {
             en: '컷팅준비: 파랑🟦 ${num}번',
+            ko: '파란색 ${num} 끊을 준비',
           },
         };
 
@@ -1478,7 +1646,7 @@ const triggerSet: TriggerSet<Data> = {
         // or that it is the third bait that has no race
         if (data.waveCounter === 1 && data.flamesCutCounter === 1 || data.waveCounter === 3) {
           // Third and Fourth Flames need to move to cut across immediately after baiting
-          // Three can cut there flame if they have baited and 2 has cut
+          // Three can cut their flame if they have baited and 2 has cut
           if (data.myFlame === 3) {
             if (data.firstColorCut === 'blue')
               return { alertText: output.cutBlueNum!({ num: data.myFlame }) };
@@ -1521,26 +1689,33 @@ const triggerSet: TriggerSet<Data> = {
         output.responseOutputStrings = {
           baitWardTwo: {
             en: '둘째 기둥으로 => 장판 깔아요',
+            ko: '지팡이 2 유도 => 장판 유도',
           },
           baitWardThree: {
             en: '셋째 기둥으로',
+            ko: '지팡이 3 유도',
           },
           baitPuddles: {
             en: '장판 깔아요',
+            ko: '장판 유도',
           },
           cutOrangeNum: {
             en: '컷팅: 빨강🟥 ${num}번',
             de: 'Orange ${num} durchtrennen',
+            ko: '주황색 ${num} 끊기',
           },
           cutBlueNum: {
             en: '컷팅: 파랑🟦 ${num}번',
             de: 'Blau ${num} durchtrennen',
+            ko: '파란색 ${num} 끊기',
           },
           moveOrangeNum: {
             en: '컷팅준비: 빨강🟥 ${num}번',
+            ko: '주황색 ${num} 끊을 준비',
           },
           moveBlueNum: {
             en: '컷팅준비: 파랑🟦 ${num}번',
+            ko: '파란색 ${num} 끊을 준비',
           },
         };
 

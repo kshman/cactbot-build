@@ -13,17 +13,16 @@ export interface Data extends RaidbossData {
 export type Cardinal = 'N' | 'E' | 'S' | 'W';
 export type Intercard = 'NW' | 'NE' | 'SE' | 'SW';
 export const tentacleFlags = ['00080004', '00200004', '00800004', '02000004'];
-export type TentacleFlag = typeof tentacleFlags[number];
 
 // flags are reused between both tentacles, but the final spot where the tentacle lands
 // is different for the cyan & scarlet tentacles
-const cyanTentacleLocations: { [key in TentacleFlag]: Cardinal } = {
+const cyanTentacleLocations: { [flags: string]: Cardinal } = {
   '00080004': 'S',
   '00200004': 'W',
   '00800004': 'N',
   '02000004': 'E',
 };
-const scarletTentacleLocations: { [key in TentacleFlag]: Intercard } = {
+const scarletTentacleLocations: { [flags: string]: Intercard } = {
   '00080004': 'NW',
   '00200004': 'NE',
   '00800004': 'SE',
@@ -68,10 +67,12 @@ const triggerSet: TriggerSet<Data> = {
           SW: 'NE',
         };
 
-        const tentacleFlag = data.tentacleEffects[0]!.flags;
-        if (tentacleFlag === undefined || scarletTentacleLocations[tentacleFlag] === undefined)
+        const tentacleFlag = data.tentacleEffects[0]?.flags;
+        if (tentacleFlag === undefined)
           return output.default!();
-        const tentacleLocation = scarletTentacleLocations[tentacleFlag]!;
+        const tentacleLocation = scarletTentacleLocations[tentacleFlag];
+        if (tentacleLocation === undefined)
+          return output.default!();
         const safeDir = safeMap[tentacleLocation];
         if (safeDir === undefined)
           return output.default!();
@@ -85,6 +86,7 @@ const triggerSet: TriggerSet<Data> = {
         SW: Outputs.arrowSW,
         safe: {
           en: '가욧: ${dir1}',
+          ko: '${dir1}쪽으로',
         },
         default: {
           en: '촉수가 멈추는 곳이 터져요! 피해요!',
@@ -136,18 +138,18 @@ const triggerSet: TriggerSet<Data> = {
         for (const tentacle of data.tentacleEffects) {
           if (tentacle.location === '10') {
             if (cyanTentacleLocations[tentacle.flags] !== undefined)
-              cyanLoc = cyanTentacleLocations[tentacle.flags]!;
+              cyanLoc = cyanTentacleLocations[tentacle.flags];
           } else if (tentacle.location === '11') {
             if (scarletTentacleLocations[tentacle.flags] !== undefined)
-              scarletLoc = scarletTentacleLocations[tentacle.flags]!;
+              scarletLoc = scarletTentacleLocations[tentacle.flags];
           }
         }
-        if (
-          cyanLoc === undefined || scarletLoc === undefined ||
-          safeMap[cyanLoc][scarletLoc] === undefined
-        )
+        if (cyanLoc === undefined || scarletLoc === undefined)
           return output.default!();
-        const [safe0, safe1]: string[] = safeMap[cyanLoc][scarletLoc]!;
+        const safeArray = safeMap[cyanLoc][scarletLoc];
+        if (safeArray === undefined)
+          return output.default!();
+        const [safe0, safe1]: string[] = safeArray;
         return output.safe!({ dir1: output[safe0]!(), dir2: output[safe1]!() });
       },
       run: (data) => data.tentacleEffects = [],
@@ -162,6 +164,7 @@ const triggerSet: TriggerSet<Data> = {
         SW: Outputs.dirSW,
         safe: {
           en: '가욧 ${dir1} / ${dir2}',
+          ko: '${dir1}/${dir2}쪽으로',
         },
         default: {
           en: '촉수가 멈추는 곳이 터져요! 피해요!',
