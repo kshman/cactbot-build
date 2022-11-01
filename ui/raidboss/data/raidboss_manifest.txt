@@ -398,6 +398,8 @@
 06-ew/dungeon/the_dead_ends.txt
 06-ew/dungeon/the_fell_court_of_troia.ts
 06-ew/dungeon/the_fell_court_of_troia.txt
+06-ew/dungeon/the_sildihn_subterrane.ts
+06-ew/dungeon/the_sildihn_subterrane.txt
 06-ew/dungeon/the_tower_of_zot.ts
 06-ew/dungeon/the_tower_of_zot.txt
 06-ew/dungeon/the_tower_of_babil.ts
@@ -465,4 +467,3 @@
 06-ew/raid/p8s.txt
 06-ew/ultimate/dragonsongs_reprise_ultimate.ts
 06-ew/ultimate/dragonsongs_reprise_ultimate.txt
-06-ew/variant/ss.ts

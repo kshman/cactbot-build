@@ -1,5 +1,4 @@
 import Conditions from '../../../../../resources/conditions';
-import NetRegexes from '../../../../../resources/netregexes';
 import { UnreachableCode } from '../../../../../resources/not_reached';
 import Outputs from '../../../../../resources/outputs';
 import { callOverlayHandler } from '../../../../../resources/overlay_plugin_api';
@@ -16,7 +15,14 @@ import { LocaleObject, LocaleText, TriggerSet } from '../../../../../types/trigg
 // TODO: Trigger for Hallowed Wings with Hot Tail/Hot Wings
 // TODO: Phase 6 Resentment callout?
 
-type Phase = 'doorboss' | 'thordan' | 'nidhogg' | 'haurchefant' | 'thordan2' | 'nidhogg2' | 'dragon-king';
+type Phase =
+  | 'doorboss'
+  | 'thordan'
+  | 'nidhogg'
+  | 'haurchefant'
+  | 'thordan2'
+  | 'nidhogg2'
+  | 'dragon-king';
 
 const playstationMarkers = ['circle', 'cross', 'triangle', 'square'] as const;
 type PlaystationMarker = typeof playstationMarkers[number];
@@ -60,6 +66,9 @@ export interface Data extends RaidbossData {
   spreadingFlame: string[];
   entangledFlame: string[];
   mortalVowPlayer?: string;
+  firstGigaflare?: number[];
+  secondGigaflare?: number[];
+  centerGigaflare?: number[];
   // PRs
   prsHolyHallow: number;
   prsSkyLeap: boolean;
@@ -114,7 +123,11 @@ const firstMarker = (phase: Phase) => {
   return phase === 'doorboss' ? headmarkers.hyperdimensionalSlash : headmarkers.skywardTriple;
 };
 
-const getHeadmarkerId = (data: Data, matches: NetMatches['HeadMarker'], firstDecimalMarker?: number) => {
+const getHeadmarkerId = (
+  data: Data,
+  matches: NetMatches['HeadMarker'],
+  firstDecimalMarker?: number,
+) => {
   // If we naively just check !data.decOffset and leave it, it breaks if the first marker is 00DA.
   // (This makes the offset 0, and !0 is true.)
   if (data.decOffset === undefined) {
@@ -355,7 +368,9 @@ const triggerSet: TriggerSet<Data> = {
       type: 'StartsUsing',
       netRegex: { id: '62DA', source: 'Ser Grinnaux', capture: false },
       alertText: (data, _matches, output) => {
-        return data.phase !== 'doorboss' || data.seenEmptyDimension ? output.in!() : output.inAndTether!();
+        return data.phase !== 'doorboss' || data.seenEmptyDimension
+          ? output.in!()
+          : output.inAndTether!();
       },
       run: (data) => data.seenEmptyDimension = true,
       outputStrings: {
@@ -420,7 +435,8 @@ const triggerSet: TriggerSet<Data> = {
       id: 'DSR Adelphel KB Direction',
       type: 'NameToggle',
       netRegex: { toggle: '01' },
-      condition: (data, matches) => data.phase === 'doorboss' && matches.id === data.adelphelId && data.firstAdelphelJump,
+      condition: (data, matches) =>
+        data.phase === 'doorboss' && matches.id === data.adelphelId && data.firstAdelphelJump,
       // Delay 0.1s here to prevent any race condition issues with getCombatants
       delaySeconds: 0.1,
       promise: async (data, matches) => {
@@ -613,8 +629,12 @@ const triggerSet: TriggerSet<Data> = {
 
         // Select the knights
         const combatantNameKnights: string[] = [];
-        combatantNameKnights.push(vellguineLocaleNames[data.parserLang] ?? vellguineLocaleNames['en']);
-        combatantNameKnights.push(paulecrainLocaleNames[data.parserLang] ?? paulecrainLocaleNames['en']);
+        combatantNameKnights.push(
+          vellguineLocaleNames[data.parserLang] ?? vellguineLocaleNames['en'],
+        );
+        combatantNameKnights.push(
+          paulecrainLocaleNames[data.parserLang] ?? paulecrainLocaleNames['en'],
+        );
         combatantNameKnights.push(ignasseLocaleNames[data.parserLang] ?? ignasseLocaleNames['en']);
 
         const spiralThrusts = [];
@@ -663,7 +683,9 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (data, _matches, output) => {
         data.spiralThrustSafeZones ??= [];
         if (data.spiralThrustSafeZones.length !== 2) {
-          console.error(`Spiral Thrusts: expected 2 safe zones got ${data.spiralThrustSafeZones.length}`);
+          console.error(
+            `Spiral Thrusts: expected 2 safe zones got ${data.spiralThrustSafeZones.length}`,
+          );
           return;
         }
         // PRs / 색깔로 콜링콜링
@@ -790,7 +812,9 @@ const triggerSet: TriggerSet<Data> = {
         // After the above adjustment to handle modular math wrapping,
         // d1 and d2 should be exactly two spaces apart.
         if (d2 - d1 !== 2 && d1 - d2 !== 2) {
-          console.error(`DragonsRage: bad dirs: ${d1}, ${d2}, ${JSON.stringify(data.combatantData)}`);
+          console.error(
+            `DragonsRage: bad dirs: ${d1}, ${d2}, ${JSON.stringify(data.combatantData)}`,
+          );
           return;
         }
 
@@ -965,12 +989,15 @@ const triggerSet: TriggerSet<Data> = {
         }
         const combatantDataJanlenouxLength = combatantDataJanlenoux.combatants.length;
         if (combatantDataJanlenouxLength < 1) {
-          console.error(`Ser Janlenoux: expected at least 1 combatants got ${combatantDataJanlenouxLength}`);
+          console.error(
+            `Ser Janlenoux: expected at least 1 combatants got ${combatantDataJanlenouxLength}`,
+          );
           return;
         }
 
         // Sort to retreive last combatant in list
-        const sortCombatants = (a: PluginCombatantState, b: PluginCombatantState) => (a.ID ?? 0) - (b.ID ?? 0);
+        const sortCombatants = (a: PluginCombatantState, b: PluginCombatantState) =>
+          (a.ID ?? 0) - (b.ID ?? 0);
         const combatantJanlenoux = combatantDataJanlenoux.combatants.sort(sortCombatants).shift();
         if (!combatantJanlenoux)
           throw new UnreachableCode();
@@ -1095,7 +1122,10 @@ const triggerSet: TriggerSet<Data> = {
         if (p1dps && p2dps)
           return output.dpsMeteors!({ player1: data.ShortName(p1), player2: data.ShortName(p2) });
         if (!p1dps && !p2dps)
-          return output.tankHealerMeteors!({ player1: data.ShortName(p1), player2: data.ShortName(p2) });
+          return output.tankHealerMeteors!({
+            player1: data.ShortName(p1),
+            player2: data.ShortName(p2),
+          });
         return output.unknownMeteors!({ player1: data.ShortName(p1), player2: data.ShortName(p2) });
       },
       outputStrings: {
@@ -1314,12 +1344,17 @@ const triggerSet: TriggerSet<Data> = {
 
         const num = data.diveFromGraceNum[data.me];
         if (num !== 1 && num !== 2 && num !== 3) {
-          console.error(`DSR Gnash and Lash: missing number: ${JSON.stringify(data.diveFromGraceNum)}`);
+          console.error(
+            `DSR Gnash and Lash: missing number: ${JSON.stringify(data.diveFromGraceNum)}`,
+          );
           return inout;
         }
 
         // Special case for side ones baiting the two towers.
-        if (data.eyeOfTheTyrantCounter === 1 && num === 1 && data.diveFromGracePreviousPosition[data.me] !== 'middle')
+        if (
+          data.eyeOfTheTyrantCounter === 1 && num === 1 &&
+          data.diveFromGracePreviousPosition[data.me] !== 'middle'
+        )
           return output.baitStackInOut!({ inout: inout });
 
         // Filter out anybody who needs to be stacking.
@@ -1536,7 +1571,9 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (data, _matches, output) => {
         const num = data.diveFromGraceNum[data.me];
         if (!num) {
-          console.error(`DFG Tower 1 Reminder: missing number: ${JSON.stringify(data.diveFromGraceNum)}`);
+          console.error(
+            `DFG Tower 1 Reminder: missing number: ${JSON.stringify(data.diveFromGraceNum)}`,
+          );
           return;
         }
 
@@ -1681,7 +1718,9 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (data, _matches, output) => {
         const num = data.diveFromGraceNum[data.me];
         if (!num) {
-          console.error(`DFG Tower 1 and 2: missing number: ${JSON.stringify(data.diveFromGraceNum)}`);
+          console.error(
+            `DFG Tower 1 and 2: missing number: ${JSON.stringify(data.diveFromGraceNum)}`,
+          );
           return;
         }
 
@@ -1754,7 +1793,9 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (data, _matches, output) => {
         const num = data.diveFromGraceNum[data.me];
         if (!num) {
-          console.error(`DFG Dive Single Tower: missing number: ${JSON.stringify(data.diveFromGraceNum)}`);
+          console.error(
+            `DFG Dive Single Tower: missing number: ${JSON.stringify(data.diveFromGraceNum)}`,
+          );
           return output.text!();
         }
         // To condense messages, two tower baiters get this call during the gnash and lash.
@@ -2055,7 +2096,7 @@ const triggerSet: TriggerSet<Data> = {
     {
       id: 'DSR Wrath Cauterize Marker',
       type: 'HeadMarker',
-      netRegex: NetRegexes.headMarker(),
+      netRegex: {},
       condition: Conditions.targetIsYou(),
       alarmText: (data, matches, output) => {
         const id = getHeadmarkerId(data, matches);
@@ -2245,7 +2286,9 @@ const triggerSet: TriggerSet<Data> = {
       id: 'DSR Playstation2 Fire Chains No Marker',
       type: 'HeadMarker',
       netRegex: {},
-      condition: (data, matches) => data.phase === 'thordan2' && playstationHeadmarkerIds.includes(getHeadmarkerId(data, matches)),
+      condition: (data, matches) =>
+        data.phase === 'thordan2' &&
+        playstationHeadmarkerIds.includes(getHeadmarkerId(data, matches)),
       delaySeconds: 0.5,
       suppressSeconds: 5,
       alarmText: (data, _matches, output) => {
@@ -2578,10 +2621,14 @@ const triggerSet: TriggerSet<Data> = {
         if (data.combatantData.length === 0)
           console.error(`Hallowed: no Nidhoggs found`);
         else if (data.combatantData.length > 1)
-          console.error(`Hallowed: unexpected number of Nidhoggs: ${JSON.stringify(data.combatantData)}`);
+          console.error(
+            `Hallowed: unexpected number of Nidhoggs: ${JSON.stringify(data.combatantData)}`,
+          );
       },
       alertText: (data, matches, output) => {
-        const wings = matches.id === '6D23' || matches.id === '6D24' ? output.left!() : output.right!();
+        const wings = matches.id === '6D23' || matches.id === '6D24'
+          ? output.left!()
+          : output.right!();
         let head;
         const isHeadDown = matches.id === '6D23' || matches.id === '6D26';
         if (isHeadDown)
@@ -2881,10 +2928,10 @@ const triggerSet: TriggerSet<Data> = {
       id: 'DSR Trinity Tank Dark Resistance',
       type: 'GainsEffect',
       // C40 = Dark Resistance Down, highest enmity target
-      netRegex: NetRegexes.gainsEffect({
+      netRegex: {
         effectId: 'C40',
         count: '02',
-      }),
+      },
       condition: (data, matches) => data.me === matches.target && data.role === 'tank',
       alertText: (_data, matches, output) => {
         if (parseFloat(matches.duration) > 10)
@@ -2905,10 +2952,10 @@ const triggerSet: TriggerSet<Data> = {
       id: 'DSR Trinity Tank Light Resistance',
       type: 'GainsEffect',
       // C3F = Light Resistance Down, 2nd highest enmity target
-      netRegex: NetRegexes.gainsEffect({
+      netRegex: {
         effectId: 'C3F',
         count: '02',
-      }),
+      },
       condition: (data, matches) => data.me === matches.target && data.role === 'tank',
       // To prevent boss rotating around before Exaflare
       delaySeconds: 2.5,
@@ -2924,6 +2971,132 @@ const triggerSet: TriggerSet<Data> = {
           ja: '挑発',
           cn: '挑衅',
           ko: '도발',
+        },
+      },
+    },
+    {
+      id: 'DSR Gigaflare',
+      // 6D9A fires first, followed by 6DD2, then 6DD3
+      // 6D99 is cast by boss at the center
+      // Only need to compare the rotation of 6D9A to 6DD2
+      type: 'StartsUsing',
+      netRegex: { id: ['6D99', '6D9A', '6DD2'], source: 'Dragon-king Thordan' },
+      durationSeconds: 10,
+      infoText: (data, matches, output) => {
+        // Positions are moved up 100 and right 100
+        const x = parseFloat(matches.x) - 100;
+        const y = parseFloat(matches.y) - 100;
+
+        // Collect Gigaflare position
+        switch (matches.id) {
+          case '6D99':
+            data.centerGigaflare = [x, y, parseFloat(matches.heading)];
+            break;
+          case '6D9A':
+            data.firstGigaflare = [x, y];
+            break;
+          case '6DD2':
+            data.secondGigaflare = [x, y];
+            break;
+        }
+
+        if (
+          data.firstGigaflare !== undefined && data.secondGigaflare !== undefined &&
+          data.centerGigaflare !== undefined
+        ) {
+          // Store temporary copies and remove data for next run
+          const first = data.firstGigaflare;
+          const second = data.secondGigaflare;
+          const center = data.centerGigaflare;
+          delete data.firstGigaflare;
+          delete data.secondGigaflare;
+          delete data.centerGigaflare;
+
+          if (
+            first[0] === undefined || first[1] === undefined ||
+            second[0] === undefined || second[1] === undefined ||
+            center[0] === undefined || center[1] === undefined || center[2] === undefined
+          ) {
+            console.error(`Gigaflare: missing coordinates`);
+            return;
+          }
+
+          // Compute atan2 of determinant and dot product to get rotational direction
+          // Note: X and Y are flipped due to Y axis being reversed
+          const getRotation = (x1: number, y1: number, x2: number, y2: number) => {
+            return Math.atan2(y1 * x2 - x1 * y2, y1 * y2 + x1 * x2);
+          };
+
+          // Get rotation of first and second gigaflares
+          const rotation = getRotation(first[0], first[1], second[0], second[1]);
+
+          // Get rotation of first gigaflare relative to boss
+          let start;
+
+          // Case for if front since data for heading is not exact
+          // To detect if front, added angles must match 180 degrees
+          const thetaFirstGigaflare = Math.abs(Math.atan2(first[0], first[1]));
+          const thetaCenterGigaflare = Math.abs(center[2]);
+          const thetaCenterPlusFirst = thetaFirstGigaflare + thetaCenterGigaflare;
+          if (Math.round(thetaCenterPlusFirst * 180 / Math.PI) % 180 === 0) {
+            start = output.front!();
+          } else {
+            // Gigaflare was not in line with boss facing,
+            // Compute initial location relative to boss by
+            // calculating point on circle where boss is facing
+            const radius = Math.sqrt((center[0] - first[0]) ** 2 + (center[1] - first[1]) ** 2);
+            const relX = Math.round(radius * Math.sin(center[2]));
+            const relY = Math.round(radius * Math.cos(center[2]));
+
+            // Check rotation of boss facing to first gigaflare:
+            const startNum = getRotation(relX, relY, first[0], first[1]);
+            if (startNum < 0)
+              start = output.backLeft!();
+            else if (startNum > 0)
+              start = output.backRight!();
+            else
+              start = output.unknown!();
+          }
+
+          if (rotation < 0) {
+            return output.directions!({
+              start: start,
+              rotation: output.clockwise!(),
+            });
+          }
+          if (rotation > 0) {
+            return output.directions!({
+              start: start,
+              rotation: output.counterclock!(),
+            });
+          }
+        }
+      },
+      outputStrings: {
+        directions: {
+          en: '${start} => ${rotation}',
+        },
+        backLeft: {
+          en: '뒤 왼쪽',
+        },
+        backRight: {
+          en: '뒤 오른쪽',
+        },
+        front: {
+          en: '앞으로',
+        },
+        unknown: Outputs.unknown,
+        clockwise: {
+          en: '시계방향',
+          de: 'Im Uhrzeigersinn',
+          ja: '時計回り',
+          ko: '시계방향',
+        },
+        counterclock: {
+          en: '반시계방향',
+          de: 'Gegen den Uhrzeigersinn',
+          ja: '反時計回り',
+          ko: '반시계방향',
         },
       },
     },

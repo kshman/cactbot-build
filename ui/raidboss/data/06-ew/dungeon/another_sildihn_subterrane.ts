@@ -6,21 +6,23 @@ import ZoneId from '../../../../../resources/zone_id';
 import { RaidbossData } from '../../../../../types/data';
 import { PluginCombatantState } from '../../../../../types/event';
 import { TriggerSet } from '../../../../../types/trigger';
+// 🡸🡺🔵🔴🟢🔘💫❱❰🟦🟥
 
 // TODO: Silkie specify which puff to get behind in first Slippery Soap
 // TODO: Silkie specify where to point puff's tether
 // TODO: Silkie call puff to go to for safety
-// TODO: Additional Gladiator triggers and adjustments to timeline
-// TODO: Additional Shadowcaster triggers and adjustments to timeline
+// TODO: Gladiator triggers for gold/silver location using OverlayPlugin?
+// TODO: Gladiator adjustments to timeline
+// TODO: Shadowcaster Infern Brand 1 and 4 safe location triggers if possible
+// TODO: Shadowcaster adjustments to timeline
 
 type RushVec = { x: number; y: number; l: number };
-
-export type Banishment = 'redLeft' | 'redRight' | 'blueLeft' | 'blueRight';
 
 export interface Data extends RaidbossData {
   suds?: string;
   soapCounter: number;
   beaterCounter: number;
+  spreeCounter: number;
   mightCasts: PluginCombatantState[];
   mightDir?: string;
   hasLingering?: boolean;
@@ -30,14 +32,16 @@ export interface Data extends RaidbossData {
   brandEffects: { [effectId: number]: string };
   brandCounter: number;
   myLastCut?: number;
+  firstColorCut?: 'orange' | 'blue';
+  flamesCutCounter: number;
+  waveCounter: number;
   //
   cleanSeen?: boolean;
   freshPuff: number;
   rushCounter: number;
   rushVecs: RushVec[];
   fateSeen?: boolean;
-  firesteelStrikes?: string[];
-  banishment?: Banishment;
+  firesteelStrikes: string[];
 }
 
 const triggerSet: TriggerSet<Data> = {
@@ -47,15 +51,18 @@ const triggerSet: TriggerSet<Data> = {
     return {
       soapCounter: 0,
       beaterCounter: 0,
+      spreeCounter: 0,
       mightCasts: [],
       arcaneFontCounter: 0,
       brandEffects: {},
       brandCounter: 0,
-      flameCounter: 0,
+      flamesCutCounter: 0,
+      waveCounter: 0,
       //
       freshPuff: 0,
       rushCounter: 0,
       rushVecs: [],
+      firesteelStrikes: [],
     };
   },
   triggers: [
@@ -132,9 +139,10 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '🟡비스듬 → 십자➕로',
+          en: '🟡비스듬 → 흩어져요',
           de: 'Kardinal',
-          ja: '🟡斜め → 十字➕で',
+          ja: '🟡斜め → 散会',
+          ko: '십자방향으로',
         },
       },
     },
@@ -211,34 +219,40 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         getBehindPuff: {
-          en: '솜털의 맨 뒤로',
+          en: '솜털🔘의 맨 뒤로',
           de: 'Hinter Puschel und Gruppe',
           ja: 'たまの一番後ろへ',
+          ko: '구슬 맨 뒤로',
         },
         getBehindPuffs: {
-          en: '솜털의 맨 뒤로 (동서)',
+          en: '솜털🔘의 맨 뒤로 (동서)',
           de: 'Hinter Puschel und Gruppe (Osten/Westen)',
           ja: 'たまの一番後ろへ (東西)',
+          ko: '구슬 맨 뒤로 (동/서)',
         },
         getBehindParty: {
           en: '맨 뒤로',
           de: 'Hinter Gruppe',
           ja: '一番後ろへ',
+          ko: '맨 뒤로',
         },
         getBehindPartyKnockback: {
           en: '넉백! 맨 뒤로',
           de: 'Hinter Gruppe (Rückstoß)',
           ja: 'ノックバック！ 一番後ろへ',
+          ko: '맨 뒤로 (넉백)',
         },
         getInFrontOfPlayer: {
           en: '${player} 앞으로',
           de: 'Sei vor ${player}',
           ja: '${player}の前へ',
+          ko: '${player} 앞으로',
         },
         getInFrontOfPlayerKnockback: {
           en: '넉백! ${player} 앞으로',
           de: 'Sei vor ${player} (Rückstoß)',
           ja: 'ノックバック! ${player}の前へ',
+          ko: '${player} 앞으로 (넉백)',
         },
       },
     },
@@ -272,10 +286,12 @@ const triggerSet: TriggerSet<Data> = {
         spreadCardinals: {
           en: '🟡비스듬 → 흩어져요',
           ja: '🟡斜め → 散会',
+          ko: '십자방향으로 산개',
         },
         intercards: {
           en: '🔵십자 장판',
           ja: '🔵十字, 避けて',
+          ko: '대각선 쪽으로',
         },
       },
     },
@@ -293,6 +309,7 @@ const triggerSet: TriggerSet<Data> = {
             en: '내게 탱크버스터, 동서로 유도',
             de: 'Tank Buster auf DIR, Osten/Westen zwischen Puschel',
             ja: '自分にタンクバスタ、東西で誘導',
+            ko: '나에게 탱버, 동/서쪽 구슬 사이로',
           },
         };
 
@@ -313,6 +330,7 @@ const triggerSet: TriggerSet<Data> = {
       // Boss does not cast Fizzling Duster with Soaping Spree
       type: 'StartsUsing',
       netRegex: { id: '7767', source: 'Silkie', capture: false },
+      preRun: (data) => ++data.spreeCounter,
       infoText: (data, _matches, output) => {
         switch (data.suds) {
           case 'CE1':
@@ -320,7 +338,7 @@ const triggerSet: TriggerSet<Data> = {
           case 'CE2':
             return output.intercards!();
           default:
-            if (data.soapCounter === 1)
+            if (data.spreeCounter === 1)
               return output.underPuff!();
             return output.avoidPuffs!();
         }
@@ -332,15 +350,23 @@ const triggerSet: TriggerSet<Data> = {
         },
         intercards: {
           en: '🔵십자 장판',
+          de: 'Interkardinal',
+          fr: 'Intercardinal',
           ja: '🔵十字, 避けて',
+          cn: '四角',
+          ko: '대각선 쪽으로',
         },
         underPuff: {
           en: '🟢바로 밑으로',
+          de: 'Unter grünem Puschel',
           ja: '🟢貼り付く',
+          ko: '초록색 구슬 밑으로',
         },
         avoidPuffs: {
-          en: '솜털 장판 피해요',
+          en: '솜털🔘장판 피해요',
+          de: 'Weiche den Puschel AoEs aus',
           ja: 'たまからのゆか避けて',
+          ko: '구슬 장판 피하기',
         },
       },
     },
@@ -381,23 +407,23 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         p1: {
-          en: '솜털 세개 → 꼬리',
+          en: '솜털🔘세개 → 꼬리',
           ja: 'たま3個 → 水拭き',
         },
         p2: {
-          en: '솜털 네개 → 안전지대 ',
+          en: '솜털🔘네개 → 안전지대 ',
           ja: 'たま4個, 安置を作りましょう',
         },
         p3: {
-          en: '솜털 여덟개 → 항아리',
+          en: '솜털🔘여덟개 → 항아리',
           ja: 'たま8個, がんばれ！！',
         },
         p4: {
-          en: '솜털 네개 → 꼬리 유도',
+          en: '솜털🔘네개 → 꼬리 유도',
           ja: 'たま4個 → しっぽ誘導',
         },
         px: {
-          en: '솜털 나와요',
+          en: '솜털🔘나와요',
           ja: 'たま出ます',
         },
       },
@@ -426,26 +452,7 @@ const triggerSet: TriggerSet<Data> = {
       response: Responses.getOut(),
     },
     {
-      id: 'ASS Infernal Weight',
-      type: 'StartsUsing',
-      netRegex: { id: '796B', source: 'Aqueduct Armor', capture: false },
-      infoText: (_data, _matches, output) => output.text!(),
-      outputStrings: {
-        text: {
-          en: '헤비, 발 밑으로',
-          ja: 'ヘビィ, 足元へ',
-        },
-      },
-    },
-    {
-      id: 'ASS Dominion Slash',
-      type: 'StartsUsing',
-      netRegex: { id: '796A', source: 'Aqueduct Armor', capture: false },
-      response: Responses.getBehind(),
-    },
-    // Sil'dihn Dullahan: King's Will
-    {
-      id: 'ASS+ King\'s Will',
+      id: 'ASS King\'s Will',
       type: 'StartsUsing',
       netRegex: { id: '7968', source: 'Sil\'dihn Dullahan', capture: false },
       alertText: (_data, _matches, output) => output.text!(),
@@ -456,9 +463,8 @@ const triggerSet: TriggerSet<Data> = {
         },
       },
     },
-    // Aqueduct Armor: Hells' Nebula
     {
-      id: 'ASS+ Hells\' Nebula',
+      id: 'ASS Hells\' Nebula',
       type: 'StartsUsing',
       netRegex: { id: '796C', source: 'Aqueduct Armor', capture: false },
       alarmText: (_data, _matches, output) => output.text!(),
@@ -469,6 +475,25 @@ const triggerSet: TriggerSet<Data> = {
         },
       },
     },
+    {
+      id: 'ASS Infernal Weight',
+      type: 'StartsUsing',
+      netRegex: { id: '796B', source: 'Aqueduct Armor', capture: false },
+      infoText: (_data, _matches, output) => output.text!(),
+      outputStrings: {
+        text: {
+          en: '헤비, 발 밑으로',
+          de: 'AoE + Rein',
+          ja: 'ヘビィ, 足元へ',
+        },
+      },
+    },
+    {
+      id: 'ASS Dominion Slash',
+      type: 'StartsUsing',
+      netRegex: { id: '796A', source: 'Aqueduct Armor', capture: false },
+      response: Responses.getBehind(),
+    },
     // ---------------- Gladiator of Sil'dih ----------------
     {
       id: 'ASS Flash of Steel',
@@ -476,8 +501,149 @@ const triggerSet: TriggerSet<Data> = {
       netRegex: { id: '7671', source: 'Gladiator of Sil\'dih', capture: false },
       response: Responses.aoe(),
     },
-    /*
+    /* 안씀
+    {
       id: 'ASS Rush of Might 1',
+      // Boss casts 765C (12.2s) and 765B (10.2s), twice
+      // Gladiator of Mirage casts 7659, 7658, 765A, these target the environment
+      // North
+      //                East               West
+      //   Line 1: (-34.14, -270.14) (-35.86, -270.14)
+      //   Line 2: (-39.45, -275.45) (-30.55, -275.45)
+      //   Line 3: (-44.75, -280.75) (-25.25, -280.75)
+      // South
+      //                East               West
+      //   Line 1: (-34.14, -271.86) (-35.86, -271.86)
+      //   Line 2: (-39.45, -266.55) (-30.55, -266.55)
+      //   Line 3: (-44.75, -261.25) (-25.25, -261.25)
+      // Center is at (-35, -271)
+      type: 'StartsUsing',
+      netRegex: { id: '765C', source: 'Gladiator of Sil\'dih' },
+      delaySeconds: 0.4,
+      promise: async (data, matches) => {
+        if (data.mightCasts.length === 2)
+          data.mightCasts = [];
+
+        // select the Gladiator with same source id
+        let gladiatorData = null;
+        gladiatorData = await callOverlayHandler({
+          call: 'getCombatants',
+          ids: [parseInt(matches.sourceId, 16)],
+        });
+
+        // if we could not retrieve combatant data, the
+        // trigger will not work, so just resume promise here
+        if (gladiatorData === null) {
+          console.error(`Gladiator of Sil'dih: null data`);
+          return;
+        }
+        if (gladiatorData.combatants.length !== 1) {
+          console.error(`Gladiator of Sil'dih: expected 1, got ${gladiatorData.combatants.length}`);
+          return;
+        }
+
+        const gladiator = gladiatorData.combatants[0];
+        if (!gladiator)
+          return;
+        data.mightCasts.push(gladiator);
+      },
+      infoText: (data, _matches, output) => {
+        if (data.mightCasts.length !== 2)
+          return;
+        const mirage1 = data.mightCasts[0];
+        const mirage2 = data.mightCasts[1];
+
+        if (mirage1 === undefined || mirage2 === undefined)
+          throw new UnreachableCode();
+
+        const x1 = mirage1.PosX;
+        const y1 = mirage1.PosY;
+        const x2 = mirage2.PosX;
+        const y2 = mirage2.PosY;
+
+        const getLine = (x: number) => {
+          // Round values to be easier to read:
+          //   1    2    3
+          // [-35, -40, -45]
+          // [-35, -30, -25]
+          const roundX = Math.round(x / 5) * 5;
+          if (roundX === -45 || roundX === -25)
+            return 3;
+          else if (roundX === -40 || roundX === -30)
+            return 2;
+          else if (roundX === -35)
+            return 1;
+          return undefined;
+        };
+        const line1 = getLine(x1);
+        const line2 = getLine(x2);
+        if (line1 === undefined || line2 === undefined) {
+          console.error(`Rush of Might 1: Failed to determine line from ${x1} or ${x2}`);
+          return;
+        }
+
+        const line = line1 > line2 ? line1 : line2;
+
+        // Get card and greatest relative x value
+        let card;
+        const roundY = Math.round(y1 / 3) * 3;
+        // Round values to be easier to read:
+        //          1     2     3
+        // North [-270, -276, -282]
+        // South [-273, -267, -261]
+        if (roundY === -270 || roundY === -276 || roundY === -282) {
+          // Get the x value of farthest north mirage
+          const x = y1 < y2 ? x1 : x2;
+          card = x < -35 ? 'west' : 'east';
+          data.mightDir = 'north';
+        } else if (roundY === -273 || roundY === -267 || roundY === -261) {
+          // Get the x value of farthest south mirage
+          const x = y1 > y2 ? x1 : x2;
+          card = x < -35 ? 'west' : 'east';
+          data.mightDir = 'south';
+        } else {
+          console.error(`Rush of Might 1: Failed to determine card from ${y1}`);
+          return;
+        }
+
+        // When one is 2 and one is 3 we need to be inside (towards middle)
+        if (line1 === 2 && line2 === 3 || line1 === 3 && line2 === 2)
+          return output.insideLine!({ card: output[card]!() });
+        return output.outsideLine!({ card: output[card]!(), line: line });
+      },
+      outputStrings: {
+        outsideLine: {
+          en: 'Outside ${card}, above line ${line}',
+          ko: '${card} 바깥, ${line}번 줄 위로',
+        },
+        insideLine: {
+          en: 'Inside ${card}, above line 3',
+          ko: '${card} 안, 3번 줄 위로',
+        },
+        east: Outputs.east,
+        west: Outputs.west,
+      },
+    },
+    {
+      id: 'ASS Rush of Might 2',
+      type: 'Ability',
+      netRegex: { id: '765B', source: 'Gladiator of Sil\'dih', capture: false },
+      suppressSeconds: 1,
+      infoText: (data, _matches, output) => {
+        if (data.mightDir === undefined)
+          return output.move!();
+        return output.text!({ dir: output[data.mightDir]!() });
+      },
+      outputStrings: {
+        text: {
+          en: 'Move ${dir}',
+          ko: '${dir}으로',
+        },
+        north: Outputs.north,
+        south: Outputs.south,
+        move: Outputs.moveAway,
+      },
+    },
     */
     {
       id: 'ASS Sculptor\'s Passion',
@@ -496,7 +662,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: 'Charge sur ${player}',
           ja: '${player}に突進！',
           cn: '蓝球点${player}',
-          ko: '"${player}" 야성의 돌진 대상',
+          ko: '"${player}" 돌진 대상',
         },
         chargeOnYou: {
           en: '내게 돌진!',
@@ -504,7 +670,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: 'Charge sur VOUS',
           ja: '自分に突進！',
           cn: '蓝球点名',
-          ko: '야성의 돌진 대상자',
+          ko: '돌진 대상자',
         },
       },
     },
@@ -522,6 +688,7 @@ const triggerSet: TriggerSet<Data> = {
       condition: Conditions.targetIsYou(),
       preRun: (data) => data.hasLingering = true,
       delaySeconds: (_data, matches) => parseFloat(matches.duration) - 2,
+      // response: Responses.moveAway(),
     },
     {
       id: 'ASS Thunderous Echo Collect',
@@ -568,27 +735,32 @@ const triggerSet: TriggerSet<Data> = {
           en: '뭉쳤다 => 흩어져요 (${player})',
           de: 'Auf ${player} sammeln => Verteilen',
           ja: '頭割り => 散会 (${player})',
+          ko: '${player} 쉐어 => 산개',
         },
         stackOnYouThenSpread: {
           en: '내게 뭉쳤다 => 흩어져요',
           de: 'Auf DIR sammeln => Verteilen',
           ja: '自分に頭割り => 散会',
+          ko: '나에게 쉐어 => 산개',
         },
         spreadThenStack: Outputs.spreadThenStack,
         spreadThenStackOn: {
           en: '흩어졌다 => 뭉쳐요 (${player})',
           de: 'Verteilen => Auf ${player} sammeln',
           ja: '散会 => 頭割り (${player})',
+          ko: '산개 => ${player} 쉐어',
         },
         spreadThenStackOnYou: {
           en: '흩어졌다 => 내게 뭉쳐요',
           de: 'Verteilen => Auf DIR sammeln',
           ja: '散会 => 自分に頭割り',
+          ko: '산개 => 나에게 쉐어',
         },
         spreadThenSpread: {
           en: '내가 링거, 홀로 있어야 해요',
           de: 'Verteilen => Sammeln',
           ja: '自分に連呪、ひとりぼっちでずっと',
+          ko: '산개 => 쉐어',
         },
       },
     },
@@ -613,16 +785,19 @@ const triggerSet: TriggerSet<Data> = {
           en: '링 차지 ①',
           de: 'Außerhalb des inneren Ringes',
           ja: 'リングチャージ ①',
+          ko: '안쪽 고리 바깥',
         },
         outsideMiddle: {
           en: '링 차지 ②',
           de: 'Außerhalb des mittleren Ringes',
           ja: 'リングチャージ ②',
+          ko: '중간 고리 바깥',
         },
         outsideOuter: {
           en: '링 차지 ③',
           de: 'Außerhalb des äußeren Ringes',
           ja: 'リングチャージ ③',
+          ko: '바깥쪽 고리 바깥',
         },
       },
     },
@@ -656,12 +831,67 @@ const triggerSet: TriggerSet<Data> = {
         stackOn: Outputs.stackOnPlayer,
       },
     },
-    /* 아래는 흔적만 남김
+    /* 아래는 안씀
+    {
       id: 'ASS Nothing beside Remains',
+      type: 'StartsUsing',
+      netRegex: { id: '768C', source: 'Gladiator of Sil\'dih', capture: false },
+      suppressSeconds: 1,
+      response: Responses.spread(),
+    },
     */
-   /* 아래는 내께 더 좋다 → ASS+ Gilded/Silvered Fate
+    /* 아래는 안씀 → ASS+ Gilded/Silvered Fate
+    {
       id: 'ASS Accursed Visage Collect',
+      // CDF = Gilded Fate
+      // CE0 = Silvered Fate
+      type: 'GainsEffect',
+      netRegex: { effectId: ['CDF', 'CE0'] },
+      condition: Conditions.targetIsYou(),
+      run: (data, matches) => {
+        const id = matches.effectId;
+        if (id === 'CDF')
+          ++data.gildedCounter;
+        else if (id === 'CE0')
+          ++data.silveredCounter;
+      },
+    },
+    {
       id: 'ASS Golden/Silver Flame',
+      // 766F = Golden Flame
+      // 7670 = Silver Flame
+      type: 'StartsUsing',
+      netRegex: { id: ['766F', '7670'], source: 'Hateful Visage', capture: false },
+      suppressSeconds: 1,
+      infoText: (data, _matches, output) => {
+        if (data.gildedCounter > 0) {
+          if (data.silveredCounter > 0)
+            return output.bothFates!();
+          return output.gildedFate!();
+        }
+        if (data.silveredCounter > 0)
+          return output.silveredFate!();
+        return output.neitherFate!();
+      },
+      outputStrings: {
+        bothFates: {
+          en: 'Get hit by silver and gold',
+          de: 'Von Silber und Gold treffen lassen',
+        },
+        gildedFate: {
+          en: 'Get hit by two silver',
+          de: 'Von 2 Silber treffen lassen',
+        },
+        silveredFate: {
+          en: 'Get hit by two gold',
+          de: 'Von 2 Gold treffen lassen',
+        },
+        neitherFate: {
+          en: 'Avoid silver and gold',
+          de: 'Vermeide Silber und Gold',
+        },
+      },
+    },
     */
     // 그라디아토르: Gilded/Silvered Fate
     {
@@ -716,24 +946,11 @@ const triggerSet: TriggerSet<Data> = {
         center: Outputs.goIntoMiddle,
       },
     },
-    /* 아래는 내께 더 좋다 → ASS+ Curse of the Monument Tether
-      id: 'ASS Curse of the Monument',
-    */
     {
-      id: 'ASS+ Curse of the Monument Tether',
-      type: 'Tether',
-      netRegex: { id: '00A3' },
-      condition: (data, matches) => matches.source === data.me || matches.target === data.me,
-      alertText: (data, matches, output) => {
-        const who = matches.source === data.me ? matches.target : matches.source;
-        return output.run!({ player: data.ShortName(who) });
-      },
-      outputStrings: {
-        run: {
-          en: '줄 끊어요 (+${player})',
-          ja: '線切 (+${player})',
-        },
-      },
+      id: 'ASS Curse of the Monument',
+      type: 'Ability',
+      netRegex: { id: '7666', source: 'Gladiator of Sil\'dih', capture: false },
+      response: Responses.breakChains(),
     },
     {
       id: 'ASS Scream of the Fallen',
@@ -753,9 +970,13 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         soakThenSpread: {
           en: '먼저 타워 들어갔다 => 벽으로 흩어져요',
+          de: 'Türme zuerst nehmen => verteilen',
+          ko: '첫번째 기둥 밟기 => 산개',
         },
         spreadThenSoak: {
           en: '벽으로 흩어졌다 => 타워 들어가요',
+          de: 'Verteilen => zweite Türme nehmen',
+          ko: '산개 => 두번째 기둥 밟기',
         },
       },
     },
@@ -895,11 +1116,11 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         p1: {
           en: '① 돌아가는 동글동글',
-          ja: '回る杖、安置探せ',
+          ja: '回る杖',
         },
         p2: {
-          en: '② 마법진 커팅식',
-          ja: '魔法陣: 北→🟥 / 西→🟦',
+          en: '② 마법진 컷팅식',
+          ja: '魔法陣',
         },
         p3: {
           en: '③ 전이 기둥과 놀아요',
@@ -907,11 +1128,11 @@ const triggerSet: TriggerSet<Data> = {
         },
         p4: {
           en: '④ 카드 전이 놀이',
-          ja: 'カード転移、安置探せ',
+          ja: 'カード転移',
         },
         p5: {
-          en: '⑤ 1/2→가운데, 3/4→파란선 지팡이',
-          ja: '1/2→真ん中, 3/4→青線つき杖',
+          en: '⑤ 줄끊고 부채 유도',
+          ja: '線切と扇誘導',
         },
       },
     },
@@ -940,8 +1161,8 @@ const triggerSet: TriggerSet<Data> = {
       // CC7 Fourth Brand
       type: 'GainsEffect',
       netRegex: { effectId: ['CC4', 'CC5', 'CC6', 'CC7'] },
-      condition: (data, matches) => data.me === matches.target,
-      delaySeconds: 0.1, // Delay to collect all Infern Brand Effects
+      condition: (data, matches) => data.me === matches.target && data.brandCounter === 2,
+      delaySeconds: 0.2, // Delay to collect all Infern Brand Effects
       durationSeconds: (_data, matches) => parseFloat(matches.duration) - 0.1,
       infoText: (data, matches, output) => {
         const brandMap: { [effectId: string]: number } = {
@@ -953,15 +1174,6 @@ const triggerSet: TriggerSet<Data> = {
         const myNum = brandMap[matches.effectId];
         if (myNum === undefined)
           throw new UnreachableCode();
-        const cNum = output['num' + myNum.toString()]!();
-
-        // 5번일때
-        if (data.brandCounter === 5)
-          return output.brandNum!({ num: cNum });
-
-        // 2번일때
-        if (data.brandCounter !== 2)
-          return;
 
         // Store for later trigger
         data.myFlame = myNum;
@@ -969,10 +1181,10 @@ const triggerSet: TriggerSet<Data> = {
         if (Object.keys(data.brandEffects).length !== 8) {
           // Missing Infern Brands, output number
           if (data.arcaneFontCounter === 3)
-            return output.blueBrandNum!({ num: cNum });
+            return output.blueBrandNum!({ num: myNum });
           if (data.arcaneFontCounter === 2)
-            return output.orangeBrandNum!({ num: cNum });
-          return output.brandNum!({ num: cNum });
+            return output.orangeBrandNum!({ num: myNum });
+          return output.brandNum!({ num: myNum });
         }
 
         // Brands are located along East and South wall and in order by id
@@ -1034,39 +1246,43 @@ const triggerSet: TriggerSet<Data> = {
 
         // Check color of brand that will be cut
         if (data.arcaneFontCounter === 3)
-          return output.blueBrandNumCorner!({ num: cNum, corner: output[cardX + cardY]!() });
+          return output.blueBrandNumCorner!({ num: myNum, corner: output[cardX + cardY]!() });
         if (data.arcaneFontCounter === 2)
-          return output.orangeBrandNumCorner!({ num: cNum, corner: output[cardX + cardY]!() });
-        return output.brandNumCorner!({ num: cNum, corner: output[cardX + cardY]!() });
+          return output.orangeBrandNumCorner!({ num: myNum, corner: output[cardX + cardY]!() });
+        return output.brandNumCorner!({ num: myNum, corner: output[cardX + cardY]!() });
       },
       run: (data) => data.brandEffects = {},
       outputStrings: {
         blueBrandNumCorner: {
-          en: '🟦파랑 브렌드 ${num}: ${corner}',
+          en: '파랑🟦 ${num}번: ${corner}',
+          ko: '파란색 선 ${num}: ${corner} 구석',
         },
         orangeBrandNumCorner: {
-          en: '🟥빨강 브렌드 ${num}: ${corner}',
+          en: '빨강🟥 ${num}번: ${corner}',
+          ko: '주황색 선 ${num}: ${corner} 구석',
         },
         brandNumCorner: {
-          en: '내 브렌드 ${num}: ${corner}',
+          en: '내가 ${num}번: ${corner}',
+          de: 'Kryptogramm ${num}: ${corner} Ecke',
+          ko: '선 ${num}: ${corner} 구석',
         },
         blueBrandNum: {
-          en: '🟦파랑 브렌드 ${num}',
+          en: '컷팅: 파랑🟦 ${num}번',
+          ko: '파란색 선 ${num}',
         },
         orangeBrandNum: {
-          en: '🟥빨강 브렌드 ${num}',
+          en: '컷팅: 빨강🟥 ${num}번',
+          ko: '주황색 선 ${num}',
         },
         brandNum: {
-          en: '내 브렌드 ${num}',
+          en: '컷팅: ${num}번',
+          de: 'Kryptogramm ${num}',
+          ko: '선 ${num}',
         },
         northwest: Outputs.arrowNW,
         northeast: Outputs.arrowNE,
         southeast: Outputs.arrowSE,
         southwest: Outputs.arrowSW,
-        num1: Outputs.cnum1,
-        num2: Outputs.cnum2,
-        num3: Outputs.cnum3,
-        num4: Outputs.cnum4,
       },
     },
     {
@@ -1096,13 +1312,19 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         cutBlueOne: {
-          en: '🟦파랑 ①',
+          en: '컷팅: 파랑🟦 1번',
+          de: 'Blau 1 durchtrennen',
+          ko: '파란색 1 끊기',
         },
         cutOrangeOne: {
-          en: '🟥빨강 ①',
+          en: '컷팅: 빨강🟥 1번',
+          de: 'Orange 1 durchtrennen',
+          ko: '주황색 1 끊기',
         },
         firstCut: {
           en: '컷팅하세요',
+          de: 'Als Erster durchtrennen',
+          ko: '첫번째 선 끊기',
         },
       },
     },
@@ -1152,42 +1374,38 @@ const triggerSet: TriggerSet<Data> = {
         return 0;
       },
       alertText: (data, matches, output) => {
-        if (data.myFlame === undefined)
-          return;
-        const cnum = output['num' + data.myFlame.toString()]!();
-
         if (data.arcaneFontCounter === 3 && matches.count.match(/1C[6-8]/)) {
           // Expected Blue and count is Blue
           data.arcaneFontCounter = 2;
-          return output.cutBlueNum!({ num: cnum });
+          return output.cutBlueNum!({ num: data.myFlame });
         }
         if (data.arcaneFontCounter === 2 && matches.count.match(/1C[2-4]/)) {
           // Expected Orange and count is Orange
           data.arcaneFontCounter = 3;
-          return output.cutOrangeNum!({ num: cnum });
+          return output.cutOrangeNum!({ num: data.myFlame });
         }
 
         // Exception for First Flame on second set
         if (data.myFlame === 1) {
           if (data.arcaneFontCounter === 3 && matches.count === '1C5')
-            return output.cutBlueNum!({ num: cnum });
+            return output.cutBlueNum!({ num: data.myFlame });
           if (data.arcaneFontCounter === 2 && matches.count === '1C9')
-            return output.cutOrangeNum!({ num: cnum });
+            return output.cutOrangeNum!({ num: data.myFlame });
         }
         // Unexpected result, mechanic is likely failed at this point
       },
       run: (data) => data.brandEffects = {},
       outputStrings: {
         cutOrangeNum: {
-          en: '🟥빨강 ${num}',
+          en: '컷팅: 빨강🟥 ${num}번',
+          de: 'Orange ${num} durchtrennen',
+          ko: '주황색 ${num} 끊기',
         },
         cutBlueNum: {
-          en: '🟦파랑 ${num}',
+          en: '컷팅: 파랑🟦 ${num}번',
+          de: 'Blau ${num} durchtrennen',
+          ko: '파란색 ${num} 끊기',
         },
-        num1: Outputs.cnum1,
-        num2: Outputs.cnum2,
-        num3: Outputs.cnum3,
-        num4: Outputs.cnum4,
       },
     },
     {
@@ -1197,6 +1415,348 @@ const triggerSet: TriggerSet<Data> = {
       netRegex: { id: '74B7', source: 'Infern Brand' },
       condition: Conditions.targetIsYou(),
       run: (data, matches) => data.myLastCut = Date.parse(matches.timestamp),
+    },
+    {
+      id: 'ASS Banishment',
+      // Players receive invisible effect that indicates rotation and direction
+      // of their teleport attached teleport pad
+      //
+      // At the same time, two teleports on North and South are also marked:
+      // one rotates outside the arena, the other rotates towards the inner rows
+      // Players have 12s to teleport using the safe teleports prior to Call of
+      // the Portal (CCC) expiration
+      //
+      // The first teleports occur at ~11.4s after these debuff go out
+      // After first teleport, lasers block rows but can be teleported over
+      // Hitting a laser results in stun and likely death
+      //
+      // Seconds after first teleport, two wards will go off that target the
+      // two nearest players. Players need to have teleported close enough
+      // to the ward to bait the ward away from other players
+      //
+      // Following the first set of baits, the player's teleport will go off
+      // which should have been positioned to teleport across the laser to bait
+      // the final ward away from other players
+      //
+      // 1CD Blue (Counterclockwise) Teleporting East
+      // 1CE Orange (Clockwise) Teleporting West
+      // 1D2 Orange (Clockwise) Teleporting East
+      // 1D3 Blue (Counterclockwise) Teleporting West
+      //
+      // There are multiple strategies, so this only describes what you have,
+      // from there you can create a personal call of where to go
+      type: 'GainsEffect',
+      netRegex: { effectId: 'B9A' },
+      condition: Conditions.targetIsYou(),
+      infoText: (_data, matches, output) => {
+        switch (matches.count) {
+          case '1CD':
+            return output.blueEast!();
+          case '1CE':
+            return output.orangeWest!();
+          case '1D2':
+            return output.orangeEast!();
+          case '1D3':
+            return output.blueWest!();
+        }
+      },
+      outputStrings: {
+        blueEast: {
+          en: '셋째줄 🡺',
+          ja: '3列 🡺',
+          ko: '파란색 동쪽 텔레포트',
+        },
+        blueWest: {
+          en: '🡸 맨아랫줄',
+          ja: '🡸 一番下列',
+          ko: '파란색 서쪽 텔레포트',
+        },
+        orangeEast: {
+          en: '둘째줄 🡺',
+          ja: '2列 🡺',
+          ko: '주황색 동쪽 텔레포트',
+        },
+        orangeWest: {
+          en: '🡸 첫째줄',
+          ja: '🡸 1列',
+          ko: '주황색 서쪽 텔레포트',
+        },
+      },
+    },
+    /* 아래는 안씀
+    {
+      id: 'ASS Banishment First Ward',
+      // This debuff expires 4.7s before the first bait, but there is a slight
+      // animation lock from the teleport that occurs
+      // Repositioning may be required to bait the active ward's Infern Wave
+      // Using Call of the Portal (CCC) expiration for trigger
+      type: 'LosesEffect',
+      netRegex: { effectId: 'CCC' },
+      condition: Conditions.targetIsYou(),
+      delaySeconds: 0.75, // Delay for animation lock from teleport to complete
+      infoText: (_data, _matches, output) => output.text!(),
+      outputStrings: {
+        text: {
+          en: 'Bait First Ward',
+        },
+      },
+    },
+    {
+      id: 'ASS Banishment Bait Second Ward',
+      // After the second teleport and stun expiring, there is 2s before the
+      // the last ward casts Infern Wave that must be baited
+      // Rite of Passage (CCD) debuff is tied to the player's teleport going
+      // off
+      type: 'LosesEffect',
+      netRegex: { effectId: 'CCD' },
+      condition: Conditions.targetIsYou(),
+      delaySeconds: 2, // Delay for stun to complete
+      infoText: (_data, _matches, output) => output.text!(),
+      outputStrings: {
+        text: {
+          en: 'Bait Second Ward',
+        },
+      },
+    },
+    */
+    {
+      id: 'ASS Infern Brand 5 Starting Position',
+      // CC4 First Brand
+      // CC5 Second Brand
+      // CC6 Third Brand
+      // CC7 Fourth Brand
+      // Although we can see where the 4 wards spawn, Does not seem to be a way
+      // to determine which one is animated which is required to tell which color
+      // to cut
+      type: 'GainsEffect',
+      netRegex: { effectId: ['CC4', 'CC5', 'CC6', 'CC7'] },
+      condition: (data, matches) => data.me === matches.target && data.brandCounter === 5,
+      delaySeconds: 0.1,
+      infoText: (data, matches, output) => {
+        const brandMap: { [effectId: string]: number } = {
+          'CC4': 1,
+          'CC5': 2,
+          'CC6': 3,
+          'CC7': 4,
+        };
+        const myNum = brandMap[matches.effectId];
+        if (myNum === undefined)
+          throw new UnreachableCode();
+
+        // Store for later trigger
+        data.myFlame = myNum;
+
+        // In Infern Brand 5, there are 4 wards in a + and blocked by 2 lines each
+        // This creates an opening in middle where First Brand + Second Brand
+        // while Third Brand and Fourth Brand need to bait the first ward
+        // Blue N/S:
+        //   (304.00, -110.00)
+        //   (304.00, -108.00)
+        //
+        //   (304.00, -102.00)
+        //   (304.00, -100.00)
+        // Orange E/W:
+        //   (284.00, -85.00)
+        //   (286.00, -85.00)
+        //
+        //   (292.00, -85.00)
+        //   (294.00, -85.00)
+
+        // Generic output unless we find a method to determine which way to cut
+        if (myNum === 1 || myNum === 2)
+          return output.middle!({ num: myNum });
+        return output.outThenBait!({ num: myNum });
+      },
+      run: (data) => data.brandEffects = {},
+      outputStrings: {
+        middle: {
+          en: '내가 ${num}번: ⊙한가운데로',
+          ko: '선 ${num}: 중앙으로',
+        },
+        outThenBait: {
+          en: '내가 ${num}번: ☥기둥으로',
+          ko: '선 ${num}: 밖으로, 지팡이 유도',
+        },
+      },
+    },
+    {
+      id: 'ASS Infern Brand 5 First Flame',
+      // CC8 First Flame
+      // CC9 Second Flame
+      // CCA Third Flame
+      // CCB Fourth Flame
+      // Until we find a way to determine color, call cut order only
+      type: 'GainsEffect',
+      netRegex: { effectId: 'CC8' },
+      condition: (data, matches) => data.me === matches.target && data.brandCounter === 5,
+      alertText: (_data, _matches, output) => output.firstCut!(),
+      outputStrings: {
+        firstCut: {
+          en: '컷팅하세요',
+          de: 'Als Erster durchtrennen',
+          ko: '첫번째 선 끊기',
+        },
+      },
+    },
+    {
+      id: 'ASS Infern Brand 5 Infern Wave Counter',
+      type: 'Ability',
+      netRegex: { id: '74BB', source: 'Infern Brand', capture: false },
+      condition: (data) => data.brandCounter === 5,
+      preRun: (data) => data.waveCounter++,
+      suppressSeconds: 1,
+    },
+    {
+      id: 'ASS Infern Brand 5 Cuts after Baits',
+      // Utilizing 1.96s Magic Vulnerability Up (B7D) from Infern Wave to tell
+      // when to start cutting after baiting the Infern Ward
+      // Vulnerability expires after Pure Fire (749F) puddles, so no need to
+      // add additional delay for the puddle
+      type: 'GainsEffect',
+      netRegex: { effectId: 'B7D' },
+      condition: (data, matches) => {
+        const duration = parseFloat(matches.duration);
+        return data.me === matches.target && data.brandCounter === 5 && duration <= 2;
+      },
+      delaySeconds: (_data, matches) => parseFloat(matches.duration),
+      response: (data, _matches, output) => {
+        // cactbot-builtin-response
+        output.responseOutputStrings = {
+          cutOrangeNum: {
+            en: '컷팅: 빨강🟥 ${num}번',
+            de: 'Orange ${num} durchtrennen',
+            ko: '주황색 ${num} 끊기',
+          },
+          cutBlueNum: {
+            en: '컷팅: 파랑🟦 ${num}번',
+            de: 'Blau ${num} durchtrennen',
+            ko: '파란색 ${num} 끊기',
+          },
+          moveOrange: {
+            en: '컷팅준비: 빨강🟥 ${num}번',
+            ko: '주황색 ${num} 끊을 준비',
+          },
+          moveBlue: {
+            en: '컷팅준비: 파랑🟦 ${num}번',
+            ko: '파란색 ${num} 끊을 준비',
+          },
+        };
+
+        // Check for race condition with Second Flame after first bait
+        // or that it is the third bait that has no race
+        if (data.waveCounter === 1 && data.flamesCutCounter === 1 || data.waveCounter === 3) {
+          // Third and Fourth Flames need to move to cut across immediately after baiting
+          // Three can cut their flame if they have baited and 2 has cut
+          if (data.myFlame === 3) {
+            if (data.firstColorCut === 'blue')
+              return { alertText: output.cutBlueNum!({ num: data.myFlame }) };
+            return { alertText: output.cutOrangeNum!({ num: data.myFlame }) };
+          }
+          if (data.myFlame === 4) {
+            if (data.firstColorCut === 'blue')
+              return { infoText: output.moveBlue!({ num: data.myFlame }) };
+            return { infoText: output.moveOrange!({ num: data.myFlame }) };
+          }
+        }
+
+        // First Flame needs to cut after the second bait
+        if (data.waveCounter === 2 && data.myFlame === 1) {
+          if (data.firstColorCut === 'orange')
+            return { alertText: output.cutOrangeNum!({ num: data.myFlame }) };
+          return { alertText: output.cutBlueNum!({ num: data.myFlame }) };
+        }
+      },
+    },
+    {
+      id: 'ASS Infern Brand 5 Remaining Flames',
+      type: 'LosesEffect',
+      netRegex: { effectId: '95D', target: 'Infern Brand', count: '1C[2-9]' },
+      condition: (data) => data.brandCounter === 5,
+      preRun: (data, matches) => {
+        data.flamesCutCounter++;
+        // First and last of a set let us know what's being cut next
+        if (data.flamesCutCounter === 1) {
+          if (matches.count === '1C2')
+            data.firstColorCut = 'orange';
+          else if (matches.count === '1C5')
+            data.firstColorCut = 'blue';
+        } else if (data.flamesCutCounter === 4) {
+          data.firstColorCut = data.firstColorCut === 'orange' ? 'blue' : 'orange';
+        }
+      },
+      response: (data, _matches, output) => {
+        // cactbot-builtin-response
+        output.responseOutputStrings = {
+          baitWardTwo: {
+            en: '둘째 기둥으로 => 장판 깔아요',
+            ko: '지팡이 2 유도 => 장판 유도',
+          },
+          baitWardThree: {
+            en: '셋째 기둥으로',
+            ko: '지팡이 3 유도',
+          },
+          baitPuddles: {
+            en: '장판 깔아요',
+            ko: '장판 유도',
+          },
+          cutOrangeNum: {
+            en: '컷팅: 빨강🟥 ${num}번',
+            de: 'Orange ${num} durchtrennen',
+            ko: '주황색 ${num} 끊기',
+          },
+          cutBlueNum: {
+            en: '컷팅: 파랑🟦 ${num}번',
+            de: 'Blau ${num} durchtrennen',
+            ko: '파란색 ${num} 끊기',
+          },
+          moveOrangeNum: {
+            en: '컷팅준비: 빨강🟥 ${num}번',
+            ko: '주황색 ${num} 끊을 준비',
+          },
+          moveBlueNum: {
+            en: '컷팅준비: 파랑🟦 ${num}번',
+            ko: '파란색 ${num} 끊을 준비',
+          },
+        };
+
+        // Two can cut immediately after one
+        if (data.myFlame === 2 && (data.flamesCutCounter === 1 || data.flamesCutCounter === 6)) {
+          if (data.firstColorCut === 'blue')
+            return { alertText: output.cutBlueNum!({ num: data.myFlame }) };
+          return { alertText: output.cutOrangeNum!({ num: data.myFlame }) };
+        }
+
+        // Three can cut if they have baited their wave and two has cut
+        if (data.myFlame === 3 && data.flamesCutCounter === 2 && data.waveCounter === 1) {
+          if (data.firstColorCut === 'blue')
+            return { alertText: output.cutBlueNum!({ num: data.myFlame }) };
+          return { alertText: output.cutOrangeNum!({ num: data.myFlame }) };
+        }
+        // Four can follow three after they have baited and two has cut
+        if (data.myFlame === 4 && data.flamesCutCounter === 2 && data.waveCounter === 1) {
+          if (data.firstColorCut === 'blue')
+            return { infoText: output.moveBlueNum!({ num: data.myFlame }) };
+          return { infoText: output.moveOrangeNum!({ num: data.myFlame }) };
+        }
+
+        // Four can cut immediately after three
+        if (data.myFlame === 4 && (data.flamesCutCounter === 3 || data.flamesCutCounter === 7)) {
+          if (data.firstColorCut === 'blue')
+            return { alertText: output.cutBlueNum!({ num: data.myFlame }) };
+          return { alertText: output.cutOrangeNum!({ num: data.myFlame }) };
+        }
+
+        // Fourth Flame should open path for One and Two to bait second ward
+        if (data.flamesCutCounter === 4) {
+          if (data.myFlame === 1 || data.myFlame === 2)
+            return { alertText: output.baitWardTwo!() };
+          return { infoText: output.baitPuddles!() };
+        }
+
+        // Sixth Flame should open path for Three and Four to bait third ward
+        if (data.flamesCutCounter === 6 && (data.myFlame === 3 || data.myFlame === 4))
+          return { alertText: output.baitWardThree!() };
+      },
     },
     /*
     //
@@ -1219,7 +1779,7 @@ const triggerSet: TriggerSet<Data> = {
       id: 'ASS+ Firesteel Strike Collect',
       type: 'Ability',
       netRegex: { id: ['74B1', '74B2'], source: 'Shadowcaster Zeless Gah' },
-      run: (data, matches) => data.firesteelStrikes?.push(matches.target),
+      run: (data, matches) => data.firesteelStrikes.push(matches.target),
     },
     //
     {
@@ -1227,7 +1787,7 @@ const triggerSet: TriggerSet<Data> = {
       type: 'StartsUsing',
       netRegex: { id: '74B3', source: 'Shadowcaster Zeless Gah' },
       response: (data, _matches, output) => {
-        if (data.firesteelStrikes === undefined || data.firesteelStrikes.length === 0)
+        if (data.firesteelStrikes.length === 0)
           return { infoText: output.text!() };
 
         if (data.firesteelStrikes.includes(data.me))
@@ -1249,72 +1809,6 @@ const triggerSet: TriggerSet<Data> = {
         behind: {
           en: '뒤로 숨어요',
           ja: '後ろに隠れる',
-        },
-      },
-    },
-    //
-    {
-      id: 'ASS+ Banishment Debuff',
-      type: 'GainsEffect',
-      netRegex: { effectId: 'B9A' },
-      condition: Conditions.targetIsYou(),
-      infoText: (data, matches, output) => {
-        if (matches.count === '1D2')
-          data.banishment = 'redRight';
-        else if (matches.count === '1D3')
-          data.banishment = 'blueLeft';
-        else if (matches.count === '1CD')
-          data.banishment = 'blueRight';
-        else if (matches.count === '1CE')
-          data.banishment = 'redLeft';
-        else
-          throw new UnreachableCode();
-
-        return output[data.banishment]!();
-      },
-      outputStrings: {
-        redLeft: {
-          en: '🡸 첫째줄',
-          ja: '🡸 1列',
-        },
-        redRight: {
-          en: '둘째줄 🡺',
-          ja: '2列 🡺',
-        },
-        blueRight: {
-          en: '셋째줄 🡺',
-          ja: '3列 🡺',
-        },
-        blueLeft: {
-          en: '🡸 맨아랫줄',
-          ja: '🡸 一番下列',
-        },
-      },
-    },
-    //
-    {
-      id: 'ASS+ Brands P5',
-      type: 'GainsEffect',
-      netRegex: { effectId: 'CC[4-7]' },
-      condition: Conditions.targetIsYou(),
-      delaySeconds: (_data, matches) => parseFloat(matches.duration) - 3,
-      durationSeconds: 11,
-      infoText: (data, _matches, output) => {
-        if (data.brandCounter !== 5)
-          return;
-        if (data.myFlame === 1 || data.myFlame === 1)
-          return output.f12!();
-        if (data.myFlame === 3 || data.myFlame === 4)
-          return output.f34!();
-      },
-      outputStrings: {
-        f12: {
-          en: '줄끊고 → 3/4 기둘 → 지팡이 불꽃 → 장판깔기',
-          ja: '線切 → 3/4待つ → 杖の炎 → ゆか',
-        },
-        f34: {
-          en: '지팡이 불꽃 → 줄끊고 → 원위치 → 장판깔기',
-          ja: '杖の炎 → 線切 → 戻る → ゆか',
         },
       },
     },

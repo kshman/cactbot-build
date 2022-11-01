@@ -130,7 +130,11 @@ const curtainCallOutputStrings = {
 const eviscerationMarker = parseInt('00DA', 16);
 const orangeMarker = parseInt('012F', 16);
 
-const getHeadmarkerId = (data: Data, matches: NetMatches['HeadMarker'], firstDecimalMarker: number) => {
+const getHeadmarkerId = (
+  data: Data,
+  matches: NetMatches['HeadMarker'],
+  firstDecimalMarker: number,
+) => {
   // If we naively just check !data.decOffset and leave it, it breaks if the first marker is 00DA.
   // (This makes the offset 0, and !0 is true.)
   if (typeof data.decOffset === 'undefined')
@@ -480,8 +484,8 @@ const triggerSet: TriggerSet<Data> = {
         };
 
         if (data.wellShiftKnockback)
-          return { alertText: output.knockback!() };
-        return { infoText: output.middleKnockback!() };
+          return { ['alertText']: output.knockback!() };
+        return { ['infoText']: output.middleKnockback!() };
       },
     },
     {
@@ -810,8 +814,12 @@ const triggerSet: TriggerSet<Data> = {
         }
 
         // the lowest eight Hesperos IDs are the thorns that tether the boss
-        const sortCombatants = (a: PluginCombatantState, b: PluginCombatantState) => (a.ID ?? 0) - (b.ID ?? 0);
-        const sortedCombatantData = combatantData.combatants.sort(sortCombatants).splice(combatantDataLength - 8, combatantDataLength);
+        const sortCombatants = (a: PluginCombatantState, b: PluginCombatantState) =>
+          (a.ID ?? 0) - (b.ID ?? 0);
+        const sortedCombatantData = combatantData.combatants.sort(sortCombatants).splice(
+          combatantDataLength - 8,
+          combatantDataLength,
+        );
 
         sortedCombatantData.forEach((combatant: PluginCombatantState) => {
           (data.thornIds ??= []).push(combatant.ID ?? 0);
@@ -854,7 +862,8 @@ const triggerSet: TriggerSet<Data> = {
       id: 'P4S Nearsight',
       type: 'StartsUsing',
       netRegex: { id: '6A26', source: 'Hesperos', capture: false },
-      alertText: (data, _matches, output) => data.role === 'tank' ? output.tankbustersIn!() : output.getOut!(),
+      alertText: (data, _matches, output) =>
+        data.role === 'tank' ? output.tankbustersIn!() : output.getOut!(),
       outputStrings: {
         tankbustersIn: {
           en: '안쪽에서 탱크버스터!!!',
@@ -871,7 +880,8 @@ const triggerSet: TriggerSet<Data> = {
       id: 'P4S Farsight',
       type: 'StartsUsing',
       netRegex: { id: '6A27', source: 'Hesperos', capture: false },
-      alertText: (data, _matches, output) => data.role === 'tank' ? output.tankbustersOut!() : output.getIn!(),
+      alertText: (data, _matches, output) =>
+        data.role === 'tank' ? output.tankbustersOut!() : output.getIn!(),
       outputStrings: {
         tankbustersOut: {
           en: '바깥쪽에서 탱크버스터!!!',

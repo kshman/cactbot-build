@@ -12,7 +12,17 @@ import { Output, TriggerSet } from '../../../../../types/trigger';
 // TODO: call out shriek specifically again when debuff soon? (or maybe even gaze/poison/stack too?)
 // TODO: initial tank auto call on final boss as soon as boss pulled
 
-export type Concept = 'shortalpha' | 'longalpha' | 'shortbeta' | 'longbeta' | 'shortgamma' | 'longgamma' | 'alpha' | 'beta' | 'gamma' | 'primal';
+export type Concept =
+  | 'shortalpha'
+  | 'longalpha'
+  | 'shortbeta'
+  | 'longbeta'
+  | 'shortgamma'
+  | 'longgamma'
+  | 'alpha'
+  | 'beta'
+  | 'gamma'
+  | 'primal';
 export type Splicer = 'solosplice' | 'multisplice1st' | 'supersplice' | 'multisplice2nd';
 export const towerColors = ['green', 'blue', 'purple'] as const;
 export type TowerColor = typeof towerColors[number];
@@ -1051,7 +1061,11 @@ const triggerSet: TriggerSet<Data> = {
         if (myDebuff === 'nothing') {
           return {
             alertText: gazeAlert,
-            infoText: output.noDebuff!({ player1: friends[0], player2: friends[1], player3: friends[2] }),
+            infoText: output.noDebuff!({
+              player1: friends[0],
+              player2: friends[1],
+              player3: friends[2],
+            }),
           };
         }
 
@@ -1276,7 +1290,9 @@ const triggerSet: TriggerSet<Data> = {
           // Check if have valid dirs
           const validDirs = [0, 1, 2, 3];
           if (!validDirs.includes(data.footfallsDirs[1])) {
-            console.error(`Blazing Footfalls Reminder: Unexpected dirs, got ${data.footfallsDirs[1]}`);
+            console.error(
+              `Blazing Footfalls Reminder: Unexpected dirs, got ${data.footfallsDirs[1]}`,
+            );
             return;
           }
 
@@ -1376,8 +1392,16 @@ const triggerSet: TriggerSet<Data> = {
           }
           if (!validDirs.includes(dir)) {
             if (data.trailblazeCount === 0)
-              console.error(`Blazing Footfalls Crush/Impact Reminder: Unexpected dirs, got ${data.footfallsDirs[0]}`);
-            console.error(`Blazing Footfalls Crush/Impact Reminder: Unexpected dirs, got ${data.footfallsDirs[1]}`);
+              console.error(
+                `Blazing Footfalls Crush/Impact Reminder: Unexpected dirs, got ${
+                  data.footfallsDirs[0]
+                }`,
+              );
+            console.error(
+              `Blazing Footfalls Crush/Impact Reminder: Unexpected dirs, got ${
+                data.footfallsDirs[1]
+              }`,
+            );
             return;
           }
 
@@ -1397,7 +1421,12 @@ const triggerSet: TriggerSet<Data> = {
 
             // Call future push location if knockback
             if (data.footfallsOrder[data.trailblazeCount] === 'impact')
-              return { infoText: output.trailblazeKnockbackToDir!({ dir1: dirToCard[dir], dir2: dirToCard[data.footfallsDirs[1]] }) };
+              return {
+                infoText: output.trailblazeKnockbackToDir!({
+                  dir1: dirToCard[dir],
+                  dir2: dirToCard[data.footfallsDirs[1]],
+                }),
+              };
           }
 
           // prs: 피하는 곳 마커로 표시, 여기서 안걸릴리 없지만 혹시 안걸리면 원래 루틴
@@ -1604,16 +1633,28 @@ const triggerSet: TriggerSet<Data> = {
 
           // There's maybe some way to do this more generally, but I don't see it.
           // Also, if this fails for some reason, it will just not call anything below.
-          if (originalPos === 7 && heading === 2 || originalPos === 3 && heading === 0 || originalPos === 5 && heading === 1) {
+          if (
+            originalPos === 7 && heading === 2 || originalPos === 3 && heading === 0 ||
+            originalPos === 5 && heading === 1
+          ) {
             // Going towards NE
             unsafeSpots.push(1);
-          } else if (originalPos === 1 && heading === 4 || originalPos === 5 && heading === 2 || originalPos === 7 && heading === 3) {
+          } else if (
+            originalPos === 1 && heading === 4 || originalPos === 5 && heading === 2 ||
+            originalPos === 7 && heading === 3
+          ) {
             // Going towards SE
             unsafeSpots.push(3);
-          } else if (originalPos === 3 && heading === 6 || originalPos === 1 && heading === 5 || originalPos === 7 && heading === 4) {
+          } else if (
+            originalPos === 3 && heading === 6 || originalPos === 1 && heading === 5 ||
+            originalPos === 7 && heading === 4
+          ) {
             // Going towards SW
             unsafeSpots.push(5);
-          } else if (originalPos === 5 && heading === 0 || originalPos === 1 && heading === 6 || originalPos === 3 && heading === 7) {
+          } else if (
+            originalPos === 5 && heading === 0 || originalPos === 1 && heading === 6 ||
+            originalPos === 3 && heading === 7
+          ) {
             // Going towards NW
             unsafeSpots.push(7);
           }
@@ -2527,10 +2568,21 @@ const triggerSet: TriggerSet<Data> = {
             throw new UnreachableCode();
           const [name1, name2] = conceptToPlayers[otherConcept].map((x) => data.ShortName(x));
           if (name1 === undefined)
-            return { infoText: output.colorTowerMergeLetter!({ color: color, letter: output[otherConcept]!() }) };
+            return {
+              alertText: output.colorTowerMergeLetter!({
+                color: color,
+                letter: output[otherConcept]!(),
+              }),
+            };
           if (name2 === undefined)
             return { alertText: output.colorTowerMergePlayer!({ color: color, player: name1 }) };
-          return { infoText: output.colorTowerMergePlayers!({ color: color, player1: name1, player2: name2 }) };
+          return {
+            alertText: output.colorTowerMergePlayers!({
+              color: color,
+              player1: name1,
+              player2: name2,
+            }),
+          };
         }
 
         // HC2 (final towers), in order to solve this, you need a 2nd beta or gamma
@@ -2543,10 +2595,17 @@ const triggerSet: TriggerSet<Data> = {
           const [concept1, concept2] = [...perfectedConcepts].filter((x) => x !== myConcept);
           if (concept1 === undefined || concept2 === undefined)
             throw new UnreachableCode();
-          const [name1, name2] = [...conceptToPlayers[concept1], ...conceptToPlayers[concept2]].map((x) => data.ShortName(x));
+          const [name1, name2] = [...conceptToPlayers[concept1], ...conceptToPlayers[concept2]].map(
+            (x) => data.ShortName(x),
+          );
           if (name1 === undefined || name2 === undefined)
-            return { infoText: output.towerMergeLetters!({ letter1: output[concept1]!(), letter2: output[concept2]!() }) };
-          return { infoText: output.towerMergePlayers!({ player1: name1, player2: name2 }) };
+            return {
+              alertText: output.towerMergeLetters!({
+                letter1: output[concept1]!(),
+                letter2: output[concept2]!(),
+              }),
+            };
+          return { alertText: output.towerMergePlayers!({ player1: name1, player2: name2 }) };
         }
 
         // If not doubled, merge with one of the doubled folks (because they can't merge together).
@@ -2556,8 +2615,16 @@ const triggerSet: TriggerSet<Data> = {
           throw new UnreachableCode();
         const color = output[tower]!();
         if (name1 === undefined || name2 === undefined)
-          return { infoText: output.colorTowerMergeLetter!({ color: color, letter: output[doubled]!() }) };
-        return { infoText: output.colorTowerMergePlayers!({ color: color, player1: name1, player2: name2 }) };
+          return {
+            alertText: output.colorTowerMergeLetter!({ color: color, letter: output[doubled]!() }),
+          };
+        return {
+          alertText: output.colorTowerMergePlayers!({
+            color: color,
+            player1: name1,
+            player2: name2,
+          }),
+        };
       },
       run: (data) => {
         data.arcaneChannelColor.clear();

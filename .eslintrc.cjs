@@ -31,7 +31,7 @@ const settings = {
     'resources/lib/',
   ],
   'parserOptions': {
-    'ecmaVersion': 2020,
+    'ecmaVersion': 2022,
     'sourceType': 'module',
   },
   'plugins': [
@@ -145,7 +145,16 @@ const rules = {
       'allowAllPropertiesOnSameLine': true,
     },
   ],
-  'operator-linebreak': 'error',
+  'operator-linebreak': [
+    'error',
+    'after',
+    {
+      'overrides': {
+        ':': 'before',
+        '?': 'before',
+      },
+    },
+  ],
   'prefer-arrow-callback': 'error',
   'prefer-const': 'error',
   'prefer-regex-literals': 'error',
@@ -183,6 +192,7 @@ const rules = {
     'error',
     'never',
   ],
+  'unicorn/prefer-string-slice': 'error',
   'valid-jsdoc': 'off',
 };
 
@@ -198,7 +208,7 @@ const tsOverrides = {
     'project': ['./tsconfig.json'],
     'tsconfigRootDir': __dirname,
   },
-  'plugins': ['@typescript-eslint', 'prefer-arrow'],
+  'plugins': ['@typescript-eslint', 'prefer-arrow', 'unicorn'],
   'rules': {
     '@typescript-eslint/consistent-type-assertions': [
       'error',
@@ -228,6 +238,7 @@ const tsOverrides = {
     '@typescript-eslint/no-unsafe-argument': 'error',
     '@typescript-eslint/no-unused-vars': ['warn', { 'args': 'all', 'argsIgnorePattern': '^_\\w?' }],
     '@typescript-eslint/object-curly-spacing': ['warn', 'always'],
+    '@typescript-eslint/prefer-string-starts-ends-with': 'error',
     '@typescript-eslint/strict-boolean-expressions': ['error', {
       // @TODO: Remove these keys over time, setting them back to default
       'allowNullableBoolean': true,

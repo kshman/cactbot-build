@@ -6,7 +6,7 @@
 import fs from 'fs';
 import path from 'path';
 
-import chai from 'chai';
+import { assert } from 'chai';
 
 import NetRegexes, {
   buildNetRegexForTrigger,
@@ -31,8 +31,6 @@ import {
   ResponseFunc,
   TriggerFunc,
 } from '../../types/trigger';
-
-const { assert } = chai;
 
 const isResponseFunc = (func: unknown): func is ResponseFunc<RaidbossData, Matches> => {
   return typeof func === 'function';
@@ -258,7 +256,7 @@ const testTriggerFile = (file: string) => {
           brokenPrefixes = true;
           continue;
         }
-        prefix = prefix.substr(0, idx);
+        prefix = prefix.slice(0, idx);
       }
     }
 
@@ -270,8 +268,8 @@ const testTriggerFile = (file: string) => {
     if (ids.size > 1 && !brokenPrefixes && prefix !== null && prefix.length > 0) {
       // if prefix includes more than one word, just remove latter letters.
       if (prefix.includes(' '))
-        prefix = prefix.substr(0, prefix.lastIndexOf(' ') + 1);
-      if (prefix[prefix.length - 1] !== ' ')
+        prefix = prefix.slice(0, prefix.lastIndexOf(' ') + 1);
+      if (!prefix.endsWith(' '))
         assert.fail(`id prefix '${prefix}' is not a full word, must end in a space`);
     }
   });
