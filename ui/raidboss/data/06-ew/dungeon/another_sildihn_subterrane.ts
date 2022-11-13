@@ -19,7 +19,7 @@ type RushVec = { x: number; y: number; l: number };
 export interface Data extends RaidbossData {
   suds?: string;
   puffCounter: number;
-  silkenPuffs: { [id: string]: { effect: string, location?: string } };
+  silkenPuffs: { [id: string]: { effect: string; location: string } };
   freshPuff2SafeAlert?: string;
   soapCounter: number;
   beaterCounter: number;
@@ -37,7 +37,6 @@ export interface Data extends RaidbossData {
   flamesCutCounter: number;
   waveCounter: number;
   //
-  cleanSeen?: boolean;
   rushCounter: number;
   rushVecs: RushVec[];
   fateSeen?: boolean;
@@ -201,7 +200,6 @@ const triggerSet: TriggerSet<Data> = {
       preRun: (data) => {
         ++data.puffCounter;
         data.silkenPuffs = {};
-        data.cleanSeen = false;
       },
       infoText: (data, _matches, output) => {
         if (data.puffCounter === 1)
@@ -281,26 +279,13 @@ const triggerSet: TriggerSet<Data> = {
     {
       id: 'ASS Squeaky Clean Right',
       type: 'StartsUsing',
-      netRegex: { id: ['7751', '7755'], source: 'Silkie', capture: false },
-      condition: (data) => {
-        // 왼쪽도 그렇지만 엄청 패다보면(!) 기믹이 스킵되는데 7755, 7756이 스킵되버린다.
-        if (data.cleanSeen)
-          return false;
-        data.cleanSeen = true;
-        return true;
-      },
+      netRegex: { id: '7751', source: 'Silkie', capture: false },
       response: Responses.goLeft(),
     },
     {
       id: 'ASS Squeaky Clean Left',
       type: 'StartsUsing',
-      netRegex: { id: ['7752', '7756'], source: 'Silkie', capture: false },
-      condition: (data) => {
-        if (data.cleanSeen)
-          return false;
-        data.cleanSeen = true;
-        return true;
-      },
+      netRegex: { id: '7752', source: 'Silkie', capture: false },
       response: Responses.goRight(),
     },
     {
@@ -346,8 +331,8 @@ const triggerSet: TriggerSet<Data> = {
         // See Silken Puff Suds Gain trigger for list of Silken Puff effectIds
         // By this point, Squeaky Clean Left/Right has changed the N puff and either the SW/SE puff to CE9 (Bracing Suds)
         // We only care about the unaffected puff's status effect (CEA/CEB) for resolving the mechanic.
-        let stackDir = '';
-        let safeDir = '';
+        let stackDir;
+        let safeDir;
         if (matches.id === '7751') { // Squeaky Clean Right - resolve based on SW puff's effect
           if (puffsByLoc.SW === undefined)
             return output.default!();
@@ -369,9 +354,11 @@ const triggerSet: TriggerSet<Data> = {
         SW: Outputs.arrowSW,
         stacksafe: {
           en: '뭉쳐욧: ${dir1} (나중에 ${dir2})',
+          ko: '${dir1}쪽에서 쉐어 (이후 ${dir2}쪽이 안전)',
         },
         default: {
           en: '🟢바로 밑에서 뭉쳐요',
+          ko: '초록색 구슬에서 쉐어',
         },
       },
     },
@@ -468,12 +455,16 @@ const triggerSet: TriggerSet<Data> = {
         },
         spreadCardinals: {
           en: '🟡비스듬 → 흩어져요',
+          de: 'Kardinal verteilen',
           ja: '🟡斜め → 散会',
           ko: '십자방향으로 산개',
         },
         intercards: {
           en: '🔵십자 장판',
+          de: 'Interkardinal',
+          fr: 'Intercardinal',
           ja: '🔵十字, 避けて',
+          cn: '四角',
           ko: '대각선 쪽으로',
         },
       },
@@ -627,53 +618,69 @@ const triggerSet: TriggerSet<Data> = {
         SW: Outputs.arrowSW,
         bait: {
           en: '보스${boss}, 처리: ${dir} ${puff}',
+          ko: '${boss} - ${dir} ${puff}',
         },
         bossIce: {
           en: '🔵',
+          ko: '파란색 꼬리',
         },
         bossIcePuffsCardinalSafeLater: {
           en: '비스듬 안전 (대부분 🟡앞)',
+          ko: '대각선이 안전',
         },
         bossIcePuffsIntercardSafeLater: {
           en: '비스듬 안전 (대부분 🟡앞)',
+          ko: '대각선이 안전',
         },
         bossWind: {
-          en: '🟡',
+          en: '🟢',
+          ko: '초록색 꼬리',
         },
         bossWindPuffsCardinalSafeLater: {
           en: '한가운데가 안전',
+          ko: '가운데가 안전',
         },
         bossWindPuffsIntercardSafeLater: {
           en: '한가운데가 안전',
+          ko: '가운데가 안전',
         },
         // keep tethered puff info as separate outputStrings
         // so users can customize for their particular strat
         bossIceBlueCardinalPuff: {
           en: '🔵파랑 솜털',
+          ko: '파란색 구슬',
         },
         bossIceBlueIntercardPuff: {
           en: '🔵파랑 솜털',
+          ko: '파란색 구슬',
         },
         bossIceYellowCardinalPuff: {
           en: '🟡노란솜털',
+          ko: '노란색 구슬',
         },
         bossIceYellowIntercardPuff: {
           en: '🟡노란솜털',
+          ko: '노란색 구슬',
         },
         bossWindBlueCardinalPuff: {
           en: '🔵파랑 솜털',
+          ko: '파란색 구슬',
         },
         bossWindBlueIntercardPuff: {
           en: '🔵파랑 솜털',
+          ko: '파란색 구슬',
         },
         bossWindYellowCardinalPuff: {
           en: '🟡노란솜털',
+          ko: '노란색 구슬',
         },
         bossWindYellowIntercardPuff: {
           en: '🟡노란솜털',
+          ko: '노란색 구슬',
         },
         default: {
           en: '솜털 땡겨요~',
+          ko: '구슬 유도',
         },
       },
     },
@@ -691,6 +698,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         safe: {
           en: '${safe}',
+          ko: '${safe}',
         },
       },
     },
@@ -703,6 +711,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         avoidEwers: {
           en: '항아리 피해요',
+          ko: '항아리 피하기',
         },
       },
     },
@@ -760,18 +769,23 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         windAndLightning: {
           en: '🟢바로 밑으로',
+          ko: '초록 구슬 밑으로',
         },
         doubleIce: {
           en: '비스듬히, 솜털 피해요',
+          ko: '대각선으로, 구슬에서 떨어지기',
         },
         iceAndLightning: {
           en: '🟡옆으로',
+          ko: '노란 구슬 옆으로',
         },
         doubleLightning: {
           en: '솜털 사이로',
+          ko: '구슬 사이로',
         },
         default: {
           en: '솜털 장판 피해요',
+          ko: '구슬 장판 피하기',
         },
       },
     },
@@ -806,6 +820,7 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: '자기 강화',
           ja: '自己強化',
+          ko: '평타 강화',
         },
       },
     },
@@ -817,7 +832,9 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: '체력이 1이네!',
+          de: 'HP auf 1',
           ja: '体力１!',
+          ko: 'HP 1',
         },
       },
     },
@@ -831,6 +848,7 @@ const triggerSet: TriggerSet<Data> = {
           en: '헤비, 발 밑으로',
           de: 'AoE + Rein',
           ja: 'ヘビィ, 足元へ',
+          ko: '전체공격 + 안으로',
         },
       },
     },
@@ -960,10 +978,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         outsideLine: {
           en: 'Outside ${card}, above line ${line}',
+          de: 'Außerhalb vom ${card}, über der Linie im ${line}',
           ko: '${card} 바깥, ${line}번 줄 위로',
         },
         insideLine: {
           en: 'Inside ${card}, above line 3',
+          de: 'Innerhalb vom ${card}, über der 3. Linie',
           ko: '${card} 안, 3번 줄 위로',
         },
         east: Outputs.east,
@@ -983,6 +1003,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Move ${dir}',
+          de: 'Geh nach ${dir}',
           ko: '${dir}으로',
         },
         north: Outputs.north,
@@ -1223,18 +1244,22 @@ const triggerSet: TriggerSet<Data> = {
         bothFates: {
           en: 'Get hit by silver and gold',
           de: 'Von Silber und Gold treffen lassen',
+          ko: '은색 + 금색 맞기',
         },
         gildedFate: {
           en: 'Get hit by two silver',
           de: 'Von 2 Silber treffen lassen',
+          ko: '은색 2개 맞기',
         },
         silveredFate: {
           en: 'Get hit by two gold',
           de: 'Von 2 Gold treffen lassen',
+          ko: '금색 2개 맞기',
         },
         neitherFate: {
           en: 'Avoid silver and gold',
           de: 'Vermeide Silber und Gold',
+          ko: '은색 금색 피하기',
         },
       },
     },
@@ -1279,22 +1304,7 @@ const triggerSet: TriggerSet<Data> = {
       // Using 7666 Curse of the Monument
       type: 'StartsUsing',
       netRegex: { id: '7666', source: 'Gladiator of Sil\'dih', capture: false },
-      infoText: (data, _matches, output) => {
-        if (data.role === 'tank' || data.CanFeint())
-          return output.east!();
-        else if (data.role === 'healer' || data.CanAddle() || data.CanSilence())
-          return output.west!();
-        return output.center!();
-      },
-      run: (data) => {
-        data.explosionTime = 0;
-        data.explosionCounter = 0;
-      },
-      outputStrings: {
-        east: Outputs.right,
-        west: Outputs.left,
-        center: Outputs.goIntoMiddle,
-      },
+      response: Responses.goMiddle(),
     },
     {
       id: 'ASS Curse of the Monument',
@@ -1311,7 +1321,8 @@ const triggerSet: TriggerSet<Data> = {
       type: 'GainsEffect',
       netRegex: { effectId: 'BB[CD]' },
       condition: Conditions.targetIsYou(),
-      alertText: (_data, matches, output) => {
+      durationSeconds: 10,
+      infoText: (_data, matches, output) => {
         const id = matches.effectId;
         if (id === 'BBD')
           return output.soakThenSpread!();
@@ -1653,10 +1664,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         blueBrandNumCorner: {
           en: '파랑🟦 ${num}번: ${corner}',
+          de: 'Blaues Kryptogramm ${num}: ${corner} Ecke',
           ko: '파란색 선 ${num}: ${corner} 구석',
         },
         orangeBrandNumCorner: {
           en: '빨강🟥 ${num}번: ${corner}',
+          de: 'Oranges Kryptogramm ${num}: ${corner} Ecke',
           ko: '주황색 선 ${num}: ${corner} 구석',
         },
         brandNumCorner: {
@@ -1666,10 +1679,12 @@ const triggerSet: TriggerSet<Data> = {
         },
         blueBrandNum: {
           en: '컷팅: 파랑🟦 ${num}번',
+          de: 'Blaues Kryptogramm ${num}',
           ko: '파란색 선 ${num}',
         },
         orangeBrandNum: {
           en: '컷팅: 빨강🟥 ${num}번',
+          de: 'Oranges Kryptogramm ${num}',
           ko: '주황색 선 ${num}',
         },
         brandNum: {
@@ -1861,21 +1876,25 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         blueEast: {
           en: '셋째줄 🡺',
+          de: 'Blau Teleport nach Osten',
           ja: '3列 🡺',
           ko: '파란색 동쪽 텔레포트',
         },
         blueWest: {
           en: '🡸 맨아랫줄',
+          de: 'Blau Teleport nach Westen',
           ja: '🡸 一番下列',
           ko: '파란색 서쪽 텔레포트',
         },
         orangeEast: {
           en: '둘째줄 🡺',
+          de: 'Orange Teleport nach Osten',
           ja: '2列 🡺',
           ko: '주황색 동쪽 텔레포트',
         },
         orangeWest: {
           en: '🡸 첫째줄',
+          de: 'Orange Teleport nach Westen',
           ja: '🡸 1列',
           ko: '주황색 서쪽 텔레포트',
         },
@@ -1896,6 +1915,8 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Bait First Ward',
+          de: 'Köder erste Wehr',
+          ko: '첫번째 지팡이 유도하기',
         },
       },
     },
@@ -1913,6 +1934,8 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Bait Second Ward',
+          de: 'Köder zweite Wehr',
+          ko: '두번째 지팡이 유도하기',
         },
       },
     },
@@ -1969,10 +1992,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         middle: {
           en: '내가 ${num}번: ⊙한가운데로',
+          de: 'Kryptogramm ${num}: Geh in die Mitte',
           ko: '선 ${num}: 중앙으로',
         },
         outThenBait: {
           en: '내가 ${num}번: ☥기둥으로',
+          de: 'Kryptogramm ${num}: Wehr ködern',
           ko: '선 ${num}: 밖으로, 지팡이 유도',
         },
       },
@@ -2032,10 +2057,12 @@ const triggerSet: TriggerSet<Data> = {
           },
           moveOrange: {
             en: '컷팅준비: 빨강🟥 ${num}번',
+            de: 'Bewegen für Orange ${num}',
             ko: '주황색 ${num} 끊을 준비',
           },
           moveBlue: {
             en: '컷팅준비: 파랑🟦 ${num}번',
+            de: 'Bewegen für Blau ${num}',
             ko: '파란색 ${num} 끊을 준비',
           },
         };
@@ -2087,14 +2114,17 @@ const triggerSet: TriggerSet<Data> = {
         output.responseOutputStrings = {
           baitWardTwo: {
             en: '둘째 기둥으로 => 장판 깔아요',
+            de: 'Köder Wehr 2 => Köder Flächen',
             ko: '지팡이 2 유도 => 장판 유도',
           },
           baitWardThree: {
             en: '셋째 기둥으로',
+            de: 'Köder Wehr 3',
             ko: '지팡이 3 유도',
           },
           baitPuddles: {
             en: '장판 깔아요',
+            de: 'Köder Flächen',
             ko: '장판 유도',
           },
           cutOrangeNum: {
@@ -2109,10 +2139,12 @@ const triggerSet: TriggerSet<Data> = {
           },
           moveOrangeNum: {
             en: '컷팅준비: 빨강🟥 ${num}번',
+            de: 'Bewegen für Orange ${num}',
             ko: '주황색 ${num} 끊을 준비',
           },
           moveBlueNum: {
             en: '컷팅준비: 파랑🟦 ${num}번',
+            de: 'Bewegen für Blau ${num}',
             ko: '파란색 ${num} 끊을 준비',
           },
         };
@@ -2226,8 +2258,8 @@ const triggerSet: TriggerSet<Data> = {
     },
     {
       'locale': 'de',
+      'missingTranslations': true,
       'replaceSync': {
-        'Aqueduct Armor': 'Aquädukt-Kampfmaschine',
         'Aqueduct Belladonna': 'Aquädukt-Belladonna',
         'Aqueduct Dryad': 'Aquädukt-Dryade',
         'Aqueduct Kaluk': 'Aquädukt-Kaluk',
@@ -2239,6 +2271,7 @@ const triggerSet: TriggerSet<Data> = {
         'Hateful Visage': 'Hassendes Haupt',
         'Infern Brand': 'Infernales Mal',
         'Shadowcaster Zeless Gah': 'Schattenwirker Zeless Gah',
+        'Sil\'dihn Armor': 'Sil\'dih-Kampfmaschine',
         'Sil\'dihn Dullahan': 'Sil\'dih-Dullahan',
         'Silkie': 'Silkie',
         'The Trial of Balance': 'Prüfung der Gerechtigkeit',
@@ -2299,8 +2332,8 @@ const triggerSet: TriggerSet<Data> = {
     },
     {
       'locale': 'fr',
+      'missingTranslations': true,
       'replaceSync': {
-        'Aqueduct Armor': 'armure maléfique des aqueducs',
         'Aqueduct Belladonna': 'belladone des aqueducs',
         'Aqueduct Dryad': 'dryade des aqueducs',
         'Aqueduct Kaluk': 'kaluk des aqueducs',
@@ -2312,6 +2345,7 @@ const triggerSet: TriggerSet<Data> = {
         'Hateful Visage': 'Visage de haine',
         'Infern Brand': 'Étendard sacré',
         'Shadowcaster Zeless Gah': 'Zeless Gah la Flamme ombrée',
+        'Sil\'dihn Armor': 'armure maléfique sildien',
         'Sil\'dihn Dullahan': 'dullahan sildien',
         'Silkie': 'Silkie',
         'The Trial of Balance': 'Épreuve de la Justice',
@@ -2372,8 +2406,8 @@ const triggerSet: TriggerSet<Data> = {
     },
     {
       'locale': 'ja',
+      'missingTranslations': true,
       'replaceSync': {
-        'Aqueduct Armor': 'アクアダクト・イビルアーマー',
         'Aqueduct Belladonna': 'アクアダクト・ベラドンナ',
         'Aqueduct Dryad': 'アクアダクト・ドライアド',
         'Aqueduct Kaluk': 'アクアダクト・カルク',
@@ -2382,10 +2416,10 @@ const triggerSet: TriggerSet<Data> = {
         'Ball of Fire': '火炎球',
         'Eastern Ewer': '洗い壺',
         'Gladiator of Sil\'dih': 'シラディハ・グラディアトル',
-        'Gladiator Mirage': 'ミラージュ・グラディアトル',
         'Hateful Visage': '呪像起動',
         'Infern Brand': '呪具設置',
         'Shadowcaster Zeless Gah': '影火のゼレズ・ガー',
+        'Sil\'dihn Armor': 'シラディハ・イビルアーマー',
         'Sil\'dihn Dullahan': 'シラディハ・デュラハン',
         'Silkie': 'シルキー',
         'The Trial of Balance': '参の試練',
