@@ -54,6 +54,7 @@ try {
   if ($dllbuild -eq $TRUE) {
     $vspath = $Env:VS_PATH
     if (-not (Test-Path "$vspath")) {
+      # 보통이런식 → C:\Program Files\Microsoft Visual Studio\2022\Community
       Get-LineWithMesg "DLL 빌드하려면 VS_PATH 환경 변수를 미리 지정해야함요..."
       exit 1
     }
