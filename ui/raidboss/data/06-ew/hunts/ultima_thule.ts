@@ -11,8 +11,6 @@ export type Data = RaidbossData;
 //   7A7 = About Face
 //   7A8 = Left Face
 //   7A9 = Right Face
-// TODO: Chi Fore Arms > Rear Guns 2.0
-// TODO: Chi Carapace > Rear Guns 2.0 (Line and Donut variations)
 // TODO: Chi unknown tankbuster
 // TODO: Chi Bunker Buster
 // TODO: Chi Hellburner
@@ -154,17 +152,20 @@ const triggerSet: TriggerSet<Data> = {
       suppressSeconds: 1,
       response: Responses.getOut('info'),
     },
+    // ---------------- Chi Boss FATE ----------------
     {
       id: 'Hunt Chi Assault Carapace (Donut)',
+      // 6561 = 4.7s cast
+      // 6254 = 7.7s cast (during Bunker Buster)
       type: 'StartsUsing',
-      netRegex: { id: '6561', source: 'Chi', capture: false },
+      netRegex: { id: ['6561', '6254'], source: 'Chi', capture: false },
       condition: (data) => data.inCombat,
       response: Responses.getUnder(),
     },
     {
       id: 'Hunt Chi Assault Carapace (Line)',
-      // 6562 = 4.7s line
-      // 6255 = 7.7s line (during Bunker Buster)
+      // 6562 = 4.7s cast
+      // 6255 = 7.7s cast (during Bunker Buster)
       type: 'StartsUsing',
       netRegex: { id: ['6562', '6255'], source: 'Chi', capture: false },
       condition: (data) => data.inCombat,
@@ -180,7 +181,7 @@ const triggerSet: TriggerSet<Data> = {
     {
       id: 'Hunt Chi Fore Arms',
       type: 'StartsUsing',
-      netRegex: { id: '679B', source: 'Chi', capture: false },
+      netRegex: { id: '6567', source: 'Chi', capture: false },
       condition: (data) => data.inCombat,
       response: Responses.getBehind(),
     },
@@ -191,13 +192,13 @@ const triggerSet: TriggerSet<Data> = {
       condition: (data) => data.inCombat,
       response: Responses.getFrontThenBack(),
     },
-    // {
-    //   id: 'Hunt Chi Fore Arms > Rear Guns 2.0',
-    //   type: 'StartsUsing',
-    //   netRegex: { id: '', source: 'Chi', capture: false },
-    //   condition: (data) => data.inCombat,
-    //   response: Responses.getBackThenFront(),
-    // },
+    {
+      id: 'Hunt Chi Fore Arms > Rear Guns 2.0',
+      type: 'StartsUsing',
+      netRegex: { id: '6568', source: 'Chi', capture: false },
+      condition: (data) => data.inCombat,
+      response: Responses.getBackThenFront(),
+    },
     {
       id: 'Hunt Chi Carapace > Fore Arms 2.0 (Donut)',
       type: 'StartsUsing',
@@ -207,6 +208,9 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: '◎바로 밑에서 => 엉댕이로',
+          de: 'Unter Ihn => Hinter den Boss',
+          ja: '下 => 後ろ',
+          cn: '下方 => 背后',
         },
       },
     },
@@ -219,73 +223,87 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: '↔옆에 있다가 => 엉댕이로',
+          de: 'Seiten => Hinter den Boss',
+          ja: '横 => 後ろ',
+          cn: '两侧 => 背后',
         },
       },
     },
-    // {
-    //   id: 'Hunt Chi Carapace > Rear Guns 2.0 (Donut)',
-    //   type: 'StartsUsing',
-    //   netRegex: { id: '', source: 'Chi', capture: false },
-    //   condition: (data) => data.inCombat,
-    //   infoText: (_data, _matches, output) => output.text!(),
-    //   outputStrings: {
-    //     text: {
-    //       en: 'Under => Front',
-    //     },
-    //   },
-    // },
-    // {
-    //   id: 'Hunt Chi Carapace > Rear Guns 2.0 (Line)',
-    //   type: 'StartsUsing',
-    //   netRegex: { id: '', source: 'Chi', capture: false },
-    //   condition: (data) => data.inCombat,
-    //   infoText: (_data, _matches, output) => output.text!(),
-    //   outputStrings: {
-    //     text: {
-    //       en: 'Sides => Front',
-    //     },
-    //   },
-    // },
+    {
+      id: 'Hunt Chi Carapace > Rear Guns 2.0 (Donut)',
+      type: 'StartsUsing',
+      netRegex: { id: '6564', source: 'Chi', capture: false },
+      condition: (data) => data.inCombat,
+      infoText: (_data, _matches, output) => output.text!(),
+      outputStrings: {
+        text: {
+          en: '◎바로 밑에서 => 앞으',
+          de: 'Unter Ihn => Vor den Boss',
+          ja: '下 => 前',
+          cn: '下方 => 正面',
+        },
+      },
+    },
+    {
+      id: 'Hunt Chi Carapace > Rear Guns 2.0 (Line)',
+      type: 'StartsUsing',
+      netRegex: { id: '6566', source: 'Chi', capture: false },
+      condition: (data) => data.inCombat,
+      infoText: (_data, _matches, output) => output.text!(),
+      outputStrings: {
+        text: {
+          en: '↔옆에 있다가 => 앞으로',
+          de: 'Seiten => Vor den Boss',
+          ja: '横 => 前',
+          cn: '两侧 => 正面',
+        },
+      },
+    },
   ],
   timelineReplace: [
     {
       'locale': 'de',
-      'missingTranslations': true,
       'replaceSync': {
         'Arch-Eta': 'Erz-Eta',
+        'Chi': 'Chi',
         'Fan Ail': 'Fan Ail',
+        'Narrow-rift': 'Enger Riss',
       },
     },
     {
       'locale': 'fr',
-      'missingTranslations': true,
       'replaceSync': {
         'Arch-Eta': 'Arch-Êta',
+        'Chi': 'Chi',
         'Fan Ail': 'Fan Ail',
+        'Narrow-rift': 'Rift-étroit',
       },
     },
     {
       'locale': 'ja',
-      'missingTranslations': true,
       'replaceSync': {
         'Arch-Eta': 'アーチイータ',
+        'Chi': 'カイ',
         'Fan Ail': 'ファン・アイル',
+        'Narrow-rift': 'ナロー＝リフト',
       },
     },
     {
       'locale': 'cn',
-      'missingTranslations': true,
       'replaceSync': {
         'Arch-Eta': '伊塔总领',
+        'Chi': '希',
         'Fan Ail': '凡·艾尔',
+        'Narrow-rift': '狭缝',
       },
     },
     {
       'locale': 'ko',
-      'missingTranslations': true,
       'replaceSync': {
         'Arch-Eta': '아치 에타',
+        'Chi': '키',
         'Fan Ail': '판 아일',
+        'Narrow-rift': '내로 리프트',
       },
     },
   ],

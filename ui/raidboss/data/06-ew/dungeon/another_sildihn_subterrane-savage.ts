@@ -179,7 +179,7 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: '🟡비스듬 → 흩어져요',
           de: 'Kardinal',
-          ja: '🟡斜め → 散会',
+          ja: '十字回避',
           ko: '십자방향으로',
         },
       },
@@ -214,23 +214,23 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         p1: {
           en: '솜털🔘세개 → 꼬리',
-          ja: 'たま3個 → 水拭き',
+          ja: 'たま🔘3個 → 水拭き',
         },
         p2: {
           en: '솜털🔘네개 → 안전지대 ',
-          ja: 'たま4個, 安置を作りましょう',
+          ja: 'たま🔘4個, 安置を作りましょう',
         },
         p3: {
           en: '솜털🔘여덟개 → 항아리',
-          ja: 'たま8個, がんばれ！！',
+          ja: 'たま🔘8個, がんばれ！！',
         },
         p4: {
           en: '솜털🔘네개 → 꼬리 유도',
-          ja: 'たま4個 → しっぽ誘導',
+          ja: 'たま🔘4個 → しっぽ誘導',
         },
         px: {
           en: '솜털🔘나와요',
-          ja: 'たま出ます',
+          ja: 'たま🔘出ます',
         },
       },
     },
@@ -353,10 +353,14 @@ const triggerSet: TriggerSet<Data> = {
         SW: Outputs.arrowSW,
         stacksafe: {
           en: '뭉쳐욧: ${dir1} (나중에 ${dir2})',
+          de: 'Sammeln ${dir1} (${dir2} danach sicher)',
+          ja: '${dir1}で頭割り (あとは${dir2}が安置)',
           ko: '${dir1}쪽에서 쉐어 (이후 ${dir2}쪽이 안전)',
         },
         default: {
           en: '🟢바로 밑으로',
+          de: 'Neben unsicherem grünen Puschel sammeln',
+          ja: '🟢下',
           ko: '초록색 구슬에서 쉐어',
         },
       },
@@ -389,13 +393,13 @@ const triggerSet: TriggerSet<Data> = {
         getBehindPuff: {
           en: '솜털🔘의 맨 뒤로',
           de: 'Hinter Puschel und Gruppe',
-          ja: 'たまの一番後ろへ',
+          ja: 'たま🔘の一番後ろへ',
           ko: '구슬 맨 뒤로',
         },
         getBehindPuffs: {
           en: '솜털🔘의 맨 뒤로 (동서)',
           de: 'Hinter Puschel und Gruppe (Osten/Westen)',
-          ja: 'たまの一番後ろへ (東西)',
+          ja: 'たま🔘の一番後ろへ (東西)',
           ko: '구슬 맨 뒤로 (동/서)',
         },
         getBehindParty: {
@@ -453,12 +457,16 @@ const triggerSet: TriggerSet<Data> = {
         },
         spreadCardinals: {
           en: '🟡비스듬 → 흩어져요',
+          de: 'Kardinal verteilen',
           ja: '🟡斜め → 散会',
           ko: '십자방향으로 산개',
         },
         intercards: {
           en: '🔵십자 장판',
+          de: 'Interkardinal',
+          fr: 'Intercardinal',
           ja: '🔵十字, 避けて',
+          cn: '四角',
           ko: '대각선 쪽으로',
         },
       },
@@ -476,7 +484,7 @@ const triggerSet: TriggerSet<Data> = {
           busterOnYouPuffs: {
             en: '내게 탱크버스터, 동서로 유도',
             de: 'Tank Buster auf DIR, Osten/Westen zwischen Puschel',
-            ja: '自分にタンクバスタ、東西で誘導',
+            ja: '自分に強攻撃、東西で誘導',
             ko: '나에게 탱버, 동/서쪽 구슬 사이로',
           },
         };
@@ -537,7 +545,7 @@ const triggerSet: TriggerSet<Data> = {
         avoidPuffs: {
           en: '솜털🔘장판 피해요',
           de: 'Weiche den Puschel AoEs aus',
-          ja: 'たまからのゆか避けて',
+          ja: 'たま🔘からのゆか避けて',
           ko: '구슬 장판 피하기',
         },
       },
@@ -612,68 +620,100 @@ const triggerSet: TriggerSet<Data> = {
         SW: Outputs.arrowSW,
         bait: {
           en: '보스${boss}, 처리: ${dir} ${puff}',
+          de: '${boss} - ${dir} ${puff}',
+          ja: '${boss} - ${dir} ${puff}',
           ko: '${boss} - ${dir} ${puff}',
         },
         bossIce: {
           en: '🔵',
+          de: 'Blauer Schweif',
+          ja: '🔵',
           ko: '파란색 꼬리',
         },
         bossIcePuffsCardinalSafeLater: {
           en: '비스듬 안전 (대부분 🟡앞)',
+          de: 'Interkardinal sicher',
+          ja: '斜め',
           ko: '대각선이 안전',
         },
         bossIcePuffsIntercardSafeLater: {
           en: '비스듬 안전 (대부분 🟡앞)',
+          de: 'Interkardinal sicher',
+          ja: '斜め',
           ko: '대각선이 안전',
         },
         bossWind: {
           en: '🟡',
+          de: 'Grüner Schweif',
+          ja: '🟡',
           ko: '초록색 꼬리',
         },
         bossWindPuffsCardinalSafeLater: {
           en: '한가운데가 안전',
+          de: 'Mitte sicher',
+          ja: '真ん中',
           ko: '가운데가 안전',
         },
         bossWindPuffsIntercardSafeLater: {
           en: '한가운데가 안전',
+          de: 'Mitte sicher',
+          ja: '真ん中',
           ko: '가운데가 안전',
         },
         // keep tethered puff info as separate outputStrings
         // so users can customize for their particular strat
         bossIceBlueCardinalPuff: {
           en: '🔵파랑 솜털',
+          de: 'Blauer Puschel',
+          ja: '🔵青たま',
           ko: '파란색 구슬',
         },
         bossIceBlueIntercardPuff: {
           en: '🔵파랑 솜털',
+          de: 'Blauer Puschel',
+          ja: '🔵青たま',
           ko: '파란색 구슬',
         },
         bossIceYellowCardinalPuff: {
           en: '🟡노란솜털',
+          de: 'Gelber Puschel',
+          ja: '🟡黄色たま',
           ko: '노란색 구슬',
         },
         bossIceYellowIntercardPuff: {
           en: '🟡노란솜털',
+          de: 'Gelber Puschel',
+          ja: '🟡黄色たま',
           ko: '노란색 구슬',
         },
         bossWindBlueCardinalPuff: {
           en: '🔵파랑 솜털',
+          de: 'Blauer Puschel',
+          ja: '🔵青たま',
           ko: '파란색 구슬',
         },
         bossWindBlueIntercardPuff: {
           en: '🔵파랑 솜털',
+          de: 'Blauer Puschel',
+          ja: '🔵青たま',
           ko: '파란색 구슬',
         },
         bossWindYellowCardinalPuff: {
           en: '🟡노란솜털',
+          de: 'Gelber Puschel',
+          ja: '🟡黄色たま',
           ko: '노란색 구슬',
         },
         bossWindYellowIntercardPuff: {
           en: '🟡노란솜털',
+          de: 'Gelber Puschel',
+          ja: '🟡黄色たま',
           ko: '노란색 구슬',
         },
         default: {
           en: '솜털 땡겨요~',
+          de: 'Puschel ködern',
+          ja: 'たま誘導',
           ko: '구슬 유도',
         },
       },
@@ -692,6 +732,8 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         safe: {
           en: '${safe}',
+          de: '${safe}',
+          ja: '${safe}',
           ko: '${safe}',
         },
       },
@@ -705,6 +747,8 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         avoidEwers: {
           en: '항아리 피해요',
+          de: 'Krug ausweichen',
+          ja: '壺確認',
           ko: '항아리 피하기',
         },
       },
@@ -763,22 +807,32 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         windAndLightning: {
           en: '🟢바로 밑으로',
+          de: 'Unter grünem Puschel',
+          ja: '🟢下',
           ko: '초록 구슬 밑으로',
         },
         doubleIce: {
           en: '비스듬히, 솜털 피해요',
+          de: 'Interkardinal, weg von den Puscheln',
+          ja: '斜め、たまから離れる',
           ko: '대각선으로, 구슬에서 떨어지기',
         },
         iceAndLightning: {
           en: '🟡옆으로',
+          de: 'Seitlich der gelben Puscheln',
+          ja: '🟡横へ',
           ko: '노란 구슬 옆으로',
         },
         doubleLightning: {
           en: '솜털 사이로',
+          de: 'Zwischen Puscheln',
+          ja: 'たまとたまの間',
           ko: '구슬 사이로',
         },
         default: {
           en: '솜털 장판 피해요',
+          de: 'Puschel AoEs vermeiden',
+          ja: 'たまのゆか回避',
           ko: '구슬 장판 피하기',
         },
       },
@@ -974,11 +1028,13 @@ const triggerSet: TriggerSet<Data> = {
         outsideLine: {
           en: 'Outside ${card}, above line ${line}',
           de: 'Außerhalb vom ${card}, über der Linie im ${line}',
+          ja: '${card}の外、 ${line}ラインの上',
           ko: '${card} 바깥, ${line}번 줄 위로',
         },
         insideLine: {
           en: 'Inside ${card}, above line 3',
           de: 'Innerhalb vom ${card}, über der 3. Linie',
+          ja: '${card}の中, 3ラインの上',
           ko: '${card} 안, 3번 줄 위로',
         },
         east: Outputs.east,
@@ -999,6 +1055,7 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: 'Move ${dir}',
           de: 'Geh nach ${dir}',
+          ja: '${dir}へ',
           ko: '${dir}으로',
         },
         north: Outputs.north,
@@ -1022,7 +1079,7 @@ const triggerSet: TriggerSet<Data> = {
           en: '${player}에게 돌진!',
           de: 'Ansturm auf ${player}',
           fr: 'Charge sur ${player}',
-          ja: '${player}に突進！',
+          ja: '${player}に突進',
           cn: '蓝球点${player}',
           ko: '"${player}" 돌진 대상',
         },
@@ -1030,7 +1087,7 @@ const triggerSet: TriggerSet<Data> = {
           en: '내게 돌진!',
           de: 'Ansturm auf DIR',
           fr: 'Charge sur VOUS',
-          ja: '自分に突進！',
+          ja: '自分に突進',
           cn: '蓝球点名',
           ko: '돌진 대상자',
         },
@@ -1096,7 +1153,7 @@ const triggerSet: TriggerSet<Data> = {
         stackOnThenSpread: {
           en: '뭉쳤다 => 흩어져요 (${player})',
           de: 'Auf ${player} sammeln => Verteilen',
-          ja: '頭割り => 散会 (${player})',
+          ja: '${player}に頭割り => 散会',
           ko: '${player} 쉐어 => 산개',
         },
         stackOnYouThenSpread: {
@@ -1109,7 +1166,7 @@ const triggerSet: TriggerSet<Data> = {
         spreadThenStackOn: {
           en: '흩어졌다 => 뭉쳐요 (${player})',
           de: 'Verteilen => Auf ${player} sammeln',
-          ja: '散会 => 頭割り (${player})',
+          ja: '散会 => ${player}に頭割り',
           ko: '산개 => ${player} 쉐어',
         },
         spreadThenStackOnYou: {
@@ -1122,7 +1179,7 @@ const triggerSet: TriggerSet<Data> = {
           en: '내가 링거, 홀로 있어야 해요',
           de: 'Verteilen => Sammeln',
           ja: '自分に連呪、ひとりぼっちでずっと',
-          ko: '산개 => 쉐어',
+          ko: '산개 => 산개',
         },
       },
     },
@@ -1239,21 +1296,25 @@ const triggerSet: TriggerSet<Data> = {
         bothFates: {
           en: 'Get hit by silver and gold',
           de: 'Von Silber und Gold treffen lassen',
+          ja: '金銀 一個ずつ',
           ko: '은색 + 금색 맞기',
         },
         gildedFate: {
           en: 'Get hit by two silver',
           de: 'Von 2 Silber treffen lassen',
+          ja: '銀 二つ',
           ko: '은색 2개 맞기',
         },
         silveredFate: {
           en: 'Get hit by two gold',
           de: 'Von 2 Gold treffen lassen',
+          ja: '金 二つ',
           ko: '금색 2개 맞기',
         },
         neitherFate: {
           en: 'Avoid silver and gold',
           de: 'Vermeide Silber und Gold',
+          ja: '顔からのビーム全部回避',
           ko: '은색 금색 피하기',
         },
       },
@@ -1316,7 +1377,7 @@ const triggerSet: TriggerSet<Data> = {
       type: 'GainsEffect',
       netRegex: { effectId: 'BB[CD]' },
       condition: Conditions.targetIsYou(),
-      durationSeconds: 10,
+      durationSeconds: 11,
       infoText: (_data, matches, output) => {
         const id = matches.effectId;
         if (id === 'BBD')
@@ -1327,11 +1388,13 @@ const triggerSet: TriggerSet<Data> = {
         soakThenSpread: {
           en: '타워 들어갔다 => 벽으로 가요',
           de: 'Türme zuerst nehmen => verteilen',
+          ja: '塔から踏み => 外側',
           ko: '첫번째 기둥 밟기 => 산개',
         },
         spreadThenSoak: {
           en: '벽으로 갔다 => 타워로 들어가요',
           de: 'Verteilen => zweite Türme nehmen',
+          ja: '外側 => 塔踏み',
           ko: '산개 => 두번째 기둥 밟기',
         },
       },
@@ -1660,31 +1723,37 @@ const triggerSet: TriggerSet<Data> = {
         blueBrandNumCorner: {
           en: '파랑🟦 ${num}번: ${corner}',
           de: 'Blaues Kryptogramm ${num}: ${corner} Ecke',
+          ja: '青🟦 ${num}: ${corner}',
           ko: '파란색 선 ${num}: ${corner} 구석',
         },
         orangeBrandNumCorner: {
           en: '빨강🟥 ${num}번: ${corner}',
           de: 'Oranges Kryptogramm ${num}: ${corner} Ecke',
+          ja: '赤🟥 ${num}: ${corner}',
           ko: '주황색 선 ${num}: ${corner} 구석',
         },
         brandNumCorner: {
           en: '내가 ${num}번: ${corner}',
           de: 'Kryptogramm ${num}: ${corner} Ecke',
+          ja: 'わたしは${num}: ${corner}',
           ko: '선 ${num}: ${corner} 구석',
         },
         blueBrandNum: {
           en: '컷팅: 파랑🟦 ${num}번',
           de: 'Blaues Kryptogramm ${num}',
+          ja: 'カット: 青🟦 ${num}',
           ko: '파란색 선 ${num}',
         },
         orangeBrandNum: {
           en: '컷팅: 빨강🟥 ${num}번',
           de: 'Oranges Kryptogramm ${num}',
+          ja: 'カット: 赤🟥 ${num}',
           ko: '주황색 선 ${num}',
         },
         brandNum: {
           en: '컷팅: ${num}번',
           de: 'Kryptogramm ${num}',
+          ja: 'カット: ${num}',
           ko: '선 ${num}',
         },
         northwest: Outputs.arrowNW,
@@ -1722,16 +1791,19 @@ const triggerSet: TriggerSet<Data> = {
         cutBlueOne: {
           en: '컷팅: 파랑🟦 1번',
           de: 'Blau 1 durchtrennen',
+          ja: 'カット: 青🟦 1',
           ko: '파란색 1 끊기',
         },
         cutOrangeOne: {
           en: '컷팅: 빨강🟥 1번',
           de: 'Orange 1 durchtrennen',
+          ja: 'カット: 赤🟥 1',
           ko: '주황색 1 끊기',
         },
         firstCut: {
           en: '컷팅하세요',
           de: 'Als Erster durchtrennen',
+          ja: 'いまカット',
           ko: '첫번째 선 끊기',
         },
       },
@@ -1807,11 +1879,13 @@ const triggerSet: TriggerSet<Data> = {
         cutOrangeNum: {
           en: '컷팅: 빨강🟥 ${num}번',
           de: 'Orange ${num} durchtrennen',
+          ja: 'カット: 赤🟥 ${num}',
           ko: '주황색 ${num} 끊기',
         },
         cutBlueNum: {
           en: '컷팅: 파랑🟦 ${num}번',
           de: 'Blau ${num} durchtrennen',
+          ja: 'カット: 青🟦 ${num}',
           ko: '파란색 ${num} 끊기',
         },
       },
@@ -1911,6 +1985,7 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: 'Bait First Ward',
           de: 'Köder erste Wehr',
+          ja: '1番目の扇誘導',
           ko: '첫번째 지팡이 유도하기',
         },
       },
@@ -1930,6 +2005,7 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: 'Bait Second Ward',
           de: 'Köder zweite Wehr',
+          ja: '2番目の扇誘導',
           ko: '두번째 지팡이 유도하기',
         },
       },
@@ -1988,11 +2064,13 @@ const triggerSet: TriggerSet<Data> = {
         middle: {
           en: '내가 ${num}번: ⊙한가운데로',
           de: 'Kryptogramm ${num}: Geh in die Mitte',
+          ja: '線${num}: 真ん中へ',
           ko: '선 ${num}: 중앙으로',
         },
         outThenBait: {
           en: '내가 ${num}번: ☥기둥으로',
           de: 'Kryptogramm ${num}: Wehr ködern',
+          ja: '線${num}: 外側へ/扇誘導',
           ko: '선 ${num}: 밖으로, 지팡이 유도',
         },
       },
@@ -2012,6 +2090,7 @@ const triggerSet: TriggerSet<Data> = {
         firstCut: {
           en: '컷팅하세요',
           de: 'Als Erster durchtrennen',
+          ja: 'いまカット',
           ko: '첫번째 선 끊기',
         },
       },
@@ -2043,21 +2122,25 @@ const triggerSet: TriggerSet<Data> = {
           cutOrangeNum: {
             en: '컷팅: 빨강🟥 ${num}번',
             de: 'Orange ${num} durchtrennen',
+            ja: 'カット: 赤🟥 ${num}',
             ko: '주황색 ${num} 끊기',
           },
           cutBlueNum: {
             en: '컷팅: 파랑🟦 ${num}번',
             de: 'Blau ${num} durchtrennen',
+            ja: 'カット: 青🟥 ${num}',
             ko: '파란색 ${num} 끊기',
           },
           moveOrange: {
             en: '컷팅준비: 빨강🟥 ${num}번',
             de: 'Bewegen für Orange ${num}',
+            ja: 'まもなくカット: 赤🟥${num}',
             ko: '주황색 ${num} 끊을 준비',
           },
           moveBlue: {
             en: '컷팅준비: 파랑🟦 ${num}번',
             de: 'Bewegen für Blau ${num}',
+            ja: 'まもなくカット: 青🟥${num}',
             ko: '파란색 ${num} 끊을 준비',
           },
         };
@@ -2110,36 +2193,43 @@ const triggerSet: TriggerSet<Data> = {
           baitWardTwo: {
             en: '둘째 기둥으로 => 장판 깔아요',
             de: 'Köder Wehr 2 => Köder Flächen',
+            ja: '扇２ => AOE誘導',
             ko: '지팡이 2 유도 => 장판 유도',
           },
           baitWardThree: {
             en: '셋째 기둥으로',
             de: 'Köder Wehr 3',
+            ja: '扇３',
             ko: '지팡이 3 유도',
           },
           baitPuddles: {
             en: '장판 깔아요',
             de: 'Köder Flächen',
+            ja: 'AOE誘導',
             ko: '장판 유도',
           },
           cutOrangeNum: {
             en: '컷팅: 빨강🟥 ${num}번',
             de: 'Orange ${num} durchtrennen',
+            ja: 'カット: 赤🟥${num}',
             ko: '주황색 ${num} 끊기',
           },
           cutBlueNum: {
             en: '컷팅: 파랑🟦 ${num}번',
             de: 'Blau ${num} durchtrennen',
+            ja: 'カット: 青🟦${num}',
             ko: '파란색 ${num} 끊기',
           },
           moveOrangeNum: {
             en: '컷팅준비: 빨강🟥 ${num}번',
             de: 'Bewegen für Orange ${num}',
+            ja: 'まもなくカット: 赤🟥${num}',
             ko: '주황색 ${num} 끊을 준비',
           },
           moveBlueNum: {
             en: '컷팅준비: 파랑🟦 ${num}번',
             de: 'Bewegen für Blau ${num}',
+            ja: 'まもなくカット: 青🟦${num}',
             ko: '파란색 ${num} 끊을 준비',
           },
         };
@@ -2256,7 +2346,6 @@ const triggerSet: TriggerSet<Data> = {
     },
     {
       'locale': 'de',
-      'missingTranslations': true,
       'replaceSync': {
         'Aqueduct Belladonna': 'Aquädukt-Belladonna',
         'Aqueduct Dryad': 'Aquädukt-Dryade',
@@ -2271,6 +2360,7 @@ const triggerSet: TriggerSet<Data> = {
         'Shadowcaster Zeless Gah': 'Schattenwirker Zeless Gah',
         'Sil\'dihn Armor': 'Sil\'dih-Kampfmaschine',
         'Sil\'dihn Dullahan': 'Sil\'dih-Dullahan',
+        'Silken Puff': 'weich(?:e|er|es|en) Puschel',
         'Silkie': 'Silkie',
         'The Trial of Balance': 'Prüfung der Gerechtigkeit',
         'The Trial of Knowledge': 'Prüfung der Weisheit',
@@ -2345,6 +2435,7 @@ const triggerSet: TriggerSet<Data> = {
         'Shadowcaster Zeless Gah': 'Zeless Gah la Flamme ombrée',
         'Sil\'dihn Armor': 'armure maléfique sildien',
         'Sil\'dihn Dullahan': 'dullahan sildien',
+        'Silken Puff': 'pompon de Silkie',
         'Silkie': 'Silkie',
         'The Trial of Balance': 'Épreuve de la Justice',
         'The Trial of Knowledge': 'Épreuve de la Sagesse',
@@ -2419,6 +2510,7 @@ const triggerSet: TriggerSet<Data> = {
         'Shadowcaster Zeless Gah': '影火のゼレズ・ガー',
         'Sil\'dihn Armor': 'シラディハ・イビルアーマー',
         'Sil\'dihn Dullahan': 'シラディハ・デュラハン',
+        'Silken Puff': 'シルキーズ・ポンポン',
         'Silkie': 'シルキー',
         'The Trial of Balance': '参の試練',
         'The Trial of Knowledge': '壱の試練',

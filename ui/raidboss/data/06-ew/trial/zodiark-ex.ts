@@ -121,6 +121,9 @@ const fetchCombatantsById = async (id: string[]) => {
 const paradeigmaLeanOutputStrings = {
   dirWithLean: {
     en: '${dir} bird (lean ${lean})',
+    de: '${dir} Vogel (nach ${lean} neigen)',
+    ja: '${dir}の鳥 (すこし${lean})',
+    cn: '${dir}鸟 (偏${lean})',
     ko: '${dir}쪽 새, (약간 ${lean}쪽으로)',
   },
   dirN: Outputs.arrowN,
@@ -391,26 +394,44 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         outsideNorth: {
           en: '북[밖]',
+          de: 'Außen Norden',
+          ja: '北の外側',
+          cn: '上 (北) 外',
           ko: '북쪽 바깥',
         },
         insideNorth: {
           en: '북[안]',
+          de: 'Innen Norden',
+          ja: '北の内側',
+          cn: '上 (北) 内',
           ko: '북쪽 안',
         },
         outsideWest: {
           en: '서[밖]',
+          de: 'Außen Westen',
+          ja: '西の外側',
+          cn: '左 (西) 外',
           ko: '서쪽 바깥',
         },
         insideWest: {
           en: '서[안]',
+          de: 'Innen Westen',
+          ja: '西の内側',
+          cn: '左 (西) 内',
           ko: '서쪽 안',
         },
         outsideEast: {
           en: '동[밖]',
+          de: 'Außen Osten',
+          ja: '東の外側',
+          cn: '右 (东) 外',
           ko: '동쪽 바깥',
         },
         insideEast: {
           en: '동[안]',
+          de: 'Innen Osten',
+          ja: '東の内側',
+          cn: '右 (东) 内',
           ko: '동쪽 안',
         },
         ...paradeigmaLeanOutputStrings,
@@ -742,6 +763,9 @@ const triggerSet: TriggerSet<Data> = {
         },
         single: {
           en: '가욧: ${dir} (살짝 ${lean})',
+          de: 'Geh nach ${dir} (nach ${lean} neigen)',
+          ja: '${dir}の鳥 (すこし${lean})',
+          cn: '去 ${dir} (偏 ${lean})',
           ko: '${dir}쪽으로, (약간 ${lean}쪽으로)',
         },
         ...paradeigmaLeanOutputStrings,
@@ -793,10 +817,16 @@ const triggerSet: TriggerSet<Data> = {
         },
         adikia1OutsideNorth: {
           en: '더블 피스트 (북[밖])',
+          de: 'Doppel-Fäuste (nördlich außen)',
+          ja: 'ダブルフィスト (北の外側)',
+          cn: '双拳 (上北外)',
           ko: '양 옆 큰 원형 장판 (북쪽 바깥)',
         },
         adikia1InsideNorth: {
           en: '더블 피스트 (북[안])',
+          de: 'Doppel-Fäuste (nördlich innen)',
+          ja: 'ダブルフィスト (北の内側)',
+          cn: '双拳 (上北内)',
           ko: '양 옆 큰 원형 장판 (북쪽 안)',
         },
         adikia2: {
@@ -881,6 +911,9 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         combo: {
           en: '${dir1} > ${dir2} > ${dir3}',
+          de: '${dir1} > ${dir2} > ${dir3}',
+          ja: '${dir1} > ${dir2} > ${dir3}',
+          cn: '${dir1} > ${dir2} > ${dir3}',
           ko: '${dir1} > ${dir2} > ${dir3}',
         },
         ...eclipseOutputStrings,

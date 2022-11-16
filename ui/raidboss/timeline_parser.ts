@@ -276,6 +276,7 @@ export class TimelineParser {
             lineNumber: lineNumber,
             event: e,
           };
+          e.sync = sync;
           if (syncCommand.args) {
             let argMatch = regexes.windowCommand.exec(syncCommand.args);
             if (argMatch && argMatch['groups']) {
@@ -416,10 +417,12 @@ export class TimelineParser {
       '--sync--',
       'Start',
       '^ ?21:',
+      '^( ?257)? 101:',
       '^(\\(\\?\\<timestamp\\>\\^\\.\\{14\\}\\)) (1B|21|23):',
       '^(\\^\\.\\{14\\})? ?(1B|21|23):',
       '^::\\y{AbilityCode}:$',
       '^\\.\\*$',
+      '^ 1\\[56\\]:\\[\\^:\\]\\*:\\[\\^:\\]\\*:',
     ].map((x) => Regexes.parse(x));
   }
 
