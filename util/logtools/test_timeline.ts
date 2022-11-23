@@ -5,21 +5,20 @@ import readline from 'readline';
 import { Namespace } from 'argparse';
 import chalk from 'chalk';
 
-import { logDefinitionsVersions } from '../resources/netlog_defs';
-import { RaidbossData } from '../types/data';
-import { LooseTriggerSet, TimelineTrigger } from '../types/trigger';
-import LineEvent from '../ui/raidboss/emulator/data/network_log_converter/LineEvent';
-import LogRepository from '../ui/raidboss/emulator/data/network_log_converter/LogRepository';
-import ParseLine from '../ui/raidboss/emulator/data/network_log_converter/ParseLine';
-import defaultRaidbossOptions from '../ui/raidboss/raidboss_options';
-import { Timeline, TimelineUI } from '../ui/raidboss/timeline';
-import { Event, Sync, Text } from '../ui/raidboss/timeline_parser';
+import { logDefinitionsVersions } from '../../resources/netlog_defs';
+import { LooseTriggerSet } from '../../types/trigger';
+import LineEvent from '../../ui/raidboss/emulator/data/network_log_converter/LineEvent';
+import LogRepository from '../../ui/raidboss/emulator/data/network_log_converter/LogRepository';
+import ParseLine from '../../ui/raidboss/emulator/data/network_log_converter/ParseLine';
+import defaultRaidbossOptions from '../../ui/raidboss/raidboss_options';
+import { Timeline, TimelineUI } from '../../ui/raidboss/timeline';
+import { Event, Sync } from '../../ui/raidboss/timeline_parser';
+import { walkDirSync } from '../file_utils';
 
-import { walkDirSync } from './file_utils';
-import { LogUtilArgParse } from './logtools/arg_parser';
-import { printCollectedFights } from './logtools/encounter_printer';
-import { EncounterCollector } from './logtools/encounter_tools';
-import FFLogs, { FFLogsParsedEntry } from './logtools/fflogs';
+import { LogUtilArgParse } from './arg_parser';
+import { printCollectedFights } from './encounter_printer';
+import { EncounterCollector } from './encounter_tools';
+import FFLogs, { FFLogsParsedEntry } from './fflogs';
 
 const rootDir = 'ui/raidboss/data';
 
@@ -77,7 +76,7 @@ const testLineEvents = async (
   }
 
   // TODO: this block is very duplicated with a number of other scripts.
-  const importPath = '../' + path.relative(process.cwd(), triggersFile).replace('.ts', '.js');
+  const importPath = `../../${path.relative(process.cwd(), triggersFile).replace('.ts', '.js')}`;
   // TODO: Fix dynamic imports in TypeScript
   // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
   const triggerSet = (await import(importPath))?.default as LooseTriggerSet;
@@ -150,21 +149,6 @@ const testLineEvents = async (
       `${lineNumber}`.padStart(4),
       lineStr,
     );
-  }
-
-  if (ui.triggers.length > 0) {
-    console.log('Triggers:');
-
-    for (const trigger of ui.triggers) {
-      const delta = (trigger.timestamp - trigger.timebase) / 1000 - trigger.text.time;
-      const invertedDelta = delta * -1;
-      const sign = invertedDelta > 0 ? '+' : ' ';
-      console.log(
-        chalk.green(`%s | %s`),
-        `${sign}${invertedDelta.toFixed(3)}`.padStart(12),
-        trigger.trigger.id,
-      );
-    }
   }
 };
 
@@ -432,6 +416,15 @@ class TestTimeline extends Timeline {
     const lastEventIdx = lastRecord?.event.sortKey;
     const currentEventIdx = sync.event.sortKey;
 
+    // Ignore repeated syncs to the same id that are roughly at the same time.
+    if (lastRecord?.event.sync?.id === sync.id) {
+      const timelineTime = (currentTime - this.timebase) / 1000;
+      const deltaSeconds = timelineTime - sync.event.time;
+      const epsilonSeconds = 0.01;
+      if (deltaSeconds < epsilonSeconds)
+        return;
+    }
+
     // Push records of any intermediate events that were skipped over.
     if (lastEventIdx !== undefined && currentEventIdx !== undefined) {
       // This naturally ignores jumps into the past.
@@ -478,14 +471,6 @@ type TimelineRecord = {
 class TestTimelineUI extends TimelineUI {
   public records: TimelineRecord[] = [];
 
-  public triggers: {
-    trigger: Partial<TimelineTrigger<RaidbossData>>;
-    matches: RegExpExecArray;
-    text: Text;
-    timestamp: number;
-    timebase: number;
-  }[] = [];
-
   public fightNow = 0;
 
   public constructor(protected override timeline: TestTimeline) {
@@ -494,27 +479,6 @@ class TestTimelineUI extends TimelineUI {
 
   public override OnSyncTime(fightNow: number, _running: boolean): void {
     this.fightNow = fightNow;
-  }
-
-  public override OnTrigger(
-    trigger: Partial<TimelineTrigger<RaidbossData>>,
-    matches: RegExpExecArray,
-    currentTime: number,
-  ): void {
-    const foundText = this.timeline.texts.find((text) =>
-      text.type === 'trigger' && text.trigger === trigger
-    );
-    if (!foundText) {
-      console.error(chalk.red(`Trigger fired ${trigger.id ?? '???'} with no matched texts entry!`));
-      return;
-    }
-    this.triggers.push({
-      trigger: trigger,
-      text: foundText,
-      matches: matches,
-      timestamp: currentTime,
-      timebase: this.timeline.timebase,
-    });
   }
 }
 

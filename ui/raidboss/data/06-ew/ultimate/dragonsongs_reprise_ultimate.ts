@@ -8,6 +8,7 @@ import { RaidbossData } from '../../../../../types/data';
 import { PluginCombatantState } from '../../../../../types/event';
 import { NetMatches } from '../../../../../types/net_matches';
 import { LocaleObject, LocaleText, TriggerSet } from '../../../../../types/trigger';
+// 🔴▲🟪➕Ⓑ❱❰🡺🡸🡹🡻🟤🟢→🟥🟦⬜⬛🌪
 
 // TODO: Ser Adelphel left/right movement after initial charge
 // TODO: Meteor "run" call?
@@ -243,7 +244,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         vowOnYou: {
-          en: '내가 멸살이네!!!',
+          en: '내가 멸살이네!',
           de: 'Schwur auf DIR',
           ja: '自分に滅殺',
           cn: '毒点名',
@@ -257,7 +258,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '${player} 멸살의 맹세',
         },
         vowSoon: {
-          en: '곧 멸살! 흩어져욧!!!',
+          en: '곧 멸살! 흩어져!',
           de: 'Schwur bald (verteilen)',
           ja: 'まもなく滅殺 (散会)',
           cn: '即将上毒 (分散)',
@@ -380,7 +381,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: 'Intérieur + Liens tanks',
           ja: '中へ + タンク線取り',
           cn: '中间 + 坦克接线',
-          ko: '안으로 + 탱커 선 가로채기',
+          ko: '안으로 + 탱커가 선 가로채기',
         },
         in: Outputs.in,
       },
@@ -415,7 +416,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         slashOnYou: {
-          en: '슬래시! 흩어지자고!',
+          en: '슬래시! 흩어져!',
           de: 'Schlag auf DIR',
           fr: 'Slash sur VOUS',
           ja: '自分にハイパーディメンション',
@@ -513,7 +514,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         circle: {
-          en: '빨강 ○',
+          en: '🔴빨강',
           de: 'Roter Kreis',
           fr: 'Cercle rouge',
           ja: '赤まる',
@@ -521,7 +522,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '빨강 동그라미',
         },
         triangle: {
-          en: '초록 △',
+          en: '▲초록',
           de: 'Grünes Dreieck',
           fr: 'Triangle vert',
           ja: '緑さんかく',
@@ -529,7 +530,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '초록 삼각',
         },
         square: {
-          en: '보라 ■',
+          en: '🟪보라',
           de: 'Lilanes Viereck',
           fr: 'Carré violet',
           ja: '紫しかく',
@@ -537,7 +538,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '보라 사각',
         },
         cross: {
-          en: '파랑 Ⅹ',
+          en: '➕파랑',
           de: 'Blaues X',
           fr: 'Croix bleue',
           ja: '青バツ',
@@ -709,7 +710,7 @@ const triggerSet: TriggerSet<Data> = {
             0: '4',
             1: 'A',
             2: '1',
-            3: 'ⓑ',
+            3: 'Ⓑ',
             4: '②',
             5: 'ⓒ',
             6: '③',
@@ -1014,14 +1015,14 @@ const triggerSet: TriggerSet<Data> = {
       run: (data) => delete data.sanctityWardDir,
       outputStrings: {
         clockwise: {
-          en: '시계 ◀◁◀',
+          en: '시계❰❰❰',
           de: 'Im Uhrzeigersinn',
           ja: '時計回り',
           cn: '顺时针起跑',
           ko: '시계방향',
         },
         counterclock: {
-          en: '▶▷▶ 반시계',
+          en: '❱❱❱반시계',
           de: 'Gegen den Uhrzeigersinn',
           ja: '反時計回り',
           cn: '逆时针起跑',
@@ -1044,14 +1045,14 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         sword1: {
-          en: '1번! 제피란 없는데로!!!',
+          en: '1번! 제피란 없는데로!',
           de: '1',
           ja: '1',
           cn: '1',
           ko: '1',
         },
         sword2: {
-          en: '2번! 제피란 뒤로!!!',
+          en: '2번! 제피란 뒤로!',
           de: '2',
           ja: '2',
           cn: '2',
@@ -1085,7 +1086,7 @@ const triggerSet: TriggerSet<Data> = {
       tts: '',
       outputStrings: {
         text: {
-          en: '칼: ${name1} / ${name2}',
+          en: '칼: ${name1}, ${name2}',
           de: 'Schwerter: ${name1}, ${name2}',
           ja: '剣：${name1}, ${name2}',
           cn: '剑: ${name1}, ${name2}',
@@ -1130,7 +1131,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         tankHealerMeteors: {
-          en: '탱힐: ${player1} / ${player2}',
+          en: '탱힐: ${player1}, ${player2}',
           de: 'Tank/Heiler Meteore (${player1}, ${player2})',
           fr: 'Météores Tank/Healer (${player1}, ${player2})', // FIXME
           ja: 'タンヒラ 隕石 (${player1}, ${player2})',
@@ -1138,7 +1139,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '탱/힐 메테오 (${player1}, ${player2})',
         },
         dpsMeteors: {
-          en: 'DPS: ${player1} / ${player2}',
+          en: 'DPS: ${player1}, ${player2}',
           de: 'DDs Meteore (${player1}, ${player2})',
           fr: 'Météores DPS (${player1}, ${player2})', // FIXME
           ja: 'DPS 隕石 (${player1}, ${player2})',
@@ -1175,7 +1176,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '▶▷▶ 오른쪽으로',
+          en: '🡺오른쪽',
           de: 'Hinter ihn => Rechts',
           ja: '後ろ => 右',
           cn: '后 => 右',
@@ -1190,7 +1191,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '왼쪽으로 ◀◁◀',
+          en: '왼쪽🡸',
           de: 'Hinter ihn => Links',
           ja: '後ろ => 左',
           cn: '后 => 左',
@@ -1224,7 +1225,7 @@ const triggerSet: TriggerSet<Data> = {
         num2: Outputs.num2,
         num3: Outputs.num3,
         stackNorthNum: {
-          en: '${num}번, 북에서 뭉쳐욧!',
+          en: '${num}번, 북으로',
           de: '${num} (Im Norden sammeln)',
           ja: '${num} (北で頭割り)',
           cn: '${num} (上北分摊)',
@@ -1301,28 +1302,28 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         circleAllCircles: {
-          en: '#${num} 모두 동글 / ${sts}',
-          de: '#${num} Alle Kreise / ${sts}',
-          ja: '#${num} みんなハイジャンプ / ${sts}',
-          cn: '#${num} 全圆圈 / ${sts}',
-          ko: '#${num} 모두 하이점프 / ${sts}',
+          en: '#${num} 모두🟢 (${sts})',
+          de: '#${num} Alle Kreise (${sts})',
+          ja: '#${num} みんなハイジャンプ (${sts})',
+          cn: '#${num} 全圆圈 (${sts})',
+          ko: '#${num} 모두 하이점프 (${sts})',
         },
         circleWithArrows: {
-          en: '#${num} 나만 동글',
+          en: '#${num} 나만🔴',
           de: '#${num} Kreise (mit Pfeilen)',
           ja: '#${num} 自分のみハイジャンプ',
           cn: '#${num} 圆圈 (有箭头)',
           ko: '#${num} 나만 하이점프',
         },
         upArrow: {
-          en: '#${num} 위 화살 (동쪽)',
+          en: '#${num} 🡹/동쪽',
           de: '#${num} Pfeil nach Vorne',
           ja: '#${num} 上矢印 / スパインダイブ',
           cn: '#${num} 上箭头',
           ko: '#${num} 위 화살표 / 척추 강타',
         },
         downArrow: {
-          en: '#${num} 아래 화살 (서쪽)',
+          en: '#${num} 🡻/서쪽',
           de: '#${num} Pfeil nach Hinten',
           ja: '#${num} 下矢印 / イルーシヴジャンプ',
           cn: '#${num} 下箭头',
@@ -1402,70 +1403,70 @@ const triggerSet: TriggerSet<Data> = {
         in: Outputs.in,
         out: Outputs.out,
         stackInOut: {
-          en: '뭉쳐욧 => ${inout}',
+          en: '뭉쳤다 → ${inout}',
           de: 'Sammeln => ${inout}',
           ja: '頭割り => ${inout}',
           cn: '分摊 => ${inout}',
           ko: '쉐어 => ${inout}',
         },
         baitStackInOut: {
-          en: '게이른 미끼 => 뭉쳐욧 => ${inout}',
+          en: '게이른 미끼 → 뭉치고 → ${inout}',
           de: 'Ködern => Sammeln => ${inout}',
           ja: '誘導 => 頭割り => ${inout}',
           cn: '引导 => 分摊 => ${inout}',
           ko: '공격 유도 => 쉐어 => ${inout}',
         },
         circlesDive1: {
-          en: '다이브 (모두 동글) => ${inout}',
+          en: '모두🟢 다이브 → ${inout}',
           de: 'Sturz (alle Kreise) => ${inout}',
           ja: 'ダイブ (みんなハイジャ) => ${inout}',
           cn: '俯冲 (全圆圈) => ${inout}',
           ko: '다이브 (모두 하이점프) => ${inout}',
         },
         circlesDive3: {
-          en: '다이브 (모두 동글) => ${inout}',
+          en: '모두🟢 다이브 → ${inout}',
           de: 'Sturz (alle Kreise) => ${inout}',
           ja: 'ダイブ (みんなハイジャ) => ${inout}',
           cn: '俯冲 (全圆圈) => ${inout}',
           ko: '다이브 (모두 하이점프) => ${inout}',
         },
         southDive1: {
-          en: '남쪽 다이브 => ${inout}',
+          en: '남쪽 다이브 → ${inout}',
           de: 'Südlicher Sturz => ${inout}',
           ja: '南ダイブ => ${inout}',
           cn: '下南俯冲 => ${inout}',
           ko: '남쪽 다이브 => ${inout}',
         },
         southDive3: {
-          en: '남쪽 다이브 => ${inout}',
+          en: '남쪽 다이브 → ${inout}',
           de: 'Südlicher Sturz => ${inout}',
           ja: '南ダイブ => ${inout}',
           cn: '下南俯冲 => ${inout}',
           ko: '남쪽 다이브 => ${inout}',
         },
         upArrowDive1: {
-          en: '위 화살 다이브 => ${inout}',
+          en: '🡹 다이브 → ${inout}',
           de: 'Vorne-Pfeil-Sturz => ${inout}',
           ja: '上矢印 => ${inout}',
           cn: '上箭头俯冲 => ${inout}',
           ko: '위 화살표 => ${inout}',
         },
         upArrowDive3: {
-          en: '위 화살 다이브 => ${inout}',
+          en: '🡹 다이브 → ${inout}',
           de: 'Vorne-Pfeil-Sturz => ${inout}',
           ja: '上矢印 => ${inout}',
           cn: '上箭头俯冲 => ${inout}',
           ko: '위 화살표 => ${inout}',
         },
         downArrowDive1: {
-          en: '아래 화살 다이브 => ${inout}',
+          en: '🡻 다이브 → ${inout}',
           de: 'Hinten-Pfeil-Sturz => ${inout}',
           ja: '下矢印 => ${inout}',
           cn: '下箭头俯冲 => ${inout}',
           ko: '아래 화살표 => ${inout}',
         },
         downArrowDive3: {
-          en: '아래 화살 다이브 => ${inout}',
+          en: '🡻 다이브 → ${inout}',
           de: 'Hinten-Pfeil-Sturz => ${inout}',
           ja: '下矢印 => ${inout}',
           cn: '下箭头俯冲 => ${inout}',
@@ -1494,21 +1495,21 @@ const triggerSet: TriggerSet<Data> = {
             ko: '${inout} + 공격 유도',
           },
           circlesDive2: {
-            en: '${inout} => 다이브 (모두 동글)',
+            en: '${inout} → 모두🟢 다이브',
             de: '${inout} => Sturz (alle Kreise)',
             ja: '${inout} => ダイブ (みんなハイジャ)',
             cn: '${inout} => 俯冲 (全圆圈)',
             ko: '${inout} => 다이브 (모두 하이점프)',
           },
           upArrowDive2: {
-            en: '${inout} => 위 화살 다이브',
+            en: '${inout} → 🡹 다이브',
             de: '${inout} => Vorne-Pfeil-Sturz',
             ja: '${inout} => 上矢印',
             cn: '${inout} => 上箭头俯冲',
             ko: '${inout} => 위 화살표',
           },
           downArrowDive2: {
-            en: '${inout} => 아래 화살 다이브',
+            en: '${inout} → 🡻 다이브',
             de: '${inout} => Hinten-Pfeil-Sturz',
             ja: '${inout} => 下矢印',
             cn: '${inout} => 下箭头俯冲',
@@ -1645,42 +1646,42 @@ const triggerSet: TriggerSet<Data> = {
           ko: '남쪽 기둥 (${inout})',
         },
         circleTowers1: {
-          en: '타워 (모두 동글, ${inout})',
+          en: '타워 (모두🟢, ${inout})',
           de: 'Türme (alle Kreise, ${inout})',
           ja: '塔 (みんなハイジャ、${inout})',
           cn: '塔 (全圆圈, ${inout})',
           ko: '기둥 (모두 하이점프, ${inout})',
         },
         circleTowers3: {
-          en: '타워 (모두 동글, ${inout})',
+          en: '타워 (모두🟢, ${inout})',
           de: 'Türme (alle Kreise, ${inout})',
           ja: '塔 (みんなハイジャ、${inout})',
           cn: '塔 (全圆圈, ${inout})',
           ko: '기둥 (모두 하이점프, ${inout})',
         },
         upArrowTower1: {
-          en: '위 화살 타워 (${inout})',
+          en: '🡹 타워 (${inout})',
           de: 'Vorne-Pfeil-Turm (${inout})',
           ja: '上矢印の塔 (${inout})',
           cn: '上箭头塔 (${inout})',
           ko: '위 화살표 기둥 (${inout})',
         },
         downArrowTower1: {
-          en: '아래 화살 타워 ( ${inout})',
+          en: '🡻 타워 ( ${inout})',
           de: 'Hinten-Pfeil-Turm (${inout})',
           ja: '下矢印の塔 (${inout})',
           cn: '下箭头塔 (${inout})',
           ko: '아래 화살표 기둥 (${inout})',
         },
         upArrowTower3: {
-          en: '위 화살 타워 (${inout})',
+          en: '🡹 타워 (${inout})',
           de: 'Vorne-Pfeil-Turm (${inout})',
           ja: '上矢印の塔 (${inout})',
           cn: '上箭头塔 (${inout})',
           ko: '위 화살표 기둥 (${inout})',
         },
         downArrowTower3: {
-          en: '아래 화살 타워 ( ${inout})',
+          en: '🡻 타워 ( ${inout})',
           de: 'Hinten-Pfeil-Turm (${inout})',
           ja: '下矢印の塔 (${inout})',
           cn: '下箭头塔 (${inout})',
@@ -1841,7 +1842,7 @@ const triggerSet: TriggerSet<Data> = {
         out: Outputs.out,
         unknown: Outputs.unknown,
         stackInOut: {
-          en: '뭉쳐욧 => ${inout}',
+          en: '뭉치고 → ${inout}',
           de: 'Sammeln => ${inout}',
           ja: '頭割り => ${inout}',
           cn: '分摊 => ${inout}',
@@ -1869,7 +1870,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '파란줄',
+          en: '파란🟦줄',
           de: 'Blau',
           ja: '青',
           cn: '蓝点名',
@@ -1886,7 +1887,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '빨간줄',
+          en: '빨간🟥줄',
           de: 'Rot',
           ja: '赤',
           cn: '红点名',
@@ -1904,7 +1905,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '곧 다이브!!',
+          en: '곧 다이브!',
           de: 'Stürze bald',
           ja: 'まもなくダイブ',
           cn: '即将幻象冲',
@@ -1947,7 +1948,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '오른쪽 눈깔 잡아욧!',
+          en: '오른쪽 눈깔 잡아요',
           de: 'Besiege Rechtes Auge',
           ja: '右目を攻撃',
           cn: '击杀右眼',
@@ -1990,7 +1991,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         text: {
-          en: '트위스터!',
+          en: '🌪트위스터!',
           de: 'Wirbelstürme',
           fr: 'Tornades',
           ja: 'ツイスター',
@@ -1998,7 +1999,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '회오리',
         },
         withAscalon: {
-          en: '트위스터 + 아스칼론!!!',
+          en: '🌪트위스터 + 아스칼론!',
           ko: '회오리 + 아스칼론',
         },
       },
@@ -2011,7 +2012,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '내게 줄이!!',
+          en: '내게 줄이!',
           de: 'Verbindung auf DIR',
           ja: '自分に線',
           cn: '连线点名',
@@ -2032,7 +2033,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         leapOnYou: {
-          en: '파란거네!!',
+          en: '파란거네!',
           de: 'Sprung auf DIR',
           fr: 'Saut sur VOUS',
           ja: '自分に青マーカー',
@@ -2057,7 +2058,7 @@ const triggerSet: TriggerSet<Data> = {
       run: (data, matches) => data.thunderstruck.push(matches.target),
       outputStrings: {
         text: {
-          en: '내게 번개가!!',
+          en: '내게 번개가!',
           de: 'Blitz auf DIR',
           ja: '自分に雷',
           cn: '雷点名',
@@ -2105,7 +2106,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         diveOnYou: {
-          en: '내게 카탈라이즈! 몽둥이 뒤로!',
+          en: '내게 카탈라이즈! 지팡이 뒤로!',
           de: 'Sturz (gegenüber des Kriegers)',
           ja: '自分にダイブ (杖の後ろ)',
           cn: '俯冲 (去法师场边)',
@@ -2130,14 +2131,14 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         doomOnYou: {
-          en: '내게 둠이!!',
+          en: '내게 둠이!',
           de: 'Verhängnis auf DIR',
           ja: '自分に死の宣告',
           cn: '死宣点名',
           ko: '선고 대상자',
         },
         noDoom: {
-          en: '둠 없음',
+          en: '둠 없네',
           de: 'Kein Verhängnis',
           ja: '自分は無職',
           cn: '无死宣',
@@ -2216,7 +2217,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         circle: {
-          en: '빨강 ○',
+          en: '🔴빨강',
           de: 'Roter Kreis',
           fr: 'Cercle rouge',
           ja: '赤まる',
@@ -2224,7 +2225,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '빨강 동그라미',
         },
         triangle: {
-          en: '초록 △',
+          en: '▲초록',
           de: 'Grünes Dreieck',
           fr: 'Triangle vert',
           ja: '緑さんかく',
@@ -2232,7 +2233,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '초록 삼각',
         },
         square: {
-          en: '보라 ■',
+          en: '🟪보라',
           de: 'Lilanes Viereck',
           fr: 'Carré violet',
           ja: '紫しかく',
@@ -2240,7 +2241,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '보라 사각',
         },
         cross: {
-          en: '파랑 Ⅹ',
+          en: '➕파랑',
           de: 'Blaues X',
           fr: 'Croix bleue',
           ja: '青バツ',
@@ -2248,28 +2249,28 @@ const triggerSet: TriggerSet<Data> = {
           ko: '파랑 X',
         },
         circleWithDoom: {
-          en: '☠ / 빨강 ○',
+          en: '🔴빨강 + 둠',
           de: 'Roter Kreis (Verhängnis)',
           ja: '赤まる (死の宣告)',
           cn: '红圆圈 (死宣)',
           ko: '빨강 동그라미 (선고)',
         },
         triangleWithDoom: {
-          en: '☠ / 초록 △',
+          en: '▲초록 + 둠',
           de: 'Grünes Dreieck (Verhängnis)',
           ja: '緑さんかく (死の宣告)',
           cn: '绿三角 (死宣)',
           ko: '초록 삼각 (선고)',
         },
         squareWithDoom: {
-          en: '☠ / 보라 ■',
+          en: '🟪보라 + 둠',
           de: 'Lilanes Viereck (Verhängnis)',
           ja: '紫しかく (死の宣告)',
           cn: '紫方块 (死宣)',
           ko: '보라 사각 (선고)',
         },
         crossWithDoom: {
-          en: '☠ / 파랑 Ⅹ',
+          en: '➕파랑 + 둠',
           de: 'Blaues X (Verhängnis)',
           ja: '青バツ(死の宣告)',
           cn: '蓝X (死宣)',
@@ -2326,56 +2327,56 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         circle: {
-          en: '마커없는 빨강 ○',
+          en: '노마커 🔴빨강',
           de: 'Unmarkierter roter Kreis',
           ja: '無職で赤まる',
           cn: '无标记红圆圈',
           ko: '무징 빨강 동그라미',
         },
         triangle: {
-          en: '마커없는 초록 △',
+          en: '노마커 ▲초록',
           de: 'Unmarkiertes grünes Dreieck',
           ja: '無職で緑さんかく',
           cn: '无标记绿三角',
           ko: '무징 초록 삼각',
         },
         square: {
-          en: '마커없는 보라 ■',
+          en: '노마커 🟪보라',
           de: 'Unmarkiertes lilanes Viereck',
           ja: '無職で紫しかく',
           cn: '无标记紫方块',
           ko: '무징 보라 사각',
         },
         cross: {
-          en: '마커없는 파랑 Ⅹ',
+          en: '노마커 ➕파랑',
           de: 'Unmarkiertes blaues X ',
           ja: '無職で青バツ',
           cn: '无标记蓝X',
           ko: '무징 파랑 X',
         },
         circleWithDoom: {
-          en: '☠ / 마커없는 빨강 ○',
+          en: '노마커 🔴빨강 + 둠',
           de: 'Unmarkierter roter Kreis (Verhängnis)',
           ja: '無職で赤まる (死の宣告)',
           cn: '无标记红圆圈 (死宣)',
           ko: '무징 빨강 동그라미 (선고)',
         },
         triangleWithDoom: {
-          en: '☠ / 마커없는 초록 △',
+          en: '노마커 ▲초록 + 둠',
           de: 'Unmarkiertes grünes Dreieck (Verhängnis)',
           ja: '無職で緑さんかく (死の宣告)',
           cn: '无标记绿三角 (死宣)',
           ko: '무징 초록 삼각 (선고)',
         },
         squareWithDoom: {
-          en: '☠ / 마커없는 보라 ■',
+          en: '노마커 🟪보라 + 둠',
           de: 'Unmarkiertes lilanes Viereck (Verhängnis)',
           ja: '無職で紫しかく (死の宣告)',
           cn: '无标记紫方块 (死宣)',
           ko: '무징 보라 사각 (선고)',
         },
         crossWithDoom: {
-          en: '☠ / 마커없는 파랑 Ⅹ',
+          en: '노마커 ➕파랑 + 둠',
           de: 'Unmarkiertes blaues X (Verhängnis)',
           ja: '無職で青バツ (死の宣告)',
           cn: '无标记蓝X (死宣)',
@@ -2434,14 +2435,14 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         // In case users want to have triangle vs square say something different.
         doubleTriangle: {
-          en: '둘다 ☠ 없음: ${player}',
+          en: '둠 없음: ${player}',
           de: 'Doppeltes Nicht-Verhängnis (${player})',
           ja: '自分と相棒は死の宣告なし (${player})',
           cn: '双无死宣 (${player})',
           ko: '둘 다 선고 없음 (${player})',
         },
         doubleSquare: {
-          en: '둘다 ☠ 없음: ${player}',
+          en: '둠 없음: ${player}',
           de: 'Doppeltes Nicht-Verhängnis (${player})',
           ja: '自分と相棒は死の宣告なし (${player})',
           cn: '双无死宣 (${player})',
@@ -2457,14 +2458,14 @@ const triggerSet: TriggerSet<Data> = {
         // cactbot-builtin-response
         output.responseOutputStrings = {
           tanksApart: {
-            en: '니드호그로, ST 버스터!!!',
+            en: '탱크 분리, 흐레스 버스터',
             de: 'Auseinander (Hrae-buster)',
             ja: '離れる (フレスから攻撃)',
             cn: '分散 (圣龙死刑)',
             ko: '떨어지기 (흐레스벨그 탱버)',
           },
           hraesvelgrTankbuster: {
-            en: '흐레스벨그 버스터',
+            en: '흐레스 버스터',
             de: 'Hrae Tankbuster',
             ja: 'フレスから攻撃',
             cn: '圣龙死刑',
@@ -2492,7 +2493,7 @@ const triggerSet: TriggerSet<Data> = {
         // cactbot-builtin-response
         output.responseOutputStrings = {
           tanksApart: {
-            en: '니드호그로, 나한테 버스터!!!',
+            en: '탱크 분리, 니드호그 버스터',
             de: 'Auseinander (Nid-buster)',
             ja: '離れる (ニーズから攻撃)',
             cn: '分散 (邪龙死刑)',
@@ -2535,7 +2536,7 @@ const triggerSet: TriggerSet<Data> = {
         // cactbot-builtin-response
         output.responseOutputStrings = {
           sharedBuster: {
-            en: '가운데서 함께 버스터!!!',
+            en: '탱크 뭉쳐 버스터!',
             de: 'geteilter Tankbuster',
             ja: 'タンク二人で頭割り',
             cn: '分摊死刑',
@@ -2572,7 +2573,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.groups!(),
       outputStrings: {
         groups: {
-          en: '아크아파! 힐러랑 뭉쳐욧!!!',
+          en: '아크아파! 힐러랑 뭉쳐욧!',
           de: 'Heiler-Gruppen',
           fr: 'Groupes sur les heals',
           ja: 'ヒラに頭割り',
@@ -2677,31 +2678,31 @@ const triggerSet: TriggerSet<Data> = {
         // Yes, these are also tank busters, but there's too many things to call out here,
         // and this is a case of "tanks and healers need to know what's going on ahead of time".
         left: {
-          en: '◀◀',
+          en: '왼쪽🡸',
           ja: '左',
           ko: '왼쪽',
         },
         right: {
-          en: '▶▶',
+          en: '🡺오른쪽',
           ja: '右',
           ko: '오른쪽',
         },
         forward: {
-          en: '▲▲',
+          en: '🡹앞으로',
           de: 'Vorwärts',
           ja: '前へ',
           cn: '向前',
           ko: '앞쪽으로',
         },
         backward: {
-          en: '▼▼',
+          en: '뒤로🡻',
           de: 'Rückwärts',
           ja: '後ろへ',
           cn: '向后',
           ko: '뒤쪽으로',
         },
         partyNear: {
-          en: '파티는 가까이',
+          en: '파티 가까이',
           de: 'Party nahe',
           ja: 'パーティが前へ',
           cn: '人群靠近',
@@ -2715,7 +2716,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '탱커가 가까이',
         },
         partyFar: {
-          en: '파티는 멀리',
+          en: '파티 멀리',
           de: 'Party weit weg',
           ja: 'パーティが後ろへ',
           cn: '人群远离',
@@ -2729,10 +2730,10 @@ const triggerSet: TriggerSet<Data> = {
           ko: '탱커가 멀리',
         },
         tanksFront: {
-          en: '맨 앞으로',
+          en: '맨 🡹앞으로',
         },
         tanksBehind: {
-          en: '맨 뒤로',
+          en: '맨 뒤로🡻',
         },
         wingsHead: {
           en: '${wings}, ${head}',
@@ -2778,7 +2779,7 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           // Often cactbot uses "in" and "out", but that's usually hitbox relative vs
           // anything else.  Because this is more arena-relative.
-          en: '안으로!!! 날개!!!',
+          en: '|안으로| 날개!',
           de: 'Rein',
           ja: '内側へ',
           cn: '中间',
@@ -2797,7 +2798,7 @@ const triggerSet: TriggerSet<Data> = {
       tts: (_data, _matches, output) => output.tts!(),
       outputStrings: {
         text: {
-          en: '바깥으로!!! 꼬리!!!',
+          en: '⤄바깥으로! 꼬리!',
           de: 'Raus',
           ja: '外側へ',
           cn: '两侧',
@@ -2826,14 +2827,14 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         nidhogg: {
-          en: '니드호그에게 맞아욧!',
+          en: '니드호그 쪽으로',
           de: 'Werde von Nidhogg getroffen',
           ja: 'ニーズヘッグに当たる',
           cn: '吃邪龙俯冲',
           ko: '니드호그에게 맞기',
         },
         hraesvelgr: {
-          en: '흐레스벨그에게 맞아욧!',
+          en: '흐레스 쪽으로',
           de: 'Werde von Hraesvelgr getroffen',
           ja: 'フレースヴェルグに当たる',
           cn: '吃圣龙俯冲',
@@ -2890,21 +2891,21 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         spread: {
-          en: '검정색! 혼자욧!!!',
+          en: '검정⬛ 혼자!',
           de: 'Verteilen',
           ja: '散会',
           cn: '分散',
           ko: '산개징 대상자',
         },
         stack: {
-          en: '흰색! 함께예욧!!!',
+          en: '흰색⬜ 둘이 함께!',
           de: 'Sammeln',
           ja: '頭割り',
           cn: '分摊',
           ko: '쉐어징 대상자',
         },
         nodebuff: {
-          en: '무직이네!!!',
+          en: '무직! 흰색과 함께!',
           de: 'Kein Debuff (Sammeln)',
           ja: 'バフなし (頭割り)',
           cn: '无Debuff (分摊)',
@@ -2940,7 +2941,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           // Only showing 'swap' is really confusing, in my opinion
-          en: '스탠스 꺼욧! 다크!!!',
+          en: '스탠스 꺼욧! 다크⬛!',
           de: 'Sei 2. in der Aggro',
           ja: 'スタンスオフ',
           cn: '建立二仇',
@@ -2966,7 +2967,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         text: {
-          en: '프로보크! 라이트!!!',
+          en: '프로보크! 라이트⬜!',
           de: 'Herausforderung',
           ja: '挑発',
           cn: '挑衅',
@@ -3075,27 +3076,41 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         directions: {
           en: '${start} => ${rotation}',
+          de: '${start} => ${rotation}',
+          cn: '${start} => ${rotation}',
+          ko: '${start} => ${rotation}',
         },
         backLeft: {
-          en: '뒤 왼쪽',
+          en: '🡿왼쪽뒤',
+          de: 'Hinten links',
+          cn: '左后',
+          ko: '뒤 왼쪽',
         },
         backRight: {
-          en: '뒤 오른쪽',
+          en: '🡾오른쪽뒤',
+          de: 'Hinten rechts',
+          cn: '右后',
+          ko: '뒤 오른쪽',
         },
         front: {
-          en: '앞으로',
+          en: '🡹앞',
+          de: 'Vorne',
+          cn: '前',
+          ko: '앞',
         },
         unknown: Outputs.unknown,
         clockwise: {
-          en: '시계방향',
+          en: '시계❰❰❰',
           de: 'Im Uhrzeigersinn',
           ja: '時計回り',
+          cn: '顺时针',
           ko: '시계방향',
         },
         counterclock: {
-          en: '반시계방향',
+          en: '❱❱❱반시계',
           de: 'Gegen den Uhrzeigersinn',
           ja: '反時計回り',
+          cn: '逆时针',
           ko: '반시계방향',
         },
       },
