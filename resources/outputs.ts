@@ -423,6 +423,22 @@ export default {
     cn: '去右/东边 =>',
     ko: '오른쪽으로 =>',
   },
+  leftThenRight: {
+    en: '왼쪽 => 오른쪽',
+    de: 'Links => Rechts',
+    fr: 'À gauche => À droite',
+    ja: '左 => 右',
+    cn: '左 => 右',
+    ko: '왼쪽 => 오른쪽',
+  },
+  rightThenLeft: {
+    en: '오른쪽 => 왼쪽',
+    de: 'Rechts => Links',
+    fr: 'À droite => À gauche',
+    ja: '右 => 左',
+    cn: '右 => 左',
+    ko: '오른쪽 => 왼쪽',
+  },
   goFrontBack: {
     en: '🡹앞/뒤로🡻',
     de: 'Geh nach Vorne/Hinten',

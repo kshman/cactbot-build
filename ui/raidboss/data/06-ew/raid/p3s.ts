@@ -62,7 +62,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Fire Positions',
+          en: '불꽃 위치로!',
           de: 'Feuer-Positionen',
           fr: 'Positions pour les flammes',
           ja: '黒い炎の位置に散開',
@@ -78,7 +78,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Tank Tethers',
+          en: '탱크 줄!',
           de: 'Tank-Verbindungen',
           fr: 'Liens Tank',
           ja: 'タンク線取り',
@@ -94,7 +94,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Get Middle (then rotate)',
+          en: '작은 구슬 / 가운데 → 시바',
           de: 'Geh in die Mitte (und rotiere dann)',
           fr: 'Placez-vous au milieu (puis tournez)',
           ja: '中央 → 小玉・ぐるぐる',
@@ -110,7 +110,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Get Middle (then out)',
+          en: '큰 구슬 / 가운데 → 밖으로',
           de: 'Geh in die Mitte (und dann raus)',
           fr: 'Placez-vous au milieu (puis sortez)',
           ja: '中央 → 大玉・離れる',
@@ -145,7 +145,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Sides + Spread',
+          en: '바깥 + 흩어졋',
           de: 'Seiten + Verteilen',
           fr: 'Côtés + Dispersez-vous',
           ja: '横側安置：散開',
@@ -161,7 +161,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Middle Pairs',
+          en: '가운데서 짝짝쿵',
           de: 'Mittlere Paare',
           fr: 'Paires au milieu',
           ja: '中央直線安置：二人組で頭割り',
@@ -197,10 +197,10 @@ const triggerSet: TriggerSet<Data> = {
         num2: Outputs.num2,
         num3: Outputs.num3,
         num4: Outputs.num4,
-        num5: Outputs.num5,
-        num6: Outputs.num6,
-        num7: Outputs.num7,
-        num8: Outputs.num8,
+        num5: '1 ◁ 5',
+        num6: '2 ◁ 6',
+        num7: '3 ◁ 7',
+        num8: '4 ◁ 8',
         east: Outputs.east,
         west: Outputs.west,
         south: Outputs.south,
@@ -280,7 +280,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         playerTether: {
-          en: '${dir} (away from ${player})',
+          en: '${dir} (상대방: ${player})',
           de: '${dir} (weg von ${player})',
           fr: '${dir} (éloignez-vous de ${player})',
           ja: '${dir} (${player}と繋がる)',
@@ -288,7 +288,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '${dir} (${player}에게서 멀리 떨어지기)',
         },
         birdTether: {
-          en: '${dir} (away from bird)',
+          en: '${dir} (새랑 묶였네)',
           de: '${dir} (weg vom Vogel)',
           fr: '${dir} (éloignez-vous de l\'oiseau)',
           ja: '${dir} (鳥と繋がる)',
@@ -319,7 +319,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Get Middle (then rotate)',
+          en: '작은 구슬 / 가운데 → 시바',
           de: 'Geh in die Mitte (und rotiere dann)',
           fr: 'Placez-vous au milieu (puis tournez)',
           ja: '中央 → 小玉・ぐるぐる',
@@ -336,7 +336,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Get Middle (then out)',
+          en: '큰 구슬 / 가운데 → 밖으로',
           de: 'Geh in die Mitte (und dann raus)',
           fr: 'Placez-vous au milieu (puis sortez)',
           ja: '中央 → 大玉・離れる',
@@ -363,7 +363,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Stacks After',
+          en: '그담엔 뭉쳐야해욧',
           de: 'Danach sammeln',
           fr: 'Packez-vous après',
           ja: 'あとは頭割り',
@@ -381,7 +381,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Spread After',
+          en: '그담엔 흩어져욧',
           de: 'Danach verteilen',
           fr: 'Dispersez-vous après',
           ja: 'あとは散開',
@@ -399,7 +399,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Spread => Bird Tether',
+          en: '흩어졌다 => 새의 줄',
           de: 'Verteilen => Vogel-Verbindungen',
           fr: 'Dispersez-vous => Liens oiseaux',
           ja: '散開 => 鳥の線',
@@ -422,7 +422,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Stacks',
+          en: '뭉쳐욧',
           de: 'Sammeln',
           fr: 'Packez-vous',
           ja: '頭割り',
@@ -439,7 +439,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Spread',
+          en: '흩어져욧',
           de: 'Verteilen',
           fr: 'Dispersez-vous',
           ja: '散開',
@@ -470,7 +470,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         middle: Outputs.middle,
         outIntercards: {
-          en: 'Intercards + Out',
+          en: '모서리로!',
           de: 'Interkardinal + Raus',
           fr: 'Intercadinal + Extérieur',
           ja: '斜め + 外側',
@@ -478,7 +478,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '대각선 + 바깥',
         },
         outCardinals: {
-          en: 'Out + Cardinals',
+          en: '십자로!',
           de: 'Raus + Kardinal',
           fr: 'Extérieur + Cardinal',
           ja: '外側 + 十字',

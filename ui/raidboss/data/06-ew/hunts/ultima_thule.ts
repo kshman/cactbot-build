@@ -105,12 +105,14 @@ const triggerSet: TriggerSet<Data> = {
       id: 'Hunt Narrow-rift Empty Promise Donut',
       type: 'StartsUsing',
       netRegex: { id: '6B60', source: 'Narrow-rift', capture: false },
+      condition: (data) => data.inCombat,
       response: Responses.getIn(),
     },
     {
       id: 'Hunt Narrow-rift Empty Promise Circle',
       type: 'StartsUsing',
       netRegex: { id: '6B5F', source: 'Narrow-rift', capture: false },
+      condition: (data) => data.inCombat,
       response: Responses.getOut(),
     },
     {
@@ -118,6 +120,7 @@ const triggerSet: TriggerSet<Data> = {
       type: 'Ability',
       // An unknown single-target ability that preceeds Vanishing Ray with no cast bar.
       netRegex: { id: '6AC5', source: 'Narrow-rift', capture: false },
+      condition: (data) => data.inCombat,
       response: Responses.getBehind(),
     },
     {
@@ -125,12 +128,14 @@ const triggerSet: TriggerSet<Data> = {
       type: 'StartsUsing',
       // This is followed by a very short 6AC9 castbar.
       netRegex: { id: '6AC3', source: 'Narrow-rift', capture: false },
+      condition: (data) => data.inCombat,
       response: Responses.getOutThenIn(),
     },
     {
       id: 'Hunt Narrow-rift Empty Refrain In Second',
       type: 'Ability',
       netRegex: { id: '6AC3', source: 'Narrow-rift', capture: false },
+      condition: (data) => data.inCombat,
       suppressSeconds: 1,
       response: Responses.getIn('info'),
     },
@@ -139,12 +144,14 @@ const triggerSet: TriggerSet<Data> = {
       type: 'StartsUsing',
       // This is followed by a very short 6AC7 castbar.
       netRegex: { id: '6AC4', source: 'Narrow-rift', capture: false },
+      condition: (data) => data.inCombat,
       response: Responses.getInThenOut(),
     },
     {
       id: 'Hunt Narrow-rift Empty Refrain Out Second',
       type: 'Ability',
       netRegex: { id: '6AC4', source: 'Narrow-rift', capture: false },
+      condition: (data) => data.inCombat,
       suppressSeconds: 1,
       response: Responses.getOut('info'),
     },
@@ -206,7 +213,7 @@ const triggerSet: TriggerSet<Data> = {
           en: '◎바로 밑에서 => 엉댕이로',
           de: 'Unter Ihn => Hinter den Boss',
           ja: '下 => 後ろ',
-          cn: '下方 => 背后',
+          cn: '脚下 => 背后',
           ko: '안으로 => 뒤로',
         },
       },
@@ -235,10 +242,10 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '◎바로 밑에서 => 앞으',
+          en: '◎바로 밑에서 => 앞으로',
           de: 'Unter Ihn => Vor den Boss',
           ja: '下 => 前',
-          cn: '下方 => 正面',
+          cn: '脚下 => 正面',
           ko: '안으로 => 앞으로',
         },
       },
@@ -293,13 +300,17 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         northSouth: {
-          en: '남/북 모서리로',
+          en: '남북 끝으로 (앞뒤 확인해야해요)',
+          de: 'Geh zur Kante im Norden / Süden',
           ja: '南・北の角へ',
+          cn: '去南北边缘',
           ko: '남/북쪽 끝으로',
         },
         eastWest: {
-          en: '동/서 모서리로',
+          en: '동서 끝으로 (앞뒤 확인해야해요)',
+          de: 'Geh zur Kante im Osten / Westen',
           ja: '東・西の角へ',
+          cn: '去东西边缘',
           ko: '동/서쪽 끝으로',
         },
       },

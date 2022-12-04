@@ -43,6 +43,53 @@ const triggerSet: TriggerSet<Data> = {
       response: Responses.getIn(),
     },
   ],
+  timelineReplace: [
+    {
+      'locale': 'de',
+      'replaceSync': {
+        'Deep Palace Fachan': 'Katakomben-Fachan',
+        'Deep Palace Knight': 'Katakomben-Ritter',
+        'Deep Palace Wraith': 'Katakomben-Geist',
+        'Onyx Dragon': 'Onyxdrache',
+      },
+    },
+    {
+      'locale': 'fr',
+      'replaceSync': {
+        'Deep Palace Fachan': 'fachan des profondeurs',
+        'Deep Palace Knight': 'chevalier des profondeurs',
+        'Deep Palace Wraith': 'spectre des profondeurs',
+        'Onyx Dragon': 'dragon d\'onyx',
+      },
+    },
+    {
+      'locale': 'ja',
+      'replaceSync': {
+        'Deep Palace Fachan': '«Ç«£?«×«Ñ«ì«¹?«Õ«¡«Ï«ó',
+        'Deep Palace Knight': '«Ç«£?«×«Ñ«ì«¹?«Ê«¤«È',
+        'Deep Palace Wraith': '«Ç«£?«×«Ñ«ì«¹?«ì«¤«¹',
+        'Onyx Dragon': '«ª«Ë«­«¹«É«é«´«ó',
+      },
+    },
+    {
+      'locale': 'cn',
+      'replaceSync': {
+        'Deep Palace Fachan': 'ä¢?êëÐ¡ñýäÑ',
+        'Deep Palace Knight': 'ä¢??ÞÍ',
+        'Deep Palace Wraith': 'ä¢?êë?',
+        'Onyx Dragon': '?ÒùÐºÞÙ?',
+      },
+    },
+    {
+      'locale': 'ko',
+      'replaceSync': {
+        'Deep Palace Fachan': '±íÀº ±ÃÀü ÆÄÇÑ',
+        'Deep Palace Knight': '±íÀº ±ÃÀü ±â»ç',
+        'Deep Palace Wraith': '±íÀº ±ÃÀü ¸Á·É',
+        'Onyx Dragon': 'ÁÙ¸¶³ë µå·¡°ï',
+      },
+    },
+  ],
 };
 
 export default triggerSet;

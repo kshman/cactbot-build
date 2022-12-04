@@ -27,10 +27,47 @@ const triggerSet: TriggerSet<Data> = {
       // gains Haste and Attack Boost
       type: 'StartsUsing',
       netRegex: { id: '1B94', source: 'Bird of the Deep Palace' },
-      response: Responses.interrupt(),
+      response: Responses.interruptIfPossible(),
     },
     // ---------------- Floor 180 Boss: Dendainsonne ----------------
     // intentionally blank
+  ],
+  timelineReplace: [
+    {
+      'locale': 'de',
+      'replaceSync': {
+        'Bird of the Deep Palace': 'Katakombenvogel',
+        'Deep Palace Snowclops': 'Katakomben-Schneezyklop',
+      },
+    },
+    {
+      'locale': 'fr',
+      'replaceSync': {
+        'Bird of the Deep Palace': 'oiseau des profondeurs',
+        'Deep Palace Snowclops': 'chionope des profondeurs',
+      },
+    },
+    {
+      'locale': 'ja',
+      'replaceSync': {
+        'Bird of the Deep Palace': '«Ð?«É?«ª«Ö?«Ç«£?«×«Ñ«ì«¹',
+        'Deep Palace Snowclops': '«Ç«£?«×«Ñ«ì«¹?«¹«Î«¦«¯«í«×«¹',
+      },
+    },
+    {
+      'locale': 'cn',
+      'replaceSync': {
+        'Bird of the Deep Palace': 'ä¢?èí?',
+        'Deep Palace Snowclops': 'ä¢??äÑàäËÝìÑ',
+      },
+    },
+    {
+      'locale': 'ko',
+      'replaceSync': {
+        'Bird of the Deep Palace': '±íÀº ±ÃÀü »õ',
+        'Deep Palace Snowclops': '±íÀº ±ÃÀü ´«º¸¶ó »çÀÌÅ¬·Ó½º',
+      },
+    },
   ],
 };
 

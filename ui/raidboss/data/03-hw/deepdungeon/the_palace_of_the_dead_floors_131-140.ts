@@ -36,6 +36,43 @@ const triggerSet: TriggerSet<Data> = {
       response: Responses.killAdds('alert'),
     },
   ],
+  timelineReplace: [
+    {
+      'locale': 'de',
+      'replaceSync': {
+        'Deep Palace Ahriman': 'Katakomben-Ahriman',
+        'Deep Palace Catoblepas': 'Katakomben-Catblepus',
+      },
+    },
+    {
+      'locale': 'fr',
+      'replaceSync': {
+        'Deep Palace Ahriman': 'ahriman des profondeurs',
+        'Deep Palace Catoblepas': 'catoblepas des profondeurs',
+      },
+    },
+    {
+      'locale': 'ja',
+      'replaceSync': {
+        'Deep Palace Ahriman': '«Ç«£?«×«Ñ«ì«¹?«¢?«ê«Þ«ó',
+        'Deep Palace Catoblepas': '«Ç«£?«×«Ñ«ì«¹?«««È«Ö«ì«Ñ«¹',
+      },
+    },
+    {
+      'locale': 'cn',
+      'replaceSync': {
+        'Deep Palace Ahriman': 'ä¢?Ù¢Ð¡ñýäÑ',
+        'Deep Palace Catoblepas': 'ä¢??öõøÖ??ÞÙ',
+      },
+    },
+    {
+      'locale': 'ko',
+      'replaceSync': {
+        'Deep Palace Ahriman': '±íÀº ±ÃÀü ¾Æ¸®¸¸',
+        'Deep Palace Catoblepas': '±íÀº ±ÃÀü Ä«Åäºí·¹ÆÄ½º',
+      },
+    },
+  ],
 };
 
 export default triggerSet;

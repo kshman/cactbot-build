@@ -29,6 +29,38 @@ const triggerSet: TriggerSet<Data> = {
     // ---------------- Floor 170 Boss: Yulunggu ----------------
     // intentionally blank
   ],
+  timelineReplace: [
+    {
+      'locale': 'de',
+      'replaceSync': {
+        'Deep Palace Diplocaulus': 'Katakomben-Diplocaulus',
+      },
+    },
+    {
+      'locale': 'fr',
+      'replaceSync': {
+        'Deep Palace Diplocaulus': 'diplocaulus des profondeurs',
+      },
+    },
+    {
+      'locale': 'ja',
+      'replaceSync': {
+        'Deep Palace Diplocaulus': '«Ç«£?«×«Ñ«ì«¹?«Ç«£«×«í«««¦«ë«¹',
+      },
+    },
+    {
+      'locale': 'cn',
+      'replaceSync': {
+        'Deep Palace Diplocaulus': 'ä¢?Ø¢??',
+      },
+    },
+    {
+      'locale': 'ko',
+      'replaceSync': {
+        'Deep Palace Diplocaulus': '±íÀº ±ÃÀü µðÇÃ·ÎÄ«¿ï·ç½º',
+      },
+    },
+  ],
 };
 
 export default triggerSet;

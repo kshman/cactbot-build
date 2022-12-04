@@ -27,6 +27,38 @@ const triggerSet: TriggerSet<Data> = {
       response: Responses.tankBuster(),
     },
   ],
+  timelineReplace: [
+    {
+      'locale': 'de',
+      'replaceSync': {
+        'Gorynich': 'Gorynich',
+      },
+    },
+    {
+      'locale': 'fr',
+      'replaceSync': {
+        'Gorynich': 'Gorynich',
+      },
+    },
+    {
+      'locale': 'ja',
+      'replaceSync': {
+        'Gorynich': '«´«ê«Ë«Á',
+      },
+    },
+    {
+      'locale': 'cn',
+      'replaceSync': {
+        'Gorynich': 'Ì«×ìÒùÐô??',
+      },
+    },
+    {
+      'locale': 'ko',
+      'replaceSync': {
+        'Gorynich': '°í¸®´ÏÄ¡',
+      },
+    },
+  ],
 };
 
 export default triggerSet;

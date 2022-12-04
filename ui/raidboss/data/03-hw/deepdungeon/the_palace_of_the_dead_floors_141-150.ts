@@ -64,6 +64,68 @@ const triggerSet: TriggerSet<Data> = {
       response: Responses.bigAoe('alert'),
     },
   ],
+  timelineReplace: [
+    {
+      'locale': 'de',
+      'replaceSync': {
+        'Deep Palace Bhoot': 'Katakomben-Bhut',
+        'Deep Palace Manticore': 'Katakomben-Manticore',
+        'Deep Palace Persona': 'Katakomben-Persona',
+        'Deep Palace Succubus': 'Katakomben-Sukkubus',
+        'Deep Palace Wraith': 'Katakomben-Geist',
+        'Onyx Dragon': 'Onyxdrache',
+        'Tisiphone': 'Tisiphone',
+      },
+    },
+    {
+      'locale': 'fr',
+      'replaceSync': {
+        'Deep Palace Bhoot': 'bhut des profondeurs',
+        'Deep Palace Manticore': 'manticore des profondeurs',
+        'Deep Palace Persona': 'persona des profondeurs',
+        'Deep Palace Succubus': 'succube des profondeurs',
+        'Deep Palace Wraith': 'spectre des profondeurs',
+        'Onyx Dragon': 'dragon d\'onyx',
+        'Tisiphone': 'Tisiphone',
+      },
+    },
+    {
+      'locale': 'ja',
+      'replaceSync': {
+        'Deep Palace Bhoot': '«Ç«£?«×«Ñ«ì«¹?«Ö«Õ?«È',
+        'Deep Palace Manticore': '«Ç«£?«×«Ñ«ì«¹?«Þ«ó«Æ«£«³«¢',
+        'Deep Palace Persona': '«Ç«£?«×«Ñ«ì«¹?«Ú«ë«½«Ê',
+        'Deep Palace Succubus': '«Ç«£?«×«Ñ«ì«¹?«µ«­«å«Ð«¹',
+        'Deep Palace Wraith': '«Ç«£?«×«Ñ«ì«¹?«ì«¤«¹',
+        'Onyx Dragon': '«ª«Ë«­«¹«É«é«´«ó',
+        'Tisiphone': '«Æ«£?«·«Ý«Í?',
+      },
+    },
+    {
+      'locale': 'cn',
+      'replaceSync': {
+        'Deep Palace Bhoot': 'ä¢?Ý©?',
+        'Deep Palace Manticore': 'ä¢?Øºð«Ðº',
+        'Deep Palace Persona': 'ä¢?Ê£Øü',
+        'Deep Palace Succubus': 'ä¢??Øª',
+        'Deep Palace Wraith': 'ä¢?êë?',
+        'Onyx Dragon': '?ÒùÐºÞÙ?',
+        'Tisiphone': 'ð«à¤ÜØæî',
+      },
+    },
+    {
+      'locale': 'ko',
+      'replaceSync': {
+        'Deep Palace Bhoot': '±íÀº ±ÃÀü ºêÈÄÆ®',
+        'Deep Palace Manticore': '±íÀº ±ÃÀü ¸¸Æ¼ÄÚ¾î',
+        'Deep Palace Persona': '±íÀº ±ÃÀü Æä¸£¼Ò³ª',
+        'Deep Palace Succubus': '±íÀº ±ÃÀü ¼­Å¥¹ö½º',
+        'Deep Palace Wraith': '±íÀº ±ÃÀü ¸Á·É',
+        'Onyx Dragon': 'ÁÙ¸¶³ë µå·¡°ï',
+        'Tisiphone': 'Æ¼½ÃÆ÷³×',
+      },
+    },
+  ],
 };
 
 export default triggerSet;

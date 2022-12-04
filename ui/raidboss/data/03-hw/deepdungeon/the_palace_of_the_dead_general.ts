@@ -33,6 +33,8 @@ const triggerSet: TriggerSet<Data> = {
   ],
   zoneLabel: {
     en: 'The Palace of the Dead (All Floors)',
+    de: 'Palast der Toten (Alle Ebenen)',
+    cn: '死者宫殿 (全楼层)',
     ko: '망자의 궁전',
   },
 
@@ -48,6 +50,8 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: '미믹 나왔어요!',
+          de: 'Mimik ist erschienen!',
+          cn: '已生成 拟态怪!',
           ko: '미믹 등장!',
         },
       },
@@ -57,7 +61,7 @@ const triggerSet: TriggerSet<Data> = {
       // inflicts Accursed Pox (43F) if not interrupted
       type: 'StartsUsing',
       netRegex: { id: '18FD', source: 'Mimic' },
-      response: Responses.interrupt(),
+      response: Responses.interruptIfPossible(),
     },
     // ---------------- Pomanders ----------------
     {
@@ -111,6 +115,8 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         duplicate: {
           en: '${pomander} 중복',
+          de: 'Doppelter ${pomander}',
+          cn: '${pomander} 重复',
           ko: '${pomander} 중복',
         },
         // pomanders: https://xivapi.com/deepdungeonItem?pretty=true
@@ -280,8 +286,42 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: '다음 층으로 갈 수 있어요',
+          de: 'Wegleuchte aktiviert',
+          cn: '转移石冢已启动',
           ko: '전송 석탑 활성화',
         },
+      },
+    },
+  ],
+  timelineReplace: [
+    {
+      'locale': 'de',
+      'replaceSync': {
+        'Mimic': 'Nachahmung',
+      },
+    },
+    {
+      'locale': 'fr',
+      'replaceSync': {
+        'Mimic': 'Mime',
+      },
+    },
+    {
+      'locale': 'ja',
+      'replaceSync': {
+        'Mimic': 'ものまね',
+      },
+    },
+    {
+      'locale': 'cn',
+      'replaceSync': {
+        'Mimic': '模仿',
+      },
+    },
+    {
+      'locale': 'ko',
+      'replaceSync': {
+        'Mimic': '흉내',
       },
     },
   ],

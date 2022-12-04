@@ -54,6 +54,48 @@ const triggerSet: TriggerSet<Data> = {
       response: Responses.getUnder('alert'),
     },
   ],
+  timelineReplace: [
+    {
+      'locale': 'de',
+      'replaceSync': {
+        'Alfard': 'Alfard',
+        'Deep Palace Minotaur': 'Katakomben-Minotaurus',
+        'Deep Palace Skatene': 'Katakomben-Skatene',
+      },
+    },
+    {
+      'locale': 'fr',
+      'replaceSync': {
+        'Alfard': 'Alfard',
+        'Deep Palace Minotaur': 'minotaure des profondeurs',
+        'Deep Palace Skatene': 'skate\'ne des profondeurs',
+      },
+    },
+    {
+      'locale': 'ja',
+      'replaceSync': {
+        'Alfard': '«¢«ë«Õ«¡«ë«É',
+        'Deep Palace Minotaur': '«Ç«£?«×«Ñ«ì«¹?«ß«Î«¿«¦«ë«¹',
+        'Deep Palace Skatene': '«Ç«£?«×«Ñ«ì«¹?«¹«««Í«Æ',
+      },
+    },
+    {
+      'locale': 'cn',
+      'replaceSync': {
+        'Alfard': 'äï?ÛöÓì',
+        'Deep Palace Minotaur': 'ä¢???Ô¶Õ¦ÞÙ',
+        'Deep Palace Skatene': 'ä¢?ÞÙ?Òù÷å',
+      },
+    },
+    {
+      'locale': 'ko',
+      'replaceSync': {
+        'Alfard': '¾ËÆÄ¸£µå',
+        'Deep Palace Minotaur': '±íÀº ±ÃÀü ¹Ì³ëÅ¸¿ì·Î½º',
+        'Deep Palace Skatene': '±íÀº ±ÃÀü ½ºÄ«³×Å×',
+      },
+    },
+  ],
 };
 
 export default triggerSet;

@@ -530,7 +530,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '초록 삼각',
         },
         square: {
-          en: '🟪보라',
+          en: '🟪보라 (➕왼쪽으로)',
           de: 'Lilanes Viereck',
           fr: 'Carré violet',
           ja: '紫しかく',
@@ -538,7 +538,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '보라 사각',
         },
         cross: {
-          en: '➕파랑',
+          en: '➕파랑 (북으로)',
           de: 'Blaues X',
           fr: 'Croix bleue',
           ja: '青バツ',
@@ -905,7 +905,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         leapOnYou: {
-          en: '파란거네!',
+          en: '🟦파란거네!',
           de: 'Sprung auf DIR',
           fr: 'Saut sur VOUS',
           ja: '自分に青マーカー',
@@ -2033,7 +2033,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         leapOnYou: {
-          en: '파란거네!',
+          en: '🟦파란거네!',
           de: 'Sprung auf DIR',
           fr: 'Saut sur VOUS',
           ja: '自分に青マーカー',
@@ -2058,7 +2058,7 @@ const triggerSet: TriggerSet<Data> = {
       run: (data, matches) => data.thunderstruck.push(matches.target),
       outputStrings: {
         text: {
-          en: '내게 번개가!',
+          en: '내게 ⚡번개가!',
           de: 'Blitz auf DIR',
           ja: '自分に雷',
           cn: '雷点名',
@@ -2085,7 +2085,7 @@ const triggerSet: TriggerSet<Data> = {
       tts: null,
       outputStrings: {
         text: {
-          en: '번개: ${name1}, ${name2}',
+          en: '⚡번개: ${name1}, ${name2}',
           de: 'Blitz: ${name1}, ${name2}',
           ja: '雷: ${name1}, ${name2}',
           cn: '雷点: ${name1}, ${name2}',
@@ -2106,7 +2106,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         diveOnYou: {
-          en: '내게 카탈라이즈! 지팡이 뒤로!',
+          en: '내게 💥카탈라이즈! 지팡이 뒤로!',
           de: 'Sturz (gegenüber des Kriegers)',
           ja: '自分にダイブ (杖の後ろ)',
           cn: '俯冲 (去法师场边)',
@@ -2131,7 +2131,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         doomOnYou: {
-          en: '내게 둠이!',
+          en: '내게 💀둠이!',
           de: 'Verhängnis auf DIR',
           ja: '自分に死の宣告',
           cn: '死宣点名',
@@ -2249,28 +2249,28 @@ const triggerSet: TriggerSet<Data> = {
           ko: '파랑 X',
         },
         circleWithDoom: {
-          en: '🔴빨강 + 둠',
+          en: '🔴빨강 + 💀둠',
           de: 'Roter Kreis (Verhängnis)',
           ja: '赤まる (死の宣告)',
           cn: '红圆圈 (死宣)',
           ko: '빨강 동그라미 (선고)',
         },
         triangleWithDoom: {
-          en: '▲초록 + 둠',
+          en: '▲초록 + 💀둠',
           de: 'Grünes Dreieck (Verhängnis)',
           ja: '緑さんかく (死の宣告)',
           cn: '绿三角 (死宣)',
           ko: '초록 삼각 (선고)',
         },
         squareWithDoom: {
-          en: '🟪보라 + 둠',
+          en: '🟪보라 + 💀둠',
           de: 'Lilanes Viereck (Verhängnis)',
           ja: '紫しかく (死の宣告)',
           cn: '紫方块 (死宣)',
           ko: '보라 사각 (선고)',
         },
         crossWithDoom: {
-          en: '➕파랑 + 둠',
+          en: '➕파랑 + 💀둠',
           de: 'Blaues X (Verhängnis)',
           ja: '青バツ(死の宣告)',
           cn: '蓝X (死宣)',
@@ -2355,28 +2355,28 @@ const triggerSet: TriggerSet<Data> = {
           ko: '무징 파랑 X',
         },
         circleWithDoom: {
-          en: '노마커 🔴빨강 + 둠',
+          en: '노마커 🔴빨강 + 💀둠',
           de: 'Unmarkierter roter Kreis (Verhängnis)',
           ja: '無職で赤まる (死の宣告)',
           cn: '无标记红圆圈 (死宣)',
           ko: '무징 빨강 동그라미 (선고)',
         },
         triangleWithDoom: {
-          en: '노마커 ▲초록 + 둠',
+          en: '노마커 ▲초록 + 💀둠',
           de: 'Unmarkiertes grünes Dreieck (Verhängnis)',
           ja: '無職で緑さんかく (死の宣告)',
           cn: '无标记绿三角 (死宣)',
           ko: '무징 초록 삼각 (선고)',
         },
         squareWithDoom: {
-          en: '노마커 🟪보라 + 둠',
+          en: '노마커 🟪보라 + 💀둠',
           de: 'Unmarkiertes lilanes Viereck (Verhängnis)',
           ja: '無職で紫しかく (死の宣告)',
           cn: '无标记紫方块 (死宣)',
           ko: '무징 보라 사각 (선고)',
         },
         crossWithDoom: {
-          en: '노마커 ➕파랑 + 둠',
+          en: '노마커 ➕파랑 + 💀둠',
           de: 'Unmarkiertes blaues X (Verhängnis)',
           ja: '無職で青バツ (死の宣告)',
           cn: '无标记蓝X (死宣)',
@@ -2458,14 +2458,14 @@ const triggerSet: TriggerSet<Data> = {
         // cactbot-builtin-response
         output.responseOutputStrings = {
           tanksApart: {
-            en: '탱크 분리, 흐레스 버스터',
+            en: '탱크 위치로! 흐레스벨그 버스터!',
             de: 'Auseinander (Hrae-buster)',
             ja: '離れる (フレスから攻撃)',
             cn: '分散 (圣龙死刑)',
             ko: '떨어지기 (흐레스벨그 탱버)',
           },
           hraesvelgrTankbuster: {
-            en: '흐레스 버스터',
+            en: '흐레스벨그 버스터',
             de: 'Hrae Tankbuster',
             ja: 'フレスから攻撃',
             cn: '圣龙死刑',
@@ -2493,7 +2493,7 @@ const triggerSet: TriggerSet<Data> = {
         // cactbot-builtin-response
         output.responseOutputStrings = {
           tanksApart: {
-            en: '탱크 분리, 니드호그 버스터',
+            en: '탱크 위치로! 니드호그 버스터!',
             de: 'Auseinander (Nid-buster)',
             ja: '離れる (ニーズから攻撃)',
             cn: '分散 (邪龙死刑)',
@@ -2779,7 +2779,7 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           // Often cactbot uses "in" and "out", but that's usually hitbox relative vs
           // anything else.  Because this is more arena-relative.
-          en: '|안으로| 날개!',
+          en: '안으로! 날개!',
           de: 'Rein',
           ja: '内側へ',
           cn: '中间',
@@ -2798,7 +2798,7 @@ const triggerSet: TriggerSet<Data> = {
       tts: (_data, _matches, output) => output.tts!(),
       outputStrings: {
         text: {
-          en: '⤄바깥으로! 꼬리!',
+          en: '바깥으로! 꼬리!',
           de: 'Raus',
           ja: '外側へ',
           cn: '两侧',
@@ -2905,7 +2905,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '쉐어징 대상자',
         },
         nodebuff: {
-          en: '무직! 흰색과 함께!',
+          en: '무직! 흰색⬜과 함께!',
           de: 'Kein Debuff (Sammeln)',
           ja: 'バフなし (頭割り)',
           cn: '无Debuff (分摊)',
