@@ -11,12 +11,8 @@ export type Data = RaidbossData;
 //   7A7 = About Face
 //   7A8 = Left Face
 //   7A9 = Right Face
-// TODO: Chi unknown tankbuster
 // TODO: Chi Bunker Buster
-// TODO: Chi Hellburner
 // TODO: Chi Bouncing Bomb
-// TODO: Chi Free-fall Bombs
-// TODO: Chi Thermobaric Explosive
 
 const triggerSet: TriggerSet<Data> = {
   zoneId: ZoneId.UltimaThule,
@@ -109,12 +105,14 @@ const triggerSet: TriggerSet<Data> = {
       id: 'Hunt Narrow-rift Empty Promise Donut',
       type: 'StartsUsing',
       netRegex: { id: '6B60', source: 'Narrow-rift', capture: false },
+      condition: (data) => data.inCombat,
       response: Responses.getIn(),
     },
     {
       id: 'Hunt Narrow-rift Empty Promise Circle',
       type: 'StartsUsing',
       netRegex: { id: '6B5F', source: 'Narrow-rift', capture: false },
+      condition: (data) => data.inCombat,
       response: Responses.getOut(),
     },
     {
@@ -122,6 +120,7 @@ const triggerSet: TriggerSet<Data> = {
       type: 'Ability',
       // An unknown single-target ability that preceeds Vanishing Ray with no cast bar.
       netRegex: { id: '6AC5', source: 'Narrow-rift', capture: false },
+      condition: (data) => data.inCombat,
       response: Responses.getBehind(),
     },
     {
@@ -129,12 +128,14 @@ const triggerSet: TriggerSet<Data> = {
       type: 'StartsUsing',
       // This is followed by a very short 6AC9 castbar.
       netRegex: { id: '6AC3', source: 'Narrow-rift', capture: false },
+      condition: (data) => data.inCombat,
       response: Responses.getOutThenIn(),
     },
     {
       id: 'Hunt Narrow-rift Empty Refrain In Second',
       type: 'Ability',
       netRegex: { id: '6AC3', source: 'Narrow-rift', capture: false },
+      condition: (data) => data.inCombat,
       suppressSeconds: 1,
       response: Responses.getIn('info'),
     },
@@ -143,12 +144,14 @@ const triggerSet: TriggerSet<Data> = {
       type: 'StartsUsing',
       // This is followed by a very short 6AC7 castbar.
       netRegex: { id: '6AC4', source: 'Narrow-rift', capture: false },
+      condition: (data) => data.inCombat,
       response: Responses.getInThenOut(),
     },
     {
       id: 'Hunt Narrow-rift Empty Refrain Out Second',
       type: 'Ability',
       netRegex: { id: '6AC4', source: 'Narrow-rift', capture: false },
+      condition: (data) => data.inCombat,
       suppressSeconds: 1,
       response: Responses.getOut('info'),
     },
@@ -210,7 +213,8 @@ const triggerSet: TriggerSet<Data> = {
           en: '◎바로 밑에서 => 엉댕이로',
           de: 'Unter Ihn => Hinter den Boss',
           ja: '下 => 後ろ',
-          cn: '下方 => 背后',
+          cn: '脚下 => 背后',
+          ko: '안으로 => 뒤로',
         },
       },
     },
@@ -226,6 +230,7 @@ const triggerSet: TriggerSet<Data> = {
           de: 'Seiten => Hinter den Boss',
           ja: '横 => 後ろ',
           cn: '两侧 => 背后',
+          ko: '옆으로 => 뒤로',
         },
       },
     },
@@ -237,10 +242,11 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '◎바로 밑에서 => 앞으',
+          en: '◎바로 밑에서 => 앞으로',
           de: 'Unter Ihn => Vor den Boss',
           ja: '下 => 前',
-          cn: '下方 => 正面',
+          cn: '脚下 => 正面',
+          ko: '안으로 => 앞으로',
         },
       },
     },
@@ -256,6 +262,56 @@ const triggerSet: TriggerSet<Data> = {
           de: 'Seiten => Vor den Boss',
           ja: '横 => 前',
           cn: '两侧 => 正面',
+          ko: '옆으로 => 앞으로',
+        },
+      },
+    },
+    {
+      id: 'Hunt Chi Missile Shower',
+      type: 'StartsUsing',
+      netRegex: { id: '6571', source: 'Chi', capture: false },
+      condition: (data) => data.inCombat,
+      response: Responses.aoe(),
+    },
+    {
+      id: 'Hunt Chi Hellburner',
+      // tankbuster aoe around marked target (primary threat)
+      type: 'StartsUsing',
+      netRegex: { id: '6574', source: 'Chi' },
+      condition: (data) => data.inCombat,
+      response: Responses.tankCleave('alert'),
+    },
+    {
+      id: 'Hunt Chi Thermobaric Explosive',
+      // dual proximity aoes either N/S or E/W targeting the environment (E0000000)
+      // proximity aoe locations (x, y):
+      //   N: (650.00, 15.00)
+      //   S: (650.00, -15.00)
+      //   E: (665.00, 0.00)
+      //   W: (635.00, 0.00)
+      type: 'StartsUsing',
+      netRegex: { id: '656E', source: 'Chi' },
+      condition: (data) => data.inCombat,
+      suppressSeconds: 1,
+      infoText: (_data, matches, output) => {
+        if (Math.abs(parseFloat(matches.x) - 650) < 0.1)
+          return output.eastWest!();
+        return output.northSouth!();
+      },
+      outputStrings: {
+        northSouth: {
+          en: '남북 끝으로 (앞뒤 확인해야해요)',
+          de: 'Geh zur Kante im Norden / Süden',
+          ja: '南・北の角へ',
+          cn: '去南北边缘',
+          ko: '남/북쪽 끝으로',
+        },
+        eastWest: {
+          en: '동서 끝으로 (앞뒤 확인해야해요)',
+          de: 'Geh zur Kante im Osten / Westen',
+          ja: '東・西の角へ',
+          cn: '去东西边缘',
+          ko: '동/서쪽 끝으로',
         },
       },
     },

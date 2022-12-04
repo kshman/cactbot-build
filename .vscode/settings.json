@@ -2,7 +2,8 @@
   "editor.tabSize": 2,
   "files.associations": {
     "**/data/**/*.txt": "cactbot-timeline",
-    "**/@prs/**/*.txt": "cactbot-timeline"
+    "**/@prs/**/*.txt": "cactbot-timeline",
+    "D:/FF14/act/plugins/cactbot/user/raidboss/*.txt": "cactbot-timeline"
   },
   "files.exclude": {
     ".git": true,
@@ -30,7 +31,7 @@
     "editor.formatOnSaveMode": "file"
   },
   "[javascript]": {
-    "editor.defaultFormatter": "dprint.dprint"
+    "editor.defaultFormatter": "vscode.typescript-language-features"
   },
   "[typescript]": {
     "editor.defaultFormatter": "dprint.dprint"

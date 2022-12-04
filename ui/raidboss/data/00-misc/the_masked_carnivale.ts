@@ -18,6 +18,12 @@ export interface Data extends RaidbossData {
 
 const triggerSet: TriggerSet<Data> = {
   zoneId: ZoneId.TheMaskedCarnivale,
+  zoneLabel: {
+    en: 'The Masked Carnivale',
+    de: 'Die Große Maskerade',
+    cn: '假面狂欢',
+    ko: '가면 무투회',
+  },
   triggers: [
     // ================ Stage 01 Act 1 ================
     // intentionally blank

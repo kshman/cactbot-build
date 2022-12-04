@@ -15,6 +15,38 @@ const triggerSet: TriggerSet<Data> = {
       response: Responses.awayFromFront(),
     },
   ],
+  timelineReplace: [
+    {
+      'locale': 'de',
+      'replaceSync': {
+        'Vicegerent to the Warden': 'Statthalter der Aufseherin',
+      },
+    },
+    {
+      'locale': 'fr',
+      'replaceSync': {
+        'Vicegerent to the Warden': 'adjoint de la Gardienne',
+      },
+    },
+    {
+      'locale': 'ja',
+      'replaceSync': {
+        'Vicegerent to the Warden': '«¢?«¼«Þ«ô«¡«¤«¹«¸«§«ì«ó«È',
+      },
+    },
+    {
+      'locale': 'cn',
+      'replaceSync': {
+        'Vicegerent to the Warden': '?×âãêÓÛåëíº',
+      },
+    },
+    {
+      'locale': 'ko',
+      'replaceSync': {
+        'Vicegerent to the Warden': '¾ÆÁ¦¸¶ ±³È²',
+      },
+    },
+  ],
 };
 
 export default triggerSet;

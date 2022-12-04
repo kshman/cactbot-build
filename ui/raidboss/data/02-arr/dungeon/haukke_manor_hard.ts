@@ -23,6 +23,43 @@ const triggerSet: TriggerSet<Data> = {
       response: Responses.stun(),
     },
   ],
+  timelineReplace: [
+    {
+      'locale': 'de',
+      'replaceSync': {
+        'Halicarnassus': 'Halikarnassos',
+        'Manor Sentry': 'Wachter',
+      },
+    },
+    {
+      'locale': 'fr',
+      'replaceSync': {
+        'Halicarnassus': 'Halicarnasse',
+        'Manor Sentry': 'vigile du manoir',
+      },
+    },
+    {
+      'locale': 'ja',
+      'replaceSync': {
+        'Halicarnassus': '«Ï«ê«««ë«Ê«Ã«½«¹',
+        'Manor Sentry': 'åÙéÄîÐªÎà´ßÀ',
+      },
+    },
+    {
+      'locale': 'cn',
+      'replaceSync': {
+        'Halicarnassus': 'ùë××???ÞÙ',
+        'Manor Sentry': 'íä?îÜà´ßÀ',
+      },
+    },
+    {
+      'locale': 'ko',
+      'replaceSync': {
+        'Halicarnassus': 'ÇÒ¸®Ä«¸£³ª¼Ò½º',
+        'Manor Sentry': 'º°±Ã ¼®»ó',
+      },
+    },
+  ],
 };
 
 export default triggerSet;

@@ -186,6 +186,24 @@ const kDirectoryToCategory = {
     cn: '绝境战',
     ko: '절 난이도',
   },
+  hunts: {
+    en: '몹헌과 페이트',
+    de: 'Hohe Jagd & FATEs',
+    cn: '怪物狩猎 & 危命任务',
+    ko: '마물 & 돌발',
+  },
+  map: {
+    en: '보물 지도',
+    de: 'Schatzkarten',
+    cn: '宝物地图',
+    ko: '보물 지도',
+  },
+  deepdungeon: {
+    en: '딥던전',
+    de: 'Tiefes Gewölbe',
+    cn: '深层迷宫',
+    ko: '딥 던전',
+  },
   variant: {
     en: '바리언트 던전',
     ja: 'ヴァリアント',
@@ -754,6 +772,14 @@ export class CactbotConfigurator {
           title = this.translate(zoneInfo.name);
       }
 
+      let zoneLabel: LocaleText | undefined = undefined;
+
+      // if a zoneLabel is set, use for the title
+      if (triggerSet.zoneLabel) {
+        zoneLabel = triggerSet.zoneLabel;
+        title = this.translate(zoneLabel);
+      }
+
       const fileKey = filename.replace(/\//g, '-').replace(/.[jt]s$/, '');
       map[fileKey] = {
         filename: filename,
@@ -781,7 +807,12 @@ export class CactbotConfigurator {
       // may also use zoneRegex or also have errors and not have either.
       let title = '???';
       let zoneId: number | undefined = undefined;
-      if (typeof triggerSet.zoneId === 'number') {
+      let zoneLabel: LocaleText | undefined = undefined;
+      // if a zoneLabel is set, use for the title
+      if (triggerSet.zoneLabel) {
+        zoneLabel = triggerSet.zoneLabel;
+        title = this.translate(zoneLabel);
+      } else if (typeof triggerSet.zoneId === 'number') {
         zoneId = triggerSet.zoneId;
         // Use the translatable zone info name, if possible.
         const zoneInfo = ZoneInfo[zoneId];
