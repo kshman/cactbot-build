@@ -34,35 +34,35 @@ const triggerSet: TriggerSet<Data> = {
       'locale': 'de',
       'replaceSync': {
         'Beccho': 'Beccho',
-        'Heavenly Otokage': 'Himmelssaulen-Otokage',
+        'Heavenly Otokage': 'HimmelssÃ¤ulen-Otokage',
       },
     },
     {
       'locale': 'fr',
       'replaceSync': {
-        'Beccho': 'Beccho',
-        'Heavenly Otokage': 'o-tokage des Cieux',
+        'Beccho': 'BecchÃ´',
+        'Heavenly Otokage': 'Ã´-tokage des Cieux',
       },
     },
     {
       'locale': 'ja',
       'replaceSync': {
-        'Beccho': '«Ù«Ã«Á«ç«¦',
-        'Heavenly Otokage': '«¢«á«Î?«ª«ª«È«««²',
+        'Beccho': 'ãƒ™ãƒƒãƒãƒ§ã‚¦',
+        'Heavenly Otokage': 'ã‚¢ãƒ¡ãƒãƒ»ã‚ªã‚ªãƒˆã‚«ã‚²',
       },
     },
     {
       'locale': 'cn',
       'replaceSync': {
-        'Beccho': '?ïÊ',
-        'Heavenly Otokage': 'ô¸ñıËİ?',
+        'Beccho': 'åˆ«è¶',
+        'Heavenly Otokage': 'å¤©ä¹‹å·¨èœ¥',
       },
     },
     {
       'locale': 'ko',
       'replaceSync': {
-        'Beccho': 'ºªÃİ',
-        'Heavenly Otokage': 'Ãµ±Ã ¿Õµµ¸¶¹ì',
+        'Beccho': 'ë²³ìµ¸',
+        'Heavenly Otokage': 'ì²œê¶ ì™•ë„ë§ˆë±€',
       },
     },
   ],

@@ -76,9 +76,10 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '¾È¿¡¼­ => ¿·À¸·Î',
+          en: 'ì•ˆì—ì„œ => ì˜†ìœ¼ë¡œ',
           de: 'Rein => Seiten',
-          cn: 'ñé? => ??',
+          cn: 'ä¸­é—´ => ä¸¤ä¾§',
+          ko: 'ì•ˆìœ¼ë¡œ => ì˜†ìœ¼ë¡œ',
         },
       },
     },
@@ -90,9 +91,10 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '¿·¿¡¼­ => ¿·À¸·Î (µÎ¹ø)',
+          en: 'ì˜†ì—ì„œ => ì˜†ìœ¼ë¡œ (ë‘ë²ˆ)',
           de: 'Seiten => Seiten (nochmal)',
-          cn: '?? => ?? (ñì?)',
+          cn: 'ä¸¤ä¾§ => ä¸¤ä¾§ (é‡å¤)',
+          ko: 'ì˜†ìœ¼ë¡œ => ì˜†ìœ¼ë¡œ (ë°˜ë³µ)',
         },
       },
     },
@@ -150,41 +152,41 @@ const triggerSet: TriggerSet<Data> = {
     {
       'locale': 'de',
       'replaceSync': {
-        'Forgiven Pedantry': 'gelautert(?:e|er|es|en) Pedanterie',
+        'Forgiven Pedantry': 'gelÃ¤utert(?:e|er|es|en) Pedanterie',
         'Huracan': 'Huracan',
-        'Li\'l Murderer': 'Klein(?:e|er|es|en) Morder',
+        'Li\'l Murderer': 'Klein(?:e|er|es|en) MÃ¶rder',
       },
     },
     {
       'locale': 'fr',
       'replaceSync': {
-        'Forgiven Pedantry': 'pedanterie pardonnee',
+        'Forgiven Pedantry': 'pÃ©danterie pardonnÃ©e',
         'Huracan': 'Huracan',
-        'Li\'l Murderer': 'Traitre',
+        'Li\'l Murderer': 'TraÃ®tre',
       },
     },
     {
       'locale': 'ja',
       'replaceSync': {
-        'Forgiven Pedantry': '«Õ«©?«®«ô«ó?«Ú«À«ó«È«ê?',
-        'Huracan': '«Õ«é«««ó',
-        'Li\'l Murderer': '«ê«ë«Ş?«À?',
+        'Forgiven Pedantry': 'ãƒ•ã‚©ãƒ¼ã‚®ãƒ´ãƒ³ãƒ»ãƒšãƒ€ãƒ³ãƒˆãƒªãƒ¼',
+        'Huracan': 'ãƒ•ãƒ©ã‚«ãƒ³',
+        'Li\'l Murderer': 'ãƒªãƒ«ãƒãƒ¼ãƒ€ãƒ¼',
       },
     },
     {
       'locale': 'cn',
       'replaceSync': {
-        'Forgiven Pedantry': 'ÔğÓğ?ßğîÜúÛ?',
-        'Huracan': '?ÕÃÊì',
-        'Li\'l Murderer': 'á³á³?â¢',
+        'Forgiven Pedantry': 'å¾—åˆ°å®½æ•çš„ç‚«å­¦',
+        'Huracan': 'ä¹Œæ‹‰å',
+        'Li\'l Murderer': 'å°å°æ€æ‰‹',
       },
     },
     {
       'locale': 'ko',
       'replaceSync': {
-        'Forgiven Pedantry': '¸éÁËµÈ ÇöÇĞ',
-        'Huracan': 'ÈÄ¶óÄ­',
-        'Li\'l Murderer': 'ÀÛÀº »ìÀÎÀÚ',
+        'Forgiven Pedantry': 'ë©´ì£„ëœ í˜„í•™',
+        'Huracan': 'í›„ë¼ì¹¸',
+        'Li\'l Murderer': 'ì‘ì€ ì‚´ì¸ì',
       },
     },
   ],

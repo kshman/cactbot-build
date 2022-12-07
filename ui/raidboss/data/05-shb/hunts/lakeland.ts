@@ -39,6 +39,7 @@ const triggerSet: TriggerSet<Data> = {
             en: '뭉치면 안되요',
             de: 'Vermeide Sammeln',
             cn: '远离分摊',
+            ko: '쉐어징 피하기',
           },
         };
 
@@ -91,6 +92,7 @@ const triggerSet: TriggerSet<Data> = {
           en: '돌진 피해요',
           de: 'Weg vom Anstrum',
           cn: '躲避冲锋',
+          ko: '돌진한 곳 피하기',
         },
       },
     },
@@ -105,6 +107,7 @@ const triggerSet: TriggerSet<Data> = {
           en: '오른쪽이나 뒤로',
           de: 'Geh nach Hinten/Rechts',
           cn: '去背后/右侧',
+          ko: '뒤/오른쪽으로',
         },
       },
     },
@@ -126,6 +129,7 @@ const triggerSet: TriggerSet<Data> = {
           en: '왼쪽이나 뒤로',
           de: 'Geh nach Hinten/Links',
           cn: '去背后/左侧',
+          ko: '뒤/왼쪽으로',
         },
       },
     },

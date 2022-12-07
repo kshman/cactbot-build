@@ -106,25 +106,25 @@ const triggerSet: TriggerSet<Data> = {
     {
       'locale': 'ja',
       'replaceSync': {
-        'Aglaope': '«¢«°«é«ª«Ú',
-        'O Poorest Pauldia': '«İ?«ë«Ç«£«¢',
-        'The Mudman': 'ÒúìÑ',
+        'Aglaope': 'ã‚¢ã‚°ãƒ©ã‚ªãƒš',
+        'O Poorest Pauldia': 'ãƒãƒ¼ãƒ«ãƒ‡ã‚£ã‚¢',
+        'The Mudman': 'æ³¥äºº',
       },
     },
     {
       'locale': 'cn',
       'replaceSync': {
-        'Aglaope': 'ä¹Ì«ÕÃä­ÚÖ',
-        'O Poorest Pauldia': 'ÜÁ?îèäº',
-        'The Mudman': 'ÒúìÑ',
+        'Aglaope': 'é˜¿æ ¼æ‹‰ä¿„ç€',
+        'O Poorest Pauldia': 'ä¿å°”è¿ªé›…',
+        'The Mudman': 'æ³¥äºº',
       },
     },
     {
       'locale': 'ko',
       'replaceSync': {
-        'Aglaope': '¾Æ±Û¶ó¿ÀÆä',
-        'O Poorest Pauldia': 'Æúµğ¾Æ',
-        'The Mudman': 'ÁøÈëÀÎ°£',
+        'Aglaope': 'ì•„ê¸€ë¼ì˜¤í˜',
+        'O Poorest Pauldia': 'í´ë””ì•„',
+        'The Mudman': 'ì§„í™ì¸ê°„',
       },
     },
   ],

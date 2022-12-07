@@ -117,25 +117,25 @@ const triggerSet: TriggerSet<Data> = {
     {
       'locale': 'ja',
       'replaceSync': {
-        'Maliktender': '«Ş«ê«¯«Æ«ó«À?',
-        'Sugaar': '«·«å«¬?«ë',
-        'Tarchia': '«¿«ë«­«¢',
+        'Maliktender': 'ãƒãƒªã‚¯ãƒ†ãƒ³ãƒ€ãƒ¼',
+        'Sugaar': 'ã‚·ãƒ¥ã‚¬ãƒ¼ãƒ«',
+        'Tarchia': 'ã‚¿ãƒ«ã‚­ã‚¢',
       },
     },
     {
       'locale': 'cn',
       'replaceSync': {
-        'Maliktender': '?××ĞºËİìÑíæ',
-        'Sugaar': 'ıÌÌ«?',
-        'Tarchia': 'Òıòª?',
+        'Maliktender': 'é©¬åˆ©å…‹å·¨äººæŒ',
+        'Sugaar': 'ä¼‘æ ¼å°”',
+        'Tarchia': 'å¤šæ™ºå…½',
       },
     },
     {
       'locale': 'ko',
       'replaceSync': {
-        'Maliktender': '¸»¸®Å©ÅÙ´õ',
-        'Sugaar': '½´°¡¸£',
-        'Tarchia': 'Å¸¸£Å°¾Æ',
+        'Maliktender': 'ë§ë¦¬í¬í…ë”',
+        'Sugaar': 'ìŠˆê°€ë¥´',
+        'Tarchia': 'íƒ€ë¥´í‚¤ì•„',
       },
     },
   ],

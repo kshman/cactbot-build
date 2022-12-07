@@ -45,19 +45,19 @@ const triggerSet: TriggerSet<Data> = {
     {
       'locale': 'ja',
       'replaceSync': {
-        'Deep Palace Diplocaulus': 'л╟лг?л╫л╤льл╣?л╟лгл╫лэлллжлыл╣',
+        'Deep Palace Diplocaulus': 'уГЗуВгуГ╝уГЧуГСуГмуВ╣уГ╗уГЗуВгуГЧуГнуВлуВжуГлуВ╣',
       },
     },
     {
       'locale': 'cn',
       'replaceSync': {
-        'Deep Palace Diplocaulus': 'фв?╪в??',
+        'Deep Palace Diplocaulus': 'ц╖▒холчмахд┤шЮИ',
       },
     },
     {
       'locale': 'ko',
       'replaceSync': {
-        'Deep Palace Diplocaulus': '▒э└║ ▒├└№ ╡Ё╟├╖╬─л┐я╖ч╜║',
+        'Deep Palace Diplocaulus': 'ъ╣КьЭА ъ╢БьаД ыФФэФМыбЬь╣┤ьЪ╕ыгиьКд',
       },
     },
   ],

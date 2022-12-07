@@ -42,9 +42,10 @@ const triggerSet: TriggerSet<Data> = {
       alarmText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '¶³¾îÁ®¼­ + µÚµ¹¾Æ¿ê',
+          en: 'ë–¨ì–´ì ¸ì„œ + ë’¤ëŒì•„ìš§',
           de: 'Schnell raus + weg schauen',
-          cn: 'öáõóËÛ + Ê×ú¾ĞìöâÛ°ú¾',
+          cn: 'å¿«å‡ºå» + çœ‹å‘å…¶ä»–æ–¹å‘',
+          ko: 'ë©€ë¦¬ ë¹ ì§€ê¸° + ë’¤ëŒê¸°',
         },
       },
     },
@@ -92,9 +93,10 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'HP ¸¸¶¥!',
+          en: 'HP ë§Œë•…!',
           de: 'Voll heilen',
-          cn: '??îï?',
+          cn: 'å¥¶æ»¡å…¨å‘˜',
+          ko: 'ì²´ë ¥ í’€í”¼ë¡œ',
         },
       },
     },
@@ -157,25 +159,25 @@ const triggerSet: TriggerSet<Data> = {
     {
       'locale': 'ja',
       'replaceSync': {
-        'Grassman': '«°«é«¹«Ş«ó',
-        'Ixtab': '«¤«·«å«¿«à',
-        'Supay': '«¹«Ú«¤',
+        'Grassman': 'ã‚°ãƒ©ã‚¹ãƒãƒ³',
+        'Ixtab': 'ã‚¤ã‚·ãƒ¥ã‚¿ãƒ ',
+        'Supay': 'ã‚¹ãƒšã‚¤',
       },
     },
     {
       'locale': 'cn',
       'replaceSync': {
-        'Grassman': 'Ì«ÕÃŞÙØº',
-        'Ixtab': 'ì¥ıÌ?',
-        'Supay': '??ì¥',
+        'Grassman': 'æ ¼æ‹‰æ–¯æ›¼',
+        'Ixtab': 'ä¼Šä¼‘å¦²',
+        'Supay': 'è‹å¸•ä¼Š',
       },
     },
     {
       'locale': 'ko',
       'replaceSync': {
-        'Grassman': '½£¿øÀÎ',
-        'Ixtab': 'ÀÌ½´Å¸ºê',
-        'Supay': '¼öÆÄÀÌ',
+        'Grassman': 'ìˆ²ì›ì¸',
+        'Ixtab': 'ì´ìŠˆíƒ€ë¸Œ',
+        'Supay': 'ìˆ˜íŒŒì´',
       },
     },
   ],

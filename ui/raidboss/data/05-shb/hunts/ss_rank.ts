@@ -17,7 +17,8 @@ const triggerSet: TriggerSet<Data> = {
   zoneLabel: {
     en: 'SS Rank Hunts',
     de: 'SS Jagdziele',
-    cn: 'SS ?â­?ÎÖ',
+    cn: 'SS çº§ç‹©çŒæ€ª',
+    ko: 'SSê¸‰ ë§ˆë¬¼',
   },
   triggers: [
     {
@@ -60,31 +61,31 @@ const triggerSet: TriggerSet<Data> = {
     {
       'locale': 'de',
       'replaceSync': {
-        'Forgiven Rebellion': 'gelautert(?:e|er|es|en) Rebellion',
+        'Forgiven Rebellion': 'gelÃ¤utert(?:e|er|es|en) Rebellion',
       },
     },
     {
       'locale': 'fr',
       'replaceSync': {
-        'Forgiven Rebellion': 'rebellion pardonnee',
+        'Forgiven Rebellion': 'rÃ©bellion pardonnÃ©e',
       },
     },
     {
       'locale': 'ja',
       'replaceSync': {
-        'Forgiven Rebellion': '«Õ«©?«®«ô«ó?«ê«Ù«ê«ª«ó',
+        'Forgiven Rebellion': 'ãƒ•ã‚©ãƒ¼ã‚®ãƒ´ãƒ³ãƒ»ãƒªãƒ™ãƒªã‚ªãƒ³',
       },
     },
     {
       'locale': 'cn',
       'replaceSync': {
-        'Forgiven Rebellion': 'ÔğÓğ?ßğîÜÚä?',
+        'Forgiven Rebellion': 'å¾—åˆ°å®½æ•çš„å›ä¹±',
       },
     },
     {
       'locale': 'ko',
       'replaceSync': {
-        'Forgiven Rebellion': '¸éÁËµÈ Æøµ¿',
+        'Forgiven Rebellion': 'ë©´ì£„ëœ í­ë™',
       },
     },
   ],

@@ -40,8 +40,8 @@ const triggerSet: TriggerSet<Data> = {
     {
       'locale': 'de',
       'replaceSync': {
-        'Heavenly Amikiri': 'Himmelssaulen-Amikiri',
-        'Heavenly Uwabami': 'Himmelssaulen-Uwabami',
+        'Heavenly Amikiri': 'HimmelssÃ¤ulen-Amikiri',
+        'Heavenly Uwabami': 'HimmelssÃ¤ulen-Uwabami',
         'Mojabune': 'Mojabune',
       },
     },
@@ -50,31 +50,31 @@ const triggerSet: TriggerSet<Data> = {
       'replaceSync': {
         'Heavenly Amikiri': 'Amikiri des Cieux',
         'Heavenly Uwabami': 'uwabami des Cieux',
-        'Mojabune': 'Mojabune',
+        'Mojabune': 'MÃ´jabune',
       },
     },
     {
       'locale': 'ja',
       'replaceSync': {
-        'Heavenly Amikiri': '«¢«á«Î?«¢«ß«­«ê',
-        'Heavenly Uwabami': '«¢«á«Î?«¦«ï«Ğ«ß',
-        'Mojabune': '«â«¦«¸«ã«Ö«Í',
+        'Heavenly Amikiri': 'ã‚¢ãƒ¡ãƒãƒ»ã‚¢ãƒŸã‚­ãƒª',
+        'Heavenly Uwabami': 'ã‚¢ãƒ¡ãƒãƒ»ã‚¦ãƒ¯ãƒãƒŸ',
+        'Mojabune': 'ãƒ¢ã‚¦ã‚¸ãƒ£ãƒ–ãƒ',
       },
     },
     {
       'locale': 'cn',
       'replaceSync': {
-        'Heavenly Amikiri': 'ô¸ñıï·???',
-        'Heavenly Uwabami': 'ô¸ñı?Şï',
-        'Mojabune': 'ØÌíºàÏ',
+        'Heavenly Amikiri': 'å¤©ä¹‹åˆ‡ç½‘è™¾è›„',
+        'Heavenly Uwabami': 'å¤©ä¹‹èŸ’è›‡',
+        'Mojabune': 'äº¡è€…èˆ¹',
       },
     },
     {
       'locale': 'ko',
       'replaceSync': {
-        'Heavenly Amikiri': 'Ãµ±Ã ¾Æ¹ÌÅ°¸®',
-        'Heavenly Uwabami': 'Ãµ±Ã ÀÌ¹«±â',
-        'Mojabune': '¸ÁÀÚÀÇ ¹è',
+        'Heavenly Amikiri': 'ì²œê¶ ì•„ë¯¸í‚¤ë¦¬',
+        'Heavenly Uwabami': 'ì²œê¶ ì´ë¬´ê¸°',
+        'Mojabune': 'ë§ìì˜ ë°°',
       },
     },
   ],

@@ -45,6 +45,7 @@ const triggerSet: TriggerSet<Data> = {
           en: '바닥 피해욧',
           de: 'Flächen vermeiden',
           cn: '躲避圈圈',
+          ko: '장판 피하기',
         },
       },
     },
