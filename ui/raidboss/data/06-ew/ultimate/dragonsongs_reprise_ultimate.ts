@@ -2026,9 +2026,11 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         wheremine: {
           en: '줄 채기: ${pos} (${role})',
+          ja: '線取り: ${pos} (${role})',
         },
         itsmine: {
-          en: '줄 갖고 있네!'
+          en: '줄 갖고 있네!',
+          ja: '線持っている!',
         },
       },
     },
@@ -2210,6 +2212,7 @@ const triggerSet: TriggerSet<Data> = {
         },
         withAscalon: {
           en: '🌪트위스터 + 아스칼론!',
+          ja: 'ツイスター + アスカロン',
           ko: '회오리 + 아스칼론',
         },
       },
@@ -2400,12 +2403,15 @@ const triggerSet: TriggerSet<Data> = {
         },
         mynum: {
           en: '${pos}: ${num}번',
+          ja: '${pos}: ${num}',
         },
         doom: {
           en: '💀둠',
+          ja: '💀死',
         },
         nodoom: {
           en: '안전',
+          ja: '安全',
         },
       },
     },
@@ -2946,9 +2952,11 @@ const triggerSet: TriggerSet<Data> = {
         },
         tanksFront: {
           en: '맨 🡹앞으로',
+          ja: '一番前へ',
         },
         tanksBehind: {
           en: '맨 뒤로🡻',
+          ja: '一番後ろへ',
         },
         wingsHead: {
           en: '${wings}, ${head}',
@@ -3309,24 +3317,28 @@ const triggerSet: TriggerSet<Data> = {
         directions: {
           en: '${start} => ${rotation}',
           de: '${start} => ${rotation}',
+          ja: '',
           cn: '${start} => ${rotation}',
           ko: '${start} => ${rotation}',
         },
         backLeft: {
           en: '🡿왼쪽뒤',
           de: 'Hinten links',
+          ja: '左後ろ',
           cn: '左后',
           ko: '뒤 왼쪽',
         },
         backRight: {
           en: '🡾오른쪽뒤',
           de: 'Hinten rechts',
+          ja: '右後ろ',
           cn: '右后',
           ko: '뒤 오른쪽',
         },
         front: {
           en: '🡹앞',
           de: 'Vorne',
+          ja: '前',
           cn: '前',
           ko: '앞',
         },
@@ -3359,6 +3371,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: '스탠스 ON!',
+          ja: 'スタンスオン',
         },
       },
     },
