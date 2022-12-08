@@ -17,8 +17,7 @@ import { LocaleObject, LocaleText, TriggerSet } from '../../../../../types/trigg
 // TODO: Phase 6 Resentment callout?
 
 /* 멤버 처리:
-사용자 raidboss 어딘가에서 data.prsParty 에 다음 형식으로 넣어요
-단, 토르당(P2) 시작할 때 넣어야 해요
+사용자 데이터에 아래 예처럼 넣어야 해요. 단, 토르당(P2) 시작할 때 넣어야 해요
 보통 사용자 파일은 [cactbot디렉토리]/user/raidboss.js 를 쓰면 되요
 예)
 Options.Triggers.push({
@@ -31,38 +30,39 @@ Options.Triggers.push({
 });
 형식)
   data.prsParty = [
-    { role: 'MT', job: 'WAR', sdp: 'ST', sdc: 1, skd: 9, nto: 0, nid: '🡼', wrn: 0, name: '즌사' },
-    { role: 'ST', job: 'DRK', sdp: 'MT', sdc: 2, skd: 9, nto: 1, nid: '🡽', wrn: 1, name: '닭흐' },
-    { role: 'H1', job: 'WHM', sdp: 'H2', sdc: 1, skd: 0, nto: 2, nid: '🡿', wrn: 2, name: '홀리' },
-    { role: 'H2', job: 'SCH', sdp: 'H1', sdc: 2, skd: 1, nto: 3, nid: '🡾', wrn: 3, name: '서커' },
-    { role: 'D1', job: 'MNK', sdp: 'D2', sdc: 1, skd: 2, nto: 4, nid: '🡿', wrn: 7, name: '포므' },
-    { role: 'D2', job: 'RPR', sdp: 'D1', sdc: 2, skd: 3, nto: 5, nid: '🡾', wrn: 6, name: '점프' },
-    { role: 'D3', job: 'DNC', sdp: 'D4', sdc: 1, skd: 4, nto: 6, nid: '🡼', wrn: 5, name: '춤춰' },
-    { role: 'D4', job: 'SMN', sdp: 'D3', sdc: 2, skd: 5, nto: 7, nid: '🡽', wrn: 4, name: '서몬' },
+    { r: 'MT', j: 'WAR', sp: 'ST', sc: 1, li: 9, ni: 0, nt: '🡼', wi: 0, n: '전사' },
+    { r: 'ST', j: 'DRK', sp: 'MT', sc: 2, li: 9, ni: 1, nt: '🡽', wi: 1, n: '다크 나이트' },
+    { r: 'H1', j: 'WHM', sp: 'H2', sc: 1, li: 0, ni: 2, nt: '🡿', wi: 2, n: '뱅마' },
+    { r: 'H2', j: 'SCH', sp: 'H1', sc: 2, li: 1, ni: 3, nt: '🡾', wi: 3, n: '스콜라' },
+    { r: 'D1', j: 'MNK', sp: 'D2', sc: 1, li: 2, ni: 4, nt: '🡿', wi: 7, n: '몽크' },
+    { r: 'D2', j: 'RPR', sp: 'D1', sc: 2, li: 3, ni: 5, nt: '🡾', wi: 6, n: '낫쟁이' },
+    { r: 'D3', j: 'DNC', sp: 'D4', sc: 1, li: 4, ni: 6, nt: '🡼', wi: 5, n: '춤꾼' },
+    { r: 'D4', j: 'SMN', sp: 'D3', sc: 2, li: 5, ni: 7, nt: '🡽', wi: 4, n: '서모너' },
   ];
-role: 역할
-job: 잡 (사용안함)
-prt: 보통 우선 순위
-sdp: Sanctity of the Ward에서 칼일 경우 바꿀 사람
-sdc: Sanctity of the Ward에서 갖고 있을 칼 개수
-skd: Skyward Leaps 우선 순위
-nto: 니드호그 1-2-3 타워 왼쪽 기준 우선 순서
-nid: 니드호그 4 타워 연결 줄 위치
-wrn: Wrath of the Heavens 우선 순위
-name: 게임 내 캐릭터 이름
+설명)
+r: 역할
+j: 잡 (사용안함)
+sp: Sanctity of the Ward에서 칼일 경우 바꿀 사람
+sc: Sanctity of the Ward에서 갖고 있을 칼 개수
+li: Skyward Leaps 우선 순위
+ni: 니드호그 1-2-3 타워 왼쪽 기준 우선 순서
+nt: 니드호그 4 타워 위치
+wi: Wrath of the Heavens 우선 순위
+n: 게임 내 캐릭터 이름
 */
-type Member = {
-  role: string;
-  job: string;
-  prt: number;
-  sdp: string;
-  sdc: number;
-  skd: number;
-  nto: number;
-  nid: string;
-  wrn: number;
-  name: string;
-  flag?: boolean;
+type PrsMember = {
+  r: string;
+  j: string;
+  sp: string;
+  sc: number;
+  li: number;
+  ni: number;
+  nt: string;
+  wi: number;
+  n: string;
+  // internal
+  i: number;
+  f?: boolean;
 };
 
 type Phase =
@@ -120,8 +120,8 @@ export interface Data extends RaidbossData {
   secondGigaflare?: number[];
   centerGigaflare?: number[];
   // PRs
-  prsParty?: Member[];
-  prsMe?: Member;
+  prsParty?: PrsMember[];
+  prsMe?: PrsMember;
   prsHolyHallow: number;
   prsTethers: string[];
   prsTetherId?: number;
@@ -628,19 +628,23 @@ const triggerSet: TriggerSet<Data> = {
       response: Responses.moveAway(),
     },
     {
-      id: 'DSR+ 뇌창 / 데이터 설정',
+      id: 'DSR+ 사용자 데이터 설정 (뇌창)',
       type: 'Ability',
       netRegex: { id: '63D3', source: 'King Thordan', capture: false },
-      preRun: (data) => {
-        if (data.prsParty === undefined)
-          return;
-        data.prsMe = data.prsParty.find((e) => e.name === data.me);
-      },
+      delaySeconds: 1,
       durationSeconds: 2,
       infoText: (data, _matches, output) => {
+        if (data.prsParty === undefined)
+          return;
+        for (let i = 0; i < data.prsParty.length; i++) {
+          const m = data.prsParty[i];
+          if (m !== undefined)
+            m.i = i;
+        }
+        data.prsMe = data.prsParty.find((e) => e.n === data.me);
         if (data.prsMe === undefined)
           return output.nodata!();
-        return output.text!({ role: data.prsMe.role });
+        return output.text!({ role: data.prsMe.r });
       },
       outputStrings: {
         nodata: {
@@ -649,7 +653,7 @@ const triggerSet: TriggerSet<Data> = {
         },
         text: {
           en: '내 역할: ${role}',
-          ja: '自己ロール:  ${role}',
+          ja: 'ロール:  ${role}',
         },
       },
     },
@@ -658,18 +662,11 @@ const triggerSet: TriggerSet<Data> = {
       type: 'Tether',
       netRegex: { id: '0054' },
       condition: (data) => data.phase === 'thordan' || data.phase === 'nidhogg',
-      durationSeconds: 1,
-      /*
-      infoText: (data, matches, output) => {
-        if (data.prsDrachen < 0)
-          return output.text!({ name: data.ShortName(matches.target) });
-      },
-      */
       run: (data, matches, _output) => {
         data.prsTethers.push(matches.target);
 
         const sid = parseInt(matches.sourceId, 16);
-        if (data.prsMe?.role === 'MT') {
+        if (data.prsMe?.r === 'MT') {
           const lid = data.prsTetherId ?? 0xFFFFFFFF;
           if (sid <= lid) {
             data.prsTetherId = sid;
@@ -683,14 +680,6 @@ const triggerSet: TriggerSet<Data> = {
           }
         }
       },
-      /*
-      outputStrings: {
-        text: {
-          en: '줄: ${name}',
-          ja: '線: ${name}',
-        },
-      },
-      */
     },
     {
       id: 'DSR Spiral Thrust Safe Spots',
@@ -999,9 +988,9 @@ const triggerSet: TriggerSet<Data> = {
         const id = getHeadmarkerId(data, matches);
         if (id === headmarkers.skywardTriple) {
           if (data.prsParty !== undefined) {
-            const find = data.prsParty.find((e) => e.name === matches.target);
+            const find = data.prsParty.find((e) => e.n === matches.target);
             if (find !== undefined)
-              find.flag = true;
+              find.f = true;
           }
           if (data.me === matches.target)
             return output.leapOnYou!();
@@ -1023,13 +1012,13 @@ const triggerSet: TriggerSet<Data> = {
       type: 'Ability',
       netRegex: { id: '63DA', source: 'Ser Guerrique', capture: false },
       alertText: (data, _matches, output) => {
-        if (data.prsParty === undefined || !data.prsMe?.flag)
+        if (data.prsParty === undefined || !data.prsMe?.f)
           return;
-        const bls = data.prsParty.filter((e) => e.flag);
-        const ss = bls.sort((a, b) => a.skd - b.skd).map((e) => e.role);
-        return output.leaps!({ leaps: ss.join(', ') });
+        const blues = data.prsParty.filter((e) => e.f);
+        const sorted = blues.sort((a, b) => a.li - b.li).map((e) => e.r);
+        return output.leaps!({ leaps: sorted.join(', ') });
       },
-      run: (data) => data.prsParty?.forEach((e) => delete e.flag),
+      run: (data) => data.prsParty?.forEach((e) => delete e.f),
       outputStrings: {
         leaps: {
           en: '${leaps}',
@@ -1048,11 +1037,11 @@ const triggerSet: TriggerSet<Data> = {
           return;
         if (data.prsParty !== undefined) {
           const [t1, t2] = data.prsTethers.splice(-2);
-          const [m1, m2] = data.prsParty.filter((e) => e.name === t1 || e.name === t2).sort((a, b) => a.prt - b.prt);
-          return output.tether!({ t1: m1?.role, t2: m2?.role });
+          const [m1, m2] = data.prsParty.filter((e) => e.n === t1 || e.n === t2).sort((a, b) => a.i - b.i);
+          return output.tether!({ tether1: m1?.r, tether2: m2?.r });
         }
         const [s1, s2] = data.prsTethers.slice(-2).map((e) => data.ShortName(e));
-        return output.tether!({ t1: s1, t2: s2 });
+        return output.tether!({ tether1: s1, tether2: s2 });
       },
       run: (data) => {
         data.prsTethers = [];
@@ -1061,7 +1050,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         tether: {
-          en: '${t1}, ${t2}',
+          en: '${tether1}, ${tether2}',
         },
       },
     },
@@ -1212,19 +1201,19 @@ const triggerSet: TriggerSet<Data> = {
           return;
 
         if (data.prsParty !== undefined && data.prsMe !== undefined) {
-          const m1 = data.prsParty.find((e) => e.name === data.sanctitySword1);
+          const m1 = data.prsParty.find((e) => e.n === data.sanctitySword1);
           if (m1 !== undefined) {
-            if (m1.role === data.prsMe.role && data.prsMe.sdc === 2)
-              return { alertText: output.swap!({ role: m1.sdp }) };
-            if (m1.sdp === data.prsMe.role && m1.sdc === 2)
-              return { alertText: output.swap!({ role: m1.role }) };
+            if (m1 === data.prsMe && data.prsMe.sc === 2)
+              return { alertText: output.swap!({ role: m1.sp }) };
+            if (m1.sp === data.prsMe.r && m1.sc === 2)
+              return { alertText: output.swap!({ role: m1.r }) };
           }
-          const m2 = data.prsParty.find((e) => e.name === data.sanctitySword2);
+          const m2 = data.prsParty.find((e) => e.n === data.sanctitySword2);
           if (m2 !== undefined) {
-            if (m2.role === data.prsMe.role && data.prsMe.sdc === 1)
-              return { alertText: output.swap!({ role: m2.sdp }) };
-            if (m2.sdp === data.prsMe.role && m2.sdc === 1)
-              return { alertText: output.swap!({ role: m2.role }) };
+            if (m2 === data.prsMe && data.prsMe.sc === 1)
+              return { alertText: output.swap!({ role: m2.sp }) };
+            if (m2.sp === data.prsMe.r && m2.sc === 1)
+              return { alertText: output.swap!({ role: m2.r }) };
           }
           return { infoText: output.keep!() };
         }
@@ -1248,7 +1237,7 @@ const triggerSet: TriggerSet<Data> = {
           ja: 'スワップ: ${role}',
         },
         keep: {
-          en: '담당 위치로',
+          en: '담당 자리로',
           ja: '散開位置へ',
         },
       },
@@ -1277,12 +1266,11 @@ const triggerSet: TriggerSet<Data> = {
           return;
 
         if (data.prsParty !== undefined) {
-          const m1 = data.prsParty.find((e) => e.name === p1);
-          const m2 = data.prsParty.find((e) => e.name === p2);
+          const [m1, m2] = data.prsParty.filter((e) => e.n === p1 || e.n === p2);
           if (m1 !== undefined && m2 !== undefined) {
-            if (m1.prt < m2.prt)
-              return output.meteors!({ player1: m1.role, player2: m2.role });
-            return output.meteors!({ player1: m2.role, player2: m1.role });
+            if (m1.i < m2.i)
+              return output.meteors!({ player1: m1.r, player2: m2.r });
+            return output.meteors!({ player1: m2.r, player2: m1.r });
           }
         }
 
@@ -1445,28 +1433,28 @@ const triggerSet: TriggerSet<Data> = {
         if (data.diveFromGraceHasArrow[num])
           return output.circleWithArrows!({ num: num });
 
-        const teams: string[] = [];
+        const circles: string[] = [];
         Object.entries(data.diveFromGraceNum).forEach(([kn, vn]) => {
           if (vn === num)
-            teams.push(kn);
+            circles.push(kn);
         });
 
         if (data.prsParty !== undefined) {
-          const ccs = data.prsParty.filter((e) => teams.includes(e.name));
-          const ss = ccs.sort((a, b) => a.nto - b.nto).map((e) => e.role);
-          return output.circleAllCircles!({ num: num, sts: ss.join(', ') });
+          const members = data.prsParty.filter((e) => circles.includes(e.n));
+          const sorted = members.sort((a, b) => a.ni - b.ni).map((e) => e.r);
+          return output.circleAllCircles!({ num: num, circles: sorted.join(', ') });
         }
 
-        const ss = teams.map((e) => data.ShortName(e));
-        return output.circleAllCircles!({ num: num, sts: ss.join(', ') });
+        const ss = circles.map((e) => data.ShortName(e));
+        return output.circleAllCircles!({ num: num, circles: ss.join(', ') });
       },
       outputStrings: {
         circleAllCircles: {
-          en: '#${num} 모두🟢 (${sts})',
-          de: '#${num} Alle Kreise (${sts})',
-          ja: '#${num} みんなハイジャンプ (${sts})',
-          cn: '#${num} 全圆圈 (${sts})',
-          ko: '#${num} 모두 하이점프 (${sts})',
+          en: '#${num} 모두🟢 (${circles})',
+          de: '#${num} Alle Kreise (${circles})',
+          ja: '#${num} みんなハイジャンプ (${circles})',
+          cn: '#${num} 全圆圈 (${circles})',
+          ko: '#${num} 모두 하이점프 (${circles})',
         },
         circleWithArrows: {
           en: '#${num} 나만🔴',
@@ -2031,13 +2019,13 @@ const triggerSet: TriggerSet<Data> = {
         if (data.me === data.prsTetherTarget)
           return output.itsmine!();
         for (const i of data.prsParty) {
-          if (i.name === data.prsTetherTarget)
-            return output.wheremine!({ pos: i.nid, name: i.role });
+          if (i.n === data.prsTetherTarget)
+            return output.wheremine!({ pos: i.nt, role: i.r });
         }
       },
       outputStrings: {
         wheremine: {
-          en: '줄 채기: ${pos} (${name})',
+          en: '줄 채기: ${pos} (${role})',
         },
         itsmine: {
           en: '줄 갖고 있네!'
@@ -2050,21 +2038,22 @@ const triggerSet: TriggerSet<Data> = {
       netRegex: { id: '670C', source: 'Nidhogg', capture: false },
       condition: (data) => data.role === 'tank' && !data.prsSeenNidTether,
       delaySeconds: 10.5,
+      durationSeconds: 4,
       infoText: (data, _matches, output) => {
         if (data.prsTethers.length < 2)
           return;
         if (data.prsParty !== undefined) {
           const [t1, t2] = data.prsTethers.splice(-2);
-          const [m1, m2] = data.prsParty.filter((e) => e.name === t1 || e.name === t2).sort((a, b) => a.prt - b.prt);
-          return output.tether!({ t1: m1?.role, t2: m2?.role });
+          const [m1, m2] = data.prsParty.filter((e) => e.n === t1 || e.n === t2).sort((a, b) => a.i - b.i);
+          return output.tether!({ tether1: m1?.r, tether2: m2?.r });
         }
         const [s1, s2] = data.prsTethers.slice(-2).map((e) => data.ShortName(e));
-        return output.tether!({ t1: s1, t2: s2 });
+        return output.tether!({ tether1: s1, tether2: s2 });
       },
       run: (data) => data.prsSeenNidTether = true,
       outputStrings: {
         tether: {
-          en: '${t1}, ${t2}',
+          en: '${tether1}, ${tether2}',
         },
       },
     },
@@ -2299,10 +2288,11 @@ const triggerSet: TriggerSet<Data> = {
         // In case somebody wants to do some "go in the order cactbot tells you" sort of strat.
         const [fullName1, fullName2] = data.thunderstruck.sort();
         if (data.prsParty !== undefined) {
-          const ms = data.prsParty.filter((e) => e.name === fullName1 || e.name === fullName2);
-          if (ms.length === 2) {
-            const [m1, m2] = ms.sort((a, b) => a.wrn - b.wrn);
-            return output.text!({ name1: m1?.role, name2: m2?.role });
+          const [m1, m2] = data.prsParty.filter((e) => e.n === fullName1 || e.n === fullName2);
+          if (m1 !== undefined && m2 !== undefined) {
+            if (m1.i < m2.i)
+              return output.text!({ name1: m1.r, name2: m2.r });
+            return output.text!({ name1: m2.r, name2: m1.r });
           }
         }
         const name1 = fullName1 ? data.ShortName(fullName1) : output.unknown!();
@@ -2313,7 +2303,7 @@ const triggerSet: TriggerSet<Data> = {
       tts: null,
       outputStrings: {
         text: {
-          en: '⚡번개: ${name1}, ${name2}',
+          en: '⚡: ${name1}, ${name2}',
           de: 'Blitz: ${name1}, ${name2}',
           ja: '雷: ${name1}, ${name2}',
           cn: '雷点: ${name1}, ${name2}',
@@ -2384,25 +2374,24 @@ const triggerSet: TriggerSet<Data> = {
         if (data.prsParty === undefined || data.prsMe === undefined)
           return;
 
-        let dests: Member[];
+        let dests: PrsMember[];
         let pos: string;
         if (data.hasDoom[data.me]) {
-          dests = data.prsParty.filter((x) => data.hasDoom[x.name]);
+          dests = data.prsParty.filter((x) => data.hasDoom[x.n]);
           pos = output.doom!();
         } else {
-          dests = data.prsParty.filter((x) => !data.hasDoom[x.name]);
+          dests = data.prsParty.filter((x) => !data.hasDoom[x.n]);
           pos = output.nodoom!();
         }
         if (dests.length !== 4)
           return;
 
-        const sorted = dests.sort((a, b) => a.wrn - b.wrn);
-/*
-        const index = sorted.indexOf(data.prsMe) + 1;
-        if (index > 0)
-          return output.mynum!({ pos: pos, num: index });
-*/
-        const teams = sorted.map((e) => e.role);
+        const sorted = dests.sort((a, b) => a.wi - b.wi);
+        const num = sorted.indexOf(data.prsMe) + 1;
+        if (num > 0)
+          return output.mynum!({ pos: pos, num: num });
+
+        const teams = sorted.map((e) => e.r);
         return output.teams!({ pos: pos, teams: teams.join(', ') });
       },
       outputStrings: {
