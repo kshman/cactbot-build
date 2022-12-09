@@ -16,6 +16,55 @@ import { LocaleObject, LocaleText, TriggerSet } from '../../../../../types/trigg
 // TODO: Trigger for Hallowed Wings with Hot Tail/Hot Wings
 // TODO: Phase 6 Resentment callout?
 
+/* 멤버 처리:
+사용자 데이터에 아래 예처럼 넣어야 해요. 단, 토르당(P2) 시작할 때 넣어야 해요
+보통 사용자 파일은 [cactbot디렉토리]/user/raidboss.js 를 쓰면 되요
+예)
+Options.Triggers.push({
+    zoneId: ZoneId.DragonsongsRepriseUltimate,
+    timelineTriggers: [{
+      id: 'DSR+ 데이터 설정',
+      regex: /--setup--/,
+      run: (data) => data.prsParty = [여기서 값],
+    },],
+});
+형식)
+  data.prsParty = [
+    { r: 'MT', j: 'WAR', sp: 'ST', sc: 1, li: 9, ni: 0, nt: '🡼', wi: 0, n: '전사' },
+    { r: 'ST', j: 'DRK', sp: 'MT', sc: 2, li: 9, ni: 1, nt: '🡽', wi: 1, n: '다크 나이트' },
+    { r: 'H1', j: 'WHM', sp: 'H2', sc: 1, li: 0, ni: 2, nt: '🡿', wi: 2, n: '뱅마' },
+    { r: 'H2', j: 'SCH', sp: 'H1', sc: 2, li: 1, ni: 3, nt: '🡾', wi: 3, n: '스콜라' },
+    { r: 'D1', j: 'MNK', sp: 'D2', sc: 1, li: 2, ni: 4, nt: '🡿', wi: 7, n: '몽크' },
+    { r: 'D2', j: 'RPR', sp: 'D1', sc: 2, li: 3, ni: 5, nt: '🡾', wi: 6, n: '낫쟁이' },
+    { r: 'D3', j: 'DNC', sp: 'D4', sc: 1, li: 4, ni: 6, nt: '🡼', wi: 5, n: '춤꾼' },
+    { r: 'D4', j: 'SMN', sp: 'D3', sc: 2, li: 5, ni: 7, nt: '🡽', wi: 4, n: '서모너' },
+  ];
+설명)
+r: 역할
+j: 잡 (사용안함)
+sp: Sanctity of the Ward에서 칼일 경우 바꿀 사람
+sc: Sanctity of the Ward에서 갖고 있을 칼 개수
+li: Skyward Leaps 우선 순위
+ni: 니드호그 1-2-3 타워 왼쪽 기준 우선 순서
+nt: 니드호그 4 타워 위치
+wi: Wrath of the Heavens 우선 순위
+n: 게임 내 캐릭터 이름
+*/
+type PrsMember = {
+  r: string;
+  j: string;
+  sp: string;
+  sc: number;
+  li: number;
+  ni: number;
+  nt: string;
+  wi: number;
+  n: string;
+  // internal
+  i: number;
+  f?: boolean;
+};
+
 type Phase =
   | 'doorboss'
   | 'thordan'
@@ -71,11 +120,15 @@ export interface Data extends RaidbossData {
   secondGigaflare?: number[];
   centerGigaflare?: number[];
   // PRs
+  prsParty?: PrsMember[];
+  prsMe?: PrsMember;
   prsHolyHallow: number;
-  prsSkyLeap: boolean;
-  prsSkyList: string[];
-  prsTwister: number;
-  prsParty: string[];
+  prsTethers: string[];
+  prsTetherId?: number;
+  prsTetherTarget?: string;
+  prsSeenNidTether?: boolean;
+  prsSeenTwister?: boolean;
+  prsLog?: string;
 }
 
 // Due to changes introduced in patch 5.2, overhead markers now have a random offset
@@ -199,10 +252,7 @@ const triggerSet: TriggerSet<Data> = {
       entangledFlame: [],
       // PRs
       prsHolyHallow: 0,
-      prsSkyLeap: false,
-      prsSkyList: [],
-      prsTwister: 0,
-      prsParty: [],
+      prsTethers: [],
     };
   },
   timelineTriggers: [
@@ -341,27 +391,13 @@ const triggerSet: TriggerSet<Data> = {
       id: 'DSR Holiest Hallowing',
       type: 'StartsUsing',
       netRegex: { id: '62D0', source: 'Ser Adelphel' },
-      response: (data, _matches, output) => {
-        // cactbot-builtin-response
-        output.responseOutputStrings = {
-          intrs: {
-            en: '${num}번째 아델펠 인터럽트',
-          },
-          intr2: {
-            en: '2번째 아델펠 인터럽트',
-          },
-        };
-
-        data.prsHolyHallow++;
-
-        if (data.prsHolyHallow === 2) {
-          if (data.role !== 'tank' && data.CanSilence())
-            return { alarmText: output.intr2!() };
-        } else {
-          if (data.role === 'tank')
-            return { alarmText: output.intrs!({ num: data.prsHolyHallow }) };
-        }
-        return { infoText: output.intrs!({ num: data.prsHolyHallow }) };
+      condition: (data) => data.CanSilence(),
+      alertText: (data, _matches, output) => output.intrs!({ num: ++data.prsHolyHallow }),
+      outputStrings: {
+        intrs: {
+          en: '${num}번째 아델펠 인터럽트',
+          ja: '${num}番目のインタラプト',
+        },
       },
     },
     {
@@ -592,6 +628,60 @@ const triggerSet: TriggerSet<Data> = {
       response: Responses.moveAway(),
     },
     {
+      id: 'DSR+ 사용자 데이터 설정 (뇌창)',
+      type: 'Ability',
+      netRegex: { id: '63D3', source: 'King Thordan', capture: false },
+      delaySeconds: 1,
+      durationSeconds: 2,
+      infoText: (data, _matches, output) => {
+        if (data.prsParty === undefined)
+          return;
+        for (let i = 0; i < data.prsParty.length; i++) {
+          const m = data.prsParty[i];
+          if (m !== undefined)
+            m.i = i;
+        }
+        data.prsMe = data.prsParty.find((e) => e.n === data.me);
+        if (data.prsMe === undefined)
+          return output.nodata!();
+        return output.text!({ role: data.prsMe.r });
+      },
+      outputStrings: {
+        nodata: {
+          en: '데이터를 설정하지 않았네요',
+          ja: 'データの設定が見つかりません',
+        },
+        text: {
+          en: '내 역할: ${role}',
+          ja: 'ロール:  ${role}',
+        },
+      },
+    },
+    {
+      id: 'DSR+ 줄 (0054)',
+      type: 'Tether',
+      netRegex: { id: '0054' },
+      condition: (data) => data.phase === 'thordan' || data.phase === 'nidhogg',
+      run: (data, matches, _output) => {
+        data.prsTethers.push(matches.target);
+
+        const sid = parseInt(matches.sourceId, 16);
+        if (data.prsMe?.r === 'MT') {
+          const lid = data.prsTetherId ?? 0xFFFFFFFF;
+          if (sid <= lid) {
+            data.prsTetherId = sid;
+            data.prsTetherTarget = matches.target;
+          }
+        } else {
+          const lid = data.prsTetherId ?? 0;
+          if (sid >= lid) {
+            data.prsTetherId = sid;
+            data.prsTetherTarget = matches.target;
+          }
+        }
+      },
+    },
+    {
       id: 'DSR Spiral Thrust Safe Spots',
       // 63D3 Strength of the Ward
       type: 'Ability',
@@ -717,10 +807,11 @@ const triggerSet: TriggerSet<Data> = {
             7: 'D',
             8: output.unknown!(),
           };
-          return output.safeSpots!({
-            dir1: pfms[data.spiralThrustSafeZones[0] ?? 8],
-            dir2: pfms[data.spiralThrustSafeZones[1] ?? 8],
-          });
+          const s1 = pfms[data.spiralThrustSafeZones[0] ?? 8] ?? '';
+          const s2 = pfms[data.spiralThrustSafeZones[1] ?? 8] ?? '';
+          if (s1 < s2)
+            return output.safeSpots!({ dir1: s1, dir2: s2 });
+          return output.safeSpots!({ dir1: s2, dir2: s1 });
         }
         // Map of directions
         const dirs: { [dir: number]: string } = {
@@ -896,11 +987,13 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (data, matches, output) => {
         const id = getHeadmarkerId(data, matches);
         if (id === headmarkers.skywardTriple) {
-          data.prsSkyList.push(matches.target);
-          if (data.me === matches.target) {
-            data.prsSkyLeap = true;
-            return output.leapOnYou!();
+          if (data.prsParty !== undefined) {
+            const find = data.prsParty.find((e) => e.n === matches.target);
+            if (find !== undefined)
+              find.f = true;
           }
+          if (data.me === matches.target)
+            return output.leapOnYou!();
         }
       },
       outputStrings: {
@@ -915,20 +1008,49 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: 'DSR+ 또르당 마커 확인',
+      id: 'DSR+ Skyward Leap 동료 확인',
       type: 'Ability',
       netRegex: { id: '63DA', source: 'Ser Guerrique', capture: false },
       alertText: (data, _matches, output) => {
-        if (!data.prsSkyLeap)
+        if (data.prsParty === undefined || !data.prsMe?.f)
           return;
-        const sls: string[] = [];
-        for (const i of data.prsSkyList)
-          sls.push(data.ShortName(i));
-        return output.leaps!({ leaps: sls.sort().join(', ') });
+        const blues = data.prsParty.filter((e) => e.f);
+        const sorted = blues.sort((a, b) => a.li - b.li).map((e) => e.r);
+        return output.leaps!({ leaps: sorted.join(', ') });
       },
+      run: (data) => data.prsParty?.forEach((e) => delete e.f),
       outputStrings: {
         leaps: {
           en: '${leaps}',
+        },
+      },
+    },
+    {
+      id: 'DSR+ 배시 줄은 어디에',
+      type: 'Ability',
+      // Heavy Impact 5
+      netRegex: { id: '63DA', source: 'Ser Guerrique', capture: false },
+      condition: (data) => data.role === 'tank',
+      delaySeconds: 4,
+      infoText: (data, _matches, output) => {
+        if (data.prsTethers.length < 2)
+          return;
+        if (data.prsParty !== undefined) {
+          const [t1, t2] = data.prsTethers.splice(-2);
+          const [m1, m2] = data.prsParty.filter((e) => e.n === t1 || e.n === t2).sort((a, b) => a.i - b.i);
+          return output.tether!({ tether1: m1?.r, tether2: m2?.r });
+        }
+        const [s1, s2] = data.prsTethers.slice(-2).map((e) => data.ShortName(e));
+        return output.tether!({ tether1: s1, tether2: s2 });
+      },
+      run: (data) => {
+        data.prsTethers = [];
+        delete data.prsTetherId;
+        delete data.prsTetherTarget;
+      },
+      outputStrings: {
+        tether: {
+          en: '${tether1}, ${tether2}',
         },
       },
     },
@@ -1036,7 +1158,7 @@ const triggerSet: TriggerSet<Data> = {
       type: 'HeadMarker',
       netRegex: {},
       condition: (data, matches) => data.phase === 'thordan' && data.me === matches.target,
-      alarmText: (data, matches, output) => {
+      alertText: (data, matches, output) => {
         const id = getHeadmarkerId(data, matches);
         if (id === headmarkers.sword1)
           return output.sword1!();
@@ -1045,14 +1167,14 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         sword1: {
-          en: '1번! 제피란 없는데로!',
+          en: '칼 한개!',
           de: '1',
           ja: '1',
           cn: '1',
           ko: '1',
         },
         sword2: {
-          en: '2번! 제피란 뒤로!',
+          en: '칼 두개!',
           de: '2',
           ja: '2',
           cn: '2',
@@ -1066,7 +1188,7 @@ const triggerSet: TriggerSet<Data> = {
       netRegex: {},
       condition: (data) => data.phase === 'thordan',
       sound: '',
-      infoText: (data, matches, output) => {
+      response: (data, matches, output) => {
         const id = getHeadmarkerId(data, matches);
         if (id === headmarkers.sword1)
           data.sanctitySword1 = matches.target;
@@ -1078,9 +1200,27 @@ const triggerSet: TriggerSet<Data> = {
         if (data.sanctitySword1 === undefined || data.sanctitySword2 === undefined)
           return;
 
+        if (data.prsParty !== undefined && data.prsMe !== undefined) {
+          const m1 = data.prsParty.find((e) => e.n === data.sanctitySword1);
+          if (m1 !== undefined) {
+            if (m1 === data.prsMe && data.prsMe.sc === 2)
+              return { alertText: output.swap!({ role: m1.sp }) };
+            if (m1.sp === data.prsMe.r && m1.sc === 2)
+              return { alertText: output.swap!({ role: m1.r }) };
+          }
+          const m2 = data.prsParty.find((e) => e.n === data.sanctitySword2);
+          if (m2 !== undefined) {
+            if (m2 === data.prsMe && data.prsMe.sc === 1)
+              return { alertText: output.swap!({ role: m2.sp }) };
+            if (m2.sp === data.prsMe.r && m2.sc === 1)
+              return { alertText: output.swap!({ role: m2.r }) };
+          }
+          return { infoText: output.keep!() };
+        }
+
         const name1 = data.ShortName(data.sanctitySword1);
         const name2 = data.ShortName(data.sanctitySword2);
-        return output.text!({ name1: name1, name2: name2 });
+        return { infoText: output.text!({ name1: name1, name2: name2 }) };
       },
       // Don't collide with the more important 1/2 call.
       tts: '',
@@ -1091,6 +1231,14 @@ const triggerSet: TriggerSet<Data> = {
           ja: '剣：${name1}, ${name2}',
           cn: '剑: ${name1}, ${name2}',
           ko: '돌진 대상자: ${name1}, ${name2}',
+        },
+        swap: {
+          en: '자리 바꿔요: ${role}',
+          ja: 'スワップ: ${role}',
+        },
+        keep: {
+          en: '담당 자리로',
+          ja: '散開位置へ',
         },
       },
     },
@@ -1116,6 +1264,15 @@ const triggerSet: TriggerSet<Data> = {
         const [p1, p2] = data.thordanMeteorMarkers.sort();
         if (data.thordanMeteorMarkers.length !== 2 || p1 === undefined || p2 === undefined)
           return;
+
+        if (data.prsParty !== undefined) {
+          const [m1, m2] = data.prsParty.filter((e) => e.n === p1 || e.n === p2);
+          if (m1 !== undefined && m2 !== undefined) {
+            if (m1.i < m2.i)
+              return output.meteors!({ player1: m1.r, player2: m2.r });
+            return output.meteors!({ player1: m2.r, player2: m1.r });
+          }
+        }
 
         const p1dps = data.party.isDPS(p1);
         const p2dps = data.party.isDPS(p2);
@@ -1153,6 +1310,10 @@ const triggerSet: TriggerSet<Data> = {
           cn: '??? 陨石 (${player1}, ${player2})',
           ko: '??? 메테오 (${player1}, ${player2})',
         },
+        meteors: {
+          en: '메테오: ${player1}, ${player2}',
+          ja: '隕石: ${player1}, ${player2}',
+        },
       },
     },
     {
@@ -1173,31 +1334,13 @@ const triggerSet: TriggerSet<Data> = {
       id: 'DSR Broad Swing Right',
       type: 'StartsUsing',
       netRegex: { id: '63C0', source: 'King Thordan', capture: false },
-      alertText: (_data, _matches, output) => output.text!(),
-      outputStrings: {
-        text: {
-          en: '🡺오른쪽',
-          de: 'Hinter ihn => Rechts',
-          ja: '後ろ => 右',
-          cn: '后 => 右',
-          ko: '뒤 => 오른쪽',
-        },
-      },
+      response: Responses.goRight(),
     },
     {
       id: 'DSR Broad Swing Left',
       type: 'StartsUsing',
       netRegex: { id: '63C1', source: 'King Thordan', capture: false },
-      alertText: (_data, _matches, output) => output.text!(),
-      outputStrings: {
-        text: {
-          en: '왼쪽🡸',
-          de: 'Hinter ihn => Links',
-          ja: '後ろ => 左',
-          cn: '后 => 左',
-          ko: '뒤 => 왼쪽',
-        },
-      },
+      response: Responses.goLeft(),
     },
     {
       id: 'DSR Dive From Grace Number',
@@ -1282,13 +1425,6 @@ const triggerSet: TriggerSet<Data> = {
           return;
         }
 
-        const teams: string[] = [];
-        Object.entries(data.diveFromGraceNum).forEach(([kn, vn]) => {
-          if (vn === num)
-            teams.push(data.ShortName(kn));
-          data.prsParty.push(kn);
-        });
-
         if (data.diveFromGraceDir[data.me] === 'up')
           return output.upArrow!({ num: num });
         else if (data.diveFromGraceDir[data.me] === 'down')
@@ -1297,16 +1433,28 @@ const triggerSet: TriggerSet<Data> = {
         if (data.diveFromGraceHasArrow[num])
           return output.circleWithArrows!({ num: num });
 
-        const sts = teams.sort().join(', ');
-        return output.circleAllCircles!({ num: num, sts: sts });
+        const circles: string[] = [];
+        Object.entries(data.diveFromGraceNum).forEach(([kn, vn]) => {
+          if (vn === num)
+            circles.push(kn);
+        });
+
+        if (data.prsParty !== undefined) {
+          const members = data.prsParty.filter((e) => circles.includes(e.n));
+          const sorted = members.sort((a, b) => a.ni - b.ni).map((e) => e.r);
+          return output.circleAllCircles!({ num: num, circles: sorted.join(', ') });
+        }
+
+        const ss = circles.map((e) => data.ShortName(e));
+        return output.circleAllCircles!({ num: num, circles: ss.join(', ') });
       },
       outputStrings: {
         circleAllCircles: {
-          en: '#${num} 모두🟢 (${sts})',
-          de: '#${num} Alle Kreise (${sts})',
-          ja: '#${num} みんなハイジャンプ (${sts})',
-          cn: '#${num} 全圆圈 (${sts})',
-          ko: '#${num} 모두 하이점프 (${sts})',
+          en: '#${num} 모두🟢 (${circles})',
+          de: '#${num} Alle Kreise (${circles})',
+          ja: '#${num} みんなハイジャンプ (${circles})',
+          cn: '#${num} 全圆圈 (${circles})',
+          ko: '#${num} 모두 하이점프 (${circles})',
         },
         circleWithArrows: {
           en: '#${num} 나만🔴',
@@ -1859,6 +2007,69 @@ const triggerSet: TriggerSet<Data> = {
       response: Responses.getBehind(),
     },
     {
+      id: 'DSR+ 니드 줄을 채야해',
+      type: 'StartsUsing',
+      netRegex: { id: '670C', source: 'Nidhogg', capture: false },
+      condition: (data) => data.role === 'tank' && !data.prsSeenNidTether,
+      delaySeconds: 10.3,
+      durationSeconds: 6,
+      alertText: (data, _matches, output) => {
+        if (data.prsParty === undefined || data.prsTetherTarget === undefined)
+          return;
+        if (data.me === data.prsTetherTarget)
+          return output.itsmine!();
+        for (const i of data.prsParty) {
+          if (i.n === data.prsTetherTarget)
+            return output.wheremine!({ pos: i.nt, role: i.r });
+        }
+      },
+      outputStrings: {
+        wheremine: {
+          en: '줄 채기: ${pos} (${role})',
+          ja: '線取り: ${pos} (${role})',
+        },
+        itsmine: {
+          en: '줄 갖고 있네!',
+          ja: '線持っている!',
+        },
+      },
+    },
+    {
+      id: 'DSR+ 니드 줄은 어디에',
+      type: 'StartsUsing',
+      netRegex: { id: '670C', source: 'Nidhogg', capture: false },
+      condition: (data) => data.role === 'tank' && !data.prsSeenNidTether,
+      delaySeconds: 10.5,
+      durationSeconds: 4,
+      infoText: (data, _matches, output) => {
+        if (data.prsTethers.length < 2)
+          return;
+        if (data.prsParty !== undefined) {
+          const [t1, t2] = data.prsTethers.splice(-2);
+          const [m1, m2] = data.prsParty.filter((e) => e.n === t1 || e.n === t2).sort((a, b) => a.i - b.i);
+          return output.tether!({ tether1: m1?.r, tether2: m2?.r });
+        }
+        const [s1, s2] = data.prsTethers.slice(-2).map((e) => data.ShortName(e));
+        return output.tether!({ tether1: s1, tether2: s2 });
+      },
+      run: (data) => data.prsSeenNidTether = true,
+      outputStrings: {
+        tether: {
+          en: '${tether1}, ${tether2}',
+        },
+      },
+    },
+    {
+      id: 'DSR+ 니드 줄 처리 종료',
+      type: 'StartsUsing',
+      netRegex: { id: '7436', source: 'Nidhogg', capture: false },
+      run: (data, _matches, _output) => {
+        data.prsTethers = [];
+        delete data.prsTetherId;
+        delete data.prsTetherTarget;
+      },
+    },
+    {
       id: 'DSR Right Eye Blue Tether',
       type: 'Tether',
       netRegex: { id: '0033' },
@@ -1984,9 +2195,10 @@ const triggerSet: TriggerSet<Data> = {
       netRegex: { id: '6B8B', source: 'Vedrfolnir', capture: false },
       suppressSeconds: 1,
       alertText: (data, _matches, output) => {
-        data.prsTwister++;
-        if (data.prsTwister === 1)
+        if (!data.prsSeenTwister) {
+          data.prsSeenTwister = true;
           return output.withAscalon!();
+        }
         return output.text!();
       },
       outputStrings: {
@@ -2000,6 +2212,7 @@ const triggerSet: TriggerSet<Data> = {
         },
         withAscalon: {
           en: '🌪트위스터 + 아스칼론!',
+          ja: 'ツイスター + アスカロン',
           ko: '회오리 + 아스칼론',
         },
       },
@@ -2077,6 +2290,14 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (data, _matches, output) => {
         // In case somebody wants to do some "go in the order cactbot tells you" sort of strat.
         const [fullName1, fullName2] = data.thunderstruck.sort();
+        if (data.prsParty !== undefined) {
+          const [m1, m2] = data.prsParty.filter((e) => e.n === fullName1 || e.n === fullName2);
+          if (m1 !== undefined && m2 !== undefined) {
+            if (m1.i < m2.i)
+              return output.text!({ name1: m1.r, name2: m2.r });
+            return output.text!({ name1: m2.r, name2: m1.r });
+          }
+        }
         const name1 = fullName1 ? data.ShortName(fullName1) : output.unknown!();
         const name2 = fullName2 ? data.ShortName(fullName2) : output.unknown!();
         return output.text!({ name1: name1, name2: name2 });
@@ -2085,7 +2306,7 @@ const triggerSet: TriggerSet<Data> = {
       tts: null,
       outputStrings: {
         text: {
-          en: '⚡번개: ${name1}, ${name2}',
+          en: '⚡: ${name1}, ${name2}',
           de: 'Blitz: ${name1}, ${name2}',
           ja: '雷: ${name1}, ${name2}',
           cn: '雷点: ${name1}, ${name2}',
@@ -2138,7 +2359,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '선고 대상자',
         },
         noDoom: {
-          en: '둠 없네',
+          en: '둠 없어욧!',
           de: 'Kein Verhängnis',
           ja: '自分は無職',
           cn: '无死宣',
@@ -2147,30 +2368,50 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      // Death of the Heavens + 12초
       id: 'DSR+ 헤븐데스 순번 찾기',
       type: 'Ability',
       netRegex: { id: '6B92', source: 'King Thordan', capture: false },
+      // Death of the Heavens + 12초
       delaySeconds: 9,
       infoText: (data, _matches, output) => {
-        const dooms = data.prsParty.filter((x) => data.hasDoom[x]);
-        if (dooms.length !== 4)
+        if (data.prsParty === undefined || data.prsMe === undefined)
           return;
 
-        const teams: string[] = [];
-        if (dooms.includes(data.me)) {
-          for (const i of dooms)
-            teams.push(data.ShortName(i));
+        let dests: PrsMember[];
+        let pos: string;
+        if (data.hasDoom[data.me]) {
+          dests = data.prsParty.filter((x) => data.hasDoom[x.n]);
+          pos = output.doom!();
         } else {
-          const nodms = data.prsParty.filter((x) => !data.hasDoom[x]);
-          for (const i of nodms)
-            teams.push(data.ShortName(i));
+          dests = data.prsParty.filter((x) => !data.hasDoom[x.n]);
+          pos = output.nodoom!();
         }
-        return output.teams!({ teams: teams.sort().join(', ') });
+        if (dests.length !== 4)
+          return;
+
+        const sorted = dests.sort((a, b) => a.wi - b.wi);
+        const num = sorted.indexOf(data.prsMe) + 1;
+        if (num > 0)
+          return output.mynum!({ pos: pos, num: num });
+
+        const teams = sorted.map((e) => e.r);
+        return output.teams!({ pos: pos, teams: teams.join(', ') });
       },
       outputStrings: {
         teams: {
-          en: '${teams}',
+          en: '${pos}: ${teams}',
+        },
+        mynum: {
+          en: '${pos}: ${num}번',
+          ja: '${pos}: ${num}',
+        },
+        doom: {
+          en: '💀둠',
+          ja: '💀死',
+        },
+        nodoom: {
+          en: '안전',
+          ja: '安全',
         },
       },
     },
@@ -2249,28 +2490,28 @@ const triggerSet: TriggerSet<Data> = {
           ko: '파랑 X',
         },
         circleWithDoom: {
-          en: '🔴빨강 + 💀둠',
+          en: '🔴빨강 + 💀',
           de: 'Roter Kreis (Verhängnis)',
           ja: '赤まる (死の宣告)',
           cn: '红圆圈 (死宣)',
           ko: '빨강 동그라미 (선고)',
         },
         triangleWithDoom: {
-          en: '▲초록 + 💀둠',
+          en: '▲초록 + 💀',
           de: 'Grünes Dreieck (Verhängnis)',
           ja: '緑さんかく (死の宣告)',
           cn: '绿三角 (死宣)',
           ko: '초록 삼각 (선고)',
         },
         squareWithDoom: {
-          en: '🟪보라 + 💀둠',
+          en: '🟪보라 + 💀',
           de: 'Lilanes Viereck (Verhängnis)',
           ja: '紫しかく (死の宣告)',
           cn: '紫方块 (死宣)',
           ko: '보라 사각 (선고)',
         },
         crossWithDoom: {
-          en: '➕파랑 + 💀둠',
+          en: '➕파랑 + 💀',
           de: 'Blaues X (Verhängnis)',
           ja: '青バツ(死の宣告)',
           cn: '蓝X (死宣)',
@@ -2327,56 +2568,56 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         circle: {
-          en: '노마커 🔴빨강',
+          en: '(🔴빨강)',
           de: 'Unmarkierter roter Kreis',
           ja: '無職で赤まる',
           cn: '无标记红圆圈',
           ko: '무징 빨강 동그라미',
         },
         triangle: {
-          en: '노마커 ▲초록',
+          en: '(▲초록)',
           de: 'Unmarkiertes grünes Dreieck',
           ja: '無職で緑さんかく',
           cn: '无标记绿三角',
           ko: '무징 초록 삼각',
         },
         square: {
-          en: '노마커 🟪보라',
+          en: '(🟪보라)',
           de: 'Unmarkiertes lilanes Viereck',
           ja: '無職で紫しかく',
           cn: '无标记紫方块',
           ko: '무징 보라 사각',
         },
         cross: {
-          en: '노마커 ➕파랑',
+          en: '(➕파랑)',
           de: 'Unmarkiertes blaues X ',
           ja: '無職で青バツ',
           cn: '无标记蓝X',
           ko: '무징 파랑 X',
         },
         circleWithDoom: {
-          en: '노마커 🔴빨강 + 💀둠',
+          en: '(🔴빨강) + 💀',
           de: 'Unmarkierter roter Kreis (Verhängnis)',
           ja: '無職で赤まる (死の宣告)',
           cn: '无标记红圆圈 (死宣)',
           ko: '무징 빨강 동그라미 (선고)',
         },
         triangleWithDoom: {
-          en: '노마커 ▲초록 + 💀둠',
+          en: '(▲초록) + 💀',
           de: 'Unmarkiertes grünes Dreieck (Verhängnis)',
           ja: '無職で緑さんかく (死の宣告)',
           cn: '无标记绿三角 (死宣)',
           ko: '무징 초록 삼각 (선고)',
         },
         squareWithDoom: {
-          en: '노마커 🟪보라 + 💀둠',
+          en: '(🟪보라) + 💀',
           de: 'Unmarkiertes lilanes Viereck (Verhängnis)',
           ja: '無職で紫しかく (死の宣告)',
           cn: '无标记紫方块 (死宣)',
           ko: '무징 보라 사각 (선고)',
         },
         crossWithDoom: {
-          en: '노마커 ➕파랑 + 💀둠',
+          en: '(➕파랑) + 💀',
           de: 'Unmarkiertes blaues X (Verhängnis)',
           ja: '無職で青バツ (死の宣告)',
           cn: '无标记蓝X (死宣)',
@@ -2677,30 +2918,10 @@ const triggerSet: TriggerSet<Data> = {
         //
         // Yes, these are also tank busters, but there's too many things to call out here,
         // and this is a case of "tanks and healers need to know what's going on ahead of time".
-        left: {
-          en: '왼쪽🡸',
-          ja: '左',
-          ko: '왼쪽',
-        },
-        right: {
-          en: '🡺오른쪽',
-          ja: '右',
-          ko: '오른쪽',
-        },
-        forward: {
-          en: '🡹앞으로',
-          de: 'Vorwärts',
-          ja: '前へ',
-          cn: '向前',
-          ko: '앞쪽으로',
-        },
-        backward: {
-          en: '뒤로🡻',
-          de: 'Rückwärts',
-          ja: '後ろへ',
-          cn: '向后',
-          ko: '뒤쪽으로',
-        },
+        left: Outputs.left,
+        right: Outputs.right,
+        forward: Outputs.front,
+        backward: Outputs.back,
         partyNear: {
           en: '파티 가까이',
           de: 'Party nahe',
@@ -2731,9 +2952,11 @@ const triggerSet: TriggerSet<Data> = {
         },
         tanksFront: {
           en: '맨 🡹앞으로',
+          ja: '一番前へ',
         },
         tanksBehind: {
           en: '맨 뒤로🡻',
+          ja: '一番後ろへ',
         },
         wingsHead: {
           en: '${wings}, ${head}',
@@ -2889,6 +3112,20 @@ const triggerSet: TriggerSet<Data> = {
           return output.stack!();
         return output.nodebuff!();
       },
+      tts: (data, _matches, output) => {
+        if (data.role !== 'tank')
+          return;
+        if (data.spreadingFlame.length < 4)
+          return;
+        if (data.entangledFlame.length < 2)
+          return;
+
+        if (data.spreadingFlame.includes(data.me))
+          return;
+        if (data.entangledFlame.includes(data.me))
+          return;
+        return output.ttsnobuff!();
+      },
       outputStrings: {
         spread: {
           en: '검정⬛ 혼자!',
@@ -2910,6 +3147,9 @@ const triggerSet: TriggerSet<Data> = {
           ja: 'バフなし (頭割り)',
           cn: '无Debuff (分摊)',
           ko: '무징 (쉐어)',
+        },
+        ttsnobuff: {
+          en: 'タンク無職',
         },
       },
     },
@@ -2941,7 +3181,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           // Only showing 'swap' is really confusing, in my opinion
-          en: '스탠스 꺼욧! 다크⬛!',
+          en: '스탠스 OFF! 다크⬛!',
           de: 'Sei 2. in der Aggro',
           ja: 'スタンスオフ',
           cn: '建立二仇',
@@ -3077,24 +3317,28 @@ const triggerSet: TriggerSet<Data> = {
         directions: {
           en: '${start} => ${rotation}',
           de: '${start} => ${rotation}',
+          ja: '${start} => ${rotation}',
           cn: '${start} => ${rotation}',
           ko: '${start} => ${rotation}',
         },
         backLeft: {
           en: '🡿왼쪽뒤',
           de: 'Hinten links',
+          ja: '左後ろ',
           cn: '左后',
           ko: '뒤 왼쪽',
         },
         backRight: {
           en: '🡾오른쪽뒤',
           de: 'Hinten rechts',
+          ja: '右後ろ',
           cn: '右后',
           ko: '뒤 오른쪽',
         },
         front: {
           en: '🡹앞',
           de: 'Vorne',
+          ja: '前',
           cn: '前',
           ko: '앞',
         },
@@ -3126,7 +3370,8 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         text: {
-          en: '스탠스 켜욧!',
+          en: '스탠스 ON!',
+          ja: 'スタンスオン',
         },
       },
     },

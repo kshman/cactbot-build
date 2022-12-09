@@ -8,6 +8,7 @@
 
 hideall "--Reset--"
 hideall "--sync--"
+hideall "--setup--"
 
 0.0 "--Reset--" sync / 21:........:4000000F:/ window 100000 jump 0
 
@@ -17,6 +18,7 @@ hideall "--sync--"
 0.0 "Start"
 6.0 "--sync--" sync / 14:[^:]*:Ser Adelphel:62D4:/ window 10,10
 10.0 "Holiest of Holy" sync / 1[56]:[^:]*:Ser Adelphel:62D4:/
+11.0 "--setup--"
 23.2 "Empty Dimension" sync / 1[56]:[^:]*:Ser Grinnaux:62DA:/
 23.2 "Holy Shield Bash" sync / 1[56]:[^:]*:Ser Adelphel:62D1:/
 23.9 "--sync--" sync / 1[56]:[^:]*:Ser Adelphel:63EB:/
@@ -70,6 +72,7 @@ hideall "--sync--"
 541.5 "--targetable--"
 550.0 "--sync--" sync / 14:[^:]*:King Thordan:63C8:/ window 600,10
 553.0 "Ascalon's Mercy Concealed" sync / 1[56]:[^:]*:King Thordan:63C8:/
+553.5 "--setup--"
 554.6 "--sync--" sync / 1[56]:[^:]*:King Thordan:63C9:/
 556.2 "Ascalon's Might 1" #sync / 1[56]:[^:]*:King Thordan:63C5:/
 557.8 "Ascalon's Might 2" #sync / 1[56]:[^:]*:King Thordan:63C5:/

@@ -95,9 +95,10 @@ const triggerSet: TriggerSet<Data> = {
         stackMarker: Outputs.stackMarker,
         stackOnYou: Outputs.stackOnYou,
         avoidStack: {
-          en: '¹¶Ä¡¸é ¾ÈµÇ¿ä',
+          en: 'ë­‰ì¹˜ë©´ ì•ˆë˜ìš”',
           de: 'Vermeide Sammeln',
-          cn: '??İÂ?',
+          cn: 'è¿œç¦»åˆ†æ‘Š',
+          ko: 'ì‰ì–´ì§• í”¼í•˜ê¸°',
         },
       },
     },
@@ -143,25 +144,25 @@ const triggerSet: TriggerSet<Data> = {
     {
       'locale': 'ja',
       'replaceSync': {
-        'Baal': '«Ğ?«ë',
-        'Gunitt': '«°«Ë«Ã«È',
-        'Rusalka': '«ë«µ«ë««',
+        'Baal': 'ãƒãƒ¼ãƒ«',
+        'Gunitt': 'ã‚°ãƒ‹ãƒƒãƒˆ',
+        'Rusalka': 'ãƒ«ã‚µãƒ«ã‚«',
       },
     },
     {
       'locale': 'cn',
       'replaceSync': {
-        'Baal': '÷éÕô',
-        'Gunitt': '?Òù?',
-        'Rusalka': '?Şí?',
+        'Baal': 'å·´åŠ›',
+        'Gunitt': 'é¡¾å°¼å›¾',
+        'Rusalka': 'å¢èå¡',
       },
     },
     {
       'locale': 'ko',
       'replaceSync': {
-        'Baal': '¹Ù¾Ë',
-        'Gunitt': '±¸´ÏÆ®',
-        'Rusalka': '·ç»ìÄ«',
+        'Baal': 'ë°”ì•Œ',
+        'Gunitt': 'êµ¬ë‹ˆíŠ¸',
+        'Rusalka': 'ë£¨ì‚´ì¹´',
       },
     },
   ],

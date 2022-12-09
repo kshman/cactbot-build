@@ -48,28 +48,28 @@ const triggerSet: TriggerSet<Data> = {
       'locale': 'fr',
       'replaceSync': {
         'Deep Palace Ahriman': 'ahriman des profondeurs',
-        'Deep Palace Catoblepas': 'catoblepas des profondeurs',
+        'Deep Palace Catoblepas': 'catoblÃ©pas des profondeurs',
       },
     },
     {
       'locale': 'ja',
       'replaceSync': {
-        'Deep Palace Ahriman': '«Ç«£?«×«Ñ«ì«¹?«¢?«ê«Ş«ó',
-        'Deep Palace Catoblepas': '«Ç«£?«×«Ñ«ì«¹?«««È«Ö«ì«Ñ«¹',
+        'Deep Palace Ahriman': 'ãƒ‡ã‚£ãƒ¼ãƒ—ãƒ‘ãƒ¬ã‚¹ãƒ»ã‚¢ãƒ¼ãƒªãƒãƒ³',
+        'Deep Palace Catoblepas': 'ãƒ‡ã‚£ãƒ¼ãƒ—ãƒ‘ãƒ¬ã‚¹ãƒ»ã‚«ãƒˆãƒ–ãƒ¬ãƒ‘ã‚¹',
       },
     },
     {
       'locale': 'cn',
       'replaceSync': {
-        'Deep Palace Ahriman': 'ä¢?Ù¢Ğ¡ñıäÑ',
-        'Deep Palace Catoblepas': 'ä¢??öõøÖ??ŞÙ',
+        'Deep Palace Ahriman': 'æ·±å®«å†¥é¬¼ä¹‹çœ¼',
+        'Deep Palace Catoblepas': 'æ·±å®«å¡æ‰˜å¸ƒè±å¸•æ–¯',
       },
     },
     {
       'locale': 'ko',
       'replaceSync': {
-        'Deep Palace Ahriman': '±íÀº ±ÃÀü ¾Æ¸®¸¸',
-        'Deep Palace Catoblepas': '±íÀº ±ÃÀü Ä«Åäºí·¹ÆÄ½º',
+        'Deep Palace Ahriman': 'ê¹Šì€ ê¶ì „ ì•„ë¦¬ë§Œ',
+        'Deep Palace Catoblepas': 'ê¹Šì€ ê¶ì „ ì¹´í† ë¸”ë ˆíŒŒìŠ¤',
       },
     },
   ],

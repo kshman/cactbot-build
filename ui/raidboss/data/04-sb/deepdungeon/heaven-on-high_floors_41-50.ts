@@ -66,19 +66,19 @@ const triggerSet: TriggerSet<Data> = {
     {
       'locale': 'ja',
       'replaceSync': {
-        'Gozu': '«´«º',
+        'Gozu': 'ã‚´ã‚º',
       },
     },
     {
       'locale': 'cn',
       'replaceSync': {
-        'Gozu': 'éÚ?',
+        'Gozu': 'ç‰›å¤´',
       },
     },
     {
       'locale': 'ko',
       'replaceSync': {
-        'Gozu': '¼Ò¸Ó¸®',
+        'Gozu': 'ì†Œë¨¸ë¦¬',
       },
     },
   ],

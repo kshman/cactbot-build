@@ -25,6 +25,7 @@ const triggerSet: TriggerSet<Data> = {
           en: '엉덩이로 가던가, 뒤돌아 봐욧',
           de: 'Geh hinter oder schau weg',
           cn: '去背后或看向其他方向',
+          ko: '보스 뒤로 또는 뒤돌기',
         },
       },
     },

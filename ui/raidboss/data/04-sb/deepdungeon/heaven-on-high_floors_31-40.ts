@@ -41,35 +41,35 @@ const triggerSet: TriggerSet<Data> = {
       'locale': 'de',
       'replaceSync': {
         'Bhima': 'Bhima',
-        'Heavenly Dogu': 'Himmelssaulen-Dogu',
+        'Heavenly Dogu': 'HimmelssÃ¤ulen-Dogu',
       },
     },
     {
       'locale': 'fr',
       'replaceSync': {
         'Bhima': 'Bhima',
-        'Heavenly Dogu': 'dogu des Cieux',
+        'Heavenly Dogu': 'dogÃ» des Cieux',
       },
     },
     {
       'locale': 'ja',
       'replaceSync': {
-        'Bhima': '«Ó?«Ş',
-        'Heavenly Dogu': '«¢«á«Î?«É«°«¦',
+        'Bhima': 'ãƒ“ãƒ¼ãƒ',
+        'Heavenly Dogu': 'ã‚¢ãƒ¡ãƒãƒ»ãƒ‰ã‚°ã‚¦',
       },
     },
     {
       'locale': 'cn',
       'replaceSync': {
-        'Bhima': 'ø×?',
-        'Heavenly Dogu': 'ô¸ñı÷ÏéÏ',
+        'Bhima': 'æ€–å†›',
+        'Heavenly Dogu': 'å¤©ä¹‹åœŸå¶',
       },
     },
     {
       'locale': 'ko',
       'replaceSync': {
-        'Bhima': 'ºñ¸¶',
-        'Heavenly Dogu': 'Ãµ±Ã Åä¿ì',
+        'Bhima': 'ë¹„ë§ˆ',
+        'Heavenly Dogu': 'ì²œê¶ í† ìš°',
       },
     },
   ],

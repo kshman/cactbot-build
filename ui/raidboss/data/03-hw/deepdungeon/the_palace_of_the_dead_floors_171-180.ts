@@ -30,11 +30,19 @@ const triggerSet: TriggerSet<Data> = {
       response: Responses.interruptIfPossible(),
     },
     // ---------------- Floor 180 Boss: Dendainsonne ----------------
-    // intentionally blank
+    {
+      id: 'PotD 171-180 Dendainsonne Ecliptic Meteor',
+      // 80% max HP damage
+      type: 'StartsUsing',
+      netRegex: { id: '1BFE', source: 'Dendainsonne' },
+      delaySeconds: (_data, matches) => parseFloat(matches.castTime) - 4,
+      response: Responses.bigAoe('alert'),
+    },
   ],
   timelineReplace: [
     {
       'locale': 'de',
+      'missingTranslations': true,
       'replaceSync': {
         'Bird of the Deep Palace': 'Katakombenvogel',
         'Deep Palace Snowclops': 'Katakomben-Schneezyklop',
@@ -42,6 +50,7 @@ const triggerSet: TriggerSet<Data> = {
     },
     {
       'locale': 'fr',
+      'missingTranslations': true,
       'replaceSync': {
         'Bird of the Deep Palace': 'oiseau des profondeurs',
         'Deep Palace Snowclops': 'chionope des profondeurs',
@@ -49,23 +58,26 @@ const triggerSet: TriggerSet<Data> = {
     },
     {
       'locale': 'ja',
+      'missingTranslations': true,
       'replaceSync': {
-        'Bird of the Deep Palace': '«Ğ?«É?«ª«Ö?«Ç«£?«×«Ñ«ì«¹',
-        'Deep Palace Snowclops': '«Ç«£?«×«Ñ«ì«¹?«¹«Î«¦«¯«í«×«¹',
+        'Bird of the Deep Palace': 'ãƒãƒ¼ãƒ‰ãƒ»ã‚ªãƒ–ãƒ»ãƒ‡ã‚£ãƒ¼ãƒ—ãƒ‘ãƒ¬ã‚¹',
+        'Deep Palace Snowclops': 'ãƒ‡ã‚£ãƒ¼ãƒ—ãƒ‘ãƒ¬ã‚¹ãƒ»ã‚¹ãƒã‚¦ã‚¯ãƒ­ãƒ—ã‚¹',
       },
     },
     {
       'locale': 'cn',
+      'missingTranslations': true,
       'replaceSync': {
-        'Bird of the Deep Palace': 'ä¢?èí?',
-        'Deep Palace Snowclops': 'ä¢??äÑàäËİìÑ',
+        'Bird of the Deep Palace': 'æ·±å®«å¦–é¸Ÿ',
+        'Deep Palace Snowclops': 'æ·±å®«ç‹¬çœ¼é›ªå·¨äºº',
       },
     },
     {
       'locale': 'ko',
+      'missingTranslations': true,
       'replaceSync': {
-        'Bird of the Deep Palace': '±íÀº ±ÃÀü »õ',
-        'Deep Palace Snowclops': '±íÀº ±ÃÀü ´«º¸¶ó »çÀÌÅ¬·Ó½º',
+        'Bird of the Deep Palace': 'ê¹Šì€ ê¶ì „ ìƒˆ',
+        'Deep Palace Snowclops': 'ê¹Šì€ ê¶ì „ ëˆˆë³´ë¼ ì‚¬ì´í´ë¡­ìŠ¤',
       },
     },
   ],
