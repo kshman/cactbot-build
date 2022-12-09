@@ -24,7 +24,7 @@ Options.Triggers.push({
     zoneId: ZoneId.DragonsongsRepriseUltimate,
     timelineTriggers: [{
       id: 'DSR+ 데이터 설정',
-      regex: /Strength of the Ward/,
+      regex: /--setup--/,
       run: (data) => data.prsParty = [여기서 값],
     },],
 });
@@ -3317,7 +3317,7 @@ const triggerSet: TriggerSet<Data> = {
         directions: {
           en: '${start} => ${rotation}',
           de: '${start} => ${rotation}',
-          ja: '',
+          ja: '${start} => ${rotation}',
           cn: '${start} => ${rotation}',
           ko: '${start} => ${rotation}',
         },
