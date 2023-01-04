@@ -29,6 +29,38 @@ const triggerSet: TriggerSet<Data> = {
       response: Responses.killAdds('alert'),
     },
   ],
+  timelineReplace: [
+    {
+      'locale': 'de',
+      'replaceSync': {
+        'Nightmare Eye': 'Albtraum-Auge',
+      },
+    },
+    {
+      'locale': 'fr',
+      'replaceSync': {
+        'Nightmare Eye': '©«il du cauchemar',
+      },
+    },
+    {
+      'locale': 'ja',
+      'replaceSync': {
+        'Nightmare Eye': '«Ê«¤«È«á«¢?«¢«¤',
+      },
+    },
+    {
+      'locale': 'cn',
+      'replaceSync': {
+        'Nightmare Eye': '??ñýäÑ',
+      },
+    },
+    {
+      'locale': 'ko',
+      'replaceSync': {
+        'Nightmare Eye': '¾Ç¸ù ´«¾Ë',
+      },
+    },
+  ],
 };
 
 export default triggerSet;

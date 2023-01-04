@@ -54,6 +54,48 @@ const triggerSet: TriggerSet<Data> = {
       response: Responses.getUnder('alert'),
     },
   ],
+  timelineReplace: [
+    {
+      'locale': 'de',
+      'replaceSync': {
+        'Ningishzida': 'Ningishzida',
+        'Palace Minotaur': 'Palast-Minotaurus',
+        'Palace Skatene': 'Palast-Skatene',
+      },
+    },
+    {
+      'locale': 'fr',
+      'replaceSync': {
+        'Ningishzida': 'Ningishzida',
+        'Palace Minotaur': 'minotaure du palais',
+        'Palace Skatene': 'skate\'ne du palais',
+      },
+    },
+    {
+      'locale': 'ja',
+      'replaceSync': {
+        'Ningishzida': '«Ë«ó«®«¸«Ã«À',
+        'Palace Minotaur': '«Ñ«ì«¹?«ß«Î«¿«¦«í«¹',
+        'Palace Skatene': '«Ñ«ì«¹?«¹«««Í«Æ',
+      },
+    },
+    {
+      'locale': 'cn',
+      'replaceSync': {
+        'Ningishzida': '?ÑÎ???',
+        'Palace Minotaur': 'ò¢???Ô¶Õ¦ÞÙ',
+        'Palace Skatene': 'ò¢?ÞÙ?Òù÷å',
+      },
+    },
+    {
+      'locale': 'ko',
+      'replaceSync': {
+        'Ningishzida': '´×±â½ÃÁö´Ù',
+        'Palace Minotaur': '±ÃÀü ¹Ì³ëÅ¸¿ì·Î½º',
+        'Palace Skatene': '±ÃÀü ½ºÄ«³×Å×',
+      },
+    },
+  ],
 };
 
 export default triggerSet;

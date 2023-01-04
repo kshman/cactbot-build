@@ -23,6 +23,38 @@ const triggerSet: TriggerSet<Data> = {
       response: Responses.aoe(),
     },
   ],
+  timelineReplace: [
+    {
+      'locale': 'de',
+      'replaceSync': {
+        'Alicanto': 'Alicanto',
+      },
+    },
+    {
+      'locale': 'fr',
+      'replaceSync': {
+        'Alicanto': 'Alicanto',
+      },
+    },
+    {
+      'locale': 'ja',
+      'replaceSync': {
+        'Alicanto': '«¢«ê«««ó«È',
+      },
+    },
+    {
+      'locale': 'cn',
+      'replaceSync': {
+        'Alicanto': 'ä¹××Êìöõ',
+      },
+    },
+    {
+      'locale': 'ko',
+      'replaceSync': {
+        'Alicanto': '¾Ë¸®Ä­Åä',
+      },
+    },
+  ],
 };
 
 export default triggerSet;

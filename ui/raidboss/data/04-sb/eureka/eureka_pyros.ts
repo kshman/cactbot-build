@@ -33,7 +33,7 @@ const triggerSet: TriggerSet<Data> = {
       'locale': 'de',
       'replaceSync': {
         '7 minutes have elapsed since your last activity..*?':
-          'Seit deiner letzten Aktivitat sind 7 Minuten vergangen.',
+          'Seit deiner letzten AktivitÃ¤t sind 7 Minuten vergangen.',
         'Skoll': 'Skalli',
       },
     },
@@ -42,28 +42,28 @@ const triggerSet: TriggerSet<Data> = {
       'replaceSync': {
         '7 minutes have elapsed since your last activity.':
           'Votre personnage est inactif depuis 7 minutes',
-        'Skoll': 'Skoll',
+        'Skoll': 'SkÃ¶ll',
       },
     },
     {
       'locale': 'ja',
       'replaceSync': {
-        '7 minutes have elapsed since your last activity.': 'ğÃíÂª¬ªÊª¤?÷¾ªËªÊªÃªÆª«ªé7İÂª¬?Î¦ª·ªŞª·ª¿¡£',
-        'Skoll': '«¹«³«ë',
+        '7 minutes have elapsed since your last activity.': 'æ“ä½œãŒãªã„çŠ¶æ…‹ã«ãªã£ã¦ã‹ã‚‰7åˆ†ãŒçµŒéã—ã¾ã—ãŸã€‚',
+        'Skoll': 'ã‚¹ã‚³ãƒ«',
       },
     },
     {
       'locale': 'cn',
       'replaceSync': {
-        '7 minutes have elapsed since your last activity.': 'ì«?7İÂ??êó?ú¼ìòù¼ğÃíÂ',
-        'Skoll': 'ŞÙ??',
+        '7 minutes have elapsed since your last activity.': 'å·²ç»7åˆ†é’Ÿæ²¡æœ‰è¿›è¡Œä»»ä½•æ“ä½œ',
+        'Skoll': 'æ–¯åº“å°”',
       },
     },
     {
       'locale': 'ko',
       'replaceSync': {
-        '7 minutes have elapsed since your last activity..*?': '7ºĞ µ¿¾È ¾Æ¹« Á¶ÀÛÀ» ÇÏÁö ¾Ê¾Ò½À´Ï´Ù',
-        'Skoll': '½ºÄİ',
+        '7 minutes have elapsed since your last activity..*?': '7ë¶„ ë™ì•ˆ ì•„ë¬´ ì¡°ì‘ì„ í•˜ì§€ ì•Šì•˜ìŠµë‹ˆë‹¤',
+        'Skoll': 'ìŠ¤ì½œ',
       },
     },
   ],

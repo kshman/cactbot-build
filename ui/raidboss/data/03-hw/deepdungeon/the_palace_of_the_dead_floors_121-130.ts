@@ -74,25 +74,25 @@ const triggerSet: TriggerSet<Data> = {
     {
       'locale': 'ja',
       'replaceSync': {
-        'Alfard': '«¢«ë«Õ«¡«ë«É',
-        'Deep Palace Minotaur': '«Ç«£?«×«Ñ«ì«¹?«ß«Î«¿«¦«ë«¹',
-        'Deep Palace Skatene': '«Ç«£?«×«Ñ«ì«¹?«¹«««Í«Æ',
+        'Alfard': 'ã‚¢ãƒ«ãƒ•ã‚¡ãƒ«ãƒ‰',
+        'Deep Palace Minotaur': 'ãƒ‡ã‚£ãƒ¼ãƒ—ãƒ‘ãƒ¬ã‚¹ãƒ»ãƒŸãƒã‚¿ã‚¦ãƒ«ã‚¹',
+        'Deep Palace Skatene': 'ãƒ‡ã‚£ãƒ¼ãƒ—ãƒ‘ãƒ¬ã‚¹ãƒ»ã‚¹ã‚«ãƒãƒ†',
       },
     },
     {
       'locale': 'cn',
       'replaceSync': {
-        'Alfard': 'äï?ÛöÓì',
-        'Deep Palace Minotaur': 'ä¢???Ô¶Õ¦ŞÙ',
-        'Deep Palace Skatene': 'ä¢?ŞÙ?Òù÷å',
+        'Alfard': 'åŸƒå°”æ³•å¾·',
+        'Deep Palace Minotaur': 'æ·±å®«å¼¥è¯ºé™¶æ´›æ–¯',
+        'Deep Palace Skatene': 'æ·±å®«æ–¯å¡å°¼ç‰¹',
       },
     },
     {
       'locale': 'ko',
       'replaceSync': {
-        'Alfard': '¾ËÆÄ¸£µå',
-        'Deep Palace Minotaur': '±íÀº ±ÃÀü ¹Ì³ëÅ¸¿ì·Î½º',
-        'Deep Palace Skatene': '±íÀº ±ÃÀü ½ºÄ«³×Å×',
+        'Alfard': 'ì•ŒíŒŒë¥´ë“œ',
+        'Deep Palace Minotaur': 'ê¹Šì€ ê¶ì „ ë¯¸ë…¸íƒ€ìš°ë¡œìŠ¤',
+        'Deep Palace Skatene': 'ê¹Šì€ ê¶ì „ ìŠ¤ì¹´ë„¤í…Œ',
       },
     },
   ],

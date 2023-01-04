@@ -31,7 +31,7 @@
     "editor.formatOnSaveMode": "file"
   },
   "[javascript]": {
-    "editor.defaultFormatter": "vscode.typescript-language-features"
+    "editor.defaultFormatter": "dprint.dprint"
   },
   "[typescript]": {
     "editor.defaultFormatter": "dprint.dprint"

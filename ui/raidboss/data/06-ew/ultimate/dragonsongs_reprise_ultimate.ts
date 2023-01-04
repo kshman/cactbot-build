@@ -3883,6 +3883,7 @@ const triggerSet: TriggerSet<Data> = {
         'Mirage Dive': '幻象冲',
         'Mortal Vow': '灭杀的誓言',
         'Morn Afah\'s Edge': '无尽顿悟剑',
+        '(?<! )Pierce': '贯穿',
         'Planar Prison': '空间牢狱',
         'Pure of Heart': '纯洁心灵',
         'Resentment': '苦闷怒嚎',

@@ -131,6 +131,11 @@ export const missedAbilityBuffMap: readonly MissableAbility[] = [
     abilityId: '3E8C',
   },
   {
+    id: 'Magick Barrier',
+    type: 'mitigation',
+    abilityId: '6501',
+  },
+  {
     id: 'Mantra',
     type: 'mitigation',
     abilityId: '41',
@@ -275,6 +280,11 @@ export const missedAbilityBuffMap: readonly MissableAbility[] = [
     id: 'Stellar Explosion',
     type: 'heal',
     abilityId: '1D11',
+  },
+  {
+    id: 'Macrocosmos',
+    type: 'heal',
+    abilityId: '6512',
   },
   {
     id: 'Astral Stasis',

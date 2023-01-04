@@ -22,6 +22,38 @@ const triggerSet: TriggerSet<Data> = {
       response: Responses.aoe(),
     },
   ],
+  timelineReplace: [
+    {
+      'locale': 'de',
+      'replaceSync': {
+        'Palace Deathgaze': 'Palast-Thanatos',
+      },
+    },
+    {
+      'locale': 'fr',
+      'replaceSync': {
+        'Palace Deathgaze': 'mortalis du palais',
+      },
+    },
+    {
+      'locale': 'ja',
+      'replaceSync': {
+        'Palace Deathgaze': '«Ñ«ì«¹?«Ç«¹«²«¤«º',
+      },
+    },
+    {
+      'locale': 'cn',
+      'replaceSync': {
+        'Palace Deathgaze': 'ò¢?ÞÝØÌëê?',
+      },
+    },
+    {
+      'locale': 'ko',
+      'replaceSync': {
+        'Palace Deathgaze': '±ÃÀü Àú½ÂÆÄ¼ö²Û',
+      },
+    },
+  ],
 };
 
 export default triggerSet;
