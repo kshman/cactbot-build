@@ -49,7 +49,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Vacuum Wave soon',
+          en: '곧 바큠 웨이브',
           de: 'Vakuumwelle bald',
           fr: 'Vague de vide bientôt',
           ja: 'まもなく真空波',
@@ -78,7 +78,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Fire III',
+          en: '파이어3',
           de: 'Feuga',
           fr: 'Méga Feu',
           ja: 'ファイガ',
@@ -126,7 +126,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         thunderBuster: {
-          en: 'Thunder III: Tank buster',
+          en: '선더3: 탱크버스터',
           de: 'Blitzga: Tank buster',
           fr: 'Méga Foudre : Tank buster',
           ja: 'サンダガ: タンクバスター',
@@ -134,15 +134,15 @@ const triggerSet: TriggerSet<Data> = {
           ko: '선더가: 탱버',
         },
         thunder: {
-          en: 'Thunder III',
-          de: 'Blitzga',
+          en: '선더3',
+          de: 'Blitz ga',
           fr: 'Méga Foudre',
           ja: 'サンダガ',
           cn: '雷三',
           ko: '선더가',
         },
         thunderTTS: {
-          en: 'thunder',
+          en: '선더',
           de: 'blitzga',
           fr: 'foudre',
           ja: '離れる',
@@ -189,7 +189,7 @@ const triggerSet: TriggerSet<Data> = {
       run: (data) => delete data.flareTargets,
       outputStrings: {
         text: {
-          en: 'Flare on you',
+          en: '내게 플레어',
           de: 'Flare auf dir',
           fr: 'Brasier sur vous',
           ja: '自分にフレア',
@@ -314,7 +314,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         goOutside: {
-          en: 'Go Outside',
+          en: '밖으로!',
           de: 'Nach Außen',
           fr: 'Allez à l\'extérieur',
           ja: '外に出る',
@@ -322,7 +322,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '바깥으로',
         },
         dieOnInside: {
-          en: 'Die on Inside',
+          en: '안쪽에서 죽어!',
           de: 'Innen sterben',
           fr: 'Mourrez à l\'intérieur',
           ja: '中で死ぬ',
@@ -330,7 +330,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '안쪽 레이저 맞기',
         },
         dieInInIn: {
-          en: 'die in in in',
+          en: '걍 죽어어어어엉!',
           de: 'sterben rein rein rein',
           fr: 'Mourrez à l\'intérieur !',
           ja: '死になさい！',
@@ -338,7 +338,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '안쪽 레이저 맞기',
         },
         outOutOut: {
-          en: 'out out out',
+          en: '밖으로!',
           de: 'raus raus raus',
           fr: 'Extérieur !',
           ja: '出て出て！',
@@ -368,7 +368,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         goInside: {
-          en: 'Go Inside',
+          en: '안으로',
           de: 'Rein gehen',
           fr: 'Allez à l\'intérieur',
           ja: '中に入る',
@@ -376,7 +376,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '안으로',
         },
         dieOnOutside: {
-          en: 'Die on Outside',
+          en: '밖에서 죽어',
           de: 'Außen sterben',
           fr: 'Mourrez à l\'extérieur',
           ja: '外で死ぬ',
@@ -384,7 +384,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '바깥 레이저 맞기',
         },
         dieOutOutOut: {
-          en: 'die out out out',
+          en: '그냥 죽어어어어엉!',
           de: 'sterben raus raus raus',
           fr: 'Mourrez à l\'extérieur !',
           ja: '死になさい！',
@@ -392,7 +392,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '바깥 레이저 맞기',
         },
         inInIn: {
-          en: 'in in in',
+          en: '안으로!',
           de: 'rein rein rein',
           fr: 'Intérieur !',
           ja: '入れ入れ',
@@ -431,7 +431,7 @@ const triggerSet: TriggerSet<Data> = {
       tts: (_data, _matches, output) => output.colors!(),
       outputStrings: {
         leftOnPurple: {
-          en: 'Left On Purple',
+          en: '왼쪽 보라로',
           de: 'Links auf Pink',
           fr: 'À gauche sur le violet',
           ja: '左の紫色に',
@@ -439,7 +439,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '왼쪽 보라',
         },
         rightOnBlue: {
-          en: 'Right On Blue',
+          en: '오른쪽 파랑으로',
           de: 'Rechts auf Blau',
           fr: 'À droite sur le bleu',
           ja: '右の青色に',
@@ -447,7 +447,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '오른쪽 파랑',
         },
         colorSides: {
-          en: 'Color sides',
+          en: '색깔 있는 쪽으로',
           de: 'Farbige Seiten',
           fr: 'Côtés de couleur',
           ja: '同じ色に',
@@ -455,7 +455,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '색깔 맞기',
         },
         dieOnRightBlue: {
-          en: 'Die On Right Blue',
+          en: '오른쪽 파랑에 죽어!',
           de: 'In Blauem rechts sterben',
           fr: 'Mourrez à droite sur le bleu',
           ja: '右の青色で死ぬ',
@@ -463,7 +463,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '오른쪽 파랑 맞기',
         },
         dieOnLeftPurple: {
-          en: 'Die On Left Purple',
+          en: '왼쪽 보라에 죽어!',
           de: 'In Pinkem links sterben',
           fr: 'Mourrez à gauche sur le violet',
           ja: '左の紫色で死ぬ',
@@ -471,7 +471,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '왼쪽 보라 맞기',
         },
         dieOnColorSides: {
-          en: 'Die on color sides',
+          en: '색깔 있는 쪽에서 죽어!',
           de: 'Auf Farben sterben',
           fr: 'Mourrez sur les côtés de couleur',
           ja: '同じ色で死ぬ',
@@ -479,7 +479,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '색깔 맞기',
         },
         colors: {
-          en: 'colors',
+          en: '색깔',
           de: 'Farben',
           fr: 'Couleurs',
           ja: '色',
@@ -518,7 +518,7 @@ const triggerSet: TriggerSet<Data> = {
       tts: (_data, _matches, output) => output.colors!(),
       outputStrings: {
         beRightOnPurple: {
-          en: 'Be Right On Purple',
+          en: '오른쪽 보라로',
           de: 'Rechts auf Pink',
           fr: 'Placez-vous à droite sur le violet',
           ja: '右の紫色に',
@@ -526,7 +526,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '오른쪽 보라 맞기',
         },
         beLeftOnBlue: {
-          en: 'Be Left On Blue',
+          en: '왼쪽 파랑으로',
           de: 'Links auf Blau',
           fr: 'Placez-vous à gauche sur le bleu',
           ja: '左の青色に',
@@ -534,7 +534,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '왼쪽 파랑 맞기',
         },
         colorSides: {
-          en: 'Color sides',
+          en: '색깔 있는 곳으로',
           de: 'Farbige Seiten',
           fr: 'Côtés de couleur',
           ja: '同じ色に',
@@ -542,7 +542,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '색깔 방향',
         },
         dieOnLeftBlue: {
-          en: 'Die On Left Blue',
+          en: '왼쪽 파랑에 죽어!',
           de: 'Auf Blauem links sterben',
           fr: 'Mourrez à gauche sur le bleu',
           ja: '左の青色で死ぬ',
@@ -550,7 +550,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '왼쪽 파랑 맞기',
         },
         dieOnRightPurple: {
-          en: 'Die On Right Purple',
+          en: '오른쪽 보라에 죽어!',
           de: 'Auf Pinkem rechts sterben',
           fr: 'Mourrez à droite sur le violet',
           ja: '右の紫色で死ぬ',
@@ -558,7 +558,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '오른쪽 보라 맞기',
         },
         dieOnColorSides: {
-          en: 'Die on color sides',
+          en: '색깔 있는 곳에서 죽어!',
           de: 'Auf Farben sterben',
           fr: 'Mourrez sur les côtés de couleur',
           ja: '同じ色で死ぬ',
@@ -566,7 +566,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '색깔 맞기',
         },
         colors: {
-          en: 'colors',
+          en: '색깔',
           de: 'farben',
           fr: 'Couleurs',
           ja: '色',
@@ -612,7 +612,7 @@ const triggerSet: TriggerSet<Data> = {
       tts: (_data, _matches, output) => output.charge!(),
       outputStrings: {
         chargeBeBehindOtherTank: {
-          en: 'Charge: be behind other tank',
+          en: '돌진: 다른 탱크 뒤로',
           de: 'Aufladung: hinter anderen Tank',
           fr: 'Charge : Placez-vous derrière l\'autre tank',
           ja: '突進: 他のタンクの後ろに',
@@ -620,7 +620,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '탱커 뒤에 있기',
         },
         chargeBeInTheVeryBack: {
-          en: 'Charge: be in the very back',
+          en: '차지: 맨 뒤로',
           de: 'Aufladung: Ganz nach hinten',
           fr: 'Charge : Placez-vous tout au fond',
           ja: '突進: 後ろの遠くへ',
@@ -628,7 +628,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '가장 뒤에 있기',
         },
         chargeBeInFront: {
-          en: 'Charge: be in front!',
+          en: '차지: 앞쪽으로',
           de: 'Aufladung: Ganz nach vorn',
           fr: 'Charge : Placez-vous devant !',
           ja: '突進: 前方に',
@@ -636,7 +636,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '앞쪽으로',
         },
         chargeBeBehindTanks: {
-          en: 'Charge: be behind tanks',
+          en: '차지: 탱크 뒤로',
           de: 'Aufladung: Hinter die Tanks',
           fr: 'Charge : Placez-vous derrière les tanks',
           ja: '突進: タンクの後ろに',
@@ -644,7 +644,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '탱커 뒤로',
         },
         charge: {
-          en: 'charge',
+          en: '차지',
           de: 'aufladung',
           fr: 'Charge',
           ja: '無の氾濫',
@@ -666,7 +666,7 @@ const triggerSet: TriggerSet<Data> = {
       tts: (_data, _matches, output) => output.doubleAttack!(),
       outputStrings: {
         doubleAttack: {
-          en: 'Double Attack',
+          en: '더블 어택',
           de: 'Doppelangriff',
           fr: 'Double attaque',
           ja: 'ダブルアタック',
@@ -674,7 +674,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '이중 공격',
         },
         doubleAttackGetOut: {
-          en: 'Double Attack: Get out',
+          en: '더블 어택: 바깥으로',
           de: 'Doppelangriff: Raus da',
           fr: 'Double attaque : À l\'extérieur',
           ja: 'ダブルアタック: 外へ',
@@ -691,7 +691,7 @@ const triggerSet: TriggerSet<Data> = {
       tts: (_data, _matches, output) => output.tts!(),
       outputStrings: {
         text: {
-          en: 'Grand Cross Alpha: Go to middle',
+          en: '그랜드 크로스 알파: 맨가운데로',
           de: 'Supernova Alpha: In die Mitte',
           fr: 'Croix suprême alpha : Allez au milieu',
           ja: 'グランドクロス・アルファ: 中央に',
@@ -699,7 +699,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '그랜드크로스: 알파, 중앙으로',
         },
         tts: {
-          en: 'go to middle',
+          en: '맨 가운데로',
           de: 'In die Mitte',
           fr: 'Allez au milieu',
           ja: '中央に',
@@ -732,7 +732,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         beInFront: {
-          en: 'Grand Cross Delta: Be in front of boss',
+          en: '그랜드 크로스 델타: 보스 앞으로',
           de: 'Supernova Delta: Vor den Boss',
           fr: 'Croix suprême delta : Placez-vous devant le boss',
           ja: 'グランドクロス・デルタ: ボスの前に',
@@ -740,7 +740,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '그랜드크로스: 델타, 보스 범위 끝으로',
         },
         beOnSides: {
-          en: 'Grand Cross Delta: Be on sides of boss',
+          en: '그랜드 크로스 델타: 보스 옆쪽으로',
           de: 'Supernova Delta: An die Seiten vom Boss',
           fr: 'Croix suprême delta : Placez-vous sur les côtés du boss',
           ja: 'グランドクロス・デルタ: ボスの横に',
@@ -748,7 +748,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '그랜드크로스: 델타, 보스 옆쪽으로',
         },
         beInsideBoss: {
-          en: 'Grand Cross Delta: Inside boss',
+          en: '그랜드 크로스 델타: 보스 안쪽으로',
           de: 'Supernvoa Delta: In den Boss',
           fr: 'Croix suprême delta : À l\'intérieur du boss',
           ja: 'グランドクロス・デルタ: ボスの真ん中に',

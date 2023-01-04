@@ -31,19 +31,19 @@ const triggerSet: TriggerSet<Data> = {
     {
       'locale': 'ja',
       'replaceSync': {
-        'Bismarck': '�ӫ��ޫ뫯',
+        'Bismarck': 'ビスマルク',
       },
     },
     {
       'locale': 'cn',
       'replaceSync': {
-        'Bismarck': '?��?',
+        'Bismarck': '俾斯麦',
       },
     },
     {
       'locale': 'ko',
       'replaceSync': {
-        'Bismarck': '�񽺸���ũ',
+        'Bismarck': '비스마르크',
       },
     },
   ],

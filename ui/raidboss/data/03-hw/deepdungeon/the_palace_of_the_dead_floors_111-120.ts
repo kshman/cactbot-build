@@ -36,6 +36,43 @@ const triggerSet: TriggerSet<Data> = {
       response: Responses.killAdds('alert'),
     },
   ],
+  timelineReplace: [
+    {
+      'locale': 'de',
+      'replaceSync': {
+        'Deep Palace Salamander': 'Katakomben-Salamander',
+        'Kirtimukha': 'Kirtimukha',
+      },
+    },
+    {
+      'locale': 'fr',
+      'replaceSync': {
+        'Deep Palace Salamander': 'salamandre des profondeurs',
+        'Kirtimukha': 'Kirtimukha',
+      },
+    },
+    {
+      'locale': 'ja',
+      'replaceSync': {
+        'Deep Palace Salamander': '«Ç«£?«×«Ñ«ì«¹?«µ«é«Þ«ó«À?',
+        'Kirtimukha': '«­?«ë«Æ«£«à««',
+      },
+    },
+    {
+      'locale': 'cn',
+      'replaceSync': {
+        'Deep Palace Salamander': 'ä¢???',
+        'Kirtimukha': '?ÎÃØªü£',
+      },
+    },
+    {
+      'locale': 'ko',
+      'replaceSync': {
+        'Deep Palace Salamander': '±íÀº ±ÃÀü ºÒµµ·Õ´¨',
+        'Kirtimukha': 'Å°¸£Æ¼¹«Ä«',
+      },
+    },
+  ],
 };
 
 export default triggerSet;

@@ -36,6 +36,43 @@ const triggerSet: TriggerSet<Data> = {
       response: Responses.killAdds('alert'),
     },
   ],
+  timelineReplace: [
+    {
+      'locale': 'de',
+      'replaceSync': {
+        'Palace Cobra': 'Palast-Kobra',
+        'Spurge': 'Euphorbia',
+      },
+    },
+    {
+      'locale': 'fr',
+      'replaceSync': {
+        'Palace Cobra': 'cobra du palais',
+        'Spurge': 'Euphorbe',
+      },
+    },
+    {
+      'locale': 'ja',
+      'replaceSync': {
+        'Palace Cobra': '«Ñ«ì«¹?«³«Ö«é',
+        'Spurge': '«¹«Ñ?«¸',
+      },
+    },
+    {
+      'locale': 'cn',
+      'replaceSync': {
+        'Palace Cobra': 'ò¢?äÑ?Þï',
+        'Spurge': 'ÓÞÐ½ü£',
+      },
+    },
+    {
+      'locale': 'ko',
+      'replaceSync': {
+        'Palace Cobra': '±ÃÀü ÄÚºê¶ó',
+        'Spurge': 'µî´ëÇ®',
+      },
+    },
+  ],
 };
 
 export default triggerSet;

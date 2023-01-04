@@ -43,19 +43,19 @@ const triggerSet: TriggerSet<Data> = {
     {
       'locale': 'ja',
       'replaceSync': {
-        'Gorynich': '«´«ê«Ë«Á',
+        'Gorynich': 'ã‚´ãƒªãƒ‹ãƒ',
       },
     },
     {
       'locale': 'cn',
       'replaceSync': {
-        'Gorynich': 'Ì«×ìÒùĞô??',
+        'Gorynich': 'æ ¼é‡Œå°¼å¥‡æ¶é¾™',
       },
     },
     {
       'locale': 'ko',
       'replaceSync': {
-        'Gorynich': '°í¸®´ÏÄ¡',
+        'Gorynich': 'ê³ ë¦¬ë‹ˆì¹˜',
       },
     },
   ],

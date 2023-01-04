@@ -85,6 +85,7 @@ const triggerSet: TriggerSet<Data> = {
           en: '바닥에서 나와욧',
           de: 'Raus aus der Fläche',
           cn: '离开圈圈',
+          ko: '장판 밖으로',
         },
       },
     },

@@ -30,6 +30,43 @@ const triggerSet: TriggerSet<Data> = {
       response: Responses.killAdds('alert'),
     },
   ],
+  timelineReplace: [
+    {
+      'locale': 'de',
+      'replaceSync': {
+        'Nybeth Obdilord': 'Nybeth Obdilord',
+        'Palace Wraith': 'Palast-Geist',
+      },
+    },
+    {
+      'locale': 'fr',
+      'replaceSync': {
+        'Nybeth Obdilord': 'Nybeth Obdilord',
+        'Palace Wraith': 'spectre du palais',
+      },
+    },
+    {
+      'locale': 'ja',
+      'replaceSync': {
+        'Nybeth Obdilord': 'ã»âúÞÔ«Ë«Ð«¹',
+        'Palace Wraith': '«Ñ«ì«¹?«ì«¤«¹',
+      },
+    },
+    {
+      'locale': 'cn',
+      'replaceSync': {
+        'Nybeth Obdilord': 'ÞÝ??ÞÍÒùÚÏÞÙ',
+        'Palace Wraith': 'ò¢?êë?',
+      },
+    },
+    {
+      'locale': 'ko',
+      'replaceSync': {
+        'Nybeth Obdilord': '½ÃÃ¼¼ú»ç ´Ï¹ö½º',
+        'Palace Wraith': '±ÃÀü ¸Á·É',
+      },
+    },
+  ],
 };
 
 export default triggerSet;

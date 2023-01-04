@@ -31,19 +31,19 @@ const triggerSet: TriggerSet<Data> = {
     {
       'locale': 'ja',
       'replaceSync': {
-        'Vicegerent to the Warden': '«¢?«¼«Ş«ô«¡«¤«¹«¸«§«ì«ó«È',
+        'Vicegerent to the Warden': 'ã‚¢ãƒ¼ã‚¼ãƒãƒ´ã‚¡ã‚¤ã‚¹ã‚¸ã‚§ãƒ¬ãƒ³ãƒˆ',
       },
     },
     {
       'locale': 'cn',
       'replaceSync': {
-        'Vicegerent to the Warden': '?×âãêÓÛåëíº',
+        'Vicegerent to the Warden': 'å®¡ç†ç¥ä»£è¨€è€…',
       },
     },
     {
       'locale': 'ko',
       'replaceSync': {
-        'Vicegerent to the Warden': '¾ÆÁ¦¸¶ ±³È²',
+        'Vicegerent to the Warden': 'ì•„ì œë§ˆ êµí™©',
       },
     },
   ],

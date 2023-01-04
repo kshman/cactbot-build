@@ -28,7 +28,7 @@ const triggerSet: TriggerSet<Data> = {
       'locale': 'de',
       'replaceSync': {
         'Halicarnassus': 'Halikarnassos',
-        'Manor Sentry': 'Wachter',
+        'Manor Sentry': 'WÃ¤chter',
       },
     },
     {
@@ -41,22 +41,22 @@ const triggerSet: TriggerSet<Data> = {
     {
       'locale': 'ja',
       'replaceSync': {
-        'Halicarnassus': '«Ï«ê«««ë«Ê«Ã«½«¹',
-        'Manor Sentry': 'åÙéÄîĞªÎà´ßÀ',
+        'Halicarnassus': 'ãƒãƒªã‚«ãƒ«ãƒŠãƒƒã‚½ã‚¹',
+        'Manor Sentry': 'å¾¡ç”¨é‚¸ã®çŸ³åƒ',
       },
     },
     {
       'locale': 'cn',
       'replaceSync': {
-        'Halicarnassus': 'ùë××???ŞÙ',
-        'Manor Sentry': 'íä?îÜà´ßÀ',
+        'Halicarnassus': 'å“ˆåˆ©å¡çº³è‹æ–¯',
+        'Manor Sentry': 'åº„å›­çš„çŸ³åƒ',
       },
     },
     {
       'locale': 'ko',
       'replaceSync': {
-        'Halicarnassus': 'ÇÒ¸®Ä«¸£³ª¼Ò½º',
-        'Manor Sentry': 'º°±Ã ¼®»ó',
+        'Halicarnassus': 'í• ë¦¬ì¹´ë¥´ë‚˜ì†ŒìŠ¤',
+        'Manor Sentry': 'ë³„ê¶ ì„ìƒ',
       },
     },
   ],

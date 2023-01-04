@@ -71,6 +71,58 @@ const triggerSet: TriggerSet<Data> = {
       response: Responses.lookAway('alert'),
     },
   ],
+  timelineReplace: [
+    {
+      'locale': 'de',
+      'replaceSync': {
+        'Edda Blackbosom': 'Edda Schwarzherz',
+        'Nightmare Bhoot': 'Albtraum-Bhut',
+        'Nightmare Manticore': 'Albtraum-Manticore',
+        'Nightmare Persona': 'Albtraum-Persona',
+        'Nightmare Wraith': 'Albtraum-Geist',
+      },
+    },
+    {
+      'locale': 'fr',
+      'replaceSync': {
+        'Edda Blackbosom': 'Edda C©«ur-noir',
+        'Nightmare Bhoot': 'bhut du cauchemar',
+        'Nightmare Manticore': 'manticore du cauchemar',
+        'Nightmare Persona': 'persona du cauchemar',
+        'Nightmare Wraith': 'spectre du cauchemar',
+      },
+    },
+    {
+      'locale': 'ja',
+      'replaceSync': {
+        'Edda Blackbosom': 'öÔ?ªÎ«¨«Ã«À',
+        'Nightmare Bhoot': '«Ê«¤«È«á«¢?«Ö«Õ?«È',
+        'Nightmare Manticore': '«Ê«¤«È«á«¢?«Þ«ó«Æ«£«³«¢',
+        'Nightmare Persona': '«Ê«¤«È«á«¢?«Ú«ë«½«Ê',
+        'Nightmare Wraith': '«Ê«¤«È«á«¢?«ì«¤«¹',
+      },
+    },
+    {
+      'locale': 'cn',
+      'replaceSync': {
+        'Edda Blackbosom': 'öÔýÙîÜäõ?',
+        'Nightmare Bhoot': '??Ý©?',
+        'Nightmare Manticore': '??Øºð«Ðº',
+        'Nightmare Persona': '??Ê£Øü',
+        'Nightmare Wraith': '??êë?',
+      },
+    },
+    {
+      'locale': 'ko',
+      'replaceSync': {
+        'Edda Blackbosom': 'Ä¥ÈæÀÇ ¿¡´Ù',
+        'Nightmare Bhoot': '¾Ç¸ù ºêÈÄÆ®',
+        'Nightmare Manticore': '¾Ç¸ù ¸¸Æ¼ÄÚ¾î',
+        'Nightmare Persona': '¾Ç¸ù Æä¸£¼Ò³ª',
+        'Nightmare Wraith': '¾Ç¸ù ¸Á·É',
+      },
+    },
+  ],
 };
 
 export default triggerSet;
