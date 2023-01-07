@@ -1373,35 +1373,35 @@ const triggerSet: TriggerSet<Data> = {
       run: (data) => data.visageMap = {},
       outputStrings: {
         bothFates: {
-          en: '금🥇은🥈 하나씩 (${loc})',
+          en: '금🥇은🥈으로: ${loc}',
           de: 'Von Silber und Gold treffen lassen (${loc})',
           fr: 'Faites-vous toucher par l\'argent et l\'or (${loc})', // FIXME
           ja: '金銀 一個ずつ (${loc})', // FIXME
           ko: '은색 + 금색 맞기 (${loc})',
         },
         gildedFate: {
-          en: '은🥈 두개 (${loc})',
+          en: '은🥈x2으로: ${loc}',
           de: 'Von 2 Silber treffen lassen (${loc})',
           fr: 'Faites-vous toucher par les deux argent (${loc})', // FIXME
           ja: '銀 二つ (${loc})', // FIXME
           ko: '은색 2개 맞기 (${loc})',
         },
         silveredFate: {
-          en: '금🥇 두개 (${loc})',
+          en: '금🥇x2으로: ${loc}',
           de: 'Von 2 Gold treffen lassen (${loc})',
           fr: 'Faites-vous toucher par les deux or (${loc})', // FIXME
           ja: '金 二つ (${loc})', // FIXME
           ko: '금색 2개 맞기 (${loc})',
         },
         neitherFate: {
-          en: '레이저 피하기 (업타임 ${loc})',
+          en: '레이저 피해요',
           de: 'Vermeide Silber und Gold (${loc})',
           fr: 'Évitez l\'argent et l\'or (${loc})', // FIXME
           ja: '顔からのビーム全部回避 (${loc})', // FIXME
           ko: '레이저 피하기 (업타임 ${loc})',
         },
         outsideNW: {
-          en: '🡼 구석',
+          en: '🡼구석',
           de: 'NW Ecke',
           fr: 'Coin NO',
           ja: '北西 隅',
@@ -1409,7 +1409,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '북서쪽 구석',
         },
         outsideNNW: {
-          en: '첫줄 서쪽 안',
+          en: '첫줄🡸',
           de: 'NNW außen',
           fr: 'Extérieur NNO',
           ja: '1列 西の内側',
@@ -1417,7 +1417,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '바깥 북쪽 왼칸',
         },
         outsideNNE: {
-          en: '첫줄 동쪽 안',
+          en: '첫줄🡺',
           de: 'NNO außen',
           fr: 'Extérieur NNE',
           ja: '1列 東の内側',
@@ -1425,7 +1425,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '바깥 북쪽 오른칸',
         },
         outsideNE: {
-          en: '🡽 구석',
+          en: '🡽구석',
           de: 'NO Ecke',
           fr: 'Coin NE',
           ja: '北東 隅',
@@ -1433,7 +1433,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '북동쪽 구석',
         },
         outsideWNW: {
-          en: '둘째줄 서쪽 바깥',
+          en: '둘째줄🡸🡸',
           de: 'WNW außen',
           fr: 'Extérieur ONO',
           ja: '2列 西の外側',
@@ -1441,7 +1441,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '바깥 서쪽 위칸',
         },
         insideNW: {
-          en: '🡼 안쪽',
+          en: '둘째줄🡸',
           de: 'NW innen',
           fr: 'Intérieur NO',
           ja: '内側 北西',
@@ -1449,7 +1449,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '안 북서쪽',
         },
         insideNE: {
-          en: '🡽 안쪽',
+          en: '둘째줄🡺',
           de: 'NO innen',
           fr: 'Intérieur NE',
           ja: '内側 北東',
@@ -1457,7 +1457,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '안 북동쪽',
         },
         outsideENE: {
-          en: '둘째줄 동쪽 바깥',
+          en: '둘째줄🡺🡺',
           de: 'ONO außen',
           fr: 'Extérieur ENE',
           ja: '2列 東の外側',
@@ -1465,7 +1465,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '바깥 동쪽 위칸',
         },
         outsideWSW: {
-          en: '셋째줄 서쪽 바깥',
+          en: '세째줄🡸🡸',
           de: 'WSW außen',
           fr: 'Extérieur OSO',
           ja: '3列 西の外側',
@@ -1473,7 +1473,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '바깥 서쪽 아래칸',
         },
         insideSW: {
-          en: '🡿 안쪽',
+          en: '세째줄🡸',
           de: 'SW innen',
           fr: 'Intérieur SO',
           ja: '内側 南西',
@@ -1481,7 +1481,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '안 남서쪽',
         },
         insideSE: {
-          en: '🡾 안쪽',
+          en: '세째줄🡺',
           de: 'SO innen',
           fr: 'Intérieur SE',
           ja: '内側 南東',
@@ -1489,7 +1489,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '안 남동쪽',
         },
         outsideESE: {
-          en: '셋째줄 동쪽 바깥',
+          en: '세째줄🡺🡺',
           de: 'OSO außen',
           fr: 'Extérieur ESE',
           ja: '3列 東の外側',
@@ -1497,7 +1497,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '바깥 동쪽 아래칸',
         },
         outsideSW: {
-          en: '🡿 구석',
+          en: '🡿구석',
           de: 'SW Ecke',
           fr: 'Coin SO',
           ja: '南西 隅',
@@ -1505,7 +1505,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '남서쪽 구석',
         },
         outsideSSW: {
-          en: '넷째줄 서쪽 안쪽',
+          en: '맨아래줄🡸',
           de: 'SSW außen',
           fr: 'Extérieur SSO',
           ja: '4列 西の内側',
@@ -1513,7 +1513,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '바깥 남쪽 왼칸',
         },
         outsideSSE: {
-          en: '넷째줄 동쪽 안쪽',
+          en: '맨아래줄🡺',
           de: 'SSO außen',
           fr: 'Extérieur SSE',
           ja: '4列 東の内側',
@@ -1521,7 +1521,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '바깥 남쪽 오른칸',
         },
         outsideSE: {
-          en: '🡾 구석',
+          en: '🡾구석',
           de: 'SO Ecke',
           fr: 'Coin SE',
           ja: '南東 隅',

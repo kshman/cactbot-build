@@ -43,7 +43,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Out of blue circle',
+          en: '🔵동그라미 밖으로',
           de: 'Raus aus dem blauen Kreis',
           fr: 'Sortez du cercle bleu',
           ja: '青い円から離れる',
@@ -65,7 +65,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Protean',
+          en: '프로틴',
           de: 'Um den Boss verteilen',
           fr: 'Changement',
           ja: 'ボスを基準として散開',
@@ -82,7 +82,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Face tether out',
+          en: '줄을 바깥으로',
           de: 'Verbindung nach draußen richten',
           fr: 'Lien vers l\'extérieur',
           ja: '線を外へ向ける',

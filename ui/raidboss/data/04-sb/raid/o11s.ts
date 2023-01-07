@@ -62,7 +62,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         moveLeft: {
-          en: 'Move (Left)',
+          en: '이동: 🡸왼쪽',
           de: 'Bewegen (Links)',
           fr: 'Bougez (À gauche)',
           ja: '反対へ (左)',
@@ -70,7 +70,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '오른쪽으로',
         },
         stayLeft: {
-          en: 'Stay (Left)',
+          en: '그대로: 🡸왼쪽',
           de: 'Stehenbleiben (Links)',
           fr: 'Restez (À gauche)',
           ja: 'そのまま (左)',
@@ -92,7 +92,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         stayRight: {
-          en: 'Stay (Right)',
+          en: '그대로: 오른쪽🡺',
           de: 'Stehenbleiben (Rechts)',
           fr: 'Restez (À droite)',
           ja: 'そのまま (右)',
@@ -100,7 +100,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '대기 (왼쪽)',
         },
         moveRight: {
-          en: 'Move (Right)',
+          en: '이동: 오른쪽🡺',
           de: 'Bewegen (Rechts)',
           fr: 'Bougez (À droite)',
           ja: '反対へ (右)',
@@ -116,7 +116,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Left (then opposite)',
+          en: '🡸왼쪽 (바로 반대쪽으로)',
           de: 'Links (dann umgekehrt)',
           fr: 'À gauche (puis à l\'opposée)',
           ja: '左 (零式)',
@@ -132,7 +132,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Right (then opposite)',
+          en: '오른쪽🡺 (바로 반대쪽으로)',
           de: 'Rechts (dann umgekehrt)',
           fr: 'À droite (puis à l\'opposée)',
           ja: '右 (零式)',
@@ -149,7 +149,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Opposite (Left)',
+          en: '반대쪽으로: 🡸왼쪽',
           de: 'Umgekehrt (Links)',
           fr: 'À l\'opposée (À gauche)',
           ja: '反対へ (左)',
@@ -166,7 +166,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Opposite (Right)',
+          en: '반대쪽으로: 오른쪽🡺',
           de: 'Umgekehrt (Rechts)',
           fr: 'À l\'opposée (À droite)',
           ja: '反対へ (右)',

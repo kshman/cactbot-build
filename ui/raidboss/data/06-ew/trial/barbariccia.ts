@@ -50,7 +50,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Out and Away',
+          en: '밖으로 멀리',
           de: 'Raus und Weg',
           ja: '外へ',
           cn: '外侧远离',
@@ -65,7 +65,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Wall',
+          en: '벽으로',
           de: 'Wand',
           ja: '壁へ',
           cn: '去场边',
@@ -129,7 +129,7 @@ const triggerSet: TriggerSet<Data> = {
       run: (data) => delete data.boldBoulderTarget,
       outputStrings: {
         flareOnYou: {
-          en: 'Flare on YOU',
+          en: '내게 플레어가',
           de: 'Flare auf DIR',
           fr: 'Brasier sur VOUS',
           ja: '自分にフレア',

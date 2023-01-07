@@ -331,10 +331,10 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         unknown: Outputs.unknown,
-        north: Outputs.north,
-        east: Outputs.east,
-        south: Outputs.south,
-        west: Outputs.west,
+        north: Outputs.arrowN,
+        east: Outputs.arrowE,
+        south: Outputs.arrowS,
+        west: Outputs.arrowW,
       },
     },
     {
@@ -556,14 +556,14 @@ const triggerSet: TriggerSet<Data> = {
         }
       },
       outputStrings: {
-        e: Outputs.dirE,
-        w: Outputs.dirW,
-        nw: Outputs.dirNW,
-        ne: Outputs.dirNE,
-        sw: Outputs.dirSW,
-        se: Outputs.dirSE,
+        e: Outputs.arrowE,
+        w: Outputs.arrowW,
+        nw: Outputs.arrowNW,
+        ne: Outputs.arrowNE,
+        sw: Outputs.arrowSW,
+        se: Outputs.arrowSE,
         text: {
-          en: '${dir1} / ${dir2}',
+          en: '${dir1} 또는 ${dir2}',
           de: '${dir1} / ${dir2}',
           fr: '${dir1} / ${dir2}',
           ja: '${dir1} / ${dir2}',

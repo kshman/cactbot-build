@@ -132,7 +132,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         avoidLasers: {
-          en: 'Avoid Head Lasers',
+          en: '머리 빔 피해요',
           de: 'Weiche den Kopflaser aus',
           fr: 'Évitez les lasers des têtes',
           ja: '顔の直線AoEを避ける',
@@ -165,7 +165,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         cardinal: {
-          en: 'Cardinal edge',
+          en: '십자 방향 모서리 끝으로',
           de: 'Kardinaler Rand',
           fr: 'Au bord cardinal',
           ja: '東西南北の端へ',
@@ -173,7 +173,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '동서남북 끝으로',
         },
         intercardinal: {
-          en: 'Intercardinal edge',
+          en: '비스듬 방향 모서리 끝으로',
           de: 'Interkardinaler Rand',
           fr: 'Au bord intercardinal',
           ja: '斜めの端へ',
@@ -248,16 +248,16 @@ const triggerSet: TriggerSet<Data> = {
         });
       },
       outputStrings: {
-        north: Outputs.north,
-        northeast: Outputs.northeast,
-        east: Outputs.east,
-        southeast: Outputs.southeast,
-        south: Outputs.south,
-        southwest: Outputs.southwest,
-        west: Outputs.west,
-        northwest: Outputs.northwest,
+        north: Outputs.arrowN,
+        northeast: Outputs.arrowNE,
+        east: Outputs.arrowE,
+        southeast: Outputs.arrowSE,
+        south: Outputs.arrowS,
+        southwest: Outputs.arrowSW,
+        west: Outputs.arrowW,
+        northwest: Outputs.arrowNW,
         direction: {
-          en: '${dir1} / ${dir2}',
+          en: '${dir1} 또는 ${dir2}',
           de: '${dir1} / ${dir2}',
           fr: '${dir1} / ${dir2}',
           ja: '${dir1} / ${dir2}',
@@ -289,7 +289,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         text: {
-          en: 'Tank LB NOW',
+          en: '지금 탱크 리미트브레이크!',
           de: 'JETZT Tank LB',
           fr: 'Transcendance Tank maintenant !',
           ja: '今タンクLB',
