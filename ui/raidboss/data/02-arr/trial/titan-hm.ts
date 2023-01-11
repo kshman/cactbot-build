@@ -45,7 +45,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (data, matches, output) => output.text!({ player: data.ShortName(matches.target) }),
       outputStrings: {
         text: {
-          en: 'Cleanse ${player}',
+          en: '에스나: ${player}',
           de: 'Reinige ${player}',
           fr: 'Guérison sur ${player}',
           ja: '${player}にエスナ',

@@ -92,14 +92,14 @@ const triggerSet: TriggerSet<Data> = {
     {
       // Gnosis does in fact have a cast time, but it's only 2.7 seconds.
       // It's safer to warn via the timeline.
-      id: 'SophiaEX Gnosis',
+      id: 'SophiaUN Gnosis',
       regex: /Gnosis/,
       beforeSeconds: 5,
       response: Responses.knockback(),
     },
     {
       // Onrush also has a 2.7 second cast time and thus is best notified from the timeline.
-      id: 'SophiaEX Onrush',
+      id: 'SophiaUN Onrush',
       regex: /Onrush/,
       beforeSeconds: 5,
       infoText: (_data, _matches, output) => output.text!(),
@@ -115,19 +115,19 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: 'SophiaEX Cintamani',
+      id: 'SophiaUN Cintamani',
       regex: /Cintamani/,
       beforeSeconds: 4,
       response: Responses.aoe(),
     },
     {
-      id: 'SophiaEX Dischordant Cleansing',
+      id: 'SophiaUN Dischordant Cleansing',
       regex: /Dischordant Cleansing/,
       beforeSeconds: 6,
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '흑백끼리 뭉쳐요',
+          en: '죄와 벌!',
           de: 'Mit Partner stacken',
           fr: 'Packez-vous avec votre partenaire',
           ja: '白と黒で重なる',
@@ -137,13 +137,13 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: 'SophiaEX Quasar Bait',
+      id: 'SophiaUN Quasar Bait',
       regex: /Quasar \(Snapshot\)/,
       beforeSeconds: 6,
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '퀘이사 미티어 유도',
+          en: '미티어: Ⓐ로',
           de: 'Quasar Meteore ködern',
           fr: 'Attirez les météores du Quasar',
           ja: 'メテオを誘導',
@@ -155,41 +155,41 @@ const triggerSet: TriggerSet<Data> = {
   ],
   triggers: [
     {
-      id: 'SophiaEX Tank Buster',
+      id: 'SophiaUN Tank Buster',
       type: 'StartsUsing',
-      netRegex: { id: '19C4', source: 'Sophia' },
+      netRegex: { id: '7DBE', source: 'Sophia' },
       response: Responses.tankBusterSwap(),
     },
     {
-      id: 'SophiaEX Thunder 2',
+      id: 'SophiaUN Thunder 2',
       type: 'StartsUsing',
-      netRegex: { id: '19B0', source: 'Sophia', capture: false },
+      netRegex: { id: '7DAA', source: 'Sophia', capture: false },
       response: Responses.awayFromFront(),
     },
     {
-      id: 'SophiaEX Thunder 3',
+      id: 'SophiaUN Thunder 3',
       type: 'StartsUsing',
-      netRegex: { id: '19AC', source: 'Sophia', capture: false },
+      netRegex: { id: '7DA6', source: 'Sophia', capture: false },
       response: Responses.getUnder(),
     },
     {
       // Technically this one does have a telegraph, but it feels really weird
       // to have Thunder 3 with popup text and this one not.
-      id: 'SophiaEX Aero 3',
+      id: 'SophiaUN Aero 3',
       type: 'StartsUsing',
-      netRegex: { id: '19AE', source: 'Sophia', capture: false },
+      netRegex: { id: '7DA8', source: 'Sophia', capture: false },
       response: Responses.getOut(),
     },
     {
-      id: 'SophiaEX Divine Spark',
+      id: 'SophiaUN Divine Spark',
       type: 'StartsUsing',
-      netRegex: { id: '19B6', source: 'The Second Demiurge', capture: false },
+      netRegex: { id: '7DB0', source: 'The Second Demiurge', capture: false },
       response: Responses.lookAway(),
     },
     {
-      id: 'SophiaEX Gnostic Rant',
+      id: 'SophiaUN Gnostic Rant',
       type: 'StartsUsing',
-      netRegex: { id: '19B8', source: 'The Third Demiurge', capture: false },
+      netRegex: { id: '7DB2', source: 'The Third Demiurge', capture: false },
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
@@ -203,9 +203,9 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: 'SophiaEX Infusion',
+      id: 'SophiaUN Infusion',
       type: 'StartsUsing',
-      netRegex: { id: '1988', source: 'The First Demiurge' },
+      netRegex: { id: '7D9F', source: 'The First Demiurge' },
       infoText: (data, matches, output) => {
         if (data.me === matches.target)
           return output.infusionOnYou!();
@@ -258,7 +258,7 @@ const triggerSet: TriggerSet<Data> = {
       // 7. Dischordant Cleansing circles go out and resolve
       // 8. Sophia casts Execute
       // 9. Clones disappear
-      id: 'SophiaEX Clone Collect',
+      id: 'SophiaUN Clone Collect',
       type: 'AddedCombatant',
       netRegex: { name: 'Aion Teleos' },
       run: (data, matches) => {
@@ -280,7 +280,7 @@ const triggerSet: TriggerSet<Data> = {
       // Thunder is always cast first when the Aion Teleos spawn.
       // Because we don't know whether there will be one or two Thunder tethers,
       // we have to separate out the "seen Thunder" logic.
-      id: 'SophiaEX Duplicate Collect',
+      id: 'SophiaUN Duplicate Collect',
       type: 'Tether',
       netRegex: { id: '002D' },
       run: (data, matches) => {
@@ -298,9 +298,9 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: 'SophiaEX Thunder Seen',
+      id: 'SophiaUN Thunder Seen',
       type: 'StartsUsing',
-      netRegex: { id: '19AB', source: 'Aion Teleos', capture: false },
+      netRegex: { id: '7DA5', source: 'Aion Teleos', capture: false },
       delaySeconds: 1,
       suppressSeconds: 5,
       run: (data) => data.seenThunder = true,
@@ -310,7 +310,7 @@ const triggerSet: TriggerSet<Data> = {
       // but the platform will not tilt while clones are active.
       // Since both have the same tethers and initial cast,
       // our best way to call the mechanic is to check whether clones are active.
-      id: 'SophiaEX Clones Active',
+      id: 'SophiaUN Clones Active',
       type: 'AddedCombatant',
       netRegex: { name: 'Aion Teleos', capture: false },
       run: (data) => data.clonesActive = true,
@@ -320,9 +320,9 @@ const triggerSet: TriggerSet<Data> = {
       // Barbelo separates and makes one safespot dangerous with Light Dew, the orange laser.
       // Unfortunately Barbelo doesn't have a cast time on Light Dew, so we can't use that.
       // Instead, we warn the user when Barbelo separates from Sophia, which is 1983.
-      id: 'SophiaEX Light Dew',
-      type: 'Ability',
-      netRegex: { id: '1983', source: 'Sophia', capture: false },
+      id: 'SophiaUN Light Dew',
+      type: 'StartsUsing',
+      netRegex: { id: '7DB9', source: 'Barbelo', capture: false },
       condition: (data) => data.clonesActive,
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
@@ -337,9 +337,9 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: 'SophiaEX Execute',
+      id: 'SophiaUN Execute',
       type: 'StartsUsing',
-      netRegex: { id: '19AA', source: 'Sophia' },
+      netRegex: { id: '7DA4', source: 'Sophia' },
       durationSeconds: (_data, matches) => parseFloat(matches.castTime),
       alertText: (data, _matches, output) => {
         const localeCompass: { [dir: string]: string } = {
@@ -377,9 +377,9 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: 'SophiaEX Clone Cleanup',
+      id: 'SophiaUN Clone Cleanup',
       type: 'Ability',
-      netRegex: { id: '19AA', source: 'Sophia', capture: false },
+      netRegex: { id: '7DA4', source: 'Sophia', capture: false },
       delaySeconds: 5,
       run: (data) => {
         delete data.clonesActive;
@@ -402,9 +402,9 @@ const triggerSet: TriggerSet<Data> = {
       // 7: (54.99068, -10.14043)
 
       // Because of this, we need only see one entity use a 21 log line and we can find the rest.
-      id: 'SophiaEX Quasar Setup',
+      id: 'SophiaUN Quasar Setup',
       type: 'Ability',
-      netRegex: { id: '19A[89]' },
+      netRegex: { id: '7DA[23]' },
       condition: (data) => !data.scaleSophias,
       // We *really* shouldn't have to suppress this...
       suppressSeconds: 5,
@@ -446,7 +446,7 @@ const triggerSet: TriggerSet<Data> = {
       // If the difference of the sum of weights on each side is 1, the tilt will be soft.
       // Otherwise it will be hard.
       // There will always be exactly one blue Quasar, unless the split is 4/2.
-      id: 'SophiaEX Quasar Tether Collect',
+      id: 'SophiaUN Quasar Tether Collect',
       type: 'Tether',
       netRegex: { id: '0011' },
       condition: (data) => {
@@ -459,7 +459,7 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: 'SophiaEX Tilt Via Tether',
+      id: 'SophiaUN Tilt Via Tether',
       type: 'Tether',
       netRegex: { id: '0011', capture: false },
       condition: (data) => {
@@ -495,9 +495,9 @@ const triggerSet: TriggerSet<Data> = {
       // The 20/startsUsing log lines don't actually have position data,
       // but we enumerated all the locations earlier,
       // so anytime one of these entities casts, we know where it is.
-      id: 'SophiaEX Tilt Via Cast',
+      id: 'SophiaUN Tilt Via Cast',
       type: 'StartsUsing',
-      netRegex: { id: '19A9', source: 'Sophia' },
+      netRegex: { id: '7DC0', source: 'Sophia' },
       condition: (data) => data.sadTethers,
       durationSeconds: 10,
       suppressSeconds: 5,
@@ -517,9 +517,9 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: tiltOutputStrings,
     },
     {
-      id: 'SophiaEX Quasar Cleanup',
+      id: 'SophiaUN Quasar Cleanup',
       type: 'Ability',
-      netRegex: { id: '19A9', capture: false },
+      netRegex: { id: '7DC0', capture: false },
       run: (data) => {
         delete data.quasarTethers;
         delete data.sadTethers;

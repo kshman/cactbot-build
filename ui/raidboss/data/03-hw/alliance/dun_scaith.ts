@@ -40,7 +40,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Out of death circle',
+          en: '데스 동그라미 ⊗밖으로',
           de: 'Raus aus den Todeskreisen',
           fr: 'Sortez du cercle de mort',
           ja: 'ヴォイド・デス、外へ',
@@ -60,7 +60,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Cleanse Doom soon!',
+          en: '둠! 에스나!',
           de: 'Verhängnis bald reinigen!',
           fr: 'Dissipez le Glas bientôt !',
           ja: '死の宣告、エスナ！',
@@ -86,7 +86,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Kill sprites',
+          en: '스프라이트 잡아요',
           de: 'Exergone töten',
           fr: 'Tuez les élémentaires',
           ja: 'スプライトを倒す',
@@ -103,7 +103,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Drop Tornado outside',
+          en: '토네이도🌪️ 바깥에 버려요',
           de: 'Wirbel draußen ablegen',
           fr: 'Déposez les tornades à l\'extérieur',
           ja: 'エアロガ、外に置く',
@@ -133,7 +133,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Avoid death squares',
+          en: '데스 사각형 ⊗밖으로',
           de: 'Weiche den Todes-Feldern aus',
           fr: 'Évitez les carrés de mort',
           ja: 'ヴォイド・デスジャ、エリアの外に',
@@ -152,7 +152,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Drop scythe outside',
+          en: '빙글빙글 낫💫 바깥에 버려요',
           de: 'Sense draußen ablegen',
           fr: 'Déposez la faux à l\'extérieur',
           ja: 'ブラックウインド、外に置く',
@@ -229,7 +229,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         goToAnyUntethered: {
-          en: 'Go To Any Untethered',
+          en: '선없는 쪽으로',
           de: 'Gehe zu einem Unverbundenen',
           fr: 'Allez sous une Gueule non liée',
           ja: '線のないアトモスに近づく',
@@ -237,7 +237,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '아무 아트모스 근처로',
         },
         avoidAllUntethered: {
-          en: 'Avoid All Untethered',
+          en: '전부 다 피해요',
           de: 'Vermeide alle Unverbundenen',
           fr: 'Évitez toutes les Gueules non liées',
           ja: '線のないアトモスから離れる',
@@ -245,7 +245,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '모든 아트모스 피하기',
         },
         goToUntetheredBlue: {
-          en: 'Go to Untethered Blue',
+          en: '파랭이🔵로',
           de: 'Gehe zu dem nicht verbundenen blauem Atomos',
           fr: 'Allez sous une Gueule bleue non liée',
           ja: '線のない青色アトモスに近づく',
@@ -253,7 +253,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '파란 아트모스로 이동',
         },
         goToUntetheredYellow: {
-          en: 'Go to Untethered Yellow',
+          en: '노랭이🟡로',
           de: 'Gehe zu dem nicht verbundenen gelben Atomos',
           fr: 'Allez sous une Gueule jaune non liée',
           ja: '線のない黄色アトモスに近づく',
@@ -261,7 +261,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '노란 아트모스로 이동',
         },
         avoidUntetheredBlue: {
-          en: 'Avoid Untethered Blue',
+          en: '파랭이🔵 피해요',
           de: 'Weiche dem nicht verbundenen blauem Atomos aus',
           fr: 'Évitez une Gueule bleue non liée',
           ja: '線のない青色アトモスから離れる',
@@ -269,7 +269,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '파란 아트모스 피하기',
         },
         avoidUntetheredYellow: {
-          en: 'Avoid Untethered Yellow',
+          en: '노랭이🟡 피해요',
           de: 'Weiche dem nicht verbundenen gelben Atomos aus',
           fr: 'Évitez une Gueule jaune non liée',
           ja: '線のない黄色アトモスから離れる',
@@ -296,7 +296,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Avoid puddles',
+          en: '동그란 장판 피해요',
           de: 'Flächen ausweichen',
           fr: 'Évitez les zones au sol',
           ja: '円範囲攻撃、避ける',
@@ -314,7 +314,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Change puddles to water',
+          en: '물🔵로 바꿔요',
           de: 'Ändere Flächen zu Wasser',
           fr: 'Changez les zones au sol en eau',
           ja: '青い水に入れ替える',
@@ -332,7 +332,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Change puddles to fire',
+          en: '불🔴로 바꿔요',
           de: 'Ändere Flächen zu Feuer',
           fr: 'Changez les zones au sol en feu',
           ja: '赤い火に入れ替える',
@@ -357,7 +357,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Prey--Avoid party and keep moving',
+          en: '내가 먹이라니! 파티가 없는 쪽으로 도망쳐요',
           de: 'Markiert - Weg von der Gruppe und bleib in Bewegung',
           fr: 'Marquage - Évitez les autres et bougez',
           ja: 'マーキング - 外に移動し続ける',
@@ -376,7 +376,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Avoid Bit AoEs',
+          en: '비트 AOE 피해요',
           de: 'Weiche den Bit AoEs aus',
           fr: 'Évitez les AoE des forets',
           ja: 'AoEを避ける',
@@ -393,7 +393,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Kill collectors',
+          en: '기둥 잡아요',
           de: 'Ätherakkumulator besiegen',
           fr: 'Détruisez les accumulateurs',
           ja: 'エーテル集積器を倒す',
@@ -412,7 +412,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Avoid arm slaps',
+          en: '그림자 손 피해요',
           de: 'Weiche den Armschlägen aus',
           fr: 'Évitez les claques de bras',
           ja: '影の手を避ける',
@@ -435,7 +435,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Avoid line AoEs',
+          en: '선형 AOE 피해요, 스카사하 정면에 서지 말고',
           de: 'Weiche den Linien AoEs aus',
           fr: 'Évitez les AoEs en ligne',
           ja: 'スカアハの正面に立たない',
@@ -467,7 +467,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Kill the hands',
+          en: '손 처치해요',
           de: 'Besiege die Hand',
           fr: 'Tuez les mains',
           ja: '影の手を倒す',
@@ -483,7 +483,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Avoid AoE, Kill Connla',
+          en: 'AOE 피하고, Connla 잡아요',
           de: 'Weiche AoE aus, besiege Connla',
           fr: 'Évitez les AoE, tuez Connla',
           ja: 'AoEを避け、コンラを倒す',
@@ -502,7 +502,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Take orb outside',
+          en: '검은 오브를 바깥으로 끌어요',
           de: 'Orb nach außen bringen',
           fr: 'Prenez l\'orbe à l\'extérieur',
           ja: '黒い球体を外に引く',
@@ -539,7 +539,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Boss hitting hard--Shield/Mitigate',
+          en: '엄청 아픈 버스터! 바리어+경감',
           de: 'Harter Hit vom Boss - Schild/Milderung',
           fr: 'Le boss frappe fort - Bouclier/Mitigation',
           ja: '大ダメージ物理タンクバスター - ダメージ軽減/バリア',
@@ -563,7 +563,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Kill the deathgates',
+          en: '데스 게이트 잡아요',
           de: 'Besiege die Tore des Todes',
           fr: 'Détruisez les portes de mort',
           ja: '召喚の扉を倒す',
@@ -590,7 +590,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         gazeStackOnYou: {
-          en: 'Gaze stack on YOU',
+          en: '내게 게이즈 뭉치기가!',
           de: 'Blick-Sammeln auf DIR',
           fr: 'Package sur VOUS',
           ja: '自分に頭割り',
@@ -598,7 +598,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '시선 쉐어 대상자',
         },
         stackOnAndLookAway: {
-          en: 'Stack on ${player} and look away',
+          en: '뭉치면서 보면 안되요: ${player}',
           de: 'Sammeln bei ${player} und wewg schauen',
           fr: 'Packez-vous sur ${player} et regardez ailleurs',
           ja: '${player}に頭割り、見ない',

@@ -8,8 +8,8 @@ export type Data = RaidbossData;
 
 // Xelphatol
 const triggerSet: TriggerSet<Data> = {
-  zoneId: ZoneId.Xelphatol,
-  timelineFile: 'xelphatol.txt',
+  zoneId: ZoneId.Xelphatol62,
+  timelineFile: 'xelphatol62.txt',
   timelineTriggers: [
     {
       id: 'Xelphatol Short Burst',
@@ -62,7 +62,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '내게 장판이',
+          en: 'Puddle on YOU',
           de: 'Fläche auf DIR',
           fr: 'Zone au sol sur VOUS',
           ja: '自分に風',

@@ -24,7 +24,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (data, matches, output) => output.text!({ player: data.ShortName(matches.source) }),
       outputStrings: {
         text: {
-          en: 'Provoke: ${player}',
+          en: '프로보크: ${player}',
           de: 'Herausforderung: ${player}',
           fr: 'Provocation: ${player}',
           ja: '挑発: ${player}',
@@ -50,7 +50,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         text: {
-          en: 'Provoke: ${player}',
+          en: '개구리: ${player}',
           de: 'Herausforderung: ${player}',
           fr: 'Provocation: ${player}',
           ja: '挑発: ${player}',
@@ -58,7 +58,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '도발: ${player}',
         },
         noTarget: {
-          en: 'Provoke: ${player} (missed)',
+          en: '개구리: ${player} (missed)',
           de: 'Herausforderung: ${player} (verfehlt)',
           fr: 'Provocation: ${player} (manquée)',
           ja: '挑発: ${player} (タゲなし)',
@@ -79,7 +79,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (data, matches, output) => output.text!({ player: data.ShortName(matches.source) }),
       outputStrings: {
         text: {
-          en: 'Shirk: ${player}',
+          en: '셔크: ${player}',
           de: 'Geteiltes Leid: ${player}',
           fr: 'Dérobade: ${player}',
           ja: 'シャーク: ${player}',
@@ -100,7 +100,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (data, matches, output) => output.text!({ player: data.ShortName(matches.source) }),
       outputStrings: {
         text: {
-          en: 'Holmgang: ${player}',
+          en: '홀름갱: ${player}',
           de: 'Holmgang: ${player}',
           fr: 'Holmgang: ${player}',
           ja: 'ホルムギャング: ${player}',
@@ -121,7 +121,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (data, matches, output) => output.text!({ player: data.ShortName(matches.source) }),
       outputStrings: {
         text: {
-          en: 'Hallowed: ${player}',
+          en: '인빈시블 할로우드: ${player}',
           de: 'Heiliger Boden: ${player}',
           fr: 'Invincible: ${player}',
           ja: 'インビンシブル: ${player}',
@@ -142,7 +142,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (data, matches, output) => output.text!({ player: data.ShortName(matches.source) }),
       outputStrings: {
         text: {
-          en: 'Bolide: ${player}',
+          en: '슈퍼 볼라이드: ${player}',
           de: 'Meteoritenfall: ${player}',
           fr: 'Bolide: ${player}',
           ja: 'ボーライド: ${player}',
@@ -163,7 +163,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (data, matches, output) => output.text!({ player: data.ShortName(matches.source) }),
       outputStrings: {
         text: {
-          en: 'Living: ${player}',
+          en: '리빙 데드: ${player}',
           de: 'Totenerweckung: ${player}',
           fr: 'Mort-vivant: ${player}',
           ja: 'リビングデッド: ${player}',
@@ -184,7 +184,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (data, matches, output) => output.text!({ player: data.ShortName(matches.source) }),
       outputStrings: {
         text: {
-          en: 'Walking: ${player}',
+          en: '워킹 데드: ${player}',
           de: 'Erweckter: ${player}',
           fr: 'Marcheur des limbes: ${player}',
           ja: 'ウォーキングデッド: ${player}',

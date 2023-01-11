@@ -7,8 +7,8 @@ import { TriggerSet } from '../../../../../types/trigger';
 export type Data = RaidbossData;
 
 const triggerSet: TriggerSet<Data> = {
-  zoneId: ZoneId.BaelsarsWall,
-  timelineFile: 'baelsars_wall.txt',
+  zoneId: ZoneId.BaelsarsWall62,
+  timelineFile: 'baelsars_wall62.txt',
   timelineTriggers: [
     {
       id: 'Baelsar Magitek Cannon',
@@ -90,7 +90,7 @@ const triggerSet: TriggerSet<Data> = {
         output.text!({ player: data.ShortName(matches.target) }),
       outputStrings: {
         text: {
-          en: '체인 끊어요: ${player}',
+          en: 'Break chain on ${player}',
           de: 'Kette von ${player} brechen',
           fr: 'Cassez la chaînes sur ${player}',
           ja: '${player}の線を取る',

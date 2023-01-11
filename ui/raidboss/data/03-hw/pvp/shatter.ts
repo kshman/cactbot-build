@@ -18,7 +18,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Big Ice: Center',
+          en: '큰 얼음: 한가운데',
           de: 'Grosses Eis: Mitte',
           fr: 'Grosse Glace : Centre',
           ja: '氷: 中央',
@@ -37,7 +37,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Big Ice: North',
+          en: '큰 얼음: 북쪽',
           de: 'Grosses Eis: Norden',
           fr: 'Grosse Glace : Nord',
           ja: '氷: 北',
@@ -56,7 +56,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Big Ice: Southeast',
+          en: '큰 얼음: 남동쪽',
           de: 'Grosses Eis: Süden',
           fr: 'Grosse Glace : Sud-Est',
           ja: '氷: 南東',
@@ -75,7 +75,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Big Ice: Southwest',
+          en: '큰 얼음: 남서쪽',
           de: 'Grosses Eis: Südwesten',
           fr: 'Grosse Glace : Sud-Ouest',
           ja: '氷: 西南',

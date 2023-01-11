@@ -28,7 +28,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Kill Nail',
+          en: '네일 잡아요',
           de: 'infernalische Fessel zerstören',
           fr: 'Détruisez le clou',
           ja: '炎獄の楔を討つ',

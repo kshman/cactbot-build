@@ -110,7 +110,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Attack Head Only',
+          en: '머리만 공격',
           de: 'Nur den Kopf angreifen',
           fr: 'Attaquez seulement la tête',
           ja: '頭だけに攻撃',
@@ -128,7 +128,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Attack Tail Only',
+          en: '꼬리만 공격',
           de: 'Nur den Schwanz angreifen',
           fr: 'Attaquez seulement la queue',
           ja: 'テールだけに攻撃',
@@ -154,7 +154,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Kill Wavetooth Add',
+          en: '웨이브투스 사하긴 잡아요',
           de: 'Besiege Wellenzahn Add',
           fr: 'Tuez l\'add Dent-du-ressac',
           ja: 'ウェイブトゥース・サハギンに攻撃',
@@ -182,7 +182,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Kill Gyre Spumes',
+          en: '자이레 스퓸🟡 잡아요',
           de: 'Besiege Gischtblase',
           fr: 'Tuez les écumes concentriques',
           ja: 'ジャイヤ・スピュームに攻撃',
@@ -199,7 +199,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Wave Spume Adds',
+          en: '웨이브 스퓸🔵 출현',
           de: 'Gischtwelle Adds',
           fr: 'Adds Écumes ondulantes',
           ja: 'ウェイブ・スピューム出現',
@@ -220,7 +220,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Burst Soon',
+          en: '곧 터져요',
           de: 'Gischtwelle platzen gleich',
           fr: 'Burst bientôt',
           ja: 'まもなく爆発',
@@ -248,7 +248,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Hit The Button!',
+          en: '버튼 눌러욧!',
           de: 'Mit Elementarumwandler interagieren!',
           fr: 'Activez la barrière !',
           ja: '魔法障壁を発動',
