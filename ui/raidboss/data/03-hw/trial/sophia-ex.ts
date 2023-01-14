@@ -105,7 +105,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '돌진 피해요',
+          en: '돌진 바닥 피해요',
           de: 'Ansturm-Angriff ausweichen',
           fr: 'Évitez l\'attaque Charge',
           ja: '突進に避け',
@@ -127,7 +127,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '흑백끼리 뭉쳐요',
+          en: '죄와 벌!',
           de: 'Mit Partner stacken',
           fr: 'Packez-vous avec votre partenaire',
           ja: '白と黒で重なる',
@@ -183,8 +183,8 @@ const triggerSet: TriggerSet<Data> = {
     {
       id: 'SophiaEX Divine Spark',
       type: 'StartsUsing',
-      netRegex: { id: '19B6', source: 'The Second Demiurge', capture: false },
-      response: Responses.lookAway(),
+      netRegex: { id: '19B6', source: 'The Second Demiurge' },
+      response: Responses.lookAwayFromSource(),
     },
     {
       id: 'SophiaEX Gnostic Rant',
@@ -404,7 +404,7 @@ const triggerSet: TriggerSet<Data> = {
       // Because of this, we need only see one entity use a 21 log line and we can find the rest.
       id: 'SophiaEX Quasar Setup',
       type: 'Ability',
-      netRegex: { id: '19A[89]' },
+      netRegex: { id: ['19A8', '19A9'] },
       condition: (data) => !data.scaleSophias,
       // We *really* shouldn't have to suppress this...
       suppressSeconds: 5,
