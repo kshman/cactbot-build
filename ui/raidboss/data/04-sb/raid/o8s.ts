@@ -26,7 +26,7 @@ const strings = {
   },
   spread: Outputs.spread,
   stack: {
-    en: 'Stack',
+    en: '뭉쳐요',
     de: 'Stacken',
     fr: 'Packez-vous',
     ja: 'スタック',
@@ -34,7 +34,7 @@ const strings = {
     ko: '집합',
   },
   getOut: {
-    en: 'Get Out',
+    en: '바깥으로',
     de: 'raus da',
     fr: 'Sortez',
     ja: '外へ',
@@ -42,7 +42,7 @@ const strings = {
     ko: '밖으로',
   },
   getIn: {
-    en: 'Get In',
+    en: '안으로',
     de: 'reingehen',
     fr: 'À l\'intérieur',
     ja: '中へ',
@@ -50,7 +50,7 @@ const strings = {
     ko: '안으로',
   },
   trueThunder: {
-    en: 'True Thunder',
+    en: '트루 선더3',
     de: 'Wahrer Blitz',
     fr: 'Vraie foudre',
     ja: '真サンダガ',
@@ -58,7 +58,7 @@ const strings = {
     ko: '진실 선더가',
   },
   fakeThunder: {
-    en: 'Fake Thunder',
+    en: '페이크 선더3',
     de: 'Falscher Blitz',
     fr: 'Fausse foudre',
     ja: 'にせサンダガ',
@@ -66,7 +66,7 @@ const strings = {
     ko: '거짓 선더가',
   },
   trueIce: {
-    en: 'True Ice',
+    en: '트루 블리자드3',
     de: 'Wahres Eis',
     fr: 'Vraie glace',
     ja: '真ブリザガ',
@@ -74,7 +74,7 @@ const strings = {
     ko: '진실 블리자가',
   },
   fakeIce: {
-    en: 'Fake Ice',
+    en: '페이크 블리자드3',
     de: 'Falsches Eis',
     fr: 'Fausse glace',
     ja: 'にせブリザガ',
@@ -102,7 +102,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Look Away From Statue',
+          en: '조각상 보면 안되요!',
           de: 'Von Statue wegschauen',
           fr: 'Ne regardez pas la statue',
           ja: '塔を見ない！',
@@ -130,7 +130,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Look At Statue',
+          en: '조각상 봐욧!',
           de: 'Statue anschauen',
           fr: 'Regardez la statue',
           ja: '像を見る！',
@@ -146,7 +146,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Past: Stack and Stay',
+          en: '과거: 그대로 + 그대로',
           de: 'Vergangenheit: Sammeln und Stehenbleiben',
           fr: 'Passé : Packez-vous et restez',
           ja: '過去: スタックしてそのまま',
@@ -162,7 +162,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Future: Stack and Through',
+          en: '미래: 뭉쳤다 + 통과해요',
           de: 'Zukunft: Sammeln und Durchlaufen',
           fr: 'Futur : Packez-vous et traversez',
           ja: '未来: 頭割り後ボスを通り抜ける',
@@ -180,7 +180,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Past: Bait, then through',
+          en: '과거: 맞았다가 + 통과해요',
           de: 'Vergangenheit : Anlocken und Durchlaufen',
           fr: 'Passé : Attirez, puis traversez',
           ja: '過去: 飛んできたら反対に向ける',
@@ -198,7 +198,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Future: Bait, then stay',
+          en: '미래: 맞았다가 + 그자리에 그대로',
           de: 'Zukunft: Anlocken und Stehenbleiben',
           fr: 'Futur : Attirez, puis restez',
           ja: '未来: 飛んできたらそのまま',
@@ -228,7 +228,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         maxMeleeAvoidTanks: {
-          en: 'Max Melee: Avoid Tanks',
+          en: '칼끝: 탱크 피해요',
           de: 'Max Nahkampf: Weg von den Tanks',
           fr: 'Max mêlée : éloignez-vous des tanks',
           ja: '近接最大レンジ タンクから離れる',
@@ -236,7 +236,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '칼끝딜: 탱커 피하기',
         },
         wingsBeNearFar: {
-          en: 'Wings: Be Near/Far',
+          en: '날개: 가까이/멀리',
           de: 'Schwingen: Nah/Fern',
           fr: 'Ailes : Placez-vous près/loin',
           ja: '翼: めり込む/離れる',
@@ -252,7 +252,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Single Wing',
+          en: '한쪽 날개',
           de: 'Einzelner Flügel',
           fr: 'Aile unique',
           ja: '片翼',
@@ -279,7 +279,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         embraceOn: {
-          en: 'Embrace on ${player}',
+          en: '엠브레이스: ${player}',
           de: 'Umarmung auf ${player}',
           fr: 'Étreinte sur ${player}',
           ja: '${player}に双腕',
@@ -287,7 +287,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '"${player}" 종말의 포옹',
         },
         embraceOnYou: {
-          en: 'Embrace on YOU',
+          en: '내게 엠브레이스',
           de: 'Umarmung auf DIR',
           fr: 'Étreinte sur VOUS',
           ja: '自分に双腕',
@@ -311,7 +311,7 @@ const triggerSet: TriggerSet<Data> = {
       alarmText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Confusion: Go Outside',
+          en: '혼란: 바깥으로',
           de: 'Konfusion: Nach außen',
           fr: 'Confusion : Allez à l\'extérieur',
           ja: '混乱: 外へ',
@@ -328,7 +328,7 @@ const triggerSet: TriggerSet<Data> = {
       alarmText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Sleep: Go Inside',
+          en: '수면: 한가운데로',
           de: 'Schlaf: Zur Mitte',
           fr: 'Sommeil : Allez à l\'intérieur',
           ja: '睡眠: 中へ',

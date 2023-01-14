@@ -16,7 +16,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (data, matches, output) => output.text!({ player: data.ShortName(matches.target) }),
       outputStrings: {
         text: {
-          en: 'Esuna ${player}',
+          en: '에스나: ${player}',
           de: 'Medica ${player}',
           fr: 'Guérison sur ${player}',
           ja: '${player} にエスナ',
@@ -39,7 +39,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         stun: Outputs.stunTarget,
         tailScrewOn: {
-          en: 'Tail Screw on ${player}',
+          en: '테일 스크류: ${player}',
           de: 'Schweifschraube auf ${player}',
           cn: '螺旋尾点${player}',
           ko: '${player} 꼬리 후려치기',

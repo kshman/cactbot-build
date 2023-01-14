@@ -6,7 +6,7 @@ import { TriggerSet } from '../../../../../types/trigger';
 
 const uznairOutputStrings = {
   spawn: {
-    en: '${name} spawned!',
+    en: '${name} 나타났어요!',
     de: '${name} erscheint!',
     cn: '已生成 ${name}!',
     ko: '${name} 등장!',
@@ -55,7 +55,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Canal Crew spawned, kill in order!',
+          en: '만드라고라들 등장, 순서대로 죽여요!',
           de: 'Kanal-Mandragora erscheinen, in Reihenfolge besiegen!',
           cn: '已生成 运河蔓德拉战队, 依次击杀!',
           ko: '만드라즈 등장, 순서대로 잡기!',

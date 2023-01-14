@@ -29,7 +29,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'swipe',
+          en: '스와이프',
           de: 'Hieb',
           fr: 'Fauche',
           ja: 'スワイプ',
@@ -45,7 +45,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'swipe',
+          en: '스와이프',
           de: 'Hieb',
           fr: 'Fauche',
           ja: 'スワイプ',
@@ -61,7 +61,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Swing',
+          en: '스윙',
           de: 'Schwung',
           fr: 'Swing',
           ja: 'スウィング',
@@ -77,7 +77,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Swing',
+          en: '스윙',
           de: 'Schwung',
           fr: 'Swing',
           ja: 'スウィング',
@@ -93,7 +93,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Dragon\'s Voice',
+          en: '드래곤 보이스 (안으로)',
           de: 'Stimme Des Drachen',
           fr: 'Voix Du Dragon',
           ja: '雷電の咆哮',
@@ -109,7 +109,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Ram\'s Voice',
+          en: '램 보이스 (밖으로)',
           de: 'Stimme Des Widders',
           fr: 'Voix Du Bélier',
           ja: '氷結の咆哮',
@@ -125,7 +125,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Ram\'s Voice',
+          en: '램 보이스 (밖으로)',
           de: 'Stimme Des Widders',
           fr: 'Voix Du Bélier',
           ja: '氷結の咆哮',
@@ -166,7 +166,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Puddle on YOU',
+          en: '내게 장판이',
           de: 'Fläche auf DIR',
           fr: 'Zone au sol sur VOUS',
           ja: '自分に円範囲',
@@ -200,7 +200,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         text: {
-          en: 'Stack with ${player}',
+          en: '뭉쳐요: ${player}',
           de: 'Sammeln mit ${player}',
           fr: 'Packez-vous avec ${player}',
           ja: '${player}と頭割り',
@@ -244,7 +244,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         standOnRedCircle: {
-          en: 'Stand on red circle',
+          en: '🔴동그라미 밟아요',
           de: 'Im roten Kreis stehen',
           fr: 'Restez dans le cercle rouge',
           ja: '赤い輪に',
@@ -252,7 +252,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '빨간 원 밟기',
         },
         standOnBlueCircle: {
-          en: 'Stand on blue circle',
+          en: '🔵동그라미 밟아요',
           de: 'Im blauen Kreis stehen',
           fr: 'Restez dans le cercle bleu',
           ja: '青い輪に',

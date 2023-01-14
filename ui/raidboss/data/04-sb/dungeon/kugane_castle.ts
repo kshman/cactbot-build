@@ -46,7 +46,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Harakiri tether on YOU',
+          en: '내게 하라키리 줄이!',
           de: 'Harakiri Verbindung auf DIR',
           fr: 'Lien Harakiri sur VOUS',
           ja: '自分にはらきり',
@@ -70,7 +70,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Grab gold piles',
+          en: '돈 주워요',
           de: 'Sammle die Goldhaufen',
           fr: 'Prenez les pièces d\'or',
           ja: '大判小判を拾う',

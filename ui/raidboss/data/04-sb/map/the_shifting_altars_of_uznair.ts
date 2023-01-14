@@ -9,13 +9,13 @@ import { TriggerSet } from '../../../../../types/trigger';
 
 const uznairOutputStrings = {
   spawn: {
-    en: '${name} spawned!',
+    en: '${name} 나타났어요!',
     de: '${name} erscheint!',
     cn: '已生成 ${name}!',
     ko: '${name} 등장!',
   },
   adds: {
-    en: 'Adds soon',
+    en: '곧 쫄 나와요',
     de: 'Bald Adds',
     cn: '小怪即将出现',
     ko: '곧 쫄 나옴',
@@ -66,7 +66,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Altar Assembly spawned, kill in order!',
+          en: '만드라고라들 등장, 순서대로 죽어요!',
           de: 'Altar-Mandragora erscheinen, in Reihenfolge besiegen!',
           cn: '已生成 神殿蔓德拉战队, 依次击杀!',
           ko: '만드라즈 등장, 순서대로 잡기!',
@@ -122,7 +122,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         text: {
-          en: 'Bait three puddles',
+          en: '장판 3개 유도해요',
           de: '3 Flächen ködern',
           cn: '诱导三个圈圈',
           ko: '장판 3개 유도',

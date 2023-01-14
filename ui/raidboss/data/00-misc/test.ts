@@ -77,7 +77,7 @@ const triggerSet: TriggerSet<Data> = {
       tts: (_data, _matches, output) => output.stackTTS!(),
       outputStrings: {
         stack: {
-          en: 'Stack for Angry Dummy',
+          en: '뭉쳐요: Angry Dummy',
           de: 'Sammeln für Wütender Dummy',
           fr: 'Packez-vous pour le Mannequin en colère',
           ja: '怒る木人に集合',
@@ -85,7 +85,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '화난 나무인형에 집합',
         },
         stackTTS: {
-          en: 'Stack',
+          en: '뭉쳐요',
           de: 'Sammeln',
           fr: 'Packez-vous',
           ja: '集合',
@@ -115,7 +115,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         elapsed: {
-          en: 'Elapsed ms: ${elapsed}',
+          en: '걸린 밀리초: ${elapsed}',
           de: 'Abgelaufene ms: ${elapsed}',
           fr: 'Expiré ms: ${elapsed}',
           ja: '経過時間：${elapsed}',
@@ -218,7 +218,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (data, _matches, output) => output.text!({ lang: data.parserLang }),
       outputStrings: {
         text: {
-          en: 'Language: ${lang}',
+          en: '언어: ${lang}',
           de: 'Sprache: ${lang}',
           fr: 'Langage: ${lang}',
           ja: '言語：${lang}',
@@ -280,7 +280,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.close!(),
       outputStrings: {
         close: {
-          en: 'Dummy close!',
+          en: '더미랑 가까워요!',
           de: 'Puppe beendet!',
           fr: 'Mannequin proche !',
           ja: '木人に近すぎ！',

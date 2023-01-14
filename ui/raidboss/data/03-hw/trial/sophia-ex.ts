@@ -9,8 +9,7 @@ export interface Data extends RaidbossData {
   cloneSpots?: { [id: string]: string };
   scaleSophias?: string[];
   quasarTethers?: string[];
-  aeroClones?: string[];
-  thunderClones?: string[];
+  isQuadrantSafe: { [id: string]: boolean };
   seenThunder?: boolean;
   clonesActive?: boolean;
   sadTethers?: boolean; // :C
@@ -48,7 +47,7 @@ const callSafeDir = (callIndex: number, output: Output) => {
 
 const tiltOutputStrings = {
   goEastHardTilt: {
-    en: 'Go East (Hard Tilt)',
+    en: '동쪽으로 (많이)',
     de: 'Nach Osten gehen (starke Neigung)',
     fr: 'Allez à l\'Est (Inclinaison forte)',
     ja: '東へ (大きい斜め)',
@@ -56,7 +55,7 @@ const tiltOutputStrings = {
     ko: '동쪽으로 (크게 기울어짐)',
   },
   goEastSoftTilt: {
-    en: 'Go East (Soft Tilt)',
+    en: '동쪽으로 (조금)',
     de: 'Nach Osten gehen (leichte Neigung)',
     fr: 'Allez à l\'Est (Inclinaison faible)',
     ja: '東へ (小さい斜め)',
@@ -64,7 +63,7 @@ const tiltOutputStrings = {
     ko: '동쪽으로 (작게 기울어짐)',
   },
   goWestHardTilt: {
-    en: 'Go West (Hard Tilt)',
+    en: '서쪽으로 (많이)',
     de: 'Nach Westen gehen (starke Neigung)',
     fr: 'Allez à l\'Ouest (Inclinaison forte)',
     ja: '西へ (大きい斜め)',
@@ -72,7 +71,7 @@ const tiltOutputStrings = {
     ko: '서쪽으로 (크게 기울어짐)',
   },
   goWestSoftTilt: {
-    en: 'Go West (Soft Tilt)',
+    en: '서쪽으로 (조금)',
     de: 'Nach Westen gehen (leichte Neigung)',
     fr: 'Allez à l\'Ouest (Inclinaison faible)',
     ja: '西へ (小さい斜め)',
@@ -84,6 +83,11 @@ const tiltOutputStrings = {
 const triggerSet: TriggerSet<Data> = {
   zoneId: ZoneId.ContainmentBayP1T6Extreme,
   timelineFile: 'sophia-ex.txt',
+  initData: () => {
+    return {
+      isQuadrantSafe: { NW: true, NE: true, SW: true, SE: true },
+    };
+  },
   timelineTriggers: [
     {
       // Gnosis does in fact have a cast time, but it's only 2.7 seconds.
@@ -101,7 +105,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Avoid Dash Attack',
+          en: '돌진 바닥 피해요',
           de: 'Ansturm-Angriff ausweichen',
           fr: 'Évitez l\'attaque Charge',
           ja: '突進に避け',
@@ -123,7 +127,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Stack With Partner',
+          en: '죄와 벌!',
           de: 'Mit Partner stacken',
           fr: 'Packez-vous avec votre partenaire',
           ja: '白と黒で重なる',
@@ -139,7 +143,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Bait Quasar Meteors',
+          en: '퀘이사 미티어 유도',
           de: 'Quasar Meteore ködern',
           fr: 'Attirez les météores du Quasar',
           ja: 'メテオを誘導',
@@ -179,8 +183,8 @@ const triggerSet: TriggerSet<Data> = {
     {
       id: 'SophiaEX Divine Spark',
       type: 'StartsUsing',
-      netRegex: { id: '19B6', source: 'The Second Demiurge', capture: false },
-      response: Responses.lookAway(),
+      netRegex: { id: '19B6', source: 'The Second Demiurge' },
+      response: Responses.lookAwayFromSource(),
     },
     {
       id: 'SophiaEX Gnostic Rant',
@@ -189,7 +193,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Get behind lancer',
+          en: '창술맨 뒤로',
           de: 'Geh hinter dem 3. Demiurg',
           fr: 'Passez derrière le lancier',
           ja: '三の従者の後ろに',
@@ -210,7 +214,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         infusionOnYou: {
-          en: 'Infusion on YOU',
+          en: '내가 맹돌진',
           de: 'Schneisenschläger auf DIR',
           fr: 'Infusion sur VOUS',
           ja: '自分に猛突進',
@@ -218,7 +222,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '맹돌진 대상자',
         },
         infusionOn: {
-          en: 'Infusion on ${player}',
+          en: '맹돌진: ${player}',
           de: 'Schneisenschläger auf ${player}',
           fr: 'Infusion sur ${player}',
           ja: '${player}に猛突進',
@@ -283,17 +287,17 @@ const triggerSet: TriggerSet<Data> = {
         const spot = data.cloneSpots?.[matches.sourceId];
         if (!spot)
           throw new UnreachableCode();
+        // Only Thunder 2 is ever used on centerline clones,
+        // so center clones will never affect quadrant safety.
+        if (spot === 'N' || spot === 'S') {
+          return;
+        }
         if (data.seenThunder) {
-          data.aeroClones ??= [];
-          data.aeroClones.push(spot);
-        } else {
-          data.thunderClones ??= [];
-          data.thunderClones.push(spot);
+          data.isQuadrantSafe[spot] = false;
         }
       },
     },
     {
-      // The ability here is Duplicate. The first Duplicate is always used alongside Thunder 2/3.
       id: 'SophiaEX Thunder Seen',
       type: 'StartsUsing',
       netRegex: { id: '19AB', source: 'Aion Teleos', capture: false },
@@ -323,7 +327,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Avoid head laser',
+          en: '머리 레이저 피해요',
           de: 'Kopflaser ausweichen',
           fr: 'Évitez le laser de la tête',
           ja: 'レーザーを避ける',
@@ -338,35 +342,30 @@ const triggerSet: TriggerSet<Data> = {
       netRegex: { id: '19AA', source: 'Sophia' },
       durationSeconds: (_data, matches) => parseFloat(matches.castTime),
       alertText: (data, _matches, output) => {
-        if (!data.thunderClones)
-          return;
         const localeCompass: { [dir: string]: string } = {
-          'N': output.north!(),
-          'S': output.south!(),
           'NW': output.northwest!(),
           'NE': output.northeast!(),
           'SW': output.southwest!(),
           'SE': output.southeast!(),
         };
-        const firstClone = data.thunderClones[0];
-        const secondClone = data.thunderClones[1];
-
-        if (firstClone && secondClone) {
-          return output.multiple!({
-            dir1: localeCompass[firstClone],
-            dir2: localeCompass[secondClone],
-          });
-        } else if (firstClone) {
-          return localeCompass[firstClone];
+        const safeSpots = [];
+        for (const dir of Object.keys(data.isQuadrantSafe)) {
+          if (data.isQuadrantSafe[dir])
+            safeSpots.push(localeCompass[dir]);
         }
+        if (safeSpots.length === 1) {
+          return safeSpots[0];
+        }
+        return output.multiple!({
+          dir1: safeSpots[0],
+          dir2: safeSpots[1],
+        });
       },
       outputStrings: {
-        north: Outputs.dirN,
-        south: Outputs.dirS,
-        northwest: Outputs.dirNW,
-        northeast: Outputs.dirNE,
-        southwest: Outputs.dirSW,
-        southeast: Outputs.dirSE,
+        northwest: Outputs.northwest,
+        northeast: Outputs.northeast,
+        southwest: Outputs.southwest,
+        southeast: Outputs.southeast,
         multiple: {
           en: '${dir1} / ${dir2}',
           de: '${dir1} / ${dir2}',
@@ -383,11 +382,9 @@ const triggerSet: TriggerSet<Data> = {
       netRegex: { id: '19AA', source: 'Sophia', capture: false },
       delaySeconds: 5,
       run: (data) => {
-        delete data.aeroClones;
         delete data.clonesActive;
-        delete data.cloneSpots;
-        delete data.thunderClones;
         delete data.seenThunder;
+        data.isQuadrantSafe = { NW: true, NE: true, SW: true, SE: true };
       },
     },
     {
@@ -407,7 +404,7 @@ const triggerSet: TriggerSet<Data> = {
       // Because of this, we need only see one entity use a 21 log line and we can find the rest.
       id: 'SophiaEX Quasar Setup',
       type: 'Ability',
-      netRegex: { id: '19A[89]' },
+      netRegex: { id: ['19A8', '19A9'] },
       condition: (data) => !data.scaleSophias,
       // We *really* shouldn't have to suppress this...
       suppressSeconds: 5,

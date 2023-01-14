@@ -50,7 +50,7 @@ const triggerSet: TriggerSet<Data> = {
       alarmText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Kill Storm of Words or die',
+          en: '폭풍 잡아욧',
           de: 'Wörtersturm besiegen',
           fr: 'Tuez Tempête de mots ou mourrez',
           cn: '击杀言语风暴!',

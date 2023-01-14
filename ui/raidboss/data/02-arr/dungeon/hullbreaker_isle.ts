@@ -21,7 +21,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Shake Banana tree',
+          en: '바나나 나무 흔들어요',
           de: 'Bananenbaum schütteln',
           fr: 'Secouez le bananier',
           cn: '摇晃香蕉树',

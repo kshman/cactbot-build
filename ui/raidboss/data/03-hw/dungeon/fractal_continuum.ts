@@ -61,7 +61,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Use a cage',
+          en: '키마이라 배양기 켜요',
           de: 'Benutze einen Käfig',
           fr: 'Utilisez un incubateur',
           ja: 'キメラ培養器を使う',
@@ -78,7 +78,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Cleanse bomb',
+          en: '에스나: 폭탄 해제',
           de: 'Reinige Bomben-Debuff',
           fr: 'Guérison => Debuff bombe',
           ja: 'エスナ：魔科学爆弾',

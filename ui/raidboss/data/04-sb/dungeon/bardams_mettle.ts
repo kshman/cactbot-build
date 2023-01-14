@@ -29,7 +29,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Run Away From Boss',
+          en: '보스에게서 멀어져욧',
           de: 'Renn weg vom Boss',
           fr: 'Courez loin du boss',
           ja: 'ボスから離れる',
@@ -69,7 +69,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Stand in a tower',
+          en: '타워 밟아요',
           de: 'Im Turm stehen',
           fr: 'Placez-vous dans une tour',
           ja: '塔を踏む',
@@ -88,7 +88,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '8x puddles on YOU',
+          en: '내게 8x 장판',
           de: '8x Fläche auf DIR',
           fr: '8x Zones au sol sur VOUS',
           ja: '8つ波動砲',
@@ -105,7 +105,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Hide behind boulder',
+          en: '메테오 뒤에 숨어요',
           de: 'Hinter dem Brocken verstecken',
           fr: 'Cachez-vous derrière le rocher',
           ja: 'メテオの後ろに',
@@ -141,7 +141,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Knockback Laser on YOU',
+          en: '내게 넉백 레이저',
           de: 'Rückstoß-Laser auf DIR',
           fr: 'Poussée laser sur VOUS',
           ja: '自分にノックバック',
@@ -158,7 +158,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Avoid Laser',
+          en: '레이저 피해요',
           de: 'Laser ausweichen',
           fr: 'Évitez le laser',
           ja: 'ノックバックレーザーを避ける',

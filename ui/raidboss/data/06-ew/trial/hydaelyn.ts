@@ -15,7 +15,7 @@ export interface Data extends RaidbossData {
 const storedMechanicsOutputStrings = {
   spread: Outputs.spread,
   stack: {
-    en: 'Party Stack',
+    en: '모두 뭉쳐요',
     de: 'Mit der Party sammeln',
     fr: 'Package en groupe',
     ja: '全員集合',
@@ -27,7 +27,7 @@ const storedMechanicsOutputStrings = {
 const crystallizeOutputStrings = {
   ...storedMechanicsOutputStrings,
   crystallize: {
-    en: 'Crystallize: ${name}',
+    en: '크리스탈라이즈: ${name}',
     de: 'Kristalisieren: ${name}',
     fr: 'Cristallisation : ${name}',
     ja: 'クリスタライズ: ${name}',
@@ -113,7 +113,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         ...comboOutputStrings,
         intercards: {
-          en: 'Intercards',
+          en: '비스듬히',
           de: 'Interkardinal',
           fr: 'Intercardinal',
           ja: '斜めへ',
@@ -228,7 +228,7 @@ const triggerSet: TriggerSet<Data> = {
       run: (data) => delete data.crystallize,
       outputStrings: {
         avoid: {
-          en: 'Avoid Line Ends',
+          en: '선 끝자락 피해요',
           de: 'Weiche den Enden der Linien aus',
           fr: 'Évitez les fins de lignes',
           ja: '線の端から離れる',
@@ -244,7 +244,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Stack 5x',
+          en: '5x 뭉쳐 맞아요',
           de: '5x Sammeln',
           fr: '5x Packages',
           ja: '頭割り５回',

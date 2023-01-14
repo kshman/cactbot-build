@@ -26,7 +26,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Found clouded gather point',
+          en: '클라우드 게더 포인트가 있어요!',
           de: 'Verhüllte Sammlerstelle gefunden',
           fr: 'Point de récolte évanescent détecté',
           ja: '幻の採集場探したよ！',
@@ -42,7 +42,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Check coordinate on chat',
+          en: '채팅 좌표를 봐보세요',
           de: 'Überprüfe die Koordinaten im Chat',
           fr: 'Vérifier les coordonnées sur le Tchat',
           ja: 'チャットに座標を確認',
@@ -83,7 +83,7 @@ const triggerSet: TriggerSet<Data> = {
       'locale': 'cn',
       'missingTranslations': true,
       'replaceSync': {
-        '7 minutes have elapsed since your last activity.': '已经7分钟没有进行任何操作',
+        '7 minutes have elapsed since your last activity..*?': '已经7分钟没有进行任何操作',
         'The Diadem': '云冠群岛',
       },
     },

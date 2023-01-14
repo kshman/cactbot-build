@@ -55,7 +55,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (data, matches, output) => output.text!({ player: data.ShortName(matches.target) }),
       outputStrings: {
         text: {
-          en: 'Free ${player}',
+          en: '얼음 감옥: ${player}',
           de: 'Befreie ${player}',
           fr: 'Libérez ${player}',
           ja: '${player}を救う',

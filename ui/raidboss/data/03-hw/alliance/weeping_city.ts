@@ -29,7 +29,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Stand on webs',
+          en: '거미망 위로',
           de: 'Auf den Spinnennetzen stehen',
           fr: 'Placez-vous dans les toiles',
           ja: 'アンキレーウェブに入る',
@@ -45,7 +45,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Get Puddles',
+          en: '바닥 밟아요',
           de: 'Flächen nehmen',
           fr: 'Allez dans les zones au sol',
           ja: '踏む',
@@ -138,7 +138,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Drop Web Outside',
+          en: '거미망을 바깥쪽에 버려요',
           de: 'Spinnennetz draußen ablegen',
           fr: 'Déposez les toiles à l\'extérieur',
           ja: 'ウェブを外周に捨てる',
@@ -162,7 +162,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Puddles on YOU',
+          en: '내게 장판이',
           de: 'Pfützen auf DIR',
           fr: 'Zones au sol sur VOUS',
           ja: '自分に床範囲',
@@ -199,7 +199,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Stand in one puddle',
+          en: '바닥 하나만 밟아요',
           de: 'In einer Fläche stehen',
           fr: 'Placez-vous dans une zone au sol',
           ja: '範囲に入る',
@@ -216,7 +216,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Drop meteor back or left',
+          en: '메테오, 뒤🡻나 왼쪽🡸에 버려요',
           de: 'Meteor hinten oder links ablegen',
           fr: 'Déposez le météore derrière ou à gauche',
           ja: 'メテオ、後ろや左に置く',
@@ -234,7 +234,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Get off rectangle platform',
+          en: '복도로 도망가요!',
           de: 'Von der plattform runter gehen',
           fr: 'Descendez de la plateforme rectangle',
           ja: '通路で回避',
@@ -268,7 +268,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         tankLasers: {
-          en: 'Tank lasers--Avoid party',
+          en: '탱크 레이저, 왼쪽🡸에 서욧',
           de: 'Tank lasers--Weg von der Party',
           fr: 'Tank lasers - Évitez le groupe',
           ja: 'タンクレーザー - 外に',
@@ -276,7 +276,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '탱커 레이저-- 파티원 피하기',
         },
         avoidTanks: {
-          en: 'Avoid tanks',
+          en: '탱크 레이저, 오른쪽🡺으로 피해요',
           de: 'Weg von den Tanks',
           fr: 'Évitez les tanks',
           ja: 'タンクから離れる',
@@ -295,7 +295,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Get orbs',
+          en: '구슬을 몸으로',
           de: 'Kugeln nehmen',
           fr: 'Prenez les orbes',
           ja: '玉を取る',
@@ -352,7 +352,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Close to axes, avoid bulbs',
+          en: '도끼🪓는 붙고, 동글이ꔫ는 피하고',
           de: 'Nahe den Äxten, vermeide Knospen',
           fr: 'Restez proche des haches, évitez les bulbes',
           ja: '刃物の髪に近づき、丸い髪から離れる',
@@ -369,7 +369,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Avoid scythe line AoEs',
+          en: '벽에서 오는 선형 AOE 피해요',
           de: 'Weiche den Sensen AOEs aus',
           fr: 'Évitez les AoEs en lignes des faux',
           ja: '十字AoE',
@@ -387,7 +387,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Avoid purple circles',
+          en: '보라색🟣 피해요',
           de: 'Vermeide die lilanen Flächen',
           fr: 'Évitez les cercles violets',
           ja: '紫の円範囲を避ける',
@@ -418,7 +418,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         skyLaserOnYou: {
-          en: '16x Sky Laser on YOU!',
+          en: '내게 16x 스카이 레이저가!',
           de: '16x Himmelslaser auf DIR!',
           fr: '16x Lasers du ciel sur VOUS',
           ja: '自分に16連撃潜地式波動砲！',
@@ -426,7 +426,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '16 추적 레이저 대상자',
         },
         avoidSkyLasers: {
-          en: 'Avoid Sky Lasers',
+          en: '스카이 레이저 피해요',
           de: 'Himmelslaser ausweichen',
           fr: 'Évitez les lasers du ciel',
           ja: '潜地式波動砲を避ける',
