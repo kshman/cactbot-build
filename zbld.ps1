@@ -106,11 +106,11 @@ try {
   }
 
   ''
-  $yn = New-QuestionYesNo "실행 할까요? (runas 뜰수도 이씀)"
-  if ($yn -eq $TRUE) {
-    $actexe = "$act\Advanced Combat Tracker.exe"
-    Start-Process -FilePath $actexe -Verb runAs
-  }
+#  $yn = New-QuestionYesNo "실행 할까요? (runas 뜰수도 이씀)"
+#  if ($yn -eq $TRUE) {
+#    $actexe = "$act\Advanced Combat Tracker.exe"
+#    Start-Process -FilePath $actexe -Verb runAs
+#  }
 
   ''
   'ㅇㅋ 끝나쓰요!!!'
