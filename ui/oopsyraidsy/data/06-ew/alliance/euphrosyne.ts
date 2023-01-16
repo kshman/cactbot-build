@@ -4,8 +4,6 @@ import { OopsyData } from '../../../../../types/data';
 import { OopsyTriggerSet } from '../../../../../types/oopsy';
 import { playerDamageFields } from '../../../oopsy_common';
 
-// TODO: What is Halone Glacial Spear Cheimon rotation?
-
 export type Data = OopsyData;
 
 const triggerSet: OopsyTriggerSet<Data> = {
@@ -48,17 +46,24 @@ const triggerSet: OopsyTriggerSet<Data> = {
     'Euphrosyne Halone Will of the Fury 4': '7D61', // expanding ring
     'Euphrosyne Halone Will of the Fury 5': '7D62', // expanding ring
     'Euphrosyne Halone Glacial Spear Niphas': '7D69', // centered circle on spears
+    'Euphrosyne Halone Glacial Spear Cheimon 1': '7D6C', // initial rotating lines
+    'Euphrosyne Halone Glacial Spear Cheimon 2': '7D6D', // ongoing rotating lines
 
     'Eurphosyne Menphina First Blush': '7BBC', // getting hit by the Full Bright moon
     'Euphrosyne Menphina Midnight Frost 1': '7BCD', // 180 cleave
     'Euphrosyne Menphina Midnight Frost 2': '7BDD', // 180 cleave
-    'Euphrosyne Menphina Midnight Frost 3': '7BDE', // 180 cleave
-    'Euphrosyne Menphina Midnight Frost 4': '7BEA', // 180 cleave
+    'Euphrosyne Menphina Midnight Frost 3': '7BD1', // 180 cleave
+    'Euphrosyne Menphina Midnight Frost 4': '7BD2', // 180 cleave
+    'Euphrosyne Menphina Midnight Frost 5': '7BDD', // 180 cleave
+    'Euphrosyne Menphina Midnight Frost 6': '7BDE', // 180 cleave
+    'Euphrosyne Menphina Midnight Frost 7': '7BEA', // 180 cleave
+    'Euphrosyne Menphina Midnight Frost 8': '7BEB', // 180 cleave
     'Euphrosyne Menphina Lover\'s Bridge': '7BBD', // getting hit by Full Bright moon (4x)
     'Euphrosyne Menphina Silver Mirror': '7BF6', // 3x sets of ground aoes on everyone
     'Euphrosyne Menphina Moonset': '7BC9', // 3x large circle jumps
     'Euphrosyne Menphina Winter Halo 1': '7BC7', // donut
     'Euphrosyne Menphina Winter Halo 2': '7BEC', // donut during Playful Orbit
+    'Euphrosyne Menphina Winter Halo 3': '7BDF', // donut in second phase, not in Playful Orbit?
     'Euphrosyne Menphina Ice Sprite Ancient Blizzard': '8066', // long conal during add phase
     'Euphrosyne Menphina Waxing Claw 1': '7BE0', // 180 cleave from dog
     'Euphrosyne Menphina Waxing Claw 2': '7BE1', // 180 cleave from dog
@@ -101,6 +106,23 @@ const triggerSet: OopsyTriggerSet<Data> = {
       id: 'Euphrosyne Althyk Inexorable Pull',
       type: 'Ability',
       netRegex: NetRegexes.ability({ id: '7A43', ...playerDamageFields }),
+      condition: (data, matches) => data.DamageFromMatches(matches) > 0,
+      mistake: (_data, matches) => {
+        return {
+          type: 'warn',
+          blame: matches.target,
+          reportId: matches.targetId,
+          text: matches.ability,
+        };
+      },
+    },
+    {
+      // No damage if looking towards/away.
+      id: 'Euphrosyne Althyk Spinner\'s Wheel Arcane Attraction',
+      type: 'Ability',
+      // 7A54 = Spinner's Wheel damage for Arcane Attraction
+      // 7A55 = Spinner's Wheel damage for Attraction Reversed
+      netRegex: NetRegexes.ability({ id: ['7A54', '7A55'], ...playerDamageFields }),
       condition: (data, matches) => data.DamageFromMatches(matches) > 0,
       mistake: (_data, matches) => {
         return {
