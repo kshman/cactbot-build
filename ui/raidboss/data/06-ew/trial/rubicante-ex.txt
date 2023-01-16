@@ -1,6 +1,5 @@
 ### Mount Ordeals (Extreme)
 # -ii 7F6D 7EFA 7CBF 7CC0 8025
-# 7F6D AA
 
 hideall "--Reset--"
 hideall "--sync--"
@@ -14,10 +13,10 @@ hideall "--sync--"
 17.5 "Hope Abandon Ye" sync / 1[56]:[^:]*:Rubicante:7F27:/
 26.9 "Arcane Revelation" sync / 1[56]:[^:]*:Rubicante:7CBE:/
 35.0 "Ninth Circle" sync / 1[56]:[^:]*:Rubicante:8022:/
-49.1 "Ordeal of Purgation" sync / 1[56]:[^:]*:Rubicante:80E9:/
+49.1 "Ordeal of Purgation #1" sync / 1[56]:[^:]*:Rubicante:80E9:/
 57.1 "Fiery Expiation" #sync / 1[56]:[^:]*:Circle of Purgatory:(7CEF|7CF0):/
 61.1 "Ninth Circle" sync / 1[56]:[^:]*:Rubicante:8022:/
-75.5 "Ordeal of Purgation" sync / 1[56]:[^:]*:Rubicante:80E9:/
+75.5 "Ordeal of Purgation #2" sync / 1[56]:[^:]*:Rubicante:80E9:/
 83.5 "Fiery Expiation" #sync / 1[56]:[^:]*:Circle of Purgatory:7CF0:/
 87.5 "--sync--" sync / 1[56]:[^:]*:Rubicante:7F6D:/
 90.5 "--sync--" sync / 1[56]:[^:]*:Rubicante:7F6D:/
@@ -54,10 +53,10 @@ hideall "--sync--"
 157.3 "Hope Abandon Ye" sync / 1[56]:[^:]*:Rubicante:7F27:/
 166.7 "Arcane Revelation" sync / 1[56]:[^:]*:Rubicante:7CBE:/
 174.8 "Ninth Circle" sync / 1[56]:[^:]*:Rubicante:8022:/
-189.4 "Ordeal of Purgation" sync / 1[56]:[^:]*:Rubicante:80E9:/
+189.4 "Ordeal of Purgation #3" sync / 1[56]:[^:]*:Rubicante:80E9:/
 197.4 "Fiery Expiation" #sync / 1[56]:[^:]*:Circle of Purgatory:(7CEF|7CF0):/
 201.5 "Ninth Circle" sync / 1[56]:[^:]*:Rubicante:8022:/
-215.8 "Ordeal of Purgation" sync / 1[56]:[^:]*:Rubicante:80E9:/
+215.8 "Ordeal of Purgation #4" sync / 1[56]:[^:]*:Rubicante:80E9:/
 223.8 "Fiery Expiation" #sync / 1[56]:[^:]*:Circle of Purgatory:(7CEF|7CF0):/
 227.8 "--sync--" sync / 1[56]:[^:]*:Rubicante:7F6D:/
 228.9 "--sync--" sync / 1[56]:[^:]*:Rubicante:7CBC:/
@@ -103,10 +102,10 @@ hideall "--sync--"
 614.4 "Hope Abandon Ye" sync / 1[56]:[^:]*:Rubicante:7F27:/
 623.8 "Arcane Revelation" sync / 1[56]:[^:]*:Rubicante:7CBE:/
 631.9 "Ninth Circle" sync / 1[56]:[^:]*:Rubicante:8022:/
-646.9 "Ordeal of Purgation" sync / 1[56]:[^:]*:Rubicante:80E9:/
+646.9 "Ordeal of Purgation #5" sync / 1[56]:[^:]*:Rubicante:80E9:/
 654.9 "Fiery Expiation" #sync / 1[56]:[^:]*:Circle of Purgatory:(7CEF|7CF0):/
 659.0 "Ninth Circle" sync / 1[56]:[^:]*:Rubicante:8022:/
-673.8 "Ordeal of Purgation" sync / 1[56]:[^:]*:Rubicante:80E9:/
+673.8 "Ordeal of Purgation #6" sync / 1[56]:[^:]*:Rubicante:80E9:/
 681.8 "Fiery Expiation" #sync / 1[56]:[^:]*:Circle of Purgatory:7CF0:/ # 7CEF가 따라옴
 685.8 "--sync--" sync / 1[56]:[^:]*:Rubicante:7F6D:/
 690.8 "Inferno" sync / 1[56]:[^:]*:Rubicante:7D2C:/ window 5,5
@@ -114,7 +113,27 @@ hideall "--sync--"
 
 # 또 변신
 708.0 "Flamespire Claw" sync / 1[56]:[^:]*:Rubicante:7D28:/ window 1000,10
-708.2 "Flamespire Claw x8" duration 17  #sync / 1[56]:[^:]*:Rubicante:7D29:/
-720.1 "Flamespire" sync / 1[56]:[^:]*:Rubicante:7D2A:/
+708.2 "Flamespire Claw x8" duration 18  #sync / 1[56]:[^:]*:Rubicante:7D29:/
+736.6 "Inferno" sync / 1[56]:[^:]*:Rubicante:7D0F:/ window 5,5
+740.7 "--sync--" sync / 1[56]:[^:]*:Rubicante:7CBD:/
+747.7 "Scalding Signal/Ring" sync / 1[56]:[^:]*:Rubicante:(7D24|7D25):/
+748.8 "Scalding Fleet" sync / 1[56]:[^:]*:Rubicante Mirage:7D26:/
+758.5 "Sweeping Immolation" sync / 1[56]:[^:]*:Rubicante:(7D20|7D21):/ window 10,10
+758.9 "Partial Immolation/Total Immolation" sync / 1[56]:[^:]*:Rubicante:(7D22|7D23):/
+764.6 "Explosive Pyre" sync / 1[56]:[^:]*:Rubicante:7D11:/
+772.6 "Dualfire" sync / 1[56]:[^:]*:Rubicante:7D2E:/
+773.5 "--sync--" sync / 1[56]:[^:]*:Rubicante:7D2F:/ # Dualfire
 
-# 이담엔 모르겟당
+# 돌아오능가
+781.8 "--sync--" sync / 1[56]:[^:]*:Rubicante:7F6D:/ window 5,5
+785.2 "Hope Abandon Ye" sync / 1[56]:[^:]*:Rubicante:7F27:/
+794.6 "Arcane Revelation" sync / 1[56]:[^:]*:Rubicante:7CBE:/
+802.7 "Ninth Circle" sync / 1[56]:[^:]*:Rubicante:8022:/
+817.3 "Ordeal of Purgation #7" sync / 1[56]:[^:]*:Rubicante:80E9:/
+825.3 "Fiery Expiation" #sync / 1[56]:[^:]*:Circle of Purgatory:7CEF:/
+829.3 "Ninth Circle" sync / 1[56]:[^:]*:Rubicante:8022:/
+843.6 "Ordeal of Purgation #8" sync / 1[56]:[^:]*:Rubicante:80E9:/
+851.6 "Fiery Expiation" #sync / 1[56]:[^:]*:Circle of Purgatory:7CF0:/
+
+# ENRAGE!
+873.0 "Inferno (ENRAGE)" sync / 1[56]:[^:]*:Rubicante:7D2B:/

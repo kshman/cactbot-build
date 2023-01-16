@@ -337,6 +337,14 @@ const triggerSet: TriggerSet<Data> = {
       'replaceText': {
         'Spike of Flame/Fourfold Flame/Twinfold Flame': 'Frames',
         'Partial Immolation/Total Immolation': 'Partial/Total Immolation',
+        'Ordeal of Purgation': 'Ordeal',
+      },
+    },
+    {
+      'locale': 'ja',
+      'replaceSync': {
+        'Rubicante': 'ルビカンテ',
+        'Flamesent': '業炎妖',
       },
     },
   ],
