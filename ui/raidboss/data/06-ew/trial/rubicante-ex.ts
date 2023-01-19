@@ -200,6 +200,8 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: '탱크 줄!',
+          de: 'Tank Verbindungen',
+          ja: 'タンク線取り',
         },
       },
     },
@@ -237,9 +239,13 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         outFlareThenSpread: {
           en: '⊗밖으로+플레어 => 흩어져요',
+          de: 'Raus+Flare => Verteilen',
+          ja: '外側＋フレア => 散会',
         },
         inStackThenSpread: {
           en: '⊙안으로+뭉쳤다 => 흩어져요',
+          de: 'Rein+Sammeln => Verteilen',
+          ja: '内側＋頭割り => 散会',
         },
       },
     },
@@ -318,6 +324,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         spreadBehind: {
           en: '보스 뒤에서 흩어져요!',
+          de: 'Hinter dem Boss verteilen',
           ja: 'ボスの後ろで散会',
         },
       },
@@ -330,6 +337,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         stackBehind: {
           en: '보스 뒤에서 뭉쳐요!',
+          de: 'Hinter dem Boss sammeln',
           ja: 'ボスの後ろで頭割り',
         },
       },
@@ -366,9 +374,13 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         tankBusterCleaves: {
           en: '탱크에게 클레브',
+          de: 'Tankbuster Cleaves',
+          ja: 'MT・ST同時範囲攻撃',
         },
         avoidTankCleaves: {
           en: '탱크 클레브! 피해요',
+          de: 'Tankbuster Cleaves ausweichen',
+          ja: '範囲攻撃を避けて',
         },
       },
     },
@@ -422,12 +434,14 @@ const triggerSet: TriggerSet<Data> = {
           en: '내가 ${num}번',
           de: '#${num}',
           fr: '#${num}',
-          ja: '自分: ${num}番',
+          ja: '${num}番',
           cn: '#${num}',
           ko: '${num}번째',
         },
         numGetTether: {
           en: '${num}번 (줄 받으러 가요)',
+          de: '#${num} (Verbindung nehmen)',
+          ja: '${num}番 (線取りに行く)',
         },
       },
     },
@@ -466,6 +480,8 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         getTether: {
           en: '줄 받으러 가요',
+          de: 'Verbindung nehmen',
+          ja: '線取りに行く',
         },
       },
     },
@@ -488,9 +504,13 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         cardinals: {
           en: '십자로',
+          de: 'Kardinal',
+          ja: '十字回避',
         },
         intercards: {
           en: '비스듬하게',
+          de: 'Interkardinal',
+          ja: '斜めへ',
         },
       },
     },

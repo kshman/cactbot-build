@@ -24,12 +24,14 @@ const agononOutputStrings = {
   spawn: {
     en: '${name} 나타났어요!',
     de: '${name} erscheint!',
+    ja: '${name} 現れる！',
     cn: '已生成 ${name}!',
     ko: '${name} 등장!',
   },
   adds: {
     en: '곧 쫄 나와요',
     de: 'Bald Adds',
+    ja: 'まもなくザコ出ます',
     cn: '小怪即将出现',
     ko: '곧 쫄 나옴',
   },
@@ -68,7 +70,9 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Gymnasiou Mandragorai spawned, kill in order!',
+          en: '만드라고라! 순서대로 잡아요!',
+          de: 'Gymnasiou-Mandragorai erscheinen, in Reihenfolge besiegen!',
+          ja: 'マンドラゴラ！順番に倒して！',
         },
       },
     },
@@ -264,6 +268,8 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Verdant Plume 밑으로',
+          de: 'Geh unter die blaue Feder',
+          ja: '濃緑の羽根の下へ',
         },
       },
     },
@@ -423,24 +429,28 @@ const triggerSet: TriggerSet<Data> = {
         forward: {
           en: '강제이동: 앞',
           de: 'marschiere Vorwärts in die sichere Stelle',
+          ja: '強制移動: 前',
           cn: '向前强制移动到安全区',
           ko: '강제 이동 앞',
         },
         backward: {
           en: '강제이동: 뒤',
           de: 'marschiere Rückwärts in die sichere Stelle',
+          ja: '強制移動: 後ろ',
           cn: '向后强制移动到安全区',
           ko: '강제 이동 뒤',
         },
         left: {
           en: '강제이동: 왼쪽',
           de: 'marschiere Links in die sichere Stelle',
+          ja: '強制移動: 左',
           cn: '向左强制移动到安全区',
           ko: '강제 이동 왼쪽',
         },
         right: {
           en: '강제이동: 오른쪽',
           de: 'marschiere Rechts in die sichere Stelle',
+          ja: '強制移動: 右',
           cn: '向右强制移动到安全区',
           ko: '강제 이동 오른쪽',
         },
@@ -463,6 +473,59 @@ const triggerSet: TriggerSet<Data> = {
     // Phaethon: Flare - two? flare markers on random? players
     // Phaethon: Flame Burst - tankbuster
     // Phaethon: Eruption - aoe under random players?
+  ],
+  timelineReplace: [
+    {
+      'locale': 'de',
+      'replaceSync': {
+        'Gymnasiou Acheloios': 'Gymnasiou-Acheloios',
+        'Gymnasiou Leon': 'Gymnasiou-Leon',
+        'Gymnasiou Mandragoras': 'Gymnasiou-Mandragora',
+        'Gymnasiou Meganereis': 'Gymnasiou-Meganereis',
+        'Gymnasiou Satyros': 'Gymnasiou-Satyros',
+        'Gymnasiou Sphinx': 'Gymnasiou-Sphinx',
+        'Gymnasiou Tigris': 'Gymnasiou-Tigris',
+        'Gymnasiou Triton': 'Gymnasiou-Triton',
+        'Lampas Chrysine': 'Lampas Chrysine',
+        'Lyssa Chrysine': 'Lyssa Chrysine',
+        'Narkissos': 'Narkissos',
+        'Verdant Plume': 'blau(?:e|er|es|en) Feder',
+      },
+    },
+    {
+      'locale': 'fr',
+      'replaceSync': {
+        'Gymnasiou Acheloios': 'gymnasiou achéloios',
+        'Gymnasiou Leon': 'gymnasiou léon',
+        'Gymnasiou Mandragoras': 'gymnasiou mandragoras',
+        'Gymnasiou Meganereis': 'gymnasiou méganéréis',
+        'Gymnasiou Satyros': 'gymnasiou satyros',
+        'Gymnasiou Sphinx': 'gymnasiou sphinx',
+        'Gymnasiou Tigris': 'gymnasiou tigris',
+        'Gymnasiou Triton': 'gymnasiou triton',
+        'Lampas Chrysine': 'lampas chrysine',
+        'Lyssa Chrysine': 'lyssa chrysine',
+        'Narkissos': 'Narcisse',
+        'Verdant Plume': 'plume vert foncé',
+      },
+    },
+    {
+      'locale': 'ja',
+      'replaceSync': {
+        'Gymnasiou Acheloios': 'ギュムナシオー・アケローオス',
+        'Gymnasiou Leon': 'ギュムナシオー・レオン',
+        'Gymnasiou Mandragoras': 'ギュムナシオー・マンドラゴラ',
+        'Gymnasiou Meganereis': 'ギュムナシオー・メガネレイス',
+        'Gymnasiou Satyros': 'ギュムナシオー・サテュロス',
+        'Gymnasiou Sphinx': 'ギュムナシオー・スフィンクス',
+        'Gymnasiou Tigris': 'ギュムナシオー・ティグリス',
+        'Gymnasiou Triton': 'ギュムナシオー・トリトン',
+        'Lampas Chrysine': 'クリュシネ・ランパス',
+        'Lyssa Chrysine': 'クリュシネ・リッサ',
+        'Narkissos': 'ナルキッソス',
+        'Verdant Plume': '濃緑の羽根',
+      },
+    },
   ],
 };
 

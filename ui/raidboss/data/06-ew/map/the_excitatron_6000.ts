@@ -10,6 +10,7 @@ const excitatronOutputStrings = {
   spawn: {
     en: '나타났어요: ${name}',
     de: '${name} erscheint!',
+    ja: '${name} 現れる！',
     cn: '已生成 ${name}!',
     ko: '${name} 등장!',
   },

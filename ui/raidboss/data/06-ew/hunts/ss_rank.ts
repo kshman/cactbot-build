@@ -20,8 +20,9 @@ const triggerSet: TriggerSet<Data> = {
     ZoneId.UltimaThule,
   ],
   zoneLabel: {
-    en: 'SS Rank Hunts',
+    en: 'SS 몹',
     de: 'SS Jagdziele',
+    ja: 'SSモブ',
     cn: 'SS 级狩猎怪',
     ko: 'SS급 마물',
   },
