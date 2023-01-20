@@ -9,7 +9,7 @@ read yn
 
 if [ "${yn}" == "y" ] || [ "${yn}" == "0" ] ; then
   echo ㅇㅋ 빌드고!
-  npm run build
+  npm run build --prefix ..
   echo 빌드가 성공했을까요...
 else
 	echo 알겠습니다. 빌드 안합니다
@@ -32,8 +32,8 @@ rm -rf /mnt/d/FF14/act/plugins/cactbot/util
 rm -f /mnt/d/FF14/act/plugins/cactbot/*.js
 rm -f /mnt/d/FF14/act/plugins/cactbot/*.dll
 
-cp ./bin/x64/Release/Cactbot*.dll /mnt/d/FF14/act/plugins/cactbot/
-cp -R ./dist/* /mnt/d/FF14/act/plugins/cactbot/
+cp ../bin/x64/Release/Cactbot*.dll /mnt/d/FF14/act/plugins/cactbot/
+cp -R ../dist/* /mnt/d/FF14/act/plugins/cactbot/
 
 # 끗
 echo
