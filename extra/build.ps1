@@ -60,7 +60,7 @@ try {
     }
     else {
       $ENV:PATH = "$vspath\MSBuild\Current\Bin;${ENV:PATH}";
-      msbuild -p:Configuration=Release -p:Platform=x64 "plugin\Cactbot.sln" -t:rebuild
+      msbuild -p:Configuration=Release -p:Platform=x64 "..\plugin\Cactbot.sln" -t:rebuild
       if (-not $?) {
         Get-LineWithMesg "엇.... msbuild 오류가 있네요"
         exit 1
@@ -72,8 +72,8 @@ try {
   ''
   $npmbuild = New-QuestionYesNo "NPM 빌드 할거임?"
   if ($npmbuild -eq $TRUE) {
-    Get-ChildItem .\dist\* | Remove-Item -Recurse
-    npm run build
+    Get-ChildItem ..\dist\* | Remove-Item -Recurse
+    npm run build --prefix ..
     if (-not $?) {
       Get-LineWithMesg "엇.... npm 오류가 있네요"
       exit 1
@@ -88,7 +88,7 @@ try {
       if ($dllbuild -eq $TRUE) {
         '플러그인 복사'
         Remove-Item "$dest\*.dll"
-        Copy-Item ".\bin\x64\Release\Cactbot*.dll" -Destination "$dest" -Force
+        Copy-Item "..\bin\x64\Release\Cactbot*.dll" -Destination "$dest" -Force
       }
 
       # 데이터 복사
@@ -100,7 +100,7 @@ try {
         Remove-Directory "$dest\util"
         Remove-Directory "$dest\zh"
         Remove-Item "$dest\*.js"
-        Copy-Item ".\dist\*" -Destination "$dest" -Recurse -Force
+        Copy-Item "..\dist\*" -Destination "$dest" -Recurse -Force
       }
     }
   }

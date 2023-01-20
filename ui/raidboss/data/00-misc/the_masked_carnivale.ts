@@ -868,24 +868,28 @@ const triggerSet: TriggerSet<Data> = {
         forward: {
           en: '강제 이동으로 안전지대: 앞',
           de: 'marschiere Vorwärts in die sichere Stelle',
+          ja: '強制移動: 前',
           cn: '向前强制移动到安全区',
           ko: '강제 이동 앞',
         },
         backward: {
           en: '강제 이동으로 안전지대: 뒤',
           de: 'marschiere Rückwärts in die sichere Stelle',
+          ja: '強制移動: 後ろ',
           cn: '向后强制移动到安全区',
           ko: '강제 이동 뒤',
         },
         left: {
           en: '강제 이동으로 안전지대: 왼쪽',
           de: 'marschiere Links in die sichere Stelle',
+          ja: '強制移動: 左',
           cn: '向左强制移动到安全区',
           ko: '강제 이동 왼쪽',
         },
         right: {
           en: '강제 이동으로 안전지대: 오른쪽',
           de: 'marschiere Rechts in die sichere Stelle',
+          ja: '強制移動: 右',
           cn: '向右强制移动到安全区',
           ko: '강제 이동 오른쪽',
         },

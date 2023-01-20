@@ -1,139 +1,140 @@
-### Mount Ordeals (Extreme)
-# -ii 7F6D 7EFA 7CBF 7CC0 8025
+### Rubicante Extreme
+
+# -ii 7F6D 7CBF 8025 8022 8CBE 7D0C 8024 7CFA 7CFC 7E73 7CFF 7EFA 7EFB 7CC0 7D10 7D2F 7D1A 7D1B 7D1E 7D1F
+# -it "Rubicante"
+# -p 7D2C:12 7D05:232.7 7D06:1000
 
 hideall "--Reset--"
 hideall "--sync--"
+hideall "Infernal Slaughter"
 
-0.0 "--Reset--" sync / 21:........:4000000F:/ window 100000 jump 0
+0.0 "--Reset--" sync / 21:........:40000010:/ window 100000 jump 0
 
-# 시작
-0.0 "--sync--" sync /Engage!/ window 0,1
-1.0 "--sync--" sync / 1[56]:[^:]*:Rubicante:7F6D:/ window 1.0,2
-12.1 "Inferno" sync / 1[56]:[^:]*:Rubicante:7D2C:/ window 5,5
-17.5 "Hope Abandon Ye" sync / 1[56]:[^:]*:Rubicante:7F27:/
-26.9 "Arcane Revelation" sync / 1[56]:[^:]*:Rubicante:7CBE:/
-35.0 "Ninth Circle" sync / 1[56]:[^:]*:Rubicante:8022:/
-49.1 "Ordeal of Purgation #1" sync / 1[56]:[^:]*:Rubicante:80E9:/
-57.1 "Fiery Expiation" #sync / 1[56]:[^:]*:Circle of Purgatory:(7CEF|7CF0):/
-61.1 "Ninth Circle" sync / 1[56]:[^:]*:Rubicante:8022:/
-75.5 "Ordeal of Purgation #2" sync / 1[56]:[^:]*:Rubicante:80E9:/
-83.5 "Fiery Expiation" #sync / 1[56]:[^:]*:Circle of Purgatory:7CF0:/
-87.5 "--sync--" sync / 1[56]:[^:]*:Rubicante:7F6D:/
-90.5 "--sync--" sync / 1[56]:[^:]*:Rubicante:7F6D:/
-97.5 "Shattering Heat" sync / 1[56]:[^:]*:Rubicante:7D2D:/ window 10,10
-101.5 "--sync--" sync / 1[56]:[^:]*:Rubicante:7F6D:/
-104.5 "--sync--" sync / 1[56]:[^:]*:Rubicante:7F6D:/
+#0.0 "--sync--" sync /Engage!/ window 0,1
+0.8 "--sync--" sync / 1[56]:[^:]*:Rubicante:7F6D:/ window 1,0 # Opening autoattack
+7.0 "--sync--" sync / 14:[^:]*:Rubicante:7D2C:/ window 10,20
+12.0 "Inferno (aoe)" sync / 1[56]:[^:]*:Rubicante:7D2C:/
 
-112.6 "Arch Inferno" sync / 1[56]:[^:]*:Rubicante:7CF9:/
-112.6 "Inferno Devil" #sync / 1[56]:[^:]*:Rubicante:7CFB:/
-115.6 "Infernal Slaughter" #sync / 1[56]:[^:]*:Rubicante:7D00:/
-116.5 "Arch Inferno x2" duration 2 #sync / 1[56]:[^:]*:Rubicante:7CFA:/
-116.5 "Inferno Devil x2" duration 2 #sync / 1[56]:[^:]*:Rubicante:7CFC:/
-119.3 "--sync--" sync / 1[56]:[^:]*:Rubicante:7F6D:/
-119.7 "Arch Inferno x2" duration 2 #sync / 1[56]:[^:]*:Rubicante:7CFA:/
-120.5 "Inferno Devil" #sync / 1[56]:[^:]*:Rubicante:7CFC:/
-121.5 "Spike of Flame/Fourfold Flame/Twinfold Flame" #sync / 1[56]:[^:]*:Rubicante:(7D02|7D03|7D04):/
-121.9 "Arch Inferno x3" duration 4 #sync / 1[56]:[^:]*:Rubicante:7CFA:/
-122.6 "Inferno Devil x2" duration 3 #sync / 1[56]:[^:]*:Rubicante:7CFC:/
-125.9 "Conflagration" sync / 1[56]:[^:]*:Rubicante:7CFD:/ window 10,10
-126.1 "Arch Inferno x5" duration 5 #sync / 1[56]:[^:]*:Rubicante:7CFA:/
-126.4 "Inferno Devil x3" duration 5 #sync / 1[56]:[^:]*:Rubicante:7CFC:/
-128.0 "--sync--" sync / 1[56]:[^:]*:Rubicante:7F6D:/
-129.1 "Infernal Slaughter" #sync / 1[56]:[^:]*:Rubicante:7D00:/
-130.9 "--sync--" sync / 1[56]:[^:]*:Rubicante:7F6D:/
-131.3 "Arch Inferno x3" duration 3 #sync / 1[56]:[^:]*:Rubicante:7CFA:/
-132.3 "Inferno Devil x2" duration 2 #sync / 1[56]:[^:]*:Rubicante:7CFC:/
-134.7 "Spike of Flame/Fourfold Flame/Twinfold Flame" #sync / 1[56]:[^:]*:Rubicante:(7D02|7D03|7D04):/
-136.1 "Inferno Devil x2" duration 2 #sync / 1[56]:[^:]*:Rubicante:7CFC:/
-141.9 "Radial Flagration" sync / 1[56]:[^:]*:Rubicante:7CFE:/ window 10,10
-142.8 "Radial Flagration" #sync / 1[56]:[^:]*:Rubicante:7CFF:/
+# Purgation 1 & 2
+15.1 "--middle--" sync / 1[56]:[^:]*:Rubicante:7CBC:/
+17.4 "Hope Abandon Ye" sync / 1[56]:[^:]*:Rubicante:7F27:/
+26.8 "Arcane Revelation" sync / 1[56]:[^:]*:Rubicante:7CBE:/
+49.0 "Ordeal of Purgation 1" sync / 1[56]:[^:]*:Rubicante:80E9:/
+57.0 "Fiery Expiation" sync / 1[56]:[^:]*:Circle of Purgatory:(7CEF|7CF0):/
+75.8 "Ordeal of Purgation 2" sync / 1[56]:[^:]*:Rubicante:80E9:/
+83.8 "Fiery Expiation" sync / 1[56]:[^:]*:Circle of Purgatory:7CF0:/
+97.9 "Shattering Heat" sync / 1[56]:[^:]*:Rubicante:7D2D:/
 
-145.9 "--sync--" sync / 1[56]:[^:]*:Rubicante:7F6D:/
-151.9 "Inferno" sync / 1[56]:[^:]*:Rubicante:7D2C:/ window 5,5
-157.3 "Hope Abandon Ye" sync / 1[56]:[^:]*:Rubicante:7F27:/
-166.7 "Arcane Revelation" sync / 1[56]:[^:]*:Rubicante:7CBE:/
-174.8 "Ninth Circle" sync / 1[56]:[^:]*:Rubicante:8022:/
-189.4 "Ordeal of Purgation #3" sync / 1[56]:[^:]*:Rubicante:80E9:/
-197.4 "Fiery Expiation" #sync / 1[56]:[^:]*:Circle of Purgatory:(7CEF|7CF0):/
-201.5 "Ninth Circle" sync / 1[56]:[^:]*:Rubicante:8022:/
-215.8 "Ordeal of Purgation #4" sync / 1[56]:[^:]*:Rubicante:80E9:/
-223.8 "Fiery Expiation" #sync / 1[56]:[^:]*:Circle of Purgatory:(7CEF|7CF0):/
-227.8 "--sync--" sync / 1[56]:[^:]*:Rubicante:7F6D:/
-228.9 "--sync--" sync / 1[56]:[^:]*:Rubicante:7CBC:/
-231.3 "--sync--" sync / 1[56]:[^:]*:Rubicante:7D05:/
+# Archi Inferno
+105.1 "--middle--" sync / 1[56]:[^:]*:Rubicante:7CBC:/
+113.1 "Arch Inferno" sync / 1[56]:[^:]*:Rubicante:7CF9:/
+113.1 "Inferno Devil x2" sync / 1[56]:[^:]*:Rubicante:7CFB:/ duration 26
+116.2 "Infernal Slaughter" sync / 1[56]:[^:]*:Rubicante:7D00:/
+122.1 "Spike of Flame/Fourfold Flame/Twinfold Flame 1" sync / 1[56]:[^:]*:Rubicante:(7D02|7D03|7D04):/
+126.3 "Conflagration" sync / 1[56]:[^:]*:Rubicante:7CFD:/
+129.4 "Infernal Slaughter" sync / 1[56]:[^:]*:Rubicante:7D00:/
+135.3 "Spike of Flame/Fourfold Flame/Twinfold Flame 2" sync / 1[56]:[^:]*:Rubicante:(7D02|7D03|7D04):/
 
-# 쫄페이즈
-239.4 "Ghastly Flame" sync / 1[56]:[^:]*:Flamesent:7D0C:/ window 1000,10
-243.4 "Ghastly Torch" #sync / 1[56]:[^:]*:Greater Flamesent:7D09:/
-246.4 "Ghastly Wind" #sync / 1[56]:[^:]*:Flamesent:7D0B:/
-249.4 "Ghastly Torch" #sync / 1[56]:[^:]*:Greater Flamesent:7D09:/
-258.3 "Shattering Heat" sync / 1[56]:[^:]*:Flamesent:7D0A:/
+142.5 "Radial Flagration" sync / 1[56]:[^:]*:Rubicante:7CFE:/
+152.6 "Inferno (aoe)" sync / 1[56]:[^:]*:Rubicante:7D2C:/
 
-# 넘어간다
-500.0 "Blazing Rapture" sync / 1[56]:[^:]*:Rubicante:7D06:/ window 1000,10
-509.8 "Blazing Rapture" sync / 1[56]:[^:]*:Rubicante:7D07:/
+# Purgation 3 & 4
+155.7 "--middle--" sync / 1[56]:[^:]*:Rubicante:7CBC:/
+157.9 "Hope Abandon Ye" sync / 1[56]:[^:]*:Rubicante:7F27:/
+167.3 "Arcane Revelation" sync / 1[56]:[^:]*:Rubicante:7CBE:/
+190.3 "Ordeal of Purgation 3" sync / 1[56]:[^:]*:Rubicante:80E9:/
+198.3 "Fiery Expiation" sync / 1[56]:[^:]*:Circle of Purgatory:7CEF:/
+217.2 "Ordeal of Purgation 4" sync / 1[56]:[^:]*:Rubicante:80E9:/
+225.2 "Fiery Expiation" sync / 1[56]:[^:]*:Circle of Purgatory:7CF0:/
+230.3 "--untargetable--"
 
-# 변신
-540.4 "Flamespire Brand" sync / 1[56]:[^:]*:Rubicante:7D13:/ window 1000,20
-548.5 "Flamerake" sync / 1[56]:[^:]*:Rubicante:7D17:/
-#336.5 "Flamerake" sync / 1[56]:[^:]*:Rubicante:7D18:/
-#336.5 "Flamerake" sync / 1[56]:[^:]*:Rubicante Mirage:7D1A:/
-#337.7 "Flamerake" sync / 1[56]:[^:]*:Flamesent:7D1B:/
-#337.7 "Flamerake" sync / 1[56]:[^:]*:Rubicante:7D19:/
-#339.7 "Flamerake" sync / 1[56]:[^:]*:Flamesent:7D1E:/
-#339.7 "Flamerake" sync / 1[56]:[^:]*:Rubicante:7D1C:/
-553.5 "Blooming Welt" sync / 1[56]:[^:]*:Rubicante:7D14:/
-553.5 "Furious Welt" sync / 1[56]:[^:]*:Rubicante:7D15:/
-555.1 "Flamerake" sync / 1[56]:[^:]*:Flamesent:7D1F:/ # 7D1D가 한번 더옴
-556.5 "Stinging Welt" sync / 1[56]:[^:]*:Rubicante:7D16:/
-559.5 "Explosive Pyre" sync / 1[56]:[^:]*:Rubicante:7D11:/
-566.6 "Inferno" sync / 1[56]:[^:]*:Rubicante:7D0F:/ window 5,5
-570.7 "--sync--" sync / 1[56]:[^:]*:Rubicante:7CBD:/
-577.7 "Scalding Signal/Ring" sync / 1[56]:[^:]*:Rubicante:(7D24|7D25):/
-578.8 "Scalding Fleet" sync / 1[56]:[^:]*:Rubicante Mirage:7D26:/
-588.0 "Sweeping Immolation" sync / 1[56]:[^:]*:Rubicante:(7D20|7D21):/ window 10,10
-588.3 "Partial Immolation/Total Immolation" sync / 1[56]:[^:]*:Rubicante:(7D22|7D23):/
-594.0 "Explosive Pyre" sync / 1[56]:[^:]*:Rubicante:7D11:/
-602.0 "Dualfire" sync / 1[56]:[^:]*:Rubicante:7D2E:/
-602.9 "--sync--" sync / 1[56]:[^:]*:Rubicante:7D2F:/ # Dualfire
+# Adds phase
+232.7 "--sync--" sync / 1[56]:[^:]*:Rubicante:7D05:/ window 500,0
+240.8 "Ghastly Flame" sync / 1[56]:[^:]*:Flamesent:7D0D:/
+244.8 "Ghastly Torch" sync / 1[56]:[^:]*:Greater Flamesent:7D09:/
+247.8 "Ghastly Wind" sync / 1[56]:[^:]*:Flamesent:7D0B:/
+250.8 "Ghastly Torch" sync / 1[56]:[^:]*:Greater Flamesent:7D09:/
+259.8 "Shattering Heat" sync / 1[56]:[^:]*:Flamesent:7D0A:/
+270.8 "Ghastly Flame" sync / 1[56]:[^:]*:Flamesent:7D0D:/
+# ???
 
-# 원래대로 돌아옴
-611.1 "--sync--" sync / 1[56]:[^:]*:Rubicante:7F6D:/ window 5,5
-614.4 "Hope Abandon Ye" sync / 1[56]:[^:]*:Rubicante:7F27:/
-623.8 "Arcane Revelation" sync / 1[56]:[^:]*:Rubicante:7CBE:/
-631.9 "Ninth Circle" sync / 1[56]:[^:]*:Rubicante:8022:/
-646.9 "Ordeal of Purgation #5" sync / 1[56]:[^:]*:Rubicante:80E9:/
-654.9 "Fiery Expiation" #sync / 1[56]:[^:]*:Circle of Purgatory:(7CEF|7CF0):/
-659.0 "Ninth Circle" sync / 1[56]:[^:]*:Rubicante:8022:/
-673.8 "Ordeal of Purgation #6" sync / 1[56]:[^:]*:Rubicante:80E9:/
-681.8 "Fiery Expiation" #sync / 1[56]:[^:]*:Circle of Purgatory:7CF0:/ # 7CEF가 따라옴
-685.8 "--sync--" sync / 1[56]:[^:]*:Rubicante:7F6D:/
-690.8 "Inferno" sync / 1[56]:[^:]*:Rubicante:7D2C:/ window 5,5
-693.8 "--sync--" sync / 1[56]:[^:]*:Rubicante:7F6D:/
+# Phase 2
+996.0 "--sync--" sync / 14:[^:]*:Rubicante:7D06:/ window 1000,0
+1000.0 "--sync--" sync / 1[56]:[^:]*:Rubicante:7D06:/
+1009.8 "Blazing Rapture" sync / 1[56]:[^:]*:Rubicante:7D07:/
 
-# 또 변신
-708.0 "Flamespire Claw" sync / 1[56]:[^:]*:Rubicante:7D28:/ window 1000,10
-708.2 "Flamespire Claw x8" duration 18  #sync / 1[56]:[^:]*:Rubicante:7D29:/
-736.6 "Inferno" sync / 1[56]:[^:]*:Rubicante:7D0F:/ window 5,5
-740.7 "--sync--" sync / 1[56]:[^:]*:Rubicante:7CBD:/
-747.7 "Scalding Signal/Ring" sync / 1[56]:[^:]*:Rubicante:(7D24|7D25):/
-748.8 "Scalding Fleet" sync / 1[56]:[^:]*:Rubicante Mirage:7D26:/
-758.5 "Sweeping Immolation" sync / 1[56]:[^:]*:Rubicante:(7D20|7D21):/ window 10,10
-758.9 "Partial Immolation/Total Immolation" sync / 1[56]:[^:]*:Rubicante:(7D22|7D23):/
-764.6 "Explosive Pyre" sync / 1[56]:[^:]*:Rubicante:7D11:/
-772.6 "Dualfire" sync / 1[56]:[^:]*:Rubicante:7D2E:/
-773.5 "--sync--" sync / 1[56]:[^:]*:Rubicante:7D2F:/ # Dualfire
+# Flamespire Brand
+1034.4 "--middle--" sync / 1[56]:[^:]*:Rubicante:7CBD:/
+1040.5 "Flamespire Brand" sync / 1[56]:[^:]*:Rubicante:7D13:/
+1048.6 "--sync--" sync / 1[56]:[^:]*:Rubicante:7D17:/
+1049.9 "--sync--" sync / 1[56]:[^:]*:Rubicante:7D18:/
+1051.1 "Flamerake 1" sync / 1[56]:[^:]*:Rubicante:7D19:/
+1053.1 "Flamerake 2" sync / 1[56]:[^:]*:Rubicante:7D1C:/
+1053.5 "Blooming Welt" sync / 1[56]:[^:]*:Rubicante:7D14:/
+1053.5 "Furious Welt" sync / 1[56]:[^:]*:Rubicante:7D15:/
+1055.5 "Flamerake 3" sync / 1[56]:[^:]*:Rubicante:7D1D:/
+1056.5 "Stinging Welt" sync / 1[56]:[^:]*:Rubicante:7D16:/
 
-# 돌아오능가
-781.8 "--sync--" sync / 1[56]:[^:]*:Rubicante:7F6D:/ window 5,5
-785.2 "Hope Abandon Ye" sync / 1[56]:[^:]*:Rubicante:7F27:/
-794.6 "Arcane Revelation" sync / 1[56]:[^:]*:Rubicante:7CBE:/
-802.7 "Ninth Circle" sync / 1[56]:[^:]*:Rubicante:8022:/
-817.3 "Ordeal of Purgation #7" sync / 1[56]:[^:]*:Rubicante:80E9:/
-825.3 "Fiery Expiation" #sync / 1[56]:[^:]*:Circle of Purgatory:7CEF:/
-829.3 "Ninth Circle" sync / 1[56]:[^:]*:Rubicante:8022:/
-843.6 "Ordeal of Purgation #8" sync / 1[56]:[^:]*:Rubicante:80E9:/
-851.6 "Fiery Expiation" #sync / 1[56]:[^:]*:Circle of Purgatory:7CF0:/
+1059.9 "Explosive Pyre" sync / 1[56]:[^:]*:Rubicante:7D11:/
+1066.9 "Inferno (spread)" sync / 1[56]:[^:]*:Rubicante:7D0F:/
 
-# ENRAGE!
-873.0 "Inferno (ENRAGE)" sync / 1[56]:[^:]*:Rubicante:7D2B:/
+# Scalding/Line baits 1
+1071.0 "--middle--" sync / 1[56]:[^:]*:Rubicante:7CBD:/
+1078.0 "Scalding Ring/Scalding Signal" sync / 1[56]:[^:]*:Rubicante:(7D25|7D24):/
+1079.1 "Scalding Fleet" sync / 1[56]:[^:]*:Rubicante Mirage:7D26:/
+1088.1 "Sweeping Immolation" sync / 1[56]:[^:]*:Rubicante:7D21:/
+1088.5 "Scalding Fleet" #sync / 1[56]:[^:]*:Rubicante Mirage:7D27:/
+1088.5 "Partial Immolation/Total Immolation" sync / 1[56]:[^:]*:Rubicante:(7D22|7D23):/
+
+1094.2 "Explosive Pyre" sync / 1[56]:[^:]*:Rubicante:7D11:/
+1102.3 "Dualfire" sync / 1[56]:[^:]*:Rubicante:7D2E:/
+
+# Purgation 5 & 6
+1112.5 "--middle--" sync / 1[56]:[^:]*:Rubicante:7CBC:/
+1114.7 "Hope Abandon Ye" sync / 1[56]:[^:]*:Rubicante:7F27:/
+1124.1 "Arcane Revelation" sync / 1[56]:[^:]*:Rubicante:7CBE:/
+1146.8 "Ordeal of Purgation 5" sync / 1[56]:[^:]*:Rubicante:80E9:/
+1154.8 "Fiery Expiation" sync / 1[56]:[^:]*:Circle of Purgatory:(7CEF|7CF0):/
+1173.1 "Ordeal of Purgation 6" sync / 1[56]:[^:]*:Rubicante:80E9:/
+1181.1 "Fiery Expiation" sync / 1[56]:[^:]*:Circle of Purgatory:(7CEF|7CF0):/
+
+1190.2 "Inferno (aoe)" sync / 1[56]:[^:]*:Rubicante:7D2C:/
+
+# Flamespire Claw Limit Cut
+1199.4 "--middle--" sync / 1[56]:[^:]*:Rubicante:7CBD:/
+1207.4 "--sync--" sync / 1[56]:[^:]*:Rubicante:7D28:/ window 20,20
+1207.8 "Flamespire Claw 1" #sync / 1[56]:[^:]*:Rubicante:7D29:/
+1210.2 "Flamespire Claw 2" #sync / 1[56]:[^:]*:Rubicante:7D29:/
+1212.6 "Flamespire Claw 3" #sync / 1[56]:[^:]*:Rubicante:7D29:/
+1215.4 "Flamespire Claw 4" #sync / 1[56]:[^:]*:Rubicante:7D29:/
+1218.2 "Flamespire Claw 5" #sync / 1[56]:[^:]*:Rubicante:7D29:/
+1221.0 "Flamespire Claw 6" #sync / 1[56]:[^:]*:Rubicante:7D29:/
+1223.6 "Flamespire Claw 7" #sync / 1[56]:[^:]*:Rubicante:7D29:/
+1226.0 "Flamespire Claw 8" #sync / 1[56]:[^:]*:Rubicante:7D29:/
+
+1236.0 "Inferno (spread)" sync / 1[56]:[^:]*:Rubicante:7D0F:/
+
+# Scalding/Line baits 2
+1240.1 "--middle--" sync / 1[56]:[^:]*:Rubicante:7CBD:/
+1247.1 "Scalding Ring/Scalding Signal" sync / 1[56]:[^:]*:Rubicante:(7D25|7D24):/
+1248.2 "Scalding Fleet" sync / 1[56]:[^:]*:Rubicante Mirage:7D26:/
+1257.4 "Sweeping Immolation" sync / 1[56]:[^:]*:Rubicante:7D20:/
+1257.7 "Scalding Fleet" sync / 1[56]:[^:]*:Rubicante Mirage:7D27:/
+1257.8 "Partial Immolation/Total Immolation" sync / 1[56]:[^:]*:Rubicante:(7D22|7D23):/
+
+1263.5 "Explosive Pyre" sync / 1[56]:[^:]*:Rubicante:7D11:/
+1271.5 "Dualfire" sync / 1[56]:[^:]*:Rubicante:7D2E:/
+
+# Purgation 7 & 8
+1281.8 "--middle--" sync / 1[56]:[^:]*:Rubicante:7CBC:/
+1284.1 "Hope Abandon Ye" sync / 1[56]:[^:]*:Rubicante:7F27:/
+1293.5 "Arcane Revelation" sync / 1[56]:[^:]*:Rubicante:7CBE:/
+1315.8 "Ordeal of Purgation 7" sync / 1[56]:[^:]*:Rubicante:80E9:/
+1323.8 "Fiery Expiation" sync / 1[56]:[^:]*:Circle of Purgatory:7CEF:/
+1342.2 "Ordeal of Purgation 8" sync / 1[56]:[^:]*:Rubicante:80E9:/
+1350.2 "Fiery Expiation" sync / 1[56]:[^:]*:Circle of Purgatory:7CF0:/
+
+# Enrage
+1359.4 "--middle--" sync / 1[56]:[^:]*:Rubicante:7CBC:/
+1371.7 "Inferno Enrage" sync / 1[56]:[^:]*:Rubicante:7D2B:/
+1371.7 "--untargetable--"
