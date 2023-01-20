@@ -5,7 +5,7 @@ For visit official repo: <https://github.com/quisquous/cactbot>
 This repo is for cactbot's test & modify. No English output support.
 
 ---
-오리지날을 찾으신다면 위 리포 URL을 방문하시면 되요.
+오리지날을 찾으신다면 위 리포 URL을 방문하세요,
 
 * cactbot 실험 기능을 테스트하는 실험실 리포예요.
 * 일부 콘텐츠는 오리지날과 호환되지 않고 Japan DC 스타일로 표시되요.
