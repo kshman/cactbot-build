@@ -9,7 +9,7 @@
 * 사용자 파일을 고칠거예요. 잘 모르면 raidboss.js 파일을 고치면 되요. 혹시 이 파일이 없으면 raidboss-example.js의 이름을 raidboss.js로 고치세요.
 * 위에 example 기준으로 설명하면 파일 맨 아래에 다음 내용을 추가하세요
 
-```
+```typescript
 Options.Triggers.push({
     zoneId: ZoneId.DragonsongsRepriseUltimate,
     timelineTriggers: [{
