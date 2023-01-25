@@ -1,44 +1,24 @@
 import Conditions from '../../../../../resources/conditions';
 import Outputs from '../../../../../resources/outputs';
+import { callOverlayHandler } from '../../../../../resources/overlay_plugin_api';
 import { Responses } from '../../../../../resources/responses';
 import ZoneId from '../../../../../resources/zone_id';
 import { RaidbossData } from '../../../../../types/data';
+import { PluginCombatantState } from '../../../../../types/event';
 import { NetMatches } from '../../../../../types/net_matches';
 import { TriggerSet } from '../../../../../types/trigger';
 
 // TODO: Nophica Blueblossoms/Giltblossoms; they get 018E/018F/0190/0191/0192/0193 markers, but how to know colors?
 //       No map effects, and getCombatants has the combatants, but OverlayPlugin info all the same.
-// TODO: Nymeia & Althyk Hydrostasis have inconsistent positions? should this be getCombatants??
 // TODO: Halone Cheimon counter-clock is 7D6B, is clock 7D6A??
 // TODO: Halone Lochos positions
 // TODO: Menphina could use map effects for Love's Light + Full Bright 4x moon locations
-
-// TODO: Menphina Midnight Frost + Waxing Claw + Playful Orbit
-// 7BCB Midnight Frost = front cleave (7BCD damage) [first phase only]
-// 7BCC Midnight Frost = back cleave (7BCE damage) [first phase only]
-// 7BCF Midnight Frost = ??? (7BD1 damage)
-// 7BD0 Midnight Frost = back cleave (7BD2 damage) [dog attached, during 4x Love's Light, facing west]
-// 7BD7 Midnight Frost = front cleave (7BDD damage) [dog attached, facing southeast or north?]
-// 7BD8 Midnight Frost = front cleave (7BDD damage) [dog attached, facing south or northwest?]
-// 7BD9 Midnight Frost = back cleave (7BDE damage) [dog attached, facing south]
-// 7BDA Midnight Frost = back cleave (7BDE damage) [dog attached, facing southeast or north?]
-// 7BE4 Midnight Frost = ??? (7BDA damage)
-// 7BE5 Midnight Frost = ??? (7BDA damage)
-// 7BE6 Midnight Frost = back cleave (7BDB damage) [dog unattached, facing north]
-// 7BE7 Midnight Frost = back cleave (7BDB damage) [dog unattached, facing north]
-// 7F0A Midnight Frost = front cleave (7BDA damage) [dog unattached, facing north]
-// 7F0B Midnight Frost = ??? (7BDA damage)
-// 7F0C Midnight Frost = back cleave (7BDB damage) [dog unattached, facing south]
-// 7F0D Midnight Frost = back cleave (7BDB damage) [dog unattached, facing south]
-// 7BE0 Waxing Claw = right claw [both attached and unattached]
-// 7BE1 Waxing Claw = left claw [both attached and unattached]
-// 7BE2 Playful Orbit = jump NE
-// 7BE3 Playful Orbit = jump NW / jump SE?
 
 export type NophicaMarch = 'front' | 'back' | 'left' | 'right';
 export type HaloneTetra = 'out' | 'in' | 'left' | 'right' | 'unknown';
 
 export interface Data extends RaidbossData {
+  combatantData: PluginCombatantState[];
   nophicaMarch?: NophicaMarch;
   nophicaHeavensEarthTargets: string[];
   nymeiaSpinnerOutput?: string;
@@ -47,7 +27,25 @@ export interface Data extends RaidbossData {
   haloneSpearsThreeTargets: string[];
   haloneIceDartTargets: string[];
   menphinaLunarKissTargets: string[];
+  menphinaWaxingClaw?: 'right' | 'left';
+  menphinaDogId?: string;
 }
+
+const menphinaCenterX = 799.98;
+const menphinaCenterY = 750;
+
+const positionTo8Dir = (posX: number, posY: number, centerX: number, centerY: number) => {
+  const relX = posX - centerX;
+  const relY = posY - centerY;
+
+  // Dirs: N = 0, NE = 1, ..., NW = 7
+  return Math.round(4 - 4 * Math.atan2(relX, relY) / Math.PI) % 8;
+};
+
+export const headingTo4Dir = (heading: number) => {
+  // Dirs: N = 0, E = 1, S = 2, W = 3
+  return (2 - Math.round(heading * 2 / Math.PI)) % 4;
+};
 
 const tetraMap: { [id: string]: HaloneTetra } = {
   '7D46': 'out',
@@ -61,6 +59,7 @@ const triggerSet: TriggerSet<Data> = {
   timelineFile: 'euphrosyne.txt',
   initData: () => {
     return {
+      combatantData: [],
       nophicaHeavensEarthTargets: [],
       nymeiaHydrostasis: [],
       haloneTetrapagos: [],
@@ -388,22 +387,38 @@ const triggerSet: TriggerSet<Data> = {
       netRegex: { id: ['7A3B', '7A3C', '7A3D', '7A3E'], source: 'Nymeia', capture: false },
       // First time around is BCD all simultaneous, with 16,19,22s cast times.
       // Other times are BC instantly and then E ~11s later with a 2s cast time.
-      delaySeconds: 0.5,
+      delaySeconds: 1.5,
       durationSeconds: 18,
       suppressSeconds: 20,
+      promise: async (data) => {
+        data.combatantData = [];
+        const ids = data.nymeiaHydrostasis.map((line) => parseInt(line.sourceId, 16));
+        data.combatantData = (await callOverlayHandler({
+          call: 'getCombatants',
+          ids: ids,
+        })).combatants;
+      },
       infoText: (data, _matches, output) => {
         type HydrostasisDir = 'N' | 'SW' | 'SE';
 
-        const lines = data.nymeiaHydrostasis.sort((a, b) => a.id.localeCompare(b.id));
-        const dirs: HydrostasisDir[] = lines.map((line) => {
+        // Sort combatants by cast id.
+        // Note: it's also possible that reverse actor id sort would work.
+        const decIdToCast: { [id: string]: string } = {};
+        for (const line of data.nymeiaHydrostasis)
+          decIdToCast[parseInt(line.sourceId, 16)] = line.id;
+        const combatants = data.combatantData.sort((a, b) => {
+          const aCast = decIdToCast[a.ID ?? 0] ?? '';
+          const bCast = decIdToCast[b.ID ?? 0] ?? '';
+          return aCast.localeCompare(bCast);
+        });
+
+        const dirs: HydrostasisDir[] = combatants.map((c) => {
           const centerX = 50;
           const centerY = -741;
 
-          const x = parseFloat(line.x);
-          const y = parseFloat(line.y);
-          if (y < centerY)
+          if (c.PosY < centerY)
             return 'N';
-          return x < centerX ? 'SW' : 'SE';
+          return c.PosX < centerX ? 'SW' : 'SE';
         });
 
         const [first, second, third] = dirs;
@@ -427,6 +442,11 @@ const triggerSet: TriggerSet<Data> = {
             SE: output.dirSE!(),
           }[x] ?? output.unknown!();
         });
+
+        // Safety, in case something went awry.
+        if (dir1 === dir2 || dir2 === dir3)
+          return;
+
         return output.knockback!({ dir1: dir1, dir2: dir2, dir3: dir3 });
       },
       run: (data) => data.nymeiaHydrostasis = [],
@@ -653,7 +673,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: '달 옆으로',
-          de: 'Geh raus (vermeide den Ring)',
+          de: 'Geh seitlich des Mondes',
         },
       },
     },
@@ -670,16 +690,235 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: 'Euphrosyne Menphina Midnight Frost Front Initial',
+      id: 'Euphrosyne Menphina Midnight Frost Back No Claw',
       type: 'StartsUsing',
-      netRegex: { id: '7BCC', source: 'Menphina', capture: false },
+      // 7BCC Midnight Frost = back cleave (7BCE damage) [no dog, first phase only]
+      // 7BD0 Midnight Frost = back cleave (7BD2 damage) [dog attached, during 4x Love's Light]
+      netRegex: { id: ['7BCC', '7BD0'], source: 'Menphina', capture: false },
       response: Responses.goFront(),
     },
     {
-      id: 'Euphrosyne Menphina Midnight Frost Back Initial',
+      id: 'Euphrosyne Menphina Midnight Frost Front No Claw',
       type: 'StartsUsing',
-      netRegex: { id: '7BCB', source: 'Menphina', capture: false },
+      // 7BCB Midnight Frost = front cleave (7BCD damage) [no dog, first phase only]
+      // 7BCF Midnight Frost = front cleave (7BD1 damage) [dog attached, during 4x Love's Light]
+      netRegex: { id: ['7BCB', '7BCF'], source: 'Menphina', capture: false },
       response: Responses.getBehind(),
+    },
+    {
+      id: 'Euphrosyne Menphina Waxing Claw',
+      type: 'StartsUsing',
+      netRegex: { id: ['7BE0', '7BE1'], source: 'Menphina' },
+      run: (data, matches) => {
+        // This is true regardless of whether the dog is attached or not.
+        if (matches.id === '7BE0')
+          data.menphinaWaxingClaw = 'right';
+        else if (matches.id === '7BE1')
+          data.menphinaWaxingClaw = 'left';
+        data.menphinaDogId = matches.sourceId;
+      },
+    },
+    {
+      id: 'Euphrosyne Menphina Waxing Claw Cleanup',
+      type: 'StartsUsing',
+      netRegex: { id: ['7BE0', '7BE1'], source: 'Menphina', capture: false },
+      delaySeconds: 10,
+      run: (data) => delete data.menphinaWaxingClaw,
+    },
+    {
+      id: 'Euphrosyne Menphina Midnight Frost Attached',
+      type: 'StartsUsing',
+      // 7BD7 Midnight Frost = front cleave (7BDD damage) [dog attached]
+      // 7BD8 Midnight Frost = front cleave (7BDD damage) [dog attached]
+      // 7BD9 Midnight Frost = back cleave (7BDE damage) [dog attached]
+      // 7BDA Midnight Frost = back cleave (7BDE damage) [dog attached]
+      // This ability seems possibly player targeted for initial facing, so use relative dirs.
+      netRegex: { id: ['7BD7', '7BD8', '7BD9', '7BDA'], source: 'Menphina' },
+      // These two abilities come out at the same time.  It seems that Waxing Claw always comes
+      // after, but trying not to make assumptions here.
+      delaySeconds: 0.3,
+      alertText: (data, matches, output) => {
+        // If claw is somehow undefined, don't print anything.
+        const claw = data.menphinaWaxingClaw;
+        const isFrontCleave = matches.id === '7BD7' || matches.id === '7BD8';
+        if (isFrontCleave && claw === 'right')
+          return output.backLeft!();
+        if (isFrontCleave && claw === 'left')
+          return output.backRight!();
+        if (!isFrontCleave && claw === 'right')
+          return output.frontLeft!();
+        if (!isFrontCleave && claw === 'left')
+          return output.frontRight!();
+      },
+      outputStrings: {
+        frontLeft: {
+          en: '앞 왼쪽',
+        },
+        frontRight: {
+          en: '앞 오른쪽',
+        },
+        backLeft: {
+          en: '뒤 왼쪽',
+        },
+        backRight: {
+          en: '뒤 오른쪽',
+        },
+      },
+    },
+    {
+      id: 'Euphrosyne Menphina Midnight Frost Unattached',
+      type: 'StartsUsing',
+      // 7BE4 Midnight Frost = front cleave (7BDA damage) [dog unattached]
+      // 7BE5 Midnight Frost = front cleave (7BDA damage) [dog unattached]
+      // 7BE6 Midnight Frost = back cleave (7BDB damage) [dog unattached]
+      // 7BE7 Midnight Frost = back cleave (7BDB damage) [dog unattached]
+      // 7F0A Midnight Frost = front cleave (7BDA damage) [dog unattached]
+      // 7F0B Midnight Frost = front cleave (7BDA damage) [dog unattached]
+      // 7F0C Midnight Frost = back cleave (7BDB damage) [dog unattached]
+      // 7F0D Midnight Frost = back cleave (7BDB damage) [dog unattached]
+      // The dog uses Playful Orbit (7BE2, 7BE3) to jump to an intercardinal to do a left/right cleave.
+      // Menphina faces a cardinal (possibly just north or south) and does a front/back cleave.
+      // This leaves either 3/8 or 1/8 of a pie slice open.
+      netRegex: { id: ['7BE[4567]', '7F0[ABCD]'], source: 'Menphina' },
+      // These two abilities come out at the same time.  It seems that Waxing Claw always comes
+      // after, but trying not to make assumptions here.
+      delaySeconds: 0.3,
+      promise: async (data, matches) => {
+        data.combatantData = [];
+        if (data.menphinaDogId === undefined)
+          return;
+        const hexIds = [data.menphinaDogId, matches.sourceId];
+        data.combatantData = (await callOverlayHandler({
+          call: 'getCombatants',
+          ids: hexIds.map((id) => parseInt(id, 16)),
+        })).combatants;
+      },
+      alertText: (data, matches, output) => {
+        const [c1, c2] = data.combatantData;
+        if (data.combatantData.length !== 2 || c1 === undefined || c2 === undefined)
+          return;
+        const dogCleave = data.menphinaWaxingClaw;
+        if (dogCleave === undefined)
+          return;
+
+        const [dog, menphina] = c1.ID === data.menphinaDogId ? [c1, c2] : [c2, c1];
+
+        // These two variables are N=0, NE=1, etc
+        const menphinaHeading = headingTo4Dir(menphina.Heading) * 2;
+        const absoluteDogPos = positionTo8Dir(dog.PosX, dog.PosY, menphinaCenterX, menphinaCenterY);
+        // Dog should be on an intercard.
+        if (absoluteDogPos % 2 === 0)
+          return;
+
+        const relDogPos = (absoluteDogPos - menphinaHeading + 8) % 8;
+
+        // These are N=0, NE=1 but rotated 1/8 clockwise, e.g. NNE=0, ENE=1, etc
+        // "N" here is also relative to Menphina's facing.
+        const smallSafeSpots: { [dir: number]: string } = {
+          0: output.dirNNE!(),
+          1: output.dirENE!(),
+          2: output.dirESE!(),
+          3: output.dirSSE!(),
+          4: output.dirSSW!(),
+          5: output.dirWSW!(),
+          6: output.dirWNW!(),
+          7: output.dirNNW!(),
+        };
+        const bigSafeSpots: { [dir: number]: string } = {
+          1: output.dirNE!(),
+          3: output.dirSE!(),
+          5: output.dirSW!(),
+          7: output.dirNW!(),
+        };
+
+        const markSmallUnsafe = (keys: number[]) => {
+          for (const key of keys)
+            delete smallSafeSpots[key];
+        };
+        const markBigUnsafe = (keys: number[]) => {
+          for (const key of keys)
+            delete bigSafeSpots[key];
+        };
+
+        const isFrontCleave = ['7BE4', '7BE5', '7F0A', '7F0B'].includes(matches.id);
+        if (isFrontCleave) {
+          markBigUnsafe([1, 7]);
+          markSmallUnsafe([0, 1, 6, 7]);
+        } else {
+          markBigUnsafe([3, 5]);
+          markSmallUnsafe([2, 3, 4, 5]);
+        }
+
+        // Find the unsafe quadrant, e.g. if NE is unsafe, then that means
+        // the dog is NW cleaving left or SE cleaving right.
+        // If the dog is NE=1, and the cleave is right, then NW=7 is unsafe.
+        const dogUnsafeQuadrant = (relDogPos + (dogCleave === 'right' ? -2 : 2) + 8) % 8;
+        // Only the big quadrant opposite the dog is safe, the other three are unsafe.
+        markBigUnsafe([
+          dogUnsafeQuadrant,
+          (dogUnsafeQuadrant + 2) % 8,
+          (dogUnsafeQuadrant + 6) % 8,
+        ]);
+        if (dogUnsafeQuadrant === 1)
+          markSmallUnsafe([7, 0, 1, 2]);
+        else if (dogUnsafeQuadrant === 3)
+          markSmallUnsafe([1, 2, 3, 4]);
+        else if (dogUnsafeQuadrant === 5)
+          markSmallUnsafe([3, 4, 5, 6]);
+        else if (dogUnsafeQuadrant === 7)
+          markSmallUnsafe([5, 6, 7, 0]);
+
+        // At this point there should be either:
+        // (a) 1 big entry and 3 small entries [prefer the big entry]
+        // (b) 0 big entries and 1 small entry [prefer the small entry, since that's it]
+        const bigEntries = Object.entries(bigSafeSpots);
+        const [safeBigEntry] = bigEntries;
+        if (bigEntries.length === 1 && safeBigEntry !== undefined)
+          return safeBigEntry[1];
+
+        const smallEntries = Object.entries(smallSafeSpots);
+        const [safeSmallEntry] = smallEntries;
+        if (smallEntries.length === 1 && safeSmallEntry !== undefined)
+          return safeSmallEntry[1];
+      },
+      outputStrings: {
+        dirNNE: {
+          en: '앞, 약간 오른쪽 [1시]',
+        },
+        dirNE: {
+          en: '앞 오른쪽 [1~2시 사이]',
+        },
+        dirENE: {
+          en: '오른쪽, 약간 앞 [2시]',
+        },
+        dirESE: {
+          en: '오른쪽, 약간 뒤 [4시]',
+        },
+        dirSE: {
+          en: '뒤 오른쪽 [4~5시]',
+        },
+        dirSSE: {
+          en: '뒤, 약간 오른쪽 [5시]',
+        },
+        dirSSW: {
+          en: '뒤, 약간 왼쪽 [7시]',
+        },
+        dirSW: {
+          en: '뒤, 왼쪽 [7~8시]',
+        },
+        dirWSW: {
+          en: '왼쪽, 약간 뒤로 [8시]',
+        },
+        dirWNW: {
+          en: '왼쪽, 약간 앞으로 [10시]',
+        },
+        dirNW: {
+          en: '앞, 왼쪽 [10~11시]',
+        },
+        dirNNW: {
+          en: '앞, 약간 왼쪽 [11시]',
+        },
+      },
     },
     {
       id: 'Euphrosyne Menphina Lunar Kiss',
