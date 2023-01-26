@@ -1,4 +1,4 @@
-import { UnreachableCode } from '../../../../../resources/not_reached';
+import Conditions from '../../../../../resources/conditions';
 import Outputs from '../../../../../resources/outputs';
 import ZoneId from '../../../../../resources/zone_id';
 import { RaidbossData } from '../../../../../types/data';
@@ -10,39 +10,70 @@ import { TriggerSet } from '../../../../../types/trigger';
 type PrsMember = {
   r: string; // 롤
   j: string; // 잡
+  pp: number; // Program loop -> 프로그램 루프 우선순위
+  sm: number; // Synergy marker -> PS 마커 우선순위
   n: string; // 이름
   // 내부
   i: number;
+  p?: PrsMember;
   f?: boolean;
 };
-export const getPrsRole = (data: Data, name: string) => {
-  const m = data.prsParty?.find((e) => e.n === name);
+export const getMemberByName = (data: Data, name: string) =>
+  data.prsParty?.find((e) => e.n === name);
+export const getMemberRole = (data: Data, name: string) => {
+  const m = getMemberByName(data, name);
   return m !== undefined ? m.r : data.ShortName(name);
 };
+//
+export const prsStrings = {
+  tower: {
+    en: '塔を踏み',
+  },
+  tether: {
+    en: '線取り',
+  },
+  out: {
+    en: '外へ',
+  },
+} as const;
 
 export const playstationMarkers = ['circle', 'cross', 'triangle', 'square'] as const;
 export type PlaystationMarker = typeof playstationMarkers[number];
 
+export type Glitch = 'mid' | 'remote';
+
 export interface Data extends RaidbossData {
+  prsParty?: PrsMember[];
+  prsMe?: PrsMember;
+  //
   combatantData: PluginCombatantState[];
   decOffset?: number;
   inLine: { [name: string]: number };
   loopBlasterCount: number;
   pantoMissileCount: number;
-  // PRs
-  prsParty?: PrsMember[];
-  prsMe?: PrsMember;
+  solarRayTargets: string[];
+  glitch?: Glitch;
+  synergyMarker: { [name: string]: PlaystationMarker };
+  spotlightStacks: string[];
 }
 
 // Due to changes introduced in patch 5.2, overhead markers now have a random offset
 // added to their ID. This offset currently appears to be set per instance, so
 // we can determine what it is from the first overhead marker we see.
 export const headmarkers = {
-  // vfx/lockon/eff/r1fz_firechain_01x.avfx through 04x
-  'firechainCircle': '0119',
-  'firechainTriangle': '011A',
-  'firechainSquare': '011B',
-  'firechainX': '011C',
+  // vfx/lockon/eff/lockon5_t0h.avfx
+  spread: '0017',
+  // vfx/lockon/eff/tank_lockonae_5m_5s_01k1.avfx
+  buster: '0157',
+  // vfx/lockon/eff/z3oz_firechain_01c.avfx through 04c
+  firechainCircle: '01A0',
+  firechainTriangle: '01A1',
+  firechainSquare: '01A2',
+  firechainX: '01A3',
+  // vfx/lockon/eff/com_share2i.avfx
+  stack: '0064',
+  // vfx/lockon/eff/all_at8s_0v.avfx
+  meteor: '015A',
 } as const;
 
 export const playstationHeadmarkerIds: readonly string[] = [
@@ -59,21 +90,14 @@ export const playstationMarkerMap: { [id: string]: PlaystationMarker } = {
   [headmarkers.firechainX]: 'cross',
 } as const;
 
-export const firstMarker = 'TODO';
+export const firstMarker = parseInt('0017', 16);
 
 export const getHeadmarkerId = (
   data: Data,
   matches: NetMatches['HeadMarker'],
-  firstDecimalMarker?: number,
 ) => {
-  // If we naively just check !data.decOffset and leave it, it breaks if the first marker is 00DA.
-  // (This makes the offset 0, and !0 is true.)
-  if (data.decOffset === undefined) {
-    // This must be set the first time this function is called in DSR Headmarker Tracker.
-    if (firstDecimalMarker === undefined)
-      throw new UnreachableCode();
-    data.decOffset = parseInt(matches.id, 16) - firstDecimalMarker;
-  }
+  if (data.decOffset === undefined)
+    data.decOffset = parseInt(matches.id, 16) - firstMarker;
   // The leading zeroes are stripped when converting back to string, so we re-add them here.
   // Fortunately, we don't have to worry about whether or not this is robust,
   // since we know all the IDs that will be present in the encounter.
@@ -89,6 +113,9 @@ const triggerSet: TriggerSet<Data> = {
       inLine: {},
       loopBlasterCount: 0,
       pantoMissileCount: 0,
+      solarRayTargets: [],
+      synergyMarker: {},
+      spotlightStacks: [],
     };
   },
   timelineTriggers: [
@@ -96,7 +123,7 @@ const triggerSet: TriggerSet<Data> = {
       id: 'TOP+ 데이터 확인',
       regex: /--setup--/,
       delaySeconds: 1,
-      run: (data, _matches, output) => {
+      infoText: (data, _matches, output) => {
         if (data.prsParty === undefined)
           return output.nodata!();
         for (let i = 0; i < data.prsParty.length; i++) {
@@ -106,13 +133,17 @@ const triggerSet: TriggerSet<Data> = {
         }
         data.prsMe = data.prsParty.find((e) => e.n === data.me);
         if (data.prsMe === undefined)
-          return output.nodata!();
+          return output.nome!();
         return output.itsme!({ role: data.prsMe.r });
       },
       outputStrings: {
         nodata: {
           en: '데이터를 설정하지 않았네요',
           ja: 'データの設定が見つかりません',
+        },
+        nome: {
+          en: '내 데이터를 찾을 수 없어요',
+          ja: 'わたしのデータが見つかりません',
         },
         itsme: {
           en: '내 역할: ${role}',
@@ -128,10 +159,7 @@ const triggerSet: TriggerSet<Data> = {
       netRegex: {},
       condition: (data) => data.decOffset === undefined,
       // Unconditionally set the first headmarker here so that future triggers are conditional.
-      run: (data, matches) => {
-        const firstHeadmarker: number = parseInt(firstMarker, 16);
-        getHeadmarkerId(data, matches, firstHeadmarker);
-      },
+      run: (data, matches) => getHeadmarkerId(data, matches),
     },
     {
       id: 'TOP In Line Debuff Collector',
@@ -163,6 +191,10 @@ const triggerSet: TriggerSet<Data> = {
       id: 'TOP In Line Debuff',
       type: 'GainsEffect',
       netRegex: { effectId: ['BBC', 'BBD', 'BBE', 'D7B'], capture: false },
+      preRun: (data) => {
+        if (data.prsMe !== undefined)
+          data.prsMe.p = undefined;
+      },
       delaySeconds: 0.5,
       durationSeconds: 5,
       suppressSeconds: 1,
@@ -174,14 +206,16 @@ const triggerSet: TriggerSet<Data> = {
         for (const [name, num] of Object.entries(data.inLine)) {
           if (num === myNum && name !== data.me) {
             partner = name;
+            if (data.prsMe !== undefined)
+              data.prsMe.p = getMemberByName(data, name);
             break;
           }
         }
-        return output.text!({ num: myNum, player: getPrsRole(data, partner) });
+        return output.text!({ num: myNum, player: getMemberRole(data, partner) });
       },
       outputStrings: {
         text: {
-          en: '${num}번 (+${player})',
+          en: '${num}번, 파트너: ${player}',
           de: '${num} (mit ${player})',
         },
         unknown: Outputs.unknown,
@@ -196,28 +230,56 @@ const triggerSet: TriggerSet<Data> = {
         // cactbot-builtin-response
         output.responseOutputStrings = {
           tower: {
-            en: '타워 #1',
+            en: '타워로! #1',
             de: 'Turm 1',
           },
           tether: {
-            en: '줄 #1',
+            en: '줄받아요! #1',
             de: 'Verbindung 1',
           },
           numNoMechanic: {
             en: '1',
             de: '1',
           },
+          towerWith: {
+            en: '타워로! #1, 파트너: ${player}',
+            de: 'Turm 1',
+          },
+          tetherWith: {
+            en: '줄받아요! #1, 파트너: ${player}',
+            de: 'Verbindung 1',
+          },
         };
 
         const myNum = data.inLine[data.me];
         if (myNum === undefined)
           return;
+        if (data.prsMe?.p !== undefined) {
+          if (myNum === 1)
+            return { alertText: output.towerWith!({ player: data.prsMe.p.r }) };
+          if (myNum === 3)
+            return { alertText: output.tetherWith!({ player: data.prsMe.p.r }) };
+          return { infoText: output.numNoMechanic!() };
+        }
         if (myNum === 1)
           return { alertText: output.tower!() };
         if (myNum === 3)
           return { alertText: output.tether!() };
         return { infoText: output.numNoMechanic!() };
       },
+      tts: (data, _matches, output) => {
+        const myNum = data.inLine[data.me];
+        if (myNum === undefined)
+          return;
+        if (myNum === 1)
+          return output.ttsTower!();
+        if (myNum === 3)
+          return output.ttsTether!();
+      },
+      outputStrings: {
+        ttsTower: prsStrings.tower,
+        ttsTether: prsStrings.tether,
+      }
     },
     {
       id: 'TOP Program Loop Other Debuffs',
@@ -228,16 +290,24 @@ const triggerSet: TriggerSet<Data> = {
         // cactbot-builtin-response
         output.responseOutputStrings = {
           tower: {
-            en: '타워 #${num}',
+            en: '타워로! #${num}',
             de: 'Turm ${num}',
           },
           tether: {
-            en: '줄 #${num}',
+            en: '줄받아요! #${num}',
             de: 'Verbindung ${num}',
           },
           numNoMechanic: {
             en: '${num}',
             de: '${num}',
+          },
+          towerWith: {
+            en: '타워로! #${num}, 파트너: ${player}',
+            de: 'Turm 1',
+          },
+          tetherWith: {
+            en: '줄받아요! #${num}, 파트너: ${player}',
+            de: 'Verbindung 1',
           },
         };
 
@@ -248,12 +318,36 @@ const triggerSet: TriggerSet<Data> = {
         if (myNum === undefined)
           return { infoText: output.numNoMechanic!({ num: mechanicNum }) };
 
+        if (data.prsMe?.p !== undefined) {
+          if (myNum === mechanicNum)
+            return { alertText: output.towerWith!({ num: mechanicNum, player: data.prsMe.p.r }) };
+          if (mechanicNum === myNum + 2 || mechanicNum === myNum - 2)
+            return { alertText: output.tetherWith!({ num: mechanicNum, player: data.prsMe.p.r }) };
+          return { infoText: output.numNoMechanic!({ num: mechanicNum }) };
+        }
+
         if (myNum === mechanicNum)
           return { alertText: output.tower!({ num: mechanicNum }) };
         if (mechanicNum === myNum + 2 || mechanicNum === myNum - 2)
           return { alertText: output.tether!({ num: mechanicNum }) };
         return { infoText: output.numNoMechanic!({ num: mechanicNum }) };
       },
+      tts: (data, _matches, output) => {
+        const mechanicNum = data.loopBlasterCount + 1;
+        if (mechanicNum >= 5)
+          return;
+        const myNum = data.inLine[data.me];
+        if (myNum === undefined)
+          return;
+        if (myNum === mechanicNum)
+          return output.ttsTower!();
+        if (mechanicNum === myNum + 2 || mechanicNum === myNum - 2)
+          return output.ttsTether!();
+      },
+      outputStrings: {
+        ttsTower: prsStrings.tower,
+        ttsTether: prsStrings.tether,
+      }
     },
     {
       id: 'TOP Pantokrator First Debuffs',
@@ -269,7 +363,7 @@ const triggerSet: TriggerSet<Data> = {
             de: '1',
           },
           spread: {
-            en: '내가 #1 밖으로!',
+            en: '밖으로 가요! #1',
             de: '1 Raus (auf Dir)',
           },
         };
@@ -278,6 +372,14 @@ const triggerSet: TriggerSet<Data> = {
         if (myNum === 1)
           return { alertText: output.spread!() };
         return { infoText: output.lineStack!() };
+      },
+      tts: (data, _match, output) => {
+        const myNum = data.inLine[data.me];
+        if (myNum === 1)
+          return output.out!();
+      },
+      outputStrings: {
+        out: prsStrings.out,
       },
     },
     {
@@ -295,7 +397,7 @@ const triggerSet: TriggerSet<Data> = {
             de: '${num}',
           },
           spread: {
-            en: '내가 #${num} 밖으로!',
+            en: '밖으로 가요! #${num}',
             de: '${num} Raus (auf Dir)',
           },
         };
@@ -307,6 +409,242 @@ const triggerSet: TriggerSet<Data> = {
         if (myNum === mechanicNum)
           return { alertText: output.spread!({ num: mechanicNum }) };
         return { infoText: output.lineStack!({ num: mechanicNum }) };
+      },
+      tts: (data, _match, output) => {
+        const mechanicNum = data.pantoMissileCount + 1;
+        const myNum = data.inLine[data.me];
+        if (myNum === mechanicNum)
+          return output.out!();
+      },
+      outputStrings: {
+        out: prsStrings.out,
+      },
+    },
+    {
+      id: 'TOP Diffuse Wave Cannon Kyrios',
+      type: 'HeadMarker',
+      netRegex: {},
+      // We normally call this stuff out for other roles, but tanks often invuln this.
+      condition: (data) => data.role === 'tank',
+      suppressSeconds: 20,
+      alertText: (data, matches, output) => {
+        const id = getHeadmarkerId(data, matches);
+        if (id === headmarkers.spread)
+          return output.tankCleaves!();
+      },
+      outputStrings: {
+        tankCleaves: {
+          en: '탱크 클레브',
+        },
+      },
+    },
+    {
+      id: 'TOP Wave Cannon Kyrios',
+      type: 'HeadMarker',
+      netRegex: {},
+      condition: Conditions.targetIsYou(),
+      infoText: (data, matches, output) => {
+        const id = getHeadmarkerId(data, matches);
+        if (id === headmarkers.spread)
+          return output.laserOnYou!();
+      },
+      outputStrings: {
+        laserOnYou: {
+          en: '내게 레이저',
+        },
+      },
+    },
+    {
+      id: 'TOP Solar Ray You',
+      type: 'StartsUsing',
+      netRegex: { id: ['7E6A', '7E6B'], source: 'Omega' },
+      preRun: (data, matches) => data.solarRayTargets.push(matches.target),
+      response: (data, matches, output) => {
+        // cactbot-builtin-response
+        output.responseOutputStrings = {
+          tankBusterOnYou: Outputs.tankBusterOnYou,
+          tankBusters: Outputs.tankBusters,
+        };
+
+        if (matches.target === data.me)
+          return { alertText: output.tankBusterOnYou!() };
+
+        if (data.solarRayTargets.length === 2 && !data.solarRayTargets.includes(data.me))
+          return { infoText: output.tankBusters!() };
+      },
+    },
+    {
+      id: 'TOP Mid Remote Glitch',
+      type: 'GainsEffect',
+      // D63 = Mid Glitch
+      // D64 = Remote Glitch
+      netRegex: { effectId: ['D63', 'D64'] },
+      suppressSeconds: 10,
+      run: (data, matches) => data.glitch = matches.effectId === 'D63' ? 'mid' : 'remote',
+    },
+    {
+      id: 'TOP Synergy Marker Collect',
+      type: 'HeadMarker',
+      netRegex: {},
+      run: (data, matches) => {
+        const id = getHeadmarkerId(data, matches);
+        const marker = playstationMarkerMap[id];
+        if (marker === undefined)
+          return;
+        data.synergyMarker[matches.target] = marker;
+      },
+    },
+    {
+      id: 'TOP Synergy Marker',
+      type: 'GainsEffect',
+      // In practice, glitch1 glitch2 marker1 marker2 glitch3 glitch4 etc ordering.
+      netRegex: { effectId: ['D63', 'D64'], capture: false },
+      preRun: (data) => {
+        if (data.prsMe !== undefined)
+          data.prsMe.p = undefined;
+      },
+      delaySeconds: 0.5,
+      durationSeconds: 14,
+      suppressSeconds: 10,
+      infoText: (data, _matches, output) => {
+        const glitch = data.glitch
+          ? {
+            mid: output.midGlitch!(),
+            remote: output.remoteGlitch!(),
+          }[data.glitch]
+          : output.unknown!();
+
+        const myMarker = data.synergyMarker[data.me];
+        // If something has gone awry, at least return something here.
+        if (myMarker === undefined)
+          return glitch;
+
+        let partner = output.unknown!();
+        for (const [name, marker] of Object.entries(data.synergyMarker)) {
+          if (marker === myMarker && name !== data.me) {
+            partner = name;
+            if (data.prsMe !== undefined)
+              data.prsMe.p = getMemberByName(data, name);
+            break;
+          }
+        }
+
+        const side = data.prsMe === undefined || data.prsMe.p === undefined ? ''
+          : data.prsMe.sm < data.prsMe.p.sm ? output.left!() : output.right!();
+
+        return {
+          circle: output.circle!({ glitch: glitch, player: getMemberRole(data, partner), side: side }),
+          triangle: output.triangle!({ glitch: glitch, player: getMemberRole(data, partner), side: side }),
+          square: output.square!({ glitch: glitch, player: getMemberRole(data, partner), side: side }),
+          cross: output.cross!({ glitch: glitch, player: getMemberRole(data, partner), side: side }),
+        }[myMarker];
+      },
+      outputStrings: {
+        midGlitch: {
+          en: '중간',
+        },
+        remoteGlitch: {
+          en: '멀리',
+        },
+        circle: {
+          en: '${side} 🔴 ${glitch}, 파트너: ${player}',
+        },
+        triangle: {
+          en: '${side} ▲ ${glitch}, 파트너: ${player}',
+        },
+        square: {
+          en: '${side} 🟪 ${glitch}, 파트너: ${player}',
+        },
+        cross: {
+          en: '${side} ➕ ${glitch}, 파트너: ${player}',
+        },
+        left: Outputs.arrowW,
+        right: Outputs.arrowE,
+        unknown: Outputs.unknown,
+      },
+    },
+    {
+      id: 'TOP Spotlight',
+      type: 'HeadMarker',
+      netRegex: {},
+      preRun: (data, matches) => {
+        const id = getHeadmarkerId(data, matches);
+        if (id === headmarkers.stack)
+          data.spotlightStacks.push(matches.target);
+      },
+      response: (data, _matches, output) => {
+        // cactbot-builtin-response
+        output.responseOutputStrings = {
+          midGlitch: {
+            en: '중간',
+          },
+          remoteGlitch: {
+            en: '멀리',
+          },
+          stacksOn: {
+            en: '${glitch}서 뭉쳐요 (${player1}, ${player2})',
+          },
+          // TODO: say who your tether partner is to swap??
+          // TODO: tell the tether partner they are tethered to a stack?
+          stackOnYou: {
+            en: '내게 뭉칠거예요!',
+          },
+          unknown: Outputs.unknown,
+        };
+
+        const glitch = data.glitch
+          ? {
+            mid: output.midGlitch!(),
+            remote: output.remoteGlitch!(),
+          }[data.glitch]
+          : output.unknown!();
+
+        const [p1, p2] = data.spotlightStacks.sort();
+        if (data.spotlightStacks.length !== 2 || p1 === undefined || p2 === undefined)
+          return;
+
+        const stacksOn = output.stacksOn!({
+          glitch: glitch,
+          player1: getMemberRole(data, p1),
+          player2: getMemberRole(data, p2),
+        });
+        if (!data.spotlightStacks.includes(data.me))
+          return { infoText: stacksOn };
+        return {
+          alertText: output.stackOnYou!(),
+          infoText: stacksOn,
+        };
+      },
+    },
+    {
+      id: 'TOP Optimized Meteor',
+      type: 'HeadMarker',
+      netRegex: {},
+      condition: Conditions.targetIsYou(),
+      alertText: (data, matches, output) => {
+        const id = getHeadmarkerId(data, matches);
+        if (id === headmarkers.meteor)
+          return output.meteorOnYou!();
+      },
+      outputStrings: {
+        meteorOnYou: Outputs.meteorOnYou,
+      },
+    },
+    {
+      id: 'TOP Beyond Defense',
+      type: 'Ability',
+      netRegex: { id: '7B28' },
+      condition: Conditions.targetIsYou(),
+      alertText: (_data, _matches, output) => output.text!(),
+      outputStrings: {
+        text: {
+          en: '뭉치면 안되요!',
+          de: 'Nicht stacken!',
+          fr: 'Ne vous packez pas !',
+          ja: 'スタックするな！',
+          cn: '分散站位！',
+          ko: '쉐어 맞지 말것',
+        },
       },
     },
   ],
