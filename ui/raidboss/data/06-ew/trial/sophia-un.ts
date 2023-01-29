@@ -50,7 +50,7 @@ const callSafeDir = (callIndex: number, output: Output) => {
 
 const tiltOutputStrings = {
   goEastHardTilt: {
-    en: '동쪽으로 (많이)',
+    en: '🡺🡺🡺 (많이)',
     de: 'Nach Osten gehen (starke Neigung)',
     fr: 'Allez à l\'Est (Inclinaison forte)',
     ja: '東へ (大きい斜め)',
@@ -58,7 +58,7 @@ const tiltOutputStrings = {
     ko: '동쪽으로 (크게 기울어짐)',
   },
   goEastSoftTilt: {
-    en: '동쪽으로 (조금)',
+    en: '🡺🡺 (조금)',
     de: 'Nach Osten gehen (leichte Neigung)',
     fr: 'Allez à l\'Est (Inclinaison faible)',
     ja: '東へ (小さい斜め)',
@@ -66,7 +66,7 @@ const tiltOutputStrings = {
     ko: '동쪽으로 (작게 기울어짐)',
   },
   goWestHardTilt: {
-    en: '서쪽으로 (많이)',
+    en: '🡸🡸🡸 (많이)',
     de: 'Nach Westen gehen (starke Neigung)',
     fr: 'Allez à l\'Ouest (Inclinaison forte)',
     ja: '西へ (大きい斜め)',
@@ -74,7 +74,7 @@ const tiltOutputStrings = {
     ko: '서쪽으로 (크게 기울어짐)',
   },
   goWestSoftTilt: {
-    en: '서쪽으로 (조금)',
+    en: '🡸🡸 (조금)',
     de: 'Nach Westen gehen (leichte Neigung)',
     fr: 'Allez à l\'Ouest (Inclinaison faible)',
     ja: '西へ (小さい斜め)',
@@ -365,10 +365,10 @@ const triggerSet: TriggerSet<Data> = {
         });
       },
       outputStrings: {
-        northwest: Outputs.northwest,
-        northeast: Outputs.northeast,
-        southwest: Outputs.southwest,
-        southeast: Outputs.southeast,
+        northwest: Outputs.arrowNW,
+        northeast: Outputs.arrowNE,
+        southwest: Outputs.arrowSW,
+        southeast: Outputs.arrowSE,
         multiple: {
           en: '${dir1} / ${dir2}',
           de: '${dir1} / ${dir2}',
