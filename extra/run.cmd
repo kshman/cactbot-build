@@ -1,6 +1,4 @@
 @echo off
-echo �����Թ�
-
-npm run start -- --port 18767 --prefix ..
-
-echo ���� ����...�� �ǳ�?
+echo RUN!
+cd ..
+npm run start -- --port 18767
