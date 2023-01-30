@@ -26,37 +26,13 @@ export const getMemberByName = (data: Data, name: string) =>
   data.members?.find((e) => e.n === name);
 export const getMemberRole = (data: Data, name: string) => {
   const m = getMemberByName(data, name);
-  return m !== undefined ? m.r : data.ShortName(name);
+  return m ? m.r : data.ShortName(name);
 };
 export const testSynergyMarkerMove = (my: PrsMember, ot: PrsMember) => {
   if (my.sm < 5)
     return my.sm > ot.sm;
   return my.sm < ot.sm;
 };
-
-// 추가 처리
-export const prsMethods = {
-  ttsProgramLoop: (data: Data, dest: number) => {
-    if (data.lang !== 'en')
-      return;
-    if (dest >= 5)
-      return;
-    const num = data.inLine[data.me];
-    if (num === undefined)
-      return;
-    if (num === dest)
-      return '塔へ';
-    if (num + 2 === dest || num - 2 === dest)
-      return '線取り';
-  },
-  ttsPantokratorTurnOut: (data: Data, dest: number) => {
-    if (data.lang !== 'en')
-      return;
-    const num = data.inLine[data.me];
-    if (num === dest)
-      return '外へ';
-  },
-} as const;
 // [PRS END]
 
 export const playstationMarkers = ['circle', 'cross', 'triangle', 'square'] as const;
@@ -69,6 +45,7 @@ export type RotColor = 'blue' | 'red';
 export interface Data extends RaidbossData {
   members?: PrsMember[];
   my?: PrsMember;
+  simple?: boolean;
   prsPank?: boolean;
   //
   combatantData: PluginCombatantState[];
@@ -158,17 +135,18 @@ const triggerSet: TriggerSet<Data> = {
       regex: /--setup--/,
       delaySeconds: 1,
       infoText: (data, _matches, output) => {
-        if (data.members === undefined)
+        if (!data.members)
           return output.nodata!();
         for (let i = 0; i < data.members.length; i++) {
           const m = data.members[i];
-          if (m !== undefined)
+          if (m)
             m.i = i;
         }
         data.my = data.members.find((e) => e.n === data.me);
-        if (data.my === undefined)
+        if (!data.my)
           return output.nome!();
-        return output.itsme!({ role: data.my.r });
+        const simple = data.simple ? output.simple!() : '';
+        return output.itsme!({ role: data.my.r, simple: simple });
       },
       outputStrings: {
         nodata: {
@@ -180,9 +158,13 @@ const triggerSet: TriggerSet<Data> = {
           ja: 'わたしのデータが見つかりません',
         },
         itsme: {
-          en: '내 역할: ${role}',
-          ja: 'ロール:  ${role}',
+          en: '내 역할: ${role} ${simple}',
+          ja: 'ロール:  ${role} ${simple}',
         },
+        simple: {
+          en: '(심플 모드)',
+          ja: '(簡略モード)',
+        }
       }
     },
   ],
@@ -221,7 +203,7 @@ const triggerSet: TriggerSet<Data> = {
       // Don't clean up when the buff is lost, as that happens after taking a tower.
       run: (data, matches) => {
         data.inLine = {};
-        if (data.my !== undefined)
+        if (data.my)
           data.my.p = undefined;
         if (matches.id === '7B0B')
           data.prsPank = true;
@@ -234,27 +216,7 @@ const triggerSet: TriggerSet<Data> = {
       delaySeconds: 0.5,
       durationSeconds: (data) => data.prsPank ? 5 : 38, // 원래 5초
       suppressSeconds: 1,
-      response: (data, _matches, output) => {
-        // cactbot-builtin-response
-        output.responseOutputStrings = {
-          text: {
-            en: '${num}번 (${player})',
-            de: '${num} (mit ${player})',
-          },
-          cw: {
-            en: '${num}번 (${player}) ❱❱❱',
-            de: '${num} (mit ${player})',
-          },
-          ccw: {
-            en: '❰❰❰ ${num}번 (${player})',
-            de: '${num} (mit ${player})',
-          },
-          switch: {
-            en: '스위치!',
-          },
-          unknown: Outputs.unknown,
-        };
-
+      infoText: (data, _matches, output) => {
         const myNum = data.inLine[data.me];
         if (myNum === undefined)
           return;
@@ -262,30 +224,66 @@ const triggerSet: TriggerSet<Data> = {
         for (const [name, num] of Object.entries(data.inLine)) {
           if (num === myNum && name !== data.me) {
             partner = name;
-            if (data.my !== undefined)
+            if (data.my)
               data.my.p = getMemberByName(data, name);
             break;
           }
         }
 
-        if (data.my !== undefined && data.my.p !== undefined) {
+        if (data.my && data.my.p) {
           if (data.prsPank) {
             const cm = Math.floor(data.my.pk / 10);
             const cp = Math.floor(data.my.p.pk / 10);
             if (cm === cp && data.my.pk < data.my.p.pk) {
-             return {
-                alertText: output.switch!(),
-                infoText: output.text!({ num: myNum, player: data.my.p.r }),
-             };
+              if (data.simple)
+                return output.simpleSwitch!({ player: data.my.p.r });
+              return output.switch!({ num: myNum, player: data.my.p.r });
             }
-            return { infoText: output.text!({ num: myNum, player: data.my.p.r }) };
+            if (data.simple)
+              return output.simple!({ player: data.my.p.r });
+            return output.text!({ num: myNum, player: data.my.p.r });
+          }
+          if (data.simple) {
+            if (data.my.pp < data.my.p.pp)
+              return output.simpleCw!({ player: data.my.p.r });
+            return output.simpleCcw!({ player: data.my.p.r });
           }
           if (data.my.pp < data.my.p.pp)
-            return { infoText: output.cw!({ num: myNum, player: data.my.p.r }) };
-          return { infoText: output.ccw!({ num: myNum, player: data.my.p.r }) };
+            return output.cw!({ num: myNum, player: data.my.p.r });
+          return output.ccw!({ num: myNum, player: data.my.p.r });
         }
 
-        return { infoText: output.text!({ num: myNum, player: data.ShortName(partner) }) };
+        return output.text!({ num: myNum, player: data.ShortName(partner) });
+      },
+      outputStrings: {
+        text: {
+          en: '${num}번 (${player})',
+          de: '${num} (mit ${player})',
+        },
+        cw: {
+          en: '${num}번 (${player}) ❱❱❱',
+          de: '${num} (mit ${player})',
+        },
+        ccw: {
+          en: '❰❰❰ ${num}번 (${player})',
+          de: '${num} (mit ${player})',
+        },
+        switch: {
+          en: '${num}번 스위치! (${player})',
+        },
+        simple: {
+          en: '(${player})',
+        },
+        simpleCw: {
+          en: '❱❱❱ (${player}) ❱❱❱',
+        },
+        simpleCcw: {
+          en: '❰❰❰ (${player}) ❰❰❰',
+        },
+        simpleSwitch: {
+          en: '스위치! (${player})',
+        },
+        unknown: Outputs.unknown,
       },
     },
     {
@@ -319,7 +317,6 @@ const triggerSet: TriggerSet<Data> = {
           return { alertText: output.tether!() };
         return { infoText: output.numNoMechanic!() };
       },
-      tts: (data) => prsMethods.ttsProgramLoop(data, 1),
     },
     {
       id: 'TOP Program Loop Other Debuffs',
@@ -356,7 +353,6 @@ const triggerSet: TriggerSet<Data> = {
           return { alertText: output.tether!({ num: mechanicNum }) };
         return { infoText: output.numNoMechanic!({ num: mechanicNum }) };
       },
-      tts: (data) => prsMethods.ttsProgramLoop(data, data.loopBlasterCount + 1),
     },
     {
       id: 'TOP Pantokrator First Debuffs',
@@ -382,7 +378,6 @@ const triggerSet: TriggerSet<Data> = {
           return { alertText: output.spread!() };
         return { infoText: output.lineStack!() };
       },
-      tts: (data) => prsMethods.ttsPantokratorTurnOut(data, 1),
     },
     {
       id: 'TOP Pantokrator Other Debuffs',
@@ -412,7 +407,6 @@ const triggerSet: TriggerSet<Data> = {
           return { alertText: output.spread!({ num: mechanicNum }) };
         return { infoText: output.lineStack!({ num: mechanicNum }) };
       },
-      tts: (data) => prsMethods.ttsPantokratorTurnOut(data, data.pantoMissileCount + 1),
     },
     {
       id: 'TOP Diffuse Wave Cannon Kyrios',
@@ -455,7 +449,7 @@ const triggerSet: TriggerSet<Data> = {
       type: 'StartsUsing',
       netRegex: { id: '7B40', source: 'Omega', capture: false },
       run: (data) => {
-        if (data.my !== undefined)
+        if (data.my)
           data.my.p = undefined;
       }
     },
@@ -524,14 +518,22 @@ const triggerSet: TriggerSet<Data> = {
         for (const [name, marker] of Object.entries(data.synergyMarker)) {
           if (marker === myMarker && name !== data.me) {
             partner = name;
-            if (data.my !== undefined)
+            if (data.my)
               data.my.p = getMemberByName(data, name);
             break;
           }
         }
 
-        const side = data.my === undefined || data.my.p === undefined ? ''
-          : data.my.sm < data.my.p.sm ? output.left!() : output.right!();
+        let side = '';
+        if (data.my && data.my.p) {
+          const left = data.my.sm < data.my.p.sm;
+          if (data.simple) {
+            return left
+              ? output.simpleLeft!({ player: data.my.p.r })
+              : output.simpleRight!({ player: data.my.p.r });
+          }
+          side = left ? output.left!() : output.right!();
+        }
 
         return {
           circle: output.circle!({ glitch: glitch, player: getMemberRole(data, partner), side: side }),
@@ -567,6 +569,12 @@ const triggerSet: TriggerSet<Data> = {
         },
         left: Outputs.arrowW,
         right: Outputs.arrowE,
+        simpleLeft: {
+          en: '❰❰❰❰❰ (${player}) ❰❰❰❰❰',
+        },
+        simpleRight: {
+          en: '❱❱❱❱❱ (${player}) ❱❱❱❱❱',
+        },
         unknown: Outputs.unknown,
       },
     },
@@ -574,6 +582,7 @@ const triggerSet: TriggerSet<Data> = {
       id: 'TOP Optical Unit Location',
       type: 'MapEffect',
       netRegex: { location: '0[1-8]', flags: '00020001' },
+      condition: (data) => !data.simple,
       // This comes out right with playstation debuffs.
       // Let players resolve Superliminal Steel/etc first.
       delaySeconds: 4,
@@ -649,7 +658,7 @@ const triggerSet: TriggerSet<Data> = {
           }[data.glitch]
           : output.unknown!();
 
-        if (data.my !== undefined && data.my.p !== undefined) {
+        if (data.my && data.my.p) {
           let m1 = getMemberByName(data, p1)!;
           let m2 = getMemberByName(data, p2)!;
           if (m1.sm > m2.sm)
@@ -774,6 +783,18 @@ const triggerSet: TriggerSet<Data> = {
             continue;
           if (data.cannonFodder[name] === partnerBuff)
             partners.push(name);
+        }
+
+        if (data.members) {
+          let m1 = getMemberByName(data, partners[0]!);
+          let m2 = getMemberByName(data, partners[1]!);
+          if (m1 && m2) {
+            if (m1.i > m2.i)
+              [m1, m2] = [m2, m1];
+            if (myBuff === 'stack')
+              return output.stack!({ player1: m1.r, player2: m2.r });
+            return output.unmarkedStack!({ player1: m1.r, player2: m2.r });
+          }
         }
 
         const [p1, p2] = partners.sort().map((x) => getMemberRole(data, x));
