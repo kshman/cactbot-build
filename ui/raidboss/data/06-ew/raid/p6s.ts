@@ -1052,6 +1052,35 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
+      id: 'P6S Transmission Instant',
+      type: 'GainsEffect',
+      // CF3 Chelomorph (Wing icon - cleave behind player)
+      // D48 Glossomorph (Snake icon - cleave in front of player)
+      netRegex: { effectId: ['CF3', 'D48'] },
+      condition: Conditions.targetIsYou(),
+      infoText: (_data, matches, output) => {
+        return matches.effectId === 'D48' ? output.forwardCleave!() : output.backwardCleave!();
+      },
+      outputStrings: {
+        forwardCleave: {
+          en: '좀 이따 트름',
+          de: 'Kegel Aoe nach Vorne, für später',
+          fr: 'Cleave Avant, pour après',
+          ja: '後で口からおくび',
+          cn: '稍后 前方扇形',
+          ko: '곧 전방 부채꼴 장판',
+        },
+        backwardCleave: {
+          en: '좀 이따 방구',
+          de: 'Kegel Aoe nach Hinten, für später',
+          fr: 'Cleave Arrière, pour après',
+          ja: '後で尻からおなら',
+          cn: '稍后 背后扇形',
+          ko: '곧 후방 부채꼴 장판',
+        },
+      },
+    },
+    {
       id: 'P6S Dark Spheres Collect',
       type: 'StartsUsing',
       netRegex: { id: '7880', source: 'Hegemone' },

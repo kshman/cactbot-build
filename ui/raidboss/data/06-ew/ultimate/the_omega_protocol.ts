@@ -1,5 +1,6 @@
 import Conditions from '../../../../../resources/conditions';
 import Outputs from '../../../../../resources/outputs';
+import { callOverlayHandler } from '../../../../../resources/overlay_plugin_api';
 import { Responses } from '../../../../../resources/responses';
 import ZoneId from '../../../../../resources/zone_id';
 import { RaidbossData } from '../../../../../types/data';
@@ -16,11 +17,13 @@ type PrsMember = {
   pp: number; // Program loop -> 프로그램 루프 우선순위
   pk: number; // Pantokrator -> 판크 우선 순위
   sm: number; // Synergy marker -> PS 마커 우선순위
+  oc: number; // canon
   n: string; // 이름
   // 내부
   i: number;
   p?: PrsMember;
   f?: boolean;
+  z?: number;
 };
 export const getMemberByName = (data: Data, name: string) =>
   data.members?.find((e) => e.n === name);
@@ -41,6 +44,7 @@ export type PlaystationMarker = typeof playstationMarkers[number];
 export type Glitch = 'mid' | 'remote';
 export type Cannon = 'spread' | 'stack';
 export type RotColor = 'blue' | 'red';
+export type Regression = 'local' | 'remote';
 
 export interface Data extends RaidbossData {
   members?: PrsMember[];
@@ -61,7 +65,13 @@ export interface Data extends RaidbossData {
   cannonFodder: { [name: string]: Cannon };
   smellDefamation: string[];
   smellRot: { [name: string]: RotColor };
+  bugRot: { [name: string]: RotColor };
   defamationColor?: RotColor;
+  latentDefectCount: number;
+  regression: { [name: string]: Regression };
+  patchVulnCount: number;
+  waveCannonStacks: NetMatches['Ability'][];
+  monitorPlayers: NetMatches['GainsEffect'][];
 }
 
 // Due to changes introduced in patch 5.2, overhead markers now have a random offset
@@ -127,6 +137,12 @@ const triggerSet: TriggerSet<Data> = {
       cannonFodder: {},
       smellDefamation: [],
       smellRot: {},
+      bugRot: {},
+      latentDefectCount: 0,
+      regression: {},
+      patchVulnCount: 0,
+      waveCannonStacks: [],
+      monitorPlayers: [],
     };
   },
   timelineTriggers: [
@@ -259,6 +275,7 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: '${num}번 (${player})',
           de: '${num} (mit ${player})',
+          ko: '${num} (+ ${player})',
         },
         cw: {
           en: '${num}번 (${player}) ❱❱❱',
@@ -291,20 +308,28 @@ const triggerSet: TriggerSet<Data> = {
       type: 'StartsUsing',
       // 7B07 = Blaster cast (only one cast, but 4 abilities)
       netRegex: { id: '7B07', source: 'Omega', capture: false },
+      durationSeconds: (data) => {
+        const myNum = data.inLine[data.me];
+        if (myNum === 1 || myNum === 3)
+          return 7;
+      },
       response: (data, _matches, output) => {
         // cactbot-builtin-response
         output.responseOutputStrings = {
           tower: {
             en: '타워로!',
             de: 'Turm 1',
+            ko: '기둥 1',
           },
           tether: {
             en: '줄채요!',
             de: 'Verbindung 1',
+            ko: '선 1',
           },
           numNoMechanic: {
             en: '1',
             de: '1',
+            ko: '1',
           },
         };
 
@@ -323,20 +348,31 @@ const triggerSet: TriggerSet<Data> = {
       type: 'Ability',
       netRegex: { id: '7B08', source: 'Omega', capture: false },
       preRun: (data) => data.loopBlasterCount++,
+      durationSeconds: (data) => {
+        const mechanicNum = data.loopBlasterCount + 1;
+        const myNum = data.inLine[data.me];
+        if (myNum === undefined)
+          return;
+        if (mechanicNum === myNum || mechanicNum === myNum + 2 || mechanicNum === myNum - 2)
+          return 7;
+      },
       response: (data, _matches, output) => {
         // cactbot-builtin-response
         output.responseOutputStrings = {
           tower: {
             en: '타워로!',
             de: 'Turm ${num}',
+            ko: '기둥 ${num}',
           },
           tether: {
             en: '줄채요!',
             de: 'Verbindung ${num}',
+            ko: '선 ${num}',
           },
           numNoMechanic: {
             en: '${num}',
             de: '${num}',
+            ko: '${num}',
           },
         };
 
@@ -366,10 +402,12 @@ const triggerSet: TriggerSet<Data> = {
           lineStack: {
             en: '1',
             de: '1',
+            ko: '1',
           },
           spread: {
             en: '밖으로!',
             de: '1 Raus (auf Dir)',
+            ko: '밖으로 1',
           },
         };
 
@@ -392,10 +430,12 @@ const triggerSet: TriggerSet<Data> = {
           lineStack: {
             en: '${num}',
             de: '${num}',
+            ko: '${num}',
           },
           spread: {
             en: '밖으로!',
             de: '${num} Raus (auf Dir)',
+            ko: '밖으로 ${num}',
           },
         };
 
@@ -416,6 +456,8 @@ const triggerSet: TriggerSet<Data> = {
       condition: (data) => data.role === 'tank',
       suppressSeconds: 20,
       alertText: (data, matches, output) => {
+        if (data.simple)
+          return;
         const id = getHeadmarkerId(data, matches);
         if (id === headmarkers.spread)
           return output.tankCleaves!();
@@ -424,6 +466,7 @@ const triggerSet: TriggerSet<Data> = {
         tankCleaves: {
           en: '탱크 클레브',
           de: 'Tank Cleaves',
+          ko: '광역 탱버',
         },
       },
     },
@@ -433,6 +476,8 @@ const triggerSet: TriggerSet<Data> = {
       netRegex: {},
       condition: Conditions.targetIsYou(),
       infoText: (data, matches, output) => {
+        if (data.simple)
+          return;
         const id = getHeadmarkerId(data, matches);
         if (id === headmarkers.spread)
           return output.laserOnYou!();
@@ -441,6 +486,7 @@ const triggerSet: TriggerSet<Data> = {
         laserOnYou: {
           en: '내게 레이저',
           de: 'Laser auf DIR',
+          ko: '레이저 대상자',
         },
       },
     },
@@ -494,6 +540,71 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
+      id: 'TOP Party Synergy',
+      type: 'Ability',
+      netRegex: { id: '7B3E', source: 'Omega', capture: false },
+      // Untargetable 3s after this, things appear ~2 after this, 2.5 for safety.
+      delaySeconds: 5.5,
+      promise: async (data) => {
+        data.combatantData = [];
+        // TODO: filter this by the combatants added right before Party Synergy???
+        data.combatantData = (await callOverlayHandler({
+          call: 'getCombatants',
+        })).combatants;
+      },
+      alertText: (data, _matches, output) => {
+        const omegaMNPCId = 15714;
+        const omegaFNPCId = 15715;
+        let countM = 0;
+        let countF = 0;
+        let isFIn = false;
+        let isMIn = false;
+        for (const c of data.combatantData) {
+          if (c.BNpcID === omegaMNPCId) {
+            countM++;
+            if (c.WeaponId === 4)
+              isMIn = true;
+          }
+          if (c.BNpcID === omegaFNPCId) {
+            countF++;
+            if (c.WeaponId === 4)
+              isFIn = true;
+          }
+        }
+
+        if (countM === 0 || countF === 0) {
+          console.error(`PartySynergy: missing m/f: ${JSON.stringify(data.combatantData)}`);
+          return;
+        }
+        if (isFIn && isMIn)
+          return output.superliminalStrength!();
+        if (isFIn && !isMIn)
+          return output.superliminalBladework!();
+        if (!isFIn && isMIn)
+          return output.blizzardStrength!();
+        if (!isFIn && !isMIn)
+          return output.blizzardBladework!();
+      },
+      outputStrings: {
+        blizzardBladework: {
+          en: '밖 + 밖',
+          de: 'Raus Raus',
+        },
+        superliminalStrength: {
+          en: '안 + 안 (남자)',
+          de: 'Rein Rein auf M',
+        },
+        superliminalBladework: {
+          en: '여자 밑으로',
+          de: 'Unter W',
+        },
+        blizzardStrength: {
+          en: '남자 옆으로',
+          de: 'Seitlich von M',
+        },
+      },
+    },
+    {
       id: 'TOP Synergy Marker',
       type: 'GainsEffect',
       // In practice, glitch1 glitch2 marker1 marker2 glitch3 glitch4 etc ordering.
@@ -529,8 +640,8 @@ const triggerSet: TriggerSet<Data> = {
           const left = data.my.sm < data.my.p.sm;
           if (data.simple) {
             return left
-              ? output.simpleLeft!({ player: data.my.p.r })
-              : output.simpleRight!({ player: data.my.p.r });
+              ? output.simpleLeft!({ glitch: glitch, player: data.my.p.r })
+              : output.simpleRight!({ glitch: glitch, player: data.my.p.r });
           }
           side = left ? output.left!() : output.right!();
         }
@@ -546,34 +657,40 @@ const triggerSet: TriggerSet<Data> = {
         midGlitch: {
           en: '중간',
           de: 'Mittel',
+          ko: '가까이',
         },
         remoteGlitch: {
           en: '멀리',
           de: 'Fern',
+          ko: '멀리',
         },
         circle: {
           en: '${side}🔴 (${player}) [${glitch}]',
           de: '${glitch} Kreis (mit ${player})',
+          ko: '${glitch} 동그라미 (+ ${player})',
         },
         triangle: {
           en: '${side}⟁ (${player}) [${glitch}]',
           de: '${glitch} Dreieck (mit ${player})',
+          ko: '${glitch} 삼각 (+ ${player})',
         },
         square: {
           en: '${side}🟪 (${player}) [${glitch}]',
           de: '${glitch} Viereck (mit ${player})',
+          ko: '${glitch} 사각 (+ ${player})',
         },
         cross: {
           en: '${side}❌ (${player}) [${glitch}]',
           de: '${glitch} Kreuz (mit ${player})',
+          ko: '${glitch} X (+ ${player})',
         },
         left: Outputs.arrowW,
         right: Outputs.arrowE,
         simpleLeft: {
-          en: '❰❰❰❰❰ (${player}) ❰❰❰❰❰',
+          en: '❰❰❰❰❰ ${glitch} (${player}) ❰❰❰❰❰',
         },
         simpleRight: {
-          en: '❱❱❱❱❱ (${player}) ❱❱❱❱❱',
+          en: '❱❱❱❱❱ ${glitch} (${player}) ❱❱❱❱❱',
         },
         unknown: Outputs.unknown,
       },
@@ -625,14 +742,17 @@ const triggerSet: TriggerSet<Data> = {
           midGlitch: {
             en: '중간',
             de: 'Mittel',
+            ko: '가까이',
           },
           remoteGlitch: {
             en: '멀리',
             de: 'Fern',
+            ko: '멀리',
           },
           stacksOn: {
             en: '${glitch} 넉백, 뭉쳐요 (${player1}, ${player2})',
-            de: '${glitch} Sammeln (${player1}, ${player2}',
+            de: '${glitch} Sammeln (${player1}, ${player2})',
+            ko: '${glitch} 쉐어 (${player1}, ${player2})',
           },
           // TODO: say who your tether partner is to swap??
           // TODO: tell the tether partner they are tethered to a stack?
@@ -735,7 +855,7 @@ const triggerSet: TriggerSet<Data> = {
         if (matches.target === data.me)
           return { alarmText: output.dontStack!() };
         if (!data.meteorTargets.includes(data.me))
-          return { infoText: output.stack!() };
+          return { alertText: output.stack!() };
       },
     },
     {
@@ -806,10 +926,12 @@ const triggerSet: TriggerSet<Data> = {
         stack: {
           en: '뭉쳐요 (${player1}, ${player2})',
           de: 'Sammeln (mit ${player1} oder ${player2})',
+          ko: '쉐어 (+ ${player1}, ${player2})',
         },
         unmarkedStack: {
           en: '노마커 뭉쳐요 (${player1}, ${player2})',
           de: 'Nicht markiertes Sammeln (mit ${player1} oder ${player2})',
+          ko: '무징 쉐어 (+ ${player1}, ${player2})',
         },
       },
     },
@@ -893,23 +1015,407 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         red: {
-          en: '🟥 데파',
+          en: '서클 색깔: 🟥',
           de: 'Rote Ehrenstrafe',
+          ko: '빨강 광역',
         },
         blue: {
-          en: '🟦 데파',
+          en: '서클 색깔: 🟦',
           de: 'Blaue Ehrenstrafe',
+          ko: '파랑 광역',
         },
         unknown: {
           en: '??? 데파메이션',
           de: '??? Ehrenstrafe',
+          ko: '??? 광역',
         },
       },
+    },
+    {
+      id: 'TOP Latent Defect Tower',
+      type: 'StartsUsing',
+      netRegex: { id: '7B6F', source: 'Omega', capture: false },
+      infoText: (data, _matches, output) => {
+        const myColor = data.bugRot[data.me];
+        if (myColor === undefined)
+          return;
+        if (data.defamationColor === myColor)
+          return output.colorTowerDefamation!({ color: output[myColor]!() });
+        else if (myColor)
+          return output.colorTower!({ color: output[myColor]!() });
+      },
+      outputStrings: {
+        colorTower: {
+          en: '${color} 타워로 / 뭉쳐요',
+        },
+        colorTowerDefamation: {
+          en: '${color} 타워 안 모서리 / 서클',
+        },
+        red: {
+          en: '🟥',
+        },
+        blue: {
+          en: '🟦',
+        },
+      },
+    },
+    {
+      id: 'TOP Rot Collect',
+      type: 'GainsEffect',
+      // D65 Critical Performance Bug (blue)
+      // DC6 Critical Underflow Bug (red)
+      // Debuffs last 27s
+      netRegex: { effectId: ['D65', 'DC6'] },
+      condition: (data, matches) => {
+        data.bugRot[matches.target] = matches.effectId === 'D65' ? 'blue' : 'red';
+        return (matches.target === data.me) && data.latentDefectCount !== 3;
+      },
+    },
+    {
+      id: 'TOP Rot Pass/Get',
+      type: 'Ability',
+      // 7B5F Cascading Latent Defect (Red Tower)
+      // 7B60 Latent Performance Defect (Blue Tower)
+      // These casts go off 1 second after Latent Defect and go off regardless if someone soaks it
+      netRegex: { id: ['7B5F', '7B60'], source: 'Omega', capture: false },
+      condition: (data) => data.latentDefectCount < 2,
+      suppressSeconds: 1,
+      response: (data, _matches, output) => {
+        // cactbot-builtin-response
+        output.responseOutputStrings = {
+          passRot: {
+            en: 'ROT 넘겨줘요',
+          },
+          getRot: {
+            en: 'ROT 받으러 가요',
+          },
+        };
+        if (data.bugRot[data.me])
+          return { infoText: output.passRot!() };
+        return { alertText: output.getRot!() };
+      },
+      run: (data) => {
+        data.bugRot = {};
+        data.latentDefectCount = data.latentDefectCount + 1;
+      },
+    },
+    {
+      id: 'TOP Rot Spread',
+      type: 'GainsEffect',
+      // D6B Latent Performance Defect (from blue)
+      // DC8 Cascading Latent Defect (from red)
+      // Debuffs last 27s
+      netRegex: { effectId: ['D6B', 'DC8'] },
+      condition: Conditions.targetIsYou(),
+      delaySeconds: (_data, matches) => parseFloat(matches.duration) - 3,
+      alertText: (_data, _matches, output) => output.spread!(),
+      run: (data, matches) => delete data.bugRot[matches.target],
+      outputStrings: {
+        spread: Outputs.spread,
+      },
+    },
+    {
+      id: 'TOP Latent Defect Tether Towers',
+      type: 'GainsEffect',
+      // D71 Remote Code Smell (blue)
+      // DAF Local Code Smell(red/green)
+      // Using Code Smell as the regressions come ~8.75s after Latent Defect
+      // Debuffs are 23, 44, 65, and 86s
+      // TODO: Possibly include direction?
+      netRegex: { effectId: ['D71', 'DAF'] },
+      condition: Conditions.targetIsYou(),
+      delaySeconds: (_data, matches) => parseFloat(matches.duration) - 8.75,
+      infoText: (data, matches, output) => {
+        const regression = matches.effectId === 'DAF' ? 'local' : 'remote';
+        const defamation = data.defamationColor;
+        if (defamation === undefined)
+          return;
+        if (regression === 'remote') {
+          const color = defamation === 'red' ? output['blue']!() : output['red']!();
+          return output.nearTether!({ color: color });
+        }
+
+        if (parseFloat(matches.duration) < 80)
+          return output.farTether!({ color: output[defamation]!() });
+
+        const color = defamation === 'red' ? output['blue']!() : output['red']!();
+        return output.finalTowerFar!({ color: color });
+      },
+      outputStrings: {
+        nearTether: {
+          en: '뭉쳐요: ${color} 타워',
+        },
+        farTether: {
+          en: '얻어요: ${color} 서클',
+        },
+        finalTowerFar: {
+          en: '${color} 타워 사이로',
+        },
+        red: {
+          en: '🟥',
+        },
+        blue: {
+          en: '🟦',
+        },
+      },
+    },
+    {
+      id: 'TOP P3 Regression Collect',
+      type: 'GainsEffect',
+      // DC9 Local Regression (red/green)
+      // DCA Remote Regression (blue)
+      netRegex: { effectId: ['DC9', 'DCA'] },
+      run: (data, matches) => {
+        data.regression[matches.target] = matches.effectId === 'DC9' ? 'local' : 'remote';
+      },
+    },
+    {
+      id: 'TOP P3 Second Regression Break Tether',
+      type: 'GainsEffect',
+      // DC9 Local Regression (red/green)
+      // DCA Remote Regression (blue)
+      // Debuffs last 10s
+      // Ideally first patch that breaks is blue, else this will not work
+      // Will call out if has not broken yet and it is safe to break, if by end
+      // of delay and first tether has not broken, it will not call
+      netRegex: { effectId: ['DC9', 'DCA'] },
+      condition: Conditions.targetIsYou(),
+      delaySeconds: (_data, matches) => parseFloat(matches.duration) - 6,
+      alertText: (data, _matches, output) => {
+        if (
+          (data.patchVulnCount % 2 === 1 && data.regression[data.me] === 'local') ||
+          (data.patchVulnCount === 7 && data.regression[data.me] === 'remote')
+        ) {
+          if (data.regression[data.me] === 'local')
+            return output.breakClose!();
+          if (data.regression[data.me] === 'remote')
+            return output.breakFar!();
+          return output.breakTether!();
+        }
+      },
+      outputStrings: {
+        breakTether: {
+          en: '줄 끊어요',
+        },
+        breakClose: {
+          en: '붙어서 줄 끊어요',
+        },
+        breakFar: {
+          en: '멀어져서 줄 끊어요',
+        },
+      },
+    },
+    {
+      id: 'TOP P3 Regression Cleanup',
+      type: 'LosesEffect',
+      // DC9 Local Regression (red/green)
+      // DCA Remote Regression (blue)
+      netRegex: { effectId: ['DC9', 'DCA'] },
+      run: (data, matches) => delete data.regression[matches.target],
+    },
+    {
+      id: 'TOP Regression Break Counter',
+      type: 'GainsEffect',
+      // DBC Magic Vulnerability Up from Patch, lasts 0.96s
+      // TODO: Clean this up for P5 Tethers?
+      netRegex: { effectId: 'DBC' },
+      preRun: (data) => data.patchVulnCount = data.patchVulnCount + 1,
+      delaySeconds: (_data, matches) => parseFloat(matches.duration),
+      suppressSeconds: 1,
+      run: (data) => {
+        // Clear count for later phases
+        if (data.patchVulnCount === 8)
+          data.patchVulnCount = 0;
+      },
+    },
+    {
+      id: 'TOP Oversampled Wave Cannon East',
+      type: 'StartsUsing',
+      netRegex: { id: '7B6B', source: 'Omega', capture: false },
+      /*
+      alertText: (_data, _matches, output) => output.text!(),
+      */
+      delaySeconds: 1,
+      infoText: (data, _matches, output) => {
+         if (!data.my || !data.my.z)
+           return output.text!();
+         const mo = {
+           21: output.m1!(),
+           22: output.m2!(),
+           23: output.m3!(),
+           11: output.o1!(),
+           12: output.o2!(),
+           13: output.o3!(),
+           14: output.o4!(),
+           15: output.o5!(),
+         }[data.my.z];
+         return mo;
+      },
+      outputStrings: {
+        text: {
+          en: '모니터: 동쪽❱❱❱',
+        },
+         m1: '④ 위 / ❰❰❰❰ 봐욧',
+         m2: 'Ⓓ 위 / 🡹🡹 봐욧',
+         m3: 'Ⓓ 아래 / 🡻🡻 봐욧',
+         o1: '🡼 Ⓐ',
+         o2: '보스 ❱❱❱❱',
+         o3: 'Ⓑ 🡺',
+         o4: '🡸 ③-②라인 ',
+         o5: '🡿 Ⓒ',
+      },
+    },
+    {
+      id: 'TOP Oversampled Wave Cannon West',
+      type: 'StartsUsing',
+      netRegex: { id: '7B6C', source: 'Omega', capture: false },
+      /*
+      alertText: (_data, _matches, output) => output.text!(),
+      */
+      delaySeconds: 1,
+      infoText: (data, _matches, output) => {
+         if (!data.my || !data.my.z)
+           return output.text!();
+         const mo = {
+           21: output.m1!(),
+           22: output.m2!(),
+           23: output.m3!(),
+           11: output.o1!(),
+           12: output.o2!(),
+           13: output.o3!(),
+           14: output.o4!(),
+           15: output.o5!(),
+         }[data.my.z];
+         return mo;
+      },
+      outputStrings: {
+        text: {
+          en: '모니터: ❰❰❰서쪽',
+        },
+         m1: '① 위 / ❱❱❱❱ 봐욧',
+         m2: 'Ⓑ 위 / 🡹🡹 봐욧',
+         m3: 'Ⓑ 아래 / 🡻🡻 봐욧',
+         o1: 'Ⓐ 🡽',
+         o2: '❰❰❰❰ 보스',
+         o3: '🡸 Ⓓ',
+         o4: '③-②라인 🡺',
+         o5: 'Ⓒ 🡾',
+      },
+    },
+    {
+      id: 'TOP Oversampled Wave Cannon Loading',
+      type: 'GainsEffect',
+      // D7C = Oversampled Wave Cannon Loading (facing right)
+      // D7D = Oversampled Wave Cannon Loading (facing left)
+      netRegex: { effectId: ['D7C', 'D7D'] },
+      preRun: (data, matches) => data.monitorPlayers.push(matches),
+      response: (data, _matches, output) => {
+        // cactbot-builtin-response
+        output.responseOutputStrings = {
+          // TODO: should we get all of these player's positions,
+          // assuming there's a N/S conga line?
+          monitorOnYou: {
+            en: '내가 모니터 (${player1}, ${player2})',
+          },
+          unmarked: {
+            en: '안붙었네',
+          },
+          monitorNum: {
+            en: '내가 모니터: ${num}번',
+          },
+          noMonitor: {
+            en: '안붙었네: ${num}번',
+          },
+        };
+
+        if (data.monitorPlayers.length !== 3)
+          return;
+
+        if (data.members && data.my) {
+          const ms = data.monitorPlayers.map((x) => getMemberByName(data, x.target));
+          data.monitorPlayers = [];
+
+          if (ms.includes(data.my)) {
+            const mm = ms.sort((a, b) => a!.oc - b!.oc);
+            for (let i = 0; i < mm.length; i++)
+              mm[i]!.z = i + 21;
+            return { alertText: output.monitorNum!({ num: data.my.z! - 20 }) };
+          }
+
+          const mn = data.members.filter((x) => !ms.includes(x));
+          const mm = mn.sort((a, b) => a.oc - b.oc);
+          for (let i = 0; i < mm.length; i++)
+            mm[i]!.z = i + 11;
+          return { alertText: output.noMonitor!({ num: data.my.z! - 10 }) };
+        }
+
+        const players = data.monitorPlayers.map((x) => x.target).sort();
+        data.monitorPlayers = [];
+
+        if (players.includes(data.me)) {
+          const [p1, p2] = players.filter((x) => x !== data.me).map((x) => data.ShortName(x));
+          return { alertText: output.monitorOnYou!({ player1: p1, player2: p2 }) };
+        }
+        return { infoText: output.unmarked!() };
+      },
+    },
+    {
+      id: 'TOP Wave Cannon Stack Collector',
+      type: 'Ability',
+      netRegex: { id: '5779', source: 'Omega' },
+      // Store full matches here in case somebody has a N/S priority system
+      // they want to implement themselves in the stack trigger.
+      run: (data, matches) => data.waveCannonStacks.push(matches),
+    },
+    {
+      id: 'TOP Wave Cannon Stack',
+      type: 'Ability',
+      netRegex: { id: '5779', source: 'Omega', capture: false },
+      delaySeconds: 0.3,
+      suppressSeconds: 1,
+      response: (data, _matches, output) => {
+        // cactbot-builtin-response
+        output.responseOutputStrings = {
+          stacks: {
+            en: '뭉쳐요 (${player1}, ${player2})',
+          },
+          stackOnYou: {
+            en: '내게 뭉쳐요 (${player})',
+          },
+        };
+        const [m1, m2] = data.waveCannonStacks;
+        if (data.waveCannonStacks.length !== 2 || m1 === undefined || m2 === undefined)
+          return;
+
+        const [p1, p2] = [m1.target, m2.target].sort();
+        const onYou = p1 === data.me || p2 === data.me;
+        if (onYou) {
+          const otherPerson = p1 === data.me ? p2 : p1;
+          if (data.members) {
+            const m = getMemberByName(data, otherPerson!);
+            if (m)
+              return { alertText: output.stackOnYou!({ player: m.r }) };
+          }
+          return { alertText: output.stackOnYou!({ player: data.ShortName(otherPerson) }) };
+        }
+
+        if (data.members) {
+          const m1 = getMemberByName(data, p1!);
+          const m2 = getMemberByName(data, p2!);
+          if (m1 && m2)
+            return { infoText: output.stacks!({ player1: m1.r, player2: m2.r }), };
+        }
+        return {
+          infoText: output.stacks!({ player1: data.ShortName(p1), player2: data.ShortName(p2) }),
+        };
+      },
+      run: (data, _matches) => data.waveCannonStacks = [],
     },
   ],
   timelineReplace: [
     {
       'locale': 'de',
+      'missingTranslations': true,
       'replaceSync': {
         'Omega(?!-)': 'Omega',
         'Omega-F': 'Omega-W',
@@ -958,13 +1464,14 @@ const triggerSet: TriggerSet<Data> = {
         'Spotlight': 'Scheinwerfer',
         'Storage Violation': 'Speicherverletzung S',
         'Superliminal Steel': 'Klingenkombo B',
-        'Synthetic Shield': 'Effiziente Klingenführung',
+        'Synthetic Shield': 'Synthetischer Schild', // This is currently a mistranslated in German as 'Effiziente Klingenführung'
         '(?<! )Wave Cannon Kyrios': 'Wellenkanone P',
         'Wave Repeater': 'Schnellfeuer-Wellenkanone',
       },
     },
     {
       'locale': 'fr',
+      'missingTranslations': true,
       'replaceSync': {
         'Omega(?!-)': 'Oméga',
         'Omega-F': 'Oméga-F',
@@ -1020,6 +1527,7 @@ const triggerSet: TriggerSet<Data> = {
     },
     {
       'locale': 'ja',
+      'missingTranslations': true,
       'replaceSync': {
         'Omega(?!-)': 'オメガ',
         'Omega-F': 'オメガF',
