@@ -38,6 +38,16 @@ export const testSynergyMarkerMove = (my: PrsMember, ot: PrsMember) => {
 };
 // [PRS END]
 
+type Phase =
+  | 'p1'
+  | 'p2'
+  | 'p3'
+  | 'p4'
+  | 'delta'
+  | 'sigma'
+  | 'omega'
+  | 'p6';
+
 export const playstationMarkers = ['circle', 'cross', 'triangle', 'square'] as const;
 export type PlaystationMarker = typeof playstationMarkers[number];
 
@@ -51,8 +61,10 @@ export interface Data extends RaidbossData {
   my?: PrsMember;
   simple?: boolean;
   prsPank?: boolean;
+  prsEye?: boolean;
   //
   combatantData: PluginCombatantState[];
+  phase: Phase;
   decOffset?: number;
   inLine: { [name: string]: number };
   loopBlasterCount: number;
@@ -67,8 +79,8 @@ export interface Data extends RaidbossData {
   smellRot: { [name: string]: RotColor };
   bugRot: { [name: string]: RotColor };
   defamationColor?: RotColor;
-  latentDefectCount: number;
   regression: { [name: string]: Regression };
+  latentDefectCount: number;
   patchVulnCount: number;
   waveCannonStacks: NetMatches['Ability'][];
   monitorPlayers: NetMatches['GainsEffect'][];
@@ -127,6 +139,7 @@ const triggerSet: TriggerSet<Data> = {
   initData: () => {
     return {
       combatantData: [],
+      phase: 'p1',
       inLine: {},
       loopBlasterCount: 0,
       pantoMissileCount: 0,
@@ -137,9 +150,9 @@ const triggerSet: TriggerSet<Data> = {
       cannonFodder: {},
       smellDefamation: [],
       smellRot: {},
+      regression: {},
       bugRot: {},
       latentDefectCount: 0,
-      regression: {},
       patchVulnCount: 0,
       waveCannonStacks: [],
       monitorPlayers: [],
@@ -185,6 +198,59 @@ const triggerSet: TriggerSet<Data> = {
     },
   ],
   triggers: [
+    {
+      id: 'TOP Phase Tracker',
+      type: 'StartsUsing',
+      // 7B40 = Firewall
+      // 8014 = Run ****mi* (Sigma Version)
+      // 8015 = Run ****mi* (Omega Version)
+      netRegex: { id: ['7B40', '8014', '8015'], capture: true },
+      run: (data, matches) => {
+        switch (matches.id) {
+          case '7B40':
+            data.phase = 'p2';
+            delete data.prsEye;
+            break;
+          case '8014':
+            data.phase = 'sigma';
+            break;
+          case '8015':
+            data.phase = 'omega';
+            break;
+        }
+      },
+    },
+    {
+      id: 'TOP Phase Ability Tracker',
+      type: 'Ability',
+      // 7BFD = attack (Omega)
+      // 7B13 = self-cast on omega
+      // 7B47 = self-cast on omega
+      // 7B7C = self-cast on omega
+      // 7F72 = Blind Faith (non-enrage)
+      netRegex: { id: ['7BFD', '7B13', '7B47', '7B7C', '7F72'], capture: true },
+      suppressSeconds: 20, // Ignore multiple delta/omega captures
+      run: (data, matches) => {
+        switch (matches.id) {
+          case '7BFD':
+            data.phase = 'p1';
+            break;
+          case '7B13':
+            data.phase = 'p3';
+            break;
+          case '7B47':
+            data.phase = 'p4';
+            break;
+          case '7B7C':
+            data.phase = 'delta';
+            delete data.prsEye;
+            break;
+          case '7F72':
+            data.phase = 'p6';
+            break;
+        }
+      },
+    },
     {
       id: 'TOP Headmarker Tracker',
       type: 'HeadMarker',
@@ -587,20 +653,24 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         blizzardBladework: {
-          en: '밖 + 밖',
+          en: '밖 + 밖 (남자 밖으로)',
           de: 'Raus Raus',
+          ko: '밖 밖',
         },
         superliminalStrength: {
           en: '안 + 안 (남자)',
           de: 'Rein Rein auf M',
+          ko: '안 안 남자',
         },
         superliminalBladework: {
           en: '여자 밑으로',
           de: 'Unter W',
+          ko: '여자 밑',
         },
         blizzardStrength: {
-          en: '남자 옆으로',
+          en: '남자 옆으로 (가운데로 여자 발차기)',
           de: 'Seitlich von M',
+          ko: '남자 양옆',
         },
       },
     },
@@ -635,62 +705,129 @@ const triggerSet: TriggerSet<Data> = {
           }
         }
 
-        let side = '';
         if (data.my && data.my.p) {
-          const left = data.my.sm < data.my.p.sm;
-          if (data.simple) {
-            return left
-              ? output.simpleLeft!({ glitch: glitch, player: data.my.p.r })
-              : output.simpleRight!({ glitch: glitch, player: data.my.p.r });
+          if (data.phase === 'p2') {
+            const left = data.my.sm < data.my.p.sm;
+            if (data.simple) {
+              return left
+                ? output.simpleLeft!({ glitch: glitch, player: data.my.p.r })
+                : output.simpleRight!({ glitch: glitch, player: data.my.p.r });
+            }
+            // 왼쪽
+            if (left) {
+              const index = {
+                circle: 1,
+                cross: 2,
+                triangle: 3,
+                square: 4
+              } [myMarker];
+              return {
+                circle: output.ccL!({ glitch: glitch, num: index, player: data.my.p.r }),
+                cross: output.crL!({ glitch: glitch, num: index, player: data.my.p.r }),
+                triangle: output.trL!({ glitch: glitch, num: index, player: data.my.p.r }),
+                square: output.sqL!({ glitch: glitch, num: index, player: data.my.p.r }),
+              }[myMarker];
+            }
+            // 오른쪽
+            let index;
+            if (data.glitch === 'mid') {
+              index = {
+                circle: 1,
+                cross: 2,
+                triangle: 3,
+                square: 4
+              } [myMarker];
+            } else {
+              index = {
+                circle: 4,
+                cross: 3,
+                triangle: 2,
+                square: 1
+              } [myMarker];
+            }
+            return {
+                circle: output.ccR!({ glitch: glitch, num: index, player: data.my.p.r }),
+                cross: output.crR!({ glitch: glitch, num: index, player: data.my.p.r }),
+                triangle: output.trR!({ glitch: glitch, num: index, player: data.my.p.r }),
+                square: output.sqR!({ glitch: glitch, num: index, player: data.my.p.r }),
+            }[myMarker];
+          } else if (data.phase === 'sigma') {
+            return {
+                circle: output.circle!({ glitch: glitch, player: data.my.p.r }),
+                cross: output.cross!({ glitch: glitch, player: data.my.p.r }),
+                triangle: output.triangle!({ glitch: glitch, player: data.my.p.r }),
+                square: output.square!({ glitch: glitch, player: data.my.p.r }),
+            }[myMarker];
           }
-          side = left ? output.left!() : output.right!();
         }
 
         return {
-          circle: output.circle!({ glitch: glitch, player: getMemberRole(data, partner), side: side }),
-          triangle: output.triangle!({ glitch: glitch, player: getMemberRole(data, partner), side: side }),
-          square: output.square!({ glitch: glitch, player: getMemberRole(data, partner), side: side }),
-          cross: output.cross!({ glitch: glitch, player: getMemberRole(data, partner), side: side }),
+          circle: output.circle!({ glitch: glitch, player: getMemberRole(data, partner) }),
+          triangle: output.triangle!({ glitch: glitch, player: getMemberRole(data, partner) }),
+          square: output.square!({ glitch: glitch, player: getMemberRole(data, partner) }),
+          cross: output.cross!({ glitch: glitch, player: getMemberRole(data, partner) }),
         }[myMarker];
       },
       outputStrings: {
         midGlitch: {
-          en: '중간',
+          en: '미들',
           de: 'Mittel',
           ko: '가까이',
         },
         remoteGlitch: {
-          en: '멀리',
+          en: '파',
           de: 'Fern',
           ko: '멀리',
         },
         circle: {
-          en: '${side}🔴 (${player}) [${glitch}]',
+          en: '${glitch}🔴 (${player})',
           de: '${glitch} Kreis (mit ${player})',
           ko: '${glitch} 동그라미 (+ ${player})',
         },
         triangle: {
-          en: '${side}⟁ (${player}) [${glitch}]',
+          en: '${glitch}▲ (${player})',
           de: '${glitch} Dreieck (mit ${player})',
           ko: '${glitch} 삼각 (+ ${player})',
         },
         square: {
-          en: '${side}🟪 (${player}) [${glitch}]',
+          en: '${glitch}🟪 (${player})',
           de: '${glitch} Viereck (mit ${player})',
           ko: '${glitch} 사각 (+ ${player})',
         },
         cross: {
-          en: '${side}❌ (${player}) [${glitch}]',
+          en: '${glitch}❌ (${player})',
           de: '${glitch} Kreuz (mit ${player})',
           ko: '${glitch} X (+ ${player})',
         },
-        left: Outputs.arrowW,
-        right: Outputs.arrowE,
         simpleLeft: {
           en: '❰❰❰❰❰ ${glitch} (${player}) ❰❰❰❰❰',
         },
         simpleRight: {
           en: '❱❱❱❱❱ ${glitch} (${player}) ❱❱❱❱❱',
+        },
+        ccL: {
+          en: '❰❰❰❰❰ ${glitch}🔴#${num} (${player})',
+        },
+        crL: {
+          en: '❰❰❰❰❰ ${glitch}❌#${num} (${player})',
+        },
+        trL: {
+          en: '❰❰❰❰❰ ${glitch}▲#${num} (${player})',
+        },
+        sqL: {
+          en: '❰❰❰❰❰ ${glitch}🟪#${num} (${player})',
+        },
+        ccR: {
+          en: '${glitch}🔴#${num} (${player}) ❱❱❱❱❱',
+        },
+        crR: {
+          en: '${glitch}❌#${num} (${player}) ❱❱❱❱❱',
+        },
+        trR: {
+          en: '${glitch}▲#${num} (${player}) ❱❱❱❱❱',
+        },
+        sqR: {
+          en: '${glitch}🟪#${num} (${player}) ❱❱❱❱❱',
         },
         unknown: Outputs.unknown,
       },
@@ -702,9 +839,13 @@ const triggerSet: TriggerSet<Data> = {
       condition: (data) => !data.simple,
       // This comes out right with playstation debuffs.
       // Let players resolve Superliminal Steel/etc first.
-      delaySeconds: 4,
-      durationSeconds: 4,
-      alertText: (_data, matches, output) => {
+      delaySeconds: 0.5,
+      durationSeconds: 7,
+      alertText: (data, matches, output) => {
+        if (data.prsEye)
+          return;
+        data.prsEye = true;
+
         const dir = {
           '01': output.dirN!(),
           '02': output.dirNE!(),
@@ -721,14 +862,14 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: '눈: ${dir}',
         },
-        dirN: 'A',
-        dirNE: '1',
-        dirE: 'B',
-        dirSE: '2',
-        dirS: 'C',
-        dirSW: '3',
-        dirW: 'D',
-        dirNW: '4',
+        dirN: 'A [12시]',
+        dirNE: '1 [1시]',
+        dirE: 'B [3시]',
+        dirSE: '2 [5시]',
+        dirS: 'C [6시]',
+        dirSW: '3 [7시]',
+        dirW: 'D [9시]',
+        dirNW: '4 [11시]',
       },
     },
     {
@@ -740,17 +881,29 @@ const triggerSet: TriggerSet<Data> = {
         // cactbot-builtin-response
         output.responseOutputStrings = {
           midGlitch: {
-            en: '중간',
+            en: '미들',
             de: 'Mittel',
             ko: '가까이',
           },
           remoteGlitch: {
-            en: '멀리',
+            en: '파',
             de: 'Fern',
             ko: '멀리',
           },
+        circle: {
+          en: '🔴',
+        },
+        triangle: {
+          en: '▲',
+        },
+        square: {
+          en: '🟪',
+        },
+        cross: {
+          en: '❌',
+        },
           stacksOn: {
-            en: '${glitch} 넉백, 뭉쳐요 (${player1}, ${player2})',
+            en: '${glitch}${marker} (${player1}, ${player2})',
             de: '${glitch} Sammeln (${player1}, ${player2})',
             ko: '${glitch} 쉐어 (${player1}, ${player2})',
           },
@@ -778,7 +931,17 @@ const triggerSet: TriggerSet<Data> = {
           }[data.glitch]
           : output.unknown!();
 
-        if (data.my && data.my.p) {
+        const myMarker = data.synergyMarker[data.me];
+        const marker = myMarker === undefined
+          ? ''
+          : {
+            circle: output.circle!(),
+            cross: output.cross!(),
+            triangle: output.triangle!(),
+            square: output.square!(),
+          }[myMarker];
+
+        /* if (data.my && data.my.p) {
           let m1 = getMemberByName(data, p1)!;
           let m2 = getMemberByName(data, p2)!;
           if (m1.sm > m2.sm)
@@ -805,10 +968,11 @@ const triggerSet: TriggerSet<Data> = {
           }
           // 그냥 알랴줌
           return { infoText: output.stacksOn!({ glitch: glitch, player1: m1.r, player2: m2.r }) };
-        }
+        } */
 
         const stacksOn = output.stacksOn!({
           glitch: glitch,
+          marker: marker,
           player1: data.ShortName(p1),
           player2: data.ShortName(p2),
         });
@@ -854,8 +1018,9 @@ const triggerSet: TriggerSet<Data> = {
 
         if (matches.target === data.me)
           return { alarmText: output.dontStack!() };
-        if (!data.meteorTargets.includes(data.me))
-          return { alertText: output.stack!() };
+        // Note: if you are doing uptime meteors then everybody stacks.
+        // If you are not, then you'll need to ignore this as needed.
+        return { infoText: output.stack!() };
       },
     },
     {
@@ -968,8 +1133,9 @@ const triggerSet: TriggerSet<Data> = {
       type: 'GainsEffect',
       netRegex: { effectId: 'D6D', capture: false },
       delaySeconds: 0.5,
+      durationSeconds: 10,
       suppressSeconds: 1,
-      alertText: (data, _matches, output) => {
+      infoText: (data, _matches, output) => {
         let rotColor: RotColor | undefined;
 
         if (data.smellDefamation.length !== 2) {
@@ -1015,17 +1181,17 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         red: {
-          en: '서클 색깔: 🟥',
-          de: 'Rote Ehrenstrafe',
+          en: '서클 색깔: 🔴',
+          de: 'Rot hat Ehrenstrafe',
           ko: '빨강 광역',
         },
         blue: {
-          en: '서클 색깔: 🟦',
-          de: 'Blaue Ehrenstrafe',
+          en: '서클 색깔: 🔵',
+          de: 'Blau hat Ehrenstrafe',
           ko: '파랑 광역',
         },
         unknown: {
-          en: '??? 데파메이션',
+          en: '서클 색깔: ???',
           de: '??? Ehrenstrafe',
           ko: '??? 광역',
         },
@@ -1035,6 +1201,7 @@ const triggerSet: TriggerSet<Data> = {
       id: 'TOP Latent Defect Tower',
       type: 'StartsUsing',
       netRegex: { id: '7B6F', source: 'Omega', capture: false },
+      durationSeconds: 10,
       infoText: (data, _matches, output) => {
         const myColor = data.bugRot[data.me];
         if (myColor === undefined)
@@ -1046,16 +1213,24 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         colorTower: {
-          en: '${color} 타워로 / 뭉쳐요',
+          en: '${color} 타워 밟은채 🡺 뭉쳐요',
+          de: '${color} Turm versammeln',
+          ko: '${color} 장판 쉐어',
         },
         colorTowerDefamation: {
-          en: '${color} 타워 안 모서리 / 서클',
+          en: '${color} 타워 밟은채 모서리 / 서클',
+          de: '${color} Turm Ehrenstrafe',
+          ko: '${color} 장판 광역',
         },
         red: {
-          en: '🟥',
+          en: '🔴',
+          de: 'Rot',
+          ko: '빨강',
         },
         blue: {
-          en: '🟦',
+          en: '🔵',
+          de: 'Blau',
+          ko: '파랑',
         },
       },
     },
@@ -1084,10 +1259,14 @@ const triggerSet: TriggerSet<Data> = {
         // cactbot-builtin-response
         output.responseOutputStrings = {
           passRot: {
-            en: 'ROT 넘겨줘요',
+            en: 'ROT 넘겨요',
+            de: 'Bug weitergeben',
+            ko: '디버프 건네기',
           },
           getRot: {
             en: 'ROT 받으러 가요',
+            de: 'Bug nehmen',
+            ko: '디버프 받기',
           },
         };
         if (data.bugRot[data.me])
@@ -1097,21 +1276,6 @@ const triggerSet: TriggerSet<Data> = {
       run: (data) => {
         data.bugRot = {};
         data.latentDefectCount = data.latentDefectCount + 1;
-      },
-    },
-    {
-      id: 'TOP Rot Spread',
-      type: 'GainsEffect',
-      // D6B Latent Performance Defect (from blue)
-      // DC8 Cascading Latent Defect (from red)
-      // Debuffs last 27s
-      netRegex: { effectId: ['D6B', 'DC8'] },
-      condition: Conditions.targetIsYou(),
-      delaySeconds: (_data, matches) => parseFloat(matches.duration) - 3,
-      alertText: (_data, _matches, output) => output.spread!(),
-      run: (data, matches) => delete data.bugRot[matches.target],
-      outputStrings: {
-        spread: Outputs.spread,
       },
     },
     {
@@ -1125,37 +1289,48 @@ const triggerSet: TriggerSet<Data> = {
       netRegex: { effectId: ['D71', 'DAF'] },
       condition: Conditions.targetIsYou(),
       delaySeconds: (_data, matches) => parseFloat(matches.duration) - 8.75,
-      infoText: (data, matches, output) => {
+      durationSeconds: 10,
+      alertText: (data, matches, output) => {
         const regression = matches.effectId === 'DAF' ? 'local' : 'remote';
         const defamation = data.defamationColor;
         if (defamation === undefined)
           return;
-        if (regression === 'remote') {
-          const color = defamation === 'red' ? output['blue']!() : output['red']!();
-          return output.nearTether!({ color: color });
-        }
+
+        const defamationTowerColor = defamation === 'red' ? output.red!() : output.blue!();
+        const stackTowerColor = defamation === 'red' ? output.blue!() : output.red!();
+        if (regression === 'remote')
+          return output.farTether!({ color: stackTowerColor });
 
         if (parseFloat(matches.duration) < 80)
-          return output.farTether!({ color: output[defamation]!() });
+          return output.nearTether!({ color: defamationTowerColor });
 
-        const color = defamation === 'red' ? output['blue']!() : output['red']!();
-        return output.finalTowerFar!({ color: color });
+        return output.finalTowerNear!({ color: stackTowerColor });
       },
       outputStrings: {
-        nearTether: {
-          en: '뭉쳐요: ${color} 타워',
-        },
         farTether: {
-          en: '얻어요: ${color} 서클',
+          en: '뭉쳐요: ${color} 타워 사이로',
+          de: 'Beim ${color}en Turm versammeln',
+          ko: '${color} 장판 사이에서 쉐어',
         },
-        finalTowerFar: {
-          en: '${color} 타워 사이로',
+        nearTether: {
+          en: '얻어요: ${color} 타워 바깥으로 / 서클',
+          de: 'Auserhalb vom ${color}en Turm',
+          ko: '${color} 장판 바깥쪽으로',
+        },
+        finalTowerNear: {
+          en: '마지막 뭉쳐요: ${color} 타워 사이로',
+          de: 'Zwischen den ${color}en Türmen',
+          ko: '${color} 장판 사이로',
         },
         red: {
-          en: '🟥',
+          en: '🔴',
+          de: 'Rot',
+          ko: '빨강',
         },
         blue: {
-          en: '🟦',
+          en: '🔵',
+          de: 'Blau',
+          ko: '파랑',
         },
       },
     },
@@ -1181,6 +1356,7 @@ const triggerSet: TriggerSet<Data> = {
       netRegex: { effectId: ['DC9', 'DCA'] },
       condition: Conditions.targetIsYou(),
       delaySeconds: (_data, matches) => parseFloat(matches.duration) - 6,
+      durationSeconds: 8,
       alertText: (data, _matches, output) => {
         if (
           (data.patchVulnCount % 2 === 1 && data.regression[data.me] === 'local') ||
@@ -1229,6 +1405,25 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
+      id: 'TOP Rot Spread',
+      type: 'GainsEffect',
+      // D65 Critical Performance Bug (blue)
+      // DC6 Critical Underflow Bug (red)
+      // Debuffs last 27s
+      netRegex: { effectId: ['D65', 'DC6'] },
+      // TODO: should we have a "Watch Rot" call if you don't get it?
+      // (with some suppression due to inconsistent rot pickup timings etc)
+      condition: Conditions.targetIsYou(),
+      delaySeconds: (_data, matches) => parseFloat(matches.duration) - 3,
+      infoText: (_data, _matches, output) => output.spread!(),
+      run: (data, matches) => delete data.bugRot[matches.target],
+      outputStrings: {
+        spread: {
+          en: '적당히 흩어져요, 부디치지 말고',
+        },
+      },
+    },
+    {
       id: 'TOP Oversampled Wave Cannon East',
       type: 'StartsUsing',
       netRegex: { id: '7B6B', source: 'Omega', capture: false },
@@ -1236,7 +1431,8 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       */
       delaySeconds: 1,
-      infoText: (data, _matches, output) => {
+      durationSeconds: 8,
+      alertText: (data, _matches, output) => {
          if (!data.my || !data.my.z)
            return output.text!();
          const mo = {
@@ -1254,15 +1450,16 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: '모니터: 동쪽❱❱❱',
+          ko: '오른쪽 모니터',
         },
-         m1: '④ 위 / ❰❰❰❰ 봐욧',
-         m2: 'Ⓓ 위 / 🡹🡹 봐욧',
-         m3: 'Ⓓ 아래 / 🡻🡻 봐욧',
-         o1: '🡼 Ⓐ',
+         m1: '④ 위 / ❰❰❰❰ 유도',
+         m2: 'Ⓓ 위 / 🡹🡹 유도',
+         m3: 'Ⓓ 아래 / 🡻🡻 유도',
+         o1: 'Ⓐ 🡼',
          o2: '보스 ❱❱❱❱',
          o3: 'Ⓑ 🡺',
-         o4: '🡸 ③-②라인 ',
-         o5: '🡿 Ⓒ',
+         o4: 'Ⓒ 🡼 / ③-②라인 ',
+         o5: '③ 🡻',
       },
     },
     {
@@ -1273,7 +1470,8 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       */
       delaySeconds: 1,
-      infoText: (data, _matches, output) => {
+      durationSeconds: 8,
+      alertText: (data, _matches, output) => {
          if (!data.my || !data.my.z)
            return output.text!();
          const mo = {
@@ -1291,15 +1489,16 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: '모니터: ❰❰❰서쪽',
+          ko: '왼쪽 모니터',
         },
-         m1: '① 위 / ❱❱❱❱ 봐욧',
-         m2: 'Ⓑ 위 / 🡹🡹 봐욧',
-         m3: 'Ⓑ 아래 / 🡻🡻 봐욧',
+         m1: '① 위 / ❱❱❱❱ 유도',
+         m2: 'Ⓑ 위 / 🡹🡹 유도',
+         m3: 'Ⓑ 아래 / 🡻🡻 유도',
          o1: 'Ⓐ 🡽',
          o2: '❰❰❰❰ 보스',
-         o3: '🡸 Ⓓ',
-         o4: '③-②라인 🡺',
-         o5: 'Ⓒ 🡾',
+         o3: 'Ⓓ 🡸',
+         o4: 'Ⓒ 🡽 / ③-②라인',
+         o5: '② 🡻',
       },
     },
     {
@@ -1316,9 +1515,13 @@ const triggerSet: TriggerSet<Data> = {
           // assuming there's a N/S conga line?
           monitorOnYou: {
             en: '내가 모니터 (${player1}, ${player2})',
+            de: 'Bildschirm (w/${player1}, ${player2})',
+            ko: '모니터 (+ ${player1}, ${player2})',
           },
           unmarked: {
             en: '안붙었네',
+            de: 'Unmarkiert',
+            ko: '무징',
           },
           monitorNum: {
             en: '내가 모니터: ${num}번',
@@ -1378,9 +1581,13 @@ const triggerSet: TriggerSet<Data> = {
         output.responseOutputStrings = {
           stacks: {
             en: '뭉쳐요 (${player1}, ${player2})',
+            de: 'Sammeln (${player1}, ${player2})',
+            ko: '쉐어징 (${player1}, ${player2})',
           },
           stackOnYou: {
             en: '내게 뭉쳐요 (${player})',
+            de: 'Auf DIR sammeln (w/${player})',
+            ko: '쉐어징 대상자 (+ ${player})',
           },
         };
         const [m1, m2] = data.waveCannonStacks;
@@ -1417,34 +1624,50 @@ const triggerSet: TriggerSet<Data> = {
       'locale': 'de',
       'missingTranslations': true,
       'replaceSync': {
-        'Omega(?!-)': 'Omega',
+        'Alpha Omega': 'Alpha-Omega',
+        'Cosmo Meteor': 'Kosmosmeteor',
+        '(?<!Alpha )Omega(?!-)': 'Omega',
         'Omega-F': 'Omega-W',
         'Omega-M': 'Omega-M',
         'Optical Unit': 'Optikmodul',
+        'Rear Power Unit': 'hinter(?:e|er|es|en) Antriebseinheit',
         'Right Arm Unit': 'recht(?:e|er|es|en) Arm',
+        'Rocket Punch': 'Raketenschlag',
       },
       'replaceText': {
+        'Archive Peripheral': 'Archiv-Peripherie',
         'Atomic Ray': 'Atomstrahlung',
         'Beyond Defense': 'Schildkombo S',
         'Beyond Strength': 'Schildkombo G',
         'Blaster': 'Blaster',
+        'Blind Faith': 'Blindes Vertrauen',
         'Colossal Blow': 'Kolossaler Hieb',
         'Condensed Wave Cannon Kyrios': 'Hochleistungswellenkanone P',
+        'Cosmo Arrow': 'Kosmospfeil',
+        'Cosmo Dive': 'Kosmossturz',
         'Cosmo Memory': 'Kosmosspeicher',
+        'Cosmo Meteor': 'Kosmosmeteor',
         'Critical Error': 'Schwerer Ausnahmefehler',
+        'Diffuse Wave Cannon(?! Kyrios)': 'Streuende Wellenkanone',
         'Diffuse Wave Cannon Kyrios': 'Streuende Wellenkanone P',
         'Discharger': 'Entlader',
         'Efficient Bladework': 'Effiziente Klingenführung',
+        'Explosion': 'Explosion',
         'Firewall': 'Sicherungssystem',
         'Flame Thrower': 'Flammensturm',
+        'Flash Gale': 'Blitzwind',
         'Guided Missile Kyrios': 'Lenkrakete P',
+        'Hello, Distant World': 'Hallo, Welt: Fern',
+        'Hello, Near World': 'Hallo, Welt: Nah',
         'Hello, World': 'Hallo, Welt!',
         'High-powered Sniper Cannon': 'Wellengeschütz „Pfeil +”',
+        'Hyper Pulse': 'Hyper-Impuls',
         'Ion Efflux': 'Ionenstrom',
         'Laser Shower': 'Laserschauer',
         'Latent Defect': 'Latenter Bug',
         'Left Arm Unit': 'link(?:e|er|es|en) Arm',
         'Limitless Synergy': 'Synergieprogramm LB',
+        'Magic Number': 'Magische Zahl',
         'Optical Laser': 'Optischer Laser F',
         'Optimized Bladedance': 'Omega-Schwertertanz',
         'Optimized Blizzard III': 'Omega-Eisga',
@@ -1456,15 +1679,24 @@ const triggerSet: TriggerSet<Data> = {
         'Pantokrator': 'Pantokrator',
         'Party Synergy': 'Synergieprogramm PT',
         'Patch': 'Regression',
+        'Peripheral Synthesis': 'Ausdruck',
         'Pile Pitch': 'Neigungsstoß',
         'Program Loop': 'Programmschleife',
+        'Rear Lasers': 'Hintere Laser',
         'Right Arm Unit': 'recht(?:e|er|es|en) Arm',
+        'Run: \\*\\*\\*\\*mi\\* \\(Delta Version\\)': 'Ausführen: XXXXmiX (Delta)',
+        'Run: \\*\\*\\*\\*mi\\* \\(Omega Version\\)': 'Ausführen: XXXXmiX (Omega)',
+        'Run: \\*\\*\\*\\*mi\\* \\(Sigma Version\\)': 'Ausführen: XXXXmiX (Sigma)',
         '(?<! )Sniper Cannon': 'Wellengeschütz „Pfeil”',
         'Solar Ray': 'Sonnenstrahl',
         'Spotlight': 'Scheinwerfer',
         'Storage Violation': 'Speicherverletzung S',
+        'Subject Simulation F': 'Transformation W',
         'Superliminal Steel': 'Klingenkombo B',
+        'Swivel Cannon': 'Rotierende Wellenkanone',
         'Synthetic Shield': 'Synthetischer Schild', // This is currently a mistranslated in German as 'Effiziente Klingenführung'
+        'Unlimited Wave Cannon': 'Wellenkanone: Grenzwertüberschreitung',
+        '(?<! )Wave Cannon(?! Kyrios)': 'Wellenkanone',
         '(?<! )Wave Cannon Kyrios': 'Wellenkanone P',
         'Wave Repeater': 'Schnellfeuer-Wellenkanone',
       },
@@ -1473,34 +1705,50 @@ const triggerSet: TriggerSet<Data> = {
       'locale': 'fr',
       'missingTranslations': true,
       'replaceSync': {
-        'Omega(?!-)': 'Oméga',
+        'Alpha Omega': 'Alpha-Oméga',
+        'Cosmo Meteor': 'Cosmométéore',
+        '(?<!Alpha )Omega(?!-)': 'Oméga',
         'Omega-F': 'Oméga-F',
         'Omega-M': 'Oméga-M',
         'Optical Unit': 'unité optique',
+        'Rear Power Unit': 'unité arrière',
         'Right Arm Unit': 'unité bras droit',
+        'Rocket Punch': 'Astéropoing',
       },
       'replaceText': {
+        'Archive Peripheral': 'Périphérique d\'archivage',
         'Atomic Ray': 'Rayon atomique',
         'Beyond Defense': 'Combo bouclier S',
         'Beyond Strength': 'Combo bouclier G',
         'Blaster': 'Électrochoc',
+        'Blind Faith': 'Confiance aveugle',
         'Colossal Blow': 'Coup colossal',
         'Condensed Wave Cannon Kyrios': 'Canon plasma surchargé P',
+        'Cosmo Arrow': 'Cosmoflèche',
+        'Cosmo Dive': 'Cosmoplongeon',
         'Cosmo Memory': 'Cosmomémoire',
+        'Cosmo Meteor': 'Cosmométéore',
         'Critical Error': 'Erreur critique',
+        'Diffuse Wave Cannon(?! Kyrios)': 'Canon plasma diffuseur',
         'Diffuse Wave Cannon Kyrios': 'Canon plasma diffuseur P',
         'Discharger': 'Déchargeur',
         'Efficient Bladework': 'Lame active',
+        'Explosion': 'Explosion',
         'Firewall': 'Programme protecteur',
         'Flame Thrower': 'Crache-flammes',
+        'Flash Gale': 'Vent subit',
         'Guided Missile Kyrios': 'Missile guidé P',
+        'Hello, Distant World': 'Bonjour, le monde : distance',
+        'Hello, Near World': 'Bonjour, le monde : proximité',
         'Hello, World': 'Bonjour, le monde',
         'High-powered Sniper Cannon': 'Canon plasma longue portée surchargé',
+        'Hyper Pulse': 'Hyperpulsion',
         'Ion Efflux': 'Fuite d\'ions',
         'Laser Shower': 'Pluie de lasers',
         'Latent Defect': 'Bogue latent',
         'Left Arm Unit': 'unité bras gauche',
         'Limitless Synergy': 'Programme synergique LB',
+        'Magic Number': 'Nombre magique',
         'Optical Laser': 'Laser optique F',
         'Optimized Bladedance': 'Danse de la lame Oméga',
         'Optimized Blizzard III': 'Méga Glace Oméga',
@@ -1512,15 +1760,24 @@ const triggerSet: TriggerSet<Data> = {
         'Pantokrator': 'Pantokrator',
         'Party Synergy': 'Programme synergique PT',
         'Patch': 'Bogue intentionnel',
+        'Peripheral Synthesis': 'Impression',
         'Pile Pitch': 'Lancement de pieu',
         'Program Loop': 'Boucle de programme',
+        'Rear Lasers': 'Lasers arrière',
         'Right Arm Unit': 'unité bras droit',
+        'Run: \\*\\*\\*\\*mi\\* \\(Delta Version\\)': 'Exécution : ****mi* Delta',
+        'Run: \\*\\*\\*\\*mi\\* \\(Omega Version\\)': 'Exécution : ****mi* Oméga',
+        'Run: \\*\\*\\*\\*mi\\* \\(Sigma Version\\)': 'Exécution : ****mi* Sigma',
         '(?<! )Sniper Cannon': 'Canon plasma longue portée',
         'Solar Ray': 'Rayon solaire',
         'Spotlight': 'Phare',
         'Storage Violation': 'Corruption de données S',
+        'Subject Simulation F': 'Transformation F',
         'Superliminal Steel': 'Combo lame B',
+        'Swivel Cannon': 'Canon plasma rotatif',
         'Synthetic Shield': 'Bouclier optionnel',
+        'Unlimited Wave Cannon': 'Canon plasma : Dépassement de limites',
+        '(?<! )Wave Cannon(?! Kyrios)': 'Canon plasma',
         '(?<! )Wave Cannon Kyrios': 'Canon plasma P',
         'Wave Repeater': 'Canon plasma automatique',
       },
@@ -1529,34 +1786,50 @@ const triggerSet: TriggerSet<Data> = {
       'locale': 'ja',
       'missingTranslations': true,
       'replaceSync': {
-        'Omega(?!-)': 'オメガ',
+        'Alpha Omega': 'アルファオメガ',
+        'Cosmo Meteor': 'コスモメテオ',
+        '(?<!Alpha )Omega(?!-)': 'オメガ',
         'Omega-F': 'オメガF',
         'Omega-M': 'オメガM',
         'Optical Unit': 'オプチカルユニット',
+        'Rear Power Unit': 'リアユニット',
         'Right Arm Unit': 'ライトアームユニット',
+        'Rocket Punch': 'ロケットパンチ',
       },
       'replaceText': {
+        'Archive Peripheral': 'アーカイブアーム',
         'Atomic Ray': 'アトミックレイ',
         'Beyond Defense': 'シールドコンボS',
         'Beyond Strength': 'シールドコンボG',
         'Blaster': 'ブラスター',
+        'Blind Faith': 'ブラインド・フェイス',
         'Colossal Blow': 'コロッサスブロー',
         'Condensed Wave Cannon Kyrios': '高出力波動砲P',
+        'Cosmo Arrow': 'コスモアロー',
+        'Cosmo Dive': 'コスモダイブ',
         'Cosmo Memory': 'コスモメモリー',
+        'Cosmo Meteor': 'コスモメテオ',
         'Critical Error': 'クリティカルエラー',
+        'Diffuse Wave Cannon(?! Kyrios)': '拡散波動砲',
         'Diffuse Wave Cannon Kyrios': '拡散波動砲P',
         'Discharger': 'ディスチャージャー',
         'Efficient Bladework': 'ソードアクション',
+        'Explosion': '爆発',
         'Firewall': 'ガードプログラム',
         'Flame Thrower': '火炎放射',
+        'Flash Gale': 'フラッシュウィンド',
         'Guided Missile Kyrios': '誘導ミサイルP',
+        'Hello, Distant World': 'ハロー・ワールド：ファー',
+        'Hello, Near World': 'ハロー・ワールド：ニア',
         'Hello, World': 'ハロー・ワールド',
         'High-powered Sniper Cannon': '狙撃式高出力波動砲',
+        'Hyper Pulse': 'ハイパーパルス',
         'Ion Efflux': 'イオンエフラクス',
         'Laser Shower': 'レーザーシャワー',
         'Latent Defect': 'レイテントバグ',
         'Left Arm Unit': 'レフトアームユニット',
         'Limitless Synergy': '連携プログラムLB',
+        'Magic Number': 'マジックナンバー',
         'Optical Laser': 'オプチカルレーザーF',
         'Optimized Bladedance': 'ブレードダンス・オメガ',
         'Optimized Blizzard III': 'ブリザガ・オメガ',
@@ -1568,15 +1841,24 @@ const triggerSet: TriggerSet<Data> = {
         'Pantokrator': 'パントクラトル',
         'Party Synergy': '連携プログラムPT',
         'Patch': 'エンバグ',
+        'Peripheral Synthesis': 'プリントアウト',
         'Pile Pitch': 'パイルピッチ',
         'Program Loop': 'サークルプログラム',
+        'Rear Lasers': 'リアレーザー',
         'Right Arm Unit': 'ライトアームユニット',
+        'Run: \\*\\*\\*\\*mi\\* \\(Delta Version\\)': 'コード：＊＊＊ミ＊【デルタ】',
+        'Run: \\*\\*\\*\\*mi\\* \\(Omega Version\\)': 'コード：＊＊＊ミ＊【オメガ】',
+        'Run: \\*\\*\\*\\*mi\\* \\(Sigma Version\\)': 'コード：＊＊＊ミ＊【シグマ】',
         '(?<! )Sniper Cannon': '狙撃式波動砲',
         'Solar Ray': 'ソーラレイ',
         'Spotlight': 'スポットライト',
         'Storage Violation': '記憶汚染除去S',
+        'Subject Simulation F': 'トランスフォームF',
         'Superliminal Steel': 'ブレードコンボB',
+        'Swivel Cannon': '旋回式波動砲',
         'Synthetic Shield': 'シールドオプション',
+        'Unlimited Wave Cannon': '波動砲：リミッターカット',
+        '(?<! )Wave Cannon(?! Kyrios)': '波動砲',
         '(?<! )Wave Cannon Kyrios': '波動砲P',
         'Wave Repeater': '速射式波動砲',
       },
