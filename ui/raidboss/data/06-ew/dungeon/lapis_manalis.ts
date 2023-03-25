@@ -76,7 +76,7 @@ const triggerSet: TriggerSet<Data> = {
         },
         text: {
           en: '스탬피드 피해욧 (${dir} 줄:${row})',
-          de: 'Stampede von ${dir} (${row} Row)',
+          de: 'Stampede von ${dir} (${row} Reihe)',
           fr: 'Ruée depuis ${dir} (${row})',
           ko: '${dir}에서 돌진 (${row} 줄)',
         },
