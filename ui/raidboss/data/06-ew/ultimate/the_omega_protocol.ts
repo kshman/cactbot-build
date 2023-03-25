@@ -55,6 +55,7 @@ export type Glitch = 'mid' | 'remote';
 export type Cannon = 'spread' | 'stack';
 export type RotColor = 'blue' | 'red';
 export type Regression = 'local' | 'remote';
+export type TetherColor = 'blue' | 'green';
 
 export interface Data extends RaidbossData {
   members?: PrsMember[];
@@ -84,6 +85,7 @@ export interface Data extends RaidbossData {
   patchVulnCount: number;
   waveCannonStacks: NetMatches['Ability'][];
   monitorPlayers: NetMatches['GainsEffect'][];
+  deltaTethers: { [name: string]: TetherColor };
 }
 
 // Due to changes introduced in patch 5.2, overhead markers now have a random offset
@@ -156,6 +158,7 @@ const triggerSet: TriggerSet<Data> = {
       patchVulnCount: 0,
       waveCannonStacks: [],
       monitorPlayers: [],
+      deltaTethers: {},
     };
   },
   timelineTriggers: [
@@ -344,11 +347,11 @@ const triggerSet: TriggerSet<Data> = {
           ko: '${num} (+ ${player})',
         },
         cw: {
-          en: '${num}번 (${player}) ❱❱❱',
+          en: '${num}번 (${player}) ❱❱❱❱❱',
           de: '${num} (mit ${player})',
         },
         ccw: {
-          en: '❰❰❰ ${num}번 (${player})',
+          en: '❰❰❰❰❰ ${num}번 (${player})',
           de: '${num} (mit ${player})',
         },
         switch: {
@@ -358,10 +361,10 @@ const triggerSet: TriggerSet<Data> = {
           en: '(${player})',
         },
         simpleCw: {
-          en: '❱❱❱ (${player}) ❱❱❱',
+          en: '(${player}) ❱❱❱❱❱',
         },
         simpleCcw: {
-          en: '❰❰❰ (${player}) ❰❰❰',
+          en: '❰❰❰❰❰ (${player})',
         },
         simpleSwitch: {
           en: '스위치! (${player})',
@@ -663,12 +666,12 @@ const triggerSet: TriggerSet<Data> = {
           ko: '안 안 남자',
         },
         superliminalBladework: {
-          en: '여자 밑으로',
+          en: '언니 밑으로',
           de: 'Unter W',
           ko: '여자 밑',
         },
         blizzardStrength: {
-          en: '남자 옆으로 (가운데로 여자 발차기)',
+          en: '남자 옆으로 (가운데로 언니 발차기)',
           de: 'Seitlich von M',
           ko: '남자 양옆',
         },
@@ -705,68 +708,33 @@ const triggerSet: TriggerSet<Data> = {
           }
         }
 
+        const mark = output[myMarker]!();
+        const index = { circle: 1, cross: 2, triangle: 3, square: 4 }[myMarker];
+
         if (data.my && data.my.p) {
           if (data.phase === 'p2') {
+            // P2 일때
             const left = data.my.sm < data.my.p.sm;
-            if (data.simple) {
-              return left
-                ? output.simpleLeft!({ glitch: glitch, player: data.my.p.r })
-                : output.simpleRight!({ glitch: glitch, player: data.my.p.r });
-            }
             // 왼쪽
             if (left) {
-              const index = {
-                circle: 1,
-                cross: 2,
-                triangle: 3,
-                square: 4
-              } [myMarker];
-              return {
-                circle: output.ccL!({ glitch: glitch, num: index, player: data.my.p.r }),
-                cross: output.crL!({ glitch: glitch, num: index, player: data.my.p.r }),
-                triangle: output.trL!({ glitch: glitch, num: index, player: data.my.p.r }),
-                square: output.sqL!({ glitch: glitch, num: index, player: data.my.p.r }),
-              }[myMarker];
+              const num = output[`num${index}`]!();
+              return output.left!({ glitch: glitch, mark: mark, num: num, player: data.my.p.r });
             }
             // 오른쪽
-            let index;
             if (data.glitch === 'mid') {
-              index = {
-                circle: 1,
-                cross: 2,
-                triangle: 3,
-                square: 4
-              } [myMarker];
-            } else {
-              index = {
-                circle: 4,
-                cross: 3,
-                triangle: 2,
-                square: 1
-              } [myMarker];
+              const num = output[`num${index}`]!();
+              return output.right!({ glitch: glitch, mark: mark, num: num, player: data.my.p.r });
             }
-            return {
-                circle: output.ccR!({ glitch: glitch, num: index, player: data.my.p.r }),
-                cross: output.crR!({ glitch: glitch, num: index, player: data.my.p.r }),
-                triangle: output.trR!({ glitch: glitch, num: index, player: data.my.p.r }),
-                square: output.sqR!({ glitch: glitch, num: index, player: data.my.p.r }),
-            }[myMarker];
+            const num = output[`num${5 - index}`]!();
+            return output.right!({ glitch: glitch, mark: mark, num: num, player: data.my.p.r });
           } else if (data.phase === 'sigma') {
-            return {
-                circle: output.circle!({ glitch: glitch, player: data.my.p.r }),
-                cross: output.cross!({ glitch: glitch, player: data.my.p.r }),
-                triangle: output.triangle!({ glitch: glitch, player: data.my.p.r }),
-                square: output.square!({ glitch: glitch, player: data.my.p.r }),
-            }[myMarker];
+            // 시그마 일때
+            return output.text!({ glitch: glitch, mark: mark, player: data.my.p.r });
           }
         }
 
-        return {
-          circle: output.circle!({ glitch: glitch, player: getMemberRole(data, partner) }),
-          triangle: output.triangle!({ glitch: glitch, player: getMemberRole(data, partner) }),
-          square: output.square!({ glitch: glitch, player: getMemberRole(data, partner) }),
-          cross: output.cross!({ glitch: glitch, player: getMemberRole(data, partner) }),
-        }[myMarker];
+        // 기본
+        return output.text!({ glitch: glitch, mark: mark, player: getMemberRole(data, partner) });
       },
       outputStrings: {
         midGlitch: {
@@ -779,56 +747,17 @@ const triggerSet: TriggerSet<Data> = {
           de: 'Fern',
           ko: '멀리',
         },
-        circle: {
-          en: '${glitch}🔴 (${player})',
-          de: '${glitch} Kreis (mit ${player})',
-          ko: '${glitch} 동그라미 (+ ${player})',
-        },
-        triangle: {
-          en: '${glitch}▲ (${player})',
-          de: '${glitch} Dreieck (mit ${player})',
-          ko: '${glitch} 삼각 (+ ${player})',
-        },
-        square: {
-          en: '${glitch}🟪 (${player})',
-          de: '${glitch} Viereck (mit ${player})',
-          ko: '${glitch} 사각 (+ ${player})',
-        },
-        cross: {
-          en: '${glitch}❌ (${player})',
-          de: '${glitch} Kreuz (mit ${player})',
-          ko: '${glitch} X (+ ${player})',
-        },
-        simpleLeft: {
-          en: '❰❰❰❰❰ ${glitch} (${player}) ❰❰❰❰❰',
-        },
-        simpleRight: {
-          en: '❱❱❱❱❱ ${glitch} (${player}) ❱❱❱❱❱',
-        },
-        ccL: {
-          en: '❰❰❰❰❰ ${glitch}🔴#${num} (${player})',
-        },
-        crL: {
-          en: '❰❰❰❰❰ ${glitch}❌#${num} (${player})',
-        },
-        trL: {
-          en: '❰❰❰❰❰ ${glitch}▲#${num} (${player})',
-        },
-        sqL: {
-          en: '❰❰❰❰❰ ${glitch}🟪#${num} (${player})',
-        },
-        ccR: {
-          en: '${glitch}🔴#${num} (${player}) ❱❱❱❱❱',
-        },
-        crR: {
-          en: '${glitch}❌#${num} (${player}) ❱❱❱❱❱',
-        },
-        trR: {
-          en: '${glitch}▲#${num} (${player}) ❱❱❱❱❱',
-        },
-        sqR: {
-          en: '${glitch}🟪#${num} (${player}) ❱❱❱❱❱',
-        },
+        circle: '🔴',
+        triangle: '▲',
+        square: '🟪',
+        cross: '❌',
+        num1: '①',
+        num2: '②',
+        num3: '③',
+        num4: '④',
+        text: '${glitch} ${mark} (${player})',
+        left: '❰❰❰❰❰ ${glitch} ${mark}${num} (${player})',
+        right: '${glitch} ${mark}${num} (${player}) ❱❱❱❱❱',
         unknown: Outputs.unknown,
       },
     },
@@ -903,7 +832,7 @@ const triggerSet: TriggerSet<Data> = {
           en: '❌',
         },
           stacksOn: {
-            en: '${glitch}${marker} (${player1}, ${player2})',
+            en: '${glitch} ${marker} (${player1}, ${player2})',
             de: '${glitch} Sammeln (${player1}, ${player2})',
             ko: '${glitch} 쉐어 (${player1}, ${player2})',
           },
@@ -932,21 +861,14 @@ const triggerSet: TriggerSet<Data> = {
           : output.unknown!();
 
         const myMarker = data.synergyMarker[data.me];
-        const marker = myMarker === undefined
-          ? ''
-          : {
-            circle: output.circle!(),
-            cross: output.cross!(),
-            triangle: output.triangle!(),
-            square: output.square!(),
-          }[myMarker];
+        const marker = myMarker === undefined ? '' : output[myMarker]!();
 
-        /* if (data.my && data.my.p) {
+        if (data.my && data.my.p) {
           let m1 = getMemberByName(data, p1)!;
           let m2 = getMemberByName(data, p2)!;
           if (m1.sm > m2.sm)
             [m1, m2] = [m2, m1];
-          if (m1.t === m2.t) { // 둘이 팀이 같으면
+          /* if (m1.t === m2.t) { // 둘이 팀이 같으면
             if (data.spotlightStacks.includes(data.me)) { // 내가 그 중 하나면
               const om = m1 === data.my ? m2 : m1;
               const kp = output.knockback!({ glitch: glitch });
@@ -965,10 +887,16 @@ const triggerSet: TriggerSet<Data> = {
                 };
               }
             }
-          }
+          } */
           // 그냥 알랴줌
-          return { infoText: output.stacksOn!({ glitch: glitch, player1: m1.r, player2: m2.r }) };
-        } */
+          const ouch = output.stacksOn!({
+              glitch: glitch,
+              marker: marker,
+              player1: m1.r,
+              player2: m2.r,
+            });
+          return { infoText: ouch };
+        }
 
         const stacksOn = output.stacksOn!({
           glitch: glitch,
@@ -1020,8 +948,11 @@ const triggerSet: TriggerSet<Data> = {
           return { alarmText: output.dontStack!() };
         // Note: if you are doing uptime meteors then everybody stacks.
         // If you are not, then you'll need to ignore this as needed.
-        return { infoText: output.stack!() };
+        // Note2: For P5 Delta, all remaining blues will stack for pile pitch
+        if (data.deltaTethers[data.me] !== 'green')
+          return { infoText: output.stack!() };
       },
+      run: (data) => data.deltaTethers = {},
     },
     {
       id: 'TOP Cosmo Memory',
@@ -1253,7 +1184,7 @@ const triggerSet: TriggerSet<Data> = {
       // 7B60 Latent Performance Defect (Blue Tower)
       // These casts go off 1 second after Latent Defect and go off regardless if someone soaks it
       netRegex: { id: ['7B5F', '7B60'], source: 'Omega', capture: false },
-      condition: (data) => data.latentDefectCount < 2,
+      condition: (data) => data.latentDefectCount < 3,
       suppressSeconds: 1,
       response: (data, _matches, output) => {
         // cactbot-builtin-response
@@ -1264,7 +1195,7 @@ const triggerSet: TriggerSet<Data> = {
             ko: '디버프 건네기',
           },
           getRot: {
-            en: 'ROT 받으러 가요',
+            en: 'ROT 받아요',
             de: 'Bug nehmen',
             ko: '디버프 받기',
           },
@@ -1617,6 +1548,268 @@ const triggerSet: TriggerSet<Data> = {
         };
       },
       run: (data, _matches) => data.waveCannonStacks = [],
+    },
+    {
+      id: 'TOP Delta Tethers',
+      type: 'GainsEffect',
+      // D70 Local Code Smell (red/green)
+      // DB0 Remote Code Smell (blue)
+      netRegex: { effectId: ['D70', 'DB0'] },
+      preRun: (data, matches) => {
+        data.deltaTethers[matches.target] = matches.effectId === 'D70' ? 'green' : 'blue';
+      },
+      infoText: (data, matches, output) => {
+        if (matches.target !== data.me)
+          return;
+        if (matches.effectId === 'D70')
+          return output.nearTether!();
+        return output.farTether!();
+      },
+      outputStrings: {
+        farTether: {
+          en: '파란 줄 🡺 개똥벌레로',
+        },
+        nearTether: {
+          en: '초록 줄 🡺 파이널',
+        },
+      },
+    },
+    {
+      id: 'TOP Swivel Cannon',
+      // 7B95 Swivel Cannon Left-ish
+      // 7B94 Swivel Cannon Right-ish
+      // 9.7s cast
+      type: 'StartsUsing',
+      netRegex: { id: ['7B94', '7B95'], source: 'Omega' },
+      condition: (data) => !data.simple,
+      durationSeconds: (_data, matches) => parseFloat(matches.castTime),
+      infoText: (_data, matches, output) => {
+        const isLeft = matches.id === '7B95';
+        // The eye is always clockwise to the beetle
+        return isLeft ? output.awayFromEye!() : output.towardsEye!();
+      },
+      outputStrings: {
+        awayFromEye: {
+          en: '눈깔 반대쪽에서 처리',
+          de: 'Weg vom Auge',
+          ko: '눈에서 멀리 떨어지기',
+        },
+        towardsEye: {
+          en: '눈깔쪽에서 처리',
+          de: 'Geh zu dem Auge',
+          ko: '눈 쪽으로',
+        },
+      },
+    },
+    {
+      id: 'TOP Sigma Superliminal/Blizzard',
+      // Omega-M casts Superliminal/Blizzard
+      // Track from Discharger (7B2E)
+      type: 'Ability',
+      netRegex: { id: '7B2E', source: 'Omega' },
+      delaySeconds: 6,
+      promise: async (data, matches) => {
+        data.combatantData = [];
+        data.combatantData = (await callOverlayHandler({
+          call: 'getCombatants',
+          ids: [parseInt(matches.id, 16)],
+        })).combatants;
+      },
+      alertText: (data, _matches, output) => {
+        const f = data.combatantData.pop();
+        if (f === undefined) {
+          console.error(
+            `Sigma Superliminal/Blizzard: missing f: ${JSON.stringify(data.combatantData)}`,
+          );
+          return;
+        }
+        if (f.WeaponId === 4)
+          return output.superliminalSteel!();
+        return output.optimizedBlizzard!();
+      },
+      outputStrings: {
+        optimizedBlizzard: {
+          en: '레이저를 따라 들어가요',
+        },
+        superliminalSteel: {
+          en: '먼저 기다려요 (언니 다리)',
+        },
+      },
+    },
+    {
+      id: 'TOP Omega Safe Spots',
+      // 7B9B Diffuse Wave Cannon (North/South), is followed up with 7B78
+      // 7B9C Diffuse Wave Cannon (East/West), is followed up with 7B77
+      type: 'StartsUsing',
+      netRegex: { id: ['7B9B', '7B9C'], source: 'Omega' },
+      promise: async (data) => {
+        data.combatantData = [];
+        data.combatantData = (await callOverlayHandler({
+          call: 'getCombatants',
+        })).combatants;
+        // Sort highest ID to lowest ID
+        const sortCombatants = (a: PluginCombatantState, b: PluginCombatantState) =>
+          (b.ID ?? 0) - (a.ID ?? 0);
+        data.combatantData = data.combatantData.sort(sortCombatants);
+      },
+      alertText: (data, matches, output) => {
+        // The higher id is first set
+        const omegaMNPCId = 15721;
+        const omegaFNPCId = 15722;
+        let isF1In = false;
+        let isM1In = false;
+        let isF2In = false;
+        let isM2In = false;
+        let dir1;
+        let dir2;
+        let distance1;
+        let distance2;
+        const findOmegaF = (combatant: PluginCombatantState) => combatant.BNpcID === omegaFNPCId;
+        const findOmegaM = (combatant: PluginCombatantState) => combatant.BNpcID === omegaMNPCId;
+
+        const [f1, f2] = data.combatantData.filter(findOmegaF);
+        const [m1, m2] = data.combatantData.filter(findOmegaM);
+
+        if (f1 === undefined || f2 === undefined || m1 === undefined || m2 === undefined) {
+          console.error(`Omega Safe Spots: missing m/f: ${JSON.stringify(data.combatantData)}`);
+          return;
+        }
+        if (f1.WeaponId === 4)
+          isF1In = true;
+        if (f2.WeaponId === 4)
+          isF2In = true;
+        if (m1.WeaponId === 4)
+          isM1In = true;
+        if (m2.WeaponId === 4)
+          isM2In = true;
+
+        if (isF1In)
+          distance1 = output.close!();
+        else if (isM1In)
+          distance1 = output.mid!();
+        else
+          distance1 = output.far!();
+
+        if (isF2In)
+          distance2 = output.close!();
+        else if (isM2In)
+          distance2 = output.mid!();
+        else
+          distance2 = output.far!();
+
+        // The combatants only spawn in these intercards:
+        // 92.93, 92.93 (NW)      107.07, 92.93 (NE)
+        // 92.93, 107.07 (SW)     107.07, 107.07 (SE)
+        // They will either spawn NW/SE first or NE/SW
+        // Boss cleave tells if it is actually east/west or north/south
+        if (matches.id === '7B9B') {
+          // East or West Safe, look for male side
+          dir1 = m1.PosX === 92.93 ? output.dirW!() : output.dirE!();
+          dir2 = m2.PosY === 92.93 ? output.dirN!() : output.dirS!();
+        } else {
+          // North or South Safe
+          dir1 = m1.PosY === 92.93 ? output.dirN!() : output.dirS!();
+          dir2 = m2.PosX === 92.93 ? output.dirW!() : output.dirE!();
+        }
+        const firstSpot = output.safeSpot!({ distance: distance1, dir: dir1 });
+        const secondSpot = output.safeSpot!({ distance: distance2, dir: dir2 });
+
+        return output.safeSpots!({ first: firstSpot, second: secondSpot });
+      },
+      outputStrings: {
+        safeSpots: {
+          en: '${first} => ${second}',
+        },
+        safeSpot: {
+          en: '${distance} ${dir}',
+        },
+        close: {
+          en: '가까이',
+        },
+        mid: {
+          en: '중간쯤',
+        },
+        far: {
+          en: '멀리',
+        },
+        dirN: Outputs.dirN,
+        dirE: Outputs.dirE,
+        dirS: Outputs.dirS,
+        dirW: Outputs.dirW,
+      },
+    },
+    {
+      id: 'TOP Omega Safe Spot 2 Reminder',
+      // 7B9B Diffuse Wave Cannon (North/South), is followed up with 7B78
+      // 7B9C Diffuse Wave Cannon (East/West), is followed up with 7B77
+      type: 'StartsUsing',
+      netRegex: { id: ['7B9B', '7B9C'], source: 'Omega' },
+      delaySeconds: (_data, matches) => parseFloat(matches.castTime),
+      alertText: (data, matches, output) => {
+        // The lower id is second set
+        const omegaMNPCId = 15721;
+        const omegaFNPCId = 15722;
+        let isFIn = false;
+        let isMIn = false;
+        let dir;
+        let distance;
+        const findOmegaF = (combatant: PluginCombatantState) => combatant.BNpcID === omegaFNPCId;
+        const findOmegaM = (combatant: PluginCombatantState) => combatant.BNpcID === omegaMNPCId;
+
+        const f = data.combatantData.filter(findOmegaF).pop();
+        const m = data.combatantData.filter(findOmegaM).pop();
+
+        if (f === undefined || m === undefined) {
+          console.error(
+            `Omega Safe Spot 2 Reminder: missing m/f: ${JSON.stringify(data.combatantData)}`,
+          );
+          return;
+        }
+        if (f.WeaponId === 4)
+          isFIn = true;
+        if (m.WeaponId === 4)
+          isMIn = true;
+
+        if (isFIn)
+          distance = output.close!();
+        else if (isMIn)
+          distance = output.mid!();
+        else
+          distance = output.far!();
+
+        // The combatants only spawn in these intercards:
+        // 92.93, 92.93 (NW)      107.07, 92.93 (NE)
+        // 92.93, 107.07 (SW)     107.07, 107.07 (SE)
+        // They will either spawn NW/SE first or NE/SW
+        // Boss cleave tells if it is actually east/west or north/south
+        if (matches.id === '7B9B') {
+          // East or West Safe, look for male side
+          dir = m.PosY === 92.93 ? output.dirN!() : output.dirS!();
+        } else {
+          // North or South Safe
+          dir = m.PosX === 92.93 ? output.dirW!() : output.dirE!();
+        }
+
+        return output.safeSpot!({ distance: distance, dir: dir });
+      },
+      outputStrings: {
+        safeSpot: {
+          en: '${distance} ${dir}',
+        },
+        close: {
+          en: '가까이',
+        },
+        mid: {
+          en: '중간쯤',
+        },
+        far: {
+          en: '멀리',
+        },
+        dirN: Outputs.dirN,
+        dirE: Outputs.dirE,
+        dirS: Outputs.dirS,
+        dirW: Outputs.dirW,
+      },
     },
   ],
   timelineReplace: [
