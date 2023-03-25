@@ -201,6 +201,7 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: '탱크 줄!',
           de: 'Tank Verbindungen',
+          fr: 'Liens tanks',
           ja: 'タンク線取り',
           ko: '탱커가 선 가로채기',
         },
@@ -241,12 +242,14 @@ const triggerSet: TriggerSet<Data> = {
         outFlareThenSpread: {
           en: '⊗밖으로+플레어 => 흩어져요',
           de: 'Raus+Flare => Verteilen',
+          fr: 'Extérieur + Brasier -> Dispersion',
           ja: '外側＋フレア => 散会',
           ko: '바깥+플레어 => 산개',
         },
         inStackThenSpread: {
           en: '⊙안으로+뭉쳤다 => 흩어져요',
           de: 'Rein+Sammeln => Verteilen',
+          fr: 'Intérieur + Package -> Dispersion',
           ja: '内側＋頭割り => 散会',
           ko: '안+쉐어 => 산개',
         },
@@ -328,6 +331,7 @@ const triggerSet: TriggerSet<Data> = {
         spreadBehind: {
           en: '보스 뒤에서 흩어져요!',
           de: 'Hinter dem Boss verteilen',
+          fr: 'Écartez-vous derrière le boss',
           ja: 'ボスの後ろで散会',
           ko: '보스 뒤에서 산개',
         },
@@ -342,6 +346,7 @@ const triggerSet: TriggerSet<Data> = {
         stackBehind: {
           en: '보스 뒤에서 뭉쳐요!',
           de: 'Hinter dem Boss sammeln',
+          fr: 'Packez-vous derrière le boss',
           ja: 'ボスの後ろで頭割り',
           ko: '보스 뒤에서 쉐어',
         },
@@ -380,12 +385,14 @@ const triggerSet: TriggerSet<Data> = {
         tankBusterCleaves: {
           en: '탱크에게 클레브',
           de: 'Tankbuster Cleaves',
+          fr: 'Tankbuster cleaves',
           ja: 'MT・ST同時範囲攻撃',
           ko: '광역 탱버',
         },
         avoidTankCleaves: {
           en: '탱크 클레브! 피해요',
           de: 'Tankbuster Cleaves ausweichen',
+          fr: 'Évitez les cleaves (tankbusters)',
           ja: '範囲攻撃を避けて',
           ko: '광역 탱버 피하기',
         },
@@ -448,6 +455,7 @@ const triggerSet: TriggerSet<Data> = {
         numGetTether: {
           en: '${num}번 (줄 받으러 가요)',
           de: '#${num} (Verbindung nehmen)',
+          fr: '#${num} (Prenez le lien)',
           ja: '${num}番 (線取りに行く)',
           ko: '${num}번째 (선 가져가기)',
         },
@@ -489,6 +497,7 @@ const triggerSet: TriggerSet<Data> = {
         getTether: {
           en: '줄 받으러 가요',
           de: 'Verbindung nehmen',
+          fr: 'Prenez le lien',
           ja: '線取りに行く',
           ko: '선 가져가기',
         },
@@ -514,12 +523,14 @@ const triggerSet: TriggerSet<Data> = {
         cardinals: {
           en: '십자로',
           de: 'Kardinal',
+          fr: 'Cardinaux',
           ja: '十字回避',
           ko: '십자방향',
         },
         intercards: {
           en: '비스듬하게',
           de: 'Interkardinal',
+          fr: 'Intercardinaux',
           ja: '斜めへ',
           ko: '대각선',
         },

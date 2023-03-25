@@ -166,6 +166,7 @@ const triggerSet: TriggerSet<Data> = {
         avoidCone: {
           en: '원뿔 피해요: ${dir}',
           de: 'Weiche dem KEgel aus (von ${dir})',
+          fr: 'Évitez le cône (depuis ${dir})',
           ko: '${dir}의 삼각형 장판 피하기',
         },
       },

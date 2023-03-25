@@ -65,16 +65,19 @@ const triggerSet: TriggerSet<Data> = {
         middlenorth: {
           en: '가운데-북쪽',
           de: 'Norden-Mittig',
+          fr: 'Milieu-Nord',
           ko: '중앙-북쪽',
         },
         middlesouth: {
           en: '가운데-남쪽',
           de: 'Süden-Mittig',
+          fr: 'Milieu-Sud',
           ko: '중앙-남쪽',
         },
         text: {
           en: '스탬피드 피해욧 (${dir} 줄:${row})',
-          de: 'Stampede von ${dir} (${row} Row)',
+          de: 'Stampede von ${dir} (${row} Reihe)',
+          fr: 'Ruée depuis ${dir} (${row})',
           ko: '${dir}에서 돌진 (${row} 줄)',
         },
       },
