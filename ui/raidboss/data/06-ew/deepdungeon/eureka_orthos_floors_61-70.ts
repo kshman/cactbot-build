@@ -52,7 +52,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, matches, output) => output.text!({ target: matches.target }),
       outputStrings: {
         text: {
-          en: '공격 중지: ${target}',
+          en: '반사! 공격 중지: ${target}',
           de: 'Stoppe Angriffe auf ${target}',
           cn: '停止攻击 ${target}',
           ko: '${target} 공격 중지',
