@@ -8,6 +8,7 @@ import { TriggerSet } from '../../../../../types/trigger';
 export type Data = RaidbossData;
 
 const triggerSet: TriggerSet<Data> = {
+  id: 'ThePalaceOfTheDeadFloors41_50',
   zoneId: ZoneId.ThePalaceOfTheDeadFloors41_50,
 
   triggers: [
@@ -85,7 +86,7 @@ const triggerSet: TriggerSet<Data> = {
     {
       'locale': 'fr',
       'replaceSync': {
-        'Edda Blackbosom': 'Edda C©«ur-noir',
+        'Edda Blackbosom': 'Edda CÅ“ur-noir',
         'Nightmare Bhoot': 'bhut du cauchemar',
         'Nightmare Manticore': 'manticore du cauchemar',
         'Nightmare Persona': 'persona du cauchemar',
@@ -95,31 +96,31 @@ const triggerSet: TriggerSet<Data> = {
     {
       'locale': 'ja',
       'replaceSync': {
-        'Edda Blackbosom': 'öÔ?ªÎ«¨«Ã«À',
-        'Nightmare Bhoot': '«Ê«¤«È«á«¢?«Ö«Õ?«È',
-        'Nightmare Manticore': '«Ê«¤«È«á«¢?«Ş«ó«Æ«£«³«¢',
-        'Nightmare Persona': '«Ê«¤«È«á«¢?«Ú«ë«½«Ê',
-        'Nightmare Wraith': '«Ê«¤«È«á«¢?«ì«¤«¹',
+        'Edda Blackbosom': 'æ¼†é»’ã®ã‚¨ãƒƒãƒ€',
+        'Nightmare Bhoot': 'ãƒŠã‚¤ãƒˆãƒ¡ã‚¢ãƒ»ãƒ–ãƒ•ãƒ¼ãƒˆ',
+        'Nightmare Manticore': 'ãƒŠã‚¤ãƒˆãƒ¡ã‚¢ãƒ»ãƒãƒ³ãƒ†ã‚£ã‚³ã‚¢',
+        'Nightmare Persona': 'ãƒŠã‚¤ãƒˆãƒ¡ã‚¢ãƒ»ãƒšãƒ«ã‚½ãƒŠ',
+        'Nightmare Wraith': 'ãƒŠã‚¤ãƒˆãƒ¡ã‚¢ãƒ»ãƒ¬ã‚¤ã‚¹',
       },
     },
     {
       'locale': 'cn',
       'replaceSync': {
-        'Edda Blackbosom': 'öÔıÙîÜäõ?',
-        'Nightmare Bhoot': '??İ©?',
-        'Nightmare Manticore': '??Øºğ«Ğº',
-        'Nightmare Persona': '??Ê£Øü',
-        'Nightmare Wraith': '??êë?',
+        'Edda Blackbosom': 'æ¼†é»‘çš„è‰¾è¾¾',
+        'Nightmare Bhoot': 'å™©æ¢¦æµ®çµ',
+        'Nightmare Manticore': 'å™©æ¢¦æ›¼æå…‹',
+        'Nightmare Persona': 'å™©æ¢¦å‡é¢',
+        'Nightmare Wraith': 'å™©æ¢¦å¹½çµ',
       },
     },
     {
       'locale': 'ko',
       'replaceSync': {
-        'Edda Blackbosom': 'Ä¥ÈæÀÇ ¿¡´Ù',
-        'Nightmare Bhoot': '¾Ç¸ù ºêÈÄÆ®',
-        'Nightmare Manticore': '¾Ç¸ù ¸¸Æ¼ÄÚ¾î',
-        'Nightmare Persona': '¾Ç¸ù Æä¸£¼Ò³ª',
-        'Nightmare Wraith': '¾Ç¸ù ¸Á·É',
+        'Edda Blackbosom': 'ì¹ í‘ì˜ ì—ë‹¤',
+        'Nightmare Bhoot': 'ì•…ëª½ ë¸Œí›„íŠ¸',
+        'Nightmare Manticore': 'ì•…ëª½ ë§Œí‹°ì½”ì–´',
+        'Nightmare Persona': 'ì•…ëª½ í˜ë¥´ì†Œë‚˜',
+        'Nightmare Wraith': 'ì•…ëª½ ë§ë ¹',
       },
     },
   ],

@@ -30,6 +30,7 @@ const diveDirections = {
 };
 
 const triggerSet: TriggerSet<Data> = {
+  id: 'TheSecondCoilOfBahamutTurn4',
   zoneId: ZoneId.TheSecondCoilOfBahamutTurn4,
   timelineFile: 't9.txt',
   initData: () => {
@@ -96,7 +97,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: 'Bile de rapace sur VOUS',
           ja: '自分に凶鳥毒気',
           cn: '毒气点名',
-          ko: '5초후 디버프 폭발',
+          ko: '흉조의 독 대상자',
         },
       },
     },
@@ -115,7 +116,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: 'Bile de rapace sur ${player}',
           ja: '${player}に凶鳥毒気',
           cn: '毒气点${player}',
-          ko: '광역폭발 디버프 ${player}',
+          ko: '${player} 흉조의 독',
         },
       },
     },
@@ -387,6 +388,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: 'Feu extérieur (sur VOUS)',
           ja: 'ファイヤ、外に (自分)',
           cn: '火球单吃点名',
+          ko: '불 대상자 밖으로',
         },
         fireInOnYou: {
           en: 'Fire In (on YOU)',
@@ -394,6 +396,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: 'Feu intérieur (sur VOUS)',
           ja: 'ファイヤ、頭割り (自分)',
           cn: '火球集合点名',
+          ko: '불 대상자 같이맞기',
         },
         fireOutOn: {
           en: 'Fire Out (on ${player})',
@@ -401,6 +404,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: 'Feu extérieur (sur ${player})',
           ja: 'ファイヤ、外に (${player})',
           cn: '火球单吃点${player}',
+          ko: '${player} 불 밖으로',
         },
         fireInOn: {
           en: 'Fire In (on ${player})',
@@ -408,6 +412,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: 'Feu intérieur (sur ${player})',
           ja: 'ファイヤ、頭割り (${player})',
           cn: '火球集合点${player}',
+          ko: '${player} 불 같이맞기',
         },
       },
     },

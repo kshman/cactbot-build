@@ -9,6 +9,7 @@ import { TriggerSet } from '../../../../../types/trigger';
 export type Data = RaidbossData;
 
 const triggerSet: TriggerSet<Data> = {
+  id: 'EurekaOrthosFloors21_30',
   zoneId: ZoneId.EurekaOrthosFloors21_30,
 
   triggers: [
@@ -36,6 +37,12 @@ const triggerSet: TriggerSet<Data> = {
       type: 'StartsUsing',
       netRegex: { id: '7EAF', source: 'Orthoshelled Dragon' },
       response: Responses.interruptIfPossible(),
+    },
+    {
+      id: 'EO 21-30 Orthos Brobinyak Cold Gaze',
+      type: 'StartsUsing',
+      netRegex: { id: '7EAB', source: 'Orthos Brobinyak', capture: false },
+      response: Responses.awayFromFront(),
     },
     // ---------------- Floor 30 Boss: Tiamat Clone ----------------
     {
@@ -65,6 +72,41 @@ const triggerSet: TriggerSet<Data> = {
           cn: '5连追踪AOE点名!',
           ko: '따라오는 5연속 장판 피하기!',
         },
+      },
+    },
+  ],
+  timelineReplace: [
+    {
+      'locale': 'de',
+      'missingTranslations': true,
+      'replaceSync': {
+        'Lesser Orthos Dragon': 'nieder(?:e|er|es|en) Orthos-Drache',
+        'Orthoknight': 'Orthoritter',
+        'Orthos Vanara': 'Orthos-Vanara',
+        'Orthoshelled Dragon': 'Orthos-Panzerdrache',
+        'Tiamat Clone': 'Tiamat-Klon',
+      },
+    },
+    {
+      'locale': 'fr',
+      'missingTranslations': true,
+      'replaceSync': {
+        'Lesser Orthos Dragon': 'maître aérien mineur Orthos',
+        'Orthoknight': 'chevalier Orthos',
+        'Orthos Vanara': 'vanara Orthos',
+        'Orthoshelled Dragon': 'dragon Orthos à carapace',
+        'Tiamat Clone': 'clone de Tiamat',
+      },
+    },
+    {
+      'locale': 'ja',
+      'missingTranslations': true,
+      'replaceSync': {
+        'Lesser Orthos Dragon': 'オルト・レッサードラゴン',
+        'Orthoknight': 'オルト・ナイト',
+        'Orthos Vanara': 'オルト・ヴァナラ',
+        'Orthoshelled Dragon': 'オルト・カラペスドラゴン',
+        'Tiamat Clone': 'ティアマット・クローン',
       },
     },
   ],

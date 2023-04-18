@@ -8,6 +8,7 @@ import { TriggerSet } from '../../../../../types/trigger';
 export type Data = RaidbossData;
 
 const triggerSet: TriggerSet<Data> = {
+  id: 'ThePalaceOfTheDeadFloors31_40',
   zoneId: ZoneId.ThePalaceOfTheDeadFloors31_40,
 
   triggers: [
@@ -39,25 +40,25 @@ const triggerSet: TriggerSet<Data> = {
     {
       'locale': 'fr',
       'replaceSync': {
-        'Nightmare Eye': '©«il du cauchemar',
+        'Nightmare Eye': 'Å“il du cauchemar',
       },
     },
     {
       'locale': 'ja',
       'replaceSync': {
-        'Nightmare Eye': '«Ê«¤«È«á«¢?«¢«¤',
+        'Nightmare Eye': 'ãƒŠã‚¤ãƒˆãƒ¡ã‚¢ãƒ»ã‚¢ã‚¤',
       },
     },
     {
       'locale': 'cn',
       'replaceSync': {
-        'Nightmare Eye': '??ñýäÑ',
+        'Nightmare Eye': 'å™©æ¢¦ä¹‹çœ¼',
       },
     },
     {
       'locale': 'ko',
       'replaceSync': {
-        'Nightmare Eye': '¾Ç¸ù ´«¾Ë',
+        'Nightmare Eye': 'ì•…ëª½ ëˆˆì•Œ',
       },
     },
   ],

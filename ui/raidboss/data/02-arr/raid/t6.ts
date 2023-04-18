@@ -13,6 +13,7 @@ export interface Data extends RaidbossData {
 }
 
 const triggerSet: TriggerSet<Data> = {
+  id: 'TheSecondCoilOfBahamutTurn1',
   zoneId: ZoneId.TheSecondCoilOfBahamutTurn1,
   timelineFile: 't6.txt',
   triggers: [
@@ -73,6 +74,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: 'Ronces sur VOUS',
           ja: '自分にソーンウィップ',
           cn: '荆棘点名',
+          ko: '가시 대상자',
         },
         oneTether: {
           en: 'Thorns w/ (${player})',
@@ -80,6 +82,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: 'Ronces avec (${player})',
           ja: '自分と (${player}) にソーンウィップ',
           cn: '荆棘与(${player})',
+          ko: '가시 대상자 (${player})',
         },
         twoTethers: {
           en: 'Thorns w/ (${player1}, ${player2})',
@@ -87,6 +90,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: 'Ronces avec (${player1}, ${player2})',
           ja: '自分と (${player1}, ${player2}) にソーンウィップ',
           cn: '荆棘与(${player1}, ${player2})',
+          ko: '가시 대상자 (${player1}, ${player2})',
         },
         threeOrMoreTethers: {
           en: 'Thorns (${num} people)',
@@ -94,6 +98,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: 'Ronces (${num} personne)',
           ja: 'ソーンウィップ (${num}人)',
           cn: '荆棘(${num} people)',
+          ko: '가시 (${num}명)',
         },
       },
     },
@@ -140,6 +145,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: 'Évitez Dévoration',
           ja: '捕食を避ける',
           cn: '躲开吞食',
+          ko: '포식 피하기',
         },
         jumpInNewThorns: {
           en: 'Devour: Jump In New Thorns',
@@ -147,6 +153,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: 'Dévoration : Sautez dans les ronces',
           ja: '捕食: 新芽に乗る',
           cn: '去新荆棘',
+          ko: '포식: 가시장판 밟기',
         },
         getEaten: {
           en: 'Devour: Get Eaten',
@@ -154,6 +161,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: 'Dévoration : Faites-vous manger',
           ja: '捕食: 捕食される',
           cn: '捕食点名',
+          ko: '포식: 잡아먹히기',
         },
       },
     },
@@ -183,6 +191,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: 'Packez-vous pour Pluie acide',
           ja: '集合、アシッドレインを誘導',
           cn: '集合引导酸雨',
+          ko: '모여서 산성비 장판 유도',
         },
       },
     },
@@ -207,6 +216,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: 'Nuée sur ${player}',
           ja: '${player}にスウォーム',
           cn: '蜂群点${player}',
+          ko: '${player} 벌레',
         },
         swarmOnYou: {
           en: 'Swarm on YOU',
@@ -214,6 +224,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: 'Nuée sur VOUS',
           ja: '自分にスウォーム',
           cn: '蜂群点名',
+          ko: '벌레 대상자',
         },
       },
     },
@@ -234,6 +245,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: 'Partagez le laser (sur VOUS)',
           ja: '(自分に)頭割りレーザー',
           cn: '分摊激光点名',
+          ko: '직선 쉐어 대상자',
         },
         shareLaserOn: {
           en: 'Share Laser (on ${player})',
@@ -241,6 +253,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: 'Partage de laser (sur ${player})',
           ja: '(${player})に頭割りレーザー',
           cn: '分摊激光点(on ${player})',
+          ko: '${player} 직선 쉐어',
         },
       },
     },

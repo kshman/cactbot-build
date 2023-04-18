@@ -9,6 +9,7 @@ import { TriggerSet } from '../../../../../types/trigger';
 export type Data = RaidbossData;
 
 const triggerSet: TriggerSet<Data> = {
+  id: 'EurekaOrthosFloors1_10',
   zoneId: ZoneId.EurekaOrthosFloors1_10,
 
   triggers: [
@@ -26,12 +27,47 @@ const triggerSet: TriggerSet<Data> = {
       condition: Conditions.targetIsYou(),
       response: Responses.knockback(),
     },
+    {
+      id: 'EO 01-10 Orthos Fachan Dread Gaze',
+      type: 'StartsUsing',
+      netRegex: { id: '7E82', source: 'Orthos Fachan', capture: false },
+      response: Responses.awayFromFront(),
+    },
     // ---------------- Floor 10 Boss: Gancanagh ----------------
     {
       id: 'EO 01-10 Gancanagh Mandrastorm',
       type: 'StartsUsing',
       netRegex: { id: '7AF7', source: 'Gancanagh', capture: false },
       response: Responses.aoe(),
+    },
+  ],
+  timelineReplace: [
+    {
+      'locale': 'de',
+      'missingTranslations': true,
+      'replaceSync': {
+        'Gancanagh': 'Gancanagh',
+        'Orthos Behemoth': 'Orthos-Behemoth',
+        'Orthos Grenade': 'Orthos-Granate',
+      },
+    },
+    {
+      'locale': 'fr',
+      'missingTranslations': true,
+      'replaceSync': {
+        'Gancanagh': 'Gancanagh',
+        'Orthos Behemoth': 'béhémoth Orthos',
+        'Orthos Grenade': 'grenado Orthos',
+      },
+    },
+    {
+      'locale': 'ja',
+      'missingTranslations': true,
+      'replaceSync': {
+        'Gancanagh': 'ガンカナグー',
+        'Orthos Behemoth': 'オルト・ベヒーモス',
+        'Orthos Grenade': 'オルト・グレネード',
+      },
     },
   ],
 };

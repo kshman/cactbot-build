@@ -710,7 +710,7 @@ export default {
     ko: '남동쪽',
   },
   dirN: {
-    en: '북쪽',
+    en: '북',
     de: 'N',
     fr: 'N',
     ja: '北',
@@ -718,7 +718,7 @@ export default {
     ko: '북',
   },
   dirS: {
-    en: '남쪽',
+    en: '남',
     de: 'S',
     fr: 'S',
     ja: '南',
@@ -726,7 +726,7 @@ export default {
     ko: '남',
   },
   dirE: {
-    en: '동쪽',
+    en: '동',
     de: 'O',
     fr: 'E',
     ja: '東',
@@ -734,7 +734,7 @@ export default {
     ko: '동',
   },
   dirW: {
-    en: '서쪽',
+    en: '서',
     de: 'W',
     fr: 'O',
     ja: '西',
@@ -742,7 +742,7 @@ export default {
     ko: '서',
   },
   dirNW: {
-    en: '북서쪽',
+    en: '북서',
     de: 'NW',
     fr: 'NO',
     ja: '北西',
@@ -750,7 +750,7 @@ export default {
     ko: '북서',
   },
   dirNE: {
-    en: '북동쪽',
+    en: '북동',
     de: 'NO',
     fr: 'NE',
     ja: '北東',
@@ -758,7 +758,7 @@ export default {
     ko: '북동',
   },
   dirSW: {
-    en: '남서쪽',
+    en: '남서',
     de: 'SW',
     fr: 'SO',
     ja: '南西',
@@ -766,7 +766,7 @@ export default {
     ko: '남서',
   },
   dirSE: {
-    en: '남동쪽',
+    en: '남동',
     de: 'SO',
     fr: 'SE',
     ja: '南東',

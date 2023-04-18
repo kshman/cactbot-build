@@ -11,6 +11,7 @@ export interface Data extends RaidbossData {
 }
 
 const triggerSet: TriggerSet<Data> = {
+  id: 'EdensGateResurrectionSavage',
   zoneId: ZoneId.EdensGateResurrectionSavage,
   timelineFile: 'e1s.txt',
   timeline: [
@@ -66,6 +67,12 @@ const triggerSet: TriggerSet<Data> = {
           '圣诞快乐',
           '我柜子动了等下再玩',
           'CG',
+        ],
+        ko: [
+          '잠수',
+          ':zzz:',
+          '라희',
+          '저 물좀 떠올게요',
         ],
       };
       const goofs = goofsByLang[data.displayLang];

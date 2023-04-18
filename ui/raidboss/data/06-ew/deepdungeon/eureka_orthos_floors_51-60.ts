@@ -12,6 +12,7 @@ export interface Data extends RaidbossData {
 }
 
 const triggerSet: TriggerSet<Data> = {
+  id: 'EurekaOrthosFloors51_60',
   zoneId: ZoneId.EurekaOrthosFloors51_60,
 
   triggers: [
@@ -190,6 +191,44 @@ const triggerSet: TriggerSet<Data> = {
       type: 'StartsUsing',
       netRegex: { id: '7C81', source: 'Servomechanical Minotaur 16', capture: false },
       response: Responses.aoe(),
+    },
+  ],
+  timelineReplace: [
+    {
+      'locale': 'de',
+      'replaceSync': {
+        'Orthos Big Claw': 'Orthos-Mörderkrabbe',
+        'Orthos Ice Sprite': 'Orthos-Eis-Exergon',
+        'Orthos Rockfin': 'Orthos-Felsenflosse',
+        'Orthos Stingray': 'Orthos-Manta',
+        'Orthos Ymir': 'Orthos-Ymir',
+        'Orthos Zaratan': 'Orthos-Zaratan',
+        'Servomechanical Minotaur 16': 'servomechanisch(?:e|er|es|en) Minotaurus 16',
+      },
+    },
+    {
+      'locale': 'fr',
+      'replaceSync': {
+        'Orthos Big Claw': 'grosse pince Orthos',
+        'Orthos Ice Sprite': 'élémentaire de glace Orthos',
+        'Orthos Rockfin': 'rocquin Orthos',
+        'Orthos Stingray': 'raie Orthos',
+        'Orthos Ymir': 'bulot Orthos',
+        'Orthos Zaratan': 'zaratan Orthos',
+        'Servomechanical Minotaur 16': 'minotaure servomécanique 16',
+      },
+    },
+    {
+      'locale': 'ja',
+      'replaceSync': {
+        'Orthos Big Claw': 'オルト・ビッグクロウ',
+        'Orthos Ice Sprite': 'オルト・アイススプライト',
+        'Orthos Rockfin': 'オルト・ロックフィン',
+        'Orthos Stingray': 'オルト・スティングレイ',
+        'Orthos Ymir': 'オルト・ユミール',
+        'Orthos Zaratan': 'オルト・ザラタン',
+        'Servomechanical Minotaur 16': 'サーヴォ・ミノタウロス16',
+      },
     },
   ],
 };

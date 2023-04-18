@@ -39,6 +39,7 @@ const shouldDieOnLaser = (data: Data) => {
 
 // O4S - Deltascape 4.0 Savage
 const triggerSet: TriggerSet<Data> = {
+  id: 'DeltascapeV40Savage',
   zoneId: ZoneId.DeltascapeV40Savage,
   timelineFile: 'o4s.txt',
   timelineTriggers: [
@@ -135,7 +136,7 @@ const triggerSet: TriggerSet<Data> = {
         },
         thunder: {
           en: '선더3',
-          de: 'Blitz ga',
+          de: 'Blitzga',
           fr: 'Méga Foudre',
           ja: 'サンダガ',
           cn: '雷三',

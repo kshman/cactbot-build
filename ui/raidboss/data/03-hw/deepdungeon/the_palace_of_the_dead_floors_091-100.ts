@@ -8,6 +8,7 @@ import { TriggerSet } from '../../../../../types/trigger';
 export type Data = RaidbossData;
 
 const triggerSet: TriggerSet<Data> = {
+  id: 'ThePalaceOfTheDeadFloors91_100',
   zoneId: ZoneId.ThePalaceOfTheDeadFloors91_100,
 
   triggers: [
@@ -48,22 +49,22 @@ const triggerSet: TriggerSet<Data> = {
     {
       'locale': 'ja',
       'replaceSync': {
-        'Nybeth Obdilord': 'ã»âúŞÔ«Ë«Ğ«¹',
-        'Palace Wraith': '«Ñ«ì«¹?«ì«¤«¹',
+        'Nybeth Obdilord': 'å±è¡“å¸«ãƒ‹ãƒã‚¹',
+        'Palace Wraith': 'ãƒ‘ãƒ¬ã‚¹ãƒ»ãƒ¬ã‚¤ã‚¹',
       },
     },
     {
       'locale': 'cn',
       'replaceSync': {
-        'Nybeth Obdilord': 'Şİ??ŞÍÒùÚÏŞÙ',
-        'Palace Wraith': 'ò¢?êë?',
+        'Nybeth Obdilord': 'æ­»çµæœ¯å£«å°¼åšæ–¯',
+        'Palace Wraith': 'åœ°å®«å¹½çµ',
       },
     },
     {
       'locale': 'ko',
       'replaceSync': {
-        'Nybeth Obdilord': '½ÃÃ¼¼ú»ç ´Ï¹ö½º',
-        'Palace Wraith': '±ÃÀü ¸Á·É',
+        'Nybeth Obdilord': 'ì‹œì²´ìˆ ì‚¬ ë‹ˆë²„ìŠ¤',
+        'Palace Wraith': 'ê¶ì „ ë§ë ¹',
       },
     },
   ],

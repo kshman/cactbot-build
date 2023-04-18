@@ -5,7 +5,6 @@ import { RaidbossData } from '../../../../../types/data';
 import { TriggerSet } from '../../../../../types/trigger';
 
 // Eureka Orthos Floors 71-80
-// TODO: Orthos Kargas Winds of Winter untelegraphed AoE, stun or LoS
 
 export interface Data extends RaidbossData {
   charge?: boolean;
@@ -14,6 +13,7 @@ export interface Data extends RaidbossData {
 }
 
 const triggerSet: TriggerSet<Data> = {
+  id: 'EurekaOrthosFloors71_80',
   zoneId: ZoneId.EurekaOrthosFloors71_80,
 
   triggers: [
@@ -88,6 +88,27 @@ const triggerSet: TriggerSet<Data> = {
       netRegex: { id: '7F9A', source: 'Bird of Orthos' },
       response: Responses.awayFrom(),
     },
+    {
+      id: 'EO 71-80 Orthos Kargas Winds of Winter',
+      // lethal large AoE; can stun or break line-of-sight to avoid
+      type: 'StartsUsing',
+      netRegex: { id: '81AA', source: 'Orthos Kargas' },
+      alertText: (data, matches, output) => {
+        if (data.CanStun())
+          return output.stunOrBreakLOS!({ name: matches.source });
+        return output.breakLOS!({ name: matches.source });
+      },
+      outputStrings: {
+        stunOrBreakLOS: {
+          en: '${name}: 스턴 또는 시야 밖으로 숨어요',
+        },
+        breakLOS: {
+          en: '${name}: 시야 밖으로 숨어요',
+          de: 'Unterbreche Sichtlinie zu ${name}',
+          ko: '${name}의 시야 밖으로 숨기',
+        },
+      },
+    },
     // ---------------- Floor 80 Boss: Proto-Kaliya ----------------
     {
       id: 'EO 71-80 Proto-Kaliya Resonance',
@@ -128,7 +149,7 @@ const triggerSet: TriggerSet<Data> = {
     {
       id: 'EO 71-80 Proto-Kaliya Nanospore Jet Player Charge Collect',
       // D5A = Positive Charge
-      // D5B - Negative Charge
+      // D5B = Negative Charge
       type: 'GainsEffect',
       netRegex: { effectId: 'D5[AB]' },
       condition: Conditions.targetIsYou(),
@@ -139,7 +160,7 @@ const triggerSet: TriggerSet<Data> = {
     {
       id: 'EO 71-80 Proto-Kaliya Nanospore Jet Drone Charge Collect',
       // D58 = Positive Charge
-      // D59 - Negative Charge
+      // D59 = Negative Charge
       type: 'GainsEffect',
       netRegex: { effectId: 'D5[89]', target: 'Weapons Drone' },
       run: (data, matches) => {
@@ -192,6 +213,56 @@ const triggerSet: TriggerSet<Data> = {
           de: 'Werde in den sicheren Bereich gezogen',
           ko: '안전지대로 당겨지기',
         },
+      },
+    },
+  ],
+  timelineReplace: [
+    {
+      'locale': 'de',
+      'missingTranslations': true,
+      'replaceSync': {
+        'Bird of Orthos': 'Orthos-Vogel',
+        'Orthos Coeurl': 'Orthos-Coeurl',
+        'Orthos Flamebeast': 'Orthos-Flammenbestie',
+        'Orthos Gulo Gulo': 'Orthos-Gulo Gulo',
+        'Orthos Primelephas': 'Orthos-Primelephas',
+        'Orthos Skatene': 'Orthos-Skatene',
+        'Orthos Thunderbeast': 'Orthos-Donnerbestie',
+        'Orthos Toco Toco': 'Orthos-Tokotoko',
+        'Proto-Kaliya': 'Proto-Kaliya',
+        'Weapons Drone': 'Artilleriedrohne',
+      },
+    },
+    {
+      'locale': 'fr',
+      'missingTranslations': true,
+      'replaceSync': {
+        'Bird of Orthos': 'oiseau d\'Eurêka Orthos',
+        'Orthos Coeurl': 'coeurl Orthos',
+        'Orthos Flamebeast': 'bête de feu Orthos',
+        'Orthos Gulo Gulo': 'gulo gulo Orthos',
+        'Orthos Primelephas': 'primelephas Orthos',
+        'Orthos Skatene': 'skate\'ne Orthos',
+        'Orthos Thunderbeast': 'bête de foudre Orthos',
+        'Orthos Toco Toco': 'toco toco Orthos',
+        'Proto-Kaliya': 'proto-Kaliya',
+        'Weapons Drone': 'drone armé',
+      },
+    },
+    {
+      'locale': 'ja',
+      'missingTranslations': true,
+      'replaceSync': {
+        'Bird of Orthos': 'バード・オブ・オルト',
+        'Orthos Coeurl': 'オルト・クァール',
+        'Orthos Flamebeast': 'オルト・フレイムビースト',
+        'Orthos Gulo Gulo': 'オルト・グログロ',
+        'Orthos Primelephas': 'オルト・プリメレファス',
+        'Orthos Skatene': 'オルト・スカネテ',
+        'Orthos Thunderbeast': 'オルト・サンダービースト',
+        'Orthos Toco Toco': 'オルト・トコトコ',
+        'Proto-Kaliya': 'プロトカーリア',
+        'Weapons Drone': '砲撃ドローン',
       },
     },
   ],

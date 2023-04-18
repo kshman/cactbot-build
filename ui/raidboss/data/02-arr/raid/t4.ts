@@ -6,6 +6,7 @@ import { TriggerSet } from '../../../../../types/trigger';
 export type Data = RaidbossData;
 
 const triggerSet: TriggerSet<Data> = {
+  id: 'TheBindingCoilOfBahamutTurn4',
   zoneId: ZoneId.TheBindingCoilOfBahamutTurn4,
   timelineFile: 't4.txt',
   triggers: [
@@ -22,6 +23,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: 'LOS Percée gravitationelle',
           ja: 'グラビデカノン',
           cn: '死刑',
+          ko: '중력포',
         },
       },
     },
@@ -38,6 +40,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: 'LOS Vérole',
           ja: 'ポックス',
           cn: '血量上限降低',
+          ko: '두창',
         },
       },
     },
@@ -54,6 +57,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: 'Magique sur Soldat, Physique sur Chevalier',
           ja: '魔法はソルジャー、物理はナイト',
           cn: '法系打士兵，物理打骑士',
+          ko: '병사 마법공격, 기사 물리공격',
         },
       },
     },

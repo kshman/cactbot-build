@@ -10,6 +10,7 @@ import { TriggerSet } from '../../../../../types/trigger';
 export type Data = RaidbossData;
 
 const triggerSet: TriggerSet<Data> = {
+  id: 'EurekaOrthosFloors41_50',
   zoneId: ZoneId.EurekaOrthosFloors41_50,
 
   triggers: [
@@ -143,6 +144,47 @@ const triggerSet: TriggerSet<Data> = {
           cn: '球点名',
           ko: '구슬 대상자',
         },
+      },
+    },
+  ],
+  timelineReplace: [
+    {
+      'locale': 'de',
+      'replaceSync': {
+        'Cacophony': 'Kakophonie',
+        'Orthos Acheron': 'Orthos-Acheron',
+        'Orthos Bergthurs': 'Orthos-Jötunn',
+        'Orthos Gelato': 'Orthos-Gelato',
+        'Orthos Goobbue': 'Orthos-Goobbue',
+        'Orthos Hoarhound': 'Orthos-Höllenhund',
+        'Orthos Kelpie': 'Orthos-Kelpie',
+        'Servomechanical Chimera 14X': 'servomechanisch(?:e|er|es|en) Chimäre 14X',
+      },
+    },
+    {
+      'locale': 'fr',
+      'replaceSync': {
+        'Cacophony': 'cacophonie',
+        'Orthos Acheron': 'achéron Orthos',
+        'Orthos Bergthurs': 'bergthurs Orthos',
+        'Orthos Gelato': 'gelato Orthos',
+        'Orthos Goobbue': 'goobbue Orthos',
+        'Orthos Hoarhound': 'ballote Orthos',
+        'Orthos Kelpie': 'kelpie Orthos',
+        'Servomechanical Chimera 14X': 'chimère servomécanique 14X',
+      },
+    },
+    {
+      'locale': 'ja',
+      'replaceSync': {
+        'Cacophony': 'カカフォニー',
+        'Orthos Acheron': 'オルト・アケローン',
+        'Orthos Bergthurs': 'オルト・ベルグスルス',
+        'Orthos Gelato': 'オルト・ジェラート',
+        'Orthos Goobbue': 'オルト・グゥーブー',
+        'Orthos Hoarhound': 'オルト・ホアハウンド',
+        'Orthos Kelpie': 'オルト・ケルピー',
+        'Servomechanical Chimera 14X': 'サーヴォ・キマイラ14X',
       },
     },
   ],

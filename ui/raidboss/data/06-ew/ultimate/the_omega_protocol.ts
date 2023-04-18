@@ -6,7 +6,7 @@ import ZoneId from '../../../../../resources/zone_id';
 import { RaidbossData } from '../../../../../types/data';
 import { PluginCombatantState } from '../../../../../types/event';
 import { NetMatches } from '../../../../../types/net_matches';
-import { LocaleText, TriggerSet } from '../../../../../types/trigger';
+import { LocaleText, Output, TriggerSet } from '../../../../../types/trigger';
 
 // TODO: Delta green tether break calls
 // TODO: Sigma say if you are unmarked / marked with unmarked / double mark pair
@@ -71,9 +71,9 @@ export interface Data extends RaidbossData {
   members?: PrsMember[];
   my?: PrsMember;
   simple?: boolean;
-  dynaself?: boolean;
-  playtts?: number;
-  prsPank?: boolean;
+  panked?: boolean;
+  lastmode?: number;
+  omegaMonitors?: string[];
   //
   combatantData: PluginCombatantState[];
   phase: Phase;
@@ -98,11 +98,15 @@ export interface Data extends RaidbossData {
   monitorPlayers: NetMatches['GainsEffect'][];
   deltaTethers: { [name: string]: TetherColor };
   trioDebuff: { [name: string]: TrioDebuff };
+  seenOmegaTethers?: boolean;
 }
 
 const phaseReset = (data: Data) => {
   data.monitorPlayers = [];
   data.trioDebuff = {};
+  //
+  if (data.my)
+    data.my.ip = undefined;
 };
 
 // Due to changes introduced in patch 5.2, overhead markers now have a random offset
@@ -161,12 +165,45 @@ const nearDistantOutputStrings: { [label: string]: LocaleText } = {
   },
 } as const;
 
+const staffSwordMidHelper = (isEastWest: boolean, posX: number, posY: number, output: Output) => {
+  if (isEastWest) {
+    // East/West Safe
+    if (posX < 100 && posY < 100) {
+      // NW
+      return output.dirWSW!();
+    } else if (posX < 100 && posY > 100) {
+      // SW
+      return output.dirWNW!();
+    } else if (posX > 100 && posY < 100) {
+      // NE
+      return output.dirESE!();
+    }
+    // SE
+    return output.dirENE!();
+  }
+
+  // North/South Safe
+  if (posX < 100 && posY < 100) {
+    // NW
+    return output.dirNNE!();
+  } else if (posX < 100 && posY > 100) {
+    // SW
+    return output.dirSSE!();
+  } else if (posX > 100 && posY < 100) {
+    // NE
+    return output.dirNNW!();
+  }
+
+  // SE
+  return output.dirSSW!();
+};
+
 const triggerSet: TriggerSet<Data> = {
+  id: 'TheOmegaProtocolUltimate',
   zoneId: ZoneId.TheOmegaProtocolUltimate,
   timelineFile: 'the_omega_protocol.txt',
   initData: () => {
     return {
-      //
       combatantData: [],
       phase: 'p1',
       inLine: {},
@@ -246,7 +283,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '프로틴',
+          en: '프로틴, 흩어져욧',
         },
       },
     },
@@ -343,7 +380,7 @@ const triggerSet: TriggerSet<Data> = {
         if (data.my)
           data.my.ip = undefined;
         if (matches.id === '7B0B')
-          data.prsPank = true;
+          data.panked = true;
       }
     },
     {
@@ -352,7 +389,7 @@ const triggerSet: TriggerSet<Data> = {
       netRegex: { effectId: ['BBC', 'BBD', 'BBE', 'D7B'], capture: false },
       condition: (data) => data.phase === 'p1',
       delaySeconds: 0.5,
-      durationSeconds: (data) => data.prsPank ? 5 : 38, // 원래 5초
+      durationSeconds: (data) => data.panked ? 5 : 38, // 원래 5초
       suppressSeconds: 1,
       infoText: (data, _matches, output) => {
         const myNum = data.inLine[data.me];
@@ -369,7 +406,7 @@ const triggerSet: TriggerSet<Data> = {
         }
 
         if (data.my && data.my.ip) {
-          if (data.prsPank) {
+          if (data.panked) {
             const cm = Math.floor(data.my.pk / 10);
             const cp = Math.floor(data.my.ip.pk / 10);
             if (cm === cp && data.my.pk < data.my.ip.pk) {
@@ -611,15 +648,6 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: 'TOP+ Firewall / 클린업용',
-      type: 'StartsUsing',
-      netRegex: { id: '7B40', source: 'Omega', capture: false },
-      run: (data) => {
-        if (data.my)
-          data.my.ip = undefined;
-      }
-    },
-    {
       id: 'TOP Solar Ray You',
       type: 'StartsUsing',
       netRegex: { id: ['7E6A', '7E6B'], source: 'Omega' },
@@ -707,22 +735,22 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         blizzardBladework: {
-          en: '밖 + 밖 (남자 밖으로)',
+          en: '남자 바깥 (밖 + 밖)',
           de: 'Raus Raus',
           ko: '밖 밖',
         },
         superliminalStrength: {
-          en: '안 + 안 (남자)',
+          en: '남자 밑 (안 + 안)',
           de: 'Rein Rein auf M',
           ko: '안 안 남자',
         },
         superliminalBladework: {
-          en: '언니 밑으로',
+          en: '언니 밑',
           de: 'Unter W',
           ko: '여자 밑',
         },
         blizzardStrength: {
-          en: '남자 옆으로 (가운데로 언니 발차기)',
+          en: '남자 바로 옆 (언니 발차기)',
           de: 'Seitlich von M',
           ko: '남자 양옆',
         },
@@ -789,63 +817,49 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         midGlitch: {
-          en: '미들',
+          en: '[미들]',
           de: 'Mittel',
           ko: '가까이',
         },
         remoteGlitch: {
-          en: '파',
+          en: '[파]',
           de: 'Fern',
           ko: '멀리',
         },
-        circle: '🔴',
-        triangle: '▲',
-        square: '🟪',
-        cross: '❌',
-        num1: '①',
-        num2: '②',
-        num3: '③',
-        num4: '④',
-        text: '${glitch} ${mark} (${player})',
-        left: '❰❰❰❰❰ ${glitch} ${mark}${num} (${player})',
-        right: '${glitch} ${mark}${num} (${player}) ❱❱❱❱❱',
-        unknown: Outputs.unknown,
-      },
-    },
-    {
-      id: 'TOP Optical Unit Location',
-      type: 'MapEffect',
-      netRegex: { location: '0[1-8]', flags: '00020001' },
-      condition: (data) => !data.simple,
-      // This comes out right with playstation debuffs.
-      // Let players resolve Superliminal Steel/etc first.
-      delaySeconds: 0.5,
-      durationSeconds: 7,
-      alertText: (data, matches, output) => {
-        const dir = {
-          '01': output.dirN!(),
-          '02': output.dirNE!(),
-          '03': output.dirE!(),
-          '04': output.dirSE!(),
-          '05': output.dirS!(),
-          '06': output.dirSW!(),
-          '07': output.dirW!(),
-          '08': output.dirNW!(),
-        }[matches.location];
-        return output.text!({ dir: dir });
-      },
-      outputStrings: {
-        text: {
-          en: '눈: ${dir}',
+        circle: {
+          en: '동글',
         },
-        dirN: 'A [12시]',
-        dirNE: '1 [1시]',
-        dirE: 'B [3시]',
-        dirSE: '2 [5시]',
-        dirS: 'C [6시]',
-        dirSW: '3 [7시]',
-        dirW: 'D [9시]',
-        dirNW: '4 [11시]',
+        triangle: {
+          en: '삼각',
+        },
+        square: {
+          en: '사각',
+        },
+        cross: {
+          en: '엑스',
+        },
+        num1: {
+          en: '①',
+        },
+        num2: {
+          en: '②',
+        },
+        num3: {
+          en: '③',
+        },
+        num4: {
+          en: '④',
+        },
+        text: {
+          en: '${glitch} ${mark} (${player})',
+        },
+        left: {
+          en: '❰❰❰❰❰ ${glitch} ${num}${mark} (${player})',
+        },
+        right: {
+          en: '${glitch} ${num}${mark} (${player}) ❱❱❱❱❱',
+        },
+        unknown: Outputs.unknown,
       },
     },
     {
@@ -857,27 +871,27 @@ const triggerSet: TriggerSet<Data> = {
         // cactbot-builtin-response
         output.responseOutputStrings = {
           midGlitch: {
-            en: '미들',
+            en: '[미들]',
             de: 'Mittel',
             ko: '가까이',
           },
           remoteGlitch: {
-            en: '파',
+            en: '[파]',
             de: 'Fern',
             ko: '멀리',
           },
-        circle: {
-          en: '🔴',
-        },
-        triangle: {
-          en: '▲',
-        },
-        square: {
-          en: '🟪',
-        },
-        cross: {
-          en: '❌',
-        },
+          circle: {
+            en: '동글',
+          },
+          triangle: {
+            en: '삼각',
+          },
+          square: {
+            en: '사각',
+          },
+          cross: {
+            en: '엑스',
+          },
           stacksOn: {
             en: '${glitch} ${marker} (${player1}, ${player2})',
             de: '${glitch} Sammeln (${player1}, ${player2})',
@@ -1017,7 +1031,9 @@ const triggerSet: TriggerSet<Data> = {
           return output.spread!();
       },
       outputStrings: {
-        spread: Outputs.spread,
+        spread: {
+          en: '흩어져서 내 자리로',
+        },
       },
     },
     {
@@ -1042,7 +1058,7 @@ const triggerSet: TriggerSet<Data> = {
             ko: '쉐어 (+ ${player1}, ${player2})',
           },
           unmarkedStack: {
-            en: '노마커 뭉쳐요 (${player1}, ${player2})',
+            en: '노 디버프, 뭉쳐요 (${player1}, ${player2})',
             de: 'Nicht markiertes Sammeln (mit ${player1} oder ${player2})',
             ko: '무징 쉐어 (+ ${player1}, ${player2})',
           },
@@ -1305,17 +1321,17 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         farTether: {
-          en: '뭉쳐요: ${color} 타워 사이로',
+          en: '뭉쳐요: ${color} 타워 사이',
           de: 'Beim ${color}en Turm versammeln',
           ko: '${color} 장판 사이에서 쉐어',
         },
         nearTether: {
-          en: '얻어요: ${color} 타워 바깥으로 / 서클',
+          en: '얻어요: ${color} 타워 바깥 / 서클',
           de: 'Auserhalb vom ${color}en Turm',
           ko: '${color} 장판 바깥쪽으로',
         },
         finalTowerNear: {
-          en: '마지막 뭉쳐요: ${color} 타워 사이로',
+          en: '마지막: ${color} 타워 사이',
           de: 'Zwischen den ${color}en Türmen',
           ko: '${color} 장판 사이로',
         },
@@ -1416,7 +1432,7 @@ const triggerSet: TriggerSet<Data> = {
       run: (data, matches) => delete data.bugRot[matches.target],
       outputStrings: {
         spread: {
-          en: '적당히 흩어져요, 부디치지 말고',
+          en: '흩어져요, 서로 안 부딪게',
         },
       },
     },
@@ -1424,13 +1440,10 @@ const triggerSet: TriggerSet<Data> = {
       id: 'TOP Oversampled Wave Cannon East',
       type: 'StartsUsing',
       netRegex: { id: '7B6B', source: 'Omega', capture: false },
-      /*
-      alertText: (_data, _matches, output) => output.text!(),
-      */
       delaySeconds: 1.2,
       durationSeconds: 8,
       alertText: (data, _matches, output) => {
-         if (!data.my || !data.my.imn)
+         if (!data.my?.imn)
            return output.text!();
          const mo = {
            21: output.m1!(),
@@ -1442,20 +1455,22 @@ const triggerSet: TriggerSet<Data> = {
            14: output.o4!(),
            15: output.o5!(),
          }[data.my.imn];
+         delete data.my.imn;
          return mo;
       },
       outputStrings: {
         text: {
           en: '모니터: 동쪽❱❱❱',
+          de: 'Östliche Bildschirme',
           ko: '오른쪽 모니터',
         },
-         m1: '④ 위 / ❰❰❰❰ 유도',
-         m2: 'Ⓓ 위 / 🡹🡹 유도',
-         m3: 'Ⓓ 아래 / 🡻🡻 유도',
+         m1: '④ 위 / ❰❰❰❰모니터',
+         m2: 'Ⓓ 위 / 🡹🡹모니터',
+         m3: 'Ⓓ 아래 / 🡻🡻모니터',
          o1: 'Ⓐ 🡼',
          o2: '보스 ❱❱❱❱',
          o3: 'Ⓑ 🡺',
-         o4: 'Ⓒ 🡼 / ③-②라인 ',
+         o4: 'Ⓒ 🡼',
          o5: '③ 🡻',
       },
     },
@@ -1463,13 +1478,10 @@ const triggerSet: TriggerSet<Data> = {
       id: 'TOP Oversampled Wave Cannon West',
       type: 'StartsUsing',
       netRegex: { id: '7B6C', source: 'Omega', capture: false },
-      /*
-      alertText: (_data, _matches, output) => output.text!(),
-      */
       delaySeconds: 1.2,
       durationSeconds: 8,
       alertText: (data, _matches, output) => {
-         if (!data.my || !data.my.imn)
+         if (!data.my?.imn)
            return output.text!();
          const mo = {
            21: output.m1!(),
@@ -1481,6 +1493,7 @@ const triggerSet: TriggerSet<Data> = {
            14: output.o4!(),
            15: output.o5!(),
          }[data.my.imn];
+         delete data.my.imn;
          return mo;
       },
       outputStrings: {
@@ -1488,13 +1501,13 @@ const triggerSet: TriggerSet<Data> = {
           en: '모니터: ❰❰❰서쪽',
           ko: '왼쪽 모니터',
         },
-         m1: '① 위 / ❱❱❱❱ 유도',
-         m2: 'Ⓑ 위 / 🡹🡹 유도',
-         m3: 'Ⓑ 아래 / 🡻🡻 유도',
+         m1: '① 위 / 모니터❱❱❱❱',
+         m2: 'Ⓑ 위 / 🡹🡹모니터',
+         m3: 'Ⓑ 아래 / 🡻🡻모니터',
          o1: 'Ⓐ 🡽',
          o2: '❰❰❰❰ 보스',
          o3: 'Ⓓ 🡸',
-         o4: 'Ⓒ 🡽 / ③-②라인',
+         o4: 'Ⓒ 🡽',
          o5: '② 🡻',
       },
     },
@@ -1505,7 +1518,6 @@ const triggerSet: TriggerSet<Data> = {
       // D7D = Oversampled Wave Cannon Loading (facing left)
       netRegex: { effectId: ['D7C', 'D7D'] },
       preRun: (data, matches) => data.monitorPlayers.push(matches),
-      delaySeconds: 0.5,
       response: (data, _matches, output) => {
         // cactbot-builtin-response
         output.responseOutputStrings = {
@@ -1698,7 +1710,7 @@ const triggerSet: TriggerSet<Data> = {
           ...nearDistantOutputStrings,
           unmarkedBlue: {
             // Probably near baits, but you never know.
-            en: '마커 없는 파랑',
+            en: '할 일 없는 🥶파랑',
           },
         };
 
@@ -1722,6 +1734,7 @@ const triggerSet: TriggerSet<Data> = {
       // Same NPC that casts Sigma Version teleports to card/intercard
       type: 'Ability',
       netRegex: { id: '8014', source: 'Omega-M' },
+      condition: (data) => !data.simple,
       delaySeconds: 5.4,
       durationSeconds: 26, // Display until Discharger
       suppressSeconds: 1,
@@ -1808,7 +1821,8 @@ const triggerSet: TriggerSet<Data> = {
           return { alertText: output.near!() };
         if (myDebuff === 'distant')
           return { alertText: output.distant!() };
-        return { infoText: output.noDebuff!() };
+        if (!data.simple)
+          return { infoText: output.noDebuff!() };
       },
     },
     {
@@ -1817,7 +1831,9 @@ const triggerSet: TriggerSet<Data> = {
       // Track from Discharger (7B2E)
       type: 'Ability',
       netRegex: { id: '7B2E', source: 'Omega-M' },
-      condition: (data) => data.phase === 'sigma',
+      // TODO: temporarily disabled as it is returning inconsistent results even with longer delay.
+      // See: https://github.com/quisquous/cactbot/issues/5335
+      condition: (data) => false && data.phase === 'sigma',
       delaySeconds: 6.2,
       suppressSeconds: 1,
       promise: async (data, matches) => {
@@ -1848,14 +1864,13 @@ const triggerSet: TriggerSet<Data> = {
         },
       },
     },
-    /* -> TOP P5 오메가 니어파
     {
       id: 'TOP P5 Omega Debuffs',
       // First In Line: ~32s duration, ~12s left after 2nd dodge
       // Second In Line: ~50s duration, ~15s left after final bounce
       type: 'GainsEffect',
       netRegex: { effectId: ['D72', 'D73'] },
-      condition: (data, matches) => data.phase === 'omega' && matches.target === data.me,
+      condition: (data, matches) => data.members === undefined && data.phase === 'omega' && matches.target === data.me,
       delaySeconds: (_data, matches) => parseFloat(matches.duration) > 40 ? 35 : 20,
       durationSeconds: 8,
       alertText: (_data, matches, output) => {
@@ -1866,13 +1881,24 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: nearDistantOutputStrings,
     },
-    */
+    {
+      id: 'TOP P5 Omega Tether Detector',
+      type: 'Tether',
+      netRegex: { id: '0059', capture: false },
+      condition: (data) => data.phase === 'omega',
+      suppressSeconds: 30,
+      run: (data) => data.seenOmegaTethers = true,
+    },
     {
       id: 'TOP P5 Omega Tether Bait',
       type: 'GainsEffect',
       // Quickening Dynamis
       netRegex: { effectId: 'D74', count: '03' },
-      condition: (data, matches) => data.phase === 'omega' && matches.target === data.me,
+      condition: (data, matches) => {
+        if (data.phase !== 'omega' || data.seenOmegaTethers)
+          return false;
+        return matches.target === data.me;
+      },
       durationSeconds: 8,
       alarmText: (_data, _matches, output) => output.baitTethers!(),
       outputStrings: {
@@ -1882,12 +1908,14 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: 'TOP Omega Safe Spots',
-      // 7B9B Diffuse Wave Cannon (North/South), is followed up with 7B78
-      // 7B9C Diffuse Wave Cannon (East/West), is followed up with 7B77
-      type: 'StartsUsing',
-      netRegex: { id: ['7B9B', '7B9C'], source: 'Omega' },
-      durationSeconds: (_data, matches) => parseFloat(matches.castTime),
+      id: 'TOP Omega Pre-Safe Spot',
+      // The combatants appear around the start of this cast, but the WeaponIds
+      // don't switch until ~2.7s after the ability goes off.
+      type: 'Ability',
+      netRegex: { id: '8015', source: 'Omega-M', capture: false },
+      condition: (data) => !data.simple,
+      delaySeconds: 4,
+      suppressSeconds: 1,
       promise: async (data) => {
         data.combatantData = [];
         data.combatantData = (await callOverlayHandler({
@@ -1898,20 +1926,99 @@ const triggerSet: TriggerSet<Data> = {
           (b.ID ?? 0) - (a.ID ?? 0);
         data.combatantData = data.combatantData.sort(sortCombatants);
       },
+      infoText: (data, _matches, output) => {
+        // The higher id is first set
+        const omegaMNPCId = 15721;
+        const omegaFNPCId = 15722;
+        const findOmegaF = (combatant: PluginCombatantState) => combatant.BNpcID === omegaFNPCId;
+        const findOmegaM = (combatant: PluginCombatantState) => combatant.BNpcID === omegaMNPCId;
+
+        const f = data.combatantData.filter(findOmegaF).shift();
+        const m = data.combatantData.filter(findOmegaM).shift();
+
+        if (f === undefined || m === undefined) {
+          console.error(`Omega Safe Spots: missing m/f: ${JSON.stringify(data.combatantData)}`);
+          return;
+        }
+
+        const isFIn = f.WeaponId === 4;
+        const isMIn = m.WeaponId === 4;
+
+        // The combatants only spawn in these intercards:
+        // 92.93, 92.93 (NW)      107.07, 92.93 (NE)
+        // 92.93, 107.07 (SW)     107.07, 107.07 (SE)
+        // They will either spawn NW/SE first or NE/SW
+        // Boss cleave is unknown at this time, so call both sides
+        const pos1 = (!isMIn && isFIn) ? f.PosY : m.PosY;
+        const pos2 = (!isMIn && isFIn) ? f.PosX : m.PosX;
+        const northSouthDir = pos1 < 100 ? output.dirN!() : output.dirS!();
+        const eastWestDir = pos2 < 100 ? output.dirW!() : output.dirE!();
+
+        if (isFIn) {
+          if (isMIn)
+            return output.legsShield!({ northSouth: northSouthDir, eastWest: eastWestDir });
+          return output.legsSword!({ northSouth: northSouthDir, eastWest: eastWestDir });
+        }
+        if (isMIn)
+          return output.staffShield!({ northSouth: northSouthDir, eastWest: eastWestDir });
+
+        const staffSwordFar = output.staffSwordFar!({
+          northSouth: northSouthDir,
+          eastWest: eastWestDir,
+        });
+        const eastWestSwordStaffDir = staffSwordMidHelper(true, f.PosX, f.PosY, output);
+        const northSouthSwordStaffDir = staffSwordMidHelper(false, f.PosX, f.PosY, output);
+        const staffSwordMid = output.staffSwordMid!({
+          northSouth: northSouthSwordStaffDir,
+          eastWest: eastWestSwordStaffDir,
+        });
+        return output.staffSwordCombo!({ farText: staffSwordFar, midText: staffSwordMid });
+      },
+      outputStrings: {
+        legsSword: {
+          en: '가까운 ${northSouth}${eastWest}',
+        },
+        legsShield: {
+          en: '가까운 ${northSouth}${eastWest}',
+        },
+        staffShield: {
+          en: '안쪽 ${northSouth}${eastWest}',
+        },
+        staffSwordCombo: {
+          en: '${farText} / ${midText}',
+        },
+        staffSwordFar: {
+          en: '멀리 ${northSouth}${eastWest}',
+        },
+        staffSwordMid: {
+          en: '중간 ${northSouth}${eastWest}',
+        },
+        dirN: 'Ⓐ',
+        dirE: 'Ⓑ',
+        dirS: 'Ⓒ',
+        dirW: 'Ⓓ',
+        dirNNW: '④',
+        dirNNE: '①',
+        dirENE: '①',
+        dirESE: '②',
+        dirSSE: '②',
+        dirSSW: '③',
+        dirWSW: '③',
+        dirWNW: '④',
+      },
+    },
+    {
+      id: 'TOP Omega Safe Spots',
+      // 7B9B Diffuse Wave Cannon (North/South), is followed up with 7B78
+      // 7B9C Diffuse Wave Cannon (East/West), is followed up with 7B77
+      type: 'StartsUsing',
+      netRegex: { id: ['7B9B', '7B9C'], source: 'Omega' },
+      condition: (data) => !data.simple,
+      durationSeconds: (_data, matches) => parseFloat(matches.castTime),
       alertText: (data, matches, output) => {
         // The higher id is first set
         const omegaMNPCId = 15721;
         const omegaFNPCId = 15722;
-        let isF1In = false;
-        let isM1In = false;
-        let isF2In = false;
-        let isM2In = false;
-        let dir1;
-        let dir2;
-        let dir3;
-        let dir4;
-        let distance1;
-        let distance2;
         const findOmegaF = (combatant: PluginCombatantState) => combatant.BNpcID === omegaFNPCId;
         const findOmegaM = (combatant: PluginCombatantState) => combatant.BNpcID === omegaMNPCId;
 
@@ -1922,35 +2029,22 @@ const triggerSet: TriggerSet<Data> = {
           console.error(`Omega Safe Spots: missing m/f: ${JSON.stringify(data.combatantData)}`);
           return;
         }
-        if (f1.WeaponId === 4)
-          isF1In = true;
-        if (f2.WeaponId === 4)
-          isF2In = true;
-        if (m1.WeaponId === 4)
-          isM1In = true;
-        if (m2.WeaponId === 4)
-          isM2In = true;
 
-        if (isF1In)
-          distance1 = output.close!();
-        else if (isM1In)
-          distance1 = output.mid!();
-        else
-          distance1 = output.far!();
-
-        if (isF2In)
-          distance2 = output.close!();
-        else if (isM2In)
-          distance2 = output.mid!();
-        else
-          distance2 = output.far!();
+        const isF1In = f1.WeaponId === 4;
+        const isF2In = f2.WeaponId === 4;
+        const isM1In = m1.WeaponId === 4;
+        const isM2In = m2.WeaponId === 4;
+        const isFirstEastWest = matches.id === '7B9B';
+        const isSecondEastWest = !isFirstEastWest;
 
         // The combatants only spawn in these intercards:
         // 92.93, 92.93 (NW)      107.07, 92.93 (NE)
         // 92.93, 107.07 (SW)     107.07, 107.07 (SE)
         // They will either spawn NW/SE first or NE/SW
         // Boss cleave tells if it is actually east/west or north/south
-        if (matches.id === '7B9B') {
+        let dir1;
+        let dir2;
+        if (isFirstEastWest) {
           // East or West Safe
           // Check for Sword/Shield to know if to go to Male or Female
           const pos1 = (!isM1In && isF1In) ? f1.PosX : m1.PosX;
@@ -1965,110 +2059,44 @@ const triggerSet: TriggerSet<Data> = {
           dir2 = pos2 < 100 ? output.dirW!() : output.dirE!();
         }
 
-        // Secondary Spot for Staff + Sword
-        if (!isM1In && !isF1In) {
-          if (matches.id === '7B9B') {
-            // East/West Safe
-            if (f1.PosX < 100 && f1.PosY < 100) {
-              // NW
-              dir3 = output.dirWSW!();
-            } else if (f1.PosX < 100 && f1.PosY > 100) {
-              // SW
-              dir3 = output.dirWNW!();
-            } else if (f1.PosX > 100 && f1.PosY < 100) {
-              // NE
-              dir3 = output.dirESE!();
-            } else {
-              // SE
-              dir3 = output.dirENE!();
-            }
+        let firstSpot;
+        if (isF1In) {
+          if (isM1In)
+            firstSpot = output.legsShield!({ dir: dir1 });
+          else
+            firstSpot = output.legsSword!({ dir: dir1 });
+        } else {
+          if (isM1In) {
+            firstSpot = output.staffShield!({ dir: dir1 });
+          } else if (data.simple) {
+            firstSpot = output.staffSwordSimple!({ text: output.staffSwordFar!({ dir: dir1 }) });
           } else {
-            // North/South Safe
-            if (f1.PosX < 100 && f1.PosY < 100) {
-              // NW
-              dir3 = output.dirNNE!();
-            } else if (f1.PosX < 100 && f1.PosY > 100) {
-              // SW
-              dir3 = output.dirSSE!();
-            } else if (f1.PosX > 100 && f1.PosY < 100) {
-              // NE
-              dir3 = output.dirNNW!();
-            } else {
-              // SE
-              dir3 = output.dirSSW!();
-            }
-          }
-        }
-        if (!isM2In && !isF2In) {
-          if (matches.id === '7B9B') {
-            // East/West Safe
-            if (f2.PosX < 100 && f2.PosY < 100) {
-              // NW
-              dir4 = output.dirNNE!();
-            } else if (f2.PosX < 100 && f2.PosY > 100) {
-              // SW
-              dir4 = output.dirSSE!();
-            } else if (f2.PosX > 100 && f2.PosY < 100) {
-              // NE
-              dir4 = output.dirNNW!();
-            } else {
-              // SE
-              dir4 = output.dirSSW!();
-            }
-          } else {
-            // North/South Safe
-            if (f2.PosX < 100 && f2.PosY < 100) {
-              // NW
-              dir4 = output.dirWSW!();
-            } else if (f2.PosX < 100 && f2.PosY > 100) {
-              // SW
-              dir4 = output.dirWNW!();
-            } else if (f2.PosX > 100 && f2.PosY < 100) {
-              // NE
-              dir4 = output.dirESE!();
-            } else {
-              // SE
-              dir4 = output.dirENE!();
-            }
+            const staffMidDir1 = staffSwordMidHelper(isFirstEastWest, f1.PosX, f1.PosY, output);
+            firstSpot = output.staffSwordCombo!({
+              farText: output.staffSwordFar!({ dir: dir1 }),
+              midText: output.staffSwordMid!({ dir: staffMidDir1 }),
+            });
           }
         }
 
-        const firstSpot = output.safeSpot!({ distance: distance1, dir: dir1 });
-        const secondSpot = output.safeSpot!({ distance: distance2, dir: dir2 });
-
-        if (!isM1In && !isF1In && !isM2In && !isF2In) {
-          // Output two locations => two locations
-          const staffSwordFar1 = output.staffSwordFar!({ dir: dir1 });
-          const staffSwordFar2 = output.staffSwordFar!({ dir: dir2 });
-          const staffSwordMid1 = output.staffSwordMid!({ dir: dir3 });
-          const staffSwordMid2 = output.staffSwordMid!({ dir: dir4 });
-          const staffSwordCombo1 = output.staffSwordCombo!({
-            farText: staffSwordFar1,
-            midText: staffSwordMid1,
-          });
-          const staffSwordCombo2 = output.staffSwordCombo!({
-            farText: staffSwordFar2,
-            midText: staffSwordMid2,
-          });
-          return output.safeSpots!({ first: staffSwordCombo1, second: staffSwordCombo2 });
-        } else if (!isM1In && !isF1In) {
-          // Output two locations => one location
-          const staffSwordFar1 = output.staffSwordFar!({ dir: dir1 });
-          const staffSwordMid1 = output.staffSwordMid!({ dir: dir3 });
-          const staffSwordCombo1 = output.staffSwordCombo!({
-            farText: staffSwordFar1,
-            midText: staffSwordMid1,
-          });
-          return output.safeSpots!({ first: staffSwordCombo1, second: secondSpot });
-        } else if (!isM2In && !isF2In) {
-          // Output one location => two locations
-          const staffSwordFar1 = output.staffSwordFar!({ dir: dir2 });
-          const staffSwordMid1 = output.staffSwordMid!({ dir: dir4 });
-          const staffSwordCombo1 = output.staffSwordCombo!({
-            farText: staffSwordFar1,
-            midText: staffSwordMid1,
-          });
-          return output.safeSpots!({ first: firstSpot, second: staffSwordCombo1 });
+        let secondSpot;
+        if (isF2In) {
+          if (isM2In)
+            secondSpot = output.legsShield!({ dir: dir2 });
+          else
+            secondSpot = output.legsSword!({ dir: dir2 });
+        } else {
+          if (isM2In) {
+            secondSpot = output.staffShield!({ dir: dir2 });
+          } else if (data.simple) {
+            secondSpot = output.staffSwordSimple!({ text: output.staffSwordFar!({ dir: dir2 }) });
+          } else {
+            const staffMidDir2 = staffSwordMidHelper(isSecondEastWest, f2.PosX, f2.PosY, output);
+            secondSpot = output.staffSwordCombo!({
+              farText: output.staffSwordFar!({ dir: dir2 }),
+              midText: output.staffSwordMid!({ dir: staffMidDir2 }),
+            });
+          }
         }
 
         return output.safeSpots!({ first: firstSpot, second: secondSpot });
@@ -2077,8 +2105,15 @@ const triggerSet: TriggerSet<Data> = {
         safeSpots: {
           en: '${first} => ${second}',
         },
-        safeSpot: {
-          en: '${distance} ${dir}',
+        // The two legs are split in case somebody wants a "go to M" or "go to F" style call.
+        legsSword: {
+          en: '가까운 ${dir}',
+        },
+        legsShield: {
+          en: '가까운 ${dir}',
+        },
+        staffShield: {
+          en: '중간 ${dir}',
         },
         staffSwordCombo: {
           en: '${farText} / ${midText}',
@@ -2087,29 +2122,23 @@ const triggerSet: TriggerSet<Data> = {
           en: '멀리 ${dir}',
         },
         staffSwordMid: {
-          en: '중간쯤 ${dir}',
+          en: '중간 ${dir}',
         },
-        close: {
-          en: '가까이',
+        staffSwordSimple: {
+          en: '${text}',
         },
-        mid: {
-          en: '중간쯤',
-        },
-        far: {
-          en: '멀리',
-        },
-        dirN: Outputs.dirN,
-        dirE: Outputs.dirE,
-        dirS: Outputs.dirS,
-        dirW: Outputs.dirW,
-        dirNNW: Outputs.dirNNW,
-        dirNNE: Outputs.dirNNE,
-        dirENE: Outputs.dirENE,
-        dirESE: Outputs.dirESE,
-        dirSSE: Outputs.dirSSE,
-        dirSSW: Outputs.dirSSW,
-        dirWSW: Outputs.dirWSW,
-        dirWNW: Outputs.dirWNW,
+        dirN: 'Ⓐ',
+        dirE: 'Ⓑ',
+        dirS: 'Ⓒ',
+        dirW: 'Ⓓ',
+        dirNNW: '④-Ⓐ',
+        dirNNE: 'Ⓐ-①',
+        dirENE: '①-Ⓑ',
+        dirESE: 'Ⓑ-②',
+        dirSSE: '②-Ⓒ',
+        dirSSW: 'Ⓒ-③',
+        dirWSW: '③-Ⓓ',
+        dirWNW: 'Ⓓ-④',
       },
     },
     {
@@ -2118,16 +2147,12 @@ const triggerSet: TriggerSet<Data> = {
       // 7B9C Diffuse Wave Cannon (East/West), is followed up with 7B77
       type: 'StartsUsing',
       netRegex: { id: ['7B9B', '7B9C'], source: 'Omega' },
+      condition: (data) => !data.simple,
       delaySeconds: (_data, matches) => parseFloat(matches.castTime),
       alertText: (data, matches, output) => {
         // The lower id is second set
         const omegaMNPCId = 15721;
         const omegaFNPCId = 15722;
-        let isFIn = false;
-        let isMIn = false;
-        let dir1;
-        let dir2;
-        let distance;
         const findOmegaF = (combatant: PluginCombatantState) => combatant.BNpcID === omegaFNPCId;
         const findOmegaM = (combatant: PluginCombatantState) => combatant.BNpcID === omegaMNPCId;
 
@@ -2140,77 +2165,55 @@ const triggerSet: TriggerSet<Data> = {
           );
           return;
         }
-        if (f.WeaponId === 4)
-          isFIn = true;
-        if (m.WeaponId === 4)
-          isMIn = true;
 
-        if (isFIn)
-          distance = output.close!();
-        else if (isMIn)
-          distance = output.mid!();
-        else
-          distance = output.far!();
+        const isFIn = f.WeaponId === 4;
+        const isMIn = m.WeaponId === 4;
+        const isFirstEastWest = matches.id === '7B9B';
+        const isSecondEastWest = !isFirstEastWest;
 
         // The combatants only spawn in these intercards:
         // 92.93, 92.93 (NW)      107.07, 92.93 (NE)
         // 92.93, 107.07 (SW)     107.07, 107.07 (SE)
         // They will either spawn NW/SE first or NE/SW
         // Boss cleave tells if it is actually east/west or north/south
-        if (matches.id === '7B9B') {
+        let dir1;
+        if (isSecondEastWest) {
           // East or West Safe, look for male side
           // Check for Sword/Shield to know if to go to Male or Female
-          const pos = (!isMIn && isFIn) ? f.PosY : m.PosY;
-          dir1 = pos < 100 ? output.dirN!() : output.dirS!();
-        } else {
-          // North or South Safe
           const pos = (!isMIn && isFIn) ? f.PosX : m.PosX;
           dir1 = pos < 100 ? output.dirW!() : output.dirE!();
+        } else {
+          // North or South Safe
+          const pos = (!isMIn && isFIn) ? f.PosY : m.PosY;
+          dir1 = pos < 100 ? output.dirN!() : output.dirS!();
         }
 
-        // Secondary Spot for Staff + Sword
-        if (!isMIn && !isFIn) {
-          if (matches.id === '7B9B') {
-            // East/West Safe
-            if (f.PosX < 100 && f.PosY < 100) {
-              // NW
-              dir2 = output.dirNNE!();
-            } else if (f.PosX < 100 && f.PosY > 100) {
-              // SW
-              dir2 = output.dirSSE!();
-            } else if (f.PosX > 100 && f.PosY < 100) {
-              // NE
-              dir2 = output.dirNNW!();
-            } else {
-              // SE
-              dir2 = output.dirSSW!();
-            }
-          } else {
-            // North/South Safe
-            if (f.PosX < 100 && f.PosY < 100) {
-              // NW
-              dir2 = output.dirWSW!();
-            } else if (f.PosX < 100 && f.PosY > 100) {
-              // SW
-              dir2 = output.dirWNW!();
-            } else if (f.PosX > 100 && f.PosY < 100) {
-              // NE
-              dir2 = output.dirESE!();
-            } else {
-              // SE
-              dir2 = output.dirENE!();
-            }
-          }
-          const staffSwordFar = output.staffSwordFar!({ dir: dir1 });
-          const staffSwordMid = output.staffSwordMid!({ dir: dir2 });
-          return output.staffSwordCombo!({ farText: staffSwordFar, midText: staffSwordMid });
+        if (isFIn) {
+          if (isMIn)
+            return output.legsShield!({ dir: dir1 });
+          return output.legsSword!({ dir: dir1 });
         }
+        if (isMIn)
+          return output.staffShield!({ dir: dir1 });
 
-        return output.safeSpot!({ distance: distance, dir: dir1 });
+        if (data.simple)
+          return output.staffSwordSimple!({ text: output.staffSwordFar!({ dir: dir1 }) });
+
+        const staffMidDir1 = staffSwordMidHelper(isSecondEastWest, f.PosX, f.PosY, output);
+        return output.staffSwordCombo!({
+          farText: output.staffSwordFar!({ dir: dir1 }),
+          midText: output.staffSwordMid!({ dir: staffMidDir1 }),
+        });
       },
       outputStrings: {
-        safeSpot: {
-          en: '${distance} ${dir}',
+        legsSword: {
+          en: '가까운 ${dir}',
+        },
+        legsShield: {
+          en: '가까운 ${dir}',
+        },
+        staffShield: {
+          en: '중간 ${dir}',
         },
         staffSwordCombo: {
           en: '${farText} / ${midText}',
@@ -2219,29 +2222,23 @@ const triggerSet: TriggerSet<Data> = {
           en: '멀리 ${dir}',
         },
         staffSwordMid: {
-          en: '중간쯤 ${dir}',
+          en: '중간 ${dir}',
         },
-        close: {
-          en: '가까이',
+        staffSwordSimple: {
+          en: '${text}',
         },
-        mid: {
-          en: '중간쯤',
-        },
-        far: {
-          en: '멀리',
-        },
-        dirN: Outputs.dirN,
-        dirE: Outputs.dirE,
-        dirS: Outputs.dirS,
-        dirW: Outputs.dirW,
-        dirNNW: Outputs.dirNNW,
-        dirNNE: Outputs.dirNNE,
-        dirENE: Outputs.dirENE,
-        dirESE: Outputs.dirESE,
-        dirSSE: Outputs.dirSSE,
-        dirSSW: Outputs.dirSSW,
-        dirWSW: Outputs.dirWSW,
-        dirWNW: Outputs.dirWNW,
+        dirN: 'Ⓐ',
+        dirE: 'Ⓑ',
+        dirS: 'Ⓒ',
+        dirW: 'Ⓓ',
+        dirNNW: '④-Ⓐ',
+        dirNNE: 'Ⓐ-①',
+        dirENE: '①-Ⓑ',
+        dirESE: 'Ⓑ-②',
+        dirSSE: '②-Ⓒ',
+        dirSSW: 'Ⓒ-③',
+        dirWSW: '③-Ⓓ',
+        dirWNW: 'Ⓓ-④',
       },
     },
     {
@@ -2332,15 +2329,16 @@ const triggerSet: TriggerSet<Data> = {
       netRegex: { id: '8014', source: 'Omega-M' },
       condition: (data, _matches) => data.my?.idyn === 1,
       delaySeconds: 29,
+      durationSeconds: 10,
       alarmText: (data, _matches, output) => {
         if (data.trioDebuff[data.me] === undefined) {
-          data.playtts = 1;
+          data.lastmode = 1;
           return output.text!();
         }
-        data.playtts = undefined;
+        data.lastmode = undefined;
       },
       tts: (data) => {
-        if (data.playtts === 1)
+        if (data.lastmode === 1)
           return '数字マーカー';
       },
       outputStrings: {
@@ -2348,153 +2346,87 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: 'TOP P5 오메가 니어파',
-      // First In Line: ~32s duration, ~12s left after 2nd dodge
-      // Second In Line: ~50s duration, ~15s left after final bounce
-      type: 'GainsEffect',
-      netRegex: { effectId: ['D72', 'D73'] },
-      condition: (data, matches) => data.phase === 'omega' && matches.target === data.me,
-      delaySeconds: (data, matches) => {
-        if (parseFloat(matches.duration) > 40) {
-          data.prsPank = true;
-          return 33;
-        }
-        data.prsPank = false;
-        return 18;
-      },
-      durationSeconds: 10,
-      alertText: (data, matches, output) => {
-        // 첫번째꺼는 오메가 모니터에서 처리, 두번째꺼만 여기서
-        if (!data.prsPank)
-          return;
-        if (matches.effectId === 'D72')
-          return output.near!();
-        if (matches.effectId === 'D73')
-          return output.distant!();
-      },
-      outputStrings: nearDistantOutputStrings,
-    },
-    {
-      id: 'TOP P5 오메가 런 듀나미스',
+      id: 'TOP P5 오메가 런 듀나미스 모니터 찾기',
       type: 'StartsUsing',
       netRegex: { id: '8015', source: 'Omega-M' },
       delaySeconds: 8.5,
       durationSeconds: 7,
+      infoText: (data, _matches, output) => {
+        if (!data.members)
+          return;
+
+        for (const m of data.members)
+          m.imn = data.inLine[m.n];
+        const mm = data.members.filter((x) => x.idyn === 2 && x.imn !== 1).map((x) => {
+          return { p: x.imn === undefined ? 100 : 0 + x.idyn! * 10 + x.i, m: x.n };
+        }).sort((a, b) => a.p - b.p);
+
+        const ms = mm.map((x) => x.m);
+        data.omegaMonitors = ms;
+
+        if (ms.length === 0)
+          return output.noTarget!();
+        if (ms.length === 1)
+          return output.onlyOne!({ target: data.ShortName(ms[0]) });
+        return output.okTwo!({ t1: data.ShortName(ms[0]), t2: data.ShortName(ms[1]) });
+      },
+      tts: '検知検知',
+      outputStrings: {
+        noTarget: {
+          en: '검지: 대상자가 없네?',
+        },
+        onlyOne: {
+          en: '검지: ${target} (혼자?)',
+        },
+        okTwo: {
+          en: '검지: ${t1}, ${t2}',
+        },
+      },
+    },
+    {
+      id: 'TOP P5 오메가 런 듀나미스 나는 어디로',
+      type: 'StartsUsing',
+      netRegex: { id: '8015', source: 'Omega-M' },
+      delaySeconds: 15.5,
+      durationSeconds: 8,
       response: (data, _matches, output) => {
         // cactbot-builtin-response
         output.responseOutputStrings = {
           ...nearDistantOutputStrings,
-          noDebuff: {
-            en: '(버프 확인해요)',
-          },
-          verticalLine: {
-            en: '(가운데 줄 맞춰요)',
-          },
-          stopMe: {
-            en: '금지 마커 달아요!',
-          },
-          attackMe: {
-            en: '숫자 마커 달아요!',
-          },
-          noTarget: {
-            en: '대상자가 없네?',
-          },
-          onlyOne: {
-            en: '검지 한명: ${target}',
-          },
-          okTwo: {
-            en: '검지: ${t1}, ${t2}',
-          },
+          unknown: { en: '(버프 확인해야해요)' },
+          stopMe: { en: '금지 마커 달아요!' },
+          attackMe: { en: '숫자 마커 달아요!' },
         };
 
-        data.playtts = undefined;
+        data.lastmode = undefined;
 
-        if (!data.members) {
-          if (!data.prsPank) {
-            const myDebuff = data.trioDebuff[data.me];
-            if (myDebuff === 'near')
-              return { infoText: output.near!() };
-            if (myDebuff === 'distant')
-              return { infoText: output.distant!() };
-          }
-          return { infoText: output.noDebuff!() };
-        }
+        if (!data.members || !data.my)
+          return;
 
-        // 나만 콜
-        if (data.dynaself) {
-          if (!data.prsPank) {
-            const myDebuff = data.trioDebuff[data.me];
-            if (myDebuff === 'near')
-              return { infoText: output.near!() };
-            if (myDebuff === 'distant')
-              return { infoText: output.distant!() };
-          }
-
-          for (const m of data.members) {
-            m.ip = undefined;
-            m.imn = data.inLine[m.n]; // 순번 1,2 찾기
-          }
-          const mm = data.members.filter((x) => x.idyn === 2 && x.imn !== 1).map((x) => {
-            return { p: x.imn === undefined ? 100 : 0 + x.idyn! * 10 + x.i, m: x };
-          }).sort((a, b) => a.p - b.p);
-
-          const mp = [];
-          for (const m of mm)
-            mp.push(m.m);
-
-          if (data.my && mp.includes(data.my)) {
-            if (data.my.imn === 2)
-              return { alarmText: output.stopMe!() };
-            return { alarmText: output.attackMe!() };
-          }
-          return { alertText: output.verticalLine!() };
-        }
-
-        // 모두 콜
-        for (const m of data.members) {
-          m.ip = undefined;
-          m.imn = data.inLine[m.n]; // 순번 1,2 찾기
-        }
-        const mm = data.members.filter((x) => x.idyn === 2 && x.imn !== 1).map((x) => {
-          return { p: x.imn === undefined ? 100 : 0 + x.idyn! * 10 + x.i, m: x.n };
-        }).sort((a, b) => a.p - b.p);
-        const ms = mm.map((x) => x.m);
-        const sm = ms.length === 0 ? output.noTarget!()
-          : ms.length === 1 ? output.onlyOne!({ target: data.ShortName(ms[0]) })
-          : output.okTwo!({ t1: data.ShortName(ms[0]), t2: data.ShortName(ms[1]) });
-
-        // 내꺼
-        let ss = undefined;
-        if (!data.prsPank) {
+        if (data.my.imn === 1) {
           const myDebuff = data.trioDebuff[data.me];
           if (myDebuff === 'near')
-            ss = output.near!();
-          else if (myDebuff === 'distant')
-            ss = output.distant!();
-        }
-        if (ss === undefined) {
-          const nth = ms.indexOf(data.me);
-          if (nth < 0 || nth >= 2) {
-            data.playtts = 1;
-            ss = output.attackMe!();
-          } else {
-            data.playtts = 2;
-            ss = output.stopMe!();
-          }
+            return { infoText: output.near!() };
+          if (myDebuff === 'distant')
+            return { infoText: output.distant!() };
         }
 
-        // 표시
-        if (ss === undefined)
-          return { infoText: sm };
-        return {
-          alarmText: ss,
-          infoText: sm,
-        };
+        if (data.omegaMonitors) {
+          const nth = data.omegaMonitors.indexOf(data.me);
+          if (nth < 0 || nth >= 2) {
+            data.lastmode = 1;
+            return { alarmText: output.attackMe!() };
+          }
+          data.lastmode = 2;
+          return { alarmText: output.stopMe!() };
+        }
+
+        return { infoText: output.unknown!() };
       },
       tts: (data) => {
-        if (data.playtts === 1)
+        if (data.lastmode === 1)
           return '数字マーカー';
-        if (data.playtts === 2)
+        if (data.lastmode === 2)
           return '禁止マーカー';
       },
     },
@@ -2503,11 +2435,11 @@ const triggerSet: TriggerSet<Data> = {
       type: 'StartsUsing',
       // 6=오른쪽, 7=왼쪽
       netRegex: { id: ['7B96', '7B97'], source: 'Omega' },
-      condition: (data, _matches) => data.phase === 'omega',
+      condition: (data, _matches) => data.members !== undefined && data.phase === 'omega',
       durationSeconds: 10,
       alertText: (data, matches, output) => {
         // 니어파 먼저 확인
-        if (!data.prsPank) {
+        if (data.my?.imn === 1) {
           const myDebuff = data.trioDebuff[data.me];
           if (myDebuff === 'near')
             return matches.id === '7B96' ? output.nearL!() : output.nearR!();
@@ -2524,6 +2456,53 @@ const triggerSet: TriggerSet<Data> = {
         farR: '[파 월드] ①🡽🡽🡽',
         monL: '모니터: 🡸🡸🡸',
         monR: '모니터: 🡺🡺🡺',
+      },
+    },
+    {
+      id: 'TOP P5 오메가 마지막 나는 어디로',
+      type: 'Ability',
+      netRegex: { id: '7B6D', capture: false },
+      condition: (data) => data.phase === 'omega',
+      delaySeconds: 2,
+      durationSeconds: 8,
+      suppressSeconds: 5,
+      response: (data, _matches, output) => {
+        // cactbot-builtin-response
+        output.responseOutputStrings = {
+          ...nearDistantOutputStrings,
+          attackMe: { en: '숫자 마커 달아요!' },
+          tether: { en: '줄 채서 북으로!' },
+          mesg: { en: '2:흩어지고, 3: 줄채고, 아니면 응??' }
+        };
+
+        data.lastmode = undefined;
+
+        if (data.my) {
+          if (data.my.imn === 2) {
+            const myDebuff = data.trioDebuff[data.me];
+            if (myDebuff === 'near')
+              return { alertText: output.near!() };
+            if (myDebuff === 'distant')
+              return { alertText: output.distant!() };
+          }
+
+          if (data.my.idyn === 1 || data.my.idyn === 2) {
+            data.lastmode = 1;
+            return { alarmText: output.attackMe!() };
+          }
+          if (data.my.idyn === 3) {
+            // 위에서 한번 alarm으로 출력하기 땜시 여기선 그냥 info
+            return { infoText: output.tether!() };
+          }
+        }
+
+        return { infoText: output.mesg!() };
+      },
+      tts: (data) => {
+        if (data.lastmode === 1)
+          return '数字マーカー';
+        if (data.lastmode === 3)
+          return '線取り';
       },
     }
   ],

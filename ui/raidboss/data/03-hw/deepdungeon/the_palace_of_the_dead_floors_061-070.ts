@@ -8,6 +8,7 @@ import { TriggerSet } from '../../../../../types/trigger';
 export type Data = RaidbossData;
 
 const triggerSet: TriggerSet<Data> = {
+  id: 'ThePalaceOfTheDeadFloors61_70',
   zoneId: ZoneId.ThePalaceOfTheDeadFloors61_70,
 
   triggers: [
@@ -38,19 +39,19 @@ const triggerSet: TriggerSet<Data> = {
     {
       'locale': 'ja',
       'replaceSync': {
-        'Palace Diplocaulus': '«Ñ«ì«¹?«Ç«£«×«í«««¦«ë«¹',
+        'Palace Diplocaulus': 'ãƒ‘ãƒ¬ã‚¹ãƒ»ãƒ‡ã‚£ãƒ—ãƒ­ã‚«ã‚¦ãƒ«ã‚¹',
       },
     },
     {
       'locale': 'cn',
       'replaceSync': {
-        'Palace Diplocaulus': 'ò¢?Ø¢??',
+        'Palace Diplocaulus': 'åœ°å®«ç¬ å¤´èˆ',
       },
     },
     {
       'locale': 'ko',
       'replaceSync': {
-        'Palace Diplocaulus': '±ÃÀü µğÇÃ·ÎÄ«¿ï·ç½º',
+        'Palace Diplocaulus': 'ê¶ì „ ë””í”Œë¡œì¹´ìš¸ë£¨ìŠ¤',
       },
     },
   ],
