@@ -9,6 +9,7 @@ import { TriggerSet } from '../../../../../types/trigger';
 export type Data = RaidbossData;
 
 const triggerSet: TriggerSet<Data> = {
+  id: 'ThePalaceOfTheDeadFloors11_20',
   zoneId: ZoneId.ThePalaceOfTheDeadFloors11_20,
 
   triggers: [
@@ -54,22 +55,22 @@ const triggerSet: TriggerSet<Data> = {
     {
       'locale': 'ja',
       'replaceSync': {
-        'Palace Cobra': '«Ñ«ì«¹?«³«Ö«é',
-        'Spurge': '«¹«Ñ?«¸',
+        'Palace Cobra': 'ãƒ‘ãƒ¬ã‚¹ãƒ»ã‚³ãƒ–ãƒ©',
+        'Spurge': 'ã‚¹ãƒ‘ãƒ¼ã‚¸',
       },
     },
     {
       'locale': 'cn',
       'replaceSync': {
-        'Palace Cobra': 'ò¢?äÑ?Şï',
-        'Spurge': 'ÓŞĞ½ü£',
+        'Palace Cobra': 'åœ°å®«çœ¼é•œè›‡',
+        'Spurge': 'å¤§æˆŸèŠ±',
       },
     },
     {
       'locale': 'ko',
       'replaceSync': {
-        'Palace Cobra': '±ÃÀü ÄÚºê¶ó',
-        'Spurge': 'µî´ëÇ®',
+        'Palace Cobra': 'ê¶ì „ ì½”ë¸Œë¼',
+        'Spurge': 'ë“±ëŒ€í’€',
       },
     },
   ],

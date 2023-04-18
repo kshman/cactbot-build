@@ -134,7 +134,6 @@ export default (
           test: /\.(m?j|t)s$/,
           exclude: /(node_modules|bower_components)/,
           use: {
-            /*
             loader: 'babel-loader',
             options: {
               cacheDirectory: true,
@@ -150,12 +149,6 @@ export default (
                   '@babel/preset-typescript',
                 ],
               ],
-            },
-            */
-            loader: 'esbuild-loader',
-            options: {
-              target: 'chrome95',
-              loader: 'ts',
             },
           },
           resolve: {

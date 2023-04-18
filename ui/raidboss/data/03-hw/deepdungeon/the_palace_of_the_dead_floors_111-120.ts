@@ -9,6 +9,7 @@ import { TriggerSet } from '../../../../../types/trigger';
 export type Data = RaidbossData;
 
 const triggerSet: TriggerSet<Data> = {
+  id: 'ThePalaceOfTheDeadFloors111_120',
   zoneId: ZoneId.ThePalaceOfTheDeadFloors111_120,
 
   triggers: [
@@ -54,22 +55,22 @@ const triggerSet: TriggerSet<Data> = {
     {
       'locale': 'ja',
       'replaceSync': {
-        'Deep Palace Salamander': '«Ç«£?«×«Ñ«ì«¹?«µ«é«Ş«ó«À?',
-        'Kirtimukha': '«­?«ë«Æ«£«à««',
+        'Deep Palace Salamander': 'ãƒ‡ã‚£ãƒ¼ãƒ—ãƒ‘ãƒ¬ã‚¹ãƒ»ã‚µãƒ©ãƒãƒ³ãƒ€ãƒ¼',
+        'Kirtimukha': 'ã‚­ãƒ¼ãƒ«ãƒ†ã‚£ãƒ ã‚«',
       },
     },
     {
       'locale': 'cn',
       'replaceSync': {
-        'Deep Palace Salamander': 'ä¢???',
-        'Kirtimukha': '?ÎÃØªü£',
+        'Deep Palace Salamander': 'æ·±å®«è¾èˆ',
+        'Kirtimukha': 'è£å…‰é­”èŠ±',
       },
     },
     {
       'locale': 'ko',
       'replaceSync': {
-        'Deep Palace Salamander': '±íÀº ±ÃÀü ºÒµµ·Õ´¨',
-        'Kirtimukha': 'Å°¸£Æ¼¹«Ä«',
+        'Deep Palace Salamander': 'ê¹Šì€ ê¶ì „ ë¶ˆë„ë¡±ë‡½',
+        'Kirtimukha': 'í‚¤ë¥´í‹°ë¬´ì¹´',
       },
     },
   ],

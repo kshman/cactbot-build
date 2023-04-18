@@ -10,6 +10,7 @@ import { TriggerSet } from '../../../../../types/trigger';
 export type Data = RaidbossData;
 
 const triggerSet: TriggerSet<Data> = {
+  id: 'ThePalaceOfTheDeadFloors21_30',
   zoneId: ZoneId.ThePalaceOfTheDeadFloors21_30,
 
   triggers: [
@@ -74,25 +75,25 @@ const triggerSet: TriggerSet<Data> = {
     {
       'locale': 'ja',
       'replaceSync': {
-        'Ningishzida': '«Ë«ó«®«¸«Ã«À',
-        'Palace Minotaur': '«Ñ«ì«¹?«ß«Î«¿«¦«í«¹',
-        'Palace Skatene': '«Ñ«ì«¹?«¹«««Í«Æ',
+        'Ningishzida': 'ãƒ‹ãƒ³ã‚®ã‚¸ãƒƒãƒ€',
+        'Palace Minotaur': 'ãƒ‘ãƒ¬ã‚¹ãƒ»ãƒŸãƒã‚¿ã‚¦ãƒ­ã‚¹',
+        'Palace Skatene': 'ãƒ‘ãƒ¬ã‚¹ãƒ»ã‚¹ã‚«ãƒãƒ†',
       },
     },
     {
       'locale': 'cn',
       'replaceSync': {
-        'Ningishzida': '?ÑÎ???',
-        'Palace Minotaur': 'ò¢???Ô¶Õ¦ŞÙ',
-        'Palace Skatene': 'ò¢?ŞÙ?Òù÷å',
+        'Ningishzida': 'å®å‰å…¹æµè¾¾',
+        'Palace Minotaur': 'åœ°å®«å¼¥è¯ºé™¶æ´›æ–¯',
+        'Palace Skatene': 'åœ°å®«æ–¯å¡å°¼ç‰¹',
       },
     },
     {
       'locale': 'ko',
       'replaceSync': {
-        'Ningishzida': '´×±â½ÃÁö´Ù',
-        'Palace Minotaur': '±ÃÀü ¹Ì³ëÅ¸¿ì·Î½º',
-        'Palace Skatene': '±ÃÀü ½ºÄ«³×Å×',
+        'Ningishzida': 'ë‹ê¸°ì‹œì§€ë‹¤',
+        'Palace Minotaur': 'ê¶ì „ ë¯¸ë…¸íƒ€ìš°ë¡œìŠ¤',
+        'Palace Skatene': 'ê¶ì „ ìŠ¤ì¹´ë„¤í…Œ',
       },
     },
   ],

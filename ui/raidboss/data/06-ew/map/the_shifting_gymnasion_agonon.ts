@@ -40,6 +40,7 @@ const agononOutputStrings = {
 export type Data = RaidbossData;
 
 const triggerSet: TriggerSet<Data> = {
+  id: 'TheShiftingGymnasionAgonon',
   zoneId: ZoneId.TheShiftingGymnasionAgonon,
 
   triggers: [
@@ -73,6 +74,7 @@ const triggerSet: TriggerSet<Data> = {
           en: '만드라고라! 순서대로 잡아요!',
           de: 'Gymnasiou-Mandragorai erscheinen, in Reihenfolge besiegen!',
           ja: 'マンドラゴラ！順番に倒して！',
+          ko: '만드라즈 등장, 순서대로 잡기',
         },
       },
     },

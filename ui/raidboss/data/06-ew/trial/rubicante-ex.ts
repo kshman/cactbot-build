@@ -56,6 +56,7 @@ const getHeadmarkerId = (data: Data, matches: NetMatches['HeadMarker']) => {
 };
 
 const triggerSet: TriggerSet<Data> = {
+  id: 'MountOrdealsExtreme',
   zoneId: ZoneId.MountOrdealsExtreme,
   timelineFile: 'rubicante-ex.txt',
   initData: () => {

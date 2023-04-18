@@ -10,6 +10,7 @@ export interface Data extends RaidbossData {
 }
 
 const triggerSet: TriggerSet<Data> = {
+  id: 'TheBindingCoilOfBahamutTurn1',
   zoneId: ZoneId.TheBindingCoilOfBahamutTurn1,
   initData: () => {
     return {
@@ -44,6 +45,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: 'Crachat sur VOUS',
           ja: '自分にリゴージ',
           cn: '吐痰点名',
+          ko: '나에게 침뱉기',
         },
       },
     },
@@ -61,6 +63,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: 'Division',
           ja: '分裂',
           cn: '分裂',
+          ko: '분열',
         },
       },
     },
@@ -79,6 +82,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: 'Coup de capot dans 10s',
           ja: '十秒以内タンクバスター',
           cn: '10秒内死刑',
+          ko: '10초 이내에 머리 휘두르기',
         },
       },
     },
@@ -99,6 +103,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: 'Gluant bientôt',
           ja: 'まもなくスライム',
           cn: '软泥即将出现',
+          ko: '곧 슬라임',
         },
       },
     },
@@ -116,6 +121,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: 'Gluant bientôt',
           ja: 'まもなくスライム',
           cn: '软泥即将出现',
+          ko: '곧 슬라임',
         },
       },
     },

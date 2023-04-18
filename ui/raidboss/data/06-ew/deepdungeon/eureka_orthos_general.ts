@@ -8,6 +8,7 @@ import { TriggerSet } from '../../../../../types/trigger';
 export type Data = RaidbossData;
 
 const triggerSet: TriggerSet<Data> = {
+  id: 'EurekaOrthosGeneral',
   zoneId: [
     ZoneId.EurekaOrthosFloors1_10,
     ZoneId.EurekaOrthosFloors11_20,
@@ -317,6 +318,32 @@ const triggerSet: TriggerSet<Data> = {
       type: 'StartsUsing',
       netRegex: { id: '7FCE', source: 'Meracydian Clone', capture: false },
       response: Responses.getOut(),
+    },
+  ],
+  timelineReplace: [
+    {
+      'locale': 'de',
+      'replaceSync': {
+        'Lamia Queen': 'Lamia-Königin',
+        'Meracydian Clone': 'meracydisch(?:e|er|es|en) Klon',
+        'Mimic': 'Mimik',
+      },
+    },
+    {
+      'locale': 'fr',
+      'replaceSync': {
+        'Lamia Queen': 'reine lamia',
+        'Meracydian Clone': 'clone de Méracydien',
+        'Mimic': 'mimic',
+      },
+    },
+    {
+      'locale': 'ja',
+      'replaceSync': {
+        'Lamia Queen': 'ラミアクィーン',
+        'Meracydian Clone': 'メラシディアン・クローン',
+        'Mimic': 'ミミック',
+      },
     },
   ],
 };

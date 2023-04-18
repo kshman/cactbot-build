@@ -92,6 +92,7 @@ const rightDoorNoCeruleum: CatapultMech[] = [
 ];
 
 const triggerSet: TriggerSet<Data> = {
+  id: 'TheSildihnSubterrane',
   zoneId: ZoneId.TheSildihnSubterrane,
   timelineFile: 'the_sildihn_subterrane.txt',
   initData: () => {

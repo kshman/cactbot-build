@@ -6,10 +6,6 @@ import { RaidbossData } from '../../../../../types/data';
 import { TriggerSet } from '../../../../../types/trigger';
 
 // Eureka Orthos Floors 91-100
-// TODO: Orthosystem γ Repelling Cannons PBAoE
-// TODO: Orthosystem γ Ring Cannon donut AoE
-// TODO: Servomechanical Orthochimera The Dragon's Breath front-left cleave
-// TODO: Servomechanical Orthochimera The Scorpion's Sting back cleave
 // TODO: Excalibur Exglacialis safe spots
 
 export interface Data extends RaidbossData {
@@ -17,6 +13,7 @@ export interface Data extends RaidbossData {
 }
 
 const triggerSet: TriggerSet<Data> = {
+  id: 'EurekaOrthosFloors91_100',
   zoneId: ZoneId.EurekaOrthosFloors91_100,
 
   triggers: [
@@ -46,18 +43,18 @@ const triggerSet: TriggerSet<Data> = {
         },
       },
     },
-    // {
-    //   id: 'EO 91-100 Orthosystem γ Repelling Cannons',
-    //   type: 'StartsUsing',
-    //   netRegex: { id: '', source: 'Orthosystem γ', capture: false },
-    //   response: Responses.getOut(),
-    // },
-    // {
-    //   id: 'EO 91-100 Orthosystem γ Ring Cannon',
-    //   type: 'StartsUsing',
-    //   netRegex: { id: '', source: 'Orthosystem γ', capture: false },
-    //   response: Responses.getIn(),
-    // },
+    {
+      id: 'EO 91-100 Orthosystem γ Repelling Cannons',
+      type: 'StartsUsing',
+      netRegex: { id: '806D', source: 'Orthosystem γ', capture: false },
+      response: Responses.getOut(),
+    },
+    {
+      id: 'EO 91-100 Orthosystem γ Ring Cannon',
+      type: 'StartsUsing',
+      netRegex: { id: '806C', source: 'Orthosystem γ', capture: false },
+      response: Responses.getIn(),
+    },
     {
       id: 'EO 91-100 Orthosystem α Aetherochemical Laser α',
       type: 'StartsUsing',
@@ -89,13 +86,6 @@ const triggerSet: TriggerSet<Data> = {
       netRegex: { id: '809A', source: 'Servomechanical Orthotaur', capture: false },
       response: Responses.getOut(),
     },
-    // {
-    //   id: 'EO 91-100 Servomechanical Orthochimera The Dragon\'s Breath',
-    //   // AoE cleave to front and left
-    //   type: 'StartsUsing',
-    //   netRegex: { id: '', source: 'Servomechanical Orthochimera', capture: false },
-    //   response: Responses.goRight(),
-    // },
     {
       id: 'EO 91-100 Servomechanical Orthochimera Engulfing Ice',
       // AoE cleave to front and right
@@ -103,13 +93,20 @@ const triggerSet: TriggerSet<Data> = {
       netRegex: { id: '808A', source: 'Servomechanical Orthochimera', capture: false },
       response: Responses.goLeft(),
     },
-    // {
-    //   id: 'EO 91-100 Servomechanical Orthochimera The Scorpion\'s Sting',
-    //   // AoE cleave behind
-    //   type: 'StartsUsing',
-    //   netRegex: { id: '', source: 'Servomechanical Orthochimera', capture: false },
-    //   response: Responses.goFront(),
-    // },
+    {
+      id: 'EO 91-100 Servomechanical Orthochimera The Dragon\'s Breath',
+      // AoE cleave to front and left
+      type: 'StartsUsing',
+      netRegex: { id: '808B', source: 'Servomechanical Orthochimera', capture: false },
+      response: Responses.goRight(),
+    },
+    {
+      id: 'EO 91-100 Servomechanical Orthochimera the Scorpion\'s Sting',
+      // AoE cleave behind
+      type: 'StartsUsing',
+      netRegex: { id: '808C', source: 'Servomechanical Orthochimera', capture: false },
+      response: Responses.goFront(),
+    },
     {
       id: 'EO 91-100 Servomechanical Orthochimera the Ram\'s Voice',
       type: 'StartsUsing',
@@ -247,7 +244,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '얼음 맞기',
         },
         avoid: {
-          en: '줄 AOE 피해요',
+          en: '한 줄 AOE 피해요',
           ko: '칼 피하기',
         },
       },
@@ -272,9 +269,65 @@ const triggerSet: TriggerSet<Data> = {
           ko: '불 맞기',
         },
         avoid: {
-          en: '줄 AOE 피해요',
+          en: '한 줄 AOE 피해요',
           ko: '칼 피하기',
         },
+      },
+    },
+  ],
+  timelineReplace: [
+    {
+      'locale': 'de',
+      'replaceSync': {
+        'Excalibur': 'Excalibur',
+        'Orthodrone': 'Orthodrohne',
+        'Orthonaught': 'Orthonaut',
+        'Orthos Fitter': 'Orthos-Schlosser',
+        'Orthos Mining Drone': 'Orthos-Minendrohne',
+        'Orthos Mithridates': 'Orthos-Mithridates',
+        'Orthos Motherbit': 'Orthos-Mutterdrohne',
+        'Orthos Sphinx': 'Orthosphinx',
+        'Orthos Zaghnal': 'Orthos-Zaghnal',
+        'Orthosystem α': 'Orthosystem α',
+        'Orthosystem γ': 'Orthosystem γ',
+        'Servomechanical Orthochimera': 'servomechanisch(?:e|er|es|en) Orthochimära',
+        'Servomechanical Orthotaur': 'servomechanisch(?:e|er|es|en) Orthotaurus',
+      },
+    },
+    {
+      'locale': 'fr',
+      'replaceSync': {
+        'Excalibur': 'Excalibur',
+        'Orthodrone': 'drone Orthos',
+        'Orthonaught': 'cuirassé Dreadnaught Orthos',
+        'Orthos Fitter': 'installateur Orthos',
+        'Orthos Mining Drone': 'drone des mines Orthos',
+        'Orthos Mithridates': 'mithridate Orthos',
+        'Orthos Motherbit': 'drone mère Orthos',
+        'Orthos Sphinx': 'sphinx Orthos',
+        'Orthos Zaghnal': 'zaghnal Orthos',
+        'Orthosystem α': 'système α Orthos',
+        'Orthosystem γ': 'système γ Orthos',
+        'Servomechanical Orthochimera': 'chimère servomécanique Orthos',
+        'Servomechanical Orthotaur': 'minotaure servomécanique Orthos',
+      },
+    },
+    {
+      'locale': 'ja',
+      'replaceSync': {
+        'Excalibur': '闘神エクスカリバー',
+        'Orthodrone': 'オルト・ドローン',
+        'Orthonaught': 'オルト・ドレッドノート',
+        'Orthos Fitter': 'オルト・フィッター',
+        'Orthos Mining Drone': 'オルト・マイニングドローン',
+        'Orthos Mithridates': 'オルト・ミトリダテス',
+        'Orthos Motherbit': 'オルト・マザービット',
+        'Orthos Sphinx': 'オルト・スフィンクス',
+        'Orthos Zaghnal': 'オルト・ザグナル',
+        'Orthosystem α': 'オルト・システムα',
+        'Orthosystem γ': 'オルト・システムγ',
+        'Servomechanical Orthochimera': 'オルト・サーヴォキマイラ',
+        'Servomechanical Orthotaur': 'オルト・サーヴォミノタウロス',
       },
     },
   ],

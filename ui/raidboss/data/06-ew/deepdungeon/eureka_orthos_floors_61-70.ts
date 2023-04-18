@@ -9,6 +9,7 @@ import { TriggerSet } from '../../../../../types/trigger';
 export type Data = RaidbossData;
 
 const triggerSet: TriggerSet<Data> = {
+  id: 'EurekaOrthosFloors61_70',
   zoneId: ZoneId.EurekaOrthosFloors61_70,
 
   triggers: [
@@ -52,7 +53,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, matches, output) => output.text!({ target: matches.target }),
       outputStrings: {
         text: {
-          en: '공격 중지: ${target}',
+          en: '반사! 공격 중지: ${target}',
           de: 'Stoppe Angriffe auf ${target}',
           cn: '停止攻击 ${target}',
           ko: '${target} 공격 중지',
@@ -112,6 +113,44 @@ const triggerSet: TriggerSet<Data> = {
       type: 'StartsUsing',
       netRegex: { id: '7ACB', source: 'Aeturna', capture: false },
       response: Responses.aoe(),
+    },
+  ],
+  timelineReplace: [
+    {
+      'locale': 'de',
+      'replaceSync': {
+        'Aeturna': 'Aeturna',
+        'Orthos Basilisk': 'Orthos-Basilisk',
+        'Orthos Cobra': 'Orthos-Kobra',
+        'Orthos Drake': 'Orthos-Drakon',
+        'Orthos Falak': 'Orthos-Falak',
+        'Orthos Gowrow': 'Orthos-Gowrow',
+        'Orthos Palleon': 'Orthos-Palleon',
+      },
+    },
+    {
+      'locale': 'fr',
+      'replaceSync': {
+        'Aeturna': 'Aeturna',
+        'Orthos Basilisk': 'basilic Orthos',
+        'Orthos Cobra': 'cobra Orthos',
+        'Orthos Drake': 'draconide Orthos',
+        'Orthos Falak': 'falak Orthos',
+        'Orthos Gowrow': 'gowrow Orthos',
+        'Orthos Palleon': 'palléon Orthos',
+      },
+    },
+    {
+      'locale': 'ja',
+      'replaceSync': {
+        'Aeturna': 'アエテルナエ',
+        'Orthos Basilisk': 'オルト・バジリスク',
+        'Orthos Cobra': 'オルト・コブラ',
+        'Orthos Drake': 'オルト・ドレイク',
+        'Orthos Falak': 'オルト・ファラク',
+        'Orthos Gowrow': 'オルト・ガウロウ',
+        'Orthos Palleon': 'オルト・パレオン',
+      },
     },
   ],
 };

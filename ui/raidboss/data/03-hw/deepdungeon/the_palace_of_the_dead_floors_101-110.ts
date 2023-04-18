@@ -9,6 +9,7 @@ import { TriggerSet } from '../../../../../types/trigger';
 export type Data = RaidbossData;
 
 const triggerSet: TriggerSet<Data> = {
+  id: 'ThePalaceOfTheDeadFloors101_110',
   zoneId: ZoneId.ThePalaceOfTheDeadFloors101_110,
 
   triggers: [
@@ -39,19 +40,19 @@ const triggerSet: TriggerSet<Data> = {
     {
       'locale': 'ja',
       'replaceSync': {
-        'Alicanto': '«¢«ê«««ó«È',
+        'Alicanto': 'ã‚¢ãƒªã‚«ãƒ³ãƒˆ',
       },
     },
     {
       'locale': 'cn',
       'replaceSync': {
-        'Alicanto': 'ä¹××Êìöõ',
+        'Alicanto': 'é˜¿åˆ©åæ‰˜',
       },
     },
     {
       'locale': 'ko',
       'replaceSync': {
-        'Alicanto': '¾Ë¸®Ä­Åä',
+        'Alicanto': 'ì•Œë¦¬ì¹¸í† ',
       },
     },
   ],

@@ -9,6 +9,7 @@ import { TriggerSet } from '../../../../../types/trigger';
 export type Data = RaidbossData;
 
 const triggerSet: TriggerSet<Data> = {
+  id: 'EurekaOrthosFloors31_40',
   zoneId: ZoneId.EurekaOrthosFloors31_40,
 
   triggers: [
@@ -129,6 +130,47 @@ const triggerSet: TriggerSet<Data> = {
       type: 'StartsUsing',
       netRegex: { id: '7AEB', source: 'Twintania Clone', capture: false },
       response: Responses.knockback(),
+    },
+  ],
+  timelineReplace: [
+    {
+      'locale': 'de',
+      'replaceSync': {
+        'Orthochimera': 'Orthochimära',
+        'Orthoempuse': 'Orthos-Empusa',
+        'Orthonaga': 'Orthos-Naga',
+        'Orthos Mirrorknight': 'Orthos-Speglidae',
+        'Orthospider': 'Orthos-Spinne',
+        'Orthotaur': 'Orthotaurus',
+        'Phantom Orthoray': 'Orthos-Phantomschimmer',
+        'Twintania Clone': 'Twintania-Klon',
+      },
+    },
+    {
+      'locale': 'fr',
+      'replaceSync': {
+        'Orthochimera': 'chimère Orthos',
+        'Orthoempuse': 'empousa Orthos',
+        'Orthonaga': 'naga Orthos',
+        'Orthos Mirrorknight': 'chevalier miroir Orthos',
+        'Orthospider': 'araignée Orthos',
+        'Orthotaur': 'minotaure Orthos',
+        'Phantom Orthoray': 'rayon fantomatique Orthos',
+        'Twintania Clone': 'clone de Gémellia',
+      },
+    },
+    {
+      'locale': 'ja',
+      'replaceSync': {
+        'Orthochimera': 'オルト・キマイラ',
+        'Orthoempuse': 'オルト・エンプーサ',
+        'Orthonaga': 'オルト・ナーガ',
+        'Orthos Mirrorknight': 'オルト・ミラーナイト',
+        'Orthospider': 'オルト・スパイダー',
+        'Orthotaur': 'オルト・ミノタウロス',
+        'Phantom Orthoray': 'オルト・ファントムレイ',
+        'Twintania Clone': 'ツインタニア・クローン',
+      },
     },
   ],
 };

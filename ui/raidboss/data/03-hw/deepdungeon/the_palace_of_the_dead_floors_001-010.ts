@@ -9,6 +9,7 @@ import { TriggerSet } from '../../../../../types/trigger';
 export type Data = RaidbossData;
 
 const triggerSet: TriggerSet<Data> = {
+  id: 'ThePalaceOfTheDeadFloors1_10',
   zoneId: ZoneId.ThePalaceOfTheDeadFloors1_10,
 
   triggers: [
@@ -38,19 +39,19 @@ const triggerSet: TriggerSet<Data> = {
     {
       'locale': 'ja',
       'replaceSync': {
-        'Palace Deathgaze': '«Ñ«ì«¹?«Ç«¹«²«¤«º',
+        'Palace Deathgaze': 'ãƒ‘ãƒ¬ã‚¹ãƒ»ãƒ‡ã‚¹ã‚²ã‚¤ã‚º',
       },
     },
     {
       'locale': 'cn',
       'replaceSync': {
-        'Palace Deathgaze': 'ò¢?ŞİØÌëê?',
+        'Palace Deathgaze': 'åœ°å®«æ­»äº¡å‡è§†',
       },
     },
     {
       'locale': 'ko',
       'replaceSync': {
-        'Palace Deathgaze': '±ÃÀü Àú½ÂÆÄ¼ö²Û',
+        'Palace Deathgaze': 'ê¶ì „ ì €ìŠ¹íŒŒìˆ˜ê¾¼',
       },
     },
   ],

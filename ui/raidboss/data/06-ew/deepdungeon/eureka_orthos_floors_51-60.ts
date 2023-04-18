@@ -1,5 +1,4 @@
 import Conditions from '../../../../../resources/conditions';
-import Outputs from '../../../../../resources/outputs';
 import { Responses } from '../../../../../resources/responses';
 import ZoneId from '../../../../../resources/zone_id';
 import { RaidbossData } from '../../../../../types/data';
@@ -13,6 +12,7 @@ export interface Data extends RaidbossData {
 }
 
 const triggerSet: TriggerSet<Data> = {
+  id: 'EurekaOrthosFloors51_60',
   zoneId: ZoneId.EurekaOrthosFloors51_60,
 
   triggers: [
@@ -39,7 +39,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, matches, output) => output.text!({ target: matches.target }),
       outputStrings: {
         text: {
-          en: '공격 중지: ${target}',
+          en: '반사! 공격 중지: ${target}',
           de: 'Stoppe Angriffe auf ${target}',
           cn: '停止攻击 ${target}',
           ko: '${target} 공격 중지',
@@ -161,11 +161,23 @@ const triggerSet: TriggerSet<Data> = {
         return;
       },
       outputStrings: {
-        front: Outputs.front,
-        left: Outputs.left,
-
+        front: {
+          en: '🡹',
+          fr: 'Devant',
+          ja: '前',
+          cn: '前',
+          ko: '앞',
+        },
+        left: {
+          en: '🡸',
+          de: 'Links',
+          fr: 'À gauche',
+          ja: '左へ',
+          cn: '左',
+          ko: '왼쪽',
+        },
         text: {
-          en: '${dir1} > ${dir2} > ${dir3} > ${dir4}',
+          en: '${dir1} ${dir2} ${dir3} ${dir4}',
           de: '${dir1} > ${dir2} > ${dir3} > ${dir4}',
           fr: '${dir1} > ${dir2} > ${dir3} > ${dir4}',
           ja: '${dir1} > ${dir2} > ${dir3} > ${dir4}',
@@ -179,6 +191,44 @@ const triggerSet: TriggerSet<Data> = {
       type: 'StartsUsing',
       netRegex: { id: '7C81', source: 'Servomechanical Minotaur 16', capture: false },
       response: Responses.aoe(),
+    },
+  ],
+  timelineReplace: [
+    {
+      'locale': 'de',
+      'replaceSync': {
+        'Orthos Big Claw': 'Orthos-Mörderkrabbe',
+        'Orthos Ice Sprite': 'Orthos-Eis-Exergon',
+        'Orthos Rockfin': 'Orthos-Felsenflosse',
+        'Orthos Stingray': 'Orthos-Manta',
+        'Orthos Ymir': 'Orthos-Ymir',
+        'Orthos Zaratan': 'Orthos-Zaratan',
+        'Servomechanical Minotaur 16': 'servomechanisch(?:e|er|es|en) Minotaurus 16',
+      },
+    },
+    {
+      'locale': 'fr',
+      'replaceSync': {
+        'Orthos Big Claw': 'grosse pince Orthos',
+        'Orthos Ice Sprite': 'élémentaire de glace Orthos',
+        'Orthos Rockfin': 'rocquin Orthos',
+        'Orthos Stingray': 'raie Orthos',
+        'Orthos Ymir': 'bulot Orthos',
+        'Orthos Zaratan': 'zaratan Orthos',
+        'Servomechanical Minotaur 16': 'minotaure servomécanique 16',
+      },
+    },
+    {
+      'locale': 'ja',
+      'replaceSync': {
+        'Orthos Big Claw': 'オルト・ビッグクロウ',
+        'Orthos Ice Sprite': 'オルト・アイススプライト',
+        'Orthos Rockfin': 'オルト・ロックフィン',
+        'Orthos Stingray': 'オルト・スティングレイ',
+        'Orthos Ymir': 'オルト・ユミール',
+        'Orthos Zaratan': 'オルト・ザラタン',
+        'Servomechanical Minotaur 16': 'サーヴォ・ミノタウロス16',
+      },
     },
   ],
 };
