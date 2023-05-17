@@ -44,7 +44,7 @@ const triggerSet: TriggerSet<Data> = {
       response: Responses.tankCleave(),
     },
     {
-      id: 'The Vault Altar Candle',
+      id: 'TheVault61 Altar Candle',
       regex: /Altar Candle/,
       beforeSeconds: 5,
       condition: (data) => data.role !== 'dps',

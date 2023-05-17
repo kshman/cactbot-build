@@ -156,7 +156,7 @@ const triggerSet: TriggerSet<Data> = {
             ko: '${platform1} / ${platform2}',
           },
           orientation: {
-            en: '줄 달린 소: ${location}',
+            en: 'Line Bull: ${location}',
             de: 'Bullen-Linie: ${location}',
             fr: 'Taureau Ligne : ${location}',
             ja: '線付き牛: ${location}',
@@ -164,7 +164,7 @@ const triggerSet: TriggerSet<Data> = {
             ko: '줄 달린 소: ${location}',
           },
           famineOrientation: {
-            en: '미노만 있는 곳: ${location}', // 맹
+            en: 'Minotaurs without Bird: ${location}',
             de: 'Minotauren ohne Vögel: ${location}',
             fr: 'Minotaure sans oiseau : ${location}',
             ja: 'ミノがある場所: ${location}',
@@ -172,7 +172,7 @@ const triggerSet: TriggerSet<Data> = {
             ko: '새 없는 곳: ${location}',
           },
           deathOrientation: {
-            en: '줄 없는 소: ${location}', // 흉
+            en: 'Lightning Bull: ${location}',
             de: 'Blitz-Bulle: ${location}',
             fr: 'Taureau éclair : ${location}',
             ja: '線付いてない牛: ${location}',
@@ -180,7 +180,7 @@ const triggerSet: TriggerSet<Data> = {
             ko: '줄 안달린 소: ${location}',
           },
           warOrientation: {
-            en: '새랑 미노가 있는 곳: ${location}', // 란
+            en: 'Bird with Minotaurs: ${location}',
             de: 'Vögel mit Minotauren : ${location}',
             fr: 'Oiseau sans Minotaure : ${location}',
             ja: 'ミノと鳥: ${location}',
@@ -359,7 +359,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '따로 따로 탱크버스터',
+          en: 'Split Tankbusters',
           de: 'getrennte Tankbuster',
           fr: 'Séparez des Tankbusters',
           ja: '2人同時タンク強攻撃',
@@ -388,7 +388,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.baitSoon!(),
       outputStrings: {
         baitSoon: {
-          en: '빈 곳에서 시작해욧',
+          en: 'Bait on Empty Platform Soon',
           de: 'Bald auf freier Plattform ködern',
           fr: 'Déposez sur une plateforme vide bientôt',
           ja: '果実がない空きの円盤へ移動',
@@ -406,7 +406,7 @@ const triggerSet: TriggerSet<Data> = {
       run: (data) => data.rootsCount = data.rootsCount + 1,
       outputStrings: {
         separateHealerGroups: {
-          en: '모여 맞아요! 나눠진건 아쉽네',
+          en: 'Healer Group Platforms',
           de: 'Heiler-Gruppen Plattformen',
           fr: 'Groupes heals sur les plateformes',
           ja: '円盤の内でヒーラーと頭割り',
@@ -423,13 +423,7 @@ const triggerSet: TriggerSet<Data> = {
       type: 'StartsUsing',
       netRegex: { id: '780E', source: 'Agdistis', capture: false },
       condition: (data) => data.rootsCount === 0,
-      infoText: (_data, _matches, output) => output.knockbackSpreadSoon!(),
       run: (data) => data.rootsCount = data.rootsCount + 1,
-      outputStrings: {
-        knockbackSpreadSoon: {
-          en: '윗쪽 다리가 끊어져요!',
-        },
-      },
     },
     {
       id: 'P7S Hemitheos\'s Aero IV',
@@ -454,7 +448,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '전체공격 + 출혈',
+          en: 'aoe + bleed',
           de: 'AoE + Blutung',
           fr: 'AoE + Saignement',
           ja: '全体攻撃 + 出血',
@@ -507,7 +501,7 @@ const triggerSet: TriggerSet<Data> = {
         // cactbot-builtin-response
         output.responseOutputStrings = {
           bullTether: {
-            en: '소에서 파란 줄',
+            en: 'Bull Tether (Line AoE)',
             de: 'Stier-Verbindung (Linien AoE)',
             fr: 'Lien Taureau (AoE en ligne)',
             ja: '牛から直線',
@@ -515,7 +509,7 @@ const triggerSet: TriggerSet<Data> = {
             ko: '소 (직선 장판)',
           },
           deathBullTether: {
-            en: '소에서 파란 줄',
+            en: 'Bull Tether (Line AoE)',
             de: 'Stier-Verbindung (Linien AoE)',
             fr: 'Lien Taureau (AoE en ligne)',
             ja: '牛から直線',
@@ -523,7 +517,7 @@ const triggerSet: TriggerSet<Data> = {
             ko: '소 (직선 장판)',
           },
           warBullTether: {
-            en: '소에서 파란 줄',
+            en: 'Bull Tether (Line AoE)',
             de: 'Stier-Verbindung (Linien AoE)',
             fr: 'Lien Taureau (AoE en ligne)',
             ja: '牛から直線',
@@ -531,7 +525,7 @@ const triggerSet: TriggerSet<Data> = {
             ko: '소 (직선 장판)',
           },
           minotaurTether: {
-            en: '반대쪽 미노로 쭉쭉 땡기는 줄',
+            en: 'Minotaur Tether (Big Cleave)',
             de: 'Minotaurus-Verbindung (Große Kegel-AoE)',
             fr: 'Lien Minotaure (Gros Cleave)',
             ja: 'ミノから扇',
@@ -539,7 +533,7 @@ const triggerSet: TriggerSet<Data> = {
             ko: '미노타우로스 (부채꼴 장판)',
           },
           famineMinotaurTether: {
-            en: '크로스로 쭉쭉 땡기는 미노 줄',
+            en: 'Cross Minotaur Tethers (Big Cleave)',
             de: 'Überkreuze Minotaurus-Verbindung (Große Kegel-AoE)',
             fr: 'Lien Minotaure en croix (Gros Cleave)',
             ja: 'ミノからの扇を交える',
@@ -547,7 +541,7 @@ const triggerSet: TriggerSet<Data> = {
             ko: '미노타우로스 선 교차시키기 (부채꼴 장판)',
           },
           warMinotaurTether: {
-            en: '미노에서 쭉쭉 땡기는 줄',
+            en: 'Minotaur Tether (Big Cleave)',
             de: 'Minotaurus-Verbindung (Große Kegel-AoE)',
             fr: 'Lien Minotaure (Gros Cleave)',
             ja: 'ミノから扇',
@@ -555,7 +549,7 @@ const triggerSet: TriggerSet<Data> = {
             ko: '미노타우로스 (부채꼴 장판)',
           },
           warBirdTether: {
-            en: '새가 돌진해 오네',
+            en: 'Bird Tether',
             de: 'Vogel-Verbindung',
             fr: 'Lien Oiseau',
             ja: '鳥から線',
@@ -563,7 +557,7 @@ const triggerSet: TriggerSet<Data> = {
             ko: '새',
           },
           noTether: {
-            en: '줄 없네, 가운데서 미노 클레브',
+            en: 'No Tether, Bait Minotaur Cleave (Middle)',
             de: 'Keine Verbindung, Minotaurus-Verbindung ködern (Mitte)',
             fr: 'Aucun lien, encaissez le cleave du Minotaure (Milieu)',
             ja: '線なし、中央で扇を誘導',
@@ -571,7 +565,7 @@ const triggerSet: TriggerSet<Data> = {
             ko: '선 없음, 미노타우로스 유도 (중앙)',
           },
           famineNoTether: {
-            en: '줄 없네, 두 마리 있는데서 미노 클레브',
+            en: 'No Tether, Bait Minotaur Cleave',
             de: 'Keine Verbindung, Minotaurus-Verbindung ködern',
             fr: 'Aucun lien, encaissez le cleave du Minotaure',
             ja: '線なし、ミノからの扇を誘導',
@@ -727,14 +721,8 @@ const triggerSet: TriggerSet<Data> = {
           cn: '${effect1} => ${effect2} => ${effect3} => ${effect4}',
           ko: '${effect1} => ${effect2} => ${effect3} => ${effect4}',
         },
-        spread: {
-          en: '흩어지고',
-          ja: '散会',
-        },
-        stack: {
-          en: '뭉쳤다',
-          ja: '頭割り',
-        },
+        spread: Outputs.spread,
+        stack: Outputs.stackMarker,
       },
     },
     {
@@ -769,32 +757,16 @@ const triggerSet: TriggerSet<Data> = {
       type: 'StartsUsing',
       netRegex: { id: '78E2', source: 'Agdistis', capture: false },
       // ~5s castTime, but boss cancels it and ability goes off 26s after start
-      delaySeconds: 20,
+      delaySeconds: 21,
       alertText: (_data, _matches, output) => output.bigAoEMiddle!(),
       outputStrings: {
         bigAoEMiddle: {
-          en: '엄청 아픈 전체 공격',
+          en: 'Big AOE, Get Middle',
           de: 'Große AoE, geh in die Mitte',
           fr: 'Grosse AoE, allez au milieu',
           ja: '強力な全体攻撃、真ん中へ',
           cn: '超大伤害，去中间',
           ko: '아픈 광뎀, 중앙으로',
-        },
-      },
-    },
-    {
-      id: 'P7S Chaser Baits',
-      type: 'HeadMarker',
-      netRegex: {},
-      suppressSeconds: 1,
-      infoText: (data, matches, output) => {
-        const correctedMatch = getHeadmarkerId(data, matches);
-        if (correctedMatch === '00C5')
-          return output.baitOnEdge!();
-      },
-      outputStrings: {
-        baitOnEdge: {
-          en: '빈 곳으로 끌고 가욧',
         },
       },
     },

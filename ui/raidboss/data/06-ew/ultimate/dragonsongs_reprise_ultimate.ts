@@ -3,12 +3,14 @@ import { UnreachableCode } from '../../../../../resources/not_reached';
 import Outputs from '../../../../../resources/outputs';
 import { callOverlayHandler } from '../../../../../resources/overlay_plugin_api';
 import { Responses } from '../../../../../resources/responses';
+import { ConfigValue } from '../../../../../resources/user_config';
 import ZoneId from '../../../../../resources/zone_id';
 import { RaidbossData } from '../../../../../types/data';
 import { PluginCombatantState } from '../../../../../types/event';
 import { NetMatches } from '../../../../../types/net_matches';
 import { LocaleObject, LocaleText, TriggerSet } from '../../../../../types/trigger';
-// 🔴▲🟪➕Ⓑ❱❰🡺🡸🡹🡻🟤🟢→🟥🟦⬜⬛🌪
+
+export type ConfigIds = 'prsMarkerType';
 
 // TODO: Ser Adelphel left/right movement after initial charge
 // TODO: Meteor "run" call?
@@ -78,6 +80,7 @@ const playstationMarkers = ['circle', 'cross', 'triangle', 'square'] as const;
 type PlaystationMarker = typeof playstationMarkers[number];
 
 export interface Data extends RaidbossData {
+  triggerSetConfig: { [key in ConfigIds]: ConfigValue };
   combatantData: PluginCombatantState[];
   phase: Phase;
   decOffset?: number;
@@ -229,6 +232,21 @@ const matchedPositionTo4Dir = (combatant: PluginCombatantState) => {
 const triggerSet: TriggerSet<Data> = {
   id: 'DragonsongsRepriseUltimate',
   zoneId: ZoneId.DragonsongsRepriseUltimate,
+  config: [
+    {
+      id: 'prsMarkerType',
+      name: {
+        en: '얼티밋 드래곤송: 마커 방식 0=기본, 1=고정팀용, 2=일반파티용',
+        ja: '絶竜詩戦争: マーカー 0=デフォルト, 1=固定用, 2=野良用',
+        ko: '절용시전쟁: 마커 방식 0=기본, 1=고정팀용, 2=일반파티용',
+      },
+      type: 'integer',
+      default: (options) => {
+        const oldSetting = options['prsDsrMarker'];
+        return typeof oldSetting === 'number' ? oldSetting : false;
+      },
+    },
+  ],
   timelineFile: 'dragonsongs_reprise_ultimate.txt',
   initData: () => {
     return {
@@ -781,7 +799,7 @@ const triggerSet: TriggerSet<Data> = {
           return;
         }
         // PRs / 색깔로 콜링콜링
-        if (data.options.prsDsrMarker === 1) {
+        if (data.triggerSetConfig.prsMarkerType === 1) {
           const clrs: { [clr: number]: string } = {
             0: '보라',
             1: '빨강',
@@ -796,7 +814,7 @@ const triggerSet: TriggerSet<Data> = {
           return output.safeSpotsColor!({ clr: clrs[data.spiralThrustSafeZones[0] ?? 8] });
         }
         // PRs / 일반 파티용 A 1 B 2...
-        if (data.options.prsDsrMarker === 2) {
+        if (data.triggerSetConfig.prsMarkerType === 2) {
           const pfms: { [pfm: number]: string } = {
             0: '4',
             1: 'A',
@@ -915,7 +933,7 @@ const triggerSet: TriggerSet<Data> = {
         const thordanDir = (Math.floor((d1 + d2) / 2) + 4) % 8;
 
         // PRs / 알파벳-숫자 콜링콜링
-        if (data.options.prsDsrMarker === 1) {
+        if (data.triggerSetConfig.prsMarkerType === 1) {
           const mrks: { [mrk: number]: string } = {
             0: '4',
             1: 'A',
@@ -931,7 +949,7 @@ const triggerSet: TriggerSet<Data> = {
           });
         }
         // PRs / A 1 B 2...
-        if (data.options.prsDsrMarker === 2) {
+        if (data.triggerSetConfig.prsMarkerType === 2) {
           const pfms: { [pfm: number]: string } = {
             0: '4',
             1: 'A',
@@ -3395,10 +3413,10 @@ const triggerSet: TriggerSet<Data> = {
         'Haurchefant': 'Haurchefant',
         'Hraesvelgr': 'Hraesvelgr',
         '(?<!Dragon-)King Thordan': 'Thordan',
-        'Left Eye': 'Linkes Drachenauge',
+        'Left Eye': 'link(?:e|er|es|en) Auge',
         'Meteor Circle': 'Meteorsiegel',
         'Nidhogg': 'Nidhogg',
-        'Right Eye': 'Rechtes Drachenauge',
+        'Right Eye': 'recht(?:e|er|es|en) Auge',
         'Ser Adelphel': 'Adelphel',
         'Ser Charibert': 'Charibert',
         'Ser Grinnaux': 'Grinnaux',
@@ -3529,10 +3547,10 @@ const triggerSet: TriggerSet<Data> = {
         'Haurchefant': 'Haurchefant',
         'Hraesvelgr': 'Hraesvelgr',
         '(?<!Dragon-)King Thordan': 'roi Thordan',
-        'Left Eye': 'Œil gauche',
+        'Left Eye': 'Œil gauche de Nidhogg',
         'Meteor Circle': 'sceau du météore',
         'Nidhogg': 'Nidhogg',
-        'Right Eye': 'Œil droit',
+        'Right Eye': 'Œil droit de Nidhogg',
         'Ser Adelphel': 'sire Adelphel',
         'Ser Charibert': 'sire Charibert',
         'Ser Grinnaux': 'sire Grinnaux',

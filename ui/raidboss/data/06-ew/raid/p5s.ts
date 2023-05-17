@@ -113,12 +113,12 @@ const triggerSet: TriggerSet<Data> = {
         return;
       },
       outputStrings: {
-        NE: Outputs.arrowNE,
-        SE: Outputs.arrowSE,
-        SW: Outputs.arrowSW,
-        NW: Outputs.arrowNW,
+        NE: Outputs.dirNE,
+        SE: Outputs.dirSE,
+        SW: Outputs.dirSW,
+        NW: Outputs.dirNW,
         safeCorner: {
-          en: '${dir1} 구석으로 (독은 피해요)',
+          en: '${dir1} Corner (avoid poison)',
           de: '${dir1} Ecke (vermeide das Gift)',
           fr: 'Coin ${dir1} (évitez le poison)',
           ja: '${dir1}の隅へ (毒回避)',
@@ -249,12 +249,12 @@ const triggerSet: TriggerSet<Data> = {
         });
       },
       outputStrings: {
-        NE: Outputs.arrowNE,
-        SE: Outputs.arrowSE,
-        SW: Outputs.arrowSW,
-        NW: Outputs.arrowNW,
+        NE: Outputs.dirNE,
+        SE: Outputs.dirSE,
+        SW: Outputs.dirSW,
+        NW: Outputs.dirNW,
         text: {
-          en: '안전: ${dir1} ${dir2} ${dir3} ${dir4}',
+          en: '${dir1} -> ${dir2} -> ${dir3} -> ${dir4}',
           de: '${dir1} -> ${dir2} -> ${dir3} -> ${dir4}',
           fr: '${dir1} -> ${dir2} -> ${dir3} -> ${dir4}',
           ja: '${dir1} -> ${dir2} -> ${dir3} -> ${dir4}',
@@ -269,19 +269,23 @@ const triggerSet: TriggerSet<Data> = {
       netRegex: { id: '771[67]', source: 'Proto-Carbuncle' },
       durationSeconds: 5,
       alertText: (_data, matches, output) => {
+        const spread = output.spread!();
+        const healerGroups = output.healerGroups!();
         // Venom Squall
         if (matches.id === '7716')
-          return output.spreadToHeal!();
-        return output.healToSpread!();
+          return output.text!({ dir1: spread, dir2: healerGroups });
+        return output.text!({ dir1: healerGroups, dir2: spread });
       },
       outputStrings: {
-        spreadToHeal: {
-          en: '흩어졌다 -> 장판깔고 -> 힐러랑 붙어욧',
-          ja: '散会 -> 真ん中 -> ヒーラと頭割り',
-        },
-        healToSpread: {
-          en: '힐러랑 있다가 -> 장판깔고 -> 흩어져욧',
-          ja: 'ヒーラと頭割り -> 真ん中 -> 散会',
+        healerGroups: Outputs.healerGroups,
+        spread: Outputs.spread,
+        text: {
+          en: '${dir1} -> Bait -> ${dir2}',
+          de: '${dir1} -> Ködern -> ${dir2}',
+          fr: '${dir1} -> Attendez -> ${dir2}',
+          ja: '${dir1} -> 真ん中 -> ${dir2}',
+          cn: '${dir1} -> 诱导 -> ${dir2}',
+          ko: '${dir1} -> 장판 유도 -> ${dir2}',
         },
       },
     },
@@ -295,7 +299,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         groups: {
-          en: '보석에서 힐러랑 뭉쳐요',
+          en: 'Healer Groups on Topaz Stones',
           de: 'Heilergruppen auf Topassteine',
           fr: 'Groupes heal sur les Topazes',
           ja: 'トパーズの上でヒーラーと頭割り',
@@ -318,7 +322,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.moveBehind!(),
       outputStrings: {
         moveBehind: {
-          en: '엉댕이로 가욧',
+          en: 'Move Behind',
           de: 'Nach Hinten bewegen',
           fr: 'Allez derrière',
           ja: '背面へ',
@@ -348,7 +352,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         moveFront: {
-          en: '앞으로 가욧!',
+          en: 'Move Front',
           de: 'Nach Vorne bewegen',
           fr: 'Allez devant',
           ja: '前へ',

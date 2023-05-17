@@ -40,6 +40,7 @@ const kOptionKeys = {
   duration: 'Duration',
   beforeSeconds: 'BeforeSeconds',
   outputStrings: 'OutputStrings',
+  triggerSetConfig: 'TriggerSetConfig',
 } as const;
 
 type TriggerSoundOption = {
@@ -588,6 +589,24 @@ class RaidbossConfigurator {
 
       triggerContainer.appendChild(headerDiv);
 
+      // TODO: print a warning if config exists without triggerset id??
+      if (
+        info.triggerSet.id !== undefined && info.triggerSet.config !== undefined &&
+        info.triggerSet.config.length > 0
+      ) {
+        const triggerSetConfig = document.createElement('div');
+        triggerSetConfig.classList.add('overlay-options');
+        triggerContainer.appendChild(triggerSetConfig);
+        for (const opt of info.triggerSet.config) {
+          if (!this.base.developerOptions && opt.debugOnly)
+            continue;
+          this.base.buildConfigEntry(userOptions, triggerSetConfig, opt, 'raidboss', [
+            kOptionKeys.triggerSetConfig,
+            info.triggerSet.id,
+          ]);
+        }
+      }
+
       // Timeline editing is tied to a single, specific zoneId per file for now.
       // We could add more indirection (via fileKey?) and look up zoneId -> fileKey[]
       // and fileKey -> timeline edits if needed.
@@ -1116,6 +1135,7 @@ class RaidbossConfigurator {
       currentHP: 1000,
       options: this.base.configOptions,
       inCombat: true,
+      triggerSetConfig: {},
       ShortName: (x?: string) => x ?? '???',
       StopCombat: () => {/* noop */},
       ParseLocaleFloat: parseFloat,
@@ -1586,6 +1606,36 @@ const processPerZoneTimelineConfig = (options: RaidbossOptions, savedConfig: Sav
   }
 };
 
+const processTriggerSetConfig = (options: RaidbossOptions, savedConfig: SavedConfigEntry) => {
+  // Note: this function is just for providing the raw values for TriggerSetConfig.
+  // popuptext handles the loading of triggersets at runtime (maybe this should be merged?)
+  // and so it has to do the work of using this info to set defaults, apply overrides, and
+  // run setter functions via `processOptions`.
+  const optionName = 'TriggerSetConfig';
+  const outputTriggerSetConfig = options[optionName] ??= {};
+  if (typeof savedConfig !== 'object' || Array.isArray(savedConfig))
+    return;
+
+  // raidboss > TriggerSetConfig > [triggerSetId] > [key] > [leaf ConfigValue]
+  const triggerSetConfig = savedConfig[kOptionKeys.triggerSetConfig];
+  if (
+    triggerSetConfig === undefined || typeof triggerSetConfig !== 'object' ||
+    Array.isArray(triggerSetConfig)
+  )
+    return;
+
+  for (const [triggerSetId, configDict] of Object.entries(triggerSetConfig)) {
+    if (typeof configDict !== 'object' || Array.isArray(configDict))
+      continue;
+
+    for (const [key, value] of Object.entries(configDict)) {
+      if (typeof value !== 'boolean' && typeof value !== 'string' && typeof value !== 'number')
+        continue;
+      (outputTriggerSetConfig[triggerSetId] ??= {})[key] = value;
+    }
+  }
+};
+
 const templateOptions: OptionsTemplate = {
   buildExtraUI: (base, container) => {
     const builder = new RaidbossConfigurator(base);
@@ -1601,6 +1651,7 @@ const templateOptions: OptionsTemplate = {
 
     processPerTriggerAutoConfig(options, savedConfig);
     processPerZoneTimelineConfig(options, savedConfig);
+    processTriggerSetConfig(options, savedConfig);
   },
   options: [
     {
@@ -2204,44 +2255,6 @@ const templateOptions: OptionsTemplate = {
       },
       type: 'float',
       default: 0.75,
-    },
-    {
-      id: 'cactbotWormholeStrat',
-      // TODO: maybe need some way to group these kinds of
-      // options if we end up having a lot?
-      name: {
-        en: '얼티밋 알렉산더: cactbot 웜홀 공략 사용',
-        de: 'Alex Ultimate: aktiviere cactbot Wormhole Strategie',
-        fr: 'Alex fatal : activer cactbot pour la strat Wormhole',
-        ja: '絶アレキサンダー討滅戦：cactbot「次元断絶のマーチ」ギミック',
-        cn: '亚历山大绝境战: cactbot灵泉辅助功能',
-        ko: '절 알렉: cactbot 웜홀 공략방식 활성화',
-      },
-      type: 'checkbox',
-      default: false,
-    },
-    {
-      id: 'cactbote8sUptimeKnockbackStrat',
-      name: {
-        en: 'E8S: cactbot 넉백 공략 사용',
-        de: 'e8s: aktiviere cactbot Uptime Knockback Strategie',
-        fr: 'e8s : activer cactbot pour la strat Uptime Knockback',
-        ja: 'エデン零式共鳴編４層：cactbot「ヘヴンリーストライク (ノックバック)」ギミック',
-        cn: 'E8S: cactbot击退提示功能',
-        ko: '공명 영웅 4층: cactbot 정확한 타이밍 넉백방지 공략 활성화',
-      },
-      type: 'checkbox',
-      default: false,
-    },
-    {
-      id: 'prsDsrMarker',
-      name: {
-        en: '얼티밋 드래곤송: 마커 방식 0=기본, 1=고정팀용, 2=일반파티용',
-        ja: '絶竜詩戦争: マーカー 0=デフォルト, 1=固定用, 2=野良用',
-        ko: '절용시전쟁: 마커 방식 0=기본, 1=고정팀용, 2=일반파티용',
-      },
-      type: 'integer',
-      default: 1,
     },
   ],
 };
