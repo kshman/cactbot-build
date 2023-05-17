@@ -44,11 +44,11 @@ const triggerSet: TriggerSet<Data> = {
       id: 'uptimeKnockbackStrat',
       name: {
         en: 'Enable uptime knockback strat',
-        de: 'e8s: aktiviere cactbot Uptime Knockback Strategie', // FIXME
+        de: 'Aktiviere Uptime Rückstoß Strategie',
         fr: 'e8s : activer cactbot pour la strat Uptime Knockback', // FIXME
         ja: 'エデン零式共鳴編４層：cactbot「ヘヴンリーストライク (ノックバック)」ギミック', // FIXME
-        cn: 'E8S: cactbot击退提示功能', // FIXME
-        ko: '공명 영웅 4층: cactbot 정확한 타이밍 넉백방지 공략 활성화', // FIXME
+        cn: '启用 cactbot 精确计时防击退策略',
+        ko: '정확한 타이밍 넉백방지 공략 사용',
       },
       type: 'checkbox',
       default: (options) => {

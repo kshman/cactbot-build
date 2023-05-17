@@ -75,6 +75,7 @@ export interface Data extends RaidbossData {
   lastmode?: number;
   omegaMonitors?: string[];
   //
+  readonly triggerSetConfig: { staffSwordDodge: 'mid' | 'far' };
   combatantData: PluginCombatantState[];
   phase: Phase;
   decOffset?: number;
@@ -98,7 +99,11 @@ export interface Data extends RaidbossData {
   monitorPlayers: NetMatches['GainsEffect'][];
   deltaTethers: { [name: string]: TetherColor };
   trioDebuff: { [name: string]: TrioDebuff };
+  omegaDodgeRotation?: 'right' | 'left';
   seenOmegaTethers?: boolean;
+  cosmoArrowCount: number;
+  cosmoArrowIn?: boolean;
+  cosmoArrowExaCount: number;
 }
 
 const phaseReset = (data: Data) => {
@@ -159,9 +164,11 @@ export const getHeadmarkerId = (
 const nearDistantOutputStrings: { [label: string]: LocaleText } = {
   near: {
     en: '[니어 월드]',
+    de: 'Hallo Welt: Nah',
   },
   distant: {
     en: '[파 월드]',
+    de: 'Hallo Welt: Fern',
   },
 } as const;
 
@@ -201,6 +208,23 @@ const staffSwordMidHelper = (isEastWest: boolean, posX: number, posY: number, ou
 const triggerSet: TriggerSet<Data> = {
   id: 'TheOmegaProtocolUltimate',
   zoneId: ZoneId.TheOmegaProtocolUltimate,
+  config: [
+    {
+      id: 'staffSwordDodge',
+      name: {
+        en: 'Run: Omega Staff Sword Dodge Direction',
+        de: 'Renn: Omega Stab Schwert Ausweich-Richtung',
+      },
+      type: 'select',
+      options: {
+        en: {
+          'Dodge Far (by Omega-M)': 'far',
+          'Dodge Mid (by Omega-F)': 'mid',
+        },
+      },
+      default: 'far',
+    },
+  ],
   timelineFile: 'the_omega_protocol.txt',
   initData: () => {
     return {
@@ -224,6 +248,8 @@ const triggerSet: TriggerSet<Data> = {
       monitorPlayers: [],
       deltaTethers: {},
       trioDebuff: {},
+      cosmoArrowCount: 0,
+      cosmoArrowExaCount: 0,
     };
   },
   timelineTriggers: [
@@ -272,6 +298,8 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: '탱크 오토 어택',
+          de: 'Tank Autos',
+          ko: '탱커 평타',
         },
       },
     },
@@ -284,6 +312,8 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: '프로틴, 흩어져욧',
+          de: 'Himmelsrichtungen',
+          ko: '기본 산개',
         },
       },
     },
@@ -742,17 +772,17 @@ const triggerSet: TriggerSet<Data> = {
         superliminalStrength: {
           en: '남자 밑 (안 + 안)',
           de: 'Rein Rein auf M',
-          ko: '안 안 남자',
+          ko: '안 안 M',
         },
         superliminalBladework: {
           en: '언니 밑',
           de: 'Unter W',
-          ko: '여자 밑',
+          ko: 'F 밑',
         },
         blizzardStrength: {
           en: '남자 바로 옆 (언니 발차기)',
           de: 'Seitlich von M',
-          ko: '남자 양옆',
+          ko: 'M 양옆',
         },
       },
     },
@@ -1064,6 +1094,8 @@ const triggerSet: TriggerSet<Data> = {
           },
           sameDebuffPartner: {
             en: '(같은 디버프: ${player})',
+            de: '(selber Debuff wie ${player})',
+            ko: '(${player}와 같은 디버프)',
           },
           unknown: Outputs.unknown,
         };
@@ -1711,6 +1743,8 @@ const triggerSet: TriggerSet<Data> = {
           unmarkedBlue: {
             // Probably near baits, but you never know.
             en: '할 일 없는 🥶파랑',
+            de: 'Blau ohne Debuff',
+            ko: '디버프 없는 파란색 선',
           },
         };
 
@@ -1796,6 +1830,8 @@ const triggerSet: TriggerSet<Data> = {
         unknown: Outputs.unknown,
         mLocation: {
           en: '남자: ${dir}',
+          de: '${dir} M',
+          ko: '${dir} M',
         },
       },
     },
@@ -1813,6 +1849,8 @@ const triggerSet: TriggerSet<Data> = {
           ...nearDistantOutputStrings,
           noDebuff: {
             en: '(디버프 없음)',
+            de: '(kein Debuff)',
+            ko: '(디버프 없음)',
           },
         };
 
@@ -1856,11 +1894,15 @@ const triggerSet: TriggerSet<Data> = {
         return output.optimizedBlizzard!();
       },
       outputStrings: {
-        optimizedBlizzard: {
-          en: '바로 들어가요',
-        },
         superliminalSteel: {
-          en: '기다렸다가 들어가요',
+          en: '레이저 따라 바로 ㄱㄱ',
+          de: 'Laser folgen, rein gehen',
+          ko: '레이저 따라서 안으로',
+        },
+        optimizedBlizzard: {
+          en: '멈춰서 언니 발차기 보고 ㄱㄱ',
+          de: 'Zuerst warten',
+          ko: '기다렸다가 이동',
         },
       },
     },
@@ -1904,6 +1946,8 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         baitTethers: {
           en: '줄 채서 북으로!',
+          de: 'Verbindung ködern',
+          ko: '선 가져가기',
         },
       },
     },
@@ -1977,21 +2021,31 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         legsSword: {
           en: '가까운 ${northSouth}${eastWest}',
+          de: 'Nahe ${northSouth} oder ${eastWest}',
+          ko: '${northSouth}/${eastWest} 가까이',
         },
         legsShield: {
           en: '가까운 ${northSouth}${eastWest}',
+          de: 'Nahe ${northSouth} oder ${eastWest}',
+          ko: '${northSouth}/${eastWest} 가까이',
         },
         staffShield: {
           en: '안쪽 ${northSouth}${eastWest}',
+          de: 'Rein ${northSouth} oder ${eastWest}',
+          ko: '${northSouth}/${eastWest} 중간',
         },
         staffSwordCombo: {
           en: '${farText} / ${midText}',
         },
         staffSwordFar: {
           en: '멀리 ${northSouth}${eastWest}',
+          de: 'Entfernt von ${northSouth} oder ${eastWest}',
+          ko: '${northSouth}/${eastWest} 멀리',
         },
         staffSwordMid: {
           en: '중간 ${northSouth}${eastWest}',
+          de: 'Mittig ${northSouth} oder ${eastWest}',
+          ko: '${northSouth}/${eastWest} 중간',
         },
         dirN: 'Ⓐ',
         dirE: 'Ⓑ',
@@ -2037,27 +2091,49 @@ const triggerSet: TriggerSet<Data> = {
         const isFirstEastWest = matches.id === '7B9B';
         const isSecondEastWest = !isFirstEastWest;
 
+        let pos1: number;
+        let pos2: number;
+        if (data.triggerSetConfig.staffSwordDodge === 'far') {
+          if (isFirstEastWest) {
+            // Dodge by Omega-M for everything except sword + legs.
+            pos1 = (!isM1In && isF1In) ? f1.PosX : m1.PosX;
+            pos2 = (!isM2In && isF2In) ? f2.PosY : m2.PosY;
+          } else {
+            pos1 = (!isM1In && isF1In) ? f1.PosY : m1.PosY;
+            pos2 = (!isM2In && isF2In) ? f2.PosX : m2.PosX;
+          }
+        } else {
+          if (isFirstEastWest) {
+            // Dodge by Omega-F for sword and Omega-M for shield.
+            pos1 = !isM1In ? f1.PosX : m1.PosX;
+            pos2 = !isM2In ? f2.PosY : m2.PosY;
+          } else {
+            pos1 = !isM1In ? f1.PosY : m1.PosY;
+            pos2 = !isM2In ? f2.PosX : m2.PosX;
+          }
+        }
+
         // The combatants only spawn in these intercards:
         // 92.93, 92.93 (NW)      107.07, 92.93 (NE)
         // 92.93, 107.07 (SW)     107.07, 107.07 (SE)
         // They will either spawn NW/SE first or NE/SW
         // Boss cleave tells if it is actually east/west or north/south
-        let dir1;
-        let dir2;
+        let dir1: string;
+        let dir2: string;
+        let rotate: NonNullable<typeof data.omegaDodgeRotation>;
+
         if (isFirstEastWest) {
-          // East or West Safe
-          // Check for Sword/Shield to know if to go to Male or Female
-          const pos1 = (!isM1In && isF1In) ? f1.PosX : m1.PosX;
-          const pos2 = (!isM2In && isF2In) ? f2.PosY : m2.PosY;
           dir1 = pos1 < 100 ? output.dirW!() : output.dirE!();
           dir2 = pos2 < 100 ? output.dirN!() : output.dirS!();
+          const isLeftRotation = pos1 < 100 && pos2 < 100 || pos1 > 100 && pos2 > 100;
+          rotate = isLeftRotation ? 'left' : 'right';
         } else {
-          // North or South Safe
-          const pos1 = (!isM1In && isF1In) ? f1.PosY : m1.PosY;
-          const pos2 = (!isM2In && isF2In) ? f2.PosX : m2.PosX;
           dir1 = pos1 < 100 ? output.dirN!() : output.dirS!();
           dir2 = pos2 < 100 ? output.dirW!() : output.dirE!();
+          const isRightRotation = pos1 < 100 && pos2 < 100 || pos1 > 100 && pos2 > 100;
+          rotate = isRightRotation ? 'right' : 'left';
         }
+        data.omegaDodgeRotation = rotate;
 
         let firstSpot;
         if (isF1In) {
@@ -2068,14 +2144,11 @@ const triggerSet: TriggerSet<Data> = {
         } else {
           if (isM1In) {
             firstSpot = output.staffShield!({ dir: dir1 });
-          } else if (data.simple) {
-            firstSpot = output.staffSwordSimple!({ text: output.staffSwordFar!({ dir: dir1 }) });
+          } else if (data.triggerSetConfig.staffSwordDodge === 'far') {
+            firstSpot = output.staffSwordFar!({ dir: dir1 });
           } else {
             const staffMidDir1 = staffSwordMidHelper(isFirstEastWest, f1.PosX, f1.PosY, output);
-            firstSpot = output.staffSwordCombo!({
-              farText: output.staffSwordFar!({ dir: dir1 }),
-              midText: output.staffSwordMid!({ dir: staffMidDir1 }),
-            });
+            firstSpot = output.staffSwordMid!({ dir: staffMidDir1 });
           }
         }
 
@@ -2088,41 +2161,59 @@ const triggerSet: TriggerSet<Data> = {
         } else {
           if (isM2In) {
             secondSpot = output.staffShield!({ dir: dir2 });
-          } else if (data.simple) {
-            secondSpot = output.staffSwordSimple!({ text: output.staffSwordFar!({ dir: dir2 }) });
+          } else if (data.triggerSetConfig.staffSwordDodge === 'far') {
+            secondSpot = output.staffSwordFar!({ dir: dir2 });
           } else {
             const staffMidDir2 = staffSwordMidHelper(isSecondEastWest, f2.PosX, f2.PosY, output);
-            secondSpot = output.staffSwordCombo!({
-              farText: output.staffSwordFar!({ dir: dir2 }),
-              midText: output.staffSwordMid!({ dir: staffMidDir2 }),
-            });
+            secondSpot = output.staffSwordMid!({ dir: staffMidDir2 });
           }
         }
 
-        return output.safeSpots!({ first: firstSpot, second: secondSpot });
+        const rotateStr = rotate === 'right' ? output.rotateRight!() : output.rotateLeft!();
+        return output.safeSpots!({ first: firstSpot, rotate: rotateStr, second: secondSpot });
       },
       outputStrings: {
         safeSpots: {
-          en: '${first} => ${second}',
+          en: '${first} => ${rotate} => ${second}',
+          de: '${first} => ${rotate} => ${second}',
+          ko: '${first} => ${rotate} => ${second}',
+        },
+        rotateRight: {
+          en: '오른쪽',
+          de: 'Rechts',
+        },
+        rotateLeft: {
+          en: '왼',
+          de: 'Links',
         },
         // The two legs are split in case somebody wants a "go to M" or "go to F" style call.
         legsSword: {
           en: '가까운 ${dir}',
+          de: 'Nahe ${dir}',
+          ko: '${dir} 가까이',
         },
         legsShield: {
           en: '가까운 ${dir}',
+          de: 'Nahe ${dir}',
+          ko: '${dir} 가까이',
         },
         staffShield: {
           en: '중간 ${dir}',
+          de: 'Mittig ${dir}',
+          ko: '${dir} 중간',
         },
         staffSwordCombo: {
           en: '${farText} / ${midText}',
         },
         staffSwordFar: {
           en: '멀리 ${dir}',
+          de: 'Entfernt von ${dir}',
+          ko: '${dir} 멀리',
         },
         staffSwordMid: {
           en: '중간 ${dir}',
+          de: 'Mittig ${dir}',
+          ko: '${dir} 중간',
         },
         staffSwordSimple: {
           en: '${text}',
@@ -2259,6 +2350,115 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
+      id: 'TOP Cosmo Arrow In/Out Collect',
+      type: 'StartsUsing',
+      // Sometimes cast by Omega, sometimes by Alpha Omega
+      netRegex: { id: '7BA3', capture: false },
+      run: (data) => {
+        // This will overcount but get reset after
+        data.cosmoArrowCount = data.cosmoArrowCount + 1;
+      },
+    },
+    {
+      id: 'TOP Cosmo Arrow In/Out First',
+      type: 'StartsUsing',
+      // Sometimes cast by Omega, sometimes by Alpha Omega
+      netRegex: { id: '7BA3', capture: false },
+      delaySeconds: 0.1,
+      durationSeconds: 7,
+      suppressSeconds: 5,
+      infoText: (data, _matches, output) => {
+        data.cosmoArrowExaCount = 1;
+        if (data.cosmoArrowCount === 2) {
+          data.cosmoArrowIn = true;
+          return output.inFirst!();
+        }
+        data.cosmoArrowIn = false;
+        return output.outFirst!();
+      },
+      outputStrings: {
+        inFirst: {
+          en: '먼저 안으로',
+        },
+        outFirst: {
+          en: '먼저 밖으로',
+        },
+      },
+    },
+    {
+      id: 'TOP Cosmo Arrow In/Out Wait',
+      type: 'Ability',
+      // Sometimes cast by Omega, sometimes by Alpha Omega
+      netRegex: { id: '7BA3', capture: false },
+      suppressSeconds: 5,
+      infoText: (data, _matches, output) => {
+        if (data.cosmoArrowIn)
+          return output.inWait2!();
+        return output.outWait2!();
+      },
+      outputStrings: {
+        inWait2: {
+          en: '안으로 => 두번 기둘',
+        },
+        outWait2: {
+          en: '밖으로 => 두번 기둘',
+        },
+      },
+    },
+    {
+      id: 'TOP Cosmo Arrow Dodges',
+      type: 'Ability',
+      netRegex: { id: '7BA4', source: 'Alpha Omega', capture: false },
+      preRun: (data) => data.cosmoArrowExaCount = data.cosmoArrowExaCount + 1,
+      durationSeconds: (data) => {
+        if (data.cosmoArrowExaCount === 3 && data.cosmoArrowIn)
+          return 5;
+        return 3;
+      },
+      suppressSeconds: 1, // Only capture 1 in the set of casts
+      infoText: (data, _matches, output) => {
+        if (data.cosmoArrowIn) {
+          switch (data.cosmoArrowExaCount) {
+            case 3:
+              return output.outWait2!();
+            case 5:
+              return output.SidesIn!();
+            case 6:
+              return output.in!();
+          }
+          // No callout
+          return;
+        }
+
+        switch (data.cosmoArrowExaCount) {
+          case 3:
+          case 5:
+            return output.in!();
+          case 4:
+            return output.SidesOut!();
+        }
+      },
+      run: (data) => {
+        if (data.cosmoArrowExaCount === 7) {
+          data.cosmoArrowExaCount = 0;
+          data.cosmoArrowCount = 0;
+        }
+      },
+      outputStrings: {
+        in: Outputs.in,
+        inWait2: {
+          en: '안으로 => 두번 기둘',
+        },
+        outWait2: {
+          en: '밖으로 => 두번 기둘',
+        },
+        SidesIn: Outputs.moveAway,
+        SidesOut: {
+          en: '옆으로 + 밖으로',
+        },
+      },
+    },
+    {
       id: 'TOP Cosmo Dive',
       type: 'StartsUsing',
       netRegex: { id: '7BA6', source: 'Alpha Omega', capture: false },
@@ -2273,9 +2473,13 @@ const triggerSet: TriggerSet<Data> = {
         // that everybody needs to know that already, and so just call positioning.
         cosmoDiveTank: {
           en: '탱크 안으로 (파티는 밖으로)',
+          de: 'Tanks nahe (Gruppe entfernt)',
+          ko: '탱커 가까이 (본대 멀리)',
         },
         cosmoDiveParty: {
           en: '파티 밖으로 (탱크가 안으로)',
+          de: 'Gruppe entfernt (Tanks nahe)',
+          ko: '본대 멀리 (탱커 가까이)',
         },
       },
     },
@@ -2287,6 +2491,8 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: '한가운데로 유도',
+          de: 'Mitte ködern',
+          ko: '중앙에 장판 유도',
         },
       },
     },
@@ -2299,6 +2505,8 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: '한줄로 뭉쳐요',
+          de: 'Linien Ansturm',
+          ko: '직선 쉐어',
         },
       },
     },
@@ -2310,6 +2518,8 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: '한가운데로 유도',
+          de: 'Mitte ködern',
+          ko: '중앙에 장판 유도',
         },
       },
     },
