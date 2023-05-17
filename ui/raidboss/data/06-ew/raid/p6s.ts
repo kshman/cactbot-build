@@ -25,8 +25,6 @@ export interface Data extends RaidbossData {
   poly5SideTile?: string;
   darkSpheres: NetMatches['StartsUsing'][];
   poly6SafeSide?: string;
-  //
-  prsSigma?: number;
 }
 
 // Due to changes introduced in patch 5.2, overhead markers now have a random offset
@@ -85,7 +83,7 @@ const triggerSet: TriggerSet<Data> = {
       id: 'P6S Chelic Synergy',
       type: 'StartsUsing',
       netRegex: { id: '788A', source: 'Hegemone' },
-      response: Responses.sharedOrInvinTankBuster(),
+      response: Responses.sharedTankBuster(),
     },
     {
       id: 'P6S Synergy',
@@ -96,7 +94,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '따로 따로 탱크버스터',
+          en: 'Split Tankbusters',
           de: 'getrennte Tankbuster',
           fr: 'Séparez les Tankbusters',
           ja: '2人同時タンク強攻撃',
@@ -406,7 +404,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '${dir1}: ${dir2} / ${dir3}',
         },
         left: {
-          en: '🡸왼쪽 (날개)',
+          en: 'Left (Wing Side)',
           de: 'Links (Flügel-Seite)',
           fr: 'Gauche (Côté aile)',
           ja: '左 (翼)',
@@ -414,7 +412,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '왼쪽 (날개쪽)',
         },
         right: {
-          en: '🡺오른쪽 (비암)',
+          en: 'Right (Snake Side)',
           de: 'Rechts (Schlangen-Seite)',
           fr: 'Droite (Côté serpent)',
           ja: '右 (蛇)',
@@ -422,162 +420,162 @@ const triggerSet: TriggerSet<Data> = {
           ko: '오른쪽 (뱀쪽)',
         },
         insideWest: {
-          en: '안🡸',
+          en: 'Inside West',
           de: 'Westen innen',
           fr: 'Intérieur Ouest',
-          ja: '内側🡸',
+          ja: '内側 西',
           cn: '内侧 左 (西)',
           ko: '안 서쪽',
         },
         insideEast: {
-          en: '안🡺',
+          en: 'Inside East',
           de: 'Osten innen',
           fr: 'Intérieur Est',
-          ja: '内側🡺',
+          ja: '内側 東',
           cn: '内侧 右 (东)',
           ko: '안 동쪽',
         },
         outsideWest: {
-          en: '바깥🡸🡸',
+          en: 'Outside West',
           de: 'Westen außen',
           fr: 'Extérieur Ouest',
-          ja: '外側🡸🡸',
+          ja: '外側 西',
           cn: '外侧 左 (西)',
           ko: '바깥 서쪽',
         },
         outsideEast: {
-          en: '바깥🡺🡺',
+          en: 'Outside East',
           de: 'Osten außen',
           fr: 'Extérieur Est',
-          ja: '外側🡺🡺',
+          ja: '外側 東',
           cn: '外侧 右 (东)',
           ko: '바깥 동쪽',
         },
         insideNW: {
-          en: '안🡼',
+          en: 'Inside NW',
           de: 'NW innen',
           fr: 'Intérieur NO',
-          ja: '内側🡼',
+          ja: '内側 北西',
           cn: '内侧 左上 (西北)',
           ko: '안 북서쪽',
         },
         insideNE: {
-          en: '안🡽',
+          en: 'Inside NE',
           de: 'NO innen',
           fr: 'Intérieur NE',
-          ja: '内側🡽',
+          ja: '内側 北東',
           cn: '内侧 右上 (东北)',
           ko: '안 북동쪽',
         },
         insideSE: {
-          en: '안🡾',
+          en: 'Inside SE',
           de: 'SO innen',
           fr: 'Intérieur SE',
-          ja: '内側🡾',
+          ja: '内側 南東',
           cn: '内侧 右下 (东南)',
           ko: '안 남동쪽',
         },
         insideSW: {
-          en: '안🡿',
+          en: 'Inside SW',
           de: 'SW innen',
           fr: 'Intérieur SO',
-          ja: '内側🡿',
+          ja: '内側 南西',
           cn: '内侧 左下 (西南)',
           ko: '안 남서쪽',
         },
         outsideNNW: {
-          en: '첫줄🡸',
+          en: 'Outside NNW',
           de: 'NNW außen',
           fr: 'Extérieur NNO',
-          ja: '1列🡸',
+          ja: '1列 西の内側',
           cn: '外侧 上偏左 (北偏西)',
           ko: '바깥 북쪽 왼칸',
         },
         outsideNNE: {
-          en: '첫줄🡺',
+          en: 'Outside NNE',
           de: 'NNO außen',
           fr: 'Extérieur NNE',
-          ja: '1列🡺',
+          ja: '1列 東の内側',
           cn: '外侧 上偏右 (北偏东)',
           ko: '바깥 북쪽 오른칸',
         },
         outsideSSW: {
-          en: '맨아래줄🡸',
+          en: 'Outside SSW',
           de: 'SSW außen',
           fr: 'Extérieur SSO',
-          ja: '4列🡸',
+          ja: '4列 西の内側',
           cn: '外侧 下偏左 (南偏西)',
           ko: '바깥 남쪽 왼칸',
         },
         outsideSSE: {
-          en: '맨아래줄🡺',
+          en: 'Outside SSE',
           de: 'SSO außen',
           fr: 'Extérieur SSE',
-          ja: '4列🡺',
+          ja: '4列 東の内側',
           cn: '外侧 下偏右 (南偏东)',
           ko: '바깥 남쪽 오른칸',
         },
         outsideWNW: {
-          en: '둘째줄🡸🡸',
+          en: 'Outside WNW',
           de: 'WNW außen',
           fr: 'Extérieur ONO',
-          ja: '2列🡸🡸',
+          ja: '2列 西の外側',
           cn: '外侧 左偏上 (西偏北)',
           ko: '바깥 서쪽 위칸',
         },
         outsideENE: {
-          en: '둘째줄🡺🡺',
+          en: 'Outside ENE',
           de: 'ONO außen',
           fr: 'Extérieur ENE',
-          ja: '2列🡺🡺',
+          ja: '2列 東の外側',
           cn: '外侧 右偏上 (东偏北)',
           ko: '바깥 동쪽 위칸',
         },
         outsideWSW: {
-          en: '세째줄🡸🡸',
+          en: 'Outside WSW',
           de: 'WSW außen',
           fr: 'Extérieur OSO',
-          ja: '3列🡸🡸',
+          ja: '3列 西の外側',
           cn: '外侧 左偏下 (西偏南)',
           ko: '바깥 서쪽 아래칸',
         },
         outsideESE: {
-          en: '세째줄🡺🡺',
+          en: 'Outside ESE',
           de: 'OSO außen',
           fr: 'Extérieur ESE',
-          ja: '3列🡺🡺',
+          ja: '3列 東の外側',
           cn: '外侧 右偏下 (东偏南)',
           ko: '바깥 동쪽 아래칸',
         },
         cornerNW: {
-          en: '🡼구석',
+          en: 'NW Corner',
           de: 'NW Ecke',
           fr: 'Coin NO',
-          ja: '🡼隅',
+          ja: '北西 隅',
           cn: '左上 (西北) 角',
           ko: '북서쪽 구석',
         },
         cornerNE: {
-          en: '🡽구석',
+          en: 'NE Corner',
           de: 'NO Ecke',
           fr: 'Coin NE',
-          ja: '🡽隅',
+          ja: '北東 隅',
           cn: '右上 (东北) 角',
           ko: '북동쪽 구석',
         },
         cornerSE: {
-          en: '🡾구석',
+          en: 'SE Corner',
           de: 'SO Ecke',
           fr: 'Coin SE',
-          ja: '🡾隅',
+          ja: '南東 隅',
           cn: '右下 (东南) 角',
           ko: '남동쪽 구석',
         },
         cornerSW: {
-          en: '🡿구석',
+          en: 'SW Corner',
           de: 'SW Ecke',
           fr: 'Coin SO',
-          ja: '🡿隅',
+          ja: '南西 隅',
           cn: '左下 (西南) 角',
           ko: '남서쪽 구석',
         },
@@ -628,7 +626,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         goFrontBack: Outputs.goFrontBack,
         goFrontBackPoly5: {
-          en: '앞/뒤로 (${tile})',
+          en: 'Go Front/Back (${tile})',
           de: 'Gehe nach Vorne/Hinten (${tile})',
           fr: 'Allez Devant/Derrière (${tile})',
           ja: '縦へ (${tile})',
@@ -649,7 +647,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         goSides: Outputs.sides,
         goSidesPoly5: {
-          en: '옆으로 (${tile})',
+          en: 'Sides (${tile})',
           de: 'Seiten (${tile})',
           fr: 'Côté (${tile})',
           ja: '横へ (${tile})',
@@ -700,7 +698,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (data, _matches, output) => output.text!({ num: data.pathogenicCellsNumber }),
       outputStrings: {
         text: {
-          en: '나: ${num}번',
+          en: '#${num}',
           de: '#${num}',
           fr: '#${num}',
           ja: '自分: ${num}番',
@@ -721,7 +719,7 @@ const triggerSet: TriggerSet<Data> = {
       tts: null,
       outputStrings: {
         text: {
-          en: '${num}번',
+          en: '${num}',
           de: '${num}',
           fr: '${num}',
           ja: '${num}番',
@@ -758,7 +756,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         stackOnYou: Outputs.stackOnYou,
         donut: {
-          en: '도넛! 뭉쳐욧!',
+          en: 'Stack Donut',
           de: 'Sammeln Donut',
           fr: 'Packez-vous, donut',
           ja: '頭割り',
@@ -766,7 +764,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '도넛 장판, 쉐어',
         },
         spreadCorner: {
-          en: '구석으로 가욧!',
+          en: 'Spread Corner',
           de: 'In Ecken Verteilen',
           fr: 'Écartez-vous dans le coin',
           ja: '隅で散会',
@@ -782,7 +780,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '돔 장판 유도!',
+          en: 'Bait Circles',
           de: 'Kreise ködern',
           fr: 'Déposez les cercles',
           ja: 'ゆか誘導',
@@ -850,7 +848,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '${dir}, ${bait}',
         },
         left: {
-          en: '🡸왼쪽 (날개)',
+          en: 'Left (Wing Side)',
           de: 'Links (Flügel-Seite)',
           fr: 'Gauche (Côté Aile)',
           ja: '左 (翼)',
@@ -858,7 +856,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '왼쪽 (날개쪽)',
         },
         right: {
-          en: '🡺오른쪽 (비암)',
+          en: 'Right (Snake Side)',
           de: 'Rechts (Schlangen-Seite)',
           fr: 'Droite (Côté Serpent)',
           ja: '右 (蛇)',
@@ -866,7 +864,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '오른쪽 (뱀쪽)',
         },
         firstBait: {
-          en: '#1 (안/20초)',
+          en: 'First Bait (20s)',
           de: 'Köder als 1. (20s)',
           fr: 'Dépose en 1er (20s)',
           ja: '1番目 (20秒)',
@@ -874,7 +872,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '유도 1번 (20초)',
         },
         secondBait: {
-          en: '#2 (위/8초)',
+          en: 'Second Bait (8s)',
           de: 'Köder als 2. (8s)',
           fr: 'Dépose en 2ème (8s)',
           ja: '2番目 (8秒)',
@@ -882,7 +880,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '유도 2번 (8초)',
         },
         thirdBait: {
-          en: '#3 (밖/12초)',
+          en: 'Third Bait (12s)',
           de: 'Köder als 3. (12s)',
           fr: 'Dépose en 3ème (12s)',
           ja: '3番目 (12秒)',
@@ -890,7 +888,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '유도 3번 (12초)',
         },
         fourthBait: {
-          en: '#4 (아래/16초)',
+          en: 'Fourth Bait (16s)',
           de: 'Köder als 4. (16s)',
           fr: 'Dépose en 4ème (16s)',
           ja: '4番目 (16秒)',
@@ -910,7 +908,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.inFirstBait!(),
       outputStrings: {
         inFirstBait: {
-          en: '안으로 (#1)',
+          en: 'In (First Bait)',
           de: 'Rein (Köder als 1.)',
           fr: 'À l\'intérieur (1er)',
           ja: '内側へ (1番目)',
@@ -955,7 +953,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         inSecondBait: {
-          en: '안으로 (#2)',
+          en: 'In (Second Bait)',
           de: 'Rein (Köder als 2.)',
           fr: 'À l\'intérieur (2ème)',
           ja: '内側へ (2番目)',
@@ -963,7 +961,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '안으로 (유도 2번)',
         },
         inThirdBait: {
-          en: '안으로 (#3)',
+          en: 'In (Third Bait)',
           de: 'Rein (Köder als 3.)',
           fr: 'À l\'intérieur (3ème)',
           ja: '内側へ (3番目)',
@@ -971,7 +969,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '안으로 (유도 3번)',
         },
         inFourthBait: {
-          en: '안으로 (#4)',
+          en: 'In (Fourth Bait)',
           de: 'Rein (Köder als 4.)',
           fr: 'À l\'intérieur (4ème)',
           ja: '内側へ (4番目)',
@@ -1001,7 +999,7 @@ const triggerSet: TriggerSet<Data> = {
         data.predationDebuff === 'CF7' ? output.left!() : output.right!(),
       outputStrings: {
         left: {
-          en: '🡸왼쪽 (날개)',
+          en: 'Left (Wing Side)',
           de: 'Links (Flügel-Seite)',
           fr: 'Gauche (Côté Aile)',
           ja: '左 (翼)',
@@ -1009,7 +1007,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '왼쪽 (날개쪽)',
         },
         right: {
-          en: '🡺오른쪽 (비암)',
+          en: 'Right (Snake Side)',
           de: 'Rechts (Schlangen-Seite)',
           fr: 'Droite (Côté Serpent)',
           ja: '右 (蛇)',
@@ -1035,7 +1033,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         forwardCleave: {
-          en: '입에서 트림',
+          en: 'Front Cleave',
           de: 'Kegel Aoe nach Vorne',
           fr: 'Cleave Avant',
           ja: '口からおくび',
@@ -1043,7 +1041,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '전방 부채꼴 장판',
         },
         backwardCleave: {
-          en: '방구 뽕',
+          en: 'Rear Cleave',
           de: 'Kegel Aoe nach Hinten',
           fr: 'Cleave Arrière',
           ja: '尻からおなら',
@@ -1064,7 +1062,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         forwardCleave: {
-          en: '좀 이따 트름',
+          en: 'Front Cleave, for later',
           de: 'Kegel Aoe nach Vorne, für später',
           fr: 'Cleave Avant, pour après',
           ja: '後で口からおくび',
@@ -1072,7 +1070,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '곧 전방 부채꼴 장판',
         },
         backwardCleave: {
-          en: '좀 이따 방구',
+          en: 'Rear Cleave, for later',
           de: 'Kegel Aoe nach Hinten, für später',
           fr: 'Cleave Arrière, pour après',
           ja: '後で尻からおなら',
@@ -1108,7 +1106,7 @@ const triggerSet: TriggerSet<Data> = {
         spread: Outputs.spread,
         stack: Outputs.stackMarker,
         spreadSide: {
-          en: '흩어져욧 ${dir1}',
+          en: 'Spread ${dir1}',
           de: 'Verteilen ${dir1}',
           fr: 'Dispersion ${dir1}',
           ja: '散会 ${dir1}',
@@ -1116,7 +1114,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '산개 ${dir1}',
         },
         stackSide: {
-          en: '뭉쳐욧 ${dir1}',
+          en: 'Stack ${dir1}',
           de: 'Sammeln ${dir1}',
           fr: 'Package ${dir1}',
           ja: '頭割り ${dir1}',

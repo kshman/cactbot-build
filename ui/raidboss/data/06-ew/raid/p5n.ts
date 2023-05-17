@@ -43,7 +43,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         goFront: Outputs.goFront,
         goFrontAvoid: {
-          en: '앞쪽으로 (장판 피해욧)',
+          en: 'Go Front (avoid puddle)',
           de: 'Geh nach Vorne (weiche Flächen aus)',
           fr: 'Allez devant (Évitez les zones au sol)',
           ja: '前へ (ゆか回避)',
@@ -90,7 +90,7 @@ const triggerSet: TriggerSet<Data> = {
       run: (data) => data.seenStones = true,
       outputStrings: {
         getInEmptyTile: {
-          en: '돌이 없는 빈 칸으로 가요',
+          en: 'Get in empty tile (no stones)',
           de: 'Geh ins leere Feld (ohne Stein)',
           fr: 'Allez dans une case vide (sans pierres)',
           ja: '石がないマスへ',
@@ -98,7 +98,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '돌이 없는 빈 칸으로',
         },
         moveAway: {
-          en: '장판을 피해 도망가세요',
+          en: 'Move away from puddles',
           de: 'Geh weg von den Flächen',
           fr: 'Éloignez-vous des zones au sol',
           ja: 'ゆかから離れる',
@@ -158,7 +158,7 @@ const triggerSet: TriggerSet<Data> = {
         dirNE: Outputs.dirNE,
         dirNW: Outputs.dirNW,
         text: {
-          en: '${start}에서 시작 -> ${end}으로 이동',
+          en: 'start at ${start} -> move to ${end}',
           de: 'Starte im ${start} -> Bewegen nach ${end}',
           fr: 'Commencez à ${start} -> allez vers ${end}',
           ja: '${start}から -> ${end}へ移動',
@@ -215,7 +215,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '한가운데서 시작해서 -> 첫 점프 위치로',
+          en: 'Start in middle -> move to first jump',
           de: 'Starte in der Mitte -> zum ersten Sprung bewegen',
           fr: 'Démarrez au milieu -> allez vers le 1er saut',
           ja: '真ん中 -> 1回目のジャンプへ',
