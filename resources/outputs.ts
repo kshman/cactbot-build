@@ -458,7 +458,7 @@ export default {
     ko: '양옆으로',
   },
   middle: {
-    en: '⊙한가운데쪽',
+    en: '한가운데',
     de: 'Mitte',
     fr: 'Milieu',
     ja: '中へ',
@@ -638,7 +638,7 @@ export default {
     ko: '상대와 떨어지기 (${player})',
   },
   unknown: {
-    en: '???',
+    en: '몰루??',
     de: '???',
     fr: '???',
     ja: '???',
