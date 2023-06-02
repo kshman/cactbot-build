@@ -24,7 +24,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '조각상 뒤로',
+          en: 'Go Behind Statue',
           de: 'Geh hinter die Statue',
           fr: 'Cachez vous derriere une statue',
           cn: '躲在雕像后',
@@ -39,7 +39,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '루미너신스 잡은 담 보스랑 붙어요',
+          en: 'Kill luminescence and stay close to boss',
           de: 'Besiege die Photosphäre und steh nahe am Boss',
           fr: 'Tuez la Luminescence et restez près du boss',
           cn: '击杀幻光球, 靠近BOSS',

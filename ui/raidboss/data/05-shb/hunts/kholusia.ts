@@ -77,7 +77,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '안에서 => 옆으로',
+          en: 'In => Sides',
           de: 'Rein => Seiten',
           cn: '中间 => 两侧',
           ko: '안으로 => 옆으로',
@@ -92,7 +92,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '옆에서 => 옆으로 (두번)',
+          en: 'Sides => Sides (again)',
           de: 'Seiten => Seiten (nochmal)',
           cn: '两侧 => 两侧 (重复)',
           ko: '옆으로 => 옆으로 (반복)',

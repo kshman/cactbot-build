@@ -30,7 +30,7 @@ Slots:
 00080004 = clear indicator
  */
 
-// 7D09 Ghastly Torch during add phase *is* an aoe but is constant and small, so skipped.
+// 7D09 Ghastly Torch during add phase *is* an aoe + bleed but is constant and small, so skipped.
 
 export interface Data extends RaidbossData {
   circle: number;

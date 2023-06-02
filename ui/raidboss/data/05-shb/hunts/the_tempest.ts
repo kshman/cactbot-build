@@ -96,7 +96,7 @@ const triggerSet: TriggerSet<Data> = {
         stackMarker: Outputs.stackMarker,
         stackOnYou: Outputs.stackOnYou,
         avoidStack: {
-          en: '뭉치면 안되요',
+          en: 'Avoid Stack',
           de: 'Vermeide Sammeln',
           cn: '远离分摊',
           ko: '쉐어징 피하기',

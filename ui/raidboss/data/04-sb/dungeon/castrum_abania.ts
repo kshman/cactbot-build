@@ -41,7 +41,7 @@ const triggerSet: TriggerSet<Data> = {
       run: (data) => data.calledUseCannon = true,
       outputStrings: {
         text: {
-          en: '보스에게 파이어 캐논',
+          en: 'Fire cannon at boss',
           de: 'Feuere Kanonen auf den Boss',
           fr: 'Tirez le canon sur le boss',
           cn: '用炮射BOSS',
@@ -62,7 +62,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '파이어 버프 받아요',
+          en: 'Get Fire Buff',
           de: 'Nimm Feuer Buff',
           fr: 'Prenez le buff de Feu',
           cn: '去火BUFF',
@@ -77,7 +77,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '아이스 버프 받아요',
+          en: 'Get Ice Buff',
           de: 'Nimm Eis Buff',
           fr: 'Prenez le buff de Glace',
           cn: '去冰BUFF',
@@ -92,7 +92,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '라이트닝 버프 받아요',
+          en: 'Get Lightning Buff',
           de: 'Nimm Blitz Buff',
           fr: 'Prenez le buff d\'Éclair',
           cn: '去雷BUFF',
@@ -128,7 +128,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           // Knockback comes from the proximity marker, not the boss.
-          en: '작은 혜성 넉백',
+          en: 'Small comet knockback',
           de: 'Kleiner Kometenrückstoß',
           fr: 'Poussée de la petite comète',
           cn: '小彗星击退',

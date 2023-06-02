@@ -15,7 +15,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '오브 써요',
+          en: 'Use the Orb',
           de: 'Orb benutzen',
           fr: 'Utilisez l\'Orbe',
           cn: '使用幽暗珠',
@@ -30,7 +30,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '네일 써요',
+          en: 'Use the Nail',
           de: 'Nagel benutzen',
           fr: 'Utilisez L\'Épine',
           cn: '使用咒具',

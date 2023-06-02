@@ -22,6 +22,7 @@ export interface Data extends RaidbossData {
   delayedDummyTimestampBefore: number;
   delayedDummyTimestampAfter: number;
   pokes: number;
+  watchingForCast: boolean;
 }
 
 const triggerSet: TriggerSet<Data> = {
@@ -78,6 +79,7 @@ const triggerSet: TriggerSet<Data> = {
       delayedDummyTimestampBefore: 0,
       delayedDummyTimestampAfter: 0,
       pokes: 0,
+      watchingForCast: false,
     };
   },
   timelineStyles: [
@@ -98,7 +100,7 @@ const triggerSet: TriggerSet<Data> = {
       tts: (_data, _matches, output) => output.stackTTS!(),
       outputStrings: {
         stack: {
-          en: '뭉쳐요: Angry Dummy',
+          en: 'Stack for Angry Dummy',
           de: 'Sammeln für Wütender Dummy',
           fr: 'Packez-vous pour le Mannequin en colère',
           ja: '怒る木人に集合',
@@ -106,7 +108,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '화난 나무인형에 집합',
         },
         stackTTS: {
-          en: '뭉쳐요',
+          en: 'Stack',
           de: 'Sammeln',
           fr: 'Packez-vous',
           ja: '集合',
@@ -136,7 +138,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         elapsed: {
-          en: '걸린 밀리초: ${elapsed}',
+          en: 'Elapsed ms: ${elapsed}',
           de: 'Abgelaufene ms: ${elapsed}',
           fr: 'Expiré ms: ${elapsed}',
           ja: '経過時間：${elapsed}',
@@ -239,7 +241,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (data, _matches, output) => output.text!({ lang: data.parserLang }),
       outputStrings: {
         text: {
-          en: '언어: ${lang}',
+          en: 'Language: ${lang}',
           de: 'Sprache: ${lang}',
           fr: 'Langage: ${lang}',
           ja: '言語：${lang}',
@@ -301,7 +303,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.close!(),
       outputStrings: {
         close: {
-          en: '더미랑 가까워요!',
+          en: 'Dummy close!',
           de: 'Puppe beendet!',
           fr: 'Mannequin proche !',
           ja: '木人に近すぎ！',
@@ -326,10 +328,37 @@ const triggerSet: TriggerSet<Data> = {
         },
       },
     },
+    {
+      id: 'Test Combatant Cast Enable',
+      type: 'GameLog',
+      netRegex: NetRegexes.echo({ line: 'cactbot test combatant cast.*?', capture: false }),
+      run: (data) => {
+        data.watchingForCast = true;
+      },
+    },
+    {
+      id: 'Test Combatant Cast',
+      type: 'CombatantMemory',
+      netRegex: NetRegexes.combatantMemory({
+        pair: [{ key: 'IsCasting1', value: '1' }, { key: 'CastBuffID', value: '.*?' }],
+      }),
+      condition: (data) => data.watchingForCast,
+      infoText: (data, matches, output) => {
+        data.watchingForCast = false;
+        return output.casting!({ id: matches.id, spellId: matches.pairCastBuffID });
+      },
+      outputStrings: {
+        casting: {
+          en: 'ID ${id} is casting spell ID ${spellId}',
+          de: 'ID ${id} wirkt Zauber ID ${spellId}',
+        },
+      },
+    },
   ],
   timelineReplace: [
     {
       locale: 'de',
+      missingTranslations: true,
       replaceSync: {
         'You bid farewell to the striking dummy': 'Du winkst der Trainingspuppe zum Abschied zu',
         'You bow courteously to the striking dummy':
@@ -420,6 +449,7 @@ const triggerSet: TriggerSet<Data> = {
     },
     {
       locale: 'cn',
+      missingTranslations: true,
       replaceSync: {
         'You bid farewell to the striking dummy': '.*向木人告别',
         'You bow courteously to the striking dummy': '.*恭敬地对木人行礼',
@@ -448,6 +478,7 @@ const triggerSet: TriggerSet<Data> = {
     },
     {
       locale: 'ko',
+      missingTranslations: true,
       replaceSync: {
         'You bid farewell to the striking dummy': '.*나무인형에게 작별 인사를 합니다',
         'You bow courteously to the striking dummy': '.*나무인형에게 공손하게 인사합니다',

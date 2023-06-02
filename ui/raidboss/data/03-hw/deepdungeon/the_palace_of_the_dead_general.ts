@@ -52,7 +52,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '미믹 나왔어요!',
+          en: 'Mimic spawned!',
           de: 'Mimik ist erschienen!',
           cn: '已生成 拟态怪!',
           ko: '미믹 등장!',
@@ -117,14 +117,14 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         duplicate: {
-          en: '${pomander} 중복',
+          en: '${pomander} duplicate',
           de: 'Doppelter ${pomander}',
           cn: '${pomander} 重复',
           ko: '${pomander} 중복',
         },
         // pomanders: https://xivapi.com/deepdungeonItem?pretty=true
         safety: {
-          en: '함정(呪印) 없애줌',
+          en: 'Safety',
           de: 'Siegelbruchs',
           fr: 'désamorçage',
           ja: '呪印解除',
@@ -132,7 +132,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '함정 해제',
         },
         sight: {
-          en: '사이트',
+          en: 'Sight',
           de: 'Sicht',
           fr: 'localisation',
           ja: 'サイトロ',
@@ -140,7 +140,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '사이트로',
         },
         strength: {
-          en: '셀프 스트렝스',
+          en: 'Strength',
           de: 'Stärkung',
           fr: 'puissance',
           ja: '自己強化',
@@ -148,7 +148,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '자기 강화',
         },
         steel: {
-          en: '셀프 스틸',
+          en: 'Steel',
           de: 'Abwehr',
           fr: 'protection',
           ja: '防御強化',
@@ -156,7 +156,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '방어 강화',
         },
         affluence: {
-          en: '상자 개수 증가',
+          en: 'Affluence',
           de: 'Schätze',
           fr: 'décèlement',
           ja: '宝箱増加',
@@ -164,7 +164,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '보물상자 증가',
         },
         flight: {
-          en: '적 감소',
+          en: 'Flight',
           de: 'Feindtods',
           fr: 'sécurisation',
           ja: '敵排除',
@@ -172,7 +172,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '적 감소',
         },
         alteration: {
-          en: '적 변화',
+          en: 'Alteration',
           de: 'Feindwandlung',
           fr: 'affaiblissement',
           ja: '敵変化',
@@ -180,7 +180,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '적 대체',
         },
         purity: {
-          en: '저주 해제(解呪)',
+          en: 'Purity',
           de: 'Entzauberung',
           fr: 'anti-maléfice',
           ja: '解呪',
@@ -188,7 +188,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '저주 해제',
         },
         fortune: {
-          en: '운빨 증가',
+          en: 'Fortune',
           de: 'Glücks',
           fr: 'chance',
           ja: '運気上昇',
@@ -196,7 +196,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '운 상승',
         },
         witching: {
-          en: '형태 변화',
+          en: 'Witching',
           de: 'Wandlung',
           fr: 'mutation',
           ja: '形態変化',
@@ -204,7 +204,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '적 변형',
         },
         serenity: {
-          en: '마법 효과 해제',
+          en: 'Serenity',
           de: 'Enthexung',
           fr: 'dissipation',
           ja: '魔法効果解除',
@@ -212,7 +212,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '마법 효과 해제',
         },
         rage: {
-          en: '레이지-만티코아',
+          en: 'Rage',
           de: 'Manticoren',
           fr: 'manticore',
           ja: 'マンティコア化',
@@ -220,7 +220,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '만티코어 변신',
         },
         lust: {
-          en: '러스트-서큐버스',
+          en: 'Lust',
           de: 'Sukkuben',
           fr: 'succube',
           ja: 'サキュバス化',
@@ -228,7 +228,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '서큐버스 변신',
         },
         intuition: {
-          en: '보물 찾아줘요',
+          en: 'Intuition',
           de: 'Finders',
           fr: 'intuition',
           ja: '財宝感知',
@@ -236,7 +236,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '보물 탐지',
         },
         raising: {
-          en: '리레이즈',
+          en: 'Raising',
           de: 'Lebens',
           fr: 'résurrection',
           ja: 'リレイズ',
@@ -244,7 +244,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '리레이즈',
         },
         resolution: {
-          en: '레졸루션-쿠리부',
+          en: 'Resolution',
           de: 'Kuribu',
           fr: 'Kuribu',
           ja: 'クリブ化',
@@ -252,7 +252,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '쿠리부 변신',
         },
         frailty: {
-          en: '적 약하게',
+          en: 'Frailty',
           de: 'Feindschwächung',
           fr: 'incapacité',
           ja: '敵弱体',
@@ -260,7 +260,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '적 약화',
         },
         concealment: {
-          en: '몰래 다니기',
+          en: 'Concealment',
           de: 'Verschwindens',
           fr: 'invisibilité',
           ja: 'バニシュ',
@@ -268,7 +268,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '배니시',
         },
         petrification: {
-          en: '적을 석화',
+          en: 'Petrification',
           de: 'Feindversteinerung',
           fr: 'pétrification',
           ja: '敵石化',
@@ -288,7 +288,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '다음 층으로 갈 수 있어요',
+          en: 'Cairn of Passage activated',
           de: 'Wegleuchte aktiviert',
           cn: '转移石冢已启动',
           ko: '전송 석탑 활성화',

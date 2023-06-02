@@ -27,7 +27,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '산개 - 호밍 레이저',
+          en: 'Spread--Homing Lasers',
           de: 'Verteilen--Leitlaser',
           fr: 'Écartez-vous - Lasers guidés',
           cn: '分散--追踪激光',
@@ -48,7 +48,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '밀리 넉백',
+          en: 'Melee knockback',
           de: 'Melee Rückstoß',
           fr: 'Poussée',
           cn: '近战击退',
@@ -99,14 +99,14 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         target: {
-          en: '내게 호밍 에테롭프라즈마',
+          en: 'Homing Aetheroplasm on YOU',
           de: 'Verfolgendes Ätheroplasma auf DIR',
           fr: 'Laser + Éthéroplasma sur VOUS',
           cn: '追踪激光点名',
           ko: '에테르 폭뢰 대상자',
         },
         avoid: {
-          en: '호밍 에테롭플라즈마 피해요',
+          en: 'Avoid Homing Aetheroplasm',
           de: 'Weiche dem verfolgendem Ätheroplasma aus',
           fr: 'Évitez le laser + l\'Éthéroplasma',
           cn: '躲避追踪激光',
@@ -132,21 +132,21 @@ const triggerSet: TriggerSet<Data> = {
       run: (data) => data.boomCounter += 1,
       outputStrings: {
         boom1: {
-          en: '오브: 십자',
+          en: 'Orbs: Cardinals',
           de: 'Orbs: Kardinal',
           fr: 'Orbes : Cardinaux',
           cn: '球: 十字',
           ko: '구슬: 십자',
         },
         boom2: {
-          en: '오브: 십자 (남북먼저)',
+          en: 'Orbs: Cardinals (N/S first)',
           de: 'Orbs: Kardinal (N/S zuerst)',
           fr: 'Orbes : Cardinaux (N/S en premier)',
           cn: '球: 十字（先南/北）',
           ko: '구슬: 십자(남/북 먼저)',
         },
         boom3: {
-          en: '오브: 비스듬',
+          en: 'Orbs: Intercardinals',
           de: 'Orbs: Interkardinal',
           fr: 'Orbes : Intercardinaux',
           cn: '球: 方形',

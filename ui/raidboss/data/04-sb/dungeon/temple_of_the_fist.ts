@@ -51,7 +51,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '파랑🟦 밟아요',
+          en: 'Stand in blue',
           de: 'Im Blauen stehen',
           fr: 'Placez-vous dans le bleu',
           ja: '青色を踏む',
@@ -68,7 +68,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '빨강🟥 밟아요',
+          en: 'Stand in red',
           de: 'Im Roten stehen',
           fr: 'Placez-vous dans le rouge',
           ja: '赤色を踏む',
@@ -96,7 +96,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '안전한 곳 찾아요',
+          en: 'watch for safe',
           de: 'nach sicherer Position schauen',
           fr: 'Trouvez une zone safe',
           ja: '安置へ',
@@ -119,7 +119,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (data, matches, output) => output.text!({ player: data.ShortName(matches.target) }),
       outputStrings: {
         text: {
-          en: '힐 준비해요: ${player}',
+          en: 'Heal ${player} soon',
           de: 'Bald ${player} heilen',
           fr: 'Soignez ${player} bientôt',
           ja: 'すぐに${player}をヒール',
@@ -135,7 +135,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '떠다니는 머리 피해요',
+          en: 'Avoid floating heads',
           de: 'Weiche den fliegenden Köpfen aus',
           fr: 'Évitez les têtes flottantes',
           ja: 'ヘッドを避ける',
@@ -151,7 +151,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '마커에게서 멀어져요',
+          en: 'Away from marker',
           de: 'Weg von den Markierungen',
           fr: 'Éloignez-vous du marqueur',
           ja: 'マーカーから離れる',

@@ -26,7 +26,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         out: Outputs.out,
         interruptOrOut: {
-          en: '멀리 떨어지거나 인터럽트: ${name}',
+          en: 'Out or interrupt ${name}',
           de: 'Raus oder unterbreche ${name}',
           cn: '出去或打断 ${name}',
           ko: '밖으로 또는 ${name} 시전 끊기',
@@ -46,7 +46,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         getUnder: Outputs.getUnder,
         interruptOrUnder: {
-          en: '밑으로 들어가거나 인터럽트: ${name}',
+          en: 'Get Under or interrupt ${name}',
           de: 'Unter oder unterbreche ${name}',
           cn: '去脚下或打断 ${name}',
           ko: '밑으로 또는 ${name} 시전 끊기',
@@ -63,7 +63,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, matches, output) => output.kill!({ name: matches.name }),
       outputStrings: {
         kill: {
-          en: '죽여욧: ${name}',
+          en: 'Kill ${name}',
           de: 'Besiege ${name}',
           fr: 'Tuez ${name}',
           ja: '${name}を倒す',
@@ -83,7 +83,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, matches, output) => output.pushToBoss!({ name: matches.name }),
       outputStrings: {
         pushToBoss: {
-          en: '보스로 밀쳐욧: ${name}',
+          en: 'Push ${name} into boss',
           de: 'Stoß ${name} in den Boss',
           cn: '将 ${name} 推至BOSS',
           ko: '보스쪽으로 ${name} 밀기',

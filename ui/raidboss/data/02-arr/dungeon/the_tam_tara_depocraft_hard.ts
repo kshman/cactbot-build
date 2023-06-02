@@ -15,7 +15,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '뭉쳐요 (쫄 무시)',
+          en: 'Stack (ignore adds)',
           de: 'Sammeln (Adds ignorieren)',
           fr: 'Packez-vous: ne tuez pas les Adds',
           cn: '集合 (忽略小怪)',

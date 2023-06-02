@@ -43,7 +43,7 @@ const triggerSet: TriggerSet<Data> = {
       alarmText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '떨어져서 + 뒤돌아욧',
+          en: 'GTFO + Look Away',
           de: 'Schnell raus + weg schauen',
           cn: '快出去 + 看向其他方向',
           ko: '멀리 빠지기 + 뒤돌기',
@@ -94,7 +94,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'HP 만땅!',
+          en: 'Heal to Full',
           de: 'Voll heilen',
           cn: '奶满全员',
           ko: '체력 풀피로',

@@ -25,7 +25,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '버블 폭팔 피해요',
+          en: 'Avoid Bubble Explosions',
           de: 'Vermeide die Blasen-Explosionen',
           fr: 'Évitez les explosions des bulles',
           ja: '泡の爆発から避ける',
@@ -74,7 +74,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '꼬리 쓸기',
+          en: 'tail cleave',
           de: 'Schweif-Flächenangriff',
           fr: 'Évitez la queue',
           ja: 'しっぽ！',
@@ -97,7 +97,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '내게 도넛이!',
+          en: 'Ring on YOU',
           de: 'Ring auf DIR',
           fr: 'Anneau sur VOUS',
           ja: '自分にドーナツ範囲',
@@ -114,7 +114,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '내게 십자가!',
+          en: 'Cross on YOU',
           de: 'Kreuz auf DIR',
           fr: 'Croix sur VOUS',
           ja: '自分に十字範囲',

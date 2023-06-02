@@ -67,7 +67,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '마커 범위 확인해요',
+          en: 'Look for Evil Earth Marker',
           de: 'Schau nach den Grimm der Erde Marker',
           fr: 'Repérez une marque de Terre maléfique',
           ja: '範囲見て',
@@ -102,7 +102,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '랜드슬라이드: 정면으로',
+          en: 'Landslide: In Front',
           de: 'Armberge: Vor ihm',
           fr: 'Glissement : Devant',
           ja: 'ランスラ: 正面へ',
@@ -124,7 +124,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '랜드슬라이드: 뒤쪽 구석으로',
+          en: 'Back Corners',
           de: 'Hintere Ecken',
           fr: 'Coins arrière',
           ja: 'ランスラくるよ',
@@ -141,7 +141,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '내게 폭탄이!!!',
+          en: 'Bomb on YOU',
           de: 'Bombe auf DIR',
           fr: 'Bombe sur VOUS',
           ja: 'マーカーついた',
@@ -190,7 +190,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         hideBehindEast: {
-          en: '동쪽으로 숨어',
+          en: 'Hide Behind East',
           de: 'Im Osten vestecken',
           fr: 'Cachez-vous derrière à l\'est',
           ja: '東',
@@ -198,7 +198,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '동쪽으로',
         },
         hideBehindWest: {
-          en: '서쪽으로 숨어',
+          en: 'Hide Behind West',
           de: 'Im Westen vestecken',
           fr: 'Cachez-vous derrière à l\'ouest',
           ja: '西',
@@ -206,7 +206,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '서쪽으로',
         },
         goCardinalsFirst: {
-          en: '먼저 십자로 ㄱㄱ',
+          en: 'Go Cardinals First',
           de: 'Zuerst zu den Seiten gehen',
           fr: 'Allez aux cardinaux en premier',
           ja: 'まずは十字',
@@ -214,7 +214,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '먼저 측면으로 이동',
         },
         goCornersFirst: {
-          en: '먼저 구석으로 ㄱㄱ',
+          en: 'Go Corners First',
           de: 'Zuerst in die Ecken gehen',
           fr: 'Allez dans les coins en premier',
           ja: 'まずはコーナー',
@@ -230,7 +230,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '바퀴: 옆으로',
+          en: 'Wheels: On Sides',
           de: 'Räder: Zur Seite',
           fr: 'Roues : Sur les côtés',
           ja: '車輪: 横へ',
@@ -246,7 +246,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '탱크한테 돌진',
+          en: 'Tank Charge',
           de: 'Tank wird angefahren',
           fr: 'Charge tank',
           ja: 'タンクに突進',
@@ -274,7 +274,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '왼쪽, 그리고 오른쪽',
+          en: 'Left, Then Right',
           de: 'Links, dann Rechts',
           fr: 'À gauche, puis à droite',
           ja: '左 => 右',
@@ -290,7 +290,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '오른쪽, 그리고 왼쪽',
+          en: 'Right, Then Left',
           de: 'Rechts, dann Links',
           fr: 'À droite, puis à gauche',
           ja: '右 => 左',
@@ -306,7 +306,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '왼쪽, 그대로 왼쪽',
+          en: 'Left, Stay Left',
           de: 'Links, Links bleiben',
           fr: 'À gauche, puis restez',
           ja: 'ずっと左',
@@ -322,7 +322,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '오른쪽, 그대로 오른쪽',
+          en: 'Right, Stay Right',
           de: 'Rechts, Rechts bleiben',
           fr: 'À droite, puis restez',
           ja: 'ずっと右',
@@ -359,7 +359,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         awayFromTanks: {
-          en: '탱크랑 떨어져야함!!!',
+          en: 'Away from Tanks',
           de: 'Weg von den Tanks',
           fr: 'Éloignez-vous des tanks',
           ja: 'タンクから離れ',
@@ -378,7 +378,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '나한테 감옥',
+          en: 'Gaol on YOU',
           de: 'Gefängnis auf DIR',
           fr: 'Geôle sur VOUS',
           ja: '自分にジェイル',
@@ -400,7 +400,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '[앞][오른쪽] 부셔짐',
+          en: 'GET OFF FRONT RIGHT',
           de: 'VON VORNE RECHTS RUNTER',
           fr: 'PARTEZ DE L\'AVANT DROITE',
           ja: '右前壊れるよ',
@@ -416,7 +416,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '[뒤][오른쪽] 부셔짐',
+          en: 'GET OFF BACK RIGHT',
           de: 'VON HINTEN RECHTS RUNTER',
           fr: 'PARTEZ DE L\'ARRIÈRE DROITE',
           ja: '右後ろ壊れるよ',
@@ -432,7 +432,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '[뒤][왼쪽] 부셔짐',
+          en: 'GET OFF BACK LEFT',
           de: 'VON HINTEN LINKS RUNTER',
           fr: 'PARTEZ DE L\'ARRIÈRE GAUCHE',
           ja: '左後ろ壊れるよ',
@@ -448,7 +448,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '[앞][왼쪽] 부셔짐',
+          en: 'GET OFF FRONT LEFT',
           de: 'VON VORNE LINKS RUNTER',
           fr: 'PARTEZ DE L\'AVANT GAUCHE',
           ja: '左前壊れるよ',

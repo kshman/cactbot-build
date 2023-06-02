@@ -18,7 +18,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, matches, output) => output.kill!({ name: matches.name }),
       outputStrings: {
         kill: {
-          en: '죽여욧: ${name}',
+          en: 'Kill ${name}',
           de: 'Besiege ${name}',
           fr: 'Tuez ${name}',
           ja: '${name}を倒す',
@@ -41,7 +41,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '상자안으로',
+          en: 'Get In Box',
           de: 'Geh in die Box',
           fr: 'Allez dans la boîte',
           ja: '箱に入る',
@@ -59,7 +59,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '내게 따라오는 AOE가!',
+          en: 'Chasing AOE on YOU',
           de: 'Verfolgende AoE auf DIR',
           fr: 'Ruée sur VOUS',
           ja: '追跡AOE',

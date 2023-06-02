@@ -22,7 +22,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '아쿠아 스피어 잡아요',
+          en: 'Kill Aqua Spheres',
           de: 'Wasserkugeln zerstören',
           fr: 'Détruire les bulles d\'eau',
           ja: 'アクアスフィアを倒す',
@@ -47,7 +47,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         breathless: {
-          en: '호흡곤란: ${num}',
+          en: 'Breathless: ${num}',
           de: 'Atemnot: ${num}',
           fr: 'Suffocation : ${num}',
           ja: '呼吸困難 :${num}',
@@ -55,7 +55,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '호흡곤란: ${num}',
         },
         getInBubble: {
-          en: '버블 안으로',
+          en: 'Get In Bubble',
           de: 'Geh in die Blase',
           fr: 'Allez dans une bulle',
           ja: '泡に入る',
@@ -71,7 +71,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '안전한 곳으로',
+          en: 'Move To Safe Spot',
           de: 'Zur sicheren Zone',
           fr: 'Allez en zone safe',
           ja: '安置へ',
@@ -93,7 +93,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '하시말 찾고; 🡸왼쪽으로 피해요',
+          en: 'Find Hashmal; Dodge Left',
           de: 'Finde Hashmallim; Weiche nach Links aus',
           fr: 'Trouvez Hashmal, Esquivez à gauche',
           ja: 'ボスに向かって左に',
@@ -109,7 +109,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '하시말 찾고; 오른쪽🡺으로 피해요',
+          en: 'Find Hashmal; Dodge Right',
           de: 'Finde Hashmallim; Weiche nach Rechts aus',
           fr: 'Trouvez Hashmal, Esquivez à droite',
           ja: 'ボスに向かって右に',
@@ -146,7 +146,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '도망가요',
+          en: 'Move Away',
           de: 'Weg da',
           fr: 'Éloignez-vous',
           ja: 'ハンマーから離れる',
@@ -163,7 +163,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '골렘 잡아요',
+          en: 'Kill Golems',
           de: 'Golems töten',
           fr: 'Tuez les golems',
           ja: 'ゴーレムを倒す',
@@ -207,7 +207,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '트램플',
+          en: 'Trample',
           de: 'Zertrampeln',
           fr: 'Fauchage',
           ja: '蹂躙',
@@ -235,7 +235,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.getTowers!(),
       outputStrings: {
         getTowers: {
-          en: '타워 밟아요',
+          en: 'Get Towers',
           de: 'Türme nehmen',
           fr: 'Prenez les tours',
           ja: '塔を踏む',

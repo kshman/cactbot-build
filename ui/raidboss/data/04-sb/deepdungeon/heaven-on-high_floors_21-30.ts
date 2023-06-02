@@ -36,7 +36,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '구름 아래로 가욧',
+          en: 'Stand under a cloud',
           de: 'Steh unter einer Wolke',
           cn: '站在一朵云下',
           ko: '구름 아래에 서기',

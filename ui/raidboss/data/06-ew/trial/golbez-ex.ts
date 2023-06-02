@@ -29,6 +29,7 @@ export interface Data extends RaidbossData {
   prsShadow?: AzdajaShadow;
   prsFlide?: number;
   //
+  galeSphereShadows: ('n' | 'e' | 's' | 'w')[];
   galeSphereCasts: {
     x: number;
     y: number;
@@ -79,16 +80,27 @@ const triggerSet: TriggerSet<Data> = {
     return {
       terrastormCount: 0,
       terrastormCombatantDirs: [],
+      galeSphereShadows: [],
       galeSphereCasts: [],
       arcticAssaultMapEffects: [],
     };
   },
   timelineTriggers: [
     {
-      id: 'GolbezEx Flames of Eventide',
+      id: 'GolbezEx Flames of Eventide 1',
       regex: /Flames of Eventide 1/,
       beforeSeconds: 5,
-      response: Responses.tankBusterSwap(),
+      response: Responses.tankCleave(),
+    },
+    {
+      id: 'GolbezEx Flames of Eventide Swap',
+      regex: /Flames of Eventide 1/,
+      beforeSeconds: 0,
+      condition: (data) => data.role === 'tank',
+      alertText: (_data, _matches, output) => output.text!(),
+      outputStrings: {
+        text: Outputs.tankSwap,
+      },
     },
   ],
   triggers: [
@@ -197,12 +209,7 @@ const triggerSet: TriggerSet<Data> = {
       id: 'GolbezEx Binding Cold',
       type: 'StartsUsing',
       netRegex: { id: '84B3', source: 'Golbez', capture: false },
-       alertText: (_data, _matches, output) => output.text!(),
-      outputStrings: {
-        text: {
-          en: '도트 달린 전체 공격',
-        },
-      },
+      response: Responses.bleedAoe(),
     },
     {
       id: 'GolbezEx Void Meteor',
@@ -220,7 +227,7 @@ const triggerSet: TriggerSet<Data> = {
       id: 'GolbezEx Abyssal Quasar',
       type: 'StartsUsing',
       netRegex: { id: '84AB', source: 'Golbez', capture: false },
-      suppressSeconds: 2,
+      suppressSeconds: 3,
       alertText: (_data, _matches, output) => output.partnerStack!(),
       outputStrings: {
         partnerStack: {
@@ -253,6 +260,7 @@ const triggerSet: TriggerSet<Data> = {
       id: 'GolbezEx Eventide Fall',
       type: 'StartsUsing',
       netRegex: { id: '8485', source: 'Golbez', capture: false },
+      suppressSeconds: 3,
       alertText: (_data, _matches, output) => output.healerGroups!(),
       outputStrings: {
         healerGroups: Outputs.healerGroups,
@@ -262,7 +270,7 @@ const triggerSet: TriggerSet<Data> = {
       id: 'GolbezEx Void Tornado',
       type: 'StartsUsing',
       netRegex: { id: '845D', source: 'Golbez', capture: false },
-      suppressSeconds: 2,
+      suppressSeconds: 3,
       alertText: (_data, _matches, output) => output.healerGroups!(),
       outputStrings: {
         healerGroups: Outputs.healerGroups,
@@ -272,7 +280,7 @@ const triggerSet: TriggerSet<Data> = {
       id: 'GolbezEx Void Aero III',
       type: 'StartsUsing',
       netRegex: { id: '845C', source: 'Golbez', capture: false },
-      suppressSeconds: 2,
+      suppressSeconds: 3,
       alertText: (_data, _matches, output) => output.partnerStack!(),
       outputStrings: {
         partnerStack: {
@@ -289,7 +297,7 @@ const triggerSet: TriggerSet<Data> = {
       id: 'GolbezEx Void Blizzard III',
       type: 'StartsUsing',
       netRegex: { id: '8462', source: 'Golbez', capture: false },
-      suppressSeconds: 2,
+      suppressSeconds: 3,
       alertText: (_data, _matches, output) => output.healerGroups!(),
       outputStrings: {
         healerGroups: Outputs.healerGroups,
@@ -314,30 +322,29 @@ const triggerSet: TriggerSet<Data> = {
     },
     {
       id: 'GolbezEx Gale Sphere Directions',
-      type: 'StartsUsing',
-      netRegex: { id: '845[89AB]', source: 'Gale Sphere', capture: false },
-      condition: (data) => data.galeSphereCasts.length === 16,
-      infoText: (data, _matches, output) => {
-        const order: (GaleDirections)[] = [];
+      type: 'Ability',
+      netRegex: { id: '84(?:4F|50|51|52)', source: 'Golbez\'s Shadow', capture: true },
+      infoText: (data, matches, output) => {
+        switch (matches.id) {
+          case '844F':
+            data.galeSphereShadows.push('n');
+            break;
+          case '8450':
+            data.galeSphereShadows.push('e');
+            break;
+          case '8451':
+            data.galeSphereShadows.push('w');
+            break;
+          case '8452':
+            data.galeSphereShadows.push('s');
+            break;
+        }
 
-        data.galeSphereCasts.forEach((sphere) => {
-          let dir: GaleDirections;
-          // x = 115.0 for north, 85.0 for south, etc
-          if (sphere.x > 113)
-            dir = 'e';
-          else if (sphere.y > 113)
-            dir = 's';
-          else if (sphere.x < 87)
-            dir = 'w';
-          // (sphere.y < 87)
-          else
-            dir = 'n';
+        if (data.galeSphereShadows.length < 4)
+          return;
 
-          if (!order.includes(dir))
-            order.push(dir);
-        });
-
-        const [dir1, dir2, dir3, dir4] = order;
+        const [dir1, dir2, dir3, dir4] = data.galeSphereShadows;
+        data.galeSphereShadows = [];
 
         return output.clones!({
           dir1: output[dir1 ?? 'unknown']!(),
@@ -353,7 +360,7 @@ const triggerSet: TriggerSet<Data> = {
         w: Outputs.dirW,
         unknown: Outputs.unknown,
         clones: {
-          en: '등장순서: ${dir1} 🡺 ${dir2} 🡺 ${dir3} 🡺 ${dir4}',
+          en: '${dir1}${dir2}${dir3}${dir4}',
         },
       },
     },
@@ -578,7 +585,7 @@ const triggerSet: TriggerSet<Data> = {
           en: '뒤로 갔다 🡺 앞으로',
         },
         pin: {
-          en: '뒤에서 🡺 안쪽+앞으로 🡺 흩어져요',
+          en: '뒤에서 🡺 안쪽+앞으로 🡺 프로틴',
         },
         pout: {
           en: '뒤에서 🡺 밖으로+앞으로 🡺 힐러랑 뭉쳐요',
@@ -589,7 +596,7 @@ const triggerSet: TriggerSet<Data> = {
       id: '골베익스: Void Stardust',
       type: 'StartsUsing',
       netRegex: { id: '84A4', source: 'Golbez', capture: false },
-      infoText: (_data, _matches, output) => output.text!(),
+      alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
           en: '돌 떨어져요',

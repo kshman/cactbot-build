@@ -569,16 +569,7 @@ const triggerSet: TriggerSet<Data> = {
       id: 'ASS Total Wash',
       type: 'StartsUsing',
       netRegex: { id: '7750', source: 'Silkie', capture: false },
-      infoText: (_data, _matches, output) => output.text!(),
-      outputStrings: {
-        text: {
-          en: '전체 공격 + 출혈',
-          de: 'AoE + Blutung',
-          fr: 'AoE + Saignement',
-          ja: '全体攻撃 + 出血',
-          ko: '전체 공격 + 도트',
-        },
-      },
+      response: Responses.bleedAoe(),
     },
     {
       id: 'ASS Fresh Puff 2 Bait', // 4 puffs on cardinals or intercardinals with tethers
@@ -878,16 +869,7 @@ const triggerSet: TriggerSet<Data> = {
       id: 'ASS Infernal Pain',
       type: 'StartsUsing',
       netRegex: { id: '7969', source: 'Sil\'dihn Dullahan', capture: false },
-      infoText: (_data, _matches, output) => output.text!(),
-      outputStrings: {
-        text: {
-          en: '전체 공격 + 출혈',
-          de: 'AoE + Blutung',
-          fr: 'AoE + Saignement',
-          ja: '全体攻撃 + 出血',
-          ko: '전체 공격 + 도트',
-        },
-      },
+      response: Responses.bleedAoe(),
     },
     {
       id: 'ASS Blighted Gloom',

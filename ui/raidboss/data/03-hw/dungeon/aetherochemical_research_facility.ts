@@ -81,7 +81,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '깜장 포탈로',
+          en: 'Stand in dark portal',
           de: 'Im dunklen Portal stehen',
           fr: 'Placez-vous dans un portail noir',
           ja: '黒い玉に入る',
@@ -98,7 +98,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '내 오브는 피하고, 남의 오브는 터뜨리고',
+          en: 'Avoid your orb--pop others\'',
           de: 'Weiche deinem Orb aus - löse die Orbs der anderen aus',
           fr: 'Évitez votre orbe, éclatez les autres',
           ja: '自分の玉を避け、他人の玉を砕く',
