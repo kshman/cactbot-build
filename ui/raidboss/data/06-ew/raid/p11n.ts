@@ -27,9 +27,10 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '길다란 클레브 -> 안으로',
+          en: '가운데 장판 -> 안으로',
           de: 'Linien AoE -> Rein',
           fr: 'AoE en ligne -> Intérieur',
+          ko: '직선 장판 -> 안으로',
         },
       },
     },
@@ -40,7 +41,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '길다란 클레브 -> 밖으로',
+          en: '가운데 장판 -> 밖으로',
           de: 'Linien AoE -> Raus',
           fr: 'AoE en ligne -> Extérieur',
           ja: '直線AoE -> 離れる',
@@ -57,9 +58,10 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '밝은 장판으로',
+          en: '노란 장판으로',
           de: 'Geh in die Licht-Fläche',
           fr: 'Allez dans la flaque de lumière',
+          ko: '빛 장판 안으로',
         },
       },
     },
@@ -71,9 +73,10 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '어두운 장판으로',
+          en: '보라 장판으로',
           de: 'Geh in die Dunkel-Fläche',
           fr: 'Allez dans la flaque sombre',
+          ko: '어둠 장판 안으로',
         },
       },
     },
@@ -84,9 +87,10 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '장판 두번 깔려요',
+          en: '장판 두번 깔아요',
           de: 'Köder Fläche x2',
           fr: 'Déposez les flaques x2',
+          ko: '장판 유도 x2',
         },
       },
     },
@@ -100,6 +104,7 @@ const triggerSet: TriggerSet<Data> = {
           en: '넉백 -> 안으로',
           de: 'Rückstoß -> geh rein',
           fr: 'Poussée -> Intérieur',
+          ko: '넉백 -> 안으로',
         },
       },
     },
@@ -113,6 +118,7 @@ const triggerSet: TriggerSet<Data> = {
           en: '넉백 -> 그대로 밖에서',
           de: 'Rückstoß -> bleib außen',
           fr: 'Poussée -> Restez à l\'extérieur',
+          ko: '넉백 -> 바깥에 있기',
         },
       },
     },
@@ -156,11 +162,13 @@ const triggerSet: TriggerSet<Data> = {
           en: '클레브: ${target} -> 안으로',
           de: 'Cleave auf ${target} -> geh Rein',
           fr: 'Cleave sur ${target} -> Intérieur',
+          ko: '"${target}"에게 광역기 -> 안으로',
         },
         cleaveOnYou: {
           en: '내게 클레브 -> 그대로 안으로',
           de: 'Cleave auf DIR -> bleib drin',
           fr: 'Cleave sur VOUS -> Restez à l\'intérieur',
+          ko: '광역기 대상자 -> 안에 있기',
         },
       },
     },
@@ -174,6 +182,7 @@ const triggerSet: TriggerSet<Data> = {
           en: '뭉쳐요: ${target} -> 밖으로',
           de: 'Auf ${target} Sammeln -> geh raus',
           fr: 'Package sur ${target} -> Extérieur',
+          ko: '"${target}" 쉐어 -> 밖으로',
         },
       },
     },
@@ -197,9 +206,10 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '길다란 클레브 -> 어두운 쪽으로',
+          en: '가운데 장판 -> 보라 쪽으로',
           de: 'Linien AoE -> Rein auf dunkle Adds',
           fr: 'AoE en ligne -> Intérieur sur les adds sombres',
+          ko: '직선 장판 -> 어두운 장판 피하기',
         },
       },
     },

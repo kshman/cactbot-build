@@ -6,6 +6,8 @@ import { NetMatches } from '../../../../../types/net_matches';
 import { TriggerSet } from '../../../../../types/trigger';
 
 export interface Data extends RaidbossData {
+  prsSoul?: number;
+  //
   decOffset?: number;
   dividingWingsTethers: string[];
   dividingWingsStacks: string[];
@@ -70,7 +72,27 @@ const triggerSet: TriggerSet<Data> = {
       type: 'HeadMarker',
       netRegex: {},
       condition: (data, matches) => getHeadmarkerId(data, matches) === headmarkers.soulGrasp,
+      /*
       response: Responses.sharedTankBuster(),
+      */
+      response: (data, _matches, output) => {
+        // cactbot-builtin-response
+        output.responseOutputStrings = {
+          shared: Outputs.sharedTankbuster,
+          avoid: Outputs.avoidTankCleave,
+          mesg: {
+            en: '${num}번째 둘이서 버스터',
+          },
+        };
+
+        data.prsSoul = (data.prsSoul ?? 0) + 1;
+
+        if (data.role === 'tank')
+          return { alertText: output.mesg!({ num: data.prsSoul }) };
+        if (data.role === 'healer')
+          return { alertText: output.shared!() };
+        return { infoText: output.avoid!() };
+      },
     },
     {
       id: 'P10S Pandaemon\'s Holy',
@@ -98,7 +120,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         soak: {
-          en: '탱크가 타워 밟아요',
+          en: '타워 밟아요',
           de: 'Türme nehmen',
           fr: 'Prenez une tour',
         },
@@ -146,6 +168,7 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: '줄 끊어요',
           de: 'Verbindung brechen',
+          fr: 'Cassez les liens',
         },
       },
     },
@@ -183,7 +206,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         text: {
-          en: '뭉쳐요',
+          en: 'Stack',
           de: 'Sammeln',
         },
       },
@@ -204,8 +227,9 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           // TODO: should we say "on posts" or "on back wall" based on count?
-          en: '거미줄 겹쳐요',
+          en: '거미줄 다리위에 마지막 이별을',
           de: 'Netze überlappen',
+          fr: 'Superposez les toiles',
         },
       },
     },
@@ -228,8 +252,9 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '흩어져요 (거미줄 안겹치게)',
+          en: '흩어져요 (거미줄 바닥)',
           de: 'Für Netze verteilen',
+          fr: 'Écartez-vous pour les toiles',
         },
       },
     },
@@ -291,7 +316,7 @@ const triggerSet: TriggerSet<Data> = {
       id: 'P10S Dueodaemoniac Bonds Future',
       type: 'GainsEffect',
       netRegex: { effectId: 'DDF' },
-      durationSeconds: 5,
+      durationSeconds: 7,
       suppressSeconds: 5,
       infoText: (data, matches, output) => {
         if (data.daemonicBondsTime === undefined) {
@@ -310,12 +335,14 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         spreadThenPartners: {
-          en: '(흩어졌다 => 둘이서, 나중에)',
+          en: '(예고: 흩어졌다 => 둘이서)',
           de: '(Verteilen => Partner, für später)',
+          fr: '(Écartez-vous => Partenaires, pour après)',
         },
         partnersThenSpread: {
-          en: '(둘이었다 => 흩어져요, 나중에)',
+          en: '(예고: 둘이었다 => 흩어져요)',
           de: '(Partner => Verteilen, für später)',
+          fr: '(Partenaires => Écartez-vous, pour après)',
         },
       },
     },
@@ -323,7 +350,7 @@ const triggerSet: TriggerSet<Data> = {
       id: 'P10S TetraDaemoniac Bonds Future',
       type: 'GainsEffect',
       netRegex: { effectId: 'E70' },
-      durationSeconds: 5,
+      durationSeconds: 7,
       suppressSeconds: 5,
       infoText: (data, matches, output) => {
         if (data.daemonicBondsTime === undefined) {
@@ -342,17 +369,19 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         spreadThenStack: {
-          en: '(흩어졌다 => TH/DPS 따로 뭉쳐요, 나중에)',
+          en: '(예고: 흩어졌다 => TH/DPS 따로 뭉쳐요)',
           de: '(Verteilen => Rollengruppe, für später)',
+          fr: '(Écartez-vous => Package par rôle, pour après)',
         },
         stackThenSpread: {
-          en: '(TH/DPS 따로 뭉쳤다 => 흩어져요, 나중에)',
+          en: '(예고: TH/DPS 따로 뭉쳤다 => 흩어져요)',
           de: '(Rollengruppe => Verteilen, für später)',
+          fr: '(Package par rôle => Écartez-vous, pour après)',
         },
       },
     },
     {
-      id: 'P10S Daemonic Bonds First',
+      id: 'P10S Daemoniac Bonds First',
       type: 'GainsEffect',
       netRegex: { effectId: 'DDE' },
       delaySeconds: (_data, matches) => parseFloat(matches.duration) - 5,
@@ -369,10 +398,12 @@ const triggerSet: TriggerSet<Data> = {
         spreadThenStack: {
           en: '흩어졌다 => TH/DPS 따로 뭉쳐요',
           de: 'Verteilen => Rollengruppe',
+          fr: 'Écartez-vous => Package par rôle',
         },
         spreadThenPartners: {
           en: '흩어졌다 => 둘이 뭉쳐요',
           de: 'Verteilen => Partner',
+          fr: 'Écartez-vous => Partenaires',
         },
       },
     },
@@ -392,10 +423,12 @@ const triggerSet: TriggerSet<Data> = {
         partnersThenStack: {
           en: '둘이 뭉쳤다 => TH/DPS 따로 뭉쳐요',
           de: 'Partner => Rollengruppe',
+          fr: 'Partenaires => Package par rôle',
         },
         partnersThenSpread: {
           en: '둘이 뭉쳤다 => 흩어져요',
           de: 'Partner => Verteilen',
+          fr: 'Partenaires => Écartez-vous',
         },
       },
     },
@@ -415,10 +448,12 @@ const triggerSet: TriggerSet<Data> = {
         stackThenPartners: {
           en: 'TH/DPS 따로 뭉쳤다 => 둘이 뭉쳐요',
           de: 'Rollengruppe => Partner',
+          fr: 'Package par rôle => Partenaires',
         },
         stackThenSpread: {
           en: 'TH/DPS 따로 뭉쳤다 => 흩어져요',
           de: 'Rollengruppe => Verteilen',
+          fr: 'Package par rôle => Écartez-vous',
         },
       },
     },
@@ -445,10 +480,12 @@ const triggerSet: TriggerSet<Data> = {
         partners: {
           en: '둘이 뭉쳐요',
           de: 'Partner',
+          fr: 'Partenaires',
         },
         stack: {
           en: 'TH/DPS 따로 뭉쳐요',
           de: 'Rollengruppe',
+          fr: 'Package par rôle',
         },
       },
     },

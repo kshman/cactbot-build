@@ -7,7 +7,7 @@ export type Data = OopsyData;
 // TODO: non-tanks in Soul Grasp 82A0
 // TODO: take two TetraDaemoniac Bonds stacks 87AE
 // TODO: not 4 people in TetraDaemoniac Bonds stacks 87AE
-// TODO: not 2 people in Duod©°moniac Bonds 82A3
+// TODO: not 2 people in Duod√¶moniac Bonds 82A3
 // TODO: not 3 people in Steel Web 827F
 // TODO: towers exploding (person missing the tower 8288 damage from it)
 // TODO: take two meltdown laser 87B1 (or laser + stack 829E)
@@ -42,7 +42,7 @@ const triggerSet: OopsyTriggerSet<Data> = {
     'P10S Wicked Step 2': '829B', // first wicked step tower
   },
   soloFail: {
-    'P10S Duod©°moniac Bonds': '82A3', // partners
+    'P10S Duod√¶moniac Bonds': '82A3', // partners
   },
 };
 

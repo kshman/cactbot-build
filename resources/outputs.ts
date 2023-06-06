@@ -38,7 +38,7 @@ export default {
     ko: '강한 전체 공격!',
   },
   bleedAoe: {
-    en: '전체 공 + 출혈',
+    en: '전체 공격 + 출혈',
     de: 'AoE + Blutung',
     fr: 'AoE + Saignement',
     ja: '全体攻撃 + 出血',
