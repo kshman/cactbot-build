@@ -847,15 +847,27 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         frontLeft: {
           en: '앞 + 왼쪽',
+          de: 'Vorne Links',
+          cn: '左前',
+          ko: '앞 왼쪽',
         },
         frontRight: {
           en: '앞 + 오른쪽',
+          de: 'Vorne Rechts',
+          cn: '右前',
+          ko: '앞 오른쪽',
         },
         backLeft: {
           en: '뒤 + 왼쪽',
+          de: 'Hinten Links',
+          cn: '左后',
+          ko: '뒤 왼쪽',
         },
         backRight: {
           en: '뒤 + 오른쪽',
+          de: 'Hinten Rechts',
+          cn: '右后',
+          ko: '뒤 오른쪽',
         },
       },
     },

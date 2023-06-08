@@ -1,3 +1,4 @@
+import Conditions from '../../../../../resources/conditions';
 import Outputs from '../../../../../resources/outputs';
 import ZoneId from '../../../../../resources/zone_id';
 import { RaidbossData } from '../../../../../types/data';
@@ -49,7 +50,19 @@ const headmarkers = {
   chains: '0061',
 } as const;
 
-const wingIds: string[] = Object.values(wings);
+const limitCutMap: { [id: string]: number } = {
+  [headmarkers.limitCut1]: 1,
+  [headmarkers.limitCut2]: 2,
+  [headmarkers.limitCut3]: 3,
+  [headmarkers.limitCut4]: 4,
+  [headmarkers.limitCut5]: 5,
+  [headmarkers.limitCut6]: 6,
+  [headmarkers.limitCut7]: 7,
+  [headmarkers.limitCut8]: 8,
+} as const;
+
+const limitCutIds: readonly string[] = Object.keys(limitCutMap);
+const wingIds: readonly string[] = Object.values(wings);
 
 const getHeadmarkerId = (data: Data, matches: NetMatches['HeadMarker']) => {
   if (data.decOffset === undefined) {
@@ -104,6 +117,7 @@ const triggerSet: TriggerSet<Data> = {
         data.expectedFirstHeadmarker = first;
       },
     },
+    // --------------------- Phase 1 ------------------------
     {
       id: 'P12S First Wing',
       type: 'StartsUsing',
@@ -260,8 +274,74 @@ const triggerSet: TriggerSet<Data> = {
         },
       },
     },
+    {
+      id: 'P12S Limit Cut',
+      type: 'HeadMarker',
+      netRegex: {},
+      condition: Conditions.targetIsYou(),
+      durationSeconds: 20,
+      alertText: (data, matches, output) => {
+        const id = getHeadmarkerId(data, matches);
+        if (!limitCutIds.includes(id))
+          return;
+        const num = limitCutMap[id];
+        if (num === undefined)
+          return;
+        return output.text!({ num: num });
+      },
+      outputStrings: {
+        text: {
+          en: '${num}',
+          de: '${num}',
+          fr: '${num}',
+          ja: '${num}',
+          cn: '${num}',
+          ko: '${num}',
+        },
+      },
+    },
+    // --------------------- Phase 2 ------------------------
+    {
+      id: 'P12S Geocentrism Vertical',
+      type: 'StartsUsing',
+      netRegex: { id: '8329', source: 'Pallas Athena', capture: false },
+      alertText: (_data, _matches, output) => output.text!(),
+      outputStrings: {
+        text: 'Vertical',
+      },
+    },
+    {
+      id: 'P12S Geocentrism Circle',
+      type: 'StartsUsing',
+      netRegex: { id: '832A', source: 'Pallas Athena', capture: false },
+      alertText: (_data, _matches, output) => output.text!(),
+      outputStrings: {
+        text: 'Inny Spinny',
+      },
+    },
+    {
+      id: 'P12S Geocentrism Horizontal',
+      type: 'StartsUsing',
+      netRegex: { id: '832B', source: 'Pallas Athena', capture: false },
+      alertText: (_data, _matches, output) => output.text!(),
+      outputStrings: {
+        text: 'Horizontal',
+      },
+    },
   ],
   timelineReplace: [
+    {
+      'locale': 'en',
+      'replaceSync': {
+        'Astral Glow/Umbral Glow': 'Astral/Umbral Glow',
+        'Astral Advance/Umbral Advance': 'Astral/Umbral Advance',
+        'Superchain Coil/Superchain Burst': 'Superchain Coil/Burst',
+        'Apodialogos/Peridialogos': 'Apodia/Peridia',
+        'Theos\'s Saltire/Theos\'s Cross': 'Saltire/Cross',
+        'Astral Impact/Umbral Impact': 'Astral/Umbral Impact',
+        'Astral Advent/Umbral Advent': 'Astral/Umbral Advent',
+      },
+    },
     {
       'locale': 'de',
       'missingTranslations': true,
@@ -273,14 +353,14 @@ const triggerSet: TriggerSet<Data> = {
       'locale': 'fr',
       'missingTranslations': true,
       'replaceSync': {
-        'Athena': 'Athena',
+        'Athena': 'AthÃ©na',
       },
     },
     {
       'locale': 'ja',
       'missingTranslations': true,
       'replaceSync': {
-        'Athena': '«¢«Æ«Ê',
+        'Athena': 'ã‚¢ãƒ†ãƒŠ',
       },
     },
   ],

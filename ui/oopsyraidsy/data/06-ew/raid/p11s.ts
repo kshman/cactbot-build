@@ -72,11 +72,11 @@ const triggerSet: OopsyTriggerSet<Data> = {
           name: matches.target,
           text: {
             en: 'Knocked into wall',
-            de: 'Rucksto©¬ in die Wand',
-            fr: 'Frappe(e) dans le mur',
-            ja: 'ÛúªØ«Î«Ã«¯«Ğ«Ã«¯',
-            cn: '?÷Üò¸?',
-            ko: '³Ë¹é',
+            de: 'RÃ¼ckstoÃŸ in die Wand',
+            fr: 'FrappÃ©(e) dans le mur',
+            ja: 'å£ã¸ãƒãƒƒã‚¯ãƒãƒƒã‚¯',
+            cn: 'å‡»é€€è‡³å¢™',
+            ko: 'ë„‰ë°±',
           },
         };
       },
