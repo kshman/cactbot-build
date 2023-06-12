@@ -27,7 +27,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '클라우드 게더 포인트가 있어요!',
+          en: 'Found clouded gather point',
           de: 'Verhüllte Sammlerstelle gefunden',
           fr: 'Point de récolte évanescent détecté',
           ja: '幻の採集場探したよ！',
@@ -43,7 +43,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '채팅 좌표를 봐보세요',
+          en: 'Check coordinate on chat',
           de: 'Überprüfe die Koordinaten im Chat',
           fr: 'Vérifier les coordonnées sur le Tchat',
           ja: 'チャットに座標を確認',

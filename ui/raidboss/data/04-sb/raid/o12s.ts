@@ -42,7 +42,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         knockback: Outputs.knockback,
         knockbackAndAvoid: {
-          en: 'F가 넉백 + M는 피해요',
+          en: 'Knockback F + Avoid M',
           de: 'Rückstoß W + Weiche M aus',
           fr: 'Poussée F + Évitez M',
           ja: 'Fのノックバック + Mに避ける',
@@ -88,7 +88,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         text: {
-          en: '뭉치면 안돼욧!',
+          en: 'Don\'t Stack!',
           de: 'Nicht stacken!',
           fr: 'Ne vous packez pas !',
           ja: 'スタックするな！',
@@ -122,7 +122,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '뒤에 있다 => 흩어져요',
+          en: 'Behind => Spread',
           de: 'Hinter => Verteilen',
           fr: 'Derrière => Dispersez-vous',
           ja: '後ろ -> 散開',
@@ -150,7 +150,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '보스를 서로 멀리',
+          en: 'Move Bosses Apart',
           de: 'Bosse auseinander ziehen',
           fr: 'Déplacez les boss séparément',
           ja: 'ボスを離して',
@@ -166,7 +166,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '보스를 함께 뭉쳐요',
+          en: 'Move Bosses Together',
           de: 'Bosse zusammenziehen',
           fr: 'Déplacez les boss ensembles',
           ja: 'ボスを重ねて',
@@ -217,7 +217,7 @@ const triggerSet: TriggerSet<Data> = {
       run: (data) => delete data.weaponPhase,
       outputStrings: {
         text: {
-          en: '보스를 한가운데로, 그리고 눈쪽으로',
+          en: 'Bring Bosses Middle, Face Eye',
           de: 'Zieh Bosse zur Mitte, zum Auge drehen',
           fr: 'Placez les boss au milieu, face à l\'œil',
           ja: 'ボスを中央に、目を見る',
@@ -235,7 +235,7 @@ const triggerSet: TriggerSet<Data> = {
       run: (data) => data.weaponPhase = 'blades',
       outputStrings: {
         text: {
-          en: '한가운데로 (블레이드)',
+          en: 'Get Middle (Blades)',
           de: 'Zur Mitte (Schwerter)',
           fr: 'Allez au milieu (Lames)',
           ja: '中へ (剣)',
@@ -252,7 +252,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '비스듬히 + 뭉쳐요',
+          en: 'Intercards + Stack',
           de: 'Interkardinal + Sammeln',
           fr: 'Intercardinal + Package',
           ja: '斜め + 頭割り',
@@ -269,7 +269,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '뒤에 있다 => 밖으로 + 흩어져요',
+          en: 'Behind => Out + Spread',
           de: 'Hinter => Raus + Verteilen',
           fr: 'Derrière => Extérieur + Dispersion',
           ja: '後ろ => 外へ + 散開',
@@ -287,7 +287,7 @@ const triggerSet: TriggerSet<Data> = {
       run: (data) => data.weaponPhase = 'shield',
       outputStrings: {
         text: {
-          en: '비스듬히 + 흩어져요 (방패)',
+          en: 'Intercards + Spread (Shield)',
           de: 'Interkardinal + Verteilen (Schild)',
           fr: 'Intercardinal + Dispersion (Bouclier)',
           ja: '斜め + 散開 (盾)',
@@ -307,7 +307,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '흩어졌다 => M 따라가요',
+          en: 'Spread => Follow M',
           de: 'Verteilen => Folge M',
           fr: 'Dispersion => Suivez M',
           ja: '散開 -> Mを追う',
@@ -326,7 +326,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'M에게서 멀어져요',
+          en: 'Away from M',
           de: 'Weg von M',
           fr: 'Éloignez-vous de M',
           ja: 'Mから離れる',
@@ -351,7 +351,7 @@ const triggerSet: TriggerSet<Data> = {
         // cactbot-builtin-response
         output.responseOutputStrings = {
           square: {
-            en: '#${num} ■',
+            en: '#${num} Square',
             de: '#${num} Viereck',
             fr: '#${num} Carré',
             ja: '#${num} 四角',
@@ -359,7 +359,7 @@ const triggerSet: TriggerSet<Data> = {
             ko: '#${num} 짝수',
           },
           triangle: {
-            en: '#${num} ▲',
+            en: '#${num} Triangle',
             de: '#${num} Dreieck',
             fr: '#${num} Triangle',
             ja: '#${num} 三角',
@@ -394,7 +394,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '그룹으로 뭉쳐요',
+          en: 'Stack Groups',
           de: 'Gruppen-Sammeln',
           fr: 'Package en groupes',
           ja: '組み分け頭割り',
@@ -418,7 +418,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '내게 화살표',
+          en: 'Arrow on YOU',
           de: 'Pfeil auf DIR',
           fr: 'Flèche sur VOUS',
           ja: '自分にアロー',
@@ -435,7 +435,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '오메가M 공격해요',
+          en: 'Attack Omega-M',
           de: 'Omega-M angreifen',
           fr: 'Attaquez Oméga-M',
           ja: 'Mを攻撃',
@@ -452,7 +452,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '오메가F 공격해요',
+          en: 'Attack Omega-F',
           de: 'Omega-W angreifen',
           fr: 'Attaquez Oméga-F',
           ja: 'Fを攻撃',
@@ -485,7 +485,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         monitorsLeft: {
-          en: '모니터: 🡸왼쪽',
+          en: 'Monitors Left',
           de: 'Monitore Links',
           fr: 'Moniteurs à gauche',
           ja: '波動砲 (左)',
@@ -493,7 +493,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '모니터 왼쪽',
         },
         dodgeLeft: {
-          en: '🡸왼쪽으로 피해요',
+          en: 'Dodge Left',
           de: 'Links ausweichen',
           fr: 'Évitez à gauche',
           ja: '左側に離れる',
@@ -514,7 +514,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         monitorsRight: {
-          en: '모니터: 오른쪽🡺',
+          en: 'Monitors Right',
           de: 'Monitore Rechts',
           fr: 'Moniteurs à droite',
           ja: '波動砲 (右)',
@@ -522,7 +522,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '모니터 오른쪽',
         },
         dodgeRight: {
-          en: '오른쪽🡺으로 피해요',
+          en: 'Dodge Right',
           de: 'Rechts ausweichen',
           fr: 'Évitez à droite',
           ja: '右側に離れる',
@@ -548,7 +548,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         vulnOn: {
-          en: '표적: ${player}',
+          en: 'Vuln on ${player}',
           de: 'Verwundbarkeit auf ${player}',
           fr: 'Vulnérabilité sur ${player}',
           ja: '${player}に標的',
@@ -556,7 +556,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '"${player}" 표적식별',
         },
         vulnOnYou: {
-          en: '내가 표적이라니',
+          en: 'Vuln on YOU',
           de: 'Verwundbarkeit auf DIR',
           fr: 'Vulnérabilité sur VOUS',
           ja: '自分に標的',
@@ -574,7 +574,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '붙어 끊는 줄🟢',
+          en: 'Close Tethers',
           de: 'Nahe Verbindungen',
           fr: 'Liens proches',
           ja: 'ニアー',
@@ -592,7 +592,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '떨어져 끊는 줄🔵',
+          en: 'Far Tethers',
           de: 'Entfernte Verbindungen',
           fr: 'Liens éloignés',
           ja: 'ファー',
@@ -610,7 +610,7 @@ const triggerSet: TriggerSet<Data> = {
       alarmText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '내게 🔴동그라미: 8초',
+          en: 'Defamation on YOU',
           de: 'Urteil auf DIR',
           fr: 'Médisance sur VOUS',
           ja: 'サークルついた',
@@ -627,7 +627,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '내게 🟦레이텐트: 10초',
+          en: 'Blue Marker',
           de: 'Blauer Marker',
           fr: 'Marqueur bleu',
           ja: 'レイテントついた',
@@ -645,7 +645,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '내게 💫디그레이드: 14초',
+          en: 'Rot',
           de: 'Fäulnis',
           fr: 'Pourriture',
           ja: 'デグレードついた',
@@ -691,7 +691,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         shortStackOn: {
-          en: '짧은 뭉침: ${player}',
+          en: 'Short Stack on ${player}',
           de: 'Kurzer Stack auf ${player}',
           fr: 'Marque courte sur ${player}',
           ja: '${player}に早シェア',
@@ -699,7 +699,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '"${player}" 쉐어',
         },
         shortStackOnYou: {
-          en: '내게 짧은 뭉침: 8초',
+          en: 'Short Stack on YOU',
           de: 'Kurzer Stack auf YOU',
           fr: 'Marque courte sur VOUS',
           ja: '自分に早シェア',
@@ -707,7 +707,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '8초 치명적오류:분배(쉐어)',
         },
         longStackOnYou: {
-          en: '내게 긴 뭉침: 13초',
+          en: 'Long Stack on YOU',
           de: 'Langer Stack auf YOU',
           fr: 'Marque longue sur VOUS',
           ja: '自分に遅シェア',
@@ -747,7 +747,7 @@ const triggerSet: TriggerSet<Data> = {
       run: (data) => data.calledHelloNoMarker = true,
       outputStrings: {
         text: {
-          en: '무직이예요',
+          en: 'No Marker',
           de: 'Kein Marker',
           fr: 'Aucun marqueur',
           ja: '無職',
@@ -765,7 +765,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '🔴동그라미 버리러 가요',
+          en: 'Move out for Defamation',
           de: 'Rausgehen für Urteil',
           fr: 'Sortez pour Médisance',
           ja: 'サークルを捨てる',
@@ -828,7 +828,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '뒤 + 🡸왼쪽',
+          en: 'Back Left',
           de: 'Hinten Links',
           fr: 'Derrière à gauche',
           ja: '左後ろ',
@@ -844,7 +844,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '뒤 + 오른쪽🡺',
+          en: 'Back Right',
           de: 'Hinten Rechts',
           fr: 'Derrière à droite',
           ja: '右後ろ',

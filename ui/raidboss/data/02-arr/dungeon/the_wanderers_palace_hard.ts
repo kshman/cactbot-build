@@ -24,7 +24,7 @@ const triggerSet: TriggerSet<Data> = {
         output.text!({ player: data.ShortName(matches.target) }),
       outputStrings: {
         text: {
-          en: 'HP 만땅: ${player}',
+          en: 'Heal ${player} to full',
           de: 'Heile ${player} voll',
           fr: 'Soin complet sur ${player}',
           cn: '奶满${player}',

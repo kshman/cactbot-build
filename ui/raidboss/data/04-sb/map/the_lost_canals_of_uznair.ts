@@ -8,7 +8,7 @@ import { TriggerSet } from '../../../../../types/trigger';
 
 const uznairOutputStrings = {
   spawn: {
-    en: '${name} 나타났어요!',
+    en: '${name} spawned!',
     de: '${name} erscheint!',
     cn: '已生成 ${name}!',
     ko: '${name} 등장!',

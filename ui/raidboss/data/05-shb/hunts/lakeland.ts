@@ -37,7 +37,7 @@ const triggerSet: TriggerSet<Data> = {
           stackOnPlayer: Outputs.stackOnPlayer,
           stackOnYou: Outputs.stackOnYou,
           avoidStack: {
-            en: '뭉치면 안되요',
+            en: 'Avoid Stack',
             de: 'Vermeide Sammeln',
             cn: '远离分摊',
             ko: '쉐어징 피하기',
@@ -73,7 +73,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '걸렸네, 멀리 빠져요',
+          en: 'GTFO with marker',
           de: 'Geh raus mit dem Marker',
           fr: 'Partez avec le marquage',
           ja: 'ボスから離れる',
@@ -90,7 +90,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '돌진 피해요',
+          en: 'Away from Dash',
           de: 'Weg vom Anstrum',
           cn: '躲避冲锋',
           ko: '돌진한 곳 피하기',
@@ -105,7 +105,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '오른쪽이나 뒤로',
+          en: 'Go Back/Right',
           de: 'Geh nach Hinten/Rechts',
           cn: '去背后/右侧',
           ko: '뒤/오른쪽으로',
@@ -127,7 +127,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '왼쪽이나 뒤로',
+          en: 'Go Back/Left',
           de: 'Geh nach Hinten/Links',
           cn: '去背后/左侧',
           ko: '뒤/왼쪽으로',

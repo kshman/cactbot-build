@@ -43,7 +43,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, matches, output) => output.text!({ target: matches.target }),
       outputStrings: {
         text: {
-          en: '공격 중지: ${target}',
+          en: 'Stop attacking ${target}',
           de: 'Stoppe Angriffe auf ${target}',
           cn: '停止攻击 ${target}',
           ko: '${target} 공격 중지',
@@ -60,7 +60,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '안전지대로 넉백',
+          en: 'Knockback into Safe Spot',
           de: 'Rückstoß zur sicheren Stelle',
           cn: '击退到安全区',
           ko: '안전지대로 넉백되기',

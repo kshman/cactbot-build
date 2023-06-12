@@ -67,7 +67,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         red: {
-          en: '뒤로! (빨강🔴)',
+          en: 'Get Behind (Red)',
           de: 'Geh nach Hinten (Rot)',
           fr: 'Passez derrière (Rouge)',
           ja: 'ボスの後ろに (赤)',
@@ -75,7 +75,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '뒤쪽으로 (빨강)',
         },
         white: {
-          en: '앞으로! (하양⚪)',
+          en: 'Get in Front (White)',
           de: 'Geh nach Vorne (Weiß)',
           fr: 'Allez devant (Blanc)',
           ja: 'ボスの前に (白)',
@@ -99,7 +99,7 @@ const triggerSet: TriggerSet<Data> = {
       alarmText: (_data, _matches, output) => output.cleanse!(),
       outputStrings: {
         cleanse: {
-          en: '세척 원으로 달려욧!',
+          en: 'Run to Cleanse Circle',
           de: 'Geh in die Kreise zum reinigen',
           fr: 'Allez dans un cercle de purification',
           ja: '床の光っている円範囲へ',

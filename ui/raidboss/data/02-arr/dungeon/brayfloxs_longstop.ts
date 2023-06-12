@@ -47,7 +47,7 @@ const triggerSet: TriggerSet<Data> = {
       run: (data) => data.pelicanPoisons = [],
       outputStrings: {
         esunaYourPoison: {
-          en: '내가 독! 에스나!',
+          en: 'Esuna Your Poison',
           de: 'Entferne dein Gift',
           fr: 'Purifiez-vous du poison',
           ja: '自分の毒をエスナ',
@@ -55,7 +55,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '독 에스나 하기',
         },
         esunaPoisonOn: {
-          en: '에스나: ${players}',
+          en: 'Esuna Poison on ${players}',
           de: 'Entferne Gift von ${players}',
           fr: 'Purifiez le poison sur ${players}',
           ja: '${players}の毒をエスナ',
@@ -110,7 +110,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         breakBubbleOn: {
-          en: '버블: ${player}',
+          en: 'Break Bubble on ${player}',
           de: 'Besiege die Blase von ${player}',
           fr: 'Brisez la bulle de ${player}',
           ja: '${player}の泡を破れ',
@@ -118,7 +118,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '"${player}" 물구슬 깨기',
         },
         breakYourBubble: {
-          en: '내가 버블! 공격!',
+          en: 'Break Your Bubble',
           de: 'Besiege deine Blase',
           fr: 'Brisez votre bulle',
           ja: '自分の泡を破れ',
@@ -144,7 +144,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '보스를 장판 밖으로',
+          en: 'Move Boss Out of Puddles',
           de: 'Bewege den Boss aus der Fläche',
           fr: 'Déplacez le boss hors des zones au sol',
           ja: 'ボスを円範囲の外に',
@@ -168,7 +168,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         esunaPoisonOn: {
-          en: '에스나: ${player}',
+          en: 'Esuna Poison on ${player}',
           de: 'Entferne Gift von ${player}',
           fr: 'Purifiez le poison sur ${player}',
           ja: '${player}の毒をエスナ',
@@ -176,7 +176,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '"${player}" 독 에스나',
         },
         esunaYourPoison: {
-          en: '내가 독! 에스나!',
+          en: 'Esuna Your Poison',
           de: 'Entferne dein Gift',
           fr: 'Purifiez-vous du poison',
           ja: '自分の毒をエスナ',

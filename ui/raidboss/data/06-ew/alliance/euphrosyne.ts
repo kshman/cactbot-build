@@ -847,15 +847,27 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         frontLeft: {
           en: '앞 + 왼쪽',
+          de: 'Vorne Links',
+          cn: '左前',
+          ko: '앞 왼쪽',
         },
         frontRight: {
           en: '앞 + 오른쪽',
+          de: 'Vorne Rechts',
+          cn: '右前',
+          ko: '앞 오른쪽',
         },
         backLeft: {
           en: '뒤 + 왼쪽',
+          de: 'Hinten Links',
+          cn: '左后',
+          ko: '뒤 왼쪽',
         },
         backRight: {
           en: '뒤 + 오른쪽',
+          de: 'Hinten Rechts',
+          cn: '右后',
+          ko: '뒤 오른쪽',
         },
       },
     },
@@ -1068,6 +1080,13 @@ const triggerSet: TriggerSet<Data> = {
     {
       id: 'Euphrosyne Menphina Winter Halo',
       type: 'StartsUsing',
+      // 7BC6 = no dog (7BC7 damage)
+      // 7BDB = dog cleaving right attached (7BDF damage)
+      // 7BDC = ? (probably dog cleaving left attached?)
+      // 7BE8 = dog cleaving right unattached (7BEC damage)
+      // 7BE9 = dog cleaving left unattached (7BEC damage)
+      // 7F0E = ? (probably dog cleaving right unattached?)
+      // 7F0F = dog cleaving left unattached (7BEC damage)
       netRegex: {
         id: ['7BC6', '7BE8', '7BE9', '7F0E', '7F0F', '7BDB', '7BDC'],
         source: 'Menphina',

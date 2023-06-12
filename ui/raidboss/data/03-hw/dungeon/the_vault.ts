@@ -28,7 +28,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '돌진 피해요',
+          en: 'Avoid dashes',
           de: 'Sprint ausweichen',
           fr: 'Évitez les charges',
           ja: 'ブレードを避ける',
@@ -68,7 +68,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         text: {
-          en: '힐 + 방패: ${player}',
+          en: 'Heal + shield ${player}',
           de: 'Heilung + Schild ${player}',
           fr: 'Soin + bouclier ${player}',
           ja: 'すぐに${player}をヒールする',
@@ -105,7 +105,7 @@ const triggerSet: TriggerSet<Data> = {
       alarmText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '틈새로 부터 멀어져요',
+          en: 'Away from rifts',
           de: 'Weg von de Ätherspalten',
           fr: 'Éloignez-vous des déchirures',
           ja: '裂け目から離れる',
@@ -144,7 +144,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '행진 기사들 피해요',
+          en: 'Evade marching knights',
           de: 'Marschierenden Rittern ausweichen',
           fr: 'Esquivez les chevaliers',
           ja: 'ナイトを避ける',

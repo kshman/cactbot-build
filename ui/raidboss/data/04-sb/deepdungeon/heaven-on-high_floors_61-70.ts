@@ -43,7 +43,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '바닥 피해욧',
+          en: 'Avoid Puddle',
           de: 'Flächen vermeiden',
           cn: '躲避圈圈',
           ko: '장판 피하기',
@@ -66,7 +66,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '바닥 밟아욧',
+          en: 'Get In Puddle',
           de: 'Geh in die Flächen',
           fr: 'Prenez une zone au sol',
           cn: '进入圈圈',
@@ -83,7 +83,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '바닥에서 나와욧',
+          en: 'Out of Puddle',
           de: 'Raus aus der Fläche',
           cn: '离开圈圈',
           ko: '장판 밖으로',

@@ -18,7 +18,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '동그란 플랫폼 위로',
+          en: 'Be On A Platform',
           de: 'Sei auf einer Plattform',
           fr: 'Restez sur une plateforme ',
           ja: '円形床の上へ',
@@ -51,7 +51,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '내게 슬러지 봄이!',
+          en: 'Sludge puddle on YOU',
           de: 'Schlammfläche auf DIR',
           fr: 'Zone de poison au sol sur VOUS',
           ja: '自分にスラッジボム',
@@ -81,7 +81,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '꽃 뒤로 피해요',
+          en: 'Get behind flower',
           de: 'Geh hinter die Blume',
           fr: 'Passez derrière la plante',
           ja: 'ボスの後ろへ',
@@ -110,7 +110,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '컨베이어: 골렘 줄 피해요',
+          en: 'Conveyors: Avoid Golem Lines',
           de: 'Transportbänder: Weiche den Golemlinien aus',
           fr: 'Transporteurs : Évitez les lignes des golems',
           ja: '強制移動: ゴーレムの直線を避ける',
@@ -146,7 +146,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '흩어지고 + 플랫폼에 있으면 안되요',
+          en: 'Spread + Stay Off Platforms',
           de: 'Verteilen + runter von den Plattformen',
           fr: 'Dispersion + Restez hors des platesformes',
           ja: '散開、円形床に落とさないよう',
@@ -162,7 +162,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '머드 파이를 플랫폼 위로 밀어요',
+          en: 'Push Mud Pie On Platform',
           de: 'Schiebe Schlammklumpen auf eine Plattform',
           fr: 'Poussez la Boule de boue sur la platesforme',
           ja: 'スライムを円形床に吹き飛ばす',
@@ -178,7 +178,7 @@ const triggerSet: TriggerSet<Data> = {
       alarmText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '머드 파이를 부채꼴 밖으로 밀어요',
+          en: 'Push Mud Pie Out Of Cone',
           de: 'Schiebe Schlammklumpen aus der Kegel-AoE',
           fr: 'Poussez la Boule de boue hors du cône',
           ja: 'スライムを範囲外へ吹き飛ばす',

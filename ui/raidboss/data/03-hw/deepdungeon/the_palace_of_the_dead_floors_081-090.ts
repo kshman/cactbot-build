@@ -25,7 +25,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, matches, output) => output.kill!({ name: matches.name }),
       outputStrings: {
         kill: {
-          en: '죽여요: ${name}',
+          en: 'Kill ${name}',
           de: 'Besiege ${name}',
           fr: 'Tuez ${name}',
           ja: '${name}を倒す',
@@ -45,7 +45,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, matches, output) => output.pushToBoss!({ name: matches.name }),
       outputStrings: {
         pushToBoss: {
-          en: '보스로 밀어요: ${name}',
+          en: 'Push ${name} into boss',
           de: 'Stoß ${name} in den Boss',
           cn: '将 ${name} 推至BOSS',
           ko: '보스쪽으로 ${name} 밀기',

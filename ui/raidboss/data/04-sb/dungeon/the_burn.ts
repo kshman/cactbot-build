@@ -27,7 +27,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '크리스탈 뒤로 숨어요',
+          en: 'Hide behind crystal',
           de: 'Hinter dem Kristall verstecken',
           fr: 'Cachez-vous derrière le cristal',
           ja: '水晶の後ろに',
@@ -44,7 +44,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '흩어지고 + 크리스탈 피해요',
+          en: 'Spread + Avoid Crystals',
           de: 'Verteilen + Kristall meiden',
           fr: 'Dispersez-vous + évitez les cristaux',
           ja: '散開 + 水晶を避ける',
@@ -60,7 +60,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '크리스탈 뒤로 숨어요',
+          en: 'Hide behind crystal',
           de: 'Hinter dem Kristall verstecken',
           fr: 'Cachez-vous derrière le cristal',
           ja: '水晶の後ろに',
@@ -104,7 +104,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '내게 점액이',
+          en: 'Puddle on YOU',
           de: 'Fläche auf DIR',
           fr: 'Zone au sol sur VOUS',
           ja: '自分に粘液',
@@ -122,7 +122,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '연기나는 드론이 있는 라인으로',
+          en: 'In line with smoking drone',
           de: 'In einer Linie mit der rauchenden Drohne stellen',
           fr: 'En ligne avec le drone endommagé',
           ja: 'ドローンの直線に',
@@ -139,7 +139,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '록 커터 피해요',
+          en: 'Avoid Rock Biters',
           de: 'Felsbeißer meiden',
           fr: 'Évitez le trancheur de pierre',
           ja: 'ロックカッターを避ける',
@@ -167,7 +167,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         puddleCleaveOnYou: {
-          en: '내게 늪 + 프로스트 브레스',
+          en: 'Puddle + cleave on YOU',
           de: 'Fläche + Cleave auf DIR',
           fr: 'Zone au sol + Cleave sur VOUS',
           ja: '自分に沼 + フロストブレス',
@@ -175,7 +175,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '장판 + 브레스 대상자',
         },
         avoidMarkerCone: {
-          en: '마커 피해요',
+          en: 'Avoid marker cone',
           de: 'Kegel-Markierung ausweichen',
           fr: 'Évitez le marqueur de cône',
           ja: 'マーカーを避ける',
@@ -192,7 +192,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '스타 익스플로전 유도해요',
+          en: 'Bait Star Explosions',
           de: 'Stern Explosion ködern',
           fr: 'Attirez les explosions d\'étoiles',
           ja: '放射霧を誘導',

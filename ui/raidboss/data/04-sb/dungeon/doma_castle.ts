@@ -29,7 +29,7 @@ const triggerSet: TriggerSet<Data> = {
       run: (data) => data.seenTowers = true,
       outputStrings: {
         getTower: {
-          en: '타워 밟아요',
+          en: 'Get Tower',
           de: 'Turm nehmen',
           fr: 'Prenez la tour',
           ja: '塔を踏む',
@@ -37,7 +37,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '장판 들어가기',
         },
         getTowers: {
-          en: '타워 밟아요',
+          en: 'Get Towers',
           de: 'Türme nehmen',
           fr: 'Prenez les tours',
           ja: '塔を踏む',
@@ -62,7 +62,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '마커를 멀리가서 버려요',
+          en: 'Drop Charge Away',
           de: 'Lege Markierung weit weg ab',
           fr: 'Déposez la charge au loin',
           ja: 'マーカーを外に捨てる',

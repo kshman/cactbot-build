@@ -30,7 +30,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '산개: 뭉친거 곧 폭발',
+          en: 'Spread: Stacks Explode Soon',
           de: 'Verteilen: Kristallstacks explodieren bald',
           cn: '散开: 即将爆炸',
           ko: '산개: 곧 크리스탈 폭발',
@@ -45,7 +45,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (data, matches, output) => output.text!({ player: data.ShortName(matches.target) }),
       outputStrings: {
         text: {
-          en: 'HP 만땅: ${player}',
+          en: 'Heal ${player} to full',
           de: 'Heile ${player} voll',
           fr: 'Soin complet sur ${player}',
           cn: '奶满${player}',

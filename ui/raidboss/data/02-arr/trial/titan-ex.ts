@@ -37,7 +37,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '쫄: 꼬마 타이탄',
+          en: 'Gaoler Adds',
           de: 'graniten Kerkermeister Adds',
           fr: 'Adds Geôlier',
           ja: '雑魚: 子タイタン',
@@ -53,7 +53,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '2연속 웨이트',
+          en: 'Double Weight',
           de: 'Doppeltes Gaias Gewicht',
           fr: 'Double poids',
           ja: '大地の重み2連',
@@ -80,7 +80,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         jailOnYou: {
-          en: '내게 감옥이!',
+          en: 'Jail on YOU',
           de: 'Gefängnis auf DIR',
           fr: 'Geôle sur VOUS',
           ja: '自分にジェイル',
@@ -88,7 +88,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '돌감옥 대상자',
         },
         jails: {
-          en: '감옥',
+          en: 'Jails',
           de: 'Gefängnis',
           fr: 'Geôles',
           ja: 'ジェイル',

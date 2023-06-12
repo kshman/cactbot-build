@@ -47,7 +47,7 @@ const callSafeDir = (callIndex: number, output: Output) => {
 
 const tiltOutputStrings = {
   goEastHardTilt: {
-    en: '동쪽으로 (많이)',
+    en: 'Go East (Hard Tilt)',
     de: 'Nach Osten gehen (starke Neigung)',
     fr: 'Allez à l\'Est (Inclinaison forte)',
     ja: '東へ (大きい斜め)',
@@ -55,7 +55,7 @@ const tiltOutputStrings = {
     ko: '동쪽으로 (크게 기울어짐)',
   },
   goEastSoftTilt: {
-    en: '동쪽으로 (조금)',
+    en: 'Go East (Soft Tilt)',
     de: 'Nach Osten gehen (leichte Neigung)',
     fr: 'Allez à l\'Est (Inclinaison faible)',
     ja: '東へ (小さい斜め)',
@@ -63,7 +63,7 @@ const tiltOutputStrings = {
     ko: '동쪽으로 (작게 기울어짐)',
   },
   goWestHardTilt: {
-    en: '서쪽으로 (많이)',
+    en: 'Go West (Hard Tilt)',
     de: 'Nach Westen gehen (starke Neigung)',
     fr: 'Allez à l\'Ouest (Inclinaison forte)',
     ja: '西へ (大きい斜め)',
@@ -71,7 +71,7 @@ const tiltOutputStrings = {
     ko: '서쪽으로 (크게 기울어짐)',
   },
   goWestSoftTilt: {
-    en: '서쪽으로 (조금)',
+    en: 'Go West (Soft Tilt)',
     de: 'Nach Westen gehen (leichte Neigung)',
     fr: 'Allez à l\'Ouest (Inclinaison faible)',
     ja: '西へ (小さい斜め)',
@@ -106,10 +106,10 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '돌진 바닥 피해요',
+          en: 'Avoid Dash Attack',
           de: 'Ansturm-Angriff ausweichen',
           fr: 'Évitez l\'attaque Charge',
-          ja: '突進に避け',
+          ja: '突進回避',
           cn: '躲避击飞',
           ko: '돌진 공격 피하기',
         },
@@ -128,7 +128,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '죄와 벌!',
+          en: 'Stack With Partner',
           de: 'Mit Partner stacken',
           fr: 'Packez-vous avec votre partenaire',
           ja: '白と黒で重なる',
@@ -144,7 +144,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '퀘이사 미티어 유도',
+          en: 'Bait Quasar Meteors',
           de: 'Quasar Meteore ködern',
           fr: 'Attirez les météores du Quasar',
           ja: 'メテオを誘導',
@@ -194,7 +194,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '창술맨 뒤로',
+          en: 'Get behind lancer',
           de: 'Geh hinter dem 3. Demiurg',
           fr: 'Passez derrière le lancier',
           ja: '三の従者の後ろに',
@@ -215,7 +215,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         infusionOnYou: {
-          en: '내가 맹돌진',
+          en: 'Infusion on YOU',
           de: 'Schneisenschläger auf DIR',
           fr: 'Infusion sur VOUS',
           ja: '自分に猛突進',
@@ -223,7 +223,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '맹돌진 대상자',
         },
         infusionOn: {
-          en: '맹돌진: ${player}',
+          en: 'Infusion on ${player}',
           de: 'Schneisenschläger auf ${player}',
           fr: 'Infusion sur ${player}',
           ja: '${player}に猛突進',
@@ -328,10 +328,10 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '머리 레이저 피해요',
+          en: 'Avoid head laser',
           de: 'Kopflaser ausweichen',
           fr: 'Évitez le laser de la tête',
-          ja: 'レーザーを避ける',
+          ja: '頭レーザー回避',
           cn: '躲避人头炮',
           ko: '머리 레이저 피하기',
         },
