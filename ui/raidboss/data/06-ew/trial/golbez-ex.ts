@@ -1,4 +1,3 @@
-import NetRegexes from '../../../../../resources/netregexes';
 import { UnreachableCode } from '../../../../../resources/not_reached';
 import Outputs from '../../../../../resources/outputs';
 import { callOverlayHandler } from '../../../../../resources/overlay_plugin_api';
@@ -107,7 +106,7 @@ const triggerSet: TriggerSet<Data> = {
     {
       id: 'GolbezEx Terrastorm',
       type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ id: '8466', source: 'Golbez', capture: true }),
+      netRegex: { id: '8466', source: 'Golbez', capture: true },
       delaySeconds: 0.5,
       promise: async (data, matches) => {
         const meteorData = await callOverlayHandler({
@@ -252,7 +251,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: 'Positions par rôle',
           ja: 'ロール特定位置へ',
           cn: '去指定位置',
-          ko: '1단리밋 산개위치로',
+          ko: '직업군별 위치로',
         },
       },
     },

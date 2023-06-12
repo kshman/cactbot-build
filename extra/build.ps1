@@ -28,6 +28,7 @@ function New-QuestionYesNo([string] $msg) {
     if ($in -eq ' ') { return $TRUE }
     if ($in -eq 'N') { return $FALSE }
     if ($in -eq '.') { return $FALSE }
+    if ($in -eq '') { return $FALSE }
   } while ($TRUE)
 }
 

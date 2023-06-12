@@ -1,9 +1,33 @@
 import Conditions from '../../../../../resources/conditions';
 import Outputs from '../../../../../resources/outputs';
+import { Responses } from '../../../../../resources/responses';
+import { Directions } from '../../../../../resources/util';
 import ZoneId from '../../../../../resources/zone_id';
 import { RaidbossData } from '../../../../../types/data';
 import { NetMatches } from '../../../../../types/net_matches';
 import { TriggerSet } from '../../../../../types/trigger';
+
+// TODO: north / south laser add call for first Paradeigma
+// TODO: second paradeigma tether/tower debuff?
+// TODO: laser add call (inner west / inner east?) for second Paradeigma
+// TODO: glaukopis tank swap call
+// TODO: glaukopis tank swap after 2nd hit (if different person took both)
+// TODO: tether/tower/saltire/cross debuffs for third Paradeigma (and partners for towers?)
+// TODO: light/dark tower call for third Paradeigma (+ taking towers, baiting adds, etc)
+// TODO: add phase dash calls?? (maybe this is overkill)
+// TODO: Superchain 1 debuff triggers (maybe combine with existing triggers?)
+// TODO: Superchain 2A
+// TODO: Superchain 2B
+// TODO: final Sample safe spot
+
+const centerX = 100;
+const centerY = 100;
+
+const distSqr = (a: NetMatches['AddedCombatant'], b: NetMatches['AddedCombatant']): number => {
+  const dX = parseFloat(a.x) - parseFloat(b.x);
+  const dY = parseFloat(a.y) - parseFloat(b.y);
+  return dX * dX + dY * dY;
+};
 
 const wings = {
   // vfx/lockon/eff/m0829_cst19_9s_c0v.avfx
@@ -26,6 +50,16 @@ const wings = {
   bottomLeftThird: '01B1', // 82E6 damage
   // vfx/lockon/eff/m0829_cst23_3s_c0v.avfx
   bottomRightThird: '01B2', // 82E5 damage
+} as const;
+
+type SuperchainMechanic = 'destination' | 'out' | 'in' | 'protean' | 'partners';
+const superchainNpcNameId = '12377';
+const superchainNpcBaseIdMap: Record<SuperchainMechanic, string> = {
+  destination: '16176',
+  out: '16177',
+  in: '16178',
+  protean: '16179',
+  partners: '16180',
 } as const;
 
 const headmarkers = {
@@ -63,6 +97,7 @@ const limitCutMap: { [id: string]: number } = {
 
 const limitCutIds: readonly string[] = Object.keys(limitCutMap);
 const wingIds: readonly string[] = Object.values(wings);
+const superchainNpcBaseIds: readonly string[] = Object.values(superchainNpcBaseIdMap);
 
 const getHeadmarkerId = (data: Data, matches: NetMatches['HeadMarker']) => {
   if (data.decOffset === undefined) {
@@ -76,11 +111,18 @@ const getHeadmarkerId = (data: Data, matches: NetMatches['HeadMarker']) => {
 };
 
 export interface Data extends RaidbossData {
+  prsTheory?: number;
+  //
   decOffset?: number;
   expectedFirstHeadmarker?: string;
-  phase: 'door' | 'final';
+  isDoorBoss: boolean;
+  phase?: 'superchain1' | 'palladion' | 'superchain2a' | 'superchain2b';
   wingCollect: string[];
   wingCalls: ('swap' | 'stay')[];
+  superchainCollect: NetMatches['AddedCombatant'][];
+  superchain1FirstDest?: NetMatches['AddedCombatant'];
+  limitCutNumber?: number;
+  whiteFlameCounter: number;
 }
 
 const triggerSet: TriggerSet<Data> = {
@@ -89,19 +131,38 @@ const triggerSet: TriggerSet<Data> = {
   timelineFile: 'p12s.txt',
   initData: () => {
     return {
-      phase: 'door',
+      isDoorBoss: true,
       wingCollect: [],
       wingCalls: [],
+      superchainCollect: [],
+      whiteFlameCounter: 0,
     };
   },
   triggers: [
     {
-      id: 'P12S Phase Tracker',
+      id: 'P12S Phase Tracker 1',
       type: 'StartsUsing',
-      // Ultima cast
+      netRegex: { id: ['82DA', '82F5', '86FA', '86FB'], source: 'Athena' },
+      run: (data, matches) => {
+        data.whiteFlameCounter = 0;
+        data.superchainCollect = [];
+
+        const phaseMap: { [id: string]: Data['phase'] } = {
+          '82DA': 'superchain1',
+          '82F5': 'palladion',
+          '86FA': 'superchain2a',
+          '86FB': 'superchain2b',
+        } as const;
+        data.phase = phaseMap[matches.id];
+      },
+    },
+    {
+      id: 'P12S Phase Tracker 2',
+      type: 'StartsUsing',
+      // 8682 = Ultima cast
       netRegex: { id: '8682', source: 'Pallas Athena', capture: false },
       run: (data) => {
-        data.phase = 'final';
+        data.isDoorBoss = false;
         data.expectedFirstHeadmarker = headmarkers.palladianGrasp;
       },
     },
@@ -118,6 +179,12 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     // --------------------- Phase 1 ------------------------
+    {
+      id: 'P12S On the Soul',
+      type: 'StartsUsing',
+      netRegex: { id: '8304', source: 'Athena', capture: false },
+      response: Responses.aoe(),
+    },
     {
       id: 'P12S First Wing',
       type: 'StartsUsing',
@@ -191,20 +258,24 @@ const triggerSet: TriggerSet<Data> = {
         left: Outputs.left,
         right: Outputs.right,
         swap: {
-          en: 'Swap',
+          en: '자리바꿈',
           de: 'Wechseln',
+          fr: 'Swap',
         },
         stay: {
-          en: 'Stay',
+          en: '그대로',
           de: 'bleib Stehen',
+          fr: 'Restez',
         },
         secondWingCallStay: {
-          en: '(stay)',
+          en: '(그대로)',
           de: '(bleib Stehen)',
+          fr: '(restez)',
         },
         secondWingCallSwap: {
-          en: '(swap)',
+          en: '(자리바꿈)',
           de: '(Wechseln)',
+          fr: '(swap)',
         },
         allThreeWings: {
           en: '${first} => ${second} => ${third}',
@@ -231,12 +302,14 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         swap: {
-          en: 'Swap',
+          en: '자리바꿔요',
           de: 'Wechseln',
+          fr: 'Swap',
         },
         stay: {
-          en: 'Stay',
+          en: '그대로',
           de: 'bleib Stehen',
+          fr: 'Restez',
         },
       },
     },
@@ -248,12 +321,14 @@ const triggerSet: TriggerSet<Data> = {
         data.role === 'tank' ? output.tanksInPartyOut!() : output.partyOutTanksIn!(),
       outputStrings: {
         partyOutTanksIn: {
-          en: 'Party Out (Tanks In)',
+          en: '바깥으로 (탱크가 안쪽)',
           de: 'Gruppe Raus (Tanks Rein)',
+          fr: 'Équipe à l\'extérieur (Tanks à l\'intérieur)',
         },
         tanksInPartyOut: {
-          en: 'Tanks In (Party Out)',
+          en: '안쪽으로 (파티가 바깥쪽)',
           de: 'Gruppe Rein (Tanks Raus)',
+          fr: 'Tanks à l\'intérieur (Équipe à l\'extérieur',
         },
       },
     },
@@ -265,12 +340,14 @@ const triggerSet: TriggerSet<Data> = {
         data.role === 'tank' ? output.tanksInPartyOut!() : output.partyInTanksOut!(),
       outputStrings: {
         partyInTanksOut: {
-          en: 'Party In (Tanks Out)',
+          en: '안쪽으로 (탱크가 바깥쪽)',
           de: 'Gruppe Rein (Tanks Raus)',
+          fr: 'Équipe à l\'intérieur (Tanks à l\'extérieur)',
         },
         tanksInPartyOut: {
-          en: 'Tanks Out (Party In)',
+          en: '바깥으로 (파티가 안쪽)',
           de: 'Tanks Raus (Gruppe Rein)',
+          fr: 'Tanks à l\'extérieur (Équipe à l\'intérieur',
         },
       },
     },
@@ -287,17 +364,237 @@ const triggerSet: TriggerSet<Data> = {
         const num = limitCutMap[id];
         if (num === undefined)
           return;
+        data.limitCutNumber = num;
         return output.text!({ num: num });
       },
       outputStrings: {
         text: {
-          en: '${num}',
+          en: '${num}번',
           de: '${num}',
           fr: '${num}',
           ja: '${num}',
           cn: '${num}',
           ko: '${num}',
         },
+      },
+    },
+    {
+      id: 'P12S Palladion White Flame Initial',
+      type: 'StartsUsing',
+      // 82F5 = Palladion cast
+      netRegex: { id: '82F5', source: 'Athena', capture: false },
+      // Don't collide with number callout.
+      delaySeconds: 2,
+      durationSeconds: 4,
+      response: (data, _matches, output) => {
+        // cactbot-builtin-response
+        output.responseOutputStrings = {
+          baitLaser: {
+            en: '레이저 유도',
+          },
+          firstWhiteFlame: {
+            en: '(5번과 7번 유도)',
+          },
+        };
+        const infoText = output.firstWhiteFlame!();
+        if (data.limitCutNumber === 5 || data.limitCutNumber === 7)
+          return { alert: output.baitLaser!(), infoText: infoText };
+        return { infoText: infoText };
+      },
+    },
+    {
+      id: 'P12S Palladion White Flame Followup',
+      type: 'Ability',
+      netRegex: { id: '82EF', source: 'Anthropos', capture: false },
+      condition: (data) => data.phase === 'palladion',
+      response: (data, _matches, output) => {
+        // cactbot-builtin-response
+        output.responseOutputStrings = {
+          baitLaser: {
+            en: '레이저 유도',
+          },
+          secondWhiteFlame: {
+            en: '(6번과 8번 유도)',
+          },
+          thirdWhiteFlame: {
+            en: '(1번과 3번 유도)',
+          },
+          fourthWhiteFlame: {
+            en: '(2번과 4번 유도)',
+          },
+        };
+
+        data.whiteFlameCounter++;
+
+        const baitLaser = output.baitLaser!();
+
+        if (data.whiteFlameCounter === 1) {
+          const infoText = output.secondWhiteFlame!();
+          if (data.limitCutNumber === 6 || data.limitCutNumber === 8)
+            return { alertText: baitLaser, infoText: infoText };
+          return { infoText: infoText };
+        }
+        if (data.whiteFlameCounter === 2) {
+          const infoText = output.thirdWhiteFlame!();
+          if (data.limitCutNumber === 1 || data.limitCutNumber === 3)
+            return { alertText: baitLaser, infoText: infoText };
+          return { infoText: infoText };
+        }
+        if (data.whiteFlameCounter === 3) {
+          const infoText = output.fourthWhiteFlame!();
+          if (data.limitCutNumber === 2 || data.limitCutNumber === 4)
+            return { alertText: baitLaser, infoText: infoText };
+          return { infoText: infoText };
+        }
+      },
+    },
+    {
+      id: 'P12S Superchain Theory Collect',
+      type: 'AddedCombatant',
+      netRegex: { npcNameId: superchainNpcNameId, npcBaseId: superchainNpcBaseIds },
+      // Note: do not modify or clear this in any trigger but phase reset.
+      run: (data, matches) => data.superchainCollect.push(matches),
+    },
+    {
+      id: 'P12S Superchain Theory I First Mechanic',
+      type: 'AddedCombatant',
+      netRegex: { npcNameId: superchainNpcNameId, npcBaseId: superchainNpcBaseIds, capture: false },
+      condition: (data) => data.phase === 'superchain1' && data.superchainCollect.length === 3,
+      alertText: (data, _matches, output) => {
+        const ids = data.superchainCollect.slice(0, 3).map((x) => x.npcBaseId).sort();
+        const [destMatches] = data.superchainCollect.filter((x) =>
+          x.npcBaseId === superchainNpcBaseIdMap.destination
+        );
+
+        // Based on id sorting (see: superchainNpcBaseIdMap), they will always be in this order.
+        const [, inOut, proteanPartner] = ids;
+        if (destMatches === undefined || inOut === undefined || proteanPartner === undefined)
+          return;
+
+        // TODO: technically this is just intercardinals and we don't need all outputs here.
+        // Do we need another helper for this?
+        const dirStr = Directions.addedCombatantPosTo8DirOutput(destMatches, centerX, centerY);
+        const dir = output[dirStr]!();
+        data.superchain1FirstDest = destMatches;
+
+        if (inOut === superchainNpcBaseIdMap.in) {
+          if (proteanPartner === superchainNpcBaseIdMap.protean)
+            return output.inAndProtean!({ dir: dir });
+          return output.inAndPartners!({ dir: dir });
+        }
+
+        if (proteanPartner === superchainNpcBaseIdMap.protean)
+          return output.outAndProtean!({ dir: dir });
+        return output.outAndPartners!({ dir: dir });
+      },
+      outputStrings: {
+        inAndProtean: {
+          en: '안으로 프로틴: (${dir})',
+        },
+        inAndPartners: {
+          en: '안으로 페어: (${dir})',
+        },
+        outAndProtean: {
+          en: '밖에서 프로틴: (${dir})',
+        },
+        outAndPartners: {
+          en: '밖에서 페어: (${dir})',
+        },
+        ...Directions.outputStrings8Dir,
+      },
+    },
+    {
+      id: 'P12S Superchain Theory I Second Mechanic',
+      type: 'AddedCombatant',
+      netRegex: { npcNameId: superchainNpcNameId, npcBaseId: superchainNpcBaseIds, capture: false },
+      condition: (data) => data.phase === 'superchain1' && data.superchainCollect.length === 7,
+      // TODO: should we base this off of the first coil/burst instead?
+      // 7.2 seconds is the time until the second mechanic finishes, so call early.
+      delaySeconds: 6.2,
+      alertText: (data, _matches, output) => {
+        // Sort ascending.
+        const collect = data.superchainCollect.slice(3, 7).sort((a, b) =>
+          parseInt(a.npcBaseId) - parseInt(b.npcBaseId)
+        );
+
+        const firstMechDest = data.superchain1FirstDest;
+        if (firstMechDest === undefined)
+          return;
+        const [dest1, dest2, donut, sphere] = collect;
+        if (
+          dest1 === undefined || dest2 === undefined || donut === undefined || sphere === undefined
+        )
+          return;
+
+        // TODO: it'd sure be nice if we had more info about what is tethered to what
+        // as part of AddedCombatant, but for now we can heuristic our way out of this.
+        const expectedDistanceSqr = 561.3101;
+        const dest1Donut = Math.abs(distSqr(dest1, donut) - expectedDistanceSqr);
+        const dest2Donut = Math.abs(distSqr(dest2, donut) - expectedDistanceSqr);
+        const dest1Sphere = Math.abs(distSqr(dest1, sphere) - expectedDistanceSqr);
+        const dest2Sphere = Math.abs(distSqr(dest2, sphere) - expectedDistanceSqr);
+
+        let donutDest;
+        // Extra checks just in case??
+        if (dest1Donut < dest1Sphere && dest2Donut > dest2Sphere)
+          donutDest = dest1;
+        else if (dest1Donut > dest1Sphere && dest2Donut < dest2Sphere)
+          donutDest = dest2;
+
+        if (donutDest === undefined)
+          return;
+
+        const prevDir = Directions.addedCombatantPosTo8Dir(firstMechDest, centerX, centerY);
+        const thisDir = Directions.addedCombatantPosTo8Dir(donutDest, centerX, centerY);
+
+        const rotation = (thisDir - prevDir + 8) % 8;
+        if (rotation === 2)
+          return output.leftClockwise!();
+        if (rotation === 6)
+          return output.rightCounterclockwise!();
+      },
+      outputStrings: {
+        // This is left and right facing the boss.
+        // TODO: this should probably also say your debuff,
+        // e.g. "Left (Dark Laser)" or "Right (Light Tower)" or something?
+        leftClockwise: {
+          en: '왼쪽 (시계방향)',
+        },
+        rightCounterclockwise: {
+          en: '오른쪽 (반시계방향)',
+        },
+      },
+    },
+    {
+      id: 'P12S Superchain Theory I Third Mechanic',
+      type: 'AddedCombatant',
+      netRegex: { npcNameId: superchainNpcNameId, npcBaseId: superchainNpcBaseIds, capture: false },
+      condition: (data) => data.phase === 'superchain1' && data.superchainCollect.length === 10,
+      // TODO: should we base this off of the first coil/burst instead?
+      // 10.6 seconds is the time until the second mechanic finishes, so call early.
+      delaySeconds: 9.1,
+      alertText: (data, _matches, output) => {
+        // Sort ascending.
+        const collect = data.superchainCollect.slice(7, 10).sort((a, b) =>
+          parseInt(a.npcBaseId) - parseInt(b.npcBaseId)
+        );
+
+        // Based on id sorting (see: superchainNpcBaseIdMap), they will always be in this order.
+        const [dest, donut, sphere] = collect;
+        if (dest === undefined || donut === undefined || sphere === undefined)
+          return;
+
+        const donutDistSqr = distSqr(donut, dest);
+        const sphereDistSqr = distSqr(sphere, dest);
+        if (donutDistSqr > sphereDistSqr)
+          return output.inThenOut!();
+        return output.outThenIn!();
+      },
+      outputStrings: {
+        // TODO: this should also say to spread / place tower / take tower
+        // TODO: maybe we need separate calls for these ^ after initial donut/sphere goes off?
+        inThenOut: Outputs.inThenOut,
+        outThenIn: Outputs.outThenIn,
       },
     },
     // --------------------- Phase 2 ------------------------
@@ -307,7 +604,7 @@ const triggerSet: TriggerSet<Data> = {
       netRegex: { id: '8329', source: 'Pallas Athena', capture: false },
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
-        text: 'Vertical',
+        text: '세로로',
       },
     },
     {
@@ -316,7 +613,7 @@ const triggerSet: TriggerSet<Data> = {
       netRegex: { id: '832A', source: 'Pallas Athena', capture: false },
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
-        text: 'Inny Spinny',
+        text: '이니 스피니(Inny Spinny)',
       },
     },
     {
@@ -325,7 +622,58 @@ const triggerSet: TriggerSet<Data> = {
       netRegex: { id: '832B', source: 'Pallas Athena', capture: false },
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
-        text: 'Horizontal',
+        text: '가로로',
+      },
+    },
+    // -- PRT --
+    {
+      id: 'P12S 체인 시어리 I',
+      type: 'StartsUsing',
+      netRegex: { id: '82DA' },
+      infoText: (_data, _matches, output) => output.text!(),
+      run: (data) => data.prsTheory = 1,
+      outputStrings: {
+        text: '슈퍼 체인 시어리 I',
+      },
+    },
+    {
+      id: 'P12S 체인 이펙트',
+      type: 'GainsEffect',
+      // DF8:Umbral Tilt
+      // DF9:Astral Tilt
+      // DFA:Heavensflame Soul
+      // DFB:Umbralbright Soul
+      // DFC:Astralbright Soul
+      // DFD:Umbralstrong Soul
+      // DFE:Astralstrong Soul
+      netRegex: { effectId: ['DF8', 'DF9', /* 'DFA', */ 'DFB', 'DFC', 'DFD', 'DFE'] },
+      condition: Conditions.targetIsYou(),
+      delaySeconds: 4,
+      durationSeconds: 17,
+      suppressSeconds: 23,
+      infoText: (data, matches, output) => {
+        if (data.prsTheory === 1) {
+          const mesgs: { [eid: string]: string } = {
+            'DF8': output.umbTilt!(),
+            'DF9': output.astTilt!(),
+            // 'DFA': output.heavenSoul!(),
+            'DFB': output.ubgtSoul!(),
+            'DFC': output.abgtSoul!(),
+            'DFD': output.ustrSoul!(),
+            'DFE': output.astrSoul!()
+          };
+          return mesgs[matches.effectId] ?? output.unknown!();
+        }
+      },
+      outputStrings: {
+        umbTilt: '왼쪽 뭉쳤다 🡺 흩어져요',
+        astTilt: '오른쪽 뭉쳤다 🡺 흩어져요',
+        heavenSoul: '',
+        ubgtSoul: '왼쪽 뭉쳤다 🡺 왼쪽 타워 만들어요',
+        abgtSoul: '오른쪽 뭉쳤다 🡺 오른쪽 타워 만들어요',
+        ustrSoul: '오른쪽 뭉쳤다 🡺 오른쪽 밟아요',
+        astrSoul: '왼쪽 뭉쳤다 🡺 왼쪽 밟아요',
+        unknown: Outputs.unknown,
       },
     },
   ],
@@ -333,34 +681,95 @@ const triggerSet: TriggerSet<Data> = {
     {
       'locale': 'en',
       'replaceSync': {
-        'Astral Glow/Umbral Glow': 'Astral/Umbral Glow',
-        'Astral Advance/Umbral Advance': 'Astral/Umbral Advance',
-        'Superchain Coil/Superchain Burst': 'Superchain Coil/Burst',
         'Apodialogos/Peridialogos': 'Apodia/Peridia',
-        'Theos\'s Saltire/Theos\'s Cross': 'Saltire/Cross',
-        'Astral Impact/Umbral Impact': 'Astral/Umbral Impact',
+        'Astral Advance/Umbral Advance': 'Astral/Umbral Advance',
         'Astral Advent/Umbral Advent': 'Astral/Umbral Advent',
+        'Astral Glow/Umbral Glow': 'Astral/Umbral Glow',
+        'Astral Impact/Umbral Impact': 'Astral/Umbral Impact',
+        'Superchain Coil/Superchain Burst': 'Superchain Coil/Burst',
+        'Theos\'s Saltire/Theos\'s Cross': 'Saltire/Cross',
       },
     },
     {
       'locale': 'de',
       'missingTranslations': true,
       'replaceSync': {
+        'Anthropos': 'Anthropos',
         'Athena': 'Athena',
+      },
+      'replaceText': {
+        '\\(cast\\)': '(Wirken)',
+        '\\(enrage\\)': '(Finalangriff)',
+        '\\(proximity\\)': '(Entfernung)',
+        '\\(spread\\)': '(Verteilen)',
+        'Dialogos': 'Dialogos',
+        'Engravement of Souls': 'Seelensiegel',
+        'Glaukopis': 'Glaukopis',
+        'On the Soul': 'Auf der Seele',
+        'Palladion': 'Palladion',
+        'Paradeigma': 'Paradigma',
+        'Parthenos': 'Parthenos',
+        'Ray of Light': 'Lichtstrahl',
+        'Sample': 'Vielfraß',
+        'Superchain Burst': 'Superkette - Ausbruch',
+        'Superchain Coil': 'Superkette - Kreis',
+        'Theos\'s Ultima': 'Theos Ultima',
+        'Trinity of Souls': 'Dreifaltigkeit der Seelen',
+        'Ultima Blade': 'Ultima-Klinge',
+        'Unnatural Enchainment': 'Seelenfessel',
+        'White Flame': 'Weißes Feuer',
       },
     },
     {
       'locale': 'fr',
       'missingTranslations': true,
       'replaceSync': {
+        'Anthropos': 'anthropos',
         'Athena': 'Athéna',
+      },
+      'replaceText': {
+        'Dialogos': 'Dialogos',
+        'Engravement of Souls': 'Marquage d\'âme',
+        'Glaukopis': 'Glaukopis',
+        'On the Soul': 'Sur les âmes',
+        'Palladion': 'Palladion',
+        'Paradeigma': 'Paradeigma',
+        'Parthenos': 'Parthénon',
+        'Ray of Light': 'Onde de lumière',
+        'Sample': 'Voracité',
+        'Superchain Burst': 'Salve des superchaînes',
+        'Superchain Coil': 'Cercle des superchaînes',
+        'Theos\'s Ultima': 'Ultima de théos',
+        'Trinity of Souls': 'Âmes trinité',
+        'Ultima Blade': 'Lames Ultima',
+        'Unnatural Enchainment': 'Enchaînement d\'âmes',
+        'White Flame': 'Feu blanc',
       },
     },
     {
       'locale': 'ja',
       'missingTranslations': true,
       'replaceSync': {
+        'Anthropos': 'アンスロポス',
         'Athena': 'アテナ',
+      },
+      'replaceText': {
+        'Dialogos': 'ディアロゴス',
+        'Engravement of Souls': '魂の刻印',
+        'Glaukopis': 'グラウコピス',
+        'On the Soul': 'オン・ザ・ソウル',
+        'Palladion': 'パラディオン',
+        'Paradeigma': 'パラデイグマ',
+        'Parthenos': 'パルテノン',
+        'Ray of Light': '光波',
+        'Sample': '貪食',
+        'Superchain Burst': 'スーパーチェイン・バースト',
+        'Superchain Coil': 'スーパーチェイン・サークル',
+        'Theos\'s Ultima': 'テオス・アルテマ',
+        'Trinity of Souls': 'トリニティ・ソウル',
+        'Ultima Blade': 'アルテマブレイド',
+        'Unnatural Enchainment': '魂の鎖',
+        'White Flame': '白火',
       },
     },
   ],

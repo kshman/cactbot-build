@@ -8,6 +8,7 @@ export const playstationMarkers = ['circle', 'cross', 'triangle', 'square'] as c
 export type lightAndDarks = 'none' | 'lightnear' | 'lightfar' | 'darknear' | 'darkfar';
 
 export interface Data extends RaidbossData {
+  prsDike?: number;
   prsStyx?: number;
   prsLnd?: lightAndDarks;
   prsTethers: string[];
@@ -19,7 +20,7 @@ export interface Data extends RaidbossData {
 
 export const prsP11Strings = {
   proteinpair: {
-    en: '프로틴 (둘이서)',
+    en: '프로틴 (페어)',
   },
   proteinshare: {
     en: '프로틴 (힐러)',
@@ -96,6 +97,7 @@ const triggerSet: TriggerSet<Data> = {
           en: '(안쪽에서) 힐러랑 뭉쳐요',
           de: 'Himmelsrichtungen => Heiler Gruppen',
           fr: 'Positions => Package sur les heals',
+          cn: '八方分散 => 治疗分摊',
         },
         lightLr: {
           en: '(왼쪽 돌아 마커) 힐러랑 뭉쳐요',
@@ -128,21 +130,22 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         text: {
-          en: '(마커에서) 둘이 뭉쳐요',
+          en: '(마커에서) 페어',
           de: 'Himmelsrichtungen => Partner',
           fr: 'Positions => Partenaires',
+          cn: '八方分散 => 两人分摊',
         },
         pairlightfar: {
-          en: '둘이 뭉쳐요: 왼쪽 돌아 🟪로',
+          en: '페어: 왼쪽 돌아 🟪로',
         },
         pairlightnear: {
-          en: '둘이 뭉쳐요: 밖으로 나가요',
+          en: '페어: 밖으로 나가요',
         },
         pairdarkfar: {
-          en: '둘이 뭉쳐요: 그자리 그대로',
+          en: '페어: 그자리 그대로',
         },
         pairdarknear: {
-          en: '둘이 뭉쳐요: 밖으로 나가요',
+          en: '페어: 밖으로 나가요',
         },
         unknown: Outputs.unknown,
       },
@@ -158,6 +161,7 @@ const triggerSet: TriggerSet<Data> = {
           en: '한가운데 => 밖에서 힐러랑 뭉쳐요',
           de: 'Party Rein => Raus + Heiler Gruppen',
           fr: 'Intérieur => Extérieur + package sur les heals',
+          cn: '场中集合 => 场边 + 治疗分摊',
         },
       },
     },
@@ -173,12 +177,13 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         text: {
-          en: '밖으로 => 안쪽으로 둘이서',
+          en: '밖으로 => 안쪽으로 페어',
           de: 'Party Raus => Rein + Partner',
           fr: 'Extérieur => Intérieur + package sur les heals',
+          cn: '场外 => 场中 + 两人分摊',
         },
         tank: {
-          en: '줄이면 한가운데 아니면 밖으로 => 안쪽으로 둘이서',
+          en: '줄이면 한가운데 아니면 밖으로 => 안쪽으로 페어',
         },
       },
     },
@@ -193,6 +198,7 @@ const triggerSet: TriggerSet<Data> = {
           en: '옆으로 => 그대로 힐러랑 뭉쳐요',
           de: 'Seiten => Heiler Gruppen + Raus',
           fr: 'Côtés => Extérieur + Package sur les heals',
+          cn: '两侧 => 治疗分摊 + 场外',
         },
       },
     },
@@ -204,9 +210,10 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '옆으로 => 안쪽으로 둘이서',
+          en: '옆으로 => 안쪽으로 페어',
           de: 'Seiten => Rein + Partner',
           fr: 'Côtés => Intérieur + Package sur les heals',
+          cn: '两侧 => 两人分摊 + 场内',
         },
       },
     },
@@ -221,6 +228,7 @@ const triggerSet: TriggerSet<Data> = {
           en: '바깥에서 힐러랑 뭉쳐요',
           de: 'Heiler Gruppen + Raus',
           fr: 'Extérieur + Package sur les heals',
+          cn: '治疗分摊 + 场外',
         },
       },
     },
@@ -232,9 +240,10 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '안쪽으로 둘이서',
+          en: '안쪽으로 페어',
           de: 'Partner + Rein',
           fr: 'Partenaires + Intérieur',
+          cn: '两人分摊 + 场内',
         },
       },
     },
@@ -249,6 +258,7 @@ const triggerSet: TriggerSet<Data> = {
           en: '넉백 먼저 => 바깥에서 힐러랑 뭉쳐요',
           de: 'Rückstoß => Heiler Gruppen + Raus',
           fr: 'Poussée => Extérieur + Package sur les heals',
+          cn: '击退 => 治疗分摊 + 场外',
         },
       },
     },
@@ -260,9 +270,10 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '넉백 먼저 => 안쪽으로 둘이서',
+          en: '넉백 먼저 => 안쪽으로 페어',
           de: 'Rückstoß => Rein + Partner',
           fr: 'Poussée => Intérieur + Partenaires',
+          cn: '击退 => 两人分摊 + 场内',
         },
       },
     },
@@ -277,6 +288,7 @@ const triggerSet: TriggerSet<Data> = {
           en: '옆으로 => 🟪 포탈 안전',
           de: 'Geh zu einem Dunkel-Portal',
           fr: 'Allez vers les portails sombres',
+          cn: '去暗门前',
         },
       },
     },
@@ -291,6 +303,7 @@ const triggerSet: TriggerSet<Data> = {
           en: '옆으로 => 🟨 포탈 안전',
           de: 'Geh zu einem Licht-Portal',
           fr: 'Allez sur les portails de lumière',
+          cn: '去光门前',
         },
       },
     },
@@ -304,6 +317,7 @@ const triggerSet: TriggerSet<Data> = {
           en: '🟣 구슬 쪽으로',
           de: 'Rotiere zu den dunklen Orbs',
           fr: 'Tournez vers les orbes sombres',
+          cn: '暗球侧安全',
         },
       },
     },
@@ -317,6 +331,7 @@ const triggerSet: TriggerSet<Data> = {
           en: '🟡 구슬 쪽으로',
           de: 'Rotiere zu den licht Orbs',
           fr: 'Tournez ves les orbes de lumière',
+          cn: '光球侧安全',
         },
       },
     },
@@ -366,21 +381,25 @@ const triggerSet: TriggerSet<Data> = {
             en: '🟡 니어: ${player} (${side})',
             de: 'Licht Nahe w/${player}',
             fr: 'Lumière proche avec ${player}',
+            cn: '光靠近 => ${player}',
           },
           lightFar: {
             en: '🟡 파: ${player} (${side})',
             de: 'Licht Entfernt w/${player}',
             fr: 'Lumière éloignée avec ${player}',
+            cn: '光远离 => ${player}',
           },
           darkNear: {
             en: '🟣 니어: ${player} (${side})',
             de: 'Dunkel Nahe w/${player}',
             fr: 'Sombre proche avec ${player}',
+            cn: '暗靠近 => ${player}',
           },
           darkFar: {
             en: '🟣 파: ${player} (${side})',
             de: 'Dunkel Entfernt w/${player}',
             fr: 'Sombre éloigné avec ${player}',
+            cn: '暗远离 => ${player}',
           },
           otherNear: {
             en: '다른팀 니어: ${player1}, ${player2}',
@@ -393,10 +412,10 @@ const triggerSet: TriggerSet<Data> = {
             fr: 'Autre éloigné : ${player1}, ${player2}',
           },
           leftSide: {
-            en: 'Ⓑ🡸',
+            en: 'Ⓑ🡺',
           },
           rightSide: {
-            en: 'Ⓓ🡺',
+            en: '🡸Ⓓ',
           },
         };
 
@@ -405,6 +424,10 @@ const triggerSet: TriggerSet<Data> = {
         const myLength = data.lightDarkTether[data.me];
 
         if (myColor === undefined || myBuddy === undefined || myLength === undefined) {
+          // Heuristic for "is this a synthetic execution".
+          // TODO: maybe we need a field on data for this?
+          if (Object.keys(data.lightDarkDebuff).length === 0)
+            return;
           console.log(`Dark and Light: missing data for ${data.me}`);
           console.log(`Dark and Light: lightDarkDebuff: ${JSON.stringify(data.lightDarkDebuff)}`);
           console.log(`Dark and Light: lightDarkBuddy: ${JSON.stringify(data.lightDarkBuddy)}`);
@@ -460,6 +483,8 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: '안전: 🟣🟪',
           de: 'Geh zum dunklen Orb + dunkle Portale',
+          fr: 'Allez vers l\'orbe sombre + Portail sombre',
+          cn: '去暗球 + 暗门',
         },
       },
     },
@@ -472,6 +497,8 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: '안전: 🟡🟨',
           de: 'Geh zum hellen Orb + helle Portale',
+          fr: 'Allez vers l\'orbe de lumière + Portail de lumière',
+          cn: '去光球 + 光门',
         },
       },
     },
@@ -481,10 +508,13 @@ const triggerSet: TriggerSet<Data> = {
       netRegex: { id: ['822D', '822F', '8230'], source: 'Themis' },
       condition: (data, matches) => data.me === matches.target,
       suppressSeconds: 3,
-      alertText: (_data, _matches, output) => output.text!(),
+      alertText: (data, _matches, output) => {
+        data.prsDike = (data.prsDike ?? 0) + 1;
+        return output.text!({ num: data.prsDike });
+      },
       outputStrings: {
         text: {
-          en: '탱크버스터! 나 주거! 스위치!',
+          en: '${num}번째  디케 둘이서 버스터!',
         },
       },
     },
