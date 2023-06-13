@@ -71,7 +71,7 @@ const triggerSet: OopsyTriggerSet<Data> = {
           id: matches.targetId,
           name: matches.target,
           text: {
-            en: 'Knocked into wall',
+            en: '벽으로 넉백',
             de: 'Rückstoß in die Wand',
             fr: 'Frappé(e) dans le mur',
             ja: '壁へノックバック',

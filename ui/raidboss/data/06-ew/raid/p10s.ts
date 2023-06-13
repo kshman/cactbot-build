@@ -124,12 +124,14 @@ const triggerSet: TriggerSet<Data> = {
           de: 'Türme nehmen',
           fr: 'Prenez une tour',
           cn: '踩塔击飞',
+          ko: '기둥 들어가기',
         },
         avoid: {
           en: '타워 피해요',
           de: 'Türme vermeiden',
           fr: 'Évitez les tours',
           cn: '远离塔',
+          ko: '기둥 피하기',
         },
       },
     },
@@ -156,7 +158,9 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: '줄 땡겨요',
           de: 'Zeige Verbindung weg',
+          fr: 'Orientez le lien à l\'extérieur',
           cn: '向外引导',
+          ko: '선을 바깥쪽으로',
         },
       },
     },
@@ -173,6 +177,7 @@ const triggerSet: TriggerSet<Data> = {
           de: 'Verbindung brechen',
           fr: 'Cassez les liens',
           cn: '截断丝线',
+          ko: '선 끊기',
         },
       },
     },
@@ -214,6 +219,7 @@ const triggerSet: TriggerSet<Data> = {
           de: 'Sammeln',
           fr: 'Package',
           cn: '分摊连线',
+          ko: '쉐어',
         },
       },
     },
@@ -226,7 +232,11 @@ const triggerSet: TriggerSet<Data> = {
           return false;
         return getHeadmarkerId(data, matches) === headmarkers.webEntangling;
       },
-      alertText: (_data, _matches, output) => output.text!(),
+      alertText: (data, _matches, output) => {
+        if (data.prsSoul === 4)
+          return output.place!();
+        return output.text!();
+      },
       // This will happen for non-dividing entangling web headmarkers,
       // but will get cleaned up in time for the next dividing wings.
       run: (data, matches) => data.dividingWingsEntangling.push(matches.target),
@@ -237,6 +247,10 @@ const triggerSet: TriggerSet<Data> = {
           de: 'Netze überlappen',
           fr: 'Superposez les toiles',
           cn: '用网搭桥',
+          ko: '거미줄 겹치기',
+        },
+        place: {
+          en: '남쪽에 셋이 나란히 거미집을 지어요',
         },
       },
     },
@@ -263,6 +277,7 @@ const triggerSet: TriggerSet<Data> = {
           de: 'Für Netze verteilen',
           fr: 'Écartez-vous pour les toiles',
           cn: '网分散',
+          ko: '거미줄 산개',
         },
       },
     },
@@ -343,16 +358,18 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         spreadThenPartners: {
-          en: '(예고: 흩어졌다 => 둘이서)',
+          en: '(예고: 흩어졌다 => 페어)',
           de: '(Verteilen => Partner, für später)',
           fr: '(Écartez-vous => Partenaires, pour après)',
           cn: '(稍后 分散 => 分摊)',
+          ko: '(곧 산개 => 파트너)',
         },
         partnersThenSpread: {
-          en: '(예고: 둘이었다 => 흩어져요)',
+          en: '(예고: 페어 => 흩어져요)',
           de: '(Partner => Verteilen, für später)',
           fr: '(Partenaires => Écartez-vous, pour après)',
           cn: '(稍后 分摊 => 分散)',
+          ko: '(곧 파트너 => 산개)',
         },
       },
     },
@@ -383,12 +400,14 @@ const triggerSet: TriggerSet<Data> = {
           de: '(Verteilen => Rollengruppe, für später)',
           fr: '(Écartez-vous => Package par rôle, pour après)',
           cn: '(稍后 分散 => 四四分摊)',
+          ko: '(곧 산개 => 직업군별 쉐어)',
         },
         stackThenSpread: {
           en: '(예고: 4:4 뭉쳤다 => 흩어져요)',
           de: '(Rollengruppe => Verteilen, für später)',
           fr: '(Package par rôle => Écartez-vous, pour après)',
           cn: '(稍后 四四分摊 => 分散)',
+          ko: '(곧 직업군별 쉐어 => 산개)',
         },
       },
     },
@@ -412,12 +431,14 @@ const triggerSet: TriggerSet<Data> = {
           de: 'Verteilen => Rollengruppe',
           fr: 'Écartez-vous => Package par rôle',
           cn: '分散 => 四四分摊',
+          ko: '산개 => 직업군별 쉐어',
         },
         spreadThenPartners: {
-          en: '흩어졌다 => 둘이서',
+          en: '흩어졌다 => 페어',
           de: 'Verteilen => Partner',
           fr: 'Écartez-vous => Partenaires',
           cn: '分散 => 分摊',
+          ko: '산개 => 파트너',
         },
       },
     },
@@ -435,16 +456,18 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         partnersThenStack: {
-          en: '둘이 뭉쳤다 => 4:4 뭉쳐요',
+          en: '페어 => 4:4 뭉쳐요',
           de: 'Partner => Rollengruppe',
           fr: 'Partenaires => Package par rôle',
           cn: '分摊  => 四四分摊',
+          ko: '파트너 => 직업군별 쉐어',
         },
         partnersThenSpread: {
-          en: '둘이 뭉쳤다 => 흩어져요',
+          en: '페어 => 흩어져요',
           de: 'Partner => Verteilen',
           fr: 'Partenaires => Écartez-vous',
           cn: '分摊 => 分散',
+          ko: '파트너 => 산개',
         },
       },
     },
@@ -462,16 +485,18 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         stackThenPartners: {
-          en: '4:4 뭉쳤다 => 둘이 뭉쳐요',
+          en: '4:4 뭉쳤다 => 페어',
           de: 'Rollengruppe => Partner',
           fr: 'Package par rôle => Partenaires',
           cn: '四四分摊 => 分摊',
+          ko: '직업군별 쉐어 => 파트너',
         },
         stackThenSpread: {
           en: '4:4 뭉쳤다 => 흩어져요',
           de: 'Rollengruppe => Verteilen',
           fr: 'Package par rôle => Écartez-vous',
           cn: '四四分摊 => 分散',
+          ko: '직업군별 쉐어 => 산개',
         },
       },
     },
@@ -496,16 +521,18 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         spread: Outputs.spread,
         partners: {
-          en: '둘이 뭉쳐요',
+          en: '페어',
           de: 'Partner',
           fr: 'Partenaires',
           cn: '分摊',
+          ko: '파트너',
         },
         stack: {
           en: '4:4 뭉쳐요',
           de: 'Rollengruppe',
           fr: 'Package par rôle',
           cn: '四四分摊',
+          ko: '직업군별 쉐어',
         },
       },
     },
@@ -521,6 +548,17 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         east: Outputs.getRightAndEast,
         west: Outputs.getLeftAndWest,
+      },
+    },
+    {
+      id: 'P10S Pandaemoniac Ray 레이저 조심',
+      type: 'StartsUsing',
+      netRegex: { id: ['8289', '828B'], source: bossNameUnicode, capture: false },
+      condition: (data) => data.role === 'healer',
+      delaySeconds: 3,
+      alertText: (_data, _matches, output) => output.text!(),
+      outputStrings: {
+        text: '옆에서 레이저 쏴요!',
       },
     },
   ],

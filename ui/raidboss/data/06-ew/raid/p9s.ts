@@ -358,6 +358,8 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: '첫번째 구슬 ${dir} => ${rotation}',
+          de: 'Erster Orb ${dir} => ${rotation}',
+          fr: 'Premier orbe ${dir} => ${rotation}',
         },
         clockwise: Outputs.clockwise,
         counterclock: Outputs.counterclockwise,
@@ -430,9 +432,13 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         dash: {
           en: '돌진 유도',
+          de: 'Sprung ködern',
+          fr: 'Encaissez le saut',
         },
         soak: {
           en: '타워 밟아요',
+          de: 'Im Turm stehen',
+          fr: 'Prenez votre tour',
         },
       },
     },
@@ -463,9 +469,13 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         dash: {
           en: '돌진 유도',
+          de: 'Sprung ködern',
+          fr: 'Encaissez le saut',
         },
         soak: {
           en: '타워 밟아요',
+          de: 'Im Turm stehen',
+          fr: 'Prenez votre tour',
         },
       },
     },
@@ -630,6 +640,8 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: '푹찍쾅 => 그대로',
+          de: 'Sprung => Stehen bleiben',
+          fr: 'Saut => Restez',
         },
       },
     },
@@ -641,6 +653,8 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: '푹찍쾅 => 앞으로 지나가서 피해요',
+          de: 'Sprung => Geh durch den Boss',
+          fr: 'Saut => Traversez le boss',
         },
       },
     },
@@ -658,8 +672,8 @@ const triggerSet: TriggerSet<Data> = {
     },
     {
       'locale': 'de',
-      'missingTranslations': true,
       'replaceSync': {
+        'Ball of Levin': 'Elektrosphäre',
         'Comet': 'Komet',
         'Kokytos(?!\')': 'Kokytos',
         'Kokytos\'s Echo': 'Phantom-Kokytos',
@@ -719,6 +733,7 @@ const triggerSet: TriggerSet<Data> = {
       'locale': 'fr',
       'missingTranslations': true,
       'replaceSync': {
+        'Ball of Levin': 'orbe de foudre',
         'Comet': 'Comète',
         'Kokytos(?!\')': 'Cocyte',
         'Kokytos\'s Echo': 'spectre de Cocyte',
@@ -770,6 +785,7 @@ const triggerSet: TriggerSet<Data> = {
       'locale': 'ja',
       'missingTranslations': true,
       'replaceSync': {
+        'Ball of Levin': '雷球',
         'Comet': 'コメット',
         'Kokytos(?!\')': 'コキュートス',
         'Kokytos\'s Echo': 'コキュートスの幻影',
