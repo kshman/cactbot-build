@@ -23,10 +23,10 @@ export const prsP11Strings = {
     en: '프로틴 (페어)',
   },
   proteinshare: {
-    en: '프로틴 (힐러)',
+    en: '프로틴 (힐러 4:4)',
   },
   proteinlightfar: {
-    en: '프로틴: 그대로',
+    en: '프로틴: 그대로 대기',
   },
   proteinlightnear: {
     en: '프로틴: 90도 왼쪽 안으로',
@@ -94,13 +94,14 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         text: {
-          en: '(안쪽에서) 힐러랑 뭉쳐요',
+          en: '(안쪽에서) 4:4 힐러랑 뭉쳐요',
           de: 'Himmelsrichtungen => Heiler Gruppen',
           fr: 'Positions => Package sur les heals',
           cn: '八方分散 => 治疗分摊',
+          ko: '8방향 산개 => 힐러 그룹 쉐어',
         },
         lightLr: {
-          en: '(왼쪽 돌아 마커) 힐러랑 뭉쳐요',
+          en: '(왼쪽 돌아 마커) 4:4 힐러랑 뭉쳐요',
         },
       },
     },
@@ -134,6 +135,7 @@ const triggerSet: TriggerSet<Data> = {
           de: 'Himmelsrichtungen => Partner',
           fr: 'Positions => Partenaires',
           cn: '八方分散 => 两人分摊',
+          ko: '8방향 산개 => 파트너',
         },
         pairlightfar: {
           en: '페어: 왼쪽 돌아 🟪로',
@@ -142,7 +144,7 @@ const triggerSet: TriggerSet<Data> = {
           en: '페어: 밖으로 나가요',
         },
         pairdarkfar: {
-          en: '페어: 그자리 그대로',
+          en: '페어: 그자리 대기',
         },
         pairdarknear: {
           en: '페어: 밖으로 나가요',
@@ -158,10 +160,11 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '한가운데 => 밖에서 힐러랑 뭉쳐요',
+          en: '한가운데 => 밖으로 4:4 힐러랑 뭉쳐요',
           de: 'Party Rein => Raus + Heiler Gruppen',
           fr: 'Intérieur => Extérieur + package sur les heals',
           cn: '场中集合 => 场边 + 治疗分摊',
+          ko: '본대 안으로 => 밖으로 + 힐러 그룹 쉐어',
         },
       },
     },
@@ -171,20 +174,29 @@ const triggerSet: TriggerSet<Data> = {
       netRegex: { id: '87D4', source: 'Themis' },
       durationSeconds: 11,
       alertText: (data, _matches, output) => {
-        if (data.role !== 'tank')
-          return output.text!();
-        return output.tank!();
+        if (data.role === 'tank') {
+          if (data.prsTethers.length === 0)
+            return output.tankUnknown!();
+          if (data.prsTethers.includes(data.me))
+            return output.tank!();
+        }
+        return output.text!();
       },
+      run: (data) => data.prsTethers = [],
       outputStrings: {
         text: {
-          en: '밖으로 => 안쪽으로 페어',
+          en: '밖으로 => 안쪽에서 페어',
           de: 'Party Raus => Rein + Partner',
           fr: 'Extérieur => Intérieur + package sur les heals',
           cn: '场外 => 场中 + 两人分摊',
+          ko: '본대 밖으로 => 안으로 + 파트너',
         },
         tank: {
-          en: '줄이면 한가운데 아니면 밖으로 => 안쪽으로 페어',
+          en: '한가운데 줄 유도 => 안쪽에서 페어',
         },
+        tankUnknown: {
+          en: '줄 달리면 한가운데 유도 => 안쪽에서 페어',
+        }
       },
     },
     {
@@ -195,10 +207,11 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '옆으로 => 그대로 힐러랑 뭉쳐요',
+          en: '옆으로 => 그대로 4:4 힐러랑 뭉쳐요',
           de: 'Seiten => Heiler Gruppen + Raus',
           fr: 'Côtés => Extérieur + Package sur les heals',
           cn: '两侧 => 治疗分摊 + 场外',
+          ko: '양 옆 => 밖으로 + 힐러 그룹 쉐어',
         },
       },
     },
@@ -210,10 +223,11 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '옆으로 => 안쪽으로 페어',
+          en: '옆으로 => 안쪽에서 페어',
           de: 'Seiten => Rein + Partner',
           fr: 'Côtés => Intérieur + Package sur les heals',
           cn: '两侧 => 两人分摊 + 场内',
+          ko: '양 옆 => 안으로 + 파트너',
         },
       },
     },
@@ -225,10 +239,11 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '바깥에서 힐러랑 뭉쳐요',
+          en: '바깥에서 4:4 힐러랑 뭉쳐요',
           de: 'Heiler Gruppen + Raus',
           fr: 'Extérieur + Package sur les heals',
           cn: '治疗分摊 + 场外',
+          ko: '힐러 그룹 쉐어 + 밖으로',
         },
       },
     },
@@ -240,10 +255,11 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '안쪽으로 페어',
+          en: '안쪽에서 페어',
           de: 'Partner + Rein',
           fr: 'Partenaires + Intérieur',
           cn: '两人分摊 + 场内',
+          ko: '파트너 + 안으로',
         },
       },
     },
@@ -255,10 +271,11 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '넉백 먼저 => 바깥에서 힐러랑 뭉쳐요',
+          en: '넉백 먼저 => 바깥에서 4:4 힐러랑 뭉쳐요',
           de: 'Rückstoß => Heiler Gruppen + Raus',
           fr: 'Poussée => Extérieur + Package sur les heals',
           cn: '击退 => 治疗分摊 + 场外',
+          ko: '넉백 => 밖으로 + 힐러 그룹 쉐어',
         },
       },
     },
@@ -270,10 +287,11 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '넉백 먼저 => 안쪽으로 페어',
+          en: '넉백 먼저 => 안쪽에서 페어',
           de: 'Rückstoß => Rein + Partner',
           fr: 'Poussée => Intérieur + Partenaires',
           cn: '击退 => 两人分摊 + 场内',
+          ko: '넉백 => 안으로 + 파트너',
         },
       },
     },
@@ -289,6 +307,7 @@ const triggerSet: TriggerSet<Data> = {
           de: 'Geh zu einem Dunkel-Portal',
           fr: 'Allez vers les portails sombres',
           cn: '去暗门前',
+          ko: '어둠 문 쪽으로',
         },
       },
     },
@@ -304,6 +323,7 @@ const triggerSet: TriggerSet<Data> = {
           de: 'Geh zu einem Licht-Portal',
           fr: 'Allez sur les portails de lumière',
           cn: '去光门前',
+          ko: '빛 문 쪽으로',
         },
       },
     },
@@ -318,6 +338,7 @@ const triggerSet: TriggerSet<Data> = {
           de: 'Rotiere zu den dunklen Orbs',
           fr: 'Tournez vers les orbes sombres',
           cn: '暗球侧安全',
+          ko: '어둠 구슬 쪽으로',
         },
       },
     },
@@ -332,6 +353,7 @@ const triggerSet: TriggerSet<Data> = {
           de: 'Rotiere zu den licht Orbs',
           fr: 'Tournez ves les orbes de lumière',
           cn: '光球侧安全',
+          ko: '빛 구슬 쪽으로',
         },
       },
     },
@@ -382,34 +404,40 @@ const triggerSet: TriggerSet<Data> = {
             de: 'Licht Nahe w/${player}',
             fr: 'Lumière proche avec ${player}',
             cn: '光靠近 => ${player}',
+            ko: '빛 가까이 +${player}',
           },
           lightFar: {
             en: '🟡 파: ${player} (${side})',
             de: 'Licht Entfernt w/${player}',
             fr: 'Lumière éloignée avec ${player}',
             cn: '光远离 => ${player}',
+            ko: '빛 멀리 +${player}',
           },
           darkNear: {
             en: '🟣 니어: ${player} (${side})',
             de: 'Dunkel Nahe w/${player}',
             fr: 'Sombre proche avec ${player}',
             cn: '暗靠近 => ${player}',
+            ko: '어둠 가까이 +${player}',
           },
           darkFar: {
             en: '🟣 파: ${player} (${side})',
             de: 'Dunkel Entfernt w/${player}',
             fr: 'Sombre éloigné avec ${player}',
             cn: '暗远离 => ${player}',
+            ko: '어둠 멀리 +${player}',
           },
           otherNear: {
             en: '다른팀 니어: ${player1}, ${player2}',
             de: 'Anderes Nahe: ${player1}, ${player2}',
             fr: 'Autre proche : ${player1}, ${player2}',
+            ko: '다른 가까이: ${player1}, ${player2}',
           },
           otherFar: {
             en: '다른팀 파: ${player1}, ${player2}',
             de: 'Anderes Entfernt: ${player1}, ${player2}',
             fr: 'Autre éloigné : ${player1}, ${player2}',
+            ko: '다른 멀리: ${player1}, ${player2}',
           },
           leftSide: {
             en: 'Ⓑ🡺',
@@ -485,6 +513,7 @@ const triggerSet: TriggerSet<Data> = {
           de: 'Geh zum dunklen Orb + dunkle Portale',
           fr: 'Allez vers l\'orbe sombre + Portail sombre',
           cn: '去暗球 + 暗门',
+          ko: '어둠 구슬 + 어둠 문',
         },
       },
     },
@@ -499,6 +528,7 @@ const triggerSet: TriggerSet<Data> = {
           de: 'Geh zum hellen Orb + helle Portale',
           fr: 'Allez vers l\'orbe de lumière + Portail de lumière',
           cn: '去光球 + 光门',
+          ko: '빛 구슬 + 빛 문',
         },
       },
     },
@@ -577,18 +607,22 @@ const triggerSet: TriggerSet<Data> = {
           en: '내게 줄! A로 유도',
         },
         otherTether: {
-          en: '내게 줄! 한가운데 => 탱크 유도한 곳으로',
+          en: '내게 줄! 한가운데 => 탱크쪽으로',
         },
         text: {
-          en: '한가운데서 뭉쳤다 => 탱크 유도한 곳으로',
+          en: '한가운데서 뭉쳤다 => 탱크쪽으로',
         },
       },
     },
     {
-      id: 'P11S 탱힐선으로 추정하는 테더',
+      id: 'P11S 보스와 연결 선',
       type: 'Tether',
-      netRegex: { id: '00F9' },
+      netRegex: { id: '00F9', capture: false },
+      infoText: (_data, _matches, output) => output.text!(),
       run: (data, matches) => data.prsTethers.push(matches.target),
+      outputStrings: {
+        text: '내게 줄이 달렸어요',
+      },
     },
     {
       id: 'P11S 라이트 스트림',
@@ -643,14 +677,23 @@ const triggerSet: TriggerSet<Data> = {
       type: 'StartsUsing',
       netRegex: { id: '87D2', source: 'Themis', capture: false },
       durationSeconds: 7,
-      alertText: (data, _matches, output) => data.role === 'tank' ? output.tank!() : output.others!(),
+      alertText: (data, _matches, output) => {
+        if (data.role === 'tank') {
+          if (data.prsTethers.length === 0)
+            return output.tankUnknown!();
+          if (data.prsTethers.includes(data.me))
+            return output.tankTether!();
+        }
+        return output.others!();
+      },
       run: (data) => data.prsTethers = [],
       outputStrings: {
-        tank: {
-          en: '복합 기믹 북으로, 줄 안달렸으면 남으로',
+        tankTether: '복합 기믹: 줄 달렸어요 북으로!',
+        tankUnknown: {
+          en: '복합 기믹: 즐🡺북으로 / 줄없음🡺남으로',
         },
         others: {
-          en: '복합 기믹 남쪽으로',
+          en: '복합 기믹: 남쪽으로',
         },
       },
     },
