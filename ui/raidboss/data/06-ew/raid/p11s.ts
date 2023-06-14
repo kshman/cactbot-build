@@ -676,8 +676,11 @@ const triggerSet: TriggerSet<Data> = {
     {
       id: 'P11S 보스와 연결 선',
       type: 'Tether',
-      netRegex: { id: '00F9', capture: false },
-      infoText: (_data, _matches, output) => output.text!(),
+      netRegex: { id: '00F9' },
+      alertText: (data, matches, output) => {
+        if (matches.target === data.me)
+          return output.text!();
+      },
       run: (data, matches) => data.prsTethers.push(matches.target),
       outputStrings: {
         text: '내게 줄이 달렸어요',
@@ -691,7 +694,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '🡸🡸🟦🟦 또는 🟥🟥🡺🡺',
+          en: '🡸🡸🔵🔵 또는 🔴🔴🡺🡺',
         },
       },
     },
