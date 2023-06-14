@@ -16,7 +16,6 @@ import { TriggerSet } from '../../../../../types/trigger';
 // TODO: light/dark tower call for third Paradeigma (+ taking towers, baiting adds, etc)
 // TODO: add phase dash calls?? (maybe this is overkill)
 // TODO: Superchain 1 debuff triggers (maybe combine with existing triggers?)
-// TODO: Superchain 2A
 // TODO: Superchain 2B
 // TODO: final Sample safe spot
 
@@ -111,8 +110,9 @@ const getHeadmarkerId = (data: Data, matches: NetMatches['HeadMarker']) => {
 };
 
 export interface Data extends RaidbossData {
-  prsPrdms?: number;
-  prsPrdmTower?: 'umbral' | 'astral' | 'unknown';
+  prsCount?: number;
+  prsTarget?: string;
+  prsPmTower?: 'umbral' | 'astral' | 'unknown';
   //
   decOffset?: number;
   expectedFirstHeadmarker?: string;
@@ -124,6 +124,9 @@ export interface Data extends RaidbossData {
   superchain1FirstDest?: NetMatches['AddedCombatant'];
   limitCutNumber?: number;
   whiteFlameCounter: number;
+  superchain2aFirstDir?: 'north' | 'south';
+  superchain2aSecondDir?: 'north' | 'south';
+  superchain2aSecondMech?: 'protean' | 'partners';
 }
 
 const triggerSet: TriggerSet<Data> = {
@@ -165,7 +168,8 @@ const triggerSet: TriggerSet<Data> = {
         } as const;
         data.phase = phaseMap[matches.id];
 
-        data.prsPrdmTower = 'unknown';
+        data.prsCount = (data.prsCount ?? 0) + 10;
+        data.prsPmTower = 'unknown';
       },
       outputStrings: {
         superChain1: '슈퍼 체인 시어리 I',
@@ -211,12 +215,67 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (data, matches, output) => {
         data.wingCollect = [];
         data.wingCalls = [];
-        const isLeft = matches.id === '82E8' || matches.id === '82E2';
-        return isLeft ? output.right!() : output.left!();
+        const isLeftAttack = matches.id === '82E8' || matches.id === '82E2';
+
+        // Normal wings.
+        const firstDir = data.superchain2aFirstDir;
+        const secondDir = data.superchain2aSecondDir;
+        if (data.phase !== 'superchain2a' || firstDir === undefined || secondDir === undefined)
+          return isLeftAttack ? output.right!() : output.left!();
+
+        if (isLeftAttack) {
+          if (firstDir === 'north') {
+            if (secondDir === 'north')
+              return output.superchain2aRightNorthNorth!();
+            return output.superchain2aRightNorthSouth!();
+          }
+          if (secondDir === 'north')
+            return output.superchain2aRightSouthNorth!();
+          return output.superchain2aRightSouthSouth!();
+        }
+
+        if (firstDir === 'north') {
+          if (secondDir === 'north')
+            return output.superchain2aLeftNorthNorth!();
+          return output.superchain2aLeftNorthSouth!();
+        }
+        if (secondDir === 'north')
+          return output.superchain2aLeftSouthNorth!();
+        return output.superchain2aLeftSouthSouth!();
       },
       outputStrings: {
         left: Outputs.left,
         right: Outputs.right,
+        // This could *also* say partners, but it's always partners and that feels like
+        // too much information.  The "after" call could be in an info text or something,
+        // but the wings are also calling out info text too.  This is a compromise.
+        // Sorry also for spelling this out so explicitly, but I suspect some people
+        // might want different left/right calls based on North/South boss facing
+        // and it's nice to have a "go through" or "go back" description too.
+        superchain2aLeftNorthNorth: {
+          en: '북쪽 + 보스 왼쪽 (그리고 북쪽 뒤로)',
+        },
+        superchain2aLeftNorthSouth: {
+          en: '북쪽 + 보스 왼쪽 (그리고 남쪽으로)',
+        },
+        superchain2aLeftSouthNorth: {
+          en: '남쪽 + 왼쪽 (그리고 북쪽으로)',
+        },
+        superchain2aLeftSouthSouth: {
+          en: '남쪽 + 왼쪽 (그리고 남쪽 뒤로)',
+        },
+        superchain2aRightNorthNorth: {
+          en: '북쪽 + 보스 오른쪽 (그리고 북쪽 뒤로)',
+        },
+        superchain2aRightNorthSouth: {
+          en: '북쪽 + 보스 오른쪽 (그리고 남쪽으로)',
+        },
+        superchain2aRightSouthNorth: {
+          en: '남쪽 + 오른쪽 (그리고 북쪽으로)',
+        },
+        superchain2aRightSouthSouth: {
+          en: '남쪽 + 오른쪽 (그리고 남쪽 뒤로)',
+        },
       },
     },
     {
@@ -315,13 +374,53 @@ const triggerSet: TriggerSet<Data> = {
         source: 'Athena',
         capture: false,
       },
+      // These are exactly 3 apart, so give them some room to disappear and not stack up.
+      durationSeconds: 2.5,
       suppressSeconds: 1,
       alertText: (data, _matches, output) => {
         const call = data.wingCalls.shift();
-        if (call === 'swap')
-          return output.swap!();
+        if (call === undefined)
+          return;
+
+        // Check if a normal wing call, not during Superchain IIA.
+        const firstDir = data.superchain2aFirstDir;
+        const secondDir = data.superchain2aSecondDir;
+        const secondMech = data.superchain2aSecondMech;
+        if (
+          data.phase !== 'superchain2a' || firstDir === undefined || secondDir === undefined ||
+          secondMech === undefined
+        ) {
+          if (call === 'swap')
+            return output.swap!();
         if (call === 'stay')
           return output.stay!();
+        }
+
+        // Second wing call (when middle) during Superchain IIA.
+        const isSecondWing = data.wingCalls.length === 1;
+        const finalDir = secondDir === 'north' ? output.north!() : output.south!();
+        if (isSecondWing) {
+          const isReturnBack = firstDir === secondDir;
+          if (call === 'swap') {
+            if (isReturnBack)
+              return output.superchain2aSwapMidBack!({ dir: finalDir });
+            return output.superchain2aSwapMidGo!({ dir: finalDir });
+          }
+          if (isReturnBack)
+            return output.superchain2aStayMidBack!({ dir: finalDir });
+          return output.superchain2aStayMidGo!({ dir: finalDir });
+        }
+
+        // Third wing call (when at final destination).
+        const isProtean = secondMech === 'protean';
+        if (call === 'swap') {
+          if (isProtean)
+            return output.superchain2aSwapProtean!({ dir: finalDir });
+          return output.superchain2aSwapPartners!({ dir: finalDir });
+        }
+        if (isProtean)
+          return output.superchain2aStayProtean!({ dir: finalDir });
+        return output.superchain2aStayPartners!({ dir: finalDir });
       },
       outputStrings: {
         swap: {
@@ -335,6 +434,57 @@ const triggerSet: TriggerSet<Data> = {
           de: 'bleib Stehen',
           fr: 'Restez',
           ko: '가만히',
+        },
+        superchain2aSwapMidBack: {
+          en: '자리바꾸고 + 가운데 => ${dir} 뒤로',
+        },
+        superchain2aSwapMidGo: {
+          en: '자리바꾸고 + 가운데 => ${dir}으로',
+        },
+        superchain2aStayMidBack: {
+          en: '그대로 + 가운데 => ${dir} 뒤로',
+        },
+        superchain2aStayMidGo: {
+          en: '그대로 + 가운데 => ${dir}으로',
+        },
+        superchain2aSwapProtean: {
+          en: '자리바꾸고 => 프로틴 + ${dir}',
+        },
+        superchain2aStayProtean: {
+          en: '그대로 => 프로틴 + ${dir}',
+        },
+        superchain2aSwapPartners: {
+          en: '자리바꾸고 => 페어 + ${dir}',
+        },
+        superchain2aStayPartners: {
+          en: '그대로 => 페어 + ${dir}',
+        },
+        north: Outputs.north,
+        south: Outputs.south,
+      },
+    },
+    {
+      id: 'P12S Wing Followup Third Wing Superchain IIA',
+      type: 'Ability',
+      netRegex: { id: ['82E5', '82E6', '82EB', '82EC'], source: 'Athena', capture: false },
+      condition: (data) => data.phase === 'superchain2a',
+      suppressSeconds: 1,
+      alertText: (data, _matches, output) => {
+        const secondMech = data.superchain2aSecondMech;
+        if (secondMech === undefined)
+          return;
+
+        // No direction needed here, because if you're not already here you're not going to make it.
+        if (secondMech === 'protean')
+          return output.protean!();
+        return output.partners!();
+      },
+      outputStrings: {
+        protean: {
+          en: '프로틴',
+        },
+        partners: {
+          en: '페어',
         },
       },
     },
@@ -638,6 +788,90 @@ const triggerSet: TriggerSet<Data> = {
         outThenIn: Outputs.outThenIn,
       },
     },
+    {
+      id: 'P12S Superchain Theory IIa ',
+      type: 'AddedCombatant',
+      netRegex: { npcNameId: superchainNpcNameId, npcBaseId: superchainNpcBaseIds, capture: false },
+      condition: (data) => data.phase === 'superchain2a' && data.superchainCollect.length === 10,
+      run: (data) => {
+        // Sort ascending.
+        const collect = data.superchainCollect.sort((a, b) =>
+          parseInt(a.npcBaseId) - parseInt(b.npcBaseId)
+        );
+
+        // Based on id sorting (see: superchainNpcBaseIdMap), they will always be in this order.
+        const [
+          dest1,
+          dest2,
+          dest3,
+          /* out1 */,
+          /* out2 */,
+          /* out3 */,
+          /* out4 */,
+          /* in1 */,
+          mech1,
+          mech2,
+        ] = collect;
+        if (
+          dest1 === undefined || dest2 === undefined || dest3 === undefined ||
+          mech1 === undefined || mech2 === undefined
+        )
+          return;
+
+        // These are all at x = 100, y = 100 +/- 10
+        const [destNorth, /* destMid */, destSouth] = [dest1, dest2, dest3].sort((a, b) =>
+          parseFloat(a.y) - parseFloat(b.y)
+        );
+        if (destNorth === undefined || destSouth === undefined)
+          return;
+
+        const mech1NorthDist = distSqr(mech1, destNorth);
+        const mech2NorthDist = distSqr(mech2, destNorth);
+        const mech1SouthDist = distSqr(mech1, destSouth);
+        const mech2SouthDist = distSqr(mech2, destSouth);
+
+        // Distance between mechanic and destination determines which goes off when.
+        // ~81 distance for first mechanic, ~1190 for second mechanic
+        // ~440, ~480 for comparing with wrong destination.
+        const firstDistance = 100;
+        const secondDistance = 1000;
+
+        let secondMech: NetMatches['AddedCombatant'] | undefined;
+        let firstDir: 'north' | 'south' | undefined;
+        let secondDir: 'north' | 'south' | undefined;
+
+        if (mech1NorthDist < firstDistance || mech2NorthDist < firstDistance)
+          firstDir = 'north';
+        else if (mech1SouthDist < firstDistance || mech2SouthDist < firstDistance)
+          firstDir = 'south';
+
+        if (mech1NorthDist > secondDistance) {
+          secondDir = 'north';
+          secondMech = mech1;
+        } else if (mech1SouthDist > secondDistance) {
+          secondDir = 'south';
+          secondMech = mech1;
+        } else if (mech2NorthDist > secondDistance) {
+          secondDir = 'north';
+          secondMech = mech2;
+        } else if (mech2SouthDist > secondDistance) {
+          secondDir = 'south';
+          secondMech = mech2;
+        }
+
+        if (secondMech === undefined || firstDir === undefined || secondDir === undefined) {
+          const distances = [mech1NorthDist, mech1SouthDist, mech2NorthDist, mech2SouthDist];
+          console.error(`Superchain2a: bad distances: ${JSON.stringify(distances)}`);
+          return;
+        }
+
+        // To avoid trigger overload, we'll combine these calls with the wings calls.
+        const isSecondMechProtean = secondMech.npcBaseId === superchainNpcBaseIdMap.protean;
+        data.superchain2aFirstDir = firstDir;
+        data.superchain2aSecondDir = secondDir;
+        data.superchain2aSecondMech = isSecondMechProtean ? 'protean' : 'partners';
+      },
+    },
     // --------------------- Phase 2 ------------------------
     {
       id: 'P12S Geocentrism Vertical',
@@ -672,7 +906,7 @@ const triggerSet: TriggerSet<Data> = {
         },
       },
     },
-    // -- PRT --
+    // --------------------- PRT ---------------------
     {
       id: 'P12S 글라우코피스',
       type: 'StartsUsing',
@@ -687,110 +921,11 @@ const triggerSet: TriggerSet<Data> = {
       id: 'P12S 파라데이그마',
       type: 'StartsUsing',
       netRegex: { id: '82ED', capture: false },
-      run: (data) => data.prsPrdms = (data.prsPrdms ?? 0) + 1,
-    },
-    {
-      id: 'P12S 개인별 체인 이펙트',
-      type: 'GainsEffect',
-      // DF8:Umbral Tilt 하얀 동글
-      // DF9:Astral Tilt 보라 동글
-      // DFA:Heavensflame Soul
-      // DFB:Umbralbright Soul
-      // DFC:Astralbright Soul
-      // DFD:Umbralstrong Soul
-      // DFE:Astralstrong Soul
-      netRegex: { effectId: ['DF8', 'DF9', 'DFB', 'DFC', 'DFD', 'DFE'] },
-      condition: Conditions.targetIsYou(),
-      delaySeconds: (data) => {
-        if (data.phase === 'superchain1' && data.prsPrdms === 2)
-          return 4;
-        if (data.prsPrdms === 3)
-          return 0.5;
-        return 0;
-      },
-      durationSeconds: (data) => {
-        if (data.phase === undefined)
-          return 7;
-        if (data.phase === 'superchain1') {
-          if (data.prsPrdms === 2)
-            return 18;
-          if (data.prsPrdms === 3)
-            return 9;
-        }
-        return 5;
-      },
-      suppressSeconds: (data) => {
-        if (data.phase === 'superchain1' && data.prsPrdms === 2)
-          return 23;
-        return 20;
-      },
-      infoText: (data, matches, output) => {
-        if (data.phase === undefined) {
-          if (matches.effectId === 'DFB')
-            return output.twUbSoul!();
-          if (matches.effectId === 'DFC')
-            return output.twAbSoul!();
-        } else if (data.phase === 'superchain1') {
-          if (data.prsPrdms === 2) {
-            const mesgs: { [eid: string]: string } = {
-              'DF8': output.sc1UmbTilt!(),
-              'DF9': output.sc1AstTilt!(),
-              // 'DFA': output.heavenSoul!(),
-              'DFB': output.sc1UbSoul!(),
-              'DFC': output.sc1AbSoul!(),
-              'DFD': output.sc1UsSoul!(),
-              'DFE': output.sc1AsSoul!()
-            };
-            return mesgs[matches.effectId] ?? output.unknown!();
-          } else if (data.prsPrdms === 3) {
-            if (matches.effectId === 'DFB')
-              return output.pd3UbSoul!();
-            if (matches.effectId === 'DFC')
-              return output.pd3AbSoul!();
-
-            // 타워 또는 레이저
-            if (matches.effectId === 'DF8')
-              return data.prsPrdmTower === 'astral' ? output.pd3UmbTilt!() : output.pd3Bait!();
-            if (matches.effectId === 'DF9')
-              return data.prsPrdmTower === 'umbral' ? output.pd3AstTilt!() : output.pd3Bait!();
-          }
-        }
-      },
-      outputStrings: {
-        // 그냥 타워
-        twUbSoul: '🟡타워',
-        twAbSoul: '🟣타워',
-        // 슈퍼체인1
-        sc1UmbTilt: '❰❰❰왼쪽 🡺 흩어져요',
-        sc1AstTilt: '오른쪽❱❱❱ 🡺 흩어져요',
-        heavenSoul: '',
-        sc1UbSoul: '❰❰❰왼쪽 🡺 🟡타워 설치',
-        sc1AbSoul: '오른쪽❱❱❱ 🡺 🟣타워 설치',
-        sc1UsSoul: '오른쪽❱❱❱ 🡺 🟣 밟아요',
-        sc1AsSoul: '❰❰❰왼쪽 🡺 🟡 밟아요',
-        // 파라데이그3
-        pd3UbSoul: '타워 밟고 🡺 보라 쪽에 🟡타워 설치', // 노랑
-        pd3AbSoul: '타워 밟고 🡺 노랑 쪽에 🟣타워 설치', // 보라
-        pd3UmbTilt: '🟣 타워 밟아요',
-        pd3AstTilt: '🟡 타워 밟아요',
-        pd3Bait: '레이저 유도',
-        //
-        unknown: Outputs.unknown,
-      },
-    },
-    {
-      id: 'P12S 파라데이그마3 이펙트 얻기',
-      type: 'GainsEffect',
-      netRegex: { effectId: ['DFB', 'DFC'] },
-      condition: (data) => data.prsPrdms === 3,
-      run: (data, matches) => {
-        if (matches.effectId === 'DFB')
-          data.prsPrdmTower = 'umbral'; // 노랑 타워
-        else if (matches.effectId === 'DFC')
-          data.prsPrdmTower = 'astral'; // 보라 타워
-        else
-          data.prsPrdmTower = 'unknown';
-      },
+      // infoText: (data, _matches, output) => output.text!({ cnt: (data.prsCount ?? 0) + 1 }),
+      run: (data) => data.prsCount = (data.prsCount ?? 0) + 1,
+      // outputStrings: {
+      //   text: '파라: ${cnt}',
+      // },
     },
     {
       id: 'P12S 줄다리기 보라',
@@ -798,7 +933,7 @@ const triggerSet: TriggerSet<Data> = {
       netRegex: { id: ['00FB', '00EA'] },
       condition: Conditions.targetIsYou(),
       durationSeconds: 7,
-      suppressSeconds: 20,
+      suppressSeconds: 5,
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: '🟪 줄 땡겨요',
@@ -810,31 +945,121 @@ const triggerSet: TriggerSet<Data> = {
       netRegex: { id: '00E9' },
       condition: Conditions.targetIsYou(),
       durationSeconds: 7,
-      suppressSeconds: 20,
+      suppressSeconds: 5,
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: '🟨 줄 땡겨요',
       }
     },
+      // DF8:Umbral Tilt 하얀 동글
+      // DF9:Astral Tilt 보라 동글
+      // DFA:Heavensflame Soul
+      // DFB:Umbralbright Soul
+      // DFC:Astralbright Soul
+      // DFD:Umbralstrong Soul
+      // DFE:Astralstrong Soul
     {
-      id: 'P12S 파라데이그마 더하기',
+      id: 'P12S 첫번째 줄다리기 + 바닥',
+      type: 'GainsEffect',
+      netRegex: { effectId: ['DFB', 'DFC'] },
+      condition: (data, matches) => data.prsCount === 2 && matches.target === data.me,
+      infoText: (_data, matches, output) => {
+        if (matches.effectId === 'DFB')
+          return output.twUbSoul!();
+        if (matches.effectId === 'DFC')
+          return output.twAbSoul!();
+      },
+      outputStrings: {
+        twUbSoul: '🟡타워',
+        twAbSoul: '🟣타워',
+      }
+    },
+    {
+      id: 'P12S 슈퍼체인 이펙트',
+      type: 'GainsEffect',
+      netRegex: { effectId: ['DF8', 'DF9', 'DFB', 'DFC', 'DFD', 'DFE'] },
+      condition: (data, matches) => data.prsCount === 12 && matches.target === data.me,
+      delaySeconds: 4,
+      durationSeconds: 18,
+      suppressSeconds: 22,
+      infoText: (_data, matches, output) => {
+        const mesgs: { [eid: string]: string } = {
+          'DF8': output.umbTilt!(),
+          'DF9': output.astTilt!(),
+          'DFB': output.ubSoul!(),
+          'DFC': output.abSoul!(),
+          'DFD': output.usSoul!(),
+          'DFE': output.asSoul!()
+        };
+        return mesgs[matches.effectId];
+      },
+      outputStrings: {
+        umbTilt: '❰❰❰왼쪽 🡺 흩어져요',
+        astTilt: '오른쪽❱❱❱ 🡺 흩어져요',
+        ubSoul: '❰❰❰왼쪽 🡺 🟡타워 설치',
+        abSoul: '오른쪽❱❱❱ 🡺 🟣타워 설치',
+        usSoul: '오른쪽❱❱❱ 🡺 🟣 밟아요',
+        asSoul: '❰❰❰왼쪽 🡺 🟡 밟아요',
+      },
+    },
+    {
+      id: 'P12S 파라3 DPS 이펙트',
+      type: 'GainsEffect',
+      netRegex: { effectId: ['DF8', 'DF9'] },
+      condition: (data, matches) => data.prsCount === 13 && matches.target === data.me && data.role === 'dps',
+      alertText: (data, matches, output) => {
+        if (matches.effectId === 'DF8')
+          return data.prsPmTower === 'astral' ? output.umbTilt!() : output.bait!();
+        if (matches.effectId === 'DF9')
+          return data.prsPmTower === 'umbral' ? output.astTilt!() : output.bait!();
+      },
+      outputStrings: {
+        umbTilt: '🟣 타워 밟아요',
+        astTilt: '🟡 타워 밟아요',
+        bait: '레이저 유도',
+      },
+    },
+    {
+      id: 'P12S 파라3 탱힐 이펙트',
+      type: 'GainsEffect',
+      netRegex: { effectId: ['DFB', 'DFC'] },
+      condition: (data) => data.prsCount === 13,
+      durationSeconds: 9,
+      infoText: (data, matches, output) => {
+        if (matches.effectId === 'DFB') {
+          data.prsPmTower = 'umbral'; // 노랑 타워
+          if (matches.target === data.me)
+            return output.ubSoul!();
+        } else if (matches.effectId === 'DFC') {
+          data.prsPmTower = 'astral'; // 보라 타워
+          if (matches.target === data.me)
+            return output.abSoul!();
+        } else {
+          data.prsPmTower = 'unknown';
+        }
+      },
+      outputStrings: {
+        ubSoul: '타워 밟고 🡺 🟪 쪽에 🟡타워 설치', // 노랑
+        abSoul: '타워 밟고 🡺 🟨 쪽에 🟣타워 설치', // 보라
+      },
+    },
+    {
+      id: 'P12S 파라3 더하기',
       type: 'GainsEffect',
       netRegex: { effectId: 'DFF' },
       condition: Conditions.targetIsYou(),
       durationSeconds: 10,
-      suppressSeconds: 10,
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: '북쪽  🡺 타워 밟고 🡺 모서리➕'
       },
     },
     {
-      id: 'P12S 파라데이그마 곱하기',
+      id: 'P12S 파라3 곱하기',
       type: 'GainsEffect',
       netRegex: { effectId: 'E00' },
       condition: Conditions.targetIsYou(),
       durationSeconds: 10,
-      suppressSeconds: 10,
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: '남쪽 🡺 타워 밟고 🡺 가운데❌'

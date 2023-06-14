@@ -149,7 +149,7 @@ const triggerSet: TriggerSet<Data> = {
       run: (data, matches) => data.lastDualspellId = matches.id,
       outputStrings: {
         text: {
-          en: '둘이서 + 안으로',
+          en: '페어 + 안으로',
           de: 'Partner + Donut',
           fr: 'Partenaires + Donut',
           cn: '双人分摊 + 月环',
@@ -186,7 +186,7 @@ const triggerSet: TriggerSet<Data> = {
       run: (data) => delete data.lastDualspellId,
       outputStrings: {
         fireIceOut: {
-          en: '둘이서 + 밖으로',
+          en: '페어 + 밖으로',
           de: 'Raus + Partner',
           fr: 'Extérieur + Partenaires',
           cn: '远离 + 双人分摊',
@@ -210,7 +210,7 @@ const triggerSet: TriggerSet<Data> = {
       run: (data) => delete data.lastDualspellId,
       outputStrings: {
         fireIceIn: {
-          en: '둘이서 + 안으로',
+          en: '페어 + 안으로',
           de: 'Rein + Partner',
           fr: 'Intérieur + Partenaires',
           cn: '靠近 + 双人分摊',

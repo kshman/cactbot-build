@@ -16,6 +16,8 @@ export interface Data extends RaidbossData {
   lightDarkDebuff: { [name: string]: 'light' | 'dark' };
   lightDarkBuddy: { [name: string]: string };
   lightDarkTether: { [name: string]: 'near' | 'far' };
+  cylinderValue?: number;
+  numCylinders?: number;
 }
 
 export const prsP11Strings = {
@@ -400,28 +402,28 @@ const triggerSet: TriggerSet<Data> = {
         // cactbot-builtin-response
         output.responseOutputStrings = {
           lightNear: {
-            en: '🟡 니어: ${player} (${side})',
+            en: '🟡 니어: ${role}/${player} (${side})',
             de: 'Licht Nahe w/${player}',
             fr: 'Lumière proche avec ${player}',
             cn: '光靠近 => ${player}',
             ko: '빛 가까이 +${player}',
           },
           lightFar: {
-            en: '🟡 파: ${player} (${side})',
+            en: '🟡 파: ${role}/${player} (${side})',
             de: 'Licht Entfernt w/${player}',
             fr: 'Lumière éloignée avec ${player}',
             cn: '光远离 => ${player}',
             ko: '빛 멀리 +${player}',
           },
           darkNear: {
-            en: '🟣 니어: ${player} (${side})',
+            en: '🟣 니어: ${role}/${player} (${side})',
             de: 'Dunkel Nahe w/${player}',
             fr: 'Sombre proche avec ${player}',
             cn: '暗靠近 => ${player}',
             ko: '어둠 가까이 +${player}',
           },
           darkFar: {
-            en: '🟣 파: ${player} (${side})',
+            en: '🟣 파: ${role}/${player} (${side})',
             de: 'Dunkel Entfernt w/${player}',
             fr: 'Sombre éloigné avec ${player}',
             cn: '暗远离 => ${player}',
@@ -445,6 +447,9 @@ const triggerSet: TriggerSet<Data> = {
           rightSide: {
             en: '🡸Ⓓ',
           },
+          roleTank: Outputs.roleTank,
+          roleHeal: Outputs.roleHeal,
+          roleDps: Outputs.roleDps,
         };
 
         const myColor = data.lightDarkDebuff[data.me];
@@ -472,19 +477,23 @@ const triggerSet: TriggerSet<Data> = {
         else
           data.prsLnd = myLength === 'near' ? 'darknear' : 'darkfar';
 
+        const myBuddyRole = data.party.isTank(myBuddy)
+          ? output.roleTank!() : data.party.isHealer(myBuddy)
+          ? output.roleHeal!() : output.roleDps!();
+
         const myBuddyShort = data.ShortName(myBuddy);
 
         let alertText: string;
         if (myLength === 'near') {
           if (myColor === 'light')
-            alertText = output.lightNear!({ player: myBuddyShort, side: mySide });
+            alertText = output.lightNear!({ role: myBuddyRole, player: myBuddyShort, side: mySide });
           else
-            alertText = output.darkNear!({ player: myBuddyShort, side: mySide });
+            alertText = output.darkNear!({ role: myBuddyRole, player: myBuddyShort, side: mySide });
         } else {
           if (myColor === 'light')
-            alertText = output.lightFar!({ player: myBuddyShort, side: mySide });
+            alertText = output.lightFar!({ prole: myBuddyRole, layer: myBuddyShort, side: mySide });
           else
-            alertText = output.darkFar!({ player: myBuddyShort, side: mySide });
+            alertText = output.darkFar!({ role: myBuddyRole, player: myBuddyShort, side: mySide });
         }
 
         let infoText: string | undefined = undefined;
@@ -530,6 +539,56 @@ const triggerSet: TriggerSet<Data> = {
           cn: '去光球 + 光门',
           ko: '빛 구슬 + 빛 문',
         },
+      },
+    },
+    {
+      id: 'P11S Lightstream Collect',
+      type: 'HeadMarker',
+      // 00E6 = orange clockwise rotation
+      // 00E7 = blue counterclockwise rotation
+      netRegex: { id: '00E[67]', target: 'Arcane Cylinder' },
+      run: (data, matches) => {
+        // Create a 3 digit binary value, Orange = 0, Blue = 1.
+        // e.g. BBO = 110 = 6
+        data.cylinderValue ??= 0;
+        data.numCylinders ??= 0;
+        data.cylinderValue *= 2;
+        if (matches.id === '00E7')
+          data.cylinderValue += 1;
+        data.numCylinders++;
+      },
+    },
+    {
+      id: 'P11S Lightstream',
+      type: 'HeadMarker',
+      netRegex: { id: '00E[67]', target: 'Arcane Cylinder', capture: false },
+      condition: (data) => data.numCylinders === 3,
+      alertText: (data, _matches, output) => {
+        if (!data.cylinderValue || !(data.cylinderValue >= 0) || data.cylinderValue > 7)
+          return;
+        const outputs: { [cylinderValue: number]: string | undefined } = {
+          0b000: undefined,
+          0b001: output.northwest!(),
+          0b010: output.east!(),
+          0b011: output.northeast!(),
+          0b100: output.southwest!(),
+          0b101: output.west!(),
+          0b110: output.southeast!(),
+          0b111: undefined,
+        };
+        return outputs[data.cylinderValue];
+      },
+      run: (data) => {
+        delete data.cylinderValue;
+        delete data.numCylinders;
+      },
+      outputStrings: {
+        east: Outputs.east,
+        northeast: Outputs.northeast,
+        northwest: Outputs.northwest,
+        southeast: Outputs.southeast,
+        southwest: Outputs.southwest,
+        west: Outputs.west,
       },
     },
     {

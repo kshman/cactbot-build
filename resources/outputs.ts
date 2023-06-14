@@ -949,4 +949,14 @@ export default {
   cnum9: {
     en: '⑨',
   },
+  // 롤
+  roleTank: {
+    en: '탱크',
+  },
+  roleHeal: {
+    en: '힐러',
+  },
+  roleDps: {
+    en: 'DPS',
+  },
 } as const;
