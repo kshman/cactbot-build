@@ -6,18 +6,22 @@ import { RaidbossData } from '../../../../../types/data';
 import { NetMatches } from '../../../../../types/net_matches';
 import { TriggerSet } from '../../../../../types/trigger';
 
-// TODO: handle Two Minds
+// TODO: something for Charybdis??
 
 export interface Data extends RaidbossData {
   prsDefm?: number;
   //
   decOffset?: number;
+  dualityBuster: string[];
   lastDualspellId?: string;
   limitCutNumber?: number;
   combination?: 'front' | 'rear';
   seenChimericSuccession?: boolean;
   levinOrbs: {
-    [combatantId: string]: { [property: string]: number };
+    [combatantId: string]: {
+      order?: number;
+      dir?: number;
+    };
   };
   limitCutDash: number;
 }
@@ -75,6 +79,14 @@ const limitCutPlayerActive: number[][] = [
   [8, 4],
 ];
 
+// Time between headmarker and defamation for Chimeric Succession.
+const chimericLimitCutTime: { [id: number]: number } = {
+  1: 10,
+  2: 13,
+  3: 16,
+  4: 19,
+} as const;
+
 const firstHeadmarker = parseInt(headmarkers.dualityOfDeath, 16);
 
 const getHeadmarkerId = (data: Data, matches: NetMatches['HeadMarker']) => {
@@ -97,6 +109,7 @@ const triggerSet: TriggerSet<Data> = {
   timelineFile: 'p9s.txt',
   initData: () => {
     return {
+      dualityBuster: [],
       levinOrbs: {},
       limitCutDash: 0,
     };
@@ -107,6 +120,7 @@ const triggerSet: TriggerSet<Data> = {
       type: 'HeadMarker',
       netRegex: {},
       condition: (data) => data.decOffset === undefined,
+      suppressSeconds: 99999,
       // Unconditionally set the first headmarker here so that future triggers are conditional.
       run: (data, matches) => getHeadmarkerId(data, matches),
     },
@@ -124,21 +138,32 @@ const triggerSet: TriggerSet<Data> = {
       response: Responses.aoe(),
     },
     {
+      id: 'P9S Duality of Death Collect',
+      type: 'HeadMarker',
+      netRegex: {},
+      condition: (data, matches) => getHeadmarkerId(data, matches) === headmarkers.dualityOfDeath,
+      run: (data, matches) => data.dualityBuster.push(matches.target),
+    },
+    {
       id: 'P9S Duality of Death',
       type: 'StartsUsing',
       netRegex: { id: '8151', source: 'Kokytos', capture: false },
       response: (data, _matches, output) => {
         // cactbot-builtin-response
         output.responseOutputStrings = {
+          tankBusterOnYou: Outputs.tankBusterOnYou,
           tankSwap: Outputs.tankSwap,
           tankBusters: Outputs.tankBusters,
         };
 
-        // TODO: track headmarkers?
-        if (data.role === 'tank')
+        if (data.dualityBuster.includes(data.me)) {
+          if (data.role !== 'tank' && data.job !== 'BLU')
+            return { alarmText: output.tankBusterOnYou!() };
           return { alertText: output.tankSwap!() };
+        }
         return { infoText: output.tankBusters!() };
       },
+      run: (data) => data.dualityBuster = [],
     },
     {
       id: 'P9S Dualspell Fire/Ice',
@@ -149,10 +174,11 @@ const triggerSet: TriggerSet<Data> = {
       run: (data, matches) => data.lastDualspellId = matches.id,
       outputStrings: {
         text: {
-          en: '페어 + 안으로',
+          en: '안에서 + 둘이 함께',
           de: 'Partner + Donut',
           fr: 'Partenaires + Donut',
           cn: '双人分摊 + 月环',
+          ko: '파트너 + 도넛',
         },
       },
     },
@@ -165,10 +191,11 @@ const triggerSet: TriggerSet<Data> = {
       run: (data, matches) => data.lastDualspellId = matches.id,
       outputStrings: {
         text: {
-          en: '프로틴 + 안으로',
+          en: '안에서 + 자기 자리로 흩어져요',
           de: 'Himmelsrichtungen + Donut',
           fr: 'Positions + Donut',
           cn: '八方分散 + 月环',
+          ko: '8방향 산개 + 도넛',
         },
       },
     },
@@ -186,10 +213,11 @@ const triggerSet: TriggerSet<Data> = {
       run: (data) => delete data.lastDualspellId,
       outputStrings: {
         fireIceOut: {
-          en: '페어 + 밖으로',
+          en: '밖으로 + 둘이 함게',
           de: 'Raus + Partner',
           fr: 'Extérieur + Partenaires',
           cn: '远离 + 双人分摊',
+          ko: '밖으로 + 파트너',
         },
         out: Outputs.out,
       },
@@ -210,16 +238,18 @@ const triggerSet: TriggerSet<Data> = {
       run: (data) => delete data.lastDualspellId,
       outputStrings: {
         fireIceIn: {
-          en: '페어 + 안으로',
+          en: '안에서 + 둘이 함께',
           de: 'Rein + Partner',
           fr: 'Intérieur + Partenaires',
           cn: '靠近 + 双人分摊',
+          ko: '안으로 + 파트너',
         },
         thunderIceIn: {
-          en: '프로틴 + 안으로',
+          en: '안에서 + 자기 자리로 흩어져요',
           de: 'Rein + Himmelsrichtungen',
           fr: 'Intérieur + Positions',
           cn: '靠近 + 八方分散',
+          ko: '안으로 + 8방향 산개',
         },
         in: Outputs.in,
       },
@@ -238,10 +268,11 @@ const triggerSet: TriggerSet<Data> = {
       run: (data) => delete data.lastDualspellId,
       outputStrings: {
         thunderIceOut: {
-          en: '프로틴 + 밖으로',
+          en: '밖으로 + 자기 자리로 흩어져요',
           de: 'Raus + Himmelsrichtungen',
           fr: 'Extérieur + Positions',
           cn: '远离 + 八方分散',
+          ko: '밖으로 + 8방향 산개',
         },
         out: Outputs.out,
       },
@@ -263,6 +294,7 @@ const triggerSet: TriggerSet<Data> = {
           de: 'Rückstoß in die Wand',
           fr: 'Poussée sur un mur',
           cn: '向墙边击退',
+          ko: '벽으로 넉백',
         },
       },
     },
@@ -357,9 +389,10 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         text: {
-          en: '첫번째 구슬 ${dir} => ${rotation}',
+          en: '맨 처음 구슬 ${dir} => ${rotation}',
           de: 'Erster Orb ${dir} => ${rotation}',
           fr: 'Premier orbe ${dir} => ${rotation}',
+          ko: '첫번째 구슬 ${dir} => ${rotation}',
         },
         clockwise: Outputs.clockwise,
         counterclock: Outputs.counterclockwise,
@@ -367,7 +400,7 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: 'P9S Limit Cut Player Dash Order',
+      id: 'P9S Limit Cut Player Number',
       type: 'HeadMarker',
       netRegex: {},
       condition: (data, matches) => {
@@ -408,6 +441,36 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
+      id: 'P9S Chimeric Limit Cut Defamation',
+      type: 'HeadMarker',
+      netRegex: {},
+      condition: (data, matches) => {
+        return data.seenChimericSuccession && data.me === matches.target &&
+          data.limitCutNumber !== undefined &&
+          limitCutMarkers.includes(getHeadmarkerId(data, matches));
+      },
+      delaySeconds: (data) => {
+        if (data.limitCutNumber === undefined)
+          return 0;
+        const time = chimericLimitCutTime[data.limitCutNumber];
+        if (time === undefined)
+          return 0;
+        // 6 seconds ahead of time
+        return time - 6;
+      },
+      alertText: (_data, _matches, output) => output.defamation!(),
+      outputStrings: {
+        defamation: {
+          en: '내게 지금 서클',
+          de: 'Ehrenstrafe aud DIR',
+          fr: 'Diffamation sur VOUS',
+          ja: '名誉罰',
+          cn: '大圈点名',
+          ko: '광역징 대상자',
+        },
+      },
+    },
+    {
       // When Kokytos uses 'Scrambled Succession' (817D), there is ~4.0s. until the first tower appears (8181)
       // and about ~5.0s until he dashes and uses Firemeld (8180) on the #2 limit cut player.  Because these abilities
       // have very short (or no) cast times, we can base the first combo trigger on the use of Scrambled Succession, and
@@ -434,11 +497,13 @@ const triggerSet: TriggerSet<Data> = {
           en: '돌진 유도',
           de: 'Sprung ködern',
           fr: 'Encaissez le saut',
+          ko: '돌진 유도',
         },
         soak: {
           en: '타워 밟아요',
           de: 'Im Turm stehen',
           fr: 'Prenez votre tour',
+          ko: '기둥 들어가기',
         },
       },
     },
@@ -471,11 +536,13 @@ const triggerSet: TriggerSet<Data> = {
           en: '돌진 유도',
           de: 'Sprung ködern',
           fr: 'Encaissez le saut',
+          ko: '돌진 유도',
         },
         soak: {
           en: '타워 밟아요',
           de: 'Im Turm stehen',
           fr: 'Prenez votre tour',
+          ko: '기둥 들어가기',
         },
       },
     },
@@ -484,11 +551,13 @@ const triggerSet: TriggerSet<Data> = {
       type: 'HeadMarker',
       netRegex: {},
       condition: (data, matches) => {
-        // return data.me === matches.target &&
-        //   getHeadmarkerId(data, matches) === headmarkers.defamation;
+      /*
+        return data.me === matches.target &&
+          getHeadmarkerId(data, matches) === headmarkers.defamation;
+      */
         return getHeadmarkerId(data, matches) === headmarkers.defamation;
       },
-      alarmText: (data, matches, output) => {
+      infoText: (data, matches, output) => {
         data.prsDefm = (data.prsDefm ?? 0) + 1;
         if (data.me === matches.target)
           return output.defamation!({ num: data.prsDefm });
@@ -500,7 +569,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: 'Diffamation sur VOUS',
           ja: '名誉罰',
           cn: '大圈点名',
-          ko: '명예형: 보스 밑에서 나 홀로!!!',
+          ko: '광역징 대상자',
         },
       },
     },
@@ -522,6 +591,7 @@ const triggerSet: TriggerSet<Data> = {
           de: 'Raus => Hinten',
           fr: 'Extérieur => Derrière',
           cn: '远离 => 去背后',
+          ko: '밖으로 => 뒤로',
         },
       },
     },
@@ -537,6 +607,7 @@ const triggerSet: TriggerSet<Data> = {
           de: 'Rein => Hinten',
           fr: 'Intérieur => Derrière',
           cn: '靠近 => 去背后',
+          ko: '안으로 => 뒤로',
         },
       },
     },
@@ -552,6 +623,7 @@ const triggerSet: TriggerSet<Data> = {
           de: 'Raus => Vorne',
           fr: 'Extérieur => Devant',
           cn: '远离 => 去面前',
+          ko: '밖으로 => 앞으로',
         },
       },
     },
@@ -567,6 +639,7 @@ const triggerSet: TriggerSet<Data> = {
           de: 'Rein => Vorne',
           fr: 'Intérieur => Devant',
           cn: '靠近 => 去面前',
+          ko: '안으로 => 앞으로',
         },
       },
     },
@@ -605,24 +678,28 @@ const triggerSet: TriggerSet<Data> = {
           de: 'Raus + Vorne',
           fr: 'Extérieur + Devant',
           cn: '远离 => 去面前',
+          ko: '밖으로 + 앞으로',
         },
         outAndBack: {
           en: '밖으로 + 뒤로',
           de: 'Raus + Hinten',
           fr: 'Extérieur + Derrière',
           cn: '远离 => 去背后',
+          ko: '밖으로 + 뒤로',
         },
         inAndFront: {
           en: '안으로 + 앞으로',
           de: 'Rein + Vorne',
           fr: 'Intérieur + Devant',
           cn: '靠近 => 去面前',
+          ko: '안으로 + 앞으로',
         },
         inAndBack: {
           en: '안으로 + 뒤로',
           de: 'Rein + Hinten',
           fr: 'Intérieur + Derrière',
           cn: '靠近 => 去背后',
+          ko: '안으로 + 뒤로',
         },
       },
     },
@@ -642,6 +719,7 @@ const triggerSet: TriggerSet<Data> = {
           en: '푹찍쾅 => 그대로',
           de: 'Sprung => Stehen bleiben',
           fr: 'Saut => Restez',
+          ko: '돌진 => 가만히',
         },
       },
     },
@@ -655,6 +733,7 @@ const triggerSet: TriggerSet<Data> = {
           en: '푹찍쾅 => 앞으로 지나가서 피해요',
           de: 'Sprung => Geh durch den Boss',
           fr: 'Saut => Traversez le boss',
+          ko: '돌진 => 가로지르기',
         },
       },
     },
