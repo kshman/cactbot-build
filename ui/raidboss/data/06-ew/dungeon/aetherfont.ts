@@ -70,6 +70,10 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'AOE + 가운데로',
+          de: 'AoE + Geh in die Mitte',
+          fr: 'AoE + Allez au milieu',
+          cn: 'AoE + 场边招雷',
+          ko: '전체공격 + 중앙으로',
         },
       },
     },
@@ -108,6 +112,10 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: '사잇길로',
+          de: 'Steh zwischen den Platformen',
+          fr: 'Restez entre les plateformes',
+          cn: '站在平台间',
+          ko: '플랫폼 사이로',
         },
       },
     },
@@ -132,6 +140,10 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: '뒤쪽으로 (촉수 피해요)',
+          de: 'Geh nach Hinten (Vermeide Tentakel)',
+          fr: 'Allez derrière (évitez les tentacules)',
+          cn: '去背后（远离触手）',
+          ko: '보스 뒤로 (촉수 피하기)',
         },
       },
     },
