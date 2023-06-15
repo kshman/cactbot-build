@@ -110,6 +110,7 @@ const getHeadmarkerId = (data: Data, matches: NetMatches['HeadMarker']) => {
 };
 
 export interface Data extends RaidbossData {
+  prsSimple?: boolean;
   prsCount?: number;
   prsTarget?: string;
   prsPmTower?: 'umbral' | 'astral' | 'unknown';
@@ -153,21 +154,21 @@ const triggerSet: TriggerSet<Data> = {
         text: '무적으로 받아요',
       }
     },
+    {
+      id: 'P12S 알테마 블레이드',
+      regex: /Ultima Blade/,
+      beforeSeconds: 4,
+      alertText: (_data, _matches, output) => output.text!(),
+      outputStrings: {
+        text: '엄청 아픈 전체 공격!',
+      },
+    },
   ],
   triggers: [
     {
       id: 'P12S Phase Tracker 1',
       type: 'StartsUsing',
       netRegex: { id: ['82DA', '82F5', '86FA', '86FB'], source: 'Athena' },
-      infoText: (_data, matches, output) => {
-        const pms: { [id: string]: string } = {
-          '82DA': output.superChain1!(),
-          '82F5': output.palladion!(),
-          '86FA': output.superChain2a!(),
-          '86FB': output.superChain2b!(),
-        } as const;
-        return pms[matches.id];
-      },
       run: (data, matches) => {
         data.whiteFlameCounter = 0;
         data.superchainCollect = [];
@@ -183,12 +184,6 @@ const triggerSet: TriggerSet<Data> = {
         data.prsCount = (data.prsCount ?? 0) + 10;
         data.prsPmTower = 'unknown';
       },
-      outputStrings: {
-        superChain1: '슈퍼 체인 시어리 I',
-        palladion: '팔라디온',
-        superChain2a: '슈퍼 체인 시어리 II-A',
-        superChain2b: '슈퍼 체인 시어리 II-B',
-      }
     },
     {
       id: 'P12S Phase Tracker 2',
@@ -223,7 +218,7 @@ const triggerSet: TriggerSet<Data> = {
       id: 'P12S First Wing',
       type: 'StartsUsing',
       netRegex: { id: ['82E7', '82E8', '82E1', '82E2'], source: 'Athena' },
-      durationSeconds: 7,
+      durationSeconds: 8,
       alertText: (data, matches, output) => {
         data.wingCollect = [];
         data.wingCalls = [];
@@ -234,6 +229,19 @@ const triggerSet: TriggerSet<Data> = {
         const secondDir = data.superchain2aSecondDir;
         if (data.phase !== 'superchain2a' || firstDir === undefined || secondDir === undefined)
           return isLeftAttack ? output.right!() : output.left!();
+
+        //
+        if (data.prsSimple) {
+          const lrs = isLeftAttack ? output.prsRight!() : output.prsLeft!();
+          if (firstDir === 'north') {
+            if (secondDir === 'north')
+              return output.prsc2aNn!({ dir: lrs });
+            return output.prsc2aNs!({ dir: lrs });
+          }
+          if (secondDir === 'north')
+            return output.prsc2aSn!({ dir: lrs });
+          return output.prsc2aSs!({ dir: lrs });
+        }
 
         if (isLeftAttack) {
           if (firstDir === 'north') {
@@ -255,9 +263,16 @@ const triggerSet: TriggerSet<Data> = {
           return output.superchain2aLeftSouthNorth!();
         return output.superchain2aLeftSouthSouth!();
       },
+      tts: (data) => {
+        const firstDir = data.superchain2aFirstDir;
+        const secondDir = data.superchain2aSecondDir;
+        if (data.phase !== 'superchain2a' || firstDir === undefined || secondDir === undefined)
+          return;
+        return firstDir === secondDir ? 'もどります' : 'すすみます';
+      },
       outputStrings: {
-        left: Outputs.left,
-        right: Outputs.right,
+        left: '❰❰❰왼쪽❰❰❰',
+        right: '❱❱❱오른쪽❱❱❱',
         // This could *also* say partners, but it's always partners and that feels like
         // too much information.  The "after" call could be in an info text or something,
         // but the wings are also calling out info text too.  This is a compromise.
@@ -265,29 +280,36 @@ const triggerSet: TriggerSet<Data> = {
         // might want different left/right calls based on North/South boss facing
         // and it's nice to have a "go through" or "go back" description too.
         superchain2aLeftNorthNorth: {
-          en: '북쪽 + 보스 왼쪽 (그리고 뒤로 북쪽)',
+          en: '북쪽 + 왼쪽 => 북쪽',
         },
         superchain2aLeftNorthSouth: {
-          en: '북쪽 + 보스 왼쪽 (그리고 남쪽으로)',
+          en: '북쪽 + 왼쪽 => 남쪽',
         },
         superchain2aLeftSouthNorth: {
-          en: '남쪽 + 왼쪽 (그리고 북쪽으로)',
+          en: '남쪽 + 왼쪽 => 북쪽',
         },
         superchain2aLeftSouthSouth: {
-          en: '남쪽 + 왼쪽 (그리고 뒤로 남쪽)',
+          en: '남쪽 + 왼쪽 => 남쪽',
         },
         superchain2aRightNorthNorth: {
-          en: '북쪽 + 보스 오른쪽 (그리고 뒤로 북쪽)',
+          en: '북쪽 + 오른쪽 => 북쪽',
         },
         superchain2aRightNorthSouth: {
-          en: '북쪽 + 보스 오른쪽 (그리고 남쪽으로)',
+          en: '북쪽 + 오른쪽 => 남쪽',
         },
         superchain2aRightSouthNorth: {
-          en: '남쪽 + 오른쪽 (그리고 북쪽으로)',
+          en: '남쪽 + 오른쪽 => 북쪽',
         },
         superchain2aRightSouthSouth: {
-          en: '남쪽 + 오른쪽 (그리고 뒤로 남쪽)',
+          en: '남쪽 + 오른쪽 => 남쪽',
         },
+        //
+        prsc2aNn: '북쪽 => 다시 북쪽 [${dir}]',
+        prsc2aNs: '북쪽 => 전진해서 남쪽 [${dir}]',
+        prsc2aSs: '남쪽 => 다시 남쪽 [${dir}]',
+        prsc2aSn: '남쪽 => 전진해서 북쪽 [${dir}]',
+        prsLeft: Outputs.left,
+        prsRight: Outputs.right,
       },
     },
     {
@@ -347,7 +369,7 @@ const triggerSet: TriggerSet<Data> = {
         left: Outputs.left,
         right: Outputs.right,
         swap: {
-          en: '자리바꿈',
+          en: '옆자리',
           de: 'Wechseln',
           fr: 'Swap',
           ko: '이동',
@@ -365,7 +387,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '(가만히)',
         },
         secondWingCallSwap: {
-          en: '(자리바꿈)',
+          en: '(옆자리로 이동)',
           de: '(Wechseln)',
           fr: '(swap)',
           ko: '(이동)',
@@ -413,6 +435,14 @@ const triggerSet: TriggerSet<Data> = {
         const finalDir = secondDir === 'north' ? output.north!() : output.south!();
         if (isSecondWing) {
           const isReturnBack = firstDir === secondDir;
+          //
+          if (data.prsSimple) {
+            const move = call === 'swap' ? output.swap!() : output.stay!();
+            if (isReturnBack)
+              return output.prsc2aMb!({ move: move });
+            return output.prsc2aMg!({ move: move });
+          }
+          //
           if (call === 'swap') {
             if (isReturnBack)
               return output.superchain2aSwapMidBack!({ dir: finalDir });
@@ -425,6 +455,19 @@ const triggerSet: TriggerSet<Data> = {
 
         // Third wing call (when at final destination).
         const isProtean = secondMech === 'protean';
+        //
+        if (data.prsSimple) {
+          const move = call === 'swap' ? output.swap!() : output.stay!();
+          if (firstDir === secondDir) {
+            if (isProtean)
+              return output.prsc2aBpro!({ move: move });
+            return output.prsc2aBtwo!({ move: move });
+          }
+          if (isProtean)
+            return output.prsc2aGpro!({ move: move });
+          return output.prsc2aGtwo!({ move: move });
+        }
+        //
         if (call === 'swap') {
           if (isProtean)
             return output.superchain2aSwapProtean!({ dir: finalDir });
@@ -436,7 +479,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         swap: {
-          en: '자리바꿔요',
+          en: '옆자리로 이동',
           de: 'Wechseln',
           fr: 'Swap',
           ko: '이동',
@@ -448,31 +491,38 @@ const triggerSet: TriggerSet<Data> = {
           ko: '가만히',
         },
         superchain2aSwapMidBack: {
-          en: '자리바꾸고 + 가운데 => ${dir} 뒤로',
+          en: '옆자리 + 한가운데 => ${dir} 뒤로',
         },
         superchain2aSwapMidGo: {
-          en: '자리바꾸고 + 가운데 => ${dir}으로',
+          en: '옆자리 + 한가운데 => ${dir}으로',
         },
         superchain2aStayMidBack: {
-          en: '그대로 + 가운데 => ${dir} 뒤로',
+          en: '그대로 + 한가운데 => ${dir} 뒤로',
         },
         superchain2aStayMidGo: {
-          en: '그대로 + 가운데 => ${dir}으로',
+          en: '그대로 + 한가운데 => ${dir}으로',
         },
         superchain2aSwapProtean: {
-          en: '자리바꾸고 => 자기 자리로 + ${dir}',
+          en: '옆자리 => 프로틴 + ${dir}',
         },
         superchain2aStayProtean: {
-          en: '그대로 => 자기 자리로 + ${dir}',
+          en: '그대로 => 프로틴 + ${dir}',
         },
         superchain2aSwapPartners: {
-          en: '자리바꾸고 => 둘이 함께 + ${dir}',
+          en: '옆자리 => 페어 + ${dir}',
         },
         superchain2aStayPartners: {
-          en: '그대로 => 둘이 함께 + ${dir}',
+          en: '그대로 => 페어 + ${dir}',
         },
         north: Outputs.north,
         south: Outputs.south,
+        //
+        prsc2aMb: '한가운데로 => 되돌아 가욧 [${move}]',
+        prsc2aMg: '한가운데로 => 계속 전진 [${move}]',
+        prsc2aBpro: '되돌아 와서 + 프로틴 [${move}]',
+        prsc2aBtwo: '되돌아 와서 + 페어 [${move}]',
+        prsc2aGpro: '전진해서 + 프로틴 [${move}]',
+        prsc2aGtwo: '전진해서 + 페어 [${move}]',
       },
     },
     {
@@ -493,10 +543,10 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         protean: {
-          en: '자기 자리로 흩어져요',
+          en: '프로틴! 흩어져요',
         },
         partners: {
-          en: '둘이 함께',
+          en: '페어! 둘이 함께',
         },
       },
     },
@@ -576,7 +626,7 @@ const triggerSet: TriggerSet<Data> = {
       netRegex: { id: '82F5', source: 'Athena', capture: false },
       // Don't collide with number callout.
       delaySeconds: 2,
-      durationSeconds: 4,
+      durationSeconds: 3,
       response: (data, _matches, output) => {
         // cactbot-builtin-response
         output.responseOutputStrings = {
@@ -587,7 +637,7 @@ const triggerSet: TriggerSet<Data> = {
             ko: '레이저 유도',
           },
           firstWhiteFlame: {
-            en: '(5, 7 유도)',
+            en: '(5, 7 레이저 유도)',
             de: '(5 und 7 ködern)',
             fr: '(5 et 7 bait)',
             ko: '(5, 7 레이저)',
@@ -604,6 +654,7 @@ const triggerSet: TriggerSet<Data> = {
       type: 'Ability',
       netRegex: { id: '82EF', source: 'Anthropos', capture: false },
       condition: (data) => data.phase === 'palladion',
+      durationSeconds: 3,
       response: (data, _matches, output) => {
         // cactbot-builtin-response
         output.responseOutputStrings = {
@@ -614,19 +665,19 @@ const triggerSet: TriggerSet<Data> = {
             ko: '레이저 유도',
           },
           secondWhiteFlame: {
-            en: '(6, 8 유도)',
+            en: '(6, 8 레이저 유도)',
             de: '(6 und 8 ködern)',
             fr: '(6 et 8 bait)',
             ko: '(6, 8 레이저)',
           },
           thirdWhiteFlame: {
-            en: '(1, 3 유도)',
+            en: '(1, 3 레이저 유도)',
             de: '(1 und 3 ködern)',
             fr: '(1 et 3 bait)',
             ko: '(1, 3 레이저)',
           },
           fourthWhiteFlame: {
-            en: '(2, 4 유도)',
+            en: '(2, 4 레이저 유도)',
             de: '(2 und 6 ködern)',
             fr: '(2 et 4 bait)',
             ko: '(2, 4 레이저)',
@@ -680,6 +731,19 @@ const triggerSet: TriggerSet<Data> = {
         if (destMatches === undefined || inOut === undefined || proteanPartner === undefined)
           return;
 
+        //
+        if (data.prsSimple) {
+          if (inOut === superchainNpcBaseIdMap.in) {
+            if (proteanPartner === superchainNpcBaseIdMap.protean)
+              return output.prInPro!();
+            return output.prInTwo!();
+          }
+
+          if (proteanPartner === superchainNpcBaseIdMap.protean)
+            return output.prOutPro!();
+          return output.prOutTwo!();
+        }
+
         // TODO: technically this is just intercardinals and we don't need all outputs here.
         // Do we need another helper for this?
         const dirStr = Directions.addedCombatantPosTo8DirOutput(destMatches, centerX, centerY);
@@ -698,30 +762,35 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         inAndProtean: {
-          en: '안으로 + 자기 자리로 흩어져요: (${dir})',
+          en: '안으로 + 프로틴: (${dir})',
           de: 'Rein + Himmelsrichtungen (${dir})',
           fr: 'Intérieur + Position (${dir})',
           ko: '안 + 8방향 산개 (${dir})',
         },
         inAndPartners: {
-          en: '안으로 + 둘이 함께: (${dir})',
+          en: '안으로 + 페어: (${dir})',
           de: 'Rein + Partner (${dir})',
           fr: 'Intérieur + Partenaire (${dir})',
           ko: '안 + 파트너 (${dir})',
         },
         outAndProtean: {
-          en: '밖에서 + 자기 자리로 흩어져요: (${dir})',
+          en: '밖에서 + 프로틴: (${dir})',
           de: 'Raus + Himmelsrichtungen (${dir})',
           fr: 'Extérieur + Position (${dir})',
           ko: '밖 + 8방향 산개 (${dir})',
         },
         outAndPartners: {
-          en: '밖에서 + 둘이 함께: (${dir})',
+          en: '밖에서 + 페어: (${dir})',
           de: 'Raus + Partner (${dir})',
           fr: 'Extérieur + Partenaire (${dir})',
           ko: '밖 + 파트너 (${dir})',
         },
         ...Directions.outputStrings8Dir,
+        //
+        prInPro: '안으로 + 프로틴',
+        prInTwo: '안으로 + 페어',
+        prOutPro: '밖에서 + 프로틴',
+        prOutTwo: '밖에서 + 페어'
       },
     },
     {
@@ -779,13 +848,13 @@ const triggerSet: TriggerSet<Data> = {
         // TODO: this should probably also say your debuff,
         // e.g. "Left (Dark Laser)" or "Right (Light Tower)" or something?
         leftClockwise: {
-          en: '왼쪽 (시계방향)',
+          en: '❰❰❰시계 방향❰❰❰',
           de: 'Links (im Uhrzeigersinn)',
           fr: 'Gauche (horaire)',
           ko: '왼쪽 (시계방향)',
         },
         rightCounterclockwise: {
-          en: '오른쪽 (반시계방향)',
+          en: '❱❱❱반시계 방향❱❱❱',
           de: 'Rechts (gegen Uhrzeigersinn)',
           fr: 'Droite (Anti-horaire)',
           ko: '오른쪽 (반시계방향)',
@@ -820,8 +889,8 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         // TODO: this should also say to spread / place tower / take tower
         // TODO: maybe we need separate calls for these ^ after initial donut/sphere goes off?
-        inThenOut: Outputs.inThenOut,
-        outThenIn: Outputs.outThenIn,
+        inThenOut: '안에 있다 => 밖으로',
+        outThenIn: '밖에 있다 => 안으로',
       },
     },
     {
@@ -963,11 +1032,7 @@ const triggerSet: TriggerSet<Data> = {
       id: 'P12S 파라데이그마',
       type: 'StartsUsing',
       netRegex: { id: '82ED', capture: false },
-      // infoText: (data, _matches, output) => output.text!({ cnt: (data.prsCount ?? 0) + 1 }),
       run: (data) => data.prsCount = (data.prsCount ?? 0) + 1,
-      // outputStrings: {
-      //   text: '파라: ${cnt}',
-      // },
     },
     {
       id: 'P12S 줄다리기 보라',
@@ -996,8 +1061,8 @@ const triggerSet: TriggerSet<Data> = {
       // DF8:Umbral Tilt 하얀 동글
       // DF9:Astral Tilt 보라 동글
       // DFA:Heavensflame Soul
-      // DFB:Umbralbright Soul
-      // DFC:Astralbright Soul
+      // DFB:Umbralbright Soul      타워 설치
+      // DFC:Astralbright Soul      타워 설치
       // DFD:Umbralstrong Soul
       // DFE:Astralstrong Soul
     {
@@ -1023,7 +1088,7 @@ const triggerSet: TriggerSet<Data> = {
       condition: (data, matches) => data.prsCount === 12 && matches.target === data.me,
       delaySeconds: 4,
       durationSeconds: 18,
-      suppressSeconds: 22,
+      suppressSeconds: 23,
       infoText: (_data, matches, output) => {
         const mesgs: { [eid: string]: string } = {
           'DF8': output.umbTilt!(),
@@ -1036,12 +1101,12 @@ const triggerSet: TriggerSet<Data> = {
         return mesgs[matches.effectId];
       },
       outputStrings: {
-        umbTilt: '❰❰❰왼쪽 🡺 흩어져요',
-        astTilt: '오른쪽❱❱❱ 🡺 흩어져요',
-        ubSoul: '❰❰❰왼쪽 🡺 🟡타워 설치',
-        abSoul: '오른쪽❱❱❱ 🡺 🟣타워 설치',
-        usSoul: '오른쪽❱❱❱ 🡺 🟣밟아요',
-        asSoul: '❰❰❰왼쪽 🡺 🟡밟아요',
+        umbTilt: '❰❰❰왼쪽❰❰❰ 도망가요',
+        astTilt: '❱❱❱오른쪽❱❱❱ 도망가요',
+        ubSoul: '❰❰❰왼쪽❰❰❰ 🟡타워 설치',
+        abSoul: '❱❱❱오른쪽❱❱❱ 🟣타워 설치',
+        usSoul: '❱❱❱오른쪽❱❱❱ 🟣밟아요',
+        asSoul: '❰❰❰왼쪽❰❰❰ 🟡밟아요',
       },
     },
     {
@@ -1049,6 +1114,7 @@ const triggerSet: TriggerSet<Data> = {
       type: 'GainsEffect',
       netRegex: { effectId: ['DF8', 'DF9'] },
       condition: (data, matches) => data.prsCount === 13 && matches.target === data.me && data.role === 'dps',
+      suppressSeconds: 12,
       alertText: (data, matches, output) => {
         if (matches.effectId === 'DF8')
           return data.prsPmTower === 'astral' ? output.umbTilt!() : output.bait!();
@@ -1056,8 +1122,8 @@ const triggerSet: TriggerSet<Data> = {
           return data.prsPmTower === 'umbral' ? output.astTilt!() : output.bait!();
       },
       outputStrings: {
-        umbTilt: '🟣 타워 밟아요',
-        astTilt: '🟡 타워 밟아요',
+        umbTilt: '🟣타워 밟아요',
+        astTilt: '🟡타워 밟아요',
         bait: '레이저 유도',
       },
     },
@@ -1081,8 +1147,8 @@ const triggerSet: TriggerSet<Data> = {
         }
       },
       outputStrings: {
-        ubSoul: '타워 밟고 🡺 🟪 쪽에 설치 (🟡타워)', // 노랑
-        abSoul: '타워 밟고 🡺 🟨 쪽에 설치 (🟣타워)', // 보라
+        ubSoul: '타워 밟고 🡺 🟪쪽에 설치 (🟡타워)', // 노랑
+        abSoul: '타워 밟고 🡺 🟨쪽에 설치 (🟣타워)', // 보라
       },
     },
     {
@@ -1105,6 +1171,15 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: '남쪽 🡺 타워 밟고 🡺 가운데❌'
+      },
+    },
+    {
+      id: 'P12S 테오의 알테마',
+      type: 'StartsUsing',
+      netRegex: { id: '82FA', capture: false },
+      alertText: (_data, _matches, output) => output.text!(),
+      outputStrings: {
+        text: '엄청 아픈 전체 공격! 이러다 우리 다 주거!',
       },
     },
   ],

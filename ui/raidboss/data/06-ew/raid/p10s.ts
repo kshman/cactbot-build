@@ -425,14 +425,14 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         spreadThenPartners: {
-          en: '(흩어졌다 => 둘이 함께)',
+          en: '(흩어졌다 => 페어)',
           de: '(Verteilen => Partner, für später)',
           fr: '(Écartez-vous => Partenaires, pour après)',
           cn: '(稍后 分散 => 分摊)',
           ko: '(곧 산개 => 파트너)',
         },
         partnersThenSpread: {
-          en: '(둘이 맞고 => 흩어져요)',
+          en: '(페어 => 흩어져요)',
           de: '(Partner => Verteilen, für später)',
           fr: '(Partenaires => Écartez-vous, pour après)',
           cn: '(稍后 分摊 => 分散)',
@@ -502,7 +502,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '산개 => 직업군별 쉐어',
         },
         spreadThenPartners: {
-          en: '흩어졌다 => 둘이 함께',
+          en: '흩어졌다 => 페어',
           de: 'Verteilen => Partner',
           fr: 'Écartez-vous => Partenaires',
           cn: '分散 => 分摊',
@@ -524,7 +524,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         partnersThenSpread: {
-          en: '둘이 맞고 => 흩어져요',
+          en: '페어 => 흩어져요',
           de: 'Partner => Verteilen',
           fr: 'Partenaires => Écartez-vous',
           cn: '分摊 => 分散',
@@ -575,7 +575,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         spread: Outputs.spread,
         partners: {
-          en: '둘이 함께',
+          en: '페어',
           de: 'Partner',
           fr: 'Partenaires',
           cn: '分摊',

@@ -174,7 +174,7 @@ const triggerSet: TriggerSet<Data> = {
       run: (data, matches) => data.lastDualspellId = matches.id,
       outputStrings: {
         text: {
-          en: '안에서 + 둘이 함께',
+          en: '안에서 + 페어',
           de: 'Partner + Donut',
           fr: 'Partenaires + Donut',
           cn: '双人分摊 + 月环',
@@ -191,7 +191,7 @@ const triggerSet: TriggerSet<Data> = {
       run: (data, matches) => data.lastDualspellId = matches.id,
       outputStrings: {
         text: {
-          en: '안에서 + 자기 자리로 흩어져요',
+          en: '안에서 + 프로틴',
           de: 'Himmelsrichtungen + Donut',
           fr: 'Positions + Donut',
           cn: '八方分散 + 月环',
@@ -213,7 +213,7 @@ const triggerSet: TriggerSet<Data> = {
       run: (data) => delete data.lastDualspellId,
       outputStrings: {
         fireIceOut: {
-          en: '밖으로 + 둘이 함게',
+          en: '밖으로 + 페어',
           de: 'Raus + Partner',
           fr: 'Extérieur + Partenaires',
           cn: '远离 + 双人分摊',
@@ -238,14 +238,14 @@ const triggerSet: TriggerSet<Data> = {
       run: (data) => delete data.lastDualspellId,
       outputStrings: {
         fireIceIn: {
-          en: '안에서 + 둘이 함께',
+          en: '안에서 + 페어',
           de: 'Rein + Partner',
           fr: 'Intérieur + Partenaires',
           cn: '靠近 + 双人分摊',
           ko: '안으로 + 파트너',
         },
         thunderIceIn: {
-          en: '안에서 + 자기 자리로 흩어져요',
+          en: '안에서 + 프로틴',
           de: 'Rein + Himmelsrichtungen',
           fr: 'Intérieur + Positions',
           cn: '靠近 + 八方分散',
@@ -268,7 +268,7 @@ const triggerSet: TriggerSet<Data> = {
       run: (data) => delete data.lastDualspellId,
       outputStrings: {
         thunderIceOut: {
-          en: '밖으로 + 자기 자리로 흩어져요',
+          en: '밖으로 + 프로틴',
           de: 'Raus + Himmelsrichtungen',
           fr: 'Extérieur + Positions',
           cn: '远离 + 八方分散',

@@ -13,10 +13,11 @@ import { Output, TriggerSet } from '../../../../../types/trigger';
 export type lightAndDarks = 'none' | 'lightnear' | 'lightfar' | 'darknear' | 'darkfar';
 
 export interface Data extends RaidbossData {
+  prsSimple?: boolean;
   prsDike?: number;
   prsStyx?: number;
   prsLnd?: lightAndDarks;
-  prsTethers: string[];
+  prsTethers?: number;
   //
   decOffset?: number;
   phase?: 'messengers' | 'darkLight' | 'letter';
@@ -48,27 +49,27 @@ const getHeadmarkerId = (data: Data, matches: NetMatches['HeadMarker']) => {
   return (parseInt(matches.id, 16) - data.decOffset).toString(16).toUpperCase().padStart(4, '0');
 };
 
-export const prsP11Strings = {
+export const prsJuryOverrulingStrings = {
   proteinpair: {
-    en: '자기 자리로 (둘이 함께)',
+    en: '프로틴 (페어)',
   },
   proteinshare: {
-    en: '자기 자리로 (4:4 뭉쳐요)',
+    en: '프로틴 (4:4 뭉쳐요)',
   },
   proteinlightfar: {
-    en: '정위치예요: 그대로 대기',
+    en: '프로틴: 그대로 대기',
   },
   proteinlightnear: {
-    en: '흩어 져요: 90도 / 왼쪽 안으로',
+    en: '프로틴: 90도 안쪽으로',
   },
   proteindarkfar: {
-    en: '흩어 져요: 45도 / 왼쪽으로',
+    en: '프로틴: 45도',
   },
   proteindarknear: {
-    en: '흩어 져요: 90+45도 / 왼쪽 안으로',
+    en: '프로틴: 90+45도 안쪽으로',
   },
   proteinunknown: {
-    en: '흩어 져요 (${unk})',
+    en: '프로틴 (${unk})',
   },
   unknown: Outputs.unknown,
 };
@@ -90,8 +91,6 @@ const triggerSet: TriggerSet<Data> = {
   timelineFile: 'p11s.txt',
   initData: () => {
     return {
-      prsTethers: [],
-      //
       upheldTethers: [],
       lightDarkDebuff: {},
       lightDarkBuddy: {},
@@ -140,7 +139,7 @@ const triggerSet: TriggerSet<Data> = {
       netRegex: { id: '81E6', source: 'Themis', capture: false },
       durationSeconds: 6,
       alertText: (data, _matches, output) => prsJuryPrepare(data, output, false),
-      outputStrings: prsP11Strings,
+      outputStrings: prsJuryOverrulingStrings,
     },
     {
       id: 'P11S Jury Overruling Light Followup',
@@ -172,7 +171,7 @@ const triggerSet: TriggerSet<Data> = {
       netRegex: { id: '81E7', source: 'Themis', capture: false },
       durationSeconds: 6,
       alertText: (data, _matches, output) => prsJuryPrepare(data, output, true),
-      outputStrings: prsP11Strings,
+      outputStrings: prsJuryOverrulingStrings,
     },
     {
       id: 'P11S Jury Overruling Dark Followup',
@@ -193,23 +192,23 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         text: {
-          en: '(마커에서) 둘이 함께',
+          en: '(마커에서) 페어',
           de: 'Himmelsrichtungen => Partner',
           fr: 'Positions => Partenaires',
           cn: '八方分散 => 两人分摊',
           ko: '8방향 산개 => 파트너',
         },
         pairlightfar: {
-          en: '둘이서: 왼쪽 돌아 🟪로',
+          en: '페어: 왼쪽 돌아 🟪로',
         },
         pairlightnear: {
-          en: '둘이서: 밖으로 나가요',
+          en: '페어: 밖으로 나가요',
         },
         pairdarkfar: {
-          en: '둘이서: 그대로 멈추쇼',
+          en: '페어: 그대로 멈추쇼',
         },
         pairdarknear: {
-          en: '둘이서: 밖으로 나가요',
+          en: '페어: 밖으로 나가요',
         },
         unknown: Outputs.unknown,
       },
@@ -232,9 +231,9 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: 'P11S Jury Overruling Light Followup',
+      id: 'P11S Upheld Overruling Light Followup',
       type: 'Ability',
-      netRegex: { id: '81E8', capture: false },
+      netRegex: { id: '81F2', capture: false },
       durationSeconds: 4,
       suppressSeconds: 5,
       infoText: (_data, _matches, output) => output.text!(),
@@ -253,13 +252,13 @@ const triggerSet: TriggerSet<Data> = {
         // cactbot-builtin-response
         output.responseOutputStrings = {
           upheldOnYou: {
-            en: '한가운데서 줄 유도 => 안에서 + 둘이 함께',
+            en: '한가운데서 줄 유도 => 안에서 + 페어',
           },
           upheldOnPlayer: {
-            en: '밖으로 => 안으로 + 둘이 함께 (줄 처리: ${player})',
+            en: '밖에 있다 => 안으로 + 페어 (줄 처리: ${player})',
           },
           upheldNotOnYou: {
-            en: '밖으로 => 안으로 + 둘이 함께',
+            en: '밖에 있다 => 안으로 + 페어',
             de: 'Party Raus => Rein + Partner',
             fr: 'Extérieur => Intérieur + Partenaire',
             cn: '场外 => 场中 + 两人分摊',
@@ -274,6 +273,9 @@ const triggerSet: TriggerSet<Data> = {
         if (tether.target === data.me)
           return { alarmText: output.upheldOnYou!() };
 
+        if (data.prsSimple)
+          return { alertText: output.upheldNotOnYou!() };
+
         return { alertText: output.upheldOnPlayer!({ player: data.ShortName(tether.target) }) };
       },
       run: (data) => data.upheldTethers = [],
@@ -287,7 +289,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '안으로 + 둘이 함께',
+          en: '안으로 + 페어',
         },
       },
     },
@@ -312,15 +314,41 @@ const triggerSet: TriggerSet<Data> = {
           partyStack: {
             en: '모두 뭉쳐요',
           },
+          // 샤도우
+          tankShadow: {
+            en: '내게 줄! Ⓐ로 유도!',
+          },
+          partyShadow: {
+            en: '한가운데 뭉쳤다 => 탱크 쿵Ⓐ 안으로',
+          },
+          // 하트오브저지
+          tankHeart: {
+            en: '내게 줄! 한가운데서 무적 => 자기 타워로',
+          },
+          partyHeart: {
+            en: '모두 뭉쳐 푹찍쾅',
+          },
         };
+
+        data.prsTethers = (data.prsTethers ?? 0) + 1;
 
         const sourceId = matches.sourceId;
         const [tether] = data.upheldTethers.filter((x) => x.sourceId === sourceId);
         if (tether === undefined || data.upheldTethers.length !== 2)
           return { alertText: output.partyStack!() };
 
-        if (tether.target === data.me)
+        if (tether.target === data.me) {
+          if (data.prsTethers === 1)
+            return { alarmText: output.tankShadow!() };
+          if (data.prsTethers === 2)
+            return { alarmText: output.tankHeart!() };
           return { alarmText: output.tankTether!() };
+        }
+
+        if (data.prsTethers === 1)
+          return { alertText: output.partyShadow!() };
+        if (data.prsTethers === 2)
+          return { alertText: output.partyHeart!() };
         return {
           alertText: output.partyStackPlayerOut!({ player: data.ShortName(tether.target) }),
         };
@@ -332,10 +360,22 @@ const triggerSet: TriggerSet<Data> = {
       type: 'Ability',
       netRegex: { id: '8221', capture: false },
       suppressSeconds: 5,
-      infoText: (_data, _matches, output) => output.text!(),
+      infoText: (data, _matches, output) => {
+        if (data.prsTethers === 1)
+          return output.shadow!();
+        if (data.prsTethers === 2)
+          return output.heart!();
+        return output.text!();
+      },
       outputStrings: {
         text: {
           en: '안으로 드루와',
+        },
+        shadow: {
+          en: '탱크 쿵Ⓐ 안으로',
+        },
+        heart: {
+          en: '한가운데 모였다가',
         },
       },
     },
@@ -373,7 +413,7 @@ const triggerSet: TriggerSet<Data> = {
       run: (data) => data.divisiveColor = 'dark',
       outputStrings: {
         text: {
-          en: '옆으로 => 안으로 + 둘이 함께',
+          en: '옆으로 => 안으로 + 페어',
           de: 'Seiten => Rein + Partner',
           fr: 'Côtés => Intérieur + Partenaire',
           cn: '两侧 => 两人分摊 + 场内',
@@ -399,7 +439,7 @@ const triggerSet: TriggerSet<Data> = {
           en: '그대로 + 4:4 뭉쳐요',
         },
         dark: {
-          en: '안으로 + 둘이 함께',
+          en: '안으로 + 페어',
         },
       },
     },
@@ -427,7 +467,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '안에서 + 둘이 함께',
+          en: '안에서 + 페어',
           de: 'Partner + Rein',
           fr: 'Partenaires + Intérieur',
           cn: '两人分摊 + 场内',
@@ -472,7 +512,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '넉백 먼저 => 안으로 + 둘이 함께',
+          en: '넉백 먼저 => 안으로 + 페어',
           de: 'Rückstoß => Rein + Partner',
           fr: 'Poussée => Intérieur + Partenaires',
           cn: '击退 => 两人分摊 + 场内',
@@ -489,7 +529,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '안으로 + 둘이 함께',
+          en: '안으로 + 페어',
         },
       },
     },
@@ -839,7 +879,6 @@ const triggerSet: TriggerSet<Data> = {
       netRegex: { id: '8219', source: 'Themis', capture: false },
       durationSeconds: 8,
       infoText: (_data, _matches, output) => output.text!(),
-      run: (data) => data.prsTethers = [],
       outputStrings: {
         text: {
           en: '옆으로 => 장판 깔리면 🟪쪽으로',
@@ -859,59 +898,6 @@ const triggerSet: TriggerSet<Data> = {
         },
       },
     },
-    {
-      id: 'P11S 샤도 메신저 보충 줄 확인',
-      type: 'StartsUsing',
-      netRegex: { id: '8219', source: 'Themis', capture: false },
-      delaySeconds: 25,
-      durationSeconds: 7,
-      alertText: (data, _matches, output) => {
-        if (data.prsTethers.includes(data.me)) {
-          if (data.role === 'tank')
-            return output.tankTether!();
-          return output.otherTether!();
-        }
-        return output.text!();
-      },
-      outputStrings: {
-        tankTether: {
-          en: '내게 줄! Ⓐ로 유도',
-        },
-        otherTether: {
-          en: '내게 줄! 한가운데 뭉쳤다 => 탱크쪽Ⓐ으로',
-        },
-        text: {
-          en: '한가운데서 뭉쳤다 => 탱크쪽Ⓐ으로',
-        },
-      },
-    },
-    {
-      id: 'P11S 보스와 연결 선',
-      type: 'Tether',
-      netRegex: { id: '00F9' },
-      alertText: (data, matches, output) => {
-        if (matches.target === data.me)
-          return output.text!();
-      },
-      run: (data, matches) => data.prsTethers.push(matches.target),
-      outputStrings: {
-        text: '내게 줄이 달렸어요',
-      },
-    },
-    /*
-    {
-      id: 'P11S 라이트 스트림',
-      type: 'StartsUsing',
-      netRegex: { id: '8203', source: 'Themis', capture: false },
-      durationSeconds: 7,
-      infoText: (_data, _matches, output) => output.text!(),
-      outputStrings: {
-        text: {
-          en: '🡸🡸🔵🔵 또는 🔴🔴🡺🡺',
-        },
-      },
-    },
-    */
     {
       id: 'P11S 라이트 앤 다크 시작',
       type: 'StartsUsing',
@@ -944,7 +930,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '곧 흩어지기, 자기 자리 확인',
+          en: '곧 흩어지기, 프로틴 자리 확인',
         },
       },
     },
@@ -953,49 +939,10 @@ const triggerSet: TriggerSet<Data> = {
       type: 'StartsUsing',
       netRegex: { id: '87D2', source: 'Themis', capture: false },
       durationSeconds: 6,
-      alertText: (data, _matches, output) => {
-        if (data.role === 'tank') {
-          if (data.prsTethers.length === 0)
-            return output.tankUnknown!();
-          if (data.prsTethers.includes(data.me))
-            return output.tankTether!();
-        }
-        return output.others!();
-      },
-      run: (data) => data.prsTethers = [],
+      infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
-        tankTether: '복합 기믹: 줄 달렸어요 북으로!',
-        tankUnknown: {
-          en: '복합 기믹: 즐🡺북으로 / 줄없음🡺남으로',
-        },
-        others: {
-          en: '복합 기믹: 남쪽으로',
-        },
-      },
-    },
-    {
-      id: 'P11S 하트 오브 저지 관련',
-      type: 'StartsUsing',
-      netRegex: { id: '8226', source: 'Themis', capture: false },
-      delaySeconds: 3,
-      durationSeconds: 10,
-      infoText: (data, _matches, output) => {
-        if (data.prsTethers.includes(data.me)) {
-          if (data.role === 'tank')
-            return output.tankTether!();
-          return output.otherTether!();
-        }
-        return output.text!();
-      },
-      outputStrings: {
-        tankTether: {
-          en: '내게 줄! 한가운데서 무적 => 자기 자리로',
-        },
-        otherTether: {
-          en: '내게 줄! 푹직쾅 => 한가운데 => 자기자리로'
-        },
         text: {
-          en: '푹직쾅 => 한가운데 => 자기 자리로',
+          en: '복합 기믹 시작해요',
         },
       },
     },
