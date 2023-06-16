@@ -126,6 +126,11 @@ export interface Data extends RaidbossData {
   prsFirstCalorics: string[];
   prsTeamCalorics: { [name: string]: 'fire' | 'wind' };
   prsMyCaloric?: 'fire' | 'wind';
+  prsSeenPangenesis?: boolean;
+  prsPgCount: { [name: string]: number };
+  prsPgStat: { [name: string]: 'dark' | 'light' };
+  prsPgDuration: { [name: string]: number };
+  prsPgTilts?: number;
   //
   decOffset?: number;
   expectedFirstHeadmarker?: string;
@@ -152,6 +157,9 @@ const triggerSet: TriggerSet<Data> = {
       prsAlphaBeta: {},
       prsFirstCalorics: [],
       prsTeamCalorics: {},
+      prsPgCount: {},
+      prsPgStat: {},
+      prsPgDuration: {},
       //
       isDoorBoss: true,
       wingCollect: [],
@@ -1331,12 +1339,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text1st: '${ps} / ${ab}',
         text2nd: '[반전] ${ps} / ${ab}',
-        circle: '🔴:첫째',
-        triangle: '▲:셋째',
-        square: '🟪:넷째',
-        cross: '❌:둘째',
-        alpha: '알파:삼각',
-        beta: '베타:사각',
+        circle: '왼쪽 아래',
+        triangle: '오른쪽 아래',
+        square: '오른쪽 위',
+        cross: '왼쪽 위',
+        alpha: '알파:세모쪽',
+        beta: '베타:네모쪽',
         unknown: Outputs.unknown,
       },
     },
@@ -1362,14 +1370,14 @@ const triggerSet: TriggerSet<Data> = {
         data.prsAlphaBeta = {};
       },
       outputStrings: {
-        m10: '바깥 왼쪽 위',
-        m20: '오른쪽 터치다운 윗쪽',
-        m30: '바깥 오른쪽 위',
+        m10: '왼쪽 바깥 위 쯤',
+        m20: '오른쪽 터치다운 위로',
+        m30: '오른쪽 바깥 위 쯤',
         m40: '왼쪽 터치다운 위로',
-        m11: '바깥 왼쪽 아래',
-        m21: '오른쪽 터치다운 아래쪽',
-        m31: '바깥 오른쪽 아래',
-        m41: '왼쪽 터치다운 아래쪽',
+        m11: '왼쪽 바깥 아래 쯤',
+        m21: '오른쪽 터치다운 아래로',
+        m31: '오른쪽 바깥 아래 쯤',
+        m41: '왼쪽 터치다운 아래로',
       },
     },
     {
@@ -1518,6 +1526,160 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: '엑사플레어 + 전체 공격',
       }
+    },
+    {
+      id: 'P12S2 판제네시스',
+      type: 'Ability',
+      netRegex: { id: '833F', source: 'Pallas Athena', capture: false },
+      delaySeconds: 1,
+      suppressSeconds: 2,
+      alertText: (data, _matches, output) => {
+        let partner = output.unknown!();
+        // 무직
+        const mycnt = data.prsPgCount[data.me] ?? 0;
+        if (mycnt === 0) {
+          for (const [name, cnt] of Object.entries(data.prsPgCount)) {
+            if (cnt === 0 && name !== data.me) {
+              partner = data.ShortName(name);
+              break;
+            }
+          }
+          return output.none!({ partner: partner });
+        }
+        // 인자 1
+        if (mycnt === 1) {
+          for (const [name, cnt] of Object.entries(data.prsPgCount)) {
+            if (cnt === 1 && name !== data.me) {
+              partner = data.ShortName(name);
+              break;
+            }
+          }
+          return output.geneone!({ partner: partner });
+        }
+
+        // 이제 시간에 따른 처리
+        const mystat = data.prsPgStat[data.me];
+        const myduration = data.prsPgDuration[data.me];
+        if (mystat === undefined || myduration === undefined)
+          return;
+
+        for (const [name, duration] of Object.entries(data.prsPgDuration)) {
+          if (duration === myduration && name !== data.me) {
+            partner = data.ShortName(name);
+            break;
+          }
+        }
+        if (mystat === 'dark')
+          return myduration === 16 ? output.dark1st!({ partner: partner }) : output.dark2nd!({ partner: partner });
+        return myduration === 16 ? output.light1st!({ partner: partner }) : output.light2nd!({ partner: partner });
+      },
+      run: (data) => data.prsSeenPangenesis = true,
+      outputStrings: {
+        dark1st: '첫째 하얀 타워로 (+${partner})',
+        light1st: '첫째 검은 타워로 (+${partner})',
+        dark2nd: '기다렸다 => 둘째 아래 하얀 타워로 (+${partner})',
+        light2nd: '기다렸다 => 둘째 아래 검은 타워로 (+${partner})',
+        geneone: '위로 살짝 => 첫째 타워로 (+${partner})',
+        none: '아래로 살짝 => 둘째 위쪽 타워로 (+${partner})',
+        unknown: Outputs.unknown,
+      },
+    },
+    {
+      id: 'P12S2 판제네시스 언스테이블',
+      type: 'GainsEffect',
+      netRegex: { effectId: 'E09' },
+      run: (data, matches) => {
+        const cnt = data.prsPgCount[matches.target];
+        data.prsPgCount[matches.target] = cnt === undefined ? 1 : cnt + 1;
+      }
+    },
+    {
+      id: 'P12S2 판제네시스 스테이블',
+      type: 'GainsEffect',
+      netRegex: { effectId: 'E22' },
+      run: (data, matches) => {
+        const cnt = data.prsPgCount[matches.target];
+        if (cnt === undefined)
+          data.prsPgCount[matches.target] = 0;
+      }
+    },
+    {
+      id: 'P12S2 판제네시스 라이트', // Umbral Tilt
+      type: 'GainsEffect',
+      netRegex: { effectId: 'DF8' },
+      run: (data, matches) => {
+        if (!data.prsSeenPangenesis) {
+          const cnt = data.prsPgCount[matches.target];
+          data.prsPgCount[matches.target] = cnt === undefined ? 1 : cnt + 1;
+          data.prsPgDuration[matches.target] = parseInt(matches.duration);
+        }
+        data.prsPgStat[matches.target] = 'light';
+      },
+    },
+    {
+      id: 'P12S2 판제네시스 다크', // Astral Tilt
+      type: 'GainsEffect',
+      netRegex: { effectId: 'DF9' },
+      run: (data, matches) => {
+        if (!data.prsSeenPangenesis) {
+          const cnt = data.prsPgCount[matches.target];
+          data.prsPgCount[matches.target] = cnt === undefined ? 1 : cnt + 1;
+          data.prsPgDuration[matches.target] = parseInt(matches.duration);
+        }
+        data.prsPgStat[matches.target] = 'dark';
+      },
+    },
+    {
+      id: 'P12S2 판제네시스 이동', // Astral Advent
+      type: 'Ability',
+      netRegex: { id: '8344', source: 'Hemitheos', capture: false },
+      delaySeconds: 0.5,
+      durationSeconds: 4,
+      suppressSeconds: 2,
+      infoText: (data, _matches, output) => {
+        data.prsPgTilts = (data.prsPgTilts ?? 0) + 1;
+        const tilt = data.prsPgTilts;
+
+        const mycnt = data.prsPgCount[data.me] ?? 0;
+        const mystat = data.prsPgStat[data.me];
+        const myduration = data.prsPgDuration[data.me] ?? 0;
+
+        if (tilt === 1) {
+          if (myduration === 16 || mycnt === 1)
+            return mystat === undefined ? output.move!() : output.movecc!({ color: output[mystat]!() });
+          if (myduration === 20)
+            return mystat === undefined ? output.wait1g!() : output.wait1gcc!({ color: output[mystat]!() });
+          if (mycnt === 0)
+            return output.wait1n!();
+        } else if (tilt === 2) {
+          // 모두 다 이동
+          return mystat === undefined ? output.move!() : output.movecc!({ color: output[mystat]!() });
+        } else if (tilt === 3) {
+          // 무직만 슬라임
+          if (mycnt === 0)
+            return output.slime!();
+          return output.end!();
+        }
+      },
+      run: (data) => {
+        if (data.prsPgTilts && data.prsPgTilts >= 3) {
+          data.prsPgCount = {};
+          data.prsPgStat = {};
+          data.prsPgDuration = {};
+          delete data.prsPgTilts;
+        }
+      },
+      outputStrings: {
+        move: '다음 타워로',
+        movecc: '다음 ${color} 타워로',
+        end: '끝! 남쪽으로',
+        slime: '끝이지만 슬라임 유도',
+        wait1n: '둘째 위쪽 타워 나올 곳으로',
+        wait1g: '둘째 아래쪽 타워 나올 곳으로',
+        wait1gcc: '둘째 아래쪽 ${color} 타워 나올 곳으로',
+        dark: '하얀', // 색깔 바뀜
+        light: '검은', // 색깔 바뀜
+      },
     },
     /*
     {
