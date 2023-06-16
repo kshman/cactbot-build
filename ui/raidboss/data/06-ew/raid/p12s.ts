@@ -110,7 +110,7 @@ const getHeadmarkerId = (data: Data, matches: NetMatches['HeadMarker']) => {
 };
 
 export interface Data extends RaidbossData {
-  prsSimple?: boolean;
+  prsStyle?: boolean;
   prsCount?: number;
   prsTarget?: string;
   prsPmTower?: 'umbral' | 'astral' | 'unknown';
@@ -231,7 +231,7 @@ const triggerSet: TriggerSet<Data> = {
           return isLeftAttack ? output.right!() : output.left!();
 
         //
-        if (data.prsSimple) {
+        if (data.prsStyle) {
           const lrs = isLeftAttack ? output.prsRight!() : output.prsLeft!();
           if (firstDir === 'north') {
             if (secondDir === 'north')
@@ -436,7 +436,7 @@ const triggerSet: TriggerSet<Data> = {
         if (isSecondWing) {
           const isReturnBack = firstDir === secondDir;
           //
-          if (data.prsSimple) {
+          if (data.prsStyle) {
             const move = call === 'swap' ? output.swap!() : output.stay!();
             if (isReturnBack)
               return output.prsc2aMb!({ move: move });
@@ -456,7 +456,7 @@ const triggerSet: TriggerSet<Data> = {
         // Third wing call (when at final destination).
         const isProtean = secondMech === 'protean';
         //
-        if (data.prsSimple) {
+        if (data.prsStyle) {
           const move = call === 'swap' ? output.swap!() : output.stay!();
           if (firstDir === secondDir) {
             if (isProtean)
@@ -732,7 +732,7 @@ const triggerSet: TriggerSet<Data> = {
           return;
 
         //
-        if (data.prsSimple) {
+        if (data.prsStyle) {
           if (inOut === superchainNpcBaseIdMap.in) {
             if (proteanPartner === superchainNpcBaseIdMap.protean)
               return output.prInPro!();
@@ -800,7 +800,7 @@ const triggerSet: TriggerSet<Data> = {
       condition: (data) => data.phase === 'superchain1' && data.superchainCollect.length === 7,
       // TODO: should we base this off of the first coil/burst instead?
       // 7.2 seconds is the time until the second mechanic finishes, so call early.
-      delaySeconds: 6.2,
+      delaySeconds: 4.5,
       alertText: (data, _matches, output) => {
         // Sort ascending.
         const collect = data.superchainCollect.slice(3, 7).sort((a, b) =>

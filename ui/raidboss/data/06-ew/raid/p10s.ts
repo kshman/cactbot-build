@@ -605,9 +605,22 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
+      id: 'P10S Jade Passage',
+      type: 'StartsUsing',
+      netRegex: { id: '828C', capture: false },
+      suppressSeconds: 5,
+      infoText: (_data, _matches, output) => output.text!(),
+      outputStrings: {
+        text: {
+          en: '레이저 피해욧',
+          cn: '注意躲避激光',
+        },
+      },
+    },
+    {
       id: 'P10S Pandaemoniac Ray 레이저 조심',
       type: 'StartsUsing',
-      netRegex: { id: ['8289', '828B'], source: bossNameUnicode, capture: false },
+      netRegex: { id: ['8289', '828B'], capture: false },
       condition: (data) => data.role === 'healer',
       delaySeconds: 3,
       alertText: (_data, _matches, output) => output.text!(),

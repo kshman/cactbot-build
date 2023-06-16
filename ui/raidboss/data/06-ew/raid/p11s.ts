@@ -10,13 +10,11 @@ import { Output, TriggerSet } from '../../../../../types/trigger';
 // TODO: if party standing on Dark Orbs during Arcane Revelation+Unlucky Lot, say rotate or stay?
 // TODO: call out where Letter of the Law safe spots are (e.g. N lean E / S lean W)
 
-export type lightAndDarks = 'none' | 'lightnear' | 'lightfar' | 'darknear' | 'darkfar';
-
 export interface Data extends RaidbossData {
-  prsSimple?: boolean;
+  prsStyle?: boolean;
   prsDike?: number;
   prsStyx?: number;
-  prsLnd?: lightAndDarks;
+  prsLightAndDarks?: 'none' | 'lightnear' | 'lightfar' | 'darknear' | 'darkfar';
   prsTethers?: number;
   //
   decOffset?: number;
@@ -63,7 +61,7 @@ export const prsJuryOverrulingStrings = {
     en: '프로틴: 90도 안쪽으로',
   },
   proteindarkfar: {
-    en: '프로틴: 45도',
+    en: '프로틴: 45도 왼쪽으로',
   },
   proteindarknear: {
     en: '프로틴: 90+45도 안쪽으로',
@@ -74,14 +72,14 @@ export const prsJuryOverrulingStrings = {
   unknown: Outputs.unknown,
 };
 export const prsJuryPrepare = (data: Data, output: Output, pair: boolean) => {
-    const mesg = data.prsLnd
+    const mesg = data.prsLightAndDarks
     ? {
       lightfar: output.proteinlightfar!(),
       lightnear: output.proteinlightnear!(),
       darkfar: output.proteindarkfar!(),
       darknear: output.proteindarknear!(),
       none: output.proteinunknown!({ unk: output.unknown!() }),
-    }[data.prsLnd] : pair ? output.proteinpair!() : output.proteinshare!();
+    }[data.prsLightAndDarks] : pair ? output.proteinpair!() : output.proteinshare!();
     return mesg;
 };
 
@@ -148,7 +146,7 @@ const triggerSet: TriggerSet<Data> = {
       durationSeconds: 4,
       suppressSeconds: 5,
       infoText: (data, _matches, output) => {
-        if (data.prsLnd && data.prsLnd !== 'none')
+        if (data.prsLightAndDarks && data.prsLightAndDarks !== 'none')
           return output.lightLr!();
         return output.text!();
       },
@@ -180,14 +178,14 @@ const triggerSet: TriggerSet<Data> = {
       durationSeconds: 4,
       suppressSeconds: 5,
       infoText: (data, _matches, output) => {
-        const mesg = data.prsLnd
+        const mesg = data.prsLightAndDarks
         ? {
           lightfar: output.pairlightfar!(),
           lightnear: output.pairlightnear!(),
           darkfar: output.pairdarkfar!(),
           darknear: output.pairdarknear!(),
           none: output.unknown!(),
-        }[data.prsLnd] : output.text!();
+        }[data.prsLightAndDarks] : output.text!();
         return mesg;
       },
       outputStrings: {
@@ -222,7 +220,7 @@ const triggerSet: TriggerSet<Data> = {
       run: (data) => data.upheldTethers = [],
       outputStrings: {
         text: {
-          en: '한가운데 => 밖으로 + 4:4 뭉쳐요',
+          en: '한가운데 모였다 => 밖으로 + 4:4 뭉쳐요',
           de: 'Party Rein => Raus + Heiler Gruppen',
           fr: 'Intérieur => Extérieur + package sur les heals',
           cn: '场中集合 => 场边 + 治疗分摊',
@@ -255,10 +253,10 @@ const triggerSet: TriggerSet<Data> = {
             en: '한가운데서 줄 유도 => 안에서 + 페어',
           },
           upheldOnPlayer: {
-            en: '밖에 있다 => 안으로 + 페어 (줄 처리: ${player})',
+            en: '밖에 있다가 => 안으로 + 페어 (줄 처리: ${player})',
           },
           upheldNotOnYou: {
-            en: '밖에 있다 => 안으로 + 페어',
+            en: '밖에 있다가 => 안으로 + 페어',
             de: 'Party Raus => Rein + Partner',
             fr: 'Extérieur => Intérieur + Partenaire',
             cn: '场外 => 场中 + 两人分摊',
@@ -273,7 +271,7 @@ const triggerSet: TriggerSet<Data> = {
         if (tether.target === data.me)
           return { alarmText: output.upheldOnYou!() };
 
-        if (data.prsSimple)
+        if (data.prsStyle)
           return { alertText: output.upheldNotOnYou!() };
 
         return { alertText: output.upheldOnPlayer!({ player: data.ShortName(tether.target) }) };
@@ -319,11 +317,11 @@ const triggerSet: TriggerSet<Data> = {
             en: '내게 줄! Ⓐ로 유도!',
           },
           partyShadow: {
-            en: '한가운데 뭉쳤다 => 탱크 쿵Ⓐ 안으로',
+            en: '한가운데서 뭉쳤다 => 탱크 쿵Ⓐ 안으로',
           },
           // 하트오브저지
           tankHeart: {
-            en: '내게 줄! 한가운데서 무적 => 자기 타워로',
+            en: '내게 줄! 한가운데서 무적 => 내 타워로',
           },
           partyHeart: {
             en: '모두 뭉쳐 푹찍쾅',
@@ -375,7 +373,7 @@ const triggerSet: TriggerSet<Data> = {
           en: '탱크 쿵Ⓐ 안으로',
         },
         heart: {
-          en: '한가운데 모였다가',
+          en: '한가운데서 모이고',
         },
       },
     },
@@ -413,7 +411,7 @@ const triggerSet: TriggerSet<Data> = {
       run: (data) => data.divisiveColor = 'dark',
       outputStrings: {
         text: {
-          en: '옆으로 => 안으로 + 페어',
+          en: '옆에 있다 => 안으로 + 페어',
           de: 'Seiten => Rein + Partner',
           fr: 'Côtés => Intérieur + Partenaire',
           cn: '两侧 => 两人分摊 + 场内',
@@ -541,7 +539,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '옆으로 => 🟪 포탈 안전',
+          en: '옆으로 => 🟪포탈 안전',
           de: 'Geh zu einem Dunkel-Portal',
           fr: 'Allez vers les portails sombres',
           cn: '去暗门前',
@@ -557,7 +555,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '옆으로 => 🟨 포탈 안전',
+          en: '옆으로 => 🟨포탈 안전',
           de: 'Geh zu einem Licht-Portal',
           fr: 'Allez sur les portails de lumière',
           cn: '去光门前',
@@ -573,7 +571,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '🟣 구슬 쪽으로',
+          en: '🟣구슬 쪽으로',
           de: 'Rotiere zu den dunklen Orbs',
           fr: 'Tournez vers les orbes sombres',
           cn: '暗球侧安全',
@@ -589,7 +587,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '🟡 구슬 쪽으로',
+          en: '🟡구슬 쪽으로',
           de: 'Rotiere zu den licht Orbs',
           fr: 'Tournez ves les orbes de lumière',
           cn: '光球侧安全',
@@ -640,28 +638,28 @@ const triggerSet: TriggerSet<Data> = {
         // cactbot-builtin-response
         output.responseOutputStrings = {
           lightNear: {
-            en: '🟡 니어: ${role}/${player} (${side})',
+            en: '🟡니어: ${role}/${player} (${side})',
             de: 'Licht Nahe w/${player} (${role})',
             fr: 'Lumière proche avec ${player} (${role})',
             cn: '光靠近 => ${player} (${role})',
             ko: '빛 가까이 +${player} (${role})',
           },
           lightFar: {
-            en: '🟡 파: ${role}/${player} (${side})',
+            en: '🟡파: ${role}/${player} (${side})',
             de: 'Licht Entfernt w/${player} (${role})',
             fr: 'Lumière éloignée avec ${player} (${role})',
             cn: '光远离 => ${player} (${role})',
             ko: '빛 멀리 +${player} (${role})',
           },
           darkNear: {
-            en: '🟣 니어: ${role}/${player} (${side})',
+            en: '🟣니어: ${role}/${player} (${side})',
             de: 'Dunkel Nahe w/${player} (${role})',
             fr: 'Sombre proche avec ${player} (${role})',
             cn: '暗靠近 => ${player} (${role})',
             ko: '어둠 가까이 +${player} (${role})',
           },
           darkFar: {
-            en: '🟣 파: ${role}/${player} (${side})',
+            en: '🟣파: ${role}/${player} (${side})',
             de: 'Dunkel Entfernt w/${player} (${role})',
             fr: 'Sombre éloigné avec ${player} (${role})',
             cn: '暗远离 => ${player} (${role})',
@@ -722,9 +720,9 @@ const triggerSet: TriggerSet<Data> = {
         : myColor === 'dark' ? output.leftSide!() : output.rightSide!();
 
         if (myColor === 'light')
-          data.prsLnd = myLength === 'near' ? 'lightnear' : 'lightfar';
+          data.prsLightAndDarks = myLength === 'near' ? 'lightnear' : 'lightfar';
         else
-          data.prsLnd = myLength === 'near' ? 'darknear' : 'darkfar';
+          data.prsLightAndDarks = myLength === 'near' ? 'darknear' : 'darkfar';
 
         const myBuddyShort = data.ShortName(myBuddy);
 
@@ -835,12 +833,12 @@ const triggerSet: TriggerSet<Data> = {
         delete data.numCylinders;
       },
       outputStrings: {
-        east: Outputs.east,
-        northeast: Outputs.northeast,
-        northwest: Outputs.northwest,
-        southeast: Outputs.southeast,
-        southwest: Outputs.southwest,
-        west: Outputs.west,
+        east: 'Ⓑ 동쪽',
+        northeast: '① 북동',
+        northwest: '④ 북서',
+        southeast: '② 남동',
+        southwest: '③ 남서',
+        west: 'Ⓓ 서쪽',
       },
     },
     {
@@ -902,13 +900,13 @@ const triggerSet: TriggerSet<Data> = {
       id: 'P11S 라이트 앤 다크 시작',
       type: 'StartsUsing',
       netRegex: { id: '81FE', source: 'Themis', capture: false },
-      run: (data) => data.prsLnd = 'none',
+      run: (data) => data.prsLightAndDarks = 'none',
     },
     {
       id: 'P11S Emissary 리셋',
       type: 'StartsUsing',
       netRegex: { id: '8202' },
-      run: (data) => delete data.prsLnd,
+      run: (data) => delete data.prsLightAndDarks,
     },
     {
       id: 'P11S 다크 커런트',
