@@ -1,7 +1,9 @@
 import Outputs from '../../../../../resources/outputs';
+import { callOverlayHandler } from '../../../../../resources/overlay_plugin_api';
 import { Responses } from '../../../../../resources/responses';
 import ZoneId from '../../../../../resources/zone_id';
 import { RaidbossData } from '../../../../../types/data';
+import { PluginCombatantState } from '../../../../../types/event';
 import { NetMatches } from '../../../../../types/net_matches';
 import { TriggerSet } from '../../../../../types/trigger';
 
@@ -9,11 +11,13 @@ export interface Data extends RaidbossData {
   prsSoul?: number;
   //
   decOffset?: number;
+  combatantData: PluginCombatantState[];
   dividingWingsTethers: string[];
   dividingWingsStacks: string[];
   dividingWingsEntangling: string[];
   meltdownSpreads: string[];
   daemonicBondsTime?: number;
+  daemonicBondsCounter: number;
   bondsSecondMechanic?: 'stack' | 'partners' | 'spread';
 }
 
@@ -40,16 +44,39 @@ const getHeadmarkerId = (data: Data, matches: NetMatches['HeadMarker']) => {
   return (parseInt(matches.id, 16) - data.decOffset).toString(16).toUpperCase().padStart(4, '0');
 };
 
+const bondsOffsetSeconds = (data: Data): number => {
+  const fallbackDelay = 5;
+  return {
+    // t=145.8, call right after laser before running out to platforms
+    1: 13,
+    // t=223.9, call after 4th turret goes off
+    2: 5,
+    // t=329.9, call as donut/circle towers go off before ray
+    3: 7,
+    // t=459.3, call as harrowing hell knockback starts
+    4: 9,
+  }[data.daemonicBondsCounter] ?? fallbackDelay;
+};
+
+// Helper function to call out the Daemonic Bonds spread/stack/partner ability.
+const bondsDelaySeconds = (data: Data, matches: NetMatches['GainsEffect']): number => {
+  return parseFloat(matches.duration) - bondsOffsetSeconds(data);
+};
+
+const bondsDurationSeconds = (data: Data): number => Math.max(bondsOffsetSeconds(data) - 3, 3);
+
 const triggerSet: TriggerSet<Data> = {
   id: 'AnabaseiosTheTenthCircleSavage',
   zoneId: ZoneId.AnabaseiosTheTenthCircleSavage,
   timelineFile: 'p10s.txt',
   initData: () => {
     return {
+      combatantData: [],
       dividingWingsTethers: [],
       dividingWingsStacks: [],
       dividingWingsEntangling: [],
       meltdownSpreads: [],
+      daemonicBondsCounter: 0,
     };
   },
   triggers: [
@@ -78,19 +105,21 @@ const triggerSet: TriggerSet<Data> = {
       response: (data, _matches, output) => {
         // cactbot-builtin-response
         output.responseOutputStrings = {
-          shared: Outputs.sharedTankbuster,
           avoid: Outputs.avoidTankCleave,
-          mesg: {
+          tank: {
             en: '${num}번째 둘이서 버스터',
+          },
+          healer: {
+            en: '${num}번째 탱크버스터',
           },
         };
 
         data.prsSoul = (data.prsSoul ?? 0) + 1;
 
         if (data.role === 'tank')
-          return { alertText: output.mesg!({ num: data.prsSoul }) };
+          return { alertText: output.tank!({ num: data.prsSoul }) };
         if (data.role === 'healer')
-          return { alertText: output.shared!() };
+          return { alertText: output.healer!({ num: data.prsSoul }) };
         return { infoText: output.avoid!() };
       },
     },
@@ -149,19 +178,56 @@ const triggerSet: TriggerSet<Data> = {
       id: 'P10S Dividing Wings Tether',
       type: 'Tether',
       netRegex: { id: '00F2', source: bossNameUnicode },
+      preRun: (data, matches) => data.dividingWingsTethers.push(matches.target),
+      promise: async (data, matches) => {
+        if (data.me === matches.target) {
+          data.combatantData = [];
+          const wingId = parseInt(matches.sourceId, 16);
+          if (wingId === undefined)
+            return;
+          data.combatantData = (await callOverlayHandler({
+            call: 'getCombatants',
+            ids: [wingId],
+          })).combatants;
+        }
+      },
       alarmText: (data, matches, output) => {
-        data.dividingWingsTethers.push(matches.target);
-        if (data.me === matches.target)
-          return output.text!();
+        if (data.me === matches.target) {
+          const x = data.combatantData[0]?.PosX;
+          if (x === undefined)
+            return output.default!();
+          let wingSide;
+          let wingDir;
+          if (x > 100) {
+            wingSide = output.right!();
+            wingDir = output.east!();
+          } else if (x < 100) {
+            wingSide = output.left!();
+            wingDir = output.west!();
+          }
+          if (wingSide !== undefined && wingDir !== undefined)
+            return output.tetherside!({ side: wingSide, dir: wingDir });
+          return output.default!();
+        }
       },
       outputStrings: {
-        text: {
+        tetherside: {
+          en: '줄 땡겨요: ${side}/${dir}',
+          de: 'Zeige ${side}/${dir} Verbindung weg',
+          fr: 'Orientez le lien à l\'extérieur - ${side}/${dir}',
+          cn: '向 ${side}/${dir} 外侧引导',
+        },
+        default: {
           en: '줄 땡겨요',
           de: 'Zeige Verbindung weg',
           fr: 'Orientez le lien à l\'extérieur',
           cn: '向外引导',
           ko: '선을 바깥쪽으로',
         },
+        right: Outputs.right,
+        left: Outputs.left,
+        east: Outputs.east,
+        west: Outputs.west,
       },
     },
     {
@@ -250,7 +316,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '거미줄 겹치기',
         },
         place: {
-          en: '남쪽에 셋이 나란히 거미집을 지어요',
+          en: '남쪽에서 셋이 나란히 거미집을 지어요',
         },
       },
     },
@@ -258,13 +324,13 @@ const triggerSet: TriggerSet<Data> = {
       id: 'P10S Pandaemoniac Pillars',
       type: 'StartsUsing',
       netRegex: { id: '8280', source: bossNameUnicode, capture: false },
-      response: Responses.getTowers('info'),
+      response: Responses.getTowers('alert'),
     },
     {
       id: 'P10S Pandaemoniac Turrets',
       type: 'StartsUsing',
       netRegex: { id: '87AF', source: bossNameUnicode, capture: false },
-      response: Responses.getTowers('info'),
+      response: Responses.getTowers('alert'),
     },
     {
       id: 'P10S Silkspit',
@@ -287,7 +353,7 @@ const triggerSet: TriggerSet<Data> = {
       type: 'HeadMarker',
       netRegex: {},
       condition: (data, matches) => getHeadmarkerId(data, matches) === headmarkers.spread,
-      alertText: (data, matches, output) => {
+      alarmText: (data, matches, output) => {
         data.meltdownSpreads.push(matches.target);
         if (data.me === matches.target)
           return output.spread!();
@@ -300,7 +366,7 @@ const triggerSet: TriggerSet<Data> = {
       id: 'P10S Pandaemoniac Meltdown Stack',
       type: 'StartsUsing',
       netRegex: { id: '829D', source: bossNameUnicode, capture: false },
-      infoText: (data, _matches, output) => {
+      alertText: (data, _matches, output) => {
         if (!data.meltdownSpreads.includes(data.me))
           return output.text!();
       },
@@ -326,6 +392,7 @@ const triggerSet: TriggerSet<Data> = {
       run: (data) => {
         delete data.daemonicBondsTime;
         delete data.bondsSecondMechanic;
+        data.daemonicBondsCounter++;
       },
     },
     {
@@ -358,14 +425,14 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         spreadThenPartners: {
-          en: '(예고: 흩어졌다 => 페어)',
+          en: '(흩어졌다 => 페어)',
           de: '(Verteilen => Partner, für später)',
           fr: '(Écartez-vous => Partenaires, pour après)',
           cn: '(稍后 分散 => 分摊)',
           ko: '(곧 산개 => 파트너)',
         },
         partnersThenSpread: {
-          en: '(예고: 페어 => 흩어져요)',
+          en: '(페어 => 흩어져요)',
           de: '(Partner => Verteilen, für später)',
           fr: '(Partenaires => Écartez-vous, pour après)',
           cn: '(稍后 分摊 => 分散)',
@@ -396,14 +463,14 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         spreadThenStack: {
-          en: '(예고: 흩어졌다 => 4:4 뭉쳐요)',
+          en: '(흩어졌다 => 4:4 뭉쳐요)',
           de: '(Verteilen => Rollengruppe, für später)',
           fr: '(Écartez-vous => Package par rôle, pour après)',
           cn: '(稍后 分散 => 四四分摊)',
           ko: '(곧 산개 => 직업군별 쉐어)',
         },
         stackThenSpread: {
-          en: '(예고: 4:4 뭉쳤다 => 흩어져요)',
+          en: '(4:4 뭉쳤다 => 흩어져요)',
           de: '(Rollengruppe => Verteilen, für später)',
           fr: '(Package par rôle => Écartez-vous, pour après)',
           cn: '(稍后 四四分摊 => 分散)',
@@ -415,7 +482,8 @@ const triggerSet: TriggerSet<Data> = {
       id: 'P10S Daemoniac Bonds First',
       type: 'GainsEffect',
       netRegex: { effectId: 'DDE' },
-      delaySeconds: (_data, matches) => parseFloat(matches.duration) - 5,
+      delaySeconds: bondsDelaySeconds,
+      durationSeconds: bondsDurationSeconds,
       suppressSeconds: 5,
       alertText: (data, _matches, output) => {
         // If this is undefined, then this is the second mechanic and will be called out elsewhere.
@@ -446,22 +514,15 @@ const triggerSet: TriggerSet<Data> = {
       id: 'P10S Dueodaemoniac Bonds First',
       type: 'GainsEffect',
       netRegex: { effectId: 'DDF' },
-      delaySeconds: (_data, matches) => parseFloat(matches.duration) - 5,
+      delaySeconds: bondsDelaySeconds,
+      durationSeconds: bondsDurationSeconds,
       suppressSeconds: 5,
       alertText: (data, _matches, output) => {
-        if (data.bondsSecondMechanic === 'stack')
-          return output.partnersThenStack!();
+        // If this is undefined, then this is the second mechanic and will be called out elsewhere.
         if (data.bondsSecondMechanic === 'spread')
           return output.partnersThenSpread!();
       },
       outputStrings: {
-        partnersThenStack: {
-          en: '페어 => 4:4 뭉쳐요',
-          de: 'Partner => Rollengruppe',
-          fr: 'Partenaires => Package par rôle',
-          cn: '分摊  => 四四分摊',
-          ko: '파트너 => 직업군별 쉐어',
-        },
         partnersThenSpread: {
           en: '페어 => 흩어져요',
           de: 'Partner => Verteilen',
@@ -475,22 +536,15 @@ const triggerSet: TriggerSet<Data> = {
       id: 'P10S TetraDaemoniac Bonds First',
       type: 'GainsEffect',
       netRegex: { effectId: 'E70' },
-      delaySeconds: (_data, matches) => parseFloat(matches.duration) - 5,
+      delaySeconds: bondsDelaySeconds,
+      durationSeconds: bondsDurationSeconds,
       suppressSeconds: 5,
       alertText: (data, _matches, output) => {
-        if (data.bondsSecondMechanic === 'partners')
-          return output.stackThenPartners!();
+        // If this is undefined, then this is the second mechanic and will be called out elsewhere.
         if (data.bondsSecondMechanic === 'spread')
           return output.stackThenSpread!();
       },
       outputStrings: {
-        stackThenPartners: {
-          en: '4:4 뭉쳤다 => 페어',
-          de: 'Rollengruppe => Partner',
-          fr: 'Package par rôle => Partenaires',
-          cn: '四四分摊 => 分摊',
-          ko: '직업군별 쉐어 => 파트너',
-        },
         stackThenSpread: {
           en: '4:4 뭉쳤다 => 흩어져요',
           de: 'Rollengruppe => Verteilen',
@@ -551,9 +605,22 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
+      id: 'P10S Jade Passage',
+      type: 'StartsUsing',
+      netRegex: { id: '828C', capture: false },
+      suppressSeconds: 5,
+      infoText: (_data, _matches, output) => output.text!(),
+      outputStrings: {
+        text: {
+          en: '레이저 피해욧',
+          cn: '注意躲避激光',
+        },
+      },
+    },
+    {
       id: 'P10S Pandaemoniac Ray 레이저 조심',
       type: 'StartsUsing',
-      netRegex: { id: ['8289', '828B'], source: bossNameUnicode, capture: false },
+      netRegex: { id: ['8289', '828B'], capture: false },
       condition: (data) => data.role === 'healer',
       delaySeconds: 3,
       alertText: (_data, _matches, output) => output.text!(),

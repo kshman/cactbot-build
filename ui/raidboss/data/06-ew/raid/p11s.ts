@@ -2,40 +2,69 @@ import Outputs from '../../../../../resources/outputs';
 import { Responses } from '../../../../../resources/responses';
 import ZoneId from '../../../../../resources/zone_id';
 import { RaidbossData } from '../../../../../types/data';
+import { NetMatches } from '../../../../../types/net_matches';
 import { Output, TriggerSet } from '../../../../../types/trigger';
 
-export const playstationMarkers = ['circle', 'cross', 'triangle', 'square'] as const;
-export type lightAndDarks = 'none' | 'lightnear' | 'lightfar' | 'darknear' | 'darkfar';
+// TODO: tankbuster calls
+// TODO: call out where Arcane Revelation+Arche light/dark portals are
+// TODO: if party standing on Dark Orbs during Arcane Revelation+Unlucky Lot, say rotate or stay?
+// TODO: call out where Letter of the Law safe spots are (e.g. N lean E / S lean W)
 
 export interface Data extends RaidbossData {
+  prsStyle?: boolean;
   prsDike?: number;
   prsStyx?: number;
-  prsLnd?: lightAndDarks;
-  prsTethers: string[];
+  prsLightAndDarks?: 'none' | 'lightnear' | 'lightfar' | 'darknear' | 'darkfar';
+  prsTethers?: number;
   //
+  decOffset?: number;
+  phase?: 'messengers' | 'darkLight' | 'letter';
+  upheldTethers: NetMatches['Tether'][];
+  divisiveColor?: 'dark' | 'light';
   lightDarkDebuff: { [name: string]: 'light' | 'dark' };
   lightDarkBuddy: { [name: string]: string };
   lightDarkTether: { [name: string]: 'near' | 'far' };
+  cylinderValue?: number;
+  numCylinders?: number;
 }
 
-export const prsP11Strings = {
+const headmarkers = {
+  // vfx/lockon/eff/tank_lockon04_7sk1.avfx
+  dike: '01DB', // tankbuster
+  // vfx/lockon/eff/com_share4a1.avfx
+  styx: '0131', // multi-hit stack, currently unused
+  // vfx/lockon/eff/m0515_turning_right01c.avfx
+  orangeCW: '009C', // orange clockwise rotation
+  // vfx/lockon/eff/m0515_turning_left01c.avfx
+  blueCCW: '009D', // blue counterclockwise rotation
+} as const;
+
+const firstHeadmarker = parseInt(headmarkers.dike, 16);
+
+const getHeadmarkerId = (data: Data, matches: NetMatches['HeadMarker']) => {
+  if (data.decOffset === undefined)
+    data.decOffset = parseInt(matches.id, 16) - firstHeadmarker;
+  return (parseInt(matches.id, 16) - data.decOffset).toString(16).toUpperCase().padStart(4, '0');
+};
+
+export const prsJuryOverrulingStrings = {
   proteinpair: {
     en: '프로틴 (페어)',
   },
   proteinshare: {
-    en: '프로틴 (힐러 4:4)',
+    en: '프로틴 (4:4 뭉쳐요)',
   },
   proteinlightfar: {
     en: '프로틴: 그대로 대기',
   },
   proteinlightnear: {
-    en: '프로틴: 90도 왼쪽 안으로',
+    en: '프로틴: 90도 안쪽으로',
   },
   proteindarkfar: {
     en: '프로틴: 45도 왼쪽으로',
   },
   proteindarknear: {
-    en: '프로틴: 90+45도 왼쪽 안으로',
+    en: '프로틴: 90+45도 안쪽으로',
   },
   proteinunknown: {
     en: '프로틴 (${unk})',
@@ -43,14 +72,14 @@ export const prsP11Strings = {
   unknown: Outputs.unknown,
 };
 export const prsJuryPrepare = (data: Data, output: Output, pair: boolean) => {
-    const mesg = data.prsLnd
+    const mesg = data.prsLightAndDarks
     ? {
       lightfar: output.proteinlightfar!(),
       lightnear: output.proteinlightnear!(),
       darkfar: output.proteindarkfar!(),
       darknear: output.proteindarknear!(),
       none: output.proteinunknown!({ unk: output.unknown!() }),
-    }[data.prsLnd] : pair ? output.proteinpair!() : output.proteinshare!();
+    }[data.prsLightAndDarks] : pair ? output.proteinpair!() : output.proteinshare!();
     return mesg;
 };
 
@@ -60,14 +89,42 @@ const triggerSet: TriggerSet<Data> = {
   timelineFile: 'p11s.txt',
   initData: () => {
     return {
-      prsTethers: [],
-      //
+      upheldTethers: [],
       lightDarkDebuff: {},
       lightDarkBuddy: {},
       lightDarkTether: {},
     };
   },
   triggers: [
+    {
+      id: 'P11S Headmarker Tracker',
+      type: 'HeadMarker',
+      netRegex: {},
+      condition: (data) => data.decOffset === undefined,
+      suppressSeconds: 99999,
+      // Unconditionally set the first headmarker here so that future triggers are conditional.
+      run: (data, matches) => getHeadmarkerId(data, matches),
+    },
+    {
+      id: 'P11S Phase Tracker',
+      type: 'StartsUsing',
+      netRegex: { id: ['8219', '81FE', '87D2'], source: 'Themis' },
+      run: (data, matches) => {
+        data.upheldTethers = [];
+        const phaseMap: { [id: string]: Data['phase'] } = {
+          '8219': 'messengers',
+          '81FE': 'darkLight',
+          '87D2': 'letter',
+        } as const;
+        data.phase = phaseMap[matches.id];
+      },
+    },
+    {
+      id: 'P11S Upheld Tether Collector',
+      type: 'Tether',
+      netRegex: { id: '00F9' },
+      run: (data, matches) => data.upheldTethers.push(matches),
+    },
     {
       id: 'P11S Eunomia',
       type: 'StartsUsing',
@@ -78,30 +135,31 @@ const triggerSet: TriggerSet<Data> = {
       id: 'P11S Jury Overruling Light',
       type: 'StartsUsing',
       netRegex: { id: '81E6', source: 'Themis', capture: false },
+      durationSeconds: 6,
       alertText: (data, _matches, output) => prsJuryPrepare(data, output, false),
-      outputStrings: prsP11Strings,
+      outputStrings: prsJuryOverrulingStrings,
     },
     {
-      id: 'P11S Jury Overruling Light 실행',
-      type: 'StartsUsing',
-      netRegex: { id: '81E6', source: 'Themis', capture: false },
-      delaySeconds: 5.1,
-      durationSeconds: 7,
-      alertText: (data, _matches, output) => {
-        if (data.prsLnd && data.prsLnd !== 'none')
+      id: 'P11S Jury Overruling Light Followup',
+      type: 'Ability',
+      netRegex: { id: '81E8', capture: false },
+      durationSeconds: 4,
+      suppressSeconds: 5,
+      infoText: (data, _matches, output) => {
+        if (data.prsLightAndDarks && data.prsLightAndDarks !== 'none')
           return output.lightLr!();
         return output.text!();
       },
       outputStrings: {
         text: {
-          en: '(안쪽에서) 4:4 힐러랑 뭉쳐요',
+          en: '(안쪽에서) 4:4 뭉쳐요',
           de: 'Himmelsrichtungen => Heiler Gruppen',
           fr: 'Positions => Package sur les heals',
           cn: '八方分散 => 治疗分摊',
           ko: '8방향 산개 => 힐러 그룹 쉐어',
         },
         lightLr: {
-          en: '(왼쪽 돌아 마커) 4:4 힐러랑 뭉쳐요',
+          en: '(왼쪽 돌아 마커) 4:4 뭉쳐요',
         },
       },
     },
@@ -109,24 +167,25 @@ const triggerSet: TriggerSet<Data> = {
       id: 'P11S Jury Overruling Dark',
       type: 'StartsUsing',
       netRegex: { id: '81E7', source: 'Themis', capture: false },
+      durationSeconds: 6,
       alertText: (data, _matches, output) => prsJuryPrepare(data, output, true),
-      outputStrings: prsP11Strings,
+      outputStrings: prsJuryOverrulingStrings,
     },
     {
-      id: 'P11S Jury Overruling Dark 실행',
-      type: 'StartsUsing',
-      netRegex: { id: '81E7', source: 'Themis', capture: false },
-      delaySeconds: 5.1,
-      durationSeconds: 7,
-      alertText: (data, _matches, output) => {
-        const mesg = data.prsLnd
+      id: 'P11S Jury Overruling Dark Followup',
+      type: 'Ability',
+      netRegex: { id: '81E9', capture: false },
+      durationSeconds: 4,
+      suppressSeconds: 5,
+      infoText: (data, _matches, output) => {
+        const mesg = data.prsLightAndDarks
         ? {
           lightfar: output.pairlightfar!(),
           lightnear: output.pairlightnear!(),
           darkfar: output.pairdarkfar!(),
           darknear: output.pairdarknear!(),
           none: output.unknown!(),
-        }[data.prsLnd] : output.text!();
+        }[data.prsLightAndDarks] : output.text!();
         return mesg;
       },
       outputStrings: {
@@ -144,7 +203,7 @@ const triggerSet: TriggerSet<Data> = {
           en: '페어: 밖으로 나가요',
         },
         pairdarkfar: {
-          en: '페어: 그자리 대기',
+          en: '페어: 그대로 멈추쇼',
         },
         pairdarknear: {
           en: '페어: 밖으로 나가요',
@@ -156,11 +215,12 @@ const triggerSet: TriggerSet<Data> = {
       id: 'P11S Upheld Overruling Light',
       type: 'StartsUsing',
       netRegex: { id: '87D3', source: 'Themis', capture: false },
-      durationSeconds: 11,
+      durationSeconds: 6,
       alertText: (_data, _matches, output) => output.text!(),
+      run: (data) => data.upheldTethers = [],
       outputStrings: {
         text: {
-          en: '한가운데 => 밖으로 4:4 힐러랑 뭉쳐요',
+          en: '한가운데 모였다 => 밖으로 + 4:4 뭉쳐요',
           de: 'Party Rein => Raus + Heiler Gruppen',
           fr: 'Intérieur => Extérieur + package sur les heals',
           cn: '场中集合 => 场边 + 治疗分摊',
@@ -169,45 +229,172 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: 'P11S Upheld Overruling Dark',
-      type: 'StartsUsing',
-      netRegex: { id: '87D4', source: 'Themis' },
-      durationSeconds: 11,
-      alertText: (data, _matches, output) => {
-        if (data.role === 'tank') {
-          if (data.prsTethers.length === 0)
-            return output.tankUnknown!();
-          if (data.prsTethers.includes(data.me))
-            return output.tank!();
-        }
-        return output.text!();
-      },
-      run: (data) => data.prsTethers = [],
+      id: 'P11S Upheld Overruling Light Followup',
+      type: 'Ability',
+      netRegex: { id: '81F2', capture: false },
+      durationSeconds: 4,
+      suppressSeconds: 5,
+      infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '밖으로 => 안쪽에서 페어',
-          de: 'Party Raus => Rein + Partner',
-          fr: 'Extérieur => Intérieur + package sur les heals',
-          cn: '场外 => 场中 + 两人分摊',
-          ko: '본대 밖으로 => 안으로 + 파트너',
+          en: '밖으로 + 4:4 뭉쳐요',
         },
-        tank: {
-          en: '한가운데 줄 유도 => 안쪽에서 페어',
-        },
-        tankUnknown: {
-          en: '줄 달리면 한가운데 유도 => 안쪽에서 페어',
-        }
       },
+    },
+    {
+      id: 'P11S Upheld Overruling Dark',
+      type: 'StartsUsing',
+      netRegex: { id: '87D4', source: 'Themis', capture: false },
+      durationSeconds: 6,
+      response: (data, _matches, output) => {
+        // cactbot-builtin-response
+        output.responseOutputStrings = {
+          upheldOnYou: {
+            en: '한가운데서 줄 유도 => 안에서 + 페어',
+          },
+          upheldOnPlayer: {
+            en: '밖에 있다가 => 안으로 + 페어 (줄 처리: ${player})',
+          },
+          upheldNotOnYou: {
+            en: '밖에 있다가 => 안으로 + 페어',
+            de: 'Party Raus => Rein + Partner',
+            fr: 'Extérieur => Intérieur + Partenaire',
+            cn: '场外 => 场中 + 两人分摊',
+            ko: '본대 밖으로 => 안으로 + 파트너',
+          },
+        };
+
+        const [tether] = data.upheldTethers;
+        if (tether === undefined || data.upheldTethers.length !== 1)
+          return { alertText: output.upheldNotOnYou!() };
+
+        if (tether.target === data.me)
+          return { alarmText: output.upheldOnYou!() };
+
+        if (data.prsStyle)
+          return { alertText: output.upheldNotOnYou!() };
+
+        return { alertText: output.upheldOnPlayer!({ player: data.ShortName(tether.target) }) };
+      },
+      run: (data) => data.upheldTethers = [],
+    },
+    {
+      id: 'P11S Upheld Overruling Dark Followup',
+      type: 'Ability',
+      netRegex: { id: '81F3', capture: false },
+      durationSeconds: 4,
+      suppressSeconds: 5,
+      infoText: (_data, _matches, output) => output.text!(),
+      outputStrings: {
+        text: {
+          en: '안으로 + 페어',
+        },
+      },
+    },
+    {
+      id: 'P11S Upheld Ruling Tether',
+      type: 'StartsUsing',
+      // Two adds tether players; the light add casts 87D0, the dark casts 87D1.
+      // There's also a WeaponId 27/28 change too, but we don't need it.
+      netRegex: { id: '87D1' },
+      // Wait until after the Inevitable Law/Sentence during messengers.
+      delaySeconds: (data) => data.phase === 'messengers' ? 5.7 : 0,
+      response: (data, matches, output) => {
+        // cactbot-builtin-response
+        output.responseOutputStrings = {
+          tankTether: {
+            en: '줄 유도해요!',
+          },
+          partyStackPlayerOut: {
+            en: '모두 뭉쳐요 (줄 처리: ${player})',
+          },
+          // If we're not sure who the tether is on.
+          partyStack: {
+            en: '모두 뭉쳐요',
+          },
+          // 샤도우
+          tankShadow: {
+            en: '내게 줄! Ⓐ로 유도!',
+          },
+          partyShadow: {
+            en: '한가운데서 뭉쳤다 => 탱크 쿵Ⓐ 안으로',
+          },
+          // 하트오브저지
+          tankHeart: {
+            en: '내게 줄! 한가운데서 무적 => 내 타워로',
+          },
+          partyHeart: {
+            en: '모두 뭉쳐 푹찍쾅',
+          },
+        };
+
+        data.prsTethers = (data.prsTethers ?? 0) + 1;
+
+        const sourceId = matches.sourceId;
+        const [tether] = data.upheldTethers.filter((x) => x.sourceId === sourceId);
+        if (tether === undefined || data.upheldTethers.length !== 2)
+          return { alertText: output.partyStack!() };
+
+        if (tether.target === data.me) {
+          if (data.prsTethers === 1)
+            return { alarmText: output.tankShadow!() };
+          if (data.prsTethers === 2)
+            return { alarmText: output.tankHeart!() };
+          return { alarmText: output.tankTether!() };
+        }
+
+        if (data.prsTethers === 1)
+          return { alertText: output.partyShadow!() };
+        if (data.prsTethers === 2)
+          return { alertText: output.partyHeart!() };
+        return {
+          alertText: output.partyStackPlayerOut!({ player: data.ShortName(tether.target) }),
+        };
+      },
+      run: (data) => data.upheldTethers = [],
+    },
+    {
+      id: 'P11S Upheld Ruling Dark Followup',
+      type: 'Ability',
+      netRegex: { id: '8221', capture: false },
+      suppressSeconds: 5,
+      infoText: (data, _matches, output) => {
+        if (data.prsTethers === 1)
+          return output.shadow!();
+        if (data.prsTethers === 2)
+          return output.heart!();
+        return output.text!();
+      },
+      outputStrings: {
+        text: {
+          en: '안으로 드루와',
+        },
+        shadow: {
+          en: '탱크 쿵Ⓐ 안으로',
+        },
+        heart: {
+          en: '한가운데서 모이고',
+        },
+      },
+    },
+    {
+      id: 'P11S Dark Perimeter Followup',
+      type: 'Ability',
+      netRegex: { id: '8225', capture: false },
+      condition: (data) => data.phase === 'letter',
+      suppressSeconds: 5,
+      response: Responses.getTowers('alert'),
     },
     {
       id: 'P11S Divisive Overruling Light',
       type: 'StartsUsing',
       netRegex: { id: '81EC', source: 'Themis', capture: false },
-      durationSeconds: 11,
+      durationSeconds: 6,
       alertText: (_data, _matches, output) => output.text!(),
+      run: (data) => data.divisiveColor = 'light',
       outputStrings: {
         text: {
-          en: '옆으로 => 그대로 4:4 힐러랑 뭉쳐요',
+          en: '옆으로 => 그대로 4:4 뭉쳐요',
           de: 'Seiten => Heiler Gruppen + Raus',
           fr: 'Côtés => Extérieur + Package sur les heals',
           cn: '两侧 => 治疗分摊 + 场外',
@@ -219,15 +406,38 @@ const triggerSet: TriggerSet<Data> = {
       id: 'P11S Divisive Overruling Dark',
       type: 'StartsUsing',
       netRegex: { id: '81ED', source: 'Themis', capture: false },
-      durationSeconds: 11,
+      durationSeconds: 6,
       alertText: (_data, _matches, output) => output.text!(),
+      run: (data) => data.divisiveColor = 'dark',
       outputStrings: {
         text: {
-          en: '옆으로 => 안쪽에서 페어',
+          en: '옆에 있다 => 안으로 + 페어',
           de: 'Seiten => Rein + Partner',
-          fr: 'Côtés => Intérieur + Package sur les heals',
+          fr: 'Côtés => Intérieur + Partenaire',
           cn: '两侧 => 两人分摊 + 场内',
           ko: '양 옆 => 안으로 + 파트너',
+        },
+      },
+    },
+    {
+      id: 'P11S Divisive Overruling Dark Followup',
+      type: 'Ability',
+      netRegex: { id: '81EE', capture: false },
+      durationSeconds: 4,
+      suppressSeconds: 5,
+      infoText: (data, _matches, output) => {
+        if (data.divisiveColor === 'dark')
+          return output.dark!();
+        if (data.divisiveColor === 'light')
+          return output.light!();
+      },
+      run: (data) => delete data.divisiveColor,
+      outputStrings: {
+        light: {
+          en: '그대로 + 4:4 뭉쳐요',
+        },
+        dark: {
+          en: '안으로 + 페어',
         },
       },
     },
@@ -239,7 +449,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '바깥에서 4:4 힐러랑 뭉쳐요',
+          en: '밖으로 + 4:4 뭉쳐요',
           de: 'Heiler Gruppen + Raus',
           fr: 'Extérieur + Package sur les heals',
           cn: '治疗分摊 + 场外',
@@ -255,7 +465,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '안쪽에서 페어',
+          en: '안에서 + 페어',
           de: 'Partner + Rein',
           fr: 'Partenaires + Intérieur',
           cn: '两人分摊 + 场内',
@@ -267,11 +477,11 @@ const triggerSet: TriggerSet<Data> = {
       id: 'P11S Dismissal Overruling Light',
       type: 'StartsUsing',
       netRegex: { id: '8784', source: 'Themis', capture: false },
-      durationSeconds: 10,
+      durationSeconds: 6,
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '넉백 먼저 => 바깥에서 4:4 힐러랑 뭉쳐요',
+          en: '넉백 먼저 => 밖에서 + 4:4 뭉쳐요',
           de: 'Rückstoß => Heiler Gruppen + Raus',
           fr: 'Poussée => Extérieur + Package sur les heals',
           cn: '击退 => 治疗分摊 + 场外',
@@ -280,18 +490,44 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
+      id: 'P11S Dismissal Overruling Light Followup',
+      type: 'Ability',
+      netRegex: { id: '8784', capture: false },
+      durationSeconds: 4,
+      suppressSeconds: 5,
+      infoText: (_data, _matches, output) => output.text!(),
+      outputStrings: {
+        text: {
+          en: '밖에서 + 4:4 뭉쳐요',
+        },
+      },
+    },
+    {
       id: 'P11S Dismissal Overruling Dark',
       type: 'StartsUsing',
       netRegex: { id: '8785', source: 'Themis', capture: false },
-      durationSeconds: 10,
+      durationSeconds: 6,
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '넉백 먼저 => 안쪽에서 페어',
+          en: '넉백 먼저 => 안으로 + 페어',
           de: 'Rückstoß => Rein + Partner',
           fr: 'Poussée => Intérieur + Partenaires',
           cn: '击退 => 两人分摊 + 场内',
           ko: '넉백 => 안으로 + 파트너',
+        },
+      },
+    },
+    {
+      id: 'P11S Dismissal Overruling Dark Followup',
+      type: 'Ability',
+      netRegex: { id: '8785', capture: false },
+      durationSeconds: 4,
+      suppressSeconds: 5,
+      infoText: (_data, _matches, output) => output.text!(),
+      outputStrings: {
+        text: {
+          en: '안으로 + 페어',
         },
       },
     },
@@ -303,7 +539,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '옆으로 => 🟪 포탈 안전',
+          en: '옆으로 => 🟪포탈 안전',
           de: 'Geh zu einem Dunkel-Portal',
           fr: 'Allez vers les portails sombres',
           cn: '去暗门前',
@@ -319,7 +555,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '옆으로 => 🟨 포탈 안전',
+          en: '옆으로 => 🟨포탈 안전',
           de: 'Geh zu einem Licht-Portal',
           fr: 'Allez sur les portails de lumière',
           cn: '去光门前',
@@ -331,10 +567,11 @@ const triggerSet: TriggerSet<Data> = {
       id: 'P11S Arcane Revelation Light Orbs',
       type: 'StartsUsing',
       netRegex: { id: '820F', source: 'Themis', capture: false },
+      durationSeconds: 6,
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '🟣 구슬 쪽으로',
+          en: '🟣구슬 쪽으로',
           de: 'Rotiere zu den dunklen Orbs',
           fr: 'Tournez vers les orbes sombres',
           cn: '暗球侧安全',
@@ -346,10 +583,11 @@ const triggerSet: TriggerSet<Data> = {
       id: 'P11S Arcane Revelation Dark Orbs',
       type: 'StartsUsing',
       netRegex: { id: '8210', source: 'Themis', capture: false },
+      durationSeconds: 6,
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '🟡 구슬 쪽으로',
+          en: '🟡구슬 쪽으로',
           de: 'Rotiere zu den licht Orbs',
           fr: 'Tournez ves les orbes de lumière',
           cn: '光球侧安全',
@@ -400,32 +638,32 @@ const triggerSet: TriggerSet<Data> = {
         // cactbot-builtin-response
         output.responseOutputStrings = {
           lightNear: {
-            en: '🟡 니어: ${player} (${side})',
-            de: 'Licht Nahe w/${player}',
-            fr: 'Lumière proche avec ${player}',
-            cn: '光靠近 => ${player}',
-            ko: '빛 가까이 +${player}',
+            en: '🟡니어: ${role}/${player} (${side})',
+            de: 'Licht Nahe w/${player} (${role})',
+            fr: 'Lumière proche avec ${player} (${role})',
+            cn: '光靠近 => ${player} (${role})',
+            ko: '빛 가까이 +${player} (${role})',
           },
           lightFar: {
-            en: '🟡 파: ${player} (${side})',
-            de: 'Licht Entfernt w/${player}',
-            fr: 'Lumière éloignée avec ${player}',
-            cn: '光远离 => ${player}',
-            ko: '빛 멀리 +${player}',
+            en: '🟡파: ${role}/${player} (${side})',
+            de: 'Licht Entfernt w/${player} (${role})',
+            fr: 'Lumière éloignée avec ${player} (${role})',
+            cn: '光远离 => ${player} (${role})',
+            ko: '빛 멀리 +${player} (${role})',
           },
           darkNear: {
-            en: '🟣 니어: ${player} (${side})',
-            de: 'Dunkel Nahe w/${player}',
-            fr: 'Sombre proche avec ${player}',
-            cn: '暗靠近 => ${player}',
-            ko: '어둠 가까이 +${player}',
+            en: '🟣니어: ${role}/${player} (${side})',
+            de: 'Dunkel Nahe w/${player} (${role})',
+            fr: 'Sombre proche avec ${player} (${role})',
+            cn: '暗靠近 => ${player} (${role})',
+            ko: '어둠 가까이 +${player} (${role})',
           },
           darkFar: {
-            en: '🟣 파: ${player} (${side})',
-            de: 'Dunkel Entfernt w/${player}',
-            fr: 'Sombre éloigné avec ${player}',
-            cn: '暗远离 => ${player}',
-            ko: '어둠 멀리 +${player}',
+            en: '🟣파: ${role}/${player} (${side})',
+            de: 'Dunkel Entfernt w/${player} (${role})',
+            fr: 'Sombre éloigné avec ${player} (${role})',
+            cn: '暗远离 => ${player} (${role})',
+            ko: '어둠 멀리 +${player} (${role})',
           },
           otherNear: {
             en: '다른팀 니어: ${player1}, ${player2}',
@@ -445,6 +683,10 @@ const triggerSet: TriggerSet<Data> = {
           rightSide: {
             en: '🡸Ⓓ',
           },
+          tank: Outputs.tank,
+          healer: Outputs.healer,
+          dps: Outputs.dps,
+          unknown: Outputs.unknown,
         };
 
         const myColor = data.lightDarkDebuff[data.me];
@@ -463,28 +705,38 @@ const triggerSet: TriggerSet<Data> = {
           return;
         }
 
+        let myBuddyRole;
+        if (data.party.isDPS(myBuddy))
+          myBuddyRole = output.dps!();
+        else if (data.party.isTank(myBuddy))
+          myBuddyRole = output.tank!();
+        else if (data.party.isHealer(myBuddy))
+          myBuddyRole = output.healer!();
+        else
+          myBuddyRole = output.unknown!();
+
         const mySide = data.role === 'dps'
         ? myColor === 'dark' ? output.rightSide!() : output.leftSide!()
         : myColor === 'dark' ? output.leftSide!() : output.rightSide!();
 
         if (myColor === 'light')
-          data.prsLnd = myLength === 'near' ? 'lightnear' : 'lightfar';
+          data.prsLightAndDarks = myLength === 'near' ? 'lightnear' : 'lightfar';
         else
-          data.prsLnd = myLength === 'near' ? 'darknear' : 'darkfar';
+          data.prsLightAndDarks = myLength === 'near' ? 'darknear' : 'darkfar';
 
         const myBuddyShort = data.ShortName(myBuddy);
 
         let alertText: string;
         if (myLength === 'near') {
           if (myColor === 'light')
-            alertText = output.lightNear!({ player: myBuddyShort, side: mySide });
+            alertText = output.lightNear!({ player: myBuddyShort, role: myBuddyRole, side: mySide });
           else
-            alertText = output.darkNear!({ player: myBuddyShort, side: mySide });
+            alertText = output.darkNear!({ player: myBuddyShort, role: myBuddyRole, side: mySide });
         } else {
           if (myColor === 'light')
-            alertText = output.lightFar!({ player: myBuddyShort, side: mySide });
+            alertText = output.lightFar!({ player: myBuddyShort, role: myBuddyRole, side: mySide });
           else
-            alertText = output.darkFar!({ player: myBuddyShort, side: mySide });
+            alertText = output.darkFar!({ player: myBuddyShort, role: myBuddyRole, side: mySide });
         }
 
         let infoText: string | undefined = undefined;
@@ -533,6 +785,63 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
+      id: 'P11S Lightstream Collect',
+      type: 'HeadMarker',
+      netRegex: { target: 'Arcane Cylinder' },
+      condition: (data, matches) => {
+        const id = getHeadmarkerId(data, matches);
+        return (id === headmarkers.orangeCW || id === headmarkers.blueCCW);
+      },
+      run: (data, matches) => {
+        const id = getHeadmarkerId(data, matches);
+        // Create a 3 digit binary value, Orange = 0, Blue = 1.
+        // e.g. BBO = 110 = 6
+        data.cylinderValue ??= 0;
+        data.numCylinders ??= 0;
+        data.cylinderValue *= 2;
+        if (id === headmarkers.blueCCW)
+          data.cylinderValue += 1;
+        data.numCylinders++;
+      },
+    },
+    {
+      id: 'P11S Lightstream',
+      type: 'HeadMarker',
+      netRegex: { target: 'Arcane Cylinder' },
+      condition: (data, matches) => {
+        const id = getHeadmarkerId(data, matches);
+        return (data.numCylinders === 3 &&
+          (id === headmarkers.orangeCW || id === headmarkers.blueCCW));
+      },
+      alertText: (data, _matches, output) => {
+        if (!data.cylinderValue || !(data.cylinderValue >= 0) || data.cylinderValue > 7)
+          return;
+        const outputs: { [cylinderValue: number]: string | undefined } = {
+          0b000: undefined,
+          0b001: output.northwest!(),
+          0b010: output.east!(),
+          0b011: output.northeast!(),
+          0b100: output.southwest!(),
+          0b101: output.west!(),
+          0b110: output.southeast!(),
+          0b111: undefined,
+        };
+        return outputs[data.cylinderValue];
+      },
+      run: (data) => {
+        delete data.cylinderValue;
+        delete data.numCylinders;
+      },
+      outputStrings: {
+        east: 'Ⓑ 동쪽',
+        northeast: '① 북동',
+        northwest: '④ 북서',
+        southeast: '② 남동',
+        southwest: '③ 남서',
+        west: 'Ⓓ 서쪽',
+      },
+    },
+    {
       id: 'P11S 디케',
       type: 'StartsUsing',
       netRegex: { id: ['822D', '822F', '8230'], source: 'Themis' },
@@ -566,9 +875,8 @@ const triggerSet: TriggerSet<Data> = {
       id: 'P11S 샤도 메신저',
       type: 'StartsUsing',
       netRegex: { id: '8219', source: 'Themis', capture: false },
-      durationSeconds: 12,
+      durationSeconds: 8,
       infoText: (_data, _matches, output) => output.text!(),
-      run: (data) => data.prsTethers = [],
       outputStrings: {
         text: {
           en: '옆으로 => 장판 깔리면 🟪쪽으로',
@@ -580,7 +888,7 @@ const triggerSet: TriggerSet<Data> = {
       type: 'StartsUsing',
       netRegex: { id: '8219', source: 'Themis', capture: false },
       delaySeconds: 15,
-      durationSeconds: 10,
+      durationSeconds: 8,
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
@@ -589,64 +897,16 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: 'P11S 샤도 메신저 보충 줄 확인',
-      type: 'StartsUsing',
-      netRegex: { id: '8219', source: 'Themis', capture: false },
-      delaySeconds: 25,
-      durationSeconds: 7,
-      alertText: (data, _matches, output) => {
-        if (data.prsTethers.includes(data.me)) {
-          if (data.role === 'tank')
-            return output.tankTether!();
-          return output.otherTether!();
-        }
-        return output.text!();
-      },
-      outputStrings: {
-        tankTether: {
-          en: '내게 줄! A로 유도',
-        },
-        otherTether: {
-          en: '내게 줄! 한가운데 => 탱크쪽으로',
-        },
-        text: {
-          en: '한가운데서 뭉쳤다 => 탱크쪽으로',
-        },
-      },
-    },
-    {
-      id: 'P11S 보스와 연결 선',
-      type: 'Tether',
-      netRegex: { id: '00F9', capture: false },
-      infoText: (_data, _matches, output) => output.text!(),
-      run: (data, matches) => data.prsTethers.push(matches.target),
-      outputStrings: {
-        text: '내게 줄이 달렸어요',
-      },
-    },
-    {
-      id: 'P11S 라이트 스트림',
-      type: 'StartsUsing',
-      netRegex: { id: '8203', source: 'Themis', capture: false },
-      durationSeconds: 7,
-      infoText: (_data, _matches, output) => output.text!(),
-      outputStrings: {
-        text: {
-          en: '🡸🡸🟦🟦 또는 🟥🟥🡺🡺',
-        },
-      },
-    },
-    {
       id: 'P11S 라이트 앤 다크 시작',
       type: 'StartsUsing',
       netRegex: { id: '81FE', source: 'Themis', capture: false },
-      run: (data) => data.prsLnd = 'none',
+      run: (data) => data.prsLightAndDarks = 'none',
     },
     {
       id: 'P11S Emissary 리셋',
       type: 'StartsUsing',
       netRegex: { id: '8202' },
-      run: (data) => delete data.prsLnd,
+      run: (data) => delete data.prsLightAndDarks,
     },
     {
       id: 'P11S 다크 커런트',
@@ -661,14 +921,14 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: 'P11S 다크 커런트 프로틴',
+      id: 'P11S 다크 커런트 흩어지기',
       type: 'StartsUsing',
       netRegex: { id: '8204', source: 'Themis', capture: false },
       delaySeconds: 9,
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '곧 프로틴, 자리 확인',
+          en: '곧 흩어지기, 프로틴 자리 확인',
         },
       },
     },
@@ -676,50 +936,11 @@ const triggerSet: TriggerSet<Data> = {
       id: 'P11S 레터 오브 더 로',
       type: 'StartsUsing',
       netRegex: { id: '87D2', source: 'Themis', capture: false },
-      durationSeconds: 7,
-      alertText: (data, _matches, output) => {
-        if (data.role === 'tank') {
-          if (data.prsTethers.length === 0)
-            return output.tankUnknown!();
-          if (data.prsTethers.includes(data.me))
-            return output.tankTether!();
-        }
-        return output.others!();
-      },
-      run: (data) => data.prsTethers = [],
+      durationSeconds: 6,
+      infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
-        tankTether: '복합 기믹: 줄 달렸어요 북으로!',
-        tankUnknown: {
-          en: '복합 기믹: 즐🡺북으로 / 줄없음🡺남으로',
-        },
-        others: {
-          en: '복합 기믹: 남쪽으로',
-        },
-      },
-    },
-    {
-      id: 'P11S 하트 오브 저지 관련',
-      type: 'StartsUsing',
-      netRegex: { id: '8226', source: 'Themis', capture: false },
-      delaySeconds: 3,
-      durationSeconds: 10,
-      alertText: (data, _matches, output) => {
-        if (data.prsTethers.includes(data.me)) {
-          if (data.role === 'tank')
-            return output.tankTether!();
-          return output.otherTether!();
-        }
-        return output.text!();
-      },
-      outputStrings: {
-        tankTether: {
-          en: '내게 줄! 한가운데서 무적 => 자기 자리로',
-        },
-        otherTether: {
-          en: '내게 줄! 푹직쾅 => 한가운데 => 자기자리로'
-        },
         text: {
-          en: '푹직쾅 => 한가운데 => 자기 자리로',
+          en: '복합 기믹 시작해요',
         },
       },
     },
@@ -733,7 +954,6 @@ const triggerSet: TriggerSet<Data> = {
     },
     {
       'locale': 'de',
-      'missingTranslations': true,
       'replaceSync': {
         'Arcane Cylinder': 'arkan(?:e|er|es|en) Zylinder',
         'Arcane Sphere': 'arkan(?:e|er|es|en) Körper',
@@ -750,6 +970,8 @@ const triggerSet: TriggerSet<Data> = {
         'Dark Perimeter': 'Dunkler Kreis',
         'Dark and Light': 'Licht-Dunkel-Schlichtung',
         'Dike': 'Dike',
+        'Dismissal Overruling': 'Verweisungsbefehl',
+        'Divisive Overruling': 'Auflösungsbefehl',
         'Divisive Ruling': 'Auflösungsbeschluss',
         'Emissary\'s Will': 'Schlichtung',
         'Eunomia': 'Eunomia',
@@ -757,13 +979,16 @@ const triggerSet: TriggerSet<Data> = {
         'Heart of Judgment': 'Urteilsschlag',
         'Inevitable Law': 'Langer Arm des Rechts',
         'Inevitable Sentence': 'Langer Arm der Strafe',
+        'Jury Overruling': 'Schöffenbefehl',
         'Letter of the Law': 'Phantomgesetz',
         'Lightburst': 'Lichtstoß',
         'Lightstream': 'Lichtstrahl',
         'Shadowed Messengers': 'Boten des Schattens',
         'Styx': 'Styx',
+        'Twofold Revelation': 'Zweifache Enthüllung',
         'Ultimate Verdict': 'Letzte Schlichtung',
         'Unlucky Lot': 'Magieexplosion',
+        'Upheld Overruling': 'Erhebungsbefehl',
         'Upheld Ruling': 'Erhebungsbeschluss',
       },
     },
@@ -784,6 +1009,8 @@ const triggerSet: TriggerSet<Data> = {
         'Dark Perimeter': 'Cercle ténébreux',
         'Dark and Light': 'Médiation Lumière-Ténèbres',
         'Dike': 'Diké',
+        'Dismissal Overruling': 'Rejet et annulation',
+        'Divisive Overruling': 'Partage et annulation',
         'Divisive Ruling': 'Partage et décision',
         'Emissary\'s Will': 'Médiation',
         'Eunomia': 'Eunomia',
@@ -791,13 +1018,16 @@ const triggerSet: TriggerSet<Data> = {
         'Heart of Judgment': 'Onde pénale',
         'Inevitable Law': 'Ligne additionnelle',
         'Inevitable Sentence': 'Peine complémentaire',
+        'Jury Overruling': 'Jugement et annulation',
         'Letter of the Law': 'Fantasmagorie des lois',
         'Lightburst': 'Éclat de lumière',
         'Lightstream': 'Flux lumineux',
         'Shadowed Messengers': 'Fantasmagorie des préceptes',
         'Styx': 'Styx',
+        'Twofold Revelation': 'Double déploiement arcanique',
         'Ultimate Verdict': 'Médiation ultime',
         'Unlucky Lot': 'Déflagration éthérée',
+        'Upheld Overruling': 'Maintien et annulation',
         'Upheld Ruling': 'Maintien et décision',
       },
     },
@@ -818,6 +1048,8 @@ const triggerSet: TriggerSet<Data> = {
         'Dark Perimeter': 'ダークサークル',
         'Dark and Light': '光と闇の調停',
         'Dike': 'ディケー',
+        'Dismissal Overruling': 'ディスミサル＆オーバールール',
+        'Divisive Overruling': 'ディバイド＆オーバールール',
         'Divisive Ruling': 'ディバイド＆ルーリング',
         'Emissary\'s Will': '調停',
         'Eunomia': 'エウノミアー',
@@ -825,13 +1057,16 @@ const triggerSet: TriggerSet<Data> = {
         'Heart of Judgment': '刑律の波動',
         'Inevitable Law': 'アディショナルロウ',
         'Inevitable Sentence': 'アディショナルセンテンス',
+        'Jury Overruling': 'ジューリー＆オーバールール',
         'Letter of the Law': '理法の幻奏',
         'Lightburst': 'ライトバースト',
         'Lightstream': 'ライトストリーム',
         'Shadowed Messengers': '戒律の幻奏',
         'Styx': 'ステュクス',
+        'Twofold Revelation': '二種魔法陣展開',
         'Ultimate Verdict': '究極調停',
         'Unlucky Lot': '魔爆',
+        'Upheld Overruling': 'アップヘルド＆オーバールール',
         'Upheld Ruling': 'アップヘルド＆ルーリング',
       },
     },

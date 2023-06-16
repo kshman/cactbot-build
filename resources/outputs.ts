@@ -869,6 +869,30 @@ export default {
     cn: '上偏左(北偏西)',
     ko: '11시',
   },
+  tank: {
+    en: '탱크',
+    de: 'Tank',
+    fr: 'Tank',
+    ja: 'タンク',
+    cn: '坦克',
+    ko: '탱',
+  },
+  healer: {
+    en: '힐러',
+    de: 'Heiler',
+    fr: 'Healer',
+    ja: 'ヒーラ',
+    cn: '治疗',
+    ko: '힐',
+  },
+  dps: {
+    en: 'DPS',
+    de: 'DPS',
+    fr: 'DPS',
+    ja: 'DPS',
+    cn: 'DPS',
+    ko: '딜러',
+  },
   // Literal numbers.
   num0: numberToOutputString(0),
   num1: numberToOutputString(1),
@@ -948,5 +972,15 @@ export default {
   },
   cnum9: {
     en: '⑨',
+  },
+  // 롤
+  roleTank: {
+    en: '탱크',
+  },
+  roleHeal: {
+    en: '힐러',
+  },
+  roleDps: {
+    en: 'DPS',
   },
 } as const;
