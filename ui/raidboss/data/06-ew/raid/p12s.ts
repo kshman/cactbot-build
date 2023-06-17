@@ -113,24 +113,23 @@ const getHeadmarkerId = (data: Data, matches: NetMatches['HeadMarker']) => {
 
 export interface Data extends RaidbossData {
   prsStyle?: boolean;
-  prsCount?: number;
-  prsTarget?: string;
-  prsPmTower?: 'umbral' | 'astral' | 'unknown';
-  //
-  prsPalGraps?: string;
+  prsPhase: number;
+  // 전반
+  prsParadeigmaTower?: 'umbral' | 'astral' | 'unknown';
+  // 후반
+  prsPalladionGraps?: string;
   prsUltima?: number;
-  prsClassic?: number;
-  prsPsMarker: { [name: string]: PlaystationMarker };
-  prsAlphaBeta: { [name: string]: 'alpha' | 'beta' };
-  prsCaloric?: number;
-  prsFirstCalorics: string[];
-  prsTeamCalorics: { [name: string]: 'fire' | 'wind' };
-  prsMyCaloric?: 'fire' | 'wind';
+  prsClassicMarker: { [name: string]: PlaystationMarker };
+  prsClassicAlphaBeta: { [name: string]: 'alpha' | 'beta' };
+  prsCaloricFirst: string[];
+  prsCaloricBuff: { [name: string]: 'fire' | 'wind' };
+  prsCaloricMine?: 'fire' | 'wind';
+  prsCaloricFire?: string;
   prsSeenPangenesis?: boolean;
-  prsPgCount: { [name: string]: number };
-  prsPgStat: { [name: string]: 'dark' | 'light' };
-  prsPgDuration: { [name: string]: number };
-  prsPgTilts?: number;
+  prsPangenesisCount: { [name: string]: number };
+  prsPangenesisStat: { [name: string]: 'dark' | 'light' };
+  prsPangenesisDuration: { [name: string]: number };
+  prsPangenesisTilt?: number;
   //
   decOffset?: number;
   expectedFirstHeadmarker?: string;
@@ -153,13 +152,14 @@ const triggerSet: TriggerSet<Data> = {
   timelineFile: 'p12s.txt',
   initData: () => {
     return {
-      prsPsMarker: {},
-      prsAlphaBeta: {},
-      prsFirstCalorics: [],
-      prsTeamCalorics: {},
-      prsPgCount: {},
-      prsPgStat: {},
-      prsPgDuration: {},
+      prsPhase: 0,
+      prsClassicMarker: {},
+      prsClassicAlphaBeta: {},
+      prsCaloricFirst: [],
+      prsCaloricBuff: {},
+      prsPangenesisCount: {},
+      prsPangenesisStat: {},
+      prsPangenesisDuration: {},
       //
       isDoorBoss: true,
       wingCollect: [],
@@ -170,16 +170,6 @@ const triggerSet: TriggerSet<Data> = {
   },
   timelineTriggers: [
     {
-      id: 'P12S 처음에 무적',
-      regex: /Trinity of Souls 1/,
-      beforeSeconds: 4,
-      condition: (data) => data.role === 'tank',
-      alertText: (_data, _matches, output) => output.text!(),
-      outputStrings: {
-        text: '무적으로 받아요',
-      }
-    },
-    {
       id: 'P12S 알테마 블레이드',
       regex: /Ultima Blade/,
       beforeSeconds: 4,
@@ -187,15 +177,6 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: '엄청 아픈 전체 공격!',
       },
-    },
-    {
-      id: 'P12S2 판제네시스 전 산개',
-      regex: /Pangenesis/,
-      beforeSeconds: 12,
-      infoText: (_data, _matches, output) => output.text!(),
-      outputStrings: {
-        text: '판제용: 나란히 줄 서요',
-      }
     },
   ],
   triggers: [
@@ -215,8 +196,8 @@ const triggerSet: TriggerSet<Data> = {
         } as const;
         data.phase = phaseMap[matches.id];
 
-        data.prsCount = (data.prsCount ?? 0) + 10;
-        data.prsPmTower = 'unknown';
+        data.prsPhase += 10;
+        data.prsParadeigmaTower = 'unknown';
       },
     },
     {
@@ -1068,7 +1049,7 @@ const triggerSet: TriggerSet<Data> = {
       id: 'P12S 파라데이그마',
       type: 'StartsUsing',
       netRegex: { id: '82ED', capture: false },
-      run: (data) => data.prsCount = (data.prsCount ?? 0) + 1,
+      run: (data) => data.prsPhase++,
     },
     {
       id: 'P12S 줄다리기 보라',
@@ -1105,7 +1086,7 @@ const triggerSet: TriggerSet<Data> = {
       id: 'P12S 첫번째 줄다리기 + 바닥',
       type: 'GainsEffect',
       netRegex: { effectId: ['DFB', 'DFC'] },
-      condition: (data, matches) => data.prsCount === 2 && matches.target === data.me,
+      condition: (data, matches) => data.prsPhase === 2 && matches.target === data.me,
       infoText: (_data, matches, output) => {
         if (matches.effectId === 'DFB')
           return output.twUbSoul!();
@@ -1121,7 +1102,7 @@ const triggerSet: TriggerSet<Data> = {
       id: 'P12S 슈퍼체인 이펙트',
       type: 'GainsEffect',
       netRegex: { effectId: ['DF8', 'DF9', 'DFB', 'DFC', 'DFD', 'DFE'] },
-      condition: (data, matches) => data.prsCount === 12 && matches.target === data.me,
+      condition: (data, matches) => data.prsPhase === 12 && matches.target === data.me,
       delaySeconds: 4,
       durationSeconds: 18,
       suppressSeconds: 23,
@@ -1149,13 +1130,13 @@ const triggerSet: TriggerSet<Data> = {
       id: 'P12S 파라3 DPS 이펙트',
       type: 'GainsEffect',
       netRegex: { effectId: ['DF8', 'DF9'] },
-      condition: (data, matches) => data.prsCount === 13 && matches.target === data.me && data.role === 'dps',
+      condition: (data, matches) => data.prsPhase === 13 && matches.target === data.me && data.role === 'dps',
       suppressSeconds: 12,
       alertText: (data, matches, output) => {
         if (matches.effectId === 'DF8')
-          return data.prsPmTower === 'astral' ? output.umbTilt!() : output.bait!();
+          return data.prsParadeigmaTower === 'astral' ? output.umbTilt!() : output.bait!();
         if (matches.effectId === 'DF9')
-          return data.prsPmTower === 'umbral' ? output.astTilt!() : output.bait!();
+          return data.prsParadeigmaTower === 'umbral' ? output.astTilt!() : output.bait!();
       },
       outputStrings: {
         umbTilt: '🟣타워 밟아요',
@@ -1167,19 +1148,19 @@ const triggerSet: TriggerSet<Data> = {
       id: 'P12S 파라3 탱힐 이펙트',
       type: 'GainsEffect',
       netRegex: { effectId: ['DFB', 'DFC'] },
-      condition: (data) => data.prsCount === 13,
+      condition: (data) => data.prsPhase === 13,
       durationSeconds: 9,
       infoText: (data, matches, output) => {
         if (matches.effectId === 'DFB') {
-          data.prsPmTower = 'umbral'; // 노랑 타워
+          data.prsParadeigmaTower = 'umbral'; // 노랑 타워
           if (matches.target === data.me)
             return output.ubSoul!();
         } else if (matches.effectId === 'DFC') {
-          data.prsPmTower = 'astral'; // 보라 타워
+          data.prsParadeigmaTower = 'astral'; // 보라 타워
           if (matches.target === data.me)
             return output.abSoul!();
         } else {
-          data.prsPmTower = 'unknown';
+          data.prsParadeigmaTower = 'unknown';
         }
       },
       outputStrings: {
@@ -1220,6 +1201,21 @@ const triggerSet: TriggerSet<Data> = {
     },
     // --------------------- PRT 후반 ---------------------
     {
+      id: 'P12S2 페이즈 확인',
+      type: 'StartsUsing',
+      netRegex: { id: ['8326', '8331', '8338', '831E', '833F'], source: 'Pallas Athena' },
+      run: (data) => {
+        // 8326 가이아오코스
+        // 8331 클래식 컨셉
+        // 8338 칼로리
+        // 831E 에크파이로시스
+        // 833F 판제네시스
+        if (data.prsPhase < 100)
+          data.prsPhase = 0;
+        data.prsPhase += 100;
+      },
+    },
+    {
       id: 'P12S2 알테마',
       type: 'StartsUsing',
       netRegex: { id: '8682', source: 'Pallas Athena', capture: false },
@@ -1238,7 +1234,7 @@ const triggerSet: TriggerSet<Data> = {
       run: (data, matches) => {
         const id = getHeadmarkerId(data, matches);
         if (id === '01D4')
-          data.prsPalGraps = matches.target;
+          data.prsPalladionGraps = matches.target;
       },
     },
     {
@@ -1246,7 +1242,7 @@ const triggerSet: TriggerSet<Data> = {
       type: 'StartsUsing',
       netRegex: { id: '831A', source: 'Pallas Athena', capture: false },
       alertText: (data, _match, output) => {
-        if (data.prsPalGraps === data.me)
+        if (data.prsPalladionGraps === data.me)
           return output.tank!();
         return output.text!();
       },
@@ -1256,8 +1252,7 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      // 참고로 작아지는 마커는 0061
-      id: 'P12S2 가이아오코스',
+      id: 'P12S2 가이아오코스', // 두번옴. 참고로 작아지는 마커는 0061
       type: 'StartsUsing',
       netRegex: { id: '8326', source: 'Pallas Athena', capture: false },
       alertText: (_data, _matches, output) => output.text!(),
@@ -1266,7 +1261,7 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: 'P12S2 사슬 연결',
+      id: 'P12S2 가이아오코스 사슬 연결',
       type: 'Tether',
       netRegex: { id: '0009' },
       condition: (data, matches) => matches.source === data.me || matches.target === data.me,
@@ -1279,6 +1274,21 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
+      id: 'P12S2 가이아오코스 헤미테오스 연결',
+      type: 'Tether',
+      netRegex: { id: '0001' },
+      suppressSeconds: 2,
+      alertText: (data, matches, output) => {
+        if (data.party.isDPS(matches.target))
+          return output.dpstether!();
+        return output.thtether!();
+      },
+      outputStrings: {
+        dpstether: '탱힐이 앞에 막아줘요',
+        thtether: 'DPS가 앞에 막아줘요',
+      },
+    },
+    {
       id: 'P12S2 지오센트리즘',
       type: 'StartsUsing',
       netRegex: { id: ['8320', '832A', '832B'], source: 'Pallas Athena', capture: false },
@@ -1286,12 +1296,6 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: '산개 + 전체 공격',
       },
-    },
-    {
-      id: 'P12S2 클래식 컨셉 시작',
-      type: 'StartsUsing',
-      netRegex: { id: '8331', source: 'Pallas Athena', capture: false },
-      run: (data) => data.prsClassic = (data.prsClassic ?? 0) + 1,
     },
     {
       id: 'P12S2 클래식 컨셉 플스 마커',
@@ -1308,14 +1312,26 @@ const triggerSet: TriggerSet<Data> = {
         const marker = playstationMarkerMap[id];
         if (marker === undefined)
           return;
-        data.prsPsMarker[matches.target] = marker;
+        data.prsClassicMarker[matches.target] = marker;
       },
     },
     {
       id: 'P12S2 클래식 컨셉 알파 베타',
       type: 'GainsEffect',
       netRegex: { effectId: ['DE8', 'DE9'] },
-      run: (data, matches) => data.prsAlphaBeta[matches.target] = matches.effectId === 'DE8' ? 'alpha' : 'beta',
+      run: (data, matches) => data.prsClassicAlphaBeta[matches.target] = matches.effectId === 'DE8' ? 'alpha' : 'beta',
+    },
+    {
+      id: 'P12S2 클래식 컨셉 반전',
+      type: 'StartsUsing',
+      netRegex: { id: '8331', source: 'Pallas Athena', capture: false },
+      condition: (data) => data.prsPhase !== 200,
+      delaySeconds: 9,
+      durationSeconds: 7,
+      alarmText: (_data, _matches, output) => output.revert!(),
+      outputStrings: {
+        revert: '그대로 상하좌우 반전 위치로',
+      },
     },
     {
       id: 'P12S2 클래식 컨셉 알랴줌',
@@ -1325,27 +1341,23 @@ const triggerSet: TriggerSet<Data> = {
       durationSeconds: 10,
       suppressSeconds: 2,
       infoText: (data, _matches, output) => {
-        const myPs = data.prsPsMarker[data.me];
-        const myAb = data.prsAlphaBeta[data.me];
+        const myPs = data.prsClassicMarker[data.me];
+        const myAb = data.prsClassicAlphaBeta[data.me];
         if (myPs === undefined || myAb === undefined)
           return;
 
         const outPs = output[myPs]!();
         const outAb = output[myAb]!();
-        if (data.prsClassic === 1)
-          return output.text1st!({ ps: outPs, ab: outAb });
-        return output.text2nd!({ ps: outPs, ab: outAb });
+        return output.text!({ ps: outPs, ab: outAb });
       },
       outputStrings: {
-        text1st: '${ps} / ${ab}',
-        text2nd: '[반전] ${ps} / ${ab}',
-        circle: '왼쪽 아래',
-        triangle: '오른쪽 아래',
-        square: '오른쪽 위',
-        cross: '왼쪽 위',
-        alpha: '알파:세모쪽',
-        beta: '베타:네모쪽',
-        unknown: Outputs.unknown,
+        text: '${ps} / ${ab}',
+        circle: '🡿🡿 페어',
+        triangle: '🡾🡾 페어',
+        square: '🡽🡽 페어',
+        cross: '🡼🡼 페어',
+        alpha: '알파:▲',
+        beta: '베타:■',
       },
     },
     {
@@ -1353,31 +1365,41 @@ const triggerSet: TriggerSet<Data> = {
       type: 'StartsUsing',
       netRegex: { id: '8333', source: 'Concept of Water', capture: false },
       delaySeconds: 2,
-      durationSeconds: 10,
+      durationSeconds: 8,
       suppressSeconds: 1,
-      infoText: (data, _matches, output) => {
-        const myPs = data.prsPsMarker[data.me];
-        const myAb = data.prsAlphaBeta[data.me];
+      alertText: (data, _matches, output) => {
+        const myPs = data.prsClassicMarker[data.me];
+        const myAb = data.prsClassicAlphaBeta[data.me];
         if (myPs === undefined || myAb === undefined)
           return;
 
         const iPs = { circle: 1, triangle: 2, square: 3, cross: 4 }[myPs];
         const iAb = { alpha: 0, beta: 1 }[myAb];
-        return output[`m${iPs}${iAb}`]!();
+        if (data.prsPhase === 200)
+          return output[`m${iPs}${iAb}`]!();
+        return output[`p${iPs}${iAb}`]!();
       },
       run: (data) => {
-        data.prsPsMarker = {};
-        data.prsAlphaBeta = {};
+        data.prsClassicMarker = {};
+        data.prsClassicAlphaBeta = {};
       },
       outputStrings: {
-        m10: '왼쪽 바깥 위 쯤',
-        m20: '오른쪽 터치다운 위로',
-        m30: '오른쪽 바깥 위 쯤',
-        m40: '왼쪽 터치다운 위로',
-        m11: '왼쪽 바깥 아래 쯤',
-        m21: '오른쪽 터치다운 아래로',
-        m31: '오른쪽 바깥 아래 쯤',
-        m41: '왼쪽 터치다운 아래로',
+        m10: '🡼🡼바깥', // 알파, 동글
+        m20: '❱❱❱🡹🡹❱❱❱', // 알파, 세모
+        m30: '바깥🡽🡽', // 알파, 네모
+        m40: '❰❰❰🡹🡹❰❰❰', // 알파, 가위
+        m11: '🡿🡿바깥', // 베타, 동글
+        m21: '❱❱❱🡻🡻❱❱❱', // 베타, 세모
+        m31: '바깥🡾🡾', // 베타, 네모
+        m41: '❰❰❰🡻🡻❰❰❰', // 베타, 가위
+        p10: '🡽🡺사이', // 알파, 동글
+        p20: '🡼사이', // 알파, 세모
+        p30: '🡼🡸사이', // 알파, 네모
+        p40: '🡽사이', // 알파, 가위
+        p11: '🡾🡺사이', // 베타, 동글
+        p21: '🡿사이', // 베타, 세모
+        p31: '🡿🡸사이', // 베타, 네모
+        p41: '🡾', // 베타, 가위
       },
     },
     {
@@ -1397,37 +1419,67 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: 'P12S2 칼로리 첫 불',
+      id: 'P12S2 칼로리1 첫 불',
       type: 'HeadMarker',
       netRegex: {},
       run: (data, matches) => {
         const id = getHeadmarkerId(data, matches);
         if (id !== '012F')
           return;
-        data.prsFirstCalorics.push(matches.target);
+        data.prsCaloricFirst.push(matches.target);
       },
+    },
+    {
+      id: 'P12S2 칼로리2 불',
+      type: 'HeadMarker',
+      netRegex: {},
+      alertText: (data, matches, output) => {
+        const id = getHeadmarkerId(data, matches);
+        if (id !== '1D6')
+          return;
+        data.prsCaloricFire = matches.target;
+        if (data.me === matches.target)
+          return output.text!();
+      },
+      outputStrings: {
+        text: '내게 첫 불! 가운데로',
+      }
+    },
+    {
+      id: 'P12S2 칼로리2 바람',
+      type: 'HeadMarker',
+      netRegex: {},
+      condition: (data, matches) => data.me === matches.target,
+      infoText: (data, matches, output) => {
+        const id = getHeadmarkerId(data, matches);
+        if (id !== '1D5')
+          return;
+        return output.text!();
+      },
+      outputStrings: {
+        text: '바람, 지정 자리로',
+      }
     },
     {
       id: 'P12S2 칼로리 시작',
       type: 'StartsUsing',
       netRegex: { id: '8338', source: 'Pallas Athena', capture: false },
       preRun: (data) => {
-        data.prsCaloric = (data.prsCaloric ?? 0) + 1;
-        data.prsTeamCalorics = {};
-        data.prsMyCaloric = undefined;
+        data.prsCaloricBuff = {};
+        data.prsCaloricMine = undefined;
       },
       delaySeconds: 1,
       alertText: (data, _matches, output) => {
         // 칼로릭1
-        if (data.prsCaloric === 1) {
-          if (data.prsFirstCalorics.length !== 2)
+        if (data.prsPhase === 300) {
+          if (data.prsCaloricFirst.length !== 2)
             return;
-          const index = data.prsFirstCalorics.indexOf(data.me);
+          const index = data.prsCaloricFirst.indexOf(data.me);
           if (index < 0)
             return;
 
           const partner = index === 0 ? 1 : 0;
-          return output.text1st!({ partner: data.ShortName(data.prsFirstCalorics[partner]) });
+          return output.text1st!({ partner: data.ShortName(data.prsCaloricFirst[partner]) });
         }
 
         // 칼로릭2
@@ -1441,14 +1493,14 @@ const triggerSet: TriggerSet<Data> = {
       id: 'P12S2 칼로릭 바람', // 바람: Atmosfaction
       type: 'GainsEffect',
       netRegex: { effectId: 'E07' },
-      run: (data, matches) => data.prsTeamCalorics[matches.target] = 'wind',
+      run: (data, matches) => data.prsCaloricBuff[matches.target] = 'wind',
     },
     {
       id: 'P12S2 칼로릭 불', // 불: Pyrefaction
       type: 'GainsEffect',
       netRegex: { effectId: 'E06' },
       alertText: (data, matches, output) => {
-        data.prsTeamCalorics[matches.target] = 'fire';
+        data.prsCaloricBuff[matches.target] = 'fire';
 
         const duration = parseInt(matches.duration);
         if (duration === 11 && matches.target === data.me)
@@ -1466,9 +1518,9 @@ const triggerSet: TriggerSet<Data> = {
       delaySeconds: 12.8,
       suppressSeconds: 2,
       alertText: (data, _matches, output) => {
-        if (data.prsMyCaloric === 'fire' && data.prsTeamCalorics[data.me] === undefined)
+        if (data.prsCaloricMine === 'fire' && data.prsCaloricBuff[data.me] === undefined)
           return output.none!();
-        if (data.prsMyCaloric === 'wind')
+        if (data.prsCaloricMine === 'wind')
           return output.wind!();
       },
       outputStrings: {
@@ -1477,46 +1529,74 @@ const triggerSet: TriggerSet<Data> = {
       }
     },
     {
-      id: 'P12S2 칼로리 알랴줌',
+      id: 'P12S2 칼로리 첫번째 알랴줌',
       type: 'Ability',
       netRegex: { id: '8338', source: 'Pallas Athena', capture: false },
+      condition: (data) => data.prsPhase === 300,
       delaySeconds: 2,
       durationSeconds: 10,
       suppressSeconds: 2,
       infoText: (data, _matches, output) => {
-        const mystat = data.prsTeamCalorics[data.me];
-        data.prsMyCaloric = mystat;
+        const mystat = data.prsCaloricBuff[data.me];
+        data.prsCaloricMine = mystat;
         if (mystat === undefined)
           return;
 
         if (mystat === 'fire') {
           const myteam : string[] = [];
-          for (const [name, stat] of Object.entries(data.prsTeamCalorics)) {
+          for (const [name, stat] of Object.entries(data.prsCaloricBuff)) {
             if (stat === mystat && name !== data.me)
               myteam.push(data.ShortName(name));
           }
           return output.fire!({ team: myteam.sort().join(', ') });
         }
 
-        if (data.prsFirstCalorics.includes(data.me))
+        if (data.prsCaloricFirst.includes(data.me))
           return output.wind1st!();
 
         const myteam : string[] = [];
-        for (const [name, stat] of Object.entries(data.prsTeamCalorics)) {
-          if (stat === mystat && name !== data.me && !data.prsFirstCalorics.includes(name))
+        for (const [name, stat] of Object.entries(data.prsCaloricBuff)) {
+          if (stat === mystat && name !== data.me && !data.prsCaloricFirst.includes(name))
             myteam.push(data.ShortName(name));
         }
         return output.wind!({ team: myteam.sort().join(', ') });
       },
       run: (data) => {
-        data.prsFirstCalorics = [];
-        data.prsTeamCalorics = {};
+        data.prsCaloricFirst = [];
+        data.prsCaloricBuff = {};
       },
       outputStrings: {
         fire: '내게 불 (${team})',
         wind: '내게 바람 (${team})',
         wind1st: '내게 바람',
       },
+    },
+    {
+      id: 'P12S2 칼로릭2 불 당사자',
+      type: 'GainsEffect',
+      netRegex: { effectId: ['E08'] },
+      infoText: (data, matches, output) => {
+        if (data.prsCaloricFire === data.me)
+          return;
+        data.prsCaloricFire = matches.target;
+        if (matches.target === data.me)
+          return output.text!();
+      },
+      outputStrings: {
+        text: '내게 불 장판',
+      }
+    },
+    {
+      id: 'P12S2 칼로릭2 터져욧 옮겨욧',
+      type: 'Ability',
+      netRegex: { id: '833C', source: 'Pallas Athena', capture: false },
+      alertText: (data, _matches, output) => {
+        if (data.me === data.prsCaloricFire)
+          return output.text!();
+      },
+      outputStrings: {
+        text: '이동! 다음 사람에게 옮겨요',
+      }
     },
     {
       id: 'P12S2 에크파이로시스',
@@ -1532,13 +1612,14 @@ const triggerSet: TriggerSet<Data> = {
       type: 'Ability',
       netRegex: { id: '833F', source: 'Pallas Athena', capture: false },
       delaySeconds: 1,
+      durationSeconds: 10,
       suppressSeconds: 2,
       alertText: (data, _matches, output) => {
         let partner = output.unknown!();
         // 무직
-        const mycnt = data.prsPgCount[data.me] ?? 0;
+        const mycnt = data.prsPangenesisCount[data.me] ?? 0;
         if (mycnt === 0) {
-          for (const [name, cnt] of Object.entries(data.prsPgCount)) {
+          for (const [name, cnt] of Object.entries(data.prsPangenesisCount)) {
             if (cnt === 0 && name !== data.me) {
               partner = data.ShortName(name);
               break;
@@ -1548,7 +1629,7 @@ const triggerSet: TriggerSet<Data> = {
         }
         // 인자 1
         if (mycnt === 1) {
-          for (const [name, cnt] of Object.entries(data.prsPgCount)) {
+          for (const [name, cnt] of Object.entries(data.prsPangenesisCount)) {
             if (cnt === 1 && name !== data.me) {
               partner = data.ShortName(name);
               break;
@@ -1558,29 +1639,29 @@ const triggerSet: TriggerSet<Data> = {
         }
 
         // 이제 시간에 따른 처리
-        const mystat = data.prsPgStat[data.me];
-        const myduration = data.prsPgDuration[data.me];
+        const mystat = data.prsPangenesisStat[data.me];
+        const myduration = data.prsPangenesisDuration[data.me];
         if (mystat === undefined || myduration === undefined)
           return;
 
-        for (const [name, duration] of Object.entries(data.prsPgDuration)) {
+        for (const [name, duration] of Object.entries(data.prsPangenesisDuration)) {
           if (duration === myduration && name !== data.me) {
             partner = data.ShortName(name);
             break;
           }
         }
-        if (mystat === 'dark')
-          return myduration === 16 ? output.dark1st!({ partner: partner }) : output.dark2nd!({ partner: partner });
-        return myduration === 16 ? output.light1st!({ partner: partner }) : output.light2nd!({ partner: partner });
+        if (myduration === 16)
+          return output.tower1st!({ color: output[mystat]!(), partner: partner });
+        return output.tower2nd!({ color: output[mystat]!(), partner: partner });
       },
       run: (data) => data.prsSeenPangenesis = true,
       outputStrings: {
-        dark1st: '첫째 하얀 타워로 (+${partner})',
-        light1st: '첫째 검은 타워로 (+${partner})',
-        dark2nd: '기다렸다 => 둘째 아래 하얀 타워로 (+${partner})',
-        light2nd: '기다렸다 => 둘째 아래 검은 타워로 (+${partner})',
-        geneone: '위로 살짝 => 첫째 타워로 (+${partner})',
-        none: '아래로 살짝 => 둘째 위쪽 타워로 (+${partner})',
+        tower1st: '첫째 ${color} 타워 (+${partner})',
+        tower2nd: '기다렸다 => 둘째 아래쪽 ${color} 타워 (+${partner})',
+        geneone: '위로 살짝 => 첫째 타워 (+${partner})',
+        none: '아래로 살짝 => 둘째 위쪽 타워 (+${partner})',
+        dark: '하얀', // 색깔 바뀜
+        light: '검은', // 색깔 바뀜
         unknown: Outputs.unknown,
       },
     },
@@ -1589,8 +1670,8 @@ const triggerSet: TriggerSet<Data> = {
       type: 'GainsEffect',
       netRegex: { effectId: 'E09' },
       run: (data, matches) => {
-        const cnt = data.prsPgCount[matches.target];
-        data.prsPgCount[matches.target] = cnt === undefined ? 1 : cnt + 1;
+        const cnt = data.prsPangenesisCount[matches.target];
+        data.prsPangenesisCount[matches.target] = cnt === undefined ? 1 : cnt + 1;
       }
     },
     {
@@ -1598,35 +1679,37 @@ const triggerSet: TriggerSet<Data> = {
       type: 'GainsEffect',
       netRegex: { effectId: 'E22' },
       run: (data, matches) => {
-        const cnt = data.prsPgCount[matches.target];
+        const cnt = data.prsPangenesisCount[matches.target];
         if (cnt === undefined)
-          data.prsPgCount[matches.target] = 0;
+          data.prsPangenesisCount[matches.target] = 0;
       }
     },
     {
       id: 'P12S2 판제네시스 라이트', // Umbral Tilt
       type: 'GainsEffect',
       netRegex: { effectId: 'DF8' },
+      condition: (data) => data.prsPhase === 500,
       run: (data, matches) => {
         if (!data.prsSeenPangenesis) {
-          const cnt = data.prsPgCount[matches.target];
-          data.prsPgCount[matches.target] = cnt === undefined ? 1 : cnt + 1;
-          data.prsPgDuration[matches.target] = parseInt(matches.duration);
+          const cnt = data.prsPangenesisCount[matches.target];
+          data.prsPangenesisCount[matches.target] = cnt === undefined ? 1 : cnt + 1;
+          data.prsPangenesisDuration[matches.target] = parseInt(matches.duration);
         }
-        data.prsPgStat[matches.target] = 'light';
+        data.prsPangenesisStat[matches.target] = 'light';
       },
     },
     {
       id: 'P12S2 판제네시스 다크', // Astral Tilt
       type: 'GainsEffect',
       netRegex: { effectId: 'DF9' },
+      condition: (data) => data.prsPhase === 500,
       run: (data, matches) => {
         if (!data.prsSeenPangenesis) {
-          const cnt = data.prsPgCount[matches.target];
-          data.prsPgCount[matches.target] = cnt === undefined ? 1 : cnt + 1;
-          data.prsPgDuration[matches.target] = parseInt(matches.duration);
+          const cnt = data.prsPangenesisCount[matches.target];
+          data.prsPangenesisCount[matches.target] = cnt === undefined ? 1 : cnt + 1;
+          data.prsPangenesisDuration[matches.target] = parseInt(matches.duration);
         }
-        data.prsPgStat[matches.target] = 'dark';
+        data.prsPangenesisStat[matches.target] = 'dark';
       },
     },
     {
@@ -1637,12 +1720,12 @@ const triggerSet: TriggerSet<Data> = {
       durationSeconds: 4,
       suppressSeconds: 2,
       infoText: (data, _matches, output) => {
-        data.prsPgTilts = (data.prsPgTilts ?? 0) + 1;
-        const tilt = data.prsPgTilts;
+        data.prsPangenesisTilt = (data.prsPangenesisTilt ?? 0) + 1;
+        const tilt = data.prsPangenesisTilt;
 
-        const mycnt = data.prsPgCount[data.me] ?? 0;
-        const mystat = data.prsPgStat[data.me];
-        const myduration = data.prsPgDuration[data.me] ?? 0;
+        const mycnt = data.prsPangenesisCount[data.me] ?? 0;
+        const mystat = data.prsPangenesisStat[data.me];
+        const myduration = data.prsPangenesisDuration[data.me] ?? 0;
 
         if (tilt === 1) {
           if (myduration === 16 || mycnt === 1)
@@ -1662,11 +1745,11 @@ const triggerSet: TriggerSet<Data> = {
         }
       },
       run: (data) => {
-        if (data.prsPgTilts && data.prsPgTilts >= 3) {
-          data.prsPgCount = {};
-          data.prsPgStat = {};
-          data.prsPgDuration = {};
-          delete data.prsPgTilts;
+        if (data.prsPangenesisTilt && data.prsPangenesisTilt >= 3) {
+          data.prsPangenesisCount = {};
+          data.prsPangenesisStat = {};
+          data.prsPangenesisDuration = {};
+          delete data.prsPangenesisTilt;
         }
       },
       outputStrings: {

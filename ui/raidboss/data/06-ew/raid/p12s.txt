@@ -118,7 +118,7 @@ hideall "--sync--"
 1012.1 "Ultima 1" sync / 1[56]:[^:]*:Pallas Athena:8682:/
 1024.2 "Palladian Grasp 1" sync / 1[56]:[^:]*:Pallas Athena:831A:/
 1027.4 "Palladian Grasp 2" sync / 1[56]:[^:]*:Pallas Athena:831B:/
-1040.8 "Gaiaochos 1" sync / 1[56]:[^:]*:Pallas Athena:8326:/
+1040.8 "Gaiaochos 1" sync / 1[56]:[^:]*:Pallas Athena:8326:/ #번호: 100x
 1051.9 "Summon Darkness" sync / 1[56]:[^:]*:Pallas Athena:832F:/
 1063.8 "Ultima Ray" sync / 1[56]:[^:]*:Hemitheos:8330:/
 
@@ -128,7 +128,7 @@ hideall "--sync--"
 1085.2 "Divine Excoriation" sync / 1[56]:[^:]*:Pallas Athena:832E:/
 
 1094.4 "Ultima 2" sync / 1[56]:[^:]*:Pallas Athena:86F6:/
-1108.6 "The Classical Concepts 1" sync / 1[56]:[^:]*:Pallas Athena:8331:/
+1108.6 "The Classical Concepts 1" sync / 1[56]:[^:]*:Pallas Athena:8331:/ #번호: 200x
 1130.0 "Implode" sync / 1[56]:[^:]*:Concept of Water:8333:/
 1133.4 "Palladian Ray" sync / 1[56]:[^:]*:Pallas Athena:8324:/ duration 4
 
@@ -140,17 +140,17 @@ hideall "--sync--"
 1157.1 "Crush Helm 4" #sync / 1[56]:[^:]*:Pallas Athena:8318:/
 1159.2 "Crush Helm Buster" sync / 1[56]:[^:]*:Pallas Athena:8319:/
 
-1173.2 "Caloric Theory 1" sync / 1[56]:[^:]*:Pallas Athena:8338:/
+1173.2 "Caloric Theory 1" sync / 1[56]:[^:]*:Pallas Athena:8338:/ #번호: 300x
 1185.9 "Pyre Pulse 1" sync / 1[56]:[^:]*:Pallas Athena:833A:/
 1197.3 "Pyre Pulse 2" sync / 1[56]:[^:]*:Pallas Athena:833A:/
 1197.3 "Dynamic Atmosphere" sync / 1[56]:[^:]*:Pallas Athena:833B:/
 
-1207.6 "Ekpyrosis (cast)" sync / 1[56]:[^:]*:Pallas Athena:831E:/
+1207.6 "Ekpyrosis (cast)" sync / 1[56]:[^:]*:Pallas Athena:831E:/ #번호: 400x
 1215.4 "Ekpyrosis (proximity)" sync / 1[56]:[^:]*:Pallas Athena:8683:/
 1218.5 "Ekpyrosis (spread)" sync / 1[56]:[^:]*:Pallas Athena:8322:/
 
 1226.8 "Ultima 4" sync / 1[56]:[^:]*:Pallas Athena:8682:/
-1241.0 "Pangenesis" sync / 1[56]:[^:]*:Pallas Athena:833F:/
+1241.0 "Pangenesis" sync / 1[56]:[^:]*:Pallas Athena:833F:/ #번호: 500x
 
 1254.9 "Astral Advent/Umbral Advent 1" sync / 1[56]:[^:]*:Hemitheos:834[34]:/
 1260.0 "Astral Advent/Umbral Advent 2" sync / 1[56]:[^:]*:Hemitheos:834[34]:/
@@ -159,7 +159,7 @@ hideall "--sync--"
 1280.4 "Palladian Grasp 1" sync / 1[56]:[^:]*:Pallas Athena:831A:/
 1283.6 "Palladian Grasp 2" sync / 1[56]:[^:]*:Pallas Athena:831B:/
 
-1296.8 "The Classical Concepts 2" sync / 1[56]:[^:]*:Pallas Athena:8331:/
+1296.8 "The Classical Concepts 2" sync / 1[56]:[^:]*:Pallas Athena:8331:/ #번호: 600x
 1313.9 "Panta Rhei" sync / 1[56]:[^:]*:Pallas Athena:8336:/
 1322.7 "Palladian Ray" sync / 1[56]:[^:]*:Pallas Athena:8324:/ duration 4
 1325.2 "Implode" sync / 1[56]:[^:]*:Concept of Water:8333:/
@@ -172,7 +172,7 @@ hideall "--sync--"
 1346.3 "Crush Helm 4" #sync / 1[56]:[^:]*:Pallas Athena:8318:/
 1348.4 "Crush Helm Buster" sync / 1[56]:[^:]*:Pallas Athena:8319:/
 
-1362.5 "Caloric Theory 2" sync / 1[56]:[^:]*:Pallas Athena:8338:/
+1362.5 "Caloric Theory 2" sync / 1[56]:[^:]*:Pallas Athena:8338:/ #번호: 700x
 1369.3 "Entropic Excess 1" sync / 1[56]:[^:]*:Pallas Athena:833C:/ window 1.5,1.5
 1372.3 "Entropic Excess 2" sync / 1[56]:[^:]*:Pallas Athena:833C:/ window 1.5,1.5
 1375.3 "Entropic Excess 3" sync / 1[56]:[^:]*:Pallas Athena:833C:/ window 1.5,1.5
@@ -183,12 +183,12 @@ hideall "--sync--"
 1390.3 "Entropic Excess 8" sync / 1[56]:[^:]*:Pallas Athena:833C:/ window 1.5,1.5
 1390.3 "Dynamic Atmosphere" sync / 1[56]:[^:]*:Pallas Athena:833B:/
 
-1392.6 "Ekpyrosis (cast)" sync / 1[56]:[^:]*:Pallas Athena:831E:/
+1392.6 "Ekpyrosis (cast)" sync / 1[56]:[^:]*:Pallas Athena:831E:/ #번호: 800x
 1400.4 "Ekpyrosis (proximity)" sync / 1[56]:[^:]*:Pallas Athena:8683:/
 1403.5 "Ekpyrosis (spread)" sync / 1[56]:[^:]*:Pallas Athena:8322:/
 
 1411.7 "Ultima 6" sync / 1[56]:[^:]*:Pallas Athena:8682:/
-1425.9 "Gaiaochos 2" sync / 1[56]:[^:]*:Pallas Athena:8326:/
+1425.9 "Gaiaochos 2" sync / 1[56]:[^:]*:Pallas Athena:8326:/ #번호: 900x
 1437.0 "Summon Darkness" sync / 1[56]:[^:]*:Pallas Athena:832F:/
 1443.1 "Demi Parhelion" sync / 1[56]:[^:]*:Pallas Athena:8327:/
 1453.2 "Geocentrism" sync / 1[56]:[^:]*:Pallas Athena:832[AB9]:/
