@@ -606,26 +606,21 @@ const triggerSet: TriggerSet<Data> = {
     },
     {
       id: 'P10S Jade Passage',
-      type: 'StartsUsing',
-      netRegex: { id: '828C', capture: false },
+      // Track addition of Arcane Sphere combatants
+      type: 'AddedCombatant',
+      netRegex: { npcNameId: '12356' },
       suppressSeconds: 5,
-      infoText: (_data, _matches, output) => output.text!(),
-      outputStrings: {
-        text: {
-          en: '레이저 피해욧',
-          cn: '注意躲避激光',
-        },
+      infoText: (_data, matches, output) => {
+        const y = parseInt(matches.y);
+        return (Math.floor(y / 2) % 2 === 1) ? output.boxes!() : output.lines!();
       },
-    },
-    {
-      id: 'P10S Pandaemoniac Ray 레이저 조심',
-      type: 'StartsUsing',
-      netRegex: { id: ['8289', '828B'], capture: false },
-      condition: (data) => data.role === 'healer',
-      delaySeconds: 3,
-      alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
-        text: '옆에서 레이저 쏴요!',
+        lines: {
+          en: '레이저 피해욧 (줄 위로)',
+        },
+        boxes: {
+          en: '레이저 피해욧 (네모 사이로)',
+        },
       },
     },
   ],

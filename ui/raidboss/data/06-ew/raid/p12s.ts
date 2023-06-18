@@ -63,6 +63,24 @@ const superchainNpcBaseIdMap: Record<SuperchainMechanic, string> = {
   partners: '16180',
 } as const;
 
+const engravementIdMap = {
+  lightTilt: 'DF8',
+  darkTilt: 'DF9',
+  lightTower: 'DFB',
+  darkTower: 'DFC',
+  lightBeam: 'DFD',
+  darkBeam: 'DFE',
+  crossMarked: 'DFF',
+  xMarked: 'E00',
+};
+const engravementLabelMap = Object.fromEntries(
+  Object.entries(engravementIdMap).map(([k, v]) => [v, k]),
+);
+const engravementBeamIds = [engravementIdMap.lightBeam, engravementIdMap.darkBeam];
+const engravementTowerIds = [engravementIdMap.lightTower, engravementIdMap.darkTower];
+const engravementTiltIds = [engravementIdMap.lightTilt, engravementIdMap.darkTilt];
+const engravement3TheosSoulIds = [engravementIdMap.crossMarked, engravementIdMap.xMarked];
+
 const headmarkers = {
   ...wings,
   // vfx/lockon/eff/tank_laser_5sec_lockon_c0a1.avfx
@@ -115,6 +133,7 @@ export interface Data extends RaidbossData {
   prsStyle?: boolean;
   prsPhase: number;
   // 전반
+  prsTrinityInvul?: boolean;
   prsParadeigmaTower?: 'umbral' | 'astral' | 'unknown';
   // 후반
   prsPalladionGraps?: string;
@@ -135,6 +154,10 @@ export interface Data extends RaidbossData {
   expectedFirstHeadmarker?: string;
   isDoorBoss: boolean;
   phase?: 'superchain1' | 'palladion' | 'superchain2a' | 'superchain2b';
+  engravementCounter: number;
+  engravement1Towers: string[];
+  engravement3TowerType?: string;
+  engravement3TowerPlayers: string[];
   wingCollect: string[];
   wingCalls: ('swap' | 'stay')[];
   superchainCollect: NetMatches['AddedCombatant'][];
@@ -162,6 +185,9 @@ const triggerSet: TriggerSet<Data> = {
       prsPangenesisDuration: {},
       //
       isDoorBoss: true,
+      engravementCounter: 0,
+      engravement1Towers: [],
+      engravement3TowerPlayers: [],
       wingCollect: [],
       wingCalls: [],
       superchainCollect: [],
@@ -169,6 +195,14 @@ const triggerSet: TriggerSet<Data> = {
     };
   },
   timelineTriggers: [
+    {
+      id: 'P12S+ 트리니티 처음에 무적',
+      regex: /Trinity of Souls 1/,
+      beforeSeconds: 3,
+      condition: (data) => data.role === 'tank' && !data.prsTrinityInvul,
+      alertText: '무적으로 받아요',
+      run: (data) => data.prsTrinityInvul = true,
+    },
     {
       id: 'P12S 알테마 블레이드',
       regex: /Ultima Blade/,
@@ -566,6 +600,329 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
+      id: 'P12S Engravement of Souls Tracker',
+      type: 'Ability',
+      netRegex: { id: '8305', source: 'Athena', capture: false },
+      run: (data) => ++data.engravementCounter,
+    },
+    // In Engravement 1 (Paradeigma 2), 2 players receive lightTower and 2 players receive darkTower.
+    // When debuffs expire and towers drop, their debuff changes to lightTilt or darkTilt (same as tower color).
+    // At the same time the towers drop, the 4 tethered players receive lightTilt or darkTilt depending on their tether color.
+    {
+      id: 'P12S Engravement 1 Tower Drop',
+      type: 'GainsEffect',
+      netRegex: { effectId: engravementTowerIds },
+      condition: (data) => data.engravementCounter === 1,
+      durationSeconds: (_data, matches) => parseFloat(matches.duration),
+      alertText: (data, matches, output) => {
+        data.engravement1Towers.push(matches.target);
+        if (data.me === matches.target) {
+          if (matches.effectId === engravementIdMap.lightTower)
+            return output.lightTower!();
+          return output.darkTower!();
+        }
+      },
+      outputStrings: {
+        lightTower: {
+          en: '🟡타워 설치',
+        },
+        darkTower: {
+          en: '🟣타워 설치',
+        },
+      },
+    },
+    {
+      id: 'P12S Engravement 1 Tower Soak',
+      type: 'GainsEffect',
+      netRegex: { effectId: engravementTiltIds },
+      condition: (data, matches) => data.engravementCounter === 1 && data.me === matches.target,
+      suppressSeconds: 5, // avoid second (incorrect) alert when debuff switches from soaking tower
+      alertText: (data, matches, output) => {
+        if (data.engravement1Towers.indexOf(data.me) === -1) {
+          // Did not drop a tower, so needs to soak one.
+          if (matches.effectId === engravementIdMap.lightTilt)
+            return output.lightTilt!();
+          return output.darkTilt!();
+        }
+      },
+      outputStrings: {
+        lightTilt: {
+          en: '🟣밟아요',
+        },
+        darkTilt: {
+          en: '🟡밟아요',
+        },
+      },
+    },
+    // In Engravement 2 (Superchain 1), all supports or  DPS will receive lightTilt and darkTilt (2 each).
+    // All 4 also receive Heavensflame Soul.
+    // The other role group will receive lightTower, darkTower, lightBeam, and darkBeam.
+    // To resolve the Beams during the 2nd orb, lightBeam needs to stack with darkTower and both darkTilts, and vice versa.
+    // After the 3rd orb, lightTower and darkTower will drop their towers, and  darkBeam and lightBeam (respectively) will soak them.
+    // The four Heavensflame players all simultaneously need to spread to drop their AoEs.
+    // Debuffs do change based on mechanic resolution, which can complicate things:
+    // - When a lightTilt player soaks a dark beam, their debuff will change to darkTilt, and vice versa.
+    // - Once the beams detonate, the lightBeam debuff disappears and is replaced with lightTilt (same with dark).
+    // So only use the initial debuff to resolve the mechanic, and use a long suppress to avoid incorrect later alerts.
+    {
+      id: 'P12S Engravement 2 Beam Soak',
+      type: 'GainsEffect',
+      netRegex: { effectId: Object.values(engravementIdMap) },
+      condition: (data, matches) => data.engravementCounter === 2 && data.me === matches.target,
+      delaySeconds: 5, // wait until first orb resolves so as not to confuse
+      durationSeconds: 7, // keep active until beams go off
+      suppressSeconds: 30,
+      response: (_data, matches, output) => {
+        // cactbot-builtin-response
+        output.responseOutputStrings = {
+          lightBeam: {
+            en: '오른쪽❱❱❱❱❱ => 🟣밟아요',
+          },
+          darkBeam: {
+            en: '❰❰❰❰❰왼쪽 => 🟡밟아요',
+          },
+          lightTower: {
+            en: '❰❰❰❰❰왼쪽 => 🟡타워 설치',
+          },
+          darkTower: {
+            en: '오른쪽❱❱❱❱❱ => 🟣타워 설치',
+          },
+          lightTilt: {
+            en: '❰❰❰❰❰왼쪽 => 흩어져요',
+          },
+          darkTilt: {
+            en: '오른쪽❱❱❱❱❱ => 흩어져요',
+          },
+        };
+
+        const engraveLabel = engravementLabelMap[matches.effectId];
+        if (engraveLabel === undefined)
+          return;
+        const engraveOutputStr = output[engraveLabel]!();
+        if (engraveOutputStr === undefined)
+          return;
+        if (engravementBeamIds.indexOf(matches.effectId) !== -1)
+          return { alarmText: engraveOutputStr };
+        return { infoText: engraveOutputStr };
+      },
+    },
+    // darkTower/lightTower are 20s, but lightBeam/darkBeam are shorter and swap to lightTilt/darkTilt before the mechanic resolves.
+    // So use a fixed delay rather than one based on effect duration.
+    {
+      id: 'P12S Engravement 2 Tower Drop/Soak Reminder',
+      type: 'GainsEffect',
+      netRegex: { effectId: [...engravementTowerIds, ...engravementBeamIds] },
+      condition: (data, matches) => data.engravementCounter === 2 && data.me === matches.target,
+      delaySeconds: 16,
+      alertText: (_data, matches, output) => {
+        const engraveLabel = engravementLabelMap[matches.effectId];
+        if (engraveLabel === undefined)
+          return;
+        const engraveOutputStr = output[engraveLabel]!();
+        if (engraveOutputStr === undefined)
+          return;
+        return engraveOutputStr;
+      },
+      outputStrings: {
+        lightBeam: {
+          en: '오른쪽 🟣밟아요',
+        },
+        darkBeam: {
+          en: '왼쪽 🟡밟아요',
+        },
+        lightTower: {
+          en: '왼쪽 🟡타워 설치',
+        },
+        darkTower: {
+          en: '오른쪽 🟣타워 설치',
+        },
+      },
+    },
+    {
+      id: 'P12S Engravement 2 Heavensflame Soul',
+      type: 'GainsEffect',
+      netRegex: { effectId: 'DFA' },
+      condition: (data, matches) => data.engravementCounter === 2 && data.me === matches.target,
+      delaySeconds: (_data, matches) => parseFloat(matches.duration) - 4,
+      response: Responses.spread(),
+    },
+    // In Engravement 3 (Paradeigma 3), 2 support players will both receive either lightTower or darkTower.
+    // The other 2 support players receive a '+'/Cross (DFF) or 'x'/Saltire (E00) debuff.
+    // Because of platform separation during the mechanic, the '+' and 'x' players must soak the far north/south towers,
+    // while the lightTower or darkTower players must soak the middle towers (so they can then drop their towers for DPS to soak).
+    // All DPS receive tethers (2 light, 2 dark), and they receive corresponding lightTilt/darkTilt when tethers resolve.
+    // If the support players receive lightTower, the darkTilt DPS must soak those towers, or vice versa.
+    // While the light & dark towers are being soaked, the '+' and 'x' supports and  other 2 DPS must bait the adds' line cleaves.
+    {
+      id: 'P12S Engravement 3 Theos Initial',
+      type: 'GainsEffect',
+      netRegex: { effectId: engravement3TheosSoulIds },
+      condition: (data, matches) => data.engravementCounter === 3 && data.me === matches.target,
+      alertText: (_data, matches, output) => {
+        const mark = matches.effectId === engravementIdMap.crossMarked ? '➕ 북쪽으로' : '❌ 남쪽으로';
+        return output.theosDebuff!({ mark: mark });
+      },
+      outputStrings: {
+        theosDebuff: {
+          en: '내게 ${mark}',
+        },
+      },
+    },
+    {
+      id: 'P12S Engravement 3 Theos Drop AoE',
+      type: 'GainsEffect',
+      netRegex: { effectId: engravement3TheosSoulIds },
+      condition: (data, matches) => data.engravementCounter === 3 && data.me === matches.target,
+      delaySeconds: (_data, matches) => parseFloat(matches.duration) - 4,
+      alertText: (_data, matches, output) => {
+        const mark = matches.effectId === engravementIdMap.crossMarked ? '➕ 모서리에' : '❌ 가운데';
+        return output.dropBait!({ mark: mark });
+      },
+      outputStrings: {
+        dropBait: {
+          en: '${mark} 설치',
+        },
+      },
+    },
+    {
+      id: 'P12S Engravement 3 Theos Bait Adds',
+      type: 'GainsEffect',
+      netRegex: { effectId: engravement3TheosSoulIds },
+      condition: (data, matches) => data.engravementCounter === 3 && data.me === matches.target,
+      delaySeconds: (_data, matches) => parseFloat(matches.duration),
+      durationSeconds: 4,
+      infoText: (_data, _matches, output) => output.baitCleave!(),
+      outputStrings: {
+        baitCleave: {
+          en: '천사 레이저 유도',
+        },
+      },
+    },
+    {
+      id: 'P12S Engravement 3 Towers Collect',
+      type: 'GainsEffect',
+      netRegex: { effectId: engravementTowerIds },
+      condition: (data) => data.engravementCounter === 3,
+      run: (data, matches) => {
+        data.engravement3TowerPlayers.push(matches.target);
+        data.engravement3TowerType = engravementLabelMap[matches.effectId];
+      },
+    },
+    {
+      id: 'P12S Engravement 3 Towers Initial',
+      type: 'GainsEffect',
+      netRegex: { effectId: engravementTowerIds, capture: false },
+      condition: (data) => data.engravementCounter === 3,
+      delaySeconds: 0.3,
+      suppressSeconds: 1,
+      response: (data, _matches, output) => {
+        // cactbot-builtin-response
+        output.responseOutputStrings = {
+          towerOnYou: {
+            en: '내게 ${color} 타워 (+${partner})',
+          },
+          towerLater: {
+            en: '들어갈 곳: ${color} 타워',
+          },
+          light: {
+            en: '🟡',
+          },
+          dark: {
+            en: '🟣',
+          },
+          unknown: Outputs.unknown,
+        };
+        const towerOnYou = data.engravement3TowerPlayers.indexOf(data.me) !== -1;
+        let towerColor = output.unknown!();
+        if (data.engravement3TowerType !== undefined)
+          towerColor = data.engravement3TowerType === 'lightTower'
+            ? output.light!()
+            : output.dark!();
+        let partner;
+        if (towerOnYou) {
+          partner = data.ShortName(data.engravement3TowerPlayers.find((name) =>
+            name !== data.me
+          )) ?? output.unknown!();
+          return { alertText: output.towerOnYou!({ color: towerColor, partner: partner }) };
+        } else if (data.party.isDPS(data.me)) {
+          // DPS want to know tower color to know if they are soaking or baiting add cleaves later
+          return { alertText: output.towerLater!({ color: towerColor }) };
+        }
+      },
+    },
+    {
+      id: 'P12S Engravement 3 Towers Drop',
+      type: 'GainsEffect',
+      netRegex: { effectId: engravementTowerIds },
+      condition: (data, matches) => data.engravementCounter === 3 && data.me === matches.target,
+      delaySeconds: (_data, matches) => parseFloat(matches.duration) - 5,
+      alertText: (data, _matches, output) => {
+        let towerColor = output.unknown!();
+        if (data.engravement3TowerType !== undefined)
+          towerColor = data.engravement3TowerType === 'lightTower'
+            ? output.light!()
+            : output.dark!();
+        return output.dropTower!({ color: towerColor });
+      },
+      outputStrings: {
+        dropTower: {
+          en: '${color}쪽에 설치',
+        },
+        light: {
+          en: '🟪',
+        },
+        dark: {
+          en: '🟨',
+        },
+        unknown: Outputs.unknown,
+      },
+    },
+    {
+      id: 'P12S Engravement 3 Soak Tower/Bait Adds',
+      type: 'GainsEffect',
+      netRegex: { effectId: engravementTiltIds },
+      condition: (data, matches) => data.engravementCounter === 3 && data.me === matches.target,
+      suppressSeconds: 15, // avoid second (incorrect) alert when debuff switches from soaking tower
+      alertText: (data, matches, output) => {
+        // lightTower/darkTower support players receive lightTilt/darkTilt once dropping their tower
+        // so exclude them from receiving this alert
+        if (data.engravement3TowerPlayers.indexOf(data.me) !== -1)
+          return;
+
+        const soakMap: { [key: string]: string } = {
+          lightTower: 'darkTilt',
+          darkTower: 'lightTilt',
+        };
+        const myEffect = engravementLabelMap[matches.effectId];
+        if (myEffect === undefined || data.engravement3TowerType === undefined)
+          return;
+        const soakers = soakMap[data.engravement3TowerType];
+        if (soakers === undefined)
+          return;
+
+        const towerColor = data.engravement3TowerType === 'lightTower'
+          ? output.light!()
+          : output.dark!();
+        if (myEffect === soakers)
+          return output.soakTower!({ color: towerColor });
+        return output.baitCleaves!();
+      },
+      outputStrings: {
+        soakTower: {
+          en: '${color}타워 밟아요',
+        },
+        baitCleaves: {
+          en: '레이저 유도',
+        },
+        light: {
+          en: '🟡',
+        },
+        dark: {
+          en: '🟣',
+        },
+      },
+    },
+    {
       id: 'P12S Peridialogos',
       type: 'StartsUsing',
       netRegex: { id: '82FF', source: 'Athena', capture: false },
@@ -648,7 +1005,7 @@ const triggerSet: TriggerSet<Data> = {
         // cactbot-builtin-response
         output.responseOutputStrings = {
           baitLaser: {
-            en: '레이저 유도',
+            en: '레이저 유도! 안쪽으로!',
             de: 'Laser Ködern',
             fr: 'Bait le laser',
             ko: '레이저 유도',
@@ -662,7 +1019,7 @@ const triggerSet: TriggerSet<Data> = {
         };
         const infoText = output.firstWhiteFlame!();
         if (data.limitCutNumber === 5 || data.limitCutNumber === 7)
-          return { alert: output.baitLaser!(), infoText: infoText };
+          return { alertText: output.baitLaser!(), infoText: infoText };
         return { infoText: infoText };
       },
     },
@@ -676,7 +1033,7 @@ const triggerSet: TriggerSet<Data> = {
         // cactbot-builtin-response
         output.responseOutputStrings = {
           baitLaser: {
-            en: '레이저 유도',
+            en: '레이저 유도! 안쪽으로!',
             de: 'Laser Ködern',
             fr: 'Bait le laser',
             ko: '레이저 유도',
@@ -1060,7 +1417,7 @@ const triggerSet: TriggerSet<Data> = {
       netRegex: { id: ['00FB', '00EA'] },
       condition: Conditions.targetIsYou(),
       durationSeconds: 7,
-      suppressSeconds: 5,
+      suppressSeconds: 6,
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: '🟪 줄 땡겨요',
@@ -1072,19 +1429,13 @@ const triggerSet: TriggerSet<Data> = {
       netRegex: { id: '00E9' },
       condition: Conditions.targetIsYou(),
       durationSeconds: 7,
-      suppressSeconds: 5,
+      suppressSeconds: 6,
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: '🟨 줄 땡겨요',
       }
     },
-      // DF8:Umbral Tilt 하얀 동글
-      // DF9:Astral Tilt 보라 동글
-      // DFA:Heavensflame Soul
-      // DFB:Umbralbright Soul      타워 설치
-      // DFC:Astralbright Soul      타워 설치
-      // DFD:Umbralstrong Soul
-      // DFE:Astralstrong Soul
+    /* 대신 사용: Engravement 1 시리즈
     {
       id: 'P12S 첫번째 줄다리기 + 바닥',
       type: 'GainsEffect',
@@ -1101,9 +1452,18 @@ const triggerSet: TriggerSet<Data> = {
         twAbSoul: '🟣타워',
       }
     },
+    */
+   /* 대신 사용 : Engravement 2 시리즈
     {
       id: 'P12S 슈퍼체인 이펙트',
       type: 'GainsEffect',
+      // DF8:Umbral Tilt 하얀 동글
+      // DF9:Astral Tilt 보라 동글
+      // DFA:Heavensflame Soul
+      // DFB:Umbralbright Soul      타워 설치
+      // DFC:Astralbright Soul      타워 설치
+      // DFD:Umbralstrong Soul
+      // DFE:Astralstrong Soul
       netRegex: { effectId: ['DF8', 'DF9', 'DFB', 'DFC', 'DFD', 'DFE'] },
       condition: (data, matches) => data.prsPhase === 12 && matches.target === data.me,
       delaySeconds: 4,
@@ -1129,6 +1489,8 @@ const triggerSet: TriggerSet<Data> = {
         asSoul: '❰❰❰❰❰왼쪽 => 🟡밟아요',
       },
     },
+    */
+   /* 대신 사용: Engravement 3 시리즈
     {
       id: 'P12S 파라3 DPS 이펙트',
       type: 'GainsEffect',
@@ -1193,6 +1555,7 @@ const triggerSet: TriggerSet<Data> = {
         text: '남쪽 🡺 타워 밟고 🡺 가운데❌'
       },
     },
+    */
     {
       id: 'P12S 테오의 알테마',
       type: 'StartsUsing',
@@ -1402,23 +1765,17 @@ const triggerSet: TriggerSet<Data> = {
         beta: '베타 🟨사각',
       },
     },
-    /* 1번은 이게 맞는데 3초 정도 늦춰서. 2번은 StartUsing이 맞을 거 같다
     {
       id: 'P12S2 클래식 컨셉 피해욧',
       type: 'Ability',
-      netRegex: { id: '8333', source: 'Concept of Water', capture: false },
-      delaySeconds: 1,
-      suppressSeconds: 1,
+      netRegex: { id: '8323', source: 'Pallas Athena', capture: false },
+      delaySeconds: 2.5,
+      durationSeconds: 4,
       alertText: (_data, _matches, output) => output.text!(),
-      run: (data) => {
-        data.prsClassicMarker = {};
-        data.prsClassicAlphaBeta = {};
-      },
       outputStrings: {
         text: '피해욧',
       },
     },
-    */
     {
       id: 'P12S2 크러시 헬름',
       type: 'StartsUsing',
