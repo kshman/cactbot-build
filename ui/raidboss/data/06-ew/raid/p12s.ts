@@ -8,18 +8,18 @@ import { NetMatches } from '../../../../../types/net_matches';
 import { TriggerSet } from '../../../../../types/trigger';
 
 // TODO: north / south laser add call for first Paradeigma
-// TODO: second paradeigma tether/tower debuff?
 // TODO: laser add call (inner west / inner east?) for second Paradeigma
 // TODO: glaukopis tank swap call
 // TODO: glaukopis tank swap after 2nd hit (if different person took both)
-// TODO: tether/tower/saltire/cross debuffs for third Paradeigma (and partners for towers?)
-// TODO: light/dark tower call for third Paradeigma (+ taking towers, baiting adds, etc)
 // TODO: add phase dash calls?? (maybe this is overkill)
-// TODO: Superchain 1 debuff triggers (maybe combine with existing triggers?)
 // TODO: Superchain 2B
 // TODO: final Sample safe spot
 
-export type PlaystationMarker = 'circle' | 'cross' | 'triangle' | 'square';
+// umbral=라이트=노랑=하양 / astral=다크=보라=깜장
+type TypeUmbralAstral = 'umbral' | 'astral' | 'unknown';
+type TypePlaystation = 'circle' | 'cross' | 'triangle' | 'square';
+type TypeAlphaBeta = 'alpha' | 'beta';
+type TypeCaloric = 'fire' | 'wind';
 
 const centerX = 100;
 const centerY = 100;
@@ -115,19 +115,24 @@ export interface Data extends RaidbossData {
   prsStyle?: boolean;
   prsPhase: number;
   // 전반
-  prsParadeigmaTower?: 'umbral' | 'astral' | 'unknown';
+  prsTrinityInvul?: boolean;
+  prsEngravement1Tower: string[];
+  prsEngravement2Debuff?: string;
+  prsEngravement3TowerEnter: string[];
+  prsEngravement3TowerSoul: TypeUmbralAstral;
+  prsEngravement3TetherSide: 'umbLeft' | 'umbRight' | 'astLeft' | 'astRight' | 'unknown';
   // 후반
   prsPalladionGraps?: string;
   prsUltima?: number;
-  prsClassicMarker: { [name: string]: PlaystationMarker };
-  prsClassicAlphaBeta: { [name: string]: 'alpha' | 'beta' };
-  prsCaloricFirst: string[];
-  prsCaloricBuff: { [name: string]: 'fire' | 'wind' };
-  prsCaloricMine?: 'fire' | 'wind';
-  prsCaloricFire?: string;
+  prsClassicMarker: { [name: string]: TypePlaystation };
+  prsClassicAlphaBeta: { [name: string]: TypeAlphaBeta };
+  prsCaloric1First: string[];
+  prsCaloric1Buff: { [name: string]: TypeCaloric };
+  prsCaloric1Mine?: TypeCaloric;
+  prsCaloric2Fire?: string;
   prsSeenPangenesis?: boolean;
   prsPangenesisCount: { [name: string]: number };
-  prsPangenesisStat: { [name: string]: 'dark' | 'light' };
+  prsPangenesisStat: { [name: string]: TypeUmbralAstral };
   prsPangenesisDuration: { [name: string]: number };
   prsPangenesisTilt?: number;
   //
@@ -153,15 +158,20 @@ const triggerSet: TriggerSet<Data> = {
   initData: () => {
     return {
       prsPhase: 0,
+      prsEngravement1Tower: [],
+      prsEngravement3TowerEnter: [],
+      prsEngravement3TowerSoul: 'unknown',
+      prsEngravement3TetherSide: 'unknown',
       prsClassicMarker: {},
       prsClassicAlphaBeta: {},
-      prsCaloricFirst: [],
-      prsCaloricBuff: {},
+      prsCaloric1First: [],
+      prsCaloric1Buff: {},
       prsPangenesisCount: {},
       prsPangenesisStat: {},
       prsPangenesisDuration: {},
       //
       isDoorBoss: true,
+      engravementCounter: 0,
       wingCollect: [],
       wingCalls: [],
       superchainCollect: [],
@@ -169,6 +179,14 @@ const triggerSet: TriggerSet<Data> = {
     };
   },
   timelineTriggers: [
+    {
+      id: 'P12S+ 트리니티 처음에 무적',
+      regex: /Trinity of Souls 1/,
+      beforeSeconds: 3,
+      condition: (data) => data.role === 'tank' && !data.prsTrinityInvul,
+      alertText: '무적으로 받아요',
+      run: (data) => data.prsTrinityInvul = true,
+    },
     {
       id: 'P12S 알테마 블레이드',
       regex: /Ultima Blade/,
@@ -195,9 +213,7 @@ const triggerSet: TriggerSet<Data> = {
           '86FB': 'superchain2b',
         } as const;
         data.phase = phaseMap[matches.id];
-
-        data.prsPhase += 10;
-        data.prsParadeigmaTower = 'unknown';
+        data.prsPhase++;
       },
     },
     {
@@ -245,86 +261,23 @@ const triggerSet: TriggerSet<Data> = {
         if (data.phase !== 'superchain2a' || firstDir === undefined || secondDir === undefined)
           return isLeftAttack ? output.right!() : output.left!();
 
-        //
-        if (data.prsStyle) {
-          const lrs = isLeftAttack ? output.prsRight!() : output.prsLeft!();
-          if (firstDir === 'north') {
-            if (secondDir === 'north')
-              return output.prsc2aNn!({ dir: lrs });
-            return output.prsc2aNs!({ dir: lrs });
-          }
-          if (secondDir === 'north')
-            return output.prsc2aSn!({ dir: lrs });
-          return output.prsc2aSs!({ dir: lrs });
-        }
-
-        if (isLeftAttack) {
-          if (firstDir === 'north') {
-            if (secondDir === 'north')
-              return output.superchain2aRightNorthNorth!();
-            return output.superchain2aRightNorthSouth!();
-          }
-          if (secondDir === 'north')
-            return output.superchain2aRightSouthNorth!();
-          return output.superchain2aRightSouthSouth!();
-        }
-
+        const dir = isLeftAttack ? output.right!() : output.left!();
         if (firstDir === 'north') {
           if (secondDir === 'north')
-            return output.superchain2aLeftNorthNorth!();
-          return output.superchain2aLeftNorthSouth!();
+            return output.prsc2aNn!({ dir: dir });
+          return output.prsc2aNs!({ dir: dir });
         }
         if (secondDir === 'north')
-          return output.superchain2aLeftSouthNorth!();
-        return output.superchain2aLeftSouthSouth!();
-      },
-      tts: (data) => {
-        const firstDir = data.superchain2aFirstDir;
-        const secondDir = data.superchain2aSecondDir;
-        if (data.phase !== 'superchain2a' || firstDir === undefined || secondDir === undefined)
-          return;
-        return firstDir === secondDir ? 'もどります' : 'すすみます';
+          return output.prsc2aSn!({ dir: dir });
+        return output.prsc2aSs!({ dir: dir });
       },
       outputStrings: {
-        left: '❰❰❰❰❰왼쪽',
-        right: '오른쪽❱❱❱❱❱',
-        // This could *also* say partners, but it's always partners and that feels like
-        // too much information.  The "after" call could be in an info text or something,
-        // but the wings are also calling out info text too.  This is a compromise.
-        // Sorry also for spelling this out so explicitly, but I suspect some people
-        // might want different left/right calls based on North/South boss facing
-        // and it's nice to have a "go through" or "go back" description too.
-        superchain2aLeftNorthNorth: {
-          en: '북쪽 + 왼쪽 => 북쪽',
-        },
-        superchain2aLeftNorthSouth: {
-          en: '북쪽 + 왼쪽 => 남쪽',
-        },
-        superchain2aLeftSouthNorth: {
-          en: '남쪽 + 왼쪽 => 북쪽',
-        },
-        superchain2aLeftSouthSouth: {
-          en: '남쪽 + 왼쪽 => 남쪽',
-        },
-        superchain2aRightNorthNorth: {
-          en: '북쪽 + 오른쪽 => 북쪽',
-        },
-        superchain2aRightNorthSouth: {
-          en: '북쪽 + 오른쪽 => 남쪽',
-        },
-        superchain2aRightSouthNorth: {
-          en: '남쪽 + 오른쪽 => 북쪽',
-        },
-        superchain2aRightSouthSouth: {
-          en: '남쪽 + 오른쪽 => 남쪽',
-        },
-        //
+        left: Outputs.left,
+        right: Outputs.right,
         prsc2aNn: '북쪽 => 다시 북쪽 [${dir}]',
         prsc2aNs: '북쪽 => 전진해서 남쪽 [${dir}]',
         prsc2aSs: '남쪽 => 다시 남쪽 [${dir}]',
         prsc2aSn: '남쪽 => 전진해서 북쪽 [${dir}]',
-        prsLeft: Outputs.left,
-        prsRight: Outputs.right,
       },
     },
     {
@@ -387,30 +340,35 @@ const triggerSet: TriggerSet<Data> = {
           en: '옆자리',
           de: 'Wechseln',
           fr: 'Swap',
+          cn: '穿',
           ko: '이동',
         },
         stay: {
           en: '그대로',
           de: 'bleib Stehen',
           fr: 'Restez',
+          cn: '停',
           ko: '가만히',
         },
         secondWingCallStay: {
-          en: '(그대로)',
+          en: '[그대로]',
           de: '(bleib Stehen)',
           fr: '(restez)',
+          cn: '(停)',
           ko: '(가만히)',
         },
         secondWingCallSwap: {
-          en: '(옆자리로 이동)',
+          en: '[옆자리로 이동]',
           de: '(Wechseln)',
           fr: '(swap)',
+          cn: '(穿)',
           ko: '(이동)',
         },
         allThreeWings: {
           en: '${first} => ${second} => ${third}',
           de: '${first} => ${second} => ${third}',
           fr: '${first} => ${second} => ${third}',
+          cn: '${first} => ${second} => ${third}',
           ko: '${first} => ${second} => ${third}',
         },
       },
@@ -441,97 +399,46 @@ const triggerSet: TriggerSet<Data> = {
         ) {
           if (call === 'swap')
             return output.swap!();
-        if (call === 'stay')
           return output.stay!();
         }
 
         // Second wing call (when middle) during Superchain IIA.
         const isSecondWing = data.wingCalls.length === 1;
-        const finalDir = secondDir === 'north' ? output.north!() : output.south!();
         if (isSecondWing) {
           const isReturnBack = firstDir === secondDir;
-          //
-          if (data.prsStyle) {
-            const move = call === 'swap' ? output.swap!() : output.stay!();
-            if (isReturnBack)
-              return output.prsc2aMb!({ move: move });
-            return output.prsc2aMg!({ move: move });
-          }
-          //
-          if (call === 'swap') {
-            if (isReturnBack)
-              return output.superchain2aSwapMidBack!({ dir: finalDir });
-            return output.superchain2aSwapMidGo!({ dir: finalDir });
-          }
+          const move = call === 'swap' ? output.swap!() : output.stay!();
           if (isReturnBack)
-            return output.superchain2aStayMidBack!({ dir: finalDir });
-          return output.superchain2aStayMidGo!({ dir: finalDir });
+            return output.prsc2aMb!({ move: move });
+          return output.prsc2aMg!({ move: move });
         }
 
         // Third wing call (when at final destination).
         const isProtean = secondMech === 'protean';
-        //
-        if (data.prsStyle) {
-          const move = call === 'swap' ? output.swap!() : output.stay!();
-          if (firstDir === secondDir) {
-            if (isProtean)
-              return output.prsc2aBpro!({ move: move });
-            return output.prsc2aBtwo!({ move: move });
-          }
+        const move = call === 'swap' ? output.swap!() : output.stay!();
+        if (firstDir === secondDir) {
           if (isProtean)
-            return output.prsc2aGpro!({ move: move });
-          return output.prsc2aGtwo!({ move: move });
-        }
-        //
-        if (call === 'swap') {
-          if (isProtean)
-            return output.superchain2aSwapProtean!({ dir: finalDir });
-          return output.superchain2aSwapPartners!({ dir: finalDir });
+            return output.prsc2aBpro!({ move: move });
+          return output.prsc2aBtwo!({ move: move });
         }
         if (isProtean)
-          return output.superchain2aStayProtean!({ dir: finalDir });
-        return output.superchain2aStayPartners!({ dir: finalDir });
+          return output.prsc2aGpro!({ move: move });
+        return output.prsc2aGtwo!({ move: move });
       },
       outputStrings: {
         swap: {
           en: '옆자리로 이동',
           de: 'Wechseln',
           fr: 'Swap',
+          cn: '穿',
           ko: '이동',
         },
         stay: {
           en: '그대로',
           de: 'bleib Stehen',
           fr: 'Restez',
+          cn: '停',
           ko: '가만히',
         },
-        superchain2aSwapMidBack: {
-          en: '옆자리 + 한가운데 => ${dir} 뒤로',
-        },
-        superchain2aSwapMidGo: {
-          en: '옆자리 + 한가운데 => ${dir}으로',
-        },
-        superchain2aStayMidBack: {
-          en: '그대로 + 한가운데 => ${dir} 뒤로',
-        },
-        superchain2aStayMidGo: {
-          en: '그대로 + 한가운데 => ${dir}으로',
-        },
-        superchain2aSwapProtean: {
-          en: '옆자리 => 프로틴 + ${dir}',
-        },
-        superchain2aStayProtean: {
-          en: '그대로 => 프로틴 + ${dir}',
-        },
-        superchain2aSwapPartners: {
-          en: '옆자리 => 페어 + ${dir}',
-        },
-        superchain2aStayPartners: {
-          en: '그대로 => 페어 + ${dir}',
-        },
-        north: Outputs.north,
-        south: Outputs.south,
-        //
         prsc2aMb: '한가운데로 => 되돌아 가욧 [${move}]',
         prsc2aMg: '한가운데로 => 계속 전진 [${move}]',
         prsc2aBpro: '되돌아 와서 + 프로틴 [${move}]',
@@ -559,9 +466,13 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         protean: {
           en: '프로틴! 흩어져요',
+          de: 'Himmelsrichtungen',
+          cn: '八方分散',
         },
         partners: {
           en: '페어! 둘이 함께',
+          de: 'Partner',
+          cn: '双人分摊',
         },
       },
     },
@@ -576,12 +487,14 @@ const triggerSet: TriggerSet<Data> = {
           en: '바깥으로 (탱크가 안쪽)',
           de: 'Gruppe Raus (Tanks Rein)',
           fr: 'Équipe à l\'extérieur (Tanks à l\'intérieur)',
+          cn: '小队出 (T进)',
           ko: '본대 밖 (탱커 안)',
         },
         tanksInPartyOut: {
           en: '안쪽으로 (파티가 바깥쪽)',
           de: 'Gruppe Rein (Tanks Raus)',
           fr: 'Tanks à l\'intérieur (Équipe à l\'extérieur',
+          cn: 'T进 (小队出)',
           ko: '탱커 안 (본대 밖)',
         },
       },
@@ -597,12 +510,14 @@ const triggerSet: TriggerSet<Data> = {
           en: '안쪽으로 (탱크가 바깥쪽)',
           de: 'Gruppe Rein (Tanks Raus)',
           fr: 'Équipe à l\'intérieur (Tanks à l\'extérieur)',
+          cn: '小队进 (T出)',
           ko: '본대 안 (탱커 밖)',
         },
         tanksInPartyOut: {
           en: '바깥으로 (파티가 안쪽)',
           de: 'Tanks Raus (Gruppe Rein)',
           fr: 'Tanks à l\'extérieur (Équipe à l\'intérieur',
+          cn: 'T出 (小队进)',
           ko: '탱커 밖 (본대 안)',
         },
       },
@@ -648,21 +563,23 @@ const triggerSet: TriggerSet<Data> = {
         // cactbot-builtin-response
         output.responseOutputStrings = {
           baitLaser: {
-            en: '레이저 유도',
+            en: '레이저 유도! 안쪽으로!',
             de: 'Laser Ködern',
             fr: 'Bait le laser',
+            cn: '引导激光',
             ko: '레이저 유도',
           },
           firstWhiteFlame: {
             en: '(5, 7 레이저 유도)',
             de: '(5 und 7 ködern)',
             fr: '(5 et 7 bait)',
+            cn: '(5 和 7 引导)',
             ko: '(5, 7 레이저)',
           },
         };
         const infoText = output.firstWhiteFlame!();
         if (data.limitCutNumber === 5 || data.limitCutNumber === 7)
-          return { alert: output.baitLaser!(), infoText: infoText };
+          return { alertText: output.baitLaser!(), infoText: infoText };
         return { infoText: infoText };
       },
     },
@@ -676,27 +593,31 @@ const triggerSet: TriggerSet<Data> = {
         // cactbot-builtin-response
         output.responseOutputStrings = {
           baitLaser: {
-            en: '레이저 유도',
+            en: '레이저 유도! 안쪽으로!',
             de: 'Laser Ködern',
             fr: 'Bait le laser',
+            cn: '引导激光',
             ko: '레이저 유도',
           },
           secondWhiteFlame: {
             en: '(6, 8 레이저 유도)',
             de: '(6 und 8 ködern)',
             fr: '(6 et 8 bait)',
+            cn: '(6 和 8 引导)',
             ko: '(6, 8 레이저)',
           },
           thirdWhiteFlame: {
             en: '(1, 3 레이저 유도)',
             de: '(1 und 3 ködern)',
             fr: '(1 et 3 bait)',
+            cn: '(1 和 3 引导)',
             ko: '(1, 3 레이저)',
           },
           fourthWhiteFlame: {
             en: '(2, 4 레이저 유도)',
             de: '(2 und 6 ködern)',
             fr: '(2 et 4 bait)',
+            cn: '(2 和 4 引导)',
             ko: '(2, 4 레이저)',
           },
         };
@@ -748,19 +669,6 @@ const triggerSet: TriggerSet<Data> = {
         if (destMatches === undefined || inOut === undefined || proteanPartner === undefined)
           return;
 
-        //
-        if (data.prsStyle) {
-          if (inOut === superchainNpcBaseIdMap.in) {
-            if (proteanPartner === superchainNpcBaseIdMap.protean)
-              return output.prInPro!();
-            return output.prInTwo!();
-          }
-
-          if (proteanPartner === superchainNpcBaseIdMap.protean)
-            return output.prOutPro!();
-          return output.prOutTwo!();
-        }
-
         // TODO: technically this is just intercardinals and we don't need all outputs here.
         // Do we need another helper for this?
         const dirStr = Directions.addedCombatantPosTo8DirOutput(destMatches, centerX, centerY);
@@ -779,35 +687,34 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         inAndProtean: {
-          en: '안으로 + 프로틴: (${dir})',
+          en: '안으로 + 프로틴 [${dir}]',
           de: 'Rein + Himmelsrichtungen (${dir})',
           fr: 'Intérieur + Position (${dir})',
+          cn: '靠近 + 八方分散 (${dir})',
           ko: '안 + 8방향 산개 (${dir})',
         },
         inAndPartners: {
-          en: '안으로 + 페어: (${dir})',
+          en: '안으로 + 페어 [${dir}]',
           de: 'Rein + Partner (${dir})',
           fr: 'Intérieur + Partenaire (${dir})',
+          cn: '靠近 + 双人分摊 (${dir})',
           ko: '안 + 파트너 (${dir})',
         },
         outAndProtean: {
-          en: '밖에서 + 프로틴: (${dir})',
+          en: '밖에서 + 프로틴 [${dir}]',
           de: 'Raus + Himmelsrichtungen (${dir})',
           fr: 'Extérieur + Position (${dir})',
+          cn: '远离 + 八方分散 (${dir})',
           ko: '밖 + 8방향 산개 (${dir})',
         },
         outAndPartners: {
-          en: '밖에서 + 페어: (${dir})',
+          en: '밖에서 + 페어 [${dir}]',
           de: 'Raus + Partner (${dir})',
           fr: 'Extérieur + Partenaire (${dir})',
-          ko: '밖 + 파트너 (${dir})',
+          cn: '远离 + 双人分摊 (${dir})',
+          ko: '밖 + 8방향 산개 (${dir})',
         },
         ...Directions.outputStrings8Dir,
-        //
-        prInPro: '안으로 + 프로틴',
-        prInTwo: '안으로 + 페어',
-        prOutPro: '밖에서 + 프로틴',
-        prOutTwo: '밖에서 + 페어'
       },
     },
     {
@@ -818,6 +725,7 @@ const triggerSet: TriggerSet<Data> = {
       // TODO: should we base this off of the first coil/burst instead?
       // 7.2 seconds is the time until the second mechanic finishes, so call early.
       delaySeconds: 4.5,
+      durationSeconds: 8, // keep active until right before 2nd orb resolves
       alertText: (data, _matches, output) => {
         // Sort ascending.
         const collect = data.superchainCollect.slice(3, 7).sort((a, b) =>
@@ -862,8 +770,6 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         // This is left and right facing the boss.
-        // TODO: this should probably also say your debuff,
-        // e.g. "Left (Dark Laser)" or "Right (Light Tower)" or something?
         leftClockwise: {
           en: '❰❰❰❰❰시계 방향',
           de: 'Links (im Uhrzeigersinn)',
@@ -886,6 +792,7 @@ const triggerSet: TriggerSet<Data> = {
       // TODO: should we base this off of the first coil/burst instead?
       // 10.6 seconds is the time until the second mechanic finishes, so call early.
       delaySeconds: 9.1,
+      durationSeconds: 5.5,
       alertText: (data, _matches, output) => {
         // Sort ascending.
         const collect = data.superchainCollect.slice(7, 10).sort((a, b) =>
@@ -899,13 +806,10 @@ const triggerSet: TriggerSet<Data> = {
 
         const donutDistSqr = distSqr(donut, dest);
         const sphereDistSqr = distSqr(sphere, dest);
-        if (donutDistSqr > sphereDistSqr)
-          return output.inThenOut!();
-        return output.outThenIn!();
+        const moveOrder = donutDistSqr > sphereDistSqr ? output.inThenOut!() : output.outThenIn!();
+        return moveOrder;
       },
       outputStrings: {
-        // TODO: this should also say to spread / place tower / take tower
-        // TODO: maybe we need separate calls for these ^ after initial donut/sphere goes off?
         inThenOut: '안에 있다 => 밖으로',
         outThenIn: '밖에 있다 => 안으로',
       },
@@ -1049,7 +953,7 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: 'P12S 파라데이그마',
+      id: 'P12S 파라데이그마 페이즈',
       type: 'StartsUsing',
       netRegex: { id: '82ED', capture: false },
       run: (data) => data.prsPhase++,
@@ -1057,10 +961,10 @@ const triggerSet: TriggerSet<Data> = {
     {
       id: 'P12S 줄다리기 보라',
       type: 'Tether',
-      netRegex: { id: ['00FB', '00EA'] },
+      netRegex: { id: ['00EA', '00FB'] },
       condition: Conditions.targetIsYou(),
       durationSeconds: 7,
-      suppressSeconds: 5,
+      suppressSeconds: 10,
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: '🟪 줄 땡겨요',
@@ -1069,47 +973,73 @@ const triggerSet: TriggerSet<Data> = {
     {
       id: 'P12S 줄다리기 노랑',
       type: 'Tether',
-      netRegex: { id: '00E9' },
+      netRegex: { id: ['00E9', '00FA'] },
       condition: Conditions.targetIsYou(),
       durationSeconds: 7,
-      suppressSeconds: 5,
+      suppressSeconds: 10,
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: '🟨 줄 땡겨요',
       }
     },
-      // DF8:Umbral Tilt 하얀 동글
-      // DF9:Astral Tilt 보라 동글
-      // DFA:Heavensflame Soul
-      // DFB:Umbralbright Soul      타워 설치
-      // DFC:Astralbright Soul      타워 설치
-      // DFD:Umbralstrong Soul
-      // DFE:Astralstrong Soul
+    // DF8:Umbral Tilt                  노랑 타워
+    // DF9:Astral Tilt                  보라 타워
+    // DFA:Heavensflame Soul
+    // DFB:Umbralbright Soul        타워 설치
+    // DFC:Astralbright Soul        타워 설치
+    // DFD:Umbralstrong Soul
+    // DFE:Astralstrong Soul
     {
-      id: 'P12S 첫번째 줄다리기 + 바닥',
+      id: 'P12S 엔그레이브먼트1 타워',
       type: 'GainsEffect',
       netRegex: { effectId: ['DFB', 'DFC'] },
-      condition: (data, matches) => data.prsPhase === 2 && matches.target === data.me,
-      infoText: (_data, matches, output) => {
+      condition: (data) => data.prsPhase === 2,
+      durationSeconds: (_data, matches) => parseFloat(matches.duration),
+      infoText: (data, matches, output) => {
+        data.prsEngravement1Tower.push(matches.target);
+        if (data.me !== matches.target)
+          return;
         if (matches.effectId === 'DFB')
-          return output.twUbSoul!();
-        if (matches.effectId === 'DFC')
-          return output.twAbSoul!();
+          return output.umbSoul!();
+        return output.astSoul!();
       },
       outputStrings: {
-        twUbSoul: '🟡타워',
-        twAbSoul: '🟣타워',
+        umbSoul: '🟡설치',
+        astSoul: '🟣설치',
       }
     },
     {
-      id: 'P12S 슈퍼체인 이펙트',
+      id: 'P12S 엔그레이브먼트1 밟아요',
+      type: 'GainsEffect',
+      netRegex: { effectId: ['DF8', 'DF9'] },
+      condition: (data, matches) => data.prsPhase === 2 && data.me === matches.target,
+      suppressSeconds: 5,
+      infoText: (data, matches, output) => {
+        if (data.prsEngravement1Tower.includes(data.me))
+          return;
+        data.prsEngravement1Tower.push(matches.target);
+        if (data.me !== matches.target)
+          return;
+        if (matches.effectId === 'DF8')
+          return output.astSoul!();
+        return output.umbTilt!();
+      },
+      run: (data) => data.prsEngravement1Tower = [],
+      outputStrings: {
+        umbTilt: '🟡밟아요',
+        astSoul: '🟣밟아요',
+      }
+    },
+    {
+      id: 'P12S 엔그레이브먼트2',
       type: 'GainsEffect',
       netRegex: { effectId: ['DF8', 'DF9', 'DFB', 'DFC', 'DFD', 'DFE'] },
-      condition: (data, matches) => data.prsPhase === 12 && matches.target === data.me,
+      condition: (data, matches) => data.prsPhase === 3 && matches.target === data.me,
       delaySeconds: 4,
       durationSeconds: 18,
       suppressSeconds: 23,
-      infoText: (_data, matches, output) => {
+      infoText: (data, matches, output) => {
+        data.prsEngravement2Debuff = matches.effectId;
         const mesgs: { [eid: string]: string } = {
           'DF8': output.umbTilt!(),
           'DF9': output.astTilt!(),
@@ -1121,76 +1051,178 @@ const triggerSet: TriggerSet<Data> = {
         return mesgs[matches.effectId];
       },
       outputStrings: {
-        umbTilt: '❰❰❰❰❰왼쪽 => 도망가요',
-        astTilt: '오른쪽❱❱❱❱❱ => 도망가요',
-        ubSoul: '❰❰❰❰❰왼쪽 => 🟡타워 설치',
-        abSoul: '오른쪽❱❱❱❱❱ => 🟣타워 설치',
+        umbTilt: '❰❰❰❰❰왼쪽 => 흩어져요',
+        astTilt: '오른쪽❱❱❱❱❱ => 흩어져요',
+        ubSoul: '❰❰❰❰❰왼쪽 => 🟡설치',
+        abSoul: '오른쪽❱❱❱❱❱ => 🟣설치',
         usSoul: '오른쪽❱❱❱❱❱ => 🟣밟아요',
         asSoul: '❰❰❰❰❰왼쪽 => 🟡밟아요',
       },
     },
     {
-      id: 'P12S 파라3 DPS 이펙트',
+      id: 'P12S 엔그레이브먼트2 다시 알림',
       type: 'GainsEffect',
-      netRegex: { effectId: ['DF8', 'DF9'] },
-      condition: (data, matches) => data.prsPhase === 13 && matches.target === data.me && data.role === 'dps',
-      suppressSeconds: 12,
-      alertText: (data, matches, output) => {
-        if (matches.effectId === 'DF8')
-          return data.prsParadeigmaTower === 'astral' ? output.umbTilt!() : output.bait!();
-        if (matches.effectId === 'DF9')
-          return data.prsParadeigmaTower === 'umbral' ? output.astTilt!() : output.bait!();
+      netRegex: { effectId: ['DFB', 'DFC', 'DFD', 'DFE'] },
+      condition: (data, matches) => data.prsPhase === 3 && data.me === matches.target,
+      delaySeconds: 16,
+      alertText: (_data, matches, output) => {
+        const mesgs: { [eid: string]: string } = {
+          'DFB': output.ubSoul!(),
+          'DFC': output.abSoul!(),
+          'DFD': output.usSoul!(),
+          'DFE': output.asSoul!()
+        };
+        return mesgs[matches.effectId];
       },
       outputStrings: {
-        umbTilt: '🟣타워 밟아요',
-        astTilt: '🟡타워 밟아요',
-        bait: '레이저 유도',
+        ubSoul: '❰❰❰❰❰🟡설치',
+        abSoul: '🟣설치❱❱❱❱❱',
+        usSoul: '🟣밟아요❱❱❱❱❱',
+        asSoul: '❰❰❰❰❰🟡밟아요',
       },
     },
     {
-      id: 'P12S 파라3 탱힐 이펙트',
+      id: 'P12S 엔그레이브먼트2 피해욧',
+      type: 'GainsEffect',
+      netRegex: { effectId: 'DFA' },
+      condition: (data, matches) => data.prsPhase === 3 && data.me === matches.target,
+      delaySeconds: (_data, matches) => parseFloat(matches.duration) - 4,
+      response: Responses.spread('alert'),
+    },
+    {
+      id: 'P12S 엔그레이브먼트3 탱힐 ➕❌',
+      type: 'GainsEffect',
+      netRegex: { effectId: ['DFF', 'E00'] },
+      condition: (data, matches) => data.prsPhase === 4 && data.me === matches.target,
+      alertText: (_data, matches, output) => matches.effectId === 'DFF' ? output.plus!() : output.cross!(),
+      outputStrings: {
+        plus: '내게 ➕ 북쪽으로!',
+        cross: '내게 ❌ 남쪽으로!',
+      },
+    },
+    {
+      id: 'P12S 엔그레이브먼트3 탱힐 ➕❌ 설치',
+      type: 'GainsEffect',
+      netRegex: { effectId: ['DFF', 'E00'] },
+      condition: (data, matches) => data.prsPhase === 4 && data.me === matches.target,
+      delaySeconds: (_data, matches) => parseFloat(matches.duration) - 4,
+      durationSeconds: 4,
+      alertText: (_data, matches, output) => matches.effectId === 'DFF' ? output.plus!() : output.cross!(),
+      outputStrings: {
+        plus: '➕ 모서리에 설치',
+        cross: '❌ 가운데 설치',
+      },
+    },
+    {
+      id: 'P12S 엔그레이브먼트3 탱힐 ➕❌ 유도',
+      type: 'GainsEffect',
+      netRegex: { effectId: ['DFF', 'E00'] },
+      condition: (data, matches) => data.prsPhase === 4 && data.me === matches.target,
+      delaySeconds: (_data, matches) => parseFloat(matches.duration),
+      durationSeconds: 4,
+      infoText: (_data, _matches, output) => output.text!(),
+      outputStrings: {
+        text: '천사 레이저 유도',
+      },
+    },
+    {
+      id: 'P12S 엔그레이브먼트3 탱힐 타워 준비',
       type: 'GainsEffect',
       netRegex: { effectId: ['DFB', 'DFC'] },
-      condition: (data) => data.prsPhase === 13,
-      durationSeconds: 9,
-      infoText: (data, matches, output) => {
-        if (matches.effectId === 'DFB') {
-          data.prsParadeigmaTower = 'umbral'; // 노랑 타워
-          if (matches.target === data.me)
-            return output.ubSoul!();
-        } else if (matches.effectId === 'DFC') {
-          data.prsParadeigmaTower = 'astral'; // 보라 타워
-          if (matches.target === data.me)
-            return output.abSoul!();
-        } else {
-          data.prsParadeigmaTower = 'unknown';
+      condition: (data) => data.prsPhase === 4,
+      run: (data, matches) => {
+        data.prsEngravement3TowerEnter.push(matches.target);
+        data.prsEngravement3TowerSoul = matches.effect === 'DFB' ? 'umbral' : 'astral';
+      }
+    },
+    {
+      id: 'P12S 엔그레이브먼트3 탱힐 타워 알랴줌',
+      type: 'GainsEffect',
+      netRegex: { effectId: ['DFB', 'DFC'] },
+      condition: (data, matches) => data.prsPhase === 4 && data.me === matches.target,
+      delaySeconds: 0.3,
+      alertText: (data, _matches, output) => {
+        const cc = output[data.prsEngravement3TowerSoul]!();
+        return output.text!({ color: cc });
+      },
+      outputStrings: {
+        text: '내게 ${color}타워',
+        umbral: '🟡',
+        astral: '🟣',
+        unknown: Outputs.unknown,
+      },
+    },
+    {
+      id: 'P12S 엔그레이브먼트3 탱힐 타워 어디에',
+      type: 'StartsUsing',
+      netRegex: { id: ['82F1', '82F2'], source: 'Anthropos' },
+      condition: (data) => data.prsPhase === 4,
+      run: (data, matches) => {
+        data.prsEngravement3TetherSide = parseInt(matches.x) > 100
+          ? matches.id === '82F1' ? 'astLeft' : 'umbLeft'
+          : matches.id === '82F1' ? 'astRight' : 'umbRight';
+      },
+    },
+    {
+      id: 'P12S 엔그레이브먼트3 탱힐 타워 설치',
+      type: 'Ability',
+      netRegex: { id: '8312', source: 'Athena' },
+      condition: (data, matches) => data.prsPhase === 4 && data.me === matches.target && data.prsEngravement3TowerEnter.includes(data.me),
+      alertText: (data, matches, output) => {
+        const cc = output[data.prsEngravement3TowerSoul]!();
+        const side = parseInt(matches.x) > 100
+          ? data.prsEngravement3TowerSoul === 'umbral' ? 'astLeft' : 'umbLeft'
+          : data.prsEngravement3TowerSoul === 'umbral' ? 'astRight' : 'umbRight';
+        const loc = side === data.prsEngravement3TetherSide ? output.corner!() : output.inside!();
+        return output.text!({ color: cc, location: loc });
+      },
+      outputStrings: {
+        text: '${location} ${color}설치',
+        umbral: '🟡',
+        astral: '🟣',
+        inside: '판때기 한가운데',
+        corner: '안쪽 모서리에',
+        unknown: Outputs.unknown,
+      },
+    },
+    {
+      id: 'P12S 엔그레이브먼트3 DPS 줄다리기',
+      type: 'Tether',
+      netRegex: { id: ['00E9', '00EA', '00FA', '00FB'], source: 'Anthropos' },
+      condition: (data, matches) => data.prsPhase === 4 && data.me === matches.target,
+      suppressSeconds: 10,
+      alertText: (data, matches, output) => {
+        const my = matches.id === '00E9' || matches.id === '00FA' ? 'umbral' : 'astral';
+        if (my !== data.prsEngravement3TowerSoul) {
+          const cc = output[data.prsEngravement3TowerSoul]!();
+          return output.text!({ color: cc });
         }
       },
       outputStrings: {
-        ubSoul: '타워 밟고 🡺 🟪쪽에 설치 (🟡타워)', // 노랑
-        abSoul: '타워 밟고 🡺 🟨쪽에 설치 (🟣타워)', // 보라
+        text: '타워 들어갈거예요: ${color}',
+        umbral: '🟡',
+        astral: '🟣',
+        unknown: Outputs.unknown,
       },
     },
     {
-      id: 'P12S 파라3 더하기',
+      id: 'P12S 엔그레이브먼트3 DPS 결과',
       type: 'GainsEffect',
-      netRegex: { effectId: 'DFF' },
-      condition: Conditions.targetIsYou(),
-      durationSeconds: 10,
-      infoText: (_data, _matches, output) => output.text!(),
-      outputStrings: {
-        text: '북쪽  🡺 타워 밟고 🡺 모서리➕'
+      netRegex: { effectId: ['DF8', 'DF9'] },
+      condition: (data, matches) => data.prsPhase === 4 && data.me === matches.target && data.role === 'dps',
+      suppressSeconds: 12,
+      alertText: (data, matches, output) => {
+        if (data.prsEngravement3TowerSoul === 'unknown')
+          return;
+        if (matches.effectId === 'DF8')
+          return data.prsEngravement3TowerSoul === 'astral' ? output.umbTilt!() : output.bait!();
+        if (matches.effectId === 'DF9')
+          return data.prsEngravement3TowerSoul === 'umbral' ? output.astTilt!() : output.bait!();
       },
-    },
-    {
-      id: 'P12S 파라3 곱하기',
-      type: 'GainsEffect',
-      netRegex: { effectId: 'E00' },
-      condition: Conditions.targetIsYou(),
-      durationSeconds: 10,
-      infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
-        text: '남쪽 🡺 타워 밟고 🡺 가운데❌'
+        umbTilt: '🟣밟아요',
+        astTilt: '🟡밟아요',
+        bait: '레이저 유도',
       },
     },
     {
@@ -1217,23 +1249,6 @@ const triggerSet: TriggerSet<Data> = {
           data.prsPhase = 0;
         data.prsPhase += 100;
       },
-    },
-    {
-      id: 'P12S2 줄 서로 사슬',
-      type: 'Tether',
-      netRegex: { id: '0009' },
-      infoText: (data, matches, output) => {
-        if (data.prsPhase === 100) {
-          // 가이아오코스 사슬
-          if (matches.source !== data.me && matches.target !== data.me)
-            return;
-          const partner = matches.source === data.me ? matches.target : matches.source;
-          return output.breakWith!({ partner: data.ShortName(partner) });
-        }
-      },
-      outputStrings: {
-        breakWith: '사슬 끊어요! (+${partner})',
-      }
     },
     {
       id: 'P12S2 줄 적과 연결',
@@ -1265,23 +1280,23 @@ const triggerSet: TriggerSet<Data> = {
         dpsTether: '탱힐이 막아요',
         thTether: 'DPS가 막아요',
         // 클래식 컨셉1
-        c1Safe10: '🡼🡼', // 알파, 동글
-        c1Safe20: '촉수 위로❱❱❱❱❱', // 알파, 세모
-        c1Safe30: '🡽🡽', // 알파, 네모
-        c1Safe40: '❰❰❰❰❰촉수 위로', // 알파, 가위
-        c1Safe11: '🡿🡿', // 베타, 동글
-        c1Safe21: '촉수 아래로❱❱❱❱❱', // 베타, 세모
-        c1Safe31: '🡾🡾', // 베타, 네모
-        c1Safe41: '❰❰❰❰❰촉수 아래로', // 베타, 가위
+        c1Safe10: '🡼🡼🡼', // 알파, 동글
+        c1Safe20: '🡹🡹🡹❱❱❱❱❱', // 알파, 세모
+        c1Safe30: '🡽🡽🡽', // 알파, 네모
+        c1Safe40: '❰❰❰❰❰🡹🡹🡹', // 알파, 가위
+        c1Safe11: '🡿🡿🡿', // 베타, 동글
+        c1Safe21: '🡻🡻🡻❱❱❱❱❱', // 베타, 세모
+        c1Safe31: '🡾🡾🡾', // 베타, 네모
+        c1Safe41: '❰❰❰❰❰🡻🡻🡻', // 베타, 가위
         // 클래식 컨셉2
-        c2Safe10: '4번 위로', // 알파, 동글
-        c2Safe20: '2번 위로', // 알파, 세모
-        c2Safe30: '1번 위로', // 알파, 네모
-        c2Safe40: '3번 위로', // 알파, 가위
-        c2Safe11: '4번 아래로', // 베타, 동글
-        c2Safe21: '2번 아래로', // 베타, 세모
-        c2Safe31: '1번 아래로', // 베타, 네모
-        c2Safe41: '3번 아래로', // 베타, 가위
+        c2Safe10: '4번 🡹🡹🡹', // 알파, 동글
+        c2Safe20: '2번 🡹🡹🡹', // 알파, 세모
+        c2Safe30: '1번 🡹🡹🡹', // 알파, 네모
+        c2Safe40: '3번 🡹🡹🡹', // 알파, 가위
+        c2Safe11: '4번 🡻🡻🡻', // 베타, 동글
+        c2Safe21: '2번 🡻🡻🡻', // 베타, 세모
+        c2Safe31: '1번 🡻🡻🡻', // 베타, 네모
+        c2Safe41: '3번 🡻🡻🡻', // 베타, 가위
       }
     },
     {
@@ -1330,6 +1345,21 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
+      id: 'P12S2 가이아오코스 사슬',
+      type: 'Tether',
+      netRegex: { id: '0009' },
+      // condition: (data) => data.prsPhase === 100 || data.prsPhase === 900,
+      infoText: (data, matches, output) => {
+        if (matches.source !== data.me && matches.target !== data.me)
+          return;
+        const partner = matches.source === data.me ? matches.target : matches.source;
+        return output.breakWith!({ partner: data.ShortName(partner) });
+      },
+      outputStrings: {
+        breakWith: '사슬 끊어요! (+${partner})',
+      }
+    },
+    {
       id: 'P12S2 지오센트리즘',
       type: 'StartsUsing',
       netRegex: { id: ['8329', '832A', '832B'], source: 'Pallas Athena', capture: false },
@@ -1345,7 +1375,7 @@ const triggerSet: TriggerSet<Data> = {
       netRegex: {},
       run: (data, matches) => {
         const id = getHeadmarkerId(data, matches);
-        const playstationMarkerMap: { [id: string]: PlaystationMarker } = {
+        const playstationMarkerMap: { [id: string]: TypePlaystation } = {
           '016F': 'circle',
           '0170': 'triangle',
           '0171': 'square',
@@ -1369,10 +1399,13 @@ const triggerSet: TriggerSet<Data> = {
       netRegex: { id: '8331', source: 'Pallas Athena', capture: false },
       condition: (data) => data.prsPhase !== 200,
       delaySeconds: 12,
-      durationSeconds: 6,
+      durationSeconds: 4,
       alertText: (_data, _matches, output) => output.revert!(),
+      tts: (_data, _matches, output) => output.voice!(),
       outputStrings: {
         revert: '반대로 가야 해요',
+        //
+        voice: '反対側へ',
       },
     },
     {
@@ -1392,33 +1425,40 @@ const triggerSet: TriggerSet<Data> = {
         const outAb = output[myAb]!();
         return output.text!({ ps: outPs, ab: outAb });
       },
+      tts: (data, _matches, output) => {
+        const myPs = data.prsClassicMarker[data.me];
+        if (myPs !== undefined)
+          return output[`v${myPs}`]!();
+      },
       outputStrings: {
         text: '${ps} + ${ab}',
-        circle: '동글 1번',
-        triangle: '세모 3번',
-        square: '네모 4번',
-        cross: '가위 2번',
+        circle: '1번⚪',
+        triangle: '3번⨻',
+        square: '4번⬜',
+        cross: '2번❌',
         alpha: '알파 🟥삼각',
         beta: '베타 🟨사각',
+        //
+        vcircle: '1ばん',
+        vtriangle: '3ばん',
+        vsquare: '4ばん',
+        vcross: '2ばん',
       },
     },
-    /* 1번은 이게 맞는데 3초 정도 늦춰서. 2번은 StartUsing이 맞을 거 같다
     {
       id: 'P12S2 클래식 컨셉 피해욧',
       type: 'Ability',
-      netRegex: { id: '8333', source: 'Concept of Water', capture: false },
-      delaySeconds: 1,
-      suppressSeconds: 1,
-      alertText: (_data, _matches, output) => output.text!(),
-      run: (data) => {
-        data.prsClassicMarker = {};
-        data.prsClassicAlphaBeta = {};
-      },
+      netRegex: { id: '8323', source: 'Pallas Athena', capture: false },
+      delaySeconds: 2.5,
+      durationSeconds: 4,
+      alarmText: (_data, _matches, output) => output.text!(),
+      tts: (_data, _matches, output) => output.voice!(),
       outputStrings: {
         text: '피해욧',
+        //
+        voice: '逃げて！',
       },
     },
-    */
     {
       id: 'P12S2 크러시 헬름',
       type: 'StartsUsing',
@@ -1443,7 +1483,126 @@ const triggerSet: TriggerSet<Data> = {
         const id = getHeadmarkerId(data, matches);
         if (id !== '012F')
           return;
-        data.prsCaloricFirst.push(matches.target);
+        data.prsCaloric1First.push(matches.target);
+      },
+    },
+    {
+      id: 'P12S2 칼로리1 시작',
+      type: 'StartsUsing',
+      netRegex: { id: '8338', source: 'Pallas Athena', capture: false },
+      condition: (data) => data.prsPhase === 300,
+      preRun: (data) => {
+        data.prsCaloric1Buff = {};
+        data.prsCaloric1Mine = undefined;
+      },
+      delaySeconds: 1,
+      infoText: (data, _matches, output) => {
+        if (data.prsCaloric1First.length !== 2)
+          return;
+        const index = data.prsCaloric1First.indexOf(data.me);
+        if (index < 0)
+          return;
+
+        const partner = index === 0 ? 1 : 0;
+        return output.text1st!({ partner: data.ShortName(data.prsCaloric1First[partner]) });
+      },
+      outputStrings: {
+        text1st: '내게 첫 불 (+${partner})',
+      }
+    },
+    {
+      id: 'P12S2 칼로릭1 바람', // 바람: Atmosfaction
+      type: 'GainsEffect',
+      netRegex: { effectId: 'E07' },
+      run: (data, matches) => data.prsCaloric1Buff[matches.target] = 'wind',
+    },
+    {
+      id: 'P12S2 칼로릭1 불', // 불: Pyrefaction
+      type: 'GainsEffect',
+      netRegex: { effectId: 'E06' },
+      alertText: (data, matches, output) => {
+        data.prsCaloric1Buff[matches.target] = 'fire';
+
+        const duration = parseInt(matches.duration);
+        if (duration === 11 && matches.target === data.me)
+          return output.text!();
+      },
+      tts: (data, matches, output) => {
+        const duration = parseInt(matches.duration);
+        if (duration === 11 && matches.target === data.me)
+          return output.voice!();
+      },
+      outputStrings: {
+        text: '또다시 불! 무직이랑 뭉쳐요',
+        //
+        voice: 'また火',
+      },
+    },
+    {
+      id: 'P12S2 칼로릭1 불 터짐',
+      type: 'GainsEffect',
+      netRegex: { effectId: ['E06'] },
+      condition: (_data, matches) => parseInt(matches.duration) === 12,
+      delaySeconds: 12.8,
+      suppressSeconds: 2,
+      alertText: (data, _matches, output) => {
+        if (data.prsCaloric1Mine === 'fire' && data.prsCaloric1Buff[data.me] === undefined)
+          return output.none!();
+        if (data.prsCaloric1Mine === 'wind')
+          return output.wind!();
+      },
+      tts: (data, _matches, output) => {
+        if (data.prsCaloric1Mine === 'fire' && data.prsCaloric1Buff[data.me] === undefined)
+          return output.vpair!();
+      },
+      outputStrings: {
+        none: '무직! 불이랑 뭉쳐요!',
+        wind: '바람! 흩어져요!',
+        //
+        vpair: 'ペア',
+      }
+    },
+    {
+      id: 'P12S2 칼로리1 버프 확인',
+      type: 'Ability',
+      netRegex: { id: '8338', source: 'Pallas Athena', capture: false },
+      condition: (data) => data.prsPhase === 300,
+      delaySeconds: 2,
+      durationSeconds: 8,
+      suppressSeconds: 2,
+      infoText: (data, _matches, output) => {
+        const mystat = data.prsCaloric1Buff[data.me];
+        data.prsCaloric1Mine = mystat;
+        if (mystat === undefined)
+          return;
+
+        if (mystat === 'fire') {
+          const myteam : string[] = [];
+          for (const [name, stat] of Object.entries(data.prsCaloric1Buff)) {
+            if (stat === mystat && name !== data.me)
+              myteam.push(data.ShortName(name));
+          }
+          return output.fire!({ team: myteam.sort().join(', ') });
+        }
+
+        if (data.prsCaloric1First.includes(data.me))
+          return output.wind1st!();
+
+        const myteam : string[] = [];
+        for (const [name, stat] of Object.entries(data.prsCaloric1Buff)) {
+          if (stat === mystat && name !== data.me && !data.prsCaloric1First.includes(name))
+            myteam.push(data.ShortName(name));
+        }
+        return output.wind!({ team: myteam.sort().join(', ') });
+      },
+      run: (data) => {
+        data.prsCaloric1First = [];
+        data.prsCaloric1Buff = {};
+      },
+      outputStrings: {
+        fire: '내게 불 (${team})',
+        wind: '내게 바람 (${team})',
+        wind1st: '바람, 살짝 옆으로',
       },
     },
     {
@@ -1454,12 +1613,18 @@ const triggerSet: TriggerSet<Data> = {
         const id = getHeadmarkerId(data, matches);
         if (id !== '01D6')
           return;
-        data.prsCaloricFire = matches.target;
+        data.prsCaloric2Fire = matches.target;
         if (data.me === matches.target)
           return output.text!();
       },
+      tts: (data, _matches, output) => {
+        if (data.me === data.prsCaloric2Fire)
+          return output.voice!();
+      },
       outputStrings: {
         text: '내게 첫 불! 가운데로',
+        //
+        voice: '真ん中',
       }
     },
     {
@@ -1474,144 +1639,39 @@ const triggerSet: TriggerSet<Data> = {
         return output.text!();
       },
       outputStrings: {
-        text: '내게 바람: 흩어져요',
+        text: '내게 바람, 흩어져요',
       }
     },
     {
-      id: 'P12S2 칼로리 시작',
-      type: 'StartsUsing',
-      netRegex: { id: '8338', source: 'Pallas Athena', capture: false },
-      preRun: (data) => {
-        data.prsCaloricBuff = {};
-        data.prsCaloricMine = undefined;
-      },
-      delaySeconds: 1,
-      infoText: (data, _matches, output) => {
-        // 칼로릭1
-        if (data.prsPhase === 300) {
-          if (data.prsCaloricFirst.length !== 2)
-            return;
-          const index = data.prsCaloricFirst.indexOf(data.me);
-          if (index < 0)
-            return;
-
-          const partner = index === 0 ? 1 : 0;
-          return output.text1st!({ partner: data.ShortName(data.prsCaloricFirst[partner]) });
-        }
-
-        // 칼로릭2
-        // 후... 할게 없나?
-      },
-      outputStrings: {
-        text1st: '내게 첫 불 (+${partner})',
-      }
-    },
-    {
-      id: 'P12S2 칼로릭 바람', // 바람: Atmosfaction
-      type: 'GainsEffect',
-      netRegex: { effectId: 'E07' },
-      run: (data, matches) => data.prsCaloricBuff[matches.target] = 'wind',
-    },
-    {
-      id: 'P12S2 칼로릭 불', // 불: Pyrefaction
-      type: 'GainsEffect',
-      netRegex: { effectId: 'E06' },
-      alertText: (data, matches, output) => {
-        data.prsCaloricBuff[matches.target] = 'fire';
-
-        const duration = parseInt(matches.duration);
-        if (duration === 11 && matches.target === data.me)
-          return output.text!();
-      },
-      outputStrings: {
-        text: '또다시 불! 무직이랑 뭉쳐요',
-      },
-    },
-    {
-      id: 'P12S2 칼로릭 불 터짐',
-      type: 'GainsEffect',
-      netRegex: { effectId: ['E06'] },
-      condition: (_data, matches) => parseInt(matches.duration) === 12,
-      delaySeconds: 12.8,
-      suppressSeconds: 2,
-      alertText: (data, _matches, output) => {
-        if (data.prsCaloricMine === 'fire' && data.prsCaloricBuff[data.me] === undefined)
-          return output.none!();
-        if (data.prsCaloricMine === 'wind')
-          return output.wind!();
-      },
-      outputStrings: {
-        none: '무직! 불이랑 뭉쳐요!',
-        wind: '바람! 흩어져요!',
-      }
-    },
-    {
-      id: 'P12S2 칼로리 첫번째 알랴줌',
-      type: 'Ability',
-      netRegex: { id: '8338', source: 'Pallas Athena', capture: false },
-      condition: (data) => data.prsPhase === 300,
-      delaySeconds: 2,
-      durationSeconds: 8,
-      suppressSeconds: 2,
-      infoText: (data, _matches, output) => {
-        const mystat = data.prsCaloricBuff[data.me];
-        data.prsCaloricMine = mystat;
-        if (mystat === undefined)
-          return;
-
-        if (mystat === 'fire') {
-          const myteam : string[] = [];
-          for (const [name, stat] of Object.entries(data.prsCaloricBuff)) {
-            if (stat === mystat && name !== data.me)
-              myteam.push(data.ShortName(name));
-          }
-          return output.fire!({ team: myteam.sort().join(', ') });
-        }
-
-        if (data.prsCaloricFirst.includes(data.me))
-          return output.wind1st!();
-
-        const myteam : string[] = [];
-        for (const [name, stat] of Object.entries(data.prsCaloricBuff)) {
-          if (stat === mystat && name !== data.me && !data.prsCaloricFirst.includes(name))
-            myteam.push(data.ShortName(name));
-        }
-        return output.wind!({ team: myteam.sort().join(', ') });
-      },
-      run: (data) => {
-        data.prsCaloricFirst = [];
-        data.prsCaloricBuff = {};
-      },
-      outputStrings: {
-        fire: '내게 불 (${team})',
-        wind: '내게 바람 (${team})',
-        wind1st: '바람: 살짝 옆으로',
-      },
-    },
-    {
-      id: 'P12S2 칼로릭2 불 당사자',
+      id: 'P12S2 칼로릭2 불 장판',
       type: 'GainsEffect',
       netRegex: { effectId: ['E08'] },
       durationSeconds: 3,
       infoText: (data, matches, output) => {
-        if (matches.target === data.me && data.prsCaloricFire !== data.me)
+        if (matches.target === data.me && data.prsCaloric2Fire !== data.me)
           return output.text!();
       },
-      run: (data, matches) => data.prsCaloricFire = matches.target,
+      run: (data, matches) => data.prsCaloric2Fire = matches.target,
       outputStrings: {
         text: '내게 불 장판',
       }
     },
     {
-      id: 'P12S2 칼로릭2 터져욧 옮겨욧',
+      id: 'P12S2 칼로릭2 옮겨욧',
       type: 'Ability',
       netRegex: { id: '833C', source: 'Pallas Athena', capture: false },
       alertText: (data, _matches, output) => {
-        if (data.me === data.prsCaloricFire)
+        if (data.me === data.prsCaloric2Fire)
+          return output.text!();
+      },
+      tts: (data, _matches, output) => {
+        if (data.me === data.prsCaloric2Fire)
           return output.text!();
       },
       outputStrings: {
-        text: '이동! 다음 사람에게 옮겨요',
+        text: '다음 사람에게 옮겨요!',
+        //
+        voice: '運びます',
       }
     },
     {
@@ -1676,8 +1736,8 @@ const triggerSet: TriggerSet<Data> = {
         tower2nd: '기다렸다 => 둘째 아래쪽 ${color} 타워 (+${partner})',
         geneone: '위로 살짝 => 첫째 타워 (+${partner})',
         none: '아래로 살짝 => 둘째 위쪽 타워 (+${partner})',
-        dark: '하얀', // 색깔 바뀜
-        light: '검은', // 색깔 바뀜
+        astral: '🟡하얀', // 색깔 바뀜
+        umbral: '🟣검은', // 색깔 바뀜
         unknown: Outputs.unknown,
       },
     },
@@ -1711,7 +1771,7 @@ const triggerSet: TriggerSet<Data> = {
           data.prsPangenesisCount[matches.target] = cnt === undefined ? 1 : cnt + 1;
           data.prsPangenesisDuration[matches.target] = parseInt(matches.duration);
         }
-        data.prsPangenesisStat[matches.target] = 'light';
+        data.prsPangenesisStat[matches.target] = 'umbral';
       },
     },
     {
@@ -1725,7 +1785,7 @@ const triggerSet: TriggerSet<Data> = {
           data.prsPangenesisCount[matches.target] = cnt === undefined ? 1 : cnt + 1;
           data.prsPangenesisDuration[matches.target] = parseInt(matches.duration);
         }
-        data.prsPangenesisStat[matches.target] = 'dark';
+        data.prsPangenesisStat[matches.target] = 'astral';
       },
     },
     {
@@ -1776,8 +1836,8 @@ const triggerSet: TriggerSet<Data> = {
         wait1n: '둘째 위쪽 타워 나올 곳으로',
         wait1g: '둘째 아래쪽 타워 나올 곳으로',
         wait1gcc: '둘째 아래쪽 ${color} 타워 나올 곳으로',
-        dark: '하얀', // 색깔 바뀜
-        light: '검은', // 색깔 바뀜
+        astral: '🟡하얀', // 색깔 바뀜
+        umbral: '🟣검은', // 색깔 바뀜
       },
     },
     /*
