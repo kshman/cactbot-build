@@ -24,8 +24,7 @@ export interface Data extends RaidbossData {
   lightDarkDebuff: { [name: string]: 'light' | 'dark' };
   lightDarkBuddy: { [name: string]: string };
   lightDarkTether: { [name: string]: 'near' | 'far' };
-  cylinderValue?: number;
-  numCylinders?: number;
+  cylinderCollect: NetMatches['HeadMarker'][];
 }
 
 const headmarkers = {
@@ -93,6 +92,7 @@ const triggerSet: TriggerSet<Data> = {
       lightDarkDebuff: {},
       lightDarkBuddy: {},
       lightDarkTether: {},
+      cylinderCollect: [],
     };
   },
   triggers: [
@@ -238,6 +238,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: '밖으로 + 4:4 뭉쳐요',
+          de: 'Raus + Heiler Gruppen',
         },
       },
     },
@@ -251,9 +252,11 @@ const triggerSet: TriggerSet<Data> = {
         output.responseOutputStrings = {
           upheldOnYou: {
             en: '한가운데서 줄 유도 => 안에서 + 페어',
+            de: 'Du rein (Gruppe raus) => Rein + Partner',
           },
           upheldOnPlayer: {
             en: '밖에 있다가 => 안으로 + 페어 (줄 처리: ${player})',
+            de: 'Gruppe raus (${player} rein)=> Rein + Partner',
           },
           upheldNotOnYou: {
             en: '밖에 있다가 => 안으로 + 페어',
@@ -288,6 +291,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: '안으로 + 페어',
+          de: 'Rein + Partner',
         },
       },
     },
@@ -304,13 +308,16 @@ const triggerSet: TriggerSet<Data> = {
         output.responseOutputStrings = {
           tankTether: {
             en: '줄 유도해요!',
+            de: 'Weg von der Gruppe',
           },
           partyStackPlayerOut: {
             en: '모두 뭉쳐요 (줄 처리: ${player})',
+            de: 'Mit der Gruppe sammeln (${player} raus)',
           },
           // If we're not sure who the tether is on.
           partyStack: {
             en: '모두 뭉쳐요',
+            de: 'In der Gruppe sammeln',
           },
           // 샤도우
           tankShadow: {
@@ -368,6 +375,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: '안으로 드루와',
+          de: 'Geh in den Donut',
         },
         shadow: {
           en: '탱크 쿵Ⓐ 안으로',
@@ -435,9 +443,11 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         light: {
           en: '그대로 + 4:4 뭉쳐요',
+          de: 'Heiler Gruppen + Raus',
         },
         dark: {
           en: '안으로 + 페어',
+          de: 'Rein + Partner',
         },
       },
     },
@@ -499,6 +509,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: '밖에서 + 4:4 뭉쳐요',
+          de: 'Heiler Gruppen + Raus',
         },
       },
     },
@@ -528,6 +539,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: '안으로 + 페어',
+          de: 'Rein + Partner',
         },
       },
     },
@@ -790,32 +802,31 @@ const triggerSet: TriggerSet<Data> = {
       netRegex: { target: 'Arcane Cylinder' },
       condition: (data, matches) => {
         const id = getHeadmarkerId(data, matches);
-        return (id === headmarkers.orangeCW || id === headmarkers.blueCCW);
-      },
-      run: (data, matches) => {
-        const id = getHeadmarkerId(data, matches);
-        // Create a 3 digit binary value, Orange = 0, Blue = 1.
-        // e.g. BBO = 110 = 6
-        data.cylinderValue ??= 0;
-        data.numCylinders ??= 0;
-        data.cylinderValue *= 2;
-        if (id === headmarkers.blueCCW)
-          data.cylinderValue += 1;
-        data.numCylinders++;
-      },
-    },
-    {
-      id: 'P11S Lightstream',
-      type: 'HeadMarker',
-      netRegex: { target: 'Arcane Cylinder' },
-      condition: (data, matches) => {
-        const id = getHeadmarkerId(data, matches);
-        return (data.numCylinders === 3 &&
-          (id === headmarkers.orangeCW || id === headmarkers.blueCCW));
+        if (id !== headmarkers.orangeCW && id !== headmarkers.blueCCW)
+          return false;
+        data.cylinderCollect.push(matches);
+        return data.cylinderCollect.length === 3;
       },
       alertText: (data, _matches, output) => {
-        if (!data.cylinderValue || !(data.cylinderValue >= 0) || data.cylinderValue > 7)
-          return;
+        let cylinderValue = 0;
+
+        // targetId is in hex, but that's still lexicographically sorted so no need to parseInt.
+        const sortedCylinders = data.cylinderCollect.sort((a, b) => {
+          return a.targetId.localeCompare(b.targetId);
+        });
+        const markers = sortedCylinders.map((x) => x.id);
+
+        // Once sorted by id, the lasers will always be in NW, S, NE order.
+        // Create a 3 digit binary value, Orange = 0, Blue = 1.
+        // e.g. BBO = 110 = 6
+        for (const marker of markers) {
+          cylinderValue *= 2;
+          if (marker === headmarkers.blueCCW)
+            cylinderValue += 1;
+        }
+
+        // The safe spot is the one just CW of two reds or just CCW of two blues.
+        // There's always two of one color and one of the other.
         const outputs: { [cylinderValue: number]: string | undefined } = {
           0b000: undefined,
           0b001: output.northwest!(),
@@ -826,12 +837,9 @@ const triggerSet: TriggerSet<Data> = {
           0b110: output.southeast!(),
           0b111: undefined,
         };
-        return outputs[data.cylinderValue];
+        return outputs[cylinderValue];
       },
-      run: (data) => {
-        delete data.cylinderValue;
-        delete data.numCylinders;
-      },
+      run: (data) => data.cylinderCollect = [],
       outputStrings: {
         east: 'Ⓑ 동쪽',
         northeast: '① 북동',

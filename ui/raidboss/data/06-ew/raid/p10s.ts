@@ -616,10 +616,14 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         lines: {
-          en: '레이저 피해욧 (줄 위로)',
+          en: '레이저 피해욧 (줄 있는 곳)',
+          de: 'Auf die Linien (vermeide Laser)',
+          cn: '站在线上（躲避激光）',
         },
         boxes: {
-          en: '레이저 피해욧 (네모 사이로)',
+          en: '레이저 피해욧 (네모 안으로)',
+          de: 'In den Boxen (vermeide Laser)',
+          cn: '站在盒子里（躲避激光）',
         },
       },
     },
