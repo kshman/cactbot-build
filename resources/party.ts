@@ -151,4 +151,13 @@ export default class PartyTracker {
   nameFromId(id: string): string | undefined {
     return this.idToName_[id];
   }
+
+  prJob(name?: string): string {
+    if (name !== undefined) {
+      const index = this.partyNames.indexOf(name);
+      if (index >= 0)
+        return Util.jobEnumToPrJob(this.details[index]?.job as number);
+    }
+    return '몰?루';
+  }
 }

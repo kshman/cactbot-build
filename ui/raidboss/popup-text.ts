@@ -1423,7 +1423,8 @@ export class PopupText {
     // on (speech=true, text=true, sound=true) but this will
     // not cause tts to play over top of sounds or noises.
     // PRS 강제 TTS처리
-      if (triggerHelper.ttsText && (triggerHelper.spokenAlertsEnabled || triggerHelper.soundAlertsEnabled)) {
+      if (triggerHelper.ttsText &&
+        (triggerHelper.spokenAlertsEnabled || triggerHelper.soundAlertsEnabled)) {
       // Heuristics for auto tts.
       // * In case this is an integer.
       triggerHelper.ttsText = triggerHelper.ttsText.toString();

@@ -116,6 +116,7 @@ export interface Data extends RaidbossData {
   prsPhase: number;
   // 전반
   prsTrinityInvul?: boolean;
+  prsApoPeri?: number;
   prsEngravement1Tower: string[];
   prsEngravement2Debuff?: string;
   prsEngravement3TowerEnter: string[];
@@ -183,8 +184,8 @@ const triggerSet: TriggerSet<Data> = {
       id: 'P12S+ 트리니티 처음에 무적',
       regex: /Trinity of Souls 1/,
       beforeSeconds: 3,
-      condition: (data) => data.role === 'tank' && !data.prsTrinityInvul,
-      alertText: '무적으로 받아요',
+      condition: (data) => (data.role === 'tank' || data.job === 'BLU') && !data.prsTrinityInvul,
+      alertText: '탱크 무적으로 받아요',
       run: (data) => data.prsTrinityInvul = true,
     },
     {
@@ -480,8 +481,15 @@ const triggerSet: TriggerSet<Data> = {
       id: 'P12S Peridialogos',
       type: 'StartsUsing',
       netRegex: { id: '82FF', source: 'Athena', capture: false },
-      alertText: (data, _matches, output) =>
-        data.role === 'tank' ? output.tanksInPartyOut!() : output.partyOutTanksIn!(),
+      alertText: (data, _matches, output) => {
+        data.prsApoPeri = (data.prsApoPeri ?? 0) + 1;
+        if (data.role === 'tank') {
+          if (data.prsApoPeri === 2 && data.job === 'WAR')
+            return output.holmgang!();
+          return output.tanksInPartyOut!();
+        }
+        return output.partyOutTanksIn!();
+      },
       outputStrings: {
         partyOutTanksIn: {
           en: '바깥으로 (탱크가 안쪽)',
@@ -497,14 +505,22 @@ const triggerSet: TriggerSet<Data> = {
           cn: 'T进 (小队出)',
           ko: '탱커 안 (본대 밖)',
         },
+        holmgang: '바깥에서 혼자 홀름으로 받아요!',
       },
     },
     {
       id: 'P12S Apodialogos',
       type: 'StartsUsing',
       netRegex: { id: '82FE', source: 'Athena', capture: false },
-      alertText: (data, _matches, output) =>
-        data.role === 'tank' ? output.tanksInPartyOut!() : output.partyInTanksOut!(),
+      alertText: (data, _matches, output) => {
+        data.prsApoPeri = (data.prsApoPeri ?? 0) + 1;
+        if (data.role === 'tank') {
+          if (data.prsApoPeri === 2 && data.job === 'WAR')
+            return output.holmgang!();
+          return output.tanksInPartyOut!();
+        }
+        return output.partyInTanksOut!();
+      },
       outputStrings: {
         partyInTanksOut: {
           en: '안쪽으로 (탱크가 바깥쪽)',
@@ -520,6 +536,7 @@ const triggerSet: TriggerSet<Data> = {
           cn: 'T出 (小队进)',
           ko: '탱커 밖 (본대 안)',
         },
+        holmgang: '안쪽에서 혼자 홀름으로 받아요!',
       },
     },
     {
@@ -967,7 +984,7 @@ const triggerSet: TriggerSet<Data> = {
       suppressSeconds: 10,
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
-        text: '🟪 줄 땡겨요',
+        text: '🟪줄 땡겨요',
       }
     },
     {
@@ -979,7 +996,7 @@ const triggerSet: TriggerSet<Data> = {
       suppressSeconds: 10,
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
-        text: '🟨 줄 땡겨요',
+        text: '🟨줄 땡겨요',
       }
     },
     // DF8:Umbral Tilt                  노랑 타워
@@ -1051,16 +1068,16 @@ const triggerSet: TriggerSet<Data> = {
         return mesgs[matches.effectId];
       },
       outputStrings: {
-        umbTilt: '❰❰❰❰❰왼쪽 => 흩어져요',
-        astTilt: '오른쪽❱❱❱❱❱ => 흩어져요',
-        ubSoul: '❰❰❰❰❰왼쪽 => 🟡설치',
-        abSoul: '오른쪽❱❱❱❱❱ => 🟣설치',
-        usSoul: '오른쪽❱❱❱❱❱ => 🟣밟아요',
-        asSoul: '❰❰❰❰❰왼쪽 => 🟡밟아요',
+        umbTilt: '왼쪽 => 흩어져요',
+        astTilt: '오른쪽 => 흩어져요',
+        ubSoul: '왼쪽 => 🟡설치',
+        abSoul: '오른쪽 => 🟣설치',
+        usSoul: '오른쪽 => 🟣밟아요',
+        asSoul: '왼쪽 => 🟡밟아요',
       },
     },
     {
-      id: 'P12S 엔그레이브먼트2 다시 알림',
+      id: 'P12S 엔그레이브먼트2 기믹',
       type: 'GainsEffect',
       netRegex: { effectId: ['DFB', 'DFC', 'DFD', 'DFE'] },
       condition: (data, matches) => data.prsPhase === 3 && data.me === matches.target,
@@ -1075,10 +1092,10 @@ const triggerSet: TriggerSet<Data> = {
         return mesgs[matches.effectId];
       },
       outputStrings: {
-        ubSoul: '❰❰❰❰❰🟡설치',
-        abSoul: '🟣설치❱❱❱❱❱',
-        usSoul: '🟣밟아요❱❱❱❱❱',
-        asSoul: '❰❰❰❰❰🟡밟아요',
+        ubSoul: '왼쪽 🟡설치',
+        abSoul: '오른쪽 🟣설치',
+        usSoul: '오른쪽 🟣밟아요',
+        asSoul: '왼쪽 🟡밟아요',
       },
     },
     {
@@ -1209,9 +1226,11 @@ const triggerSet: TriggerSet<Data> = {
       id: 'P12S 엔그레이브먼트3 DPS 결과',
       type: 'GainsEffect',
       netRegex: { effectId: ['DF8', 'DF9'] },
-      condition: (data, matches) => data.prsPhase === 4 && data.me === matches.target && data.role === 'dps',
+      condition: (data, matches) => data.prsPhase === 4 && data.me === matches.target,
       suppressSeconds: 12,
       alertText: (data, matches, output) => {
+        if (data.prsEngravement3TowerEnter.includes(data.me))
+          return; // 그냥 DPS라고만 해도 되는데 나중에 블루메용
         if (data.prsEngravement3TowerSoul === 'unknown')
           return;
         if (matches.effectId === 'DF8')
@@ -1281,13 +1300,13 @@ const triggerSet: TriggerSet<Data> = {
         thTether: 'DPS가 막아요',
         // 클래식 컨셉1
         c1Safe10: '🡼🡼🡼', // 알파, 동글
-        c1Safe20: '🡹🡹🡹❱❱❱❱❱', // 알파, 세모
+        c1Safe20: '오른쪽🡹🡹🡹', // 알파, 세모
         c1Safe30: '🡽🡽🡽', // 알파, 네모
-        c1Safe40: '❰❰❰❰❰🡹🡹🡹', // 알파, 가위
+        c1Safe40: '왼쪽🡹🡹🡹', // 알파, 가위
         c1Safe11: '🡿🡿🡿', // 베타, 동글
-        c1Safe21: '🡻🡻🡻❱❱❱❱❱', // 베타, 세모
+        c1Safe21: '오른쪽🡻🡻🡻', // 베타, 세모
         c1Safe31: '🡾🡾🡾', // 베타, 네모
-        c1Safe41: '❰❰❰❰❰🡻🡻🡻', // 베타, 가위
+        c1Safe41: '왼쪽🡻🡻🡻', // 베타, 가위
         // 클래식 컨셉2
         c2Safe10: '4번 🡹🡹🡹', // 알파, 동글
         c2Safe20: '2번 🡹🡹🡹', // 알파, 세모
@@ -1331,8 +1350,8 @@ const triggerSet: TriggerSet<Data> = {
         return output.text!();
       },
       outputStrings: {
-        tank: '❰❰❰❰❰맵 반쪽 탱크버스터! 무적으로!',
-        text: '탱크버스터 피해요❱❱❱❱❱',
+        tank: '맵 반쪽 탱크버스터! 무적으로!',
+        text: '맵 반쪽 탱크버스터 피해요',
       },
     },
     {
@@ -1353,7 +1372,7 @@ const triggerSet: TriggerSet<Data> = {
         if (matches.source !== data.me && matches.target !== data.me)
           return;
         const partner = matches.source === data.me ? matches.target : matches.source;
-        return output.breakWith!({ partner: data.ShortName(partner) });
+        return output.breakWith!({ partner: data.party.prJob(partner) });
       },
       outputStrings: {
         breakWith: '사슬 끊어요! (+${partner})',
@@ -1401,11 +1420,8 @@ const triggerSet: TriggerSet<Data> = {
       delaySeconds: 12,
       durationSeconds: 4,
       alertText: (_data, _matches, output) => output.revert!(),
-      tts: (_data, _matches, output) => output.voice!(),
       outputStrings: {
         revert: '반대로 가야 해요',
-        //
-        voice: '反対側へ',
       },
     },
     {
@@ -1425,11 +1441,6 @@ const triggerSet: TriggerSet<Data> = {
         const outAb = output[myAb]!();
         return output.text!({ ps: outPs, ab: outAb });
       },
-      tts: (data, _matches, output) => {
-        const myPs = data.prsClassicMarker[data.me];
-        if (myPs !== undefined)
-          return output[`v${myPs}`]!();
-      },
       outputStrings: {
         text: '${ps} + ${ab}',
         circle: '1번⚪',
@@ -1438,11 +1449,6 @@ const triggerSet: TriggerSet<Data> = {
         cross: '2번❌',
         alpha: '알파 🟥삼각',
         beta: '베타 🟨사각',
-        //
-        vcircle: '1ばん',
-        vtriangle: '3ばん',
-        vsquare: '4ばん',
-        vcross: '2ばん',
       },
     },
     {
@@ -1452,11 +1458,8 @@ const triggerSet: TriggerSet<Data> = {
       delaySeconds: 2.5,
       durationSeconds: 4,
       alarmText: (_data, _matches, output) => output.text!(),
-      tts: (_data, _matches, output) => output.voice!(),
       outputStrings: {
         text: '피해욧',
-        //
-        voice: '逃げて！',
       },
     },
     {
@@ -1504,7 +1507,7 @@ const triggerSet: TriggerSet<Data> = {
           return;
 
         const partner = index === 0 ? 1 : 0;
-        return output.text1st!({ partner: data.ShortName(data.prsCaloric1First[partner]) });
+        return output.text1st!({ partner: data.party.prJob(data.prsCaloric1First[partner]) });
       },
       outputStrings: {
         text1st: '내게 첫 불 (+${partner})',
@@ -1527,15 +1530,8 @@ const triggerSet: TriggerSet<Data> = {
         if (duration === 11 && matches.target === data.me)
           return output.text!();
       },
-      tts: (data, matches, output) => {
-        const duration = parseInt(matches.duration);
-        if (duration === 11 && matches.target === data.me)
-          return output.voice!();
-      },
       outputStrings: {
         text: '또다시 불! 무직이랑 뭉쳐요',
-        //
-        voice: 'また火',
       },
     },
     {
@@ -1551,15 +1547,9 @@ const triggerSet: TriggerSet<Data> = {
         if (data.prsCaloric1Mine === 'wind')
           return output.wind!();
       },
-      tts: (data, _matches, output) => {
-        if (data.prsCaloric1Mine === 'fire' && data.prsCaloric1Buff[data.me] === undefined)
-          return output.vpair!();
-      },
       outputStrings: {
         none: '무직! 불이랑 뭉쳐요!',
         wind: '바람! 흩어져요!',
-        //
-        vpair: 'ペア',
       }
     },
     {
@@ -1580,7 +1570,7 @@ const triggerSet: TriggerSet<Data> = {
           const myteam : string[] = [];
           for (const [name, stat] of Object.entries(data.prsCaloric1Buff)) {
             if (stat === mystat && name !== data.me)
-              myteam.push(data.ShortName(name));
+              myteam.push(data.party.prJob(name));
           }
           return output.fire!({ team: myteam.sort().join(', ') });
         }
@@ -1591,7 +1581,7 @@ const triggerSet: TriggerSet<Data> = {
         const myteam : string[] = [];
         for (const [name, stat] of Object.entries(data.prsCaloric1Buff)) {
           if (stat === mystat && name !== data.me && !data.prsCaloric1First.includes(name))
-            myteam.push(data.ShortName(name));
+            myteam.push(data.party.prJob(name));
         }
         return output.wind!({ team: myteam.sort().join(', ') });
       },
@@ -1617,14 +1607,8 @@ const triggerSet: TriggerSet<Data> = {
         if (data.me === matches.target)
           return output.text!();
       },
-      tts: (data, _matches, output) => {
-        if (data.me === data.prsCaloric2Fire)
-          return output.voice!();
-      },
       outputStrings: {
         text: '내게 첫 불! 가운데로',
-        //
-        voice: '真ん中',
       }
     },
     {
@@ -1664,14 +1648,8 @@ const triggerSet: TriggerSet<Data> = {
         if (data.me === data.prsCaloric2Fire)
           return output.text!();
       },
-      tts: (data, _matches, output) => {
-        if (data.me === data.prsCaloric2Fire)
-          return output.text!();
-      },
       outputStrings: {
         text: '다음 사람에게 옮겨요!',
-        //
-        voice: '運びます',
       }
     },
     {
@@ -1697,7 +1675,7 @@ const triggerSet: TriggerSet<Data> = {
         if (mycnt === 0) {
           for (const [name, cnt] of Object.entries(data.prsPangenesisCount)) {
             if (cnt === 0 && name !== data.me) {
-              partner = data.ShortName(name);
+              partner = data.party.prJob(name);
               break;
             }
           }
@@ -1707,7 +1685,7 @@ const triggerSet: TriggerSet<Data> = {
         if (mycnt === 1) {
           for (const [name, cnt] of Object.entries(data.prsPangenesisCount)) {
             if (cnt === 1 && name !== data.me) {
-              partner = data.ShortName(name);
+              partner = data.party.prJob(name);
               break;
             }
           }
@@ -1722,7 +1700,7 @@ const triggerSet: TriggerSet<Data> = {
 
         for (const [name, duration] of Object.entries(data.prsPangenesisDuration)) {
           if (duration === myduration && name !== data.me) {
-            partner = data.ShortName(name);
+            partner = data.party.prJob(name);
             break;
           }
         }

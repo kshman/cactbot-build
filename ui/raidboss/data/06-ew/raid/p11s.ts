@@ -277,7 +277,7 @@ const triggerSet: TriggerSet<Data> = {
         if (data.prsStyle)
           return { alertText: output.upheldNotOnYou!() };
 
-        return { alertText: output.upheldOnPlayer!({ player: data.ShortName(tether.target) }) };
+        return { alertText: output.upheldOnPlayer!({ player: data.party.prJob(tether.target) }) };
       },
       run: (data) => data.upheldTethers = [],
     },
@@ -355,7 +355,7 @@ const triggerSet: TriggerSet<Data> = {
         if (data.prsTethers === 2)
           return { alertText: output.partyHeart!() };
         return {
-          alertText: output.partyStackPlayerOut!({ player: data.ShortName(tether.target) }),
+          alertText: output.partyStackPlayerOut!({ player: data.party.prJob(tether.target) }),
         };
       },
       run: (data) => data.upheldTethers = [],
@@ -736,7 +736,7 @@ const triggerSet: TriggerSet<Data> = {
         else
           data.prsLightAndDarks = myLength === 'near' ? 'darknear' : 'darkfar';
 
-        const myBuddyShort = data.ShortName(myBuddy);
+        const myBuddyShort = data.party.prJob(myBuddy);
 
         let alertText: string;
         if (myLength === 'near') {
@@ -756,7 +756,7 @@ const triggerSet: TriggerSet<Data> = {
         const playerNames = Object.keys(data.lightDarkTether);
         const sameLength = playerNames.filter((x) => data.lightDarkTether[x] === myLength);
         const others = sameLength.filter((x) => x !== data.me && x !== myBuddy).sort();
-        const [player1, player2] = others.map((x) => data.ShortName(x));
+        const [player1, player2] = others.map((x) => data.party.prJob(x));
         if (player1 !== undefined && player2 !== undefined) {
           if (myLength === 'near')
             infoText = output.otherNear!({ player1: player1, player2: player2 });
@@ -814,7 +814,7 @@ const triggerSet: TriggerSet<Data> = {
         const sortedCylinders = data.cylinderCollect.sort((a, b) => {
           return a.targetId.localeCompare(b.targetId);
         });
-        const markers = sortedCylinders.map((x) => x.id);
+        const markers = sortedCylinders.map((m) => getHeadmarkerId(data, m));
 
         // Once sorted by id, the lasers will always be in NW, S, NE order.
         // Create a 3 digit binary value, Orange = 0, Blue = 1.
