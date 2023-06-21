@@ -113,7 +113,7 @@ const getHeadmarkerId = (data: Data, matches: NetMatches['HeadMarker']) => {
 
 export interface Data extends RaidbossData {
   prsStyle?: boolean;
-  prsPhase: number;
+  prsPhase: number; // 지금은 편리하지만 스킵이 있으면 이거 깨지므로 수정해야함
   // 전반
   prsTrinityInvul?: boolean;
   prsApoPeri?: number;
@@ -1149,7 +1149,7 @@ const triggerSet: TriggerSet<Data> = {
       condition: (data) => data.prsPhase === 4,
       run: (data, matches) => {
         data.prsEngravement3TowerEnter.push(matches.target);
-        data.prsEngravement3TowerSoul = matches.effect === 'DFB' ? 'umbral' : 'astral';
+        data.prsEngravement3TowerSoul = matches.effectId === 'DFB' ? 'umbral' : 'astral';
       }
     },
     {
