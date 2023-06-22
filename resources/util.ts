@@ -95,7 +95,7 @@ const nameToPrJob: Record<number, string> = {
   37: '총칼이',
   38: '춤꾼',
   39: '리퍼',
-  40: '사게',
+  40: '현자',
 };
 
 const allJobs = Object.keys(nameToJobEnum) as Job[];
