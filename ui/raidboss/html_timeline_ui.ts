@@ -172,6 +172,7 @@ export class HTMLTimelineUI extends TimelineUI {
       if (this.debugElement)
         this.debugElement.innerHTML = '';
       this.debugFightTimer = null;
+      // TODO: clear all timeouts?
       this.activeBars = {};
     }
   }
