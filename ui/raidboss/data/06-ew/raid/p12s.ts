@@ -806,13 +806,13 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         // This is left and right facing the boss.
         leftClockwise: {
-          en: '❰❰❰❰❰시계 방향',
+          en: '🡸🡸시계 방향',
           de: 'Links (im Uhrzeigersinn)',
           fr: 'Gauche (horaire)',
           ko: '왼쪽 (시계방향)',
         },
         rightCounterclockwise: {
-          en: '반시계 방향❱❱❱❱❱',
+          en: '반시계 방향🡺🡺',
           de: 'Rechts (gegen Uhrzeigersinn)',
           fr: 'Droite (Anti-horaire)',
           ko: '오른쪽 (반시계방향)',
@@ -1183,12 +1183,12 @@ const triggerSet: TriggerSet<Data> = {
         return mesgs[matches.effectId];
       },
       outputStrings: {
-        umbTilt: '❰❰❰❰❰ 흩어져요',
-        astTilt: '❱❱❱❱❱ 흩어져요',
-        ubSoul: '❰❰❰❰❰ 🟡설치',
-        abSoul: '❱❱❱❱❱ 🟣설치',
-        usSoul: '❱❱❱❱❱ 🟣밟아요',
-        asSoul: '❰❰❰❰❰ 🟡밟아요',
+        umbTilt: '🡸🡸 흩어져요',
+        astTilt: '🡺🡺 흩어져요',
+        ubSoul: '🡸🡸 🟡설치',
+        abSoul: '🡺🡺 🟣설치',
+        usSoul: '🡺🡺 🟣밟아요',
+        asSoul: '🡸🡸 🟡밟아요',
       },
     },
     {
@@ -1207,10 +1207,10 @@ const triggerSet: TriggerSet<Data> = {
         return mesgs[matches.effectId];
       },
       outputStrings: {
-        ubSoul: '❰❰❰❰❰ 🟡설치',
-        abSoul: '❱❱❱❱❱ 🟣설치',
-        usSoul: '❱❱❱❱❱ 🟣밟아요',
-        asSoul: '❰❰❰❰❰ 🟡밟아요',
+        ubSoul: '🡸🡸 🟡설치',
+        abSoul: '🡺🡺 🟣설치',
+        usSoul: '🡸🡸 🟣밟아요',
+        asSoul: '🡺🡺 🟡밟아요',
       },
     },
     {
@@ -1844,9 +1844,9 @@ const triggerSet: TriggerSet<Data> = {
       run: (data) => data.prsSeenPangenesis = true,
       outputStrings: {
         tower1st: '첫째 ${color} 타워 (+${partner})',
-        tower2nd: '기다렸다 => 둘째 아래쪽 ${color} 타워 (+${partner})',
+        tower2nd: '기다렸다 => 둘째🡻 ${color} 타워 (+${partner})',
         geneone: '위로 살짝 => 첫째 타워 (+${partner})',
-        none: '아래로 살짝 => 둘째 위쪽 타워 (+${partner})',
+        none: '아래로 살짝 => 둘째🡹 타워 (+${partner})',
         astral: '🟡하얀', // 색깔 바뀜
         umbral: '🟣검은', // 색깔 바뀜
         unknown: Outputs.unknown,
@@ -1944,9 +1944,9 @@ const triggerSet: TriggerSet<Data> = {
         movecc: '다음 ${color} 타워로',
         end: '끝! 남쪽으로',
         slime: '끝이지만 무직! 슬라임 유도',
-        wait1n: '둘째 위쪽 타워 나올 곳으로',
-        wait1g: '둘째 아래쪽 타워 나올 곳으로',
-        wait1gcc: '둘째 아래쪽 ${color} 타워 나올 곳으로',
+        wait1n: '둘째🡹 타워 나올 곳으로',
+        wait1g: '둘째🡻 타워 나올 곳으로',
+        wait1gcc: '둘째🡻 ${color} 타워 나올 곳으로',
         astral: '🟡하얀', // 색깔 바뀜
         umbral: '🟣검은', // 색깔 바뀜
       },
