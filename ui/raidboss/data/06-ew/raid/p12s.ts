@@ -938,7 +938,8 @@ const triggerSet: TriggerSet<Data> = {
       id: 'P12S Geocentrism Vertical',
       type: 'StartsUsing',
       netRegex: { id: '8329', source: 'Pallas Athena', capture: false },
-      infoText: (_data, _matches, output) => output.text!(),
+      condition: (data) => !data.triggerSetConfig.prStyle,
+      alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
           en: '흩어져요: ||',
@@ -951,7 +952,8 @@ const triggerSet: TriggerSet<Data> = {
       id: 'P12S Geocentrism Circle',
       type: 'StartsUsing',
       netRegex: { id: '832A', source: 'Pallas Athena', capture: false },
-      infoText: (_data, _matches, output) => output.text!(),
+      condition: (data) => !data.triggerSetConfig.prStyle,
+      alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
           en: '흩어져요: ◎',
@@ -964,7 +966,8 @@ const triggerSet: TriggerSet<Data> = {
       id: 'P12S Geocentrism Horizontal',
       type: 'StartsUsing',
       netRegex: { id: '832B', source: 'Pallas Athena', capture: false },
-      infoText: (_data, _matches, output) => output.text!(),
+      condition: (data) => !data.triggerSetConfig.prStyle,
+      alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
           en: '흩어져요: 〓',
@@ -1488,11 +1491,23 @@ const triggerSet: TriggerSet<Data> = {
     {
       id: 'P12S2 지오센트리즘',
       type: 'StartsUsing',
-      netRegex: { id: ['8329', '832A', '832B'], source: 'Pallas Athena', capture: false },
-      durationSeconds: 4,
-      alertText: (_data, _matches, output) => output.text!(),
+      netRegex: { id: ['8329', '832A', '832B'], source: 'Pallas Athena' },
+      durationSeconds: 6,
+      alertText: (_data, matches, output) => {
+        const geomap: { [id: string]: string } = {
+          '8329': output.vertical!(),
+          '832A': output.donut!(),
+          '832B': output.horizontal!(),
+        };
+        const layout = geomap[matches.id] ?? output.unknown!();
+        return output.text!({ layout: layout });
+      },
       outputStrings: {
-        text: '전체 공격 + 흩어져요',
+        text: '전체 공격 + 흩어져요: ${layout}',
+        vertical: '||',
+        donut: '◎',
+        horizontal: '〓',
+        unknown: Outputs.unknown,
       },
     },
     {
