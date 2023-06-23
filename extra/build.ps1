@@ -1,5 +1,14 @@
 ﻿# Requires -RunAsAdministrator
 
+param(
+  [Parameter(Mandatory = $false, HelpMessage = "DLL 빌드")]
+  [string]$ParamDll = "unknown",
+  [Parameter(Mandatory = $false, HelpMessage = "MPN 빌드")]
+  [string]$ParamNpm = "unknown",
+  [Parameter(Mandatory = $false, HelpMessage = "복사 확인")]
+  [string]$ParamCopy = "unknown"
+)
+
 '보람찬 작업을 대충했다면!'
 '빌드하고 복사를 하자고'
 ''
@@ -51,7 +60,10 @@ $dest = "$act\Plugins\cactbot"
 try {
   # 플러그인
   ''
-  $dllbuild = New-QuestionYesNo "DLL 빌드 할거임?"
+  $dllbuild = $FALSE
+  if ($ParamDll -eq "unknown") {
+    $dllbuild = New-QuestionYesNo "DLL 빌드 할거임?"
+  }
   if ($dllbuild -eq $TRUE) {
     $vspath = $Env:VS_PATH
     if (-not (Test-Path "$vspath")) {
@@ -71,7 +83,10 @@ try {
 
   # NPM
   ''
-  $npmbuild = New-QuestionYesNo "NPM 빌드 할거임?"
+  $npmbuild = $TRUE
+  if ($ParamNpm -eq 'unknown') {
+    $npmbuild = New-QuestionYesNo "NPM 빌드 할거임?"
+  }
   if ($npmbuild -eq $TRUE) {
     Get-ChildItem ..\dist\* | Remove-Item -Recurse
     npm run build --prefix ..
@@ -83,7 +98,10 @@ try {
 
   if ($dllbuild -eq $TRUE -Or $npmbuild -eq $TRUE) {
     ''
-    $yn = New-QuestionYesNo "빌드한거 복사하실랑까요?"
+    $yn = $TRUE
+    if ($ParamCopy -eq 'unknown') {
+      $yn = New-QuestionYesNo "빌드한거 복사하실랑까요?"
+    }
     if ($yn -eq $TRUE) {
       # 플러그인 복사
       if ($dllbuild -eq $TRUE) {

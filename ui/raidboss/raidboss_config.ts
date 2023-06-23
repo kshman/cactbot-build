@@ -1947,7 +1947,7 @@ const templateOptions: OptionsTemplate = {
     {
       id: 'TimelineEnabled',
       name: {
-        en: '타임라인 사용하기',
+        en: '타임라인 사용',
         de: 'Timeline aktiviert',
         fr: 'Timeline activée',
         ja: 'タイムラインを有効にする',
@@ -1960,7 +1960,7 @@ const templateOptions: OptionsTemplate = {
     {
       id: 'AlertsEnabled',
       name: {
-        en: '얼러트 사용하기',
+        en: '얼러트 사용',
         de: 'Alerts aktiviert',
         fr: 'Alertes activées',
         ja: '警告情報を有効にする',
