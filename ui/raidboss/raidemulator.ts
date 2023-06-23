@@ -157,6 +157,7 @@ const raidEmulatorOnLoad = async () => {
     options.SoundAlertsEnabled = true;
     options.SpokenAlertsEnabled = false;
     options.GroupSpokenAlertsEnabled = false;
+    options.PrsStyle = true;
   }
 
   // If DisplayLanguage isn't English, switch to correct lang for emulator display

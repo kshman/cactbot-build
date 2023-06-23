@@ -112,7 +112,6 @@ const getHeadmarkerId = (data: Data, matches: NetMatches['HeadMarker']) => {
 };
 
 export interface Data extends RaidbossData {
-  prsStyle?: boolean;
   prsPhase: number; // 지금은 편리하지만 스킵이 있으면 이거 깨지므로 수정해야함
   // 전반
   prsTrinityInvul?: boolean;
@@ -553,7 +552,7 @@ const triggerSet: TriggerSet<Data> = {
         if (num === undefined)
           return;
         data.limitCutNumber = num;
-        if (data.prsStyle)
+        if (data.options.PrsStyle)
           return;
         return output.text!({ num: num });
       },
@@ -920,7 +919,7 @@ const triggerSet: TriggerSet<Data> = {
       id: 'P12S Geocentrism Vertical',
       type: 'StartsUsing',
       netRegex: { id: '8329', source: 'Pallas Athena', capture: false },
-      condition: (data) => !data.prsStyle,
+      condition: (data) => !data.options.PrsStyle,
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
@@ -934,7 +933,7 @@ const triggerSet: TriggerSet<Data> = {
       id: 'P12S Geocentrism Circle',
       type: 'StartsUsing',
       netRegex: { id: '832A', source: 'Pallas Athena', capture: false },
-      condition: (data) => !data.prsStyle,
+      condition: (data) => !data.options.PrsStyle,
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
@@ -948,7 +947,7 @@ const triggerSet: TriggerSet<Data> = {
       id: 'P12S Geocentrism Horizontal',
       type: 'StartsUsing',
       netRegex: { id: '832B', source: 'Pallas Athena', capture: false },
-      condition: (data) => !data.prsStyle,
+      condition: (data) => !data.options.PrsStyle,
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
