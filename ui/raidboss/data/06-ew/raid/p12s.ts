@@ -980,11 +980,22 @@ const triggerSet: TriggerSet<Data> = {
     {
       id: 'P12S 글라우코피스',
       type: 'StartsUsing',
-      netRegex: { id: '82FC', capture: false },
-      condition: (data) => data.role === 'tank',
-      alertText: (_data, _matches, output) => output.text!(),
-      outputStrings: {
-        text: '탱크 스위치!',
+      netRegex: { id: '82FC', source: 'Athena' },
+      response: (data, matches, output) => {
+        // cactbot-builtin-response
+        output.responseOutputStrings = {
+          tankSwitch: {
+            en: '탱크버스터! 스위치!',
+          },
+          tankOn: Outputs.tankBusterOnPlayer,
+          avoid: Outputs.avoidTankCleave,
+        };
+
+        if (data.role === 'tank')
+          return { alertText: output.tankSwitch!() };
+        if (data.role === 'healer')
+          return { alertText: output.tankOn!({ player: data.ShortName(matches.target) }) };
+        return { infoText: output.avoid!() };
       },
     },
     {
