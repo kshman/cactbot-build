@@ -11,7 +11,7 @@ import { Output, TriggerSet } from '../../../../../types/trigger';
 // TODO: call out where Letter of the Law safe spots are (e.g. N lean E / S lean W)
 
 export interface Data extends RaidbossData {
-  prsStyle?: boolean;
+  readonly triggerSetConfig: { prStyle: boolean };
   prsDike?: number;
   prsStyx?: number;
   prsLightAndDarks?: 'none' | 'lightnear' | 'lightfar' | 'darknear' | 'darkfar';
@@ -85,6 +85,16 @@ export const prsJuryPrepare = (data: Data, output: Output, pair: boolean) => {
 const triggerSet: TriggerSet<Data> = {
   id: 'AnabaseiosTheEleventhCircleSavage',
   zoneId: ZoneId.AnabaseiosTheEleventhCircleSavage,
+  config: [
+    {
+      id: 'prStyle',
+      name: {
+        en: 'P11S PR 스타일',
+      },
+      type: 'checkbox',
+      default: false,
+    },
+  ],
   timelineFile: 'p11s.txt',
   initData: () => {
     return {
@@ -278,7 +288,7 @@ const triggerSet: TriggerSet<Data> = {
         if (tether.target === data.me)
           return { alarmText: output.upheldOnYou!() };
 
-        if (data.prsStyle)
+        if (data.triggerSetConfig.prStyle)
           return { alertText: output.upheldNotOnYou!() };
 
         return { alertText: output.upheldOnPlayer!({ player: data.party.prJob(tether.target) }) };

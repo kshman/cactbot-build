@@ -18,7 +18,6 @@ export interface BaseOptions {
   SystemInfo: SystemInfo;
   Debug: boolean;
   [key: string]: unknown;
-  PrsStyle: boolean;
 }
 
 export interface RaidbossData {

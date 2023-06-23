@@ -115,7 +115,6 @@ class UserConfig {
         gameRegion: 'International',
       },
       Debug: false,
-      PrsStyle: false,
     };
   }
 

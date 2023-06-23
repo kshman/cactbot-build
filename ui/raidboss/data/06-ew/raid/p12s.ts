@@ -1,9 +1,11 @@
 import Conditions from '../../../../../resources/conditions';
 import Outputs from '../../../../../resources/outputs';
+import { callOverlayHandler } from '../../../../../resources/overlay_plugin_api';
 import { Responses } from '../../../../../resources/responses';
 import { Directions } from '../../../../../resources/util';
 import ZoneId from '../../../../../resources/zone_id';
 import { RaidbossData } from '../../../../../types/data';
+import { PluginCombatantState } from '../../../../../types/event';
 import { NetMatches } from '../../../../../types/net_matches';
 import { TriggerSet } from '../../../../../types/trigger';
 
@@ -112,11 +114,15 @@ const getHeadmarkerId = (data: Data, matches: NetMatches['HeadMarker']) => {
 };
 
 export interface Data extends RaidbossData {
+  readonly triggerSetConfig: { prStyle: boolean };
   prsPhase: number; // 지금은 편리하지만 스킵이 있으면 이거 깨지므로 수정해야함
   // 전반
   prsTrinityInvul?: boolean;
   prsApoPeri?: number;
   prsEngravement1Tower: string[];
+  prsEngravement1Combatant: PluginCombatantState[];
+  prsEngravement1LaserPos: Map<string, string>;
+  prsEngravement1Buff: { [name: string]: string };
   prsEngravement2Debuff?: string;
   prsEngravement3TowerEnter: string[];
   prsEngravement3TowerSoul: TypeUmbralAstral;
@@ -154,11 +160,24 @@ export interface Data extends RaidbossData {
 const triggerSet: TriggerSet<Data> = {
   id: 'AnabaseiosTheTwelfthCircleSavage',
   zoneId: ZoneId.AnabaseiosTheTwelfthCircleSavage,
+  config: [
+    {
+      id: 'prStyle',
+      name: {
+        en: 'P12S PR 스타일',
+      },
+      type: 'checkbox',
+      default: false,
+    },
+  ],
   timelineFile: 'p12s.txt',
   initData: () => {
     return {
       prsPhase: 0,
       prsEngravement1Tower: [],
+      prsEngravement1Combatant: [],
+      prsEngravement1LaserPos: new Map(),
+      prsEngravement1Buff: {},
       prsEngravement3TowerEnter: [],
       prsEngravement3TowerSoul: 'unknown',
       prsEngravement3TetherSide: 'unknown',
@@ -552,7 +571,7 @@ const triggerSet: TriggerSet<Data> = {
         if (num === undefined)
           return;
         data.limitCutNumber = num;
-        if (data.options.PrsStyle)
+        if (data.triggerSetConfig.prStyle)
           return;
         return output.text!({ num: num });
       },
@@ -919,7 +938,7 @@ const triggerSet: TriggerSet<Data> = {
       id: 'P12S Geocentrism Vertical',
       type: 'StartsUsing',
       netRegex: { id: '8329', source: 'Pallas Athena', capture: false },
-      condition: (data) => !data.options.PrsStyle,
+      condition: (data) => !data.triggerSetConfig.prStyle,
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
@@ -933,7 +952,7 @@ const triggerSet: TriggerSet<Data> = {
       id: 'P12S Geocentrism Circle',
       type: 'StartsUsing',
       netRegex: { id: '832A', source: 'Pallas Athena', capture: false },
-      condition: (data) => !data.options.PrsStyle,
+      condition: (data) => !data.triggerSetConfig.prStyle,
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
@@ -947,7 +966,7 @@ const triggerSet: TriggerSet<Data> = {
       id: 'P12S Geocentrism Horizontal',
       type: 'StartsUsing',
       netRegex: { id: '832B', source: 'Pallas Athena', capture: false },
-      condition: (data) => !data.options.PrsStyle,
+      condition: (data) => !data.triggerSetConfig.prStyle,
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
@@ -1006,15 +1025,94 @@ const triggerSet: TriggerSet<Data> = {
     // DFD:Umbralstrong Soul
     // DFE:Astralstrong Soul
     {
+      id: 'P12S 엔그레이브먼트1 타위 찾기',
+      type: 'StartsUsing',
+      netRegex: { id: ['82F1', '82F2'], source: 'Anthropos' },
+      condition: (data) => data.prsPhase === 2,
+      promise: async (data, matches) => {
+        data.prsEngravement1Combatant = [];
+        const ids = parseInt(matches.sourceId, 16);
+        if (ids !== undefined) {
+          data.prsEngravement1Combatant = (await callOverlayHandler({
+            call: 'getCombatants',
+            ids: [ids],
+          })).combatants;
+        }
+      },
+      run: (data, matches) => {
+        const x = data.prsEngravement1Combatant[0]?.PosX;
+        const y = data.prsEngravement1Combatant[0]?.PosY;
+        if (x === undefined || y === undefined)
+          return;
+        const color = matches.id === '82F1' ? 'astral' : 'umbral';
+        // https://github.com/quisquous/cactbot/pull/5597S
+        if (x < 80 && y < 100)
+          data.prsEngravement1LaserPos.set('northeast', color);
+        else if (x < 100 && y < 80)
+          data.prsEngravement1LaserPos.set('southwest', color);
+        else if (x > 100 && y < 80)
+          data.prsEngravement1LaserPos.set('southeast', color);
+        else if (x > 120 && y < 100)
+          data.prsEngravement1LaserPos.set('northwest', color);
+        else if (x > 120 && y > 100)
+          data.prsEngravement1LaserPos.set('southwest', color);
+        else if (x > 100 && y > 120)
+          data.prsEngravement1LaserPos.set('northeast', color);
+        else if (x < 100 && y > 120)
+          data.prsEngravement1LaserPos.set('northwest', color);
+        else if (x < 80 && y > 100)
+          data.prsEngravement1LaserPos.set('southeast', color);
+      },
+    },
+    {
+      id: 'P12S 엔그레이브먼트1 타워 인원',
+      type: 'GainsEffect',
+      netRegex: { effectId: ['DFB', 'DFC'] },
+      condition: (data) => data.prsPhase === 2 && data.triggerSetConfig.prStyle,
+      run: (data, matches) => data.prsEngravement1Buff[matches.target] = matches.effectId,
+    },
+    {
       id: 'P12S 엔그레이브먼트1 타워',
       type: 'GainsEffect',
       netRegex: { effectId: ['DFB', 'DFC'] },
       condition: (data) => data.prsPhase === 2,
-      durationSeconds: (_data, matches) => parseFloat(matches.duration),
+      delaySeconds: 0.1,
+      durationSeconds: (_data, matches) => parseFloat(matches.duration) - 1,
       infoText: (data, matches, output) => {
         data.prsEngravement1Tower.push(matches.target);
         if (data.me !== matches.target)
           return;
+
+        if (data.triggerSetConfig.prStyle) {
+          const umbrals:string[] = [];
+          const astrals:string[] = [];
+          data.prsEngravement1LaserPos.forEach((value, key) => {
+            if (matches.effectId === 'DFB' && value === 'umbral')
+              umbrals.push(output[key]!() ?? output.unknown!());
+            else if (matches.effectId === 'DFC' && value === 'astral')
+              astrals.push(output[key]!() ?? output.unknown!());
+          });
+
+          if (matches.effectId === 'DFB') {
+            let partner = output.unknown!();
+            for (const [name, eid] of Object.entries(data.prsEngravement1Buff)) {
+              if (name !== data.me && eid === 'DFB') {
+                partner = data.party.prJob(name);
+                break;
+              }
+            }
+            return output.umbSoulPos!({ pos1: umbrals[0], pos2: umbrals[1], partnert: partner });
+          }
+          let partner = output.unknown!();
+          for (const [name, eid] of Object.entries(data.prsEngravement1Buff)) {
+            if (name !== data.me && eid !== 'DFB') {
+              partner = data.party.prJob(name);
+              break;
+            }
+          }
+          return output.astSoulPos!({ pos1: astrals[0], pos2: astrals[1], partnert: partner });
+        }
+
         if (matches.effectId === 'DFB')
           return output.umbSoul!();
         return output.astSoul!();
@@ -1022,6 +1120,13 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         umbSoul: '🟡설치',
         astSoul: '🟣설치',
+        umbSoulPos: '🟡설치 ${pos1}${pos2} (+${partnert})',
+        astSoulPos: '🟣설치 ${pos1}${pos2} (+${partnert})',
+        northeast: Outputs.arrowNE,
+        northwest: Outputs.arrowNW,
+        southeast: Outputs.arrowSE,
+        southwest: Outputs.arrowSW,
+        unknown: Outputs.unknown,
       }
     },
     {
@@ -1067,12 +1172,12 @@ const triggerSet: TriggerSet<Data> = {
         return mesgs[matches.effectId];
       },
       outputStrings: {
-        umbTilt: '왼쪽 => 흩어져요',
-        astTilt: '오른쪽 => 흩어져요',
-        ubSoul: '왼쪽 => 🟡설치',
-        abSoul: '오른쪽 => 🟣설치',
-        usSoul: '오른쪽 => 🟣밟아요',
-        asSoul: '왼쪽 => 🟡밟아요',
+        umbTilt: '❰❰❰❰❰ 흩어져요',
+        astTilt: '❱❱❱❱❱ 흩어져요',
+        ubSoul: '❰❰❰❰❰ 🟡설치',
+        abSoul: '❱❱❱❱❱ 🟣설치',
+        usSoul: '❱❱❱❱❱ 🟣밟아요',
+        asSoul: '❰❰❰❰❰ 🟡밟아요',
       },
     },
     {
@@ -1091,10 +1196,10 @@ const triggerSet: TriggerSet<Data> = {
         return mesgs[matches.effectId];
       },
       outputStrings: {
-        ubSoul: '왼쪽 🟡설치',
-        abSoul: '오른쪽 🟣설치',
-        usSoul: '오른쪽 🟣밟아요',
-        asSoul: '왼쪽 🟡밟아요',
+        ubSoul: '❰❰❰❰❰ 🟡설치',
+        abSoul: '❱❱❱❱❱ 🟣설치',
+        usSoul: '❱❱❱❱❱ 🟣밟아요',
+        asSoul: '❰❰❰❰❰ 🟡밟아요',
       },
     },
     {
@@ -1242,6 +1347,12 @@ const triggerSet: TriggerSet<Data> = {
         astTilt: '🟡밟아요',
         bait: '레이저 유도',
       },
+    },
+    {
+      id: 'P12S 파르테노스',
+      type: 'StartsUsing',
+      netRegex: { id: '8303', source: 'Athena', capture: false },
+      response: Responses.goSides(),
     },
     {
       id: 'P12S 테오의 알테마',
