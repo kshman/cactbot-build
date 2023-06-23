@@ -938,11 +938,10 @@ const triggerSet: TriggerSet<Data> = {
       id: 'P12S Geocentrism Vertical',
       type: 'StartsUsing',
       netRegex: { id: '8329', source: 'Pallas Athena', capture: false },
-      condition: (data) => !data.triggerSetConfig.prStyle,
-      alertText: (_data, _matches, output) => output.text!(),
+      infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '세로로 흩어져요',
+          en: '흩어져요: ||',
           de: 'Vertikal',
           fr: 'Vertical',
         },
@@ -952,11 +951,10 @@ const triggerSet: TriggerSet<Data> = {
       id: 'P12S Geocentrism Circle',
       type: 'StartsUsing',
       netRegex: { id: '832A', source: 'Pallas Athena', capture: false },
-      condition: (data) => !data.triggerSetConfig.prStyle,
-      alertText: (_data, _matches, output) => output.text!(),
+      infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '동그라미로 흩어져요',
+          en: '흩어져요: ◎',
           de: 'Innerer Kreis',
           fr: 'Cercle intérieur',
         },
@@ -966,11 +964,10 @@ const triggerSet: TriggerSet<Data> = {
       id: 'P12S Geocentrism Horizontal',
       type: 'StartsUsing',
       netRegex: { id: '832B', source: 'Pallas Athena', capture: false },
-      condition: (data) => !data.triggerSetConfig.prStyle,
-      alertText: (_data, _matches, output) => output.text!(),
+      infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '가로로 흩어져요',
+          en: '흩어져요: 〓',
           de: 'Horizontal',
           fr: 'Horizontal',
         },
