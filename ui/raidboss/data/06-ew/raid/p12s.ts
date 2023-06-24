@@ -993,7 +993,7 @@ const triggerSet: TriggerSet<Data> = {
           cn: 'T进 (小队出)',
           ko: '탱커 안 (본대 밖)',
         },
-        tankSolo: '바깥에서 혼자 무적!',
+        tankSolo: '❱❱안쪽❰❰ 혼자 무적!',
       },
     },
     {
@@ -1024,7 +1024,7 @@ const triggerSet: TriggerSet<Data> = {
           cn: 'T出 (小队进)',
           ko: '탱커 밖 (본대 안)',
         },
-        tankSolo: '바깥에서 혼자 무적!',
+        tankSolo: '❰❰바깥❱❱ 혼자 무적!',
       },
     },
     {
@@ -1828,9 +1828,12 @@ const triggerSet: TriggerSet<Data> = {
         data.prsCaloric2Fire = matches.target;
         if (data.me === matches.target)
           return output.text!();
+        if (data.prsPalladionGraps === data.me)
+          return output.mt!({ target: data.party.prJob(matches.target) });
       },
       outputStrings: {
         text: '내게 첫 불! 가운데로',
+        mt: '불 교대: ${target}',
       }
     },
     {
@@ -1866,12 +1869,13 @@ const triggerSet: TriggerSet<Data> = {
       id: 'P12S2 칼로릭2 옮겨욧',
       type: 'Ability',
       netRegex: { id: '833C', source: 'Pallas Athena', capture: false },
+      condition: (data) => data.prsPhase === 700,
       alertText: (data, _matches, output) => {
         if (data.me === data.prsCaloric2Fire)
           return output.text!();
       },
       outputStrings: {
-        text: '다음 사람에게 옮겨요!',
+        text: '불 옮겨욧!',
       }
     },
     {
