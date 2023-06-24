@@ -678,6 +678,17 @@ const triggerSet: TriggerSet<Data> = {
 
         // Third wing call (when at final destination).
         const isProtean = secondMech === 'protean';
+        if (data.triggerSetConfig.prStyle) {
+          const move = call === 'swap' ? output.prSwap!() : '';
+          if (firstDir === secondDir) {
+            if (isProtean)
+              return output.prsc2aBpro!({ move: move });
+            return output.prsc2aBtwo!({ move: move });
+          }
+          if (isProtean)
+            return output.prsc2aGpro!({ move: move });
+          return output.prsc2aGtwo!({ move: move });
+        }
         if (call === 'swap') {
           if (isProtean)
             return output.superchain2aSwapProtean!({ dir: finalDir });
@@ -752,6 +763,13 @@ const triggerSet: TriggerSet<Data> = {
         },
         north: Outputs.north,
         south: Outputs.south,
+        prSwap: '[옆으로]',
+        prsc2aMb: '한가운데로 => 되돌아 가욧 ${move}',
+        prsc2aMg: '한가운데로 => 계속 전진 ${move}',
+        prsc2aBpro: '되돌아 와서 + 프로틴 ${move}',
+        prsc2aBtwo: '되돌아 와서 + 페어 ${move}',
+        prsc2aGpro: '전진해서 + 프로틴 ${move}',
+        prsc2aGtwo: '전진해서 + 페어 ${move}',
       },
     },
     {
