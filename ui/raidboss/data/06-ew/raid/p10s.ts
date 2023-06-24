@@ -612,16 +612,16 @@ const triggerSet: TriggerSet<Data> = {
       suppressSeconds: 5,
       infoText: (_data, matches, output) => {
         const y = parseInt(matches.y);
-        return (Math.floor(y / 2) % 2 === 1) ? output.boxes!() : output.lines!();
+        return (Math.floor(y / 2) % 2 === 1) ? output.lines!() : output.boxes!();
       },
       outputStrings: {
         lines: {
-          en: '레이저 피해욧 (줄 있는 곳)',
+          en: '레이저 피해욧 (바닥 선  위로)',
           de: 'Auf die Linien (vermeide Laser)',
           cn: '站在线上（躲避激光）',
         },
         boxes: {
-          en: '레이저 피해욧 (네모 안으로)',
+          en: '레이저 피해욧 (네모칸 안으로)',
           de: 'In den Boxen (vermeide Laser)',
           cn: '站在盒子里（躲避激光）',
         },
