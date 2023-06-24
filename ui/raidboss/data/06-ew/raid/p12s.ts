@@ -1882,11 +1882,10 @@ const triggerSet: TriggerSet<Data> = {
       }
     },
     {
-      id: 'P12S2 에크파이로시스 흩어져욧',
+      id: 'P12S2 에크파이로시스 움직여',
       type: 'GainsEffect',
       netRegex: { effectId: '8322', source: 'Pallas Athena', capture: false },
       suppressSeconds: 2,
-      response: Responses.spread('alert'),
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: '흩어져욧! 달려욧!',
@@ -1900,51 +1899,39 @@ const triggerSet: TriggerSet<Data> = {
       durationSeconds: 10,
       suppressSeconds: 2,
       alertText: (data, _matches, output) => {
-        let partner = output.unknown!();
-        // 무직
+         let partner = output.unknown!();
+        // 무직, 인자1
         const mycnt = data.prsPangenesisCount[data.me] ?? 0;
-        if (mycnt === 0) {
+        if (mycnt < 2) {
           for (const [name, cnt] of Object.entries(data.prsPangenesisCount)) {
-            if (cnt === 0 && name !== data.me) {
+            if (cnt === mycnt && name !== data.me) {
               partner = data.party.prJob(name);
               break;
             }
           }
-          return output.none!({ partner: partner });
+          return mycnt === 0 ? output.slime!({ partner: partner }) : output.geneone!({ partner: partner });
         }
-        // 인자 1
-        if (mycnt === 1) {
-          for (const [name, cnt] of Object.entries(data.prsPangenesisCount)) {
-            if (cnt === 1 && name !== data.me) {
-              partner = data.party.prJob(name);
-              break;
-            }
-          }
-          return output.geneone!({ partner: partner });
-        }
-
-        // 이제 시간에 따른 처리
+        // 시간에 따른 처리
         const mystat = data.prsPangenesisStat[data.me];
         const myduration = data.prsPangenesisDuration[data.me];
         if (mystat === undefined || myduration === undefined)
           return;
-
         for (const [name, duration] of Object.entries(data.prsPangenesisDuration)) {
           if (duration === myduration && name !== data.me) {
             partner = data.party.prJob(name);
             break;
           }
         }
-        if (myduration === 16)
+        if (myduration < 18)
           return output.tower1st!({ color: output[mystat]!(), partner: partner });
         return output.tower2nd!({ color: output[mystat]!(), partner: partner });
       },
       run: (data) => data.prsSeenPangenesis = true,
       outputStrings: {
-        tower1st: '첫째 ${color} 타워 (+${partner})',
-        tower2nd: '기다렸다 => 둘째🡻 ${color} 타워 (+${partner})',
-        geneone: '위로 살짝 => 첫째 타워 (+${partner})',
-        none: '아래로 살짝 => 둘째🡹 타워 (+${partner})',
+        tower1st: '빠른: 첫 ${color} 타워 (+${partner})',
+        tower2nd: '느림: 둘째🡻 ${color} 타워 (+${partner})',
+        geneone: '인자1: 첫 타워 (+${partner}) [위로]',
+        slime: '무직: 둘째🡹 타워 (+${partner}) [아래로]',
         astral: '🟡하얀', // 색깔 바뀜
         umbral: '🟣검은', // 색깔 바뀜
         unknown: Outputs.unknown,
@@ -1978,7 +1965,7 @@ const triggerSet: TriggerSet<Data> = {
         if (!data.prsSeenPangenesis) {
           const cnt = data.prsPangenesisCount[matches.target];
           data.prsPangenesisCount[matches.target] = cnt === undefined ? 1 : cnt + 1;
-          data.prsPangenesisDuration[matches.target] = parseInt(matches.duration);
+          data.prsPangenesisDuration[matches.target] = parseFloat(matches.duration);
         }
         data.prsPangenesisStat[matches.target] = 'umbral';
       },
@@ -1992,7 +1979,7 @@ const triggerSet: TriggerSet<Data> = {
         if (!data.prsSeenPangenesis) {
           const cnt = data.prsPangenesisCount[matches.target];
           data.prsPangenesisCount[matches.target] = cnt === undefined ? 1 : cnt + 1;
-          data.prsPangenesisDuration[matches.target] = parseInt(matches.duration);
+          data.prsPangenesisDuration[matches.target] = parseFloat(matches.duration);
         }
         data.prsPangenesisStat[matches.target] = 'astral';
       },
