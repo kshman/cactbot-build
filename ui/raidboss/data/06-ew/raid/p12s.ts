@@ -300,12 +300,14 @@ const triggerSet: TriggerSet<Data> = {
         const y = data.prsCombatantData[0]?.PosY;
         if (y === undefined)
           return output.clones!({ dir: output.unknown!() });
-        const cloneSide = y > centerY ? 'south' : 'north';
+        const cloneSide = y > centerY
+          ? data.role === 'tank' ? 'south' : 'north'
+          : data.role === 'tank' ? 'north' : 'south';
         return output.clones!({ dir: output[cloneSide]!() });
       },
       outputStrings: {
         clones: {
-          en: '바닥 쏘는 곳: ${dir}',
+          en: '${dir}으로',
         },
         north: Outputs.north,
         south: Outputs.south,
@@ -383,12 +385,12 @@ const triggerSet: TriggerSet<Data> = {
         return output.prsc2aSs!({ dir: dir });
       },
       outputStrings: {
-        left: '🡸🡸',
-        right: '🡺🡺',
-        prsc2aNn: '북쪽[${dir}] => 다시 북쪽',
-        prsc2aNs: '북쪽[${dir}] => 전진해서 남쪽',
-        prsc2aSs: '남쪽[${dir}] => 다시 남쪽',
-        prsc2aSn: '남쪽[${dir}] => 전진해서 북쪽',
+        left: Outputs.left,
+        right: Outputs.right,
+        prsc2aNn: '북쪽 => 다시 북쪽 [${dir}]',
+        prsc2aNs: '북쪽 => 전진해서 남쪽 [${dir}]',
+        prsc2aSs: '남쪽 => 다시 남쪽 [${dir}]',
+        prsc2aSn: '남쪽 => 전진해서 북쪽 [${dir}]',
       },
     },
     {
@@ -448,7 +450,7 @@ const triggerSet: TriggerSet<Data> = {
         left: Outputs.left,
         right: Outputs.right,
         swap: {
-          en: '옆자리',
+          en: '옆으로',
           de: 'Wechseln',
           fr: 'Swap',
           cn: '穿',
@@ -469,7 +471,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '(가만히)',
         },
         secondWingCallSwap: {
-          en: '[옆자리로 이동]',
+          en: '[옆으로 이동]',
           de: '(Wechseln)',
           fr: '(swap)',
           cn: '(穿)',
@@ -517,7 +519,7 @@ const triggerSet: TriggerSet<Data> = {
         const isSecondWing = data.wingCalls.length === 1;
         if (isSecondWing) {
           const isReturnBack = firstDir === secondDir;
-          const move = call === 'swap' ? output.swap!() : output.stay!();
+          const move = call === 'swap' ? output.prSwap!() : '';
           if (isReturnBack)
             return output.prsc2aMb!({ move: move });
           return output.prsc2aMg!({ move: move });
@@ -537,7 +539,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         swap: {
-          en: '옆자리로 이동',
+          en: '옆으로 이동',
           de: 'Wechseln',
           fr: 'Swap',
           cn: '穿',
@@ -550,13 +552,13 @@ const triggerSet: TriggerSet<Data> = {
           cn: '停',
           ko: '가만히',
         },
-        prSwap: '[옆자리]',
-        prsc2aMb: '한가운데로${move} => 되돌아 가욧 ',
-        prsc2aMg: '한가운데로${move} => 계속 전진',
-        prsc2aBpro: '되돌아 와서${move} + 프로틴',
-        prsc2aBtwo: '되돌아 와서${move} + 페어',
-        prsc2aGpro: '전진해서${move} + 프로틴',
-        prsc2aGtwo: '전진해서${move} + 페어',
+        prSwap: '[옆으로]',
+        prsc2aMb: '한가운데로 => 되돌아 가욧 ${move}',
+        prsc2aMg: '한가운데로 => 계속 전진 ${move}',
+        prsc2aBpro: '되돌아 와서 + 프로틴 ${move}',
+        prsc2aBtwo: '되돌아 와서 + 페어 ${move}',
+        prsc2aGpro: '전진해서 + 프로틴 ${move}',
+        prsc2aGtwo: '전진해서 + 페어 ${move}',
       },
     },
     {
@@ -1583,7 +1585,7 @@ const triggerSet: TriggerSet<Data> = {
         return output.breakWith!({ partner: data.party.prJob(partner) });
       },
       outputStrings: {
-        breakWith: '사슬 끊어요! (+${partner})',
+        breakWith: '사슬 끊어요! (${partner})',
       }
     },
     {
@@ -1730,7 +1732,7 @@ const triggerSet: TriggerSet<Data> = {
         return output.text1st!({ partner: data.party.prJob(data.prsCaloric1First[partner]) });
       },
       outputStrings: {
-        text1st: '내게 첫 불 (+${partner})',
+        text1st: '내게 첫 불 (${partner})',
       }
     },
     {
@@ -1928,10 +1930,10 @@ const triggerSet: TriggerSet<Data> = {
       },
       run: (data) => data.prsSeenPangenesis = true,
       outputStrings: {
-        tower1st: '빠른: 첫 ${color} 타워 (+${partner})',
-        tower2nd: '느림: 둘째🡻 ${color} 타워 (+${partner})',
-        geneone: '인자1: 첫 타워 (+${partner}) [위로]',
-        slime: '무직: 둘째🡹 타워 (+${partner}) [아래로]',
+        tower1st: '빠른: 첫 ${color} 타워 (${partner})',
+        tower2nd: '느림: 둘째🡻 ${color} 타워 (${partner})',
+        geneone: '인자1: 첫 타워 (${partner} / 살짝 위로)',
+        slime: '무직: 둘째🡹 타워 (${partner} / 살짝 아래로)',
         astral: '🟡하얀', // 색깔 바뀜
         umbral: '🟣검은', // 색깔 바뀜
         unknown: Outputs.unknown,
