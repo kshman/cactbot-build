@@ -666,6 +666,12 @@ const triggerSet: TriggerSet<Data> = {
         const finalDir = secondDir === 'north' ? output.north!() : output.south!();
         if (isSecondWing) {
           const isReturnBack = firstDir === secondDir;
+          if (data.triggerSetConfig.prStyle) {
+            const move = call === 'swap' ? output.prSwap!() : '';
+            if (isReturnBack)
+              return output.prsc2aMb!({ move: move });
+            return output.prsc2aMg!({ move: move });
+          }
           if (call === 'swap') {
             if (isReturnBack)
               return output.superchain2aSwapMidBack!({ dir: finalDir });
