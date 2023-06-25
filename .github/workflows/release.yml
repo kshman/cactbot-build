@@ -1,0 +1,85 @@
+name: Create Release Artifact
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  create-release:
+    runs-on: windows-latest
+    if: ${{ github.repository == 'quisquous/cactbot' }}
+    env:
+      GITHUB_TOKEN: ${{ secrets.BOT_TOKEN }}
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - name: Set up msbuild
+        uses: microsoft/setup-msbuild@v1.0.2
+
+      - uses: ./.github/actions/setup-js-env
+
+      # Gets the numerical output of the git tag and assigns it to an environment variable
+      - name: Get Tag Version
+        run: |
+          echo "RELEASE_VERSION=${GITHUB_REF#refs/tags/v}" >> $GITHUB_ENV
+        shell: bash
+      - name: Check dependencies cache
+        id: cache-dependencies
+        uses: actions/cache@v3
+        with:
+          path: ./plugin/ThirdParty
+          key: ${{ runner.os }}-cactbot-${{ hashFiles('./util/fetch_deps.ts', './util/DEPS.json5') }}
+          restore-keys: |
+            ${{ runner.os }}-cactbot-
+      - name: Fetch Dependencies
+        if: steps.cache-dependencies.outputs.cache-hit != 'true'
+        run: |
+          npm run fetch-deps
+        shell: bash
+      - name: Build Cactbot Plugin
+        shell: cmd
+        run: |
+          msbuild /p:Configuration=Release /p:Platform=x64 plugin/Cactbot.sln
+
+      - name: Build JavaScript UI Module Bundles
+        run: |
+          npm run build
+      - name: Setup Staging Directory
+        run: |
+          ./util/publish.sh
+        shell: bash
+      - name: Create Release Artifact
+        run: |
+          mkdir cactbot
+          mv publish/cactbot-release/cactbot/ cactbot
+          compress-archive cactbot cactbot-${{ env.RELEASE_VERSION }}.zip
+        shell: pwsh
+      - name: Create Release
+        uses: ncipollo/release-action@v1
+        with:
+          name: ${{ env.RELEASE_VERSION }}
+          tag: ${{ github.ref }}
+          artifacts: cactbot-${{ env.RELEASE_VERSION }}.zip
+          artifactContentType: application/zip
+          draft: true
+          generateReleaseNotes: true
+
+  create-npm-package:
+    runs-on: ubuntu-latest
+    if: ${{ github.repository == 'quisquous/cactbot' }}
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+      - uses: ./.github/actions/setup-js-env
+
+      - run: node .github/scripts/npm-package.cjs
+
+      - run: npm publish
+        working-directory: npm-package
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+
