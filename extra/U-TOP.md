@@ -40,4 +40,3 @@ Options.Triggers.push({
 * 가장 편한 방법은 디버그 체크 박스를 누르면, 안내 줄이 맨 위에 뜨고 거기에 "새로 고침"이 나오니 그걸 누르세요.
 
 ![image](https://user-images.githubusercontent.com/7216647/215310599-e60265fc-9b55-4606-b50b-58a52cb47e4e.png)
-

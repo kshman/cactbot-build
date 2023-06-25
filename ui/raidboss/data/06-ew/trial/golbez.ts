@@ -28,6 +28,7 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: '메테오 피해요',
           de: 'Vermeide Meteor',
+          fr: 'Évitez le météore',
           cn: '远离陨石',
           ko: '메테오 피하기',
         },
@@ -66,6 +67,7 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: '보스 뒤로 갔다 밖으로',
           de: 'Geh hinter, dann raus',
+          fr: 'Derrière puis extérieur',
           cn: '去背后 => 远离',
           ko: '보스 뒤로 => 밖으로',
         },
@@ -111,6 +113,7 @@ const triggerSet: TriggerSet<Data> = {
         clones: {
           en: '${dir1}${dir2}${dir3}${dir4}',
           de: 'Klone: ${dir1}->${dir2}->${dir3}->${dir4}',
+          fr: 'Clones : ${dir1}->${dir2}->${dir3}->${dir4}',
           cn: '分身：${dir1}->${dir2}->${dir3}->${dir4}',
           ko: '분신: ${dir1}->${dir2}->${dir3}->${dir4}',
         },
@@ -136,6 +139,7 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: '먼저 밖으로 갔다 뭉쳐요: ${player}',
           de: 'Zuerst Raus => Sammeln mit ${player}',
+          fr: 'Extérieur d\'abord => package avec ${player}',
           cn: '远离 => 与 ${player} 分摊',
           ko: '밖으로 => ${player} 쉐어',
         },

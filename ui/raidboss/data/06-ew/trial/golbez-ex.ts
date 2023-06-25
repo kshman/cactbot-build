@@ -521,7 +521,7 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: '골베익스: 아즈그림자 페이크',
+      id: 'GolbezEx PR 아즈그림자 페이크',
       type: 'StartsUsing',
       netRegex: { id: '86FF', source: 'Golbez', capture: false },
       infoText: (_data, _matches, output) => output.text!(),
@@ -533,7 +533,7 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: '골베익스: 아즈그림자 끗',
+      id: 'GolbezEx PR 아즈그림자 끗',
       type: 'StartsUsing',
       netRegex: { id: '84B9', source: 'Golbez', capture: false },
       infoText: (_data, _matches, output) => output.text!(),
@@ -545,7 +545,7 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: '골베익스: 아즈그림자 밖힐러',
+      id: 'GolbezEx PR 아즈그림자 밖힐러',
       type: 'StartsUsing',
       netRegex: { id: '8478', source: 'Golbez', capture: false },
       infoText: (_data, _matches, output) => output.text!(),
@@ -557,7 +557,7 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: '골베익스: 아즈그림자 안흩어',
+      id: 'GolbezEx PR 아즈그림자 안흩어',
       type: 'StartsUsing',
       netRegex: { id: '8479', source: 'Golbez', capture: false },
       infoText: (_data, _matches, output) => output.text!(),
@@ -569,9 +569,9 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: '골베익스: Phases of the Shadow',
+      id: 'GolbezEx PR Phases of the Shadow',
       type: 'StartsUsing',
-      netRegex: { id: '86E7', source: 'Golbez', capture: true },
+      netRegex: { id: '86E7', source: 'Golbez', capture: false },
       alertText: (data, _matches, output) => {
         if (data.prsShadow === 'in')
           return output.pin!();
@@ -592,7 +592,7 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: '골베익스: Void Stardust',
+      id: 'GolbezEx PR Void Stardust',
       type: 'StartsUsing',
       netRegex: { id: '84A4', source: 'Golbez', capture: false },
       alertText: (_data, _matches, output) => output.text!(),

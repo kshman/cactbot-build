@@ -94,6 +94,19 @@ const ignoredCombatants = PetData['en'].concat([
   'Mikoto',
   'Liturgic Bell',
   'Zero',
+  'Gosetsu',
+  'Mol Youth',
+  'Hien',
+  'Lyse',
+  'Resistance Fighter',
+  'Resistance Pikedancer',
+  'Obsidian Carbuncle',
+  'Carvallain',
+  'Doman Shaman',
+  'Yugiri',
+  'Doman Liberator',
+  'Arenvald',
+  'Raubahn',
 ]);
 
 const timelineParse = new LogUtilArgParse();

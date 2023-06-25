@@ -1384,7 +1384,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '금색 2개 맞기 (${loc})',
         },
         neitherFate: {
-          en: '레이저 피해요',
+          en: '레이저 피해요 (${loc})',
           de: 'Vermeide Silber und Gold (${loc})',
           fr: 'Évitez l\'argent et l\'or (${loc})', // FIXME
           ja: '顔からのビーム全部回避 (${loc})',
@@ -1524,7 +1524,7 @@ const triggerSet: TriggerSet<Data> = {
     // 그라디아토르: Gilded/Silvered Fate
     /*
     {
-      id: 'ASS+ Gilded/Silvered Fate',
+      id: 'ASS PR Gilded/Silvered Fate',
       type: 'GainsEffect',
       netRegex: { effectId: ['CDF', 'CE0'] },
       condition: Conditions.targetIsYou(),
@@ -1662,7 +1662,7 @@ const triggerSet: TriggerSet<Data> = {
     },
     // 그라디아토르: Specter of Might
     {
-      id: 'ASS+ Specter of Might',
+      id: 'ASS PR Specter of Might',
       type: 'StartsUsing',
       netRegex: { id: '7673', source: 'Gladiator of Sil\'dih', capture: false },
       run: (data) => {
@@ -1672,7 +1672,7 @@ const triggerSet: TriggerSet<Data> = {
     },
     // 그라디아토르: Rush of Might
     {
-      id: 'ASS+ Rush of Might',
+      id: 'ASS PR Rush of Might',
       type: 'StartsUsing',
       netRegex: { id: ['7658', '7659', '765A'], source: 'Gladiator Mirage' },
       durationSeconds: 9.4,
@@ -2527,25 +2527,41 @@ const triggerSet: TriggerSet<Data> = {
     */
     //
     {
-      id: 'ASS+ Firesteel Strike',
+      id: 'ASS PR Firesteel Strike',
       type: 'StartsUsing',
-      netRegex: { id: '74B0', source: 'Shadowcaster Zeless Gah' },
+      netRegex: { id: '74B0', source: 'Shadowcaster Zeless Gah', capture: false },
       response: Responses.spread(),
       run: (data) => data.firesteelStrikes = [],
     },
     //
     {
-      id: 'ASS+ Firesteel Strike Collect',
+      id: 'ASS PR Firesteel Strike Collect',
       type: 'Ability',
       netRegex: { id: ['74B1', '74B2'], source: 'Shadowcaster Zeless Gah' },
       run: (data, matches) => data.firesteelStrikes.push(matches.target),
     },
     //
     {
-      id: 'ASS+ Blessed Beacon',
+      id: 'ASS PR Blessed Beacon',
       type: 'StartsUsing',
-      netRegex: { id: '74B3', source: 'Shadowcaster Zeless Gah' },
+      netRegex: { id: '74B3', source: 'Shadowcaster Zeless Gah', capture: false },
       response: (data, _matches, output) => {
+        // cactbot-builtin-response
+        output.responseOutputStrings = {
+          text: {
+            en: '두 번 내려치기',
+            ja: '2回打ち下ろし',
+          },
+          front: {
+            en: '앞에서 막아요 (${players})',
+            ja: '前でカーバ (${players})',
+          },
+          behind: {
+            en: '뒤로 숨어요',
+            ja: '後ろに隠れる',
+          },
+        };
+
         if (data.firesteelStrikes.length === 0)
           return { infoText: output.text!() };
 
@@ -2555,20 +2571,6 @@ const triggerSet: TriggerSet<Data> = {
         const players: string[] = [];
         data.firesteelStrikes.forEach((value) => players.push(data.ShortName(value)));
         return { infoText: output.front!({ players: players.join(', ') }) };
-      },
-      outputStrings: {
-        text: {
-          en: '두 번 내려치기',
-          ja: '2回打ち下ろし',
-        },
-        front: {
-          en: '앞에서 막아요 (${players})',
-          ja: '前でカーバ (${players})',
-        },
-        behind: {
-          en: '뒤로 숨어요',
-          ja: '後ろに隠れる',
-        },
       },
     },
   ],
@@ -2587,6 +2589,7 @@ const triggerSet: TriggerSet<Data> = {
     },
     {
       'locale': 'de',
+      'missingTranslations': true,
       'replaceSync': {
         'Aqueduct Belladonna': 'Aquädukt-Belladonna',
         'Aqueduct Dryad': 'Aquädukt-Dryade',
@@ -2811,6 +2814,7 @@ const triggerSet: TriggerSet<Data> = {
     },
     {
       'locale': 'cn',
+      'missingTranslations': true,
       'replaceSync': {
         'Aqueduct Belladonna': '水道剧毒美人',
         'Aqueduct Dryad': '水道树妖',
@@ -2885,6 +2889,7 @@ const triggerSet: TriggerSet<Data> = {
     },
     {
       'locale': 'ko',
+      'missingTranslations': true,
       'replaceSync': {
         'Aqueduct Belladonna': '지하수도 벨라돈나',
         'Aqueduct Dryad': '지하수도 드라이어드',

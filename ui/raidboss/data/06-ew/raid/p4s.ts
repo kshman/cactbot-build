@@ -901,19 +901,20 @@ const triggerSet: TriggerSet<Data> = {
       netRegex: { id: '6E78', source: 'Hesperos' },
       condition: Conditions.caresAboutPhysical(),
       response: (data, matches, output) => {
+        // cactbot-builtin-response
+        output.responseOutputStrings = {
+          tankBuster: Outputs.tankBuster,
+          tankBusterOnPlayer: Outputs.tankBusterOnPlayer,
+          invulnerable: {
+            en: '내게 탱크버스터! 무적을 써욧!!!',
+          },
+        };
         // response: Responses.sharedTankBuster(),
         if (matches.target === data.me)
           return { alertText: output.invulnerable!() };
         if (!matches.target)
           return { infoText: output.tankBuster!() };
         return { infoText: output.tankBusterOnPlayer!({ player: data.ShortName(matches.target) }) };
-      },
-      outputStrings: {
-        tankBuster: Outputs.tankBuster,
-        tankBusterOnPlayer: Outputs.tankBusterOnPlayer,
-        invulnerable: {
-          en: '내게 탱크버스터! 무적을 써욧!!!',
-        },
       },
     },
     {
@@ -1270,7 +1271,7 @@ const triggerSet: TriggerSet<Data> = {
     {
       id: 'P4S Wreath of Thorns 4',
       type: 'StartsUsing',
-      netRegex: { id: '6A32', source: 'Hesperos' },
+      netRegex: { id: '6A32', source: 'Hesperos', capture: false },
       alarmText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {

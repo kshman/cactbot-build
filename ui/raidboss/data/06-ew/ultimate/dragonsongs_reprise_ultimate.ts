@@ -25,7 +25,7 @@ export type ConfigIds = 'prsMarkerType';
 Options.Triggers.push({
     zoneId: ZoneId.DragonsongsRepriseUltimate,
     timelineTriggers: [{
-      id: 'DSR+ 데이터 설정',
+      id: 'DSR PR 데이터 설정',
       regex: /--setup--/,
       run: (data) => data.prsParty = [여기서 값],
     },],
@@ -399,7 +399,7 @@ const triggerSet: TriggerSet<Data> = {
     {
       id: 'DSR Holiest Hallowing',
       type: 'StartsUsing',
-      netRegex: { id: '62D0', source: 'Ser Adelphel' },
+      netRegex: { id: '62D0', source: 'Ser Adelphel', capture: false },
       condition: (data) => data.CanSilence(),
       alertText: (data, _matches, output) => output.intrs!({ num: ++data.prsHolyHallow }),
       outputStrings: {
@@ -637,7 +637,7 @@ const triggerSet: TriggerSet<Data> = {
       response: Responses.moveAway(),
     },
     {
-      id: 'DSR+ 사용자 데이터 설정 (뇌창)',
+      id: 'DSR PR 사용자 데이터 설정 (뇌창)',
       type: 'Ability',
       netRegex: { id: '63D3', source: 'King Thordan', capture: false },
       delaySeconds: 1,
@@ -667,7 +667,7 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: 'DSR+ 줄 (0054)',
+      id: 'DSR PR 줄 (0054)',
       type: 'Tether',
       netRegex: { id: '0054' },
       condition: (data) => data.phase === 'thordan' || data.phase === 'nidhogg',
@@ -1017,7 +1017,7 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: 'DSR+ Skyward Leap 동료 확인',
+      id: 'DSR PR Skyward Leap 동료 확인',
       type: 'Ability',
       netRegex: { id: '63DA', source: 'Ser Guerrique', capture: false },
       alertText: (data, _matches, output) => {
@@ -1035,7 +1035,7 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: 'DSR+ 배시 줄은 어디에',
+      id: 'DSR PR 배시 줄은 어디에',
       type: 'Ability',
       // Heavy Impact 5
       netRegex: { id: '63DA', source: 'Ser Guerrique', capture: false },
@@ -1198,6 +1198,23 @@ const triggerSet: TriggerSet<Data> = {
       condition: (data) => data.phase === 'thordan',
       sound: '',
       response: (data, matches, output) => {
+        // cactbot-builtin-response
+        output.responseOutputStrings = {
+          text: {
+            en: '칼: ${name1}, ${name2}',
+            de: 'Schwerter: ${name1}, ${name2}',
+            ja: '剣：${name1}, ${name2}',
+            cn: '剑: ${name1}, ${name2}',
+            ko: '돌진 대상자: ${name1}, ${name2}',
+          },
+          swap: {
+            en: '자리바꿔요: ${role}',
+          },
+          keep: {
+            en: '자리 그대로',
+          },
+        };
+
         const id = getHeadmarkerId(data, matches);
         if (id === headmarkers.sword1)
           data.sanctitySword1 = matches.target;
@@ -1230,25 +1247,6 @@ const triggerSet: TriggerSet<Data> = {
         const name1 = data.ShortName(data.sanctitySword1);
         const name2 = data.ShortName(data.sanctitySword2);
         return { infoText: output.text!({ name1: name1, name2: name2 }) };
-      },
-      // Don't collide with the more important 1/2 call.
-      tts: '',
-      outputStrings: {
-        text: {
-          en: '칼: ${name1}, ${name2}',
-          de: 'Schwerter: ${name1}, ${name2}',
-          ja: '剣：${name1}, ${name2}',
-          cn: '剑: ${name1}, ${name2}',
-          ko: '돌진 대상자: ${name1}, ${name2}',
-        },
-        swap: {
-          en: '자리 바꿔요: ${role}',
-          ja: 'スワップ: ${role}',
-        },
-        keep: {
-          en: '담당 자리로',
-          ja: '散開位置へ',
-        },
       },
     },
     {
@@ -2016,7 +2014,7 @@ const triggerSet: TriggerSet<Data> = {
       response: Responses.getBehind(),
     },
     {
-      id: 'DSR+ 니드 줄을 채야해',
+      id: 'DSR PR 니드 줄을 채야해',
       type: 'StartsUsing',
       netRegex: { id: '670C', source: 'Nidhogg', capture: false },
       condition: (data) => data.role === 'tank' && !data.prsSeenNidTether,
@@ -2044,7 +2042,7 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: 'DSR+ 니드 줄은 어디에',
+      id: 'DSR PR 니드 줄은 어디에',
       type: 'StartsUsing',
       netRegex: { id: '670C', source: 'Nidhogg', capture: false },
       condition: (data) => data.role === 'tank' && !data.prsSeenNidTether,
@@ -2069,7 +2067,7 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: 'DSR+ 니드 줄 처리 종료',
+      id: 'DSR PR 니드 줄 처리 종료',
       type: 'StartsUsing',
       netRegex: { id: '7436', source: 'Nidhogg', capture: false },
       run: (data, _matches, _output) => {
@@ -2377,7 +2375,7 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: 'DSR+ 헤븐데스 순번 찾기',
+      id: 'DSR PR 헤븐데스 순번 찾기',
       type: 'Ability',
       netRegex: { id: '6B92', source: 'King Thordan', capture: false },
       // Death of the Heavens + 12초
@@ -3369,7 +3367,7 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: 'DSR+ Trinity 스탠스 켜기',
+      id: 'DSR PR Trinity 스탠스 켜기',
       type: 'GainsEffect',
       netRegex: { effectId: 'C3F', count: '02' },
       condition: (data, matches) => data.me === matches.target && data.role === 'tank',
@@ -3396,6 +3394,7 @@ const triggerSet: TriggerSet<Data> = {
     },
     {
       'locale': 'de',
+      'missingTranslations': true,
       'replaceSync': {
         'Darkscale': 'Dunkelschuppe',
         'Dragon-king Thordan': 'König Thordan',
@@ -3795,6 +3794,7 @@ const triggerSet: TriggerSet<Data> = {
     },
     {
       'locale': 'cn',
+      'missingTranslations': true,
       'replaceSync': {
         'Darkscale': '暗鳞黑龙',
         'Dragon-king Thordan': '龙威骑神托尔丹',
@@ -3929,6 +3929,7 @@ const triggerSet: TriggerSet<Data> = {
     },
     {
       'locale': 'ko',
+      'missingTranslations': true,
       'replaceSync': {
         'Darkscale': '검은미늘',
         'Dragon-king Thordan': '기룡신 토르당',

@@ -450,18 +450,24 @@ const triggerSet: TriggerSet<Data> = {
     },
     // 실키: Chilling Suds
     {
-      id: 'SS+ 실키 Chilling Suds',
+      id: 'Sildihn PR 실키 Chilling Suds',
       type: 'StartsUsing',
       netRegex: { id: '7736', source: 'Silkie', capture: false },
-      infoText: '파랑🔵 꼬리',
+      infoText: (_data, _matches, output) => output.text!(),
+      outputStrings: {
+        text: '파랑🔵 꼬리',
+      },
     },
 
     // 실키: Bracing Suds
     {
-      id: 'SS+ 실키 Bracing Suds',
+      id: 'Sildihn PR 실키 Bracing Suds',
       type: 'StartsUsing',
       netRegex: { id: '7735', source: 'Silkie', capture: false },
-      infoText: '초록🟢 꼬리',
+      infoText: (_data, _matches, output) => output.text!(),
+      outputStrings: {
+        text: '초록🟢 꼬리',
+      },
     },
     {
       id: 'Sildihn Gladiator Flash of Steel',
@@ -619,18 +625,24 @@ const triggerSet: TriggerSet<Data> = {
     },
     // 글라디에이터: Wrath of Ruin
     {
-      id: 'SS+ 그라디아토르 Wrath of Ruin',
+      id: 'Sildihn PR 그라디아토르 Wrath of Ruin',
       type: 'StartsUsing',
       netRegex: { id: '7645', source: 'Gladiator of Sil\'dih', capture: false },
-      infoText: '바깥에 구슬 나와요',
+      infoText: (_data, _matches, output) => output.text!(),
+      outputStrings: {
+        text: '바깥에 구슬 나와요',
+      },
     },
     // 글라디에이터: Sundered Remains
     //   7648이 첨, 7649가 이어서 여러개
     {
-      id: 'SS+ 그라디아토르 Sundered Remains',
+      id: 'Sildihn PR 그라디아토르 Sundered Remains',
       type: 'StartsUsing',
       netRegex: { id: '7648', source: 'Gladiator of Sil\'dih', capture: false },
-      infoText: '바닥에 연속 장판이 깔려요~',
+      infoText: (_data, _matches, output) => output.text!(),
+      outputStrings: {
+        text: '바닥에 연속 장판이 깔려요~',
+      },
     },
     {
       id: 'Sildihn Shadowcaster Firesteel Fracture',
@@ -689,35 +701,47 @@ const triggerSet: TriggerSet<Data> = {
     },
     // 쏜: Spring to Life
     {
-      id: 'SS+ 쏜나이트 Spring to Life',
+      id: 'Sildihn PR 쏜나이트 Spring to Life',
       type: 'StartsUsing',
       netRegex: { id: '70ED', source: 'Thorne Knight', capture: false },
       durationSeconds: 7,
-      infoText: '그리드▦ 나와요',
+      infoText: (_data, _matches, output) => output.text!(),
+      outputStrings: {
+        text: '그리드▦ 나와요',
+      },
     },
     // 쏜: Spring to Life + Blaze of Glory
     {
-      id: 'SS+ 쏜나이트 Spring to Life:Glory',
+      id: 'Sildihn PR 쏜나이트 Spring to Life:Glory',
       type: 'StartsUsing',
       netRegex: { id: '70EE', source: 'Thorne Knight', capture: false },
       durationSeconds: 7,
-      infoText: '구슬 십자 + 그리드▦ 나와요',
+      infoText: (_data, _matches, output) => output.text!(),
+      outputStrings: {
+        text: '구슬 십자 + 그리드▦ 나와요',
+      },
     },
     // 쏜: Signal Flare
     {
-      id: 'SS+ 쏜나이트 Signal Flare',
+      id: 'Sildihn PR 쏜나이트 Signal Flare',
       type: 'StartsUsing',
       netRegex: { id: '70F5', source: 'Thorne Knight', capture: false },
       durationSeconds: 7,
-      infoText: '세번째 있다가 → 첫번째 사라지면 들어가요',
+      infoText: (_data, _matches, output) => output.text!(),
+      outputStrings: {
+        text: '세번째 있다가 → 첫번째 사라지면 들어가요',
+      },
     },
     // 쏜: Blaze of Glory
     {
-      id: 'SS+ 쏜나이트 Blaze of Glory',
+      id: 'Sildihn PR 쏜나이트 Blaze of Glory',
       type: 'StartsUsing',
       netRegex: { id: '70F4', source: 'Thorne Knight', capture: false },
       durationSeconds: 3,
-      infoText: '구슬 두개 나와요',
+      infoText: (_data, _matches, output) => output.text!(),
+      outputStrings: {
+        text: '구슬 두개 나와요',
+      },
     },
     // Slashburn(70EF)
     // Reverse Slashburn(70F0, 70F1)

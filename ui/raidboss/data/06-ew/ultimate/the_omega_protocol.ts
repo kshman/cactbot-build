@@ -256,7 +256,7 @@ const triggerSet: TriggerSet<Data> = {
   },
   timelineTriggers: [
     {
-      id: 'TOP+ 데이터 확인',
+      id: 'TOP PR 데이터 확인',
       regex: /--setup--/,
       delaySeconds: 1,
       infoText: (data, _matches, output) => {
@@ -2693,7 +2693,7 @@ const triggerSet: TriggerSet<Data> = {
     {
       id: 'TOP P5 시그마 런 듀나미스',
       type: 'StartsUsing',
-      netRegex: { id: '8014', source: 'Omega-M' },
+      netRegex: { id: '8014', source: 'Omega-M', capture: false },
       condition: (data, _matches) => data.my?.idyn === 1,
       delaySeconds: 29,
       durationSeconds: 10,
@@ -2715,7 +2715,7 @@ const triggerSet: TriggerSet<Data> = {
     {
       id: 'TOP P5 오메가 런 듀나미스 모니터 찾기',
       type: 'StartsUsing',
-      netRegex: { id: '8015', source: 'Omega-M' },
+      netRegex: { id: '8015', source: 'Omega-M', capture: false },
       delaySeconds: 8.5,
       durationSeconds: 7,
       infoText: (data, _matches, output) => {
@@ -2753,7 +2753,7 @@ const triggerSet: TriggerSet<Data> = {
     {
       id: 'TOP P5 오메가 런 듀나미스 나는 어디로',
       type: 'StartsUsing',
-      netRegex: { id: '8015', source: 'Omega-M' },
+      netRegex: { id: '8015', source: 'Omega-M', capture: false },
       delaySeconds: 15.5,
       durationSeconds: 8,
       response: (data, _matches, output) => {
@@ -2763,6 +2763,8 @@ const triggerSet: TriggerSet<Data> = {
           unknown: { en: '(버프 확인해야해요)' },
           stopMe: { en: '금지 마커 달아요!' },
           attackMe: { en: '숫자 마커 달아요!' },
+          ttsNumber: { en: '数字マーカー' },
+          ttsStop: { en: '禁止マーカー' },
         };
 
         data.lastmode = undefined;
@@ -2782,19 +2784,13 @@ const triggerSet: TriggerSet<Data> = {
           const nth = data.omegaMonitors.indexOf(data.me);
           if (nth < 0 || nth >= 2) {
             data.lastmode = 1;
-            return { alarmText: output.attackMe!() };
+            return { alarmText: output.attackMe!(), tts: output.ttsNumber!() };
           }
           data.lastmode = 2;
-          return { alarmText: output.stopMe!() };
+          return { alarmText: output.stopMe!(), tts: output.ttsStop!() };
         }
 
         return { infoText: output.unknown!() };
-      },
-      tts: (data) => {
-        if (data.lastmode === 1)
-          return '数字マーカー';
-        if (data.lastmode === 2)
-          return '禁止マーカー';
       },
     },
     {
@@ -2839,7 +2835,9 @@ const triggerSet: TriggerSet<Data> = {
           ...nearDistantOutputStrings,
           attackMe: { en: '숫자 마커 달아요!' },
           tether: { en: '줄 채서 북으로!' },
-          mesg: { en: '2:흩어지고, 3: 줄채고, 아니면 응??' }
+          mesg: { en: '2:흩어지고, 3: 줄채고, 아니면 응??' },
+          ttsNum: { en: '数字マーカー' },
+          ttsTether: { en: '線取り' },
         };
 
         data.lastmode = undefined;
@@ -2855,27 +2853,22 @@ const triggerSet: TriggerSet<Data> = {
 
           if (data.my.idyn === 1 || data.my.idyn === 2) {
             data.lastmode = 1;
-            return { alarmText: output.attackMe!() };
+            return { alarmText: output.attackMe!(), tts: output.ttsNum!() };
           }
           if (data.my.idyn === 3) {
             // 위에서 한번 alarm으로 출력하기 땜시 여기선 그냥 info
-            return { infoText: output.tether!() };
+            return { infoText: output.tether!(), tts: output.ttsTether!() };
           }
         }
 
         return { infoText: output.mesg!() };
-      },
-      tts: (data) => {
-        if (data.lastmode === 1)
-          return '数字マーカー';
-        if (data.lastmode === 3)
-          return '線取り';
       },
     }
   ],
   timelineReplace: [
     {
       'locale': 'de',
+      'missingTranslations': true,
       'replaceSync': {
         'Alpha Omega': 'Alpha-Omega',
         'Cosmo Meteor': 'Kosmosmeteor',
