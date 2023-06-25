@@ -1882,7 +1882,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         combined: {
           en: '${move} + ${engrave}',
-          ko: '${move} => ${engrave}',
+          ko: '${move} => $engrave',
         },
         inThenOut: '안에 있다 => 밖으로',
         outThenIn: '밖에 있다 => 안으로',
