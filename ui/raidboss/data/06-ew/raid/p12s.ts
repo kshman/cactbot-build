@@ -497,49 +497,49 @@ const triggerSet: TriggerSet<Data> = {
         // might want different left/right calls based on North/South boss facing
         // and it's nice to have a "go through" or "go back" description too.
         superchain2aLeftNorthNorth: {
-          en: '북쪽 => 다시 북쪽 [왼쪽]',
+          en: '북쪽 => 되돌아 와욧 [왼쪽]',
           de: 'Norden + Links von Ihr (dannach Norden)',
           cn: '北 + Boss左侧 (稍后 回到北)',
           ko: '북쪽 + 보스 왼쪽 (그리고 다시 북쪽)',
         },
         superchain2aLeftNorthSouth: {
-          en: '북쪽 => 전진해서 남쪽 [왼쪽]',
+          en: '북쪽 => 계속 전진 [왼쪽]',
           de: 'Norden + Links von Ihr (dannach Süden)',
           cn: '北 + Boss左侧 (稍后 去南)',
           ko: '북쪽 + 보스 왼쪽 (그리고 남쪽으로)',
         },
         superchain2aLeftSouthNorth: {
-          en: '남쪽 => 전진해서 북쪽 [왼쪽]',
+          en: '남쪽 => 계속 전진 [왼쪽]',
           de: 'Süden + Links (dannach Norden)',
           cn: '南 + 左 (稍后 去北)',
           ko: '남쪽 + 왼쪽 (그리고 북쪽으로)',
         },
         superchain2aLeftSouthSouth: {
-          en: '남쪽 => 다시 남쪽 [왼쪽]',
+          en: '남쪽 => 되돌아 와욧 [왼쪽]',
           de: 'Süden + Links (dannach Süden)',
           cn: '南 + 左 (稍后 回到南)',
           ko: '남쪽 + 왼쪽 (그리고 다시 남쪽)',
         },
         superchain2aRightNorthNorth: {
-          en: '북쪽 => 다시 북쪽 [오른쪽]',
+          en: '북쪽 => 되돌아 와욧 [오른쪽]',
           de: 'Norden + Rechts von Ihr (dannach Norden)',
           cn: '北 + Boss右侧 (稍后 回到北)',
           ko: '북쪽 + 보스 오른쪽 (그리고 다시 북쪽)',
         },
         superchain2aRightNorthSouth: {
-          en: '북쪽 => 전진해서 남쪽 [오른쪽]',
+          en: '북쪽 => 계속 전진 [오른쪽]',
           de: 'Norden + Rechts von Ihr (dannach Süden)',
           cn: '北 + Boss右侧 (稍后 去南)',
           ko: '북쪽 + 보스 오른쪽 (그리고 남쪽으로)',
         },
         superchain2aRightSouthNorth: {
-          en: '남쪽 => 전진해서 북쪽 [오른쪽]',
+          en: '남쪽 => 계속 전진 [오른쪽]',
           de: 'Süden + Rechts (dannach Norden)',
           cn: '南 + 右 (稍后 去北)',
           ko: '남쪽 + 오른쪽 (그리고 북쪽으로)',
         },
         superchain2aRightSouthSouth: {
-          en: '남쪽 => 다시 남쪽 [오른쪽]',
+          en: '남쪽 => 되돌아 와욧 [오른쪽]',
           de: 'Süden + Rechts (dannach Süden)',
           cn: '南 + 右 (稍后 回到南)',
           ko: '남쪽 + 오른쪽 (그리고 다시 남쪽)',
@@ -2085,9 +2085,12 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (data, matches, output) => {
         if (data.prsPhase === 900) {
           // 가이아오코스2 천사랑 연결
-          if (data.party.isDPS(matches.target))
-            return output.dpsTether!();
-          return output.thTether!();
+          if (data.party.isDPS(matches.target)) {
+            if (data.role !== 'dps')
+              return output.tetherBarrier!();
+          }
+          if (data.role === 'dps')
+            return output.tetherBarrier!();
         } else if (data.prsPhase === 200 || data.prsPhase === 600) {
           // 클래식 컨셉 줄달리면 자기 자리 알려줌
           const myPs = data.prsClassicMarker[data.me];
@@ -2104,8 +2107,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         // 가이아오코스2
-        dpsTether: '탱힐이 막아요',
-        thTether: 'DPS가 막아요',
+        tetherBarrier: '줄 앞에 막아줘요',
         // 클래식 컨셉1
         c1Safe10: '🡼🡼🡼', // 알파, 동글
         c1Safe20: '오른쪽🡹🡹🡹', // 알파, 세모
