@@ -4,16 +4,17 @@
     "moduleTypes": {
       "webpack/*": "cjs",
       // Globs are also supported with the same behavior as tsconfig "include"
-      "webpack/**/*": "cjs"
+      "webpack/**/*": "cjs",
+      "experimentalSpecifierResolution": "node"
     },
-    "esm": true
+    "esm": true,
   },
   "compilerOptions": {
     "plugins": [
       {
         "transform": "@zoltu/typescript-transformer-append-js-extension/output/index.js",
         "after": true
-      }
+      },
     ],
 
     "target": "ES2022",
@@ -48,10 +49,6 @@
     "typeRoots": [
       "node_modules/@types"
     ],
-    "lib": [
-      "es2020",
-      "dom"
-    ]
   },
   "include": [
     "./ui",
