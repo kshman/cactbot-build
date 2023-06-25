@@ -1191,6 +1191,7 @@ const triggerSet: TriggerSet<Data> = {
         },
       },
     },
+    /* 여기 어디에 도달하지 않는게 있는가 싶다
     {
       id: 'DSR Sanctity of the Ward Sword Names',
       type: 'HeadMarker',
@@ -1249,6 +1250,7 @@ const triggerSet: TriggerSet<Data> = {
         return { infoText: output.text!({ name1: name1, name2: name2 }) };
       },
     },
+    */
     {
       id: 'DSR Dragon\'s Gaze',
       type: 'StartsUsing',
