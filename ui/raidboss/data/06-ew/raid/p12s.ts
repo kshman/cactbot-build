@@ -394,6 +394,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         clones: {
           en: '${dir}으로',
+          ko: '분신 ${dir}',
         },
         north: Outputs.north,
         south: Outputs.south,
@@ -435,12 +436,18 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         insideWestOutsideEast: {
           en: '서[안] / 동[밖]',
+          cn: '内西 / 外东',
+          ko: '서쪽 안 / 동쪽 바깥',
         },
         insideEastOutsideWest: {
           en: '서[밖] / 동[안]',
+          cn: '内东 / 外西',
+          ko: '동쪽 안 / 서쪽 바깥',
         },
         avoid: {
           en: '한 줄 장판 피해요',
+          cn: '远离场边激光',
+          ko: '직선 장판 피하기',
         },
       },
     },
@@ -879,10 +886,12 @@ const triggerSet: TriggerSet<Data> = {
         lightBeam: {
           en: 'light beam 🟨줄 땡겨요',
           cn: '引导光激光',
+          ko: '빛 선',
         },
         darkBeam: {
           en: 'dark beam 🟪줄 땡겨요',
           cn: '引导暗激光',
+          ko: '어둠 선',
         },
       },
     },
@@ -1009,18 +1018,22 @@ const triggerSet: TriggerSet<Data> = {
         lightTowerSide: {
           en: '🟡설치 ${pos1}/${pos2}',
           cn: '去 ${pos1}/${pos2} 放光塔',
+          ko: '빛 기둥 ${pos1}/${pos2}에 놓기',
         },
         darkTowerSide: {
           en: '🟣설치 ${pos1}/${pos2}',
           cn: '去 ${pos1}/${pos2} 放暗塔',
+          ko: '어둠 기둥 ${pos1}/${pos2}에 놓기',
         },
         lightTower: {
           en: '🟡설치',
           cn: '放光塔',
+          ko: '빛 기둥 놓기',
         },
         darkTower: {
           en: '🟣설치',
           cn: '放暗塔',
+          ko: '어둠 기둥 놓기',
         },
         northeast: Outputs.arrowNE,
         northwest: Outputs.arrowNW,
@@ -1046,10 +1059,12 @@ const triggerSet: TriggerSet<Data> = {
         lightTilt: {
           en: '🟣밟아요',
           cn: '踩暗塔',
+          ko: '어둠 기둥 들어가기',
         },
         darkTilt: {
           en: '🟡밟아요',
           cn: '踩光塔',
+          ko: '빛 기둥 들어가기',
         },
       },
     },
@@ -1085,6 +1100,7 @@ const triggerSet: TriggerSet<Data> = {
         spreadLater: {
           en: '(곧 흩어져요)',
           cn: '（稍后分散）',
+          ko: '(나중에 산개)',
         },
       },
     },
@@ -1109,18 +1125,22 @@ const triggerSet: TriggerSet<Data> = {
         lightBeam: {
           en: '🟣밟아요🡺🡺',
           cn: '踩暗塔',
+          ko: '어둠 기둥 들어가기',
         },
         darkBeam: {
           en: '🡸🡸🟡밟아요',
           cn: '踩光塔',
+          ko: '빛 기둥 들어가기',
         },
         lightTower: {
           en: '🡸🡸🟡설치',
           cn: '放光塔',
+          ko: '빛 기둥 놓기',
         },
         darkTower: {
           en: '🟣설치🡺🡺',
           cn: '放暗塔',
+          ko: '어둠 기둥 놓기',
         },
       },
     },
@@ -1154,10 +1174,12 @@ const triggerSet: TriggerSet<Data> = {
         crossMarked: {
           en: '내게 ➕ 북쪽으로!',
           cn: '十 点名',
+          ko: '\'+\' 장판 대상자',
         },
         xMarked: {
           en: '내게 ❌ 남쪽으로!',
           cn: '\'x\' 点名',
+          ko: '\'x\' 장판 대상자',
         },
       },
     },
@@ -1177,10 +1199,12 @@ const triggerSet: TriggerSet<Data> = {
         crossMarked: {
           en: '➕ 모서리에 설치',
           cn: '放置 十 点名',
+          ko: '\'+\' 장판 놓기',
         },
         xMarked: {
           en: '❌ 가운데 설치',
           cn: '放置 \'x\' 点名',
+          ko: '\'x\' 장판 놓기',
         },
       },
     },
@@ -1194,6 +1218,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         baitCleave: {
           en: '천사 레이저 유도',
+          ko: '레이저 유도',
         },
       },
     },
@@ -1245,14 +1270,17 @@ const triggerSet: TriggerSet<Data> = {
         towerOnYou: {
           en: '내게 ${color}타워 (${partner})',
           cn: '${color} 塔点名 (+ ${partner})',
+          ko: '${color} 기둥 대상자 (+ ${partner})',
         },
         light: {
           en: '🟡',
           cn: '光',
+          ko: '빛',
         },
         dark: {
           en: '🟣',
           cn: '暗',
+          ko: '어둠',
         },
         unknown: Outputs.unknown,
       },
@@ -1290,14 +1318,17 @@ const triggerSet: TriggerSet<Data> = {
         towersLater: {
           en: '타워 들어갈거예요: ${color}',
           cn: '稍后 ${color} 塔',
+          ko: '${color} 기둥 (나중에)',
         },
         light: {
           en: '🟡',
           cn: '光',
+          ko: '빛',
         },
         dark: {
           en: '🟣',
           cn: '暗',
+          ko: '어둠',
         },
         unknown: Outputs.unknown,
       },
@@ -1331,22 +1362,27 @@ const triggerSet: TriggerSet<Data> = {
         dropTower: {
           en: '${spot} ${color}설치',
           cn: '在 ${spot} 放 ${color} 塔',
+          ko: '${color} 기둥 놓기 (${spot})',
         },
         light: {
           en: '🟡',
           cn: '光',
+          ko: '빛',
         },
         dark: {
           en: '🟣',
           cn: '暗',
+          ko: '어둠',
         },
         platform: {
           en: '판때기 한가운데',
           cn: '平台内',
+          ko: '플랫폼 내부',
         },
         corner: {
           en: '안쪽 모서리에',
           cn: '平台交叉处',
+          ko: '플랫폼 교차지점',
         },
         unknown: Outputs.unknown,
       },
@@ -1382,18 +1418,22 @@ const triggerSet: TriggerSet<Data> = {
         soakTower: {
           en: '${color}밟아요',
           cn: '踩 ${color} 塔',
+          ko: '${color} 기둥 들어가기',
         },
         baitCleaves: {
           en: '천사 레이저 유도',
           cn: '引导射线',
+          ko: '레이저 유도',
         },
         light: {
           en: '🟡',
           cn: '光',
+          ko: '빛',
         },
         dark: {
           en: '🟣',
           cn: '暗',
+          ko: '어둠',
         },
       },
     },
@@ -1582,7 +1622,6 @@ const triggerSet: TriggerSet<Data> = {
       type: 'Ability',
       netRegex: { id: '82EF', source: 'Anthropos', capture: false },
       condition: (data) => data.phase === 'palladion',
-      delaySeconds: 0.5,
       durationSeconds: 3,
       response: (data, _matches, output) => {
         // cactbot-builtin-response
@@ -1784,26 +1823,32 @@ const triggerSet: TriggerSet<Data> = {
         lightBeam: {
           en: '밟아요🡺🡺',
           cn: '光激光（与暗分摊）',
+          ko: '빛 레이저 (어둠 쉐어)',
         },
         darkBeam: {
           en: '🡸🡸밟아요',
           cn: '暗激光（与光分摊）',
+          ko: '어둠 레이저 (빛 쉐어),',
         },
         lightTower: {
           en: '🡸🡸🟡설치',
           cn: '光塔点名',
+          ko: '빛 기둥',
         },
         darkTower: {
           en: '🟣설치🡺🡺',
           cn: '暗塔点名',
+          ko: '어둠 기둥',
         },
         lightTilt: {
           en: '🡸🡸흩어져요',
           cn: '光分摊组',
+          ko: '빛 쉐어',
         },
         darkTilt: {
           en: '흩어져요🡺🡺',
           cn: '暗分摊组',
+          ko: '어둠 쉐어',
         },
         unknown: Outputs.unknown,
       },
@@ -1837,24 +1882,29 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         combined: {
           en: '${move} + ${engrave}',
+          ko: '${move} => ${engrave}',
         },
         inThenOut: '안에 있다 => 밖으로',
         outThenIn: '밖에 있다 => 안으로',
         lightBeam: {
           en: '🟣밟아요🡺🡺',
           cn: '踩暗塔',
+          ko: '어둠 기둥 들어가기',
         },
         darkBeam: {
           en: '🡸🡸🟡밟아요',
           cn: '踩光塔',
+          ko: '빛 기둥 들어가기',
         },
         lightTower: {
           en: '🡸🡸🟡설치',
           cn: '放光塔',
+          ko: '빛 기둥 놓기',
         },
         darkTower: {
           en: '🟣설치🡺🡺',
           cn: '放暗塔',
+          ko: '어둠 기둥 놓기',
         },
         lightTilt: Outputs.spread,
         darkTilt: Outputs.spread,

@@ -164,6 +164,7 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: '(안쪽에서) 4:4 뭉쳐요',
           de: 'Heiler Gruppen',
+          fr: 'Groupes sur les heals',
           cn: '双奶分摊',
           ko: '힐러 그룹 쉐어',
         },
@@ -201,6 +202,7 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: '(마커에서) 페어',
           de: 'Partner',
+          fr: 'Partenaires',
           cn: '两人分摊',
           ko: '파트너',
         },
@@ -247,6 +249,7 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: '밖으로 + 4:4 뭉쳐요',
           de: 'Raus + Heiler Gruppen',
+          fr: 'Extérieur + Package sur les heals',
           cn: '场外 + 双奶分摊',
           ko: '밖으로 + 힐러 그룹 쉐어',
         },
@@ -263,19 +266,21 @@ const triggerSet: TriggerSet<Data> = {
           upheldOnYou: {
             en: '한가운데서 줄 유도 => 안에서 + 페어',
             de: 'Du rein (Gruppe raus) => Rein + Partner',
+            fr: 'Vous à l\'intérieur (groupe à l\'extérieur) => Intérieur + Partenaires',
             cn: '引导月环 => 场中 + 两人分摊',
             ko: '안으로 (본대 밖) => 안으로 + 파트너',
           },
           upheldOnPlayer: {
             en: '밖에 있다가 => 안으로 + 페어 (줄 처리: ${player})',
             de: 'Gruppe raus (${player} rein)=> Rein + Partner',
+            fr: 'Groupe à l\'extérieur (${player} intérieur) => Intérieur + Partenaires',
             cn: '场外 （${player} 引导） => 场中 + 两人分摊',
             ko: '본대 밖으로 (${player} 안) => 안으로 + 파트너',
           },
           upheldNotOnYou: {
             en: '밖에 있다가 => 안으로 + 페어',
             de: 'Party Raus => Rein + Partner',
-            fr: 'Extérieur => Intérieur + Partenaire',
+            fr: 'Groupe à l\'extérieur => Intérieur + Partenaires',
             cn: '场外 => 场中 + 两人分摊',
             ko: '본대 밖으로 => 안으로 + 파트너',
           },
@@ -306,6 +311,7 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: '안으로 + 페어',
           de: 'Rein + Partner',
+          fr: 'Intérieur + Partenaires',
           cn: '场中 + 两人分摊',
           ko: '안으로 + 파트너',
         },
@@ -325,12 +331,14 @@ const triggerSet: TriggerSet<Data> = {
           tankTether: {
             en: '줄 유도해요!',
             de: 'Weg von der Gruppe',
+            fr: 'Éloignez-vous du groupe',
             cn: '远离放月环',
             ko: '본대와 멀어지기',
           },
           partyStackPlayerOut: {
             en: '모두 뭉쳐요 (줄 처리: ${player})',
             de: 'Mit der Gruppe sammeln (${player} raus)',
+            fr: 'Package en groupe (${player} à l\'extérieur)',
             cn: '集合 （${player} 放月环）',
             ko: '쉐어 (${player} 밖)',
           },
@@ -338,6 +346,7 @@ const triggerSet: TriggerSet<Data> = {
           partyStack: {
             en: '모두 뭉쳐요',
             de: 'In der Gruppe sammeln',
+            fr: 'Package en groupe',
             cn: '分摊',
             ko: '쉐어',
           },
@@ -398,6 +407,7 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: '안으로 드루와',
           de: 'Geh in den Donut',
+          fr: 'Intérieur du donut',
           cn: '进入月环',
           ko: '도넛 안으로',
         },
@@ -445,7 +455,7 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: '옆에 있다 => 안으로 + 페어',
           de: 'Seiten => Rein + Partner',
-          fr: 'Côtés => Intérieur + Partenaire',
+          fr: 'Côtés => Intérieur + Partenaires',
           cn: '两侧 => 两人分摊 + 场内',
           ko: '양 옆 => 안으로 + 파트너',
         },
@@ -468,12 +478,14 @@ const triggerSet: TriggerSet<Data> = {
         light: {
           en: '그대로 + 4:4 뭉쳐요',
           de: 'Heiler Gruppen + Raus',
+          fr: 'Package sur les heals + Extérieur',
           cn: '双奶分摊 + 场外',
           ko: '힐러 그룹 쉐어 + 밖으로',
         },
         dark: {
           en: '안으로 + 페어',
           de: 'Rein + Partner',
+          fr: 'Intérieur + Partenaires',
           cn: '场中 + 两人分摊',
           ko: '안으로 + 파트너',
         },
@@ -538,6 +550,7 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: '밖에서 + 4:4 뭉쳐요',
           de: 'Heiler Gruppen + Raus',
+          fr: 'Package sur les heals + Extérieur',
           cn: '双奶分摊 + 场外',
           ko: '힐러 그룹 쉐어 + 밖으로',
         },
@@ -570,6 +583,7 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: '안으로 + 페어',
           de: 'Rein + Partner',
+          fr: 'Intérieur + Partenaires',
           cn: '场中 + 两人分摊',
           ko: '안으로 + 파트너',
         },
@@ -633,7 +647,7 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: '🟡구슬 쪽으로',
           de: 'Rotiere zu den licht Orbs',
-          fr: 'Tournez ves les orbes de lumière',
+          fr: 'Tournez vers les orbes de lumière',
           cn: '光球侧安全',
           ko: '빛 구슬 쪽으로',
         },

@@ -216,6 +216,7 @@ const triggerSet: TriggerSet<Data> = {
           de: 'Zeige ${side}/${dir} Verbindung weg',
           fr: 'Orientez le lien à l\'extérieur - ${side}/${dir}',
           cn: '向 ${side}/${dir} 外侧引导',
+          ko: '선을 ${side}/${dir}으로',
         },
         default: {
           en: '줄 땡겨요',
@@ -618,12 +619,16 @@ const triggerSet: TriggerSet<Data> = {
         lines: {
           en: '레이저 피해욧 (바닥 선  위로)',
           de: 'Auf die Linien (vermeide Laser)',
+          fr: 'Sur les lignes (évitez les lasers)',
           cn: '站在线上（躲避激光）',
+          ko: '경계선 위 (레이저 피하기)',
         },
         boxes: {
           en: '레이저 피해욧 (네모칸 안으로)',
           de: 'In den Boxen (vermeide Laser)',
+          fr: 'Dans les carrés (évitez les lasers)',
           cn: '站在盒子里（躲避激光）',
+          ko: '네모칸 안 (레이저 피하기)',
         },
       },
     },
