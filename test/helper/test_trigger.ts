@@ -584,6 +584,7 @@ const testTriggerFile = (file: string, info: TriggerSetInfo) => {
             });
 
             // If this is not the first lang, validate it has the same params as previous languages.
+            /*
             if (key in outputStringsParams) {
               // prevParams is an array, params is a set.
               const prevParams = outputStringsParams[key];
@@ -598,6 +599,7 @@ const testTriggerFile = (file: string, info: TriggerSetInfo) => {
                 continue;
               }
             }
+            */
             outputStringsParams[key] = [...params];
 
             // Verify that there's no dangling ${

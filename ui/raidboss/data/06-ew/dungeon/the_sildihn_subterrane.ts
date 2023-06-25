@@ -453,7 +453,10 @@ const triggerSet: TriggerSet<Data> = {
       id: 'SS+ 실키 Chilling Suds',
       type: 'StartsUsing',
       netRegex: { id: '7736', source: 'Silkie', capture: false },
-      infoText: '파랑🔵 꼬리',
+      infoText: (_data, _matches, output) => output.text!(),
+      outputStrings: {
+        text: '파랑🔵 꼬리',
+      },
     },
 
     // 실키: Bracing Suds
@@ -461,7 +464,10 @@ const triggerSet: TriggerSet<Data> = {
       id: 'SS+ 실키 Bracing Suds',
       type: 'StartsUsing',
       netRegex: { id: '7735', source: 'Silkie', capture: false },
-      infoText: '초록🟢 꼬리',
+      infoText: (_data, _matches, output) => output.text!(),
+      outputStrings: {
+        text: '초록🟢 꼬리',
+      },
     },
     {
       id: 'Sildihn Gladiator Flash of Steel',

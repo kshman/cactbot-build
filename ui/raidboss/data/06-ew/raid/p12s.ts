@@ -2065,7 +2065,7 @@ const triggerSet: TriggerSet<Data> = {
     {
       id: 'P12S2 페이즈 확인',
       type: 'StartsUsing',
-      netRegex: { id: ['8326', '8331', '8338', '831E', '833F'], source: 'Pallas Athena' },
+      netRegex: { id: ['8326', '8331', '8338', '831E', '833F'], source: 'Pallas Athena', capture: false },
       run: (data) => {
         // 8326 가이아오코스
         // 8331 클래식 컨셉

@@ -68,7 +68,7 @@ const triggerSet: TriggerSet<Data> = {
   },
   timelineTriggers: [
     {
-      id: '루비칸테EX 곧 남북으로 팀',
+      id: 'RubicanteEx PR 곧 남북으로 팀',
       regex: /^Arch Inferno$/,
       beforeSeconds: 24,
       durationSeconds: 8,
@@ -80,7 +80,7 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: '루비칸테EX 곧 주사위',
+      id: 'RubicanteEx PR 곧 주사위',
       regex: /^Flamespire Claw 1$/,
       beforeSeconds: 18,
       durationSeconds: 8,
@@ -535,7 +535,7 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: '루비칸테EX Ordeal of Purgation',
+      id: 'RubicanteEx PR Ordeal of Purgation',
       type: 'StartsUsing',
       netRegex: { id: '80E9', source: 'Rubicante', capture: false },
       durationSeconds: 8,
@@ -585,7 +585,7 @@ const triggerSet: TriggerSet<Data> = {
       }
     },
     {
-      id: '루비칸테EX Arch Inferno',
+      id: 'RubicanteEx PR Arch Inferno',
       type: 'StartsUsing',
       netRegex: { id: '7CF9', source: 'Rubicante', capture: false },
       alertText: (_data, _matches, output) => output.text!(),
@@ -596,7 +596,7 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: '루비칸테EX Blazing Rapture',
+      id: 'RubicanteEx PR Blazing Rapture',
       type: 'StartsUsing',
       netRegex: { id: '7D06', source: 'Rubicante', capture: false },
       delaySeconds: 6,
@@ -608,7 +608,7 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: '루비칸테EX Flamespire Brand',
+      id: 'RubicanteEx PR Flamespire Brand',
       type: 'StartsUsing',
       netRegex: { id: '7D13', source: 'Rubicante', capture: false },
       durationSeconds: 6,

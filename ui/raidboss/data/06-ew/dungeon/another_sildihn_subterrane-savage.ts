@@ -1440,7 +1440,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '금색 2개 맞기 (${loc})',
         },
         neitherFate: {
-          en: '레이저 피해요',
+          en: '레이저 피해요 (${loc})',
           de: 'Vermeide Silber und Gold (${loc})',
           fr: 'Évitez les lasers (${loc})',
           ja: '顔からのビーム全部回避 (${loc})',
@@ -2628,7 +2628,7 @@ const triggerSet: TriggerSet<Data> = {
       id: 'ASSS+ Firesteel Strike',
       type: 'StartsUsing',
       // 안맞을거 같은데... 고쳐야함
-      netRegex: { id: '76C5', source: 'Shadowcaster Zeless Gah' },
+      netRegex: { id: '76C5', source: 'Shadowcaster Zeless Gah', capture: false },
       response: Responses.spread(),
       run: (data) => data.firesteelStrikes = [],
     },
@@ -2687,6 +2687,7 @@ const triggerSet: TriggerSet<Data> = {
     },
     {
       'locale': 'de',
+      'missingTranslations': true,
       'replaceSync': {
         'Aqueduct Belladonna': 'Aquädukt-Belladonna',
         'Aqueduct Dryad': 'Aquädukt-Dryade',

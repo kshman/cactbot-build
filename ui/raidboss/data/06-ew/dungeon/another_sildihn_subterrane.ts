@@ -1384,7 +1384,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '금색 2개 맞기 (${loc})',
         },
         neitherFate: {
-          en: '레이저 피해요',
+          en: '레이저 피해요 (${loc})',
           de: 'Vermeide Silber und Gold (${loc})',
           fr: 'Évitez l\'argent et l\'or (${loc})', // FIXME
           ja: '顔からのビーム全部回避 (${loc})',
@@ -2529,7 +2529,7 @@ const triggerSet: TriggerSet<Data> = {
     {
       id: 'ASS+ Firesteel Strike',
       type: 'StartsUsing',
-      netRegex: { id: '74B0', source: 'Shadowcaster Zeless Gah' },
+      netRegex: { id: '74B0', source: 'Shadowcaster Zeless Gah', capture: false },
       response: Responses.spread(),
       run: (data) => data.firesteelStrikes = [],
     },
@@ -2587,6 +2587,7 @@ const triggerSet: TriggerSet<Data> = {
     },
     {
       'locale': 'de',
+      'missingTranslations': true,
       'replaceSync': {
         'Aqueduct Belladonna': 'Aquädukt-Belladonna',
         'Aqueduct Dryad': 'Aquädukt-Dryade',
@@ -2811,6 +2812,7 @@ const triggerSet: TriggerSet<Data> = {
     },
     {
       'locale': 'cn',
+      'missingTranslations': true,
       'replaceSync': {
         'Aqueduct Belladonna': '水道剧毒美人',
         'Aqueduct Dryad': '水道树妖',
@@ -2885,6 +2887,7 @@ const triggerSet: TriggerSet<Data> = {
     },
     {
       'locale': 'ko',
+      'missingTranslations': true,
       'replaceSync': {
         'Aqueduct Belladonna': '지하수도 벨라돈나',
         'Aqueduct Dryad': '지하수도 드라이어드',
