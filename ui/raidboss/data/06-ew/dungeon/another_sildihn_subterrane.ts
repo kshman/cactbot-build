@@ -1524,7 +1524,7 @@ const triggerSet: TriggerSet<Data> = {
     // 그라디아토르: Gilded/Silvered Fate
     /*
     {
-      id: 'ASS+ Gilded/Silvered Fate',
+      id: 'ASS PR Gilded/Silvered Fate',
       type: 'GainsEffect',
       netRegex: { effectId: ['CDF', 'CE0'] },
       condition: Conditions.targetIsYou(),
@@ -1662,7 +1662,7 @@ const triggerSet: TriggerSet<Data> = {
     },
     // 그라디아토르: Specter of Might
     {
-      id: 'ASS+ Specter of Might',
+      id: 'ASS PR Specter of Might',
       type: 'StartsUsing',
       netRegex: { id: '7673', source: 'Gladiator of Sil\'dih', capture: false },
       run: (data) => {
@@ -1672,7 +1672,7 @@ const triggerSet: TriggerSet<Data> = {
     },
     // 그라디아토르: Rush of Might
     {
-      id: 'ASS+ Rush of Might',
+      id: 'ASS PR Rush of Might',
       type: 'StartsUsing',
       netRegex: { id: ['7658', '7659', '765A'], source: 'Gladiator Mirage' },
       durationSeconds: 9.4,
@@ -2527,7 +2527,7 @@ const triggerSet: TriggerSet<Data> = {
     */
     //
     {
-      id: 'ASS+ Firesteel Strike',
+      id: 'ASS PR Firesteel Strike',
       type: 'StartsUsing',
       netRegex: { id: '74B0', source: 'Shadowcaster Zeless Gah', capture: false },
       response: Responses.spread(),
@@ -2535,17 +2535,33 @@ const triggerSet: TriggerSet<Data> = {
     },
     //
     {
-      id: 'ASS+ Firesteel Strike Collect',
+      id: 'ASS PR Firesteel Strike Collect',
       type: 'Ability',
       netRegex: { id: ['74B1', '74B2'], source: 'Shadowcaster Zeless Gah' },
       run: (data, matches) => data.firesteelStrikes.push(matches.target),
     },
     //
     {
-      id: 'ASS+ Blessed Beacon',
+      id: 'ASS PR Blessed Beacon',
       type: 'StartsUsing',
-      netRegex: { id: '74B3', source: 'Shadowcaster Zeless Gah' },
+      netRegex: { id: '74B3', source: 'Shadowcaster Zeless Gah', capture: false },
       response: (data, _matches, output) => {
+        // cactbot-builtin-response
+        output.responseOutputStrings = {
+          text: {
+            en: '두 번 내려치기',
+            ja: '2回打ち下ろし',
+          },
+          front: {
+            en: '앞에서 막아요 (${players})',
+            ja: '前でカーバ (${players})',
+          },
+          behind: {
+            en: '뒤로 숨어요',
+            ja: '後ろに隠れる',
+          },
+        };
+
         if (data.firesteelStrikes.length === 0)
           return { infoText: output.text!() };
 
@@ -2555,20 +2571,6 @@ const triggerSet: TriggerSet<Data> = {
         const players: string[] = [];
         data.firesteelStrikes.forEach((value) => players.push(data.ShortName(value)));
         return { infoText: output.front!({ players: players.join(', ') }) };
-      },
-      outputStrings: {
-        text: {
-          en: '두 번 내려치기',
-          ja: '2回打ち下ろし',
-        },
-        front: {
-          en: '앞에서 막아요 (${players})',
-          ja: '前でカーバ (${players})',
-        },
-        behind: {
-          en: '뒤로 숨어요',
-          ja: '後ろに隠れる',
-        },
       },
     },
   ],

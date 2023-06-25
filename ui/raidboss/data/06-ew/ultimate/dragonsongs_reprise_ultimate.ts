@@ -1198,6 +1198,23 @@ const triggerSet: TriggerSet<Data> = {
       condition: (data) => data.phase === 'thordan',
       sound: '',
       response: (data, matches, output) => {
+        // cactbot-builtin-response
+        output.responseOutputStrings = {
+          text: {
+            en: '칼: ${name1}, ${name2}',
+            de: 'Schwerter: ${name1}, ${name2}',
+            ja: '剣：${name1}, ${name2}',
+            cn: '剑: ${name1}, ${name2}',
+            ko: '돌진 대상자: ${name1}, ${name2}',
+          },
+          swap: {
+            en: '자리바꿔요: ${role}',
+          },
+          keep: {
+            en: '자리 그대로',
+          },
+        };
+
         const id = getHeadmarkerId(data, matches);
         if (id === headmarkers.sword1)
           data.sanctitySword1 = matches.target;

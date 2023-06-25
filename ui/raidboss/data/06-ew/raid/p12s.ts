@@ -290,12 +290,15 @@ const triggerSet: TriggerSet<Data> = {
   },
   timelineTriggers: [
     {
-      id: 'P12S+ 트리니티 처음에 무적',
+      id: 'P12S PR 트리니티 처음에 무적',
       regex: /Trinity of Souls 1/,
       beforeSeconds: 3,
       condition: (data) => (data.role === 'tank' || data.job === 'BLU') && !data.prsTrinityInvul,
-      alertText: '탱크 무적으로 받아요',
+      alertText: (_data, _matches, output) => output.text!(),
       run: (data) => data.prsTrinityInvul = true,
+      outputStrings: {
+        text: '탱크 무적으로 받아요',
+      },
     },
     {
       id: 'P12S 알테마 블레이드',
@@ -2063,7 +2066,7 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: 'P12S2 페이즈 확인',
+      id: 'P12S 후반 페이즈 확인',
       type: 'StartsUsing',
       netRegex: { id: ['8326', '8331', '8338', '831E', '833F'], source: 'Pallas Athena', capture: false },
       run: (data) => {
@@ -2078,7 +2081,7 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: 'P12S2 줄 적과 연결',
+      id: 'P12S 줄 적과 연결',
       type: 'Tether',
       netRegex: { id: '0001' },
       suppressSeconds: 2,
@@ -2129,7 +2132,7 @@ const triggerSet: TriggerSet<Data> = {
       }
     },
     {
-      id: 'P12S2 알테마',
+      id: 'P12S 알테마',
       type: 'StartsUsing',
       netRegex: { id: ['8682', '86F6'], source: 'Pallas Athena', capture: false },
       alertText: (data, _match, output) => {
@@ -2141,7 +2144,7 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: 'P12S2 팔라디언 그랩스 대상',
+      id: 'P12S 팔라디언 그랩스 대상',
       type: 'HeadMarker',
       netRegex: {},
       run: (data, matches) => {
@@ -2151,7 +2154,7 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: 'P12S2 팔라디언 그랩스',
+      id: 'P12S 팔라디언 그랩스',
       type: 'StartsUsing',
       netRegex: { id: '831A', source: 'Pallas Athena', capture: false },
       alertText: (data, _match, output) => {
@@ -2165,7 +2168,7 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: 'P12S2 가이아오코스', // 두번옴. 참고로 작아지는 마커는 0061
+      id: 'P12S 가이아오코스', // 두번옴. 참고로 작아지는 마커는 0061
       type: 'StartsUsing',
       netRegex: { id: '8326', source: 'Pallas Athena', capture: false },
       alertText: (_data, _matches, output) => output.text!(),
@@ -2174,7 +2177,7 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: 'P12S2 가이아오코스 사슬',
+      id: 'P12S 가이아오코스 사슬',
       type: 'Tether',
       netRegex: { id: '0009' },
       // condition: (data) => data.prsPhase === 100 || data.prsPhase === 900,
@@ -2189,7 +2192,7 @@ const triggerSet: TriggerSet<Data> = {
       }
     },
     {
-      id: 'P12S2 지오센트리즘',
+      id: 'P12S 지오센트리즘',
       type: 'StartsUsing',
       netRegex: { id: ['8329', '832A', '832B'], source: 'Pallas Athena' },
       durationSeconds: 6,
@@ -2211,7 +2214,7 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: 'P12S2 클래식 컨셉 플스 마커',
+      id: 'P12S 클래식 컨셉 플스 마커',
       type: 'HeadMarker',
       netRegex: {},
       run: (data, matches) => {
@@ -2229,13 +2232,13 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: 'P12S2 클래식 컨셉 알파 베타',
+      id: 'P12S 클래식 컨셉 알파 베타',
       type: 'GainsEffect',
       netRegex: { effectId: ['DE8', 'DE9'] },
       run: (data, matches) => data.prsClassicAlphaBeta[matches.target] = matches.effectId === 'DE8' ? 'alpha' : 'beta',
     },
     {
-      id: 'P12S2 클래식 컨셉 반전',
+      id: 'P12S 클래식 컨셉 반전',
       type: 'StartsUsing',
       netRegex: { id: '8331', source: 'Pallas Athena', capture: false },
       condition: (data) => data.prsPhase !== 200,
@@ -2247,7 +2250,7 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: 'P12S2 클래식 컨셉 알랴줌',
+      id: 'P12S 클래식 컨셉 알랴줌',
       type: 'Ability',
       netRegex: { id: '8331', source: 'Pallas Athena', capture: false },
       delaySeconds: 2,
@@ -2274,7 +2277,7 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: 'P12S2 클래식 컨셉 피해욧',
+      id: 'P12S 클래식 컨셉 피해욧',
       type: 'Ability',
       netRegex: { id: '8323', source: 'Pallas Athena', capture: false },
       delaySeconds: 2.5,
@@ -2285,7 +2288,7 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: 'P12S2 크러시 헬름',
+      id: 'P12S 크러시 헬름',
       type: 'StartsUsing',
       netRegex: { id: '8317', source: 'Pallas Athena', capture: false },
       durationSeconds: 7,
@@ -2301,7 +2304,7 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: 'P12S2 칼로리1 첫 불',
+      id: 'P12S 칼로리1 첫 불',
       type: 'HeadMarker',
       netRegex: {},
       run: (data, matches) => {
@@ -2312,7 +2315,7 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: 'P12S2 칼로리1 시작',
+      id: 'P12S 칼로리1 시작',
       type: 'StartsUsing',
       netRegex: { id: '8338', source: 'Pallas Athena', capture: false },
       condition: (data) => data.prsPhase === 300,
@@ -2336,13 +2339,13 @@ const triggerSet: TriggerSet<Data> = {
       }
     },
     {
-      id: 'P12S2 칼로릭1 바람', // 바람: Atmosfaction
+      id: 'P12S 칼로릭1 바람', // 바람: Atmosfaction
       type: 'GainsEffect',
       netRegex: { effectId: 'E07' },
       run: (data, matches) => data.prsCaloric1Buff[matches.target] = 'wind',
     },
     {
-      id: 'P12S2 칼로릭1 불', // 불: Pyrefaction
+      id: 'P12S 칼로릭1 불', // 불: Pyrefaction
       type: 'GainsEffect',
       netRegex: { effectId: 'E06' },
       alertText: (data, matches, output) => {
@@ -2357,7 +2360,7 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: 'P12S2 칼로릭1 불 터짐',
+      id: 'P12S 칼로릭1 불 터짐',
       type: 'GainsEffect',
       netRegex: { effectId: ['E06'] },
       condition: (_data, matches) => parseInt(matches.duration) === 12,
@@ -2375,7 +2378,7 @@ const triggerSet: TriggerSet<Data> = {
       }
     },
     {
-      id: 'P12S2 칼로리1 버프 확인',
+      id: 'P12S 칼로리1 버프 확인',
       type: 'Ability',
       netRegex: { id: '8338', source: 'Pallas Athena', capture: false },
       condition: (data) => data.prsPhase === 300,
@@ -2418,7 +2421,7 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: 'P12S2 칼로리2 불',
+      id: 'P12S 칼로리2 불',
       type: 'HeadMarker',
       netRegex: {},
       alertText: (data, matches, output) => {
@@ -2437,7 +2440,7 @@ const triggerSet: TriggerSet<Data> = {
       }
     },
     {
-      id: 'P12S2 칼로리2 바람',
+      id: 'P12S 칼로리2 바람',
       type: 'HeadMarker',
       netRegex: {},
       condition: (data, matches) => data.me === matches.target,
@@ -2452,7 +2455,7 @@ const triggerSet: TriggerSet<Data> = {
       }
     },
     {
-      id: 'P12S2 칼로릭2 불 장판',
+      id: 'P12S 칼로릭2 불 장판',
       type: 'GainsEffect',
       netRegex: { effectId: ['E08'] },
       durationSeconds: 3,
@@ -2466,7 +2469,7 @@ const triggerSet: TriggerSet<Data> = {
       }
     },
     {
-      id: 'P12S2 칼로릭2 옮겨욧',
+      id: 'P12S 칼로릭2 옮겨욧',
       type: 'Ability',
       netRegex: { id: '833C', source: 'Pallas Athena', capture: false },
       condition: (data) => data.prsPhase === 700,
@@ -2479,7 +2482,7 @@ const triggerSet: TriggerSet<Data> = {
       }
     },
     {
-      id: 'P12S2 에크파이로시스',
+      id: 'P12S 에크파이로시스',
       type: 'StartsUsing',
       netRegex: { id: '831E', source: 'Pallas Athena', capture: false },
       alertText: (_data, _matches, output) => output.text!(),
@@ -2488,7 +2491,7 @@ const triggerSet: TriggerSet<Data> = {
       }
     },
     {
-      id: 'P12S2 에크파이로시스 움직여',
+      id: 'P12S 에크파이로시스 움직여',
       type: 'GainsEffect',
       netRegex: { effectId: '8322', source: 'Pallas Athena', capture: false },
       suppressSeconds: 2,
@@ -2498,7 +2501,7 @@ const triggerSet: TriggerSet<Data> = {
       }
     },
     {
-      id: 'P12S2 판제네시스',
+      id: 'P12S 판제네시스',
       type: 'Ability',
       netRegex: { id: '833F', source: 'Pallas Athena', capture: false },
       delaySeconds: 1,
@@ -2544,7 +2547,7 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: 'P12S2 판제네시스 언스테이블',
+      id: 'P12S 판제네시스 언스테이블',
       type: 'GainsEffect',
       netRegex: { effectId: 'E09' },
       run: (data, matches) => {
@@ -2553,7 +2556,7 @@ const triggerSet: TriggerSet<Data> = {
       }
     },
     {
-      id: 'P12S2 판제네시스 스테이블',
+      id: 'P12S 판제네시스 스테이블',
       type: 'GainsEffect',
       netRegex: { effectId: 'E22' },
       run: (data, matches) => {
@@ -2563,7 +2566,7 @@ const triggerSet: TriggerSet<Data> = {
       }
     },
     {
-      id: 'P12S2 판제네시스 라이트', // Umbral Tilt
+      id: 'P12S 판제네시스 라이트', // Umbral Tilt
       type: 'GainsEffect',
       netRegex: { effectId: 'DF8' },
       condition: (data) => data.prsPhase === 500,
@@ -2577,7 +2580,7 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: 'P12S2 판제네시스 다크', // Astral Tilt
+      id: 'P12S 판제네시스 다크', // Astral Tilt
       type: 'GainsEffect',
       netRegex: { effectId: 'DF9' },
       condition: (data) => data.prsPhase === 500,
@@ -2591,7 +2594,7 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: 'P12S2 판제네시스 이동', // Astral Advent
+      id: 'P12S 판제네시스 이동', // Astral Advent
       type: 'Ability',
       netRegex: { id: '8344', source: 'Hemitheos', capture: false },
       delaySeconds: 0.5,
@@ -2644,7 +2647,7 @@ const triggerSet: TriggerSet<Data> = {
     },
     /*
     {
-      id: 'P12S2 마커 처리',
+      id: 'P12S 마커 처리',
       type: 'HeadMarker',
       netRegex: {},
       alarmText: (data, matches, output) => {

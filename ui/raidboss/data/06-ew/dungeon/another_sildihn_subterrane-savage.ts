@@ -168,7 +168,7 @@ const triggerSet: TriggerSet<Data> = {
     },
     // Aqueduct Odqan: Gelid Gale
     {
-      id: 'ASSS+ Gelid Gale',
+      id: 'ASSS PR Gelid Gale',
       type: 'StartsUsing',
       netRegex: { id: '7971', source: 'Aqueduct Odqan', capture: false },
       infoText: (_data, _matches, output) => output.text!(),
@@ -181,7 +181,7 @@ const triggerSet: TriggerSet<Data> = {
     },
     // Aqueduct Odqan: Uproot
     {
-      id: 'ASSS+ Uproot',
+      id: 'ASSS PR Uproot',
       type: 'StartsUsing',
       netRegex: { id: '7972', source: 'Aqueduct Odqan', capture: false },
       infoText: (_data, _matches, output) => output.text!(),
@@ -1581,7 +1581,7 @@ const triggerSet: TriggerSet<Data> = {
     // 그라디아토르: Gilded/Silvered Fate
     /*
     {
-      id: 'ASSS+ Gilded/Silvered Fate',
+      id: 'ASSS PR Gilded/Silvered Fate',
       type: 'GainsEffect',
       netRegex: { effectId: ['CDF', 'CE0'] },
       condition: Conditions.targetIsYou(),
@@ -1728,7 +1728,7 @@ const triggerSet: TriggerSet<Data> = {
     },
     // 그라디아토르: Specter of Might
     {
-      id: 'ASSS+ Specter of Might',
+      id: 'ASSS PR Specter of Might',
       type: 'StartsUsing',
       netRegex: { id: '77B5', source: 'Gladiator of Sil\'dih', capture: false },
       run: (data) => {
@@ -1738,7 +1738,7 @@ const triggerSet: TriggerSet<Data> = {
     },
     // 그라디아토르: Rush of Might
     {
-      id: 'ASSS+ Rush of Might',
+      id: 'ASSS PR Rush of Might',
       type: 'StartsUsing',
       netRegex: { id: ['779A', '779B', '779C'], source: 'Gladiator Mirage' },
       durationSeconds: 9.4,
@@ -2617,7 +2617,7 @@ const triggerSet: TriggerSet<Data> = {
     /*
     //
     {
-      id: 'ASSS+ 젤레스가 Cryptic Portal',
+      id: 'ASSS PR 젤레스가 Cryptic Portal',
       type: 'StartsUsing',
       // 안맞을거 같은데... 고쳐야함
       netRegex: { id: '7494', source: 'Shadowcaster Zeless Gah' },
@@ -2625,7 +2625,7 @@ const triggerSet: TriggerSet<Data> = {
     */
     //
     {
-      id: 'ASSS+ Firesteel Strike',
+      id: 'ASSS PR Firesteel Strike',
       type: 'StartsUsing',
       // 안맞을거 같은데... 고쳐야함
       netRegex: { id: '76C5', source: 'Shadowcaster Zeless Gah', capture: false },
@@ -2634,18 +2634,34 @@ const triggerSet: TriggerSet<Data> = {
     },
     //
     {
-      id: 'ASSS+ Firesteel Strike Collect',
+      id: 'ASSS PR Firesteel Strike Collect',
       type: 'Ability',
       netRegex: { id: ['76C6', '76C7'], source: 'Shadowcaster Zeless Gah' },
       run: (data, matches) => data.firesteelStrikes.push(matches.target),
     },
     //
     {
-      id: 'ASSS+ Blessed Beacon',
+      id: 'ASSS PR Blessed Beacon',
       type: 'StartsUsing',
       // 안맞을거 같은데... 고쳐야함
-      netRegex: { id: '76C7', source: 'Shadowcaster Zeless Gah' },
+      netRegex: { id: '76C7', source: 'Shadowcaster Zeless Gah', capture: false },
       response: (data, _matches, output) => {
+        // cactbot-builtin-response
+        output.responseOutputStrings = {
+          text: {
+            en: '두 번 내려치기',
+            ja: '2回打ち下ろし',
+          },
+          front: {
+            en: '앞에서 막아요 (${players})',
+            ja: '前でカーバ (${players})',
+          },
+          behind: {
+            en: '뒤로 숨어요',
+            ja: '後ろに隠れる',
+          },
+        };
+
         if (data.firesteelStrikes.length === 0)
           return { infoText: output.text!() };
 
@@ -2655,20 +2671,6 @@ const triggerSet: TriggerSet<Data> = {
         const players: string[] = [];
         data.firesteelStrikes.forEach((value) => players.push(data.ShortName(value)));
         return { infoText: output.front!({ players: players.join(', ') }) };
-      },
-      outputStrings: {
-        text: {
-          en: '두 번 내려치기',
-          ja: '2回打ち下ろし',
-        },
-        front: {
-          en: '앞에서 막아요 (${players})',
-          ja: '前でカーバ (${players})',
-        },
-        behind: {
-          en: '뒤로 숨어요',
-          ja: '後ろに隠れる',
-        },
       },
     },
   ],
@@ -2912,6 +2914,7 @@ const triggerSet: TriggerSet<Data> = {
     },
     {
       'locale': 'cn',
+      'missingTranslations': true,
       'replaceSync': {
         'Aqueduct Belladonna': '水道剧毒美人',
         'Aqueduct Dryad': '水道树妖',
@@ -2986,6 +2989,7 @@ const triggerSet: TriggerSet<Data> = {
     },
     {
       'locale': 'ko',
+      'missingTranslations': true,
       'replaceSync': {
         'Aqueduct Belladonna': '지하수도 벨라돈나',
         'Aqueduct Dryad': '지하수도 드라이어드',

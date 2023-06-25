@@ -1882,31 +1882,31 @@ const triggerSet: TriggerSet<Data> = {
       // This also only happens once on the second time through, so no need to reset.
       netRegex: { effectId: 'D15' },
       response: (data, matches, output) => {
+        // cactbot-builtin-response
+        output.responseOutputStrings = {
+          reversed: {
+            en: '반전: ${player}',
+            de: '${player} umgekehrt',
+            fr: '${player} inversé',
+            ja: '反転：${player}',
+            cn: '${player} 颠倒',
+            ko: '${player} 반전',
+          },
+          reversedme: {
+            en: '내가 반전!!!',
+            ja: 'わたしが反転',
+          },
+          ttsReverse: {
+            en: 'わたしが反転',
+          },
+        };
         if (!data.inverseMagics[matches.target]) {
           if (data.me === matches.target)
-            return { alarmText: output.reversedme!() };
+            return { alarmText: output.reversedme!(), tts: output.ttsReverse!() };
           return { infoText: output.reversed!({ player: data.ShortName(matches.target) }) };
         }
       },
-      tts: (data, matches, _output) => {
-        if (!data.inverseMagics[matches.target] && data.me === matches.target)
-          return 'わたしが反転';
-      },
       run: (data, matches) => data.inverseMagics[matches.target] = true,
-      outputStrings: {
-        reversed: {
-          en: '반전: ${player}',
-          de: '${player} umgekehrt',
-          fr: '${player} inversé',
-          ja: '反転：${player}',
-          cn: '${player} 颠倒',
-          ko: '${player} 반전',
-        },
-        reversedme: {
-          en: '내가 반전!!!',
-          ja: 'わたしが反転',
-        },
-      },
     },
     {
       id: 'P8S Natural Alignment Purple on You',
@@ -2389,7 +2389,7 @@ const triggerSet: TriggerSet<Data> = {
     {
       // 원래 퍼펙트가 바뀌기 전에 이걸로 통합
       // 아니 결국 퍼펙트는 그냥 그대로 가네. 임시 꼬리 뺌
-      id: 'P8S+ 퍼펙트 알파/베타/감마',
+      id: 'P8S PR 퍼펙트 알파/베타/감마',
       type: 'GainsEffect',
       netRegex: { effectId: ['D05', 'D06', 'D07'] },
       condition: Conditions.targetIsYou(),
