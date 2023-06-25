@@ -289,8 +289,8 @@ const triggerSet: TriggerSet<Data> = {
         simple: {
           en: '(심플 모드)',
           ja: '(簡略モード)',
-        }
-      }
+        },
+      },
     },
     {
       id: 'TOP Flash Gale Tank Auto',
@@ -413,7 +413,7 @@ const triggerSet: TriggerSet<Data> = {
           data.my.ip = undefined;
         if (matches.id === '7B0B')
           data.panked = true;
-      }
+      },
     },
     {
       id: 'TOP In Line Debuff',
@@ -938,7 +938,7 @@ const triggerSet: TriggerSet<Data> = {
           },
           knockback: {
             en: '${glitch} 넉백',
-          }
+          },
         };
 
         data.spotlightStacks.push(matches.target);
@@ -983,11 +983,11 @@ const triggerSet: TriggerSet<Data> = {
           } */
           // 그냥 알랴줌
           const ouch = output.stacksOn!({
-              glitch: glitch,
-              marker: marker,
-              player1: m1.r,
-              player2: m2.r,
-            });
+            glitch: glitch,
+            marker: marker,
+            player1: m1.r,
+            player2: m2.r,
+          });
           return { infoText: ouch };
         }
 
@@ -1477,20 +1477,20 @@ const triggerSet: TriggerSet<Data> = {
       delaySeconds: 1.2,
       durationSeconds: 8,
       alertText: (data, _matches, output) => {
-         if (!data.my?.imn)
-           return output.text!();
-         const mo = {
-           21: output.m1!(),
-           22: output.m2!(),
-           23: output.m3!(),
-           11: output.o1!(),
-           12: output.o2!(),
-           13: output.o3!(),
-           14: output.o4!(),
-           15: output.o5!(),
-         }[data.my.imn];
-         delete data.my.imn;
-         return mo;
+        if (!data.my?.imn)
+          return output.text!();
+        const mo = {
+          21: output.m1!(),
+          22: output.m2!(),
+          23: output.m3!(),
+          11: output.o1!(),
+          12: output.o2!(),
+          13: output.o3!(),
+          14: output.o4!(),
+          15: output.o5!(),
+        }[data.my.imn];
+        delete data.my.imn;
+        return mo;
       },
       outputStrings: {
         text: {
@@ -1498,14 +1498,14 @@ const triggerSet: TriggerSet<Data> = {
           de: 'Östliche Bildschirme',
           ko: '오른쪽 모니터',
         },
-         m1: '④ 위 / ❰❰❰❰모니터',
-         m2: 'Ⓓ 위 / 🡹🡹모니터',
-         m3: 'Ⓓ 아래 / 🡻🡻모니터',
-         o1: 'Ⓐ 🡼',
-         o2: '보스 ❱❱❱❱',
-         o3: 'Ⓑ 🡺',
-         o4: 'Ⓒ 🡼',
-         o5: '③ 🡻',
+        m1: '④ 위 / ❰❰❰❰모니터',
+        m2: 'Ⓓ 위 / 🡹🡹모니터',
+        m3: 'Ⓓ 아래 / 🡻🡻모니터',
+        o1: 'Ⓐ 🡼',
+        o2: '보스 ❱❱❱❱',
+        o3: 'Ⓑ 🡺',
+        o4: 'Ⓒ 🡼',
+        o5: '③ 🡻',
       },
     },
     {
@@ -1515,34 +1515,34 @@ const triggerSet: TriggerSet<Data> = {
       delaySeconds: 1.2,
       durationSeconds: 8,
       alertText: (data, _matches, output) => {
-         if (!data.my?.imn)
-           return output.text!();
-         const mo = {
-           21: output.m1!(),
-           22: output.m2!(),
-           23: output.m3!(),
-           11: output.o1!(),
-           12: output.o2!(),
-           13: output.o3!(),
-           14: output.o4!(),
-           15: output.o5!(),
-         }[data.my.imn];
-         delete data.my.imn;
-         return mo;
+        if (!data.my?.imn)
+          return output.text!();
+        const mo = {
+          21: output.m1!(),
+          22: output.m2!(),
+          23: output.m3!(),
+          11: output.o1!(),
+          12: output.o2!(),
+          13: output.o3!(),
+          14: output.o4!(),
+          15: output.o5!(),
+        }[data.my.imn];
+        delete data.my.imn;
+        return mo;
       },
       outputStrings: {
         text: {
           en: '모니터: ❰❰❰서쪽',
           ko: '왼쪽 모니터',
         },
-         m1: '① 위 / 모니터❱❱❱❱',
-         m2: 'Ⓑ 위 / 🡹🡹모니터',
-         m3: 'Ⓑ 아래 / 🡻🡻모니터',
-         o1: 'Ⓐ 🡽',
-         o2: '❰❰❰❰ 보스',
-         o3: 'Ⓓ 🡸',
-         o4: 'Ⓒ 🡽',
-         o5: '② 🡻',
+        m1: '① 위 / 모니터❱❱❱❱',
+        m2: 'Ⓑ 위 / 🡹🡹모니터',
+        m3: 'Ⓑ 아래 / 🡻🡻모니터',
+        o1: 'Ⓐ 🡽',
+        o2: '❰❰❰❰ 보스',
+        o3: 'Ⓓ 🡸',
+        o4: 'Ⓒ 🡽',
+        o5: '② 🡻',
       },
     },
     {
@@ -1654,7 +1654,7 @@ const triggerSet: TriggerSet<Data> = {
           const m1 = getMemberByName(data, p1!);
           const m2 = getMemberByName(data, p2!);
           if (m1 && m2)
-            return { infoText: output.stacks!({ player1: m1.r, player2: m2.r }), };
+            return { infoText: output.stacks!({ player1: m1.r, player2: m2.r }) };
         }
         return {
           infoText: output.stacks!({ player1: data.ShortName(p1), player2: data.ShortName(p2) }),
@@ -1914,7 +1914,8 @@ const triggerSet: TriggerSet<Data> = {
       // Second In Line: ~50s duration, ~15s left after final bounce
       type: 'GainsEffect',
       netRegex: { effectId: ['D72', 'D73'] },
-      condition: (data, matches) => data.members === undefined && data.phase === 'omega' && matches.target === data.me,
+      condition: (data, matches) =>
+        data.members === undefined && data.phase === 'omega' && matches.target === data.me,
       delaySeconds: (_data, matches) => parseFloat(matches.duration) > 40 ? 35 : 20,
       durationSeconds: 8,
       alertText: (_data, matches, output) => {
@@ -2863,7 +2864,7 @@ const triggerSet: TriggerSet<Data> = {
 
         return { infoText: output.mesg!() };
       },
-    }
+    },
   ],
   timelineReplace: [
     {

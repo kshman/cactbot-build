@@ -582,7 +582,7 @@ const triggerSet: TriggerSet<Data> = {
           en: '#8: ^_^ 에서 회전 방향 ^으로',
         },
         unknown: Outputs.unknown,
-      }
+      },
     },
     {
       id: 'RubicanteEx PR Arch Inferno',

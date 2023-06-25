@@ -389,9 +389,11 @@ const triggerSet: TriggerSet<Data> = {
         const y = data.combatantData[0]?.PosY;
         if (y === undefined)
           return output.clones!({ dir: output.unknown!() });
-        const cloneSide = y > centerY
-          ? data.role === 'tank' ? 'south' : 'north'
-          : data.role === 'tank' ? 'north' : 'south';
+        let cloneSide;
+        if (y > centerY)
+          cloneSide = data.role === 'tank' ? 'south' : 'north';
+        else
+          cloneSide = data.role === 'tank' ? 'north' : 'south';
         return output.clones!({ dir: output[cloneSide]!() });
       },
       outputStrings: {
@@ -829,7 +831,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: '🟪줄 땡겨요',
-      }
+      },
     },
     {
       id: 'P12S 줄다리기 노랑',
@@ -841,7 +843,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: '🟨줄 땡겨요',
-      }
+      },
     },
     {
       id: 'P12S Engravement of Souls Tracker',
@@ -930,6 +932,7 @@ const triggerSet: TriggerSet<Data> = {
           /*
           if (data.triggerSetConfig.engravement1DropTower === 'quadrant') {
           */
+          if (tempColor !== undefined) {
             if (x < 80 && y < 100) { // x = 75 && y = 97
               data.engravement1BeamsPosMap.set('NE', color);
             } else if (x < 100 && y < 80) { // x = 97 && y = 75
@@ -947,6 +950,7 @@ const triggerSet: TriggerSet<Data> = {
             } else if (x < 80 && y > 100) { // x = 75 && y = 103
               data.engravement1BeamsPosMap.set('SE', color);
             }
+          }
           /*
           } else if (data.triggerSetConfig.engravement1DropTower === 'clockwise') {
             if (x < 80 && y < 100) { // x = 75 && y = 97
@@ -1575,7 +1579,7 @@ const triggerSet: TriggerSet<Data> = {
         data.limitCutNumber = num;
         if (data.triggerSetConfig.prStyle)
           return;
-       return output.text!({ num: num });
+        return output.text!({ num: num });
       },
       outputStrings: {
         text: {
@@ -2068,7 +2072,11 @@ const triggerSet: TriggerSet<Data> = {
     {
       id: 'P12S 후반 페이즈 확인',
       type: 'StartsUsing',
-      netRegex: { id: ['8326', '8331', '8338', '831E', '833F'], source: 'Pallas Athena', capture: false },
+      netRegex: {
+        id: ['8326', '8331', '8338', '831E', '833F'],
+        source: 'Pallas Athena',
+        capture: false,
+      },
       run: (data) => {
         // 8326 가이아오코스
         // 8331 클래식 컨셉
@@ -2129,7 +2137,7 @@ const triggerSet: TriggerSet<Data> = {
         c2Safe21: '2번 🡻🡻🡻', // 베타, 세모
         c2Safe31: '1번 🡻🡻🡻', // 베타, 네모
         c2Safe41: '3번 🡻🡻🡻', // 베타, 가위
-      }
+      },
     },
     {
       id: 'P12S 알테마',
@@ -2189,7 +2197,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         breakWith: '사슬 끊어요! (${partner})',
-      }
+      },
     },
     {
       id: 'P12S 지오센트리즘',
@@ -2235,7 +2243,11 @@ const triggerSet: TriggerSet<Data> = {
       id: 'P12S 클래식 컨셉 알파 베타',
       type: 'GainsEffect',
       netRegex: { effectId: ['DE8', 'DE9'] },
-      run: (data, matches) => data.prsClassicAlphaBeta[matches.target] = matches.effectId === 'DE8' ? 'alpha' : 'beta',
+      run: (data, matches) => {
+        if (matches.effectId === 'DE8')
+          data.prsClassicAlphaBeta[matches.target] = 'alpha';
+        data.prsClassicAlphaBeta[matches.target] = 'beta';
+      },
     },
     {
       id: 'P12S 클래식 컨셉 반전',
@@ -2336,7 +2348,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         text1st: '내게 첫 불 (${partner})',
-      }
+      },
     },
     {
       id: 'P12S 칼로릭1 바람', // 바람: Atmosfaction
@@ -2375,7 +2387,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         none: '무직! 불이랑 뭉쳐요!',
         wind: '바람! 흩어져요!',
-      }
+      },
     },
     {
       id: 'P12S 칼로리1 버프 확인',
@@ -2392,7 +2404,7 @@ const triggerSet: TriggerSet<Data> = {
           return;
 
         if (mystat === 'fire') {
-          const myteam : string[] = [];
+          const myteam: string[] = [];
           for (const [name, stat] of Object.entries(data.prsCaloric1Buff)) {
             if (stat === mystat && name !== data.me)
               myteam.push(data.party.prJob(name));
@@ -2403,7 +2415,7 @@ const triggerSet: TriggerSet<Data> = {
         if (data.prsCaloric1First.includes(data.me))
           return output.wind1st!();
 
-        const myteam : string[] = [];
+        const myteam: string[] = [];
         for (const [name, stat] of Object.entries(data.prsCaloric1Buff)) {
           if (stat === mystat && name !== data.me && !data.prsCaloric1First.includes(name))
             myteam.push(data.party.prJob(name));
@@ -2437,7 +2449,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: '내게 첫 불! 가운데로',
         mt: '불 교대: ${target}',
-      }
+      },
     },
     {
       id: 'P12S 칼로리2 바람',
@@ -2452,7 +2464,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         text: '내게 바람, 흩어져요',
-      }
+      },
     },
     {
       id: 'P12S 칼로릭2 불 장판',
@@ -2466,7 +2478,7 @@ const triggerSet: TriggerSet<Data> = {
       run: (data, matches) => data.prsCaloric2Fire = matches.target,
       outputStrings: {
         text: '내게 불 장판',
-      }
+      },
     },
     {
       id: 'P12S 칼로릭2 옮겨욧',
@@ -2479,7 +2491,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         text: '불 옮겨욧!',
-      }
+      },
     },
     {
       id: 'P12S 에크파이로시스',
@@ -2488,7 +2500,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: '엑사플레어 + 전체 공격',
-      }
+      },
     },
     {
       id: 'P12S 에크파이로시스 움직여',
@@ -2498,7 +2510,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: '흩어져욧! 달려욧!',
-      }
+      },
     },
     {
       id: 'P12S 판제네시스',
@@ -2508,7 +2520,7 @@ const triggerSet: TriggerSet<Data> = {
       durationSeconds: 10,
       suppressSeconds: 2,
       alertText: (data, _matches, output) => {
-         let partner = output.unknown!();
+        let partner = output.unknown!();
         // 무직, 인자1
         const mycnt = data.prsPangenesisCount[data.me] ?? 0;
         if (mycnt < 2) {
@@ -2518,7 +2530,9 @@ const triggerSet: TriggerSet<Data> = {
               break;
             }
           }
-          return mycnt === 0 ? output.slime!({ partner: partner }) : output.geneone!({ partner: partner });
+          return mycnt === 0
+            ? output.slime!({ partner: partner })
+            : output.geneone!({ partner: partner });
         }
         // 시간에 따른 처리
         const mystat = data.prsPangenesisStat[data.me];
@@ -2553,7 +2567,7 @@ const triggerSet: TriggerSet<Data> = {
       run: (data, matches) => {
         const cnt = data.prsPangenesisCount[matches.target];
         data.prsPangenesisCount[matches.target] = cnt === undefined ? 1 : cnt + 1;
-      }
+      },
     },
     {
       id: 'P12S 판제네시스 스테이블',
@@ -2563,7 +2577,7 @@ const triggerSet: TriggerSet<Data> = {
         const cnt = data.prsPangenesisCount[matches.target];
         if (cnt === undefined)
           data.prsPangenesisCount[matches.target] = 0;
-      }
+      },
     },
     {
       id: 'P12S 판제네시스 라이트', // Umbral Tilt
@@ -2610,14 +2624,20 @@ const triggerSet: TriggerSet<Data> = {
 
         if (tilt === 1) {
           if (myduration === 16 || mycnt === 1)
-            return mystat === undefined ? output.move!() : output.movecc!({ color: output[mystat]!() });
+            return mystat === undefined
+              ? output.move!()
+              : output.movecc!({ color: output[mystat]!() });
           if (myduration === 20)
-            return mystat === undefined ? output.wait1g!() : output.wait1gcc!({ color: output[mystat]!() });
+            return mystat === undefined
+              ? output.wait1g!()
+              : output.wait1gcc!({ color: output[mystat]!() });
           if (mycnt === 0)
             return output.wait1n!();
         } else if (tilt === 2) {
           // 모두 다 이동
-          return mystat === undefined ? output.move!() : output.movecc!({ color: output[mystat]!() });
+          return mystat === undefined
+            ? output.move!()
+            : output.movecc!({ color: output[mystat]!() });
         } else if (tilt === 3) {
           // 무직만 슬라임
           if (mycnt === 0)

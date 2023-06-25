@@ -7,14 +7,14 @@
       "webpack/**/*": "cjs",
       "experimentalSpecifierResolution": "node"
     },
-    "esm": true,
+    "esm": true
   },
   "compilerOptions": {
     "plugins": [
       {
         "transform": "@zoltu/typescript-transformer-append-js-extension/output/index.js",
         "after": true
-      },
+      }
     ],
 
     "target": "ES2022",
@@ -48,7 +48,7 @@
     "forceConsistentCasingInFileNames": true,
     "typeRoots": [
       "node_modules/@types"
-    ],
+    ]
   },
   "include": [
     "./ui",

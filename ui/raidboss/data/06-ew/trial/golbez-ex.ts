@@ -129,7 +129,7 @@ const triggerSet: TriggerSet<Data> = {
         data.terrastormCombatantDirs.push(matchedPositionTo8Dir(meteor));
       },
       alertText: (data, _matches, output) => {
-       if (data.terrastormCombatantDirs.length < 2)
+        if (data.terrastormCombatantDirs.length < 2)
           return;
 
         const meteors = data.terrastormCombatantDirs;

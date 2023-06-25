@@ -418,8 +418,26 @@ const triggerSet: TriggerSet<Data> = {
         if (data.seenChimericSuccession)
           return output.text!({ num: dice });
 
-        const rushMap: { [id: number]: number } = { 1: 0, 2: 1, 3: 0, 4: 2, 5: 0, 6: 3, 7: 0, 8: 4, };
-        const towerMap: { [id: number]: number } = { 1: 0, 2: 3, 3: 0, 4: 4, 5: 0, 6: 1, 7: 0, 8: 2, };
+        const rushMap: { [id: number]: number } = {
+          1: 0,
+          2: 1,
+          3: 0,
+          4: 2,
+          5: 0,
+          6: 3,
+          7: 0,
+          8: 4,
+        };
+        const towerMap: { [id: number]: number } = {
+          1: 0,
+          2: 3,
+          3: 0,
+          4: 4,
+          5: 0,
+          6: 1,
+          7: 0,
+          8: 2,
+        };
         const rush = rushMap[data.limitCutNumber ?? 1];
         const tower = towerMap[data.limitCutNumber ?? 1];
         if (tower === 0 || rush === 0)
@@ -557,10 +575,10 @@ const triggerSet: TriggerSet<Data> = {
       type: 'HeadMarker',
       netRegex: {},
       condition: (data, matches) => {
-      /*
+        /*
         return data.me === matches.target &&
           getHeadmarkerId(data, matches) === headmarkers.defamation;
-      */
+        */
         return getHeadmarkerId(data, matches) === headmarkers.defamation;
       },
       infoText: (data, matches, output) => {

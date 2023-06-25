@@ -1046,7 +1046,8 @@ const triggerSet: TriggerSet<Data> = {
           return;
         if (data.prsParty !== undefined) {
           const [t1, t2] = data.prsTethers.splice(-2);
-          const [m1, m2] = data.prsParty.filter((e) => e.n === t1 || e.n === t2).sort((a, b) => a.i - b.i);
+          const [m1, m2] = data.prsParty.filter((e) => e.n === t1 || e.n === t2)
+            .sort((a, b) => a.i - b.i);
           return output.tether!({ tether1: m1?.r, tether2: m2?.r });
         }
         const [s1, s2] = data.prsTethers.slice(-2).map((e) => data.ShortName(e));
@@ -2055,7 +2056,8 @@ const triggerSet: TriggerSet<Data> = {
           return;
         if (data.prsParty !== undefined) {
           const [t1, t2] = data.prsTethers.splice(-2);
-          const [m1, m2] = data.prsParty.filter((e) => e.n === t1 || e.n === t2).sort((a, b) => a.i - b.i);
+          const [m1, m2] = data.prsParty.filter((e) => e.n === t1 || e.n === t2)
+            .sort((a, b) => a.i - b.i);
           return output.tether!({ tether1: m1?.r, tether2: m2?.r });
         }
         const [s1, s2] = data.prsTethers.slice(-2).map((e) => data.ShortName(e));

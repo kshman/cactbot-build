@@ -71,15 +71,18 @@ export const prsJuryOverrulingStrings = {
   unknown: Outputs.unknown,
 };
 export const prsJuryPrepare = (data: Data, output: Output, pair: boolean) => {
-    const mesg = data.prsLightAndDarks
+  const mesg = data.prsLightAndDarks
     ? {
       lightfar: output.proteinlightfar!(),
       lightnear: output.proteinlightnear!(),
       darkfar: output.proteindarkfar!(),
       darknear: output.proteindarknear!(),
       none: output.proteinunknown!({ unk: output.unknown!() }),
-    }[data.prsLightAndDarks] : pair ? output.proteinpair!() : output.proteinshare!();
-    return mesg;
+    }[data.prsLightAndDarks]
+    : pair
+    ? output.proteinpair!()
+    : output.proteinshare!();
+  return mesg;
 };
 
 const triggerSet: TriggerSet<Data> = {
@@ -189,13 +192,14 @@ const triggerSet: TriggerSet<Data> = {
       suppressSeconds: 5,
       infoText: (data, _matches, output) => {
         const mesg = data.prsLightAndDarks
-        ? {
-          lightfar: output.pairlightfar!(),
-          lightnear: output.pairlightnear!(),
-          darkfar: output.pairdarkfar!(),
-          darknear: output.pairdarknear!(),
-          none: output.unknown!(),
-        }[data.prsLightAndDarks] : output.text!();
+          ? {
+            lightfar: output.pairlightfar!(),
+            lightnear: output.pairlightnear!(),
+            darkfar: output.pairdarkfar!(),
+            darknear: output.pairdarknear!(),
+            none: output.unknown!(),
+          }[data.prsLightAndDarks]
+          : output.text!();
         return mesg;
       },
       outputStrings: {
@@ -775,9 +779,11 @@ const triggerSet: TriggerSet<Data> = {
         else
           myBuddyRole = output.unknown!();
 
-        const mySide = data.role === 'dps'
-        ? myColor === 'dark' ? output.rightSide!() : output.leftSide!()
-        : myColor === 'dark' ? output.leftSide!() : output.rightSide!();
+        let mySide;
+        if (data.role === 'dps')
+          mySide = myColor === 'dark' ? output.rightSide!() : output.leftSide!();
+        else
+          mySide = myColor === 'dark' ? output.leftSide!() : output.rightSide!();
 
         if (myColor === 'light')
           data.prsLightAndDarks = myLength === 'near' ? 'lightnear' : 'lightfar';
@@ -789,14 +795,30 @@ const triggerSet: TriggerSet<Data> = {
         let alertText: string;
         if (myLength === 'near') {
           if (myColor === 'light')
-            alertText = output.lightNear!({ player: myBuddyShort, role: myBuddyRole, side: mySide });
+            alertText = output.lightNear!({
+              player: myBuddyShort,
+              role: myBuddyRole,
+              side: mySide,
+            });
           else
-            alertText = output.darkNear!({ player: myBuddyShort, role: myBuddyRole, side: mySide });
+            alertText = output.darkNear!({
+              player: myBuddyShort,
+              role: myBuddyRole,
+              side: mySide,
+            });
         } else {
           if (myColor === 'light')
-            alertText = output.lightFar!({ player: myBuddyShort, role: myBuddyRole, side: mySide });
+            alertText = output.lightFar!({
+              player: myBuddyShort,
+              role: myBuddyRole,
+              side: mySide,
+            });
           else
-            alertText = output.darkFar!({ player: myBuddyShort, role: myBuddyRole, side: mySide });
+            alertText = output.darkFar!({
+              player: myBuddyShort,
+              role: myBuddyRole,
+              side: mySide,
+            });
         }
 
         let infoText: string | undefined = undefined;
