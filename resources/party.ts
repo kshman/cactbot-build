@@ -1,6 +1,7 @@
 import { Party } from '../types/event';
 import { Job, Role } from '../types/job';
 
+import Autumns from './autumns';
 import Util from './util';
 
 const emptyRoleToPartyNames = () => {
@@ -152,11 +153,12 @@ export default class PartyTracker {
     return this.idToName_[id];
   }
 
-  prJob(name?: string): string {
+  // 어듬이 형태로 직업 이름 가져오기
+  aJob(name?: string): string {
     if (name !== undefined) {
       const index = this.partyNames.indexOf(name);
       if (index >= 0)
-        return Util.jobEnumToPrJob(this.details[index]?.job as number);
+        return Autumns.JobName(this.details[index]?.job as number);
     }
     return '몰?루';
   }

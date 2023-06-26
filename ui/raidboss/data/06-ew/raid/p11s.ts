@@ -296,7 +296,7 @@ const triggerSet: TriggerSet<Data> = {
         if (data.options.AutumnStyle)
           return { alertText: output.upheldNotOnYou!() };
 
-        return { alertText: output.upheldOnPlayer!({ player: data.party.prJob(tether.target) }) };
+        return { alertText: output.upheldOnPlayer!({ player: data.party.aJob(tether.target) }) };
       },
       run: (data) => data.upheldTethers = [],
     },
@@ -390,7 +390,7 @@ const triggerSet: TriggerSet<Data> = {
         if (data.prsTethers === 2)
           return { alertText: output.partyHeart!() };
         return {
-          alertText: output.partyStackPlayerOut!({ player: data.party.prJob(tether.target) }),
+          alertText: output.partyStackPlayerOut!({ player: data.party.aJob(tether.target) }),
         };
       },
       run: (data) => data.upheldTethers = [],
@@ -811,7 +811,7 @@ const triggerSet: TriggerSet<Data> = {
         else
           data.prsLightAndDarks = myLength === 'near' ? 'darknear' : 'darkfar';
 
-        const myBuddyShort = data.party.prJob(myBuddy);
+        const myBuddyShort = data.party.aJob(myBuddy);
 
         let alertText: string;
         if (myLength === 'near') {
@@ -847,7 +847,7 @@ const triggerSet: TriggerSet<Data> = {
         const playerNames = Object.keys(data.lightDarkTether);
         const sameLength = playerNames.filter((x) => data.lightDarkTether[x] === myLength);
         const others = sameLength.filter((x) => x !== data.me && x !== myBuddy).sort();
-        const [player1, player2] = others.map((x) => data.party.prJob(x));
+        const [player1, player2] = others.map((x) => data.party.aJob(x));
         if (player1 !== undefined && player2 !== undefined) {
           if (myLength === 'near')
             infoText = output.otherNear!({ player1: player1, player2: player2 });

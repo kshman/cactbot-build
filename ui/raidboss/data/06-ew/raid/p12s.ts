@@ -1349,7 +1349,7 @@ const triggerSet: TriggerSet<Data> = {
             ? output.light!()
             : output.dark!();
         const partner =
-          data.party.prJob(data.engravement3TowerPlayers.find((name) => name !== data.me)) ??
+          data.party.aJob(data.engravement3TowerPlayers.find((name) => name !== data.me)) ??
             output.unknown!();
         return output.towerOnYou!({ color: towerColor, partner: partner });
       },
@@ -2318,7 +2318,7 @@ const triggerSet: TriggerSet<Data> = {
         if (matches.source !== data.me && matches.target !== data.me)
           return;
         const partner = matches.source === data.me ? matches.target : matches.source;
-        return output.breakWith!({ partner: data.party.prJob(partner) });
+        return output.breakWith!({ partner: data.party.aJob(partner) });
       },
       outputStrings: {
         breakWith: '사슬 끊어요! (${partner})',
@@ -2469,7 +2469,7 @@ const triggerSet: TriggerSet<Data> = {
           return;
 
         const partner = index === 0 ? 1 : 0;
-        return output.text1st!({ partner: data.party.prJob(data.prsCaloric1First[partner]) });
+        return output.text1st!({ partner: data.party.aJob(data.prsCaloric1First[partner]) });
       },
       outputStrings: {
         text1st: '내게 첫 불 (${partner})',
@@ -2532,7 +2532,7 @@ const triggerSet: TriggerSet<Data> = {
           const myteam: string[] = [];
           for (const [name, stat] of Object.entries(data.prsCaloric1Buff)) {
             if (stat === mystat && name !== data.me)
-              myteam.push(data.party.prJob(name));
+              myteam.push(data.party.aJob(name));
           }
           return output.fire!({ team: myteam.sort().join(', ') });
         }
@@ -2543,7 +2543,7 @@ const triggerSet: TriggerSet<Data> = {
         const myteam: string[] = [];
         for (const [name, stat] of Object.entries(data.prsCaloric1Buff)) {
           if (stat === mystat && name !== data.me && !data.prsCaloric1First.includes(name))
-            myteam.push(data.party.prJob(name));
+            myteam.push(data.party.aJob(name));
         }
         return output.wind!({ team: myteam.sort().join(', ') });
       },
@@ -2569,7 +2569,7 @@ const triggerSet: TriggerSet<Data> = {
         if (data.me === matches.target)
           return output.text!();
         if (data.prsPalladionGraps === data.me)
-          return output.mt!({ target: data.party.prJob(matches.target) });
+          return output.mt!({ target: data.party.aJob(matches.target) });
       },
       outputStrings: {
         text: '내게 첫 불! 가운데로',
@@ -2651,7 +2651,7 @@ const triggerSet: TriggerSet<Data> = {
         if (mycnt < 2) {
           for (const [name, cnt] of Object.entries(data.prsPangenesisCount)) {
             if (cnt === mycnt && name !== data.me) {
-              partner = data.party.prJob(name);
+              partner = data.party.aJob(name);
               break;
             }
           }
@@ -2666,7 +2666,7 @@ const triggerSet: TriggerSet<Data> = {
           return;
         for (const [name, duration] of Object.entries(data.prsPangenesisDuration)) {
           if (duration === myduration && name !== data.me) {
-            partner = data.party.prJob(name);
+            partner = data.party.aJob(name);
             break;
           }
         }
