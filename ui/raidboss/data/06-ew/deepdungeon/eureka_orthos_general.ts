@@ -42,6 +42,7 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: '미믹이 나왔어요!',
           de: 'Mimik ist erschienen!',
+          ja: 'ミミック！',
           cn: '已生成 拟态怪!',
           ko: '미믹 등장!',
         },
@@ -101,6 +102,7 @@ const triggerSet: TriggerSet<Data> = {
         duplicate: {
           en: '${protomander} 또 나옴',
           de: 'Doppelter ${protomander}',
+          ja: 'もっています: ${protomander}',
           cn: '${protomander} 重复',
           ko: '${protomander} 중복',
         },

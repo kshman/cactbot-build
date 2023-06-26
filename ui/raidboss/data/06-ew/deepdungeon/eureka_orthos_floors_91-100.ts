@@ -38,6 +38,7 @@ const triggerSet: TriggerSet<Data> = {
         interruptOrOut: {
           en: '밖으로 또는 인터럽트: ${name}',
           de: 'Raus oder unterbreche ${name}',
+          ja: '沈黙: ${name}',
           cn: '出去或打断 ${name}',
           ko: '밖으로 또는 ${name} 시전 끊기',
         },
@@ -215,11 +216,13 @@ const triggerSet: TriggerSet<Data> = {
         ice: {
           en: '얼음에 부디쳐요',
           de: 'Lass dich von Eis treffen',
+          ja: '氷へ',
           ko: '얼음 맞기',
         },
         fire: {
           en: '불에 부디쳐요',
           de: 'Lass dich von Feuer treffen',
+          ja: '炎へ',
           ko: '불 맞기',
         },
       },
@@ -241,11 +244,13 @@ const triggerSet: TriggerSet<Data> = {
         ice: {
           en: '얼음에 부디쳐요',
           de: 'Lass dich von Eis treffen',
+          ja: '氷へ',
           ko: '얼음 맞기',
         },
         avoid: {
           en: '한 줄 AOE 피해요',
           de: 'Vermeide Linien-AoEs',
+          ja: '剣AOE回避',
           ko: '칼 피하기',
         },
       },
@@ -267,11 +272,13 @@ const triggerSet: TriggerSet<Data> = {
         fire: {
           en: '불에 부디쳐요',
           de: 'Lass dich von Feuer treffen',
+          ja: '炎へ',
           ko: '불 맞기',
         },
         avoid: {
           en: '한 줄 AOE 피해요',
           de: 'Vermeide Linien-AoEs',
+          ja: '剣AOE回避',
           ko: '칼 피하기',
         },
       },

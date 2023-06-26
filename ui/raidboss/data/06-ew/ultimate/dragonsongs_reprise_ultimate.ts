@@ -3,14 +3,11 @@ import { UnreachableCode } from '../../../../../resources/not_reached';
 import Outputs from '../../../../../resources/outputs';
 import { callOverlayHandler } from '../../../../../resources/overlay_plugin_api';
 import { Responses } from '../../../../../resources/responses';
-import { ConfigValue } from '../../../../../resources/user_config';
 import ZoneId from '../../../../../resources/zone_id';
 import { RaidbossData } from '../../../../../types/data';
 import { PluginCombatantState } from '../../../../../types/event';
 import { NetMatches } from '../../../../../types/net_matches';
 import { LocaleObject, LocaleText, TriggerSet } from '../../../../../types/trigger';
-
-export type ConfigIds = 'prsMarkerType';
 
 // TODO: Ser Adelphel left/right movement after initial charge
 // TODO: Meteor "run" call?
@@ -80,7 +77,7 @@ const playstationMarkers = ['circle', 'cross', 'triangle', 'square'] as const;
 type PlaystationMarker = typeof playstationMarkers[number];
 
 export interface Data extends RaidbossData {
-  triggerSetConfig: { [key in ConfigIds]: ConfigValue };
+  readonly triggerSetConfig: { markerStyle: number };
   combatantData: PluginCombatantState[];
   phase: Phase;
   decOffset?: number;
@@ -234,17 +231,14 @@ const triggerSet: TriggerSet<Data> = {
   zoneId: ZoneId.DragonsongsRepriseUltimate,
   config: [
     {
-      id: 'prsMarkerType',
+      id: 'markerStyle',
       name: {
         en: '얼티밋 드래곤송: 마커 방식 0=기본, 1=고정팀용, 2=일반파티용',
         ja: '絶竜詩戦争: マーカー 0=デフォルト, 1=固定用, 2=野良用',
         ko: '절용시전쟁: 마커 방식 0=기본, 1=고정팀용, 2=일반파티용',
       },
       type: 'integer',
-      default: (options) => {
-        const oldSetting = options['prsDsrMarker'];
-        return typeof oldSetting === 'number' ? oldSetting : false;
-      },
+      default: 0,
     },
   ],
   timelineFile: 'dragonsongs_reprise_ultimate.txt',
@@ -789,7 +783,7 @@ const triggerSet: TriggerSet<Data> = {
           return;
         }
         // PRs / 색깔로 콜링콜링
-        if (data.triggerSetConfig.prsMarkerType === 1) {
+        if (data.triggerSetConfig.markerStyle === 1) {
           const clrs: { [clr: number]: string } = {
             0: '보라',
             1: '빨강',
@@ -804,7 +798,7 @@ const triggerSet: TriggerSet<Data> = {
           return output.safeSpotsColor!({ clr: clrs[data.spiralThrustSafeZones[0] ?? 8] });
         }
         // PRs / 일반 파티용 A 1 B 2...
-        if (data.triggerSetConfig.prsMarkerType === 2) {
+        if (data.triggerSetConfig.markerStyle === 2) {
           const pfms: { [pfm: number]: string } = {
             0: '4',
             1: 'A',
@@ -923,7 +917,7 @@ const triggerSet: TriggerSet<Data> = {
         const thordanDir = (Math.floor((d1 + d2) / 2) + 4) % 8;
 
         // PRs / 알파벳-숫자 콜링콜링
-        if (data.triggerSetConfig.prsMarkerType === 1) {
+        if (data.triggerSetConfig.markerStyle === 1) {
           const mrks: { [mrk: number]: string } = {
             0: '4',
             1: 'A',
@@ -939,7 +933,7 @@ const triggerSet: TriggerSet<Data> = {
           });
         }
         // PRs / A 1 B 2...
-        if (data.triggerSetConfig.prsMarkerType === 2) {
+        if (data.triggerSetConfig.markerStyle === 2) {
           const pfms: { [pfm: number]: string } = {
             0: '4',
             1: 'A',

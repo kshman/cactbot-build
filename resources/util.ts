@@ -7,6 +7,7 @@ import { Job, Role } from '../types/job';
 import { NetMatches } from '../types/net_matches';
 import { OutputStrings } from '../types/trigger';
 
+import { gameLogCodes } from './netregexes';
 import Outputs from './outputs';
 import { callOverlayHandler } from './overlay_plugin_api';
 
@@ -461,6 +462,7 @@ const Util = {
     watchCombatantOverride = watchFunc;
     clearCombatantsOverride = clearFunc;
   },
+  gameLogCodes: gameLogCodes,
 } as const;
 
 export default Util;
