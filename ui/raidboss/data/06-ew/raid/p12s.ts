@@ -2779,10 +2779,10 @@ const triggerSet: TriggerSet<Data> = {
     },
     {
       id: 'P12S 에크파이로시스 움직여',
-      type: 'GainsEffect',
-      netRegex: { effectId: '8322', source: 'Pallas Athena', capture: false },
+      type: 'Ability',
+      netRegex: { id: '831F', source: 'Pallas Athena', capture: false },
       suppressSeconds: 2,
-      alertText: (_data, _matches, output) => output.text!(),
+      alarmText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
           en: '흩어져욧! 달려욧!',
