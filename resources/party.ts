@@ -153,13 +153,28 @@ export default class PartyTracker {
     return this.idToName_[id];
   }
 
-  // 어듬이 형태로 직업 이름 가져오기
-  aJob(name?: string): string {
+  // 어듬이용 직업 이름 가져오기
+  aJobName(name?: string): string {
     if (name !== undefined) {
       const index = this.partyNames.indexOf(name);
       if (index >= 0)
         return Autumns.JobName(this.details[index]?.job as number);
     }
     return '몰?루';
+  }
+
+  // 어듬이용 직업 번호 가져오기
+  aJobIndex(name?: string): number {
+    if (name !== undefined) {
+      const index = this.partyNames.indexOf(name);
+      if (index >= 0)
+        return this.details[index]?.job as number;
+    }
+    return 0;
+  }
+
+  // 어듬이용 직업 정렬 목록
+  aJobSortedList(ids: number[], separator?: string): string {
+    return Autumns.BuildJobPriorities(ids, separator);
   }
 }

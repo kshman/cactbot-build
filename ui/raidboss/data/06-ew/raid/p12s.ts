@@ -322,7 +322,9 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       run: (data) => data.prsTrinityInvul = true,
       outputStrings: {
-        text: '탱크 무적으로 받아요',
+        text: {
+          en: '탱크 무적으로 받아요',
+        },
       },
     },
     {
@@ -331,7 +333,9 @@ const triggerSet: TriggerSet<Data> = {
       beforeSeconds: 4,
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
-        text: '엄청 아픈 전체 공격!',
+        text: {
+          en: '엄청 아픈 전체 공격!',
+        },
       },
     },
   ],
@@ -599,10 +603,18 @@ const triggerSet: TriggerSet<Data> = {
           ko: '남쪽 + 오른쪽 (그리고 다시 남쪽)',
         },
         //
-        prsc2aNn: '북쪽 => 다시 북쪽 [${dir}]',
-        prsc2aNs: '북쪽 => 전진해서 남쪽 [${dir}]',
-        prsc2aSs: '남쪽 => 다시 남쪽 [${dir}]',
-        prsc2aSn: '남쪽 => 전진해서 북쪽 [${dir}]',
+        prsc2aNn: {
+          en: '북쪽 => 다시 북쪽 [${dir}]',
+        },
+        prsc2aNs: {
+          en: '북쪽 => 전진해서 남쪽 [${dir}]',
+        },
+        prsc2aSs: {
+          en: '남쪽 => 다시 남쪽 [${dir}]',
+        },
+        prsc2aSn: {
+          en: '남쪽 => 전진해서 북쪽 [${dir}]',
+        },
       },
     },
     {
@@ -850,13 +862,27 @@ const triggerSet: TriggerSet<Data> = {
         north: Outputs.north,
         south: Outputs.south,
         //
-        prSwap: '[옆으로]',
-        prsc2aMb: '한가운데로 => 되돌아 가욧 ${move}',
-        prsc2aMg: '한가운데로 => 계속 전진 ${move}',
-        prsc2aBpro: '되돌아 와서 + 프로틴 ${move}',
-        prsc2aBtwo: '되돌아 와서 + 페어 ${move}',
-        prsc2aGpro: '전진해서 + 프로틴 ${move}',
-        prsc2aGtwo: '전진해서 + 페어 ${move}',
+        prSwap: {
+          en: '[옆으로]',
+        },
+        prsc2aMb: {
+          en: '한가운데로 => 되돌아 가욧 ${move}',
+        },
+        prsc2aMg: {
+          en: '한가운데로 => 계속 전진 ${move}',
+        },
+        prsc2aBpro: {
+          en: '되돌아 와서 + 프로틴 ${move}',
+        },
+        prsc2aBtwo: {
+          en: '되돌아 와서 + 페어 ${move}',
+        },
+        prsc2aGpro: {
+          en: '전진해서 + 프로틴 ${move}',
+        },
+        prsc2aGtwo: {
+          en: '전진해서 + 페어 ${move}',
+        },
       },
     },
     {
@@ -901,7 +927,9 @@ const triggerSet: TriggerSet<Data> = {
       suppressSeconds: 10,
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
-        text: '🟪줄 땡겨요',
+        text: {
+          en: '🟪줄 땡겨요',
+        },
       },
     },
     {
@@ -913,7 +941,9 @@ const triggerSet: TriggerSet<Data> = {
       suppressSeconds: 10,
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
-        text: '🟨줄 땡겨요',
+        text: {
+          en: '🟨줄 땡겨요',
+        },
       },
     },
     {
@@ -1349,7 +1379,7 @@ const triggerSet: TriggerSet<Data> = {
             ? output.light!()
             : output.dark!();
         const partner =
-          data.party.aJob(data.engravement3TowerPlayers.find((name) => name !== data.me)) ??
+          data.party.aJobName(data.engravement3TowerPlayers.find((name) => name !== data.me)) ??
             output.unknown!();
         return output.towerOnYou!({ color: towerColor, partner: partner });
       },
@@ -1626,7 +1656,9 @@ const triggerSet: TriggerSet<Data> = {
           cn: 'T进 (小队出)',
           ko: '탱커 안 (본대 밖)',
         },
-        tankSolo: '❱❱안쪽❰❰ 혼자 무적!',
+        tankSolo: {
+          en: '❱❱안쪽❰❰ 혼자 무적!',
+        },
       },
     },
     {
@@ -1659,7 +1691,9 @@ const triggerSet: TriggerSet<Data> = {
           cn: 'T出 (小队进)',
           ko: '탱커 밖 (본대 안)',
         },
-        tankSolo: '❰❰바깥❱❱ 혼자 무적!',
+        tankSolo: {
+          en: '❰❰바깥❱❱ 혼자 무적!',
+        },
       },
     },
     {
@@ -2009,8 +2043,12 @@ const triggerSet: TriggerSet<Data> = {
           ja: '${move} => ${engrave}',
           ko: '${move} => ${engrave}',
         },
-        inThenOut: '안에 있다 => 밖으로',
-        outThenIn: '밖에 있다 => 안으로',
+        inThenOut: {
+          en: '안에 있다 => 밖으로',
+        },
+        outThenIn: {
+          en: '밖에 있다 => 안으로',
+        },
         lightBeam: {
           en: '🟣밟아요🡺🡺',
           ja: '右塔踏み',
@@ -2139,7 +2177,9 @@ const triggerSet: TriggerSet<Data> = {
       netRegex: { id: '82FA', capture: false },
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
-        text: '엄청 아픈 전체 공격! 이러다 우리 다 주거!',
+        text: {
+          en: '엄청 아픈 전체 공격! 이러다 우리 다 주거!',
+        },
       },
     },
     // --------------------- Phase 2 ------------------------
@@ -2218,7 +2258,7 @@ const triggerSet: TriggerSet<Data> = {
       type: 'Tether',
       netRegex: { id: '0001' },
       suppressSeconds: 2,
-      infoText: (data, matches, output) => {
+      alertText: (data, matches, output) => {
         if (data.prsPhase === 900) {
           // 가이아오코스2 천사랑 연결
           if (data.party.isDPS(matches.target)) {
@@ -2243,25 +2283,59 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         // 가이아오코스2
-        tetherBarrier: '줄 앞에 막아줘요',
+        tetherBarrier: {
+          en: '줄 앞에 막아줘요',
+        },
         // 클래식 컨셉1
-        c1Safe10: '🡼🡼🡼', // 알파, 동글
-        c1Safe20: '오른쪽🡹🡹🡹', // 알파, 세모
-        c1Safe30: '🡽🡽🡽', // 알파, 네모
-        c1Safe40: '왼쪽🡹🡹🡹', // 알파, 가위
-        c1Safe11: '🡿🡿🡿', // 베타, 동글
-        c1Safe21: '오른쪽🡻🡻🡻', // 베타, 세모
-        c1Safe31: '🡾🡾🡾', // 베타, 네모
-        c1Safe41: '왼쪽🡻🡻🡻', // 베타, 가위
+        c1Safe10: {
+          en: '🡼🡼🡼', // 알파, 동글
+        },
+        c1Safe20: {
+          en: '오른쪽🡹🡹🡹', // 알파, 세모
+        },
+        c1Safe30: {
+          en: '🡽🡽🡽', // 알파, 네모
+        },
+        c1Safe40: {
+          en: '왼쪽🡹🡹🡹', // 알파, 가위
+        },
+        c1Safe11: {
+          en: '🡿🡿🡿', // 베타, 동글
+        },
+        c1Safe21: {
+          en: '오른쪽🡻🡻🡻', // 베타, 세모
+        },
+        c1Safe31: {
+          en: '🡾🡾🡾', // 베타, 네모
+        },
+        c1Safe41: {
+          en: '왼쪽🡻🡻🡻', // 베타, 가위
+        },
         // 클래식 컨셉2
-        c2Safe10: '4번 🡹🡹🡹', // 알파, 동글
-        c2Safe20: '2번 🡹🡹🡹', // 알파, 세모
-        c2Safe30: '1번 🡹🡹🡹', // 알파, 네모
-        c2Safe40: '3번 🡹🡹🡹', // 알파, 가위
-        c2Safe11: '4번 🡻🡻🡻', // 베타, 동글
-        c2Safe21: '2번 🡻🡻🡻', // 베타, 세모
-        c2Safe31: '1번 🡻🡻🡻', // 베타, 네모
-        c2Safe41: '3번 🡻🡻🡻', // 베타, 가위
+        c2Safe10: {
+          en: '4번 🡹🡹🡹', // 알파, 동글
+        },
+        c2Safe20: {
+          en: '2번 🡹🡹🡹', // 알파, 세모
+        },
+        c2Safe30: {
+          en: '1번 🡹🡹🡹', // 알파, 네모
+        },
+        c2Safe40: {
+          en: '3번 🡹🡹🡹', // 알파, 가위
+        },
+        c2Safe11: {
+          en: '4번 🡻🡻🡻', // 베타, 동글
+        },
+        c2Safe21: {
+          en: '2번 🡻🡻🡻', // 베타, 세모
+        },
+        c2Safe31: {
+          en: '1번 🡻🡻🡻', // 베타, 네모
+        },
+        c2Safe41: {
+          en: '3번 🡻🡻🡻', // 베타, 가위
+        },
       },
     },
     {
@@ -2273,7 +2347,9 @@ const triggerSet: TriggerSet<Data> = {
         return output.text!({ num: data.prsUltima });
       },
       outputStrings: {
-        text: '알테마#${num} 전체 공격',
+        text: {
+          en: '알테마#${num} 전체 공격',
+        },
       },
     },
     {
@@ -2296,8 +2372,12 @@ const triggerSet: TriggerSet<Data> = {
         return output.text!();
       },
       outputStrings: {
-        tank: '맵 반쪽 탱크버스터! 무적으로!',
-        text: '맵 반쪽 탱크버스터 피해요',
+        tank: {
+          en: '맵 반쪽 탱크버스터! 무적으로!',
+        },
+        text: {
+          en: '맵 반쪽 탱크버스터 피해요',
+        },
       },
     },
     {
@@ -2306,7 +2386,9 @@ const triggerSet: TriggerSet<Data> = {
       netRegex: { id: '8326', source: 'Pallas Athena', capture: false },
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
-        text: '전체 공격 + 작아져요',
+        text: {
+          en: '전체 공격 + 작아져요',
+        },
       },
     },
     {
@@ -2318,10 +2400,12 @@ const triggerSet: TriggerSet<Data> = {
         if (matches.source !== data.me && matches.target !== data.me)
           return;
         const partner = matches.source === data.me ? matches.target : matches.source;
-        return output.breakWith!({ partner: data.party.aJob(partner) });
+        return output.breakWith!({ partner: data.party.aJobName(partner) });
       },
       outputStrings: {
-        breakWith: '사슬 끊어요! (${partner})',
+        breakWith: {
+          en: '사슬 끊어요! (${partner})',
+        },
       },
     },
     {
@@ -2339,10 +2423,18 @@ const triggerSet: TriggerSet<Data> = {
         return output.text!({ layout: layout });
       },
       outputStrings: {
-        text: '전체 공격 + 흩어져요: ${layout}',
-        vertical: '‖',
-        donut: '◎',
-        horizontal: '〓',
+        text: {
+          en: '전체 공격 + 흩어져요: ${layout}',
+        },
+        vertical: {
+          en: '‖',
+        },
+        donut: {
+          en: '◎',
+        },
+        horizontal: {
+          en: '〓',
+        },
         unknown: Outputs.unknown,
       },
     },
@@ -2352,13 +2444,13 @@ const triggerSet: TriggerSet<Data> = {
       netRegex: {},
       run: (data, matches) => {
         const id = getHeadmarkerId(data, matches);
-        const playstationMarkerMap: { [id: string]: TypePlaystation } = {
+        const psMarkerMap: { [id: string]: TypePlaystation } = {
           '016F': 'circle',
           '0170': 'triangle',
           '0171': 'square',
           '0172': 'cross',
         };
-        const marker = playstationMarkerMap[id];
+        const marker = psMarkerMap[id];
         if (marker === undefined)
           return;
         data.prsClassicMarker[matches.target] = marker;
@@ -2381,9 +2473,21 @@ const triggerSet: TriggerSet<Data> = {
       condition: (data) => data.prsPhase !== 200,
       delaySeconds: 12,
       durationSeconds: 4,
-      alertText: (_data, _matches, output) => output.revert!(),
+      alertText: (data, _matches, output) => {
+        const psToNumMap: Record<TypePlaystation, number> = {
+          circle: 4,
+          triangle: 2,
+          square: 1,
+          cross: 3,
+        };
+        const myps = data.prsClassicMarker[data.me];
+        return output.revert!({ num: myps === undefined ? output.unknown!() : psToNumMap[myps] });
+      },
       outputStrings: {
-        revert: '반대로 가야 해요',
+        revert: {
+          en: '${num}번으로 가야 해요',
+        },
+        unknown: Outputs.unknown,
       },
     },
     {
@@ -2404,13 +2508,27 @@ const triggerSet: TriggerSet<Data> = {
         return output.text!({ ps: outPs, ab: outAb });
       },
       outputStrings: {
-        text: '${ps} + ${ab}',
-        circle: '1번⚪',
-        triangle: '3번⨻',
-        square: '4번⬜',
-        cross: '2번❌',
-        alpha: '알파 🟥삼각',
-        beta: '베타 🟨사각',
+        text: {
+          en: '${ps} + ${ab}',
+        },
+        circle: {
+          en: '1번⚪',
+        },
+        triangle: {
+          en: '3번⨻',
+        },
+        square: {
+          en: '4번⬜',
+        },
+        cross: {
+          en: '2번❌',
+        },
+        alpha: {
+          en: '알파 🟥삼각',
+        },
+        beta: {
+          en: '베타 🟨사각',
+        },
       },
     },
     {
@@ -2421,7 +2539,9 @@ const triggerSet: TriggerSet<Data> = {
       durationSeconds: 4,
       alarmText: (_data, _matches, output) => output.text!(),
       outputStrings: {
-        text: '피해욧',
+        text: {
+          en: '피해욧',
+        },
       },
     },
     {
@@ -2436,8 +2556,12 @@ const triggerSet: TriggerSet<Data> = {
           return output.healer!();
       },
       outputStrings: {
-        tank: '탱크버스터! 에스나 받아욧',
-        healer: '탱크버스터! 에스나 준비해욧',
+        tank: {
+          en: '탱크버스터! 에스나 받아욧',
+        },
+        healer: {
+          en: '탱크버스터! 에스나 준비해욧',
+        },
       },
     },
     {
@@ -2461,7 +2585,7 @@ const triggerSet: TriggerSet<Data> = {
         data.prsCaloric1Mine = undefined;
       },
       delaySeconds: 1,
-      infoText: (data, _matches, output) => {
+      alertText: (data, _matches, output) => {
         if (data.prsCaloric1First.length !== 2)
           return;
         const index = data.prsCaloric1First.indexOf(data.me);
@@ -2469,10 +2593,12 @@ const triggerSet: TriggerSet<Data> = {
           return;
 
         const partner = index === 0 ? 1 : 0;
-        return output.text1st!({ partner: data.party.aJob(data.prsCaloric1First[partner]) });
+        return output.text1st!({ partner: data.party.aJobName(data.prsCaloric1First[partner]) });
       },
       outputStrings: {
-        text1st: '내게 첫 불 (${partner})',
+        text1st: {
+          en: '내게 첫 불 (${partner})',
+        },
       },
     },
     {
@@ -2493,7 +2619,9 @@ const triggerSet: TriggerSet<Data> = {
           return output.text!();
       },
       outputStrings: {
-        text: '또다시 불! 무직이랑 뭉쳐요',
+        text: {
+          en: '또다시 불! 무직이랑 뭉쳐요',
+        },
       },
     },
     {
@@ -2510,8 +2638,12 @@ const triggerSet: TriggerSet<Data> = {
           return output.wind!();
       },
       outputStrings: {
-        none: '무직! 불이랑 뭉쳐요!',
-        wind: '바람! 흩어져요!',
+        none: {
+          en: '무직! 불이랑 뭉쳐요!',
+        },
+        wind: {
+          en: '바람! 흩어져요!',
+        },
       },
     },
     {
@@ -2529,32 +2661,38 @@ const triggerSet: TriggerSet<Data> = {
           return;
 
         if (mystat === 'fire') {
-          const myteam: string[] = [];
+          const myteam: number[] = [];
           for (const [name, stat] of Object.entries(data.prsCaloric1Buff)) {
             if (stat === mystat && name !== data.me)
-              myteam.push(data.party.aJob(name));
+              myteam.push(data.party.aJobIndex(name));
           }
-          return output.fire!({ team: myteam.sort().join(', ') });
+          return output.fire!({ team: data.party.aJobSortedList(myteam) });
         }
 
         if (data.prsCaloric1First.includes(data.me))
           return output.wind1st!();
 
-        const myteam: string[] = [];
+        const myteam: number[] = [];
         for (const [name, stat] of Object.entries(data.prsCaloric1Buff)) {
           if (stat === mystat && name !== data.me && !data.prsCaloric1First.includes(name))
-            myteam.push(data.party.aJob(name));
+            myteam.push(data.party.aJobIndex(name));
         }
-        return output.wind!({ team: myteam.sort().join(', ') });
+        return output.wind!({ team: data.party.aJobSortedList(myteam) });
       },
       run: (data) => {
         data.prsCaloric1First = [];
         data.prsCaloric1Buff = {};
       },
       outputStrings: {
-        fire: '내게 불 (${team})',
-        wind: '내게 바람 (${team})',
-        wind1st: '바람, 살짝 옆으로',
+        fire: {
+          en: '내게 불 (${team})',
+        },
+        wind: {
+          en: '내게 바람 (${team})',
+        },
+        wind1st: {
+          en: '바람, 살짝 옆으로',
+        },
       },
     },
     {
@@ -2569,11 +2707,15 @@ const triggerSet: TriggerSet<Data> = {
         if (data.me === matches.target)
           return output.text!();
         if (data.prsPalladionGraps === data.me)
-          return output.mt!({ target: data.party.aJob(matches.target) });
+          return output.mt!({ target: data.party.aJobName(matches.target) });
       },
       outputStrings: {
-        text: '내게 첫 불! 가운데로',
-        mt: '불 교대: ${target}',
+        text: {
+          en: '내게 첫 불! 가운데로',
+        },
+        mt: {
+          en: '불 교대: ${target}',
+        },
       },
     },
     {
@@ -2588,7 +2730,9 @@ const triggerSet: TriggerSet<Data> = {
         return output.text!();
       },
       outputStrings: {
-        text: '내게 바람, 흩어져요',
+        text: {
+          en: '내게 바람, 흩어져요',
+        },
       },
     },
     {
@@ -2602,7 +2746,9 @@ const triggerSet: TriggerSet<Data> = {
       },
       run: (data, matches) => data.prsCaloric2Fire = matches.target,
       outputStrings: {
-        text: '내게 불 장판',
+        text: {
+          en: '내게 불 장판',
+        },
       },
     },
     {
@@ -2615,7 +2761,9 @@ const triggerSet: TriggerSet<Data> = {
           return output.text!();
       },
       outputStrings: {
-        text: '불 옮겨욧!',
+        text: {
+          en: '불 옮겨욧!',
+        },
       },
     },
     {
@@ -2624,7 +2772,9 @@ const triggerSet: TriggerSet<Data> = {
       netRegex: { id: '831E', source: 'Pallas Athena', capture: false },
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
-        text: '엑사플레어 + 전체 공격',
+        text: {
+          en: '엑사플레어 + 전체 공격',
+        },
       },
     },
     {
@@ -2634,7 +2784,9 @@ const triggerSet: TriggerSet<Data> = {
       suppressSeconds: 2,
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
-        text: '흩어져욧! 달려욧!',
+        text: {
+          en: '흩어져욧! 달려욧!',
+        },
       },
     },
     {
@@ -2645,13 +2797,13 @@ const triggerSet: TriggerSet<Data> = {
       durationSeconds: 10,
       suppressSeconds: 2,
       alertText: (data, _matches, output) => {
-        let partner = output.unknown!();
         // 무직, 인자1
         const mycnt = data.prsPangenesisCount[data.me] ?? 0;
         if (mycnt < 2) {
+          let partner = output.unknown!();
           for (const [name, cnt] of Object.entries(data.prsPangenesisCount)) {
             if (cnt === mycnt && name !== data.me) {
-              partner = data.party.aJob(name);
+              partner = data.party.aJobName(name);
               break;
             }
           }
@@ -2664,24 +2816,30 @@ const triggerSet: TriggerSet<Data> = {
         const myduration = data.prsPangenesisDuration[data.me];
         if (mystat === undefined || myduration === undefined)
           return;
-        for (const [name, duration] of Object.entries(data.prsPangenesisDuration)) {
-          if (duration === myduration && name !== data.me) {
-            partner = data.party.aJob(name);
-            break;
-          }
-        }
         if (myduration < 18)
-          return output.tower1st!({ color: output[mystat]!(), partner: partner });
-        return output.tower2nd!({ color: output[mystat]!(), partner: partner });
+          return output.tower1st!({ color: output[mystat]!() });
+        return output.tower2nd!({ color: output[mystat]!() });
       },
       run: (data) => data.prsSeenPangenesis = true,
       outputStrings: {
-        tower1st: '빠른: 첫 ${color} 타워 (${partner})',
-        tower2nd: '느림: 둘째🡻 ${color} 타워 (${partner})',
-        geneone: '인자1: 첫 타워 (${partner} / 살짝 위로)',
-        slime: '무직: 둘째🡹 타워 (${partner} / 살짝 아래로)',
-        astral: '🟡하얀', // 색깔 바뀜
-        umbral: '🟣검은', // 색깔 바뀜
+        tower1st: {
+          en: '빠른: 첫 ${color} 타워',
+        },
+        tower2nd: {
+          en: '느림: 둘째🡻 ${color} 타워',
+        },
+        geneone: {
+          en: '인자1: 첫 타워 (${partner} / 살짝 위로)',
+        },
+        slime: {
+          en: '무직: 둘째🡹 타워 (${partner} / 살짝 아래로)',
+        },
+        astral: {
+          en: '🟡하얀', // 색깔 바뀜
+        },
+        umbral: {
+          en: '🟣검은', // 색깔 바뀜
+        },
         unknown: Outputs.unknown,
       },
     },
@@ -2739,7 +2897,37 @@ const triggerSet: TriggerSet<Data> = {
       delaySeconds: 0.5,
       durationSeconds: 4,
       suppressSeconds: 2,
-      infoText: (data, _matches, output) => {
+      response: (data, _matches, output) => {
+        // cactbot-builtin-response
+        output.responseOutputStrings = {
+          move: {
+            en: '다음 타워',
+          },
+          movecc: {
+            en: '다음 ${color} 타워',
+          },
+          end: {
+            en: '끝! 남쪽으로',
+          },
+          slime: {
+            en: '끝이지만 무직! 슬라임 채요!',
+          },
+          wait1n: {
+            en: '둘째🡹 타워',
+          },
+          wait1g: {
+            en: '둘째🡻 타워',
+          },
+          wait1gcc: {
+            en: '둘째🡻 ${color} 타워',
+          },
+          astral: {
+            en: '🟡하얀', // 색깔 바뀜
+          },
+          umbral: {
+            en: '🟣검은', // 색깔 바뀜
+          },
+        };
         data.prsPangenesisTilt = (data.prsPangenesisTilt ?? 0) + 1;
         const tilt = data.prsPangenesisTilt;
 
@@ -2748,26 +2936,28 @@ const triggerSet: TriggerSet<Data> = {
         const myduration = data.prsPangenesisDuration[data.me] ?? 0;
 
         if (tilt === 1) {
-          if (myduration === 16 || mycnt === 1)
-            return mystat === undefined
-              ? output.move!()
-              : output.movecc!({ color: output[mystat]!() });
-          if (myduration === 20)
-            return mystat === undefined
-              ? output.wait1g!()
-              : output.wait1gcc!({ color: output[mystat]!() });
+          if (myduration < 18 || mycnt === 1) {
+            if (mystat === undefined)
+              return { alertText: output.move!() };
+            return { alertText: output.movecc!({ color: output[mystat]!() }) };
+          }
+          if (myduration > 18) {
+            if (mystat === undefined)
+              return { alertText: output.wait1g!() };
+            return { alertText: output.wait1gcc!({ color: output[mystat]!() }) };
+          }
           if (mycnt === 0)
-            return output.wait1n!();
+            return { alertText: output.wait1n!() };
         } else if (tilt === 2) {
           // 모두 다 이동
-          return mystat === undefined
-            ? output.move!()
-            : output.movecc!({ color: output[mystat]!() });
+          if (mystat === undefined)
+            return { alertText: output.move!() };
+          return { alertText: output.movecc!({ color: output[mystat]!() }) };
         } else if (tilt === 3) {
           // 무직만 슬라임
           if (mycnt === 0)
-            return output.slime!();
-          return output.end!();
+            return { alarmText: output.slime!() };
+          return { alertText: output.end!() };
         }
       },
       run: (data) => {
@@ -2778,46 +2968,7 @@ const triggerSet: TriggerSet<Data> = {
           delete data.prsPangenesisTilt;
         }
       },
-      outputStrings: {
-        move: '다음 타워로',
-        movecc: '다음 ${color} 타워로',
-        end: '끝! 남쪽으로',
-        slime: '끝이지만 무직! 슬라임 유도',
-        wait1n: '둘째🡹 타워 나올 곳으로',
-        wait1g: '둘째🡻 타워 나올 곳으로',
-        wait1gcc: '둘째🡻 ${color} 타워 나올 곳으로',
-        astral: '🟡하얀', // 색깔 바뀜
-        umbral: '🟣검은', // 색깔 바뀜
-      },
     },
-    /*
-    {
-      id: 'P12S 마커 처리',
-      type: 'HeadMarker',
-      netRegex: {},
-      alarmText: (data, matches, output) => {
-        const id = getHeadmarkerId(data, matches);
-        // 01D4 팔라디언 그랩스 대상자
-        // 0061 작아지는 거
-        // 0016 작아진 담에 지오센트리즘 개별 장판
-        // 016F/0170/0171/0172 각각 🔴▲🟪❌
-        // 012F 칼로릭1 첫불
-        // 01D5 칼로릭2 바람
-        // 01D6 칼로릭2 불
-        const excludes: string[] = [
-          '01D4', '0061', '0016',
-          '016F', '0170', '0171', '0172',
-          '012F', '01D5', '01D6',
-        ];
-        if (excludes.includes(id))
-          return;
-        return output.text!({ who: matches.target, num: id, org: matches.id });
-      },
-      outputStrings: {
-        text: '${who} => ${num} (${org})',
-      },
-    },
-    */
   ],
   timelineReplace: [
     {
