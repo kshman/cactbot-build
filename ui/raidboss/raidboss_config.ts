@@ -488,6 +488,15 @@ const setOptionsFromOutputValue = (
   }
 };
 
+const setAutumnStyleValue = (
+  value: SavedConfigEntry,
+  options: BaseOptions | TriggerAutoConfig,
+) => {
+  if (typeof value !== 'boolean')
+    return;
+  options.AutumnStyle = value;
+};
+
 // Helper for doing nothing during trigger eval, but still recording any
 // calls to `output.responseOutputStrings = x;` via callback.
 class DoNothingFuncProxy {
@@ -2255,6 +2264,16 @@ const templateOptions: OptionsTemplate = {
       },
       type: 'float',
       default: 0.75,
+    },
+    {
+      id: 'AutumnStyle',
+      name: {
+        en: '어듬이 스타일',
+        ja: 'オヅミスタイル',
+      },
+      type: 'checkbox',
+      default: false,
+      setterFunc: setAutumnStyleValue,
     },
   ],
 };

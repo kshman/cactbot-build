@@ -482,7 +482,9 @@ const triggerSet: TriggerSet<Data> = {
         if (data.illusory === 'bird')
           return output.inAndProtean!();
         if (data.illusory === 'snake') {
-          if (data.role === 'healer' || data.role === 'dps' && (data.CanSilence() || data.CanAddle()))
+          if (data.role === 'healer')
+            return output.outAndProteanOutside!();
+          if (data.role === 'dps' && (data.CanSilence() || data.CanAddle()))
             return output.outAndProteanOutside!();
           return output.outAndProteanInside!();
         }
@@ -2063,7 +2065,9 @@ const triggerSet: TriggerSet<Data> = {
         if (!isReversed && id === ids.fireThenIce || isReversed && id === ids.iceThenFire)
           return { [key]: output.fire!() };
         if (!isReversed && id === ids.iceThenFire || isReversed && id === ids.fireThenIce)
-          return { [key]: output.ice!({ adj: data.prsAlignMt ? output.adjMt!() : output.adjD1!() }) };
+          return {
+            [key]: output.ice!({ adj: data.prsAlignMt ? output.adjMt!() : output.adjD1!() }),
+          };
         if (!isReversed && id === ids.spreadThenStack || isReversed && id === ids.stackThenSpread)
           return { [key]: output.spread!() };
         if (!isReversed && id === ids.stackThenSpread || isReversed && id === ids.spreadThenStack)
@@ -2358,7 +2362,9 @@ const triggerSet: TriggerSet<Data> = {
           if (concept === undefined)
             return { alarmText: output.noDebuff!() };
 
-          const isShort = concept === 'shortalpha' || concept === 'shortbeta' || concept === 'shortgamma';
+          const isShort = concept === 'shortalpha' ||
+            concept === 'shortbeta' ||
+            concept === 'shortgamma';
           const conceptStr = singleConceptMap[concept];
           if (isShort)
             return { alarmText: conceptStr };

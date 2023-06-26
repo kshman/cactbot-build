@@ -29,6 +29,7 @@ const settings = {
     'plugin/',
     'publish/',
     'resources/lib/',
+    '@prs/',
   ],
   'parserOptions': {
     'ecmaVersion': 2022,

@@ -177,6 +177,7 @@ const triggerSet: TriggerSet<Data> = {
           en: '안에서 + 페어',
           de: 'Partner + Donut',
           fr: 'Partenaires + Donut',
+          ja: 'ペア + ドーナツ',
           cn: '双人分摊 + 月环',
           ko: '파트너 + 도넛',
         },
@@ -194,6 +195,7 @@ const triggerSet: TriggerSet<Data> = {
           en: '안에서 + 프로틴',
           de: 'Himmelsrichtungen + Donut',
           fr: 'Positions + Donut',
+          ja: '基本散会 + ドーナツ',
           cn: '八方分散 + 月环',
           ko: '8방향 산개 + 도넛',
         },
@@ -216,6 +218,7 @@ const triggerSet: TriggerSet<Data> = {
           en: '밖으로 + 페어',
           de: 'Raus + Partner',
           fr: 'Extérieur + Partenaires',
+          ja: '外側へ + ペア',
           cn: '远离 + 双人分摊',
           ko: '밖으로 + 파트너',
         },
@@ -241,6 +244,7 @@ const triggerSet: TriggerSet<Data> = {
           en: '안에서 + 페어',
           de: 'Rein + Partner',
           fr: 'Intérieur + Partenaires',
+          ja: '内側へ + ペア',
           cn: '靠近 + 双人分摊',
           ko: '안으로 + 파트너',
         },
@@ -248,6 +252,7 @@ const triggerSet: TriggerSet<Data> = {
           en: '안에서 + 프로틴',
           de: 'Rein + Himmelsrichtungen',
           fr: 'Intérieur + Positions',
+          ja: '内側へ + 基本散会',
           cn: '靠近 + 八方分散',
           ko: '안으로 + 8방향 산개',
         },
@@ -271,6 +276,7 @@ const triggerSet: TriggerSet<Data> = {
           en: '밖으로 + 프로틴',
           de: 'Raus + Himmelsrichtungen',
           fr: 'Extérieur + Positions',
+          ja: '外側へ + 基本散会',
           cn: '远离 + 八方分散',
           ko: '밖으로 + 8방향 산개',
         },
@@ -293,6 +299,7 @@ const triggerSet: TriggerSet<Data> = {
           en: '벽으로 넉백',
           de: 'Rückstoß in die Wand',
           fr: 'Poussée sur un mur',
+          ja: 'ノックバック',
           cn: '向墙边击退',
           ko: '벽으로 넉백',
         },
@@ -392,6 +399,7 @@ const triggerSet: TriggerSet<Data> = {
           en: '맨 처음 구슬 ${dir} => ${rotation}',
           de: 'Erster Orb ${dir} => ${rotation}',
           fr: 'Premier orbe ${dir} => ${rotation}',
+          ja: '1回目の玉 ${dir} => ${rotation}',
           cn: '第一个球 ${dir} => ${rotation}',
           ko: '첫번째 구슬 ${dir} => ${rotation}',
         },
@@ -418,8 +426,26 @@ const triggerSet: TriggerSet<Data> = {
         if (data.seenChimericSuccession)
           return output.text!({ num: dice });
 
-        const rushMap: { [id: number]: number } = { 1: 0, 2: 1, 3: 0, 4: 2, 5: 0, 6: 3, 7: 0, 8: 4, };
-        const towerMap: { [id: number]: number } = { 1: 0, 2: 3, 3: 0, 4: 4, 5: 0, 6: 1, 7: 0, 8: 2, };
+        const rushMap: { [id: number]: number } = {
+          1: 0,
+          2: 1,
+          3: 0,
+          4: 2,
+          5: 0,
+          6: 3,
+          7: 0,
+          8: 4,
+        };
+        const towerMap: { [id: number]: number } = {
+          1: 0,
+          2: 3,
+          3: 0,
+          4: 4,
+          5: 0,
+          6: 1,
+          7: 0,
+          8: 2,
+        };
         const rush = rushMap[data.limitCutNumber ?? 1];
         const tower = towerMap[data.limitCutNumber ?? 1];
         if (tower === 0 || rush === 0)
@@ -465,7 +491,7 @@ const triggerSet: TriggerSet<Data> = {
           en: '내게 지금 서클',
           de: 'Ehrenstrafe aud DIR',
           fr: 'Diffamation sur VOUS',
-          ja: '名誉罰',
+          ja: '自分の巨大な爆発',
           cn: '大圈点名',
           ko: '광역징 대상자',
         },
@@ -498,6 +524,7 @@ const triggerSet: TriggerSet<Data> = {
           en: '돌진 유도',
           de: 'Sprung ködern',
           fr: 'Encaissez le saut',
+          ja: '突進誘導',
           cn: '引导BOSS',
           ko: '돌진 유도',
         },
@@ -505,6 +532,7 @@ const triggerSet: TriggerSet<Data> = {
           en: '타워 밟아요',
           de: 'Im Turm stehen',
           fr: 'Prenez votre tour',
+          ja: '塔踏み',
           cn: '踩塔',
           ko: '기둥 들어가기',
         },
@@ -540,6 +568,7 @@ const triggerSet: TriggerSet<Data> = {
           en: '돌진 유도',
           de: 'Sprung ködern',
           fr: 'Encaissez le saut',
+          ja: '突進誘導',
           cn: '引导BOSS',
           ko: '돌진 유도',
         },
@@ -547,6 +576,7 @@ const triggerSet: TriggerSet<Data> = {
           en: '타워 밟아요',
           de: 'Im Turm stehen',
           fr: 'Prenez votre tour',
+          ja: '塔踏み',
           cn: '踩塔',
           ko: '기둥 들어가기',
         },
@@ -557,10 +587,10 @@ const triggerSet: TriggerSet<Data> = {
       type: 'HeadMarker',
       netRegex: {},
       condition: (data, matches) => {
-      /*
+        /*
         return data.me === matches.target &&
           getHeadmarkerId(data, matches) === headmarkers.defamation;
-      */
+        */
         return getHeadmarkerId(data, matches) === headmarkers.defamation;
       },
       infoText: (data, matches, output) => {
@@ -573,7 +603,7 @@ const triggerSet: TriggerSet<Data> = {
           en: '내게 ${num}번 서클',
           de: 'Ehrenstrafe aud DIR',
           fr: 'Diffamation sur VOUS',
-          ja: '名誉罰',
+          ja: '自分に巨大な爆発',
           cn: '大圈点名',
           ko: '광역징 대상자',
         },
@@ -596,6 +626,7 @@ const triggerSet: TriggerSet<Data> = {
           en: '밖으로 => 뒤로',
           de: 'Raus => Hinten',
           fr: 'Extérieur => Derrière',
+          ja: '外側 => 後ろへ',
           cn: '远离 => 去背后',
           ko: '밖으로 => 뒤로',
         },
@@ -612,6 +643,7 @@ const triggerSet: TriggerSet<Data> = {
           en: '안으로 => 뒤로',
           de: 'Rein => Hinten',
           fr: 'Intérieur => Derrière',
+          ja: '内側 => 後ろへ',
           cn: '靠近 => 去背后',
           ko: '안으로 => 뒤로',
         },
@@ -628,6 +660,7 @@ const triggerSet: TriggerSet<Data> = {
           en: '밖으로 => 앞으로',
           de: 'Raus => Vorne',
           fr: 'Extérieur => Devant',
+          ja: '外側 => 前へ',
           cn: '远离 => 去面前',
           ko: '밖으로 => 앞으로',
         },
@@ -644,6 +677,7 @@ const triggerSet: TriggerSet<Data> = {
           en: '안으로 => 앞으로',
           de: 'Rein => Vorne',
           fr: 'Intérieur => Devant',
+          ja: '内側 => 前へ',
           cn: '靠近 => 去面前',
           ko: '안으로 => 앞으로',
         },
@@ -683,6 +717,7 @@ const triggerSet: TriggerSet<Data> = {
           en: '밖으로 + 앞으로',
           de: 'Raus + Vorne',
           fr: 'Extérieur + Devant',
+          ja: '外側 + 前へ',
           cn: '远离 => 去面前',
           ko: '밖으로 + 앞으로',
         },
@@ -690,6 +725,7 @@ const triggerSet: TriggerSet<Data> = {
           en: '밖으로 + 뒤로',
           de: 'Raus + Hinten',
           fr: 'Extérieur + Derrière',
+          ja: '外側 + 後ろへ',
           cn: '远离 => 去背后',
           ko: '밖으로 + 뒤로',
         },
@@ -697,6 +733,7 @@ const triggerSet: TriggerSet<Data> = {
           en: '안으로 + 앞으로',
           de: 'Rein + Vorne',
           fr: 'Intérieur + Devant',
+          ja: '内側 + 前へ',
           cn: '靠近 => 去面前',
           ko: '안으로 + 앞으로',
         },
@@ -704,6 +741,7 @@ const triggerSet: TriggerSet<Data> = {
           en: '안으로 + 뒤로',
           de: 'Rein + Hinten',
           fr: 'Intérieur + Derrière',
+          ja: '内側 + 後ろへ',
           cn: '靠近 => 去背后',
           ko: '안으로 + 뒤로',
         },
@@ -725,6 +763,7 @@ const triggerSet: TriggerSet<Data> = {
           en: '푹찍쾅 => 그대로',
           de: 'Sprung => Stehen bleiben',
           fr: 'Saut => Restez',
+          ja: '突進 => 止まれ',
           cn: '突进 => 停',
           ko: '돌진 => 가만히',
         },
@@ -740,6 +779,7 @@ const triggerSet: TriggerSet<Data> = {
           en: '푹찍쾅 => 앞으로 지나가서 피해요',
           de: 'Sprung => Geh durch den Boss',
           fr: 'Saut => Traversez le boss',
+          ja: '突進 => 移動',
           cn: '突进 => 穿',
           ko: '돌진 => 가로지르기',
         },

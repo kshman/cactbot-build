@@ -4,7 +4,8 @@
     "moduleTypes": {
       "webpack/*": "cjs",
       // Globs are also supported with the same behavior as tsconfig "include"
-      "webpack/**/*": "cjs"
+      "webpack/**/*": "cjs",
+      "experimentalSpecifierResolution": "node"
     },
     "esm": true
   },
@@ -47,10 +48,6 @@
     "forceConsistentCasingInFileNames": true,
     "typeRoots": [
       "node_modules/@types"
-    ],
-    "lib": [
-      "es2020",
-      "dom"
     ]
   },
   "include": [

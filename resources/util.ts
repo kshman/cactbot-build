@@ -7,6 +7,7 @@ import { Job, Role } from '../types/job';
 import { NetMatches } from '../types/net_matches';
 import { OutputStrings } from '../types/trigger';
 
+import { gameLogCodes } from './netregexes';
 import Outputs from './outputs';
 import { callOverlayHandler } from './overlay_plugin_api';
 
@@ -53,49 +54,6 @@ const nameToJobEnum: Record<Job, number> = {
   DNC: 38,
   RPR: 39,
   SGE: 40,
-};
-const nameToPrJob: Record<number, string> = {
-  0: '몰?루',
-  1: '검술사',
-  2: '격투사',
-  3: '도끼맨',
-  4: '랜서',
-  5: '활쟁이',
-  6: '환술사',
-  7: '주술사',
-  8: '목수',
-  9: '대장장이',
-  10: '갑옷장인',
-  11: '보석장인',
-  12: '가죽장인',
-  13: '재봉사',
-  14: '연금술사',
-  15: '요리사',
-  16: '광부',
-  17: '원예사',
-  18: '어부',
-  19: '팔라딘',
-  20: '몽크',
-  21: '전사',
-  22: '류상',
-  23: '바드',
-  24: '뱅마',
-  25: '흥마',
-  26: '비술사',
-  27: '서모너',
-  28: '스콜라',
-  29: '로그',
-  30: '닌자',
-  31: '기공사',
-  32: '다크나이트',
-  33: '점쟁이',
-  34: '사무라이',
-  35: '레드메',
-  36: '블루메',
-  37: '총칼이',
-  38: '춤꾼',
-  39: '리퍼',
-  40: '현자',
 };
 
 const allJobs = Object.keys(nameToJobEnum) as Job[];
@@ -428,10 +386,6 @@ const Util = {
     const role = jobToRoleMap.get(job);
     return role ?? 'none';
   },
-  jobEnumToPrJob: (id: number) => {
-    const job = nameToPrJob[id];
-    return job ?? '몰?루';
-  },
   getAllRoles: (): readonly Role[] => allRoles,
   isTankJob: (job: Job) => tankJobs.includes(job),
   isHealerJob: (job: Job) => healerJobs.includes(job),
@@ -461,6 +415,7 @@ const Util = {
     watchCombatantOverride = watchFunc;
     clearCombatantsOverride = clearFunc;
   },
+  gameLogCodes: gameLogCodes,
 } as const;
 
 export default Util;

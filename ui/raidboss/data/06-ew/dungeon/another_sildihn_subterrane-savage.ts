@@ -1752,7 +1752,7 @@ const triggerSet: TriggerSet<Data> = {
         data.rushVecs.push({
           x: parseInt(matches.x),
           y: parseInt(matches.y),
-          l: i2n[matches.id] ?? 0
+          l: i2n[matches.id] ?? 0,
         });
         if (data.rushVecs.length !== 2)
           return;
