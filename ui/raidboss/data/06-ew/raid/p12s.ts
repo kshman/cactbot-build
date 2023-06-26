@@ -2264,8 +2264,7 @@ const triggerSet: TriggerSet<Data> = {
           if (data.party.isDPS(matches.target)) {
             if (data.role !== 'dps')
               return output.tetherBarrier!();
-          }
-          if (data.role === 'dps')
+          } else if (data.role === 'dps')
             return output.tetherBarrier!();
         } else if (data.prsPhase === 200 || data.prsPhase === 600) {
           // 클래식 컨셉 줄달리면 자기 자리 알려줌
@@ -2463,7 +2462,8 @@ const triggerSet: TriggerSet<Data> = {
       run: (data, matches) => {
         if (matches.effectId === 'DE8')
           data.prsClassicAlphaBeta[matches.target] = 'alpha';
-        data.prsClassicAlphaBeta[matches.target] = 'beta';
+        else
+          data.prsClassicAlphaBeta[matches.target] = 'beta';
       },
     },
     {
