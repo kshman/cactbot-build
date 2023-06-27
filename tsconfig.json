@@ -4,8 +4,7 @@
     "moduleTypes": {
       "webpack/*": "cjs",
       // Globs are also supported with the same behavior as tsconfig "include"
-      "webpack/**/*": "cjs",
-      "experimentalSpecifierResolution": "node"
+      "webpack/**/*": "cjs"
     },
     "esm": true
   },
@@ -45,10 +44,7 @@
     "inlineSources": true,
     "useDefineForClassFields": true,
     //    "noPropertyAccessFromIndexSignature": false, // used by trigger output strings
-    "forceConsistentCasingInFileNames": true,
-    "typeRoots": [
-      "node_modules/@types"
-    ]
+    "forceConsistentCasingInFileNames": true
   },
   "include": [
     "./ui",

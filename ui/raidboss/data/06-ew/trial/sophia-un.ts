@@ -50,7 +50,7 @@ const callSafeDir = (callIndex: number, output: Output) => {
 
 const tiltOutputStrings = {
   goEastHardTilt: {
-    en: '🡺🡺🡺 (많이)',
+    en: 'Go East (Hard Tilt)',
     de: 'Nach Osten gehen (starke Neigung)',
     fr: 'Allez à l\'Est (Inclinaison forte)',
     ja: '東へ (大きい斜め)',
@@ -58,7 +58,7 @@ const tiltOutputStrings = {
     ko: '동쪽으로 (크게 기울어짐)',
   },
   goEastSoftTilt: {
-    en: '🡺🡺 (조금)',
+    en: 'Go East (Soft Tilt)',
     de: 'Nach Osten gehen (leichte Neigung)',
     fr: 'Allez à l\'Est (Inclinaison faible)',
     ja: '東へ (小さい斜め)',
@@ -66,7 +66,7 @@ const tiltOutputStrings = {
     ko: '동쪽으로 (작게 기울어짐)',
   },
   goWestHardTilt: {
-    en: '🡸🡸🡸 (많이)',
+    en: 'Go West (Hard Tilt)',
     de: 'Nach Westen gehen (starke Neigung)',
     fr: 'Allez à l\'Ouest (Inclinaison forte)',
     ja: '西へ (大きい斜め)',
@@ -74,7 +74,7 @@ const tiltOutputStrings = {
     ko: '서쪽으로 (크게 기울어짐)',
   },
   goWestSoftTilt: {
-    en: '🡸🡸 (조금)',
+    en: 'Go West (Soft Tilt)',
     de: 'Nach Westen gehen (leichte Neigung)',
     fr: 'Allez à l\'Ouest (Inclinaison faible)',
     ja: '西へ (小さい斜め)',
@@ -109,7 +109,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '돌진 피해요',
+          en: 'Avoid Dash Attack',
           de: 'Ansturm-Angriff ausweichen',
           fr: 'Évitez l\'attaque Charge',
           ja: '突進回避',
@@ -131,7 +131,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '죄와 벌!',
+          en: 'Stack With Partner',
           de: 'Mit Partner stacken',
           fr: 'Packez-vous avec votre partenaire',
           ja: '白と黒で重なる',
@@ -147,7 +147,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '미티어: Ⓐ로',
+          en: 'Bait Quasar Meteors',
           de: 'Quasar Meteore ködern',
           fr: 'Attirez les météores du Quasar',
           ja: 'メテオを誘導',
@@ -197,7 +197,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '창술맨 뒤로',
+          en: 'Get behind lancer',
           de: 'Geh hinter dem 3. Demiurg',
           fr: 'Passez derrière le lancier',
           ja: '三の従者の後ろに',
@@ -218,7 +218,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         infusionOnYou: {
-          en: '내가 맹돌진',
+          en: 'Infusion on YOU',
           de: 'Schneisenschläger auf DIR',
           fr: 'Infusion sur VOUS',
           ja: '自分に猛突進',
@@ -226,7 +226,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '맹돌진 대상자',
         },
         infusionOn: {
-          en: '맹돌진: ${player}',
+          en: 'Infusion on ${player}',
           de: 'Schneisenschläger auf ${player}',
           fr: 'Infusion sur ${player}',
           ja: '${player}に猛突進',
@@ -323,15 +323,15 @@ const triggerSet: TriggerSet<Data> = {
       // During the first post-intermission clones sequence,
       // Barbelo separates and makes one safespot dangerous with Light Dew, the orange laser.
       // Unfortunately Barbelo doesn't have a cast time on Light Dew, so we can't use that.
-      // Instead, we warn the user when Barbelo separates from Sophia, which is 1983.
+      // Instead, we warn the user when Barbelo separates from Sophia, which is 7D9D.
       id: 'SophiaUN Light Dew',
       type: 'Ability',
-      netRegex: { id: '7D7D', source: 'Sophia', capture: false },
+      netRegex: { id: '7D9D', source: 'Sophia', capture: false },
       condition: (data) => data.clonesActive,
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '머리 레이저 피해요',
+          en: 'Avoid head laser',
           de: 'Kopflaser ausweichen',
           fr: 'Évitez le laser de la tête',
           ja: '頭レーザー回避',
@@ -366,10 +366,10 @@ const triggerSet: TriggerSet<Data> = {
         });
       },
       outputStrings: {
-        northwest: Outputs.arrowNW,
-        northeast: Outputs.arrowNE,
-        southwest: Outputs.arrowSW,
-        southeast: Outputs.arrowSE,
+        northwest: Outputs.northwest,
+        northeast: Outputs.northeast,
+        southwest: Outputs.southwest,
+        southeast: Outputs.southeast,
         multiple: {
           en: '${dir1} / ${dir2}',
           de: '${dir1} / ${dir2}',

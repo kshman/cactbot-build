@@ -1,6 +1,5 @@
 const { ASTUtils: t } = require('@typescript-eslint/utils');
-// const textProps = ['alarmText', 'alertText', 'infoText' , 'tts'];
-const·textProps = ['alarmText', 'alertText', 'infoText'];
+const textProps = ['alarmText', 'alertText', 'infoText', 'tts'];
 
 const isSpreadElement = (node) => {
   return node.type === 'SpreadElement';

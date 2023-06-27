@@ -251,7 +251,7 @@ const triggerSet: TriggerSet<Data> = {
     {
       id: 'engravement1DropTower',
       name: {
-        en: '파라데이그마2 2 타워 처리',
+        en: '파라데이그마2 타워 처리 방식',
         ja: 'パラデイグマ2の塔処理方法',
         cn: '第一次拉线踩塔方法',
         ko: 'Paradeigma 2 기둥 공략',
@@ -260,7 +260,7 @@ const triggerSet: TriggerSet<Data> = {
       options: {
         en: {
           '게임8': 'quadrant',
-          '줄부터 시계 방향': 'clockwise',
+          '줄 기준 시계 방향': 'clockwise',
           '그냥 알랴줌': 'tower',
         },
         ja: {
@@ -804,28 +804,28 @@ const triggerSet: TriggerSet<Data> = {
           ko: '가만히',
         },
         superchain2aSwapMidBack: {
-          en: '한가운데 => 되돌아 가욧 [옆으로]',
+          en: '한가운데 => ${dir} 되돌아 가욧 [옆으로]',
           de: 'Wechseln + Mitte => Zurück nach ${dir}',
           ja: '真ん中 => また${dir} (横へ)',
           cn: '穿 + 去中间 => 回到 ${dir}',
           ko: '이동 + 가운데 => 다시 ${dir}',
         },
         superchain2aSwapMidGo: {
-          en: '한가운데 => 계속 전진 [옆으로]',
+          en: '한가운데 => 계속 전진 ${dir} [옆으로]',
           de: 'Wechseln + Mitte => Geh nach ${dir}',
           ja: '真ん中 => ${dir}前進 (横へ)',
           cn: '穿 + 去中间 => 去 ${dir}',
           ko: '이동 + 가운데 => ${dir}으로',
         },
         superchain2aStayMidBack: {
-          en: '한가운데 => 되돌아 가욧',
+          en: '한가운데 => ${dir} 되돌아 가욧',
           de: 'Bleib stehen + Mitte => Zurück nach ${dir}',
           ja: '真ん中 => また${dir} (止まる)',
           cn: '停 + 去中间 => 回到 ${dir}',
           ko: '가만히 + 가운데 => 다시 ${dir}',
         },
         superchain2aStayMidGo: {
-          en: '한가운데 => 계속 전진',
+          en: '한가운데 => 계속 전진 ${dir}',
           de: 'Bleib stehen + Mitte => Geh nach ${dir}',
           ja: '真ん中 => ${dir}前進 (止まる)',
           cn: '停 + 去中间 => 去 ${dir}',
@@ -1957,7 +1957,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         // This is left and right facing the boss.
         leftClockwise: {
-          en: '시계 방향 [${engrave}]',
+          en: '❰❰시계 방향 [${engrave}]',
           de: 'Links (im Uhrzeigersinn) => ${engrave}',
           fr: 'Gauche (horaire) => ${engrave}',
           ja: '時計回り => ${engrave}',
@@ -1965,7 +1965,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '왼쪽 (시계방향) => ${engrave}',
         },
         rightCounterclockwise: {
-          en: '반시계 방향 [${engrave}]',
+          en: '반시계 방향❱❱ [${engrave}]',
           de: 'Rechts (gegen Uhrzeigersinn) => ${engrave}',
           fr: 'Droite (Anti-horaire) => ${engrave}',
           ja: '反時計回り => ${engrave}',
@@ -2264,8 +2264,7 @@ const triggerSet: TriggerSet<Data> = {
           if (data.party.isDPS(matches.target)) {
             if (data.role !== 'dps')
               return output.tetherBarrier!();
-          }
-          if (data.role === 'dps')
+          } else if (data.role === 'dps')
             return output.tetherBarrier!();
         } else if (data.prsPhase === 200 || data.prsPhase === 600) {
           // 클래식 컨셉 줄달리면 자기 자리 알려줌
@@ -2463,7 +2462,8 @@ const triggerSet: TriggerSet<Data> = {
       run: (data, matches) => {
         if (matches.effectId === 'DE8')
           data.prsClassicAlphaBeta[matches.target] = 'alpha';
-        data.prsClassicAlphaBeta[matches.target] = 'beta';
+        else
+          data.prsClassicAlphaBeta[matches.target] = 'beta';
       },
     },
     {
