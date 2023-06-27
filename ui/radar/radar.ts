@@ -308,7 +308,7 @@ class Radar {
       img.setAttribute('src', arrowImage);
       img.setAttribute('class', 'radar-image-40');
       th.appendChild(img);
-      th.setAttribute('style', 'max-width: 70px');
+      th.setAttribute('style', 'max-width: 100px');
       tr.appendChild(th);
       th = document.createElement('th');
       th.setAttribute('align', 'left');
@@ -337,7 +337,7 @@ class Radar {
 
       const mapX = posToMap(m.pos.x).toFixed(1);
       const mapY = posToMap(m.pos.y).toFixed(1);
-      console.log(`몹발견: ${m.name} (${mapX}, ${mapY})`);
+      console.log(`Found: ${m.name} (${mapX}, ${mapY})`);
 
       PlayPopSound(m, options);
     }
@@ -356,7 +356,7 @@ class Radar {
 
     monster.puller = puller;
     this.UpdateMonsterDom(monster);
-    console.log(`선빵: ${puller} => ${monster.name}`);
+    console.log(`Pulled: ${puller} => ${monster.name}`);
   }
 
   UpdateMonsterDom(monster: Monster) {
@@ -375,39 +375,27 @@ class Radar {
       targetVector.x - playerVector.x,
       targetVector.y - playerVector.y,
     );
-    if (tr) {
-      const node = tr.childNodes[1];
-      if (node && node instanceof HTMLElement) {
-        node.innerHTML = `&lt;${monster.rank ?? '?'}&gt;&nbsp;&nbsp;${monster.name}`;
-        if (Math.abs(this.playerPos.z - monster.posZ) > 5)
-          node.innerHTML += '&nbsp;&nbsp;' + (this.playerPos.z < monster.posZ ? '↑' : '↓');
-        node.innerHTML += '<br>' + deltaVector.length().toFixed(2) + ' 미터';
-        if (Date.now().valueOf() / 1000 <= monster.battleTime + 60) {
-          node.innerHTML += ' (' + (monster.currentHp * 100 /
-            monster.hp).toFixed(2) +
-            '%)';
-        }
-        if (monster.puller)
-          node.innerHTML += '&nbsp;&nbsp;' + monster.puller;
-        // Z position is relative to the map so it's omitted.
-        if (options.Position) {
-          node.innerHTML += '<br>X: ' +
-            posToMap(monster.pos.x).toFixed(1) + '&nbsp;&nbsp;Y:' +
-            posToMap(monster.pos.y).toFixed(1);
-        }
+    const node = tr.childNodes[1];
+    if (node && node instanceof HTMLElement) {
+      node.innerHTML = `${monster.rank ?? ''}&nbsp;&nbsp;&nbsp;&nbsp;${monster.name}`;
+      if (Math.abs(this.playerPos.z - monster.posZ) > 5)
+        node.innerHTML += '&nbsp;&nbsp;' + (this.playerPos.z < monster.posZ ? '↑' : '↓');
+      node.innerHTML += '<br>' + deltaVector.length().toFixed(2) + 'm';
+      if (Date.now().valueOf() / 1000 <= monster.battleTime + 60) {
+        node.innerHTML += ' ' + (monster.currentHp * 100 /
+          monster.hp).toFixed(2) +
+          '%';
+      }
+      if (monster.puller !== undefined)
+        node.innerHTML += '&nbsp;&nbsp;' + monster.puller;
+      // Z position is relative to the map so it's omitted.
+      if (options.Position) {
+        node.innerHTML += '<br>X: ' +
+          posToMap(monster.pos.x).toFixed(1) + '&nbsp;&nbsp;Y:' +
+          posToMap(monster.pos.y).toFixed(1);
       }
     }
-    /*
     if (options.DetectionRange > 0 && deltaVector.length() > options.DetectionRange)
-      monster.dom.classList.add('hide');
-    else
-      monster.dom.classList.remove('hide');
-    */
-    if (
-      !monster.rank?.startsWith('S') &&
-      options.DetectionRange > 0 &&
-      deltaVector.length() > options.DetectionRange
-    )
       monster.dom.classList.add('hide');
     else
       monster.dom.classList.remove('hide');
@@ -425,7 +413,7 @@ class Radar {
     const monster = this.targetMonsters[mobKey];
     if (!monster)
       return;
-    console.log(`몹쥬금: ${monster.name}`);
+    console.log(`Killed: ${monster.name}`);
     monster.dom.remove();
     delete this.targetMonsters[mobKey];
   }

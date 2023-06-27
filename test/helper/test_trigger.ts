@@ -91,10 +91,10 @@ const testTriggerFile = (file: string, info: TriggerSetInfo) => {
   // Dummy test so that failures in before show up with better text.
   it('should load properly', () => {/* noop */});
 
-  it('반드시 유니크 아이디를 가져야해요', () => {
+  it('should have a unique set id', () => {
     const id = triggerSet.id;
     if (id === undefined) {
-      assert.fail('어쨋튼 정의되지 않은 아이디를 갖고 있어요');
+      assert.fail('has an undefined id somehow');
       return;
     }
     const prevFile = info.triggerSetId[id];
@@ -102,15 +102,15 @@ const testTriggerFile = (file: string, info: TriggerSetInfo) => {
       info.triggerSetId[id] = file;
       return;
     }
-    assert.fail(`트리거셋 아이디 충돌: ${id} 아이디는 이미 사용중이예요: ${prevFile}`);
+    assert.fail(`triggerset id conflict: ${id} already used by ${prevFile}`);
   });
 
-  it('Regexes를 쓰면 안되요', () => {
+  it('should not use Regexes', () => {
     const regexes = /(?:(?:regex)(?:|Cn|De|Fr|Ko|Ja)\w*\s*:\w*\s*Regexes\.)/g;
     const results = regexes.exec(contents);
     if (results && results.length > 0) {
       for (const result of results)
-        assert.fail(`Regexes 사용: '${result}'`);
+        assert.fail(`using Regexes: '${result}'`);
     }
   });
 
@@ -158,7 +158,7 @@ const testTriggerFile = (file: string, info: TriggerSetInfo) => {
       .split(/,(?![^{]*})/g).filter(Boolean); // split & filter [""]
   };
 
-  it('올바른 matches와 output strings 파라미터를 갖고 있어요', () => {
+  it('has valid matches and output parameters', () => {
     for (const [index, currentTrigger] of triggerSet.triggers?.entries() ?? []) {
       const id = currentTrigger.id ?? `triggers[${index}]`;
 
@@ -184,7 +184,7 @@ const testTriggerFile = (file: string, info: TriggerSetInfo) => {
           const containsOutputParam = paramNames.includes('output');
           // TODO: should we error when there is an unused output param? that seems a bit much.
           if (containsOutput && !containsOutputParam)
-            assert.fail(`'${id}' 아이디에 'output' 파라미터가 없어요.`);
+            assert.fail(`Missing 'output' param for '${id}'.`);
 
           containsMatches = containsMatches || /(?<!_)matches/.test(funcStr);
           for (const paramName of paramNames)
@@ -194,13 +194,13 @@ const testTriggerFile = (file: string, info: TriggerSetInfo) => {
           if (funcStr.includes(builtInResponse)) {
             if (typeof currentTriggerFunction !== 'function') {
               assert.fail(
-                `${id} 필드 '${func}' 함수는 ${builtInResponse} 기능이 있지만 함수가 아녜요.`,
+                `${id} field '${func}' has ${builtInResponse} but is not a function.`,
               );
               continue;
             }
             if (func !== 'response') {
               assert.fail(
-                `${id} 팔드 '${func}' 함수는 ${builtInResponse} 기능이 있지만 리스폰스가 아녜요.`,
+                `${id} field '${func}' has ${builtInResponse} but is not a response.`,
               );
               continue;
             }
@@ -230,7 +230,7 @@ const testTriggerFile = (file: string, info: TriggerSetInfo) => {
         } else {
           if (currentTrigger.type === undefined) {
             assert.fail(
-              `netTrigger "${id}" 타입과 비졍규형태의 netRegex 속성을 갖고 있어요`,
+              `netTrigger "${id}" without type and non-regex netRegex property`,
             );
             continue;
           }
@@ -239,32 +239,30 @@ const testTriggerFile = (file: string, info: TriggerSetInfo) => {
         }
 
         const capture = new RegExp(`(?:${netRegexRegex.toString()})?`).exec('');
-        if (!capture) {
-          assert.fail(`도달하지 않는 코드라고 해요: "${id}"`);
+        if (!capture)
           throw new UnreachableCode();
-        }
         captures = capture.length - 1;
       }
 
       if (captures > 0) {
         if (!containsMatches) {
           assert.fail(
-            `필요 없는 캡쳐 그룹 트리거가 있어요: '${id}'`,
+            `Found unnecessary regex capturing group for trigger id '${id}'.`,
           );
         } else if (!containsMatchesParam) {
-          assert.fail(`'${id}' 아이디에는 matches 파라미터가 보이지 않아요.`);
+          assert.fail(`Missing matches param for '${id}'.`);
         }
       } else {
         if (containsMatches) {
           assert.fail(
-            `트리거 '${id}' 아이디에 대한 정규식 캡처 그룹이 없는데도 matches 파라미터가 있어요.`,
+            `Found 'matches' as a function parameter without regex capturing group for trigger id '${id}'.`,
           );
         }
       }
     }
   });
 
-  it('올바른 아이디와 접두사를 갖고 있어요', () => {
+  it('has valid id and prefix', () => {
     let prefix = null;
     let brokenPrefixes = false;
     // TODO: make this global to this file.
@@ -275,13 +273,13 @@ const testTriggerFile = (file: string, info: TriggerSetInfo) => {
         continue;
       for (const trigger of set) {
         if (!trigger.id) {
-          assert.fail(`${trigger.regex?.source ?? '???'} 트리거에 아이디 필드가 없어요`);
+          assert.fail(`Missing id field in trigger ${trigger.regex?.source ?? '???'}`);
           continue;
         }
 
         // Triggers must be unique.
         if (ids.has(trigger.id))
-          assert.fail(`중복된 아이디: '${trigger.id}`);
+          assert.fail(`duplicate id: '${trigger.id}`);
 
         ids.add(trigger.id);
 
@@ -302,7 +300,7 @@ const testTriggerFile = (file: string, info: TriggerSetInfo) => {
             break;
         }
         if (idx === 0) {
-          assert.fail(`${file}: 잘못된 아이디 접두사 '${prefix}' 와 '${trigger.id}'`);
+          assert.fail(`${file}: No common id prefix in '${prefix}' and '${trigger.id}'`);
           brokenPrefixes = true;
           continue;
         }
@@ -320,11 +318,11 @@ const testTriggerFile = (file: string, info: TriggerSetInfo) => {
       if (prefix.includes(' '))
         prefix = prefix.slice(0, prefix.lastIndexOf(' ') + 1);
       if (!prefix.endsWith(' '))
-        assert.fail(`아아디 접두사 '${prefix}' 이 것은 완전한 단어가 아녜요. 반드시 공백으로 끝나야 해요`);
+        assert.fail(`id prefix '${prefix}' is not a full word, must end in a space`);
     }
   });
 
-  it('전역 유니크 트리거 아이디들을 갖고 있어요', () => {
+  it('has globally unique trigger ids', () => {
     for (const set of [triggerSet.triggers, triggerSet.timelineTriggers]) {
       if (!set)
         continue;
@@ -339,7 +337,7 @@ const testTriggerFile = (file: string, info: TriggerSetInfo) => {
           info.triggerId[id] = file;
           continue;
         }
-        assert.fail(`트리거 아이디가 충돌: ${id} 아이디는 이미 사용 중이예요: ${prevFile}`);
+        assert.fail(`trigger id conflict: ${id} already used by ${prevFile}`);
       }
     }
   });
@@ -366,13 +364,13 @@ const testTriggerFile = (file: string, info: TriggerSetInfo) => {
           continue;
         for (const item of bannedItems) {
           if (item in trigger)
-            assert.fail(`${id} 함께 사용할 수 없어요: 'response', '${item}'`);
+            assert.fail(`${id} cannot have both 'response' and '${item}'`);
         }
       }
     }
   });
 
-  it('정렬된 트리거 필드를 갖고 있어요', () => {
+  it('has sorted trigger fields', () => {
     // This is the order in which they are run.
     const triggerOrder: (keyof LooseTrigger | keyof LooseTimelineTrigger)[] = [
       'id',
@@ -438,7 +436,7 @@ const testTriggerFile = (file: string, info: TriggerSetInfo) => {
     }
   });
 
-  it('올바른 타임라인 트리거 정규식을 갖고 있어요', () => {
+  it('has valid regex for timeline trigger', () => {
     if (!triggerSet.timelineTriggers)
       return;
 
@@ -454,7 +452,7 @@ const testTriggerFile = (file: string, info: TriggerSetInfo) => {
     }
   });
 
-  it('올바른 지역 아이디를 갖고 있어요', () => {
+  it('has valid zone id', () => {
     if (!('zoneId' in triggerSet))
       assert.fail(`missing zone id`);
     else if (typeof triggerSet.zoneId === 'undefined')
@@ -490,7 +488,7 @@ const testTriggerFile = (file: string, info: TriggerSetInfo) => {
   // responses_test.js will handle testing any response with builtInResponseStr.
   // triggers using `response:` otherwise cannot be tested, because we cannot
   // safely call the response function.
-  it('올바른 output strings를 갖고 있어요', () => {
+  it('has valid output strings', () => {
     for (const set of [triggerSet.triggers, triggerSet.timelineTriggers]) {
       if (!set)
         continue;
@@ -503,7 +501,7 @@ const testTriggerFile = (file: string, info: TriggerSetInfo) => {
           // Triggers using responses should include the outputStrings in the
           // response func itself, via `output.responseOutputStrings = {};`
           if (trigger.outputStrings) {
-            assert.fail(`'response' 와 'outputStrings 둘 다 갖고 있어요: '${id}'.`);
+            assert.fail(`found both 'response' and 'outputStrings in '${id}'.`);
             continue;
           }
           if (typeof trigger.response !== 'function')
@@ -511,7 +509,7 @@ const testTriggerFile = (file: string, info: TriggerSetInfo) => {
           const funcStr = trigger.response.toString();
           if (!funcStr.includes(builtInResponseStr)) {
             assert.fail(
-              `'${id}' 빌트인 response를  포함하고 있지 않아요: "${builtInResponseStr}".`,
+              `'${id}' built-in response does not include "${builtInResponseStr}".`,
             );
             continue;
           }
@@ -524,19 +522,19 @@ const testTriggerFile = (file: string, info: TriggerSetInfo) => {
             response = responseFunc(data, {}, output) ?? {};
 
             if (typeof outputStrings !== 'object') {
-              assert.fail(`'${id}' 빌트인 response는 outputStrings를 설정하지 않아요.`);
+              assert.fail(`'${id}' built-in response did not set outputStrings.`);
               continue;
             }
           }
         } else {
           if (trigger.outputStrings && typeof outputStrings !== 'object') {
-            assert.fail(`'${id}' outputStrings는 오브젝트여야 해요.`);
+            assert.fail(`'${id}' outputStrings must be an object.`);
             continue;
           }
           if (typeof trigger.outputStrings !== 'object') {
             for (const func of triggerTextOutputFunctions) {
               if (func in trigger) {
-                assert.fail(`'${id}' outputStrings 필드를 찾을 수 없어요.`);
+                assert.fail(`'${id}' missing field outputStrings.`);
                 break;
               }
             }
@@ -565,7 +563,7 @@ const testTriggerFile = (file: string, info: TriggerSetInfo) => {
             templateObj = { en: templateObj };
           }
           if (typeof templateObj !== 'object') {
-            assert.fail(`'${id}'의 키 '${key}'의 outputStrings은 번역할 수 없는 오브젝트예요`);
+            assert.fail(`'${key}' in '${id}' outputStrings is not a translatable object`);
             continue;
           }
 
@@ -573,7 +571,7 @@ const testTriggerFile = (file: string, info: TriggerSetInfo) => {
           for (const [lang, template] of Object.entries(templateObj)) {
             if (typeof template !== 'string') {
               assert.fail(
-                `'${id}'의 키 '${key}'의 outputStrings에 문자열이 아닌게 있어요: ${lang}`,
+                `'${key}' in '${id}' outputStrings for lang ${lang} is not a string`,
               );
               continue;
             }
@@ -586,7 +584,6 @@ const testTriggerFile = (file: string, info: TriggerSetInfo) => {
             });
 
             // If this is not the first lang, validate it has the same params as previous languages.
-            /*
             if (key in outputStringsParams) {
               // prevParams is an array, params is a set.
               const prevParams = outputStringsParams[key];
@@ -601,13 +598,12 @@ const testTriggerFile = (file: string, info: TriggerSetInfo) => {
                 continue;
               }
             }
-            */
             outputStringsParams[key] = [...params];
 
             // Verify that there's no dangling ${
             if (/\${/.test(template.replace(paramRegex, ''))) {
               assert.fail(
-                `'${id}'의 키 '${key}'의 outputStrings은 열리기만 했어요 \${ 닫혀있지 않아요 }`,
+                `'${key}' in '${id}' outputStrings has an open \${ without a closing }`,
               );
             }
           }
@@ -666,14 +662,14 @@ const testTriggerFile = (file: string, info: TriggerSetInfo) => {
     }
   });
 
-  it('올바른 타임라인 파일을 갖고 있어요', () => {
+  it('has valid timeline file', () => {
     if (triggerSet.timelineFile !== undefined) {
       const timelineFile = path.join(path.dirname(file), triggerSet.timelineFile);
       assert.isTrue(fs.existsSync(timelineFile), `${triggerSet.timelineFile} does not exist`);
     }
   });
 
-  it('정규식 변환이 누락되어 있어요', () => {
+  it('should not have missing regex translations', () => {
     const translations = triggerSet.timelineReplace;
     if (!translations)
       return;
@@ -698,7 +694,7 @@ const testTriggerFile = (file: string, info: TriggerSetInfo) => {
         if (trigger.type === undefined) {
           if (!(trigger.netRegex instanceof RegExp)) {
             assert.fail(
-              `${id} 아이디는 'type' 프로퍼티와 RegExp netRegex를 갖고 있지 않아요`,
+              `${id} doesn't have 'type' property and doesn't have a RegExp netRegex`,
             );
           }
           continue;
@@ -725,13 +721,13 @@ const testTriggerFile = (file: string, info: TriggerSetInfo) => {
             if (typeof field === 'string') {
               assert.isTrue(
                 textHasTranslation(field),
-                `${id}:로켈 ${locale}:타임라인 대체 항목을 갖고 있지 않아요: ${fieldName} '${field}'`,
+                `${id}:locale ${locale}:missing timelineReplace replaceSync for ${fieldName} '${field}'`,
               );
             } else {
               for (const s of field) {
                 assert.isTrue(
                   textHasTranslation(s),
-                  `${id}:로켈 ${locale}:타임라인 대체 항목을 갖고 있지 않아요: ${fieldName} '${s}'`,
+                  `${id}:locale ${locale}:missing timelineReplace replaceSync for ${fieldName} '${s}'`,
                 );
               }
             }
@@ -766,7 +762,7 @@ const testTriggerFile = (file: string, info: TriggerSetInfo) => {
 
         assert.isTrue(
           wasTranslated,
-          `${id}:로캘 ${locale}:정규식용 타임라인 대체 항목을 갖고 있지 않아요 '${origRegex}'`,
+          `${id}:locale ${locale}:missing timelineReplace replaceSync for regex '${origRegex}'`,
         );
       }
     }
