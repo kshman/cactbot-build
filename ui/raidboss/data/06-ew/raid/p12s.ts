@@ -1507,7 +1507,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '플랫폼 내부',
         },
         corner: {
-          en: '안쪽 모서리에',
+          en: '건너편에 닿게 모서리에',
           ja: '真ん中のコーナー',
           cn: '平台交叉处',
           ko: '플랫폼 교차지점',
@@ -2781,6 +2781,7 @@ const triggerSet: TriggerSet<Data> = {
       id: 'P12S 에크파이로시스 움직여',
       type: 'Ability',
       netRegex: { id: '831F', source: 'Pallas Athena', capture: false },
+      delaySeconds: 0.5,
       suppressSeconds: 2,
       alarmText: (_data, _matches, output) => output.text!(),
       outputStrings: {
