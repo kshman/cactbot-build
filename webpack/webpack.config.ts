@@ -180,7 +180,6 @@ export default (
           },
         },
         {
-          // 여기서 오류같은데!
           test: /data[\\\/]\w*_manifest\.txt$/,
           use: [
             {

@@ -716,7 +716,7 @@ const triggerSet: TriggerSet<Data> = {
         // cactbot-builtin-response
         output.responseOutputStrings = {
           lightNear: {
-            en: '🟡니어: ${role}/${player} (${side})',
+            en: '🟡니어: ${player} (${role})',
             de: 'Licht Nahe w/${player} (${role})',
             fr: 'Lumière proche avec ${player} (${role})',
             ja: 'ひかりニア => ${player} (${role})',
@@ -724,7 +724,7 @@ const triggerSet: TriggerSet<Data> = {
             ko: '빛 가까이 +${player} (${role})',
           },
           lightFar: {
-            en: '🟡파: ${role}/${player} (${side})',
+            en: '🟡파: ${player} (${role})',
             de: 'Licht Entfernt w/${player} (${role})',
             fr: 'Lumière éloignée avec ${player} (${role})',
             ja: 'ひかりファー => ${player} (${role})',
@@ -732,7 +732,7 @@ const triggerSet: TriggerSet<Data> = {
             ko: '빛 멀리 +${player} (${role})',
           },
           darkNear: {
-            en: '🟣니어: ${role}/${player} (${side})',
+            en: '🟣니어: ${player} (${role})',
             de: 'Dunkel Nahe w/${player} (${role})',
             fr: 'Sombre proche avec ${player} (${role})',
             ja: 'やみニア => ${player} (${role})',
@@ -740,7 +740,7 @@ const triggerSet: TriggerSet<Data> = {
             ko: '어둠 가까이 +${player} (${role})',
           },
           darkFar: {
-            en: '🟣파: ${role}/${player} (${side})',
+            en: '🟣파: ${player} (${role})',
             de: 'Dunkel Entfernt w/${player} (${role})',
             fr: 'Sombre éloigné avec ${player} (${role})',
             ja: 'やみファー => ${player} (${role})',
@@ -762,6 +762,18 @@ const triggerSet: TriggerSet<Data> = {
             ja: '他のペア: ${player1}, ${player2}',
             cn: '远离 : ${player1}, ${player2}',
             ko: '다른 멀리: ${player1}, ${player2}',
+          },
+          lnSide: {
+            en: '🟡니어: ${side} (${player})',
+          },
+          lfSide: {
+            en: '🟡파: ${side} (${player})',
+          },
+          dnSide: {
+            en: '🟣니어: ${side} (${player})',
+          },
+          dfSide: {
+            en: '🟣파: ${side} (${player})',
           },
           leftSide: {
             en: 'Ⓑ🡺',
@@ -801,46 +813,44 @@ const triggerSet: TriggerSet<Data> = {
         else
           myBuddyRole = output.unknown!();
 
-        let mySide;
-        if (data.role === 'dps')
-          mySide = myColor === 'dark' ? output.rightSide!() : output.leftSide!();
-        else
-          mySide = myColor === 'dark' ? output.leftSide!() : output.rightSide!();
-
         if (myColor === 'light')
           data.prsLightAndDarks = myLength === 'near' ? 'lightnear' : 'lightfar';
         else
           data.prsLightAndDarks = myLength === 'near' ? 'darknear' : 'darkfar';
 
-        const myBuddyShort = data.party.aJobName(myBuddy);
+        const myBuddyShort = data.ShortName(myBuddy);
 
         let alertText: string;
         if (myLength === 'near') {
           if (myColor === 'light')
-            alertText = output.lightNear!({
-              player: myBuddyShort,
-              role: myBuddyRole,
-              side: mySide,
-            });
+            alertText = output.lightNear!({ player: myBuddyShort, role: myBuddyRole });
           else
-            alertText = output.darkNear!({
-              player: myBuddyShort,
-              role: myBuddyRole,
-              side: mySide,
-            });
+            alertText = output.darkNear!({ player: myBuddyShort, role: myBuddyRole });
         } else {
           if (myColor === 'light')
-            alertText = output.lightFar!({
-              player: myBuddyShort,
-              role: myBuddyRole,
-              side: mySide,
-            });
+            alertText = output.lightFar!({ player: myBuddyShort, role: myBuddyRole });
           else
-            alertText = output.darkFar!({
-              player: myBuddyShort,
-              role: myBuddyRole,
-              side: mySide,
-            });
+            alertText = output.darkFar!({ player: myBuddyShort, role: myBuddyRole });
+        }
+        if (data.options.AutumnStyle) {
+          // 어듬이 스타일 덮어쓰기
+          const myPartner = data.party.aJobName(myBuddy);
+          let mySide;
+          if (data.role === 'dps')
+            mySide = myColor === 'dark' ? output.rightSide!() : output.leftSide!();
+          else
+            mySide = myColor === 'dark' ? output.leftSide!() : output.rightSide!();
+          if (myLength === 'near') {
+            if (myColor === 'light')
+              alertText = output.lnSide!({ player: myPartner, side: mySide });
+            else
+              alertText = output.dnSide!({ player: myPartner, side: mySide });
+          } else {
+            if (myColor === 'light')
+              alertText = output.lfSide!({ player: myPartner, side: mySide });
+            else
+              alertText = output.dfSide!({ player: myPartner, side: mySide });
+          }
         }
 
         let infoText: string | undefined = undefined;
@@ -935,12 +945,24 @@ const triggerSet: TriggerSet<Data> = {
       },
       run: (data) => data.cylinderCollect = [],
       outputStrings: {
-        east: 'Ⓑ 동쪽',
-        northeast: '① 북동',
-        northwest: '④ 북서',
-        southeast: '② 남동',
-        southwest: '③ 남서',
-        west: 'Ⓓ 서쪽',
+        east: {
+          en: 'Ⓑ 동쪽',
+        },
+        northeast: {
+          en: '① 북동',
+        },
+        northwest: {
+          en: '④ 북서',
+        },
+        southeast: {
+          en: '② 남동',
+        },
+        southwest: {
+          en: '③ 남서',
+        },
+        west: {
+          en: 'Ⓓ 서쪽',
+        },
       },
     },
     {
