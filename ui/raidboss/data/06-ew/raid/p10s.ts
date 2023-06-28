@@ -382,7 +382,7 @@ const triggerSet: TriggerSet<Data> = {
       run: (data) => data.meltdownSpreads = [],
       outputStrings: {
         text: {
-          en: '한 줄 뭉쳐요',
+          en: '한 줄로 뭉쳐요',
           de: 'Linien-Stack',
           fr: 'Packez-vous en ligne',
           ja: '直線あたまわり',
