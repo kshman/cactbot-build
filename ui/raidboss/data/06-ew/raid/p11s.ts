@@ -225,7 +225,7 @@ const triggerSet: TriggerSet<Data> = {
       run: (data) => data.upheldTethers = [],
       outputStrings: {
         text: {
-          en: '한가운데 모였다 => 밖으로 + 4:4 뭉쳐요',
+          en: '한가운데서 뭉쳤다 => 밖으로 + 4:4 뭉쳐요',
           de: 'Party Rein => Raus + Heiler Gruppen',
           fr: 'Intérieur => Extérieur + package sur les heals',
           ja: '内側から => 外側へ + 4:4あたまわり',
@@ -269,7 +269,7 @@ const triggerSet: TriggerSet<Data> = {
             ko: '안으로 (본대 밖) => 안으로 + 파트너',
           },
           upheldOnPlayer: {
-            en: '밖에 있다가 => 안으로 + 페어 (줄 처리: ${player})',
+            en: '밖으로 나가있다 => 안으로 + 페어 (줄 처리: ${player})',
             de: 'Gruppe raus (${player} rein)=> Rein + Partner',
             fr: 'Groupe à l\'extérieur (${player} intérieur) => Intérieur + Partenaires',
             ja: '外側へ (${player}が内側) => 内側で + ペア',
@@ -277,7 +277,7 @@ const triggerSet: TriggerSet<Data> = {
             ko: '본대 밖으로 (${player} 안) => 안으로 + 파트너',
           },
           upheldNotOnYou: {
-            en: '밖에 있다가 => 안으로 + 페어',
+            en: '밖으로 나가있다 => 안으로 + 페어',
             de: 'Party Raus => Rein + Partner',
             fr: 'Groupe à l\'extérieur => Intérieur + Partenaires',
             ja: '外側へ => 内側で + ペア',

@@ -91,6 +91,80 @@ const jobIndexToPriority: Record<number, number> = {
   40: 203, // 현자
 };
 
+export type MarkerOutput8 =
+  | 'markerN'
+  | 'markerNE'
+  | 'markerE'
+  | 'markerSE'
+  | 'markerS'
+  | 'markerSW'
+  | 'markerW'
+  | 'markerNW'
+  | 'unknown';
+export type MarkerOutputCardinal =
+  | 'markerN'
+  | 'markerE'
+  | 'markerS'
+  | 'markerW'
+  | 'unknown';
+export type MarkerOutputIntercard =
+  | 'markerNE'
+  | 'markerSE'
+  | 'markerSW'
+  | 'markerNW'
+  | 'unknown';
+
+const outputMarker8: MarkerOutput8[] = [
+  'markerN',
+  'markerNE',
+  'markerE',
+  'markerSE',
+  'markerS',
+  'markerSW',
+  'markerW',
+  'markerNW',
+];
+const outputMarkerCardinal: MarkerOutputCardinal[] = [
+  'markerN',
+  'markerE',
+  'markerS',
+  'markerW',
+];
+const outputMarkerIntercard: MarkerOutputIntercard[] = [
+  'markerNE',
+  'markerSE',
+  'markerSW',
+  'markerNW',
+];
+const outputStringsMarker8: { [outputString: string]: OutputStrings } = {
+  markerN: Outputs.cmarkA,
+  markerNE: Outputs.cnum1,
+  markerE: Outputs.cmarkB,
+  markerSE: Outputs.cnum2,
+  markerS: Outputs.cmarkC,
+  markerSW: Outputs.cnum3,
+  markerW: Outputs.cmarkD,
+  markerNW: Outputs.cnum4,
+  unknown: Outputs.unknown,
+};
+const outputStringsMarkerCardinal: { [outputString: string]: OutputStrings } = {
+  markerN: Outputs.cmarkA,
+  markerE: Outputs.cmarkB,
+  markerS: Outputs.cmarkC,
+  markerW: Outputs.cmarkD,
+  unknown: Outputs.unknown,
+};
+const outputStringsMarkerIntercard: { [outputString: string]: OutputStrings } = {
+  markerNE: Outputs.cnum1,
+  markerSE: Outputs.cnum2,
+  markerSW: Outputs.cnum3,
+  markerNW: Outputs.cnum4,
+  unknown: Outputs.unknown,
+};
+const outputFromMarker8Num = (dirNum: number): MarkerOutput8 => {
+  return outputMarker8[dirNum] ?? 'unknown';
+};
+
 export type ArrowOutput8 =
   | 'arrowN'
   | 'arrowNE'
@@ -113,7 +187,6 @@ export type ArrowOutputIntercard =
   | 'arrowSW'
   | 'arrowNW'
   | 'unknown';
-
 const outputArrow8: ArrowOutput8[] = [
   'arrowN',
   'arrowNE',
@@ -136,7 +209,6 @@ const outputArrowIntercard: ArrowOutputIntercard[] = [
   'arrowSW',
   'arrowNW',
 ];
-
 const outputStringsArrow8: { [outputString: string]: OutputStrings } = {
   arrowN: Outputs.arrowN,
   arrowNE: Outputs.arrowNE,
@@ -163,11 +235,18 @@ const outputStringsArrowIntercard: { [outputString: string]: OutputStrings } = {
   unknown: Outputs.unknown,
 };
 
-const outputFromArrow8Num = (arrowNum: number): ArrowOutput8 => {
-  return outputArrow8[arrowNum] ?? 'unknown';
+const outputFromArrow8Num = (dirNum: number): ArrowOutput8 => {
+  return outputArrow8[dirNum] ?? 'unknown';
 };
 
-export const Arrows = {
+export const AutumnIndicator = {
+  outputMarker8: outputMarker8,
+  outputMarkerCardinal: outputMarkerCardinal,
+  outputMarkerIntercard: outputMarkerIntercard,
+  outputStringsMarker8: outputStringsMarker8,
+  outputStringsMarkerCardinal: outputStringsMarkerCardinal,
+  outputStringsMarkerIntercard: outputStringsMarkerIntercard,
+  outputFromMarker8Num: outputFromMarker8Num,
   outputArrow8: outputArrow8,
   outputArrowCardinal: outputArrowCardinal,
   outputArrowIntercard: outputArrowIntercard,

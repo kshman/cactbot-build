@@ -1,3 +1,4 @@
+import { AutumnIndicator } from '../../../../../resources/autumns';
 import Outputs from '../../../../../resources/outputs';
 import { Responses } from '../../../../../resources/responses';
 import { Directions } from '../../../../../resources/util';
@@ -174,7 +175,7 @@ const triggerSet: TriggerSet<Data> = {
       run: (data, matches) => data.lastDualspellId = matches.id,
       outputStrings: {
         text: {
-          en: '안에서 + 페어',
+          en: '페어, 자기 자리로',
           de: 'Partner + Donut',
           fr: 'Partenaires + Donut',
           ja: 'ペア + ドーナツ',
@@ -192,7 +193,7 @@ const triggerSet: TriggerSet<Data> = {
       run: (data, matches) => data.lastDualspellId = matches.id,
       outputStrings: {
         text: {
-          en: '안에서 + 프로틴',
+          en: '프로틴, 흩어져요',
           de: 'Himmelsrichtungen + Donut',
           fr: 'Positions + Donut',
           ja: '基本散会 + ドーナツ',
@@ -381,6 +382,22 @@ const triggerSet: TriggerSet<Data> = {
         }
         if (firstOrb8Dir === undefined || secondOrb8Dir === undefined)
           return;
+
+        if (data.options.AutumnStyle) {
+          const firstOrb8DirStr = AutumnIndicator.outputFromMarker8Num(firstOrb8Dir);
+          if (firstOrb8DirStr === undefined)
+            return;
+          const firstOrbDir = output[firstOrb8DirStr]!();
+
+          const rotationDir = (secondOrb8Dir - firstOrb8Dir + 8) % 8 === 2
+            ? output.clockwise!()
+            : output.counterclock!();
+
+          if (firstOrbDir !== undefined && rotationDir !== undefined)
+            return output.text!({ dir: firstOrbDir, rotation: rotationDir });
+          return;
+        }
+
         const firstOrb8DirStr = Directions.outputFrom8DirNum(firstOrb8Dir);
         if (firstOrb8DirStr === undefined)
           return;
@@ -396,7 +413,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         text: {
-          en: '맨 처음 구슬 ${dir} => ${rotation}',
+          en: '첫 구슬 ${dir} => ${rotation}',
           de: 'Erster Orb ${dir} => ${rotation}',
           fr: 'Premier orbe ${dir} => ${rotation}',
           ja: '1回目の玉 ${dir} => ${rotation}',
@@ -406,6 +423,7 @@ const triggerSet: TriggerSet<Data> = {
         clockwise: Outputs.clockwise,
         counterclock: Outputs.counterclockwise,
         ...Directions.outputStrings8Dir,
+        ...AutumnIndicator.outputStringsMarker8,
       },
     },
     {
@@ -611,7 +629,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '광역징 대상자',
         },
         defNum: {
-          en: '내게 ${num}번 서클',
+          en: '내게 ${num}번째 서클',
         },
       },
     },
@@ -629,7 +647,7 @@ const triggerSet: TriggerSet<Data> = {
       run: (data) => data.combination = 'front',
       outputStrings: {
         text: {
-          en: '밖으로 => 뒤로',
+          en: '바깥쪽 => 뒤로',
           de: 'Raus => Hinten',
           fr: 'Extérieur => Derrière',
           ja: '外側 => 後ろへ',
@@ -646,7 +664,7 @@ const triggerSet: TriggerSet<Data> = {
       run: (data) => data.combination = 'front',
       outputStrings: {
         text: {
-          en: '안으로 => 뒤로',
+          en: '안쪽 => 뒤로',
           de: 'Rein => Hinten',
           fr: 'Intérieur => Derrière',
           ja: '内側 => 後ろへ',
@@ -663,7 +681,7 @@ const triggerSet: TriggerSet<Data> = {
       run: (data) => data.combination = 'rear',
       outputStrings: {
         text: {
-          en: '밖으로 => 앞으로',
+          en: '바깥쪽 => 앞으로',
           de: 'Raus => Vorne',
           fr: 'Extérieur => Devant',
           ja: '外側 => 前へ',
@@ -680,7 +698,7 @@ const triggerSet: TriggerSet<Data> = {
       run: (data) => data.combination = 'rear',
       outputStrings: {
         text: {
-          en: '안으로 => 앞으로',
+          en: '안쪽 => 앞으로',
           de: 'Rein => Vorne',
           fr: 'Intérieur => Devant',
           ja: '内側 => 前へ',
@@ -720,7 +738,7 @@ const triggerSet: TriggerSet<Data> = {
         out: Outputs.out,
         in: Outputs.in,
         outAndFront: {
-          en: '밖으로 + 앞으로',
+          en: '바깥쪽 + 앞으로',
           de: 'Raus + Vorne',
           fr: 'Extérieur + Devant',
           ja: '外側 + 前へ',
@@ -728,7 +746,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '밖으로 + 앞으로',
         },
         outAndBack: {
-          en: '밖으로 + 뒤로',
+          en: '바깥쪽 + 뒤로',
           de: 'Raus + Hinten',
           fr: 'Extérieur + Derrière',
           ja: '外側 + 後ろへ',
@@ -736,7 +754,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '밖으로 + 뒤로',
         },
         inAndFront: {
-          en: '안으로 + 앞으로',
+          en: '안쪽 + 앞으로',
           de: 'Rein + Vorne',
           fr: 'Intérieur + Devant',
           ja: '内側 + 前へ',
@@ -744,7 +762,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '안으로 + 앞으로',
         },
         inAndBack: {
-          en: '안으로 + 뒤로',
+          en: '안쪽 + 뒤로',
           de: 'Rein + Hinten',
           fr: 'Intérieur + Derrière',
           ja: '内側 + 後ろへ',
@@ -766,7 +784,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '푹찍쾅 => 그대로',
+          en: '푹찍쾅 => 그대로 멈춰요!',
           de: 'Sprung => Stehen bleiben',
           fr: 'Saut => Restez',
           ja: '突進 => 止まれ',
@@ -782,7 +800,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '푹찍쾅 => 앞으로 지나가서 피해요',
+          en: '푹찍쾅 => 보스 가로 질러요!',
           de: 'Sprung => Geh durch den Boss',
           fr: 'Saut => Traversez le boss',
           ja: '突進 => 移動',

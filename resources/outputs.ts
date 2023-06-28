@@ -490,7 +490,7 @@ export default {
     ko: '중앙',
   },
   clockwise: {
-    en: '시계방향',
+    en: '❰❰시계방향',
     de: 'Im Uhrzeigersinn',
     fr: 'Sens horaire',
     ja: '時針回り',
@@ -498,7 +498,7 @@ export default {
     ko: '시계방향',
   },
   counterclockwise: {
-    en: '반시계방향',
+    en: '반시계방향❱❱',
     de: 'Gegen den Uhrzeigersinn',
     fr: 'Anti-horaire',
     ja: '逆時針回り',
@@ -988,5 +988,18 @@ export default {
   },
   cnum9: {
     en: '⑨',
+  },
+  // 마커
+  cmarkA: {
+    en: 'Ⓐ',
+  },
+  cmarkB: {
+    en: 'Ⓑ',
+  },
+  cmarkC: {
+    en: 'Ⓒ',
+  },
+  cmarkD: {
+    en: 'Ⓓ',
   },
 } as const;
