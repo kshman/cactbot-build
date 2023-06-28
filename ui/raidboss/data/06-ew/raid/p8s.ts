@@ -148,12 +148,16 @@ export const headingTo8Dir = (heading: number) => {
 
 export const ventOutputStrings = {
   comboDir: {
-    en: '${dir1}${dir2} ${arr1}${arr2}',
+    en: '${dir1} / ${dir2}',
     de: '${dir1} / ${dir2}',
     fr: '${dir1} / ${dir2}',
-    ja: '${dir1}${dir2} ${arr1}${arr2}',
+    ja: '${dir1} / ${dir2}',
     cn: '${dir1} / ${dir2}',
     ko: '${dir1} / ${dir2}',
+  },
+  comboArrow: {
+    en: '${dir1}${dir2} ${arr1}${arr2}',
+    ja: '${dir1}${dir2} ${arr1}${arr2}',
   },
   north: prsStrings.north,
   east: prsStrings.east,
@@ -171,7 +175,7 @@ export const ventOutputStrings = {
 } as const;
 
 // Shared alertText for vent triggers, using `ventOutputStrings` above.
-export const ventOutput = (unsafeSpots: number[], output: Output) => {
+export const ventOutput = (autumStyle: boolean, unsafeSpots: number[], output: Output) => {
   const [unsafe0, unsafe1] = [...unsafeSpots].sort();
   if (unsafe0 === undefined || unsafe1 === undefined)
     throw new UnreachableCode();
@@ -212,9 +216,12 @@ export const ventOutput = (unsafeSpots: number[], output: Output) => {
 
   const safeStr0 = safeIntercardMap[unsafe0] ?? output.unknown!();
   const safeStr1 = safeIntercardMap[unsafe1] ?? output.unknown!();
+  if (!autumStyle)
+    return output.comboDir!({ dir1: safeStr0, dir2: safeStr1 });
+
   const safeArr0 = safeArrowMap[unsafe0] ?? output.unknown!();
   const safeArr1 = safeArrowMap[unsafe1] ?? output.unknown!();
-  return output.comboDir!({ dir1: safeStr0, dir2: safeStr1, arr1: safeArr0, arr2: safeArr1 });
+  return output.comboArrow!({ dir1: safeStr0, dir2: safeStr1, arr1: safeArr0, arr2: safeArr1 });
 };
 
 const arcaneChannelFlags = '00020001'; // mapEffect flags for tower tile effect
@@ -835,9 +842,11 @@ const triggerSet: TriggerSet<Data> = {
         };
         const dir1 = outputMap[d0] ?? output.unknown!();
         const dir2 = outputMap[d1] ?? output.unknown!();
+        if (!data.options.AutumnStyle)
+          return output.gorgons!({ dir1: dir1, dir2: dir2 });
         const arr1 = arrowMap[d0] ?? output.unknown!();
         const arr2 = arrowMap[d1] ?? output.unknown!();
-        return output.gorgons!({ dir1: dir1, dir2: dir2, arr1: arr1, arr2: arr2 });
+        return output.gorgonsArrow!({ dir1: dir1, dir2: dir2, arr1: arr1, arr2: arr2 });
       },
       outputStrings: {
         cardinals: {
@@ -857,12 +866,15 @@ const triggerSet: TriggerSet<Data> = {
           ko: '시선을 대각선쪽으로',
         },
         gorgons: {
-          en: '고르곤: ${dir1}${dir2} ${arr1}${arr2}',
+          en: '고르곤: ${dir1}${dir2}',
           de: '${dir1}/${dir2} Gorgone',
           fr: '${dir1}/${dir2} Gorgone',
           ja: 'ゴルゴン：${dir1}/${dir2}',
           cn: '蛇: ${dir1}/${dir2}',
           ko: '${dir1}/${dir2} 고르곤',
+        },
+        gorgonsArrow: {
+          en: '고르곤: ${dir1}${dir2} ${arr1}${arr2}',
         },
         dirN: prsStrings.north,
         dirNE: prsStrings.northEast,
@@ -1617,7 +1629,7 @@ const triggerSet: TriggerSet<Data> = {
           return;
 
         const unsafeSpots = data.combatantData.map((c) => positionTo8Dir(c));
-        return ventOutput(unsafeSpots, output);
+        return ventOutput(data.options.AutumnStyle, unsafeSpots, output);
       },
       run: (data) => data.ventCasts = [],
       outputStrings: ventOutputStrings,
@@ -1678,7 +1690,7 @@ const triggerSet: TriggerSet<Data> = {
           }
         }
 
-        return ventOutput(unsafeSpots, output);
+        return ventOutput(data.options.AutumnStyle, unsafeSpots, output);
       },
       run: (data) => data.ventCasts = [],
       outputStrings: ventOutputStrings,
@@ -1946,7 +1958,9 @@ const triggerSet: TriggerSet<Data> = {
       sound: '',
       infoText: (data, _matches, output) => {
         const [name1, name2] = data.alignmentTargets.sort();
-        return output.text!({
+        if (!data.options.AutumnStyle)
+          return output.text!({ player1: data.ShortName(name1), player2: data.ShortName(name2) });
+        return output.target!({
           player1: data.ShortName(name1),
           player2: data.ShortName(name2),
           target: data.prsAlignMt ? output.targetDps!() : output.targetTh!(),
@@ -1959,12 +1973,16 @@ const triggerSet: TriggerSet<Data> = {
       run: (data) => data.alignmentTargets = [],
       outputStrings: {
         text: {
-          en: '동글: ${player1}, ${player2} (${target})',
+          en: '동글: ${player1}, ${player2}',
           de: 'Anpassung auf ${player1}, ${player2}',
           fr: 'Alignement sur ${player1}, ${player2}',
-          ja: '紫丸：${player1}, ${player2} (${target})',
+          ja: '紫丸：${player1}, ${player2}',
           cn: '记述点 ${player1}, ${player2}',
           ko: '${player1}, ${player2} 원판',
+        },
+        target: {
+          en: '동글: ${player1}, ${player2} (${target})',
+          ja: '紫丸：${player1}, ${player2} (${target})',
         },
         targetTh: {
           en: '탱힐 → D1 조정',
@@ -1985,10 +2003,10 @@ const triggerSet: TriggerSet<Data> = {
         // cactbot-builtin-response
         output.responseOutputStrings = {
           ice: {
-            en: '먼저 얼음!! 3:3으로 뭉쳐욧 (${adj})',
+            en: '먼저 얼음!! 3:3으로 뭉쳐욧',
             de: 'Eis Gruppen zuerst',
             fr: 'Groupe Glace en 1er',
-            ja: '氷の頭割りから (${adj})',
+            ja: '氷の頭割りから',
             cn: '先冰分摊',
             ko: '얼음 쉐어 먼저',
           },
@@ -2032,6 +2050,10 @@ const triggerSet: TriggerSet<Data> = {
             cn: '诱导 => 分散',
             ko: '장판 유도 => 산개',
           },
+          adjIce: {
+            en: '먼저 얼음!! 3:3으로 뭉쳐욧 (${adj})',
+            ja: '氷の頭割りから (${adj})',
+          },
           adjMt: prsStrings.adjMt,
           adjD1: prsStrings.adjD1,
         };
@@ -2064,10 +2086,12 @@ const triggerSet: TriggerSet<Data> = {
         const key = isReversed ? 'alarmText' : 'alertText';
         if (!isReversed && id === ids.fireThenIce || isReversed && id === ids.iceThenFire)
           return { [key]: output.fire!() };
-        if (!isReversed && id === ids.iceThenFire || isReversed && id === ids.fireThenIce)
-          return {
-            [key]: output.ice!({ adj: data.prsAlignMt ? output.adjMt!() : output.adjD1!() }),
-          };
+        if (!isReversed && id === ids.iceThenFire || isReversed && id === ids.fireThenIce) {
+          if (!data.options.AutumnStyle)
+            return { [key]: output.ice!() };
+          const adj = data.prsAlignMt ? output.adjMt!() : output.adjD1!();
+          return { [key]: output.adjIce!({ adj: adj }) };
+        }
         if (!isReversed && id === ids.spreadThenStack || isReversed && id === ids.stackThenSpread)
           return { [key]: output.spread!() };
         if (!isReversed && id === ids.stackThenSpread || isReversed && id === ids.spreadThenStack)
@@ -2101,18 +2125,21 @@ const triggerSet: TriggerSet<Data> = {
           return output.spread!();
         if (id === ids.ice)
           return output.fire!();
-        if (id === ids.fire)
-          return output.ice!({ adj: data.prsAlignMt ? output.adjMt!() : output.adjD1!() });
+        if (id === ids.fire) {
+          if (!data.options.AutumnStyle)
+            return output.ice!();
+          return output.adjIce!({ adj: data.prsAlignMt ? output.adjMt!() : output.adjD1!() });
+        }
       },
       run: (data) => data.seenFirstAlignmentStackSpread = true,
       outputStrings: {
         stack: Outputs.stackMarker,
         spread: Outputs.spread,
         ice: {
-          en: '얼음!! 3:3으로 뭉쳐욧 (${adj})',
+          en: '얼음!! 3:3으로 뭉쳐욧',
           de: 'Eis Gruppen',
           fr: 'Groupe de glace',
-          ja: '氷の頭割り (${adj})',
+          ja: '氷の頭割り',
           cn: '冰分摊',
           ko: '얼음 그룹 쉐어',
         },
@@ -2123,6 +2150,10 @@ const triggerSet: TriggerSet<Data> = {
           ja: '火の2人頭割り',
           cn: '火分摊',
           ko: '불 2인 쉐어',
+        },
+        adjIce: {
+          en: '얼음!! 3:3으로 뭉쳐욧 (${adj})',
+          ja: '氷の頭割り (${adj})',
         },
         adjMt: prsStrings.adjMt,
         adjD1: prsStrings.adjD1,
@@ -2746,10 +2777,10 @@ const triggerSet: TriggerSet<Data> = {
       run: (data) => data.myTower = data.burstCounter,
       outputStrings: {
         text: {
-          en: '나: ${num}번',
+          en: '나: ${num}번째',
           de: '${num}',
           fr: '${num}',
-          ja: '自分: {num}番目',
+          ja: '自分: ${num}番目',
           cn: '${num}',
           ko: '${num}',
         },

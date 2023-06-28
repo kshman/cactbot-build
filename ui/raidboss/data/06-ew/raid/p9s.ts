@@ -595,17 +595,23 @@ const triggerSet: TriggerSet<Data> = {
       },
       infoText: (data, matches, output) => {
         data.prsDefm = (data.prsDefm ?? 0) + 1;
-        if (data.me === matches.target)
-          return output.defamation!({ num: data.prsDefm });
+        if (data.me === matches.target) {
+          if (!data.options.AutumnStyle)
+            return output.defamation!();
+          return output.defNum!({ num: data.prsDefm });
+        }
       },
       outputStrings: {
         defamation: {
-          en: '내게 ${num}번 서클',
+          en: '내게 서클',
           de: 'Ehrenstrafe aud DIR',
           fr: 'Diffamation sur VOUS',
           ja: '自分に巨大な爆発',
           cn: '大圈点名',
           ko: '광역징 대상자',
+        },
+        defNum: {
+          en: '내게 ${num}번 서클',
         },
       },
     },
