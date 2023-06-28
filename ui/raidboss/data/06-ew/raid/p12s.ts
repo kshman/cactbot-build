@@ -1286,13 +1286,13 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         crossMarked: {
-          en: '내게 ➕ 북쪽으로!',
+          en: '➕ 북쪽으로!',
           ja: '自分に\'+\'',
           cn: '十 点名',
           ko: '\'+\' 장판 대상자',
         },
         xMarked: {
-          en: '내게 ❌ 남쪽으로!',
+          en: '❌ 남쪽으로!',
           ja: '自分に\'x\'',
           cn: '\'x\' 点名',
           ko: '\'x\' 장판 대상자',
@@ -1387,7 +1387,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         towerOnYou: {
-          en: '내게 ${color}타워 (${partner})',
+          en: '${color}타워 (${partner})',
           ja: '自分に${color}塔 (${partner})',
           cn: '${color} 塔点名 (+ ${partner})',
           ko: '${color} 기둥 대상자 (+ ${partner})',
@@ -2599,7 +2599,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         text1st: {
-          en: '내게 첫 불 (${partner})',
+          en: '첫 불! 앞으로! (${partner})',
         },
       },
     },
@@ -2714,7 +2714,7 @@ const triggerSet: TriggerSet<Data> = {
       run: (data) => data.prsCaloric2Count = 0,
       outputStrings: {
         text: {
-          en: '내게 첫 불! 가운데로',
+          en: '첫 불! 한가운데로!',
         },
         mt: {
           en: '불 교대: ${target}',

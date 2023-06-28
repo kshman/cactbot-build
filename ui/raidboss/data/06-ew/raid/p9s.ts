@@ -175,7 +175,7 @@ const triggerSet: TriggerSet<Data> = {
       run: (data, matches) => data.lastDualspellId = matches.id,
       outputStrings: {
         text: {
-          en: '페어, 자기 자리로',
+          en: '페어, 둘이 함께',
           de: 'Partner + Donut',
           fr: 'Partenaires + Donut',
           ja: 'ペア + ドーナツ',
