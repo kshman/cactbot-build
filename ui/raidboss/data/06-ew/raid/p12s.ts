@@ -206,6 +206,7 @@ export interface Data extends RaidbossData {
   prsCaloric1Buff: { [name: string]: TypeCaloric };
   prsCaloric1Mine?: TypeCaloric;
   prsCaloric2Fire?: string;
+  prsCaloric2Count: number;
   prsSeenPangenesis?: boolean;
   prsPangenesisCount: { [name: string]: number };
   prsPangenesisStat: { [name: string]: TypeUmbralAstral };
@@ -290,6 +291,7 @@ const triggerSet: TriggerSet<Data> = {
       prsClassicAlphaBeta: {},
       prsCaloric1First: [],
       prsCaloric1Buff: {},
+      prsCaloric2Count: 0,
       prsPangenesisCount: {},
       prsPangenesisStat: {},
       prsPangenesisDuration: {},
@@ -1284,13 +1286,13 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         crossMarked: {
-          en: '내게 ➕ 북쪽으로!',
+          en: '➕ 북쪽으로!',
           ja: '自分に\'+\'',
           cn: '十 点名',
           ko: '\'+\' 장판 대상자',
         },
         xMarked: {
-          en: '내게 ❌ 남쪽으로!',
+          en: '❌ 남쪽으로!',
           ja: '自分に\'x\'',
           cn: '\'x\' 点名',
           ko: '\'x\' 장판 대상자',
@@ -1385,7 +1387,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         towerOnYou: {
-          en: '내게 ${color}타워 (${partner})',
+          en: '${color}타워 (${partner})',
           ja: '自分に${color}塔 (${partner})',
           cn: '${color} 塔点名 (+ ${partner})',
           ko: '${color} 기둥 대상자 (+ ${partner})',
@@ -1507,7 +1509,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '플랫폼 내부',
         },
         corner: {
-          en: '안쪽 모서리에',
+          en: '건너편에 닿게 모서리에',
           ja: '真ん中のコーナー',
           cn: '平台交叉处',
           ko: '플랫폼 교차지점',
@@ -2597,7 +2599,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         text1st: {
-          en: '내게 첫 불 (${partner})',
+          en: '첫 불! 앞으로! (${partner})',
         },
       },
     },
@@ -2685,10 +2687,10 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         fire: {
-          en: '내게 불 (${team})',
+          en: '불 (${team})',
         },
         wind: {
-          en: '내게 바람 (${team})',
+          en: '바람 (${team})',
         },
         wind1st: {
           en: '바람, 살짝 옆으로',
@@ -2709,9 +2711,10 @@ const triggerSet: TriggerSet<Data> = {
         if (data.prsPalladionGraps === data.me)
           return output.mt!({ target: data.party.aJobName(matches.target) });
       },
+      run: (data) => data.prsCaloric2Count = 0,
       outputStrings: {
         text: {
-          en: '내게 첫 불! 가운데로',
+          en: '첫 불! 한가운데로!',
         },
         mt: {
           en: '불 교대: ${target}',
@@ -2731,7 +2734,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         text: {
-          en: '내게 바람, 흩어져요',
+          en: '바람, 흩어져요',
         },
       },
     },
@@ -2739,17 +2742,26 @@ const triggerSet: TriggerSet<Data> = {
       id: 'P12S 칼로릭2 불 장판',
       type: 'GainsEffect',
       netRegex: { effectId: ['E08'] },
-      durationSeconds: 3,
-      infoText: (data, matches, output) => {
-        if (matches.target === data.me && data.prsCaloric2Fire !== data.me)
-          return output.text!();
+      response: (data, matches, output) => {
+        // cactbot-builtin-response
+        output.responseOutputStrings = {
+          text: {
+            en: '${num}번째 불 장판',
+          },
+          text1st: {
+            en: '첫째 불 장판, 옮겨욧 반시계 방향❱❱',
+          },
+        };
+
+        if (data.prsCaloric2Fire !== matches.target)
+          data.prsCaloric2Count++;
+        if (matches.target === data.me && data.prsCaloric2Fire !== data.me) {
+          if (data.prsCaloric2Count === 1)
+            return { alertText: output.text1st!() };
+          return { infoText: output.text!({ num: data.prsCaloric2Count }) };
+        }
       },
       run: (data, matches) => data.prsCaloric2Fire = matches.target,
-      outputStrings: {
-        text: {
-          en: '내게 불 장판',
-        },
-      },
     },
     {
       id: 'P12S 칼로릭2 옮겨욧',
@@ -2757,12 +2769,27 @@ const triggerSet: TriggerSet<Data> = {
       netRegex: { id: '833C', source: 'Pallas Athena', capture: false },
       condition: (data) => data.prsPhase === 700,
       alertText: (data, _matches, output) => {
-        if (data.me === data.prsCaloric2Fire)
+        if (data.me === data.prsCaloric2Fire) {
+          if (data.prsCaloric2Count === 7)
+            return output.last!();
+          if (data.prsCaloric2Count === 8)
+            return output.final!();
           return output.text!();
+        }
+      },
+      run: (data) => {
+        if (data.prsCaloric2Count === 7)
+          data.prsCaloric2Count++;
       },
       outputStrings: {
         text: {
-          en: '불 옮겨욧!',
+          en: '불 옮겨욧! 반시계 방향❱❱',
+        },
+        last: {
+          en: '마지막 불! 빈 곳에 버려요!',
+        },
+        final: {
+          en: '한 번 더! 빈 곳에 버려요!',
         },
       },
     },
@@ -2781,6 +2808,7 @@ const triggerSet: TriggerSet<Data> = {
       id: 'P12S 에크파이로시스 움직여',
       type: 'Ability',
       netRegex: { id: '831F', source: 'Pallas Athena', capture: false },
+      delaySeconds: 0.5,
       suppressSeconds: 2,
       alarmText: (_data, _matches, output) => output.text!(),
       outputStrings: {

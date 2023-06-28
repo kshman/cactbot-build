@@ -3392,7 +3392,6 @@ const triggerSet: TriggerSet<Data> = {
     },
     {
       'locale': 'de',
-      'missingTranslations': true,
       'replaceSync': {
         'Darkscale': 'Dunkelschuppe',
         'Dragon-king Thordan': 'König Thordan',
@@ -3792,7 +3791,6 @@ const triggerSet: TriggerSet<Data> = {
     },
     {
       'locale': 'cn',
-      'missingTranslations': true,
       'replaceSync': {
         'Darkscale': '暗鳞黑龙',
         'Dragon-king Thordan': '龙威骑神托尔丹',
@@ -3927,7 +3925,6 @@ const triggerSet: TriggerSet<Data> = {
     },
     {
       'locale': 'ko',
-      'missingTranslations': true,
       'replaceSync': {
         'Darkscale': '검은미늘',
         'Dragon-king Thordan': '기룡신 토르당',

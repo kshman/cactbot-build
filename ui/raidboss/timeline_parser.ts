@@ -415,6 +415,7 @@ export class TimelineParser {
     return [
       '--Reset--',
       '--sync--',
+      '--setup--',
       'Start',
       '^ ?21:',
       '^( ?257)? 101:',

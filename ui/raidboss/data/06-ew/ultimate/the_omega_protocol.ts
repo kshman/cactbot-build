@@ -573,14 +573,14 @@ const triggerSet: TriggerSet<Data> = {
         // cactbot-builtin-response
         output.responseOutputStrings = {
           tower: {
-            en: '타워로!',
+            en: '타워로! ${num}',
             de: 'Turm ${num}',
             ja: '塔 ${num}',
             cn: '塔 ${num}',
             ko: '기둥 ${num}',
           },
           tether: {
-            en: '줄채요!',
+            en: '줄채요! ${num}',
             de: 'Verbindung ${num}',
             ja: '線 ${num}',
             cn: '线 ${num}',
@@ -593,6 +593,14 @@ const triggerSet: TriggerSet<Data> = {
             cn: '${num}',
             ko: '${num}',
           },
+          simpleTower: {
+            en: '타워로!',
+            ja: '塔へ！',
+          },
+          simpleTether: {
+            en: '줄채요!',
+            ja: '線取り！',
+          },
         };
 
         const mechanicNum = data.loopBlasterCount + 1;
@@ -601,6 +609,14 @@ const triggerSet: TriggerSet<Data> = {
         const myNum = data.inLine[data.me];
         if (myNum === undefined)
           return { infoText: output.numNoMechanic!({ num: mechanicNum }) };
+
+        if (data.options.AutumnStyle) {
+          if (myNum === mechanicNum)
+            return { alertText: output.simpleTower!() };
+          if (mechanicNum === myNum + 2 || mechanicNum === myNum - 2)
+            return { alertText: output.simpleTether!() };
+          return { infoText: output.numNoMechanic!({ num: mechanicNum }) };
+        }
 
         if (myNum === mechanicNum)
           return { alertText: output.tower!({ num: mechanicNum }) };
@@ -658,11 +674,15 @@ const triggerSet: TriggerSet<Data> = {
             ko: '${num}',
           },
           spread: {
-            en: '밖으로!',
+            en: '${num} 밖으로!',
             de: '${num} Raus (auf Dir)',
             ja: '${num} 外へ',
             cn: '${num} 出 (点名)',
             ko: '밖으로 ${num}',
+          },
+          spreadMesg: {
+            en: '밖으로!',
+            ja: '外へ',
           },
         };
 
@@ -670,8 +690,11 @@ const triggerSet: TriggerSet<Data> = {
         if (mechanicNum >= 5)
           return;
         const myNum = data.inLine[data.me];
-        if (myNum === mechanicNum)
-          return { alertText: output.spread!({ num: mechanicNum }) };
+        if (myNum === mechanicNum) {
+          if (!data.options.AutumnStyle)
+            return { alertText: output.spread!({ num: mechanicNum }) };
+          return { alertText: output.spreadMesg!() };
+        }
         return { infoText: output.lineStack!({ num: mechanicNum }) };
       },
     },
@@ -980,10 +1003,14 @@ const triggerSet: TriggerSet<Data> = {
             en: '엑스',
           },
           stacksOn: {
-            en: '${glitch} ${marker} (${player1}, ${player2})',
+            en: '${glitch} (${player1}, ${player2})',
             de: '${glitch} Sammeln (${player1}, ${player2})',
             cn: '${glitch} 分摊 (${player1}, ${player2})',
             ko: '${glitch} 쉐어 (${player1}, ${player2})',
+          },
+          markerOn: {
+            en: '${glitch} ${marker} (${player1}, ${player2})',
+            ja: '${glitch} ${marker} (${player1}, ${player2})',
           },
           // TODO: say who your tether partner is to swap??
           // TODO: tell the tether partner they are tethered to a stack?
@@ -1038,21 +1065,24 @@ const triggerSet: TriggerSet<Data> = {
             }
           } */
           // 그냥 알랴줌
-          const ouch = output.stacksOn!({
-            glitch: glitch,
-            marker: marker,
-            player1: m1.r,
-            player2: m2.r,
-          });
+          const ouch = !data.options.AutumnStyle
+            ? output.stacksOn!({ glitch: glitch, player1: m1.r, player2: m2.r })
+            : output.markerOn!({ glitch: glitch, marker: marker, player1: m1.r, player2: m2.r });
           return { infoText: ouch };
         }
 
-        const stacksOn = output.stacksOn!({
-          glitch: glitch,
-          marker: marker,
-          player1: data.ShortName(p1),
-          player2: data.ShortName(p2),
-        });
+        const stacksOn = !data.options.AutumnStyle
+          ? output.stacksOn!({
+            glitch: glitch,
+            player1: data.ShortName(p1),
+            player2: data.ShortName(p2),
+          })
+          : output.markerOn!({
+            glitch: glitch,
+            marker: marker,
+            player1: data.ShortName(p1),
+            player2: data.ShortName(p2),
+          });
         if (!data.spotlightStacks.includes(data.me))
           return { infoText: stacksOn };
         return {
@@ -3063,7 +3093,6 @@ const triggerSet: TriggerSet<Data> = {
   timelineReplace: [
     {
       'locale': 'de',
-      'missingTranslations': true,
       'replaceSync': {
         'Alpha Omega': 'Alpha-Omega',
         'Cosmo Meteor': 'Kosmosmeteor',
@@ -3306,7 +3335,6 @@ const triggerSet: TriggerSet<Data> = {
     },
     {
       'locale': 'cn',
-      'missingTranslations': true,
       'replaceSync': {
         'Alpha Omega': '阿尔法欧米茄',
         'Cosmo Meteor': '宇宙流星',
