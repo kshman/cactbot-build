@@ -5,6 +5,7 @@
 
 hideall "--Reset--"
 hideall "--sync--"
+hideall "--setup--"
 
 0.0 "--Reset--" sync / 21:........:4000000F:/ window 100000 jump 0
 
