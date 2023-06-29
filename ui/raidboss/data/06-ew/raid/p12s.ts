@@ -2213,9 +2213,14 @@ const triggerSet: TriggerSet<Data> = {
         // For the first mechanic, two destination orbs span at [100,95] and [100,105]
         // Each has a short tether to either an 'in' or 'out' orb on the same N/S half of the area.
         // We therefore only need to know whether the 'in' orb is N or S to identify the safe spot.
-        return parseFloat(donut.y) > 100 ? output.south!() : output.north!();
+        const dir = parseFloat(donut.y) > 100 ? output.south!() : output.north!();
+        return output.safe!({ dir: dir });
       },
       outputStrings: {
+        safe: {
+          en: '${dir}으로',
+          ja: '${dir}',
+        },
         north: Outputs.north,
         south: Outputs.south,
       },
@@ -2432,31 +2437,31 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         outsideNW: {
-          en: '북서 바깥',
+          en: '북서 바깥 판때기',
         },
         outsideNE: {
-          en: '북동 바깥',
+          en: '북동 바깥 판때기',
         },
         insideNW: {
-          en: '북서 안',
+          en: '북서 안 판때기',
         },
         insideNE: {
-          en: '북동 안',
+          en: '북동 안 판때기',
         },
         insideSW: {
-          en: '남서 안',
+          en: '남서 안 판때기',
         },
         insideSE: {
-          en: '남동 안',
+          en: '남동 안 판때기',
         },
         outsideSW: {
-          en: '남서 바깥',
+          en: '남서 바깥 판때기',
         },
         outsideSE: {
-          en: '남동 바깥',
+          en: '남동 바깥 판때기',
         },
         default: {
-          en: '안전한 곳 찾아요',
+          en: '안전한 판때기 찾아요',
         },
       },
     },
