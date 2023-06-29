@@ -10,8 +10,6 @@ import { NetMatches } from '../../../../../types/net_matches';
 import { TriggerSet } from '../../../../../types/trigger';
 
 // TODO: add phase dash calls?? (maybe this is overkill)
-// TODO: Superchain 2B
-// TODO: final Sample safe spot
 
 // TODO: palladian grasp tankbusters (which are often invulned)
 // TODO: crush helm tankbusters??? (+esuna calls for non-invulning tanks??)
@@ -181,6 +179,16 @@ const limitCutIds: readonly string[] = Object.keys(limitCutMap);
 const wingIds: readonly string[] = Object.values(wings);
 const superchainNpcBaseIds: readonly string[] = Object.values(superchainNpcBaseIdMap);
 
+type FloorTile =
+  | 'outsideNW'
+  | 'outsideNE'
+  | 'insideNW'
+  | 'insideNE'
+  | 'insideSW'
+  | 'insideSE'
+  | 'outsideSW'
+  | 'outsideSE';
+
 const getHeadmarkerId = (data: Data, matches: NetMatches['HeadMarker']) => {
   if (data.decOffset === undefined) {
     if (data.expectedFirstHeadmarker === undefined) {
@@ -243,6 +251,9 @@ export interface Data extends RaidbossData {
   superchain2aFirstDir?: 'north' | 'south';
   superchain2aSecondDir?: 'north' | 'south';
   superchain2aSecondMech?: 'protean' | 'partners';
+  superchain2bSecondMech?: 'protean' | 'partners';
+  superchain2bSecondDir?: 'east' | 'west';
+  sampleTiles: NetMatches['Tether'][];
 }
 
 const triggerSet: TriggerSet<Data> = {
@@ -313,6 +324,7 @@ const triggerSet: TriggerSet<Data> = {
       wingCalls: [],
       superchainCollect: [],
       whiteFlameCounter: 0,
+      sampleTiles: [],
     };
   },
   timelineTriggers: [
@@ -431,6 +443,7 @@ const triggerSet: TriggerSet<Data> = {
         clones: {
           en: '${dir}으로',
           ja: '${dir}',
+          cn: '${dir}',
           ko: '분신 ${dir}',
         },
         north: Outputs.north,
@@ -440,34 +453,20 @@ const triggerSet: TriggerSet<Data> = {
     },
     // In Ray 1 (Paradeigma2), two adds always spawn north in pairs with PosX of [85, 105] or [95, 115].
     // Each cleaves 1/4th of the arena. So given one PosX, we can determine the inside/outside safe lanes.
-
-    // TODO: In Ray 2 (SC IIB), the adds have the same cleave width but spawn at [87, 103] or [97, 113].
-    // So "inside east", e.g., is a bit inaccurate.  Because of mech timing, there also isn't time to cross
-    // the arena.  So realistically, this should be combined with SC IIB triggers to indicate whether
-    //  the player needs to move inside or outside to avoid the cleave that will intersect the 2nd orb.
-    // For now, though, display a reminder to avoid the cleaves.
     {
-      id: 'P12S Ray of Light',
+      id: 'P12S Ray of Light 1',
       type: 'StartsUsing',
       netRegex: { id: '82EE', source: 'Anthropos' },
       suppressSeconds: 1,
-      alertText: (data, matches, output) => {
+      infoText: (_data, matches, output) => {
         const x = Math.round(parseFloat(matches.x));
-        if (x === undefined)
-          return output.avoid!();
-
         let safeLanes;
-        if (data.paradeigmaCounter === 2) {
-          if (x < 90)
-            safeLanes = 'insideWestOutsideEast';
-          else if (x > 110)
-            safeLanes = 'insideEastOutsideWest';
-          else
-            safeLanes = x < 100 ? 'insideEastOutsideWest' : 'insideWestOutsideEast';
-        }
-
-        if (safeLanes === undefined)
-          return output.avoid!(); // will fire during Ray 2 (SC IIB)
+        if (x < 90)
+          safeLanes = 'insideWestOutsideEast';
+        else if (x > 110)
+          safeLanes = 'insideEastOutsideWest';
+        else
+          safeLanes = x < 100 ? 'insideEastOutsideWest' : 'insideWestOutsideEast';
         return output[safeLanes]!();
       },
       outputStrings: {
@@ -478,16 +477,10 @@ const triggerSet: TriggerSet<Data> = {
           ko: '서쪽 안 / 동쪽 바깥',
         },
         insideEastOutsideWest: {
-          en: '서[밖] / 동[안]',
+          en: '동[안] / 서[밖]',
           ja: '西の外側 / 東の内側',
           cn: '内东 / 外西',
           ko: '동쪽 안 / 서쪽 바깥',
-        },
-        avoid: {
-          en: '한 줄 장판 피해요',
-          ja: '直線回避',
-          cn: '远离场边激光',
-          ko: '직선 장판 피하기',
         },
       },
     },
@@ -1035,40 +1028,41 @@ const triggerSet: TriggerSet<Data> = {
           const color = tempColor === 'light' ? 'dark' : 'light';
 
           if (data.triggerSetConfig.engravement1DropTower === 'quadrant') {
-            if (x < 80 && y < 100) { // x = 75 && y = 97
+            if (x < 80 && y < 100) { // WNW: x = 75 && y = 97
               data.engravement1BeamsPosMap.set('NE', color);
-            } else if (x < 100 && y < 80) { // x = 97 && y = 75
+            } else if (x < 100 && y < 80) { // NNW: x = 97 && y = 75
               data.engravement1BeamsPosMap.set('SW', color);
-            } else if (x > 100 && y < 80) { // x = 103 && y = 75
+            } else if (x > 100 && y < 80) { // NNE: x = 103 && y = 75
               data.engravement1BeamsPosMap.set('SE', color);
-            } else if (x > 120 && y < 100) { // x = 125 && y = 97
+            } else if (x > 120 && y < 100) { // ENE: x = 125 && y = 97
               data.engravement1BeamsPosMap.set('NW', color);
-            } else if (x > 120 && y > 100) { // x = 125 && y = 103
+            } else if (x > 120 && y > 100) { // ESE: x = 125 && y = 103
               data.engravement1BeamsPosMap.set('SW', color);
-            } else if (x > 100 && y > 120) { // x = 103 && y = 125
+            } else if (x > 100 && y > 120) { // SSE: x = 103 && y = 125
               data.engravement1BeamsPosMap.set('NE', color);
-            } else if (x < 100 && y > 120) { // x = 97 && y = 125
+            } else if (x < 100 && y > 120) { // SSW: x = 97 && y = 125
               data.engravement1BeamsPosMap.set('NW', color);
-            } else if (x < 80 && y > 100) { // x = 75 && y = 103
+            } else if (x < 80 && y > 100) { // WSW: x = 75 && y = 103
               data.engravement1BeamsPosMap.set('SE', color);
             }
           } else if (data.triggerSetConfig.engravement1DropTower === 'clockwise') {
-            if (x < 80 && y < 100) { // x = 75 && y = 97
+            // Tether stretches across and tower is clockwise; e.g. N add stretches S, and tower is SW.
+            if (x < 80 && y < 100) { // WNW: x = 75 && y = 97
               data.engravement1BeamsPosMap.set('SE', color);
-            } else if (x < 100 && y < 80) { // x = 97 && y = 75
+            } else if (x < 100 && y < 80) { // NNW: x = 97 && y = 75
+              data.engravement1BeamsPosMap.set('SW', color);
+            } else if (x > 100 && y < 80) { // NNE: x = 103 && y = 75
+              data.engravement1BeamsPosMap.set('SW', color);
+            } else if (x > 120 && y < 100) { // ENE: x = 125 && y = 97
+              data.engravement1BeamsPosMap.set('NW', color);
+            } else if (x > 120 && y > 100) { // ESE: x = 125 && y = 103
+              data.engravement1BeamsPosMap.set('NW', color);
+            } else if (x > 100 && y > 120) { // SSE: x = 103 && y = 125
+              data.engravement1BeamsPosMap.set('NE', color);
+            } else if (x < 100 && y > 120) { // SSW: x = 97 && y = 125
+              data.engravement1BeamsPosMap.set('NE', color);
+            } else if (x < 80 && y > 100) { // WSW: x = 75 && y = 103
               data.engravement1BeamsPosMap.set('SE', color);
-            } else if (x > 100 && y < 80) { // x = 103 && y = 75
-              data.engravement1BeamsPosMap.set('SW', color);
-            } else if (x > 120 && y < 100) { // x = 125 && y = 97
-              data.engravement1BeamsPosMap.set('SW', color);
-            } else if (x > 120 && y > 100) { // x = 125 && y = 103
-              data.engravement1BeamsPosMap.set('NW', color);
-            } else if (x > 100 && y > 120) { // x = 103 && y = 125
-              data.engravement1BeamsPosMap.set('NW', color);
-            } else if (x < 100 && y > 120) { // x = 97 && y = 125
-              data.engravement1BeamsPosMap.set('NE', color);
-            } else if (x < 80 && y > 100) { // x = 75 && y = 103
-              data.engravement1BeamsPosMap.set('NE', color);
             }
           }
         }
@@ -1083,6 +1077,28 @@ const triggerSet: TriggerSet<Data> = {
           data.engravement1DarkBeamsPos = [];
           data.engravement1LightBeamsPos = [];
           data.engravement1BeamsPosMap.forEach((value: string, key: string) => {
+            if (data.options.AutumnStyle) {
+              if (matches.effectId === engravementIdMap.lightTower && value === 'light') {
+                if (key === 'NE' && data.role === 'dps')
+                  data.engravement1LightBeamsPos.push(output.northeast!());
+                else if (key === 'NW' && data.role !== 'dps')
+                  data.engravement1LightBeamsPos.push(output.northwest!());
+                else if (key === 'SE')
+                  data.engravement1LightBeamsPos.push(output.southeast!());
+                else if (key === 'SW')
+                  data.engravement1LightBeamsPos.push(output.southwest!());
+              } else if (matches.effectId === engravementIdMap.darkTower && value === 'dark') {
+                if (key === 'NE' && data.role === 'dps')
+                  data.engravement1DarkBeamsPos.push(output.northeast!());
+                else if (key === 'NW' && data.role !== 'dps')
+                  data.engravement1DarkBeamsPos.push(output.northwest!());
+                else if (key === 'SE')
+                  data.engravement1DarkBeamsPos.push(output.southeast!());
+                else if (key === 'SW')
+                  data.engravement1DarkBeamsPos.push(output.southwest!());
+              }
+              return;
+            }
             if (matches.effectId === engravementIdMap.lightTower && value === 'light') {
               if (key === 'NE')
                 data.engravement1LightBeamsPos.push(output.northeast!());
@@ -1103,6 +1119,12 @@ const triggerSet: TriggerSet<Data> = {
                 data.engravement1DarkBeamsPos.push(output.southwest!());
             }
           });
+
+          if (data.options.AutumnStyle) {
+            if (matches.effectId === engravementIdMap.lightTower)
+              return output.simpleLightTower!({ pos: data.engravement1LightBeamsPos.join(' ') });
+            return output.simpleDarkTower!({ pos: data.engravement1DarkBeamsPos.join(' ') });
+          }
 
           // if light tower
           if (matches.effectId === engravementIdMap.lightTower) {
@@ -1147,6 +1169,14 @@ const triggerSet: TriggerSet<Data> = {
         northwest: Outputs.arrowNW,
         southeast: Outputs.arrowSE,
         southwest: Outputs.arrowSW,
+        simpleLightTower: {
+          en: '🟡설치 ${pos}',
+          ja: 'ひかり設置 ${pos}',
+        },
+        simpleDarkTower: {
+          en: '🟣설치 ${pos}',
+          ja: 'やみ設置 ${pos}',
+        },
       },
     },
     {
@@ -1337,6 +1367,7 @@ const triggerSet: TriggerSet<Data> = {
         baitCleave: {
           en: '천사 레이저 유도',
           ja: '外からのレーザー誘導',
+          cn: '引导射线',
           ko: '레이저 유도',
         },
       },
@@ -2164,14 +2195,270 @@ const triggerSet: TriggerSet<Data> = {
         data.superchain2aSecondMech = isSecondMechProtean ? 'protean' : 'partners';
       },
     },
-    // TODO: Combine with future SC IIB trigger?  Happens immediately after 1st orb (donut)
-    // and before 2nd orb (protean/partners). Also, rather than calling "sides", it should probably
-    // call the specific side where the 2nd orb is.
     {
-      id: 'P12S Parthenos',
+      id: 'P12S Superchain Theory IIb First Mechanic',
+      type: 'AddedCombatant',
+      netRegex: { npcNameId: superchainNpcNameId, npcBaseId: superchainNpcBaseIds, capture: false },
+      condition: (data) => data.phase === 'superchain2b' && data.superchainCollect.length === 4,
+      alertText: (data, _matches, output) => {
+        // Sort ascending. collect: [dest1, dest2, out/sphere, in/donut]
+        const collect = data.superchainCollect.slice(0, 4).sort((a, b) =>
+          parseInt(a.npcBaseId) - parseInt(b.npcBaseId)
+        );
+
+        const donut = collect[3];
+        if (donut === undefined)
+          return;
+
+        // For the first mechanic, two destination orbs span at [100,95] and [100,105]
+        // Each has a short tether to either an 'in' or 'out' orb on the same N/S half of the area.
+        // We therefore only need to know whether the 'in' orb is N or S to identify the safe spot.
+        return parseFloat(donut.y) > 100 ? output.south!() : output.north!();
+      },
+      outputStrings: {
+        north: Outputs.north,
+        south: Outputs.south,
+      },
+    },
+    {
+      id: 'P12S Superchain Theory IIb Second Mechanic',
+      type: 'AddedCombatant',
+      netRegex: { npcNameId: superchainNpcNameId, npcBaseId: superchainNpcBaseIds, capture: false },
+      condition: (data) => data.phase === 'superchain2b' && data.superchainCollect.length === 8,
+      delaySeconds: 6.5,
+      durationSeconds: 6, // keep active until just before Ray of Light 2
+      alertText: (data, _matches, output) => {
+        // Sort ascending. collect: [dest1, dest2, out, partnerProtean]
+        const collect = data.superchainCollect.slice(4, 8).sort((a, b) =>
+          parseInt(a.npcBaseId) - parseInt(b.npcBaseId)
+        );
+
+        const partnerProtean = collect[3];
+        if (partnerProtean === undefined)
+          return;
+        let mechanicStr;
+        if (partnerProtean.npcBaseId === superchainNpcBaseIdMap.protean) {
+          mechanicStr = output.protean!();
+          data.superchain2bSecondMech = 'protean';
+        } else {
+          mechanicStr = output.partners!();
+          data.superchain2bSecondMech = 'partners';
+        }
+
+        // For the second mechanic, the two destination orbs spawn at [92,100] and [108,100]
+        // One is tethered to a sphere (out) orb, and the other to a partner or protean orb.
+        // The partner/protean orb is always on the same E/W half as the destination orb it is tethered to.
+        // We therefore only need to know whether the partnerProteam orb is E or W to identify the safe spot.
+        const x = parseFloat(partnerProtean.x);
+        if (x > 100) {
+          data.superchain2bSecondDir = 'east';
+          return output.combined!({ dir: output.east!(), mechanic: mechanicStr });
+        }
+        data.superchain2bSecondDir = 'west';
+        return output.combined!({ dir: output.west!(), mechanic: mechanicStr });
+      },
+      outputStrings: {
+        combined: {
+          en: '${mechanic} [${dir}]',
+        },
+        east: Outputs.east,
+        west: Outputs.west,
+        protean: {
+          en: '프로틴',
+        },
+        partners: {
+          en: '페어',
+        },
+      },
+    },
+    {
+      id: 'P12S Superchain Theory IIb Second Mechanic + Ray of Light 2',
       type: 'StartsUsing',
-      netRegex: { id: '8303', source: 'Athena', capture: false },
-      response: Responses.goSides(),
+      netRegex: { id: '82EE', source: 'Anthropos' }, // Ray of Light cleaves from North adds
+      condition: (data) => data.paradeigmaCounter === 4,
+      suppressSeconds: 1,
+      alertText: (data, matches, output) => {
+        if (data.superchain2bSecondMech === undefined)
+          return output.avoid!();
+        const mechanicStr = output[data.superchain2bSecondMech]!();
+
+        const x = Math.round(parseFloat(matches.x));
+        if (data.superchain2bSecondDir === undefined || x === undefined)
+          return output.combined!({ mechanic: mechanicStr, dir: output.avoid!() });
+
+        let safeLane = output.avoid!(); // default if unable to determine safe lane
+
+        // In Ray 2 (SC IIB), the adds spawn with PosX of [87, 103] or [97, 113].
+        // Because of mech timing, there is only realistically time to move either inside or outside
+        // (relative to the orb) to avoid the cleave.
+        if (x < 92)
+          safeLane = data.superchain2bSecondDir === 'east' ? output.outside!() : output.inside!();
+        else if (x > 108)
+          safeLane = data.superchain2bSecondDir === 'east' ? output.inside!() : output.outside!();
+        else if (x > 100)
+          safeLane = data.superchain2bSecondDir === 'east' ? output.outside!() : output.inside!();
+        else
+          safeLane = data.superchain2bSecondDir === 'east' ? output.inside!() : output.outside!();
+
+        return output.combined!({ mechanic: mechanicStr, dir: safeLane });
+      },
+      outputStrings: {
+        combined: {
+          en: '${mechanic} => ${dir}',
+        },
+        protean: {
+          en: '프로틴',
+        },
+        partners: {
+          en: '페어',
+        },
+        inside: {
+          en: '안으로',
+        },
+        outside: {
+          en: '바깥으로',
+        },
+        avoid: {
+          en: '한 줄 장판 피해요',
+          ja: '直線回避',
+          cn: '远离场边激光',
+          ko: '직선 장판 피하기',
+        },
+      },
+    },
+    {
+      id: 'P12S Superchain Theory IIb Third Mechanic',
+      type: 'AddedCombatant',
+      netRegex: { npcNameId: superchainNpcNameId, npcBaseId: superchainNpcBaseIds, capture: false },
+      condition: (data) => data.phase === 'superchain2b' && data.superchainCollect.length === 13,
+      delaySeconds: 13.6,
+      durationSeconds: 6,
+      alertText: (data, _matches, output) => {
+        // Sort ascending. collect: [dest1, dest2, out, out, partnerProtean]
+        const collect = data.superchainCollect.slice(8, 13).sort((a, b) =>
+          parseInt(a.npcBaseId) - parseInt(b.npcBaseId)
+        );
+
+        const partnerProtean = collect[4];
+        if (partnerProtean === undefined)
+          return;
+
+        // For the third mechanic, the three destination orbs spawn at [100,90] and [100,110]
+        // Both are tethered to a sphere (out) orb, and one is tethered to a partner/protean orb.
+        // The partner/protean orb is always on opposite N/S half as the destination orb it is tethered to.
+        // We therefore only need to know whether the partnerProteam orb is N or S to identify the safe spot.
+        const mechanicStr = partnerProtean.npcBaseId === superchainNpcBaseIdMap.protean
+          ? output.protean!()
+          : output.partners!();
+        const dirStr = parseFloat(partnerProtean.y) > 100 ? output.north!() : output.south!();
+        return output.combined!({ dir: dirStr, mechanic: mechanicStr });
+      },
+      outputStrings: {
+        combined: {
+          en: '밖에서 + ${mechanic} [${dir}]',
+        },
+        north: Outputs.north,
+        south: Outputs.south,
+        protean: {
+          en: '프로틴',
+        },
+        partners: {
+          en: '페어',
+        },
+      },
+    },
+    {
+      id: 'P12S Sample Collect',
+      type: 'Tether',
+      netRegex: { id: '00E8', target: 'Athena' },
+      condition: (data) => data.phase === 'superchain2b',
+      run: (data, matches) => data.sampleTiles.push(matches),
+    },
+    {
+      id: 'P12S Sample Safe Tile',
+      type: 'Tether',
+      netRegex: { id: '00E8', target: 'Athena', capture: false }, // tile combatants are the source
+      condition: (data) => data.phase === 'superchain2b' && data.sampleTiles.length === 7,
+      delaySeconds: 1, // short delay to avoid collision
+      promise: async (data) => {
+        data.combatantData = [];
+        const ids = data.sampleTiles.map((tile) => parseInt(tile.sourceId, 16));
+        data.combatantData = (await callOverlayHandler({
+          call: 'getCombatants',
+          ids: ids,
+        })).combatants;
+      },
+      infoText: (data, _matches, output) => {
+        if (data.combatantData.length !== 7)
+          return output.default!();
+        // platform 'combatants' can be at x:[90,110], y:[85,95,105,115]
+        let safeTiles: FloorTile[] = [
+          'outsideNW',
+          'outsideNE',
+          'insideNW',
+          'insideNE',
+          'insideSW',
+          'insideSE',
+          'outsideSW',
+          'outsideSE',
+        ];
+        data.combatantData.forEach((tile) => {
+          if (tile.PosX !== undefined && tile.PosY !== undefined) {
+            let unsafeTile: FloorTile;
+            if (tile.PosX < centerX) { // west
+              if (tile.PosY < 90)
+                unsafeTile = 'outsideNW';
+              else if (tile.PosY > 110)
+                unsafeTile = 'outsideSW';
+              else
+                unsafeTile = tile.PosY < centerY ? 'insideNW' : 'insideSW';
+            } else { // east
+              if (tile.PosY < 90)
+                unsafeTile = 'outsideNE';
+              else if (tile.PosY > 110)
+                unsafeTile = 'outsideSE';
+              else
+                unsafeTile = tile.PosY < centerY ? 'insideNE' : 'insideSE';
+            }
+            safeTiles = safeTiles.filter((tile) => tile !== unsafeTile);
+          }
+        });
+        if (safeTiles.length !== 1)
+          return output.default!();
+        const safeTile = safeTiles[0];
+        if (safeTile === undefined)
+          return output.default!();
+        return output[safeTile]!();
+      },
+      outputStrings: {
+        outsideNW: {
+          en: '북서 바깥',
+        },
+        outsideNE: {
+          en: '북동 바깥',
+        },
+        insideNW: {
+          en: '북서 안',
+        },
+        insideNE: {
+          en: '북동 안',
+        },
+        insideSW: {
+          en: '남서 안',
+        },
+        insideSE: {
+          en: '남동 안',
+        },
+        outsideSW: {
+          en: '남서 바깥',
+        },
+        outsideSE: {
+          en: '남동 바깥',
+        },
+        default: {
+          en: '안전한 곳 찾아요',
+        },
+      },
     },
     {
       id: 'P12S 테오의 알테마',
