@@ -3154,13 +3154,14 @@ const triggerSet: TriggerSet<Data> = {
       netRegex: { effectId: 'E06' },
       alertText: (data, matches, output) => {
         data.caloric1Buff[matches.target] = 'fire';
-        const duration = parseInt(matches.duration);
+        const duration = parseFloat(matches.duration);
         if (duration < 12 && matches.target === data.me)
           return output.text!();
       },
       outputStrings: {
         text: {
           en: '또다시 불! 무직이랑 뭉쳐요',
+          ja: '再び炎！無職とあたまわり',
         },
       },
     },
@@ -3256,8 +3257,8 @@ const triggerSet: TriggerSet<Data> = {
             ja: '自分に初炎!', // FIXME
           },
           fireOn: {
-            en: '불 교대: ${target}',
-            ja: '初炎: ${target}',
+            en: '불 교대: ${player}',
+            ja: '初炎: ${player}',
           },
         };
 
@@ -3267,7 +3268,7 @@ const triggerSet: TriggerSet<Data> = {
         if (data.me === matches.target)
           return { alarmText: output.fireOnMe!() };
         if (data.palladionGrapsTarget === data.me)
-          return { infoText: output.fireOn!({ target: data.party.aJobName(matches.target) }) };
+          return { infoText: output.fireOn!({ player: data.party.aJobName(matches.target) }) };
       },
     },
     {
@@ -3291,7 +3292,7 @@ const triggerSet: TriggerSet<Data> = {
     {
       id: 'P12S Caloric Theory 2 Pass',
       type: 'GainsEffect',
-      netRegex: { effectId: ['E08'] },
+      netRegex: { effectId: 'E08' },
       condition: (data) => data.caloricCounter === 2,
       durationSeconds: 3,
       response: (data, matches, output) => {
