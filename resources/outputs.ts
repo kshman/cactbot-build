@@ -102,6 +102,9 @@ export default {
     cn: '双T扇形死刑',
     ko: '광역 탱버',
   },
+  tankBusterCleavesOnYou: {
+    en: 'Tank Cleaves on YOU',
+  },
   avoidTankCleave: {
     en: '탱크클레브 피해욧',
     de: 'Tank Cleave ausweichen',
