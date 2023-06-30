@@ -36,7 +36,7 @@ const jobIndexToName: Record<number, string> = {
   29: '로그',
   30: '닌자',
   31: '기공사',
-  32: '다크나이트',
+  32: '암흑기사',
   33: '점쟁이',
   34: '사무라이',
   35: '레드메',
@@ -89,6 +89,50 @@ const jobIndexToPriority: Record<number, number> = {
   38: 403, // 춤꾼
   39: 303, // 리퍼
   40: 203, // 현자
+};
+// 직업 순위를 이름으로
+const jobPriorityToName: Record<number, string> = {
+  101: '암흑기사',
+  102: '전사',
+  103: '총칼이',
+  104: '나이트',
+  201: '뱅마',
+  202: '점쟁이',
+  203: '현자',
+  204: '학자',
+  301: '사무라이',
+  302: '몽크',
+  303: '리퍼',
+  304: '류상',
+  305: '닌자',
+  401: '기공사',
+  402: '바드',
+  403: '춤꾼',
+  501: '흥마',
+  502: '레드메',
+  503: '소환사',
+  599: '블루메',
+  8102: '도끼맨',
+  8104: '검술사',
+  8201: '환술사',
+  8302: '격투사',
+  8304: '랜서',
+  8305: '로그',
+  8402: '활쟁이',
+  8501: '주술사',
+  8503: '비술사',
+  9101: '목수',
+  9102: '대장장이',
+  9103: '갑옷장인',
+  9104: '보석장인',
+  9105: '가죽장인',
+  9106: '재봉사',
+  9107: '연금술사',
+  9108: '요리사',
+  9201: '광부',
+  9202: '원예사',
+  9203: '어부',
+  9999: '몰?루',
 };
 
 export type MarkerOutput8 =
@@ -266,8 +310,8 @@ const Autumns = {
     return prior ?? 9999;
   },
   BuildJobPriorities: (ids: number[], separator?: string) => {
-    const priors = ids.filter((x) => jobIndexToPriority[x]).sort((a, b) => a - b);
-    const jobs = priors.map((x) => jobIndexToName[x] ?? '몰?루');
+    const priors = ids.map((x) => jobIndexToPriority[x] ?? 9999).sort((a, b) => a - b);
+    const jobs = priors.map((x) => jobPriorityToName[x]);
     return jobs.join(separator === undefined ? ', ' : separator);
   },
 } as const;

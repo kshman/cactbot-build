@@ -102,6 +102,9 @@ export default {
     cn: '双T扇形死刑',
     ko: '광역 탱버',
   },
+  tankBusterCleavesOnYou: {
+    en: 'Tank Cleaves on YOU',
+  },
   avoidTankCleave: {
     en: '탱크클레브 피해욧',
     de: 'Tank Cleave ausweichen',
@@ -613,7 +616,7 @@ export default {
   },
   moveAway: {
     // move away to dodge aoes
-    en: '다른 데로 피해요!',
+    en: '피해욧!',
     de: 'Bewegen!',
     fr: 'Bougez !',
     ja: '避けて！',
