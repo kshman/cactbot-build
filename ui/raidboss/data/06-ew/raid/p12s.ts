@@ -2816,14 +2816,21 @@ const triggerSet: TriggerSet<Data> = {
           beta: {
             en: 'β🟨',
           },
+          simple: {
+            en: '${marker} + ${tether}',
+          },
         };
 
-        if (
-          Object.keys(data.conceptData).length !== 12 ||
-          data.conceptDebuff === undefined ||
-          data.conceptPair === undefined
-        )
+        if (data.conceptDebuff === undefined || data.conceptPair === undefined)
           return;
+
+        const failStr = output.simple!({
+          marker: output[data.conceptPair]!(),
+          tether: output[data.conceptDebuff]!(),
+        });
+
+        if (Object.keys(data.conceptData).length !== 12)
+          return { infoText: failStr };
 
         let myColumn: number | undefined;
         let myRow: number | undefined;
@@ -2839,7 +2846,7 @@ const triggerSet: TriggerSet<Data> = {
           const columnOrder =
             columnOrderFromConfig[data.triggerSetConfig.classicalConceptsPairOrder];
           if (columnOrder?.length !== 4)
-            return;
+            return { infoText: failStr };
 
           myColumn = columnOrder.indexOf(data.conceptPair);
           const myColumnLocations = [
@@ -2849,7 +2856,7 @@ const triggerSet: TriggerSet<Data> = {
           ];
           const [north, middle, south] = myColumnLocations;
           if (north === undefined || middle === undefined || south === undefined)
-            return;
+            return { infoText: failStr };
 
           let myColumnBlueLocation: number;
           if (data.conceptData[north] === 'blue')
@@ -2885,30 +2892,31 @@ const triggerSet: TriggerSet<Data> = {
             // but this has never been observed in-game, and it generates two valid solution sets.
             // Since there is no single solution, we should not generate an output for it.
             const possible1 = possibleLocations[0];
-            if (possible1 !== undefined) {
-              const possible1AdjacentsMap = getConceptMap(possible1);
-              for (let x = 0; x < possible1AdjacentsMap.length; x++) {
-                const [possibleAdjacentLocation] = possible1AdjacentsMap[x] ?? [];
-                if (possibleAdjacentLocation === undefined)
-                  continue;
-                const possibleAdjacentColor = data.conceptData[possibleAdjacentLocation];
-                if (
-                  possibleAdjacentColor === 'blue' &&
-                  possibleAdjacentLocation !== myColumnBlueLocation
-                ) {
-                  // there's an adjacent blue (not the one the player is responsible for), so possibleLocations[0] is eliminated
-                  myIntercept = possibleIntercepts[1];
-                  break;
-                }
-                if (x === possible1AdjacentsMap.length - 1) {
-                  // last iteration & none of the adjacent shapes to possibleLocations[0] is a blue, so it's our spot
-                  myIntercept = possibleIntercepts[0];
-                }
+            if (possible1 === undefined)
+              return { infoText: failStr };
+
+            const possible1AdjacentsMap = getConceptMap(possible1);
+            for (let x = 0; x < possible1AdjacentsMap.length; x++) {
+              const [possibleAdjacentLocation] = possible1AdjacentsMap[x] ?? [];
+              if (possibleAdjacentLocation === undefined)
+                continue;
+              const possibleAdjacentColor = data.conceptData[possibleAdjacentLocation];
+              if (
+                possibleAdjacentColor === 'blue' &&
+                possibleAdjacentLocation !== myColumnBlueLocation
+              ) {
+                // there's an adjacent blue (not the one the player is responsible for), so possibleLocations[0] is eliminated
+                myIntercept = possibleIntercepts[1];
+                break;
+              }
+              if (x === possible1AdjacentsMap.length - 1) {
+                // last iteration & none of the adjacent shapes to possibleLocations[0] is a blue, so it's our spot
+                myIntercept = possibleIntercepts[0];
               }
             }
           }
           if (myIntercept === undefined)
-            return;
+            return { infoText: failStr };
 
           const interceptDelta = myIntercept - myColumnBlueLocation;
           if (interceptDelta === -1)
@@ -2917,9 +2925,8 @@ const triggerSet: TriggerSet<Data> = {
             myInterceptOutput = 'leanEast';
           else if (interceptDelta === 1)
             myInterceptOutput = 'leanSouth';
-          // interceptDelta === -5
           else
-            myInterceptOutput = 'leanWest';
+            myInterceptOutput = 'leanWest'; // interceptDelta === -5
 
           if (data.phase === 'classical2') {
             data.classical2InitialColumn = myColumn;
@@ -2944,12 +2951,12 @@ const triggerSet: TriggerSet<Data> = {
         }
 
         if (myColumn === undefined || myRow === undefined || myInterceptOutput === undefined)
-          return;
+          return { infoText: failStr };
 
         const columnOutput = ['outsideWest', 'insideWest', 'insideEast', 'outsideEast'][myColumn];
         const rowOutput = ['northRow', 'middleRow', 'southRow'][myRow];
         if (columnOutput === undefined || rowOutput === undefined)
-          return;
+          return { infoText: failStr };
 
         let outputStr;
         if (data.phase === 'classical1') {
@@ -3601,12 +3608,7 @@ const triggerSet: TriggerSet<Data> = {
       netRegex: { id: '831F', source: 'Pallas Athena', capture: false },
       delaySeconds: 0.5,
       suppressSeconds: 2,
-      alarmText: (_data, _matches, output) => output.text!(),
-      outputStrings: {
-        text: {
-          en: '흩어져욧! 달려욧!',
-        },
-      },
+      response: Responses.spread('alarm'),
     },
     {
       id: 'P12S 클래식 컨셉 회피 위치',
