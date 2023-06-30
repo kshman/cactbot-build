@@ -616,7 +616,7 @@ export default {
   },
   moveAway: {
     // move away to dodge aoes
-    en: '다른 데로 피해요!',
+    en: '피해욧!',
     de: 'Bewegen!',
     fr: 'Bougez !',
     ja: '避けて！',

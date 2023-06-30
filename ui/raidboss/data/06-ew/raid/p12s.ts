@@ -11,32 +11,25 @@ import { TriggerSet } from '../../../../../types/trigger';
 
 // TODO: add phase dash calls?? (maybe this is overkill)
 
-// TODO: palladian grasp tankbusters (which are often invulned)
 // TODO: crush helm tankbusters??? (+esuna calls for non-invulning tanks??)
-// TODO: gaiochos group up for chains / break chains calls
-//       (also maybe delay the second horizontal/vertical call until after break chains)
-// TODO: summon darkness tether break locations
-// TODO: more aoe calls for caloric, classical, gaiaochos (big?)
-// TODO: basic caloric headmarkers (e.g. beacons, initial fire spread)
-// TODO: other caloric buff calls (if there's any universal strat, e.g. wind spreads)
-// TODO: classical shape headmarker + pyramid/cube call
-// TODO: bait proteans / move calls for classical 1 and 2
+// TODO: gaiochos group up for chains
+// TODO: delay the second horizontal/vertical call until after break chains (or combine!)
+// TODO: summon darkness tether break locations for gaiaochos 1 and 2
+// TODO: bait protean calls for classical 1 and 2
 
 // TODO: add triggerset ui for playstation order + classical location
 // TODO: detect(?!) hex strat for caloric2 and tell people who to go to??
 
-// umbral=라이트=노랑=하양 / astral=다크=보라=깜장
-// DF8:Umbral Tilt                  노랑 타워
-// DF9:Astral Tilt                  보라 타워
-// DFA:Heavensflame Soul
-// DFB:Umbralbright Soul        타워 설치
-// DFC:Astralbright Soul        타워 설치
-// DFD:Umbralstrong Soul
-// DFE:Astralstrong Soul
-type TypeUmbralAstral = 'umbral' | 'astral' | 'unknown';
-type TypePlaystation = 'circle' | 'cross' | 'triangle' | 'square';
-type TypeAlphaBeta = 'alpha' | 'beta';
-type TypeCaloric = 'fire' | 'wind';
+type Phase =
+  | 'superchain1'
+  | 'palladion'
+  | 'superchain2a'
+  | 'superchain2b'
+  | 'gaiaochos'
+  | 'classical'
+  | 'caloric'
+  | 'ekpyrosis'
+  | 'pangenesis';
 
 const centerX = 100;
 const centerY = 100;
@@ -157,11 +150,13 @@ const headmarkers = {
   // vfx/lockon/eff/lockon_batu_01v.avfx
   playstationCross: '0172',
   // vfx/lockon/eff/m0124trg_a4c.avfx
-  caloric1Beacon: '0193',
+  caloric1Beacon: '012F',
   // vfx/lockon/eff/lockon8_line_1v.avfx
   caloric2InitialFire: '01D6',
   // vfx/lockon/eff/d1014trg_8s_0v.avfx
   caloric2Wind: '01D5',
+  // 가이아오초스 작아지는 마커
+  gaiaochosMinimal: '0061',
 } as const;
 
 const limitCutMap: { [id: string]: number } = {
@@ -189,6 +184,10 @@ type FloorTile =
   | 'outsideSW'
   | 'outsideSE';
 
+type TypeUmbralAstral = 'umbral' | 'astral' | 'unknown';
+type PlaystationMarker = 'circle' | 'cross' | 'triangle' | 'square';
+type CaloricMarker = 'fire' | 'wind';
+
 const getHeadmarkerId = (data: Data, matches: NetMatches['HeadMarker']) => {
   if (data.decOffset === undefined) {
     if (data.expectedFirstHeadmarker === undefined) {
@@ -201,20 +200,11 @@ const getHeadmarkerId = (data: Data, matches: NetMatches['HeadMarker']) => {
 };
 
 export interface Data extends RaidbossData {
-  prsPhase: number; // 지금은 편리하지만 스킵이 있으면 이거 깨지므로 수정해야함
   // 전반
   prsTrinityInvul?: boolean;
   prsApoPeri?: number;
   // 후반
-  prsPalladionGraps?: string;
   prsUltima?: number;
-  prsClassicMarker: { [name: string]: TypePlaystation };
-  prsClassicAlphaBeta: { [name: string]: TypeAlphaBeta };
-  prsCaloric1First: string[];
-  prsCaloric1Buff: { [name: string]: TypeCaloric };
-  prsCaloric1Mine?: TypeCaloric;
-  prsCaloric2Fire?: string;
-  prsCaloric2Count: number;
   prsSeenPangenesis?: boolean;
   prsPangenesisCount: { [name: string]: number };
   prsPangenesisStat: { [name: string]: TypeUmbralAstral };
@@ -225,7 +215,7 @@ export interface Data extends RaidbossData {
   decOffset?: number;
   expectedFirstHeadmarker?: string;
   isDoorBoss: boolean;
-  phase?: 'superchain1' | 'palladion' | 'superchain2a' | 'superchain2b';
+  phase?: Phase;
   combatantData: PluginCombatantState[];
   paradeigmaCounter: number;
   glaukopisFirstHit?: string;
@@ -254,6 +244,18 @@ export interface Data extends RaidbossData {
   superchain2bSecondMech?: 'protean' | 'partners';
   superchain2bSecondDir?: 'east' | 'west';
   sampleTiles: NetMatches['Tether'][];
+  gaiaochosCounter: number;
+  palladionGrapsTarget?: string;
+  classicalCounter: number;
+  classicalMarker: { [name: string]: PlaystationMarker };
+  classicalAlphaBeta: { [name: string]: 'alpha' | 'beta' };
+  caloricCounter: number;
+  caloric1First: string[];
+  caloric1Buff: { [name: string]: CaloricMarker };
+  caloric1Mine?: CaloricMarker;
+  caloric2Fire?: string;
+  caloric2PassCount: number;
+  gaiochosTetherCollect: string[];
 }
 
 const triggerSet: TriggerSet<Data> = {
@@ -297,12 +299,6 @@ const triggerSet: TriggerSet<Data> = {
   timelineFile: 'p12s.txt',
   initData: () => {
     return {
-      prsPhase: 0,
-      prsClassicMarker: {},
-      prsClassicAlphaBeta: {},
-      prsCaloric1First: [],
-      prsCaloric1Buff: {},
-      prsCaloric2Count: 0,
       prsPangenesisCount: {},
       prsPangenesisStat: {},
       prsPangenesisDuration: {},
@@ -325,6 +321,15 @@ const triggerSet: TriggerSet<Data> = {
       superchainCollect: [],
       whiteFlameCounter: 0,
       sampleTiles: [],
+      gaiaochosCounter: 0,
+      classicalCounter: 0,
+      classicalMarker: {},
+      classicalAlphaBeta: {},
+      caloricCounter: 0,
+      caloric1First: [],
+      caloric1Buff: {},
+      caloric2PassCount: 0,
+      gaiochosTetherCollect: [],
     };
   },
   timelineTriggers: [
@@ -362,14 +367,13 @@ const triggerSet: TriggerSet<Data> = {
         data.whiteFlameCounter = 0;
         data.superchainCollect = [];
 
-        const phaseMap: { [id: string]: Data['phase'] } = {
+        const phaseMap: { [id: string]: Phase } = {
           '82DA': 'superchain1',
           '82F5': 'palladion',
           '86FA': 'superchain2a',
           '86FB': 'superchain2b',
         } as const;
         data.phase = phaseMap[matches.id];
-        data.prsPhase++;
       },
     },
     {
@@ -380,6 +384,33 @@ const triggerSet: TriggerSet<Data> = {
       run: (data) => {
         data.isDoorBoss = false;
         data.expectedFirstHeadmarker = headmarkers.palladianGrasp;
+      },
+    },
+    {
+      id: 'P12S Phase Tracker 3',
+      type: 'StartsUsing',
+      netRegex: { id: ['8326', '8331', '8338', '831E', '833F'], source: 'Pallas Athena' },
+      run: (data, matches) => {
+        switch (matches.id) {
+          case '8326':
+            data.phase = 'gaiaochos';
+            data.gaiaochosCounter++;
+            break;
+          case '8331':
+            data.phase = 'classical';
+            data.classicalCounter++;
+            break;
+          case '8338':
+            data.phase = 'caloric';
+            data.caloricCounter++;
+            break;
+          case '831E':
+            data.phase = 'ekpyrosis';
+            break;
+          case '833F':
+            data.phase = 'pangenesis';
+            break;
+        }
       },
     },
     {
@@ -405,10 +436,7 @@ const triggerSet: TriggerSet<Data> = {
       id: 'P12S Paradeigma Counter',
       type: 'StartsUsing',
       netRegex: { id: '82ED', capture: false },
-      run: (data) => {
-        data.paradeigmaCounter++;
-        data.prsPhase++;
-      },
+      run: (data) => data.paradeigmaCounter++,
     },
     {
       id: 'P12S Paradeigma 1 Clones',
@@ -1308,6 +1336,7 @@ const triggerSet: TriggerSet<Data> = {
       type: 'GainsEffect',
       netRegex: { effectId: engravement3TheosSoulIds },
       condition: (data, matches) => data.engravementCounter === 3 && data.me === matches.target,
+      durationSeconds: 6,
       alertText: (_data, matches, output) => {
         const engraveLabel = engravementLabelMap[matches.effectId];
         if (engraveLabel === undefined)
@@ -2481,11 +2510,10 @@ const triggerSet: TriggerSet<Data> = {
       id: 'P12S Geocentrism Vertical',
       type: 'StartsUsing',
       netRegex: { id: '8329', source: 'Pallas Athena', capture: false },
-      condition: (data) => !data.options.AutumnStyle,
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '흩어져요: ‖',
+          en: '전체 공격 + 흩어져요: ‖',
           de: 'Vertikal',
           fr: 'Vertical',
           ja: '横',
@@ -2498,11 +2526,10 @@ const triggerSet: TriggerSet<Data> = {
       id: 'P12S Geocentrism Circle',
       type: 'StartsUsing',
       netRegex: { id: '832A', source: 'Pallas Athena', capture: false },
-      condition: (data) => !data.options.AutumnStyle,
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '흩어져요: ◎',
+          en: '전체 공격 + 흩어져요: ◎',
           de: 'Innerer Kreis',
           fr: 'Cercle intérieur',
           ja: 'ドーナツ',
@@ -2515,597 +2542,15 @@ const triggerSet: TriggerSet<Data> = {
       id: 'P12S Geocentrism Horizontal',
       type: 'StartsUsing',
       netRegex: { id: '832B', source: 'Pallas Athena', capture: false },
-      condition: (data) => !data.options.AutumnStyle,
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '흩어져요: 〓',
+          en: '전체 공격 + 흩어져요: 〓',
           de: 'Horizontal',
           fr: 'Horizontal',
           ja: '縦',
           cn: '水平',
           ko: '가로',
-        },
-      },
-    },
-    {
-      id: 'P12S 후반 페이즈 확인',
-      type: 'StartsUsing',
-      netRegex: {
-        id: ['8326', '8331', '8338', '831E', '833F'],
-        source: 'Pallas Athena',
-        capture: false,
-      },
-      run: (data) => {
-        // 8326 가이아오코스
-        // 8331 클래식 컨셉
-        // 8338 칼로리
-        // 831E 에크파이로시스
-        // 833F 판제네시스
-        if (data.prsPhase < 100)
-          data.prsPhase = 0;
-        data.prsPhase += 100;
-      },
-    },
-    {
-      id: 'P12S 줄 적과 연결',
-      type: 'Tether',
-      netRegex: { id: '0001' },
-      suppressSeconds: 2,
-      alertText: (data, matches, output) => {
-        if (data.prsPhase === 900) {
-          // 가이아오코스2 천사랑 연결
-          if (data.party.isDPS(matches.target)) {
-            if (data.role !== 'dps')
-              return output.tetherBarrier!();
-          } else if (data.role === 'dps')
-            return output.tetherBarrier!();
-        } else if (data.prsPhase === 200 || data.prsPhase === 600) {
-          // 클래식 컨셉 줄달리면 자기 자리 알려줌
-          const myPs = data.prsClassicMarker[data.me];
-          const myAb = data.prsClassicAlphaBeta[data.me];
-          if (myPs === undefined || myAb === undefined)
-            return;
-
-          const iPs = { circle: 1, triangle: 2, square: 3, cross: 4 }[myPs];
-          const iAb = { alpha: 0, beta: 1 }[myAb];
-          if (data.prsPhase === 200)
-            return output[`c1Safe${iPs}${iAb}`]!();
-          return output[`c2Safe${iPs}${iAb}`]!();
-        }
-      },
-      outputStrings: {
-        // 가이아오코스2
-        tetherBarrier: {
-          en: '줄 앞에 막아줘요',
-        },
-        // 클래식 컨셉1
-        c1Safe10: {
-          en: '🡼🡼🡼', // 알파, 동글
-        },
-        c1Safe20: {
-          en: '오른쪽🡹🡹🡹', // 알파, 세모
-        },
-        c1Safe30: {
-          en: '🡽🡽🡽', // 알파, 네모
-        },
-        c1Safe40: {
-          en: '왼쪽🡹🡹🡹', // 알파, 가위
-        },
-        c1Safe11: {
-          en: '🡿🡿🡿', // 베타, 동글
-        },
-        c1Safe21: {
-          en: '오른쪽🡻🡻🡻', // 베타, 세모
-        },
-        c1Safe31: {
-          en: '🡾🡾🡾', // 베타, 네모
-        },
-        c1Safe41: {
-          en: '왼쪽🡻🡻🡻', // 베타, 가위
-        },
-        // 클래식 컨셉2
-        c2Safe10: {
-          en: '4번 🡹🡹🡹', // 알파, 동글
-        },
-        c2Safe20: {
-          en: '2번 🡹🡹🡹', // 알파, 세모
-        },
-        c2Safe30: {
-          en: '1번 🡹🡹🡹', // 알파, 네모
-        },
-        c2Safe40: {
-          en: '3번 🡹🡹🡹', // 알파, 가위
-        },
-        c2Safe11: {
-          en: '4번 🡻🡻🡻', // 베타, 동글
-        },
-        c2Safe21: {
-          en: '2번 🡻🡻🡻', // 베타, 세모
-        },
-        c2Safe31: {
-          en: '1번 🡻🡻🡻', // 베타, 네모
-        },
-        c2Safe41: {
-          en: '3번 🡻🡻🡻', // 베타, 가위
-        },
-      },
-    },
-    {
-      id: 'P12S 알테마',
-      type: 'StartsUsing',
-      netRegex: { id: ['8682', '86F6'], source: 'Pallas Athena', capture: false },
-      alertText: (data, _match, output) => {
-        data.prsUltima = (data.prsUltima ?? 0) + 1;
-        return output.text!({ num: data.prsUltima });
-      },
-      outputStrings: {
-        text: {
-          en: '알테마#${num} 전체 공격',
-        },
-      },
-    },
-    {
-      id: 'P12S 팔라디언 그랩스 대상',
-      type: 'HeadMarker',
-      netRegex: {},
-      run: (data, matches) => {
-        const id = getHeadmarkerId(data, matches);
-        if (id === '01D4')
-          data.prsPalladionGraps = matches.target;
-      },
-    },
-    {
-      id: 'P12S 팔라디언 그랩스',
-      type: 'StartsUsing',
-      netRegex: { id: '831A', source: 'Pallas Athena', capture: false },
-      alertText: (data, _match, output) => {
-        if (data.prsPalladionGraps === data.me)
-          return output.tank!();
-        return output.text!();
-      },
-      outputStrings: {
-        tank: {
-          en: '맵 반쪽 탱크버스터! 무적으로!',
-        },
-        text: {
-          en: '맵 반쪽 탱크버스터 피해요',
-        },
-      },
-    },
-    {
-      id: 'P12S 가이아오코스', // 두번옴. 참고로 작아지는 마커는 0061
-      type: 'StartsUsing',
-      netRegex: { id: '8326', source: 'Pallas Athena', capture: false },
-      alertText: (_data, _matches, output) => output.text!(),
-      outputStrings: {
-        text: {
-          en: '전체 공격 + 작아져요',
-        },
-      },
-    },
-    {
-      id: 'P12S 가이아오코스 사슬',
-      type: 'Tether',
-      netRegex: { id: '0009' },
-      // condition: (data) => data.prsPhase === 100 || data.prsPhase === 900,
-      infoText: (data, matches, output) => {
-        if (matches.source !== data.me && matches.target !== data.me)
-          return;
-        const partner = matches.source === data.me ? matches.target : matches.source;
-        return output.breakWith!({ partner: data.party.aJobName(partner) });
-      },
-      outputStrings: {
-        breakWith: {
-          en: '사슬 끊어요! (${partner})',
-        },
-      },
-    },
-    {
-      id: 'P12S 지오센트리즘',
-      type: 'StartsUsing',
-      netRegex: { id: ['8329', '832A', '832B'], source: 'Pallas Athena' },
-      durationSeconds: 6,
-      alertText: (_data, matches, output) => {
-        const geomap: { [id: string]: string } = {
-          '8329': output.vertical!(),
-          '832A': output.donut!(),
-          '832B': output.horizontal!(),
-        };
-        const layout = geomap[matches.id] ?? output.unknown!();
-        return output.text!({ layout: layout });
-      },
-      outputStrings: {
-        text: {
-          en: '전체 공격 + 흩어져요: ${layout}',
-        },
-        vertical: {
-          en: '‖',
-        },
-        donut: {
-          en: '◎',
-        },
-        horizontal: {
-          en: '〓',
-        },
-        unknown: Outputs.unknown,
-      },
-    },
-    {
-      id: 'P12S 클래식 컨셉 플스 마커',
-      type: 'HeadMarker',
-      netRegex: {},
-      run: (data, matches) => {
-        const id = getHeadmarkerId(data, matches);
-        const psMarkerMap: { [id: string]: TypePlaystation } = {
-          '016F': 'circle',
-          '0170': 'triangle',
-          '0171': 'square',
-          '0172': 'cross',
-        };
-        const marker = psMarkerMap[id];
-        if (marker === undefined)
-          return;
-        data.prsClassicMarker[matches.target] = marker;
-      },
-    },
-    {
-      id: 'P12S 클래식 컨셉 알파 베타',
-      type: 'GainsEffect',
-      netRegex: { effectId: ['DE8', 'DE9'] },
-      run: (data, matches) => {
-        if (matches.effectId === 'DE8')
-          data.prsClassicAlphaBeta[matches.target] = 'alpha';
-        else
-          data.prsClassicAlphaBeta[matches.target] = 'beta';
-      },
-    },
-    {
-      id: 'P12S 클래식 컨셉 반전',
-      type: 'StartsUsing',
-      netRegex: { id: '8331', source: 'Pallas Athena', capture: false },
-      condition: (data) => data.prsPhase !== 200,
-      delaySeconds: 12,
-      durationSeconds: 4,
-      alertText: (data, _matches, output) => {
-        const psToNumMap: Record<TypePlaystation, number> = {
-          circle: 4,
-          triangle: 2,
-          square: 1,
-          cross: 3,
-        };
-        const myps = data.prsClassicMarker[data.me];
-        return output.revert!({ num: myps === undefined ? output.unknown!() : psToNumMap[myps] });
-      },
-      outputStrings: {
-        revert: {
-          en: '${num}번으로 가야 해요',
-        },
-        unknown: Outputs.unknown,
-      },
-    },
-    {
-      id: 'P12S 클래식 컨셉 알랴줌',
-      type: 'Ability',
-      netRegex: { id: '8331', source: 'Pallas Athena', capture: false },
-      delaySeconds: 2,
-      durationSeconds: (data) => data.prsPhase === 200 ? 9 : 16,
-      suppressSeconds: 2,
-      infoText: (data, _matches, output) => {
-        const myPs = data.prsClassicMarker[data.me];
-        const myAb = data.prsClassicAlphaBeta[data.me];
-        if (myPs === undefined || myAb === undefined)
-          return;
-
-        const outPs = output[myPs]!();
-        const outAb = output[myAb]!();
-        return output.text!({ ps: outPs, ab: outAb });
-      },
-      outputStrings: {
-        text: {
-          en: '${ps} + ${ab}',
-        },
-        circle: {
-          en: '1번⚪',
-        },
-        triangle: {
-          en: '3번⨻',
-        },
-        square: {
-          en: '4번⬜',
-        },
-        cross: {
-          en: '2번❌',
-        },
-        alpha: {
-          en: '알파 🟥삼각',
-        },
-        beta: {
-          en: '베타 🟨사각',
-        },
-      },
-    },
-    {
-      id: 'P12S 클래식 컨셉 피해욧',
-      type: 'Ability',
-      netRegex: { id: '8323', source: 'Pallas Athena', capture: false },
-      delaySeconds: 2.5,
-      durationSeconds: 4,
-      alarmText: (_data, _matches, output) => output.text!(),
-      outputStrings: {
-        text: {
-          en: '피해욧',
-        },
-      },
-    },
-    {
-      id: 'P12S 크러시 헬름',
-      type: 'StartsUsing',
-      netRegex: { id: '8317', source: 'Pallas Athena', capture: false },
-      durationSeconds: 7,
-      alertText: (data, _matches, output) => {
-        if (data.role === 'tank')
-          return output.tank!();
-        if (data.role === 'healer')
-          return output.healer!();
-      },
-      outputStrings: {
-        tank: {
-          en: '탱크버스터! 에스나 받아욧',
-        },
-        healer: {
-          en: '탱크버스터! 에스나 준비해욧',
-        },
-      },
-    },
-    {
-      id: 'P12S 칼로리1 첫 불',
-      type: 'HeadMarker',
-      netRegex: {},
-      run: (data, matches) => {
-        const id = getHeadmarkerId(data, matches);
-        if (id !== '012F')
-          return;
-        data.prsCaloric1First.push(matches.target);
-      },
-    },
-    {
-      id: 'P12S 칼로리1 시작',
-      type: 'StartsUsing',
-      netRegex: { id: '8338', source: 'Pallas Athena', capture: false },
-      condition: (data) => data.prsPhase === 300,
-      preRun: (data) => {
-        data.prsCaloric1Buff = {};
-        data.prsCaloric1Mine = undefined;
-      },
-      delaySeconds: 1,
-      alertText: (data, _matches, output) => {
-        if (data.prsCaloric1First.length !== 2)
-          return;
-        const index = data.prsCaloric1First.indexOf(data.me);
-        if (index < 0)
-          return;
-
-        const partner = index === 0 ? 1 : 0;
-        return output.text1st!({ partner: data.party.aJobName(data.prsCaloric1First[partner]) });
-      },
-      outputStrings: {
-        text1st: {
-          en: '첫 불! 앞으로! (${partner})',
-        },
-      },
-    },
-    {
-      id: 'P12S 칼로릭1 바람', // 바람: Atmosfaction
-      type: 'GainsEffect',
-      netRegex: { effectId: 'E07' },
-      run: (data, matches) => data.prsCaloric1Buff[matches.target] = 'wind',
-    },
-    {
-      id: 'P12S 칼로릭1 불', // 불: Pyrefaction
-      type: 'GainsEffect',
-      netRegex: { effectId: 'E06' },
-      alertText: (data, matches, output) => {
-        data.prsCaloric1Buff[matches.target] = 'fire';
-
-        const duration = parseInt(matches.duration);
-        if (duration === 11 && matches.target === data.me)
-          return output.text!();
-      },
-      outputStrings: {
-        text: {
-          en: '또다시 불! 무직이랑 뭉쳐요',
-        },
-      },
-    },
-    {
-      id: 'P12S 칼로릭1 불 터짐',
-      type: 'GainsEffect',
-      netRegex: { effectId: ['E06'] },
-      condition: (_data, matches) => parseInt(matches.duration) === 12,
-      delaySeconds: 12.8,
-      suppressSeconds: 2,
-      alertText: (data, _matches, output) => {
-        if (data.prsCaloric1Mine === 'fire' && data.prsCaloric1Buff[data.me] === undefined)
-          return output.none!();
-        if (data.prsCaloric1Mine === 'wind')
-          return output.wind!();
-      },
-      outputStrings: {
-        none: {
-          en: '무직! 불이랑 뭉쳐요!',
-        },
-        wind: {
-          en: '바람! 흩어져요!',
-        },
-      },
-    },
-    {
-      id: 'P12S 칼로리1 버프 확인',
-      type: 'Ability',
-      netRegex: { id: '8338', source: 'Pallas Athena', capture: false },
-      condition: (data) => data.prsPhase === 300,
-      delaySeconds: 2,
-      durationSeconds: 8,
-      suppressSeconds: 2,
-      infoText: (data, _matches, output) => {
-        const mystat = data.prsCaloric1Buff[data.me];
-        data.prsCaloric1Mine = mystat;
-        if (mystat === undefined)
-          return;
-
-        if (mystat === 'fire') {
-          const myteam: number[] = [];
-          for (const [name, stat] of Object.entries(data.prsCaloric1Buff)) {
-            if (stat === mystat && name !== data.me)
-              myteam.push(data.party.aJobIndex(name));
-          }
-          return output.fire!({ team: data.party.aJobSortedList(myteam) });
-        }
-
-        if (data.prsCaloric1First.includes(data.me))
-          return output.wind1st!();
-
-        const myteam: number[] = [];
-        for (const [name, stat] of Object.entries(data.prsCaloric1Buff)) {
-          if (stat === mystat && name !== data.me && !data.prsCaloric1First.includes(name))
-            myteam.push(data.party.aJobIndex(name));
-        }
-        return output.wind!({ team: data.party.aJobSortedList(myteam) });
-      },
-      run: (data) => {
-        data.prsCaloric1First = [];
-        data.prsCaloric1Buff = {};
-      },
-      outputStrings: {
-        fire: {
-          en: '불 (${team})',
-        },
-        wind: {
-          en: '바람 (${team})',
-        },
-        wind1st: {
-          en: '바람, 살짝 옆으로',
-        },
-      },
-    },
-    {
-      id: 'P12S 칼로리2 불',
-      type: 'HeadMarker',
-      netRegex: {},
-      alertText: (data, matches, output) => {
-        const id = getHeadmarkerId(data, matches);
-        if (id !== '01D6')
-          return;
-        data.prsCaloric2Fire = matches.target;
-        if (data.me === matches.target)
-          return output.text!();
-        if (data.prsPalladionGraps === data.me)
-          return output.mt!({ target: data.party.aJobName(matches.target) });
-      },
-      run: (data) => data.prsCaloric2Count = 0,
-      outputStrings: {
-        text: {
-          en: '첫 불! 한가운데로!',
-        },
-        mt: {
-          en: '불 교대: ${target}',
-        },
-      },
-    },
-    {
-      id: 'P12S 칼로리2 바람',
-      type: 'HeadMarker',
-      netRegex: {},
-      condition: (data, matches) => data.me === matches.target,
-      infoText: (data, matches, output) => {
-        const id = getHeadmarkerId(data, matches);
-        if (id !== '01D5')
-          return;
-        return output.text!();
-      },
-      outputStrings: {
-        text: {
-          en: '바람, 흩어져요',
-        },
-      },
-    },
-    {
-      id: 'P12S 칼로릭2 불 장판',
-      type: 'GainsEffect',
-      netRegex: { effectId: ['E08'] },
-      response: (data, matches, output) => {
-        // cactbot-builtin-response
-        output.responseOutputStrings = {
-          text: {
-            en: '${num}번째 불 장판',
-          },
-          text1st: {
-            en: '첫째 불 장판, 옮겨욧 반시계 방향❱❱',
-          },
-        };
-
-        if (data.prsCaloric2Fire !== matches.target)
-          data.prsCaloric2Count++;
-        if (matches.target === data.me && data.prsCaloric2Fire !== data.me) {
-          if (data.prsCaloric2Count === 1)
-            return { alertText: output.text1st!() };
-          return { infoText: output.text!({ num: data.prsCaloric2Count }) };
-        }
-      },
-      run: (data, matches) => data.prsCaloric2Fire = matches.target,
-    },
-    {
-      id: 'P12S 칼로릭2 옮겨욧',
-      type: 'Ability',
-      netRegex: { id: '833C', source: 'Pallas Athena', capture: false },
-      condition: (data) => data.prsPhase === 700,
-      alertText: (data, _matches, output) => {
-        if (data.me === data.prsCaloric2Fire) {
-          if (data.prsCaloric2Count === 7)
-            return output.last!();
-          if (data.prsCaloric2Count === 8)
-            return output.final!();
-          return output.text!();
-        }
-      },
-      run: (data) => {
-        if (data.prsCaloric2Count === 7)
-          data.prsCaloric2Count++;
-      },
-      outputStrings: {
-        text: {
-          en: '불 옮겨욧! 반시계 방향❱❱',
-        },
-        last: {
-          en: '마지막 불! 빈 곳에 버려요!',
-        },
-        final: {
-          en: '한 번 더! 빈 곳에 버려요!',
-        },
-      },
-    },
-    {
-      id: 'P12S 에크파이로시스',
-      type: 'StartsUsing',
-      netRegex: { id: '831E', source: 'Pallas Athena', capture: false },
-      alertText: (_data, _matches, output) => output.text!(),
-      outputStrings: {
-        text: {
-          en: '엑사플레어 + 전체 공격',
-        },
-      },
-    },
-    {
-      id: 'P12S 에크파이로시스 움직여',
-      type: 'Ability',
-      netRegex: { id: '831F', source: 'Pallas Athena', capture: false },
-      delaySeconds: 0.5,
-      suppressSeconds: 2,
-      alarmText: (_data, _matches, output) => output.text!(),
-      outputStrings: {
-        text: {
-          en: '흩어져욧! 달려욧!',
         },
       },
     },
@@ -3186,7 +2631,7 @@ const triggerSet: TriggerSet<Data> = {
       id: 'P12S 판제네시스 라이트', // Umbral Tilt
       type: 'GainsEffect',
       netRegex: { effectId: 'DF8' },
-      condition: (data) => data.prsPhase === 500,
+      condition: (data) => data.phase === 'pangenesis',
       run: (data, matches) => {
         if (!data.prsSeenPangenesis) {
           const cnt = data.prsPangenesisCount[matches.target];
@@ -3200,7 +2645,7 @@ const triggerSet: TriggerSet<Data> = {
       id: 'P12S 판제네시스 다크', // Astral Tilt
       type: 'GainsEffect',
       netRegex: { effectId: 'DF9' },
-      condition: (data) => data.prsPhase === 500,
+      condition: (data) => data.phase === 'pangenesis',
       run: (data, matches) => {
         if (!data.prsSeenPangenesis) {
           const cnt = data.prsPangenesisCount[matches.target];
@@ -3287,6 +2732,585 @@ const triggerSet: TriggerSet<Data> = {
           data.prsPangenesisDuration = {};
           delete data.prsPangenesisTilt;
         }
+      },
+    },
+    {
+      id: 'P12S Ultima Blow Tether Collect',
+      type: 'Tether',
+      netRegex: { id: '0001' },
+      condition: (data) => data.phase === 'gaiaochos' && data.gaiaochosCounter === 2,
+      run: (data, matches) => data.gaiochosTetherCollect.push(matches.target),
+    },
+    {
+      id: 'P12S Ultima Blow Tether',
+      type: 'Tether',
+      netRegex: { id: '0001', capture: false },
+      condition: (data) => data.phase === 'gaiaochos' && data.gaiaochosCounter === 2,
+      delaySeconds: 0.5,
+      suppressSeconds: 5,
+      response: (data, _matches, output) => {
+        // cactbot-builtin-response
+        output.responseOutputStrings = {
+          blockPartner: {
+            en: '줄 앞에 막아줘요',
+            ja: '相棒の前でビームを受ける',
+          },
+          stretchTether: {
+            en: '줄 늘려요',
+          },
+        };
+
+        if (data.gaiochosTetherCollect.includes(data.me))
+          return { infoText: output.stretchTether!() };
+        return { alertText: output.blockPartner!() };
+      },
+      // If people die, it's not always on the opposite role, so just re-collect.
+      run: (data) => data.gaiochosTetherCollect = [],
+    },
+    {
+      id: 'P12S 클래식 컨셉 회피 위치',
+      type: 'Tether',
+      netRegex: { id: '0001', capture: false },
+      condition: (data) => data.phase === 'classical',
+      suppressSeconds: 2,
+      alertText: (data, _matches, output) => {
+        const myPs = data.classicalMarker[data.me];
+        const myAb = data.classicalAlphaBeta[data.me];
+        if (myPs === undefined || myAb === undefined)
+          return;
+
+        const iPs = { circle: 1, triangle: 2, square: 3, cross: 4 }[myPs];
+        const iAb = { alpha: 0, beta: 1 }[myAb];
+        if (data.classicalCounter === 1)
+          return output[`c1Safe${iPs}${iAb}`]!();
+        return output[`c2Safe${iPs}${iAb}`]!();
+      },
+      outputStrings: {
+        c1Safe10: {
+          en: '🡼🡼🡼', // 알파, 동글
+        },
+        c1Safe20: {
+          en: '오른쪽🡹🡹🡹', // 알파, 세모
+        },
+        c1Safe30: {
+          en: '🡽🡽🡽', // 알파, 네모
+        },
+        c1Safe40: {
+          en: '왼쪽🡹🡹🡹', // 알파, 가위
+        },
+        c1Safe11: {
+          en: '🡿🡿🡿', // 베타, 동글
+        },
+        c1Safe21: {
+          en: '오른쪽🡻🡻🡻', // 베타, 세모
+        },
+        c1Safe31: {
+          en: '🡾🡾🡾', // 베타, 네모
+        },
+        c1Safe41: {
+          en: '왼쪽🡻🡻🡻', // 베타, 가위
+        },
+        // 클래식 컨셉2
+        c2Safe10: {
+          en: '4번 🡹🡹🡹', // 알파, 동글
+        },
+        c2Safe20: {
+          en: '2번 🡹🡹🡹', // 알파, 세모
+        },
+        c2Safe30: {
+          en: '1번 🡹🡹🡹', // 알파, 네모
+        },
+        c2Safe40: {
+          en: '3번 🡹🡹🡹', // 알파, 가위
+        },
+        c2Safe11: {
+          en: '4번 🡻🡻🡻', // 베타, 동글
+        },
+        c2Safe21: {
+          en: '2번 🡻🡻🡻', // 베타, 세모
+        },
+        c2Safe31: {
+          en: '1번 🡻🡻🡻', // 베타, 네모
+        },
+        c2Safe41: {
+          en: '3번 🡻🡻🡻', // 베타, 가위
+        },
+      },
+    },
+    {
+      id: 'P12S Ultima',
+      type: 'StartsUsing',
+      netRegex: { id: ['8682', '86F6'], source: 'Pallas Athena', capture: false },
+      alertText: (data, _match, output) => {
+        data.prsUltima = (data.prsUltima ?? 0) + 1;
+        return output.text!({ num: data.prsUltima });
+      },
+      outputStrings: {
+        text: {
+          en: '알테마#${num} 전체 공격',
+        },
+      },
+    },
+    {
+      id: 'P12S Palladian Grasp Target',
+      type: 'HeadMarker',
+      netRegex: {},
+      run: (data, matches) => {
+        const id = getHeadmarkerId(data, matches);
+        if (id === headmarkers.palladianGrasp)
+          data.palladionGrapsTarget = matches.target;
+      },
+    },
+    {
+      id: 'P12S Palladian Grasp',
+      type: 'StartsUsing',
+      netRegex: { id: '831A', source: 'Pallas Athena', capture: false },
+      response: (data, _match, output) => {
+        // cactbot-builtin-response
+        // We could suggest to swap here, but I think this is mostly invulned.
+        output.responseOutputStrings = {
+          tankBusterCleavesOnYou: {
+            en: '맵 반쪽 탱크버스터! 무적으로!',
+          },
+          tankBusterCleaves: {
+            en: '맵 반쪽 탱크버스터!',
+          },
+          avoidTankCleaves: {
+            en: '맵 반쪽 탱크버스터 피해요',
+          },
+        };
+
+        if (data.palladionGrapsTarget === data.me)
+          return { alertText: output.tankBusterCleavesOnYou!() };
+        if (data.role === 'tank' || data.role === 'healer' || data.job === 'BLU')
+          return { alertText: output.tankBusterCleaves!() };
+        return { infoText: output.avoidTankCleaves!() };
+      },
+    },
+    {
+      id: 'P12S Gaiaochos',
+      type: 'StartsUsing',
+      netRegex: { id: '8326', source: 'Pallas Athena', capture: false },
+      alertText: (_data, _matches, output) => output.text!(),
+      outputStrings: {
+        text: {
+          en: '전체 공격 + 작아져요',
+        },
+      },
+    },
+    {
+      id: 'P12S Gaiaochos tether',
+      type: 'Tether',
+      netRegex: { id: '0009' },
+      infoText: (data, matches, output) => {
+        if (matches.source !== data.me && matches.target !== data.me)
+          return;
+        const partner = matches.source === data.me ? matches.target : matches.source;
+        return output.breakWith!({ partner: data.party.aJobName(partner) });
+      },
+      outputStrings: {
+        breakWith: {
+          en: '사슬 끊어요! (${partner})',
+          ja: '線切る (${partner})',
+        },
+      },
+    },
+    {
+      id: 'P12S The Classical Concepts PS marker',
+      type: 'HeadMarker',
+      netRegex: {},
+      run: (data, matches) => {
+        const id = getHeadmarkerId(data, matches);
+        const psMarkerMap: { [id: string]: PlaystationMarker } = {
+          [headmarkers.playstationCircle]: 'circle',
+          [headmarkers.playstationTriangle]: 'triangle',
+          [headmarkers.playstationSquare]: 'square',
+          [headmarkers.playstationCross]: 'cross',
+        } as const;
+        const marker = psMarkerMap[id];
+        if (marker === undefined)
+          return;
+        data.classicalMarker[matches.target] = marker;
+      },
+    },
+    {
+      id: 'P12S The Classical Concepts Alpha Beta',
+      type: 'GainsEffect',
+      netRegex: { effectId: ['DE8', 'DE9'] },
+      run: (data, matches) => {
+        data.classicalAlphaBeta[matches.target] = matches.effectId === 'DE8' ? 'alpha' : 'beta';
+      },
+    },
+    {
+      id: 'P12S The Classical Concepts 반전',
+      type: 'StartsUsing',
+      netRegex: { id: '8331', source: 'Pallas Athena', capture: false },
+      condition: (data) => data.classicalCounter === 2,
+      delaySeconds: 12,
+      durationSeconds: 4,
+      alertText: (data, _matches, output) => {
+        const psToNumMap: Record<PlaystationMarker, number> = {
+          circle: 4,
+          triangle: 2,
+          square: 1,
+          cross: 3,
+        };
+        const myps = data.classicalMarker[data.me];
+        return output.revert!({ num: myps === undefined ? output.unknown!() : psToNumMap[myps] });
+      },
+      outputStrings: {
+        revert: {
+          en: '${num}번으로 가야 해요',
+        },
+        unknown: Outputs.unknown,
+      },
+    },
+    {
+      id: 'P12S The Classical Concepts',
+      type: 'Ability',
+      netRegex: { id: '8331', source: 'Pallas Athena', capture: false },
+      delaySeconds: 2,
+      durationSeconds: (data) => data.classicalCounter === 1 ? 9 : 16,
+      suppressSeconds: 1,
+      infoText: (data, _matches, output) => {
+        const marker = data.classicalMarker[data.me];
+        const tether = data.classicalAlphaBeta[data.me];
+        if (marker === undefined || tether === undefined)
+          return;
+        return output.text!({ marker: output[marker]!(), shape: output[tether]!() });
+      },
+      outputStrings: {
+        text: {
+          en: '${marker} + ${shape}',
+          ja: '${marker} + ${shape}',
+        },
+        circle: {
+          en: '1번⚪',
+          de: 'Kreis',
+          fr: 'Cercle',
+          ja: '1/まる',
+          cn: '圆圈',
+          ko: '동그라미',
+        },
+        triangle: {
+          en: '3번⨻',
+          de: 'Dreieck',
+          fr: 'Triangle',
+          ja: '3/さんかく',
+          cn: '三角',
+          ko: '삼각',
+        },
+        square: {
+          en: '4번⬜',
+          de: 'Viereck',
+          fr: 'Carré',
+          ja: '4/しかく',
+          cn: '方块',
+          ko: '사각',
+        },
+        cross: {
+          en: '2번❌',
+          de: 'X',
+          fr: 'Croix',
+          ja: '2/バツ',
+          cn: 'X',
+          ko: 'X',
+        },
+        alpha: {
+          en: '알파 🟥세모',
+          ja: 'アルファ',
+        },
+        beta: {
+          en: '베타 🟨네모',
+          ja: 'ベター',
+        },
+      },
+    },
+    {
+      id: 'P12S The Classical Concepts Move',
+      type: 'Ability',
+      netRegex: { id: '8323', source: 'Pallas Athena', capture: false },
+      delaySeconds: 2.5,
+      durationSeconds: 4,
+      response: Responses.moveAway('alarm'),
+    },
+    {
+      id: 'P12S 크러시 헬름',
+      type: 'StartsUsing',
+      netRegex: { id: '8317', source: 'Pallas Athena', capture: false },
+      durationSeconds: 7,
+      alertText: (data, _matches, output) => {
+        if (data.role === 'tank')
+          return output.tank!();
+        if (data.role === 'healer')
+          return output.healer!();
+      },
+      outputStrings: {
+        tank: {
+          en: '탱크버스터! 에스나 받아욧',
+        },
+        healer: {
+          en: '탱크버스터! 에스나 준비해욧',
+        },
+      },
+    },
+    {
+      id: 'P12S Caloric Theory 1 Beacon Collect',
+      type: 'HeadMarker',
+      netRegex: {},
+      run: (data, matches) => {
+        const id = getHeadmarkerId(data, matches);
+        if (id !== headmarkers.caloric1Beacon)
+          return;
+        data.caloric1First.push(matches.target);
+      },
+    },
+    {
+      id: 'P12S Caloric Theory 1 Beacon',
+      type: 'StartsUsing',
+      netRegex: { id: '8338', source: 'Pallas Athena', capture: false },
+      condition: (data) => data.caloricCounter === 1,
+      preRun: (data) => {
+        data.caloric1Buff = {};
+        data.caloric1Mine = undefined;
+      },
+      delaySeconds: 1,
+      alertText: (data, _matches, output) => {
+        if (data.caloric1First.length !== 2)
+          return;
+        const index = data.caloric1First.indexOf(data.me);
+        if (index < 0)
+          return;
+        const partner = index === 0 ? 1 : 0;
+        return output.text1st!({ partner: data.party.aJobName(data.caloric1First[partner]) });
+      },
+      outputStrings: {
+        text1st: {
+          en: '첫 불! 앞으로! (${partner})',
+          ja: '自分に初炎 (${partner})', // FIXME
+        },
+      },
+    },
+    {
+      id: 'P12S Caloric Theory 1 Wind',
+      type: 'GainsEffect',
+      // E07 = Atmosfaction
+      netRegex: { effectId: 'E07' },
+      run: (data, matches) => data.caloric1Buff[matches.target] = 'wind',
+    },
+    {
+      id: 'P12S Caloric Theory 1 Fire',
+      type: 'GainsEffect',
+      // E06 = Pyrefaction
+      netRegex: { effectId: 'E06' },
+      alertText: (data, matches, output) => {
+        data.caloric1Buff[matches.target] = 'fire';
+        const duration = parseInt(matches.duration);
+        if (duration < 12 && matches.target === data.me)
+          return output.text!();
+      },
+      outputStrings: {
+        text: {
+          en: '또다시 불! 무직이랑 뭉쳐요',
+        },
+      },
+    },
+    {
+      id: 'P12S Caloric Theory 1 Fire Final',
+      type: 'GainsEffect',
+      netRegex: { effectId: ['E06'] },
+      condition: (_data, matches) => parseFloat(matches.duration) > 11,
+      delaySeconds: 12.8,
+      suppressSeconds: 2,
+      alertText: (data, _matches, output) => {
+        if (data.caloric1Mine === 'fire' && data.caloric1Buff[data.me] === undefined)
+          return output.none!();
+        if (data.caloric1Mine === 'wind')
+          return output.wind!();
+      },
+      outputStrings: {
+        none: {
+          en: '무직! 불이랑 뭉쳐요!',
+          ja: '無職！炎とあたまわり',
+        },
+        wind: {
+          en: '바람! 흩어져요!',
+          ja: '風！ 散会',
+        },
+      },
+    },
+    {
+      id: 'P12S Caloric Theory 1 Initial Buff',
+      type: 'Ability',
+      netRegex: { id: '8338', source: 'Pallas Athena', capture: false },
+      condition: (data) => data.caloricCounter === 1,
+      delaySeconds: 2,
+      durationSeconds: 8,
+      suppressSeconds: 1,
+      response: (data, _matches, output) => {
+        // cactbot-builtin-response
+        output.responseOutputStrings = {
+          fire: {
+            en: '불 (${team})',
+            ja: '自分に炎 (${team})',
+          },
+          wind: {
+            en: '바람 (${team})',
+            ja: '自分に風 (${team})',
+          },
+          windBeacon: {
+            en: '바람, 살짝 옆으로',
+            ja: '自分に初風', // FIXME
+          },
+        };
+
+        const myBuff = data.caloric1Buff[data.me];
+        data.caloric1Mine = myBuff;
+        if (myBuff === undefined)
+          return;
+
+        if (myBuff === 'fire') {
+          const myTeam: number[] = [];
+          for (const [name, stat] of Object.entries(data.caloric1Buff)) {
+            if (stat === myBuff && name !== data.me)
+              myTeam.push(data.party.aJobIndex(name));
+          }
+          return { alertText: output.fire!({ team: data.party.aJobSortedList(myTeam) }) };
+        }
+
+        if (data.caloric1First.includes(data.me))
+          return { infoText: output.windBeacon!() };
+
+        const myTeam: number[] = [];
+        for (const [name, stat] of Object.entries(data.caloric1Buff)) {
+          if (stat === myBuff && name !== data.me && !data.caloric1First.includes(name))
+            myTeam.push(data.party.aJobIndex(name));
+        }
+        return { alertText: output.wind!({ team: data.party.aJobSortedList(myTeam) }) };
+      },
+      run: (data) => {
+        data.caloric1First = [];
+        data.caloric1Buff = {};
+      },
+    },
+    {
+      id: 'P12S Caloric Theory 2 Fire Beacon',
+      type: 'HeadMarker',
+      netRegex: {},
+      response: (data, matches, output) => {
+        // cactbot-builtin-response
+        output.responseOutputStrings = {
+          fireOnMe: {
+            // TODO: is "first marker" ambiguous with "first person to pass fire"
+            // This is meant to be "person without wind who gets an extra stack".
+            en: '첫 불! 한가운데로!',
+            ja: '自分に初炎!', // FIXME
+          },
+          fireOn: {
+            en: '불 교대: ${target}',
+            ja: '初炎: ${target}',
+          },
+        };
+
+        const id = getHeadmarkerId(data, matches);
+        if (id !== headmarkers.caloric2InitialFire)
+          return;
+        if (data.me === matches.target)
+          return { alarmText: output.fireOnMe!() };
+        if (data.palladionGrapsTarget === data.me)
+          return { infoText: output.fireOn!({ target: data.party.aJobName(matches.target) }) };
+      },
+    },
+    {
+      id: 'P12S Caloric Theory 2 Wind',
+      type: 'HeadMarker',
+      netRegex: {},
+      condition: (data, matches) => data.me === matches.target,
+      infoText: (data, matches, output) => {
+        const id = getHeadmarkerId(data, matches);
+        if (id !== headmarkers.caloric2Wind)
+          return;
+        return output.text!();
+      },
+      outputStrings: {
+        text: {
+          en: '바람, 흩어져요',
+          ja: '自分に風、散会',
+        },
+      },
+    },
+    {
+      id: 'P12S Caloric Theory 2 Pass',
+      type: 'GainsEffect',
+      netRegex: { effectId: ['E08'] },
+      condition: (data) => data.caloricCounter === 2,
+      durationSeconds: 3,
+      response: (data, matches, output) => {
+        // cactbot-builtin-response
+        output.responseOutputStrings = {
+          passFire: {
+            en: '불 장판 옮겨욧! 반시계 방향❱❱',
+            ja: '次に移る！',
+          },
+          moveAway: Outputs.moveAway,
+        };
+
+        const prevFire = data.caloric2Fire;
+        const thisFire = matches.target;
+
+        // Order of events:
+        // - Player 1 gets the debuff at 8
+        // - Player 1 gets the debuff at 7
+        //
+        // loop:
+        // - Player 2 gets the debuff at 7
+        // - Player 1 loses the debuff
+        // - Player 2 gets the debuff at 6
+        // etc.
+        //
+        // Ignore duplicates, only consider transfers.
+        if (prevFire === thisFire)
+          return;
+
+        data.caloric2Fire = matches.target;
+        data.caloric2PassCount++;
+
+        if (thisFire !== data.me && prevFire !== data.me)
+          return;
+
+        if (data.caloric2PassCount === 8 || prevFire === data.me)
+          return { alarmText: output.moveAway!() };
+        if (thisFire === data.me)
+          return { alertText: output.passFire!() };
+      },
+    },
+    {
+      id: 'P12S Ekpyrosis Cast',
+      type: 'StartsUsing',
+      netRegex: { id: '831E', source: 'Pallas Athena', capture: false },
+      alertText: (_data, _matches, output) => output.text!(),
+      outputStrings: {
+        text: {
+          en: '엑사플레어 + 전체 공격',
+          de: 'Exaflare + Große AoE!', // FIXME
+          fr: 'ExaBrasier + Grosse AoE!', // FIXME
+          ja: 'エクサフレア + 全体攻撃',
+          cn: '地火 + 大AoE伤害！', // FIXME
+          ko: '엑사플레어 + 전체 공격!', // FIXME
+        },
+      },
+    },
+    {
+      id: 'P12S Ekpyrosis Spread',
+      type: 'Ability',
+      netRegex: { id: '831F', source: 'Pallas Athena', capture: false },
+      delaySeconds: 0.5,
+      suppressSeconds: 2,
+      alarmText: (_data, _matches, output) => output.text!(),
+      outputStrings: {
+        text: {
+          en: '흩어져욧! 달려욧!',
+        },
       },
     },
   ],
@@ -3531,3 +3555,12 @@ const triggerSet: TriggerSet<Data> = {
 };
 
 export default triggerSet;
+
+// umbral=라이트=노랑=하양 / astral=다크=보라=깜장
+// DF8:Umbral Tilt                  노랑 타워
+// DF9:Astral Tilt                  보라 타워
+// DFA:Heavensflame Soul
+// DFB:Umbralbright Soul        타워 설치
+// DFC:Astralbright Soul        타워 설치
+// DFD:Umbralstrong Soul
+// DFE:Astralstrong Soul
