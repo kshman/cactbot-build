@@ -246,6 +246,7 @@ export interface Data extends RaidbossData {
   superchain2aFirstDir?: 'north' | 'south';
   superchain2aSecondDir?: 'north' | 'south';
   superchain2aSecondMech?: 'protean' | 'partners';
+  superchain2bFirstDir?: 'north' | 'south';
   superchain2bSecondMech?: 'protean' | 'partners';
   superchain2bSecondDir?: 'east' | 'west';
   sampleTiles: NetMatches['Tether'][];
@@ -493,6 +494,7 @@ const triggerSet: TriggerSet<Data> = {
       id: 'P12S Ray of Light 1',
       type: 'StartsUsing',
       netRegex: { id: '82EE', source: 'Anthropos' },
+      condition: (data) => data.paradeigmaCounter === 2,
       suppressSeconds: 1,
       infoText: (_data, matches, output) => {
         const x = Math.round(parseFloat(matches.x));
@@ -2250,7 +2252,14 @@ const triggerSet: TriggerSet<Data> = {
         // For the first mechanic, two destination orbs span at [100,95] and [100,105]
         // Each has a short tether to either an 'in' or 'out' orb on the same N/S half of the area.
         // We therefore only need to know whether the 'in' orb is N or S to identify the safe spot.
-        const dir = parseFloat(donut.y) > 100 ? output.south!() : output.north!();
+        let dir;
+        if (parseFloat(donut.y) > 100) {
+          data.superchain2bFirstDir = 'south';
+          dir = output.south!();
+        } else {
+          data.superchain2bFirstDir = 'north';
+          dir = output.north!();
+        }
         return output.safe!({ dir: dir });
       },
       outputStrings: {
@@ -2267,8 +2276,8 @@ const triggerSet: TriggerSet<Data> = {
       type: 'AddedCombatant',
       netRegex: { npcNameId: superchainNpcNameId, npcBaseId: superchainNpcBaseIds, capture: false },
       condition: (data) => data.phase === 'superchain2b' && data.superchainCollect.length === 8,
-      delaySeconds: 6.5,
-      durationSeconds: 6, // keep active until just before Ray of Light 2
+      delaySeconds: 4.5,
+      durationSeconds: 86, // keep active until just before Ray of Light 2
       alertText: (data, _matches, output) => {
         // Sort ascending. collect: [dest1, dest2, out, partnerProtean]
         const collect = data.superchainCollect.slice(4, 8).sort((a, b) =>
@@ -2292,12 +2301,17 @@ const triggerSet: TriggerSet<Data> = {
         // The partner/protean orb is always on the same E/W half as the destination orb it is tethered to.
         // We therefore only need to know whether the partnerProteam orb is E or W to identify the safe spot.
         const x = parseFloat(partnerProtean.x);
+        data.superchain2bSecondDir = x > 100 ? 'east' : 'west';
+
+        let dirStr: 'eastFromSouth' | 'eastFromNorth' | 'westFromSouth' | 'westFromNorth';
         if (x > 100) {
           data.superchain2bSecondDir = 'east';
-          return output.combined!({ dir: output.east!(), mechanic: mechanicStr });
+          dirStr = data.superchain2bFirstDir === 'south' ? 'eastFromSouth' : 'eastFromNorth';
+        } else {
+          data.superchain2bSecondDir = 'west';
+          dirStr = data.superchain2bFirstDir === 'south' ? 'westFromSouth' : 'westFromNorth';
         }
-        data.superchain2bSecondDir = 'west';
-        return output.combined!({ dir: output.west!(), mechanic: mechanicStr });
+        return output.combined!({ dir: output[dirStr]!(), mechanic: mechanicStr });
       },
       outputStrings: {
         combined: {
@@ -2305,6 +2319,18 @@ const triggerSet: TriggerSet<Data> = {
         },
         east: Outputs.east,
         west: Outputs.west,
+        eastFromSouth: {
+          en: '동🡺🡺',
+        },
+        eastFromNorth: {
+          en: '🡸🡸동',
+        },
+        westFromSouth: {
+          en: '🡸🡸서',
+        },
+        westFromNorth: {
+          en: '서🡺🡺',
+        },
         protean: {
           en: '프로틴',
         },
@@ -2776,7 +2802,7 @@ const triggerSet: TriggerSet<Data> = {
 
         const isSameTower = tower === data.lastPangenesisTowerColor;
         if (isSameTower)
-          return { infoText: tower === 'light' ? output.lightTower!() : output.darkTower!() };
+          return { alertText: tower === 'light' ? output.lightTower!() : output.darkTower!() };
 
         if (tower === 'light')
           return { alertText: output.lightTowerSwitch!() };
