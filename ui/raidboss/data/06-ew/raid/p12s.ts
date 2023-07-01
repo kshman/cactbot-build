@@ -3402,7 +3402,7 @@ const triggerSet: TriggerSet<Data> = {
       id: 'P12S Summon Darkness Preposition',
       type: 'StartsUsing',
       netRegex: { id: '832F', source: 'Pallas Athena', capture: false },
-      condition: (data) => data.seenSecondTethers === false,
+      condition: (data) => data.seenSecondTethers === false && !data.options.AutumnStyle,
       alertText: (_data, _matches, output) => output.stackForTethers!(),
       outputStrings: {
         stackForTethers: {
