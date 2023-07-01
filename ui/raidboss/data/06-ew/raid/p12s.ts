@@ -7,7 +7,7 @@ import ZoneId from '../../../../../resources/zone_id';
 import { RaidbossData } from '../../../../../types/data';
 import { PluginCombatantState } from '../../../../../types/event';
 import { NetMatches } from '../../../../../types/net_matches';
-import { TriggerSet } from '../../../../../types/trigger';
+import { Output, TriggerSet } from '../../../../../types/trigger';
 
 // TODO: add phase dash calls?? (maybe this is overkill)
 
@@ -15,9 +15,7 @@ import { TriggerSet } from '../../../../../types/trigger';
 // TODO: gaiochos group up for chains
 // TODO: delay the second horizontal/vertical call until after break chains (or combine!)
 // TODO: summon darkness tether break locations for gaiaochos 1 and 2
-// TODO: bait protean calls for classical 1 and 2
 
-// TODO: add triggerset ui for playstation order + classical location
 // TODO: detect(?!) hex strat for caloric2 and tell people who to go to??
 
 type Phase =
@@ -275,6 +273,61 @@ const getConceptMap = (startLoc: number): number[][] => {
   return conceptMap;
 };
 
+const palladionRayOutputStrings = {
+  spread: {
+    en: '흩어져요: ${mesg}',
+  },
+  safe10: {
+    en: '1번🡼🡼', // α, ○
+  },
+  safe20: {
+    en: '2번🡽🡽', // α, X
+  },
+  safe30: {
+    en: '3번🡼🡼', // α, Δ
+  },
+  safe40: {
+    en: '4번🡽🡽', // α, □
+  },
+  safe11: {
+    en: '1번🡿🡿', // β, ○
+  },
+  safe21: {
+    en: '2번🡾🡾', // β, X
+  },
+  safe31: {
+    en: '3번🡿🡿', // β, Δ
+  },
+  safe41: {
+    en: '4번🡾🡾', // β, □
+  },
+} as const;
+
+const getPalladionRayEscape = (
+  phase: Phase,
+  ps: ConceptPair | undefined,
+  ab: ConceptDebuff | undefined,
+  output: Output,
+) => {
+  if (ps === undefined || ab === undefined)
+    return;
+  const safe1 = {
+    circle: 1,
+    cross: 2,
+    triangle: 3,
+    square: 4,
+  } as const;
+  const safe2 = {
+    circle: 4,
+    cross: 3,
+    triangle: 2,
+    square: 1,
+  } as const;
+  const mps = phase === 'classical1' ? safe1[ps] : safe2[ps];
+  const mab = { alpha: 0, beta: 1 }[ab];
+  return output[`safe${mps}${mab}`]!();
+};
+
 const pangenesisEffects = {
   stableSystem: 'E22',
   unstableFactor: 'E09',
@@ -411,9 +464,9 @@ const triggerSet: TriggerSet<Data> = {
       type: 'select',
       options: {
         en: {
-          'X□○Δ (BPOG)': 'xsct',
-          '○XΔ□ (Lines)': 'cxts',
-          '○Δ□X (Rocketship)': 'ctsx',
+          'X□○Δ': 'xsct',
+          '○XΔ□': 'cxts',
+          '○Δ□X': 'ctsx',
         },
       },
       default: 'cxts',
@@ -557,7 +610,7 @@ const triggerSet: TriggerSet<Data> = {
     {
       id: 'P12S Paradeigma Counter',
       type: 'StartsUsing',
-      netRegex: { id: '82ED', capture: false },
+      netRegex: { id: '82ED', source: 'Athena', capture: false },
       run: (data) => data.paradeigmaCounter++,
     },
     {
@@ -1459,7 +1512,6 @@ const triggerSet: TriggerSet<Data> = {
       type: 'GainsEffect',
       netRegex: { effectId: engravement3TheosSoulIds },
       condition: (data, matches) => data.engravementCounter === 3 && data.me === matches.target,
-      durationSeconds: 6,
       alertText: (_data, matches, output) => {
         const engraveLabel = engravementLabelMap[matches.effectId];
         if (engraveLabel === undefined)
@@ -1610,14 +1662,13 @@ const triggerSet: TriggerSet<Data> = {
       netRegex: { id: Object.keys(anthroposTetherMap), source: 'Anthropos' },
       condition: (data, matches) => data.engravementCounter === 3 && data.me === matches.target,
       suppressSeconds: 10,
-      infoText: (data, matches, output) => {
-        const my = matches.id === '00E9' || matches.id === '00FA' ? 'lightTower' : 'darkTower';
-        if (data.engravement3TowerType !== my) {
-          const towerColor = data.engravement3TowerType === 'lightTower'
+      infoText: (data, _matches, output) => {
+        let towerColor = output.unknown!();
+        if (data.engravement3TowerType !== undefined)
+          towerColor = data.engravement3TowerType === 'lightTower'
             ? output.light!()
             : output.dark!();
-          return output.towersLater!({ color: towerColor });
-        }
+        return output.towersLater!({ color: towerColor });
       },
       outputStrings: {
         towersLater: {
@@ -1650,6 +1701,7 @@ const triggerSet: TriggerSet<Data> = {
       condition: (data, matches) =>
         data.engravementCounter === 3 && data.me === matches.target &&
         data.engravement3TowerPlayers.includes(data.me),
+      durationSeconds: 6,
       alertText: (data, matches, output) => {
         let towerColor = output.unknown!();
         if (data.engravement3TowerType !== undefined)
@@ -2390,7 +2442,7 @@ const triggerSet: TriggerSet<Data> = {
       netRegex: { npcNameId: superchainNpcNameId, npcBaseId: superchainNpcBaseIds, capture: false },
       condition: (data) => data.phase === 'superchain2b' && data.superchainCollect.length === 8,
       delaySeconds: 4.5,
-      durationSeconds: 86, // keep active until just before Ray of Light 2
+      durationSeconds: 6, // keep active until just before Ray of Light 2
       alertText: (data, _matches, output) => {
         // Sort ascending. collect: [dest1, dest2, out, partnerProtean]
         const collect = data.superchainCollect.slice(4, 8).sort((a, b) =>
@@ -2780,11 +2832,11 @@ const triggerSet: TriggerSet<Data> = {
           northRow: {
             en: '위로',
           },
-          southRow: {
-            en: '아래로',
-          },
           middleRow: {
             en: '가운데',
+          },
+          southRow: {
+            en: '아래로',
           },
           leanNorth: {
             en: '🡹🡹',
@@ -2881,7 +2933,7 @@ const triggerSet: TriggerSet<Data> = {
             }
           });
 
-          let myIntercept;
+          let myIntercept; // don't set this initially in case there's something wrong with possibleLocations
           if (possibleLocations.length === 1) {
             // only one possible adjacent shape to intercept; we're done
             myIntercept = possibleIntercepts[0];
@@ -2892,12 +2944,11 @@ const triggerSet: TriggerSet<Data> = {
             // but this has never been observed in-game, and it generates two valid solution sets.
             // Since there is no single solution, we should not generate an output for it.
             const possible1 = possibleLocations[0];
+            myIntercept = possibleIntercepts[0];
             if (possible1 === undefined)
               return { infoText: failStr };
-
             const possible1AdjacentsMap = getConceptMap(possible1);
-            for (let x = 0; x < possible1AdjacentsMap.length; x++) {
-              const [possibleAdjacentLocation] = possible1AdjacentsMap[x] ?? [];
+            for (const [possibleAdjacentLocation] of possible1AdjacentsMap) {
               if (possibleAdjacentLocation === undefined)
                 continue;
               const possibleAdjacentColor = data.conceptData[possibleAdjacentLocation];
@@ -2909,12 +2960,9 @@ const triggerSet: TriggerSet<Data> = {
                 myIntercept = possibleIntercepts[1];
                 break;
               }
-              if (x === possible1AdjacentsMap.length - 1) {
-                // last iteration & none of the adjacent shapes to possibleLocations[0] is a blue, so it's our spot
-                myIntercept = possibleIntercepts[0];
-              }
             }
           }
+
           if (myIntercept === undefined)
             return { infoText: failStr };
 
@@ -2925,8 +2973,9 @@ const triggerSet: TriggerSet<Data> = {
             myInterceptOutput = 'leanEast';
           else if (interceptDelta === 1)
             myInterceptOutput = 'leanSouth';
+          // else: interceptDelta === -5
           else
-            myInterceptOutput = 'leanWest'; // interceptDelta === -5
+            myInterceptOutput = 'leanWest';
 
           if (data.phase === 'classical2') {
             data.classical2InitialColumn = myColumn;
@@ -2943,8 +2992,8 @@ const triggerSet: TriggerSet<Data> = {
             const interceptOutputInvertMap: Record<InterceptOutput, InterceptOutput> = {
               leanNorth: 'leanSouth',
               leanSouth: 'leanNorth',
-              leanEast: 'leanEast',
-              leanWest: 'leanWest',
+              leanEast: 'leanWest',
+              leanWest: 'leanEast',
             };
             myInterceptOutput = interceptOutputInvertMap[data.classical2Intercept];
           }
@@ -2993,6 +3042,81 @@ const triggerSet: TriggerSet<Data> = {
           */
           data.conceptData = {};
         }
+      },
+    },
+    {
+      id: 'P12S Palladian Ray 1 Initial',
+      type: 'LosesEffect',
+      netRegex: { effectId: 'E04' }, // Shackled Together
+      condition: (data, matches) => data.me === matches.target && data.phase === 'classical1',
+      // shapes use 8333 (Implode) at t+5.6s, and 8324 (Palladian Ray cleaves) snapshots at t+8.9s
+      durationSeconds: 8.5,
+      alertText: (data, _matches, output) => {
+        if (data.options.AutumnStyle)
+          return getPalladionRayEscape('classical1', data.conceptPair, data.conceptDebuff, output);
+        if (data.conceptDebuff === undefined)
+          return output.default!();
+        return data.conceptDebuff === 'alpha'
+          ? output.baitAlphaDebuff!()
+          : output.baitBetaDebuff!();
+      },
+      run: (data) => delete data.conceptDebuff,
+      outputStrings: {
+        baitAlphaDebuff: {
+          en: '피하고 => 광선 유도 (알파)',
+        },
+        baitBetaDebuff: {
+          en: '피하고 => 광선 유도 (베타)',
+        },
+        default: {
+          en: '광선 유도해요',
+        },
+        ...palladionRayOutputStrings,
+      },
+    },
+    {
+      id: 'P12S Palladian Ray 2 Initial',
+      type: 'Tether',
+      netRegex: { id: '0001', source: ['Concept of Fire', 'Concept of Earth'] },
+      condition: (data, matches) => data.me === matches.target && data.phase === 'classical2',
+      durationSeconds: 6,
+      alertText: (data, _matches, output) => {
+        if (data.options.AutumnStyle)
+          return getPalladionRayEscape('classical2', data.conceptPair, data.conceptDebuff, output);
+        if (data.conceptDebuff === undefined)
+          return output.default!();
+        return data.conceptDebuff === 'alpha'
+          ? output.baitAlphaDebuff!()
+          : output.baitBetaDebuff!();
+      },
+      outputStrings: {
+        baitAlphaDebuff: {
+          en: '광선 유도 (알파)',
+        },
+        baitBetaDebuff: {
+          en: '광선 유도 (베타)',
+        },
+        default: {
+          en: '광선 유도해요',
+        },
+        ...palladionRayOutputStrings,
+      },
+    },
+    {
+      id: 'P12S Palladian Ray Followup',
+      type: 'Ability',
+      netRegex: { id: '8323', source: 'Pallas Athena', capture: false },
+      delaySeconds: 2.5,
+      alarmText: (data, _matches, output) => {
+        if (data.phase === 'classical2')
+          return output.moveAvoid!();
+        return output.move!();
+      },
+      outputStrings: {
+        moveAvoid: {
+          en: '피해욧! (사이사이로)',
+        },
+        move: Outputs.moveAway,
       },
     },
     // 전체적으로 판지너시스는 내꺼보다 느린데. 유지보수의 귀찮음을 위해 오피셜껄로 씀
@@ -3318,22 +3442,14 @@ const triggerSet: TriggerSet<Data> = {
         if (matches.source !== data.me && matches.target !== data.me)
           return;
         const partner = matches.source === data.me ? matches.target : matches.source;
-        return output.breakWith!({ partner: data.party.aJobName(partner) });
+        return output.text!({ partner: data.party.aJobName(partner) });
       },
       outputStrings: {
-        breakWith: {
+        text: {
           en: '사슬 끊어요! (${partner})',
           ja: '線切る (${partner})',
         },
       },
-    },
-    {
-      id: 'P12S The Classical Concepts Move',
-      type: 'Ability',
-      netRegex: { id: '8323', source: 'Pallas Athena', capture: false },
-      delaySeconds: 2.5,
-      durationSeconds: 4,
-      response: Responses.moveAway('alarm'),
     },
     {
       id: 'P12S 크러시 헬름',
@@ -3361,9 +3477,8 @@ const triggerSet: TriggerSet<Data> = {
       netRegex: {},
       run: (data, matches) => {
         const id = getHeadmarkerId(data, matches);
-        if (id !== headmarkers.caloric1Beacon)
-          return;
-        data.caloric1First.push(matches.target);
+        if (id === headmarkers.caloric1Beacon)
+          data.caloric1First.push(matches.target);
       },
     },
     {
@@ -3383,10 +3498,10 @@ const triggerSet: TriggerSet<Data> = {
         if (index < 0)
           return;
         const partner = index === 0 ? 1 : 0;
-        return output.text1st!({ partner: data.party.aJobName(data.caloric1First[partner]) });
+        return output.text!({ partner: data.party.aJobName(data.caloric1First[partner]) });
       },
       outputStrings: {
-        text1st: {
+        text: {
           en: '첫 불! 앞으로! (${partner})',
           ja: '自分に初炎 (${partner})', // FIXME
         },
@@ -3609,65 +3724,6 @@ const triggerSet: TriggerSet<Data> = {
       delaySeconds: 0.5,
       suppressSeconds: 2,
       response: Responses.spread('alarm'),
-    },
-    {
-      id: 'P12S 클래식 컨셉 회피 위치',
-      type: 'Tether',
-      netRegex: { id: '0001', capture: false },
-      condition: (data) => data.phase === 'classical1' || data.phase === 'classical2',
-      durationSeconds: (data) => data.phase === 'classical1' ? 8 : 6,
-      suppressSeconds: 2,
-      alertText: (data, _matches, output) => {
-        const ps = data.conceptPair;
-        const ab = data.conceptDebuff;
-        if (ps === undefined || ab === undefined)
-          return;
-        const safe1 = {
-          circle: 1,
-          cross: 2,
-          triangle: 3,
-          square: 4,
-        } as const;
-        const safe2 = {
-          circle: 4,
-          cross: 3,
-          triangle: 2,
-          square: 1,
-        } as const;
-        const mps = data.phase === 'classical1' ? safe1[ps] : safe2[ps];
-        const mab = { alpha: 0, beta: 1 }[ab];
-        const mesg = output[`safe${mps}${mab}`]!();
-        return output.text!({ mesg: mesg });
-      },
-      outputStrings: {
-        text: {
-          en: '흩어져요: ${mesg}', // spread & bait
-        },
-        safe10: {
-          en: '1번🡼🡼', // α, ○
-        },
-        safe20: {
-          en: '2번🡽🡽', // α, X
-        },
-        safe30: {
-          en: '3번🡼🡼', // α, Δ
-        },
-        safe40: {
-          en: '4번🡽🡽', // α, □
-        },
-        safe11: {
-          en: '1번🡿🡿', // β, ○
-        },
-        safe21: {
-          en: '2번🡾🡾', // β, X
-        },
-        safe31: {
-          en: '3번🡿🡿', // β, Δ
-        },
-        safe41: {
-          en: '4번🡾🡾', // β, □
-        },
-      },
     },
   ],
   timelineReplace: [
