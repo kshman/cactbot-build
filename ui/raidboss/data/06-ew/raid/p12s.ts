@@ -2909,16 +2909,16 @@ const triggerSet: TriggerSet<Data> = {
             en: '🡸🡸',
           },
           circle: {
-            en: '○',
+            en: '⚪',
           },
           triangle: {
-            en: 'Δ',
+            en: '⨻',
           },
           square: {
-            en: '□',
+            en: '⬜',
           },
           cross: {
-            en: 'X',
+            en: '❌',
           },
           alpha: {
             en: 'α🔴', // 🔺🟥
