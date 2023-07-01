@@ -1,3 +1,4 @@
+import { ArrowOutput8, AutumnIndicator } from '../../../../../resources/autumns';
 import Conditions from '../../../../../resources/conditions';
 import Outputs from '../../../../../resources/outputs';
 import { callOverlayHandler } from '../../../../../resources/overlay_plugin_api';
@@ -7,17 +8,12 @@ import ZoneId from '../../../../../resources/zone_id';
 import { RaidbossData } from '../../../../../types/data';
 import { PluginCombatantState } from '../../../../../types/event';
 import { NetMatches } from '../../../../../types/net_matches';
-import { TriggerSet } from '../../../../../types/trigger';
+import { Output, TriggerSet } from '../../../../../types/trigger';
 
 // TODO: add phase dash calls?? (maybe this is overkill)
 
 // TODO: crush helm tankbusters??? (+esuna calls for non-invulning tanks??)
-// TODO: gaiochos group up for chains
-// TODO: delay the second horizontal/vertical call until after break chains (or combine!)
-// TODO: summon darkness tether break locations for gaiaochos 1 and 2
-// TODO: bait protean calls for classical 1 and 2
 
-// TODO: add triggerset ui for playstation order + classical location
 // TODO: detect(?!) hex strat for caloric2 and tell people who to go to??
 
 type Phase =
@@ -26,8 +22,11 @@ type Phase =
   | 'superchain2a'
   | 'superchain2b'
   | 'gaiaochos'
-  | 'classical'
+  | 'gaiaochos1'
+  | 'classical1'
   | 'caloric'
+  | 'classical2'
+  | 'gaiaochos2'
   | 'ekpyrosis'
   | 'pangenesis';
 
@@ -184,6 +183,165 @@ type FloorTile =
   | 'outsideSW'
   | 'outsideSE';
 
+type ConceptColor = 'blue' | 'red' | 'yellow';
+type ConceptDebuff = 'alpha' | 'beta';
+type ConceptPair = 'circle' | 'triangle' | 'square' | 'cross';
+type ConceptRow = 'north' | 'middle' | 'south';
+type InterceptOutput = 'leanNorth' | 'leanEast' | 'leanSouth' | 'leanWest';
+
+const conceptPairMap: { [id: string]: ConceptPair } = {
+  [headmarkers.playstationCircle]: 'circle',
+  [headmarkers.playstationTriangle]: 'triangle',
+  [headmarkers.playstationSquare]: 'square',
+  [headmarkers.playstationCross]: 'cross',
+} as const;
+
+const conceptDebuffIds: { [effectId: string]: ConceptDebuff } = {
+  DE8: 'alpha',
+  DE9: 'beta',
+} as const;
+
+const conceptDebuffToColor: Record<ConceptDebuff, ConceptColor> = {
+  alpha: 'red',
+  beta: 'yellow',
+} as const;
+
+const npcBaseIdToConceptColor: { [npcId: number]: ConceptColor } = {
+  16183: 'red',
+  16184: 'blue',
+  16185: 'yellow',
+} as const;
+
+const conceptDebuffEffectIds: readonly string[] = Object.keys(conceptDebuffIds);
+const conceptNpcBaseIds: readonly string[] = Object.keys(npcBaseIdToConceptColor);
+const conceptPairIds: readonly string[] = Object.keys(conceptPairMap);
+
+// The below functions assign a numerical value to all (shapes) and intercept points:
+// xy: 88       96       104       112
+// 84  (0)--5--(10)--15--(20)--25--(30)
+//      |        |         |         |
+//      1       11        21        31
+//      |        |         |         |
+// 92  (2)--7--(12)--17--(22)--27--(32)
+//      |        |         |         |
+//      3       13        23        33
+//      |        |         |         |
+// 100 (4)--9--(14)--19--(24)--29--(34)
+
+const conceptLocationMap: Record<ConceptRow, number[]> = {
+  north: [0, 10, 20, 30],
+  middle: [2, 12, 22, 32],
+  south: [4, 14, 24, 34],
+};
+
+const getConceptLocation = (concept: NetMatches['AddedCombatant']): number => {
+  const x = parseFloat(concept.x);
+  const y = parseFloat(concept.y);
+
+  let row: ConceptRow;
+  if (y < 88)
+    row = 'north';
+  else
+    row = y > 96 ? 'south' : 'middle';
+  let col: number;
+  if (x < 92)
+    col = 0;
+  else if (x > 108)
+    col = 3;
+  else
+    col = x > 100 ? 2 : 1;
+  return conceptLocationMap[row][col]!;
+};
+
+const getConceptMap = (startLoc: number): number[][] => {
+  // takes a concept location and returns an array containing pairs of [adjacentLocation, interceptLocation]
+  const conceptMap: number[][] = [];
+  const expectedLocs = [
+    ...conceptLocationMap.north,
+    ...conceptLocationMap.middle,
+    ...conceptLocationMap.south,
+  ];
+  const [n, e, s, w] = [startLoc - 2, startLoc + 10, startLoc + 2, startLoc - 10];
+  if (expectedLocs.includes(n))
+    conceptMap.push([n, n + 1]);
+  if (expectedLocs.includes(e))
+    conceptMap.push([e, e - 5]);
+  if (expectedLocs.includes(s))
+    conceptMap.push([s, s - 1]);
+  if (expectedLocs.includes(w))
+    conceptMap.push([w, w + 5]);
+  return conceptMap;
+};
+
+const palladionRayOutputStrings = {
+  spread: {
+    en: '흩어져요: ${mesg}',
+  },
+  safe10: {
+    en: '1번🡼🡼', // α, ○
+  },
+  safe20: {
+    en: '2번🡽🡽', // α, X
+  },
+  safe30: {
+    en: '3번🡼🡼', // α, Δ
+  },
+  safe40: {
+    en: '4번🡽🡽', // α, □
+  },
+  safe11: {
+    en: '1번🡿🡿', // β, ○
+  },
+  safe21: {
+    en: '2번🡾🡾', // β, X
+  },
+  safe31: {
+    en: '3번🡿🡿', // β, Δ
+  },
+  safe41: {
+    en: '4번🡾🡾', // β, □
+  },
+} as const;
+
+const getPalladionRayEscape = (
+  phase: Phase,
+  ps: ConceptPair | undefined,
+  ab: ConceptDebuff | undefined,
+  output: Output,
+) => {
+  if (ps === undefined || ab === undefined)
+    return;
+  const safe1 = {
+    circle: 1,
+    cross: 2,
+    triangle: 3,
+    square: 4,
+  } as const;
+  const safe2 = {
+    circle: 4,
+    cross: 3,
+    triangle: 2,
+    square: 1,
+  } as const;
+  const mps = phase === 'classical1' ? safe1[ps] : safe2[ps];
+  const mab = { alpha: 0, beta: 1 }[ab];
+  return output[`safe${mps}${mab}`]!();
+};
+
+const ultimaRayDpsArrows: ArrowOutput8[] = ['arrowE', 'arrowSE', 'arrowS', 'arrowSW'];
+
+const getUltimaRayArrow = (isDps: boolean, dirs: ArrowOutput8[]) => {
+  const find = dirs.filter((x) => {
+    if (isDps && ultimaRayDpsArrows.includes(x))
+      return x;
+    else if (!isDps && !ultimaRayDpsArrows.includes(x))
+      return x;
+  });
+  if (find.length !== 1)
+    return undefined;
+  return find[0];
+};
+
 const pangenesisEffects = {
   stableSystem: 'E22',
   unstableFactor: 'E09',
@@ -195,7 +353,6 @@ const pangenesisEffectIds: readonly string[] = Object.values(pangenesisEffects);
 
 type PangenesisRole = 'shortLight' | 'shortDark' | 'longLight' | 'longDark' | 'one' | 'not';
 
-type PlaystationMarker = 'circle' | 'cross' | 'triangle' | 'square';
 type CaloricMarker = 'fire' | 'wind';
 
 const getHeadmarkerId = (data: Data, matches: NetMatches['HeadMarker']) => {
@@ -216,7 +373,10 @@ export interface Data extends RaidbossData {
   // 후반
   prsUltima?: number;
   //
-  readonly triggerSetConfig: { engravement1DropTower: 'quadrant' | 'clockwise' | 'tower' };
+  readonly triggerSetConfig: {
+    engravement1DropTower: 'quadrant' | 'clockwise' | 'tower';
+    classicalConceptsPairOrder: 'xsct' | 'cxts' | 'ctsx';
+  };
   decOffset?: number;
   expectedFirstHeadmarker?: string;
   isDoorBoss: boolean;
@@ -250,6 +410,13 @@ export interface Data extends RaidbossData {
   superchain2bSecondMech?: 'protean' | 'partners';
   superchain2bSecondDir?: 'east' | 'west';
   sampleTiles: NetMatches['Tether'][];
+  darknessClones: NetMatches['StartsUsing'][];
+  conceptPair?: ConceptPair;
+  conceptDebuff?: ConceptDebuff;
+  conceptData: { [location: number]: ConceptColor };
+  classical2InitialColumn?: number;
+  classical2InitialRow?: number;
+  classical2Intercept?: InterceptOutput;
   pangenesisDebuffsCalled?: boolean;
   pangenesisRole: { [name: string]: PangenesisRole };
   pangenesisTowerCount: number;
@@ -258,15 +425,15 @@ export interface Data extends RaidbossData {
   gaiaochosCounter: number;
   palladionGrapsTarget?: string;
   classicalCounter: number;
-  classicalMarker: { [name: string]: PlaystationMarker };
-  classicalAlphaBeta: { [name: string]: 'alpha' | 'beta' };
   caloricCounter: number;
   caloric1First: string[];
   caloric1Buff: { [name: string]: CaloricMarker };
   caloric1Mine?: CaloricMarker;
   caloric2Fire?: string;
   caloric2PassCount: number;
-  gaiochosTetherCollect: string[];
+  gaiaochosTetherCollect: string[];
+  seenSecondTethers: boolean;
+  geocentrism2OutputStr?: string;
 }
 
 const triggerSet: TriggerSet<Data> = {
@@ -306,6 +473,21 @@ const triggerSet: TriggerSet<Data> = {
       },
       default: 'quadrant',
     },
+    {
+      id: 'classicalConceptsPairOrder',
+      name: {
+        en: '클래식 컨셉 : 페어 순서 (왼쪽->오른쪽)',
+      },
+      type: 'select',
+      options: {
+        en: {
+          'X□○Δ': 'xsct',
+          '○XΔ□': 'cxts',
+          '○Δ□X': 'ctsx',
+        },
+      },
+      default: 'cxts',
+    },
   ],
   timelineFile: 'p12s.txt',
   initData: () => {
@@ -328,6 +510,8 @@ const triggerSet: TriggerSet<Data> = {
       superchainCollect: [],
       whiteFlameCounter: 0,
       sampleTiles: [],
+      darknessClones: [],
+      conceptData: {},
       pangenesisRole: {},
       pangenesisTowerCount: 0,
       gaiaochosCounter: 0,
@@ -338,7 +522,8 @@ const triggerSet: TriggerSet<Data> = {
       caloric1First: [],
       caloric1Buff: {},
       caloric2PassCount: 0,
-      gaiochosTetherCollect: [],
+      gaiaochosTetherCollect: [],
+      seenSecondTethers: false,
     };
   },
   timelineTriggers: [
@@ -402,11 +587,11 @@ const triggerSet: TriggerSet<Data> = {
       run: (data, matches) => {
         switch (matches.id) {
           case '8326':
-            data.phase = 'gaiaochos';
+            data.phase = data.gaiaochosCounter === 0 ? 'gaiaochos1' : 'gaiaochos2';
             data.gaiaochosCounter++;
             break;
           case '8331':
-            data.phase = 'classical';
+            data.phase = data.classicalCounter === 0 ? 'classical1' : 'classical2';
             data.classicalCounter++;
             break;
           case '8338':
@@ -444,7 +629,7 @@ const triggerSet: TriggerSet<Data> = {
     {
       id: 'P12S Paradeigma Counter',
       type: 'StartsUsing',
-      netRegex: { id: '82ED', capture: false },
+      netRegex: { id: '82ED', source: 'Athena', capture: false },
       run: (data) => data.paradeigmaCounter++,
     },
     {
@@ -1346,7 +1531,6 @@ const triggerSet: TriggerSet<Data> = {
       type: 'GainsEffect',
       netRegex: { effectId: engravement3TheosSoulIds },
       condition: (data, matches) => data.engravementCounter === 3 && data.me === matches.target,
-      durationSeconds: 6,
       alertText: (_data, matches, output) => {
         const engraveLabel = engravementLabelMap[matches.effectId];
         if (engraveLabel === undefined)
@@ -1497,14 +1681,13 @@ const triggerSet: TriggerSet<Data> = {
       netRegex: { id: Object.keys(anthroposTetherMap), source: 'Anthropos' },
       condition: (data, matches) => data.engravementCounter === 3 && data.me === matches.target,
       suppressSeconds: 10,
-      infoText: (data, matches, output) => {
-        const my = matches.id === '00E9' || matches.id === '00FA' ? 'lightTower' : 'darkTower';
-        if (data.engravement3TowerType !== my) {
-          const towerColor = data.engravement3TowerType === 'lightTower'
+      infoText: (data, _matches, output) => {
+        let towerColor = output.unknown!();
+        if (data.engravement3TowerType !== undefined)
+          towerColor = data.engravement3TowerType === 'lightTower'
             ? output.light!()
             : output.dark!();
-          return output.towersLater!({ color: towerColor });
-        }
+        return output.towersLater!({ color: towerColor });
       },
       outputStrings: {
         towersLater: {
@@ -1537,6 +1720,7 @@ const triggerSet: TriggerSet<Data> = {
       condition: (data, matches) =>
         data.engravementCounter === 3 && data.me === matches.target &&
         data.engravement3TowerPlayers.includes(data.me),
+      durationSeconds: 6,
       alertText: (data, matches, output) => {
         let towerColor = output.unknown!();
         if (data.engravement3TowerType !== undefined)
@@ -2277,7 +2461,7 @@ const triggerSet: TriggerSet<Data> = {
       netRegex: { npcNameId: superchainNpcNameId, npcBaseId: superchainNpcBaseIds, capture: false },
       condition: (data) => data.phase === 'superchain2b' && data.superchainCollect.length === 8,
       delaySeconds: 4.5,
-      durationSeconds: 86, // keep active until just before Ray of Light 2
+      durationSeconds: 6, // keep active until just before Ray of Light 2
       alertText: (data, _matches, output) => {
         // Sort ascending. collect: [dest1, dest2, out, partnerProtean]
         const collect = data.superchainCollect.slice(4, 8).sort((a, b) =>
@@ -2544,10 +2728,23 @@ const triggerSet: TriggerSet<Data> = {
       id: 'P12S Geocentrism Vertical',
       type: 'StartsUsing',
       netRegex: { id: '8329', source: 'Pallas Athena', capture: false },
-      alertText: (_data, _matches, output) => output.text!(),
+      alertText: (data, _matches, output) => {
+        if (data.phase === 'gaiaochos1')
+          return output.text!();
+        data.geocentrism2OutputStr = output.outstr!();
+        return;
+      },
       outputStrings: {
         text: {
-          en: '전체 공격 + 흩어져요: ‖',
+          en: '전체 공격 + 흩어져요(‖)',
+          de: 'Vertikal',
+          fr: 'Vertical',
+          ja: '横',
+          cn: '垂直',
+          ko: '세로',
+        },
+        outstr: {
+          en: '‖',
           de: 'Vertikal',
           fr: 'Vertical',
           ja: '横',
@@ -2560,10 +2757,23 @@ const triggerSet: TriggerSet<Data> = {
       id: 'P12S Geocentrism Circle',
       type: 'StartsUsing',
       netRegex: { id: '832A', source: 'Pallas Athena', capture: false },
-      alertText: (_data, _matches, output) => output.text!(),
+      alertText: (data, _matches, output) => {
+        if (data.phase === 'gaiaochos1')
+          return output.text!();
+        data.geocentrism2OutputStr = output.outstr!();
+        return;
+      },
       outputStrings: {
         text: {
-          en: '전체 공격 + 흩어져요: ◎',
+          en: '전체 공격 + 흩어져요(◎)',
+          de: 'Innerer Kreis',
+          fr: 'Cercle intérieur',
+          ja: 'ドーナツ',
+          cn: '月环',
+          ko: '가운데 원',
+        },
+        outstr: {
+          en: '◎',
           de: 'Innerer Kreis',
           fr: 'Cercle intérieur',
           ja: 'ドーナツ',
@@ -2576,16 +2786,395 @@ const triggerSet: TriggerSet<Data> = {
       id: 'P12S Geocentrism Horizontal',
       type: 'StartsUsing',
       netRegex: { id: '832B', source: 'Pallas Athena', capture: false },
-      alertText: (_data, _matches, output) => output.text!(),
+      alertText: (data, _matches, output) => {
+        if (data.phase === 'gaiaochos1')
+          return output.text!();
+        data.geocentrism2OutputStr = output.outstr!();
+        return;
+      },
       outputStrings: {
         text: {
-          en: '전체 공격 + 흩어져요: 〓',
+          en: '전체 공격 + 흩어져요(〓)',
           de: 'Horizontal',
           fr: 'Horizontal',
           ja: '縦',
           cn: '水平',
           ko: '가로',
         },
+        outstr: {
+          en: '〓',
+          de: 'Horizontal',
+          fr: 'Horizontal',
+          ja: '縦',
+          cn: '水平',
+          ko: '가로',
+        },
+      },
+    },
+    {
+      id: 'P12S Classical Concepts Headmarker',
+      type: 'HeadMarker',
+      netRegex: {},
+      condition: Conditions.targetIsYou(),
+      run: (data, matches) => {
+        const id = getHeadmarkerId(data, matches);
+        if (!conceptPairIds.includes(id))
+          return;
+        const pair = conceptPairMap[id];
+        if (pair === undefined)
+          return;
+        data.conceptPair = pair;
+      },
+    },
+    {
+      id: 'P12S Classical Concepts Debuff',
+      type: 'GainsEffect',
+      netRegex: { effectId: conceptDebuffEffectIds },
+      condition: Conditions.targetIsYou(),
+      run: (data, matches) => data.conceptDebuff = conceptDebuffIds[matches.effectId],
+    },
+    {
+      id: 'P12S Classical Concepts Shape Collect',
+      type: 'AddedCombatant',
+      netRegex: { npcBaseId: conceptNpcBaseIds },
+      run: (data, matches) => {
+        const location = getConceptLocation(matches);
+        const color = npcBaseIdToConceptColor[parseInt(matches.npcBaseId)];
+        if (location !== undefined && color !== undefined)
+          data.conceptData[location] = color;
+      },
+    },
+    {
+      id: 'P12S Classical Concepts',
+      type: 'StartsUsing',
+      // 8331 = The Classical Concepts (6.7s cast)
+      // 8336 = Panta Rhei (9.7s cast during classical2 that inverts shapes)
+      netRegex: { id: ['8331', '8336'], source: 'Pallas Athena' },
+      delaySeconds: (_data, matches) => {
+        if (matches.id === '8331')
+          // for Classical Concepts, 6.7 cast time + 1.5 for debuff/headmarker data (some variability)
+          return 8.2;
+        return 0; // for Panta Rhei, fire immediately once cast starts
+      },
+      durationSeconds: (data, matches) => {
+        if (data.phase === 'classical1')
+          return 11; // keep active until shapes tether
+        if (matches.id === '8331')
+          return 16; // for classical2 initial, display initially to allow player to find (stand in) initial position
+        return 9.7; // for Panta Rhei, display until shape inversion completes
+      },
+      response: (data, matches, output) => {
+        // cactbot-builtin-response
+        output.responseOutputStrings = {
+          classic1: {
+            en: '${column} ${row} + ${intercept} [${marker} ${tether}]',
+          },
+          classic2initial: {
+            en: '${column} ${row} [${marker} ${tether}]',
+          },
+          classic2actual: {
+            en: '반전: ${column} ${row} + ${intercept}',
+          },
+          outsideWest: {
+            en: '1번',
+          },
+          insideWest: {
+            en: '2번',
+          },
+          insideEast: {
+            en: '3번',
+          },
+          outsideEast: {
+            en: '4번',
+          },
+          northRow: {
+            en: '위로',
+          },
+          middleRow: {
+            en: '가운데',
+          },
+          southRow: {
+            en: '아래로',
+          },
+          leanNorth: {
+            en: '🡹🡹',
+          },
+          leanEast: {
+            en: '🡺🡺',
+          },
+          leanSouth: {
+            en: '🡻🡻',
+          },
+          leanWest: {
+            en: '🡸🡸',
+          },
+          circle: {
+            en: '○',
+          },
+          triangle: {
+            en: 'Δ',
+          },
+          square: {
+            en: '□',
+          },
+          cross: {
+            en: 'X',
+          },
+          alpha: {
+            en: 'α🔴', // 🔺🟥
+          },
+          beta: {
+            en: 'β🟨',
+          },
+          simple: {
+            en: '${marker} + ${tether}',
+          },
+        };
+
+        if (data.conceptDebuff === undefined || data.conceptPair === undefined)
+          return;
+
+        const failStr = output.simple!({
+          marker: output[data.conceptPair]!(),
+          tether: output[data.conceptDebuff]!(),
+        });
+
+        if (Object.keys(data.conceptData).length !== 12)
+          return { infoText: failStr };
+
+        let myColumn: number | undefined;
+        let myRow: number | undefined;
+        let myInterceptOutput: InterceptOutput | undefined;
+
+        if (matches.id === '8331') {
+          // for classic1 and classic2, find the (initial) position for the player to intercept
+          const columnOrderFromConfig: { [order: string]: ConceptPair[] } = {
+            xsct: ['cross', 'square', 'circle', 'triangle'],
+            cxts: ['circle', 'cross', 'triangle', 'square'],
+            ctsx: ['circle', 'triangle', 'square', 'cross'],
+          };
+          const columnOrder =
+            columnOrderFromConfig[data.triggerSetConfig.classicalConceptsPairOrder];
+          if (columnOrder?.length !== 4)
+            return { infoText: failStr };
+
+          myColumn = columnOrder.indexOf(data.conceptPair);
+          const myColumnLocations = [
+            conceptLocationMap.north[myColumn],
+            conceptLocationMap.middle[myColumn],
+            conceptLocationMap.south[myColumn],
+          ];
+          const [north, middle, south] = myColumnLocations;
+          if (north === undefined || middle === undefined || south === undefined)
+            return { infoText: failStr };
+
+          let myColumnBlueLocation: number;
+          if (data.conceptData[north] === 'blue')
+            myColumnBlueLocation = north;
+          else
+            myColumnBlueLocation = data.conceptData[middle] === 'blue' ? middle : south;
+          myRow = myColumnLocations.indexOf(myColumnBlueLocation);
+
+          const conceptMap = getConceptMap(myColumnBlueLocation);
+          const myShapeColor = conceptDebuffToColor[data.conceptDebuff];
+
+          const possibleLocations: number[] = [];
+          const possibleIntercepts: number[] = [];
+          conceptMap.forEach((adjacentPair) => {
+            const [location, intercept] = adjacentPair;
+            if (location !== undefined && intercept !== undefined) {
+              const adjacentColor = data.conceptData[location];
+              if (adjacentColor === myShapeColor) {
+                possibleLocations.push(location);
+                possibleIntercepts.push(intercept);
+              }
+            }
+          });
+
+          let myIntercept; // don't set this initially in case there's something wrong with possibleLocations
+          if (possibleLocations.length === 1) {
+            // only one possible adjacent shape to intercept; we're done
+            myIntercept = possibleIntercepts[0];
+          } else if (possibleLocations.length === 2) {
+            // two adjacent shapes that match player's debuff (does happen)
+            // the one that is NOT adjacent to a different blue is the correct shape.
+            // NOTE: There is a theoretical arrangement where both possibles are adjacent to another blue,
+            // but this has never been observed in-game, and it generates two valid solution sets.
+            // Since there is no single solution, we should not generate an output for it.
+            const possible1 = possibleLocations[0];
+            myIntercept = possibleIntercepts[0];
+            if (possible1 === undefined)
+              return { infoText: failStr };
+            const possible1AdjacentsMap = getConceptMap(possible1);
+            for (const [possibleAdjacentLocation] of possible1AdjacentsMap) {
+              if (possibleAdjacentLocation === undefined)
+                continue;
+              const possibleAdjacentColor = data.conceptData[possibleAdjacentLocation];
+              if (
+                possibleAdjacentColor === 'blue' &&
+                possibleAdjacentLocation !== myColumnBlueLocation
+              ) {
+                // there's an adjacent blue (not the one the player is responsible for), so possibleLocations[0] is eliminated
+                myIntercept = possibleIntercepts[1];
+                break;
+              }
+            }
+          }
+
+          if (myIntercept === undefined)
+            return { infoText: failStr };
+
+          const interceptDelta = myIntercept - myColumnBlueLocation;
+          if (interceptDelta === -1)
+            myInterceptOutput = 'leanNorth';
+          else if (interceptDelta === 5)
+            myInterceptOutput = 'leanEast';
+          else if (interceptDelta === 1)
+            myInterceptOutput = 'leanSouth';
+          // else: interceptDelta === -5
+          else
+            myInterceptOutput = 'leanWest';
+
+          if (data.phase === 'classical2') {
+            data.classical2InitialColumn = myColumn;
+            data.classical2InitialRow = myRow;
+            data.classical2Intercept = myInterceptOutput;
+          }
+        } else {
+          // for Panta Rhei, get myColumn, myRow, and myInterceptOutput from data{} and invert them
+          if (data.classical2InitialColumn !== undefined)
+            myColumn = 3 - data.classical2InitialColumn;
+          if (data.classical2InitialRow !== undefined)
+            myRow = 2 - data.classical2InitialRow;
+          if (data.classical2Intercept !== undefined) {
+            const interceptOutputInvertMap: Record<InterceptOutput, InterceptOutput> = {
+              leanNorth: 'leanSouth',
+              leanSouth: 'leanNorth',
+              leanEast: 'leanWest',
+              leanWest: 'leanEast',
+            };
+            myInterceptOutput = interceptOutputInvertMap[data.classical2Intercept];
+          }
+        }
+
+        if (myColumn === undefined || myRow === undefined || myInterceptOutput === undefined)
+          return { infoText: failStr };
+
+        const columnOutput = ['outsideWest', 'insideWest', 'insideEast', 'outsideEast'][myColumn];
+        const rowOutput = ['northRow', 'middleRow', 'southRow'][myRow];
+        if (columnOutput === undefined || rowOutput === undefined)
+          return { infoText: failStr };
+
+        let outputStr;
+        if (data.phase === 'classical1') {
+          outputStr = output.classic1!({
+            column: output[columnOutput]!(),
+            row: output[rowOutput]!(),
+            intercept: output[myInterceptOutput]!(),
+            marker: output[data.conceptPair]!(),
+            tether: output[data.conceptDebuff]!(),
+          });
+          return { infoText: outputStr };
+        }
+        if (matches.id === '8331') { // classic2 initial
+          outputStr = output.classic2initial!({
+            column: output[columnOutput]!(),
+            row: output[rowOutput]!(),
+            marker: output[data.conceptPair]!(),
+            tether: output[data.conceptDebuff]!(),
+          });
+          return { infoText: outputStr };
+        }
+        outputStr = output.classic2actual!({
+          column: output[columnOutput]!(),
+          row: output[rowOutput]!(),
+          intercept: output[myInterceptOutput]!(),
+        });
+        return { alertText: outputStr };
+      },
+      run: (data) => {
+        if (data.phase === 'classical1') {
+          /*
+          delete data.conceptPair;
+          delete data.conceptDebuff;
+          */
+          data.conceptData = {};
+        }
+      },
+    },
+    {
+      id: 'P12S Palladian Ray 1 Initial',
+      type: 'LosesEffect',
+      netRegex: { effectId: 'E04' }, // Shackled Together
+      condition: (data, matches) => data.me === matches.target && data.phase === 'classical1',
+      // shapes use 8333 (Implode) at t+5.6s, and 8324 (Palladian Ray cleaves) snapshots at t+8.9s
+      durationSeconds: 8.5,
+      alertText: (data, _matches, output) => {
+        if (data.options.AutumnStyle)
+          return getPalladionRayEscape('classical1', data.conceptPair, data.conceptDebuff, output);
+        if (data.conceptDebuff === undefined)
+          return output.default!();
+        return data.conceptDebuff === 'alpha'
+          ? output.baitAlphaDebuff!()
+          : output.baitBetaDebuff!();
+      },
+      run: (data) => delete data.conceptDebuff,
+      outputStrings: {
+        baitAlphaDebuff: {
+          en: '피하고 => 광선 유도 (알파)',
+        },
+        baitBetaDebuff: {
+          en: '피하고 => 광선 유도 (베타)',
+        },
+        default: {
+          en: '광선 유도해요',
+        },
+        ...palladionRayOutputStrings,
+      },
+    },
+    {
+      id: 'P12S Palladian Ray 2 Initial',
+      type: 'Tether',
+      netRegex: { id: '0001', source: ['Concept of Fire', 'Concept of Earth'] },
+      condition: (data, matches) => data.me === matches.target && data.phase === 'classical2',
+      durationSeconds: 6,
+      alertText: (data, _matches, output) => {
+        if (data.options.AutumnStyle)
+          return getPalladionRayEscape('classical2', data.conceptPair, data.conceptDebuff, output);
+        if (data.conceptDebuff === undefined)
+          return output.default!();
+        return data.conceptDebuff === 'alpha'
+          ? output.baitAlphaDebuff!()
+          : output.baitBetaDebuff!();
+      },
+      outputStrings: {
+        baitAlphaDebuff: {
+          en: '광선 유도 (알파)',
+        },
+        baitBetaDebuff: {
+          en: '광선 유도 (베타)',
+        },
+        default: {
+          en: '광선 유도해요',
+        },
+        ...palladionRayOutputStrings,
+      },
+    },
+    {
+      id: 'P12S Palladian Ray Followup',
+      type: 'Ability',
+      netRegex: { id: '8323', source: 'Pallas Athena', capture: false },
+      delaySeconds: 2.5,
+      alarmText: (data, _matches, output) => {
+        if (data.phase === 'classical2')
+          return output.moveAvoid!();
+        return output.move!();
+      },
+      outputStrings: {
+        moveAvoid: {
+          en: '피해욧! (사이사이로)',
+        },
+        move: Outputs.moveAway,
       },
     },
     // 전체적으로 판지너시스는 내꺼보다 느린데. 유지보수의 귀찮음을 위해 오피셜껄로 씀
@@ -2810,17 +3399,169 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
+      id: 'P12S Summon Darkness Preposition',
+      type: 'StartsUsing',
+      netRegex: { id: '832F', source: 'Pallas Athena', capture: false },
+      condition: (data) => data.seenSecondTethers === false && !data.options.AutumnStyle,
+      alertText: (_data, _matches, output) => output.stackForTethers!(),
+      outputStrings: {
+        stackForTethers: {
+          en: '한가운데 모여요!',
+        },
+      },
+    },
+    {
+      id: 'P12S Ultima Ray 1',
+      type: 'StartsUsing',
+      netRegex: { id: '8330', source: 'Hemitheos' },
+      condition: (data) => data.phase === 'gaiaochos1',
+      infoText: (data, matches, output) => {
+        data.darknessClones.push(matches);
+        if (data.darknessClones.length !== 3)
+          return;
+
+        // during 'UAV' phase, the center of the circular arena is [100, 90]
+        const uavCenterX = 100;
+        const uavCenterY = 90;
+
+        const unsafeMap: Partial<Record<ArrowOutput8, ArrowOutput8>> = {
+          arrowN: 'arrowS',
+          arrowNE: 'arrowSW',
+          arrowE: 'arrowW',
+          arrowSE: 'arrowNW',
+          arrowS: 'arrowN',
+          arrowSW: 'arrowNE',
+          arrowW: 'arrowE',
+          arrowNW: 'arrowSE',
+        };
+        let safeDirs = Object.keys(unsafeMap) as ArrowOutput8[];
+        data.darknessClones.forEach((clone) => {
+          const x = parseFloat(clone.x);
+          const y = parseFloat(clone.y);
+          const cloneDir = AutumnIndicator.xyToArrow8Output(x, y, uavCenterX, uavCenterY);
+          const pairedDir = unsafeMap[cloneDir];
+          safeDirs = safeDirs.filter((dir) => dir !== cloneDir && dir !== pairedDir);
+        });
+        if (safeDirs.length !== 2)
+          return;
+
+        const arrow = getUltimaRayArrow(data.role === 'dps', safeDirs);
+        if (arrow !== undefined)
+          return output.moveTo!({ dir: output[arrow]!() });
+
+        const [dir1, dir2] = safeDirs;
+        if (dir1 === undefined || dir2 === undefined)
+          return;
+        return output.combined!({ dir1: output[dir1]!(), dir2: output[dir2]!() });
+      },
+      outputStrings: {
+        combined: {
+          en: '${dir1} / ${dir2}',
+        },
+        moveTo: {
+          en: '${dir}${dir}',
+        },
+        ...AutumnIndicator.outputStringsArrow8,
+      },
+    },
+    {
+      id: 'P12S Ultima Ray 2',
+      type: 'StartsUsing',
+      netRegex: { id: '8330', source: 'Hemitheos' },
+      condition: (data) => data.phase === 'gaiaochos2',
+      infoText: (data, matches, output) => {
+        // during 'UAV' phase, the center of the circular arena is [100, 90]
+        const uavCenterX = 100;
+        const uavCenterY = 90;
+
+        const safeMap: Partial<Record<ArrowOutput8, ArrowOutput8[]>> = {
+          // for each dir, identify the two dirs 90 degrees away
+          arrowN: ['arrowW', 'arrowE'],
+          arrowNE: ['arrowNW', 'arrowSE'],
+          arrowE: ['arrowN', 'arrowS'],
+          arrowSE: ['arrowNE', 'arrowSW'],
+          arrowS: ['arrowW', 'arrowE'],
+          arrowSW: ['arrowNW', 'arrowSE'],
+          arrowW: ['arrowN', 'arrowS'],
+          arrowNW: ['arrowNE', 'arrowSW'],
+        };
+
+        const x = parseFloat(matches.x);
+        const y = parseFloat(matches.y);
+        const cloneDir = AutumnIndicator.xyToArrow8Output(x, y, uavCenterX, uavCenterY);
+        const safeDirs = safeMap[cloneDir] ?? [];
+
+        const arrow = getUltimaRayArrow(data.role === 'dps', safeDirs);
+        if (arrow !== undefined)
+          return output.moveTo!({ dir: output[arrow]!() });
+
+        const [dir1, dir2] = safeDirs;
+        if (dir1 === undefined || dir2 === undefined)
+          return;
+        return output.combined!({ dir1: output[dir1]!(), dir2: output[dir2]!() });
+      },
+      outputStrings: {
+        combined: {
+          en: '${dir1} / ${dir2}',
+        },
+        moveTo: {
+          en: '${dir}${dir}',
+        },
+        ...AutumnIndicator.outputStringsArrow8,
+      },
+    },
+    {
+      id: 'P12S Gaiaochos',
+      type: 'StartsUsing',
+      netRegex: { id: '8326', source: 'Pallas Athena', capture: false },
+      alertText: (_data, _matches, output) => output.text!(),
+      outputStrings: {
+        text: {
+          en: '전체 공격 + 작아져요',
+        },
+      },
+    },
+    {
+      id: 'P12S Gaiaochos Tether',
+      type: 'Tether',
+      netRegex: { id: '0009' },
+      condition: (data) => data.phase === 'gaiaochos1' || data.phase === 'gaiaochos2',
+      durationSeconds: (data) => data.phase === 'gaiaochos2' ? 6 : 4,
+      alertText: (data, matches, output) => {
+        if (matches.source !== data.me && matches.target !== data.me)
+          return;
+        const partner = matches.source === data.me ? matches.target : matches.source;
+        if (data.phase === 'gaiaochos1')
+          return output.uav1!({ partner: data.party.aJobName(partner) });
+        data.seenSecondTethers = true;
+        return output.uav2!({
+          partner: data.party.aJobName(partner),
+          geocentrism: data.geocentrism2OutputStr ?? output.unknown!(),
+        });
+      },
+      outputStrings: {
+        uav1: {
+          en: '끊어요! (${partner})',
+          ja: '線切る (${partner})',
+        },
+        uav2: {
+          en: '끊으면서 흩어져요(${geocentrism})! (${partner})',
+        },
+        unknown: Outputs.unknown,
+      },
+    },
+    {
       id: 'P12S Ultima Blow Tether Collect',
       type: 'Tether',
       netRegex: { id: '0001' },
-      condition: (data) => data.phase === 'gaiaochos' && data.gaiaochosCounter === 2,
-      run: (data, matches) => data.gaiochosTetherCollect.push(matches.target),
+      condition: (data) => data.phase === 'gaiaochos2',
+      run: (data, matches) => data.gaiaochosTetherCollect.push(matches.target),
     },
     {
       id: 'P12S Ultima Blow Tether',
       type: 'Tether',
       netRegex: { id: '0001', capture: false },
-      condition: (data) => data.phase === 'gaiaochos' && data.gaiaochosCounter === 2,
+      condition: (data) => data.phase === 'gaiaochos2',
       delaySeconds: 0.5,
       suppressSeconds: 5,
       response: (data, _matches, output) => {
@@ -2835,82 +3576,12 @@ const triggerSet: TriggerSet<Data> = {
           },
         };
 
-        if (data.gaiochosTetherCollect.includes(data.me))
+        if (data.gaiaochosTetherCollect.includes(data.me))
           return { infoText: output.stretchTether!() };
         return { alertText: output.blockPartner!() };
       },
       // If people die, it's not always on the opposite role, so just re-collect.
-      run: (data) => data.gaiochosTetherCollect = [],
-    },
-    {
-      id: 'P12S 클래식 컨셉 회피 위치',
-      type: 'Tether',
-      netRegex: { id: '0001', capture: false },
-      condition: (data) => data.phase === 'classical',
-      suppressSeconds: 2,
-      alertText: (data, _matches, output) => {
-        const myPs = data.classicalMarker[data.me];
-        const myAb = data.classicalAlphaBeta[data.me];
-        if (myPs === undefined || myAb === undefined)
-          return;
-
-        const iPs = { circle: 1, triangle: 2, square: 3, cross: 4 }[myPs];
-        const iAb = { alpha: 0, beta: 1 }[myAb];
-        if (data.classicalCounter === 1)
-          return output[`c1Safe${iPs}${iAb}`]!();
-        return output[`c2Safe${iPs}${iAb}`]!();
-      },
-      outputStrings: {
-        c1Safe10: {
-          en: '🡼🡼🡼', // 알파, 동글
-        },
-        c1Safe20: {
-          en: '오른쪽🡹🡹🡹', // 알파, 세모
-        },
-        c1Safe30: {
-          en: '🡽🡽🡽', // 알파, 네모
-        },
-        c1Safe40: {
-          en: '왼쪽🡹🡹🡹', // 알파, 가위
-        },
-        c1Safe11: {
-          en: '🡿🡿🡿', // 베타, 동글
-        },
-        c1Safe21: {
-          en: '오른쪽🡻🡻🡻', // 베타, 세모
-        },
-        c1Safe31: {
-          en: '🡾🡾🡾', // 베타, 네모
-        },
-        c1Safe41: {
-          en: '왼쪽🡻🡻🡻', // 베타, 가위
-        },
-        // 클래식 컨셉2
-        c2Safe10: {
-          en: '4번 🡹🡹🡹', // 알파, 동글
-        },
-        c2Safe20: {
-          en: '2번 🡹🡹🡹', // 알파, 세모
-        },
-        c2Safe30: {
-          en: '1번 🡹🡹🡹', // 알파, 네모
-        },
-        c2Safe40: {
-          en: '3번 🡹🡹🡹', // 알파, 가위
-        },
-        c2Safe11: {
-          en: '4번 🡻🡻🡻', // 베타, 동글
-        },
-        c2Safe21: {
-          en: '2번 🡻🡻🡻', // 베타, 세모
-        },
-        c2Safe31: {
-          en: '1번 🡻🡻🡻', // 베타, 네모
-        },
-        c2Safe41: {
-          en: '3번 🡻🡻🡻', // 베타, 가위
-        },
-      },
+      run: (data) => data.gaiaochosTetherCollect = [],
     },
     {
       id: 'P12S Ultima',
@@ -2963,153 +3634,6 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: 'P12S Gaiaochos',
-      type: 'StartsUsing',
-      netRegex: { id: '8326', source: 'Pallas Athena', capture: false },
-      alertText: (_data, _matches, output) => output.text!(),
-      outputStrings: {
-        text: {
-          en: '전체 공격 + 작아져요',
-        },
-      },
-    },
-    {
-      id: 'P12S Gaiaochos tether',
-      type: 'Tether',
-      netRegex: { id: '0009' },
-      infoText: (data, matches, output) => {
-        if (matches.source !== data.me && matches.target !== data.me)
-          return;
-        const partner = matches.source === data.me ? matches.target : matches.source;
-        return output.breakWith!({ partner: data.party.aJobName(partner) });
-      },
-      outputStrings: {
-        breakWith: {
-          en: '사슬 끊어요! (${partner})',
-          ja: '線切る (${partner})',
-        },
-      },
-    },
-    {
-      id: 'P12S The Classical Concepts PS marker',
-      type: 'HeadMarker',
-      netRegex: {},
-      run: (data, matches) => {
-        const id = getHeadmarkerId(data, matches);
-        const psMarkerMap: { [id: string]: PlaystationMarker } = {
-          [headmarkers.playstationCircle]: 'circle',
-          [headmarkers.playstationTriangle]: 'triangle',
-          [headmarkers.playstationSquare]: 'square',
-          [headmarkers.playstationCross]: 'cross',
-        } as const;
-        const marker = psMarkerMap[id];
-        if (marker === undefined)
-          return;
-        data.classicalMarker[matches.target] = marker;
-      },
-    },
-    {
-      id: 'P12S The Classical Concepts Alpha Beta',
-      type: 'GainsEffect',
-      netRegex: { effectId: ['DE8', 'DE9'] },
-      run: (data, matches) => {
-        data.classicalAlphaBeta[matches.target] = matches.effectId === 'DE8' ? 'alpha' : 'beta';
-      },
-    },
-    {
-      id: 'P12S The Classical Concepts 반전',
-      type: 'StartsUsing',
-      netRegex: { id: '8331', source: 'Pallas Athena', capture: false },
-      condition: (data) => data.classicalCounter === 2,
-      delaySeconds: 12,
-      durationSeconds: 4,
-      alertText: (data, _matches, output) => {
-        const psToNumMap: Record<PlaystationMarker, number> = {
-          circle: 4,
-          triangle: 2,
-          square: 1,
-          cross: 3,
-        };
-        const myps = data.classicalMarker[data.me];
-        return output.revert!({ num: myps === undefined ? output.unknown!() : psToNumMap[myps] });
-      },
-      outputStrings: {
-        revert: {
-          en: '${num}번으로 가야 해요',
-        },
-        unknown: Outputs.unknown,
-      },
-    },
-    {
-      id: 'P12S The Classical Concepts',
-      type: 'Ability',
-      netRegex: { id: '8331', source: 'Pallas Athena', capture: false },
-      delaySeconds: 2,
-      durationSeconds: (data) => data.classicalCounter === 1 ? 9 : 16,
-      suppressSeconds: 1,
-      infoText: (data, _matches, output) => {
-        const marker = data.classicalMarker[data.me];
-        const tether = data.classicalAlphaBeta[data.me];
-        if (marker === undefined || tether === undefined)
-          return;
-        return output.text!({ marker: output[marker]!(), shape: output[tether]!() });
-      },
-      outputStrings: {
-        text: {
-          en: '${marker} + ${shape}',
-          ja: '${marker} + ${shape}',
-        },
-        circle: {
-          en: '1번⚪',
-          de: 'Kreis',
-          fr: 'Cercle',
-          ja: '1/まる',
-          cn: '圆圈',
-          ko: '동그라미',
-        },
-        triangle: {
-          en: '3번⨻',
-          de: 'Dreieck',
-          fr: 'Triangle',
-          ja: '3/さんかく',
-          cn: '三角',
-          ko: '삼각',
-        },
-        square: {
-          en: '4번⬜',
-          de: 'Viereck',
-          fr: 'Carré',
-          ja: '4/しかく',
-          cn: '方块',
-          ko: '사각',
-        },
-        cross: {
-          en: '2번❌',
-          de: 'X',
-          fr: 'Croix',
-          ja: '2/バツ',
-          cn: 'X',
-          ko: 'X',
-        },
-        alpha: {
-          en: '알파 🟥세모',
-          ja: 'アルファ',
-        },
-        beta: {
-          en: '베타 🟨네모',
-          ja: 'ベター',
-        },
-      },
-    },
-    {
-      id: 'P12S The Classical Concepts Move',
-      type: 'Ability',
-      netRegex: { id: '8323', source: 'Pallas Athena', capture: false },
-      delaySeconds: 2.5,
-      durationSeconds: 4,
-      response: Responses.moveAway('alarm'),
-    },
-    {
       id: 'P12S 크러시 헬름',
       type: 'StartsUsing',
       netRegex: { id: '8317', source: 'Pallas Athena', capture: false },
@@ -3135,9 +3659,8 @@ const triggerSet: TriggerSet<Data> = {
       netRegex: {},
       run: (data, matches) => {
         const id = getHeadmarkerId(data, matches);
-        if (id !== headmarkers.caloric1Beacon)
-          return;
-        data.caloric1First.push(matches.target);
+        if (id === headmarkers.caloric1Beacon)
+          data.caloric1First.push(matches.target);
       },
     },
     {
@@ -3157,10 +3680,10 @@ const triggerSet: TriggerSet<Data> = {
         if (index < 0)
           return;
         const partner = index === 0 ? 1 : 0;
-        return output.text1st!({ partner: data.party.aJobName(data.caloric1First[partner]) });
+        return output.text!({ partner: data.party.aJobName(data.caloric1First[partner]) });
       },
       outputStrings: {
-        text1st: {
+        text: {
           en: '첫 불! 앞으로! (${partner})',
           ja: '自分に初炎 (${partner})', // FIXME
         },
@@ -3382,12 +3905,7 @@ const triggerSet: TriggerSet<Data> = {
       netRegex: { id: '831F', source: 'Pallas Athena', capture: false },
       delaySeconds: 0.5,
       suppressSeconds: 2,
-      alarmText: (_data, _matches, output) => output.text!(),
-      outputStrings: {
-        text: {
-          en: '흩어져욧! 달려욧!',
-        },
-      },
+      response: Responses.spread('alarm'),
     },
   ],
   timelineReplace: [

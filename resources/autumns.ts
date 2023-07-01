@@ -1,6 +1,7 @@
 import { OutputStrings } from '../types/trigger';
 
 import Outputs from './outputs';
+import { Directions } from './util';
 
 // 직업 인덱스를 이름으로
 const jobIndexToName: Record<number, string> = {
@@ -291,6 +292,11 @@ export const AutumnIndicator = {
   outputStringsMarkerCardinal: outputStringsMarkerCardinal,
   outputStringsMarkerIntercard: outputStringsMarkerIntercard,
   outputFromMarker8Num: outputFromMarker8Num,
+  xyToMarker8Output: (x: number, y: number, cx: number, cy: number): MarkerOutput8 => {
+    const n = Directions.xyTo8DirNum(x, y, cx, cy);
+    return outputFromMarker8Num(n);
+  },
+
   outputArrow8: outputArrow8,
   outputArrowCardinal: outputArrowCardinal,
   outputArrowIntercard: outputArrowIntercard,
@@ -298,6 +304,10 @@ export const AutumnIndicator = {
   outputStringsArrowCardinal: outputStringsArrowCardinal,
   outputStringsArrowIntercard: outputStringsArrowIntercard,
   outputFromArrow8Num: outputFromArrow8Num,
+  xyToArrow8Output: (x: number, y: number, cx: number, cy: number): ArrowOutput8 => {
+    const n = Directions.xyTo8DirNum(x, y, cx, cy);
+    return outputFromArrow8Num(n);
+  },
 };
 
 const Autumns = {
