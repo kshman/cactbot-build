@@ -2763,26 +2763,21 @@ const triggerSet: TriggerSet<Data> = {
       netRegex: { id: '8329', source: 'Pallas Athena', capture: false },
       alertText: (data, _matches, output) => {
         if (data.phase === 'gaiaochos1')
-          return output.text!();
-        data.geocentrism2OutputStr = output.outstr!();
+          return output.mesg!({ style: output.text!() });
+        data.geocentrism2OutputStr = output.text!();
         return;
       },
       outputStrings: {
         text: {
-          en: '전체 공격 + 흩어져요(‖)',
-          de: 'Vertikal',
-          fr: 'Vertical',
-          ja: '横',
-          cn: '垂直',
-          ko: '세로',
-        },
-        outstr: {
           en: '‖',
           de: 'Vertikal',
           fr: 'Vertical',
           ja: '横',
           cn: '垂直',
           ko: '세로',
+        },
+        mesg: {
+          en: '전체 공격  + 흩어져요(${style})',
         },
       },
     },
@@ -2792,26 +2787,21 @@ const triggerSet: TriggerSet<Data> = {
       netRegex: { id: '832A', source: 'Pallas Athena', capture: false },
       alertText: (data, _matches, output) => {
         if (data.phase === 'gaiaochos1')
-          return output.text!();
-        data.geocentrism2OutputStr = output.outstr!();
+          return output.mesg!({ style: output.text!() });
+        data.geocentrism2OutputStr = output.text!();
         return;
       },
       outputStrings: {
         text: {
-          en: '전체 공격 + 흩어져요(◎)',
-          de: 'Innerer Kreis',
-          fr: 'Cercle intérieur',
-          ja: 'ドーナツ',
-          cn: '月环',
-          ko: '가운데 원',
-        },
-        outstr: {
           en: '◎',
           de: 'Innerer Kreis',
           fr: 'Cercle intérieur',
           ja: 'ドーナツ',
           cn: '月环',
           ko: '가운데 원',
+        },
+        mesg: {
+          en: '전체 공격  + 흩어져요(${style})',
         },
       },
     },
@@ -2821,26 +2811,21 @@ const triggerSet: TriggerSet<Data> = {
       netRegex: { id: '832B', source: 'Pallas Athena', capture: false },
       alertText: (data, _matches, output) => {
         if (data.phase === 'gaiaochos1')
-          return output.text!();
-        data.geocentrism2OutputStr = output.outstr!();
+          return output.mesg!({ style: output.text!() });
+        data.geocentrism2OutputStr = output.text!();
         return;
       },
       outputStrings: {
         text: {
-          en: '전체 공격 + 흩어져요(〓)',
-          de: 'Horizontal',
-          fr: 'Horizontal',
-          ja: '縦',
-          cn: '水平',
-          ko: '가로',
-        },
-        outstr: {
           en: '〓',
           de: 'Horizontal',
           fr: 'Horizontal',
           ja: '縦',
           cn: '水平',
           ko: '가로',
+        },
+        mesg: {
+          en: '전체 공격  + 흩어져요(${style})',
         },
       },
     },
