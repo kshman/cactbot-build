@@ -349,10 +349,6 @@ const pangenesisEffects = {
   darkTilt: 'DF9',
 } as const;
 
-const pangenesisEffectIds: readonly string[] = Object.values(pangenesisEffects);
-
-type PangenesisRole = 'shortLight' | 'shortDark' | 'longLight' | 'longDark' | 'one' | 'not';
-
 type CaloricMarker = 'fire' | 'wind';
 
 const getHeadmarkerId = (data: Data, matches: NetMatches['HeadMarker']) => {
@@ -372,6 +368,11 @@ export interface Data extends RaidbossData {
   prsApoPeri?: number;
   // 후반
   prsUltima?: number;
+  prsSeenPangenesis?: boolean;
+  prsPangenesisCount: { [name: string]: number };
+  prsPangenesisDuration: { [name: string]: number };
+  prsPangenesisRole: { [name: string]: 'umbral' | 'astral' };
+  prsPangenesisTilt?: number;
   //
   readonly triggerSetConfig: {
     engravement1DropTower: 'quadrant' | 'clockwise' | 'tower';
@@ -417,11 +418,6 @@ export interface Data extends RaidbossData {
   classical2InitialColumn?: number;
   classical2InitialRow?: number;
   classical2Intercept?: InterceptOutput;
-  pangenesisDebuffsCalled?: boolean;
-  pangenesisRole: { [name: string]: PangenesisRole };
-  pangenesisTowerCount: number;
-  lastPangenesisTowerColor?: 'light' | 'dark';
-  pangenesisCurrentColor?: 'light' | 'dark';
   gaiaochosCounter: number;
   palladionGrapsTarget?: string;
   classicalCounter: number;
@@ -492,6 +488,10 @@ const triggerSet: TriggerSet<Data> = {
   timelineFile: 'p12s.txt',
   initData: () => {
     return {
+      prsPangenesisCount: {},
+      prsPangenesisRole: {},
+      prsPangenesisDuration: {},
+      //
       isDoorBoss: true,
       combatantData: [],
       paradeigmaCounter: 0,
@@ -512,8 +512,6 @@ const triggerSet: TriggerSet<Data> = {
       sampleTiles: [],
       darknessClones: [],
       conceptData: {},
-      pangenesisRole: {},
-      pangenesisTowerCount: 0,
       gaiaochosCounter: 0,
       classicalCounter: 0,
       classicalMarker: {},
@@ -3177,225 +3175,197 @@ const triggerSet: TriggerSet<Data> = {
         move: Outputs.moveAway,
       },
     },
-    // 전체적으로 판지너시스는 내꺼보다 느린데. 유지보수의 귀찮음을 위해 오피셜껄로 씀
     {
-      id: 'P12S Pangenesis Collect',
-      type: 'GainsEffect',
-      netRegex: { effectId: pangenesisEffectIds },
-      condition: (data) => !data.pangenesisDebuffsCalled && !data.isDoorBoss,
-      run: (data, matches) => {
-        const id = matches.effectId;
-        if (id === pangenesisEffects.darkTilt) {
-          const duration = parseFloat(matches.duration);
-          // 16 = short, 20 = long
-          data.pangenesisRole[matches.target] = duration > 18 ? 'longDark' : 'shortDark';
-        } else if (id === pangenesisEffects.lightTilt) {
-          const duration = parseFloat(matches.duration);
-          // 16 = short, 20 = long
-          data.pangenesisRole[matches.target] = duration > 18 ? 'longLight' : 'shortLight';
-        } else if (id === pangenesisEffects.unstableFactor) {
-          if (matches.count === '01')
-            data.pangenesisRole[matches.target] = 'one';
-        } else if (id === pangenesisEffects.stableSystem) {
-          // Ordered: Unstable Factor / Stable System / Umbral Tilt (light) / Astral Tilt (dark)
-          // ...and applied per person in that order.  Don't overwrite roles here.
-          data.pangenesisRole[matches.target] ??= 'not';
-        }
-      },
-    },
-    {
-      id: 'P12S Pangenesis Initial',
-      type: 'GainsEffect',
-      netRegex: { effectId: 'E22', capture: false },
-      delaySeconds: 0.5,
-      durationSeconds: (data) => {
-        // There's ~13 seconds until the first tower and ~18 until the second tower.
-        // Some strats have 'not' take the first tower or the second tower,
-        // so to avoid noisy alerts only extend duration for the long tilts.
-        const myRole = data.pangenesisRole[data.me];
-        return myRole === 'longDark' || myRole === 'longLight' || myRole === 'not' ? 17 : 12;
-      },
-      suppressSeconds: 999999,
+      id: 'P12S 판제네시스 시작',
+      type: 'Ability',
+      netRegex: { id: '833F', source: 'Pallas Athena', capture: false },
+      delaySeconds: 1,
+      durationSeconds: 10,
+      suppressSeconds: 2,
       alertText: (data, _matches, output) => {
-        const myRole = data.pangenesisRole[data.me];
-        if (myRole === undefined)
+        // 무직, 인자1
+        const mycnt = data.prsPangenesisCount[data.me] ?? 0;
+        if (mycnt < 2) {
+          let partner = output.unknown!();
+          for (const [name, cnt] of Object.entries(data.prsPangenesisCount)) {
+            if (cnt === mycnt && name !== data.me) {
+              partner = data.party.aJobName(name);
+              break;
+            }
+          }
+          return mycnt === 0
+            ? output.slime!({ partner: partner })
+            : output.geneone!({ partner: partner });
+        }
+        // 시간에 따른 처리
+        const mystat = data.prsPangenesisRole[data.me];
+        const myduration = data.prsPangenesisDuration[data.me];
+        if (mystat === undefined || myduration === undefined)
           return;
-
-        if (myRole === 'shortLight')
-          return output.shortLight!();
-        if (myRole === 'longLight')
-          return output.longLight!();
-        if (myRole === 'shortDark')
-          return output.shortDark!();
-        if (myRole === 'longDark')
-          return output.longDark!();
-
-        const myBuddy = Object.keys(data.pangenesisRole).find((x) => {
-          return data.pangenesisRole[x] === myRole && x !== data.me;
-        });
-        const player = myBuddy === undefined ? output.unknown!() : data.party.aJobName(myBuddy);
-        if (myRole === 'not')
-          return output.nothing!({ player: player });
-        return output.one!({ player: player });
+        if (myduration < 18)
+          return output.tower1st!({ color: output[mystat]!() });
+        return output.tower2nd!({ color: output[mystat]!() });
       },
-      run: (data) => data.pangenesisDebuffsCalled = true,
+      run: (data) => data.prsSeenPangenesis = true,
       outputStrings: {
-        nothing: {
-          en: '무직: 둘째🡹 타워 (${player}▽)',
-          ja: '無職: 2番目の上の塔 (${player})',
-          cn: '闲人: 踩第2轮塔 (${player})',
-          ko: '디버프 없음 (+ ${player})',
+        tower1st: {
+          en: '빠른: 첫 ${color} 타워',
         },
-        one: {
-          en: '인자1: 첫 타워 (${player}△)',
-          ja: '因子1: 1番目の塔 (${player})',
-          cn: '单因子: 踩第1轮塔 (${player})',
-          ko: '1번 (+ ${player})',
+        tower2nd: {
+          en: '느림: 둘째🡻 ${color} 타워',
         },
-        shortLight: {
-          en: '빠른: 첫 🟣검은 타워',
-          ja: '早: 1番目のやみ塔',
-          cn: '白1: 踩第1轮黑塔',
-          ko: '짧은 빛 (첫 어둠 대상)',
+        geneone: {
+          en: '인자1: 첫 타워 (${partner}△)',
         },
-        longLight: {
-          en: '느림: 둘째🡻 🟣검은 타워',
-          ja: '遅: 2番目の下のやみ塔',
-          cn: '白2: 踩第2轮黑塔',
-          ko: '긴 빛 (두번째 어둠 대상)',
+        slime: {
+          en: '무직: 둘째🡹 타워 (${partner}▽)',
         },
-        shortDark: {
-          en: '빠른: 첫 🟡하얀 타워',
-          ja: '早: 1番目のひかり塔',
-          cn: '黑1: 踩第1轮白塔',
-          ko: '짧은 어둠 (첫 빛 대상)',
+        astral: {
+          en: '🟡하얀', // 색깔 바뀜
         },
-        longDark: {
-          en: '느림: 둘째🡻 🟡하얀 타워',
-          ja: '遅: 2番目の下のひかり塔',
-          cn: '黑2: 踩第2轮白塔',
-          ko: '긴 어둠 (두번째 빛 대상)',
+        umbral: {
+          en: '🟣검은', // 색깔 바뀜
         },
         unknown: Outputs.unknown,
       },
     },
     {
-      id: 'P12S Pangenesis Tilt Gain',
+      id: 'P12S 판제네시스 상태/언스테이블',
       type: 'GainsEffect',
-      netRegex: { effectId: [pangenesisEffects.lightTilt, pangenesisEffects.darkTilt] },
-      condition: (data, matches) => matches.target === data.me && !data.isDoorBoss,
+      netRegex: { effectId: pangenesisEffects.unstableFactor },
       run: (data, matches) => {
-        const color = matches.effectId === pangenesisEffects.lightTilt ? 'light' : 'dark';
-        data.pangenesisCurrentColor = color;
+        const cnt = data.prsPangenesisCount[matches.target];
+        data.prsPangenesisCount[matches.target] = cnt === undefined ? 1 : cnt + 1;
       },
     },
     {
-      id: 'P12S Pangenesis Tilt Lose',
-      type: 'LosesEffect',
-      netRegex: { effectId: [pangenesisEffects.lightTilt, pangenesisEffects.darkTilt] },
-      condition: (data, matches) => matches.target === data.me && !data.isDoorBoss,
-      run: (data) => data.pangenesisCurrentColor = undefined,
-    },
-    {
-      id: 'P12S Pangenesis Tower',
-      type: 'Ability',
-      // 8343 = Umbral Advent (light tower), 8344 = Astral Advent (dark tower)
-      netRegex: { id: ['8343', '8344'] },
-      condition: (data, matches) => matches.target === data.me && !data.isDoorBoss,
+      id: 'P12S 판제네시스 상태/스테이블',
+      type: 'GainsEffect',
+      netRegex: { effectId: pangenesisEffects.stableSystem },
       run: (data, matches) => {
-        const color = matches.id === '8343' ? 'light' : 'dark';
-        data.lastPangenesisTowerColor = color;
+        const cnt = data.prsPangenesisCount[matches.target];
+        if (cnt === undefined)
+          data.prsPangenesisCount[matches.target] = 0;
       },
     },
     {
-      id: 'P12S Pangenesis Slime Reminder',
+      id: 'P12S 판제네시스 상태/음브랄', // Umbral Tilt
+      type: 'GainsEffect',
+      netRegex: { effectId: pangenesisEffects.lightTilt },
+      condition: (data) => data.phase === 'pangenesis',
+      run: (data, matches) => {
+        if (!data.prsSeenPangenesis) {
+          const cnt = data.prsPangenesisCount[matches.target];
+          data.prsPangenesisCount[matches.target] = cnt === undefined ? 1 : cnt + 1;
+          data.prsPangenesisDuration[matches.target] = parseFloat(matches.duration);
+        }
+        data.prsPangenesisRole[matches.target] = 'umbral';
+      },
+    },
+    {
+      id: 'P12S 판제네시스 상태/아스트랄', // Astral Tilt
+      type: 'GainsEffect',
+      netRegex: { effectId: pangenesisEffects.darkTilt },
+      condition: (data) => data.phase === 'pangenesis',
+      run: (data, matches) => {
+        if (!data.prsSeenPangenesis) {
+          const cnt = data.prsPangenesisCount[matches.target];
+          data.prsPangenesisCount[matches.target] = cnt === undefined ? 1 : cnt + 1;
+          data.prsPangenesisDuration[matches.target] = parseFloat(matches.duration);
+        }
+        data.prsPangenesisRole[matches.target] = 'astral';
+      },
+    },
+    {
+      id: 'P12S 판제네시스 상태/타워 색깔',
       type: 'Ability',
-      // 8343 = Umbral Advent (light tower), 8344 = Astral Advent (dark tower)
-      // There's always 1-2 of each, so just watch one.
-      netRegex: { id: '8343', capture: false },
-      condition: (data) => !data.isDoorBoss,
-      preRun: (data) => data.pangenesisTowerCount++,
-      suppressSeconds: 3,
+      netRegex: { id: ['8343', '8344'], source: 'Hemitheos' },
+      condition: (data, matches) => matches.target === data.me,
+      run: (data, matches) => {
+        if (data.prsPangenesisRole[data.me] !== undefined)
+          return;
+        const cc = matches.id === '8343' ? 'astral' : 'umbral';
+        data.prsPangenesisRole[data.me] = cc;
+      },
+    },
+    {
+      id: 'P12S 판제네시스 이동',
+      type: 'Ability',
+      netRegex: { id: ['8343', '8344'], source: 'Hemitheos', capture: false },
+      delaySeconds: 0.5,
+      durationSeconds: 4,
+      suppressSeconds: 2,
       response: (data, _matches, output) => {
         // cactbot-builtin-response
         output.responseOutputStrings = {
-          slimeTethers: {
-            en: '끝이지만 무직! 슬라임 채요!',
-            ja: 'スライムの線取り',
-            cn: '接线',
-            ko: '슬라임 선 가져가기',
+          move: {
+            en: '타워 둘어가요',
           },
-          theEnd: {
+          movecc: {
+            en: '다음 ${color} 타워',
+          },
+          end: {
             en: '끝! 남쪽으로',
           },
-        };
-        if (data.pangenesisTowerCount !== 3)
-          return;
-        if (data.pangenesisRole[data.me] !== 'not')
-          return { alertText: output.theEnd!() };
-        return { alarmText: output.slimeTethers!() };
-      },
-    },
-    {
-      id: 'P12S Pangenesis Tower Call',
-      type: 'GainsEffect',
-      netRegex: { effectId: pangenesisEffects.lightTilt, capture: false },
-      condition: (data) => {
-        if (data.isDoorBoss)
-          return false;
-        return data.lastPangenesisTowerColor !== undefined && data.pangenesisTowerCount !== 3;
-      },
-      delaySeconds: 0.5,
-      suppressSeconds: 3,
-      response: (data, _matches, output) => {
-        // cactbot-builtin-response
-        output.responseOutputStrings = {
-          // TODO: with more tracking we could even tell you who you're supposed
-          // to be with so that you could yell something on comms to fix mistakes.
-          lightTower: {
-            en: '다음 🟡하얀 타워',
-            ja: 'ひかり塔',
-            cn: '踩白塔',
-            ko: '빛 기둥',
+          slime: {
+            en: '끝이지만 무직! 슬라임 채요!',
           },
-          darkTower: {
-            en: '다음 🟣검은 타워',
-            ja: 'やみ塔',
-            cn: '踩黑塔',
-            ko: '어둠 기둥',
+          wait1n: {
+            en: '둘째🡹 타워',
           },
-          lightTowerSwitch: {
-            en: '색깔 바꿔 🟡하얀 타워',
-            ja: 'やみ -> ひかり塔',
-            cn: '踩白塔 (换色)',
-            ko: '빛 기둥 (교체)',
+          wait1g: {
+            en: '둘째🡻 타워',
           },
-          darkTowerSwitch: {
-            en: '색깔 바꿔 🟣검은 타워',
-            ja: 'ひかり -> やみ塔',
-            cn: '踩黑塔 (换色)',
-            ko: '어둠 기둥 (교체)',
+          wait1gcc: {
+            en: '둘째🡻 ${color} 타워',
+          },
+          astral: {
+            en: '🟡하얀', // 색깔 바뀜
+          },
+          umbral: {
+            en: '🟣검은', // 색깔 바뀜
           },
         };
 
-        let tower: typeof data.pangenesisCurrentColor;
-        if (data.pangenesisCurrentColor === 'light')
-          tower = 'dark';
-        else if (data.pangenesisCurrentColor === 'dark')
-          tower = 'light';
-        else
-          tower = data.lastPangenesisTowerColor;
+        data.prsPangenesisTilt = (data.prsPangenesisTilt ?? 0) + 1;
+        const tilt = data.prsPangenesisTilt;
 
-        if (tower === undefined)
-          return;
+        const mycnt = data.prsPangenesisCount[data.me] ?? 0;
+        const mystat = data.prsPangenesisRole[data.me];
+        const myduration = data.prsPangenesisDuration[data.me] ?? 0;
 
-        const isSameTower = tower === data.lastPangenesisTowerColor;
-        if (isSameTower)
-          return { alertText: tower === 'light' ? output.lightTower!() : output.darkTower!() };
-
-        if (tower === 'light')
-          return { alertText: output.lightTowerSwitch!() };
-        return { alertText: output.darkTowerSwitch!() };
+        if (tilt === 1) {
+          if (myduration < 18 || mycnt === 1) {
+            if (mystat === undefined)
+              return { alertText: output.move!() };
+            return { alertText: output.movecc!({ color: output[mystat]!() }) };
+          }
+          if (myduration > 18) {
+            if (mystat === undefined)
+              return { alertText: output.wait1g!() };
+            return { alertText: output.wait1gcc!({ color: output[mystat]!() }) };
+          }
+          if (mycnt === 0)
+            return { alertText: output.wait1n!() };
+        } else if (tilt === 2) {
+          // 모두 다 이동
+          if (mystat === undefined)
+            return { alertText: output.move!() };
+          return { alertText: output.movecc!({ color: output[mystat]!() }) };
+        } else if (tilt === 3) {
+          // 무직만 슬라임
+          if (mycnt === 0)
+            return { alarmText: output.slime!() };
+          return { alertText: output.end!() };
+        }
+      },
+      run: (data) => {
+        if (data.prsPangenesisTilt && data.prsPangenesisTilt >= 3) {
+          data.prsPangenesisCount = {};
+          data.prsPangenesisRole = {};
+          data.prsPangenesisDuration = {};
+          delete data.prsPangenesisTilt;
+        }
       },
     },
     {
