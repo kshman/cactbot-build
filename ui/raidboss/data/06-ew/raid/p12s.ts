@@ -3204,6 +3204,53 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
+      id: 'P12S 판제네시스 상태/언스테이블',
+      type: 'GainsEffect',
+      netRegex: { effectId: pangenesisEffects.unstableFactor },
+      run: (data, matches) => {
+        const cnt = data.prsPangenesisCount[matches.target];
+        data.prsPangenesisCount[matches.target] = cnt === undefined ? 1 : cnt + 1;
+      },
+    },
+    {
+      id: 'P12S 판제네시스 상태/스테이블',
+      type: 'GainsEffect',
+      netRegex: { effectId: pangenesisEffects.stableSystem },
+      run: (data, matches) => {
+        const cnt = data.prsPangenesisCount[matches.target];
+        if (cnt === undefined)
+          data.prsPangenesisCount[matches.target] = 0;
+      },
+    },
+    {
+      id: 'P12S 판제네시스 상태/음브랄', // Umbral Tilt
+      type: 'GainsEffect',
+      netRegex: { effectId: pangenesisEffects.lightTilt },
+      condition: (data) => data.phase === 'pangenesis',
+      run: (data, matches) => {
+        if (!data.prsSeenPangenesis) {
+          const cnt = data.prsPangenesisCount[matches.target];
+          data.prsPangenesisCount[matches.target] = cnt === undefined ? 1 : cnt + 1;
+          data.prsPangenesisDuration[matches.target] = parseFloat(matches.duration);
+        }
+        data.prsPangenesisRole[matches.target] = 'umbral';
+      },
+    },
+    {
+      id: 'P12S 판제네시스 상태/아스트랄', // Astral Tilt
+      type: 'GainsEffect',
+      netRegex: { effectId: pangenesisEffects.darkTilt },
+      condition: (data) => data.phase === 'pangenesis',
+      run: (data, matches) => {
+        if (!data.prsSeenPangenesis) {
+          const cnt = data.prsPangenesisCount[matches.target];
+          data.prsPangenesisCount[matches.target] = cnt === undefined ? 1 : cnt + 1;
+          data.prsPangenesisDuration[matches.target] = parseFloat(matches.duration);
+        }
+        data.prsPangenesisRole[matches.target] = 'astral';
+      },
+    },
+    {
       id: 'P12S 판제네시스 시작',
       type: 'Ability',
       netRegex: { id: '833F', source: 'Pallas Athena', capture: false },
@@ -3261,53 +3308,6 @@ const triggerSet: TriggerSet<Data> = {
           ja: '🟣やみ',
         },
         unknown: Outputs.unknown,
-      },
-    },
-    {
-      id: 'P12S 판제네시스 상태/언스테이블',
-      type: 'GainsEffect',
-      netRegex: { effectId: pangenesisEffects.unstableFactor },
-      run: (data, matches) => {
-        const cnt = data.prsPangenesisCount[matches.target];
-        data.prsPangenesisCount[matches.target] = cnt === undefined ? 1 : cnt + 1;
-      },
-    },
-    {
-      id: 'P12S 판제네시스 상태/스테이블',
-      type: 'GainsEffect',
-      netRegex: { effectId: pangenesisEffects.stableSystem },
-      run: (data, matches) => {
-        const cnt = data.prsPangenesisCount[matches.target];
-        if (cnt === undefined)
-          data.prsPangenesisCount[matches.target] = 0;
-      },
-    },
-    {
-      id: 'P12S 판제네시스 상태/음브랄', // Umbral Tilt
-      type: 'GainsEffect',
-      netRegex: { effectId: pangenesisEffects.lightTilt },
-      condition: (data) => data.phase === 'pangenesis',
-      run: (data, matches) => {
-        if (!data.prsSeenPangenesis) {
-          const cnt = data.prsPangenesisCount[matches.target];
-          data.prsPangenesisCount[matches.target] = cnt === undefined ? 1 : cnt + 1;
-          data.prsPangenesisDuration[matches.target] = parseFloat(matches.duration);
-        }
-        data.prsPangenesisRole[matches.target] = 'umbral';
-      },
-    },
-    {
-      id: 'P12S 판제네시스 상태/아스트랄', // Astral Tilt
-      type: 'GainsEffect',
-      netRegex: { effectId: pangenesisEffects.darkTilt },
-      condition: (data) => data.phase === 'pangenesis',
-      run: (data, matches) => {
-        if (!data.prsSeenPangenesis) {
-          const cnt = data.prsPangenesisCount[matches.target];
-          data.prsPangenesisCount[matches.target] = cnt === undefined ? 1 : cnt + 1;
-          data.prsPangenesisDuration[matches.target] = parseFloat(matches.duration);
-        }
-        data.prsPangenesisRole[matches.target] = 'astral';
       },
     },
     {
