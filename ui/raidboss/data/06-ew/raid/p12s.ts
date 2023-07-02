@@ -2866,66 +2866,87 @@ const triggerSet: TriggerSet<Data> = {
         output.responseOutputStrings = {
           classic1: {
             en: '${column} ${row} + ${intercept} [${marker} ${tether}]',
+            ja: '${column} ${row} + ${intercept} [${marker} ${tether}]',
           },
           classic2initial: {
             en: '${column} ${row} [${marker} ${tether}]',
+            ja: '${column} ${row} [${marker} ${tether}]',
           },
           classic2actual: {
             en: '반전: ${column} ${row} + ${intercept}',
+            ja: '反転: ${column} ${row} + ${intercept}',
           },
           outsideWest: {
             en: '1번',
+            ja: '1列',
           },
           insideWest: {
             en: '2번',
+            ja: '2列',
           },
           insideEast: {
             en: '3번',
+            ja: '3列',
           },
           outsideEast: {
             en: '4번',
+            ja: '4列',
           },
           northRow: {
             en: '위로',
+            ja: '上',
           },
           middleRow: {
             en: '가운데',
+            ja: '中',
           },
           southRow: {
             en: '아래로',
+            ja: '下',
           },
           leanNorth: {
             en: '🡹🡹',
+            ja: '🡹🡹',
           },
           leanEast: {
             en: '🡺🡺',
+            ja: '🡺🡺',
           },
           leanSouth: {
             en: '🡻🡻',
+            ja: '🡻🡻',
           },
           leanWest: {
             en: '🡸🡸',
+            ja: '🡸🡸',
           },
           circle: {
             en: '⚪',
+            ja: '⚪',
           },
           triangle: {
             en: '⨻',
+            ja: '⨻',
           },
           square: {
             en: '⬜',
+            ja: '⬜',
           },
           cross: {
             en: '❌',
+            ja: '❌',
           },
           alpha: {
             en: 'α🔴', // 🔺🟥
+            ja: 'α🔴',
           },
           beta: {
             en: 'β🟨',
+            ja: 'β🟨',
           },
           simple: {
             en: '${marker} + ${tether}',
+            ja: '${marker} + ${tether}',
           },
         };
 
@@ -3119,13 +3140,16 @@ const triggerSet: TriggerSet<Data> = {
       run: (data) => delete data.conceptDebuff,
       outputStrings: {
         baitAlphaDebuff: {
-          en: '피하고 => 광선 유도 (알파)',
+          en: '피하고 => 빔 유도 (알파)',
+          ja: '回避 => ビーム誘導 (アルファ)',
         },
         baitBetaDebuff: {
-          en: '피하고 => 광선 유도 (베타)',
+          en: '피하고 => 빔 유도 (베타)',
+          ja: '回避 => ビーム誘導 (ベター)',
         },
         default: {
-          en: '광선 유도해요',
+          en: '빔 유도해요',
+          ja: 'ビーム誘導',
         },
         ...palladionRayOutputStrings,
       },
@@ -3147,13 +3171,16 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         baitAlphaDebuff: {
-          en: '광선 유도 (알파)',
+          en: '빔 유도 (알파)',
+          ja: 'ビーム誘導 (アルファ)',
         },
         baitBetaDebuff: {
-          en: '광선 유도 (베타)',
+          en: '빔 유도 (베타)',
+          ja: 'ビーム誘導 (ベター)',
         },
         default: {
-          en: '광선 유도해요',
+          en: '빔 유도해요',
+          ja: 'ビーム誘導',
         },
         ...palladionRayOutputStrings,
       },
@@ -3171,6 +3198,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         moveAvoid: {
           en: '피해욧! (사이사이로)',
+          ja: '回避 (ビームの間)',
         },
         move: Outputs.moveAway,
       },
@@ -3210,21 +3238,27 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         tower1st: {
           en: '빠른: 첫 ${color} 타워',
+          ja: '早: 1の${color}塔',
         },
         tower2nd: {
           en: '느림: 둘째🡻 ${color} 타워',
+          ja: '遅: 2🡻の${color}塔',
         },
         geneone: {
           en: '인자1: 첫 타워 (${partner}△)',
+          ja: '因子1: 1の塔 (${partner}△)',
         },
         slime: {
           en: '무직: 둘째🡹 타워 (${partner}▽)',
+          ja: '無職: 2🡹の塔 (${partner}▽)',
         },
         astral: {
           en: '🟡하얀', // 색깔 바뀜
+          ja: '🟡ひかり',
         },
         umbral: {
           en: '🟣검은', // 색깔 바뀜
+          ja: '🟣やみ',
         },
         unknown: Outputs.unknown,
       },
@@ -3300,30 +3334,39 @@ const triggerSet: TriggerSet<Data> = {
         output.responseOutputStrings = {
           move: {
             en: '타워 둘어가요',
+            ja: '塔踏み',
           },
           movecc: {
             en: '다음 ${color} 타워',
+            ja: '次${color}塔',
           },
           end: {
             en: '끝! 남쪽으로',
+            ja: '終わり！南へ',
           },
           slime: {
             en: '끝이지만 무직! 슬라임 채요!',
+            ja: '終わったが無職！スライム取り！',
           },
           wait1n: {
             en: '둘째🡹 타워',
+            ja: '2🡹の塔',
           },
           wait1g: {
             en: '둘째🡻 타워',
+            ja: '2🡻の塔',
           },
           wait1gcc: {
             en: '둘째🡻 ${color} 타워',
+            ja: '2🡻の${color}塔',
           },
           astral: {
             en: '🟡하얀', // 색깔 바뀜
+            ja: '🟡ひかり',
           },
           umbral: {
             en: '🟣검은', // 색깔 바뀜
+            ja: '🟣やみ',
           },
         };
 
