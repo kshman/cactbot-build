@@ -3403,7 +3403,7 @@ const triggerSet: TriggerSet<Data> = {
       type: 'StartsUsing',
       netRegex: { id: '832F', source: 'Pallas Athena', capture: false },
       condition: (data) => data.seenSecondTethers === false && !data.options.AutumnStyle,
-      alertText: (_data, _matches, output) => output.stackForTethers!(),
+      infoText: (_data, _matches, output) => output.stackForTethers!(),
       outputStrings: {
         stackForTethers: {
           en: '한가운데 모여요!',
@@ -3433,7 +3433,7 @@ const triggerSet: TriggerSet<Data> = {
           arrowSW: 'arrowNE',
           arrowW: 'arrowE',
           arrowNW: 'arrowSE',
-        };
+        } as const;
         let safeDirs = Object.keys(unsafeMap) as ArrowOutput8[];
         data.darknessClones.forEach((clone) => {
           const x = parseFloat(clone.x);
@@ -3449,7 +3449,7 @@ const triggerSet: TriggerSet<Data> = {
         if (arrow !== undefined)
           return output.moveTo!({ dir: output[arrow]!() });
 
-        const [dir1, dir2] = safeDirs;
+        const [dir1, dir2] = safeDirs.sort();
         if (dir1 === undefined || dir2 === undefined)
           return;
         return output.combined!({ dir1: output[dir1]!(), dir2: output[dir2]!() });
@@ -3495,7 +3495,7 @@ const triggerSet: TriggerSet<Data> = {
         if (arrow !== undefined)
           return output.moveTo!({ dir: output[arrow]!() });
 
-        const [dir1, dir2] = safeDirs;
+        const [dir1, dir2] = safeDirs.sort();
         if (dir1 === undefined || dir2 === undefined)
           return;
         return output.combined!({ dir1: output[dir1]!(), dir2: output[dir2]!() });
