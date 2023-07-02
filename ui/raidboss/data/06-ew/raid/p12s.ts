@@ -21,14 +21,13 @@ type Phase =
   | 'palladion'
   | 'superchain2a'
   | 'superchain2b'
-  | 'gaiaochos'
   | 'gaiaochos1'
   | 'classical1'
   | 'caloric'
+  | 'pangenesis'
   | 'classical2'
   | 'gaiaochos2'
-  | 'ekpyrosis'
-  | 'pangenesis';
+  | 'ekpyrosis';
 
 const centerX = 100;
 const centerY = 100;
@@ -330,16 +329,19 @@ const getPalladionRayEscape = (
 
 const ultimaRayDpsArrows: ArrowOutput8[] = ['arrowE', 'arrowSE', 'arrowS', 'arrowSW'];
 
-const getUltimaRayArrow = (isDps: boolean, dirs: ArrowOutput8[]) => {
-  const find = dirs.filter((x) => {
-    if (isDps && ultimaRayDpsArrows.includes(x))
-      return x;
-    else if (!isDps && !ultimaRayDpsArrows.includes(x))
-      return x;
-  });
-  if (find.length !== 1)
-    return undefined;
-  return find[0];
+const getUltimaRayArrow = (isDps: boolean, dir1: ArrowOutput8, dir2: ArrowOutput8) => {
+  if (isDps) {
+    if (ultimaRayDpsArrows.includes(dir1))
+      return dir1;
+    if (ultimaRayDpsArrows.includes(dir2))
+      return dir2;
+  } else {
+    if (!ultimaRayDpsArrows.includes(dir1))
+      return dir1;
+    if (!ultimaRayDpsArrows.includes(dir2))
+      return dir2;
+  }
+  return undefined;
 };
 
 const pangenesisEffects = {
@@ -1773,7 +1775,13 @@ const triggerSet: TriggerSet<Data> = {
       id: 'P12S Engravement 3 Soak Tower/Bait Adds',
       type: 'GainsEffect',
       netRegex: { effectId: engravementTiltIds },
-      condition: (data, matches) => data.engravementCounter === 3 && data.me === matches.target,
+      condition: (data, matches) => {
+        if (!data.isDoorBoss)
+          return false;
+        if (data.engravementCounter === 3 && data.me === matches.target)
+          return true;
+        return false;
+      },
       suppressSeconds: 15, // avoid second (incorrect) alert when debuff switches from soaking tower
       alertText: (data, matches, output) => {
         // lightTower/darkTower support players receive lightTilt/darkTilt once dropping their tower
@@ -2295,13 +2303,16 @@ const triggerSet: TriggerSet<Data> = {
         combined: {
           en: '${move} [${engrave}]',
           ja: '${move} => ${engrave}',
+          cn: '${move} => ${engrave}',
           ko: '${move} => ${engrave}',
         },
         inThenOut: {
           en: '안에 있다 => 밖으로',
+          ja: '内から => 外へ',
         },
         outThenIn: {
           en: '밖에 있다 => 안으로',
+          ja: '外から => 内へ',
         },
         lightBeam: {
           en: '🟣밟아요🡺🡺',
@@ -2498,26 +2509,33 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         combined: {
           en: '${mechanic} [${dir}]',
+          cn: '去 ${dir}(侧) => 稍后 ${mechanic}',
         },
         east: Outputs.east,
         west: Outputs.west,
         eastFromSouth: {
           en: '동🡺🡺',
+          cn: '右/东',
         },
         eastFromNorth: {
           en: '🡸🡸동',
+          cn: '左/东',
         },
         westFromSouth: {
           en: '🡸🡸서',
+          cn: '左/西',
         },
         westFromNorth: {
           en: '서🡺🡺',
+          cn: '右/西',
         },
         protean: {
           en: '프로틴',
+          cn: '八方分散',
         },
         partners: {
           en: '페어',
+          cn: '两人分摊',
         },
       },
     },
@@ -2555,23 +2573,28 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         combined: {
           en: '${mechanic} => ${dir}',
+          cn: '${mechanic} => ${dir}',
         },
         protean: {
           en: '프로틴',
+          cn: '八方分散',
         },
         partners: {
           en: '페어',
+          cn: '两人分摊',
         },
         inside: {
           en: '안으로',
+          cn: '内侧 (躲避场边激光)',
         },
         outside: {
           en: '바깥으로',
+          cn: '外侧 (躲避场边激光)',
         },
         avoid: {
           en: '한 줄 장판 피해요',
           ja: '直線回避',
-          cn: '远离场边激光',
+          cn: '躲避场边激光',
           ko: '직선 장판 피하기',
         },
       },
@@ -2606,14 +2629,17 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         combined: {
           en: '밖에서 + ${mechanic} [${dir}]',
+          cn: '${dir} => 远离 + ${mechanic}',
         },
         north: Outputs.north,
         south: Outputs.south,
         protean: {
           en: '프로틴',
+          cn: '八方分散',
         },
         partners: {
           en: '페어',
+          cn: '两人分摊',
         },
       },
     },
@@ -2682,31 +2708,40 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         outsideNW: {
-          en: '북서 바깥 판때기',
+          en: '북서 바깥',
+          cn: '外侧 左上(西北)',
         },
         outsideNE: {
-          en: '북동 바깥 판때기',
+          en: '북동 바깥',
+          cn: '外侧 右上(东北)',
         },
         insideNW: {
-          en: '북서 안 판때기',
+          en: '북서 안',
+          cn: '内侧 左上(西北)',
         },
         insideNE: {
-          en: '북동 안 판때기',
+          en: '북동 안',
+          cn: '内侧 右上(东北)',
         },
         insideSW: {
-          en: '남서 안 판때기',
+          en: '남서 안',
+          cn: '内侧 左下(西南)',
         },
         insideSE: {
-          en: '남동 안 판때기',
+          en: '남동 안',
+          cn: '内侧 右下(东南)',
         },
         outsideSW: {
-          en: '남서 바깥 판때기',
+          en: '남서 바깥',
+          cn: '外侧 左下(西南)',
         },
         outsideSE: {
-          en: '남동 바깥 판때기',
+          en: '남동 바깥',
+          cn: '外侧 右下(东南)',
         },
         default: {
           en: '안전한 판때기 찾아요',
+          cn: '找安全地板',
         },
       },
     },
@@ -2867,58 +2902,72 @@ const triggerSet: TriggerSet<Data> = {
           classic1: {
             en: '${column} ${row} + ${intercept} [${marker} ${tether}]',
             ja: '${column} ${row} + ${intercept} [${marker} ${tether}]',
+            cn: '${column}, ${row} => ${intercept} [${marker} ${tether}]',
           },
           classic2initial: {
             en: '${column} ${row} [${marker} ${tether}]',
             ja: '${column} ${row} [${marker} ${tether}]',
+            cn: '先去 ${column}, ${row} [${marker} ${tether}]',
           },
           classic2actual: {
             en: '반전: ${column} ${row} + ${intercept}',
             ja: '反転: ${column} ${row} + ${intercept}',
+            cn: '去 ${column}, ${row} => ${intercept}',
           },
           outsideWest: {
             en: '1번',
             ja: '1列',
+            cn: '第1列 (左西 外侧)',
           },
           insideWest: {
             en: '2번',
             ja: '2列',
+            cn: '第2列 (左西 内侧)',
           },
           insideEast: {
             en: '3번',
             ja: '3列',
+            cn: '第3列 (右东 内侧)',
           },
           outsideEast: {
             en: '4번',
             ja: '4列',
+            cn: '第4列 (右东 外侧)',
           },
           northRow: {
             en: '위로',
             ja: '上',
+            cn: '第1个蓝方块',
           },
           middleRow: {
             en: '가운데',
             ja: '中',
+            cn: '第2个蓝方块',
           },
           southRow: {
             en: '아래로',
             ja: '下',
+            cn: '第3个蓝方块',
           },
           leanNorth: {
             en: '🡹🡹',
             ja: '🡹🡹',
+            cn: '靠上(北)',
           },
           leanEast: {
             en: '🡺🡺',
             ja: '🡺🡺',
+            cn: '靠右(东)',
           },
           leanSouth: {
             en: '🡻🡻',
             ja: '🡻🡻',
+            cn: '靠下(南)',
           },
           leanWest: {
             en: '🡸🡸',
             ja: '🡸🡸',
+            cn: '靠左(西)',
           },
           circle: {
             en: '⚪',
@@ -3113,8 +3162,8 @@ const triggerSet: TriggerSet<Data> = {
       },
       run: (data) => {
         if (data.phase === 'classical1') {
-          /*
           delete data.conceptPair;
+          /*
           delete data.conceptDebuff;
           */
           data.conceptData = {};
@@ -3142,14 +3191,17 @@ const triggerSet: TriggerSet<Data> = {
         baitAlphaDebuff: {
           en: '피하고 => 빔 유도 (알파)',
           ja: '回避 => ビーム誘導 (アルファ)',
+          cn: '远离方块 => 引导射线 (α)',
         },
         baitBetaDebuff: {
           en: '피하고 => 빔 유도 (베타)',
           ja: '回避 => ビーム誘導 (ベター)',
+          cn: '远离方块 => 引导射线 (β)',
         },
         default: {
           en: '빔 유도해요',
           ja: 'ビーム誘導',
+          cn: '引导射线',
         },
         ...palladionRayOutputStrings,
       },
@@ -3173,14 +3225,17 @@ const triggerSet: TriggerSet<Data> = {
         baitAlphaDebuff: {
           en: '빔 유도 (알파)',
           ja: 'ビーム誘導 (アルファ)',
+          cn: '引导射线 (α)',
         },
         baitBetaDebuff: {
           en: '빔 유도 (베타)',
           ja: 'ビーム誘導 (ベター)',
+          cn: '引导射线 (β)',
         },
         default: {
           en: '빔 유도해요',
           ja: 'ビーム誘導',
+          cn: '引导射线',
         },
         ...palladionRayOutputStrings,
       },
@@ -3199,6 +3254,7 @@ const triggerSet: TriggerSet<Data> = {
         moveAvoid: {
           en: '피해욧! (사이사이로)',
           ja: '回避 (ビームの間)',
+          cn: '快躲开! (远离方块)',
         },
         move: Outputs.moveAway,
       },
@@ -3457,14 +3513,14 @@ const triggerSet: TriggerSet<Data> = {
         });
         if (safeDirs.length !== 2)
           return;
-
-        const arrow = getUltimaRayArrow(data.role === 'dps', safeDirs);
-        if (arrow !== undefined)
-          return output.moveTo!({ dir: output[arrow]!() });
-
         const [dir1, dir2] = safeDirs.sort();
         if (dir1 === undefined || dir2 === undefined)
           return;
+        if (data.options.AutumnStyle) {
+          const arrow = getUltimaRayArrow(data.role === 'dps', dir1, dir2);
+          if (arrow !== undefined)
+            return output.moveTo!({ dir: output[arrow]!() });
+        }
         return output.combined!({ dir1: output[dir1]!(), dir2: output[dir2]!() });
       },
       outputStrings: {
@@ -3487,7 +3543,7 @@ const triggerSet: TriggerSet<Data> = {
         const uavCenterX = 100;
         const uavCenterY = 90;
 
-        const safeMap: Partial<Record<ArrowOutput8, ArrowOutput8[]>> = {
+        const safeMap: Record<ArrowOutput8, readonly ArrowOutput8[]> = {
           // for each dir, identify the two dirs 90 degrees away
           arrowN: ['arrowW', 'arrowE'],
           arrowNE: ['arrowNW', 'arrowSE'],
@@ -3497,20 +3553,20 @@ const triggerSet: TriggerSet<Data> = {
           arrowSW: ['arrowNW', 'arrowSE'],
           arrowW: ['arrowN', 'arrowS'],
           arrowNW: ['arrowNE', 'arrowSW'],
-        };
+          unknown: [],
+        } as const;
 
         const x = parseFloat(matches.x);
         const y = parseFloat(matches.y);
         const cloneDir = AutumnIndicator.xyToArrow8Output(x, y, uavCenterX, uavCenterY);
-        const safeDirs = safeMap[cloneDir] ?? [];
-
-        const arrow = getUltimaRayArrow(data.role === 'dps', safeDirs);
-        if (arrow !== undefined)
-          return output.moveTo!({ dir: output[arrow]!() });
-
-        const [dir1, dir2] = safeDirs.sort();
+        const [dir1, dir2] = safeMap[cloneDir];
         if (dir1 === undefined || dir2 === undefined)
           return;
+        if (data.options.AutumnStyle) {
+          const arrow = getUltimaRayArrow(data.role === 'dps', dir1, dir2);
+          if (arrow !== undefined)
+            return output.moveTo!({ dir: output[arrow]!() });
+        }
         return output.combined!({ dir1: output[dir1]!(), dir2: output[dir2]!() });
       },
       outputStrings: {
@@ -3556,6 +3612,7 @@ const triggerSet: TriggerSet<Data> = {
         uav1: {
           en: '끊어요! (${partner})',
           ja: '線切る (${partner})',
+          cn: '拉断连线 (和 ${partner})',
         },
         uav2: {
           en: '끊으면서 흩어져요(${geocentrism})! (${partner})',
@@ -3583,9 +3640,11 @@ const triggerSet: TriggerSet<Data> = {
           blockPartner: {
             en: '줄 앞에 막아줘요',
             ja: '相棒の前でビームを受ける',
+            cn: '挡枪',
           },
           stretchTether: {
             en: '줄 늘려요',
+            cn: '拉线',
           },
         };
 
@@ -3699,6 +3758,7 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: '첫 불! 앞으로! (${partner})',
           ja: '自分に初炎 (${partner})', // FIXME
+          cn: '火标记点名 (和 ${partner})',
         },
       },
     },
@@ -3724,6 +3784,7 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: '또다시 불! 무직이랑 뭉쳐요',
           ja: '再び炎！無職とあたまわり',
+          cn: '二次火标记点名',
         },
       },
     },
@@ -3744,10 +3805,12 @@ const triggerSet: TriggerSet<Data> = {
         none: {
           en: '무직! 불이랑 뭉쳐요!',
           ja: '無職！炎とあたまわり',
+          cn: '与火标记分摊',
         },
         wind: {
           en: '바람! 흩어져요!',
           ja: '風！ 散会',
+          cn: '风点名散开',
         },
       },
     },
@@ -3765,14 +3828,17 @@ const triggerSet: TriggerSet<Data> = {
           fire: {
             en: '불 (${team})',
             ja: '自分に炎 (${team})',
+            cn: '火标记点名 (和 ${team})',
           },
           wind: {
             en: '바람 (${team})',
             ja: '自分に風 (${team})',
+            cn: '风标记点名 (和 ${team})',
           },
           windBeacon: {
             en: '바람, 살짝 옆으로',
             ja: '自分に初風', // FIXME
+            cn: '风标记点名',
           },
         };
 
@@ -3817,10 +3883,12 @@ const triggerSet: TriggerSet<Data> = {
             // This is meant to be "person without wind who gets an extra stack".
             en: '첫 불! 한가운데로!',
             ja: '自分に初炎!', // FIXME
+            cn: '火标记点名',
           },
           fireOn: {
             en: '불 교대: ${player}',
             ja: '初炎: ${player}',
+            cn: '火标记点 ${player}',
           },
         };
 
@@ -3848,6 +3916,7 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: '바람, 흩어져요',
           ja: '自分に風、散会',
+          cn: '风点名散开',
         },
       },
     },
@@ -3863,6 +3932,7 @@ const triggerSet: TriggerSet<Data> = {
           passFire: {
             en: '불 장판 옮겨욧! 반시계 방향❱❱',
             ja: '次に移る！',
+            cn: '传火!',
           },
           moveAway: Outputs.moveAway,
         };
@@ -3907,7 +3977,7 @@ const triggerSet: TriggerSet<Data> = {
           de: 'Exaflare + Große AoE!', // FIXME
           fr: 'ExaBrasier + Grosse AoE!', // FIXME
           ja: 'エクサフレア + 全体攻撃',
-          cn: '地火 + 大AoE伤害！', // FIXME
+          cn: '地火 + 大AoE伤害!',
           ko: '엑사플레어 + 전체 공격!', // FIXME
         },
       },
