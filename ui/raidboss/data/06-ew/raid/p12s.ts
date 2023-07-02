@@ -3374,27 +3374,27 @@ const triggerSet: TriggerSet<Data> = {
         const tilt = data.prsPangenesisTilt;
 
         const mycnt = data.prsPangenesisCount[data.me] ?? 0;
-        const mystat = data.prsPangenesisRole[data.me];
+        const myrole = data.prsPangenesisRole[data.me];
         const myduration = data.prsPangenesisDuration[data.me] ?? 0;
 
         if (tilt === 1) {
           if (myduration < 18 || mycnt === 1) {
-            if (mystat === undefined)
+            if (myrole === undefined)
               return { alertText: output.move!() };
-            return { alertText: output.movecc!({ color: output[mystat]!() }) };
+            return { alertText: output.movecc!({ color: output[myrole]!() }) };
           }
           if (myduration > 18) {
-            if (mystat === undefined)
+            if (myrole === undefined)
               return { alertText: output.wait1g!() };
-            return { alertText: output.wait1gcc!({ color: output[mystat]!() }) };
+            return { alertText: output.wait1gcc!({ color: output[myrole]!() }) };
           }
           if (mycnt === 0)
             return { alertText: output.wait1n!() };
         } else if (tilt === 2) {
           // 모두 다 이동
-          if (mystat === undefined)
+          if (myrole === undefined)
             return { alertText: output.move!() };
-          return { alertText: output.movecc!({ color: output[mystat]!() }) };
+          return { alertText: output.movecc!({ color: output[myrole]!() }) };
         } else if (tilt === 3) {
           // 무직만 슬라임
           if (mycnt === 0)
