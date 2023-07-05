@@ -734,12 +734,12 @@ const triggerSet: TriggerSet<Data> = {
           const dir = isLeftAttack ? output.right!() : output.left!();
           if (firstDir === 'north') {
             if (secondDir === 'north')
-              return output.prsc2aNn!({ dir: dir });
-            return output.prsc2aNs!({ dir: dir });
+              return output.aSc2aNn!({ dir: dir });
+            return output.aSc2aNs!({ dir: dir });
           }
           if (secondDir === 'north')
-            return output.prsc2aSn!({ dir: dir });
-          return output.prsc2aSs!({ dir: dir });
+            return output.aSc2aSn!({ dir: dir });
+          return output.aSc2aSs!({ dir: dir });
         }
 
         if (isLeftAttack) {
@@ -828,16 +828,16 @@ const triggerSet: TriggerSet<Data> = {
           ko: '남쪽 + 오른쪽 (그리고 다시 남쪽)',
         },
         //
-        prsc2aNn: {
+        aSc2aNn: {
           en: '북쪽 => 다시 북쪽 [${dir}]',
         },
-        prsc2aNs: {
+        aSc2aNs: {
           en: '북쪽 => 전진해서 남쪽 [${dir}]',
         },
-        prsc2aSs: {
+        aSc2aSs: {
           en: '남쪽 => 다시 남쪽 [${dir}]',
         },
-        prsc2aSn: {
+        aSc2aSn: {
           en: '남쪽 => 전진해서 북쪽 [${dir}]',
         },
       },
@@ -974,15 +974,15 @@ const triggerSet: TriggerSet<Data> = {
         if (isSecondWing) {
           const isReturnBack = firstDir === secondDir;
           if (data.options.AutumnStyle) {
-            const move = call === 'swap' ? output.prSwap!() : '';
+            const move = call === 'swap' ? output.aswap!() : '';
             if (isReturnBack)
-              return output.prsc2aMb!({ move: move });
-            return output.prsc2aMg!({ move: move });
+              return output.aSc2aMb!({ move: move });
+            return output.aSc2aMg!({ move: move });
           }
           if (call === 'swap') {
             if (isReturnBack)
-              return output.superchain2aSwapMidBack!({ dir: finalDir });
-            return output.superchain2aSwapMidGo!({ dir: finalDir });
+              return output.superchain2aswapMidBack!({ dir: finalDir });
+            return output.superchain2aswapMidGo!({ dir: finalDir });
           }
           if (isReturnBack)
             return output.superchain2aStayMidBack!({ dir: finalDir });
@@ -992,20 +992,20 @@ const triggerSet: TriggerSet<Data> = {
         // Third wing call (when at final destination).
         const isProtean = secondMech === 'protean';
         if (data.options.AutumnStyle) {
-          const move = call === 'swap' ? output.prSwap!() : '';
+          const move = call === 'swap' ? output.aswap!() : '';
           if (firstDir === secondDir) {
             if (isProtean)
-              return output.prsc2aBpro!({ move: move });
-            return output.prsc2aBtwo!({ move: move });
+              return output.aSc2aBpro!({ move: move });
+            return output.aSc2aBtwo!({ move: move });
           }
           if (isProtean)
-            return output.prsc2aGpro!({ move: move });
-          return output.prsc2aGtwo!({ move: move });
+            return output.aSc2aGpro!({ move: move });
+          return output.aSc2aGtwo!({ move: move });
         }
         if (call === 'swap') {
           if (isProtean)
-            return output.superchain2aSwapProtean!({ dir: finalDir });
-          return output.superchain2aSwapPartners!({ dir: finalDir });
+            return output.superchain2aswapProtean!({ dir: finalDir });
+          return output.superchain2aswapPartners!({ dir: finalDir });
         }
         if (isProtean)
           return output.superchain2aStayProtean!({ dir: finalDir });
@@ -1028,14 +1028,14 @@ const triggerSet: TriggerSet<Data> = {
           cn: '停',
           ko: '가만히',
         },
-        superchain2aSwapMidBack: {
+        superchain2aswapMidBack: {
           en: '한가운데 => ${dir} 되돌아 가욧 [옆으로]',
           de: 'Wechseln + Mitte => Zurück nach ${dir}',
           ja: '真ん中 => また${dir} (横へ)',
           cn: '穿 + 去中间 => 回到 ${dir}',
           ko: '이동 + 가운데 => 다시 ${dir}',
         },
-        superchain2aSwapMidGo: {
+        superchain2aswapMidGo: {
           en: '한가운데 => 계속 전진 ${dir} [옆으로]',
           de: 'Wechseln + Mitte => Geh nach ${dir}',
           ja: '真ん中 => ${dir}前進 (横へ)',
@@ -1056,7 +1056,7 @@ const triggerSet: TriggerSet<Data> = {
           cn: '停 + 去中间 => 去 ${dir}',
           ko: '가만히 + 가운데 => ${dir}으로',
         },
-        superchain2aSwapProtean: {
+        superchain2aswapProtean: {
           en: '${dir} + 프로틴 [옆으로]',
           de: 'Wechseln => Himmelsrichtungen + ${dir}',
           ja: '基本散会 + ${dir} (横へ)',
@@ -1070,7 +1070,7 @@ const triggerSet: TriggerSet<Data> = {
           cn: '停 => 八方分散 + ${dir}',
           ko: '가만히 => 8방향 산개 + ${dir}',
         },
-        superchain2aSwapPartners: {
+        superchain2aswapPartners: {
           en: '${dir} + 페어 [옆으로]',
           de: 'Wechseln => Partner + ${dir}',
           ja: 'ペア + ${dir} (横へ)',
@@ -1087,25 +1087,25 @@ const triggerSet: TriggerSet<Data> = {
         north: Outputs.north,
         south: Outputs.south,
         //
-        prSwap: {
+        aswap: {
           en: '[옆으로]',
         },
-        prsc2aMb: {
+        aSc2aMb: {
           en: '한가운데로 => 되돌아 가욧 ${move}',
         },
-        prsc2aMg: {
+        aSc2aMg: {
           en: '한가운데로 => 계속 전진 ${move}',
         },
-        prsc2aBpro: {
+        aSc2aBpro: {
           en: '되돌아 와서 + 프로틴 ${move}',
         },
-        prsc2aBtwo: {
+        aSc2aBtwo: {
           en: '되돌아 와서 + 페어 ${move}',
         },
-        prsc2aGpro: {
+        aSc2aGpro: {
           en: '전진해서 + 프로틴 ${move}',
         },
-        prsc2aGtwo: {
+        aSc2aGtwo: {
           en: '전진해서 + 페어 ${move}',
         },
       },
@@ -1352,8 +1352,8 @@ const triggerSet: TriggerSet<Data> = {
 
           if (data.options.AutumnStyle) {
             if (matches.effectId === engravementIdMap.lightTower)
-              return output.simpleLightTower!({ pos: data.engravement1LightBeamsPos.join(' ') });
-            return output.simpleDarkTower!({ pos: data.engravement1DarkBeamsPos.join(' ') });
+              return output.alightTower!({ pos: data.engravement1LightBeamsPos.join(' ') });
+            return output.adarkTower!({ pos: data.engravement1DarkBeamsPos.join(' ') });
           }
 
           // if light tower
@@ -1399,11 +1399,11 @@ const triggerSet: TriggerSet<Data> = {
         northwest: Outputs.arrowNW,
         southeast: Outputs.arrowSE,
         southwest: Outputs.arrowSW,
-        simpleLightTower: {
+        alightTower: {
           en: '🟡설치 ${pos}',
           ja: 'ひかり設置 ${pos}',
         },
-        simpleDarkTower: {
+        adarkTower: {
           en: '🟣설치 ${pos}',
           ja: 'やみ設置 ${pos}',
         },
@@ -1493,7 +1493,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         lightBeam: {
-          en: '🟣밟아요🡺🡺',
+          en: '🡺🡺🟣밟아요',
           ja: 'やみ塔踏み (右)',
           cn: '踩暗塔',
           ko: '어둠 기둥 들어가기',
@@ -1511,7 +1511,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '빛 기둥 놓기',
         },
         darkTower: {
-          en: '🟣설치🡺🡺',
+          en: '🡺🡺🟣설치',
           ja: 'やみ塔設置 (右)',
           cn: '放暗塔',
           ko: '어둠 기둥 놓기',
@@ -2226,7 +2226,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         // This is left and right facing the boss.
         leftClockwise: {
-          en: '❰❰시계 방향 [${engrave}]',
+          en: '❰❰시계 => ${engrave}',
           de: 'Links (im Uhrzeigersinn) => ${engrave}',
           fr: 'Gauche (horaire) => ${engrave}',
           ja: '時計回り => ${engrave}',
@@ -2234,7 +2234,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '왼쪽 (시계방향) => ${engrave}',
         },
         rightCounterclockwise: {
-          en: '반시계 방향❱❱ [${engrave}]',
+          en: '반시계❱❱ => ${engrave}',
           de: 'Rechts (gegen Uhrzeigersinn) => ${engrave}',
           fr: 'Droite (Anti-horaire) => ${engrave}',
           ja: '反時計回り => ${engrave}',
@@ -2242,13 +2242,13 @@ const triggerSet: TriggerSet<Data> = {
           ko: '오른쪽 (반시계방향) => ${engrave}',
         },
         lightBeam: {
-          en: '밟아요🡺🡺',
+          en: '🡺🡺🟣밟아요',
           ja: '右塔踏み',
           cn: '光激光（与暗分摊）',
           ko: '빛 레이저 (어둠 쉐어)',
         },
         darkBeam: {
-          en: '🡸🡸밟아요',
+          en: '🡸🡸🟡밟아요',
           ja: '左塔踏み',
           cn: '暗激光（与光分摊）',
           ko: '어둠 레이저 (빛 쉐어),',
@@ -2260,7 +2260,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '빛 기둥',
         },
         darkTower: {
-          en: '🟣설치🡺🡺',
+          en: '🡺🡺🟣설치',
           ja: '右塔設置',
           cn: '暗塔点名',
           ko: '어둠 기둥',
@@ -2272,7 +2272,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '빛 쉐어',
         },
         darkTilt: {
-          en: '흩어져요🡺🡺',
+          en: '🡺🡺흩어져요',
           ja: '右散会',
           cn: '暗分摊组',
           ko: '어둠 쉐어',
@@ -2308,21 +2308,21 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         combined: {
-          en: '${move} [${engrave}]',
+          en: '${move} => ${engrave}',
           ja: '${move} => ${engrave}',
           cn: '${move} => ${engrave}',
           ko: '${move} => ${engrave}',
         },
         inThenOut: {
-          en: '안에 있다 => 밖으로',
+          en: '안에서 바깥',
           ja: '内から => 外へ',
         },
         outThenIn: {
-          en: '밖에 있다 => 안으로',
+          en: '바깥에서 안',
           ja: '外から => 内へ',
         },
         lightBeam: {
-          en: '🟣밟아요🡺🡺',
+          en: '🡺🡺🟣밟아요',
           ja: '右塔踏み',
           cn: '踩暗塔',
           ko: '어둠 기둥 들어가기',
@@ -2340,7 +2340,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '빛 기둥 놓기',
         },
         darkTower: {
-          en: '🟣설치🡺🡺',
+          en: '🡺🡺🟣설치',
           ja: '右塔設置',
           cn: '放暗塔',
           ko: '어둠 기둥 놓기',
@@ -2522,22 +2522,22 @@ const triggerSet: TriggerSet<Data> = {
         east: Outputs.east,
         west: Outputs.west,
         eastFromSouth: {
-          en: '동🡺🡺',
+          en: '동쪽🡺',
           cn: '右/东',
           ko: '오른쪽/동쪽',
         },
         eastFromNorth: {
-          en: '🡸🡸동',
+          en: '🡸동쪽',
           cn: '左/东',
           ko: '왼쪽/동쪽',
         },
         westFromSouth: {
-          en: '🡸🡸서',
+          en: '🡸서쪽',
           cn: '左/西',
           ko: '왼쪽/서쪽',
         },
         westFromNorth: {
-          en: '서🡺🡺',
+          en: '서쪽🡺',
           cn: '右/西',
           ko: '오른쪽/서쪽',
         },
@@ -2647,7 +2647,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         combined: {
-          en: '밖에서 + ${mechanic} [${dir}]',
+          en: '바깥에서 + ${mechanic} [${dir}]',
           cn: '${dir} => 远离 + ${mechanic}',
           ko: '${dir} => 밖으로 + ${mechanic}',
         },
@@ -3945,6 +3945,8 @@ const triggerSet: TriggerSet<Data> = {
           },
         };
 
+        if (data.decOffset === undefined)
+          return;
         const id = getHeadmarkerId(data, matches);
         if (id !== headmarkers.caloric2InitialFire)
           return;
