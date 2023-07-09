@@ -199,7 +199,13 @@ const triggerSet: TriggerSet<Data> = {
           if (x === undefined)
             return output.default!();
           if (data.options.AutumnStyle) {
-            const arrow = x > 100 ? output.aright!() : output.aleft!();
+            let arrow;
+            if (x > 100)
+              arrow = output.aright!();
+            else if (x < 100)
+              arrow = output.aleft!();
+            if (arrow === undefined)
+              return output.default!();
             return output.atether!({ arrow: arrow });
           }
           let wingSide;
@@ -628,8 +634,12 @@ const triggerSet: TriggerSet<Data> = {
         return output[safeOutput]!();
       },
       outputStrings: {
-        east: Outputs.getRightAndEast,
-        west: Outputs.getLeftAndWest,
+        east: {
+          en: '🡺❱❱❱❱❱',
+        },
+        west: {
+          en: '❰❰❰❰❰🡸',
+        },
       },
     },
     {
@@ -644,7 +654,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         lines: {
-          en: '레이저 피해욧 (바닥 선 위로)',
+          en: '레이저 피해욧 (선┼ 위로)',
           de: 'Auf die Linien (vermeide Laser)',
           fr: 'Sur les lignes (évitez les lasers)',
           ja: 'レーザー回避(マスの境界の上)',
@@ -652,7 +662,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '경계선 위 (레이저 피하기)',
         },
         boxes: {
-          en: '레이저 피해욧 (네모칸 안으로)',
+          en: '레이저 피해욧 (네모칸□ 안으로)',
           de: 'In den Boxen (vermeide Laser)',
           fr: 'Dans les carrés (évitez les lasers)',
           ja: 'レーザー回避(マスの内側)',

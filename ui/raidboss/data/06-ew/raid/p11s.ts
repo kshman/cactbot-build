@@ -162,7 +162,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '힐러 그룹 쉐어',
         },
         lightLr: {
-          en: '(왼쪽 돌아 마커) 4:4 뭉쳐요',
+          en: '(왼쪽 마커) 4:4 뭉쳐요',
         },
       },
     },
