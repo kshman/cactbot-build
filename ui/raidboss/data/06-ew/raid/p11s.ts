@@ -53,16 +53,16 @@ export const prsJuryOverrulingStrings = {
     en: '프로틴 (4:4 뭉쳐요)',
   },
   proteinlightfar: {
-    en: '프로틴: 그대로 대기',
+    en: '프로틴: 그자리 그대로',
   },
   proteinlightnear: {
-    en: '프로틴: 90도 안쪽으로',
+    en: '프로틴: 🡼90도',
   },
   proteindarkfar: {
-    en: '프로틴: 45도 왼쪽으로',
+    en: '프로틴: 🡸45도',
   },
   proteindarknear: {
-    en: '프로틴: 90+45도 안쪽으로',
+    en: '프로틴: 🡼🡹90+45도',
   },
   proteinunknown: {
     en: '프로틴 (${unk})',
@@ -364,7 +364,7 @@ const triggerSet: TriggerSet<Data> = {
           },
           // 하트오브저지
           tankHeart: {
-            en: '내게 줄! 한가운데서 무적 => 내 타워로',
+            en: '내게 줄! 한가운데 => 내 타워로',
           },
           partyHeart: {
             en: '모두 뭉쳐 푹찍쾅',
@@ -977,7 +977,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         text: {
-          en: '${num}번째  디케 둘이서 버스터!',
+          en: '${num}번째 디케 버스터!',
         },
       },
     },
@@ -1003,7 +1003,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '옆으로 => 장판 깔리면 🟪쪽으로',
+          en: '옆으로 => 🟪쪽으로 돌아요',
         },
       },
     },
