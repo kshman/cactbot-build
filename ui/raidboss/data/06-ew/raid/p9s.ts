@@ -463,13 +463,13 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         2: {
-          en: '2번: 첫 돌진, #3 타워',
+          en: '2번: 처음 #1 돌진, #3 타워',
         },
         4: {
           en: '4번: #2 돌진, 마지막 #4 타워',
         },
         6: {
-          en: '6번: 첫 타워, #3 돌진',
+          en: '6번: 처음 #1 타워, #3 돌진',
         },
         8: {
           en: '8번: #2 타워, 마지막 #4 돌진',
@@ -499,7 +499,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         defamationLater: {
-          en: '🔵폭탄이 와요',
+          en: '🔵폭탄',
         },
       },
     },
@@ -590,7 +590,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         dash: {
-          en: '돌진 처리 위치로',
+          en: '돌진 유도!',
           de: 'Sprung ködern',
           fr: 'Encaissez le saut',
           ja: '突進誘導',
@@ -598,7 +598,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '돌진 유도',
         },
         soak: {
-          en: '타워 밟아요',
+          en: '타워 밟아요!',
           de: 'Im Turm stehen',
           fr: 'Prenez votre tour',
           ja: '塔踏み',
@@ -634,7 +634,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         dash: {
-          en: '돌진 처리 위치로',
+          en: '돌진 유도!',
           de: 'Sprung ködern',
           fr: 'Encaissez le saut',
           ja: '突進誘導',
@@ -642,7 +642,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '돌진 유도',
         },
         soak: {
-          en: '타워 밟아요',
+          en: '타워 밟아요!',
           de: 'Im Turm stehen',
           fr: 'Prenez votre tour',
           ja: '塔踏み',
@@ -835,7 +835,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '푹찍쾅 => 그대로 멈춰요!',
+          en: '푹찍쾅 => 그대로!',
           de: 'Sprung => Stehen bleiben',
           fr: 'Saut => Restez',
           ja: '突進 => 止まれ',
@@ -851,7 +851,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '푹찍쾅 => 보스 가로 질러요!',
+          en: '푹찍쾅 => 보스 뒤로!',
           de: 'Sprung => Geh durch den Boss',
           fr: 'Saut => Traversez le boss',
           ja: '突進 => 移動',
