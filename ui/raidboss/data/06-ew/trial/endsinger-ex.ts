@@ -69,24 +69,24 @@ export interface Data extends RaidbossData {
 }
 
 export const orbOutputStrings: OutputStrings = {
-  ne: Outputs.dirNE,
-  nw: Outputs.dirNW,
-  se: Outputs.dirSE,
-  sw: Outputs.dirSW,
-  n: Outputs.dirN,
-  e: Outputs.dirE,
-  s: Outputs.dirS,
-  w: Outputs.dirW,
+  ne: Outputs.arrowNE,
+  nw: Outputs.arrowNW,
+  se: Outputs.arrowSE,
+  sw: Outputs.arrowSW,
+  n: Outputs.arrowN,
+  e: Outputs.arrowE,
+  s: Outputs.arrowS,
+  w: Outputs.arrowW,
   knockback: {
-    en: '${dir} 넉백',
-    ko: '${dir} 넉백',
+    en: '${dir}넉백',
+    ko: '${dir}넉백',
   },
   knockbackWithHead: {
-    en: '${dir1} 넉백 -> ${dir2}',
-    ko: '${dir1} 넉백 -> ${dir2}',
+    en: '${dir1}넉백 -> ${dir2}',
+    ko: '${dir1}넉백 -> ${dir2}',
   },
   aoeWithHead: {
-    en: '${dir1} [${dir2}]',
+    en: '${dir1} 살짝 ${dir2}',
     ko: '${dir1}쪽으로 (살짝 ${dir2}쪽으로)',
   },
 };
@@ -354,15 +354,15 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         sides: {
-          en: '바깥으로',
+          en: '바깥 옆으로',
           ko: '밖으로 (양 옆)',
         },
         sidesWithTower: {
-          en: '타워 밟고 + 바깥으로',
+          en: '타워 밟고 + 바깥',
           ko: '기둥 + 양 옆',
         },
         sidesWithStacks: {
-          en: '바깥에서 + 4:4 뭉쳐요',
+          en: '바깥 옆에서 + 4:4 뭉쳐요',
           ko: '양 옆 + 힐러 그룹',
         },
       },
@@ -387,7 +387,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '안으로 (가운데)',
         },
         middleWithTower: {
-          en: '타워 밟고 + 안으로',
+          en: '타워 밟고 + 안쪽',
           ko: '기둥 + 안으로',
         },
         middleWithStacks: {
@@ -808,12 +808,12 @@ const triggerSet: TriggerSet<Data> = {
         }
       },
       outputStrings: {
-        e: Outputs.dirE,
-        w: Outputs.dirW,
-        nw: Outputs.dirNW,
-        ne: Outputs.dirNE,
-        sw: Outputs.dirSW,
-        se: Outputs.dirSE,
+        e: Outputs.arrowE,
+        w: Outputs.arrowW,
+        nw: Outputs.arrowNW,
+        ne: Outputs.arrowNE,
+        sw: Outputs.arrowSW,
+        se: Outputs.arrowSE,
         text: {
           en: '${dir1} 또는 ${dir2}',
           de: '${dir1} / ${dir2}',
