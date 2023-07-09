@@ -107,7 +107,7 @@ const triggerSet: TriggerSet<Data> = {
         output.responseOutputStrings = {
           avoid: Outputs.avoidTankCleave,
           tank: {
-            en: '${num}번째 둘이서 버스터',
+            en: '${num}번째 둘이 버스터',
           },
           healer: {
             en: '${num}번째 탱크버스터',
@@ -198,6 +198,10 @@ const triggerSet: TriggerSet<Data> = {
           const x = data.combatantData[0]?.PosX;
           if (x === undefined)
             return output.default!();
+          if (data.options.AutumnStyle) {
+            const arrow = x > 100 ? output.aright!() : output.aleft!();
+            return output.atether!({ arrow: arrow });
+          }
           let wingSide;
           let wingDir;
           if (x > 100) {
@@ -233,6 +237,11 @@ const triggerSet: TriggerSet<Data> = {
         left: Outputs.left,
         east: Outputs.east,
         west: Outputs.west,
+        atether: {
+          en: '줄 땡겨요: ${arrow}${arrow}',
+        },
+        aleft: Outputs.arrowW,
+        aright: Outputs.arrowE,
       },
     },
     {
@@ -287,7 +296,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         text: {
-          en: '거미집 안으로',
+          en: '거미집 이어요',
           de: 'Sammeln',
           fr: 'Package',
           ja: 'あたまわり',
@@ -316,7 +325,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           // TODO: should we say "on posts" or "on back wall" based on count?
-          en: '거미집을 지어요',
+          en: '거미집 지어요',
           de: 'Netze überlappen',
           fr: 'Superposez les toiles',
           ja: 'ウェブ重なる',
@@ -324,7 +333,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '거미줄 겹치기',
         },
         place: {
-          en: '남쪽에서 셋이 나란히 거미집을 지어요',
+          en: '남쪽 셋이 나란히 거미집 지어요',
         },
       },
     },
@@ -347,7 +356,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '흩어져요 (거미집)',
+          en: '흩어져 거미집 지어요',
           de: 'Für Netze verteilen',
           fr: 'Écartez-vous pour les toiles',
           ja: 'ウェブ散会',
@@ -635,7 +644,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         lines: {
-          en: '레이저 피해욧 (바닥 선  위로)',
+          en: '레이저 피해욧 (바닥 선 위로)',
           de: 'Auf die Linien (vermeide Laser)',
           fr: 'Sur les lignes (évitez les lasers)',
           ja: 'レーザー回避(マスの境界の上)',
