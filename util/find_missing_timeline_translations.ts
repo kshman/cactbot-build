@@ -4,6 +4,7 @@ import path from 'path';
 import { Lang } from '../resources/languages';
 import NetRegexes from '../resources/netregexes';
 import Regexes from '../resources/regexes';
+import { AnonNetRegexParams, translateRegexBuildParamAnon } from '../resources/translations';
 import { LooseTriggerSet } from '../types/trigger';
 import {
   commonReplacement,
@@ -70,7 +71,33 @@ export const findMissing = async (
     );
   }
 
-  findMissingTimeline(timelineFile, triggersFile, triggerSet, timeline, trans, locale, errorFunc);
+  const missingTimeline = findMissingTimeline(
+    timelineFile,
+    triggersFile,
+    triggerSet,
+    timeline,
+    trans,
+    locale,
+    errorFunc,
+  );
+  const missingTrigger = findMissingTriggers(
+    triggersFile,
+    triggerSet,
+    translations ?? [],
+    locale,
+    errorFunc,
+  );
+
+  const missingAnything = missingTimeline || missingTrigger;
+  if (!missingAnything && trans.missingTranslations) {
+    errorFunc(
+      triggersFile,
+      undefined,
+      'other',
+      locale,
+      `missingTranslations set true when not needed`,
+    );
+  }
 };
 
 const findMissingTimeline = (
@@ -81,10 +108,10 @@ const findMissingTimeline = (
   trans: TimelineReplacement,
   locale: Lang,
   errorFunc: ErrorFuncType,
-) => {
+): boolean => {
   // Don't bother translating timelines that are old.
   if (triggerSet.timelineNeedsFixing)
-    return;
+    return false;
 
   // TODO: merge this with test_timeline.js??
   const testCases = [
@@ -187,12 +214,47 @@ const findMissingTimeline = (
       errorFunc(...value);
   }
 
-  if (keys.length === 0 && trans.missingTranslations)
-    errorFunc(
-      triggersFile,
-      undefined,
-      'other',
-      locale,
-      `missingTranslations set true when not needed`,
-    );
+  return keys.length === 0;
+};
+
+const findMissingTriggers = (
+  triggersFile: string,
+  triggerSet: LooseTriggerSet,
+  translations: TimelineReplacement[],
+  locale: Lang,
+  errorFunc: ErrorFuncType,
+): boolean => {
+  let missing = false;
+  for (const trigger of triggerSet.triggers ?? []) {
+    if (trigger.type === undefined || trigger.disabled === true)
+      continue;
+    if (trigger.netRegex instanceof RegExp || typeof trigger.netRegex !== 'object')
+      continue;
+
+    const result = translateRegexBuildParamAnon(trigger.netRegex ?? {}, locale, translations);
+    if (result.wasTranslated)
+      continue;
+
+    const anonParams: AnonNetRegexParams = trigger.netRegex;
+
+    for (const field of result.missingFields ?? []) {
+      missing = true;
+      const triggerIdStr = trigger.id ?? '???';
+      const fieldValueStr = JSON.stringify(anonParams[field]);
+      errorFunc(
+        triggersFile,
+        // Hard to find the line number, sorry.
+        // TODO: we could borrow the logic from raidboss_config.ts here
+        // and do a text fragment with the uri encoded trigger id.
+        // We could also just search for the line number in yet another
+        // parsing TypeScript with regex sort of way.
+        undefined,
+        'sync',
+        locale,
+        `trigger id "${triggerIdStr}" missing timelineReplace replaceSync for field "${field}" with value ${fieldValueStr}`,
+      );
+    }
+  }
+
+  return missing;
 };
