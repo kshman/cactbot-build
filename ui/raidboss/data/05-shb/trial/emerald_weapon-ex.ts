@@ -74,7 +74,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Get orbs',
+          en: '오브 처리',
           de: 'Orbs nehmen',
           fr: 'Prenez les orbes',
           ja: '玉を処理',
@@ -119,14 +119,14 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         clockwise: {
-          en: 'Rotate Clockwise',
+          en: '왼쪽으로 돌아요',
           de: 'Im Uhrzeigersinn rotieren',
           fr: 'Tournez dans le sens horaire',
           cn: '顺时针转',
           ko: '시계방향',
         },
         counterclock: {
-          en: 'Rotate Counterclockwise',
+          en: '오른쪽으로 돌아요',
           de: 'Gegen den Uhrzeigersinn rotieren',
           fr: 'Tournez dans le sens anti-horaire',
           cn: '逆时针转',
@@ -141,7 +141,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Away From Red Circle',
+          en: '빨강 장판에서 멀어져요',
           de: 'Weg vom roten Kreis',
           fr: 'Éloignez-vous du cercle rouge',
           cn: '远离红圈',
@@ -164,7 +164,7 @@ const triggerSet: TriggerSet<Data> = {
       run: (data) => data.seenMines = true,
       outputStrings: {
         text: {
-          en: 'Get Near Same Polarity Mines',
+          en: '같은 극끼리 있는 곳으로',
           de: 'Nahe den Bomben mit gleicher Polarisierung',
           fr: 'Allez vers les mines de même polarité',
           ja: '同じ極性の爆雷に近づく',
@@ -195,7 +195,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Flare on YOU',
+          en: '내게 플레어',
           de: 'Flare auf DIR',
           fr: 'Brasier sur VOUS',
           ja: '自分にフレア',
@@ -212,7 +212,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Bait Lines Away From Safe Spot',
+          en: '안전한 곳으로 줄 유도',
           de: 'Linien weg vom Safespot ködern',
           fr: 'Orientez les lignes hors de la zone safe',
           ja: '線を安置に被らないように捨てる',
@@ -238,7 +238,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         protean: {
-          en: 'Protean',
+          en: '프로틴, 흩어져요',
           de: 'Himmelsrichtungen',
           fr: 'Positions',
           ja: '8方向散開',
@@ -269,7 +269,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         text: {
-          en: 'Go ${dir}, Aim Across',
+          en: '${dir}으로 이동, 반대쪽 봐요',
           de: 'Geh nach ${dir}, schau Gegenüber',
           fr: 'Allez direction ${dir}, visez en face',
           cn: '去${dir}, 看好对面',
@@ -294,7 +294,7 @@ const triggerSet: TriggerSet<Data> = {
       run: (data) => delete data.primusPlayers,
       outputStrings: {
         text: {
-          en: 'Dodge Arrow Lines',
+          en: '화살표 피해요',
           de: 'Weiche den Pfeillinien aus',
           fr: 'Esquivez les lignes fléchées',
           cn: '避开箭头路径',
@@ -310,7 +310,7 @@ const triggerSet: TriggerSet<Data> = {
       run: (data) => delete data.tertius,
       outputStrings: {
         text: {
-          en: 'Watch for Swords',
+          en: '칼 확인',
           de: 'Schau nach den Schwertern',
           fr: 'Repérez les épées',
           cn: '观察剑',
@@ -367,20 +367,20 @@ const triggerSet: TriggerSet<Data> = {
         return output.middleLast!({ middle: s0, dir1: s4, dir2: s5 });
       },
       outputStrings: {
-        dirNE: Outputs.dirNE,
-        dirSE: Outputs.dirSE,
-        dirSW: Outputs.dirSW,
-        dirNW: Outputs.dirNW,
+        dirNE: Outputs.arrowNE,
+        dirSE: Outputs.arrowSE,
+        dirSW: Outputs.arrowSW,
+        dirNW: Outputs.arrowNW,
         middle: Outputs.middle,
         middleFirst: {
-          en: '${middle} -> ${dir1} / ${dir2}',
+          en: '${middle} -> ${dir1} ${dir2}',
           de: '${middle} -> ${dir1} / ${dir2}',
           fr: '${middle} -> ${dir1} / ${dir2}',
           cn: '${middle} -> ${dir1} / ${dir2}',
           ko: '${middle} -> ${dir1} / ${dir2}',
         },
         middleLast: {
-          en: '${dir1} / ${dir2} -> ${middle}',
+          en: '${dir1} ${dir2} -> ${middle}',
           de: '${dir1} / ${dir2} -> ${middle}',
           fr: '${dir1} / ${dir2} -> ${middle}',
           cn: '${dir1} / ${dir2} -> ${middle}',
@@ -415,7 +415,7 @@ const triggerSet: TriggerSet<Data> = {
       alarmText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Intercard + Out (Plus)',
+          en: '비스듬 + 밖으로 (➕)',
           de: 'Interkardinal + Raus (Plus)',
           fr: 'Intercardinal + Extérieur (Plus)',
           cn: '去场边角落 (十字)',
@@ -431,7 +431,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Cardinal + Out (Cross)',
+          en: '십자 + 밖으로 (❌)',
           de: 'Kardinal + Raus (Kreuz)',
           fr: 'Cardinal + Extérieur (Croix)',
           cn: '去场边中点 (X字)',
@@ -452,7 +452,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Go North; Dodge Soldiers/Divebombs',
+          en: '북으로! 쫄병과 다이브밤 피해요',
           de: 'Geh nach Norden; Achte auf die Lücken zwischen den Soldaten',
           fr: 'Allez au Nord, esquivez les soldats et les bombes plongeantes',
           ja: '飛行部隊と射撃部隊を見覚える', // FIXME
