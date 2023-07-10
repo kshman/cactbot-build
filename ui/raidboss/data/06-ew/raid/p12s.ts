@@ -373,6 +373,7 @@ export interface Data extends RaidbossData {
   prsTrinityInvul?: boolean;
   prsApoPeri?: number;
   prsWings: boolean[];
+  prsNorth?: boolean;
   // 후반
   prsUltima?: number;
   prsSeenPangenesis?: boolean;
@@ -582,6 +583,8 @@ const triggerSet: TriggerSet<Data> = {
           '86FB': 'superchain2b',
         } as const;
         data.phase = phaseMap[matches.id];
+
+        delete data.prsNorth;
       },
     },
     {
@@ -669,10 +672,23 @@ const triggerSet: TriggerSet<Data> = {
         if (y === undefined)
           return output.clones!({ dir: output.unknown!() });
         let cloneSide;
-        if (y > centerY)
-          cloneSide = data.role === 'tank' ? 'south' : 'north';
-        else
-          cloneSide = data.role === 'tank' ? 'north' : 'south';
+        if (y > centerY) {
+          if (data.role === 'tank') {
+            data.prsNorth = false;
+            cloneSide = 'south';
+          } else {
+            data.prsNorth = true;
+            cloneSide = 'north';
+          }
+        } else {
+          if (data.role === 'tank') {
+            data.prsNorth = true;
+            cloneSide = 'north';
+          } else {
+            data.prsNorth = false;
+            cloneSide = 'south';
+          }
+        }
         return output.clones!({ dir: output[cloneSide]!() });
       },
       outputStrings: {
@@ -739,7 +755,7 @@ const triggerSet: TriggerSet<Data> = {
           data.prsWings = [];
 
           if (data.phase !== 'superchain2a') {
-            if (data.role === 'tank')
+            if (data.prsNorth)
               return isLeftAttack ? output.aleft!() : output.aright!();
             return isLeftAttack ? output.aright!() : output.aleft!();
           }
@@ -920,7 +936,7 @@ const triggerSet: TriggerSet<Data> = {
 
           if (third === undefined) {
             let dir;
-            if (data.role === 'tank')
+            if (data.prsNorth)
               dir = isSecondLeft ? output.aright!() : output.aleft!();
             else
               dir = isSecondLeft ? output.aleft!() : output.aright!();
@@ -929,7 +945,7 @@ const triggerSet: TriggerSet<Data> = {
             return output.a2swap!({ dir: dir });
           }
 
-          if (data.role === 'tank')
+          if (data.prsNorth)
             return output.aall!({
               first: isFirstLeft ? output.aleft!() : output.aright!(),
               second: isSecondLeft ? output.aright!() : output.aleft!(),
@@ -1032,12 +1048,13 @@ const triggerSet: TriggerSet<Data> = {
         const secondMech = data.superchain2aSecondMech;
 
         if (data.options.AutumnStyle) {
+          const wing = data.prsWings.shift();
           if (data.phase !== 'superchain2a') {
             let dir;
-            if (data.prsWings.shift())
-              dir = data.role === 'tank' ? output.aright!() : output.aleft!();
+            if (wing)
+              dir = data.prsNorth ? output.aright!() : output.aleft!();
             else
-              dir = data.role === 'tank' ? output.aleft!() : output.aright!();
+              dir = data.prsNorth ? output.aleft!() : output.aright!();
             if (call === 'swap')
               return output.aswap!({ dir: dir });
             return output.astay!({ dir: dir });
@@ -1046,14 +1063,18 @@ const triggerSet: TriggerSet<Data> = {
           const isSecondWing = data.wingCalls.length === 1;
           if (isSecondWing) {
             const isReturnBack = firstDir === secondDir;
-            const move = call === 'swap' ? output.a2swap!() : '';
+            let move = '';
+            if (call === 'swap')
+              move = wing ? output.a2swapLeft!() : output.a2swapRight!();
             if (isReturnBack)
               return output.aSc2aMb!({ move: move });
             return output.aSc2aMg!({ move: move });
           }
 
           const isProtean = secondMech === 'protean';
-          const move = call === 'swap' ? output.a2swap!() : '';
+          let move = '';
+          if (call === 'swap')
+            move = wing ? output.a2swapLeft!() : output.a2swapRight!();
           if (firstDir === secondDir) {
             if (isProtean)
               return output.aSc2aBpro!({ move: move });
@@ -1183,8 +1204,11 @@ const triggerSet: TriggerSet<Data> = {
         aswap: {
           en: '${dir}옆으로',
         },
-        a2swap: {
-          en: '[옆으로]',
+        a2swapLeft: {
+          en: '[🡸옆으로]',
+        },
+        a2swapRight: {
+          en: '[🡺옆으로]',
         },
         aSc2aMb: {
           en: '한가운데로 => 되돌아 가욧 ${move}',
@@ -1468,13 +1492,13 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         lightTowerSide: {
-          en: '🟡설치 ${pos1}/${pos2}',
+          en: '🟡설치 ${pos1} ${pos2}',
           ja: 'ひかり設置 ${pos1}/${pos2}',
           cn: '去 ${pos1}/${pos2} 放光塔',
           ko: '빛 기둥 ${pos1}/${pos2}에 놓기',
         },
         darkTowerSide: {
-          en: '🟣설치 ${pos1}/${pos2}',
+          en: '🟣설치 ${pos1} ${pos2}',
           ja: 'やみ設置 ${pos1}/${pos2}',
           cn: '去 ${pos1}/${pos2} 放暗塔',
           ko: '어둠 기둥 ${pos1}/${pos2}에 놓기',
@@ -2410,11 +2434,11 @@ const triggerSet: TriggerSet<Data> = {
           ko: '${move} => ${engrave}',
         },
         inThenOut: {
-          en: '안에서 바깥',
+          en: '안:바깥',
           ja: '内から => 外へ',
         },
         outThenIn: {
-          en: '바깥에서 안',
+          en: '바깥:안',
           ja: '外から => 内へ',
         },
         lightBeam: {
