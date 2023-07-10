@@ -68,7 +68,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         ...comboOutputStrings,
         intercards: {
-          en: '비스듬하게 피해욧',
+          en: '비스듬히 피해욧',
           de: 'Interkardinal',
           fr: 'Intercardinal',
           ja: '斜めへ',
@@ -307,7 +307,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.rolePositions!(),
       outputStrings: {
         rolePositions: {
-          en: '롤 위치로 흩어져욧',
+          en: '롤 위치로',
           de: 'Rollenposition',
           fr: 'Positions par rôle',
           ja: 'ロール特定位置へ',
@@ -351,7 +351,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '뭉쳐맞기 5번',
+          en: '5x 뭉쳐요',
           de: '5x Sammeln',
           fr: '5x Packages',
           ja: '頭割り５回',

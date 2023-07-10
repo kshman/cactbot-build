@@ -116,7 +116,7 @@ const fetchCombatantsById = async (id: string[]) => {
 
 const paradeigmaLeanOutputStrings = {
   dirWithLean: {
-    en: '${dir}에 새, (약간 ${lean} 방향)',
+    en: '${dir}에 케찰, (약간 ${lean})',
     de: '${dir} Vogel (nach ${lean} neigen)',
     ja: '${dir}の鳥 (すこし${lean})',
     cn: '${dir}鸟 (偏${lean})',
@@ -506,7 +506,7 @@ const triggerSet: TriggerSet<Data> = {
         sides: {
           // Specify "for laser" to disambiguate with the astral eclipse going on at the same time.
           // Similarly, there's a Algedon knockback call too.
-          en: '옆쪽으로 (레이저 피해요)',
+          en: '옆으로 (레이저 피해요)',
           de: 'Seiten (für die Laser)',
           fr: 'Côtés (pour les lasers)',
           ja: '横側 (レーザー回避)',

@@ -112,7 +112,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.groups!(),
       outputStrings: {
         groups: {
-          en: '힐러랑 뭉쳐요',
+          en: '4:4 힐러',
           de: 'Heiler-Gruppen',
           fr: 'Groupes sur les heals',
           ja: 'ヒラに頭割り',
@@ -136,7 +136,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.protean!(),
       outputStrings: {
         protean: {
-          en: '프로틴으로 흩어져요',
+          en: '프로틴, 흩어져요',
           de: 'Himmelsrichtungen',
           fr: 'Positions',
           ja: '8方向散開',
@@ -159,7 +159,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '한가운데 모였다가 => 프로틴으로 흩어져요',
+          en: '한가운데 모였다 => 프로틴',
           de: 'In der Mitte Ködern => Raus (verteilen)',
           fr: 'Posez au centre -> Écartez-vous à l\'extérieur',
           ja: '真ん中で誘導 => 8方向散開',
@@ -178,7 +178,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '내게 돌진 줄이!',
+          en: '내게 돌진 줄!',
           de: 'Grausame Hatz Verbindung auf DIR',
           fr: 'Lien de Ruée brutale sur VOUS',
           ja: '自分に突進',
@@ -219,7 +219,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         partnerStack: {
-          en: '파트너와 둘이 함께',
+          en: '페어, 둘이 함께',
           de: 'Mit Partner sammeln',
           fr: 'Package partenaire',
           ja: '2人で頭割り',
@@ -242,7 +242,7 @@ const triggerSet: TriggerSet<Data> = {
       run: (data) => data.hairFlayUpbraidTargets = [],
       outputStrings: {
         partnerStack: {
-          en: '파트너와 둘이 함께 (근데 마커가 없네)',
+          en: '페어, 둘이 함께 (근데 마커가 없네)',
           de: 'Mit Partner sammeln (nicht markiert)',
           fr: 'Package partenaire (sans marque)',
           ja: '2人で頭割り (マーカーなし)',
