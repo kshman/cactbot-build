@@ -158,13 +158,13 @@ const triggerSet: TriggerSet<Data> = {
         if (data.prsTerra === 2)
           return output.acas!({ dir: dirOutputs.join('/') });
 
-        return dirOutputs.join(' / ');
+        return dirOutputs.join(' ');
       },
       outputStrings: {
-        nw: Outputs.dirNW,
-        ne: Outputs.dirNE,
-        sw: Outputs.dirSW,
-        se: Outputs.dirSE,
+        nw: Outputs.arrowNW,
+        ne: Outputs.arrowNE,
+        sw: Outputs.arrowSW,
+        se: Outputs.arrowSE,
         acas: {
           en: '송곳 조심: ${dir}',
         },
@@ -230,7 +230,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.partnerStack!(),
       outputStrings: {
         partnerStack: {
-          en: '파트너랑 뭉쳐요',
+          en: '페어, 둘이 함께',
           de: 'Mit Partner sammeln',
           fr: 'Package partenaire',
           ja: 'ペア',
@@ -283,7 +283,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.partnerStack!(),
       outputStrings: {
         partnerStack: {
-          en: '파트너랑 뭉쳐요',
+          en: '페어, 둘이 함께',
           de: 'Mit Partner sammeln',
           fr: 'Package partenaire',
           ja: 'ペア',
@@ -353,13 +353,13 @@ const triggerSet: TriggerSet<Data> = {
         });
       },
       outputStrings: {
-        n: Outputs.dirN,
-        e: Outputs.dirE,
-        s: Outputs.dirS,
-        w: Outputs.dirW,
+        n: Outputs.arrowN,
+        e: Outputs.arrowE,
+        s: Outputs.arrowS,
+        w: Outputs.arrowW,
         unknown: Outputs.unknown,
         clones: {
-          en: '${dir1}${dir2}${dir3}${dir4}',
+          en: '${dir1} ${dir2} ${dir3} ${dir4}',
         },
       },
     },
@@ -441,13 +441,13 @@ const triggerSet: TriggerSet<Data> = {
           dirOutputs.push(output[safeSpots[dir]]!());
         }
 
-        return dirOutputs.join(' 🡺 ');
+        return dirOutputs.join(' ');
       },
       outputStrings: {
-        n: Outputs.dirS,
-        e: Outputs.dirW,
-        s: Outputs.dirN,
-        w: Outputs.dirE,
+        n: Outputs.arrowS,
+        e: Outputs.arrowW,
+        s: Outputs.arrowN,
+        w: Outputs.arrowE,
         middle: Outputs.middle,
         unknown: Outputs.unknown,
       },
@@ -506,17 +506,17 @@ const triggerSet: TriggerSet<Data> = {
           dirOutputs.push(output[dir]!());
         }
 
-        return dirOutputs.join(' / ');
+        return dirOutputs.join(' ');
       },
       outputStrings: {
-        nw: Outputs.dirNE,
-        ne: Outputs.dirNW,
-        sw: Outputs.dirSE,
-        se: Outputs.dirSW,
-        n: Outputs.dirS,
-        e: Outputs.dirW,
-        s: Outputs.dirN,
-        w: Outputs.dirE,
+        nw: Outputs.arrowNE,
+        ne: Outputs.arrowNW,
+        sw: Outputs.arrowSE,
+        se: Outputs.arrowSW,
+        n: Outputs.arrowS,
+        e: Outputs.arrowW,
+        s: Outputs.arrowN,
+        w: Outputs.arrowE,
         unknown: Outputs.unknown,
       },
     },
@@ -552,7 +552,7 @@ const triggerSet: TriggerSet<Data> = {
       run: (data) => data.prsShadow = 'out',
       outputStrings: {
         text: {
-          en: '밖으로 🡺 힐러 뭉침',
+          en: '밖으로 🡺 4:4 힐러',
         },
       },
     },
@@ -587,7 +587,7 @@ const triggerSet: TriggerSet<Data> = {
           en: '뒤에서 🡺 안쪽+앞으로 🡺 프로틴',
         },
         pout: {
-          en: '뒤에서 🡺 밖으로+앞으로 🡺 힐러랑 뭉쳐요',
+          en: '뒤에서 🡺 밖으로+앞으로 🡺 4:4 힐러',
         },
       },
     },

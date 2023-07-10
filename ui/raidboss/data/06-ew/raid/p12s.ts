@@ -13,7 +13,6 @@ import { Output, TriggerSet } from '../../../../../types/trigger';
 // TODO: add phase dash calls?? (maybe this is overkill)
 
 // TODO: crush helm tankbusters??? (+esuna calls for non-invulning tanks??)
-
 // TODO: detect(?!) hex strat for caloric2 and tell people who to go to??
 
 type Phase =
@@ -276,30 +275,34 @@ const palladionRayOutputStrings = {
   spread: {
     en: '흩어져요: ${mesg}',
   },
+  raydown: {
+    en: '빔처리: ${safe}',
+  },
   safe10: {
-    en: '1번🡼🡼', // α, ○
+    en: '1🡼', // α, ○
   },
   safe20: {
-    en: '2번🡽🡽', // α, X
+    en: '2🡽', // α, X
   },
   safe30: {
-    en: '3번🡼🡼', // α, Δ
+    en: '3🡼', // α, Δ
   },
   safe40: {
-    en: '4번🡽🡽', // α, □
+    en: '4🡽', // α, □
   },
   safe11: {
-    en: '1번🡿🡿', // β, ○
+    en: '1🡿', // β, ○
   },
   safe21: {
-    en: '2번🡾🡾', // β, X
+    en: '2🡾', // β, X
   },
   safe31: {
-    en: '3번🡿🡿', // β, Δ
+    en: '3🡿', // β, Δ
   },
   safe41: {
-    en: '4번🡾🡾', // β, □
+    en: '4🡾', // β, □
   },
+  unknown: Outputs.unknown,
 } as const;
 
 const getPalladionRayEscape = (
@@ -309,7 +312,7 @@ const getPalladionRayEscape = (
   output: Output,
 ) => {
   if (ps === undefined || ab === undefined)
-    return;
+    return output.unknown!();
   const safe1 = {
     circle: 1,
     cross: 2,
@@ -324,7 +327,8 @@ const getPalladionRayEscape = (
   } as const;
   const mps = phase === 'classical1' ? safe1[ps] : safe2[ps];
   const mab = { alpha: 0, beta: 1 }[ab];
-  return output[`safe${mps}${mab}`]!();
+  const safe = output[`safe${mps}${mab}`]!();
+  return output.raydown!({ safe: safe });
 };
 
 const ultimaRayDpsArrows: ArrowOutput8[] = ['arrowE', 'arrowSE', 'arrowS', 'arrowSW'];
@@ -368,6 +372,8 @@ export interface Data extends RaidbossData {
   // 전반
   prsTrinityInvul?: boolean;
   prsApoPeri?: number;
+  prsWings: boolean[];
+  prsNorth?: boolean;
   // 후반
   prsUltima?: number;
   prsSeenPangenesis?: boolean;
@@ -475,6 +481,7 @@ const triggerSet: TriggerSet<Data> = {
       id: 'classicalConceptsPairOrder',
       name: {
         en: '클래식 컨셉 : 페어 순서 (왼쪽->오른쪽)',
+        ko: 'Classical Concepts: 도형 순서 (왼 -> 오)',
       },
       type: 'select',
       options: {
@@ -483,6 +490,11 @@ const triggerSet: TriggerSet<Data> = {
           '○XΔ□': 'cxts',
           '○Δ□X': 'ctsx',
         },
+        ko: {
+          'X□○Δ (파보빨초)': 'xsct',
+          '○XΔ□ (1234)': 'cxts',
+          '○Δ□X (동세네엑)': 'ctsx',
+        },
       },
       default: 'cxts',
     },
@@ -490,6 +502,7 @@ const triggerSet: TriggerSet<Data> = {
   timelineFile: 'p12s.txt',
   initData: () => {
     return {
+      prsWings: [],
       prsPangenesisCount: {},
       prsPangenesisRole: {},
       prsPangenesisDuration: {},
@@ -537,6 +550,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: '탱크 무적으로 받아요',
+          ja: 'タンク無敵',
         },
       },
     },
@@ -548,6 +562,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: '엄청 아픈 전체 공격!',
+          ja: '強力な全体攻撃！',
         },
       },
     },
@@ -568,6 +583,8 @@ const triggerSet: TriggerSet<Data> = {
           '86FB': 'superchain2b',
         } as const;
         data.phase = phaseMap[matches.id];
+
+        delete data.prsNorth;
       },
     },
     {
@@ -655,10 +672,23 @@ const triggerSet: TriggerSet<Data> = {
         if (y === undefined)
           return output.clones!({ dir: output.unknown!() });
         let cloneSide;
-        if (y > centerY)
-          cloneSide = data.role === 'tank' ? 'south' : 'north';
-        else
-          cloneSide = data.role === 'tank' ? 'north' : 'south';
+        if (y > centerY) {
+          if (data.role === 'tank') {
+            data.prsNorth = false;
+            cloneSide = 'south';
+          } else {
+            data.prsNorth = true;
+            cloneSide = 'north';
+          }
+        } else {
+          if (data.role === 'tank') {
+            data.prsNorth = true;
+            cloneSide = 'north';
+          } else {
+            data.prsNorth = false;
+            cloneSide = 'south';
+          }
+        }
         return output.clones!({ dir: output[cloneSide]!() });
       },
       outputStrings: {
@@ -720,20 +750,29 @@ const triggerSet: TriggerSet<Data> = {
         // Normal wings.
         const firstDir = data.superchain2aFirstDir;
         const secondDir = data.superchain2aSecondDir;
-        if (data.phase !== 'superchain2a' || firstDir === undefined || secondDir === undefined)
-          return isLeftAttack ? output.right!() : output.left!();
 
         if (data.options.AutumnStyle) {
-          const dir = isLeftAttack ? output.right!() : output.left!();
+          data.prsWings = [];
+
+          if (data.phase !== 'superchain2a') {
+            if (data.prsNorth)
+              return isLeftAttack ? output.aleft!() : output.aright!();
+            return isLeftAttack ? output.aright!() : output.aleft!();
+          }
+
+          const dir = isLeftAttack ? output.aright!() : output.aleft!();
           if (firstDir === 'north') {
             if (secondDir === 'north')
-              return output.prsc2aNn!({ dir: dir });
-            return output.prsc2aNs!({ dir: dir });
+              return output.aSc2aNn!({ dir: dir });
+            return output.aSc2aNs!({ dir: dir });
           }
           if (secondDir === 'north')
-            return output.prsc2aSn!({ dir: dir });
-          return output.prsc2aSs!({ dir: dir });
+            return output.aSc2aSn!({ dir: dir });
+          return output.aSc2aSs!({ dir: dir });
         }
+
+        if (data.phase !== 'superchain2a' || firstDir === undefined || secondDir === undefined)
+          return isLeftAttack ? output.right!() : output.left!();
 
         if (isLeftAttack) {
           if (firstDir === 'north') {
@@ -821,18 +860,20 @@ const triggerSet: TriggerSet<Data> = {
           ko: '남쪽 + 오른쪽 (그리고 다시 남쪽)',
         },
         //
-        prsc2aNn: {
-          en: '북쪽 => 다시 북쪽 [${dir}]',
+        aSc2aNn: {
+          en: '북쪽[${dir}] => 다시 북쪽',
         },
-        prsc2aNs: {
-          en: '북쪽 => 전진해서 남쪽 [${dir}]',
+        aSc2aNs: {
+          en: '북쪽[${dir}] => 전진해서 남쪽',
         },
-        prsc2aSs: {
-          en: '남쪽 => 다시 남쪽 [${dir}]',
+        aSc2aSs: {
+          en: '남쪽[${dir}] => 다시 남쪽',
         },
-        prsc2aSn: {
-          en: '남쪽 => 전진해서 북쪽 [${dir}]',
+        aSc2aSn: {
+          en: '남쪽[${dir}] => 전진해서 북쪽',
         },
+        aleft: Outputs.arrowW,
+        aright: Outputs.arrowE,
       },
     },
     {
@@ -874,6 +915,48 @@ const triggerSet: TriggerSet<Data> = {
         }
 
         data.wingCalls = [secondCall, thirdCall];
+
+        if (data.options.AutumnStyle) {
+          data.prsWings = [isSecondLeft, !isThirdLeft];
+
+          if (data.phase === 'superchain2a') {
+            if (third === undefined) {
+              const dir = isSecondLeft ? output.aleft!() : output.aright!();
+              if (secondCall === 'stay')
+                return output.a2stay!({ dir: dir });
+              return output.a2swap!({ dir: dir });
+            }
+
+            return output.aall!({
+              first: isFirstLeft ? output.aright!() : output.aleft!(),
+              second: isSecondLeft ? output.aleft!() : output.aright!(),
+              third: isThirdLeft ? output.aright!() : output.aleft!(),
+            });
+          }
+
+          if (third === undefined) {
+            let dir;
+            if (data.prsNorth)
+              dir = isSecondLeft ? output.aright!() : output.aleft!();
+            else
+              dir = isSecondLeft ? output.aleft!() : output.aright!();
+            if (secondCall === 'stay')
+              return output.a2stay!({ dir: dir });
+            return output.a2swap!({ dir: dir });
+          }
+
+          if (data.prsNorth)
+            return output.aall!({
+              first: isFirstLeft ? output.aleft!() : output.aright!(),
+              second: isSecondLeft ? output.aright!() : output.aleft!(),
+              third: isThirdLeft ? output.aleft!() : output.aright!(),
+            });
+          return output.aall!({
+            first: isFirstLeft ? output.aright!() : output.aleft!(),
+            second: isSecondLeft ? output.aleft!() : output.aright!(),
+            third: isThirdLeft ? output.aright!() : output.aleft!(),
+          });
+        }
 
         // This is the second call only.
         if (third === undefined) {
@@ -930,6 +1013,17 @@ const triggerSet: TriggerSet<Data> = {
           cn: '${first} => ${second} => ${third}',
           ko: '${first} => ${second} => ${third}',
         },
+        aleft: Outputs.arrowW,
+        aright: Outputs.arrowE,
+        a2stay: {
+          en: '[${dir}그대로]',
+        },
+        a2swap: {
+          en: '[${dir}옆으로]',
+        },
+        aall: {
+          en: '${first} ${second} ${third}',
+        },
       },
     },
     {
@@ -952,6 +1046,45 @@ const triggerSet: TriggerSet<Data> = {
         const firstDir = data.superchain2aFirstDir;
         const secondDir = data.superchain2aSecondDir;
         const secondMech = data.superchain2aSecondMech;
+
+        if (data.options.AutumnStyle) {
+          const wing = data.prsWings.shift();
+          if (data.phase !== 'superchain2a') {
+            let dir;
+            if (wing)
+              dir = data.prsNorth ? output.aright!() : output.aleft!();
+            else
+              dir = data.prsNorth ? output.aleft!() : output.aright!();
+            if (call === 'swap')
+              return output.aswap!({ dir: dir });
+            return output.astay!({ dir: dir });
+          }
+
+          const isSecondWing = data.wingCalls.length === 1;
+          if (isSecondWing) {
+            const isReturnBack = firstDir === secondDir;
+            let move = '';
+            if (call === 'swap')
+              move = wing ? output.a2swapLeft!() : output.a2swapRight!();
+            if (isReturnBack)
+              return output.aSc2aMb!({ move: move });
+            return output.aSc2aMg!({ move: move });
+          }
+
+          const isProtean = secondMech === 'protean';
+          let move = '';
+          if (call === 'swap')
+            move = wing ? output.a2swapLeft!() : output.a2swapRight!();
+          if (firstDir === secondDir) {
+            if (isProtean)
+              return output.aSc2aBpro!({ move: move });
+            return output.aSc2aBtwo!({ move: move });
+          }
+          if (isProtean)
+            return output.aSc2aGpro!({ move: move });
+          return output.aSc2aGtwo!({ move: move });
+        }
+
         if (
           data.phase !== 'superchain2a' || firstDir === undefined || secondDir === undefined ||
           secondMech === undefined
@@ -966,16 +1099,10 @@ const triggerSet: TriggerSet<Data> = {
         const finalDir = secondDir === 'north' ? output.north!() : output.south!();
         if (isSecondWing) {
           const isReturnBack = firstDir === secondDir;
-          if (data.options.AutumnStyle) {
-            const move = call === 'swap' ? output.prSwap!() : '';
-            if (isReturnBack)
-              return output.prsc2aMb!({ move: move });
-            return output.prsc2aMg!({ move: move });
-          }
           if (call === 'swap') {
             if (isReturnBack)
-              return output.superchain2aSwapMidBack!({ dir: finalDir });
-            return output.superchain2aSwapMidGo!({ dir: finalDir });
+              return output.superchain2aswapMidBack!({ dir: finalDir });
+            return output.superchain2aswapMidGo!({ dir: finalDir });
           }
           if (isReturnBack)
             return output.superchain2aStayMidBack!({ dir: finalDir });
@@ -984,21 +1111,10 @@ const triggerSet: TriggerSet<Data> = {
 
         // Third wing call (when at final destination).
         const isProtean = secondMech === 'protean';
-        if (data.options.AutumnStyle) {
-          const move = call === 'swap' ? output.prSwap!() : '';
-          if (firstDir === secondDir) {
-            if (isProtean)
-              return output.prsc2aBpro!({ move: move });
-            return output.prsc2aBtwo!({ move: move });
-          }
-          if (isProtean)
-            return output.prsc2aGpro!({ move: move });
-          return output.prsc2aGtwo!({ move: move });
-        }
         if (call === 'swap') {
           if (isProtean)
-            return output.superchain2aSwapProtean!({ dir: finalDir });
-          return output.superchain2aSwapPartners!({ dir: finalDir });
+            return output.superchain2aswapProtean!({ dir: finalDir });
+          return output.superchain2aswapPartners!({ dir: finalDir });
         }
         if (isProtean)
           return output.superchain2aStayProtean!({ dir: finalDir });
@@ -1021,14 +1137,14 @@ const triggerSet: TriggerSet<Data> = {
           cn: '停',
           ko: '가만히',
         },
-        superchain2aSwapMidBack: {
+        superchain2aswapMidBack: {
           en: '한가운데 => ${dir} 되돌아 가욧 [옆으로]',
           de: 'Wechseln + Mitte => Zurück nach ${dir}',
           ja: '真ん中 => また${dir} (横へ)',
           cn: '穿 + 去中间 => 回到 ${dir}',
           ko: '이동 + 가운데 => 다시 ${dir}',
         },
-        superchain2aSwapMidGo: {
+        superchain2aswapMidGo: {
           en: '한가운데 => 계속 전진 ${dir} [옆으로]',
           de: 'Wechseln + Mitte => Geh nach ${dir}',
           ja: '真ん中 => ${dir}前進 (横へ)',
@@ -1049,7 +1165,7 @@ const triggerSet: TriggerSet<Data> = {
           cn: '停 + 去中间 => 去 ${dir}',
           ko: '가만히 + 가운데 => ${dir}으로',
         },
-        superchain2aSwapProtean: {
+        superchain2aswapProtean: {
           en: '${dir} + 프로틴 [옆으로]',
           de: 'Wechseln => Himmelsrichtungen + ${dir}',
           ja: '基本散会 + ${dir} (横へ)',
@@ -1063,7 +1179,7 @@ const triggerSet: TriggerSet<Data> = {
           cn: '停 => 八方分散 + ${dir}',
           ko: '가만히 => 8방향 산개 + ${dir}',
         },
-        superchain2aSwapPartners: {
+        superchain2aswapPartners: {
           en: '${dir} + 페어 [옆으로]',
           de: 'Wechseln => Partner + ${dir}',
           ja: 'ペア + ${dir} (横へ)',
@@ -1080,25 +1196,36 @@ const triggerSet: TriggerSet<Data> = {
         north: Outputs.north,
         south: Outputs.south,
         //
-        prSwap: {
-          en: '[옆으로]',
+        aleft: Outputs.arrowW,
+        aright: Outputs.arrowE,
+        astay: {
+          en: '${dir}그대로',
         },
-        prsc2aMb: {
+        aswap: {
+          en: '${dir}옆으로',
+        },
+        a2swapLeft: {
+          en: '[🡸옆으로]',
+        },
+        a2swapRight: {
+          en: '[🡺옆으로]',
+        },
+        aSc2aMb: {
           en: '한가운데로 => 되돌아 가욧 ${move}',
         },
-        prsc2aMg: {
+        aSc2aMg: {
           en: '한가운데로 => 계속 전진 ${move}',
         },
-        prsc2aBpro: {
+        aSc2aBpro: {
           en: '되돌아 와서 + 프로틴 ${move}',
         },
-        prsc2aBtwo: {
+        aSc2aBtwo: {
           en: '되돌아 와서 + 페어 ${move}',
         },
-        prsc2aGpro: {
+        aSc2aGpro: {
           en: '전진해서 + 프로틴 ${move}',
         },
-        prsc2aGtwo: {
+        aSc2aGtwo: {
           en: '전진해서 + 페어 ${move}',
         },
       },
@@ -1345,8 +1472,8 @@ const triggerSet: TriggerSet<Data> = {
 
           if (data.options.AutumnStyle) {
             if (matches.effectId === engravementIdMap.lightTower)
-              return output.simpleLightTower!({ pos: data.engravement1LightBeamsPos.join(' ') });
-            return output.simpleDarkTower!({ pos: data.engravement1DarkBeamsPos.join(' ') });
+              return output.alightTower!({ pos: data.engravement1LightBeamsPos.join(' ') });
+            return output.adarkTower!({ pos: data.engravement1DarkBeamsPos.join(' ') });
           }
 
           // if light tower
@@ -1365,13 +1492,13 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         lightTowerSide: {
-          en: '🟡설치 ${pos1}/${pos2}',
+          en: '🟡설치 ${pos1} ${pos2}',
           ja: 'ひかり設置 ${pos1}/${pos2}',
           cn: '去 ${pos1}/${pos2} 放光塔',
           ko: '빛 기둥 ${pos1}/${pos2}에 놓기',
         },
         darkTowerSide: {
-          en: '🟣설치 ${pos1}/${pos2}',
+          en: '🟣설치 ${pos1} ${pos2}',
           ja: 'やみ設置 ${pos1}/${pos2}',
           cn: '去 ${pos1}/${pos2} 放暗塔',
           ko: '어둠 기둥 ${pos1}/${pos2}에 놓기',
@@ -1392,11 +1519,11 @@ const triggerSet: TriggerSet<Data> = {
         northwest: Outputs.arrowNW,
         southeast: Outputs.arrowSE,
         southwest: Outputs.arrowSW,
-        simpleLightTower: {
+        alightTower: {
           en: '🟡설치 ${pos}',
           ja: 'ひかり設置 ${pos}',
         },
-        simpleDarkTower: {
+        adarkTower: {
           en: '🟣설치 ${pos}',
           ja: 'やみ設置 ${pos}',
         },
@@ -1486,25 +1613,25 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         lightBeam: {
-          en: '🟣밟아요🡺🡺',
+          en: '🟣밟아요🡺▶',
           ja: 'やみ塔踏み (右)',
           cn: '踩暗塔',
           ko: '어둠 기둥 들어가기',
         },
         darkBeam: {
-          en: '🡸🡸🟡밟아요',
+          en: '◀🡸🟡밟아요',
           ja: 'ひかり塔踏み (左)',
           cn: '踩光塔',
           ko: '빛 기둥 들어가기',
         },
         lightTower: {
-          en: '🡸🡸🟡설치',
+          en: '◀🡸🟡설치',
           ja: 'ひかり塔設置 (左)',
           cn: '放光塔',
           ko: '빛 기둥 놓기',
         },
         darkTower: {
-          en: '🟣설치🡺🡺',
+          en: '🟣설치🡺▶',
           ja: 'やみ塔設置 (右)',
           cn: '放暗塔',
           ko: '어둠 기둥 놓기',
@@ -2219,7 +2346,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         // This is left and right facing the boss.
         leftClockwise: {
-          en: '❰❰시계 방향 [${engrave}]',
+          en: '❰❰왼쪽 + ${engrave}',
           de: 'Links (im Uhrzeigersinn) => ${engrave}',
           fr: 'Gauche (horaire) => ${engrave}',
           ja: '時計回り => ${engrave}',
@@ -2227,7 +2354,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '왼쪽 (시계방향) => ${engrave}',
         },
         rightCounterclockwise: {
-          en: '반시계 방향❱❱ [${engrave}]',
+          en: '오른쪽❱❱ + ${engrave}',
           de: 'Rechts (gegen Uhrzeigersinn) => ${engrave}',
           fr: 'Droite (Anti-horaire) => ${engrave}',
           ja: '反時計回り => ${engrave}',
@@ -2235,37 +2362,37 @@ const triggerSet: TriggerSet<Data> = {
           ko: '오른쪽 (반시계방향) => ${engrave}',
         },
         lightBeam: {
-          en: '밟아요🡺🡺',
+          en: '🟣밟아요🡺▶',
           ja: '右塔踏み',
           cn: '光激光（与暗分摊）',
           ko: '빛 레이저 (어둠 쉐어)',
         },
         darkBeam: {
-          en: '🡸🡸밟아요',
+          en: '◀🡸🟡밟아요',
           ja: '左塔踏み',
           cn: '暗激光（与光分摊）',
           ko: '어둠 레이저 (빛 쉐어),',
         },
         lightTower: {
-          en: '🡸🡸🟡설치',
+          en: '◀🡸🟡설치',
           ja: '左塔設置',
           cn: '光塔点名',
           ko: '빛 기둥',
         },
         darkTower: {
-          en: '🟣설치🡺🡺',
+          en: '🟣설치🡺▶',
           ja: '右塔設置',
           cn: '暗塔点名',
           ko: '어둠 기둥',
         },
         lightTilt: {
-          en: '🡸🡸흩어져요',
+          en: '◀🡸흩어져요',
           ja: '左散会',
           cn: '光分摊组',
           ko: '빛 쉐어',
         },
         darkTilt: {
-          en: '흩어져요🡺🡺',
+          en: '흩어져요🡺▶',
           ja: '右散会',
           cn: '暗分摊组',
           ko: '어둠 쉐어',
@@ -2301,39 +2428,39 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         combined: {
-          en: '${move} [${engrave}]',
+          en: '${move} + ${engrave}',
           ja: '${move} => ${engrave}',
           cn: '${move} => ${engrave}',
           ko: '${move} => ${engrave}',
         },
         inThenOut: {
-          en: '안에 있다 => 밖으로',
+          en: '안:바깥',
           ja: '内から => 外へ',
         },
         outThenIn: {
-          en: '밖에 있다 => 안으로',
+          en: '바깥:안',
           ja: '外から => 内へ',
         },
         lightBeam: {
-          en: '🟣밟아요🡺🡺',
+          en: '🟣밟아요🡺▶',
           ja: '右塔踏み',
           cn: '踩暗塔',
           ko: '어둠 기둥 들어가기',
         },
         darkBeam: {
-          en: '🡸🡸🟡밟아요',
+          en: '◀🡸🟡밟아요',
           ja: '左塔踏み',
           cn: '踩光塔',
           ko: '빛 기둥 들어가기',
         },
         lightTower: {
-          en: '🡸🡸🟡설치',
+          en: '◀🡸🟡설치',
           ja: '左塔設置',
           cn: '放光塔',
           ko: '빛 기둥 놓기',
         },
         darkTower: {
-          en: '🟣설치🡺🡺',
+          en: '🟣설치🡺▶',
           ja: '右塔設置',
           cn: '放暗塔',
           ko: '어둠 기둥 놓기',
@@ -2510,32 +2637,39 @@ const triggerSet: TriggerSet<Data> = {
         combined: {
           en: '${mechanic} [${dir}]',
           cn: '去 ${dir}(侧) => 稍后 ${mechanic}',
+          ko: '${dir} (옆) => ${mechanic}',
         },
         east: Outputs.east,
         west: Outputs.west,
         eastFromSouth: {
-          en: '동🡺🡺',
+          en: '🡺동쪽',
           cn: '右/东',
+          ko: '오른쪽/동쪽',
         },
         eastFromNorth: {
-          en: '🡸🡸동',
+          en: '🡸동쪽',
           cn: '左/东',
+          ko: '왼쪽/동쪽',
         },
         westFromSouth: {
-          en: '🡸🡸서',
+          en: '🡸서쪽',
           cn: '左/西',
+          ko: '왼쪽/서쪽',
         },
         westFromNorth: {
-          en: '서🡺🡺',
+          en: '🡺서쪽',
           cn: '右/西',
+          ko: '오른쪽/서쪽',
         },
         protean: {
           en: '프로틴',
           cn: '八方分散',
+          ko: '8방향 산개',
         },
         partners: {
           en: '페어',
           cn: '两人分摊',
+          ko: '파트너',
         },
       },
     },
@@ -2574,22 +2708,27 @@ const triggerSet: TriggerSet<Data> = {
         combined: {
           en: '${mechanic} => ${dir}',
           cn: '${mechanic} => ${dir}',
+          ko: '${mechanic} => ${dir}',
         },
         protean: {
           en: '프로틴',
           cn: '八方分散',
+          ko: '8방향 산개',
         },
         partners: {
           en: '페어',
           cn: '两人分摊',
+          ko: '파트너',
         },
         inside: {
           en: '안으로',
           cn: '内侧 (躲避场边激光)',
+          ko: '안쪽 (분신 피하기)',
         },
         outside: {
           en: '바깥으로',
           cn: '外侧 (躲避场边激光)',
+          ko: '바깥쪽 (분신 피하기)',
         },
         avoid: {
           en: '한 줄 장판 피해요',
@@ -2628,18 +2767,21 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         combined: {
-          en: '밖에서 + ${mechanic} [${dir}]',
+          en: '${dir} 바깥에서 + ${mechanic}',
           cn: '${dir} => 远离 + ${mechanic}',
+          ko: '${dir} => 밖으로 + ${mechanic}',
         },
         north: Outputs.north,
         south: Outputs.south,
         protean: {
           en: '프로틴',
           cn: '八方分散',
+          ko: '8방향 산개',
         },
         partners: {
           en: '페어',
           cn: '两人分摊',
+          ko: '파트너',
         },
       },
     },
@@ -2710,38 +2852,47 @@ const triggerSet: TriggerSet<Data> = {
         outsideNW: {
           en: '북서 바깥',
           cn: '外侧 左上(西北)',
+          ko: '북서 바깥',
         },
         outsideNE: {
           en: '북동 바깥',
           cn: '外侧 右上(东北)',
+          ko: '북동 바깥',
         },
         insideNW: {
           en: '북서 안',
           cn: '内侧 左上(西北)',
+          ko: '북서 안',
         },
         insideNE: {
           en: '북동 안',
           cn: '内侧 右上(东北)',
+          ko: '북동 안',
         },
         insideSW: {
           en: '남서 안',
           cn: '内侧 左下(西南)',
+          ko: '남서 안',
         },
         insideSE: {
           en: '남동 안',
           cn: '内侧 右下(东南)',
+          ko: '남동 안',
         },
         outsideSW: {
           en: '남서 바깥',
           cn: '外侧 左下(西南)',
+          ko: '남서 바깥',
         },
         outsideSE: {
           en: '남동 바깥',
           cn: '外侧 右下(东南)',
+          ko: '남동 바깥',
         },
         default: {
           en: '안전한 판때기 찾아요',
           cn: '找安全地板',
+          ko: '안전한 타일 찾기',
         },
       },
     },
@@ -2763,26 +2914,21 @@ const triggerSet: TriggerSet<Data> = {
       netRegex: { id: '8329', source: 'Pallas Athena', capture: false },
       alertText: (data, _matches, output) => {
         if (data.phase === 'gaiaochos1')
-          return output.text!();
-        data.geocentrism2OutputStr = output.outstr!();
+          return output.mesg!({ style: output.text!() });
+        data.geocentrism2OutputStr = output.text!();
         return;
       },
       outputStrings: {
         text: {
-          en: '전체 공격 + 흩어져요(‖)',
-          de: 'Vertikal',
-          fr: 'Vertical',
-          ja: '横',
-          cn: '垂直',
-          ko: '세로',
-        },
-        outstr: {
           en: '‖',
           de: 'Vertikal',
           fr: 'Vertical',
           ja: '横',
           cn: '垂直',
           ko: '세로',
+        },
+        mesg: {
+          en: '전체 공격  + 흩어져요(${style})',
         },
       },
     },
@@ -2792,26 +2938,21 @@ const triggerSet: TriggerSet<Data> = {
       netRegex: { id: '832A', source: 'Pallas Athena', capture: false },
       alertText: (data, _matches, output) => {
         if (data.phase === 'gaiaochos1')
-          return output.text!();
-        data.geocentrism2OutputStr = output.outstr!();
+          return output.mesg!({ style: output.text!() });
+        data.geocentrism2OutputStr = output.text!();
         return;
       },
       outputStrings: {
         text: {
-          en: '전체 공격 + 흩어져요(◎)',
-          de: 'Innerer Kreis',
-          fr: 'Cercle intérieur',
-          ja: 'ドーナツ',
-          cn: '月环',
-          ko: '가운데 원',
-        },
-        outstr: {
           en: '◎',
           de: 'Innerer Kreis',
           fr: 'Cercle intérieur',
           ja: 'ドーナツ',
           cn: '月环',
           ko: '가운데 원',
+        },
+        mesg: {
+          en: '전체 공격  + 흩어져요(${style})',
         },
       },
     },
@@ -2821,26 +2962,21 @@ const triggerSet: TriggerSet<Data> = {
       netRegex: { id: '832B', source: 'Pallas Athena', capture: false },
       alertText: (data, _matches, output) => {
         if (data.phase === 'gaiaochos1')
-          return output.text!();
-        data.geocentrism2OutputStr = output.outstr!();
+          return output.mesg!({ style: output.text!() });
+        data.geocentrism2OutputStr = output.text!();
         return;
       },
       outputStrings: {
         text: {
-          en: '전체 공격 + 흩어져요(〓)',
-          de: 'Horizontal',
-          fr: 'Horizontal',
-          ja: '縦',
-          cn: '水平',
-          ko: '가로',
-        },
-        outstr: {
           en: '〓',
           de: 'Horizontal',
           fr: 'Horizontal',
           ja: '縦',
           cn: '水平',
           ko: '가로',
+        },
+        mesg: {
+          en: '전체 공격  + 흩어져요(${style})',
         },
       },
     },
@@ -2885,8 +3021,8 @@ const triggerSet: TriggerSet<Data> = {
       netRegex: { id: ['8331', '8336'], source: 'Pallas Athena' },
       delaySeconds: (_data, matches) => {
         if (matches.id === '8331')
-          // for Classical Concepts, 6.7 cast time + 1.5 for debuff/headmarker data (some variability)
-          return 8.2;
+          // for Classical Concepts, 6.7 cast time + 1.8 for shape/debuff/headmarker data (some variability)
+          return 8.5;
         return 0; // for Panta Rhei, fire immediately once cast starts
       },
       durationSeconds: (data, matches) => {
@@ -2900,74 +3036,88 @@ const triggerSet: TriggerSet<Data> = {
         // cactbot-builtin-response
         output.responseOutputStrings = {
           classic1: {
-            en: '${column} ${row} + ${intercept} [${marker} ${tether}]',
-            ja: '${column} ${row} + ${intercept} [${marker} ${tether}]',
-            cn: '${column}, ${row} => ${intercept} [${marker} ${tether}]',
+            en: '${column}${row} ${intercept} [${marker}${tether}]',
+            ja: '${column} ${row} + ${intercept} [${marker}${tether}]',
+            cn: '${column}, ${row} => ${intercept} [${marker}${tether}]',
+            ko: '${column}, ${row} => ${intercept} [${marker}${tether}]',
           },
           classic2initial: {
-            en: '${column} ${row} [${marker} ${tether}]',
-            ja: '${column} ${row} [${marker} ${tether}]',
-            cn: '先去 ${column}, ${row} [${marker} ${tether}]',
+            en: '${column}${row} [${marker}${tether}]',
+            ja: '${column} ${row} [${marker}${tether}]',
+            cn: '先去 ${column}, ${row} [${marker}${tether}]',
+            ko: '시작: ${column}, ${row} [${marker}${tether}]',
           },
           classic2actual: {
-            en: '반전: ${column} ${row} + ${intercept}',
+            en: '반전: ${column}${row} ${intercept}',
             ja: '反転: ${column} ${row} + ${intercept}',
             cn: '去 ${column}, ${row} => ${intercept}',
+            ko: '실제: ${column}, ${row} => ${intercept}',
           },
           outsideWest: {
-            en: '1번',
+            en: '1',
             ja: '1列',
             cn: '第1列 (左西 外侧)',
+            ko: '1열 (서쪽 바깥)',
           },
           insideWest: {
-            en: '2번',
+            en: '2',
             ja: '2列',
             cn: '第2列 (左西 内侧)',
+            ko: '2열 (서쪽 안)',
           },
           insideEast: {
-            en: '3번',
+            en: '3',
             ja: '3列',
             cn: '第3列 (右东 内侧)',
+            ko: '3열 (동쪽 안)',
           },
           outsideEast: {
-            en: '4번',
+            en: '4',
             ja: '4列',
             cn: '第4列 (右东 外侧)',
+            ko: '4열 (동쪽 바깥)',
           },
           northRow: {
-            en: '위로',
+            en: '윗쪽',
             ja: '上',
             cn: '第1个蓝方块',
+            ko: '위쪽 파란색',
           },
           middleRow: {
             en: '가운데',
             ja: '中',
             cn: '第2个蓝方块',
+            ko: '가운데 파란색',
           },
           southRow: {
-            en: '아래로',
+            en: '아래쪽',
             ja: '下',
             cn: '第3个蓝方块',
+            ko: '아래쪽 파란색',
           },
           leanNorth: {
-            en: '🡹🡹',
-            ja: '🡹🡹',
+            en: '🡹',
+            ja: '🡹',
             cn: '靠上(北)',
+            ko: '위쪽',
           },
           leanEast: {
-            en: '🡺🡺',
-            ja: '🡺🡺',
+            en: '🡺',
+            ja: '🡺',
             cn: '靠右(东)',
+            ko: '오른쪽',
           },
           leanSouth: {
-            en: '🡻🡻',
-            ja: '🡻🡻',
+            en: '🡻',
+            ja: '🡻',
             cn: '靠下(南)',
+            ko: '아래쪽',
           },
           leanWest: {
-            en: '🡸🡸',
-            ja: '🡸🡸',
+            en: '🡸',
+            ja: '🡸',
             cn: '靠左(西)',
+            ko: '왼쪽',
           },
           circle: {
             en: '⚪',
@@ -2986,12 +3136,12 @@ const triggerSet: TriggerSet<Data> = {
             ja: '❌',
           },
           alpha: {
-            en: 'α🔴', // 🔺🟥
-            ja: 'α🔴',
+            en: '🔴α', // 🔺🟥
+            ja: '🔴α',
           },
           beta: {
-            en: 'β🟨',
-            ja: 'β🟨',
+            en: '🟨β',
+            ja: '🟨β',
           },
           simple: {
             en: '${marker} + ${tether}',
@@ -3162,8 +3312,8 @@ const triggerSet: TriggerSet<Data> = {
       },
       run: (data) => {
         if (data.phase === 'classical1') {
-          delete data.conceptPair;
           /*
+          delete data.conceptPair;
           delete data.conceptDebuff;
           */
           data.conceptData = {};
@@ -3192,16 +3342,19 @@ const triggerSet: TriggerSet<Data> = {
           en: '피하고 => 빔 유도 (알파)',
           ja: '回避 => ビーム誘導 (アルファ)',
           cn: '远离方块 => 引导射线 (α)',
+          ko: '도형 피하기 => 장판 유도 (알파)',
         },
         baitBetaDebuff: {
           en: '피하고 => 빔 유도 (베타)',
           ja: '回避 => ビーム誘導 (ベター)',
           cn: '远离方块 => 引导射线 (β)',
+          ko: '도형 피하기 => 장판 유도 (베타)',
         },
         default: {
           en: '빔 유도해요',
           ja: 'ビーム誘導',
           cn: '引导射线',
+          ko: '장판 유도',
         },
         ...palladionRayOutputStrings,
       },
@@ -3226,16 +3379,19 @@ const triggerSet: TriggerSet<Data> = {
           en: '빔 유도 (알파)',
           ja: 'ビーム誘導 (アルファ)',
           cn: '引导射线 (α)',
+          ko: '장판 유도 (알파)',
         },
         baitBetaDebuff: {
           en: '빔 유도 (베타)',
           ja: 'ビーム誘導 (ベター)',
           cn: '引导射线 (β)',
+          ko: '장판 유도 (베타)',
         },
         default: {
           en: '빔 유도해요',
           ja: 'ビーム誘導',
           cn: '引导射线',
+          ko: '장판 유도',
         },
         ...palladionRayOutputStrings,
       },
@@ -3255,6 +3411,7 @@ const triggerSet: TriggerSet<Data> = {
           en: '피해욧! (사이사이로)',
           ja: '回避 (ビームの間)',
           cn: '快躲开! (远离方块)',
+          ko: '이동! (도형 피하기)',
         },
         move: Outputs.moveAway,
       },
@@ -3476,6 +3633,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         stackForTethers: {
           en: '한가운데 모여요!',
+          ko: '선 생기기 전에 모이기',
         },
       },
     },
@@ -3526,9 +3684,10 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         combined: {
           en: '${dir1} / ${dir2}',
+          ko: '${dir1} / ${dir2} 안전',
         },
         moveTo: {
-          en: '${dir}${dir}',
+          en: '${dir}으로',
         },
         ...AutumnIndicator.outputStringsArrow8,
       },
@@ -3572,9 +3731,10 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         combined: {
           en: '${dir1} / ${dir2}',
+          ko: '${dir1} / ${dir2} 안전',
         },
         moveTo: {
-          en: '${dir}${dir}',
+          en: '${dir}으로',
         },
         ...AutumnIndicator.outputStringsArrow8,
       },
@@ -3613,9 +3773,11 @@ const triggerSet: TriggerSet<Data> = {
           en: '끊어요! (${partner})',
           ja: '線切る (${partner})',
           cn: '拉断连线 (和 ${partner})',
+          ko: '선 끊기 (+ ${partner})',
         },
         uav2: {
-          en: '끊으면서 흩어져요(${geocentrism})! (${partner})',
+          en: '끊고 + 흩어져요(${geocentrism}) (${partner})',
+          ko: '선 끊기 (+ ${partner}) => ${geocentrism}',
         },
         unknown: Outputs.unknown,
       },
@@ -3641,10 +3803,12 @@ const triggerSet: TriggerSet<Data> = {
             en: '줄 앞에 막아줘요',
             ja: '相棒の前でビームを受ける',
             cn: '挡枪',
+            ko: '선 대상자 앞에 서기',
           },
           stretchTether: {
             en: '줄 늘려요',
             cn: '拉线',
+            ko: '선 늘리기',
           },
         };
 
@@ -3759,6 +3923,7 @@ const triggerSet: TriggerSet<Data> = {
           en: '첫 불! 앞으로! (${partner})',
           ja: '自分に初炎 (${partner})', // FIXME
           cn: '火标记点名 (和 ${partner})',
+          ko: '첫 불 대상자 (+ ${partner})',
         },
       },
     },
@@ -3785,6 +3950,7 @@ const triggerSet: TriggerSet<Data> = {
           en: '또다시 불! 무직이랑 뭉쳐요',
           ja: '再び炎！無職とあたまわり',
           cn: '二次火标记点名',
+          ko: '두번째 불',
         },
       },
     },
@@ -3806,11 +3972,13 @@ const triggerSet: TriggerSet<Data> = {
           en: '무직! 불이랑 뭉쳐요!',
           ja: '無職！炎とあたまわり',
           cn: '与火标记分摊',
+          ko: '불 쉐어',
         },
         wind: {
           en: '바람! 흩어져요!',
           ja: '風！ 散会',
           cn: '风点名散开',
+          ko: '바람 산개',
         },
       },
     },
@@ -3829,16 +3997,19 @@ const triggerSet: TriggerSet<Data> = {
             en: '불 (${team})',
             ja: '自分に炎 (${team})',
             cn: '火标记点名 (和 ${team})',
+            ko: '불 (+ ${team})',
           },
           wind: {
             en: '바람 (${team})',
             ja: '自分に風 (${team})',
             cn: '风标记点名 (和 ${team})',
+            ko: '바람 (+ ${team})',
           },
           windBeacon: {
             en: '바람, 살짝 옆으로',
             ja: '自分に初風', // FIXME
             cn: '风标记点名',
+            ko: '첫 바람 대상자',
           },
         };
 
@@ -3884,14 +4055,18 @@ const triggerSet: TriggerSet<Data> = {
             en: '첫 불! 한가운데로!',
             ja: '自分に初炎!', // FIXME
             cn: '火标记点名',
+            ko: '불 대상자',
           },
           fireOn: {
             en: '불 교대: ${player}',
             ja: '初炎: ${player}',
             cn: '火标记点 ${player}',
+            ko: '불: ${player}',
           },
         };
 
+        if (data.decOffset === undefined)
+          return;
         const id = getHeadmarkerId(data, matches);
         if (id !== headmarkers.caloric2InitialFire)
           return;
@@ -3917,6 +4092,7 @@ const triggerSet: TriggerSet<Data> = {
           en: '바람, 흩어져요',
           ja: '自分に風、散会',
           cn: '风点名散开',
+          ko: '바람 산개',
         },
       },
     },
@@ -3933,6 +4109,7 @@ const triggerSet: TriggerSet<Data> = {
             en: '불 장판 옮겨욧! 반시계 방향❱❱',
             ja: '次に移る！',
             cn: '传火!',
+            ko: '불 건네기',
           },
           moveAway: Outputs.moveAway,
         };
@@ -3978,7 +4155,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: 'ExaBrasier + Grosse AoE!', // FIXME
           ja: 'エクサフレア + 全体攻撃',
           cn: '地火 + 大AoE伤害!',
-          ko: '엑사플레어 + 전체 공격!', // FIXME
+          ko: '엑사플레어 + 전체 공격!',
         },
       },
     },
@@ -4232,12 +4409,3 @@ const triggerSet: TriggerSet<Data> = {
 };
 
 export default triggerSet;
-
-// umbral=라이트=노랑=하양 / astral=다크=보라=깜장
-// DF8:Umbral Tilt                  노랑 타워
-// DF9:Astral Tilt                  보라 타워
-// DFA:Heavensflame Soul
-// DFB:Umbralbright Soul        타워 설치
-// DFC:Astralbright Soul        타워 설치
-// DFD:Umbralstrong Soul
-// DFE:Astralstrong Soul

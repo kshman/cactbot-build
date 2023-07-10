@@ -150,7 +150,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.stack!(),
       outputStrings: {
         stack: {
-          en: '짝꿍이랑 둘이 뭉쳐요',
+          en: '페어, 둘이 함께',
           de: 'Mit Partner sammeln',
           fr: 'Package avec votre partenaire',
           ja: '2人頭割り',
@@ -166,7 +166,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.spread!(),
       outputStrings: {
         spread: {
-          en: '프로틴! 자기 자리로',
+          en: '프로틴, 흩어져요',
           de: 'Himmelsrichtung',
           fr: 'Positions',
           ja: '基本散会',
@@ -183,7 +183,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '내게 범위 줄이!',
+          en: '내게 범위 줄!',
           de: 'Verbindung nach draußen richten',
           fr: 'Lien vers l\'extérieur',
           ja: '線を外へ向ける',
@@ -242,7 +242,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         outFlareThenSpread: {
-          en: '⊗밖으로+플레어 => 흩어져요',
+          en: '⊗밖으로 + 플레어 => 흩어져요',
           de: 'Raus+Flare => Verteilen',
           fr: 'Extérieur + Brasier -> Dispersion',
           ja: '外側＋フレア => 散会',
@@ -250,7 +250,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '바깥+플레어 => 산개',
         },
         inStackThenSpread: {
-          en: '⊙안으로+뭉쳤다 => 흩어져요',
+          en: '⊙안으로 + 뭉쳤다 => 흩어져요',
           de: 'Rein+Sammeln => Verteilen',
           fr: 'Intérieur + Package -> Dispersion',
           ja: '内側＋頭割り => 散会',
@@ -301,7 +301,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.outAndProtean!(),
       outputStrings: {
         outAndProtean: {
-          en: '⊗밖으로! 자기 자리로',
+          en: '⊗밖으로! 프로틴',
           de: 'Raus + Himmelsrichtung',
           fr: 'Extérieur + Positions',
           ja: '外側 + 基本散会',
@@ -317,7 +317,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.inAndProtean!(),
       outputStrings: {
         inAndProtean: {
-          en: '⊙안으로! 자기 자리로',
+          en: '⊙안으로! 프로틴',
           de: 'Rein + Himmelsrichtung',
           fr: 'Intérieur + Positions',
           ja: '内側 + 基本散会',
@@ -525,7 +525,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '십자방향',
         },
         intercards: {
-          en: '비스듬하게',
+          en: '비스듬히',
           de: 'Interkardinal',
           fr: 'Intercardinaux',
           ja: '斜めへ',
@@ -558,7 +558,7 @@ const triggerSet: TriggerSet<Data> = {
           en: '아니 오류인가...',
         },
         p1: {
-          en: '#1: 보스 뒤로 / 회전 방향에 맞춰 좌우로',
+          en: '#1: 보스 뒤 / 회전 방향으로',
         },
         p2: {
           en: '#2: V 뒤쪽',

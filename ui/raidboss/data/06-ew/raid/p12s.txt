@@ -344,3 +344,14 @@ hideall "--sync--"
 # Pallas Athena:8339 Unmitigated Explosion, caloric theory failure
 # Hemitheos:8348 Ultima Blow, tether laser damage during Gaiaochos 2
 # Pallas Athena:8349 Ignorabimus, enrage cast and damage
+#
+# 버프
+#
+# umbral=라이트=노랑=하양 / astral=다크=보라=깜장
+# DF8:Umbral Tilt                  노랑 타워
+# DF9:Astral Tilt                  보라 타워
+# DFA:Heavensflame Soul
+# DFB:Umbralbright Soul        타워 설치
+# DFC:Astralbright Soul        타워 설치
+# DFD:Umbralstrong Soul
+# DFE:Astralstrong Soul

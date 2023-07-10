@@ -25,6 +25,7 @@ export interface Data extends RaidbossData {
     };
   };
   limitCutDash: number;
+  limitCut1Count: number;
 }
 
 const dualspells = {
@@ -113,6 +114,7 @@ const triggerSet: TriggerSet<Data> = {
       dualityBuster: [],
       levinOrbs: {},
       limitCutDash: 0,
+      limitCut1Count: 0,
     };
   },
   triggers: [
@@ -426,52 +428,105 @@ const triggerSet: TriggerSet<Data> = {
         ...AutumnIndicator.outputStringsMarker8,
       },
     },
+    // 아니 내꺼랑 비슷해 졌는데 메시지가 계산이 아니고 스태틱이네
     {
-      id: 'P9S Limit Cut Player Number',
+      id: 'P9S Limit Cut 1 Player Number',
       type: 'HeadMarker',
       netRegex: {},
       condition: (data, matches) => {
-        return data.me === matches.target &&
+        return !data.seenChimericSuccession &&
+          limitCutMarkers.includes(getHeadmarkerId(data, matches));
+      },
+      preRun: (data, matches) => {
+        data.limitCut1Count++;
+        if (data.me === matches.target) {
+          const correctedMatch = getHeadmarkerId(data, matches);
+          data.limitCutNumber = limitCutNumberMap[correctedMatch];
+        }
+      },
+      durationSeconds: 30,
+      infoText: (data, matches, output) => {
+        if (data.me !== matches.target)
+          return;
+        const expectedLimitCutNumbers = [2, 4, 6, 8];
+        if (
+          data.limitCutNumber === undefined ||
+          !expectedLimitCutNumbers.includes(data.limitCutNumber)
+        )
+          return;
+        return output[data.limitCutNumber]!();
+      },
+      tts: (data, matches, output) => {
+        if (data.me !== matches.target || data.limitCutNumber === undefined)
+          return;
+        return output.tts!({ num: data.limitCutNumber });
+      },
+      outputStrings: {
+        2: {
+          en: '2번: 처음 #1 돌진, #3 타워',
+        },
+        4: {
+          en: '4번: #2 돌진, 마지막 #4 타워',
+        },
+        6: {
+          en: '6번: 처음 #1 타워, #3 돌진',
+        },
+        8: {
+          en: '8번: #2 타워, 마지막 #4 돌진',
+        },
+        tts: {
+          en: '${num}番',
+          de: '${num}',
+          fr: '${num}',
+          ja: '${num}',
+          cn: '${num}',
+          ko: '${num}',
+        },
+      },
+    },
+    {
+      id: 'P9S Limit Cut 1 Early Defamation',
+      type: 'HeadMarker',
+      netRegex: {},
+      condition: (data, matches) => {
+        return data.limitCut1Count === 4 && !data.seenChimericSuccession &&
+          limitCutMarkers.includes(getHeadmarkerId(data, matches));
+      },
+      infoText: (data, _matches, output) => {
+        if (data.limitCutNumber !== undefined)
+          return;
+        return output.defamationLater!();
+      },
+      outputStrings: {
+        defamationLater: {
+          en: '🔵폭탄',
+        },
+      },
+    },
+    {
+      id: 'P9S Chimeric Limit Cut Player Number',
+      type: 'HeadMarker',
+      netRegex: {},
+      condition: (data, matches) => {
+        return data.seenChimericSuccession && data.me === matches.target &&
           limitCutMarkers.includes(getHeadmarkerId(data, matches));
       },
       preRun: (data, matches) => {
         const correctedMatch = getHeadmarkerId(data, matches);
         data.limitCutNumber = limitCutNumberMap[correctedMatch];
       },
-      durationSeconds: (data) => data.seenChimericSuccession ? 20 : 30,
+      durationSeconds: 20,
       infoText: (data, _matches, output) => {
-        const dice = data.limitCutNumber ?? output.unknown!();
-        if (data.seenChimericSuccession)
-          return output.text!({ num: dice });
-
-        const rushMap: { [id: number]: number } = {
-          1: 0,
-          2: 1,
-          3: 0,
-          4: 2,
-          5: 0,
-          6: 3,
-          7: 0,
-          8: 4,
-        };
-        const towerMap: { [id: number]: number } = {
-          1: 0,
-          2: 3,
-          3: 0,
-          4: 4,
-          5: 0,
-          6: 1,
-          7: 0,
-          8: 2,
-        };
-        const rush = rushMap[data.limitCutNumber ?? 1];
-        const tower = towerMap[data.limitCutNumber ?? 1];
-        if (tower === 0 || rush === 0)
-          return output.text!({ num: dice });
-        return output.rshTwr!({ num: dice, n1: rush, n2: tower });
+        const expectedLimitCutNumbers = [1, 2, 3, 4];
+        if (
+          data.limitCutNumber === undefined ||
+          !expectedLimitCutNumbers.includes(data.limitCutNumber)
+        )
+          return;
+        return output.number!({ num: data.limitCutNumber });
       },
       outputStrings: {
-        text: {
+        number: {
           en: '${num}번',
           de: '${num}',
           fr: '${num}',
@@ -479,10 +534,6 @@ const triggerSet: TriggerSet<Data> = {
           cn: '${num}',
           ko: '${num}',
         },
-        rshTwr: {
-          en: '${num}번 (돌진: ${n1}번 / 탑: ${n2}번째)',
-        },
-        unknown: Outputs.unknown,
       },
     },
     {
@@ -503,10 +554,10 @@ const triggerSet: TriggerSet<Data> = {
         // 6 seconds ahead of time
         return time - 6;
       },
-      alertText: (_data, _matches, output) => output.defamation!(),
+      alarmText: (_data, _matches, output) => output.defamation!(),
       outputStrings: {
         defamation: {
-          en: '내게 지금 서클',
+          en: '내게 🔵폭탄!',
           de: 'Ehrenstrafe aud DIR',
           fr: 'Diffamation sur VOUS',
           ja: '自分の巨大な爆発',
@@ -539,7 +590,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         dash: {
-          en: '돌진 유도',
+          en: '돌진 유도!',
           de: 'Sprung ködern',
           fr: 'Encaissez le saut',
           ja: '突進誘導',
@@ -547,7 +598,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '돌진 유도',
         },
         soak: {
-          en: '타워 밟아요',
+          en: '타워 밟아요!',
           de: 'Im Turm stehen',
           fr: 'Prenez votre tour',
           ja: '塔踏み',
@@ -583,7 +634,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         dash: {
-          en: '돌진 유도',
+          en: '돌진 유도!',
           de: 'Sprung ködern',
           fr: 'Encaissez le saut',
           ja: '突進誘導',
@@ -591,7 +642,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '돌진 유도',
         },
         soak: {
-          en: '타워 밟아요',
+          en: '타워 밟아요!',
           de: 'Im Turm stehen',
           fr: 'Prenez votre tour',
           ja: '塔踏み',
@@ -601,7 +652,7 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: 'P9S Defamation',
+      id: 'P9S Limit Cut 1 Defamation',
       type: 'HeadMarker',
       netRegex: {},
       condition: (data, matches) => {
@@ -629,7 +680,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '광역징 대상자',
         },
         defNum: {
-          en: '내게 ${num}번째 서클',
+          en: '내게 #${num} 🔵폭탄',
         },
       },
     },
@@ -784,7 +835,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '푹찍쾅 => 그대로 멈춰요!',
+          en: '푹찍쾅 => 그대로!',
           de: 'Sprung => Stehen bleiben',
           fr: 'Saut => Restez',
           ja: '突進 => 止まれ',
@@ -800,7 +851,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '푹찍쾅 => 보스 가로 질러요!',
+          en: '푹찍쾅 => 보스 뒤로!',
           de: 'Sprung => Geh durch den Boss',
           fr: 'Saut => Traversez le boss',
           ja: '突進 => 移動',
@@ -808,6 +859,12 @@ const triggerSet: TriggerSet<Data> = {
           ko: '돌진 => 가로지르기',
         },
       },
+    },
+    {
+      id: 'P9S Beastly Fury',
+      type: 'StartsUsing',
+      netRegex: { id: '8186', source: 'Kokytos', capture: false },
+      response: Responses.aoe(),
     },
   ],
   timelineReplace: [
