@@ -72,6 +72,7 @@ UserConfig.registerOptions('radar', {
       name: {
         en: 'S몹 잡기 시작하면 소리로 알려주기',
         de: 'Spiele Ton ab, wenn ein S-Rank gepullt wurde',
+        fr: 'Jouer un son quand un rang S est attaqué',
         cn: 'S级开怪时播放提示音',
         ko: 'S급 몬스터가 풀링되면 소리로 알림',
       },
@@ -83,6 +84,7 @@ UserConfig.registerOptions('radar', {
       name: {
         en: '잡기 시작 알림 소리 크기 (0-1)',
         de: 'Lautstärke für den Pullsound (0-1)',
+        fr: 'Volume du son lors du pull (0-1)',
         cn: '开怪提示音量 (0-1)',
         ko: '풀링 알림 소리 크기 (0-1)',
       },

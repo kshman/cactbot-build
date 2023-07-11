@@ -79,14 +79,17 @@ export const orbOutputStrings: OutputStrings = {
   w: Outputs.arrowW,
   knockback: {
     en: '${dir}넉백',
-    ko: '${dir}넉백',
+    cn: '${dir} 击退',
+    ko: '${dir} 넉백',
   },
   knockbackWithHead: {
     en: '${dir1}넉백 -> ${dir2}',
-    ko: '${dir1}넉백 -> ${dir2}',
+    cn: '${dir1} 击退 -> ${dir2}',
+    ko: '${dir1} 넉백 -> ${dir2}',
   },
   aoeWithHead: {
     en: '${dir1} 살짝 ${dir2}',
+    cn: '去${dir1} (偏${dir2})',
     ko: '${dir1}쪽으로 (살짝 ${dir2}쪽으로)',
   },
 };
@@ -355,14 +358,17 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         sides: {
           en: '바깥 옆으로',
+          cn: '去外面 (两边)',
           ko: '밖으로 (양 옆)',
         },
         sidesWithTower: {
           en: '타워 밟고 + 바깥',
+          cn: '踩塔 + 去外面',
           ko: '기둥 + 양 옆',
         },
         sidesWithStacks: {
           en: '바깥 옆에서 + 4:4 뭉쳐요',
+          cn: '去外面 + 治疗分组分摊',
           ko: '양 옆 + 힐러 그룹',
         },
       },
@@ -384,14 +390,17 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         middle: {
           en: '안으로',
+          cn: '去里面 (中间)',
           ko: '안으로 (가운데)',
         },
         middleWithTower: {
           en: '타워 밟고 + 안쪽',
+          cn: '踩塔 + 去里面',
           ko: '기둥 + 안으로',
         },
         middleWithStacks: {
           en: '안에서 + 4:4 뭉쳐요',
+          cn: '去里面 + 治疗分组分摊',
           ko: '안으로 + 힐러 그룹',
         },
       },
@@ -443,6 +452,7 @@ const triggerSet: TriggerSet<Data> = {
         ...orbOutputStrings,
         temp: {
           en: '${text}',
+          cn: '${text}',
           ko: '${text}',
         },
       },

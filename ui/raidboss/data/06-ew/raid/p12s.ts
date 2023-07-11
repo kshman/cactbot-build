@@ -384,7 +384,7 @@ export interface Data extends RaidbossData {
   //
   readonly triggerSetConfig: {
     engravement1DropTower: 'quadrant' | 'clockwise' | 'tower';
-    classicalConceptsPairOrder: 'xsct' | 'cxts' | 'ctsx';
+    classicalConceptsPairOrder: 'xsct' | 'cxts' | 'ctsx' | 'ctxs';
   };
   decOffset?: number;
   expectedFirstHeadmarker?: string;
@@ -489,6 +489,7 @@ const triggerSet: TriggerSet<Data> = {
           'X□○Δ': 'xsct',
           '○XΔ□': 'cxts',
           '○Δ□X': 'ctsx',
+          '○ΔX□ (Rainbow)': 'ctxs',
         },
         ko: {
           'X□○Δ (파보빨초)': 'xsct',
@@ -1101,8 +1102,8 @@ const triggerSet: TriggerSet<Data> = {
           const isReturnBack = firstDir === secondDir;
           if (call === 'swap') {
             if (isReturnBack)
-              return output.superchain2aswapMidBack!({ dir: finalDir });
-            return output.superchain2aswapMidGo!({ dir: finalDir });
+              return output.superchain2aSwapMidBack!({ dir: finalDir });
+            return output.superchain2aSwapMidGo!({ dir: finalDir });
           }
           if (isReturnBack)
             return output.superchain2aStayMidBack!({ dir: finalDir });
@@ -1113,8 +1114,8 @@ const triggerSet: TriggerSet<Data> = {
         const isProtean = secondMech === 'protean';
         if (call === 'swap') {
           if (isProtean)
-            return output.superchain2aswapProtean!({ dir: finalDir });
-          return output.superchain2aswapPartners!({ dir: finalDir });
+            return output.superchain2aSwapProtean!({ dir: finalDir });
+          return output.superchain2aSwapPartners!({ dir: finalDir });
         }
         if (isProtean)
           return output.superchain2aStayProtean!({ dir: finalDir });
@@ -1137,14 +1138,14 @@ const triggerSet: TriggerSet<Data> = {
           cn: '停',
           ko: '가만히',
         },
-        superchain2aswapMidBack: {
+        superchain2aSwapMidBack: {
           en: '한가운데 => ${dir} 되돌아 가욧 [옆으로]',
           de: 'Wechseln + Mitte => Zurück nach ${dir}',
           ja: '真ん中 => また${dir} (横へ)',
           cn: '穿 + 去中间 => 回到 ${dir}',
           ko: '이동 + 가운데 => 다시 ${dir}',
         },
-        superchain2aswapMidGo: {
+        superchain2aSwapMidGo: {
           en: '한가운데 => 계속 전진 ${dir} [옆으로]',
           de: 'Wechseln + Mitte => Geh nach ${dir}',
           ja: '真ん中 => ${dir}前進 (横へ)',
@@ -1165,7 +1166,7 @@ const triggerSet: TriggerSet<Data> = {
           cn: '停 + 去中间 => 去 ${dir}',
           ko: '가만히 + 가운데 => ${dir}으로',
         },
-        superchain2aswapProtean: {
+        superchain2aSwapProtean: {
           en: '${dir} + 프로틴 [옆으로]',
           de: 'Wechseln => Himmelsrichtungen + ${dir}',
           ja: '基本散会 + ${dir} (横へ)',
@@ -1179,7 +1180,7 @@ const triggerSet: TriggerSet<Data> = {
           cn: '停 => 八方分散 + ${dir}',
           ko: '가만히 => 8방향 산개 + ${dir}',
         },
-        superchain2aswapPartners: {
+        superchain2aSwapPartners: {
           en: '${dir} + 페어 [옆으로]',
           de: 'Wechseln => Partner + ${dir}',
           ja: 'ペア + ${dir} (横へ)',
@@ -2435,11 +2436,11 @@ const triggerSet: TriggerSet<Data> = {
         },
         inThenOut: {
           en: '안:바깥',
-          ja: '内から => 外へ',
+          ja: '内:外',
         },
         outThenIn: {
           en: '바깥:안',
-          ja: '外から => 内へ',
+          ja: '外:内',
         },
         lightBeam: {
           en: '🟣밟아요🡺▶',
@@ -2597,7 +2598,7 @@ const triggerSet: TriggerSet<Data> = {
       netRegex: { npcNameId: superchainNpcNameId, npcBaseId: superchainNpcBaseIds, capture: false },
       condition: (data) => data.phase === 'superchain2b' && data.superchainCollect.length === 8,
       delaySeconds: 4.5,
-      durationSeconds: 6, // keep active until just before Ray of Light 2
+      durationSeconds: 8, // keep active until just before Ray of Light 2
       alertText: (data, _matches, output) => {
         // Sort ascending. collect: [dest1, dest2, out, partnerProtean]
         const collect = data.superchainCollect.slice(4, 8).sort((a, b) =>
@@ -3170,6 +3171,7 @@ const triggerSet: TriggerSet<Data> = {
             xsct: ['cross', 'square', 'circle', 'triangle'],
             cxts: ['circle', 'cross', 'triangle', 'square'],
             ctsx: ['circle', 'triangle', 'square', 'cross'],
+            ctxs: ['circle', 'triangle', 'cross', 'square'],
           };
           const columnOrder =
             columnOrderFromConfig[data.triggerSetConfig.classicalConceptsPairOrder];
@@ -3633,6 +3635,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         stackForTethers: {
           en: '한가운데 모여요!',
+          cn: '集合等待连线出现',
           ko: '선 생기기 전에 모이기',
         },
       },
@@ -3684,6 +3687,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         combined: {
           en: '${dir1} / ${dir2}',
+          cn: '${dir1} / ${dir2} 安全',
           ko: '${dir1} / ${dir2} 안전',
         },
         moveTo: {
@@ -3731,6 +3735,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         combined: {
           en: '${dir1} / ${dir2}',
+          cn: '${dir1} / ${dir2} 安全',
           ko: '${dir1} / ${dir2} 안전',
         },
         moveTo: {
@@ -3777,6 +3782,7 @@ const triggerSet: TriggerSet<Data> = {
         },
         uav2: {
           en: '끊고 + 흩어져요(${geocentrism}) (${partner})',
+          cn: '拉断连线 (和 ${partner}) => ${geocentrism}',
           ko: '선 끊기 (+ ${partner}) => ${geocentrism}',
         },
         unknown: Outputs.unknown,
