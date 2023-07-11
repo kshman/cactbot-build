@@ -840,7 +840,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '푹찍쾅 => 그대로!',
+          en: '푹찍쾅 => 앞차기! 그대로!',
           de: 'Sprung => Stehen bleiben',
           fr: 'Saut => Restez',
           ja: '突進 => 止まれ',
@@ -856,7 +856,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '푹찍쾅 => 보스 뒤로!',
+          en: '푹찍쾅 => 뒤차기! 가로질러!',
           de: 'Sprung => Geh durch den Boss',
           fr: 'Saut => Traversez le boss',
           ja: '突進 => 移動',

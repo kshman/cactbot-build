@@ -635,10 +635,10 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         east: {
-          en: '🡺❱❱❱❱❱',
+          en: '🡺▶▶▶',
         },
         west: {
-          en: '❰❰❰❰❰🡸',
+          en: '◀◀◀🡸',
         },
       },
     },
