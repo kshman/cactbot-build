@@ -1700,6 +1700,16 @@ const templateOptions: OptionsTemplate = {
       default: false,
     },
     {
+      id: 'AutumnStyle',
+      name: {
+        en: '어듬이 스타일',
+        ja: 'オヅミスタイル',
+      },
+      type: 'checkbox',
+      default: false,
+      setterFunc: setAutumnStyleValue,
+    },
+    {
       id: 'DefaultAlertOutput',
       name: {
         en: '기본 얼러트 출력',
@@ -2264,16 +2274,6 @@ const templateOptions: OptionsTemplate = {
       },
       type: 'float',
       default: 0.75,
-    },
-    {
-      id: 'AutumnStyle',
-      name: {
-        en: '어듬이 스타일',
-        ja: 'オヅミスタイル',
-      },
-      type: 'checkbox',
-      default: false,
-      setterFunc: setAutumnStyleValue,
     },
   ],
 };
