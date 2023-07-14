@@ -2031,7 +2031,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         partyOutTanksIn: {
-          en: '바깥으로 (탱크가 안쪽)',
+          en: '바깥으로 (탱크 안쪽)',
           de: 'Gruppe Raus (Tanks Rein)',
           fr: 'Équipe à l\'extérieur (Tanks à l\'intérieur)',
           ja: 'ボスから離れる (タンクが内側)',
@@ -2039,7 +2039,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '본대 밖 (탱커 안)',
         },
         tanksInPartyOut: {
-          en: '안쪽으로 (파티가 바깥쪽)',
+          en: '안쪽으로 (파티 바깥쪽)',
           de: 'Gruppe Rein (Tanks Raus)',
           fr: 'Tanks à l\'intérieur (Équipe à l\'extérieur',
           ja: 'ボスに足元へ (パーティーは離れる)',
@@ -2066,7 +2066,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         partyInTanksOut: {
-          en: '안쪽으로 (탱크가 바깥쪽)',
+          en: '안쪽으로 (탱크 바깥쪽)',
           de: 'Gruppe Rein (Tanks Raus)',
           fr: 'Équipe à l\'intérieur (Tanks à l\'extérieur)',
           ja: 'ボスの足元へ (タンクは離れる)',
@@ -2074,7 +2074,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '본대 안 (탱커 밖)',
         },
         tanksInPartyOut: {
-          en: '바깥으로 (파티가 안쪽)',
+          en: '바깥으로 (파티 안쪽)',
           de: 'Tanks Raus (Gruppe Rein)',
           fr: 'Tanks à l\'extérieur (Équipe à l\'intérieur',
           ja: 'ボスからはなれる (パーティーが内側)',

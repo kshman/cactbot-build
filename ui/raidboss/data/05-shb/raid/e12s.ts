@@ -9,6 +9,8 @@ import { NetMatches } from '../../../../../types/net_matches';
 import { LocaleText, Output, TriggerSet } from '../../../../../types/trigger';
 
 export interface Data extends RaidbossData {
+  prsTarget?: string;
+  //
   isDoorBoss?: boolean;
   decOffset?: number;
   tethers?: string[];
@@ -321,7 +323,7 @@ const triggerSet: TriggerSet<Data> = {
 
         // Formless double tankbuster mechanic.
         if (id === '00DA') {
-          if (data.role === 'tank')
+          if (data.role === 'tank' || data.prsTarget === matches.target)
             return { alertText: output.formlessBusterAndSwap!() };
           // Not that you personally can do anything about it, but maybe this
           // is your cue to yell on voice comms for cover.
@@ -351,7 +353,7 @@ const triggerSet: TriggerSet<Data> = {
           // The third is technically fixed by role with a standard party (one dps, one !dps),
           // but call out your partner anyway in case you've got 8 blus or something.
           titanBlueWithPartner: {
-            en: '🔵 (↔${player})',
+            en: '🔵 (${player})',
             de: 'Blau (mit ${player})',
             fr: 'Bleu (avec ${player})',
             ja: '青、重圧 (${player}と)',
@@ -556,7 +558,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.knockback!(),
       outputStrings: {
         knockback: {
-          en: '넉백: 남동🡾🡾',
+          en: '넉백: 남동🡾',
           de: 'SO Rückstoß',
           fr: 'SE Poussée',
           ja: '東南ノックバック',
@@ -573,7 +575,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.knockback!(),
       outputStrings: {
         knockback: {
-          en: '넉백: 🡿🡿남서',
+          en: '넉백: 🡿남서',
           de: 'SW Rückstoß',
           fr: 'SO Poussée',
           ja: '西南ノックバック',
@@ -664,8 +666,8 @@ const triggerSet: TriggerSet<Data> = {
     {
       id: 'E12S Promise Formless Judgment',
       type: 'StartsUsing',
-      netRegex: { source: 'Eden\'s Promise', id: '58A9', capture: false },
-      response: (data, _matches, output) => {
+      netRegex: { source: 'Eden\'s Promise', id: '58A9' },
+      response: (data, matches, output) => {
         // cactbot-builtin-response
         output.responseOutputStrings = {
           formlessBusterAndSwap: {
@@ -684,7 +686,7 @@ const triggerSet: TriggerSet<Data> = {
           return;
 
         // TODO: should this call out who to cover if you are a paladin?
-        if (data.role === 'tank')
+        if (data.role === 'tank' || data.prsTarget === matches.target)
           return { alertText: output.formlessBusterAndSwap!() };
 
         if (data.role === 'healer')
@@ -845,7 +847,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         junctionWithCast: {
-          en: '4:4 뭉쳐요',
+          en: '4:4 힐러',
           de: 'Heiler-Gruppen',
           fr: 'Packages sur les Heals',
           ja: 'ヒラ頭割り',
@@ -1075,7 +1077,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         tankBait: {
-          en: '떨어져서 미끼 역할',
+          en: '바깥으로 (미끼 유도)',
           de: 'Ködern - Weit weg',
           fr: 'Attirez au loin',
           ja: '遠くに誘導',
@@ -1083,7 +1085,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '멀리 유도하기',
         },
         partyUnder: {
-          en: '보스 바로 밑으로',
+          en: '안쪽으로 (탱크 바깥쪽)',
           de: 'Unter ihn',
           fr: 'En dessous',
           ja: 'ボスと貼り付く',
@@ -1105,7 +1107,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         tankBait: {
-          en: '가까이 유도',
+          en: '안쪽으로 (미끼 유도)',
           de: 'Köder nah',
           fr: 'Attirez proche',
           ja: '近い誘導',
@@ -1113,7 +1115,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '가까이 붙기',
         },
         partyOut: {
-          en: '파티는 멀리서',
+          en: '바깥으로 (탱크 안쪽)',
           de: 'Gruppe raus',
           fr: 'Groupe au loin',
           ja: '全員離れる',
@@ -1208,7 +1210,7 @@ const triggerSet: TriggerSet<Data> = {
         // cactbot-builtin-response
         output.responseOutputStrings = {
           shadoweye: {
-            en: '나한테 눈',
+            en: '내게 눈',
             de: 'Auge auf DIR',
             fr: 'Œil sur VOUS',
             ja: '自分に目',
@@ -1399,7 +1401,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         lookAwayFromPlayers: {
-          en: '보면안되욧: ${player1}, ${player2}',
+          en: '보지마: ${player1}, ${player2}',
           de: 'Schau weg von ${player1} und ${player2}',
           fr: 'Ne regardez pas ${player1} et ${player2}',
           ja: '${player1}と${player2}を見ない',
@@ -1450,7 +1452,7 @@ const triggerSet: TriggerSet<Data> = {
         west: Outputs.west,
         northwest: Outputs.northwest,
         hourglass: {
-          en: '노란색: ${dir}',
+          en: '🟨: ${dir}',
           de: 'Gelb: ${dir}',
           fr: 'Jaune : ${dir}',
           ja: '黄色: ${dir}',
@@ -1503,7 +1505,7 @@ const triggerSet: TriggerSet<Data> = {
         west: Outputs.west,
         northwest: Outputs.northwest,
         hourglass: {
-          en: '노란색: ${dir1} / ${dir2}',
+          en: '🟨: ${dir1} / ${dir2}',
           de: 'Gelb: ${dir1} / ${dir2}',
           fr: 'Jaune : ${dir1} / ${dir2}',
           ja: '黄色: ${dir1} / ${dir2}',
@@ -1531,7 +1533,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         stackGroups: {
-          en: '뭉쳐 모여욧',
+          en: '뭉쳐요',
           de: 'In Gruppen sammeln',
           fr: 'Packez-vous en groupe',
           ja: '頭割り',
@@ -1539,7 +1541,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '쉐어',
         },
         knockbackIntoStackGroups: {
-          en: '넉백하고 뭉쳐 모여욧',
+          en: '넉백하고 뭉쳐요',
           de: 'Rückstoß, dann in Gruppen sammeln',
           fr: 'Poussée puis packez-vous en groupe',
           ja: '頭割り位置に向かってノックバックを',
@@ -1568,7 +1570,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         spread: Outputs.spread,
         knockbackIntoSpread: {
-          en: '넉백하고 산개해욧',
+          en: '넉백하고 흩어져요',
           de: 'Rückstoß dann verteilen',
           fr: 'Poussée puis dispersez-vous',
           ja: '散開のためノックバックを',
@@ -1594,7 +1596,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '뭉쳐 모여욧',
+          en: '뭉쳐요',
           de: 'In Gruppen sammeln',
           fr: 'Packez-vous en groupe',
           ja: '集合',
@@ -1680,6 +1682,17 @@ const triggerSet: TriggerSet<Data> = {
           cn: '分散点名',
           ko: '산개징 대상자',
         },
+      },
+    },
+    //
+    {
+      id: 'E12S 전반 AA',
+      type: 'Ability',
+      netRegex: { id: '4B1E', source: 'Eden\'s Promise' },
+      run: (data, matches) => {
+        if (data.prsTarget === matches.target)
+          return;
+        data.prsTarget = matches.target;
       },
     },
   ],
