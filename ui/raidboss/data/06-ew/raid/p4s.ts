@@ -864,17 +864,24 @@ const triggerSet: TriggerSet<Data> = {
       type: 'StartsUsing',
       netRegex: { id: '6A26', source: 'Hesperos', capture: false },
       alertText: (data, _matches, output) =>
-        data.role === 'tank' ? output.tankbustersIn!() : output.getOut!(),
+        data.role === 'tank' ? output.tanksInPartyOut!() : output.partyOutTanksIn!(),
       outputStrings: {
-        tankbustersIn: {
+        partyOutTanksIn: {
           en: '안쪽에서 탱크버스터!!!',
-          de: 'Rein (Tankbusters)',
-          fr: 'À l\'intérieur (Tank busters)',
-          ja: 'タンク近づく',
-          cn: '靠近 (坦克死刑)',
-          ko: '안쪽으로 (탱버)',
+          de: 'Gruppe Raus (Tanks Rein)',
+          fr: 'Équipe à l\'extérieur (Tanks à l\'intérieur)',
+          ja: 'ボスから離れる (タンクが内側)',
+          cn: '小队出 (T进)',
+          ko: '본대 밖 (탱커 안)',
         },
-        getOut: Outputs.out,
+        tanksInPartyOut: {
+          en: '바깥으로 (탱크 안쪽)',
+          de: 'Gruppe Rein (Tanks Raus)',
+          fr: 'Tanks à l\'intérieur (Équipe à l\'extérieur',
+          ja: 'ボスに足元へ (パーティーは離れる)',
+          cn: 'T进 (小队出)',
+          ko: '탱커 안 (본대 밖)',
+        },
       },
     },
     {

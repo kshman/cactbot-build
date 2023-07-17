@@ -1072,25 +1072,25 @@ const triggerSet: TriggerSet<Data> = {
       netRegex: { source: 'Oracle Of Darkness', id: ['58BE', '58BD'], capture: false },
       infoText: (data, _matches, output) => {
         if (data.role === 'tank')
-          return output.tankBait!();
-        return output.partyUnder!();
+          return output.tanksOutPartyIn!();
+        return output.partyInTanksOut!();
       },
       outputStrings: {
-        tankBait: {
+        partyInTanksOut: {
           en: '바깥으로 (미끼 유도)',
-          de: 'Ködern - Weit weg',
-          fr: 'Attirez au loin',
-          ja: '遠くに誘導',
-          cn: '远诱导',
-          ko: '멀리 유도하기',
+          de: 'Gruppe Rein (Tanks Raus)',
+          fr: 'Équipe à l\'intérieur (Tanks à l\'extérieur)',
+          ja: 'ボスの足元へ (タンクは離れる)',
+          cn: '小队进 (T出)',
+          ko: '본대 안 (탱커 밖)',
         },
-        partyUnder: {
+        tanksOutPartyIn: {
           en: '안쪽으로 (탱크 바깥쪽)',
-          de: 'Unter ihn',
-          fr: 'En dessous',
-          ja: 'ボスと貼り付く',
-          cn: '去脚下',
-          ko: '보스 안쪽으로',
+          de: 'Tanks Raus (Gruppe Rein)',
+          fr: 'Tanks à l\'extérieur (Équipe à l\'intérieur',
+          ja: 'ボスからはなれる (パーティーが内側)',
+          cn: 'T出 (小队进)',
+          ko: '탱커 밖 (본대 안)',
         },
       },
     },
@@ -1102,25 +1102,25 @@ const triggerSet: TriggerSet<Data> = {
       suppressSeconds: 5,
       infoText: (data, _matches, output) => {
         if (data.role === 'tank')
-          return output.tankBait!();
-        return output.partyOut!();
+          return output.tanksInPartyOut!();
+        return output.partyOutTanksIn!();
       },
       outputStrings: {
-        tankBait: {
+        partyOutTanksIn: {
           en: '안쪽으로 (미끼 유도)',
-          de: 'Köder nah',
-          fr: 'Attirez proche',
-          ja: '近い誘導',
-          cn: '近诱导',
-          ko: '가까이 붙기',
+          de: 'Gruppe Raus (Tanks Rein)',
+          fr: 'Équipe à l\'extérieur (Tanks à l\'intérieur)',
+          ja: 'ボスから離れる (タンクが内側)',
+          cn: '小队出 (T进)',
+          ko: '본대 밖 (탱커 안)',
         },
-        partyOut: {
+        tanksInPartyOut: {
           en: '바깥으로 (탱크 안쪽)',
-          de: 'Gruppe raus',
-          fr: 'Groupe au loin',
-          ja: '全員離れる',
-          cn: '不要靠近BOSS',
-          ko: '탱보다 멀리 있기',
+          de: 'Gruppe Rein (Tanks Raus)',
+          fr: 'Tanks à l\'intérieur (Équipe à l\'extérieur',
+          ja: 'ボスに足元へ (パーティーは離れる)',
+          cn: 'T进 (小队出)',
+          ko: '탱커 안 (본대 밖)',
         },
       },
     },

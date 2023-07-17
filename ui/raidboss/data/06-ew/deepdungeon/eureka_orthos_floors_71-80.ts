@@ -64,6 +64,7 @@ const triggerSet: TriggerSet<Data> = {
         getBehind: {
           // Telegraphed Killing Paw swipe (81A9) followed by untelegraphed Savage Swipe (7F8E).
           en: '원투 펀치! 뒤로!',
+          de: 'Geh nach hinten (und bleib hinten)',
           cn: '去背后 (待在背后)',
         },
       },
