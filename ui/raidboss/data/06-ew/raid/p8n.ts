@@ -295,7 +295,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '${dir1} / ${dir2}',
         },
         outsideNorth: {
-          en: 'Outside North',
+          en: '북쪽 바깥',
           de: 'Im Norden raus',
           fr: 'Nord Extérieur',
           ja: '北の外側',
@@ -303,7 +303,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '북쪽 바깥',
         },
         insideNorth: {
-          en: 'Inside North',
+          en: '북쪽 안',
           de: 'Im Norden rein',
           fr: 'Nord Intérieur',
           ja: '北の内側',
@@ -311,7 +311,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '북쪽 안',
         },
         outsideEast: {
-          en: 'Outside East',
+          en: '동쪽 바깥',
           de: 'Im Osten raus',
           fr: 'Est Extérieur',
           ja: '東の外側',
@@ -319,7 +319,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '동쪽 바깥',
         },
         insideEast: {
-          en: 'Inside East',
+          en: '동쪽 안',
           de: 'Im Osten rein',
           fr: 'Est Intérieur',
           ja: '東の内側',
@@ -327,7 +327,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '동쪽 안',
         },
         outsideSouth: {
-          en: 'Outside South',
+          en: '남쪽 바깥',
           de: 'Im Süden raus',
           fr: 'Sud Extérieur',
           ja: '南の外側',
@@ -335,7 +335,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '남쪽 바깥',
         },
         insideSouth: {
-          en: 'Inside South',
+          en: '남쪽 안',
           de: 'Im Süden rein',
           fr: 'Sud Intérieur',
           ja: '南の内側',
@@ -343,7 +343,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '남쪽 안',
         },
         outsideWest: {
-          en: 'Outside West',
+          en: '서쪽 바깥',
           de: 'Im Westen raus',
           fr: 'Ouest Extérieur',
           ja: '西の外側',
@@ -351,7 +351,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '서쪽 바깥',
         },
         insideWest: {
-          en: 'Inside West',
+          en: '서쪽 안',
           de: 'Im Westen rein',
           fr: 'Ouest Intérieur',
           ja: '西の内側',

@@ -51,7 +51,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '장판을 바깥쪽에',
+          en: '장판을 바깥에',
           de: 'Flächen drausen ablegen',
           fr: 'Déposez les zones au sol à l\'extérieur',
           ja: '散開',
@@ -88,7 +88,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '보스 뒤로 그리고 아래로',
+          en: '안쪽 보스 뒤로',
           de: 'Geh nach Hinten und Unter den Boss',
           fr: 'Allez derrière et sous le boss',
           ja: '後ろ => 中へ',
@@ -104,7 +104,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '보스 앞으로 그리고 아래로',
+          en: '안쪽 보스 앞으로',
           de: 'Geh nach Vorne und Unter den Boss',
           ja: '前 => 中へ',
           cn: '去正面靠近',
@@ -119,7 +119,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '보스 뒤로 그리고 밖으로',
+          en: '바깥 보스 뒤로',
           de: 'Geh nach Hinten und Raus',
           fr: 'Allez derrière et à l\'extérieur',
           ja: '後ろの外側へ',
@@ -135,7 +135,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '보스 앞으로 그리고 밖으로',
+          en: '바깥 보스 앞으로',
           de: 'Geh nach Vorne und Raus',
           fr: 'Allez devant et à l\'extérieur',
           ja: '前の外側へ',

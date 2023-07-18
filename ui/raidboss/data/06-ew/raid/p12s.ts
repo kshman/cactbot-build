@@ -372,7 +372,6 @@ export interface Data extends RaidbossData {
   // 전반
   prsTrinityInvul?: boolean;
   prsApoPeri?: number;
-  prsWings: boolean[];
   prsNorth?: boolean;
   // 후반
   prsUltima?: number;
@@ -488,21 +487,28 @@ const triggerSet: TriggerSet<Data> = {
       name: {
         en: '클래식 컨셉 : 페어 순서 (왼쪽->오른쪽)',
         de: 'Elementarschöpfung: Ordnen nach Paaren (Links->Rechts)',
+        cn: '经典概念 索尼顺序（左->右）',
         ko: 'Classical Concepts: 도형 순서 (왼 -> 오)',
       },
       type: 'select',
       options: {
         en: {
-          'X□○Δ': 'xsct',
-          '○XΔ□': 'cxts',
-          '○Δ□X': 'ctsx',
-          '○ΔX□ (Rainbow)': 'ctxs',
+          'X□○Δ (NA 기본)': 'xsct',
+          '○XΔ□ (JP 기본, 1234)': 'cxts',
+          '○Δ□X (로켓모양)': 'ctsx',
+          '○ΔX□ (무지개)': 'ctxs',
         },
         de: {
           'X□○Δ (BLOG)': 'xsct',
           '○XΔ□ (Linien)': 'cxts',
           '○Δ□X (Raketenschiff)': 'ctsx',
           '○ΔX□ (Regenbogen)': 'ctxs',
+        },
+        cn: {
+          'X□○Δ (BPOG)': 'xsct',
+          '○XΔ□ (1234笔画)': 'cxts',
+          '○Δ□X (Rocketship)': 'ctsx',
+          '○ΔX□ (彩虹)': 'ctxs',
         },
         ko: {
           'X□○Δ (파보빨초)': 'xsct',
@@ -516,7 +522,6 @@ const triggerSet: TriggerSet<Data> = {
   timelineFile: 'p12s.txt',
   initData: () => {
     return {
-      prsWings: [],
       prsPangenesisCount: {},
       prsPangenesisRole: {},
       prsPangenesisDuration: {},
@@ -769,8 +774,6 @@ const triggerSet: TriggerSet<Data> = {
         const secondDir = data.superchain2aSecondDir;
 
         if (data.options.AutumnStyle) {
-          data.prsWings = [];
-
           if (data.phase !== 'superchain2a') {
             if (data.prsNorth)
               return isLeftAttack ? output.aleft!() : output.aright!();
@@ -934,44 +937,35 @@ const triggerSet: TriggerSet<Data> = {
         data.wingCalls = [secondCall, thirdCall];
 
         if (data.options.AutumnStyle) {
-          data.prsWings = [isSecondLeft, !isThirdLeft];
-
           if (data.phase === 'superchain2a') {
             if (third === undefined) {
-              const dir = isSecondLeft ? output.aleft!() : output.aright!();
               if (secondCall === 'stay')
-                return output.a2stay!({ dir: dir });
-              return output.a2swap!({ dir: dir });
+                return output.secondWingCallStay!();
+              return output.secondWingCallSwap!();
             }
 
             return output.aall!({
               first: isFirstLeft ? output.aright!() : output.aleft!(),
-              second: isSecondLeft ? output.aleft!() : output.aright!(),
-              third: isThirdLeft ? output.aright!() : output.aleft!(),
+              second: output[secondCall]!(),
+              third: output[thirdCall]!(),
             });
           }
 
           if (third === undefined) {
-            let dir;
-            if (data.prsNorth)
-              dir = isSecondLeft ? output.aright!() : output.aleft!();
-            else
-              dir = isSecondLeft ? output.aleft!() : output.aright!();
             if (secondCall === 'stay')
-              return output.a2stay!({ dir: dir });
-            return output.a2swap!({ dir: dir });
+              return output.secondWingCallStay!();
+            return output.secondWingCallSwap!();
           }
 
+          let afirst;
           if (data.prsNorth)
-            return output.aall!({
-              first: isFirstLeft ? output.aleft!() : output.aright!(),
-              second: isSecondLeft ? output.aright!() : output.aleft!(),
-              third: isThirdLeft ? output.aleft!() : output.aright!(),
-            });
+            afirst = isFirstLeft ? output.aleft!() : output.aright!();
+          else
+            afirst = isFirstLeft ? output.aright!() : output.aleft!();
           return output.aall!({
-            first: isFirstLeft ? output.aright!() : output.aleft!(),
-            second: isSecondLeft ? output.aleft!() : output.aright!(),
-            third: isThirdLeft ? output.aright!() : output.aleft!(),
+            first: afirst,
+            second: output[secondCall]!(),
+            third: output[thirdCall]!(),
           });
         }
 
@@ -1016,7 +1010,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '(가만히)',
         },
         secondWingCallSwap: {
-          en: '[옆으로 이동]',
+          en: '[옆으로]',
           de: '(Wechseln)',
           fr: '(swap)',
           ja: '(横へ)',
@@ -1032,12 +1026,6 @@ const triggerSet: TriggerSet<Data> = {
         },
         aleft: Outputs.arrowW,
         aright: Outputs.arrowE,
-        a2stay: {
-          en: '[${dir}그대로]',
-        },
-        a2swap: {
-          en: '[${dir}옆으로]',
-        },
         aall: {
           en: '${first} ${second} ${third}',
         },
@@ -1065,33 +1053,23 @@ const triggerSet: TriggerSet<Data> = {
         const secondMech = data.superchain2aSecondMech;
 
         if (data.options.AutumnStyle) {
-          const wing = data.prsWings.shift();
           if (data.phase !== 'superchain2a') {
-            let dir;
-            if (wing)
-              dir = data.prsNorth ? output.aright!() : output.aleft!();
-            else
-              dir = data.prsNorth ? output.aleft!() : output.aright!();
             if (call === 'swap')
-              return output.aswap!({ dir: dir });
-            return output.astay!({ dir: dir });
+              return output.swap!();
+            return output.stay!();
           }
 
           const isSecondWing = data.wingCalls.length === 1;
           if (isSecondWing) {
             const isReturnBack = firstDir === secondDir;
-            let move = '';
-            if (call === 'swap')
-              move = wing ? output.a2swapLeft!() : output.a2swapRight!();
+            const move = call !== 'swap' ? '' : output.a2swap!();
             if (isReturnBack)
               return output.aSc2aMb!({ move: move });
             return output.aSc2aMg!({ move: move });
           }
 
           const isProtean = secondMech === 'protean';
-          let move = '';
-          if (call === 'swap')
-            move = wing ? output.a2swapLeft!() : output.a2swapRight!();
+          const move = call !== 'swap' ? '' : output.a2swap!();
           if (firstDir === secondDir) {
             if (isProtean)
               return output.aSc2aBpro!({ move: move });
@@ -1139,7 +1117,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         swap: {
-          en: '옆으로 이동',
+          en: '옆으로',
           de: 'Wechseln',
           fr: 'Swap',
           ja: '横へ',
@@ -1215,17 +1193,8 @@ const triggerSet: TriggerSet<Data> = {
         //
         aleft: Outputs.arrowW,
         aright: Outputs.arrowE,
-        astay: {
-          en: '${dir}그대로',
-        },
-        aswap: {
-          en: '${dir}옆으로',
-        },
-        a2swapLeft: {
-          en: '[🡸옆으로]',
-        },
-        a2swapRight: {
-          en: '[🡺옆으로]',
+        a2swap: {
+          en: '[옆으로]',
         },
         aSc2aMb: {
           en: '한가운데로 => 되돌아 가욧 ${move}',
@@ -1928,14 +1897,14 @@ const triggerSet: TriggerSet<Data> = {
           ko: '어둠',
         },
         platform: {
-          en: '판때기 한가운데',
+          en: '판때기 한가운데 설치',
           de: 'Platform',
           ja: 'マス内部',
           cn: '平台内',
           ko: '플랫폼 내부',
         },
         corner: {
-          en: '건너편에 닿게 모서리에',
+          en: '건너편에 닿게 모서리 설치',
           de: 'In der Ecke',
           ja: '真ん中のコーナー',
           cn: '平台交叉处',
