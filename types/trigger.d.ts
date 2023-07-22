@@ -88,6 +88,7 @@ export type ResponseField<Data extends RaidbossData, MatchType extends NetAnyMat
   | ResponseFunc<Data, MatchType>
   | ResponseOutput<Data, MatchType>;
 
+// Config UI options that apply to an individual trigger (by id).
 export type TriggerAutoConfig = {
   Output?: Output;
   Duration?: number;
@@ -98,6 +99,15 @@ export type TriggerAutoConfig = {
   SoundAlertsEnabled?: boolean;
   SpokenAlertsEnabled?: boolean;
   AutumnStyle?: boolean;
+};
+
+// Config UI options that apply to an entire trigger set.
+// TODO: this doesn't apply to literal timeline alerts (not timeline triggers but
+// ancient timeline code that specifies alerts directly).
+export type TriggerSetAutoConfig = {
+  TextAlertsEnabled?: boolean;
+  SoundAlertsEnabled?: boolean;
+  SpokenAlertsEnabled?: boolean;
 };
 
 // Note: functions like run or preRun need to be defined as void-only as (confusingly)

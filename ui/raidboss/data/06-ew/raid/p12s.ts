@@ -2058,7 +2058,7 @@ const triggerSet: TriggerSet<Data> = {
         },
         tanksInPartyOut: {
           en: '안쪽으로 (파티 바깥쪽)',
-          de: 'Gruppe Rein (Tanks Raus)',
+          de: 'Tanks Rein (Gruppe Raus)',
           fr: 'Tanks à l\'intérieur (Équipe à l\'extérieur',
           ja: 'ボスに足元へ (パーティーは離れる)',
           cn: 'T进 (小队出)',

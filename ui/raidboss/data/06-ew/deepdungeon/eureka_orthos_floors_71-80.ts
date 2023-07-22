@@ -66,6 +66,7 @@ const triggerSet: TriggerSet<Data> = {
           en: '원투 펀치! 뒤로!',
           de: 'Geh nach hinten (und bleib hinten)',
           cn: '去背后 (待在背后)',
+          ko: '뒤로 이동 (뒤에 머물기)',
         },
       },
     },
