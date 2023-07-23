@@ -15,6 +15,9 @@ type OdderTower = {
 };
 
 export interface Data extends RaidbossData {
+  prHaunting?: number;
+  prStornmclod?: number;
+  //
   combatantData: PluginCombatantState[];
   wailingCollect: NetMatches['GainsEffect'][];
   wailCount: number;
@@ -108,27 +111,27 @@ const stackSpreadResponse = (
     // Prefer "melee/ranged" stacks here and elsewhere because it keeps
     // the tank and melee together for uptime.
     spreadThenMeleeStack: {
-      en: '흩어졌다 => 팀끼리 뭉쳐요',
+      en: '흩어졌다 => 뭉쳐요',
     },
     spreadThenRoleStack: {
       en: '흩어졌다 => 롤 뭉쳐요',
     },
     spreadThenMixedStack: {
-      en: '흩어졌다 => DPS와 뭉쳐요',
+      en: '흩어졌다 => DPS 뭉쳐요',
     },
     meleeStackThenSpread: {
-      en: '팀끼리 뭉쳤다 => 흩어져요',
+      en: '뭉쳤다 => 흩어져요',
     },
     roleStackThenSpread: {
       en: '롤 뭉쳤다 => 흩어져요',
     },
     mixedStackThenSpread: {
-      en: 'DPS와 뮹쳤다 => 흩어져요',
+      en: 'DPS 뮹쳤다 => 흩어져요',
     },
     spreadThenStack: Outputs.spreadThenStack,
     stackThenSpread: Outputs.stackThenSpread,
     stacks: {
-      en: '뭉쳐요: ${player1}, ${player2}',
+      en: '(${player1}, ${player2})',
     },
   };
 
@@ -141,6 +144,31 @@ const stackSpreadResponse = (
   const isStackFirst = stackTime < spreadTime;
 
   const stackType = findStackPartners(data.party, stack1.target, stack2.target);
+
+  if (data.options.AutumnStyle) {
+    const teams = [data.party.aJobIndex(stack1.target), data.party.aJobIndex(stack2.target)];
+    const [player1, player2] = data.party.aJobSortedArray(teams);
+    const stackInfo = { infoText: output.stacks!({ player1: player1, player2: player2 }) };
+
+    if (stackType === 'melee') {
+      if (isStackFirst)
+        return { alertText: output.meleeStackThenSpread!(), ...stackInfo };
+      return { alertText: output.spreadThenMeleeStack!(), ...stackInfo };
+    } else if (stackType === 'role') {
+      if (isStackFirst)
+        return { alertText: output.roleStackThenSpread!(), ...stackInfo };
+      return { alertText: output.spreadThenRoleStack!(), ...stackInfo };
+    } else if (stackType === 'mixed') {
+      if (isStackFirst)
+        return { alertText: output.mixedStackThenSpread!(), ...stackInfo };
+      return { alertText: output.spreadThenMixedStack!(), ...stackInfo };
+    }
+
+    // 'unknown' catch-all
+    if (isStackFirst)
+      return { alertText: output.stackThenSpread!(), ...stackInfo };
+    return { alertText: output.spreadThenStack!(), ...stackInfo };
+  }
 
   const stacks = [stack1, stack2].map((x) => x.target).sort();
   const [player1, player2] = stacks.map((x) => data.party.aJobName(x));
@@ -173,19 +201,19 @@ const towerResponse = (
   // cactbot-builtin-response
   output.responseOutputStrings = {
     tetherThenBlueTower: {
-      en: '줄#${num1} => 🔵타워#${num2}',
+      en: '줄채고#${num1} => 🔵타워로#${num2}',
     },
     tetherThenOrangeTower: {
-      en: '줄#${num1} => 🔴타워#${num2}',
+      en: '줄채고#${num1} => 🔴타워로#${num2}',
     },
     tether: {
-      en: '줄#${num}',
+      en: '줄채요#${num}',
     },
     blueTower: {
-      en: '🔵타워#${num}',
+      en: '🔵타워로#${num}',
     },
     orangeTower: {
-      en: '🔴타워#${num}',
+      en: '🔴타워로#${num}',
     },
     num1: Outputs.num1,
     num2: Outputs.num2,
@@ -220,15 +248,15 @@ const towerResponse = (
   const nextTowers = data.reincarnationCollect[towerNum + 1];
   const nextNumStr = numMap[towerNum + 1];
   if (towerNum === 4 || nextTowers === undefined || nextNumStr === undefined)
-    return { infoText: output.tether!({ num: numStr }) };
+    return { alertText: output.tether!({ num: numStr }) };
 
   if (data.me === nextTowers.blue)
-    return { infoText: output.tetherThenBlueTower!({ num1: numStr, num2: nextNumStr }) };
+    return { alertText: output.tetherThenBlueTower!({ num1: numStr, num2: nextNumStr }) };
   if (data.me === nextTowers.orange)
-    return { infoText: output.tetherThenOrangeTower!({ num1: numStr, num2: nextNumStr }) };
+    return { alertText: output.tetherThenOrangeTower!({ num1: numStr, num2: nextNumStr }) };
 
   // Just in case...
-  return { infoText: output.tether!({ num: numStr }) };
+  return { alertText: output.tether!({ num: numStr }) };
 };
 
 const triggerSet: TriggerSet<Data> = {
@@ -386,31 +414,43 @@ const triggerSet: TriggerSet<Data> = {
           out: Outputs.out,
           in: Outputs.in,
           spreadThenMeleeStack: {
-            en: '${inOut} + 흩어졌다 => ${outIn} + 밀리 뭉쳐요',
+            en: '${inOut} 흩어졌다 => ${outIn} 뭉쳐요',
           },
           spreadThenRoleStack: {
-            en: '${inOut} + 흩어졌다 => ${outIn} + 롤 뭉쳐요',
+            en: '${inOut} 흩어졌다 => ${outIn} 롤 뭉쳐요',
           },
           spreadThenMixedStack: {
-            en: '${inOut} + 흩어졌다 => ${outIn} + DPS와 뭉쳐요',
+            en: '${inOut} 흩어졌다 => ${outIn} DPS 뭉쳐요',
           },
           meleeStackThenSpread: {
-            en: '${inOut} + 밀리 뭉쳣다 => ${outIn} + 흩어져요',
+            en: '${inOut} 뭉쳣다 => ${outIn} 흩어져요',
           },
           roleStackThenSpread: {
-            en: '${inOut} + 롤 뭉쳤다 => ${outIn} + 흩어져요',
+            en: '${inOut} 롤 뭉쳤다 => ${outIn} 흩어져요',
           },
           mixedStackThenSpread: {
-            en: '${inOut} + DPS와 뭉쳤다 => ${outIn} + 흩어져요',
+            en: '${inOut} DPS 뭉쳤다 => ${outIn} 흩어져요',
           },
           spreadThenStack: {
-            en: '${inOut} + 흩어졌다 => ${outIn} + 뭉쳐요',
+            en: '${inOut} 흩어졌다 => ${outIn} 뭉쳐요',
           },
           stackThenSpread: {
-            en: '${inOut} + 뭉쳤다 => ${outIn} + 흩어져요',
+            en: '${inOut} 뭉쳤다 => ${outIn} 흩어져요',
           },
           stacks: {
-            en: '뭉쳐요: ${player1}, ${player2}',
+            en: '(${player1}, ${player2})',
+          },
+          out1: {
+            en: '밖에서',
+          },
+          out2: {
+            en: '밖으로',
+          },
+          in1: {
+            en: '안에서',
+          },
+          in2: {
+            en: '안으로',
           },
         };
 
@@ -425,6 +465,36 @@ const triggerSet: TriggerSet<Data> = {
         const stackType = findStackPartners(data.party, stack1.target, stack2.target);
 
         const isInFirst = matches.id === '8415';
+
+        if (data.options.AutumnStyle) {
+          const inOut = isInFirst ? output.in1!() : output.out1!();
+          const outIn = isInFirst ? output.out2!() : output.in2!();
+          const args = { inOut: inOut, outIn: outIn };
+
+          const teams = [data.party.aJobIndex(stack1.target), data.party.aJobIndex(stack2.target)];
+          const [player1, player2] = data.party.aJobSortedArray(teams);
+          const stackInfo = { infoText: output.stacks!({ player1: player1, player2: player2 }) };
+
+          if (stackType === 'melee') {
+            if (isStackFirst)
+              return { alertText: output.meleeStackThenSpread!(args), ...stackInfo };
+            return { alertText: output.spreadThenMeleeStack!(args), ...stackInfo };
+          } else if (stackType === 'role') {
+            if (isStackFirst)
+              return { alertText: output.roleStackThenSpread!(args), ...stackInfo };
+            return { alertText: output.spreadThenRoleStack!(args), ...stackInfo };
+          } else if (stackType === 'mixed') {
+            if (isStackFirst)
+              return { alertText: output.mixedStackThenSpread!(args), ...stackInfo };
+            return { alertText: output.spreadThenMixedStack!(args), ...stackInfo };
+          }
+
+          // 'unknown' catch-all
+          if (isStackFirst)
+            return { alertText: output.stackThenSpread!(args), ...stackInfo };
+          return { alertText: output.spreadThenStack!(args), ...stackInfo };
+        }
+
         const inOut = isInFirst ? output.in!() : output.out!();
         const outIn = isInFirst ? output.out!() : output.in!();
         const args = { inOut: inOut, outIn: outIn };
@@ -468,7 +538,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '더블 어택! 뒤로 (뒤에서 대기)',
+          en: '옆으로 (앞🡺뒤 더블 어택)',
         },
       },
     },
@@ -499,8 +569,8 @@ const triggerSet: TriggerSet<Data> = {
     {
       id: 'AMR Shishu Kotengu Wrath of the Tengu',
       type: 'StartsUsing',
-      netRegex: { id: '8654', source: 'Shishu Kotengu', capture: false },
-      response: Responses.bleedAoe('info'),
+      netRegex: { id: '8660', source: 'Shishu Kotengu', capture: false },
+      response: Responses.bleedAoe('alert'),
     },
     {
       id: 'AMR Shishu Kotengu Gaze of the Tengu',
@@ -555,7 +625,7 @@ const triggerSet: TriggerSet<Data> = {
         // cactbot-builtin-response
         output.responseOutputStrings = {
           meleeStack: {
-            en: '따로 뭉쳐요',
+            en: '뭉쳐요',
           },
           roleStack: {
             en: '롤 뭉쳐요',
@@ -564,7 +634,7 @@ const triggerSet: TriggerSet<Data> = {
             en: 'DPS와 뭉쳐요',
           },
           stacks: {
-            en: '뭉쳐요: ${player1}, ${player2}',
+            en: '(${player1}, ${player2})',
           },
         };
 
@@ -573,6 +643,20 @@ const triggerSet: TriggerSet<Data> = {
           return;
 
         const stackType = findStackPartners(data.party, stack1.target, stack2.target);
+
+        if (data.options.AutumnStyle) {
+          const teams = [data.party.aJobIndex(stack1.target), data.party.aJobIndex(stack2.target)];
+          const [player1, player2] = data.party.aJobSortedArray(teams);
+          const stackInfo = { infoText: output.stacks!({ player1: player1, player2: player2 }) };
+          if (stackType === 'melee') {
+            return { alertText: output.meleeStack!(), ...stackInfo };
+          } else if (stackType === 'role') {
+            return { alertText: output.roleStack!(), ...stackInfo };
+          } else if (stackType === 'mixed') {
+            return { alertText: output.mixedStack!(), ...stackInfo };
+          }
+          return stackInfo;
+        }
 
         const stacks = [stack1, stack2].map((x) => x.target).sort();
         const [player1, player2] = stacks.map((x) => data.party.aJobName(x));
@@ -659,6 +743,133 @@ const triggerSet: TriggerSet<Data> = {
       response: (data, _matches, output) => {
         // cactbot-builtin-response
         return towerResponse(data, output);
+      },
+    },
+    // ---------------- 어드미 ----------------
+    {
+      id: 'AMR 사자 Stormcloud Summons',
+      type: 'StartsUsing',
+      netRegex: { id: '83F8', source: 'Shishio', capture: false },
+      response: (data, _matches, output) => {
+        // cactbot-builtin-response
+        output.responseOutputStrings = {
+          check: {
+            en: '구름 먹는거 확인!',
+          },
+          line1: {
+            en: '빠른 빔 피해요!',
+          },
+          line2: {
+            en: '굵은 빔 피해요!',
+          },
+        };
+
+        data.prStornmclod = (data.prStornmclod ?? 0) + 1;
+        if (data.prStornmclod === 1 || data.prStornmclod === 3)
+          return { infoText: output.check!() };
+        if (data.prStornmclod === 2)
+          return { alertText: output.line1!() };
+        if (data.prStornmclod === 4)
+          return { alertText: output.line2!() };
+      },
+    },
+    {
+      id: 'AMR 사자 Noble Pursuit',
+      type: 'StartsUsing',
+      netRegex: { id: '8407', source: 'Shishio', capture: false },
+      alertText: (_data, _matches, output) => output.text!(),
+      outputStrings: {
+        text: {
+          en: '돌진 안전한 곳 찾아요',
+        },
+      },
+    },
+    {
+      id: 'AMR 사자 Unnatural Wail',
+      type: 'StartsUsing',
+      netRegex: { id: '8417', source: 'Shishio', capture: false },
+      infoText: (_data, _matches, output) => output.text!(),
+      outputStrings: {
+        text: {
+          en: '자기 자리로',
+        },
+      },
+    },
+    {
+      id: 'AMR 사자 Haunting Cry',
+      type: 'StartsUsing',
+      netRegex: { id: '840A', source: 'Shishio', capture: false },
+      infoText: (data, _matches, output) => {
+        data.prHaunting = (data.prHaunting ?? 0) + 1;
+        if (data.prHaunting === 1)
+          return output.blue4!();
+        else if (data.prHaunting === 2)
+          return output.ghost!();
+      },
+      outputStrings: {
+        blue4: {
+          en: '파란색 네마리 나와요',
+        },
+        ghost: {
+          en: '유령 나와요',
+        },
+      },
+    },
+    {
+      id: 'AMR 쥐 Impure Purgation',
+      type: 'StartsUsing',
+      netRegex: { id: '852F', source: 'Gorai the Uncaged', capture: false },
+      alertText: (_data, _matches, output) => output.text!(),
+      outputStrings: {
+        text: {
+          en: '부채꼴 맞고 이동',
+        },
+      },
+    },
+    {
+      id: 'AMR 쥐 Thundercall',
+      type: 'StartsUsing',
+      netRegex: { id: '8520', source: 'Gorai the Uncaged', capture: false },
+      infoText: (_data, _matches, output) => output.text!(),
+      outputStrings: {
+        text: {
+          en: '번개 구슬 피해요',
+        },
+      },
+    },
+    {
+      id: 'AMR 쥐 Rousing Reincarnation',
+      type: 'StartsUsing',
+      netRegex: { id: '8512', source: 'Gorai the Uncaged', capture: false },
+      infoText: (_data, _matches, output) => output.text!(),
+      outputStrings: {
+        text: {
+          en: '줄과 타워처리, 엉덩이로',
+        },
+      },
+    },
+    {
+      id: 'AMR 쥐 Fighting Spirits',
+      type: 'StartsUsing',
+      // 852C가 동시에 오던데 뭐지
+      netRegex: { id: '852B', source: 'Gorai the Uncaged', capture: false },
+      infoText: (_data, _matches, output) => output.text!(),
+      outputStrings: {
+        text: {
+          en: '자기 번호 마커로!',
+        },
+      },
+    },
+    {
+      id: 'AMR 쥐 Fighting Spirits 넉백',
+      type: 'StartsUsing',
+      netRegex: { id: '852B', source: 'Gorai the Uncaged', capture: false },
+      delaySeconds: 4,
+      alarmText: (_data, _matches, output) => output.text!(),
+      outputStrings: {
+        text: {
+          en: '넉백 조심!',
+        },
       },
     },
   ],

@@ -4130,7 +4130,7 @@ const triggerSet: TriggerSet<Data> = {
             if (stat === myBuff && name !== data.me)
               myTeam.push(data.party.aJobIndex(name));
           }
-          return { alertText: output.fire!({ team: data.party.aJobSortedList(myTeam) }) };
+          return { alertText: output.fire!({ team: data.party.aJobSortedString(myTeam) }) };
         }
 
         if (data.caloric1First.includes(data.me))
@@ -4141,7 +4141,7 @@ const triggerSet: TriggerSet<Data> = {
           if (stat === myBuff && name !== data.me && !data.caloric1First.includes(name))
             myTeam.push(data.party.aJobIndex(name));
         }
-        return { alertText: output.wind!({ team: data.party.aJobSortedList(myTeam) }) };
+        return { alertText: output.wind!({ team: data.party.aJobSortedString(myTeam) }) };
       },
       run: (data) => {
         data.caloric1First = [];
