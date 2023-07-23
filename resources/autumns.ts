@@ -324,6 +324,11 @@ const Autumns = {
     const jobs = priors.map((x) => jobPriorityToName[x]);
     return jobs.join(separator === undefined ? ', ' : separator);
   },
+  BuildJobPriorityArray: (ids: number[]) => {
+    const priors = ids.map((x) => jobIndexToPriority[x] ?? 9999).sort((a, b) => a - b);
+    const jobs = priors.map((x) => jobPriorityToName[x]);
+    return jobs;
+  },
 } as const;
 
 export default Autumns;

@@ -431,7 +431,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: 'Derrière le pompon et le groupe',
           ja: 'たま🔘の一番後ろへ',
           cn: '站在球和队友后',
-          ko: '구슬 맨 뒤로',
+          ko: '구슬 뒤로',
         },
         getBehindPuffs: {
           en: '솜털🔘의 맨 뒤로 (동서)',
@@ -439,7 +439,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: 'Derrière les pompons et le groupe (Est/Ouest)',
           ja: 'たま🔘の一番後ろへ (東西)',
           cn: '站在球和队友后 (东/西)',
-          ko: '구슬 맨 뒤로 (동/서)',
+          ko: '구슬 뒤로 (동/서)',
         },
         getBehindParty: {
           en: '맨 뒤로',
@@ -963,7 +963,7 @@ const triggerSet: TriggerSet<Data> = {
       id: 'ASSS Hells\' Nebula',
       type: 'StartsUsing',
       netRegex: { id: '7984', source: 'Sil\'dihn Armor', capture: false },
-      condition: (data) => data.role === 'healer',
+      condition: (data) => data.role === 'healer' || data.job === 'BLU',
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {

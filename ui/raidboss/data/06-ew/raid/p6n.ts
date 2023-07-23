@@ -81,7 +81,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         first: {
-          en: 'Short parasite on YOU',
+          en: '내게 짧은 기생',
           de: 'Kurzer Parasit auf DIR',
           fr: 'Parasite court sur VOUS',
           ja: '自分に短い寄生',
@@ -89,7 +89,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '짧은 기생 디버프 대상자',
         },
         second: {
-          en: 'Long parasite on YOU',
+          en: '내게 긴 기생',
           de: 'Langer Parasit auf DIR',
           fr: 'Parasite long sur VOUS',
           ja: '自分に長い寄生',
@@ -107,7 +107,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Face outside: Parasite',
+          en: '바깥 봐요: 기생',
           de: 'Nach außen schauen: Parasit',
           fr: 'Regardez vers l\'extérieur : Parasite',
           ja: '外向き：寄生',
@@ -125,7 +125,7 @@ const triggerSet: TriggerSet<Data> = {
         matches.id === '00A7' ? output.left!() : output.right!(),
       outputStrings: {
         left: {
-          en: 'Rotate left',
+          en: '왼쪽으로 돌아요',
           de: 'Nach links rotieren',
           fr: 'Tournez vers la gauche',
           ja: '左回り',
@@ -133,7 +133,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '왼쪽으로 회전',
         },
         right: {
-          en: 'Rotate right',
+          en: '오른쪽으로 돌아요',
           de: 'Nach rechts rotieren',
           fr: 'Tournez vers la droite',
           ja: '右回り',
@@ -156,7 +156,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Be opposite tethered safespot',
+          en: '줄 반대편 안전한 곳으로',
           de: 'Sei gegenüber dem verbundenen, sicheren Platz',
           fr: 'Placez vous sur la zone sûre de l\'élément opposé',
           ja: '線が繋がってる安置へ移動',

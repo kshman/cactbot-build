@@ -145,8 +145,12 @@ export default class PartyTracker {
   // returns the job name of the specified party member
   jobName(name: string): Job | undefined {
     const partyIndex = this.partyNames.indexOf(name);
-    if (partyIndex >= 0)
-      return Util.jobEnumToJob(this.details[partyIndex]?.job as number);
+    if (partyIndex < 0)
+      return;
+    const job = this.details[partyIndex]?.job;
+    if (job === undefined)
+      return;
+    return Util.jobEnumToJob(job);
   }
 
   nameFromId(id: string): string | undefined {
@@ -173,8 +177,13 @@ export default class PartyTracker {
     return 0;
   }
 
-  // 어듬이용 직업 정렬 목록
-  aJobSortedList(ids: number[], separator?: string): string {
+  // 어듬이용 직업 정렬 목록 문자열
+  aJobSortedString(ids: number[], separator?: string): string {
     return Autumns.BuildJobPriorities(ids, separator);
+  }
+
+  // 어듬이용 직업 정렬 배열
+  aJobSortedArray(ids: number[]): (string | undefined)[] {
+    return Autumns.BuildJobPriorityArray(ids);
   }
 }

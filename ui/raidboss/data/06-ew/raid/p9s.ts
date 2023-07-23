@@ -464,15 +464,27 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         2: {
           en: '2번: 처음 #1 돌진, #3 타워',
+          de: '2: 1. Raus, 3. Turm',
+          cn: '2麻 1火3塔',
+          ko: '2: 1돌진, 3기둥',
         },
         4: {
           en: '4번: #2 돌진, 마지막 #4 타워',
+          de: '4: 2. Raus, 4. Turm',
+          cn: '4麻 2火4塔',
+          ko: '4: 2돌진, 4기둥',
         },
         6: {
           en: '6번: 처음 #1 타워, #3 돌진',
+          de: '6: 1. Turm, 3. Raus',
+          cn: '6麻 1塔3火',
+          ko: '4: 1기둥, 3돌진',
         },
         8: {
           en: '8번: #2 타워, 마지막 #4 돌진',
+          de: '8: 2. Turm, 4. Raus',
+          cn: '8麻 2塔4火',
+          ko: '8: 2기둥, 4돌진',
         },
         tts: {
           en: '${num}番',
@@ -500,6 +512,9 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         defamationLater: {
           en: '🔵폭탄',
+          de: 'Ehrenstrafe auf dir (später)',
+          cn: '大圈点名 (稍后放置)',
+          ko: '광역 대상자 (나중에)',
         },
       },
     },
@@ -835,7 +850,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '푹찍쾅 => 그대로!',
+          en: '푹찍쾅 => 그대로! 남쪽 바라보게!',
           de: 'Sprung => Stehen bleiben',
           fr: 'Saut => Restez',
           ja: '突進 => 止まれ',
@@ -851,7 +866,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '푹찍쾅 => 보스 뒤로!',
+          en: '푹찍쾅 => 가로질러! 북쪽 바라보게!',
           de: 'Sprung => Geh durch den Boss',
           fr: 'Saut => Traversez le boss',
           ja: '突進 => 移動',
