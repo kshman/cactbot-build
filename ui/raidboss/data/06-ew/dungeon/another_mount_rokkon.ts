@@ -856,7 +856,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '자기 번호 마커로!',
+          en: '내 번호 기억해줘',
         },
       },
     },
