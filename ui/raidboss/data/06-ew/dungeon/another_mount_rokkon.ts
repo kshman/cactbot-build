@@ -1,3 +1,4 @@
+import Conditions from '../../../../../resources/conditions';
 import Outputs from '../../../../../resources/outputs';
 import PartyTracker from '../../../../../resources/party';
 import { Responses } from '../../../../../resources/responses';
@@ -14,9 +15,29 @@ type OdderTower = {
   orange?: string;
 };
 
+const headmarkers = {
+  // vfx/lockon/eff/sph_lockon2_num01_s8p.avfx (through sph_lockon2_num04_s8p)
+  limitCut1: '0150',
+  limitCut2: '0151',
+  limitCut3: '0152',
+  limitCut4: '0153',
+} as const;
+
+const limitCutIds: readonly string[] = Object.values(headmarkers);
+
 export interface Data extends RaidbossData {
+  prPhase?: 'vengence' | 'moonless' | 'none';
   prHaunting?: number;
   prStornmclod?: number;
+  prStackFirst?: boolean;
+  prGainCollect: NetMatches['GainsEffect'][];
+  prFlag: boolean;
+  prSourceId?: string;
+  prMoonTether: string[];
+  prGiri: number;
+  prTripleDir: number[];
+  prTripleColor: boolean[];
+  prShadowGiri: string[];
   //
   combatantData: PluginCombatantState[];
   wailingCollect: NetMatches['GainsEffect'][];
@@ -26,6 +47,47 @@ export interface Data extends RaidbossData {
   reincarnationCollect: [OdderTower, OdderTower, OdderTower, OdderTower];
   towerCount: number;
 }
+
+const giriAngles: { [effectId: string]: number } = {
+  '85B0': 0,
+  '85B1': 90,
+  '85B2': 180,
+  '85B3': 270,
+  '85B4': 0,
+  '85B5': 90,
+  '85B6': 180,
+  '85B7': 270,
+  // '85B8': Unbound Spirit
+  // '85B9': Azure Coil
+  '85BA': 0,
+  '85BB': 90,
+  '85BC': 180,
+  '85BD': 270,
+  '85BE': 0,
+  '85BF': 90,
+  '85C0': 180,
+  '85C1': 270,
+};
+const giriIds: readonly string[] = Object.keys(giriAngles);
+const calcGiri = (giri: number, rot: number): number => {
+  let add = giri + rot;
+  if (add < 0)
+    add += 360;
+  else if (add > 360)
+    add -= 360;
+  return add;
+};
+const giriToSafe = (giri: number): string | undefined => {
+  if (giri === 0 || giri === 360)
+    return 'C';
+  if (giri === 90)
+    return 'D';
+  if (giri === 180)
+    return 'A';
+  if (giri === 270)
+    return 'B';
+  return undefined;
+};
 
 const countJob = (job1: Job, job2: Job, func: (x: Job) => boolean): number => {
   return (func(job1) ? 1 : 0) + (func(job2) ? 1 : 0);
@@ -146,6 +208,7 @@ const stackSpreadResponse = (
   const stackType = findStackPartners(data.party, stack1.target, stack2.target);
 
   if (data.options.AutumnStyle) {
+    data.prStackFirst = isStackFirst;
     const teams = [data.party.aJobIndex(stack1.target), data.party.aJobIndex(stack2.target)];
     const [player1, player2] = data.party.aJobSortedArray(teams);
     const stackInfo = { infoText: output.stacks!({ player1: player1, player2: player2 }) };
@@ -265,6 +328,14 @@ const triggerSet: TriggerSet<Data> = {
   timelineFile: 'another_mount_rokkon.txt',
   initData: () => {
     return {
+      prGainCollect: [],
+      prFlag: false,
+      prMoonTether: [],
+      prGiri: 0,
+      prTripleDir: [],
+      prTripleColor: [],
+      prShadowGiri: [],
+      //
       combatantData: [],
       wailingCollect: [],
       wailCount: 0,
@@ -693,6 +764,61 @@ const triggerSet: TriggerSet<Data> = {
       response: Responses.tankBuster(),
     },
     {
+      id: 'AMR Gorai Impure Purgation First Hit',
+      type: 'StartsUsing',
+      netRegex: { id: '852F', source: 'Gorai the Uncaged', capture: false },
+      durationSeconds: 4,
+      alertText: (_data, _matches, output) => output.text!(),
+      outputStrings: {
+        text: {
+          en: '부채꼴, 흩어져요',
+          de: 'Um den Boss verteilen',
+          fr: 'Changement',
+          ja: 'ボスを基準として散開',
+          cn: '和队友分散路径',
+          ko: '산개',
+        },
+      },
+    },
+    {
+      id: 'AMR Gorai Impure Purgation Second Hit',
+      type: 'StartsUsing',
+      netRegex: { id: '8531', source: 'Gorai the Uncaged', capture: false },
+      suppressSeconds: 5,
+      response: Responses.moveAway(),
+    },
+    {
+      id: 'AMR Gorai Humble Hammer',
+      type: 'StartsUsing',
+      netRegex: { id: '8525', source: 'Gorai the Uncaged' },
+      condition: Conditions.targetIsYou(),
+      alertText: (_data, _matches, output) => output.text!(),
+      outputStrings: {
+        text: {
+          en: '모서리 번개 구슬 몸통 박치기',
+        },
+      },
+    },
+    {
+      id: 'AMR Gorai Flintlock',
+      type: 'Ability',
+      // Trigger this on Humble Hammer damage
+      netRegex: { id: '8525', source: 'Gorai the Uncaged', capture: false },
+      // This cleaves and should hit the orb and the player.
+      suppressSeconds: 5,
+      alertText: (_data, _matches, output) => output.text!(),
+      outputStrings: {
+        text: {
+          en: '한 줄 뭉쳐요',
+          de: 'Sammeln in einer Linie',
+          fr: 'Packez-vous en ligne',
+          ja: '頭割り',
+          cn: '直线分摊',
+          ko: '직선 쉐어',
+        },
+      },
+    },
+    {
       id: 'AMR Gorai Rousing Reincarnation Collect',
       type: 'GainsEffect',
       netRegex: { effectId: ['E0D', 'E0E', 'E0F', 'E10', 'E11', 'E12', 'E13', 'E14'] },
@@ -743,6 +869,46 @@ const triggerSet: TriggerSet<Data> = {
       response: (data, _matches, output) => {
         // cactbot-builtin-response
         return towerResponse(data, output);
+      },
+    },
+    /*
+    {
+      id: 'AMR Gorai Fighting Spirits',
+      type: 'StartsUsing',
+      netRegex: { id: '852B', source: 'Gorai the Uncaged', capture: false },
+      // this is also a light aoe but knockback is more important
+      response: Responses.knockback('info'),
+    },
+    */
+    {
+      id: 'AMR Gorai Fighting Spirits Limit Cut',
+      type: 'HeadMarker',
+      netRegex: { id: limitCutIds },
+      durationSeconds: 10, // FIXME
+      alertText: (data, matches, output) => {
+        if (matches.target !== data.me)
+          return;
+        let num = undefined;
+        if (matches.id === headmarkers.limitCut1)
+          num = output.num1!();
+        else if (matches.id === headmarkers.limitCut2)
+          num = output.num2!();
+        else if (matches.id === headmarkers.limitCut3)
+          num = output.num3!();
+        else if (matches.id === headmarkers.limitCut4)
+          num = output.num4!();
+        else
+          return;
+        return output.text!({ num: num });
+      },
+      outputStrings: {
+        num1: Outputs.num1,
+        num2: Outputs.num2,
+        num3: Outputs.num3,
+        num4: Outputs.num4,
+        text: {
+          en: '${num}번',
+        },
       },
     },
     // ---------------- 어드미 ----------------
@@ -816,29 +982,18 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: 'AMR 쥐 Impure Purgation',
-      type: 'StartsUsing',
-      netRegex: { id: '852F', source: 'Gorai the Uncaged', capture: false },
-      alertText: (_data, _matches, output) => output.text!(),
-      outputStrings: {
-        text: {
-          en: '부채꼴 맞고 이동',
-        },
-      },
-    },
-    {
-      id: 'AMR 쥐 Thundercall',
+      id: 'AMR Gorai Thundercall',
       type: 'StartsUsing',
       netRegex: { id: '8520', source: 'Gorai the Uncaged', capture: false },
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '번개 구슬 피해요',
+          en: '번개 구슬 처리',
         },
       },
     },
     {
-      id: 'AMR 쥐 Rousing Reincarnation',
+      id: 'AMR Gorai Rousing Reincarnation',
       type: 'StartsUsing',
       netRegex: { id: '8512', source: 'Gorai the Uncaged', capture: false },
       infoText: (_data, _matches, output) => output.text!(),
@@ -849,27 +1004,530 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: 'AMR 쥐 Fighting Spirits',
-      type: 'StartsUsing',
-      // 852C가 동시에 오던데 뭐지
-      netRegex: { id: '852B', source: 'Gorai the Uncaged', capture: false },
-      infoText: (_data, _matches, output) => output.text!(),
-      outputStrings: {
-        text: {
-          en: '내 번호 기억해줘',
-        },
-      },
-    },
-    {
-      id: 'AMR 쥐 Fighting Spirits 넉백',
+      id: 'AMR Gorai Fighting Spirits 넉백',
       type: 'StartsUsing',
       netRegex: { id: '852B', source: 'Gorai the Uncaged', capture: false },
-      delaySeconds: 4,
+      delaySeconds: 3,
       alarmText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
           en: '넉백 조심!',
         },
+      },
+    },
+    {
+      id: 'AMR Gorai Fighting Spirits 스프린트',
+      type: 'Ability',
+      netRegex: { id: '852B', source: 'Gorai the Uncaged', capture: false },
+      delaySeconds: 2,
+      alertText: (_data, _matches, output) => output.text!(),
+      outputStrings: {
+        text: {
+          en: '스프린트!',
+        },
+      },
+    },
+    {
+      id: 'AMR Gorai 뭉쳐',
+      type: 'GainsEffect',
+      // E17 = Live Brazier (stack)
+      netRegex: { effectId: 'E17' },
+      condition: (data) => data.options.AutumnStyle,
+      delaySeconds: (data, matches) => {
+        if (data.sparksCount === 1)
+          return parseFloat(matches.duration) - 3;
+        if (data.sparksCount === 2)
+          return parseFloat(matches.duration);
+        return 0;
+      },
+      durationSeconds: 3,
+      suppressSeconds: 10,
+      alertText: (data, _matches, output) => {
+        if (data.sparksCount === 1)
+          return output.explosion!();
+        if (data.sparksCount === 2 && data.prStackFirst)
+          return output.spread!();
+      },
+      outputStrings: {
+        explosion: {
+          en: '곧 뭉치기가 터져요!',
+        },
+        spread: {
+          en: '흩어져요! (엑사 피하면서)',
+        },
+      },
+    },
+    {
+      id: 'AMR Gorai 흩어져',
+      type: 'GainsEffect',
+      // E18 = Live Candle (spread)
+      netRegex: { effectId: 'E18' },
+      condition: (data) => data.options.AutumnStyle,
+      delaySeconds: (data, matches) => {
+        if (data.sparksCount === 2)
+          return parseFloat(matches.duration);
+        return 0;
+      },
+      durationSeconds: 3,
+      suppressSeconds: 10,
+      alertText: (data, _matches, output) => {
+        if (data.sparksCount === 2 && !data.prStackFirst)
+          return output.stack!();
+      },
+      outputStrings: {
+        stack: {
+          en: '뭉쳐요! (엑사 피하면서)',
+        },
+      },
+    },
+    {
+      id: 'AMR Moko Kenki Release',
+      type: 'StartsUsing',
+      netRegex: { id: '85E0', source: 'Moko the Restless', capture: false },
+      response: Responses.aoe('alert'),
+      run: (data) => {
+        data.prGiri = 0;
+        data.prTripleDir = [];
+        data.prTripleColor = [];
+      },
+    },
+    {
+      id: 'AMR Moko Lateral Slice',
+      type: 'StartsUsing',
+      netRegex: { id: '85E3', source: 'Moko the Restless' },
+      response: Responses.tankBuster(),
+    },
+    {
+      id: 'AMR Moko Scarlet Auspice',
+      type: 'StartsUsing',
+      netRegex: { id: '85D1', source: 'Moko the Restless', capture: false },
+      response: Responses.goSides(),
+    },
+    {
+      id: 'AMR Moko Invocation of Vengeance',
+      type: 'StartsUsing',
+      netRegex: { id: '85DB', source: 'Moko the Restless', capture: false },
+      run: (data, _matches) => {
+        data.prPhase = 'vengence';
+        data.prGainCollect = [];
+      },
+    },
+    {
+      id: 'AMR Moko Vengeful Collect',
+      type: 'GainsEffect',
+      // E1A = spread
+      // E1B = stack
+      netRegex: { effectId: ['E1A', 'E1B'] },
+      run: (data, matches) => data.prGainCollect.push(matches),
+    },
+    {
+      id: 'AMR Moko Vengeful',
+      type: 'GainsEffect',
+      netRegex: { effectId: ['E1A', 'E1B'], capture: false },
+      delaySeconds: 0.5,
+      durationSeconds: 10,
+      suppressSeconds: 999999,
+      infoText: (data, _matches, output) => {
+        const stack = data.prGainCollect.find((x) => x.effectId === 'E1B');
+        const spread = data.prGainCollect.find((x) => x.effectId === 'E1A');
+        if (stack === undefined || spread === undefined)
+          return;
+        const stackTime = parseFloat(stack.duration);
+        const spreadTime = parseFloat(spread.duration);
+        data.prStackFirst = stackTime < spreadTime;
+
+        if (data.prStackFirst)
+          return output.stsp!();
+        return output.spst!();
+      },
+      outputStrings: {
+        stsp: {
+          en: '먼저 뭉쳐요',
+        },
+        spst: {
+          en: '먼저 흩어져요',
+        },
+      },
+    },
+    {
+      id: 'AMR Moko Vengeful Flame',
+      type: 'GainsEffect',
+      netRegex: { effectId: 'E1A' },
+      delaySeconds: (_data, matches) => parseFloat(matches.duration),
+      durationSeconds: 7,
+      suppressSeconds: 10,
+      alarmText: (data, _matches, output) => {
+        if (data.prStackFirst)
+          return;
+        if (data.role === 'tank')
+          return output.tank!();
+        if (data.role === 'healer')
+          return output.healer!();
+        return output.dps!();
+      },
+      outputStrings: {
+        tank: {
+          en: '힐러랑 뭉쳐요!',
+        },
+        healer: {
+          en: '탱크랑 뭉쳐요!',
+        },
+        dps: {
+          en: 'DPS끼리 뭉쳐요!',
+        },
+      },
+    },
+    {
+      id: 'AMR Moko Vengeful Pyre',
+      type: 'GainsEffect',
+      netRegex: { effectId: 'E1B' },
+      delaySeconds: (_data, matches) => parseFloat(matches.duration),
+      durationSeconds: 7,
+      suppressSeconds: 10,
+      alarmText: (data, _matches, output) => {
+        if (data.prStackFirst)
+          return output.text!();
+      },
+      outputStrings: {
+        text: {
+          en: '흩어져요!',
+        },
+      },
+    },
+    {
+      id: 'AMR Moko Vengeance Rat and Mouse',
+      type: 'GainsEffect',
+      netRegex: { effectId: 'E19' },
+      condition: (data, matches) => data.prPhase === 'vengence' && matches.target === data.me,
+      alertText: (_data, _matches, output) => output.text!(),
+      outputStrings: {
+        text: {
+          en: '내게 줄! 칼 방향 확인!',
+        },
+      },
+    },
+    {
+      id: 'AMR Moko Fleeting Iai-giri',
+      type: 'StartsUsing',
+      netRegex: { id: ['85C2', '85C6'], source: 'Moko the Restless', capture: false },
+      suppressSeconds: 20,
+      infoText: (_data, _matches, output) => {
+        return output.findsafe!();
+      },
+      outputStrings: {
+        findsafe: {
+          en: '안전한 곳 찾아 이동',
+        },
+      },
+    },
+    {
+      id: 'AMR Moko Shadow-twin',
+      type: 'StartsUsing',
+      netRegex: { id: '85C7', source: 'Moko the Restless', capture: false },
+      infoText: (data, _matches, output) => {
+        data.prShadowGiri = [];
+        return output.text!();
+      },
+      outputStrings: {
+        text: {
+          en: '쫄 두마리',
+        },
+      },
+    },
+    {
+      id: 'AMR Moko Moonless Night',
+      type: 'StartsUsing',
+      netRegex: { id: '85DE', source: 'Moko the Restless', capture: false },
+      run: (data) => {
+        data.prPhase = 'moonless';
+        data.prGainCollect = [];
+        data.prFlag = false;
+        data.prMoonTether = [];
+      },
+    },
+    {
+      id: 'AMR Moko Moonless 줄다리기',
+      type: 'Tether',
+      netRegex: { id: '0011' },
+      condition: (data) => data.prPhase === 'moonless',
+      run: (data, matches) => {
+        const target = matches.target;
+        data.prMoonTether.push(target);
+        if (data.me === target) {
+          data.prFlag = true;
+          data.prSourceId = matches.sourceId;
+        } else {
+          if (data.role === 'tank' && data.party.isHealer(target))
+            data.prSourceId = matches.sourceId;
+          else if (data.role === 'healer' && data.party.isTank(target))
+            data.prSourceId = matches.sourceId;
+          else if (data.role === 'dps' && data.party.isDPS(target))
+            data.prSourceId = matches.sourceId;
+          /*
+          else if (data.prSourceId === undefined)
+            data.prSourceId = matches.sourceId;
+          else if (!data.prFlag && parseInt(data.prSourceId, 16) < parseInt(matches.sourceId, 16))
+            data.prSourceId = matches.sourceId;
+          */
+        }
+      },
+    },
+    {
+      id: 'AMR Moko Moonless 줄다리기 알림',
+      type: 'Tether',
+      netRegex: { id: '0011', capture: false },
+      condition: (data) => data.prPhase === 'moonless',
+      delaySeconds: 0.5,
+      suppressSeconds: 5,
+      response: (data, _matches, output) => {
+        // cactbot-builtin-response
+        output.responseOutputStrings = {
+          tether: {
+            en: '내게 줄! (${dest})',
+          },
+          tetheronly: {
+            en: '내게 줄!',
+          },
+          notether: {
+            en: '줄 없음',
+          },
+        };
+
+        if (data.prFlag) {
+          const left = data.prMoonTether.filter((x) => data.me !== x);
+          if (left.length === 1)
+            return { alertText: output.tether!({ dest: data.party.aJobName(left[0]) }) };
+          return { alertText: output.tetheronly!() };
+        }
+        return { infoText: output.notether!() };
+      },
+    },
+    {
+      id: 'AMR Moko Near Edge',
+      type: 'StartsUsing',
+      netRegex: { id: '85D9', source: 'Moko the Restless', capture: false },
+      response: (data, _matches, output) => {
+        // cactbot-builtin-response
+        output.responseOutputStrings = {
+          in: {
+            en: '안쪽으로 (${giri})',
+          },
+          out: {
+            en: '바깥쪽/바깥보기 (${giri})',
+          },
+          unknown: Outputs.unknown,
+        };
+        if (data.prShadowGiri.length === 0)
+          data.prShadowGiri.push(output.unknown!());
+        else if (data.prShadowGiri.length === 1)
+          data.prShadowGiri.push('반대로');
+        const giri = data.prShadowGiri.join(' => ');
+        if (data.prFlag)
+          return { alertText: output.out!({ giri: giri }) };
+        return { infoText: output.in!({ giri: giri }) };
+      },
+      run: (data) => {
+        data.prFlag = false;
+        data.prMoonTether = [];
+        data.prSourceId = undefined;
+        data.prShadowGiri = [];
+      },
+    },
+    {
+      id: 'AMR Moko Far Edge',
+      type: 'StartsUsing',
+      netRegex: { id: '85D8', source: 'Moko the Restless', capture: false },
+      response: (data, _matches, output) => {
+        // cactbot-builtin-response
+        output.responseOutputStrings = {
+          in: {
+            en: '안쪽/안쪽보기 (${giri})',
+          },
+          out: {
+            en: '바깥쪽으로 (${giri})',
+          },
+          unknown: Outputs.unknown,
+        };
+        if (data.prShadowGiri.length === 0)
+          data.prShadowGiri.push(output.unknown!());
+        else if (data.prShadowGiri.length === 1)
+          data.prShadowGiri.push('반대로');
+        const giri = data.prShadowGiri.join(' => ');
+        if (data.prFlag)
+          return { alertText: output.in!({ giri: giri }) };
+        return { infoText: output.out!({ giri: giri }) };
+      },
+      run: (data) => {
+        data.prFlag = false;
+        data.prMoonTether = [];
+        data.prSourceId = undefined;
+        data.prShadowGiri = [];
+      },
+    },
+    {
+      id: 'AMR Moko Moko\'s Shadow',
+      type: 'GainsEffect',
+      netRegex: { effectId: 'B9A', capture: true },
+      durationSeconds: 1,
+      infoText: (data, matches, output) => {
+        if (matches.targetId !== data.prSourceId)
+          return;
+        const cCount: { [id: string]: string } = {
+          '248': output.front!(),
+          '249': output.right!(),
+          '24A': output.left!(),
+          '24B': output.left!(),
+        };
+        const where = cCount[matches.count];
+        if (where !== undefined && !data.prShadowGiri.includes(where)) {
+          data.prShadowGiri.push(where);
+          return;
+        }
+        return output.unk!({ num: matches.count });
+      },
+      outputStrings: {
+        front: {
+          en: '뒤로',
+        },
+        back: {
+          en: '앞으로',
+        },
+        left: {
+          en: '오른쪽',
+        },
+        right: {
+          en: '왼쪽',
+        },
+        unk: {
+          en: '모르는 방향: ${num}',
+        },
+      },
+    },
+    {
+      id: 'AMR Moko Azure Auspice',
+      type: 'StartsUsing',
+      netRegex: { id: '85D4', source: 'Moko the Restless', capture: false },
+      response: Responses.getIn(),
+    },
+    {
+      id: 'AMR Moko Soldiers of Death',
+      type: 'StartsUsing',
+      netRegex: { id: '8593', source: 'Moko the Restless', capture: false },
+      alertText: (_data, _matches, output) => {
+        // 선 달린 사람이 바깥쪽
+        return output.text!();
+      },
+      outputStrings: {
+        text: {
+          en: '파란 쫄 찾아요',
+        },
+      },
+    },
+    {
+      id: 'AMR Moko Triple Kasumi-giri',
+      type: 'StartsUsing',
+      netRegex: { id: giriIds, source: 'Moko the Restless' },
+      run: (data, matches) => {
+        const angle = giriAngles[matches.id];
+        if (angle === undefined)
+          return;
+        data.prGiri = calcGiri(data.prGiri, angle);
+        data.prTripleDir.push(data.prGiri);
+      },
+    },
+    {
+      id: 'AMR Moko Unbound Spirit',
+      type: 'Ability',
+      netRegex: { id: '85B8', source: 'Moko the Restless', capture: false },
+      infoText: (data, _matches, output) => {
+        data.prTripleColor.push(true);
+        if (data.prTripleDir.length < 3) {
+          const mark = giriToSafe(data.prGiri);
+          if (mark !== undefined)
+            return output.text!({ mark: mark });
+          return output.unk!({ angle: data.prGiri });
+        }
+        const mark = data.prTripleDir.map((x) => giriToSafe(x));
+        const safe = data.prTripleColor.map((x) => x ? '밖' : '안');
+        const mesg = output.whole!({
+          m1: mark[0],
+          s1: safe[0],
+          m2: mark[1],
+          s2: safe[1],
+          m3: mark[2],
+          s3: safe[2],
+        });
+        data.prTripleDir = [];
+        data.prTripleColor = [];
+        return mesg;
+      },
+      outputStrings: {
+        text: {
+          en: '(${mark}밖)',
+        },
+        whole: {
+          en: '${m1}${s1} => ${m2}${s2} => ${m3}${s3}',
+        },
+        unk: {
+          en: '(몰루: ${angle}도)',
+        },
+      },
+    },
+    {
+      id: 'AMR Moko Azure Coil',
+      type: 'Ability',
+      netRegex: { id: '85B9', source: 'Moko the Restless', capture: false },
+      infoText: (data, _matches, output) => {
+        data.prTripleColor.push(false);
+        if (data.prTripleDir.length < 3) {
+          const mark = giriToSafe(data.prGiri);
+          if (mark !== undefined)
+            return output.text!({ mark: mark });
+          return output.unk!({ angle: data.prGiri });
+        }
+        const mark = data.prTripleDir.map((x) => giriToSafe(x));
+        const safe = data.prTripleColor.map((x) => x ? '밖' : '안');
+        const mesg = output.whole!({
+          m1: mark[0],
+          s1: safe[0],
+          m2: mark[1],
+          s2: safe[1],
+          m3: mark[2],
+          s3: safe[2],
+        });
+        data.prTripleDir = [];
+        data.prTripleColor = [];
+        return mesg;
+      },
+      outputStrings: {
+        text: {
+          en: '(${mark}안)',
+        },
+        whole: {
+          en: '${m1}${s1} => ${m2}${s2} => ${m3}${s3}',
+        },
+        unk: {
+          en: '(몰루: ${angle}도)',
+        },
+      },
+    },
+    {
+      id: 'AMR Moko Boundless Azure',
+      type: 'StartsUsing',
+      netRegex: { id: '859D', source: 'Moko the Restless', capture: false },
+      response: Responses.goSides(),
+    },
+  ],
+  timelineReplace: [
+    {
+      locale: 'en',
+      replaceText: {
+        'Unnatural Ailment/Unnatural Force': 'Unnatural Ailment/Force',
+        'Unnatural Force/Unnatural Ailment': 'Unnatural Force/Ailment',
+        'Eye of the Thunder Vortex/Vortex of the Thunder Eye': 'Thunder Eye/Vortex',
+        'Vortex of the Thunder Eye/Eye of the Thunder Vortex': 'Thunder Vortex/Eye',
+        'Greater Ball of Fire/Great Ball of Fire': 'Great/Greater Ball of Fire',
+        'Great Ball of Fire/Greater Ball of Fire': 'Greater/Great Ball of Fire',
       },
     },
   ],
