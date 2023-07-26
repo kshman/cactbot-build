@@ -1144,10 +1144,10 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         blue: {
-          en: '🟦파랑: 즉 가짜',
+          en: '🟦파랑: 즉, 가짜',
         },
         red: {
-          en: '🟥빨강: 즉 진짜',
+          en: '🟥빨강: 즉, 진짜',
         },
       },
     },
@@ -1639,8 +1639,9 @@ const triggerSet: TriggerSet<Data> = {
           '24B': output.left!(),
         };
         const where = cCount[matches.count];
-        if (where !== undefined && !data.prShadowGiri.includes(where)) {
-          data.prShadowGiri.push(where);
+        if (where !== undefined) {
+          if (!data.prShadowGiri.includes(where))
+            data.prShadowGiri.push(where);
           return;
         }
         return output.unk!({ num: matches.count });
@@ -1696,15 +1697,18 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: 'AMR Moko Unbound Spirit',
+      id: 'AMR Moko Unbound Spirit & Azure Coil',
       type: 'Ability',
-      netRegex: { id: '85B8', source: 'Moko the Restless', capture: false },
-      infoText: (data, _matches, output) => {
-        data.prTripleColor.push(true);
+      netRegex: { id: ['85B8', '85B9'], source: 'Moko the Restless' },
+      infoText: (data, matches, output) => {
+        data.prTripleColor.push(matches.id === '85B8');
         if (data.prTripleDir.length < 3) {
           const mark = giriToSafe(data.prGiri);
-          if (mark !== undefined)
-            return output.text!({ mark: mark });
+          if (mark !== undefined) {
+            if (matches.id === '85B8')
+              return output.unbound!({ mark: mark });
+            return output.azure!({ mark: mark });
+          }
           return output.unk!({ angle: data.prGiri });
         }
         const mark = data.prTripleDir.map((x) => giriToSafe(x));
@@ -1722,45 +1726,10 @@ const triggerSet: TriggerSet<Data> = {
         return mesg;
       },
       outputStrings: {
-        text: {
+        unbound: {
           en: '(${mark}밖)',
         },
-        whole: {
-          en: '${m1}${s1} => ${m2}${s2} => ${m3}${s3}',
-        },
-        unk: {
-          en: '(몰루: ${angle}도)',
-        },
-      },
-    },
-    {
-      id: 'AMR Moko Azure Coil',
-      type: 'Ability',
-      netRegex: { id: '85B9', source: 'Moko the Restless', capture: false },
-      infoText: (data, _matches, output) => {
-        data.prTripleColor.push(false);
-        if (data.prTripleDir.length < 3) {
-          const mark = giriToSafe(data.prGiri);
-          if (mark !== undefined)
-            return output.text!({ mark: mark });
-          return output.unk!({ angle: data.prGiri });
-        }
-        const mark = data.prTripleDir.map((x) => giriToSafe(x));
-        const safe = data.prTripleColor.map((x) => x ? '밖' : '안');
-        const mesg = output.whole!({
-          m1: mark[0],
-          s1: safe[0],
-          m2: mark[1],
-          s2: safe[1],
-          m3: mark[2],
-          s3: safe[2],
-        });
-        data.prTripleDir = [];
-        data.prTripleColor = [];
-        return mesg;
-      },
-      outputStrings: {
-        text: {
+        azure: {
           en: '(${mark}안)',
         },
         whole: {
