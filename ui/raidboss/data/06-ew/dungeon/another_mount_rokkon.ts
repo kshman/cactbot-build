@@ -26,10 +26,17 @@ const headmarkers = {
 
 const limitCutIds: readonly string[] = Object.values(headmarkers);
 
+type MalformedInfo = {
+  d1?: boolean;
+  d3?: boolean;
+};
+
 export interface Data extends RaidbossData {
   prPhase?: 'vengence' | 'moonless' | 'none';
   prHaunting?: number;
-  prStornmclod?: number;
+  prStormclod?: number;
+  prSmokeater?: number;
+  prMalformed: { [name: string]: MalformedInfo };
   prStackFirst?: boolean;
   prGainCollect: NetMatches['GainsEffect'][];
   prFlag: boolean;
@@ -330,6 +337,7 @@ const triggerSet: TriggerSet<Data> = {
   timelineFile: 'another_mount_rokkon.txt',
   initData: () => {
     return {
+      prMalformed: {},
       prGainCollect: [],
       prFlag: false,
       prMoonTether: [],
@@ -673,28 +681,28 @@ const triggerSet: TriggerSet<Data> = {
       run: (data) => data.devilishThrallCollect = [],
       outputStrings: {
         north: {
-          en: '북쪽 마름모',
+          en: 'Ⓐ 마름모',
         },
         east: {
-          en: '동쪽 마름모',
+          en: 'Ⓑ 마름모',
         },
         south: {
-          en: '남쪽 마름모',
+          en: 'Ⓒ 마름모',
         },
         west: {
-          en: '서쪽 마름모',
+          en: 'Ⓓ 마름모',
         },
         northeast: {
-          en: '북동 사각',
+          en: '① 사각',
         },
         southeast: {
-          en: '남동 사각',
+          en: '② 사각',
         },
         southwest: {
-          en: '남서 사각',
+          en: '③ 사각',
         },
         northwest: {
-          en: '북서 사각',
+          en: '④ 사각',
         },
       },
     },
@@ -1017,9 +1025,6 @@ const triggerSet: TriggerSet<Data> = {
       response: (data, _matches, output) => {
         // cactbot-builtin-response
         output.responseOutputStrings = {
-          check: {
-            en: '구름 먹는거 확인!',
-          },
           line1: {
             en: '빠른 빔 피해요!',
           },
@@ -1028,13 +1033,49 @@ const triggerSet: TriggerSet<Data> = {
           },
         };
 
-        data.prStornmclod = (data.prStornmclod ?? 0) + 1;
-        if (data.prStornmclod === 1 || data.prStornmclod === 3)
-          return { infoText: output.check!() };
-        if (data.prStornmclod === 2)
+        data.prStormclod = (data.prStormclod ?? 0) + 1;
+        data.prSmokeater = 0;
+        if (data.prStormclod === 2)
           return { alertText: output.line1!() };
-        if (data.prStornmclod === 4)
+        if (data.prStormclod === 4)
           return { alertText: output.line2!() };
+      },
+    },
+    {
+      id: 'AMR 사자 Smokeater',
+      type: 'Ability',
+      netRegex: { id: ['83F9', '83FA'], source: 'Shishio', capture: false },
+      run: (data) => data.prSmokeater = (data.prSmokeater ?? 0) + 1,
+    },
+    {
+      id: 'AMR 사자 Rokujo Revel',
+      type: 'StartsUsing',
+      netRegex: { id: '83FC', source: 'Shishio', capture: false },
+      durationSeconds: 7,
+      response: (data, _matches, output) => {
+        // cactbot-builtin-response
+        output.responseOutputStrings = {
+          c1: {
+            en: '장판🡾 구름 없는 곳 => 돌면서 한가운데',
+          },
+          c2: {
+            en: '첫장판🡾 구름 없는 곳 => 돌면서 한가운데',
+          },
+          c3: {
+            en: '한개의 반대편 => 오른쪽 달려',
+          },
+          cs: {
+            en: '구름 ${num}번 먹었네',
+          },
+        };
+        const smokes = { alertText: output.cs!({ num: data.prSmokeater }) };
+        if (data.prSmokeater === 1)
+          return { ...smokes, infoText: output.c1!() };
+        if (data.prSmokeater === 2)
+          return { ...smokes, infoText: output.c2!() };
+        if (data.prSmokeater === 3)
+          return { ...smokes, infoText: output.c3!() };
+        return smokes;
       },
     },
     {
@@ -1044,7 +1085,19 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '돌진 안전한 곳 찾아요',
+          en: '돌진: 안전한 곳 찾아요',
+        },
+      },
+    },
+    {
+      id: 'AMR 사자 Noble Pursuit 버스트',
+      type: 'Ability',
+      netRegex: { id: '8407', source: 'Shishio', capture: false },
+      delaySeconds: 3,
+      infoText: (_data, _matches, output) => output.text!(),
+      outputStrings: {
+        text: {
+          en: '[버스트 준비]',
         },
       },
     },
@@ -1080,13 +1133,32 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
+      id: 'AMR Gorai Brazen Ballad',
+      type: 'StartsUsing',
+      netRegex: { id: ['8509', '850A'], source: 'Gorai the Uncaged', capture: true },
+      durationSeconds: 4,
+      alertText: (_data, matches, output) => {
+        if (matches.id === '850A')
+          return output.blue!();
+        return output.red!();
+      },
+      outputStrings: {
+        blue: {
+          en: '🟦파랑: 즉 가짜',
+        },
+        red: {
+          en: '🟥빨강: 즉 진짜',
+        },
+      },
+    },
+    {
       id: 'AMR Gorai Thundercall',
       type: 'StartsUsing',
       netRegex: { id: '8520', source: 'Gorai the Uncaged', capture: false },
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '번개 구슬 처리',
+          en: '번개 구슬',
         },
       },
     },
@@ -1176,6 +1248,94 @@ const triggerSet: TriggerSet<Data> = {
         stack: {
           en: '뭉쳐요! (엑사 피하면서)',
         },
+      },
+    },
+    {
+      id: 'AMR Gorai Malformed Reincarnation',
+      type: 'StartsUsing',
+      netRegex: { id: '8514', source: 'Gorai the Uncaged', capture: false },
+      run: (data) => data.prMalformed = {},
+    },
+    {
+      id: 'AMR Gorai Malformed Reincarnation Debuff',
+      type: 'GainsEffect',
+      // E0D = Rodential Rebirth#1 / 빨강
+      // E0E = Rodential Rebirth#2 / 빨강
+      // E0F = Rodential Rebirth#3 / 빨강
+      // E11 = Odder Incarnation#1 / 파랑
+      // E12 = Odder Incarnation#2 / 파랑
+      // E13 = Odder Incarnation#3 / 파랑
+      netRegex: { effectId: ['E0D', 'E0F', 'E11', 'E13'] },
+      condition: (data) => data.options.AutumnStyle,
+      run: (data, matches) => {
+        if (data.prMalformed[matches.target] === undefined)
+          data.prMalformed[matches.target] = {};
+        switch (matches.effectId) {
+          case 'E0D':
+            data.prMalformed[matches.target]!.d1 = true;
+            break;
+          case 'E0F':
+            data.prMalformed[matches.target]!.d3 = true;
+            break;
+          case 'E11':
+            data.prMalformed[matches.target]!.d1 = false;
+            break;
+          case 'E13':
+            data.prMalformed[matches.target]!.d3 = false;
+            break;
+        }
+      },
+    },
+    {
+      id: 'AMR Gorai Malformed Reincarnation Action',
+      type: 'GainsEffect',
+      // E15 = Squirrelly Prayer / 빨강 다람쥐
+      // E16 = Odder Prayer / 파랑 버섯
+      netRegex: { effectId: ['E15', 'E16'], capture: false },
+      delaySeconds: 6,
+      durationSeconds: 10,
+      suppressSeconds: 99999,
+      infoText: (data, _matches, output) => {
+        const me = data.prMalformed[data.me];
+        if (me === undefined || me.d1 === undefined || me.d3 === undefined)
+          return;
+        const issame = me.d1 === me.d3; // 세개가 같은거임
+        if (issame) {
+          if (me.d1)
+            return output.sameright!();
+          return output.sameleft!();
+        }
+        const hassame = Object.entries(data.prMalformed)
+          .find((x) => x[1].d1 === x[1].d3) !== undefined;
+        if (hassame) {
+          if (me.d1)
+            return output.southright!();
+          return output.southleft!();
+        }
+        if (me.d1)
+          return output.diffright!();
+        return output.diffleft!();
+      },
+      outputStrings: {
+        sameleft: {
+          en: '[북] 같은색🟦: 왼쪽으로',
+        },
+        sameright: {
+          en: '[북] 같은색🟥: 오른쪽으로',
+        },
+        diffleft: {
+          en: '다른색🟦: 왼쪽으로',
+        },
+        diffright: {
+          en: '다른색🟥: 오른쪽으로',
+        },
+        southleft: {
+          en: '[남] 다른색🟦: 왼쪽으로',
+        },
+        southright: {
+          en: '[남] 다른색🟥: 오른쪽으로',
+        },
+        unknown: Outputs.unknown,
       },
     },
     {
@@ -1282,7 +1442,7 @@ const triggerSet: TriggerSet<Data> = {
       delaySeconds: (_data, matches) => parseFloat(matches.duration),
       durationSeconds: 7,
       suppressSeconds: 10,
-      alarmText: (data, _matches, output) => {
+      alertText: (data, _matches, output) => {
         if (data.prStackFirst)
           return output.text!();
       },
@@ -1304,6 +1464,7 @@ const triggerSet: TriggerSet<Data> = {
         },
       },
     },
+    /*
     {
       id: 'AMR Moko Fleeting Iai-giri',
       type: 'StartsUsing',
@@ -1318,6 +1479,7 @@ const triggerSet: TriggerSet<Data> = {
         },
       },
     },
+    */
     {
       id: 'AMR Moko Shadow-twin',
       type: 'StartsUsing',
