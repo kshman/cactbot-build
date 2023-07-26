@@ -150,7 +150,8 @@ hideall "--sync--"
 # -ii 8502 8504 8535 8504 851D 851E 8513 852F 8525 8257 8522 8533 8528 8519 852A 852D 852B 8527 8523
 
 2000.0 "--sync--" sync / 00:0839::The Trial Of Wisdom will be sealed off/ window 10000,0
-2014.3 "Unenlightenment" sync / 1[56]:[^:]*:Gorai the Uncaged:8534:/  window 10000,0
+2009.0 "--sync--" sync / 1[56]:[^:]*:Gorai the Uncaged:8534:/  window 10000,0
+2014.3 "Unenlightenment" sync / 1[56]:[^:]*:Gorai the Uncaged:8534:/
 
 2021.7 "--middle--" sync / 1[56]:[^:]*:Gorai the Uncaged:84D3:/
 2028.0 "Seal of Scurrying Sparks" sync / 1[56]:[^:]*:Gorai the Uncaged:8503:/
@@ -249,6 +250,7 @@ hideall "--sync--"
 #~~~~~~~~~~~~~~~~~~~#
 
 3000.0 "--sync--" sync / 00:0839::The Trial Of Responsibility will be sealed off/ window 10000,1
+3011.0 "--sync--" sync / 1[56]:[^:]*:Moko the Restless:85E0:/ window 10000,1
 3016.3 "Kenki Release" sync / 1[56]:[^:]*:Moko the Restless:85E0:/
 3035.4 "Triple Kasumi-giri" duration 6 #sync / 1[56]:[^:]*:Moko the Restless:85BC:/
 3055.4 "Triple Kasumi-giri" duration 6 #sync / 1[56]:[^:]*:Moko the Restless:85B0:/

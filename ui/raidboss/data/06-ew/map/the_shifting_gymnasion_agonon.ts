@@ -175,6 +175,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: '마커를 벽에 설치',
+          de: 'Markierung an der Wand ablegen',
         },
       },
     },
@@ -206,6 +207,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: '뒤로 (계속 뒤로)',
+          de: 'Geh hinter den Boss (und bleib hinter ihm stehen)',
         },
       },
     },
