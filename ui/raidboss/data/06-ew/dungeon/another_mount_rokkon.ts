@@ -42,10 +42,10 @@ export interface Data extends RaidbossData {
   prFlag: boolean;
   prSourceId?: string;
   prMoonTether: string[];
-  prGiri: number;
-  prTripleDir: number[];
-  prTripleColor: boolean[];
   prShadowGiri: string[];
+  prSlash: number;
+  prSlashMark: string[];
+  prSlashSafe: boolean[];
   //
   combatantData: PluginCombatantState[];
   wailingCollect: NetMatches['GainsEffect'][];
@@ -56,47 +56,6 @@ export interface Data extends RaidbossData {
   towerCount: number;
   devilishThrallCollect: NetMatches['StartsUsing'][];
 }
-
-const giriAngles: { [effectId: string]: number } = {
-  '85B0': 0,
-  '85B1': 90,
-  '85B2': 180,
-  '85B3': 270,
-  '85B4': 0,
-  '85B5': 90,
-  '85B6': 180,
-  '85B7': 270,
-  // '85B8': Unbound Spirit
-  // '85B9': Azure Coil
-  '85BA': 0,
-  '85BB': 90,
-  '85BC': 180,
-  '85BD': 270,
-  '85BE': 0,
-  '85BF': 90,
-  '85C0': 180,
-  '85C1': 270,
-};
-const giriIds: readonly string[] = Object.keys(giriAngles);
-const calcGiri = (giri: number, rot: number): number => {
-  let add = giri + rot;
-  if (add < 0)
-    add += 360;
-  else if (add > 360)
-    add -= 360;
-  return add;
-};
-const giriToSafe = (giri: number): string | undefined => {
-  if (giri === 0 || giri === 360)
-    return 'C';
-  if (giri === 90)
-    return 'D';
-  if (giri === 180)
-    return 'A';
-  if (giri === 270)
-    return 'B';
-  return undefined;
-};
 
 const countJob = (job1: Job, job2: Job, func: (x: Job) => boolean): number => {
   return (func(job1) ? 1 : 0) + (func(job2) ? 1 : 0);
@@ -341,10 +300,10 @@ const triggerSet: TriggerSet<Data> = {
       prGainCollect: [],
       prFlag: false,
       prMoonTether: [],
-      prGiri: 0,
-      prTripleDir: [],
-      prTripleColor: [],
       prShadowGiri: [],
+      prSlash: 0,
+      prSlashMark: [],
+      prSlashSafe: [],
       //
       combatantData: [],
       wailingCollect: [],
@@ -1343,11 +1302,6 @@ const triggerSet: TriggerSet<Data> = {
       type: 'StartsUsing',
       netRegex: { id: '85E0', source: 'Moko the Restless', capture: false },
       response: Responses.aoe('alert'),
-      run: (data) => {
-        data.prGiri = 0;
-        data.prTripleDir = [];
-        data.prTripleColor = [];
-      },
     },
     {
       id: 'AMR Moko Lateral Slice',
@@ -1685,44 +1639,64 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: 'AMR Moko Triple Kasumi-giri',
+      id: 'AMR Moko Boundless Azure',
       type: 'StartsUsing',
-      netRegex: { id: giriIds, source: 'Moko the Restless' },
-      run: (data, matches) => {
-        const angle = giriAngles[matches.id];
-        if (angle === undefined)
-          return;
-        data.prGiri = calcGiri(data.prGiri, angle);
-        data.prTripleDir.push(data.prGiri);
-      },
+      netRegex: { id: '859D', source: 'Moko the Restless', capture: false },
+      response: Responses.goSides(),
     },
     {
-      id: 'AMR Moko Unbound Spirit & Azure Coil',
-      type: 'Ability',
-      netRegex: { id: ['85B8', '85B9'], source: 'Moko the Restless' },
+      id: 'AMR Moko Triple Kasumi-giri',
+      type: 'GainsEffect',
+      netRegex: { effectId: 'B9A', target: 'Moko the Restless' },
       infoText: (data, matches, output) => {
-        data.prTripleColor.push(matches.id === '85B8');
-        if (data.prTripleDir.length < 3) {
-          const mark = giriToSafe(data.prGiri);
-          if (mark !== undefined) {
-            if (matches.id === '85B8')
-              return output.unbound!({ mark: mark });
-            return output.azure!({ mark: mark });
-          }
-          return output.unk!({ angle: data.prGiri });
+        const angleMap: { [count: string]: number } = {
+          '24C': 0,
+          '24D': 90,
+          '24E': 180,
+          '24F': 270,
+          '250': 0,
+          '251': 90,
+          '252': 180,
+          '253': 270,
+        };
+        const angleMark: { [angle: number]: string } = {
+          0: 'C',
+          90: 'D',
+          180: 'A',
+          270: 'B',
+          360: 'C',
+        };
+        const outsides = ['24C', '24D', '24E', '24F'];
+        const cnt = matches.count;
+        const angle = angleMap[cnt];
+        if (angle === undefined)
+          return output.unk!({ id: cnt });
+
+        const rotate = data.prSlash + angle;
+        data.prSlash = rotate >= 360 ? rotate - 360 : rotate;
+        const mark = angleMark[data.prSlash] ?? '물?루';
+        const safe = outsides.includes(cnt);
+        data.prSlashMark.push(mark);
+        data.prSlashSafe.push(safe);
+
+        if (data.prSlashSafe.length < 3) {
+          if (safe)
+            return output.unbound!({ mark: mark });
+          return output.azure!({ mark: mark });
         }
-        const mark = data.prTripleDir.map((x) => giriToSafe(x));
-        const safe = data.prTripleColor.map((x) => x ? '밖' : '안');
+
+        const marks = data.prSlashMark;
+        const safes = data.prSlashSafe.map((x) => x ? '밖' : '안');
         const mesg = output.whole!({
-          m1: mark[0],
-          s1: safe[0],
-          m2: mark[1],
-          s2: safe[1],
-          m3: mark[2],
-          s3: safe[2],
+          m1: marks[0],
+          s1: safes[0],
+          m2: marks[1],
+          s2: safes[1],
+          m3: marks[2],
+          s3: safes[2],
         });
-        data.prTripleDir = [];
-        data.prTripleColor = [];
+        data.prSlashMark = [];
+        data.prSlashSafe = [];
         return mesg;
       },
       outputStrings: {
@@ -1736,15 +1710,9 @@ const triggerSet: TriggerSet<Data> = {
           en: '${m1}${s1} => ${m2}${s2} => ${m3}${s3}',
         },
         unk: {
-          en: '(몰루: ${angle}도)',
+          en: '(각도 몰라: ${id})',
         },
       },
-    },
-    {
-      id: 'AMR Moko Boundless Azure',
-      type: 'StartsUsing',
-      netRegex: { id: '859D', source: 'Moko the Restless', capture: false },
-      response: Responses.goSides(),
     },
   ],
   timelineReplace: [
@@ -1757,6 +1725,33 @@ const triggerSet: TriggerSet<Data> = {
         'Vortex of the Thunder Eye/Eye of the Thunder Vortex': 'Thunder Vortex/Eye',
         'Greater Ball of Fire/Great Ball of Fire': 'Great/Greater Ball of Fire',
         'Great Ball of Fire/Greater Ball of Fire': 'Greater/Great Ball of Fire',
+      },
+    },
+    {
+      'locale': 'ja',
+      'missingTranslations': true,
+      'replaceSync': {
+        'Ashigaru Kyuhei': '足軽弓兵',
+        'Gorai The Uncaged': '鉄鼠ゴウライ',
+        'Moko the Restless': '怨霊モウコ',
+        'Oni\'s Claw': '鬼腕',
+        'Shishio': '獅子王',
+      },
+      'replaceText': {
+        'Azure Auspice': '青帝剣気',
+        'Boundless Azure': '青帝空閃刃',
+        'Boundless Scarlet': '赤帝空閃刃',
+        'Bunshin': '分身の術',
+        'Clearout': 'なぎ払い',
+        'Double Kasumi-giri': '霞二段',
+        'Explosion': '爆発',
+        'Iai-kasumi-giri': '居合霞斬り',
+        'Iron Rain': '矢の雨',
+        'Kenki Release': '剣気解放',
+        'Moonless Night': '闇夜斬り',
+        'Scarlet Auspice': '赤帝剣気',
+        'Soldiers of Death': '屍兵呼び',
+        'Upwell': '水流',
       },
     },
   ],

@@ -190,13 +190,29 @@ hideall "--sync--"
 2183.5 "Great Ball of Fire/Greater Ball of Fire" sync / 1[56]:[^:]*:Gorai the Uncaged:(8506|8505):/
 
 2193.5 "--middle--" sync / 1[56]:[^:]*:Gorai the Uncaged:84D3:/
-2202.2 "Fighting Spirits" sync / 1[56]:[^:]*:Gorai the Uncaged:852C:/
-2205.5 "Worldly Pursuit 1" sync / 1[56]:[^:]*:Gorai the Uncaged:850D:/
-2208.6 "Worldly Pursuit 2" sync / 1[56]:[^:]*:Gorai the Uncaged:850D:/
-2211.6 "Worldly Pursuit 3" sync / 1[56]:[^:]*:Gorai the Uncaged:850D:/
-2214.6 "Worldly Pursuit 4" sync / 1[56]:[^:]*:Gorai the Uncaged:850D:/
+#2202.2 "Fighting Spirits" sync / 1[56]:[^:]*:Gorai the Uncaged:852C:/
+#2205.5 "Worldly Pursuit 1" sync / 1[56]:[^:]*:Gorai the Uncaged:850D:/
+#2208.6 "Worldly Pursuit 2" sync / 1[56]:[^:]*:Gorai the Uncaged:850D:/
+#2211.6 "Worldly Pursuit 3" sync / 1[56]:[^:]*:Gorai the Uncaged:850D:/
+#2214.6 "Worldly Pursuit 4" sync / 1[56]:[^:]*:Gorai the Uncaged:850D:/
 # ???
 
+2202.2 "Fighting Spirits" sync / 1[56]:[^:]*:Gorai the Uncaged:852C:/
+2205.7 "Worldly Pursuit 1" sync / 1[56]:[^:]*:Gorai the Uncaged:850D:/
+2208.9 "Worldly Pursuit 2" sync / 1[56]:[^:]*:Gorai the Uncaged:850D:/
+2212.1 "Worldly Pursuit 3" sync / 1[56]:[^:]*:Gorai the Uncaged:850D:/
+2215.3 "Worldly Pursuit 4" sync / 1[56]:[^:]*:Gorai the Uncaged:850D:/
+2218.5 "Worldly Pursuit 5" sync / 1[56]:[^:]*:Gorai the Uncaged:850D:/
+2232.9 "Torching Torment" sync / 1[56]:[^:]*:Gorai the Uncaged:8532:/
+2246.4 "Malformed Reincarnation" sync / 1[56]:[^:]*:Gorai the Uncaged:8514:/
+2252.8 "Malformed Prayer" sync / 1[56]:[^:]*:Gorai the Uncaged:8518:/
+2265.9 "Flickering Flame" sync / 1[56]:[^:]*:Gorai the Uncaged:8510:/
+2267.9 "Burst 1" sync / 1[56]:[^:]*:Gorai the Uncaged:851B:/
+2270.4 "Burst 2" sync / 1[56]:[^:]*:Gorai the Uncaged:851B:/
+2272.4 "Burst 3" sync / 1[56]:[^:]*:Gorai the Uncaged:851B:/
+2273.2 "Fire Spread" #sync / 1[56]:[^:]*:Gorai the Uncaged:8511:/
+2275.2 "Fire Spread" #sync / 1[56]:[^:]*:Gorai the Uncaged:8511:/
+# ???
 
 # ALL ENCOUNTER ABILITIES
 # 84D3 --sync-- repositioning
@@ -289,9 +305,9 @@ hideall "--sync--"
 3263.8 "Soldiers of Death" sync / 1[56]:[^:]*:Moko the Restless:8593:/
 3269.9 "Shadow-twin" sync / 1[56]:[^:]*:Moko the Restless:85C7:/
 3285.1 "Double Iai-giri" sync / 1[56]:[^:]*:Moko's Shadow:85C8:/
-3285.6 "Iron Rain" #sync / 1[56]:[^:]*:Ashigaru Kyuhei:85CF:/
-3287.6 "Shadow Kasumi-giri" duration 3 #sync / 1[56]:[^:]*:Moko's Shadow:85CA:/
-3291.6 "Iron Rain" #sync / 1[56]:[^:]*:Ashigaru Kyuhei:87A7:/
+3285.6 "Iron Rain" sync / 1[56]:[^:]*:Ashigaru Kyuhei:85CF:/
+3287.6 "Shadow Kasumi-giri" duration 3 sync / 1[56]:[^:]*:Moko's Shadow:85CA:/
+3291.6 "Iron Rain" sync / 1[56]:[^:]*:Ashigaru Kyuhei:87A7:/
 3295.7 "Kenki Release" sync / 1[56]:[^:]*:Moko's Shadow:85CE:/
 # 이 담엔 모르겟슴
 
