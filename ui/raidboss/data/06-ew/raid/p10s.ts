@@ -522,7 +522,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: '(Écartez-vous => Package par rôle (${player1}, ${player2}), pour après)', // FIXME
           ja: '(散会 => 4:4あたまわり (${player1}, ${player2}))', // FIXME
           cn: '(稍后 分散 => 四四分摊 (${player1}, ${player2}))', // FIXME
-          ko: '(곧 산개 => 직업군별 쉐어 (${player1}, ${player2}))', // FIXME
+          ko: '(곧 산개 => 직업군별 쉐어 (${player1}, ${player2}))',
         },
         stackThenSpread: {
           en: '(4:4 뭉쳤다/${player1},${player2} => 흩어져요)',
@@ -530,7 +530,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: '(Package par rôle (${player1}, ${player2}) => Écartez-vous, pour après)', // FIXME
           ja: '(4:4あたまわり (${player1}, ${player2}) => 散会)', // FIXME
           cn: '(稍后 四四分摊 (${player1}, ${player2}) => 分散)', // FIXME
-          ko: '(곧 직업군별 쉐어 (${player1}, ${player2}) => 산개)', // FIXME
+          ko: '(곧 직업군별 쉐어 (${player1}, ${player2}) => 산개)',
         },
       },
     },
@@ -564,7 +564,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: 'Écartez-vous => Package par rôle (${player1}, ${player2})', // FIXME
           ja: '散会 => 4:4あたまわり (${player1}, ${player2})', // FIXME
           cn: '分散 => 四四分摊 (${player1}, ${player2})', // FIXME
-          ko: '산개 => 직업군별 쉐어 (${player1}, ${player2})', // FIXME
+          ko: '산개 => 직업군별 쉐어 (${player1}, ${player2})',
         },
         spreadThenPartners: {
           en: '흩어졌다 => 페어',
@@ -626,7 +626,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: 'Package par rôle (${player1}, ${player2}) => Écartez-vous', // FIXME
           ja: '4:4あたまわり (${player1}, ${player2}) => 散会', // FIXME
           cn: '四四分摊 (${player1}, ${player2}) => 分散', // FIXME
-          ko: '직업군별 쉐어 (${player1}, ${player2}) => 산개', // FIXME
+          ko: '직업군별 쉐어 (${player1}, ${player2}) => 산개',
         },
       },
     },
@@ -672,7 +672,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: 'Package par rôle (${player1}, ${player2})', // FIXME
           ja: '4:4あたまわり (${player1}, ${player2})', // FIXME
           cn: '四四分摊 (${player1}, ${player2})', // FIXME
-          ko: '직업군별 쉐어 (${player1}, ${player2})', // FIXME
+          ko: '직업군별 쉐어 (${player1}, ${player2})',
         },
       },
     },
