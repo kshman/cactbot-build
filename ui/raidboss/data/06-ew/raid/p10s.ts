@@ -19,6 +19,7 @@ export interface Data extends RaidbossData {
   daemonicBondsTime?: number;
   daemonicBondsCounter: number;
   bondsSecondMechanic?: 'stack' | 'partners' | 'spread';
+  tetradaemonicTarget: string[];
 }
 
 const bossNameUnicode = 'Pand\u00e6monium';
@@ -77,6 +78,7 @@ const triggerSet: TriggerSet<Data> = {
       dividingWingsEntangling: [],
       meltdownSpreads: [],
       daemonicBondsCounter: 0,
+      tetradaemonicTarget: [],
     };
   },
   triggers: [
@@ -416,7 +418,16 @@ const triggerSet: TriggerSet<Data> = {
       run: (data) => {
         delete data.daemonicBondsTime;
         delete data.bondsSecondMechanic;
+        data.tetradaemonicTarget = [];
         data.daemonicBondsCounter++;
+      },
+    },
+    {
+      id: 'P10S Tetradaemoniac Bonds Collect',
+      type: 'GainsEffect',
+      netRegex: { effectId: 'E70' },
+      run: (data, matches) => {
+        data.tetradaemonicTarget.push(matches.target);
       },
     },
     {
@@ -471,38 +482,55 @@ const triggerSet: TriggerSet<Data> = {
       type: 'GainsEffect',
       netRegex: { effectId: 'E70' },
       durationSeconds: 7,
-      suppressSeconds: 5,
       infoText: (data, matches, output) => {
         if (data.daemonicBondsTime === undefined) {
           console.error(`Daemoniac Bonds: ${matches.effectId} effect before DDE?`);
           return;
         }
+        if (data.tetradaemonicTarget.length !== 2)
+          return;
 
         const duration = parseFloat(matches.duration);
         if (duration > data.daemonicBondsTime) {
           data.bondsSecondMechanic = 'stack';
-          return output.spreadThenStack!();
+          if (data.options.AutumnStyle)
+            return output.spreadThenStack!({
+              player1: data.party.aJobName(data.tetradaemonicTarget[0]),
+              player2: data.party.aJobName(data.tetradaemonicTarget[1]),
+            });
+          return output.spreadThenStack!({
+            player1: data.ShortName(data.tetradaemonicTarget[0]),
+            player2: data.ShortName(data.tetradaemonicTarget[1]),
+          });
         }
 
         data.bondsSecondMechanic = 'spread';
-        return output.stackThenSpread!();
+        if (data.options.AutumnStyle)
+          return output.stackThenSpread!({
+            player1: data.party.aJobName(data.tetradaemonicTarget[0]),
+            player2: data.party.aJobName(data.tetradaemonicTarget[1]),
+          });
+        return output.stackThenSpread!({
+          player1: data.ShortName(data.tetradaemonicTarget[0]),
+          player2: data.ShortName(data.tetradaemonicTarget[1]),
+        });
       },
       outputStrings: {
         spreadThenStack: {
-          en: '(흩어졌다 => 4:4 뭉쳐요)',
-          de: '(Verteilen => Rollengruppe, für später)',
-          fr: '(Écartez-vous => Package par rôle, pour après)',
-          ja: '(散会 => 4:4あたまわり)',
-          cn: '(稍后 分散 => 四四分摊)',
-          ko: '(곧 산개 => 직업군별 쉐어)',
+          en: '(흩어졌다 => 4:4 뭉쳐요/${player1},${player2})',
+          de: '(Verteilen => Rollengruppe (${player1}, ${player2}), für später)', // FIXME
+          fr: '(Écartez-vous => Package par rôle (${player1}, ${player2}), pour après)', // FIXME
+          ja: '(散会 => 4:4あたまわり (${player1}, ${player2}))', // FIXME
+          cn: '(稍后 分散 => 四四分摊 (${player1}, ${player2}))', // FIXME
+          ko: '(곧 산개 => 직업군별 쉐어 (${player1}, ${player2}))', // FIXME
         },
         stackThenSpread: {
-          en: '(4:4 뭉쳤다 => 흩어져요)',
-          de: '(Rollengruppe => Verteilen, für später)',
-          fr: '(Package par rôle => Écartez-vous, pour après)',
-          ja: '(4:4あたまわり => 散会)',
-          cn: '(稍后 四四分摊 => 分散)',
-          ko: '(곧 직업군별 쉐어 => 산개)',
+          en: '(4:4 뭉쳤다/${player1},${player2} => 흩어져요)',
+          de: '(Rollengruppe (${player1}, ${player2}) => Verteilen, für später)', // FIXME
+          fr: '(Package par rôle (${player1}, ${player2}) => Écartez-vous, pour après)', // FIXME
+          ja: '(4:4あたまわり (${player1}, ${player2}) => 散会)', // FIXME
+          cn: '(稍后 四四分摊 (${player1}, ${player2}) => 分散)', // FIXME
+          ko: '(곧 직업군별 쉐어 (${player1}, ${player2}) => 산개)', // FIXME
         },
       },
     },
@@ -516,19 +544,27 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (data, _matches, output) => {
         // If this is undefined, then this is the second mechanic and will be called out elsewhere.
         // We can't make this a `condition` as this is not known until after some delay.
+        if (data.options.AutumnStyle && data.bondsSecondMechanic === 'stack')
+          return output.spreadThenStack!({
+            player1: data.party.aJobName(data.tetradaemonicTarget[0]),
+            player2: data.party.aJobName(data.tetradaemonicTarget[1]),
+          });
         if (data.bondsSecondMechanic === 'stack')
-          return output.spreadThenStack!();
+          return output.spreadThenStack!({
+            player1: data.ShortName(data.tetradaemonicTarget[0]),
+            player2: data.ShortName(data.tetradaemonicTarget[1]),
+          });
         if (data.bondsSecondMechanic === 'partners')
           return output.spreadThenPartners!();
       },
       outputStrings: {
         spreadThenStack: {
-          en: '흩어졌다 => 4:4 뭉쳐요',
-          de: 'Verteilen => Rollengruppe',
-          fr: 'Écartez-vous => Package par rôle',
-          ja: '散会 => 4:4あたまわり',
-          cn: '分散 => 四四分摊',
-          ko: '산개 => 직업군별 쉐어',
+          en: '흩어졌다 => 4:4 뭉쳐요/${player1},${player2}',
+          de: 'Verteilen => Rollengruppe (${player1}, ${player2})', // FIXME
+          fr: 'Écartez-vous => Package par rôle (${player1}, ${player2})', // FIXME
+          ja: '散会 => 4:4あたまわり (${player1}, ${player2})', // FIXME
+          cn: '分散 => 四四分摊 (${player1}, ${player2})', // FIXME
+          ko: '산개 => 직업군별 쉐어 (${player1}, ${player2})', // FIXME
         },
         spreadThenPartners: {
           en: '흩어졌다 => 페어',
@@ -572,17 +608,25 @@ const triggerSet: TriggerSet<Data> = {
       suppressSeconds: 5,
       alertText: (data, _matches, output) => {
         // If this is undefined, then this is the second mechanic and will be called out elsewhere.
+        if (data.options.AutumnStyle && data.bondsSecondMechanic === 'spread')
+          return output.stackThenSpread!({
+            player1: data.party.aJobName(data.tetradaemonicTarget[0]),
+            player2: data.party.aJobName(data.tetradaemonicTarget[1]),
+          });
         if (data.bondsSecondMechanic === 'spread')
-          return output.stackThenSpread!();
+          return output.stackThenSpread!({
+            player1: data.ShortName(data.tetradaemonicTarget[0]),
+            player2: data.ShortName(data.tetradaemonicTarget[1]),
+          });
       },
       outputStrings: {
         stackThenSpread: {
-          en: '4:4 뭉쳤다 => 흩어져요',
-          de: 'Rollengruppe => Verteilen',
-          fr: 'Package par rôle => Écartez-vous',
-          ja: '4:4あたまわり => 散会',
-          cn: '四四分摊 => 分散',
-          ko: '직업군별 쉐어 => 산개',
+          en: '4:4 뭉쳤다/${player1},${player2} => 흩어져요',
+          de: 'Rollengruppe (${player1}, ${player2}) => Verteilen', // FIXME
+          fr: 'Package par rôle (${player1}, ${player2}) => Écartez-vous', // FIXME
+          ja: '4:4あたまわり (${player1}, ${player2}) => 散会', // FIXME
+          cn: '四四分摊 (${player1}, ${player2}) => 分散', // FIXME
+          ko: '직업군별 쉐어 (${player1}, ${player2}) => 산개', // FIXME
         },
       },
     },
@@ -600,8 +644,16 @@ const triggerSet: TriggerSet<Data> = {
           return output.spread!();
         if (data.bondsSecondMechanic === 'partners')
           return output.partners!();
+        if (data.options.AutumnStyle && data.bondsSecondMechanic === 'stack')
+          return output.stack!({
+            player1: data.party.aJobName(data.tetradaemonicTarget[0]),
+            player2: data.party.aJobName(data.tetradaemonicTarget[1]),
+          });
         if (data.bondsSecondMechanic === 'stack')
-          return output.stack!();
+          return output.stack!({
+            player1: data.ShortName(data.tetradaemonicTarget[0]),
+            player2: data.ShortName(data.tetradaemonicTarget[1]),
+          });
       },
       run: (data) => delete data.bondsSecondMechanic,
       outputStrings: {
@@ -615,12 +667,12 @@ const triggerSet: TriggerSet<Data> = {
           ko: '파트너',
         },
         stack: {
-          en: '4:4 뭉쳐요',
-          de: 'Rollengruppe',
-          fr: 'Package par rôle',
-          ja: '4:4あたまわり',
-          cn: '四四分摊',
-          ko: '직업군별 쉐어',
+          en: '4:4 뭉쳐요/${player1},${player2}',
+          de: 'Rollengruppe (${player1}, ${player2})', // FIXME
+          fr: 'Package par rôle (${player1}, ${player2})', // FIXME
+          ja: '4:4あたまわり (${player1}, ${player2})', // FIXME
+          cn: '四四分摊 (${player1}, ${player2})', // FIXME
+          ko: '직업군별 쉐어 (${player1}, ${player2})', // FIXME
         },
       },
     },

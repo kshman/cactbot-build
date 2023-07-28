@@ -3190,26 +3190,32 @@ const triggerSet: TriggerSet<Data> = {
           },
           circle: {
             en: '⚪',
+            de: 'Roter Kreis',
             ja: '⚪',
           },
           triangle: {
             en: '⨻',
+            de: 'Grünes Dreieck',
             ja: '⨻',
           },
           square: {
             en: '⬜',
+            de: 'Lila Viereck',
             ja: '⬜',
           },
           cross: {
             en: '❌',
+            de: 'Blaues X',
             ja: '❌',
           },
           alpha: {
             en: '🔴α', // 🔺🟥
+            de: 'Alpha',
             ja: '🔴α',
           },
           beta: {
             en: '🟨β',
+            de: 'Beta',
             ja: '🟨β',
           },
           simple: {
@@ -4002,10 +4008,11 @@ const triggerSet: TriggerSet<Data> = {
         output.responseOutputStrings = {
           noBeacon: {
             en: '첫 불: ${player1}, ${player2}',
+            de: 'Initiales Feuer: ${player1}, ${player2}',
           },
           beacon: {
             en: '첫 불! 앞으로! (${partner})',
-            de: 'Initial Feuer (mit ${partner})',
+            de: 'Initiales Feuer (mit ${partner})',
             ja: '自分に初炎 (${partner})', // FIXME
             cn: '火标记点名 (和 ${partner})',
             ko: '첫 불 대상자 (+ ${partner})',
@@ -4313,6 +4320,7 @@ const triggerSet: TriggerSet<Data> = {
         '\\(enrage\\)': '(Finalangriff)',
         '\\(proximity\\)': '(Entfernung)',
         '\\(spread\\)': '(Verteilen)',
+        '--tethers--': '--Verbindungen--',
         'Apodialogos': 'Apodialogos',
         'Astral Advance': 'Lichtvordringen',
         'Astral Advent': 'Vorzeit des Lichts',
@@ -4389,6 +4397,7 @@ const triggerSet: TriggerSet<Data> = {
         'Thymou Idea': 'thymou idea',
       },
       'replaceText': {
+        '--tethers--': '--liens--',
         'Apodialogos': 'Apo dialogos',
         'Astral Advance': 'Avancée astrale',
         'Astral Advent': 'Avènement astral',

@@ -491,7 +491,7 @@ const addTriggerDetail = (
 // fields here.  This should be fixed.
 const setOptionsFromOutputValue = (
   value: SavedConfigEntry,
-  options: BaseOptions | TriggerAutoConfig,
+  options: BaseOptions | TriggerAutoConfig | TriggerSetAutoConfig,
 ) => {
   if (value === 'default') {
     // Nothing.
@@ -1843,6 +1843,7 @@ const defaultTriggerSetAlertOutput = {
   ...defaultAlertOutput,
   name: {
     en: 'Default trigger set alert output',
+    de: 'Standard trigger-Set Alert Ausgabe',
   },
 } as const;
 
