@@ -1540,6 +1540,31 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
+      id: 'AMR Moko Ashigaru Kyuhei ',
+      type: 'StartsUsing',
+      // 85D0 => 87A8 멀리(확실)
+      // 85FF => 87AA 가까이 일듯
+      netRegex: { id: ['85D0', '85FF'], source: 'Ashigaru Kyuhei' },
+      infoText: (data, matches, output) => {
+        if (data.role === 'dps')
+          return output.oppo!();
+        if (matches.id === '85D0')
+          return output.far!();
+        return output.near!();
+      },
+      outputStrings: {
+        near: {
+          en: '파랭이 먼 쪽',
+        },
+        far: {
+          en: '파랭이 가까운 쪽',
+        },
+        oppo: {
+          en: '파랭이 대각',
+        },
+      },
+    },
+    {
       id: 'AMR Moko/T 샤도 줄다리기 리셋',
       type: 'Tether',
       netRegex: { id: '0011', source: 'Moko\'s Shadow', capture: false },
