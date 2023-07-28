@@ -1663,6 +1663,8 @@ const triggerSet: TriggerSet<Data> = {
 
         data.prFlowPhase++;
         data.prKasumiGiri = [];
+        if (data.prFlowPhase > 1)
+          data.prKasumiAngle = 0;
 
         return out.join(' => ');
       },
