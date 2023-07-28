@@ -368,6 +368,10 @@ const getHeadmarkerId = (data: Data, matches: NetMatches['HeadMarker']) => {
   return (parseInt(matches.id, 16) - data.decOffset).toString(16).toUpperCase().padStart(4, '0');
 };
 
+export type LimitCutCombatantState = PluginCombatantState & {
+  order?: number;
+};
+
 export interface Data extends RaidbossData {
   // 전반
   prsTrinityInvul?: boolean;
@@ -383,7 +387,7 @@ export interface Data extends RaidbossData {
   //
   readonly triggerSetConfig: {
     engravement1DropTower: 'quadrant' | 'clockwise' | 'tower';
-    classicalConceptsPairOrder: 'xsct' | 'cxts' | 'ctsx' | 'ctxs';
+    classicalConceptsPairOrder: 'xsct' | 'cxts' | 'ctsx' | 'ctxs' | 'shapeAndDebuff';
   };
   decOffset?: number;
   expectedFirstHeadmarker?: string;
@@ -410,6 +414,9 @@ export interface Data extends RaidbossData {
   superchainCollect: NetMatches['AddedCombatant'][];
   superchain1FirstDest?: NetMatches['AddedCombatant'];
   limitCutNumber?: number;
+  lcCombatants: LimitCutCombatantState[];
+  lcCombatantsOffset: number;
+  lcWhiteFlameDelay?: [number, number, number, number];
   whiteFlameCounter: number;
   superchain2aFirstDir?: 'north' | 'south';
   superchain2aSecondDir?: 'north' | 'south';
@@ -497,23 +504,28 @@ const triggerSet: TriggerSet<Data> = {
           '○XΔ□ (JP 기본, 1234)': 'cxts',
           '○Δ□X (로켓모양)': 'ctsx',
           '○ΔX□ (무지개)': 'ctxs',
+          '디버프만 알려줌': 'shapeAndDebuff',
         },
         de: {
           'X□○Δ (BLOG)': 'xsct',
           '○XΔ□ (Linien)': 'cxts',
           '○Δ□X (Raketenschiff)': 'ctsx',
           '○ΔX□ (Regenbogen)': 'ctxs',
+          'Just call shape and debuff': 'shapeAndDebuff', // FIXME
         },
         cn: {
           'X□○Δ (BPOG)': 'xsct',
           '○XΔ□ (1234笔画)': 'cxts',
           '○Δ□X (Rocketship)': 'ctsx',
           '○ΔX□ (彩虹)': 'ctxs',
+          'Just call shape and debuff': 'shapeAndDebuff', // FIXME
         },
         ko: {
           'X□○Δ (파보빨초)': 'xsct',
           '○XΔ□ (1234)': 'cxts',
           '○Δ□X (동세네엑)': 'ctsx',
+          '○ΔX□ (무지개)': 'ctxs',
+          '모양과 디버프만 알림': 'shapeAndDebuff',
         },
       },
       default: 'cxts',
@@ -542,6 +554,8 @@ const triggerSet: TriggerSet<Data> = {
       wingCollect: [],
       wingCalls: [],
       superchainCollect: [],
+      lcCombatants: [],
+      lcCombatantsOffset: 0,
       whiteFlameCounter: 0,
       sampleTiles: [],
       darknessClones: [],
@@ -2134,13 +2148,97 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
+      id: 'P12S Limit Cut Combatant Tracker',
+      type: 'Ability',
+      netRegex: { id: '82F3', source: 'Athena', capture: false },
+      promise: async (data) => {
+        const actorData = await callOverlayHandler({
+          call: 'getCombatants',
+        });
+
+        if (actorData === null) {
+          console.error(`LC Combatant Tracker: null data`);
+          return;
+        }
+
+        const combatants: LimitCutCombatantState[] = actorData.combatants.filter((combatant) => {
+          const distX = Math.abs(100 - combatant.PosX);
+          const distY = Math.abs(100 - combatant.PosY);
+          const distance = Math.hypot(distX, distY);
+          // Only "Anthropos" (12378) combatants at roughly the correct distance (roughly 9.89y intercard/10y card away from middle)
+          return combatant.BNpcNameID === 12378 && Math.abs(distance - 10) < 0.25;
+        });
+
+        if (combatants.length !== 8) {
+          console.error(`LC Combatant Tracker: expected 8, got ${combatants.length}`);
+          return;
+        }
+
+        data.lcCombatants = combatants;
+      },
+    },
+    {
+      id: 'P12S Limit Cut Line Bait Collector',
+      type: 'CombatantMemory',
+      netRegex: {
+        id: '40[0-9A-F]{6}',
+        pair: [{ key: 'ModelStatus', value: '16384' }],
+        capture: true,
+      },
+      condition: (data, matches) =>
+        data.lcCombatants.length > 0 &&
+        data.lcCombatants.find((c) => c.ID === parseInt(matches.id, 16)) !== undefined,
+      run: (data, matches) => {
+        const combatant = data.lcCombatants.find((c) => c.ID === parseInt(matches.id, 16));
+        if (combatant === undefined) {
+          console.error(`LC Line Bait Collector: Could not find combatant for ID ${matches.id}`);
+          return;
+        }
+
+        combatant.order = data.lcCombatantsOffset;
+        ++data.lcCombatantsOffset;
+
+        if (data.lcCombatantsOffset < 8)
+          return;
+
+        // Find the intercardinal adds that jumped, and then sort by order.
+        const orderedJumps = data.lcCombatants
+          .filter((combatant) =>
+            (Directions.xyTo8DirNum(combatant.PosX, combatant.PosY, 100, 100) % 2) === 1
+          ).map((combatant) => combatant.order)
+          .sort((left, right) => (left ?? 0) - (right ?? 0));
+
+        if (orderedJumps.length !== 4) {
+          console.error(
+            `LC Line Bait Collector: Incorrect count of intercardinal adds`,
+            data.lcCombatants,
+          );
+          return;
+        }
+
+        const [o1, o2, o3, o4] = orderedJumps;
+        if (o1 === undefined || o2 === undefined || o3 === undefined || o4 === undefined)
+          return;
+
+        // delay of 1 = immediate, 5 = maximum
+        data.lcWhiteFlameDelay = [o1 + 1, o2 - o1, o3 - o2, o4 - o3];
+      },
+    },
+    {
       id: 'P12S Palladion White Flame Initial',
       type: 'StartsUsing',
       // 82F5 = Palladion cast
+      // 8 seconds from Palladion starts casting to first White Flame damage
+      // This is also an 8 second cast.
+      // ~3 seconds after that for every potential White Flame
       netRegex: { id: '82F5', source: 'Athena', capture: false },
       // Don't collide with number callout.
       delaySeconds: 2,
-      durationSeconds: 4,
+      durationSeconds: (data) => {
+        const delay = data.lcWhiteFlameDelay?.[0] ?? 1;
+        // 8 seconds from cast start - 2 second delay already
+        return (8 - 2) + 3 * (delay - 1) - 0.5;
+      },
       response: (data, _matches, output) => {
         // cactbot-builtin-response
         output.responseOutputStrings = {
@@ -2161,6 +2259,7 @@ const triggerSet: TriggerSet<Data> = {
             ko: '(5, 7 레이저)',
           },
         };
+        // TODO: use `data.lcWhiteFlameDelay` to say things like "quick" or "delayed" or "very delayed".
         const infoText = output.firstWhiteFlame!();
         if (data.limitCutNumber === 5 || data.limitCutNumber === 7)
           return { alertText: output.baitLaser!(), infoText: infoText };
@@ -2172,7 +2271,11 @@ const triggerSet: TriggerSet<Data> = {
       type: 'Ability',
       netRegex: { id: '82EF', source: 'Anthropos', capture: false },
       condition: (data) => data.phase === 'palladion',
-      durationSeconds: 3,
+      preRun: (data) => data.whiteFlameCounter++,
+      durationSeconds: (data) => {
+        const delay = data.lcWhiteFlameDelay?.[data.whiteFlameCounter] ?? 1;
+        return 3 * delay - 0.5;
+      },
       response: (data, _matches, output) => {
         // cactbot-builtin-response
         output.responseOutputStrings = {
@@ -2210,7 +2313,7 @@ const triggerSet: TriggerSet<Data> = {
           },
         };
 
-        data.whiteFlameCounter++;
+        // TODO: use `data.lcWhiteFlameDelay` to say things like "quick" or "delayed" or "very delayed".
 
         const baitLaser = output.baitLaser!();
 
@@ -3111,6 +3214,14 @@ const triggerSet: TriggerSet<Data> = {
             cn: '去 ${column}, ${row} => ${intercept}',
             ko: '실제: ${column}, ${row} => ${intercept}',
           },
+          shapeAndDebuff: {
+            en: '${shape}, ${debuff}',
+            de: '${shape}, ${debuff}',
+            fr: '${shape}, ${debuff}',
+            ja: '${shape}, ${debuff}',
+            cn: '${shape}, ${debuff}',
+            ko: '${shape}, ${debuff}',
+          },
           outsideWest: {
             en: '1',
             de: 'Außerhalb Westen',
@@ -3191,32 +3302,50 @@ const triggerSet: TriggerSet<Data> = {
           circle: {
             en: '⚪',
             de: 'Roter Kreis',
+            fr: 'Cercle rouge',
             ja: '⚪',
+            cn: '红圆圈',
+            ko: '빨강 동그라미',
           },
           triangle: {
             en: '⨻',
             de: 'Grünes Dreieck',
+            fr: 'Triangle vert',
             ja: '⨻',
+            cn: '绿三角',
+            ko: '초록 삼각',
           },
           square: {
             en: '⬜',
             de: 'Lila Viereck',
+            fr: 'Carré violet',
             ja: '⬜',
+            cn: '紫方块',
+            ko: '보라 사각',
           },
           cross: {
             en: '❌',
             de: 'Blaues X',
+            fr: 'Croix bleue',
             ja: '❌',
+            cn: '蓝 X',
+            ko: '파랑 X',
           },
           alpha: {
             en: '🔴α', // 🔺🟥
             de: 'Alpha',
+            fr: 'Alpha',
             ja: '🔴α',
+            cn: '阿尔法',
+            ko: '알파',
           },
           beta: {
             en: '🟨β',
             de: 'Beta',
+            fr: 'Beta',
             ja: '🟨β',
+            cn: '贝塔',
+            ko: '베타',
           },
           simple: {
             en: '${marker} + ${tether}',
@@ -3234,6 +3363,18 @@ const triggerSet: TriggerSet<Data> = {
 
         if (Object.keys(data.conceptData).length !== 12)
           return { infoText: failStr };
+
+        if (data.triggerSetConfig.classicalConceptsPairOrder === 'shapeAndDebuff') {
+          if (matches.id === '8336') // prevent going off again on Panta Rhei
+            return;
+          const myShape = data.conceptPair;
+          const myDebuff = data.conceptDebuff;
+          const outputStr = output.shapeAndDebuff!({
+            shape: output[myShape]!(),
+            debuff: output[myDebuff]!(),
+          });
+          return { alertText: outputStr };
+        }
 
         let myColumn: number | undefined;
         let myRow: number | undefined;
