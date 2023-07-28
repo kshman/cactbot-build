@@ -1,4 +1,6 @@
+/*
 import Conditions from '../../../../../resources/conditions';
+*/
 import Outputs from '../../../../../resources/outputs';
 import { callOverlayHandler } from '../../../../../resources/overlay_plugin_api';
 import PartyTracker from '../../../../../resources/party';
@@ -258,6 +260,7 @@ const stackSpreadResponse = (
   return { alertText: output.spreadThenStack!(), ...stackInfo };
 };
 
+/*
 const towerResponse = (
   data: Data,
   output: Output,
@@ -322,11 +325,12 @@ const towerResponse = (
   // Just in case...
   return { alertText: output.tether!({ num: numStr }) };
 };
+*/
 
 const triggerSet: TriggerSet<Data> = {
-  id: 'AnotherMountRokkon',
-  zoneId: ZoneId.AnotherMountRokkon,
-  timelineFile: 'another_mount_rokkon.txt',
+  id: 'AnotherMountRokkonSavage',
+  zoneId: ZoneId.AnotherMountRokkonSavage,
+  timelineFile: 'another_mount_rokkon-savage.txt',
   initData: () => {
     return {
       prMalformed: {},
@@ -351,22 +355,22 @@ const triggerSet: TriggerSet<Data> = {
   triggers: [
     // ---------------- first trash ----------------
     {
-      id: 'AMR Shishu Raiko Disciples of Levin',
+      id: 'AMRS Shishu Raiko Disciples of Levin',
       type: 'StartsUsing',
-      netRegex: { id: '8656', source: 'Shishu Raiko', capture: false },
+      netRegex: { id: '8668', source: 'Shishu Raiko', capture: false },
       response: Responses.getOut(),
     },
     {
-      id: 'AMR Shishu Furutsubaki Bloody Caress',
+      id: 'AMRS Shishu Furutsubaki Bloody Caress',
       type: 'StartsUsing',
-      netRegex: { id: '8657', source: 'Shishu Furutsubaki', capture: false },
+      netRegex: { id: '8669', source: 'Shishu Furutsubaki', capture: false },
       suppressSeconds: 5,
       response: Responses.getBehind('info'),
     },
     {
-      id: 'AMR Shishu Raiko Barreling Smash',
+      id: 'AMRS Shishu Raiko Barreling Smash',
       type: 'StartsUsing',
-      netRegex: { id: '8653', source: 'Shishu Raiko' },
+      netRegex: { id: '8665', source: 'Shishu Raiko' },
       response: (data, matches, output) => {
         // cactbot-builtin-response
         output.responseOutputStrings = {
@@ -384,79 +388,79 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: 'AMR Shishu Raiko Howl',
+      id: 'AMRS Shishu Raiko Howl',
       type: 'StartsUsing',
-      netRegex: { id: '8654', source: 'Shishu Raiko', capture: false },
+      netRegex: { id: '8666', source: 'Shishu Raiko', capture: false },
       response: Responses.bleedAoe('info'),
     },
     {
-      id: 'AMR Shishu Raiko Master of Levin',
+      id: 'AMRS Shishu Raiko Master of Levin',
       type: 'StartsUsing',
-      netRegex: { id: '8655', source: 'Shishu Raiko', capture: false },
+      netRegex: { id: '8667', source: 'Shishu Raiko', capture: false },
       response: Responses.getUnder(),
     },
     {
-      id: 'AMR Shishu Fuko Scythe Tail',
+      id: 'AMRS Shishu Fuko Scythe Tail',
       type: 'StartsUsing',
-      netRegex: { id: '865A', source: 'Shishu Raiko', capture: false },
+      netRegex: { id: '866C', source: 'Shishu Raiko', capture: false },
       response: Responses.getOut(),
     },
     {
-      id: 'AMR Shishu Fuko Twister',
+      id: 'AMRS Shishu Fuko Twister',
       type: 'StartsUsing',
-      netRegex: { id: '8658', source: 'Shishu Raiko' },
+      netRegex: { id: '866A', source: 'Shishu Raiko' },
       response: Responses.stackMarkerOn(),
     },
     {
-      id: 'AMR Shishu Fuko Crosswind',
+      id: 'AMRS Shishu Fuko Crosswind',
       type: 'StartsUsing',
-      netRegex: { id: '8659', source: 'Shishu Raiko', capture: false },
+      netRegex: { id: '866B', source: 'Shishu Raiko', capture: false },
       response: Responses.knockback(),
     },
     {
-      id: 'AMR Shishu Yuki Right Swipe',
+      id: 'AMRS Shishu Yuki Right Swipe',
       type: 'StartsUsing',
-      netRegex: { id: '8685', source: 'Shishu Yuki', capture: false },
+      netRegex: { id: '8688', source: 'Shishu Yuki', capture: false },
       response: Responses.goLeft('info'),
     },
     {
-      id: 'AMR Shishu Yuki Left Swipe',
+      id: 'AMRS Shishu Yuki Left Swipe',
       type: 'StartsUsing',
-      netRegex: { id: '8686', source: 'Shishu Yuki', capture: false },
+      netRegex: { id: '8689', source: 'Shishu Yuki', capture: false },
       response: Responses.goRight('info'),
     },
     // ---------------- Shishio ----------------
     {
-      id: 'AMR Shishio Enkyo',
+      id: 'AMRS Shishio Enkyo',
       type: 'StartsUsing',
-      netRegex: { id: '841A', source: 'Shishio', capture: false },
+      netRegex: { id: '8441', source: 'Shishio', capture: false },
       response: Responses.aoe(),
     },
     {
-      id: 'AMR Shishio Splitting Cry',
+      id: 'AMRS Shishio Splitting Cry',
       type: 'StartsUsing',
-      netRegex: { id: '841B', source: 'Shishio' },
+      netRegex: { id: '8442', source: 'Shishio' },
       response: Responses.tankBuster(),
     },
     {
-      id: 'AMR Shishio Splitter',
+      id: 'AMRS Shishio Splitter',
       type: 'Ability',
       // This comes out ~4s after Splitting Cry.
-      netRegex: { id: '841B', source: 'Shishio', capture: false },
+      netRegex: { id: '8442', source: 'Shishio', capture: false },
       suppressSeconds: 5,
       response: Responses.goFrontOrSides('info'),
     },
     {
-      id: 'AMR Shishio Unnatural Wail Count',
+      id: 'AMRS Shishio Unnatural Wail Count',
       type: 'StartsUsing',
-      netRegex: { id: '8417', source: 'Shishio', capture: false },
+      netRegex: { id: '843E', source: 'Shishio', capture: false },
       run: (data) => {
         data.wailCount++;
         data.wailingCollect = [];
       },
     },
     {
-      id: 'AMR Shishio Wailing Collect',
+      id: 'AMRS Shishio Wailing Collect',
       type: 'GainsEffect',
       // DEB = Scattered Wailing (spread)
       // DEC = Intensified Wailing (stack)
@@ -464,7 +468,7 @@ const triggerSet: TriggerSet<Data> = {
       run: (data, matches) => data.wailingCollect.push(matches),
     },
     {
-      id: 'AMR Shishio Unnatural Wailing 1',
+      id: 'AMRS Shishio Unnatural Wailing 1',
       type: 'GainsEffect',
       netRegex: { effectId: ['DEB', 'DEC'], source: 'Shishio', capture: false },
       condition: (data) => data.wailCount === 1,
@@ -476,11 +480,11 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: 'AMR Shishio Vortex of the Thunder Eye',
+      id: 'AMRS Shishio Vortex of the Thunder Eye',
       type: 'StartsUsing',
-      // 8413 = Eye of the Thunder Vortex (out)
-      // 8415 = Vortex of the Thnder Eye (in)
-      netRegex: { id: ['8413', '8415'], source: 'Shishio' },
+      // 843A = Eye of the Thunder Vortex (out)
+      // 843C = Vortex of the Thnder Eye (in)
+      netRegex: { id: ['843A', '843C'], source: 'Shishio' },
       durationSeconds: 7,
       response: (data, matches, output) => {
         // cactbot-builtin-response
@@ -538,7 +542,7 @@ const triggerSet: TriggerSet<Data> = {
 
         const stackType = findStackPartners(data.party, stack1.target, stack2.target);
 
-        const isInFirst = matches.id === '8415';
+        const isInFirst = matches.id === '843C';
 
         if (data.options.AutumnStyle) {
           const inOut = isInFirst ? output.in1!() : output.out1!();
@@ -598,23 +602,23 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: 'AMR Shishio Thunder Vortex',
+      id: 'AMRS Shishio Thunder Vortex',
       type: 'StartsUsing',
-      netRegex: { id: '8412', source: 'Shishio', capture: false },
+      netRegex: { id: '8439', source: 'Shishio', capture: false },
       response: Responses.getUnder(),
     },
     {
-      id: 'AMR Shishio Devilish Thrall Collect',
+      id: 'AMRS Shishio Devilish Thrall Collect',
       type: 'StartsUsing',
-      // 840B = Right Swipe
-      // 840C = Left Swipe
-      netRegex: { id: ['840B', '840C'], source: 'Devilish Thrall' },
+      // 8432 = Right Swipe
+      // 8433 = Left Swipe
+      netRegex: { id: ['8432', '8433'], source: 'Devilish Thrall' },
       run: (data, matches) => data.devilishThrallCollect.push(matches),
     },
     {
-      id: 'AMR Shishio Devilish Thrall Safe Spot',
+      id: 'AMRS Shishio Devilish Thrall Safe Spot',
       type: 'StartsUsing',
-      netRegex: { id: ['840B', '840C'], source: 'Devilish Thrall', capture: false },
+      netRegex: { id: ['8432', '8433'], source: 'Devilish Thrall', capture: false },
       delaySeconds: 0.5,
       suppressSeconds: 1,
       promise: async (data: Data) => {
@@ -700,7 +704,7 @@ const triggerSet: TriggerSet<Data> = {
     },
     // ---------------- second trash ----------------
     {
-      id: 'AMR Shishu Kotengu Backward Blows',
+      id: 'AMRS Shishu Kotengu Backward Blows',
       type: 'StartsUsing',
       netRegex: { id: '865C', source: 'Shishu Kotengu', capture: false },
       durationSeconds: 5.7,
@@ -712,7 +716,7 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: 'AMR Shishu Kotengu Leftward Blows',
+      id: 'AMRS Shishu Kotengu Leftward Blows',
       type: 'StartsUsing',
       netRegex: { id: '865D', source: 'Shishu Kotengu', capture: false },
       durationSeconds: 5.7,
@@ -724,7 +728,7 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: 'AMR Shishu Kotengu Rightward Blows',
+      id: 'AMRS Shishu Kotengu Rightward Blows',
       type: 'StartsUsing',
       netRegex: { id: '865E', source: 'Shishu Kotengu', capture: false },
       durationSeconds: 5.7,
@@ -736,38 +740,41 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: 'AMR Shishu Kotengu Wrath of the Tengu',
+      id: 'AMRS Shishu Kotengu Wrath of the Tengu',
       type: 'StartsUsing',
       netRegex: { id: '8660', source: 'Shishu Kotengu', capture: false },
       response: Responses.bleedAoe('alert'),
     },
     {
-      id: 'AMR Shishu Kotengu Gaze of the Tengu',
+      id: 'AMRS Shishu Kotengu Gaze of the Tengu',
       type: 'StartsUsing',
       netRegex: { id: '8661', source: 'Shishu Kotengu', capture: false },
       response: Responses.lookAway('alert'),
     },
     {
-      id: 'AMR Shishu Onmitsugashira Juji Shuriken',
+      id: 'AMRS Shishu Onmitsugashira Juji Shuriken',
       type: 'StartsUsing',
       netRegex: { id: '8664', source: 'Shishu Onmitsugashira', capture: false },
       response: Responses.getBehind(),
     },
     {
-      id: 'AMR Shishu Onmitsugashira Issen',
+      id: 'AMRS Shishu Onmitsugashira Issen',
       type: 'StartsUsing',
       netRegex: { id: '8662', source: 'Shishu Onmitsugashira' },
       response: Responses.tankBuster(),
     },
     // ---------------- Gorai the Uncaged ----------------
+    /*
     {
-      id: 'AMR Gorai Unenlightenment',
+      id: 'AMRS Gorai Unenlightenment',
       type: 'StartsUsing',
       netRegex: { id: '8534', source: 'Gorai the Uncaged', capture: false },
       response: Responses.bleedAoe('info'),
     },
+    */
+    /*
     {
-      id: 'AMR Gorai Sparks Count',
+      id: 'AMRS Gorai Sparks Count',
       type: 'StartsUsing',
       netRegex: { id: '8503', source: 'Gorai the Uncaged', capture: false },
       run: (data) => {
@@ -775,8 +782,19 @@ const triggerSet: TriggerSet<Data> = {
         data.sparksCollect = [];
       },
     },
+    */
     {
-      id: 'AMR Gorai Sparks Collect',
+      id: 'AMRS Gorai Sparks 카운트 땜빵',
+      type: 'GainsEffect',
+      netRegex: { effectId: ['E17', 'E18'], capture: false },
+      suppressSeconds: 10,
+      run: (data) => {
+        data.sparksCount++;
+        data.sparksCollect = [];
+      },
+    },
+    {
+      id: 'AMRS Gorai Sparks Collect',
       type: 'GainsEffect',
       // E17 = Live Brazier (stack)
       // E18 = Live Candle (spread)
@@ -784,7 +802,7 @@ const triggerSet: TriggerSet<Data> = {
       run: (data, matches) => data.sparksCollect.push(matches),
     },
     {
-      id: 'AMR Gorai Seal of Scurrying Sparks 1',
+      id: 'AMRS Gorai Seal of Scurrying Sparks 1',
       type: 'GainsEffect',
       netRegex: { effectId: ['E17', 'E18'], capture: false },
       condition: (data) => data.sparksCount === 1,
@@ -844,7 +862,7 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: 'AMR Gorai Seal of Scurrying Sparks 2',
+      id: 'AMRS Gorai Seal of Scurrying Sparks 2',
       type: 'GainsEffect',
       netRegex: { effectId: ['E17', 'E18'], capture: false },
       condition: (data) => data.sparksCount === 2,
@@ -855,14 +873,17 @@ const triggerSet: TriggerSet<Data> = {
         return stackSpreadResponse(data, output, data.sparksCollect, 'E17', 'E18');
       },
     },
+    /*
     {
-      id: 'AMR Gorai Torching Torment',
+      id: 'AMRS Gorai Torching Torment',
       type: 'StartsUsing',
       netRegex: { id: '8532', source: 'Gorai the Uncaged' },
       response: Responses.tankBuster(),
     },
+    */
+    /*
     {
-      id: 'AMR Gorai Impure Purgation First Hit',
+      id: 'AMRS Gorai Impure Purgation First Hit',
       type: 'StartsUsing',
       netRegex: { id: '852F', source: 'Gorai the Uncaged', capture: false },
       durationSeconds: 4,
@@ -878,15 +899,19 @@ const triggerSet: TriggerSet<Data> = {
         },
       },
     },
+    */
+    /*
     {
-      id: 'AMR Gorai Impure Purgation Second Hit',
+      id: 'AMRS Gorai Impure Purgation Second Hit',
       type: 'StartsUsing',
       netRegex: { id: '8531', source: 'Gorai the Uncaged', capture: false },
       suppressSeconds: 5,
       response: Responses.moveAway(),
     },
+    */
+    /*
     {
-      id: 'AMR Gorai Humble Hammer',
+      id: 'AMRS Gorai Humble Hammer',
       type: 'StartsUsing',
       netRegex: { id: '8525', source: 'Gorai the Uncaged' },
       condition: Conditions.targetIsYou(),
@@ -897,8 +922,10 @@ const triggerSet: TriggerSet<Data> = {
         },
       },
     },
+    */
+    /*
     {
-      id: 'AMR Gorai Flintlock',
+      id: 'AMRS Gorai Flintlock',
       type: 'Ability',
       // Trigger this on Humble Hammer damage
       netRegex: { id: '8525', source: 'Gorai the Uncaged', capture: false },
@@ -916,8 +943,9 @@ const triggerSet: TriggerSet<Data> = {
         },
       },
     },
+    */
     {
-      id: 'AMR Gorai Rousing Reincarnation Collect',
+      id: 'AMRS Gorai Rousing Reincarnation Collect',
       type: 'GainsEffect',
       netRegex: { effectId: ['E0D', 'E0E', 'E0F', 'E10', 'E11', 'E12', 'E13', 'E14'] },
       run: (data, matches) => {
@@ -943,8 +971,9 @@ const triggerSet: TriggerSet<Data> = {
           data.reincarnationCollect[3].orange = matches.target;
       },
     },
+    /*
     {
-      id: 'AMR Gorai Rousing Reincarnation First Tower',
+      id: 'AMRS Gorai Rousing Reincarnation First Tower',
       type: 'StartsUsing',
       // Malformed Prayer cast
       netRegex: { id: '8518', source: 'Gorai the Uncaged', capture: false },
@@ -954,8 +983,10 @@ const triggerSet: TriggerSet<Data> = {
         return towerResponse(data, output);
       },
     },
+    */
+    /*
     {
-      id: 'AMR Gorai Rousing Reincarnation Other Towers',
+      id: 'AMRS Gorai Rousing Reincarnation Other Towers',
       type: 'Ability',
       // Technically 851F Pointed Purgation protean happens ~0.2s beforehand,
       // but wait on the tower burst to call things out.
@@ -969,9 +1000,10 @@ const triggerSet: TriggerSet<Data> = {
         return towerResponse(data, output);
       },
     },
+    */
     /*
     {
-      id: 'AMR Gorai Fighting Spirits',
+      id: 'AMRS Gorai Fighting Spirits',
       type: 'StartsUsing',
       netRegex: { id: '852B', source: 'Gorai the Uncaged', capture: false },
       // this is also a light aoe but knockback is more important
@@ -979,7 +1011,7 @@ const triggerSet: TriggerSet<Data> = {
     },
     */
     {
-      id: 'AMR Gorai Fighting Spirits Limit Cut',
+      id: 'AMRS Gorai Fighting Spirits Limit Cut',
       type: 'HeadMarker',
       netRegex: { id: limitCutIds },
       durationSeconds: 10, // FIXME
@@ -1011,9 +1043,9 @@ const triggerSet: TriggerSet<Data> = {
     },
     // ---------------- 어드미 ----------------
     {
-      id: 'AMR 사자 Stormcloud Summons',
+      id: 'AMRS 사자 Stormcloud Summons',
       type: 'StartsUsing',
-      netRegex: { id: '83F8', source: 'Shishio', capture: false },
+      netRegex: { id: '841F', source: 'Shishio', capture: false },
       response: (data, _matches, output) => {
         // cactbot-builtin-response
         output.responseOutputStrings = {
@@ -1034,15 +1066,15 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: 'AMR 사자 Smokeater',
+      id: 'AMRS 사자 Smokeater',
       type: 'Ability',
-      netRegex: { id: ['83F9', '83FA'], source: 'Shishio', capture: false },
+      netRegex: { id: ['8420', '8421'], source: 'Shishio', capture: false },
       run: (data) => data.prSmokeater = (data.prSmokeater ?? 0) + 1,
     },
     {
-      id: 'AMR 사자 Rokujo Revel',
+      id: 'AMRS 사자 Rokujo Revel',
       type: 'StartsUsing',
-      netRegex: { id: '83FC', source: 'Shishio', capture: false },
+      netRegex: { id: '8423', source: 'Shishio', capture: false },
       durationSeconds: 7,
       response: (data, _matches, output) => {
         // cactbot-builtin-response
@@ -1071,9 +1103,9 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: 'AMR 사자 Noble Pursuit',
+      id: 'AMRS 사자 Noble Pursuit',
       type: 'StartsUsing',
-      netRegex: { id: '8407', source: 'Shishio', capture: false },
+      netRegex: { id: '842E', source: 'Shishio', capture: false },
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
@@ -1082,9 +1114,9 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: 'AMR 사자 Noble Pursuit 버스트',
+      id: 'AMRS 사자 Noble Pursuit 버스트',
       type: 'Ability',
-      netRegex: { id: '8407', source: 'Shishio', capture: false },
+      netRegex: { id: '842E', source: 'Shishio', capture: false },
       delaySeconds: 3,
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
@@ -1094,9 +1126,9 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: 'AMR 사자 Unnatural Wail',
+      id: 'AMRS 사자 Unnatural Wail',
       type: 'StartsUsing',
-      netRegex: { id: '8417', source: 'Shishio', capture: false },
+      netRegex: { id: '843E', source: 'Shishio', capture: false },
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
@@ -1106,9 +1138,9 @@ const triggerSet: TriggerSet<Data> = {
     },
     /*
     {
-      id: 'AMR 사자 Haunting Cry',
+      id: 'AMRS 사자 Haunting Cry',
       type: 'StartsUsing',
-      netRegex: { id: '840A', source: 'Shishio', capture: false },
+      netRegex: { id: '8431', source: 'Shishio', capture: false },
       infoText: (data, _matches, output) => {
         data.prHaunting = (data.prHaunting ?? 0) + 1;
         if (data.prHaunting === 1)
@@ -1126,8 +1158,9 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     */
+    /*
     {
-      id: 'AMR Gorai Brazen Ballad',
+      id: 'AMRS Gorai Brazen Ballad',
       type: 'StartsUsing',
       netRegex: { id: ['8509', '850A'], source: 'Gorai the Uncaged', capture: true },
       durationSeconds: 4,
@@ -1145,8 +1178,10 @@ const triggerSet: TriggerSet<Data> = {
         },
       },
     },
+    */
+    /*
     {
-      id: 'AMR Gorai Thundercall',
+      id: 'AMRS Gorai Thundercall',
       type: 'StartsUsing',
       netRegex: { id: '8520', source: 'Gorai the Uncaged', capture: false },
       infoText: (_data, _matches, output) => output.text!(),
@@ -1156,8 +1191,10 @@ const triggerSet: TriggerSet<Data> = {
         },
       },
     },
+    */
+    /*
     {
-      id: 'AMR Gorai Rousing Reincarnation',
+      id: 'AMRS Gorai Rousing Reincarnation',
       type: 'StartsUsing',
       netRegex: { id: '8512', source: 'Gorai the Uncaged', capture: false },
       infoText: (_data, _matches, output) => output.text!(),
@@ -1167,8 +1204,10 @@ const triggerSet: TriggerSet<Data> = {
         },
       },
     },
+    */
+    /*
     {
-      id: 'AMR Gorai Fighting Spirits 넉백',
+      id: 'AMRS Gorai Fighting Spirits 넉백',
       type: 'StartsUsing',
       netRegex: { id: '852B', source: 'Gorai the Uncaged', capture: false },
       delaySeconds: 3,
@@ -1179,8 +1218,10 @@ const triggerSet: TriggerSet<Data> = {
         },
       },
     },
+    */
+    /*
     {
-      id: 'AMR Gorai Fighting Spirits 스프린트',
+      id: 'AMRS Gorai Fighting Spirits 스프린트',
       type: 'Ability',
       netRegex: { id: '852B', source: 'Gorai the Uncaged', capture: false },
       delaySeconds: 2,
@@ -1191,8 +1232,9 @@ const triggerSet: TriggerSet<Data> = {
         },
       },
     },
+    */
     {
-      id: 'AMR Gorai 뭉쳐',
+      id: 'AMRS Gorai 뭉쳐',
       type: 'GainsEffect',
       // E17 = Live Brazier (stack)
       netRegex: { effectId: 'E17' },
@@ -1222,7 +1264,7 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: 'AMR Gorai 흩어져',
+      id: 'AMRS Gorai 흩어져',
       type: 'GainsEffect',
       // E18 = Live Candle (spread)
       netRegex: { effectId: 'E18' },
@@ -1244,14 +1286,16 @@ const triggerSet: TriggerSet<Data> = {
         },
       },
     },
+    /*
     {
-      id: 'AMR Gorai Malformed Reincarnation',
+      id: 'AMRS Gorai Malformed Reincarnation',
       type: 'StartsUsing',
       netRegex: { id: '8514', source: 'Gorai the Uncaged', capture: false },
       run: (data) => data.prMalformed = {},
     },
+    */
     {
-      id: 'AMR Gorai Malformed Reincarnation Debuff',
+      id: 'AMRS Gorai Malformed Reincarnation Debuff',
       type: 'GainsEffect',
       // E0D = Rodential Rebirth#1 / 빨강
       // E0E = Rodential Rebirth#2 / 빨강
@@ -1281,7 +1325,7 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: 'AMR Gorai Malformed Reincarnation Action',
+      id: 'AMRS Gorai Malformed Reincarnation Action',
       type: 'GainsEffect',
       // E15 = Squirrelly Prayer / 빨강 다람쥐
       // E16 = Odder Prayer / 파랑 버섯
@@ -1332,34 +1376,42 @@ const triggerSet: TriggerSet<Data> = {
         unknown: Outputs.unknown,
       },
     },
+    /*
     {
-      id: 'AMR Moko Kenki Release',
+      id: 'AMRS Moko Kenki Release',
       type: 'StartsUsing',
       netRegex: { id: '85E0', source: 'Moko the Restless', capture: false },
       response: Responses.aoe('alert'),
     },
+    */
+    /*
     {
-      id: 'AMR Moko Lateral Slice',
+      id: 'AMRS Moko Lateral Slice',
       type: 'StartsUsing',
       netRegex: { id: '85E3', source: 'Moko the Restless' },
       response: Responses.tankBuster(),
     },
+    */
+    /*
     {
-      id: 'AMR Moko Scarlet Auspice',
+      id: 'AMRS Moko Scarlet Auspice',
       type: 'StartsUsing',
       netRegex: { id: '85D1', source: 'Moko the Restless', capture: false },
       response: Responses.goSides(),
     },
+    */
+    /*
     {
-      id: 'AMR Moko Invocation of Vengeance',
+      id: 'AMRS Moko Invocation of Vengeance',
       type: 'StartsUsing',
       netRegex: { id: '85DB', source: 'Moko the Restless', capture: false },
       run: (data, _matches) => {
         data.prVengefulCollect = []; // 사실 할 필요 없다
       },
     },
+    */
     {
-      id: 'AMR Moko/E Vengeful Collect',
+      id: 'AMRS Moko/E Vengeful Collect',
       type: 'GainsEffect',
       // E1A = spread
       // E1B = stack
@@ -1367,7 +1419,7 @@ const triggerSet: TriggerSet<Data> = {
       run: (data, matches) => data.prVengefulCollect.push(matches),
     },
     {
-      id: 'AMR Moko/E Vengeful',
+      id: 'AMRS Moko/E Vengeful',
       type: 'GainsEffect',
       netRegex: { effectId: ['E1A', 'E1B'], capture: false },
       delaySeconds: 0.5,
@@ -1396,7 +1448,7 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: 'AMR Moko/E Vengeful Flame',
+      id: 'AMRS Moko/E Vengeful Flame',
       type: 'GainsEffect',
       netRegex: { effectId: 'E1A' },
       delaySeconds: (_data, matches) => parseFloat(matches.duration),
@@ -1425,7 +1477,7 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: 'AMR Moko/E Vengeful Pyre',
+      id: 'AMRS Moko/E Vengeful Pyre',
       type: 'GainsEffect',
       netRegex: { effectId: 'E1B' },
       delaySeconds: (_data, matches) => parseFloat(matches.duration),
@@ -1443,7 +1495,7 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: 'AMR Moko/T Vengeance Tether',
+      id: 'AMRS Moko/T Vengeance Tether',
       type: 'Tether',
       netRegex: { id: '0011', source: 'Moko the Restless' },
       condition: (data, matches) => matches.target === data.me,
@@ -1455,8 +1507,9 @@ const triggerSet: TriggerSet<Data> = {
         },
       },
     },
+    /*
     {
-      id: 'AMR Moko Shadow-twin',
+      id: 'AMRS Moko Shadow-twin',
       type: 'StartsUsing',
       netRegex: { id: '85C7', source: 'Moko the Restless', capture: false },
       infoText: (_data, _matches, output) => output.text!(),
@@ -1466,8 +1519,10 @@ const triggerSet: TriggerSet<Data> = {
         },
       },
     },
+    */
+    /*
     {
-      id: 'AMR Moko Azure Auspice',
+      id: 'AMRS Moko Azure Auspice',
       type: 'StartsUsing',
       netRegex: { id: '85D4', source: 'Moko the Restless', capture: false },
       alertText: (_data, _matches, output) => output.text!(),
@@ -1477,14 +1532,18 @@ const triggerSet: TriggerSet<Data> = {
         },
       },
     },
+    */
+    /*
     {
-      id: 'AMR Moko Boundless Azure',
+      id: 'AMRS Moko Boundless Azure',
       type: 'StartsUsing',
       netRegex: { id: '859D', source: 'Moko the Restless', capture: false },
       response: Responses.goSides(),
     },
+    */
+    /*
     {
-      id: 'AMR Moko Soldiers of Death',
+      id: 'AMRS Moko Soldiers of Death',
       type: 'StartsUsing',
       netRegex: { id: '8593', source: 'Moko the Restless', capture: false },
       alertText: (_data, _matches, output) => {
@@ -1497,8 +1556,10 @@ const triggerSet: TriggerSet<Data> = {
         },
       },
     },
+    */
+    /*
     {
-      id: 'AMR Moko Moonless Night',
+      id: 'AMRS Moko Moonless Night',
       type: 'StartsUsing',
       netRegex: { id: '85DE', source: 'Moko the Restless', capture: false },
       run: (data) => {
@@ -1507,8 +1568,10 @@ const triggerSet: TriggerSet<Data> = {
         delete data.prHaveTether;
       },
     },
+    */
+    /*
     {
-      id: 'AMR Moko Near/Far Edge',
+      id: 'AMRS Moko Near/Far Edge',
       type: 'StartsUsing',
       // 85D8 NEAR
       // 85D9 FAR
@@ -1541,8 +1604,10 @@ const triggerSet: TriggerSet<Data> = {
         },
       },
     },
+    */
+    /*
     {
-      id: 'AMR Moko Ashigaru Kyuhei ',
+      id: 'AMRS Moko Ashigaru Kyuhei ',
       type: 'StartsUsing',
       // 85D0 => 87A8 멀리(확실)
       // 85FF => 87AA 가까이 일듯
@@ -1566,8 +1631,9 @@ const triggerSet: TriggerSet<Data> = {
         },
       },
     },
+    */
     {
-      id: 'AMR Moko/T 샤도 줄다리기 리셋',
+      id: 'AMRS Moko/T 샤도 줄다리기 리셋',
       type: 'Tether',
       netRegex: { id: '0011', source: 'Moko\'s Shadow', capture: false },
       suppressSeconds: 10,
@@ -1577,7 +1643,7 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: 'AMR Moko/T 샤도 줄다리기 확인',
+      id: 'AMRS Moko/T 샤도 줄다리기 확인',
       type: 'Tether',
       netRegex: { id: '0011', source: 'Moko\'s Shadow' },
       run: (data, matches) => {
@@ -1604,7 +1670,7 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: 'AMR Moko/T 샤도 줄다리기 알림',
+      id: 'AMRS Moko/T 샤도 줄다리기 알림',
       type: 'Tether',
       netRegex: { id: '0011', source: 'Moko\'s Shadow', capture: false },
       condition: (data) => data.prShadowTether <= 2,
@@ -1642,7 +1708,7 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: 'AMR Moko/E Giris',
+      id: 'AMRS Moko/E Giris',
       type: 'GainsEffect',
       netRegex: { effectId: 'B9A', target: 'Moko the Restless' },
       durationSeconds: (data, matches) => {
@@ -1719,7 +1785,7 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: 'AMR Moko/E Moko\'s Shadow',
+      id: 'AMRS Moko/E Moko\'s Shadow',
       type: 'GainsEffect',
       netRegex: { effectId: 'B9A', target: 'Moko\'s Shadow', capture: true },
       durationSeconds: 11,

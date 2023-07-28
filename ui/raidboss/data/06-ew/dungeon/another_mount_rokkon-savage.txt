@@ -1,0 +1,104 @@
+### ANOTHER MOUNT ROKKON SAVAGE
+# ZoneId: 483
+
+hideall "--Reset--"
+hideall "--sync--"
+
+0.0 "--Reset--" sync / 00:0839::.*is no longer sealed/ window 100000 jump 0
+
+#~~~~~~~~~#
+# SHISHIO #
+#~~~~~~~~~#
+
+1000.0 "--sync--" sync / 00:0839::The Trial Of Benevolence will be sealed off/ window 10000,0
+1007.0 "--sync--" sync / 14:[^:]*:Shishio:8441:/ window 10000,0
+1012.0 "Enkyo" sync / 1[56]:[^:]*:Shishio:8441:/
+
+1014.0 "--sync--" sync / 1[56]:[^:]*:Shishio:8444:/
+1019.2 "Stormcloud Summons" sync / 1[56]:[^:]*:Shishio:841F:/
+1023.9 "Smokeater 1" sync / 1[56]:[^:]*:Shishio:8420:/
+1026.0 "Smokeater 2?" #sync / 1[56]:[^:]*:Shishio:8421:/
+1028.0 "Smokeater 3?" #sync / 1[56]:[^:]*:Shishio:8421:/
+
+1046.4 "--sync--" sync / 14:[^:]*:Shishio:8442:/ window 10,10
+1051.4 "Splitting Cry" sync / 1[56]:[^:]*:Shishio:8442:/
+1055.5 "Slither" sync / 1[56]:[^:]*:Shishio:8443:/
+
+1060.7 "--jump--" sync / 1[56]:[^:]*:Shishio:8444:/
+1071.0 "Noble Pursuit 1" sync / 1[56]:[^:]*:Shishio:842E:/
+1071.9 "Levinburst 1" #sync / 1[56]:[^:]*:Rairin:8430:/
+1072.6 "Noble Pursuit 2" #sync / 1[56]:[^:]*:Shishio:842F:/
+1073.5 "Levinburst 2" #sync / 1[56]:[^:]*:Rairin:8430:/
+1074.2 "Noble Pursuit 3" #sync / 1[56]:[^:]*:Shishio:842F:/
+1075.1 "Levinburst 3" #sync / 1[56]:[^:]*:Rairin:8430:/
+1075.8 "Noble Pursuit 4" #sync / 1[56]:[^:]*:Shishio:842F:/
+1076.7 "Levinburst 4" #sync / 1[56]:[^:]*:Rairin:8430:/
+1082.4 "Enkyo" sync / 1[56]:[^:]*:Shishio:8441:/
+
+1084.6 "--middle--" sync / 1[56]:[^:]*:Shishio:8444:/
+1089.6 "Unnatural Wail" sync / 1[56]:[^:]*:Shishio:843E:/
+1094.7 "Haunting Cry" sync / 1[56]:[^:]*:Shishio:8431:/
+1106.6 "Right Swipe" #sync / 1[56]:[^:]*:Devilish Thrall:8432:/
+1106.6 "Left Swipe" sync / 1[56]:[^:]*:Devilish Thrall:8433:/
+1107.5 "Unnatural Ailment/Unnatural Force 1" sync / 1[56]:[^:]*:Shishio:(843F|8440):/
+1113.5 "Right Swipe" sync / 1[56]:[^:]*:Devilish Thrall:8432:/
+1113.5 "Left Swipe" sync / 1[56]:[^:]*:Devilish Thrall:8433:/
+1114.4 "Unnatural Ailment/Unnatural Force 2" sync / 1[56]:[^:]*:Shishio:(843F|8440):/
+
+1118.7 "--sync--" sync / 1[56]:[^:]*:Shishio:8444:/
+1123.8 "Stormcloud Summons" sync / 1[56]:[^:]*:Shishio:841F:/
+1128.5 "Smokeater 1" sync / 1[56]:[^:]*:Shishio:8420:/
+1130.5 "Smokeater 2?" #sync / 1[56]:[^:]*:Shishio:8421:/
+1132.5 "Smokeater 3?" #sync / 1[56]:[^:]*:Shishio:8421:/
+
+1153.4 "--sync--" sync / 1[56]:[^:]*:Shishio:8444:/ window 10,10
+1158.4 "Unnatural Wail" sync / 1[56]:[^:]*:Shishio:843E:/
+1165.7 "Eye of the Thunder Vortex/Vortex of the Thunder Eye" sync / 1[56]:[^:]*:Shishio:(843A|843C):/
+1166.4 "Unnatural Ailment/Unnatural Force 1" sync / 1[56]:[^:]*:Shishio:(843F|8440):/
+1169.7 "Vortex of the Thunder Eye/Eye of the Thunder Vortex" sync / 1[56]:[^:]*:Shishio:(843B|843D):/
+1170.4 "Unnatural Ailment/Unnatural Force 2" sync / 1[56]:[^:]*:Shishio:(843F|8440):/
+1178.8 "Enkyo" sync / 1[56]:[^:]*:Shishio:8441:/
+
+1186.9 "Haunting Cry" sync / 1[56]:[^:]*:Shishio:8431:/
+1192.1 "--sync--" sync / 1[56]:[^:]*:Shishio:8444:/
+1209.0 "Vengeful Souls" sync / 1[56]:[^:]*:Shishio:8435:/
+1209.0 "Stygian Aura" sync / 1[56]:[^:]*:Shishio:8437:/
+1209.0 "Vermilion Aura" sync / 1[56]:[^:]*:Shishio:8436:/
+
+1216.0 "Thunder Vortex" sync / 1[56]:[^:]*:Shishio:8439:/
+1223.2 "Splitting Cry" sync / 1[56]:[^:]*:Shishio:8442:/
+1227.3 "Slither" sync / 1[56]:[^:]*:Shishio:8443:/
+
+1232.5 "--sync--" sync / 1[56]:[^:]*:Shishio:8444:/
+1237.6 "Stormcloud Summons" sync / 1[56]:[^:]*:Shishio:841F:/
+1242.3 "Smokeater 1" sync / 1[56]:[^:]*:Shishio:8420:/
+1244.4 "Smokeater 2?" #sync / 1[56]:[^:]*:Shishio:8421:/
+1246.4 "Smokeater 3?" #sync / 1[56]:[^:]*:Shishio:8421:/
+
+1263.6 "--sync--" sync / 1[56]:[^:]*:Shishio:8444:/ window 10,10
+1268.7 "Stormcloud Summons" sync / 1[56]:[^:]*:Shishio:841F:/
+1273.4 "Smokeater 1" sync / 1[56]:[^:]*:Shishio:8420:/
+1275.5 "Smokeater 2?" #sync / 1[56]:[^:]*:Shishio:8421:/
+1277.5 "Smokeater 3?" #sync / 1[56]:[^:]*:Shishio:8421:/
+
+1304.1 "--sync--" sync / 1[56]:[^:]*:Shishio:8444:/ window 10,10
+1309.1 "Unnatural Wail" sync / 1[56]:[^:]*:Shishio:843E:/
+1316.4 "Eye of the Thunder Vortex/Vortex of the Thunder Eye" sync / 1[56]:[^:]*:Shishio:(843A|843C):/
+1317.1 "Unnatural Ailment/Unnatural Force 1" sync / 1[56]:[^:]*:Shishio:(843F|8440):/
+1320.4 "Vortex of the Thunder Eye/Eye of the Thunder Vortex" sync / 1[56]:[^:]*:Shishio:(843B|843D):/
+1321.0 "Unnatural Ailment/Unnatural Force 2" sync / 1[56]:[^:]*:Shishio:(843F|8440):/
+1336.1 "Enkyo (ENRAGE)" sync / 1[56]:[^:]*:Shishio:8445:/
+
+
+#~~~~~~~~~~~~~~~~~~~#
+# GORAI THE UNCAGED #
+#~~~~~~~~~~~~~~~~~~~#
+
+#
+
+
+#~~~~~~~~~~~~~~~~~~~#
+# 모코
+#~~~~~~~~~~~~~~~~~~~#
+
+#
