@@ -199,6 +199,7 @@ const kDetailKeys = {
       // people who know what they're doing.
       en: 'DEBUG 딜레이 조정 (초)',
       de: 'DEBUG Verzögerungseinstellung (sec)',
+      cn: 'DEBUG 延时调整 (秒)',
       ko: '"디버그" 딜레이 조절 (초)',
     },
     cls: 'delay-adjust-text',
@@ -1842,8 +1843,9 @@ const defaultAlertOutput: ConfigEntry = {
 const defaultTriggerSetAlertOutput = {
   ...defaultAlertOutput,
   name: {
-    en: 'Default trigger set alert output',
+    en: '기본 트리거 셋 알람 출력',
     de: 'Standard trigger-Set Alert Ausgabe',
+    cn: '默认自定义触发器提示输出模式',
     ko: '기본 트리거 세트 알람 출력 방식',
   },
 } as const;
