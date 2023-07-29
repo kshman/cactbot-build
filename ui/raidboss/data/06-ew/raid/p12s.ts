@@ -518,7 +518,7 @@ const triggerSet: TriggerSet<Data> = {
           '○XΔ□ (1234笔画)': 'cxts',
           '○Δ□X (Rocketship)': 'ctsx',
           '○ΔX□ (彩虹)': 'ctxs',
-          'Just call shape and debuff': 'shapeAndDebuff', // FIXME
+          '只报形状和debuff': 'shapeAndDebuff',
         },
         ko: {
           'X□○Δ (파보빨초)': 'xsct',
