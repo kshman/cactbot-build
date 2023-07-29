@@ -706,7 +706,7 @@ const triggerSet: TriggerSet<Data> = {
     {
       id: 'AMRS Shishu Kotengu Backward Blows',
       type: 'StartsUsing',
-      netRegex: { id: '865C', source: 'Shishu Kotengu', capture: false },
+      netRegex: { id: '866E', source: 'Shishu Kotengu', capture: false },
       durationSeconds: 5.7,
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
@@ -718,7 +718,7 @@ const triggerSet: TriggerSet<Data> = {
     {
       id: 'AMRS Shishu Kotengu Leftward Blows',
       type: 'StartsUsing',
-      netRegex: { id: '865D', source: 'Shishu Kotengu', capture: false },
+      netRegex: { id: '866F', source: 'Shishu Kotengu', capture: false },
       durationSeconds: 5.7,
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
@@ -730,7 +730,7 @@ const triggerSet: TriggerSet<Data> = {
     {
       id: 'AMRS Shishu Kotengu Rightward Blows',
       type: 'StartsUsing',
-      netRegex: { id: '865E', source: 'Shishu Kotengu', capture: false },
+      netRegex: { id: '8670 ', source: 'Shishu Kotengu', capture: false },
       durationSeconds: 5.7,
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
@@ -742,25 +742,25 @@ const triggerSet: TriggerSet<Data> = {
     {
       id: 'AMRS Shishu Kotengu Wrath of the Tengu',
       type: 'StartsUsing',
-      netRegex: { id: '8660', source: 'Shishu Kotengu', capture: false },
+      netRegex: { id: '8672', source: 'Shishu Kotengu', capture: false },
       response: Responses.bleedAoe('alert'),
     },
     {
       id: 'AMRS Shishu Kotengu Gaze of the Tengu',
       type: 'StartsUsing',
-      netRegex: { id: '8661', source: 'Shishu Kotengu', capture: false },
+      netRegex: { id: '8673', source: 'Shishu Kotengu', capture: false },
       response: Responses.lookAway('alert'),
     },
     {
       id: 'AMRS Shishu Onmitsugashira Juji Shuriken',
       type: 'StartsUsing',
-      netRegex: { id: '8664', source: 'Shishu Onmitsugashira', capture: false },
+      netRegex: { id: '8676', source: 'Shishu Onmitsugashira', capture: false },
       response: Responses.getBehind(),
     },
     {
       id: 'AMRS Shishu Onmitsugashira Issen',
       type: 'StartsUsing',
-      netRegex: { id: '8662', source: 'Shishu Onmitsugashira' },
+      netRegex: { id: '8674', source: 'Shishu Onmitsugashira' },
       response: Responses.tankBuster(),
     },
     // ---------------- Gorai the Uncaged ----------------
@@ -1083,7 +1083,7 @@ const triggerSet: TriggerSet<Data> = {
             en: '장판🡾 구름 없는 곳 => 돌면서 한가운데',
           },
           c2: {
-            en: '첫장판🡾 구름 없는 곳 => 돌면서 한가운데',
+            en: '첫장판🡻 구름 없는 곳 => 돌면서 한가운데',
           },
           c3: {
             en: '한개의 반대편 => 오른쪽 달려',
@@ -1291,7 +1291,7 @@ const triggerSet: TriggerSet<Data> = {
       id: 'AMRS Gorai Malformed Reincarnation',
       type: 'StartsUsing',
       netRegex: { id: '8514', source: 'Gorai the Uncaged', capture: false },
-      run: (data) => data.prMalformed = {},
+      run: (data) => data.prMalformed = {}, // 굳이 필요할까? 한번만 하는데
     },
     */
     {
@@ -1855,6 +1855,7 @@ const triggerSet: TriggerSet<Data> = {
         'Ashigaru Kyuhei': '足軽弓兵',
         'Gorai The Uncaged': '鉄鼠ゴウライ',
         'Moko the Restless': '怨霊モウコ',
+        'Moko\'s Shadow': 'モウコの幻影',
         'Oni\'s Claw': '鬼腕',
         'Shishio': '獅子王',
       },
