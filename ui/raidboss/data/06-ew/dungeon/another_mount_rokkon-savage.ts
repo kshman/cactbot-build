@@ -730,7 +730,7 @@ const triggerSet: TriggerSet<Data> = {
     {
       id: 'AMRS Shishu Kotengu Rightward Blows',
       type: 'StartsUsing',
-      netRegex: { id: '8670 ', source: 'Shishu Kotengu', capture: false },
+      netRegex: { id: '8670', source: 'Shishu Kotengu', capture: false },
       durationSeconds: 5.7,
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
