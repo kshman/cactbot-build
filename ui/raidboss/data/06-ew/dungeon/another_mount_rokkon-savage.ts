@@ -959,9 +959,9 @@ const triggerSet: TriggerSet<Data> = {
       type: 'Ability',
       // Technically 851F Pointed Purgation protean happens ~0.2s beforehand,
       // but wait on the tower burst to call things out.
-      // 8546/851B = Burst (blue tower)
-      // 8544/8519 = Burst (orange tower)
-      // 8545/851C = Dramatic Burst (missed tower)
+      // 8546 = Burst (blue tower)
+      // 8544 = Burst (orange tower)
+      // 8545 = Dramatic Burst (missed tower)
       // 8548 = Pointed Purgation 줄 처리
       netRegex: { id: '8546', source: 'Gorai the Uncaged', capture: false },
       durationSeconds: 4,
@@ -972,7 +972,7 @@ const triggerSet: TriggerSet<Data> = {
     },
     /*
     {
-      // 테스트 안됨
+      // 이거 안씀
       id: 'AMRS Gorai Fighting Spirits',
       type: 'StartsUsing',
       netRegex: { id: '852B', source: 'Gorai the Uncaged', capture: false },
@@ -1170,7 +1170,6 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      // 테스트 안됨
       id: 'AMRS Gorai Fighting Spirits 넉백',
       type: 'StartsUsing',
       netRegex: { id: '852B', source: 'Gorai the Uncaged', capture: false },
@@ -1236,7 +1235,6 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      // 테스트 안됨
       id: 'AMRS Gorai Malformed Reincarnation',
       type: 'StartsUsing',
       netRegex: { id: '8514', source: 'Gorai the Uncaged', capture: false },
@@ -1278,8 +1276,8 @@ const triggerSet: TriggerSet<Data> = {
       // E15 = Squirrelly Prayer / 빨강 다람쥐
       // E16 = Odder Prayer / 파랑 버섯
       netRegex: { effectId: ['E15', 'E16'], capture: false },
-      delaySeconds: 6,
-      durationSeconds: 10,
+      delaySeconds: 5,
+      durationSeconds: 11,
       suppressSeconds: 99999,
       infoText: (data, _matches, output) => {
         const me = data.prMalformed[data.me];
@@ -1324,7 +1322,6 @@ const triggerSet: TriggerSet<Data> = {
         unknown: Outputs.unknown,
       },
     },
-    /*
     {
       // 테스트 안됨
       id: 'AMRS Moko Kenki Release',
@@ -1332,8 +1329,6 @@ const triggerSet: TriggerSet<Data> = {
       netRegex: { id: '85E0', source: 'Moko the Restless', capture: false },
       response: Responses.aoe('alert'),
     },
-    */
-    /*
     {
       // 테스트 안됨
       id: 'AMRS Moko Lateral Slice',
@@ -1341,8 +1336,6 @@ const triggerSet: TriggerSet<Data> = {
       netRegex: { id: '85E3', source: 'Moko the Restless' },
       response: Responses.tankBuster(),
     },
-    */
-    /*
     {
       // 테스트 안됨
       id: 'AMRS Moko Scarlet Auspice',
@@ -1350,8 +1343,6 @@ const triggerSet: TriggerSet<Data> = {
       netRegex: { id: '85D1', source: 'Moko the Restless', capture: false },
       response: Responses.goSides(),
     },
-    */
-    /*
     {
       // 테스트 안됨
       id: 'AMRS Moko Invocation of Vengeance',
@@ -1361,7 +1352,6 @@ const triggerSet: TriggerSet<Data> = {
         data.prVengefulCollect = []; // 사실 할 필요 없다
       },
     },
-    */
     {
       id: 'AMRS Moko/E Vengeful Collect',
       type: 'GainsEffect',
