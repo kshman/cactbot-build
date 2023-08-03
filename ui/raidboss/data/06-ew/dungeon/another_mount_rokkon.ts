@@ -176,20 +176,26 @@ const stackSpreadResponse = (
     spreadThenMeleeStack: {
       en: '흩어졌다 => 뭉쳐요',
     },
-    spreadThenRoleStack: {
-      en: '흩어졌다 => 롤 뭉쳐요',
+    spreadThenThStack: {
+      en: '흩어졌다 => 탱힐 둘이 뭉쳐요',
+    },
+    spreadThenDpsStack: {
+      en: '흩어졌다 => DPS 둘이 뭉쳐요',
     },
     spreadThenMixedStack: {
-      en: '흩어졌다 => DPS 뭉쳐요',
+      en: '흩어졌다 => DPS랑 뭉쳐요',
     },
     meleeStackThenSpread: {
       en: '뭉쳤다 => 흩어져요',
     },
-    roleStackThenSpread: {
-      en: '롤 뭉쳤다 => 흩어져요',
+    thStackThenSpread: {
+      en: '탱힐 둘이 뭉쳤다 => 흩어져요',
+    },
+    dpsStackThenSpread: {
+      en: 'DPS 둘이 뭉쳤다 => 흩어져요',
     },
     mixedStackThenSpread: {
-      en: 'DPS 뮹쳤다 => 흩어져요',
+      en: 'DPS랑 뮹쳤다 => 흩어져요',
     },
     spreadThenStack: Outputs.spreadThenStack,
     stackThenSpread: Outputs.stackThenSpread,
@@ -219,9 +225,14 @@ const stackSpreadResponse = (
         return { alertText: output.meleeStackThenSpread!(), ...stackInfo };
       return { alertText: output.spreadThenMeleeStack!(), ...stackInfo };
     } else if (stackType === 'role') {
-      if (isStackFirst)
-        return { alertText: output.roleStackThenSpread!(), ...stackInfo };
-      return { alertText: output.spreadThenRoleStack!(), ...stackInfo };
+      if (isStackFirst) {
+        if (data.role !== 'dps')
+          return { alertText: output.thStackThenSpread!(), ...stackInfo };
+        return { alertText: output.dpsStackThenSpread!(), ...stackInfo };
+      }
+      if (data.role !== 'dps')
+        return { alertText: output.spreadThenThStack!(), ...stackInfo };
+      return { alertText: output.spreadThenDpsStack!(), ...stackInfo };
     } else if (stackType === 'mixed') {
       if (isStackFirst)
         return { alertText: output.mixedStackThenSpread!(), ...stackInfo };
@@ -243,9 +254,14 @@ const stackSpreadResponse = (
       return { alertText: output.meleeStackThenSpread!(), ...stackInfo };
     return { alertText: output.spreadThenMeleeStack!(), ...stackInfo };
   } else if (stackType === 'role') {
-    if (isStackFirst)
-      return { alertText: output.roleStackThenSpread!(), ...stackInfo };
-    return { alertText: output.spreadThenRoleStack!(), ...stackInfo };
+    if (isStackFirst) {
+      if (data.role !== 'dps')
+        return { alertText: output.thStackThenSpread!(), ...stackInfo };
+      return { alertText: output.dpsStackThenSpread!(), ...stackInfo };
+    }
+    if (data.role !== 'dps')
+      return { alertText: output.spreadThenThStack!(), ...stackInfo };
+    return { alertText: output.spreadThenDpsStack!(), ...stackInfo };
   } else if (stackType === 'mixed') {
     if (isStackFirst)
       return { alertText: output.mixedStackThenSpread!(), ...stackInfo };
@@ -490,20 +506,26 @@ const triggerSet: TriggerSet<Data> = {
           spreadThenMeleeStack: {
             en: '${inOut} 흩어졌다 => ${outIn} 뭉쳐요',
           },
-          spreadThenRoleStack: {
-            en: '${inOut} 흩어졌다 => ${outIn} 롤 뭉쳐요',
+          spreadThenThStack: {
+            en: '${inOut} 흩어졌다 => ${outIn} 탱힐 둘이 뭉쳐요',
+          },
+          spreadThenDpsStack: {
+            en: '${inOut} 흩어졌다 => ${outIn} DPS 둘이 뭉쳐요',
           },
           spreadThenMixedStack: {
-            en: '${inOut} 흩어졌다 => ${outIn} DPS 뭉쳐요',
+            en: '${inOut} 흩어졌다 => ${outIn} DPS랑 뭉쳐요',
           },
           meleeStackThenSpread: {
             en: '${inOut} 뭉쳣다 => ${outIn} 흩어져요',
           },
-          roleStackThenSpread: {
-            en: '${inOut} 롤 뭉쳤다 => ${outIn} 흩어져요',
+          thStackThenSpread: {
+            en: '${inOut} 탱힐 둘이 뭉쳤다 => ${outIn} 흩어져요',
+          },
+          dpsStackThenSpread: {
+            en: '${inOut} DPS 둘이 뭉쳤다 => ${outIn} 흩어져요',
           },
           mixedStackThenSpread: {
-            en: '${inOut} DPS 뭉쳤다 => ${outIn} 흩어져요',
+            en: '${inOut} DPS랑 뭉쳤다 => ${outIn} 흩어져요',
           },
           spreadThenStack: {
             en: '${inOut} 흩어졌다 => ${outIn} 뭉쳐요',
@@ -515,16 +537,16 @@ const triggerSet: TriggerSet<Data> = {
             en: '(${player1}, ${player2})',
           },
           out1: {
-            en: '밖에서',
+            en: '[밖]', // '밖에서',
           },
           out2: {
-            en: '밖으로',
+            en: '[밖]', // '밖으로',
           },
           in1: {
-            en: '안에서',
+            en: '[안]', // '안에서',
           },
           in2: {
-            en: '안으로',
+            en: '[안]', // '안으로',
           },
         };
 
@@ -538,7 +560,7 @@ const triggerSet: TriggerSet<Data> = {
 
         const stackType = findStackPartners(data.party, stack1.target, stack2.target);
 
-        const isInFirst = matches.id === '8415';
+        const isInFirst = matches.id === '843C';
 
         if (data.options.AutumnStyle) {
           const inOut = isInFirst ? output.in1!() : output.out1!();
@@ -554,9 +576,14 @@ const triggerSet: TriggerSet<Data> = {
               return { alertText: output.meleeStackThenSpread!(args), ...stackInfo };
             return { alertText: output.spreadThenMeleeStack!(args), ...stackInfo };
           } else if (stackType === 'role') {
-            if (isStackFirst)
-              return { alertText: output.roleStackThenSpread!(args), ...stackInfo };
-            return { alertText: output.spreadThenRoleStack!(args), ...stackInfo };
+            if (isStackFirst) {
+              if (data.role !== 'dps')
+                return { alertText: output.thStackThenSpread!(args), ...stackInfo };
+              return { alertText: output.dpsStackThenSpread!(args), ...stackInfo };
+            }
+            if (data.role !== 'dps')
+              return { alertText: output.spreadThenThStack!(args), ...stackInfo };
+            return { alertText: output.spreadThenDpsStack!(args), ...stackInfo };
           } else if (stackType === 'mixed') {
             if (isStackFirst)
               return { alertText: output.mixedStackThenSpread!(args), ...stackInfo };
@@ -582,9 +609,14 @@ const triggerSet: TriggerSet<Data> = {
             return { alertText: output.meleeStackThenSpread!(args), ...stackInfo };
           return { alertText: output.spreadThenMeleeStack!(args), ...stackInfo };
         } else if (stackType === 'role') {
-          if (isStackFirst)
-            return { alertText: output.roleStackThenSpread!(args), ...stackInfo };
-          return { alertText: output.spreadThenRoleStack!(args), ...stackInfo };
+          if (isStackFirst) {
+            if (data.role !== 'dps')
+              return { alertText: output.thStackThenSpread!(args), ...stackInfo };
+            return { alertText: output.dpsStackThenSpread!(args), ...stackInfo };
+          }
+          if (data.role !== 'dps')
+            return { alertText: output.spreadThenThStack!(args), ...stackInfo };
+          return { alertText: output.spreadThenDpsStack!(args), ...stackInfo };
         } else if (stackType === 'mixed') {
           if (isStackFirst)
             return { alertText: output.mixedStackThenSpread!(args), ...stackInfo };
@@ -1446,14 +1478,23 @@ const triggerSet: TriggerSet<Data> = {
       id: 'AMR Moko/T Vengeance Tether',
       type: 'Tether',
       netRegex: { id: '0011', source: 'Moko the Restless' },
-      condition: (data, matches) => matches.target === data.me,
-      alertText: (_data, _matches, output) => output.text!(),
-      run: (data) => data.prHaveTether = true,
-      outputStrings: {
-        text: {
-          en: '내게 줄! 칼 방향 확인!',
-        },
+      response: (data, matches, output) => {
+        // cactbot-builtin-response
+        output.responseOutputStrings = {
+          tether: {
+            en: '내게 줄! 칼 방향 확인!',
+          },
+          notether: {
+            en: '줄없음 (${target})',
+          },
+        };
+
+        if (matches.target === data.me)
+          return { alertText: output.tether!() };
+        const target = data.party.aJobName(matches.target);
+        return { infoText: output.notether!({ target: target }) };
       },
+      run: (data, matches) => data.prHaveTether = matches.target === data.me,
     },
     {
       id: 'AMR Moko Shadow-twin',

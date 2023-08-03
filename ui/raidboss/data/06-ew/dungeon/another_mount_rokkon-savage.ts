@@ -1,6 +1,4 @@
-/*
 import Conditions from '../../../../../resources/conditions';
-*/
 import Outputs from '../../../../../resources/outputs';
 import { callOverlayHandler } from '../../../../../resources/overlay_plugin_api';
 import PartyTracker from '../../../../../resources/party';
@@ -178,20 +176,26 @@ const stackSpreadResponse = (
     spreadThenMeleeStack: {
       en: '흩어졌다 => 뭉쳐요',
     },
-    spreadThenRoleStack: {
-      en: '흩어졌다 => 롤 뭉쳐요',
+    spreadThenThStack: {
+      en: '흩어졌다 => 탱힐 둘이 뭉쳐요',
+    },
+    spreadThenDpsStack: {
+      en: '흩어졌다 => DPS 둘이 뭉쳐요',
     },
     spreadThenMixedStack: {
-      en: '흩어졌다 => DPS 뭉쳐요',
+      en: '흩어졌다 => DPS랑 뭉쳐요',
     },
     meleeStackThenSpread: {
       en: '뭉쳤다 => 흩어져요',
     },
-    roleStackThenSpread: {
-      en: '롤 뭉쳤다 => 흩어져요',
+    thStackThenSpread: {
+      en: '탱힐 둘이 뭉쳤다 => 흩어져요',
+    },
+    dpsStackThenSpread: {
+      en: 'DPS 둘이 뭉쳤다 => 흩어져요',
     },
     mixedStackThenSpread: {
-      en: 'DPS 뮹쳤다 => 흩어져요',
+      en: 'DPS랑 뮹쳤다 => 흩어져요',
     },
     spreadThenStack: Outputs.spreadThenStack,
     stackThenSpread: Outputs.stackThenSpread,
@@ -221,9 +225,14 @@ const stackSpreadResponse = (
         return { alertText: output.meleeStackThenSpread!(), ...stackInfo };
       return { alertText: output.spreadThenMeleeStack!(), ...stackInfo };
     } else if (stackType === 'role') {
-      if (isStackFirst)
-        return { alertText: output.roleStackThenSpread!(), ...stackInfo };
-      return { alertText: output.spreadThenRoleStack!(), ...stackInfo };
+      if (isStackFirst) {
+        if (data.role !== 'dps')
+          return { alertText: output.thStackThenSpread!(), ...stackInfo };
+        return { alertText: output.dpsStackThenSpread!(), ...stackInfo };
+      }
+      if (data.role !== 'dps')
+        return { alertText: output.spreadThenThStack!(), ...stackInfo };
+      return { alertText: output.spreadThenDpsStack!(), ...stackInfo };
     } else if (stackType === 'mixed') {
       if (isStackFirst)
         return { alertText: output.mixedStackThenSpread!(), ...stackInfo };
@@ -245,9 +254,14 @@ const stackSpreadResponse = (
       return { alertText: output.meleeStackThenSpread!(), ...stackInfo };
     return { alertText: output.spreadThenMeleeStack!(), ...stackInfo };
   } else if (stackType === 'role') {
-    if (isStackFirst)
-      return { alertText: output.roleStackThenSpread!(), ...stackInfo };
-    return { alertText: output.spreadThenRoleStack!(), ...stackInfo };
+    if (isStackFirst) {
+      if (data.role !== 'dps')
+        return { alertText: output.thStackThenSpread!(), ...stackInfo };
+      return { alertText: output.dpsStackThenSpread!(), ...stackInfo };
+    }
+    if (data.role !== 'dps')
+      return { alertText: output.spreadThenThStack!(), ...stackInfo };
+    return { alertText: output.spreadThenDpsStack!(), ...stackInfo };
   } else if (stackType === 'mixed') {
     if (isStackFirst)
       return { alertText: output.mixedStackThenSpread!(), ...stackInfo };
@@ -260,7 +274,6 @@ const stackSpreadResponse = (
   return { alertText: output.spreadThenStack!(), ...stackInfo };
 };
 
-/*
 const towerResponse = (
   data: Data,
   output: Output,
@@ -325,7 +338,6 @@ const towerResponse = (
   // Just in case...
   return { alertText: output.tether!({ num: numStr }) };
 };
-*/
 
 const triggerSet: TriggerSet<Data> = {
   id: 'AnotherMountRokkonSavage',
@@ -494,20 +506,26 @@ const triggerSet: TriggerSet<Data> = {
           spreadThenMeleeStack: {
             en: '${inOut} 흩어졌다 => ${outIn} 뭉쳐요',
           },
-          spreadThenRoleStack: {
-            en: '${inOut} 흩어졌다 => ${outIn} 롤 뭉쳐요',
+          spreadThenThStack: {
+            en: '${inOut} 흩어졌다 => ${outIn} 탱힐 둘이 뭉쳐요',
+          },
+          spreadThenDpsStack: {
+            en: '${inOut} 흩어졌다 => ${outIn} DPS 둘이 뭉쳐요',
           },
           spreadThenMixedStack: {
-            en: '${inOut} 흩어졌다 => ${outIn} DPS 뭉쳐요',
+            en: '${inOut} 흩어졌다 => ${outIn} DPS랑 뭉쳐요',
           },
           meleeStackThenSpread: {
             en: '${inOut} 뭉쳣다 => ${outIn} 흩어져요',
           },
-          roleStackThenSpread: {
-            en: '${inOut} 롤 뭉쳤다 => ${outIn} 흩어져요',
+          thStackThenSpread: {
+            en: '${inOut} 탱힐 둘이 뭉쳤다 => ${outIn} 흩어져요',
+          },
+          dpsStackThenSpread: {
+            en: '${inOut} DPS 둘이 뭉쳤다 => ${outIn} 흩어져요',
           },
           mixedStackThenSpread: {
-            en: '${inOut} DPS 뭉쳤다 => ${outIn} 흩어져요',
+            en: '${inOut} DPS랑 뭉쳤다 => ${outIn} 흩어져요',
           },
           spreadThenStack: {
             en: '${inOut} 흩어졌다 => ${outIn} 뭉쳐요',
@@ -519,16 +537,16 @@ const triggerSet: TriggerSet<Data> = {
             en: '(${player1}, ${player2})',
           },
           out1: {
-            en: '밖에서',
+            en: '[밖]', // '밖에서',
           },
           out2: {
-            en: '밖으로',
+            en: '[밖]', // '밖으로',
           },
           in1: {
-            en: '안에서',
+            en: '[안]', // '안에서',
           },
           in2: {
-            en: '안으로',
+            en: '[안]', // '안으로',
           },
         };
 
@@ -558,9 +576,14 @@ const triggerSet: TriggerSet<Data> = {
               return { alertText: output.meleeStackThenSpread!(args), ...stackInfo };
             return { alertText: output.spreadThenMeleeStack!(args), ...stackInfo };
           } else if (stackType === 'role') {
-            if (isStackFirst)
-              return { alertText: output.roleStackThenSpread!(args), ...stackInfo };
-            return { alertText: output.spreadThenRoleStack!(args), ...stackInfo };
+            if (isStackFirst) {
+              if (data.role !== 'dps')
+                return { alertText: output.thStackThenSpread!(args), ...stackInfo };
+              return { alertText: output.dpsStackThenSpread!(args), ...stackInfo };
+            }
+            if (data.role !== 'dps')
+              return { alertText: output.spreadThenThStack!(args), ...stackInfo };
+            return { alertText: output.spreadThenDpsStack!(args), ...stackInfo };
           } else if (stackType === 'mixed') {
             if (isStackFirst)
               return { alertText: output.mixedStackThenSpread!(args), ...stackInfo };
@@ -586,9 +609,14 @@ const triggerSet: TriggerSet<Data> = {
             return { alertText: output.meleeStackThenSpread!(args), ...stackInfo };
           return { alertText: output.spreadThenMeleeStack!(args), ...stackInfo };
         } else if (stackType === 'role') {
-          if (isStackFirst)
-            return { alertText: output.roleStackThenSpread!(args), ...stackInfo };
-          return { alertText: output.spreadThenRoleStack!(args), ...stackInfo };
+          if (isStackFirst) {
+            if (data.role !== 'dps')
+              return { alertText: output.thStackThenSpread!(args), ...stackInfo };
+            return { alertText: output.dpsStackThenSpread!(args), ...stackInfo };
+          }
+          if (data.role !== 'dps')
+            return { alertText: output.spreadThenThStack!(args), ...stackInfo };
+          return { alertText: output.spreadThenDpsStack!(args), ...stackInfo };
         } else if (stackType === 'mixed') {
           if (isStackFirst)
             return { alertText: output.mixedStackThenSpread!(args), ...stackInfo };
@@ -706,7 +734,7 @@ const triggerSet: TriggerSet<Data> = {
     {
       id: 'AMRS Shishu Kotengu Backward Blows',
       type: 'StartsUsing',
-      netRegex: { id: '865C', source: 'Shishu Kotengu', capture: false },
+      netRegex: { id: '866E', source: 'Shishu Kotengu', capture: false },
       durationSeconds: 5.7,
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
@@ -718,7 +746,7 @@ const triggerSet: TriggerSet<Data> = {
     {
       id: 'AMRS Shishu Kotengu Leftward Blows',
       type: 'StartsUsing',
-      netRegex: { id: '865D', source: 'Shishu Kotengu', capture: false },
+      netRegex: { id: '866F', source: 'Shishu Kotengu', capture: false },
       durationSeconds: 5.7,
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
@@ -730,7 +758,7 @@ const triggerSet: TriggerSet<Data> = {
     {
       id: 'AMRS Shishu Kotengu Rightward Blows',
       type: 'StartsUsing',
-      netRegex: { id: '865E', source: 'Shishu Kotengu', capture: false },
+      netRegex: { id: '8670', source: 'Shishu Kotengu', capture: false },
       durationSeconds: 5.7,
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
@@ -742,52 +770,38 @@ const triggerSet: TriggerSet<Data> = {
     {
       id: 'AMRS Shishu Kotengu Wrath of the Tengu',
       type: 'StartsUsing',
-      netRegex: { id: '8660', source: 'Shishu Kotengu', capture: false },
+      netRegex: { id: '8672', source: 'Shishu Kotengu', capture: false },
       response: Responses.bleedAoe('alert'),
     },
     {
       id: 'AMRS Shishu Kotengu Gaze of the Tengu',
       type: 'StartsUsing',
-      netRegex: { id: '8661', source: 'Shishu Kotengu', capture: false },
+      netRegex: { id: '8673', source: 'Shishu Kotengu', capture: false },
       response: Responses.lookAway('alert'),
     },
     {
       id: 'AMRS Shishu Onmitsugashira Juji Shuriken',
       type: 'StartsUsing',
-      netRegex: { id: '8664', source: 'Shishu Onmitsugashira', capture: false },
+      netRegex: { id: '8676', source: 'Shishu Onmitsugashira', capture: false },
       response: Responses.getBehind(),
     },
     {
       id: 'AMRS Shishu Onmitsugashira Issen',
       type: 'StartsUsing',
-      netRegex: { id: '8662', source: 'Shishu Onmitsugashira' },
+      netRegex: { id: '8674', source: 'Shishu Onmitsugashira' },
       response: Responses.tankBuster(),
     },
     // ---------------- Gorai the Uncaged ----------------
-    /*
     {
       id: 'AMRS Gorai Unenlightenment',
       type: 'StartsUsing',
       netRegex: { id: '8534', source: 'Gorai the Uncaged', capture: false },
       response: Responses.bleedAoe('info'),
     },
-    */
-    /*
     {
       id: 'AMRS Gorai Sparks Count',
       type: 'StartsUsing',
       netRegex: { id: '8503', source: 'Gorai the Uncaged', capture: false },
-      run: (data) => {
-        data.sparksCount++;
-        data.sparksCollect = [];
-      },
-    },
-    */
-    {
-      id: 'AMRS Gorai Sparks 카운트 땜빵',
-      type: 'GainsEffect',
-      netRegex: { effectId: ['E17', 'E18'], capture: false },
-      suppressSeconds: 10,
       run: (data) => {
         data.sparksCount++;
         data.sparksCollect = [];
@@ -873,15 +887,12 @@ const triggerSet: TriggerSet<Data> = {
         return stackSpreadResponse(data, output, data.sparksCollect, 'E17', 'E18');
       },
     },
-    /*
     {
       id: 'AMRS Gorai Torching Torment',
       type: 'StartsUsing',
       netRegex: { id: '8532', source: 'Gorai the Uncaged' },
       response: Responses.tankBuster(),
     },
-    */
-    /*
     {
       id: 'AMRS Gorai Impure Purgation First Hit',
       type: 'StartsUsing',
@@ -899,21 +910,17 @@ const triggerSet: TriggerSet<Data> = {
         },
       },
     },
-    */
-    /*
     {
       id: 'AMRS Gorai Impure Purgation Second Hit',
       type: 'StartsUsing',
-      netRegex: { id: '8531', source: 'Gorai the Uncaged', capture: false },
+      netRegex: { id: '8553', source: 'Gorai the Uncaged', capture: false },
       suppressSeconds: 5,
       response: Responses.moveAway(),
     },
-    */
-    /*
     {
       id: 'AMRS Gorai Humble Hammer',
       type: 'StartsUsing',
-      netRegex: { id: '8525', source: 'Gorai the Uncaged' },
+      netRegex: { id: '854B', source: 'Gorai the Uncaged' },
       condition: Conditions.targetIsYou(),
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
@@ -922,13 +929,11 @@ const triggerSet: TriggerSet<Data> = {
         },
       },
     },
-    */
-    /*
     {
       id: 'AMRS Gorai Flintlock',
       type: 'Ability',
       // Trigger this on Humble Hammer damage
-      netRegex: { id: '8525', source: 'Gorai the Uncaged', capture: false },
+      netRegex: { id: '854C', source: 'Gorai the Uncaged', capture: false },
       // This cleaves and should hit the orb and the player.
       suppressSeconds: 5,
       alertText: (_data, _matches, output) => output.text!(),
@@ -943,7 +948,6 @@ const triggerSet: TriggerSet<Data> = {
         },
       },
     },
-    */
     {
       id: 'AMRS Gorai Rousing Reincarnation Collect',
       type: 'GainsEffect',
@@ -971,7 +975,6 @@ const triggerSet: TriggerSet<Data> = {
           data.reincarnationCollect[3].orange = matches.target;
       },
     },
-    /*
     {
       id: 'AMRS Gorai Rousing Reincarnation First Tower',
       type: 'StartsUsing',
@@ -983,26 +986,25 @@ const triggerSet: TriggerSet<Data> = {
         return towerResponse(data, output);
       },
     },
-    */
-    /*
     {
       id: 'AMRS Gorai Rousing Reincarnation Other Towers',
       type: 'Ability',
       // Technically 851F Pointed Purgation protean happens ~0.2s beforehand,
       // but wait on the tower burst to call things out.
-      // 851B = Burst (blue tower)
-      // 8519 = Burst (orange tower)
-      // 851C = Dramatic Burst (missed tower)
-      netRegex: { id: '851B', source: 'Gorai the Uncaged', capture: false },
+      // 8546 = Burst (blue tower)
+      // 8544 = Burst (orange tower)
+      // 8545 = Dramatic Burst (missed tower)
+      // 8548 = Pointed Purgation 줄 처리
+      netRegex: { id: '8546', source: 'Gorai the Uncaged', capture: false },
       durationSeconds: 4,
       response: (data, _matches, output) => {
         // cactbot-builtin-response
         return towerResponse(data, output);
       },
     },
-    */
     /*
     {
+      // 이거 안씀
       id: 'AMRS Gorai Fighting Spirits',
       type: 'StartsUsing',
       netRegex: { id: '852B', source: 'Gorai the Uncaged', capture: false },
@@ -1083,7 +1085,7 @@ const triggerSet: TriggerSet<Data> = {
             en: '장판🡾 구름 없는 곳 => 돌면서 한가운데',
           },
           c2: {
-            en: '첫장판🡾 구름 없는 곳 => 돌면서 한가운데',
+            en: '첫장판🡻 구름 없는 곳 => 돌면서 한가운데',
           },
           c3: {
             en: '한개의 반대편 => 오른쪽 달려',
@@ -1158,7 +1160,6 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     */
-    /*
     {
       id: 'AMRS Gorai Brazen Ballad',
       type: 'StartsUsing',
@@ -1178,8 +1179,6 @@ const triggerSet: TriggerSet<Data> = {
         },
       },
     },
-    */
-    /*
     {
       id: 'AMRS Gorai Thundercall',
       type: 'StartsUsing',
@@ -1191,8 +1190,6 @@ const triggerSet: TriggerSet<Data> = {
         },
       },
     },
-    */
-    /*
     {
       id: 'AMRS Gorai Rousing Reincarnation',
       type: 'StartsUsing',
@@ -1204,8 +1201,6 @@ const triggerSet: TriggerSet<Data> = {
         },
       },
     },
-    */
-    /*
     {
       id: 'AMRS Gorai Fighting Spirits 넉백',
       type: 'StartsUsing',
@@ -1218,21 +1213,6 @@ const triggerSet: TriggerSet<Data> = {
         },
       },
     },
-    */
-    /*
-    {
-      id: 'AMRS Gorai Fighting Spirits 스프린트',
-      type: 'Ability',
-      netRegex: { id: '852B', source: 'Gorai the Uncaged', capture: false },
-      delaySeconds: 2,
-      alertText: (_data, _matches, output) => output.text!(),
-      outputStrings: {
-        text: {
-          en: '스프린트!',
-        },
-      },
-    },
-    */
     {
       id: 'AMRS Gorai 뭉쳐',
       type: 'GainsEffect',
@@ -1286,14 +1266,12 @@ const triggerSet: TriggerSet<Data> = {
         },
       },
     },
-    /*
     {
       id: 'AMRS Gorai Malformed Reincarnation',
       type: 'StartsUsing',
       netRegex: { id: '8514', source: 'Gorai the Uncaged', capture: false },
-      run: (data) => data.prMalformed = {},
+      run: (data) => data.prMalformed = {}, // 굳이 필요할까? 한번만 하는데
     },
-    */
     {
       id: 'AMRS Gorai Malformed Reincarnation Debuff',
       type: 'GainsEffect',
@@ -1330,8 +1308,8 @@ const triggerSet: TriggerSet<Data> = {
       // E15 = Squirrelly Prayer / 빨강 다람쥐
       // E16 = Odder Prayer / 파랑 버섯
       netRegex: { effectId: ['E15', 'E16'], capture: false },
-      delaySeconds: 6,
-      durationSeconds: 10,
+      delaySeconds: 5,
+      durationSeconds: 11,
       suppressSeconds: 99999,
       infoText: (data, _matches, output) => {
         const me = data.prMalformed[data.me];
@@ -1376,31 +1354,24 @@ const triggerSet: TriggerSet<Data> = {
         unknown: Outputs.unknown,
       },
     },
-    /*
     {
       id: 'AMRS Moko Kenki Release',
       type: 'StartsUsing',
-      netRegex: { id: '85E0', source: 'Moko the Restless', capture: false },
+      netRegex: { id: '860C', source: 'Moko the Restless', capture: false },
       response: Responses.aoe('alert'),
     },
-    */
-    /*
     {
       id: 'AMRS Moko Lateral Slice',
       type: 'StartsUsing',
-      netRegex: { id: '85E3', source: 'Moko the Restless' },
+      netRegex: { id: '860D', source: 'Moko the Restless' },
       response: Responses.tankBuster(),
     },
-    */
-    /*
     {
       id: 'AMRS Moko Scarlet Auspice',
       type: 'StartsUsing',
-      netRegex: { id: '85D1', source: 'Moko the Restless', capture: false },
+      netRegex: { id: '8600', source: 'Moko the Restless', capture: false },
       response: Responses.goSides(),
     },
-    */
-    /*
     {
       id: 'AMRS Moko Invocation of Vengeance',
       type: 'StartsUsing',
@@ -1409,7 +1380,6 @@ const triggerSet: TriggerSet<Data> = {
         data.prVengefulCollect = []; // 사실 할 필요 없다
       },
     },
-    */
     {
       id: 'AMRS Moko/E Vengeful Collect',
       type: 'GainsEffect',
@@ -1498,16 +1468,25 @@ const triggerSet: TriggerSet<Data> = {
       id: 'AMRS Moko/T Vengeance Tether',
       type: 'Tether',
       netRegex: { id: '0011', source: 'Moko the Restless' },
-      condition: (data, matches) => matches.target === data.me,
-      alertText: (_data, _matches, output) => output.text!(),
-      run: (data) => data.prHaveTether = true,
-      outputStrings: {
-        text: {
-          en: '내게 줄! 칼 방향 확인!',
-        },
+      response: (data, matches, output) => {
+        // cactbot-builtin-response
+        output.responseOutputStrings = {
+          tether: {
+            en: '내게 줄! 칼 방향 확인!',
+          },
+          notether: {
+            en: '줄없음 (${target})',
+          },
+        };
+
+        if (matches.target === data.me) {
+          data.prHaveTether = true;
+          return { alertText: output.tether!() };
+        }
+        const target = data.party.aJobName(matches.target);
+        return { infoText: output.notether!({ target: target }) };
       },
     },
-    /*
     {
       id: 'AMRS Moko Shadow-twin',
       type: 'StartsUsing',
@@ -1519,12 +1498,11 @@ const triggerSet: TriggerSet<Data> = {
         },
       },
     },
-    */
-    /*
     {
+      // 테스트 안됨
       id: 'AMRS Moko Azure Auspice',
       type: 'StartsUsing',
-      netRegex: { id: '85D4', source: 'Moko the Restless', capture: false },
+      netRegex: { id: '8603', source: 'Moko the Restless', capture: false },
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
@@ -1532,17 +1510,15 @@ const triggerSet: TriggerSet<Data> = {
         },
       },
     },
-    */
-    /*
     {
+      // 테스트 안됨
       id: 'AMRS Moko Boundless Azure',
       type: 'StartsUsing',
       netRegex: { id: '859D', source: 'Moko the Restless', capture: false },
       response: Responses.goSides(),
     },
-    */
-    /*
     {
+      // 테스트 안됨
       id: 'AMRS Moko Soldiers of Death',
       type: 'StartsUsing',
       netRegex: { id: '8593', source: 'Moko the Restless', capture: false },
@@ -1556,20 +1532,16 @@ const triggerSet: TriggerSet<Data> = {
         },
       },
     },
-    */
-    /*
     {
       id: 'AMRS Moko Moonless Night',
       type: 'StartsUsing',
-      netRegex: { id: '85DE', source: 'Moko the Restless', capture: false },
+      netRegex: { id: '860A', source: 'Moko the Restless', capture: false },
       run: (data) => {
         // 뒤에 나올꺼 초기화
         data.prTetherCollect = [];
         delete data.prHaveTether;
       },
     },
-    */
-    /*
     {
       id: 'AMRS Moko Near/Far Edge',
       type: 'StartsUsing',
@@ -1604,10 +1576,9 @@ const triggerSet: TriggerSet<Data> = {
         },
       },
     },
-    */
-    /*
     {
-      id: 'AMRS Moko Ashigaru Kyuhei ',
+      // 테스트 안됨
+      id: 'AMRS Moko Ashigaru Kyuhei',
       type: 'StartsUsing',
       // 85D0 => 87A8 멀리(확실)
       // 85FF => 87AA 가까이 일듯
@@ -1631,7 +1602,6 @@ const triggerSet: TriggerSet<Data> = {
         },
       },
     },
-    */
     {
       id: 'AMRS Moko/T 샤도 줄다리기 리셋',
       type: 'Tether',
@@ -1855,6 +1825,7 @@ const triggerSet: TriggerSet<Data> = {
         'Ashigaru Kyuhei': '足軽弓兵',
         'Gorai The Uncaged': '鉄鼠ゴウライ',
         'Moko the Restless': '怨霊モウコ',
+        'Moko\'s Shadow': 'モウコの幻影',
         'Oni\'s Claw': '鬼腕',
         'Shishio': '獅子王',
       },
