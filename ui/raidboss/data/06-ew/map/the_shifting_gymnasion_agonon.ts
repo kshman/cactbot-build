@@ -556,7 +556,6 @@ const triggerSet: TriggerSet<Data> = {
   timelineReplace: [
     {
       'locale': 'de',
-      'missingTranslations': true,
       'replaceSync': {
         'Gymnasiou Acheloios': 'Gymnasiou-Acheloios',
         'Gymnasiou Leon': 'Gymnasiou-Leon',
