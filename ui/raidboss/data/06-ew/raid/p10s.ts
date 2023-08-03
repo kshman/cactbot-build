@@ -518,7 +518,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         spreadThenStack: {
           en: '(흩어졌다 => 4:4 뭉쳐요/${player1},${player2})',
-          de: '(Verteilen => Rollengruppe (${player1}, ${player2}), für später)', // FIXME
+          de: '(Verteilen => Rollengruppe (${player1}, ${player2}), für später)',
           fr: '(Écartez-vous => Package par rôle (${player1}, ${player2}), pour après)', // FIXME
           ja: '(散会 => 4:4あたまわり (${player1}, ${player2}))', // FIXME
           cn: '(稍后 分散 => 四人分摊 (${player1}, ${player2}))',
@@ -526,7 +526,7 @@ const triggerSet: TriggerSet<Data> = {
         },
         stackThenSpread: {
           en: '(4:4 뭉쳤다/${player1},${player2} => 흩어져요)',
-          de: '(Rollengruppe (${player1}, ${player2}) => Verteilen, für später)', // FIXME
+          de: '(Rollengruppe (${player1}, ${player2}) => Verteilen, für später)',
           fr: '(Package par rôle (${player1}, ${player2}) => Écartez-vous, pour après)', // FIXME
           ja: '(4:4あたまわり (${player1}, ${player2}) => 散会)', // FIXME
           cn: '(稍后 四人分摊 (${player1}, ${player2}) => 分散)',
@@ -560,7 +560,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         spreadThenStack: {
           en: '흩어졌다 => 4:4 뭉쳐요/${player1},${player2}',
-          de: 'Verteilen => Rollengruppe (${player1}, ${player2})', // FIXME
+          de: 'Verteilen => Rollengruppe (${player1}, ${player2})',
           fr: 'Écartez-vous => Package par rôle (${player1}, ${player2})', // FIXME
           ja: '散会 => 4:4あたまわり (${player1}, ${player2})', // FIXME
           cn: '分散 => 四人分摊 (${player1}, ${player2})',
@@ -622,7 +622,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         stackThenSpread: {
           en: '4:4 뭉쳤다/${player1},${player2} => 흩어져요',
-          de: 'Rollengruppe (${player1}, ${player2}) => Verteilen', // FIXME
+          de: 'Rollengruppe (${player1}, ${player2}) => Verteilen',
           fr: 'Package par rôle (${player1}, ${player2}) => Écartez-vous', // FIXME
           ja: '4:4あたまわり (${player1}, ${player2}) => 散会', // FIXME
           cn: '四人分摊 (${player1}, ${player2}) => 分散',
@@ -668,7 +668,7 @@ const triggerSet: TriggerSet<Data> = {
         },
         stack: {
           en: '4:4 뭉쳐요/${player1},${player2}',
-          de: 'Rollengruppe (${player1}, ${player2})', // FIXME
+          de: 'Rollengruppe (${player1}, ${player2})',
           fr: 'Package par rôle (${player1}, ${player2})', // FIXME
           ja: '4:4あたまわり (${player1}, ${player2})', // FIXME
           cn: '四人分摊 (${player1}, ${player2})',

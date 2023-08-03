@@ -126,6 +126,7 @@ export type BaseTrigger<
 
 type BaseNetTrigger<Data extends RaidbossData, Type extends TriggerTypes> = {
   id: string;
+  comment?: Partial<LocaleText>;
   type: Type;
   netRegex: NetParams[Type];
   disabled?: boolean;

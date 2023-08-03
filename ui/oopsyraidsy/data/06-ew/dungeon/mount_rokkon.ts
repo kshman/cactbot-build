@@ -45,6 +45,8 @@ const triggerSet: OopsyTriggerSet<Data> = {
 
     // Yozakura the Fleeting (left and right paths)
     'Rokkon Yozakura Shadowflight': '8380', // backstab line from clone
+
+    // Yozakura the Fleeting (left path)
     'Rokkon Yozakura Mudrain': '838A', // initial circles on water path
     'Rokkon Yozakura Mud Pie': '838E', // line aoes from mud circles
     'Rokkon Yozakura Icebloom': '838C', // chasing circles in route 1 during Mud Rain
