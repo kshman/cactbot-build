@@ -319,7 +319,7 @@ export default {
     ko: '보스 뒤로',
   },
   goFrontOrSides: {
-    en: '엉댕이를 피해 앞이나 옆으로',
+    en: '엉댕이 쪽은 피해요',
     de: 'Gehe nach Vorne/ zu den Seiten',
     fr: 'Allez Devant / Côtés',
     ja: '前／横へ',
