@@ -1263,7 +1263,6 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      // 테스트 안됨
       id: 'AMRS Moko Azure Auspice',
       type: 'StartsUsing',
       netRegex: { id: '8603', source: 'Moko the Restless', capture: false },
@@ -1275,7 +1274,6 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      // 테스트 안됨
       id: 'AMRS Moko Boundless Azure',
       type: 'StartsUsing',
       netRegex: { id: '859D', source: 'Moko the Restless', capture: false },
@@ -1635,6 +1633,7 @@ const triggerSet: TriggerSet<Data> = {
       locale: 'ja',
       missingTranslations: true,
       replaceSync: {
+        'Ancient Katana': '古刀',
         'Ashigaru Kyuhei': '足軽弓兵',
         'Devilish Thrall': '惑わされた屍鬼',
         'Gorai The Uncaged': '鉄鼠ゴウライ',
@@ -1649,7 +1648,7 @@ const triggerSet: TriggerSet<Data> = {
         'Shishu Yuki': 'シシュウ・ユウキ',
       },
       replaceText: {
-        // 'Accursed Edge': '',
+        'Accursed Edge': 'なぎ払い',
         'Azure Auspice': '青帝剣気',
         'Boundless Azure': '青帝空閃刃',
         'Boundless Scarlet': '赤帝空閃刃',
@@ -1665,7 +1664,7 @@ const triggerSet: TriggerSet<Data> = {
         'Fighting Spirits': '般若湯',
         'Fire Spread': '放火',
         'Flame and Sulphur': '岩火招来',
-        'Fleeting Iai-giri': '俊足居合い斬り',
+        'Fleeting Iai-giri': '俊足居合斬り',
         'Flickering Flame': '怪火招来',
         // 'Flintlock': '',
         // 'Great Ball of Fire/Greater Ball of Fire': '',
@@ -1674,7 +1673,7 @@ const triggerSet: TriggerSet<Data> = {
         'Haunting Cry': '不気味な鳴声',
         'Humble Hammer': '打ち出の小槌',
         'Impure Purgation': '炎流',
-        // 'Invocation of Vengeance': '',
+        'Invocation of Vengeance': '怨呪の祈請',
         'Iron Rain': '矢の雨',
         'Kenki Release': '剣気解放',
         'Lateral Slice': '胴薙ぎ',
@@ -1706,8 +1705,8 @@ const triggerSet: TriggerSet<Data> = {
         // 'Unnatural Ailment/Unnatural Force': '',
         'Unnatural Wail': '不気味な呪声',
         'Upwell': '水流',
-        'Vengeful Flame': '怨呪の祈請',
-        'Vengeful Pyre': '怨呪の祈請',
+        // 'Vengeful Flame': '',
+        // 'Vengeful Pyre': '',
         // 'Vengeful Souls': '',
         // 'Vermilion Aura': '',
         'Vortex of the Thunder Eye/Eye of the Thunder Vortex': '渦雷の連舞：輪円/円輪',
