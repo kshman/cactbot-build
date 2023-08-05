@@ -310,7 +310,8 @@ const triggerSet: TriggerSet<Data> = {
         };
 
         if (matches.target === data.me)
-          return { alertText: output.chargeOn!({ player: data.party.aJobName(matches.target) }) };
+          return { alarmText: output.chargeOnYou!() };
+        return { alertText: output.chargeOn!({ player: data.party.aJobName(matches.target) }) };
       },
     },
     {
