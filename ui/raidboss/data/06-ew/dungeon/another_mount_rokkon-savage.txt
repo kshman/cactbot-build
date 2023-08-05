@@ -214,5 +214,3 @@ hideall "--sync--"
 3291.6 "Iron Rain" #sync / 1[56]:[^:]*:Ashigaru Kyuhei:87A7:/
 3295.7 "Kenki Release" sync / 1[56]:[^:]*:Moko's Shadow:85CE:/
 # 이 담엔 모르겟슴
-
-# 스칼렛 85D1, 애져 85D4 -> +3

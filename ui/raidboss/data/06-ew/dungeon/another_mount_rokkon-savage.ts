@@ -1263,7 +1263,6 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      // 테스트 안됨
       id: 'AMRS Moko Azure Auspice',
       type: 'StartsUsing',
       netRegex: { id: '8603', source: 'Moko the Restless', capture: false },
@@ -1275,7 +1274,6 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      // 테스트 안됨
       id: 'AMRS Moko Boundless Azure',
       type: 'StartsUsing',
       netRegex: { id: '859D', source: 'Moko the Restless', capture: false },
