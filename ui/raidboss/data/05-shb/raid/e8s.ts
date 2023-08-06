@@ -158,7 +158,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '반대쪽으로',
+          en: '반대편으로',
           de: 'Seiten wechseln',
           fr: 'Changez de côté',
           ja: '反対側へ',
@@ -235,7 +235,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         northSouth: {
-          en: '남/북으로',
+          en: '남북으로',
           de: 'Norden / Süden',
           fr: 'Nord / Sud',
           ja: '南 / 北',
@@ -243,7 +243,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '남 / 북',
         },
         eastWest: {
-          en: '동/서로',
+          en: '동서로',
           de: 'Osten / Westen',
           fr: 'Est / Ouest',
           ja: '東 / 西',
@@ -478,7 +478,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (data, _matches, output) => output.text!({ num: data.wyrmclawNumber }),
       outputStrings: {
         text: {
-          en: '🔴 #${num}번',
+          en: '🔴#${num}번',
           de: 'Rot #${num}',
           fr: 'Rouge #${num}',
           ja: '赤 #${num}',
@@ -513,7 +513,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (data, _matches, output) => output.text!({ num: data.wyrmfangNumber }),
       outputStrings: {
         text: {
-          en: '🔵 #${num}번',
+          en: '🔵#${num}번',
           de: 'Blau #${num}',
           fr: 'Bleu #${num}',
           ja: '青 #${num}',
