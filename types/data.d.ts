@@ -51,6 +51,7 @@ export interface OopsyData {
   role: Role;
   party: PartyTracker;
   inCombat: boolean;
+  IsImmune: (x?: string) => boolean;
   ShortName: (x?: string) => string;
   IsPlayerId: (x?: string) => boolean;
   DamageFromMatches: (matches: NetMatches['Ability']) => number;
