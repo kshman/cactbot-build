@@ -70,6 +70,9 @@ export interface Data extends RaidbossData {
   prKasumiGiri: KasumiGiriInfo[];
   prShadowTether: number;
   prShadowGiri: ShadowGiriInfo[];
+  readonly triggerSetConfig: {
+    prGoraiTower: 'hamukatsu' | 'poshiume';
+  };
   //
   combatantData: PluginCombatantState[];
   wailingCollect: NetMatches['GainsEffect'][];
@@ -256,6 +259,22 @@ const towerResponse = (
 const triggerSet: TriggerSet<Data> = {
   id: 'AnotherMountRokkonSavage',
   zoneId: ZoneId.AnotherMountRokkonSavage,
+  config: [
+    {
+      id: 'prGoraiTower',
+      name: {
+        en: '고라이 탑 설치',
+      },
+      type: 'select',
+      options: {
+        en: {
+          '하므까스': 'hamukatsu',
+          '포시우메': 'poshiume',
+        },
+      },
+      default: 'poshiume',
+    },
+  ],
   timelineFile: 'another_mount_rokkon-savage.txt',
   initData: () => {
     return {
@@ -1081,29 +1100,50 @@ const triggerSet: TriggerSet<Data> = {
       // E15 = Squirrelly Prayer / 빨강 다람쥐
       // E16 = Odder Prayer / 파랑 버섯
       netRegex: { effectId: ['E15', 'E16'], capture: false },
-      delaySeconds: 5,
-      durationSeconds: 11,
+      delaySeconds: 3,
+      durationSeconds: (data) => {
+        if (data.triggerSetConfig.prGoraiTower === 'hamukatsu')
+          return 13;
+        if (data.triggerSetConfig.prGoraiTower === 'poshiume')
+          return 17;
+        return 8;
+      },
       suppressSeconds: 99999,
       infoText: (data, _matches, output) => {
         const me = data.prMalformed[data.me];
         if (me === undefined || me.d1 === undefined || me.d3 === undefined)
           return;
         const issame = me.d1 === me.d3; // 세개가 같은거임
-        if (issame) {
+        if (data.triggerSetConfig.prGoraiTower === 'hamukatsu') {
+          // 하므까스
+          if (issame) {
+            if (me.d1)
+              return output.sameRight!();
+            return output.sameLeft!();
+          }
+          const hassame = Object.entries(data.prMalformed)
+            .find((x) => x[1].d1 === x[1].d3) !== undefined;
+          if (hassame) {
+            if (me.d1)
+              return output.southRight!();
+            return output.southLeft!();
+          }
           if (me.d1)
-            return output.sameRight!();
-          return output.sameLeft!();
+            return output.right!();
+          return output.left!();
+        } else if (data.triggerSetConfig.prGoraiTower === 'poshiume') {
+          // 포시우메
+          const isred = me.d1;
+          if (issame)
+            return isred ? output.sameBlue!() : output.sameRed!();
+          const hassame = Object.entries(data.prMalformed)
+            .find((x) => x[1].d1 === x[1].d3) !== undefined;
+          if (hassame)
+            return isred ? output.diffBlue!() : output.diffRed!();
+          return isred ? output.blue!() : output.red!();
         }
-        const hassame = Object.entries(data.prMalformed)
-          .find((x) => x[1].d1 === x[1].d3) !== undefined;
-        if (hassame) {
-          if (me.d1)
-            return output.southRight!();
-          return output.southLeft!();
-        }
-        if (me.d1)
-          return output.right!();
-        return output.left!();
+        // 멍미
+        return '오노';
       },
       outputStrings: {
         left: {
@@ -1123,6 +1163,24 @@ const triggerSet: TriggerSet<Data> = {
         },
         southRight: {
           en: '[남] 다른색🟥: 오른쪽으로',
+        },
+        blue: {
+          en: '🟦측으로 => 한칸 건너 🔴으로',
+        },
+        red: {
+          en: '🟥측으로 => 한칸 건너 🔵으로',
+        },
+        diffBlue: {
+          en: '🟦측 오른쪽 => 한칸 건너 🔴으로',
+        },
+        diffRed: {
+          en: '🟥측 오른쪽 => 한칸 건너 🔵으로',
+        },
+        sameBlue: {
+          en: '🟦측 왼쪽 => 한칸 건너 🔴으로',
+        },
+        sameRed: {
+          en: '🟥측 왼쪽 => 한칸 건너 🔵으로',
         },
         unknown: Outputs.unknown,
       },
