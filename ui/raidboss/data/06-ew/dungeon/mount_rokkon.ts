@@ -159,21 +159,25 @@ const triggerSet: TriggerSet<Data> = {
         inAndCards: {
           en: '안에서 + ➕회피',
           de: 'Rein + Kardinal',
+          cn: '内 + 十字',
           ko: '안 + 십자방향',
         },
         outAndCards: {
           en: '밖으로 + ➕회피',
           de: 'Raus + Kardinal',
+          cn: '外 + 十字',
           ko: '밖 + 십자방향',
         },
         inAndIntercards: {
           en: '안에서 + ❌회피',
           de: 'Rein + Interkardinal',
+          cn: '内 + 对角',
           ko: '안 + 대각선',
         },
         outAndIntercards: {
           en: '밖으로 + ❌회피',
           de: 'Raus + Interkardinal',
+          cn: '外 + 对角',
           ko: '밖 + 대각선',
         },
       },
@@ -205,10 +209,12 @@ const triggerSet: TriggerSet<Data> = {
         lookWest: {
           en: '서쪽 봐요',
           de: 'Schau nach Westen',
+          cn: '看西侧',
         },
         lookEast: {
           en: '동쪽 봐요',
           de: 'Schau nach Osten',
+          cn: '看东侧',
         },
       },
     },
@@ -250,18 +256,22 @@ const triggerSet: TriggerSet<Data> = {
         outsideNorth: {
           en: '[북] 바깥',
           de: 'Nördlich außen',
+          cn: '外北',
         },
         insideNorth: {
           en: '[북] 안쪽',
           de: 'Nördlich innen',
+          cn: '内北',
         },
         insideSouth: {
           en: '[남] 안쪽',
           de: 'Südlich innen',
+          cn: '内南',
         },
         outsideSouth: {
           en: '[남] 바깥',
           de: 'Südlich außen',
+          cn: '外南',
         },
       },
     },
@@ -275,6 +285,7 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: '장판 4개가 따라와요',
           de: '4x verfolgende AoE auf DIR',
+          cn: '四连 AOE 点名',
         },
       },
     },
@@ -362,26 +373,31 @@ const triggerSet: TriggerSet<Data> = {
         through: {
           en: '지나쳐 이동',
           de: 'Renn durch',
+          cn: '穿',
           ko: '가로지르기',
         },
         stay: {
           en: '그대로',
           de: 'Stehen bleiben',
+          cn: '停',
           ko: '그대로',
         },
         rotateLeft: {
           en: '왼쪽으로 회전',
           de: 'Links rotieren',
+          cn: '逆时针旋转',
           ko: '왼쪽으로',
         },
         rotateRight: {
           en: '오른쪽으로 회전',
           de: 'Rechts rotieren',
+          cn: '顺时针旋转',
           ko: '오른쪽으로',
         },
         combo: {
           en: '${dir1} => ${dir2}',
           de: '${dir1} => ${dir2}',
+          cn: '${dir1} => ${dir2}',
           ko: '${dir1} => ${dir2}',
         },
       },
@@ -403,6 +419,7 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: '(${dir} 먼저)',
           de: '(${dir} Zuerst)',
+          cn: '(首先${dir})',
           ko: '(${dir} 먼저)',
         },
         back: Outputs.back,
@@ -412,6 +429,7 @@ const triggerSet: TriggerSet<Data> = {
         combo: {
           en: '${dir1} => ${dir2}',
           de: '${dir1} => ${dir2}',
+          cn: '${dir1} => ${dir2}',
           ko: '${dir1} => ${dir2}',
         },
       },
@@ -468,14 +486,17 @@ const triggerSet: TriggerSet<Data> = {
         lines: {
           en: '넓어지는 줄 피해요',
           de: 'Weiche den expandierenden Linien aus',
+          cn: '远离扩张的线',
         },
         rocks: {
           en: '넓어지는 돌맹이 피해요',
           de: 'Weiche den expandierenden Steinen aus',
+          cn: '远离变大的石头',
         },
         both: {
           en: '넓어지는 줄/돎맹이 피해요',
           de: 'Weiche den expandierenden Steinen/Linien aus',
+          cn: '远离扩张的线 + 石头',
         },
       },
     },
@@ -498,10 +519,12 @@ const triggerSet: TriggerSet<Data> = {
         rocks: {
           en: '돌 위로',
           de: 'Steh auf einem Stein',
+          cn: '站在石头上',
         },
         both: {
           en: '돌+줄 위로',
           de: 'Steh auf einem Stein + Linie',
+          cn: '站在石头+线上',
         },
       },
     },
@@ -514,6 +537,7 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: '모든 타워에 들어가요',
           de: 'Steh in allen Türmen',
+          cn: '站在塔里',
         },
       },
     },
@@ -539,6 +563,7 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: '동글동글 사이 + 바깥',
           de: 'Zwischen Ringen + äußere Linie',
+          cn: '内环 + 外线',
         },
       },
     },
