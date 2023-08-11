@@ -206,11 +206,17 @@ hideall "--sync--"
 3238.5 "Triple Kasumi-giri" duration 6 #sync / 1[56]:[^:]*:Moko the Restless:85B1:/
 3251.5 "Kenki Release" sync / 1[56]:[^:]*:Moko the Restless:860C:/
 
-3263.8 "Soldiers of Death" #sync / 1[56]:[^:]*:Moko the Restless:8593:/
+3263.8 "Soldiers of Death" sync / 1[56]:[^:]*:Moko the Restless:8593:/
 3269.9 "Shadow-twin" sync / 1[56]:[^:]*:Moko the Restless:85C7:/
-3285.1 "Double Iai-giri" sync / 1[56]:[^:]*:Moko's Shadow:85C8:/
-3285.6 "Iron Rain" #sync / 1[56]:[^:]*:Ashigaru Kyuhei:85CF:/
-3287.6 "Shadow Kasumi-giri" #duration 3 sync / 1[56]:[^:]*:Moko's Shadow:85CA:/
-3291.6 "Iron Rain" #sync / 1[56]:[^:]*:Ashigaru Kyuhei:87A7:/
-3295.7 "Kenki Release" sync / 1[56]:[^:]*:Moko's Shadow:85CE:/
-# 이 담엔 모르겟슴
+3285.2 "Double Iai-giri" sync / 1[56]:[^:]*:Moko's Shadow:85C8:/
+3285.7 "Iron Storm" sync / 1[56]:[^:]*:Ashigaru Kyuhei:(85D0|85FF):/
+3287.6 "--sync--" sync / 1[56]:[^:]*:Moko the Restless:8507:/
+3287.9 "Shadow Kasumi-giri" #sync / 1[56]:[^:]*:Moko's Shadow:85F9:/
+3291.9 "Iron Storm" sync / 1[56]:[^:]*:Ashigaru Kyuhei:(87A8|87AA):/
+3292.0 "--sync--" sync / 1[56]:[^:]*:Moko the Restless:85AF:/
+3305.3 "Triple Kasumi-giri" duration 6 #sync / 1[56]:[^:]*:Moko the Restless:85F0:/
+3318.3 "Kenki Release" sync / 1[56]:[^:]*:Moko the Restless:860C:/
+
+3328.7 "Lateral Slice" sync / 1[56]:[^:]*:Moko the Restless:860D:/
+3336.8 "Kenki Release" sync / 1[56]:[^:]*:Moko the Restless:860C:/
+3352.0 "Kenki Release (ENRAGE)" sync / 1[56]:[^:]*:Moko the Restless:85E1:/

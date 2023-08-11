@@ -1338,7 +1338,6 @@ const triggerSet: TriggerSet<Data> = {
       response: Responses.goSides(),
     },
     {
-      // 테스트 안됨
       id: 'AMRS Moko Soldiers of Death',
       type: 'StartsUsing',
       netRegex: { id: '8593', source: 'Moko the Restless', capture: false },
@@ -1397,7 +1396,6 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      // 테스트 안됨
       id: 'AMRS Moko Ashigaru Kyuhei',
       type: 'StartsUsing',
       // 85D0 => 87A8 멀리(확실)
@@ -1407,8 +1405,8 @@ const triggerSet: TriggerSet<Data> = {
         if (data.role === 'dps')
           return output.oppo!();
         if (matches.id === '85D0')
-          return output.far!();
-        return output.near!();
+          return output.near!();
+        return output.far!();
       },
       outputStrings: {
         near: {
