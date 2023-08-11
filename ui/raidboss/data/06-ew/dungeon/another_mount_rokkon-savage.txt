@@ -168,11 +168,13 @@ hideall "--sync--"
 3000.0 "--sync--" sync / 00:0839::The Trial Of Responsibility will be sealed off/ window 10000,1
 3011.0 "--sync--" sync / 1[56]:[^:]*:Moko the Restless:860C:/ window 10000,1
 3016.3 "Kenki Release" sync / 1[56]:[^:]*:Moko the Restless:860C:/
-3035.4 "Triple Kasumi-giri" duration 6 #sync / 1[56]:[^:]*:Moko the Restless:85BC:/
-3055.4 "Triple Kasumi-giri" duration 6 #sync / 1[56]:[^:]*:Moko the Restless:85B0:/
+3035.4 "Triple Kasumi-giri #1" duration 6
+3055.4 "Triple Kasumi-giri #2" duration 6
 
+3065.4 "--sync--" sync / 1[56]:[^:]*:Moko the Restless:8507:/ window 10,10
 3070.6 "Lateral Slice" sync / 1[56]:[^:]*:Moko the Restless:860D:/
 3082.8 "Scarlet Auspice" sync / 1[56]:[^:]*:Moko the Restless:8600:/
+3084.2 "--middle--" sync / 1[56]:[^:]*:Moko the Restless:8507:/
 3088.4 "Boundless Scarlet" sync / 1[56]:[^:]*:Moko the Restless:(8599|8601):/
 3095.5 "Invocation of Vengeance" sync / 1[56]:[^:]*:Moko the Restless:85DB:/ # 뭉쳐,흩여져 붙임
 3107.6 "Fleeting Iai-giri" sync / 1[56]:[^:]*:Moko the Restless:(85C2|85C6):/
@@ -182,41 +184,40 @@ hideall "--sync--"
 3119.4 "Vengeful Pyre" #sync / 1[56]:[^:]*:Moko the Restless:85DD:/
 3127.5 "Kenki Release" sync / 1[56]:[^:]*:Moko the Restless:860C:/
 
-3138.0 "--middle--" sync / 1[56]:[^:]*:Moko the Restless:85C7:/
+3138.0 "--middle--" sync / 1[56]:[^:]*:Moko the Restless:85AF:/ window 10,10
 3139.1 "Shadow-twin" sync / 1[56]:[^:]*:Moko the Restless:85C7:/
 3145.2 "Moonless Night" sync / 1[56]:[^:]*:Moko the Restless:860A:/
-3154.3 "Double Iai-giri" sync / 1[56]:[^:]*:Moko's Shadow:85C8:/
+3154.3 "Double Iai-giri #1" sync / 1[56]:[^:]*:Moko's Shadow:85C8:/
 3154.3 "Far/Near Edge" sync / 1[56]:[^:]*:Moko the Restless:(85D8|85D9):/
 3154.3 "Accursed Edge" sync / 1[56]:[^:]*:Ancient Katana:8607:/
-3157.0 "Shadow Kasumi-giri" #sync / 1[56]:[^:]*:Moko's Shadow:85CA:/
-3157.0 "Shadow Kasumi-giri" #sync / 1[56]:[^:]*:Moko's Shadow:85CA:/
-3160.0 "Shadow Kasumi-giri" #sync / 1[56]:[^:]*:Moko's Shadow:86C4:/
+3157.0 "Shadow Kasumi-giri #1"
 3165.4 "Moonless Night" sync / 1[56]:[^:]*:Moko the Restless:860A:/
 3174.5 "Far/Near Edge" sync / 1[56]:[^:]*:Moko the Restless:(85D8|85D9):/
 3174.5 "Accursed Edge" sync / 1[56]:[^:]*:Ancient Katana:8607:/
-3174.5 "Double Iai-giri" sync / 1[56]:[^:]*:Moko's Shadow:85C8:/
-3176.8 "Shadow Kasumi-giri" #sync / 1[56]:[^:]*:Moko's Shadow:85CA:/
-3179.8 "Shadow Kasumi-giri" #sync / 1[56]:[^:]*:Moko's Shadow:86C6:/
-3179.8 "Shadow Kasumi-giri" #sync / 1[56]:[^:]*:Moko's Shadow:86C4:/
+3174.5 "Double Iai-giri #2" sync / 1[56]:[^:]*:Moko's Shadow:85C8:/
+3176.8 "Shadow Kasumi-giri #2"
 3187.4 "Kenki Release" sync / 1[56]:[^:]*:Moko the Restless:860C:/
 
+3195.6 "--middle--" sync / 1[56]:[^:]*:Moko the Restless:85AF:/ window 10,10
 3201.7 "Azure Auspice" sync / 1[56]:[^:]*:Moko the Restless:8603:/
 3207.3 "Boundless Azure" #sync / 1[56]:[^:]*:Moko the Restless:859D:/
-3219.0 "Upwell" duration 18 #sync / 1[56]:[^:]*:Moko the Restless:(85D6|85D6):/
-3238.5 "Triple Kasumi-giri" duration 6 #sync / 1[56]:[^:]*:Moko the Restless:85B1:/
+3219.0 "Upwell" duration 18 #sync / 1[56]:[^:]*:Moko the Restless:(8605|8606):/
+3238.5 "Triple Kasumi-giri #3" duration 6
 3251.5 "Kenki Release" sync / 1[56]:[^:]*:Moko the Restless:860C:/
 
+3260.6 "--middle--" sync / 1[56]:[^:]*:Moko the Restless:8507:/ window 10,10
 3263.8 "Soldiers of Death" sync / 1[56]:[^:]*:Moko the Restless:8593:/
 3269.9 "Shadow-twin" sync / 1[56]:[^:]*:Moko the Restless:85C7:/
-3285.2 "Double Iai-giri" sync / 1[56]:[^:]*:Moko's Shadow:85C8:/
+3285.2 "Double Iai-giri #3" sync / 1[56]:[^:]*:Moko's Shadow:85C8:/
 3285.7 "Iron Storm" sync / 1[56]:[^:]*:Ashigaru Kyuhei:(85D0|85FF):/
-3287.6 "--sync--" sync / 1[56]:[^:]*:Moko the Restless:8507:/
-3287.9 "Shadow Kasumi-giri" #sync / 1[56]:[^:]*:Moko's Shadow:85F9:/
+3287.6 "--sync--" sync / 1[56]:[^:]*:Moko the Restless:8507:/ window 10,10
+3287.9 "Shadow Kasumi-giri #3"
 3291.9 "Iron Storm" sync / 1[56]:[^:]*:Ashigaru Kyuhei:(87A8|87AA):/
-3292.0 "--sync--" sync / 1[56]:[^:]*:Moko the Restless:85AF:/
-3305.3 "Triple Kasumi-giri" duration 6 #sync / 1[56]:[^:]*:Moko the Restless:85F0:/
+3292.0 "--middle--" sync / 1[56]:[^:]*:Moko the Restless:85AF:/ window 10,10
+3305.3 "Triple Kasumi-giri #4" duration 6
 3318.3 "Kenki Release" sync / 1[56]:[^:]*:Moko the Restless:860C:/
 
+3321.5 "--sync--" sync / 1[56]:[^:]*:Moko the Restless:8720:/ window 10,10
 3328.7 "Lateral Slice" sync / 1[56]:[^:]*:Moko the Restless:860D:/
 3336.8 "Kenki Release" sync / 1[56]:[^:]*:Moko the Restless:860C:/
 3352.0 "Kenki Release (ENRAGE)" sync / 1[56]:[^:]*:Moko the Restless:85E1:/
