@@ -1193,6 +1193,18 @@ const triggerSet: TriggerSet<Data> = {
       response: Responses.aoe('alert'),
     },
     {
+      id: 'AMRS Moko Kenki Release Enrage',
+      type: 'StartsUsing',
+      netRegex: { id: '85E1', source: 'Moko the Restless', capture: false },
+      durationSeconds: 9.7,
+      alertText: (_data, _matches, output) => output.text!(),
+      outputStrings: {
+        text: {
+          en: '전멸 공격!',
+        },
+      },
+    },
+    {
       id: 'AMRS Moko Lateral Slice',
       type: 'StartsUsing',
       netRegex: { id: '860D', source: 'Moko the Restless' },
