@@ -8,6 +8,9 @@ import { TriggerSet } from '../../../../../types/trigger';
 export type ConfigIds = 'uptimeKnockbackStrat';
 
 export interface Data extends RaidbossData {
+  prTank?: string;
+  prMyRush?: number;
+  //
   triggerSetConfig: { [key in ConfigIds]: ConfigValue };
   firstFrost?: string;
   rushCount?: number;
@@ -85,6 +88,8 @@ const triggerSet: TriggerSet<Data> = {
       beforeSeconds: 5,
       infoText: (data, _matches, output) => {
         data.rushCount = (data.rushCount ?? 0) + 1;
+        if (data.rushCount === data.prMyRush)
+          return output.my!({ num: data.rushCount });
         return output.text!({ num: data.rushCount });
       },
       outputStrings: {
@@ -96,10 +101,20 @@ const triggerSet: TriggerSet<Data> = {
           cn: '和${num}连线',
           ko: '선: ${num}',
         },
+        my: {
+          en: '줄 채욧! ${num}번',
+        },
       },
     },
   ],
   triggers: [
+    {
+      id: 'E8S 자동공격',
+      type: 'Ability',
+      netRegex: { id: '4D59', source: 'Shiva' },
+      suppressSeconds: 5,
+      run: (data, matches) => data.prTank = matches.target,
+    },
     {
       id: 'E8S Absolute Zero',
       type: 'StartsUsing',
