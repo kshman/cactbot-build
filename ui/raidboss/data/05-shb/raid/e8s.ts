@@ -9,7 +9,7 @@ export type ConfigIds = 'uptimeKnockbackStrat';
 
 type WyrmInfo = {
   name: string;
-  time: number;
+  num: number;
 };
 
 export interface Data extends RaidbossData {
@@ -529,9 +529,9 @@ const triggerSet: TriggerSet<Data> = {
       netRegex: { effectId: '8D2' },
       condition: (data) => data.options.AutumnStyle && data.wyrmsLament !== 1,
       run: (data, matches) => {
-        const duration = Math.ceil(parseFloat(matches.duration));
+        const num = parseFloat(matches.duration) < 30 ? 1 : 2; // 22초 38초
         data.prWyrmsClaw ??= [];
-        data.prWyrmsClaw.push({ name: matches.target, time: duration });
+        data.prWyrmsClaw.push({ name: matches.target, num: num });
       },
     },
     {
@@ -540,9 +540,9 @@ const triggerSet: TriggerSet<Data> = {
       netRegex: { effectId: '8D3' },
       condition: (data) => data.options.AutumnStyle && data.wyrmsLament !== 1,
       run: (data, matches) => {
-        const duration = Math.ceil(parseFloat(matches.duration));
+        const num = parseFloat(matches.duration) < 30 ? 1 : 2; // 28초 44초
         data.prWyrmsFang ??= [];
-        data.prWyrmsFang.push({ name: matches.target, time: duration });
+        data.prWyrmsFang.push({ name: matches.target, num: num });
       },
     },
     {
@@ -554,11 +554,10 @@ const triggerSet: TriggerSet<Data> = {
       delaySeconds: 0.5,
       durationSeconds: (_data, matches) => parseFloat(matches.duration),
       alertText: (data, matches, output) => {
-        const time = Math.ceil(parseFloat(matches.duration));
-        const num = time < 30 ? 1 : 2; // 22초 38초
+        const num = parseFloat(matches.duration) < 30 ? 1 : 2; // 22초 38초
         if (data.prWyrmsClaw === undefined)
           return output.onlyme!({ num: num });
-        const [partner] = data.prWyrmsClaw.filter((x) => x.time === time && x.name !== data.me);
+        const [partner] = data.prWyrmsClaw.filter((x) => x.num === num && x.name !== data.me);
         if (partner === undefined)
           return output.onlyme!({ num: num });
         return output.text!({ num: num, partner: data.ShortName(partner.name) });
@@ -581,11 +580,10 @@ const triggerSet: TriggerSet<Data> = {
       delaySeconds: 0.5,
       durationSeconds: (_data, matches) => parseFloat(matches.duration),
       alertText: (data, matches, output) => {
-        const time = Math.ceil(parseFloat(matches.duration));
-        const num = time < 30 ? 1 : 2; // 28초 44초
+        const num = parseFloat(matches.duration) < 30 ? 1 : 2; // 28초 44초
         if (data.prWyrmsFang === undefined)
           return output.onlyme!({ num: num });
-        const [partner] = data.prWyrmsFang.filter((x) => x.time === time && x.name !== data.me);
+        const [partner] = data.prWyrmsFang.filter((x) => x.num === num && x.name !== data.me);
         if (partner === undefined)
           return output.onlyme!({ num: num });
         return output.text!({ num: num, partner: data.ShortName(partner.name) });
