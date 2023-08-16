@@ -1780,7 +1780,7 @@ const triggerSet: TriggerSet<Data> = {
             ? output.light!()
             : output.dark!();
         const partner =
-          data.party.aJobName(data.engravement3TowerPlayers.find((name) => name !== data.me)) ??
+          data.ShortName(data.engravement3TowerPlayers.find((name) => name !== data.me)) ??
             output.unknown!();
         return output.towerOnYou!({ color: towerColor, partner: partner });
       },
@@ -3701,7 +3701,7 @@ const triggerSet: TriggerSet<Data> = {
           let partner = output.unknown!();
           for (const [name, cnt] of Object.entries(data.prsPangenesisCount)) {
             if (cnt === mycnt && name !== data.me) {
-              partner = data.party.aJobName(name);
+              partner = data.ShortName(name);
               break;
             }
           }
@@ -3991,10 +3991,10 @@ const triggerSet: TriggerSet<Data> = {
           return;
         const partner = matches.source === data.me ? matches.target : matches.source;
         if (data.phase === 'gaiaochos1')
-          return output.uav1!({ partner: data.party.aJobName(partner) });
+          return output.uav1!({ partner: data.ShortName(partner) });
         data.seenSecondTethers = true;
         return output.uav2!({
-          partner: data.party.aJobName(partner),
+          partner: data.ShortName(partner),
           geocentrism: data.geocentrism2OutputStr ?? output.unknown!(),
         });
       },
@@ -4165,13 +4165,13 @@ const triggerSet: TriggerSet<Data> = {
         if (index < 0)
           return {
             infoText: output.noBeacon!({
-              player1: data.party.aJobName(data.caloric1First[0]),
-              player2: data.party.aJobName(data.caloric1First[1]),
+              player1: data.ShortName(data.caloric1First[0]),
+              player2: data.ShortName(data.caloric1First[1]),
             }),
           };
         const partner = index === 0 ? 1 : 0;
         return {
-          alertText: output.beacon!({ partner: data.party.aJobName(data.caloric1First[partner]) }),
+          alertText: output.beacon!({ partner: data.ShortName(data.caloric1First[partner]) }),
         };
       },
     },
@@ -4273,23 +4273,23 @@ const triggerSet: TriggerSet<Data> = {
           return;
 
         if (myBuff === 'fire') {
-          const myTeam: number[] = [];
+          const myTeam: string[] = [];
           for (const [name, stat] of Object.entries(data.caloric1Buff)) {
             if (stat === myBuff && name !== data.me)
-              myTeam.push(data.party.aJobIndex(name));
+              myTeam.push(name);
           }
-          return { alertText: output.fire!({ team: data.party.aJobSortedString(myTeam) }) };
+          return { alertText: output.fire!({ team: data.PriorityNames(myTeam).join(', ') }) };
         }
 
         if (data.caloric1First.includes(data.me))
           return { infoText: output.windBeacon!() };
 
-        const myTeam: number[] = [];
+        const myTeam: string[] = [];
         for (const [name, stat] of Object.entries(data.caloric1Buff)) {
           if (stat === myBuff && name !== data.me && !data.caloric1First.includes(name))
-            myTeam.push(data.party.aJobIndex(name));
+            myTeam.push(name);
         }
-        return { alertText: output.wind!({ team: data.party.aJobSortedString(myTeam) }) };
+        return { alertText: output.wind!({ team: data.PriorityNames(myTeam).join(', ') }) };
       },
       run: (data) => {
         data.caloric1First = [];
@@ -4329,7 +4329,7 @@ const triggerSet: TriggerSet<Data> = {
         if (data.me === matches.target)
           return { alarmText: output.fireOnMe!() };
         if (data.palladionGrapsTarget === data.me)
-          return { infoText: output.fireOn!({ player: data.party.aJobName(matches.target) }) };
+          return { infoText: output.fireOn!({ player: data.ShortName(matches.target) }) };
       },
     },
     {

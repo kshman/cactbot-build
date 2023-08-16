@@ -59,6 +59,7 @@ const getFakeRaidbossData = (triggerSet?: LooseTriggerSet): RaidbossData => {
     CanCleanse: () => false,
     CanFeint: () => false,
     CanAddle: () => false,
+    PriorityNames: (x: string[]) => x,
     ...triggerSet?.initData?.() ?? {},
   };
 };

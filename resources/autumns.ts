@@ -1,51 +1,52 @@
-import { OutputStrings } from '../types/trigger';
+import { LocaleText, OutputStrings } from '../types/trigger';
 
+import { Lang } from './languages';
 import Outputs from './outputs';
 import { Directions } from './util';
 
 // 직업 인덱스를 이름으로
-const jobIndexToName: Record<number, string> = {
-  0: '몰?루',
-  1: '검술사',
-  2: '격투사',
-  3: '도끼맨',
-  4: '랜서',
-  5: '활쟁이',
-  6: '환술사',
-  7: '주술사',
-  8: '목수',
-  9: '대장장이',
-  10: '갑옷장인',
-  11: '보석장인',
-  12: '가죽장인',
-  13: '재봉사',
-  14: '연금술사',
-  15: '요리사',
-  16: '광부',
-  17: '원예사',
-  18: '어부',
-  19: '나이트',
-  20: '몽크',
-  21: '전사',
-  22: '류상',
-  23: '바드',
-  24: '뱅마',
-  25: '흥마',
-  26: '비술사',
-  27: '소환사',
-  28: '학자',
-  29: '로그',
-  30: '닌자',
-  31: '기공사',
-  32: '암흑기사',
-  33: '점쟁이',
-  34: '사무라이',
-  35: '레드메',
-  36: '블루메',
-  37: '총칼이',
-  38: '춤꾼',
-  39: '리퍼',
-  40: '현자',
+const jobIndexToName: Record<number, LocaleText> = {
+  0: { en: '몰?루' },
+  1: { en: '검술사' },
+  2: { en: '격투사' },
+  3: { en: '도끼맨' },
+  4: { en: '랜서' },
+  5: { en: '활쟁이' },
+  6: { en: '환술사' },
+  7: { en: '주술사' },
+  8: { en: '목수' },
+  9: { en: '대장장이' },
+  10: { en: '갑옷장인' },
+  11: { en: '보석장인' },
+  12: { en: '가죽장인' },
+  13: { en: '재봉사' },
+  14: { en: '연금술사' },
+  15: { en: '요리사' },
+  16: { en: '광부' },
+  17: { en: '원예사' },
+  18: { en: '어부' },
+  19: { en: '나이트' },
+  20: { en: '몽크' },
+  21: { en: '전사' },
+  22: { en: '류상' },
+  23: { en: '바드' },
+  24: { en: '뱅마' },
+  25: { en: '흥마' },
+  26: { en: '비술사' },
+  27: { en: '소환사' },
+  28: { en: '학자' },
+  29: { en: '로그' },
+  30: { en: '닌자' },
+  31: { en: '기공사' },
+  32: { en: '암흑기사' },
+  33: { en: '점쟁이' },
+  34: { en: '사무라이' },
+  35: { en: '레드메' },
+  36: { en: '블루메' },
+  37: { en: '총칼이' },
+  38: { en: '춤꾼' },
+  39: { en: '리퍼' },
+  40: { en: '현자' },
 };
 // 직업 인덱스를 우선 순위로
 const jobIndexToPriority: Record<number, number> = {
@@ -92,48 +93,48 @@ const jobIndexToPriority: Record<number, number> = {
   40: 203, // 현자
 };
 // 직업 순위를 이름으로
-const jobPriorityToName: Record<number, string> = {
-  101: '암흑기사',
-  102: '전사',
-  103: '총칼이',
-  104: '나이트',
-  201: '뱅마',
-  202: '점쟁이',
-  203: '현자',
-  204: '학자',
-  301: '사무라이',
-  302: '몽크',
-  303: '리퍼',
-  304: '류상',
-  305: '닌자',
-  401: '기공사',
-  402: '바드',
-  403: '춤꾼',
-  501: '흥마',
-  502: '레드메',
-  503: '소환사',
-  599: '블루메',
-  8102: '도끼맨',
-  8104: '검술사',
-  8201: '환술사',
-  8302: '격투사',
-  8304: '랜서',
-  8305: '로그',
-  8402: '활쟁이',
-  8501: '주술사',
-  8503: '비술사',
-  9101: '목수',
-  9102: '대장장이',
-  9103: '갑옷장인',
-  9104: '보석장인',
-  9105: '가죽장인',
-  9106: '재봉사',
-  9107: '연금술사',
-  9108: '요리사',
-  9201: '광부',
-  9202: '원예사',
-  9203: '어부',
-  9999: '몰?루',
+const jobPriorityToName: Record<number, LocaleText> = {
+  101: { en: '암흑기사' },
+  102: { en: '전사' },
+  103: { en: '총칼이' },
+  104: { en: '나이트' },
+  201: { en: '뱅마' },
+  202: { en: '점쟁이' },
+  203: { en: '현자' },
+  204: { en: '학자' },
+  301: { en: '사무라이' },
+  302: { en: '몽크' },
+  303: { en: '리퍼' },
+  304: { en: '류상' },
+  305: { en: '닌자' },
+  401: { en: '기공사' },
+  402: { en: '바드' },
+  403: { en: '춤꾼' },
+  501: { en: '흥마' },
+  502: { en: '레드메' },
+  503: { en: '소환사' },
+  599: { en: '블루메' },
+  8102: { en: '도끼맨' },
+  8104: { en: '검술사' },
+  8201: { en: '환술사' },
+  8302: { en: '격투사' },
+  8304: { en: '랜서' },
+  8305: { en: '로그' },
+  8402: { en: '활쟁이' },
+  8501: { en: '주술사' },
+  8503: { en: '비술사' },
+  9101: { en: '목수' },
+  9102: { en: '대장장이' },
+  9103: { en: '갑옷장인' },
+  9104: { en: '보석장인' },
+  9105: { en: '가죽장인' },
+  9106: { en: '재봉사' },
+  9107: { en: '연금술사' },
+  9108: { en: '요리사' },
+  9201: { en: '광부' },
+  9202: { en: '원예사' },
+  9203: { en: '어부' },
+  9999: { en: '몰?루' },
 };
 
 export type MarkerOutput8 =
@@ -311,22 +312,17 @@ export const AutumnIndicator = {
 };
 
 const Autumns = {
-  JobName: (id: number) => {
-    const job = jobIndexToName[id];
+  JobName: (id: number, lang: Lang) => {
+    const job = jobIndexToName[id]?.[lang];
     return job ?? '몰?루';
   },
   JobPriority: (id: number) => {
     const prior = jobIndexToPriority[id];
     return prior ?? 9999;
   },
-  BuildJobPriorities: (ids: number[], separator?: string) => {
+  BuildJobPriority: (ids: number[], lang: Lang) => {
     const priors = ids.map((x) => jobIndexToPriority[x] ?? 9999).sort((a, b) => a - b);
-    const jobs = priors.map((x) => jobPriorityToName[x]);
-    return jobs.join(separator === undefined ? ', ' : separator);
-  },
-  BuildJobPriorityArray: (ids: number[]) => {
-    const priors = ids.map((x) => jobIndexToPriority[x] ?? 9999).sort((a, b) => a - b);
-    const jobs = priors.map((x) => jobPriorityToName[x]);
+    const jobs = priors.map((x) => jobPriorityToName[x]?.[lang]);
     return jobs;
   },
 } as const;
