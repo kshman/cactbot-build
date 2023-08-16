@@ -43,6 +43,8 @@ export interface RaidbossData {
   CanCleanse: () => boolean;
   CanFeint: () => boolean;
   CanAddle: () => boolean;
+  //
+  PriorityNames: (names: string[]) => string[];
 }
 
 export interface OopsyData {

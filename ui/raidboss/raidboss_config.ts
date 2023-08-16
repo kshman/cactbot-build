@@ -1268,6 +1268,7 @@ class RaidbossConfigurator {
       CanCleanse: () => false,
       CanFeint: () => false,
       CanAddle: () => false,
+      PriorityNames: (x: string[]) => x,
       parserLang: this.base.lang,
       displayLang: this.base.lang,
     };

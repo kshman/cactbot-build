@@ -706,7 +706,7 @@ const triggerSet: TriggerSet<Data> = {
         output.responseOutputStrings = {
           goLeft: Outputs.left,
           goLeftBaitInner: {
-            en: '왼쪽 + 가운데로 유도 #1',
+            en: '왼쪽 + 한가운데로 유도 #1',
             de: 'Links + Köder innen #1',
             fr: 'À gauche + Orientez vers l\'intérieur #1',
             ja: '左 + 中へ誘導 #1',
@@ -751,7 +751,7 @@ const triggerSet: TriggerSet<Data> = {
         output.responseOutputStrings = {
           goRight: Outputs.right,
           goRightBaitInner: {
-            en: '오른쪽 + 가운데로 유도 #1',
+            en: '오른쪽 + 한가운데로 유도 #1',
             de: 'Rechts + Köder innen #1',
             fr: 'À droite + Orientez vers l\'intérieur #1',
             ja: '右 + 中へ誘導 #1',
@@ -1219,7 +1219,7 @@ const triggerSet: TriggerSet<Data> = {
           },
           water: intermediateRelativityOutputStrings.stack,
           longFire: {
-            en: '나중 장판 / 긴 불',
+            en: '나중 장판 [긴 불]',
             de: 'langes Feuer',
             fr: 'Feu long',
             ja: 'ファイガ(遅い)',
@@ -1227,7 +1227,7 @@ const triggerSet: TriggerSet<Data> = {
             ko: '느린 파이가',
           },
           shortFire: {
-            en: '빠른 장판 / 짧은 불',
+            en: '빠른 장판 [짧은 불]',
             de: 'kurzes Feuer',
             fr: 'Feu court',
             ja: 'ファイガ(早い)',
@@ -1235,7 +1235,7 @@ const triggerSet: TriggerSet<Data> = {
             ko: '빠른 파이가',
           },
           longIce: {
-            en: '먼저 레이저 처리 / 긴 얼음',
+            en: '먼저 레이저 [긴 얼음]',
             de: 'langes Eis',
             fr: 'Glace longue',
             ja: 'ブリザガ(遅い)',
@@ -1243,7 +1243,7 @@ const triggerSet: TriggerSet<Data> = {
             ko: '느린 블리자가',
           },
           shortIce: {
-            en: '먼저 레이저 처리 / 짧은 얼음',
+            en: '먼저 레이저 [짧은 얼음]',
             de: 'kurzes Eis',
             fr: 'Glace courte',
             ja: 'ブリザガ(早い)',

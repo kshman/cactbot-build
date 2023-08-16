@@ -67,7 +67,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '마커 범위 확인',
+          en: '바닥 범위 잘봐요',
           de: 'Schau nach den Grimm der Erde Marker',
           fr: 'Repérez une marque de Terre maléfique',
           ja: '範囲見て',
@@ -124,7 +124,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '랜드슬라이드: 뒤쪽 구석으로!',
+          en: '랜드슬라이드: 뒷구석으로!',
           de: 'Hintere Ecken',
           fr: 'Coins arrière',
           ja: 'ランスラくるよ',
@@ -246,7 +246,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '탱크로 돌진',
+          en: '탱크에게 돌진',
           de: 'Tank wird angefahren',
           fr: 'Charge tank',
           ja: 'タンクに突進',
@@ -366,7 +366,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         awayFromTanks: {
-          en: '탱크랑 떨어져요!!!',
+          en: '탱크랑 멀어져요!!!',
           de: 'Weg von den Tanks',
           fr: 'Éloignez-vous des tanks',
           ja: 'タンクから離れ',

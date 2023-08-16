@@ -70,6 +70,9 @@ export interface Data extends RaidbossData {
   prKasumiGiri: KasumiGiriInfo[];
   prShadowTether: number;
   prShadowGiri: ShadowGiriInfo[];
+  readonly triggerSetConfig: {
+    prGoraiTower: 'hamukatsu' | 'poshiume';
+  };
   //
   combatantData: PluginCombatantState[];
   wailingCollect: NetMatches['GainsEffect'][];
@@ -256,6 +259,22 @@ const towerResponse = (
 const triggerSet: TriggerSet<Data> = {
   id: 'AnotherMountRokkonSavage',
   zoneId: ZoneId.AnotherMountRokkonSavage,
+  config: [
+    {
+      id: 'prGoraiTower',
+      name: {
+        en: '고라이 탑 설치',
+      },
+      type: 'select',
+      options: {
+        en: {
+          '하므까스(맵기준)': 'hamukatsu',
+          '포시우메(보스기준)': 'poshiume',
+        },
+      },
+      default: 'poshiume',
+    },
+  ],
   timelineFile: 'another_mount_rokkon-savage.txt',
   initData: () => {
     return {
@@ -311,7 +330,7 @@ const triggerSet: TriggerSet<Data> = {
 
         if (matches.target === data.me)
           return { alarmText: output.chargeOnYou!() };
-        return { alertText: output.chargeOn!({ player: data.party.aJobName(matches.target) }) };
+        return { alertText: output.chargeOn!({ player: data.ShortName(matches.target) }) };
       },
     },
     {
@@ -554,7 +573,7 @@ const triggerSet: TriggerSet<Data> = {
             6: output.west!(),
             7: output.northwest!(),
           }[averagePos],
-          partner: data.party.aJobName(data.prPartner),
+          partner: data.ShortName(data.prPartner),
         };
         if (data.prDevilishCount === 0) {
           if (data.prStackFirst)
@@ -614,7 +633,7 @@ const triggerSet: TriggerSet<Data> = {
         const isInFirst = matches.id === '843C';
         const inOut = isInFirst ? output.in!() : output.out!();
         const outIn = isInFirst ? output.out!() : output.in!();
-        const args = { inOut: inOut, outIn: outIn, partner: data.party.aJobName(data.prPartner) };
+        const args = { inOut: inOut, outIn: outIn, partner: data.ShortName(data.prPartner) };
         if (data.prStackFirst)
           return output.stack!(args);
         return output.spread!(args);
@@ -739,7 +758,7 @@ const triggerSet: TriggerSet<Data> = {
             return output.stackTank!();
           return output.stackDps!();
         }
-        return output.stack!({ partner: data.party.aJobName(partner) });
+        return output.stack!({ partner: data.ShortName(partner) });
       },
       outputStrings: {
         stack: {
@@ -785,8 +804,8 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (data, _matches, output) => {
         buildStackPartner(data, data.sparksCollect, 'E17', 'E18');
         if (data.prStackFirst)
-          return output.stack!({ partner: data.party.aJobName(data.prPartner) });
-        return output.spread!({ partner: data.party.aJobName(data.prPartner) });
+          return output.stack!({ partner: data.ShortName(data.prPartner) });
+        return output.spread!({ partner: data.ShortName(data.prPartner) });
       },
       outputStrings: {
         stack: {
@@ -1081,48 +1100,87 @@ const triggerSet: TriggerSet<Data> = {
       // E15 = Squirrelly Prayer / 빨강 다람쥐
       // E16 = Odder Prayer / 파랑 버섯
       netRegex: { effectId: ['E15', 'E16'], capture: false },
-      delaySeconds: 5,
-      durationSeconds: 11,
+      delaySeconds: 3,
+      durationSeconds: (data) => {
+        if (data.triggerSetConfig.prGoraiTower === 'hamukatsu')
+          return 13;
+        if (data.triggerSetConfig.prGoraiTower === 'poshiume')
+          return 13;
+        return 8;
+      },
       suppressSeconds: 99999,
       infoText: (data, _matches, output) => {
         const me = data.prMalformed[data.me];
         if (me === undefined || me.d1 === undefined || me.d3 === undefined)
           return;
         const issame = me.d1 === me.d3; // 세개가 같은거임
-        if (issame) {
+        if (data.triggerSetConfig.prGoraiTower === 'hamukatsu') {
+          // 하므까스
+          if (issame) {
+            if (me.d1)
+              return output.sameRight!();
+            return output.sameLeft!();
+          }
+          const hassame = Object.entries(data.prMalformed)
+            .find((x) => x[1].d1 === x[1].d3) !== undefined;
+          if (hassame) {
+            if (me.d1)
+              return output.southRight!();
+            return output.southLeft!();
+          }
           if (me.d1)
-            return output.sameRight!();
-          return output.sameLeft!();
+            return output.right!();
+          return output.left!();
+        } else if (data.triggerSetConfig.prGoraiTower === 'poshiume') {
+          // 포시우메
+          const isred = me.d1;
+          if (issame)
+            return isred ? output.sameBlue!() : output.sameRed!();
+          const hassame = Object.entries(data.prMalformed)
+            .find((x) => x[1].d1 === x[1].d3) !== undefined;
+          if (hassame)
+            return isred ? output.diffBlue!() : output.diffRed!();
+          return isred ? output.blue!() : output.red!();
         }
-        const hassame = Object.entries(data.prMalformed)
-          .find((x) => x[1].d1 === x[1].d3) !== undefined;
-        if (hassame) {
-          if (me.d1)
-            return output.southRight!();
-          return output.southLeft!();
-        }
-        if (me.d1)
-          return output.right!();
-        return output.left!();
+        // 멍미
+        return '오노';
       },
       outputStrings: {
         left: {
-          en: '다른색🟦: 왼쪽으로',
+          en: '모두 다른🟦: 왼쪽으로',
         },
         right: {
-          en: '다른색🟥: 오른쪽으로',
+          en: '모두 다른🟥: 오른쪽으로',
         },
         sameLeft: {
-          en: '[북] 같은색🟦: 왼쪽으로',
+          en: '[북] 같은🟦: 왼쪽으로',
         },
         sameRight: {
-          en: '[북] 같은색🟥: 오른쪽으로',
+          en: '[북] 같은🟥: 오른쪽으로',
         },
         southLeft: {
-          en: '[남] 다른색🟦: 왼쪽으로',
+          en: '[남] 다른🟦: 왼쪽으로',
         },
         southRight: {
-          en: '[남] 다른색🟥: 오른쪽으로',
+          en: '[남] 다른🟥: 오른쪽으로',
+        },
+        blue: {
+          en: '모두 다름: 🟦으로',
+        },
+        red: {
+          en: '모두 다름: 🟥으로',
+        },
+        diffBlue: {
+          en: '다름: 보스보고 🟦오른쪽',
+        },
+        diffRed: {
+          en: '다름: 보스보고 🟥왼쪽',
+        },
+        sameBlue: {
+          en: '같음: 보스보고 🟦왼쪽',
+        },
+        sameRed: {
+          en: '같음: 보스보고 🟥오른쪽',
         },
         unknown: Outputs.unknown,
       },
@@ -1133,6 +1191,18 @@ const triggerSet: TriggerSet<Data> = {
       type: 'StartsUsing',
       netRegex: { id: '860C', source: 'Moko the Restless', capture: false },
       response: Responses.aoe('alert'),
+    },
+    {
+      id: 'AMRS Moko Kenki Release Enrage',
+      type: 'StartsUsing',
+      netRegex: { id: '85E1', source: 'Moko the Restless', capture: false },
+      durationSeconds: 9.7,
+      alertText: (_data, _matches, output) => output.text!(),
+      outputStrings: {
+        text: {
+          en: '전멸 공격!',
+        },
+      },
     },
     {
       id: 'AMRS Moko Lateral Slice',
@@ -1258,7 +1328,7 @@ const triggerSet: TriggerSet<Data> = {
           data.prHaveTether = true;
           return { alertText: output.tether!() };
         }
-        const target = data.party.aJobName(matches.target);
+        const target = data.ShortName(matches.target);
         return { infoText: output.notether!({ target: target }) };
       },
     },
@@ -1280,7 +1350,6 @@ const triggerSet: TriggerSet<Data> = {
       response: Responses.goSides(),
     },
     {
-      // 테스트 안됨
       id: 'AMRS Moko Soldiers of Death',
       type: 'StartsUsing',
       netRegex: { id: '8593', source: 'Moko the Restless', capture: false },
@@ -1339,7 +1408,6 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      // 테스트 안됨
       id: 'AMRS Moko Ashigaru Kyuhei',
       type: 'StartsUsing',
       // 85D0 => 87A8 멀리(확실)
@@ -1349,8 +1417,8 @@ const triggerSet: TriggerSet<Data> = {
         if (data.role === 'dps')
           return output.oppo!();
         if (matches.id === '85D0')
-          return output.far!();
-        return output.near!();
+          return output.near!();
+        return output.far!();
       },
       outputStrings: {
         near: {
@@ -1428,13 +1496,12 @@ const triggerSet: TriggerSet<Data> = {
         if (data.prHaveTether) {
           const left = data.prTetherCollect.filter((x) => data.me !== x);
           if (left.length === 1)
-            return { alertText: output.tether!({ player: data.party.aJobName(left[0]) }) };
+            return { alertText: output.tether!({ player: data.ShortName(left[0]) }) };
           return { alertText: output.tetheronly!() };
         }
         if (data.prTetherCollect.length === 2) {
-          const indices = data.prTetherCollect.map((x) => data.party.aJobIndex(x));
-          const tethers = data.party.aJobSortedString(indices);
-          return { infoText: output.notether!({ players: tethers }) };
+          const tethers = data.PriorityNames(data.prTetherCollect);
+          return { infoText: output.notether!({ players: tethers.join(', ') }) };
         }
         return { infoText: output.notetheronly!() };
       },

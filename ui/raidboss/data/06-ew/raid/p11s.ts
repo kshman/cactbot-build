@@ -296,7 +296,7 @@ const triggerSet: TriggerSet<Data> = {
         if (data.options.AutumnStyle)
           return { alertText: output.upheldNotOnYou!() };
 
-        const player = data.party.aJobName(tether.target);
+        const player = data.ShortName(tether.target);
         return { alertText: output.upheldOnPlayer!({ player: player }) };
       },
       run: (data) => data.upheldTethers = [],
@@ -391,7 +391,7 @@ const triggerSet: TriggerSet<Data> = {
         if (data.prsTethers === 2)
           return { alertText: output.partyHeart!() };
         return {
-          alertText: output.partyStackPlayerOut!({ player: data.party.aJobName(tether.target) }),
+          alertText: output.partyStackPlayerOut!({ player: data.ShortName(tether.target) }),
         };
       },
       run: (data) => data.upheldTethers = [],
@@ -834,7 +834,7 @@ const triggerSet: TriggerSet<Data> = {
         }
         if (data.options.AutumnStyle) {
           // 어듬이 스타일 덮어쓰기
-          const myPartner = data.party.aJobName(myBuddy);
+          const myPartner = data.ShortName(myBuddy);
           let mySide;
           if (data.role === 'dps')
             mySide = myColor === 'dark' ? output.rightSide!() : output.leftSide!();
@@ -858,7 +858,7 @@ const triggerSet: TriggerSet<Data> = {
         const playerNames = Object.keys(data.lightDarkTether);
         const sameLength = playerNames.filter((x) => data.lightDarkTether[x] === myLength);
         const others = sameLength.filter((x) => x !== data.me && x !== myBuddy).sort();
-        const [player1, player2] = others.map((x) => data.party.aJobName(x));
+        const [player1, player2] = others.map((x) => data.ShortName(x));
         if (player1 !== undefined && player2 !== undefined) {
           if (myLength === 'near')
             infoText = output.otherNear!({ player1: player1, player2: player2 });
