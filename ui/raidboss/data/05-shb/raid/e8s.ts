@@ -17,6 +17,8 @@ export interface Data extends RaidbossData {
   prMyRush?: number;
   prWyrmsClaw?: WyrmInfo[];
   prWyrmsFang?: WyrmInfo[];
+  prMirrors?: number;
+  prWingLeft?: boolean;
   //
   triggerSetConfig: { [key in ConfigIds]: ConfigValue };
   firstFrost?: string;
@@ -73,12 +75,14 @@ const triggerSet: TriggerSet<Data> = {
       id: 'E8S Shining Armor',
       regex: /(?<!Reflected )Shining Armor/,
       beforeSeconds: 2,
+      durationSeconds: 3,
       response: Responses.lookAway('alert'),
     },
     {
       id: 'E8S Reflected Armor',
       regex: /Reflected Armor/,
       beforeSeconds: 2,
+      durationSeconds: 3,
       response: Responses.lookAway('alert'),
     },
     {
@@ -144,7 +148,7 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           // Sorry, there are no mirror colors in the logs (YET),
           // and so this is the best that can be done.
-          en: '뒤로, 🟥거울 쪽으로',
+          en: '뒤로, 🟥거울쪽',
           de: 'Nach Hinten gehen, Seite des roten Spiegels',
           fr: 'Allez derrière, côté miroir rouge',
           ja: '後ろに、赤い鏡の横へ',
@@ -163,7 +167,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '앞으로, 🟩거울 쪽으로',
+          en: '앞으로, 🟩거울쪽',
           de: 'Nach Vorne gehen, Seite des grünen Spiegels',
           fr: 'Allez devant, côté miroir vert',
           ja: '前に、赤い鏡の横へ',
@@ -215,7 +219,6 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (data, _matches, output) => {
         if (data.firstFrost === 'driving')
           return output.bitingFrostNext!();
-
         return output.drivingFrostNext!();
       },
       outputStrings: {
@@ -446,12 +449,14 @@ const triggerSet: TriggerSet<Data> = {
       type: 'StartsUsing',
       netRegex: { source: 'Shiva', id: '4D75', capture: false },
       response: Responses.goRight(),
+      run: (data) => data.prWingLeft = true,
     },
     {
       id: 'E8S Hallowed Wings Right',
       type: 'StartsUsing',
       netRegex: { source: 'Shiva', id: '4D76', capture: false },
       response: Responses.goLeft(),
+      run: (data) => data.prWingLeft = false,
     },
     {
       id: 'E8S Hallowed Wings Knockback',
@@ -764,6 +769,52 @@ const triggerSet: TriggerSet<Data> = {
           ja: 'タンクは塔に散開',
           cn: '坦克塔内分散',
           ko: '탱커 산개',
+        },
+      },
+    },
+    {
+      // 1: 처음
+      // 2: 전반 끝나기전
+      // 3: 후반 시작
+      // 4: 좌우 넉백
+      // 5: 반사 거울(초록 -> 무색)
+      // 6: 드래곤송 전
+      // 7: 마지막 미끄러지기 전
+      id: 'E8S 미러 미러',
+      type: 'StartsUsing',
+      netRegex: { source: 'Shiva', id: '4D5A', capture: false },
+      preRun: (data) => data.prMirrors = (data.prMirrors ?? 0) + 1,
+      delaySeconds: 8,
+      durationSeconds: 6,
+      infoText: (data, _matches, output) => {
+        if (data.prMirrors === 33) // 아놔 어찌해야합니까
+          return output.p3!();
+      },
+      outputStrings: {
+        p3: {
+          en: '왼쪽🟥=>엉덩이 / 오른쪽🟥=>앞',
+        },
+      },
+    },
+    {
+      // 4DC7: 왼쪽
+      // 4DC8: 오른쪽
+      id: 'E8S 미러3 프로즌 미러',
+      type: 'StartsUsing',
+      netRegex: { id: ['4DC7', '4DC8'], source: 'Frozen Mirror' },
+      condition: (data) => data.prMirrors === 3,
+      durationSeconds: 8,
+      infoText: (_data, matches, output) => {
+        if (matches.id === '4DC7')
+          return output.left!();
+        return output.right!();
+      },
+      outputStrings: {
+        left: {
+          en: '🟥아래쪽 => 시계',
+        },
+        right: {
+          en: '⬜윗쪽 => 반시계',
         },
       },
     },

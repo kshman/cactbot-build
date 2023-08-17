@@ -1,3 +1,4 @@
+import { AutumnIndicator } from '../../../../../resources/autumns';
 import Conditions from '../../../../../resources/conditions';
 import { UnreachableCode } from '../../../../../resources/not_reached';
 import Outputs from '../../../../../resources/outputs';
@@ -8,8 +9,16 @@ import { RaidbossData } from '../../../../../types/data';
 import { NetMatches } from '../../../../../types/net_matches';
 import { LocaleText, Output, TriggerSet } from '../../../../../types/trigger';
 
+type TitanColors = 'blue' | 'yellow' | 'red';
+type TitanProp = {
+  name: string;
+  color: TitanColors;
+};
+
 export interface Data extends RaidbossData {
   prsTarget?: string;
+  prsTitanProps?: TitanProp[];
+  prsStacker?: string[];
   //
   isDoorBoss?: boolean;
   decOffset?: number;
@@ -269,7 +278,20 @@ const matchedPositionToDir = (matches: NetMatches['AddedCombatant']) => {
 };
 
 // Convert dir to Output
-const dirToOutput = (dir: number, output: Output) => {
+const dirToOutput = (dir: number, output: Output, marker: boolean) => {
+  if (marker) {
+    const markers: { [dir: number]: string } = {
+      0: output.markerNW!(),
+      1: output.markerN!(),
+      2: output.markerNE!(),
+      3: output.markerE!(),
+      4: output.markerSE!(),
+      5: output.markerS!(),
+      6: output.markerSW!(),
+      7: output.markerW!(),
+    };
+    return markers[dir];
+  }
   const dirs: { [dir: number]: string } = {
     0: output.northwest!(),
     1: output.north!(),
@@ -281,6 +303,32 @@ const dirToOutput = (dir: number, output: Output) => {
     7: output.west!(),
   };
   return dirs[dir];
+};
+
+const sortWithJobNick = (names: string[]) => {
+  const jobNamePriority: Record<string, number> = {
+    // 기본
+    'MT': 0,
+    'ST': 1,
+    'H1': 2,
+    'H2': 3,
+    'D1': 4,
+    'D2': 5,
+    'D3': 6,
+    'D4': 7,
+    // 미쿡식
+    'OT': 1,
+    'M1': 4,
+    'M2': 5,
+    'R1': 6,
+    'R2': 7,
+  } as const;
+  type Pair = { prior: number; name: string };
+  const pairs: Pair[] = [];
+  for (const n of names)
+    pairs.push({ prior: jobNamePriority[n] ?? 8, name: n });
+  const sorted = pairs.sort((a, b) => a.prior - b.prior);
+  return sorted.map((x) => x.name);
 };
 
 const triggerSet: TriggerSet<Data> = {
@@ -336,13 +384,13 @@ const triggerSet: TriggerSet<Data> = {
       id: 'E12S Promise Junction Titan Bombs',
       type: 'HeadMarker',
       netRegex: {},
-      condition: (data) => data.isDoorBoss,
+      condition: (data) => data.isDoorBoss && !data.options.AutumnStyle,
       response: (data, matches, output) => {
         // cactbot-builtin-response
         output.responseOutputStrings = {
           // The first round has only one blue.
           titanBlueSingular: {
-            en: '🔵',
+            en: '🔵흩어져요',
             de: 'Blau - Gewicht',
             fr: 'Poids bleu',
             ja: '青、重圧',
@@ -353,7 +401,7 @@ const triggerSet: TriggerSet<Data> = {
           // The third is technically fixed by role with a standard party (one dps, one !dps),
           // but call out your partner anyway in case you've got 8 blus or something.
           titanBlueWithPartner: {
-            en: '🔵 (${player})',
+            en: '🔵흩어져요 (${player})',
             de: 'Blau (mit ${player})',
             fr: 'Bleu (avec ${player})',
             ja: '青、重圧 (${player}と)',
@@ -525,7 +573,7 @@ const triggerSet: TriggerSet<Data> = {
         laser3: Outputs.num3,
         laser4: Outputs.num4,
         inner: {
-          en: '#${num} (안쪽)',
+          en: '#${num} (안쪽 유도)',
           de: '#${num} (innen)',
           fr: '#${num} (Intérieur)',
           ja: '#${num} (中)',
@@ -533,7 +581,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '#${num} (안쪽)',
         },
         outer: {
-          en: '#${num} (바깥쪽)',
+          en: '#${num} (바깥쪽 유도)',
           de: '#${num} (außen)',
           fr: '#${num} (Extérieur)',
           ja: '#${num} (外)',
@@ -558,7 +606,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.knockback!(),
       outputStrings: {
         knockback: {
-          en: '넉백: 남동🡾',
+          en: '넉백: 남동🡾 [②마커로]',
           de: 'SO Rückstoß',
           fr: 'SE Poussée',
           ja: '東南ノックバック',
@@ -575,7 +623,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.knockback!(),
       outputStrings: {
         knockback: {
-          en: '넉백: 🡿남서',
+          en: '넉백: 🡿남서 [③마커로]',
           de: 'SW Rückstoß',
           fr: 'SO Poussée',
           ja: '西南ノックバック',
@@ -600,7 +648,7 @@ const triggerSet: TriggerSet<Data> = {
           laser3: Outputs.num3,
           laser4: Outputs.num4,
           baitInner: {
-            en: '가운데로 유도 #${num}',
+            en: '안쪽으로 유도 #${num}',
             de: 'Köder innen #${num}',
             fr: 'Orientez vers l\'intérieur #${num}',
             ja: '中へ誘導 #${num}',
@@ -608,7 +656,7 @@ const triggerSet: TriggerSet<Data> = {
             ko: '내부 유도 #${num}',
           },
           baitOuter: {
-            en: '바깥으로 유도 #${num}',
+            en: '바깥쪽으로 유도 #${num}',
             de: 'Köder außen #${num}',
             fr: 'Orientez vers l\'extérieur #${num}',
             ja: '外へ誘導 #${num}',
@@ -659,6 +707,7 @@ const triggerSet: TriggerSet<Data> = {
       type: 'StartsUsing',
       netRegex: { source: 'Eden\'s Promise', id: '58A5', capture: false },
       run: (data) => {
+        delete data.prsTitanProps;
         delete data.weightTargets;
         data.seenFirstBombs = true;
       },
@@ -706,7 +755,7 @@ const triggerSet: TriggerSet<Data> = {
         output.responseOutputStrings = {
           goLeft: Outputs.left,
           goLeftBaitInner: {
-            en: '왼쪽 + 한가운데로 유도 #1',
+            en: '왼쪽 + 안쪽으로 유도 #1',
             de: 'Links + Köder innen #1',
             fr: 'À gauche + Orientez vers l\'intérieur #1',
             ja: '左 + 中へ誘導 #1',
@@ -714,7 +763,7 @@ const triggerSet: TriggerSet<Data> = {
             ko: '왼쪽 + 내부 유도 #1',
           },
           goLeftBaitOuter: {
-            en: '왼쪽 + 바깥으로 유도 #1',
+            en: '왼쪽 + 바깥쪽으로 유도 #1',
             de: 'Links + Köder außen #1',
             fr: 'À gauche + Orientez vers l\'extérieur #1',
             ja: '左 + 外へ誘導 #1',
@@ -751,7 +800,7 @@ const triggerSet: TriggerSet<Data> = {
         output.responseOutputStrings = {
           goRight: Outputs.right,
           goRightBaitInner: {
-            en: '오른쪽 + 한가운데로 유도 #1',
+            en: '오른쪽 + 안쪽으로 유도 #1',
             de: 'Rechts + Köder innen #1',
             fr: 'À droite + Orientez vers l\'intérieur #1',
             ja: '右 + 中へ誘導 #1',
@@ -759,7 +808,7 @@ const triggerSet: TriggerSet<Data> = {
             ko: '오른쪽 + 내부 유도 #1',
           },
           goRightBaitOuter: {
-            en: '오른쪽 + 바깥으로 유도 #1',
+            en: '오른쪽 + 바깥쪽으로 유도 #1',
             de: 'Rechts + Köder außen #1',
             fr: 'À droite + Orientez vers l\'extérieur #1',
             ja: '右 + 外へ誘導 #1',
@@ -1077,7 +1126,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         partyInTanksOut: {
-          en: '바깥으로 (미끼 유도)',
+          en: '바깥쪽으로 (미끼 유도)',
           de: 'Gruppe Rein (Tanks Raus)',
           fr: 'Équipe à l\'intérieur (Tanks à l\'extérieur)',
           ja: 'ボスの足元へ (タンクは離れる)',
@@ -1115,7 +1164,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '본대 밖 (탱커 안)',
         },
         tanksInPartyOut: {
-          en: '바깥으로 (탱크 안쪽)',
+          en: '바깥쪽으로 (탱크 안쪽)',
           de: 'Gruppe Rein (Tanks Raus)',
           fr: 'Tanks à l\'intérieur (Équipe à l\'extérieur',
           ja: 'ボスに足元へ (パーティーは離れる)',
@@ -1158,6 +1207,17 @@ const triggerSet: TriggerSet<Data> = {
         // N = 0, E = 1, S = 2, W = 3
         const cardinal = (2 - Math.round(oracle.Heading * 4 / Math.PI) / 2 + 2) % 4;
 
+        if (data.options.AutumnStyle) {
+          const markers: { [dir: number]: string } = {
+            0: output.markerN!(),
+            1: output.markerE!(),
+            2: output.markerS!(),
+            3: output.markerS!(),
+          };
+          data.safeZone = markers[cardinal];
+          return;
+        }
+
         const dirs: { [dir: number]: string } = {
           0: output.north!(),
           1: output.east!(),
@@ -1174,6 +1234,7 @@ const triggerSet: TriggerSet<Data> = {
         east: Outputs.east,
         south: Outputs.south,
         west: Outputs.west,
+        ...AutumnIndicator.outputStringsMarkerCardinal,
       },
     },
     {
@@ -1437,9 +1498,9 @@ const triggerSet: TriggerSet<Data> = {
       // Orient where "Yellow" Anger's Hourglass spawns
       netRegex: { npcNameId: '9824' },
       durationSeconds: 10,
-      infoText: (_data, matches, output) => {
+      infoText: (data, matches, output) => {
         return output.hourglass!({
-          dir: dirToOutput(matchedPositionToDir(matches), output),
+          dir: dirToOutput(matchedPositionToDir(matches), output, data.options.AutumnStyle),
         });
       },
       outputStrings: {
@@ -1460,6 +1521,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '노랑: ${dir}',
         },
       },
+      ...AutumnIndicator.outputStringsMarker8,
     },
     {
       id: 'E12S Adv Relativity Hourglass Collect',
@@ -1491,8 +1553,12 @@ const triggerSet: TriggerSet<Data> = {
         const sorrow2 = (sorrow1 + 4) % 8;
 
         return output.hourglass!({
-          dir1: sorrow1 < sorrow2 ? dirToOutput(sorrow1, output) : dirToOutput(sorrow2, output),
-          dir2: sorrow1 > sorrow2 ? dirToOutput(sorrow1, output) : dirToOutput(sorrow2, output),
+          dir1: sorrow1 < sorrow2
+            ? dirToOutput(sorrow1, output, data.options.AutumnStyle)
+            : dirToOutput(sorrow2, output, data.options.AutumnStyle),
+          dir2: sorrow1 > sorrow2
+            ? dirToOutput(sorrow1, output, data.options.AutumnStyle)
+            : dirToOutput(sorrow2, output, data.options.AutumnStyle),
         });
       },
       outputStrings: {
@@ -1512,6 +1578,7 @@ const triggerSet: TriggerSet<Data> = {
           cn: '黄色: ${dir1} / ${dir2}',
           ko: '노랑: ${dir1} / ${dir2}',
         },
+        ...AutumnIndicator.outputStringsMarker8,
       },
     },
     {
@@ -1541,7 +1608,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '쉐어',
         },
         knockbackIntoStackGroups: {
-          en: '넉백하고 뭉쳐요',
+          en: '넉백하고 => 뭉쳐요',
           de: 'Rückstoß, dann in Gruppen sammeln',
           fr: 'Poussée puis packez-vous en groupe',
           ja: '頭割り位置に向かってノックバックを',
@@ -1570,7 +1637,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         spread: Outputs.spread,
         knockbackIntoSpread: {
-          en: '넉백하고 흩어져요',
+          en: '넉백하고 => 흩어져요',
           de: 'Rückstoß dann verteilen',
           fr: 'Poussée puis dispersez-vous',
           ja: '散開のためノックバックを',
@@ -1689,10 +1756,112 @@ const triggerSet: TriggerSet<Data> = {
       id: 'E12S 전반 AA',
       type: 'Ability',
       netRegex: { id: '4B1E', source: 'Eden\'s Promise' },
+      condition: (data) => data.options.AutumnStyle,
       run: (data, matches) => {
         if (data.prsTarget === matches.target)
           return;
         data.prsTarget = matches.target;
+      },
+    },
+    {
+      id: 'E12S 전반 타이탄 수집',
+      type: 'HeadMarker',
+      netRegex: {},
+      condition: (data) => data.isDoorBoss && data.options.AutumnStyle,
+      run: (data, matches) => {
+        const colorMap: { [id: string]: TitanColors } = {
+          '00BB': 'blue',
+          '00B9': 'yellow',
+          '00BA': 'red',
+        } as const;
+        const id = getHeadmarkerId(data, matches);
+        const color = colorMap[id];
+        if (color === undefined)
+          return;
+        data.prsTitanProps ??= [];
+        data.prsTitanProps.push({ name: matches.target, color: color });
+      },
+    },
+    {
+      id: 'E12S 전반 타이탄 알림',
+      type: 'Tether',
+      netRegex: { id: '0007', target: 'Bomb Boulder', capture: false },
+      condition: (data) => data.isDoorBoss && data.options.AutumnStyle,
+      delaySeconds: 0.1,
+      suppressSeconds: 5,
+      response: (data, _matches, output) => {
+        // cactbot-builtin-response
+        output.responseOutputStrings = {
+          blue: {
+            en: '🔵홀로',
+          },
+          blueWith: {
+            en: '🔵홀로 (${player})',
+          },
+          yellow: {
+            en: '🟡흩어져요',
+          },
+          yellowWith: {
+            en: '🟡흩어져요 (${players})',
+          },
+          red: {
+            en: '🔴뭉쳐요',
+          },
+          unknown: Outputs.unknown,
+        };
+        if (data.prsTitanProps === undefined)
+          return;
+        const my = data.prsTitanProps.find((x) => x.name === data.me);
+        if (my === undefined)
+          return;
+        const ps = data.prsTitanProps.filter((x) => x.color === my.color && x.name !== my.name);
+        if (my.color === 'blue') {
+          if (ps === undefined || ps[0] === undefined)
+            return { alarmText: output.blue!() };
+          return { alarmText: output.blueWith!({ player: data.ShortName(ps[0].name) }) };
+        } else if (my.color === 'yellow') {
+          if (ps === undefined || ps.length === 0)
+            return { alertText: output.yellow!() };
+          const names = sortWithJobNick(data.PriorityNames(ps.map((x) => x.name)));
+          return { alertText: output.yellowWith!({ players: names.join(', ') }) };
+        } else if (my.color === 'red') {
+          return { infoText: output.red!() };
+        }
+        return { infoText: output.unknown!() };
+      },
+    },
+    {
+      id: 'E12S 전반 4:4 대상',
+      type: 'HeadMarker',
+      netRegex: {},
+      condition: (data) => data.isDoorBoss && data.options.AutumnStyle,
+      infoText: (data, matches, output) => {
+        const id = getHeadmarkerId(data, matches);
+        if (id !== '003E')
+          return;
+        data.prsStacker ??= [];
+        data.prsStacker.push(matches.target);
+        if (data.prsStacker.length !== 2)
+          return;
+        if (data.prsStacker.includes(data.me)) {
+          const [partner] = data.prsStacker.filter((x) => x !== data.me);
+          if (partner !== undefined)
+            return output.stackOnMe!({ partner: data.ShortName(partner) });
+        }
+        const names = sortWithJobNick(data.PriorityNames(data.prsStacker));
+        return output.stack!({ targets: names.join(', ') });
+      },
+      run: (data) => {
+        if (data.prsStacker !== undefined && data.prsStacker.length === 2)
+          delete data.prsStacker;
+      },
+      outputStrings: {
+        stack: {
+          en: '뭉쳐요 (${targets})',
+        },
+        stackOnMe: {
+          en: '내게 뭉쳐요 (${partner})',
+        },
       },
     },
   ],

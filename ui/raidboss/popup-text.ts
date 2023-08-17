@@ -983,7 +983,7 @@ export class PopupText {
 
   BuildPriorityNames(names: string[]): string[] {
     const ls: string[] = [];
-    if (!this.options.AutumnStyle) {
+    if (!this.options.AutumnStyle || this.job === 'BLU') {
       for (const n of names) {
         const nick = this.options.PlayerNicks[n];
         if (nick) {
