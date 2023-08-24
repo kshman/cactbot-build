@@ -9,16 +9,33 @@ import { RaidbossData } from '../../../../../types/data';
 import { NetMatches } from '../../../../../types/net_matches';
 import { LocaleText, Output, TriggerSet } from '../../../../../types/trigger';
 
-type TitanColors = 'blue' | 'yellow' | 'red';
+type TitanColor = 'blue' | 'yellow' | 'red';
 type TitanProp = {
   name: string;
-  color: TitanColors;
+  color: TitanColor;
+};
+type RelDebuff =
+  | 'eye'
+  | 'water'
+  | 'longfire'
+  | 'shortfire'
+  | 'longice'
+  | 'shortice'
+  | 'fire'
+  | 'aero'
+  | 'unknown';
+type RelProp = {
+  name: string;
+  debuff: RelDebuff;
 };
 
 export interface Data extends RaidbossData {
   prsTarget?: string;
   prsTitanProps?: TitanProp[];
   prsStacker?: string[];
+  prsMyProp?: RelProp;
+  prsBasics?: RelProp[];
+  prsAdvances?: RelProp[];
   //
   isDoorBoss?: boolean;
   decOffset?: number;
@@ -330,6 +347,8 @@ const sortWithJobNick = (names: string[]) => {
   const sorted = pairs.sort((a, b) => a.prior - b.prior);
   return sorted.map((x) => x.name);
 };
+const clamp = (num: number, a: number, b: number) =>
+  Math.max(Math.min(num, Math.max(a, b)), Math.min(a, b));
 
 const triggerSet: TriggerSet<Data> = {
   id: 'EdensPromiseEternitySavage',
@@ -1126,7 +1145,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         partyInTanksOut: {
-          en: '바깥쪽으로 (미끼 유도)',
+          en: '보스 발 밑으로 (탱크 바깥쪽)',
           de: 'Gruppe Rein (Tanks Raus)',
           fr: 'Équipe à l\'intérieur (Tanks à l\'extérieur)',
           ja: 'ボスの足元へ (タンクは離れる)',
@@ -1134,7 +1153,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '본대 안 (탱커 밖)',
         },
         tanksOutPartyIn: {
-          en: '안쪽으로 (탱크 바깥쪽)',
+          en: '바깥으로 (파티 안쪽)',
           de: 'Tanks Raus (Gruppe Rein)',
           fr: 'Tanks à l\'extérieur (Équipe à l\'intérieur',
           ja: 'ボスからはなれる (パーティーが内側)',
@@ -1156,7 +1175,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         partyOutTanksIn: {
-          en: '안쪽으로 (미끼 유도)',
+          en: '바깥으로 (탱크 안쪽)',
           de: 'Gruppe Raus (Tanks Rein)',
           fr: 'Équipe à l\'extérieur (Tanks à l\'intérieur)',
           ja: 'ボスから離れる (タンクが内側)',
@@ -1164,7 +1183,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '본대 밖 (탱커 안)',
         },
         tanksInPartyOut: {
-          en: '바깥쪽으로 (탱크 안쪽)',
+          en: '보스 발 밑으로 (파티 바깥쪽)',
           de: 'Gruppe Rein (Tanks Raus)',
           fr: 'Tanks à l\'intérieur (Équipe à l\'extérieur',
           ja: 'ボスに足元へ (パーティーは離れる)',
@@ -1266,21 +1285,25 @@ const triggerSet: TriggerSet<Data> = {
       // 99D Spell-In-Waiting: Dark Water III
       // 99E Spell-In-Waiting: Dark Blizzard III
       netRegex: { effectId: '99[78DE]' },
-      condition: (data, matches) => data.phase === 'basic' && matches.target === data.me,
+      condition: (data, matches) =>
+        !data.options.AutumnStyle && data.phase === 'basic' && matches.target === data.me,
+      durationSeconds: (_data, matches) => parseFloat(matches.duration),
       response: (_data, matches, output) => {
         // cactbot-builtin-response
         output.responseOutputStrings = {
           shadoweye: {
-            en: '내게 눈',
+            en: '내게 눈 (힐탱 역할)',
             de: 'Auge auf DIR',
             fr: 'Œil sur VOUS',
             ja: '自分に目',
             cn: '石化眼点名',
             ko: '시선징 대상자',
           },
-          water: intermediateRelativityOutputStrings.stack,
+          water: {
+            en: '뭉쳐요 (힐러 역할)',
+          },
           longFire: {
-            en: '나중 장판 [긴 불]',
+            en: '뭉쳤다 => 아래쪽에서 장판 [긴 불]',
             de: 'langes Feuer',
             fr: 'Feu long',
             ja: 'ファイガ(遅い)',
@@ -1288,7 +1311,7 @@ const triggerSet: TriggerSet<Data> = {
             ko: '느린 파이가',
           },
           shortFire: {
-            en: '빠른 장판 [짧은 불]',
+            en: '바로 아래쪽에서 장판 [짧은 불]',
             de: 'kurzes Feuer',
             fr: 'Feu court',
             ja: 'ファイガ(早い)',
@@ -1296,7 +1319,7 @@ const triggerSet: TriggerSet<Data> = {
             ko: '빠른 파이가',
           },
           longIce: {
-            en: '먼저 레이저 [긴 얼음]',
+            en: '레이저 유도 => 뭉쳤다 => 한가운데 [긴 얼음]',
             de: 'langes Eis',
             fr: 'Glace longue',
             ja: 'ブリザガ(遅い)',
@@ -1304,7 +1327,7 @@ const triggerSet: TriggerSet<Data> = {
             ko: '느린 블리자가',
           },
           shortIce: {
-            en: '먼저 레이저 [짧은 얼음]',
+            en: '레이저 유도 => 그대로 얼음처리 [짧은 얼음]',
             de: 'kurzes Eis',
             fr: 'Glace courte',
             ja: 'ブリザガ(早い)',
@@ -1405,7 +1428,7 @@ const triggerSet: TriggerSet<Data> = {
         // cactbot-builtin-response
         output.responseOutputStrings = Object.assign({
           moveAway: {
-            en: '도망쳐욧!',
+            en: '움직여요!',
             de: 'Bewegen!',
             fr: 'Bougez !',
             ja: '避けて！',
@@ -1458,7 +1481,7 @@ const triggerSet: TriggerSet<Data> = {
         }
 
         // Return empty when only you have eye
-        return;
+        return output.haveEye!();
       },
       outputStrings: {
         lookAwayFromPlayers: {
@@ -1469,7 +1492,12 @@ const triggerSet: TriggerSet<Data> = {
           cn: '背对${player1}和${player2}',
           ko: '${player1}와 ${player2}에게서 뒤돌기',
         },
-        lookAwayFromPlayer: Outputs.lookAwayFromPlayer,
+        lookAwayFromPlayer: {
+          en: '내게 눈! (${player})',
+        },
+        haveEye: {
+          en: '내게 눈!',
+        },
       },
     },
     {
@@ -1520,8 +1548,8 @@ const triggerSet: TriggerSet<Data> = {
           cn: '黄色: ${dir}',
           ko: '노랑: ${dir}',
         },
+        ...AutumnIndicator.outputStringsMarker8,
       },
-      ...AutumnIndicator.outputStringsMarker8,
     },
     {
       id: 'E12S Adv Relativity Hourglass Collect',
@@ -1608,7 +1636,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '쉐어',
         },
         knockbackIntoStackGroups: {
-          en: '넉백하고 => 뭉쳐요',
+          en: '넉백 다음 => 뭉쳐요',
           de: 'Rückstoß, dann in Gruppen sammeln',
           fr: 'Poussée puis packez-vous en groupe',
           ja: '頭割り位置に向かってノックバックを',
@@ -1637,7 +1665,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         spread: Outputs.spread,
         knockbackIntoSpread: {
-          en: '넉백하고 => 흩어져요',
+          en: '넉백 다음 => 흩어져요',
           de: 'Rückstoß dann verteilen',
           fr: 'Poussée puis dispersez-vous',
           ja: '散開のためノックバックを',
@@ -1680,6 +1708,15 @@ const triggerSet: TriggerSet<Data> = {
       condition: (data, matches) => data.phase === 'advanced' && parseFloat(matches.duration) > 28,
       infoText: (data, matches, output) => {
         data.doubleAero ??= [];
+
+        if (data.options.AutumnStyle) {
+          data.doubleAero.push(matches.target);
+          if (data.doubleAero.length !== 2)
+            return;
+          const sorted = sortWithJobNick(data.PriorityNames(data.doubleAero));
+          return output.text!({ name1: sorted[0], name2: sorted[1] });
+        }
+
         data.doubleAero.push(data.ShortName(matches.target));
 
         if (data.doubleAero.length !== 2)
@@ -1692,7 +1729,7 @@ const triggerSet: TriggerSet<Data> = {
       tts: null,
       outputStrings: {
         text: {
-          en: '바람 두개: ${name1}, ${name2}',
+          en: '바람x2: ${name1}, ${name2}',
           de: 'Doppel Windga: ${name1}, ${name2}',
           fr: 'Double Vent : ${name1}, ${name2}',
           ja: 'エアロガ×2: ${name1}, ${name2}',
@@ -1708,7 +1745,8 @@ const triggerSet: TriggerSet<Data> = {
       // 998 Spell-In-Waiting: Shadoweye
       // 99F Spell-In-Waiting: Dark Aero III
       netRegex: { effectId: '99[78F]' },
-      condition: (data, matches) => data.phase === 'advanced' && data.me === matches.target,
+      condition: (data, matches) =>
+        !data.options.AutumnStyle && data.phase === 'advanced' && data.me === matches.target,
       durationSeconds: 15,
       alertText: (_data, matches, output) => {
         const id = matches.effectId.toUpperCase();
@@ -1769,7 +1807,7 @@ const triggerSet: TriggerSet<Data> = {
       netRegex: {},
       condition: (data) => data.isDoorBoss && data.options.AutumnStyle,
       run: (data, matches) => {
-        const colorMap: { [id: string]: TitanColors } = {
+        const colorMap: { [id: string]: TitanColor } = {
           '00BB': 'blue',
           '00B9': 'yellow',
           '00BA': 'red',
@@ -1793,10 +1831,10 @@ const triggerSet: TriggerSet<Data> = {
         // cactbot-builtin-response
         output.responseOutputStrings = {
           blue: {
-            en: '🔵홀로',
+            en: '🔵흩어져요',
           },
           blueWith: {
-            en: '🔵홀로 (${player})',
+            en: '🔵흩어져요 (${player})',
           },
           yellow: {
             en: '🟡흩어져요',
@@ -1862,6 +1900,144 @@ const triggerSet: TriggerSet<Data> = {
         stackOnMe: {
           en: '내게 뭉쳐요 (${partner})',
         },
+      },
+    },
+    {
+      id: 'E12S 후반 베이직 수집',
+      type: 'GainsEffect',
+      netRegex: { effectId: '99[78DE]' },
+      condition: (data) => data.options.AutumnStyle && data.phase === 'basic',
+      run: (data, matches) => {
+        data.prsBasics ??= [];
+        const prop: RelProp = { name: matches.target, debuff: 'unknown' };
+        const id = matches.effectId.toUpperCase();
+        if (id === '998') {
+          // 눈깔
+          prop.debuff = 'eye';
+        } else if (id === '99D') {
+          // 물
+          prop.debuff = 'water';
+        } else if (id === '997') {
+          // 파이어3
+          prop.debuff = parseFloat(matches.duration) > 20 ? 'longfire' : 'shortfire';
+        } else if (id === '99E') {
+          // 블리자드3
+          prop.debuff = parseFloat(matches.duration) > 20 ? 'longice' : 'shortice';
+        }
+        if (prop.debuff === 'unknown')
+          return;
+        if (prop.name === data.me)
+          data.prsMyProp = prop;
+        else
+          data.prsBasics.push(prop);
+      },
+    },
+    {
+      id: 'E12S 후반 베이직 실행',
+      type: 'GainsEffect',
+      netRegex: { effectId: '99[78DE]' },
+      condition: (data, matches) =>
+        data.options.AutumnStyle && data.phase === 'basic' && matches.target === data.me,
+      delaySeconds: 0.1,
+      durationSeconds: (_data, matches) => clamp(parseFloat(matches.duration), 10, 22),
+      alertText: (data, _matches, output) => {
+        if (data.prsBasics === undefined || data.prsMyProp === undefined)
+          return;
+        const my = data.prsMyProp;
+        const partner = data.prsBasics.find((x) => x.debuff === my.debuff);
+        const mesg = output[my.debuff];
+        const name = partner === undefined ? output.unknown!() : data.ShortName(partner.name);
+        return mesg!({ partner: name });
+      },
+      run: (data) => {
+        delete data.prsBasics;
+        delete data.prsMyProp;
+      },
+      outputStrings: {
+        eye: {
+          en: '[눈깔/힐러] 유도#2 (${partner})',
+        },
+        water: {
+          en: '[워터/탱크] 유도#3 => 4:4 (${partner})',
+        },
+        longfire: {
+          en: '[긴불] 뭉쳤다 => 흩어져요 (${partner})',
+        },
+        shortfire: {
+          en: '[짧은불] 먼저 흩어져요 (${partner})',
+        },
+        longice: {
+          en: '[긴얼음] 유도#1 => 뭉쳐요 (${partner})',
+        },
+        shortice: {
+          en: '[짧은얼음] 유도#1 (${partner})',
+        },
+        unknown: Outputs.unknown,
+      },
+    },
+    {
+      id: 'E12S 후반 어드밴스 수집',
+      type: 'GainsEffect',
+      netRegex: { effectId: '99[78F]' },
+      condition: (data) => data.options.AutumnStyle && data.phase === 'advanced',
+      run: (data, matches) => {
+        data.prsAdvances ??= [];
+        const prop: RelProp = { name: matches.target, debuff: 'unknown' };
+        const id = matches.effectId.toUpperCase();
+        if (id === '997') {
+          // 파이어
+          prop.debuff = 'fire';
+        } else if (id === '998') {
+          // 눈깔
+          prop.debuff = 'eye';
+        } else if (id === '99F') {
+          // 에어로
+          if (parseFloat(matches.duration) < 28)
+            return;
+          prop.debuff = 'aero';
+        }
+        if (prop.debuff === 'unknown')
+          return;
+        if (prop.name === data.me)
+          data.prsMyProp = prop;
+        else
+          data.prsAdvances.push(prop);
+      },
+    },
+    {
+      id: 'E12S 후반 어드밴스 실행',
+      type: 'GainsEffect',
+      netRegex: { effectId: '99F', capture: false },
+      condition: (data) => data.options.AutumnStyle && data.phase === 'advanced',
+      delaySeconds: 0.1,
+      durationSeconds: 15,
+      suppressSeconds: 5,
+      alertText: (data, _matches, output) => {
+        if (data.prsAdvances === undefined || data.prsMyProp === undefined)
+          return;
+        const my = data.prsMyProp;
+        const partners = data.prsAdvances.filter((x) => x.debuff === my.debuff).map((x) => x.name);
+        const mesg = output[my.debuff];
+        const names = partners === undefined
+          ? output.unknown!()
+          : data.PriorityNames(partners).join(', ');
+        return mesg!({ partners: names });
+      },
+      run: (data) => {
+        delete data.prsAdvances;
+        delete data.prsMyProp;
+      },
+      outputStrings: {
+        eye: {
+          en: '내게 눈 (${partners})',
+        },
+        fire: {
+          en: '내게 흩어져 (${partners})',
+        },
+        aero: {
+          en: '내게 바람x2 (${partners})',
+        },
+        unknown: Outputs.unknown,
       },
     },
   ],
