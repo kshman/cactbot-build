@@ -322,7 +322,9 @@ const dirToOutput = (dir: number, output: Output, marker: boolean) => {
   return dirs[dir];
 };
 
-const sortWithJobNick = (names: string[], data?: Data) => {
+const sortByBluRole = (names: string[], data: Data) => {
+  if (data.job !== 'BLU')
+    return names;
   const jobNamePriority: Record<string, number> = {
     // 기본
     'MT': 0,
@@ -342,7 +344,7 @@ const sortWithJobNick = (names: string[], data?: Data) => {
   } as const;
   type Pair = { prior: number; name: string };
   const pairs: Pair[] = [];
-  if (data !== undefined && data.prsRealName !== undefined && data.prsNickName !== undefined) {
+  if (data.prsRealName !== undefined && data.prsNickName !== undefined) {
     for (const n of names) {
       if (n === data.prsRealName)
         pairs.push({ prior: jobNamePriority[data.prsNickName] ?? 8, name: n });
@@ -1480,7 +1482,7 @@ const triggerSet: TriggerSet<Data> = {
         if (player1 !== data.me && player2 !== data.me) {
           // Call out both player names if you don't have eye
           if (data.options.AutumnStyle && data.eyes !== undefined) {
-            const sorted = sortWithJobNick(data.PriorityNames(data.eyes), data);
+            const sorted = sortByBluRole(data.PriorityNames(data.eyes), data);
             return output.lookAwayFromPlayers!({ player1: sorted[0], player2: sorted[1] });
           }
           return output.lookAwayFromPlayers!({
@@ -1729,7 +1731,7 @@ const triggerSet: TriggerSet<Data> = {
           data.doubleAero.push(matches.target);
           if (data.doubleAero.length !== 2)
             return;
-          const sorted = sortWithJobNick(data.PriorityNames(data.doubleAero), data);
+          const sorted = sortByBluRole(data.PriorityNames(data.doubleAero), data);
           return output.text!({ name1: sorted[0], name2: sorted[1] });
         }
 
@@ -1889,7 +1891,7 @@ const triggerSet: TriggerSet<Data> = {
             const name = p1 === data.me ? p2 : p1;
             return { alertText: output.yellowWith!({ players: data.ShortName(name) }) };
           }
-          const names = sortWithJobNick(data.PriorityNames(ps), data);
+          const names = sortByBluRole(data.PriorityNames(ps), data);
           return { alertText: output.yellowWith!({ players: names.join(', ') }) };
         } else if (my.color === 'red') {
           // 빨강
@@ -1924,7 +1926,7 @@ const triggerSet: TriggerSet<Data> = {
           if (partner !== undefined)
             return output.stackOnMe!({ partner: data.ShortName(partner) });
         }
-        const names = sortWithJobNick(data.PriorityNames(data.prsStacker), data);
+        const names = sortByBluRole(data.PriorityNames(data.prsStacker), data);
         return output.stack!({ targets: names.join(', ') });
       },
       run: (data) => {
@@ -2076,7 +2078,7 @@ const triggerSet: TriggerSet<Data> = {
             names = data.ShortName(name);
           }
         } else {
-          const sorted = sortWithJobNick(data.PriorityNames(targets), data);
+          const sorted = sortByBluRole(data.PriorityNames(targets), data);
           names = sorted.join(', ');
         }
         return output[my.debuff]!({ partners: names });
