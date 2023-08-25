@@ -1305,18 +1305,16 @@ const triggerSet: TriggerSet<Data> = {
         // cactbot-builtin-response
         output.responseOutputStrings = {
           shadoweye: {
-            en: '내게 눈 (힐탱 역할)',
+            en: '내게 눈',
             de: 'Auge auf DIR',
             fr: 'Œil sur VOUS',
             ja: '自分に目',
             cn: '石化眼点名',
             ko: '시선징 대상자',
           },
-          water: {
-            en: '뭉쳐요 (힐러 역할)',
-          },
+          water: intermediateRelativityOutputStrings.stack,
           longFire: {
-            en: '뭉쳤다 => 아래쪽에서 장판 [긴 불]',
+            en: '뭉쳤다 => 남쪽에서 장판 [긴 불]',
             de: 'langes Feuer',
             fr: 'Feu long',
             ja: 'ファイガ(遅い)',
@@ -1324,7 +1322,7 @@ const triggerSet: TriggerSet<Data> = {
             ko: '느린 파이가',
           },
           shortFire: {
-            en: '바로 아래쪽에서 장판 [짧은 불]',
+            en: '바로 남쪽에서 장판 [짧은 불]',
             de: 'kurzes Feuer',
             fr: 'Feu court',
             ja: 'ファイガ(早い)',
@@ -1967,7 +1965,7 @@ const triggerSet: TriggerSet<Data> = {
           case '998': // 눈깔
             debuff = 'eye';
             break;
-          case '99D': // 물
+          case '99D': // 워터3
             debuff = 'water';
             break;
           case '99E': // 블리자드3
@@ -2032,13 +2030,13 @@ const triggerSet: TriggerSet<Data> = {
       run: (data, matches) => {
         let debuff: RelDebuff;
         switch (matches.effectId.toUpperCase()) {
-          case '997': // 파이어
+          case '997': // 파이어3
             debuff = 'fire';
             break;
           case '998': // 눈깔
             debuff = 'eye';
             break;
-          case '99F': // 에어로
+          case '99F': // 에어로3
             if (parseFloat(matches.duration) < 28)
               return;
             debuff = 'aero';
