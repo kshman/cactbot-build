@@ -2086,13 +2086,13 @@ const triggerSet: TriggerSet<Data> = {
       run: (data) => delete data.prsRelProps,
       outputStrings: {
         eye: {
-          en: '내게 눈 (${partners})',
+          en: '[눈깔/앞] 왼쪽 => 왼쪽 (${partners})',
         },
         fire: {
-          en: '내게 흩어져 (${partners})',
+          en: '[불/앞] 오른쪽 => 흩어져요 (${partners})',
         },
         aero: {
-          en: '내게 바람x2 (${partners})',
+          en: '[바람x2/뒤] 오른쪽 => 오른쪽 (${partners})',
         },
         unknown: Outputs.unknown,
       },
