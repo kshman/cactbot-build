@@ -30,12 +30,12 @@ type RelProp = {
 };
 
 export interface Data extends RaidbossData {
+  prsRealName?: string;
+  prsNickName?: string;
   prsTarget?: string;
   prsTitanProps?: TitanProp[];
   prsStacker?: string[];
-  prsMyProp?: RelProp;
-  prsBasics?: RelProp[];
-  prsAdvances?: RelProp[];
+  prsRelProps?: RelProp[];
   //
   isDoorBoss?: boolean;
   decOffset?: number;
@@ -322,7 +322,7 @@ const dirToOutput = (dir: number, output: Output, marker: boolean) => {
   return dirs[dir];
 };
 
-const sortWithJobNick = (names: string[]) => {
+const sortWithJobNick = (names: string[], data?: Data) => {
   const jobNamePriority: Record<string, number> = {
     // 기본
     'MT': 0,
@@ -342,10 +342,19 @@ const sortWithJobNick = (names: string[]) => {
   } as const;
   type Pair = { prior: number; name: string };
   const pairs: Pair[] = [];
-  for (const n of names)
-    pairs.push({ prior: jobNamePriority[n] ?? 8, name: n });
-  const sorted = pairs.sort((a, b) => a.prior - b.prior);
-  return sorted.map((x) => x.name);
+  if (data !== undefined && data.prsRealName !== undefined && data.prsNickName !== undefined) {
+    for (const n of names) {
+      if (n === data.prsRealName)
+        pairs.push({ prior: jobNamePriority[data.prsNickName] ?? 8, name: n });
+      else
+        pairs.push({ prior: jobNamePriority[n] ?? 8, name: n });
+    }
+  } else {
+    for (const n of names)
+      pairs.push({ prior: jobNamePriority[n] ?? 8, name: n });
+  }
+  const sorted = pairs.sort((a, b) => a.prior - b.prior).map((x) => x.name);
+  return sorted;
 };
 const clamp = (num: number, a: number, b: number) =>
   Math.max(Math.min(num, Math.max(a, b)), Math.min(a, b));
@@ -1139,7 +1148,7 @@ const triggerSet: TriggerSet<Data> = {
       // Darkest and Somber Dance both.
       netRegex: { source: 'Oracle Of Darkness', id: ['58BE', '58BD'], capture: false },
       infoText: (data, _matches, output) => {
-        if (data.role === 'tank')
+        if (data.role === 'tank' || data.prsTarget === data.me)
           return output.tanksOutPartyIn!();
         return output.partyInTanksOut!();
       },
@@ -1169,7 +1178,7 @@ const triggerSet: TriggerSet<Data> = {
       netRegex: { source: 'Oracle Of Darkness', id: '58BD', capture: false },
       suppressSeconds: 5,
       infoText: (data, _matches, output) => {
-        if (data.role === 'tank')
+        if (data.role === 'tank' || data.prsTarget === data.me)
           return output.tanksInPartyOut!();
         return output.partyOutTanksIn!();
       },
@@ -1246,13 +1255,17 @@ const triggerSet: TriggerSet<Data> = {
 
         data.safeZone = dirs[cardinal];
       },
-      infoText: (data, _matches, output) => !data.safeZone ? output.unknown!() : data.safeZone,
+      infoText: (data, _matches, output) =>
+        output.safeZone!({ safe: !data.safeZone ? output.unknown!() : data.safeZone }),
       outputStrings: {
         unknown: Outputs.unknown,
         north: Outputs.north,
         east: Outputs.east,
         south: Outputs.south,
         west: Outputs.west,
+        safeZone: {
+          en: '안전한곳: ${safe}',
+        },
         ...AutumnIndicator.outputStringsMarkerCardinal,
       },
     },
@@ -1468,6 +1481,10 @@ const triggerSet: TriggerSet<Data> = {
 
         if (player1 !== data.me && player2 !== data.me) {
           // Call out both player names if you don't have eye
+          if (data.options.AutumnStyle && data.eyes !== undefined) {
+            const sorted = sortWithJobNick(data.PriorityNames(data.eyes), data);
+            return output.lookAwayFromPlayers!({ player1: sorted[0], player2: sorted[1] });
+          }
           return output.lookAwayFromPlayers!({
             player1: data.ShortName(player1),
             player2: data.ShortName(player2),
@@ -1483,6 +1500,7 @@ const triggerSet: TriggerSet<Data> = {
         // Return empty when only you have eye
         return output.haveEye!();
       },
+      run: (data) => delete data.eyes,
       outputStrings: {
         lookAwayFromPlayers: {
           en: '보지마: ${player1}, ${player2}',
@@ -1713,7 +1731,7 @@ const triggerSet: TriggerSet<Data> = {
           data.doubleAero.push(matches.target);
           if (data.doubleAero.length !== 2)
             return;
-          const sorted = sortWithJobNick(data.PriorityNames(data.doubleAero));
+          const sorted = sortWithJobNick(data.PriorityNames(data.doubleAero), data);
           return output.text!({ name1: sorted[0], name2: sorted[1] });
         }
 
@@ -1845,6 +1863,9 @@ const triggerSet: TriggerSet<Data> = {
           red: {
             en: '🔴뭉쳐요',
           },
+          redWith: {
+            en: '🔴뭉쳐요 (${players})',
+          },
           unknown: Outputs.unknown,
         };
         if (data.prsTitanProps === undefined)
@@ -1852,17 +1873,36 @@ const triggerSet: TriggerSet<Data> = {
         const my = data.prsTitanProps.find((x) => x.name === data.me);
         if (my === undefined)
           return;
-        const ps = data.prsTitanProps.filter((x) => x.color === my.color && x.name !== my.name);
         if (my.color === 'blue') {
+          // 파랑
+          const ps = data.prsTitanProps.filter((x) => x.color === my.color && x.name !== my.name);
           if (ps === undefined || ps[0] === undefined)
-            return { alarmText: output.blue!() };
-          return { alarmText: output.blueWith!({ player: data.ShortName(ps[0].name) }) };
+            return { alertText: output.blue!() };
+          return { alertText: output.blueWith!({ player: data.ShortName(ps[0].name) }) };
         } else if (my.color === 'yellow') {
-          if (ps === undefined || ps.length === 0)
+          // 노랑
+          const ps = data.prsTitanProps.filter((x) => x.color === my.color).map((x) => x.name);
+          if (ps === undefined || ps.length === 0 || ps.length === 1)
             return { alertText: output.yellow!() };
-          const names = sortWithJobNick(data.PriorityNames(ps.map((x) => x.name)));
+          if (ps.length === 2) {
+            const [p1, p2] = ps;
+            if (p1 === undefined || p2 === undefined)
+              return { alertText: output.yellow!() };
+            const name = p1 === data.me ? p2 : p1;
+            return { alertText: output.yellowWith!({ players: data.ShortName(name) }) };
+          }
+          const names = sortWithJobNick(data.PriorityNames(ps), data);
           return { alertText: output.yellowWith!({ players: names.join(', ') }) };
         } else if (my.color === 'red') {
+          // 빨강
+          /*
+          const ps = data.prsTitanProps.filter((x) => x.color === my.color).map((x) => x.name);
+          if (ps === undefined || ps.length === 0 || ps.length > 4)
+            return { infoText: output.red!() };
+          const names = sortWithJobNick(data.PriorityNames(ps), data);
+          return { infoText: output.redWith!({ players: names.join(', ') }) };
+          */
+          // 너무 길게 나와서 그냥 원래 껄로
           return { infoText: output.red!() };
         }
         return { infoText: output.unknown!() };
@@ -1886,7 +1926,7 @@ const triggerSet: TriggerSet<Data> = {
           if (partner !== undefined)
             return output.stackOnMe!({ partner: data.ShortName(partner) });
         }
-        const names = sortWithJobNick(data.PriorityNames(data.prsStacker));
+        const names = sortWithJobNick(data.PriorityNames(data.prsStacker), data);
         return output.stack!({ targets: names.join(', ') });
       },
       run: (data) => {
@@ -1903,33 +1943,42 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
+      id: 'E12S 후반 AA',
+      type: 'Ability',
+      netRegex: { id: '4B1F', source: 'Oracle of Darkness' },
+      condition: (data) => data.options.AutumnStyle,
+      run: (data, matches) => {
+        if (data.prsTarget === matches.target)
+          return;
+        data.prsTarget = matches.target;
+      },
+    },
+    {
       id: 'E12S 후반 베이직 수집',
       type: 'GainsEffect',
       netRegex: { effectId: '99[78DE]' },
       condition: (data) => data.options.AutumnStyle && data.phase === 'basic',
       run: (data, matches) => {
-        data.prsBasics ??= [];
-        const prop: RelProp = { name: matches.target, debuff: 'unknown' };
-        const id = matches.effectId.toUpperCase();
-        if (id === '998') {
-          // 눈깔
-          prop.debuff = 'eye';
-        } else if (id === '99D') {
-          // 물
-          prop.debuff = 'water';
-        } else if (id === '997') {
-          // 파이어3
-          prop.debuff = parseFloat(matches.duration) > 20 ? 'longfire' : 'shortfire';
-        } else if (id === '99E') {
-          // 블리자드3
-          prop.debuff = parseFloat(matches.duration) > 20 ? 'longice' : 'shortice';
+        let debuff: RelDebuff;
+        switch (matches.effectId.toUpperCase()) {
+          case '997': // 파이어3
+            debuff = parseFloat(matches.duration) > 20 ? 'longfire' : 'shortfire';
+            break;
+          case '998': // 눈깔
+            debuff = 'eye';
+            break;
+          case '99D': // 물
+            debuff = 'water';
+            break;
+          case '99E': // 블리자드3
+            debuff = parseFloat(matches.duration) > 20 ? 'longice' : 'shortice';
+            break;
+          default:
+            return;
         }
-        if (prop.debuff === 'unknown')
-          return;
-        if (prop.name === data.me)
-          data.prsMyProp = prop;
-        else
-          data.prsBasics.push(prop);
+        const prop: RelProp = { name: matches.target, debuff: debuff };
+        data.prsRelProps ??= [];
+        data.prsRelProps.push(prop);
       },
     },
     {
@@ -1941,18 +1990,18 @@ const triggerSet: TriggerSet<Data> = {
       delaySeconds: 0.1,
       durationSeconds: (_data, matches) => clamp(parseFloat(matches.duration), 10, 22),
       alertText: (data, _matches, output) => {
-        if (data.prsBasics === undefined || data.prsMyProp === undefined)
+        if (data.prsRelProps === undefined)
           return;
-        const my = data.prsMyProp;
-        const partner = data.prsBasics.find((x) => x.debuff === my.debuff);
-        const mesg = output[my.debuff];
-        const name = partner === undefined ? output.unknown!() : data.ShortName(partner.name);
-        return mesg!({ partner: name });
+        const my = data.prsRelProps.find((x) => x.name === data.me);
+        if (my === undefined)
+          return;
+        const [p1, p2] = data.prsRelProps.filter((x) => x.debuff === my.debuff).map((x) => x.name);
+        if (p1 === undefined || p2 === undefined)
+          return;
+        const name = p1 === my.name ? p2 : p1;
+        return output[my.debuff]!({ partner: data.ShortName(name) });
       },
-      run: (data) => {
-        delete data.prsBasics;
-        delete data.prsMyProp;
-      },
+      run: (data) => delete data.prsRelProps,
       outputStrings: {
         eye: {
           en: '[눈깔/힐러] 유도#2 (${partner})',
@@ -1981,27 +2030,25 @@ const triggerSet: TriggerSet<Data> = {
       netRegex: { effectId: '99[78F]' },
       condition: (data) => data.options.AutumnStyle && data.phase === 'advanced',
       run: (data, matches) => {
-        data.prsAdvances ??= [];
-        const prop: RelProp = { name: matches.target, debuff: 'unknown' };
-        const id = matches.effectId.toUpperCase();
-        if (id === '997') {
-          // 파이어
-          prop.debuff = 'fire';
-        } else if (id === '998') {
-          // 눈깔
-          prop.debuff = 'eye';
-        } else if (id === '99F') {
-          // 에어로
-          if (parseFloat(matches.duration) < 28)
+        let debuff: RelDebuff;
+        switch (matches.effectId.toUpperCase()) {
+          case '997': // 파이어
+            debuff = 'fire';
+            break;
+          case '998': // 눈깔
+            debuff = 'eye';
+            break;
+          case '99F': // 에어로
+            if (parseFloat(matches.duration) < 28)
+              return;
+            debuff = 'aero';
+            break;
+          default:
             return;
-          prop.debuff = 'aero';
         }
-        if (prop.debuff === 'unknown')
-          return;
-        if (prop.name === data.me)
-          data.prsMyProp = prop;
-        else
-          data.prsAdvances.push(prop);
+        const prop: RelProp = { name: matches.target, debuff: debuff };
+        data.prsRelProps ??= [];
+        data.prsRelProps.push(prop);
       },
     },
     {
@@ -2013,20 +2060,30 @@ const triggerSet: TriggerSet<Data> = {
       durationSeconds: 15,
       suppressSeconds: 5,
       alertText: (data, _matches, output) => {
-        if (data.prsAdvances === undefined || data.prsMyProp === undefined)
+        if (data.prsRelProps === undefined)
           return;
-        const my = data.prsMyProp;
-        const partners = data.prsAdvances.filter((x) => x.debuff === my.debuff).map((x) => x.name);
-        const mesg = output[my.debuff];
-        const names = partners === undefined
-          ? output.unknown!()
-          : data.PriorityNames(partners).join(', ');
-        return mesg!({ partners: names });
+        const my = data.prsRelProps.find((x) => x.name === data.me);
+        if (my === undefined)
+          return;
+        const targets = data.prsRelProps.filter((x) => x.debuff === my.debuff).map((x) => x.name);
+        let names: string;
+        if (targets === undefined || targets.length === 1) {
+          names = output.unknown!();
+        } else if (targets.length === 2) {
+          const [p1, p2] = targets;
+          if (p1 === undefined || p2 === undefined)
+            names = output.unknown!();
+          else {
+            const name = p1 === my.name ? p2 : p1;
+            names = data.ShortName(name);
+          }
+        } else {
+          const sorted = sortWithJobNick(data.PriorityNames(targets), data);
+          names = sorted.join(', ');
+        }
+        return output[my.debuff]!({ partners: names });
       },
-      run: (data) => {
-        delete data.prsAdvances;
-        delete data.prsMyProp;
-      },
+      run: (data) => delete data.prsRelProps,
       outputStrings: {
         eye: {
           en: '내게 눈 (${partners})',
