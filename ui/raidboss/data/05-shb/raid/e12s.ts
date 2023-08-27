@@ -31,12 +31,18 @@ type RelProp = {
 };
 
 export interface Data extends RaidbossData {
+  prsBlu?: boolean;
   prsRealName?: string;
   prsNickName?: string;
   prsTarget?: string;
   prsTitanProps?: TitanProp[];
   prsStacker?: string[];
+  prsStackLeft?: boolean;
   prsRelProps?: RelProp[];
+  prsMyDebuff?: RelDebuff;
+  prsBscNorth?: number;
+  prsBscSlow?: number;
+  prsAdvNorth?: boolean;
   //
   isDoorBoss?: boolean;
   decOffset?: number;
@@ -323,8 +329,9 @@ const dirToOutput = (dir: number, output: Output, marker: boolean) => {
   return dirs[dir];
 };
 
-const sortByBluRole = (names: string[], data: Data) => {
-  if (data.job !== 'BLU')
+const sortPriority = (data: Data, party: string[]) => {
+  const names = data.PriorityNames(party);
+  if (!data.prsBlu)
     return names;
   const jobNamePriority: Record<string, number> = {
     // 기본
@@ -359,8 +366,9 @@ const sortByBluRole = (names: string[], data: Data) => {
   const sorted = pairs.sort((a, b) => a.prior - b.prior).map((x) => x.name);
   return sorted;
 };
-const sortRelativity = (names: string[], data: Data) => {
-  if (data.job !== 'BLU')
+const sortRelativity = (data: Data, party: string[]) => {
+  const names = data.PriorityNames(party);
+  if (!data.prsBlu)
     return names;
   const jobNamePriority: Record<string, number> = {
     // 기본 h1>mt>st>d1>d2>d3>d4>h2
@@ -640,7 +648,7 @@ const triggerSet: TriggerSet<Data> = {
         laser3: Outputs.num3,
         laser4: Outputs.num4,
         inner: {
-          en: '#${num} (안쪽 유도)',
+          en: '안쪽#${num}',
           de: '#${num} (innen)',
           fr: '#${num} (Intérieur)',
           ja: '#${num} (中)',
@@ -648,7 +656,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '#${num} (안쪽)',
         },
         outer: {
-          en: '#${num} (바깥쪽 유도)',
+          en: '바깥쪽#${num}',
           de: '#${num} (außen)',
           fr: '#${num} (Extérieur)',
           ja: '#${num} (外)',
@@ -656,7 +664,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '#${num} (바깥쪽)',
         },
         unknown: {
-          en: '#${num} (???)',
+          en: '몰?루#${num}',
           de: '#${num} (???)',
           fr: '#${num} (???)',
           ja: '#${num} (???)',
@@ -673,7 +681,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.knockback!(),
       outputStrings: {
         knockback: {
-          en: '넉백: 남동🡾 [②마커로]',
+          en: '넉백: ② => 남동🡾',
           de: 'SO Rückstoß',
           fr: 'SE Poussée',
           ja: '東南ノックバック',
@@ -690,7 +698,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.knockback!(),
       outputStrings: {
         knockback: {
-          en: '넉백: 🡿남서 [③마커로]',
+          en: '넉백: ③ => 🡿남서',
           de: 'SW Rückstoß',
           fr: 'SO Poussée',
           ja: '西南ノックバック',
@@ -1147,6 +1155,7 @@ const triggerSet: TriggerSet<Data> = {
       id: 'E12S Relativity Phase',
       type: 'StartsUsing',
       netRegex: { source: 'Oracle Of Darkness', id: '58E[0-3]' },
+      response: Responses.bigAoe(),
       run: (data, matches) => {
         const phaseMap: { [id: string]: string } = {
           '58E0': 'basic',
@@ -1155,31 +1164,9 @@ const triggerSet: TriggerSet<Data> = {
           '58E3': 'terminal',
         };
         data.phase = phaseMap[matches.id];
+
+        delete data.sorrows;
       },
-    },
-    {
-      id: 'E12S Oracle Basic Relativity',
-      type: 'StartsUsing',
-      netRegex: { source: 'Oracle Of Darkness', id: '58E0', capture: false },
-      response: Responses.bigAoe(),
-    },
-    {
-      id: 'E12S Oracle Intermediate Relativity',
-      type: 'StartsUsing',
-      netRegex: { source: 'Oracle Of Darkness', id: '58E1', capture: false },
-      response: Responses.bigAoe(),
-    },
-    {
-      id: 'E12S Oracle Advanced Relativity',
-      type: 'StartsUsing',
-      netRegex: { source: 'Oracle Of Darkness', id: '58E2', capture: false },
-      response: Responses.bigAoe(),
-    },
-    {
-      id: 'E12S Oracle Terminal Relativity',
-      type: 'StartsUsing',
-      netRegex: { source: 'Oracle Of Darkness', id: '58E3', capture: false },
-      response: Responses.bigAoe(),
     },
     {
       id: 'E12S Oracle Darkest Dance',
@@ -1303,7 +1290,7 @@ const triggerSet: TriggerSet<Data> = {
         south: Outputs.south,
         west: Outputs.west,
         safeZone: {
-          en: '안전한곳: ${safe}',
+          en: '안전: ${safe}',
         },
         ...AutumnIndicator.outputStringsMarkerCardinal,
       },
@@ -1338,13 +1325,13 @@ const triggerSet: TriggerSet<Data> = {
       // 99E Spell-In-Waiting: Dark Blizzard III
       netRegex: { effectId: '99[78DE]' },
       condition: (data, matches) =>
-        !data.options.AutumnStyle && data.phase === 'basic' && matches.target === data.me,
+        !data.prsBlu && data.phase === 'basic' && matches.target === data.me,
       durationSeconds: (_data, matches) => parseFloat(matches.duration),
       response: (_data, matches, output) => {
         // cactbot-builtin-response
         output.responseOutputStrings = {
           shadoweye: {
-            en: '내게 눈',
+            en: '내게 눈깔',
             de: 'Auge auf DIR',
             fr: 'Œil sur VOUS',
             ja: '自分に目',
@@ -1353,7 +1340,7 @@ const triggerSet: TriggerSet<Data> = {
           },
           water: intermediateRelativityOutputStrings.stack,
           longFire: {
-            en: '뭉쳤다 => 남쪽에서 장판 [긴 불]',
+            en: '[긴 불] 뭉쳤다 => 장판',
             de: 'langes Feuer',
             fr: 'Feu long',
             ja: 'ファイガ(遅い)',
@@ -1361,7 +1348,7 @@ const triggerSet: TriggerSet<Data> = {
             ko: '느린 파이가',
           },
           shortFire: {
-            en: '바로 남쪽에서 장판 [짧은 불]',
+            en: '[짧은 불] 바로 장판',
             de: 'kurzes Feuer',
             fr: 'Feu court',
             ja: 'ファイガ(早い)',
@@ -1369,7 +1356,7 @@ const triggerSet: TriggerSet<Data> = {
             ko: '빠른 파이가',
           },
           longIce: {
-            en: '레이저 유도 => 뭉쳤다 => 한가운데 [긴 얼음]',
+            en: '[긴 얼음] 레이저 유도',
             de: 'langes Eis',
             fr: 'Glace longue',
             ja: 'ブリザガ(遅い)',
@@ -1377,7 +1364,7 @@ const triggerSet: TriggerSet<Data> = {
             ko: '느린 블리자가',
           },
           shortIce: {
-            en: '레이저 유도 => 그대로 얼음처리 [짧은 얼음]',
+            en: '[짧은 얼음] 레이저 유도',
             de: 'kurzes Eis',
             fr: 'Glace courte',
             ja: 'ブリザガ(早い)',
@@ -1474,6 +1461,7 @@ const triggerSet: TriggerSet<Data> = {
       // Return IV = 995
       netRegex: { effectId: '99[45]' },
       condition: Conditions.targetIsYou(),
+      durationSeconds: 4.5,
       response: (data, _matches, output) => {
         // cactbot-builtin-response
         output.responseOutputStrings = Object.assign({
@@ -1485,10 +1473,41 @@ const triggerSet: TriggerSet<Data> = {
             cn: '快移动！',
             ko: '이동하기!',
           },
+          goCenter: {
+            en: '한가운데로!',
+          },
+          baitNorth: {
+            en: '움직여서 => 북쪽에서 유도',
+          },
+          baitSouth: {
+            en: '움직여서 => 남쪽에서 유도',
+          },
           action: {
-            en: '${action} (${targets})',
+            en: '${action} (${marker}로)',
+          },
+          targets: {
+            en: '대상: ${targets}',
+          },
+          ttss: {
+            en: '${marker}',
           },
         }, intermediateRelativityOutputStrings);
+
+        if (data.phase === 'basic') {
+          if (data.prsBscSlow === undefined || data.prsBscNorth === undefined)
+            return { infoText: output.moveAway!() };
+
+          const sub = Math.abs(data.prsBscSlow - data.prsBscNorth);
+          delete data.prsBscSlow;
+          delete data.prsBscNorth;
+
+          if (data.prsMyDebuff !== 'water')
+            return { infoText: output.goCenter!() };
+
+          if (sub === 1 || sub === 7)
+            return { infoText: output.baitNorth!() };
+          return { infoText: output.baitSouth!() };
+        }
 
         if (data.phase !== 'intermediate')
           return { infoText: output.moveAway!() };
@@ -1497,14 +1516,19 @@ const triggerSet: TriggerSet<Data> = {
         if (!key)
           return { infoText: output.moveAway!() };
 
-        if (
-          data.options.AutumnStyle && data.prsRelProps !== undefined &&
-          (key === 'flare' || key === 'aero')
-        ) {
+        if (data.prsRelProps !== undefined && (key === 'flare' || key === 'aero')) {
           const targets = data.prsRelProps.filter((x) => x.debuff === key).map((x) => x.name);
-          const sorted = sortRelativity(data.PriorityNames(targets), data);
+          const sorted = sortRelativity(data, targets);
+
           const action = output[key]!();
-          return { alertText: output.action!({ action: action, targets: sorted.join(', ') }) };
+          const index = sorted.indexOf(data.ShortName(data.me));
+          const markers = ['Ⓐ', 'Ⓑ', 'Ⓒ', 'Ⓓ'] as const;
+          const ttss = ['アルパ', 'ブラボー', 'チャーリ', 'デルタ'] as const;
+          return {
+            alertText: output.action!({ action: action, marker: markers[index] }),
+            infoText: output.targets!({ targets: sorted.join(', ') }),
+            tts: output.ttss!({ marker: ttss[index] }),
+          };
         }
 
         return { alertText: output[key]!() };
@@ -1531,9 +1555,7 @@ const triggerSet: TriggerSet<Data> = {
         if (data.options.AutumnStyle && data.eyes !== undefined) {
           if (data.eyes.includes(data.me))
             return output.aHaveEye!();
-          const sorted = sortRelativity(data.PriorityNames(data.eyes), data);
-          const p1 = sorted[0] ?? output.unknown!();
-          const p2 = sorted[1] ?? output.unknown!();
+          const [p1, p2] = sortRelativity(data, data.eyes);
           return output.lookAwayFromPlayers!({ player1: p1, player2: p2 });
         }
 
@@ -1602,8 +1624,9 @@ const triggerSet: TriggerSet<Data> = {
       netRegex: { npcNameId: '9824' },
       durationSeconds: 10,
       infoText: (data, matches, output) => {
+        data.prsBscNorth = matchedPositionToDir(matches);
         return output.hourglass!({
-          dir: dirToOutput(matchedPositionToDir(matches), output, data.options.AutumnStyle),
+          dir: dirToOutput(data.prsBscNorth, output, data.options.AutumnStyle),
         });
       },
       outputStrings: {
@@ -1645,7 +1668,7 @@ const triggerSet: TriggerSet<Data> = {
       // '0085' is the Red tether that buffs "Slow"
       netRegex: { id: '0086' },
       condition: (data) => data.phase === 'advanced',
-      durationSeconds: 4,
+      durationSeconds: 8,
       suppressSeconds: 3,
       infoText: (data, matches, output) => {
         const sorrow1 = data.sorrows?.[matches.sourceId.toUpperCase()];
@@ -1654,6 +1677,19 @@ const triggerSet: TriggerSet<Data> = {
 
         // Calculate opposite side
         const sorrow2 = (sorrow1 + 4) % 8;
+
+        if (data.prsAdvNorth !== undefined) {
+          let mesg;
+          if (data.prsAdvNorth) {
+            const sorrow = sorrow1 < sorrow2 ? sorrow1 : sorrow2;
+            mesg = output.goNorth!({ marker: dirToOutput(sorrow, output, true) });
+          } else {
+            const sorrow = sorrow1 < sorrow2 ? sorrow2 : sorrow1;
+            mesg = output.goSouth!({ marker: dirToOutput(sorrow, output, true) });
+          }
+          delete data.prsAdvNorth;
+          return mesg;
+        }
 
         return output.hourglass!({
           dir1: sorrow1 < sorrow2
@@ -1680,6 +1716,12 @@ const triggerSet: TriggerSet<Data> = {
           ja: '黄色: ${dir1} / ${dir2}',
           cn: '黄色: ${dir1} / ${dir2}',
           ko: '노랑: ${dir1} / ${dir2}',
+        },
+        goNorth: {
+          en: '북쪽으로! 🟨노랑: ${marker}',
+        },
+        goSouth: {
+          en: '남쪽으로! 🟨노랑: ${marker}',
         },
         ...AutumnIndicator.outputStringsMarker8,
       },
@@ -1763,7 +1805,12 @@ const triggerSet: TriggerSet<Data> = {
       condition: (data, matches) => data.phase !== undefined && parseFloat(matches.duration) > 13,
       delaySeconds: (_data, matches) => parseFloat(matches.duration) - 4,
       suppressSeconds: 5,
-      alertText: (_data, _matches, output) => output.text!(),
+      alertText: (data, _matches, output) => {
+        if (data.prsStackLeft === undefined)
+          return output.text!();
+        return data.prsStackLeft ? output.left!() : output.right!();
+      },
+      run: (data) => delete data.prsStackLeft,
       outputStrings: {
         text: {
           en: '뭉쳐요',
@@ -1773,6 +1820,12 @@ const triggerSet: TriggerSet<Data> = {
           cn: '集合',
           ko: '쉐어',
         },
+        left: {
+          en: '왼쪽에서 뭉쳐요',
+        },
+        right: {
+          en: '오른쪽에서 뭉쳐요',
+        },
       },
     },
     {
@@ -1781,23 +1834,12 @@ const triggerSet: TriggerSet<Data> = {
       netRegex: { effectId: '99F' },
       // In advanced, Aero comes in ~23 and ~31s flavors
       condition: (data, matches) =>
-        !data.options.AutumnStyle && data.phase === 'advanced' && parseFloat(matches.duration) > 28,
+        !data.prsBlu && data.phase === 'advanced' && parseFloat(matches.duration) > 28,
       infoText: (data, matches, output) => {
         data.doubleAero ??= [];
-
-        if (data.options.AutumnStyle) {
-          data.doubleAero.push(matches.target);
-          if (data.doubleAero.length !== 2)
-            return;
-          const sorted = sortRelativity(data.PriorityNames(data.doubleAero), data);
-          return output.text!({ name1: sorted[0], name2: sorted[1] });
-        }
-
         data.doubleAero.push(data.ShortName(matches.target));
-
         if (data.doubleAero.length !== 2)
           return;
-
         data.doubleAero.sort();
         return output.text!({ name1: data.doubleAero[0], name2: data.doubleAero[1] });
       },
@@ -1822,7 +1864,7 @@ const triggerSet: TriggerSet<Data> = {
       // 99F Spell-In-Waiting: Dark Aero III
       netRegex: { effectId: '99[78F]' },
       condition: (data, matches) =>
-        !data.options.AutumnStyle && data.phase === 'advanced' && data.me === matches.target,
+        !data.prsBlu && data.phase === 'advanced' && data.me === matches.target,
       durationSeconds: 15,
       alertText: (_data, matches, output) => {
         const id = matches.effectId.toUpperCase();
@@ -1840,7 +1882,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         shadoweye: {
-          en: '내게 눈',
+          en: '내게 눈깔',
           de: 'Auge auf DIR',
           fr: 'Œil sur VOUS',
           ja: '自分に目',
@@ -1848,7 +1890,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '시선징 대상자',
         },
         doubleAero: {
-          en: '내게 바람 두개',
+          en: '내게 바람x2',
           de: 'Doppel Windga auf DIR',
           fr: 'Double Vent sur VOUS',
           ja: '自分にエアロガ×2',
@@ -1856,7 +1898,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '더블 에어로가 대상자',
         },
         spread: {
-          en: '내게 산개',
+          en: '내게 흩어져요',
           de: 'Verteilen auf DIR',
           fr: 'Dispersion sur VOUS',
           ja: '自分に散開',
@@ -1910,7 +1952,7 @@ const triggerSet: TriggerSet<Data> = {
             en: '🔵흩어져요',
           },
           blueWith: {
-            en: '🔵흩어져요 (${player})',
+            en: '🔵흩어져요 (${players})',
           },
           yellow: {
             en: '🟡흩어져요',
@@ -1921,9 +1963,6 @@ const triggerSet: TriggerSet<Data> = {
           red: {
             en: '🔴뭉쳐요',
           },
-          redWith: {
-            en: '🔴뭉쳐요 (${players})',
-          },
           unknown: Outputs.unknown,
         };
         if (data.prsTitanProps === undefined)
@@ -1933,34 +1972,20 @@ const triggerSet: TriggerSet<Data> = {
           return;
         if (my.color === 'blue') {
           // 파랑
-          const ps = data.prsTitanProps.filter((x) => x.color === my.color && x.name !== my.name);
-          if (ps === undefined || ps[0] === undefined)
+          const ps = data.prsTitanProps.filter((x) => x.color === my.color).map((x) => x.name);
+          if (ps.length === 1)
             return { alertText: output.blue!() };
-          return { alertText: output.blueWith!({ player: data.ShortName(ps[0].name) }) };
+          const names = sortRelativity(data, ps);
+          return { alertText: output.blueWith!({ players: names.join(', ') }) };
         } else if (my.color === 'yellow') {
           // 노랑
           const ps = data.prsTitanProps.filter((x) => x.color === my.color).map((x) => x.name);
-          if (ps === undefined || ps.length === 0 || ps.length === 1)
+          if (ps.length === 1)
             return { alertText: output.yellow!() };
-          if (ps.length === 2) {
-            const [p1, p2] = ps;
-            if (p1 === undefined || p2 === undefined)
-              return { alertText: output.yellow!() };
-            const name = p1 === data.me ? p2 : p1;
-            return { alertText: output.yellowWith!({ players: data.ShortName(name) }) };
-          }
-          const names = sortByBluRole(data.PriorityNames(ps), data);
+          const names = sortRelativity(data, ps);
           return { alertText: output.yellowWith!({ players: names.join(', ') }) };
         } else if (my.color === 'red') {
           // 빨강
-          /*
-          const ps = data.prsTitanProps.filter((x) => x.color === my.color).map((x) => x.name);
-          if (ps === undefined || ps.length === 0 || ps.length > 4)
-            return { infoText: output.red!() };
-          const names = sortWithJobNick(data.PriorityNames(ps), data);
-          return { infoText: output.redWith!({ players: names.join(', ') }) };
-          */
-          // 너무 길게 나와서 그냥 원래 껄로
           return { infoText: output.red!() };
         }
         return { infoText: output.unknown!() };
@@ -1970,7 +1995,7 @@ const triggerSet: TriggerSet<Data> = {
       id: 'E12S 전반 4:4 대상',
       type: 'HeadMarker',
       netRegex: {},
-      condition: (data) => data.isDoorBoss && data.options.AutumnStyle,
+      condition: (data) => data.isDoorBoss && data.prsBlu,
       infoText: (data, matches, output) => {
         const id = getHeadmarkerId(data, matches);
         if (id !== '003E')
@@ -1979,12 +2004,9 @@ const triggerSet: TriggerSet<Data> = {
         data.prsStacker.push(matches.target);
         if (data.prsStacker.length !== 2)
           return;
-        if (data.prsStacker.includes(data.me)) {
-          const [partner] = data.prsStacker.filter((x) => x !== data.me);
-          if (partner !== undefined)
-            return output.stackOnMe!({ partner: data.ShortName(partner) });
-        }
-        const names = sortByBluRole(data.PriorityNames(data.prsStacker), data);
+        const names = sortPriority(data, data.prsStacker);
+        if (data.prsStacker.includes(data.me))
+          return output.stackOnMe!({ targets: names.join(', ') });
         return output.stack!({ targets: names.join(', ') });
       },
       run: (data) => {
@@ -1996,7 +2018,54 @@ const triggerSet: TriggerSet<Data> = {
           en: '뭉쳐요: ${targets}',
         },
         stackOnMe: {
-          en: '내게 뭉쳐요 (${partner})',
+          en: '내게 뭉쳐요 (${targets})',
+        },
+      },
+    },
+    {
+      id: 'E12S 전반 사자줄 수집',
+      type: 'Tether',
+      netRegex: { source: 'Beastly Sculpture', id: '0011' },
+      condition: (data) => data.options.AutumnStyle,
+      run: (data, matches) => {
+        data.prsStacker ??= [];
+        data.prsStacker.push(matches.target);
+      },
+    },
+    {
+      id: 'E12S 전반 사자줄 없네',
+      type: 'Tether',
+      netRegex: { source: 'Beastly Sculpture', id: '0011', capture: false },
+      condition: (data) => data.options.AutumnStyle,
+      delaySeconds: 0.5,
+      suppressSeconds: 99999,
+      alertText: (data, _matches, output) => {
+        if (data.prsStacker === undefined)
+          return;
+        const stacker = data.prsStacker;
+        if (stacker.includes(data.me))
+          return;
+        const targets = data.party.partyNames.filter((x) => !stacker.includes(x));
+        if (targets.length !== 4)
+          return output.nothing!();
+        const sorted = sortPriority(data, targets);
+        const index = sorted.indexOf(data.ShortName(data.me));
+        if (index < 0)
+          return output.nothing!();
+        if (index < 2)
+          return output.north!({ player1: sorted[0], player2: sorted[1] });
+        return output.south!({ player1: sorted[2], player2: sorted[3] });
+      },
+      run: (data) => delete data.prsStacker,
+      outputStrings: {
+        nothing: {
+          en: '사자 줄 없어요!',
+        },
+        north: {
+          en: '북쪽/사자 줄 없어요! (${player1}, ${player2})',
+        },
+        south: {
+          en: '남쪽/사자 줄 없어요! (${player1}, ${player2})',
         },
       },
     },
@@ -2034,7 +2103,7 @@ const triggerSet: TriggerSet<Data> = {
           return;
 
         const itsme = data.prsStacker.includes(data.me);
-        const sorted = sortByBluRole(data.PriorityNames(data.prsStacker), data);
+        const sorted = sortPriority(data, data.prsStacker);
         delete data.prsStacker;
         if (itsme)
           return { alertText: output.itsme!({ targets: sorted.join(', ') }) };
@@ -2042,10 +2111,32 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
+      id: 'E12S 후반 베이직 모래시계 수집',
+      type: 'AddedCombatant',
+      netRegex: { npcNameId: '9822' },
+      condition: (data) => data.options.AutumnStyle && data.phase === 'basic',
+      run: (data, matches) => {
+        const id = matches.id.toUpperCase();
+        data.sorrows ??= {};
+        data.sorrows[id] = matchedPositionToDir(matches);
+      },
+    },
+    {
+      id: 'E12S 후반 베이직 모래시계 줄',
+      type: 'Tether',
+      netRegex: { id: '0085' },
+      condition: (data) => data.options.AutumnStyle && data.phase === 'basic',
+      run: (data, matches) => {
+        if (data.prsBscSlow !== undefined)
+          return;
+        data.prsBscSlow = data.sorrows?.[matches.sourceId.toUpperCase()];
+      },
+    },
+    {
       id: 'E12S 후반 베이직 수집',
       type: 'GainsEffect',
       netRegex: { effectId: '99[78DE]' },
-      condition: (data) => data.options.AutumnStyle && data.phase === 'basic',
+      condition: (data) => data.prsBlu && data.phase === 'basic',
       run: (data, matches) => {
         let debuff: RelDebuff;
         switch (matches.effectId.toUpperCase()) {
@@ -2074,7 +2165,7 @@ const triggerSet: TriggerSet<Data> = {
       type: 'GainsEffect',
       netRegex: { effectId: '99[78DE]' },
       condition: (data, matches) =>
-        data.options.AutumnStyle && data.phase === 'basic' && matches.target === data.me,
+        data.prsBlu && data.phase === 'basic' && matches.target === data.me,
       delaySeconds: 0.1,
       durationSeconds: (_data, matches) => clamp(parseFloat(matches.duration), 10, 25),
       response: (data, _matches, output) => {
@@ -2105,8 +2196,10 @@ const triggerSet: TriggerSet<Data> = {
         const my = data.prsRelProps.find((x) => x.name === data.me);
         if (my === undefined)
           return;
+        data.prsMyDebuff = my.debuff;
         const dests = data.prsRelProps.filter((x) => x.debuff === my.debuff).map((x) => x.name);
-        const sorted = sortRelativity(data.PriorityNames(dests), data);
+        const sorted = sortRelativity(data, dests);
+        data.prsStackLeft = sorted.indexOf(data.ShortName(data.me)) === 0;
         if (my.debuff === 'eye' || my.debuff === 'water')
           return { infoText: output[my.debuff]!({ targets: sorted.join(', ') }) };
         return { alertText: output[my.debuff]!({ targets: sorted.join(', ') }) };
@@ -2118,7 +2211,7 @@ const triggerSet: TriggerSet<Data> = {
       type: 'GainsEffect',
       // 플레어(690), 에어로(99F)
       netRegex: { effectId: ['690', '99F'] },
-      condition: (data) => data.options.AutumnStyle && data.phase === 'intermediate',
+      condition: (data) => data.prsBlu && data.phase === 'intermediate',
       run: (data, matches) => {
         const debuff: RelDebuff = matches.effectId === '690' ? 'flare' : 'aero';
         const prop: RelProp = { name: matches.target, debuff: debuff };
@@ -2131,23 +2224,40 @@ const triggerSet: TriggerSet<Data> = {
       type: 'GainsEffect',
       netRegex: { effectId: ['690', '99F'] },
       condition: (data, matches) =>
-        data.options.AutumnStyle && data.phase === 'intermediate' &&
+        data.prsBlu && data.phase === 'intermediate' &&
         matches.target === data.me && parseFloat(matches.duration) > 30,
       delaySeconds: 0.1,
-      alertText: (data, matches, output) => {
+      durationSeconds: 4.5,
+      response: (data, matches, output) => {
+        // cactbot-builtin-response
+        output.responseOutputStrings = {
+          action: {
+            en: '${action} (${marker}로)',
+          },
+          targets: {
+            en: '대상: ${targets}',
+          },
+          ttss: {
+            en: '${marker}',
+          },
+          ...intermediateRelativityOutputStrings,
+        };
         if (data.prsRelProps === undefined)
           return;
+
         const debuff: RelDebuff = matches.effectId === '690' ? 'flare' : 'aero';
         const targets = data.prsRelProps.filter((x) => x.debuff === debuff).map((x) => x.name);
-        const sorted = sortRelativity(data.PriorityNames(targets), data);
+        const sorted = sortRelativity(data, targets);
+
         const action = output[debuff]!();
-        return output.action!({ action: action, targets: sorted.join(', ') });
-      },
-      outputStrings: {
-        action: {
-          en: '${action} (${targets})',
-        },
-        ...intermediateRelativityOutputStrings,
+        const index = sorted.indexOf(data.ShortName(data.me));
+        const markers = ['Ⓐ', 'Ⓑ', 'Ⓒ', 'Ⓓ'] as const;
+        const ttss = ['アルパ', 'ブラボー', 'チャーリ', 'デルタ'] as const;
+        return {
+          alertText: output.action!({ action: action, marker: markers[index] }),
+          infoText: output.targets!({ targets: sorted.join(', ') }),
+          tts: output.ttss!({ marker: ttss[index] }),
+        };
       },
     },
     {
@@ -2160,7 +2270,7 @@ const triggerSet: TriggerSet<Data> = {
       id: 'E12S 후반 어드밴스 수집',
       type: 'GainsEffect',
       netRegex: { effectId: '99[78F]' },
-      condition: (data) => data.options.AutumnStyle && data.phase === 'advanced',
+      condition: (data) => data.prsBlu && data.phase === 'advanced',
       run: (data, matches) => {
         let debuff: RelDebuff;
         switch (matches.effectId.toUpperCase()) {
@@ -2187,39 +2297,48 @@ const triggerSet: TriggerSet<Data> = {
       id: 'E12S 후반 어드밴스 실행',
       type: 'GainsEffect',
       netRegex: { effectId: '99F', capture: false },
-      condition: (data) => data.options.AutumnStyle && data.phase === 'advanced',
+      condition: (data) => data.prsBlu && data.phase === 'advanced',
       delaySeconds: 0.1,
-      durationSeconds: 15,
+      durationSeconds: 11,
       suppressSeconds: 9999,
-      alertText: (data, _matches, output) => {
+      response: (data, _matches, output) => {
+        // cactbot-builtin-response
+        output.responseOutputStrings = {
+          eye: {
+            en: '[눈깔] 앞 => 왼쪽',
+          },
+          fire: {
+            en: '[불] 앞 => 오른쪽',
+          },
+          aero: {
+            en: '[바람x2] 뒤 => 오른쪽',
+          },
+          targets: {
+            en: '대상: ${targets}',
+          },
+          unknown: Outputs.unknown,
+        };
         if (data.prsRelProps === undefined)
           return;
         const my = data.prsRelProps.find((x) => x.name === data.me);
         if (my === undefined)
           return;
-        const targets = data.prsRelProps.filter((x) => x.debuff === my.debuff).map((x) => x.name);
-        let names: string;
-        if (targets === undefined || targets.length === 1) {
-          names = output.unknown!();
-        } else {
-          const sorted = sortRelativity(data.PriorityNames(targets), data);
-          names = sorted.join(', ');
-        }
-        return output[my.debuff]!({ targets: names });
+
+        data.prsMyDebuff = my.debuff;
+        const targets = data.prsRelProps.filter((x) => x.debuff === my.debuff);
+        if (targets === undefined || targets.length === 1)
+          return { alertText: output[my.debuff]!() };
+
+        const sorted = sortRelativity(data, targets.map((x) => x.name));
+        data.prsAdvNorth = my.debuff !== 'fire'
+          ? (sorted.indexOf(data.ShortName(data.me)) === 0 ? true : false)
+          : (sorted.indexOf(data.ShortName(data.me)) < 2 ? true : false);
+        return {
+          alertText: output[my.debuff]!(),
+          infoText: output.targets!({ targets: sorted.join(', ') }),
+        };
       },
       run: (data) => delete data.prsRelProps,
-      outputStrings: {
-        eye: {
-          en: '[눈깔] 앞+왼쪽 (${targets})',
-        },
-        fire: {
-          en: '[불] 앞+오른쪽 (${targets})',
-        },
-        aero: {
-          en: '[바람x2] 뒤+오른쪽 (${targets})',
-        },
-        unknown: Outputs.unknown,
-      },
     },
   ],
   timelineReplace: [
