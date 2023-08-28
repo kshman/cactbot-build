@@ -1506,7 +1506,6 @@ const triggerSet: TriggerSet<Data> = {
         const key = data.intermediateDebuffs && data.intermediateDebuffs.shift();
         if (!key)
           return { infoText: output.moveAway!() };
-
         return { alertText: output[key]!() };
       },
     },
@@ -2200,7 +2199,14 @@ const triggerSet: TriggerSet<Data> = {
       condition: (data, matches) =>
         data.prsBlu && data.phase === 'intermediate' && matches.target === data.me,
       delaySeconds: 0.1,
-      durationSeconds: 20,
+      durationSeconds: (_data, matches) => {
+        const time = parseFloat(matches.duration);
+        if (time > 30)
+          return 7;
+        if (time > 26)
+          return 12;
+        return 17;
+      },
       response: (data, _matches, output) => {
         // cactbot-builtin-response
         output.responseOutputStrings = {
