@@ -32,8 +32,7 @@ type RelProp = {
 
 export interface Data extends RaidbossData {
   prsBlu?: boolean;
-  prsRealName?: string;
-  prsNickName?: string;
+  prsNick?: string;
   prsAggro?: string;
   prsTitanProp?: TitanProp[];
   prsStacker?: string[];
@@ -352,10 +351,11 @@ const sortPriority = (data: Data, party: string[]) => {
   } as const;
   type Pair = { prior: number; name: string };
   const pairs: Pair[] = [];
-  if (data.prsRealName !== undefined && data.prsNickName !== undefined) {
+  if (data.prsNick !== undefined) {
+    const sn = data.ShortName(data.me);
     for (const n of names) {
-      if (n === data.prsRealName)
-        pairs.push({ prior: jobNamePriority[data.prsNickName] ?? 8, name: n });
+      if (n === sn)
+        pairs.push({ prior: jobNamePriority[data.prsNick] ?? 8, name: n });
       else
         pairs.push({ prior: jobNamePriority[n] ?? 8, name: n });
     }
@@ -389,10 +389,11 @@ const sortRelativity = (data: Data, party: string[]) => {
   } as const;
   type Pair = { prior: number; name: string };
   const pairs: Pair[] = [];
-  if (data.prsRealName !== undefined && data.prsNickName !== undefined) {
+  if (data.prsNick !== undefined) {
+    const sn = data.ShortName(data.me);
     for (const n of names) {
-      if (n === data.prsRealName)
-        pairs.push({ prior: jobNamePriority[data.prsNickName] ?? 8, name: n });
+      if (n === sn)
+        pairs.push({ prior: jobNamePriority[data.prsNick] ?? 8, name: n });
       else
         pairs.push({ prior: jobNamePriority[n] ?? 8, name: n });
     }
