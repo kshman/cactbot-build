@@ -40,7 +40,7 @@ export interface Data extends RaidbossData {
   prsStackLeft?: boolean;
   prsRelProp?: RelProp[];
   prsRelTarget?: string[];
-  prsMyDebuff?: RelDebuff;
+  prsRelMine?: RelDebuff;
   prsBscNorth?: number;
   prsBscSlow?: number;
   //
@@ -1492,7 +1492,7 @@ const triggerSet: TriggerSet<Data> = {
           delete data.prsBscSlow;
           delete data.prsBscNorth;
 
-          if (data.prsMyDebuff !== 'water')
+          if (data.prsRelMine !== 'water')
             return { infoText: output.goCenter!() };
 
           if (sub === 1 || sub === 7)
@@ -1654,8 +1654,8 @@ const triggerSet: TriggerSet<Data> = {
         // Calculate opposite side
         const sorrow2 = (sorrow1 + 4) % 8;
 
-        if (data.prsRelTarget !== undefined && data.prsMyDebuff !== undefined) {
-          const isNorth = data.prsMyDebuff !== 'fire'
+        if (data.prsRelTarget !== undefined && data.prsRelMine !== undefined) {
+          const isNorth = data.prsRelMine !== 'fire'
             ? (data.prsRelTarget.indexOf(data.ShortName(data.me)) === 0 ? true : false)
             : (data.prsRelTarget.indexOf(data.ShortName(data.me)) < 2 ? true : false);
           const targets = data.prsRelTarget.join(', ');
@@ -2173,7 +2173,7 @@ const triggerSet: TriggerSet<Data> = {
         const my = data.prsRelProp.find((x) => x.name === data.me);
         if (my === undefined)
           return;
-        data.prsMyDebuff = my.debuff;
+        data.prsRelMine = my.debuff;
         const dests = data.prsRelProp.filter((x) => x.debuff === my.debuff).map((x) => x.name);
         const sorted = sortRelativity(data, dests);
         data.prsStackLeft = sorted.indexOf(data.ShortName(data.me)) === 0;
@@ -2268,7 +2268,7 @@ const triggerSet: TriggerSet<Data> = {
         if (my === undefined)
           return;
 
-        data.prsMyDebuff = my.debuff;
+        data.prsRelMine = my.debuff;
         const targets = data.prsRelProp.filter((x) => x.debuff === my.debuff);
         data.prsRelTarget = sortRelativity(data, targets.map((x) => x.name));
 
