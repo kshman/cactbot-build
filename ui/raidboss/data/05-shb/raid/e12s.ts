@@ -1482,15 +1482,6 @@ const triggerSet: TriggerSet<Data> = {
           baitSouth: {
             en: '움직여서 => 남쪽에서 유도',
           },
-          action: {
-            en: '${action} (${marker}로)',
-          },
-          targets: {
-            en: '대상: ${targets}',
-          },
-          ttss: {
-            en: '${marker}',
-          },
         }, intermediateRelativityOutputStrings);
 
         if (data.phase === 'basic') {
