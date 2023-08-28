@@ -34,15 +34,15 @@ export interface Data extends RaidbossData {
   prsBlu?: boolean;
   prsRealName?: string;
   prsNickName?: string;
-  prsTarget?: string;
-  prsTitanProps?: TitanProp[];
+  prsAggro?: string;
+  prsTitanProp?: TitanProp[];
   prsStacker?: string[];
   prsStackLeft?: boolean;
-  prsRelProps?: RelProp[];
+  prsRelProp?: RelProp[];
+  prsRelTarget?: string[];
   prsMyDebuff?: RelDebuff;
   prsBscNorth?: number;
   prsBscSlow?: number;
-  prsAdvNorth?: boolean;
   //
   isDoorBoss?: boolean;
   decOffset?: number;
@@ -405,6 +405,7 @@ const sortRelativity = (data: Data, party: string[]) => {
 };
 const clamp = (num: number, a: number, b: number) =>
   Math.max(Math.min(num, Math.max(a, b)), Math.min(a, b));
+const minmax = (a: number, b: number) => a < b ? [a, b] : [b, a];
 
 const triggerSet: TriggerSet<Data> = {
   id: 'EdensPromiseEternitySavage',
@@ -446,7 +447,7 @@ const triggerSet: TriggerSet<Data> = {
 
         // Formless double tankbuster mechanic.
         if (id === '00DA') {
-          if (data.role === 'tank' || data.prsTarget === matches.target)
+          if (data.role === 'tank' || data.prsAggro === matches.target)
             return { alertText: output.formlessBusterAndSwap!() };
           // Not that you personally can do anything about it, but maybe this
           // is your cue to yell on voice comms for cover.
@@ -782,7 +783,7 @@ const triggerSet: TriggerSet<Data> = {
       type: 'StartsUsing',
       netRegex: { source: 'Eden\'s Promise', id: '58A5', capture: false },
       run: (data) => {
-        delete data.prsTitanProps;
+        delete data.prsTitanProp;
         delete data.weightTargets;
         data.seenFirstBombs = true;
       },
@@ -810,7 +811,7 @@ const triggerSet: TriggerSet<Data> = {
           return;
 
         // TODO: should this call out who to cover if you are a paladin?
-        if (data.role === 'tank' || data.prsTarget === matches.target)
+        if (data.role === 'tank' || data.prsAggro === matches.target)
           return { alertText: output.formlessBusterAndSwap!() };
 
         if (data.role === 'healer')
@@ -1164,7 +1165,6 @@ const triggerSet: TriggerSet<Data> = {
           '58E3': 'terminal',
         };
         data.phase = phaseMap[matches.id];
-
         delete data.sorrows;
       },
     },
@@ -1174,7 +1174,7 @@ const triggerSet: TriggerSet<Data> = {
       // Darkest and Somber Dance both.
       netRegex: { source: 'Oracle Of Darkness', id: ['58BE', '58BD'], capture: false },
       infoText: (data, _matches, output) => {
-        if (data.role === 'tank' || data.prsTarget === data.me)
+        if (data.role === 'tank' || data.prsAggro === data.me)
           return output.tanksOutPartyIn!();
         return output.partyInTanksOut!();
       },
@@ -1204,7 +1204,7 @@ const triggerSet: TriggerSet<Data> = {
       netRegex: { source: 'Oracle Of Darkness', id: '58BD', capture: false },
       suppressSeconds: 5,
       infoText: (data, _matches, output) => {
-        if (data.role === 'tank' || data.prsTarget === data.me)
+        if (data.role === 'tank' || data.prsAggro === data.me)
           return output.tanksInPartyOut!();
         return output.partyOutTanksIn!();
       },
@@ -1516,21 +1516,6 @@ const triggerSet: TriggerSet<Data> = {
         if (!key)
           return { infoText: output.moveAway!() };
 
-        if (data.prsRelProps !== undefined && (key === 'flare' || key === 'aero')) {
-          const targets = data.prsRelProps.filter((x) => x.debuff === key).map((x) => x.name);
-          const sorted = sortRelativity(data, targets);
-
-          const action = output[key]!();
-          const index = sorted.indexOf(data.ShortName(data.me));
-          const markers = ['Ⓐ', 'Ⓑ', 'Ⓒ', 'Ⓓ'] as const;
-          const ttss = ['アルパ', 'ブラボー', 'チャーリ', 'デルタ'] as const;
-          return {
-            alertText: output.action!({ action: action, marker: markers[index] }),
-            infoText: output.targets!({ targets: sorted.join(', ') }),
-            tts: output.ttss!({ marker: ttss[index] }),
-          };
-        }
-
         return { alertText: output[key]!() };
       },
     },
@@ -1608,7 +1593,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '바깥쪽 봐욧!',
+          en: '당장 바깥 봐욧!',
           de: 'Nach draußen schauen',
           fr: 'Regardez vers l\'extérieur',
           ja: '外に向け',
@@ -1639,7 +1624,7 @@ const triggerSet: TriggerSet<Data> = {
         west: Outputs.west,
         northwest: Outputs.northwest,
         hourglass: {
-          en: '🟨노랑: ${dir}',
+          en: '🟨: ${dir}',
           de: 'Gelb: ${dir}',
           fr: 'Jaune : ${dir}',
           ja: '黄色: ${dir}',
@@ -1678,17 +1663,17 @@ const triggerSet: TriggerSet<Data> = {
         // Calculate opposite side
         const sorrow2 = (sorrow1 + 4) % 8;
 
-        if (data.prsAdvNorth !== undefined) {
-          let mesg;
-          if (data.prsAdvNorth) {
-            const sorrow = sorrow1 < sorrow2 ? sorrow1 : sorrow2;
-            mesg = output.goNorth!({ marker: dirToOutput(sorrow, output, true) });
-          } else {
-            const sorrow = sorrow1 < sorrow2 ? sorrow2 : sorrow1;
-            mesg = output.goSouth!({ marker: dirToOutput(sorrow, output, true) });
-          }
-          delete data.prsAdvNorth;
-          return mesg;
+        if (data.prsRelTarget !== undefined && data.prsMyDebuff !== undefined) {
+          const isNorth = data.prsMyDebuff !== 'fire'
+            ? (data.prsRelTarget.indexOf(data.ShortName(data.me)) === 0 ? true : false)
+            : (data.prsRelTarget.indexOf(data.ShortName(data.me)) < 2 ? true : false);
+          const targets = data.prsRelTarget.join(', ');
+          const [s1, s2] = minmax(sorrow1, sorrow2);
+          delete data.prsRelTarget;
+
+          if (isNorth)
+            return output.goNorth!({ marker: dirToOutput(s1!, output, true), targets: targets });
+          return output.goSouth!({ marker: dirToOutput(s2!, output, true), targets: targets });
         }
 
         return output.hourglass!({
@@ -1710,7 +1695,7 @@ const triggerSet: TriggerSet<Data> = {
         west: Outputs.west,
         northwest: Outputs.northwest,
         hourglass: {
-          en: '🟨노랑: ${dir1} / ${dir2}',
+          en: '🟨: ${dir1} / ${dir2}',
           de: 'Gelb: ${dir1} / ${dir2}',
           fr: 'Jaune : ${dir1} / ${dir2}',
           ja: '黄色: ${dir1} / ${dir2}',
@@ -1718,11 +1703,12 @@ const triggerSet: TriggerSet<Data> = {
           ko: '노랑: ${dir1} / ${dir2}',
         },
         goNorth: {
-          en: '북쪽으로! 🟨노랑: ${marker}',
+          en: '북쪽 🟨${marker} (${targets})',
         },
         goSouth: {
-          en: '남쪽으로! 🟨노랑: ${marker}',
+          en: '남쪽 🟨${marker} (${targets})',
         },
+        unknown: Outputs.unknown,
         ...AutumnIndicator.outputStringsMarker8,
       },
     },
@@ -1914,9 +1900,9 @@ const triggerSet: TriggerSet<Data> = {
       netRegex: { id: '4B1E', source: 'Eden\'s Promise' },
       condition: (data) => data.options.AutumnStyle,
       run: (data, matches) => {
-        if (data.prsTarget === matches.target)
+        if (data.prsAggro === matches.target)
           return;
-        data.prsTarget = matches.target;
+        data.prsAggro = matches.target;
       },
     },
     {
@@ -1934,8 +1920,8 @@ const triggerSet: TriggerSet<Data> = {
         const color = colorMap[id];
         if (color === undefined)
           return;
-        data.prsTitanProps ??= [];
-        data.prsTitanProps.push({ name: matches.target, color: color });
+        data.prsTitanProp ??= [];
+        data.prsTitanProp.push({ name: matches.target, color: color });
       },
     },
     {
@@ -1965,21 +1951,21 @@ const triggerSet: TriggerSet<Data> = {
           },
           unknown: Outputs.unknown,
         };
-        if (data.prsTitanProps === undefined)
+        if (data.prsTitanProp === undefined)
           return;
-        const my = data.prsTitanProps.find((x) => x.name === data.me);
+        const my = data.prsTitanProp.find((x) => x.name === data.me);
         if (my === undefined)
           return;
         if (my.color === 'blue') {
           // 파랑
-          const ps = data.prsTitanProps.filter((x) => x.color === my.color).map((x) => x.name);
+          const ps = data.prsTitanProp.filter((x) => x.color === my.color).map((x) => x.name);
           if (ps.length === 1)
             return { alertText: output.blue!() };
           const names = sortRelativity(data, ps);
           return { alertText: output.blueWith!({ players: names.join(', ') }) };
         } else if (my.color === 'yellow') {
           // 노랑
-          const ps = data.prsTitanProps.filter((x) => x.color === my.color).map((x) => x.name);
+          const ps = data.prsTitanProp.filter((x) => x.color === my.color).map((x) => x.name);
           if (ps.length === 1)
             return { alertText: output.yellow!() };
           const names = sortRelativity(data, ps);
@@ -2075,9 +2061,9 @@ const triggerSet: TriggerSet<Data> = {
       netRegex: { id: '4B1F', source: 'Oracle of Darkness' },
       condition: (data) => data.options.AutumnStyle,
       run: (data, matches) => {
-        if (data.prsTarget === matches.target)
+        if (data.prsAggro === matches.target)
           return;
-        data.prsTarget = matches.target;
+        data.prsAggro = matches.target;
       },
     },
     {
@@ -2156,8 +2142,8 @@ const triggerSet: TriggerSet<Data> = {
             return;
         }
         const prop: RelProp = { name: matches.target, debuff: debuff };
-        data.prsRelProps ??= [];
-        data.prsRelProps.push(prop);
+        data.prsRelProp ??= [];
+        data.prsRelProp.push(prop);
       },
     },
     {
@@ -2191,80 +2177,63 @@ const triggerSet: TriggerSet<Data> = {
           },
           unknown: Outputs.unknown,
         };
-        if (data.prsRelProps === undefined)
+        if (data.prsRelProp === undefined)
           return;
-        const my = data.prsRelProps.find((x) => x.name === data.me);
+        const my = data.prsRelProp.find((x) => x.name === data.me);
         if (my === undefined)
           return;
         data.prsMyDebuff = my.debuff;
-        const dests = data.prsRelProps.filter((x) => x.debuff === my.debuff).map((x) => x.name);
+        const dests = data.prsRelProp.filter((x) => x.debuff === my.debuff).map((x) => x.name);
         const sorted = sortRelativity(data, dests);
         data.prsStackLeft = sorted.indexOf(data.ShortName(data.me)) === 0;
         if (my.debuff === 'eye' || my.debuff === 'water')
           return { infoText: output[my.debuff]!({ targets: sorted.join(', ') }) };
         return { alertText: output[my.debuff]!({ targets: sorted.join(', ') }) };
       },
-      run: (data) => delete data.prsRelProps,
+      run: (data) => delete data.prsRelProp,
     },
     {
-      id: 'E12S 후반 인터 밖으로 수집',
+      id: 'E12S 후반 인터 에어로 수집',
       type: 'GainsEffect',
-      // 플레어(690), 에어로(99F)
-      netRegex: { effectId: ['690', '99F'] },
+      netRegex: { effectId: '99F' },
       condition: (data) => data.prsBlu && data.phase === 'intermediate',
       run: (data, matches) => {
-        const debuff: RelDebuff = matches.effectId === '690' ? 'flare' : 'aero';
-        const prop: RelProp = { name: matches.target, debuff: debuff };
-        data.prsRelProps ??= [];
-        data.prsRelProps.push(prop);
+        data.prsRelTarget ??= [];
+        data.prsRelTarget.push(matches.target);
       },
     },
     {
-      id: 'E12S 후반 인터 첫 밖으로',
+      id: 'E12S 후반 인터 에어로 알림',
       type: 'GainsEffect',
-      netRegex: { effectId: ['690', '99F'] },
+      netRegex: { effectId: '99F' },
       condition: (data, matches) =>
-        data.prsBlu && data.phase === 'intermediate' &&
-        matches.target === data.me && parseFloat(matches.duration) > 30,
+        data.prsBlu && data.phase === 'intermediate' && matches.target === data.me,
       delaySeconds: 0.1,
-      durationSeconds: 4.5,
-      response: (data, matches, output) => {
+      durationSeconds: 20,
+      response: (data, _matches, output) => {
         // cactbot-builtin-response
         output.responseOutputStrings = {
-          action: {
-            en: '${action} (${marker}로)',
-          },
-          targets: {
-            en: '대상: ${targets}',
+          aero: {
+            en: '에어로: ${marker} (${targets})',
           },
           ttss: {
             en: '${marker}',
           },
-          ...intermediateRelativityOutputStrings,
         };
-        if (data.prsRelProps === undefined)
+        if (data.prsRelTarget === undefined)
           return;
 
-        const debuff: RelDebuff = matches.effectId === '690' ? 'flare' : 'aero';
-        const targets = data.prsRelProps.filter((x) => x.debuff === debuff).map((x) => x.name);
-        const sorted = sortRelativity(data, targets);
+        const sorted = sortRelativity(data, data.prsRelTarget);
+        delete data.prsRelTarget;
 
-        const action = output[debuff]!();
         const index = sorted.indexOf(data.ShortName(data.me));
         const markers = ['Ⓐ', 'Ⓑ', 'Ⓒ', 'Ⓓ'] as const;
         const ttss = ['アルパ', 'ブラボー', 'チャーリ', 'デルタ'] as const;
         return {
-          alertText: output.action!({ action: action, marker: markers[index] }),
-          infoText: output.targets!({ targets: sorted.join(', ') }),
+          infoText: output.aero!({ marker: markers[index], targets: sorted.join(', ') }),
           tts: output.ttss!({ marker: ttss[index] }),
         };
       },
-    },
-    {
-      id: 'E12S 후반 듀얼 아포칼립스',
-      type: 'StartsUsing',
-      netRegex: { id: '501C', source: 'Oracle of Darkness', capture: false },
-      run: (data) => delete data.prsRelProps,
     },
     {
       id: 'E12S 후반 어드밴스 수집',
@@ -2289,8 +2258,8 @@ const triggerSet: TriggerSet<Data> = {
             return;
         }
         const prop: RelProp = { name: matches.target, debuff: debuff };
-        data.prsRelProps ??= [];
-        data.prsRelProps.push(prop);
+        data.prsRelProp ??= [];
+        data.prsRelProp.push(prop);
       },
     },
     {
@@ -2301,44 +2270,31 @@ const triggerSet: TriggerSet<Data> = {
       delaySeconds: 0.1,
       durationSeconds: 11,
       suppressSeconds: 9999,
-      response: (data, _matches, output) => {
-        // cactbot-builtin-response
-        output.responseOutputStrings = {
-          eye: {
-            en: '[눈깔] 앞 => 왼쪽',
-          },
-          fire: {
-            en: '[불] 앞 => 오른쪽',
-          },
-          aero: {
-            en: '[바람x2] 뒤 => 오른쪽',
-          },
-          targets: {
-            en: '대상: ${targets}',
-          },
-          unknown: Outputs.unknown,
-        };
-        if (data.prsRelProps === undefined)
+      alertText: (data, _matches, output) => {
+        if (data.prsRelProp === undefined)
           return;
-        const my = data.prsRelProps.find((x) => x.name === data.me);
+        const my = data.prsRelProp.find((x) => x.name === data.me);
         if (my === undefined)
           return;
 
         data.prsMyDebuff = my.debuff;
-        const targets = data.prsRelProps.filter((x) => x.debuff === my.debuff);
-        if (targets === undefined || targets.length === 1)
-          return { alertText: output[my.debuff]!() };
+        const targets = data.prsRelProp.filter((x) => x.debuff === my.debuff);
+        data.prsRelTarget = sortRelativity(data, targets.map((x) => x.name));
 
-        const sorted = sortRelativity(data, targets.map((x) => x.name));
-        data.prsAdvNorth = my.debuff !== 'fire'
-          ? (sorted.indexOf(data.ShortName(data.me)) === 0 ? true : false)
-          : (sorted.indexOf(data.ShortName(data.me)) < 2 ? true : false);
-        return {
-          alertText: output[my.debuff]!(),
-          infoText: output.targets!({ targets: sorted.join(', ') }),
-        };
+        return output[my.debuff]!();
       },
-      run: (data) => delete data.prsRelProps,
+      run: (data) => delete data.prsRelProp,
+      outputStrings: {
+        eye: {
+          en: '[눈깔] 앞 => 왼쪽',
+        },
+        fire: {
+          en: '[불] 앞 => 오른쪽',
+        },
+        aero: {
+          en: '[바람x2] 뒤 => 오른쪽',
+        },
+      },
     },
   ],
   timelineReplace: [
