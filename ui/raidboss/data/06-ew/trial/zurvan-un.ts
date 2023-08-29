@@ -53,14 +53,14 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         waveCannonTarget: {
-          en: 'Wave Cannon on YOU',
+          en: '내게 웨이브 캐논!',
           de: 'Wellenkanone auf DIR',
           ja: '波動砲対象',
           cn: '波动炮点名',
           ko: '파동포 대상자',
         },
         avoidWaveCannon: {
-          en: 'Away from ${target} -- Wave Cannon',
+          en: '웨이브 캐논 피해요: ${target}',
           de: 'Weg von ${target} -- Wellenkanone',
           ja: '${target} から離れる -- 波動砲',
           cn: '远离 ${target} -- 波动炮',
@@ -103,7 +103,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         demonClawYou: {
-          en: 'Knockback from boss on YOU',
+          en: '내게 데몬 클로 넉백이!',
           de: 'Rückstoß vom Boss auf DIR',
           ja: 'デモンクロー ノックバック対象',
           cn: 'BOSS击退点名',
@@ -145,7 +145,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.demonicSpread!(),
       outputStrings: {
         demonicSpread: {
-          en: 'Spread -- Don\'t stack!',
+          en: '흩어져요! 뭉치면 주거!',
           de: 'Verteilen -- Nicht aufeinander!',
           ja: '散開 -- 重ならないで！',
           cn: '分散 -- 不要集合!',
@@ -184,7 +184,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Stay outside hitbox',
+          en: '센터 서클 밖에서 기둘',
           de: 'Auserhalb der Hitbox stehen',
           ja: '範囲攻撃を避ける',
           cn: '站在判定圈外',
@@ -212,7 +212,7 @@ const triggerSet: TriggerSet<Data> = {
       alarmText: (_data, _matches, output) => output.baitSouthernCross!(),
       outputStrings: {
         baitSouthernCross: {
-          en: 'Bait Ice Puddles',
+          en: '얼음 깔 준비',
           de: 'Eisflächen ködern',
           ja: '氷範囲を捨てる',
           cn: '诱导冰圈',
@@ -241,7 +241,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         tetherBuddy: {
-          en: 'Tethered with ${buddy}',
+          en: '파트너: ${buddy}',
           de: 'Mit ${buddy} verbunden',
           ja: '${buddy} とペア',
           cn: '与 ${buddy} 连线',
@@ -270,21 +270,21 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         infiniteDebuff: {
-          en: '${element} on you',
+          en: '내게 ${element}',
           de: '${element} auf dir',
           ja: '${element} 付与',
           cn: '${element} 点名',
           ko: '${element}',
         },
         fire: {
-          en: 'Fire',
+          en: '불 속성',
           de: 'Feuer',
           ja: '炎',
           cn: '火',
           ko: '불',
         },
         ice: {
-          en: 'Ice',
+          en: '얼음 속성',
           de: 'Eis',
           ja: '氷',
           cn: '冰',
@@ -308,21 +308,21 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         sealTowers: {
-          en: '${element} towers with ${buddy}',
+          en: '${element} 타워로 이동! 파트너: ${buddy}',
           de: '${element} Türme mit ${buddy}',
           ja: '${buddy} と ${element} の塔に入る',
           cn: '与${buddy}踩${element}塔',
           ko: '${element} 기둥 +${buddy}',
         },
         fire: {
-          en: 'Fire',
+          en: '불 속성',
           de: 'Feuer',
           ja: '炎',
           cn: '火',
           ko: '불',
         },
         ice: {
-          en: 'Ice',
+          en: '얼음 속성',
           de: 'Eis',
           ja: '氷',
           cn: '冰',
