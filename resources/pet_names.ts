@@ -55,6 +55,7 @@ const data: PetData = {
     'Topas-Titan',
     'Smaragd-Garuda',
     'Bernstein-Karfunkel',
+    'Obsidian-Karfunkel',
   ],
   'en': [
     'Emerald Carbuncle',
@@ -79,6 +80,7 @@ const data: PetData = {
     'Topaz Titan',
     'Emerald Garuda',
     'Amber Carbuncle',
+    'Obsidian Carbuncle',
   ],
   'fr': [
     'Carbuncle émeraude',
@@ -103,6 +105,7 @@ const data: PetData = {
     'Titan topaze',
     'Garuda émeraude',
     'Carbuncle ambre',
+    'Carbuncle obsidienne',
   ],
   'ja': [
     'カーバンクル・エメラルド',
@@ -127,6 +130,7 @@ const data: PetData = {
     'タイタン・トパーズ',
     'ガルーダ・エメラルド',
     'カーバンクル・アンバー',
+    'カーバンクル・オブシダン',
   ],
   'ko': [
     '카벙클 에메랄드',
@@ -151,6 +155,7 @@ const data: PetData = {
     '타이탄 토파즈',
     '가루다 에메랄드',
     '카벙클 앰버',
+    '카벙클 옵시디언',
   ],
 };
 

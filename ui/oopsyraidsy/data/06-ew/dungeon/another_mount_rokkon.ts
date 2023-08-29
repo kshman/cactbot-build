@@ -11,7 +11,10 @@ import { playerDamageFields } from '../../../oopsy_common';
 // TODO: standing in outside of Shishio arena
 // TODO: better track who didn't take Shishio towers
 // TODO: does Gorai Torching Torment cleave?
+// TODO: Humble Hammer share damage
 // TODO: who missed Gorai towers or was not hit by protean
+// TODO: does Lateral Slice cleave
+// TODO: 85CE whose adds were too close
 
 export type Data = OopsyData;
 
@@ -53,6 +56,7 @@ const triggerSet: OopsyTriggerSet<Data> = {
     'AMR Shishu Yamabiko': '8687', // sprite line aoe
     'AMR Shishu Kotengu Blade of the Tengu': '865F', // Leftward/Rightward/Backward Blows
     'AMR Shishu Onmitsugashira Juji Shuriken': '8664', // untelegraphed front line
+    'AMR Shishu Onmitsugashira Juji Shuriken Huton': '867D', // untelegraphed fast front line on all players
 
     // Gorai
     'AMR Gorai Fire Spread Purple': '850B', // line damage after purple Brazen Ballad
@@ -63,7 +67,53 @@ const triggerSet: OopsyTriggerSet<Data> = {
     'AMR Gorai Ball of Levin Shock Big': '8523', // large circle from Ball of Levin
     'AMR Gorai Cloud to Ground 1': '8529', // initial cloud exaflare
     'AMR Gorai Cloud to Ground 2': '852A', // ongoing cloud exaflare
-    'AMR Gorai Impure Purgation Second': '8531', // follow-up protean
+    'AMR Gorai Impure Purgation Second': '8531', // follow-up protean'
+
+    // Moko
+    'AMR Moko Triple Kasumi-Giri 1': '85B0', // back red first
+    'AMR Moko Triple Kasumi-Giri 2': '85B1', // left red first
+    'AMR Moko Triple Kasumi-Giri 3': '85B2', // front red first
+    'AMR Moko Triple Kasumi-Giri 4': '85B3', // right red first
+    'AMR Moko Triple Kasumi-Giri 5': '85B4', // back red followup
+    'AMR Moko Triple Kasumi-Giri 6': '85B4', // left red followup
+    'AMR Moko Triple Kasumi-Giri 7': '85B4', // front red followup
+    'AMR Moko Triple Kasumi-Giri 8': '85B4', // right red followup
+    'AMR Moko Triple Kasumi-Giri 9': '85BA', // back blue first
+    'AMR Moko Triple Kasumi-Giri 10': '85BB', // left blue first
+    'AMR Moko Triple Kasumi-Giri 11': '85BC', // front blue first
+    'AMR Moko Triple Kasumi-Giri 12': '85BD', // right blue first
+    'AMR Moko Triple Kasumi-Giri 13': '85BE', // back blue followup
+    'AMR Moko Triple Kasumi-Giri 14': '85BF', // left blue followup
+    'AMR Moko Triple Kasumi-Giri 15': '85C0', // front blue followup
+    'AMR Moko Triple Kasumi-Giri 16': '85C1', // right blue followup
+    'AMR Moko Unbound Spirit': '85B8', // red "out" Triple Kasumi-Giri
+    'AMR Moko Azure Coil': '85B9', // blue "in" Triple Kasumi-Giri
+
+    'AMR Moko Scarlet Auspice': '85D1', // "get out" before Boundless Scarlet
+    'AMR Moko Boundless Scarlet': '85D2', // initial red lines before they grow
+    'AMR Moko Explosion': '85D3', // growing red lines
+    'AMR Moko Azure Auspice': '85D4', // "get under" donut before Boundless Azure
+    'AMR Moko Boundless Azure': '85D5', // initial blue lines before they bounce
+    'AMR Moko Upwell 1': '85D6', // blue line first bounce
+    'AMR Moko Upwell 2': '85D7', // blue line ongoing bounces
+
+    'AMR Moko Fleeting Iai-Giri 1': '85C4', // back purple
+    'AMR Moko Fleeting Iai-Giri 2': '85C5', // left purple
+    'AMR Moko Fleeting Iai-Giri 3': '85C6', // right purple
+
+    'AMR Moko Shadow Kasumi-Giri 1': '85CA', // back purple first
+    'AMR Moko Shadow Kasumi-giri 2': '86C4', // left purple followup
+    'AMR Moko Shadow Kasumi-giri 3': '86C5', // front purple followup
+    'AMR Moko Shadow Kasumi-giri 4': '86C6', // right purple followup
+
+    'AMR Moko Oni\'s Claw Clearout 1': '8C21', // hit 1 of large circles
+    'AMR Moko Oni\'s Claw Clearout 2': '8C27', // hit 2 of large circles
+    'AMR Moko Oni\'s Claw Clearout 3': '85DF', // hit 3 of large circles
+
+    'AMR Moko Ashigaru Kyuhei Iron Rain 1': '85CF', // initial medium circle damage from red Ashigaru Kyuheis
+    'AMR Moko Ashigaru Kyuhei Iron Rain 2': '87A7', // followup medium circle damage from red Ashigaru Kyuheis
+    'AMR Moko Ashigaru Kyuhei Iron Storm 1': '85D0', // initial big circle damage from blue Ashigaru Kyuhei
+    'AMR Moko Ashigaru Kyuhei Iron Storm 2': '87A8', // followup big circle damage from blue Ashigaru Kyuhei
   },
   damageFail: {
     'AMR Shishio Unmitigated Explosion': '8411', // not taking towers
@@ -80,11 +130,15 @@ const triggerSet: OopsyTriggerSet<Data> = {
   shareFail: {
     'AMR Shishio Unnatural Ailment': '8418', // spread during Unnatural Wail
     'AMR Gorai Great Ball of Fire': '8506', // spread damage from Live Candle debuff
+    'AMR Gorai Worldy Pursuit': '850D', // cross jumps
+    'AMR Moko Vengeful Flame': '85DC', // spreads during Fleeting Iai-giri
+    'AMR Moko Accursed Edge': '85DA', // bind on players from Far Edge / Near Edge
   },
   soloFail: {
     'AMR Shishio Unnatural Force': '8419', // pair stack during Unnatural Wail
     'AMR Gorai Greater Ball of Fire': '8505', // pair stack from Live Brazier debuff
-    'AMR Gorai Flintlock': '8527', // line share
+    'AMR Gorai Flintlock': '8527', // tank block line share
+    'AMR Moko Vengeful Pyre': '85DD', // pair stack during Fleeting Iai-giri
   },
   triggers: [
     {
