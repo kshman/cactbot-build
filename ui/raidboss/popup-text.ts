@@ -1012,7 +1012,7 @@ export class PopupText {
             ids.push(mm.job);
         }
       }
-      const sorted = Autumns.BuildJobPriority(ids, this.displayLang);
+      const sorted = Autumns.JobPriorityList(ids, this.displayLang);
       for (const i of sorted)
         ls.push(i ?? '몰?루');
     }
