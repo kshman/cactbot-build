@@ -16,14 +16,13 @@ module.exports = {
         (node) =>
           context.report({
             node,
-            message:
-              'timelineTrigger regex has to be a regular expression literal, such as /^Ability Name$/',
+            message: 'timelineTrigger의 정규식은 리터럴이어야 해요. 예컨데 /^Ability Name$/ 처럼',
           }),
       'Property[key.name=\'timelineTriggers\'] > ArrayExpression > ObjectExpression > Property[key.name=/(?:netRegex.{0,2}|regex.{2})/]':
         (node) =>
           context.report({
             node,
-            message: 'timelineTriggers only support "regex"',
+            message: 'timelineTriggers는 오직 "정규식"만 지원해요',
           }),
     };
   },

@@ -23,7 +23,7 @@ module.exports = {
     ],
     messages: {
       sortKeys:
-        'Expected trigger properties ordered like {{expectedOrder}} (\'{{beforeKey}}\' should be before \'{{nextKey}}\')',
+        'trigger 속성의 순서는 다음과 같아야 해요: {{expectedOrder}} (\'{{beforeKey}}\'와 \'{{nextKey}}\'의 사이)',
     },
   },
   create: (context) => {

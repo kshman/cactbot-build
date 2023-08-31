@@ -43,7 +43,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Move to safe quadrant',
+          en: '안전 구역으로 이동',
           de: 'Beweg dich in den sicheren Quadranten',
           cn: '移动到安全区域',
           ko: '안전한 지역으로 이동',

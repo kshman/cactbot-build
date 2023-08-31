@@ -219,7 +219,7 @@ export const init = (): void => {
         });
 
         ws.addEventListener('open', () => {
-          console.log('Connected!');
+          console.log('연결됐어요!');
 
           const q = queue ?? [];
           queue = null;
@@ -238,7 +238,7 @@ export const init = (): void => {
         ws.addEventListener('message', (_msg) => {
           try {
             if (typeof _msg.data !== 'string') {
-              console.error('Invalid message data received: ', _msg);
+              console.error('잘못된 데이터를 받았어요: ', _msg);
               return;
             }
             const msg = JSON.parse(_msg.data) as EventParameter & BaseResponse;
@@ -254,7 +254,7 @@ export const init = (): void => {
               processEvent(msg);
             }
           } catch (e) {
-            console.error('Invalid message received: ', _msg);
+            console.error('잘못된 메시지를 받았어요: ', _msg);
             return;
           }
         });
@@ -262,7 +262,7 @@ export const init = (): void => {
         ws.addEventListener('close', () => {
           queue = null;
 
-          console.log('Trying to reconnect...');
+          console.log('접속하고 있어요...');
           // Don't spam the server with retries.
           window.setTimeout(() => {
             connectWs(wsUrl);

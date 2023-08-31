@@ -61,7 +61,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         closeToBoss: {
-          en: 'Close to boss',
+          en: '붙어요',
           de: 'Nahe zum Boss',
           fr: 'Rapprochez-vous du boss',
           ja: 'ボスに近づく',
@@ -69,7 +69,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '보스와 가까이 서기',
         },
         awayFromBoss: {
-          en: 'Away from boss',
+          en: '멀리 떨어져요',
           de: 'Weg vom Boss',
           fr: 'Éloignez-vous du boss',
           ja: 'ボスから離れる',
@@ -86,7 +86,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Away from boss',
+          en: '멀리 떨어져요',
           de: 'Weg vom Boss',
           fr: 'Éloignez-vous du boss',
           ja: 'ボスから離れる',
@@ -103,7 +103,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Stand in red',
+          en: '🔴빨강으로',
           de: 'Im Roten stehen',
           fr: 'Placez-vous dans le rouge',
           ja: '赤色に入る',
@@ -120,7 +120,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Stand in blue',
+          en: '🔵파랑으로',
           de: 'Im Blauen stehen',
           fr: 'Placez-vous dans le bleu',
           ja: '青色に入る',
@@ -143,7 +143,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         interruptMechanoscribe: {
-          en: 'Interrupt Mechanoscribe',
+          en: '인터럽트: Mechanoscribe',
           de: 'unterbreche Mechanoscholar',
           fr: 'Interrompez le Mécano-scribe',
           ja: '沈黙：メカノスクライブ',
@@ -151,7 +151,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '기계 서기 차단',
         },
         stunMechanoscribe: {
-          en: 'Stun Mechanoscribe',
+          en: '스턴: Mechanoscribe',
           de: 'betäube Mechanoscholar',
           fr: 'Étourdissez le Mécano-scribe',
           ja: 'スタン：メカノスクライブ',
@@ -167,7 +167,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Stand in light circle',
+          en: '⚪하얀 장판으로',
           de: 'Im hellen Kreis stehen',
           fr: 'Placez-vous dans le cercle blanc',
           ja: '白い輪に入る',
@@ -183,7 +183,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Stand in dark circle',
+          en: '🟣어두운 장판으로',
           de: 'Im dunklen Kreis stehen',
           fr: 'Placez-vous dans le cercle noir',
           ja: '黒い輪に入る',
@@ -199,7 +199,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Cleanse in green circle',
+          en: '🟢초록 장판으로',
           de: 'Im grünen Kreis reinigen',
           fr: 'Purifiez-vous dans le cercle vert',
           ja: '緑の輪に入る',
@@ -228,7 +228,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Hide behind boulder',
+          en: '메테오 뒤에 숨어요',
           de: 'Hinter dem Brocken verstecken',
           fr: 'Cachez-vous derrière le rocher',
           ja: 'メテオの後ろに',

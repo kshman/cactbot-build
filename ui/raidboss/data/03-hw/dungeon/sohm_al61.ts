@@ -52,7 +52,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Kill Chyme Add',
+          en: '추가된 Chyme 잡아요!',
           de: 'Brei Add töten',
           fr: 'Tuez l\'add Chyme',
           ja: 'キームス・マウンテンを倒す',

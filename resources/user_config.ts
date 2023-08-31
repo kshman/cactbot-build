@@ -377,7 +377,7 @@ class UserConfig {
                 // Ideally users should do something like `Options.Triggers.push([etc]);`
                 // instead of `Options.Triggers = [etc];`
                 console.log(
-                  `*** WARNING: ${basePath}${jsFile} overwrites Options.${field} from previous files.`,
+                  `*** 경고: ${basePath}${jsFile} 덮어쓰기 옵션. 이전 파일의 ${field}.`,
                 );
               }
               variableTracker[field] = options[field];
@@ -386,7 +386,7 @@ class UserConfig {
             this.userFileCallbacks[overlayName]?.(jsFile, localFiles, options, basePath);
           } catch (e) {
             // Be very visible for users.
-            console.log('*** ERROR IN USER FILE ***');
+            console.log('*** 사용자 파일에 오류가 있어요 ***');
             console.log(e);
           }
         }

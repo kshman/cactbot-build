@@ -44,7 +44,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Party Share Tankbuster',
+          en: '뭉쳐서 탱크버스터',
           de: 'Tankbuster mit der Gruppe Teilen',
           fr: 'Partagez le Tank buster avec le groupe',
           ja: '頭割りタンクバスター',
@@ -71,7 +71,7 @@ const triggerSet: TriggerSet<Data> = {
         // cactbot-builtin-response
         output.responseOutputStrings = {
           staffTankSwap: {
-            en: 'Staff (Tank Swap)',
+            en: '지팡이 (탱크 스위치)',
             de: 'Stab (Tankwechsel)',
             fr: 'Bâton (Tank Swap)',
             ja: '杖 (スイッチ)',
@@ -79,7 +79,7 @@ const triggerSet: TriggerSet<Data> = {
             ko: '지팡이 (탱커 교대)',
           },
           staff: {
-            en: 'Staff',
+            en: '지팡이',
             de: 'Stab',
             fr: 'Bâton',
             ja: '杖',
@@ -105,7 +105,7 @@ const triggerSet: TriggerSet<Data> = {
         // cactbot-builtin-response
         output.responseOutputStrings = {
           swordTankSwap: {
-            en: 'Sword (Tank Swap)',
+            en: '칼 (탱크 스위치)',
             de: 'Schwert (Tankwechsel)',
             fr: 'Épée (Tank Swap)',
             ja: '剣 (スイッチ)',
@@ -113,7 +113,7 @@ const triggerSet: TriggerSet<Data> = {
             ko: '검 (탱커 교대)',
           },
           sword: {
-            en: 'Sword',
+            en: '칼',
             de: 'Schwert',
             fr: 'Épée',
             ja: '剣',
@@ -211,7 +211,7 @@ const triggerSet: TriggerSet<Data> = {
       alarmText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Knockback Laser on YOU',
+          en: '내게 아발란체',
           de: 'Rückstoß-Laser auf DIR',
           fr: 'Poussée-Laser sur VOUS',
           ja: '自分にアバランチ',
@@ -228,7 +228,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Avoid Laser',
+          en: '아발란체 피해요',
           de: 'Laser ausweichen',
           fr: 'Évitez le laser',
           ja: 'アバランチを避ける',
@@ -268,7 +268,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (data, matches, output) => output.text!({ player: data.ShortName(matches.target) }),
       outputStrings: {
         text: {
-          en: 'Free ${player}',
+          en: '얼음: ${player}',
           de: 'Befreie ${player}',
           fr: 'Libérez ${player}',
           ja: '${player}を救って',
