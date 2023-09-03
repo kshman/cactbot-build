@@ -92,7 +92,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         fireOrb: {
-          en: '${num}번 오브 아래로',
+          en: '${num}번 구슬 아래로',
           de: 'Unter den ${num}. Orb',
           fr: 'En dessous l\'orbe ${num}',
           ja: '${num}番目の玉へ',
@@ -100,7 +100,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '${num}번 구슬 밑으로',
         },
         bioOrb: {
-          en: '${num}번 오브 뒤로',
+          en: '${num}번 구슬 뒤로',
           de: 'Hinter den ${num}. Orb',
           fr: 'Allez derrière l\'orbe ${num}',
           ja: '${num}番目の玉の後ろへ',
@@ -108,7 +108,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '${num}번 구슬 뒤로',
         },
         fireThenBio: {
-          en: '밑에 있다가 => ${num}번 오브 뒤로',
+          en: '밑에 있다가 => ${num}번 구슬 뒤로',
           de: 'Unter ihn => Hinter den ${num}. Orb',
           fr: 'En dessous => Allez derrière l\'orbe ${num}',
           ja: 'ボスに貼り付く=> ${num}番目の玉の後ろへ',
@@ -116,7 +116,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '보스 아래로 => ${num}번 구슬 뒤로',
         },
         bioThenFire: {
-          en: '뒤에 있다가 => ${num}번 오브 밑으로',
+          en: '뒤에 있다가 => ${num}번 구슬 밑으로',
           de: 'Hinter ihn => Unter den ${num}. Orb',
           fr: 'Passez derrière => En dessous l\'orbe ${num}',
           ja: '背面へ => ${num}番目の玉へ',

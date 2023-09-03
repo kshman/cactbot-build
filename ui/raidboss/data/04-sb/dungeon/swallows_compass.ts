@@ -42,7 +42,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Avoid Fire Orbs',
+          en: '불구슬 피해요',
           de: 'Weiche den Feuerorbs aus',
           fr: 'Évitez les orbes de feu',
           ja: '火の玉を避ける',
@@ -59,7 +59,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Away From Fireballs',
+          en: '커다란 불구슬 피해요',
           de: 'Weg von den Feuerkugeln',
           fr: 'Éloignez-vous des boules de feu',
           ja: '(大きい)火の玉を避ける',
@@ -95,7 +95,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '5x Puddles on YOU',
+          en: '내게 5연속 장판',
           de: '5x Flächen auf DIR',
           fr: '5x Zones au sol sur VOUS',
           ja: '自分に追尾AoE',
@@ -119,7 +119,7 @@ const triggerSet: TriggerSet<Data> = {
       alarmText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'OUT OF THE LAKE',
+          en: '물구덩이에서 나와요',
           de: 'RAUS AUS DEM SEE',
           fr: 'SORTEZ DU LAC',
           ja: '青いエリアを踏まない',
@@ -181,7 +181,7 @@ const triggerSet: TriggerSet<Data> = {
       run: (data) => delete data.dynamo,
       outputStrings: {
         dynamo: {
-          en: 'Close to blue staff',
+          en: '파란 여의봉 근처로',
           de: 'Nahe am blauen Stab',
           fr: 'Rapprochez-vous du bâton bleu',
           ja: '如意棒に近づく',
@@ -189,7 +189,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '파랑 지팡이 근처로',
         },
         chariot: {
-          en: 'Away from red staff',
+          en: '빨간 여의봉에서 먼곳으로',
           de: 'Weg vom roten Stab',
           fr: 'Éloignez-vous du bâton rouge',
           ja: '如意棒から離れる',
@@ -241,7 +241,7 @@ const triggerSet: TriggerSet<Data> = {
       run: (data) => delete data.tethers,
       outputStrings: {
         target: {
-          en: 'Laser on YOU',
+          en: '내게 레이저',
           de: 'Laser auf DIR',
           fr: 'Laser sur VOUS',
           ja: '自分にレーザー',
@@ -249,7 +249,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '레이저 대상자',
         },
         knockback: {
-          en: 'Knockback laser on YOU',
+          en: '내게 넉백 레이저',
           de: 'Rückstoßlaser auf DIR',
           fr: 'Poussée laser sur VOUS',
           ja: '自分にノックバックレーザー',
@@ -257,7 +257,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '넉백 레이저 대상자',
         },
         avoid: {
-          en: 'Avoid tethers',
+          en: '줄 피해요',
           de: 'Vermeide die Verbindungen',
           fr: 'Évitez les liens',
           ja: '線から離れる',

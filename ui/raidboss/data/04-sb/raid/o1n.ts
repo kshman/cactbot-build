@@ -32,7 +32,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Breath Wing: Be beside boss',
+          en: '브레스 윙: 보스 옆으로',
           de: 'Atemschwinge: Neben Boss gehen',
           fr: 'Aile déferlante : Placez-vous à côté du boss',
           ja: 'ブレスウィング: ボスに近づく',

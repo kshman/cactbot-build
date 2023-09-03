@@ -38,7 +38,7 @@ const mathDirection = (
 
 const mathOutputStrings = {
   stayOut: {
-    en: 'Stay out',
+    en: '바깥에 있어요',
     de: 'Draußen stehen',
     fr: 'Restez à l\'extérieur',
     ja: '入らない',
@@ -46,7 +46,7 @@ const mathOutputStrings = {
     ko: '바깥에 있기',
   },
   standIn1: {
-    en: 'Stand in 1',
+    en: '1로',
     de: 'In 1 stehen',
     fr: 'Placez-vous sur le 1',
     ja: '１を踏む',
@@ -54,7 +54,7 @@ const mathOutputStrings = {
     ko: '답: 1',
   },
   standIn2: {
-    en: 'Stand in 2',
+    en: '2로',
     de: 'In 2 stehen',
     fr: 'Placez-vous sur le 2',
     ja: '２を踏む',
@@ -62,7 +62,7 @@ const mathOutputStrings = {
     ko: '답: 2',
   },
   standIn3: {
-    en: 'Stand in 3',
+    en: '3으로',
     de: 'In 3 stehen',
     fr: 'Placez-vous sur le 3',
     ja: '３を踏む',
@@ -70,7 +70,7 @@ const mathOutputStrings = {
     ko: '답: 3',
   },
   standIn4: {
-    en: 'Stand in 4',
+    en: '4로',
     de: 'In 4 stehen',
     fr: 'Placez-vous sur le 4',
     ja: '４を踏む',
@@ -106,7 +106,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Look for Tsunami',
+          en: '츠나미 확인해요',
           de: 'Auf Krug achten',
           fr: 'Repérez le Tsunami',
           ja: '水瓶が向いてる方向から離れる',
@@ -123,7 +123,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Look for Tsunami',
+          en: '츠나미 확인해요',
           de: 'Auf Krug achten',
           fr: 'Repérez le Tsunami',
           ja: '水瓶が向いてる方向から離れる',
@@ -140,7 +140,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Look for Tsunami',
+          en: '츠나미 확인해요',
           de: 'Auf Krug achten',
           fr: 'Repérez le Tsunami',
           ja: '水瓶が向いてる方向から離れる',
@@ -183,7 +183,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Stand on Slow Clock',
+          en: '느린 시계로',
           de: 'In der langsamen Uhr stehen',
           fr: 'Placez-vous sur une horloge lente',
           ja: '遅い時計で待機（早い方が爆発したらすぐ安置へ）',
@@ -201,7 +201,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Stretch Tether Outside',
+          en: '줄 바깥쪽으로 늘려요',
           de: 'Verbindung nach außen strecken',
           fr: 'Étirez le lien vers l\'exterieur',
           ja: '線を伸ばして外に向ける',
@@ -217,7 +217,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Stop Clocks',
+          en: '시침을 바깥쪽으로',
           de: 'Uhrzeiger nach außen',
           fr: 'Arrêtez les horloges',
           ja: '針を外に向ける',
@@ -379,7 +379,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Move to Positive',
+          en: '플러스(+)로',
           de: 'Ins Positive laufen',
           fr: 'Allez sur le positif',
           ja: 'プラス（＋）へ',
@@ -396,7 +396,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Move to Negative',
+          en: '마이너스(-)로',
           de: 'Ins Negative laufen',
           fr: 'Allez sur le négatif',
           ja: 'マイナス（－）へ',
@@ -420,7 +420,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Kill Heart',
+          en: '심핵 잡아요',
           de: 'Herz',
           fr: 'Tuer le cœur',
           ja: '心核を討つ',

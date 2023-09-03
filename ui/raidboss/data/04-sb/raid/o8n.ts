@@ -44,7 +44,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Look At Statue',
+          en: '북쪽 봐요 (조각 봐요)',
           de: 'Statue anschauen',
           fr: 'Regardez la statue',
           ja: '神々の像を見て',
@@ -60,7 +60,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Look Away From Statue',
+          en: '남쪽 봐요 (조각 보면 안되요)',
           de: 'Von Statue wegschauen',
           fr: 'Ne regardez pas la statue',
           ja: '神々の像を見ない',
@@ -76,7 +76,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Get Outside Destination',
+          en: '텔레포트 위치 바깥쪽으로',
           de: 'Geh aus dem Zielkreis raus',
           fr: 'Allez à côté du cercle extérieur',
           cn: '去传送目的地的外圈',
@@ -98,7 +98,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'fire on YOU',
+          en: '내게 파이어3',
           de: 'Feuer auf DIR',
           fr: 'Feu sur VOUS',
           ja: '自分にファイガ',
@@ -121,7 +121,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'True Thunder',
+          en: '진짜 선더3',
           de: 'Wahrer Blitz',
           fr: 'Vraie foudre',
           ja: '真サンダガ',
@@ -138,7 +138,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Fake Thunder',
+          en: '가짜 선더3',
           de: 'Falscher Blitz',
           fr: 'Fausse foudre',
           ja: '偽サンダガ',
@@ -155,7 +155,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Fake Ice: Get out',
+          en: '가짜 얼음: 밖으로',
           de: 'Falsches Eis: Rausgehen',
           fr: 'Fausse glace : Sortez',
           ja: '偽ブリザガ: 外へ',
@@ -172,7 +172,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'True Ice: Get in',
+          en: '진짜 얼음: 안으로',
           de: 'Wahre Eis: Reingehen',
           fr: 'Vraie glace : À l\'intérieur',
           ja: '真ブリザガ: 入る',
@@ -189,7 +189,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Fake Ice: Get in',
+          en: '가짜 얼음: 안으로',
           de: 'Falsches Eis: Reingehen',
           fr: 'Fausse glace: À l\'intérieur',
           ja: '偽ブリザガ: 入る',
@@ -206,7 +206,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'True Ice: Get out',
+          en: '진짜 얼음: 밖으로',
           de: 'Wahres Eis: Rausgehen',
           fr: 'Vraie glace: Sortez',
           ja: '真ブリザガ: 外へ',

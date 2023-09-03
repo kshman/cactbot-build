@@ -172,10 +172,10 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '🟡비스듬 → 흩어져요',
+          en: '🟡비스듬 => 흩어져요',
           de: 'Kardinal',
           fr: 'Cardinaux',
-          ja: '🟡斜め → 散会',
+          ja: '🟡斜め => 散会',
           ko: '십자방향으로',
         },
       },
@@ -209,20 +209,20 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         p1: {
-          en: '솜털🔘세개 → 꼬리',
-          ja: 'たま3個 → 水拭き',
+          en: '솜털🔘세개 => 꼬리',
+          ja: 'たま3個 => 水拭き',
         },
         p2: {
-          en: '솜털🔘네개 → 안전지대 ',
+          en: '솜털🔘네개 => 안전지대 ',
           ja: 'たま4個, 安置を作りましょう',
         },
         p3: {
-          en: '솜털🔘여덟개 → 항아리',
+          en: '솜털🔘여덟개 => 항아리',
           ja: 'たま8個, がんばれ！！',
         },
         p4: {
-          en: '솜털🔘네개 → 꼬리 유도',
-          ja: 'たま4個 → しっぽ誘導',
+          en: '솜털🔘네개 => 꼬리 유도',
+          ja: 'たま4個 => しっぽ誘導',
         },
         px: {
           en: '솜털🔘나와요',
@@ -466,10 +466,10 @@ const triggerSet: TriggerSet<Data> = {
           ja: '🟢貼り付く',
         },
         spreadCardinals: {
-          en: '🟡비스듬 → 흩어져요',
+          en: '🟡비스듬 => 흩어져요',
           de: 'Kardinal verteilen',
           fr: 'Écartez-vous en cardinal',
-          ja: '🟡斜め → 散会',
+          ja: '🟡斜め => 散会',
           ko: '십자방향으로 산개',
         },
         intercards: {
@@ -493,7 +493,7 @@ const triggerSet: TriggerSet<Data> = {
           busterOnYou: Outputs.tankBusterOnYou,
           busterOnTarget: Outputs.tankBusterOnPlayer,
           busterOnYouPuffs: {
-            en: '내게 탱크버스터, 동서로 유도',
+            en: '내게 탱크버스터, 동서 구슬 사이로',
             de: 'Tank Buster auf DIR, Osten/Westen zwischen Puschel',
             fr: 'Tankbuster sur VOUS, entre les pompons Est/Ouest',
             ja: '自分に強攻撃、東西で誘導',
