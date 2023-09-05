@@ -47,7 +47,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Distant Clap',
+          en: '멀리 쿵',
           de: 'Donnergrollen',
           fr: 'Tonnerre lointain',
           ja: '遠雷',
@@ -64,7 +64,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Provoke Boss',
+          en: '보스 프로보크',
           de: 'Boss abspotten',
           fr: 'Provoquez le Boss',
           ja: '挑発',
@@ -82,7 +82,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Provoke Boss',
+          en: '보스 프로보크',
           de: 'Boss abspotten',
           fr: 'Provoquez le Boss',
           ja: '挑発',
@@ -113,7 +113,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         text: {
-          en: 'Tank LB NOW',
+          en: '지금 탱크 리미트브레이크',
           de: 'JETZT Tank LB',
           fr: 'Transcendance Tank maintenant !',
           ja: '今タンクLB',
@@ -130,7 +130,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Drop bubble outside',
+          en: '바깥에 버블 버려요',
           de: 'Blase außen ablegen',
           fr: 'Déposez la bulle à l\'extérieur',
           ja: '外にマーカーを置く',
@@ -147,7 +147,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Pink bubble',
+          en: '핑크 버블',
           de: 'Pinke Blase',
           fr: 'Bulle violette',
           ja: '祟り目',
@@ -164,7 +164,7 @@ const triggerSet: TriggerSet<Data> = {
       alarmText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Puddles on YOU',
+          en: '내게 장판x3',
           de: 'Pfützen auf DIR',
           fr: 'Zones au sol sur VOUS',
           ja: '自分に床範囲',
@@ -181,7 +181,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Get away',
+          en: '도망쳐요',
           de: 'Weg da',
           fr: 'Éloignez-vous',
           ja: '離れる',
@@ -202,7 +202,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Tiger Add',
+          en: '호랑이 나와요',
           de: 'Tiger Add',
           fr: 'Add Tigre',
           ja: '虎分離',
@@ -233,7 +233,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (data, _matches, output) => output.text!({ num: data.stakeCount }),
       outputStrings: {
         text: {
-          en: 'Stack #${num}',
+          en: '뭉쳐요#${num}',
           de: 'Stack #${num}',
           fr: 'Packez-vous #${num}',
           ja: '頭割り #${num}',

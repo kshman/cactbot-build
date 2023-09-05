@@ -22,7 +22,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Tank Tether',
+          en: '탱크가 줄 채요',
           de: 'Tank Verbindung',
           fr: 'Lien tank',
           ja: 'タンク 線を取る',
@@ -89,7 +89,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         moveLeft: {
-          en: 'Move (Left)',
+          en: '왼쪽으로',
           de: 'Bewegen (Links)',
           fr: 'Bougez (À gauche)',
           ja: '動け (左へ)',
@@ -97,7 +97,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '이동 (왼쪽)',
         },
         stayLeft: {
-          en: 'Stay (Left)',
+          en: '왼쪽에 그대로',
           de: 'Stehenbleiben (Links)',
           fr: 'Restez (À gauche)',
           ja: 'そのまま (左に)',
@@ -119,7 +119,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         stayRight: {
-          en: 'Stay (Right)',
+          en: '오른쪽에 그대로',
           de: 'Stehenbleiben (Rechts)',
           fr: 'Restez (À droite)',
           ja: 'そのまま (右に)',
@@ -127,7 +127,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '멈추기 (오른쪽)',
         },
         moveRight: {
-          en: 'Move (Right)',
+          en: '오른쪽으로',
           de: 'Bewegen (Rechts)',
           fr: 'Bougez (À droite)',
           ja: '動け (右へ)',
@@ -144,7 +144,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Drop Fire Outside',
+          en: '바깥에 불 버려요',
           de: 'Feuer draußen ablegen',
           fr: 'Déposez le feu à l\'extérieur',
           cn: '把火放在外面',
@@ -166,7 +166,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Use duty action on Conductive Focus',
+          en: '듀티 액션 연타',
           de: 'Benutze Spezialkommando auf "Ziel des Blitzstrahls"',
           fr: 'Utilisez l\'action spéciale sur le Point de convergence électrique',
           cn: '在雷力投射点上使用任务指令',

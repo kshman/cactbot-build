@@ -34,7 +34,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         akhRhaiSpreadAndMove: {
-          en: 'Akh Rhai: spread and move',
+          en: '아크 라이: 흩어지면서 움직여요',
           de: 'Akh Rhai: Verteilen und bewegen',
           fr: 'Akh Rhai : Dispersion et bougez',
           ja: 'アク・ラーイ: 散開 動け',
@@ -42,7 +42,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '아크 라이: 산개, 이동',
         },
         akhMornOnYou: {
-          en: 'Akh Morn on YOU',
+          en: '내게 아크몬',
           de: 'Akh Morn auf DIR',
           fr: 'Akh Morn sur VOUS',
           ja: '自分にアク・モーン',
@@ -50,7 +50,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '아크몬 대상자',
         },
         akhMornOn: {
-          en: 'Akh Morn on ${player}',
+          en: '아크몬: ${player}',
           de: 'Akh Morn auf ${player}',
           fr: 'Akh Morn sur ${player}',
           ja: '${player}にアク・モーン',
@@ -75,7 +75,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Out of middle',
+          en: '한가운데 피해요',
           de: 'Raus aus der Mitte',
           fr: 'Sortez du milieu',
           ja: '中央から離れる',
@@ -92,7 +92,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Get in water',
+          en: '물로 들어가요',
           de: 'In\'s Wasser',
           fr: 'Allez dans l\'eau',
           ja: '水に入る',
@@ -109,7 +109,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Stack in water',
+          en: '물에서 뭉쳐요',
           de: 'In Wasser stacken',
           fr: 'Packez-vous dans l\'eau',
           ja: '水に集合',
@@ -126,7 +126,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'out of water',
+          en: '물 밖으로',
           de: 'Raus aus dem Wasser',
           fr: 'Sortez de l\'eau',
           ja: '水から離れる',
@@ -143,7 +143,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Spread out, no water',
+          en: '흩어져요, 물에는 들어가지 말고',
           de: 'Verteilen und nicht in\'s Wasser',
           fr: 'Dispersez-vous en dehors de l\'eau',
           ja: '散開、水に入らない',
@@ -161,7 +161,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Knockback, look for water',
+          en: '넉백, 바깥 물 기둥은 어디에!',
           de: 'Rückstoß, nach Wasser schauen',
           fr: 'Poussée, cherchez l\'eau',
           ja: 'ノックバック、水を探せ',
@@ -185,7 +185,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Tail: Switch targets',
+          en: '꼬리부터 잡아요',
           de: 'Schweif: Zielwechsel',
           fr: 'Queue : Changez de cible',
           ja: '尾: タゲチェンジ',
@@ -209,7 +209,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'avoid divebomb',
+          en: '다이브밤 피해요',
           de: 'Divebomb ausweichen',
           fr: 'Évitez la bombe plongeante',
           ja: 'ダイブボムを避ける',
@@ -237,7 +237,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Bait onto unbroken squares',
+          en: '안부셔진 바닥으로 꼬리 치기 유도',
           de: 'Auf nicht kaputter Fläche ködern',
           fr: 'Attirez sur les carrés non brisés',
           ja: '壊れなかった床に誘導',

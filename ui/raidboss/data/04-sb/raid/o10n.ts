@@ -33,7 +33,7 @@ const triggerSet: TriggerSet<Data> = {
       run: (data) => data.lastSpinWasHorizontal = true,
       outputStrings: {
         text: {
-          en: 'Next Spin: In or Out',
+          en: '다음 스핀: 안 또는 밖으로',
           de: 'Nächste Drehung: Rein oder raus',
           fr: 'Tour suivant : Intérieur ou Extérieur',
           ja: '次: 中/外',
@@ -50,7 +50,7 @@ const triggerSet: TriggerSet<Data> = {
       run: (data) => data.lastSpinWasHorizontal = false,
       outputStrings: {
         text: {
-          en: 'Next Spin: Corners',
+          en: '다음 스핀: 모서리',
           de: 'Nächste Drehung: Ecken',
           fr: 'Tour suivant : Coins',
           ja: '次: コーナー',
@@ -73,7 +73,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         getOut: {
-          en: 'Get Out',
+          en: '밖으로',
           de: 'Raus da',
           fr: 'Sortez',
           ja: '外へ',
@@ -81,7 +81,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '밖으로',
         },
         goToCardinals: {
-          en: 'Go To Cardinals',
+          en: '십자로',
           de: 'Geh zu den Kanten',
           fr: 'Allez sur un point cardinal',
           ja: '横や縦へ',
@@ -103,7 +103,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         getIn: {
-          en: 'Get In',
+          en: '안으로',
           de: 'Rein da',
           fr: 'Passez en dessous',
           ja: '中へ',
@@ -111,7 +111,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '안으로',
         },
         goToCorners: {
-          en: 'Go To Corners',
+          en: '모서리로',
           de: 'In die Ecken',
           fr: 'Allez dans les coins',
           ja: '角へ',
@@ -150,7 +150,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Drop Ice Outside',
+          en: '얼음! 바깥쪽에 버려요',
           de: 'Eis draußen ablegen',
           fr: 'Déposez la glace à l\'extérieur',
           cn: '把冰放在外面',

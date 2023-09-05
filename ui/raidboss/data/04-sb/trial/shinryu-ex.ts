@@ -67,7 +67,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         akhRhaiSpreadAndMove: {
-          en: 'Akh Rhai: spread and move',
+          en: '아크 라이: 흩어지면서 움직여요',
           de: 'Akh Rhai: Verteilen und bewegen',
           fr: 'Akh Rhai : Dispersion et bougez',
           ja: 'アク・ラーイ: 散開 動け',
@@ -75,7 +75,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '아크 라이: 산개, 이동',
         },
         akhMornOnYou: {
-          en: 'Akh Morn on YOU',
+          en: '내게 아크몬',
           de: 'Akh Morn auf DIR',
           fr: 'Akh Morn sur VOUS',
           ja: '自分にアク・モーン',
@@ -83,7 +83,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '아크몬 대상자',
         },
         akhMornOn: {
-          en: 'Akh Morn on ${player}',
+          en: '아크몬: ${player}',
           de: 'Akh Morn auf ${player}',
           fr: 'Akh Morn sur ${player}',
           ja: '${player}にアク・モーン',
@@ -99,7 +99,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Ice: Stack and Stop',
+          en: '얼음: 뭉치고 그대로 스탑',
           de: 'Eis: Stack und Stehenbleiben',
           fr: 'Glace : Packez-vous et arrêtez',
           ja: '氷: スタック 動かない',
@@ -115,7 +115,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Out of middle',
+          en: '한가운데 피해요',
           de: 'Raus aus der Mitte',
           fr: 'Sortez du milieu',
           ja: '中央から離れ',
@@ -132,7 +132,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Get in water',
+          en: '물로 들어가요',
           de: 'In\'s Wasser',
           fr: 'Allez dans l\'eau',
           ja: '水に入る',
@@ -156,7 +156,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         stopToGetFrozen: {
-          en: 'stop to get frozen',
+          en: '멈춰서 그대로 얼어요',
           de: 'Stopp! Einfrieren lassen',
           fr: 'Arrêtez, laissez-vous geler',
           ja: '止まれ、凍結',
@@ -164,7 +164,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '멈춰서 얼기',
         },
         stackInWater: {
-          en: 'Stack in water',
+          en: '물에서 뭉쳐요',
           de: 'In Wasser stacken',
           fr: 'Packez-vous dans l\'eau',
           ja: '水に集合',
@@ -181,7 +181,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'out of water',
+          en: '물 밖으로',
           de: 'Raus aus dem Wasser',
           fr: 'Sortez de l\'eau',
           ja: '水から離れ',
@@ -208,7 +208,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         baitBoltKeepMoving: {
-          en: 'bait bolt, keep moving',
+          en: '번개! 흩어져요, 그리고 계속 움직여요',
           de: 'Blitz ködern, weiterbewegen',
           fr: 'Attirez la foudre, continuez à bouger',
           ja: '稲妻: 動き続ける',
@@ -216,7 +216,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '번개 공격 산개, 계속 움직이기',
         },
         spreadOutNoWater: {
-          en: 'Spread out, no water',
+          en: '흩어져요, 물에는 들어가지 말고',
           de: 'Verteilen und nicht in\'s Wasser',
           fr: 'Dispersez-vous en dehors de l\'eau',
           ja: '散開、水に入らない',
@@ -239,7 +239,7 @@ const triggerSet: TriggerSet<Data> = {
       alarmText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'move away',
+          en: '흩어져 도망쳐요',
           de: 'wegbewegen',
           fr: 'Éloignez-vous',
           ja: '散開',
@@ -259,7 +259,7 @@ const triggerSet: TriggerSet<Data> = {
       alarmText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'icicle, lean west',
+          en: '아이시클, 서쪽으로',
           de: 'Eiszapfen, nach westen',
           fr: 'Stalactite, penchez vers l\'ouest',
           ja: 'アイシクル: 西へ',
@@ -279,7 +279,7 @@ const triggerSet: TriggerSet<Data> = {
       alarmText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'icicle, lean east',
+          en: '아이시클, 동쪽으로',
           de: 'Eiszapfen, nach Osten',
           fr: 'Stalactite, penchez vers l\'est',
           ja: 'アイシクル: 東へ',
@@ -297,7 +297,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Knockback, look for water',
+          en: '넉백, 바깥 물 기둥은 어디에!',
           de: 'Rückstoß, nach Wasser schauen',
           fr: 'Poussée, cherchez l\'eau',
           ja: 'ノックバック、水を探せ',
@@ -314,7 +314,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'no more heals needed',
+          en: '힐 그만 해도 되요',
           de: 'keine Heilung mehr nötig',
           fr: 'Plus besoin de soigner',
           ja: 'ヒールはもう要らない',
@@ -331,7 +331,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Tail: Switch targets',
+          en: '꼬리부터 잡아요',
           de: 'Schweif: Zielwechsel',
           fr: 'Queue : Changez de cible',
           ja: '尾: タゲチェンジ',
@@ -352,7 +352,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Heart: Switch targets',
+          en: '심장 나왔네, 잡아요',
           de: 'Herz: Ziel wechseln',
           fr: 'Cœur : Changez de cible',
           ja: '心核: タゲチェンジ',
@@ -369,7 +369,7 @@ const triggerSet: TriggerSet<Data> = {
       alarmText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'avoid divebomb',
+          en: '다이브밤 피해요',
           de: 'Divebomb ausweichen',
           fr: 'Évitez la bombe plongeante',
           ja: 'ダイブボムに避け',
@@ -394,7 +394,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         deathSentenceOn: {
-          en: 'Death Sentence on ${player}',
+          en: '데스 센텐스: ${player}',
           de: 'Todesurteil auf ${player}',
           fr: 'Peine de mort sur ${player}',
           ja: '${player}にデスセンテンス',
@@ -402,7 +402,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '"${player}" 사형 선고',
         },
         deathSentenceOnYou: {
-          en: 'Death Sentence on YOU',
+          en: '내게 데스 센텐스',
           de: 'Todesurteil auf DIR',
           fr: 'Peine de mort sur VOUS',
           ja: '自分にデスセンテンス',
@@ -430,7 +430,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'front cleave',
+          en: '정면 물러서요 (정면 클레브)',
           de: 'Frontalcleave',
           fr: 'Cleave devant',
           ja: '正面から離れ',
@@ -448,7 +448,7 @@ const triggerSet: TriggerSet<Data> = {
       run: (data) => data.finalWing = true,
       outputStrings: {
         text: {
-          en: 'kill left first',
+          en: '왼쪽 날개 먼저 잡아요',
           de: 'linken Flügel zuerst',
           fr: 'Tuez l\'aile gauche d\'abord',
           ja: 'レフトウィングに攻撃',
@@ -466,7 +466,7 @@ const triggerSet: TriggerSet<Data> = {
       run: (data) => data.finalWing = true,
       outputStrings: {
         text: {
-          en: 'kill right first',
+          en: '오른쪽 날개 먼저 잡아요',
           de: 'rechten Flügel zuerst',
           fr: 'Tuez l\'aile droite d\'abord',
           ja: 'ライトウィングに攻撃',
@@ -489,7 +489,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         breakTethersThenStack: {
-          en: 'break tethers then stack',
+          en: '줄 끊고 뭉쳐요',
           de: 'Kette zerreissen, dann stack',
           fr: 'Cassez les liens, puis packez-vous',
           ja: '鎖を引き、集合',
@@ -497,7 +497,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '선 끊고 모이기',
         },
         breakTethers: {
-          en: 'break tethers',
+          en: '줄 끊어요',
           de: 'Ketten zerreissen',
           fr: 'Cassez les liens',
           ja: '鎖',
@@ -514,7 +514,7 @@ const triggerSet: TriggerSet<Data> = {
       alarmText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'tail marker on you',
+          en: '내게 꼬리 치기',
           de: 'Schweifmarker auf dir',
           fr: 'Marqueur Queue sur VOUS',
           ja: '自分にテイル',
@@ -543,7 +543,7 @@ const triggerSet: TriggerSet<Data> = {
       run: (data) => delete data.shakerTargets,
       outputStrings: {
         avoidEarthshakers: {
-          en: 'avoid earthshakers',
+          en: '어스 퀘이커 피해요',
           de: 'Stöße ausweichen',
           fr: 'Évitez les secousses',
           ja: 'アースシェーカーに避け',
@@ -551,7 +551,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '어스 피하기',
         },
         earthshakerOnYou: {
-          en: 'earthshaker on you',
+          en: '내게 어스 퀘이커',
           de: 'Erdstoss auf dir',
           fr: 'Secousse sur VOUS',
           ja: '自分にアースシェーカー',

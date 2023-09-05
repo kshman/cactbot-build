@@ -24,7 +24,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'look for cloud',
+          en: '구름 봐요',
           de: 'Nach Wolke ausschau halten',
           fr: 'Cherchez le nuage',
           ja: '雷雲を探せ',
@@ -94,17 +94,9 @@ const triggerSet: TriggerSet<Data> = {
 
         return output.knockback!();
       },
-      tts: (data, _matches, output) => {
-        if (data.cloud)
-          return output.knockbackWithCloudTTS!();
-        else if (data.churning)
-          return output.knockbackWithDiceTTS!();
-
-        return output.knockbackTTS!();
-      },
       outputStrings: {
         knockbackWithCloud: {
-          en: 'Knockback on you (cloud)',
+          en: '내게 넉백 (구름)',
           de: 'Rückstoss auf Dir (Wolke)',
           fr: 'Poussée sur VOUS (nuage)',
           ja: '自分にノックバック (雷雲)',
@@ -112,7 +104,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '넉백 대상자 (구름)',
         },
         knockbackWithDice: {
-          en: 'Knockback + dice (STOP)',
+          en: '넉백 + 카운트 (멈춰요)',
           de: 'Rückstoss + Würfel (STOPP)',
           fr: 'Poussée + dé (ARRÊTEZ)',
           ja: 'ノックバック + 禍泡 (そのまま)',
@@ -120,23 +112,6 @@ const triggerSet: TriggerSet<Data> = {
           ko: '넉백 + 주사위 (가만히)',
         },
         knockback: Outputs.knockbackOnYou,
-        knockbackWithCloudTTS: {
-          en: 'knockback with cloud',
-          de: 'Rückstoß mit wolke',
-          fr: 'Poussée avec nuage',
-          ja: '雷雲ノックバック',
-          cn: '雷云击退',
-          ko: '넉백과 구름 장판',
-        },
-        knockbackWithDiceTTS: {
-          en: 'Knockback with dice',
-          de: 'Rückstoß mit Würfel',
-          fr: 'Poussée avec dé',
-          ja: '禍泡ノックバック',
-          cn: '水泡击退',
-          ko: '넉백과 주사위',
-        },
-        knockbackTTS: Outputs.knockback,
       },
     },
     {
@@ -156,15 +131,9 @@ const triggerSet: TriggerSet<Data> = {
 
         return output.levinboltOnYou!();
       },
-      tts: (data, _matches, output) => {
-        if (data.cloud)
-          return output.levinboltWithCloudTTS!();
-
-        return output.levinboltOnYouTTS!();
-      },
       outputStrings: {
         levinboltWithCloud: {
-          en: 'Levinbolt on you (cloud)',
+          en: '내게 레빈볼트 (구름)',
           de: 'Blitz auf Dir (Wolke)',
           fr: 'Fulguration sur VOUS (nuage)',
           ja: '自分に稲妻 (雷雲)',
@@ -172,28 +141,12 @@ const triggerSet: TriggerSet<Data> = {
           ko: '우레 대상자 (구름)',
         },
         levinboltOnYou: {
-          en: 'Levinbolt on you',
+          en: '내게 레빈 볼트',
           de: 'Blitz auf dir',
           fr: 'Fulguration sur VOUS',
           ja: '自分に稲妻',
           cn: '闪电点名',
           ko: '우레 대상자',
-        },
-        levinboltWithCloudTTS: {
-          en: 'bolt with cloud',
-          de: 'blitz mit wolke',
-          fr: 'foudre avec nuage',
-          ja: '雷雲 稲妻',
-          cn: '闪电带雷云',
-          ko: '구름 번개',
-        },
-        levinboltOnYouTTS: {
-          en: 'bolt',
-          de: 'blitz',
-          fr: 'foudre',
-          ja: '稲妻',
-          cn: '闪电',
-          ko: '번개',
         },
       },
     },
@@ -209,7 +162,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         text: {
-          en: 'Stun: ${player}',
+          en: '스턴: ${player}',
           de: 'Paralyse ${player}',
           fr: 'Étourdi(e) :  ${player}',
           ja: '${player}にスタン',

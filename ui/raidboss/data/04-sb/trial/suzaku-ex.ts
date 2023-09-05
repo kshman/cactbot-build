@@ -34,7 +34,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Get Out',
+          en: '밖으로',
           de: 'Raus da',
           fr: 'Allez au bord extérieur',
           ja: '誘引',
@@ -50,7 +50,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Get In',
+          en: '안으로',
           de: 'Rein da',
           fr: 'Allez au bord intérieur',
           ja: '拒絶',

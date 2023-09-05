@@ -67,7 +67,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Move bosses apart',
+          en: '보스 서로 멀리',
           de: 'Bosse auseinander ziehen',
           fr: 'Déplacez les boss séparément',
           ja: 'ボスを引き離す',
@@ -92,7 +92,7 @@ const triggerSet: TriggerSet<Data> = {
       run: (data, matches) => data.groundZero = matches.target,
       outputStrings: {
         getOut: {
-          en: 'Get Out',
+          en: '밖으로',
           de: 'Raus da',
           fr: 'Sortez',
           ja: '外へ',
@@ -110,7 +110,7 @@ const triggerSet: TriggerSet<Data> = {
       run: (data) => delete data.groundZero,
       outputStrings: {
         text: {
-          en: 'Knockback from F; Away from M',
+          en: '언니 넉백: 오빠 범위 공격',
           de: 'Rückstoß von F; Weg von M',
           fr: 'Poussée depuis F; Éloignez-vous de M',
           cn: '被女性击退; 远离男性',
@@ -152,7 +152,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Attack Omega-M',
+          en: '오메가 오빠 공격',
           de: 'Omega-M angreifen',
           fr: 'Attaquez Oméga-M',
           ja: 'オメガMに攻撃',
@@ -169,7 +169,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Attack Omega-F',
+          en: '오메가 언니 공격',
           de: 'Omega-W angreifen',
           fr: 'Attaquez Oméga-F',
           ja: 'オメガFに攻撃',
