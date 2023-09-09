@@ -35,6 +35,7 @@ hideall "--sync--"
 100 label "loop"
 102 "Two"
 103 label "three"
+103 "Three"
 104 "Four"
 106 "Six"
 110 "Ten" #duration 100

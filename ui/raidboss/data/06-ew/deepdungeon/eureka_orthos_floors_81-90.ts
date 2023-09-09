@@ -24,21 +24,21 @@ export const firstHeadmarker = parseInt('0186', 16);
 
 const interceptionOutputStrings: { [label: string]: LocaleText } = {
   egg: {
-    en: '계란',
+    en: '알',
     de: 'Ei',
     ja: 'たまご',
     cn: '蛋',
     ko: '알',
   },
   cube: {
-    en: '큐브',
+    en: '사면체',
     de: 'Würfel',
     ja: '四角',
     cn: '方块',
     ko: '큐브',
   },
   ball: {
-    en: '구슬',
+    en: '동글이',
     de: 'Ball',
     ja: '円', // 〇
     cn: '球',
@@ -343,7 +343,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         between: {
-          en: '${safe}, 계란 사이',
+          en: '${safe}, 알과 알 사이',
           de: '${safe}, zwichen den Eiern',
           ja: '${safe}, たまごの間',
           cn: '${safe}, 蛋中间',

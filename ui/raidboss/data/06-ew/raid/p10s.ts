@@ -210,28 +210,25 @@ const triggerSet: TriggerSet<Data> = {
               return output.default!();
             return output.atether!({ arrow: arrow });
           }
-          let wingSide;
           let wingDir;
           if (x > 100) {
-            wingSide = output.right!();
             wingDir = output.east!();
           } else if (x < 100) {
-            wingSide = output.left!();
             wingDir = output.west!();
           }
-          if (wingSide !== undefined && wingDir !== undefined)
-            return output.tetherside!({ side: wingSide, dir: wingDir });
+          if (wingDir !== undefined)
+            return output.tetherside!({ dir: wingDir });
           return output.default!();
         }
       },
       outputStrings: {
         tetherside: {
-          en: '줄 땡겨요: ${side}/${dir}',
-          de: 'Zeige ${side}/${dir} Verbindung weg',
-          fr: 'Orientez le lien à l\'extérieur - ${side}/${dir}',
-          ja: '線伸ばし ${side}/${dir}',
-          cn: '向 ${side}/${dir} 外侧引导',
-          ko: '선을 ${side}/${dir}으로',
+          en: '줄 땡겨요: ${dir}',
+          de: 'Zeige ${dir} Verbindung weg',
+          fr: 'Orientez le lien à l\'extérieur - ${dir}',
+          ja: '線伸ばし ${dir}',
+          cn: '向 ${dir} 外侧引导',
+          ko: '선을 ${dir}으로',
         },
         default: {
           en: '줄 땡겨요',
@@ -241,10 +238,22 @@ const triggerSet: TriggerSet<Data> = {
           cn: '向外引导',
           ko: '선을 바깥쪽으로',
         },
-        right: Outputs.right,
-        left: Outputs.left,
-        east: Outputs.east,
-        west: Outputs.west,
+        west: {
+          en: '왼쪽/서쪽',
+          de: 'Links/Westen',
+          fr: 'Gauche/Ouest',
+          ja: '左/西へ',
+          cn: '左(西)',
+          ko: '왼쪽/서쪽',
+        },
+        east: {
+          en: '오른쪽/동쪽',
+          de: 'Rechts/Osten',
+          fr: 'Droite/Est',
+          ja: '右/東へ',
+          cn: '右(东)',
+          ko: '오른쪽/동쪽',
+        },
         atether: {
           en: '줄 땡겨요: ${arrow}${arrow}',
         },

@@ -171,6 +171,36 @@ const limitCutIds: readonly string[] = Object.keys(limitCutMap);
 const wingIds: readonly string[] = Object.values(wings);
 const superchainNpcBaseIds: readonly string[] = Object.values(superchainNpcBaseIdMap);
 
+const whiteFlameDelayOutputStrings = {
+  delay1: {
+    en: '지금 당장',
+    de: 'jetzt',
+    cn: '现在!',
+    ko: '바로',
+  },
+  delay2: {
+    en: '잠시 후',
+    de: 'bald',
+    cn: '等一会',
+    ko: '곧',
+  },
+  delay3: {
+    en: '기다렸다가',
+    de: 'verzögert',
+    cn: '等两会',
+  },
+  delay4: {
+    en: '좀 길게 기다렸다가',
+    de: 'sehr verzögert',
+    cn: '等三会',
+  },
+  delay5: {
+    en: '많이 좀 기다렸다가',
+    de: 'seeeeehr verzögert',
+    cn: '等前一组(非常延后)',
+  },
+} as const;
+
 type FloorTile =
   | 'outsideNW'
   | 'outsideNE'
@@ -2123,7 +2153,7 @@ const triggerSet: TriggerSet<Data> = {
       type: 'HeadMarker',
       netRegex: {},
       condition: Conditions.targetIsYou(),
-      durationSeconds: 20,
+      durationSeconds: (data) => data.options.AutumnStyle ? 4 : 20,
       alertText: (data, matches, output) => {
         const id = getHeadmarkerId(data, matches);
         if (!limitCutIds.includes(id))
@@ -2132,8 +2162,6 @@ const triggerSet: TriggerSet<Data> = {
         if (num === undefined)
           return;
         data.limitCutNumber = num;
-        if (data.options.AutumnStyle)
-          return;
         return output.text!({ num: num });
       },
       outputStrings: {
@@ -2185,22 +2213,18 @@ const triggerSet: TriggerSet<Data> = {
         pair: [{ key: 'ModelStatus', value: '16384' }],
         capture: true,
       },
-      condition: (data, matches) =>
-        data.lcCombatants.length > 0 &&
-        data.lcCombatants.find((c) => c.ID === parseInt(matches.id, 16)) !== undefined,
-      run: (data, matches) => {
+      condition: (data, matches) => {
+        // This happens repeatedly, so suppress future calls.
+        if (data.lcWhiteFlameDelay !== undefined)
+          return false;
         const combatant = data.lcCombatants.find((c) => c.ID === parseInt(matches.id, 16));
-        if (combatant === undefined) {
-          console.error(`LC Line Bait Collector: Could not find combatant for ID ${matches.id}`);
-          return;
-        }
-
+        if (combatant === undefined)
+          return false;
         combatant.order = data.lcCombatantsOffset;
         ++data.lcCombatantsOffset;
-
-        if (data.lcCombatantsOffset < 8)
-          return;
-
+        return data.lcCombatantsOffset === 8;
+      },
+      run: (data) => {
         // Find the intercardinal adds that jumped, and then sort by order.
         const orderedJumps = data.lcCombatants
           .filter((combatant) =>
@@ -2220,7 +2244,6 @@ const triggerSet: TriggerSet<Data> = {
         if (o1 === undefined || o2 === undefined || o3 === undefined || o4 === undefined)
           return;
 
-        // delay of 1 = immediate, 5 = maximum
         data.lcWhiteFlameDelay = [o1 + 1, o2 - o1, o3 - o2, o4 - o3];
       },
     },
@@ -2243,26 +2266,35 @@ const triggerSet: TriggerSet<Data> = {
         // cactbot-builtin-response
         output.responseOutputStrings = {
           baitLaser: {
-            en: '레이저 유도! 안쪽으로!',
-            de: 'Laser Ködern',
-            fr: 'Bait le laser',
-            ja: 'レーザー誘導',
-            cn: '引导激光',
-            ko: '레이저 유도',
+            en: '레이저 유도! 안쪽으로! (${delay})',
+            de: 'Laser Ködern (${delay})',
+            fr: 'Bait le laser (${delay})', // FIXME
+            ja: 'レーザー誘導 (${delay})', // FIXME
+            cn: '引导激光 (${delay})',
+            ko: '레이저 유도 (${delay})',
           },
           firstWhiteFlame: {
-            en: '(5, 7 레이저 유도)',
-            de: '(5 und 7 ködern)',
-            fr: '(5 et 7 bait)',
-            ja: '(5と7誘導)',
-            cn: '(5 和 7 引导)',
-            ko: '(5, 7 레이저)',
+            en: '(5, 7 유도 ${delay})',
+            de: '(5 und 7 ködern ${delay})',
+            fr: '(5 et 7 bait ${delay})', // FIXME
+            ja: '(5と7誘導 ${delay})', // FIXME
+            cn: '(5 和 7 引导 ${delay})',
+            ko: '(5, 7 레이저 ${delay})',
           },
+          ...whiteFlameDelayOutputStrings,
         };
-        // TODO: use `data.lcWhiteFlameDelay` to say things like "quick" or "delayed" or "very delayed".
-        const infoText = output.firstWhiteFlame!();
+
+        const delayMap: { [delay: number]: string } = {
+          1: output.delay1!(),
+          2: output.delay2!(),
+          3: output.delay3!(),
+          4: output.delay4!(),
+          5: output.delay5!(),
+        } as const;
+        const delayStr = delayMap[data.lcWhiteFlameDelay?.[0] ?? 1];
+        const infoText = output.firstWhiteFlame!({ delay: delayStr });
         if (data.limitCutNumber === 5 || data.limitCutNumber === 7)
-          return { alertText: output.baitLaser!(), infoText: infoText };
+          return { alertText: output.baitLaser!({ delay: delayStr }), infoText: infoText };
         return { infoText: infoText };
       },
     },
@@ -2280,57 +2312,65 @@ const triggerSet: TriggerSet<Data> = {
         // cactbot-builtin-response
         output.responseOutputStrings = {
           baitLaser: {
-            en: '레이저 유도! 안쪽으로!',
-            de: 'Laser Ködern',
-            fr: 'Bait le laser',
-            ja: 'レーザー誘導',
-            cn: '引导激光',
-            ko: '레이저 유도',
+            en: '레이저 유도! 안쪽으로! (${delay})',
+            de: 'Laser Ködern (${delay})',
+            fr: 'Bait le laser (${delay})', // FIXME
+            ja: 'レーザー誘導 (${delay})', // FIXME
+            cn: '引导激光 (${delay})',
+            ko: '레이저 유도 (${delay})',
           },
           secondWhiteFlame: {
-            en: '(6, 8 레이저 유도)',
-            de: '(6 und 8 ködern)',
-            fr: '(6 et 8 bait)',
-            ja: '(6と8誘導)',
-            cn: '(6 和 8 引导)',
-            ko: '(6, 8 레이저)',
+            en: '(6, 8 유도 ${delay})',
+            de: '(6 und 8 ködern ${delay})',
+            fr: '(6 et 8 bait ${delay})', // FIXME
+            ja: '(6と8誘導 ${delay})', // FIXME
+            cn: '(6 和 8 引导 ${delay})',
+            ko: '(6, 8 레이저 ${delay})',
           },
           thirdWhiteFlame: {
-            en: '(1, 3 레이저 유도)',
-            de: '(1 und 3 ködern)',
-            fr: '(1 et 3 bait)',
-            ja: '(1と3誘導)',
-            cn: '(1 和 3 引导)',
-            ko: '(1, 3 레이저)',
+            en: '(1, 3 유도 ${delay})',
+            de: '(1 und 3 ködern ${delay})',
+            fr: '(1 et 3 bait ${delay})', // FIXME
+            ja: '(1と3誘導 ${delay})', // FIXME
+            cn: '(1 和 3 引导 ${delay})',
+            ko: '(1, 3 레이저 ${delay})',
           },
           fourthWhiteFlame: {
-            en: '(2, 4 레이저 유도)',
-            de: '(2 und 6 ködern)',
-            fr: '(2 et 4 bait)',
-            ja: '(2と4誘導)',
-            cn: '(2 和 4 引导)',
-            ko: '(2, 4 레이저)',
+            en: '(2, 4 유도 ${delay})',
+            de: '(2 und 6 ködern ${delay})',
+            fr: '(2 et 4 bait ${delay})', // FIXME
+            ja: '(2と4誘導 ${delay})', // FIXME
+            cn: '(2 和 4 引导 ${delay})',
+            ko: '(2, 4 레이저 ${delay})',
           },
+          ...whiteFlameDelayOutputStrings,
         };
 
-        // TODO: use `data.lcWhiteFlameDelay` to say things like "quick" or "delayed" or "very delayed".
+        const delayMap: { [delay: number]: string } = {
+          1: output.delay1!(),
+          2: output.delay2!(),
+          3: output.delay3!(),
+          4: output.delay4!(),
+          5: output.delay5!(),
+        } as const;
+        const delayStr = delayMap[data.lcWhiteFlameDelay?.[data.whiteFlameCounter] ?? 1];
 
-        const baitLaser = output.baitLaser!();
+        const baitLaser = output.baitLaser!({ delay: delayStr });
 
         if (data.whiteFlameCounter === 1) {
-          const infoText = output.secondWhiteFlame!();
+          const infoText = output.secondWhiteFlame!({ delay: delayStr });
           if (data.limitCutNumber === 6 || data.limitCutNumber === 8)
             return { alertText: baitLaser, infoText: infoText };
           return { infoText: infoText };
         }
         if (data.whiteFlameCounter === 2) {
-          const infoText = output.thirdWhiteFlame!();
+          const infoText = output.thirdWhiteFlame!({ delay: delayStr });
           if (data.limitCutNumber === 1 || data.limitCutNumber === 3)
             return { alertText: baitLaser, infoText: infoText };
           return { infoText: infoText };
         }
         if (data.whiteFlameCounter === 3) {
-          const infoText = output.fourthWhiteFlame!();
+          const infoText = output.fourthWhiteFlame!({ delay: delayStr });
           if (data.limitCutNumber === 2 || data.limitCutNumber === 4)
             return { alertText: baitLaser, infoText: infoText };
           return { infoText: infoText };
@@ -4150,6 +4190,8 @@ const triggerSet: TriggerSet<Data> = {
           noBeacon: {
             en: '첫 불: ${player1}, ${player2}',
             de: 'Initiales Feuer: ${player1}, ${player2}',
+            cn: '火标记点: ${player1}, ${player2}',
+            ko: '첫 불: ${player1}, ${player2}',
           },
           beacon: {
             en: '첫 불! 앞으로! (${partner})',

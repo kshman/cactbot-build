@@ -238,6 +238,26 @@ const output8Dir: DirectionOutput8[] = [
   'dirW',
   'dirNW',
 ];
+
+const output16Dir: DirectionOutput16[] = [
+  'dirN',
+  'dirNNE',
+  'dirNE',
+  'dirENE',
+  'dirE',
+  'dirESE',
+  'dirSE',
+  'dirSSE',
+  'dirS',
+  'dirSSW',
+  'dirSW',
+  'dirWSW',
+  'dirW',
+  'dirWNW',
+  'dirNW',
+  'dirNNW',
+];
+
 const outputCardinalDir: DirectionOutputCardinal[] = ['dirN', 'dirE', 'dirS', 'dirW'];
 const outputIntercardDir: DirectionOutputIntercard[] = ['dirNE', 'dirSE', 'dirSW', 'dirNW'];
 
@@ -323,6 +343,7 @@ const outputFrom8DirNum = (dirNum: number): DirectionOutput8 => {
 
 export const Directions = {
   output8Dir: output8Dir,
+  output16Dir: output16Dir,
   outputCardinalDir: outputCardinalDir,
   outputIntercardDir: outputIntercardDir,
   outputStrings16Dir: outputStrings16Dir,

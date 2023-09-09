@@ -12,7 +12,6 @@ import { Output, TriggerSet } from '../../../../../types/trigger';
 
 export interface Data extends RaidbossData {
   prsDike?: number;
-  prsStyx?: number;
   prsLightAndDarks?: 'none' | 'lightnear' | 'lightfar' | 'darknear' | 'darkfar';
   prsTethers?: number;
   //
@@ -24,6 +23,7 @@ export interface Data extends RaidbossData {
   lightDarkBuddy: { [name: string]: string };
   lightDarkTether: { [name: string]: 'near' | 'far' };
   cylinderCollect: NetMatches['HeadMarker'][];
+  styxCount: number;
 }
 
 const headmarkers = {
@@ -95,6 +95,7 @@ const triggerSet: TriggerSet<Data> = {
       lightDarkBuddy: {},
       lightDarkTether: {},
       cylinderCollect: [],
+      styxCount: 4,
     };
   },
   triggers: [
@@ -247,7 +248,7 @@ const triggerSet: TriggerSet<Data> = {
           de: 'Raus + Heiler Gruppen',
           fr: 'Extérieur + Package sur les heals',
           ja: '外側で + 4:4あたまわり',
-          cn: '场外 + 双奶分摊',
+          cn: '场外 + 治疗分摊',
           ko: '밖으로 + 힐러 그룹 쉐어',
         },
       },
@@ -488,7 +489,7 @@ const triggerSet: TriggerSet<Data> = {
           de: 'Heiler Gruppen + Raus',
           fr: 'Package sur les heals + Extérieur',
           ja: '4:4あたまわり + 外側へ',
-          cn: '双奶分摊 + 场外',
+          cn: '治疗分摊 + 场外',
           ko: '힐러 그룹 쉐어 + 밖으로',
         },
         dark: {
@@ -565,7 +566,7 @@ const triggerSet: TriggerSet<Data> = {
           de: 'Heiler Gruppen + Raus',
           fr: 'Package sur les heals + Extérieur',
           ja: '4:4あたまわり + 外側へ',
-          cn: '双奶分摊 + 场外',
+          cn: '治疗分摊 + 场外',
           ko: '힐러 그룹 쉐어 + 밖으로',
         },
       },
@@ -982,16 +983,21 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: 'P11S 스틱스',
+      id: 'P11S Styx Stack',
       type: 'StartsUsing',
       netRegex: { id: '8217', source: 'Themis', capture: false },
-      infoText: (data, _matches, output) => {
-        data.prsStyx = (data.prsStyx ?? 4) + 1;
-        return output.text!({ num: data.prsStyx });
+      preRun: (data) => {
+        data.styxCount++;
       },
+      infoText: (data, _matches, output) => output.text!({ num: data.styxCount }),
       outputStrings: {
         text: {
           en: '전체 연속 공격! ${num}번',
+          de: 'Sammeln (${num} Mal)',
+          fr: 'Packez-vous (${num} fois)',
+          ja: '頭割り（${num}回）',
+          cn: '集合分摊（${num}次）',
+          ko: '쉐어뎀 (${num}번)',
         },
       },
     },
