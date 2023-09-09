@@ -25,7 +25,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.pullOrb!(),
       outputStrings: {
         pullOrb: {
-          en: 'Pull orb to an empty hole',
+          en: '진흙 구슬을 빈 구멍으로 유도',
           de: 'Orb in ein Loch lenken',
           fr: 'Tirez l\'orbe vers un trou vide',
           ja: '泥団子を四隅の穴に誘導',
@@ -65,7 +65,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         tankBuster: Outputs.tankBuster,
         avoidTether: {
-          en: 'Avoid ${player} and tethers',
+          en: '피해요: 선 그리고, ${player}',
           de: 'Weiche ${player} und Verbindungen aus',
           fr: 'Évitez ${player} et les liens',
           ja: '${player}と線から離れる',
@@ -81,7 +81,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.avoidWall!(),
       outputStrings: {
         avoidWall: {
-          en: 'Avoid Wall Flush',
+          en: '벽쪽 배수 피해요',
           de: 'Weiche den Wand-Stömmungen aus',
           fr: 'Évitez le jet d\'eau',
           ja: '光ってない横列に移動',
@@ -99,7 +99,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.stepIn!(),
       outputStrings: {
         stepIn: {
-          en: 'Step in Puddle near the Cloud',
+          en: '구름 가까운 곳 물 밟아요',
           de: 'In einer Fläche nahe der Wolke stehen',
           fr: 'Marchez dans la zone au sol près du nuage',
           ja: '雲に近い水を踏む',
@@ -121,7 +121,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.getKnocked!(),
       outputStrings: {
         getKnocked: {
-          en: 'Get Knocked into Safe (no anti-knockback)',
+          en: '안전한 쪽으로 넉백 (암랭/견실 안됨)',
           de: 'Lass dich in den Safespot zurückstoßen (kein Rückstoßschutz)',
           fr: 'Faites-vous pousser en zone safe (pas d\'anti-poussée)',
           ja: 'ボスの正面に (堅実魔効かない)',
@@ -137,7 +137,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.awayFromAoe!(),
       outputStrings: {
         awayFromAoe: {
-          en: 'Go to Opposite Side',
+          en: '반대쪽으로',
           de: 'Geh auf die andere Seite',
           fr: 'Allez du côté opposé',
           ja: '反対側へ',
@@ -154,7 +154,7 @@ const triggerSet: TriggerSet<Data> = {
       alarmText: (_data, _matches, output) => output.runAway!(),
       outputStrings: {
         runAway: {
-          en: 'RUN AWAY',
+          en: '보스가 빨아들여요! 도망!',
           de: 'RENN WEG',
           fr: 'FUYEZ',
           ja: 'ボスから離れる',
@@ -177,7 +177,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.goBoss!(),
       outputStrings: {
         goBoss: {
-          en: 'Go to Boss',
+          en: '보스쪽으로',
           de: 'Gehe zum Boss',
           fr: 'Allez vers le boss',
           ja: 'ボスの場所に移動',

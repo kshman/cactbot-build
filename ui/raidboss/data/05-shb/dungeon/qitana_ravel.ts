@@ -31,7 +31,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Look for pillar',
+          en: '빛나는 조각상 피해요',
           de: 'Auf die Pfeiler schauen',
           fr: 'Cherchez les piliers',
           ja: '光った像を避ける',
@@ -49,7 +49,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Stay on left flank',
+          en: '왼쪽 옆으로',
           de: 'Auf seiner linken Seite stehen',
           fr: 'Restez sur le flanc gauche',
           ja: 'ボスの左側へ',
@@ -67,7 +67,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Stay on right flank',
+          en: '오른쪽 옆으로',
           de: 'Auf seiner rechten Seite stehen',
           fr: 'Restez sur le flanc droit',
           ja: 'ボスの右側へ',
@@ -114,7 +114,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Run Away From Boss',
+          en: '보스에게서 먼곳으로',
           de: 'Renn weg vom Boss',
           fr: 'Courez loin du boss',
           ja: 'ボスから離れる',
@@ -131,7 +131,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Drop Poison Outside',
+          en: '독 장판, 바깥쪽에 버려요',
           de: 'Gift am Rand ablegen',
           fr: 'Déposez le poison à l\'extérieur',
           ja: '外周に捨てる',
@@ -153,7 +153,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Spread to Sides',
+          en: '옆쪽에서 흩어져요',
           de: 'Auf die Seiten verteilen',
           fr: 'Dispersez-vous sur les côtés',
           ja: '横に散開',

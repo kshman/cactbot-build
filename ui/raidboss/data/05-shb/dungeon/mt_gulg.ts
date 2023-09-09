@@ -24,7 +24,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Ambition Tail Smash',
+          en: '테일 스매시 주의',
           de: 'Begierde Schweifschlag',
           fr: 'Ambition, Queue fracassante',
           ja: 'テールスマッシュ',
@@ -46,7 +46,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Frontal Laser',
+          en: '정면 레이저',
           de: 'Frontaler Laser',
           fr: 'Laser frontal',
           ja: 'ボス前方レーザー',
@@ -69,7 +69,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'dodge wind cones',
+          en: '부채꼴 바람 피해요',
           de: 'Wind-Fächerflächen ausweichen',
           fr: 'Esquivez les cônes de vent',
           ja: '風の楔から離れる',
@@ -105,7 +105,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Get Towers',
+          en: '타워 밟아요',
           de: 'Türme nehmen',
           fr: 'Prenez les tours',
           ja: '塔を踏む',
@@ -146,7 +146,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'max melee range',
+          en: '칼 끝 공격 거리로',
           de: 'Maximale Nahkämpfer Entfernung',
           fr: 'À distance max du CaC',
           ja: '近接最大距離',

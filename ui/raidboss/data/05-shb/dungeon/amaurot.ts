@@ -29,7 +29,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         dropMeteorWest: {
-          en: 'Drop Meteor West',
+          en: '미티어 서쪽에 버려요',
           de: 'Meteor im Westen ablegen',
           fr: 'Déposez le météore à l\'ouest',
           ja: 'メテオを西に',
@@ -37,7 +37,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '메테오 서쪽으로 빼기',
         },
         dropMeteorEast: {
-          en: 'Drop Meteor East',
+          en: '미티어 동쪽에 버려요',
           de: 'Meteor im Osten ablegen',
           fr: 'Déposez le météore à l\'est',
           ja: 'メテオを東に',
@@ -45,7 +45,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '메테오 동쪽으로 빼기',
         },
         meteor: {
-          en: 'Meteor',
+          en: '미티어',
           de: 'Meteor',
           fr: 'Météore',
           ja: 'メテオ',
@@ -68,7 +68,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Hide Behind Boulder',
+          en: '운석 뒤로',
           de: 'Hinter einem Felsen verstecken',
           fr: 'Cachez-vous derrière un rocher',
           ja: '隕石の後ろに',
@@ -90,7 +90,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Get Off',
+          en: '바깥으로 피해요',
           de: 'Runter gehen',
           fr: 'Descendez',
           ja: '横へ',
