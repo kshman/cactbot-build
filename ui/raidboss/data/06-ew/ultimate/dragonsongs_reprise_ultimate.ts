@@ -291,7 +291,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (data, _matches, output) => {
         if (data.me === data.mortalVowPlayer)
           return output.vowOnYou!();
-        if (data.mortalVowPlayer)
+        if (data.mortalVowPlayer !== undefined)
           return output.vowOn!({ player: data.ShortName(data.mortalVowPlayer) });
         return output.vowSoon!();
       },
@@ -1101,7 +1101,7 @@ const triggerSet: TriggerSet<Data> = {
         combatantNameJanlenoux = janlenouxLocaleNames[data.parserLang];
 
         let combatantDataJanlenoux = null;
-        if (combatantNameJanlenoux) {
+        if (combatantNameJanlenoux !== undefined) {
           combatantDataJanlenoux = await callOverlayHandler({
             call: 'getCombatants',
             names: [combatantNameJanlenoux],
@@ -2303,8 +2303,8 @@ const triggerSet: TriggerSet<Data> = {
             return output.text!({ name1: m2.r, name2: m1.r });
           }
         }
-        const name1 = fullName1 ? data.ShortName(fullName1) : output.unknown!();
-        const name2 = fullName2 ? data.ShortName(fullName2) : output.unknown!();
+        const name1 = fullName1 !== undefined ? data.ShortName(fullName1) : output.unknown!();
+        const name2 = fullName2 !== undefined ? data.ShortName(fullName2) : output.unknown!();
         return output.text!({ name1: name1, name2: name2 });
       },
       // Sorry tts players, but "Thunder on YOU" and "Thunder: names" are too similar.

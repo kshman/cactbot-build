@@ -79,16 +79,19 @@ export const orbOutputStrings: OutputStrings = {
   w: Outputs.arrowW,
   knockback: {
     en: '${dir}넉백',
+    de: '${dir} Rückstoß',
     cn: '${dir} 击退',
     ko: '${dir} 넉백',
   },
   knockbackWithHead: {
     en: '${dir1}넉백 -> ${dir2}',
+    de: '${dir1} Rückstoß -> ${dir2}',
     cn: '${dir1} 击退 -> ${dir2}',
     ko: '${dir1} 넉백 -> ${dir2}',
   },
   aoeWithHead: {
     en: '${dir1} 살짝 ${dir2}',
+    de: 'Geh ${dir1} (nach ${dir2} bewegen)',
     cn: '去${dir1} (偏${dir2})',
     ko: '${dir1}쪽으로 (살짝 ${dir2}쪽으로)',
   },
@@ -358,16 +361,19 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         sides: {
           en: '바깥 옆으로',
+          de: 'Raus (Seiten)',
           cn: '去外面 (两边)',
           ko: '밖으로 (양 옆)',
         },
         sidesWithTower: {
           en: '타워 밟고 + 바깥',
+          de: 'Turm + Außerhalb',
           cn: '踩塔 + 去外面',
           ko: '기둥 + 양 옆',
         },
         sidesWithStacks: {
           en: '바깥 옆에서 + 4:4 뭉쳐요',
+          de: 'Außerhalb + Heiler-Gruppen',
           cn: '去外面 + 治疗分组分摊',
           ko: '양 옆 + 힐러 그룹',
         },
@@ -390,16 +396,19 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         middle: {
           en: '안으로',
+          de: 'Innen (Mitte)',
           cn: '去里面 (中间)',
           ko: '안으로 (가운데)',
         },
         middleWithTower: {
           en: '타워 밟고 + 안쪽',
+          de: 'Turm + Innen',
           cn: '踩塔 + 去里面',
           ko: '기둥 + 안으로',
         },
         middleWithStacks: {
           en: '안에서 + 4:4 뭉쳐요',
+          de: 'Innen + Heiler-Gruppen',
           cn: '去里面 + 治疗分组分摊',
           ko: '안으로 + 힐러 그룹',
         },
@@ -557,7 +566,7 @@ const triggerSet: TriggerSet<Data> = {
 
         for (const head of headData.combatants) {
           const headId = head.ID?.toString(16).toUpperCase();
-          if (!headId) {
+          if (headId === undefined) {
             console.error(`5Head Initial Direction: invalid head ID`);
             continue;
           }
@@ -614,7 +623,7 @@ const triggerSet: TriggerSet<Data> = {
 
         for (const head of headData.combatants) {
           const headId = head.ID?.toString(16).toUpperCase();
-          if (!headId) {
+          if (headId === undefined) {
             console.error(`5Head Mechanics Collector: invalid head ID`);
             continue;
           }
@@ -799,7 +808,7 @@ const triggerSet: TriggerSet<Data> = {
           const dir1 = headPositions[0];
           const dir2 = headPositions[1];
 
-          if (!dir1 || !dir2) {
+          if (dir1 === undefined || dir2 === undefined) {
             console.error(`6 Head Collector: expected 2 safe heads`);
             return;
           }

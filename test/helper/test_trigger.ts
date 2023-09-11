@@ -274,7 +274,7 @@ const testTriggerFile = (file: string, info: TriggerSetInfo) => {
       if (!set)
         continue;
       for (const trigger of set) {
-        if (!trigger.id) {
+        if (trigger.id === undefined) {
           assert.fail(`Missing id field in trigger ${trigger.regex?.source ?? '???'}`);
           continue;
         }

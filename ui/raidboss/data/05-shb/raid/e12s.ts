@@ -57,7 +57,7 @@ export interface Data extends RaidbossData {
   statueIds?: number[];
   statueDir?: string;
   statueLaserCount?: number;
-  phase?: string;
+  phase?: 'basic' | 'intermediate' | 'advanced' | 'terminal';
   debuffs?: { [name: string]: number };
   intermediateDebuffs?: string[];
   safeZone?: string;
@@ -88,7 +88,7 @@ const getTetherString = (tethers: string[] | undefined, output: Output) => {
   const sorted = tethers?.sort();
 
   const [first, second] = sorted ?? [];
-  if (!first || !second)
+  if (first === undefined || second === undefined)
     return;
 
   const comboStr = first + second;
@@ -633,11 +633,11 @@ const triggerSet: TriggerSet<Data> = {
         };
         const numStr = numMap[data.statueTetherNumber ?? -1];
 
-        if (!numStr) {
+        if (numStr === undefined) {
           console.error(`sculpture: invalid tether number: ${data.statueTetherNumber ?? '???'}`);
           return;
         }
-        if (!data.statueDir) {
+        if (data.statueDir === undefined) {
           console.error(`sculpture: missing statueDir`);
           return;
         }
@@ -1008,7 +1008,7 @@ const triggerSet: TriggerSet<Data> = {
         delete data.tethers;
 
         const text = getTetherString(data.stockedTethers, output);
-        if (!text)
+        if (text === undefined)
           return;
         return output.stock!({ text: text });
       },
@@ -1034,9 +1034,9 @@ const triggerSet: TriggerSet<Data> = {
         // which means that we need to grab the original tethers during the first stock.
         const isRelease = matches.id === '5893';
         const text = getTetherString(isRelease ? data.stockedTethers : data.tethers, output);
-        if (!text)
+        if (text === undefined)
           return;
-        if (!data.junctionSuffix)
+        if (data.junctionSuffix === undefined)
           return text;
         return output.junctionSuffix!({
           text: text,
@@ -1159,7 +1159,7 @@ const triggerSet: TriggerSet<Data> = {
       netRegex: { source: 'Oracle Of Darkness', id: '58E[0-3]' },
       response: Responses.bigAoe(),
       run: (data, matches) => {
-        const phaseMap: { [id: string]: string } = {
+        const phaseMap: { [id: string]: Data['phase'] } = {
           '58E0': 'basic',
           '58E1': 'intermediate',
           '58E2': 'advanced',
@@ -1283,7 +1283,7 @@ const triggerSet: TriggerSet<Data> = {
         data.safeZone = dirs[cardinal];
       },
       infoText: (data, _matches, output) =>
-        output.safeZone!({ safe: !data.safeZone ? output.unknown!() : data.safeZone }),
+        output.safeZone!({ safe: data.safeZone === undefined ? output.unknown!() : data.safeZone }),
       outputStrings: {
         unknown: Outputs.unknown,
         north: Outputs.north,
@@ -1426,7 +1426,7 @@ const triggerSet: TriggerSet<Data> = {
         const keys = sortedIds.map((effectId) => effectIdToOutputStringKey[effectId]);
 
         const [key0, key1, key2] = keys;
-        if (!key0 || !key1 || !key2)
+        if (key0 === undefined || key1 === undefined || key2 === undefined)
           throw new UnreachableCode();
 
         // Stash outputstring keys to use later.
@@ -1505,7 +1505,7 @@ const triggerSet: TriggerSet<Data> = {
           return { infoText: output.moveAway!() };
 
         const key = data.intermediateDebuffs && data.intermediateDebuffs.shift();
-        if (!key)
+        if (key === undefined)
           return { infoText: output.moveAway!() };
         return { alertText: output[key]!() };
       },
@@ -1543,7 +1543,7 @@ const triggerSet: TriggerSet<Data> = {
             player1: data.ShortName(player1),
             player2: data.ShortName(player2),
           });
-        } else if (player1 === data.me && player2) {
+        } else if (player1 === data.me && player2 !== undefined) {
           // Call out second player name if exists and you have eye
           return output.lookAwayFromPlayer!({ player: data.ShortName(player2) });
         } else if (player2 === data.me) {
@@ -1815,8 +1815,10 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (data, matches, output) => {
         data.doubleAero ??= [];
         data.doubleAero.push(data.ShortName(matches.target));
+
         if (data.doubleAero.length !== 2)
           return;
+
         data.doubleAero.sort();
         return output.text!({ name1: data.doubleAero[0], name2: data.doubleAero[1] });
       },

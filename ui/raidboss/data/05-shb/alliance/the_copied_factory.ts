@@ -7,7 +7,7 @@ import { TriggerSet } from '../../../../../types/trigger';
 
 export interface Data extends RaidbossData {
   lightfastCount?: number;
-  alliance?: string;
+  alliance?: 'A' | 'B' | 'C';
 }
 
 // The Copied Factory
@@ -130,7 +130,7 @@ const triggerSet: TriggerSet<Data> = {
         capture: false,
       },
       infoText: (_data, _matches, output) => output.text!(),
-      run: (data) => data.alliance = data.alliance ?? 'A',
+      run: (data) => data.alliance ??= 'A',
       outputStrings: {
         text: {
           en: '움직이는 동글 피해요',
@@ -152,7 +152,7 @@ const triggerSet: TriggerSet<Data> = {
         capture: false,
       },
       alertText: (_data, _matches, output) => output.text!(),
-      run: (data) => data.alliance = data.alliance || 'B',
+      run: (data) => data.alliance ??= 'B',
       outputStrings: {
         text: {
           en: '뒷쪽 화염방사 피해요',
@@ -174,7 +174,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       durationSeconds: 6,
       response: Responses.getOut('info'),
-      run: (data) => data.alliance = data.alliance || 'C',
+      run: (data) => data.alliance ??= 'C',
     },
     {
       id: 'Copied Hobbes Left Arm 2',
