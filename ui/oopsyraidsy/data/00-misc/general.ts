@@ -5,6 +5,7 @@ import { OopsyTriggerSet } from '../../../../types/oopsy';
 
 export interface Data extends OopsyData {
   lostFood?: { [name: string]: boolean };
+  raiseTracker?: { [targetId: string]: string };
 }
 
 // General mistakes; these apply everywhere.
@@ -21,7 +22,7 @@ const triggerSet: OopsyTriggerSet<Data> = {
       comment: { cn: '食物消失' },
       type: 'LosesEffect',
       // Well Fed
-      netRegex: NetRegexes.losesEffect({ effectId: '48' }),
+      netRegex: NetRegexes.losesEffect({ effectId: '30' }),
       condition: (_data, matches) => {
         // Prevent "Eos loses the effect of Well Fed from Critlo Mcgee"
         return matches.target === matches.source;
@@ -51,7 +52,7 @@ const triggerSet: OopsyTriggerSet<Data> = {
     {
       id: 'General Well Fed',
       type: 'GainsEffect',
-      netRegex: NetRegexes.gainsEffect({ effectId: '48' }),
+      netRegex: NetRegexes.gainsEffect({ effectId: '30' }),
       run: (data, matches) => {
         if (!data.lostFood)
           return;
@@ -78,6 +79,40 @@ const triggerSet: OopsyTriggerSet<Data> = {
             ko: '토끼',
           },
         };
+      },
+    },
+    {
+      id: 'General Double Raise',
+      type: 'Ability',
+      netRegex: NetRegexes.ability({
+        id: ['7D', 'AD', 'E13', '1D63', '5EDF', '478D', '7423', '7426'],
+      }),
+      // 7D = Raise; AD = Resurrection; E13 = Ascend; 1D63 = Verraise; 5EDF = Egeiro; 478D = BLU; 7423, 7426 = Variant
+      mistake: (data, matches) => {
+        data.raiseTracker ??= {};
+        const lastRaiser = data.raiseTracker[matches.targetId];
+        if (lastRaiser !== undefined) {
+          return {
+            type: 'warn',
+            blame: matches.source,
+            reportId: matches.sourceId,
+            text: {
+              en: '소생 겹침. 먼저 씀: ' + lastRaiser,
+              de: 'überschrieb ' + lastRaiser + '\'s Wiederbeleben',
+              ko: lastRaiser + '의 부활과 겹침',
+            },
+          };
+        }
+        data.raiseTracker[matches.targetId] ??= data.ShortName(matches.source);
+      },
+    },
+    {
+      id: 'General Raise Cleanup',
+      type: 'LosesEffect',
+      netRegex: NetRegexes.losesEffect({ effectId: '94' }),
+      run: (data, matches) => {
+        if (data.raiseTracker)
+          delete data.raiseTracker[matches.targetId];
       },
     },
   ],

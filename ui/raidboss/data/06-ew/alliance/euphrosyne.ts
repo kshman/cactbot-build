@@ -869,6 +869,7 @@ const triggerSet: TriggerSet<Data> = {
         frontLeft: {
           en: '앞 + 왼쪽',
           de: 'Vorne Links',
+          fr: 'Avant Gauche',
           ja: '前左',
           cn: '左前',
           ko: '앞 왼쪽',
@@ -876,6 +877,7 @@ const triggerSet: TriggerSet<Data> = {
         frontRight: {
           en: '앞 + 오른쪽',
           de: 'Vorne Rechts',
+          fr: 'Avant Droit',
           ja: '前右',
           cn: '右前',
           ko: '앞 오른쪽',
@@ -883,6 +885,7 @@ const triggerSet: TriggerSet<Data> = {
         backLeft: {
           en: '뒤 + 왼쪽',
           de: 'Hinten Links',
+          fr: 'Arrière Gauche',
           ja: '後左',
           cn: '左后',
           ko: '뒤 왼쪽',
@@ -890,6 +893,7 @@ const triggerSet: TriggerSet<Data> = {
         backRight: {
           en: '뒤 + 오른쪽',
           de: 'Hinten Rechts',
+          fr: 'Arrière Droit',
           ja: '後ろ右',
           cn: '右后',
           ko: '뒤 오른쪽',

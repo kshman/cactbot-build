@@ -80,7 +80,7 @@ export default {
   // when there are multiple tankbusters going out
   tankBusters: {
     en: '탱크버스터',
-    de: 'Tank buster',
+    de: 'Tank busters',
     fr: 'Tank busters',
     ja: 'タンク強攻撃',
     cn: '坦克死刑',
@@ -104,6 +104,7 @@ export default {
   },
   tankBusterCleavesOnYou: {
     en: '내게 탱크 클레브',
+    de: 'Tank Cleaves auf DIR',
     fr: 'Tank cleaves sur VOUS',
     cn: '坦克顺劈点名',
     ko: '광역 탱버 대상자',
@@ -134,6 +135,7 @@ export default {
   },
   sharedTankbuster: {
     en: '둘이서 맞는 탱크버스터',
+    de: 'Geteilter Tankbuster',
     fr: 'Partagez le Tank buster',
     ja: 'タンク頭割り',
     cn: '分摊死刑',
@@ -411,6 +413,7 @@ export default {
   },
   front: {
     en: '앞쪽',
+    de: 'Vorne',
     fr: 'Devant',
     ja: '前',
     cn: '前',
@@ -418,6 +421,7 @@ export default {
   },
   back: {
     en: '뒷쪽',
+    de: 'Hinten',
     fr: 'Derrière',
     ja: '後ろ',
     cn: '后',

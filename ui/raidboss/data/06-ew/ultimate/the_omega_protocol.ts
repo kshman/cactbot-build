@@ -221,18 +221,29 @@ const triggerSet: TriggerSet<Data> = {
       comment: {
         en:
           '<a href="https://github.com/quisquous/cactbot/releases/tag/v0.28.19" target="_blank">Read Notes</a>',
+        de:
+          '<a href="https://github.com/quisquous/cactbot/releases/tag/v0.28.19" target="_blank">Notizen lesen</a>',
+        cn:
+          '<a href="https://github.com/quisquous/cactbot/releases/tag/v0.28.19" target="_blank">阅读笔记</a>',
+        ko:
+          '<a href="https://github.com/quisquous/cactbot/releases/tag/v0.28.19" target="_blank">참고</a>',
       },
       name: {
         en: 'Run: Omega Staff Sword Dodge Direction',
         de: 'Renn: Omega Stab Schwert Ausweich-Richtung',
         ja: 'オメガの杖の回避方向',
         cn: '欧米茄运动会杖剑躲避方向',
+        ko: '코드: 오메가 지팡이 칼 회피 방향',
       },
       type: 'select',
       options: {
         en: {
           'Dodge Far (by Omega-M)': 'far',
           'Dodge Mid (by Omega-F)': 'mid',
+        },
+        de: {
+          'Ausweichen Fern (von Omega-M)': 'far',
+          'Ausweichen Mitte (von Omega-F)': 'mid',
         },
         cn: {
           '躲远 (by Omega-M)': 'far',
