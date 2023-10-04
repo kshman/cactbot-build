@@ -371,6 +371,16 @@ const templateOptions: OptionsTemplate = {
       },
       default: 'left',
     },
+    {
+      id: 'MinimumTimeForOverwrittenMit',
+      name: {
+        en: '최소 겹치는 mit 시간 보이기(초단위)',
+        de: 'Minimum Zeit überschriebene Mitigation anzuzeigen (Sekunden)',
+        cn: '显示被顶减伤最小时间 (秒)',
+      },
+      type: 'float',
+      default: 2,
+    },
   ],
 };
 
