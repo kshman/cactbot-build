@@ -603,8 +603,8 @@ const triggerSet: TriggerSet<Data> = {
           return output.default!();
 
         const puffLocs = dirCards.includes(puffDir) ? 'Cardinal' : 'Intercard';
-        const baitOutput: string = silkieStatus + puffEffect + puffLocs + 'Puff';
-        const safeOutput: string = silkieStatus + 'Puffs' + puffLocs + 'SafeLater';
+        const baitOutput = `${silkieStatus + puffEffect + puffLocs}Puff`;
+        const safeOutput = `${silkieStatus}Puffs${puffLocs}SafeLater`;
 
         // set the output for the subsequent safe call here and pass the output to the followup trigger
         // this keeps all of the interrelated output strings in this trigger for ease of customization
@@ -1715,8 +1715,8 @@ const triggerSet: TriggerSet<Data> = {
         if (r1 === undefined || r2 === undefined)
           return output.unknown!();
 
-        const c1 = output['r' + r1.toString()]!();
-        const c2 = output['r' + (r2 + 3).toString()]!();
+        const c1 = output[`r${r1.toString()}`]!();
+        const c2 = output[`r${(r2 + 3).toString()}`]!();
         if (data.rushCounter % 2 === 0)
           return output.revs!({ left: c1, right: c2 });
         return output.rush!({ left: c1, right: c2 });
