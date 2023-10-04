@@ -384,7 +384,7 @@ const triggerSet: TriggerSet<Data> = {
           cn: '穿天点名',
         },
         defamationCounted: {
-          en: '내게 #${number}번째 🔵폭탄!',
+          en: '내게 ${number}번째 🔵폭탄!',
           de: 'Große AoE #${number} auf DIR',
           fr: 'Diffamation #${number} sur VOUS',
           cn: '穿天 #${number} 点名',
@@ -466,13 +466,13 @@ const triggerSet: TriggerSet<Data> = {
           cn: '奶枪点名',
         },
         spearMainTank: {
-          en: '돌진: 밖에서 대기',
+          en: '돌진: 계속 탱킹',
           de: 'Ansturm: BLEIB DRAUSEN',
           fr: 'Charge sauvage : RESTEZ À L\'EXTÉRIEUR',
           cn: '奶枪: 保持远离',
         },
         spearOther: {
-          en: '돌진 - 가로채요: ${spearTarget}',
+          en: '돌진: ${spearTarget}',
           de: 'Ansturm: Zwichen ${spearTarget} stehen',
           fr: 'Charge sauvage : Interceptez ${spearTarget}',
           cn: '奶枪: 挡住 ${spearTarget}',
@@ -490,7 +490,7 @@ const triggerSet: TriggerSet<Data> = {
       type: 'Ability',
       netRegex: { id: '89B7', source: 'Ser Vellguine' }, // Shared ability from all knights when they teleport in.
       condition: (data) => data.phase === 5,
-      infoText: (_data, matches, output) => {
+      alertText: (_data, matches, output) => {
         const knightNum = Directions.hdgTo8DirNum(parseFloat(matches.heading));
         const knightDir = Directions.outputFrom8DirNum(knightNum);
         const [dir1, dir2] = [knightDir, unsafeMap[knightDir]].sort();
@@ -500,7 +500,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         combined: {
-          en: '위험한 곳: ${dir1} / ${dir2}',
+          en: '돌진 위치 확인! 위험: ${dir1} / ${dir2}',
           de: '${dir1} / ${dir2} Nicht Sicher',
           fr: '${dir1} / ${dir2} non-sûr',
           cn: '${dir1} / ${dir2} 危险',
