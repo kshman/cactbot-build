@@ -41,7 +41,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Spread (avoid cages)',
+          en: '흩어져요 (옆에 몹 우리에 닿지 않게)',
           de: 'Verteilen (Vermeide "Käfige")',
           fr: 'Dispersez-vous (évitez les cages)',
           ja: '散開 (檻に近づかない)',
@@ -90,7 +90,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'cardinal lasers',
+          en: '십자 레이저',
           de: 'Himmelrichtungs-Lasers',
           fr: 'Lasers cardinaux',
           ja: '十字レーザー',
@@ -107,7 +107,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'outer lasers',
+          en: '바깥쪽 레이저',
           de: 'Lasers am Rand',
           fr: 'Lasers extérieurs',
           ja: '外周レーザー',

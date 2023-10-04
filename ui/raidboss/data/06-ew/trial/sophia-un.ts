@@ -50,7 +50,7 @@ const callSafeDir = (callIndex: number, output: Output) => {
 
 const tiltOutputStrings = {
   goEastHardTilt: {
-    en: 'Go East (Hard Tilt)',
+    en: '동쪽으로 (많이 기울어요)',
     de: 'Nach Osten gehen (starke Neigung)',
     fr: 'Allez à l\'Est (Inclinaison forte)',
     ja: '東へ (大きい斜め)',
@@ -58,7 +58,7 @@ const tiltOutputStrings = {
     ko: '동쪽으로 (크게 기울어짐)',
   },
   goEastSoftTilt: {
-    en: 'Go East (Soft Tilt)',
+    en: '동쪽으로 (조금 기울어요)',
     de: 'Nach Osten gehen (leichte Neigung)',
     fr: 'Allez à l\'Est (Inclinaison faible)',
     ja: '東へ (小さい斜め)',
@@ -66,7 +66,7 @@ const tiltOutputStrings = {
     ko: '동쪽으로 (작게 기울어짐)',
   },
   goWestHardTilt: {
-    en: 'Go West (Hard Tilt)',
+    en: '서쪽으로 (많이 기울어요)',
     de: 'Nach Westen gehen (starke Neigung)',
     fr: 'Allez à l\'Ouest (Inclinaison forte)',
     ja: '西へ (大きい斜め)',
@@ -74,7 +74,7 @@ const tiltOutputStrings = {
     ko: '서쪽으로 (크게 기울어짐)',
   },
   goWestSoftTilt: {
-    en: 'Go West (Soft Tilt)',
+    en: '서쪽으로 (조금 기울어요)',
     de: 'Nach Westen gehen (leichte Neigung)',
     fr: 'Allez à l\'Ouest (Inclinaison faible)',
     ja: '西へ (小さい斜め)',
@@ -109,7 +109,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Avoid Dash Attack',
+          en: '돌진 공격 피해요',
           de: 'Ansturm-Angriff ausweichen',
           fr: 'Évitez l\'attaque Charge',
           ja: '突進回避',
@@ -131,7 +131,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Stack With Partner',
+          en: '좌와벌: 둘이 뭉쳐요',
           de: 'Mit Partner stacken',
           fr: 'Packez-vous avec votre partenaire',
           ja: '白と黒で重なる',
@@ -147,7 +147,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Bait Quasar Meteors',
+          en: '퀘이사 미티어 유도',
           de: 'Quasar Meteore ködern',
           fr: 'Attirez les météores du Quasar',
           ja: 'メテオを誘導',
@@ -197,7 +197,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Get behind lancer',
+          en: '제3종자-창잡이-뒤로',
           de: 'Geh hinter dem 3. Demiurg',
           fr: 'Passez derrière le lancier',
           ja: '三の従者の後ろに',
@@ -218,7 +218,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         infusionOnYou: {
-          en: 'Infusion on YOU',
+          en: '내게 맹돌진',
           de: 'Schneisenschläger auf DIR',
           fr: 'Infusion sur VOUS',
           ja: '自分に猛突進',
@@ -226,7 +226,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '맹돌진 대상자',
         },
         infusionOn: {
-          en: 'Infusion on ${player}',
+          en: '맹돌진: ${player}',
           de: 'Schneisenschläger auf ${player}',
           fr: 'Infusion sur ${player}',
           ja: '${player}に猛突進',
@@ -289,7 +289,7 @@ const triggerSet: TriggerSet<Data> = {
       netRegex: { id: '002D' },
       run: (data, matches) => {
         const spot = data.cloneSpots?.[matches.sourceId];
-        if (!spot)
+        if (spot === undefined)
           throw new UnreachableCode();
         // Only Thunder 2 is ever used on centerline clones,
         // so center clones will never affect quadrant safety.
@@ -331,7 +331,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Avoid head laser',
+          en: '머리 레이저 피해요',
           de: 'Kopflaser ausweichen',
           fr: 'Évitez le laser de la tête',
           ja: '頭レーザー回避',

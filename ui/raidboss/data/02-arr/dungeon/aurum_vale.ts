@@ -18,7 +18,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Eat Fruit',
+          en: '과일 줏어요!',
           de: 'Frucht essen',
           fr: 'Mangez un fruit',
           cn: '吃果实',

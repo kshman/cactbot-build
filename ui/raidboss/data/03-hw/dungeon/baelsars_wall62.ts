@@ -91,7 +91,7 @@ const triggerSet: TriggerSet<Data> = {
         output.text!({ player: data.ShortName(matches.target) }),
       outputStrings: {
         text: {
-          en: 'Break chain on ${player}',
+          en: '사슬 부셔요: ${player}',
           de: 'Kette von ${player} brechen',
           fr: 'Cassez la chaînes sur ${player}',
           ja: '${player}の線を取る',

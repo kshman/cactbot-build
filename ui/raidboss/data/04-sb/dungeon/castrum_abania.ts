@@ -58,7 +58,7 @@ const triggerSet: TriggerSet<Data> = {
       run: (data) => data.calledUseCannon = true,
       outputStrings: {
         text: {
-          en: 'Fire cannon at boss',
+          en: '보스에게 포탄을',
           de: 'Feuere Kanonen auf den Boss',
           fr: 'Tirez le canon sur le boss',
           cn: '用炮射BOSS',
@@ -93,7 +93,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.getTowers!(),
       outputStrings: {
         getTowers: {
-          en: 'Get Towers',
+          en: '타워 밟아요',
           de: 'Türme nehmen',
           fr: 'Prenez les tours',
           ja: '塔を踏む',
@@ -130,7 +130,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           // Knockback comes from the proximity marker, not the boss.
-          en: 'Small comet knockback',
+          en: '작은 혜성 넉백',
           de: 'Kleiner Kometenrückstoß',
           fr: 'Poussée de la petite comète',
           cn: '小彗星击退',
@@ -250,19 +250,23 @@ const triggerSet: TriggerSet<Data> = {
     },
     {
       'locale': 'cn',
-      'missingTranslations': true,
       'replaceSync': {
         'Inferno': '炼狱炎魔',
         'Magna Roader': '魔导机车大魔',
         'Mark XLIII Mini Cannon': '43式小迫击炮',
         'Project Aegis': '强化实验室',
+        'Subject Number XXIV': '024号',
         'Terrestrial Weaponry': '陆战兵器开发室',
         'The Assessment Grounds': '性能试验场',
       },
       'replaceText': {
         '--adds--': '--小怪--',
         'Barrier Shift': '护盾转换',
+        'Blizzard II': '冰冻',
+        'Elemental Overload': '元素过载',
+        '(?<!Magitek )Fire II(?!I)': '烈炎',
         'Gale Cut': '烈风杀',
+        'Ice Grid': '冰格',
         'Ketu & Rahu': '罗睺计都',
         'Ketu Cut': '计都限制器减档',
         'Ketu Slash': '计都挥',
@@ -270,8 +274,12 @@ const triggerSet: TriggerSet<Data> = {
         'Magitek Fire III': '魔导爆炎',
         'Rahu Blaster': '罗睺冲击波',
         'Rahu Cut': '罗睺限制器减档',
+        'Sparking Current': '电流火花',
         'Stab': '突刺',
+        'System Error': '系统错误',
+        'Thunder II': '震雷',
         'Towers': '塔',
+        'Triflame': '三炎',
         'Wheel': '车轮',
         'Wild Speed': '猛冲',
       },

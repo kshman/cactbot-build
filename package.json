@@ -1,6 +1,6 @@
 {
   "name": "cactbot",
-  "version": "99.29.99",
+  "version": "99.30.0",
   "license": "Apache-2.0",
   "type": "module",
   "types": "./types",
@@ -111,7 +111,7 @@
     "ts-loader": "^9.3.0",
     "ts-node": "^10.8.0",
     "tsconfig-paths": "^3.9.0",
-    "ttypescript": "^1.5.12",
+    "ttypescript": "^1.5.15",
     "typescript": "^4.6.4",
     "webpack": "^5.76.0",
     "webpack-cli": "^4.9.2",
@@ -141,7 +141,6 @@
       "eslint --max-warnings=0 --plugin tsc --rule 'tsc/config: [2, {configFile: \"./tsconfig.json\"}]'"
     ],
     "*.md": "markdownlint",
-    "*.py": "python -m pylint --errors-only",
     "ui/(raidboss|oopsyraidsy)/data/**": [
       "node --loader ts-node/esm test/test_raidboss_data.ts"
     ]

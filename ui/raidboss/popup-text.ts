@@ -149,10 +149,10 @@ const onTriggerException = (trigger: ProcessedTrigger, e: unknown) => {
   if (e === null || typeof e !== 'object')
     return;
 
-  let str = 'Error in trigger: ' + (trigger.id ? trigger.id : '[unknown trigger id]');
+  let str = `Error in trigger: ${trigger.id !== undefined ? trigger.id : '[unknown trigger id]'}`;
 
-  if (trigger.filename)
-    str += ' (' + trigger.filename + ')';
+  if (trigger.filename !== undefined)
+    str += ` (${trigger.filename})`;
   console.error(str);
 
   if (e instanceof Error) {
@@ -241,7 +241,7 @@ class OrderedTriggerList {
 
       // TODO: be verbose now while this is fresh, but hide this output behind debug flags later.
       const triggerFile = (trigger: ProcessedTrigger) =>
-        trigger.filename ? `'${trigger.filename}'` : 'user override';
+        trigger.filename !== undefined ? `'${trigger.filename}'` : 'user override';
       const oldFile = triggerFile(oldTrigger);
       const newFile = triggerFile(trigger);
       console.log(`Overriding '${trigger.id}' from ${oldFile} with ${newFile}.`);
@@ -279,7 +279,7 @@ class TriggerOutputProxy {
   ) {
     this.outputStrings = trigger.outputStrings ?? {};
 
-    if (trigger.id && perTriggerAutoConfig) {
+    if (trigger.id !== undefined && perTriggerAutoConfig) {
       const config = perTriggerAutoConfig[trigger.id];
       if (config && config.OutputStrings)
         this.overrideStrings = config.OutputStrings;
@@ -663,15 +663,15 @@ export class PopupText {
           addTimeline(objVal);
       } else if (typeof obj === 'function') {
         addTimeline(obj(this.data));
-      } else if (obj) {
+      } else if (obj !== undefined) {
         timelines.push(obj);
       }
     }.bind(this);
 
     // construct something like regexDe or regexFr.
     const langSuffix = this.parserLang.charAt(0).toUpperCase() + this.parserLang.slice(1);
-    const regexParserLang = 'regex' + langSuffix;
-    const netRegexParserLang = 'netRegex' + langSuffix;
+    const regexParserLang = `regex${langSuffix}`;
+    const netRegexParserLang = `netRegex${langSuffix}`;
 
     for (const set of this.triggerSets) {
       // zoneRegex can be undefined, a regex, or translatable object of regex.
@@ -682,7 +682,7 @@ export class PopupText {
         continue;
       }
       if (haveZoneId && set.zoneId === undefined) {
-        const filename = set.filename ? `'${set.filename}'` : '(user file)';
+        const filename = set.filename !== undefined ? `'${set.filename}'` : '(user file)';
         console.error(
           `Trigger set has zoneId, but with nothing specified in ${filename}.  ` +
             `Did you misspell the ZoneId.ZoneName?`,
@@ -700,7 +700,7 @@ export class PopupText {
         let zoneRegex = set.zoneRegex;
         if (typeof zoneRegex !== 'object') {
           console.error(
-            'zoneRegex must be translatable object or regexp: ' + JSON.stringify(set.zoneRegex),
+            `zoneRegex must be translatable object or regexp: ${JSON.stringify(set.zoneRegex)}`,
           );
           continue;
         } else if (!(zoneRegex instanceof RegExp)) {
@@ -710,12 +710,12 @@ export class PopupText {
           } else if (zoneRegex['en']) {
             zoneRegex = zoneRegex['en'];
           } else {
-            console.error('unknown zoneRegex parser language: ' + JSON.stringify(set.zoneRegex));
+            console.error(`unknown zoneRegex parser language: ${JSON.stringify(set.zoneRegex)}`);
             continue;
           }
 
           if (!(zoneRegex instanceof RegExp)) {
-            console.error('zoneRegex must be regexp: ' + JSON.stringify(set.zoneRegex));
+            console.error(`zoneRegex must be regexp: ${JSON.stringify(set.zoneRegex)}`);
             continue;
           }
         }
@@ -849,7 +849,7 @@ export class PopupText {
       }
 
       if (set.overrideTimelineFile) {
-        const filename = set.filename ? `'${set.filename}'` : '(user file)';
+        const filename = set.filename !== undefined ? `'${set.filename}'` : '(user file)';
         console.log(`Overriding timeline from ${filename}.`);
 
         // If the timeline file override is set, all previously loaded timeline info is dropped.
@@ -859,14 +859,14 @@ export class PopupText {
       }
 
       // And set the timeline files/timelines from each set that matches.
-      if (set.timelineFile) {
-        if (set.filename) {
+      if (set.timelineFile !== undefined) {
+        if (set.filename !== undefined) {
           const dir = set.filename.slice(0, Math.max(0, set.filename.lastIndexOf('/')));
-          timelineFiles.push(dir + '/' + set.timelineFile);
+          timelineFiles.push(`${dir}/${set.timelineFile}`);
         } else {
           // Note: For user files, this should get handled by raidboss_config.js,
           // where `timelineFile` should get converted to `timeline`.
-          console.error('Can\'t specify timelineFile in non-manifest file:' + set.timelineFile);
+          console.error(`Can't specify timelineFile in non-manifest file:${set.timelineFile}`);
         }
       }
 
@@ -922,7 +922,7 @@ export class PopupText {
 
     trigger.output = TriggerOutputProxy.makeOutput(
       trigger,
-      this.options.DisplayLanguage,
+      this.displayLang,
       this.options.PerTriggerAutoConfig,
     );
   }
@@ -967,7 +967,7 @@ export class PopupText {
 
     const nick = this.options.PlayerNicks[name];
 
-    if (nick)
+    if (nick !== undefined)
       return nick;
 
     if (this.job !== 'BLU' && this.options.AutumnStyle) {
@@ -986,7 +986,7 @@ export class PopupText {
     if (!this.options.AutumnStyle || this.job === 'BLU') {
       for (const n of names) {
         const nick = this.options.PlayerNicks[n];
-        if (nick) {
+        if (nick !== undefined) {
           ls.push(nick);
         } else {
           const idx = n.indexOf(' ');
@@ -1000,7 +1000,7 @@ export class PopupText {
         const index = party.partyNames.indexOf(n);
         if (index < 0) {
           const nick = this.options.PlayerNicks[n];
-          if (nick) {
+          if (nick !== undefined) {
             ls.push(nick);
           } else {
             const idx = n.indexOf(' ');
@@ -1177,7 +1177,7 @@ export class PopupText {
     let options: PerTriggerOption = {};
     let config: TriggerAutoConfig = {};
     let suppressed = false;
-    if (id) {
+    if (id !== undefined) {
       options = this.options.PerTriggerOptions[id] ?? options;
       config = this.options.PerTriggerAutoConfig[id] ?? config;
       suppressed = this.options.DisabledTriggers[id] ?? suppressed;
@@ -1344,7 +1344,7 @@ export class PopupText {
       : 0;
     if (typeof suppress !== 'number')
       return;
-    if (triggerHelper.trigger.id && suppress > 0)
+    if (triggerHelper.trigger.id !== undefined && suppress > 0)
       this.triggerSuppress[triggerHelper.trigger.id] = triggerHelper.now + suppress * 1000;
   }
 
@@ -1468,11 +1468,11 @@ export class PopupText {
   _onTriggerInternalPlayAudio(triggerHelper: TriggerHelper): void {
     if (
       triggerHelper.trigger.sound !== undefined &&
-      triggerHelper.soundUrl &&
+      triggerHelper.soundUrl !== undefined &&
       soundStrs.includes(triggerHelper.soundUrl)
     ) {
-      const namedSound = triggerHelper.soundUrl + 'Sound';
-      const namedSoundVolume = triggerHelper.soundUrl + 'SoundVolume';
+      const namedSound = `${triggerHelper.soundUrl}Sound`;
+      const namedSoundVolume = `${triggerHelper.soundUrl}SoundVolume`;
       const sound = this.options[namedSound];
       if (typeof sound === 'string') {
         triggerHelper.soundUrl = sound;
@@ -1493,7 +1493,7 @@ export class PopupText {
     // not cause tts to play over top of sounds or noises.
     // PRS 강제 TTS처리
     const helperAlerts = triggerHelper.spokenAlertsEnabled || triggerHelper.soundAlertsEnabled;
-    if (triggerHelper.ttsText && helperAlerts) {
+    if (triggerHelper.ttsText !== undefined && helperAlerts) {
       // Heuristics for auto tts.
       // * In case this is an integer.
       triggerHelper.ttsText = triggerHelper.ttsText.toString();
@@ -1524,7 +1524,7 @@ export class PopupText {
         arrowReplacement[this.displayLang],
       );
       this.ttsSay(triggerHelper.ttsText);
-    } else if (triggerHelper.soundUrl && triggerHelper.soundAlertsEnabled) {
+    } else if (triggerHelper.soundUrl !== undefined && triggerHelper.soundAlertsEnabled) {
       this._playAudioFile(triggerHelper, triggerHelper.soundUrl, triggerHelper.soundVol);
     }
   }
@@ -1545,7 +1545,7 @@ export class PopupText {
     duration: number,
   ): void {
     // info-text
-    const textElementClass = textType + '-text';
+    const textElementClass = `${textType}-text`;
     if (textType !== 'info')
       text = triggerUpperCase(text);
 

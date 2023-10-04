@@ -60,7 +60,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Turn off Lamps',
+          en: '불 꺼요',
           de: 'Schalte die Lampen aus',
           fr: 'Éteignez les lampes',
           ja: '消灯する',
@@ -88,7 +88,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Kill Sentry',
+          en: '센트리 잡아요',
           de: 'Wachposten besiegen',
           fr: 'Tuez la sentinelle',
           ja: '守衛を倒す',

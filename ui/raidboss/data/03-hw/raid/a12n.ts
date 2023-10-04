@@ -22,7 +22,7 @@ const triggerSet: TriggerSet<Data> = {
       alarmText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Limit break now!',
+          en: '지금 리미트브레이크!',
           de: 'Limit break jetzt!',
           fr: 'Transcendance maintenant !',
           ja: 'タンクLBを！',
@@ -68,7 +68,7 @@ const triggerSet: TriggerSet<Data> = {
       run: (data) => data.assault = true,
       outputStrings: {
         text: {
-          en: 'Spread (Don\'t Stack!)',
+          en: '흩어져요 (뭉치면 죽어요!)',
           de: 'Verteilen (Ohne stacken)',
           fr: 'Dispersez-vous (Pas de package !)',
           ja: '散開（重ならないように）',
@@ -107,7 +107,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Lasers',
+          en: '레이저',
           de: 'Laser',
           fr: 'Lasers',
           ja: 'レーザー',
@@ -124,7 +124,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Puddle Tether on YOU',
+          en: '내게 장판 줄',
           de: 'Flächen-Verbindung auf dir',
           fr: 'Lien Zone au sol sur VOUS',
           ja: '自分に線',

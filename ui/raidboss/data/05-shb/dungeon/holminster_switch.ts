@@ -67,7 +67,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (data, matches, output) => output.text!({ player: data.ShortName(matches.target) }),
       outputStrings: {
         text: {
-          en: 'Break chain on ${player}',
+          en: '체인 끊어요: ${player}',
           de: 'Kette von ${player} brechen',
           fr: 'Cassez les chaînes de ${player}',
           ja: '${player}の線を取る',
@@ -90,7 +90,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Line Stack',
+          en: '한 줄 뭉쳐요',
           de: 'Sammeln in einer Linie',
           fr: 'Packez-vous en ligne',
           ja: '頭割り',

@@ -46,7 +46,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Avoid Brooms',
+          en: '빗자루 피해요',
           de: 'Besen ausweichen',
           fr: 'Évitez les balais',
           ja: 'ほうきを避ける',
@@ -83,7 +83,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'put seeds on dirt',
+          en: '씨앗을 흙 위로 옮겨요',
           de: 'Samen auf den nicht bewachsenen Boden legen',
           fr: 'Mettez les graines sur la terre',
           ja: '種を土に置かないように',
@@ -127,7 +127,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Dodge Crosses',
+          en: '십자 피해요',
           de: 'Den Kreuzen ausweichen',
           fr: 'Esquivez les croix',
           ja: '十字を避ける',
@@ -152,7 +152,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Touch Furniture',
+          en: '불을 주변 기물로 옮겨요',
           de: 'Einrichtung berühren',
           fr: 'Touchez un meuble',
           ja: '調度品に寄る',
@@ -189,7 +189,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         pointTetherAwayFromFurniture: {
-          en: 'Point Tether Away From Furniture',
+          en: '주변 기물에 닿지 않게 줄을 늘려요',
           de: 'Verbindung weg von der Einrichtung zeigen',
           fr: 'Pointez le lien éloigné des meubles',
           ja: '調度品に当たらないように',
@@ -197,7 +197,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '징: 장판이 가구에 닿지 않게 하기',
         },
         tetherOnYou: {
-          en: 'Tether on YOU',
+          en: '내게 줄',
           de: 'Verbindung auf DIR',
           fr: 'Lien sur VOUS',
           ja: '線ついた',

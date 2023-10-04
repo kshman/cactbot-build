@@ -20,7 +20,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Get Towers',
+          en: '타워 밟아요',
           de: 'Türme nehmen',
           fr: 'Prenez les tours',
           ja: '塔を踏む',
@@ -77,7 +77,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Stand in glowing bomb circle',
+          en: '각각 커지는 폭탄 동그라미 밟아요',
           de: 'Steh im grün-leuchtenden Kreis der Bombe',
           fr: 'Placez-vous dans le cercle lumineux',
           cn: '站在炸弹发光圈内',
@@ -92,7 +92,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Activate 3 person towers',
+          en: '3인용 타워 밟아요',
           de: 'Aktiviere 3 Spieler-Türme',
           fr: 'Activez les tours avec 3 personnes',
           cn: '3人踩塔',
@@ -113,7 +113,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         kill: {
-          en: 'Kill ${name} add',
+          en: '잡아요: ${name}',
           de: 'Besiege ${name} Add',
           fr: 'Tuez l\'add ${name}',
           cn: '击杀 ${name} 小怪',

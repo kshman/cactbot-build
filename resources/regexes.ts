@@ -242,21 +242,21 @@ const parseHelper = <T extends LogDefinitionTypes>(
             (left: Record<string, unknown>, right: Record<string, unknown>): number => {
               // We check the validity of left/right because they're user-supplied
               if (typeof left !== 'object' || left[primaryKey] === undefined) {
-                console.warn('Invalid argument passed to trigger:', left);
+                console.warn('trigger에 잘못된 인수 전달:', left);
                 return 0;
               }
               const leftValue = left[primaryKey];
               if (typeof leftValue !== 'string' || !possibleKeys?.includes(leftValue)) {
-                console.warn('Invalid argument passed to trigger:', left);
+                console.warn('trigger에 잘못된 인수 전달:', left);
                 return 0;
               }
               if (typeof right !== 'object' || right[primaryKey] === undefined) {
-                console.warn('Invalid argument passed to trigger:', right);
+                console.warn('trigger에 잘못된 인수 전달:', right);
                 return 0;
               }
               const rightValue = right[primaryKey];
               if (typeof rightValue !== 'string' || !possibleKeys?.includes(rightValue)) {
-                console.warn('Invalid argument passed to trigger:', right);
+                console.warn('trigger에 잘못된 인수 전달:', right);
                 return 0;
               }
               return leftValue.toLowerCase().localeCompare(rightValue.toLowerCase());
@@ -303,7 +303,7 @@ const parseHelper = <T extends LogDefinitionTypes>(
         });
 
         if (fieldRegex.length > 0) {
-          str += '(?:' + fieldRegex + ')' + (rep !== undefined ? '' : '?');
+          str += `(?:${fieldRegex})${rep !== undefined ? '' : '?'}`;
         }
       });
     } else if (fields[keyStr]?.repeating) {
@@ -600,11 +600,11 @@ export default class Regexes {
   // Creates a named regex capture group named |name| for the match |value|.
   static namedCapture(name: string, value: string): string {
     if (name.includes('>'))
-      console.error('"' + name + '" contains ">".');
+      console.error(`"${name}" contains ">".`);
     if (name.includes('<'))
-      console.error('"' + name + '" contains ">".');
+      console.error(`"${name}" contains ">".`);
 
-    return '(?<' + name + '>' + value + ')';
+    return `(?<${name}>${value})`;
   }
 
   /**
@@ -696,8 +696,8 @@ export default class Regexes {
     for (const key of keys) {
       if (!params.includes(key)) {
         throw new Error(
-          `${funcName}: invalid parameter '${key}'.  ` +
-            `Valid params: ${JSON.stringify(params)}`,
+          `${funcName}: 잘못된 파라미터 '${key}'.  ` +
+            `올바른 파라미터: ${JSON.stringify(params)}`,
         );
       }
     }

@@ -21,7 +21,7 @@ export interface Data extends RaidbossData {
   prWingLeft?: boolean;
   //
   triggerSetConfig: { [key in ConfigIds]: ConfigValue };
-  firstFrost?: string;
+  firstFrost?: 'biting' | 'driving';
   rushCount?: number;
   akhMornTargets?: string[];
   wyrmsLament?: number;
@@ -219,6 +219,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (data, _matches, output) => {
         if (data.firstFrost === 'driving')
           return output.bitingFrostNext!();
+
         return output.drivingFrostNext!();
       },
       outputStrings: {

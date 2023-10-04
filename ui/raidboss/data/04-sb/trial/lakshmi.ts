@@ -49,7 +49,7 @@ const triggerSet: TriggerSet<Data> = {
       alarmText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'USE VRIL OR DIE',
+          en: '지금 브릴 써요! 아님 쥬금!',
           de: 'BENUTZT VRIL ODER STIRB',
           fr: 'UTILISEZ LE VRIL OU MOURREZ',
           ja: 'エーテル使って！！',
@@ -65,7 +65,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Vril + Knockback',
+          en: '브릴 + 넉백',
           de: 'Vril + Rückstoß',
           fr: 'Vril + Poussée',
           ja: 'エーテル + 完全なる拒絶',
@@ -115,7 +115,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         dontStack: {
-          en: 'Don\'t Stack!',
+          en: '뭉치면 안돼요!',
           de: 'Nicht Sammeln!',
           fr: 'Ne vous packez pas !',
           ja: '重ならないで！',
@@ -142,7 +142,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Cross Marker',
+          en: '십자 장판',
           de: 'Kreuz-Marker',
           fr: 'Marqueur croix',
           ja: '自分に右手',
@@ -165,7 +165,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         powerFlower: {
-          en: 'Expanding Flower Marker',
+          en: '커지는 동글 장판',
           de: 'Ausdehnender Blumen-Marker',
           fr: 'Marqueur fleur en extension',
           ja: '自分に左手 (拡大する)',
@@ -173,7 +173,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '커지는 원형 장판 징',
         },
         flower: {
-          en: 'Flower Marker',
+          en: '동글 장판',
           de: 'Blumen-Marker',
           fr: 'Marqueur fleur',
           ja: '自分に左手',

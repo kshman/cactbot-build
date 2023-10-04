@@ -46,7 +46,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Go to edge; look outside',
+          en: '모서리로 + 바깥 봐요',
           de: 'Geh zum Rand und schau nach draußen',
           fr: 'Allez sur les bords et regardez à l\'extérieur',
           cn: '去场边; 看场外',
@@ -61,7 +61,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Avoid chasing orb',
+          en: '유도 구슬 피해요',
           de: 'Weiche dem verfolgenden Orb aus',
           fr: 'Évitez l\'orbe',
           cn: '躲避追踪球',
@@ -99,7 +99,7 @@ const triggerSet: TriggerSet<Data> = {
       run: (data, matches) => data.windResistDown[matches.target] = true,
       outputStrings: {
         text: {
-          en: 'Avoid Aero',
+          en: '에어로 피해요',
           de: 'Vermeide Wind',
           fr: 'Évitez le Vent',
           cn: '躲避风',
@@ -124,7 +124,7 @@ const triggerSet: TriggerSet<Data> = {
       run: (data, matches) => data.earthResistDown[matches.target] = true,
       outputStrings: {
         text: {
-          en: 'Avoid Stone',
+          en: '스톤 피해요',
           de: 'Vermeide Stein',
           fr: 'Évitez le rocher',
           cn: '躲避石',
@@ -146,14 +146,14 @@ const triggerSet: TriggerSet<Data> = {
         // cactbot-builtin-response
         output.responseOutputStrings = {
           pop: {
-            en: 'Pop stone orb',
+            en: '스톤 구슬 부비부비',
             de: 'Nimm Stein Orb',
             fr: 'Prenez l\'orbe en pierre',
             cn: '踩石圈',
             ko: '스톤 구슬 부딪히기',
           },
           avoid: {
-            en: 'Avoid stone orb',
+            en: '스톤 구슬 피해요',
             de: 'Vermeide Stein Orb',
             fr: 'Évitez l\'orbe de pierre',
             cn: '躲避石圈',
@@ -174,14 +174,14 @@ const triggerSet: TriggerSet<Data> = {
         // cactbot-builtin-response
         output.responseOutputStrings = {
           pop: {
-            en: 'Pop aero orb',
+            en: '에어로 구슬 부비부비',
             de: 'Nimm Wind Orb',
             fr: 'Prenez l\'orbe de vent',
             cn: '踩风圈',
             ko: '에어로 구슬 부딪히기',
           },
           avoid: {
-            en: 'Avoid aero orb',
+            en: '에어로 구슬 피해요',
             de: 'Vermeide Wind Orb',
             fr: 'Évitez l\'orbe de vent',
             cn: '躲避风圈',
@@ -202,7 +202,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Pop holy orb',
+          en: '홀리 구슬 잡아요',
           de: 'Nimm Sanctus Orb',
           fr: 'Prenez l\'orbe de lumière',
           cn: '踩神圣圈',
@@ -232,7 +232,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Move boss out of puddle',
+          en: '보스 끌고 장판에서 나와요',
           de: 'Bewege Boss aus der Fläche',
           fr: 'Déplacez le boss hors de la zone au sol',
           cn: '把BOSS拉出罩子',
@@ -247,7 +247,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Stand in Circle',
+          en: '보스 장판 안으로',
           de: 'In einem Kreis stehen',
           fr: 'Restez dans le cercle',
           cn: '站进圈圈',

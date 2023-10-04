@@ -38,8 +38,7 @@ const ruleModule = {
       },
     ],
     messages: {
-      sortKeys:
-        'Expected locale object keys ordered like {{expectedOrder}} (\'{{beforeKey}}\' should be before \'{{nextKey}}\')',
+      sortKeys: '로캘이 비어 있어요: {{expectedOrder}} (\'{{beforeKey}}\'와 \'{{nextKey}}\'의 사이)',
     },
   },
   create: function(context) {

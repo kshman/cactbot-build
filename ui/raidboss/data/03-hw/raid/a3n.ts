@@ -60,7 +60,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Sluice on YOU',
+          en: '내게 슬루스',
           de: 'Schleusenöffnung auf DIR',
           fr: 'Éclusage sur Vous',
           ja: '自分にスルース',
@@ -79,7 +79,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '3x Tank Cleave',
+          en: '탱크클레브x3',
           de: '3x Tank Cleave',
           fr: 'Tank Cleave x3',
           cn: '3x 顺劈',
@@ -95,7 +95,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Repeated tank cleaves',
+          en: '탱크클레브 반복',
           de: 'Wiederholte Tank Cleaves',
           fr: 'Répétition de Tank cleaves',
           cn: '多重顺劈',
@@ -111,7 +111,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Drainage on YOU',
+          en: '내게 드레니지',
           de: 'Entwässerung auf DIR',
           fr: 'Drainage sur VOUS',
           ja: '自分にドレナージ',
@@ -129,7 +129,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Get drainage tether',
+          en: '드레니지 줄 채요',
           de: 'Hole die Entwässerungs-Verbindung',
           fr: 'Prenez un lien de drainage',
           ja: '線を取る',
@@ -168,8 +168,8 @@ const triggerSet: TriggerSet<Data> = {
         const marker1 = data.ferroMarker[data.me];
         const marker2 = data.ferroMarker[partner ?? ''];
 
-        if (!partner || !marker1 || !marker2)
-          return matches.ability + ' (???)';
+        if (partner === undefined || marker1 === undefined || marker2 === undefined)
+          return `${matches.ability} (???)`;
 
         if (marker1 === marker2)
           return output.repel!({ player: data.ShortName(partner) });
@@ -177,7 +177,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         repel: {
-          en: 'Repel: close to ${player}',
+          en: '같은 극! 붙어요: ${player}',
           de: 'Abstoß: nahe bei ${player}',
           fr: 'Répulsion : Rapprochez-vous de ${player}',
           ja: '同じ極: ${player}に近づく',
@@ -185,7 +185,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '반발: ${player}와 가까이 붙기',
         },
         attract: {
-          en: 'Attract: away from ${player}',
+          en: '다른 극! 떨어져요: ${player}',
           de: 'Anziehung: weg von ${player}',
           fr: 'Attraction : Éloignez-vous de ${player}',
           ja: '異なる極: ${player}から離れる',

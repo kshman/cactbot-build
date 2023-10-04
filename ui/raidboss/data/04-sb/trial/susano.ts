@@ -34,7 +34,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Knockback on YOU',
+          en: '내게 넉백',
           de: 'Rückstoß auf DIR',
           fr: 'Poussée sur VOUS',
           cn: '击退点名',

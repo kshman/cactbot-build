@@ -55,7 +55,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Vrill + Knockback',
+          en: '브릴 + 넉백',
           de: 'Vril + Rückstoß',
           fr: 'Vril + Poussée',
           ja: 'エーテル + 完全なる拒絶',
@@ -71,7 +71,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Vrill + Be Outside',
+          en: '브릴 + 바깥으로 (끌어당김)',
           de: 'Vril + Außen',
           fr: 'Vril + Extérieur',
           ja: 'エーテル + 完全なる誘引',
@@ -87,7 +87,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Vrill + Pair Up',
+          en: '브릴 + 페어',
           de: 'Vril + Pärchen bilden',
           fr: 'Vril + Paire',
           ja: 'エーテル + 完全なる惑乱',
@@ -121,7 +121,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         stackOnYou: Outputs.stackOnYou,
         stack: {
-          en: 'Stack',
+          en: '뭉쳐요',
           de: 'Stack',
           fr: 'Packez-vous',
           ja: '頭割り',
@@ -129,7 +129,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '쉐어',
         },
         vrillStackOnYou: {
-          en: 'Vrill + Stack on YOU',
+          en: '브릴 + 내게 뭉쳐요',
           de: 'Vril + Stack auf DIR',
           fr: 'Vril + Package sur VOUS',
           ja: '自分に頭割り (エーテル)',
@@ -137,7 +137,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '락슈미 에테르 + 쉐어징 대상자',
         },
         vrillStack: {
-          en: 'Vrill + Stack',
+          en: '브릴 + 뭉쳐요',
           de: 'Vril + Stack',
           fr: 'Vril + Packez-vous',
           ja: 'エーテル と 頭割り',
@@ -154,7 +154,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Vrill for AOE',
+          en: '브릴 스토트람 AOE',
           de: 'Vril fuer Flaechenangriff',
           fr: 'Vril pour AoE',
           ja: 'ストトラム (エーテル)',
@@ -177,7 +177,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         vrillCleaveOnYou: {
-          en: 'Vrill + Cleave on YOU',
+          en: '브릴 + 내게 탱크클레브',
           de: 'Vril + Cleave auf DIR',
           fr: 'Vril + Cleave sur VOUS',
           ja: '自分に波動 (エーテル)',
@@ -185,7 +185,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '락슈미 에테르 + 광역 탱버 대상자',
         },
         cleaveOnYou: {
-          en: 'Cleave on YOU',
+          en: '내게 탱크클레브',
           de: 'Cleave auf DIR',
           fr: 'Cleave sur VOUS',
           ja: '自分に波動',
@@ -208,7 +208,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         vrillCrossMarker: {
-          en: 'Vrill + Cross Marker',
+          en: '브릴 + 십자 장판',
           de: 'Vril + Kreuz-Marker',
           fr: 'Vril + Marqueur croix',
           ja: '自分に右手 (エーテル)',
@@ -216,7 +216,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '락슈미 에테르 + 십자 장판 징',
         },
         crossMarker: {
-          en: 'Cross Marker',
+          en: '십자 장판',
           de: 'Kreuz-Marker',
           fr: 'Marqueur croix',
           ja: '自分に右手',
@@ -239,7 +239,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         vrillFlowerMarker: {
-          en: 'Vrill + Flower Marker',
+          en: '브릴 + 동글 장판',
           de: 'Vril + Blumen-Marker',
           fr: 'Vril + Marqueur fleur',
           ja: '自分に左手 (エーテル)',
@@ -247,7 +247,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '락슈미 에테르 + 원형 장판 징',
         },
         flowerMarker: {
-          en: 'Flower Marker',
+          en: '동글 장판',
           de: 'Blumen-Marker',
           fr: 'Marqueur fleur',
           ja: '自分に左手',
@@ -267,7 +267,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Move Away',
+          en: '피해욧',
           de: 'Weg da',
           fr: 'Éloignez-vous',
           ja: '離れる',

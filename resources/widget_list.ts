@@ -165,7 +165,7 @@ export default class WidgetList extends HTMLElement {
   parseToward(toward: string): void {
     const t = toward.split(' ');
     if (t.length !== 2) {
-      console.log('widget-list: Invalid toward format');
+      console.log('widget-list: 형식이 맞지 않아요');
       return;
     }
 
@@ -182,7 +182,7 @@ export default class WidgetList extends HTMLElement {
       } else if (t[1] === 'down') {
         y2inc = 1;
       } else {
-        console.log('widget-list: Invalid toward format');
+        console.log('widget-list: 형식이 맞지 않아요');
         return;
       }
     } else if (t[0] === 'right') {
@@ -194,7 +194,7 @@ export default class WidgetList extends HTMLElement {
       } else if (t[1] === 'down') {
         y2inc = 1;
       } else {
-        console.log('widget-list: Invalid toward format');
+        console.log('widget-list: 형식이 맞지 않아요');
         return;
       }
     } else if (t[0] === 'up') {
@@ -206,7 +206,7 @@ export default class WidgetList extends HTMLElement {
       } else if (t[1] === 'right') {
         x2inc = 1;
       } else {
-        console.log('widget-list: Invalid toward format');
+        console.log('widget-list: 형식이 맞지 않아요');
         return;
       }
     } else if (t[0] === 'down') {
@@ -218,11 +218,11 @@ export default class WidgetList extends HTMLElement {
       } else if (t[1] === 'right') {
         x2inc = 1;
       } else {
-        console.log('widget-list: Invalid toward format');
+        console.log('widget-list: 형식이 맞지 않아요');
         return;
       }
     } else {
-      console.log('widget-list: Invalid toward format');
+      console.log('widget-list: 형식이 맞지 않아요');
       return;
     }
 
@@ -326,12 +326,12 @@ export default class WidgetList extends HTMLElement {
 
     this._sorted.forEach((id: number) => {
       if (id === 0) {
-        console.error('An id in _sorted isn\'t in _elements?');
+        console.error('_sorted의 id가 _elements에 없어요?');
         return;
       }
       const container = this.shadowRoot?.getElementById(`child${id}`);
       if (container === null || container === undefined) {
-        console.error(`Element with id child${id} is missing?`);
+        console.error(`엘리먼트에 child${id} 가 없어요?`);
         return;
       }
 

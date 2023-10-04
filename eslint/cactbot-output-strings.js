@@ -36,10 +36,10 @@ const ruleModule = {
     fixable: 'code',
     schema: [],
     messages: {
-      noOutputStrings: 'no outputStrings in trigger',
-      notFoundProperty: 'no \'{{prop}}\' in \'{{outputParam}}\'',
-      notFoundTemplate: '`output.{{prop}}(...)` doesn\'t have template \'{{template}}\'.',
-      missingTemplateValue: 'template \'{{prop}}\' is missing in function call',
+      noOutputStrings: '트리거에 outputStrings 항목이 없어요',
+      notFoundProperty: '\'{{outputParam}}\' 항목에  \'{{prop}}\' 프로퍼티가 없어요',
+      notFoundTemplate: '`output.{{prop}}(...)` 프로퍼티에 \'{{template}}\' 템플릿이 없어요.',
+      missingTemplateValue: '\'{{prop}}\' 템플릿이 함수 호출에 들어있지 않아요',
     },
   },
   create: function(context) {

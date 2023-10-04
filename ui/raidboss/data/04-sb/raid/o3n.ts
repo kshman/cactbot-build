@@ -76,7 +76,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         stackOnYou: Outputs.stackOnYou,
         out: {
-          en: 'Out',
+          en: '밖으로',
           de: 'Raus',
           fr: 'Extérieur',
           ja: '外へ',
@@ -116,7 +116,7 @@ const triggerSet: TriggerSet<Data> = {
       tts: (_data, _matches, output) => output.blueSquare!(),
       outputStrings: {
         getOnCrystalSquare: {
-          en: 'Get on crystal square',
+          en: '🟦파란 크리스탈 장판으로',
           de: 'Kristallfeld',
           fr: 'Allez sur un carré de cristal',
           ja: '青い床に',
@@ -124,7 +124,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '파란 장판으로',
         },
         blueSquare: {
-          en: 'blue square',
+          en: '🟦파란 장판',
           de: 'blaues feld',
           fr: 'Carré bleu',
           ja: '青い床',
@@ -141,7 +141,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Grab dragon',
+          en: '용부터 잡아요',
           de: 'Drachen nehmen',
           fr: 'Attrapez le dragon',
           ja: 'ドラゴンを取って',
@@ -164,7 +164,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Get hit by Ribbit',
+          en: '개굴 맞아요',
           de: 'Lass dich von Quaaak treffen',
           fr: 'Faites-vous frapper par Coâââ',
           ja: 'クルルルルを受ける',
@@ -203,7 +203,7 @@ const triggerSet: TriggerSet<Data> = {
       run: (data) => data.gameCount += 1,
       outputStrings: {
         standOnFrogTile: {
-          en: 'Stand on frog tile',
+          en: '개굴 타일 밟아요',
           de: 'Auf Frosch-Fläche stehen',
           fr: 'Placez-vous sur la grenouille',
           ja: 'カエルパネルを踏む',
@@ -211,7 +211,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '개구리 장판으로',
         },
         standOnShield: {
-          en: 'Stand on shield',
+          en: '탱크 방패 밟아요',
           de: 'Auf Schild-Fläche stehen',
           fr: 'Placez-vous sur le bouclier',
           ja: 'タンクパネルを踏む',
@@ -219,7 +219,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '방패 장판으로',
         },
         standOnCross: {
-          en: 'Stand on cross',
+          en: '힐러 십자 밟아요',
           de: 'Auf Kreuz-Fläche stehen',
           fr: 'Placez-vous sur la croix',
           ja: 'ヒーラーパネルを踏む',
@@ -227,7 +227,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '십자가 장판으로',
         },
         standOnSword: {
-          en: 'Stand on sword',
+          en: 'DPS 칼 밟아요',
           de: 'Auf Schwert-Fläche stehen',
           fr: 'Placez-vous sur l\'épée',
           ja: 'DPSパネルを踏む',
@@ -243,7 +243,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Mindjack: Forward',
+          en: '마인드잭: 앞으로',
           de: 'Geistlenkung: Vorwärts',
           fr: 'Contrainte mentale : vers l\'avant',
           ja: 'マインドジャック: 前進',
@@ -259,7 +259,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Mindjack: Back',
+          en: '마인드잭: 뒤로',
           de: 'Geistlenkung: Zurück',
           fr: 'Contrainte mentale : vers l\'arrière',
           ja: 'マインドジャック: 後退',
@@ -275,7 +275,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Mindjack: Left',
+          en: '마인드잭: 왼쪽으로',
           de: 'Geistlenkung: Links',
           fr: 'Contrainte mentale : vers la gauche',
           ja: 'マインドジャック: 左折',
@@ -291,7 +291,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Mindjack: Right',
+          en: '마인드잭: 오른쪽으로',
           de: 'Geistlenkung: Rechts',
           fr: 'Contrainte mentale : vers la droite',
           ja: 'マインドジャック: 右折',

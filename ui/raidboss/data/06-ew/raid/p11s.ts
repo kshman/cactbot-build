@@ -12,7 +12,6 @@ import { Output, TriggerSet } from '../../../../../types/trigger';
 
 export interface Data extends RaidbossData {
   prsDike?: number;
-  prsStyx?: number;
   prsLightAndDarks?: 'none' | 'lightnear' | 'lightfar' | 'darknear' | 'darkfar';
   prsTethers?: number;
   //
@@ -24,6 +23,7 @@ export interface Data extends RaidbossData {
   lightDarkBuddy: { [name: string]: string };
   lightDarkTether: { [name: string]: 'near' | 'far' };
   cylinderCollect: NetMatches['HeadMarker'][];
+  styxCount: number;
 }
 
 const headmarkers = {
@@ -95,6 +95,7 @@ const triggerSet: TriggerSet<Data> = {
       lightDarkBuddy: {},
       lightDarkTether: {},
       cylinderCollect: [],
+      styxCount: 4,
     };
   },
   triggers: [
@@ -132,6 +133,22 @@ const triggerSet: TriggerSet<Data> = {
       type: 'StartsUsing',
       netRegex: { id: '822B', source: 'Themis', capture: false },
       response: Responses.bleedAoe(),
+    },
+    {
+      id: 'P11S Dike',
+      type: 'StartsUsing',
+      netRegex: { id: ['822D', '822F', '8230'], source: 'Themis' },
+      condition: (data, matches) => data.me === matches.target,
+      suppressSeconds: 3,
+      alertText: (data, _matches, output) => {
+        data.prsDike = (data.prsDike ?? 0) + 1;
+        return output.text!({ num: data.prsDike });
+      },
+      outputStrings: {
+        text: {
+          en: '${num}번째 디케 버스터!',
+        },
+      },
     },
     {
       id: 'P11S Jury Overruling Light',
@@ -247,7 +264,7 @@ const triggerSet: TriggerSet<Data> = {
           de: 'Raus + Heiler Gruppen',
           fr: 'Extérieur + Package sur les heals',
           ja: '外側で + 4:4あたまわり',
-          cn: '场外 + 双奶分摊',
+          cn: '场外 + 治疗分摊',
           ko: '밖으로 + 힐러 그룹 쉐어',
         },
       },
@@ -273,7 +290,7 @@ const triggerSet: TriggerSet<Data> = {
             de: 'Gruppe raus (${player} rein)=> Rein + Partner',
             fr: 'Groupe à l\'extérieur (${player} intérieur) => Intérieur + Partenaires',
             ja: '外側へ (${player}が内側) => 内側で + ペア',
-            cn: '场外 （${player} 引导） => 场中 + 两人分摊',
+            cn: '场外 (${player} 引导) => 场中 + 两人分摊',
             ko: '본대 밖으로 (${player} 안) => 안으로 + 파트너',
           },
           upheldNotOnYou: {
@@ -343,7 +360,7 @@ const triggerSet: TriggerSet<Data> = {
             de: 'Mit der Gruppe sammeln (${player} raus)',
             fr: 'Package en groupe (${player} à l\'extérieur)',
             ja: 'あたまわり (${player}が外側)',
-            cn: '集合 （${player} 放月环）',
+            cn: '集合 (${player} 放月环)',
             ko: '쉐어 (${player} 밖)',
           },
           // If we're not sure who the tether is on.
@@ -488,7 +505,7 @@ const triggerSet: TriggerSet<Data> = {
           de: 'Heiler Gruppen + Raus',
           fr: 'Package sur les heals + Extérieur',
           ja: '4:4あたまわり + 外側へ',
-          cn: '双奶分摊 + 场外',
+          cn: '治疗分摊 + 场外',
           ko: '힐러 그룹 쉐어 + 밖으로',
         },
         dark: {
@@ -565,7 +582,7 @@ const triggerSet: TriggerSet<Data> = {
           de: 'Heiler Gruppen + Raus',
           fr: 'Package sur les heals + Extérieur',
           ja: '4:4あたまわり + 外側へ',
-          cn: '双奶分摊 + 场外',
+          cn: '治疗分摊 + 场外',
           ko: '힐러 그룹 쉐어 + 밖으로',
         },
       },
@@ -752,7 +769,7 @@ const triggerSet: TriggerSet<Data> = {
             de: 'Anderes Nahe: ${player1}, ${player2}',
             fr: 'Autre proche : ${player1}, ${player2}',
             ja: '他のペア: ${player1}, ${player2}',
-            cn: '靠近 : ${player1}, ${player2}',
+            cn: '另一组靠近：${player1}, ${player2}',
             ko: '다른 가까이: ${player1}, ${player2}',
           },
           otherFar: {
@@ -760,7 +777,7 @@ const triggerSet: TriggerSet<Data> = {
             de: 'Anderes Entfernt: ${player1}, ${player2}',
             fr: 'Autre éloigné : ${player1}, ${player2}',
             ja: '他のペア: ${player1}, ${player2}',
-            cn: '远离 : ${player1}, ${player2}',
+            cn: '另一组远离：${player1}, ${player2}',
             ko: '다른 멀리: ${player1}, ${player2}',
           },
           lnSide: {
@@ -966,32 +983,21 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: 'P11S 디케',
-      type: 'StartsUsing',
-      netRegex: { id: ['822D', '822F', '8230'], source: 'Themis' },
-      condition: (data, matches) => data.me === matches.target,
-      suppressSeconds: 3,
-      alertText: (data, _matches, output) => {
-        data.prsDike = (data.prsDike ?? 0) + 1;
-        return output.text!({ num: data.prsDike });
-      },
-      outputStrings: {
-        text: {
-          en: '${num}번째 디케 버스터!',
-        },
-      },
-    },
-    {
-      id: 'P11S 스틱스',
+      id: 'P11S Styx Stack',
       type: 'StartsUsing',
       netRegex: { id: '8217', source: 'Themis', capture: false },
-      infoText: (data, _matches, output) => {
-        data.prsStyx = (data.prsStyx ?? 4) + 1;
-        return output.text!({ num: data.prsStyx });
+      preRun: (data) => {
+        data.styxCount++;
       },
+      infoText: (data, _matches, output) => output.text!({ num: data.styxCount }),
       outputStrings: {
         text: {
           en: '전체 연속 공격! ${num}번',
+          de: 'Sammeln (${num} Mal)',
+          fr: 'Packez-vous (${num} fois)',
+          ja: '頭割り（${num}回）',
+          cn: '集合分摊 (${num}次)',
+          ko: '쉐어뎀 (${num}번)',
         },
       },
     },
@@ -1192,6 +1198,46 @@ const triggerSet: TriggerSet<Data> = {
         'Unlucky Lot': '魔爆',
         'Upheld Overruling': 'アップヘルド＆オーバールール',
         'Upheld Ruling': 'アップヘルド＆ルーリング',
+      },
+    },
+    {
+      'locale': 'cn',
+      'replaceSync': {
+        'Arcane Cylinder': '指向魔法阵',
+        'Arcane Sphere': '立体魔法阵',
+        'Illusory Themis': '特弥斯的幻影',
+        '(?<! )Themis': '特弥斯',
+      },
+      'replaceText': {
+        '\\(cast\\)': '(咏唱)',
+        '\\(enrage\\)': '(狂暴)',
+        'Arcane Revelation': '魔法阵展开',
+        'Arche': '始基',
+        'Blinding Light': '光弹',
+        'Dark Current': '黑暗奔流',
+        'Dark Perimeter': '黑暗回环',
+        'Dark and Light': '光与暗的调停',
+        'Dike': '正义',
+        'Dismissal Overruling': '驳回否决',
+        'Divisive Overruling': '分歧否决',
+        'Divisive Ruling': '驳回判决',
+        'Emissary\'s Will': '调停者之意',
+        'Eunomia': '秩序',
+        '(?<!Magie)Explosion': '爆炸',
+        'Heart of Judgment': '刑律波动',
+        'Inevitable Law': '追加律法',
+        'Inevitable Sentence': '追加刑罚',
+        'Jury Overruling': '陪审团否决',
+        'Letter of the Law': '理法幻奏',
+        'Lightburst': '光爆破',
+        'Lightstream': '光明奔流',
+        'Shadowed Messengers': '戒律幻奏',
+        'Styx': '仇恨',
+        'Twofold Revelation': '魔法阵双重展开',
+        'Ultimate Verdict': '究极调停',
+        'Unlucky Lot': '魔爆',
+        'Upheld Overruling': '维持否决',
+        'Upheld Ruling': '维持判决',
       },
     },
   ],

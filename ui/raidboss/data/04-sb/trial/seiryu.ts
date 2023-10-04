@@ -23,7 +23,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'line stack',
+          en: '한줄 뭉쳐요',
           de: 'Linien-Stack',
           fr: 'Packez-vous en ligne',
           ja: 'スタック',
@@ -65,7 +65,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Get Towers',
+          en: '타워 밟아요',
           de: 'Türme nehmen',
           fr: 'Prenez les tours',
           ja: '塔を踏む',
@@ -113,7 +113,7 @@ const triggerSet: TriggerSet<Data> = {
       run: (data, matches) => (data.redRush ??= []).push(matches.target),
       outputStrings: {
         text: {
-          en: 'Point Knockback Tether Outside',
+          en: '넉백 줄을 바깥으로 유도',
           de: 'Rückstoß-Verbindung nach draußen zeigen',
           fr: 'Orientez les liens de poussée vers l\'extérieur',
           cn: '将击退连线指向场外',
@@ -130,7 +130,7 @@ const triggerSet: TriggerSet<Data> = {
       alarmText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Point Cleave Tether Outside',
+          en: '클레브 줄을 바깥으로 유도',
           de: 'Cleave nach draußen zeigen',
           fr: 'Orientez les liens de cleave vers l\'extérieur',
           cn: '将顺劈连线指向场外',

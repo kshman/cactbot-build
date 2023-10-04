@@ -23,7 +23,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'stack with your group',
+          en: '4:4 뭉쳐요',
           de: 'mit der Gruppe stacken',
           fr: 'Packez avec votre groupe',
           ja: 'グループ別にスタック',
@@ -40,7 +40,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'line stack',
+          en: '한줄 뭉쳐요',
           de: 'Linien-Stack',
           fr: 'Packez-vous en ligne',
           ja: 'スタック',
@@ -57,7 +57,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Grab Tether, Point Away',
+          en: '줄 채고, 바깥으로 유도',
           de: 'Verbindung nehmen und wegdrehen',
           fr: 'Prenez le lien, pointez vers l\'extérieur',
           ja: '線を取って外に向ける',
@@ -88,7 +88,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         tankSwap: Outputs.tankSwap,
         swapThenBuster: {
-          en: 'Swap, then Buster',
+          en: '스위치, 다음 탱크버스터',
           de: 'Tankwechsel, danach Tankbuster',
           fr: 'Tank swap puis Tank buster',
           ja: 'スイッチ後強攻撃',
@@ -110,7 +110,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Away From Tanks',
+          en: '탱크랑 조금 멀찌감치',
           de: 'Weg von den Tanks',
           fr: 'Éloignez-vous des Tanks',
           ja: 'タンクから離れる',
@@ -133,7 +133,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Stack for Puddle AOEs',
+          en: '한가운데 뭉쳐요 (AOE장판)',
           de: 'Stacken (Pfützen)',
           fr: 'Packez-vous pour l\'AoE',
           ja: 'スタック',
@@ -165,7 +165,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         spreadDpsGetTowers: {
-          en: 'Spread (dps get towers)',
+          en: '흩어져요 (DPS가 타워)',
           de: 'Verteilen (nicht in den Turm)',
           fr: 'Dispersion (DPS prenez les tours)',
           ja: '散開 (DPSが塔)',
@@ -173,7 +173,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '산개 (딜러 기둥 처리)',
         },
         spreadTanksHealersGetTowers: {
-          en: 'Spread (tanks/healers get towers)',
+          en: '흩어져요 (탱힐 타워)',
           de: 'Verteilen (nicht in den Turm)',
           fr: 'Dispersion (Tanks/Healers prenez les tours)',
           ja: '散開 (タンクヒラが塔)',
@@ -199,7 +199,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         getTowerTankHealerTowers: {
-          en: 'Get Tower (tank/healer towers)',
+          en: '타워 밟아요 (탱힐 타워)',
           de: 'In den Turm',
           fr: 'Prenez votre tour (tours T/H)',
           ja: '塔 (タンクヒラが塔)',
@@ -207,7 +207,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '기둥 처리 (탱/힐)',
         },
         getTowerDpsTowers: {
-          en: 'Get Tower (dps towers)',
+          en: '티워 밟아요 (DPS 타워)',
           de: 'In den Turm',
           fr: 'Prenez votre tour (tours DPS)',
           ja: '塔 (DPSが塔)',
@@ -241,7 +241,7 @@ const triggerSet: TriggerSet<Data> = {
       run: (data) => data.withForce = true,
       outputStrings: {
         goToSnakes: {
-          en: 'Go To Snakes',
+          en: '뱀들 있는 곳으로',
           de: 'Zu den Schlangen',
           fr: 'Allez vers les serpents',
           ja: '蛇側へ',
@@ -249,7 +249,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '뱀쪽으로 이동',
         },
         outOfMiddleTowardSnakes: {
-          en: 'Out of Middle, Toward Snakes',
+          en: '한가운데 피하면서, 뱀들 쪽으로',
           de: 'Raus aus der Mitte, Zu den Schlangen',
           fr: 'Sortez du milieu, vers les serpents',
           ja: '真ん中からずれて蛇に向く',
@@ -277,7 +277,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         stackSouth: {
-          en: 'Stack South',
+          en: '남쪽에서 뭉쳐요',
           de: 'Im Süden stacken',
           fr: 'Packez-vous au sud',
           ja: '南でスタック',
@@ -285,7 +285,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '남쪽에서 모이기',
         },
         stackIfNoTether: {
-          en: 'Stack if no tether',
+          en: '줄 없으면 뭉쳐요',
           de: 'Stacken, wenn keine Verbindung',
           fr: 'Packez-vous si pas de lien',
           ja: '線無しはスタック',
@@ -336,7 +336,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Pop Sprint',
+          en: '스프린트 써요!',
           de: 'Sprinten',
           fr: 'Sprintez',
           ja: 'スプリント',

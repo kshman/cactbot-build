@@ -44,7 +44,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Go to a lightning rod',
+          en: '장판을 피뢰침으로',
           de: 'Geh zu einem Blitzableiter',
           fr: 'Allez sur un paratonnerre',
           ja: '避雷針に円範囲を転嫁',
@@ -99,7 +99,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Away from circles',
+          en: '동글 장판 피해요',
           de: 'Weg von den Kreisen',
           fr: 'Éloignez-vous des cercles',
           ja: '円を避ける',
@@ -116,7 +116,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Kan Rhai on YOU',
+          en: '내게 칸 라이',
           de: 'Kan Rhai auf DIR',
           fr: 'Kan Rhai sur VOUS',
           ja: '自分にカン・ラーイ',
@@ -132,7 +132,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Away from crosses',
+          en: '십장에게서 먼곳으로',
           de: 'Weg von dem Kreuz',
           fr: 'Éloignez-vous des croix',
           ja: '十字から離れる',
@@ -168,7 +168,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         getMiddle: {
-          en: 'Get Middle',
+          en: '한가운데',
           de: 'In die Mitte gehen',
           fr: 'Allez au milieu',
           ja: '中心へ',
@@ -176,7 +176,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '중앙으로',
         },
         getOutsideBetweenCircles: {
-          en: 'Get Outside Between Circles',
+          en: '바깥쪽 동글들 사이로',
           de: 'Geh zum Rand zwichen den Kreisen',
           fr: 'Allez à l\'extérieur entre les cercles',
           ja: '外周の円の隙間へ',

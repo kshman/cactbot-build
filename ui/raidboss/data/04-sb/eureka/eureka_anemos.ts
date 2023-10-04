@@ -20,7 +20,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Dragon\'s Voice',
+          en: '드래곤즈 보이스 (안으로)',
           de: 'Stimme Des Drachen',
           fr: 'Voix du dragon',
           ja: '雷電の咆哮',
@@ -42,7 +42,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Swipe',
+          en: '스와이프',
           de: 'Hieb',
           fr: 'Fauche',
           ja: 'スワイプ',
@@ -64,7 +64,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Eye Donut',
+          en: '아이 오브 비홀더 (도넛)',
           de: 'Augendonut',
           fr: 'Donut œil',
           ja: 'アイ・オブ・ビホルダー',
@@ -80,7 +80,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Glower Laser',
+          en: '글로워 레이저',
           de: 'Blick Laser',
           fr: 'Regard laser',
           ja: 'グラワー',
@@ -109,7 +109,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Ice ball on you!',
+          en: '내게 얼음 구슬!',
           de: 'Eisball auf dir!',
           fr: 'Boule de glace sur vous !',
           ja: '自分に氷玉',
@@ -144,7 +144,7 @@ const triggerSet: TriggerSet<Data> = {
       alarmText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Plague Donut',
+          en: '로커스트 프레이그 (도넛)',
           de: 'Plagen-Donut',
           fr: 'Donut Nuée',
           ja: 'ローカストプレイグ',
@@ -164,7 +164,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         text: {
-          en: 'wraiths: ${num}',
+          en: '레이스: ${num}',
           de: 'Geister: ${num}',
           fr: 'spectres: ${num}',
           ja: 'レイス: ${num}',

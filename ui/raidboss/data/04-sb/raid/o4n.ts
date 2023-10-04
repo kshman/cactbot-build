@@ -22,7 +22,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Cleanse Doom soon',
+          en: '곧 둠 에스나',
           de: 'Reinige Verhängnis bald',
           fr: 'Guérison du Glas bientôt',
           ja: '死の宣告にエスナ',
@@ -51,7 +51,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Move around',
+          en: '얼음: 계속 움직여요',
           de: 'Bewegen',
           fr: 'Bougez',
           ja: '動き続ける',
@@ -85,7 +85,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Stand in the gap',
+          en: '빈 틈으로',
           de: 'In der Lücke stehen',
           fr: 'Placez-vous à l\'écart',
           ja: '狭間に',
@@ -102,7 +102,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Behind head--Avoid zombie breath',
+          en: '머리 뒤로 - 좀비 트름 피해요',
           de: 'Hinter den Kopf - Vermeide den Zombie-Atem',
           fr: 'Derrière la tête - Évitez l\'haleine zombie',
           ja: '頭の後ろに - ゾンビブレス来るぞ',
@@ -118,7 +118,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Avoid black holes',
+          en: '블랙홀 피해요',
           de: 'Weiche den Schwarzen Löchern aus',
           fr: 'Évitez les trous noirs',
           ja: 'ブラックホールから離れる',
@@ -141,7 +141,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Flare on YOU',
+          en: '내게 플레어',
           de: 'Flare auf DIR',
           fr: 'Brasier sur VOUS',
           ja: '自分にフレア',

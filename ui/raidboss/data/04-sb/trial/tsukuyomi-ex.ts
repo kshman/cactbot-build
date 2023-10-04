@@ -55,7 +55,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         getOutOfFront: {
-          en: 'Get out of front',
+          en: '정면 피해요',
           de: 'Weg von vorn',
           fr: 'Éloignez-vous de l\'avant',
           ja: '正面から離れる',
@@ -90,7 +90,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         leftAndOut: {
-          en: 'Left + Out',
+          en: '왼쪽 + 밖으로',
           de: 'Links + Raus',
           fr: 'À gauche + Extérieur',
           ja: '左へ + 外へ',
@@ -98,7 +98,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '왼쪽 + 밖',
         },
         leftAndIn: {
-          en: 'Left + In',
+          en: '왼쪽 + 안으로',
           de: 'Links + Rein',
           fr: 'À gauche + Intérieur',
           ja: '左へ + 中へ',
@@ -118,7 +118,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         rightAndOut: {
-          en: 'Right + Out',
+          en: '오른쪽 + 밖으로',
           de: 'Rechts + Raus',
           fr: 'À droite + Extérieur',
           ja: '右へ + 外へ',
@@ -126,7 +126,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '오른쪽 + 밖',
         },
         rightAndIn: {
-          en: 'Right + In',
+          en: '오른쪽 + 안으로',
           de: 'Rechts + Rein',
           fr: 'À droite + Intérieur',
           ja: '右へ + 中へ',
@@ -207,7 +207,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Move to Black!',
+          en: '깜장으로 가욧!',
           de: 'In\'s schwarze laufen!',
           fr: 'Allez en zone noire !',
           ja: '新月に！',
@@ -245,7 +245,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Move to White!',
+          en: '하양으로 가욧!',
           de: 'In\'s weiße laufen!',
           fr: 'Allez en zone blanche !',
           ja: '満月に！',

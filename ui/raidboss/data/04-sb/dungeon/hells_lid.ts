@@ -19,7 +19,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Away from club/shield',
+          en: '몽둥이와 방패로부터 멀리 떨어져요',
           de: 'Weg von der Keule/dem Schild',
           fr: 'Éloignez-vous du bouclier/fauche',
           ja: '岩棍棒から離れる',
@@ -59,7 +59,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         targetText: {
-          en: 'Boss chasing--GET AWAY',
+          en: '보스 체이싱 - 피해욧!',
           de: 'Boss-Verfolgung--RENN WEG',
           fr: 'Ruée du boss -- ÉLOIGNEZ-VOUS',
           ja: 'ボス追いつけるよ～早く走れ！',
@@ -67,7 +67,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '보스 추격중 --도망가세요',
         },
         otherText: {
-          en: 'Avoid boss',
+          en: '보스 피해요',
           de: 'Weiche dem Boss aus',
           fr: 'Évitez le boss',
           ja: 'ボスから離れる',
@@ -95,7 +95,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Avoid water orb',
+          en: '물구슬 피해요',
           de: 'Weiche dem Wasser-Orb aus',
           fr: 'Évitez l\'orbe d\'eau',
           ja: '水玉から離れる',

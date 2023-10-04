@@ -38,7 +38,7 @@ const triggerSet: TriggerSet<Data> = {
       run: (data) => data.seenTowers = true,
       outputStrings: {
         getTower: {
-          en: 'Get Tower',
+          en: '타워 밟아요',
           de: 'Turm nehmen',
           fr: 'Prenez la tour',
           ja: '塔を踏む',
@@ -46,7 +46,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '장판 들어가기',
         },
         getTowers: {
-          en: 'Get Towers',
+          en: '각각 타워 밟아요',
           de: 'Türme nehmen',
           fr: 'Prenez les tours',
           ja: '塔を踏む',
@@ -71,7 +71,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Drop Charge Away',
+          en: '멀리 버리러 가요',
           de: 'Lege Markierung weit weg ab',
           fr: 'Déposez la charge au loin',
           ja: 'マーカーを外に捨てる',
@@ -116,7 +116,6 @@ const triggerSet: TriggerSet<Data> = {
     },
     {
       'locale': 'fr',
-      'missingTranslations': true,
       'replaceSync': {
         'Hexadrone Bit': 'module d\'hexadrone',
         'Hypertuned Grynewaht': 'Grynewaht hyper-renforcé',
@@ -180,7 +179,6 @@ const triggerSet: TriggerSet<Data> = {
     },
     {
       'locale': 'cn',
-      'missingTranslations': true,
       'replaceSync': {
         'Hexadrone Bit': '魔导六轮装甲浮游炮',
         'Hypertuned Grynewaht': '强化格林瓦特',

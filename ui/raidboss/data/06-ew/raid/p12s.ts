@@ -171,6 +171,39 @@ const limitCutIds: readonly string[] = Object.keys(limitCutMap);
 const wingIds: readonly string[] = Object.values(wings);
 const superchainNpcBaseIds: readonly string[] = Object.values(superchainNpcBaseIdMap);
 
+const whiteFlameDelayOutputStrings = {
+  delay1: {
+    en: '지금 당장',
+    de: 'jetzt',
+    cn: '现在!',
+    ko: '바로',
+  },
+  delay2: {
+    en: '젓번째',
+    de: 'bald',
+    cn: '等1只小怪',
+    ko: '1번째 쫄',
+  },
+  delay3: {
+    en: '두번째',
+    de: 'verzögert',
+    cn: '等2只小怪',
+    ko: '2번째 쫄',
+  },
+  delay4: {
+    en: '세번째',
+    de: 'sehr verzögert',
+    cn: '等3只小怪',
+    ko: '3번째 쫄',
+  },
+  delay5: {
+    en: '네번째',
+    de: 'seeeeehr verzögert',
+    cn: '等4只小怪',
+    ko: '4번째 쫄',
+  },
+} as const;
+
 type FloorTile =
   | 'outsideNW'
   | 'outsideNE'
@@ -841,56 +874,56 @@ const triggerSet: TriggerSet<Data> = {
           en: '북쪽 => 되돌아 와욧 [왼쪽]',
           de: 'Norden + Links von Ihr (dannach Norden)',
           ja: '北 + 北に戻る (左安置)',
-          cn: '北 + Boss左侧 (稍后 回到北)',
+          cn: '上 (北) + Boss左侧 (稍后 回上北)',
           ko: '북쪽 + 보스 왼쪽 (그리고 다시 북쪽)',
         },
         superchain2aLeftNorthSouth: {
           en: '북쪽 => 계속 전진 [왼쪽]',
           de: 'Norden + Links von Ihr (dannach Süden)',
           ja: '北 + 南へ前進 (左安置)',
-          cn: '北 + Boss左侧 (稍后 去南)',
+          cn: '上 (北) + Boss左侧 (稍后 去下南)',
           ko: '북쪽 + 보스 왼쪽 (그리고 남쪽으로)',
         },
         superchain2aLeftSouthNorth: {
           en: '남쪽 => 계속 전진 [왼쪽]',
           de: 'Süden + Links (dannach Norden)',
           ja: '南 + 北へ前進 (左安置)',
-          cn: '南 + 左 (稍后 去北)',
+          cn: '下 (南) + 左 (稍后 去上北)',
           ko: '남쪽 + 왼쪽 (그리고 북쪽으로)',
         },
         superchain2aLeftSouthSouth: {
           en: '남쪽 => 되돌아 와욧 [왼쪽]',
           de: 'Süden + Links (dannach Süden)',
           ja: '南 + 南に戻る (左安置)',
-          cn: '南 + 左 (稍后 回到南)',
+          cn: '下 (南) + 左 (稍后 回下南)',
           ko: '남쪽 + 왼쪽 (그리고 다시 남쪽)',
         },
         superchain2aRightNorthNorth: {
           en: '북쪽 => 되돌아 와욧 [오른쪽]',
           de: 'Norden + Rechts von Ihr (dannach Norden)',
           ja: '北 + 北に戻る (右安置)',
-          cn: '北 + Boss右侧 (稍后 回到北)',
+          cn: '上 (北) + Boss右侧 (稍后 回上北)',
           ko: '북쪽 + 보스 오른쪽 (그리고 다시 북쪽)',
         },
         superchain2aRightNorthSouth: {
           en: '북쪽 => 계속 전진 [오른쪽]',
           de: 'Norden + Rechts von Ihr (dannach Süden)',
           ja: '北 + 南へ前進 (右安置)',
-          cn: '北 + Boss右侧 (稍后 去南)',
+          cn: '上 (北) + Boss右侧 (稍后 去下南)',
           ko: '북쪽 + 보스 오른쪽 (그리고 남쪽으로)',
         },
         superchain2aRightSouthNorth: {
           en: '남쪽 => 계속 전진 [오른쪽]',
           de: 'Süden + Rechts (dannach Norden)',
           ja: '南 + 北へ前進 (右安置)',
-          cn: '南 + 右 (稍后 去北)',
+          cn: '下 (南) + 右 (稍后 去上北)',
           ko: '남쪽 + 오른쪽 (그리고 북쪽으로)',
         },
         superchain2aRightSouthSouth: {
           en: '남쪽 => 되돌아 와욧 [오른쪽]',
           de: 'Süden + Rechts (dannach Süden)',
           ja: '南 + 南に戻る (右安置)',
-          cn: '南 + 右 (稍后 回到南)',
+          cn: '下 (南) + 右 (稍后 回下南)',
           ko: '남쪽 + 오른쪽 (그리고 다시 남쪽)',
         },
         //
@@ -1839,7 +1872,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         towersLater: {
-          en: '타워 들어갈거예요: ${color}',
+          en: '${color}타워예요',
           de: '${color} Türme (später)',
           ja: '塔: ${color}',
           cn: '稍后 ${color} 塔',
@@ -2123,7 +2156,7 @@ const triggerSet: TriggerSet<Data> = {
       type: 'HeadMarker',
       netRegex: {},
       condition: Conditions.targetIsYou(),
-      durationSeconds: 20,
+      durationSeconds: (data) => data.options.AutumnStyle ? 4 : 20,
       alertText: (data, matches, output) => {
         const id = getHeadmarkerId(data, matches);
         if (!limitCutIds.includes(id))
@@ -2132,8 +2165,6 @@ const triggerSet: TriggerSet<Data> = {
         if (num === undefined)
           return;
         data.limitCutNumber = num;
-        if (data.options.AutumnStyle)
-          return;
         return output.text!({ num: num });
       },
       outputStrings: {
@@ -2185,22 +2216,18 @@ const triggerSet: TriggerSet<Data> = {
         pair: [{ key: 'ModelStatus', value: '16384' }],
         capture: true,
       },
-      condition: (data, matches) =>
-        data.lcCombatants.length > 0 &&
-        data.lcCombatants.find((c) => c.ID === parseInt(matches.id, 16)) !== undefined,
-      run: (data, matches) => {
+      condition: (data, matches) => {
+        // This happens repeatedly, so suppress future calls.
+        if (data.lcWhiteFlameDelay !== undefined)
+          return false;
         const combatant = data.lcCombatants.find((c) => c.ID === parseInt(matches.id, 16));
-        if (combatant === undefined) {
-          console.error(`LC Line Bait Collector: Could not find combatant for ID ${matches.id}`);
-          return;
-        }
-
+        if (combatant === undefined)
+          return false;
         combatant.order = data.lcCombatantsOffset;
         ++data.lcCombatantsOffset;
-
-        if (data.lcCombatantsOffset < 8)
-          return;
-
+        return data.lcCombatantsOffset === 8;
+      },
+      run: (data) => {
         // Find the intercardinal adds that jumped, and then sort by order.
         const orderedJumps = data.lcCombatants
           .filter((combatant) =>
@@ -2220,7 +2247,6 @@ const triggerSet: TriggerSet<Data> = {
         if (o1 === undefined || o2 === undefined || o3 === undefined || o4 === undefined)
           return;
 
-        // delay of 1 = immediate, 5 = maximum
         data.lcWhiteFlameDelay = [o1 + 1, o2 - o1, o3 - o2, o4 - o3];
       },
     },
@@ -2243,26 +2269,35 @@ const triggerSet: TriggerSet<Data> = {
         // cactbot-builtin-response
         output.responseOutputStrings = {
           baitLaser: {
-            en: '레이저 유도! 안쪽으로!',
-            de: 'Laser Ködern',
-            fr: 'Bait le laser',
-            ja: 'レーザー誘導',
-            cn: '引导激光',
-            ko: '레이저 유도',
+            en: '레이저 유도! 안쪽으로! (${delay})',
+            de: 'Laser Ködern (${delay})',
+            fr: 'Bait le laser (${delay})', // FIXME
+            ja: 'レーザー誘導 (${delay})', // FIXME
+            cn: '引导激光 (${delay})',
+            ko: '레이저 유도 (${delay})',
           },
           firstWhiteFlame: {
-            en: '(5, 7 레이저 유도)',
-            de: '(5 und 7 ködern)',
-            fr: '(5 et 7 bait)',
-            ja: '(5と7誘導)',
-            cn: '(5 和 7 引导)',
-            ko: '(5, 7 레이저)',
+            en: '(5, 7 유도 ${delay})',
+            de: '(5 und 7 ködern ${delay})',
+            fr: '(5 et 7 bait ${delay})', // FIXME
+            ja: '(5と7誘導 ${delay})', // FIXME
+            cn: '(5 和 7 引导 ${delay})',
+            ko: '(5, 7 레이저 ${delay})',
           },
+          ...whiteFlameDelayOutputStrings,
         };
-        // TODO: use `data.lcWhiteFlameDelay` to say things like "quick" or "delayed" or "very delayed".
-        const infoText = output.firstWhiteFlame!();
+
+        const delayMap: { [delay: number]: string } = {
+          1: output.delay1!(),
+          2: output.delay2!(),
+          3: output.delay3!(),
+          4: output.delay4!(),
+          5: output.delay5!(),
+        } as const;
+        const delayStr = delayMap[data.lcWhiteFlameDelay?.[0] ?? 1];
+        const infoText = output.firstWhiteFlame!({ delay: delayStr });
         if (data.limitCutNumber === 5 || data.limitCutNumber === 7)
-          return { alertText: output.baitLaser!(), infoText: infoText };
+          return { alertText: output.baitLaser!({ delay: delayStr }), infoText: infoText };
         return { infoText: infoText };
       },
     },
@@ -2280,57 +2315,65 @@ const triggerSet: TriggerSet<Data> = {
         // cactbot-builtin-response
         output.responseOutputStrings = {
           baitLaser: {
-            en: '레이저 유도! 안쪽으로!',
-            de: 'Laser Ködern',
-            fr: 'Bait le laser',
-            ja: 'レーザー誘導',
-            cn: '引导激光',
-            ko: '레이저 유도',
+            en: '레이저 유도! 안쪽으로! (${delay})',
+            de: 'Laser Ködern (${delay})',
+            fr: 'Bait le laser (${delay})', // FIXME
+            ja: 'レーザー誘導 (${delay})', // FIXME
+            cn: '引导激光 (${delay})',
+            ko: '레이저 유도 (${delay})',
           },
           secondWhiteFlame: {
-            en: '(6, 8 레이저 유도)',
-            de: '(6 und 8 ködern)',
-            fr: '(6 et 8 bait)',
-            ja: '(6と8誘導)',
-            cn: '(6 和 8 引导)',
-            ko: '(6, 8 레이저)',
+            en: '(6, 8 유도 ${delay})',
+            de: '(6 und 8 ködern ${delay})',
+            fr: '(6 et 8 bait ${delay})', // FIXME
+            ja: '(6と8誘導 ${delay})', // FIXME
+            cn: '(6 和 8 引导 ${delay})',
+            ko: '(6, 8 레이저 ${delay})',
           },
           thirdWhiteFlame: {
-            en: '(1, 3 레이저 유도)',
-            de: '(1 und 3 ködern)',
-            fr: '(1 et 3 bait)',
-            ja: '(1と3誘導)',
-            cn: '(1 和 3 引导)',
-            ko: '(1, 3 레이저)',
+            en: '(1, 3 유도 ${delay})',
+            de: '(1 und 3 ködern ${delay})',
+            fr: '(1 et 3 bait ${delay})', // FIXME
+            ja: '(1と3誘導 ${delay})', // FIXME
+            cn: '(1 和 3 引导 ${delay})',
+            ko: '(1, 3 레이저 ${delay})',
           },
           fourthWhiteFlame: {
-            en: '(2, 4 레이저 유도)',
-            de: '(2 und 6 ködern)',
-            fr: '(2 et 4 bait)',
-            ja: '(2と4誘導)',
-            cn: '(2 和 4 引导)',
-            ko: '(2, 4 레이저)',
+            en: '(2, 4 유도 ${delay})',
+            de: '(2 und 6 ködern ${delay})',
+            fr: '(2 et 4 bait ${delay})', // FIXME
+            ja: '(2と4誘導 ${delay})', // FIXME
+            cn: '(2 和 4 引导 ${delay})',
+            ko: '(2, 4 레이저 ${delay})',
           },
+          ...whiteFlameDelayOutputStrings,
         };
 
-        // TODO: use `data.lcWhiteFlameDelay` to say things like "quick" or "delayed" or "very delayed".
+        const delayMap: { [delay: number]: string } = {
+          1: output.delay1!(),
+          2: output.delay2!(),
+          3: output.delay3!(),
+          4: output.delay4!(),
+          5: output.delay5!(),
+        } as const;
+        const delayStr = delayMap[data.lcWhiteFlameDelay?.[data.whiteFlameCounter] ?? 1];
 
-        const baitLaser = output.baitLaser!();
+        const baitLaser = output.baitLaser!({ delay: delayStr });
 
         if (data.whiteFlameCounter === 1) {
-          const infoText = output.secondWhiteFlame!();
+          const infoText = output.secondWhiteFlame!({ delay: delayStr });
           if (data.limitCutNumber === 6 || data.limitCutNumber === 8)
             return { alertText: baitLaser, infoText: infoText };
           return { infoText: infoText };
         }
         if (data.whiteFlameCounter === 2) {
-          const infoText = output.thirdWhiteFlame!();
+          const infoText = output.thirdWhiteFlame!({ delay: delayStr });
           if (data.limitCutNumber === 1 || data.limitCutNumber === 3)
             return { alertText: baitLaser, infoText: infoText };
           return { infoText: infoText };
         }
         if (data.whiteFlameCounter === 3) {
-          const infoText = output.fourthWhiteFlame!();
+          const infoText = output.fourthWhiteFlame!({ delay: delayStr });
           if (data.limitCutNumber === 2 || data.limitCutNumber === 4)
             return { alertText: baitLaser, infoText: infoText };
           return { infoText: infoText };
@@ -2866,20 +2909,20 @@ const triggerSet: TriggerSet<Data> = {
         inside: {
           en: '안으로',
           de: 'Innen (Klonen ausweichen)',
-          cn: '内侧 (躲避场边激光)',
+          cn: '内侧 (躲避小怪激光)',
           ko: '안쪽 (분신 피하기)',
         },
         outside: {
           en: '바깥으로',
           de: 'Außen (Klonen ausweichen)',
-          cn: '外侧 (躲避场边激光)',
+          cn: '外侧 (躲避小怪激光)',
           ko: '바깥쪽 (분신 피하기)',
         },
         avoid: {
           en: '한 줄 장판 피해요',
           de: 'Vermeide Linien AoEs',
           ja: '直線回避',
-          cn: '躲避场边激光',
+          cn: '躲避小怪激光',
           ko: '직선 장판 피하기',
         },
       },
@@ -3001,7 +3044,7 @@ const triggerSet: TriggerSet<Data> = {
         outsideNW: {
           en: '북서 바깥',
           de: 'Außerhalb NW',
-          cn: '外侧 左上(西北)',
+          cn: '外侧 左上 (西北)',
           ko: '북서 바깥',
         },
         outsideNE: {
@@ -4150,6 +4193,8 @@ const triggerSet: TriggerSet<Data> = {
           noBeacon: {
             en: '첫 불: ${player1}, ${player2}',
             de: 'Initiales Feuer: ${player1}, ${player2}',
+            cn: '火标记点: ${player1}, ${player2}',
+            ko: '첫 불: ${player1}, ${player2}',
           },
           beacon: {
             en: '첫 불! 앞으로! (${partner})',
@@ -4673,6 +4718,88 @@ const triggerSet: TriggerSet<Data> = {
         'Umbral Glow': 'アンブラルグロウ',
         'Umbral Impact': '霊撃',
         'Unnatural Enchainment': '魂の鎖',
+        'White Flame': '白火',
+      },
+    },
+    {
+      'locale': 'cn',
+      'replaceSync': {
+        '(?<! )Athena': '雅典娜',
+        'Anthropos': '人',
+        'Concept of Earth': '土之概念',
+        'Concept of Fire': '火之概念',
+        'Concept of Water': '水之概念',
+        'Forbidden Factor': '禁忌因子',
+        'Hemitheos': '半神',
+        'Pallas Athena': '帕拉斯雅典娜',
+        'Thymou Idea': '激情理念',
+      },
+      'replaceText': {
+        '\\(Floor Drop\\)': '(地板坠落)',
+        '\\(cast\\)': '(咏唱)',
+        '\\(enrage\\)': '(狂暴)',
+        '\\(proximity\\)': '(近)',
+        '\\(spread\\)': '(分散)',
+        '--tethers--': '--连线--',
+        'Apodialogos': '远距离对话',
+        'Astral Advance': '星极进升',
+        'Astral Advent': '星极临',
+        'Astral Glow': '星极炽光',
+        'Astral Impact': '星击',
+        'Buster': '死刑',
+        'Caloric Theory': '热质说',
+        'Crush Helm': '星天爆击打',
+        'Demi Parhelion': '亚幻日',
+        '(?<!(Apo|Peri))Dialogos': '对话',
+        'Divine Excoriation': '神罚',
+        'Dynamic Atmosphere': '冲风',
+        'Ekpyrosis': '宇宙火劫',
+        'Engravement of Souls': '灵魂刻印',
+        'Entropic Excess': '焦热波',
+        'Factor In': '因子还原',
+        'Gaiaochos': '大地之主',
+        'Geocentrism': '地心说',
+        'Glaukopis': '明眸',
+        'Ignorabimus': '我仍将一无所知',
+        'Implode': '自我毁灭',
+        'Missing Link': '苦痛锁链',
+        'On the Soul': '论灵魂',
+        'Palladian Grasp': '帕拉斯之手',
+        'Palladian Ray': '帕拉斯射线',
+        'Palladion': '女神的护佑',
+        'Pangenesis': '泛生论',
+        'Panta Rhei': '万物流变',
+        'Paradeigma': '范式',
+        'Parthenos': '贞女',
+        'Peridialogos': '近距离对话',
+        'Polarized Ray': '偏振射线',
+        'Pyre Pulse': '重热波',
+        'Ray of Light': '光波',
+        'Sample': '贪食',
+        'Searing Radiance': '飞光',
+        'Shadowsear': '影伤',
+        'Shock': '放电',
+        'Summon Darkness': '黑暗召唤',
+        'Superchain Burst': '超链爆发',
+        'Superchain Coil': '超链回环',
+        'Superchain Theory I(?!I)': '超链理论I',
+        'Superchain Theory IIA': '超链理论IIA',
+        'Superchain Theory IIB': '超链理论IIB',
+        'The Classical Concepts': '元素理念',
+        'Theos\'s Cross': '神之十字',
+        'Theos\'s Holy': '神之神圣',
+        'Theos\'s Saltire': '神之交错',
+        'Theos\'s Ultima': '神之究极',
+        'Trinity of Souls': '三魂一体',
+        '(?<! )Ultima(?! (B|R))': '究极',
+        'Ultima Blade': '究极之刃',
+        'Ultima Blow': '究极强击',
+        'Ultima Ray': '究极射线',
+        'Umbral Advance': '灵极进升',
+        'Umbral Advent': '灵极临',
+        'Umbral Glow': '灵极炽光',
+        'Umbral Impact': '灵击',
+        'Unnatural Enchainment': '灵魂链',
         'White Flame': '白火',
       },
     },

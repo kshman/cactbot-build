@@ -33,7 +33,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Avoid side saws',
+          en: '옆쪽 톱날 피해요',
           de: 'Weiche den Sägen an der Seite aus',
           fr: 'Évitez les scies sur le côté',
           cn: '躲避场边电锯',
@@ -51,7 +51,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Frost Lasers',
+          en: '함정: 얼음',
           de: 'Eislaser',
           fr: 'Lasers de glace',
           ja: '罠: 氷',
@@ -67,7 +67,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Ceiling Weight',
+          en: '함정: 철퇴',
           de: 'Gewichte von der Decke',
           fr: 'Poids du plafond',
           ja: '罠: 鉄球',
@@ -118,7 +118,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         target: {
-          en: 'Get away--Laser on YOU',
+          en: '내게 레이저 - 멀리 가요',
           de: 'Geh weg--Laser auf DIR',
           fr: 'Éloignez-vous - Laser sur VOUS',
           cn: '出去--激光点名',

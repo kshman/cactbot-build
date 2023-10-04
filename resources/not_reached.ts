@@ -11,6 +11,6 @@
 // (non-optional) regex groups will also be valid, but TypeScript doesn't know.
 export class UnreachableCode extends Error {
   constructor() {
-    super('This code shouldn\'t be reached');
+    super('이 코드는 여기까지 들어오지 않아요');
   }
 }
