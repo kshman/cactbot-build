@@ -294,9 +294,8 @@ const zoneReplace: ZoneReplace[] = [
     prefix: { 'ThordanEX': 'ThordanUN' },
     other: {
       'TheMinstrelsBalladThordansReign': 'TheSingularityReactorUnreal',
+      'THE MINSTREL\'S BALLAD: THORDAN\'S REIGN': 'THE SINGULARITY REACTOR (UNREAL)',
       'thordan-ex.txt': 'thordan-un.txt',
-      '(Extreme)': '(Unreal)',
-      ' Extreme': ' Unreal',
     },
     id: {
       '1018': '89B7', // --sync--
@@ -313,19 +312,19 @@ const zoneReplace: ZoneReplace[] = [
       '1483': '89C2', // Meteorain
       '1484': '89C3', // Meteorain
       '1485': '89C4', // Ancient Quaga
-      '1486': '89C5', // Ancient Quaga
+      '1486': '89C5', // Ancient Quaga enrage
       '1487': '89C6', // Heavenly Heel
-      '1488': '89C7', // the Dragon's Eye
-      '1489': '89C8', // the Dragon's Gaze
-      '148A': '89C9', // the Dragon's Glory
-      '148B': '89CA', // the Dragon's Rage
-      '148C': '89CB', // Knights Of the Round
+      '1488': '89C7', // The Dragon's Eye
+      '1489': '89C8', // The Dragon's Gaze
+      '148A': '89C9', // The Dragon's Glory
+      '148B': '89CA', // The Dragon's Rage
+      '148C': '89CB', // Knights Of The Round
       '148D': '89CC', // Ultimate End
       '148E': '89CD', // Ultimate End
-      '148F': '89CE', // the Light Of Ascalon
+      '148F': '89CE', // The Light Of Ascalon
       '1490': '89CF', // Sacred Cross
       '1491': '89D0', // Sacred Cross
-      '1492': '89D1', // Spear Of the Fury
+      '1492': '89D1', // Spear Of The Fury
       '1493': '89D2', // Divine Right
       '1494': '89D3', // Heavenly Slash
       '1495': '89D4', // Holiest Of Holy
@@ -350,6 +349,7 @@ const zoneReplace: ZoneReplace[] = [
       '14AA': '89E9', // Heavensward Leap
       '14AB': '89EA', // Heavensflame
       '14AC': '89EB', // Heavensflame
+      '14AD': '89EC', // Holy Chain
       '14AE': '89ED', // Hiemal Storm
       '14AF': '89EE', // Hiemal Storm
       '14B0': '89EF', // Holy Meteor
