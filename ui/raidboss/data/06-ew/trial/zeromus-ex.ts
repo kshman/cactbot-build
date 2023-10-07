@@ -12,6 +12,7 @@ import { TriggerSet } from '../../../../../types/trigger';
 export interface Data extends RaidbossData {
   decOffset?: number;
   miasmicBlasts: PluginCombatantState[];
+  forkedPlayers: string[];
 }
 
 const headmarkerMap = {
@@ -39,6 +40,7 @@ const triggerSet: TriggerSet<Data> = {
   initData: () => {
     return {
       miasmicBlasts: [],
+      forkedPlayers: [],
     };
   },
   triggers: [
@@ -165,12 +167,46 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
+      id: 'ZeromusEx Forked Lightning Collect',
+      type: 'GainsEffect',
+      netRegex: { effectId: 'ED7' },
+      run: (data, matches) => data.forkedPlayers.push(matches.target),
+    },
+    {
       id: 'ZeromusEx Stack Headmarker',
       type: 'HeadMarker',
       netRegex: { capture: true },
       condition: (data, matches) =>
         data.decOffset !== undefined && getHeadmarkerId(data, matches) === headmarkerMap.stack,
-      response: Responses.stackMarkerOn(),
+      alertText: (data, matches, output) => {
+        if (data.forkedPlayers.includes(data.me)) {
+          if (data.forkedPlayers.length === 1)
+            return output.forkedLightning!();
+          const [player] = data.forkedPlayers.filter((x) => x !== data.me);
+          if (player === undefined)
+            return output.forkedLightning!();
+          return output.lightningWith!({ player: player });
+        }
+        if (data.me === matches.target)
+          return output.stackOnYou!();
+        return output.stackOnTarget!({ player: data.ShortName(matches.target) });
+      },
+      run: (data) => data.forkedPlayers = [],
+      outputStrings: {
+        stackOnYou: Outputs.stackOnYou,
+        stackOnTarget: Outputs.stackOnPlayer,
+        forkedLightning: {
+          en: '내게 번개!',
+          de: 'Blitz auf DIR',
+          fr: 'Éclair sur VOUS',
+          ja: '自分にフォークライトニング',
+          cn: '雷点名',
+          ko: '갈래 번개 대상자',
+        },
+        lightningWith: {
+          en: '내게 번개! (+${player})',
+        },
+      },
     },
     {
       id: 'ZeromusEx Miasmic Blasts Reset',
@@ -338,21 +374,25 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         text: {
-          en: '안전: ${safe}',
+          en: '안전 마커: ${safe}',
         },
         WNW: {
-          en: '③',
+          en: '④',
         },
-        NW: Outputs.arrowNW,
+        NW: {
+          en: '①',
+        },
         NNW: {
           en: 'Ⓐ',
         },
         NNE: {
           en: 'Ⓑ',
         },
-        NE: Outputs.arrowNE,
+        NE: {
+          en: '②',
+        },
         ENE: {
-          en: '④',
+          en: '③',
         },
         unknown: Outputs.unknown,
       },
@@ -423,23 +463,10 @@ const triggerSet: TriggerSet<Data> = {
         },
       },
     },
-    {
-      id: 'ZeromusEx PR Forked Lightning',
-      type: 'GainsEffect',
-      netRegex: { effectId: 'ED7' },
-      condition: Conditions.targetIsYou(),
-      delaySeconds: (_data, matches) => parseFloat(matches.duration) - 5,
-      alertText: (_data, _matches, output) => output.text!(),
-      outputStrings: {
-        text: {
-          en: '내게 번개! 홀로 떨어져요',
-        },
-      },
-    },
     // 441: HP Penalty
     // A61: Acceleration Bomb(오피샬)
     // EB2: Divisive Dark
-    // ED7: Forked Lightning (이쪽)
+    // ED7: Forked Lightning (이쪽 -> 오피샬)
   ],
   timelineReplace: [
     {
@@ -450,6 +477,7 @@ const triggerSet: TriggerSet<Data> = {
     },
     {
       'locale': 'de',
+      'missingTranslations': true,
       'replaceSync': {
         'Comet': 'Komet',
         'Toxic Bubble': 'Giftblase',
@@ -493,6 +521,7 @@ const triggerSet: TriggerSet<Data> = {
     },
     {
       'locale': 'fr',
+      'missingTranslations': true,
       'replaceSync': {
         'Comet': 'comète',
         'Toxic Bubble': 'bulle empoisonnée',
@@ -536,6 +565,7 @@ const triggerSet: TriggerSet<Data> = {
     },
     {
       'locale': 'ja',
+      'missingTranslations': true,
       'replaceSync': {
         'Comet': 'コメット',
         'Toxic Bubble': 'ポイズナスバブル',
