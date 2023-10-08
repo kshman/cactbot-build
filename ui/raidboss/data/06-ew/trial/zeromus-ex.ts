@@ -6,29 +6,33 @@ import { Directions } from '../../../../../resources/util';
 import ZoneId from '../../../../../resources/zone_id';
 import { RaidbossData } from '../../../../../types/data';
 import { PluginCombatantState } from '../../../../../types/event';
-import { NetMatches } from '../../../../../types/net_matches';
 import { TriggerSet } from '../../../../../types/trigger';
 
 export interface Data extends RaidbossData {
-  decOffset?: number;
+  phase: 'one' | 'two';
+  seenSableThread?: boolean;
   miasmicBlasts: PluginCombatantState[];
+  busterPlayers: string[];
   forkedPlayers: string[];
+  blackHolePlayer?: string;
+  flareMechanic?: 'spread' | 'stack';
+  noxPlayers: string[];
+  flowLocation?: 'north' | 'middle' | 'south';
 }
 
 const headmarkerMap = {
-  'tankbuster': '016C',
-  'blackHole': '014A',
-  'spread': '0017',
-  'enums': '00D3',
-  'stack': '003E',
+  tankBuster: '016C',
+  blackHole: '014A',
+  tether: '0146',
+  // Most spread markers (Big Bang, Big Crunch, Dark Divides)
+  spread: '0178',
+  accelerationBomb: '010B',
+  nox: '00C5',
+  akhRhaiSpread: '0017',
+  enums: '00D3',
+  // The Dark Beckons, but also Umbral Rays
+  stack: '003E',
 } as const;
-
-const firstHeadmarker = parseInt(headmarkerMap.tankbuster, 16);
-const getHeadmarkerId = (data: Data, matches: NetMatches['HeadMarker']) => {
-  if (typeof data.decOffset === 'undefined')
-    data.decOffset = parseInt(matches.id, 16) - firstHeadmarker;
-  return (parseInt(matches.id, 16) - data.decOffset).toString(16).toUpperCase().padStart(4, '0');
-};
 
 const centerX = 100;
 const centerY = 100;
@@ -39,23 +43,113 @@ const triggerSet: TriggerSet<Data> = {
   timelineFile: 'zeromus-ex.txt',
   initData: () => {
     return {
+      phase: 'one',
       miasmicBlasts: [],
+      busterPlayers: [],
       forkedPlayers: [],
+      noxPlayers: [],
     };
   },
+  timelineTriggers: [
+    {
+      id: 'ZeromusEx Flare',
+      // Extra time for spreading out.
+      // This could also be StartsUsing 85BD.
+      regex: /^Flare$/,
+      beforeSeconds: 13,
+      suppressSeconds: 20,
+      response: Responses.getTowers(),
+    },
+    {
+      id: 'ZeromusEx Big Bang Spread',
+      // Extra time for spreading out.
+      // This could alternatively be StartsUsing 8B4C or HeadMarker 0178.
+      regex: /^Big Bang$/,
+      beforeSeconds: 13,
+      suppressSeconds: 20,
+      response: Responses.spread(),
+    },
+    {
+      id: 'ZeromusEx Big Crunch Spread',
+      // Extra time for spreading out.
+      // This could alternatively be StartsUsing 8B4D or HeadMarker 0178.
+      regex: /^Big Crunch$/,
+      beforeSeconds: 13,
+      suppressSeconds: 20,
+      response: Responses.spread(),
+    },
+  ],
   triggers: [
     {
-      id: 'ZeromusEx Headmarker Tracker',
+      id: 'ZeromusEx Abyssal Nox',
+      type: 'GainsEffect',
+      netRegex: { effectId: '6E9', capture: false },
+      suppressSeconds: 5,
+      alertText: (_data, _matches, output) => output.text!(),
+      outputStrings: {
+        text: {
+          en: 'HP 만땅으로!',
+        },
+      },
+    },
+    {
+      id: 'ZeromusEx Sable Thread',
+      type: 'Ability',
+      netRegex: { id: '8AEF', source: 'Zeromus' },
+      alertText: (data, matches, output) => {
+        const num = data.seenSableThread ? 7 : 6;
+        data.seenSableThread = true;
+        if (matches.target === data.me)
+          return output.lineStackOnYou!({ num: num });
+        return output.lineStackOn!({ num: num, player: data.ShortName(matches.target) });
+      },
+      outputStrings: {
+        lineStackOn: {
+          en: '${num}연속 사브레 스레드: ${player}',
+        },
+        lineStackOnYou: {
+          en: '내게 ${num}연속 사브레 스레드',
+        },
+      },
+    },
+    {
+      id: 'ZeromusEx Dark Matter You',
       type: 'HeadMarker',
-      netRegex: {},
-      condition: (data) => data.decOffset === undefined,
-      // Unconditionally set the first headmarker here so that future triggers are conditional.
-      run: (data, matches) => getHeadmarkerId(data, matches),
+      netRegex: { id: headmarkerMap.tankBuster },
+      alertText: (data, matches, output) => {
+        data.busterPlayers.push(matches.target);
+        if (data.me === matches.target)
+          return output.tankBusterOnYou!();
+      },
+      outputStrings: {
+        tankBusterOnYou: Outputs.tankBusterOnYou,
+      },
+    },
+    {
+      id: 'ZeromusEx Dark Matter Others',
+      type: 'HeadMarker',
+      netRegex: { id: headmarkerMap.tankBuster, capture: false },
+      delaySeconds: 0.5,
+      suppressSeconds: 2,
+      infoText: (data, _matches, output) => {
+        if (!data.busterPlayers.includes(data.me))
+          return output.tankBusters!();
+      },
+      outputStrings: {
+        tankBusters: Outputs.tankBusters,
+      },
+    },
+    {
+      id: 'ZeromusEx Dark Matter Cleanup',
+      type: 'Ability',
+      netRegex: { id: '8B84', source: 'Zeromus', capture: false },
+      suppressSeconds: 5,
+      run: (data) => data.busterPlayers = [],
     },
     {
       id: 'ZeromusEx Visceral Whirl NE Safe',
       type: 'StartsUsing',
-      netRegex: { id: '8B43', capture: false },
+      netRegex: { id: '8B43', source: 'Zeromus', capture: false },
       infoText: (data, _matches, output) => {
         if (data.options.AutumnStyle)
           return output.atext!();
@@ -69,14 +163,14 @@ const triggerSet: TriggerSet<Data> = {
         ne: Outputs.northeast,
         sw: Outputs.southwest,
         atext: {
-          en: '안전: 🡿🡽',
+          en: '안전: 🡿🡽 (오른쪽)',
         },
       },
     },
     {
       id: 'ZeromusEx Visceral Whirl NW Safe',
       type: 'StartsUsing',
-      netRegex: { id: '8B46', capture: false },
+      netRegex: { id: '8B46', source: 'Zeromus', capture: false },
       infoText: (data, _matches, output) => {
         if (data.options.AutumnStyle)
           return output.atext!();
@@ -90,121 +184,7 @@ const triggerSet: TriggerSet<Data> = {
         nw: Outputs.northwest,
         se: Outputs.southeast,
         atext: {
-          en: '안전: 🡼🡾',
-        },
-      },
-    },
-    {
-      id: 'ZeromusEx Fractured Eventide NE Safe',
-      type: 'StartsUsing',
-      netRegex: { id: '8B3C', capture: false },
-      alertText: (data, _matches, output) =>
-        data.options.AutumnStyle ? output.ane!() : output.ne!(),
-      outputStrings: {
-        ne: Outputs.northeast,
-        ane: {
-          en: '안전: 🡽',
-        },
-      },
-    },
-    {
-      id: 'ZeromusEx Fractured Eventide NW Safe',
-      type: 'StartsUsing',
-      netRegex: { id: '8B3D', capture: false },
-      alertText: (data, _matches, output) =>
-        data.options.AutumnStyle ? output.anw!() : output.nw!(),
-      outputStrings: {
-        nw: Outputs.northwest,
-        anw: {
-          en: '안전: 🡼',
-        },
-      },
-    },
-    {
-      id: 'ZeromusEx Black Hole Headmarker',
-      type: 'HeadMarker',
-      netRegex: {},
-      condition: (data) => data.role === 'tank',
-      suppressSeconds: 20,
-      alertText: (data, matches, output) => {
-        const id = getHeadmarkerId(data, matches);
-        if (id === headmarkerMap.blackHole)
-          return output.blackHole!();
-      },
-      outputStrings: {
-        blackHole: {
-          en: '내게 블랙홀! 모서리로!',
-          de: 'Schwarzes Loch auf DIR',
-        },
-      },
-    },
-    {
-      id: 'ZeromusEx Spread Headmarker',
-      type: 'HeadMarker',
-      netRegex: { capture: true },
-      condition: (data, matches) =>
-        data.decOffset !== undefined && getHeadmarkerId(data, matches) === headmarkerMap.spread,
-      suppressSeconds: 2,
-      response: Responses.spread(),
-    },
-    {
-      id: 'ZeromusEx Enum Headmarker',
-      type: 'HeadMarker',
-      netRegex: { capture: true },
-      condition: (data, matches) =>
-        data.decOffset !== undefined && getHeadmarkerId(data, matches) === headmarkerMap.enums,
-      suppressSeconds: 2,
-      infoText: (_data, _matches, output) => output.enumeration!(),
-      outputStrings: {
-        enumeration: {
-          en: '페어! 둘이 뭉쳐요',
-          de: 'Enumeration',
-          fr: 'Énumération',
-          ja: 'エアーバンプ',
-          cn: '蓝圈分摊',
-          ko: '2인 장판',
-        },
-      },
-    },
-    {
-      id: 'ZeromusEx Forked Lightning Collect',
-      type: 'GainsEffect',
-      netRegex: { effectId: 'ED7' },
-      run: (data, matches) => data.forkedPlayers.push(matches.target),
-    },
-    {
-      id: 'ZeromusEx Stack Headmarker',
-      type: 'HeadMarker',
-      netRegex: { capture: true },
-      condition: (data, matches) =>
-        data.decOffset !== undefined && getHeadmarkerId(data, matches) === headmarkerMap.stack,
-      alertText: (data, matches, output) => {
-        if (data.forkedPlayers.includes(data.me)) {
-          if (data.forkedPlayers.length === 1)
-            return output.forkedLightning!();
-          const [player] = data.forkedPlayers.filter((x) => x !== data.me);
-          if (player === undefined)
-            return output.forkedLightning!();
-          return output.lightningWith!({ player: player });
-        }
-        if (data.me === matches.target)
-          return output.stackOnYou!();
-        return output.stackOnTarget!({ player: data.ShortName(matches.target) });
-      },
-      run: (data) => data.forkedPlayers = [],
-      outputStrings: {
-        stackOnYou: Outputs.stackOnYou,
-        stackOnTarget: Outputs.stackOnPlayer,
-        forkedLightning: {
-          en: '내게 번개!',
-          de: 'Blitz auf DIR',
-          fr: 'Éclair sur VOUS',
-          ja: '自分にフォークライトニング',
-          cn: '雷点名',
-          ko: '갈래 번개 대상자',
-        },
-        lightningWith: {
-          en: '내게 번개! (+${player})',
+          en: '안전: 🡼🡾 (왼쪽)',
         },
       },
     },
@@ -218,7 +198,7 @@ const triggerSet: TriggerSet<Data> = {
     {
       id: 'ZeromusEx Miasmic Blast Safe Spots',
       type: 'StartsUsing',
-      netRegex: { id: '8B49', capture: true },
+      netRegex: { id: '8B49', source: 'Zeromus', capture: true },
       condition: (data) => !data.options.AutumnStyle,
       delaySeconds: 0.5,
       promise: async (data, matches) => {
@@ -226,9 +206,6 @@ const triggerSet: TriggerSet<Data> = {
           call: 'getCombatants',
           ids: [parseInt(matches.sourceId, 16)],
         })).combatants;
-
-        if (combatants.length !== 1)
-          return;
 
         const combatant = combatants[0];
         if (combatant === undefined)
@@ -294,14 +271,6 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: 'ZeromusEx Acceleration Bomb',
-      type: 'GainsEffect',
-      netRegex: { effectId: 'A61' },
-      condition: Conditions.targetIsYou(),
-      delaySeconds: (_data, matches) => parseFloat(matches.duration) - 4,
-      response: Responses.stopMoving(),
-    },
-    {
       id: 'ZeromusEx PR Miasmic Blast',
       type: 'StartsUsing',
       netRegex: { id: '8B49', capture: true },
@@ -313,7 +282,7 @@ const triggerSet: TriggerSet<Data> = {
           ids: [parseInt(matches.sourceId, 16)],
         })).combatants;
 
-        if (combatants === undefined || combatants.length !== 1)
+        if (combatants.length !== 1)
           return;
 
         const combatant = combatants[0];
@@ -398,30 +367,354 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: 'ZeromusEx PR Big Bang/Crunch',
+      id: 'ZeromusEx Big Bang',
       type: 'StartsUsing',
-      netRegex: { id: ['8B4C', '8B4D'], capture: false },
-      condition: (data) => data.options.AutumnStyle,
-      infoText: (_data, _matches, output) => output.text!(),
+      netRegex: { id: '8B4C', source: 'Zeromus', capture: false },
+      response: Responses.bleedAoe(),
+    },
+    {
+      id: 'ZeromusEx Forked Lightning',
+      type: 'GainsEffect',
+      netRegex: { effectId: 'ED7' },
+      condition: (data, matches) => {
+        data.forkedPlayers.push(matches.target);
+        return matches.target === data.me;
+      },
+      delaySeconds: (_data, matches) => parseFloat(matches.duration) - 6,
+      durationSeconds: 5,
+      alarmText: (_data, _matches, output) => output.forkedLightning!(),
       outputStrings: {
-        text: {
-          en: '장판 피하다 => 전체 공격',
+        forkedLightning: {
+          en: '라이트닝! 흩어져요',
         },
       },
     },
     {
-      id: 'ZeromusEx PR Rend the Rift',
-      type: 'StartsUsing',
-      netRegex: { id: '8C0D', capture: false },
-      condition: (data) => data.options.AutumnStyle,
-      durationSeconds: 8,
-      infoText: (_data, _matches, output) => output.text!(),
+      id: 'ZeromusEx The Dark Beckons Stack',
+      type: 'HeadMarker',
+      netRegex: { id: headmarkerMap.stack },
+      condition: (data) => data.phase === 'one',
+      // Wait to collect tank markers.
+      delaySeconds: 0.5,
+      alertText: (data, matches, output) => {
+        if (data.busterPlayers.includes(data.me))
+          return;
+        if (data.forkedPlayers.includes(data.me))
+          return;
+        if (data.me === matches.target)
+          return output.stackOnYou!();
+        return output.stackOnTarget!({ player: data.ShortName(matches.target) });
+      },
+      outputStrings: {
+        stackOnYou: Outputs.stackOnYou,
+        stackOnTarget: Outputs.stackOnPlayer,
+      },
+    },
+    {
+      id: 'ZeromusEx Acceleration Bomb',
+      type: 'GainsEffect',
+      netRegex: { effectId: 'A61' },
+      condition: Conditions.targetIsYou(),
+      delaySeconds: (_data, matches) => parseFloat(matches.duration) - 3,
+      response: Responses.stopEverything(),
+    },
+    {
+      id: 'ZeromusEx Tether Bait',
+      type: 'HeadMarker',
+      netRegex: { id: headmarkerMap.tether, capture: false },
+      suppressSeconds: 5,
+      alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '전체 공격 => 장판 피해요',
+          en: '즐빼기! 가운데 뭉쳐요',
         },
       },
     },
+    {
+      id: 'ZeromusEx Tether',
+      type: 'Tether',
+      netRegex: { id: ['00A3', '010B'] },
+      condition: (data, matches) => data.me === matches.target || data.me === matches.source,
+      suppressSeconds: 10,
+      alertText: (data, matches, output) => {
+        const partner = matches.source === data.me ? matches.target : matches.source;
+        return output.breakTether!({ partner: data.ShortName(partner) });
+      },
+      outputStrings: {
+        breakTether: {
+          en: '줄 끊어요: ${partner}',
+          de: 'Verbindung brechen (mit ${partner})',
+          ja: '線切る (${partner})',
+          cn: '拉断连线 (和 ${partner})',
+          ko: '선 끊기 (+ ${partner})',
+        },
+      },
+    },
+    {
+      id: 'ZeromusEx Black Hole Tracker',
+      type: 'HeadMarker',
+      netRegex: { id: headmarkerMap.blackHole },
+      run: (data, matches) => data.blackHolePlayer = matches.target,
+    },
+    {
+      id: 'ZeromusEx Fractured Eventide NE Safe',
+      type: 'StartsUsing',
+      netRegex: { id: '8B3C', source: 'Zeromus', capture: false },
+      alarmText: (data, _matches, output) => {
+        if (data.me === data.blackHolePlayer)
+          return data.options.AutumnStyle ? output.aHole!() : output.blackHole!();
+      },
+      alertText: (data, _matches, output) =>
+        data.options.AutumnStyle ? output.ane!() : output.northeast!(),
+      run: (data) => delete data.blackHolePlayer,
+      outputStrings: {
+        northeast: Outputs.northeast,
+        blackHole: {
+          en: '내게 블랙홀: 오른쪽 벽',
+        },
+        aHole: {
+          en: '내게 블랙홀: 🡺②마커',
+        },
+        ane: {
+          en: '안전: 🡺',
+        },
+      },
+    },
+    {
+      id: 'ZeromusEx Fractured Eventide NW Safe',
+      type: 'StartsUsing',
+      netRegex: { id: '8B3D', source: 'Zeromus', capture: false },
+      alarmText: (data, _matches, output) => {
+        if (data.me === data.blackHolePlayer)
+          return data.options.AutumnStyle ? output.aHole!() : output.blackHole!();
+      },
+      alertText: (data, _matches, output) =>
+        data.options.AutumnStyle ? output.anw!() : output.northwest!(),
+      run: (data) => delete data.blackHolePlayer,
+      outputStrings: {
+        northwest: Outputs.northwest,
+        blackHole: {
+          en: '내게 블랙홀: 왼쪽 벽',
+        },
+        aHole: {
+          en: '내게 블랙홀: 🡸①마커',
+        },
+        anw: {
+          en: '안전: 🡸',
+        },
+      },
+    },
+    {
+      id: 'ZeromusEx Big Crunch',
+      type: 'StartsUsing',
+      netRegex: { id: '8B4D', source: 'Zeromus', capture: false },
+      response: Responses.bleedAoe(),
+    },
+    {
+      id: 'ZeromusEx Sparking Flare Tower',
+      type: 'StartsUsing',
+      netRegex: { id: '8B5E', source: 'Zeromus', capture: false },
+      durationSeconds: 6,
+      infoText: (_data, _matches, output) => output.text!(),
+      run: (data) => data.flareMechanic = 'spread',
+      outputStrings: {
+        text: {
+          en: '타워 밟고 => 흩어져요',
+        },
+      },
+    },
+    {
+      id: 'ZeromusEx Branding Flare Tower',
+      type: 'StartsUsing',
+      netRegex: { id: '8B5F', source: 'Zeromus', capture: false },
+      durationSeconds: 6,
+      infoText: (_data, _matches, output) => output.text!(),
+      run: (data) => data.flareMechanic = 'stack',
+      outputStrings: {
+        text: {
+          en: '타워 밟고 => 페어',
+        },
+      },
+    },
+    {
+      id: 'ZeromusEx Flare Mechanic With Nox',
+      type: 'HeadMarker',
+      netRegex: { id: headmarkerMap.nox },
+      condition: (data, matches) => {
+        data.noxPlayers.push(matches.target);
+        return data.me === matches.target;
+      },
+      alarmText: (data, _matches, output) => {
+        if (data.flareMechanic === 'stack')
+          return output.stackWithNox!();
+        if (data.flareMechanic === 'spread')
+          return output.spreadWithNox!();
+      },
+      outputStrings: {
+        stackWithNox: {
+          en: '페어 + 따라오는 구슬',
+        },
+        spreadWithNox: {
+          en: '흩어지고 + 따라오는 구슬',
+        },
+      },
+    },
+    {
+      id: 'ZeromusEx Flare Mechanic No Nox',
+      type: 'HeadMarker',
+      netRegex: { id: headmarkerMap.nox, capture: false },
+      delaySeconds: 0.5,
+      suppressSeconds: 5,
+      infoText: (data, _matches, output) => {
+        if (data.noxPlayers.includes(data.me))
+          return;
+        if (data.flareMechanic === 'stack')
+          return output.stack!();
+        if (data.flareMechanic === 'spread')
+          return output.spread!();
+      },
+      outputStrings: {
+        stack: {
+          en: '페어! 둘이 뭉쳐요',
+        },
+        spread: {
+          en: '흩어져요',
+        },
+      },
+    },
+    {
+      id: 'ZeromusEx Rend the Rift',
+      type: 'StartsUsing',
+      netRegex: { id: '8C0D', source: 'Zeromus', capture: false },
+      response: Responses.aoe(),
+      run: (data) => data.phase = 'two',
+    },
+    {
+      id: 'ZeromusEx Nostalgia',
+      type: 'Ability',
+      // Call this on the ability not the cast so 10 second mits last.
+      netRegex: { id: '8B6B', source: 'Zeromus', capture: false },
+      suppressSeconds: 5,
+      response: Responses.bigAoe(),
+    },
+    {
+      id: 'ZeromusEx Flow of the Abyss',
+      type: 'MapEffect',
+      netRegex: { flags: '00020001', location: ['02', '03', '04'] },
+      infoText: (data, matches, output) => {
+        const flowMap: { [location: string]: Data['flowLocation'] } = {
+          '02': 'north',
+          '03': 'middle',
+          '04': 'south',
+        } as const;
+
+        data.flowLocation = flowMap[matches.location];
+        if (data.flowLocation === 'north')
+          return output.north!();
+        if (data.flowLocation === 'middle')
+          return output.middle!();
+        if (data.flowLocation === 'south')
+          return output.south!();
+      },
+      outputStrings: {
+        north: {
+          en: '어비스: 앞쪽이 위험해요',
+        },
+        middle: {
+          en: '어비스: 가운데가 위험해요',
+        },
+        south: {
+          en: '어비스: 뒤쪽이 위험해요',
+        },
+      },
+    },
+    {
+      id: 'ZeromusEx Akh Rhai',
+      type: 'HeadMarker',
+      netRegex: { id: headmarkerMap.akhRhaiSpread },
+      condition: Conditions.targetIsYou(),
+      alertText: (data, _matches, output) => {
+        if (data.flowLocation === undefined)
+          return output.spread!();
+        return output[`${data.flowLocation}Spread`]!();
+      },
+      run: (data) => delete data.flowLocation,
+      outputStrings: {
+        spread: Outputs.spread,
+        northSpread: {
+          en: '흩어져요: 가운데/뒤쪽',
+        },
+        middleSpread: {
+          en: '흩어져요: 앞쪽/뒤쪽',
+        },
+        southSpread: {
+          en: '흩어져요: 앞쪽/가운데',
+        },
+      },
+    },
+    {
+      id: 'ZeromusEx Akh Rhai Followup',
+      type: 'Ability',
+      netRegex: { id: '8B74', source: 'Zeromus', capture: false },
+      suppressSeconds: 5,
+      response: Responses.moveAway(),
+    },
+    {
+      id: 'ZeromusEx Umbral Prism Enumeration',
+      type: 'HeadMarker',
+      netRegex: { id: headmarkerMap.enums, capture: false },
+      suppressSeconds: 2,
+      alertText: (data, _matches, output) => {
+        if (data.flowLocation === undefined)
+          return output.enumeration!();
+        return output[`${data.flowLocation}Enumeration`]!();
+      },
+      run: (data) => delete data.flowLocation,
+      outputStrings: {
+        enumeration: {
+          en: '페어',
+          de: 'Enumeration',
+          fr: 'Énumération',
+          ja: 'エアーバンプ',
+          cn: '蓝圈分摊',
+          ko: '2인 장판',
+        },
+        northEnumeration: {
+          en: '페어: 가운데/뒤쪽',
+        },
+        middleEnumeration: {
+          en: '페어: 앞쪽/뒤쪽',
+        },
+        southEnumeration: {
+          en: '페어: 앞쪽/가운데',
+        },
+      },
+    },
+    {
+      id: 'ZeromusEx Umbral Rays Stack',
+      type: 'HeadMarker',
+      netRegex: { id: headmarkerMap.stack, capture: false },
+      condition: (data) => data.phase === 'two',
+      alertText: (data, _matches, output) => {
+        if (data.flowLocation === undefined)
+          return output.stack!();
+        return output[`${data.flowLocation}Stack`]!();
+      },
+      run: (data) => delete data.flowLocation,
+      outputStrings: {
+        stack: Outputs.stackMarker,
+        northStack: {
+          en: '뭉쳐요: 가운데',
+        },
+        middleStack: {
+          en: '뭉쳐요: 앞쪽',
+        },
+        southStack: {
+          en: '뭉쳐요: 앞쪽/가운데',
+        },
+      },
+    },
+    // ////////////////////////////////
     {
       id: 'ZeromusEx PR Big Bang Enrage',
       type: 'StartsUsing',
@@ -435,38 +728,6 @@ const triggerSet: TriggerSet<Data> = {
         },
       },
     },
-    {
-      id: 'ZeromusEx PR Branding Flare',
-      type: 'StartsUsing',
-      netRegex: { id: '8B5F' },
-      condition: (data) => data.options.AutumnStyle,
-      delaySeconds: (_data, matches) => parseFloat(matches.castTime) - 3,
-      durationSeconds: 7,
-      infoText: (_data, _matches, output) => output.text!(),
-      outputStrings: {
-        text: {
-          en: '페어! 둘이 뭉쳐요!',
-        },
-      },
-    },
-    {
-      id: 'ZeromusEx PR Sparking Flare',
-      type: 'StartsUsing',
-      netRegex: { id: '8B5E' },
-      condition: (data) => data.options.AutumnStyle,
-      delaySeconds: (_data, matches) => parseFloat(matches.castTime) - 3,
-      durationSeconds: 7,
-      infoText: (_data, _matches, output) => output.text!(),
-      outputStrings: {
-        text: {
-          en: '흩어져요!',
-        },
-      },
-    },
-    // 441: HP Penalty
-    // A61: Acceleration Bomb(오피샬)
-    // EB2: Divisive Dark
-    // ED7: Forked Lightning (이쪽 -> 오피샬)
   ],
   timelineReplace: [
     {
