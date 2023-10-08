@@ -19,7 +19,7 @@ const triggerSet: OopsyTriggerSet<OopsyData> = {
     'ThordanUN Guerrique Heavy Impact 2': '89E0', // Earth ring small
     'ThordanUN Guerrique Heavy Impact 3': '89E1', // Earth ring large
     'ThordanUN Guerrique Heavy Impact 4': '89E2', // Earth ring giant
-    'ThordanUN Charibert Holy Chain': '14AD', // Failure to break chains on time
+    'ThordanUN Charibert Holy Chain': '89EC', // Failure to break chains on time
   },
   damageFail: {
     'ThordanUN Hermenost Eternal Conviction': '89DD', // Missed towers
