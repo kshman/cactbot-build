@@ -382,10 +382,20 @@ const triggerSet: TriggerSet<Data> = {
       },
       delaySeconds: (_data, matches) => parseFloat(matches.duration) - 6,
       durationSeconds: 5,
-      alarmText: (_data, _matches, output) => output.forkedLightning!(),
+      alarmText: (data, _matches, output) => {
+        if (!data.options.AutumnStyle || data.forkedPlayers.length !== 2)
+          return output.forkedLightning!();
+        const [p1, p2] = data.forkedPlayers;
+        if (p1 === data.me)
+          return output.lightiningWith!({ partner: p2 });
+        return output.lightiningWith!({ partner: p1 });
+      },
       outputStrings: {
         forkedLightning: {
           en: '라이트닝! 흩어져요',
+        },
+        lightiningWith: {
+          en: '라이트닝! 흩어져요 (+${partner})',
         },
       },
     },
@@ -473,7 +483,7 @@ const triggerSet: TriggerSet<Data> = {
           en: '내게 블랙홀: 오른쪽 벽',
         },
         aHole: {
-          en: '내게 블랙홀: 🡺②마커',
+          en: '내게 블랙홀: ②🡺마커',
         },
         ane: {
           en: '안전: 🡺',
@@ -693,24 +703,24 @@ const triggerSet: TriggerSet<Data> = {
     {
       id: 'ZeromusEx Umbral Rays Stack',
       type: 'HeadMarker',
-      netRegex: { id: headmarkerMap.stack, capture: false },
+      netRegex: { id: headmarkerMap.stack, capture: true },
       condition: (data) => data.phase === 'two',
-      alertText: (data, _matches, output) => {
+      alertText: (data, matches, output) => {
         if (data.flowLocation === undefined)
           return output.stack!();
-        return output[`${data.flowLocation}Stack`]!();
+        return output[`${data.flowLocation}Stack`]!({ player: data.ShortName(matches.target) });
       },
       run: (data) => delete data.flowLocation,
       outputStrings: {
         stack: Outputs.stackMarker,
         northStack: {
-          en: '뭉쳐요: 가운데',
+          en: '뭉쳐요: ${player} + 가운데',
         },
         middleStack: {
-          en: '뭉쳐요: 앞쪽',
+          en: '뭉쳐요: ${player} + 앞쪽',
         },
         southStack: {
-          en: '뭉쳐요: 앞쪽/가운데',
+          en: '뭉쳐요: ${player} + 앞쪽/가운데',
         },
       },
     },
