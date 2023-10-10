@@ -374,9 +374,10 @@ const templateOptions: OptionsTemplate = {
     {
       id: 'MinimumTimeForOverwrittenMit',
       name: {
-        en: '최소 겹치는 mit 시간 보이기(초단위)',
+        en: '파티 버프 겹치는 겹치는 경고 시간 (초단위)',
         de: 'Minimum Zeit überschriebene Mitigation anzuzeigen (Sekunden)',
         cn: '显示被顶减伤最小时间 (秒)',
+        ko: '파티 생존기 덮어씀 경고를 표시할 기준 시간 (초)',
       },
       type: 'float',
       default: 2,
