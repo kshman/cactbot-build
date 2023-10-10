@@ -8,6 +8,10 @@ import { RaidbossData } from '../../../../../types/data';
 import { PluginCombatantState } from '../../../../../types/event';
 import { TriggerSet } from '../../../../../types/trigger';
 
+// TODO: Abyssal Echoes safe spots
+// TODO: Flare safe spots
+// TODO: Meteor tether calls (could we say like 3 left, 1 right?)
+
 export interface Data extends RaidbossData {
   phase: 'one' | 'two';
   seenSableThread?: boolean;
@@ -67,7 +71,7 @@ const triggerSet: TriggerSet<Data> = {
       regex: /^Big Bang$/,
       beforeSeconds: 13,
       suppressSeconds: 20,
-      response: Responses.spread(),
+      response: Responses.spread('alert'),
     },
     {
       id: 'ZeromusEx Big Crunch Spread',
@@ -76,7 +80,7 @@ const triggerSet: TriggerSet<Data> = {
       regex: /^Big Crunch$/,
       beforeSeconds: 13,
       suppressSeconds: 20,
-      response: Responses.spread(),
+      response: Responses.spread('alert'),
     },
   ],
   triggers: [
@@ -89,6 +93,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'HP 만땅으로!',
+          de: 'Voll heilen',
         },
       },
     },
@@ -106,9 +111,11 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         lineStackOn: {
           en: '${num}연속 사브레 스레드: ${player}',
+          de: '${num}x in einer Linie sammeln mit ${player}',
         },
         lineStackOnYou: {
           en: '내게 ${num}연속 사브레 스레드',
+          de: '${num}x in einer Linie sammeln mit DIR',
         },
       },
     },
@@ -207,6 +214,9 @@ const triggerSet: TriggerSet<Data> = {
           ids: [parseInt(matches.sourceId, 16)],
         })).combatants;
 
+        if (combatants.length !== 1)
+          return;
+
         const combatant = combatants[0];
         if (combatant === undefined)
           return;
@@ -227,7 +237,16 @@ const triggerSet: TriggerSet<Data> = {
           intercard: [-2, 0, 2, 3, 8, 13],
         };
 
-        let possibleSafeSpots = Directions.output16Dir;
+        // Filter to north half.
+        const validSafeSpots = [
+          'dirNNE',
+          'dirNE',
+          'dirENE',
+          'dirWNW',
+          'dirNW',
+          'dirNNW',
+        ] as const;
+        let possibleSafeSpots = [...validSafeSpots];
 
         for (const blast of data.miasmicBlasts) {
           // special case for center - don't need to find relative dirs, just remove all intercards
@@ -251,23 +270,38 @@ const triggerSet: TriggerSet<Data> = {
           }
         }
 
-        if (possibleSafeSpots.length !== 2)
+        if (possibleSafeSpots.length !== 1)
           return output.avoidUnknown!();
 
-        const [safeDir1, safeDir2] = possibleSafeSpots;
-        if (safeDir1 === undefined || safeDir2 === undefined)
+        const [safeDir] = possibleSafeSpots;
+        if (safeDir === undefined)
           return output.avoidUnknown!();
 
-        return output.combo!({ dir1: output[safeDir1]!(), dir2: output[safeDir2]!() });
+        return output[safeDir]!();
       },
       outputStrings: {
-        combo: {
-          en: '${dir1} / ${dir2}',
-        },
         avoidUnknown: {
           en: 'Avoid Line Cleaves',
+          de: 'Weiche den Linien Cleaves aus',
         },
-        ...Directions.outputStrings16Dir,
+        dirNNE: {
+          en: 'North Wall (NNE/WSW)',
+        },
+        dirNNW: {
+          en: 'North Wall (NNW/ESE)',
+        },
+        dirNE: {
+          en: 'Corners (NE/SW)',
+        },
+        dirNW: {
+          en: 'Corners (NW/SE)',
+        },
+        dirENE: {
+          en: 'East Wall (ENE/SSW)',
+        },
+        dirWNW: {
+          en: 'West Wall (WNW/SSE)',
+        },
       },
     },
     {
@@ -393,6 +427,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         forkedLightning: {
           en: '라이트닝! 흩어져요',
+          de: 'Verteilen (Gabelblitz)',
         },
         lightiningWith: {
           en: '라이트닝! 흩어져요 (+${partner})',
@@ -437,6 +472,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: '즐빼기! 가운데 뭉쳐요',
+          de: 'Gruppe in die Mitte für Verbindungen',
         },
       },
     },
@@ -481,6 +517,7 @@ const triggerSet: TriggerSet<Data> = {
         northeast: Outputs.northeast,
         blackHole: {
           en: '내게 블랙홀: 오른쪽 벽',
+          de: 'Schwarzes Loch an die östliche Wand',
         },
         aHole: {
           en: '내게 블랙홀: ②🡺마커',
@@ -505,6 +542,7 @@ const triggerSet: TriggerSet<Data> = {
         northwest: Outputs.northwest,
         blackHole: {
           en: '내게 블랙홀: 왼쪽 벽',
+          de: 'Schwarzes Loch an die westliche Wand',
         },
         aHole: {
           en: '내게 블랙홀: 🡸①마커',
@@ -530,6 +568,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: '타워 밟고 => 흩어져요',
+          de: 'Türme nehmen => Verteilen',
         },
       },
     },
@@ -543,6 +582,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: '타워 밟고 => 페어',
+          de: 'Türme nehmen => mit Partner sammeln',
         },
       },
     },
@@ -563,9 +603,11 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         stackWithNox: {
           en: '페어 + 따라오는 구슬',
+          de: 'Mit Partner Sammeln + verfolgendes Nox',
         },
         spreadWithNox: {
           en: '흩어지고 + 따라오는 구슬',
+          de: 'Verteilen + verfolgendes Nox',
         },
       },
     },
@@ -586,9 +628,11 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         stack: {
           en: '페어! 둘이 뭉쳐요',
+          de: 'mit Partner sammeln',
         },
         spread: {
           en: '흩어져요',
+          de: 'Verteilen',
         },
       },
     },
@@ -629,12 +673,15 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         north: {
           en: '어비스: 앞쪽이 위험해요',
+          de: 'Weg vom Norden',
         },
         middle: {
           en: '어비스: 가운데가 위험해요',
+          de: 'Weg von der Mitte',
         },
         south: {
           en: '어비스: 뒤쪽이 위험해요',
+          de: 'Weg vom Süden',
         },
       },
     },
@@ -653,12 +700,15 @@ const triggerSet: TriggerSet<Data> = {
         spread: Outputs.spread,
         northSpread: {
           en: '흩어져요: 가운데/뒤쪽',
+          de: 'Verteilen Mitte/Süden',
         },
         middleSpread: {
           en: '흩어져요: 앞쪽/뒤쪽',
+          de: 'Verteilen Norden/Süden',
         },
         southSpread: {
           en: '흩어져요: 앞쪽/가운데',
+          de: 'Verteilen Norden/Mitte',
         },
       },
     },
@@ -691,12 +741,15 @@ const triggerSet: TriggerSet<Data> = {
         },
         northEnumeration: {
           en: '페어: 가운데/뒤쪽',
+          de: 'Enumeration Mitte/Süden',
         },
         middleEnumeration: {
           en: '페어: 앞쪽/뒤쪽',
+          de: 'Enumeration Norden/Süden',
         },
         southEnumeration: {
           en: '페어: 앞쪽/가운데',
+          de: 'Enumeration Norden/Mitte',
         },
       },
     },
@@ -715,12 +768,15 @@ const triggerSet: TriggerSet<Data> = {
         stack: Outputs.stackMarker,
         northStack: {
           en: '뭉쳐요: ${player} + 가운데',
+          de: 'Mittig sammeln (${player})',
         },
         middleStack: {
           en: '뭉쳐요: ${player} + 앞쪽',
+          de: 'Nördlich sammeln (${player})',
         },
         southStack: {
           en: '뭉쳐요: ${player} + 앞쪽/가운데',
+          de: 'Nördlich/Mittig sammeln (${player})',
         },
       },
     },
@@ -748,13 +804,14 @@ const triggerSet: TriggerSet<Data> = {
     },
     {
       'locale': 'de',
-      'missingTranslations': true,
       'replaceSync': {
         'Comet': 'Komet',
         'Toxic Bubble': 'Giftblase',
         'Zeromus': 'Zeromus',
       },
       'replaceText': {
+        '--spread--': '--verteilen--',
+        '--towers--': '--Türme--',
         'Abyssal Echoes': 'Abyssal-Echos',
         'Abyssal Nox': 'Abyssal-Nox',
         'Akh Rhai': 'Akh Rhai',
@@ -778,8 +835,11 @@ const triggerSet: TriggerSet<Data> = {
         'Primal Roar': 'Lautes Gebrüll',
         'Prominence Spine': 'Ossale Protuberanz',
         'Rend the Rift': 'Dimensionsstörung',
+        '(?<! )Roar': 'Brüllen',
         'Sable Thread': 'Pechschwarzer Pfad',
         'Sparking Flare': 'Flare-Funken',
+        'The Dark Beckons': 'Fressende Finsternis: Last',
+        'The Dark Divides': 'Fressende Finsternis: Zerschmetterung',
         'Umbral Prism': 'Umbrales Prisma',
         'Umbral Rays': 'Pfad der Dunkelheit',
         'Visceral Whirl': 'Viszerale Schürfwunden',
@@ -822,8 +882,11 @@ const triggerSet: TriggerSet<Data> = {
         'Primal Roar': 'Rugissement furieux',
         'Prominence Spine': 'Évidence ossuaire',
         'Rend the Rift': 'Déchirure dimensionnelle',
+        '(?<! )Roar': 'Rugissement',
         'Sable Thread': 'Rayon sombre',
         'Sparking Flare': 'Étincelle de brasier',
+        'The Dark Beckons': 'Ténèbres rongeuses : Gravité',
+        'The Dark Divides': 'Ténèbres rongeuses : Pulvérisation',
         'Umbral Prism': 'Déluge de Ténèbres',
         'Umbral Rays': 'Voie de ténèbres',
         'Visceral Whirl': 'Écorchure viscérale',
@@ -866,8 +929,11 @@ const triggerSet: TriggerSet<Data> = {
         'Primal Roar': '大咆哮',
         'Prominence Spine': 'プロミネンススパイン',
         'Rend the Rift': '次元干渉',
+        '(?<! )Roar': '咆哮',
         'Sable Thread': '漆黒の熱線',
         'Sparking Flare': 'フレアスパーク',
+        'The Dark Beckons': '闇の侵食：重',
+        'The Dark Divides': '闇の侵食：砕',
         'Umbral Prism': '闇の重波動',
         'Umbral Rays': '闇の波動',
         'Visceral Whirl': 'ヴィセラルワール',
