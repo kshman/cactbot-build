@@ -56,15 +56,15 @@ hideall "--sync--"
 3012.7 "Tempest" sync / 1[56]:[^:]*:Llymlaen:880B:/
 3023.8 "Seafoam Spiral" sync / 1[56]:[^:]*:Llymlaen:880D:/
 3032.9 "Wind Rose/Seafoam Spiral" sync / 1[56]:[^:]*:Llymlaen:[880C|880D]:/
-3048.0 "--sync--" sync / 1[56]:[^:]*:Llymlaen:8CCE:/ window 10,10
+3048.0 "--middle--" sync / 1[56]:[^:]*:Llymlaen:8CCE:/ window 10,10
 3050.0 "Navigator's Trident" sync / 1[56]:[^:]*:Llymlaen:880E:/
-3050.2 "Dire Straits" sync / 1[56]:[^:]*:Llymlaen:8CCB:/ window 1,1
-3051.1 "Dire Straits" sync / 1[56]:[^:]*:Llymlaen:880F:/ window 1,1
-3052.9 "Dire Straits" sync / 1[56]:[^:]*:Llymlaen:8810:/ window 1,1
-3053.3 "--sync--" sync / 1[56]:[^:]*:Llymlaen:8CCF:/ window 10,10
+3050.2 "Dire Straits" #sync / 1[56]:[^:]*:Llymlaen:8CCB:/
+3051.1 "Dire Straits" #sync / 1[56]:[^:]*:Llymlaen:880F:/
+3052.9 "Dire Straits" #sync / 1[56]:[^:]*:Llymlaen:8810:/
+3053.3 "--jump--" sync / 1[56]:[^:]*:Llymlaen:8CCF:/ window 10,10
 3054.5 "Navigator's Trident" sync / 1[56]:[^:]*:Llymlaen:8CD0:/
 3061.5 "Navigator's Trident" sync / 1[56]:[^:]*:Llymlaen:8811:/
-3064.6 "--sync--" sync / 1[56]:[^:]*:Llymlaen:8809:/
+3064.6 "--middle--" sync / 1[56]:[^:]*:Llymlaen:8809:/
 3073.6 "Wind Rose/Seafoam Spiral" sync / 1[56]:[^:]*:Llymlaen:[880C|880D]:/
 3084.7 "Surging Wave" sync / 1[56]:[^:]*:Llymlaen:8812:/ window 1,1
 3085.7 "Surging Wave" sync / 1[56]:[^:]*:Llymlaen:8813:/ window 1,1
@@ -77,9 +77,9 @@ hideall "--sync--"
 3148.2 "Stormy Seas" sync / 1[56]:[^:]*:Llymlaen:881D:/ window 10,10
 3153.0 "Stormwhorl x3" duration 4 #sync / 1[56]:[^:]*:Llymlaen:881E:/
 3158.0 "Stormwinds" sync / 1[56]:[^:]*:Llymlaen:881F:/
-3166.6 "--sync--" sync / 1[56]:[^:]*:Llymlaen:8809:/ window 10,10
+3166.6 "--jump--" sync / 1[56]:[^:]*:Llymlaen:8809:/ window 10,10
 3171.9 "Denizens of the Deep" sync / 1[56]:[^:]*:Llymlaen:8820:/
-3178.8 "--sync--" sync / 1[56]:[^:]*:Llymlaen:8809:/
+3178.8 "--middle--" sync / 1[56]:[^:]*:Llymlaen:8809:/
 3185.9 "Wind Rose/Seafoam Spiral" sync / 1[56]:[^:]*:Llymlaen:[880C|880D]:/
 3185.9 "--sync--" sync / 1[56]:[^:]*:Llymlaen:8825:/
 3186.0 "Serpents' Tide" sync / 1[56]:[^:]*:Thalaos:[8826|8827|8828|8829]:/
@@ -89,7 +89,7 @@ hideall "--sync--"
 3207.9 "--sync--" sync / 1[56]:[^:]*:Llymlaen:8825:/
 3208.0 "Serpents' Tide" sync / 1[56]:[^:]*:Thalaos:[8826|8827|8828|8829]:/
 3212.7 "Maelstrom" sync / 1[56]:[^:]*:Llymlaen:882A:/
-3214.0 "--sync--" sync / 1[56]:[^:]*:Llymlaen:8809:/ window 10,10
+3214.0 "--middle--" sync / 1[56]:[^:]*:Llymlaen:8809:/ window 10,10
 3218.1 "Godsbane" sync / 1[56]:[^:]*:Llymlaen:8824:/
 3221.1 "Godsbane" sync / 1[56]:[^:]*:Llymlaen:8821:/
 3223.1 "Godsbane" sync / 1[56]:[^:]*:Llymlaen:8C6C:/
@@ -109,19 +109,8 @@ hideall "--sync--"
 3273.7 "Surging Wave" sync / 1[56]:[^:]*:Llymlaen:8812:/
 3274.7 "Surging Wave" sync / 1[56]:[^:]*:Llymlaen:8813:/
 3274.9 "Shockwave" sync / 1[56]:[^:]*:Llymlaen:8814:/ window 10,10
-3280.9 "Frothing Sea" sync / 1[56]:[^:]*:Llymlaen:880A:/
-3282.8 "To the Last" sync / 1[56]:[^:]*:Llymlaen:8815:/
-3282.9 "Frothing Sea" sync / 1[56]:[^:]*:Llymlaen:880A:/
-3282.9 "To the Last" sync / 1[56]:[^:]*:Llymlaen:8817:/
-3283.7 "To the Last" sync / 1[56]:[^:]*:Llymlaen:8818:/
-3283.8 "Frothing Sea" sync / 1[56]:[^:]*:Llymlaen:880A:/
-3284.9 "To the Last" sync / 1[56]:[^:]*:Llymlaen:8817:/
-3285.7 "To the Last" sync / 1[56]:[^:]*:Llymlaen:8818:/
-3285.8 "Frothing Sea" sync / 1[56]:[^:]*:Llymlaen:880A:/
-3287.0 "To the Last" sync / 1[56]:[^:]*:Llymlaen:8817:/
-3287.7 "To the Last" sync / 1[56]:[^:]*:Llymlaen:8818:/
-3287.7 "Frothing Sea" sync / 1[56]:[^:]*:Llymlaen:880A:/
-3295.1 "Left/Right Strait" sync / 1[56]:[^:]*:Llymlaen:[8851|8852]:/
+3282.8 "To the Last" duration 5 sync / 1[56]:[^:]*:Llymlaen:8815:/
+3295.1 "Left/Right Strait" sync / 1[56]:[^:]*:Llymlaen:[8851|8852]:/ window 10,10
 3298.2 "--sync--" sync / 1[56]:[^:]*:Llymlaen:8809:/
 3305.4 "Hard Water" sync / 1[56]:[^:]*:Perykos:[8835|8836]:/
 3307.4 "Hard Water" sync / 1[56]:[^:]*:Thalaos:[8835|8836]:/
@@ -169,13 +158,15 @@ hideall "--sync--"
 4038.4 "Reproduce" sync / 1[56]:[^:]*:Oschon:8989:/ window 10,10
 4048.2 "Swinging Draw" sync / 1[56]:[^:]*:Oschon's Avatar:[898A|898B|898C]:/
 4054.4 "Swinging Draw" sync / 1[56]:[^:]*:Oschon's Avatar:[898A|898B|898C]:/
+# 왠지 이거 루프 같은데
 4055.5 "--sync--" sync / 1[56]:[^:]*:Oschon:8998:/
 4059.7 "Reproduce" sync / 1[56]:[^:]*:Oschon:8989:/ window 10,10
 4069.5 "Swinging Draw" sync / 1[56]:[^:]*:Oschon's Avatar:[898A|898B|898C]:/
 4075.7 "Swinging Draw" sync / 1[56]:[^:]*:Oschon's Avatar:[898A|898B|898C]:/
+#요까지 루프 의심
 4076.8 "--sync--" sync / 1[56]:[^:]*:Oschon:8998:/ window 10,10
 4082.5 "Flinted Foehn x7" duration 3 sync / 1[56]:[^:]*:Oschon:89A3:/
-4094.7 "Soaring Minuet" sync / 1[56]:[^:]*:Oschon:8D0E:/ window 10,10
+4094.7 "Soaring Minuet" sync / 1[56]:[^:]*:Oschon:8D0E:/ window 100,10
 4101.8 "the Arrow" sync / 1[56]:[^:]*:Oschon:899B:/
 4101.8 "the Arrow" sync / 1[56]:[^:]*:Oschon:899B:/
 4102.8 "the Arrow" sync / 1[56]:[^:]*:Oschon:899D:/
@@ -189,7 +180,7 @@ hideall "--sync--"
 4136.9 "Sudden Downpour" sync / 1[56]:[^:]*:Oschon:8CBA:/
 4134.0 "--sync--" sync / 1[56]:[^:]*:Oschon:8998:/ window 10,10
 4138.1 "Downhill" sync / 1[56]:[^:]*:Oschon:899F:/
-4145.2 "Climbing Shot" sync / 1[56]:[^:]*:Oschon:[8991|8892]:/
+4145.2 "Climbing Shot" sync / 1[56]:[^:]*:Oschon:[8990|8991|8992|8993]:/
 4147.0 "Downhill" sync / 1[56]:[^:]*:Oschon:89A1:/
 4153.3 "Soaring Minuet" sync / 1[56]:[^:]*:Oschon:8994:/
 4156.5 "--sync--" sync / 1[56]:[^:]*:Oschon:8998:/
@@ -291,24 +282,12 @@ hideall "--sync--"
 6032.2 "First Form" #sync / 1[56]:[^:]*:Eulogia:8A0A:/
 6039.4 "Second Form" #sync / 1[56]:[^:]*:Eulogia:8A0B:/
 6046.6 "Third Form" #sync / 1[56]:[^:]*:Eulogia:8A0F:/
-6050.7 "Quintessence" sync / 1[56]:[^:]*:Eulogia:[8A14|8A15|8A16]:/
-6050.9 "Quintessence" sync / 1[56]:[^:]*:Eulogia:[8A17|8A18|8A19]:/
-6051.5 "Quintessence" sync / 1[56]:[^:]*:Eulogia:[8A1A|8A1B|8A1C]:/
-6054.5 "Quintessence" sync / 1[56]:[^:]*:Eulogia:[8A17|8A18|8A19]:/
-6055.1 "Quintessence" sync / 1[56]:[^:]*:Eulogia:[8CE5|8CE6|8CE7]:/
-6058.1 "Quintessence" sync / 1[56]:[^:]*:Eulogia:[8A17|8A18|8A19]:/
-6058.7 "Quintessence" sync / 1[56]:[^:]*:Eulogia:[8CE8|8CE9|8CEA]:/
+6050.7 "Quintessence" duration 7
 6074.6 "--sync--" sync / 1[56]:[^:]*:Eulogia:8A08:/ window 10,10
 6084.0 "First Form" #sync / 1[56]:[^:]*:Eulogia:8A0D:/
 6091.2 "Second Form" #sync / 1[56]:[^:]*:Eulogia:8A0B:/
 6098.4 "Third Form" #sync / 1[56]:[^:]*:Eulogia:8A12:/
-6102.5 "Quintessence" sync / 1[56]:[^:]*:Eulogia:[8A14|8A15|8A16]:/
-6102.7 "Quintessence" sync / 1[56]:[^:]*:Eulogia:[8A17|8A18|8A19]:/
-6103.3 "Quintessence" sync / 1[56]:[^:]*:Eulogia:[8A1A|8A1B|8A1C]:/
-6106.3 "Quintessence" sync / 1[56]:[^:]*:Eulogia:[8A17|8A18|8A19]:/
-6106.9 "Quintessence" sync / 1[56]:[^:]*:Eulogia:[8CE5|8CE6|8CE7]:/
-6109.9 "Quintessence" sync / 1[56]:[^:]*:Eulogia:[8A17|8A18|8A19]:/
-6110.5 "Quintessence" sync / 1[56]:[^:]*:Eulogia:[8CE8|8CE9|8CEA]:/
+6102.5 "Quintessence" duration 7
 6122.8 "Sunbeam" sync / 1[56]:[^:]*:Eulogia:8A00:/ window 100,0
 6122.8 "Sunbeam" sync / 1[56]:[^:]*:Eulogia:8A01:/
 6129.0 "--sync--" sync / 1[56]:[^:]*:Eulogia:8A02:/
@@ -339,10 +318,10 @@ hideall "--sync--"
 6219.8 "Destructive Bolt" sync / 1[56]:[^:]*:Eulogia:8CEC:/
 6220.8 "Destructive Bolt" sync / 1[56]:[^:]*:Eulogia:8CFD:/
 6223.9 "--sync--" sync / 1[56]:[^:]*:Eulogia:8A02:/ window 10,10
-6231.2 "Hieroglyphika" sync / 1[56]:[^:]*:Eulogia:[8A43|8A44]:/
+6231.2 "Hieroglyphika" sync / 1[56]:[^:]*:Eulogia:8A43:/
 6242.4 "--sync--" sync / 1[56]:[^:]*:Fist of Judgment:8A46:/
 6242.4 "--sync--" sync / 1[56]:[^:]*:Fist of Wrath:8A45:/
-6248.3 "Hieroglyphika" sync / 1[56]:[^:]*:Eulogia:[8A43|8A44]:/
+6248.3 "Hieroglyphika" #sync / 1[56]:[^:]*:Eulogia:8A44:/
 6253.1 "Hand of the Destroyer" sync / 1[56]:[^:]*:Eulogia:[8A47|8A48]:/
 6253.5 "Hand of the Destroyer" sync / 1[56]:[^:]*:Fist of Judgment:[8A49|8A4A]:/
 6257.2 "--sync--" sync / 1[56]:[^:]*:Eulogia:8A02:/ window 10,10
@@ -385,13 +364,7 @@ hideall "--sync--"
 6430.2 "First Form" #sync / 1[56]:[^:]*:Eulogia:8A10:/ # 8A0D
 6437.4 "Second Form" #sync / 1[56]:[^:]*:Eulogia:8A0B:/ # 8A11
 6444.6 "Third Form" #sync / 1[56]:[^:]*:Eulogia:8A0F:/ # 8A0C
-6448.7 "Quintessence" sync / 1[56]:[^:]*:Eulogia:[8A14|8A15|8A16]:/
-6448.9 "Quintessence" sync / 1[56]:[^:]*:Eulogia:[8A17|8A18|8A19]:/
-6449.5 "Quintessence" sync / 1[56]:[^:]*:Eulogia:[8A1A|8A1B|8A1C]:/
-6452.5 "Quintessence" sync / 1[56]:[^:]*:Eulogia:[8A17|8A18|8A19]:/
-6453.1 "Quintessence" sync / 1[56]:[^:]*:Eulogia:[8CE5|8CE6|8CE7]:/
-6456.1 "Quintessence" sync / 1[56]:[^:]*:Eulogia:[8A17|8A18|8A19]:/
-6456.7 "Quintessence" sync / 1[56]:[^:]*:Eulogia:[8CE8|8CE9|8CEA]:/
+6448.7 "Quintessence" duration 7
 6469.0 "Sunbeam" sync / 1[56]:[^:]*:Eulogia:8A00:/
 6469.0 "Sunbeam" sync / 1[56]:[^:]*:Eulogia:8A01:/
 6477.3 "--sync--" sync / 1[56]:[^:]*:Eulogia:8A02:/
