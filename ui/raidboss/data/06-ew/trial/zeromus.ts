@@ -30,6 +30,8 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: 'HP 만땅으로',
           de: 'Voll heilen',
+          ja: 'HPを全回復する',
+          cn: '奶满全队',
         },
       },
     },
@@ -43,6 +45,8 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: '바닥 동그라미 피해요',
           de: 'Weg von den leuchtenden Kreisen',
+          ja: '光っている円から離れる',
+          cn: '远离黑洞',
         },
       },
     },
@@ -57,6 +61,8 @@ const triggerSet: TriggerSet<Data> = {
         lineStackOn: {
           en: '5연속 한줄 뭉치기: ${player}',
           de: '5x in einer Linie Sammeln auf ${player}',
+          ja: '${player}に5回の直線頭割り',
+          cn: '${player} 直线分摊 (5次)',
         },
       },
     },
@@ -71,6 +77,8 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: '${dir1} / ${dir2}',
           de: '${dir1} / ${dir2}',
+          ja: '${dir1} / ${dir2}',
+          cn: '${dir1} / ${dir2}',
         },
         ne: Outputs.northeast,
         sw: Outputs.southwest,
@@ -87,6 +95,8 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: '${dir1} / ${dir2}',
           de: '${dir1} / ${dir2}',
+          ja: '${dir1} / ${dir2}',
+          cn: '${dir1} / ${dir2}',
         },
         nw: Outputs.northwest,
         se: Outputs.southeast,
@@ -132,6 +142,8 @@ const triggerSet: TriggerSet<Data> = {
         tower: {
           en: '타워 밟아요',
           de: 'Steh im Turm',
+          ja: '塔を踏む',
+          cn: '踩塔',
         },
       },
     },
@@ -191,6 +203,8 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: '아크라이: 흩어져서 + 그대로 밖으로',
           de: 'Verteilen + Draußen stehen',
+          ja: '散開 + 範囲から離れる',
+          cn: '分散 + 远离',
         },
       },
     },

@@ -348,7 +348,7 @@ const triggerSet: TriggerSet<Data> = {
         }
 
         // 디버그
-        return { infoText: 'beloneCoilsCounter: ' + String(data.yppBeloneCoilsCounter) };
+        return { infoText: `beloneCoilsCounter: ${String(data.yppBeloneCoilsCounter)}` };
       },
     },
     {

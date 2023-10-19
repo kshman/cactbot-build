@@ -1,0 +1,341 @@
+# Thaleia
+
+hideall "--Reset--"
+hideall "--sync--"
+
+0.0 "--Reset--" sync / 00:0839::.*is no longer sealed/ window 100000 jump 0
+
+#The Way of the Wise
+1000.0 "--sync--" sync / 00:0839::The Way Of The Wise will be sealed off/ window 10000,0
+1011.4 "Water III" sync / 1[56]:[^:]*:Serpent of Thaleia:8A6E:/
+1015.2 "Water III" sync / 1[56]:[^:]*:Serpent of Thaleia:8A6E:/
+1022.8 "Water" #sync / 1[56]:[^:]*:Divine Sprite:8A8D:/
+1026.0 "Water" #sync / 1[56]:[^:]*:Water Sprite:8A8D:/
+1027.6 "Water" #sync / 1[56]:[^:]*:Water Sprite:8A8D:/
+1029.5 "Water" #sync / 1[56]:[^:]*:Water Sprite:8A8D:/
+1030.2 "Water" #sync / 1[56]:[^:]*:Water Sprite:8A8D:/
+1033.1 "Flood" #sync / 1[56]:[^:]*:Divine Sprite:8A70:/
+1033.3 "Burst" #sync / 1[56]:[^:]*:Water Sprite:8A73:/
+1033.4 "Flood" #sync / 1[56]:[^:]*:Divine Sprite:8A70:/
+1033.5 "Burst" #sync / 1[56]:[^:]*:Water Sprite:8A73:/
+1035.1 "Water" #sync / 1[56]:[^:]*:Water Sprite:8A8D:/
+1036.4 "Burst" #sync / 1[56]:[^:]*:Divine Sprite:8A71:/
+1036.7 "Water" #sync / 1[56]:[^:]*:Divine Sprite:8A8D:/
+1037.6 "Burst" #sync / 1[56]:[^:]*:Water Sprite:8A73:/
+1037.9 "Flood" #sync / 1[56]:[^:]*:Water Sprite:8A72:/
+1040.0 "Water" #sync / 1[56]:[^:]*:Divine Sprite:8A8D:/
+1041.2 "Burst" #sync / 1[56]:[^:]*:Water Sprite:8A73:/
+1044.5 "Water" #sync / 1[56]:[^:]*:Divine Sprite:8A8D:/
+1044.7 "Burst" #sync / 1[56]:[^:]*:Divine Sprite:8A71:/
+1046.0 "이 뒤로 몰라요" duration 5
+
+
+# The River of Knowledge / Thaliak
+2000.0 "--sync--" sync / 00:0839::The River Of Knowledge will be sealed off/ window 10000,0
+2010.7 "Katarraktes" sync / 1[56]:[^:]*:Thaliak:88D1:/
+2011.4 "Katarraktes" sync / 1[56]:[^:]*:Thaliak:88DA:/
+2017.0 "--sync--" sync / 1[56]:[^:]*:Thaliak:88DB:/
+2024.2 "Rheognosis" sync / 1[56]:[^:]*:Thaliak:88C4:/
+2030.3 "--sync--" sync / 1[56]:[^:]*:Thaliak:88C6:/
+2044.4 "Rheognosis" sync / 1[56]:[^:]*:Thaliak:88C7:/
+2052.4 "Thlipsis" sync / 1[56]:[^:]*:Thaliak:88D8:/
+2054.4 "Thlipsis" sync / 1[56]:[^:]*:Thaliak:88D9:/
+2060.5 "--sync--" sync / 1[56]:[^:]*:Thaliak:88DB:/
+2067.7 "Left/Right Bank" sync / 1[56]:[^:]*:Thaliak:[88D2|88D3]:/
+2074.8 "Left/Right Bank" sync / 1[56]:[^:]*:Thaliak:[88D2|88D3]:/
+2080.9 "Hydroptosis" sync / 1[56]:[^:]*:Thaliak:88D4:/
+2081.9 "Hydroptosis" sync / 1[56]:[^:]*:Thaliak:88D5:/
+2093.0 "Rhyton" sync / 1[56]:[^:]*:Thaliak:[88D6|88D7]:/
+2100.2 "--sync--" sync / 1[56]:[^:]*:Thaliak:88DB:/
+2108.5 "Tetraktys x7" duration 20 sync / 1[56]:[^:]*:Thaliak:88C9:/ # 이 뒤로 88CAx3 88CBx3
+2116.5 "--sync--" sync / 1[56]:[^:]*:Thaliak:88CA:/
+2124.1 "--sync--" sync / 1[56]:[^:]*:Thaliak:88CB:/
+2134.8 "Tetraktuos Kosmos" sync / 1[56]:[^:]*:Thaliak:[88CC|88CD|88CE]:/
+2143.7 "Tetraktuos Kosmos" sync / 1[56]:[^:]*:Thaliak:[88CC|88CD|88CE]:/
+2154.9 "Tetraktuos Kosmos" sync / 1[56]:[^:]*:Thaliak:[88CC|88CD|88CE]:/
+2165.3 "--sync--" sync / 1[56]:[^:]*:Thaliak:88DB:/
+2172.5 "Rheognosis Petrine" sync / 1[56]:[^:]*:Thaliak:88C5:/
+2178.6 "--sync--" sync / 1[56]:[^:]*:Thaliak:88C6:/
+2192.7 "Rheognosis" sync / 1[56]:[^:]*:Thaliak:88C7:/
+2193.7 "Crash x5" #sync / 1[56]:[^:]*:Thaliak:88C8:/
+2198.4 "--sync--" sync / 1[56]:[^:]*:Thaliak:88DB:/
+2205.7 "Hieroglyphika" sync / 1[56]:[^:]*:Thaliak:88CF:/
+2225.7 "Hieroglyphika" sync / 1[56]:[^:]*:Thaliak:[88CF|88D0]:/
+2235.1 "Hieroglyphika" sync / 1[56]:[^:]*:Thaliak:[88CF|88D0]:/
+2255.1 "Hieroglyphika" sync / 1[56]:[^:]*:Thaliak:[88CF|88D0]:/
+2259.1 "Left/Right Bank" sync / 1[56]:[^:]*:Thaliak:[8C2C|8C2D]:/
+2265.2 "--sync--" sync / 1[56]:[^:]*:Thaliak:88DB:/
+2273.3 "Tetraktys" sync / 1[56]:[^:]*:Thaliak:88C9:/
+2275.0 "이 뒤로 몰라요" duration 5
+
+
+# The briny deep / Llymlaen
+3000.0 "--sync--" sync / 00:0839::The Briny Deep will be sealed off/ window 10000,0
+3012.7 "Tempest" sync / 1[56]:[^:]*:Llymlaen:880B:/
+3023.8 "Seafoam Spiral" sync / 1[56]:[^:]*:Llymlaen:880D:/
+3032.9 "Wind Rose/Seafoam Spiral" sync / 1[56]:[^:]*:Llymlaen:[880C|880D]:/
+3042.2 "--sync--" sync / 1[56]:[^:]*:Llymlaen:8809:/
+3046.0 "--sync--" sync / 1[56]:[^:]*:Llymlaen:8CCD:/
+3048.0 "--sync--" sync / 1[56]:[^:]*:Llymlaen:8CCE:/
+3050.0 "Navigator's Trident" sync / 1[56]:[^:]*:Llymlaen:880E:/
+3050.2 "Dire Straits" sync / 1[56]:[^:]*:Llymlaen:8CCB:/
+3051.1 "Dire Straits" sync / 1[56]:[^:]*:Llymlaen:880F:/
+3052.9 "Dire Straits" sync / 1[56]:[^:]*:Llymlaen:8810:/
+3053.3 "--sync--" sync / 1[56]:[^:]*:Llymlaen:8CCF:/
+3054.5 "Navigator's Trident" sync / 1[56]:[^:]*:Llymlaen:8CD0:/
+3061.5 "Navigator's Trident" sync / 1[56]:[^:]*:Llymlaen:8811:/
+3064.6 "--sync--" sync / 1[56]:[^:]*:Llymlaen:8809:/
+3073.6 "Wind Rose/Seafoam Spiral" sync / 1[56]:[^:]*:Llymlaen:[880C|880D]:/
+3084.7 "Surging Wave" sync / 1[56]:[^:]*:Llymlaen:8812:/
+3085.7 "Surging Wave" sync / 1[56]:[^:]*:Llymlaen:8813:/
+3085.9 "Shockwave" sync / 1[56]:[^:]*:Llymlaen:8814:/
+3092.0 "Frothing Sea" duration 12 #sync / 1[56]:[^:]*:Llymlaen:880A:/
+3105.7 "Left/Right Strait" sync / 1[56]:[^:]*:Llymlaen:[8851|8852]:/
+3113.8 "Deep Dive" sync / 1[56]:[^:]*:Llymlaen:8819:/
+3127.0 "Torrential Tridents" sync / 1[56]:[^:]*:Llymlaen:881A:/
+3129.8 "Landing" duration 18 #sync / 1[56]:[^:]*:Trident:881B:/
+3148.2 "Stormy Seas" sync / 1[56]:[^:]*:Llymlaen:881D:/
+3153.0 "Stormwhorl x3" duration 4 #sync / 1[56]:[^:]*:Llymlaen:881E:/
+3158.0 "Stormwinds" sync / 1[56]:[^:]*:Llymlaen:881F:/
+3166.6 "--sync--" sync / 1[56]:[^:]*:Llymlaen:8809:/
+3171.9 "Denizens of the Deep" sync / 1[56]:[^:]*:Llymlaen:8820:/
+3178.8 "--sync--" sync / 1[56]:[^:]*:Llymlaen:8809:/
+3185.9 "Wind Rose/Seafoam Spiral" sync / 1[56]:[^:]*:Llymlaen:[880C|880D]:/
+3185.9 "--sync--" sync / 1[56]:[^:]*:Llymlaen:8825:/
+3186.0 "Serpents' Tide" sync / 1[56]:[^:]*:Thalaos:[8826|8827|8829|8829]:/
+3197.0 "--sync--" sync / 1[56]:[^:]*:Llymlaen:8825:/
+3197.1 "Serpents' Tide" sync / 1[56]:[^:]*:Thalaos:[8826|8827|8829|8829]:/
+3201.9 "Left/Right Strait" sync / 1[56]:[^:]*:Llymlaen:[8851|8852]:/
+3207.9 "--sync--" sync / 1[56]:[^:]*:Llymlaen:8825:/
+3208.0 "Serpents' Tide" sync / 1[56]:[^:]*:Thalaos:[8826|8827|8829|8829]:/
+3212.7 "Maelstrom" sync / 1[56]:[^:]*:Llymlaen:882A:/
+3214.0 "--sync--" sync / 1[56]:[^:]*:Llymlaen:8809:/
+3218.1 "Godsbane" sync / 1[56]:[^:]*:Llymlaen:8824:/
+3221.1 "Godsbane" sync / 1[56]:[^:]*:Llymlaen:8821:/
+3223.1 "Godsbane" sync / 1[56]:[^:]*:Llymlaen:8C6C:/
+3231.2 "--sync--" sync / 1[56]:[^:]*:Llymlaen:8809:/
+3235.0 "--sync--" sync / 1[56]:[^:]*:Llymlaen:8CCD:/
+3237.0 "--sync--" sync / 1[56]:[^:]*:Llymlaen:8CCE:/
+3239.0 "Navigator's Trident" sync / 1[56]:[^:]*:Llymlaen:880E:/
+3239.2 "Dire Straits x3" sync / 1[56]:[^:]*:Llymlaen:8CCB:/ # 880F 8810
+3242.3 "--sync--" sync / 1[56]:[^:]*:Llymlaen:8CCF:/
+3243.5 "Navigator's Trident" sync / 1[56]:[^:]*:Llymlaen:8CD0:/
+3250.5 "Navigator's Trident" sync / 1[56]:[^:]*:Llymlaen:8811:/
+3251.5 "--sync--" sync / 1[56]:[^:]*:Llymlaen:8825:/
+3251.6 "Serpents' Tide" sync / 1[56]:[^:]*:Thalaos:[8826|8827|8829|8829]:/
+3253.6 "--sync--" sync / 1[56]:[^:]*:Llymlaen:8809:/
+3262.6 "Wind Rose/Seafoam Spiral" sync / 1[56]:[^:]*:Llymlaen:[880C|880D]:/
+3273.7 "Surging Wave" sync / 1[56]:[^:]*:Llymlaen:8812:/
+3274.7 "Surging Wave" sync / 1[56]:[^:]*:Llymlaen:8813:/
+3274.9 "Shockwave" sync / 1[56]:[^:]*:Llymlaen:8814:/
+3280.9 "Frothing Sea" sync / 1[56]:[^:]*:Llymlaen:880A:/
+3282.8 "To the Last" sync / 1[56]:[^:]*:Llymlaen:8815:/
+3282.9 "Frothing Sea" sync / 1[56]:[^:]*:Llymlaen:880A:/
+3282.9 "To the Last" sync / 1[56]:[^:]*:Llymlaen:8817:/
+3283.7 "To the Last" sync / 1[56]:[^:]*:Llymlaen:8818:/
+3283.8 "Frothing Sea" sync / 1[56]:[^:]*:Llymlaen:880A:/
+3284.9 "To the Last" sync / 1[56]:[^:]*:Llymlaen:8817:/
+3285.7 "To the Last" sync / 1[56]:[^:]*:Llymlaen:8818:/
+3285.8 "Frothing Sea" sync / 1[56]:[^:]*:Llymlaen:880A:/
+3287.0 "To the Last" sync / 1[56]:[^:]*:Llymlaen:8817:/
+3287.7 "To the Last" sync / 1[56]:[^:]*:Llymlaen:8818:/
+3287.7 "Frothing Sea" sync / 1[56]:[^:]*:Llymlaen:880A:/
+3295.1 "Left/Right Strait" sync / 1[56]:[^:]*:Llymlaen:[8851|8852]:/
+3298.2 "--sync--" sync / 1[56]:[^:]*:Llymlaen:8809:/
+3305.4 "Hard Water" sync / 1[56]:[^:]*:Perykos:[8835|8836]:/
+3307.4 "Hard Water" sync / 1[56]:[^:]*:Thalaos:[8835|8836]:/
+3308.0 "이 뒤로 몰라요" duration 5
+
+
+# The windward pass / Oschon
+4000.0 "--sync--" sync / 00:0839::The Windward Pass will be sealed off/ window 10000,0
+4003.8 "--sync--" sync / 1[56]:[^:]*:Oschon:8C42:/
+4014.8 "Sudden Downpour" sync / 1[56]:[^:]*:Oschon:8999:/
+4018.9 "--sync--" sync / 1[56]:[^:]*:Oschon:8998:/
+4020.2 "--sync--" sync / 1[56]:[^:]*:Oschon:882F:/
+4026.2 "Trek Shot" sync / 1[56]:[^:]*:Oschon:898E:/
+4029.8 "Trek Shot" sync / 1[56]:[^:]*:Oschon:8C44:/
+4034.3 "--sync--" sync / 1[56]:[^:]*:Oschon:8998:/
+4038.4 "Reproduce" sync / 1[56]:[^:]*:Oschon:8989:/
+4041.2 "--sync--" sync / 1[56]:[^:]*:Oschon:[8830|8831]:/
+4048.2 "Swinging Draw" sync / 1[56]:[^:]*:Oschon's Avatar:[898A|898B|898C]:/
+4054.4 "Swinging Draw" sync / 1[56]:[^:]*:Oschon's Avatar:[898A|898B|898C]:/
+4055.5 "--sync--" sync / 1[56]:[^:]*:Oschon:8998:/
+4059.7 "Reproduce" sync / 1[56]:[^:]*:Oschon:8989:/
+4062.6 "--sync--" sync / 1[56]:[^:]*:Oschon:[8830|8831]:/
+4069.5 "Swinging Draw" sync / 1[56]:[^:]*:Oschon's Avatar:[898A|898B|898C]:/
+4075.7 "Swinging Draw" sync / 1[56]:[^:]*:Oschon's Avatar:[898A|898B|898C]:/
+4076.8 "--sync--" sync / 1[56]:[^:]*:Oschon:8998:/
+4082.5 "Flinted Foehn" duration 3 sync / 1[56]:[^:]*:Oschon:89A3:/
+4087.2 "Flinted Foehn" #sync / 1[56]:[^:]*:Oschon:89A5:/
+4094.7 "Soaring Minuet" sync / 1[56]:[^:]*:Oschon:8D0E:/
+4101.8 "the Arrow" sync / 1[56]:[^:]*:Oschon:899B:/
+4112.8 "--sync--" sync / 1[56]:[^:]*:Oschon:[8830|8831]:/
+4119.7 "Swinging Draw" sync / 1[56]:[^:]*:Oschon's Avatar:[898A|898B|898C]:/
+4125.9 "Swinging Draw" sync / 1[56]:[^:]*:Oschon's Avatar:[898A|898B|898C]:/
+4129.9 "Sudden Downpour" sync / 1[56]:[^:]*:Oschon:8999:/
+4134.0 "--sync--" sync / 1[56]:[^:]*:Oschon:8998:/
+4138.1 "Downhill" sync / 1[56]:[^:]*:Oschon:899F:/
+4145.2 "Climbing Shot" sync / 1[56]:[^:]*:Oschon:[8991|8892]:/
+4147.0 "Downhill" sync / 1[56]:[^:]*:Oschon:89A1:/
+4153.3 "Soaring Minuet" sync / 1[56]:[^:]*:Oschon:8994:/
+4156.5 "--sync--" sync / 1[56]:[^:]*:Oschon:8998:/
+4163.4 "Lofty Peaks" sync / 1[56]:[^:]*:Oschon:89A7:/
+4164.4 "Moving Mountains" duration 3 #sync / 1[56]:[^:]*:Oschon:8CE3:/
+4171.5 "Peak Peril" sync / 1[56]:[^:]*:Oschon:8CE4:/
+4187.2 "Shockwave" sync / 1[56]:[^:]*:Oschon:89A8:/
+4202.3 "Piton Pull" sync / 1[56]:[^:]*:Oschon:89A9:/
+4202.7 "Piton Pull" sync / 1[56]:[^:]*:Oschon:89AB:/
+4214.2 "Piton Pull" sync / 1[56]:[^:]*:Oschon:89AA:/
+4214.6 "Piton Pull" sync / 1[56]:[^:]*:Oschon:89AB:/
+4226.0 "Altitude" sync / 1[56]:[^:]*:Oschon:89AF:/
+4236.7 "Flinted Foehn" duration 5.5 sync / 1[56]:[^:]*:Oschon:89A4:/
+4252.6 "Wandering Shot" sync / 1[56]:[^:]*:Oschon:8CF7:/
+4256.3 "Great Whirlwind" sync / 1[56]:[^:]*:Oschon:89AE:/
+4266.7 "Wandering Shot" sync / 1[56]:[^:]*:Oschon:8CF6:/
+4270.4 "Great Whirlwind" sync / 1[56]:[^:]*:Oschon:89AE:/
+4280.0 "the Arrow" sync / 1[56]:[^:]*:Oschon:899C:/
+4289.3 "Arrow Trail" duration 17 sync / 1[56]:[^:]*:Oschon:89B2:/
+4293.1 "--sync--" sync / 1[56]:[^:]*:Oschon:89B3:/
+4296.4 "--sync--" sync / 1[56]:[^:]*:Oschon:89B3:/
+4298.9 "Downhill" sync / 1[56]:[^:]*:Oschon:8C45:/
+4299.3 "--sync--" sync / 1[56]:[^:]*:Oschon:8C43:/
+4301.3 "--sync--" sync / 1[56]:[^:]*:Oschon:89B3:/
+4302.2 "Downhill" sync / 1[56]:[^:]*:Oschon:8C45:/
+4303.0 "--sync--" sync / 1[56]:[^:]*:Oschon:89B3:/
+4305.6 "Downhill" sync / 1[56]:[^:]*:Oschon:8C45:/
+4312.5 "Piton Pull" sync / 1[56]:[^:]*:Oschon:[89A9|89AA|89AB]:/
+4312.9 "Piton Pull" sync / 1[56]:[^:]*:Oschon:[89A9|89AA|89AB]:/
+4322.6 "Downhill" sync / 1[56]:[^:]*:Oschon:89A0:/
+4335.7 "Wandering Volley" sync / 1[56]:[^:]*:Oschon:[89AC|89AD]:/
+4336.9 "Downhill" #sync / 1[56]:[^:]*:Oschon:89A2:/
+4336.9 "Downhill" #sync / 1[56]:[^:]*:Oschon:89A2:/
+4339.2 "Great Whirlwind" sync / 1[56]:[^:]*:Oschon:89AE:/
+4334.0 "이 뒤로 몰라요" duration 5
+
+
+# The stairway to the seventh
+5000.0 "--sync--" sync / 00:0839::The Stairway To The Seventh will be sealed off/ window 10000,0
+5005.0 "쫄 잡아야 겠죠" duration 20
+
+
+# The Twelve's Embrace
+6000.0 "--sync--" sync / 00:0839::The Twelve's Embrace will be sealed off/ window 10000,0
+6015.4 "Dawn of Time" sync / 1[56]:[^:]*:Eulogia:8A03:/
+6020.7 "--sync--" sync / 1[56]:[^:]*:Eulogia:8A02:/
+6022.8 "--sync--" sync / 1[56]:[^:]*:Eulogia:8A08:/
+6032.2 "First Form" sync / 1[56]:[^:]*:Eulogia:8A0A:/
+6039.4 "Second Form" sync / 1[56]:[^:]*:Eulogia:8A0B:/
+6046.6 "Third Form" sync / 1[56]:[^:]*:Eulogia:8A0F:/
+6050.7 "Quintessence" sync / 1[56]:[^:]*:Eulogia:[8A14|8A15|8A16]:/
+6050.9 "Quintessence" sync / 1[56]:[^:]*:Eulogia:[8A17|8A18|8A19]:/
+6051.5 "Quintessence" sync / 1[56]:[^:]*:Eulogia:[8A1A|8A1B|8A1C]:/
+6054.5 "Quintessence" sync / 1[56]:[^:]*:Eulogia:[8A17|8A18|8A19]:/
+6055.1 "Quintessence" sync / 1[56]:[^:]*:Eulogia:[8CE5|8CE6|8CE7]:/
+6058.1 "Quintessence" sync / 1[56]:[^:]*:Eulogia:[8A17|8A18|8A19]:/
+6058.7 "Quintessence" sync / 1[56]:[^:]*:Eulogia:[8CE9|8CEA]:/
+6084.0 "First Form" sync / 1[56]:[^:]*:Eulogia:8A0D:/
+6091.2 "Second Form" sync / 1[56]:[^:]*:Eulogia:8A0B:/
+6098.4 "Third Form" sync / 1[56]:[^:]*:Eulogia:8A12:/
+6102.5 "Quintessence" sync / 1[56]:[^:]*:Eulogia:[8A14|8A15|8A16]:/
+6102.7 "Quintessence" sync / 1[56]:[^:]*:Eulogia:[8A17|8A18|8A19]:/
+6103.3 "Quintessence" sync / 1[56]:[^:]*:Eulogia:[8A1A|8A1B|8A1C]:/
+6106.3 "Quintessence" sync / 1[56]:[^:]*:Eulogia:[8A17|8A18|8A19]:/
+6106.9 "Quintessence" sync / 1[56]:[^:]*:Eulogia:[8CE5|8CE6|8CE7]:/
+6109.9 "Quintessence" sync / 1[56]:[^:]*:Eulogia:[8A17|8A18|8A19]:/
+6110.5 "Quintessence" sync / 1[56]:[^:]*:Eulogia:[8CE9|8CEA]:/
+6122.8 "Sunbeam" sync / 1[56]:[^:]*:Eulogia:8A00:/
+6122.8 "Sunbeam" sync / 1[56]:[^:]*:Eulogia:8A01:/
+6129.0 "--sync--" sync / 1[56]:[^:]*:Eulogia:8A02:/
+6138.3 "the Whorl" sync / 1[56]:[^:]*:Eulogia:8A2F:/
+6145.4 "Love's Light" sync / 1[56]:[^:]*:Eulogia:8A30:/
+6153.5 "Full Bright" sync / 1[56]:[^:]*:Eulogia:8A31:/
+6164.6 "First Blush" sync / 1[56]:[^:]*:Eulogia:8A33:/
+6166.6 "First Blush" sync / 1[56]:[^:]*:Eulogia:8A34:/
+6168.6 "First Blush" sync / 1[56]:[^:]*:Eulogia:8A35:/
+6170.6 "First Blush" sync / 1[56]:[^:]*:Eulogia:8A36:/
+6173.6 "Solar Fans" sync / 1[56]:[^:]*:Eulogia:8A3B:/
+6174.6 "Solar Fans" sync / 1[56]:[^:]*:Warden's Flame:8A3C:/
+6176.7 "Radiant Rhythm" #sync / 1[56]:[^:]*:Eulogia:8A3D:/
+6177.3 "Radiant Flight" #sync / 1[56]:[^:]*:Eulogia:8A3F:/
+6178.9 "Radiant Rhythm" #sync / 1[56]:[^:]*:Eulogia:8A3D:/
+6179.5 "Radiant Flight" #sync / 1[56]:[^:]*:Eulogia:8A3F:/
+6181.1 "Radiant Rhythm" #sync / 1[56]:[^:]*:Eulogia:8A3D:/
+6181.7 "Radiant Flight" #sync / 1[56]:[^:]*:Eulogia:8A3F:/
+6183.3 "Radiant Rhythm" #sync / 1[56]:[^:]*:Eulogia:8A3D:/
+6183.9 "Radiant Flight" #sync / 1[56]:[^:]*:Eulogia:8A3F:/
+6188.5 "Radiant Finish" sync / 1[56]:[^:]*:Eulogia:8A40:/
+6188.5 "Radiant Flourish" sync / 1[56]:[^:]*:Warden's Flame:8A41:/
+6194.6 "Hydrostasis" sync / 1[56]:[^:]*:Eulogia:8A37:/
+6202.6 "Time and Tide" sync / 1[56]:[^:]*:Eulogia:8A32:/
+6205.5 "Hydrostasis" sync / 1[56]:[^:]*:Eulogia:8A38:/
+6208.5 "Hydrostasis" sync / 1[56]:[^:]*:Eulogia:8A39:/
+6211.5 "Hydrostasis" sync / 1[56]:[^:]*:Eulogia:8A3A:/
+6219.8 "Destructive Bolt" sync / 1[56]:[^:]*:Eulogia:8CEC:/
+6220.8 "Destructive Bolt" sync / 1[56]:[^:]*:Eulogia:8CFD:/
+6223.9 "--sync--" sync / 1[56]:[^:]*:Eulogia:8A02:/
+6231.2 "Hieroglyphika" sync / 1[56]:[^:]*:Eulogia:[8A43|8A44]:/
+6242.4 "--sync--" sync / 1[56]:[^:]*:Fist of Judgment:8A46:/
+6242.4 "--sync--" sync / 1[56]:[^:]*:Fist of Wrath:8A45:/
+6248.3 "Hieroglyphika" sync / 1[56]:[^:]*:Eulogia:[8A43|8A44]:/
+6253.1 "Hand of the Destroyer" sync / 1[56]:[^:]*:Eulogia:[8A47|8A48]:/
+6253.5 "Hand of the Destroyer" sync / 1[56]:[^:]*:Fist of Judgment:[8A49|8A4A]:/
+6257.2 "--sync--" sync / 1[56]:[^:]*:Eulogia:8A02:/
+6262.4 "Matron's Breath" sync / 1[56]:[^:]*:Eulogia:8A4B:/
+6277.5 "Blueblossoms/Giltblossoms" sync / 1[56]:[^:]*:Eulogia:[8A4C|8A4C]:/
+6281.1 "Blueblossoms/Giltblossoms" sync / 1[56]:[^:]*:Eulogia:[8A4C|8A4C]:/
+6284.7 "Blueblossoms/Blueblossoms" sync / 1[56]:[^:]*:Eulogia:[8A4C|8A4C]:/
+6288.3 "Blueblossoms/Blueblossoms" sync / 1[56]:[^:]*:Eulogia:[8A4C|8A4C]:/
+6291.7 "Torrential Tridents" sync / 1[56]:[^:]*:Eulogia:8A4E:/
+6292.6 "Landing" duration 5.5 sync / 1[56]:[^:]*:Trident:8A4F:/
+6306.1 "Lightning Bolt" duration 5.5 sync / 1[56]:[^:]*:Trident:8A50:/
+6317.7 "Destructive Bolt" sync / 1[56]:[^:]*:Eulogia:8CEC:/
+6318.7 "Destructive Bolt" sync / 1[56]:[^:]*:Eulogia:8CFD:/
+6327.9 "Byregot's Strike" sync / 1[56]:[^:]*:Eulogia:8A52:/
+6328.7 "Byregot's Strike" sync / 1[56]:[^:]*:Eulogia:[8A53|8A54]:/
+6334.8 "Thousandfold Thrust" duration 5.5 sync / 1[56]:[^:]*:Eulogia:[8A58|8A59]:/
+6343.8 "--sync--" sync / 1[56]:[^:]*:Eulogia:8A02:/
+6351.2 "As Above, So Below" #sync / 1[56]:[^:]*:Eulogia:8A5C:/ # 이거 8A5C말고도 있을 듯
+6363.3 "Climbing Shot" sync / 1[56]:[^:]*:Eulogia:8D0B:/
+6363.5 "Climbing Shot" #sync / 1[56]:[^:]*:Eulogia:8A65:/ # 8A65 8A68 확인 이 사이 것도?
+6364.4 "Everfire" duration 7 sync / 1[56]:[^:]*:Eulogia:8D01:/
+6364.4 "Once Burned" sync / 1[56]:[^:]*:Eulogia:8CFE:/
+6373.5 "Soaring Minuet" sync / 1[56]:[^:]*:Eulogia:8A69:/
+6377.7 "--sync--" sync / 1[56]:[^:]*:Eulogia:8A08:/
+6383.5 "The Builder's Art" sync / 1[56]:[^:]*:Eulogia:8A22:/
+6385.1 "The Destroyer's Might" sync / 1[56]:[^:]*:Eulogia:8A23:/
+6386.7 "The Warden's Radiance" sync / 1[56]:[^:]*:Eulogia:8A24:/
+6388.1 "The Traders' Equity" sync / 1[56]:[^:]*:Eulogia:8A25:/
+6389.7 "The Matron's Plenty" sync / 1[56]:[^:]*:Eulogia:8A26:/
+6391.3 "The Keeper's Gravity" sync / 1[56]:[^:]*:Eulogia:8A27:/
+6392.9 "The Fury's Ambition" sync / 1[56]:[^:]*:Eulogia:8A28:/
+6394.3 "The Lover's Devotion" sync / 1[56]:[^:]*:Eulogia:8A29:/
+6395.9 "The Scholar's Wisdom" sync / 1[56]:[^:]*:Eulogia:8A2A:/
+6397.5 "The Spinner's Cunning" sync / 1[56]:[^:]*:Eulogia:8A2B:/
+6398.9 "The Navigator's Command" sync / 1[56]:[^:]*:Eulogia:8A2D:/
+6400.5 "The Wanderer's Whimsy" sync / 1[56]:[^:]*:Eulogia:8A2E:/
+6402.8 "Eudaimon Eorzea" sync / 1[56]:[^:]*:Eulogia:8A2C:/
+6405.6 "Eudaimon Eorzea" sync / 1[56]:[^:]*:Eulogia:8CFB:/
+6418.7 "--sync--" sync / 1[56]:[^:]*:Eulogia:8A02:/
+6430.2 "First Form" #sync / 1[56]:[^:]*:Eulogia:8A10:/ # 8A0D
+6437.4 "Second Form" #sync / 1[56]:[^:]*:Eulogia:8A0B:/ # 8A11
+6444.6 "Third Form" #sync / 1[56]:[^:]*:Eulogia:8A0F:/ # 8A0C
+6448.7 "Quintessence" sync / 1[56]:[^:]*:Eulogia:[8A14|8A15|8A16]:/
+6448.9 "Quintessence" sync / 1[56]:[^:]*:Eulogia:[8A17|8A18|8A19]:/
+6449.5 "Quintessence" sync / 1[56]:[^:]*:Eulogia:[8A1A|8A1B|8A1C]:/
+6452.5 "Quintessence" sync / 1[56]:[^:]*:Eulogia:[8A17|8A18|8A19]:/
+6453.1 "Quintessence" sync / 1[56]:[^:]*:Eulogia:[8CE5|8CE6|8CE7]:/
+6456.1 "Quintessence" sync / 1[56]:[^:]*:Eulogia:[8A17|8A18|8A19]:/
+6456.7 "Quintessence" sync / 1[56]:[^:]*:Eulogia:[8CE9|8CEA]:/
+6469.0 "Sunbeam" sync / 1[56]:[^:]*:Eulogia:8A00:/
+6469.0 "Sunbeam" sync / 1[56]:[^:]*:Eulogia:8A01:/
+6477.3 "--sync--" sync / 1[56]:[^:]*:Eulogia:8A02:/
+6486.5 "the Whorl" sync / 1[56]:[^:]*:Eulogia:8A2F:/
+6493.7 "Love's Light" sync / 1[56]:[^:]*:Eulogia:8A30:/
+6501.8 "Full Bright" sync / 1[56]:[^:]*:Eulogia:8A31:/
+6512.9 "First Blush" sync / 1[56]:[^:]*:Eulogia:8A33:/
+6514.9 "First Blush" sync / 1[56]:[^:]*:Eulogia:8A34:/
+6516.9 "First Blush" sync / 1[56]:[^:]*:Eulogia:8A35:/
+6518.9 "First Blush" sync / 1[56]:[^:]*:Eulogia:8A36:/
+6520.0 "이 뒤로 몰라요" duration 5
+
