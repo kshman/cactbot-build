@@ -155,22 +155,22 @@ hideall "--sync--"
 4026.2 "Trek Shot" sync / 1[56]:[^:]*:Oschon:898E:/
 4029.8 "Trek Shot" sync / 1[56]:[^:]*:Oschon:8C44:/
 4034.3 "--sync--" sync / 1[56]:[^:]*:Oschon:8998:/
-4038.4 "Reproduce" sync / 1[56]:[^:]*:Oschon:8989:/ window 10,10
+
+4038.4 "Reproduce" sync / 1[56]:[^:]*:Oschon:8989:/
 4048.2 "Swinging Draw" sync / 1[56]:[^:]*:Oschon's Avatar:[898A|898B|898C]:/
 4054.4 "Swinging Draw" sync / 1[56]:[^:]*:Oschon's Avatar:[898A|898B|898C]:/
-# 왠지 이거 루프 같은데
 4055.5 "--sync--" sync / 1[56]:[^:]*:Oschon:8998:/
-4059.7 "Reproduce" sync / 1[56]:[^:]*:Oschon:8989:/ window 10,10
-4069.5 "Swinging Draw" sync / 1[56]:[^:]*:Oschon's Avatar:[898A|898B|898C]:/
-4075.7 "Swinging Draw" sync / 1[56]:[^:]*:Oschon's Avatar:[898A|898B|898C]:/
-#요까지 루프 의심
-4076.8 "--sync--" sync / 1[56]:[^:]*:Oschon:8998:/ window 10,10
-4082.5 "Flinted Foehn x7" duration 3 sync / 1[56]:[^:]*:Oschon:89A3:/
+
+4059.7 "Reproduce" sync / 1[56]:[^:]*:Oschon:8989:/ window 10,10 jump 4038.4
+4069.5 "Swinging Draw" #sync / 1[56]:[^:]*:Oschon's Avatar:[898A|898B|898C]:/
+4075.7 "Swinging Draw" #sync / 1[56]:[^:]*:Oschon's Avatar:[898A|898B|898C]:/
+4076.8 "--sync--" #sync / 1[56]:[^:]*:Oschon:8998:/ window 10,10
+
+4078.3 "Flinted Foehn x7" duration 7.7 sync / 14:[^:]*:Oschon:89A3:/ window 100,10
 4094.7 "Soaring Minuet" sync / 1[56]:[^:]*:Oschon:8D0E:/ window 100,10
 4101.8 "the Arrow" sync / 1[56]:[^:]*:Oschon:899B:/
 4101.8 "the Arrow" sync / 1[56]:[^:]*:Oschon:899B:/
 4102.8 "the Arrow" sync / 1[56]:[^:]*:Oschon:899D:/
-
 4110.0 "Reproduce" sync / 1[56]:[^:]*:Oschon:8989:/
 4119.7 "Swinging Draw" sync / 1[56]:[^:]*:Oschon's Avatar:[898A|898B|898C]:/
 4125.9 "Swinging Draw" sync / 1[56]:[^:]*:Oschon's Avatar:[898A|898B|898C]:/
@@ -192,7 +192,6 @@ hideall "--sync--"
 4190.0 "Sudden Downpour" sync / 1[56]:[^:]*:Oschon:8999:/
 4191.0 "Sudden Downpour" sync / 1[56]:[^:]*:Oschon:8CBA:/
 4197.2 "--sync--" sync / 1[56]:[^:]*:Oschon:8998:/
-
 4201.3 "Reproduce" sync / 1[56]:[^:]*:Oschon:8989:/ window 30,30 jump 4110.0
 4211.1 "Swinging Draw" #sync / 1[56]:[^:]*:Oschon's Avatar:898A:/
 4217.2 "Swinging Draw" #sync / 1[56]:[^:]*:Oschon's Avatar:898C:/
@@ -205,68 +204,69 @@ hideall "--sync--"
 4244.8 "Soaring Minuet" #sync / 1[56]:[^:]*:Oschon:8994:/
 
 # 커짐
-4500.0 "--sync--" sync / 1[56]:[^:]*:Oschon:89A7:/ window 1000,0
-4512.0 "Lofty Peaks" sync / 1[56]:[^:]*:Oschon:89A7:/
-4513.0 "Moving Mountains" duration 3 #sync / 1[56]:[^:]*:Oschon:8CE3:/
-4520.1 "Peak Peril" sync / 1[56]:[^:]*:Oschon:8CE4:/
-4535.8 "Shockwave" sync / 1[56]:[^:]*:Oschon:89A8:/
-4550.9 "Piton Pull" sync / 1[56]:[^:]*:Oschon:[89A9|89AA|89AB]:/
-4551.3 "Piton Pull" #sync / 1[56]:[^:]*:Oschon:89AB:/
-4562.8 "Piton Pull" #sync / 1[56]:[^:]*:Oschon:89AA:/
-4563.2 "Piton Pull" #sync / 1[56]:[^:]*:Oschon:89AB:/
-4574.6 "Altitude" sync / 1[56]:[^:]*:Oschon:89AF:/ window 30,30
-4585.3 "Flinted Foehn x7" duration 5.5 sync / 1[56]:[^:]*:Oschon:89A4:/
-4601.2 "Wandering Shot" sync / 1[56]:[^:]*:Oschon:8CF7:/ window 10,10
-4604.9 "Great Whirlwind" sync / 1[56]:[^:]*:Oschon:89AE:/
-4615.3 "Wandering Shot" sync / 1[56]:[^:]*:Oschon:8CF6:/
-4619.0 "Great Whirlwind" sync / 1[56]:[^:]*:Oschon:89AE:/
-4628.6 "the Arrow" sync / 1[56]:[^:]*:Oschon:899C:/ window 10,10
-# 루프 시작 위치로 추정
-4637.9 "Arrow Trail" duration 17 sync / 1[56]:[^:]*:Oschon:89B2:/
-4641.7 "--sync--" sync / 1[56]:[^:]*:Oschon:89B3:/
-4647.5 "Downhill" sync / 1[56]:[^:]*:Oschon:8C45:/
-4649.9 "--sync--" sync / 1[56]:[^:]*:Oschon:89B3:/
-4650.8 "Downhill" sync / 1[56]:[^:]*:Oschon:8C45:/
-4651.6 "--sync--" sync / 1[56]:[^:]*:Oschon:89B3:/
-4654.2 "Downhill" sync / 1[56]:[^:]*:Oschon:8C45:/
-4661.1 "Piton Pull" sync / 1[56]:[^:]*:Oschon:[89A9|89AA|89AB]:/
-4661.5 "Piton Pull" #sync / 1[56]:[^:]*:Oschon:89AB:/
-4671.2 "Downhill" sync / 1[56]:[^:]*:Oschon:89A0:/ window 10,10
-4684.3 "Wandering Volley" sync / 1[56]:[^:]*:Oschon:[89AC|89AD]:/
-4685.6 "Downhill" sync / 1[56]:[^:]*:Oschon:89A2:/
-4687.9 "Great Whirlwind" sync / 1[56]:[^:]*:Oschon:89AE:/ window 10,10
-4695.3 "Piton Pull" #sync / 1[56]:[^:]*:Oschon:89A9:/
-4695.7 "Piton Pull" #sync / 1[56]:[^:]*:Oschon:89AB:/
-4698.7 "--sync--" sync / 1[56]:[^:]*:Oschon:8C43:/
-4705.9 "Flinted Foehn x7" duration 5.5 sync / 1[56]:[^:]*:Oschon:89A4:/
-4718.5 "the Arrow" sync / 1[56]:[^:]*:Oschon:899C:/ window 10,10
-4719.5 "the Arrow" sync / 1[56]:[^:]*:Oschon:899E:/
-4727.4 "Altitude" sync / 1[56]:[^:]*:Oschon:89AF:/
-4728.4 "Altitude" #sync / 1[56]:[^:]*:Oschon:89B1:/
-4728.4 "Altitude" #sync / 1[56]:[^:]*:Oschon:89B1:/
-4739.5 "Sudden Downpour" sync / 1[56]:[^:]*:Oschon:899A:/
-4740.5 "Sudden Downpour" sync / 1[56]:[^:]*:Oschon:8CBB:/
-4749.6 "Sudden Downpour" sync / 1[56]:[^:]*:Oschon:899A:/
-4750.6 "Sudden Downpour" sync / 1[56]:[^:]*:Oschon:8CBB:/
-# 루프 위치로 추정
-4760.7 "Arrow Trail" duration 17 sync / 1[56]:[^:]*:Oschon:89B2:/ window 10,10
-4770.0 "Downhill" sync / 1[56]:[^:]*:Oschon:8C45:/
-4770.7 "--sync--" sync / 1[56]:[^:]*:Oschon:89B3:/
-4772.4 "--sync--" sync / 1[56]:[^:]*:Oschon:89B3:/
-4773.2 "Downhill" sync / 1[56]:[^:]*:Oschon:8C45:/
-4774.0 "--sync--" sync / 1[56]:[^:]*:Oschon:89B3:/
-4776.7 "Downhill" sync / 1[56]:[^:]*:Oschon:8C45:/
-4783.6 "Piton Pull" sync / 1[56]:[^:]*:Oschon:[89A9|89AA|89AB]:/
-4784.0 "Piton Pull" #sync / 1[56]:[^:]*:Oschon:89AB:/
-4793.7 "Downhill" sync / 1[56]:[^:]*:Oschon:89A0:/ window 10,10
-4806.8 "Wandering Volley" sync / 1[56]:[^:]*:Oschon:89AD:/
-4808.0 "Downhill" #sync / 1[56]:[^:]*:Oschon:89A2:/
-4810.3 "Great Whirlwind" sync / 1[56]:[^:]*:Oschon:89AE:/ window 10,10
-4817.7 "Piton Pull" #sync / 1[56]:[^:]*:Oschon:89AA:/
-4818.1 "Piton Pull" #sync / 1[56]:[^:]*:Oschon:89AB:/
-4821.5 "--sync--" sync / 1[56]:[^:]*:Oschon:8C43:/
-4828.3 "Flinted Foehn x7" duration 5.5 sync / 1[56]:[^:]*:Oschon:89A4:/
-4830.0 "이 뒤로 몰라요" duration 5
+4500.0 "--sync--" sync / 14:[^:]*:Oschon:89A7:/ window 1000,0
+4504.7 "Lofty Peaks" sync / 1[56]:[^:]*:Oschon:89A7:/
+4505.7 "Moving Mountains" duration 3 #sync / 1[56]:[^:]*:Oschon:8CE3:/
+4512.8 "Peak Peril" sync / 1[56]:[^:]*:Oschon:8CE4:/
+4528.5 "Shockwave" sync / 1[56]:[^:]*:Oschon:89A8:/ window 20,20
+4530.5 "--sync--" sync / 1[56]:[^:]*:Oschon:8C43:/
+4533.5 "--sync--" sync / 1[56]:[^:]*:Oschon:8C43:/
+4543.6 "Piton Pull" sync / 1[56]:[^:]*:Oschon:[89A9|89AA|89AB]:/
+4544.0 "Piton Pull" #sync / 1[56]:[^:]*:Oschon:89AB:/
+4555.5 "Piton Pull" #sync / 1[56]:[^:]*:Oschon:89AA:/
+4555.9 "Piton Pull" #sync / 1[56]:[^:]*:Oschon:89AB:/
+4567.3 "Altitude" sync / 1[56]:[^:]*:Oschon:89AF:/ window 30,30
+4578.0 "Flinted Foehn x7" duration 5.5 sync / 1[56]:[^:]*:Oschon:89A4:/
+4593.9 "Wandering Shot" sync / 1[56]:[^:]*:Oschon:8CF7:/ window 10,10
+4597.6 "Great Whirlwind" sync / 1[56]:[^:]*:Oschon:89AE:/
+4608.0 "Wandering Shot" sync / 1[56]:[^:]*:Oschon:8CF6:/
+4611.7 "Great Whirlwind" sync / 1[56]:[^:]*:Oschon:89AE:/
+4621.3 "the Arrow" sync / 1[56]:[^:]*:Oschon:899C:/ window 10,10
+
+4630.6 "Arrow Trail" duration 17 sync / 1[56]:[^:]*:Oschon:89B2:/
+4634.4 "--sync--" sync / 1[56]:[^:]*:Oschon:89B3:/
+4640.2 "Downhill" sync / 1[56]:[^:]*:Oschon:8C45:/
+4642.6 "--sync--" sync / 1[56]:[^:]*:Oschon:89B3:/
+4643.5 "Downhill" sync / 1[56]:[^:]*:Oschon:8C45:/
+4644.3 "--sync--" sync / 1[56]:[^:]*:Oschon:89B3:/
+4646.9 "Downhill" sync / 1[56]:[^:]*:Oschon:8C45:/
+4653.8 "Piton Pull" sync / 1[56]:[^:]*:Oschon:[89A9|89AA|89AB]:/
+4654.2 "Piton Pull" #sync / 1[56]:[^:]*:Oschon:89AB:/
+4663.9 "Downhill" sync / 1[56]:[^:]*:Oschon:89A0:/ window 10,10
+4677.0 "Wandering Volley" sync / 1[56]:[^:]*:Oschon:[89AC|89AD]:/
+4678.3 "Downhill" sync / 1[56]:[^:]*:Oschon:89A2:/
+4680.6 "Great Whirlwind" sync / 1[56]:[^:]*:Oschon:89AE:/ window 10,10
+4688.0 "Piton Pull" #sync / 1[56]:[^:]*:Oschon:89A9:/
+4688.4 "Piton Pull" #sync / 1[56]:[^:]*:Oschon:89AB:/
+4691.4 "--sync--" sync / 1[56]:[^:]*:Oschon:8C43:/
+4698.6 "Flinted Foehn x7" duration 5.5 sync / 1[56]:[^:]*:Oschon:89A4:/
+4711.2 "the Arrow" sync / 1[56]:[^:]*:Oschon:899C:/ window 10,10
+4712.2 "the Arrow" sync / 1[56]:[^:]*:Oschon:899E:/
+4720.1 "Altitude" sync / 1[56]:[^:]*:Oschon:89AF:/
+4721.1 "Altitude" #sync / 1[56]:[^:]*:Oschon:89B1:/
+4721.1 "Altitude" #sync / 1[56]:[^:]*:Oschon:89B1:/
+4732.2 "Sudden Downpour" sync / 1[56]:[^:]*:Oschon:899A:/
+4733.2 "Sudden Downpour" sync / 1[56]:[^:]*:Oschon:8CBB:/
+4742.3 "Sudden Downpour" sync / 1[56]:[^:]*:Oschon:899A:/
+4743.3 "Sudden Downpour" sync / 1[56]:[^:]*:Oschon:8CBB:/
+
+4753.4 "Arrow Trail" duration 17 sync / 1[56]:[^:]*:Oschon:89B2:/ window 10,10 jump 4637.9
+4762.7 "Downhill" #sync / 1[56]:[^:]*:Oschon:8C45:/
+4763.4 "--sync--" #sync / 1[56]:[^:]*:Oschon:89B3:/
+4765.1 "--sync--" #sync / 1[56]:[^:]*:Oschon:89B3:/
+4765.9 "Downhill" #sync / 1[56]:[^:]*:Oschon:8C45:/
+4766.7 "--sync--" #sync / 1[56]:[^:]*:Oschon:89B3:/
+4769.4 "Downhill" #sync / 1[56]:[^:]*:Oschon:8C45:/
+4776.3 "Piton Pull" #sync / 1[56]:[^:]*:Oschon:[89A9|89AA|89AB]:/
+4776.7 "Piton Pull" #sync / 1[56]:[^:]*:Oschon:89AB:/
+4786.4 "Downhill" #sync / 1[56]:[^:]*:Oschon:89A0:/ window 10,10
+4799.5 "Wandering Volley" #sync / 1[56]:[^:]*:Oschon:89AD:/
+4800.7 "Downhill" #sync / 1[56]:[^:]*:Oschon:89A2:/
+4803.0 "Great Whirlwind" #sync / 1[56]:[^:]*:Oschon:89AE:/ window 10,10
+4810.4 "Piton Pull" #sync / 1[56]:[^:]*:Oschon:89AA:/
+4810.8 "Piton Pull" #sync / 1[56]:[^:]*:Oschon:89AB:/
+4814.2 "--sync--" #sync / 1[56]:[^:]*:Oschon:8C43:/
+4821.0 "Flinted Foehn x7" #duration 5.5 sync / 1[56]:[^:]*:Oschon:89A4:/
 
 
 # The stairway to the seventh

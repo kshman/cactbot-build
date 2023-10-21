@@ -21,7 +21,6 @@ const formsMap: { [count: string]: string } = {
 
 export interface Data extends RaidbossData {
   hydroptosisTarget?: boolean;
-  rheognosisKosmos?: boolean;
   soaringMinuet?: boolean;
   forms: string[];
 }
@@ -113,26 +112,36 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
+      id: 'Thaleia Thaliak Tetraktuos Kosmos',
+      type: 'StartsUsing',
+      // 88CD, 88CE는 부속임
+      netRegex: { id: '88CC', source: 'Thaliak', capture: false },
+      infoText: (_data, _matches, output) => output.text!(),
+      outputStrings: {
+        text: {
+          en: '삼각 장판이 점점 커지네!',
+        },
+      },
+    },
+    {
       id: 'Thaleia Thaliak Rheognosis',
       type: 'StartsUsing',
       netRegex: { id: '88C4', source: 'Thaliak', capture: false },
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '넉백쪽으로 가있어요',
+          en: '넉백쪽으로',
         },
       },
     },
     {
-      id: 'Thaleia Thaliak Rheognosis Kosmos',
+      id: 'Thaleia Thaliak Rheognosis Petrine',
       type: 'StartsUsing',
-      netRegex: { id: ['88CC', '88CD', '88CE'], source: 'Thaliak', capture: false },
-      condition: (data) => !data.rheognosisKosmos,
-      alertText: (_data, _matches, output) => output.text!(),
-      run: (data) => data.rheognosisKosmos = true,
+      netRegex: { id: '88C5', source: 'Thaliak', capture: false },
+      infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '넉백쪽으로 + 돌 굴러와요!',
+          en: '넉백 + 돌 굴러와요',
         },
       },
     },
@@ -143,7 +152,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '안전한 곳 찾아가요',
+          en: '안전한 곳으로',
         },
       },
     },
@@ -315,7 +324,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '화살표 찾아서 옆으로 (보스 고정)',
+          en: '화살표 찾아서 옆으로 (보스 안따라옴)',
         },
       },
     },
@@ -330,10 +339,10 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         first: {
-          en: '화살표 찾아서 옆으로 (보스 데려옴)',
+          en: '화살표 찾아서 옆으로 (보스 따라옴)',
         },
         others: {
-          en: '두개 화살표 사이가 안전함 (보스 데려옴)',
+          en: '두 화살표 사이가 안전 (보스 따라옴)',
         },
       },
     },
@@ -383,7 +392,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '장판 피하면서 + 넉백!',
+          en: '장판 없는 곳으로 + 넉백!',
         },
       },
     },
@@ -428,7 +437,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '화살표 구슬에서 먼곳으로!',
+          en: '구슬에서 먼곳으로!',
         },
       },
     },
@@ -464,7 +473,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '화살표 구슬에서 먼곳 + 넉백!',
+          en: '구슬에서 먼곳 + 넉백!',
         },
       },
     },
@@ -540,7 +549,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '안전한 곳 찾아가요',
+          en: '안전한 곳으로',
         },
       },
     },
