@@ -54,7 +54,7 @@ hideall "--sync--"
 3000.0 "--sync--" sync / 00:0839::The Briny Deep will be sealed off/ window 10000,0
 3006.7 "--sync--" sync / 1[56]:[^:]*:Llymlaen:880B:/ window 10,10
 3012.7 "Tempest" sync / 1[56]:[^:]*:Llymlaen:880B:/
-3023.8 "Seafoam Spiral" sync / 1[56]:[^:]*:Llymlaen:880D:/
+3023.8 "Wind Rose/Seafoam Spiral" sync / 1[56]:[^:]*:Llymlaen:[880C|880D]:/
 3032.9 "Wind Rose/Seafoam Spiral" sync / 1[56]:[^:]*:Llymlaen:[880C|880D]:/
 3048.0 "--middle--" sync / 1[56]:[^:]*:Llymlaen:8CCE:/ window 10,10
 3050.0 "Navigator's Trident" sync / 1[56]:[^:]*:Llymlaen:880E:/
@@ -328,8 +328,8 @@ hideall "--sync--"
 6262.4 "Matron's Breath" sync / 1[56]:[^:]*:Eulogia:8A4B:/
 6277.5 "Blueblossoms/Giltblossoms" sync / 1[56]:[^:]*:Eulogia:[8A4C|8A4D]:/
 6281.1 "Blueblossoms/Giltblossoms" sync / 1[56]:[^:]*:Eulogia:[8A4C|8A4D]:/
-6284.7 "Blueblossoms/Blueblossoms" sync / 1[56]:[^:]*:Eulogia:[8A4C|8A4D]:/
-6288.3 "Blueblossoms/Blueblossoms" sync / 1[56]:[^:]*:Eulogia:[8A4C|8A4D]:/
+6284.7 "Blueblossoms/Giltblossoms" sync / 1[56]:[^:]*:Eulogia:[8A4C|8A4D]:/
+6288.3 "Blueblossoms/Giltblossoms" sync / 1[56]:[^:]*:Eulogia:[8A4C|8A4D]:/
 6291.7 "Torrential Tridents" sync / 1[56]:[^:]*:Eulogia:8A4E:/ window 10,10
 6292.6 "Landing" duration 5.5 sync / 1[56]:[^:]*:Trident:8A4F:/
 6306.1 "Lightning Bolt" duration 5.5 sync / 1[56]:[^:]*:Trident:8A50:/

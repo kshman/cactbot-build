@@ -298,11 +298,11 @@ const zoneReplace: ZoneReplace[] = [
       'thordan-ex.txt': 'thordan-un.txt',
     },
     id: {
-      '1018': '89B7', // --sync--
-      '1019': '89B8', // --sync--
-      '1059': '89BC', // --sync--
-      '105A': '89BA', // --sync--
-      '105B': '89BB', // --sync--
+      '1018': '89B7', // Knights teleporting in
+      '1019': '89B8', // Knights teleporting out
+      '1059': '89B9',
+      '105A': '89BA',
+      '105B': '89BB', // Thordan teleporting in
       '147D': '89BC', // attack
       '147E': '89BD', // Ascalon's Might
       '147F': '89BE', // Ascalon's Mercy
