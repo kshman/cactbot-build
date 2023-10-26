@@ -136,6 +136,30 @@ const jobPriorityToName: Record<number, LocaleText> = {
   9203: { en: '어부', ja: '漁師' },
   9999: { en: '몰?루', ja: '無職' },
 };
+// 롤 이름
+const roleNames: readonly string[] = [
+  'MT',
+  'ST',
+  'OT',
+  'H1',
+  'H2',
+  'D1',
+  'D2',
+  'D3',
+  'D4',
+  'M1',
+  'M2',
+  'R1',
+  'R2',
+] as const;
+// 탱힐 롤 이름
+const tankHealerRoleNames: readonly string[] = [
+  'MT',
+  'ST',
+  'OT',
+  'H1',
+  'H2',
+] as const;
 
 export type MarkerOutput8 =
   | 'markerN'
@@ -324,6 +348,12 @@ const Autumns = {
     const priors = ids.map((x) => jobIndexToPriority[x] ?? 9999).sort((a, b) => a - b);
     const jobs = priors.map((x) => jobPriorityToName[x]?.[lang] ?? '몰?루');
     return jobs;
+  },
+  IsBlueName: (name: string) => {
+    return roleNames.includes(name);
+  },
+  IsBluDps: (name: string) => {
+    return !tankHealerRoleNames.includes(name);
   },
 } as const;
 

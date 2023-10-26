@@ -2155,6 +2155,14 @@ const templateOptions: OptionsTemplate = {
       default: true,
     },
     {
+      id: 'ReverseTimeline',
+      name: {
+        en: '타임라인 밑에서부터 올라옴 (아래-위)',
+      },
+      type: 'checkbox',
+      default: false,
+    },
+    {
       id: 'ShowTimerBarsAtSeconds',
       name: {
         en: '타임바의 표시 시간 (초단위)',

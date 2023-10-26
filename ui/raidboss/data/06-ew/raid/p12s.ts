@@ -1,9 +1,9 @@
-import { ArrowOutput8, AutumnIndicator } from '../../../../../resources/autumns';
+import Autumns, { ArrowOutput8, AutumnIndicator } from '../../../../../resources/autumns';
 import Conditions from '../../../../../resources/conditions';
 import Outputs from '../../../../../resources/outputs';
 import { callOverlayHandler } from '../../../../../resources/overlay_plugin_api';
 import { Responses } from '../../../../../resources/responses';
-import { Directions } from '../../../../../resources/util';
+import { DirectionOutput8, Directions } from '../../../../../resources/util';
 import ZoneId from '../../../../../resources/zone_id';
 import { RaidbossData } from '../../../../../types/data';
 import { PluginCombatantState } from '../../../../../types/event';
@@ -179,7 +179,7 @@ const whiteFlameDelayOutputStrings = {
     ko: '바로',
   },
   delay2: {
-    en: '젓번째',
+    en: '첫번째',
     de: 'bald',
     cn: '等1只小怪',
     ko: '1번째 쫄',
@@ -346,18 +346,8 @@ const getPalladionRayEscape = (
 ) => {
   if (ps === undefined || ab === undefined)
     return output.unknown!();
-  const safe1 = {
-    circle: 1,
-    cross: 2,
-    triangle: 3,
-    square: 4,
-  } as const;
-  const safe2 = {
-    circle: 4,
-    cross: 3,
-    triangle: 2,
-    square: 1,
-  } as const;
+  const safe1 = { circle: 1, cross: 2, triangle: 3, square: 4 } as const;
+  const safe2 = { circle: 4, cross: 3, triangle: 2, square: 1 } as const;
   const mps = phase === 'classical1' ? safe1[ps] : safe2[ps];
   const mab = { alpha: 0, beta: 1 }[ab];
   const safe = output[`safe${mps}${mab}`]!();
@@ -388,6 +378,10 @@ const pangenesisEffects = {
   darkTilt: 'DF9',
 } as const;
 
+const pangenesisEffectIds: readonly string[] = Object.values(pangenesisEffects);
+
+type PangenesisRole = 'shortLight' | 'shortDark' | 'longLight' | 'longDark' | 'one' | 'not';
+
 type CaloricMarker = 'fire' | 'wind';
 
 const getHeadmarkerId = (data: Data, matches: NetMatches['HeadMarker']) => {
@@ -406,21 +400,17 @@ export type LimitCutCombatantState = PluginCombatantState & {
 };
 
 export interface Data extends RaidbossData {
-  // 전반
+  //
   prsTrinityInvul?: boolean;
   prsApoPeri?: number;
   prsNorth?: boolean;
-  // 후반
   prsUltima?: number;
-  prsSeenPangenesis?: boolean;
-  prsPangenesisCount: { [name: string]: number };
-  prsPangenesisDuration: { [name: string]: number };
-  prsPangenesisRole: { [name: string]: 'umbral' | 'astral' };
-  prsPangenesisTilt?: number;
   //
   readonly triggerSetConfig: {
-    engravement1DropTower: 'quadrant' | 'clockwise' | 'tower';
-    classicalConceptsPairOrder: 'xsct' | 'cxts' | 'ctsx' | 'ctxs' | 'shapeAndDebuff';
+    engravement1DropTower: 'quadrant' | 'clockwise' | 'tower' | 'tetherbase';
+    classicalConceptsPairOrder: 'xsct' | 'cxts' | 'ctsx' | 'ctxs' | 'tcxs' | 'shapeAndDebuff';
+    classicalConcepts2ActualNoFlip: true | false;
+    pangenesisFirstTower: 'agnostic' | 'not' | 'one';
   };
   decOffset?: number;
   expectedFirstHeadmarker?: string;
@@ -465,6 +455,11 @@ export interface Data extends RaidbossData {
   classical2InitialColumn?: number;
   classical2InitialRow?: number;
   classical2Intercept?: InterceptOutput;
+  pangenesisDebuffsCalled?: boolean;
+  pangenesisRole: { [name: string]: PangenesisRole };
+  pangenesisTowerCount: number;
+  lastPangenesisTowerColor?: 'light' | 'dark';
+  pangenesisCurrentColor?: 'light' | 'dark';
   gaiaochosCounter: number;
   palladionGrapsTarget?: string;
   classicalCounter: number;
@@ -489,15 +484,16 @@ const triggerSet: TriggerSet<Data> = {
         en: '파라데이그마2 타워 처리 방식',
         de: 'Paradigma 2 Türme Strategy',
         ja: 'パラデイグマ2の塔処理方法',
-        cn: '第一次拉线踩塔方法',
+        cn: '范式 2 踩塔方法',
         ko: 'Paradeigma 2 기둥 공략',
       },
       type: 'select',
       options: {
         en: {
+          '줄 기준': 'tetherbase',
           '게임8': 'quadrant',
           '줄 기준 시계 방향': 'clockwise',
-          '그냥 알랴줌': 'tower',
+          '그냥 타워 색깔': 'tower',
         },
         de: {
           'Verbindungen gerade rüber + nächstgelegener Quadrant Turm (Game8)': 'quadrant',
@@ -510,6 +506,7 @@ const triggerSet: TriggerSet<Data> = {
           '方針なし': 'tower',
         },
         cn: {
+          '看小怪位置(菓子)': 'tetherbase',
           '垂直拉线 (Game8)': 'quadrant',
           '对角拉线': 'clockwise',
           '仅提示塔颜色': 'tower',
@@ -537,6 +534,7 @@ const triggerSet: TriggerSet<Data> = {
           '○XΔ□ (JP 기본, 1234)': 'cxts',
           '○Δ□X (로켓모양)': 'ctsx',
           '○ΔX□ (무지개)': 'ctxs',
+          'Δ○X□ (TOXS)': 'tcxs',
           '디버프만 알려줌': 'shapeAndDebuff',
         },
         de: {
@@ -544,6 +542,7 @@ const triggerSet: TriggerSet<Data> = {
           '○XΔ□ (Linien)': 'cxts',
           '○Δ□X (Raketenschiff)': 'ctsx',
           '○ΔX□ (Regenbogen)': 'ctxs',
+          'Δ○X□ (TOXS)': 'tcxs',
           'Just call shape and debuff': 'shapeAndDebuff', // FIXME
         },
         cn: {
@@ -551,6 +550,7 @@ const triggerSet: TriggerSet<Data> = {
           '○XΔ□ (1234笔画)': 'cxts',
           '○Δ□X (Rocketship)': 'ctsx',
           '○ΔX□ (彩虹)': 'ctxs',
+          'Δ○X□ (TOXS)': 'tcxs',
           '只报形状和debuff': 'shapeAndDebuff',
         },
         ko: {
@@ -558,19 +558,70 @@ const triggerSet: TriggerSet<Data> = {
           '○XΔ□ (1234)': 'cxts',
           '○Δ□X (동세네엑)': 'ctsx',
           '○ΔX□ (무지개)': 'ctxs',
+          'Δ○X□ (TOXS)': 'tcxs',
           '모양과 디버프만 알림': 'shapeAndDebuff',
         },
       },
       default: 'cxts',
     },
+    {
+      id: 'classicalConcepts2ActualNoFlip',
+      comment: {
+        en:
+          'Only calls final position immediately in chosen pair order with no flip. For example, for BPOG, the blue X (crosses) will be far west. <a href="https://quisquous.github.io/cactbot/resources/images/06ew_raid_p12s_classic2_noflip.webp" target="_blank">Visual</a>',
+        de:
+          'Nennt die endgültige Position nur sofort in der gewählten Paarreihenfolge ohne Flip.“ Bei BPOG beispielsweise befindet sich das blaue X (Kreuze) weit westlich. <a href="https://quisquous.github.io/cactbot/resources/images/06ew_raid_p12s_classic2_noflip.webp" target="_blank">Visual</a>',
+        cn:
+          '只报自己图案的最终位置，没有位置变换。例如，对于 BPOG 打法，蓝 X 是第一列（西面最远）。 <a href="https://quisquous.github.io/cactbot/resources/images/06ew_raid_p12s_classic2_noflip.webp" target="_blank">Visual</a>',
+        ko:
+          '선택한 도형 순서에 따른 최종 위치만 알립니다. 예시에서 파보빨초를 기준으로 파랑 X는 1열이 됩니다. <a href="https://quisquous.github.io/cactbot/resources/images/06ew_raid_p12s_classic2_noflip.webp" target="_blank">Visual</a>',
+      },
+      name: {
+        en: 'Classical Concepts 2: 실제 장소만 알려줌 & 반전 사용안함',
+        de: 'Classical Concepts 2: Nur tatsächlich & keine Umkehrung',
+        cn: '经典概念2: 实际位置 (没有位置变换)',
+        ko: 'Classical Concepts 2: 반전 없이 실제 위치만 알림',
+      },
+      type: 'checkbox',
+      default: false,
+    },
+    {
+      id: 'pangenesisFirstTower',
+      name: {
+        en: 'Pangenesis: 첫 타워',
+        de: 'Pangenesis: Erste Türme',
+        cn: '黑白塔',
+        ko: 'Pangenesis: 첫번째 기둥',
+      },
+      type: 'select',
+      options: {
+        en: {
+          '스위치가 필요할 때만': 'agnostic',
+          '0+2 (HRT)': 'not',
+          '1+2 (Yuki/Rinon)': 'one',
+        },
+        de: {
+          'Nenne nur benötigte Wechsel': 'agnostic',
+          '0+2 (HRT)': 'not',
+          '1+2 (Yuki/Rinon)': 'one',
+        },
+        cn: {
+          '只提示交换颜色': 'agnostic',
+          '0+2 (HRT)': 'not',
+          '1+2 (Yuki/Rinon)': 'one',
+        },
+        ko: {
+          '교체가 필요할 때만 알림': 'agnostic',
+          '0+2 (빠른 융합)': 'not',
+          '1+2 (Yuki/Rinon)': 'one',
+        },
+      },
+      default: 'agnostic',
+    },
   ],
   timelineFile: 'p12s.txt',
   initData: () => {
     return {
-      prsPangenesisCount: {},
-      prsPangenesisRole: {},
-      prsPangenesisDuration: {},
-      //
       isDoorBoss: true,
       combatantData: [],
       paradeigmaCounter: 0,
@@ -593,6 +644,8 @@ const triggerSet: TriggerSet<Data> = {
       sampleTiles: [],
       darknessClones: [],
       conceptData: {},
+      pangenesisRole: {},
+      pangenesisTowerCount: 0,
       gaiaochosCounter: 0,
       classicalCounter: 0,
       classicalMarker: {},
@@ -737,24 +790,28 @@ const triggerSet: TriggerSet<Data> = {
         const y = data.combatantData[0]?.PosY;
         if (y === undefined)
           return output.clones!({ dir: output.unknown!() });
-        let cloneSide;
-        if (y > centerY) {
-          if (data.role === 'tank') {
-            data.prsNorth = false;
-            cloneSide = 'south';
+        if (data.options.AutumnStyle) {
+          let cloneSide;
+          if (y > centerY) {
+            if (data.role === 'tank') {
+              data.prsNorth = false;
+              cloneSide = 'south';
+            } else {
+              data.prsNorth = true;
+              cloneSide = 'north';
+            }
           } else {
-            data.prsNorth = true;
-            cloneSide = 'north';
+            if (data.role === 'tank') {
+              data.prsNorth = true;
+              cloneSide = 'north';
+            } else {
+              data.prsNorth = false;
+              cloneSide = 'south';
+            }
           }
-        } else {
-          if (data.role === 'tank') {
-            data.prsNorth = true;
-            cloneSide = 'north';
-          } else {
-            data.prsNorth = false;
-            cloneSide = 'south';
-          }
+          return output.clones!({ dir: output[cloneSide]!() });
         }
+        const cloneSide = y > centerY ? 'south' : 'north';
         return output.clones!({ dir: output[cloneSide]!() });
       },
       outputStrings: {
@@ -762,7 +819,7 @@ const triggerSet: TriggerSet<Data> = {
           en: '${dir}으로',
           de: 'Klone ${dir}',
           ja: '${dir}',
-          cn: '${dir}',
+          cn: '分身 ${dir}',
           ko: '분신 ${dir}',
         },
         north: Outputs.north,
@@ -778,7 +835,7 @@ const triggerSet: TriggerSet<Data> = {
       netRegex: { id: '82EE', source: 'Anthropos' },
       condition: (data) => data.paradeigmaCounter === 2,
       suppressSeconds: 1,
-      infoText: (_data, matches, output) => {
+      alertText: (_data, matches, output) => {
         const x = Math.round(parseFloat(matches.x));
         let safeLanes;
         if (x < 90)
@@ -794,14 +851,14 @@ const triggerSet: TriggerSet<Data> = {
           en: '서[안] / 동[밖]',
           de: 'Westen innen / Osten außen',
           ja: '西の内側 / 東の外側',
-          cn: '内西 / 外东',
+          cn: '内左 (西) / 外右 (东)',
           ko: '서쪽 안 / 동쪽 바깥',
         },
         insideEastOutsideWest: {
           en: '동[안] / 서[밖]',
           de: 'Osten innen / Westen außen',
           ja: '西の外側 / 東の内側',
-          cn: '内东 / 外西',
+          cn: '内右 (东) / 外左 (西)',
           ko: '동쪽 안 / 서쪽 바깥',
         },
       },
@@ -1300,7 +1357,7 @@ const triggerSet: TriggerSet<Data> = {
       id: 'P12S 줄다리기 보라',
       type: 'Tether',
       netRegex: { id: ['00EA', '00FB'] },
-      condition: Conditions.targetIsYou(),
+      condition: (data, matches) => data.options.AutumnStyle && data.me === matches.target,
       durationSeconds: 7,
       suppressSeconds: 10,
       infoText: (_data, _matches, output) => output.text!(),
@@ -1314,7 +1371,7 @@ const triggerSet: TriggerSet<Data> = {
       id: 'P12S 줄다리기 노랑',
       type: 'Tether',
       netRegex: { id: ['00E9', '00FA'] },
-      condition: Conditions.targetIsYou(),
+      condition: (data, matches) => data.options.AutumnStyle && data.me === matches.target,
       durationSeconds: 7,
       suppressSeconds: 10,
       infoText: (_data, _matches, output) => output.text!(),
@@ -1353,12 +1410,11 @@ const triggerSet: TriggerSet<Data> = {
         data.engravement1TetherIds.push(parseInt(matches.sourceId, 16));
       },
     },
-    /*
     {
       id: 'P12S Engravement 1 Beam',
       type: 'StartsUsing',
       netRegex: { id: Object.keys(tetherAbilityToTowerMap), source: 'Anthropos' },
-      condition: (data) => data.engravementCounter === 1,
+      condition: (data) => !data.options.AutumnStyle && data.engravementCounter === 1,
       alertText: (data, matches, output) => {
         if (data.me === matches.target) {
           if (matches.id === '82F1')
@@ -1383,7 +1439,6 @@ const triggerSet: TriggerSet<Data> = {
         },
       },
     },
-    */
     {
       id: 'P12S Engravement 1 Tower Drop',
       type: 'GainsEffect',
@@ -1400,6 +1455,26 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (data, matches, output) => {
         data.engravement1Towers.push(matches.target);
 
+        if (data.me !== matches.target)
+          return;
+
+        // if Only notify tower color
+        if (data.triggerSetConfig.engravement1DropTower === 'tower') {
+          if (matches.effectId === engravementIdMap.lightTower)
+            return output.lightTower!();
+          return output.darkTower!();
+        }
+
+        const locations = ['NE', 'SW', 'SE', 'NW'] as const;
+        type TowerLocation = typeof locations[number];
+        type CloneLocation = 'NNW' | 'NNE' | 'ENE' | 'ESE' | 'SSE' | 'SSW' | 'WNW' | 'WSW';
+        type TowerData = {
+          location: TowerLocation;
+          clone: CloneLocation;
+        };
+        const towerList: TowerData[] = [];
+        const towerStrategy = data.triggerSetConfig.engravement1DropTower;
+
         for (const combatant of data.combatantData) {
           const x = combatant.PosX;
           const y = combatant.PosY;
@@ -1409,119 +1484,160 @@ const triggerSet: TriggerSet<Data> = {
             return;
 
           const tempColor = data.engravement1TetherPlayers[combatantId.toString(16).toUpperCase()];
-
           const color = tempColor === 'light' ? 'dark' : 'light';
 
-          if (data.triggerSetConfig.engravement1DropTower === 'quadrant') {
+          const isCorrectColor =
+            color === 'light' && matches.effectId === engravementIdMap.lightTower ||
+            color === 'dark' && matches.effectId === engravementIdMap.darkTower;
+
+          if (!isCorrectColor)
+            continue;
+
+          if (towerStrategy === 'quadrant' || towerStrategy === 'tetherbase') {
             if (x < 80 && y < 100) { // WNW: x = 75 && y = 97
-              data.engravement1BeamsPosMap.set('NE', color);
+              towerList.push({ location: 'NE', clone: 'WNW' });
             } else if (x < 100 && y < 80) { // NNW: x = 97 && y = 75
-              data.engravement1BeamsPosMap.set('SW', color);
+              towerList.push({ location: 'SW', clone: 'NNW' });
             } else if (x > 100 && y < 80) { // NNE: x = 103 && y = 75
-              data.engravement1BeamsPosMap.set('SE', color);
+              towerList.push({ location: 'SE', clone: 'NNE' });
             } else if (x > 120 && y < 100) { // ENE: x = 125 && y = 97
-              data.engravement1BeamsPosMap.set('NW', color);
+              towerList.push({ location: 'NW', clone: 'ENE' });
             } else if (x > 120 && y > 100) { // ESE: x = 125 && y = 103
-              data.engravement1BeamsPosMap.set('SW', color);
+              towerList.push({ location: 'SW', clone: 'ESE' });
             } else if (x > 100 && y > 120) { // SSE: x = 103 && y = 125
-              data.engravement1BeamsPosMap.set('NE', color);
+              towerList.push({ location: 'NE', clone: 'SSE' });
             } else if (x < 100 && y > 120) { // SSW: x = 97 && y = 125
-              data.engravement1BeamsPosMap.set('NW', color);
+              towerList.push({ location: 'NW', clone: 'SSW' });
             } else if (x < 80 && y > 100) { // WSW: x = 75 && y = 103
-              data.engravement1BeamsPosMap.set('SE', color);
+              towerList.push({ location: 'SE', clone: 'WSW' });
             }
           } else if (data.triggerSetConfig.engravement1DropTower === 'clockwise') {
             // Tether stretches across and tower is clockwise; e.g. N add stretches S, and tower is SW.
             if (x < 80 && y < 100) { // WNW: x = 75 && y = 97
-              data.engravement1BeamsPosMap.set('SE', color);
+              towerList.push({ location: 'SE', clone: 'WNW' });
             } else if (x < 100 && y < 80) { // NNW: x = 97 && y = 75
-              data.engravement1BeamsPosMap.set('SW', color);
+              towerList.push({ location: 'SW', clone: 'NNW' });
             } else if (x > 100 && y < 80) { // NNE: x = 103 && y = 75
-              data.engravement1BeamsPosMap.set('SW', color);
+              towerList.push({ location: 'SW', clone: 'NNE' });
             } else if (x > 120 && y < 100) { // ENE: x = 125 && y = 97
-              data.engravement1BeamsPosMap.set('NW', color);
+              towerList.push({ location: 'NW', clone: 'ENE' });
             } else if (x > 120 && y > 100) { // ESE: x = 125 && y = 103
-              data.engravement1BeamsPosMap.set('NW', color);
+              towerList.push({ location: 'NW', clone: 'ESE' });
             } else if (x > 100 && y > 120) { // SSE: x = 103 && y = 125
-              data.engravement1BeamsPosMap.set('NE', color);
+              towerList.push({ location: 'NE', clone: 'SSE' });
             } else if (x < 100 && y > 120) { // SSW: x = 97 && y = 125
-              data.engravement1BeamsPosMap.set('NE', color);
+              towerList.push({ location: 'NE', clone: 'SSW' });
             } else if (x < 80 && y > 100) { // WSW: x = 75 && y = 103
-              data.engravement1BeamsPosMap.set('SE', color);
+              towerList.push({ location: 'SE', clone: 'WSW' });
             }
           }
         }
 
-        if (data.me === matches.target) {
-          // if Only notify tower color
-          if (data.triggerSetConfig.engravement1DropTower === 'tower') {
-            if (matches.effectId === engravementIdMap.lightTower)
-              return output.lightTower!();
-            return output.darkTower!();
-          }
-          data.engravement1DarkBeamsPos = [];
-          data.engravement1LightBeamsPos = [];
-          data.engravement1BeamsPosMap.forEach((value: string, key: string) => {
-            if (data.options.AutumnStyle) {
-              if (matches.effectId === engravementIdMap.lightTower && value === 'light') {
-                if (key === 'NE' && data.role === 'dps')
-                  data.engravement1LightBeamsPos.push(output.northeast!());
-                else if (key === 'NW' && data.role !== 'dps')
-                  data.engravement1LightBeamsPos.push(output.northwest!());
-                else if (key === 'SE')
-                  data.engravement1LightBeamsPos.push(output.southeast!());
-                else if (key === 'SW')
-                  data.engravement1LightBeamsPos.push(output.southwest!());
-              } else if (matches.effectId === engravementIdMap.darkTower && value === 'dark') {
-                if (key === 'NE' && data.role === 'dps')
-                  data.engravement1DarkBeamsPos.push(output.northeast!());
-                else if (key === 'NW' && data.role !== 'dps')
-                  data.engravement1DarkBeamsPos.push(output.northwest!());
-                else if (key === 'SE')
-                  data.engravement1DarkBeamsPos.push(output.southeast!());
-                else if (key === 'SW')
-                  data.engravement1DarkBeamsPos.push(output.southwest!());
-              }
-              return;
-            }
-            if (matches.effectId === engravementIdMap.lightTower && value === 'light') {
-              if (key === 'NE')
-                data.engravement1LightBeamsPos.push(output.northeast!());
-              else if (key === 'NW')
-                data.engravement1LightBeamsPos.push(output.northwest!());
-              else if (key === 'SE')
-                data.engravement1LightBeamsPos.push(output.southeast!());
-              else if (key === 'SW')
-                data.engravement1LightBeamsPos.push(output.southwest!());
-            } else if (matches.effectId === engravementIdMap.darkTower && value === 'dark') {
-              if (key === 'NE')
-                data.engravement1DarkBeamsPos.push(output.northeast!());
-              else if (key === 'NW')
-                data.engravement1DarkBeamsPos.push(output.northwest!());
-              else if (key === 'SE')
-                data.engravement1DarkBeamsPos.push(output.southeast!());
-              else if (key === 'SW')
-                data.engravement1DarkBeamsPos.push(output.southwest!());
+        // Now use strategy and towerList (which only contains the correct color for the player)
+        // to call out two spots or sort down to one spot.
+        const cactbotMap: { [dir in TowerLocation]: string } = {
+          NW: output.northwest!(),
+          NE: output.northeast!(),
+          SE: output.southeast!(),
+          SW: output.southwest!(),
+        } as const;
+        const autumnMap: { [dir in TowerLocation]: string } = {
+          NW: output.anw!(),
+          NE: output.ane!(),
+          SE: output.ase!(),
+          SW: output.asw!(),
+        } as const;
+        const outputMap = data.options.AutumnStyle ? autumnMap : cactbotMap;
+
+        const [tower0, tower1] = towerList;
+        if (tower0 === undefined || tower1 === undefined)
+          return;
+
+        const name = data.ShortName(data.me);
+        if (data.options.AutumnStyle && (data.job !== 'BLU' || Autumns.IsBlueName(name))) {
+          const pos: TowerLocation[] = [];
+          const isdps = data.job === 'BLU' ? Autumns.IsBluDps(name) : data.role === 'dps';
+          towerList.forEach((value) => {
+            const location = value.location;
+            if (matches.effectId === engravementIdMap.lightTower) {
+              if (
+                (location === 'NE' && isdps) ||
+                (location === 'NW' && !isdps) ||
+                location === 'SE'
+              )
+                pos.push(location);
+            } else {
+              if (
+                (location === 'NE' && isdps) ||
+                (location === 'NW' && !isdps) ||
+                location === 'SE' || location === 'SW'
+              )
+                pos.push(location);
             }
           });
+          const posoutput = pos.map((x) => outputMap[x]).join(' ');
+          if (matches.effectId === engravementIdMap.lightTower)
+            return output.lightTowerOneSide!({ pos1: posoutput });
+          return output.darkTowerOneSide!({ pos1: posoutput });
+        }
 
-          if (data.options.AutumnStyle) {
-            if (matches.effectId === engravementIdMap.lightTower)
-              return output.alightTower!({ pos: data.engravement1LightBeamsPos.join(' ') });
-            return output.adarkTower!({ pos: data.engravement1DarkBeamsPos.join(' ') });
-          }
-
-          // if light tower
+        if (towerStrategy === 'clockwise' || towerStrategy === 'quadrant') {
           if (matches.effectId === engravementIdMap.lightTower) {
             return output.lightTowerSide!({
-              pos1: data.engravement1LightBeamsPos[0],
-              pos2: data.engravement1LightBeamsPos[1],
+              pos1: outputMap[tower0.location],
+              pos2: outputMap[tower1.location],
             });
           }
 
           return output.darkTowerSide!({
-            pos1: data.engravement1DarkBeamsPos[0],
-            pos2: data.engravement1DarkBeamsPos[1],
+            pos1: outputMap[tower0.location],
+            pos2: outputMap[tower1.location],
+          });
+        } else if (towerStrategy === 'tetherbase') {
+          let towerResult: TowerLocation | undefined;
+
+          // Do the sort by role
+          if (data.role === 'dps') {
+            if (tower0.clone === 'WSW' || tower0.clone === 'WNW') {
+              towerResult = tower0.location;
+            } else if (tower1.clone === 'WSW' || tower1.clone === 'WNW') {
+              towerResult = tower1.location;
+            } else if (tower0.clone === 'SSW' || tower0.clone === 'SSE') {
+              towerResult = tower0.location;
+            } else if (tower1.clone === 'SSW' || tower1.clone === 'SSE') {
+              towerResult = tower1.location;
+            } else if (tower0.clone === 'ENE' || tower0.clone === 'ESE') {
+              towerResult = tower0.location;
+            } else if (tower1.clone === 'ENE' || tower1.clone === 'ESE') {
+              towerResult = tower1.location;
+            }
+          } else {
+            if (tower0.clone === 'NNW' || tower0.clone === 'NNE') {
+              towerResult = tower0.location;
+            } else if (tower1.clone === 'NNW' || tower1.clone === 'NNE') {
+              towerResult = tower1.location;
+            } else if (tower0.clone === 'ENE' || tower0.clone === 'ESE') {
+              towerResult = tower0.location;
+            } else if (tower1.clone === 'ENE' || tower1.clone === 'ESE') {
+              towerResult = tower1.location;
+            } else if (tower0.clone === 'SSW' || tower0.clone === 'SSE') {
+              towerResult = tower0.location;
+            } else if (tower1.clone === 'SSW' || tower1.clone === 'SSE') {
+              towerResult = tower1.location;
+            }
+          }
+
+          if (towerResult === undefined)
+            return;
+
+          if (matches.effectId === engravementIdMap.lightTower) {
+            return output.lightTowerOneSide!({
+              pos1: outputMap[towerResult],
+            });
+          }
+
+          return output.darkTowerOneSide!({
+            pos1: outputMap[towerResult],
           });
         }
       },
@@ -1540,6 +1656,20 @@ const triggerSet: TriggerSet<Data> = {
           cn: '去 ${pos1}/${pos2} 放暗塔',
           ko: '어둠 기둥 ${pos1}/${pos2}에 놓기',
         },
+        lightTowerOneSide: {
+          en: '🟡설치 ${pos1}',
+          de: 'Heller Turm ${pos1} ablegen',
+          ja: 'ひかり設置 ${pos1}',
+          cn: '去 ${pos1} 放光塔',
+          ko: '빛 기둥 ${pos1}에 놓기',
+        },
+        darkTowerOneSide: {
+          en: '🟣설치 ${pos1}',
+          de: 'Dunkler Turm ${pos1} ablegen',
+          ja: 'やみ設置 ${pos1}',
+          cn: '去 ${pos1} 放暗塔',
+          ko: '어둠 기둥 ${pos1}에 놓기',
+        },
         lightTower: {
           en: '🟡설치',
           de: 'Heller Turm ablegen',
@@ -1554,18 +1684,14 @@ const triggerSet: TriggerSet<Data> = {
           cn: '放暗塔',
           ko: '어둠 기둥 놓기',
         },
-        northeast: Outputs.arrowNE,
-        northwest: Outputs.arrowNW,
-        southeast: Outputs.arrowSE,
-        southwest: Outputs.arrowSW,
-        alightTower: {
-          en: '🟡설치 ${pos}',
-          ja: 'ひかり設置 ${pos}',
-        },
-        adarkTower: {
-          en: '🟣설치 ${pos}',
-          ja: 'やみ設置 ${pos}',
-        },
+        northeast: Outputs.northeast,
+        northwest: Outputs.northwest,
+        southeast: Outputs.southeast,
+        southwest: Outputs.southwest,
+        ane: Outputs.arrowNE,
+        anw: Outputs.arrowNW,
+        ase: Outputs.arrowSE,
+        asw: Outputs.arrowSW,
       },
     },
     {
@@ -1619,12 +1745,12 @@ const triggerSet: TriggerSet<Data> = {
       suppressSeconds: 30,
       run: (data, matches) => data.engravement2MyLabel = engravementLabelMap[matches.effectId],
     },
-    /*
     {
       id: 'P12S Engravement 2 Heavensflame Soul Early',
       type: 'GainsEffect',
       netRegex: { effectId: 'DFA' },
-      condition: (data, matches) => data.engravementCounter === 2 && data.me === matches.target,
+      condition: (data, matches) =>
+        !data.options.AutumnStyle && data.engravementCounter === 2 && data.me === matches.target,
       delaySeconds: 6.5, // display a reminder as the player is moving into the second orb stack groups
       infoText: (_data, _matches, output) => output.spreadLater!(),
       outputStrings: {
@@ -1636,7 +1762,6 @@ const triggerSet: TriggerSet<Data> = {
         },
       },
     },
-    */
     // darkTower/lightTower are 20s, but lightBeam/darkBeam are shorter and swap to lightTilt/darkTilt before the mechanic resolves.
     // So use a fixed delay rather than one based on effect duration.
     // TODO: Add additional logic/different outputs if oopsies happen?  (E.g. soak player hit by tower drop -> debuff change, backup soak by spread player, etc.)
@@ -2599,20 +2724,14 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         combined: {
-          en: '${move} + ${engrave}',
+          en: '${move} => ${engrave}',
           de: '${move} => ${engrave}',
           ja: '${move} => ${engrave}',
           cn: '${move} => ${engrave}',
           ko: '${move} => ${engrave}',
         },
-        inThenOut: {
-          en: '안:바깥',
-          ja: '内:外',
-        },
-        outThenIn: {
-          en: '바깥:안',
-          ja: '外:内',
-        },
+        inThenOut: Outputs.inThenOut,
+        outThenIn: Outputs.outThenIn,
         lightBeam: {
           en: '🟣밟아요🡺▶',
           de: 'Dunklen Turm nehmen',
@@ -2748,21 +2867,14 @@ const triggerSet: TriggerSet<Data> = {
         // For the first mechanic, two destination orbs span at [100,95] and [100,105]
         // Each has a short tether to either an 'in' or 'out' orb on the same N/S half of the area.
         // We therefore only need to know whether the 'in' orb is N or S to identify the safe spot.
-        let dir;
         if (parseFloat(donut.y) > 100) {
           data.superchain2bFirstDir = 'south';
-          dir = output.south!();
-        } else {
-          data.superchain2bFirstDir = 'north';
-          dir = output.north!();
+          return output.south!();
         }
-        return output.safe!({ dir: dir });
+        data.superchain2bFirstDir = 'north';
+        return output.north!();
       },
       outputStrings: {
-        safe: {
-          en: '${dir}으로',
-          ja: '${dir}',
-        },
         north: Outputs.north,
         south: Outputs.south,
       },
@@ -3101,6 +3213,7 @@ const triggerSet: TriggerSet<Data> = {
       id: 'P12S 테오의 알테마',
       type: 'StartsUsing',
       netRegex: { id: '82FA', capture: false },
+      condition: (data) => data.options.AutumnStyle,
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
@@ -3129,7 +3242,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '세로',
         },
         mesg: {
-          en: '전체 공격  + 흩어져요(${style})',
+          en: '전체 공격 + 흩어져요(${style})',
         },
       },
     },
@@ -3153,7 +3266,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '가운데 원',
         },
         mesg: {
-          en: '전체 공격  + 흩어져요(${style})',
+          en: '전체 공격 + 흩어져요(${style})',
         },
       },
     },
@@ -3177,7 +3290,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '가로',
         },
         mesg: {
-          en: '전체 공격  + 흩어져요(${style})',
+          en: '전체 공격 + 흩어져요(${style})',
         },
       },
     },
@@ -3227,33 +3340,37 @@ const triggerSet: TriggerSet<Data> = {
         return 0; // for Panta Rhei, fire immediately once cast starts
       },
       durationSeconds: (data, matches) => {
+        if (data.options.AutumnStyle) {
+          if (data.phase === 'classical1')
+            return 11;
+          if (matches.id === '8331')
+            return 16;
+        }
         if (data.phase === 'classical1')
-          return 11; // keep active until shapes tether
+          return 12; // keep active until shapes tether
         if (matches.id === '8331')
-          return 16; // for classical2 initial, display initially to allow player to find (stand in) initial position
+          return 7; // for classical2 initial, display initially to allow player to find (stand in) initial position
         return 9.7; // for Panta Rhei, display until shape inversion completes
       },
       response: (data, matches, output) => {
         // cactbot-builtin-response
         output.responseOutputStrings = {
           classic1: {
-            en: '${column}${row} ${intercept} [${marker}${tether}]',
-            de: '${column}, ${row} => ${intercept} [${marker}${tether}]',
-            ja: '${column} ${row} + ${intercept} [${marker}${tether}]',
-            cn: '${column}, ${row} => ${intercept} [${marker}${tether}]',
-            ko: '${column}, ${row} => ${intercept} [${marker}${tether}]',
+            en: '${column} ${row} ${intercept}',
+            de: '${column}, ${row} => ${intercept}',
+            cn: '${column}, ${row} => ${intercept}',
+            ko: '${column}, ${row} => ${intercept}',
           },
           classic2initial: {
-            en: '${column}${row} [${marker}${tether}]',
-            de: '${column} ${row} [${marker}${tether}]',
-            ja: '${column} ${row} [${marker}${tether}]',
-            cn: '先去 ${column}, ${row} [${marker}${tether}]',
-            ko: '시작: ${column}, ${row} [${marker}${tether}]',
+            en: '시작: ${column} ${row} ${intercept}',
+            de: 'Initial: ${column}, ${row} => ${intercept}',
+            cn: '先去 ${column}, ${row} => ${intercept}',
+            ko: '시작: ${column}, ${row} => ${intercept}',
           },
           classic2actual: {
-            en: '반전: ${column}${row} ${intercept}',
+            en: '반전: ${column} ${row} ${intercept}',
             de: 'Tatsächlich: ${column}, ${row} => ${intercept}',
-            ja: '反転: ${column} ${row} + ${intercept}',
+            ja: '反転: ${column}, ${row} => ${intercept}',
             cn: '去 ${column}, ${row} => ${intercept}',
             ko: '실제: ${column}, ${row} => ${intercept}',
           },
@@ -3266,28 +3383,28 @@ const triggerSet: TriggerSet<Data> = {
             ko: '${shape}, ${debuff}',
           },
           outsideWest: {
-            en: '1',
+            en: '1열',
             de: 'Außerhalb Westen',
             ja: '1列',
             cn: '第1列 (左西 外侧)',
             ko: '1열 (서쪽 바깥)',
           },
           insideWest: {
-            en: '2',
+            en: '2열',
             de: 'Innen Westen',
             ja: '2列',
             cn: '第2列 (左西 内侧)',
             ko: '2열 (서쪽 안)',
           },
           insideEast: {
-            en: '3',
+            en: '3열',
             de: 'Innen Osten',
             ja: '3列',
             cn: '第3列 (右东 内侧)',
             ko: '3열 (동쪽 안)',
           },
           outsideEast: {
-            en: '4',
+            en: '4열',
             de: 'Außerhalb Osten',
             ja: '4列',
             cn: '第4列 (右东 外侧)',
@@ -3390,22 +3507,14 @@ const triggerSet: TriggerSet<Data> = {
             cn: '贝塔',
             ko: '베타',
           },
-          simple: {
-            en: '${marker} + ${tether}',
-            ja: '${marker} + ${tether}',
-          },
         };
 
-        if (data.conceptDebuff === undefined || data.conceptPair === undefined)
+        if (
+          Object.keys(data.conceptData).length !== 12 ||
+          data.conceptDebuff === undefined ||
+          data.conceptPair === undefined
+        )
           return;
-
-        const failStr = output.simple!({
-          marker: output[data.conceptPair]!(),
-          tether: output[data.conceptDebuff]!(),
-        });
-
-        if (Object.keys(data.conceptData).length !== 12)
-          return { infoText: failStr };
 
         if (data.triggerSetConfig.classicalConceptsPairOrder === 'shapeAndDebuff') {
           if (matches.id === '8336') // prevent going off again on Panta Rhei
@@ -3430,11 +3539,19 @@ const triggerSet: TriggerSet<Data> = {
             cxts: ['circle', 'cross', 'triangle', 'square'],
             ctsx: ['circle', 'triangle', 'square', 'cross'],
             ctxs: ['circle', 'triangle', 'cross', 'square'],
+            tcxs: ['triangle', 'circle', 'cross', 'square'],
           };
           const columnOrder =
             columnOrderFromConfig[data.triggerSetConfig.classicalConceptsPairOrder];
           if (columnOrder?.length !== 4)
-            return { infoText: failStr };
+            return;
+
+          // If classicalConcepts2ActualNoFlip is enabled for classic2, the left/west assigned pair will handle
+          // the left/west column, as opposed to flipping to pre-position in the right/east column before Panta Rhei.
+          // To accommodate this, and because the shapes spawn in their flipped arrangement,
+          // we just reverse the columnOrder from the config settings when determining initial safe spots.
+          if (data.triggerSetConfig.classicalConcepts2ActualNoFlip && data.phase === 'classical2')
+            columnOrder.reverse();
 
           myColumn = columnOrder.indexOf(data.conceptPair);
           const myColumnLocations = [
@@ -3444,7 +3561,7 @@ const triggerSet: TriggerSet<Data> = {
           ];
           const [north, middle, south] = myColumnLocations;
           if (north === undefined || middle === undefined || south === undefined)
-            return { infoText: failStr };
+            return;
 
           let myColumnBlueLocation: number;
           if (data.conceptData[north] === 'blue')
@@ -3482,7 +3599,7 @@ const triggerSet: TriggerSet<Data> = {
             const possible1 = possibleLocations[0];
             myIntercept = possibleIntercepts[0];
             if (possible1 === undefined)
-              return { infoText: failStr };
+              return;
             const possible1AdjacentsMap = getConceptMap(possible1);
             for (const [possibleAdjacentLocation] of possible1AdjacentsMap) {
               if (possibleAdjacentLocation === undefined)
@@ -3500,7 +3617,7 @@ const triggerSet: TriggerSet<Data> = {
           }
 
           if (myIntercept === undefined)
-            return { infoText: failStr };
+            return;
 
           const interceptDelta = myIntercept - myColumnBlueLocation;
           if (interceptDelta === -1)
@@ -3518,8 +3635,13 @@ const triggerSet: TriggerSet<Data> = {
             data.classical2InitialRow = myRow;
             data.classical2Intercept = myInterceptOutput;
           }
-        } else {
-          // for Panta Rhei, get myColumn, myRow, and myInterceptOutput from data{} and invert them
+        }
+
+        if (
+          (matches.id === '8336') ||
+          (matches.id === '8331' && data.triggerSetConfig.classicalConcepts2ActualNoFlip)
+        ) {
+          // invert myColumn, myRow, and myInterceptOutput to correspond to final/actual positions
           if (data.classical2InitialColumn !== undefined)
             myColumn = 3 - data.classical2InitialColumn;
           if (data.classical2InitialRow !== undefined)
@@ -3536,12 +3658,12 @@ const triggerSet: TriggerSet<Data> = {
         }
 
         if (myColumn === undefined || myRow === undefined || myInterceptOutput === undefined)
-          return { infoText: failStr };
+          return;
 
         const columnOutput = ['outsideWest', 'insideWest', 'insideEast', 'outsideEast'][myColumn];
         const rowOutput = ['northRow', 'middleRow', 'southRow'][myRow];
         if (columnOutput === undefined || rowOutput === undefined)
-          return { infoText: failStr };
+          return;
 
         let outputStr;
         if (data.phase === 'classical1') {
@@ -3549,33 +3671,35 @@ const triggerSet: TriggerSet<Data> = {
             column: output[columnOutput]!(),
             row: output[rowOutput]!(),
             intercept: output[myInterceptOutput]!(),
-            marker: output[data.conceptPair]!(),
-            tether: output[data.conceptDebuff]!(),
           });
-          return { infoText: outputStr };
+          return { alertText: outputStr };
         }
-        if (matches.id === '8331') { // classic2 initial
+        // call the actual position on Panta Rhei or on classical2 cast (depending on classicalConcepts2ActualNoFlip)
+        if (
+          (matches.id === '8336' && !data.triggerSetConfig.classicalConcepts2ActualNoFlip) ||
+          (matches.id === '8331' && data.triggerSetConfig.classicalConcepts2ActualNoFlip)
+        ) {
+          outputStr = output.classic2actual!({
+            column: output[columnOutput]!(),
+            row: output[rowOutput]!(),
+            intercept: output[myInterceptOutput]!(),
+          });
+          return { alertText: outputStr };
+        }
+        // the initial call is not suppressed by classicalConcepts2ActualNoFlip, so call it for classical2
+        if (matches.id === '8331') {
           outputStr = output.classic2initial!({
             column: output[columnOutput]!(),
             row: output[rowOutput]!(),
-            marker: output[data.conceptPair]!(),
-            tether: output[data.conceptDebuff]!(),
+            intercept: output[myInterceptOutput]!(),
           });
           return { infoText: outputStr };
         }
-        outputStr = output.classic2actual!({
-          column: output[columnOutput]!(),
-          row: output[rowOutput]!(),
-          intercept: output[myInterceptOutput]!(),
-        });
-        return { alertText: outputStr };
+        // only case left is Panta Rhei where initial call was suppressed by classicalConcepts2ActualNoFlip, so don't call anything
+        return;
       },
       run: (data) => {
         if (data.phase === 'classical1') {
-          /*
-          delete data.conceptPair;
-          delete data.conceptDebuff;
-          */
           data.conceptData = {};
         }
       },
@@ -3586,7 +3710,7 @@ const triggerSet: TriggerSet<Data> = {
       netRegex: { effectId: 'E04' }, // Shackled Together
       condition: (data, matches) => data.me === matches.target && data.phase === 'classical1',
       // shapes use 8333 (Implode) at t+5.6s, and 8324 (Palladian Ray cleaves) snapshots at t+8.9s
-      durationSeconds: 8.5,
+      durationSeconds: 8,
       alertText: (data, _matches, output) => {
         if (data.options.AutumnStyle)
           return getPalladionRayEscape('classical1', data.conceptPair, data.conceptDebuff, output);
@@ -3596,7 +3720,10 @@ const triggerSet: TriggerSet<Data> = {
           ? output.baitAlphaDebuff!()
           : output.baitBetaDebuff!();
       },
-      run: (data) => delete data.conceptDebuff,
+      run: (data) => {
+        delete data.conceptPair;
+        delete data.conceptDebuff;
+      },
       outputStrings: {
         baitAlphaDebuff: {
           en: '피하고 => 빔 유도 (알파)',
@@ -3667,7 +3794,7 @@ const triggerSet: TriggerSet<Data> = {
       type: 'Ability',
       netRegex: { id: '8323', source: 'Pallas Athena', capture: false },
       delaySeconds: 2.5,
-      alarmText: (data, _matches, output) => {
+      alertText: (data, _matches, output) => {
         if (data.phase === 'classical2')
           return output.moveAvoid!();
         return output.move!();
@@ -3684,218 +3811,347 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: 'P12S 판제네시스 상태/언스테이블',
+      id: 'P12S Pangenesis Collect',
       type: 'GainsEffect',
-      netRegex: { effectId: pangenesisEffects.unstableFactor },
+      netRegex: { effectId: pangenesisEffectIds },
+      condition: (data) => !data.pangenesisDebuffsCalled && data.phase === 'pangenesis',
       run: (data, matches) => {
-        const cnt = data.prsPangenesisCount[matches.target];
-        data.prsPangenesisCount[matches.target] = cnt === undefined ? 1 : cnt + 1;
-      },
-    },
-    {
-      id: 'P12S 판제네시스 상태/스테이블',
-      type: 'GainsEffect',
-      netRegex: { effectId: pangenesisEffects.stableSystem },
-      run: (data, matches) => {
-        const cnt = data.prsPangenesisCount[matches.target];
-        if (cnt === undefined)
-          data.prsPangenesisCount[matches.target] = 0;
-      },
-    },
-    {
-      id: 'P12S 판제네시스 상태/음브랄', // Umbral Tilt
-      type: 'GainsEffect',
-      netRegex: { effectId: pangenesisEffects.lightTilt },
-      condition: (data) => data.phase === 'pangenesis',
-      run: (data, matches) => {
-        if (!data.prsSeenPangenesis) {
-          const cnt = data.prsPangenesisCount[matches.target];
-          data.prsPangenesisCount[matches.target] = cnt === undefined ? 1 : cnt + 1;
-          data.prsPangenesisDuration[matches.target] = parseFloat(matches.duration);
+        const id = matches.effectId;
+        if (id === pangenesisEffects.darkTilt) {
+          const duration = parseFloat(matches.duration);
+          // 16 = short, 20 = long
+          data.pangenesisRole[matches.target] = duration > 18 ? 'longDark' : 'shortDark';
+        } else if (id === pangenesisEffects.lightTilt) {
+          const duration = parseFloat(matches.duration);
+          // 16 = short, 20 = long
+          data.pangenesisRole[matches.target] = duration > 18 ? 'longLight' : 'shortLight';
+        } else if (id === pangenesisEffects.unstableFactor) {
+          if (matches.count === '01')
+            data.pangenesisRole[matches.target] = 'one';
+        } else if (id === pangenesisEffects.stableSystem) {
+          // Ordered: Unstable Factor / Stable System / Umbral Tilt (light) / Astral Tilt (dark)
+          // ...and applied per person in that order.  Don't overwrite roles here.
+          data.pangenesisRole[matches.target] ??= 'not';
         }
-        data.prsPangenesisRole[matches.target] = 'umbral';
       },
     },
     {
-      id: 'P12S 판제네시스 상태/아스트랄', // Astral Tilt
+      id: 'P12S Pangenesis Initial',
       type: 'GainsEffect',
-      netRegex: { effectId: pangenesisEffects.darkTilt },
-      condition: (data) => data.phase === 'pangenesis',
-      run: (data, matches) => {
-        if (!data.prsSeenPangenesis) {
-          const cnt = data.prsPangenesisCount[matches.target];
-          data.prsPangenesisCount[matches.target] = cnt === undefined ? 1 : cnt + 1;
-          data.prsPangenesisDuration[matches.target] = parseFloat(matches.duration);
-        }
-        data.prsPangenesisRole[matches.target] = 'astral';
-      },
-    },
-    {
-      id: 'P12S 판제네시스 시작',
-      type: 'Ability',
-      netRegex: { id: '833F', source: 'Pallas Athena', capture: false },
-      delaySeconds: 1,
-      durationSeconds: 10,
-      suppressSeconds: 2,
-      alertText: (data, _matches, output) => {
-        // 무직, 인자1
-        const mycnt = data.prsPangenesisCount[data.me] ?? 0;
-        if (mycnt < 2) {
-          let partner = output.unknown!();
-          for (const [name, cnt] of Object.entries(data.prsPangenesisCount)) {
-            if (cnt === mycnt && name !== data.me) {
-              partner = data.ShortName(name);
-              break;
-            }
-          }
-          return mycnt === 0
-            ? output.slime!({ partner: partner })
-            : output.geneone!({ partner: partner });
-        }
-        // 시간에 따른 처리
-        const mystat = data.prsPangenesisRole[data.me];
-        const myduration = data.prsPangenesisDuration[data.me];
-        if (mystat === undefined || myduration === undefined)
+      netRegex: { effectId: 'E22', capture: false },
+      delaySeconds: 0.5,
+      durationSeconds: (data) => {
+        // There's ~13 seconds until the first tower and ~18 until the second tower.
+        // Based on the strat chosen in the triggerset config, to avoid noisy alerts,
+        // only extend duration for the long tilts and other players not taking the first towers.
+        const myRole = data.pangenesisRole[data.me];
+        if (myRole === undefined)
           return;
-        if (myduration < 18)
-          return output.tower1st!({ color: output[mystat]!() });
-        return output.tower2nd!({ color: output[mystat]!() });
+        const strat = data.triggerSetConfig.pangenesisFirstTower;
+        const longerDuration = ['longDark', 'longLight'];
+        if (strat === 'one')
+          longerDuration.push('not');
+        else if (strat === 'not')
+          longerDuration.push('one');
+        return longerDuration.includes(myRole) ? 17 : 12;
       },
-      run: (data) => data.prsSeenPangenesis = true,
+      suppressSeconds: 999999,
+      alertText: (data, _matches, output) => {
+        const strat = data.triggerSetConfig.pangenesisFirstTower;
+        const myRole = data.pangenesisRole[data.me];
+        if (myRole === undefined)
+          return;
+
+        if (myRole === 'shortLight')
+          return output.shortLight!();
+        if (myRole === 'longLight')
+          return strat === 'not' ? output.longLightMerge!() : output.longLight!();
+        if (myRole === 'shortDark')
+          return output.shortDark!();
+        if (myRole === 'longDark')
+          return strat === 'not' ? output.longDarkMerge!() : output.longDark!();
+
+        const myBuddy = Object.keys(data.pangenesisRole).find((x) => {
+          return data.pangenesisRole[x] === myRole && x !== data.me;
+        });
+        const player = myBuddy === undefined ? output.unknown!() : data.ShortName(myBuddy);
+        if (myRole === 'not') {
+          if (strat === 'not')
+            return output.nothingWithTower!({ player: player, tower: output.firstTower!() });
+          else if (strat === 'one')
+            return output.nothingWithTower!({ player: player, tower: output.secondTower!() });
+          return output.nothing!({ player: player });
+        }
+        if (strat === 'not')
+          return output.oneWithTower!({ player: player, tower: output.secondTowerMerge!() });
+        else if (strat === 'one')
+          return output.oneWithTower!({ player: player, tower: output.firstTower!() });
+        return output.one!({ player: player });
+      },
+      run: (data) => data.pangenesisDebuffsCalled = true,
       outputStrings: {
-        tower1st: {
-          en: '빠른: 첫 ${color} 타워',
-          ja: '早: 1の${color}塔',
+        nothing: {
+          en: '무직: 둘째🡹 타워 (${player})',
+          de: 'Nichts (mit ${player})',
+          ja: '無職: 2番目の上の塔 (${player})',
+          cn: '闲人: 踩第2轮塔 (${player})',
+          ko: '디버프 없음 (+ ${player})',
         },
-        tower2nd: {
-          en: '느림: 둘째🡻 ${color} 타워',
-          ja: '遅: 2🡻の${color}塔',
+        nothingWithTower: {
+          en: '무직: ${tower} (${player})',
+          de: 'Nichts (mit ${player}) - ${tower}',
+          cn: '闲人 (和 ${player}) - ${tower}',
+          ko: '디버프 없음 (+ ${player}) - ${tower}',
         },
-        geneone: {
-          en: '인자1: 첫 타워 (${partner}△)',
-          ja: '因子1: 1の塔 (${partner}△)',
+        one: {
+          en: '인자1: 첫 타워 (${player})',
+          de: 'Eins (mit ${player})',
+          ja: '因子1: 1番目の塔 (${player})',
+          cn: '单因子: 踩第1轮塔 (${player})',
+          ko: '1번 (+ ${player})',
         },
-        slime: {
-          en: '무직: 둘째🡹 타워 (${partner}▽)',
-          ja: '無職: 2🡹の塔 (${partner}▽)',
+        oneWithTower: {
+          en: '인자1: ${tower} (${player})',
+          de: 'Eins (mit ${player}) - ${tower}',
+          cn: '单因子 (和 ${player}) - ${tower}',
+          ko: '1번 (+ ${player}) - ${tower}',
         },
-        astral: {
-          en: '🟡하얀', // 색깔 바뀜
-          ja: '🟡ひかり',
+        shortLight: {
+          en: '빠름: 첫 🟣검은 타워',
+          de: 'Hell kurz (nimm erstes Dunkel)',
+          ja: '早: 1番目のやみ塔',
+          cn: '短光: 踩第1轮黑塔',
+          ko: '짧은 빛 (첫 어둠 대상)',
         },
-        umbral: {
-          en: '🟣검은', // 색깔 바뀜
-          ja: '🟣やみ',
+        longLight: {
+          en: '느림: 둘째🡻 🟣검은 타워',
+          de: 'Hell lang (nimm zweites Dunkel)',
+          ja: '遅: 2番目の下のやみ塔',
+          cn: '长光: 踩第2轮黑塔',
+          ko: '긴 빛 (두번째 어둠 대상)',
+        },
+        longLightMerge: {
+          en: '느림: 둘째 🟣검은 타워 - 먼저 합쳐요',
+          de: 'Hell lang (nimm zweites Dunkel - zuerst kombinieren)',
+          cn: '长光 (踩第2轮黑塔 - 先合成)',
+          ko: '긴 빛 (두번째 어둠 대상 - 융합 먼저)',
+        },
+        shortDark: {
+          en: '빠름: 첫 🟡하얀 타워',
+          de: 'Dunkel kurz (nimm erstes Hell)',
+          ja: '早: 1番目のひかり塔',
+          cn: '短暗: 踩第1轮白塔',
+          ko: '짧은 어둠 (첫 빛 대상)',
+        },
+        longDark: {
+          en: '느림: 둘째🡻 🟡하얀 타워',
+          de: 'Dunkel lang (nimm zweites Hell)',
+          ja: '遅: 2番目の下のひかり塔',
+          cn: '长暗: 踩第2轮白塔',
+          ko: '긴 어둠 (두번째 빛 대상)',
+        },
+        longDarkMerge: {
+          en: '느림: 둘째 🟡하얀 타워 - 먼저 합쳐요',
+          de: 'Dunkel lang (nimm zweites Hell - zuerst kombinieren)',
+          cn: '长暗 (踩第2轮白塔 - 先合成)',
+          ko: '긴 어둠 (두번째 빛 대상 - 융합 먼저)',
+        },
+        firstTower: {
+          en: '첫 타워',
+          de: 'Erster Turm',
+          cn: '1 塔',
+          ko: '첫번째 기둥',
+        },
+        secondTower: {
+          en: '둘째 타워',
+          de: 'Zweiter Turm',
+          cn: '2 塔',
+          ko: '두번째 기둥',
+        },
+        secondTowerMerge: {
+          en: '둘째 타워 - 먼저 합쳐요',
+          de: 'Zweiter Turm (zuerst kombinieren)',
+          cn: '2 塔 (先合成)',
+          ko: '두번째 기둥 (융합 먼저)',
         },
         unknown: Outputs.unknown,
       },
     },
     {
-      id: 'P12S 판제네시스 상태/타워 색깔',
-      type: 'Ability',
-      netRegex: { id: ['8343', '8344'], source: 'Hemitheos' },
-      condition: (data, matches) => matches.target === data.me,
+      id: 'P12S Pangenesis Tilt Gain',
+      type: 'GainsEffect',
+      netRegex: { effectId: [pangenesisEffects.lightTilt, pangenesisEffects.darkTilt] },
+      condition: (data, matches) => matches.target === data.me && data.phase === 'pangenesis',
       run: (data, matches) => {
-        if (data.prsPangenesisRole[data.me] !== undefined)
-          return;
-        const cc = matches.id === '8343' ? 'astral' : 'umbral';
-        data.prsPangenesisRole[data.me] = cc;
+        const color = matches.effectId === pangenesisEffects.lightTilt ? 'light' : 'dark';
+        data.pangenesisCurrentColor = color;
       },
     },
     {
-      id: 'P12S 판제네시스 이동',
+      id: 'P12S Pangenesis Tilt Lose',
+      type: 'LosesEffect',
+      netRegex: { effectId: [pangenesisEffects.lightTilt, pangenesisEffects.darkTilt] },
+      condition: (data, matches) => matches.target === data.me && data.phase === 'pangenesis',
+      run: (data) => data.pangenesisCurrentColor = undefined,
+    },
+    {
+      id: 'P12S Pangenesis Tower',
+      type: 'Ability',
+      // 8343 = Umbral Advent (light tower), 8344 = Astral Advent (dark tower)
+      netRegex: { id: ['8343', '8344'] },
+      condition: (data, matches) => matches.target === data.me && data.phase === 'pangenesis',
+      run: (data, matches) => {
+        const color = matches.id === '8343' ? 'light' : 'dark';
+        data.lastPangenesisTowerColor = color;
+      },
+    },
+    /*
+    {
+      id: 'P12S Pangenesis 이동',
       type: 'Ability',
       netRegex: { id: ['8343', '8344'], source: 'Hemitheos', capture: false },
+      condition: (data) => data.phase === 'pangenesis',
       delaySeconds: 0.5,
       durationSeconds: 4,
       suppressSeconds: 2,
+      infoText: (data, _matches, output) => {
+        if (data.pangenesisTowerCount === 3)
+          return output.end!();
+        if (data.lastPangenesisTowerColor === undefined)
+          return output.same!();
+        return output.move!();
+      },
+      outputStrings: {
+        same: {
+          en: '다음 같은 색 타워',
+        },
+        move: {
+          en: '다음 타워'
+        },
+        end: {
+          en: '끝! 남쪽으로',
+        },
+      },
+    },
+    */
+    {
+      id: 'P12S Pangenesis Slime Reminder',
+      type: 'Ability',
+      // 8343 = Umbral Advent (light tower), 8344 = Astral Advent (dark tower)
+      // There's always 1-2 of each, so just watch one.
+      netRegex: { id: '8343', capture: false },
+      condition: (data) => data.phase === 'pangenesis',
+      preRun: (data) => data.pangenesisTowerCount++,
+      suppressSeconds: 3,
+      alarmText: (data, _matches, output) => {
+        if (data.pangenesisTowerCount !== 3)
+          return;
+        if (data.pangenesisRole[data.me] !== 'not')
+          return;
+        return output.slimeTethers!();
+      },
+      outputStrings: {
+        slimeTethers: {
+          en: '끝이지만 무직! 슬라임 채요!',
+          de: 'Nimm Schleim Verbindung',
+          ja: 'スライムの線取り',
+          cn: '接线',
+          ko: '슬라임 선 가져가기',
+        },
+      },
+    },
+    {
+      id: 'P12S Pangenesis Tower Call',
+      type: 'GainsEffect',
+      netRegex: { effectId: pangenesisEffects.lightTilt, capture: false },
+      condition: (data) => {
+        if (data.phase !== 'pangenesis')
+          return false;
+        return data.lastPangenesisTowerColor !== undefined && data.pangenesisTowerCount !== 3;
+      },
+      delaySeconds: 0.5,
+      suppressSeconds: 3,
       response: (data, _matches, output) => {
         // cactbot-builtin-response
         output.responseOutputStrings = {
-          move: {
-            en: '타워 둘어가요',
-            ja: '塔踏み',
+          // TODO: with more tracking we could even tell you who you're supposed
+          // to be with so that you could yell something on comms to fix mistakes.
+          lightTower: {
+            en: '🟡하얀 타워',
+            de: 'Heller Turm',
+            ja: 'ひかり塔',
+            cn: '踩白塔',
+            ko: '빛 기둥',
           },
-          movecc: {
-            en: '다음 ${color} 타워',
-            ja: '次${color}塔',
+          darkTower: {
+            en: '🟣검은 타워',
+            de: 'Dunkler Turm',
+            ja: 'やみ塔',
+            cn: '踩黑塔',
+            ko: '어둠 기둥',
           },
-          end: {
-            en: '끝! 남쪽으로',
-            ja: '終わり！南へ',
+          lightTowerSwitch: {
+            en: '🟡하얀 타워 (반대로)',
+            de: 'Heller Turm (wechsel)',
+            ja: 'やみ -> ひかり塔',
+            cn: '踩白塔 (换色)',
+            ko: '빛 기둥 (교체)',
           },
-          slime: {
-            en: '끝이지만 무직! 슬라임 채요!',
-            ja: '終わったが無職！スライム取り！',
-          },
-          wait1n: {
-            en: '둘째🡹 타워',
-            ja: '2🡹の塔',
-          },
-          wait1g: {
-            en: '둘째🡻 타워',
-            ja: '2🡻の塔',
-          },
-          wait1gcc: {
-            en: '둘째🡻 ${color} 타워',
-            ja: '2🡻の${color}塔',
-          },
-          astral: {
-            en: '🟡하얀', // 색깔 바뀜
-            ja: '🟡ひかり',
-          },
-          umbral: {
-            en: '🟣검은', // 색깔 바뀜
-            ja: '🟣やみ',
+          darkTowerSwitch: {
+            en: '🟣검은 타워 (반대로)',
+            de: 'Dunkler Turm (wechsel)',
+            ja: 'ひかり -> やみ塔',
+            cn: '踩黑塔 (换色)',
+            ko: '어둠 기둥 (교체)',
           },
         };
+        const strat = data.triggerSetConfig.pangenesisFirstTower;
+        const myRole = data.pangenesisRole[data.me];
+        if (myRole === undefined)
+          return;
 
-        data.prsPangenesisTilt = (data.prsPangenesisTilt ?? 0) + 1;
-        const tilt = data.prsPangenesisTilt;
+        const switchOutput = data.lastPangenesisTowerColor === 'light'
+          ? 'darkTowerSwitch'
+          : 'lightTowerSwitch';
+        const stayOutput = data.lastPangenesisTowerColor === 'light' ? 'lightTower' : 'darkTower';
 
-        const mycnt = data.prsPangenesisCount[data.me] ?? 0;
-        const myrole = data.prsPangenesisRole[data.me];
-        const myduration = data.prsPangenesisDuration[data.me] ?? 0;
-
-        if (tilt === 1) {
-          if (myduration < 18 || mycnt === 1) {
-            if (myrole === undefined)
-              return { alertText: output.move!() };
-            return { alertText: output.movecc!({ color: output[myrole]!() }) };
-          }
-          if (myduration > 18) {
-            if (myrole === undefined)
-              return { alertText: output.wait1g!() };
-            return { alertText: output.wait1gcc!({ color: output[myrole]!() }) };
-          }
-          if (mycnt === 0)
-            return { alertText: output.wait1n!() };
-        } else if (tilt === 2) {
-          // 모두 다 이동
-          if (myrole === undefined)
-            return { alertText: output.move!() };
-          return { alertText: output.movecc!({ color: output[myrole]!() }) };
-        } else if (tilt === 3) {
-          // 무직만 슬라임
-          if (mycnt === 0)
-            return { alarmText: output.slime!() };
-          return { alertText: output.end!() };
+        // 2nd towers
+        if (data.pangenesisTowerCount === 1) {
+          if (strat === 'not') {
+            // in the 0+2 strat, 2nd tower responsibilities are fixed based on 1st tower soaks.
+            // the shortLight, shortDark, and both 'not' players always take the northern (opposite color) towers.
+            // the longLight, longDark, and both 'one' players soak the southern (same color) towers - per their still-active Pangenesis Initial call
+            const swapRoles: PangenesisRole[] = ['not', 'shortLight', 'shortDark'];
+            if (swapRoles.includes(myRole))
+              return { infoText: output[switchOutput]!() }; // infoText because, although a switch, it's 100% anticipated and should be treated as a reminder
+            return;
+          } else if (strat === 'one') {
+            // in the 1+2 strat, 2nd tower responsibilities are flexible based on debuffs applied by the 1st tower
+            // the 'not' players take the northern towers and the longLight and longDark players taken the southern towers
+            // for the 'one' and shortDark/shortLight players, whomever receives a same-color debuff from the first tower goes north (swaps), the other goes south
+            const swapRoles: PangenesisRole[] = ['one', 'shortLight', 'shortDark'];
+            if (data.pangenesisCurrentColor === data.lastPangenesisTowerColor)
+              return { alertText: output[switchOutput]!() };
+            else if (swapRoles.includes(myRole))
+              return { infoText: output[stayOutput]!() };
+          } else if (data.pangenesisCurrentColor === data.lastPangenesisTowerColor)
+            return { alertText: output[switchOutput]!() }; // if no strat, only call a swap for players who must swap or deadge
+          return;
         }
-      },
-      run: (data) => {
-        if (data.prsPangenesisTilt && data.prsPangenesisTilt >= 3) {
-          data.prsPangenesisCount = {};
-          data.prsPangenesisRole = {};
-          data.prsPangenesisDuration = {};
-          delete data.prsPangenesisTilt;
-        }
+
+        // 3rd towers
+        // in both the 0+2 and 1+2 strats, only the players whose debuff is incompatible with the next tower will swap; all others stay
+        if (data.pangenesisCurrentColor === data.lastPangenesisTowerColor)
+          return { alertText: output[switchOutput]!() };
+        if (strat === 'not' || strat === 'one')
+          return { infoText: output[stayOutput]!() };
       },
     },
     {
       id: 'P12S Summon Darkness Preposition',
       type: 'StartsUsing',
       netRegex: { id: '832F', source: 'Pallas Athena', capture: false },
-      condition: (data) => data.seenSecondTethers === false && !data.options.AutumnStyle,
+      condition: (data) => !data.options.AutumnStyle && data.seenSecondTethers === false,
       infoText: (_data, _matches, output) => output.stackForTethers!(),
       outputStrings: {
         stackForTethers: {
@@ -3920,21 +4176,58 @@ const triggerSet: TriggerSet<Data> = {
         const uavCenterX = 100;
         const uavCenterY = 90;
 
-        const unsafeMap: Partial<Record<ArrowOutput8, ArrowOutput8>> = {
-          arrowN: 'arrowS',
-          arrowNE: 'arrowSW',
-          arrowE: 'arrowW',
-          arrowSE: 'arrowNW',
-          arrowS: 'arrowN',
-          arrowSW: 'arrowNE',
-          arrowW: 'arrowE',
-          arrowNW: 'arrowSE',
+        if (data.options.AutumnStyle) {
+          const unsafeMap: Partial<Record<ArrowOutput8, ArrowOutput8>> = {
+            arrowN: 'arrowS',
+            arrowNE: 'arrowSW',
+            arrowE: 'arrowW',
+            arrowSE: 'arrowNW',
+            arrowS: 'arrowN',
+            arrowSW: 'arrowNE',
+            arrowW: 'arrowE',
+            arrowNW: 'arrowSE',
+          } as const;
+          let safeDirs = Object.keys(unsafeMap) as ArrowOutput8[];
+          data.darknessClones.forEach((clone) => {
+            const x = parseFloat(clone.x);
+            const y = parseFloat(clone.y);
+            const cloneDir = AutumnIndicator.xyToArrow8Output(x, y, uavCenterX, uavCenterY);
+            const pairedDir = unsafeMap[cloneDir];
+            safeDirs = safeDirs.filter((dir) => dir !== cloneDir && dir !== pairedDir);
+          });
+          if (safeDirs.length !== 2)
+            return;
+          const [dir1, dir2] = safeDirs.sort();
+          if (dir1 === undefined || dir2 === undefined)
+            return;
+          let arrow = undefined;
+          if (data.job !== 'BLU') {
+            arrow = getUltimaRayArrow(data.role === 'dps', dir1, dir2);
+          } else {
+            const name = data.ShortName(data.me);
+            if (Autumns.IsBlueName(name))
+              arrow = getUltimaRayArrow(Autumns.IsBluDps(name), dir1, dir2);
+          }
+          if (arrow !== undefined)
+            return output.moveTo!({ dir: output[arrow]!() });
+          return output.combined!({ dir1: output[dir1]!(), dir2: output[dir2]!() });
+        }
+
+        const unsafeMap: Partial<Record<DirectionOutput8, DirectionOutput8>> = {
+          dirN: 'dirS',
+          dirNE: 'dirSW',
+          dirE: 'dirW',
+          dirSE: 'dirNW',
+          dirS: 'dirN',
+          dirSW: 'dirNE',
+          dirW: 'dirE',
+          dirNW: 'dirSE',
         } as const;
-        let safeDirs = Object.keys(unsafeMap) as ArrowOutput8[];
+        let safeDirs = Object.keys(unsafeMap);
         data.darknessClones.forEach((clone) => {
           const x = parseFloat(clone.x);
           const y = parseFloat(clone.y);
-          const cloneDir = AutumnIndicator.xyToArrow8Output(x, y, uavCenterX, uavCenterY);
+          const cloneDir = Directions.xyTo8DirOutput(x, y, uavCenterX, uavCenterY);
           const pairedDir = unsafeMap[cloneDir];
           safeDirs = safeDirs.filter((dir) => dir !== cloneDir && dir !== pairedDir);
         });
@@ -3943,16 +4236,11 @@ const triggerSet: TriggerSet<Data> = {
         const [dir1, dir2] = safeDirs.sort();
         if (dir1 === undefined || dir2 === undefined)
           return;
-        if (data.options.AutumnStyle) {
-          const arrow = getUltimaRayArrow(data.role === 'dps', dir1, dir2);
-          if (arrow !== undefined)
-            return output.moveTo!({ dir: output[arrow]!() });
-        }
         return output.combined!({ dir1: output[dir1]!(), dir2: output[dir2]!() });
       },
       outputStrings: {
         combined: {
-          en: '${dir1} / ${dir2}',
+          en: '${dir1} / ${dir2} 안전',
           de: '${dir1} / ${dir2} Sicher',
           cn: '${dir1} / ${dir2} 安全',
           ko: '${dir1} / ${dir2} 안전',
@@ -3960,6 +4248,7 @@ const triggerSet: TriggerSet<Data> = {
         moveTo: {
           en: '${dir}으로',
         },
+        ...Directions.outputStrings8Dir,
         ...AutumnIndicator.outputStringsArrow8,
       },
     },
@@ -3973,35 +4262,63 @@ const triggerSet: TriggerSet<Data> = {
         const uavCenterX = 100;
         const uavCenterY = 90;
 
-        const safeMap: Record<ArrowOutput8, readonly ArrowOutput8[]> = {
+        if (data.options.AutumnStyle) {
+          const safeMap: Record<ArrowOutput8, readonly ArrowOutput8[]> = {
+            // for each dir, identify the two dirs 90 degrees away
+            arrowN: ['arrowW', 'arrowE'],
+            arrowNE: ['arrowNW', 'arrowSE'],
+            arrowE: ['arrowN', 'arrowS'],
+            arrowSE: ['arrowNE', 'arrowSW'],
+            arrowS: ['arrowW', 'arrowE'],
+            arrowSW: ['arrowNW', 'arrowSE'],
+            arrowW: ['arrowN', 'arrowS'],
+            arrowNW: ['arrowNE', 'arrowSW'],
+            unknown: [],
+          } as const;
+
+          const x = parseFloat(matches.x);
+          const y = parseFloat(matches.y);
+          const cloneDir = AutumnIndicator.xyToArrow8Output(x, y, uavCenterX, uavCenterY);
+          const [dir1, dir2] = safeMap[cloneDir];
+          if (dir1 === undefined || dir2 === undefined)
+            return;
+          let arrow = undefined;
+          if (data.job !== 'BLU') {
+            arrow = getUltimaRayArrow(data.role === 'dps', dir1, dir2);
+          } else {
+            const name = data.ShortName(data.me);
+            if (Autumns.IsBlueName(name))
+              arrow = getUltimaRayArrow(Autumns.IsBluDps(name), dir1, dir2);
+          }
+          if (arrow !== undefined)
+            return output.moveTo!({ dir: output[arrow]!() });
+          return output.combined!({ dir1: output[dir1]!(), dir2: output[dir2]!() });
+        }
+
+        const safeMap: Record<DirectionOutput8, readonly DirectionOutput8[]> = {
           // for each dir, identify the two dirs 90 degrees away
-          arrowN: ['arrowW', 'arrowE'],
-          arrowNE: ['arrowNW', 'arrowSE'],
-          arrowE: ['arrowN', 'arrowS'],
-          arrowSE: ['arrowNE', 'arrowSW'],
-          arrowS: ['arrowW', 'arrowE'],
-          arrowSW: ['arrowNW', 'arrowSE'],
-          arrowW: ['arrowN', 'arrowS'],
-          arrowNW: ['arrowNE', 'arrowSW'],
+          dirN: ['dirW', 'dirE'],
+          dirNE: ['dirNW', 'dirSE'],
+          dirE: ['dirN', 'dirS'],
+          dirSE: ['dirNE', 'dirSW'],
+          dirS: ['dirW', 'dirE'],
+          dirSW: ['dirNW', 'dirSE'],
+          dirW: ['dirN', 'dirS'],
+          dirNW: ['dirNE', 'dirSW'],
           unknown: [],
         } as const;
 
         const x = parseFloat(matches.x);
         const y = parseFloat(matches.y);
-        const cloneDir = AutumnIndicator.xyToArrow8Output(x, y, uavCenterX, uavCenterY);
+        const cloneDir = Directions.xyTo8DirOutput(x, y, uavCenterX, uavCenterY);
         const [dir1, dir2] = safeMap[cloneDir];
         if (dir1 === undefined || dir2 === undefined)
           return;
-        if (data.options.AutumnStyle) {
-          const arrow = getUltimaRayArrow(data.role === 'dps', dir1, dir2);
-          if (arrow !== undefined)
-            return output.moveTo!({ dir: output[arrow]!() });
-        }
         return output.combined!({ dir1: output[dir1]!(), dir2: output[dir2]!() });
       },
       outputStrings: {
         combined: {
-          en: '${dir1} / ${dir2}',
+          en: '${dir1} / ${dir2} 안전',
           de: '${dir1} / ${dir2} Sicher',
           cn: '${dir1} / ${dir2} 安全',
           ko: '${dir1} / ${dir2} 안전',
@@ -4009,6 +4326,7 @@ const triggerSet: TriggerSet<Data> = {
         moveTo: {
           en: '${dir}으로',
         },
+        ...Directions.outputStrings8Dir,
         ...AutumnIndicator.outputStringsArrow8,
       },
     },
@@ -4151,6 +4469,7 @@ const triggerSet: TriggerSet<Data> = {
       id: 'P12S 크러시 헬름',
       type: 'StartsUsing',
       netRegex: { id: '8317', source: 'Pallas Athena', capture: false },
+      condition: (data) => data.options.AutumnStyle,
       durationSeconds: 7,
       alertText: (data, _matches, output) => {
         if (data.role === 'tank')
@@ -4320,7 +4639,7 @@ const triggerSet: TriggerSet<Data> = {
         if (myBuff === 'fire') {
           const myTeam: string[] = [];
           for (const [name, stat] of Object.entries(data.caloric1Buff)) {
-            if (stat === myBuff && name !== data.me)
+            if (stat === myBuff /* && name !== data.me */)
               myTeam.push(name);
           }
           return { alertText: output.fire!({ team: data.PriorityNames(myTeam).join(', ') }) };
@@ -4331,7 +4650,7 @@ const triggerSet: TriggerSet<Data> = {
 
         const myTeam: string[] = [];
         for (const [name, stat] of Object.entries(data.caloric1Buff)) {
-          if (stat === myBuff && name !== data.me && !data.caloric1First.includes(name))
+          if (stat === myBuff && /* name !== data.me && */ !data.caloric1First.includes(name))
             myTeam.push(name);
         }
         return { alertText: output.wind!({ team: data.PriorityNames(myTeam).join(', ') }) };
@@ -4441,7 +4760,7 @@ const triggerSet: TriggerSet<Data> = {
           return;
 
         if (data.caloric2PassCount === 8 || prevFire === data.me)
-          return { alarmText: output.moveAway!() };
+          return { infoText: output.moveAway!() };
         if (thisFire === data.me)
           return { alertText: output.passFire!() };
       },
@@ -4471,7 +4790,7 @@ const triggerSet: TriggerSet<Data> = {
       netRegex: { id: '831F', source: 'Pallas Athena', capture: false },
       delaySeconds: 0.5,
       suppressSeconds: 2,
-      response: Responses.spread('alarm'),
+      response: Responses.spread('alert'),
     },
   ],
   timelineReplace: [
