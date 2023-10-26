@@ -40,8 +40,8 @@ const triggerSet: OopsyTriggerSet<Data> = {
     'AMRS Shishio Raiun Leaping Levin 3': '8428', // Raiun 1x Smokeater large cloud circles
     'AMRS Shishio Lightning Bolt': '842A', // initial Cloud to Cloud circles
     'AMRS Shishio Cloud to Cloud 1': '842B', // 1x Smokeater small lines
-    'AMRS Shishio Cloud to Cloud 2': '842C', // 2x Smokeater medium lines
-    'AMRS Shishio Cloud to Cloud 3': '842D', // 3x Smokeater large lines
+    'AMRS Shishio Cloud to Cloud 2': '824C', // 2x Smokeater medium lines
+    'AMRS Shishio Cloud to Cloud 3': '824D', // 3x Smokeater large lines
     'AMRS Shishio Noble Pursuit 1': '842E', // initial charge line
     'AMRS Shishio Noble Pursuit 2': '842F', // followup charge line
     'AMRS Shishio Levinburst': '8430', // line damage during Noble Pursuit
@@ -59,38 +59,38 @@ const triggerSet: OopsyTriggerSet<Data> = {
     'AMRS Shishu Yamabiko': '868A', // sprite line aoe
     'AMRS Shishu Kotengu Blade of the Tengu': '8671', // Leftward/Rightward/Backward Blows
     'AMRS Shishu Onmitsugashira Juji Shuriken': '8676', // untelegraphed front line
-    'AMRS Shishu Onmitsugashira Juji Shuriken Huton': '8677', // untelegraphed fast front line on all players
+    'AMRS Shishu Onmitsugashira Juji Shuriken Huton': '867E', // untelegraphed fast front line on all players
 
     // Gorai
     'AMRS Gorai Fire Spread Purple': '853C', // line damage after purple Brazen Ballad
     'AMRS Gorai Fire Spread Blue': '853D', // line damage after blue Brazen Ballad
     'AMRS Gorai Falling Rock Purple': '853F', // expanded rock damage after purple Brazen Ballad
     'AMRS Gorai Falling Rock Blue': '8540', // donutified rock damage after purple Brazen Ballad
-    'AMRS Gorai Ball of Levin Shock Small': '8522', // small circle from Ball of Levin hit by Humble Hammer
-    'AMRS Gorai Ball of Levin Shock Big': '8523', // large circle from Ball of Levin
-    'AMRS Gorai Cloud to Ground 1': '8529', // initial cloud exaflare
-    'AMRS Gorai Cloud to Ground 2': '852A', // ongoing cloud exaflare
-    'AMRS Gorai Impure Purgation Second': '8531', // follow-up protean'
+    'AMRS Gorai Ball of Levin Shock Small': '8549', // small circle from Ball of Levin hit by Humble Hammer
+    'AMRS Gorai Ball of Levin Shock Big': '854A', // large circle from Ball of Levin
+    'AMRS Gorai Cloud to Ground 1': '854D', // initial cloud exaflare
+    'AMRS Gorai Cloud to Ground 2': '854E', // ongoing cloud exaflare
+    'AMRS Gorai Impure Purgation Second': '8553', // follow-up protean'
 
     // Moko
-    'AMRS Moko Triple Kasumi-Giri 1': 'TODO', // back red first
-    'AMRS Moko Triple Kasumi-Giri 2': 'TODO', // left red first
-    'AMRS Moko Triple Kasumi-Giri 3': 'TODO', // front red first
-    'AMRS Moko Triple Kasumi-Giri 4': 'TODO', // right red first
-    'AMRS Moko Triple Kasumi-Giri 5': 'TODO', // back red followup
-    'AMRS Moko Triple Kasumi-Giri 6': 'TODO', // left red followup
-    'AMRS Moko Triple Kasumi-Giri 7': 'TODO', // front red followup
-    'AMRS Moko Triple Kasumi-Giri 8': 'TODO', // right red followup
-    'AMRS Moko Triple Kasumi-Giri 9': 'TODO', // back blue first
-    'AMRS Moko Triple Kasumi-Giri 10': 'TODO', // left blue first
-    'AMRS Moko Triple Kasumi-Giri 11': 'TODO', // front blue first
-    'AMRS Moko Triple Kasumi-Giri 12': 'TODO', // right blue first
-    'AMRS Moko Triple Kasumi-Giri 13': 'TODO', // back blue followup
-    'AMRS Moko Triple Kasumi-Giri 14': 'TODO', // left blue followup
-    'AMRS Moko Triple Kasumi-Giri 15': 'TODO', // front blue followup
-    'AMRS Moko Triple Kasumi-Giri 16': 'TODO', // right blue followup
-    'AMRS Moko Unbound Spirit': 'TODO', // red "out" Triple Kasumi-Giri
-    'AMRS Moko Azure Coil': 'TODO', // blue "in" Triple Kasumi-Giri
+    'AMRS Moko Triple Kasumi-Giri 1': '85E4', // back red first
+    'AMRS Moko Triple Kasumi-Giri 2': '85E5', // left red first
+    'AMRS Moko Triple Kasumi-Giri 3': '85E6', // front red first
+    'AMRS Moko Triple Kasumi-Giri 4': '85E7', // right red first
+    'AMRS Moko Triple Kasumi-Giri 5': '85E8', // back red followup
+    'AMRS Moko Triple Kasumi-Giri 6': '85E8', // left red followup
+    'AMRS Moko Triple Kasumi-Giri 7': '85E8', // front red followup
+    'AMRS Moko Triple Kasumi-Giri 8': '85E8', // right red followup
+    'AMRS Moko Triple Kasumi-Giri 9': '85EE', // back blue first
+    'AMRS Moko Triple Kasumi-Giri 10': '85EF', // left blue first
+    'AMRS Moko Triple Kasumi-Giri 11': '85F0', // front blue first
+    'AMRS Moko Triple Kasumi-Giri 12': '85F1', // right blue first
+    'AMRS Moko Triple Kasumi-Giri 13': '85F2', // back blue followup
+    'AMRS Moko Triple Kasumi-Giri 14': '85F3', // left blue followup
+    'AMRS Moko Triple Kasumi-Giri 15': '85F4', // front blue followup
+    'AMRS Moko Triple Kasumi-Giri 16': '85F5', // right blue followup
+    'AMRS Moko Unbound Spirit': '85EC', // red "out" Triple Kasumi-Giri
+    'AMRS Moko Azure Coil': '85ED', // blue "in" Triple Kasumi-Giri
 
     'AMRS Moko Scarlet Auspice': '8600', // "get out" before Boundless Scarlet
     'AMRS Moko Boundless Scarlet': '8601', // initial red lines before they grow
@@ -100,14 +100,14 @@ const triggerSet: OopsyTriggerSet<Data> = {
     'AMRS Moko Upwell 1': '8605', // blue line first bounce
     'AMRS Moko Upwell 2': '8606', // blue line ongoing bounces
 
-    'AMRS Moko Fleeting Iai-Giri 1': 'TODO', // back purple
-    'AMRS Moko Fleeting Iai-Giri 2': 'TODO', // left purple
-    'AMRS Moko Fleeting Iai-Giri 3': 'TODO', // right purple
+    'AMRS Moko Fleeting Iai-Giri 1': '85F6', // back purple
+    'AMRS Moko Fleeting Iai-Giri 2': '85F7', // left purple
+    'AMRS Moko Fleeting Iai-Giri 3': '85F8', // right purple
 
     'AMRS Moko Shadow Kasumi-Giri 1': '85F9', // back purple first
-    'AMRS Moko Shadow Kasumi-giri 2': 'TODO', // left purple followup
-    'AMRS Moko Shadow Kasumi-giri 3': 'TODO', // front purple followup
-    'AMRS Moko Shadow Kasumi-giri 4': 'TODO', // right purple followup
+    'AMRS Moko Shadow Kasumi-giri 2': '86CC', // left purple followup
+    'AMRS Moko Shadow Kasumi-giri 3': '86CD', // front purple followup
+    'AMRS Moko Shadow Kasumi-giri 4': '86CE', // right purple followup
 
     'AMRS Moko Oni\'s Claw Clearout 1': '8C22', // hit 1 of large circles
     'AMRS Moko Oni\'s Claw Clearout 2': '8C28', // hit 2 of large circles
@@ -128,19 +128,19 @@ const triggerSet: OopsyTriggerSet<Data> = {
   shareWarn: {
     'AMRS Shishu Raiko Barreling Smash': '8665', // line charge
     'AMRS Gorai Pointed Purgation': '8548', // protean tether during towers
-    'AMRS Gorai Impure Purgation': '8530', // initial protean for double hit protean
+    'AMRS Gorai Impure Purgation': '8552', // initial protean for double hit protean
   },
   shareFail: {
     'AMRS Shishio Unnatural Ailment': '843F', // spread during Unnatural Wail
     'AMRS Gorai Great Ball of Fire': '853A', // spread damage from Live Candle debuff
-    'AMRS Gorai Worldy Pursuit': '853E', // cross jumps
+    'AMRS Gorai Worldy Pursuit': '8550', // cross jumps
     'AMRS Moko Vengeful Flame': '8608', // spreads during Fleeting Iai-giri
     'AMRS Moko Accursed Edge': '8607', // bind on players from Far Edge / Near Edge
   },
   soloFail: {
     'AMRS Shishio Unnatural Force': '8440', // pair stack during Unnatural Wail
     'AMRS Gorai Greater Ball of Fire': '8539', // pair stack from Live Brazier debuff
-    'AMRS Gorai Flintlock': '854D', // tank block line share
+    'AMRS Gorai Flintlock': '854C', // tank block line share
     'AMRS Moko Vengeful Pyre': '8609', // pair stack during Fleeting Iai-giri
   },
   triggers: [
