@@ -52,6 +52,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: '장판 유도하러 뭉쳐요',
+          de: 'Sammeln um Flächen zu ködern',
         },
       },
     },
@@ -124,9 +125,11 @@ const triggerSet: TriggerSet<Data> = {
         in: Outputs.in,
         inThenSpread: {
           en: '안으로 => 흩어져요',
+          de: 'Rein => Verteilen',
         },
         inAndHealerGroups: {
           en: '안으로 => 4:4 뭉쳐요',
+          de: 'Rein => Heiler Gruppen',
         },
       },
     },
@@ -139,7 +142,8 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Spread Out',
+          en: '흩어져요',
+          de: 'Außen Verteilen',
         },
       },
     },
@@ -166,9 +170,11 @@ const triggerSet: TriggerSet<Data> = {
         },
         wallAndHealerGroups: {
           en: '벽으로 + 4:4 뭉쳐요',
+          de: 'Wand + Heiler Gruppen',
         },
         wallThenSpread: {
           en: '벽으로 + 흩어져요',
+          de: 'Wand => Verteilen',
         },
       },
     },
@@ -182,6 +188,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: '흩어져요!',
+          de: 'Außen Verteilen',
         },
       },
     },
@@ -243,6 +250,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         protean: {
           en: '프로틴, 흩어져요',
+          de: 'in Himmelsrichtungen verteilen',
         },
       },
     },
@@ -301,6 +309,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: '밖으로 + 흩어져요',
+          de: 'Raus + Verteilen',
         },
       },
     },
@@ -461,6 +470,7 @@ const triggerSet: TriggerSet<Data> = {
         num4: Outputs.num4,
         stackMiddle: {
           en: '가운데로 유도',
+          de: 'Mitte ködern',
         },
       },
     },
