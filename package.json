@@ -142,7 +142,7 @@
     ],
     "*.md": "markdownlint",
     "ui/(raidboss|oopsyraidsy)/data/**": [
-      "node --loader ts-node/esm test/test_raidboss_data.ts"
+      "node --loader ts-node/esm test/test_data_files.ts"
     ]
   },
   "dependencies": {

@@ -185,7 +185,7 @@ export default {
   },
   getTogether: {
     // for getting together without stack marker
-    en: '뭉쳐요',
+    en: '모두 뭉쳐요',
     de: 'Sammeln',
     fr: 'Packez-vous',
     ja: '集合',

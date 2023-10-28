@@ -560,7 +560,6 @@ const triggerSet: TriggerSet<Data> = {
     },
     {
       'locale': 'de',
-      'missingTranslations': true,
       'replaceSync': {
         'Comet Circle': 'Meteoritensiegel',
         'King Thordan': 'Thordan',
@@ -742,7 +741,6 @@ const triggerSet: TriggerSet<Data> = {
     },
     {
       'locale': 'cn',
-      'missingTranslations': true,
       'replaceSync': {
         'Comet Circle': '星屑圣纹',
         'King Thordan': '骑神托尔丹',
@@ -804,7 +802,6 @@ const triggerSet: TriggerSet<Data> = {
     },
     {
       'locale': 'ko',
-      'missingTranslations': true,
       'replaceSync': {
         'Comet Circle': '성스러운 별조각 문양',
         'King Thordan': '기사신 토르당',

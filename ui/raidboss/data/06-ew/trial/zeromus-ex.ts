@@ -18,6 +18,7 @@ export interface Data extends RaidbossData {
   miasmicBlasts: PluginCombatantState[];
   busterPlayers: string[];
   forkedPlayers: string[];
+  bigBangStackPlayer?: string;
   blackHolePlayer?: string;
   flareMechanic?: 'spread' | 'stack';
   noxPlayers: string[];
@@ -170,7 +171,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         text: {
-          en: '${dir1}/${dir2}',
+          en: '${dir1} / ${dir2}',
           de: '${dir1} / ${dir2}',
           cn: '${dir1} / ${dir2}',
           ko: '${dir1} / ${dir2}',
@@ -193,7 +194,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         text: {
-          en: '${dir1}/${dir2}',
+          en: '${dir1} / ${dir2}',
           de: '${dir1} / ${dir2}',
           cn: '${dir1} / ${dir2}',
           ko: '${dir1} / ${dir2}',
@@ -298,31 +299,37 @@ const triggerSet: TriggerSet<Data> = {
         },
         dirNNE: {
           en: 'North Wall (NNE/WSW)',
+          de: 'Nördliche Wand (NNO/WSW)',
           cn: '右上前方/左下侧边',
           ko: '1시/8시',
         },
         dirNNW: {
           en: 'North Wall (NNW/ESE)',
+          de: 'Nördliche Wand (NNW/OSO)',
           cn: '左上前方/右下侧边',
           ko: '11시/4시',
         },
         dirNE: {
           en: 'Corners (NE/SW)',
+          de: 'Ecken (NO/SW)',
           cn: '右上/左下角落',
           ko: '구석 (북동/남서)',
         },
         dirNW: {
           en: 'Corners (NW/SE)',
+          de: 'Ecken (NW/SO)',
           cn: '左上/右下角落',
           ko: '구석 (북서/남동)',
         },
         dirENE: {
           en: 'East Wall (ENE/SSW)',
+          de: 'Östliche Wand (ONO/SSW)',
           cn: '右上侧边/左下后方',
           ko: '2시/7시',
         },
         dirWNW: {
           en: 'West Wall (WNW/SSE)',
+          de: 'Westliche Wand (WNW/SSO)',
           cn: '左上侧边/右下后方',
           ko: '10시/5시',
         },
@@ -461,12 +468,25 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: 'ZeromusEx The Dark Beckons Stack',
+      id: 'ZeromusEx The Dark Beckons Stack Collect',
       type: 'HeadMarker',
       netRegex: { id: headmarkerMap.stack },
       condition: (data) => data.phase === 'one',
-      // Wait to collect tank markers.
-      delaySeconds: 0.5,
+      run: (data, matches) => data.bigBangStackPlayer = matches.target,
+    },
+    {
+      id: 'ZeromusEx The Dark Beckons Stack',
+      type: 'HeadMarker',
+      netRegex: { id: [headmarkerMap.stack, headmarkerMap.tankBuster] },
+      condition: (data) => {
+        if (data.phase !== 'one')
+          return false;
+        return data.bigBangStackPlayer !== undefined;
+      },
+      // If we have both busters, run immediately otherwise wait a reasonable amount of time
+      // for them to show up.
+      delaySeconds: (data) => data.busterPlayers.length === 2 ? 0 : 1,
+      suppressSeconds: 10,
       alertText: (data, matches, output) => {
         if (data.busterPlayers.includes(data.me))
           return;
@@ -655,7 +675,7 @@ const triggerSet: TriggerSet<Data> = {
       id: 'ZeromusEx Flare Mechanic No Nox',
       type: 'HeadMarker',
       netRegex: { id: headmarkerMap.nox, capture: false },
-      delaySeconds: 0.5,
+      delaySeconds: (data) => data.noxPlayers.length === 2 ? 0 : 0.5,
       suppressSeconds: 5,
       infoText: (data, _matches, output) => {
         if (data.noxPlayers.includes(data.me))

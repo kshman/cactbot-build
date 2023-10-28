@@ -5,6 +5,10 @@ hideall "--sync--"
 
 0.0 "--Reset--" sync / 00:0839::.*is no longer sealed/ window 100000 jump 0
 
+# The Way of the Wise
+1000.0 "--sync--" sync / 00:0839::The Way of the Wisewill be sealed off/ window 10000,0
+
+
 # The River of Knowledge / Thaliak
 2000.0 "--sync--" sync / 00:0839::The River Of Knowledge will be sealed off/ window 10000,0
 2005.7 "--sync--" sync / 1[56]:[^:]*:Thaliak:88D1:/ window 10,10

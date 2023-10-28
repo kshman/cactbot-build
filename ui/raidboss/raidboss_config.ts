@@ -2158,6 +2158,8 @@ const templateOptions: OptionsTemplate = {
       id: 'ReverseTimeline',
       name: {
         en: '타임라인 밑에서부터 올라옴 (아래-위)',
+        de: 'Umgekehrte Timeline Reihenfolge (unten-nach-oben)',
+        cn: '反转时间轴顺序 (从下到上)',
       },
       type: 'checkbox',
       default: false,

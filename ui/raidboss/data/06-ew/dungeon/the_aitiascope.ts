@@ -20,15 +20,18 @@ const triggerSet: TriggerSet<Data> = {
       id: 'Aitiascope Livia Aglaea Climb NE/SW',
       type: 'StartsUsing',
       netRegex: { id: '6442', source: 'Livia the Undeterred', capture: false },
-      alertText: (_data, _matches, output) => output.text!(),
+      alertText: (data, _matches, output) => data.role === 'tank' ? output.tank!() : output.text!(),
       outputStrings: {
         text: {
-          en: '오른쪽 뒤 / 왼쪽 앞',
+          en: '오른쪽으로 (탱크 왼쪽)',
           de: 'hinten rechts / vorne links',
           fr: 'Derrière à droite / Devant à gauche',
           ja: '右下 / 左上',
           cn: '右后 / 左前',
           ko: '오른쪽 아래 / 왼쪽 위',
+        },
+        tank: {
+          en: '❰❰❰왼쪽으로',
         },
       },
     },
@@ -36,15 +39,18 @@ const triggerSet: TriggerSet<Data> = {
       id: 'Aitiascope Livia Aglaea Climb NW/SE',
       type: 'StartsUsing',
       netRegex: { id: '6443', source: 'Livia the Undeterred', capture: false },
-      alertText: (_data, _matches, output) => output.text!(),
+      alertText: (data, _matches, output) => data.role === 'tank' ? output.tank!() : output.text!(),
       outputStrings: {
         text: {
-          en: '왼쪽 뒤 / 오른쪽 앞',
+          en: '왼쪽으로 (탱크 오른쪽)',
           de: 'hinten links / vorne rechts',
           fr: 'Derrière à gauche / Devant à droite',
           ja: '左下 / 右上',
           cn: '左后 / 右前',
           ko: '왼쪽 아래 / 오른쪽 위',
+        },
+        tank: {
+          en: '오른쪽으로❱❱❱',
         },
       },
     },
@@ -73,7 +79,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '부서전 크리스탈 뒤에 숨어요',
+          en: '부서전 크리스탈 뒤로',
           de: 'Hinter dem gebrochenen Kristall verstecken',
           fr: 'Cachez-vous derrière le cristal brisé',
           ja: '壊れたクリスタルの後ろ',
@@ -89,7 +95,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '크로스헤어를 피해 도망가요',
+          en: '크로스헤어 피해요',
           de: 'Weg von den Zielmarkierungen',
           fr: 'Éloignez-vous de la zone de ciblage',
           ja: 'ゆかから離れる',
@@ -124,7 +130,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '얼음 뒤에 숨어욧',
+          en: '얼음이 보호막, 뒤로',
           de: 'hinter dem Eis verstecken',
           fr: 'Cachez-vous derrière la glace',
           ja: '氷の後ろ',
