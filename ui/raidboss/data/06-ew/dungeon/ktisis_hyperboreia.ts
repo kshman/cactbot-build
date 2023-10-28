@@ -1,14 +1,15 @@
+import Outputs from '../../../../../resources/outputs';
 import { Responses } from '../../../../../resources/responses';
 import ZoneId from '../../../../../resources/zone_id';
 import { RaidbossData } from '../../../../../types/data';
 import { TriggerSet } from '../../../../../types/trigger';
 
 // TODO: Lyssa Frostbite and Seek
-// TODO: Ladon Lord cleave directions
 // TODO: Hermes correct meteor
 // TODO: Hermes mirror dodge direction
 
 export interface Data extends RaidbossData {
+  ladonBreaths: string[];
   isHermes?: boolean;
 }
 
@@ -16,6 +17,11 @@ const triggerSet: TriggerSet<Data> = {
   id: 'KtisisHyperboreia',
   zoneId: ZoneId.KtisisHyperboreia,
   timelineFile: 'ktisis_hyperboreia.txt',
+  initData: () => {
+    return {
+      ladonBreaths: [],
+    };
+  },
   triggers: [
     {
       id: 'Ktisis Lyssa Skull Dasher',
@@ -54,6 +60,48 @@ const triggerSet: TriggerSet<Data> = {
       response: Responses.stackMarkerOn(),
     },
     {
+      // AFC: Center head; AFD: Right head; AFE: Left head
+      id: 'Ktisis Ladon Lord Pyric Breath Collect',
+      type: 'GainsEffect',
+      netRegex: { effectId: ['AFC', 'AFD', 'AFE'] },
+      run: (data, matches) => data.ladonBreaths.push(matches.effectId),
+    },
+    {
+      id: 'Ktisis Ladon Lord Pyric Breath Call',
+      type: 'Ability',
+      netRegex: { id: '6485', source: 'Ladon Lord', capture: false }, // Call on boss centering
+      delaySeconds: 2, // Let the rotation happen first or simultaneously
+      alertText: (data, _matches, output) => {
+        // Somehow we have no breath data. Sadge.
+        if (data.ladonBreaths.length === 0)
+          return;
+
+        // The first breath in the encounter is always center head
+        if (data.ladonBreaths.length === 1)
+          return output.awayFromFront!();
+
+        const safeId = ['AFC', 'AFD', 'AFE'].filter((id) => !data.ladonBreaths.includes(id))[0];
+        if (safeId === undefined)
+          return;
+        return {
+          AFC: output.goFront,
+          AFD: output.backLeft,
+          AFE: output.backRight,
+        }[safeId]!();
+      },
+      run: (data) => data.ladonBreaths = [],
+      outputStrings: {
+        awayFromFront: Outputs.awayFromFront,
+        goFront: Outputs.goFront,
+        backRight: {
+          en: '뒤 + 오른쪽',
+        },
+        backLeft: {
+          en: '뒤 + 왼쪽',
+        },
+      },
+    },
+    {
       id: 'Ktisis Hermes Trimegistos',
       type: 'StartsUsing',
       netRegex: { id: '651E', source: 'Hermes', capture: false },
@@ -90,7 +138,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '안 부서진 메테오 뒤에 숨어요',
+          en: '멀쩡한 메테오 뒤로',
           de: 'Hinter einem nicht zerbrochenen Meteor verstecken',
           fr: 'Cachez-vous derrière le météore intact',
           ja: '壊れていないメテオの後ろへ',

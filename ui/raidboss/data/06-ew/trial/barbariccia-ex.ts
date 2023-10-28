@@ -53,6 +53,7 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: '장판 유도하러 뭉쳐요',
           de: 'Sammeln um Flächen zu ködern',
+          cn: '集合诱导黄圈',
         },
       },
     },
@@ -126,10 +127,12 @@ const triggerSet: TriggerSet<Data> = {
         inThenSpread: {
           en: '안으로 => 흩어져요',
           de: 'Rein => Verteilen',
+          cn: '靠近 => 分散',
         },
         inAndHealerGroups: {
           en: '안으로 => 4:4 뭉쳐요',
           de: 'Rein => Heiler Gruppen',
+          cn: '靠近 => 治疗分组分摊',
         },
       },
     },
@@ -144,6 +147,7 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: '흩어져요',
           de: 'Außen Verteilen',
+          cn: '分散',
         },
       },
     },
@@ -171,10 +175,12 @@ const triggerSet: TriggerSet<Data> = {
         wallAndHealerGroups: {
           en: '벽으로 + 4:4 뭉쳐요',
           de: 'Wand + Heiler Gruppen',
+          cn: '去场边 + 治疗分组分摊',
         },
         wallThenSpread: {
           en: '벽으로 + 흩어져요',
           de: 'Wand => Verteilen',
+          cn: '去场边 => 分散',
         },
       },
     },
@@ -189,6 +195,7 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: '흩어져요!',
           de: 'Außen Verteilen',
+          cn: '分散',
         },
       },
     },
@@ -251,6 +258,7 @@ const triggerSet: TriggerSet<Data> = {
         protean: {
           en: '프로틴, 흩어져요',
           de: 'in Himmelsrichtungen verteilen',
+          cn: '八方分散',
         },
       },
     },
@@ -310,6 +318,7 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: '밖으로 + 흩어져요',
           de: 'Raus + Verteilen',
+          cn: '远离 => 分散',
         },
       },
     },
@@ -471,6 +480,7 @@ const triggerSet: TriggerSet<Data> = {
         stackMiddle: {
           en: '가운데로 유도',
           de: 'Mitte ködern',
+          cn: '中间诱导',
         },
       },
     },
