@@ -1,0 +1,16 @@
+### ALOALO ISLAND
+# ZoneId: 498
+
+hideall "--Reset--"
+hideall "--sync--"
+
+0.0 "--Reset--" sync / 00:0839::.*is no longer sealed/ window 100000 jump 0
+
+
+# 1번 Quaqua
+0.0 "--sync--" sync / 00:0839::Ketulu Cove will be sealed off/ window 10000,0
+
+
+# Ketuduke
+0.0 "--sync--" sync / 00:0839::Seasong's Rest will be sealed off/ window 10000,0
+
