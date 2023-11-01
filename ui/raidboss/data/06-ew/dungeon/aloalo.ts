@@ -1,10 +1,23 @@
+import Conditions from '../../../../../resources/conditions';
 import { Responses } from '../../../../../resources/responses';
 import ZoneId from '../../../../../resources/zone_id';
 import { RaidbossData } from '../../../../../types/data';
 import { TriggerSet } from '../../../../../types/trigger';
 
+export type LalaMarch = 'front' | 'back' | 'left' | 'right';
+
+const LalaArcaneBlghtMap: { [count: string]: LalaMarch } = {
+  '886E': 'front',
+  '886F': 'left',
+  '8870': 'right',
+  '8871': 'back',
+} as const;
+
 export interface Data extends RaidbossData {
   tmp: boolean;
+  lalaBlight?: LalaMarch;
+  lalaMarch?: LalaMarch;
+  rotate?: 'cw' | 'ccw' | 'unknown';
 }
 
 const triggerSet: TriggerSet<Data> = {
@@ -27,23 +40,57 @@ const triggerSet: TriggerSet<Data> = {
     {
       id: 'Aloalo Quaqua Arcane Armaments',
       type: 'StartsUsing',
-      netRegex: { id: '8B94', source: 'Quaqua', capture: false },
+      netRegex: { id: '8B88', source: 'Quaqua', capture: false },
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '기믹 확인 (망치/동글/창/넉백)',
+          en: '기믹 - 망치/동글',
         },
       },
     },
     {
       id: 'Aloalo Quaqua Arcane Armaments Action',
       type: 'Ability',
-      netRegex: { id: '8B94', source: 'Quaqua', capture: false },
+      netRegex: { id: '8B88', source: 'Quaqua', capture: false },
       delaySeconds: 2,
+      alertText: (_data, _matches, output) => output.text!(),
+      outputStrings: {
+        text: {
+          en: '바로 피해요!',
+        },
+      },
+    },
+    {
+      id: 'Aloalo Quaqua Arcane Armaments Knockback',
+      type: 'StartsUsing',
+      netRegex: { id: '8B8C', source: 'Quaqua', capture: false },
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '당장 움직여요!',
+          en: '기믹 - 넉백',
+        },
+      },
+    },
+    {
+      id: 'Aloalo Quaqua Arcane Armaments Trident',
+      type: 'StartsUsing',
+      netRegex: { id: '8B9F', source: 'Quaqua', capture: false },
+      infoText: (_data, _matches, output) => output.text!(),
+      outputStrings: {
+        text: {
+          en: '기믹 - 창',
+        },
+      },
+    },
+    {
+      id: 'Aloalo Quaqua Arcane Armaments Trident Action',
+      type: 'StartsUsing',
+      netRegex: { id: '8BA0', source: 'Quaqua', capture: false },
+      suppressSeconds: 1,
+      infoText: (_data, _matches, output) => output.text!(),
+      outputStrings: {
+        text: {
+          en: '창에서 먼 곳 => 나중에 빙그르르',
         },
       },
     },
@@ -54,7 +101,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '앞으로 부채꼴! 뒤로',
+          en: '앞에 부채꼴! 뒤로!',
         },
       },
     },
@@ -173,6 +220,199 @@ const triggerSet: TriggerSet<Data> = {
       type: 'StartsUsing',
       netRegex: { id: '8AA3', source: 'Ketuduke' },
       response: Responses.tankBuster(),
+    },
+    // ----------------------------------------- Lala
+    {
+      id: 'Aloalo Lala Lala rotation',
+      type: 'HeadMarker',
+      netRegex: { id: ['01E4', '01E5'], target: 'Lala' },
+      run: (data, matches) => data.rotate = matches.id === '01E4' ? 'cw' : 'ccw',
+    },
+    {
+      id: 'Aloalo Lala Player rotation',
+      type: 'HeadMarker',
+      netRegex: { id: ['01ED', '01EE'] },
+      condition: Conditions.targetIsYou(),
+      run: (data, matches) => data.rotate = matches.id === '01ED' ? 'cw' : 'ccw',
+    },
+    {
+      id: 'Aloalo Lala Inferno Theorem',
+      type: 'StartsUsing',
+      netRegex: { id: '887F', source: 'Lala', capture: false },
+      response: Responses.aoe(),
+    },
+    {
+      id: 'Aloalo LaLa Arcane Blight Open',
+      type: 'StartsUsing',
+      // 886E 앞?
+      // 886F 오른쪽
+      // 8870 왼쪽
+      // 8871 뒤
+      netRegex: { id: Object.keys(LalaArcaneBlghtMap), source: 'Lala' },
+      run: (data, matches) => data.lalaBlight = LalaArcaneBlghtMap[matches.id.toUpperCase()],
+    },
+    {
+      id: 'Aloalo Lala Arcane Blight',
+      type: 'Ability',
+      netRegex: { id: '8873', source: 'Lala', capture: false },
+      infoText: (data, _matches, output) => {
+        if (data.lalaBlight === undefined)
+          return output.text!();
+        if (data.rotate === undefined)
+          return output[data.lalaBlight]!();
+        if (data.rotate === 'cw') {
+          return {
+            'front': output.right!(),
+            'back': output.left!(),
+            'left': output.front!(),
+            'right': output.back!(),
+          }[data.lalaBlight];
+        }
+        return {
+          'front': output.left!(),
+          'back': output.right!(),
+          'left': output.back!(),
+          'right': output.front!(),
+        }[data.lalaBlight];
+      },
+      run: (data) => {
+        delete data.lalaBlight;
+        delete data.rotate;
+      },
+      outputStrings: {
+        text: {
+          en: '빈 곳으로~',
+        },
+        front: {
+          en: '앞으로',
+        },
+        back: {
+          en: '뒤로',
+        },
+        left: {
+          en: '왼쪽',
+        },
+        right: {
+          en: '오른쪽',
+        },
+      },
+    },
+    {
+      id: 'Aloalo Lala Arcane Plot',
+      type: 'StartsUsing',
+      netRegex: { id: ['8875', '8876'], source: 'Lala', capture: false },
+      infoText: (_data, _matches, output) => output.text!(),
+      outputStrings: {
+        text: {
+          en: '장판 위치 봐둬요',
+        },
+      },
+    },
+    {
+      id: 'Aloalo Lala Analysis',
+      type: 'StartsUsing',
+      netRegex: { id: '887B', source: 'Lala', capture: false },
+      // E8E Front Unseen
+      // E8F Back Unseen
+      infoText: (data, _matches, output) => {
+        if (data.rotate === undefined)
+          return output.text!();
+        if (data.rotate === 'cw')
+          return output.right!();
+        return output.left!();
+      },
+      run: (data) => delete data.rotate,
+      outputStrings: {
+        text: {
+          en: '열린 곳을 보스쪽으로',
+        },
+        left: {
+          en: '열린 곳 보스 + 왼쪽으로 돌려요',
+        },
+        right: {
+          en: '열린 곳 보스 + 오른쪽으로 돌려요',
+        },
+      },
+    },
+    {
+      id: 'Aloalo Lala Faunal Figure',
+      type: 'StartsUsing',
+      netRegex: { id: '8882', source: 'Lala', capture: false },
+      infoText: (_data, _matches, output) => output.text!(),
+      outputStrings: {
+        text: {
+          en: '밖에 쥐 등장 => 쿵하고 장판',
+        },
+      },
+    },
+    {
+      id: 'Aloalo Lala Strategic Strike',
+      type: 'StartsUsing',
+      netRegex: { id: '887E', source: 'Lala' },
+      response: Responses.tankBuster(),
+    },
+    {
+      id: 'Aloalo Lala Calculated Trajectory Debuffs',
+      type: 'GainsEffect',
+      netRegex: { effectId: 'E8[3-6]' },
+      condition: Conditions.targetIsYou(),
+      delaySeconds: (_data, matches) => parseFloat(matches.duration) - 10,
+      run: (data, matches) => {
+        const faceMap: { [effectId: string]: LalaMarch } = {
+          E83: 'front',
+          E84: 'back',
+          E85: 'left',
+          E86: 'right',
+        } as const;
+        data.lalaMarch = faceMap[matches.effectId];
+      },
+    },
+    {
+      id: 'Aloalo Lala Calculated Trajectory',
+      type: 'Ability',
+      netRegex: { id: '887D', source: 'Lala', capture: false },
+      delaySeconds: 3,
+      alertText: (data, _matches, output) => {
+        if (data.lalaMarch === undefined)
+          return output.text!();
+        if (data.rotate === undefined)
+          return output[data.lalaMarch]!();
+        if (data.rotate === 'cw') {
+          return {
+            'front': output.right!(),
+            'back': output.left!(),
+            'left': output.front!(),
+            'right': output.back!(),
+          }[data.lalaMarch];
+        }
+        return {
+          'front': output.left!(),
+          'back': output.right!(),
+          'left': output.back!(),
+          'right': output.front!(),
+        }[data.lalaMarch];
+      },
+      run: (data) => {
+        delete data.lalaMarch;
+        delete data.rotate;
+      },
+      outputStrings: {
+        text: {
+          en: '강제이동',
+        },
+        front: {
+          en: '강제이동: 앞으로',
+        },
+        back: {
+          en: '강제이동: 뒤로',
+        },
+        left: {
+          en: '강제이동: 왼쪽',
+        },
+        right: {
+          en: '강제이동: 오른쪽',
+        },
+      },
     },
   ],
 };

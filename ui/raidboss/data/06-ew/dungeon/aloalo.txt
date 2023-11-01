@@ -14,3 +14,10 @@ hideall "--sync--"
 # Ketuduke
 0.0 "--sync--" sync / 00:0839::Seasong's Rest will be sealed off/ window 10000,0
 
+
+# 2번 Quaqua
+0.0 "--sync--" sync / 00:0839::The Elder Stump will be sealed off/ window 10000,0
+
+
+# Lala
+0.0 "--sync--" sync / 00:0839::The Origin Spring will be sealed off/ window 10000,0
