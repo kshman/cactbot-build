@@ -4,20 +4,21 @@ import ZoneId from '../../../../../resources/zone_id';
 import { RaidbossData } from '../../../../../types/data';
 import { TriggerSet } from '../../../../../types/trigger';
 
-export type LalaMarch = 'front' | 'back' | 'left' | 'right';
+export type Marches = 'front' | 'back' | 'left' | 'right';
 
-const LalaArcaneBlghtMap: { [count: string]: LalaMarch } = {
-  '886E': 'front',
-  '886F': 'left',
-  '8870': 'right',
+const LalaArcaneBlghtMap: { [count: string]: Marches } = {
+  '886F': 'right',
+  '8870': 'left',
   '8871': 'back',
+  '8872': 'front',
 } as const;
 
 export interface Data extends RaidbossData {
-  tmp: boolean;
-  lalaBlight?: LalaMarch;
-  lalaMarch?: LalaMarch;
+  quaArcaneCount: number;
+  lalaBlight?: Marches;
   rotate?: 'cw' | 'ccw' | 'unknown';
+  reloadCount: number;
+  reloadFailed: number[];
 }
 
 const triggerSet: TriggerSet<Data> = {
@@ -26,7 +27,9 @@ const triggerSet: TriggerSet<Data> = {
   timelineFile: 'aloalo.txt',
   initData: () => {
     return {
-      tmp: false,
+      quaArcaneCount: 0,
+      reloadCount: 0,
+      reloadFailed: [],
     };
   },
   triggers: [
@@ -41,10 +44,28 @@ const triggerSet: TriggerSet<Data> = {
       id: 'Aloalo Quaqua Arcane Armaments',
       type: 'StartsUsing',
       netRegex: { id: '8B88', source: 'Quaqua', capture: false },
-      infoText: (_data, _matches, output) => output.text!(),
+      infoText: (data, _matches, output) => {
+        data.quaArcaneCount++;
+        if (data.quaArcaneCount === 1)
+          return output.first!();
+        if (data.quaArcaneCount === 2)
+          return output.second!();
+        if (data.quaArcaneCount === 3)
+          return output.third!();
+        return output.text!();
+      },
       outputStrings: {
+        first: {
+          en: '망치, 피해요',
+        },
+        second: {
+          en: '도넛, 안으로',
+        },
+        third: {
+          en: '망치 + 도넛, 도넛 안으로',
+        },
         text: {
-          en: '기믹 - 망치/동글',
+          en: '망치, 도넛 조심해요',
         },
       },
     },
@@ -56,7 +77,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '바로 피해요!',
+          en: '지금 피해요!',
         },
       },
     },
@@ -67,7 +88,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '기믹 - 넉백',
+          en: '3연속 넉백, 1번부터',
         },
       },
     },
@@ -78,19 +99,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '기믹 - 창',
-        },
-      },
-    },
-    {
-      id: 'Aloalo Quaqua Arcane Armaments Trident Action',
-      type: 'StartsUsing',
-      netRegex: { id: '8BA0', source: 'Quaqua', capture: false },
-      suppressSeconds: 1,
-      infoText: (_data, _matches, output) => output.text!(),
-      outputStrings: {
-        text: {
-          en: '창에서 먼 곳 => 나중에 빙그르르',
+          en: '바깥에서 창, 떨어져요',
         },
       },
     },
@@ -112,7 +121,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '쫄 소환 기믹',
+          en: '쫄 나와요',
         },
       },
     },
@@ -166,7 +175,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '쫄 소환 기믹',
+          en: '쫄 나와요',
         },
       },
     },
@@ -223,13 +232,13 @@ const triggerSet: TriggerSet<Data> = {
     },
     // ----------------------------------------- Lala
     {
-      id: 'Aloalo Lala Lala rotation',
+      id: 'Aloalo Lala Lala Rotation',
       type: 'HeadMarker',
       netRegex: { id: ['01E4', '01E5'], target: 'Lala' },
       run: (data, matches) => data.rotate = matches.id === '01E4' ? 'cw' : 'ccw',
     },
     {
-      id: 'Aloalo Lala Player rotation',
+      id: 'Aloalo Lala Player Rotation',
       type: 'HeadMarker',
       netRegex: { id: ['01ED', '01EE'] },
       condition: Conditions.targetIsYou(),
@@ -244,18 +253,19 @@ const triggerSet: TriggerSet<Data> = {
     {
       id: 'Aloalo LaLa Arcane Blight Open',
       type: 'StartsUsing',
-      // 886E 앞?
       // 886F 오른쪽
       // 8870 왼쪽
       // 8871 뒤
+      // 8872 앞
       netRegex: { id: Object.keys(LalaArcaneBlghtMap), source: 'Lala' },
       run: (data, matches) => data.lalaBlight = LalaArcaneBlghtMap[matches.id.toUpperCase()],
     },
     {
       id: 'Aloalo Lala Arcane Blight',
-      type: 'Ability',
+      type: 'StartsUsing',
       netRegex: { id: '8873', source: 'Lala', capture: false },
-      infoText: (data, _matches, output) => {
+      delaySeconds: 1,
+      alertText: (data, _matches, output) => {
         if (data.lalaBlight === undefined)
           return output.text!();
         if (data.rotate === undefined)
@@ -309,28 +319,60 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: 'Aloalo Lala Analysis',
-      type: 'StartsUsing',
-      netRegex: { id: '887B', source: 'Lala', capture: false },
+      id: 'Aloalo Lala Analysis Direction',
+      type: 'GainsEffect',
       // E8E Front Unseen
       // E8F Back Unseen
-      infoText: (data, _matches, output) => {
-        if (data.rotate === undefined)
+      // E90 Right Unseen
+      // E91 Left Unseen? E8D?
+      netRegex: { effectId: ['E8E', 'E8F', 'E90', 'E91', 'E8D'], source: 'Lala' },
+      condition: Conditions.targetIsYou(),
+      delaySeconds: 0.5,
+      durationSeconds: 8,
+      suppressSeconds: 12, // 틀리면 한번 더 오므로 죽여버림
+      alertText: (data, matches, output) => {
+        const map = {
+          'E8E': 'front',
+          'E8F': 'back',
+          'E90': 'right',
+          'E91': 'left',
+          'E8D': 'left',
+        }[matches.effectId];
+        if (map === undefined)
           return output.text!();
-        if (data.rotate === 'cw')
-          return output.right!();
-        return output.left!();
+        if (data.rotate === undefined)
+          return output[map]!();
+        if (data.rotate)
+          return {
+            'front': output.left!(),
+            'back': output.right!(),
+            'left': output.back!(),
+            'right': output.front!(),
+          }[map];
+        return {
+          'front': output.right!(),
+          'back': output.left!(),
+          'left': output.front!(),
+          'right': output.back!(),
+        }[map];
       },
       run: (data) => delete data.rotate,
       outputStrings: {
+        front: '보스 봐요',
+        back: '뒤돌아 봐요',
+        left: '오른쪽 봐요',
+        right: '왼쪽 봐요',
+        text: '열린 곳을 보스로',
+      },
+    },
+    {
+      id: 'Aloalo Lala Floral Figure',
+      type: 'StartsUsing',
+      netRegex: { id: '8880', source: 'Lala', capture: false },
+      infoText: (_data, _matches, output) => output.text!(),
+      outputStrings: {
         text: {
-          en: '열린 곳을 보스쪽으로',
-        },
-        left: {
-          en: '열린 곳 보스 + 왼쪽으로 돌려요',
-        },
-        right: {
-          en: '열린 곳 보스 + 오른쪽으로 돌려요',
+          en: '씨앗 등장 => 도넛 장판',
         },
       },
     },
@@ -341,7 +383,18 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '밖에 쥐 등장 => 쿵하고 장판',
+          en: '밖에 쥐 등장 => 큰 장판',
+        },
+      },
+    },
+    {
+      id: 'Aloalo Lala Constructive Figure',
+      type: 'StartsUsing',
+      netRegex: { id: '8884', source: 'Lala', capture: false },
+      infoText: (_data, _matches, output) => output.text!(),
+      outputStrings: {
+        text: {
+          en: '밖에 나무 등장 => 한 줄 장판',
         },
       },
     },
@@ -352,50 +405,39 @@ const triggerSet: TriggerSet<Data> = {
       response: Responses.tankBuster(),
     },
     {
-      id: 'Aloalo Lala Calculated Trajectory Debuffs',
+      id: 'Aloalo Lala Calculated Trajectory',
       type: 'GainsEffect',
       netRegex: { effectId: 'E8[3-6]' },
       condition: Conditions.targetIsYou(),
-      delaySeconds: (_data, matches) => parseFloat(matches.duration) - 10,
-      run: (data, matches) => {
-        const faceMap: { [effectId: string]: LalaMarch } = {
-          E83: 'front',
-          E84: 'back',
-          E85: 'left',
-          E86: 'right',
-        } as const;
-        data.lalaMarch = faceMap[matches.effectId];
-      },
-    },
-    {
-      id: 'Aloalo Lala Calculated Trajectory',
-      type: 'Ability',
-      netRegex: { id: '887D', source: 'Lala', capture: false },
       delaySeconds: 3,
-      alertText: (data, _matches, output) => {
-        if (data.lalaMarch === undefined)
+      durationSeconds: 7,
+      alertText: (data, matches, output) => {
+        const map = {
+          'E83': 'front',
+          'E84': 'back',
+          'E85': 'left',
+          'E86': 'right',
+        }[matches.effectId];
+        if (map === undefined)
           return output.text!();
         if (data.rotate === undefined)
-          return output[data.lalaMarch]!();
+          return output[map]!();
         if (data.rotate === 'cw') {
           return {
             'front': output.right!(),
             'back': output.left!(),
             'left': output.front!(),
             'right': output.back!(),
-          }[data.lalaMarch];
+          }[map];
         }
         return {
           'front': output.left!(),
           'back': output.right!(),
           'left': output.back!(),
           'right': output.front!(),
-        }[data.lalaMarch];
+        }[map];
       },
-      run: (data) => {
-        delete data.lalaMarch;
-        delete data.rotate;
-      },
+      run: (data) => delete data.rotate,
       outputStrings: {
         text: {
           en: '강제이동',
@@ -412,6 +454,108 @@ const triggerSet: TriggerSet<Data> = {
         right: {
           en: '강제이동: 오른쪽',
         },
+      },
+    },
+    // ----------------------------------------- Statice
+    {
+      id: 'Aloalo Statice Surprise Balloon',
+      type: 'StartsUsing',
+      netRegex: { id: '892E', source: 'Statice', capture: false },
+      // 풍선인데 알릴 필요가?
+    },
+    {
+      id: 'Aloalo Statice Pop',
+      type: 'StartsUsing',
+      netRegex: { id: '892F', source: 'Statice', capture: false },
+      delaySeconds: 3,
+      alertText: (_data, _matches, output) => output.text!(),
+      outputStrings: {
+        text: '넉백!',
+      },
+    },
+    {
+      id: 'Aloalo Statice 4-tonze Weight',
+      type: 'StartsUsing',
+      netRegex: { id: '8931', source: 'Statice', capture: false },
+      infoText: (_data, _matches, output) => output.text!(),
+      outputStrings: {
+        text: '4톤 피해요',
+      },
+    },
+    {
+      id: 'Aloalo Statice Pinwheel',
+      type: 'StartsUsing',
+      netRegex: { id: '8933', source: 'Statice', capture: false },
+      infoText: (_data, _matches, output) => output.text!(),
+      outputStrings: {
+        text: '빙글빙글 불기둥 피해요',
+      },
+    },
+    {
+      id: 'Aloalo Statice Trick Reload',
+      type: 'StartsUsing',
+      netRegex: { id: '892A', source: 'Statice', capture: false },
+      run: (data) => {
+        data.reloadCount = 0;
+        data.reloadFailed = [];
+      },
+    },
+    {
+      id: 'Aloalo Statice Locked and Loaded',
+      type: 'Ability',
+      netRegex: { id: '8925', source: 'Statice', capture: false },
+      run: (data) => data.reloadCount++,
+    },
+    {
+      id: 'Aloalo Statice Misload',
+      type: 'Ability',
+      netRegex: { id: '8926', source: 'Statice', capture: false },
+      run: (data) => {
+        data.reloadCount++;
+        data.reloadFailed.push(data.reloadCount);
+      },
+    },
+    {
+      id: 'Aloalo Statice Trigger Happy',
+      type: 'StartsUsing',
+      netRegex: { id: '892B', source: 'Statice', capture: false },
+      infoText: (data, _matches, output) => {
+        const safe = data.reloadFailed.join(', ');
+        return output.text!({ safe: safe });
+      },
+      outputStrings: {
+        text: '안전: ${safe}',
+      },
+    },
+    {
+      id: 'Aloalo Statice Aero IV',
+      type: 'StartsUsing',
+      netRegex: { id: '8929', source: 'Statice', capture: false },
+      response: Responses.aoe('alert'),
+    },
+    {
+      id: 'Aloalo Statice Present Box',
+      type: 'StartsUsing',
+      netRegex: { id: '893E', source: 'Statice', capture: false },
+      // 무슨 기믹인지 모르겠음
+    },
+    {
+      id: 'Aloalo Statice Dartboard',
+      type: 'StartsUsing',
+      netRegex: { id: '893E', source: 'Statice', capture: false },
+      durationSeconds: 20,
+      infoText: (_data, _matches, output) => output.text!(),
+      outputStrings: {
+        text: '3번 같은 곳 떨어지는데로 옮기면 될듯?',
+      },
+    },
+    {
+      id: 'Aloalo Statice Hunks of Junk',
+      type: 'Ability',
+      netRegex: { id: '893C', source: 'Statice', capture: false },
+      infoText: (_data, _matches, output) => output.text!(),
+      outputStrings: {
+        text: '틀리면 대야 떨어지나 봄',
       },
     },
   ],

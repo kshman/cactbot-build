@@ -21,3 +21,11 @@ hideall "--sync--"
 
 # Lala
 0.0 "--sync--" sync / 00:0839::The Origin Spring will be sealed off/ window 10000,0
+
+
+# 3번 Quaqua
+0.0 "--sync--" sync / 00:0839::The ancient forum will be sealed off/ window 10000,0
+
+
+# Statice
+0.0 "--sync--" sync / 00:0839::The Slumbering Canopy will be sealed off/ window 10000,0
