@@ -93,6 +93,17 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
+      id: 'Aloalo Quaqua Arcane Armaments Rout',
+      type: 'StartsUsing',
+      netRegex: { id: '8B90', source: 'Quaqua', capture: false },
+      infoText: (_data, _matches, output) => output.text!(),
+      outputStrings: {
+        text: {
+          en: '4연속 돌진',
+        },
+      },
+    },
+    {
       id: 'Aloalo Quaqua Arcane Armaments Trident',
       type: 'StartsUsing',
       netRegex: { id: '8B9F', source: 'Quaqua', capture: false },
@@ -134,6 +145,18 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: '불 장판 조심해요~',
+        },
+      },
+    },
+    {
+      id: 'Aloalo Quaqua Arcane Intervention',
+      type: 'StartsUsing',
+      netRegex: { id: '8BAE', source: 'Quaqua', capture: false },
+      suppressSeconds: 1,
+      infoText: (_data, _matches, output) => output.text!(),
+      outputStrings: {
+        text: {
+          en: '시선 조심!',
         },
       },
     },
@@ -556,6 +579,118 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: '틀리면 대야 떨어지나 봄',
+      },
+    },
+    // ----------------------------------------- Loquloqui
+    {
+      id: 'Aloalo Loquloqui Long-lost Light',
+      type: 'StartsUsing',
+      netRegex: { id: '87BC', source: 'Loquloqui', capture: false },
+      response: Responses.aoe('alert'),
+    },
+    // Summoning Rite(87BF) 뭔가 소환
+    {
+      id: 'Aloalo Loquloqui O Life, Flourish',
+      type: 'StartsUsing',
+      netRegex: { id: '893C', source: 'Loquloqui', capture: false },
+      durationSeconds: 10,
+      infoText: (_data, _matches, output) => output.text!(),
+      outputStrings: {
+        text: '반짝이는 쫄 조심!',
+      },
+    },
+    {
+      id: 'Aloalo Uolosapa Loqua Rush',
+      type: 'StartsUsing',
+      netRegex: { id: ['87C0', '87C1'], source: 'Uolosapa Loqua', capture: false },
+      suppressSeconds: 5,
+      infoText: (_data, _matches, output) => output.text!(),
+      outputStrings: {
+        text: '참새가 날아든다!',
+      },
+    },
+    {
+      id: 'Aloalo Repuruba Loqua Turnabout',
+      type: 'StartsUsing',
+      netRegex: { id: ['87C2', '87C3'], source: 'Repuruba Loqua', capture: false },
+      suppressSeconds: 5,
+      infoText: (_data, _matches, output) => output.text!(),
+      outputStrings: {
+        text: '장판 피해요!',
+      },
+    },
+    {
+      id: 'Aloalo Loquloqui Protective Will',
+      type: 'StartsUsing',
+      netRegex: { id: '87BE', source: 'Loquloqui' },
+      response: Responses.tankBuster(),
+    },
+    {
+      id: 'Aloalo Loquloqui O Petals, Unfurl',
+      type: 'StartsUsing',
+      netRegex: { id: '87C5', source: 'Loquloqui', capture: false },
+      durationSeconds: 10,
+      infoText: (_data, _matches, output) => output.text!(),
+      outputStrings: {
+        text: '줄달린 쫄 조심!',
+      },
+    },
+    {
+      id: 'Aloalo Loquloqui Pliant Petals',
+      type: 'StartsUsing',
+      netRegex: { id: '87C6', source: 'Loquloqui', capture: false },
+      suppressSeconds: 1,
+      infoText: (_data, _matches, output) => output.text!(),
+      outputStrings: {
+        text: '줕 붙으면 크게 터져요!',
+      },
+    },
+    {
+      id: 'Aloalo Loquloqui Land Wave',
+      type: 'StartsUsing',
+      netRegex: { id: '87BD', source: 'Loquloqui', capture: false },
+      alertText: (_data, _matches, output) => output.text!(),
+      outputStrings: {
+        text: '엉덩이로!',
+      },
+    },
+    {
+      id: 'Aloalo Loquloqui O Isle, Bloom',
+      type: 'StartsUsing',
+      netRegex: { id: '87C7', source: 'Loquloqui', capture: false },
+      durationSeconds: 10,
+      infoText: (_data, _matches, output) => output.text!(),
+      outputStrings: {
+        text: '마지막 풀밭 => 안전하게 이동',
+      },
+    },
+    {
+      id: 'Aloalo Loquloqui O Sky, Be Mine',
+      type: 'StartsUsing',
+      netRegex: { id: '87C9', source: 'Loquloqui', capture: false },
+      infoText: (_data, _matches, output) => output.text!(),
+      outputStrings: {
+        text: '보스가 커지네!',
+      },
+    },
+    {
+      id: 'Aloalo Loquloqui Sanctuary',
+      type: 'StartsUsing',
+      netRegex: { id: '87CA', source: 'Loquloqui', capture: false },
+      durationSeconds: 4.5,
+      alertText: (_data, _matches, output) => output.text!(),
+      outputStrings: {
+        text: '푹찍쾅! 모서리로!',
+      },
+    },
+    {
+      id: 'Aloalo Loquloqui Stirring of Spirits',
+      type: 'StartsUsing',
+      netRegex: { id: '87CB', source: 'Loquloqui', capture: false },
+      durationSeconds: 10,
+      alertText: (_data, _matches, output) => output.text!(),
+      outputStrings: {
+        text: '연속 넉백! 암렝 추천!',
       },
     },
   ],

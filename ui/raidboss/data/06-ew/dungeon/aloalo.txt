@@ -8,24 +8,28 @@ hideall "--sync--"
 
 
 # 1번 Quaqua
-0.0 "--sync--" sync / 00:0839::Ketulu Cove will be sealed off/ window 10000,0
+1000.0 "--sync--" sync / 00:0839::Ketulu Cove will be sealed off/ window 10000,0
 
 
 # Ketuduke
-0.0 "--sync--" sync / 00:0839::Seasong's Rest will be sealed off/ window 10000,0
+2000.0 "--sync--" sync / 00:0839::Seasong's Rest will be sealed off/ window 10000,0
 
 
 # 2번 Quaqua
-0.0 "--sync--" sync / 00:0839::The Elder Stump will be sealed off/ window 10000,0
+3000.0 "--sync--" sync / 00:0839::The Elder Stump will be sealed off/ window 10000,0
 
 
 # Lala
-0.0 "--sync--" sync / 00:0839::The Origin Spring will be sealed off/ window 10000,0
+4000.0 "--sync--" sync / 00:0839::The Origin Spring will be sealed off/ window 10000,0
 
 
 # 3번 Quaqua
-0.0 "--sync--" sync / 00:0839::The ancient forum will be sealed off/ window 10000,0
+5000.0 "--sync--" sync / 00:0839::The ancient forum will be sealed off/ window 10000,0
 
 
 # Statice
-0.0 "--sync--" sync / 00:0839::The Slumbering Canopy will be sealed off/ window 10000,0
+6000.0 "--sync--" sync / 00:0839::The Slumbering Canopy will be sealed off/ window 10000,0
+
+
+# Loquloqui
+7000.0 "--sync--" sync / 00:0839::Kairimai Loquloqai will be sealed off/ window 10000,0
