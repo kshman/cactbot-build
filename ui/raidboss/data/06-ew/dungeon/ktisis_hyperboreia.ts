@@ -94,10 +94,12 @@ const triggerSet: TriggerSet<Data> = {
         awayFromFront: Outputs.awayFromFront,
         goFront: Outputs.goFront,
         backRight: {
-          en: '뒤 + 오른쪽',
+          en: '오른쪽 뒤',
+          ko: '오른쪽 뒤로',
         },
         backLeft: {
-          en: '뒤 + 왼쪽',
+          en: '왼쪽 뒤',
+          ko: '왼쪽 뒤로',
         },
       },
     },
