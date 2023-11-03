@@ -102,6 +102,102 @@ const triggerSet: TriggerSet<Data> = {
       response: Responses.tankBuster(),
     },
     // ---------------- Ketuduke ----------------
+    {
+      id: 'AAI Ketuduke Tidal Roar',
+      type: 'StartsUsing',
+      netRegex: { id: '8AD4', source: 'Ketuduke', capture: false },
+      response: Responses.aoe(),
+    },
+    {
+      id: 'AAI Ketuduke Bubble Net',
+      type: 'StartsUsing',
+      netRegex: { id: '8AAD', source: 'Ketuduke', capture: false },
+      response: Responses.aoe(),
+    },
+    {
+      id: 'AAI Ketuduke Hydrobullet',
+      type: 'StartsUsing',
+      netRegex: { id: '8AB8', source: 'Ketuduke', capture: false },
+      durationSeconds: 8,
+      infoText: (_data, _matches, output) => output.text!(),
+      outputStrings: {
+        text: {
+          en: '흩어져요',
+        },
+      },
+    },
+    {
+      id: 'AAI Ketuduke Hydrofall',
+      type: 'StartsUsing',
+      netRegex: { id: '8AB4', source: 'Ketuduke', capture: false },
+      durationSeconds: 8,
+      infoText: (_data, _matches, output) => output.text!(),
+      outputStrings: {
+        text: {
+          en: '뭉쳐요',
+        },
+      },
+    },
+    {
+      id: 'AAI Ketuduke Hydrobullet (Action)',
+      type: 'StartsUsing',
+      netRegex: { id: '8ABA', source: 'Ketuduke', capture: false },
+      durationSeconds: 8,
+      infoText: (_data, _matches, output) => output.text!(),
+      outputStrings: {
+        text: {
+          en: '흩어져요',
+        },
+      },
+    },
+    {
+      id: 'AAI Ketuduke Hydrofall (Action)',
+      type: 'StartsUsing',
+      netRegex: { id: '8AB7', source: 'Ketuduke', capture: false },
+      durationSeconds: 8,
+      infoText: (_data, _matches, output) => output.text!(),
+      outputStrings: {
+        text: {
+          en: '뭉쳐요',
+        },
+      },
+    },
+    {
+      id: 'AAI Ketuduke Encroaching Twintides',
+      type: 'StartsUsing',
+      netRegex: { id: '8ACE', source: 'Ketuduke' },
+      condition: (_data, matches) => parseFloat(matches.castTime) > 4.5,
+      alertText: (_data, _matches, output) => output.text!(),
+      outputStrings: {
+        text: {
+          en: '안에 있다 => 밖으로',
+        },
+      },
+    },
+    {
+      id: 'AAI Ketuduke Receding Twintides',
+      type: 'StartsUsing',
+      netRegex: { id: '8ACC', source: 'Ketuduke' },
+      condition: (_data, matches) => parseFloat(matches.castTime) > 4.5,
+      alertText: (_data, _matches, output) => output.text!(),
+      outputStrings: {
+        text: {
+          en: '밖에 있다 => 안으로',
+        },
+      },
+    },
+    {
+      id: 'AAI Ketuduke Angry Seas',
+      type: 'StartsUsing',
+      netRegex: { id: '8AC1', source: 'Ketuduke' },
+      condition: (_data, matches) => parseFloat(matches.castTime) > 4.5,
+      alertText: (_data, _matches, output) => output.text!(),
+      outputStrings: {
+        text: {
+          en: '넉백! 저항해욧!',
+        },
+      },
+    },
   ],
   timelineReplace: [
     {

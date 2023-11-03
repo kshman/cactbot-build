@@ -40,6 +40,7 @@ const ruleModule = {
       notFoundProperty: '\'{{outputParam}}\' 항목에  \'{{prop}}\' 프로퍼티가 없어요',
       notFoundTemplate: '`output.{{prop}}(...)` 프로퍼티에 \'{{template}}\' 템플릿이 없어요.',
       missingTemplateValue: '\'{{prop}}\' 템플릿이 함수 호출에 들어있지 않아요',
+      incorrectObjectKey: 'template \'{{prop}}\' specifies an object key with too many parts',
     },
   },
   create: function(context) {
@@ -237,12 +238,23 @@ const ruleModule = {
             const keysInParams = getAllKeys(args[0].properties);
             if (outputTemplate !== null && outputTemplate !== undefined) {
               for (const key of outputTemplate) {
-                if (!t.isIdentifier(args[0]) && !keysInParams.includes(key)) {
+                const keyParts = key.split('.');
+                if (keyParts.length > 2) {
+                  context.report({
+                    node,
+                    messageId: 'incorrectObjectKey',
+                    data: {
+                      prop: key,
+                    },
+                  });
+                }
+                const trimmedKey = keyParts[0];
+                if (!t.isIdentifier(args[0]) && !keysInParams.includes(trimmedKey)) {
                   context.report({
                     node,
                     messageId: 'missingTemplateValue',
                     data: {
-                      prop: key,
+                      prop: trimmedKey,
                     },
                   });
                 }
