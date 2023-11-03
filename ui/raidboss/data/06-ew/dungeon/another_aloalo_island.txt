@@ -20,6 +20,7 @@ hideall "--sync--"
 1022.0 "--middle--" sync / 1[56]:[^:]*:Ketuduke:8A77:/
 1027.0 "Spring Crystals 1" sync / 1[56]:[^:]*:Ketuduke:8AA8:/
 1034.0 "Bubble Net" sync / 1[56]:[^:]*:Ketuduke:8AAD:/
+1034.0 "크리스탈 나란히"
 1041.0 "Hydrobullet/Hydrofall (buff)" sync / 1[56]:[^:]*:Ketuduke:(8AB8|8AB4):/
 1050.0 "Fluke Gale (cast)" sync / 1[56]:[^:]*:Ketuduke:8AB1:/
 1060.0 "Fluke Gale 1" sync / 1[56]:[^:]*:Ketuduke:8AB2:/
@@ -62,6 +63,7 @@ hideall "--sync--"
 1214.8 "Spring Crystals 3" sync / 1[56]:[^:]*:Ketuduke:8AA8:/
 1216.8 "Hydrobullet" sync / 1[56]:[^:]*:Ketuduke:8ABA:/
 1221.8 "Bubble Net" sync / 1[56]:[^:]*:Ketuduke:8AAD:/
+#1221.8 "크리스탈 나란히"
 1227.8 "Fluke Typhoon (cast)" sync / 1[56]:[^:]*:Ketuduke:8AAF:/
 1233.8 "Fluke Typhoon" sync / 1[56]:[^:]*:Ketuduke:8AB0:/
 1236.4 "Saturate" sync / 1[56]:[^:]*:Spring Crystal:8AAB:/
