@@ -1,12 +1,13 @@
 import Conditions from '../../../../../resources/conditions';
+import Outputs from '../../../../../resources/outputs';
 import { Responses } from '../../../../../resources/responses';
 import ZoneId from '../../../../../resources/zone_id';
 import { RaidbossData } from '../../../../../types/data';
 import { TriggerSet } from '../../../../../types/trigger';
 
-export type Marches = 'front' | 'back' | 'left' | 'right';
+export type ArcaneBlightMarch = 'front' | 'back' | 'left' | 'right';
 
-const LalaArcaneBlghtMap: { [count: string]: Marches } = {
+const ArcaneBlightMap: { [count: string]: ArcaneBlightMarch } = {
   '886F': 'right',
   '8870': 'left',
   '8871': 'back',
@@ -14,20 +15,20 @@ const LalaArcaneBlghtMap: { [count: string]: Marches } = {
 } as const;
 
 export interface Data extends RaidbossData {
-  quaArcaneCount: number;
-  lalaBlight?: Marches;
-  rotate?: 'cw' | 'ccw' | 'unknown';
+  quaArmamentsCount: number;
+  lalaArcaneBlight?: ArcaneBlightMarch;
+  lalaRotate?: 'cw' | 'ccw' | 'unknown';
   reloadCount: number;
   reloadFailed: number[];
 }
 
 const triggerSet: TriggerSet<Data> = {
-  id: 'Aloalo',
+  id: 'AloaloIsland',
   zoneId: ZoneId.AloaloIsland,
-  timelineFile: 'aloalo.txt',
+  timelineFile: 'aloalo_island.txt',
   initData: () => {
     return {
-      quaArcaneCount: 0,
+      quaArmamentsCount: 0,
       reloadCount: 0,
       reloadFailed: [],
     };
@@ -45,27 +46,35 @@ const triggerSet: TriggerSet<Data> = {
       type: 'StartsUsing',
       netRegex: { id: '8B88', source: 'Quaqua', capture: false },
       infoText: (data, _matches, output) => {
-        data.quaArcaneCount++;
-        if (data.quaArcaneCount === 1)
+        data.quaArmamentsCount++;
+        if (data.quaArmamentsCount === 1)
           return output.first!();
-        if (data.quaArcaneCount === 2)
+        if (data.quaArmamentsCount === 2)
           return output.second!();
-        if (data.quaArcaneCount === 3)
+        if (data.quaArmamentsCount === 3)
           return output.third!();
         return output.text!();
       },
       outputStrings: {
         first: {
           en: '망치, 피해요',
+          de: 'Außen zwichen den Orbs',
+          ja: 'ハンマー、玉の間の外側へ',
         },
         second: {
           en: '도넛, 안으로',
+          de: 'Unter einen Orbs',
+          ja: 'ドーナツ、玉の下へ',
         },
         third: {
-          en: '망치 + 도넛, 도넛 안으로',
+          en: '도넛 안으로',
+          de: 'Unter Donut Orbs',
+          ja: 'ドーナツ玉の下へ',
         },
         text: {
           en: '망치, 도넛 조심해요',
+          de: 'Unter Donut und weit weg von der Axt',
+          ja: '玉に気を付けて',
         },
       },
     },
@@ -78,6 +87,8 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: '지금 피해요!',
+          de: 'Geh zum sicheren Bereich JETZT!',
+          ja: '安置へ移動',
         },
       },
     },
@@ -89,6 +100,8 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: '3연속 넉백, 1번부터',
+          de: '3x Rückstoß',
+          ja: '3x ノックバック',
         },
       },
     },
@@ -100,6 +113,8 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: '4연속 돌진',
+          de: '4x Ansturm',
+          ja: '4x 突進',
         },
       },
     },
@@ -111,6 +126,8 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: '바깥에서 창, 떨어져요',
+          de: 'Außen zwichen den Dreizack',
+          ja: '槍の間の外側へ',
         },
       },
     },
@@ -118,12 +135,7 @@ const triggerSet: TriggerSet<Data> = {
       id: 'Aloalo Quaqua Violet Storm',
       type: 'StartsUsing',
       netRegex: { id: '8B95', source: 'Quaqua', capture: false },
-      alertText: (_data, _matches, output) => output.text!(),
-      outputStrings: {
-        text: {
-          en: '앞에 부채꼴! 뒤로!',
-        },
-      },
+      response: Responses.getBehind(),
     },
     {
       id: 'Aloalo Quaqua Howl',
@@ -133,6 +145,8 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: '쫄 나와요',
+          de: 'Adds',
+          ja: 'ざこギミック',
         },
       },
     },
@@ -157,6 +171,11 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: '시선 조심!',
+          de: 'Schau von den Ringen weg',
+          fr: 'Ne regardez pas l\'anneau',
+          ja: '輪から視線回避',
+          cn: '视线避开圆环',
+          ko: '고리 모양 눈 시선 피하기',
         },
       },
     },
@@ -170,26 +189,14 @@ const triggerSet: TriggerSet<Data> = {
     {
       id: 'Aloalo Ketuduke Encroaching Twintides',
       type: 'StartsUsing',
-      netRegex: { id: '8A9F', source: 'Ketuduke' },
-      condition: (_data, matches) => parseFloat(matches.castTime) > 4.5,
-      alertText: (_data, _matches, output) => output.text!(),
-      outputStrings: {
-        text: {
-          en: '안에 있다 => 밖으로',
-        },
-      },
+      netRegex: { id: '8A9F', source: 'Ketuduke', capture: false },
+      response: Responses.getInThenOut(),
     },
     {
       id: 'Aloalo Ketuduke Receding Twintides',
       type: 'StartsUsing',
-      netRegex: { id: '8A9D', source: 'Ketuduke' },
-      condition: (_data, matches) => parseFloat(matches.castTime) > 4.5,
-      alertText: (_data, _matches, output) => output.text!(),
-      outputStrings: {
-        text: {
-          en: '밖에 있다 => 안으로',
-        },
-      },
+      netRegex: { id: '8A9D', source: 'Ketuduke', capture: false },
+      response: Responses.getOutThenIn(),
     },
     {
       id: 'Aloalo Ketuduke Roar',
@@ -199,6 +206,8 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: '쫄 나와요',
+          de: 'Adds',
+          ja: 'ざこギミック',
         },
       },
     },
@@ -210,6 +219,8 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: '거품만 2칸 넉백',
+          de: 'Blasen 2 Flächen Rückstoß',
+          ja: '泡のみ2マスのノックバック',
         },
       },
     },
@@ -221,6 +232,8 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: '거품만 공중 띄우기',
+          de: 'Blasen schweben',
+          ja: '泡のみ浮上',
         },
       },
     },
@@ -232,11 +245,13 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: '거품 2칸 넉백 + 곧 장판',
+          de: 'Blasen 2 Flächen Rückstoß + Flächen',
+          ja: '泡のみ2マスのノックバック + ゆか',
         },
       },
     },
     {
-      id: 'Aloalo Ketuduke Hydrobomb After',
+      id: 'Aloalo Ketuduke Hydrobomb Chasing',
       type: 'Ability',
       netRegex: { id: '8D0F', source: 'Ketuduke', capture: false },
       delaySeconds: 1.5,
@@ -244,6 +259,11 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: '연속 따라오는 장판',
+          de: 'Weiche den verfolgenden AoEs aus',
+          fr: 'Évitez les AoEs',
+          ja: 'ついてくるAOE回避',
+          cn: '躲避追踪AOE',
+          ko: '따라오는 장판 피하기',
         },
       },
     },
@@ -258,14 +278,14 @@ const triggerSet: TriggerSet<Data> = {
       id: 'Aloalo Lala Lala Rotation',
       type: 'HeadMarker',
       netRegex: { id: ['01E4', '01E5'], target: 'Lala' },
-      run: (data, matches) => data.rotate = matches.id === '01E4' ? 'cw' : 'ccw',
+      run: (data, matches) => data.lalaRotate = matches.id === '01E4' ? 'cw' : 'ccw',
     },
     {
       id: 'Aloalo Lala Player Rotation',
       type: 'HeadMarker',
       netRegex: { id: ['01ED', '01EE'] },
       condition: Conditions.targetIsYou(),
-      run: (data, matches) => data.rotate = matches.id === '01ED' ? 'cw' : 'ccw',
+      run: (data, matches) => data.lalaRotate = matches.id === '01ED' ? 'cw' : 'ccw',
     },
     {
       id: 'Aloalo Lala Inferno Theorem',
@@ -280,8 +300,8 @@ const triggerSet: TriggerSet<Data> = {
       // 8870 왼쪽
       // 8871 뒤
       // 8872 앞
-      netRegex: { id: Object.keys(LalaArcaneBlghtMap), source: 'Lala' },
-      run: (data, matches) => data.lalaBlight = LalaArcaneBlghtMap[matches.id.toUpperCase()],
+      netRegex: { id: Object.keys(ArcaneBlightMap), source: 'Lala' },
+      run: (data, matches) => data.lalaArcaneBlight = ArcaneBlightMap[matches.id.toUpperCase()],
     },
     {
       id: 'Aloalo Lala Arcane Blight',
@@ -289,45 +309,39 @@ const triggerSet: TriggerSet<Data> = {
       netRegex: { id: '8873', source: 'Lala', capture: false },
       delaySeconds: 1,
       alertText: (data, _matches, output) => {
-        if (data.lalaBlight === undefined)
+        if (data.lalaArcaneBlight === undefined)
           return output.text!();
-        if (data.rotate === undefined)
-          return output[data.lalaBlight]!();
-        if (data.rotate === 'cw') {
+        if (data.lalaRotate === undefined)
+          return output[data.lalaArcaneBlight]!();
+        if (data.lalaRotate === 'cw') {
           return {
             'front': output.right!(),
             'back': output.left!(),
             'left': output.front!(),
             'right': output.back!(),
-          }[data.lalaBlight];
+          }[data.lalaArcaneBlight];
         }
         return {
           'front': output.left!(),
           'back': output.right!(),
           'left': output.back!(),
           'right': output.front!(),
-        }[data.lalaBlight];
+        }[data.lalaArcaneBlight];
       },
       run: (data) => {
-        delete data.lalaBlight;
-        delete data.rotate;
+        delete data.lalaArcaneBlight;
+        delete data.lalaRotate;
       },
       outputStrings: {
         text: {
           en: '빈 곳으로~',
+          de: 'Geh in den sicheren Bereich',
+          ja: '安置へ移動',
         },
-        front: {
-          en: '앞으로',
-        },
-        back: {
-          en: '뒤로',
-        },
-        left: {
-          en: '왼쪽',
-        },
-        right: {
-          en: '오른쪽',
-        },
+        front: Outputs.goFront,
+        back: Outputs.getBehind,
+        left: Outputs.left,
+        right: Outputs.right,
       },
     },
     {
@@ -352,7 +366,7 @@ const triggerSet: TriggerSet<Data> = {
       condition: Conditions.targetIsYou(),
       delaySeconds: 0.5,
       durationSeconds: 8,
-      suppressSeconds: 12, // 틀리면 한번 더 오므로 죽여버림
+      suppressSeconds: 12, // Once again if failed. Suppress them
       alertText: (data, matches, output) => {
         const map = {
           'E8E': 'front',
@@ -363,9 +377,9 @@ const triggerSet: TriggerSet<Data> = {
         }[matches.effectId];
         if (map === undefined)
           return output.text!();
-        if (data.rotate === undefined)
+        if (data.lalaRotate === undefined)
           return output[map]!();
-        if (data.rotate)
+        if (data.lalaRotate === 'cw')
           return {
             'front': output.left!(),
             'back': output.right!(),
@@ -379,13 +393,32 @@ const triggerSet: TriggerSet<Data> = {
           'right': output.back!(),
         }[map];
       },
-      run: (data) => delete data.rotate,
+      run: (data) => delete data.lalaRotate,
       outputStrings: {
-        front: '보스 봐요',
-        back: '뒤돌아 봐요',
-        left: '오른쪽 봐요',
-        right: '왼쪽 봐요',
-        text: '열린 곳을 보스로',
+        front: Outputs.lookTowardsBoss,
+        back: {
+          en: '뒤돌아 봐요',
+          de: 'Schau nach Hinten',
+          ja: '後ろ見て',
+        },
+        left: {
+          en: '오른쪽 봐요',
+          de: 'Schau nach Rechts',
+          ja: '右見て',
+        },
+        right: {
+          en: '왼쪽 봐요',
+          de: 'Schau nach Links',
+          ja: '左見て',
+        },
+        text: {
+          en: '열린 곳을 보스로',
+          de: 'Zeige Öffnung zum Boss',
+          fr: 'Pointez l\'ouverture vers Boss', // FIXME
+          ja: '未解析の方角をボスに向ける',
+          cn: '脚下光环缺口对准boss',
+          ko: '문양이 빈 쪽을 보스쪽으로 향하게 하기', // FIXME
+        },
       },
     },
     {
@@ -396,6 +429,8 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: '씨앗 등장 => 도넛 장판',
+          de: 'Samen Adds => Donut AoEs',
+          ja: '種 => ドーナツAOE',
         },
       },
     },
@@ -407,6 +442,8 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: '밖에 쥐 등장 => 큰 장판',
+          de: 'Fledermaus Adds => Große AoEs',
+          ja: 'コウモリ => ゆかAOE',
         },
       },
     },
@@ -418,6 +455,8 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: '밖에 나무 등장 => 한 줄 장판',
+          de: 'Baum Adds => Linien AoEs',
+          ja: '木 => 直線AOE',
         },
       },
     },
@@ -443,9 +482,9 @@ const triggerSet: TriggerSet<Data> = {
         }[matches.effectId];
         if (map === undefined)
           return output.text!();
-        if (data.rotate === undefined)
+        if (data.lalaRotate === undefined)
           return output[map]!();
-        if (data.rotate === 'cw') {
+        if (data.lalaRotate === 'cw') {
           return {
             'front': output.right!(),
             'back': output.left!(),
@@ -460,41 +499,57 @@ const triggerSet: TriggerSet<Data> = {
           'right': output.front!(),
         }[map];
       },
-      run: (data) => delete data.rotate,
+      run: (data) => delete data.lalaRotate,
       outputStrings: {
         text: {
           en: '강제이동',
+          de: 'Geistlenkung',
+          fr: 'Piratage mental', // FIXME
+          ja: '強制移動',
+          cn: '强制移动', // FIXME
+          ko: '강제이동', // FIXME
         },
         front: {
           en: '강제이동: 앞으로',
+          de: 'Geistlenkung: Vorwärts',
+          fr: 'Piratage mental : Vers l\'avant',
+          ja: '強制移動 : 前',
+          cn: '强制移动 : 前',
+          ko: '강제이동: 앞',
         },
         back: {
           en: '강제이동: 뒤로',
+          de: 'Geistlenkung: Rückwärts',
+          fr: 'Piratage mental : Vers l\'arrière',
+          ja: '強制移動 : 後ろ',
+          cn: '强制移动 : 后',
+          ko: '강제이동: 뒤',
         },
         left: {
           en: '강제이동: 왼쪽',
+          de: 'Geistlenkung: Links',
+          fr: 'Piratage mental : Vers la gauche',
+          ja: '強制移動 : 左',
+          cn: '强制移动 : 左',
+          ko: '강제이동: 왼쪽',
         },
         right: {
           en: '강제이동: 오른쪽',
+          de: 'Geistlenkung: Rechts',
+          fr: 'Piratage mental : Vers la droite',
+          ja: '強制移動 : 右',
+          cn: '强制移动 : 右',
+          ko: '강제이동: 오른쪽',
         },
       },
     },
     // ----------------------------------------- Statice
     {
-      id: 'Aloalo Statice Surprise Balloon',
-      type: 'StartsUsing',
-      netRegex: { id: '892E', source: 'Statice', capture: false },
-      // 풍선인데 알릴 필요가?
-    },
-    {
       id: 'Aloalo Statice Pop',
       type: 'StartsUsing',
       netRegex: { id: '892F', source: 'Statice', capture: false },
       delaySeconds: 3,
-      alertText: (_data, _matches, output) => output.text!(),
-      outputStrings: {
-        text: '넉백!',
-      },
+      response: Responses.knockback(),
     },
     {
       id: 'Aloalo Statice 4-tonze Weight',
@@ -502,7 +557,11 @@ const triggerSet: TriggerSet<Data> = {
       netRegex: { id: '8931', source: 'Statice', capture: false },
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
-        text: '4톤 피해요',
+        text: {
+          en: '4톤 피해요',
+          de: 'Weiche 4-Tonnen aus',
+          ja: '4トン回避',
+        },
       },
     },
     {
@@ -511,7 +570,11 @@ const triggerSet: TriggerSet<Data> = {
       netRegex: { id: '8933', source: 'Statice', capture: false },
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
-        text: '빙글빙글 불기둥 피해요',
+        text: {
+          en: '빙글빙글 불기둥 피해요',
+          de: 'Weiche Feuer-Linien aus',
+          ja: 'ぐるぐる火を回避',
+        },
       },
     },
     {
@@ -547,7 +610,11 @@ const triggerSet: TriggerSet<Data> = {
         return output.text!({ safe: safe });
       },
       outputStrings: {
-        text: '안전: ${safe}',
+        text: {
+          en: '안전: ${safe}',
+          de: 'Sicher: ${safe}',
+          ja: '安置: ${safe}',
+        },
       },
     },
     {
@@ -556,31 +623,6 @@ const triggerSet: TriggerSet<Data> = {
       netRegex: { id: '8929', source: 'Statice', capture: false },
       response: Responses.aoe('alert'),
     },
-    {
-      id: 'Aloalo Statice Present Box',
-      type: 'StartsUsing',
-      netRegex: { id: '893E', source: 'Statice', capture: false },
-      // 무슨 기믹인지 모르겠음
-    },
-    {
-      id: 'Aloalo Statice Dartboard',
-      type: 'StartsUsing',
-      netRegex: { id: '893E', source: 'Statice', capture: false },
-      durationSeconds: 20,
-      infoText: (_data, _matches, output) => output.text!(),
-      outputStrings: {
-        text: '3번 같은 곳 떨어지는데로 옮기면 될듯?',
-      },
-    },
-    {
-      id: 'Aloalo Statice Hunks of Junk',
-      type: 'Ability',
-      netRegex: { id: '893C', source: 'Statice', capture: false },
-      infoText: (_data, _matches, output) => output.text!(),
-      outputStrings: {
-        text: '틀리면 대야 떨어지나 봄',
-      },
-    },
     // ----------------------------------------- Loquloqui
     {
       id: 'Aloalo Loquloqui Long-lost Light',
@@ -588,7 +630,6 @@ const triggerSet: TriggerSet<Data> = {
       netRegex: { id: '87BC', source: 'Loquloqui', capture: false },
       response: Responses.aoe('alert'),
     },
-    // Summoning Rite(87BF) 뭔가 소환
     {
       id: 'Aloalo Loquloqui O Life, Flourish',
       type: 'StartsUsing',
@@ -596,7 +637,11 @@ const triggerSet: TriggerSet<Data> = {
       durationSeconds: 10,
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
-        text: '반짝이는 쫄 조심!',
+        text: {
+          en: '반짝이는 쫄 조심!',
+          de: 'Weiche leuchtenden Adds aus',
+          ja: '光ってる物に注意',
+        },
       },
     },
     {
@@ -606,7 +651,11 @@ const triggerSet: TriggerSet<Data> = {
       suppressSeconds: 5,
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
-        text: '참새가 날아든다!',
+        text: {
+          en: '참새가 날아든다!',
+          de: 'Vogel ansturm',
+          ja: '鳥の突進',
+        },
       },
     },
     {
@@ -616,7 +665,11 @@ const triggerSet: TriggerSet<Data> = {
       suppressSeconds: 5,
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
-        text: '장판 피해요!',
+        text: {
+          en: '장판 피해요!',
+          de: 'Weiche AoEs aus',
+          ja: 'AOE回避',
+        },
       },
     },
     {
@@ -632,7 +685,11 @@ const triggerSet: TriggerSet<Data> = {
       durationSeconds: 10,
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
-        text: '줄달린 쫄 조심!',
+        text: {
+          en: '줄달린 쫄 조심!',
+          de: 'Weiche Verbindungen aus',
+          ja: '縮む線を回避',
+        },
       },
     },
     {
@@ -649,10 +706,7 @@ const triggerSet: TriggerSet<Data> = {
       id: 'Aloalo Loquloqui Land Wave',
       type: 'StartsUsing',
       netRegex: { id: '87BD', source: 'Loquloqui', capture: false },
-      alertText: (_data, _matches, output) => output.text!(),
-      outputStrings: {
-        text: '엉덩이로!',
-      },
+      response: Responses.getBehind(),
     },
     {
       id: 'Aloalo Loquloqui O Isle, Bloom',
@@ -661,7 +715,11 @@ const triggerSet: TriggerSet<Data> = {
       durationSeconds: 10,
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
-        text: '마지막 풀밭 => 안전하게 이동',
+        text: {
+          en: '마지막 풀밭 => 안전하게 이동',
+          de: 'Letzte Blüte => Geh zum sicheren Bereich',
+          ja: '最後の花畑 => 安置へ移動',
+        },
       },
     },
     {
@@ -680,7 +738,11 @@ const triggerSet: TriggerSet<Data> = {
       durationSeconds: 4.5,
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
-        text: '푹찍쾅! 모서리로!',
+        text: {
+          en: '푹찍쾅! 모서리로!',
+          de: 'Crush! Geh in eine Ecke',
+          ja: 'クラッシュ！隅へ移動',
+        },
       },
     },
     {
@@ -690,7 +752,73 @@ const triggerSet: TriggerSet<Data> = {
       durationSeconds: 10,
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
-        text: '연속 넉백! 암렝 추천!',
+        text: {
+          en: '4연속 넉백! 2번째 암랭',
+          de: '4x Rückstoß',
+          ja: '4x ノックバック',
+        },
+      },
+    },
+  ],
+  timelineReplace: [
+    {
+      'locale': 'de',
+      'missingTranslations': true,
+      'replaceSync': {
+        'Kairimai Loquloqai': 'Kairimai Loquloqai',
+        'Ketuduke': 'Ketuduke',
+        'Ketulu Cove': 'Ketulu-Bucht',
+        'Lala': 'Lala',
+        'Loquloqui': 'Loquloqui',
+        'Quaqua': 'Quaqua',
+        'Repuruba Loqua': 'Repuruba Loqua',
+        'Seasong\'s Rest': 'Ruh der Seesänger',
+        'Statice': 'Statice',
+        'The Elder Stump': 'Altenstumpf',
+        'The Origin Spring': 'Urquell',
+        'The Slumbering Canopy': 'Schlafende Krone',
+        'The ancient forum': 'Altes Forum',
+        'Uolosapa Loqua': 'Uolosapa Loqua',
+      },
+    },
+    {
+      'locale': 'fr',
+      'missingTranslations': true,
+      'replaceSync': {
+        'Kairimai Loquloqai': 'Kairimai Loquloqai',
+        'Ketuduke': 'Ketuduke',
+        'Ketulu Cove': 'Baie de Ketulu',
+        'Lala': 'Lala',
+        'Loquloqui': 'Loquloqui',
+        'Quaqua': 'Quaqua',
+        'Repuruba Loqua': 'repuruba loqua',
+        'Seasong\'s Rest': 'Repos du Chant marin',
+        'Statice': 'Statice',
+        'The Elder Stump': 'Souche du Doyen',
+        'The Origin Spring': 'Fontaine de l\'Origine',
+        'The Slumbering Canopy': 'Voûte apaisée',
+        'The ancient forum': 'Ancienne grand-place',
+        'Uolosapa Loqua': 'uolosapa loqua',
+      },
+    },
+    {
+      'locale': 'ja',
+      'missingTranslations': true,
+      'replaceSync': {
+        'Kairimai Loquloqai': '神子の祭壇',
+        'Ketuduke': 'ケトゥドゥケ',
+        'Ketulu Cove': 'ケトゥルの江湾',
+        'Lala': 'ララ',
+        'Loquloqui': 'ロクロクイ',
+        'Quaqua': 'クアクア',
+        'Repuruba Loqua': 'レプルバ・ロクア',
+        'Seasong\'s Rest': '鯨の還る地',
+        'Statice': 'スターチス',
+        'The Elder Stump': '老樹の切り株',
+        'The Origin Spring': '大樹の命泉',
+        'The Slumbering Canopy': '昏き微睡の間',
+        'The ancient forum': '古き広場',
+        'Uolosapa Loqua': 'オーロサパ・ロクア',
       },
     },
   ],

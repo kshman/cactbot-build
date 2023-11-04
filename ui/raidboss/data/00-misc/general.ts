@@ -25,7 +25,8 @@ const triggerSet: TriggerSet<Data> = {
           return false;
         return caresAboutTankStuff(data);
       },
-      infoText: (data, matches, output) => output.text!({ player: data.ShortName(matches.source) }),
+      infoText: (data, matches, output) =>
+        output.text!({ player: data.party.member(matches.source) }),
       outputStrings: {
         text: {
           en: '프로보크: ${player}',
@@ -52,8 +53,8 @@ const triggerSet: TriggerSet<Data> = {
       suppressSeconds: 0.5,
       infoText: (data, matches, output) => {
         if (matches.targetId === 'E0000000')
-          return output.noTarget!({ player: data.ShortName(matches.source) });
-        return output.text!({ player: data.ShortName(matches.source) });
+          return output.noTarget!({ player: data.party.member(matches.source) });
+        return output.text!({ player: data.party.member(matches.source) });
       },
       outputStrings: {
         text: {
@@ -86,7 +87,8 @@ const triggerSet: TriggerSet<Data> = {
           return false;
         return caresAboutTankStuff(data);
       },
-      infoText: (data, matches, output) => output.text!({ player: data.ShortName(matches.source) }),
+      infoText: (data, matches, output) =>
+        output.text!({ player: data.party.member(matches.source) }),
       outputStrings: {
         text: {
           en: '셔크: ${player}',
@@ -110,7 +112,8 @@ const triggerSet: TriggerSet<Data> = {
           return false;
         return caresAboutTankStuff(data);
       },
-      infoText: (data, matches, output) => output.text!({ player: data.ShortName(matches.source) }),
+      infoText: (data, matches, output) =>
+        output.text!({ player: data.party.member(matches.source) }),
       outputStrings: {
         text: {
           en: '홀름갱: ${player}',
@@ -134,7 +137,8 @@ const triggerSet: TriggerSet<Data> = {
           return false;
         return caresAboutTankStuff(data);
       },
-      infoText: (data, matches, output) => output.text!({ player: data.ShortName(matches.source) }),
+      infoText: (data, matches, output) =>
+        output.text!({ player: data.party.member(matches.source) }),
       outputStrings: {
         text: {
           en: '인빈시블 할로우드: ${player}',
@@ -158,7 +162,8 @@ const triggerSet: TriggerSet<Data> = {
           return false;
         return caresAboutTankStuff(data);
       },
-      infoText: (data, matches, output) => output.text!({ player: data.ShortName(matches.source) }),
+      infoText: (data, matches, output) =>
+        output.text!({ player: data.party.member(matches.source) }),
       outputStrings: {
         text: {
           en: '슈퍼 볼라이드: ${player}',
@@ -182,7 +187,8 @@ const triggerSet: TriggerSet<Data> = {
           return false;
         return caresAboutTankStuff(data);
       },
-      infoText: (data, matches, output) => output.text!({ player: data.ShortName(matches.source) }),
+      infoText: (data, matches, output) =>
+        output.text!({ player: data.party.member(matches.source) }),
       outputStrings: {
         text: {
           en: '리빙 데드: ${player}',
@@ -206,7 +212,8 @@ const triggerSet: TriggerSet<Data> = {
           return false;
         return caresAboutTankStuff(data);
       },
-      infoText: (data, matches, output) => output.text!({ player: data.ShortName(matches.source) }),
+      infoText: (data, matches, output) =>
+        output.text!({ player: data.party.member(matches.source) }),
       outputStrings: {
         text: {
           en: '워킹 데드: ${player}',
