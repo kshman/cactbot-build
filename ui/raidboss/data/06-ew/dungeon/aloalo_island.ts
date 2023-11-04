@@ -361,8 +361,8 @@ const triggerSet: TriggerSet<Data> = {
       // E8E Front Unseen
       // E8F Back Unseen
       // E90 Right Unseen
-      // E91 Left Unseen? E8D?
-      netRegex: { effectId: ['E8E', 'E8F', 'E90', 'E91', 'E8D'], source: 'Lala' },
+      // E91 Left Unseen
+      netRegex: { effectId: ['E8E', 'E8F', 'E90', 'E91'], source: 'Lala' },
       condition: Conditions.targetIsYou(),
       delaySeconds: 0.5,
       durationSeconds: 8,
@@ -373,7 +373,6 @@ const triggerSet: TriggerSet<Data> = {
           'E8F': 'back',
           'E90': 'right',
           'E91': 'left',
-          'E8D': 'left',
         }[matches.effectId];
         if (map === undefined)
           return output.text!();

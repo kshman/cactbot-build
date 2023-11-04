@@ -282,7 +282,7 @@ export default {
     ko: '"${player}" 넉백징',
   },
   lookTowardsBoss: {
-    en: '쳐다 봐욧',
+    en: '보스 쳐다 봐욧',
     de: 'Anschauen Boss',
     fr: 'Regardez le boss',
     ja: 'ボスを見る',
