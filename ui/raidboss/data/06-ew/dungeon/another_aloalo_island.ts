@@ -1104,7 +1104,7 @@ const triggerSet: TriggerSet<Data> = {
       id: 'AAI Statice Ring a Ring o\' Explosions',
       type: 'StartsUsing',
       netRegex: { id: '895C', source: 'Statice', capture: false },
-      alertText: (data, _matches, output) => {
+      infoText: (data, _matches, output) => {
         data.stcRingRing++;
         if (data.stcRingRing === 1)
           return output.first!();
@@ -1123,7 +1123,7 @@ const triggerSet: TriggerSet<Data> = {
       id: 'AAI Statice Dartboard of Dancing Explosives',
       type: 'Ability',
       netRegex: { id: '8CBD', source: 'Statice', capture: false },
-      alertText: (_data, _matches, output) => output.text!(),
+      infoText: (_data, _matches, output) => output.text!(),
       run: (data) => {
         delete data.myMarch;
         data.gainList = [];
@@ -1287,7 +1287,7 @@ const triggerSet: TriggerSet<Data> = {
       id: 'AAI Statice Pinwheeling Dartboard',
       type: 'Ability',
       netRegex: { id: '8CBC', source: 'Statice', capture: false },
-      alertText: (_data, _matches, output) => output.text!(),
+      infoText: (_data, _matches, output) => output.text!(),
       run: (data) => data.stcSeenPinwheeling = true,
       outputStrings: {
         text: '꼭지점 찾고 => 한가운데로',
@@ -1385,5 +1385,37 @@ const triggerSet: TriggerSet<Data> = {
     },
   ],
 };
+
+// 헤드 마커
+// 쫄
+// TargetIcon 1B:(아이디):(플레이어):0000:0000:0017:0000:0000:0000
+// TargetIcon 1B:(아이디):(플레이어):0000:0000:00A1:0000:0000:0000
+// TargetIcon 1B:(아이디):(플레이어):0000:0000:00C6:0000:0000:0000
+// TargetIcon 1B:(아이디):(플레이어):0000:0000:00DA:0000:0000:0000
+//  Ketuduke
+// TargetIcon 1B:(아이디)::0000:0000:0150:0000:0000:0000
+// TargetIcon 1B:(아이디)::0000:0000:0151:0000:0000:0000
+// Lala
+// TargetIcon 1B:(아이디):Lala:0000:0000:01E4:0000:0000:0000 // 라라 시계
+// TargetIcon 1B:(아이디):Lala:0000:0000:01E5:0000:0000:0000 // 라라 반시계
+// TargetIcon 1B:(아이디):(플레이어):0000:0000:0017:0000:0000:0000
+// TargetIcon 1B:(아이디):(플레이어):0000:0000:003E:0000:0000:0000
+// TargetIcon 1B:(아이디):(플레이어):0000:0000:00E5:0000:0000:0000
+// TargetIcon 1B:(아이디):(플레이어):0000:0000:00F3:0000:0000:0000
+// TargetIcon 1B:(아이디):(플레이어):0000:0000:01ED:0000:0000:0000 // 플레이어 시계
+// TargetIcon 1B:(아이디):(플레이어):0000:0000:01EE:0000:0000:0000 // 플레이어 반시계
+// TargetIcon 1B:(아이디):(플레이어):0000:0000:01F7:0000:0000:0000
+// Statice
+// TargetIcon 1B(아이디)::0000:0000:0186:0000:0000:0000
+// TargetIcon 1B(아이디)::0000:0000:0187:0000:0000:0000
+// TargetIcon 1B(아이디)::0000:0000:0188:0000:0000:0000
+// TargetIcon 1B(아이디)::0000:0000:0189:0000:0000:0000
+// TargetIcon 1B(아이디)::0000:0000:018A:0000:0000:0000
+// TargetIcon 1B(아이디)::0000:0000:018B:0000:0000:0000
+// TargetIcon 1B(아이디):(플레이어):0000:0000:0061:0000:0000:0000 // Burning Chains 줄
+// TargetIcon 1B(아이디):Ball of Fire:0000:0000:009C:0000:0000:0000
+// TargetIcon 1B(아이디):(플레이어):0000:0000:00DA:0000:0000:0000 // Shocking Abandon
+// TargetIcon 1B(아이디):(플레이어):0000:0000:00DC:0000:0000:0000 // Burning Chains 이펙트
+// TargetIcon 1B(아이디):(플레이어):0000:0000:015B:0000:0000:0000 // 페어?
 
 export default triggerSet;
