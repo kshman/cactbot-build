@@ -184,7 +184,7 @@ const triggerSet: TriggerSet<Data> = {
       netRegex: { id: '6D14' },
       condition: (data) => data.flareTarget !== data.me,
       alertText: (data, matches, output) =>
-        output.lineStackOn!({ player: data.ShortName(matches.target) }),
+        output.lineStackOn!({ player: data.party.member(matches.target) }),
       outputStrings: {
         lineStackOn: {
           en: '한 줄 뭉쳐요: ${player}',

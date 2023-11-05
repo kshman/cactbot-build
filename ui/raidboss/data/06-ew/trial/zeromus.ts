@@ -57,7 +57,7 @@ const triggerSet: TriggerSet<Data> = {
       type: 'Ability',
       netRegex: { id: '8AEF', source: 'Zeromus' },
       alertText: (data, matches, output) => {
-        return output.lineStackOn!({ player: data.ShortName(matches.target) });
+        return output.lineStackOn!({ player: data.party.member(matches.target) });
       },
       outputStrings: {
         lineStackOn: {
@@ -82,6 +82,7 @@ const triggerSet: TriggerSet<Data> = {
           de: '${dir1} / ${dir2}',
           ja: '${dir1} / ${dir2}',
           cn: '${dir1} / ${dir2}',
+          ko: '${dir1} / ${dir2}',
         },
         ne: Outputs.northeast,
         sw: Outputs.southwest,

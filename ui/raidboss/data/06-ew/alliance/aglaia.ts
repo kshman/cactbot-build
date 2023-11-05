@@ -494,7 +494,7 @@ const triggerSet: TriggerSet<Data> = {
       delaySeconds: 0.5,
       alertText: (data, matches, output) => {
         if (data.naldLastColor === 'orange')
-          return output.lineStackOn!({ player: data.ShortName(matches.target) });
+          return output.lineStackOn!({ player: data.party.member(matches.target) });
       },
       outputStrings: {
         lineStackOn: {

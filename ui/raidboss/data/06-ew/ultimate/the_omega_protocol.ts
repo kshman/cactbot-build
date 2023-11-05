@@ -495,7 +495,7 @@ const triggerSet: TriggerSet<Data> = {
           return output.ccw!({ num: myNum, player: data.my.ip.r });
         }
 
-        return output.text!({ num: myNum, player: data.ShortName(partner) });
+        return output.text!({ num: myNum, player: data.party.member(partner) });
       },
       outputStrings: {
         text: {
@@ -1754,7 +1754,7 @@ const triggerSet: TriggerSet<Data> = {
         data.monitorPlayers = [];
 
         if (players.includes(data.me)) {
-          const [p1, p2] = players.filter((x) => x !== data.me).map((x) => data.ShortName(x));
+          const [p1, p2] = players.filter((x) => x !== data.me).map((x) => data.party.member(x));
           return { alertText: output.monitorOnYou!({ player1: p1, player2: p2 }) };
         }
         return { infoText: output.unmarked!() };
@@ -1805,7 +1805,7 @@ const triggerSet: TriggerSet<Data> = {
             if (m)
               return { alertText: output.stackOnYou!({ player: m.r }) };
           }
-          return { alertText: output.stackOnYou!({ player: data.ShortName(otherPerson) }) };
+          return { alertText: output.stackOnYou!({ player: data.party.member(otherPerson) }) };
         }
 
         if (data.members) {
@@ -1815,7 +1815,10 @@ const triggerSet: TriggerSet<Data> = {
             return { infoText: output.stacks!({ player1: m1.r, player2: m2.r }) };
         }
         return {
-          infoText: output.stacks!({ player1: data.ShortName(p1), player2: data.ShortName(p2) }),
+          infoText: output.stacks!({
+            player1: data.party.member(p1),
+            player2: data.party.member(p2),
+          }),
         };
       },
       run: (data, _matches) => data.waveCannonStacks = [],

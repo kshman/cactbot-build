@@ -192,7 +192,9 @@ const triggerSet: TriggerSet<Data> = {
       id: 'P11N Upheld Ruling Chariot',
       type: 'HeadMarker',
       netRegex: { id: '013E' },
-      infoText: (data, matches, output) => output.text!({ target: data.ShortName(matches.target) }),
+      infoText: (data, matches, output) => {
+        return output.text!({ target: data.party.member(matches.target) });
+      },
       outputStrings: {
         text: {
           en: '뭉쳐요: ${target} -> 밖으로',

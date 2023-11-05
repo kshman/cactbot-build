@@ -6,6 +6,7 @@ import { Responses } from '../../../../../resources/responses';
 import ZoneId from '../../../../../resources/zone_id';
 import { RaidbossData } from '../../../../../types/data';
 import { NetMatches } from '../../../../../types/net_matches';
+import { PartyMemberParamObject } from '../../../../../types/party';
 import { TriggerSet } from '../../../../../types/trigger';
 // 🡸🡺🔵🔴🟡🟢🔘💫❱❰🟦🟥
 
@@ -176,6 +177,7 @@ const triggerSet: TriggerSet<Data> = {
           de: 'Kardinal',
           fr: 'Cardinaux',
           ja: '🟡斜め => 散会',
+          cn: '十字',
           ko: '십자방향으로',
         },
       },
@@ -358,6 +360,7 @@ const triggerSet: TriggerSet<Data> = {
           de: 'Sammeln ${dir1} (${dir2} danach sicher)',
           fr: 'Package ${dir1} (${dir2} sûr après)',
           ja: '${dir1}で頭割り (あとは${dir2}が安置)',
+          cn: '${dir1}集合 (然后${dir2}安全)',
           ko: '${dir1}쪽에서 쉐어 (이후 ${dir2}쪽이 안전)',
         },
         default: {
@@ -365,6 +368,7 @@ const triggerSet: TriggerSet<Data> = {
           de: 'Neben unsicherem grünen Puschel sammeln',
           fr: 'Pack vers le pompon vert non safe',
           ja: '緑の下で頭割り',
+          cn: '靠近危险绿球集合',
           ko: '초록색 구슬에서 쉐어',
         },
       },
@@ -382,7 +386,7 @@ const triggerSet: TriggerSet<Data> = {
           // Does not happen on first or third Slippery Soap
           if (matches.target === data.me)
             return output.getBehindPartyKnockback!();
-          return output.getInFrontOfPlayerKnockback!({ player: data.ShortName(matches.target) });
+          return output.getInFrontOfPlayerKnockback!({ player: data.party.member(matches.target) });
         }
         if (matches.target === data.me) {
           if (data.soapCounter === 1)
@@ -391,7 +395,7 @@ const triggerSet: TriggerSet<Data> = {
             return output.getBehindPuffs!();
           return output.getBehindParty!();
         }
-        return output.getInFrontOfPlayer!({ player: data.ShortName(matches.target) });
+        return output.getInFrontOfPlayer!({ player: data.party.member(matches.target) });
       },
       outputStrings: {
         getBehindPuff: {
@@ -399,20 +403,23 @@ const triggerSet: TriggerSet<Data> = {
           de: 'Hinter Puschel und Gruppe',
           fr: 'Derrière le pompon et le groupe',
           ja: 'たまの一番後ろへ',
-          ko: '구슬 맨 뒤로',
+          cn: '站在球和队友后',
+          ko: '구슬 뒤로',
         },
         getBehindPuffs: {
           en: '솜털🔘의 맨 뒤로 (동서)',
           de: 'Hinter Puschel und Gruppe (Osten/Westen)',
           fr: 'Derrière les pompons et le groupe (Est/Ouest)',
           ja: 'たまの一番後ろへ (東西)',
-          ko: '구슬 맨 뒤로 (동/서)',
+          cn: '站在球和队友后 (东/西)',
+          ko: '구슬 뒤로 (동/서)',
         },
         getBehindParty: {
           en: '맨 뒤로',
           de: 'Hinter Gruppe',
           fr: 'Derrière le groupe',
           ja: '一番後ろへ',
+          cn: '站在队友后',
           ko: '맨 뒤로',
         },
         getBehindPartyKnockback: {
@@ -420,6 +427,7 @@ const triggerSet: TriggerSet<Data> = {
           de: 'Hinter Gruppe (Rückstoß)',
           fr: 'Derrière le groupe (Poussée)',
           ja: 'ノックバック！ 一番後ろへ',
+          cn: '站在队友后 (击退)',
           ko: '맨 뒤로 (넉백)',
         },
         getInFrontOfPlayer: {
@@ -427,6 +435,7 @@ const triggerSet: TriggerSet<Data> = {
           de: 'Sei vor ${player}',
           fr: 'Devant ${player}',
           ja: '${player}の前へ',
+          cn: '站在 ${player} 前',
           ko: '${player} 앞으로',
         },
         getInFrontOfPlayerKnockback: {
@@ -434,6 +443,7 @@ const triggerSet: TriggerSet<Data> = {
           de: 'Sei vor ${player} (Rückstoß)',
           fr: 'Devant ${player} (Poussée)',
           ja: 'ノックバック! ${player}の前へ',
+          cn: '站在 ${player} 前 (击退)',
           ko: '${player} 앞으로 (넉백)',
         },
       },
@@ -470,6 +480,7 @@ const triggerSet: TriggerSet<Data> = {
           de: 'Kardinal verteilen',
           fr: 'Écartez-vous en cardinal',
           ja: '🟡斜め => 散会',
+          cn: '十字分散',
           ko: '십자방향으로 산개',
         },
         intercards: {
@@ -497,6 +508,7 @@ const triggerSet: TriggerSet<Data> = {
             de: 'Tank Buster auf DIR, Osten/Westen zwischen Puschel',
             fr: 'Tankbuster sur VOUS, entre les pompons Est/Ouest',
             ja: '自分に強攻撃、東西で誘導',
+            cn: '死刑点名, 左(西)/右(东) 球下引导',
             ko: '나에게 탱버, 동/서쪽 구슬 사이로',
           },
         };
@@ -510,7 +522,7 @@ const triggerSet: TriggerSet<Data> = {
         if (data.role !== 'tank' && data.role !== 'healer')
           return;
 
-        return { infoText: output.busterOnTarget!({ player: data.ShortName(matches.target) }) };
+        return { infoText: output.busterOnTarget!({ player: data.party.member(matches.target) }) };
       },
     },
     {
@@ -554,6 +566,7 @@ const triggerSet: TriggerSet<Data> = {
           de: 'Unter grünem Puschel',
           fr: 'Sous le pompon vert',
           ja: '🟢貼り付く',
+          cn: '站在绿球下',
           ko: '초록색 구슬 밑으로',
         },
         avoidPuffs: {
@@ -561,6 +574,7 @@ const triggerSet: TriggerSet<Data> = {
           de: 'Weiche den Puschel AoEs aus',
           fr: 'Évitez les AoE des pompons',
           ja: 'たまからのゆか避けて',
+          cn: '躲避球AOE',
           ko: '구슬 장판 피하기',
         },
       },
@@ -629,6 +643,7 @@ const triggerSet: TriggerSet<Data> = {
           de: '${boss} - ${dir} ${puff}',
           fr: '${boss} - ${dir} ${puff}',
           ja: '${boss} - ${dir} ${puff}',
+          cn: '${boss} - ${dir} ${puff}',
           ko: '${boss} - ${dir} ${puff}',
         },
         bossIce: {
@@ -636,6 +651,7 @@ const triggerSet: TriggerSet<Data> = {
           de: 'Blauer Schweif',
           fr: 'Queue bleue',
           ja: '🔵',
+          cn: '蓝尾巴',
           ko: '파란색 꼬리',
         },
         bossIcePuffsCardinalSafeLater: {
@@ -643,6 +659,7 @@ const triggerSet: TriggerSet<Data> = {
           de: 'Interkardinal sicher',
           fr: 'Intercardinal sûr',
           ja: '斜め',
+          cn: '四角安全',
           ko: '대각선이 안전',
         },
         bossIcePuffsIntercardSafeLater: {
@@ -650,6 +667,7 @@ const triggerSet: TriggerSet<Data> = {
           de: 'Interkardinal sicher',
           fr: 'Intercardinal sûr',
           ja: '斜め',
+          cn: '四角安全',
           ko: '대각선이 안전',
         },
         bossWind: {
@@ -657,6 +675,7 @@ const triggerSet: TriggerSet<Data> = {
           de: 'Grüner Schweif',
           fr: 'Queue verte',
           ja: '🟢',
+          cn: '绿尾巴',
           ko: '초록색 꼬리',
         },
         bossWindPuffsCardinalSafeLater: {
@@ -664,6 +683,7 @@ const triggerSet: TriggerSet<Data> = {
           de: 'Mitte sicher',
           fr: 'Milieu sûr',
           ja: '真ん中',
+          cn: '中间安全',
           ko: '가운데가 안전',
         },
         bossWindPuffsIntercardSafeLater: {
@@ -671,6 +691,7 @@ const triggerSet: TriggerSet<Data> = {
           de: 'Mitte sicher',
           fr: 'Milieu sûr',
           ja: '真ん中',
+          cn: '中间安全',
           ko: '가운데가 안전',
         },
         // keep tethered puff info as separate outputStrings
@@ -680,6 +701,7 @@ const triggerSet: TriggerSet<Data> = {
           de: 'Blauer Puschel',
           fr: 'Pompon bleu',
           ja: '🔵たま',
+          cn: '蓝球',
           ko: '파란색 구슬',
         },
         bossIceBlueIntercardPuff: {
@@ -687,6 +709,7 @@ const triggerSet: TriggerSet<Data> = {
           de: 'Blauer Puschel',
           fr: 'Pompon bleu',
           ja: '🔵たま',
+          cn: '蓝球',
           ko: '파란색 구슬',
         },
         bossIceYellowCardinalPuff: {
@@ -694,6 +717,7 @@ const triggerSet: TriggerSet<Data> = {
           de: 'Gelber Puschel',
           fr: 'Pompon jaune',
           ja: '🟡たま',
+          cn: '黄球',
           ko: '노란색 구슬',
         },
         bossIceYellowIntercardPuff: {
@@ -701,6 +725,7 @@ const triggerSet: TriggerSet<Data> = {
           de: 'Gelber Puschel',
           fr: 'Pompon jaune',
           ja: '🟡たま',
+          cn: '黄球',
           ko: '노란색 구슬',
         },
         bossWindBlueCardinalPuff: {
@@ -708,6 +733,7 @@ const triggerSet: TriggerSet<Data> = {
           de: 'Blauer Puschel',
           fr: 'Pompon bleu',
           ja: '🔵たま',
+          cn: '蓝球',
           ko: '파란색 구슬',
         },
         bossWindBlueIntercardPuff: {
@@ -715,6 +741,7 @@ const triggerSet: TriggerSet<Data> = {
           de: 'Blauer Puschel',
           fr: 'Pompon bleu',
           ja: '🔵たま',
+          cn: '蓝球',
           ko: '파란색 구슬',
         },
         bossWindYellowCardinalPuff: {
@@ -722,6 +749,7 @@ const triggerSet: TriggerSet<Data> = {
           de: 'Gelber Puschel',
           fr: 'Pompon jaune',
           ja: '🟡たま',
+          cn: '黄球',
           ko: '노란색 구슬',
         },
         bossWindYellowIntercardPuff: {
@@ -729,6 +757,7 @@ const triggerSet: TriggerSet<Data> = {
           de: 'Gelber Puschel',
           fr: 'Pompon jaune',
           ja: '🟡たま',
+          cn: '黄球',
           ko: '노란색 구슬',
         },
         default: {
@@ -736,6 +765,7 @@ const triggerSet: TriggerSet<Data> = {
           de: 'Puschel ködern',
           fr: 'Attirez le pompon',
           ja: 'たま誘導',
+          cn: '诱导球',
           ko: '구슬 유도',
         },
       },
@@ -757,6 +787,7 @@ const triggerSet: TriggerSet<Data> = {
           de: '${safe}',
           fr: '${safe}',
           ja: '${safe}',
+          cn: '${safe}',
           ko: '${safe}',
         },
       },
@@ -773,6 +804,7 @@ const triggerSet: TriggerSet<Data> = {
           de: 'Krug ausweichen',
           fr: 'Évitez les aiguières',
           ja: '壺確認',
+          cn: '躲避水壶',
           ko: '항아리 피하기',
         },
       },
@@ -829,7 +861,9 @@ const triggerSet: TriggerSet<Data> = {
         windAndLightning: {
           en: '${dir} 밑 🟢으로',
           de: 'Unter den grünen Puschel im ${dir}',
+          fr: 'Sous le pompon vert ${dir}',
           ja: '${dir}の下🟢',
+          cn: '去 ${dir} 绿球下',
           ko: '${dir} 초록색 구슬 밑으로',
         },
         doubleIce: {
@@ -837,12 +871,15 @@ const triggerSet: TriggerSet<Data> = {
           de: 'Interkardinal, weg von den Puscheln',
           fr: 'Intercadinal, loin des pompons',
           ja: '斜め、たまから離れる',
+          cn: '去四角, 避开球',
           ko: '대각선으로, 구슬에서 떨어지기',
         },
         iceAndLightning: {
           en: '${dir}옆 🟡으로',
           de: 'Seitlich des gelben Puschel im ${dir}',
+          fr: 'Côté du pompon jaune ${dir}',
           ja: '${dir}横🟡へ',
+          cn: '站在 ${dir} 黄球旁',
           ko: '${dir} 노란색 구슬 옆으로',
         },
         doubleLightning: {
@@ -850,6 +887,7 @@ const triggerSet: TriggerSet<Data> = {
           de: 'Zwischen Puscheln',
           fr: 'Entre les pompons',
           ja: 'たまとたまの間',
+          cn: '站在球之间',
           ko: '구슬 사이로',
         },
         default: {
@@ -857,6 +895,7 @@ const triggerSet: TriggerSet<Data> = {
           de: 'Puschel AoEs vermeiden',
           fr: 'Évitez les AoE des pompons',
           ja: 'たまのゆか回避',
+          cn: '躲避球AOE',
           ko: '구슬 장판 피하기',
         },
         northPuff: Outputs.north,
@@ -888,6 +927,7 @@ const triggerSet: TriggerSet<Data> = {
           de: 'große Auto-Hits',
           fr: 'Grosses attaques auto',
           ja: '自己強化',
+          cn: '强化平A',
           ko: '평타 강화',
         },
       },
@@ -904,6 +944,7 @@ const triggerSet: TriggerSet<Data> = {
           de: 'HP auf 1',
           fr: 'HP à 1',
           ja: '体力１!',
+          cn: 'HP 归 1',
           ko: 'HP 1',
         },
       },
@@ -919,6 +960,7 @@ const triggerSet: TriggerSet<Data> = {
           de: 'AoE + Rein',
           fr: 'AoE + Intérieur',
           ja: 'ヘビィ, 足元へ',
+          cn: 'AOE + 去脚下',
           ko: '전체공격 + 안으로',
         },
       },
@@ -986,32 +1028,50 @@ const triggerSet: TriggerSet<Data> = {
         goLeft3Right2: {
           en: 'Go 3 Left 2 Right',
           de: 'Gehe Links 3, Rechts 2',
+          fr: '3 à gauche, 2 à droite',
           ja: '左: 3, 右: 2',
+          cn: '左 3, 右 2',
+          ko: '왼쪽3 오른쪽2',
         },
         goLeft3Right1: {
           en: 'Go 3 Left (on line)',
           de: 'Gehe Links 3 (auf der Linie)',
+          fr: '3 à gauche (sur la ligne)',
           ja: '左: 3 (線の上)',
+          cn: '左 3 (线上)',
+          ko: '왼쪽3 (선 위)',
         },
         goLeft2Right1: {
           en: 'Go 2 Left (on line)',
           de: 'Gehe Links 2 (auf der Linie)',
+          fr: '2 à gauche (sur la ligne)',
           ja: '左: 2 (線の上)',
+          cn: '左 2 (线上)',
+          ko: '왼쪽2 (선 위)',
         },
         goRight3Left2: {
           en: 'Go 3 Right 2 Left',
           de: 'Gehe Rechts 3, Links 2',
+          fr: '3 à droite, 2 à gauche',
           ja: '右: 3, 左: 2',
+          cn: '右 3, 左 2',
+          ko: '오른쪽3 왼쪽2',
         },
         goRight3Left1: {
           en: 'Go 3 Right (on line)',
           de: 'Gehe Rechts 3 (auf der Linie)',
+          fr: '3 à droite (sur la ligne)',
           ja: '右: 3 (線の上)',
+          cn: '右 3 (线上)',
+          ko: '오른쪽3 (선 위)',
         },
         goRight2Left1: {
           en: 'Go 2 Right (on line)',
           de: 'Gehe Rechts 2 (auf der Linie)',
+          fr: '2 à droite (sur la ligne)',
           ja: '右: 2 (線の上)',
+          cn: '右 2 (线上)',
+          ko: '오른쪽2 (선 위)',
         },
       },
     },
@@ -1025,7 +1085,10 @@ const triggerSet: TriggerSet<Data> = {
         moveThrough: {
           en: 'Move through',
           de: 'Gehe durch',
+          fr: 'Allez à travers',
           ja: '移動',
+          cn: '穿穿穿',
+          ko: '가로지르기',
         },
       },
     },
@@ -1038,23 +1101,23 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (data, matches, output) => {
         if (matches.target === data.me)
           return output.chargeOnYou!();
-        return output.chargeOn!({ player: data.ShortName(matches.target) });
+        return output.chargeOn!({ player: data.party.member(matches.target) });
       },
       outputStrings: {
         chargeOn: {
           en: '${player}에게 돌진!',
           de: 'Ansturm auf ${player}',
-          fr: 'Charge sur ${player}',
+          fr: 'Ruée sur ${player}',
           ja: '${player}に突進',
-          cn: '蓝球点${player}',
+          cn: '直线分摊点${player}',
           ko: '"${player}" 돌진 대상',
         },
         chargeOnYou: {
           en: '내게 돌진!',
           de: 'Ansturm auf DIR',
-          fr: 'Charge sur VOUS',
+          fr: 'Ruée sur VOUS',
           ja: '自分に突進',
-          cn: '蓝球点名',
+          cn: '直线分摊点名',
           ko: '돌진 대상자',
         },
       },
@@ -1104,7 +1167,9 @@ const triggerSet: TriggerSet<Data> = {
             return output.spreadThenStackOnYou!();
           if (data.thunderousEchoPlayer === undefined)
             return output.spreadThenStack!();
-          return output.spreadThenStackOn!({ player: data.ShortName(data.thunderousEchoPlayer) });
+          return output.spreadThenStackOn!({
+            player: data.party.member(data.thunderousEchoPlayer),
+          });
         }
 
         if (data.hasLingering)
@@ -1113,7 +1178,7 @@ const triggerSet: TriggerSet<Data> = {
           return output.stackOnYouThenSpread!();
         if (data.thunderousEchoPlayer === undefined)
           return output.stackThenSpread!();
-        return output.stackOnThenSpread!({ player: data.ShortName(data.thunderousEchoPlayer) });
+        return output.stackOnThenSpread!({ player: data.party.member(data.thunderousEchoPlayer) });
       },
       outputStrings: {
         stackThenSpread: Outputs.stackThenSpread,
@@ -1122,6 +1187,7 @@ const triggerSet: TriggerSet<Data> = {
           de: 'Auf ${player} sammeln => Verteilen',
           fr: 'Package sur ${player} -> Dispersion',
           ja: '頭割り => 散会 (${player})',
+          cn: '${player}处分摊 => 分散',
           ko: '${player} 쉐어 => 산개',
         },
         stackOnYouThenSpread: {
@@ -1129,6 +1195,7 @@ const triggerSet: TriggerSet<Data> = {
           de: 'Auf DIR sammeln => Verteilen',
           fr: 'Package sur VOUS -> Dispersion',
           ja: '自分に頭割り => 散会',
+          cn: '分摊点名 => 分散',
           ko: '나에게 쉐어 => 산개',
         },
         spreadThenStack: Outputs.spreadThenStack,
@@ -1137,6 +1204,7 @@ const triggerSet: TriggerSet<Data> = {
           de: 'Verteilen => Auf ${player} sammeln',
           fr: 'Dispersion -> Package sur ${player}',
           ja: '散会 => 頭割り (${player})',
+          cn: '分散 => ${player}处分摊',
           ko: '산개 => ${player} 쉐어',
         },
         spreadThenStackOnYou: {
@@ -1144,18 +1212,23 @@ const triggerSet: TriggerSet<Data> = {
           de: 'Verteilen => Auf DIR sammeln',
           fr: 'Dispersion -> package sur VOUS',
           ja: '散会 => 自分に頭割り',
+          cn: '分散 => 分摊点名',
           ko: '산개 => 나에게 쉐어',
         },
         spreadThenBait: {
           en: '내가 링거, 홀로 있다가 장판 피해욧',
           de: 'Veretilen => Fläche ködern',
+          fr: 'Dispersion -> Déposez',
           ja: '散会 => AOE誘導',
+          cn: '分散 => 诱导AOE',
           ko: '산개 => 장판 유도',
         },
         baitThenSpread: {
           en: '유도했다가 => 흩어져요',
           de: 'Fläche ködern => Veretilen',
+          fr: 'Déposez -> Dispersion',
           ja: 'AOE誘導 => 散会',
+          cn: '诱导AOE => 分散',
           ko: '장판 유도 => 산개',
         },
       },
@@ -1182,6 +1255,7 @@ const triggerSet: TriggerSet<Data> = {
           de: 'Außerhalb des inneren Ringes',
           fr: 'À l\'extérieur de l\'anneau intérieur',
           ja: 'リングチャージ ①',
+          cn: '出内圈',
           ko: '안쪽 고리 바깥',
         },
         outsideMiddle: {
@@ -1189,6 +1263,7 @@ const triggerSet: TriggerSet<Data> = {
           de: 'Außerhalb des mittleren Ringes',
           fr: 'À l\'extérieur de l\'anneau central',
           ja: 'リングチャージ ②',
+          cn: '出中圈',
           ko: '중간 고리 바깥',
         },
         outsideOuter: {
@@ -1196,6 +1271,7 @@ const triggerSet: TriggerSet<Data> = {
           de: 'Außerhalb des äußeren Ringes',
           fr: 'À l\'extérieur de l\'anneau extérieur',
           ja: 'リングチャージ ③',
+          cn: '出外圈',
           ko: '바깥쪽 고리 바깥',
         },
       },
@@ -1213,14 +1289,16 @@ const triggerSet: TriggerSet<Data> = {
           return output.baitPuddle!();
         if (matches.target === data.me)
           return output.stackOnYou!();
-        return output.stackOn!({ player: data.ShortName(matches.target) });
+        return output.stackOn!({ player: data.party.member(matches.target) });
       },
       outputStrings: {
         // TODO: should this also say "In", e.g. "In + Spread" or "Spread (In)"?
         baitPuddle: {
           en: '장판 유도해요',
           de: 'Fläche ködern',
+          fr: 'Déposez',
           ja: 'AOE誘導',
+          cn: '诱导圈圈',
           ko: '장판 유도',
         },
         spread: Outputs.spread,
@@ -1365,29 +1443,33 @@ const triggerSet: TriggerSet<Data> = {
         bothFates: {
           en: '금🥇은🥈으로: ${loc}',
           de: 'Von Silber und Gold treffen lassen (${loc})',
-          fr: 'Faites-vous toucher par l\'argent et l\'or (${loc})', // FIXME
+          fr: 'Faites-vous toucher par l\'argent et l\'or (${loc})',
           ja: '金銀 一個ずつ (${loc})',
+          cn: '吃金和银 (${loc})',
           ko: '은색 + 금색 맞기 (${loc})',
         },
         gildedFate: {
           en: '은🥈x2으로: ${loc}',
           de: 'Von 2 Silber treffen lassen (${loc})',
-          fr: 'Faites-vous toucher par les deux argent (${loc})', // FIXME
+          fr: 'Faites-vous toucher par deux argent (${loc})',
           ja: '銀 二つ (${loc})',
+          cn: '吃两个银 (${loc})',
           ko: '은색 2개 맞기 (${loc})',
         },
         silveredFate: {
           en: '금🥇x2으로: ${loc}',
           de: 'Von 2 Gold treffen lassen (${loc})',
-          fr: 'Faites-vous toucher par les deux or (${loc})', // FIXME
+          fr: 'Faites-vous toucher par deux or (${loc})',
           ja: '金 二つ (${loc})',
+          cn: '吃两个金 (${loc})',
           ko: '금색 2개 맞기 (${loc})',
         },
         neitherFate: {
           en: '레이저 피해요 (${loc})',
           de: 'Vermeide Silber und Gold (${loc})',
-          fr: 'Évitez l\'argent et l\'or (${loc})', // FIXME
+          fr: 'Évitez les lasers (${loc})',
           ja: '顔からのビーム全部回避 (${loc})',
+          cn: '都不吃 (${loc})',
           ko: '레이저 피하기 (업타임 ${loc})',
         },
         outsideNW: {
@@ -1599,12 +1681,12 @@ const triggerSet: TriggerSet<Data> = {
 
         // Figure out partner, so that you know if the person running out
         // with you has the same debuff.
-        let partner = output.unknown!();
+        let partner: string | PartyMemberParamObject = output.unknown!();
         for (const [name, id] of Object.entries(data.screamOfTheFallen)) {
           if (name === data.me)
             continue;
           if (id === myBuff) {
-            partner = data.ShortName(name);
+            partner = data.party.member(name);
             break;
           }
         }
@@ -1617,12 +1699,18 @@ const triggerSet: TriggerSet<Data> = {
         soakFirst: {
           en: '먼저 타워 밟아요 (+${player})',
           de: 'Steh im ersten Turm (mit ${player})',
+          fr: 'Prenez les tours (avec ${player})',
           ja: 'さきに塔を踏み (+${player})',
+          cn: '踩 1 塔 (与 ${player})',
+          ko: '첫번째 기둥 밟기 (${player})',
         },
         spreadFirst: {
           en: '먼저 흩어져요 (+${player})',
           de: 'Zuerst verteilen (mit ${player})',
+          fr: 'Écartez-vous d\'abord (avec ${player})',
           ja: 'さきに散会 (+${player})',
+          cn: '先分散 (与 ${player})',
+          ko: '산개 먼저 (${player})',
         },
         unknown: Outputs.unknown,
       },
@@ -1643,7 +1731,10 @@ const triggerSet: TriggerSet<Data> = {
         soakSecond: {
           en: '둘째 타워 밟아요',
           de: 'Steh im zweiten Turm',
+          fr: 'Prenez les 2nd tours',
           ja: '塔を踏み',
+          cn: '踩 2 塔',
+          ko: '두번째 기둥 밟기',
         },
       },
     },
@@ -1938,6 +2029,7 @@ const triggerSet: TriggerSet<Data> = {
           de: 'Blaues Kryptogramm ${num}: ${corner} Ecke',
           fr: 'Étendard bleu ${num}: coin ${corner}',
           ja: '青線${num}: ${corner}の隅',
+          cn: '蓝线${num}: ${corner}角',
           ko: '파란색 선 ${num}: ${corner} 구석',
         },
         orangeBrandNumCorner: {
@@ -1945,6 +2037,7 @@ const triggerSet: TriggerSet<Data> = {
           de: 'Oranges Kryptogramm ${num}: ${corner} Ecke',
           fr: 'Étendard orange ${num}: coin ${corner}',
           ja: '赤線${num}: ${corner}の隅',
+          cn: '红线${num}: ${corner}角',
           ko: '주황색 선 ${num}: ${corner} 구석',
         },
         brandNumCorner: {
@@ -1952,6 +2045,7 @@ const triggerSet: TriggerSet<Data> = {
           de: 'Kryptogramm ${num}: ${corner} Ecke',
           fr: 'Étendard ${num}: coin ${corner}',
           ja: '線${num}: ${corner}の隅',
+          cn: '线${num}: ${corner}角',
           ko: '선 ${num}: ${corner} 구석',
         },
         blueBrandNum: {
@@ -1959,6 +2053,7 @@ const triggerSet: TriggerSet<Data> = {
           de: 'Blaues Kryptogramm ${num}',
           fr: 'Étendard bleu ${num}',
           ja: '青線${num}',
+          cn: '蓝线${num}',
           ko: '파란색 선 ${num}',
         },
         orangeBrandNum: {
@@ -1966,6 +2061,7 @@ const triggerSet: TriggerSet<Data> = {
           de: 'Oranges Kryptogramm ${num}',
           fr: 'Étendard orange ${num}',
           ja: '赤線${num}',
+          cn: '红线${num}',
           ko: '주황색 선 ${num}',
         },
         brandNum: {
@@ -1973,6 +2069,7 @@ const triggerSet: TriggerSet<Data> = {
           de: 'Kryptogramm ${num}',
           fr: 'Étendard ${num}',
           ja: '線${num}',
+          cn: '线${num}',
           ko: '선 ${num}',
         },
         northwest: Outputs.arrowNW,
@@ -2012,6 +2109,7 @@ const triggerSet: TriggerSet<Data> = {
           de: 'Blau 1 durchtrennen',
           fr: 'Coupez Bleu 1',
           ja: '青線1 切る',
+          cn: '剪蓝线 1',
           ko: '파란색 1 끊기',
         },
         cutOrangeOne: {
@@ -2019,6 +2117,7 @@ const triggerSet: TriggerSet<Data> = {
           de: 'Orange 1 durchtrennen',
           fr: 'Coupez Orange 1',
           ja: '赤線1 切る',
+          cn: '剪红线 1',
           ko: '주황색 1 끊기',
         },
         firstCut: {
@@ -2026,6 +2125,7 @@ const triggerSet: TriggerSet<Data> = {
           de: 'Als Erster durchtrennen',
           fr: 'Coupe en 1er',
           ja: '線1 切る',
+          cn: '剪线 1',
           ko: '첫번째 선 끊기',
         },
       },
@@ -2103,6 +2203,7 @@ const triggerSet: TriggerSet<Data> = {
           de: 'Orange ${num} durchtrennen',
           fr: 'Coupez Orange ${num}',
           ja: '赤線${num} 切る',
+          cn: '剪红线 ${num}',
           ko: '주황색 ${num} 끊기',
         },
         cutBlueNum: {
@@ -2110,6 +2211,7 @@ const triggerSet: TriggerSet<Data> = {
           de: 'Blau ${num} durchtrennen',
           fr: 'Coupez Bleu ${num}',
           ja: '青線${num} 切る',
+          cn: '剪蓝线 ${num}',
           ko: '파란색 ${num} 끊기',
         },
       },
@@ -2172,6 +2274,7 @@ const triggerSet: TriggerSet<Data> = {
           de: 'Blau Teleport nach Osten',
           fr: 'Téléportation du bleu à l\'Est',
           ja: '3列 🡺',
+          cn: '第 3 行',
           ko: '파란색 동쪽 텔레포트',
         },
         blueWest: {
@@ -2179,6 +2282,7 @@ const triggerSet: TriggerSet<Data> = {
           de: 'Blau Teleport nach Westen',
           fr: 'Téléportation du bleu à l\'Ouest',
           ja: '🡸 一番下列',
+          cn: '第 4 行',
           ko: '파란색 서쪽 텔레포트',
         },
         orangeEast: {
@@ -2186,6 +2290,7 @@ const triggerSet: TriggerSet<Data> = {
           de: 'Orange Teleport nach Osten',
           fr: 'Téléportation de l\'orange à l\'Est',
           ja: '2列 🡺',
+          cn: '第 2 行',
           ko: '주황색 동쪽 텔레포트',
         },
         orangeWest: {
@@ -2193,6 +2298,7 @@ const triggerSet: TriggerSet<Data> = {
           de: 'Orange Teleport nach Westen',
           fr: 'Téléportation de l\'orange à l\'Ouest',
           ja: '🡸 1列',
+          cn: '第 1 行',
           ko: '주황색 서쪽 텔레포트',
         },
       },
@@ -2296,6 +2402,7 @@ const triggerSet: TriggerSet<Data> = {
           de: 'Kryptogramm ${num}: Geh in die Mitte',
           fr: 'Étendard ${num} : Au centre',
           ja: '線${num}: 真ん中へ',
+          cn: '线${num}: 去中间',
           ko: '선 ${num}: 중앙으로',
         },
         outThenBait: {
@@ -2303,6 +2410,7 @@ const triggerSet: TriggerSet<Data> = {
           de: 'Kryptogramm ${num}: Wehr ködern',
           fr: 'Étendard ${num} : Extérieur, Attirez la barrière',
           ja: '線${num}: 外側へ/扇誘導',
+          cn: '线${num}: 诱导扇形',
           ko: '선 ${num}: 밖으로, 지팡이 유도',
         },
       },
@@ -2324,6 +2432,7 @@ const triggerSet: TriggerSet<Data> = {
           de: 'Als Erster durchtrennen',
           fr: '1ère coupe',
           ja: '1番目の線切る',
+          cn: '剪线 1',
           ko: '첫번째 선 끊기',
         },
       },
@@ -2357,6 +2466,7 @@ const triggerSet: TriggerSet<Data> = {
             de: 'Orange ${num} durchtrennen',
             fr: 'Coupez Orange ${num}',
             ja: '赤線${num} 切る',
+            cn: '剪红线 ${num}',
             ko: '주황색 ${num} 끊기',
           },
           cutBlueNum: {
@@ -2364,6 +2474,7 @@ const triggerSet: TriggerSet<Data> = {
             de: 'Blau ${num} durchtrennen',
             fr: 'Coupez Bleu ${num}',
             ja: '青線${num} 切る',
+            cn: '剪蓝线 ${num}',
             ko: '파란색 ${num} 끊기',
           },
           moveOrange: {
@@ -2371,6 +2482,7 @@ const triggerSet: TriggerSet<Data> = {
             de: 'Bewegen für Orange ${num}',
             fr: 'Bougez pour l\'orange ${num}',
             ja: 'まもなく赤線${num}',
+            cn: '去红线 ${num}',
             ko: '주황색 ${num} 끊을 준비',
           },
           moveBlue: {
@@ -2378,6 +2490,7 @@ const triggerSet: TriggerSet<Data> = {
             de: 'Bewegen für Blau ${num}',
             fr: 'Bougez pour le bleu ${num}',
             ja: 'まもなく青線${num}',
+            cn: '去蓝线 ${num}',
             ko: '파란색 ${num} 끊을 준비',
           },
         };
@@ -2418,7 +2531,7 @@ const triggerSet: TriggerSet<Data> = {
         if (data.flamesCutCounter === 1) {
           if (matches.count === '1C2')
             data.firstColorCut = 'orange';
-          else if (matches.count === '1C5')
+          else if (matches.count === '1C6')
             data.firstColorCut = 'blue';
         } else if (data.flamesCutCounter === 4) {
           data.firstColorCut = data.firstColorCut === 'orange' ? 'blue' : 'orange';
@@ -2432,6 +2545,7 @@ const triggerSet: TriggerSet<Data> = {
             de: 'Köder Wehr 2 => Köder Flächen',
             fr: 'Attirez barrière 2 -> Attirez les puddles',
             ja: '扇２ => AOE誘導',
+            cn: '诱导扇形 2 => 诱导圈圈',
             ko: '지팡이 2 유도 => 장판 유도',
           },
           baitWardThree: {
@@ -2439,6 +2553,7 @@ const triggerSet: TriggerSet<Data> = {
             de: 'Köder Wehr 3',
             fr: 'Attirez barrière 3',
             ja: '扇３',
+            cn: '诱导扇形 3',
             ko: '지팡이 3 유도',
           },
           baitPuddles: {
@@ -2446,6 +2561,7 @@ const triggerSet: TriggerSet<Data> = {
             de: 'Köder Flächen',
             fr: 'Attirez les puddles',
             ja: 'AOE誘導',
+            cn: '诱导圈圈',
             ko: '장판 유도',
           },
           cutOrangeNum: {
@@ -2453,6 +2569,7 @@ const triggerSet: TriggerSet<Data> = {
             de: 'Orange ${num} durchtrennen',
             fr: 'Coupez Orange ${num}',
             ja: '赤線${num} 切る',
+            cn: '剪红线 ${num}',
             ko: '주황색 ${num} 끊기',
           },
           cutBlueNum: {
@@ -2460,6 +2577,7 @@ const triggerSet: TriggerSet<Data> = {
             de: 'Blau ${num} durchtrennen',
             fr: 'Coupez Bleu ${num}',
             ja: '青線${num} 切る',
+            cn: '剪蓝线 ${num}',
             ko: '파란색 ${num} 끊기',
           },
           moveOrangeNum: {
@@ -2467,6 +2585,7 @@ const triggerSet: TriggerSet<Data> = {
             de: 'Bewegen für Orange ${num}',
             fr: 'Bougez pour l\'orange ${num}',
             ja: 'まもなく赤線${num}',
+            cn: '去红线 ${num}',
             ko: '주황색 ${num} 끊을 준비',
           },
           moveBlueNum: {
@@ -2474,6 +2593,7 @@ const triggerSet: TriggerSet<Data> = {
             de: 'Bewegen für Blau ${num}',
             fr: 'Bougez pour le bleu ${num}',
             ja: 'まもなく青線${num}',
+            cn: '去蓝线 ${num}',
             ko: '파란색 ${num} 끊을 준비',
           },
         };
@@ -2674,7 +2794,7 @@ const triggerSet: TriggerSet<Data> = {
         'Ball of Fire': 'Boule de flammes',
         'Eastern Ewer': 'cruche orientale',
         'Gladiator of Sil\'dih': 'gladiateur sildien',
-        'Hateful Visage': 'Visage de haine',
+        'Hateful Visage': 'Effigie maudite',
         'Infern Brand': 'Étendard sacré',
         'Shadowcaster Zeless Gah': 'Zeless Gah la Flamme ombrée',
         'Sil\'dihn Armor': 'armure maléfique sildien',

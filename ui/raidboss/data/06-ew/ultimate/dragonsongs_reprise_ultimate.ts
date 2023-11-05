@@ -292,7 +292,7 @@ const triggerSet: TriggerSet<Data> = {
         if (data.me === data.mortalVowPlayer)
           return output.vowOnYou!();
         if (data.mortalVowPlayer !== undefined)
-          return output.vowOn!({ player: data.ShortName(data.mortalVowPlayer) });
+          return output.vowOn!({ player: data.party.member(data.mortalVowPlayer) });
         return output.vowSoon!();
       },
       outputStrings: {
@@ -1193,24 +1193,7 @@ const triggerSet: TriggerSet<Data> = {
       netRegex: {},
       condition: (data) => data.phase === 'thordan',
       sound: '',
-      response: (data, matches, output) => {
-        // cactbot-builtin-response
-        output.responseOutputStrings = {
-          text: {
-            en: '칼: ${name1}, ${name2}',
-            de: 'Schwerter: ${name1}, ${name2}',
-            ja: '剣：${name1}, ${name2}',
-            cn: '剑: ${name1}, ${name2}',
-            ko: '돌진 대상자: ${name1}, ${name2}',
-          },
-          swap: {
-            en: '자리바꿔요: ${role}',
-          },
-          keep: {
-            en: '자리 그대로',
-          },
-        };
-
+      infoText: (data, matches, output) => {
         const id = getHeadmarkerId(data, matches);
         if (id === headmarkers.sword1)
           data.sanctitySword1 = matches.target;
@@ -1240,9 +1223,20 @@ const triggerSet: TriggerSet<Data> = {
           return { infoText: output.keep!() };
         }
 
-        const name1 = data.ShortName(data.sanctitySword1);
-        const name2 = data.ShortName(data.sanctitySword2);
-        return { infoText: output.text!({ name1: name1, name2: name2 }) };
+        const name1 = data.party.member(data.sanctitySword1);
+        const name2 = data.party.member(data.sanctitySword2);
+        return output.text!({ name1: name1, name2: name2 });
+      },
+      // Don't collide with the more important 1/2 call.
+      tts: '',
+      outputStrings: {
+        text: {
+          en: 'Swords: ${name1}, ${name2}',
+          de: 'Schwerter: ${name1}, ${name2}',
+          ja: '剣：${name1}, ${name2}',
+          cn: '剑: ${name1}, ${name2}',
+          ko: '돌진 대상자: ${name1}, ${name2}',
+        },
       },
     },
     */
@@ -1282,13 +1276,19 @@ const triggerSet: TriggerSet<Data> = {
         const p2dps = data.party.isDPS(p2);
 
         if (p1dps && p2dps)
-          return output.dpsMeteors!({ player1: data.ShortName(p1), player2: data.ShortName(p2) });
+          return output.dpsMeteors!({
+            player1: data.party.member(p1),
+            player2: data.party.member(p2),
+          });
         if (!p1dps && !p2dps)
           return output.tankHealerMeteors!({
-            player1: data.ShortName(p1),
-            player2: data.ShortName(p2),
+            player1: data.party.member(p1),
+            player2: data.party.member(p2),
           });
-        return output.unknownMeteors!({ player1: data.ShortName(p1), player2: data.ShortName(p2) });
+        return output.unknownMeteors!({
+          player1: data.party.member(p1),
+          player2: data.party.member(p2),
+        });
       },
       outputStrings: {
         tankHealerMeteors: {
@@ -2303,8 +2303,8 @@ const triggerSet: TriggerSet<Data> = {
             return output.text!({ name1: m2.r, name2: m1.r });
           }
         }
-        const name1 = fullName1 !== undefined ? data.ShortName(fullName1) : output.unknown!();
-        const name2 = fullName2 !== undefined ? data.ShortName(fullName2) : output.unknown!();
+        const name1 = data.party.member(fullName1);
+        const name2 = data.party.member(fullName2);
         return output.text!({ name1: name1, name2: name2 });
       },
       // Sorry tts players, but "Thunder on YOU" and "Thunder: names" are too similar.
@@ -2674,9 +2674,9 @@ const triggerSet: TriggerSet<Data> = {
           return;
 
         if (myMarker === 'triangle')
-          return output.doubleTriangle!({ player: data.ShortName(partner) });
+          return output.doubleTriangle!({ player: data.party.member(partner) });
         if (myMarker === 'square')
-          return output.doubleSquare!({ player: data.ShortName(partner) });
+          return output.doubleSquare!({ player: data.party.member(partner) });
       },
       outputStrings: {
         // In case users want to have triangle vs square say something different.
