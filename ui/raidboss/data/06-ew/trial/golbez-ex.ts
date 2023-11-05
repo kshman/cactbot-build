@@ -257,7 +257,7 @@ const triggerSet: TriggerSet<Data> = {
           en: '뒤에서 => 앞으로 => 밑으로 => 흩어져요',
           de: 'Hinten => Vorne => Unter ihn => Verteilen',
           cn: '后 => 前 => 月环 => 分散',
-          ko: '뒤 => 앞 => 안 => 쉐어',
+          ko: '뒤 => 앞 => 안 => 산개',
         },
       },
     },

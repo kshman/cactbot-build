@@ -2,6 +2,7 @@ import { Party } from '../types/event';
 import { Job, Role } from '../types/job';
 import { PartyMemberParamObject, PartyTrackerOptions } from '../types/party';
 
+import Autumns from './autumns';
 import Util from './util';
 
 const emptyRoleToPartyNames = () => {
@@ -183,12 +184,14 @@ export default class PartyTracker {
     } else {
       const jobName = Util.jobEnumToJob(partyMember.job);
       const role = Util.jobToRole(jobName);
+      const ajob = Autumns.JobName(partyMember.job, 'en');
       ret = {
         id: partyMember.id,
         job: jobName,
         role: role,
         name: name,
         nick: nick,
+        ajob: ajob,
       };
     }
 
@@ -201,5 +204,39 @@ export default class PartyTracker {
     };
 
     return ret;
+  }
+
+  // 멤버 목록을 문자열 배열로 만들어 준다
+  aMembers(names: string[], label: string | undefined): string[] {
+    if (label === undefined)
+      label = this.options.DefaultPlayerLabel;
+    const ls: string[] = [];
+    for (const n of names) {
+      const m = this.member(n);
+      const v = m[label];
+      ls.push(typeof v === 'string' ? v : m.nick);
+    }
+    return ls;
+  }
+
+  // 어듬이 형식으로 우선 순위 배열을 만들어 준다
+  aPriorities(names: string[]): string[] {
+    const ls: string[] = [];
+    const ids: number[] = [];
+    for (const n of names) {
+      const index = this.partyNames.indexOf(n);
+      if (index < 0) {
+        const nick = Util.shortName(n, this.options.PlayerNicks);
+        ls.push(nick);
+      } else {
+        const m = this.details[index];
+        if (m !== undefined)
+          ids.push(m.job);
+      }
+    }
+    const sorted = Autumns.JobPriorityList(ids, 'en');
+    for (const i of sorted)
+      ls.push(i ?? '몰?루');
+    return ls;
   }
 }

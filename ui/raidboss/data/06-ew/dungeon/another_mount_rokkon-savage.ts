@@ -3323,7 +3323,7 @@ const triggerSet: TriggerSet<Data> = {
           return { alertText: output.tetheronly!() };
         }
         if (data.prsTetherCollect.length === 2) {
-          const tethers = data.PriorityNames(data.prsTetherCollect);
+          const tethers = data.party.aPriorities(data.prsTetherCollect);
           return { infoText: output.notether!({ players: tethers.join(', ') }) };
         }
         return { infoText: output.notetheronly!() };

@@ -4642,7 +4642,7 @@ const triggerSet: TriggerSet<Data> = {
             if (stat === myBuff /* && name !== data.me */)
               myTeam.push(name);
           }
-          return { alertText: output.fire!({ team: data.PriorityNames(myTeam).join(', ') }) };
+          return { alertText: output.fire!({ team: data.party.aPriorities(myTeam).join(', ') }) };
         }
 
         if (data.caloric1First.includes(data.me))
@@ -4653,7 +4653,7 @@ const triggerSet: TriggerSet<Data> = {
           if (stat === myBuff && /* name !== data.me && */ !data.caloric1First.includes(name))
             myTeam.push(name);
         }
-        return { alertText: output.wind!({ team: data.PriorityNames(myTeam).join(', ') }) };
+        return { alertText: output.wind!({ team: data.party.aPriorities(myTeam).join(', ') }) };
       },
       run: (data) => {
         data.caloric1First = [];

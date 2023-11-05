@@ -157,6 +157,9 @@ hideall "--sync--"
 # LALA #
 #~~~~~#
 
+# -ii 8947 894C 894F 8954 895A 895B 8987 8A6A 8CC2
+# -p 8949:3013.6
+
 # 8947 AA
 
 3000.0 "--sync--" sync / 00:0839::The Midnight Trial will be sealed off/ window 10000,0

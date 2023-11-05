@@ -7,6 +7,7 @@ export type BasePartyMemberParamObject = {
   id?: string;
   name: string;
   nick: string;
+  ajob?: string;
 };
 
 export type PartyMemberParamObjectKeys = keyof BasePartyMemberParamObject;
