@@ -7,19 +7,7 @@ import { TriggerSet } from '../../../../../types/trigger';
 
 export type ConfigIds = 'uptimeKnockbackStrat';
 
-type WyrmInfo = {
-  name: string;
-  num: number;
-};
-
 export interface Data extends RaidbossData {
-  prTank?: string;
-  prMyRush?: number;
-  prWyrmsClaw?: WyrmInfo[];
-  prWyrmsFang?: WyrmInfo[];
-  prMirrors?: number;
-  prWingLeft?: boolean;
-  //
   triggerSetConfig: { [key in ConfigIds]: ConfigValue };
   firstFrost?: 'biting' | 'driving';
   rushCount?: number;
@@ -75,14 +63,12 @@ const triggerSet: TriggerSet<Data> = {
       id: 'E8S Shining Armor',
       regex: /(?<!Reflected )Shining Armor/,
       beforeSeconds: 2,
-      durationSeconds: 3,
       response: Responses.lookAway('alert'),
     },
     {
       id: 'E8S Reflected Armor',
       regex: /Reflected Armor/,
       beforeSeconds: 2,
-      durationSeconds: 3,
       response: Responses.lookAway('alert'),
     },
     {
@@ -99,33 +85,21 @@ const triggerSet: TriggerSet<Data> = {
       beforeSeconds: 5,
       infoText: (data, _matches, output) => {
         data.rushCount = (data.rushCount ?? 0) + 1;
-        if (data.rushCount === data.prMyRush)
-          return output.my!({ num: data.rushCount });
         return output.text!({ num: data.rushCount });
       },
       outputStrings: {
         text: {
-          en: '줄 ${num}번',
+          en: 'Tether ${num}',
           de: 'Verbindung ${num}',
           fr: 'Lien ${num}',
           ja: '線 ${num}',
           cn: '和${num}连线',
           ko: '선: ${num}',
         },
-        my: {
-          en: '줄 채욧! ${num}번',
-        },
       },
     },
   ],
   triggers: [
-    {
-      id: 'E8S 자동공격',
-      type: 'Ability',
-      netRegex: { id: '4D59', source: 'Shiva' },
-      suppressSeconds: 5,
-      run: (data, matches) => data.prTank = matches.target,
-    },
     {
       id: 'E8S Absolute Zero',
       type: 'StartsUsing',
@@ -148,7 +122,7 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           // Sorry, there are no mirror colors in the logs (YET),
           // and so this is the best that can be done.
-          en: '뒤로, 🟥거울쪽',
+          en: 'Go Back, Red Mirror Side',
           de: 'Nach Hinten gehen, Seite des roten Spiegels',
           fr: 'Allez derrière, côté miroir rouge',
           ja: '後ろに、赤い鏡の横へ',
@@ -167,7 +141,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '앞으로, 🟩거울쪽',
+          en: 'Go Front, Green Mirror Side',
           de: 'Nach Vorne gehen, Seite des grünen Spiegels',
           fr: 'Allez devant, côté miroir vert',
           ja: '前に、赤い鏡の横へ',
@@ -184,7 +158,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '반대쪽으로',
+          en: 'Swap Sides',
           de: 'Seiten wechseln',
           fr: 'Changez de côté',
           ja: '反対側へ',
@@ -224,7 +198,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         bitingFrostNext: {
-          en: '다음 Biting Frost',
+          en: 'Biting Frost Next',
           de: 'Frosthieb als nächstes',
           fr: 'Taillade de givre bientôt',
           ja: '次はフロストスラッシュ',
@@ -232,7 +206,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '다음: 서리 참격',
         },
         drivingFrostNext: {
-          en: '다음 Driving Frost',
+          en: 'Driving Frost Next',
           de: 'Froststoß als nächstes',
           fr: 'Percée de givre bientôt',
           ja: '次はフロストスラスト',
@@ -261,7 +235,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         northSouth: {
-          en: '남북으로',
+          en: 'North / South',
           de: 'Norden / Süden',
           fr: 'Nord / Sud',
           ja: '南 / 北',
@@ -269,7 +243,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '남 / 북',
         },
         eastWest: {
-          en: '동서로',
+          en: 'East / West',
           de: 'Osten / Westen',
           fr: 'Est / Ouest',
           ja: '東 / 西',
@@ -287,7 +261,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '에스나',
+          en: 'Cleanse',
           de: 'Reinigen',
           fr: 'Guérison',
           ja: 'エスナ',
@@ -329,7 +303,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '내게 사슬',
+          en: 'Chain on YOU',
           de: 'Kette auf DIR',
           fr: 'Chaîne sur VOUS',
           ja: '自分に鎖',
@@ -346,7 +320,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '내게 구슬',
+          en: 'Orb on YOU',
           de: 'Orb auf DIR',
           fr: 'Orbe sur VOUS',
           ja: '自分に玉',
@@ -379,7 +353,7 @@ const triggerSet: TriggerSet<Data> = {
         // cactbot-builtin-response
         output.responseOutputStrings = {
           akhMornOnYou: {
-            en: '내게 아크몬!!!',
+            en: 'Akh Morn on YOU',
             de: 'Akh Morn auf DIR',
             fr: 'Akh Morn sur VOUS',
             ja: '自分にアク・モーン',
@@ -387,7 +361,7 @@ const triggerSet: TriggerSet<Data> = {
             ko: '아크몬 대상자',
           },
           akhMornOn: {
-            en: '아크몬: ${players}',
+            en: 'Akh Morn: ${players}',
             de: 'Akh Morn: ${players}',
             fr: 'Akh Morn : ${players}',
             ja: 'アク・モーン: ${players}',
@@ -398,14 +372,13 @@ const triggerSet: TriggerSet<Data> = {
         if (data.me === matches.target) {
           // It'd be nice to have this be an alert, but it mixes with a lot of
           // other alerts (akh rhai "move" and worm's lament numbers).
-          const isAlarm = data.role === 'tank' || data.job === 'BLU';
-          return { [isAlarm ? 'infoText' : 'alarmText']: output.akhMornOnYou!() };
+          return { [data.role === 'tank' ? 'infoText' : 'alarmText']: output.akhMornOnYou!() };
         }
         if (data.akhMornTargets?.length !== 2)
           return;
         if (data.akhMornTargets.includes(data.me))
           return;
-        const players = data.akhMornTargets.map((x) => data.ShortName(x)).join(', ');
+        const players = data.akhMornTargets.map((x) => data.party.member(x));
         return { infoText: output.akhMornOn!({ players: players }) };
       },
     },
@@ -424,11 +397,11 @@ const triggerSet: TriggerSet<Data> = {
         if (data.me === matches.target)
           return output.mornAfahOnYou!();
 
-        return output.mornAfahOn!({ player: data.ShortName(matches.target) });
+        return output.mornAfahOn!({ player: data.party.member(matches.target) });
       },
       outputStrings: {
         mornAfahOnYou: {
-          en: '내게 몬아파!!!',
+          en: 'Morn Afah on YOU',
           de: 'Morn Afah auf DIR',
           fr: 'Morn Afah sur VOUS',
           ja: '自分にモーン・アファー',
@@ -436,7 +409,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '몬아파 대상자',
         },
         mornAfahOn: {
-          en: '몬아파: ${player}',
+          en: 'Morn Afah on ${player}',
           de: 'Morn Afah auf ${player}',
           fr: 'Morn Afah sur ${player}',
           ja: '${player}にモーン・アファー',
@@ -450,14 +423,12 @@ const triggerSet: TriggerSet<Data> = {
       type: 'StartsUsing',
       netRegex: { source: 'Shiva', id: '4D75', capture: false },
       response: Responses.goRight(),
-      run: (data) => data.prWingLeft = true,
     },
     {
       id: 'E8S Hallowed Wings Right',
       type: 'StartsUsing',
       netRegex: { source: 'Shiva', id: '4D76', capture: false },
       response: Responses.goLeft(),
-      run: (data) => data.prWingLeft = false,
     },
     {
       id: 'E8S Hallowed Wings Knockback',
@@ -482,132 +453,10 @@ const triggerSet: TriggerSet<Data> = {
       run: (data) => data.wyrmsLament = (data.wyrmsLament ?? 0) + 1,
     },
     {
-      id: 'E8S Wyrmclaw 첫번째',
-      type: 'GainsEffect',
-      netRegex: { effectId: '8D2' },
-      condition: (data, matches) =>
-        data.options.AutumnStyle && matches.target === data.me && data.wyrmsLament === 1,
-      durationSeconds: (_data, matches) => parseFloat(matches.duration),
-      alertText: (_data, matches, output) => {
-        const claw: { [time: string]: number } = {
-          '14': 1,
-          '22': 2,
-          '30': 3,
-          '38': 4,
-        } as const;
-        const duration = Math.ceil(parseFloat(matches.duration));
-        const index = claw[duration];
-        return output.red!({ num: index });
-      },
-      outputStrings: {
-        red: {
-          en: '용머리 비벼요 🔴#${num}번',
-        },
-      },
-    },
-    {
-      id: 'E8S Wyrmfang 첫번째',
-      type: 'GainsEffect',
-      netRegex: { effectId: '8D3' },
-      condition: (data, matches) =>
-        data.options.AutumnStyle && matches.target === data.me && data.wyrmsLament === 1,
-      durationSeconds: (_data, matches) => parseFloat(matches.duration),
-      alertText: (_data, matches, output) => {
-        const fang: { [time: string]: number } = {
-          '20': 1,
-          '28': 2,
-          '36': 3,
-          '44': 4,
-        } as const;
-        const duration = Math.ceil(parseFloat(matches.duration));
-        const index = fang[duration];
-        return output.blue!({ num: index });
-      },
-      outputStrings: {
-        blue: {
-          en: '떨구면 주워요 🔵#${num}번',
-        },
-      },
-    },
-    {
-      id: 'E8S Wyrmclaw 두번째 수집',
-      type: 'GainsEffect',
-      netRegex: { effectId: '8D2' },
-      condition: (data) => data.options.AutumnStyle && data.wyrmsLament !== 1,
-      run: (data, matches) => {
-        const num = parseFloat(matches.duration) < 30 ? 1 : 2; // 22초 38초
-        data.prWyrmsClaw ??= [];
-        data.prWyrmsClaw.push({ name: matches.target, num: num });
-      },
-    },
-    {
-      id: 'E8S Wyrmfang 두번째 수집',
-      type: 'GainsEffect',
-      netRegex: { effectId: '8D3' },
-      condition: (data) => data.options.AutumnStyle && data.wyrmsLament !== 1,
-      run: (data, matches) => {
-        const num = parseFloat(matches.duration) < 30 ? 1 : 2; // 28초 44초
-        data.prWyrmsFang ??= [];
-        data.prWyrmsFang.push({ name: matches.target, num: num });
-      },
-    },
-    {
-      id: 'E8S Wyrmclaw 두번째 처리',
-      type: 'GainsEffect',
-      netRegex: { effectId: '8D2' },
-      condition: (data, matches) =>
-        data.options.AutumnStyle && data.wyrmsLament !== 1 && data.me === matches.target,
-      delaySeconds: 0.5,
-      durationSeconds: (_data, matches) => parseFloat(matches.duration),
-      alertText: (data, matches, output) => {
-        const num = parseFloat(matches.duration) < 30 ? 1 : 2; // 22초 38초
-        if (data.prWyrmsClaw === undefined)
-          return output.onlyme!({ num: num });
-        const [partner] = data.prWyrmsClaw.filter((x) => x.num === num && x.name !== data.me);
-        if (partner === undefined)
-          return output.onlyme!({ num: num });
-        return output.text!({ num: num, partner: data.ShortName(partner.name) });
-      },
-      outputStrings: {
-        text: {
-          en: '용머리 비벼요 🔴#${num}번 (${partner})',
-        },
-        onlyme: {
-          en: '용머리 비벼요 🔴#${num}번',
-        },
-      },
-    },
-    {
-      id: 'E8S Wyrmfang 두번째 처리',
-      type: 'GainsEffect',
-      netRegex: { effectId: '8D3' },
-      condition: (data, matches) =>
-        data.options.AutumnStyle && data.wyrmsLament !== 1 && data.me === matches.target,
-      delaySeconds: 0.5,
-      durationSeconds: (_data, matches) => parseFloat(matches.duration),
-      alertText: (data, matches, output) => {
-        const num = parseFloat(matches.duration) < 30 ? 1 : 2; // 28초 44초
-        if (data.prWyrmsFang === undefined)
-          return output.onlyme!({ num: num });
-        const [partner] = data.prWyrmsFang.filter((x) => x.num === num && x.name !== data.me);
-        if (partner === undefined)
-          return output.onlyme!({ num: num });
-        return output.text!({ num: num, partner: data.ShortName(partner.name) });
-      },
-      outputStrings: {
-        text: {
-          en: '떨구면 주워요 🔵#${num}번 (${partner})',
-        },
-        onlyme: {
-          en: '떨구면 주워요 🔵#${num}번',
-        },
-      },
-    },
-    {
       id: 'E8S Wyrmclaw',
       type: 'GainsEffect',
       netRegex: { effectId: '8D2' },
-      condition: (data, matches) => !data.options.AutumnStyle && data.me === matches.target,
+      condition: Conditions.targetIsYou(),
       preRun: (data, matches) => {
         if (data.wyrmsLament === 1) {
           const clawNumber: { [time: string]: number } = {
@@ -629,7 +478,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (data, _matches, output) => output.text!({ num: data.wyrmclawNumber }),
       outputStrings: {
         text: {
-          en: '용머리 비벼요 🔴#${num}번',
+          en: 'Red #${num}',
           de: 'Rot #${num}',
           fr: 'Rouge #${num}',
           ja: '赤 #${num}',
@@ -642,7 +491,7 @@ const triggerSet: TriggerSet<Data> = {
       id: 'E8S Wyrmfang',
       type: 'GainsEffect',
       netRegex: { effectId: '8D3' },
-      condition: (data, matches) => !data.options.AutumnStyle && data.me === matches.target,
+      condition: Conditions.targetIsYou(),
       preRun: (data, matches) => {
         if (data.wyrmsLament === 1) {
           const fangNumber: { [time: string]: number } = {
@@ -664,7 +513,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (data, _matches, output) => output.text!({ num: data.wyrmfangNumber }),
       outputStrings: {
         text: {
-          en: '떨구면 주워요 🔵#${num}번',
+          en: 'Blue #${num}',
           de: 'Blau #${num}',
           fr: 'Bleu #${num}',
           ja: '青 #${num}',
@@ -730,7 +579,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'DPS 에스나!',
+          en: 'Cleanse DPS Only',
           de: 'Nur DPS reinigen',
           fr: 'Guérison => DPS seulement',
           ja: 'エスナ (DPSのみ)',
@@ -747,7 +596,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '타워! 탱크 둘이 함께!!!',
+          en: 'Tank Stack in Tower',
           de: 'Auf Tank im Turm sammeln',
           fr: 'Package tanks dans la tour',
           ja: 'タンクは塔に頭割り',
@@ -764,58 +613,12 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '타워! 탱크 흩어져요!!!',
+          en: 'Tank Spread in Tower',
           de: 'Tank im Turm verteilen',
           fr: 'Dispersion tanks dans la tour',
           ja: 'タンクは塔に散開',
           cn: '坦克塔内分散',
           ko: '탱커 산개',
-        },
-      },
-    },
-    {
-      // 1: 처음
-      // 2: 전반 끝나기전
-      // 3: 후반 시작
-      // 4: 좌우 넉백
-      // 5: 반사 거울(초록 -> 무색)
-      // 6: 드래곤송 전
-      // 7: 마지막 미끄러지기 전
-      id: 'E8S 미러 미러',
-      type: 'StartsUsing',
-      netRegex: { source: 'Shiva', id: '4D5A', capture: false },
-      preRun: (data) => data.prMirrors = (data.prMirrors ?? 0) + 1,
-      delaySeconds: 8,
-      durationSeconds: 6,
-      infoText: (data, _matches, output) => {
-        if (data.prMirrors === 33) // 아놔 어찌해야합니까
-          return output.p3!();
-      },
-      outputStrings: {
-        p3: {
-          en: '왼쪽🟥=>엉덩이 / 오른쪽🟥=>앞',
-        },
-      },
-    },
-    {
-      // 4DC7: 왼쪽
-      // 4DC8: 오른쪽
-      id: 'E8S 미러3 프로즌 미러',
-      type: 'StartsUsing',
-      netRegex: { id: ['4DC7', '4DC8'], source: 'Frozen Mirror' },
-      condition: (data) => data.prMirrors === 3,
-      durationSeconds: 8,
-      infoText: (_data, matches, output) => {
-        if (matches.id === '4DC7')
-          return output.left!();
-        return output.right!();
-      },
-      outputStrings: {
-        left: {
-          en: '🟥아래쪽 => 시계',
-        },
-        right: {
-          en: '⬜윗쪽 => 반시계',
         },
       },
     },

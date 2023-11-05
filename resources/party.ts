@@ -1,6 +1,8 @@
 import { Party } from '../types/event';
 import { Job, Role } from '../types/job';
+import { PartyMemberParamObject, PartyTrackerOptions } from '../types/party';
 
+import Autumns from './autumns';
 import Util from './util';
 
 const emptyRoleToPartyNames = () => {
@@ -23,6 +25,8 @@ export default class PartyTracker {
   nameToRole_: { [name: string]: Role } = {};
   idToName_: { [id: string]: string } = {};
   roleToPartyNames_: Record<Role, string[]> = emptyRoleToPartyNames();
+
+  constructor(private options: PartyTrackerOptions) {}
 
   // Bind this to PartyChanged events.
   onPartyChanged(e: { party: Party[] }): void {
@@ -154,5 +158,92 @@ export default class PartyTracker {
 
   nameFromId(id: string): string | undefined {
     return this.idToName_[id];
+  }
+
+  member(name?: string): PartyMemberParamObject {
+    // For boilerplate convenience in triggers, handle undefined names.
+    if (name === undefined) {
+      const unknown = '???';
+      return {
+        name: unknown,
+        nick: unknown,
+        toString: () => unknown,
+      };
+    }
+
+    const partyMember = this.details.find((member) => member.name === name);
+    let ret: PartyMemberParamObject;
+    const nick = Util.shortName(name, this.options.PlayerNicks);
+
+    if (!partyMember) {
+      // If we can't find this party member for some reason, use some sort of default.
+      ret = {
+        name: name,
+        nick: nick,
+      };
+    } else {
+      const jobName = Util.jobEnumToJob(partyMember.job);
+      const role = Util.jobToRole(jobName);
+      const ajob = Autumns.JobName(partyMember.job, 'en');
+      ret = {
+        id: partyMember.id,
+        job: jobName,
+        role: role,
+        name: name,
+        nick: nick,
+        ajob: ajob,
+      };
+    }
+
+    // Need to assign this afterwards so it can reference `ret`.
+    ret.toString = () => {
+      const retVal = ret[this.options.DefaultPlayerLabel];
+      if (typeof retVal === 'string')
+        return retVal;
+      return ret.nick;
+    };
+
+    return ret;
+  }
+
+  // 멤버 목록을 문자열 배열로 만들어 준다
+  aMembers(names: string[], label: string | undefined): string[] {
+    if (label === undefined)
+      label = this.options.DefaultPlayerLabel;
+    const ls: string[] = [];
+    for (const n of names) {
+      const m = this.member(n);
+      const v = m[label];
+      ls.push(typeof v === 'string' ? v : m.nick);
+    }
+    return ls;
+  }
+
+  // 어듬이 형식으로 우선 순위 배열을 만들어 준다
+  aPriorities(names: string[]): string[] {
+    const ls: string[] = [];
+    const ids: number[] = [];
+    for (const n of names) {
+      const index = this.partyNames.indexOf(n);
+      if (index < 0) {
+        const nick = Util.shortName(n, this.options.PlayerNicks);
+        ls.push(nick);
+      } else {
+        const m = this.details[index];
+        if (m !== undefined)
+          ids.push(m.job);
+      }
+    }
+    const sorted = Autumns.JobPriorityList(ids, 'en');
+    for (const i of sorted)
+      ls.push(i ?? '몰?루');
+    return ls;
+  }
+
+  ajobId(name: string): number | undefined {
+    const partyIndex = this.partyNames.indexOf(name);
+    if (partyIndex < 0)
+      return;
+    return this.details[partyIndex]?.job;
   }
 }

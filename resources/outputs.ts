@@ -282,7 +282,7 @@ export default {
     ko: '"${player}" 넉백징',
   },
   lookTowardsBoss: {
-    en: '쳐다 봐욧',
+    en: '보스 쳐다 봐욧',
     de: 'Anschauen Boss',
     fr: 'Regardez le boss',
     ja: 'ボスを見る',
@@ -946,6 +946,16 @@ export default {
     fr: 'Séparez les Tankbuster',
     ja: '2人同時タンク強攻撃',
     ko: '따로맞는 탱버',
+  },
+  pairStack: {
+    en: '페어, 둘이 뭉쳐요',
+    ja: 'ペア',
+    ko: '페어, 둘이 맞아요',
+  },
+  pairStackOnPlayer: {
+    en: '페어: ${player}',
+    ja: 'ペア: ${player}',
+    ko: '페어 (${player})',
   },
   // 화살표
   arrowN: {

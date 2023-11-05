@@ -197,7 +197,7 @@ const kDetailKeys = {
       // as well as confusing (you can adjust some but not many things negatively as
       // delay can't go below zero). Therefore, this is a developer/debug mode only for
       // people who know what they're doing.
-      en: 'DEBUG 딜레이 조정 (초)',
+      en: 'DEBUG delay adjust (sec)',
       de: 'DEBUG Verzögerungseinstellung (sec)',
       cn: 'DEBUG 延时调整 (秒)',
       ko: '"디버그" 딜레이 조절 (초)',
@@ -1254,7 +1254,7 @@ class RaidbossConfigurator {
       me: '',
       job: 'NONE',
       role: 'none',
-      party: new PartyTracker(),
+      party: new PartyTracker(raidbossOptions),
       lang: this.base.lang,
       currentHP: 1000,
       options: this.base.configOptions,
@@ -1269,7 +1269,6 @@ class RaidbossConfigurator {
       CanCleanse: () => false,
       CanFeint: () => false,
       CanAddle: () => false,
-      PriorityNames: (x: string[]) => x,
       parserLang: this.base.lang,
       displayLang: this.base.lang,
     };

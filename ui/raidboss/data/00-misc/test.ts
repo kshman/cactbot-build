@@ -362,6 +362,27 @@ const triggerSet: TriggerSet<Data> = {
         },
       },
     },
+    {
+      id: 'Test OutputStrings',
+      type: 'GameLog',
+      netRegex: {
+        line: 'cactbot test outputStrings',
+        code: Util.gameLogCodes.echo,
+        capture: false,
+      },
+      infoText: (data, _matches, output) => {
+        // TODO: This doesn't work unless you're in a party, because party tracker is empty.
+        // OverlayPlugin should probably always return the current player as being in the party
+        // regardless of the rest of the party composition.
+        return output.text!({ player: data.party.member(data.me) });
+      },
+      outputStrings: {
+        text: {
+          en: 'player = ${player}, player.job = ${player.job}, player.bogus = ${player.bogus}',
+          de: 'player = ${player}, player.job = ${player.job}, player.bogus = ${player.bogus}',
+        },
+      },
+    },
   ],
   timelineReplace: [
     {
@@ -376,6 +397,7 @@ const triggerSet: TriggerSet<Data> = {
         'cactbot test response': 'cactbot test antwort',
         'cactbot test watch': 'cactbot test beobachten',
         'cactbot test config': 'cactbot test konfig',
+        'cactbot test outputStrings': 'cactbot test outputStrings',
         'cactbot test combatant cast': 'cactbot test gegner wirken',
         'You clap for the striking dummy': 'Du klatschst begeistert Beifall für die Trainingspuppe',
         'You psych yourself up alongside the striking dummy':
@@ -404,6 +426,7 @@ const triggerSet: TriggerSet<Data> = {
     },
     {
       locale: 'fr',
+      missingTranslations: true,
       replaceSync: {
         'cactbot lang': 'cactbot langue',
         'cactbot test response': 'cactbot test de réponse',
@@ -446,6 +469,7 @@ const triggerSet: TriggerSet<Data> = {
     },
     {
       locale: 'ja',
+      missingTranslations: true,
       replaceSync: {
         'You bid farewell to the striking dummy': '.*は木人に別れの挨拶をした',
         'You bow courteously to the striking dummy': '.*は木人にお辞儀した',
@@ -483,6 +507,7 @@ const triggerSet: TriggerSet<Data> = {
     },
     {
       locale: 'cn',
+      missingTranslations: true,
       replaceSync: {
         'You bid farewell to the striking dummy': '.*向木人告别',
         'You bow courteously to the striking dummy': '.*恭敬地对木人行礼',
@@ -520,6 +545,7 @@ const triggerSet: TriggerSet<Data> = {
     },
     {
       locale: 'ko',
+      missingTranslations: true,
       replaceSync: {
         'You bid farewell to the striking dummy': '.*나무인형에게 작별 인사를 합니다',
         'You bow courteously to the striking dummy': '.*나무인형에게 공손하게 인사합니다',

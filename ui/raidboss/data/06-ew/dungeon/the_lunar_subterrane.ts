@@ -45,6 +45,7 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: '안전: 🟦사각',
           de: 'Blaues Viereck sicher',
+          ko: '파란색 네모 안전',
         },
       },
     },
@@ -57,6 +58,7 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: '안전: 🟣삼각',
           de: 'Pinkes Dreieck sicher',
+          ko: '분홍색 삼각형 안전',
         },
       },
     },
@@ -69,12 +71,13 @@ const triggerSet: TriggerSet<Data> = {
       netRegex: { effectId: 'D24' },
       condition: (data) => Util.canCleanse(data.job),
       alertText: (data, matches, output) => {
-        return output.cleanse!({ player: data.ShortName(matches.target) });
+        return output.cleanse!({ player: data.party.member(matches.target) });
       },
       outputStrings: {
         cleanse: {
           en: '에스나: ${player}',
           de: 'Reinige ${player}\'s Verhängnis',
+          ko: '${player} 선고 해제하기',
         },
       },
     },
@@ -127,6 +130,7 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: '보스 옆으로!',
           de: 'Geh seitlich an die Wand',
+          ko: '옆쪽 벽에 붙기',
         },
       },
     },
