@@ -5,6 +5,7 @@ import ZoneId from '../../../../../resources/zone_id';
 import { RaidbossData } from '../../../../../types/data';
 import { PluginCombatantState } from '../../../../../types/event';
 import { NetMatches } from '../../../../../types/net_matches';
+import { PartyMemberParamObject } from '../../../../../types/party';
 import { TriggerSet } from '../../../../../types/trigger';
 
 export type Phase = 'ketuduke' | 'lala' | 'statice';
@@ -27,10 +28,11 @@ export interface Data extends RaidbossData {
   stcReloadCount: number;
   stcReloadFailed: number;
   stcRingRing: number;
-  stcBullsEyes: string[];
+  stcBullsEyes: PartyMemberParamObject[];
   stcClaws: string[];
   stcMissiles: string[];
   stcSeenPinwheeling: boolean;
+  stcAdjustBullsEye: boolean;
   stcTether: boolean;
   stcChains: string[];
   myMarch?: MarchDirection;
@@ -90,6 +92,7 @@ const triggerSet: TriggerSet<Data> = {
       stcClaws: [],
       stcMissiles: [],
       stcSeenPinwheeling: false,
+      stcAdjustBullsEye: false,
       stcTether: false,
       stcChains: [],
       gainList: [],
@@ -979,6 +982,7 @@ const triggerSet: TriggerSet<Data> = {
       type: 'StartsUsing',
       netRegex: { id: '8949', source: 'Statice', capture: false },
       response: Responses.aoe('alert'),
+      run: (data) => data.phase = 'statice',
     },
     {
       id: 'AAI Statice Trick Reload',
@@ -1132,7 +1136,7 @@ const triggerSet: TriggerSet<Data> = {
       id: 'AAI Statice Bull\'s-eye Collect',
       type: 'GainsEffect',
       netRegex: { effectId: 'E9E' },
-      run: (data, matches) => data.stcBullsEyes.push(matches.target),
+      run: (data, matches) => data.stcBullsEyes.push(data.party.member(matches.target)),
     },
     {
       id: 'AAI Statice Bull\'s-eye 1',
@@ -1146,21 +1150,30 @@ const triggerSet: TriggerSet<Data> = {
           return output.blue!();
         if (data.role === 'healer')
           return output.yellow!();
-        const roles = data.stcBullsEyes.map((x) => data.party.member(x).role);
-        const dps = roles.filter((x) => x === 'dps');
+
+        const dps = data.stcBullsEyes.filter((x) => x.role === 'dps');
         if (dps.length === 1)
           return output.red!();
+
+        const other = dps[0]?.name !== data.me ? dps[0]?.name : dps[1]?.name;
+        if (other === undefined)
+          return output.red!();
+
+        const mi = data.party.ajobId(data.me);
+        const oi = data.party.ajobId(other);
+        if (mi === undefined || oi === undefined || mi < oi)
+          return output.red!();
+
+        const roles = data.stcBullsEyes.map((x) => x.role);
         if (roles.includes('healer'))
-          return output.redblue!();
-        return output.redyellow!();
+          return output.blue!();
+        return output.yellow!();
       },
       run: (data) => data.stcBullsEyes = [],
       outputStrings: {
         blue: '🟦파랑 밟아요',
         yellow: '🟨노랑 밟아요',
         red: '🟥빨강 밟아요',
-        redblue: '🟥빨강 또는 🟦파랑 밟아요',
-        redyellow: '🟥빨강 또는 🟨노랑 밟아요',
       },
     },
     {
@@ -1188,8 +1201,8 @@ const triggerSet: TriggerSet<Data> = {
         return output.in!();
       },
       outputStrings: {
-        in: '한가운데서 => 바깥으로 흩어져요',
-        out: '바깥에서 => 한가운데서 뭉쳐요',
+        in: '한가운데 => 바깥에서 흩어져요',
+        out: '바깥 => 한가운데서 뭉쳐요',
       },
     },
     {
@@ -1217,7 +1230,7 @@ const triggerSet: TriggerSet<Data> = {
       type: 'Tether',
       netRegex: { id: '0011', source: 'Surprising Claw', capture: false },
       delaySeconds: 0.5,
-      alertText: (data, _matches, output) => {
+      infoText: (data, _matches, output) => {
         if (!data.stcClaws.includes(data.me))
           return;
         let partner = undefined;
@@ -1246,7 +1259,7 @@ const triggerSet: TriggerSet<Data> = {
       type: 'Tether',
       netRegex: { id: '0011', source: 'Surprising Missile', capture: false },
       delaySeconds: 0.5,
-      alertText: (data, _matches, output) => {
+      infoText: (data, _matches, output) => {
         if (!data.stcMissiles.includes(data.me))
           return;
         let partner = undefined;
@@ -1260,7 +1273,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       run: (data) => data.stcMissiles = [],
       outputStrings: {
-        text: '미사일+줄! 한가운데로 (${partner})',
+        text: '미사일 + 체인, 한가운데로! (${partner})',
         unknown: Outputs.unknown,
       },
     },
@@ -1277,7 +1290,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       run: (data) => data.stcSeenPinwheeling = true,
       outputStrings: {
-        text: '▲ 꼭지점 찾고 => 한가운데로',
+        text: '꼭지점 찾고 => 한가운데로',
       },
     },
     {
@@ -1287,65 +1300,76 @@ const triggerSet: TriggerSet<Data> = {
       condition: (data) => data.stcSeenPinwheeling,
       delaySeconds: 1,
       suppressSeconds: 1,
-      /* 안해도 될거 같다
-      infoText: (data, _matches, output) => {
-        if (!data.stcBullsEyes.includes(data.me))
+      run: (data) => {
+        const roles = data.stcBullsEyes.map((x) => x.role);
+        data.stcBullsEyes = [];
+        const dps = roles.filter((x) => x === 'dps');
+        if (dps.length === 2) {
+          data.stcAdjustBullsEye = true;
           return;
-        if (data.role === 'tank')
-          return output.blue!();
-        if (data.role === 'healer')
-          return output.yellow!();
-        return output.red!();
+        }
+        const th = roles.filter((x) => x === 'tank' || x === 'healer');
+        if (th.length === 2) {
+          data.stcAdjustBullsEye = true;
+          return;
+        }
+        data.stcAdjustBullsEye = false;
       },
-      */
-      run: (data) => data.stcBullsEyes = [],
-      /*
+    },
+    {
+      id: 'AAI Statice Burning Chains Collect',
+      type: 'HeadMarker',
+      netRegex: { id: '0061' },
+      run: (data, matches) => data.stcChains.push(matches.target),
+    },
+    {
+      id: 'AAI Statice Burning Chains Alert',
+      type: 'HeadMarker',
+      netRegex: { id: '0061' },
+      condition: Conditions.targetIsYou(),
+      delaySeconds: 0.1,
+      alertText: (data, _matches, output) => {
+        if (data.stcChains.length !== 2)
+          return output.chain!();
+        const partner = data.stcChains[0] !== data.me ? data.stcChains[0] : data.stcChains[1];
+        return output.chainWith!({ partner: data.party.member(partner).ajob });
+      },
       outputStrings: {
-        blue: '🟦파랑 밟아요',
-        yellow: '🟨노랑 밟아요',
-        red: '🟥빨강 밟아요',
+        chain: '내게 체인!',
+        chainWith: '내게 체인! (${partner})',
       },
-      */
     },
     {
       id: 'AAI Statice Burning Chains Tether',
       type: 'Tether',
       netRegex: { id: '0009' },
-      condition: (data, matches) => data.me === matches.source || data.me === matches.target,
-      alarmText: (_data, _matches, output) => output.text!(),
-      run: (data) => {
-        data.stcTether = true;
-        data.stcChains = [];
-      },
-      outputStrings: {
-        text: '줄 끊어요!!!',
-      },
-    },
-    {
-      id: 'AAI Statice Burning Chains Collect',
-      type: 'GainsEffect',
-      netRegex: { effectId: '301' },
+      condition: (data) => data.phase === 'statice',
       response: (data, matches, output) => {
         // cactbot-builtin-response
         output.responseOutputStrings = {
-          tether: {
-            en: '(줄: ${partner})',
+          cutchain: {
+            en: '체인 끊어요!',
           },
-          notether: {
-            en: '줄 없어요 => 이동',
+          deathclaw: {
+            en: '데스 손톱 유도 => 뭉쳐요',
+          },
+          adjustbullseye: {
+            en: '북으로! 자리 조정 페어!',
+          },
+          bullseye: {
+            en: '북으로! 페어',
           },
         };
-        data.stcChains.push(matches.target);
-        if (data.stcChains.length === 2) {
-          const chains = data.stcChains;
-          data.stcChains = [];
-          if (!chains.includes(data.me))
-            return { alertText: output.notether!() };
-          const partner = chains[0] !== data.me ? chains[0] : chains[1];
-          const real = data.party.member(partner).ajob;
-          return { infoText: output.tether!({ partner: real }) };
+        if (data.me === matches.source || data.me === matches.target)
+          return { alarmText: output.cutchain!() };
+        if (data.stcSeenPinwheeling) {
+          if (data.stcAdjustBullsEye)
+            return { alertText: output.adjustbullseye!() };
+          return { infoText: output.bullseye!() };
         }
+        return { alertText: output.deathclaw!() }; // 이건 데스 손톱 밖에 없다
       },
+      run: (data) => data.stcChains = [],
     },
   ],
   timelineReplace: [

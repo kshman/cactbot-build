@@ -239,4 +239,11 @@ export default class PartyTracker {
       ls.push(i ?? '몰?루');
     return ls;
   }
+
+  ajobId(name: string): number | undefined {
+    const partyIndex = this.partyNames.indexOf(name);
+    if (partyIndex < 0)
+      return;
+    return this.details[partyIndex]?.job;
+  }
 }
