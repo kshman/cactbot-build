@@ -157,7 +157,7 @@ hideall "--sync--"
 # LALA #
 #~~~~~#
 
-# -ii 8947 894C 894F 8954 895A 895B 8987 8A6A 8CC2
+# -ii 8947 894C 894F 8952 8954 895A 895B 895F 8960 8987 89F9 8A6A 8CC2
 # -p 8949:3013.6
 
 # 8947 AA
@@ -204,48 +204,24 @@ hideall "--sync--"
 3150.3 "Trigger Happy" sync / 1[56]:[^:]*:Statice:894B:/
 3153.6 "Pop" sync / 1[56]:[^:]*:Statice:894E:/
 3158.4 "Trapshooting" sync / 1[56]:[^:]*:Statice:8959:/
-3162.5 "Trapshooting" sync / 1[56]:[^:]*:Statice:895B:/
 3170.5 "Aero IV" sync / 1[56]:[^:]*:Statice:8949:/
-3177.7 "--sync--" sync / 1[56]:[^:]*:Statice:8927:/
+
+3177.7 "--untargetable--" sync / 1[56]:[^:]*:Statice:8927:/
 3182.1 "Ring a Ring o' Explosions" sync / 1[56]:[^:]*:Statice:895C:/
 3187.2 "Present Box" sync / 1[56]:[^:]*:Statice:8955:/
 3192.3 "Fireworks" sync / 1[56]:[^:]*:Statice:895E:/
-3201.1 "Death by Claw" sync / 1[56]:[^:]*:Surprising Claw:8958:/
-3202.1 "Fireworks" sync / 1[56]:[^:]*:Statice:895F:/
-3202.1 "Fireworks" sync / 1[56]:[^:]*:Statice:8960:/
 3202.3 "Burst" sync / 1[56]:[^:]*:Bomb:895D:/
-3202.4 "Faerie Ring" sync / 1[56]:[^:]*:Surprising Staff:8956:/
+3202.4 "Faerie Ring" sync / 1[56]:[^:]*:Surprising Staff:8956:/ # 도넛x3
+
+3208.0 "--targetable--"
 3210.4 "Shocking Abandon" sync / 1[56]:[^:]*:Statice:8948:/
 3220.5 "Pinwheeling Dartboard" sync / 1[56]:[^:]*:Statice:8CBC:/
 3229.3 "Fireworks" sync / 1[56]:[^:]*:Statice:895E:/
-3231.2 "Fire Spread" sync / 1[56]:[^:]*:Statice:8952:/
 3231.2 "Fire Spread" sync / 1[56]:[^:]*:Ball of Fire:8982:/
-3231.2 "Fire Spread" sync / 1[56]:[^:]*:Statice:8952:/
-3232.3 "Fire Spread" #sync / 1[56]:[^:]*:Statice:89F9:/
-3232.3 "Fire Spread" #sync / 1[56]:[^:]*:Statice:89F9:/
-3233.3 "Fire Spread" #sync / 1[56]:[^:]*:Statice:89F9:/
-3233.3 "Fire Spread" #sync / 1[56]:[^:]*:Statice:89F9:/
-3234.3 "Fire Spread" #sync / 1[56]:[^:]*:Statice:89F9:/
-3235.3 "Fire Spread" #sync / 1[56]:[^:]*:Statice:89F9:/
-3235.3 "Fire Spread" #sync / 1[56]:[^:]*:Statice:89F9:/
-3236.3 "Fire Spread" #sync / 1[56]:[^:]*:Statice:89F9:/
-3236.3 "Fire Spread" #sync / 1[56]:[^:]*:Statice:89F9:/
-3237.3 "Fire Spread" #sync / 1[56]:[^:]*:Statice:89F9:/
-3238.3 "Fire Spread" #sync / 1[56]:[^:]*:Statice:89F9:/
-3238.3 "Fire Spread" #sync / 1[56]:[^:]*:Statice:89F9:/
 3238.3 "Burning Chains" sync / 1[56]:[^:]*:Statice:8CBE:/
-3238.3 "Fireworks" sync / 1[56]:[^:]*:Statice:895F:/
-3238.3 "Fireworks" sync / 1[56]:[^:]*:Statice:8960:/
-3238.9 "Uncommon Ground" sync / 1[56]:[^:]*:Statice:8CC2:/
-3238.9 "Uncommon Ground" sync / 1[56]:[^:]*:Statice:8954:/
-3239.3 "Fire Spread" #sync / 1[56]:[^:]*:Statice:89F9:/
-3239.3 "Fire Spread" #sync / 1[56]:[^:]*:Statice:89F9:/
-3240.3 "Fire Spread" #sync / 1[56]:[^:]*:Statice:89F9:/
-3241.3 "Fire Spread" #sync / 1[56]:[^:]*:Statice:89F9:/
-3241.3 "Fire Spread" #sync / 1[56]:[^:]*:Statice:89F9:/
-3242.3 "Fire Spread" #sync / 1[56]:[^:]*:Statice:89F9:/
-3242.3 "Fire Spread" #sync / 1[56]:[^:]*:Statice:89F9:/
 3250.4 "Aero IV" sync / 1[56]:[^:]*:Statice:8949:/
+
+# ???
 
 
 # ALL ENCOUNTER ABILITIES
