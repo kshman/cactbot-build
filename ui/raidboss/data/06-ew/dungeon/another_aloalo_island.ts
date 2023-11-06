@@ -8,14 +8,12 @@ import { NetMatches } from '../../../../../types/net_matches';
 import { PartyMemberParamObject } from '../../../../../types/party';
 import { TriggerSet } from '../../../../../types/trigger';
 
-export type Phase = 'ketuduke' | 'lala' | 'statice';
 export type ClockRotate = 'cw' | 'ccw' | 'unknown';
 export type MarchDirection = 'front' | 'back' | 'left' | 'right';
 
 export interface Data extends RaidbossData {
-  phase?: Phase;
-  ketuSpringCrystalCount: number;
   ketuCrystalAdd: NetMatches['AddedCombatant'][];
+  ketuSpringCrystalCount: number;
   ketuHydroCount: number;
   ketuHydroStack?: NetMatches['GainsEffect'];
   ketuHydroSpread?: NetMatches['GainsEffect'];
@@ -23,7 +21,6 @@ export interface Data extends RaidbossData {
   lalaBlight?: MarchDirection;
   lalaRotate?: ClockRotate;
   lalaNumber?: number;
-  lalaArcanePlot?: boolean;
   lalaSubtractive?: number;
   stcReloadCount: number;
   stcReloadFailed: number;
@@ -35,6 +32,7 @@ export interface Data extends RaidbossData {
   stcAdjustBullsEye: boolean;
   stcTether: boolean;
   stcChains: string[];
+  stcBallFire?: number;
   myMarch?: MarchDirection;
   myRotate?: ClockRotate;
   myNumber?: number;
@@ -76,14 +74,20 @@ const isReverseRotate = (rot: ClockRotate, num?: number): boolean => {
   return false;
 };
 
+// 스타티스 나눔
+const stcBallOfFire = (combatant: NetMatches['AddedCombatant']): number => {
+  const hg = parseFloat(combatant.heading);
+  return (Math.round(6 - 6 * (2 * Math.PI - hg) / Math.PI) % 12 + 12) % 12;
+};
+
 const triggerSet: TriggerSet<Data> = {
   id: 'AnotherAloaloIsland',
   zoneId: ZoneId.AnotherAloaloIsland,
   timelineFile: 'another_aloalo_island.txt',
   initData: () => {
     return {
-      ketuSpringCrystalCount: 0,
       ketuCrystalAdd: [],
+      ketuSpringCrystalCount: 0,
       ketuHydroCount: 0,
       stcReloadCount: 0,
       stcReloadFailed: 0,
@@ -186,7 +190,6 @@ const triggerSet: TriggerSet<Data> = {
       type: 'StartsUsing',
       netRegex: { id: '8AD4', source: 'Ketuduke', capture: false },
       response: Responses.bleedAoe(),
-      run: (data) => data.phase = 'ketuduke',
     },
     {
       id: 'AAI Ketuduke Bubble Net',
@@ -204,9 +207,15 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: 'AAI Ketuduke Spring Crystal Collect',
+      id: 'AAI Ketuduke Spring Crystal 1 Collect',
       type: 'AddedCombatant',
-      netRegex: { npcNameId: '12607' },
+      netRegex: { npcNameId: '12606' }, // 동글
+      run: (data, matches) => data.ketuCrystalAdd.push(matches),
+    },
+    {
+      id: 'AAI Ketuduke Spring Crystal 2 Collect',
+      type: 'AddedCombatant',
+      netRegex: { npcNameId: '12607' }, // 네모
       run: (data, matches) => data.ketuCrystalAdd.push(matches),
     },
     {
@@ -475,7 +484,26 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: 'AAI Ketuduke Fluke Typhoon',
+      id: 'AAI Ketuduke Fluke Typhoon Bubble',
+      type: 'StartsUsing',
+      netRegex: { id: '8AAF', source: 'Ketuduke', capture: false },
+      condition: (data) => data.role === 'dps',
+      infoText: (data, _matches, output) => {
+        if (data.ketuCrystalAdd.length !== 4 || data.ketuCrystalAdd[0] === undefined)
+          return output.text!();
+        if (parseFloat(data.ketuCrystalAdd[0].x) < 0)
+          return output.left!();
+        return output.right!();
+      },
+      run: (data) => data.ketuCrystalAdd = [],
+      outputStrings: {
+        text: '(슬슬 버블로)',
+        left: '(왼쪽 DPS가 버블로)',
+        right: '(오른쪽 DPS가 버블로)',
+      },
+    },
+    {
+      id: 'AAI Ketuduke Fluke Typhoon Tower',
       type: 'Ability',
       netRegex: { id: '8AB0', source: 'Ketuduke', capture: false },
       suppressSeconds: 5,
@@ -559,16 +587,15 @@ const triggerSet: TriggerSet<Data> = {
       type: 'StartsUsing',
       netRegex: { id: '88AE', source: 'Lala', capture: false },
       response: Responses.aoe(),
-      run: (data) => data.phase = 'lala',
     },
     {
-      id: 'AAI Lala Lala Rotation',
+      id: 'AAI Lala Lala 회전',
       type: 'HeadMarker',
       netRegex: { id: ['01E4', '01E5'], target: 'Lala' },
       run: (data, matches) => data.lalaRotate = matches.id === '01E4' ? 'cw' : 'ccw',
     },
     {
-      id: 'AAI Lala Lala Times',
+      id: 'AAI Lala Lala 3과5',
       type: 'GainsEffect',
       // F62 = Times Three
       // F63 = Times Five
@@ -576,14 +603,14 @@ const triggerSet: TriggerSet<Data> = {
       run: (data, matches) => data.lalaNumber = matches.effectId === 'F62' ? 3 : 5,
     },
     {
-      id: 'AAI Lala Player Rotation',
+      id: 'AAI Lala Player 회전',
       type: 'HeadMarker',
       netRegex: { id: ['01ED', '01EE'] },
       condition: Conditions.targetIsYou(),
       run: (data, matches) => data.myRotate = matches.id === '01ED' ? 'cw' : 'ccw',
     },
     {
-      id: 'AAI Lala Player Times',
+      id: 'AAI Lala Player 3과5',
       type: 'GainsEffect',
       // E89 = Times Three
       // ECE = Times Five
@@ -592,7 +619,7 @@ const triggerSet: TriggerSet<Data> = {
       run: (data, matches) => data.myNumber = matches.effectId === 'E89' ? 3 : 5,
     },
     {
-      id: 'AAI LaLa Arcane Blight Open',
+      id: 'AAI LaLa Arcane Blight 방향',
       type: 'StartsUsing',
       netRegex: { id: '888[B-E]', source: 'Lala' },
       run: (data, matches) => {
@@ -648,11 +675,13 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: 'AAI Lala Analysis Direction',
+      id: 'AAI Lala Analysis 방향',
       type: 'GainsEffect',
       netRegex: { effectId: ['E8E', 'E8F', 'E90', 'E91'], source: 'Lala' },
       condition: Conditions.targetIsYou(),
-      run: (data, matches) => {
+      durationSeconds: 18,
+      suppressSeconds: 50,
+      infoText: (data, matches, output) => {
         const blightMap: { [count: string]: MarchDirection } = {
           'E8E': 'front',
           'E8F': 'back',
@@ -660,21 +689,11 @@ const triggerSet: TriggerSet<Data> = {
           'E91': 'left',
         } as const;
         data.myMarch = blightMap[matches.effectId];
-      },
-    },
-    {
-      id: 'AAI Lala Arcane Array',
-      type: 'Ability',
-      netRegex: { id: '8890', source: 'Lala', capture: false },
-      durationSeconds: 15,
-      infoText: (data, _matches, output) => {
-        if (data.myMarch === undefined)
-          return output.text!();
-        return output.orbs!({ dir: output[data.myMarch]!() });
+        if (data.myMarch !== undefined)
+          return output.orbs!({ dir: output[data.myMarch]!() });
       },
       outputStrings: {
-        text: '구멍을 구슬 쪽 잊지마셈',
-        orbs: '뚤린 곳 구슬: ${dir}',
+        orbs: '뚤린 곳: ${dir}',
         front: '앞',
         back: '뒤',
         left: '왼쪽',
@@ -683,9 +702,10 @@ const triggerSet: TriggerSet<Data> = {
     },
     {
       id: 'AAI Lala Targeted Light',
-      type: 'StartsUsing',
-      netRegex: { id: '8CDF', source: 'Lala' },
+      type: 'GainsEffect',
+      netRegex: { effectId: ['E8E', 'E8F', 'E90', 'E91'], source: 'Lala' },
       condition: Conditions.targetIsYou(),
+      delaySeconds: 21,
       alertText: (data, _matches, output) => {
         if (data.myMarch === undefined)
           return output.text!();
@@ -711,30 +731,11 @@ const triggerSet: TriggerSet<Data> = {
         delete data.myNumber;
       },
       outputStrings: {
-        front: Outputs.lookTowardsBoss,
-        back: {
-          en: '뒤돌아 봐요',
-          de: 'Schau nach Hinten',
-          ja: '後ろ見て',
-        },
-        left: {
-          en: '오른쪽 봐요',
-          de: 'Schau nach Rechts',
-          ja: '右見て',
-        },
-        right: {
-          en: '왼쪽 봐요',
-          de: 'Schau nach Links',
-          ja: '左見て',
-        },
-        text: {
-          en: '열린 곳을 보스로',
-          de: 'Zeige Öffnung zum Boss',
-          fr: 'Pointez l\'ouverture vers Boss', // FIXME
-          ja: '未解析の方角をボスに向ける',
-          cn: '脚下光环缺口对准boss',
-          ko: '문양이 빈 쪽을 보스쪽으로 향하게 하기', // FIXME
-        },
+        front: '보스 봐요',
+        back: '뒤돌아 봐요',
+        left: '오른쪽 봐요',
+        right: '왼쪽 봐요',
+        text: '열린 곳을 보스로',
       },
     },
     {
@@ -862,46 +863,11 @@ const triggerSet: TriggerSet<Data> = {
         delete data.myNumber;
       },
       outputStrings: {
-        text: {
-          en: '강제이동',
-          de: 'Geistlenkung',
-          fr: 'Piratage mental', // FIXME
-          ja: '強制移動',
-          cn: '强制移动', // FIXME
-          ko: '강제이동', // FIXME
-        },
-        front: {
-          en: '강제이동: 앞으로',
-          de: 'Geistlenkung: Vorwärts',
-          fr: 'Piratage mental : Vers l\'avant',
-          ja: '強制移動 : 前',
-          cn: '强制移动 : 前',
-          ko: '강제이동: 앞',
-        },
-        back: {
-          en: '강제이동: 뒤로',
-          de: 'Geistlenkung: Rückwärts',
-          fr: 'Piratage mental : Vers l\'arrière',
-          ja: '強制移動 : 後ろ',
-          cn: '强制移动 : 后',
-          ko: '강제이동: 뒤',
-        },
-        left: {
-          en: '강제이동: 왼쪽',
-          de: 'Geistlenkung: Links',
-          fr: 'Piratage mental : Vers la gauche',
-          ja: '強制移動 : 左',
-          cn: '强制移动 : 左',
-          ko: '강제이동: 왼쪽',
-        },
-        right: {
-          en: '강제이동: 오른쪽',
-          de: 'Geistlenkung: Rechts',
-          fr: 'Piratage mental : Vers la droite',
-          ja: '強制移動 : 右',
-          cn: '强制移动 : 右',
-          ko: '강제이동: 오른쪽',
-        },
+        text: '강제이동',
+        front: '강제이동: 앞으로',
+        back: '강제이동: 뒤로',
+        left: '강제이동: 왼쪽',
+        right: '강제이동: 오른쪽',
       },
     },
     {
@@ -943,7 +909,7 @@ const triggerSet: TriggerSet<Data> = {
           return output.swap!();
       },
       outputStrings: {
-        swap: '뭉칠 파트너 자리 바꿔요!',
+        swap: 'DPS 자리 바꿔요!',
       },
     },
     {
@@ -963,18 +929,17 @@ const triggerSet: TriggerSet<Data> = {
       type: 'StartsUsing',
       netRegex: { id: '88A2', source: 'Lala', capture: false },
       infoText: (_data, _matches, output) => output.text!(),
-      run: (data) => data.lalaArcanePlot = true,
       outputStrings: {
-        text: '바깥쪽 쫄 있는 곳 기준으로 흩어져요!',
+        text: '바깥쪽 쫄 있는 곳이 북쪽!',
       },
     },
     {
       id: 'AAI Lala Arcane Plot Spread',
       type: 'GainsEffect',
       netRegex: { effectId: 'B7D', source: 'Lala' },
-      condition: (data, matches) => data.lalaArcanePlot && data.me === matches.target,
+      condition: (data, matches) =>
+        data.me === matches.target && parseFloat(matches.duration) > 1.5,
       response: Responses.spread('alert'),
-      run: (data) => delete data.lalaArcanePlot,
     },
     // ---------------- statice ----------------
     {
@@ -982,7 +947,6 @@ const triggerSet: TriggerSet<Data> = {
       type: 'StartsUsing',
       netRegex: { id: '8949', source: 'Statice', capture: false },
       response: Responses.aoe('alert'),
-      run: (data) => data.phase = 'statice',
     },
     {
       id: 'AAI Statice Trick Reload',
@@ -1294,6 +1258,19 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
+      id: 'AAI Statice Ball of Fire',
+      type: 'AddedCombatant',
+      netRegex: { npcNameId: '12511' }, // 동글
+      infoText: (data, matches, output) => {
+        data.stcBallFire = stcBallOfFire(matches);
+        if (data.stcBallFire > 1000)
+          return output.text!({ mesg: `${data.stcBallFire}/${matches.heading}` });
+      },
+      outputStrings: {
+        text: '후: ${mesg}',
+      },
+    },
+    {
       id: 'AAI Statice Bull\'s-eye 2',
       type: 'GainsEffect',
       netRegex: { effectId: 'E9E', capture: false },
@@ -1343,7 +1320,6 @@ const triggerSet: TriggerSet<Data> = {
       id: 'AAI Statice Burning Chains Tether',
       type: 'Tether',
       netRegex: { id: '0009' },
-      condition: (data) => data.phase === 'statice',
       response: (data, matches, output) => {
         // cactbot-builtin-response
         output.responseOutputStrings = {
@@ -1371,6 +1347,49 @@ const triggerSet: TriggerSet<Data> = {
       },
       run: (data) => data.stcChains = [],
     },
+    // ---------------------------------------------- 테스트
+    /*
+    {
+      id: 'AAI marker test',
+      type: 'HeadMarker',
+      netRegex: {},
+      infoText: (_data, matches, output) => {
+        const tested: string[] = [
+          '0017', // 흩어져요
+          '003E', // 뭉쳐요
+          '0061', // 체인
+          '00A1', // 뭉쳐 대상에게 옴
+          '00C6', // 쫄이 씀. 따라오는 머시기
+          '00DC', // 체인 끊김? 아무튼 Burning Chains 다음 나옴
+          '00E5', // 흩어져/뭉쳐/매직업 셋중 하나일거 같음...
+          '0150', // 케투 1번 휩쓸림
+          '0151', // 케투 2번
+          '01E4', // 라라 보스 시계
+          '01E5', // 라라 보스 반시계
+          '01ED', // 라라 플레이어 시계
+          '01EE', // 라라 플레이어 반시계
+          '01F7', // 라라 플레이어 모르겟다. 방향 관련 같은데
+          '01F8', // 라라 플레이어 모르겟다. 방향 관련 같은데
+          '00F3', // 라라 버스터 Strategic Strike
+          '0186', // 186~18B 주사위 모양
+          '0187',
+          '0188',
+          '0189',
+          '018A',
+          '018B',
+          '015B', // 스타 페어. 기믹 처리하면서 해결됨
+          '00DA', // 스타 버스터 Socking Abandon
+          '009C', // 스타 Ball of Fire. 문제의 이거 어디 있는지만 알면...
+        ];
+        if (tested.includes(matches.id))
+          return;
+        return output.text!({ id: matches.id, dest: matches.target });
+      },
+      outputStrings: {
+        text: '헤드마커: ${id} (${dest})',
+      },
+    },
+    */
   ],
   timelineReplace: [
     {
@@ -1385,37 +1404,5 @@ const triggerSet: TriggerSet<Data> = {
     },
   ],
 };
-
-// 헤드 마커
-// 쫄
-// TargetIcon 1B:(아이디):(플레이어):0000:0000:0017:0000:0000:0000
-// TargetIcon 1B:(아이디):(플레이어):0000:0000:00A1:0000:0000:0000
-// TargetIcon 1B:(아이디):(플레이어):0000:0000:00C6:0000:0000:0000
-// TargetIcon 1B:(아이디):(플레이어):0000:0000:00DA:0000:0000:0000
-//  Ketuduke
-// TargetIcon 1B:(아이디)::0000:0000:0150:0000:0000:0000
-// TargetIcon 1B:(아이디)::0000:0000:0151:0000:0000:0000
-// Lala
-// TargetIcon 1B:(아이디):Lala:0000:0000:01E4:0000:0000:0000 // 라라 시계
-// TargetIcon 1B:(아이디):Lala:0000:0000:01E5:0000:0000:0000 // 라라 반시계
-// TargetIcon 1B:(아이디):(플레이어):0000:0000:0017:0000:0000:0000
-// TargetIcon 1B:(아이디):(플레이어):0000:0000:003E:0000:0000:0000
-// TargetIcon 1B:(아이디):(플레이어):0000:0000:00E5:0000:0000:0000
-// TargetIcon 1B:(아이디):(플레이어):0000:0000:00F3:0000:0000:0000
-// TargetIcon 1B:(아이디):(플레이어):0000:0000:01ED:0000:0000:0000 // 플레이어 시계
-// TargetIcon 1B:(아이디):(플레이어):0000:0000:01EE:0000:0000:0000 // 플레이어 반시계
-// TargetIcon 1B:(아이디):(플레이어):0000:0000:01F7:0000:0000:0000
-// Statice
-// TargetIcon 1B(아이디)::0000:0000:0186:0000:0000:0000
-// TargetIcon 1B(아이디)::0000:0000:0187:0000:0000:0000
-// TargetIcon 1B(아이디)::0000:0000:0188:0000:0000:0000
-// TargetIcon 1B(아이디)::0000:0000:0189:0000:0000:0000
-// TargetIcon 1B(아이디)::0000:0000:018A:0000:0000:0000
-// TargetIcon 1B(아이디)::0000:0000:018B:0000:0000:0000
-// TargetIcon 1B(아이디):(플레이어):0000:0000:0061:0000:0000:0000 // Burning Chains 줄
-// TargetIcon 1B(아이디):Ball of Fire:0000:0000:009C:0000:0000:0000
-// TargetIcon 1B(아이디):(플레이어):0000:0000:00DA:0000:0000:0000 // Shocking Abandon
-// TargetIcon 1B(아이디):(플레이어):0000:0000:00DC:0000:0000:0000 // Burning Chains 이펙트
-// TargetIcon 1B(아이디):(플레이어):0000:0000:015B:0000:0000:0000 // 페어?
 
 export default triggerSet;
