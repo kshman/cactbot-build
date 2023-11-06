@@ -53,7 +53,6 @@ hideall "--sync--"
 1184.1 "Hundred Lashings" sync / 1[56]:[^:]*:Aloalo Zaratan:8ACA:/
 
 1190.7 "--middle--" sync / 1[56]:[^:]*:Ketuduke:8A77:/
-# TODO: this is probably either/or
 1199.4 "Hydrofall/Hydrobullet (buff)" sync / 1[56]:[^:]*:Ketuduke:(8AB4|8AB8):/
 1202.4 "Hydrobullet/Hydrofall (buff)" sync / 1[56]:[^:]*:Ketuduke:(8C6D|8AB5):/
 1210.4 "Angry Seas" sync / 1[56]:[^:]*:Ketuduke:8AC1:/
@@ -87,6 +86,57 @@ hideall "--sync--"
 1324.8 "Tidal Roar" sync / 1[56]:[^:]*:Ketuduke:8AD4:/
 # ???
 
+# ALL ENCOUNTER ABILITIES
+# 8A77 --sync-- Ketuduke repositioning
+# 8A82 Riptide ability on players from Angry Seas Airy Bubble when you step in one
+# 8A83 Fetters ability on players from Angry Seas Airy Bubble when you step in one after 8A82 Riptide
+# 8AA7 --sync-- auto damage from Ketuduke
+# 8AA8 Spring Crystals cast and ability to summon Spring Crystal adds (all flavors)
+# 8AA9 衝撃 self-targeted ability from Spring Crystal orbs
+# 8AAA 衝撃 self-targeted ability from Spring Crystal rupees
+# 8AAB Saturate cast and damage from Spring Crystal orb circle
+# 8AAC Saturate cast and damage from Spring Crystal rupee line laser
+# 8AAD Bubble Net self-targeted cast before Bubbles along with 8AAE during Spring Crystals 1
+# 8AAE Bubble Net cast and ability on players that adds Bubbles/Fetters debuffs during Spring Crystals 1
+# 8AAF Fluke Typhoon self-targeted cast before 8AB0 knockback during Spring Crystals 3
+# 8AB0 Fluke Typhoon cast and knockback ability on Spring Crystal and players during Spring Crystals 3
+# 8AB1 Fluke Gale self-targeted cast that adds limit cut winds
+# 8AB2 Fluke Gale cast and ability for limit cut 1 wind
+# 8AB3 Fluke Gale cast and ability for limit cut 2 wind
+# 8AB4 Hydrofall self-targeted cast that adds stack markers
+# 8AB5 Hydrofall ability on players to give "stack second" before Blowing Bubbles
+# 8AB6 Hydrofall ability on players that adds stack debuffs
+# 8AB7 Hydrofall damage from stack debuuffs
+# 8AB8 Hydrobullet self-targeted cast that adds stack markers
+# 8AB9 Hydrobullet ability on players that adds spread debuffs
+# 8ABA Hydrobullet damage from spread debuffs
+# 8ABB Strewn Bubbles self-targeted cast before 8ABC Sphere Shatter moving arches
+# 8ABC Sphere Shatter damage from moving arches
+# 8ABD Blowing Bubbles self-targeted cast that adds Airy Bubble Adds
+# 8ABE Riptide ability on players from Blowing Bubbles Airy Bubble when you step in one
+# 8ABF Fetters ability on players from Blowing Bubbles Airy Bubble when you step in one after 8ABE Riptide
+# 8AC0 Angry Seas cast and self-targeted ability for 8AC1 red line knockback
+# 8AC1 Angry Seas cast and knockback damage from red line
+# 8AC2 Burst tower damage
+# 8AC3 Big Burst tower failure damage
+# 8AC4 Roar self-targeted cast that summons Zaratan adds
+# 8AC5 Bubble Net self-targeted cast before Bubbles along with 8AC6 during Spring Crystals 2
+# 8AC6 Bubble Net cast and ability on players that adds Bubbles/Fetters debuffs during Spring Crystals 2
+# 8AC7 Updraft self-targeted cast to boost adds and players into the air
+# 8AC8 Updraft ability on players for 8AC7 Updraft
+# 8AC9 Hundred Lashings cast and damage for non-bubbled Zaratan 180 cleave (no damage on bubbled players)
+# 8ACA Hundred Lashings cast and self-targeted ability for bubbled Zaratan adds
+# 8ACB Hundred Lashings cast and damage for bubbled Zaratan 180 cleave (no damage on non-bubbled players)
+# 8ACC Receding Twintides cast and damage for initial out during out->in
+# 8ACD Near Tide fast cast and damage for second out during in->out with 8ACE Encroaching Twintides
+# 8ACE Encroaching Twintides cast and damage for initial in during in->out
+# 8ACF Far Tide fast cast and damage for second in during out->in with 8ACC Receding Twintides
+# 8AD0 Hydrobomb self-targeted cast for 8AD1 puddles
+# 8AD1 Hydrobomb cast and damage for 3x puddles duruing 8ABD Blowing Bubbles
+# 8AD4 Tidal Roar self-targeted cast for raidwide aoe
+# 8AD5 Tidal Roar damage from 8AD4
+# 8C6D Hydrobullet ability on players to give "spread second" before Blowing Bubbles
+
 #~~~~~#
 # LALA #
 #~~~~~#
@@ -99,7 +149,7 @@ hideall "--sync--"
 2011.6 "Inferno Theorem" sync / 1[56]:[^:]*:Lala:88AE:/
 
 2013.7 "--middle--" sync / 1[56]:[^:]*:Lala:8874:/
-2018.8 "Angular Addition" sync / 1[56]:[^:]*:Lala:(8889|8D2E):/ # 8889가 3(리버스)
+2018.8 "Angular Addition" sync / 1[56]:[^:]*:Lala:(8889|8D2E):/
 2026.9 "Arcane Blight" sync / 1[56]:[^:]*:Lala:888F:/
 
 2030.1 "--middle--" sync / 1[56]:[^:]*:Lala:8874:/
@@ -153,14 +203,48 @@ hideall "--sync--"
 2294.8 "Targeted Light" sync / 1[56]:[^:]*:Lala:8CDE:/
 # ???
 
+# ALL ENCOUNTER ABILITIES
+# 8874 --sync--
+# 8889 Angular Addition / Reverse
+# 888B Arcane Blight
+# 888D Arcane Blight
+# 888E Arcane Blight
+# 888F Arcane Blight
+# 8890 Arcane Array
+# 8891 Bright Pulse
+# 8892 Bright Pulse
+# 8893 Inferno Divide
+# 8894 Radiance
+# 8895 Analysis
+# 8898 Planar Tactics
+# 8899 Arcane Mine
+# 889A Arcane Mine
+# 889B Arcane Combustion
+# 889E Symmetric Surge
+# 889F Arcane Array
+# 88A0 Spatial Tactics
+# 88A1 Symmetric Surge
+# 88A2 Arcane Plot
+# 88A3 Constructive Figure
+# 88A4 Aero II
+# 88A5 Arcane Point
+# 88A6 Powerful Light
+# 88A7 Explosive Theorem
+# 88A8 Explosive Theorem
+# 88A9 Telluric Theorem
+# 88AD Strategic Strike
+# 88AE Inferno Theorem
+# 8CDE Targeted Light
+# 8CDF Targeted Light
+# 8D1F Radiance
+# 8D2E Angular Addition / Actual
+
 #~~~~~~~~#
 # STATICE #
 #~~~~~~~~#
 
 # -ii 8947 894C 894F 8952 8954 895A 895B 895F 8960 8987 89F9 8A6A 8CC2
 # -p 8949:3013.6
-
-# 8947 AA
 
 3000.0 "--sync--" sync / 00:0839::The Midnight Trial will be sealed off/ window 10000,0
 3008.9 "--sync--" sync / 14:[^:]*:Statice:8949:/ window 20,20
@@ -211,7 +295,7 @@ hideall "--sync--"
 3187.2 "Present Box" sync / 1[56]:[^:]*:Statice:8955:/
 3192.3 "Fireworks" sync / 1[56]:[^:]*:Statice:895E:/
 3202.3 "Burst" sync / 1[56]:[^:]*:Bomb:895D:/
-3202.4 "Faerie Ring" sync / 1[56]:[^:]*:Surprising Staff:8956:/ # 도넛x3
+3202.4 "Faerie Ring" sync / 1[56]:[^:]*:Surprising Staff:8956:/
 
 3208.0 "--targetable--"
 3210.4 "Shocking Abandon" sync / 1[56]:[^:]*:Statice:8948:/
@@ -221,61 +305,62 @@ hideall "--sync--"
 3238.3 "Burning Chains" sync / 1[56]:[^:]*:Statice:8CBE:/
 3250.4 "Aero IV" sync / 1[56]:[^:]*:Statice:8949:/
 
+3257.6 "--middle--" sync / 1[56]:[^:]*:Statice:8927:/
+3263.0 "Beguiling Glitter" sync / 1[56]:[^:]*:Statice:8963:/
+3270.1 "Trick Reload" sync / 1[56]:[^:]*:Statice:894A:/
+3272.1 "Locked and Loaded/Misload" #sync / 1[56]:[^:]*:Statice:(8925|8926):/
+3273.1 "Locked and Loaded/Misload" #sync / 1[56]:[^:]*:Statice:(8925|8926):/
+3274.1 "Locked and Loaded/Misload" #sync / 1[56]:[^:]*:Statice:(8925|8926):/
+3275.1 "Locked and Loaded/Misload" #sync / 1[56]:[^:]*:Statice:(8925|8926):/
+3276.1 "Locked and Loaded/Misload" #sync / 1[56]:[^:]*:Statice:(8925|8926):/
+3277.1 "Locked and Loaded/Misload" #sync / 1[56]:[^:]*:Statice:(8925|8926):/
+3278.1 "Locked and Loaded/Misload" #sync / 1[56]:[^:]*:Statice:(8925|8926):/
+3279.1 "Locked and Loaded/Misload" #sync / 1[56]:[^:]*:Statice:(8925|8926):/
+3284.1 "Trapshooting" sync / 1[56]:[^:]*:Statice:8D1A:/
+3291.2 "Present Box" sync / 1[56]:[^:]*:Statice:8955:/
+3297.9 "Ring a Ring o' Explosions" sync / 1[56]:[^:]*:Statice:895C:/
+3305.3 "Trigger Happy" sync / 1[56]:[^:]*:Statice:894B:/
+3305.9 "Faerie Ring" sync / 1[56]:[^:]*:Surprising Staff:8956:/
+3312.1 "Trapshooting" sync / 1[56]:[^:]*:Statice:8959:/
+3316.1 "Burst" sync / 1[56]:[^:]*:Bomb:895D:/
+3323.3 "Aero IV" sync / 1[56]:[^:]*:Statice:8949:/
 # ???
 
-
 # ALL ENCOUNTER ABILITIES
-# 8A77 --sync-- Ketuduke repositioning
-# 8A82 Riptide ability on players from Angry Seas Airy Bubble when you step in one
-# 8A83 Fetters ability on players from Angry Seas Airy Bubble when you step in one after 8A82 Riptide
-# 8AA7 --sync-- auto damage from Ketuduke
-# 8AA8 Spring Crystals cast and ability to summon Spring Crystal adds (all flavors)
-# 8AA9 衝撃 self-targeted ability from Spring Crystal orbs
-# 8AAA 衝撃 self-targeted ability from Spring Crystal rupees
-# 8AAB Saturate cast and damage from Spring Crystal orb circle
-# 8AAC Saturate cast and damage from Spring Crystal rupee line laser
-# 8AAD Bubble Net self-targeted cast before Bubbles along with 8AAE during Spring Crystals 1
-# 8AAE Bubble Net cast and ability on players that adds Bubbles/Fetters debuffs during Spring Crystals 1
-# 8AAF Fluke Typhoon self-targeted cast before 8AB0 knockback during Spring Crystals 3
-# 8AB0 Fluke Typhoon cast and knockback ability on Spring Crystal and players during Spring Crystals 3
-# 8AB1 Fluke Gale self-targeted cast that adds limit cut winds
-# 8AB2 Fluke Gale cast and ability for limit cut 1 wind
-# 8AB3 Fluke Gale cast and ability for limit cut 2 wind
-# 8AB4 Hydrofall self-targeted cast that adds stack markers
-# 8AB5 Hydrofall ability on players to give "stack second" before Blowing Bubbles
-# 8AB6 Hydrofall ability on players that adds stack debuffs
-# 8AB7 Hydrofall damage from stack debuuffs
-# 8AB8 Hydrobullet self-targeted cast that adds stack markers
-# 8AB9 Hydrobullet ability on players that adds spread debuffs
-# 8ABA Hydrobullet damage from spread debuffs
-# 8ABB Strewn Bubbles self-targeted cast before 8ABC Sphere Shatter moving arches
-# 8ABC Sphere Shatter damage from moving arches
-# 8ABD Blowing Bubbles self-targeted cast that adds Airy Bubble Adds
-# 8ABE Riptide ability on players from Blowing Bubbles Airy Bubble when you step in one
-# 8ABF Fetters ability on players from Blowing Bubbles Airy Bubble when you step in one after 8ABE Riptide
-# 8AC0 Angry Seas cast and self-targeted ability for 8AC1 red line knockback
-# 8AC1 Angry Seas cast and knockback damage from red line
-# 8AC2 Burst tower damage
-# 8AC3 Big Burst tower failure damage
-# 8AC4 Roar self-targeted cast that summons Zaratan adds
-# 8AC5 Bubble Net self-targeted cast before Bubbles along with 8AC6 during Spring Crystals 2
-# 8AC6 Bubble Net cast and ability on players that adds Bubbles/Fetters debuffs during Spring Crystals 2
-# 8AC7 Updraft self-targeted cast to boost adds and players into the air
-# 8AC8 Updraft ability on players for 8AC7 Updraft
-# 8AC9 Hundred Lashings cast and damage for non-bubbled Zaratan 180 cleave (no damage on bubbled players)
-# 8ACA Hundred Lashings cast and self-targeted ability for bubbled Zaratan adds
-# 8ACB Hundred Lashings cast and damage for bubbled Zaratan 180 cleave (no damage on non-bubbled players)
-# 8ACC Receding Twintides cast and damage for initial out during out->in
-# 8ACD Near Tide fast cast and damage for second out during in->out with 8ACE Encroaching Twintides
-# 8ACE Encroaching Twintides cast and damage for initial in during in->out
-# 8ACF Far Tide fast cast and damage for second in during out->in with 8ACC Receding Twintides
-# 8AD0 Hydrobomb self-targeted cast for 8AD1 puddles
-# 8AD1 Hydrobomb cast and damage for 3x puddles duruing 8ABD Blowing Bubbles
-# 8AD4 Tidal Roar self-targeted cast for raidwide aoe
-# 8AD5 Tidal Roar damage from 8AD4
-# 8C6D Hydrobullet ability on players to give "spread second" before Blowing Bubbles
-
-
+# 8925 Locked and Loaded
+# 8926 Misload
+# 8927 --sync--
+# 8947 --sync--
+# 8948 Shocking Abandon
+# 8949 Aero IV
+# 894A Trick Reload
+# 894B Trigger Happy
+# 894C Trigger Happy
+# 894D Surprise Balloon
+# 894E Pop
+# 894F Surprise Needle
+# 8952 Fire Spread
+# 8954 Uncommon Ground
+# 8955 Present Box
+# 8956 Faerie Ring
+# 8959 Trapshooting
+# 895A Trapshooting
+# 895B Trapshooting
+# 895C Ring a Ring o' Explosions
+# 895D Burst
+# 895E Fireworks
+# 895F Fireworks
+# 8960 Fireworks
+# 8963 Beguiling Glitter
+# 8982 Fire Spread
+# 8987 Trigger Happy
+# 89F9 Fire Spread
+# 8A6A --sync--
+# 8CBC Pinwheeling Dartboard
+# 8CBD Dartboard of Dancing Explosives
+# 8CBE Burning Chains
+# 8CC2 Uncommon Ground
+# 8D1A Trapshooting
 
 #~~~~~~~~~#
 # TRASH 1 #
@@ -297,3 +382,14 @@ hideall "--sync--"
 # 8BBE Electric Whorl casted damage from Ray "get in"
 # 8C65 Hydroshot casted damage from Monk knockback line with a dot
 # 8BBB Cross Attack casted damage from Monk tankbuster
+
+#~~~~~~~~~#
+# TRASH 2 #
+#~~~~~~~~~#
+
+# ALL ENCOUNTER ABILITIES
+# 8BC1 Ovation
+# 8BC5 Gravity Force
+# 8C4D Tornado
+# 8C4E Ancient Quaga
+# 8C6F Isle Drop

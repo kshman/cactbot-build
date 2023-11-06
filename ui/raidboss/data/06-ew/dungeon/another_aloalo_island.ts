@@ -6,10 +6,33 @@ import { RaidbossData } from '../../../../../types/data';
 import { PluginCombatantState } from '../../../../../types/event';
 import { NetMatches } from '../../../../../types/net_matches';
 import { PartyMemberParamObject } from '../../../../../types/party';
-import { TriggerSet } from '../../../../../types/trigger';
+import { Output, TriggerSet } from '../../../../../types/trigger';
 
-export type ClockRotate = 'cw' | 'ccw' | 'unknown';
-export type MarchDirection = 'front' | 'back' | 'left' | 'right';
+type ClockRotate = 'cw' | 'ccw' | 'unknown';
+type MarchDirection = 'front' | 'back' | 'left' | 'right' | 'unknown';
+
+const ForceMoveStrings = {
+  stack: Outputs.getTogether,
+  spread: Outputs.spread,
+  forward: {
+    en: '강제이동: 앞 🡺 ${aim}',
+  },
+  backward: {
+    en: '강제이동: 뒤 🡺 ${aim}',
+  },
+  left: {
+    en: '강제이동: 왼쪽 🡺 ${aim}',
+  },
+  right: {
+    en: '강제이동: 오른쪽 🡺 ${aim}',
+  },
+  move: {
+    en: '강제이동 🡺 ${aim}',
+  },
+  safety: {
+    en: '안전한 곳',
+  },
+} as const;
 
 export interface Data extends RaidbossData {
   ketuCrystalAdd: NetMatches['AddedCombatant'][];
@@ -18,10 +41,13 @@ export interface Data extends RaidbossData {
   ketuHydroStack?: NetMatches['GainsEffect'];
   ketuHydroSpread?: NetMatches['GainsEffect'];
   ketuEffectId?: string;
-  lalaBlight?: MarchDirection;
-  lalaRotate?: ClockRotate;
-  lalaNumber?: number;
-  lalaSubtractive?: number;
+  lalaBlight: MarchDirection;
+  lalaRotate: ClockRotate;
+  lalaCount: number;
+  lalaSubtractive: number;
+  lalaMyMarch: MarchDirection;
+  lalaMyRotate: ClockRotate;
+  lalaMyCount: number;
   stcReloadCount: number;
   stcReloadFailed: number;
   stcRingRing: number;
@@ -33,11 +59,11 @@ export interface Data extends RaidbossData {
   stcTether: boolean;
   stcChains: string[];
   stcBallFire?: number;
-  myMarch?: MarchDirection;
-  myRotate?: ClockRotate;
-  myNumber?: number;
+  stcPop: number;
+  stcMyMarch: MarchDirection;
+  stcMyDuration: number;
   gainList: NetMatches['GainsEffect'][];
-  isStackFirst?: boolean;
+  isStackFirst: boolean;
   //
   readonly triggerSetConfig: {
     stackOrder: 'meleeRolesPartners' | 'rolesPartners';
@@ -66,10 +92,10 @@ const isStackFirst = (
 };
 
 // 리버스?
-const isReverseRotate = (rot: ClockRotate, num?: number): boolean => {
-  if (rot === 'cw' && num === 3)
+const isReverseRotate = (rot: ClockRotate, count: number): boolean => {
+  if (rot === 'cw' && count === 3)
     return true;
-  if (rot === 'ccw' && (num === undefined || num === 5))
+  if (rot === 'ccw' && (count === 0 || count === 5))
     return true;
   return false;
 };
@@ -78,6 +104,46 @@ const isReverseRotate = (rot: ClockRotate, num?: number): boolean => {
 const stcBallOfFire = (combatant: NetMatches['AddedCombatant']): number => {
   const hg = parseFloat(combatant.heading);
   return (Math.round(6 - 6 * (2 * Math.PI - hg) / Math.PI) % 12 + 12) % 12;
+};
+
+// 주사위를 마커로
+const diceToMarker = (no: number): string => {
+  const diceMap: { [dice: number]: string } = {
+    1: 'Ⓐ',
+    2: '①',
+    3: '②',
+    4: 'Ⓒ',
+    5: '③',
+    6: '④',
+  } as const;
+  const ret = diceMap[no];
+  return ret === undefined ? '몰?루' : ret;
+};
+
+// 강제 이동
+const forceMove = (
+  output: Output,
+  march: MarchDirection,
+  stackFirst?: boolean,
+  safezone?: string,
+): string => {
+  if (march !== undefined) {
+    const move = {
+      'front': output.forward,
+      'back': output.backward,
+      'left': output.left,
+      'right': output.right,
+      'unknown': output.move,
+    }[march];
+    if (safezone !== undefined)
+      return move!({ aim: safezone });
+    return move!({ aim: stackFirst ? output.stack!() : output.spread!() });
+  }
+  if (safezone !== undefined)
+    return safezone;
+  if (stackFirst)
+    return output.stack!();
+  return output.spread!();
 };
 
 const triggerSet: TriggerSet<Data> = {
@@ -89,6 +155,13 @@ const triggerSet: TriggerSet<Data> = {
       ketuCrystalAdd: [],
       ketuSpringCrystalCount: 0,
       ketuHydroCount: 0,
+      lalaBlight: 'unknown',
+      lalaRotate: 'unknown',
+      lalaCount: 0,
+      lalaSubtractive: 0,
+      lalaMyMarch: 'unknown',
+      lalaMyRotate: 'unknown',
+      lalaMyCount: 0,
       stcReloadCount: 0,
       stcReloadFailed: 0,
       stcRingRing: 0,
@@ -99,7 +172,11 @@ const triggerSet: TriggerSet<Data> = {
       stcAdjustBullsEye: false,
       stcTether: false,
       stcChains: [],
+      stcPop: 0,
+      stcMyMarch: 'unknown',
+      stcMyDuration: 0,
       gainList: [],
+      isStackFirst: false,
       //
       combatantData: [],
     };
@@ -150,7 +227,10 @@ const triggerSet: TriggerSet<Data> = {
       id: 'AAI Snipper Bubble Shower',
       type: 'StartsUsing',
       netRegex: { id: '8BB9', source: 'Aloalo Snipper', capture: false },
-      response: Responses.getBackThenFront(),
+      infoText: (_data, _matches, output) => output.text!(),
+      outputStrings: {
+        text: '옆으로 (앞=>뒤 공격)',
+      },
     },
     {
       id: 'AAI Snipper Crab Dribble',
@@ -166,15 +246,21 @@ const triggerSet: TriggerSet<Data> = {
       response: Responses.getBehind(),
     },
     {
+      id: 'AAI Ray Expulsion',
+      type: 'StartsUsing',
+      netRegex: { id: '8BBF', source: 'Aloalo Ray', capture: false },
+      response: Responses.getOut(),
+    },
+    {
       id: 'AAI Ray Electric Whorl',
       type: 'StartsUsing',
       netRegex: { id: '8BBE', source: 'Aloalo Ray', capture: false },
-      response: Responses.getUnder(),
+      response: Responses.getUnder('alert'),
     },
     {
       id: 'AAI Monk Hydroshot',
       type: 'StartsUsing',
-      netRegex: { id: '8BBE', source: 'Aloalo Monk' },
+      netRegex: { id: '8C65', source: 'Aloalo Monk' },
       condition: Conditions.targetIsYou(),
       response: Responses.knockbackOn(),
     },
@@ -435,7 +521,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         bubble: '바닥 쫄(${player}) => 자기 자리로',
-        bind: '버블로(${player}) => 자기 자리로',
+        bind: '버블(${player}) => 자기 자리로',
       },
     },
     {
@@ -497,9 +583,9 @@ const triggerSet: TriggerSet<Data> = {
       },
       run: (data) => data.ketuCrystalAdd = [],
       outputStrings: {
-        text: '(슬슬 버블로)',
-        left: '(왼쪽 DPS가 버블로)',
-        right: '(오른쪽 DPS가 버블로)',
+        text: '(슬슬 버블 타야 함)',
+        left: '(왼쪽 DPS가 버블 타야 함)',
+        right: '(오른쪽 DPS가 버블 타야 함)',
       },
     },
     {
@@ -599,15 +685,15 @@ const triggerSet: TriggerSet<Data> = {
       type: 'GainsEffect',
       // F62 = Times Three
       // F63 = Times Five
-      netRegex: { effectId: ['F62', 'ECE'], source: 'Lala', target: 'Lala' },
-      run: (data, matches) => data.lalaNumber = matches.effectId === 'F62' ? 3 : 5,
+      netRegex: { effectId: ['F62', 'F63'], source: 'Lala', target: 'Lala' },
+      run: (data, matches) => data.lalaCount = matches.effectId === 'F62' ? 3 : 5,
     },
     {
       id: 'AAI Lala Player 회전',
       type: 'HeadMarker',
       netRegex: { id: ['01ED', '01EE'] },
       condition: Conditions.targetIsYou(),
-      run: (data, matches) => data.myRotate = matches.id === '01ED' ? 'cw' : 'ccw',
+      run: (data, matches) => data.lalaMyRotate = matches.id === '01ED' ? 'cw' : 'ccw',
     },
     {
       id: 'AAI Lala Player 3과5',
@@ -616,7 +702,7 @@ const triggerSet: TriggerSet<Data> = {
       // ECE = Times Five
       netRegex: { effectId: ['E89', 'ECE'], source: 'Lala' },
       condition: Conditions.targetIsYou(),
-      run: (data, matches) => data.myNumber = matches.effectId === 'E89' ? 3 : 5,
+      run: (data, matches) => data.lalaMyCount = matches.effectId === 'E89' ? 3 : 5,
     },
     {
       id: 'AAI LaLa Arcane Blight 방향',
@@ -629,7 +715,7 @@ const triggerSet: TriggerSet<Data> = {
           '888B': 'back',
           '888C': 'front',
         } as const;
-        data.lalaBlight = blightMap[matches.id.toUpperCase()];
+        data.lalaBlight = blightMap[matches.id.toUpperCase()] ?? 'unknown';
       },
     },
     {
@@ -642,12 +728,13 @@ const triggerSet: TriggerSet<Data> = {
           return output.text!();
         if (data.lalaRotate === undefined)
           return output[data.lalaBlight]!();
-        if (isReverseRotate(data.lalaRotate, data.lalaNumber)) {
+        if (isReverseRotate(data.lalaRotate, data.lalaCount)) {
           return {
             'front': output.left!(),
             'back': output.right!(),
             'left': output.back!(),
             'right': output.front!(),
+            'unknown': output.text!(),
           }[data.lalaBlight];
         }
         return {
@@ -655,19 +742,11 @@ const triggerSet: TriggerSet<Data> = {
           'back': output.left!(),
           'left': output.front!(),
           'right': output.back!(),
+          'unknown': output.text!(),
         }[data.lalaBlight];
       },
-      run: (data) => {
-        delete data.lalaBlight;
-        delete data.lalaRotate;
-        delete data.lalaNumber;
-      },
       outputStrings: {
-        text: {
-          en: '빈 곳으로~',
-          de: 'Geh in den sicheren Bereich',
-          ja: '安置へ移動',
-        },
+        text: '빈 곳으로~',
         front: Outputs.goFront,
         back: Outputs.getBehind,
         left: Outputs.left,
@@ -675,60 +754,61 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: 'AAI Lala Analysis 방향',
+      id: 'AAI Lala Analysis Unseen',
       type: 'GainsEffect',
       netRegex: { effectId: ['E8E', 'E8F', 'E90', 'E91'], source: 'Lala' },
       condition: Conditions.targetIsYou(),
-      durationSeconds: 18,
-      suppressSeconds: 50,
-      infoText: (data, matches, output) => {
-        const blightMap: { [count: string]: MarchDirection } = {
+      run: (data, matches) => {
+        const unseenMap: { [count: string]: MarchDirection } = {
           'E8E': 'front',
           'E8F': 'back',
           'E90': 'right',
           'E91': 'left',
         } as const;
-        data.myMarch = blightMap[matches.effectId];
-        if (data.myMarch !== undefined)
-          return output.orbs!({ dir: output[data.myMarch]!() });
+        data.lalaMyMarch = unseenMap[matches.effectId] ?? 'unknown';
+      },
+    },
+    {
+      id: 'AAI Lala Arcane Array',
+      type: 'Ability',
+      netRegex: { id: '8890', source: 'Lala', capture: false },
+      durationSeconds: 15,
+      infoText: (data, _matches, output) => {
+        const unseen = output[data.lalaMyMarch]!();
+        return output.orbs!({ unseen: unseen });
       },
       outputStrings: {
-        orbs: '뚤린 곳: ${dir}',
+        orbs: '뚤린 곳: ${unseen}',
         front: '앞',
         back: '뒤',
         left: '왼쪽',
         right: '오른쪽',
+        unknown: Outputs.unknown,
       },
     },
     {
-      id: 'AAI Lala Targeted Light',
-      type: 'GainsEffect',
-      netRegex: { effectId: ['E8E', 'E8F', 'E90', 'E91'], source: 'Lala' },
+      id: 'AAI Lala Targeted Light!',
+      type: 'StartsUsing',
+      netRegex: { id: '8CDF', source: 'Lala' },
       condition: Conditions.targetIsYou(),
-      delaySeconds: 21,
       alertText: (data, _matches, output) => {
-        if (data.myMarch === undefined)
+        if (data.lalaMyMarch === 'unknown')
           return output.text!();
-        if (data.myRotate === undefined)
-          return output[data.myMarch]!();
-        if (isReverseRotate(data.myRotate, data.myNumber))
+        if (data.lalaMyRotate === 'unknown')
+          return output[data.lalaMyMarch]!();
+        if (isReverseRotate(data.lalaMyRotate, data.lalaMyCount))
           return {
             'front': output.left!(),
             'back': output.right!(),
             'left': output.back!(),
             'right': output.front!(),
-          }[data.myMarch];
+          }[data.lalaMyMarch];
         return {
           'front': output.right!(),
           'back': output.left!(),
           'left': output.front!(),
           'right': output.back!(),
-        }[data.myMarch];
-      },
-      run: (data) => {
-        delete data.myMarch;
-        delete data.myRotate;
-        delete data.myNumber;
+        }[data.lalaMyMarch];
       },
       outputStrings: {
         front: '보스 봐요',
@@ -811,17 +891,14 @@ const triggerSet: TriggerSet<Data> = {
           return output.no3left!({ name: name });
         }
       },
-      run: (data) => {
-        delete data.lalaSubtractive;
-        data.gainList = [];
-      },
+      run: (data) => data.gainList = [],
       outputStrings: {
-        no1out: '[1] 빈칸 위 바깥 (${name})',
-        no1in: '[1] 빈칸 위 안쪽 (2번과 페어)',
-        no2out: '[2] 1,2열 바깥쪽 (1,3번과 페어)',
-        no2in: '[2] 1,2열 안쪽 (${name})',
-        no3left: '[3] 아래줄 왼쪽으로 (${name})',
-        no3right: '[3] 아래줄 오른쪽으로 (2번과 페어)',
+        no1out: '[1/바깥] 3번과 페어: ${name}',
+        no1in: '[1/안쪽] 2번과 페어',
+        no2out: '[2/바깥] 1,3번과 페어',
+        no2in: '[2/안쪽] 2번과 페어: ${name}',
+        no3left: '[3/아래줄 왼쪽] 1번과 페어: ${name}',
+        no3right: '[3/아래줄 오른쪽] 2번과 페어',
         unknown: Outputs.unknown,
       },
     },
@@ -840,10 +917,10 @@ const triggerSet: TriggerSet<Data> = {
           'E86': 'right',
         }[matches.effectId];
         if (map === undefined)
-          return output.text!();
-        if (data.myRotate === undefined)
+          return;
+        if (data.lalaMyRotate === 'unknown')
           return output[map]!();
-        if (isReverseRotate(data.myRotate, data.myNumber)) {
+        if (isReverseRotate(data.lalaMyRotate, data.lalaMyCount)) {
           return {
             'front': output.left!(),
             'back': output.right!(),
@@ -857,10 +934,6 @@ const triggerSet: TriggerSet<Data> = {
           'left': output.front!(),
           'right': output.back!(),
         }[map];
-      },
-      run: (data) => {
-        delete data.myRotate;
-        delete data.myNumber;
       },
       outputStrings: {
         text: '강제이동',
@@ -881,12 +954,11 @@ const triggerSet: TriggerSet<Data> = {
           return;
         return output[`no${data.lalaSubtractive}`]!();
       },
-      run: (data) => delete data.lalaSubtractive,
       outputStrings: {
         no1: '[1] 구슬 쪽 => 다 피해욧',
-        no2: '[2] 구슬 쪽 => 1번 맞아요',
-        no3: '[3] 구슬 없는쪽 => 2번 맞아요',
-        no4: '[4] 구슬 없는쪽 => 3번 맞아요',
+        no2: '[2] 구슬 쪽 => 한번 맞아요',
+        no3: '[3] 구슬 없는쪽 => 두번 맞아요',
+        no4: '[4] 구슬 없는쪽 => 세번 맞아요',
       },
     },
     {
@@ -919,10 +991,7 @@ const triggerSet: TriggerSet<Data> = {
       delaySeconds: 31,
       durationSeconds: 5,
       response: Responses.pairStack(),
-      run: (data) => {
-        delete data.lalaSubtractive;
-        data.gainList = [];
-      },
+      run: (data) => data.gainList = [],
     },
     {
       id: 'AAI Lala Arcane Plot',
@@ -988,11 +1057,13 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (data, _matches, output) => {
         if (data.stcReloadCount === 1)
           return output.stacks!();
-        if (data.stcReloadCount < 8)
-          return output.text!({ safe: data.stcReloadCount - 1 });
+        if (data.stcReloadCount < 8) {
+          const mark = diceToMarker(data.stcReloadFailed);
+          return output.text!({ safe: data.stcReloadFailed, mark: mark });
+        }
       },
       outputStrings: {
-        text: '(안전: ${safe})',
+        text: '(안전: ${safe}번${mark})',
         stacks: '(먼저 뭉쳐요)',
       },
     },
@@ -1017,70 +1088,77 @@ const triggerSet: TriggerSet<Data> = {
       type: 'StartsUsing',
       netRegex: { id: '8959', source: 'Statice', capture: false },
       alertText: (data, _matches, output) => {
-        const prev = data.isStackFirst;
+        let ret;
+        if (data.stcMyDuration < 10)
+          ret = data.isStackFirst ? output.stack!() : output.spread!();
+        else if (data.stcMyDuration < 20)
+          ret = forceMove(output, data.stcMyMarch, data.isStackFirst);
+        else if (data.stcMyDuration > 50)
+          ret = forceMove(output, data.stcMyMarch, data.isStackFirst);
+        else
+          ret = data.isStackFirst ? output.stack!() : output.spread!();
         data.isStackFirst = !data.isStackFirst;
-        if (data.myMarch !== undefined) {
-          if (prev)
-            return {
-              'front': output.inForwards!(),
-              'back': output.inBackwards!(),
-              'left': output.inLeft!(),
-              'right': output.inRight!(),
-            }[data.myMarch];
-          return {
-            'front': output.outForwards!(),
-            'back': output.outBackwards!(),
-            'left': output.outLeft!(),
-            'right': output.outRight!(),
-          }[data.myMarch];
-        }
-        if (prev)
-          return output.stack!();
-        return output.spread!();
+        return ret;
       },
+      run: (data) => data.stcMyDuration = 0,
       outputStrings: {
-        stack: Outputs.getTogether,
-        spread: Outputs.spread,
-        outForwards: '강제이동: 앞 🡺 밖으로 ',
-        outBackwards: '강제이동: 뒤 🡺 밖으로',
-        outLeft: '강제이동: 왼쪽 🡺 밖으로',
-        outRight: '강제이동: 오른쪽 🡺 밖으로',
-        inForwards: '강제이동: 앞 🡺 한가운데',
-        inBackwards: '강제이동: 뒤 🡺 한가운데',
-        inLeft: '강제이동: 왼쪽 🡺 한가운데',
-        inRight: '강제이동: 오른쪽 🡺 한가운데',
+        ...ForceMoveStrings,
       },
     },
     {
       id: 'AAI Statice Trigger Happy',
       type: 'StartsUsing',
       netRegex: { id: '894B', source: 'Statice', capture: false },
-      infoText: (data, _matches, output) => output.text!({ safe: data.stcReloadFailed }),
+      infoText: (data, _matches, output) => {
+        const mark = diceToMarker(data.stcReloadFailed);
+        return output.text!({ safe: data.stcReloadFailed, mark: mark });
+      },
       outputStrings: {
-        text: {
-          en: '안전: ${safe}',
-          de: 'Sicher: ${safe}',
-          ja: '安置: ${safe}',
-        },
+        text: '안전: ${safe}번${mark}',
       },
     },
     {
       id: 'AAI Statice Ring a Ring o\' Explosions',
       type: 'StartsUsing',
       netRegex: { id: '895C', source: 'Statice', capture: false },
-      infoText: (data, _matches, output) => {
+      durationSeconds: 8,
+      response: (data, _matches, output) => {
+        // cactbot-builtin-response
+        output.responseOutputStrings = {
+          first: {
+            en: '폭탄 피해요!',
+          },
+          second: {
+            en: '폭탄 위치 기억! 빙글빙글!',
+          },
+          third: {
+            en: '폭탄없는 안전한 곳 찾아요!',
+          },
+          fourth: {
+            en: '${safe}번${mark} 쪽 안전한 곳으로! 도넛 조심!',
+          },
+          forthMove: {
+            en: '${safe}번${mark}',
+          },
+          ...ForceMoveStrings,
+        };
         data.stcRingRing++;
         if (data.stcRingRing === 1)
-          return output.first!();
+          return { infoText: output.first!() };
         if (data.stcRingRing === 2)
-          return output.second!();
+          return { infoText: output.second!() };
         if (data.stcRingRing === 3)
-          return output.third!();
-      },
-      outputStrings: {
-        first: '폭탄 피해요!',
-        second: '폭탄 위치 기억! 빙글빙글!',
-        third: '폭탄없는 안전한 곳 찾아요!',
+          return { infoText: output.third!() };
+        if (data.stcRingRing === 4) {
+          const mark = diceToMarker(data.stcReloadFailed);
+          const fourth = output.fourth!({ safe: data.stcReloadFailed, mark: mark });
+          if (data.stcMyDuration > 39 && data.stcMyDuration < 50) {
+            const aim = output.forthMove!({ safe: data.stcReloadFailed, mark: mark });
+            const move = forceMove(output, data.stcMyMarch, undefined, aim);
+            return { infoText: fourth, alertText: move };
+          }
+          return { infoText: fourth };
+        }
       },
     },
     {
@@ -1088,10 +1166,7 @@ const triggerSet: TriggerSet<Data> = {
       type: 'Ability',
       netRegex: { id: '8CBD', source: 'Statice', capture: false },
       infoText: (_data, _matches, output) => output.text!(),
-      run: (data) => {
-        delete data.myMarch;
-        data.gainList = [];
-      },
+      run: (data) => data.gainList = [],
       outputStrings: {
         text: '폭탄 피해서 안전한 곳으로',
       },
@@ -1144,6 +1219,7 @@ const triggerSet: TriggerSet<Data> = {
       id: 'AAI Statice Beguiling Glitter',
       type: 'Ability',
       netRegex: { id: '8963', source: 'Statice', capture: false },
+      condition: (data) => data.stcPop < 2,
       delaySeconds: 3,
       suppressSeconds: 1,
       alertText: (_data, _matches, output) => output.text!(),
@@ -1157,7 +1233,9 @@ const triggerSet: TriggerSet<Data> = {
       id: 'AAI Statice Beguiling Glitter In/Out',
       type: 'Ability',
       netRegex: { id: '8963', source: 'Statice', capture: false },
+      condition: (data) => data.stcPop < 2,
       delaySeconds: 8.5,
+      durationSeconds: 8,
       suppressSeconds: 1,
       infoText: (data, _matches, output) => {
         if (data.isStackFirst)
@@ -1170,9 +1248,16 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
+      id: 'AAI Statice Pop',
+      type: 'StartsUsing',
+      netRegex: { id: '894E', source: 'Statice', capture: false },
+      run: (data) => data.stcPop++,
+    },
+    {
       id: 'AAI Statice March',
       type: 'GainsEffect',
       netRegex: { effectId: 'DD[2-5]' },
+      condition: Conditions.targetIsYou(),
       run: (data, matches) => {
         const marchMap: { [count: string]: MarchDirection } = {
           'DD2': 'front',
@@ -1180,7 +1265,8 @@ const triggerSet: TriggerSet<Data> = {
           'DD4': 'left',
           'DD5': 'right',
         } as const;
-        data.myMarch = marchMap[matches.effectId.toUpperCase()];
+        data.stcMyMarch = marchMap[matches.effectId.toUpperCase()] ?? 'unknown';
+        data.stcMyDuration = parseFloat(matches.duration);
       },
     },
     {
