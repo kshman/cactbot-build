@@ -78,6 +78,7 @@ export interface Data extends RaidbossData {
   stcMyDuration: number;
   gainList: NetMatches['GainsEffect'][];
   isStackFirst: boolean;
+  stest?: string;
 }
 
 // Horizontal crystals have a heading of 0, vertical crystals are -pi/2.
@@ -381,7 +382,7 @@ const triggerSet: TriggerSet<Data> = {
       run: (data) => data.ketuHydroCount++,
       outputStrings: {
         spread: Outputs.spread,
-        stacks: Outputs.getTogether,
+        stacks: Outputs.pairStack,
       },
     },
     {
@@ -942,6 +943,8 @@ const triggerSet: TriggerSet<Data> = {
             issame = (dps1 && dps2) || (!dps1 && !dps2);
           }
 
+          // data.stest = `${issame ? '같음' : '다르네'}(${s1}/${s2})`;
+
           if (mysub === 1) {
             if (issame)
               return output.ps1in!();
@@ -974,9 +977,33 @@ const triggerSet: TriggerSet<Data> = {
             .map((x) => data.party.member(x.target));
           if (mym === undefined || ptm === undefined)
             return output.hm2!();
-          if (mym.jindex < ptm.jindex)
-            return output.hm2left!();
-          return output.hm2right!();
+          const [s1, s2] = list.filter((x) => x.effectId === 'E8B').map((x) => x.target);
+          if (s1 === undefined || s2 === undefined)
+            return output.hm2!();
+
+          if (s1 === data.me || s2 === data.me) {
+            const other = s1 === data.me ? s2 : s1;
+            const [surge] = list.filter((x) => x.target === other && parseInt(x.count) > 0);
+            if (surge === undefined)
+              return output.hm2!();
+            const count = parseInt(surge.count);
+            if (count === 1)
+              return output.hm2left!();
+            if (count === 3)
+              return output.hm2right!();
+          } else if (s1 === ptm.name || s2 === ptm.name) {
+            const other = s1 === ptm.name ? s2 : s1;
+            const [surge] = list.filter((x) => x.target === other && parseInt(x.count) > 0);
+            if (surge === undefined)
+              return output.hm2!();
+            const count = parseInt(surge.count);
+            if (count === 1)
+              return output.hm2right!();
+            if (count === 3)
+              return output.hm2left!();
+          }
+
+          return mym.jindex < ptm.jindex ? output.hm2left!() : output.hm2right!();
         }
 
         // 옵션이 이상하면 그냥
@@ -984,17 +1011,17 @@ const triggerSet: TriggerSet<Data> = {
       },
       run: (data) => data.gainList = [],
       outputStrings: {
-        ps1out: '[1/바깥] 3번과 페어: ${name}',
+        ps1out: '[1/바깥] 3번과 페어 (${name})',
         ps1in: '[1/안쪽] 2번과 페어',
         ps2out: '[2/바깥] 1,3번과 페어',
-        ps2in: '[2/안쪽] 2번과 페어: ${name}',
-        ps3left: '[3/아래줄 왼쪽] 1번과 페어: ${name}',
+        ps2in: '[2/안쪽] 2번과 페어 (${name})',
+        ps3left: '[3/아래줄 왼쪽] 1번과 페어 (${name})',
         ps3right: '[3/아래줄 오른쪽] 2번과 페어',
-        hm1: '[1] 2번 페어',
+        hm1: '[1] 2번과 페어',
         hm2: '[2] 1,3번과 페어',
         hm2left: '[2/왼쪽] 3번과 페어',
         hm2right: '[2/오른쪽] 1번과 페어',
-        hm3: '[3] 2번 페어',
+        hm3: '[3] 2번과 페어',
         num: '카운트: ${num}',
         unknown: Outputs.unknown,
       },
