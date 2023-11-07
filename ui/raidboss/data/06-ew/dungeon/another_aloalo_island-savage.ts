@@ -1610,7 +1610,7 @@ const triggerSet: TriggerSet<Data> = {
             ja: '北へ！ 席入れ替え',
           },
           bullseye: {
-            en: '북으로! 페어',
+            en: '북으로! 조정없이 페어',
             ja: '北へ',
           },
         };
