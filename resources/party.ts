@@ -167,6 +167,7 @@ export default class PartyTracker {
       return {
         name: unknown,
         nick: unknown,
+        jindex: 9999,
         toString: () => unknown,
       };
     }
@@ -180,18 +181,18 @@ export default class PartyTracker {
       ret = {
         name: name,
         nick: nick,
+        jindex: 9999,
       };
     } else {
       const jobName = Util.jobEnumToJob(partyMember.job);
       const role = Util.jobToRole(jobName);
-      const ajob = Autumns.JobName(partyMember.job, 'en');
       ret = {
         id: partyMember.id,
         job: jobName,
         role: role,
         name: name,
         nick: nick,
-        ajob: ajob,
+        jindex: partyMember.job,
       };
     }
 
@@ -240,10 +241,26 @@ export default class PartyTracker {
     return ls;
   }
 
-  ajobId(name: string): number | undefined {
+  //
+  aJobIndex(name: string | undefined): number | undefined {
+    if (name === undefined)
+      return;
     const partyIndex = this.partyNames.indexOf(name);
     if (partyIndex < 0)
       return;
     return this.details[partyIndex]?.job;
+  }
+
+  //
+  aJobName(name: string | undefined): string | undefined {
+    if (name === undefined)
+      return;
+    const partyIndex = this.partyNames.indexOf(name);
+    if (partyIndex < 0)
+      return;
+    const job = this.details[partyIndex]?.job;
+    if (job === undefined)
+      return;
+    return Autumns.JobName(job);
   }
 }

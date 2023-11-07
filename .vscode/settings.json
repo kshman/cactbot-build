@@ -11,9 +11,26 @@
   },
   "files.insertFinalNewline": true,
   "files.trimTrailingWhitespace": true,
+  "pylint.args": [
+    "--errors-only"
+  ],
+  "black-formatter.args": [
+    "--line-length",
+    "100"
+  ],
   "search.exclude": {
     "**/node_modules": true,
     "dist/**": true
+  },
+  "[python]": {
+    "editor.tabSize": 4,
+    "editor.formatOnSave": true,
+    /**
+      * Although format mode could be set as "modification",
+      * unfortunately `black` does not support "Format Selection"
+      */
+    "editor.formatOnSaveMode": "file",
+    "editor.defaultFormatter": "ms-python.black-formatter"
   },
   "[javascript]": {
     "editor.defaultFormatter": "dprint.dprint"

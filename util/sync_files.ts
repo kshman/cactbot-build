@@ -573,8 +573,6 @@ const zoneReplace: ZoneReplace[] = [
     fileMap: {
       'ui/raidboss/data/06-ew/dungeon/another_aloalo_island.ts':
         'ui/raidboss/data/06-ew/dungeon/another_aloalo_island-savage.ts',
-      'ui/oopsyraidsy/data/06-ew/dungeon/another_aloalo_island.ts':
-        'ui/oopsyraidsy/data/06-ew/dungeon/another_aloalo_island-savage.ts',
       'ui/raidboss/data/06-ew/dungeon/another_aloalo_island.txt':
         'ui/raidboss/data/06-ew/dungeon/another_aloalo_island-savage.txt',
     },

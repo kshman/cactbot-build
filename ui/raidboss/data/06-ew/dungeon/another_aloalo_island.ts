@@ -16,38 +16,49 @@ const ForceMoveStrings = {
   spread: Outputs.spread,
   forward: {
     en: '강제이동: 앞 🡺 ${aim}',
+    ja: '強制移動 : 前 => ${aim}',
   },
   backward: {
     en: '강제이동: 뒤 🡺 ${aim}',
+    ja: '強制移動 : 後ろ => ${aim}',
   },
   left: {
     en: '강제이동: 왼쪽 🡺 ${aim}',
+    ja: '強制移動 : 左 => ${aim}',
   },
   right: {
     en: '강제이동: 오른쪽 🡺 ${aim}',
+    ja: '強制移動 : 右 => ${aim}',
   },
   move: {
     en: '강제이동 🡺 ${aim}',
+    ja: '強制移動 => ${aim}',
   },
   safety: {
     en: '안전한 곳',
+    ja: '安置へ',
   },
 } as const;
 
 export interface Data extends RaidbossData {
+  readonly triggerSetConfig: {
+    stackOrder: 'meleeRolesPartners' | 'rolesPartners';
+    lalaPlanarTacticsType: 'poshiume' | 'hamukatsu';
+  };
+  combatantData: PluginCombatantState[];
   ketuCrystalAdd: NetMatches['AddedCombatant'][];
   ketuSpringCrystalCount: number;
   ketuHydroCount: number;
   ketuHydroStack?: NetMatches['GainsEffect'];
   ketuHydroSpread?: NetMatches['GainsEffect'];
-  ketuEffectId?: string;
+  ketuMyBubbleFetters?: string;
   lalaBlight: MarchDirection;
   lalaRotate: ClockRotate;
-  lalaCount: number;
+  lalaTimes: number;
   lalaSubtractive: number;
   lalaMyMarch: MarchDirection;
   lalaMyRotate: ClockRotate;
-  lalaMyCount: number;
+  lalaMyTimes: number;
   stcReloadCount: number;
   stcReloadFailed: number;
   stcRingRing: number;
@@ -64,11 +75,6 @@ export interface Data extends RaidbossData {
   stcMyDuration: number;
   gainList: NetMatches['GainsEffect'][];
   isStackFirst: boolean;
-  //
-  readonly triggerSetConfig: {
-    stackOrder: 'meleeRolesPartners' | 'rolesPartners';
-  };
-  combatantData: PluginCombatantState[];
 }
 
 // Horizontal crystals have a heading of 0, vertical crystals are -pi/2.
@@ -77,7 +83,7 @@ const isHorizontalCrystal = (line: NetMatches['AddedCombatant']) => {
   return Math.abs(parseFloat(line.heading)) < epsilon;
 };
 
-// 스택 먼저?
+// test stack first
 const isStackFirst = (
   stack?: NetMatches['GainsEffect'],
   spread?: NetMatches['GainsEffect'],
@@ -91,7 +97,7 @@ const isStackFirst = (
   return stackTime < spreadTime;
 };
 
-// 리버스?
+// test reverse rotation
 const isReverseRotate = (rot: ClockRotate, count: number): boolean => {
   if (rot === 'cw' && count === 3)
     return true;
@@ -100,27 +106,7 @@ const isReverseRotate = (rot: ClockRotate, count: number): boolean => {
   return false;
 };
 
-// 스타티스 나눔
-const stcBallOfFire = (combatant: NetMatches['AddedCombatant']): number => {
-  const hg = parseFloat(combatant.heading);
-  return (Math.round(6 - 6 * (2 * Math.PI - hg) / Math.PI) % 12 + 12) % 12;
-};
-
-// 주사위를 마커로
-const diceToMarker = (no: number): string => {
-  const diceMap: { [dice: number]: string } = {
-    1: 'Ⓐ',
-    2: '①',
-    3: '②',
-    4: 'Ⓒ',
-    5: '③',
-    6: '④',
-  } as const;
-  const ret = diceMap[no];
-  return ret === undefined ? '몰?루' : ret;
-};
-
-// 강제 이동
+//
 const forceMove = (
   output: Output,
   march: MarchDirection,
@@ -146,22 +132,59 @@ const forceMove = (
   return output.spread!();
 };
 
+// 스타티스 나눔
+const stcBallOfFire = (combatant: NetMatches['AddedCombatant']): number => {
+  const hg = parseFloat(combatant.heading);
+  return (Math.round(6 - 6 * (2 * Math.PI - hg) / Math.PI) % 12 + 12) % 12;
+};
+
+// 주사위를 마커로
+const diceToMarker = (no: number): string => {
+  const diceMap: { [dice: number]: string } = {
+    1: 'Ⓐ',
+    2: '①',
+    3: '②',
+    4: 'Ⓒ',
+    5: '③',
+    6: '④',
+  } as const;
+  const ret = diceMap[no];
+  return ret === undefined ? '몰?루' : ret;
+};
+
 const triggerSet: TriggerSet<Data> = {
   id: 'AnotherAloaloIsland',
   zoneId: ZoneId.AnotherAloaloIsland,
+  config: [
+    {
+      id: 'lalaPlanarTacticsType',
+      name: {
+        en: 'Planar Tactics 형식',
+      },
+      type: 'select',
+      options: {
+        en: {
+          '포시우메: 3번 좌우 사용': 'poshiume',
+          '하므까스: 3번 한쪽만 사용': 'hamukatsu',
+        },
+      },
+      default: 'poshiume',
+    },
+  ],
   timelineFile: 'another_aloalo_island.txt',
   initData: () => {
     return {
+      combatantData: [],
       ketuCrystalAdd: [],
       ketuSpringCrystalCount: 0,
       ketuHydroCount: 0,
       lalaBlight: 'unknown',
       lalaRotate: 'unknown',
-      lalaCount: 0,
+      lalaTimes: 0,
       lalaSubtractive: 0,
       lalaMyMarch: 'unknown',
       lalaMyRotate: 'unknown',
-      lalaMyCount: 0,
+      lalaMyTimes: 0,
       stcReloadCount: 0,
       stcReloadFailed: 0,
       stcRingRing: 0,
@@ -177,8 +200,6 @@ const triggerSet: TriggerSet<Data> = {
       stcMyDuration: 0,
       gainList: [],
       isStackFirst: false,
-      //
-      combatantData: [],
     };
   },
   triggers: [
@@ -192,9 +213,11 @@ const triggerSet: TriggerSet<Data> = {
         output.responseOutputStrings = {
           tankBusterOnYou: {
             en: '내게 3연속 탱크버스터',
+            ja: '自分に3xタン強',
           },
           tankBusterOnPlayer: {
             en: '3연속 탱크버스터: ${player}',
+            ja: '3xタン強: ${player}',
           },
         };
 
@@ -229,7 +252,7 @@ const triggerSet: TriggerSet<Data> = {
       netRegex: { id: '8BB9', source: 'Aloalo Snipper', capture: false },
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
-        text: '옆으로 (앞=>뒤 공격)',
+        text: '옆으로 (앞🡺뒤 공격)',
       },
     },
     {
@@ -295,13 +318,13 @@ const triggerSet: TriggerSet<Data> = {
     {
       id: 'AAI Ketuduke Spring Crystal 1 Collect',
       type: 'AddedCombatant',
-      netRegex: { npcNameId: '12606' }, // 동글
+      netRegex: { npcNameId: '12606' },
       run: (data, matches) => data.ketuCrystalAdd.push(matches),
     },
     {
       id: 'AAI Ketuduke Spring Crystal 2 Collect',
       type: 'AddedCombatant',
-      netRegex: { npcNameId: '12607' }, // 네모
+      netRegex: { npcNameId: '12607' },
       run: (data, matches) => data.ketuCrystalAdd.push(matches),
     },
     {
@@ -311,15 +334,21 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (data, matches, output) => {
         if (data.me !== matches.target)
           return;
-        data.ketuEffectId = matches.effectId;
+        data.ketuMyBubbleFetters = matches.effectId;
         if (matches.effectId === 'E9F')
           return output.bubble!();
         return output.bind!();
       },
       run: (data, matches) => data.gainList.push(matches),
       outputStrings: {
-        bubble: '🔵버블',
-        bind: '🟡바인드',
+        bubble: {
+          en: '🔵버블',
+          ja: 'バブル',
+        },
+        bind: {
+          en: '🟡바인드',
+          ja: 'バインド',
+        },
       },
     },
     {
@@ -343,33 +372,36 @@ const triggerSet: TriggerSet<Data> = {
       suppressSeconds: 2,
       infoText: (_data, matches, output) => {
         if (matches.effectId === 'EA3')
-          return output.stack!();
+          return output.stacks!();
         return output.spread!();
       },
       run: (data) => data.ketuHydroCount++,
       outputStrings: {
         spread: Outputs.spread,
-        stack: Outputs.pairStack,
+        stacks: Outputs.getTogether,
       },
     },
     {
+      // Pylene Strat: https://twitter.com/ff14_pylene99/status/1719665676745650610
       id: 'AAI Ketuduke Fluke Gale',
       type: 'Ability',
       netRegex: { id: '8AB1', source: 'Ketuduke', capture: false },
       durationSeconds: 8,
       alertText: (data, _matches, output) => {
         data.isStackFirst = isStackFirst(data.ketuHydroStack, data.ketuHydroSpread);
-        if (data.ketuEffectId !== 'E9F' && !data.isStackFirst)
+        if (data.ketuMyBubbleFetters !== 'E9F' && !data.isStackFirst)
           return output.go2!();
         return output.go1!();
       },
-      run: (data) => delete data.ketuEffectId,
+      run: (data) => delete data.ketuMyBubbleFetters,
       outputStrings: {
         go1: {
           en: '1번 칸으로',
+          ja: '第1区域へ',
         },
         go2: {
           en: '2번 칸으로',
+          ja: '第2区域へ',
         },
       },
     },
@@ -387,12 +419,8 @@ const triggerSet: TriggerSet<Data> = {
       },
       run: (data) => data.ketuHydroCount = 2,
       outputStrings: {
-        stacks: {
-          en: '뭉쳤다 => 흩어져요',
-        },
-        spread: {
-          en: '흩어졌다 => 뭉쳐요',
-        },
+        stacks: Outputs.stackThenSpread,
+        spread: Outputs.spreadThenStack,
       },
     },
     {
@@ -404,10 +432,10 @@ const triggerSet: TriggerSet<Data> = {
       suppressSeconds: 999999,
       alertText: (data, _matches, output) => {
         if (!data.isStackFirst)
-          return output.pairStack!();
+          return output.stacks!();
       },
       outputStrings: {
-        pairStack: Outputs.pairStack,
+        stacks: Outputs.pairStack,
       },
     },
     {
@@ -432,7 +460,7 @@ const triggerSet: TriggerSet<Data> = {
       condition: (data) => data.ketuHydroCount === 2,
       run: (data) => {
         data.ketuHydroCount = 3;
-        data.gainList = []; // Roar용 사람 찾기 리셋
+        data.gainList = [];
       },
     },
     {
@@ -443,6 +471,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: '밖에 있다 => 안에서 페어',
+          ja: '外 => ボスの下で頭割り',
         },
       },
     },
@@ -454,6 +483,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: '안에 있다 => 밖에서 페어',
+          ja: 'ボスの下 => 外側で頭割り',
         },
       },
     },
@@ -489,12 +519,15 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         northSouthSafe: {
           en: '안전: 남북',
+          ja: '南・北',
         },
         eastWestSafe: {
           en: '안전: 동서',
+          ja: '東・西',
         },
         cornersSafe: {
           en: '안전: 모서리',
+          ja: '隅へ',
         },
       },
     },
@@ -508,32 +541,42 @@ const triggerSet: TriggerSet<Data> = {
       suppressSeconds: 999999,
       alertText: (data, _matches, output) => {
         const [player] = data.gainList.filter((x) =>
-          x.effectId === data.ketuEffectId && x.target !== data.me
-        ).map((x) => data.party.member(x.target).ajob);
-        if (data.ketuEffectId === 'E9F')
+          x.effectId === data.ketuMyBubbleFetters && x.target !== data.me
+        ).map((x) => data.party.aJobName(x.target));
+        if (player === undefined)
+          return output.spread!();
+        if (data.ketuMyBubbleFetters === 'E9F')
           return output.bubble!({ player: player });
         return output.bind!({ player: player });
       },
       run: (data) => {
-        delete data.ketuEffectId;
+        delete data.ketuMyBubbleFetters;
         data.ketuHydroCount = 4;
         data.gainList = [];
       },
       outputStrings: {
-        bubble: '바닥 쫄(${player}) => 자기 자리로',
-        bind: '버블(${player}) => 자기 자리로',
+        bubble: {
+          en: '흩어져요 (🔵버블: ${player})',
+          ja: '散会 (バブル: ${player})',
+        },
+        bind: {
+          en: '흩어져요 (🟡바인드: ${player})',
+          ja: '散会 (バインド: ${player})',
+        },
+        spread: Outputs.spread,
       },
     },
     {
       id: 'AAI Ketuduke Roar Move',
       type: 'StartsUsing',
       netRegex: { id: '8AAC', source: 'Spring Crystal', capture: false },
-      condition: (data) => data.ketuHydroCount === 4, // 3이 아닐껄
+      condition: (data) => data.ketuHydroCount === 4,
       suppressSeconds: 2,
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '쫄 뒤로!',
+          en: '담당 쫄 뒤로!',
+          ja: 'ざこの後ろに',
         },
       },
     },
@@ -550,24 +593,15 @@ const triggerSet: TriggerSet<Data> = {
       },
       run: (data) => data.ketuHydroCount = 5,
       outputStrings: {
-        stack: {
-          en: '뭉쳤다 => 흩어져요',
-        },
-        spread: {
-          en: '흩어졌다 => 뭉쳐요',
-        },
+        stack: Outputs.stackThenSpread,
+        spread: Outputs.spreadThenStack,
       },
     },
     {
       id: 'AAI Ketuduke Angry Seas',
       type: 'StartsUsing',
       netRegex: { id: '8AC1', source: 'Ketuduke', capture: false },
-      alertText: (_data, _matches, output) => output.text!(),
-      outputStrings: {
-        text: {
-          en: '넉백! 저항하라!!!',
-        },
-      },
+      response: Responses.knockback(),
     },
     {
       id: 'AAI Ketuduke Fluke Typhoon Bubble',
@@ -597,6 +631,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: '장판 피하면서 타워 밟아요',
+          ja: '塔踏み',
         },
       },
     },
@@ -614,11 +649,17 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (data, matches, output) => {
         if (data.me === matches.target)
           return output.itsme!();
-        return output.text!({ player: data.party.member(matches.target).ajob });
+        return output.text!({ player: data.party.aJobName(matches.target) });
       },
       outputStrings: {
-        itsme: '내게 토네이도',
-        text: '토네이도: ${player}',
+        itsme: {
+          en: '내게 토네이도',
+          ja: '自分にトルネド',
+        },
+        text: {
+          en: '토네이도: ${player}',
+          ja: 'トルネド: ${player}',
+        },
       },
     },
     {
@@ -627,9 +668,12 @@ const triggerSet: TriggerSet<Data> = {
       netRegex: { id: '8C4D', source: 'Aloalo Wood Golem' },
       condition: (data) => data.role === 'healer' || data.job === 'BRD',
       alertText: (data, matches, output) =>
-        output.text!({ player: data.party.member(matches.target).ajob }),
+        output.text!({ player: data.party.aJobName(matches.target) }),
       outputStrings: {
-        text: '에스나: ${player}',
+        text: {
+          en: '에스나: ${player}',
+          ja: 'エスナ: ${player}',
+        },
       },
     },
     {
@@ -654,11 +698,17 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (data, matches, output) => {
         if (data.me === matches.target)
           return output.itsme!();
-        return output.text!({ player: data.party.member(matches.target).ajob });
+        return output.text!({ player: data.party.aJobName(matches.target) });
       },
       outputStrings: {
-        itsme: '내게 중력, 모여있다가',
-        text: '중력, 모여있다가 (${player})',
+        itsme: {
+          en: '내게 중력',
+          ja: '自分にグラビデフォース',
+        },
+        text: {
+          en: '중력: ${player}',
+          ja: 'グラビデフォース: ${player}',
+        },
       },
     },
     {
@@ -675,37 +725,37 @@ const triggerSet: TriggerSet<Data> = {
       response: Responses.aoe(),
     },
     {
-      id: 'AAI Lala Lala 회전',
+      id: 'AAI Lala Lala Rotate',
       type: 'HeadMarker',
       netRegex: { id: ['01E4', '01E5'], target: 'Lala' },
       run: (data, matches) => data.lalaRotate = matches.id === '01E4' ? 'cw' : 'ccw',
     },
     {
-      id: 'AAI Lala Lala 3과5',
+      id: 'AAI Lala Lala Times',
       type: 'GainsEffect',
       // F62 = Times Three
       // F63 = Times Five
       netRegex: { effectId: ['F62', 'F63'], source: 'Lala', target: 'Lala' },
-      run: (data, matches) => data.lalaCount = matches.effectId === 'F62' ? 3 : 5,
+      run: (data, matches) => data.lalaTimes = matches.effectId === 'F62' ? 3 : 5,
     },
     {
-      id: 'AAI Lala Player 회전',
+      id: 'AAI Lala Player Rotate',
       type: 'HeadMarker',
       netRegex: { id: ['01ED', '01EE'] },
       condition: Conditions.targetIsYou(),
       run: (data, matches) => data.lalaMyRotate = matches.id === '01ED' ? 'cw' : 'ccw',
     },
     {
-      id: 'AAI Lala Player 3과5',
+      id: 'AAI Lala Player Times',
       type: 'GainsEffect',
       // E89 = Times Three
       // ECE = Times Five
       netRegex: { effectId: ['E89', 'ECE'], source: 'Lala' },
       condition: Conditions.targetIsYou(),
-      run: (data, matches) => data.lalaMyCount = matches.effectId === 'E89' ? 3 : 5,
+      run: (data, matches) => data.lalaMyTimes = matches.effectId === 'E89' ? 3 : 5,
     },
     {
-      id: 'AAI LaLa Arcane Blight 방향',
+      id: 'AAI LaLa Arcane Blight Drection',
       type: 'StartsUsing',
       netRegex: { id: ['888B', '888C', '888D', '888E]'], source: 'Lala' },
       run: (data, matches) => {
@@ -728,7 +778,7 @@ const triggerSet: TriggerSet<Data> = {
           return output.text!();
         if (data.lalaRotate === 'unknown')
           return output[data.lalaBlight]!();
-        if (isReverseRotate(data.lalaRotate, data.lalaCount)) {
+        if (isReverseRotate(data.lalaRotate, data.lalaTimes)) {
           return {
             'front': output.left!(),
             'back': output.right!(),
@@ -746,7 +796,10 @@ const triggerSet: TriggerSet<Data> = {
         }[data.lalaBlight];
       },
       outputStrings: {
-        text: '빈 곳으로~',
+        text: {
+          en: '빈 곳으로~',
+          ja: '安置へ移動',
+        },
         front: Outputs.goFront,
         back: Outputs.getBehind,
         left: Outputs.left,
@@ -775,14 +828,17 @@ const triggerSet: TriggerSet<Data> = {
       durationSeconds: 15,
       infoText: (data, _matches, output) => {
         const unseen = output[data.lalaMyMarch]!();
-        return output.orbs!({ unseen: unseen });
+        return output.open!({ unseen: unseen });
       },
       outputStrings: {
-        orbs: '뚤린 곳: ${unseen}',
-        front: '앞',
-        back: '뒤',
-        left: '왼쪽',
-        right: '오른쪽',
+        open: {
+          en: '뚤린 곳: ${unseen}',
+          ja: '開: ${unseen}',
+        },
+        front: Outputs.front,
+        back: Outputs.back,
+        left: Outputs.left,
+        right: Outputs.right,
         unknown: Outputs.unknown,
       },
     },
@@ -796,7 +852,7 @@ const triggerSet: TriggerSet<Data> = {
           return output.text!();
         if (data.lalaMyRotate === 'unknown')
           return output[data.lalaMyMarch]!();
-        if (isReverseRotate(data.lalaMyRotate, data.lalaMyCount))
+        if (isReverseRotate(data.lalaMyRotate, data.lalaMyTimes))
           return {
             'front': output.left!(),
             'back': output.right!(),
@@ -811,11 +867,23 @@ const triggerSet: TriggerSet<Data> = {
         }[data.lalaMyMarch];
       },
       outputStrings: {
-        front: '보스 봐요',
-        back: '뒤돌아 봐요',
-        left: '오른쪽 봐요',
-        right: '왼쪽 봐요',
-        text: '열린 곳을 보스로',
+        front: Outputs.lookTowardsBoss,
+        back: {
+          en: '뒤돌아 봐요',
+          ja: '後ろ見て',
+        },
+        left: {
+          en: '오른쪽 봐요',
+          ja: '右見て',
+        },
+        right: {
+          en: '왼쪽 봐요',
+          ja: '左見て',
+        },
+        text: {
+          en: '열린 곳을 보스로',
+          ja: '未解析の方角をボスに向ける',
+        },
       },
     },
     {
@@ -857,48 +925,74 @@ const triggerSet: TriggerSet<Data> = {
         if (data.lalaSubtractive === undefined)
           return;
 
+        const mysub = data.lalaSubtractive;
         const list = data.gainList;
-        const [s1, s2] = list.filter((x) => x.effectId === 'E8B').map((x) => x.target);
-        let issame;
-        if (s1 === undefined || s2 === undefined)
-          issame = false;
-        else {
-          const dps1 = data.party.isDPS(s1);
-          const dps2 = data.party.isDPS(s2);
-          issame = (dps1 && dps2) || (!dps1 && !dps2);
+
+        if (data.triggerSetConfig.lalaPlanarTacticsType === 'poshiume') {
+          const [s1, s2] = list.filter((x) => x.effectId === 'E8B').map((x) => x.target);
+          let issame;
+          if (s1 === undefined || s2 === undefined)
+            issame = false;
+          else {
+            const dps1 = data.party.isDPS(s1);
+            const dps2 = data.party.isDPS(s2);
+            issame = (dps1 && dps2) || (!dps1 && !dps2);
+          }
+
+          if (mysub === 1) {
+            if (issame)
+              return output.ps1in!();
+            const [pair] = list.filter((x) => parseInt(x.count) === 3);
+            const name = pair === undefined ? output.unknown!() : data.party.aJobName(pair.target);
+            return output.ps1out!({ name: name });
+          }
+          if (mysub === 2) {
+            if (issame)
+              return output.ps2out!();
+            const [pair] = list.filter((x) => parseInt(x.count) === 2 && x.target !== data.me);
+            const name = pair === undefined ? output.unknown!() : data.party.aJobName(pair.target);
+            return output.ps2in!({ name: name });
+          }
+          if (mysub === 3) {
+            if (issame)
+              return output.ps3right!();
+            const [pair] = list.filter((x) => parseInt(x.count) === 1);
+            const name = pair === undefined ? output.unknown!() : data.party.aJobName(pair.target);
+            return output.ps3left!({ name: name });
+          }
+        } else if (data.triggerSetConfig.lalaPlanarTacticsType === 'hamukatsu') {
+          if (mysub === 1)
+            return output.hm1!();
+          if (mysub === 3)
+            return output.hm3!();
+
+          const mym = data.party.member(data.me);
+          const [ptm] = list.filter((x) => x.target !== data.me && parseInt(x.count) === 2)
+            .map((x) => data.party.member(x.target));
+          if (mym === undefined || ptm === undefined)
+            return output.hm2!();
+          if (mym.jindex < ptm.jindex)
+            return output.hm2left!();
+          return output.hm2right!();
         }
 
-        const mysub = data.lalaSubtractive;
-        if (mysub === 1) {
-          if (issame)
-            return output.no1in!();
-          const [pair] = list.filter((x) => parseInt(x.count) === 3);
-          const name = pair === undefined ? output.unknown!() : data.party.member(pair.target).ajob;
-          return output.no1out!({ name: name });
-        }
-        if (mysub === 2) {
-          if (issame)
-            return output.no2out!();
-          const [pair] = list.filter((x) => parseInt(x.count) === 2 && x.target !== data.me);
-          const name = pair === undefined ? output.unknown!() : data.party.member(pair.target).ajob;
-          return output.no2in!({ name: name });
-        }
-        if (mysub === 3) {
-          if (issame)
-            return output.no3right!();
-          const [pair] = list.filter((x) => parseInt(x.count) === 1);
-          const name = pair === undefined ? output.unknown!() : data.party.member(pair.target).ajob;
-          return output.no3left!({ name: name });
-        }
+        // 옵션이 이상하면 그냥
+        return output.num!({ num: mysub });
       },
       run: (data) => data.gainList = [],
       outputStrings: {
-        no1out: '[1/바깥] 3번과 페어: ${name}',
-        no1in: '[1/안쪽] 2번과 페어',
-        no2out: '[2/바깥] 1,3번과 페어',
-        no2in: '[2/안쪽] 2번과 페어: ${name}',
-        no3left: '[3/아래줄 왼쪽] 1번과 페어: ${name}',
-        no3right: '[3/아래줄 오른쪽] 2번과 페어',
+        ps1out: '[1/바깥] 3번과 페어: ${name}',
+        ps1in: '[1/안쪽] 2번과 페어',
+        ps2out: '[2/바깥] 1,3번과 페어',
+        ps2in: '[2/안쪽] 2번과 페어: ${name}',
+        ps3left: '[3/아래줄 왼쪽] 1번과 페어: ${name}',
+        ps3right: '[3/아래줄 오른쪽] 2번과 페어',
+        hm1: '[1] 2번 페어',
+        hm2: '[2] 1,3번과 페어',
+        hm2left: '[2/왼쪽] 3번과 페어',
+        hm2right: '[2/오른쪽] 1번과 페어',
+        hm3: '[3] 2번 페어',
+        num: '카운트: ${num}',
         unknown: Outputs.unknown,
       },
     },
@@ -920,7 +1014,7 @@ const triggerSet: TriggerSet<Data> = {
           return;
         if (data.lalaMyRotate === 'unknown')
           return output[map]!();
-        if (isReverseRotate(data.lalaMyRotate, data.lalaMyCount)) {
+        if (isReverseRotate(data.lalaMyRotate, data.lalaMyTimes)) {
           return {
             'front': output.left!(),
             'back': output.right!(),
@@ -936,11 +1030,26 @@ const triggerSet: TriggerSet<Data> = {
         }[map];
       },
       outputStrings: {
-        text: '강제이동',
-        front: '강제이동: 앞으로',
-        back: '강제이동: 뒤로',
-        left: '강제이동: 왼쪽',
-        right: '강제이동: 오른쪽',
+        text: {
+          en: '강제이동',
+          ja: '強制移動',
+        },
+        front: {
+          en: '강제이동: 앞으로',
+          ja: '強制移動 : 前',
+        },
+        back: {
+          en: '강제이동: 뒤로',
+          ja: '強制移動 : 後ろ',
+        },
+        left: {
+          en: '강제이동: 왼쪽',
+          ja: '強制移動 : 左',
+        },
+        right: {
+          en: '강제이동: 오른쪽',
+          ja: '強制移動 : 右',
+        },
       },
     },
     {
@@ -981,7 +1090,10 @@ const triggerSet: TriggerSet<Data> = {
           return output.swap!();
       },
       outputStrings: {
-        swap: 'DPS 자리 바꿔요!',
+        swap: {
+          en: 'DPS 자리 바꿔요!',
+          ja: 'DPS同志に入れ替え！',
+        },
       },
     },
     {
@@ -1040,7 +1152,10 @@ const triggerSet: TriggerSet<Data> = {
           return output.spread!();
       },
       outputStrings: {
-        spread: '(먼저 흩어져요)',
+        spread: {
+          en: '(먼저 흩어져요)',
+          ja: '(後で散会)',
+        },
       },
     },
     {
@@ -1063,8 +1178,14 @@ const triggerSet: TriggerSet<Data> = {
         }
       },
       outputStrings: {
-        text: '(안전: ${safe}번${mark})',
-        stacks: '(먼저 뭉쳐요)',
+        text: {
+          en: '(안전: ${safe}번${mark})',
+          ja: '(後で${safe}${mark})',
+        },
+        stacks: {
+          en: '(먼저 뭉쳐요)',
+          ja: '(後で頭割り)',
+        },
       },
     },
     {
@@ -1114,7 +1235,10 @@ const triggerSet: TriggerSet<Data> = {
         return output.text!({ safe: data.stcReloadFailed, mark: mark });
       },
       outputStrings: {
-        text: '안전: ${safe}번${mark}',
+        text: {
+          en: '안전: ${safe}번${mark}',
+          ja: '${safe}${mark}へ',
+        },
       },
     },
     {
@@ -1127,18 +1251,23 @@ const triggerSet: TriggerSet<Data> = {
         output.responseOutputStrings = {
           first: {
             en: '폭탄 피해요!',
+            ja: '爆弾回避！',
           },
           second: {
             en: '폭탄 위치 기억! 빙글빙글!',
+            ja: '爆弾の位置をおぼえて！',
           },
           third: {
             en: '폭탄없는 안전한 곳 찾아요!',
+            ja: '爆弾回避！',
           },
           fourth: {
             en: '${safe}번${mark} 쪽 안전한 곳으로! 도넛 조심!',
+            ja: '${safe}${mark}へ、ドーナツ回避',
           },
           forthMove: {
             en: '${safe}번${mark}',
+            ja: '${safe}${mark}へ',
           },
           ...ForceMoveStrings,
         };
@@ -1198,9 +1327,11 @@ const triggerSet: TriggerSet<Data> = {
         if (other === undefined)
           return output.red!();
 
-        const mi = data.party.ajobId(data.me);
-        const oi = data.party.ajobId(other);
-        if (mi === undefined || oi === undefined || mi < oi)
+        const mi = data.party.aJobIndex(data.me);
+        const oi = data.party.aJobIndex(other);
+        if (mi === undefined || oi === undefined)
+          return output.redCheck!();
+        if (mi < oi)
           return output.red!();
 
         const roles = data.stcBullsEyes.map((x) => x.role);
@@ -1210,9 +1341,22 @@ const triggerSet: TriggerSet<Data> = {
       },
       run: (data) => data.stcBullsEyes = [],
       outputStrings: {
-        blue: '🟦파랑 밟아요',
-        yellow: '🟨노랑 밟아요',
-        red: '🟥빨강 밟아요',
+        blue: {
+          en: '🟦파랑 밟아요',
+          ja: '青へ',
+        },
+        yellow: {
+          en: '🟨노랑 밟아요',
+          ja: '黄色へ',
+        },
+        red: {
+          en: '🟥빨강 밟아요',
+          ja: '赤へ',
+        },
+        redCheck: {
+          en: '🟥빨강 밟아요 (탱&힐 디버프 봐야되요)',
+          ja: '赤へ (ただしタンクとヒーラの色確認)',
+        },
       },
     },
     {
@@ -1222,12 +1366,7 @@ const triggerSet: TriggerSet<Data> = {
       condition: (data) => data.stcPop < 2,
       delaySeconds: 3,
       suppressSeconds: 1,
-      alertText: (_data, _matches, output) => output.text!(),
-      outputStrings: {
-        text: {
-          en: '넉백! 저항하라!!!',
-        },
-      },
+      response: Responses.knockback(),
     },
     {
       id: 'AAI Statice Beguiling Glitter In/Out',
@@ -1243,8 +1382,14 @@ const triggerSet: TriggerSet<Data> = {
         return output.in!();
       },
       outputStrings: {
-        in: '한가운데 => 바깥에서 흩어져요',
-        out: '바깥 => 한가운데서 뭉쳐요',
+        in: {
+          en: '한가운데 => 바깥에서 흩어져요',
+          ja: '真ん中 => 外側で散会',
+        },
+        out: {
+          en: '바깥 => 한가운데서 뭉쳐요',
+          ja: '外 => 真ん中で頭割り',
+        },
       },
     },
     {
@@ -1286,15 +1431,18 @@ const triggerSet: TriggerSet<Data> = {
         let partner = undefined;
         if (data.stcClaws.length === 2)
           partner = data.stcClaws[0] !== data.me
-            ? data.party.member(data.stcClaws[0]).ajob
-            : data.party.member(data.stcClaws[1]).ajob;
+            ? data.party.aJobName(data.stcClaws[0])
+            : data.party.aJobName(data.stcClaws[1]);
         if (partner === undefined)
           partner = output.unknown!();
         return output.text!({ partner: partner });
       },
       run: (data) => data.stcClaws = [],
       outputStrings: {
-        text: '내게 데스 손톱이! (${partner})',
+        text: {
+          en: '내게 데스 손톱이! (${partner})',
+          ja: '自分にクロウ (${partner})',
+        },
         unknown: Outputs.unknown,
       },
     },
@@ -1315,15 +1463,18 @@ const triggerSet: TriggerSet<Data> = {
         let partner = undefined;
         if (data.stcMissiles.length === 2)
           partner = data.stcMissiles[0] !== data.me
-            ? data.party.member(data.stcMissiles[0]).ajob
-            : data.party.member(data.stcMissiles[1]).ajob;
+            ? data.party.aJobName(data.stcMissiles[0])
+            : data.party.aJobName(data.stcMissiles[1]);
         if (partner === undefined)
           partner = output.unknown!();
         return output.text!({ partner: partner });
       },
       run: (data) => data.stcMissiles = [],
       outputStrings: {
-        text: '미사일 + 체인, 한가운데로! (${partner})',
+        text: {
+          en: '미사일 + 체인, 한가운데로! (${partner})',
+          ja: '自分にミサイル+チェイン (${partner})',
+        },
         unknown: Outputs.unknown,
       },
     },
@@ -1395,14 +1546,21 @@ const triggerSet: TriggerSet<Data> = {
         if (data.stcChains.length !== 2)
           return output.chain!();
         const partner = data.stcChains[0] !== data.me ? data.stcChains[0] : data.stcChains[1];
-        return output.chainWith!({ partner: data.party.member(partner).ajob });
+        return output.chainWith!({ partner: data.party.aJobName(partner) });
       },
       outputStrings: {
-        chain: '내게 체인!',
-        chainWith: '내게 체인! (${partner})',
+        chain: {
+          en: '내게 체인!',
+          ja: '自分にチェイン',
+        },
+        chainWith: {
+          en: '내게 체인! (${partner})',
+          ja: '自分にチェイン (${partner})',
+        },
       },
     },
     {
+      // Pino Strat: https://twitter.com/pino_mujuuryoku/status/1720127076190306359
       id: 'AAI Statice Burning Chains Tether',
       type: 'Tether',
       netRegex: { id: '0009' },
@@ -1411,15 +1569,19 @@ const triggerSet: TriggerSet<Data> = {
         output.responseOutputStrings = {
           cutchain: {
             en: '체인 끊어요!',
+            ja: 'チェイン切る',
           },
           deathclaw: {
             en: '데스 손톱 유도 => 뭉쳐요',
+            ja: 'クロウ誘導 => 頭割り',
           },
           adjustbullseye: {
             en: '북으로! 자리 조정 페어!',
+            ja: '北へ！ 席入れ替え',
           },
           bullseye: {
             en: '북으로! 페어',
+            ja: '北へ',
           },
         };
         if (data.me === matches.source || data.me === matches.target)
@@ -1429,7 +1591,7 @@ const triggerSet: TriggerSet<Data> = {
             return { alertText: output.adjustbullseye!() };
           return { infoText: output.bullseye!() };
         }
-        return { alertText: output.deathclaw!() }; // 이건 데스 손톱 밖에 없다
+        return { alertText: output.deathclaw!() };
       },
       run: (data) => data.stcChains = [],
     },
@@ -1465,7 +1627,7 @@ const triggerSet: TriggerSet<Data> = {
           '018B',
           '015B', // 스타 페어. 기믹 처리하면서 해결됨
           '00DA', // 스타 버스터 Socking Abandon
-          '009C', // 스타 Ball of Fire. 문제의 이거 어디 있는지만 알면...
+          '009C', // 스타 Ball of Fire. 문제는 이거 어디 있는지만 알면...
         ];
         if (tested.includes(matches.id))
           return;

@@ -233,7 +233,7 @@ export default {
     ko: '징끼리 모이기',
   },
   spreadThenStack: {
-    en: '흩어졌다 => 뭉처요',
+    en: '흩어졌다 => 뭉쳐요',
     de: 'Verteilen => Sammeln',
     fr: 'Dispersion => Package',
     ja: '散開 => 頭割り',
@@ -282,7 +282,7 @@ export default {
     ko: '"${player}" 넉백징',
   },
   lookTowardsBoss: {
-    en: '보스 쳐다 봐욧',
+    en: '보스 봐욧',
     de: 'Anschauen Boss',
     fr: 'Regardez le boss',
     ja: 'ボスを見る',

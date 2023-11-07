@@ -7,7 +7,7 @@ export type BasePartyMemberParamObject = {
   id?: string;
   name: string;
   nick: string;
-  ajob?: string;
+  jindex: number;
 };
 
 export type PartyMemberParamObjectKeys = keyof BasePartyMemberParamObject;
