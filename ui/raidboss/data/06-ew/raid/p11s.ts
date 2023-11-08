@@ -874,7 +874,9 @@ const triggerSet: TriggerSet<Data> = {
         const playerNames = Object.keys(data.lightDarkTether);
         const sameLength = playerNames.filter((x) => data.lightDarkTether[x] === myLength);
         const others = sameLength.filter((x) => x !== data.me && x !== myBuddy).sort();
-        const [player1, player2] = others.map((x) => data.party.member(x));
+        const [player1, player2] = data.options.AutumnStyle
+          ? others.map((x) => data.party.aJobName(x))
+          : others.map((x) => data.party.member(x));
         if (player1 !== undefined && player2 !== undefined) {
           if (myLength === 'near')
             infoText = output.otherNear!({ player1: player1, player2: player2 });

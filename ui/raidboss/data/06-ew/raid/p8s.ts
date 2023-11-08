@@ -1959,10 +1959,10 @@ const triggerSet: TriggerSet<Data> = {
       sound: '',
       infoText: (data, _matches, output) => {
         const [name1, name2] = data.alignmentTargets.sort();
-        if (!data.options.AutumnStyle)
+        if (data.options.AutumnStyle)
           return output.target!({
-            player1: data.party.member(name1).ajob,
-            player2: data.party.member(name2).ajob,
+            player1: data.party.aJobName(name1),
+            player2: data.party.aJobName(name2),
             target: data.prsAlignMt ? output.targetDps!() : output.targetTh!(),
           });
         return output.text!({

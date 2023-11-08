@@ -336,25 +336,23 @@ export const AutumnIndicator = {
 };
 
 const Autumns = {
-  JobName: (id: number, lang: Lang) => {
-    const job = jobIndexToName[id]?.[lang];
-    return job ?? jobIndexToName[0]?.[lang] ?? '몰?루';
+  JobName: (index: number, lang?: Lang): string => {
+    const rlang = lang === undefined ? 'en' : lang;
+    const job = jobIndexToName[index]?.[rlang];
+    return job ?? jobIndexToName[0]?.[rlang] ?? '몰?루';
   },
-  JobPriority: (id: number) => {
-    const prior = jobIndexToPriority[id];
-    return prior ?? 9999;
+  JobPriority: (index: number): number => {
+    const val = jobIndexToPriority[index];
+    return val ?? 9999;
   },
-  JobPriorityList: (ids: number[], lang: Lang) => {
-    const priors = ids.map((x) => jobIndexToPriority[x] ?? 9999).sort((a, b) => a - b);
-    const jobs = priors.map((x) => jobPriorityToName[x]?.[lang] ?? '몰?루');
+  JobPriorityList: (indices: number[], lang?: Lang): string[] => {
+    const rlang = lang === undefined ? 'en' : lang;
+    const priors = indices.map((x) => jobIndexToPriority[x] ?? 9999).sort((a, b) => a - b);
+    const jobs = priors.map((x) => jobPriorityToName[x]?.[rlang] ?? '몰?루');
     return jobs;
   },
-  IsBlueName: (name: string) => {
-    return roleNames.includes(name);
-  },
-  IsBluDps: (name: string) => {
-    return !tankHealerRoleNames.includes(name);
-  },
+  IsBlueName: (name: string) => roleNames.includes(name),
+  IsBluDps: (name: string) => !tankHealerRoleNames.includes(name),
 } as const;
 
 export default Autumns;
