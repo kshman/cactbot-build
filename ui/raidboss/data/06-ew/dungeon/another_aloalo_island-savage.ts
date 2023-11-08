@@ -46,7 +46,8 @@ const ForceMoveStrings = {
 export interface Data extends RaidbossData {
   readonly triggerSetConfig: {
     stackOrder: 'meleeRolesPartners' | 'rolesPartners';
-    lalaPlanarTacticsType: 'poshiume' | 'hamukatsu';
+    flukeGaleType: 'pylene' | 'hamukatsu';
+    planarTacticsType: 'poshiume' | 'hamukatsu';
   };
   combatantData: PluginCombatantState[];
   ketuCrystalAdd: NetMatches['AddedCombatant'][];
@@ -161,7 +162,21 @@ const triggerSet: TriggerSet<Data> = {
   zoneId: ZoneId.AnotherAloaloIslandSavage,
   config: [
     {
-      id: 'lalaPlanarTacticsType',
+      id: 'flukeGaleType',
+      name: {
+        en: 'Fluke Gale 형식',
+      },
+      type: 'select',
+      options: {
+        en: {
+          '피렌: 뇌사': 'pylene',
+          '하므까스: 남북고정': 'hamukatsu',
+        },
+      },
+      default: 'pylene',
+    },
+    {
+      id: 'planarTacticsType',
       name: {
         en: 'Planar Tactics 형식',
       },
@@ -393,20 +408,36 @@ const triggerSet: TriggerSet<Data> = {
       durationSeconds: 8,
       alertText: (data, _matches, output) => {
         data.isStackFirst = isStackFirst(data.ketuHydroStack, data.ketuHydroSpread);
-        if (data.ketuMyBubbleFetters !== 'E9F' && !data.isStackFirst)
-          return output.go2!();
-        return output.go1!();
+        if (data.triggerSetConfig.flukeGaleType === 'pylene') {
+          if (data.ketuMyBubbleFetters !== 'E9F' && !data.isStackFirst)
+            return output.pylene2!();
+          return output.pylene1!();
+        } else if (data.triggerSetConfig.flukeGaleType === 'hamukatsu') {
+          if (data.ketuMyBubbleFetters === 'E9F')
+            return output.hamukatsu2!();
+          if (data.isStackFirst)
+            return output.hamukatsu1!();
+          return output.hamukatsu2!();
+        }
+        return output.spread!();
       },
       run: (data) => delete data.ketuMyBubbleFetters,
       outputStrings: {
-        go1: {
+        pylene1: {
           en: '1번 칸으로',
           ja: '第1区域へ',
         },
-        go2: {
+        pylene2: {
           en: '2번 칸으로',
           ja: '第2区域へ',
         },
+        hamukatsu1: {
+          en: '담당 구역 1번으로',
+        },
+        hamukatsu2: {
+          en: '담당 구역 2번으로',
+        },
+        spread: Outputs.spread,
       },
     },
     {
@@ -932,7 +963,7 @@ const triggerSet: TriggerSet<Data> = {
         const mysub = data.lalaSubtractive;
         const list = data.gainList;
 
-        if (data.triggerSetConfig.lalaPlanarTacticsType === 'poshiume') {
+        if (data.triggerSetConfig.planarTacticsType === 'poshiume') {
           const [s1, s2] = list.filter((x) => x.effectId === 'E8B').map((x) => x.target);
           let issame;
           if (s1 === undefined || s2 === undefined)
@@ -966,7 +997,7 @@ const triggerSet: TriggerSet<Data> = {
             const name = pair === undefined ? output.unknown!() : data.party.aJobName(pair.target);
             return output.ps3left!({ name: name });
           }
-        } else if (data.triggerSetConfig.lalaPlanarTacticsType === 'hamukatsu') {
+        } else if (data.triggerSetConfig.planarTacticsType === 'hamukatsu') {
           if (mysub === 1)
             return output.hm1!();
           if (mysub === 3)
