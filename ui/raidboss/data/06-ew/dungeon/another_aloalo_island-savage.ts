@@ -1518,10 +1518,32 @@ const triggerSet: TriggerSet<Data> = {
       id: 'AAIS Statice Pinwheeling Dartboard',
       type: 'Ability',
       netRegex: { id: '8CBF', source: 'Statice', capture: false },
-      infoText: (_data, _matches, output) => output.text!(),
+      alertText: (_data, _matches, output) => output.text!(),
       run: (data) => data.stcSeenPinwheeling = true,
       outputStrings: {
-        text: '꼭지점 찾고 => 한가운데로',
+        text: {
+          en: '꼭지점 찾아요!',
+        },
+      },
+    },
+    {
+      id: 'AAIS Statice Ball of Fire Rotate Right',
+      type: 'HeadMarker',
+      netRegex: { id: '009C', target: 'Ball of Fire', capture: false },
+      durationSeconds: 8,
+      infoText: (_data, _matches, output) => output.text!(),
+      outputStrings: {
+        text: '↻시계 회전',
+      },
+    },
+    {
+      id: 'AAIS Statice Ball of Fire Rotate Left',
+      type: 'HeadMarker',
+      netRegex: { id: '009D', target: 'Ball of Fire', capture: false },
+      durationSeconds: 8,
+      infoText: (_data, _matches, output) => output.text!(),
+      outputStrings: {
+        text: '↺반시계 회전',
       },
     },
     {
