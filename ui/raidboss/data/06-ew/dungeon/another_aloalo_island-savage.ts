@@ -79,7 +79,6 @@ export interface Data extends RaidbossData {
   stcMyDuration: number;
   gainList: NetMatches['GainsEffect'][];
   isStackFirst: boolean;
-  stest?: string;
 }
 
 // Horizontal crystals have a heading of 0, vertical crystals are -pi/2.
@@ -143,18 +142,18 @@ const stcBallOfFire = (combatant: NetMatches['AddedCombatant']): number => {
   return (Math.round(6 - 6 * (2 * Math.PI - hg) / Math.PI) % 12 + 12) % 12;
 };
 
-// 주사위를 마커로
-const diceToMarker = (no: number): string => {
-  const diceMap: { [dice: number]: string } = {
-    1: 'Ⓐ',
-    2: '①',
-    3: '②',
-    4: 'Ⓒ',
-    5: '③',
-    6: '④',
+// 주사위를 방향으로
+const diceToArrow = (no: number): string => {
+  const arrowMap: { [dice: number]: string } = {
+    1: '🡹',
+    2: '🡽',
+    3: '🡾',
+    4: '🡻',
+    5: '🡿',
+    6: '🡼',
   } as const;
-  const ret = diceMap[no];
-  return ret === undefined ? '몰?루' : ret;
+  const ret = arrowMap[no];
+  return ret === undefined ? 'ꔫ' : ret;
 };
 
 const triggerSet: TriggerSet<Data> = {
@@ -402,6 +401,7 @@ const triggerSet: TriggerSet<Data> = {
     },
     {
       // Pylene Strat: https://twitter.com/ff14_pylene99/status/1719665676745650610
+      // Hamukatu Nanboku Strat: https://ffxiv.link/0102424
       id: 'AAIS Ketuduke Fluke Gale',
       type: 'Ability',
       netRegex: { id: '8AB1', source: 'Ketuduke', capture: false },
@@ -432,10 +432,10 @@ const triggerSet: TriggerSet<Data> = {
           ja: '第2区域へ',
         },
         hamukatsu1: {
-          en: '담당 구역 1번으로',
+          en: '1번쪽 안전 칸으로',
         },
         hamukatsu2: {
-          en: '담당 구역 2번으로',
+          en: '2번쪽 안전 칸으로',
         },
         spread: Outputs.spread,
       },
@@ -792,7 +792,7 @@ const triggerSet: TriggerSet<Data> = {
     {
       id: 'AAIS LaLa Arcane Blight Drection',
       type: 'StartsUsing',
-      netRegex: { id: ['8BE2', '8BE3', '8BE4', '8BE5]'], source: 'Lala' },
+      netRegex: { id: ['8BE2', '8BE3', '8BE4', '8BE5'], source: 'Lala' },
       run: (data, matches) => {
         const blightMap: { [count: string]: MarchDirection } = {
           '8BE2': 'back',
@@ -950,6 +950,8 @@ const triggerSet: TriggerSet<Data> = {
       netRegex: { effectId: 'E8B', source: 'Lala' },
       run: (data, matches) => data.gainList.push(matches),
     },
+    // Poshiume Strat
+    // Hamukatsu Strat
     {
       id: 'AAIS Lala Planar Tactics',
       type: 'Ability',
@@ -974,67 +976,65 @@ const triggerSet: TriggerSet<Data> = {
             issame = (dps1 && dps2) || (!dps1 && !dps2);
           }
 
-          // data.stest = `${issame ? '같음' : '다르네'}(${s1}/${s2})`;
-
           if (mysub === 1) {
             if (issame)
-              return output.ps1in!();
+              return output.poshiume1in!();
             const [pair] = list.filter((x) => parseInt(x.count) === 3);
             const name = pair === undefined ? output.unknown!() : data.party.aJobName(pair.target);
-            return output.ps1out!({ name: name });
+            return output.poshiume1out!({ name: name });
           }
           if (mysub === 2) {
             if (issame)
-              return output.ps2out!();
+              return output.poshiume2out!();
             const [pair] = list.filter((x) => parseInt(x.count) === 2 && x.target !== data.me);
             const name = pair === undefined ? output.unknown!() : data.party.aJobName(pair.target);
-            return output.ps2in!({ name: name });
+            return output.poshiume2in!({ name: name });
           }
           if (mysub === 3) {
             if (issame)
-              return output.ps3right!();
+              return output.poshiume3right!();
             const [pair] = list.filter((x) => parseInt(x.count) === 1);
             const name = pair === undefined ? output.unknown!() : data.party.aJobName(pair.target);
-            return output.ps3left!({ name: name });
+            return output.poshiume3left!({ name: name });
           }
         } else if (data.triggerSetConfig.planarTacticsType === 'hamukatsu') {
           if (mysub === 1)
-            return output.hm1!();
+            return output.hamukatsu1!();
           if (mysub === 3)
-            return output.hm3!();
+            return output.hamukatsu3!();
 
           const mym = data.party.member(data.me);
           const [ptm] = list.filter((x) => x.target !== data.me && parseInt(x.count) === 2)
             .map((x) => data.party.member(x.target));
           if (mym === undefined || ptm === undefined)
-            return output.hm2!();
+            return output.hamukatsu2!();
           const [s1, s2] = list.filter((x) => x.effectId === 'E8B').map((x) => x.target);
           if (s1 === undefined || s2 === undefined)
-            return output.hm2!();
+            return output.hamukatsu2!();
 
           if (s1 === data.me || s2 === data.me) {
             const other = s1 === data.me ? s2 : s1;
             const [surge] = list.filter((x) => x.target === other && parseInt(x.count) > 0);
             if (surge === undefined)
-              return output.hm2!();
+              return output.hamukatsu2!();
             const count = parseInt(surge.count);
             if (count === 1)
-              return output.hm2left!();
+              return output.hamukatsu2left!();
             if (count === 3)
-              return output.hm2right!();
+              return output.hamukatsu2right!();
           } else if (s1 === ptm.name || s2 === ptm.name) {
             const other = s1 === ptm.name ? s2 : s1;
             const [surge] = list.filter((x) => x.target === other && parseInt(x.count) > 0);
             if (surge === undefined)
-              return output.hm2!();
+              return output.hamukatsu2!();
             const count = parseInt(surge.count);
             if (count === 1)
-              return output.hm2right!();
+              return output.hamukatsu2right!();
             if (count === 3)
-              return output.hm2left!();
+              return output.hamukatsu2left!();
           }
 
-          return mym.jindex < ptm.jindex ? output.hm2left!() : output.hm2right!();
+          return mym.jindex < ptm.jindex ? output.hamukatsu2left!() : output.hamukatsu2right!();
         }
 
         // 옵션이 이상하면 그냥
@@ -1042,17 +1042,17 @@ const triggerSet: TriggerSet<Data> = {
       },
       run: (data) => data.gainList = [],
       outputStrings: {
-        ps1out: '[1/바깥] 3번과 페어 (${name})',
-        ps1in: '[1/안쪽] 2번과 페어',
-        ps2out: '[2/바깥] 1,3번과 페어',
-        ps2in: '[2/안쪽] 2번과 페어 (${name})',
-        ps3left: '[3/아래줄 왼쪽] 1번과 페어 (${name})',
-        ps3right: '[3/아래줄 오른쪽] 2번과 페어',
-        hm1: '[1] 2번과 페어',
-        hm2: '[2] 1,3번과 페어',
-        hm2left: '[2/왼쪽] 3번과 페어',
-        hm2right: '[2/오른쪽] 1번과 페어',
-        hm3: '[3] 2번과 페어',
+        poshiume1out: '[1/바깥] 3번과 페어 (${name})',
+        poshiume1in: '[1/안쪽] 2번과 페어',
+        poshiume2out: '[2/바깥] 1,3번과 페어',
+        poshiume2in: '[2/안쪽] 2번과 페어 (${name})',
+        poshiume3left: '[3/아래줄 왼쪽] 1번과 페어 (${name})',
+        poshiume3right: '[3/아래줄 오른쪽] 2번과 페어',
+        hamukatsu1: '[1] 2번과 페어',
+        hamukatsu2: '[2] 1,3번과 페어',
+        hamukatsu2left: '[2/왼쪽] 3번과 페어',
+        hamukatsu2right: '[2/오른쪽] 1번과 페어',
+        hamukatsu3: '[3] 2번과 페어',
         num: '카운트: ${num}',
         unknown: Outputs.unknown,
       },
@@ -1234,14 +1234,14 @@ const triggerSet: TriggerSet<Data> = {
         if (data.stcReloadCount === 1)
           return output.stacks!();
         if (data.stcReloadCount < 8) {
-          const mark = diceToMarker(data.stcReloadFailed);
-          return output.text!({ safe: data.stcReloadFailed, mark: mark });
+          const arrow = diceToArrow(data.stcReloadFailed);
+          return output.text!({ safe: data.stcReloadFailed, arrow: arrow });
         }
       },
       outputStrings: {
         text: {
-          en: '(안전: ${safe}번${mark})',
-          ja: '(後で${safe}${mark})',
+          en: '(안전: ${safe}${arrow})',
+          ja: '(後で${safe}${arrow})',
         },
         stacks: {
           en: '(먼저 뭉쳐요)',
@@ -1292,13 +1292,13 @@ const triggerSet: TriggerSet<Data> = {
       type: 'StartsUsing',
       netRegex: { id: '8968', source: 'Statice', capture: false },
       infoText: (data, _matches, output) => {
-        const mark = diceToMarker(data.stcReloadFailed);
-        return output.text!({ safe: data.stcReloadFailed, mark: mark });
+        const arrow = diceToArrow(data.stcReloadFailed);
+        return output.text!({ safe: data.stcReloadFailed, arrow: arrow });
       },
       outputStrings: {
         text: {
-          en: '안전: ${safe}번${mark}',
-          ja: '${safe}${mark}へ',
+          en: '안전: ${safe}${arrow}',
+          ja: '${safe}${arrow}へ',
         },
       },
     },
@@ -1323,12 +1323,12 @@ const triggerSet: TriggerSet<Data> = {
             ja: '爆弾回避！',
           },
           fourth: {
-            en: '${safe}번${mark} 쪽 안전한 곳으로! 도넛 조심!',
-            ja: '${safe}${mark}へ、ドーナツ回避',
+            en: '${safe}${arrow} 쪽 안전한 곳으로! 도넛 조심!',
+            ja: '${safe}${arrow}へ、ドーナツ回避',
           },
           forthMove: {
-            en: '${safe}번${mark}',
-            ja: '${safe}${mark}へ',
+            en: '${safe}${arrow}',
+            ja: '${safe}${arrow}へ',
           },
           ...ForceMoveStrings,
         };
@@ -1340,10 +1340,10 @@ const triggerSet: TriggerSet<Data> = {
         if (data.stcRingRing === 3)
           return { infoText: output.third!() };
         if (data.stcRingRing === 4) {
-          const mark = diceToMarker(data.stcReloadFailed);
-          const fourth = output.fourth!({ safe: data.stcReloadFailed, mark: mark });
+          const arrow = diceToArrow(data.stcReloadFailed);
+          const fourth = output.fourth!({ safe: data.stcReloadFailed, arrow: arrow });
           if (data.stcMyDuration > 39 && data.stcMyDuration < 50) {
-            const aim = output.forthMove!({ safe: data.stcReloadFailed, mark: mark });
+            const aim = output.forthMove!({ safe: data.stcReloadFailed, arrow: arrow });
             const move = forceMove(output, data.stcMyMarch, undefined, aim);
             return { infoText: fourth, alertText: move };
           }
