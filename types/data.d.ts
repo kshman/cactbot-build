@@ -34,6 +34,7 @@ export interface RaidbossData {
   options: BaseOptions;
   inCombat: boolean;
   triggerSetConfig: { [key: string]: ConfigValue };
+  /** @deprecated Use data.party.member instead */
   ShortName: (x?: string) => string;
   StopCombat: () => void;
   /** @deprecated Use parseFloat instead */
@@ -53,6 +54,7 @@ export interface OopsyData {
   party: PartyTracker;
   inCombat: boolean;
   IsImmune: (x?: string) => boolean;
+  /** @deprecated Use data.party.member instead */
   ShortName: (x?: string) => string;
   IsPlayerId: (x?: string) => boolean;
   DamageFromMatches: (matches: NetMatches['Ability']) => number;

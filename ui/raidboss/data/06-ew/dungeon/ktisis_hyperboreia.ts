@@ -96,11 +96,13 @@ const triggerSet: TriggerSet<Data> = {
         backRight: {
           en: '오른쪽 뒤',
           de: 'Nach Hinten und Rechts',
+          fr: 'Allez derrière et à droite',
           ko: '오른쪽 뒤로',
         },
         backLeft: {
           en: '왼쪽 뒤',
           de: 'Nach Hinten und Links',
+          fr: 'Allez derrière et à gauche',
           ko: '왼쪽 뒤로',
         },
       },

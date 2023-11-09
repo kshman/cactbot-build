@@ -52,6 +52,7 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: '내게 장판! 밖으로!',
           de: 'Fläche auf DIR',
+          fr: 'Flaque sur VOUS',
           ja: '自分にAOE',
         },
       },
@@ -103,6 +104,7 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: '장판 피해요!',
           de: 'Flächen ködern',
+          fr: 'Déposez les flaques',
           ja: 'AOE回避',
         },
       },
@@ -123,6 +125,7 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: '넉백쪽으로',
           de: 'Nach Rückstoß Position schauen',
+          fr: 'Repérez la zone de poussée',
           ja: 'ノックバック位置へ',
         },
       },
@@ -136,6 +139,7 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: '넉백 + 돌 굴러와요',
           de: 'Rückstoß + rollende Steine',
+          fr: 'Poussée + Rocher',
           ja: 'ノックバック + 石AOE',
         },
       },
@@ -149,6 +153,7 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: '안전한 곳으로',
           de: 'Geh zum sichere Feld',
+          fr: 'Allez dans une zone sûre',
           ja: '安置へ移動',
         },
       },
@@ -180,6 +185,7 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: '곧 넉백',
           de: 'Rückstoß',
+          fr: 'Poussée',
           ja: 'まもなくノックバック',
         },
       },
@@ -193,6 +199,7 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: '멀리 넉백!',
           de: 'Weiter Rückstoß',
+          fr: 'Poussée au loin',
           ja: '遠くノックバック',
         },
       },
@@ -225,6 +232,7 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: '마지막 창 => 첫번째 창으로',
           de: 'Letzer Dreizack => erster Dreizack',
+          fr: 'Dernier trident -> 1er trident',
           ja: '最後の槍 => 1番目の槍へ',
         },
       },
@@ -250,6 +258,7 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: '화살표 찾아서 옆으로 (보스 안따라옴)',
           de: 'Geh seitlich des Pfeils (Boss bewegt sich nicht)',
+          fr: 'Allez sur les côtés de la flèche (le boss ne bouge pas)',
           ja: '矢印の横へ (ボスは動かない)',
         },
       },
@@ -267,11 +276,13 @@ const triggerSet: TriggerSet<Data> = {
         one: {
           en: '화살표 찾아서 옆으로 (보스 따라옴)',
           de: 'Geh seitlich des Pfeils',
+          fr: 'Allez sur les côtés de la flèche',
           ja: '矢印の横へ',
         },
         two: {
           en: '두 화살표 사이가 안전 (보스 따라옴)',
           de: 'Ecke zwichen 2 Pfeilen',
+          fr: 'Coin entre les 2 flèches',
           ja: '2つの矢印の隅',
         },
       },
@@ -313,6 +324,7 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: '장판 없는 곳으로 + 넉백!',
           de: 'Rückstoß in die sichere Ecke',
+          fr: 'Poussée vers un coin sûr',
           ja: 'AOEがないどころへ + ノックバック',
         },
       },
@@ -326,6 +338,7 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: '인제 곧 커져요! 버프 넣지말것!',
           de: 'Oschon zweite Phase',
+          fr: 'Oshon : deuxième phase',
           ja: 'すぐ大きくなる',
         },
       },
@@ -339,6 +352,7 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: '안전한 곳 찾아요!',
           de: 'Geh in den sicheren Bereich',
+          fr: 'Allez dans une zone sûre',
           ja: '安置で待機',
         },
       },
@@ -352,6 +366,7 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: '구슬에서 먼곳으로!',
           de: 'Weit weg vom Orb',
+          fr: 'Loin de l\'orbe',
           ja: '玉からはなれて',
         },
       },
@@ -365,6 +380,7 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: '구슬에서 먼곳 + 넉백!',
           de: 'Weit weg vom Orb + Rückstoß',
+          fr: 'Loin de l\'orbe + Poussée',
           ja: '玉からはなれて + ノックバック',
         },
       },
@@ -394,6 +410,7 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: '${form1} => ${form2} => ${form3}',
           de: '${form1} => ${form2} => ${form3}',
+          fr: '${form1} => ${form2} => ${form3}',
         },
         left: Outputs.left,
         right: Outputs.right,
@@ -423,6 +440,7 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: '밝은 것부터 터져요 => 하나씩 이동',
           de: 'Starte vom hellen Mond',
+          fr: 'Commencez depuis la lune pleine',
           ja: '明るい月から',
         },
       },
@@ -437,6 +455,7 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: '3 => 1 => 2',
           de: '3 => 1 => 2',
+          fr: '3 -> 1 -> 2',
           ja: '3 => 1 => 2',
         },
       },
@@ -451,6 +470,7 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: '안전한 곳으로',
           de: 'Geh in den sicheren Bereich',
+          fr: 'Allez dans une zone sûre',
           ja: '安置へ移動',
         },
       },
@@ -497,6 +517,7 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: '마지막 창 => 첫번째 창으로',
           de: 'Letzer Dreizack => erster Dreizack',
+          fr: 'Dernier trident -> 1er trident',
           ja: '最後の槍 => 1番目の槍へ',
         },
       },
@@ -555,11 +576,13 @@ const triggerSet: TriggerSet<Data> = {
         red: {
           en: '파랑색이 안전',
           de: 'Blau ist sicher',
+          fr: 'Bleu est sûr',
           ja: '青安置',
         },
         blue: {
           en: '빨강색이 안전',
           de: 'Rot ist sicher',
+          fr: 'Rouge est sûr',
           ja: '赤安置',
         },
       },
@@ -573,6 +596,7 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: '안전한 곳으로 넉백!',
           de: 'Rückstoß in die sichere Ecke',
+          fr: 'Poussée dans un coin sûr',
           ja: '安置へノックバック',
         },
       },

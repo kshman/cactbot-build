@@ -1040,10 +1040,6 @@ export class PopupText {
       this.Reset();
   }
 
-  ShortNamify(name?: string): string {
-    return Util.shortName(name, this.options.PlayerNicks);
-  }
-
   Reset(): void {
     Util.clearWatchCombatants();
     this.data = this.getDataObject();
@@ -1675,7 +1671,7 @@ export class PopupText {
       options: this.options,
       inCombat: this.inCombat,
       triggerSetConfig: this.triggerSetConfig,
-      ShortName: this.ShortNamify.bind(this),
+      ShortName: (name?: string) => Util.shortName(name, this.options.PlayerNicks),
       StopCombat: () => this.SetInCombat(false),
       ParseLocaleFloat: parseFloat,
       CanStun: () => Util.canStun(this.job),
