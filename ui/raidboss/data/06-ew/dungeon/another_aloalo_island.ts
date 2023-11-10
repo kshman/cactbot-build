@@ -1,3 +1,4 @@
+import Autumns from '../../../../../resources/autumns';
 import Conditions from '../../../../../resources/conditions';
 import Outputs from '../../../../../resources/outputs';
 import { Responses } from '../../../../../resources/responses';
@@ -43,8 +44,9 @@ const ForceMoveStrings = {
 export interface Data extends RaidbossData {
   readonly triggerSetConfig: {
     stackOrder: 'meleeRolesPartners' | 'rolesPartners';
-    flukeGaleType: 'pylene' | 'hamukatsu';
-    planarTacticsType: 'poshiume' | 'hamukatsu';
+    flukeGaleType: 'spread' | 'pylene' | 'hamukatsu';
+    planarTacticsType: 'count' | 'poshiume' | 'hamukatsu';
+    pinwheelingType: 'stack' | 'pino' | 'spell';
   };
   combatantData: PluginCombatantState[];
   ketuCrystalAdd: NetMatches['AddedCombatant'][];
@@ -67,7 +69,6 @@ export interface Data extends RaidbossData {
   stcClaws: string[];
   stcMissiles: string[];
   stcSeenPinwheeling: boolean;
-  stcAdjustBullsEye: boolean;
   stcTether: boolean;
   stcChains: string[];
   stcBallFire?: number;
@@ -165,6 +166,7 @@ const triggerSet: TriggerSet<Data> = {
       type: 'select',
       options: {
         en: {
+          '메시지': 'spread',
           '피렌: 뇌사': 'pylene',
           '하므까스: 남북고정': 'hamukatsu',
         },
@@ -179,11 +181,27 @@ const triggerSet: TriggerSet<Data> = {
       type: 'select',
       options: {
         en: {
+          '카운트 표시': 'count',
           '포시우메: 3번 좌우 사용': 'poshiume',
           '하므까스: 3번 한쪽만 사용': 'hamukatsu',
         },
       },
       default: 'poshiume',
+    },
+    {
+      id: 'pinwheelingType',
+      name: {
+        en: 'Pinwheeling 형식',
+      },
+      type: 'select',
+      options: {
+        en: {
+          '메시지': 'stack',
+          '피노': 'pino',
+          '스펠': 'spell',
+        },
+      },
+      default: 'spell',
     },
   ],
   timelineFile: 'another_aloalo_island.txt',
@@ -207,7 +225,6 @@ const triggerSet: TriggerSet<Data> = {
       stcClaws: [],
       stcMissiles: [],
       stcSeenPinwheeling: false,
-      stcAdjustBullsEye: false,
       stcTether: false,
       stcChains: [],
       stcPop: 0,
@@ -405,18 +422,23 @@ const triggerSet: TriggerSet<Data> = {
       durationSeconds: 8,
       alertText: (data, _matches, output) => {
         data.isStackFirst = isStackFirst(data.ketuHydroStack, data.ketuHydroSpread);
+
+        if (data.triggerSetConfig.flukeGaleType === 'spread')
+          return output.goSafeTile!();
+
         if (data.triggerSetConfig.flukeGaleType === 'pylene') {
           if (data.ketuMyBubbleFetters !== 'E9F' && !data.isStackFirst)
             return output.pylene2!();
           return output.pylene1!();
-        } else if (data.triggerSetConfig.flukeGaleType === 'hamukatsu') {
+        }
+
+        if (data.triggerSetConfig.flukeGaleType === 'hamukatsu') {
           if (data.ketuMyBubbleFetters === 'E9F')
             return output.hamukatsu2!();
           if (data.isStackFirst)
             return output.hamukatsu1!();
           return output.hamukatsu2!();
         }
-        return output.spread!();
       },
       run: (data) => delete data.ketuMyBubbleFetters,
       outputStrings: {
@@ -430,11 +452,16 @@ const triggerSet: TriggerSet<Data> = {
         },
         hamukatsu1: {
           en: '1번쪽 안전 칸으로',
+          ja: '第1区域の安置マスへ',
         },
         hamukatsu2: {
           en: '2번쪽 안전 칸으로',
+          ja: '第2区域の安置マスへ',
         },
-        spread: Outputs.spread,
+        goSafeTile: {
+          en: '안전 타일로',
+          ja: '安置マスへ',
+        },
       },
     },
     {
@@ -947,8 +974,8 @@ const triggerSet: TriggerSet<Data> = {
       netRegex: { effectId: 'E8B', source: 'Lala' },
       run: (data, matches) => data.gainList.push(matches),
     },
-    // Poshiume Strat
-    // Hamukatsu Strat
+    // Poshiume Strat: https://twitter.com/posiumesan/status/1719545249302008122
+    // Hamukatsu Strat: https://youtu.be/QqLg3DXxCVA?t=298
     {
       id: 'AAI Lala Planar Tactics',
       type: 'Ability',
@@ -959,10 +986,13 @@ const triggerSet: TriggerSet<Data> = {
         if (data.lalaSubtractive === undefined)
           return;
 
-        const mysub = data.lalaSubtractive;
-        const list = data.gainList;
+        if (data.triggerSetConfig.planarTacticsType === 'count')
+          return output.count!({ num: data.lalaSubtractive });
 
         if (data.triggerSetConfig.planarTacticsType === 'poshiume') {
+          const mysub = data.lalaSubtractive;
+          const list = data.gainList;
+
           const [s1, s2] = list.filter((x) => x.effectId === 'E8B').map((x) => x.target);
           let issame;
           if (s1 === undefined || s2 === undefined)
@@ -973,13 +1003,8 @@ const triggerSet: TriggerSet<Data> = {
             issame = (dps1 && dps2) || (!dps1 && !dps2);
           }
 
-          if (mysub === 1) {
-            if (issame)
-              return output.poshiume1in!();
-            const [pair] = list.filter((x) => parseInt(x.count) === 3);
-            const name = pair === undefined ? output.unknown!() : data.party.aJobName(pair.target);
-            return output.poshiume1out!({ name: name });
-          }
+          if (mysub === 1)
+            return issame ? output.poshiume1in!() : output.poshiume1out!();
           if (mysub === 2) {
             if (issame)
               return output.poshiume2out!();
@@ -987,14 +1012,14 @@ const triggerSet: TriggerSet<Data> = {
             const name = pair === undefined ? output.unknown!() : data.party.aJobName(pair.target);
             return output.poshiume2in!({ name: name });
           }
-          if (mysub === 3) {
-            if (issame)
-              return output.poshiume3right!();
-            const [pair] = list.filter((x) => parseInt(x.count) === 1);
-            const name = pair === undefined ? output.unknown!() : data.party.aJobName(pair.target);
-            return output.poshiume3left!({ name: name });
-          }
-        } else if (data.triggerSetConfig.planarTacticsType === 'hamukatsu') {
+          if (mysub === 3)
+            return issame ? output.poshiume3right!() : output.poshiume3left!();
+        }
+
+        if (data.triggerSetConfig.planarTacticsType === 'hamukatsu') {
+          const mysub = data.lalaSubtractive;
+          const list = data.gainList;
+
           if (mysub === 1)
             return output.hamukatsu1!();
           if (mysub === 3)
@@ -1031,26 +1056,61 @@ const triggerSet: TriggerSet<Data> = {
               return output.hamukatsu2left!();
           }
 
-          return mym.jindex < ptm.jindex ? output.hamukatsu2left!() : output.hamukatsu2right!();
+          return Autumns.JobPriority(mym.jindex) < Autumns.JobPriority(ptm.jindex)
+            ? output.hamukatsu2left!()
+            : output.hamukatsu2right!();
         }
-
-        // 옵션이 이상하면 그냥
-        return output.num!({ num: mysub });
       },
       run: (data) => data.gainList = [],
       outputStrings: {
-        poshiume1out: '[1/바깥] 3번과 페어 (${name})',
-        poshiume1in: '[1/안쪽] 2번과 페어',
-        poshiume2out: '[2/바깥] 1,3번과 페어',
-        poshiume2in: '[2/안쪽] 2번과 페어 (${name})',
-        poshiume3left: '[3/아래줄 왼쪽] 1번과 페어 (${name})',
-        poshiume3right: '[3/아래줄 오른쪽] 2번과 페어',
-        hamukatsu1: '[1] 2번과 페어',
-        hamukatsu2: '[2] 1,3번과 페어',
-        hamukatsu2left: '[2/왼쪽] 3번과 페어',
-        hamukatsu2right: '[2/오른쪽] 1번과 페어',
-        hamukatsu3: '[3] 2번과 페어',
-        num: '카운트: ${num}',
+        count: {
+          en: '${num}',
+          ja: 'カウント: ${num}',
+        },
+        poshiume1out: {
+          en: '[1/바깥] 3번과 페어',
+          ja: '1外、3とペア',
+        },
+        poshiume1in: {
+          en: '[1/안쪽] 2번과 페어',
+          ja: '1内、2とペア',
+        },
+        poshiume2out: {
+          en: '[2/바깥] 1,3번과 페어',
+          ja: '2外、1・3とペア',
+        },
+        poshiume2in: {
+          en: '[2/안쪽] 2번과 페어 (${name})',
+          ja: '2内、2とペア (${name})',
+        },
+        poshiume3left: {
+          en: '[3/아래줄 왼쪽] 1번과 페어',
+          ja: '3左から、1とペア',
+        },
+        poshiume3right: {
+          en: '[3/아래줄 오른쪽] 2번과 페어',
+          ja: '3右から、2とペア',
+        },
+        hamukatsu1: {
+          en: '[1] 2번과 페어',
+          ja: '1、2とペア',
+        },
+        hamukatsu2: {
+          en: '[2] 1,3번과 페어',
+          ja: '2、1・3とペア',
+        },
+        hamukatsu2left: {
+          en: '[2/왼쪽] 3번과 페어',
+          ja: '2左、3とペア',
+        },
+        hamukatsu2right: {
+          en: '[2/오른쪽] 1번과 페어',
+          ja: '2右、1とペア',
+        },
+        hamukatsu3: {
+          en: '[3] 2번과 페어',
+          ja: '3、2とペア',
+        },
         unknown: Outputs.unknown,
       },
     },
@@ -1173,7 +1233,7 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: 'AAI Lala Arcane Plot Spread',
+      id: 'AAI Lala Arcane Point Spread',
       type: 'GainsEffect',
       netRegex: { effectId: 'B7D', source: 'Lala' },
       condition: (data, matches) =>
@@ -1558,7 +1618,7 @@ const triggerSet: TriggerSet<Data> = {
       id: 'AAI Statice Ball of Fire Rotate Right',
       type: 'HeadMarker',
       netRegex: { id: '009C', target: 'Ball of Fire', capture: false },
-      durationSeconds: 8,
+      durationSeconds: 13,
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: '↻시계 회전',
@@ -1568,7 +1628,7 @@ const triggerSet: TriggerSet<Data> = {
       id: 'AAI Statice Ball of Fire Rotate Left',
       type: 'HeadMarker',
       netRegex: { id: '009D', target: 'Ball of Fire', capture: false },
-      durationSeconds: 8,
+      durationSeconds: 13,
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: '↺반시계 회전',
@@ -1585,29 +1645,6 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         text: '후: ${mesg}',
-      },
-    },
-    {
-      id: 'AAI Statice Bull\'s-eye 2',
-      type: 'GainsEffect',
-      netRegex: { effectId: 'E9E', capture: false },
-      condition: (data) => data.stcSeenPinwheeling,
-      delaySeconds: 1,
-      suppressSeconds: 1,
-      run: (data) => {
-        const roles = data.stcBullsEyes.map((x) => x.role);
-        data.stcBullsEyes = [];
-        const dps = roles.filter((x) => x === 'dps');
-        if (dps.length === 2) {
-          data.stcAdjustBullsEye = true;
-          return;
-        }
-        const th = roles.filter((x) => x === 'tank' || x === 'healer');
-        if (th.length === 2) {
-          data.stcAdjustBullsEye = true;
-          return;
-        }
-        data.stcAdjustBullsEye = false;
       },
     },
     {
@@ -1641,6 +1678,7 @@ const triggerSet: TriggerSet<Data> = {
     },
     {
       // Pino Strat: https://twitter.com/pino_mujuuryoku/status/1720127076190306359
+      // Spell Strat: https://twitter.com/spell_ff14/status/1720068760068120970
       id: 'AAI Statice Burning Chains Tether',
       type: 'Tether',
       netRegex: { id: '0009' },
@@ -1655,25 +1693,79 @@ const triggerSet: TriggerSet<Data> = {
             en: '데스 손톱 유도 => 뭉쳐요',
             ja: 'クロウ誘導 => 頭割り',
           },
-          adjustbullseye: {
+          pinoAdjust: {
             en: '북으로! 자리 조정 페어!',
             ja: '北へ！ 席入れ替え',
           },
-          bullseye: {
+          pinoStack: {
             en: '북으로! 조정없이 페어',
             ja: '北へ',
           },
+          spellStack: {
+            en: '북으로! 페어',
+            ja: '北へ',
+          },
+          spellLeft: {
+            en: '북으로! 페어 왼쪽 (${partner})',
+            ja: '北の左へ (${partner})',
+          },
+          spellRight: {
+            en: '북으로! 페어 오른쪽 (${partner})',
+            ja: '北の右へ (${partner})',
+          },
+          stack: Outputs.pairStack,
+          unknown: Outputs.unknown,
         };
         if (data.me === matches.source || data.me === matches.target)
           return { alarmText: output.cutchain!() };
-        if (data.stcSeenPinwheeling) {
-          if (data.stcAdjustBullsEye)
-            return { alertText: output.adjustbullseye!() };
-          return { infoText: output.bullseye!() };
+        if (!data.stcSeenPinwheeling)
+          return { alertText: output.deathclaw!() };
+
+        if (data.triggerSetConfig.pinwheelingType === 'stack')
+          return { infoText: output.stack!() };
+
+        if (data.triggerSetConfig.pinwheelingType === 'pino') {
+          const roles = data.stcBullsEyes.map((x) => x.role);
+
+          const dps = roles.filter((x) => x === 'dps');
+          if (dps.length === 2)
+            return { alertText: output.pinoAdjust!() };
+
+          const th = roles.filter((x) => x === 'tank' || x === 'healer');
+          if (th.length === 2)
+            return { alertText: output.pinoAdjust!() };
+
+          return { infoText: output.pinoStack!() };
         }
-        return { alertText: output.deathclaw!() };
+
+        if (data.triggerSetConfig.pinwheelingType === 'spell') {
+          if (data.stcBullsEyes.length !== 2)
+            return { infoText: output.spellStack!() };
+
+          const other = data.stcBullsEyes[data.stcBullsEyes[0]?.name === data.me ? 1 : 0];
+          if (other === undefined)
+            return { infoText: output.spellStack!() };
+
+          if (data.stcChains.includes(other.name)) {
+            const [partner] = data.party.partyNames.filter(
+              (x) => x !== data.me && !data.stcChains.includes(x),
+            );
+            if (partner === undefined)
+              return { alertText: output.spellLeft!({ partner: output.unknown!() }) };
+            return { alertText: output.spellLeft!({ partner: data.party.aJobName(partner) }) };
+          }
+
+          const myprior = Autumns.JobPriority(data.party.aJobIndex(data.me)!);
+          const otherprior = Autumns.JobPriority(other.jindex);
+          return myprior < otherprior
+            ? { alertText: output.spellLeft!({ partner: data.party.aJobName(other.name) }) }
+            : { alertText: output.spellRight!({ partner: data.party.aJobName(other.name) }) };
+        }
       },
-      run: (data) => data.stcChains = [],
+      run: (data) => {
+        data.stcChains = [];
+        data.stcBullsEyes = [];
+      },
     },
     // ---------------------------------------------- 테스트
     /*
