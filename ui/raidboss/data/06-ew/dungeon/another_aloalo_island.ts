@@ -476,7 +476,7 @@ const triggerSet: TriggerSet<Data> = {
         data.isStackFirst = isStackFirst(data.ketuHydroStack, data.ketuHydroSpread);
         return data.isStackFirst ? output.stacks!() : output.spread!();
       },
-      run: (data) => data.ketuHydroCount = 2,
+      run: (data) => data.ketuHydroCount++,
       outputStrings: {
         stacks: Outputs.stackThenSpread,
         spread: Outputs.spreadThenStack,
@@ -518,7 +518,7 @@ const triggerSet: TriggerSet<Data> = {
       netRegex: { effectId: 'EA3', capture: false },
       condition: (data) => data.ketuHydroCount === 2,
       run: (data) => {
-        data.ketuHydroCount = 3;
+        data.ketuHydroCount++;
         data.gainList = [];
       },
     },
@@ -610,7 +610,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       run: (data) => {
         delete data.ketuMyBubbleFetters;
-        data.ketuHydroCount = 4;
+        data.ketuHydroCount++;
         data.gainList = [];
       },
       outputStrings: {
@@ -640,7 +640,7 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: 'AAI Ketuduke Angry Seas Hydro',
+      id: 'AAI Ketuduke Angry Seas',
       type: 'GainsEffect',
       netRegex: { effectId: ['EA3', 'EA4'], capture: false },
       condition: (data) => data.ketuHydroCount === 4,
@@ -650,17 +650,47 @@ const triggerSet: TriggerSet<Data> = {
         data.isStackFirst = isStackFirst(data.ketuHydroStack, data.ketuHydroSpread);
         return data.isStackFirst ? output.stack!() : output.spread!();
       },
-      run: (data) => data.ketuHydroCount = 5,
+      run: (data) => data.ketuHydroCount++,
       outputStrings: {
-        stack: Outputs.stackThenSpread,
-        spread: Outputs.spreadThenStack,
+        stack: {
+          en: '넉백 => 뭉쳤다 => 흩어져요',
+          ja: '頭割り => 散開',
+        },
+        spread: {
+          en: '넉백 => 흩어졌다 => 뭉쳐요',
+          ja: '散開 => 頭割り',
+        },
       },
     },
     {
-      id: 'AAI Ketuduke Angry Seas',
-      type: 'StartsUsing',
-      netRegex: { id: '8AC1', source: 'Ketuduke', capture: false },
-      response: Responses.knockback(),
+      id: 'AAI Ketuduke Angry Seas Stack Reminder',
+      type: 'GainsEffect',
+      netRegex: { effectId: 'EA3' },
+      condition: (data) => data.ketuHydroCount === 4,
+      delaySeconds: (_data, matches) => parseFloat(matches.duration) - 5,
+      suppressSeconds: 999999,
+      alertText: (data, _matches, output) => {
+        if (!data.isStackFirst)
+          return output.stacks!();
+      },
+      outputStrings: {
+        stacks: Outputs.pairStack,
+      },
+    },
+    {
+      id: 'AAI Ketuduke Angry Seas Spread Reminder',
+      type: 'GainsEffect',
+      netRegex: { effectId: 'EA4' },
+      condition: (data) => data.ketuHydroCount === 4,
+      delaySeconds: (_data, matches) => parseFloat(matches.duration) - 5,
+      suppressSeconds: 999999,
+      alertText: (data, _matches, output) => {
+        if (data.isStackFirst)
+          return output.spread!();
+      },
+      outputStrings: {
+        spread: Outputs.spread,
+      },
     },
     {
       id: 'AAI Ketuduke Fluke Typhoon Bubble',
