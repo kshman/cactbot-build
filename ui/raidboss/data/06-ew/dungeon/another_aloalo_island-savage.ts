@@ -532,7 +532,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '밖에 있다 => 안에서 페어',
+          en: '밖에 있다 🡺 안에서 페어',
           ja: '外 => ボスの下で頭割り',
         },
       },
@@ -544,7 +544,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '안에 있다 => 밖에서 페어',
+          en: '안에 있다 🡺 밖에서 페어',
           ja: 'ボスの下 => 外側で頭割り',
         },
       },
@@ -656,12 +656,12 @@ const triggerSet: TriggerSet<Data> = {
       run: (data) => data.ketuHydroCount++,
       outputStrings: {
         stack: {
-          en: '넉백 => 뭉쳤다 => 흩어져요',
-          ja: '頭割り => 散開',
+          en: '넉백 🡺 뭉쳤다 🡺 흩어져요',
+          ja: 'ノックバック => 頭割り => 散開',
         },
         spread: {
-          en: '넉백 => 흩어졌다 => 뭉쳐요',
-          ja: '散開 => 頭割り',
+          en: '넉백 🡺 흩어졌다 🡺 뭉쳐요',
+          ja: 'ノックバック => 散開 => 頭割り',
         },
       },
     },
@@ -1215,10 +1215,10 @@ const triggerSet: TriggerSet<Data> = {
         return output[`no${data.lalaSubtractive}`]!();
       },
       outputStrings: {
-        no1: '[1] 구슬 쪽 => 다 피해욧',
-        no2: '[2] 구슬 쪽 => 한번 맞아요',
-        no3: '[3] 구슬 없는쪽 => 두번 맞아요',
-        no4: '[4] 구슬 없는쪽 => 세번 맞아요',
+        no1: '[1] 구슬 쪽 🡺 다 피해욧',
+        no2: '[2] 구슬 쪽 🡺 한번 맞아요',
+        no3: '[3] 구슬 없는쪽 🡺 두번 맞아요',
+        no4: '[4] 구슬 없는쪽 🡺 세번 맞아요',
       },
     },
     {
@@ -1534,11 +1534,11 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         in: {
-          en: '한가운데 => 바깥에서 흩어져요',
+          en: '한가운데로 (바깥으로 흩어질꺼임)',
           ja: '真ん中 => 外側で散会',
         },
         out: {
-          en: '바깥 => 한가운데서 뭉쳐요',
+          en: '바깥으로 (한가운데서 뭉칠꺼임)',
           ja: '外 => 真ん中で頭割り',
         },
       },
@@ -1722,8 +1722,12 @@ const triggerSet: TriggerSet<Data> = {
             en: '체인 끊어요!',
             ja: 'チェイン切る',
           },
+          cutchaintts: {
+            en: 'チェイン切って！',
+            ja: 'チェイン切ってね！',
+          },
           deathclaw: {
-            en: '데스 손톱 유도 => 뭉쳐요',
+            en: '데스 손톱 유도 🡺 뭉쳐요',
             ja: 'クロウ誘導 => 頭割り',
           },
           pinoAdjust: {
@@ -1750,7 +1754,7 @@ const triggerSet: TriggerSet<Data> = {
           unknown: Outputs.unknown,
         };
         if (data.me === matches.source || data.me === matches.target)
-          return { alarmText: output.cutchain!() };
+          return { alarmText: output.cutchain!(), tts: output.cutchaintts!() };
         if (!data.stcSeenPinwheeling)
           return { alertText: output.deathclaw!() };
 
