@@ -1553,10 +1553,10 @@ const triggerSet: TriggerSet<Data> = {
         if (tower0 === undefined || tower1 === undefined)
           return;
 
-        const name = data.ShortName(data.me);
-        if (data.options.AutumnStyle && (data.job !== 'BLU' || Autumns.IsBlueName(name))) {
+        const name = data.party.member(data.me);
+        if (data.options.AutumnStyle && (data.job !== 'BLU' || Autumns.IsBlueName(name.nick))) {
           const pos: TowerLocation[] = [];
-          const isdps = data.job === 'BLU' ? Autumns.IsBluDps(name) : data.role === 'dps';
+          const isdps = data.job === 'BLU' ? Autumns.IsBluDps(name.nick) : data.role === 'dps';
           towerList.forEach((value) => {
             const location = value.location;
             if (matches.effectId === engravementIdMap.lightTower) {
@@ -4213,9 +4213,9 @@ const triggerSet: TriggerSet<Data> = {
           if (data.job !== 'BLU') {
             arrow = getUltimaRayArrow(data.role === 'dps', dir1, dir2);
           } else {
-            const name = data.ShortName(data.me);
-            if (Autumns.IsBlueName(name))
-              arrow = getUltimaRayArrow(Autumns.IsBluDps(name), dir1, dir2);
+            const name = data.party.member(data.me);
+            if (Autumns.IsBlueName(name.nick))
+              arrow = getUltimaRayArrow(Autumns.IsBluDps(name.nick), dir1, dir2);
           }
           if (arrow !== undefined)
             return output.moveTo!({ dir: output[arrow]!() });
@@ -4295,9 +4295,9 @@ const triggerSet: TriggerSet<Data> = {
           if (data.job !== 'BLU') {
             arrow = getUltimaRayArrow(data.role === 'dps', dir1, dir2);
           } else {
-            const name = data.ShortName(data.me);
-            if (Autumns.IsBlueName(name))
-              arrow = getUltimaRayArrow(Autumns.IsBluDps(name), dir1, dir2);
+            const name = data.party.member(data.me);
+            if (Autumns.IsBlueName(name.nick))
+              arrow = getUltimaRayArrow(Autumns.IsBluDps(name.nick), dir1, dir2);
           }
           if (arrow !== undefined)
             return output.moveTo!({ dir: output[arrow]!() });
@@ -5157,32 +5157,77 @@ const triggerSet: TriggerSet<Data> = {
       'replaceSync': {
         '(?<! )Athena': '아테나',
         'Anthropos': '안트로포스',
+        'Concept of Earth': '땅의 개념',
+        'Concept of Fire': '불의 개념',
+        'Concept of Water': '물의 개념',
+        'Forbidden Factor': '금기 인자',
+        'Hemitheos': '헤미테오스',
+        'Pallas Athena': '팔라스 아테나',
         'Thymou Idea': '기개의 이데아',
       },
       'replaceText': {
         '\\(Floor Drop\\)': '(바닥 사라짐)',
         '\\(cast\\)': '(시전)',
-        '\\(proximity\\)': '(近)',
+        '\\(proximity\\)': '(근접)',
         '\\(spread\\)': '(산개)',
         '--tethers--': '--선--',
+        'Apodialogos': '원거리 디아로고스',
+        'Astral Advance': '별빛 촉진',
+        'Astral Advent': '별빛 강림',
+        'Astral Glow': '별빛 생장',
+        'Astral Impact': '별빛 충격',
+        'Caloric Theory': '열소설',
         'Crush Helm': '성천폭격타',
+        'Demi Parhelion': '버금 무리해',
         '(?<!(Apo|Peri))Dialogos': '디아로고스',
+        'Divine Excoriation': '신벌',
+        'Dynamic Atmosphere': '충격풍',
+        'Ekpyrosis': '에크피로시스',
         'Engravement of Souls': '영혼의 각인',
+        'Entropic Excess': '초열파',
+        'Factor In': '인자 환원',
+        'Gaiaochos': '대지의 주인',
+        'Geocentrism': '천동설',
         'Glaukopis': '글라우코피스',
+        'Ignorabimus': '이그노라비무스',
+        'Implode': '자기 붕괴',
+        'Missing Link': '고통의 사슬',
         'On the Soul': '영혼에 관하여',
+        'Palladian Grasp': '팔라스의 손',
+        'Palladian Ray': '팔라스의 광휘',
         'Palladion': '팔라디온',
+        'Pangenesis': '범생설',
+        'Panta Rhei': '만물유전',
         'Paradeigma': '파라데이그마',
         'Parthenos': '파르테노스',
+        'Peridialogos': '근거리 디아로고스',
+        'Polarized Ray': '극성 광선',
+        'Pyre Pulse': '중열파',
         'Ray of Light': '빛살',
         'Sample': '남식',
+        'Searing Radiance': '불사르는 빛',
+        'Shadowsear': '불사르는 어둠',
         'Shock': '방전',
         'Summon Darkness': '어둠 소환',
         'Superchain Burst': '초사슬 폭발',
         'Superchain Coil': '초사슬 고리',
+        'Superchain Theory I(?!I)': '초사슬 이론 I',
+        'Superchain Theory IIA': '초사슬 이론 IIA',
+        'Superchain Theory IIB': '초사슬 이론 IIB',
+        'The Classical Concepts': '원소 이데아',
+        'Theos\'s Cross': '테오스 십자 불길',
+        'Theos\'s Holy': '테오스 홀리',
+        'Theos\'s Saltire': '테오스 교차 불길',
         'Theos\'s Ultima': '테오스 알테마',
         'Trinity of Souls': '삼위일혼',
         '(?<! )Ultima(?! (B|R))': '알테마',
         'Ultima Blade': '알테마 블레이드',
+        'Ultima Blow': '알테마 공격',
+        'Ultima Ray': '알테마 광선',
+        'Umbral Advance': '그림자 촉진',
+        'Umbral Advent': '그림자 강림',
+        'Umbral Glow': '그림자 생장',
+        'Umbral Impact': '그림자 충격',
         'Unnatural Enchainment': '영혼의 사슬',
         'White Flame': '하얀 불꽃',
       },

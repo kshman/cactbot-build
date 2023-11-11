@@ -276,6 +276,22 @@ const templateOptions: OptionsTemplate = {
       default: false,
     },
     {
+      id: 'DefaultPlayerLabel',
+      name: {
+        en: '기본 플레이어 라벨',
+      },
+      type: 'select',
+      options: {
+        en: {
+          '별명 (Tini)': 'nick',
+          '역할 (Tank)': 'role',
+          '직업 (WAR)': 'job',
+          '원래 이름 (Tini Poutini)': 'name',
+        },
+      },
+      default: 'nick',
+    },
+    {
       id: 'NumLiveListItemsInCombat',
       name: {
         en: '전투 중에 표시할 미스의 개수',
