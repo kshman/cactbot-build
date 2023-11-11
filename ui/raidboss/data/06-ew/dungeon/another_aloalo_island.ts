@@ -334,7 +334,7 @@ const triggerSet: TriggerSet<Data> = {
       id: 'AAI Kiwakin Sharp Strike Clease',
       type: 'Ability',
       netRegex: { id: '8C63', source: 'Aloalo Kiwakin' },
-      condition: (data) => data.role === 'healer' || data.job === 'BRD',
+      condition: (data) => data.CanCleanse(),
       alertText: (data, matches, output) =>
         output.text!({ player: data.party.aJobName(matches.target) }),
       outputStrings: {
@@ -371,6 +371,7 @@ const triggerSet: TriggerSet<Data> = {
       type: 'Ability',
       // Crab Dribble 8BBA has a fast cast, so trigger on Bubble Shower ability
       netRegex: { id: '8BB9', source: 'Aloalo Snipper', capture: false },
+      suppressSeconds: 5,
       response: Responses.goFront('info'),
     },
     {
@@ -824,7 +825,8 @@ const triggerSet: TriggerSet<Data> = {
       id: 'AAI Wood Golem Ancient Aero III',
       type: 'StartsUsing',
       netRegex: { id: '8C4C', source: 'Aloalo Wood Golem' },
-      response: Responses.interruptIfPossible(),
+      condition: (data) => data.CanSilence(),
+      response: Responses.interrupt(),
     },
     {
       id: 'AAI Wood Golem Tornado',
@@ -850,7 +852,7 @@ const triggerSet: TriggerSet<Data> = {
       id: 'AAI Wood Golem Tornado Cleanse',
       type: 'Ability',
       netRegex: { id: '8C4D', source: 'Aloalo Wood Golem' },
-      condition: (data) => data.role === 'healer' || data.job === 'BRD',
+      condition: (data) => data.CanCleanse(),
       alertText: (data, matches, output) =>
         output.text!({ player: data.party.aJobName(matches.target) }),
       outputStrings: {
@@ -874,6 +876,17 @@ const triggerSet: TriggerSet<Data> = {
       type: 'StartsUsing',
       netRegex: { id: '8C4E', source: 'Aloalo Islekeeper', capture: false },
       response: Responses.bleedAoe(),
+    },
+    {
+      id: 'AAI Islekeeper Ancient Quaga Enrage',
+      type: 'StartsUsing',
+      netRegex: { id: '8C2F', source: 'Aloalo Islekeeper', capture: false },
+      alarmText: (_data, _matches, output) => output.text!(),
+      outputStrings: {
+        text: {
+          en: '죽여야해!',
+        },
+      },
     },
     {
       id: 'AAI Islekeeper Gravity Force',
@@ -1293,10 +1306,18 @@ const triggerSet: TriggerSet<Data> = {
         return output[`no${data.lalaSubtractive}`]!();
       },
       outputStrings: {
-        no1: '[1] 구슬 쪽 🡺 다 피해욧',
-        no2: '[2] 구슬 쪽 🡺 한번 맞아요',
-        no3: '[3] 구슬 없는쪽 🡺 두번 맞아요',
-        no4: '[4] 구슬 없는쪽 🡺 세번 맞아요',
+        no1: {
+          en: '[1] 구슬 쪽 🡺 다 피해욧',
+        },
+        no2: {
+          en: '[2] 구슬 쪽 🡺 한번 맞아요',
+        },
+        no3: {
+          en: '[3] 구슬 없는쪽 🡺 두번 맞아요',
+        },
+        no4: {
+          en: '[4] 구슬 없는쪽 🡺 세번 맞아요',
+        },
       },
     },
     {

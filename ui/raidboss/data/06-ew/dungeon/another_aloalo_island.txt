@@ -161,9 +161,9 @@ hideall "--sync--"
 2040.3 "Arcane Array" sync / 1[56]:[^:]*:Lala:(8890|889F):/
 2045.4 "Angular Addition" sync / 1[56]:[^:]*:Lala:(8889|8D2E):/
 2046.1 "Bright Pulse" sync / 1[56]:[^:]*:Lala:8891:/
-2047.4 "Radiance" sync / 1[56]:[^:]*:Arcane Globe:8894:/
+2047.4 "Radiance 1" sync / 1[56]:[^:]*:Arcane Globe:8894:/
 2053.4 "Arcane Blight" sync / 1[56]:[^:]*:Lala:888F:/
-2055.7 "Radiance" sync / 1[56]:[^:]*:Arcane Globe:8894:/
+2055.7 "Radiance 2" sync / 1[56]:[^:]*:Arcane Globe:8894:/
 2061.5 "Targeted Light" sync / 1[56]:[^:]*:Lala:8CDE:/
 
 2072.6 "Strategic Strike" sync / 1[56]:[^:]*:Lala:88AD:/
@@ -201,9 +201,9 @@ hideall "--sync--"
 2273.6 "Arcane Array" sync / 1[56]:[^:]*:Lala:(8890|889F):/
 2278.7 "Angular Addition" sync / 1[56]:[^:]*:Lala:(8889|8D2E):/
 2279.4 "Bright Pulse" sync / 1[56]:[^:]*:Lala:8891:/
-2280.7 "Radiance" sync / 1[56]:[^:]*:Arcane Globe:8894:/
+2280.7 "Radiance 1" sync / 1[56]:[^:]*:Arcane Globe:8894:/
 2286.7 "Arcane Blight" sync / 1[56]:[^:]*:Lala:888F:/
-2289.0 "Radiance" sync / 1[56]:[^:]*:Arcane Globe:8894:/
+2289.0 "Radiance 2" sync / 1[56]:[^:]*:Arcane Globe:8894:/
 2294.8 "Targeted Light" sync / 1[56]:[^:]*:Lala:8CDE:/
 2306.0 "Strategic Strike" sync / 1[56]:[^:]*:Lala:88AD:/
 
