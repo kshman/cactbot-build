@@ -2166,6 +2166,28 @@ const templateOptions: OptionsTemplate = {
       default: false,
     },
     {
+      id: 'DefaultPlayerLabel',
+      comment: {
+        en: `The default way to specify players in trigger output. By default, it will use
+             nicknames/first names. This can be used to print out player jobs instead.
+             If you are not in a party or players are out of a party (or there are bugs),
+             it will default to the player's nickname if there's no other information.`,
+      },
+      name: {
+        en: '기본 플레이어 라벨',
+      },
+      type: 'select',
+      options: {
+        en: {
+          '별명 (Tini)': 'nick',
+          '역할 (Tank)': 'role',
+          '직업 (WAR)': 'job',
+          '원래 이름 (Tini Poutini)': 'name',
+        },
+      },
+      default: 'nick',
+    },
+    {
       id: 'ShowTimerBarsAtSeconds',
       name: {
         en: '타임바의 표시 시간 (초단위)',

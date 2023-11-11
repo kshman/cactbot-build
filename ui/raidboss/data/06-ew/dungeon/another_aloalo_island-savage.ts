@@ -12,6 +12,7 @@ import { NetMatches } from '../../../../../types/net_matches';
 import { PartyMemberParamObject } from '../../../../../types/party';
 import { Output, TriggerSet } from '../../../../../types/trigger';
 
+type BubbleAndFetters = 'bubble' | 'fetters';
 type ClockRotate = 'cw' | 'ccw' | 'unknown';
 type MarchDirection = 'front' | 'back' | 'left' | 'right' | 'unknown';
 
@@ -57,7 +58,7 @@ export interface Data extends RaidbossData {
   ketuHydroCount: number;
   ketuHydroStack?: NetMatches['GainsEffect'];
   ketuHydroSpread?: NetMatches['GainsEffect'];
-  ketuMyBubbleFetters?: string;
+  ketuMyBubbleFetters?: BubbleAndFetters;
   lalaBlight: MarchDirection;
   lalaRotate: ClockRotate;
   lalaTimes: number;
@@ -204,7 +205,7 @@ const triggerSet: TriggerSet<Data> = {
           '스펠': 'spell',
         },
       },
-      default: 'spell',
+      default: 'pino',
     },
   ],
   timelineFile: 'another_aloalo_island-savage.txt',
@@ -369,9 +370,11 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (data, matches, output) => {
         if (data.me !== matches.target)
           return;
-        data.ketuMyBubbleFetters = matches.effectId;
-        if (matches.effectId === 'E9F')
+        if (matches.effectId === 'E9F') {
+          data.ketuMyBubbleFetters = 'bubble';
           return output.bubble!();
+        }
+        data.ketuMyBubbleFetters = 'fetters';
         return output.bind!();
       },
       run: (data, matches) => data.gainList.push(matches),
@@ -430,13 +433,13 @@ const triggerSet: TriggerSet<Data> = {
           return output.goSafeTile!();
 
         if (data.triggerSetConfig.flukeGaleType === 'pylene') {
-          if (data.ketuMyBubbleFetters !== 'E9F' && !data.isStackFirst)
+          if (data.ketuMyBubbleFetters === 'fetters' && !data.isStackFirst)
             return output.pylene2!();
           return output.pylene1!();
         }
 
         if (data.triggerSetConfig.flukeGaleType === 'hamukatsu') {
-          if (data.ketuMyBubbleFetters === 'E9F')
+          if (data.ketuMyBubbleFetters === 'bubble')
             return output.hamukatsu2!();
           if (data.isStackFirst)
             return output.hamukatsu1!();
@@ -607,7 +610,7 @@ const triggerSet: TriggerSet<Data> = {
         ).map((x) => data.party.aJobName(x.target));
         if (player === undefined)
           return output.spread!();
-        if (data.ketuMyBubbleFetters === 'E9F')
+        if (data.ketuMyBubbleFetters === 'bubble')
           return output.bubble!({ player: player });
         return output.bind!({ player: player });
       },
