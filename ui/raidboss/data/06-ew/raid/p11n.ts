@@ -166,7 +166,7 @@ const triggerSet: TriggerSet<Data> = {
       netRegex: { id: '01CF' },
       infoText: (data, matches, output) => {
         if (data.me !== matches.target)
-          return output.avoidCleave!({ target: data.ShortName(matches.target) });
+          return output.avoidCleave!({ target: data.party.member(matches.target) });
         return output.cleaveOnYou!();
       },
       outputStrings: {

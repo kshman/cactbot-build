@@ -10,8 +10,8 @@ import { PartyMemberParamObject } from '../../../../../types/party';
 import { Output, TriggerSet } from '../../../../../types/trigger';
 
 type BubbleAndFetters = 'bubble' | 'fetters';
-type ClockRotate = 'cw' | 'ccw' | 'unknown';
-type MarchDirection = 'front' | 'back' | 'left' | 'right' | 'unknown';
+type ClockRotate = 'cw' | 'ccw';
+type MarchDirection = 'front' | 'back' | 'left' | 'right';
 
 const ForceMoveStrings = {
   stack: Outputs.getTogether,
@@ -55,14 +55,15 @@ export interface Data extends RaidbossData {
   ketuHydroCount: number;
   ketuHydroStack?: NetMatches['GainsEffect'];
   ketuHydroSpread?: NetMatches['GainsEffect'];
-  ketuMyBubbleFetters?: BubbleAndFetters;
-  lalaBlight: MarchDirection;
-  lalaRotate: ClockRotate;
-  lalaTimes: number;
+  ketuBubbleFetters?: BubbleAndFetters;
+  ketuRoarSafe?: string;
+  lalaBlight?: MarchDirection;
+  lalaRotate?: ClockRotate;
+  lalaTimes?: number;
+  lalaMyMarch?: MarchDirection;
+  lalaMyRotate?: ClockRotate;
+  lalaMyTimes?: number;
   lalaSubtractive: number;
-  lalaMyMarch: MarchDirection;
-  lalaMyRotate: ClockRotate;
-  lalaMyTimes: number;
   stcReloadCount: number;
   stcReloadFailed: number;
   stcRingRing: number;
@@ -74,8 +75,8 @@ export interface Data extends RaidbossData {
   stcChains: string[];
   stcBallFire?: number;
   stcPop: number;
-  stcMyMarch: MarchDirection;
-  stcMyDuration: number;
+  stcMarch?: MarchDirection;
+  stcDuration: number;
   gainList: NetMatches['GainsEffect'][];
   isStackFirst: boolean;
 }
@@ -101,10 +102,11 @@ const isStackFirst = (
 };
 
 // test reverse rotation
-const isReverseRotate = (rot: ClockRotate, count: number): boolean => {
-  if (rot === 'cw' && count === 3)
+const isReverseRotate = (rot: ClockRotate, count?: number): boolean => {
+  const cnt = count === undefined ? 0 : count;
+  if (rot === 'cw' && cnt === 3)
     return true;
-  if (rot === 'ccw' && (count === 0 || count === 5))
+  if (rot === 'ccw' && (cnt === 0 || cnt === 5))
     return true;
   return false;
 };
@@ -112,7 +114,7 @@ const isReverseRotate = (rot: ClockRotate, count: number): boolean => {
 //
 const forceMove = (
   output: Output,
-  march: MarchDirection,
+  march?: MarchDirection,
   stackFirst?: boolean,
   safezone?: string,
 ): string => {
@@ -122,7 +124,6 @@ const forceMove = (
       'back': output.backward,
       'left': output.left,
       'right': output.right,
-      'unknown': output.move,
     }[march];
     if (safezone !== undefined)
       return move!({ aim: safezone });
@@ -154,6 +155,82 @@ const diceToArrow = (no: number): string => {
   const ret = arrowMap[no];
   return ret === undefined ? 'ꔫ' : ret;
 };
+
+// 헤드 마커
+const headmarkers = {
+  chain: '0061',
+  lalaCW: '01E4',
+  lalaCCW: '01E5',
+  playerCW: '01ED',
+  playerCCW: '01EE',
+  ballCW: '009C',
+  ballCCW: '009D',
+} as const;
+
+// 버블/바인드
+const bubbleFettersMap = {
+  bubble: 'E9F',
+  fetters: 'ECC',
+} as const;
+const bubbleFetterIdsMap: { [effectIds: string]: BubbleAndFetters } = {
+  E9F: 'bubble',
+  ECC: 'fetters',
+} as const;
+
+// 하이드로 폴/불렛
+const hydroFallBulletMap = {
+  stacks: 'EA3',
+  spread: 'EA4',
+} as const;
+const hydroFallBulletIdsMap = {
+  EA3: 'stacks',
+  EA4: 'spread',
+} as const;
+
+// 라라 타임즈
+const lalaLalaTimesIdsMap: { [effectId: string]: number } = {
+  F62: 3, // Times Three
+  F63: 5, // Times Five
+} as const;
+
+// 라라 플레이어 타임즈
+const lalaPlayerTimesIdsMap: { [effectId: string]: number } = {
+  E89: 3, // Times Three
+  ECE: 5, // Times  Five
+} as const;
+
+// 라라 unseen
+const lalaUnseenIdsMap: { [effectId: string]: MarchDirection } = {
+  E8E: 'front',
+  E8F: 'back',
+  E90: 'right',
+  E91: 'left',
+} as const;
+
+// 라라 행진
+const lalaMarchIdsMap: { [effectIds: string]: MarchDirection } = {
+  E83: 'front',
+  E84: 'back',
+  E85: 'left',
+  E86: 'right',
+} as const;
+
+// 스타티스 마치
+const staticeMarchIdsMap: { [effectIds: string]: MarchDirection } = {
+  DD2: 'front',
+  DD3: 'back',
+  DD4: 'left',
+  DD5: 'right',
+} as const;
+
+// effects
+const effectIds = {
+  surgeVector: 'E8B',
+  subtractiveAlpha: 'E8C',
+  subtractiveBeta: 'E8D',
+  arcanePointSpread: 'B7D',
+  bullsEye: 'E9E',
+} as const;
 
 const triggerSet: TriggerSet<Data> = {
   id: 'AnotherAloaloIsland',
@@ -212,13 +289,7 @@ const triggerSet: TriggerSet<Data> = {
       ketuCrystalAdd: [],
       ketuSpringCrystalCount: 0,
       ketuHydroCount: 0,
-      lalaBlight: 'unknown',
-      lalaRotate: 'unknown',
-      lalaTimes: 0,
       lalaSubtractive: 0,
-      lalaMyMarch: 'unknown',
-      lalaMyRotate: 'unknown',
-      lalaMyTimes: 0,
       stcReloadCount: 0,
       stcReloadFailed: 0,
       stcRingRing: 0,
@@ -229,8 +300,7 @@ const triggerSet: TriggerSet<Data> = {
       stcTether: false,
       stcChains: [],
       stcPop: 0,
-      stcMyMarch: 'unknown',
-      stcMyDuration: 0,
+      stcDuration: 0,
       gainList: [],
       isStackFirst: false,
     };
@@ -265,6 +335,20 @@ const triggerSet: TriggerSet<Data> = {
       type: 'StartsUsing',
       netRegex: { id: '8C63', source: 'Aloalo Kiwakin' },
       response: Responses.tankBuster(),
+    },
+    {
+      id: 'AAI Kiwakin Sharp Strike Clease',
+      type: 'Ability',
+      netRegex: { id: '8C63', source: 'Aloalo Kiwakin' },
+      condition: (data) => data.role === 'healer' || data.job === 'BRD',
+      alertText: (data, matches, output) =>
+        output.text!({ player: data.party.aJobName(matches.target) }),
+      outputStrings: {
+        text: {
+          en: '에스나: ${player}',
+          ja: 'エスナ: ${player}',
+        },
+      },
     },
     {
       id: 'AAI Kiwakin Tail Screw',
@@ -363,16 +447,13 @@ const triggerSet: TriggerSet<Data> = {
     {
       id: 'AAI Ketuduke Bubble Weave/Foamy Fetters',
       type: 'GainsEffect',
-      netRegex: { effectId: ['E9F', 'ECC'] },
+      netRegex: { effectId: Object.keys(bubbleFetterIdsMap) },
       infoText: (data, matches, output) => {
         if (data.me !== matches.target)
           return;
-        if (matches.effectId === 'E9F') {
-          data.ketuMyBubbleFetters = 'bubble';
-          return output.bubble!();
-        }
-        data.ketuMyBubbleFetters = 'fetters';
-        return output.bind!();
+        data.ketuBubbleFetters = bubbleFetterIdsMap[matches.effectId];
+        if (data.ketuBubbleFetters !== undefined && data.ketuHydroCount !== 3)
+          return output[data.ketuBubbleFetters]!();
       },
       run: (data, matches) => data.gainList.push(matches),
       outputStrings: {
@@ -380,7 +461,7 @@ const triggerSet: TriggerSet<Data> = {
           en: '🔵버블',
           ja: 'バブル',
         },
-        bind: {
+        fetters: {
           en: '🟡바인드',
           ja: 'バインド',
         },
@@ -389,24 +470,24 @@ const triggerSet: TriggerSet<Data> = {
     {
       id: 'AAI Ketuduke Hydrofall Target',
       type: 'GainsEffect',
-      netRegex: { effectId: 'EA3' },
+      netRegex: { effectId: hydroFallBulletMap.stacks },
       run: (data, matches) => data.ketuHydroStack = matches,
     },
     {
       id: 'AAI Ketuduke Hydrobullet Target',
       type: 'GainsEffect',
-      netRegex: { effectId: 'EA4' },
+      netRegex: { effectId: hydroFallBulletMap.spread },
       run: (data, matches) => data.ketuHydroSpread = matches,
     },
     {
       id: 'AAI Ketuduke Fluke Gale Hydro',
       type: 'GainsEffect',
-      netRegex: { effectId: ['EA3', 'EA4'] },
+      netRegex: { effectId: Object.keys(hydroFallBulletIdsMap) },
       condition: (data) => data.ketuHydroCount === 0 || data.ketuHydroCount === 5,
       delaySeconds: 0.5,
       suppressSeconds: 2,
       infoText: (_data, matches, output) => {
-        if (matches.effectId === 'EA3')
+        if (matches.effectId === hydroFallBulletMap.stacks)
           return output.stacks!();
         return output.spread!();
       },
@@ -417,8 +498,8 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      // Pylene Strat: https://twitter.com/ff14_pylene99/status/1719665676745650610
-      // Hamukatu Nanboku Strat: https://ffxiv.link/0102424
+      // Pylene: https://twitter.com/ff14_pylene99/status/1719665676745650610
+      // Hamukatu Nanboku: https://ffxiv.link/0102424
       id: 'AAI Ketuduke Fluke Gale',
       type: 'Ability',
       netRegex: { id: '8AB1', source: 'Ketuduke', capture: false },
@@ -430,20 +511,20 @@ const triggerSet: TriggerSet<Data> = {
           return output.goSafeTile!();
 
         if (data.triggerSetConfig.flukeGaleType === 'pylene') {
-          if (data.ketuMyBubbleFetters === 'fetters' && !data.isStackFirst)
+          if (data.ketuBubbleFetters === 'fetters' && !data.isStackFirst)
             return output.pylene2!();
           return output.pylene1!();
         }
 
         if (data.triggerSetConfig.flukeGaleType === 'hamukatsu') {
-          if (data.ketuMyBubbleFetters === 'bubble')
+          if (data.ketuBubbleFetters === 'bubble')
             return output.hamukatsu2!();
           if (data.isStackFirst)
             return output.hamukatsu1!();
           return output.hamukatsu2!();
         }
       },
-      run: (data) => delete data.ketuMyBubbleFetters,
+      run: (data) => delete data.ketuBubbleFetters,
       outputStrings: {
         pylene1: {
           en: '1번 칸으로',
@@ -470,7 +551,7 @@ const triggerSet: TriggerSet<Data> = {
     {
       id: 'AAI Ketuduke Blowing Bubbles',
       type: 'GainsEffect',
-      netRegex: { effectId: ['EA3', 'EA4'], capture: false },
+      netRegex: { effectId: Object.keys(hydroFallBulletIdsMap), capture: false },
       condition: (data) => data.ketuHydroCount === 1,
       delaySeconds: 4,
       durationSeconds: 8,
@@ -488,7 +569,7 @@ const triggerSet: TriggerSet<Data> = {
     {
       id: 'AAI Ketuduke Blowing Bubbles Stack Reminder',
       type: 'GainsEffect',
-      netRegex: { effectId: 'EA3' },
+      netRegex: { effectId: hydroFallBulletMap.stacks },
       condition: (data) => data.ketuHydroCount === 1,
       delaySeconds: (_data, matches) => parseFloat(matches.duration) - 5,
       suppressSeconds: 999999,
@@ -503,7 +584,7 @@ const triggerSet: TriggerSet<Data> = {
     {
       id: 'AAI Ketuduke Blowing Bubbles Spread Reminder',
       type: 'GainsEffect',
-      netRegex: { effectId: 'EA4' },
+      netRegex: { effectId: hydroFallBulletMap.spread },
       condition: (data) => data.ketuHydroCount === 1,
       delaySeconds: (_data, matches) => parseFloat(matches.duration) - 5,
       suppressSeconds: 999999,
@@ -518,7 +599,7 @@ const triggerSet: TriggerSet<Data> = {
     {
       id: 'AAI Ketuduke Twintides Hydrofall Target',
       type: 'GainsEffect',
-      netRegex: { effectId: 'EA3', capture: false },
+      netRegex: { effectId: hydroFallBulletMap.stacks, capture: false },
       condition: (data) => data.ketuHydroCount === 2,
       run: (data) => {
         data.ketuHydroCount++;
@@ -554,7 +635,7 @@ const triggerSet: TriggerSet<Data> = {
       type: 'AddedCombatant',
       netRegex: { npcNameId: '12607', capture: false },
       condition: (data) => data.ketuSpringCrystalCount === 2 && data.ketuCrystalAdd.length === 4,
-      alertText: (data, _matches, output) => {
+      infoText: (data, _matches, output) => {
         const horizontal = data.ketuCrystalAdd.filter((x) => isHorizontalCrystal(x));
         const vertical = data.ketuCrystalAdd.filter((x) => !isHorizontalCrystal(x));
         if (horizontal.length !== 2 || vertical.length !== 2)
@@ -565,67 +646,78 @@ const triggerSet: TriggerSet<Data> = {
         // Check if any verticals are on the outer vertical edges.
         for (const line of vertical) {
           const y = parseFloat(line.y);
-          if (y < -10 || y > 10)
-            return output.eastWestSafe!();
+          if (y < -10 || y > 10) {
+            data.ketuRoarSafe = output.eastWestSafe!();
+            return output.text!({ safe: data.ketuRoarSafe });
+          }
         }
 
         // Check if any horizontals are on the outer horizontal edges.
         for (const line of horizontal) {
           const x = parseFloat(line.x);
-          if (x < -10 || x > 10)
-            return output.northSouthSafe!();
+          if (x < -10 || x > 10) {
+            data.ketuRoarSafe = output.northSouthSafe!();
+            return output.text!({ safe: data.ketuRoarSafe });
+          }
         }
 
-        return output.cornersSafe!();
+        data.ketuRoarSafe = output.cornersSafe!();
+        return output.text!({ safe: data.ketuRoarSafe });
       },
       outputStrings: {
         northSouthSafe: {
-          en: '안전: 남북',
+          en: '남/북',
           ja: '南・北',
         },
         eastWestSafe: {
-          en: '안전: 동서',
+          en: ' 동/서',
           ja: '東・西',
         },
         cornersSafe: {
-          en: '안전: 모서리',
+          en: '모서리',
           ja: '隅へ',
+        },
+        text: {
+          en: '안전: ${safe}',
+          ja: '安置: ${safe}',
         },
       },
     },
     {
       id: 'AAI Ketuduke Roar Search',
       type: 'GainsEffect',
-      netRegex: { effectId: 'EA4' },
+      netRegex: { effectId: hydroFallBulletMap.spread },
       condition: (data) => data.ketuHydroCount === 3,
       delaySeconds: (_data, matches) => parseFloat(matches.duration) - 10,
       durationSeconds: 8,
       suppressSeconds: 999999,
       alertText: (data, _matches, output) => {
-        const [player] = data.gainList.filter((x) =>
-          x.effectId === data.ketuMyBubbleFetters && x.target !== data.me
-        ).map((x) => data.party.aJobName(x.target));
+        if (data.ketuBubbleFetters === undefined)
+          return;
+        const eid = bubbleFettersMap[data.ketuBubbleFetters];
+        const [player] = data.gainList
+          .filter((x) => x.effectId === eid && x.target !== data.me)
+          .map((x) => data.party.aJobName(x.target));
         if (player === undefined)
           return output.spread!();
-        if (data.ketuMyBubbleFetters === 'bubble')
-          return output.bubble!({ player: player });
-        return output.bind!({ player: player });
+        return output[data.ketuBubbleFetters]!({ safe: data.ketuRoarSafe, player: player });
       },
       run: (data) => {
-        delete data.ketuMyBubbleFetters;
+        delete data.ketuRoarSafe;
+        delete data.ketuBubbleFetters;
         data.ketuHydroCount++;
         data.gainList = [];
       },
       outputStrings: {
-        bubble: {
-          en: '흩어져요 (🔵버블: ${player})',
-          ja: '散会 (バブル: ${player})',
-        },
-        bind: {
-          en: '흩어져요 (🟡바인드: ${player})',
-          ja: '散会 (バインド: ${player})',
-        },
         spread: Outputs.spread,
+        bubble: {
+          en: '🔵버블: ${safe} (${player})',
+          ja: '散会: ${safe} (バブル: ${player})',
+        },
+        fetters: {
+          en: '🟡바인드: ${safe} (${player})',
+          ja: '散会: ${safe} (バインド: ${player})',
+        },
       },
     },
     {
@@ -637,7 +729,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '담당 쫄 뒤로!',
+          en: '쫄 뒤로!',
           ja: 'ざこの後ろに',
         },
       },
@@ -645,7 +737,7 @@ const triggerSet: TriggerSet<Data> = {
     {
       id: 'AAI Ketuduke Angry Seas',
       type: 'GainsEffect',
-      netRegex: { effectId: ['EA3', 'EA4'], capture: false },
+      netRegex: { effectId: Object.keys(hydroFallBulletIdsMap), capture: false },
       condition: (data) => data.ketuHydroCount === 4,
       delaySeconds: 4.5,
       suppressSeconds: 999999,
@@ -668,7 +760,7 @@ const triggerSet: TriggerSet<Data> = {
     {
       id: 'AAI Ketuduke Angry Seas Stack Reminder',
       type: 'GainsEffect',
-      netRegex: { effectId: 'EA3' },
+      netRegex: { effectId: hydroFallBulletMap.stacks },
       condition: (data) => data.ketuHydroCount === 4,
       delaySeconds: (_data, matches) => parseFloat(matches.duration) - 5,
       suppressSeconds: 999999,
@@ -683,7 +775,7 @@ const triggerSet: TriggerSet<Data> = {
     {
       id: 'AAI Ketuduke Angry Seas Spread Reminder',
       type: 'GainsEffect',
-      netRegex: { effectId: 'EA4' },
+      netRegex: { effectId: hydroFallBulletMap.spread },
       condition: (data) => data.ketuHydroCount === 4,
       delaySeconds: (_data, matches) => parseFloat(matches.duration) - 5,
       suppressSeconds: 999999,
@@ -755,7 +847,7 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: 'AAI Wood Golem Tornado Esuna',
+      id: 'AAI Wood Golem Tornado Cleanse',
       type: 'Ability',
       netRegex: { id: '8C4D', source: 'Aloalo Wood Golem' },
       condition: (data) => data.role === 'healer' || data.job === 'BRD',
@@ -819,32 +911,29 @@ const triggerSet: TriggerSet<Data> = {
     {
       id: 'AAI Lala Lala Rotate',
       type: 'HeadMarker',
-      netRegex: { id: ['01E4', '01E5'], target: 'Lala' },
-      run: (data, matches) => data.lalaRotate = matches.id === '01E4' ? 'cw' : 'ccw',
+      netRegex: { id: [headmarkers.lalaCW, headmarkers.lalaCCW], target: 'Lala' },
+      run: (data, matches) => data.lalaRotate = matches.id === headmarkers.lalaCW ? 'cw' : 'ccw',
     },
     {
       id: 'AAI Lala Lala Times',
       type: 'GainsEffect',
-      // F62 = Times Three
-      // F63 = Times Five
-      netRegex: { effectId: ['F62', 'F63'], source: 'Lala', target: 'Lala' },
-      run: (data, matches) => data.lalaTimes = matches.effectId === 'F62' ? 3 : 5,
+      netRegex: { effectId: Object.keys(lalaLalaTimesIdsMap), source: 'Lala', target: 'Lala' },
+      run: (data, matches) => data.lalaTimes = lalaLalaTimesIdsMap[matches.effectId],
     },
     {
       id: 'AAI Lala Player Rotate',
       type: 'HeadMarker',
-      netRegex: { id: ['01ED', '01EE'] },
+      netRegex: { id: [headmarkers.playerCW, headmarkers.playerCCW] },
       condition: Conditions.targetIsYou(),
-      run: (data, matches) => data.lalaMyRotate = matches.id === '01ED' ? 'cw' : 'ccw',
+      run: (data, matches) =>
+        data.lalaMyRotate = matches.id === headmarkers.playerCW ? 'cw' : 'ccw',
     },
     {
       id: 'AAI Lala Player Times',
       type: 'GainsEffect',
-      // E89 = Times Three
-      // ECE = Times Five
-      netRegex: { effectId: ['E89', 'ECE'], source: 'Lala' },
+      netRegex: { effectId: Object.keys(lalaPlayerTimesIdsMap), source: 'Lala' },
       condition: Conditions.targetIsYou(),
-      run: (data, matches) => data.lalaMyTimes = matches.effectId === 'E89' ? 3 : 5,
+      run: (data, matches) => data.lalaMyTimes = lalaPlayerTimesIdsMap[matches.effectId],
     },
     {
       id: 'AAI LaLa Arcane Blight Drection',
@@ -857,7 +946,7 @@ const triggerSet: TriggerSet<Data> = {
           '888D': 'right',
           '888E': 'left',
         } as const;
-        data.lalaBlight = blightMap[matches.id.toUpperCase()] ?? 'unknown';
+        data.lalaBlight = blightMap[matches.id.toUpperCase()];
       },
     },
     {
@@ -866,9 +955,9 @@ const triggerSet: TriggerSet<Data> = {
       netRegex: { id: '888F', source: 'Lala', capture: false },
       delaySeconds: 1,
       alertText: (data, _matches, output) => {
-        if (data.lalaBlight === 'unknown')
+        if (data.lalaBlight === undefined)
           return output.text!();
-        if (data.lalaRotate === 'unknown')
+        if (data.lalaRotate === undefined)
           return output[data.lalaBlight]!();
         if (isReverseRotate(data.lalaRotate, data.lalaTimes)) {
           return {
@@ -901,17 +990,9 @@ const triggerSet: TriggerSet<Data> = {
     {
       id: 'AAI Lala Analysis Unseen',
       type: 'GainsEffect',
-      netRegex: { effectId: ['E8E', 'E8F', 'E90', 'E91'], source: 'Lala' },
+      netRegex: { effectId: Object.keys(lalaUnseenIdsMap), source: 'Lala' },
       condition: Conditions.targetIsYou(),
-      run: (data, matches) => {
-        const unseenMap: { [count: string]: MarchDirection } = {
-          'E8E': 'front',
-          'E8F': 'back',
-          'E90': 'right',
-          'E91': 'left',
-        } as const;
-        data.lalaMyMarch = unseenMap[matches.effectId] ?? 'unknown';
-      },
+      run: (data, matches) => data.lalaMyMarch = lalaUnseenIdsMap[matches.effectId],
     },
     {
       id: 'AAI Lala Arcane Array',
@@ -919,7 +1000,9 @@ const triggerSet: TriggerSet<Data> = {
       netRegex: { id: '8890', source: 'Lala', capture: false },
       durationSeconds: 15,
       infoText: (data, _matches, output) => {
-        const unseen = output[data.lalaMyMarch]!();
+        const unseen = data.lalaMyMarch === undefined
+          ? output.unknown!()
+          : output[data.lalaMyMarch]!();
         return output.open!({ unseen: unseen });
       },
       outputStrings: {
@@ -940,9 +1023,9 @@ const triggerSet: TriggerSet<Data> = {
       netRegex: { id: '8CDF', source: 'Lala' },
       condition: Conditions.targetIsYou(),
       alertText: (data, _matches, output) => {
-        if (data.lalaMyMarch === 'unknown')
+        if (data.lalaMyMarch === undefined)
           return output.text!();
-        if (data.lalaMyRotate === 'unknown')
+        if (data.lalaMyRotate === undefined)
           return output[data.lalaMyMarch]!();
         if (isReverseRotate(data.lalaMyRotate, data.lalaMyTimes))
           return {
@@ -987,7 +1070,7 @@ const triggerSet: TriggerSet<Data> = {
     {
       id: 'AAI Lala Subtractive Suppressor Alpha',
       type: 'GainsEffect',
-      netRegex: { effectId: 'E8C', source: 'Lala' },
+      netRegex: { effectId: effectIds.subtractiveAlpha, source: 'Lala' },
       run: (data, matches) => {
         if (data.me === matches.target)
           data.lalaSubtractive = parseInt(matches.count);
@@ -997,18 +1080,18 @@ const triggerSet: TriggerSet<Data> = {
     {
       id: 'AAI Lala Subtractive Suppressor Beta',
       type: 'GainsEffect',
-      netRegex: { effectId: 'E8D', source: 'Lala' },
+      netRegex: { effectId: effectIds.subtractiveBeta, source: 'Lala' },
       condition: Conditions.targetIsYou(),
       run: (data, matches) => data.lalaSubtractive = parseInt(matches.count),
     },
     {
       id: 'AAI Lala Surge Vector',
       type: 'GainsEffect',
-      netRegex: { effectId: 'E8B', source: 'Lala' },
+      netRegex: { effectId: effectIds.surgeVector, source: 'Lala' },
       run: (data, matches) => data.gainList.push(matches),
     },
-    // Poshiume Strat: https://twitter.com/posiumesan/status/1719545249302008122
-    // Hamukatsu Strat: https://youtu.be/QqLg3DXxCVA?t=298
+    // Poshiume: https://twitter.com/posiumesan/status/1719545249302008122
+    // Hamukatsu: https://youtu.be/QqLg3DXxCVA?t=298
     {
       id: 'AAI Lala Planar Tactics',
       type: 'Ability',
@@ -1150,20 +1233,15 @@ const triggerSet: TriggerSet<Data> = {
     {
       id: 'AAI Lala March',
       type: 'GainsEffect',
-      netRegex: { effectId: ['E83', 'E84', 'E85', 'E86'], source: 'Lala' },
+      netRegex: { effectId: Object.keys(lalaMarchIdsMap), source: 'Lala' },
       condition: Conditions.targetIsYou(),
       delaySeconds: (_data, matches) => parseFloat(matches.duration) - 7,
       durationSeconds: 7,
       alertText: (data, matches, output) => {
-        const map = {
-          'E83': 'front',
-          'E84': 'back',
-          'E85': 'left',
-          'E86': 'right',
-        }[matches.effectId];
+        const map = lalaMarchIdsMap[matches.effectId];
         if (map === undefined)
           return;
-        if (data.lalaMyRotate === 'unknown')
+        if (data.lalaMyRotate === undefined)
           return output[map]!();
         if (isReverseRotate(data.lalaMyRotate, data.lalaMyTimes)) {
           return {
@@ -1268,7 +1346,7 @@ const triggerSet: TriggerSet<Data> = {
     {
       id: 'AAI Lala Arcane Point Spread',
       type: 'GainsEffect',
-      netRegex: { effectId: 'B7D', source: 'Lala' },
+      netRegex: { effectId: effectIds.arcanePointSpread, source: 'Lala' },
       condition: (data, matches) =>
         data.me === matches.target && parseFloat(matches.duration) > 1.5,
       response: Responses.spread('alert'),
@@ -1361,18 +1439,18 @@ const triggerSet: TriggerSet<Data> = {
       netRegex: { id: '8959', source: 'Statice', capture: false },
       alertText: (data, _matches, output) => {
         let ret;
-        if (data.stcMyDuration < 10)
+        if (data.stcDuration < 10)
           ret = data.isStackFirst ? output.stack!() : output.spread!();
-        else if (data.stcMyDuration < 20)
-          ret = forceMove(output, data.stcMyMarch, data.isStackFirst);
-        else if (data.stcMyDuration > 50)
-          ret = forceMove(output, data.stcMyMarch, data.isStackFirst);
+        else if (data.stcDuration < 20)
+          ret = forceMove(output, data.stcMarch, data.isStackFirst);
+        else if (data.stcDuration > 50)
+          ret = forceMove(output, data.stcMarch, data.isStackFirst);
         else
           ret = data.isStackFirst ? output.stack!() : output.spread!();
         data.isStackFirst = !data.isStackFirst;
         return ret;
       },
-      run: (data) => data.stcMyDuration = 0,
+      run: (data) => data.stcDuration = 0,
       outputStrings: {
         ...ForceMoveStrings,
       },
@@ -1432,9 +1510,9 @@ const triggerSet: TriggerSet<Data> = {
         if (data.stcRingRing === 4) {
           const arrow = diceToArrow(data.stcReloadFailed);
           const fourth = output.fourth!({ safe: data.stcReloadFailed, arrow: arrow });
-          if (data.stcMyDuration > 39 && data.stcMyDuration < 50) {
+          if (data.stcDuration > 39 && data.stcDuration < 50) {
             const aim = output.forthMove!({ safe: data.stcReloadFailed, arrow: arrow });
-            const move = forceMove(output, data.stcMyMarch, undefined, aim);
+            const move = forceMove(output, data.stcMarch, undefined, aim);
             return { infoText: fourth, alertText: move };
           }
           return { infoText: fourth };
@@ -1454,13 +1532,13 @@ const triggerSet: TriggerSet<Data> = {
     {
       id: 'AAI Statice Bull\'s-eye Collect',
       type: 'GainsEffect',
-      netRegex: { effectId: 'E9E' },
+      netRegex: { effectId: effectIds.bullsEye },
       run: (data, matches) => data.stcBullsEyes.push(data.party.member(matches.target)),
     },
     {
       id: 'AAI Statice Bull\'s-eye 1',
       type: 'GainsEffect',
-      netRegex: { effectId: 'E9E' },
+      netRegex: { effectId: effectIds.bullsEye },
       condition: (data) => !data.stcSeenPinwheeling,
       delaySeconds: (_data, matches) => parseFloat(matches.duration) - 5,
       suppressSeconds: 1,
@@ -1552,17 +1630,11 @@ const triggerSet: TriggerSet<Data> = {
     {
       id: 'AAI Statice March',
       type: 'GainsEffect',
-      netRegex: { effectId: ['DD2', 'DD3', 'DD4', 'DD5'] },
+      netRegex: { effectId: Object.keys(staticeMarchIdsMap) },
       condition: Conditions.targetIsYou(),
       run: (data, matches) => {
-        const marchMap: { [count: string]: MarchDirection } = {
-          'DD2': 'front',
-          'DD3': 'back',
-          'DD4': 'left',
-          'DD5': 'right',
-        } as const;
-        data.stcMyMarch = marchMap[matches.effectId.toUpperCase()] ?? 'unknown';
-        data.stcMyDuration = parseFloat(matches.duration);
+        data.stcMarch = staticeMarchIdsMap[matches.effectId];
+        data.stcDuration = parseFloat(matches.duration);
       },
     },
     {
@@ -1650,7 +1722,7 @@ const triggerSet: TriggerSet<Data> = {
     {
       id: 'AAI Statice Ball of Fire Rotate Right',
       type: 'HeadMarker',
-      netRegex: { id: '009C', target: 'Ball of Fire', capture: false },
+      netRegex: { id: headmarkers.ballCW, target: 'Ball of Fire', capture: false },
       durationSeconds: 13,
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
@@ -1660,7 +1732,7 @@ const triggerSet: TriggerSet<Data> = {
     {
       id: 'AAI Statice Ball of Fire Rotate Left',
       type: 'HeadMarker',
-      netRegex: { id: '009D', target: 'Ball of Fire', capture: false },
+      netRegex: { id: headmarkers.ballCCW, target: 'Ball of Fire', capture: false },
       durationSeconds: 13,
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
@@ -1683,13 +1755,13 @@ const triggerSet: TriggerSet<Data> = {
     {
       id: 'AAI Statice Burning Chains Collect',
       type: 'HeadMarker',
-      netRegex: { id: '0061' },
+      netRegex: { id: headmarkers.chain },
       run: (data, matches) => data.stcChains.push(matches.target),
     },
     {
       id: 'AAI Statice Burning Chains Alert',
       type: 'HeadMarker',
-      netRegex: { id: '0061' },
+      netRegex: { id: headmarkers.chain },
       condition: Conditions.targetIsYou(),
       delaySeconds: 0.1,
       alertText: (data, _matches, output) => {
@@ -1710,8 +1782,8 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      // Pino Strat: https://twitter.com/pino_mujuuryoku/status/1720127076190306359
-      // Spell Strat: https://twitter.com/spell_ff14/status/1720068760068120970
+      // Pino: https://twitter.com/pino_mujuuryoku/status/1720127076190306359
+      // Spell: https://twitter.com/spell_ff14/status/1720068760068120970
       id: 'AAI Statice Burning Chains Tether',
       type: 'Tether',
       netRegex: { id: '0009' },
@@ -1804,49 +1876,6 @@ const triggerSet: TriggerSet<Data> = {
         data.stcBullsEyes = [];
       },
     },
-    // ---------------------------------------------- 테스트
-    /*
-    {
-      id: 'AAI marker test',
-      type: 'HeadMarker',
-      netRegex: {},
-      infoText: (_data, matches, output) => {
-        const tested: string[] = [
-          '0017', // 흩어져요
-          '003E', // 뭉쳐요
-          '0061', // 체인
-          '00A1', // 뭉쳐 대상에게 옴
-          '00C6', // 쫄이 씀. 따라오는 머시기
-          '00DC', // 체인 끊김? 아무튼 Burning Chains 다음 나옴
-          '00E5', // 흩어져/뭉쳐/매직업 셋중 하나일거 같음...
-          '0150', // 케투 1번 휩쓸림
-          '0151', // 케투 2번
-          '01E4', // 라라 보스 시계
-          '01E5', // 라라 보스 반시계
-          '01ED', // 라라 플레이어 시계
-          '01EE', // 라라 플레이어 반시계
-          '01F7', // 라라 플레이어 모르겟다. 방향 관련 같은데
-          '01F8', // 라라 플레이어 모르겟다. 방향 관련 같은데
-          '00F3', // 라라 버스터 Strategic Strike
-          '0186', // 186~18B 주사위 모양
-          '0187',
-          '0188',
-          '0189',
-          '018A',
-          '018B',
-          '015B', // 스타 페어. 기믹 처리하면서 해결됨
-          '00DA', // 스타 버스터 Socking Abandon
-          '009C', // 스타 Ball of Fire. 문제는 이거 어디 있는지만 알면...
-        ];
-        if (tested.includes(matches.id))
-          return;
-        return output.text!({ id: matches.id, dest: matches.target });
-      },
-      outputStrings: {
-        text: '헤드마커: ${id} (${dest})',
-      },
-    },
-    */
   ],
   timelineReplace: [
     {

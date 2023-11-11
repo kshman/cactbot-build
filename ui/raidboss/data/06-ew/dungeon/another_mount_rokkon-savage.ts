@@ -1096,7 +1096,7 @@ const triggerSet: TriggerSet<Data> = {
               6: output.awest!(),
               7: output.anw!(),
             }[averagePos],
-            partner: data.ShortName(data.prsPartner),
+            partner: data.party.aJobName(data.prsPartner),
           };
           if (data.prsDevilishCount === 0) {
             if (data.prsStackFirst)
@@ -2625,7 +2625,7 @@ const triggerSet: TriggerSet<Data> = {
         const isInFirst = matches.id === '843C';
         const inOut = isInFirst ? output.in!() : output.out!();
         const outIn = isInFirst ? output.out!() : output.in!();
-        const args = { inOut: inOut, outIn: outIn, partner: data.ShortName(data.prsPartner) };
+        const args = { inOut: inOut, outIn: outIn, partner: data.party.aJobName(data.prsPartner) };
         if (data.prsStackFirst)
           return output.stack!(args);
         return output.spread!(args);
@@ -2719,7 +2719,7 @@ const triggerSet: TriggerSet<Data> = {
             return output.stackTank!();
           return output.stackDps!();
         }
-        return output.stack!({ partner: data.ShortName(partner) });
+        return output.stack!({ partner: data.party.aJobName(partner) });
       },
       outputStrings: {
         stack: {
@@ -2746,8 +2746,8 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (data, _matches, output) => {
         aBuildStackPartner(data, data.sparksCollect, 'E17', 'E18');
         if (data.prsStackFirst)
-          return output.stack!({ partner: data.ShortName(data.prsPartner) });
-        return output.spread!({ partner: data.ShortName(data.prsPartner) });
+          return output.stack!({ partner: data.party.aJobName(data.prsPartner) });
+        return output.spread!({ partner: data.party.aJobName(data.prsPartner) });
       },
       outputStrings: {
         stack: {
@@ -3250,7 +3250,7 @@ const triggerSet: TriggerSet<Data> = {
           // return { alertText: output.tether!() };
           return;
         }
-        const target = data.ShortName(matches.target);
+        const target = data.party.aJobName(matches.target);
         return { infoText: output.notether!({ target: target }) };
       },
     },
@@ -3320,7 +3320,7 @@ const triggerSet: TriggerSet<Data> = {
         if (data.prsHaveTether) {
           const left = data.prsTetherCollect.filter((x) => data.me !== x);
           if (left.length === 1)
-            return { alertText: output.tether!({ player: data.ShortName(left[0]) }) };
+            return { alertText: output.tether!({ player: data.party.aJobName(left[0]) }) };
           return { alertText: output.tetheronly!() };
         }
         if (data.prsTetherCollect.length === 2) {

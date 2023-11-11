@@ -38,7 +38,7 @@ export const getMemberByName = (data: Data, name: string) =>
   data.members?.find((e) => e.n === name);
 export const getMemberRole = (data: Data, name: string) => {
   const m = getMemberByName(data, name);
-  return m ? m.r : data.ShortName(name);
+  return m ? m.r : data.party.member(name);
 };
 export const testSynergyMarkerMove = (my: PrsMember, ot: PrsMember) => {
   if (my.sm < 5)
@@ -1095,14 +1095,14 @@ const triggerSet: TriggerSet<Data> = {
         const stacksOn = !data.options.AutumnStyle
           ? output.stacksOn!({
             glitch: glitch,
-            player1: data.ShortName(p1),
-            player2: data.ShortName(p2),
+            player1: data.party.aJobName(p1),
+            player2: data.party.aJobName(p2),
           })
           : output.markerOn!({
             glitch: glitch,
             marker: marker,
-            player1: data.ShortName(p1),
-            player2: data.ShortName(p2),
+            player1: data.party.aJobName(p1),
+            player2: data.party.aJobName(p2),
           });
         if (!data.spotlightStacks.includes(data.me))
           return { infoText: stacksOn };
@@ -2983,8 +2983,8 @@ const triggerSet: TriggerSet<Data> = {
         if (ms.length === 0)
           return output.noTarget!();
         if (ms.length === 1)
-          return output.onlyOne!({ target: data.ShortName(ms[0]) });
-        return output.okTwo!({ t1: data.ShortName(ms[0]), t2: data.ShortName(ms[1]) });
+          return output.onlyOne!({ target: data.party.aJobName(ms[0]) });
+        return output.okTwo!({ t1: data.party.aJobName(ms[0]), t2: data.party.aJobName(ms[1]) });
       },
       tts: '検知検知',
       outputStrings: {
