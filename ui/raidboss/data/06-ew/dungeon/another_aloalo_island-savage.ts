@@ -17,7 +17,7 @@ type ClockRotate = 'cw' | 'ccw';
 type MarchDirection = 'front' | 'back' | 'left' | 'right';
 
 const ForceMoveStrings = {
-  stack: Outputs.getTogether,
+  stacks: Outputs.getTogether,
   spread: Outputs.spread,
   forward: {
     en: '강제이동: 앞 🡺 ${aim}',
@@ -130,19 +130,13 @@ const forceMove = (
     }[march];
     if (safezone !== undefined)
       return move!({ aim: safezone });
-    return move!({ aim: stackFirst ? output.stack!() : output.spread!() });
+    return move!({ aim: stackFirst ? output.stacks!() : output.spread!() });
   }
   if (safezone !== undefined)
     return safezone;
   if (stackFirst)
-    return output.stack!();
+    return output.stacks!();
   return output.spread!();
-};
-
-// 스타티스 나눔
-const stcBallOfFire = (combatant: NetMatches['AddedCombatant']): number => {
-  const hg = parseFloat(combatant.heading);
-  return (Math.round(6 - 6 * (2 * Math.PI - hg) / Math.PI) % 12 + 12) % 12;
 };
 
 // 주사위를 방향으로
@@ -159,7 +153,7 @@ const diceToArrow = (no: number): string => {
   return ret === undefined ? 'ꔫ' : ret;
 };
 
-// 헤드 마커
+// head markers
 const headmarkers = {
   chain: '0061',
   lalaCW: '01E4',
@@ -746,11 +740,11 @@ const triggerSet: TriggerSet<Data> = {
       suppressSeconds: 999999,
       alertText: (data, _matches, output) => {
         data.isStackFirst = isStackFirst(data.ketuHydroStack, data.ketuHydroSpread);
-        return data.isStackFirst ? output.stack!() : output.spread!();
+        return data.isStackFirst ? output.stacks!() : output.spread!();
       },
       run: (data) => data.ketuHydroCount++,
       outputStrings: {
-        stack: {
+        stacks: {
           en: '넉백 🡺 뭉쳤다 🡺 흩어져요',
           ja: 'ノックバック => 頭割り => 散開',
         },
@@ -804,9 +798,15 @@ const triggerSet: TriggerSet<Data> = {
       },
       run: (data) => data.ketuCrystalAdd = [],
       outputStrings: {
-        text: '(슬슬 버블 타야 함)',
-        left: '(왼쪽 DPS가 버블 타야 함)',
-        right: '(오른쪽 DPS가 버블 타야 함)',
+        text: {
+          en: '(슬슬 버블 타야 함)',
+        },
+        left: {
+          en: '(왼쪽 DPS가 버블 타야 함)',
+        },
+        right: {
+          en: '(오른쪽 DPS가 버블 타야 함)',
+        },
       },
     },
     {
@@ -1021,7 +1021,7 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: 'AAIS Lala Targeted Light!',
+      id: 'AAIS Lala Targeted Light',
       type: 'StartsUsing',
       netRegex: { id: '8CE1', source: 'Lala' },
       condition: Conditions.targetIsYou(),
@@ -1428,11 +1428,11 @@ const triggerSet: TriggerSet<Data> = {
         const prev = data.isStackFirst;
         data.isStackFirst = !data.isStackFirst;
         if (prev)
-          return output.stack!();
+          return output.stacks!();
         return output.spread!();
       },
       outputStrings: {
-        stack: Outputs.getTogether,
+        stacks: Outputs.getTogether,
         spread: Outputs.spread,
       },
     },
@@ -1443,13 +1443,13 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (data, _matches, output) => {
         let ret;
         if (data.stcDuration < 10)
-          ret = data.isStackFirst ? output.stack!() : output.spread!();
+          ret = data.isStackFirst ? output.stacks!() : output.spread!();
         else if (data.stcDuration < 20)
           ret = forceMove(output, data.stcMarch, data.isStackFirst);
         else if (data.stcDuration > 50)
           ret = forceMove(output, data.stcMarch, data.isStackFirst);
         else
-          ret = data.isStackFirst ? output.stack!() : output.spread!();
+          ret = data.isStackFirst ? output.stacks!() : output.spread!();
         data.isStackFirst = !data.isStackFirst;
         return ret;
       },
@@ -1529,7 +1529,9 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       run: (data) => data.gainList = [],
       outputStrings: {
-        text: '폭탄 피해서 안전한 곳으로',
+        text: {
+          en: '폭탄 피해서 안전한 곳으로',
+        },
       },
     },
     {
@@ -1563,6 +1565,7 @@ const triggerSet: TriggerSet<Data> = {
         const oi = data.party.aJobIndex(other);
         if (mi === undefined || oi === undefined)
           return output.redCheck!();
+
         if (mi < oi)
           return output.red!();
 
@@ -1742,6 +1745,7 @@ const triggerSet: TriggerSet<Data> = {
         text: '↺반시계 회전',
       },
     },
+    /*
     {
       id: 'AAIS Statice Ball of Fire',
       type: 'AddedCombatant',
@@ -1755,6 +1759,7 @@ const triggerSet: TriggerSet<Data> = {
         text: '후: ${mesg}',
       },
     },
+    */
     {
       id: 'AAIS Statice Burning Chains Collect',
       type: 'HeadMarker',
@@ -1809,11 +1814,11 @@ const triggerSet: TriggerSet<Data> = {
             en: '북으로! 자리 조정 페어!',
             ja: '北へ！ 席入れ替え',
           },
-          pinoStack: {
+          pinoStacks: {
             en: '북으로! 조정없이 페어',
             ja: '北へ',
           },
-          spellStack: {
+          spellStacks: {
             en: '북으로! 페어',
             ja: '北へ',
           },
@@ -1825,7 +1830,7 @@ const triggerSet: TriggerSet<Data> = {
             en: '북으로! 페어 오른쪽 (${partner})',
             ja: '北の右へ (${partner})',
           },
-          stack: Outputs.pairStack,
+          stacks: Outputs.pairStack,
           unknown: Outputs.unknown,
         };
         if (data.me === matches.source || data.me === matches.target)
@@ -1834,7 +1839,7 @@ const triggerSet: TriggerSet<Data> = {
           return { alertText: output.deathclaw!() };
 
         if (data.triggerSetConfig.pinwheelingType === 'stack')
-          return { infoText: output.stack!() };
+          return { infoText: output.stacks!() };
 
         if (data.triggerSetConfig.pinwheelingType === 'pino') {
           const roles = data.stcBullsEyes.map((x) => x.role);
@@ -1847,16 +1852,16 @@ const triggerSet: TriggerSet<Data> = {
           if (th.length === 2)
             return { alertText: output.pinoAdjust!() };
 
-          return { infoText: output.pinoStack!() };
+          return { infoText: output.pinoStacks!() };
         }
 
         if (data.triggerSetConfig.pinwheelingType === 'spell') {
           if (data.stcBullsEyes.length !== 2)
-            return { infoText: output.spellStack!() };
+            return { infoText: output.spellStacks!() };
 
           const other = data.stcBullsEyes[data.stcBullsEyes[0]?.name === data.me ? 1 : 0];
           if (other === undefined)
-            return { infoText: output.spellStack!() };
+            return { infoText: output.spellStacks!() };
 
           if (data.stcChains.includes(other.name)) {
             const [partner] = data.party.partyNames.filter(
