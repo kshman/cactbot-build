@@ -834,7 +834,7 @@ const triggerSet: TriggerSet<Data> = {
         else
           data.prsLightAndDarks = myLength === 'near' ? 'darknear' : 'darkfar';
 
-        const myBuddyShort = data.ShortName(myBuddy);
+        const myBuddyShort = data.party.aJobName(myBuddy);
 
         let alertText: string;
         if (myLength === 'near') {
@@ -850,7 +850,7 @@ const triggerSet: TriggerSet<Data> = {
         }
         if (data.options.AutumnStyle) {
           // 어듬이 스타일 덮어쓰기
-          const myPartner = data.ShortName(myBuddy);
+          const myPartner = data.party.aJobName(myBuddy);
           let mySide;
           if (data.role === 'dps')
             mySide = myColor === 'dark' ? output.rightSide!() : output.leftSide!();

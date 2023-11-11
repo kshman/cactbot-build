@@ -921,7 +921,9 @@ const triggerSet: TriggerSet<Data> = {
           return { alertText: output.invulnerable!() };
         if (!matches.target)
           return { infoText: output.tankBuster!() };
-        return { infoText: output.tankBusterOnPlayer!({ player: data.ShortName(matches.target) }) };
+        return {
+          infoText: output.tankBusterOnPlayer!({ player: data.party.member(matches.target) }),
+        };
       },
     },
     {

@@ -875,7 +875,9 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (data, matches, output) => {
         if (data.flowLocation === undefined)
           return output.stack!();
-        return output[`${data.flowLocation}Stack`]!({ player: data.ShortName(matches.target) });
+        return output[`${data.flowLocation}Stack`]!({
+          player: data.party.aJobName(matches.target),
+        });
       },
       run: (data) => delete data.flowLocation,
       outputStrings: {

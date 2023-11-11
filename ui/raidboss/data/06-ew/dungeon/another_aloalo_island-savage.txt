@@ -87,7 +87,11 @@ hideall "--sync--"
 1314.4 "Hydrofall" sync / 1[56]:[^:]*:Ketuduke:8ADE:/
 
 1324.8 "Tidal Roar" sync / 1[56]:[^:]*:Ketuduke:8AD4:/
-# ???
+1342.8 "Tidal Roar (Enrage)" #sync / 1[56]:[^:]*:Ketuduke:8AD6:/
+1343.8 "Tidal Roar (Enrage)" #sync / 1[56]:[^:]*:Ketuduke:8AD8:/
+1345.5 "Tidal Roar (Enrage)" #sync / 1[56]:[^:]*:Ketuduke:8AD7:/
+1346.5 "Tidal Roar (Enrage)" #sync / 1[56]:[^:]*:Ketuduke:8AD8:/
+1348.2 "Tidal Roar (Enrage)" #sync / 1[56]:[^:]*:Ketuduke:8AD7:/
 
 # ALL ENCOUNTER ABILITIES
 # 8A77 --sync-- Ketuduke repositioning
@@ -160,9 +164,9 @@ hideall "--sync--"
 2040.3 "Arcane Array" sync / 1[56]:[^:]*:Lala:(8BE7|8BF6):/
 2045.4 "Angular Addition" sync / 1[56]:[^:]*:Lala:(8BE0|8D2F):/
 2046.1 "Bright Pulse" sync / 1[56]:[^:]*:Lala:8BE8:/
-2047.4 "Radiance" sync / 1[56]:[^:]*:Arcane Globe:8BEB:/
+2047.4 "Radiance 1" sync / 1[56]:[^:]*:Arcane Globe:8BEB:/
 2053.4 "Arcane Blight" sync / 1[56]:[^:]*:Lala:8BE6:/
-2055.7 "Radiance" sync / 1[56]:[^:]*:Arcane Globe:8BEB:/
+2055.7 "Radiance 2" sync / 1[56]:[^:]*:Arcane Globe:8BEB:/
 2061.5 "Targeted Light" sync / 1[56]:[^:]*:Lala:8CE0:/
 
 2072.6 "Strategic Strike" sync / 1[56]:[^:]*:Lala:8C04:/
@@ -200,9 +204,9 @@ hideall "--sync--"
 2273.6 "Arcane Array" sync / 1[56]:[^:]*:Lala:(8BE7|8BF6):/
 2278.7 "Angular Addition" sync / 1[56]:[^:]*:Lala:(8BE0|8D2F):/
 2279.4 "Bright Pulse" sync / 1[56]:[^:]*:Lala:8BE8:/
-2280.7 "Radiance" sync / 1[56]:[^:]*:Arcane Globe:8BEB:/
+2280.7 "Radiance 1" sync / 1[56]:[^:]*:Arcane Globe:8BEB:/
 2286.7 "Arcane Blight" sync / 1[56]:[^:]*:Lala:8BE6:/
-2289.0 "Radiance" sync / 1[56]:[^:]*:Arcane Globe:8BEB:/
+2289.0 "Radiance 2" sync / 1[56]:[^:]*:Arcane Globe:8BEB:/
 2294.8 "Targeted Light" sync / 1[56]:[^:]*:Lala:8CE0:/
 2306.0 "Strategic Strike" sync / 1[56]:[^:]*:Lala:8C04:/
 

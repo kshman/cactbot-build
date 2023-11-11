@@ -628,7 +628,7 @@ export const Responses = {
       if (target === data.me)
         return output.sharedOrInvinTankbusterOnYou?.();
       if (data.role === 'tank' || data.role === 'healer')
-        return output.sharedOrInvinTankbusterOnPlayer?.({ player: data.ShortName(target) });
+        return output.sharedOrInvinTankbusterOnPlayer?.({ player: data.party.member(target) });
     };
 
     const otherFunc = (data: Data, matches: TargetedMatches, output: Output) => {
