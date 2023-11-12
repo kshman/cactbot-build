@@ -326,10 +326,13 @@ const triggerSet: TriggerSet<Data> = {
           if (ss.length === 3)
             data.triggerSetConfig.pinwheelingType = ss[2] === 'sp' ? 'spell' : 'pino';
         }
+        console.log(
+          `알로 옵션: ${data.triggerSetConfig.flukeGaleType}${data.triggerSetConfig.planarTacticsType}${data.triggerSetConfig.pinwheelingType}`,
+        );
         return output.text!({
-          fluke: data.triggerSetConfig.flukeGaleType,
-          planar: data.triggerSetConfig.planarTacticsType,
-          pin: data.triggerSetConfig.pinwheelingType,
+          fluke: data.triggerSetConfig.flukeGaleType.slice(2),
+          planar: data.triggerSetConfig.planarTacticsType.slice(2),
+          pin: data.triggerSetConfig.pinwheelingType.slice(2),
         });
       },
       outputStrings: {
