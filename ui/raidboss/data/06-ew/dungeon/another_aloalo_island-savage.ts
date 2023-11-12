@@ -82,6 +82,7 @@ export interface Data extends RaidbossData {
   stcDuration: number;
   gainList: NetMatches['GainsEffect'][];
   isStackFirst: boolean;
+  checkOptions: boolean;
 }
 
 // Horizontal crystals have a heading of 0, vertical crystals are -pi/2.
@@ -300,10 +301,44 @@ const triggerSet: TriggerSet<Data> = {
       stcDuration: 0,
       gainList: [],
       isStackFirst: false,
+      checkOptions: false,
     };
   },
   triggers: [
     // ---------------- first trash ----------------
+    {
+      // 어드미 옵션 처리
+      id: 'AAIS Option Check',
+      type: 'StartsUsing',
+      netRegex: { id: '8BC7', source: 'Aloalo Kiwakin', capture: false },
+      condition: (data) => !data.checkOptions,
+      delaySeconds: 5.5,
+      infoText: (data, _matches, output) => {
+        data.checkOptions = true;
+        if (data.options.AutumnExtend !== undefined) {
+          const ss = data.options.AutumnExtend.split(',');
+          if (ss.length === 1 && ss[0] === 'hm') {
+            data.triggerSetConfig.flukeGaleType = 'hamukatsu';
+            data.triggerSetConfig.planarTacticsType = 'hamukatsu';
+            data.triggerSetConfig.pinwheelingType = 'pino';
+          }
+          if (ss.length >= 2) {
+            data.triggerSetConfig.flukeGaleType = ss[0] === 'hm' ? 'hamukatsu' : 'pylene';
+            data.triggerSetConfig.planarTacticsType = ss[1] === 'hm' ? 'hamukatsu' : 'poshiume';
+          }
+          if (ss.length === 3)
+            data.triggerSetConfig.pinwheelingType = ss[2] === 'sp' ? 'spell' : 'pino';
+        }
+        return output.text!({
+          fluke: data.triggerSetConfig.flukeGaleType,
+          planar: data.triggerSetConfig.planarTacticsType,
+          pin: data.triggerSetConfig.pinwheelingType,
+        });
+      },
+      outputStrings: {
+        text: '옵션: ${fluke}/${planar}/${pin}',
+      },
+    },
     {
       id: 'AAIS Kiwakin Lead Hook',
       type: 'StartsUsing',
@@ -334,7 +369,7 @@ const triggerSet: TriggerSet<Data> = {
       response: Responses.tankBuster(),
     },
     {
-      id: 'AAIS Kiwakin Sharp Strike Clease',
+      id: 'AAIS Kiwakin Sharp Strike Cleanse',
       type: 'Ability',
       netRegex: { id: '8BC8', source: 'Aloalo Kiwakin' },
       condition: (data) => data.CanCleanse(),
@@ -1196,7 +1231,7 @@ const triggerSet: TriggerSet<Data> = {
       run: (data) => data.gainList = [],
       outputStrings: {
         count: {
-          en: '${num}',
+          en: '번호: ${num}',
           ja: 'カウント: ${num}',
         },
         poshiume1out: {
