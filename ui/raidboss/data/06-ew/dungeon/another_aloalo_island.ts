@@ -1193,7 +1193,7 @@ const triggerSet: TriggerSet<Data> = {
       run: (data) => data.gainList = [],
       outputStrings: {
         count: {
-          en: '${num}',
+          en: '번호: ${num}',
           ja: 'カウント: ${num}',
         },
         poshiume1out: {

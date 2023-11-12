@@ -522,15 +522,6 @@ const setOptionsFromOutputValue = (
   }
 };
 
-const setAutumnStyleValue = (
-  value: SavedConfigEntry,
-  options: BaseOptions | TriggerAutoConfig,
-) => {
-  if (typeof value !== 'boolean')
-    return;
-  options.AutumnStyle = value;
-};
-
 // Helper for doing nothing during trigger eval, but still recording any
 // calls to `output.responseOutputStrings = x;` via callback.
 class DoNothingFuncProxy {
@@ -1920,16 +1911,6 @@ const templateOptions: OptionsTemplate = {
       debugOnly: true,
       default: false,
     },
-    {
-      id: 'AutumnStyle',
-      name: {
-        en: '어듬이 스타일',
-        ja: 'オヅミスタイル',
-      },
-      type: 'checkbox',
-      default: false,
-      setterFunc: setAutumnStyleValue,
-    },
     defaultAlertOutput,
     {
       id: 'AlertsLanguage',
@@ -2168,10 +2149,7 @@ const templateOptions: OptionsTemplate = {
     {
       id: 'DefaultPlayerLabel',
       comment: {
-        en: `The default way to specify players in trigger output. By default, it will use
-             nicknames/first names. This can be used to print out player jobs instead.
-             If you are not in a party or players are out of a party (or there are bugs),
-             it will default to the player's nickname if there's no other information.`,
+        en: `이름을 나타낼 때 대신 사용할 내용을 고릅니다.`,
       },
       name: {
         en: '기본 플레이어 라벨',
@@ -2472,6 +2450,18 @@ const templateOptions: OptionsTemplate = {
       },
       type: 'float',
       default: 0.75,
+    },
+    {
+      id: 'AutumnStyle',
+      comment: {
+        en: '어듬이와 함께 하는 칵밧 확장.',
+      },
+      name: {
+        en: '어듬이와 함게',
+        ja: 'オヅミと一緒に',
+      },
+      type: 'checkbox',
+      default: false,
     },
   ],
 };
