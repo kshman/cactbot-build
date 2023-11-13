@@ -266,10 +266,10 @@ hideall "--sync--"
 3017.8 "--middle--" sync / 1[56]:[^:]*:Statice:8927:/
 3023.2 "Trick Reload" sync / 1[56]:[^:]*:Statice:8967:/
 3025.3 "Locked and Loaded/Misload x8" duration 8 #sync / 1[56]:[^:]*:Statice:(8925|8926):/
-3037.3 "Trapshooting" sync / 1[56]:[^:]*:Statice:8D1C:/
+3037.3 "Trapshooting 1" sync / 1[56]:[^:]*:Statice:8D1C:/
 3047.7 "Trigger Happy" sync / 1[56]:[^:]*:Statice:8968:/
 3055.5 "Ring a Ring o' Explosions" sync / 1[56]:[^:]*:Statice:8979:/
-3069.6 "Trapshooting" sync / 1[56]:[^:]*:Statice:8976:/
+3069.6 "Trapshooting 2" sync / 1[56]:[^:]*:Statice:8976:/
 3073.6 "Burst" sync / 1[56]:[^:]*:Bomb:897A:/
 
 3080.6 "--middle--" sync / 1[56]:[^:]*:Statice:8927:/
@@ -277,7 +277,7 @@ hideall "--sync--"
 3088.1 "Locked and Loaded/Misload x8" duration 8 #sync / 1[56]:[^:]*:Statice:(8925|8926):/
 3099.2 "Ring a Ring o' Explosions" sync / 1[56]:[^:]*:Statice:8979:/
 3104.3 "Dartboard of Dancing Explosives " sync / 1[56]:[^:]*:Statice:8CC0:/
-3118.1 "Trapshooting" sync / 1[56]:[^:]*:Statice:8976:/
+3118.1 "Trapshooting 1" sync / 1[56]:[^:]*:Statice:8976:/
 3120.0 "Burst" sync / 1[56]:[^:]*:Bomb:897A:/
 
 3130.2 "--middle--" sync / 1[56]:[^:]*:Statice:8927:/
@@ -286,7 +286,7 @@ hideall "--sync--"
 3148.6 "Pop" sync / 1[56]:[^:]*:Statice:896B:/
 3150.3 "Trigger Happy" sync / 1[56]:[^:]*:Statice:8968:/
 3153.6 "Pop" sync / 1[56]:[^:]*:Statice:896B:/
-3158.4 "Trapshooting" sync / 1[56]:[^:]*:Statice:8976:/
+3158.4 "Trapshooting 2" sync / 1[56]:[^:]*:Statice:8976:/
 3170.5 "Aero IV" sync / 1[56]:[^:]*:Statice:8966:/
 
 3177.7 "--untargetable--" sync / 1[56]:[^:]*:Statice:8927:/
@@ -308,12 +308,12 @@ hideall "--sync--"
 3263.0 "Beguiling Glitter" sync / 1[56]:[^:]*:Statice:8980:/
 3270.1 "Trick Reload" sync / 1[56]:[^:]*:Statice:8967:/
 3272.1 "Locked and Loaded/Misload x8" duration 8 #sync / 1[56]:[^:]*:Statice:(8925|8926):/
-3284.1 "Trapshooting" sync / 1[56]:[^:]*:Statice:8D1C:/
+3284.1 "Trapshooting 1" sync / 1[56]:[^:]*:Statice:8D1C:/
 3291.2 "Present Box" sync / 1[56]:[^:]*:Statice:8972:/
 3297.9 "Ring a Ring o' Explosions" sync / 1[56]:[^:]*:Statice:8979:/
 3305.3 "Trigger Happy" sync / 1[56]:[^:]*:Statice:8968:/
 3305.9 "Faerie Ring" sync / 1[56]:[^:]*:Surprising Staff:8973:/
-3312.1 "Trapshooting" sync / 1[56]:[^:]*:Statice:8976:/
+3312.1 "Trapshooting 2" sync / 1[56]:[^:]*:Statice:8976:/
 3316.1 "Burst" sync / 1[56]:[^:]*:Bomb:897A:/
 3323.3 "Aero IV" sync / 1[56]:[^:]*:Statice:8966:/
 3331.4 "Aero IV" sync / 1[56]:[^:]*:Statice:8966:/

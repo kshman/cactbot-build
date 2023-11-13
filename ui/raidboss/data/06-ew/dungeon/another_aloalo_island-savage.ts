@@ -9,34 +9,32 @@ import ZoneId from '../../../../../resources/zone_id';
 import { RaidbossData } from '../../../../../types/data';
 import { PluginCombatantState } from '../../../../../types/event';
 import { NetMatches } from '../../../../../types/net_matches';
-import { PartyMemberParamObject } from '../../../../../types/party';
 import { Output, TriggerSet } from '../../../../../types/trigger';
 
-type BubbleAndFetters = 'bubble' | 'fetters';
-type ClockRotate = 'cw' | 'ccw';
-type MarchDirection = 'front' | 'back' | 'left' | 'right';
+type ClockRotation = 'cw' | 'ccw';
+type AloDirection = 'front' | 'back' | 'left' | 'right';
 
 const ForceMoveStrings = {
   stacks: Outputs.getTogether,
   spread: Outputs.spread,
   forward: {
-    en: '강제이동: 앞 🡺 ${aim}',
+    en: '강제이동: 앞 🔜 ${aim}',
     ja: '強制移動 : 前 => ${aim}',
   },
   backward: {
-    en: '강제이동: 뒤 🡺 ${aim}',
+    en: '강제이동: 뒤 🔜 ${aim}',
     ja: '強制移動 : 後ろ => ${aim}',
   },
   left: {
-    en: '강제이동: 왼쪽 🡺 ${aim}',
+    en: '강제이동: 왼쪽 🔜 ${aim}',
     ja: '強制移動 : 左 => ${aim}',
   },
   right: {
-    en: '강제이동: 오른쪽 🡺 ${aim}',
+    en: '강제이동: 오른쪽 🔜 ${aim}',
     ja: '強制移動 : 右 => ${aim}',
   },
   move: {
-    en: '강제이동 🡺 ${aim}',
+    en: '강제이동 🔜 ${aim}',
     ja: '強制移動 => ${aim}',
   },
   safety: {
@@ -53,34 +51,35 @@ export interface Data extends RaidbossData {
     pinwheelingType: 'stack' | 'pino' | 'spell';
   };
   combatantData: PluginCombatantState[];
+  // ketuduke
   ketuCrystalAdd: NetMatches['AddedCombatant'][];
   ketuSpringCrystalCount: number;
   ketuHydroCount: number;
   ketuHydroStack?: NetMatches['GainsEffect'];
   ketuHydroSpread?: NetMatches['GainsEffect'];
-  ketuBubbleFetters?: BubbleAndFetters;
+  ketuBuff?: 'bubble' | 'fetters';
+  ketuBuffGains: NetMatches['GainsEffect'][];
   ketuRoarSafe?: string;
-  lalaBlight?: MarchDirection;
-  lalaRotate?: ClockRotate;
-  lalaTimes?: number;
-  lalaMyMarch?: MarchDirection;
-  lalaMyRotate?: ClockRotate;
-  lalaMyTimes?: number;
-  lalaSubtractive: number;
-  stcReloadCount: number;
-  stcReloadFailed: number;
+  // lala
+  lalaRotation?: ClockRotation;
+  lalaTimes?: 3 | 5;
+  lalaMyRotation?: ClockRotation;
+  lalaMyTimes?: 3 | 5;
+  lalaUnseen?: AloDirection;
+  lalaAlphaGains: NetMatches['GainsEffect'][];
+  // statice
+  stcReloads: number;
+  stcMisload: number;
   stcRingRing: number;
-  stcBullsEyes: PartyMemberParamObject[];
+  stcBullsEyes: string[];
   stcClaws: string[];
   stcMissiles: string[];
-  stcSeenPinwheeling: boolean;
-  stcTether: boolean;
   stcChains: string[];
-  stcBallFire?: number;
-  stcPop: number;
-  stcMarch?: MarchDirection;
+  stcSeenPinwheeling: boolean;
+  stcSeenPop: boolean;
+  stcMarch?: AloDirection;
   stcDuration: number;
-  gainList: NetMatches['GainsEffect'][];
+  //
   isStackFirst: boolean;
   checkOptions: boolean;
 }
@@ -106,11 +105,10 @@ const isStackFirst = (
 };
 
 // test reverse rotation
-const isReverseRotate = (rot: ClockRotate, count?: number): boolean => {
-  const cnt = count === undefined ? 0 : count;
-  if (rot === 'cw' && cnt === 3)
+const isReverseRotate = (rot: ClockRotation, times: number): boolean => {
+  if (rot === 'cw' && times === 3)
     return true;
-  if (rot === 'ccw' && (cnt === 0 || cnt === 5))
+  if (rot === 'ccw' && times === 5)
     return true;
   return false;
 };
@@ -118,7 +116,7 @@ const isReverseRotate = (rot: ClockRotate, count?: number): boolean => {
 //
 const forceMove = (
   output: Output,
-  march?: MarchDirection,
+  march?: AloDirection,
   stackFirst?: boolean,
   safezone?: string,
 ): string => {
@@ -153,82 +151,6 @@ const diceToArrow = (no: number): string => {
   const ret = arrowMap[no];
   return ret === undefined ? 'ꔫ' : ret;
 };
-
-// head markers
-const headmarkers = {
-  chain: '0061',
-  lalaCW: '01E4',
-  lalaCCW: '01E5',
-  playerCW: '01ED',
-  playerCCW: '01EE',
-  ballCW: '009C',
-  ballCCW: '009D',
-} as const;
-
-// 버블/바인드
-const bubbleFettersMap = {
-  bubble: 'E9F',
-  fetters: 'ECC',
-} as const;
-const bubbleFetterIdsMap: { [effectIds: string]: BubbleAndFetters } = {
-  E9F: 'bubble',
-  ECC: 'fetters',
-} as const;
-
-// 하이드로 폴/불렛
-const hydroFallBulletMap = {
-  stacks: 'EA3',
-  spread: 'EA4',
-} as const;
-const hydroFallBulletIdsMap = {
-  EA3: 'stacks',
-  EA4: 'spread',
-} as const;
-
-// 라라 타임즈
-const lalaLalaTimesIdsMap: { [effectId: string]: number } = {
-  F62: 3, // Times Three
-  F63: 5, // Times Five
-} as const;
-
-// 라라 플레이어 타임즈
-const lalaPlayerTimesIdsMap: { [effectId: string]: number } = {
-  E89: 3, // Times Three
-  ECE: 5, // Times  Five
-} as const;
-
-// 라라 unseen
-const lalaUnseenIdsMap: { [effectId: string]: MarchDirection } = {
-  E8E: 'front',
-  E8F: 'back',
-  E90: 'right',
-  E91: 'left',
-} as const;
-
-// 라라 행진
-const lalaMarchIdsMap: { [effectIds: string]: MarchDirection } = {
-  E83: 'front',
-  E84: 'back',
-  E85: 'left',
-  E86: 'right',
-} as const;
-
-// 스타티스 마치
-const staticeMarchIdsMap: { [effectIds: string]: MarchDirection } = {
-  DD2: 'front',
-  DD3: 'back',
-  DD4: 'left',
-  DD5: 'right',
-} as const;
-
-// effects
-const effectIds = {
-  surgeVector: 'E8B',
-  subtractiveAlpha: 'E8C',
-  subtractiveBeta: 'E8D',
-  arcanePointSpread: 'B7D',
-  bullsEye: 'E9E',
-} as const;
 
 const triggerSet: TriggerSet<Data> = {
   id: 'AnotherAloaloIslandSavage',
@@ -287,32 +209,31 @@ const triggerSet: TriggerSet<Data> = {
       ketuCrystalAdd: [],
       ketuSpringCrystalCount: 0,
       ketuHydroCount: 0,
-      lalaSubtractive: 0,
-      stcReloadCount: 0,
-      stcReloadFailed: 0,
+      ketuBuffGains: [],
+      lalaAlphaGains: [],
+      stcReloads: 0,
+      stcMisload: 0,
       stcRingRing: 0,
       stcBullsEyes: [],
       stcClaws: [],
       stcMissiles: [],
-      stcSeenPinwheeling: false,
-      stcTether: false,
       stcChains: [],
-      stcPop: 0,
+      stcSeenPinwheeling: false,
+      stcSeenPop: false,
       stcDuration: 0,
-      gainList: [],
       isStackFirst: false,
       checkOptions: false,
     };
   },
   triggers: [
-    // ---------------- first trash ----------------
     {
       // 어드미 옵션 처리
       id: 'AAIS Option Check',
-      type: 'StartsUsing',
+      type: 'Ability',
       netRegex: { id: '8BC7', source: 'Aloalo Kiwakin', capture: false },
       condition: (data) => !data.checkOptions,
-      delaySeconds: 5.5,
+      delaySeconds: 1,
+      suppressSeconds: 99999,
       infoText: (data, _matches, output) => {
         data.checkOptions = true;
         if (data.options.AutumnExtend !== undefined) {
@@ -322,26 +243,48 @@ const triggerSet: TriggerSet<Data> = {
             data.triggerSetConfig.planarTacticsType = 'hamukatsu';
             data.triggerSetConfig.pinwheelingType = 'pino';
           }
-          if (ss.length >= 2) {
+          if (ss.length === 2) {
             data.triggerSetConfig.flukeGaleType = ss[0] === 'hm' ? 'hamukatsu' : 'pylene';
             data.triggerSetConfig.planarTacticsType = ss[1] === 'hm' ? 'hamukatsu' : 'poshiume';
+            data.triggerSetConfig.pinwheelingType = 'pino';
           }
-          if (ss.length === 3)
+          if (ss.length === 3) {
+            data.triggerSetConfig.flukeGaleType = ss[0] === 'hm' ? 'hamukatsu' : 'pylene';
+            data.triggerSetConfig.planarTacticsType = ss[1] === 'hm' ? 'hamukatsu' : 'poshiume';
             data.triggerSetConfig.pinwheelingType = ss[2] === 'sp' ? 'spell' : 'pino';
+          }
         }
-        console.log(
-          `알로 옵션: ${data.triggerSetConfig.flukeGaleType}${data.triggerSetConfig.planarTacticsType}${data.triggerSetConfig.pinwheelingType}`,
-        );
-        return output.text!({
-          fluke: data.triggerSetConfig.flukeGaleType.slice(2),
-          planar: data.triggerSetConfig.planarTacticsType.slice(2),
-          pin: data.triggerSetConfig.pinwheelingType.slice(2),
+        const param = output.options!({
+          fluke: {
+            'spread': '(없음)',
+            'pylene': '피렌',
+            'hamukatsu': '남북',
+          }[data.triggerSetConfig.flukeGaleType],
+          planar: {
+            'count': '(카운트)',
+            'poshiume': '포시 양쪽',
+            'hamukatsu': '하므 한쪽',
+          }[data.triggerSetConfig.planarTacticsType],
+          pin: {
+            'stack': '(없음)',
+            'pino': '피노',
+            'spell': '스펠',
+          }[data.triggerSetConfig.pinwheelingType],
         });
+        console.log(`알로 옵션: ${param}`);
+        if (data.options.DisplayLanguage === 'en')
+          return output.text!({ param: param });
       },
       outputStrings: {
-        text: '옵션: ${fluke}/${planar}/${pin}',
+        text: {
+          en: '옵션: ${param}',
+        },
+        options: {
+          en: '${fluke}/${planar}/${pin}',
+        },
       },
     },
+    // ---------------- first trash ----------------
     {
       id: 'AAIS Kiwakin Lead Hook',
       type: 'StartsUsing',
@@ -404,7 +347,7 @@ const triggerSet: TriggerSet<Data> = {
       netRegex: { id: '8BCA', source: 'Aloalo Snipper', capture: false },
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
-        text: '옆으로 (앞🡺뒤 공격)',
+        text: '옆으로 (앞🔜뒤 공격)',
       },
     },
     {
@@ -483,15 +426,17 @@ const triggerSet: TriggerSet<Data> = {
     {
       id: 'AAIS Ketuduke Bubble Weave/Foamy Fetters',
       type: 'GainsEffect',
-      netRegex: { effectId: Object.keys(bubbleFetterIdsMap) },
+      // E9F Bubble
+      // ECC Fetters
+      netRegex: { effectId: ['E9F', 'ECC'] },
       infoText: (data, matches, output) => {
         if (data.me !== matches.target)
           return;
-        data.ketuBubbleFetters = bubbleFetterIdsMap[matches.effectId];
-        if (data.ketuBubbleFetters !== undefined && data.ketuHydroCount !== 3)
-          return output[data.ketuBubbleFetters]!();
+        data.ketuBuff = matches.effectId === 'E9F' ? 'bubble' : 'fetters';
+        if (data.ketuHydroCount !== 3)
+          return output[data.ketuBuff]!();
       },
-      run: (data, matches) => data.gainList.push(matches),
+      run: (data, matches) => data.ketuBuffGains.push(matches),
       outputStrings: {
         bubble: {
           en: '🔵버블',
@@ -506,24 +451,24 @@ const triggerSet: TriggerSet<Data> = {
     {
       id: 'AAIS Ketuduke Hydrofall Target',
       type: 'GainsEffect',
-      netRegex: { effectId: hydroFallBulletMap.stacks },
+      netRegex: { effectId: 'EA3' },
       run: (data, matches) => data.ketuHydroStack = matches,
     },
     {
       id: 'AAIS Ketuduke Hydrobullet Target',
       type: 'GainsEffect',
-      netRegex: { effectId: hydroFallBulletMap.spread },
+      netRegex: { effectId: 'EA4' },
       run: (data, matches) => data.ketuHydroSpread = matches,
     },
     {
       id: 'AAIS Ketuduke Fluke Gale Hydro',
       type: 'GainsEffect',
-      netRegex: { effectId: Object.keys(hydroFallBulletIdsMap) },
+      netRegex: { effectId: ['EA3', 'EA4'] },
       condition: (data) => data.ketuHydroCount === 0 || data.ketuHydroCount === 5,
       delaySeconds: 0.5,
       suppressSeconds: 2,
       infoText: (_data, matches, output) => {
-        if (matches.effectId === hydroFallBulletMap.stacks)
+        if (matches.effectId === 'EA3')
           return output.stacks!();
         return output.spread!();
       },
@@ -547,20 +492,20 @@ const triggerSet: TriggerSet<Data> = {
           return output.goSafeTile!();
 
         if (data.triggerSetConfig.flukeGaleType === 'pylene') {
-          if (data.ketuBubbleFetters === 'fetters' && !data.isStackFirst)
+          if (data.ketuBuff === 'fetters' && !data.isStackFirst)
             return output.pylene2!();
           return output.pylene1!();
         }
 
         if (data.triggerSetConfig.flukeGaleType === 'hamukatsu') {
-          if (data.ketuBubbleFetters === 'bubble')
-            return output.hamukatsu2!();
+          if (data.ketuBuff === 'bubble')
+            return output.hamukatsuBubble!();
           if (data.isStackFirst)
             return output.hamukatsu1!();
           return output.hamukatsu2!();
         }
       },
-      run: (data) => delete data.ketuBubbleFetters,
+      run: (data) => delete data.ketuBuff,
       outputStrings: {
         pylene1: {
           en: '1번 칸으로',
@@ -578,6 +523,10 @@ const triggerSet: TriggerSet<Data> = {
           en: '2번쪽 안전 칸으로',
           ja: '第2区域の安置マスへ',
         },
+        hamukatsuBubble: {
+          en: '2번쪽 넉백하면 안전인 칸으로',
+          ja: '第2区域の安置マスへ',
+        },
         goSafeTile: {
           en: '안전 타일로',
           ja: '安置マスへ',
@@ -587,7 +536,7 @@ const triggerSet: TriggerSet<Data> = {
     {
       id: 'AAIS Ketuduke Blowing Bubbles',
       type: 'GainsEffect',
-      netRegex: { effectId: Object.keys(hydroFallBulletIdsMap), capture: false },
+      netRegex: { effectId: ['EA3', 'EA4'], capture: false },
       condition: (data) => data.ketuHydroCount === 1,
       delaySeconds: 4,
       durationSeconds: 8,
@@ -605,7 +554,7 @@ const triggerSet: TriggerSet<Data> = {
     {
       id: 'AAIS Ketuduke Blowing Bubbles Stack Reminder',
       type: 'GainsEffect',
-      netRegex: { effectId: hydroFallBulletMap.stacks },
+      netRegex: { effectId: 'EA3' },
       condition: (data) => data.ketuHydroCount === 1,
       delaySeconds: (_data, matches) => parseFloat(matches.duration) - 5,
       suppressSeconds: 999999,
@@ -620,7 +569,7 @@ const triggerSet: TriggerSet<Data> = {
     {
       id: 'AAIS Ketuduke Blowing Bubbles Spread Reminder',
       type: 'GainsEffect',
-      netRegex: { effectId: hydroFallBulletMap.spread },
+      netRegex: { effectId: 'EA4' },
       condition: (data) => data.ketuHydroCount === 1,
       delaySeconds: (_data, matches) => parseFloat(matches.duration) - 5,
       suppressSeconds: 999999,
@@ -635,11 +584,11 @@ const triggerSet: TriggerSet<Data> = {
     {
       id: 'AAIS Ketuduke Twintides Hydrofall Target',
       type: 'GainsEffect',
-      netRegex: { effectId: hydroFallBulletMap.stacks, capture: false },
+      netRegex: { effectId: 'EA3', capture: false },
       condition: (data) => data.ketuHydroCount === 2,
       run: (data) => {
         data.ketuHydroCount++;
-        data.gainList = [];
+        data.ketuBuffGains = [];
       },
     },
     {
@@ -649,7 +598,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '밖에 있다 🡺 안에서 페어',
+          en: '밖에 있다 🔜 안에서 페어',
           ja: '外 => ボスの下で頭割り',
         },
       },
@@ -661,7 +610,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '안에 있다 🡺 밖에서 페어',
+          en: '안에 있다 🔜 밖에서 페어',
           ja: 'ボスの下 => 外側で頭割り',
         },
       },
@@ -702,15 +651,15 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         northSouthSafe: {
-          en: '남/북',
+          en: '⇅남북',
           ja: '南・北',
         },
         eastWestSafe: {
-          en: ' 동/서',
+          en: '⇆동서',
           ja: '東・西',
         },
         cornersSafe: {
-          en: '모서리',
+          en: '❌구석',
           ja: '隅へ',
         },
         text: {
@@ -722,38 +671,48 @@ const triggerSet: TriggerSet<Data> = {
     {
       id: 'AAIS Ketuduke Roar Search',
       type: 'GainsEffect',
-      netRegex: { effectId: hydroFallBulletMap.spread },
+      netRegex: { effectId: 'EA4' },
       condition: (data) => data.ketuHydroCount === 3,
       delaySeconds: (_data, matches) => parseFloat(matches.duration) - 10,
       durationSeconds: 8,
       suppressSeconds: 999999,
-      alertText: (data, _matches, output) => {
-        if (data.ketuBubbleFetters === undefined)
+      response: (data, _matches, output) => {
+        // cactbot-builtin-response
+        output.responseOutputStrings = {
+          spread: Outputs.spread,
+          bubble: {
+            en: '🔵버블 (${player})',
+            ja: '散会 (バブル: ${player})',
+          },
+          fetters: {
+            en: '🟡바인드 (${player})',
+            ja: '散会 (バインド: ${player})',
+          },
+          safe: {
+            en: '안전: ${safe}',
+            ja: '安置: ${safe}',
+          },
+        };
+        if (data.ketuBuff === undefined)
           return;
-        const eid = bubbleFettersMap[data.ketuBubbleFetters];
-        const [player] = data.gainList
+        const eid = { bubble: 'E9F', fetters: 'ECC' }[data.ketuBuff];
+        const [player] = data.ketuBuffGains
           .filter((x) => x.effectId === eid && x.target !== data.me)
           .map((x) => data.party.aJobName(x.target));
         if (player === undefined)
-          return output.spread!();
-        return output[data.ketuBubbleFetters]!({ safe: data.ketuRoarSafe, player: player });
+          return {
+            alertText: output.spread!(),
+            infoText: output.safe!({ safe: data.ketuRoarSafe }),
+          };
+        return {
+          alertText: output[data.ketuBuff]!({ player: player }),
+          infoText: output.safe!({ safe: data.ketuRoarSafe }),
+        };
       },
       run: (data) => {
         delete data.ketuRoarSafe;
-        delete data.ketuBubbleFetters;
         data.ketuHydroCount++;
-        data.gainList = [];
-      },
-      outputStrings: {
-        spread: Outputs.spread,
-        bubble: {
-          en: '🔵버블: ${safe} (${player})',
-          ja: '散会: ${safe} (バブル: ${player})',
-        },
-        fetters: {
-          en: '🟡바인드: ${safe} (${player})',
-          ja: '散会: ${safe} (バインド: ${player})',
-        },
+        data.ketuBuffGains = [];
       },
     },
     {
@@ -762,18 +721,31 @@ const triggerSet: TriggerSet<Data> = {
       netRegex: { id: '8ADC', source: 'Spring Crystal', capture: false },
       condition: (data) => data.ketuHydroCount === 4,
       suppressSeconds: 2,
-      alertText: (_data, _matches, output) => output.text!(),
+      alertText: (data, _matches, output) => {
+        if (data.ketuBuff === undefined)
+          return output.text!();
+        return output[data.ketuBuff]!();
+      },
+      run: (data) => delete data.ketuBuff,
       outputStrings: {
         text: {
           en: '쫄 뒤로!',
           ja: 'ざこの後ろに',
+        },
+        bubble: {
+          en: '바인드🟡 쫄 뒤로!',
+          ja: 'バインドのざこの後ろに',
+        },
+        fetters: {
+          en: '버블🔵 쫄 뒤로!',
+          ja: 'バブルのざこの後ろに',
         },
       },
     },
     {
       id: 'AAIS Ketuduke Angry Seas',
       type: 'GainsEffect',
-      netRegex: { effectId: Object.keys(hydroFallBulletIdsMap), capture: false },
+      netRegex: { effectId: ['EA3', 'EA4'], capture: false },
       condition: (data) => data.ketuHydroCount === 4,
       delaySeconds: 4.5,
       suppressSeconds: 999999,
@@ -784,11 +756,11 @@ const triggerSet: TriggerSet<Data> = {
       run: (data) => data.ketuHydroCount++,
       outputStrings: {
         stacks: {
-          en: '넉백 🡺 뭉쳤다 🡺 흩어져요',
+          en: '넉백 🔜 뭉쳤다 🔜 흩어져요',
           ja: 'ノックバック => 頭割り => 散開',
         },
         spread: {
-          en: '넉백 🡺 흩어졌다 🡺 뭉쳐요',
+          en: '넉백 🔜 흩어졌다 🔜 뭉쳐요',
           ja: 'ノックバック => 散開 => 頭割り',
         },
       },
@@ -796,7 +768,7 @@ const triggerSet: TriggerSet<Data> = {
     {
       id: 'AAIS Ketuduke Angry Seas Stack Reminder',
       type: 'GainsEffect',
-      netRegex: { effectId: hydroFallBulletMap.stacks },
+      netRegex: { effectId: 'EA3' },
       condition: (data) => data.ketuHydroCount === 4,
       delaySeconds: (_data, matches) => parseFloat(matches.duration) - 5,
       suppressSeconds: 999999,
@@ -811,7 +783,7 @@ const triggerSet: TriggerSet<Data> = {
     {
       id: 'AAIS Ketuduke Angry Seas Spread Reminder',
       type: 'GainsEffect',
-      netRegex: { effectId: hydroFallBulletMap.spread },
+      netRegex: { effectId: 'EA4' },
       condition: (data) => data.ketuHydroCount === 4,
       delaySeconds: (_data, matches) => parseFloat(matches.duration) - 5,
       suppressSeconds: 999999,
@@ -926,6 +898,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: '죽여야해!',
+          ja: '倒して！',
         },
       },
     },
@@ -963,78 +936,52 @@ const triggerSet: TriggerSet<Data> = {
       response: Responses.aoe(),
     },
     {
-      id: 'AAIS Lala Lala Rotate',
+      id: 'AAIS Lala Boss Rotate',
       type: 'HeadMarker',
-      netRegex: { id: [headmarkers.lalaCW, headmarkers.lalaCCW], target: 'Lala' },
-      run: (data, matches) => data.lalaRotate = matches.id === headmarkers.lalaCW ? 'cw' : 'ccw',
+      // 01E4 Clock
+      // 01E5 Counter Clock
+      netRegex: { id: ['01E4', '01E5'], target: 'Lala' },
+      run: (data, matches) => data.lalaRotation = matches.id === '01E4' ? 'cw' : 'ccw',
     },
     {
-      id: 'AAIS Lala Lala Times',
+      id: 'AAIS Lala Boss Times',
       type: 'GainsEffect',
-      netRegex: { effectId: Object.keys(lalaLalaTimesIdsMap), source: 'Lala', target: 'Lala' },
-      run: (data, matches) => data.lalaTimes = lalaLalaTimesIdsMap[matches.effectId],
+      // F62 Three Times
+      // F63 Five Times
+      netRegex: { effectId: ['F62', 'F63'], source: 'Lala' },
+      run: (data, matches) => data.lalaTimes = matches.effectId === 'F62' ? 3 : 5,
     },
     {
-      id: 'AAIS Lala Player Rotate',
-      type: 'HeadMarker',
-      netRegex: { id: [headmarkers.playerCW, headmarkers.playerCCW] },
-      condition: Conditions.targetIsYou(),
-      run: (data, matches) =>
-        data.lalaMyRotate = matches.id === headmarkers.playerCW ? 'cw' : 'ccw',
-    },
-    {
-      id: 'AAIS Lala Player Times',
-      type: 'GainsEffect',
-      netRegex: { effectId: Object.keys(lalaPlayerTimesIdsMap), source: 'Lala' },
-      condition: Conditions.targetIsYou(),
-      run: (data, matches) => data.lalaMyTimes = lalaPlayerTimesIdsMap[matches.effectId],
-    },
-    {
-      id: 'AAIS LaLa Arcane Blight Drection',
+      id: 'AAIS LaLa Arcane Blight',
       type: 'StartsUsing',
       netRegex: { id: ['8BE2', '8BE3', '8BE4', '8BE5'], source: 'Lala' },
-      run: (data, matches) => {
-        const blightMap: { [count: string]: MarchDirection } = {
+      delaySeconds: 0.5,
+      alertText: (data, matches, output) => {
+        const blightMap: { [count: string]: AloDirection } = {
           '8BE2': 'back',
           '8BE3': 'front',
           '8BE4': 'right',
           '8BE5': 'left',
         } as const;
-        data.lalaBlight = blightMap[matches.id.toUpperCase()];
-      },
-    },
-    {
-      id: 'AAIS Lala Arcane Blight',
-      type: 'StartsUsing',
-      netRegex: { id: '8BE6', source: 'Lala', capture: false },
-      delaySeconds: 1,
-      alertText: (data, _matches, output) => {
-        if (data.lalaBlight === undefined)
-          return output.text!();
-        if (data.lalaRotate === undefined)
-          return output[data.lalaBlight]!();
-        if (isReverseRotate(data.lalaRotate, data.lalaTimes)) {
+        const blight = blightMap[matches.id.toUpperCase()]!;
+        if (data.lalaRotation === undefined || data.lalaTimes === undefined)
+          return output[blight]!();
+        if (isReverseRotate(data.lalaRotation, data.lalaTimes)) {
           return {
             'front': output.left!(),
             'back': output.right!(),
             'left': output.back!(),
             'right': output.front!(),
-            'unknown': output.text!(),
-          }[data.lalaBlight];
+          }[blight];
         }
         return {
           'front': output.right!(),
           'back': output.left!(),
           'left': output.front!(),
           'right': output.back!(),
-          'unknown': output.text!(),
-        }[data.lalaBlight];
+        }[blight];
       },
       outputStrings: {
-        text: {
-          en: '빈 곳으로~',
-          ja: '安置へ移動',
-        },
         front: Outputs.goFront,
         back: Outputs.getBehind,
         left: Outputs.left,
@@ -1042,22 +989,39 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: 'AAIS Lala Analysis Unseen',
-      type: 'GainsEffect',
-      netRegex: { effectId: Object.keys(lalaUnseenIdsMap), source: 'Lala' },
+      id: 'AAIS Lala My Rotate',
+      type: 'HeadMarker',
+      // 01ED Clock
+      // 01EE Counter Clock
+      netRegex: { id: ['01ED', '01EE'] },
       condition: Conditions.targetIsYou(),
-      run: (data, matches) => data.lalaMyMarch = lalaUnseenIdsMap[matches.effectId],
+      run: (data, matches) => data.lalaMyRotation = matches.id === '01ED' ? 'cw' : 'ccw',
     },
     {
-      id: 'AAIS Lala Arcane Array',
-      type: 'Ability',
-      netRegex: { id: '8BE7', source: 'Lala', capture: false },
+      id: 'AAIS Lala My Times',
+      type: 'GainsEffect',
+      // E89 Three Times
+      // ECE Five Times
+      netRegex: { effectId: ['E89', 'ECE'], source: 'Lala' },
+      condition: Conditions.targetIsYou(),
+      run: (data, matches) => data.lalaMyTimes = matches.effectId === 'E89' ? 3 : 5,
+    },
+    {
+      id: 'AAIS Lala Unseen',
+      type: 'GainsEffect',
+      netRegex: { effectId: ['E8E', 'E8F', 'E90', 'E91'], source: 'Lala' },
+      condition: Conditions.targetIsYou(),
       durationSeconds: 15,
-      infoText: (data, _matches, output) => {
-        const unseen = data.lalaMyMarch === undefined
-          ? output.unknown!()
-          : output[data.lalaMyMarch]!();
-        return output.open!({ unseen: unseen });
+      infoText: (data, matches, output) => {
+        const unseenMap: { [effectId: string]: AloDirection } = {
+          E8E: 'front',
+          E8F: 'back',
+          E90: 'right',
+          E91: 'left',
+        } as const;
+        data.lalaUnseen = unseenMap[matches.effectId];
+        const unseen = data.lalaUnseen ?? 'unknown';
+        return output.open!({ unseen: output[unseen]!() });
       },
       outputStrings: {
         open: {
@@ -1077,23 +1041,23 @@ const triggerSet: TriggerSet<Data> = {
       netRegex: { id: '8CE1', source: 'Lala' },
       condition: Conditions.targetIsYou(),
       alertText: (data, _matches, output) => {
-        if (data.lalaMyMarch === undefined)
+        if (data.lalaUnseen === undefined)
           return output.text!();
-        if (data.lalaMyRotate === undefined)
-          return output[data.lalaMyMarch]!();
-        if (isReverseRotate(data.lalaMyRotate, data.lalaMyTimes))
+        if (data.lalaMyRotation === undefined || data.lalaMyTimes === undefined)
+          return output[data.lalaUnseen]!();
+        if (isReverseRotate(data.lalaMyRotation, data.lalaMyTimes))
           return {
             'front': output.left!(),
             'back': output.right!(),
             'left': output.back!(),
             'right': output.front!(),
-          }[data.lalaMyMarch];
+          }[data.lalaUnseen];
         return {
           'front': output.right!(),
           'back': output.left!(),
           'left': output.front!(),
           'right': output.back!(),
-        }[data.lalaMyMarch];
+        }[data.lalaUnseen];
       },
       outputStrings: {
         front: Outputs.lookTowardsBoss,
@@ -1111,7 +1075,7 @@ const triggerSet: TriggerSet<Data> = {
         },
         text: {
           en: '열린 곳을 보스로',
-          ja: '未解析の方角をボスに向ける',
+          ja: '開きをボスに向ける',
         },
       },
     },
@@ -1121,49 +1085,34 @@ const triggerSet: TriggerSet<Data> = {
       netRegex: { id: '8C04', source: 'Lala' },
       response: Responses.tankBuster(),
     },
-    {
-      id: 'AAIS Lala Subtractive Suppressor Alpha',
-      type: 'GainsEffect',
-      netRegex: { effectId: effectIds.subtractiveAlpha, source: 'Lala' },
-      run: (data, matches) => {
-        if (data.me === matches.target)
-          data.lalaSubtractive = parseInt(matches.count);
-        data.gainList.push(matches);
-      },
-    },
-    {
-      id: 'AAIS Lala Subtractive Suppressor Beta',
-      type: 'GainsEffect',
-      netRegex: { effectId: effectIds.subtractiveBeta, source: 'Lala' },
-      condition: Conditions.targetIsYou(),
-      run: (data, matches) => data.lalaSubtractive = parseInt(matches.count),
-    },
-    {
-      id: 'AAIS Lala Surge Vector',
-      type: 'GainsEffect',
-      netRegex: { effectId: effectIds.surgeVector, source: 'Lala' },
-      run: (data, matches) => data.gainList.push(matches),
-    },
     // Poshiume: https://twitter.com/posiumesan/status/1719545249302008122
     // Hamukatsu: https://youtu.be/QqLg3DXxCVA?t=298
     {
       id: 'AAIS Lala Planar Tactics',
-      type: 'Ability',
-      netRegex: { id: '8BEF', source: 'Lala', capture: false },
-      delaySeconds: 1.2,
+      type: 'GainsEffect',
+      // E8B Surge Vector
+      // E8C Subtractive Suppressor Alpha
+      netRegex: { effectId: ['E8B', 'E8C'], source: 'Lala' },
+      condition: (data, matches) => {
+        data.lalaAlphaGains.push(matches);
+        return data.lalaAlphaGains.length === 6;
+      },
       durationSeconds: 10,
+      suppressSeconds: 999999,
       infoText: (data, _matches, output) => {
-        if (data.lalaSubtractive === undefined)
+        const strat = data.triggerSetConfig.planarTacticsType;
+        const stacks = data.lalaAlphaGains.filter((x) => x.effectId === 'E8B').map((x) => x.target);
+        const nums = data.lalaAlphaGains.filter((x) => x.effectId === 'E8C');
+        const mystr = nums.find((x) => x.target === data.me)?.count;
+        if (mystr === undefined)
           return;
+        const mycnt = parseInt(mystr);
 
-        if (data.triggerSetConfig.planarTacticsType === 'count')
-          return output.count!({ num: data.lalaSubtractive });
+        if (stacks.length !== 2 || nums.length !== 4 || strat === 'count')
+          return output.count!({ num: mycnt });
 
         if (data.triggerSetConfig.planarTacticsType === 'poshiume') {
-          const mysub = data.lalaSubtractive;
-          const list = data.gainList;
-
-          const [s1, s2] = list.filter((x) => x.effectId === 'E8B').map((x) => x.target);
+          const [s1, s2] = stacks;
           let issame;
           if (s1 === undefined || s2 === undefined)
             issame = false;
@@ -1173,40 +1122,37 @@ const triggerSet: TriggerSet<Data> = {
             issame = (dps1 && dps2) || (!dps1 && !dps2);
           }
 
-          if (mysub === 1)
+          if (mycnt === 1)
             return issame ? output.poshiume1in!() : output.poshiume1out!();
-          if (mysub === 2) {
+          if (mycnt === 2) {
             if (issame)
               return output.poshiume2out!();
-            const [pair] = list.filter((x) => parseInt(x.count) === 2 && x.target !== data.me);
+            const pair = nums.find((x) => parseInt(x.count) === 2 && x.target !== data.me);
             const name = pair === undefined ? output.unknown!() : data.party.aJobName(pair.target);
             return output.poshiume2in!({ name: name });
           }
-          if (mysub === 3)
+          if (mycnt === 3)
             return issame ? output.poshiume3right!() : output.poshiume3left!();
         }
 
         if (data.triggerSetConfig.planarTacticsType === 'hamukatsu') {
-          const mysub = data.lalaSubtractive;
-          const list = data.gainList;
-
-          if (mysub === 1)
+          if (mycnt === 1)
             return output.hamukatsu1!();
-          if (mysub === 3)
+          if (mycnt === 3)
             return output.hamukatsu3!();
 
-          const mym = data.party.member(data.me);
-          const [ptm] = list.filter((x) => x.target !== data.me && parseInt(x.count) === 2)
+          const my = data.party.member(data.me);
+          const [pm] = nums.filter((x) => x.target !== data.me && parseInt(x.count) === 2)
             .map((x) => data.party.member(x.target));
-          if (mym === undefined || ptm === undefined)
+          if (my === undefined || pm === undefined)
             return output.hamukatsu2!();
-          const [s1, s2] = list.filter((x) => x.effectId === 'E8B').map((x) => x.target);
+          const [s1, s2] = stacks;
           if (s1 === undefined || s2 === undefined)
             return output.hamukatsu2!();
 
           if (s1 === data.me || s2 === data.me) {
             const other = s1 === data.me ? s2 : s1;
-            const [surge] = list.filter((x) => x.target === other && parseInt(x.count) > 0);
+            const surge = nums.find((x) => x.target === other);
             if (surge === undefined)
               return output.hamukatsu2!();
             const count = parseInt(surge.count);
@@ -1214,9 +1160,9 @@ const triggerSet: TriggerSet<Data> = {
               return output.hamukatsu2left!();
             if (count === 3)
               return output.hamukatsu2right!();
-          } else if (s1 === ptm.name || s2 === ptm.name) {
-            const other = s1 === ptm.name ? s2 : s1;
-            const [surge] = list.filter((x) => x.target === other && parseInt(x.count) > 0);
+          } else if (s1 === pm.name || s2 === pm.name) {
+            const other = s1 === pm.name ? s2 : s1;
+            const surge = nums.find((x) => x.target === other);
             if (surge === undefined)
               return output.hamukatsu2!();
             const count = parseInt(surge.count);
@@ -1226,12 +1172,12 @@ const triggerSet: TriggerSet<Data> = {
               return output.hamukatsu2left!();
           }
 
-          return Autumns.JobPriority(mym.jindex) < Autumns.JobPriority(ptm.jindex)
+          return Autumns.JobPriority(my.jindex) < Autumns.JobPriority(pm.jindex)
             ? output.hamukatsu2left!()
             : output.hamukatsu2right!();
         }
       },
-      run: (data) => data.gainList = [],
+      run: (data) => data.lalaAlphaGains = [],
       outputStrings: {
         count: {
           en: '번호: ${num}',
@@ -1287,44 +1233,22 @@ const triggerSet: TriggerSet<Data> = {
     {
       id: 'AAIS Lala March',
       type: 'GainsEffect',
-      netRegex: { effectId: Object.keys(lalaMarchIdsMap), source: 'Lala' },
+      netRegex: { effectId: 'E83', source: 'Lala' },
       condition: Conditions.targetIsYou(),
       delaySeconds: (_data, matches) => parseFloat(matches.duration) - 7,
       durationSeconds: 7,
-      alertText: (data, matches, output) => {
-        const map = lalaMarchIdsMap[matches.effectId];
-        if (map === undefined)
+      alertText: (data, _matches, output) => {
+        if (data.lalaMyRotation === undefined || data.lalaMyTimes === undefined)
           return;
-        if (data.lalaMyRotate === undefined)
-          return output[map]!();
-        if (isReverseRotate(data.lalaMyRotate, data.lalaMyTimes)) {
-          return {
-            'front': output.left!(),
-            'back': output.right!(),
-            'left': output.back!(),
-            'right': output.front!(),
-          }[map];
-        }
-        return {
-          'front': output.right!(),
-          'back': output.left!(),
-          'left': output.front!(),
-          'right': output.back!(),
-        }[map];
+        if (isReverseRotate(data.lalaMyRotation, data.lalaMyTimes))
+          return output.left!();
+        return output.right!();
+      },
+      run: (data) => {
+        delete data.lalaMyRotation;
+        delete data.lalaMyTimes;
       },
       outputStrings: {
-        text: {
-          en: '강제이동',
-          ja: '強制移動',
-        },
-        front: {
-          en: '강제이동: 앞으로',
-          ja: '強制移動 : 前',
-        },
-        back: {
-          en: '강제이동: 뒤로',
-          ja: '強制移動 : 後ろ',
-        },
         left: {
           en: '강제이동: 왼쪽',
           ja: '強制移動 : 左',
@@ -1337,64 +1261,31 @@ const triggerSet: TriggerSet<Data> = {
     },
     {
       id: 'AAIS Lala Spatial Tactics',
-      type: 'Ability',
-      netRegex: { id: '8BF7', source: 'Lala', capture: false },
-      delaySeconds: 1.2,
-      durationSeconds: 20,
-      infoText: (data, _matches, output) => {
-        if (data.lalaSubtractive === undefined)
+      type: 'GainsEffect',
+      // E8D Subtractive Suppressor Beta
+      netRegex: { effectId: 'E8D', source: 'Lala' },
+      condition: Conditions.targetIsYou(),
+      suppressSeconds: 20,
+      infoText: (_data, matches, output) => {
+        const num = parseInt(matches.count);
+        if (num < 1 || num > 4)
           return;
-        return output[`no${data.lalaSubtractive}`]!();
+        return output[`num${num}`]!();
       },
       outputStrings: {
-        no1: {
-          en: '[1] 구슬 쪽 🡺 다 피해욧',
+        num1: {
+          en: '[1] 구슬 쪽 🔜 다 피해욧',
         },
-        no2: {
-          en: '[2] 구슬 쪽 🡺 한번 맞아요',
+        num2: {
+          en: '[2] 구슬 쪽 🔜 한번 맞아요',
         },
-        no3: {
-          en: '[3] 구슬 없는쪽 🡺 두번 맞아요',
+        num3: {
+          en: '[3] 구슬 없는쪽 🔜 두번 맞아요',
         },
-        no4: {
-          en: '[4] 구슬 없는쪽 🡺 세번 맞아요',
-        },
-      },
-    },
-    {
-      id: 'AAIS Lala Symmetric Surge Partner',
-      type: 'Ability',
-      netRegex: { id: '8BF8', source: 'Lala', capture: false },
-      delaySeconds: 1.2,
-      alertText: (data, _matches, output) => {
-        const [s1, s2] = data.gainList.filter((x) => x.effectId === 'E8B').map((x) => x.target);
-        if (s1 === undefined || s2 === undefined)
-          return;
-
-        const dps1 = data.party.isDPS(s1);
-        const dps2 = data.party.isDPS(s2);
-        const same = (dps1 && dps2) || (!dps1 && !dps2);
-        if (same)
-          return;
-
-        if (data.role === 'dps')
-          return output.swap!();
-      },
-      outputStrings: {
-        swap: {
-          en: 'DPS 자리 바꿔요!',
-          ja: 'DPS同志に入れ替え！',
+        num4: {
+          en: '[4] 구슬 없는쪽 🔜 세번 맞아요',
         },
       },
-    },
-    {
-      id: 'AAIS Lala Symmetric Surge',
-      type: 'Ability',
-      netRegex: { id: '8BF8', source: 'Lala', capture: false },
-      delaySeconds: 31,
-      durationSeconds: 5,
-      response: Responses.pairStack(),
-      run: (data) => data.gainList = [],
     },
     {
       id: 'AAIS Lala Arcane Plot',
@@ -1402,16 +1293,43 @@ const triggerSet: TriggerSet<Data> = {
       netRegex: { id: '8BF9', source: 'Lala', capture: false },
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
-        text: '바깥쪽 쫄 있는 곳이 북쪽!',
+        text: '바깥 쫄 있는데가 북쪽!',
+      },
+    },
+    {
+      id: 'AAIS Lala Arcane Point',
+      type: 'StartsUsing',
+      netRegex: { id: '8BFC', source: 'Lala', capture: false },
+      infoText: (_data, _matches, output) => output.text!(),
+      run: (data) => data.lalaAlphaGains = [], // Surge Vector 리셋할 곳이 여기뿐
+      outputStrings: {
+        text: '자기 자리로 흩어져요!',
       },
     },
     {
       id: 'AAIS Lala Arcane Point Spread',
       type: 'GainsEffect',
-      netRegex: { effectId: effectIds.arcanePointSpread, source: 'Lala' },
-      condition: (data, matches) =>
-        data.me === matches.target && parseFloat(matches.duration) > 1.5,
+      // B7D Magic Vulnerability Up (여기서는 1.96임)
+      netRegex: { effectId: 'B7D', source: 'Lala' },
+      condition: (data, matches) => {
+        if (data.me !== matches.target)
+          return;
+        return parseFloat(matches.duration) > 1.9;
+      },
       response: Responses.spread('alert'),
+    },
+    {
+      id: 'AAIS Lala Arcane Point Stack',
+      type: 'GainsEffect',
+      // B7D Magic Vulnerability Up (여기서는 1.0임)
+      netRegex: { effectId: 'B7D', source: 'Lala' },
+      condition: (data, matches) => {
+        if (data.me !== matches.target)
+          return;
+        const duration = parseFloat(matches.duration);
+        return duration > 0.99 && duration < 1.9;
+      },
+      response: Responses.pairStack(),
     },
     // ---------------- statice ----------------
     {
@@ -1425,8 +1343,8 @@ const triggerSet: TriggerSet<Data> = {
       type: 'StartsUsing',
       netRegex: { id: '8967', source: 'Statice', capture: false },
       run: (data) => {
-        data.stcReloadCount = 0;
-        data.stcReloadFailed = 0;
+        data.stcReloads = 0;
+        data.stcMisload = 0;
       },
     },
     {
@@ -1434,12 +1352,12 @@ const triggerSet: TriggerSet<Data> = {
       type: 'Ability',
       netRegex: { id: '8925', source: 'Statice', capture: false },
       preRun: (data) => {
-        if (data.stcReloadCount === 0)
+        if (data.stcReloads === 0)
           data.isStackFirst = false;
-        data.stcReloadCount++;
+        data.stcReloads++;
       },
       infoText: (data, _matches, output) => {
-        if (data.stcReloadCount === 1)
+        if (data.stcReloads === 1)
           return output.spread!();
       },
       outputStrings: {
@@ -1454,18 +1372,18 @@ const triggerSet: TriggerSet<Data> = {
       type: 'Ability',
       netRegex: { id: '8926', source: 'Statice', capture: false },
       preRun: (data) => {
-        if (data.stcReloadCount === 0)
+        if (data.stcReloads === 0)
           data.isStackFirst = true;
-        if (data.stcReloadCount < 7)
-          data.stcReloadFailed = data.stcReloadCount;
-        data.stcReloadCount++;
+        if (data.stcReloads < 7)
+          data.stcMisload = data.stcReloads;
+        data.stcReloads++;
       },
       infoText: (data, _matches, output) => {
-        if (data.stcReloadCount === 1)
+        if (data.stcReloads === 1)
           return output.stacks!();
-        if (data.stcReloadCount < 8) {
-          const arrow = diceToArrow(data.stcReloadFailed);
-          return output.text!({ safe: data.stcReloadFailed, arrow: arrow });
+        if (data.stcReloads < 8) {
+          const arrow = diceToArrow(data.stcMisload);
+          return output.text!({ safe: data.stcMisload, arrow: arrow });
         }
       },
       outputStrings: {
@@ -1522,8 +1440,8 @@ const triggerSet: TriggerSet<Data> = {
       type: 'StartsUsing',
       netRegex: { id: '8968', source: 'Statice', capture: false },
       infoText: (data, _matches, output) => {
-        const arrow = diceToArrow(data.stcReloadFailed);
-        return output.text!({ safe: data.stcReloadFailed, arrow: arrow });
+        const arrow = diceToArrow(data.stcMisload);
+        return output.text!({ safe: data.stcMisload, arrow: arrow });
       },
       outputStrings: {
         text: {
@@ -1570,10 +1488,10 @@ const triggerSet: TriggerSet<Data> = {
         if (data.stcRingRing === 3)
           return { infoText: output.third!() };
         if (data.stcRingRing === 4) {
-          const arrow = diceToArrow(data.stcReloadFailed);
-          const fourth = output.fourth!({ safe: data.stcReloadFailed, arrow: arrow });
+          const arrow = diceToArrow(data.stcMisload);
+          const fourth = output.fourth!({ safe: data.stcMisload, arrow: arrow });
           if (data.stcDuration > 39 && data.stcDuration < 50) {
-            const aim = output.forthMove!({ safe: data.stcReloadFailed, arrow: arrow });
+            const aim = output.forthMove!({ safe: data.stcMisload, arrow: arrow });
             const move = forceMove(output, data.stcMarch, undefined, aim);
             return { infoText: fourth, alertText: move };
           }
@@ -1586,7 +1504,6 @@ const triggerSet: TriggerSet<Data> = {
       type: 'Ability',
       netRegex: { id: '8CC0', source: 'Statice', capture: false },
       infoText: (_data, _matches, output) => output.text!(),
-      run: (data) => data.gainList = [],
       outputStrings: {
         text: {
           en: '폭탄 피해서 안전한 곳으로',
@@ -1596,13 +1513,13 @@ const triggerSet: TriggerSet<Data> = {
     {
       id: 'AAIS Statice Bull\'s-eye Collect',
       type: 'GainsEffect',
-      netRegex: { effectId: effectIds.bullsEye },
-      run: (data, matches) => data.stcBullsEyes.push(data.party.member(matches.target)),
+      netRegex: { effectId: 'E9E' },
+      run: (data, matches) => data.stcBullsEyes.push(matches.target),
     },
     {
       id: 'AAIS Statice Bull\'s-eye 1',
       type: 'GainsEffect',
-      netRegex: { effectId: effectIds.bullsEye },
+      netRegex: { effectId: 'E9E' },
       condition: (data) => !data.stcSeenPinwheeling,
       delaySeconds: (_data, matches) => parseFloat(matches.duration) - 5,
       suppressSeconds: 1,
@@ -1612,7 +1529,8 @@ const triggerSet: TriggerSet<Data> = {
         if (data.role === 'healer')
           return output.yellow!();
 
-        const dps = data.stcBullsEyes.filter((x) => x.role === 'dps');
+        const members = data.stcBullsEyes.map((x) => data.party.member(x));
+        const dps = members.filter((x) => x.role === 'dps');
         if (dps.length === 1)
           return output.red!();
 
@@ -1628,7 +1546,7 @@ const triggerSet: TriggerSet<Data> = {
         if (mi < oi)
           return output.red!();
 
-        const roles = data.stcBullsEyes.map((x) => x.role);
+        const roles = members.map((x) => x.role);
         if (roles.includes('healer'))
           return output.blue!();
         return output.yellow!();
@@ -1657,7 +1575,7 @@ const triggerSet: TriggerSet<Data> = {
       id: 'AAIS Statice Beguiling Glitter',
       type: 'Ability',
       netRegex: { id: '8980', source: 'Statice', capture: false },
-      condition: (data) => data.stcPop < 2,
+      condition: (data) => !data.stcSeenPop,
       delaySeconds: 3,
       suppressSeconds: 1,
       response: Responses.knockback(),
@@ -1666,7 +1584,7 @@ const triggerSet: TriggerSet<Data> = {
       id: 'AAIS Statice Beguiling Glitter In/Out',
       type: 'Ability',
       netRegex: { id: '8980', source: 'Statice', capture: false },
-      condition: (data) => data.stcPop < 2,
+      condition: (data) => !data.stcSeenPop,
       delaySeconds: 8.5,
       durationSeconds: 8,
       suppressSeconds: 1,
@@ -1690,37 +1608,38 @@ const triggerSet: TriggerSet<Data> = {
       id: 'AAIS Statice Pop',
       type: 'StartsUsing',
       netRegex: { id: '896B', source: 'Statice', capture: false },
-      run: (data) => data.stcPop++,
+      run: (data) => data.stcSeenPop = true,
     },
     {
       id: 'AAIS Statice March',
       type: 'GainsEffect',
-      netRegex: { effectId: Object.keys(staticeMarchIdsMap) },
+      netRegex: { effectId: ['DD2', 'DD3', 'DD4', 'DD5'] },
       condition: Conditions.targetIsYou(),
       run: (data, matches) => {
-        data.stcMarch = staticeMarchIdsMap[matches.effectId];
+        const marchMap: { [effectIds: string]: AloDirection } = {
+          DD2: 'front',
+          DD3: 'back',
+          DD4: 'left',
+          DD5: 'right',
+        } as const;
+        data.stcMarch = marchMap[matches.effectId];
         data.stcDuration = parseFloat(matches.duration);
       },
     },
     {
-      id: 'AAIS Statice Surprising Claw Collect',
-      type: 'Tether',
-      netRegex: { id: '0011', source: 'Surprising Claw' },
-      run: (data, matches) => data.stcClaws.push(matches.target),
-    },
-    {
       id: 'AAIS Statice Surprising Claw',
       type: 'Tether',
-      netRegex: { id: '0011', source: 'Surprising Claw', capture: false },
-      delaySeconds: 0.5,
+      netRegex: { id: '0011', source: 'Surprising Claw' },
+      condition: (data, matches) => {
+        data.stcClaws.push(matches.target);
+        return data.stcClaws.length === 2;
+      },
       infoText: (data, _matches, output) => {
         if (!data.stcClaws.includes(data.me))
           return;
-        let partner = undefined;
-        if (data.stcClaws.length === 2)
-          partner = data.stcClaws[0] !== data.me
-            ? data.party.aJobName(data.stcClaws[0])
-            : data.party.aJobName(data.stcClaws[1]);
+        let partner = data.stcClaws[0] !== data.me
+          ? data.party.aJobName(data.stcClaws[0])
+          : data.party.aJobName(data.stcClaws[1]);
         if (partner === undefined)
           partner = output.unknown!();
         return output.text!({ partner: partner });
@@ -1735,24 +1654,19 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: 'AAIS Statice Surprising Missile Collect',
-      type: 'Tether',
-      netRegex: { id: '0011', source: 'Surprising Missile' },
-      run: (data, matches) => data.stcMissiles.push(matches.target),
-    },
-    {
       id: 'AAIS Statice Surprising Missile',
       type: 'Tether',
-      netRegex: { id: '0011', source: 'Surprising Missile', capture: false },
-      delaySeconds: 0.5,
+      netRegex: { id: '0011', source: 'Surprising Missile' },
+      condition: (data, matches) => {
+        data.stcMissiles.push(matches.target);
+        return data.stcMissiles.length === 2;
+      },
       infoText: (data, _matches, output) => {
         if (!data.stcMissiles.includes(data.me))
           return;
-        let partner = undefined;
-        if (data.stcMissiles.length === 2)
-          partner = data.stcMissiles[0] !== data.me
-            ? data.party.aJobName(data.stcMissiles[0])
-            : data.party.aJobName(data.stcMissiles[1]);
+        let partner = data.stcMissiles[0] !== data.me
+          ? data.party.aJobName(data.stcMissiles[0])
+          : data.party.aJobName(data.stcMissiles[1]);
         if (partner === undefined)
           partner = output.unknown!();
         return output.text!({ partner: partner });
@@ -1785,64 +1699,41 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: 'AAIS Statice Ball of Fire Rotate Right',
+      id: 'AAIS Statice Ball of Fire Rotation',
       type: 'HeadMarker',
-      netRegex: { id: headmarkers.ballCW, target: 'Ball of Fire', capture: false },
+      netRegex: { id: ['009C', '009D'], target: 'Ball of Fire' },
       durationSeconds: 13,
-      infoText: (_data, _matches, output) => output.text!(),
-      outputStrings: {
-        text: '↻시계 회전',
-      },
-    },
-    {
-      id: 'AAIS Statice Ball of Fire Rotate Left',
-      type: 'HeadMarker',
-      netRegex: { id: headmarkers.ballCCW, target: 'Ball of Fire', capture: false },
-      durationSeconds: 13,
-      infoText: (_data, _matches, output) => output.text!(),
-      outputStrings: {
-        text: '↺반시계 회전',
-      },
-    },
-    /*
-    {
-      id: 'AAIS Statice Ball of Fire',
-      type: 'AddedCombatant',
-      netRegex: { npcNameId: '12511' }, // 동글
-      infoText: (data, matches, output) => {
-        data.stcBallFire = stcBallOfFire(matches);
-        if (data.stcBallFire > 1000)
-          return output.text!({ mesg: `${data.stcBallFire}/${matches.heading}` });
+      infoText: (_data, matches, output) => {
+        if (matches.id === '009C')
+          return output.clock!();
+        return output.counter!();
       },
       outputStrings: {
-        text: '후: ${mesg}',
+        clock: {
+          en: '⤾시계 회전',
+        },
+        counter: {
+          en: '⤿반시계 회전',
+        },
       },
     },
-    */
     {
-      id: 'AAIS Statice Burning Chains Collect',
+      id: 'AAIS Statice Burning Chains',
       type: 'HeadMarker',
-      netRegex: { id: headmarkers.chain },
-      run: (data, matches) => data.stcChains.push(matches.target),
-    },
-    {
-      id: 'AAIS Statice Burning Chains Alert',
-      type: 'HeadMarker',
-      netRegex: { id: headmarkers.chain },
-      condition: Conditions.targetIsYou(),
-      delaySeconds: 0.1,
+      netRegex: { id: '0061' },
+      condition: (data, matches) => {
+        data.stcChains.push(matches.target);
+        return data.stcChains.length === 2;
+      },
       alertText: (data, _matches, output) => {
-        if (data.stcChains.length !== 2)
-          return output.chain!();
+        if (!data.stcChains.includes(data.me))
+          return;
         const partner = data.stcChains[0] !== data.me ? data.stcChains[0] : data.stcChains[1];
-        return output.chainWith!({ partner: data.party.aJobName(partner) });
+        return output.chain!({ partner: data.party.aJobName(partner) });
       },
+      run: (data) => data.stcChains = [],
       outputStrings: {
         chain: {
-          en: '내게 체인!',
-          ja: '自分にチェイン',
-        },
-        chainWith: {
           en: '내게 체인! (${partner})',
           ja: '自分にチェイン (${partner})',
         },
@@ -1851,7 +1742,7 @@ const triggerSet: TriggerSet<Data> = {
     {
       // Pino: https://twitter.com/pino_mujuuryoku/status/1720127076190306359
       // Spell: https://twitter.com/spell_ff14/status/1720068760068120970
-      id: 'AAIS Statice Burning Chains Tether',
+      id: 'AAIS Statice Break Burning Chains',
       type: 'Tether',
       netRegex: { id: '0009' },
       response: (data, matches, output) => {
@@ -1866,7 +1757,7 @@ const triggerSet: TriggerSet<Data> = {
             ja: 'チェイン切ってね！',
           },
           deathclaw: {
-            en: '데스 손톱 유도 🡺 뭉쳐요',
+            en: '데스 손톱 유도 🔜 뭉쳐요',
             ja: 'クロウ誘導 => 頭割り',
           },
           pinoAdjust: {
@@ -1901,7 +1792,8 @@ const triggerSet: TriggerSet<Data> = {
           return { infoText: output.stacks!() };
 
         if (data.triggerSetConfig.pinwheelingType === 'pino') {
-          const roles = data.stcBullsEyes.map((x) => x.role);
+          const members = data.stcBullsEyes.map((x) => data.party.member(x));
+          const roles = members.map((x) => x.role);
 
           const dps = roles.filter((x) => x === 'dps');
           if (dps.length === 2)
@@ -1918,7 +1810,8 @@ const triggerSet: TriggerSet<Data> = {
           if (data.stcBullsEyes.length !== 2)
             return { infoText: output.spellStacks!() };
 
-          const other = data.stcBullsEyes[data.stcBullsEyes[0]?.name === data.me ? 1 : 0];
+          const members = data.stcBullsEyes.map((x) => data.party.member(x));
+          const other = members[members[0]?.name === data.me ? 1 : 0];
           if (other === undefined)
             return { infoText: output.spellStacks!() };
 

@@ -485,7 +485,7 @@ const triggerSet: TriggerSet<Data> = {
         de: 'Paradigma 2 Türme Strategy',
         ja: 'パラデイグマ2の塔処理方法',
         cn: '范式 2 踩塔方法',
-        ko: 'Paradeigma 2 기둥 공략',
+        ko: '파라데이그마  2 기둥 공략',
       },
       type: 'select',
       options: {
@@ -514,7 +514,7 @@ const triggerSet: TriggerSet<Data> = {
         ko: {
           '반대편 + 가까운 사분면의 기둥 (Game8)': 'quadrant',
           '선 연결된 곳의 시계방향': 'clockwise',
-          '공략 없음: 그냥 타워 색만 알림': 'tower',
+          '공략 없음: 그냥 기둥 색만 알림': 'tower',
         },
       },
       default: 'quadrant',
@@ -580,7 +580,7 @@ const triggerSet: TriggerSet<Data> = {
         en: 'Classical Concepts 2: 실제 장소만 알려줌 & 반전 사용안함',
         de: 'Classical Concepts 2: Nur tatsächlich & keine Umkehrung',
         cn: '经典概念2: 实际位置 (没有位置变换)',
-        ko: 'Classical Concepts 2: 반전 없이 실제 위치만 알림',
+        ko: '원소 이데아 2: 반전 없이 실제 위치만 알림',
       },
       type: 'checkbox',
       default: false,
@@ -591,7 +591,7 @@ const triggerSet: TriggerSet<Data> = {
         en: 'Pangenesis: 첫 타워',
         de: 'Pangenesis: Erste Türme',
         cn: '黑白塔',
-        ko: 'Pangenesis: 첫번째 기둥',
+        ko: '범생설: 첫번째 기둥',
       },
       type: 'select',
       options: {
@@ -2580,7 +2580,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: 'Extérieur + Partenaire (${dir})',
           ja: '外側へ + ペア (${dir})',
           cn: '远离 + 双人分摊 (${dir})',
-          ko: '밖 + 8방향 산개 (${dir})',
+          ko: '밖 + 파트너 (${dir})',
         },
         ...Directions.outputStrings8Dir,
       },
@@ -5153,7 +5153,6 @@ const triggerSet: TriggerSet<Data> = {
     },
     {
       'locale': 'ko',
-      'missingTranslations': true,
       'replaceSync': {
         '(?<! )Athena': '아테나',
         'Anthropos': '안트로포스',
@@ -5176,6 +5175,7 @@ const triggerSet: TriggerSet<Data> = {
         'Astral Advent': '별빛 강림',
         'Astral Glow': '별빛 생장',
         'Astral Impact': '별빛 충격',
+        'Buster': '버스터',
         'Caloric Theory': '열소설',
         'Crush Helm': '성천폭격타',
         'Demi Parhelion': '버금 무리해',

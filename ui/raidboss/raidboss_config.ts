@@ -2150,9 +2150,20 @@ const templateOptions: OptionsTemplate = {
       id: 'DefaultPlayerLabel',
       comment: {
         en: `이름을 나타낼 때 대신 사용할 내용을 고릅니다.`,
+        cn: `在触发器输出中指定玩家的默认方式。默认选项为输出昵称/名字。
+             使用此选项可将输出方式更改为玩家的职能名或职业名。
+             若你不在小队中或玩家离开小队 (或出现错误时), 将默认输出玩家昵称。
+             (注：国服对于昵称和全名不做区分)`,
+        ko: `트리거 출력에서 플레이어를 언급하는 방법입니다. 기본값으로 닉네임/이름을 사용합니다.
+             이 옵션은 이름 대신 플레이어의 직업이나 역할을 출력하고 싶을 때 사용할 수 있습니다.
+             당신이 파티에 있지 않거나 파티 밖에 있는 플레이어에 대해서는
+             기본값인 플레이어의 닉네임이 사용됩니다.
+             (한국 서버에서 '이름 전체' 옵션은 '닉네임'과 같습니다.)`,
       },
       name: {
         en: '기본 플레이어 라벨',
+        cn: '默认玩家代称',
+        ko: '플레이어를 언급하는 기본 방법',
       },
       type: 'select',
       options: {
@@ -2161,6 +2172,18 @@ const templateOptions: OptionsTemplate = {
           '역할 (Tank)': 'role',
           '직업 (WAR)': 'job',
           '원래 이름 (Tini Poutini)': 'name',
+        },
+        cn: {
+          '昵称 (Tini)': 'nick',
+          '职能 (坦克)': 'role',
+          '职业 (战士)': 'job',
+          '全名 (Tini Poutini)': 'name',
+        },
+        ko: {
+          '닉네임 (Tini)': 'nick',
+          '역할 (Tank)': 'role',
+          '직업 (WAR)': 'job',
+          '이름 전체 (Tini Poutini)': 'name',
         },
       },
       default: 'nick',
