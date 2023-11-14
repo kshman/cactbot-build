@@ -21,9 +21,7 @@ import defaultOptions, { ConfigOptions } from './config_options';
 // Load other config files
 import './general_config';
 import '../eureka/eureka_config';
-import '../jobs/jobs_config';
 import '../oopsyraidsy/oopsyraidsy_config';
-import '../radar/radar_config';
 import '../raidboss/raidboss_config';
 
 import '../../resources/defaults.css';

@@ -627,20 +627,6 @@ namespace Cactbot {
       });
     }
 
-    private void RegisterDpsPreset(string name, string file, int width, int height) {
-      var path = new VersionChecker(this.logger).GetCactbotDirectory();
-      string lc = name.ToLowerInvariant();
-      var uri = new System.Uri(Path.Combine(path, "ui", "dps", lc, $"{file}.html"));
-
-      var registry = container.Resolve<Registry>();
-      registry.RegisterOverlayPreset2(new OverlayPreset{
-        Name = $"Cactbot DPS {name}",
-        Url = uri.AbsoluteUri,
-        Size = new int[] { width, height },
-        Locked = false,
-      });
-    }
-
     private void RegisterExternalPreset(string name, string url, int width, int height)
     {
 
@@ -658,15 +644,9 @@ namespace Cactbot {
       RegisterPreset("Raidboss", width:1100, height:300, Strings.PresetRaidbossCombined, "raidboss");
       RegisterPreset("Raidboss", width:1100, height:300, Strings.PresetRaidbossAlertOnly, "raidboss_alerts_only");
       RegisterPreset("Raidboss", width:320, height:220, Strings.PresetRaidbossTimelineOnly, "raidboss_timeline_only");
-      RegisterPreset("Jobs", width:600, height:300, Strings.PresetJobs);
       RegisterPreset("Eureka", width:400, height:400, Strings.PresetEureka);
       RegisterPreset("OopsyRaidsy", width:400, height:400, Strings.PresetOopsyRaidsy);
-      RegisterPreset("PullCounter", width:200, height:200, Strings.PresetPullCounter);
-      RegisterPreset("Radar", width:300, height:400, Strings.PresetRadar);
       RegisterPreset("Test", width:300, height:300, Strings.PresetTest);
-      // FIXME: these should be consistently named.
-      RegisterDpsPreset(Strings.PresetXephero, "xephero-cactbot", width:600, height:400);
-      RegisterDpsPreset(Strings.PresetRdmty, "dps", width:600, height:400);
       // External Overlays using Cactbot Plugin
       RegisterExternalPreset(Strings.PresetZeffUI, "https://zeffuro.github.io/ZeffUI/", width: 800, height: 600);
     }

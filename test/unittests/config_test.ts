@@ -49,8 +49,6 @@ describe('config tests', () => {
       'raidboss/prettytimelines/something else.css',
       'ignored_root_file.js',
       'oopsyraidsy.js',
-      'RADAR.js',
-      'radar.CSS',
       'raidbossy.js',
       'raidboss.js',
       'raidboss.css',
@@ -58,8 +56,6 @@ describe('config tests', () => {
       'yet another ignored file with spaces.js',
     ];
 
-    assert.deepEqual(UserConfig.filterUserFiles(keys, 'radar', '.js'), ['RADAR.js']);
-    assert.deepEqual(UserConfig.filterUserFiles(keys, 'radar', '.css'), ['radar.CSS']);
     assert.deepEqual(UserConfig.filterUserFiles(keys, 'config', '.js'), []);
     assert.deepEqual(UserConfig.filterUserFiles(keys, 'oopsyraidsy', '.js'), [
       'oopsyraidsy/turnoffjunk/raidboss.js',

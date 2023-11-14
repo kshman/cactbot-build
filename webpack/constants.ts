@@ -1,15 +1,10 @@
 export const cactbotModules = {
   config: 'ui/config/config',
   coverage: 'util/coverage/coverage',
-  rdmty: 'ui/dps/rdmty/dps',
-  xephero: 'ui/dps/xephero/xephero',
   eureka: 'ui/eureka/eureka',
-  jobs: 'ui/jobs/jobs',
   oopsyraidsyLive: 'ui/oopsyraidsy/oopsy_live',
   oopsyraidsySummary: 'ui/oopsyraidsy/oopsy_summary',
   oopsyraidsyViewer: 'ui/oopsyraidsy/oopsy_viewer',
-  pullcounter: 'ui/pullcounter/pullcounter',
-  radar: 'ui/radar/radar',
   raidboss: 'ui/raidboss/raidboss',
   raidemulator: 'ui/raidboss/raidemulator',
   splitter: 'util/logtools/web_splitter',
@@ -36,24 +31,9 @@ export const cactbotHtmlChunksMap = {
       cactbotModules.coverage,
     ],
   },
-  'ui/dps/rdmty/dps.html': {
-    chunks: [
-      cactbotModules.rdmty,
-    ],
-  },
-  'ui/dps/xephero/xephero-cactbot.html': {
-    chunks: [
-      cactbotModules.xephero,
-    ],
-  },
   'ui/eureka/eureka.html': {
     chunks: [
       cactbotModules.eureka,
-    ],
-  },
-  'ui/jobs/jobs.html': {
-    chunks: [
-      cactbotModules.jobs,
     ],
   },
   'ui/oopsyraidsy/oopsy_summary.html': {
@@ -72,16 +52,6 @@ export const cactbotHtmlChunksMap = {
     chunks: [
       cactbotChunks.oopsyraidsyData,
       cactbotModules.oopsyraidsyLive,
-    ],
-  },
-  'ui/pullcounter/pullcounter.html': {
-    chunks: [
-      cactbotModules.pullcounter,
-    ],
-  },
-  'ui/radar/radar.html': {
-    chunks: [
-      cactbotModules.radar,
     ],
   },
   'ui/raidboss/raidboss.html': {
