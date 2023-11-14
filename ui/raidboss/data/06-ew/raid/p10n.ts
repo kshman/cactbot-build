@@ -43,20 +43,20 @@ const triggerSet: TriggerSet<Data> = {
       run: (data) => data.silkspitPlayers = [],
       outputStrings: {
         onYou: {
-          en: '흩어져요 (기둥은 터치 ㄴㄴ)',
+          en: 'Spread (avoid posts)',
           de: 'Verteilen (vermeide Stäbe)',
           fr: 'Écartez-vous (évitez les poteaux)',
           ja: '散会 (柱回避)',
           cn: '分散（远离柱子）',
-          ko: '산개 (기둥 피하기)',
+          ko: '흩어져요 (기둥은 터치 ㄴㄴ)',
         },
         onOthers: {
-          en: '마커 달린 사람 피해요',
+          en: 'Avoid marked players',
           de: 'Vermeide markierte Spieler',
           fr: 'Évitez les joueurs marqués',
           ja: 'ウェブ回避',
           cn: '远离点名玩家',
-          ko: '징 대상자 피해요',
+          ko: '마커 달린 사람 피해요',
         },
       },
     },
@@ -75,12 +75,12 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '감옥 피해요',
+          en: 'Avoid jails',
           de: 'Gefängnisen vermeiden',
           fr: 'Évitez les pièges',
           ja: 'ジェイル回避',
           cn: '远离塔',
-          ko: '감옥 벗어나기',
+          ko: '감옥 피해요',
         },
       },
     },
@@ -92,7 +92,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '감옥 아래로',
+          en: 'Under jails',
           de: 'Geh unter ein Gefängnis',
           fr: 'Sous les pièges',
           ja: 'ジェイルの下へ',
@@ -140,12 +140,12 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '옆쪽 바닥으로',
+          en: 'Side platform(s)',
           de: 'Seite-Platform(en)',
           fr: 'Plateforme(s) latérale(s)',
           ja: 'サイド島へ',
           cn: '去侧边平台',
-          ko: '옆 플랫폼으로',
+          ko: '옆쪽 바닥으로',
         },
       },
     },
@@ -175,15 +175,15 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         soak: {
-          en: '타워 밟아요',
+          en: 'Soak tower',
           de: 'Türme nehmen',
           fr: 'Prenez une tour',
           ja: '塔踏み',
           cn: '踩塔',
-          ko: '타워 들어가기',
+          ko: '타워 밟아요',
         },
         avoid: {
-          en: '타워 피해요',
+          en: 'Avoid towers',
           de: 'Türme vermeiden',
           fr: 'Évitez les tours',
           ja: '塔回避',

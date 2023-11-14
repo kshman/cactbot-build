@@ -8,11 +8,11 @@ import { TriggerSet } from '../../../../../types/trigger';
 
 const excitatronOutputStrings = {
   spawn: {
-    en: '나타났어요: ${name}',
+    en: '${name} spawned!',
     de: '${name} erscheint!',
     ja: '${name} 現れる！',
     cn: '已生成 ${name}!',
-    ko: '${name} 등장!',
+    ko: '나타났어요: ${name}',
   },
 } as const;
 
@@ -59,7 +59,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '민드라고라! 순서대로 처치해요!',
+          en: 'Exciting Mandragoras spawned, kill in order!',
           de: 'Mandragoras erscheinen, in Reihenfolge besiegen!',
           ja: 'マンドラゴラ！順番に倒して！',
           cn: '已生成 惊奇蔓德拉战队, 依次击杀!',

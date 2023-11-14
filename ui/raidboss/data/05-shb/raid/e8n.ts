@@ -162,7 +162,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: 'Brasier sur VOUS',
           ja: '自分にフレア',
           cn: '核爆点名',
-          ko: '플레어 대상자',
+          ko: '내게 플레어',
         },
       },
     },

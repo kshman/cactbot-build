@@ -814,7 +814,7 @@ const triggerSet: TriggerSet<Data> = {
           en: '내게 플레어!',
           de: 'Flare auf DIR',
           cn: '陨石点名',
-          ko: '플레어 대상자',
+          ko: '내게 플레어',
         },
       },
     },

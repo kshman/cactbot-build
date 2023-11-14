@@ -109,10 +109,12 @@ const triggerSet: TriggerSet<Data> = {
         output.responseOutputStrings = {
           avoid: Outputs.avoidTankCleave,
           tank: {
-            en: '${num}번째 둘이 버스터',
+            en: 'Shared Tank Buster ${num}',
+            ko: '${num}번째 둘이 버스터',
           },
           healer: {
-            en: '${num}번째 탱크버스터',
+            en: 'Tank Buster ${num}',
+            ko: '${num}번째 탱크버스터',
           },
         };
 
@@ -151,15 +153,15 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         soak: {
-          en: '타워 밟아요',
+          en: 'Soak tower',
           de: 'Türme nehmen',
           fr: 'Prenez une tour',
           ja: '塔踏み',
           cn: '踩塔击飞',
-          ko: '타워 들어가기',
+          ko: '타워 밟아요',
         },
         avoid: {
-          en: '타워 피해요',
+          en: 'Avoid towers',
           de: 'Türme vermeiden',
           fr: 'Évitez les tours',
           ja: '塔回避',
@@ -223,23 +225,23 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         tetherside: {
-          en: '줄 땡겨요: ${dir}',
+          en: 'Point ${dir} Tether Away',
           de: 'Zeige ${dir} Verbindung weg',
           fr: 'Orientez le lien à l\'extérieur - ${dir}',
           ja: '線伸ばし ${dir}',
           cn: '向 ${dir} 外侧引导',
-          ko: '선을 ${dir}으로',
+          ko: '줄 땡겨요: ${dir}',
         },
         default: {
-          en: '줄 땡겨요',
+          en: 'Point Tether Away',
           de: 'Zeige Verbindung weg',
           fr: 'Orientez le lien à l\'extérieur',
           ja: '線伸ばし',
           cn: '向外引导',
-          ko: '선을 바깥쪽으로',
+          ko: '줄 땡겨요',
         },
         west: {
-          en: '왼쪽/서쪽',
+          en: 'Left/West',
           de: 'Links/Westen',
           fr: 'Gauche/Ouest',
           ja: '左/西へ',
@@ -247,7 +249,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '왼쪽/서쪽',
         },
         east: {
-          en: '오른쪽/동쪽',
+          en: 'Right/East',
           de: 'Rechts/Osten',
           fr: 'Droite/Est',
           ja: '右/東へ',
@@ -255,7 +257,8 @@ const triggerSet: TriggerSet<Data> = {
           ko: '오른쪽/동쪽',
         },
         atether: {
-          en: '줄 땡겨요: ${arrow}${arrow}',
+          en: 'Point Tether Away: ${arrow}${arrow}',
+          ko: '줄 땡겨요: ${arrow}${arrow}',
         },
         aleft: Outputs.arrowW,
         aright: Outputs.arrowE,
@@ -270,12 +273,12 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '줄 끊어요',
+          en: 'Break Tethers',
           de: 'Verbindung brechen',
           fr: 'Cassez les liens',
           ja: '線切る',
           cn: '截断丝线',
-          ko: '선 끊기',
+          ko: '줄 끊어요',
         },
       },
     },
@@ -313,12 +316,12 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         text: {
-          en: '거미집 이어요',
+          en: 'Stack',
           de: 'Sammeln',
           fr: 'Package',
           ja: 'あたまわり',
           cn: '分摊连线',
-          ko: '쉐어',
+          ko: '거미집 이어요',
         },
       },
     },
@@ -342,7 +345,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           // TODO: should we say "on posts" or "on back wall" based on count?
-          en: '거미집 지어요',
+          en: 'Overlap Webs',
           de: 'Netze überlappen',
           fr: 'Superposez les toiles',
           ja: 'ウェブ重なる',
@@ -350,7 +353,8 @@ const triggerSet: TriggerSet<Data> = {
           ko: '거미줄 겹치기',
         },
         place: {
-          en: '남쪽 셋이 나란히 거미집 지어요',
+          en: 'Build 3 Webs at South',
+          ko: '남쪽 셋이 나란히 거미집 지어요',
         },
       },
     },
@@ -373,12 +377,12 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '흩어져 거미집 지어요',
+          en: 'Spread for Webs',
           de: 'Für Netze verteilen',
           fr: 'Écartez-vous pour les toiles',
           ja: 'ウェブ散会',
           cn: '网分散',
-          ko: '거미줄 산개',
+          ko: '흩어져 거미집 지어요',
         },
       },
     },
@@ -408,12 +412,12 @@ const triggerSet: TriggerSet<Data> = {
       run: (data) => data.meltdownSpreads = [],
       outputStrings: {
         text: {
-          en: '한 줄로 뭉쳐요',
+          en: 'Line stack',
           de: 'Linien-Stack',
           fr: 'Packez-vous en ligne',
           ja: '直線あたまわり',
           cn: '直线分摊',
-          ko: '직선 쉐어',
+          ko: '한 줄로 뭉쳐요',
         },
       },
     },
@@ -469,20 +473,20 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         spreadThenPartners: {
-          en: '(흩어졌다 => 페어)',
+          en: '(spread => partners, for later)',
           de: '(Verteilen => Partner, für später)',
           fr: '(Écartez-vous => Partenaires, pour après)',
           ja: '(散会 => ペア)',
           cn: '(稍后 分散 => 分摊)',
-          ko: '(곧 산개 => 파트너)',
+          ko: '(흩어졌다 => 페어)',
         },
         partnersThenSpread: {
-          en: '(페어 => 흩어져요)',
+          en: '(partners => spread, for later)',
           de: '(Partner => Verteilen, für später)',
           fr: '(Partenaires => Écartez-vous, pour après)',
           ja: '(ペア => 散会)',
           cn: '(稍后 分摊 => 分散)',
-          ko: '(곧 파트너 => 산개)',
+          ko: '(페어 => 흩어져요)',
         },
       },
     },
@@ -526,20 +530,20 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         spreadThenStack: {
-          en: '(흩어졌다 => 4:4 뭉쳐요/${player1},${player2})',
+          en: '(spread => role stack (${player1}, ${player2}), for later)',
           de: '(Verteilen => Rollengruppe (${player1}, ${player2}), für später)',
           fr: '(Écartez-vous => Package par rôle (${player1}, ${player2}), pour après)', // FIXME
           ja: '(散会 => 4:4あたまわり (${player1}, ${player2}))', // FIXME
           cn: '(稍后 分散 => 四人分摊 (${player1}, ${player2}))',
-          ko: '(곧 산개 => 직업군별 쉐어 (${player1}, ${player2}))',
+          ko: '(흩어졌다 => 4:4 뭉쳐요/${player1},${player2})',
         },
         stackThenSpread: {
-          en: '(4:4 뭉쳤다/${player1},${player2} => 흩어져요)',
+          en: '(role stack (${player1}, ${player2}) => spread, for later)',
           de: '(Rollengruppe (${player1}, ${player2}) => Verteilen, für später)',
           fr: '(Package par rôle (${player1}, ${player2}) => Écartez-vous, pour après)', // FIXME
           ja: '(4:4あたまわり (${player1}, ${player2}) => 散会)', // FIXME
           cn: '(稍后 四人分摊 (${player1}, ${player2}) => 分散)',
-          ko: '(곧 직업군별 쉐어 (${player1}, ${player2}) => 산개)',
+          ko: '(4:4 뭉쳤다/${player1},${player2} => 흩어져요)',
         },
       },
     },
@@ -568,20 +572,20 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         spreadThenStack: {
-          en: '흩어졌다 => 4:4 뭉쳐요/${player1},${player2}',
+          en: 'Spread => Role Stack (${player1}, ${player2})',
           de: 'Verteilen => Rollengruppe (${player1}, ${player2})',
           fr: 'Écartez-vous => Package par rôle (${player1}, ${player2})', // FIXME
           ja: '散会 => 4:4あたまわり (${player1}, ${player2})', // FIXME
           cn: '分散 => 四人分摊 (${player1}, ${player2})',
-          ko: '산개 => 직업군별 쉐어 (${player1}, ${player2})',
+          ko: '흩어졌다 => 4:4 뭉쳐요/${player1},${player2}',
         },
         spreadThenPartners: {
-          en: '흩어졌다 => 페어',
+          en: 'Spread => Partners',
           de: 'Verteilen => Partner',
           fr: 'Écartez-vous => Partenaires',
           ja: '散会 => ペア',
           cn: '分散 => 分摊',
-          ko: '산개 => 파트너',
+          ko: '흩어졌다 => 페어',
         },
       },
     },
@@ -599,12 +603,12 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         partnersThenSpread: {
-          en: '페어 => 흩어져요',
+          en: 'Partners => Spread',
           de: 'Partner => Verteilen',
           fr: 'Partenaires => Écartez-vous',
           ja: 'ペア => 散会',
           cn: '分摊 => 分散',
-          ko: '파트너 => 산개',
+          ko: '페어 => 흩어져요',
         },
       },
     },
@@ -630,12 +634,12 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         stackThenSpread: {
-          en: '4:4 뭉쳤다/${player1},${player2} => 흩어져요',
+          en: 'Role Stack (${player1}, ${player2}) => Spread',
           de: 'Rollengruppe (${player1}, ${player2}) => Verteilen',
           fr: 'Package par rôle (${player1}, ${player2}) => Écartez-vous', // FIXME
           ja: '4:4あたまわり (${player1}, ${player2}) => 散会', // FIXME
           cn: '四人分摊 (${player1}, ${player2}) => 分散',
-          ko: '직업군별 쉐어 (${player1}, ${player2}) => 산개',
+          ko: '4:4 뭉쳤다/${player1},${player2} => 흩어져요',
         },
       },
     },
@@ -668,20 +672,20 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         spread: Outputs.spread,
         partners: {
-          en: '페어',
+          en: 'Partners',
           de: 'Partner',
           fr: 'Partenaires',
           ja: 'ペア',
           cn: '分摊',
-          ko: '파트너',
+          ko: '페어',
         },
         stack: {
-          en: '4:4 뭉쳐요/${player1},${player2}',
+          en: 'Role Stack (${player1}, ${player2})',
           de: 'Rollengruppe (${player1}, ${player2})',
           fr: 'Package par rôle (${player1}, ${player2})', // FIXME
           ja: '4:4あたまわり (${player1}, ${player2})', // FIXME
           cn: '四人分摊 (${player1}, ${player2})',
-          ko: '직업군별 쉐어 (${player1}, ${player2})',
+          ko: '4:4 뭉쳐요/${player1},${player2}',
         },
       },
     },
@@ -697,9 +701,11 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         east: {
           en: '🡺▶▶▶',
+          ko: '🡺▶▶▶',
         },
         west: {
           en: '◀◀◀🡸',
+          ko: '◀◀◀🡸',
         },
       },
     },
@@ -715,20 +721,20 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         lines: {
-          en: '레이저 피해욧 (선┼ 위로)',
+          en: 'On Lines (Avoid Lasers)',
           de: 'Auf die Linien (vermeide Laser)',
           fr: 'Sur les lignes (évitez les lasers)',
           ja: 'レーザー回避(マスの境界の上)',
           cn: '站在线上（躲避激光）',
-          ko: '경계선 위 (레이저 피하기)',
+          ko: '레이저 피해욧 (선┼ 위로)',
         },
         boxes: {
-          en: '레이저 피해욧 (네모칸□ 안으로)',
+          en: 'Inside Boxes (Avoid Lasers)',
           de: 'In den Boxen (vermeide Laser)',
           fr: 'Dans les carrés (évitez les lasers)',
           ja: 'レーザー回避(マスの内側)',
           cn: '站方格内（躲避激光）',
-          ko: '네모칸 안 (레이저 피하기)',
+          ko: '레이저 피해욧 (네모칸□ 안으로)',
         },
       },
     },

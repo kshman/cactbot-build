@@ -78,12 +78,12 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '오른쪽 휘두르니 피해욧',
+          en: 'Away from Right Flank',
           de: 'Weg von der rechten Flanke',
           fr: 'Éloignez-vous du flanc droit',
           ja: '右が危険',
           cn: '远离右侧',
-          ko: '보스 오른쪽 피해요',
+          ko: '오른쪽 피해요',
         },
       },
     },
@@ -96,12 +96,12 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '뒷쪽 휘두르니 피해욧',
+          en: 'Away from Back',
           de: 'Weg von hinter ihr',
           fr: 'Éloignez-vous de l\'arrière',
           ja: '後ろが危険',
           cn: '远离后方',
-          ko: '보스 뒤 피해요',
+          ko: '뒷쪽 피해요',
         },
       },
     },
@@ -114,12 +114,12 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '왼쪽 휘두르니 피해욧',
+          en: 'Away from Left Flank',
           de: 'Weg von der linker Flanke',
           fr: 'Éloignez-vous du flanc gauche',
           ja: '左が危険',
           cn: '远离左侧',
-          ko: '보스 왼쪽 피해요',
+          ko: '왼쪽 피해요',
         },
       },
     },
@@ -132,12 +132,12 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '앞쪽 휘두르니 피해욧',
+          en: 'Away from Front',
           de: 'Weg von Vorne',
           fr: 'Éloignez-vous du devant',
           ja: '前方が危険',
           cn: '远离前方',
-          ko: '보스 앞 피해요',
+          ko: '앞쪽 피해요',
         },
       },
     },
