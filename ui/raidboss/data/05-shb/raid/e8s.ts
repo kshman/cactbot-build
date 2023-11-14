@@ -308,7 +308,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: 'Chaîne sur VOUS',
           ja: '自分に鎖',
           cn: '连线点名',
-          ko: '사슬 대상자',
+          ko: '내게 체인',
         },
       },
     },

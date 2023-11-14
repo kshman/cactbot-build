@@ -74,7 +74,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: 'AoE + Allez au milieu',
           ja: '全体攻撃 + 真ん中',
           cn: 'AoE + 去场中',
-          ko: '전체공격 + 한가운데로',
+          ko: '전체 공격 + 한가운데로',
         },
       },
     },

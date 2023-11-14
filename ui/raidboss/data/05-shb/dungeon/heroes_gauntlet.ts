@@ -42,12 +42,12 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '줄로 부터 먼곳으로',
+          en: 'Away from tether marker',
           de: 'Weg von der Verbindung',
           fr: 'Éloignez-vous du marqueur lié',
           ja: '線から離れる',
           cn: '远离连线标志',
-          ko: '이어진 표식으로부터 떨어져요',
+          ko: '줄로 부터 먼곳으로',
         },
       },
     },
@@ -97,12 +97,12 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '크레이터 안으로',
+          en: 'Get in a crater',
           de: 'In den Krater gehen',
           fr: 'Allez dans un cratère',
           ja: '穴に入る',
           cn: '进入坑洞',
-          ko: '구덩이에 들어가기',
+          ko: '크레이터 안으로',
         },
       },
     },
@@ -143,12 +143,12 @@ const triggerSet: TriggerSet<Data> = {
       run: (data) => delete data.anguish,
       outputStrings: {
         stackOnYourRock: {
-          en: '내 운석과 뭉쳐요',
+          en: 'Stack on your rock',
           de: 'Auf deinem Stein sammeln',
           fr: 'Packez-vous avec votre rocher',
           ja: '自分の岩に貼りつく',
           cn: '与自己的石堆重合',
-          ko: '돌과 같이 맞기',
+          ko: '내 운석과 뭉쳐요',
         },
         stackOnYou: Outputs.stackOnYou,
         stackOn: Outputs.stackOnPlayer,

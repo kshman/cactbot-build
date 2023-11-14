@@ -69,12 +69,12 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         text: {
-          en: '체인 끊어요: ${player}',
+          en: 'Break chain on ${player}',
           de: 'Kette von ${player} brechen',
           fr: 'Cassez les chaînes de ${player}',
           ja: '${player}の線を取る',
           cn: '截断${player}的线',
-          ko: '${player}의 사슬 부수기',
+          ko: '체인 끊어요: ${player}',
         },
       },
     },
@@ -92,12 +92,12 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '한 줄 뭉쳐요',
+          en: 'Line Stack',
           de: 'Sammeln in einer Linie',
           fr: 'Packez-vous en ligne',
           ja: '頭割り',
           cn: '直线分摊',
-          ko: '직선 쉐어',
+          ko: '한 줄로 뭉쳐요',
         },
       },
     },

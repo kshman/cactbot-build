@@ -126,7 +126,7 @@ const triggerSet: TriggerSet<Data> = {
           de: 'AoE + Rückstoß x7',
           fr: 'AoE + Poussée x7',
           cn: 'AOE + 击退 x7',
-          ko: '전체공격 + 넉백x7',
+          ko: '전체 공격 + 넉백x7',
         },
       },
     },

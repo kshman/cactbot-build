@@ -31,12 +31,12 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '빛나는 조각상 피해요',
+          en: 'Look for pillar',
           de: 'Auf die Pfeiler schauen',
           fr: 'Cherchez les piliers',
           ja: '光った像を避ける',
           cn: '躲开发光石像的半场',
-          ko: '빛나는 기둥 위치확인',
+          ko: '빛나는 조각상 피해요',
         },
       },
     },
@@ -49,12 +49,12 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '왼쪽 옆으로',
+          en: 'Stay on left flank',
           de: 'Auf seiner linken Seite stehen',
           fr: 'Restez sur le flanc gauche',
           ja: 'ボスの左側へ',
           cn: 'Boss左边躲避',
-          ko: '보스 왼쪽 측면으로',
+          ko: '왼쪽 옆으로',
         },
       },
     },
@@ -67,12 +67,12 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '오른쪽 옆으로',
+          en: 'Stay on right flank',
           de: 'Auf seiner rechten Seite stehen',
           fr: 'Restez sur le flanc droit',
           ja: 'ボスの右側へ',
           cn: 'Boss右边躲避',
-          ko: '보스 오른쪽 측면으로',
+          ko: '오른쪽 옆으로',
         },
       },
     },
@@ -114,12 +114,12 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '보스에게서 먼곳으로',
+          en: 'Run Away From Boss',
           de: 'Renn weg vom Boss',
           fr: 'Courez loin du boss',
           ja: 'ボスから離れる',
           cn: '远离Boss',
-          ko: '보스와 거리 벌리기',
+          ko: '보스에게서 먼곳으로',
         },
       },
     },
@@ -131,12 +131,12 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '독 장판, 바깥쪽에 버려요',
+          en: 'Drop Poison Outside',
           de: 'Gift am Rand ablegen',
           fr: 'Déposez le poison à l\'extérieur',
           ja: '外周に捨てる',
           cn: '远处放毒',
-          ko: '독 장판을 바깥 쪽에 버리기',
+          ko: '독 장판, 바깥쪽에 버려요',
         },
       },
     },
@@ -153,12 +153,12 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '옆쪽에서 흩어져요',
+          en: 'Spread to Sides',
           de: 'Auf die Seiten verteilen',
           fr: 'Dispersez-vous sur les côtés',
           ja: '横に散開',
           cn: '两侧分散',
-          ko: '좌우 측면으로 산개',
+          ko: '옆쪽에서 흩어져요',
         },
       },
     },

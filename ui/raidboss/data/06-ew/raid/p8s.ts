@@ -2974,7 +2974,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: 'Grosse AoE + Saignement',
           ja: '全体攻撃 + 出血',
           cn: '大AOE+流血',
-          ko: '아픈 전체공격 + 출혈 [어서오고]',
+          ko: '아픈 전체 공격 + 출혈 [어서오고]',
         },
       },
     },

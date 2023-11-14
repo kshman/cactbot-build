@@ -17,7 +17,7 @@ export interface Data extends RaidbossData {
 
 const swipeOutputStrings = {
   right: {
-    en: '오른쪽',
+    en: 'Right',
     de: 'Rechts',
     fr: 'À droite ',
     ja: '右へ',
@@ -25,7 +25,7 @@ const swipeOutputStrings = {
     ko: '오른쪽',
   },
   left: {
-    en: '왼쪽',
+    en: 'Left',
     de: 'Links',
     fr: 'À gauche',
     ja: '左へ',
@@ -76,12 +76,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         tankBuster: Outputs.tankBuster,
         avoidTankBuster: {
-          en: '탱크버스터 피해요',
+          en: 'Avoid tank buster',
           de: 'Tank buster ausweichen',
           fr: 'Évitez le tank buster',
           ja: 'タンクバスターを避ける',
           cn: '远离坦克死刑',
-          ko: '탱버 피해요',
+          ko: '탱크버스터 피해요',
         },
       },
     },
@@ -92,12 +92,12 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '좁게 겹친 곳으로',
+          en: 'Go To Narrow Intersection',
           de: 'Geh zu der nahen Überschneidung',
           fr: 'Allez sur l\'intersection étroite',
           ja: '狭く重なっている範囲へ',
           cn: '去窄交叉口',
-          ko: '조금 겹친 곳으로 이동',
+          ko: '좁게 겹친 곳으로',
         },
       },
     },
@@ -109,12 +109,12 @@ const triggerSet: TriggerSet<Data> = {
       alarmText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '추적 레이저: 도망가요',
+          en: 'Chasing Laser: Get Away',
           de: 'Verfolgende Laser: Weg gehen',
           fr: 'Soutien aérien : Éloignez-vous',
           ja: 'レーザー: 外へ',
           cn: '激光点名：快出去',
-          ko: '추격 레이저: 이동',
+          ko: '추적 레이저: 도망가요',
         },
       },
     },
@@ -125,12 +125,12 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '왼쪽으로, 날개 사이',
+          en: 'Go Left, Behind Wing',
           de: 'Geh links hinter den Flügel',
           fr: 'Allez à gauche, derrière l\'aile',
           ja: '翼の左へ',
           cn: '去左边，翅膀后',
-          ko: '왼쪽으로 이동 (날개 뒤)',
+          ko: '왼쪽으로, 날개 사이',
         },
       },
     },
@@ -141,12 +141,12 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '오른쪽으로, 날개 사이',
+          en: 'Go Right, Behind Wing',
           de: 'Geh rechts hinter den Flügel',
           fr: 'Allez à droite, derrière l\'aile',
           ja: '翼の右へ',
           cn: '去右边，翅膀后',
-          ko: '오른쪽으로 이동 (날개 뒤)',
+          ko: '오른쪽으로, 날개 사이',
         },
       },
     },
@@ -167,12 +167,12 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '링 사이 빈곳으로 피해요',
+          en: 'Dodge into ring gap',
           de: 'In die Lücke des Ringes ausweichen',
           fr: 'Esquivez dans les écarts de l\'anneau',
           ja: 'リングの切れ目へ',
           cn: '躲入环形缺口',
-          ko: '고리 사이로 이동',
+          ko: '링 사이 빈곳으로 피해요',
         },
       },
     },
@@ -256,12 +256,12 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '내게 불 장판',
+          en: 'Fire Puddle on YOU',
           de: 'Feuer Fläche auf DIR',
           fr: 'Zone au sol de feu sur VOUS',
           ja: '自分にファイヤ',
           cn: '火圈点名',
-          ko: '불 장판 대상자',
+          ko: '내게 불 장판',
         },
       },
     },
@@ -274,12 +274,12 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '한줄 뭉쳐요 (바깥 유도)',
+          en: 'Line Stack (Point Outside)',
           de: 'Auf einer Linie sammeln (nach außen zeigen)',
           fr: 'Package en ligne (orientez vers l\'extérieur)',
           ja: '直線頭割り (外に向ける)',
           cn: '直线分摊（指向场外）',
-          ko: '쉐어 레이저 (밖으로 유도)',
+          ko: '한줄 뭉쳐요 (바깥 유도)',
         },
       },
     },
@@ -291,7 +291,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '안으로',
+          en: 'Move to Inside',
           de: 'Nach Innen bewegen',
           fr: 'Allez à l\'intérieur',
           cn: '去里面',
@@ -307,7 +307,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '밖으로',
+          en: 'Move to Outside',
           de: 'Nach Außen bewegen',
           fr: 'Allez à l\'extérieur',
           cn: '去外面',
@@ -352,12 +352,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         tankBuster: Outputs.tankBuster,
         avoidTankBuster: {
-          en: '탱크버스터 피해요',
+          en: 'Avoid tank buster',
           de: 'Tank buster ausweichen',
           fr: 'Évitez le tank buster',
           ja: 'タンクバスターを避ける',
           cn: '远离坦克死刑',
-          ko: '탱버 피해요',
+          ko: '탱크버스터 피해요',
         },
       },
     },
@@ -422,12 +422,12 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '위쪽 쏘는 레이저의 바깥쪽으로',
+          en: 'Get Outside Upper Laser',
           de: 'Raus aus dem oberen Laser',
           fr: 'À l\'extérieur des lasers supérieurs',
           ja: '高いレーザー放射装置の外へ',
           cn: '躲避远程激光',
-          ko: '높은 레이저 쪽 밖으로 이동',
+          ko: '위쪽 쏘는 레이저의 바깥쪽으로',
         },
       },
     },
@@ -447,12 +447,12 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '내게 전압 클레브',
+          en: 'Voltage cleave on YOU',
           de: 'Spannungs-Cleave auf DIR',
           fr: 'Arcs : Cleave sur VOUS',
           ja: '自分に扇形AoE',
           cn: '扇形AOE点名',
-          ko: '전압 장판 대상자',
+          ko: '내게 전압 클레브',
         },
       },
     },
@@ -471,20 +471,20 @@ const triggerSet: TriggerSet<Data> = {
         // cactbot-builtin-response
         output.responseOutputStrings = {
           tankCleaveOnYou: {
-            en: '내게 탱크 레이저 클레브',
+            en: 'Tank Laser Cleave on YOU',
             de: 'Tank Laser cleave auf DIR',
             fr: 'Tank laser cleave sur VOUS',
             ja: '自分にタンクレーザー',
             cn: '坦克直线激光点名',
-            ko: '탱커 레이저 대상자',
+            ko: '내게 탱크 레이저 클레브',
           },
           avoidTankCleaves: {
-            en: '탱크 레이저 클레브 피해요',
+            en: 'Avoid tank laser cleaves',
             de: 'Tank Laser cleave ausweichen',
             fr: 'Évitez les Tanks laser cleaves',
             ja: 'タンクレーザーを避ける',
             cn: '躲避坦克直线激光',
-            ko: '탱커 레이저 피해요',
+            ko: '탱크 레이저 클레브 피해요',
           },
         };
         if (data.role === 'tank' || matches.target === data.me)
@@ -512,20 +512,20 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         getOutsideBetweenPods: {
-          en: '바깥쪽 포드 사이로',
+          en: 'Get Outside Between Pods',
           de: 'Zwischen den Pods raus gehen',
           fr: 'À l\'extérieur entre les Pods',
           ja: '外へ、二つのポッドの真ん中に',
           cn: '去场边两个辅助机之间',
-          ko: '포드 사이로 이동',
+          ko: '바깥쪽 포드 사이로',
         },
         getBetweenLasersWatchTethers: {
-          en: '레이저 사이 가운데로 (줄 확인)',
+          en: 'Get Between Lasers (Watch Tethers)',
           de: 'Zwischen Laser gehen (auf die Verbindungen achten)',
           fr: 'Allez entre les lasers (regardez les liens)',
           ja: 'レーザーの真ん中に (線を気にして)',
           cn: '去激光之间（观察直线）',
-          ko: '레이저 사이로 이동 (연결된 모니터 확인)',
+          ko: '레이저 사이 가운데로 (줄 확인)',
         },
       },
     },
@@ -537,12 +537,12 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '타워를 파랗게',
+          en: 'Turn Towers Blue',
           de: 'Türme zu Blau ändern',
           fr: 'Changez les tours en bleu',
           ja: '塔を青色に',
           cn: '多人踩圈至蓝色',
-          ko: '장판이 파랑색이 되도록 들어가기',
+          ko: '타워를 파랗게',
         },
       },
     },
@@ -554,12 +554,12 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '내게 레이저',
+          en: 'Laser on YOU',
           de: 'Laser auf DIR',
           fr: 'Laser sur VOUS',
           ja: '自分にレーザー',
           cn: '激光点名',
-          ko: '레이저 대상자',
+          ko: '내게 레이저',
         },
       },
     },
@@ -674,20 +674,20 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         jump: {
-          en: '내게 점프 #${num}번',
+          en: 'Jump #${num} on YOU',
           de: 'Sprung #${num} auf DIR',
           fr: 'Saut #${num} sur VOUS',
           ja: '自分にジャンプ #${num}',
           cn: '单体跳砍#${num}点名',
-          ko: '점프 #${num} 대상자',
+          ko: '내게 점프 #${num}번',
         },
         cleave: {
-          en: '내게 클레브 #${num}번',
+          en: 'Cleave #${num} on YOU',
           de: 'Cleave #${num} auf DIR',
           fr: 'Cleave #${num} sur VOUS',
           ja: '自分に直線AoE #${num}',
           cn: '直线劈砍#${num}点名',
-          ko: '직선공격 #${num} 대상자',
+          ko: '내게 클레브 #${num}번',
         },
         unknown: Outputs.unknown,
       },
@@ -700,12 +700,12 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '타워 밟아요',
+          en: 'Get Towers',
           de: 'Türme nehmen',
           fr: 'Prenez les tours',
           ja: '塔を踏む',
           cn: '踩塔',
-          ko: '장판 들어가기',
+          ko: '타워 밟아요',
         },
       },
     },
@@ -718,7 +718,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '레이저 피해요',
+          en: 'Avoid Lasers',
           de: 'Laser ausweichen',
           fr: 'Évitez les lasers',
           ja: 'レーザーを避ける',
@@ -737,12 +737,12 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '구석에 있는 클론 발밑으로',
+          en: 'Get Under Clone Corner',
           de: 'Unter den Klon in einer Ecke gehen',
           fr: 'Allez sous un clone dans un coin ',
           ja: 'コーナーの分裂体の下へ',
           cn: '去分身脚下',
-          ko: '구석의 분신 아래로 이동',
+          ko: '구석에 있는 클론 발밑으로',
         },
       },
     },
@@ -758,12 +758,12 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '십자로 있는 클론의 발밑으로',
+          en: 'Get Under Cardinal Clone',
           de: 'Unter den Klon in einer der Himmelsrichtungen gehen',
           fr: 'Allez sous un clone sur un point cardinal',
           ja: '十字にいる分裂体の下へ',
           cn: '去真分身脚下',
-          ko: '분신 아래로 이동',
+          ko: '십자로 있는 클론의 발밑으로',
         },
       },
     },
@@ -778,12 +778,12 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '클론에게서 먼곳으로',
+          en: 'Away From Clones',
           de: 'Weg von den Klonen',
           fr: 'Éloignez-vous des clones',
           ja: '分裂体から離れる',
           cn: '远离分身',
-          ko: '분신에게서 떨어져요',
+          ko: '클론에게서 먼곳으로',
         },
       },
     },

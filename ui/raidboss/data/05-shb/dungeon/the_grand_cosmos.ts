@@ -46,7 +46,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '빗자루 피해요',
+          en: 'Avoid Brooms',
           de: 'Besen ausweichen',
           fr: 'Évitez les balais',
           ja: 'ほうきを避ける',
@@ -83,12 +83,12 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '씨앗을 흙 위로 옮겨요',
+          en: 'put seeds on dirt',
           de: 'Samen auf den nicht bewachsenen Boden legen',
           fr: 'Mettez les graines sur la terre',
           ja: '種を土に置かないように',
           cn: '种子搬离AOE',
-          ko: '씨앗 자라지 못하게 하기',
+          ko: '씨앗을 흙 위로 옮겨요',
         },
       },
     },
@@ -127,12 +127,12 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '십자 피해요',
+          en: 'Dodge Crosses',
           de: 'Den Kreuzen ausweichen',
           fr: 'Esquivez les croix',
           ja: '十字を避ける',
           cn: '躲避交叉',
-          ko: '십자 장판 피해요',
+          ko: '십자 피해요',
         },
       },
     },
@@ -152,12 +152,12 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '불을 주변 기물로 옮겨요',
+          en: 'Touch Furniture',
           de: 'Einrichtung berühren',
           fr: 'Touchez un meuble',
           ja: '調度品に寄る',
           cn: '传火家具',
-          ko: '가구에 불 옮기기',
+          ko: '불을 주변 기물에 묻혀요',
         },
       },
     },
@@ -189,20 +189,20 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         pointTetherAwayFromFurniture: {
-          en: '주변 기물에 닿지 않게 줄을 늘려요',
+          en: 'Point Tether Away From Furniture',
           de: 'Verbindung weg von der Einrichtung zeigen',
           fr: 'Pointez le lien éloigné des meubles',
           ja: '調度品に当たらないように',
           cn: '连线不要打到家具',
-          ko: '징: 장판이 가구에 닿지 않게 하기',
+          ko: '주변 기물에 닿지 않게 줄 늘려요',
         },
         tetherOnYou: {
-          en: '내게 줄',
+          en: 'Tether on YOU',
           de: 'Verbindung auf DIR',
           fr: 'Lien sur VOUS',
           ja: '線ついた',
           cn: '连线点名',
-          ko: '징 대상자',
+          ko: '내게 줄',
         },
       },
     },

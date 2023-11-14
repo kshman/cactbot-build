@@ -85,33 +85,33 @@ const orbOutputStrings = {
   unknown: Outputs.unknown,
   knockback: Outputs.knockback,
   stop: {
-    en: '움직이지마',
+    en: 'Stop',
     de: 'Stopp',
     fr: 'Arrêtez',
     ja: '動かない',
     cn: '停停停',
-    ko: '멈추기',
+    ko: '움직이지마',
   },
   // Special case.
   stopOutside: {
-    en: '움직이지마 (바깥에서)',
+    en: 'Stop (Out)',
     de: 'Stop (Außen)',
     fr: 'Arrêtez (Extérieur)',
     ja: 'ストップ (外に)',
     cn: '停停停 (外面)',
-    ko: '멈추기 (바깥에서)',
+    ko: '움직이지마 (바깥에서)',
   },
   move: {
-    en: '움직여',
+    en: 'Move',
     de: 'Bewegen',
     fr: 'Bougez',
     ja: '動け',
     cn: '动动动',
-    ko: '움직이기',
+    ko: '움직여',
   },
   in: Outputs.in,
   out: {
-    en: '밖으로',
+    en: 'Out',
     de: 'Raus',
     fr: 'Exterieur',
     ja: '外へ',
@@ -119,12 +119,12 @@ const orbOutputStrings = {
     ko: '밖으로',
   },
   rings: {
-    en: '도넛',
+    en: 'Rings',
     de: 'Ringe',
     fr: 'Anneaux',
     ja: 'ドーナツ',
     cn: '月环',
-    ko: '고리장판',
+    ko: '도넛',
   },
 };
 
@@ -236,12 +236,12 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '다이브 돌진에 서요',
+          en: 'Stand in dive charge',
           de: 'Stehe im Ansturm',
           fr: 'Restez dans la charge',
           ja: '直線頭割りに入る',
           cn: '进入直线分摊',
-          ko: '돌진 장판 위에 서기',
+          ko: '다이브 돌진에 서요',
         },
       },
     },
@@ -261,12 +261,12 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '줄 하나 채요',
+          en: 'Take one tether',
           de: 'Nimm eine´Verbindung',
           fr: 'Prenez un lien',
           ja: '線を取る',
           cn: '接线',
-          ko: '선 하나 낚아채기',
+          ko: '줄 하나 채요',
         },
       },
     },
@@ -307,12 +307,12 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '마지텍 코어 잡아요',
+          en: 'Kill Magitek Core',
           de: 'Besiege Magitek-Reaktor',
           fr: 'Tuez le Cœur magitek',
           ja: '魔導コアを撃破',
           cn: '击杀魔导核心',
-          ko: '마도 핵 죽이기',
+          ko: '마지텍 코어 잡아요',
         },
       },
     },
@@ -345,7 +345,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         getUnderOrb: {
-          en: '구슬 아래로',
+          en: 'Get Under Orb',
           de: 'Geh unter einem Orb',
           fr: 'Allez sous l\'Orbe',
           ja: '白玉に安置',
@@ -353,7 +353,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '구슬 아래로',
         },
         goCorner: {
-          en: '구석으로',
+          en: 'Go To Corner',
           de: 'Geh in die Ecken',
           fr: 'Allez dans un coin',
           ja: 'コーナーへ',
@@ -398,12 +398,12 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '메테오 잡아요',
+          en: 'Kill Meteors',
           de: 'Besiege die Meteore',
           fr: 'Tuez les météores',
           ja: 'メテオを撃破',
           cn: '击杀陨石',
-          ko: '메테오 부수기',
+          ko: '메테오 잡아요',
         },
       },
     },
@@ -553,7 +553,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         unknown: {
           // "Follow Other People ;)"
-          en: '???쪽으로',
+          en: 'Go ???',
           de: 'Gehe nach ???',
           fr: 'Allez au ???',
           ja: '??? へ',
@@ -561,7 +561,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '???쪽으로',
         },
         northeast: {
-          en: '북동쪽으로',
+          en: 'Go northeast',
           de: 'Gehe nach Nordosten',
           fr: 'Allez au nord-est',
           ja: '北東へ',
@@ -569,7 +569,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '북동쪽으로',
         },
         southeast: {
-          en: '남동쪽으로',
+          en: 'Go southeast',
           de: 'Gehe nach Südosten',
           fr: 'Allez au sud-est',
           ja: '南東へ',
@@ -577,7 +577,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '남동쪽으로',
         },
         southwest: {
-          en: '남서쪽으로',
+          en: 'Go southwest',
           de: 'Gehe nach Südwesten',
           fr: 'Allez au sud-ouest',
           ja: '南西へ',
@@ -585,7 +585,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '남서쪽으로',
         },
         northwest: {
-          en: '북서쪽으로',
+          en: 'Go northwest',
           de: 'Gehe nach Nordwesten',
           fr: 'Allez au nord-ouest',
           ja: '北西へ',

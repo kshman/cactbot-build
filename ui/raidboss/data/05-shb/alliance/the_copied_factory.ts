@@ -35,12 +35,12 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         text: {
-          en: '보스 가까이',
+          en: 'Be Near Boss',
           de: 'sei in der Nähe des Bosses',
           fr: 'Placez-vous près du boss',
           ja: 'ボスに貼りつく',
           cn: '靠近Boss',
-          ko: '보스 근처로',
+          ko: '보스 가까이',
         },
       },
     },
@@ -51,12 +51,12 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '남쪽 모서리로',
+          en: 'Move to South Edge',
           de: 'zur südlichen Kante',
           fr: 'Allez vers le bord sud',
           ja: '南へ',
           cn: '前往南侧边缘',
-          ko: '남쪽으로',
+          ko: '남쪽 구석으로',
         },
       },
     },
@@ -82,12 +82,12 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '레이저 피해요',
+          en: 'Look for Lasers',
           de: 'Pass auf die Laser auf',
           fr: 'Repérez les lasers',
           ja: 'レーザーを避ける',
           cn: '小心激光',
-          ko: '레이저 확인',
+          ko: '레이저 피해요',
         },
       },
     },
@@ -133,12 +133,12 @@ const triggerSet: TriggerSet<Data> = {
       run: (data) => data.alliance ??= 'A',
       outputStrings: {
         text: {
-          en: '움직이는 동글 피해요',
+          en: 'Dodge Moving Circle',
           de: 'Bewegenden Kreisen ausweichen',
           fr: 'Esquivez les cercles mouvants',
           ja: '動いてるサークルを避ける',
           cn: '躲避移动圆圈',
-          ko: '시계방향 회전하면서 나오는 장판 피해요',
+          ko: '움직이는 동글 피해요',
         },
       },
     },
@@ -155,12 +155,12 @@ const triggerSet: TriggerSet<Data> = {
       run: (data) => data.alliance ??= 'B',
       outputStrings: {
         text: {
-          en: '뒷쪽 화염방사 피해요',
+          en: 'Look Behind For Flamethrowers',
           de: 'Flammenwerfer hinter dir',
           fr: 'Repérez les lance-flammes derrière',
           ja: '後ろに火炎放射器',
           cn: '观察后方放火',
-          ko: '뒤에서 불 나오는 곳 확인',
+          ko: '뒷쪽 화염방사 피해요',
         },
       },
     },
@@ -188,7 +188,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '넘어지는 벽 피해요',
+          en: 'Dodge Falling Walls',
           de: 'Den fallenden Wände asuweichen',
           fr: 'Esquivez les murs tombants',
           ja: '倒れてくる壁を避ける',
@@ -209,12 +209,12 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '줄! 이건 탱크 혼자 처리',
+          en: 'Spread Tethers',
           de: 'Verbindungen Verteilen',
           fr: 'Dispersez les liens',
           ja: '散開、線を断つ',
           cn: '散开扯断连线',
-          ko: '산개 선 (탱 혼자도 가능)',
+          ko: '줄! 이건 탱크 혼자 처리',
         },
       },
     },
@@ -244,12 +244,12 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '전기 바닥 피해요',
+          en: 'Dodge Electric Floor',
           de: 'Elektrischem Boden ausweichen',
           fr: 'Esquivez le sol électrifié',
           ja: '電気床を避ける',
           cn: '躲避带电地板',
-          ko: '바닥 장판 피해요',
+          ko: '전기 바닥 피해요',
         },
       },
     },
@@ -264,7 +264,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '컨베이어 벨트',
+          en: 'Conveyor Belts',
           de: 'Förderbänder',
           fr: 'Tapis roulant',
           ja: 'ローラーコンベア',
@@ -286,12 +286,12 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '기름이 끓어요',
+          en: 'Oil Vats',
           de: 'Ölbehälter',
           fr: 'Cuves à huile',
           ja: 'オイルが沸く',
           cn: '油桶',
-          ko: '뚫린 바닥 피해요',
+          ko: '기름이 끓어요',
         },
       },
     },
@@ -309,12 +309,12 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '기름이 끓어요',
+          en: 'Oil Vats',
           de: 'Ölbehälter',
           fr: 'Cuves à huile',
           ja: 'オイルが沸く',
           cn: '油桶',
-          ko: '뚫린 바닥 피해요',
+          ko: '기름이 끓어요',
         },
       },
     },
@@ -326,12 +326,12 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '내게 폭발',
+          en: 'Exploder on YOU',
           de: 'Explosion auf DIR',
           fr: 'Explosion sur VOUS',
           ja: '自分に自爆',
           cn: '自爆点名',
-          ko: '폭발 징',
+          ko: '내게 폭발',
         },
       },
     },
@@ -367,12 +367,12 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '앞쪽 가운데로',
+          en: 'Front and Center',
           de: 'Vorne und Mitte',
           fr: 'Devant et au centre',
           ja: '前方の中へ',
           cn: '前方中间',
-          ko: '앞으로 => 중앙으로',
+          ko: '앞쪽 가운데로',
         },
       },
     },
@@ -383,12 +383,12 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '뒤쪽 옆으로',
+          en: 'Back and Sides',
           de: 'Hinten und Seiten',
           fr: 'Derrière et sur les côtés',
           ja: '後方の横へ',
           cn: '后方两侧',
-          ko: '뒤로 => 양옆으로',
+          ko: '뒤쪽 옆으로',
         },
       },
     },
@@ -399,12 +399,12 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '마르크스 잡아요',
+          en: 'Kill Claws',
           de: 'Klauen töten',
           fr: 'Tuez les pinces',
           ja: 'マルクスを倒す',
           cn: '杀掉爪子',
-          ko: '양옆 톱 처리',
+          ko: '마르크스 잡아요',
         },
       },
     },
@@ -431,12 +431,12 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '옆으로 (조금 앞쪽에서)',
+          en: 'Go Sides (Near Front)',
           de: 'Zu den Seiten (Nahe der Front)',
           fr: 'Allez sur les côtés (vers l\'avant)',
           ja: '横へ (前に近づく)',
           cn: '两侧（靠近前方）',
-          ko: '양옆으로 (앞 근처)',
+          ko: '옆으로 (조금 앞쪽에서)',
         },
       },
     },
@@ -448,12 +448,12 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '타워 밟아요',
+          en: 'Get Towers',
           de: 'Türme nehmen',
           fr: 'Prenez les tours',
           ja: '塔を踏む',
           cn: '踩塔',
-          ko: '장판 하나씩 들어가기',
+          ko: '타워 밟아요',
         },
       },
     },
@@ -465,12 +465,12 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '내게 물 장판',
+          en: 'Puddle on YOU',
           de: 'Fläche auf dir',
           fr: 'Zone au sol sur VOUS',
           ja: '自分に水溜り',
           cn: '水圈点名',
-          ko: '징 대상자',
+          ko: '내게 물 장판',
         },
       },
     },
@@ -482,12 +482,12 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '밖으로 + 호밍 AOE 피해요',
+          en: 'Get Out + Dodge Homing AoE',
           de: 'Geh Raus + Zielsuch-AoE ausweichen',
           fr: 'À l\'extérieur + Esquivez l\'AoE',
           ja: '外 + AoE',
           cn: '远离 + 躲避弹幕',
-          ko: '바깥으로 빠지고 따라오는 장판 피해요',
+          ko: '밖으로 + 호밍 AOE 피해요',
         },
       },
     },
@@ -499,12 +499,12 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '큰 쫄 잡아요 (작은 쫄 무시)',
+          en: 'Adds (Ignore Small)',
           de: 'Adds (kleine ignorieren)',
           fr: 'Adds (ignorez les petits)',
           ja: '雑魚 (小さいのは無視)',
           cn: '小怪（忽略小的）',
-          ko: '쫄 나옴 (작은건 무시)',
+          ko: '큰 쫄 잡아요 (작은 쫄 무시)',
         },
       },
     },
@@ -515,12 +515,12 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '앞쪽 가운데로',
+          en: 'Front and Center',
           de: 'Vorne und Mitte',
           fr: 'Devant et au centre',
           ja: '前方の中へ',
           cn: '前方中间',
-          ko: '앞 중앙',
+          ko: '앞쪽 가운데로',
         },
       },
     },
@@ -532,12 +532,12 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '바깥에 마르크스는 어디 있을까요',
+          en: 'Look For Wall Saws',
           de: 'Halt nach den kleinen Sägen ausschau',
           fr: 'Repérez les scies murales',
           ja: 'マルクス突撃',
           cn: '观察墙壁',
-          ko: '양옆 톱 확인',
+          ko: '바깥에 마르크스는 어디 있을까요',
         },
       },
     },
@@ -574,12 +574,12 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '내게 레이저 버스터',
+          en: 'Laser Buster on YOU',
           de: 'Laser Tankbuster auf DIR',
           fr: 'Tank buster laser sur VOUS',
           ja: '自分にレーザー',
           cn: '激光点名',
-          ko: '레이저 대상자',
+          ko: '내게 레이저 버스터',
         },
       },
     },
@@ -603,12 +603,12 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '마르크스 피해요',
+          en: 'Dodge Overhead Saws',
           de: 'Sägen über dem Kopf ausweichen',
           fr: 'Esquivez les scies aériennes',
           ja: 'マルクス支援',
           cn: '躲避头顶锯',
-          ko: '톱 없는 쪽으로 피해요',
+          ko: '마르크스 피해요',
         },
       },
     },
@@ -633,12 +633,12 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '줄 없는 탱크 뒤에 숨어요',
+          en: 'Go Behind Untethered Tank',
           de: 'Hinter den nicht verbundenen Panzer gehen',
           fr: 'Allez derrière le tank non-lié',
           ja: '線のない戦車の後ろへ',
           cn: '没连线的坦克后躲避',
-          ko: '연결되지 않은 탱크 뒤로 숨기',
+          ko: '줄 없는 탱크 뒤에 숨어요',
         },
       },
     },
@@ -657,12 +657,12 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '버블 안으로',
+          en: 'Get in the bubble',
           de: 'Geh in die Kuppel',
           fr: 'Allez dans la bulle',
           ja: '泡に入る',
           cn: '进入圈圈',
-          ko: '안전지대 안으로 들어가기',
+          ko: '버블 안으로',
         },
       },
     },
