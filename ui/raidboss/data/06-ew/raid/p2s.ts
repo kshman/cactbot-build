@@ -111,7 +111,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: 'Groupes sur les heals',
           ja: 'ヒラに頭割り',
           cn: '与治疗分摊',
-          ko: '힐러 그룹 쉐어',
+          ko: '4:4 뭉쳐요',
         },
       },
     },

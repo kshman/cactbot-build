@@ -306,7 +306,7 @@ const triggerSet: TriggerSet<Data> = {
             en: 'Tank Cleave (PARTY OUT)',
             de: 'Tank Cleave (GRUPPE RAUS)',
             cn: '坦克顺劈 (人群出)',
-            ko: '광역 탱버 (본대 밖으로)',
+            ko: '탱크클레브 (본대 밖으로)',
           },
         };
 

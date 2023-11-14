@@ -466,7 +466,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: 'Tank cleave solo',
           ja: 'ソロタンクバスター',
           cn: '单吃死刑顺劈',
-          ko: '광역 탱버 혼자맞기',
+          ko: '탱크클레브 혼자맞기',
         },
       },
     },
@@ -2280,7 +2280,7 @@ const triggerSet: TriggerSet<Data> = {
             fr: 'Tank Cleave sur ${player}',
             ja: '${player}に範囲攻撃',
             cn: '顺劈: ${player}',
-            ko: '${player}에게 광역 탱버',
+            ko: '${player}에게 탱크클레브',
           },
         };
         if (matches.target === data.me)

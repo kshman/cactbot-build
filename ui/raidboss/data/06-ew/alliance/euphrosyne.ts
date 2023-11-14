@@ -53,22 +53,6 @@ export interface Data extends RaidbossData {
   menphinaDogId?: string;
 }
 
-const menphinaCenterX = 799.98;
-const menphinaCenterY = 750;
-
-const positionTo8Dir = (posX: number, posY: number, centerX: number, centerY: number) => {
-  const relX = posX - centerX;
-  const relY = posY - centerY;
-
-  // Dirs: N = 0, NE = 1, ..., NW = 7
-  return Math.round(4 - 4 * Math.atan2(relX, relY) / Math.PI) % 8;
-};
-
-export const headingTo4Dir = (heading: number) => {
-  // Dirs: N = 0, E = 1, S = 2, W = 3
-  return (2 - Math.round(heading * 2 / Math.PI)) % 4;
-};
-
 const tetraMap: { [id: string]: HaloneTetra } = {
   '7D46': 'out',
   '7D47': 'in',
@@ -115,36 +99,36 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         out: Outputs.out,
         outWithForwards: {
-          en: '강제이동: 앞 🡺 밖으로',
+          en: 'Forwards March Out',
           de: 'Geisterlenkung Vorwärts Raus',
           fr: 'Marche forcée avant vers l\'extérieur',
           ja: '強制移動 : 前 => 外へ',
           cn: '向前强制移动到钢铁外',
-          ko: '강제이동: 앞, 밖으로',
+          ko: '강제이동: 앞 🡺 밖으로',
         },
         outWithBackwards: {
-          en: '강제이동: 뒤 🡺 밖으로',
+          en: 'Backwards March Out',
           de: 'Geisterlenkung Rückwärts Raus',
           fr: 'Marche forcée arrière vers l\'extérieur',
           ja: '強制移動 : 後ろ => 外へ',
           cn: '向后强制移动到钢铁外',
-          ko: '강제이동: 뒤, 밖으로',
+          ko: '강제이동: 뒤 🡺 밖으로',
         },
         outWithLeft: {
-          en: '강제이동: 왼쪽 🡺 밖으로',
+          en: 'Left March Out',
           de: 'Geisterlenkung Links Raus',
           fr: 'Marche forcée gauche vers l\'extérieur',
           ja: '強制移動 : 左 => 外へ',
           cn: '向左强制移动到钢铁外',
-          ko: '강제이동: 왼쪽, 밖으로',
+          ko: '강제이동: 왼쪽 🡺 밖으로',
         },
         outWithRight: {
-          en: '강제이동: 오른쪽 🡺 밖으로',
+          en: 'Right March Out',
           de: 'Geisterlenkung Rechts Raus',
           fr: 'Marche forcée droite vers l\'extérieur',
           ja: '強制移動 : 右 => 外へ',
           cn: '向右强制移动到钢铁外',
-          ko: '강제이동: 오른쪽, 밖으로',
+          ko: '강제이동: 오른쪽 🡺 밖으로',
         },
       },
     },
@@ -165,36 +149,36 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         in: Outputs.in,
         inWithForwards: {
-          en: '강제이동: 앞 🡺 안으로',
+          en: 'Forwards March In',
           de: 'Geisterlenkung Vorwärts Rein',
           fr: 'Marche forcée avant vers l\'intérieur',
           ja: '強制移動 : 前 => 中へ',
           cn: '向前强制移动到月环内',
-          ko: '강제이동: 앞, 안으로',
+          ko: '강제이동: 앞 🡺 안으로',
         },
         inWithBackwards: {
-          en: '강제이동: 뒤 🡺 안으로',
+          en: 'Backwards March In',
           de: 'Geisterlenkung Rückwärts Rein',
           fr: 'Marche forcée arrière vers l\'intérieur',
           ja: '強制移動 : 後ろ => 中へ',
           cn: '向后强制移动到月环内',
-          ko: '강제이동: 뒤, 안으로',
+          ko: '강제이동: 뒤 🡺 안으로',
         },
         inWithLeft: {
-          en: '강제이동: 왼쪽 🡺 안으로',
+          en: 'Left March In',
           de: 'Geisterlenkung Links Rein',
           fr: 'Marche forcée gauche vers l\'intérieur',
           ja: '強制移動 : 左 => 中へ',
           cn: '向左强制移动到月环内',
-          ko: '강제이동: 왼쪽, 안으로',
+          ko: '강제이동: 왼쪽 🡺 안으로',
         },
         inWithRight: {
-          en: '강제이동: 오른쪽 🡺 안으로',
+          en: 'Right March In',
           de: 'Geisterlenkung Rechts Rein',
           fr: 'Marche forcée droite vers l\'intérieur',
           ja: '強制移動 : 右 => 中へ',
           cn: '向右强制移动到月环内',
-          ko: '강제이동: 오른쪽, 안으로',
+          ko: '강제이동: 오른쪽 🡺 안으로',
         },
       },
     },
@@ -320,36 +304,36 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         lookAway: {
-          en: '(곧 뒤를 봐요)',
+          en: '(look away soon)',
           de: '(bald wegschauen)',
           fr: '(regardez ailleurs bientôt)',
           ja: '(見ない)',
           cn: '(稍后背对)',
-          ko: '(곧 뒤돌기)',
+          ko: '(곧 뒤를 봐요)',
         },
         lookTowards: {
-          en: '(곧 앞만 봐요)',
+          en: '(look towards soon)',
           de: '(bald hinschauen)',
           fr: '(regardez devant bientôt)',
           ja: '(ボスを見て)',
           cn: '(稍后看向)',
-          ko: '(곧 쳐다보기)',
+          ko: '(곧 앞을 봐요)',
         },
         pyretic: {
-          en: '(곧 불덩이)',
+          en: '(pyretic soon)',
           de: '(bald Pyretisch)',
           fr: '(feu bientôt)',
           ja: '(止まれ)',
           cn: '(稍后热病)',
-          ko: '(곧 멈추기)',
+          ko: '(곧 불덩이)',
         },
         freeze: {
-          en: '(곧 얼음)',
+          en: '(freeze soon)',
           de: '(bald Kühlung)',
           fr: '(gel bientôt)',
           ja: '(動く)',
           cn: '(稍后冻结)',
-          ko: '(곧 움직이기)',
+          ko: '(곧 얼음)',
         },
       },
     },
@@ -383,20 +367,20 @@ const triggerSet: TriggerSet<Data> = {
       run: (data) => delete data.nymeiaSpinnerOutput,
       outputStrings: {
         lookAway: {
-          en: '니메이아 보면 안되요',
+          en: 'Look Away from Nymeia',
           de: 'Schau weg von Nymeia',
           fr: 'Ne regardez pas Nymeia',
           ja: 'ニメーヤさま見ない',
           cn: '背对妮美雅',
-          ko: '니메이아에게서 뒤돌기',
+          ko: '니메이아 보면 안되요',
         },
         lookTowards: {
-          en: '니메이아 바라봐요',
+          en: 'Look Towards Nymeia',
           de: 'Schau zu Nymeia',
           fr: 'Regardez Nymeia',
           ja: 'ニメーヤさまを見る',
           cn: '看向妮美雅',
-          ko: '니메이아 쳐다보기',
+          ko: '니메이아 바라봐요',
         },
         stopEverything: Outputs.stopEverything,
         keepMoving: Outputs.moveAround,
@@ -428,12 +412,12 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '흩어져요 (보라🟣 피해요)',
+          en: 'Spread (avoid purple)',
           de: 'Verteilen (vermeide den lilanen Riss)',
           fr: 'Écartez-vous (évitez les fissures violettes)',
           ja: '散会 (紫回避)',
           cn: '分散 (远离紫色区域)',
-          ko: '산개 (보라색 바닥 피하기)',
+          ko: '흩어져요 (보라🟣 피해요)',
         },
       },
     },
@@ -444,12 +428,12 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '보라🟣 균열 위로',
+          en: 'Stand in purple fissure',
           de: 'Im lilanen Riss stehen',
           fr: 'Restez sur une fissure violette',
           ja: '紫踏み',
           cn: '站进紫色区域',
-          ko: '보라색 바닥 위로',
+          ko: '보라🟣 균열 위로',
         },
       },
     },
@@ -539,7 +523,7 @@ const triggerSet: TriggerSet<Data> = {
       run: (data) => data.nymeiaHydrostasis = [],
       outputStrings: {
         knockback: {
-          en: '넉백: ${dir1} => ${dir2} => ${dir3}',
+          en: 'Knockback ${dir1} => ${dir2} => ${dir3}',
           de: 'Rückstoß ${dir1} => ${dir2} => ${dir3}',
           fr: 'Poussée ${dir1} => ${dir2} => ${dir3}',
           ja: 'ノックバック ${dir1} => ${dir2} => ${dir3}',
@@ -657,12 +641,12 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.getTowers!(),
       outputStrings: {
         getTowers: {
-          en: '타워 밟아요',
+          en: 'Get Towers',
           de: 'Türme nehmen',
           fr: 'Prenez les tours',
           ja: '塔踏み',
           cn: '踩塔',
-          ko: '타워 들어가기',
+          ko: '타워 밟아요',
         },
       },
     },
@@ -721,12 +705,12 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.out!(),
       outputStrings: {
         out: {
-          en: '⊗밖으로 (링◎ 피해요)',
+          en: 'Get Out (avoid ring)',
           de: 'Geh raus (vermeide den Ring)',
           fr: 'Sortez (évitez l\'anneau)',
           ja: '外へ (ドーナツ回避)',
           cn: '远离 (躲避圆环)',
-          ko: '밖으로 (고리 장판 피하기)',
+          ko: '⊗밖으로 (링◎ 피해요)',
         },
       },
     },
@@ -779,7 +763,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '달 옆으로',
+          en: 'Sides of Moon',
           de: 'Geh seitlich des Mondes',
           fr: 'Côtés de la lune',
           ja: '月の横',
@@ -795,12 +779,12 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '어두운 달로',
+          en: 'Go to dark moon',
           de: 'Geh zum dunklen Mond',
           fr: 'Allez sur une lune noire',
           ja: '暗い月へ',
           cn: '去暗月亮',
-          ko: '어두운 달 쪽으로',
+          ko: '어두운 달로',
         },
       },
     },
@@ -867,200 +851,36 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         frontLeft: {
-          en: '앞 + 왼쪽',
+          en: 'Front Left',
           de: 'Vorne Links',
           fr: 'Avant Gauche',
           ja: '前左',
           cn: '左前',
-          ko: '앞 왼쪽',
+          ko: '앞 + 왼쪽',
         },
         frontRight: {
-          en: '앞 + 오른쪽',
+          en: 'Front Right',
           de: 'Vorne Rechts',
           fr: 'Avant Droit',
           ja: '前右',
           cn: '右前',
-          ko: '앞 오른쪽',
+          ko: '앞 + 오른쪽',
         },
         backLeft: {
-          en: '뒤 + 왼쪽',
+          en: 'Back Left',
           de: 'Hinten Links',
           fr: 'Arrière Gauche',
           ja: '後左',
           cn: '左后',
-          ko: '뒤 왼쪽',
+          ko: '뒤 + 왼쪽',
         },
         backRight: {
-          en: '뒤 + 오른쪽',
+          en: 'Back Right',
           de: 'Hinten Rechts',
           fr: 'Arrière Droit',
           ja: '後ろ右',
           cn: '右后',
           ko: '뒤 오른쪽',
-        },
-      },
-    },
-    {
-      id: 'Euphrosyne Menphina Midnight Frost Unattached',
-      type: 'StartsUsing',
-      // 7BE4 Midnight Frost = front cleave (7BDA damage) [dog unattached]
-      // 7BE5 Midnight Frost = front cleave (7BDA damage) [dog unattached]
-      // 7BE6 Midnight Frost = back cleave (7BDB damage) [dog unattached]
-      // 7BE7 Midnight Frost = back cleave (7BDB damage) [dog unattached]
-      // 7F0A Midnight Frost = front cleave (7BDA damage) [dog unattached]
-      // 7F0B Midnight Frost = front cleave (7BDA damage) [dog unattached]
-      // 7F0C Midnight Frost = back cleave (7BDB damage) [dog unattached]
-      // 7F0D Midnight Frost = back cleave (7BDB damage) [dog unattached]
-      // The dog uses Playful Orbit (7BE2, 7BE3) to jump to an intercardinal to do a left/right cleave.
-      // Menphina faces a cardinal (possibly just north or south) and does a front/back cleave.
-      // This leaves either 3/8 or 1/8 of a pie slice open.
-      netRegex: { id: ['7BE[4567]', '7F0[ABCD]'], source: 'Menphina' },
-      // These two abilities come out at the same time.  It seems that Waxing Claw always comes
-      // after, but trying not to make assumptions here.
-      delaySeconds: 0.5,
-      promise: async (data, matches) => {
-        data.combatantData = [];
-        if (data.menphinaDogId === undefined)
-          return;
-        const hexIds = [data.menphinaDogId, matches.sourceId];
-        data.combatantData = (await callOverlayHandler({
-          call: 'getCombatants',
-          ids: hexIds.map((id) => parseInt(id, 16)),
-        })).combatants;
-      },
-      alertText: (data, matches, output) => {
-        const [c1, c2] = data.combatantData;
-        if (data.combatantData.length !== 2 || c1 === undefined || c2 === undefined)
-          return;
-        const dogCleave = data.menphinaWaxingClaw;
-        if (dogCleave === undefined)
-          return;
-
-        const [dog, menphina] = c1.ID === data.menphinaDogId ? [c1, c2] : [c2, c1];
-
-        // These two variables are N=0, NE=1, etc
-        const menphinaHeading = headingTo4Dir(menphina.Heading) * 2;
-        const absoluteDogPos = positionTo8Dir(dog.PosX, dog.PosY, menphinaCenterX, menphinaCenterY);
-
-        // TEMP DEBUGGING
-        console.log(`Menphina heading: ${menphina.Heading} => ${menphinaHeading}`);
-        console.log(`Dog: ${dog.PosX}, ${dog.PosY} => ${absoluteDogPos}`);
-
-        // Dog should be on an intercard.
-        if (absoluteDogPos % 2 === 0)
-          return;
-
-        const relDogPos = (absoluteDogPos - menphinaHeading + 8) % 8;
-
-        // These are N=0, NE=1 but rotated 1/8 clockwise, e.g. NNE=0, ENE=1, etc
-        // "N" here is also relative to Menphina's facing.
-        const smallSafeSpots: { [dir: number]: string } = {
-          0: output.dirNNE!(),
-          1: output.dirENE!(),
-          2: output.dirESE!(),
-          3: output.dirSSE!(),
-          4: output.dirSSW!(),
-          5: output.dirWSW!(),
-          6: output.dirWNW!(),
-          7: output.dirNNW!(),
-        };
-        const bigSafeSpots: { [dir: number]: string } = {
-          1: output.dirNE!(),
-          3: output.dirSE!(),
-          5: output.dirSW!(),
-          7: output.dirNW!(),
-        };
-
-        const markSmallUnsafe = (keys: number[]) => {
-          for (const key of keys)
-            delete smallSafeSpots[key];
-        };
-        const markBigUnsafe = (keys: number[]) => {
-          for (const key of keys)
-            delete bigSafeSpots[key];
-        };
-
-        const isFrontCleave = ['7BE4', '7BE5', '7F0A', '7F0B'].includes(matches.id);
-        if (isFrontCleave) {
-          markBigUnsafe([1, 7]);
-          markSmallUnsafe([0, 1, 6, 7]);
-        } else {
-          markBigUnsafe([3, 5]);
-          markSmallUnsafe([2, 3, 4, 5]);
-        }
-
-        // Find the unsafe quadrant, e.g. if NE is unsafe, then that means
-        // the dog is NW cleaving left or SE cleaving right.
-        // If the dog is NE=1, and the cleave is right, then NW=7 is unsafe.
-        const dogUnsafeQuadrant = (relDogPos + (dogCleave === 'right' ? -2 : 2) + 8) % 8;
-        // Only the big quadrant opposite the dog is safe, the other three are unsafe.
-        markBigUnsafe([
-          dogUnsafeQuadrant,
-          (dogUnsafeQuadrant + 2) % 8,
-          (dogUnsafeQuadrant + 6) % 8,
-        ]);
-        if (dogUnsafeQuadrant === 1)
-          markSmallUnsafe([7, 0, 1, 2]);
-        else if (dogUnsafeQuadrant === 3)
-          markSmallUnsafe([1, 2, 3, 4]);
-        else if (dogUnsafeQuadrant === 5)
-          markSmallUnsafe([3, 4, 5, 6]);
-        else if (dogUnsafeQuadrant === 7)
-          markSmallUnsafe([5, 6, 7, 0]);
-
-        // TEMP DEBUGGING
-        console.log(`Big Safe: ${JSON.stringify(bigSafeSpots)}`);
-        console.log(`Small Safe: ${JSON.stringify(smallSafeSpots)}`);
-
-        // At this point there should be either:
-        // (a) 1 big entry and 3 small entries [prefer the big entry]
-        // (b) 0 big entries and 1 small entry [prefer the small entry, since that's it]
-        const bigEntries = Object.entries(bigSafeSpots);
-        const [safeBigEntry] = bigEntries;
-        if (bigEntries.length === 1 && safeBigEntry !== undefined)
-          return safeBigEntry[1];
-
-        const smallEntries = Object.entries(smallSafeSpots);
-        const [safeSmallEntry] = smallEntries;
-        if (smallEntries.length === 1 && safeSmallEntry !== undefined)
-          return safeSmallEntry[1];
-      },
-      outputStrings: {
-        dirNNE: {
-          en: '앞 + 약간 오른쪽',
-        },
-        dirNE: {
-          en: '앞 + 오른쪽',
-        },
-        dirENE: {
-          en: '오른쪽 + 약간 앞',
-        },
-        dirESE: {
-          en: '오른쪽 + 약간 뒤',
-        },
-        dirSE: {
-          en: '뒤 + 오른쪽',
-        },
-        dirSSE: {
-          en: '뒤 + 약간 오른쪽',
-        },
-        dirSSW: {
-          en: '뒤 + 약간 왼쪽',
-        },
-        dirSW: {
-          en: '뒤 + 왼쪽',
-        },
-        dirWSW: {
-          en: '왼쪽 + 약간 뒤',
-        },
-        dirWNW: {
-          en: '왼쪽 + 약간 앞',
-        },
-        dirNW: {
-          en: '앞 + 왼쪽',
-        },
-        dirNNW: {
-          en: '앞 + 약간 왼쪽',
         },
       },
     },
@@ -1075,12 +895,12 @@ const triggerSet: TriggerSet<Data> = {
       run: (data, matches) => data.menphinaLunarKissTargets.push(matches.target),
       outputStrings: {
         tankLaserOnYou: {
-          en: '내게 탱크 레이저가!',
+          en: 'Tank Laser on YOU',
           de: 'Tank Laser auf DIR',
           fr: 'Tank laser sur VOUS',
           ja: '自分にタンクレーザー',
           cn: '坦克激光点名',
-          ko: '탱 레이저 대상자',
+          ko: '내게 탱크 레이저가!',
         },
       },
     },
@@ -1098,12 +918,12 @@ const triggerSet: TriggerSet<Data> = {
       run: (data) => data.menphinaLunarKissTargets = [],
       outputStrings: {
         avoidTankLaser: {
-          en: '탱크 레이저 피해요',
+          en: 'Avoid Tank Laser',
           de: 'Weiche dem Tanklaser aus',
           fr: 'Évitez le tank laser',
           ja: 'タンクレーザー回避',
           cn: '躲避坦克激光',
-          ko: '탱 레이저 피해요',
+          ko: '탱크 레이저 피해요',
         },
       },
     },

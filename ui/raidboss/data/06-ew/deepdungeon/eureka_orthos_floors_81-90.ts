@@ -24,25 +24,25 @@ export const firstHeadmarker = parseInt('0186', 16);
 
 const interceptionOutputStrings: { [label: string]: LocaleText } = {
   egg: {
-    en: '알',
+    en: 'egg',
     de: 'Ei',
     ja: 'たまご',
     cn: '蛋',
     ko: '알',
   },
   cube: {
-    en: '사면체',
+    en: 'cubes',
     de: 'Würfel',
     ja: '四角',
     cn: '方块',
     ko: '큐브',
   },
   ball: {
-    en: '동글이',
+    en: 'ball',
     de: 'Ball',
     ja: '円', // 〇
     cn: '球',
-    ko: '공',
+    ko: '동글',
   },
 } as const;
 
@@ -148,12 +148,12 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           // "Intercardinals" may confuse people between absolute and relative,
           // so add in the "of boss" just to be extra clear.
-          en: '보스 비스듬히 피해요',
+          en: 'Go Intercardinal of Boss',
           de: 'Geh in eine Intercardinale Himmelsrichtung vom Boss',
           fr: 'Allez en intercardinal du boss',
           ja: 'ボスの斜めへ',
           cn: '去Boss的对角线方向',
-          ko: '보스의 대각선 방향으로 피해요',
+          ko: '보스 비스듬히 피해요',
         },
       },
     },
@@ -343,7 +343,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         between: {
-          en: '${safe}, 알과 알 사이',
+          en: '${safe}, between eggs',
           de: '${safe}, zwichen den Eiern',
           ja: '${safe}, たまごの間',
           cn: '${safe}, 蛋中间',

@@ -26,12 +26,12 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '닫힌 입 쪽으로',
+          en: 'Go To Silent Mouth',
           de: 'Geh zum geschlossenen Mund',
           fr: 'Allez sur une bouche silencieuse',
           ja: '閉じた口へ',
           cn: '找闭着的嘴',
-          ko: '말이 없는 입 쪽으로',
+          ko: '닫힌 입 쪽으로',
         },
       },
     },
@@ -86,12 +86,12 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '버블에 삼켜지세요',
+          en: 'Get In Bubble',
           de: 'Geh in die Blase',
           fr: 'Allez dans une bulle',
           ja: '泡に入る',
           cn: '进泡泡',
-          ko: '구슬 안에 들어가기',
+          ko: '버블 안으로 들어가요',
         },
       },
     },
@@ -127,12 +127,12 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '반대 색 바닥으로',
+          en: 'Go To Opposite Color',
           de: 'Geh zur andere Farbe',
           fr: 'Allez sur la couleur opposée',
           ja: '反対の色へ',
           cn: '去异色地板',
-          ko: '화면과 색이 다른 바닥으로',
+          ko: '반대 색 바닥으로',
         },
       },
     },

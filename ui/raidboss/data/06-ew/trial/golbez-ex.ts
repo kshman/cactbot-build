@@ -47,14 +47,7 @@ const galeSphereOutputStrings = {
     ko: '${dir} + ${mechanic}',
   },
   healerGroups: Outputs.healerGroups,
-  partnerStack: {
-    en: '페어',
-    de: 'Mit Partner sammeln',
-    fr: 'Package partenaire',
-    ja: 'ペア',
-    cn: '2 人分摊',
-    ko: '2인 쉐어',
-  },
+  partnerStack: Outputs.pairStack,
   an: Outputs.arrowS,
   ae: Outputs.arrowW,
   as: Outputs.arrowN,
@@ -200,12 +193,12 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '장판 모여 깔아요!',
+          en: 'Bait Circles',
           de: 'Kreise ködern',
           fr: 'Déposez les cercles',
           ja: 'ゆか誘導',
           cn: '集合放圈',
-          ko: '장판 유도',
+          ko: '장판 모여 깔아요!',
         },
       },
     },
@@ -248,16 +241,16 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         backThenFront: Outputs.backThenFront,
         backThenFrontThenHealerGroups: {
-          en: '뒤에서 => 앞으로 => 밖으로 => 뭉쳐요',
+          en: 'Back => Front => Out => Stacks',
           de: 'Hinten => Vorne => Raus => Sammeln',
           cn: '后 => 前 => 钢铁 => 集合',
-          ko: '뒤 => 앞 => 밖 => 쉐어',
+          ko: '뒤에서 => 앞으로 => 밖으로 => 뭉쳐요',
         },
         backThenFrontThenSpread: {
-          en: '뒤에서 => 앞으로 => 밑으로 => 흩어져요',
+          en: 'Back => Front => Under => Spread',
           de: 'Hinten => Vorne => Unter ihn => Verteilen',
           cn: '后 => 前 => 月环 => 分散',
-          ko: '뒤 => 앞 => 안 => 산개',
+          ko: '뒤에서 => 앞으로 => 밑으로 => 흩어져요',
         },
       },
     },
@@ -277,16 +270,16 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         front: Outputs.front,
         frontThenHealerGroups: {
-          en: '앞에서 => 밖으로 => 뭉쳐요',
+          en: 'Front => Out => Stacks',
           de: 'Vorne => Raus => Sammeln',
           cn: '前 => 钢铁 => 集合',
-          ko: '앞 => 밖 => 쉐어',
+          ko: '앞에서 => 밖으로 => 뭉쳐요',
         },
         frontThenSpread: {
-          en: '앞에서 => 밑으로',
+          en: 'Front => Under',
           de: 'Vorne => Unter ihn',
           cn: '前 => 月环',
-          ko: '앞 => 안',
+          ko: '앞에서 => 밑으로',
         },
       },
     },
@@ -298,10 +291,10 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.outAndSpread!(),
       outputStrings: {
         outAndSpread: {
-          en: '흩어져요',
+          en: 'Spread Out',
           de: 'Außen verteilen',
           cn: '分散',
-          ko: '산개',
+          ko: '흩어져요',
         },
       },
     },
@@ -333,14 +326,7 @@ const triggerSet: TriggerSet<Data> = {
       suppressSeconds: 3,
       alertText: (_data, _matches, output) => output.partnerStack!(),
       outputStrings: {
-        partnerStack: {
-          en: '페어',
-          de: 'Mit Partner sammeln',
-          fr: 'Package partenaire',
-          ja: 'ペア',
-          cn: '2 人分摊',
-          ko: '2인 쉐어',
-        },
+        partnerStack: Outputs.pairStack,
       },
     },
     {
@@ -350,12 +336,12 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.rolePositions!(),
       outputStrings: {
         rolePositions: {
-          en: '롤 포지션으로',
+          en: 'Role positions',
           de: 'Rollenposition',
           fr: 'Positions par rôle',
           ja: 'ロール特定位置へ',
           cn: '去指定位置',
-          ko: '직업군별 위치로',
+          ko: '롤 포지션으로',
         },
       },
     },
@@ -377,10 +363,10 @@ const triggerSet: TriggerSet<Data> = {
       run: (data) => data.recordedShadowMechanic = 'stack',
       outputStrings: {
         text: {
-          en: '(밖에서 + 4:4힐러)',
+          en: '(out + healer groups, for later)',
           de: '(raus + Heiler Gruppen, für später)',
           cn: '(钢铁 + 稍后治疗分组分摊)',
-          ko: '(밖으로 + 힐러 그룹 쉐어, 나중에)',
+          ko: '(밖에서 + 4:4힐러)',
         },
       },
     },
@@ -392,10 +378,10 @@ const triggerSet: TriggerSet<Data> = {
       run: (data) => data.recordedShadowMechanic = 'spread',
       outputStrings: {
         text: {
-          en: '(안으로 + 흩어져요)',
+          en: '(in + spread, for later)',
           de: '(rein + verteilen, für später)',
           cn: '(月环 + 稍后分散)',
-          ko: '(안 + 산개, 나중에)',
+          ko: '(안으로 + 흩어져요)',
         },
       },
     },
@@ -695,10 +681,10 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         text: {
-          en: '${dir} => 4:4 힐러',
+          en: '${dir} => Healer Groups',
           de: '${dir} => Heiler Gruppen',
           cn: '${dir} => 治疗分组分摊',
-          ko: '${dir} => 힐러 그룹 쉐어',
+          ko: '${dir} => 4:4 힐러',
         },
         northeast: Outputs.northeast,
         southeast: Outputs.southeast,
@@ -709,7 +695,8 @@ const triggerSet: TriggerSet<Data> = {
         asw: Outputs.arrowSW,
         anw: Outputs.arrowNW,
         atext: {
-          en: '${dir} 4:4 힐러',
+          en: '${dir} Healer Groups',
+          ko: '${dir} 4:4 힐러',
         },
       },
     },
@@ -775,10 +762,10 @@ const triggerSet: TriggerSet<Data> = {
         dirSW: Outputs.dirSW,
         dirSE: Outputs.dirSE,
         middleLean: {
-          en: '한가운데 (약간 ${dir})',
+          en: 'Middle (lean ${dir})',
           de: 'Mitte (${dir} halten)',
           cn: '中间 (偏 ${dir})',
-          ko: '중앙 (약간 ${dir})',
+          ko: '한가운데 (약간 ${dir})',
         },
       },
     },
@@ -793,10 +780,10 @@ const triggerSet: TriggerSet<Data> = {
       run: (data, matches) => data.dragonsDescentMarker.push(matches.target),
       outputStrings: {
         text: {
-          en: '내게 넉백!',
+          en: 'Knockback on YOU',
           de: 'Rückstoß auf DIR',
           cn: '击退点名',
-          ko: '넉백 대상자',
+          ko: '내게 넉백!',
         },
       },
     },
@@ -811,10 +798,10 @@ const triggerSet: TriggerSet<Data> = {
       run: (data, matches) => data.dragonsDescentMarker.push(matches.target),
       outputStrings: {
         text: {
-          en: '내게 플레어!',
+          en: 'Flare on YOU',
           de: 'Flare auf DIR',
           cn: '陨石点名',
-          ko: '내게 플레어',
+          ko: '내게 플레어!',
         },
       },
     },
@@ -830,10 +817,10 @@ const triggerSet: TriggerSet<Data> = {
       run: (data) => data.dragonsDescentMarker = [],
       outputStrings: {
         text: {
-          en: '타워 밟아요',
+          en: 'Get Tower',
           de: 'Nimm Turm',
           cn: '踩塔',
-          ko: '타워 들어가기',
+          ko: '타워 밟아요',
         },
       },
     },
@@ -845,7 +832,8 @@ const triggerSet: TriggerSet<Data> = {
       run: (data) => data.prsShadow = 'none',
       outputStrings: {
         text: {
-          en: '(이거 페이크)',
+          en: '(Fake)',
+          ko: '(이거 페이크)',
         },
       },
     },
@@ -857,7 +845,8 @@ const triggerSet: TriggerSet<Data> = {
       run: (data) => data.prsShadow = 'none',
       outputStrings: {
         text: {
-          en: '(이제 곧 끝)',
+          en: '(Enrage soon)',
+          ko: '(이제 곧 끝)',
         },
       },
     },
@@ -869,7 +858,8 @@ const triggerSet: TriggerSet<Data> = {
       run: (data) => data.prsShadow = 'out',
       outputStrings: {
         text: {
-          en: '밖으로 🡺 4:4 힐러',
+          en: 'Out 🡺 Healer Groups',
+          ko: '밖으로 🡺 4:4 힐러',
         },
       },
     },
@@ -881,7 +871,8 @@ const triggerSet: TriggerSet<Data> = {
       run: (data) => data.prsShadow = 'in',
       outputStrings: {
         text: {
-          en: '안으로 🡺 프로틴',
+          en: 'In 🡺 Protean',
+          ko: '안으로 🡺 프로틴',
         },
       },
     },
@@ -898,13 +889,16 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         text: {
-          en: '뒤로 갔다 🡺 앞으로',
+          en: 'Behind 🡺 Front',
+          ko: '뒤로 갔다 🡺 앞으로',
         },
         pin: {
-          en: '뒤에서 🡺 안쪽+앞으로 🡺 프로틴',
+          en: 'Behind 🡺 In+Front 🡺 Protean',
+          ko: '뒤에서 🡺 안쪽+앞으로 🡺 프로틴',
         },
         pout: {
-          en: '뒤에서 🡺 밖으로+앞으로 🡺 4:4 힐러',
+          en: 'Behind 🡺 Out+Front 🡺 Healer Groups',
+          ko: '뒤에서 🡺 밖으로+앞으로 🡺 4:4 힐러',
         },
       },
     },
@@ -915,11 +909,11 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '돌 떨어져요',
+          en: 'Meteors',
+          ko: '돌 떨어져요',
         },
       },
     },
-    //
   ],
   timelineReplace: [
     {

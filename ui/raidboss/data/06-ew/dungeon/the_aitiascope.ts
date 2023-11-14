@@ -23,15 +23,16 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (data, _matches, output) => data.role === 'tank' ? output.tank!() : output.text!(),
       outputStrings: {
         text: {
-          en: '오른쪽으로 (탱크 왼쪽)',
+          en: 'Back Right / Front Left',
           de: 'hinten rechts / vorne links',
           fr: 'Derrière à droite / Devant à gauche',
           ja: '右下 / 左上',
           cn: '右后 / 左前',
-          ko: '오른쪽 아래 / 왼쪽 위',
+          ko: '오른쪽으로 (탱크 왼쪽)',
         },
         tank: {
-          en: '❰❰❰왼쪽으로',
+          en: '❰❰❰Left',
+          ko: '❰❰❰왼쪽으로',
         },
       },
     },
@@ -42,15 +43,16 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (data, _matches, output) => data.role === 'tank' ? output.tank!() : output.text!(),
       outputStrings: {
         text: {
-          en: '왼쪽으로 (탱크 오른쪽)',
+          en: 'Back Left / Front Right',
           de: 'hinten links / vorne rechts',
           fr: 'Derrière à gauche / Devant à droite',
           ja: '左下 / 右上',
           cn: '左后 / 右前',
-          ko: '왼쪽 아래 / 오른쪽 위',
+          ko: '왼쪽으로 (탱크 오른쪽)',
         },
         tank: {
-          en: '오른쪽으로❱❱❱',
+          en: 'Right❱❱❱',
+          ko: '오른쪽으로❱❱❱',
         },
       },
     },
@@ -79,12 +81,12 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '부서전 크리스탈 뒤로',
+          en: 'Hide behind broken crystal',
           de: 'Hinter dem gebrochenen Kristall verstecken',
           fr: 'Cachez-vous derrière le cristal brisé',
           ja: '壊れたクリスタルの後ろ',
           cn: '躲在破碎的水晶后',
-          ko: '부서진 수정 뒤로',
+          ko: '부서전 크리스탈 뒤로',
         },
       },
     },
@@ -95,12 +97,12 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '크로스헤어 피해요',
+          en: 'Away from Crosshairs',
           de: 'Weg von den Zielmarkierungen',
           fr: 'Éloignez-vous de la zone de ciblage',
           ja: 'ゆかから離れる',
           cn: '远离准星',
-          ko: '원형 장판에서 멀어지기',
+          ko: '크로스헤어 피해요',
         },
       },
     },
@@ -130,12 +132,12 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '얼음이 보호막, 뒤로',
+          en: 'Hide Behind Ice',
           de: 'hinter dem Eis verstecken',
           fr: 'Cachez-vous derrière la glace',
           ja: '氷の後ろ',
           cn: '躲在冰柱后面',
-          ko: '얼음 뒤로',
+          ko: '얼음이 보호막, 뒤로',
         },
       },
     },

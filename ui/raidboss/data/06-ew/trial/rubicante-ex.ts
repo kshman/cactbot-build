@@ -75,7 +75,8 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '곧 남북으로 팀',
+          en: 'North/South Team divide',
+          ko: '곧 남북으로 팀',
         },
       },
     },
@@ -87,7 +88,8 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '곧 주사위',
+          en: 'Dice soon',
+          ko: '곧 주사위',
         },
       },
     },
@@ -110,12 +112,14 @@ const triggerSet: TriggerSet<Data> = {
     },
     {
       id: 'RubicanteEx Inferno Spread',
+      // also applies a 15s bleed to each player
       type: 'StartsUsing',
       netRegex: { id: '7D0F', source: 'Rubicante', capture: false },
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '개인 장판! 자기 자리로',
+          en: 'Spread',
+          ko: '개인 장판! 자기 자리로',
         },
       },
     },
@@ -149,14 +153,7 @@ const triggerSet: TriggerSet<Data> = {
       suppressSeconds: 5,
       infoText: (_data, _matches, output) => output.stack!(),
       outputStrings: {
-        stack: {
-          en: '페어, 둘이 함께',
-          de: 'Mit Partner sammeln',
-          fr: 'Package avec votre partenaire',
-          ja: '2人頭割り',
-          cn: '2人分摊',
-          ko: '2인 쉐어',
-        },
+        stack: Outputs.pairStack,
       },
     },
     {
@@ -166,12 +163,12 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.spread!(),
       outputStrings: {
         spread: {
-          en: '프로틴, 흩어져요',
+          en: 'Protean',
           de: 'Himmelsrichtung',
           fr: 'Positions',
           ja: '基本散会',
           cn: '分散引导',
-          ko: '기본 산개',
+          ko: '프로틴, 흩어져요',
         },
       },
     },
@@ -183,12 +180,12 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '내게 범위 줄!',
+          en: 'Face tether out',
           de: 'Verbindung nach draußen richten',
           fr: 'Lien vers l\'extérieur',
           ja: '線を外へ向ける',
           cn: '离开人群背对连线',
-          ko: '본진 바깥으로 선 유도하기',
+          ko: '내게 범위 줄!',
         },
       },
     },
@@ -200,12 +197,12 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '탱크 줄!',
+          en: 'Tank Tethers',
           de: 'Tank Verbindungen',
           fr: 'Liens tanks',
           ja: 'タンク線取り',
           cn: '坦克接线',
-          ko: '탱커가 선 가로채기',
+          ko: '탱크 줄!',
         },
       },
     },
@@ -242,20 +239,20 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         outFlareThenSpread: {
-          en: '⊗밖으로 + 플레어 => 흩어져요',
+          en: 'Out+Flare => Spread',
           de: 'Raus+Flare => Verteilen',
           fr: 'Extérieur + Brasier -> Dispersion',
           ja: '外側＋フレア => 散会',
           cn: '外侧＋核爆 => 分散',
-          ko: '바깥+플레어 => 산개',
+          ko: '⊗밖으로 + 플레어 => 흩어져요',
         },
         inStackThenSpread: {
-          en: '⊙안으로 + 뭉쳤다 => 흩어져요',
+          en: 'In+Stack => Spread',
           de: 'Rein+Sammeln => Verteilen',
           fr: 'Intérieur + Package -> Dispersion',
           ja: '内側＋頭割り => 散会',
           cn: '内侧＋分摊 => 分散',
-          ko: '안+쉐어 => 산개',
+          ko: '⊙안으로 + 뭉쳤다 => 흩어져요',
         },
       },
     },
@@ -301,12 +298,12 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.outAndProtean!(),
       outputStrings: {
         outAndProtean: {
-          en: '⊗밖으로! 프로틴',
+          en: 'Out + Protean',
           de: 'Raus + Himmelsrichtung',
           fr: 'Extérieur + Positions',
           ja: '外側 + 基本散会',
           cn: '外侧 + 分散引导',
-          ko: '밖으로 + 기본 산개',
+          ko: '⊗밖으로! 프로틴',
         },
       },
     },
@@ -317,12 +314,12 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.inAndProtean!(),
       outputStrings: {
         inAndProtean: {
-          en: '⊙안으로! 프로틴',
+          en: 'In + Protean',
           de: 'Rein + Himmelsrichtung',
           fr: 'Intérieur + Positions',
           ja: '内側 + 基本散会',
           cn: '内侧 + 分散引导',
-          ko: '안으로 + 기본 산개',
+          ko: '⊙안으로! 프로틴',
         },
       },
     },
@@ -333,12 +330,12 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.spreadBehind!(),
       outputStrings: {
         spreadBehind: {
-          en: '보스 뒤에서 흩어져요!',
+          en: 'Spread behind Boss',
           de: 'Hinter dem Boss verteilen',
           fr: 'Écartez-vous derrière le boss',
           ja: 'ボスの後ろで散会',
           cn: 'BOSS背后分散',
-          ko: '보스 뒤에서 산개',
+          ko: '보스 뒤에서 흩어져요!',
         },
       },
     },
@@ -349,12 +346,12 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.stackBehind!(),
       outputStrings: {
         stackBehind: {
-          en: '보스 뒤에서 뭉쳐요!',
+          en: 'Stack behind Boss',
           de: 'Hinter dem Boss sammeln',
           fr: 'Packez-vous derrière le boss',
           ja: 'ボスの後ろで頭割り',
           cn: 'BOSS背后分摊',
-          ko: '보스 뒤에서 쉐어',
+          ko: '보스 뒤에서 뭉쳐요!',
         },
       },
     },
@@ -439,20 +436,20 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         num: {
-          en: '내가 ${num}번',
+          en: '#${num}',
           de: '#${num}',
           fr: '#${num}',
           ja: '${num}番',
           cn: '#${num}',
-          ko: '${num}번째',
+          ko: '내가 ${num}번',
         },
         numGetTether: {
-          en: '${num}번 (줄 받으러 가요)',
+          en: '#${num} (Get Tether)',
           de: '#${num} (Verbindung nehmen)',
           fr: '#${num} (Prenez le lien)',
           ja: '${num}番 (線取りに行く)',
           cn: '#${num} (接线)',
-          ko: '${num}번째 (선 가져가기)',
+          ko: '${num}번 (줄 받으러 가요)',
         },
       },
     },
@@ -467,12 +464,12 @@ const triggerSet: TriggerSet<Data> = {
       tts: null,
       outputStrings: {
         text: {
-          en: '${num}번',
+          en: '${num}',
           de: '${num}',
           fr: '${num}',
           ja: '${num}番',
           cn: '${num}',
-          ko: '${num}',
+          ko: '${num}번',
         },
       },
     },
@@ -490,12 +487,12 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.getTether!(),
       outputStrings: {
         getTether: {
-          en: '줄 받으러 가요',
+          en: 'Get Tether',
           de: 'Verbindung nehmen',
           fr: 'Prenez le lien',
           ja: '線取りに行く',
           cn: '接线',
-          ko: '선 가져가기',
+          ko: '줄 채러 가요',
         },
       },
     },
@@ -517,20 +514,20 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         cardinals: {
-          en: '십자로',
+          en: 'Cardinals',
           de: 'Kardinal',
           fr: 'Cardinaux',
           ja: '十字回避',
           cn: '十字',
-          ko: '십자방향',
+          ko: '십자로',
         },
         intercards: {
-          en: '비스듬히',
+          en: 'Intercards',
           de: 'Interkardinal',
           fr: 'Intercardinaux',
           ja: '斜めへ',
           cn: '斜角',
-          ko: '대각선',
+          ko: '비스듬히',
         },
       },
     },
@@ -555,31 +552,40 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         p0: {
-          en: '아니 오류인가...',
+          en: 'Error...?',
+          ko: '아니 오류인가...',
         },
         p1: {
-          en: '#1: 보스 뒤 / 회전 방향으로',
+          en: '#1',
+          ko: '#1: 보스 뒤 / 회전 방향으로',
         },
         p2: {
-          en: '#2: V 뒤쪽',
+          en: '#2',
+          ko: '#2: V 뒤쪽',
         },
         p3: {
-          en: '#3: V 안쪽 (벽까지 가면 좋음)',
+          en: '#3',
+          ko: '#3: V 안쪽 (벽까지 가면 좋음)',
         },
         p4: {
-          en: '#4: ^_^ 에서 회전 방향 ^으로',
+          en: '#4',
+          ko: '#4: ^_^ 에서 회전 방향 ^으로',
         },
         p5: {
-          en: '#5: 보스 뒤로',
+          en: '#5',
+          ko: '#5: 보스 뒤로',
         },
         p6: {
-          en: '#6: V 뒤쪽, 좌우 직선 찾아 그 밑단',
+          en: '#6',
+          ko: '#6: V 뒤쪽, 좌우 직선 찾아 그 밑단',
         },
         p7: {
-          en: '#7: V 안쪽 (벽까지 가면 좋음)',
+          en: '#7',
+          ko: '#7: V 안쪽 (벽까지 가면 좋음)',
         },
         p8: {
-          en: '#8: ^_^ 에서 회전 방향 ^으로',
+          en: '#8',
+          ko: '#8: ^_^ 에서 회전 방향 ^으로',
         },
         unknown: Outputs.unknown,
       },
@@ -591,7 +597,8 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '남북으로 팀 나눠요!',
+          en: 'Divide North/South Teams!',
+          ko: '남북으로 팀 나눠요!',
         },
       },
     },
@@ -603,7 +610,8 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '아픈 전체 공격!', // 또는 쫄 못잡아서 전멸
+          en: 'Big AoE!',
+          ko: '아픈 전체 공격!', // 또는 쫄 못잡아서 전멸
         },
       },
     },
@@ -615,7 +623,8 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '곧 운동회~🎉 디버프 확인',
+          en: 'Complex🎉 soon. Check your buff',
+          ko: '곧 운동회~🎉 디버프 확인',
         },
       },
     },

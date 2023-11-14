@@ -50,10 +50,11 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         text: {
-          en: '내게 장판! 밖으로!',
+          en: 'Puddle on YOU',
           de: 'Fläche auf DIR',
           fr: 'Flaque sur VOUS',
           ja: '自分にAOE',
+          ko: '내게 장판! 밖으로!',
         },
       },
     },
@@ -65,7 +66,8 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '내게 탱크버스터 장판!',
+          en: 'Tank Buster on YOU!',
+          ko: '내게 탱크버스터 장판!',
         },
       },
     },
@@ -102,10 +104,11 @@ const triggerSet: TriggerSet<Data> = {
       run: (data) => data.puddle = false,
       outputStrings: {
         text: {
-          en: '장판 피해요!',
+          en: 'Bait puddles',
           de: 'Flächen ködern',
           fr: 'Déposez les flaques',
           ja: 'AOE回避',
+          ko: '장판 피해요!',
         },
       },
     },
@@ -123,10 +126,11 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '넉백쪽으로',
+          en: 'Look for knockback position',
           de: 'Nach Rückstoß Position schauen',
           fr: 'Repérez la zone de poussée',
           ja: 'ノックバック位置へ',
+          ko: '넉백쪽으로',
         },
       },
     },
@@ -137,10 +141,11 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '넉백 + 돌 굴러와요',
+          en: 'Knockback + Rolling stones',
           de: 'Rückstoß + rollende Steine',
           fr: 'Poussée + Rocher',
           ja: 'ノックバック + 石AOE',
+          ko: '넉백 + 돌 굴러와요',
         },
       },
     },
@@ -151,10 +156,11 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '안전한 곳으로',
+          en: 'Go to safe zone',
           de: 'Geh zum sichere Feld',
           fr: 'Allez dans une zone sûre',
           ja: '安置へ移動',
+          ko: '안전한 곳으로',
         },
       },
     },
@@ -183,10 +189,11 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '곧 넉백',
+          en: 'Knockback',
           de: 'Rückstoß',
           fr: 'Poussée',
           ja: 'まもなくノックバック',
+          ko: '곧 넉백',
         },
       },
     },
@@ -197,10 +204,11 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '멀리 넉백!',
+          en: 'Far knockback',
           de: 'Weiter Rückstoß',
           fr: 'Poussée au loin',
           ja: '遠くノックバック',
+          ko: '멀리 넉백!',
         },
       },
     },
@@ -230,10 +238,11 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '마지막 창 => 첫번째 창으로',
+          en: 'Last trident => 1st trident',
           de: 'Letzer Dreizack => erster Dreizack',
           fr: 'Dernier trident -> 1er trident',
           ja: '最後の槍 => 1番目の槍へ',
+          ko: '마지막 창 => 첫번째 창으로',
         },
       },
     },
@@ -256,10 +265,11 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '화살표 찾아서 옆으로 (보스 안따라옴)',
+          en: 'Go to side of the arrow (Boss doesn\'t move)',
           de: 'Geh seitlich des Pfeils (Boss bewegt sich nicht)',
           fr: 'Allez sur les côtés de la flèche (le boss ne bouge pas)',
           ja: '矢印の横へ (ボスは動かない)',
+          ko: '화살표 찾아서 옆으로 (보스 안따라옴)',
         },
       },
     },
@@ -274,16 +284,18 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         one: {
-          en: '화살표 찾아서 옆으로 (보스 따라옴)',
+          en: 'Go to side of the arrow',
           de: 'Geh seitlich des Pfeils',
           fr: 'Allez sur les côtés de la flèche',
           ja: '矢印の横へ',
+          ko: '화살표 찾아서 옆으로 (보스 따라옴)',
         },
         two: {
-          en: '두 화살표 사이가 안전 (보스 따라옴)',
+          en: 'Corner between two arrows',
           de: 'Ecke zwichen 2 Pfeilen',
           fr: 'Coin entre les 2 flèches',
           ja: '2つの矢印の隅',
+          ko: '두 화살표 사이가 안전 (보스 따라옴)',
         },
       },
     },
@@ -295,8 +307,9 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '연속 전체 공격',
+          en: 'AoE',
           ja: '連続全体攻撃',
+          ko: '연속 전체 공격',
         },
       },
     },
@@ -322,10 +335,11 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '장판 없는 곳으로 + 넉백!',
+          en: 'Knockback to safe corner',
           de: 'Rückstoß in die sichere Ecke',
           fr: 'Poussée vers un coin sûr',
           ja: 'AOEがないどころへ + ノックバック',
+          ko: '장판 없는 곳으로 + 넉백!',
         },
       },
     },
@@ -336,10 +350,11 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '인제 곧 커져요! 버프 넣지말것!',
+          en: 'Oschon second phase',
           de: 'Oschon zweite Phase',
           fr: 'Oshon : deuxième phase',
           ja: 'すぐ大きくなる',
+          ko: '인제 곧 커져요! 버프 넣지말것!',
         },
       },
     },
@@ -350,10 +365,11 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '안전한 곳 찾아요!',
+          en: 'Go to safe zone',
           de: 'Geh in den sicheren Bereich',
           fr: 'Allez dans une zone sûre',
           ja: '安置で待機',
+          ko: '안전한 곳 찾아요!',
         },
       },
     },
@@ -364,10 +380,11 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '구슬에서 먼곳으로!',
+          en: 'Far from Orb',
           de: 'Weit weg vom Orb',
           fr: 'Loin de l\'orbe',
           ja: '玉からはなれて',
+          ko: '구슬에서 먼곳으로!',
         },
       },
     },
@@ -378,10 +395,11 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '구슬에서 먼곳 + 넉백!',
+          en: 'Far from Orb + Knockback',
           de: 'Weit weg vom Orb + Rückstoß',
           fr: 'Loin de l\'orbe + Poussée',
           ja: '玉からはなれて + ノックバック',
+          ko: '구슬에서 먼곳 + 넉백!',
         },
       },
     },
@@ -411,6 +429,8 @@ const triggerSet: TriggerSet<Data> = {
           en: '${form1} => ${form2} => ${form3}',
           de: '${form1} => ${form2} => ${form3}',
           fr: '${form1} => ${form2} => ${form3}',
+          ja: '${form1} => ${form2} => ${form3}',
+          ko: '${form1} => ${form2} => ${form3}',
         },
         left: Outputs.left,
         right: Outputs.right,
@@ -438,10 +458,11 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '밝은 것부터 터져요 => 하나씩 이동',
+          en: 'Start from the bright moon',
           de: 'Starte vom hellen Mond',
           fr: 'Commencez depuis la lune pleine',
           ja: '明るい月から',
+          ko: '밝은 것부터 터져요 => 하나씩 이동',
         },
       },
     },
@@ -457,6 +478,7 @@ const triggerSet: TriggerSet<Data> = {
           de: '3 => 1 => 2',
           fr: '3 -> 1 -> 2',
           ja: '3 => 1 => 2',
+          ko: '3 => 1 => 2',
         },
       },
     },
@@ -468,10 +490,11 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '안전한 곳으로',
+          en: 'Go to safe zone',
           de: 'Geh in den sicheren Bereich',
           fr: 'Allez dans une zone sûre',
           ja: '安置へ移動',
+          ko: '안전한 곳으로',
         },
       },
     },
@@ -482,12 +505,12 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '파랑쪽이 안전',
+          en: 'Be on blue half',
           de: 'Geh zur blauen Seite',
           fr: 'Placez-vous sur la moitié bleue',
           ja: '青い安置',
           cn: '站蓝色半场',
-          ko: '파란색 쪽으로',
+          ko: '파랑쪽이 안전',
         },
       },
     },
@@ -498,12 +521,12 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '빨간쪽이 안전',
+          en: 'Be on red half',
           de: 'Geh zur roten Seite',
           fr: 'Placez-vous sur la moitié rouge',
           ja: '赤い安置',
           cn: '站红色半场',
-          ko: '빨간색 쪽으로',
+          ko: '빨간쪽이 안전',
         },
       },
     },
@@ -515,10 +538,11 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '마지막 창 => 첫번째 창으로',
+          en: 'Last trident => 1st trident',
           de: 'Letzer Dreizack => erster Dreizack',
           fr: 'Dernier trident -> 1er trident',
           ja: '最後の槍 => 1番目の槍へ',
+          ko: '마지막 창 => 첫번째 창으로',
         },
       },
     },
@@ -535,12 +559,12 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '넉백 (번개 조심)',
+          en: 'Knockback (with lightning)',
           de: 'Rückstoß (mit Blitzen)',
           fr: 'Poussée (avec éclair)',
           ja: 'ノックバック (雷)',
           cn: '击退 (带闪电)',
-          ko: '넉백 (번개 장판)',
+          ko: '넉백 (번개 조심)',
         },
       },
     },
@@ -574,16 +598,18 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         red: {
-          en: '파랑색이 안전',
+          en: 'Blue is safe',
           de: 'Blau ist sicher',
           fr: 'Bleu est sûr',
           ja: '青安置',
+          ko: '파랑색이 안전',
         },
         blue: {
-          en: '빨강색이 안전',
+          en: 'Red is safe',
           de: 'Rot ist sicher',
           fr: 'Rouge est sûr',
           ja: '赤安置',
+          ko: '빨강색이 안전',
         },
       },
     },
@@ -594,10 +620,11 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '안전한 곳으로 넉백!',
+          en: 'Knockback to safe corner',
           de: 'Rückstoß in die sichere Ecke',
           fr: 'Poussée dans un coin sûr',
           ja: '安置へノックバック',
+          ko: '안전한 곳으로 넉백!',
         },
       },
     },
@@ -615,8 +642,9 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '지속적으로 전체 공격!',
+          en: 'AoE',
           ja: '連続全体攻撃',
+          ko: '지속적으로 전체 공격!',
         },
       },
     },
@@ -629,7 +657,8 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '삼각 장판 피해요!',
+          en: 'Avoid triangles!',
+          ko: '삼각 장판 피해요!',
         },
       },
     },
@@ -641,23 +670,11 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '삼각 장판 조심해욧',
+          en: 'Avoid triangles',
+          ko: '삼각 장판 조심해욧',
         },
       },
     },
-    /*
-    {
-      id: 'Thaleia 어듬이 Llymlaen Navigator\'s Trident',
-      type: 'StartsUsing',
-      netRegex: { id: '880E', source: 'Llymlaen', capture: false },
-      infoText: (_data, _matches, output) => output.text!(),
-      outputStrings: {
-        text: {
-          en: '좌우 피했다 => 넉백',
-        },
-      },
-    },
-    */
     {
       id: 'Thaleia 어듬이 Llymlaen Navigator\'s Trident',
       type: 'StartsUsing',
@@ -669,10 +686,12 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         left: {
-          en: '오른쪽 => 왼쪽 => 넉백',
+          en: 'Right => Left => Knockback',
+          ko: '오른쪽 => 왼쪽 => 넉백',
         },
         right: {
-          en: '왼쪽 => 오른쪽 => 넉백',
+          en: 'Left => Right => Knockback',
+          ko: '왼쪽 => 오른쪽 => 넉백',
         },
       },
     },
@@ -686,7 +705,8 @@ const triggerSet: TriggerSet<Data> = {
       run: (data) => data.puddle = false,
       outputStrings: {
         text: {
-          en: '장판 피해요!',
+          en: 'Avoid puddles!',
+          ko: '장판 피해요!',
         },
       },
     },
@@ -698,7 +718,8 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '뱀 나와요!',
+          en: 'Serpents come out!',
+          ko: '뱀 나와요!',
         },
       },
     },
@@ -710,7 +731,8 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '장판 피해요!',
+          en: 'Avoid puddles!',
+          ko: '장판 피해요!',
         },
       },
     },
@@ -722,7 +744,8 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '갈고리 없는 모서리로!',
+          en: 'Go to safe corner!',
+          ko: '갈고리 없는 모서리로!',
         },
       },
     },
@@ -734,7 +757,8 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '연속 세로 장판, 피해요!',
+          en: 'Avoid puddles!',
+          ko: '연속 세로 장판, 피해요!',
         },
       },
     },
@@ -747,7 +771,8 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '바닥 장판 피해요!',
+          en: 'Avoid puddles!',
+          ko: '바닥 장판 피해요!',
         },
       },
     },

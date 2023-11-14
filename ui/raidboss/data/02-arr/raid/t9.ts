@@ -60,7 +60,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: 'Plongeon sur le Main Tank',
           ja: 'MTに飛んでくる',
           cn: '凶鸟跳点MT',
-          ko: '광역 탱버',
+          ko: '탱크클레브',
         },
       },
     },

@@ -51,12 +51,12 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '밖으로 멀리',
+          en: 'Out and Away',
           de: 'Raus und Weg',
           fr: 'Extérieur et loin',
           ja: '外へ',
           cn: '外侧远离',
-          ko: '밖으로',
+          ko: '밖으로 멀리',
         },
       },
     },
@@ -67,7 +67,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '벽으로',
+          en: 'Wall',
           de: 'Wand',
           fr: 'Mur',
           ja: '壁へ',
@@ -132,7 +132,7 @@ const triggerSet: TriggerSet<Data> = {
       run: (data) => delete data.boldBoulderTarget,
       outputStrings: {
         flareOnYou: {
-          en: '내게 플레어가',
+          en: 'Flare on YOU',
           de: 'Flare auf DIR',
           fr: 'Brasier sur VOUS',
           ja: '自分にフレア',
@@ -328,7 +328,7 @@ const triggerSet: TriggerSet<Data> = {
         'Teasing Tangles': '머리털 구속',
         'Tornado Chain': '연속 회오리',
         'Touchdown': '착지',
-        'Trample': '짓밟아요',
+        'Trample': '짓밟기',
         'Void Aero(?! )': '보이드 에어로',
         'Void Aero III': '보이드 에어로가',
         'Void Aero IV': '보이드 에어로쟈',

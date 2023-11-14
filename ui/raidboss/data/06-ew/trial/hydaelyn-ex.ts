@@ -24,12 +24,12 @@ const storedMechanicsOutputStrings = {
 const crystallizeOutputStrings = {
   ...storedMechanicsOutputStrings,
   crystallize: {
-    en: '크리스탈라이즈: ${name}',
+    en: 'Crystallize: ${name}',
     de: 'Kristalisieren: ${name}',
     fr: 'Cristallisation : ${name}',
     ja: 'クリスタライズ: ${name}',
     cn: '水晶化: ${name}',
-    ko: '크리스탈화: ${name}',
+    ko: '크리스탈라이즈: ${name}',
   },
 };
 
@@ -68,12 +68,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         ...comboOutputStrings,
         intercards: {
-          en: '비스듬히 피해욧',
+          en: 'Intercards',
           de: 'Interkardinal',
           fr: 'Intercardinal',
           ja: '斜めへ',
           cn: '四角',
-          ko: '대각선 쪽으로',
+          ko: '비스듬히 피해욧',
         },
       },
     },
@@ -256,18 +256,18 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         dirCrystals: {
-          en: '${dir} 크리스탈부터',
+          en: '${dir} Crystals first',
           de: 'Kristall im ${dir} zuerst',
           fr: 'Premiers cristaux au ${dir} ',
           cn: '先攻击 ${dir} 水晶',
-          ko: '${dir} 크리스탈 먼저',
+          ko: '${dir} 크리스탈부터',
         },
         dirEchoes: {
-          en: '먼저 ${dir}로 데려가욧',
+          en: 'Move Echoes ${dir} first',
           de: 'Bewege Echoes zuerst nach ${dir}',
           fr: 'Déplacez les échos au ${dir} en premier',
           cn: '先拉回声到 ${dir} ',
-          ko: '쫄 ${dir}으로 먼저 데려가기',
+          ko: '먼저 ${dir}로 데려가욧',
         },
         north: Outputs.north,
         south: Outputs.south,
@@ -307,12 +307,12 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.rolePositions!(),
       outputStrings: {
         rolePositions: {
-          en: '롤 위치로',
+          en: 'Role positions',
           de: 'Rollenposition',
           fr: 'Positions par rôle',
           ja: 'ロール特定位置へ',
           cn: '去指定位置',
-          ko: '직업별 산개위치로',
+          ko: '롤 위치로',
         },
       },
     },
@@ -335,12 +335,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         ...comboOutputStrings,
         avoid: {
-          en: '줄 끝 쪽 피해욧',
+          en: 'Avoid Line Ends',
           de: 'Weiche den Enden der Linien aus',
           fr: 'Évitez les fins de lignes',
           ja: '線の端から離れる',
           cn: '远离线',
-          ko: '선의 끝부분 피해요',
+          ko: '줄 끝 쪽 피해욧',
         },
       },
     },
@@ -351,12 +351,12 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '5x 뭉쳐요',
+          en: 'Stack 5x',
           de: '5x Sammeln',
           fr: '5x Packages',
           ja: '頭割り５回',
           cn: '5连分摊',
-          ko: '쉐어 5번',
+          ko: '5x 뭉쳐요',
         },
       },
     },

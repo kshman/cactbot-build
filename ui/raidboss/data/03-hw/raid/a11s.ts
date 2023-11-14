@@ -380,7 +380,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: 'Charge sur VOUS',
           ja: '自分にチャージ',
           cn: '冲锋点名',
-          ko: '돌진 대상자',
+          ko: '내게 돌진',
         },
       },
     },

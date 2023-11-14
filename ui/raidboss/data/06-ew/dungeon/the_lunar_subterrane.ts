@@ -43,9 +43,9 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '안전: 🟦사각',
+          en: 'Blue Square Safe',
           de: 'Blaues Viereck sicher',
-          ko: '파란색 네모 안전',
+          ko: '안전: 🟦사각',
         },
       },
     },
@@ -56,9 +56,9 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '안전: 🟣삼각',
+          en: 'Pink Triangle Safe',
           de: 'Pinkes Dreieck sicher',
-          ko: '분홍색 삼각형 안전',
+          ko: '안전: 🟣삼각',
         },
       },
     },
@@ -75,9 +75,9 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         cleanse: {
-          en: '에스나: ${player}',
+          en: 'Cleanse ${player}\'s Doom',
           de: 'Reinige ${player}\'s Verhängnis',
-          ko: '${player} 선고 해제하기',
+          ko: '에스나: ${player}',
         },
       },
     },
@@ -128,9 +128,9 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '보스 옆으로!',
+          en: 'Go Sides on Wall',
           de: 'Geh seitlich an die Wand',
-          ko: '옆쪽 벽에 붙기',
+          ko: '보스 옆으로!',
         },
       },
     },
@@ -147,12 +147,12 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '보스 뒷쪽 바깥으로',
+          en: 'Get Behind and Out',
           de: 'Geh nach Hinten und Raus',
           fr: 'Passez derrière et extérieur',
           ja: '後ろの外側へ',
           cn: '去背后远离',
-          ko: '보스 뒤 바깥쪽으로',
+          ko: '보스 뒷쪽 바깥으로',
         },
       },
     },

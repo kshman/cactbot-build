@@ -64,25 +64,25 @@ const triggerSet: TriggerSet<Data> = {
         south: Outputs.south,
         unknown: Outputs.unknown,
         middlenorth: {
-          en: '가운데-북쪽',
+          en: 'Middle-North',
           de: 'Norden-Mittig',
           fr: 'Milieu-Nord',
           cn: '中央-上 (北)',
-          ko: '중앙-북쪽',
+          ko: '가운데-북쪽',
         },
         middlesouth: {
-          en: '가운데-남쪽',
+          en: 'Middle-South',
           de: 'Süden-Mittig',
           fr: 'Milieu-Sud',
           cn: '中央-下 (南)',
-          ko: '중앙-남쪽',
+          ko: '가운데-남쪽',
         },
         text: {
-          en: '스탬피드 피해욧 (${dir} 줄:${row})',
+          en: 'Stampede from ${dir} (${row} Row)',
           de: 'Stampede von ${dir} (${row} Reihe)',
           fr: 'Ruée depuis ${dir} (${row})',
           cn: '${dir}冲锋 (${row} 行)',
-          ko: '${dir}에서 돌진 (${row} 줄)',
+          ko: '스탬피드 피해욧 (${dir} 줄:${row})',
         },
       },
     },
@@ -111,10 +111,10 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '줄 달린 돌에서 멀어져요',
+          en: 'Away from tethered rock',
           de: 'Weg vom verbundenen Felsen',
           cn: '躲避连线石头',
-          ko: '선 연결된 돌 피해요',
+          ko: '줄 달린 돌에서 멀어져요',
         },
       },
     },
@@ -132,12 +132,12 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '돌 뒤에 숨어요',
+          en: 'Hide Behind Boulder',
           de: 'Hinter Felsen verstecken',
           fr: 'Cachez-vous derrière le rocher',
           ja: 'ボルダーの後ろに',
           cn: '躲在石头后',
-          ko: '돌 뒤에 숨기',
+          ko: '돌 뒤에 숨어요',
         },
       },
     },
@@ -176,7 +176,7 @@ const triggerSet: TriggerSet<Data> = {
         output.text!({ player: data.party.member(matches.target) }),
       outputStrings: {
         text: {
-          en: '에스나: ${player}',
+          en: 'Esuna ${player}',
           de: 'Medica ${player}',
           fr: 'Guérison sur ${player}',
           ja: '${player} にエスナ',
@@ -202,12 +202,12 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '타워로',
+          en: 'Get towers',
           de: 'Türme nehmen',
           fr: 'Prenez les tours',
           ja: '塔へ',
           cn: '踩塔',
-          ko: '타워 들어가기',
+          ko: '타워로',
         },
       },
     },

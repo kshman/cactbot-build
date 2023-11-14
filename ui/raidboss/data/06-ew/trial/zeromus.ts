@@ -28,11 +28,11 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'HP 만땅으로',
+          en: 'Heal to full',
           de: 'Voll heilen',
           ja: 'HPを全回復する',
           cn: '奶满全队',
-          ko: '체력 풀피로',
+          ko: 'HP 만땅으로',
         },
       },
     },
@@ -44,11 +44,11 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '바닥 동그라미 피해요',
+          en: 'Away from glowing circles',
           de: 'Weg von den leuchtenden Kreisen',
           ja: '光っている円から離れる',
           cn: '远离黑洞',
-          ko: '빛나는 원에서 멀리 떨어져요',
+          ko: '바닥 동그라미 피해요',
         },
       },
     },
@@ -61,11 +61,11 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         lineStackOn: {
-          en: '5연속 한줄 뭉치기: ${player}',
+          en: '5x line stack on ${player}',
           de: '5x in einer Linie Sammeln auf ${player}',
           ja: '${player}に5回の直線頭割り',
           cn: '${player} 直线分摊 (5次)',
-          ko: '${player} 직선 쉐어 5번',
+          ko: '5연속 한줄 뭉치기: ${player}',
         },
       },
     },
@@ -145,7 +145,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.tower!(),
       outputStrings: {
         tower: {
-          en: '타워 밟아요',
+          en: 'Stand in Tower',
           de: 'Steh im Turm',
           ja: '塔を踏む',
           cn: '踩塔',
@@ -207,11 +207,11 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '아크라이: 흩어져서 + 그대로 밖으로',
+          en: 'Spread + Stay Out',
           de: 'Verteilen + Draußen stehen',
           ja: '散開 + 範囲から離れる',
           cn: '分散 + 远离',
-          ko: '산개 + 범위에서 벗어나기',
+          ko: '아크라이: 흩어져서 + 그대로 밖으로',
         },
       },
     },

@@ -53,11 +53,11 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, matches, output) => output.text!({ target: matches.target }),
       outputStrings: {
         text: {
-          en: '반사! 공격 중지: ${target}',
+          en: 'Stop attacking ${target}',
           de: 'Stoppe Angriffe auf ${target}',
           ja: '攻撃禁止: ${target}',
           cn: '停止攻击 ${target}',
-          ko: '${target} 공격 중지',
+          ko: '반사! 공격 중지: ${target}',
         },
       },
     },
@@ -88,12 +88,12 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '보스에게서 멀어져요',
+          en: 'Run Away From Boss',
           de: 'Renn weg vom Boss',
           fr: 'Courez loin du boss',
           ja: 'ボスから離れる',
           cn: '远离Boss',
-          ko: '보스와 거리 벌리기',
+          ko: '보스에게서 멀어져요',
         },
       },
     },
