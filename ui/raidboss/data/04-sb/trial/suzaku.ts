@@ -217,7 +217,7 @@ const triggerSet: TriggerSet<Data> = {
         'Immolate': '대연소',
         'Incandescent Interlude': '작열의 음률',
         'Phantom Flurry': '귀수각',
-        'Phantom Half': '전방 피하기',
+        'Phantom Half': '전방 피해요',
         'Phoenix Down': '재생의 깃털',
         'Rekindle': '재생의 불꽃',
         'Ruthless Refrain': '거절의 선율',

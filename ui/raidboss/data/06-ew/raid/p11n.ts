@@ -231,7 +231,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: 'AoE en ligne -> Intérieur sur les adds sombres',
           ja: '直線AOE -> やみ回避',
           cn: '直线AoE -> 呆在暗区域',
-          ko: '직선 장판 -> 어두운 장판 피하기',
+          ko: '직선 장판 -> 어두운 장판 피해요',
         },
       },
     },

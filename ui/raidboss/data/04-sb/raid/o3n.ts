@@ -146,7 +146,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: 'Attrapez le dragon',
           ja: 'ドラゴンを取って',
           cn: '拉住巨龙',
-          ko: '용 잡기',
+          ko: '용 잡아요',
         },
       },
     },

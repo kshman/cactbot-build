@@ -220,7 +220,7 @@ export class DeathReport {
     const effectName = event.splitLine[logDefinitions.GainsEffect.fields.effect] ?? '???';
 
     const text = Translate(this.lang, {
-      en: `얻었음: ${effectName}`,
+      en: `Gain: ${effectName}`,
       de: `Erhalten: ${effectName}`,
       fr: `Gagne: ${effectName}`,
       ja: `獲得: ${effectName}`,
@@ -240,7 +240,7 @@ export class DeathReport {
     const effectName = event.splitLine[logDefinitions.LosesEffect.fields.effect] ?? '???';
 
     const text = Translate(this.lang, {
-      en: `잃었음: ${effectName}`,
+      en: `Lose: ${effectName}`,
       de: `Verloren: ${effectName}`,
       fr: `Perd: ${effectName}`,
       ja: `失う: ${effectName}`,
@@ -352,7 +352,7 @@ export class DeathReport {
       return;
 
     const text = Translate(this.lang, {
-      en: `${buffName} 놓쳤음 (${sourceName})`,
+      en: `Missed ${buffName} (${sourceName})`,
       de: `${buffName} verfehlte (${sourceName})`,
       fr: `${buffName} manqué(e) (${sourceName})`,
       ja: `${buffName}をミスした (${sourceName}から)`,

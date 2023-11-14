@@ -95,7 +95,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: 'Descendez',
           ja: '横へ',
           cn: '站左右小平台',
-          ko: '바깥으로 피하기',
+          ko: '바깥으로 피해요',
         },
       },
     },

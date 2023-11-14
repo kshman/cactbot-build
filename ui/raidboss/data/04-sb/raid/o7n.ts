@@ -117,7 +117,7 @@ const triggerSet: TriggerSet<Data> = {
           de: 'Besiege ${name} Add',
           fr: 'Tuez l\'add ${name}',
           cn: '击杀 ${name} 小怪',
-          ko: '${name} 처치',
+          ko: '${name} 잡아요',
         },
       },
     },

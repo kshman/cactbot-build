@@ -47,11 +47,11 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '모서리로 + 바깥 봐요',
+          en: 'Go to edge; look outside',
           de: 'Geh zum Rand und schau nach draußen',
           fr: 'Allez sur les bords et regardez à l\'extérieur',
           cn: '去场边; 看场外',
-          ko: '구석에서 바깥 보기',
+          ko: '구석으로 + 바깥 봐요',
         },
       },
     },
@@ -62,11 +62,11 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '유도 구슬 피해요',
+          en: 'Avoid chasing orb',
           de: 'Weiche dem verfolgenden Orb aus',
           fr: 'Évitez l\'orbe',
           cn: '躲避追踪球',
-          ko: '유도 구슬 피하기',
+          ko: '유도 구슬 피해요',
         },
       },
     },
@@ -100,11 +100,11 @@ const triggerSet: TriggerSet<Data> = {
       run: (data, matches) => data.windResistDown[matches.target] = true,
       outputStrings: {
         text: {
-          en: '에어로 피해요',
+          en: 'Avoid Aero',
           de: 'Vermeide Wind',
           fr: 'Évitez le Vent',
           cn: '躲避风',
-          ko: '에어로 피하기',
+          ko: '에어로 피해요',
         },
       },
     },
@@ -125,11 +125,11 @@ const triggerSet: TriggerSet<Data> = {
       run: (data, matches) => data.earthResistDown[matches.target] = true,
       outputStrings: {
         text: {
-          en: '스톤 피해요',
+          en: 'Avoid Stone',
           de: 'Vermeide Stein',
           fr: 'Évitez le rocher',
           cn: '躲避石',
-          ko: '스톤 피하기',
+          ko: '스톤 피해요',
         },
       },
     },
@@ -147,18 +147,18 @@ const triggerSet: TriggerSet<Data> = {
         // cactbot-builtin-response
         output.responseOutputStrings = {
           pop: {
-            en: '스톤 구슬 부비부비',
+            en: 'Pop stone orb',
             de: 'Nimm Stein Orb',
             fr: 'Prenez l\'orbe en pierre',
             cn: '踩石圈',
-            ko: '스톤 구슬 부딪히기',
+            ko: '스톤 구슬 부비부비',
           },
           avoid: {
-            en: '스톤 구슬 피해요',
+            en: 'Avoid stone orb',
             de: 'Vermeide Stein Orb',
             fr: 'Évitez l\'orbe de pierre',
             cn: '躲避石圈',
-            ko: '스톤 구슬 피하기',
+            ko: '스톤 구슬 피해요',
           },
         };
 
@@ -175,18 +175,18 @@ const triggerSet: TriggerSet<Data> = {
         // cactbot-builtin-response
         output.responseOutputStrings = {
           pop: {
-            en: '에어로 구슬 부비부비',
+            en: 'Pop aero orb',
             de: 'Nimm Wind Orb',
             fr: 'Prenez l\'orbe de vent',
             cn: '踩风圈',
-            ko: '에어로 구슬 부딪히기',
+            ko: '에어로 구슬 부비부비',
           },
           avoid: {
-            en: '에어로 구슬 피해요',
+            en: 'Avoid aero orb',
             de: 'Vermeide Wind Orb',
             fr: 'Évitez l\'orbe de vent',
             cn: '躲避风圈',
-            ko: '에어로 구슬 피하기',
+            ko: '에어로 구슬 피해요',
           },
         };
 
@@ -203,11 +203,11 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '홀리 구슬 잡아요',
+          en: 'Pop holy orb',
           de: 'Nimm Sanctus Orb',
           fr: 'Prenez l\'orbe de lumière',
           cn: '踩神圣圈',
-          ko: '홀리 구슬 잡기',
+          ko: '홀리 구슬 잡아요',
         },
       },
     },
@@ -233,11 +233,11 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '보스 끌고 장판에서 나와요',
+          en: 'Move boss out of puddle',
           de: 'Bewege Boss aus der Fläche',
           fr: 'Déplacez le boss hors de la zone au sol',
           cn: '把BOSS拉出罩子',
-          ko: '보스 장판에서 나오도록 유도하기',
+          ko: '보스 끌고 장판에서 나와요',
         },
       },
     },
@@ -248,7 +248,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '보스 장판 안으로',
+          en: 'Stand in Circle',
           de: 'In einem Kreis stehen',
           fr: 'Restez dans le cercle',
           cn: '站进圈圈',

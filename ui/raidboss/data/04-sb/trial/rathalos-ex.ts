@@ -81,7 +81,7 @@ const triggerSet: TriggerSet<Data> = {
           de: 'Weiche dem Ansturm aus',
           fr: 'Évitez la charge',
           cn: '避开冲锋',
-          ko: '돌진 피하기',
+          ko: '돌진 피해요',
         },
       },
     },

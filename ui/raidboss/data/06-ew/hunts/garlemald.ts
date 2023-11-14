@@ -69,7 +69,7 @@ const triggerSet: TriggerSet<Data> = {
             fr: 'Éloignez-vous du marquage',
             ja: 'マーカー付きから離れる',
             cn: '躲开标记',
-            ko: '징에서 멀리 떨어지기',
+            ko: '징에서 멀리 떨어져요',
           },
         };
 

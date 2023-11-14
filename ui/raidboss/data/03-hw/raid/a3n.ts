@@ -60,12 +60,12 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '내게 슬루스',
+          en: 'Sluice on YOU',
           de: 'Schleusenöffnung auf DIR',
           fr: 'Éclusage sur Vous',
           ja: '自分にスルース',
           cn: '蓝点名',
-          ko: '봇물 대상자',
+          ko: '내게 슬루스(봇물)',
         },
       },
     },
@@ -79,11 +79,11 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '탱크클레브x3',
+          en: '3x Tank Cleave',
           de: '3x Tank Cleave',
           fr: 'Tank Cleave x3',
           cn: '3x 顺劈',
-          ko: '광역 탱버 3번',
+          ko: '탱크클레브x3',
         },
       },
     },
@@ -95,11 +95,11 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '탱크클레브 반복',
+          en: 'Repeated tank cleaves',
           de: 'Wiederholte Tank Cleaves',
           fr: 'Répétition de Tank cleaves',
           cn: '多重顺劈',
-          ko: '광역 탱버 반복',
+          ko: '탱크클레브 반복',
         },
       },
     },
@@ -111,12 +111,12 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '내게 드레니지',
+          en: 'Drainage on YOU',
           de: 'Entwässerung auf DIR',
           fr: 'Drainage sur VOUS',
           ja: '自分にドレナージ',
           cn: '连线点名',
-          ko: '하수로 대상자',
+          ko: '내게 드레니지',
         },
       },
     },
@@ -129,12 +129,12 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '드레니지 줄 채요',
+          en: 'Get drainage tether',
           de: 'Hole die Entwässerungs-Verbindung',
           fr: 'Prenez un lien de drainage',
           ja: '線を取る',
           cn: '接线',
-          ko: '하수로 선 가져오기',
+          ko: '드레니지 줄 채요',
         },
       },
     },
@@ -177,20 +177,20 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         repel: {
-          en: '같은 극! 붙어요: ${player}',
+          en: 'Repel: close to ${player}',
           de: 'Abstoß: nahe bei ${player}',
           fr: 'Répulsion : Rapprochez-vous de ${player}',
           ja: '同じ極: ${player}に近づく',
           cn: '同极：靠近${player}',
-          ko: '반발: ${player}와 가까이 붙기',
+          ko: '같은 극! 붙어요: ${player}',
         },
         attract: {
-          en: '다른 극! 떨어져요: ${player}',
+          en: 'Attract: away from ${player}',
           de: 'Anziehung: weg von ${player}',
           fr: 'Attraction : Éloignez-vous de ${player}',
           ja: '異なる極: ${player}から離れる',
           cn: '异极：远离${player}',
-          ko: '자력: ${player}와 떨어지기',
+          ko: '다른 극! 떨어져요: ${player}',
         },
       },
     },

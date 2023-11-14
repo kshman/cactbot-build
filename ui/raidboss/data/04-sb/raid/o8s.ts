@@ -108,7 +108,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: 'Ne regardez pas la statue',
           ja: '塔を見ない！',
           cn: '背对神像',
-          ko: '시선 피하기',
+          ko: '시선 피해요',
         },
       },
     },
@@ -234,7 +234,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: 'Max mêlée : éloignez-vous des tanks',
           ja: '近接最大レンジ タンクから離れる',
           cn: '最远距离',
-          ko: '칼끝딜: 탱커 피하기',
+          ko: '칼끝딜: 탱커 피해요',
         },
         wingsBeNearFar: {
           en: 'Wings: Be Near/Far',

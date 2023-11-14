@@ -87,12 +87,12 @@ type ProcessedTriggerSet = LooseTriggerSet & {
 // There should be (at most) six lines of instructions.
 const raidbossInstructions: { [lang in Lang]: string[] } = {
   en: [
-    '사용 방법:',
-    '이 안내문은 크기 조정을 위한 디버그 메시지예요.',
-    '파란 배경과 이 안내문은',
-    '오버레이를 잠그면, 바로 안보입니다.',
-    '타임라인과 트리거는 지원 구역에서 표시됩니다.',
-    '테스트로 Summerford Farms에서 /countdown 을 입력해보세요.',
+    'Instructions as follows:',
+    'This is debug text for resizing.',
+    'It goes away when you lock the overlay',
+    'along with the blue background.',
+    'Timelines and triggers will show up in supported zones.',
+    'Test raidboss with a /countdown in Summerford Farms.',
   ],
   de: [
     'Anweisungen wie folgt:',
@@ -127,12 +127,12 @@ const raidbossInstructions: { [lang in Lang]: string[] } = {
     '可在盛夏农庄使用/countdown命令测试该raidboss模块。',
   ],
   ko: [
-    '<조작 설명>',
-    '크기 조정을 위한 디버그 창입니다',
-    '파란 배경과 이 텍스트는',
-    '오버레이를 위치잠금하면 사라집니다',
-    '지원되는 구역에서 타임라인과 트리거가 표시됩니다',
-    '여름여울 농장에서 초읽기를 실행하여 테스트 해볼 수 있습니다',
+    '사용 방법:',
+    '이 안내문은 크기 조정을 위한 디버그 메시지예요.',
+    '파란 배경과 이 안내문은',
+    '오버레이를 잠그면, 바로 안보입니다.',
+    '타임라인과 트리거는 지원 구역에서 표시됩니다.',
+    '테스트로 Summerford Farms에서 /countdown 을 입력해보세요.',
   ],
 };
 

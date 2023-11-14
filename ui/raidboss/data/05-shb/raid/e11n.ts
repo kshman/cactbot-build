@@ -175,7 +175,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: 'Évitez l\'éclair d\'abord -> Tournez pour le Feu',
           ja: '雷を避ける -> 炎 準備',
           cn: '躲雷 -> 火击退',
-          ko: '번개 먼저 피하고 -> 회전해서 화염 피하기',
+          ko: '번개 먼저 피하고 -> 회전해서 화염 피해요',
         },
       },
     },

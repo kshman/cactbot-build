@@ -437,7 +437,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: 'Évitez les croix de Silkie et des pompons',
           ja: 'ボスとたまの斜め',
           cn: '躲避交叉攻击',
-          ko: '보스와 구슬의 십자방향 피하기',
+          ko: '보스와 구슬의 십자방향 피해요',
         },
       },
     },

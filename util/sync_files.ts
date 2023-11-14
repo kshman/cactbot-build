@@ -585,9 +585,9 @@ const zoneReplace: ZoneReplace[] = [
     // eslint-disable-next-line max-len
     // grep "^# [A-F0-9]\{4\} " ui/raidboss/data/06-ew/dungeon/another_aloalo_island.txt | sort | sed "s/^..//" | sed "s/^\(....\) \(.*\)$/    '\1': 'TODO', \/\/ \2/"
     id: {
-      '7A56': '7A56', // 같다
+      '7A56': '7A56',
       '7A58': '7A58',
-      '8874': '8874', // 같다
+      '8874': '8874',
       '8889': '8BE0',
       '888B': '8BE2',
       '888C': '8BE3',
@@ -618,9 +618,9 @@ const zoneReplace: ZoneReplace[] = [
       '88A9': '8C00',
       '88AD': '8C04',
       '88AE': '8C05',
-      '8925': '8925', // 같다
-      '8926': '8926', // 같다
-      '8927': '8927', // 같다
+      '8925': '8925',
+      '8926': '8926',
+      '8927': '8927',
       '8947': '8964',
       '8948': '8965',
       '8949': '8966',
@@ -646,54 +646,54 @@ const zoneReplace: ZoneReplace[] = [
       '8982': '8983',
       '8987': '8988',
       '89F9': '89FB',
-      '8A6A': '8A6A', // 같다
-      '8A77': '8A77', // 같다
-      '8A82': '8A82', // 같다
-      '8A83': '8A83', // 같다
-      '8AA7': '8AA7', // 같다
-      '8AA8': '8AA8', // 같다
+      '8A6A': '8A6A',
+      '8A77': '8A77',
+      '8A82': '8A82',
+      '8A83': '8A83',
+      '8AA7': '8AA7',
+      '8AA8': '8AA8',
       '8AA9': '8AD9',
       '8AAA': '8ADA',
       '8AAB': '8ADB',
       '8AAC': '8ADC',
-      '8AAD': '8AAD', // 같다
+      '8AAD': '8AAD',
       '8AAE': '8ADD',
-      '8AAF': '8AAF', // 같다
-      '8AB0': '8AB0', // 같다
-      '8AB1': '8AB1', // 같다
-      '8AB2': '8AB2', // 같다
-      '8AB3': '8AB3', // 같다
-      '8AB4': '8AB4', // 같다
-      '8AB5': '8AB5', // 같다
-      '8AB6': '8AB6', // 같다
+      '8AAF': '8AAF',
+      '8AB0': '8AB0',
+      '8AB1': '8AB1',
+      '8AB2': '8AB2',
+      '8AB3': '8AB3',
+      '8AB4': '8AB4',
+      '8AB5': '8AB5',
+      '8AB6': '8AB6',
       '8AB7': '8ADE',
-      '8AB8': '8AB8', // 같다
-      '8AB9': '8AB9', // 같다
+      '8AB8': '8AB8',
+      '8AB9': '8AB9',
       '8ABA': '8ADF',
-      '8ABB': '8ABB', // 같다
+      '8ABB': '8ABB',
       '8ABC': '8AE0',
-      '8ABD': '8ABD', // 같다
+      '8ABD': '8ABD',
       '8ABE': '8A82',
       '8ABF': '8A83',
-      '8AC0': '8AC0', // 같다
+      '8AC0': '8AC0',
       '8AC1': '8AE1',
       '8AC2': '8AE2',
       '8AC3': '8AE3',
-      '8AC4': '8AC4', // 같다
-      '8AC5': '8AC5', // 같다
+      '8AC4': '8AC4',
+      '8AC5': '8AC5',
       '8AC6': '8AE4',
-      '8AC7': '8AC7', // 같다
-      '8AC8': '8AC8', // 같다
+      '8AC7': '8AC7',
+      '8AC8': '8AC8',
       '8AC9': '8AE5',
-      '8ACA': '8ACA', // 같다
+      '8ACA': '8ACA',
       '8ACB': '8AE6',
       '8ACC': '8AE7',
-      '8ACD': '8AE8', // Near': 'Tide
-      '8ACE': '8AE9', // Encroaching': 'Twintides
+      '8ACD': '8AE8',
+      '8ACE': '8AE9',
       '8ACF': '8AEA',
-      '8AD0': '8AD0', // 같다
+      '8AD0': '8AD0',
       '8AD1': '8AEB',
-      '8AD4': '8AD4', // 같다
+      '8AD4': '8AD4',
       '8AD5': '8AED',
       '8BB8': '8BC9',
       '8BB9': '8BCA',
@@ -702,7 +702,7 @@ const zoneReplace: ZoneReplace[] = [
       '8BBD': '8C4B',
       '8BBE': '8BCD',
       '8BBF': '8BCE',
-      '8BC0': '8BC0', // 같다
+      '8BC0': '8BC0',
       '8BC1': '8BD4',
       '8BC5': '8C3A',
       '8C23': '8C23',
@@ -714,7 +714,7 @@ const zoneReplace: ZoneReplace[] = [
       '8C63': '8BC8',
       '8C64': '8BCC',
       '8C65': '8BD1',
-      '8C6D': '8C6D', // 같다
+      '8C6D': '8C6D',
       '8C6E': '8BC7',
       '8C6F': '8C3C',
       '8CBC': '8CBF',

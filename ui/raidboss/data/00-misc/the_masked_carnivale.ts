@@ -110,7 +110,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '바리케이트 뒤로 숨어욧!',
+          en: 'Hide Behind Barricade',
           de: 'Hinter den Barrikaden verstecken',
           fr: 'Cachez-vous derrière la barricade',
           ja: '柵の後ろに',
@@ -182,7 +182,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '아레나 장미 스폰!',
+          en: 'Arena Roselets spawning!',
           de: 'Arena-Röslinge erscheinen!',
           cn: '正在生成 斗场小红花!',
           ko: '넝쿨장미 소환됨!',
@@ -207,12 +207,12 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, matches, output) => output.kill!({ name: matches.name }),
       outputStrings: {
         kill: {
-          en: '잡아요: ${name}',
+          en: 'Kill ${name}',
           de: 'Besiege ${name}',
           fr: 'Tuez ${name}',
           ja: '${name}を倒す',
           cn: '击杀 ${name}',
-          ko: '${name} 처치',
+          ko: '잡아요: ${name}',
         },
       },
     },
@@ -232,7 +232,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '바리케이트 뒤로 숨어욧!',
+          en: 'Hide Behind Barricade',
           de: 'Hinter den Barrikaden verstecken',
           fr: 'Cachez-vous derrière la barricade',
           ja: '柵の後ろに',
@@ -310,10 +310,10 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '🔷다이아써욧!',
+          en: 'Diamondback',
           de: 'Diamantrücken',
           cn: '超硬化',
-          ko: '초경화',
+          ko: '🔷다이아써욧!',
         },
       },
     },
@@ -324,7 +324,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '돌진 + 넉백',
+          en: 'Charge + knockback',
           de: 'Ansturm + Rückstoß',
           cn: '冲锋 + 击退',
           ko: '돌진 + 넉백',
@@ -339,10 +339,10 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '앞은 피하고 + 안쪽으로',
+          en: 'Away from front + in',
           de: 'Weg von Vorne + Rein',
           cn: '避开正面 + 去下方',
-          ko: '보스 전방 피하기 + 안으로',
+          ko: '앞은 피하고 + 안쪽으로',
         },
       },
     },
@@ -366,7 +366,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '돌진 + 넉백',
+          en: 'Charge + knockback',
           de: 'Ansturm + Rückstoß',
           cn: '冲锋 + 击退',
           ko: '돌진 + 넉백',
@@ -390,10 +390,10 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '파이어볼',
+          en: 'Fireball',
           de: 'Feuerball',
           cn: '火球',
-          ko: '화염구',
+          ko: '파이어볼',
         },
       },
     },
@@ -408,10 +408,10 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '마법 반사',
+          en: 'Magic reflect',
           de: 'Magische Reflektion',
           cn: '反弹魔法伤害',
-          ko: '마법공격 반사됨',
+          ko: '마법 반사',
         },
       },
     },
@@ -431,10 +431,10 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '뒤돌아 봐요, 또는 내게 블라인드를',
+          en: 'Blind yourself or Look Away',
           de: 'Erblinden oder schau weg',
           cn: '致盲自己或看向其他方向',
-          ko: '나한테 실명걸기 또는 뒤돌기',
+          ko: '뒤돌아 봐요, 또는 내게 블라인드를',
         },
       },
     },
@@ -448,10 +448,10 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '🔷다이아써욧!',
+          en: 'Diamondback',
           de: 'Diamantrücken',
           cn: '超硬化',
-          ko: '초경화',
+          ko: '🔷다이아써욧!',
         },
       },
     },
@@ -541,10 +541,10 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '안전한 곳 찾아가요',
+          en: 'Get to Safe Spot',
           de: 'Geh zur sicheren Stelle',
           cn: '去安全区',
-          ko: '안전지대 찾기',
+          ko: '안전한 곳 찾아요',
         },
       },
     },
@@ -561,12 +561,12 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         kill: {
-          en: '잡아요: ${name}',
+          en: 'Kill ${name}',
           de: 'Besiege ${name}',
           fr: 'Tuez ${name}',
           ja: '${name}を倒す',
           cn: '击杀 ${name}',
-          ko: '${name} 처치',
+          ko: '잡아요: ${name}',
         },
       },
     },
@@ -583,10 +583,10 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         pullToBoss: {
-          en: '보스에게 데려가요: ${name}',
+          en: 'Pull ${name} to boss',
           de: 'Ziehe ${name} zum Boss',
           cn: '将 ${name} 拉到BOSS处',
-          ko: '보스쪽으로 ${name} 끌고오기',
+          ko: '보스에게 데려가요: ${name}',
         },
       },
     },
@@ -601,10 +601,10 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '🔷다이아써욧!',
+          en: 'Diamondback',
           de: 'Diamantrücken',
           cn: '超硬化',
-          ko: '초경화',
+          ko: '🔷다이아써욧!',
         },
       },
     },
@@ -628,10 +628,10 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '에스나 아니면 방어 버프 써욧',
+          en: 'Cleanse debuff or mitigate',
           de: 'Debuff entfernen oder mitigieren',
           cn: '驱散DEBUFF或减伤',
-          ko: '디버프 해제 또는 생존기',
+          ko: '에스나 아니면 방어 버프 써욧',
         },
       },
     },
@@ -649,10 +649,10 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '안전한 곳으로 넉백',
+          en: 'Knockback into Safe Spot',
           de: 'Rückstoß zur sicheren Stelle',
           cn: '击退到安全区',
-          ko: '안전지대로 넉백되기',
+          ko: '안전한 곳으로 넉백',
         },
       },
     },
@@ -672,10 +672,10 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '물리 반사',
+          en: 'Physical reflect',
           de: 'Physische Reflektion',
           cn: '反弹物理伤害',
-          ko: '물리공격 반사됨',
+          ko: '물리 반사',
         },
       },
     },
@@ -700,10 +700,10 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '마법 반사',
+          en: 'Magic reflect',
           de: 'Magische Reflektion',
           cn: '反弹魔法伤害',
-          ko: '마법공격 반사됨',
+          ko: '마법 반사',
         },
       },
     },
@@ -724,10 +724,10 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, matches, output) => output.dispel!({ name: matches.target }),
       outputStrings: {
         dispel: {
-          en: '디스펠: ${name}',
+          en: 'Dispel ${name}',
           de: 'Entferne ${name}',
           cn: '清除 ${name}',
-          ko: '${name} 버프 해제',
+          ko: '디스펠: ${name}',
         },
       },
     },
@@ -746,10 +746,10 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, matches, output) => output.dispel!({ name: matches.target }),
       outputStrings: {
         dispel: {
-          en: '디스펠: ${name}',
+          en: 'Dispel ${name}',
           de: 'Entferne ${name}',
           cn: '清除 ${name}',
-          ko: '${name} 버프 해제',
+          ko: '디스펠: ${name}',
         },
       },
     },
@@ -770,10 +770,10 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '에스나~',
+          en: 'Cleanse debuff',
           de: 'Debuff entfernen',
           cn: '驱散DEBUFF',
-          ko: '디버프 해제',
+          ko: '에스나~',
         },
       },
     },
@@ -789,12 +789,12 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '만피 채워욧',
+          en: 'Heal To Full',
           de: 'Vollheilen',
           fr: 'Soignez complètement',
           ja: '全員のHPを全回復',
           cn: '奶满自己',
-          ko: '체력 풀피로',
+          ko: '만피 채워욧',
         },
       },
     },
@@ -819,12 +819,12 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '장판 하나만 들어가요',
+          en: 'Stand in one puddle',
           de: 'In einer Fläche stehen',
           fr: 'Placez-vous dans une zone au sol',
           ja: '範囲に入る',
           cn: '站在圈里',
-          ko: '장판 하나만 밟기',
+          ko: '장판 하나만 들어가요',
         },
       },
     },
@@ -837,10 +837,10 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '장판 피해요',
+          en: 'Avoid puddles',
           de: 'Vermeide Flächen',
           cn: '躲避圈圈',
-          ko: '장판 피하기',
+          ko: '장판 피해요',
         },
       },
     },
@@ -867,32 +867,32 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         forward: {
-          en: '강제 이동으로 안전지대: 앞',
+          en: 'March Forward into Safe Spot',
           de: 'marschiere Vorwärts in die sichere Stelle',
           ja: '強制移動: 前',
           cn: '向前强制移动到安全区',
-          ko: '강제 이동 앞',
+          ko: '강제이동 🔜 안전지대: 앞',
         },
         backward: {
-          en: '강제 이동으로 안전지대: 뒤',
+          en: 'March Backward into Safe Spot',
           de: 'marschiere Rückwärts in die sichere Stelle',
           ja: '強制移動: 後ろ',
           cn: '向后强制移动到安全区',
-          ko: '강제 이동 뒤',
+          ko: '강제이동 🔜 안전지대: 뒤',
         },
         left: {
-          en: '강제 이동으로 안전지대: 왼쪽',
+          en: 'March Left into Safe Spot',
           de: 'marschiere Links in die sichere Stelle',
           ja: '強制移動: 左',
           cn: '向左强制移动到安全区',
-          ko: '강제 이동 왼쪽',
+          ko: '강제이동 🔜 안전지대: 왼쪽',
         },
         right: {
-          en: '강제 이동으로 안전지대: 오른쪽',
+          en: 'March Right into Safe Spot',
           de: 'marschiere Rechts in die sichere Stelle',
           ja: '強制移動: 右',
           cn: '向右强制移动到安全区',
-          ko: '강제 이동 오른쪽',
+          ko: '강제이동 🔜 안전지대: 오른쪽',
         },
       },
     },
@@ -911,10 +911,10 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '이럽션 두개 유도',
+          en: 'Bait two Eruptions',
           de: 'Köder 2 Eruptionen',
           cn: '诱导2个地火',
-          ko: '장판 2개 유도',
+          ko: '이럽션 2개 유도',
         },
       },
     },
@@ -950,10 +950,10 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '안전한 곳 찾아가요',
+          en: 'Get to Safe Spot',
           de: 'Geh zur sicheren Stelle',
           cn: '去安全区',
-          ko: '안전지대 찾기',
+          ko: '안전한 곳 찾아가요',
         },
       },
     },
@@ -965,10 +965,10 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '모서리로',
+          en: 'Get to edge',
           de: 'Geh zu einem Rand',
           cn: '去场边',
-          ko: '외곽으로',
+          ko: '모서리로',
         },
       },
     },
@@ -980,12 +980,12 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '보스랑 멀리 떨어져요',
+          en: 'Run Away From Boss',
           de: 'Renn weg vom Boss',
           fr: 'Courez loin du boss',
           ja: 'ボスから離れる',
           cn: '远离Boss',
-          ko: '보스와 거리 벌리기',
+          ko: '보스랑 멀리 떨어져요',
         },
       },
     },
@@ -1013,10 +1013,10 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '에스나~',
+          en: 'Cleanse debuff',
           de: 'Debuff entfernen',
           cn: '驱散DEBUFF',
-          ko: '디버프 해제',
+          ko: '에스나~',
         },
       },
     },
@@ -1033,20 +1033,20 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         close: {
-          en: '보스에게 붙어요',
+          en: 'Close to boss',
           de: 'Nahe am Boss',
           fr: 'Allez près du boss',
           ja: 'ボスに近づく',
           cn: '靠近boss',
-          ko: '보스 가까이 붙기',
+          ko: '보스에게 붙어요',
         },
         far: {
-          en: '보스랑 멀리 떨어져요',
+          en: 'Away from boss',
           de: 'Weg am Boss',
           fr: 'Éloignez-vous du boss',
           ja: 'ボスから離れる',
           cn: '远离boss',
-          ko: '보스에게서 멀어지기',
+          ko: '보스랑 멀리 떨어져요',
         },
       },
     },
@@ -1057,7 +1057,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'AOE 두개 유도',
+          en: 'Bait two aoes',
           de: 'Köder 2 AoEs',
           cn: '诱导2个AOE',
           ko: '장판 2개 유도',
@@ -1071,10 +1071,10 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '곧 쫄',
+          en: 'Adds soon',
           de: 'Bald Adds',
           cn: '小怪即将出现',
-          ko: '곧 쫄 나옴',
+          ko: '곧 쫄',
         },
       },
     },
@@ -1095,7 +1095,7 @@ const triggerSet: TriggerSet<Data> = {
           en: '🔷다이아써욧!',
           de: 'Diamantrücken',
           cn: '超硬化',
-          ko: '초경화',
+          ko: '🔷다이아써욧!',
         },
       },
     },
@@ -1108,10 +1108,10 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '물 토네이도랑 멀리 떨어져요',
+          en: 'Away from water tornadoes',
           de: 'Weg von den Wassertornados',
           cn: '远离水龙卷',
-          ko: '물기둥에서 멀리 떨어지기',
+          ko: '물 토네이도에서 멀리 떨어져요',
         },
       },
     },
@@ -1124,10 +1124,10 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '마법 반사',
+          en: 'Magic reflect',
           de: 'Magische Reflektion',
           cn: '反弹魔法伤害',
-          ko: '마법공격 반사됨',
+          ko: '마법 반사',
         },
       },
     },
@@ -1140,10 +1140,10 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '에스나~',
+          en: 'Cleanse debuff',
           de: 'Debuff entfernen',
           cn: '驱散DEBUFF',
-          ko: '디버프 해제',
+          ko: '에스나~',
         },
       },
     },
@@ -1154,7 +1154,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'AOE 세개 유도',
+          en: 'Bait three aoes',
           de: 'Köder 3 AoEs',
           cn: '诱导3个AOE',
           ko: '장판 3개 유도',
@@ -1169,10 +1169,10 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '넉백으로 안전한 곳으로',
+          en: 'Knockback into Safe Spot',
           de: 'Rückstoß zur sicheren Stelle',
           cn: '击退到安全区',
-          ko: '안전지대로 넉백되기',
+          ko: '안전한 곳으로 넉백',
         },
       },
     },
@@ -1185,7 +1185,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '안으로 + 넉백',
+          en: 'Get in + Knockback',
           de: 'Geh rein + Rückstoß',
           cn: '去脚下 + 击退',
           ko: '안으로 + 넉백',
@@ -1200,10 +1200,10 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '안전한 곳 찾아가요 (두 얼음 사이 얼음 없는 곳)',
+          en: 'Get to Safe Spot (between two ice)',
           de: 'Geh zur sicheren Stelle (zwischen 2 Eis)',
           cn: '去安全区 (两个冰之间)',
-          ko: '안전지대 찾기 (얼음 없는쪽)',
+          ko: '안전한 곳 찾아가요 (두 얼음 사이)',
         },
       },
     },
@@ -1219,12 +1219,12 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '공격 금지',
+          en: 'Stop attacking',
           de: 'Angriffe stoppen',
           fr: 'Arrêtez d\'attaquer',
           ja: '攻撃禁止',
           cn: '停止攻击',
-          ko: '공격 중지',
+          ko: '공격 금지',
         },
       },
     },
@@ -1237,7 +1237,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'AOE 두개 유도',
+          en: 'Bait two aoes',
           de: 'Köder 2 AoEs',
           cn: '诱导2个AOE',
           ko: '장판 2개 유도',
@@ -1259,12 +1259,12 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '만피 채워욧',
+          en: 'Heal To Full',
           de: 'Vollheilen',
           fr: 'Soignez complètement',
           ja: '全員のHPを全回復',
           cn: '奶满自己',
-          ko: '체력 풀피로',
+          ko: '만피 채워욧',
         },
       },
     },
@@ -1276,7 +1276,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '분신 등장',
+          en: 'Add soon',
           de: 'Bald Add',
           cn: '小怪即将出现',
           ko: '분신 등장',
@@ -1294,7 +1294,7 @@ const triggerSet: TriggerSet<Data> = {
           en: '디스펠: ${name}',
           de: 'Entferne ${name}',
           cn: '清除 ${name}',
-          ko: '${name} 버프 해제',
+          ko: '디스펠: ${name}',
         },
       },
     },
@@ -1308,10 +1308,10 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '보스에게 멀리 떨어지고 => 아무짓도 하지 말아욧!',
+          en: 'Away from boss => Stop Everything',
           de: 'Weg vom Boss => Stoppe alles',
           cn: '远离BOSS => 停停停',
-          ko: '보스와 멀리 떨어지기 => 행동 멈추기',
+          ko: '보스와 멀리 떨어지고 => 아무짓도 하면 안되요!',
         },
       },
     },
@@ -1327,10 +1327,10 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '🔷다이아써욧!',
+          en: 'Diamondback',
           de: 'Diamantrücken',
           cn: '超硬化',
-          ko: '초경화',
+          ko: '🔷다이아써욧!',
         },
       },
     },
@@ -1345,10 +1345,10 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '에스나: 두개 모두',
+          en: 'Cleanse both debuffs',
           de: 'Entferne beide Debuffs',
           cn: '驱散两个DEBUFF',
-          ko: '디버프 둘다 해제',
+          ko: '에스나: 2개 모두',
         },
       },
     },
@@ -1374,10 +1374,10 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '에스나',
+          en: 'Cleanse debuff',
           de: 'Debuff entfernen',
           cn: '驱散DEBUFF',
-          ko: '디버프 해제',
+          ko: '에스나',
         },
       },
     },

@@ -369,7 +369,7 @@ const triggerSet: TriggerSet<Data> = {
           en: '타워 밟고 + 바깥',
           de: 'Turm + Außerhalb',
           cn: '踩塔 + 去外面',
-          ko: '기둥 + 양 옆',
+          ko: '타워 + 양 옆',
         },
         sidesWithStacks: {
           en: '바깥 옆에서 + 4:4 뭉쳐요',
@@ -404,7 +404,7 @@ const triggerSet: TriggerSet<Data> = {
           en: '타워 밟고 + 안쪽',
           de: 'Turm + Innen',
           cn: '踩塔 + 去里面',
-          ko: '기둥 + 안으로',
+          ko: '타워 + 안으로',
         },
         middleWithStacks: {
           en: '안에서 + 4:4 뭉쳐요',
@@ -1061,7 +1061,7 @@ const triggerSet: TriggerSet<Data> = {
         'Star Collision': '천체 충돌',
         'Telomania': '텔로스마니아',
         'Telos': '텔로스',
-        'Tower Explosion': '기둥 폭발',
+        'Tower Explosion': '타워 폭발',
         'Theological Fatalism': '신학적 운명론',
         'Twinsong\'s Aporrhoia': '발출: 절망 합창',
         'Ultimate Fate': '종언의 운명',

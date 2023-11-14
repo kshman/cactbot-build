@@ -275,7 +275,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: 'Évitez la charge du Wyrm',
           ja: '竜を避ける',
           cn: '躲避巴哈冲锋',
-          ko: '용 돌진 피하기',
+          ko: '용 돌진 피해요',
         },
       },
     },

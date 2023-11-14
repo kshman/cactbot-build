@@ -12,12 +12,12 @@ const kBig = 1000000000; // Something bigger than any fight length in seconds.
 
 const timelineInstructions = {
   en: [
-    '여기 보이는 글은',
-    '타임라인의 디버그 출력이예요.',
-    '오버레이를 잠그면,',
-    '바로 사라집니다!',
-    '실제의 타임라인은 지원하는 인스턴스에서',
-    '자동으로 보여주고 재생해요',
+    'These lines are',
+    'debug timeline entries.',
+    'If you lock the overlay,',
+    'they will disappear!',
+    'Real timelines automatically',
+    'appear when supported.',
   ],
   de: [
     'Diese Zeilen sind',
@@ -52,12 +52,12 @@ const timelineInstructions = {
     '当前区域动态加载并显示',
   ],
   ko: [
-    '이 막대바는 디버그용',
-    '타임라인 입니다.',
-    '오버레이를 위치잠금하면,',
-    '이 막대바도 사라집니다.',
-    '지원되는 구역에서 타임라인이',
-    '자동으로 표시됩니다.',
+    '여기 보이는 글은',
+    '타임라인의 디버그 출력이예요.',
+    '오버레이를 잠그면,',
+    '바로 사라집니다!',
+    '실제의 타임라인은 지원하는 인스턴스에서',
+    '자동으로 보여주고 재생해요',
   ],
 };
 

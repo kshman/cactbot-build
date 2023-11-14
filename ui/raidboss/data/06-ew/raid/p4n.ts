@@ -93,7 +93,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: 'Prenez la tour d\'un autre rôle',
           ja: '他のロールの塔を処理',
           cn: '踩其他职能的塔',
-          ko: '내 직업군이 아닌쪽 장판 밟기',
+          ko: '내 직업군이 아닌쪽 장판 밟아요',
         },
       },
     },

@@ -141,7 +141,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: 'Évitez les têtes flottantes',
           ja: 'ヘッドを避ける',
           cn: '避开漂浮的头',
-          ko: '커얼머리 피하기',
+          ko: '커얼머리 피해요',
         },
       },
     },

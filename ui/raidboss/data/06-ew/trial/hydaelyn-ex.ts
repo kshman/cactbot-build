@@ -340,7 +340,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: 'Évitez les fins de lignes',
           ja: '線の端から離れる',
           cn: '远离线',
-          ko: '선의 끝부분 피하기',
+          ko: '선의 끝부분 피해요',
         },
       },
     },

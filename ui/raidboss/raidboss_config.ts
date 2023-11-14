@@ -60,7 +60,7 @@ type TriggerSoundOption = {
 const kTriggerOptions = {
   default: {
     label: {
-      en: '✔ 기본',
+      en: '✔ Defaults',
       de: '✔ Standards',
       fr: '✔ Défauts',
       ja: '✔ 初期設定',
@@ -70,7 +70,7 @@ const kTriggerOptions = {
   },
   textAndSound: {
     label: {
-      en: '🆙🔊 텍스트 & 소리',
+      en: '🆙🔊 Text and Sound',
       de: '🆙🔊 Text und Ton',
       fr: '🆙🔊 Texte et son',
       ja: '🆙🔊 テキストと音声',
@@ -80,7 +80,7 @@ const kTriggerOptions = {
   },
   ttsAndText: {
     label: {
-      en: '🆙💬 텍스트 & TTS',
+      en: '🆙💬 Text and TTS',
       de: '🆙💬 Text und TTS',
       fr: '🆙💬 Texte et TTS',
       ja: '🆙💬 テキストとTTS',
@@ -90,7 +90,7 @@ const kTriggerOptions = {
   },
   ttsOnly: {
     label: {
-      en: '💬 TTS 전용',
+      en: '💬 TTS Only',
       de: '💬 Nur TTS',
       fr: '💬 TTS Seulement',
       ja: '💬 TTSのみ',
@@ -100,7 +100,7 @@ const kTriggerOptions = {
   },
   textOnly: {
     label: {
-      en: '🆙 텍스트 전용',
+      en: '🆙 Text Only',
       de: '🆙 Nur Text',
       fr: '🆙 Texte seulement',
       ja: '🆙 テキストのみ',
@@ -110,12 +110,12 @@ const kTriggerOptions = {
   },
   disabled: {
     label: {
-      en: '❌ 사용안함',
+      en: '❌ Disabled',
       de: '❌ Deaktiviert',
       fr: '❌ Désactivé',
       ja: '❌ 無効',
       cn: '❌ 禁用',
-      ko: '❌ 비활성화',
+      ko: '❌ 사용안함',
     },
   },
 } as const;
@@ -132,7 +132,7 @@ type DetailKey = {
 const kDetailKeys = {
   'triggerRegex': {
     label: {
-      en: '표현식',
+      en: 'regex',
       de: 'regex',
       fr: 'regex',
       ja: '正規表現',
@@ -144,7 +144,7 @@ const kDetailKeys = {
   },
   'triggerNetRegex': {
     label: {
-      en: '네트웍 표현식',
+      en: 'netregex',
       de: 'netregex',
       fr: 'netregex',
       ja: 'ネット正規表現',
@@ -156,7 +156,7 @@ const kDetailKeys = {
   },
   'timelineRegex': {
     label: {
-      en: '타임라인',
+      en: 'timeline',
       de: 'timeline',
       fr: 'timeline',
       ja: 'タイムライン',
@@ -168,7 +168,7 @@ const kDetailKeys = {
   },
   'beforeSeconds': {
     label: {
-      en: '앞서 표시 (초)',
+      en: 'before (sec)',
       de: 'Vorher (Sekunden)',
       fr: 'avant (seconde)',
       ja: 'その前に (秒)',
@@ -180,7 +180,7 @@ const kDetailKeys = {
   },
   'condition': {
     label: {
-      en: '조건',
+      en: 'condition',
       de: 'condition',
       fr: 'condition',
       ja: '条件',
@@ -208,7 +208,7 @@ const kDetailKeys = {
   },
   'duration': {
     label: {
-      en: '지속 시간 (초)',
+      en: 'duration (sec)',
       de: 'Dauer (Sekunden)',
       fr: 'Durée (secondes)',
       ja: '存続時間 (秒)',
@@ -220,7 +220,7 @@ const kDetailKeys = {
   },
   'preRun': {
     label: {
-      en: '앞서 실행',
+      en: 'preRun',
       de: 'preRun',
       fr: 'preRun',
       ja: 'プレ実行',
@@ -232,7 +232,7 @@ const kDetailKeys = {
   },
   'alarmText': {
     label: {
-      en: '알람',
+      en: 'alarm',
       de: 'alarm',
       fr: 'alarme',
       ja: '警報',
@@ -243,7 +243,7 @@ const kDetailKeys = {
   },
   'alertText': {
     label: {
-      en: '얼러트',
+      en: 'alert',
       de: 'alert',
       fr: 'alerte',
       ja: '警告',
@@ -254,7 +254,7 @@ const kDetailKeys = {
   },
   'infoText': {
     label: {
-      en: '인포',
+      en: 'info',
       de: 'info',
       fr: 'info',
       ja: '情報',
@@ -276,7 +276,7 @@ const kDetailKeys = {
   },
   'sound': {
     label: {
-      en: '소리',
+      en: 'sound',
       de: 'sound',
       fr: 'son',
       ja: '音声',
@@ -287,7 +287,7 @@ const kDetailKeys = {
   },
   'run': {
     label: {
-      en: '실행',
+      en: 'run',
       de: 'run',
       fr: 'run',
       ja: '実行',
@@ -302,7 +302,7 @@ const kDetailKeys = {
 // Ordered set of headers in the timeline edit table.
 const kTimelineTableHeaders = {
   shouldDisplayText: {
-    en: '표시',
+    en: 'Show',
     de: 'Anzeigen',
     fr: 'Afficher',
     ja: '表示',
@@ -310,7 +310,7 @@ const kTimelineTableHeaders = {
     ko: '표시',
   },
   text: {
-    en: '타임라인 텍스트',
+    en: 'Timeline Text',
     de: 'Timeline Text',
     fr: 'Texte de la timeline',
     ja: 'タイムラインテキスト',
@@ -318,7 +318,7 @@ const kTimelineTableHeaders = {
     ko: '타임라인 텍스트',
   },
   overrideText: {
-    en: '이름 바꿈',
+    en: 'Rename',
     de: 'Umbenennen',
     fr: 'Renommer',
     ja: 'テキスト変更',
@@ -332,7 +332,7 @@ const detailKeys: { [key in keyof LooseTrigger]: DetailKey } = kDetailKeys;
 const kMiscTranslations = {
   // Shows up for un-set values.
   valueDefault: {
-    en: '(기본)',
+    en: '(default)',
     de: '(Standard)',
     fr: '(Défaut)',
     ja: '(初期値)',
@@ -341,7 +341,7 @@ const kMiscTranslations = {
   },
   // Shown when the UI can't decipher the output of a function.
   valueIsFunction: {
-    en: '(함수)',
+    en: '(function)',
     de: '(Funktion)',
     fr: '(Fonction)',
     ja: '(関数)',
@@ -350,7 +350,7 @@ const kMiscTranslations = {
   },
   // Warning label for triggers without ids or overridden triggers.
   warning: {
-    en: '⚠️ 경고',
+    en: '⚠️ warning',
     de: '⚠️ Warnung',
     fr: '⚠️ Attention',
     ja: '⚠️ 警告',
@@ -359,7 +359,7 @@ const kMiscTranslations = {
   },
   // Shows up for triggers without ids.
   missingId: {
-    en: 'ID 필드가 없음',
+    en: 'missing id field',
     de: 'Fehlendes ID Feld',
     fr: 'Champ ID manquant',
     ja: 'idがありません',
@@ -368,7 +368,7 @@ const kMiscTranslations = {
   },
   // Shows up for triggers that are overridden by other triggers.
   overriddenByFile: {
-    en: '"${file}" 파일로 덮어씀',
+    en: 'overridden by "${file}"',
     de: 'Überschrieben durch "${file}"',
     fr: 'Écrasé(e) par "${file}"',
     ja: '"${file}"に上書きました',
@@ -377,7 +377,7 @@ const kMiscTranslations = {
   },
   // Opens trigger file on Github.
   viewTriggerSource: {
-    en: '트리거 소스 보기',
+    en: 'View Trigger Source',
     de: 'Zeige Trigger Quelle',
     fr: 'Afficher la source du Trigger',
     ja: 'トリガーのコードを表示',
@@ -386,7 +386,7 @@ const kMiscTranslations = {
   },
   // The header for the editing timeline section inside a trigger file.
   editTimeline: {
-    en: '타임라인 편집',
+    en: 'Edit Timeline',
     de: 'Timeline bearbeiten',
     fr: 'Éditer la timeline',
     ja: 'タイムラインを編集',
@@ -395,7 +395,7 @@ const kMiscTranslations = {
   },
   // The header inside the Edit Timeline section on top of the reference timeline text.
   timelineListing: {
-    en: '참조 타임라인 (수정할 수 없음)',
+    en: 'Reference Text (uneditable)',
     de: 'Referenztext (nicht editierbar)',
     fr: 'Texte de référence (non éditable)',
     cn: '参考文本 (不可编辑)',
@@ -403,7 +403,7 @@ const kMiscTranslations = {
   },
   // The header inside the Edit Timeline section on top of the add entries section.
   addCustomTimelineEntries: {
-    en: '추가 타임라인 항목',
+    en: 'Add Custom Timeline Entries',
     de: 'Eigene Timeline Einträge hinzufügen',
     fr: 'Ajouter une entrée de timeline personnalisée',
     cn: '添加自定义时间轴条目',
@@ -411,35 +411,35 @@ const kMiscTranslations = {
   },
   // The button text for the Edit Timeline add entries section.
   addMoreRows: {
-    en: '행 추가',
+    en: 'Add more rows',
     de: 'Mehr Reihen hinzufügen',
     fr: 'Ajouter une ligne',
     cn: '添加更多行',
     ko: '행 추가',
   },
   customEntryTime: {
-    en: '시간',
+    en: 'Time',
     de: 'Zeit',
     fr: 'Temps',
     cn: '时间',
     ko: '시간',
   },
   customEntryText: {
-    en: '텍스트',
+    en: 'Text',
     de: 'Text',
     fr: 'Texte',
     cn: '文本',
     ko: '텍스트',
   },
   customEntryDuration: {
-    en: '지속 시간 (초)',
+    en: 'Duration (seconds)',
     de: 'Dauer (Sekunden)',
     fr: 'Durée (s)',
     cn: '显示时长 (秒)',
     ko: '지속시간 (초)',
   },
   customEntryRemove: {
-    en: '제거',
+    en: 'Remove',
     de: 'Entfernen',
     fr: 'Supprimer',
     cn: '移除',
@@ -1790,7 +1790,7 @@ const processTriggerSetConfig = (options: RaidbossOptions, savedConfig: SavedCon
 const defaultAlertOutput: ConfigEntry = {
   id: 'DefaultAlertOutput',
   name: {
-    en: '기본 얼러트 출력',
+    en: 'Default alert output',
     de: 'Standard Alert Ausgabe',
     fr: 'Alerte par défaut',
     ja: '警告情報出力既定値',
@@ -1800,11 +1800,11 @@ const defaultAlertOutput: ConfigEntry = {
   type: 'select',
   options: {
     en: {
-      '🆙🔊 텍스트 & 소리': 'textAndSound',
-      '🆙💬 텍스트 & TTS': 'ttsAndText',
-      '💬 TTS 전용': 'ttsOnly',
-      '🆙 텍스트 전용': 'textOnly',
-      '❌ 사용안함': 'disabled',
+      '🆙🔊 Text and Sound': 'textAndSound',
+      '🆙💬 Text and TTS': 'ttsAndText',
+      '💬 TTS Only': 'ttsOnly',
+      '🆙 Text Only': 'textOnly',
+      '❌ Disabled': 'disabled',
     },
     de: {
       '🆙🔊 Text und Ton': 'textAndSound',
@@ -1839,7 +1839,7 @@ const defaultAlertOutput: ConfigEntry = {
       '🆙💬 텍스트와 TTS': 'ttsAndText',
       '💬 TTS만': 'ttsOnly',
       '🆙 텍스트만': 'textOnly',
-      '❌ 비활성화': 'disabled',
+      '❌ 사용안함': 'disabled',
     },
   },
   default: 'textAndSound',
@@ -1849,10 +1849,10 @@ const defaultAlertOutput: ConfigEntry = {
 const defaultTriggerSetAlertOutput = {
   ...defaultAlertOutput,
   name: {
-    en: '기본 트리거 셋 알람 출력',
+    en: 'Default trigger set alert output',
     de: 'Standard trigger-Set Alert Ausgabe',
     cn: '默认触发器集合提示输出模式',
-    ko: '기본 트리거 세트 알람 출력 방식',
+    ko: '기본 트리거 셋 알람 출력 방식',
   },
 } as const;
 
@@ -1878,7 +1878,7 @@ const templateOptions: OptionsTemplate = {
     {
       id: 'Coverage',
       name: {
-        en: '지원 콘텐츠 URL',
+        en: 'Supported content (latest version)',
         de: 'Unterstützte Inhalte (aktuellste Version)',
         fr: 'Contenu supporté (dernière version)',
         ja: '対応コンテンツ一覧 (最新バージョン)',
@@ -1900,7 +1900,7 @@ const templateOptions: OptionsTemplate = {
     {
       id: 'Debug',
       name: {
-        en: '디버그 모드 사용',
+        en: 'Enable debug mode',
         de: 'Aktiviere Debugmodus',
         fr: 'Activer le mode debug',
         ja: 'デバッグモードを有効にする',
@@ -1915,7 +1915,7 @@ const templateOptions: OptionsTemplate = {
     {
       id: 'AlertsLanguage',
       name: {
-        en: '얼러트 언어',
+        en: 'Alerts language',
         de: 'Alert Sprache',
         fr: 'Langue des alertes',
         ja: '警告情報の言語',
@@ -1925,13 +1925,13 @@ const templateOptions: OptionsTemplate = {
       type: 'select',
       options: {
         en: {
-          '기본 언어 사용': 'default',
-          '영어': 'en',
-          '中文': 'cn',
-          'Deutsch': 'de',
-          'Français': 'fr',
-          '日本語': 'ja',
-          '한국말': 'ko',
+          'Use Display Language': 'default',
+          'English (en)': 'en',
+          'Chinese (cn)': 'cn',
+          'German (de)': 'de',
+          'French (fr)': 'fr',
+          'Japanese (ja)': 'ja',
+          'Korean (ko)': 'ko',
         },
         fr: {
           'Utiliser la langue d\'affichage': 'default',
@@ -1983,7 +1983,7 @@ const templateOptions: OptionsTemplate = {
     {
       id: 'TimelineLanguage',
       name: {
-        en: '타임라인 언어',
+        en: 'Timeline language',
         de: 'Timeline Sprache',
         fr: 'Langue de la timeline',
         ja: 'タイムラインの言語',
@@ -1993,13 +1993,13 @@ const templateOptions: OptionsTemplate = {
       type: 'select',
       options: {
         en: {
-          'FFXIV Plugin 설정 언어': 'default',
-          '영어': 'en',
-          '中文': 'cn',
-          'Deutsch': 'de',
-          'Français': 'fr',
-          '日本語': 'ja',
-          '한국말': 'ko',
+          'Use FFXIV Plugin Language': 'default',
+          'English (en)': 'en',
+          'Chinese (cn)': 'cn',
+          'German (de)': 'de',
+          'French (fr)': 'fr',
+          'Japanese (ja)': 'ja',
+          'Korean (ko)': 'ko',
         },
         de: {
           'Benutze FFXIV Plugin Sprache': 'default',
@@ -2060,7 +2060,7 @@ const templateOptions: OptionsTemplate = {
     {
       id: 'Skin',
       name: {
-        en: 'Raidboss 스킨',
+        en: 'Raidboss Skin',
         de: 'Raidboss Skin',
         fr: 'Raidboss Skin',
         ja: 'Raidbossのスキン',
@@ -2070,7 +2070,7 @@ const templateOptions: OptionsTemplate = {
       type: 'select',
       options: {
         en: {
-          '기본': 'default',
+          'Default': 'default',
           'lippe': 'lippe',
           'jwidea': 'jwidea',
           'dorgrin': 'dorgrin',
@@ -2111,7 +2111,7 @@ const templateOptions: OptionsTemplate = {
     {
       id: 'TimelineEnabled',
       name: {
-        en: '타임라인 사용',
+        en: 'Timeline enabled',
         de: 'Timeline aktiviert',
         fr: 'Timeline activée',
         ja: 'タイムラインを有効にする',
@@ -2124,7 +2124,7 @@ const templateOptions: OptionsTemplate = {
     {
       id: 'AlertsEnabled',
       name: {
-        en: '얼러트 사용',
+        en: 'Alerts enabled',
         de: 'Alerts aktiviert',
         fr: 'Alertes activées',
         ja: '警告情報を有効にする',
@@ -2137,7 +2137,7 @@ const templateOptions: OptionsTemplate = {
     {
       id: 'ReverseTimeline',
       name: {
-        en: '타임라인 밑에서부터 올라옴 (아래-위)',
+        en: 'Reverse timeline order (bottom-to-top)',
         de: 'Umgekehrte Timeline Reihenfolge (unten-nach-oben)',
         fr: 'Timeline inversée (de bas en haut)',
         cn: '反转时间轴顺序 (从下到上)',
@@ -2149,7 +2149,10 @@ const templateOptions: OptionsTemplate = {
     {
       id: 'DefaultPlayerLabel',
       comment: {
-        en: `이름을 나타낼 때 대신 사용할 내용을 고릅니다.`,
+        en: `The default way to specify players in trigger output. By default, it will use
+             nicknames/first names. This can be used to print out player jobs instead.
+             If you are not in a party or players are out of a party (or there are bugs),
+             it will default to the player's nickname if there's no other information.`,
         cn: `在触发器输出中指定玩家的默认方式。默认选项为输出昵称/名字。
              使用此选项可将输出方式更改为玩家的职能名或职业名。
              若你不在小队中或玩家离开小队 (或出现错误时), 将默认输出玩家昵称。
@@ -2161,17 +2164,17 @@ const templateOptions: OptionsTemplate = {
              (한국 서버에서 '이름 전체' 옵션은 '닉네임'과 같습니다.)`,
       },
       name: {
-        en: '기본 플레이어 라벨',
+        en: 'Default Player Label',
         cn: '默认玩家代称',
-        ko: '플레이어를 언급하는 기본 방법',
+        ko: '플레이어 표시 방법',
       },
       type: 'select',
       options: {
         en: {
-          '별명 (Tini)': 'nick',
-          '역할 (Tank)': 'role',
-          '직업 (WAR)': 'job',
-          '원래 이름 (Tini Poutini)': 'name',
+          'Nickname (Tini)': 'nick',
+          'Role (Tank)': 'role',
+          'Job (WAR)': 'job',
+          'Full Name (Tini Poutini)': 'name',
         },
         cn: {
           '昵称 (Tini)': 'nick',
@@ -2180,10 +2183,10 @@ const templateOptions: OptionsTemplate = {
           '全名 (Tini Poutini)': 'name',
         },
         ko: {
-          '닉네임 (Tini)': 'nick',
+          '별명 (Tini)': 'nick',
           '역할 (Tank)': 'role',
           '직업 (WAR)': 'job',
-          '이름 전체 (Tini Poutini)': 'name',
+          '전체 이름 (Tini Poutini)': 'name',
         },
       },
       default: 'nick',
@@ -2191,7 +2194,7 @@ const templateOptions: OptionsTemplate = {
     {
       id: 'ShowTimerBarsAtSeconds',
       name: {
-        en: '타임바의 표시 시간 (초단위)',
+        en: 'Timer bar show window (seconds)',
         de: 'Timer-Bar Anzeigedauer (in Sekunden)',
         fr: 'Fenêtre d\'affichage de la barre de temps (secondes)',
         ja: 'タイムバーに時間表示 (秒)',
@@ -2204,7 +2207,7 @@ const templateOptions: OptionsTemplate = {
     {
       id: 'KeepExpiredTimerBarsForSeconds',
       name: {
-        en: '끝난 타임바가 사라질때까지 시간 (초단위)',
+        en: 'Keep expired timer bar (seconds)',
         de: 'Behalte abgelaufene Timer-Bar (in Sekunden)',
         fr: 'Garder la barre de temps expirée (secondes)',
         ja: '終了したタイムバーが消えるまでの待ち時間 (秒)',
@@ -2217,7 +2220,7 @@ const templateOptions: OptionsTemplate = {
     {
       id: 'BarExpiresSoonSeconds',
       name: {
-        en: '타임바가 사라지기전에 색깔을 바꿀 시간 (초단위)',
+        en: 'Time to recolor timer as expiring soon (seconds)',
         de: 'Zeit bis ein bald auslaufender Timer umgefärbt wird (in Sekunden)',
         fr: 'Recolorisation de la barre de temps avant expiration (secondes)',
         ja: 'タイムバーが終了前に再度色付けの残り時間 (秒)',
@@ -2230,7 +2233,7 @@ const templateOptions: OptionsTemplate = {
     {
       id: 'MaxNumberOfTimerBars',
       name: {
-        en: '타임바 최대 갯수',
+        en: 'Max number of timer bars',
         de: 'Max Anzahl an Timer-Bars',
         fr: 'Nombre max de barres de temps',
         ja: 'タイムバーの最大数',
@@ -2243,7 +2246,7 @@ const templateOptions: OptionsTemplate = {
     {
       id: 'DisplayAlarmTextForSeconds',
       name: {
-        en: '알람 텍스트 표시 시간 (초단위)',
+        en: 'Alarm text display duration (seconds)',
         de: 'Alarm-Text Anzeigedauer (in Sekunden)',
         fr: 'Durée d\'affichage du texte d\'alarme (secondes)',
         ja: '警報テキスト表示時間の長さ (秒)',
@@ -2256,7 +2259,7 @@ const templateOptions: OptionsTemplate = {
     {
       id: 'DisplayAlertTextForSeconds',
       name: {
-        en: '얼러트 텍스트 표시 시간 (초단위)',
+        en: 'Alert text display duration (seconds)',
         de: 'Alert-Text Anzeigedauer (in Sekunden)',
         fr: 'Durée d\'affichage du texte d\'alerte (secondes)',
         ja: '警告テキスト表示時間の長さ (秒)',
@@ -2269,7 +2272,7 @@ const templateOptions: OptionsTemplate = {
     {
       id: 'DisplayInfoTextForSeconds',
       name: {
-        en: '인포 텍스트 표시 시간 (초단위)',
+        en: 'Info text display duration (seconds)',
         de: 'Info-Text Anzeigedauer (in Sekunden)',
         fr: 'Durée d\'affichage du texte d\'information (secondes)',
         ja: '情報テキスト表示時間の長さ (秒)',
@@ -2282,7 +2285,7 @@ const templateOptions: OptionsTemplate = {
     {
       id: 'AlarmSoundVolume',
       name: {
-        en: '알람 소리 크기 (0-1)',
+        en: 'Alarm sound volume (0-1)',
         de: 'Alarm Lautstärke (0-1)',
         fr: 'Volume de l\'alarme (0-1)',
         ja: '警報音声の音量 (0-1)',
@@ -2295,7 +2298,7 @@ const templateOptions: OptionsTemplate = {
     {
       id: 'AlertSoundVolume',
       name: {
-        en: '얼러트 소리 크기 (0-1)',
+        en: 'Alert sound volume (0-1)',
         de: 'Alert Lautstärke (0-1)',
         fr: 'Volume de l\'alerte (0-1)',
         ja: '警告音声の音量 (0-1)',
@@ -2308,7 +2311,7 @@ const templateOptions: OptionsTemplate = {
     {
       id: 'InfoSoundVolume',
       name: {
-        en: '인포 소리 크기 (0-1)',
+        en: 'Info sound volume (0-1)',
         de: 'Info Lautstärke (0-1)',
         fr: 'Volume de l\'info (0-1)',
         ja: '情報音声の音量 (0-1)',
@@ -2321,7 +2324,7 @@ const templateOptions: OptionsTemplate = {
     {
       id: 'LongSoundVolume',
       name: {
-        en: '긴 소리 크기 (0-1)',
+        en: 'Long sound volume (0-1)',
         de: 'Langer Ton Lautstärke (0-1)',
         fr: 'Volume du son long (0-1)',
         ja: '長い音声の音量 (0-1)',
@@ -2334,7 +2337,7 @@ const templateOptions: OptionsTemplate = {
     {
       id: 'PullSoundVolume',
       name: {
-        en: '선타 소리 크기 (0-1)',
+        en: 'Pull sound volume (0-1)',
         de: 'Pull Lautstärke (0-1)',
         fr: 'Volume du son de pull (0-1)',
         ja: 'タゲ取る効果音の音量 (0-1)',
@@ -2347,12 +2350,12 @@ const templateOptions: OptionsTemplate = {
     {
       id: 'RumbleEnabled',
       name: {
-        en: '트리거로 컨트롤러 진동 사용하기',
+        en: 'Enable gamepad rumble for triggers',
         de: 'Gamepad-Vibration für Trigger aktivieren',
         fr: 'Activer la vibration de la manette de jeu pour les triggers',
         ja: 'トリガーによるゲームパッド振動を有効にする',
         cn: '触发器活动时使手柄振动',
-        ko: '트리거에 대해 게임패드 진동 활성화',
+        ko: '트리거 알림으로 컨트롤러 진동 사용하기',
       },
       type: 'checkbox',
       default: false,
@@ -2360,7 +2363,7 @@ const templateOptions: OptionsTemplate = {
     {
       id: 'InfoRumbleDuration',
       name: {
-        en: '인포 트리거의 진동 시간 (밀리초)',
+        en: 'Duration (milliseconds) of rumble for info triggers',
         de: 'Zeit (in Millisekunden) der Vibration bei info trigger',
         fr: 'Durée (millisecondes) de la vibration pour les triggers d\'informations',
         ja: '情報トリガーによる振動の長さ (ミリ秒)',
@@ -2373,7 +2376,7 @@ const templateOptions: OptionsTemplate = {
     {
       id: 'InfoRumbleWeak',
       name: {
-        en: '인포 트리거의 약한쪽 진동 세기 (0-1)',
+        en: 'Magnitude (0-1) of weak rumble for info triggers',
         de: 'Stärke (0-1) der leichten Vibration bei info trigger',
         fr: 'Intensité de la vibration faible pour les triggers d\'informations (0-1)',
         ja: '情報トリガーによる振動にモーターの弱い方の強さ (0-1)',
@@ -2386,7 +2389,7 @@ const templateOptions: OptionsTemplate = {
     {
       id: 'InfoRumbleStrong',
       name: {
-        en: '인포 트리거의 강한쪽 진동 세기 (0-1)',
+        en: 'Magnitude (0-1) of strong rumble for info triggers',
         de: 'Stärke (0-1) der starken Vibration bei info trigger',
         fr: 'Intensité de la vibration forte pour les triggers d\'informations (0-1)',
         ja: '情報トリガーによる振動にモーターの強い方の強さ (0-1)',
@@ -2399,7 +2402,7 @@ const templateOptions: OptionsTemplate = {
     {
       id: 'AlertRumbleDuration',
       name: {
-        en: '얼러트 트리거의 진동 시간 (밀리초)',
+        en: 'Duration (milliseconds) of rumble for alert triggers',
         de: 'Zeit (in Millisekunden) der Vibration bei alert trigger',
         fr: 'Durée (millisecondes) de la vibration pour les triggers d\'alertes',
         ja: '警告トリガーによる振動の長さ (ミリ秒)',
@@ -2412,7 +2415,7 @@ const templateOptions: OptionsTemplate = {
     {
       id: 'AlertRumbleWeak',
       name: {
-        en: '얼러트 트리거의 약한쪽 진동 세기 (0-1)',
+        en: 'Magnitude (0-1) of weak rumble for alert triggers',
         de: 'Stärke (0-1) der leichten Vibration bei alert trigger',
         fr: 'Intensité de la vibration faible pour les triggers d\'alertes (0-1)',
         ja: '警告トリガーによる振動にモーターの弱い方の強さ (0-1)',
@@ -2425,7 +2428,7 @@ const templateOptions: OptionsTemplate = {
     {
       id: 'AlertRumbleStrong',
       name: {
-        en: '얼러트 트리거의 강한쪽 진동 세기 (0-1)',
+        en: 'Magnitude (0-1) of strong rumble for alert triggers',
         de: 'Stärke (0-1) der starken Vibration bei alert trigger',
         fr: 'Intensité de la vibration forte pour les triggers d\'alertes (0-1)',
         ja: '警告トリガーによる振動にモーターの強い方の強さ (0-1)',
@@ -2438,7 +2441,7 @@ const templateOptions: OptionsTemplate = {
     {
       id: 'AlarmRumbleDuration',
       name: {
-        en: '알람 트리거의 진동 시간 (밀리초)',
+        en: 'Duration (milliseconds) of rumble for alarm triggers',
         de: 'Zeit (in Millisekunden) der Vibration bei alarm trigger',
         fr: 'Durée (millisecondes) de la vibration pour les triggers d\'alarmes',
         ja: '警報トリガーによる振動の長さ (ミリ秒)',
@@ -2451,7 +2454,7 @@ const templateOptions: OptionsTemplate = {
     {
       id: 'AlarmRumbleWeak',
       name: {
-        en: '알람 트리거의 약한쪽 진동 세기 (0-1)',
+        en: 'Magnitude (0-1) of weak rumble for alarm triggers',
         de: 'Stärke (0-1) der leichten Vibration bei alarm trigger',
         fr: 'Intensité de la vibration faible pour les triggers d\'alarmes (0-1)',
         ja: '警報トリガーによる振動にモーターの弱い方の強さ (0-1)',
@@ -2464,7 +2467,7 @@ const templateOptions: OptionsTemplate = {
     {
       id: 'AlarmRumbleStrong',
       name: {
-        en: '알람 트리거의 강한쪽 진동 세기 (0-1)',
+        en: 'Magnitude (0-1) of strong rumble for alarm triggers',
         de: 'Stärke (0-1) der starken Vibration bei alarm trigger',
         fr: 'Intensité de la vibration forte pour les triggers d\'alarmes (0-1)',
         ja: '警報トリガーによる振動にモーターの強い方の強さ (0-1)',
@@ -2476,12 +2479,10 @@ const templateOptions: OptionsTemplate = {
     },
     {
       id: 'AutumnStyle',
-      comment: {
-        en: '어듬이와 함께 하는 칵밧 확장.',
-      },
       name: {
-        en: '어듬이와 함게',
+        en: 'With Autumn\'s Style',
         ja: 'オヅミと一緒に',
+        ko: '어듬이와 함게',
       },
       type: 'checkbox',
       default: false,

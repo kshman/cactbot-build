@@ -60,7 +60,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: 'Éloignez-vous de l\'avant',
           ja: '正面から離れる',
           cn: '远离正面',
-          ko: '정면 피하기',
+          ko: '정면 피해요',
         },
         tankBusterOnYou: Outputs.tankBusterOnYou,
         busterOn: Outputs.tankBusterOnPlayer,

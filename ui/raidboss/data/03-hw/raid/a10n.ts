@@ -33,11 +33,11 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '옆쪽 톱날 피해요',
+          en: 'Avoid side saws',
           de: 'Weiche den Sägen an der Seite aus',
           fr: 'Évitez les scies sur le côté',
           cn: '躲避场边电锯',
-          ko: '옆쪽의 톱 피하기',
+          ko: '옆쪽의 톱날 피해요',
         },
       },
     },
@@ -51,12 +51,12 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '함정: 얼음',
+          en: 'Frost Lasers',
           de: 'Eislaser',
           fr: 'Lasers de glace',
           ja: '罠: 氷',
           cn: '冰晶陷阱',
-          ko: '얼음화살 함정',
+          ko: '함정: 얼음',
         },
       },
     },
@@ -67,12 +67,12 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '함정: 철퇴',
+          en: 'Ceiling Weight',
           de: 'Gewichte von der Decke',
           fr: 'Poids du plafond',
           ja: '罠: 鉄球',
           cn: '铁球陷阱',
-          ko: '철퇴 함정',
+          ko: '함정: 철퇴',
         },
       },
     },
@@ -118,18 +118,18 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         target: {
-          en: '내게 레이저 - 멀리 가요',
+          en: 'Get away--Laser on YOU',
           de: 'Geh weg--Laser auf DIR',
           fr: 'Éloignez-vous - Laser sur VOUS',
           cn: '出去--激光点名',
-          ko: '멀리 - 선 대상자',
+          ko: '내게 레이저 - 멀리 가요',
         },
         avoid: {
           en: 'Avoid Prey Laser',
           de: 'Weiche dem Markierungs-Laser aus',
           fr: 'Évitez le laser',
           cn: '躲避追踪激光',
-          ko: '선 피하기',
+          ko: '레이저 피해요',
         },
       },
     },

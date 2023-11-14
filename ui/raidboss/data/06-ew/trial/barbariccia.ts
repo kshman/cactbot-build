@@ -328,7 +328,7 @@ const triggerSet: TriggerSet<Data> = {
         'Teasing Tangles': '머리털 구속',
         'Tornado Chain': '연속 회오리',
         'Touchdown': '착지',
-        'Trample': '짓밟기',
+        'Trample': '짓밟아요',
         'Void Aero(?! )': '보이드 에어로',
         'Void Aero III': '보이드 에어로가',
         'Void Aero IV': '보이드 에어로쟈',

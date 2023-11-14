@@ -27,7 +27,7 @@ const oopsyHelpers: (keyof LooseOopsyTriggerSet)[] = [
 const kTriggerOptions = {
   default: {
     label: {
-      en: '✔ 기본',
+      en: '✔ Defaults',
       de: '✔ Standards',
       fr: '✔ Défauts',
       ja: '✔ 初期設定',
@@ -37,12 +37,12 @@ const kTriggerOptions = {
   },
   disabled: {
     label: {
-      en: '❌ 사용안함',
+      en: '❌ Disabled',
       de: '❌ Deaktiviert',
       fr: '❌ Désactivé',
       ja: '❌ 無効',
       cn: '❌ 禁用',
-      ko: '❌ 비활성화',
+      ko: '❌ 사용안함',
     },
   },
 };
@@ -186,7 +186,7 @@ class OopsyConfigurator {
       fileKey: '00-misc-buffs',
       filename: 'buff_map.ts',
       title: this.base.translate({
-        en: '놓친 버프',
+        en: 'Missed Buffs',
         de: 'Verfehlte Buffs',
         fr: 'Buffs manqués',
         ja: '欠けバフ',
@@ -264,7 +264,7 @@ const templateOptions: OptionsTemplate = {
     {
       id: 'Debug',
       name: {
-        en: '디버그 모드 사용',
+        en: 'Enable debug mode',
         de: 'Aktiviere Debugmodus',
         fr: 'Activer le mode debug',
         ja: 'デバッグモードを有効にする',
@@ -278,17 +278,17 @@ const templateOptions: OptionsTemplate = {
     {
       id: 'DefaultPlayerLabel',
       name: {
-        en: '기본 플레이어 라벨',
+        en: 'Default Player Label',
         cn: '默认玩家代称',
-        ko: '플레이어를 언급하는 기본 방법',
+        ko: '플레이어 표시 방법',
       },
       type: 'select',
       options: {
         en: {
-          '별명 (Tini)': 'nick',
-          '역할 (Tank)': 'role',
-          '직업 (WAR)': 'job',
-          '원래 이름 (Tini Poutini)': 'name',
+          'Nickname (Tini)': 'nick',
+          'Role (Tank)': 'role',
+          'Job (WAR)': 'job',
+          'Full Name (Tini Poutini)': 'name',
         },
         cn: {
           '昵称 (Tini)': 'nick',
@@ -297,10 +297,10 @@ const templateOptions: OptionsTemplate = {
           '全名 (Tini Poutini)': 'name',
         },
         ko: {
-          '닉네임 (Tini)': 'nick',
-          '역할 (탱커)': 'role',
-          '직업 (전사)': 'job',
-          '이름 전체 (Tini Poutini)': 'name',
+          '별명 (Tini)': 'nick',
+          '역할 (Tank)': 'role',
+          '직업 (WAR)': 'job',
+          '전체 이름 (Tini Poutini)': 'name',
         },
       },
       default: 'nick',
@@ -308,7 +308,7 @@ const templateOptions: OptionsTemplate = {
     {
       id: 'NumLiveListItemsInCombat',
       name: {
-        en: '전투 중에 표시할 미스의 개수',
+        en: 'Number of mistakes to show in combat',
         de: 'Anzahl der Fehler, die während des Kampfes angezeigt werden',
         fr: 'Nombre de fautes à afficher en combat',
         ja: '戦闘中に表示するミスをした回数',
@@ -321,12 +321,12 @@ const templateOptions: OptionsTemplate = {
     {
       id: 'MinimumTimeForPullMistake',
       name: {
-        en: '선타로 처리할 최소 시간 (초단위)',
+        en: 'Minimum time to show early pull (seconds)',
         de: 'Minimum Zeit in der Early-Pulls angezeigt werden (in Sekunden)',
         fr: 'Durée minimale pour afficher l\'early pull (secondes)',
         ja: 'タゲ取るのが早かったら、ミスとして表示する、カウントダウンとの最短時間 (秒)',
         cn: '显示提前开怪最小时间 (秒)',
-        ko: '풀링이 빠르다고 표시 할 최소 시간 (초)',
+        ko: '선타 처리할 표시 할 최소 시간 (초)',
       },
       type: 'float',
       default: 0.4,
@@ -334,7 +334,7 @@ const templateOptions: OptionsTemplate = {
     {
       id: 'TimeToShowDeathReportSeconds',
       name: {
-        en: '죽었을 때 데스 리포트를 표시할 시간 (초단위, 0=사용안함)',
+        en: 'Seconds to show death report on death (0=none)',
         de: 'Sekunden um den Todesreport beim Tot anzuzeigen (0=niemals)',
         fr: 'Durée d’affichage (en secondes) du rapport de mort (0 = aucun)',
         ja: '倒れた時にデスレポートを表示 (0=非表示)',
@@ -359,7 +359,7 @@ const templateOptions: OptionsTemplate = {
     {
       id: 'DeathReportSide',
       name: {
-        en: '데스 리포트 표시 방법',
+        en: 'How to show the death report',
         de: 'Wie zeige ich den Todesreport an',
         fr: 'Où afficher le rapport de mort',
         ja: 'デスレポートの表示方法',
@@ -369,9 +369,9 @@ const templateOptions: OptionsTemplate = {
       type: 'select',
       options: {
         en: {
-          '왼쪽': 'left',
-          '오른쪽': 'right',
-          '❌ 사용안함': 'disabled',
+          'Left Side': 'left',
+          'Right Side': 'right',
+          '❌ Disabled': 'disabled',
         },
         de: {
           'Left Side': 'links',
@@ -404,10 +404,10 @@ const templateOptions: OptionsTemplate = {
     {
       id: 'MinimumTimeForOverwrittenMit',
       name: {
-        en: '파티 버프 겹치는 겹치는 경고 시간 (초단위)',
+        en: 'Minimum time to show overwritten mit (seconds)',
         de: 'Minimum Zeit überschriebene Mitigation anzuzeigen (Sekunden)',
         cn: '显示被顶减伤最小时间 (秒)',
-        ko: '파티 생존기 덮어씀 경고를 표시할 기준 시간 (초)',
+        ko: '파티 버프 덮어씀 경고를 표시할 기준 시간 (초)',
       },
       type: 'float',
       default: 2,

@@ -40,7 +40,7 @@ const triggerSet: TriggerSet<Data> = {
           de: 'Weg vom Boss',
           fr: 'Éloignez-vous du boss',
           cn: '远离BOSS',
-          ko: '보스에게서 떨어지기',
+          ko: '보스에게서 떨어져요',
         },
       },
     },

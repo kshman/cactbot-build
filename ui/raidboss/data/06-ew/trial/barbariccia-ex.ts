@@ -788,7 +788,7 @@ const triggerSet: TriggerSet<Data> = {
         'Teasing Tangles': '머리털 구속',
         'Tornado Chain': '연속 회오리',
         'Tousle': '바람타래',
-        'Trample': '짓밟기',
+        'Trample': '짓밟아요',
         'Upbraid': '머리털 용오름',
         'Void Aero III': '보이드 에어로가',
         'Void Aero IV': '보이드 에어로쟈',

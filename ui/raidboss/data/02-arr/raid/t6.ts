@@ -146,7 +146,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: 'Évitez Dévoration',
           ja: '捕食を避ける',
           cn: '躲开吞食',
-          ko: '포식 피하기',
+          ko: '포식 피해요',
         },
         jumpInNewThorns: {
           en: 'Devour: Jump In New Thorns',
@@ -154,7 +154,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: 'Dévoration : Sautez dans les ronces',
           ja: '捕食: 新芽に乗る',
           cn: '去新荆棘',
-          ko: '포식: 가시장판 밟기',
+          ko: '포식: 가시장판 밟아요',
         },
         getEaten: {
           en: 'Devour: Get Eaten',

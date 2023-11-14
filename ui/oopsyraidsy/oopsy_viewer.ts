@@ -18,7 +18,7 @@ import './oopsy_summary.css';
 import './oopsy_viewer.css';
 
 const fileDropText: LocaleText = {
-  en: '네트워크 로그 파일 여기에 놓기',
+  en: 'Drop Network log file here',
   de: 'Lege Netzwerk-Log hier ab',
   fr: 'Déposez votre fichier log ici',
   cn: '将网络日志文件拖放到此处',

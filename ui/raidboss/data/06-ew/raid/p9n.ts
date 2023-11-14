@@ -184,7 +184,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: 'Tankbuster sur VOUS -- Étirez le lien',
           ja: 'タン強 -- 離れる',
           cn: '坦克死刑 -- 远离',
-          ko: '탱버 대상자 -- 멀리 떨어지기',
+          ko: '탱버 대상자 -- 멀리 떨어져요',
         },
         tankbusterOn: {
           en: '탱크버스터: ${player}',

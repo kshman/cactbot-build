@@ -47,7 +47,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: 'Poussée F + Évitez M',
           ja: 'Fのノックバック + Mに避ける',
           cn: '女性击退 + 远离男性',
-          ko: 'F쪽에서 넉백, M 피하기',
+          ko: 'F쪽에서 넉백, M 피해요',
         },
       },
     },

@@ -30,7 +30,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: 'Évitez les explosions des bulles',
           ja: '泡の爆発から避ける',
           cn: '躲开泡泡爆炸',
-          ko: '거품 폭발 피하기',
+          ko: '거품 폭발 피해요',
         },
       },
     },

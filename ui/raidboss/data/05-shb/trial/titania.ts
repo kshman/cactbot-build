@@ -117,7 +117,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: 'Évitez les Racines',
           ja: '根っこを避ける',
           cn: '躲避树根',
-          ko: '뿌리 피하기',
+          ko: '뿌리 피해요',
         },
       },
     },

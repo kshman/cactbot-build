@@ -211,7 +211,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: 'Évitez les ruées sur les côtés',
           ja: '左右のロケットパンチを避ける',
           cn: '躲避两侧冲锋',
-          ko: '옆쪽 로켓 주먹 피하기',
+          ko: '옆쪽 로켓 주먹 피해요',
         },
       },
     },

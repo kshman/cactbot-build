@@ -100,7 +100,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: 'Évitez l\'orbe d\'eau',
           ja: '水玉から離れる',
           cn: '躲避水球移动路径',
-          ko: '물구슬 피하기',
+          ko: '물구슬 피해요',
         },
       },
     },

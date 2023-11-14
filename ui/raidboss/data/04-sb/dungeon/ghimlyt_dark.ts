@@ -23,7 +23,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: 'Évitez le laser du mur',
           ja: 'レーザーを避ける',
           cn: '躲避墙壁激光',
-          ko: '벽 레이저 피하기',
+          ko: '벽 레이저 피해요',
         },
       },
     },

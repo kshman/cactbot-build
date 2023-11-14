@@ -63,7 +63,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: 'Éloignez-vous du saut',
           ja: '着地点から離れる',
           cn: '躲开跳跃',
-          ko: '점프뛴 곳에서 멀리 떨어지기',
+          ko: '점프뛴 곳에서 멀리 떨어져요',
         },
       },
     },

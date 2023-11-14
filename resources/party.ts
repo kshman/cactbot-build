@@ -241,7 +241,7 @@ export default class PartyTracker {
     return ls;
   }
 
-  //
+  // 어듬이 정의 잡 인덱
   aJobIndex(name: string | undefined): number | undefined {
     if (name === undefined)
       return;
@@ -251,7 +251,7 @@ export default class PartyTracker {
     return this.details[partyIndex]?.job;
   }
 
-  //
+  // 어듬이 정의 잡 이름
   aJobName(name: string | undefined): string | undefined {
     if (name === undefined)
       return;

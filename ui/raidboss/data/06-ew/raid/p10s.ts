@@ -156,7 +156,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: 'Prenez une tour',
           ja: '塔踏み',
           cn: '踩塔击飞',
-          ko: '기둥 들어가기',
+          ko: '타워 들어가기',
         },
         avoid: {
           en: '타워 피해요',
@@ -164,7 +164,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: 'Évitez les tours',
           ja: '塔回避',
           cn: '远离塔',
-          ko: '기둥 피하기',
+          ko: '타워 피해요',
         },
       },
     },

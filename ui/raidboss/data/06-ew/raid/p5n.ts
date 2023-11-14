@@ -103,7 +103,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: 'Éloignez-vous des zones au sol',
           ja: 'ゆかから離れる',
           cn: '躲避圈圈',
-          ko: '장판으로부터 멀리 떨어지기',
+          ko: '장판으로부터 멀리 떨어져요',
         },
       },
     },

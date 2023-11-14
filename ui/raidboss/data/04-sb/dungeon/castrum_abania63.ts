@@ -272,7 +272,7 @@ const triggerSet: TriggerSet<Data> = {
         'Rahu Blaster': '라후 폭파',
         'Rahu Cut': '라후 리미터 해제',
         'Stab': '찌르기',
-        'Towers': '기둥',
+        'Towers': '타워',
         'Wheel': '바퀴',
         'Wild Speed': '폭주',
       },

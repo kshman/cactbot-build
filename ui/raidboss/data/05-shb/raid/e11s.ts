@@ -598,7 +598,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: 'Positions -> Groupes -> AoE en ligne -> Déposez au sol -> Éloignez-vous',
           ja: '8方向散開 -> 3方向頭割り -> 直線範囲 -> AoE誘導 -> 離れる',
           cn: '八方 -> 光三向分摊 -> 直线 -> 放光点名 -> 离开',
-          ko: '8산개 -> 홀리 그룹 쉐어 -> 직선 장판 -> 장판 유도 -> 피하기',
+          ko: '8산개 -> 홀리 그룹 쉐어 -> 직선 장판 -> 장판 유도 -> 피해요',
         },
         ttsText: {
           en: 'Holy Cycle',

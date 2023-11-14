@@ -323,7 +323,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: 'Cachez-vous derrière la tour',
           ja: '塔の後ろに',
           cn: '躲在塔后',
-          ko: '기둥 뒤에 숨기',
+          ko: '타워 뒤에 숨기',
         },
       },
     },

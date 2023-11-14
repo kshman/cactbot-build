@@ -75,7 +75,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: 'Esquivez les cercles géants',
           ja: '降ったサークルを避ける',
           cn: '躲避大圈',
-          ko: '대형장판피하기',
+          ko: '대형장판피해요',
         },
       },
     },

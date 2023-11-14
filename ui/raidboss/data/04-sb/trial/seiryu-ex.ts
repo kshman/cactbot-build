@@ -204,7 +204,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: 'Prenez votre tour (tours T/H)',
           ja: '塔 (タンクヒラが塔)',
           cn: '踩塔（坦克/治疗踩塔）',
-          ko: '기둥 처리 (탱/힐)',
+          ko: '타워 처리 (탱/힐)',
         },
         getTowerDpsTowers: {
           en: '티워 밟아요 (DPS 타워)',
@@ -212,7 +212,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: 'Prenez votre tour (tours DPS)',
           ja: '塔 (DPSが塔)',
           cn: '踩塔（DPS踩塔）',
-          ko: '기둥 처리 (딜러)',
+          ko: '타워 처리 (딜러)',
         },
       },
     },

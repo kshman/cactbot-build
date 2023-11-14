@@ -1216,7 +1216,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: 'Loin de ${dir}',
           ja: '${dir}が安置 (クラッシュ)',
           cn: '去 ${dir}',
-          ko: '${dir}으로 피하기',
+          ko: '${dir}으로 피해요',
         },
         crush: {
           en: '[푹찍] 점프에서 멀어져요',
@@ -1224,7 +1224,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: 'Éloignez-vous du saut',
           ja: '離れる',
           cn: '远离跳的方向',
-          ko: '멀리 떨어지기',
+          ko: '멀리 떨어져요',
         },
         impact: {
           en: '[넉백] 점프 따라가요',
@@ -2557,7 +2557,7 @@ const triggerSet: TriggerSet<Data> = {
             fr: 'Tour (avec ${letter1} ou ${letter2})',
             ja: '塔 (✨${letter1}/${letter2})',
             cn: '塔 (与 ${letter1} 或 ${letter2})',
-            ko: '기둥 (${letter1} 또는 ${letter2})',
+            ko: '타워 (${letter1} 또는 ${letter2})',
           },
           towerMergePlayers: {
             en: '타워로 (+${player1}/${player2})',
@@ -2565,7 +2565,7 @@ const triggerSet: TriggerSet<Data> = {
             fr: 'Tour (avec ${player1} ou ${player2})',
             ja: '塔 (+${player1}/${player2})',
             cn: '塔 (与 ${player1} 或 ${player2})',
-            ko: '기둥 (${player1} 또는 ${player2})',
+            ko: '타워 (${player1} 또는 ${player2})',
           },
           colorTowerAvoid: {
             en: '조합하지 말고 피해요: ${color}',
@@ -2573,7 +2573,7 @@ const triggerSet: TriggerSet<Data> = {
             fr: 'Évitez les tours ${color}',
             ja: '組合せずに逃げて: ${color}',
             cn: '避开 ${color} 塔',
-            ko: '${color} 기둥 피하기',
+            ko: '${color} 기둥 피해요',
           },
           cloneTether: {
             en: '선 달고 도망가요!',
@@ -2807,7 +2807,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: 'Prenez la tour ${num}',
           ja: '${num}番目の塔に入って',
           cn: '${num} 塔',
-          ko: '${num}번째 기둥 밟기',
+          ko: '${num}번째 기둥 밟아요',
         },
       },
     },

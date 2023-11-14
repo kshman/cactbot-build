@@ -173,7 +173,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: 'Évitez le cône (depuis ${dir})',
           ja: '${dir}からの扇回避',
           cn: '躲避扇形 (从${dir})',
-          ko: '${dir}의 삼각형 장판 피하기',
+          ko: '${dir}의 삼각형 장판 피해요',
         },
       },
     },

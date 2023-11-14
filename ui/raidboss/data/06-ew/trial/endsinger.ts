@@ -139,7 +139,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: 'Évitez les lasers des têtes',
           ja: '顔の直線AoEを避ける',
           cn: '躲避头部激光',
-          ko: '머리가 쏘는 레이저 피하기',
+          ko: '머리가 쏘는 레이저 피해요',
         },
       },
     },

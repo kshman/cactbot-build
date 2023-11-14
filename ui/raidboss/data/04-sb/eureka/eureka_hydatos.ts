@@ -175,7 +175,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: 'Éloignez-vous du marquage Orbe',
           ja: '玉から離れる',
           cn: '远离点名',
-          ko: '구슬 대상자에서 떨어지기',
+          ko: '구슬 대상자에서 떨어져요',
         },
         orbOnYou: {
           en: '내게 구슬',
@@ -457,7 +457,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: 'Éloignez-vous des cercles lumineux',
           ja: '白リングから離れる',
           cn: '远离白圈',
-          ko: '밝은 원에서 떨어지기',
+          ko: '밝은 원에서 떨어져요',
         },
         awayFromDarkCircles: {
           en: '검은 동그라미에서 먼곳으로',
@@ -465,7 +465,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: 'Éloignez-vous des cercles ténèbreux',
           ja: '黒リングから離れる',
           cn: '远离黑圈',
-          ko: '어두운 원에서 떨어지기',
+          ko: '어두운 원에서 떨어져요',
         },
         standByDarkCircles: {
           en: '검은 동그라미 근처로',

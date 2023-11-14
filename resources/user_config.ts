@@ -380,7 +380,7 @@ class UserConfig {
                 // Ideally users should do something like `Options.Triggers.push([etc]);`
                 // instead of `Options.Triggers = [etc];`
                 console.log(
-                  `*** 경고: ${basePath}${jsFile} 덮어쓰기 옵션. 이전 파일의 ${field}.`,
+                  `*** WARNING: ${basePath}${jsFile} overwrites Options.${field} from previous files.`,
                 );
               }
               variableTracker[field] = options[field];
@@ -389,7 +389,7 @@ class UserConfig {
             this.userFileCallbacks[overlayName]?.(jsFile, localFiles, options, basePath);
           } catch (e) {
             // Be very visible for users.
-            console.log('*** 사용자 파일에 오류가 있어요 ***');
+            console.log('*** ERROR IN USER FILE ***');
             console.log(e);
           }
         }
@@ -519,12 +519,12 @@ class UserConfig {
   }
   addUnlockText(lang: Lang) {
     const unlockText = {
-      en: '🔓 풀려있음 (쓰기전에 먼저 잠궈야해요)',
+      en: '🔓 Unlocked (lock overlay before using)',
       de: '🔓 Entsperrt (Sperre das Overlay vor der Nutzung)',
       fr: '🔓 Débloqué (Bloquez l\'overlay avant utilisation)',
       ja: '🔓 ロック解除 (オーバーレイを使用する前にロックしてください)',
       cn: '🔓 已解除锁定 (你需要将此悬浮窗锁定后方可使用)',
-      ko: '🔓 위치 잠금 해제됨 (사용하기 전에 위치 잠금을 설정하세요)',
+      ko: '🔓 풀려있음 (사용하기 전에 먼저 잠궈야해요)',
     };
 
     const id = 'cactbot-unlocked-text';

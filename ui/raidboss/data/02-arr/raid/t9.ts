@@ -238,7 +238,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: 'Dissipez Sangle accélérée',
           ja: '白い床に乗る',
           cn: '踩白圈',
-          ko: '흰색 장판 밟기',
+          ko: '흰색 장판 밟아요',
         },
       },
     },

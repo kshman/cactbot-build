@@ -49,7 +49,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: 'Évitez les ombres',
           ja: '影を避ける',
           cn: '避开阴影',
-          ko: '그림자 피하기',
+          ko: '그림자 피해요',
         },
       },
     },

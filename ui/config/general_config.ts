@@ -6,7 +6,7 @@ UserConfig.registerOptions('general', {
     {
       id: 'CactbotUserDirectory',
       name: {
-        en: 'Cactbot 사용자 디렉터리',
+        en: 'Cactbot user directory',
         de: 'Cactbot Benutzerverzeichnis',
         fr: 'Répertoire utilisateur de Cactbot',
         ja: 'Cactbot ユーザーディレクトリ',
@@ -19,7 +19,7 @@ UserConfig.registerOptions('general', {
     {
       id: 'ShowDeveloperOptions',
       name: {
-        en: '디버그 설정 표시',
+        en: 'Show developer options',
         de: 'Zeige Entwickleroptionen',
         fr: 'Afficher les options développeur',
         ja: '開発者向けオプション',
@@ -32,23 +32,23 @@ UserConfig.registerOptions('general', {
     {
       id: 'DisplayLanguage',
       name: {
-        en: '표시 언어',
+        en: 'Display language',
         de: 'Displaysprache',
         fr: 'Langue d\'affichage',
         ja: '表示言語',
         cn: '显示语言',
-        ko: '주 사용 언어',
+        ko: '표시 언어',
       },
       type: 'select',
       options: {
         en: {
-          'FFXIV Plugin 설정 언어': 'default',
-          'English': 'en',
-          '中文': 'cn',
-          'Deutsch': 'de',
-          'Français': 'fr',
-          '日本語': 'ja',
-          '한국말': 'ko',
+          'Use FFXIV Plugin Language': 'default',
+          'English (en)': 'en',
+          'Chinese (cn)': 'cn',
+          'German (de)': 'de',
+          'French (fr)': 'fr',
+          'Japanese (ja)': 'ja',
+          'Korean (ko)': 'ko',
         },
         de: {
           'Benutze FFXIV Plugin Sprache': 'default',

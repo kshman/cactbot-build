@@ -186,7 +186,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: '3x Zones au sol sur vous',
           ja: '自分に３回円範囲',
           cn: '三次放圈点名',
-          ko: '따라오는 장판 피하기',
+          ko: '따라오는 장판 피해요',
         },
       },
     },
@@ -230,7 +230,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: 'Cône sur Vous -- évitez les tours',
           ja: '自分に範囲攻撃 (塔に当たらないように)',
           cn: '三角点名 -- 躲开塔',
-          ko: '부채꼴 대상자 - 장판 피하기',
+          ko: '부채꼴 대상자 - 장판 피해요',
         },
         standInATower: {
           en: 'Stand in a tower',

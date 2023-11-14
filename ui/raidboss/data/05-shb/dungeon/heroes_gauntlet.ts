@@ -47,7 +47,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: 'Éloignez-vous du marqueur lié',
           ja: '線から離れる',
           cn: '远离连线标志',
-          ko: '이어진 표식으로부터 떨어지기',
+          ko: '이어진 표식으로부터 떨어져요',
         },
       },
     },

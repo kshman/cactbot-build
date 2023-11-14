@@ -85,7 +85,7 @@ const orbOutputStrings = {
   unknown: Outputs.unknown,
   knockback: Outputs.knockback,
   stop: {
-    en: 'Stop',
+    en: '움직이지마',
     de: 'Stopp',
     fr: 'Arrêtez',
     ja: '動かない',
@@ -94,7 +94,7 @@ const orbOutputStrings = {
   },
   // Special case.
   stopOutside: {
-    en: 'Stop (Out)',
+    en: '움직이지마 (바깥에서)',
     de: 'Stop (Außen)',
     fr: 'Arrêtez (Extérieur)',
     ja: 'ストップ (外に)',
@@ -102,7 +102,7 @@ const orbOutputStrings = {
     ko: '멈추기 (바깥에서)',
   },
   move: {
-    en: 'Move',
+    en: '움직여',
     de: 'Bewegen',
     fr: 'Bougez',
     ja: '動け',
@@ -111,7 +111,7 @@ const orbOutputStrings = {
   },
   in: Outputs.in,
   out: {
-    en: 'Out',
+    en: '밖으로',
     de: 'Raus',
     fr: 'Exterieur',
     ja: '外へ',
@@ -119,7 +119,7 @@ const orbOutputStrings = {
     ko: '밖으로',
   },
   rings: {
-    en: 'Rings',
+    en: '도넛',
     de: 'Ringe',
     fr: 'Anneaux',
     ja: 'ドーナツ',
@@ -236,7 +236,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Stand in dive charge',
+          en: '다이브 돌진에 서요',
           de: 'Stehe im Ansturm',
           fr: 'Restez dans la charge',
           ja: '直線頭割りに入る',
@@ -261,7 +261,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Take one tether',
+          en: '줄 하나 채요',
           de: 'Nimm eine´Verbindung',
           fr: 'Prenez un lien',
           ja: '線を取る',
@@ -307,7 +307,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Kill Magitek Core',
+          en: '마지텍 코어 잡아요',
           de: 'Besiege Magitek-Reaktor',
           fr: 'Tuez le Cœur magitek',
           ja: '魔導コアを撃破',
@@ -345,7 +345,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         getUnderOrb: {
-          en: 'Get Under Orb',
+          en: '구슬 아래로',
           de: 'Geh unter einem Orb',
           fr: 'Allez sous l\'Orbe',
           ja: '白玉に安置',
@@ -353,7 +353,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '구슬 아래로',
         },
         goCorner: {
-          en: 'Go To Corner',
+          en: '구석으로',
           de: 'Geh in die Ecken',
           fr: 'Allez dans un coin',
           ja: 'コーナーへ',
@@ -398,7 +398,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Kill Meteors',
+          en: '메테오 잡아요',
           de: 'Besiege die Meteore',
           fr: 'Tuez les météores',
           ja: 'メテオを撃破',
@@ -553,7 +553,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         unknown: {
           // "Follow Other People ;)"
-          en: 'Go ???',
+          en: '???쪽으로',
           de: 'Gehe nach ???',
           fr: 'Allez au ???',
           ja: '??? へ',
@@ -561,7 +561,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '???쪽으로',
         },
         northeast: {
-          en: 'Go northeast',
+          en: '북동쪽으로',
           de: 'Gehe nach Nordosten',
           fr: 'Allez au nord-est',
           ja: '北東へ',
@@ -569,7 +569,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '북동쪽으로',
         },
         southeast: {
-          en: 'Go southeast',
+          en: '남동쪽으로',
           de: 'Gehe nach Südosten',
           fr: 'Allez au sud-est',
           ja: '南東へ',
@@ -577,7 +577,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '남동쪽으로',
         },
         southwest: {
-          en: 'Go southwest',
+          en: '남서쪽으로',
           de: 'Gehe nach Südwesten',
           fr: 'Allez au sud-ouest',
           ja: '南西へ',
@@ -585,7 +585,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '남서쪽으로',
         },
         northwest: {
-          en: 'Go northwest',
+          en: '북서쪽으로',
           de: 'Gehe nach Nordwesten',
           fr: 'Allez au nord-ouest',
           ja: '北西へ',

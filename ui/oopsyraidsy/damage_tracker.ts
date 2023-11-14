@@ -49,7 +49,7 @@ const actorControlFadeInCommandPre62 = '40000010';
 const actorControlFadeInCommand = '4000000F';
 
 const partyWipeText = {
-  en: '와이쁘',
+  en: 'Party Wipe',
   de: 'Gruppe ausgelöscht',
   fr: 'Party Wipe',
   ja: 'ワイプ',
@@ -58,21 +58,21 @@ const partyWipeText = {
 };
 
 const earlyPullText = {
-  en: '선타',
+  en: 'early pull',
   de: 'zu früh angegriffen',
   fr: 'early pull',
   ja: 'タゲ取り早い',
   cn: '抢开',
-  ko: '풀링 빠름',
+  ko: '선타',
 };
 
 const latePullText = {
-  en: '늦었타',
+  en: 'late pull',
   de: 'zu spät angegriffen',
   fr: 'late pull',
   ja: 'タゲ取り遅い',
   cn: '晚开',
-  ko: '풀링 늦음',
+  ko: '늦었타',
 };
 
 // Internal trigger id for early pull

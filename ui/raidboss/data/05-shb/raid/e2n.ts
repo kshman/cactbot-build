@@ -27,7 +27,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: 'Allez dans les zones au sol',
           ja: '踏む',
           cn: '踩圈',
-          ko: '장판 밟기',
+          ko: '장판 밟아요',
         },
       },
     },

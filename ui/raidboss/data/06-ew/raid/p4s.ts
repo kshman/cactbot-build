@@ -84,7 +84,7 @@ const roleOutputStrings = {
     fr: 'Tours ${role}',
     ja: '塔: ${role}',
     cn: '${role} 踩塔',
-    ko: '기둥: ${role}',
+    ko: '타워: ${role}',
   },
   unknown: Outputs.unknown,
   // YPP

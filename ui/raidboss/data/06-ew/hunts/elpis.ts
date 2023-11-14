@@ -76,7 +76,7 @@ const triggerSet: TriggerSet<Data> = {
             fr: 'Éloignez-vous du marquage eau',
             ja: 'AOEから離れる',
             cn: '躲开水标记',
-            ko: '물징에서 멀리 떨어지기',
+            ko: '물징에서 멀리 떨어져요',
           },
         };
 
@@ -150,7 +150,7 @@ const triggerSet: TriggerSet<Data> = {
           de: 'Weg vom Sprung',
           ja: 'ジャンプから離れる',
           cn: '远离跳跃',
-          ko: '점프뛴 곳에서 멀리 떨어지기',
+          ko: '점프뛴 곳에서 멀리 떨어져요',
         },
       },
     },

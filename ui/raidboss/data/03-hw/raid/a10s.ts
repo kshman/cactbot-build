@@ -286,7 +286,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: 'Activez le Piège au sol',
           ja: '棘を踏む',
           cn: '踩地刺陷阱',
-          ko: '가시함정 밟기',
+          ko: '가시함정 밟아요',
         },
       },
     },

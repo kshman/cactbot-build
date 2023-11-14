@@ -549,7 +549,7 @@ const triggerSet: TriggerSet<Data> = {
             de: 'Turm 1',
             ja: '塔1',
             cn: '塔 1',
-            ko: '기둥 1',
+            ko: '타워 1',
           },
           tether: {
             en: '줄채요!',
@@ -598,7 +598,7 @@ const triggerSet: TriggerSet<Data> = {
             de: 'Turm ${num}',
             ja: '塔 ${num}',
             cn: '塔 ${num}',
-            ko: '기둥 ${num}',
+            ko: '타워 ${num}',
           },
           tether: {
             en: '줄채요! ${num}',
@@ -1876,7 +1876,7 @@ const triggerSet: TriggerSet<Data> = {
           de: 'Weg vom Auge',
           ja: '目から離れる',
           cn: '远离眼睛',
-          ko: '눈에서 멀리 떨어지기',
+          ko: '눈에서 멀리 떨어져요',
         },
         towardsEye: {
           en: '눈깔쪽에서 처리',

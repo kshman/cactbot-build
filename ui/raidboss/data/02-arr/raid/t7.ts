@@ -193,7 +193,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: 'Esquivez le cri maudit',
           ja: '呪詛の叫声を避ける',
           cn: '躲避诅咒之嚎',
-          ko: '저주의 외침 피하기',
+          ko: '저주의 외침 피해요',
         },
       },
     },

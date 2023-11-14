@@ -74,7 +74,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: 'Esquivez les cônes de vent',
           ja: '風の楔から離れる',
           cn: '躲风锥',
-          ko: '부채꼴 공격 피하기',
+          ko: '부채꼴 공격 피해요',
         },
       },
     },

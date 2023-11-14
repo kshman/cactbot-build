@@ -221,7 +221,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: 'Attraction : Éloignez-vous de ${player}',
           ja: '異なる極: ${player}から離れる',
           cn: '异极：远离${player}',
-          ko: '자력: ${player}와 떨어지기',
+          ko: '자력: ${player}와 떨어져요',
         },
       },
     },

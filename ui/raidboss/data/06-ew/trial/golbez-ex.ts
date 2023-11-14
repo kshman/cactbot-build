@@ -833,7 +833,7 @@ const triggerSet: TriggerSet<Data> = {
           en: '타워 밟아요',
           de: 'Nimm Turm',
           cn: '踩塔',
-          ko: '기둥 들어가기',
+          ko: '타워 들어가기',
         },
       },
     },

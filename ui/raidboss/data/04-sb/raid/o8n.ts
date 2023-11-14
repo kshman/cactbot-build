@@ -65,7 +65,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: 'Ne regardez pas la statue',
           ja: '神々の像を見ない',
           cn: '背对神像',
-          ko: '시선 피하기',
+          ko: '시선 피해요',
         },
       },
     },

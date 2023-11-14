@@ -92,7 +92,8 @@ module.exports = {
           if (defaultSeverity && defaultSeverity.includes(node.callee.property.name)) {
             context.report({
               node,
-              message: '알림 등급과 기본 응답이 일치할 땐,기본 알림 등급을 사용해요',
+              message:
+                'Use default severity in cases where the severity override matches the response default',
 
               fix: (fixer) => {
                 return fixer.replaceTextRange(

@@ -671,7 +671,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: 'Allez dans les tours',
           ja: '塔を踏む',
           cn: '踩塔',
-          ko: '기둥 들어가기',
+          ko: '타워 들어가기',
         },
       },
     },

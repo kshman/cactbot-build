@@ -60,12 +60,12 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '불 꺼요',
+          en: 'Turn off Lamps',
           de: 'Schalte die Lampen aus',
           fr: 'Éteignez les lampes',
           ja: '消灯する',
           cn: '关灯',
-          ko: '등불 끄기',
+          ko: '등불 꺼요',
         },
       },
     },
@@ -88,12 +88,12 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '센트리 잡아요',
+          en: 'Kill Sentry',
           de: 'Wachposten besiegen',
           fr: 'Tuez la sentinelle',
           ja: '守衛を倒す',
           cn: '击杀守卫',
-          ko: '경비원 죽이기',
+          ko: '센트리 잡아요',
         },
       },
     },

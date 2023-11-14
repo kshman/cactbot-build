@@ -85,7 +85,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: 'Évitez normal -> ligne brillante',
           ja: '安置 -> ひかり',
           cn: '去安全区 -> 发光行',
-          ko: '안전 지대 -> 빛나는 열로 피하기',
+          ko: '안전 지대 -> 빛나는 열로 피해요',
         },
       },
     },
@@ -135,7 +135,7 @@ const triggerSet: TriggerSet<Data> = {
             fr: 'Évitez le cleave sur le tank',
             ja: 'タンク範囲攻撃回避',
             cn: '躲避坦克顺劈',
-            ko: '광역 탱버 피하기',
+            ko: '광역 탱버 피해요',
           },
         };
 
@@ -211,7 +211,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: 'Placez-vous sur la moitié rouge (loin du portail)',
           ja: '赤い安置 (ポータルから離れる)',
           cn: '站红色半场 (远离传送门)',
-          ko: '빨간색 쪽, 포탈에서 멀리 떨어지기',
+          ko: '빨간색 쪽, 포탈에서 멀리 떨어져요',
         },
       },
     },
@@ -319,7 +319,7 @@ const triggerSet: TriggerSet<Data> = {
             fr: 'Évitez les cleaves sur le tank',
             ja: 'タンク範囲攻撃回避',
             cn: '躲避坦克顺劈',
-            ko: '광역 탱버 피하기',
+            ko: '광역 탱버 피해요',
           },
         };
 
@@ -347,7 +347,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: 'Éloignez-vous de l\'orbe',
           ja: '玉から離れる',
           cn: '远离球',
-          ko: '구체와 멀리 떨어지기',
+          ko: '구체와 멀리 떨어져요',
         },
       },
     },
@@ -601,7 +601,7 @@ const triggerSet: TriggerSet<Data> = {
             fr: 'Évitez les cleaves sur le tank',
             ja: 'タンク範囲攻撃回避',
             cn: '躲避坦克顺劈',
-            ko: '광역 탱버 피하기',
+            ko: '광역 탱버 피해요',
           },
         };
 

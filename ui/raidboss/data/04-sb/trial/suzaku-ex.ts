@@ -206,7 +206,7 @@ const triggerSet: TriggerSet<Data> = {
         'Mesmerizing Melody': '유인의 선율',
         'Pay The Piper': '꼭두각시의 노래',
         'Phantom Flurry': '귀수각',
-        'Phantom Half': '전방 피하기',
+        'Phantom Half': '전방 피해요',
         'Phoenix Down': '재생의 깃털',
         'Rekindle': '재생의 불꽃',
         'Rout': '맹진',

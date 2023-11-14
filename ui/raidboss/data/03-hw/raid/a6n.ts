@@ -42,12 +42,12 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.avoidMines!(),
       outputStrings: {
         avoidMines: {
-          en: '지뢰 피해요',
+          en: 'Avoid Mines',
           de: 'Mienen vermeiden',
           fr: 'Évitez les mines',
           ja: '地雷を踏まない',
           cn: '躲开地雷',
-          ko: '지뢰 피하기',
+          ko: '지뢰 피해요',
         },
       },
     },
@@ -59,12 +59,12 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '미라지 슈퍼차지 피해요',
+          en: 'Dodge Mirage Charge',
           de: 'Superladung ausweichen',
           fr: 'Esquivez la charge de la réplique',
           ja: 'スーパーチャージを避ける',
           cn: '躲开冲锋',
-          ko: '환영 돌진 피하기',
+          ko: '미라지 돌진 피해요',
         },
       },
     },
@@ -77,7 +77,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '높은 쪽으로',
+          en: 'Go High',
           de: 'Geh Hoch',
           fr: 'Allez en haut',
           ja: '高い床に乗る',
@@ -95,7 +95,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '낮은 쪽으로',
+          en: 'Go Low',
           de: 'Geh Runter',
           fr: 'Allez en bas',
           ja: '低い床に乗る',
@@ -143,12 +143,12 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '얼음 뒤에 숨어요',
+          en: 'Hide Behind Ice',
           de: 'Hinter dem Eis verstecken',
           fr: 'Cachez-vous derrière la glace',
           ja: '氷柱の後ろに',
           cn: '躲在冰柱之后',
-          ko: '얼음 뒤에 숨기',
+          ko: '얼음 뒤에 숨어요',
         },
       },
     },
@@ -160,12 +160,12 @@ const triggerSet: TriggerSet<Data> = {
       alarmText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '얼음: 토네이도 얼려요',
+          en: 'Ice: Freeze Tornado',
           de: 'Eis: Tornado einfrieren',
           fr: 'Glace : Gelez la tornade',
           ja: '氷柱: 竜巻を凍結',
           cn: '冰柱: 冻结龙卷风',
-          ko: '얼음: 물기둥 얼리기',
+          ko: '얼음: 토네이도 얼려요',
         },
       },
     },
@@ -177,12 +177,12 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '내게 워터',
+          en: 'Water on YOU',
           de: 'Wasser auf DIR',
           fr: 'Eau sur VOUS',
           ja: '自分に水',
           cn: '水点名',
-          ko: '물징 대상자',
+          ko: '내게 워터',
         },
       },
     },
@@ -197,12 +197,12 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         text: {
-          en: '곧 워터 버려요',
+          en: 'Drop Water Soon',
           de: 'Gleich Wasser ablegen',
           fr: 'Déposez l\'eau bientôt',
           ja: '水来るよ',
           cn: '马上水分摊',
-          ko: '곧 물징 폭발',
+          ko: '곧 워터 버려요',
         },
       },
     },

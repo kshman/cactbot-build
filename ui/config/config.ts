@@ -29,17 +29,17 @@ import './config.css';
 
 // Text in the butter bar, to prompt the user to reload after a config change.
 const kReloadText = {
-  en: 'cactbot 오버레이를 새로 고쳐야 바뀐 설정이 적용됩니다.',
+  en: 'To apply configuration changes, reload cactbot overlays.',
   de: 'Um die Änderungen zu aktivieren, aktualisiere bitte die Cactbot Overlays.',
   fr: 'Afin d\'appliquer les modifications, il faut recharger l\'overlay Cactbot.',
   ja: '設定を有効にする為、Cactbotオーバーレイを再読み込みしてください',
   cn: '要应用配置更改，请重新加载cactbot悬浮窗。',
-  ko: '변경사항을 적용하려면, 오버레이를 새로고침 하십시오.',
+  ko: 'cactbot 오버레이를 새로 고쳐야 바뀐 설정이 적용되요.',
 };
 
 // Text in the butter bar reload button.
 const kReloadButtonText = {
-  en: '새로 고침',
+  en: 'Reload',
   de: 'Aktualisieren',
   fr: 'Recharger',
   ja: '再読み込み',
@@ -49,7 +49,7 @@ const kReloadButtonText = {
 
 // Text on the directory choosing button.
 const kDirectoryChooseButtonText = {
-  en: '디렉터리 선택',
+  en: 'Choose Directory',
   de: 'Wähle ein Verzeichnis',
   fr: 'Choix du répertoire',
   ja: 'ディレクトリを選択',
@@ -59,7 +59,7 @@ const kDirectoryChooseButtonText = {
 
 // What to show when a directory hasn't been chosen.
 const kDirectoryDefaultText = {
-  en: '(기본)',
+  en: '(Default)',
   de: '(Standard)',
   fr: '(Défaut)',
   ja: '(初期設定)',
@@ -70,15 +70,15 @@ const kDirectoryDefaultText = {
 // Translating data folders to a category name.
 const kPrefixToCategory = {
   '00-misc': {
-    en: '일반 트리거',
+    en: 'General Triggers',
     de: 'General Trigger',
     fr: 'Général Triggers',
     ja: '汎用',
     cn: '通用触发器',
-    ko: '공용 트리거',
+    ko: '일반 트리거',
   },
   '02-arr': {
-    en: '렐름 리본 (ARR 2.x)',
+    en: 'A Realm Reborn (ARR 2.x)',
     de: 'A Realm Reborn (ARR 2.x)',
     fr: 'A Realm Reborn (ARR 2.x)',
     ja: '新生エオルゼア (2.x)',
@@ -86,7 +86,7 @@ const kPrefixToCategory = {
     ko: '신생 에오르제아 (2.x)',
   },
   '03-hw': {
-    en: '헤븐즈워드 (HW 3.x)',
+    en: 'Heavensward (HW 3.x)',
     de: 'Heavensward (HW 3.x)',
     fr: 'Heavensward (HW 3.x)',
     ja: '蒼天のイシュガルド (3.x)',
@@ -94,7 +94,7 @@ const kPrefixToCategory = {
     ko: '창천의 이슈가르드 (3.x)',
   },
   '04-sb': {
-    en: '스텀블러드 (SB 4.x)',
+    en: 'Stormblood (SB 4.x)',
     de: 'Stormblood (SB 4.x)',
     fr: 'Stormblood (SB 4.x)',
     ja: '紅蓮のリベレーター (4.x)',
@@ -102,7 +102,7 @@ const kPrefixToCategory = {
     ko: '홍련의 해방자 (4.x)',
   },
   '05-shb': {
-    en: '샤도브링어즈 (ShB 5.x)',
+    en: 'Shadowbringers (ShB 5.x)',
     de: 'Shadowbringers (ShB 5.x)',
     fr: 'Shadowbringers (ShB 5.x)',
     ja: '漆黒のヴィランズ (5.x)',
@@ -110,7 +110,7 @@ const kPrefixToCategory = {
     ko: '칠흑의 반역자 (5.x)',
   },
   '06-ew': {
-    en: '엔드워커 (EW 6.x)',
+    en: 'Endwalker (EW 6.x)',
     de: 'Endwalker (EW 6.x)',
     fr: 'Endwalker (EW 6.x)',
     ja: '暁月のフィナーレ (6.x)',
@@ -118,27 +118,27 @@ const kPrefixToCategory = {
     ko: '효월의 종언 (6.x)',
   },
   'user': {
-    en: '사용자 트리거',
+    en: 'User Triggers',
     de: 'Benutzer Trigger',
     fr: 'Triggers personnalisés',
     ja: 'ユーザートリガー',
     cn: '自定义触发器',
-    ko: '커스텀 트리거',
+    ko: '사용자 트리거',
   },
 };
 
 // Translating data subfolders to encounter type.
 const kDirectoryToCategory = {
   alliance: {
-    en: '얼라이언스 레이드',
+    en: 'Alliance Raid',
     de: 'Allianz-Raid',
     fr: 'Raid en Alliance',
     ja: 'アライアンスレイド',
     cn: '团队任务',
-    ko: '연합 레이드',
+    ko: '얼라이언스 레이드',
   },
   dungeon: {
-    en: '던전',
+    en: 'Dungeon',
     de: 'Dungeon',
     fr: 'Donjon',
     ja: 'ダンジョン',
@@ -146,7 +146,7 @@ const kDirectoryToCategory = {
     ko: '던전',
   },
   eureka: {
-    en: '어드벤쳐링 탐색',
+    en: 'Adventuring Forays',
     de: 'Feldexkursion',
     fr: 'Missions d\'exploration',
     ja: '特殊フィールド探索',
@@ -154,7 +154,7 @@ const kDirectoryToCategory = {
     ko: '특수 필드 임무',
   },
   raid: {
-    en: '레이드',
+    en: 'Raid',
     de: 'Raid',
     fr: 'Raid',
     ja: 'レイド',
@@ -170,37 +170,37 @@ const kDirectoryToCategory = {
     ko: 'PvP',
   },
   trial: {
-    en: '트라이얼',
+    en: 'Trial',
     de: 'Prüfung',
     fr: 'Défi',
     ja: '討伐・討滅戦',
     cn: '讨伐歼灭战',
-    ko: '토벌전',
+    ko: '토벌/토멸전',
   },
   ultimate: {
-    en: '얼티밋',
+    en: 'Ultimate',
     de: 'Fatale Raids',
     fr: 'Raid fatal',
     ja: '絶シリーズ',
     cn: '绝境战',
-    ko: '절 난이도',
+    ko: '절 시리즈',
   },
   hunts: {
-    en: '몹헌과 페이트',
+    en: 'Hunts & FATEs',
     de: 'Hohe Jagd & FATEs',
     fr: 'Chasse & Aléas',
     cn: '怪物狩猎 & 危命任务',
-    ko: '마물 & 돌발',
+    ko: '몹헌 & 페이트',
   },
   map: {
-    en: '보물 지도',
+    en: 'Treasure Map',
     de: 'Schatzkarten',
     fr: 'Cartes au trésor',
     cn: '宝物地图',
     ko: '보물 지도',
   },
   deepdungeon: {
-    en: '딥던전',
+    en: 'Deep Dungeon',
     de: 'Tiefes Gewölbe',
     fr: 'Donjon sans fond',
     cn: '深层迷宫',

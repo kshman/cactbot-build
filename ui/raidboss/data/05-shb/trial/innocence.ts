@@ -77,7 +77,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: 'Évitez les charges',
           ja: '突進避けて',
           cn: '躲避冲锋',
-          ko: '돌진 피하기',
+          ko: '돌진 피해요',
         },
       },
     },

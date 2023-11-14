@@ -24,11 +24,11 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '장판을 바깥쪽에 버려요',
+          en: 'Drop Puddle Outside',
           de: 'Fläche draußen ablegen',
           fr: 'Déposez les flaques à l\'extérieur',
           cn: '远离放置圈圈',
-          ko: '바깥쪽으로 장판 유도하기',
+          ko: '바깥쪽에 장판 버려요',
         },
       },
     },
