@@ -63,20 +63,20 @@ const triggerSet: TriggerSet<Data> = {
         // cactbot-builtin-response
         output.responseOutputStrings = {
           waterOnYou: {
-            en: '물이다! 도망가욧!',
+            en: 'GTFO with water',
             de: 'Geh mit Wasser raus',
             fr: 'Partez avec l\'eau',
             ja: 'ボスから離れる',
             cn: '快躲开水',
-            ko: '나에게 물징 멀리 빠지기',
+            ko: '물이다! 도망가욧!',
           },
           waterMarker: {
-            en: '물 걸린 사람 피해욧',
+            en: 'Away from water marker',
             de: 'Weg vom Wasser Marker',
             fr: 'Éloignez-vous du marquage eau',
             ja: 'AOEから離れる',
             cn: '躲开水标记',
-            ko: '물징에서 멀리 떨어지기',
+            ko: '물 걸린 사람 피해욧',
           },
         };
 
@@ -129,11 +129,11 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '폴짝 뛰면 => 따라가서 밑으로',
+          en: 'Follow Jump => Under',
           de: 'Sprung folgen => Unter den Boss',
           ja: 'ジャンプ近づく => 下へ',
           cn: '跟随跳跃 => 脚下',
-          ko: '점프 따라가기 => 보스 아래로',
+          ko: '폴짝 뛰면 => 따라가서 밑으로',
         },
       },
     },
@@ -146,11 +146,11 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '착지점에서 떨어져욧',
+          en: 'Away From Jump',
           de: 'Weg vom Sprung',
           ja: 'ジャンプから離れる',
           cn: '远离跳跃',
-          ko: '점프뛴 곳에서 멀리 떨어지기',
+          ko: '착지점에서 떨어져욧',
         },
       },
     },

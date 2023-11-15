@@ -33,11 +33,11 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         out: Outputs.out,
         interruptOrOut: {
-          en: '밖으로 또는 인터럽트: ${name}',
+          en: 'Out or interrupt ${name}',
           de: 'Raus oder unterbreche ${name}',
           ja: '沈黙: ${name}',
           cn: '出去或打断 ${name}',
-          ko: '밖으로 또는 ${name} 시전 끊기',
+          ko: '밖으로 또는 인터럽트: ${name}',
         },
       },
     },
@@ -68,11 +68,11 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, matches, output) => output.text!({ name: matches.source }),
       outputStrings: {
         text: {
-          en: '시야 밖으로 숨어요: ${name}',
+          en: 'Break line-of-sight to ${name}',
           de: 'Unterbreche Sichtlinie zu ${name}',
           ja: '${name}の視線から隠れる',
           cn: '利用掩体卡 ${name} 的视线',
-          ko: '${name}의 시야 밖으로 숨기',
+          ko: '시야 밖으로 숨어요: ${name}',
         },
       },
     },
@@ -109,12 +109,12 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '보스에게서 멀리 떨어져요',
+          en: 'Run Away From Boss',
           de: 'Renn weg vom Boss',
           fr: 'Courez loin du boss',
           ja: 'ボスから離れる',
           cn: '远离Boss',
-          ko: '보스와 거리 벌리기',
+          ko: '보스에게서 멀리 떨어져요',
         },
       },
     },
@@ -140,12 +140,12 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '내게 구슬이',
+          en: 'Orb on YOU',
           de: 'Orb auf DIR',
           fr: 'Orbe sur VOUS',
           ja: '自分に玉',
           cn: '球点名',
-          ko: '구슬 대상자',
+          ko: '내게 구슬이',
         },
       },
     },

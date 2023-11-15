@@ -91,12 +91,12 @@ const triggerSet: TriggerSet<Data> = {
         output.text!({ player: data.party.member(matches.target) }),
       outputStrings: {
         text: {
-          en: '사슬 부셔요: ${player}',
+          en: 'Break chain on ${player}',
           de: 'Kette von ${player} brechen',
           fr: 'Cassez la chaînes sur ${player}',
           ja: '${player}の線を取る',
           cn: '截断${player}的线',
-          ko: '${player}의 사슬 부수기',
+          ko: '사슬 부셔요: ${player}',
         },
       },
     },

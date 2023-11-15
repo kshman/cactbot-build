@@ -44,12 +44,12 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '🔵파란 동그라미 바깥으로',
+          en: 'Out of blue circle',
           de: 'Raus aus dem blauen Kreis',
           fr: 'Sortez du cercle bleu',
           ja: '青い円から離れる',
           cn: '离开蓝圈',
-          ko: '파란 원 바깥으로',
+          ko: '🔵파란 동그라미 바깥으로',
         },
       },
     },
@@ -66,12 +66,12 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '흩어져요',
+          en: 'Protean',
           de: 'Um den Boss verteilen',
           fr: 'Changement',
           ja: 'ボスを基準として散開',
           cn: '和队友分散路径',
-          ko: '산개',
+          ko: '흩어져요',
         },
       },
     },
@@ -83,12 +83,12 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '줄을 바깥쪽으로',
+          en: 'Face tether out',
           de: 'Verbindung nach draußen richten',
           fr: 'Lien vers l\'extérieur',
           ja: '線を外へ向ける',
           cn: '离开人群背对连线',
-          ko: '본진 바깥으로 선 유도하기',
+          ko: '줄을 바깥쪽으로',
         },
       },
     },

@@ -29,12 +29,12 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '밀리 넉백',
+          en: 'Melee Knockback',
           de: 'Nahkämpfer Rückstoß',
           fr: 'Poussée au CaC',
           ja: '近接最大距離ノックバック',
           cn: '近战击退',
-          ko: '근거리 넉백',
+          ko: '밀리 넉백',
         },
       },
     },

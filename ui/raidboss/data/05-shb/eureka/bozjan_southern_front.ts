@@ -90,7 +90,7 @@ const orbOutputStrings = {
     fr: 'Arrêtez',
     ja: '動かない',
     cn: '停停停',
-    ko: '멈추기',
+    ko: '움직이지마',
   },
   // Special case.
   stopOutside: {
@@ -99,7 +99,7 @@ const orbOutputStrings = {
     fr: 'Arrêtez (Extérieur)',
     ja: 'ストップ (外に)',
     cn: '停停停 (外面)',
-    ko: '멈추기 (바깥에서)',
+    ko: '움직이지마 (바깥에서)',
   },
   move: {
     en: 'Move',
@@ -107,7 +107,7 @@ const orbOutputStrings = {
     fr: 'Bougez',
     ja: '動け',
     cn: '动动动',
-    ko: '움직이기',
+    ko: '움직여',
   },
   in: Outputs.in,
   out: {
@@ -124,7 +124,7 @@ const orbOutputStrings = {
     fr: 'Anneaux',
     ja: 'ドーナツ',
     cn: '月环',
-    ko: '고리장판',
+    ko: '도넛',
   },
 };
 
@@ -241,7 +241,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: 'Restez dans la charge',
           ja: '直線頭割りに入る',
           cn: '进入直线分摊',
-          ko: '돌진 장판 위에 서기',
+          ko: '다이브 돌진에 서요',
         },
       },
     },
@@ -266,7 +266,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: 'Prenez un lien',
           ja: '線を取る',
           cn: '接线',
-          ko: '선 하나 낚아채기',
+          ko: '줄 하나 채요',
         },
       },
     },
@@ -312,7 +312,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: 'Tuez le Cœur magitek',
           ja: '魔導コアを撃破',
           cn: '击杀魔导核心',
-          ko: '마도 핵 죽이기',
+          ko: '마지텍 코어 잡아요',
         },
       },
     },
@@ -403,7 +403,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: 'Tuez les météores',
           ja: 'メテオを撃破',
           cn: '击杀陨石',
-          ko: '메테오 부수기',
+          ko: '메테오 잡아요',
         },
       },
     },

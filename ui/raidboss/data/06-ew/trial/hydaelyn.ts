@@ -14,25 +14,18 @@ export interface Data extends RaidbossData {
 
 const storedMechanicsOutputStrings = {
   spread: Outputs.spread,
-  stack: {
-    en: '모두 뭉쳐요',
-    de: 'Mit der Party sammeln',
-    fr: 'Package en groupe',
-    ja: '全員集合',
-    cn: '全体分摊',
-    ko: '파티 전체 쉐어',
-  },
+  stack: Outputs.getTogether,
 };
 
 const crystallizeOutputStrings = {
   ...storedMechanicsOutputStrings,
   crystallize: {
-    en: '크리스탈라이즈: ${name}',
+    en: 'Crystallize: ${name}',
     de: 'Kristalisieren: ${name}',
     fr: 'Cristallisation : ${name}',
     ja: 'クリスタライズ: ${name}',
     cn: '水晶化: ${name}',
-    ko: '크리스탈화: ${name}',
+    ko: '크리스탈라이즈: ${name}',
   },
 };
 
@@ -114,12 +107,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         ...comboOutputStrings,
         intercards: {
-          en: '비스듬히',
+          en: 'Intercards',
           de: 'Interkardinal',
           fr: 'Intercardinal',
           ja: '斜めへ',
           cn: '四角',
-          ko: '대각선 쪽으로',
+          ko: '비스듬히',
         },
       },
     },
@@ -229,12 +222,12 @@ const triggerSet: TriggerSet<Data> = {
       run: (data) => delete data.crystallize,
       outputStrings: {
         avoid: {
-          en: '선 끝자락 피해요',
+          en: 'Avoid Line Ends',
           de: 'Weiche den Enden der Linien aus',
           fr: 'Évitez les fins de lignes',
           ja: '線の端から離れる',
           cn: '远离线',
-          ko: '선의 끝부분 피하기',
+          ko: '선 끝자락 피해요',
         },
       },
     },
@@ -245,12 +238,12 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '5x 뭉쳐 맞아요',
+          en: 'Stack 5x',
           de: '5x Sammeln',
           fr: '5x Packages',
           ja: '頭割り５回',
           cn: '5连分摊',
-          ko: '쉐어 5번',
+          ko: '5x 뭉쳐요',
         },
       },
     },

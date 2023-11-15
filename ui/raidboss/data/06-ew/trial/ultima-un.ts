@@ -109,7 +109,7 @@ const triggerSet: TriggerSet<Data> = {
           de: 'Weiche dem verfolgendem Ätheroplasma aus',
           fr: 'Évitez le laser + l\'Éthéroplasma',
           cn: '躲避追踪激光',
-          ko: '에테르 폭뢰 피하기',
+          ko: '에테르 폭뢰 피해요',
         },
       },
     },

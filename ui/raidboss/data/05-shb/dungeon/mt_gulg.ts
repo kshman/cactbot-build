@@ -24,12 +24,12 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '테일 스매시 주의',
+          en: 'Ambition Tail Smash',
           de: 'Begierde Schweifschlag',
           fr: 'Ambition, Queue fracassante',
           ja: 'テールスマッシュ',
           cn: '尾巴横扫',
-          ko: '꼬리 휘두르기 주의',
+          ko: '테일 스매시 주의',
         },
       },
     },
@@ -46,7 +46,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '정면 레이저',
+          en: 'Frontal Laser',
           de: 'Frontaler Laser',
           fr: 'Laser frontal',
           ja: 'ボス前方レーザー',
@@ -69,12 +69,12 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '부채꼴 바람 피해요',
+          en: 'dodge wind cones',
           de: 'Wind-Fächerflächen ausweichen',
           fr: 'Esquivez les cônes de vent',
           ja: '風の楔から離れる',
           cn: '躲风锥',
-          ko: '부채꼴 공격 피하기',
+          ko: '부채꼴 바람 피해요',
         },
       },
     },
@@ -105,12 +105,12 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '타워 밟아요',
+          en: 'Get Towers',
           de: 'Türme nehmen',
           fr: 'Prenez les tours',
           ja: '塔を踏む',
           cn: '踩塔',
-          ko: '장판 들어가기',
+          ko: '타워 밟아요',
         },
       },
     },
@@ -146,12 +146,12 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '칼 끝 공격 거리로',
+          en: 'max melee range',
           de: 'Maximale Nahkämpfer Entfernung',
           fr: 'À distance max du CaC',
           ja: '近接最大距離',
           cn: '最远近战距离',
-          ko: '칼끝딜',
+          ko: '칼 끝 공격 거리로',
         },
       },
     },

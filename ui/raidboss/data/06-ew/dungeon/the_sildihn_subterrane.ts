@@ -109,12 +109,12 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '넉백: 파란통🔵으로',
+          en: 'Knockback onto Blue',
           de: 'Rückstoß auf Blau',
           fr: 'Poussée sur le bleu',
           ja: '青にノックバック',
           cn: '击退至蓝色',
-          ko: '파란색쪽으로 넉백',
+          ko: '넉백: 파란통🔵으로',
         },
       },
     },
@@ -233,20 +233,20 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         standOnBlue: {
-          en: '파란통🔵으로',
+          en: 'Stand on Blue',
           de: 'Bei Blau stehen',
           fr: 'Restez sur le bleu',
           ja: '青へ',
           cn: '站蓝色',
-          ko: '파란색쪽으로',
+          ko: '파란통🔵으로',
         },
         avoidBoulders: {
-          en: '파란통🔵으로: (돌 피해요)',
+          en: 'Stand on Blue (avoid boulders)',
           de: 'Bei Blau stehen (vermeide Steine)',
           fr: 'Restez sur le bleu (évitez les rochers)',
           ja: '青へ (岩回避)',
           cn: '站蓝色 (躲避岩石)',
-          ko: '파란색쪽으로 (바위 피하기)',
+          ko: '파란통🔵으로: (돌 피해요)',
         },
       },
     },
@@ -264,12 +264,12 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '넉백: 파란통🔵으로',
+          en: 'Knockback onto Blue',
           de: 'Rückstoß zu Blau',
           fr: 'Poussée sur le bleu',
           ja: '青へノックバック',
           cn: '击退至蓝色',
-          ko: '파란색쪽으로 넉백',
+          ko: '넉백: 파란통🔵으로',
         },
       },
     },
@@ -283,12 +283,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         getBehind: Outputs.getBehind,
         getBehindOnBlue: {
-          en: '파란통🔵 뒤로',
+          en: 'Get Behind on Blue',
           de: 'Geh hinter Blau',
           fr: 'Allez derrière le bleu',
           ja: 'ボスの後ろの青へ',
           cn: 'BOSS后蓝色',
-          ko: '보스 뒤 파란색쪽으로',
+          ko: '파란통🔵 뒤로',
         },
       },
     },
@@ -299,12 +299,12 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '빨간통🔴으로: 전체 공격 + 뒤집기',
+          en: 'Stand on Red',
           de: 'Bei Rot stehen',
           fr: 'Restez sur le rouge',
           ja: '赤へ',
           cn: '站红色',
-          ko: '빨간색쪽으로',
+          ko: '빨간통🔴으로: 전체 공격 + 뒤집기',
         },
       },
     },
@@ -315,12 +315,12 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '오른쪽🡺 파란통🔵으로',
+          en: 'Stand on Right Blue',
           de: 'Steh bei dem rechten Blau',
           fr: 'Restez sur le bleu à droite',
           ja: '右の青へ',
           cn: '站右侧蓝色',
-          ko: '오른쪽 파란색쪽으로',
+          ko: '오른쪽🡺 파란통🔵으로',
         },
       },
     },
@@ -331,12 +331,12 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '🡸왼쪽 파란통🔵으로',
+          en: 'Stand on Left Blue',
           de: 'Steh bei dem linken Blau',
           fr: 'Restez sur le bleu à gauche',
           ja: '左の青へ',
           cn: '站左侧蓝色',
-          ko: '왼쪽 파란색쪽으로',
+          ko: '🡸왼쪽 파란통🔵으로',
         },
       },
     },
@@ -398,12 +398,12 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '🔵십자 장판',
+          en: 'Intercards',
           de: 'Interkardinal',
           fr: 'Intercardinal',
           ja: '斜め',
           cn: '斜角',
-          ko: '대각선 쪽으로',
+          ko: '🔵십자 장판',
         },
       },
     },
@@ -414,12 +414,12 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '따라가서 => 🔵십자 장판',
+          en: 'Follow => Intercards',
           de: 'Folgen => Interkardinal',
           fr: 'Suivez -> Intercardinal',
           ja: '近づく => 斜め',
           cn: '跟随 => 斜角',
-          ko: '따라가기 => 대각선 쪽으로',
+          ko: '따라가서 => 🔵십자 장판',
         },
       },
     },
@@ -432,12 +432,12 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           // TODO: how do you word this???
           // "Do the mechanic <se.6>"
-          en: '🔵십자 장판: 보스와 솜털',
+          en: 'Avoid Crosses from Silkie and Puffs',
           de: 'Weiche den "+" von Silkie und den Puscheln aus',
           fr: 'Évitez les croix de Silkie et des pompons',
           ja: 'ボスとたまの斜め',
           cn: '躲避交叉攻击',
-          ko: '보스와 구슬의 십자방향 피하기',
+          ko: '🔵십자 장판: 보스와 솜털',
         },
       },
     },
@@ -455,12 +455,12 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '따라가서 => 🟢바로 밑으로',
+          en: 'Follow => Under',
           de: 'Folgen => Unter Ihn',
           fr: 'Suivez -> Dessous',
           ja: '近づく => 下へ',
           cn: '跟随 => 脚下',
-          ko: '따라가기 => 밑으로',
+          ko: '따라가서 => 🟢바로 밑으로',
         },
       },
     },
@@ -482,7 +482,10 @@ const triggerSet: TriggerSet<Data> = {
       netRegex: { id: '7735', source: 'Silkie', capture: false },
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
-        text: '초록🟢 꼬리',
+        text: {
+          en: 'Green tail',
+          ko: '초록🟢 꼬리',
+        },
       },
     },
     {
@@ -512,12 +515,12 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '올라가는 기둥 타세요',
+          en: 'Get in big wind circle',
           de: 'Geh in den großen Wind-Kreis',
           fr: 'Allez dans le grand cercle de vent',
           ja: '風ゆかの中へ',
           cn: '站进大风圈',
-          ko: '큰 바람장판 안으로',
+          ko: '올라가는 기둥 타요',
         },
       },
     },
@@ -528,12 +531,12 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '링 차지 ①',
+          en: 'Outside Inner Ring (1)',
           de: 'Außerhalb des inneren Ringes (1)',
           fr: 'À l\'extérieur de l\'anneau intérieur (1)',
           ja: 'リングチャージ１',
           cn: '出内圈 (1)',
-          ko: '안쪽 고리 밖으로 (1)',
+          ko: '링 차지 ①',
         },
       },
     },
@@ -544,12 +547,12 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '링 차지 ②',
+          en: 'Outside Middle Ring (2)',
           de: 'Außerhalb des mittleren Ringes (2)',
           fr: 'À l\'extérieur de l\'anneau central (2)',
           ja: 'リングチャージ２',
           cn: '出中圈 (2)',
-          ko: '중간 고리 밖으로 (2)',
+          ko: '링 차지 ②',
         },
       },
     },
@@ -560,12 +563,12 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '링 차지 ③',
+          en: 'Outside Outer Ring (3)',
           de: 'Außerhalb des äußeren Ringes (3)',
           fr: 'À l\'extérieur de l\'anneau extérieur (3)',
           ja: 'リングチャージ３',
           cn: '出外圈 (3)',
-          ko: '바깥쪽 고리 밖으로 (3)',
+          ko: '링 차지 ③',
         },
       },
     },
@@ -583,12 +586,12 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '러시 차지 ①',
+          en: 'Behind Close Mark (1)',
           de: 'Hinter der nächsten Markierung (1)',
           fr: 'Derrière la marque de fermeture (1)',
           ja: '1番目',
           cn: '刻度 (1)',
-          ko: '첫번째 선 뒤 (1)',
+          ko: '러시 차지 ①',
         },
       },
     },
@@ -599,12 +602,12 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '러시 차지 ②',
+          en: 'Behind Middle Mark (2)',
           de: 'Hinter der mittleren Markierung (2)',
           fr: 'Derrière la marque centrale (2)',
           ja: '2番目',
           cn: '刻度 (2)',
-          ko: '두번째 선 뒤 (2)',
+          ko: '러시 차지 ②',
         },
       },
     },
@@ -615,12 +618,12 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '러시 차지 ③',
+          en: 'Behind Far Mark (3)',
           de: 'Hinter der entfernten Markierung (3)',
           fr: 'Derrière la marque éloignée (3)',
           ja: '3番目',
           cn: '刻度 (3)',
-          ko: '세번째 선 뒤 (3)',
+          ko: '러시 차지 ③',
         },
       },
     },
@@ -632,12 +635,12 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '움직여요',
+          en: 'Move Through',
           de: 'Durchlaufen',
           fr: 'Passez à travers',
           ja: 'ボスをまたいて移動',
           cn: '穿穿穿',
-          ko: '보스 통과하기',
+          ko: '가로 질러요',
         },
       },
     },
@@ -654,7 +657,10 @@ const triggerSet: TriggerSet<Data> = {
       netRegex: { id: '7645', source: 'Gladiator of Sil\'dih', capture: false },
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
-        text: '바깥에 구슬 나와요',
+        text: {
+          en: 'Outside Orbs',
+          ko: '바깥에 구슬 나와요',
+        },
       },
     },
     // 글라디에이터: Sundered Remains
@@ -665,7 +671,10 @@ const triggerSet: TriggerSet<Data> = {
       netRegex: { id: '7648', source: 'Gladiator of Sil\'dih', capture: false },
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
-        text: '바닥에 연속 장판이 깔려요~',
+        text: {
+          en: 'Puddles',
+          ko: '바닥에 연속 장판이 깔려요~',
+        },
       },
     },
     {
@@ -715,12 +724,12 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '[반대쪽] 안전지대로',
+          en: 'Reversed Slashburn',
           de: 'Umgekehrter Brandschlitzer',
           fr: 'Renversement',
           ja: 'ゆか反転',
           cn: '翻转',
-          ko: '장판 반전',
+          ko: '[반대쪽] 안전지대로',
         },
       },
     },
@@ -732,7 +741,10 @@ const triggerSet: TriggerSet<Data> = {
       durationSeconds: 7,
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
-        text: '그리드▦ 나와요',
+        text: {
+          en: 'Grid',
+          ko: '그리드▦ 나와요',
+        },
       },
     },
     // 쏜: Spring to Life + Blaze of Glory
@@ -743,7 +755,10 @@ const triggerSet: TriggerSet<Data> = {
       durationSeconds: 7,
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
-        text: '구슬 십자 + 그리드▦ 나와요',
+        text: {
+          en: 'Orb intercard + Grid',
+          ko: '구슬 십자 + 그리드▦ 나와요',
+        },
       },
     },
     // 쏜: Signal Flare
@@ -754,7 +769,10 @@ const triggerSet: TriggerSet<Data> = {
       durationSeconds: 7,
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
-        text: '세번째 있다가 → 첫번째 사라지면 들어가요',
+        text: {
+          en: 'Third place → First place',
+          ko: '세번째 있다가 → 첫번째 사라지면 들어가요',
+        },
       },
     },
     // 쏜: Blaze of Glory
@@ -765,7 +783,10 @@ const triggerSet: TriggerSet<Data> = {
       durationSeconds: 3,
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
-        text: '구슬 두개 나와요',
+        text: {
+          en: '2 Orbs',
+          ko: '구슬 두개 나와요',
+        },
       },
     },
     // Slashburn(70EF)

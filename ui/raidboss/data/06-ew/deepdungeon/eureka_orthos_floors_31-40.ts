@@ -84,12 +84,12 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '트위스터',
+          en: 'Twisters',
           de: 'Wirbelstürme',
           fr: 'Tornades',
           ja: '大竜巻',
           cn: '旋风',
-          ko: '회오리',
+          ko: '트위스터',
         },
       },
     },
@@ -100,12 +100,12 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '다이브봄',
+          en: 'DIVEBOMB',
           de: 'STURZBOMBE',
           fr: 'BOMBE PLONGEANTE',
           ja: 'ダイブボム',
           cn: '俯冲',
-          ko: '급강하',
+          ko: '다이브봄',
         },
       },
     },
@@ -116,12 +116,12 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '트위스터',
+          en: 'Twisters',
           de: 'Wirbelstürme',
           fr: 'Tornades',
           ja: 'ツイスター',
           cn: '旋风',
-          ko: '회오리',
+          ko: '트위스터',
         },
       },
     },

@@ -19,12 +19,12 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '점프 마커! 멀리 버려요!',
+          en: 'Run Marker Away',
           de: 'Mit Marker weglaufen',
           fr: 'Fuyez avec le marqueur',
           ja: 'マーカーから離れる',
           cn: '远离点名',
-          ko: '징 멀리 떨어뜨리기',
+          ko: '점프 마커! 멀리 버려요!',
         },
       },
     },
@@ -43,12 +43,12 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '월광 마커',
+          en: 'Gekko Marker',
           de: 'Gekko Marker',
           fr: 'Marqueur Gekkô',
           ja: '月光マーキング',
           cn: '月光点名',
-          ko: '월광 징',
+          ko: '월광 마커',
         },
       },
     },

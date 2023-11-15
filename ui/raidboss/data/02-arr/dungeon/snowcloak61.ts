@@ -15,11 +15,11 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '얼음 뒤에 숨어요',
+          en: 'Hide behind Ice',
           de: 'Hinter dem Eis verstecken',
           fr: 'Cachez vous derrière un pilier de glace',
           cn: '躲在冰柱后',
-          ko: '얼음 뒤에 숨기',
+          ko: '얼음 뒤에 숨어요',
         },
       },
     },

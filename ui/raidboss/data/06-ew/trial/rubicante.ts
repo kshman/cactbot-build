@@ -168,12 +168,12 @@ const triggerSet: TriggerSet<Data> = {
         northwest: Outputs.northwest,
         unknown: Outputs.unknown,
         avoidCone: {
-          en: '원뿔 피해요: ${dir}',
+          en: 'Avoid cone (from ${dir})',
           de: 'Weiche dem KEgel aus (von ${dir})',
           fr: 'Évitez le cône (depuis ${dir})',
           ja: '${dir}からの扇回避',
           cn: '躲避扇形 (从${dir})',
-          ko: '${dir}의 삼각형 장판 피하기',
+          ko: '원뿔 피해요: ${dir}',
         },
       },
     },
@@ -207,7 +207,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.avoid!(),
       outputStrings: {
         avoid: {
-          en: '선형 클레브 피하고, 안으로',
+          en: 'Avoid line cleave, then in',
           de: 'Weiche Linien Cleave aus, dann rein',
           ja: '直線AOE回避 => 中へ',
           cn: '躲避直线攻击, 然后去中间',
@@ -263,11 +263,11 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.stackBehind!(),
       outputStrings: {
         stackBehind: {
-          en: '보스 뒤에서 뭉쳐요',
+          en: 'Stack behind Boss',
           de: 'Hinter dem Boss sammeln',
           ja: 'ボスの後ろで頭割り',
           cn: 'BOSS背后分摊',
-          ko: '보스 뒤에서 쉐어',
+          ko: '보스 뒤에서 뭉쳐요',
         },
       },
     },

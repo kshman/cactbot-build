@@ -111,12 +111,12 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '머리만 공격',
+          en: 'Attack Head Only',
           de: 'Nur den Kopf angreifen',
           fr: 'Attaquez seulement la tête',
           ja: '頭だけに攻撃',
           cn: '攻击头部',
-          ko: '머리만 공격하기',
+          ko: '머리만 공격',
         },
       },
     },
@@ -129,12 +129,12 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '꼬리만 공격',
+          en: 'Attack Tail Only',
           de: 'Nur den Schwanz angreifen',
           fr: 'Attaquez seulement la queue',
           ja: 'テールだけに攻撃',
           cn: '攻击尾巴',
-          ko: '꼬리만 공격하기',
+          ko: '꼬리만 공격',
         },
       },
     },
@@ -155,12 +155,12 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '튀어나온 웨이브투스 잡아요',
+          en: 'Kill Wavetooth Add',
           de: 'Besiege Wellenzahn Add',
           fr: 'Tuez l\'add Dent-du-ressac',
           ja: 'ウェイブトゥース・サハギンに攻撃',
           cn: '优先击杀波齿鱼人',
-          ko: '물결이빨 사하긴 처치',
+          ko: '웨이브투스(물결이빨 사하긴) 잡아요',
         },
       },
     },
@@ -183,12 +183,12 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '노랑 자이레 스품 잡아요',
+          en: 'Kill Gyre Spumes',
           de: 'Besiege Gischtblase',
           fr: 'Tuez les écumes concentriques',
           ja: 'ジャイヤ・スピュームに攻撃',
           cn: '打黄泡泡',
-          ko: '노랑 물거품 처치',
+          ko: '자이레 스품(노랑 물거품) 잡아요',
         },
       },
     },
@@ -200,12 +200,12 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '웨이브 스품 나왔어요',
+          en: 'Wave Spume Adds',
           de: 'Gischtwelle Adds',
           fr: 'Adds Écumes ondulantes',
           ja: 'ウェイブ・スピューム出現',
           cn: '蓝泡泡出现',
-          ko: '파랑 물거품 출현',
+          ko: '웨이브 스품(파랑 물거품) 나왔어요',
         },
       },
     },
@@ -221,12 +221,12 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '웨이브 스품이 곧 폭발',
+          en: 'Burst Soon',
           de: 'Gischtwelle platzen gleich',
           fr: 'Burst bientôt',
           ja: 'まもなく爆発',
           cn: '黄泡泡即将爆炸',
-          ko: '물거품 폭발',
+          ko: '곧 웨이브 스품(파랑 물거품) 폭발',
         },
       },
     },
@@ -249,12 +249,12 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '스위치 눌러요!',
+          en: 'Hit The Button!',
           de: 'Mit Elementarumwandler interagieren!',
           fr: 'Activez la barrière !',
           ja: '魔法障壁を発動',
           cn: '打开开关！',
-          ko: '장벽 발동!',
+          ko: '스위치 눌러요!',
         },
       },
     },

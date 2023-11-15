@@ -51,11 +51,11 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '유령을 빛 장판으로 유도',
+          en: 'Bait ghost into light circle',
           de: 'Geist in das Licht ködern',
           fr: 'Attirez le fantôme dans la lumière',
           cn: '诱导幽灵进光圈',
-          ko: '유령 빛장판으로 유도',
+          ko: '유령을 빛 장판으로 유도',
         },
       },
     },
@@ -67,12 +67,12 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '빛 장판 버려요',
+          en: 'Drop Marker Away',
           de: 'Licht am Rand ablegen',
           fr: 'Déposez la marque au loin',
           ja: '魔界の光', // FIXME
           cn: '远离放置光点名',
-          ko: '빛장판 유도',
+          ko: '빛 장판 버려요',
         },
       },
     },
@@ -91,11 +91,11 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '유령 만져요',
+          en: 'Touch ghost',
           de: 'Geist berühren',
           fr: 'Touchez le fantôme',
           cn: '撞幽灵',
-          ko: '유령 접촉',
+          ko: '유령 만져요',
         },
       },
     },

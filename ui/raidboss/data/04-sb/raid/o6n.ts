@@ -36,11 +36,11 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '보스에게서 먼곳으로',
+          en: 'Away From Boss',
           de: 'Weg vom Boss',
           fr: 'Éloignez-vous du boss',
           cn: '远离BOSS',
-          ko: '보스에게서 떨어지기',
+          ko: '보스에게서 먼곳으로',
         },
       },
     },
@@ -52,12 +52,12 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '연속 추적 장판 버려요',
+          en: 'Drop Chasing AOE Away',
           de: 'AoEs weglocken',
           fr: 'Déposez les AoEs au loin',
           ja: '離れてAoEを置く', // FIXME
           cn: '远离放置追踪AOE',
-          ko: '연속장판 멀리빼기',
+          ko: '연속 추적 장판 버려요',
         },
       },
     },

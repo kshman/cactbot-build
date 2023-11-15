@@ -32,7 +32,7 @@ const wingOutputStrings = {
   // these say "Left Flank" (i.e. the boss's left flank) vs "Left" which could
   // mean your left or the boss's left or that you've left off reading this.
   leftFlank: {
-    en: '왼쪽',
+    en: 'Left Flank',
     de: 'Linke Flanke',
     fr: 'Flanc gauche',
     ja: '左',
@@ -40,7 +40,7 @@ const wingOutputStrings = {
     ko: '왼쪽',
   },
   rightFlank: {
-    en: '오른쪽',
+    en: 'Right Flank',
     de: 'Rechte Flanke',
     fr: 'Flanc droit',
     ja: '右',
@@ -181,15 +181,15 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         superchain1: {
-          en: '도넛 따라가요',
+          en: 'Follow Donut',
           de: 'Donut folgen',
           fr: 'Suivez le donut',
           ja: 'ドーナツへ',
           cn: '跟随月环',
-          ko: '도넛 따라가기',
+          ko: '도넛 따라가요',
         },
         superchain2: {
-          en: '짤은 도넛 => 긴 도넛',
+          en: 'Short Donut => Long Donut',
           de: 'Kurzer Donut => Langer Donut',
           fr: 'Donut court => Donut long',
           ja: '早ドーナツ => 遅ドーナツ',
@@ -197,20 +197,20 @@ const triggerSet: TriggerSet<Data> = {
           ko: '짧은 도넛 => 긴 도넛',
         },
         superchain3: {
-          en: '도넛 따라가요 (클레브 피해요)',
+          en: 'Follow Donut (avoid cleave)',
           de: 'Donut folgen (Cleave ausweichen)',
           fr: 'Suivez le donut (évitez le cleave)',
           ja: 'ボスの横からドーナツへ',
           cn: '跟随月环（远离钢铁）',
-          ko: '도넛 따라가기 (광역기 피하기)',
+          ko: '도넛 따라가요 (가운데 공격 피해요)',
         },
         superchain4: {
-          en: '동글이들 피해요',
+          en: 'Avoid Spheres',
           de: 'Spheren vermeiden',
           fr: 'Évitez les sphères',
           ja: 'オブ回避',
           cn: '远离钢铁',
-          ko: '구체 피하기',
+          ko: '동글이들 피해요',
         },
       },
     },
@@ -227,12 +227,12 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '연결된 장소 피해요',
+          en: 'Avoid Chained Platforms',
           de: 'Vermeide angekettete Platformen',
           fr: 'Évitez les plateformes enchaînées',
           ja: '壊れそうなマス回避',
           cn: '远离连线地板',
-          ko: '연결된 플랫폼 피하기',
+          ko: '연결된 장소 피해요',
         },
       },
     },

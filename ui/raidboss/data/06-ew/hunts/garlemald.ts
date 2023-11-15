@@ -21,12 +21,12 @@ const triggerSet: TriggerSet<Data> = {
       alarmText: (_data, _matches, output) => output.outAndBehind!(),
       outputStrings: {
         outAndBehind: {
-          en: '보스 뒤쪽 바깥으로',
+          en: 'Get Behind and Out',
           de: 'Geh hinter ihn und dann raus',
           fr: 'Passez derrière et à l\'extérieur',
           ja: '後ろの外側へ',
           cn: '去背后',
-          ko: '뒤로 그리고 밖으로',
+          ko: '보스 뒤쪽 바깥으로',
         },
       },
     },
@@ -38,12 +38,12 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.getFront!(),
       outputStrings: {
         getFront: {
-          en: '앞쪽으로',
+          en: 'Get Front',
           de: 'Geh nach Vorne',
           fr: 'Allez devant',
           ja: '前へ',
           cn: '去正面',
-          ko: '앞으로',
+          ko: '앞쪽으로',
         },
       },
     },
@@ -56,20 +56,20 @@ const triggerSet: TriggerSet<Data> = {
         // cactbot-builtin-response
         output.responseOutputStrings = {
           missleOnYou: {
-            en: '범위 달렷네, 도망가욧',
+            en: 'GTFO with marker',
             de: 'Geh raus mit dem Marker',
             fr: 'Partez avec le marquage',
             ja: 'ボスから離れる',
             cn: '快躲开标记',
-            ko: '나에게 징 멀리 빠지기',
+            ko: '범위 달렷네, 도망가욧',
           },
           missleMarker: {
-            en: '범위 달린 사람 피해욧',
+            en: 'Away from marker',
             de: 'Weg vom Marker',
             fr: 'Éloignez-vous du marquage',
             ja: 'マーカー付きから離れる',
             cn: '躲开标记',
-            ko: '징에서 멀리 떨어지기',
+            ko: '범위 달린 사람 피해욧',
           },
         };
 
@@ -87,20 +87,20 @@ const triggerSet: TriggerSet<Data> = {
         // cactbot-builtin-response
         output.responseOutputStrings = {
           missleOnYou: {
-            en: '도넛 범위가 달렸네, 걍 도망가욧!',
+            en: 'Place donut marker under',
             de: 'Platziere Donut-Marker unter ihm',
             fr: 'En dessous le marquage du donut',
             ja: 'ボスから離れる',
             cn: '放置环形标记',
-            ko: '나에게 도넛 장판',
+            ko: '도넛 범위가 달렸네, 걍 도망가욧!',
           },
           missleMarker: {
-            en: '도넛 달린 사람 피해욧 (원래 뭉쳐야하지만)',
+            en: 'Stack on marker',
             de: 'Auf dem Marker sammeln',
             fr: 'Packez-vous sur les marquages',
             ja: 'マーカー付きから離れる',
             cn: '标记处集合',
-            ko: '도넛징 대상자에게 붙기',
+            ko: '도넛 달린 사람 피해욧 (원래 뭉쳐야하지만)',
           },
         };
 

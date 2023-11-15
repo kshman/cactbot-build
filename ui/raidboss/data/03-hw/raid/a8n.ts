@@ -43,12 +43,12 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '슈퍼 점프 유도',
+          en: 'Bait Super Jump',
           de: 'Supersprung ködern',
           fr: 'Attirez le Super saut',
           ja: 'スーパージャンプを誘導',
           cn: '引导超级跳',
-          ko: '슈퍼 점프',
+          ko: '슈퍼 점프 유도',
         },
       },
     },
@@ -62,12 +62,12 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '메가 빔~',
+          en: 'Megabeamu~',
           de: 'Megalaser~',
           fr: 'Mégarayon~',
           ja: 'メガビーム～',
           cn: '巨型光束炮~',
-          ko: '고출력 광선~',
+          ko: '메가 빔~',
         },
       },
     },
@@ -78,12 +78,12 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '메가 빔~!',
+          en: 'Megabeamu~!',
           de: 'Megalaser~!',
           fr: 'Mégarayon~ !',
           ja: 'メガビーム～',
           cn: '巨型光束炮~!',
-          ko: '고출력 광선~!',
+          ko: '메가 빔~!',
         },
       },
     },
@@ -95,12 +95,12 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '레귤레이터들 잡아요',
+          en: 'Kill Regulators',
           de: 'Dampfregler besiegen',
           fr: 'Tuez les Régulateurs',
           ja: 'スチームジャッジを倒す',
           cn: '击杀小怪',
-          ko: '증기 감독 없애기',
+          ko: '레귤레이터들 잡아요',
         },
       },
     },
@@ -121,7 +121,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '높은 쪽으로',
+          en: 'Get High',
           de: 'Geh nach Oben',
           fr: 'Montez',
           ja: '高い床に乗る',
@@ -140,7 +140,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '낮은 쪽으로',
+          en: 'Get Down',
           de: 'Geh nach Unten',
           fr: 'Descendez',
           ja: '低い床に乗る',
@@ -219,12 +219,12 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '뭉치면 안되요! (탱크클레브)',
+          en: 'Don\'t Stack! (tank cleave)',
           de: 'Nicht Sammeln! (Tank Cleave)',
           fr: 'Ne vous packez pas ! (tank cleave)',
           ja: '集まらない! (タンクへのスラッシュ)',
           cn: '别去集合！（坦克顺劈）',
-          ko: '산개하기! (광역 탱버)',
+          ko: '뭉치면 안되요! (탱크클레브)',
         },
       },
     },
@@ -250,20 +250,20 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         superJumpOn: {
-          en: '슈퍼 점프: ${player}',
+          en: 'Super Jump on ${player}',
           de: 'Supersprung auf ${player}',
           fr: 'Super saut sur ${player}',
           ja: '${player}にスーパージャンプ',
           cn: '超级跳点${player}',
-          ko: '"${player}" 슈퍼 점프',
+          ko: '슈퍼 점프: ${player}',
         },
         superJumpOnYou: {
-          en: '내게 슈퍼 점프',
+          en: 'Super Jump on YOU',
           de: 'Supersprung auf DIR',
           fr: 'Super saut sur VOUS',
           ja: '自分にスーパージャンプ',
           cn: '超级跳点名',
-          ko: '슈퍼 점프 대상자',
+          ko: '내게 슈퍼 점프',
         },
       },
     },
@@ -275,12 +275,12 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '내게 미라지',
+          en: 'Mirage on YOU',
           de: 'Mirage auf DIR',
           fr: 'Mirage sur VOUS',
           ja: '自分にミラージュ',
           cn: '分身点名',
-          ko: '환영 징 대상자',
+          ko: '내게 미라지',
         },
       },
     },
@@ -292,12 +292,12 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '내게 얼음 미사일',
+          en: 'Ice Missile on YOU',
           de: 'Eis-Rakete auf DIR',
           fr: 'Missile de glace sur VOUS',
           ja: '自分にアイスミサイル',
           cn: '冰点名',
-          ko: '얼음 미사일 대상자',
+          ko: '내게 얼음 미사일',
         },
       },
     },
@@ -309,12 +309,12 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '미라지 슈퍼차지 피해요',
+          en: 'Avoid Mirage Dashes',
           de: 'Weiche den Replikant Ansturm aus',
           fr: 'Évitez la charge de la Réplique',
           ja: 'ミラージュの正面から離れる',
           cn: '躲避分身冲锋',
-          ko: '환영 돌진 피하기',
+          ko: '미라지 돌진 피해요',
         },
       },
     },

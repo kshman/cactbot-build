@@ -304,7 +304,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: 'Groupes heal sur les Topazes',
           ja: 'トパーズの上でヒーラーと頭割り',
           cn: '黄宝石处治疗分组分摊',
-          ko: '돌 위에서 힐러 그룹 쉐어',
+          ko: '돌 위에서 4:4 뭉쳐요',
         },
       },
     },

@@ -30,11 +30,11 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '흩어져요: 곧 크리스탈 폭발',
+          en: 'Spread: Stacks Explode Soon',
           de: 'Verteilen: Kristallstacks explodieren bald',
           fr: 'Écartez-vous : les cristaux vont exploser',
           cn: '散开: 即将爆炸',
-          ko: '산개: 곧 크리스탈 폭발',
+          ko: '흩어져요: 곧 크리스탈 폭발',
         },
       },
     },
@@ -47,11 +47,11 @@ const triggerSet: TriggerSet<Data> = {
         output.text!({ player: data.party.member(matches.target) }),
       outputStrings: {
         text: {
-          en: '만피로: ${player}',
+          en: 'Heal ${player} to full',
           de: 'Heile ${player} voll',
           fr: 'Soin complet sur ${player}',
           cn: '奶满${player}',
-          ko: '완전 회복: ${player}',
+          ko: '만피로: ${player}',
         },
       },
     },

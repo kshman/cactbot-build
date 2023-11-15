@@ -27,12 +27,12 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '클라우드 채집 위치 발견',
+          en: 'Found clouded gather point',
           de: 'Verhüllte Sammlerstelle gefunden',
           fr: 'Point de récolte évanescent détecté',
           ja: '幻の採集場探したよ！',
           cn: '梦幻采集点刷了！冲鸭！！',
-          ko: '환상의 광맥/성목 발견',
+          ko: '클라우드 채집 위치 발견',
         },
       },
     },
@@ -43,12 +43,12 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '채팅에 좌표 올라왔어요',
+          en: 'Check coordinate on chat',
           de: 'Überprüfe die Koordinaten im Chat',
           fr: 'Vérifier les coordonnées sur le Tchat',
           ja: 'チャットに座標を確認',
           cn: '检查聊天栏中的坐标',
-          ko: '디아뎀 좌표 채팅 올라옴',
+          ko: '채팅에 좌표 올라왔어요',
         },
       },
     },

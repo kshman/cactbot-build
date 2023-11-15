@@ -44,12 +44,12 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '뭉쳐서 탱크버스터',
+          en: 'Party Share Tankbuster',
           de: 'Tankbuster mit der Gruppe Teilen',
           fr: 'Partagez le Tank buster avec le groupe',
           ja: '頭割りタンクバスター',
           cn: '团队分摊死刑',
-          ko: '파티 쉐어 탱버',
+          ko: '뭉쳐서 탱크버스터',
         },
       },
     },
@@ -71,15 +71,15 @@ const triggerSet: TriggerSet<Data> = {
         // cactbot-builtin-response
         output.responseOutputStrings = {
           staffTankSwap: {
-            en: '지팡이 (탱크 스위치)',
+            en: 'Staff (Tank Swap)',
             de: 'Stab (Tankwechsel)',
             fr: 'Bâton (Tank Swap)',
             ja: '杖 (スイッチ)',
             cn: '权杖（换T）',
-            ko: '지팡이 (탱커 교대)',
+            ko: '지팡이 (탱크 스위치)',
           },
           staff: {
-            en: '지팡이',
+            en: 'Staff',
             de: 'Stab',
             fr: 'Bâton',
             ja: '杖',
@@ -105,12 +105,12 @@ const triggerSet: TriggerSet<Data> = {
         // cactbot-builtin-response
         output.responseOutputStrings = {
           swordTankSwap: {
-            en: '칼 (탱크 스위치)',
+            en: 'Sword (Tank Swap)',
             de: 'Schwert (Tankwechsel)',
             fr: 'Épée (Tank Swap)',
             ja: '剣 (スイッチ)',
             cn: '剑（换T）',
-            ko: '검 (탱커 교대)',
+            ko: '칼 (탱크 스위치)',
           },
           sword: {
             en: '칼',
@@ -118,7 +118,7 @@ const triggerSet: TriggerSet<Data> = {
             fr: 'Épée',
             ja: '剣',
             cn: '剑',
-            ko: '검',
+            ko: '칼',
           },
         };
         if (data.role === 'tank') {
@@ -216,7 +216,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: 'Poussée-Laser sur VOUS',
           ja: '自分にアバランチ',
           cn: '击退激光点名',
-          ko: '넉백 레이저 대상자',
+          ko: '내게 아발란체',
         },
       },
     },
@@ -233,7 +233,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: 'Évitez le laser',
           ja: 'アバランチを避ける',
           cn: '躲避击退激光',
-          ko: '레이저 피하기',
+          ko: '아발란체 피해요',
         },
       },
     },
@@ -275,7 +275,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: 'Libérez ${player}',
           ja: '${player}を救って',
           cn: '解救${player}',
-          ko: '${player}감옥 해제',
+          ko: '얼음: ${player}',
         },
       },
     },

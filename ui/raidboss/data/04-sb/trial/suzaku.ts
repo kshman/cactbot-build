@@ -33,12 +33,12 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '내게 줄',
+          en: 'Lady tether on YOU',
           de: 'Verbindung auf DIR',
           fr: 'Lien sur VOUS',
           ja: '線ついた',
           cn: '连线点名',
-          ko: '화염조 대상자',
+          ko: '내게 줄',
         },
       },
     },
@@ -217,7 +217,7 @@ const triggerSet: TriggerSet<Data> = {
         'Immolate': '대연소',
         'Incandescent Interlude': '작열의 음률',
         'Phantom Flurry': '귀수각',
-        'Phantom Half': '전방 피하기',
+        'Phantom Half': '전방 피해요',
         'Phoenix Down': '재생의 깃털',
         'Rekindle': '재생의 불꽃',
         'Ruthless Refrain': '거절의 선율',

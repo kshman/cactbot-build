@@ -19,12 +19,12 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '눈에서 빔 피해욧',
+          en: 'Avoid Eye Lasers',
           de: 'Weiche dem Augenlaser aus',
           fr: 'Évitez les lasers',
           ja: '目からビーム',
           cn: '躲避视线激光',
-          ko: '눈이 쏘는 레이저 피하기',
+          ko: '눈에서 빔 피해욧',
         },
       },
     },
@@ -43,12 +43,12 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '눈깔 하나 잡아욧',
+          en: 'Kill One Eye',
           de: 'Besiege ein Auge',
           fr: 'Tuez une tête',
           ja: '安置になる目を攻撃',
           cn: '击杀一只小怪',
-          ko: '눈 하나 집중해서 잡기',
+          ko: '눈깔 하나 잡아욧',
         },
       },
     },
@@ -67,12 +67,12 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '고리 시선에서 잘 피해봐욧',
+          en: 'Look Away from Rings',
           de: 'Schau von den Ringen weg',
           fr: 'Ne regardez pas l\'anneau',
           ja: '輪の目から視線回避',
           cn: '视线避开圆环',
-          ko: '고리 모양 눈 시선 피하기',
+          ko: '고리 시선 잘 피해욧',
         },
       },
     },
@@ -83,12 +83,12 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '터지는 선 순서 보고 피해요',
+          en: 'Away From Exploding Lines',
           de: 'Weg von den explodierenden Linien',
           fr: 'Éloignez-vous des lignes explosives',
           ja: '線から離れる',
           cn: '避开即将爆炸的线',
-          ko: '폭발하는 선 멀리 피하기',
+          ko: '터지는 선 순서 보고 피해요',
         },
       },
     },
@@ -138,12 +138,12 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '벽으로 넉백 당해욧',
+          en: 'Knockback Into Wall',
           de: 'Rückstoß in eine Wand',
           fr: 'Faites-vous pousser sur un mur',
           ja: '壁にノックバック',
           cn: '击退到护栏',
-          ko: '벽으로 넉백되기',
+          ko: '벽으로 넉백 당해욧',
         },
       },
     },
@@ -154,12 +154,12 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '뒤로 그리고 밖으로',
+          en: 'Get Behind and Out',
           de: 'Geh nach Hinten und Raus',
           fr: 'Passez derrière et extérieur',
           ja: '後ろの外側へ',
           cn: '去背后远离',
-          ko: '보스 뒤 바깥쪽으로',
+          ko: '뒤로 그리고 밖으로',
         },
       },
     },

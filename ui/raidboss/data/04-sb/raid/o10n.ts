@@ -33,12 +33,12 @@ const triggerSet: TriggerSet<Data> = {
       run: (data) => data.lastSpinWasHorizontal = true,
       outputStrings: {
         text: {
-          en: '다음 스핀: 안 또는 밖으로',
+          en: 'Next Spin: In or Out',
           de: 'Nächste Drehung: Rein oder raus',
           fr: 'Tour suivant : Intérieur ou Extérieur',
           ja: '次: 中/外',
           cn: '下一转:内圈/外圈',
-          ko: '다음: 안으로 혹은 밖으로',
+          ko: '다음 스핀: 안 또는 밖으로',
         },
       },
     },
@@ -50,12 +50,12 @@ const triggerSet: TriggerSet<Data> = {
       run: (data) => data.lastSpinWasHorizontal = false,
       outputStrings: {
         text: {
-          en: '다음 스핀: 모서리',
+          en: 'Next Spin: Corners',
           de: 'Nächste Drehung: Ecken',
           fr: 'Tour suivant : Coins',
           ja: '次: コーナー',
           cn: '下一转:角落',
-          ko: '다음: 모서리로',
+          ko: '다음 스핀: 구석',
         },
       },
     },
@@ -73,7 +73,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         getOut: {
-          en: '밖으로',
+          en: 'Get Out',
           de: 'Raus da',
           fr: 'Sortez',
           ja: '外へ',
@@ -81,12 +81,12 @@ const triggerSet: TriggerSet<Data> = {
           ko: '밖으로',
         },
         goToCardinals: {
-          en: '십자로',
+          en: 'Go To Cardinals',
           de: 'Geh zu den Kanten',
           fr: 'Allez sur un point cardinal',
           ja: '横や縦へ',
           cn: '去正点',
-          ko: '십자 산개',
+          ko: '십자로',
         },
       },
     },
@@ -103,7 +103,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         getIn: {
-          en: '안으로',
+          en: 'Get In',
           de: 'Rein da',
           fr: 'Passez en dessous',
           ja: '中へ',
@@ -111,7 +111,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '안으로',
         },
         goToCorners: {
-          en: '모서리로',
+          en: 'Go To Corners',
           de: 'In die Ecken',
           fr: 'Allez dans les coins',
           ja: '角へ',
@@ -150,11 +150,11 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '얼음! 바깥쪽에 버려요',
+          en: 'Drop Ice Outside',
           de: 'Eis draußen ablegen',
           fr: 'Déposez la glace à l\'extérieur',
           cn: '把冰放在外面',
-          ko: '필드 외각으로 유도',
+          ko: '얼음! 바깥쪽에 버려요',
         },
       },
     },

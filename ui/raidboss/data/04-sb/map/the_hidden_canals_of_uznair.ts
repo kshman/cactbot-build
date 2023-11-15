@@ -59,7 +59,7 @@ const triggerSet: TriggerSet<Data> = {
           en: 'Canal Crew spawned, kill in order!',
           de: 'Kanal-Mandragora erscheinen, in Reihenfolge besiegen!',
           cn: '已生成 运河蔓德拉战队, 依次击杀!',
-          ko: '만드라즈 등장, 순서대로 잡기!',
+          ko: '만드라즈 등장, 순서대로 잡아요!',
         },
       },
     },

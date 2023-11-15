@@ -18,12 +18,12 @@ const triggerSet: TriggerSet<Data> = {
         output.text!({ player: data.party.member(matches.target) }),
       outputStrings: {
         text: {
-          en: '에스나: ${player}',
+          en: 'Esuna ${player}',
           de: 'Medica ${player}',
           fr: 'Guérison sur ${player}',
           ja: '${player} にエスナ',
           cn: '驱散: ${player}',
-          ko: '${player} 에스나',
+          ko: '에스나: ${player}',
         },
       },
     },
@@ -41,11 +41,11 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         stun: Outputs.stunTarget,
         tailScrewOn: {
-          en: '테일 스크류: ${player}',
+          en: 'Tail Screw on ${player}',
           de: 'Schweifschraube auf ${player}',
           fr: 'Coup de queue sur ${player}',
           cn: '螺旋尾点${player}',
-          ko: '${player} 꼬리 후려치기',
+          ko: '테일 스크류: ${player}',
         },
       },
     },

@@ -27,7 +27,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: 'Transcendance maintenant !',
           ja: 'タンクLBを！',
           cn: '坦克LB！',
-          ko: '지금 탱리밋 사용!',
+          ko: '지금 탱크 리미트브레이크!',
         },
       },
     },
@@ -68,12 +68,12 @@ const triggerSet: TriggerSet<Data> = {
       run: (data) => data.assault = true,
       outputStrings: {
         text: {
-          en: '흩어져요 (뭉치면 죽어요!)',
+          en: 'Spread (Don\'t Stack!)',
           de: 'Verteilen (Ohne stacken)',
           fr: 'Dispersez-vous (Pas de package !)',
           ja: '散開（重ならないように）',
           cn: '分散（不要重合!）',
-          ko: '산개（모이지마세요!）',
+          ko: '흩어져요 (뭉치면 죽어요!)',
         },
       },
     },
@@ -107,7 +107,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '레이저',
+          en: 'Lasers',
           de: 'Laser',
           fr: 'Lasers',
           ja: 'レーザー',
@@ -124,12 +124,12 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '내게 장판 줄',
+          en: 'Puddle Tether on YOU',
           de: 'Flächen-Verbindung auf dir',
           fr: 'Lien Zone au sol sur VOUS',
           ja: '自分に線',
           cn: '放圈连线点名',
-          ko: '장판 남기는 선 대상자',
+          ko: '내게 장판 줄',
         },
       },
     },

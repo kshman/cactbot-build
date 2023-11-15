@@ -32,12 +32,12 @@ const triggerSet: TriggerSet<Data> = {
       // Also, technically NE/SW is safe, but having all players run together is better.
       outputStrings: {
         text: {
-          en: '북동쪽으로 가서 넉백',
+          en: 'Go NE (knockback)',
           de: 'Geh nach NO (Rückstoß)',
           fr: 'Allez au NE (poussée)',
           ja: '北東へ (ノックバック)',
           cn: '去右上 (东北)',
-          ko: '북동쪽으로 (넉백)',
+          ko: '북동쪽으로 가서 넉백',
         },
       },
     },
@@ -48,12 +48,12 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '북서쪽으로 가서 넉백',
+          en: 'Go NW (knockback)',
           de: 'Geh nach NW (Rückstoß)',
           fr: 'Allez au NO (poussée)',
           ja: '北西へ (ノックバック)',
           cn: '去左上 (西北)',
-          ko: '북서쪽으로 (넉백)',
+          ko: '북서쪽으로 가서 넉백',
         },
       },
     },

@@ -65,12 +65,12 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, outputs) => outputs.text!(),
       outputStrings: {
         text: {
-          en: '내게 5x 연속 장판!',
+          en: '5x chasing puddles on you!',
           de: '5x verfolgende Flächen auf dir!',
           fr: '5x zones au sol chainées sur vous !',
           ja: '5連続AOE回避',
           cn: '5连追踪AOE点名!',
-          ko: '따라오는 5연속 장판 피하기!',
+          ko: '내게 5x 연속 장판!',
         },
       },
     },

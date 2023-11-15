@@ -26,12 +26,12 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '타워 밟아요',
+          en: 'Get towers',
           de: 'Türme nehmen',
           fr: 'Prenez les tours',
           ja: '塔へ',
           cn: '踩塔',
-          ko: '기둥 들어가기',
+          ko: '타워 밟아요',
         },
       },
     },
@@ -76,12 +76,12 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '한가운데 안전해지면 들어가요',
+          en: 'Move center when safe',
           de: 'Geh in die Mitte, wenn es sicher ist',
           fr: 'Allez au centre quand il est sûr',
           ja: '安置に入る',
           cn: '安全时去中间',
-          ko: '중앙 바닥이 생기면 들어가기',
+          ko: '한가운데 안전해지면 들어가요',
         },
       },
     },
@@ -92,12 +92,12 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '모서리로 (동그라미 안으로)',
+          en: 'Get to edge (in circle)',
           de: 'Geh zum Rand (in den Kreisen)',
           fr: 'Allez sur le bord (dans le cercle)',
           ja: '外側の隅へ (円の中)',
           cn: '去边缘 (圆圈中)',
-          ko: '구석으로 (원 안으로)',
+          ko: '구석으로 (동그라미 안으로)',
         },
       },
     },
@@ -144,12 +144,12 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '베히모스 피해요',
+          en: 'Avoid Behemoths',
           de: 'Behemoths ausweichen',
           fr: 'Évitez les Behemoths',
           ja: 'ベヒーモスから離れる',
           cn: '躲避贝爷',
-          ko: '베히모스 피하기',
+          ko: '베히모스 피해요',
         },
       },
     },
@@ -161,12 +161,12 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '돌진 피해요',
+          en: 'Avoid line dashes',
           de: 'Linien Anstürme ausweichen',
           fr: 'Évitez les ruées en ligne',
           ja: '突進回避',
           cn: '躲避直线冲锋',
-          ko: '직선 돌진 피하기',
+          ko: '돌진 피해요',
         },
       },
     },
@@ -178,12 +178,12 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '엑사플레어 피해요',
+          en: 'Avoid Exaflares',
           de: 'Exaflares ausweichen',
           fr: 'Évitez les brasiers',
           ja: 'エクサプレア',
           cn: '躲避地火',
-          ko: '엑사플레어 피하기',
+          ko: '엑사플레어 피해요',
         },
       },
     },

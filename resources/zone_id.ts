@@ -445,7 +445,6 @@ const data = {
   'TheKeeperOfTheLake': 1063,
   'TheKeeperOfTheLake61': 150,
   'TheKillingArt': 1021,
-  'TheLavenderBeds': 340,
   'TheLabyrinthOfTheAncients': 174,
   'TheLimitlessBlueExtreme': 447,
   'TheLimitlessBlueHard': 436,

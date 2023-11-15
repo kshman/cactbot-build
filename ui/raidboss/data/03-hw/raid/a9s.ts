@@ -179,7 +179,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: 'Placez-vous dans la zone de l\'Alarum',
           ja: '紫色の沼に入る',
           cn: '站进紫色圈圈',
-          ko: '경보기 장판 밟기',
+          ko: '경보기 장판 밟아요',
         },
       },
     },

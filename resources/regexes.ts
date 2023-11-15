@@ -242,21 +242,21 @@ const parseHelper = <T extends LogDefinitionTypes>(
             (left: Record<string, unknown>, right: Record<string, unknown>): number => {
               // We check the validity of left/right because they're user-supplied
               if (typeof left !== 'object' || left[primaryKey] === undefined) {
-                console.warn('trigger에 잘못된 인수 전달:', left);
+                console.warn('Invalid argument passed to trigger:', left);
                 return 0;
               }
               const leftValue = left[primaryKey];
               if (typeof leftValue !== 'string' || !possibleKeys?.includes(leftValue)) {
-                console.warn('trigger에 잘못된 인수 전달:', left);
+                console.warn('Invalid argument passed to trigger:', left);
                 return 0;
               }
               if (typeof right !== 'object' || right[primaryKey] === undefined) {
-                console.warn('trigger에 잘못된 인수 전달:', right);
+                console.warn('Invalid argument passed to trigger:', right);
                 return 0;
               }
               const rightValue = right[primaryKey];
               if (typeof rightValue !== 'string' || !possibleKeys?.includes(rightValue)) {
-                console.warn('trigger에 잘못된 인수 전달:', right);
+                console.warn('Invalid argument passed to trigger:', right);
                 return 0;
               }
               return leftValue.toLowerCase().localeCompare(rightValue.toLowerCase());
@@ -705,8 +705,8 @@ export default class Regexes {
     for (const key of keys) {
       if (!params.includes(key)) {
         throw new Error(
-          `${funcName}: 잘못된 파라미터 '${key}'.  ` +
-            `올바른 파라미터: ${JSON.stringify(params)}`,
+          `${funcName}: invalid parameter '${key}'.  ` +
+            `Valid params: ${JSON.stringify(params)}`,
         );
       }
     }

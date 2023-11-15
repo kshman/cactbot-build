@@ -50,12 +50,12 @@ const triggerSet: TriggerSet<Data> = {
         output.text!({ player: data.party.member(matches.target) }),
       outputStrings: {
         text: {
-          en: '에스나: ${player}',
+          en: 'Esuna ${player}',
           de: 'Medica ${player}',
           fr: 'Guérison sur ${player}',
           ja: '${player} にエスナ',
           cn: '驱散: ${player}',
-          ko: '${player} 에스나',
+          ko: '에스나: ${player}',
         },
       },
     },
@@ -92,12 +92,12 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '비트 사이로 가세요',
+          en: 'Stand Between Bits',
           de: 'Zwichen den Satelliten stehen',
           fr: 'Placez-vous entre les drones',
           ja: '自動殺傷兵器の間に',
           cn: '站在浮游炮间隙躲避激光',
-          ko: '비트 사이에 자리잡기',
+          ko: '비트 사이에 자리잡아요',
         },
       },
     },
@@ -116,28 +116,28 @@ const triggerSet: TriggerSet<Data> = {
         // cactbot-builtin-response
         output.responseOutputStrings = {
           tankLaserOnYou: {
-            en: '내게 탱크 레이저',
+            en: 'Tank Laser on YOU',
             de: 'Tank Laser auf DIR',
             fr: 'Tank laser sur VOUS',
             ja: '自分に対人光線',
             cn: '坦克激光点名',
-            ko: '탱커 레이저',
+            ko: '내게 탱크 레이저',
           },
           tankLaserOnPlayer: {
-            en: '탱크 레이저: ${player}',
+            en: 'Tank Laser on ${player}',
             de: 'Tank Laser auf ${player}',
             fr: 'Tank laser sur ${player}',
             ja: '${player} に対人光線',
             cn: '坦克激光点名 ${player}',
-            ko: '탱커 레이저: ${player}',
+            ko: '탱크 레이저: ${player}',
           },
           avoidLaserOnPlayer: {
-            en: '탱크 레이저 피해요: ${player}',
+            en: 'Avoid Laser on ${player}',
             de: 'Weiche dem Laser von ${player} aus',
             fr: 'Évitez le laser sur ${player}',
             ja: '${player} への対人光線を避ける',
             cn: '远离激光点名: ${player}',
-            ko: '탱커 레이저 피하기: ${player}',
+            ko: '탱크 레이저 피해요: ${player}',
           },
         };
 
@@ -212,12 +212,12 @@ const triggerSet: TriggerSet<Data> = {
         output.cleanse!({ player: data.party.member(matches.target) }),
       outputStrings: {
         cleanse: {
-          en: '완전 회복: ${player}',
+          en: 'Heal ${player} to Full',
           de: 'Heile ${player} voll',
           fr: 'Soignez ${player} complètement',
           ja: '${player} をフル回復',
           cn: '奶满 ${player}',
-          ko: '완전 회복: ${player}',
+          ko: '만피: ${player}',
         },
       },
     },

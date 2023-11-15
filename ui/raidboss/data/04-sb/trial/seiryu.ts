@@ -23,12 +23,12 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '한줄 뭉쳐요',
+          en: 'line stack',
           de: 'Linien-Stack',
           fr: 'Packez-vous en ligne',
           ja: 'スタック',
           cn: '直线分摊',
-          ko: '직선 쉐어',
+          ko: '뭉쳐요',
         },
       },
     },
@@ -65,12 +65,12 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '타워 밟아요',
+          en: 'Get Towers',
           de: 'Türme nehmen',
           fr: 'Prenez les tours',
           ja: '塔を踏む',
           cn: '踩塔',
-          ko: '장판 하나씩 들어가기',
+          ko: '타워 밟아요',
         },
       },
     },
@@ -113,11 +113,11 @@ const triggerSet: TriggerSet<Data> = {
       run: (data, matches) => (data.redRush ??= []).push(matches.target),
       outputStrings: {
         text: {
-          en: '넉백 줄을 바깥으로 유도',
+          en: 'Point Knockback Tether Outside',
           de: 'Rückstoß-Verbindung nach draußen zeigen',
           fr: 'Orientez les liens de poussée vers l\'extérieur',
           cn: '将击退连线指向场外',
-          ko: '외곽으로 유도하기',
+          ko: '넉백 줄을 바깥으로 유도',
         },
       },
     },
@@ -130,11 +130,11 @@ const triggerSet: TriggerSet<Data> = {
       alarmText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '클레브 줄을 바깥으로 유도',
+          en: 'Point Cleave Tether Outside',
           de: 'Cleave nach draußen zeigen',
           fr: 'Orientez les liens de cleave vers l\'extérieur',
           cn: '将顺劈连线指向场外',
-          ko: '선 구석으로 유도하기',
+          ko: '클레브 줄을 바깥으로 유도',
         },
       },
     },

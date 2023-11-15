@@ -37,12 +37,12 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '스포어색에서 멀어져요',
+          en: 'Away from large pod',
           de: 'Weg vom großen Pod',
           fr: 'Éloignez-vous des spores',
           ja: 'スポアサックから離れる',
           cn: '远离大孢囊',
-          ko: '큰 포자 주머니에게서 떨어지기',
+          ko: '큰 포자 주머니에게서 멀어져요',
         },
       },
     },
@@ -57,12 +57,12 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         text: {
-          en: '에스나: ${player}',
+          en: 'Cleanse ${player}',
           de: 'Reinige ${player}',
           fr: 'Guérison sur ${player}',
           ja: 'エスナ：${player}',
           cn: '康复${player}',
-          ko: '${player} 에스나',
+          ko: '에스나: ${player}',
         },
       },
     },
@@ -130,12 +130,12 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '장판을 바깥에 버려요',
+          en: 'Drop puddle outside',
           de: 'Fläche draußen ablegen',
           fr: 'Déposez la zone au sol à l\'extérieur',
           ja: '外周に置く',
           cn: '人群外放圈圈',
-          ko: '바깥쪽으로 장판 유도하기',
+          ko: '장판을 바깥에 버려요',
         },
       },
     },

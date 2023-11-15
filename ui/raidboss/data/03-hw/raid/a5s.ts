@@ -264,7 +264,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: 'Éloignez-vous',
           ja: '外へ',
           cn: '快出去',
-          ko: '멀리 떨어지기',
+          ko: '멀리 떨어져요',
         },
       },
     },

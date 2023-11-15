@@ -58,12 +58,12 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         text: {
-          en: '얼음: ${player}',
+          en: 'Free ${player}',
           de: 'Befreie ${player}',
           fr: 'Libérez ${player}',
           ja: '${player}を救う',
           cn: '解救${player}',
-          ko: '${player}감옥 해제',
+          ko: '얼음: ${player}',
         },
       },
     },

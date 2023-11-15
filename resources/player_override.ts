@@ -65,23 +65,23 @@ export const addPlayerChangedOverrideListener = (
 // TODO: it would be nice to show the "connected / not connected" bit in the UI.
 export const addRemotePlayerSelectUI = (lang: Lang): void => {
   const instructionTextByLang = {
-    en: '플레이어를 선택하세요\n(인스턴스 안에 있으면 목록이 갱신되요)',
+    en: 'Select a Player\n(the list will update when in an instance)',
     de: 'Wähle einen Spieler\n(Diese Liste aktualisiert sich, sobald eine Instance betretten wird)',
     fr: 'Sélectionner un joueur\n (la liste se mettra à jour dans une instance)',
     ja: 'プレーヤー名を選択してください\n(インスタンスに入るとリストが更新する)',
     cn: '请选择玩家名称\n(此列表将会在进入副本后更新)',
-    ko: '플레이어를 선택하세요\n(인스턴스에 있으면 리스트가 업데이트됩니다.)',
+    ko: '플레이어를 선택하세요\n(인스턴스 안에 있으면 목록이 갱신되요)',
   };
   const forceTTSByLang = {
-    en: '강제로 TTS를 사용해요',
+    en: 'Force Enable Text To Speech',
     de: 'Erzwinge Text in Sprache (TTS)',
     fr: 'Forcer l\'activation de la synthèse vocale (TTS)',
     ja: 'TTSを強制的に有効化する',
     cn: '强制启用TTS',
-    ko: 'TTS 기능을 활성화하기',
+    ko: '강제로 TTS를 사용해요',
   };
   const buttonTextByLang = {
-    en: '오버레이 시작',
+    en: 'Start Overlay',
     de: 'Start Overlay',
     fr: 'Démarrer l\'Overlay',
     ja: 'オーバーレイを起動',
@@ -89,7 +89,7 @@ export const addRemotePlayerSelectUI = (lang: Lang): void => {
     ko: '오버레이 시작',
   };
   const defaultTextByLang = {
-    en: '(기본값)',
+    en: '(no override)',
     de: '(kein überschreiben)',
     fr: '(pas de dérogation)',
     ja: '(既定値)',

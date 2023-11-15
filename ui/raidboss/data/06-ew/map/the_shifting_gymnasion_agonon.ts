@@ -16,18 +16,18 @@ import { TriggerSet } from '../../../../../types/trigger';
 
 const agononOutputStrings = {
   spawn: {
-    en: '${name} 나타났어요!',
+    en: '${name} spawned!',
     de: '${name} erscheint!',
     ja: '${name} 現れる！',
     cn: '已生成 ${name}!',
-    ko: '${name} 등장!',
+    ko: '${name} 나타났어요!',
   },
   adds: {
-    en: '곧 쫄 나와요',
+    en: 'Adds soon',
     de: 'Bald Adds',
     ja: 'まもなくザコ出ます',
     cn: '小怪即将出现',
-    ko: '곧 쫄 나옴',
+    ko: '곧 쫄 나와요',
   },
 } as const;
 
@@ -65,11 +65,11 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '만드라고라! 순서대로 잡아요!',
+          en: 'Gymnasiou Mandragorai spawned, kill in order!',
           de: 'Gymnasiou-Mandragorai erscheinen, in Reihenfolge besiegen!',
           ja: 'マンドラゴラ！順番に倒して！',
           cn: '已生成 育体蔓德拉!',
-          ko: '만드라즈 등장, 순서대로 잡기',
+          ko: '만드라즈 등장, 순서대로 잡아요',
         },
       },
     },
@@ -108,12 +108,12 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '초록 네일 피해요',
+          en: 'Avoid green nails',
           de: 'Weiche den grünen Nägeln aus',
           fr: 'Évitez les griffes',
           ja: '緑の杭に避け',
           cn: '躲避风刃',
-          ko: '초록 발톱 피하기',
+          ko: '초록 발톱 피해요',
         },
       },
     },
@@ -174,10 +174,10 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '마커를 벽에 설치',
+          en: 'Place Marker on Wall',
           de: 'Markierung an der Wand ablegen',
           cn: '在场边放置标记',
-          ko: '벽에 징 놓기',
+          ko: '마커를 벽에 설치',
         },
       },
     },
@@ -208,10 +208,10 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '뒤로 (계속 뒤로)',
+          en: 'Get Behind (Stay Behind)',
           de: 'Geh hinter den Boss (und bleib hinter ihm stehen)',
           cn: '去背后 (待在背后)',
-          ko: '뒤로 이동 (뒤에 머물기)',
+          ko: '뒤로 (계속 뒤로)',
         },
       },
     },
@@ -322,11 +322,11 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Verdant Plume 밑으로',
+          en: 'Get Under Verdant Plume',
           de: 'Geh unter die blaue Feder',
           ja: '濃緑の羽根の下へ',
           cn: '去浓绿之羽下方',
-          ko: '진녹색 날개 밑으로',
+          ko: 'Verdant Plume 밑으로',
         },
       },
     },
@@ -337,12 +337,12 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '비스듬하게',
+          en: 'Intercards',
           de: 'Interkardinal',
           fr: 'Intercardinal',
           ja: '斜め',
           cn: '斜角',
-          ko: '대각선 쪽으로',
+          ko: '비스듬하게',
         },
       },
     },
@@ -475,12 +475,12 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '십자로',
+          en: 'Cardinals',
           de: 'Kardinal',
           fr: 'Cardinaux',
           ja: '十字回避',
           cn: '十字',
-          ko: '십자방향으로',
+          ko: '십자로',
         },
       },
     },
@@ -506,32 +506,32 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         forward: {
-          en: '강제이동: 앞',
+          en: 'March Forward into Safe Spot',
           de: 'marschiere Vorwärts in die sichere Stelle',
           ja: '強制移動: 前',
           cn: '向前强制移动到安全区',
-          ko: '강제 이동 앞',
+          ko: '강제이동: 앞',
         },
         backward: {
-          en: '강제이동: 뒤',
+          en: 'March Backward into Safe Spot',
           de: 'marschiere Rückwärts in die sichere Stelle',
           ja: '強制移動: 後ろ',
           cn: '向后强制移动到安全区',
-          ko: '강제 이동 뒤',
+          ko: '강제이동: 뒤',
         },
         left: {
-          en: '강제이동: 왼쪽',
+          en: 'March Left into Safe Spot',
           de: 'marschiere Links in die sichere Stelle',
           ja: '強制移動: 左',
           cn: '向左强制移动到安全区',
-          ko: '강제 이동 왼쪽',
+          ko: '강제이동: 왼쪽',
         },
         right: {
-          en: '강제이동: 오른쪽',
+          en: 'March Right into Safe Spot',
           de: 'marschiere Rechts in die sichere Stelle',
           ja: '強制移動: 右',
           cn: '向右强制移动到安全区',
-          ko: '강제 이동 오른쪽',
+          ko: '강제이동: 오른쪽',
         },
       },
     },

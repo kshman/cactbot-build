@@ -50,7 +50,7 @@ import {
 const kBig = 1000000000; // Something bigger than any fight length in seconds.
 
 const activeText = {
-  en: '진행:',
+  en: 'Active:',
   de: 'Aktiv:',
   fr: 'Active :',
   ja: '(進行):',

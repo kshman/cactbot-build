@@ -70,7 +70,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: 'Tuez ${name}',
           ja: '${name}を倒す',
           cn: '击杀 ${name}',
-          ko: '${name} 처치',
+          ko: '${name} 잡아요',
         },
       },
     },

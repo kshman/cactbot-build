@@ -67,12 +67,12 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '보스 서로 멀리',
+          en: 'Move bosses apart',
           de: 'Bosse auseinander ziehen',
           fr: 'Déplacez les boss séparément',
           ja: 'ボスを引き離す',
           cn: '拉开boss',
-          ko: '보스 서로 떨어뜨리기',
+          ko: '언니 오빠 서로 멀리',
         },
       },
     },
@@ -92,12 +92,12 @@ const triggerSet: TriggerSet<Data> = {
       run: (data, matches) => data.groundZero = matches.target,
       outputStrings: {
         getOut: {
-          en: '밖으로',
+          en: 'Get Out',
           de: 'Raus da',
           fr: 'Sortez',
           ja: '外へ',
           cn: '远离',
-          ko: '파티에서 멀어지기',
+          ko: '밖으로',
         },
       },
     },
@@ -110,11 +110,11 @@ const triggerSet: TriggerSet<Data> = {
       run: (data) => delete data.groundZero,
       outputStrings: {
         text: {
-          en: '언니 넉백: 오빠 범위 공격',
+          en: 'Knockback from F; Away from M',
           de: 'Rückstoß von F; Weg von M',
           fr: 'Poussée depuis F; Éloignez-vous de M',
           cn: '被女性击退; 远离男性',
-          ko: 'F 넉백, M 광역기',
+          ko: '언니 넉백 & 오빠 범위 공격',
         },
       },
     },
@@ -152,12 +152,12 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '오메가 오빠 공격',
+          en: 'Attack Omega-M',
           de: 'Omega-M angreifen',
           fr: 'Attaquez Oméga-M',
           ja: 'オメガMに攻撃',
           cn: '攻击男性',
-          ko: '오메가 M 공격',
+          ko: '오메가 오빠 공격',
         },
       },
     },
@@ -169,12 +169,12 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '오메가 언니 공격',
+          en: 'Attack Omega-F',
           de: 'Omega-W angreifen',
           fr: 'Attaquez Oméga-F',
           ja: 'オメガFに攻撃',
           cn: '攻击女性',
-          ko: '오메가 F 공격',
+          ko: '오메가 언니 공격',
         },
       },
     },

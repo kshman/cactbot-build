@@ -11,13 +11,8 @@
   },
   "files.insertFinalNewline": true,
   "files.trimTrailingWhitespace": true,
-  "pylint.args": [
-    "--errors-only"
-  ],
-  "black-formatter.args": [
-    "--line-length",
-    "100"
-  ],
+  "pylint.args": ["--errors-only"],
+  "black-formatter.args": ["--line-length", "100"],
   "search.exclude": {
     "**/node_modules": true,
     "dist/**": true

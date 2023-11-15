@@ -15,28 +15,34 @@ const ForceMoveStrings = {
   stacks: Outputs.getTogether,
   spread: Outputs.spread,
   forward: {
-    en: '강제이동: 앞 🔜 ${aim}',
+    en: 'Mindhack: Forward => ${aim}', // FIXME
     ja: '強制移動 : 前 => ${aim}',
+    ko: '강제이동: 앞 🔜 ${aim}',
   },
   backward: {
-    en: '강제이동: 뒤 🔜 ${aim}',
+    en: 'Mindhack: Back => ${aim}', // FIXME
     ja: '強制移動 : 後ろ => ${aim}',
+    ko: '강제이동: 뒤 🔜 ${aim}',
   },
   left: {
-    en: '강제이동: 왼쪽 🔜 ${aim}',
+    en: 'Mindhack: Left => ${aim}', // FIXME
     ja: '強制移動 : 左 => ${aim}',
+    ko: '강제이동: 왼쪽 🔜 ${aim}',
   },
   right: {
-    en: '강제이동: 오른쪽 🔜 ${aim}',
+    en: 'Mindhack: Right => ${aim}', // FIXME
     ja: '強制移動 : 右 => ${aim}',
+    ko: '강제이동: 오른쪽 🔜 ${aim}',
   },
   move: {
-    en: '강제이동 🔜 ${aim}',
+    en: 'Mindhack => ${aim}', // FIXME
     ja: '強制移動 => ${aim}',
+    ko: '강제이동 🔜 ${aim}',
   },
   safety: {
-    en: '안전한 곳',
+    en: 'Safe zone',
     ja: '安置へ',
+    ko: '안전한 곳',
   },
 } as const;
 
@@ -156,11 +162,17 @@ const triggerSet: TriggerSet<Data> = {
     {
       id: 'flukeGaleType',
       name: {
-        en: 'Fluke Gale 형식',
+        en: 'Fluke Gale Strat',
+        ko: 'Fluke Gale 형식',
       },
       type: 'select',
       options: {
         en: {
+          'Message only': 'spread',
+          'Pylene: Brainless': 'pylene',
+          'Hamukasu: North/South static': 'hamukatsu',
+        },
+        ko: {
           '메시지': 'spread',
           '피렌: 뇌사': 'pylene',
           '하므까스: 남북고정': 'hamukatsu',
@@ -171,11 +183,17 @@ const triggerSet: TriggerSet<Data> = {
     {
       id: 'planarTacticsType',
       name: {
-        en: 'Planar Tactics 형식',
+        en: 'Planar Tactics Strat',
+        ko: 'Planar Tactics 형식',
       },
       type: 'select',
       options: {
         en: {
+          'Count only': 'count',
+          'Poshiume: 3 left or right': 'poshiume',
+          'Hamukatsu: 3 right only': 'hamukatsu',
+        },
+        ko: {
           '카운트 표시': 'count',
           '포시우메: 3번 좌우 사용': 'poshiume',
           '하므까스: 3번 한쪽만 사용': 'hamukatsu',
@@ -186,11 +204,17 @@ const triggerSet: TriggerSet<Data> = {
     {
       id: 'pinwheelingType',
       name: {
-        en: 'Pinwheeling 형식',
+        en: 'Pinwheeling Strat',
+        ko: 'Pinwheeling 형식',
       },
       type: 'select',
       options: {
         en: {
+          'Message only': 'stack',
+          'Pino': 'pino',
+          'Spell': 'spell',
+        },
+        ko: {
           '메시지': 'stack',
           '피노': 'pino',
           '스펠': 'spell',
@@ -233,8 +257,8 @@ const triggerSet: TriggerSet<Data> = {
       suppressSeconds: 99999,
       infoText: (data, _matches, output) => {
         data.checkOptions = true;
-        if (data.options.AutumnExtend !== undefined) {
-          const ss = data.options.AutumnExtend.split(',');
+        if (data.options.AutumnParameter !== undefined) {
+          const ss = data.options.AutumnParameter.split(',');
           if (ss.length === 1 && ss[0] === 'hm') {
             data.triggerSetConfig.flukeGaleType = 'hamukatsu';
             data.triggerSetConfig.planarTacticsType = 'hamukatsu';
@@ -259,8 +283,8 @@ const triggerSet: TriggerSet<Data> = {
           }[data.triggerSetConfig.flukeGaleType],
           planar: {
             'count': '(카운트)',
-            'poshiume': '포시 양쪽',
-            'hamukatsu': '하므 한쪽',
+            'poshiume': '양쪽',
+            'hamukatsu': '한쪽',
           }[data.triggerSetConfig.planarTacticsType],
           pin: {
             'stack': '(없음)',
@@ -274,10 +298,12 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         text: {
-          en: '옵션: ${param}',
+          en: 'Option: ${param}',
+          ko: '옵션: ${param}',
         },
         options: {
           en: '${fluke}/${planar}/${pin}',
+          ko: '${fluke}/${planar}/${pin}',
         },
       },
     },
@@ -290,12 +316,14 @@ const triggerSet: TriggerSet<Data> = {
         // cactbot-builtin-response
         output.responseOutputStrings = {
           tankBusterOnYou: {
-            en: '내게 3연속 탱크버스터',
+            en: '3x Tankbuster on YOU',
             ja: '自分に3xタン強',
+            ko: '내게 3연속 탱크버스터',
           },
           tankBusterOnPlayer: {
-            en: '3연속 탱크버스터: ${player}',
+            en: '3x Tankbuster on ${player}',
             ja: '3xタン強: ${player}',
+            ko: '3연속 탱크버스터: ${player}',
           },
         };
 
@@ -320,8 +348,9 @@ const triggerSet: TriggerSet<Data> = {
         output.text!({ player: data.party.aJobName(matches.target) }),
       outputStrings: {
         text: {
-          en: '에스나: ${player}',
+          en: 'Cleanse ${player}',
           ja: 'エスナ: ${player}',
+          ko: '에스나: ${player}',
         },
       },
     },
@@ -342,10 +371,7 @@ const triggerSet: TriggerSet<Data> = {
       id: 'AAI Snipper Bubble Shower',
       type: 'StartsUsing',
       netRegex: { id: '8BB9', source: 'Aloalo Snipper', capture: false },
-      infoText: (_data, _matches, output) => output.text!(),
-      outputStrings: {
-        text: '옆으로 (앞🔜뒤 공격)',
-      },
+      response: Responses.goSides(),
     },
     {
       id: 'AAI Snipper Crab Dribble',
@@ -436,12 +462,14 @@ const triggerSet: TriggerSet<Data> = {
       run: (data, matches) => data.ketuBuffGains.push(matches),
       outputStrings: {
         bubble: {
-          en: '🔵버블',
+          en: 'Bubble',
           ja: 'バブル',
+          ko: '🔵버블',
         },
         fetters: {
-          en: '🟡바인드',
+          en: 'Fetters',
           ja: 'バインド',
+          ko: '🟡바인드',
         },
       },
     },
@@ -505,28 +533,34 @@ const triggerSet: TriggerSet<Data> = {
       run: (data) => delete data.ketuBuff,
       outputStrings: {
         pylene1: {
-          en: '1번 칸으로',
+          en: 'Go to 1',
           ja: '第1区域へ',
+          ko: '1번 칸으로',
         },
         pylene2: {
-          en: '2번 칸으로',
+          en: 'Go to 2',
           ja: '第2区域へ',
+          ko: '2번 칸으로',
         },
         hamukatsu1: {
-          en: '1번쪽 안전 칸으로',
+          en: 'Go to 1',
           ja: '第1区域の安置マスへ',
+          ko: '1번쪽 안전 칸으로',
         },
         hamukatsu2: {
-          en: '2번쪽 안전 칸으로',
+          en: 'Go to 2 safe tile ',
           ja: '第2区域の安置マスへ',
+          ko: '2번쪽 안전 칸으로',
         },
         hamukatsuBubble: {
-          en: '2번쪽 넉백하면 안전인 칸으로',
+          en: 'Go to 2 safe tile (after knockback)',
           ja: '第2区域の安置マスへ',
+          ko: '2번쪽 넉백하면 안전인 칸으로',
         },
         goSafeTile: {
-          en: '안전 타일로',
+          en: 'Go to safe tile',
           ja: '安置マスへ',
+          ko: '안전 타일로',
         },
       },
     },
@@ -595,8 +629,9 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '밖에 있다 🔜 안에서 페어',
+          en: 'Out => Stack inside',
           ja: '外 => ボスの下で頭割り',
+          ko: '밖에 있다 🔜 안에서 페어',
         },
       },
     },
@@ -607,8 +642,9 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '안에 있다 🔜 밖에서 페어',
+          en: 'In => Stack outside',
           ja: 'ボスの下 => 外側で頭割り',
+          ko: '안에 있다 🔜 밖에서 페어',
         },
       },
     },
@@ -648,20 +684,24 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         northSouthSafe: {
-          en: '⇅남북',
+          en: 'North/South',
           ja: '南・北',
+          ko: '⇅남북',
         },
         eastWestSafe: {
-          en: '⇆동서',
+          en: 'East/West',
           ja: '東・西',
+          ko: '⇆동서',
         },
         cornersSafe: {
-          en: '❌구석',
+          en: 'Corners',
           ja: '隅へ',
+          ko: '❌구석',
         },
         text: {
-          en: '안전: ${safe}',
+          en: 'Safe: ${safe}',
           ja: '安置: ${safe}',
+          ko: '안전: ${safe}',
         },
       },
     },
@@ -678,16 +718,19 @@ const triggerSet: TriggerSet<Data> = {
         output.responseOutputStrings = {
           spread: Outputs.spread,
           bubble: {
-            en: '🔵버블 (${player})',
+            en: 'Bubble (${player})',
             ja: '散会 (バブル: ${player})',
+            ko: '🔵버블 (${player})',
           },
           fetters: {
-            en: '🟡바인드 (${player})',
+            en: 'Fetters (${player})',
             ja: '散会 (バインド: ${player})',
+            ko: '🟡바인드 (${player})',
           },
           safe: {
-            en: '안전: ${safe}',
+            en: 'Safe: ${safe}',
             ja: '安置: ${safe}',
+            ko: '안전: ${safe}',
           },
         };
         if (data.ketuBuff === undefined)
@@ -726,16 +769,19 @@ const triggerSet: TriggerSet<Data> = {
       run: (data) => delete data.ketuBuff,
       outputStrings: {
         text: {
-          en: '쫄 뒤로!',
+          en: 'Behind add',
           ja: 'ざこの後ろに',
+          ko: '쫄 뒤로!',
         },
         bubble: {
-          en: '바인드🟡 쫄 뒤로!',
+          en: 'Beghind Fetters',
           ja: 'バインドのざこの後ろに',
+          ko: '바인드🟡 쫄 뒤로!',
         },
         fetters: {
-          en: '버블🔵 쫄 뒤로!',
+          en: 'Behind Bubble',
           ja: 'バブルのざこの後ろに',
+          ko: '버블🔵 쫄 뒤로!',
         },
       },
     },
@@ -753,12 +799,14 @@ const triggerSet: TriggerSet<Data> = {
       run: (data) => data.ketuHydroCount++,
       outputStrings: {
         stacks: {
-          en: '넉백 🔜 뭉쳤다 🔜 흩어져요',
+          en: 'Knockback => Stack => Spread',
           ja: 'ノックバック => 頭割り => 散開',
+          ko: '넉백 🔜 뭉쳤다 🔜 흩어져요',
         },
         spread: {
-          en: '넉백 🔜 흩어졌다 🔜 뭉쳐요',
+          en: 'Knockback => Spread => Stack',
           ja: 'ノックバック => 散開 => 頭割り',
+          ko: '넉백 🔜 흩어졌다 🔜 뭉쳐요',
         },
       },
     },
@@ -807,13 +855,16 @@ const triggerSet: TriggerSet<Data> = {
       run: (data) => data.ketuCrystalAdd = [],
       outputStrings: {
         text: {
-          en: '(슬슬 버블 타야 함)',
+          en: '(Bubble: Ready!)',
+          ko: '(슬슬 버블 타야 함)',
         },
         left: {
-          en: '(왼쪽 DPS가 버블 타야 함)',
+          en: '(Bubble: Left DPS)',
+          ko: '(왼쪽 DPS가 버블 타야 함)',
         },
         right: {
-          en: '(오른쪽 DPS가 버블 타야 함)',
+          en: '(Bubble: Right DPS)',
+          ko: '(오른쪽 DPS가 버블 타야 함)',
         },
       },
     },
@@ -825,8 +876,9 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '장판 피하면서 타워 밟아요',
+          en: 'Get Tower',
           ja: '塔踏み',
+          ko: '장판 피하면서 타워 밟아요',
         },
       },
     },
@@ -849,12 +901,14 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         itsme: {
-          en: '내게 토네이도',
+          en: 'Tornado on YOU',
           ja: '自分にトルネド',
+          ko: '내게 토네이도',
         },
         text: {
-          en: '토네이도: ${player}',
+          en: 'Tornado on ${player}',
           ja: 'トルネド: ${player}',
+          ko: '토네이도: ${player}',
         },
       },
     },
@@ -867,8 +921,9 @@ const triggerSet: TriggerSet<Data> = {
         output.text!({ player: data.party.aJobName(matches.target) }),
       outputStrings: {
         text: {
-          en: '에스나: ${player}',
+          en: 'Cleanse ${player}',
           ja: 'エスナ: ${player}',
+          ko: '에스나: ${player}',
         },
       },
     },
@@ -876,10 +931,7 @@ const triggerSet: TriggerSet<Data> = {
       id: 'AAI Wood Golem Ovation',
       type: 'StartsUsing',
       netRegex: { id: '8BC1', source: 'Aloalo Wood Golem', capture: false },
-      infoText: (_data, _matches, output) => output.text!(),
-      outputStrings: {
-        text: '옆이나 뒤로',
-      },
+      response: Responses.getBehind(),
     },
     {
       id: 'AAI Islekeeper Ancient Quaga',
@@ -894,8 +946,9 @@ const triggerSet: TriggerSet<Data> = {
       alarmText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '죽여야해!',
+          en: 'Kill!',
           ja: '倒して！',
+          ko: '죽여야해!',
         },
       },
     },
@@ -910,12 +963,14 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         itsme: {
-          en: '내게 중력',
+          en: 'Stack on YOU',
           ja: '自分にグラビデフォース',
+          ko: '내게 중력',
         },
         text: {
-          en: '중력: ${player}',
+          en: 'Stack on ${player}',
           ja: 'グラビデフォース: ${player}',
+          ko: '중력: ${player}',
         },
       },
     },
@@ -1022,8 +1077,9 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         open: {
-          en: '뚤린 곳: ${unseen}',
+          en: 'Open: ${unseen}',
           ja: '開: ${unseen}',
+          ko: '뚤린 곳: ${unseen}',
         },
         front: Outputs.front,
         back: Outputs.back,
@@ -1059,20 +1115,24 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         front: Outputs.lookTowardsBoss,
         back: {
-          en: '뒤돌아 봐요',
+          en: 'Look behind',
           ja: '後ろ見て',
+          ko: '뒤돌아 봐요',
         },
         left: {
-          en: '오른쪽 봐요',
+          en: 'Look right',
           ja: '右見て',
+          ko: '오른쪽 봐요',
         },
         right: {
-          en: '왼쪽 봐요',
+          en: 'Look left',
           ja: '左見て',
+          ko: '왼쪽 봐요',
         },
         text: {
-          en: '열린 곳을 보스로',
+          en: 'Point opening at Boss',
           ja: '開きをボスに向ける',
+          ko: '열린 곳을 보스로',
         },
       },
     },
@@ -1177,52 +1237,64 @@ const triggerSet: TriggerSet<Data> = {
       run: (data) => data.lalaAlphaGains = [],
       outputStrings: {
         count: {
-          en: '번호: ${num}',
+          en: '${num}',
           ja: 'カウント: ${num}',
+          ko: '번호: ${num}',
         },
         poshiume1out: {
-          en: '[1/바깥] 3번과 페어',
+          en: '1 Outside',
           ja: '1外、3とペア',
+          ko: '[1/바깥] 3번과 페어',
         },
         poshiume1in: {
-          en: '[1/안쪽] 2번과 페어',
+          en: '1 Inside',
           ja: '1内、2とペア',
+          ko: '[1/안쪽] 2번과 페어',
         },
         poshiume2out: {
-          en: '[2/바깥] 1,3번과 페어',
+          en: '2 Outside',
           ja: '2外、1・3とペア',
+          ko: '[2/바깥] 1,3번과 페어',
         },
         poshiume2in: {
-          en: '[2/안쪽] 2번과 페어 (${name})',
+          en: '2 Inside (w/ ${name})',
           ja: '2内、2とペア (${name})',
+          ko: '[2/안쪽] 2번과 페어 (${name})',
         },
         poshiume3left: {
-          en: '[3/아래줄 왼쪽] 1번과 페어',
+          en: '3 Left',
           ja: '3左から、1とペア',
+          ko: '[3/아래줄 왼쪽] 1번과 페어',
         },
         poshiume3right: {
-          en: '[3/아래줄 오른쪽] 2번과 페어',
+          en: '3 Right',
           ja: '3右から、2とペア',
+          ko: '[3/아래줄 오른쪽] 2번과 페어',
         },
         hamukatsu1: {
-          en: '[1] 2번과 페어',
+          en: '1',
           ja: '1、2とペア',
+          ko: '[1] 2번과 페어',
         },
         hamukatsu2: {
-          en: '[2] 1,3번과 페어',
+          en: '2',
           ja: '2、1・3とペア',
+          ko: '[2] 1,3번과 페어',
         },
         hamukatsu2left: {
-          en: '[2/왼쪽] 3번과 페어',
+          en: '2 Left',
           ja: '2左、3とペア',
+          ko: '[2/왼쪽] 3번과 페어',
         },
         hamukatsu2right: {
-          en: '[2/오른쪽] 1번과 페어',
+          en: '2 Right',
           ja: '2右、1とペア',
+          ko: '[2/오른쪽] 1번과 페어',
         },
         hamukatsu3: {
-          en: '[3] 2번과 페어',
+          en: '3',
           ja: '3、2とペア',
+          ko: '[3] 2번과 페어',
         },
         unknown: Outputs.unknown,
       },
@@ -1247,12 +1319,14 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         left: {
-          en: '강제이동: 왼쪽',
+          en: 'Mindhack: Left', // FIXME
           ja: '強制移動 : 左',
+          ko: '강제이동: 왼쪽',
         },
         right: {
-          en: '강제이동: 오른쪽',
+          en: 'Mindhack: Right', // FIXME
           ja: '強制移動 : 右',
+          ko: '강제이동: 오른쪽',
         },
       },
     },
@@ -1271,16 +1345,20 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         num1: {
-          en: '[1] 구슬 쪽 🔜 다 피해욧',
+          en: '[1]',
+          ko: '[1] 구슬 쪽 🔜 다 피해욧',
         },
         num2: {
-          en: '[2] 구슬 쪽 🔜 한번 맞아요',
+          en: '[2]',
+          ko: '[2] 구슬 쪽 🔜 한번 맞아요',
         },
         num3: {
-          en: '[3] 구슬 없는쪽 🔜 두번 맞아요',
+          en: '[3]',
+          ko: '[3] 구슬 없는쪽 🔜 두번 맞아요',
         },
         num4: {
-          en: '[4] 구슬 없는쪽 🔜 세번 맞아요',
+          en: '[4]',
+          ko: '[4] 구슬 없는쪽 🔜 세번 맞아요',
         },
       },
     },
@@ -1290,7 +1368,10 @@ const triggerSet: TriggerSet<Data> = {
       netRegex: { id: '88A2', source: 'Lala', capture: false },
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
-        text: '바깥 쫄 있는데가 북쪽!',
+        text: {
+          en: 'Find outside adds!',
+          ko: '바깥 쫄 있는데가 북쪽!',
+        },
       },
     },
     {
@@ -1300,7 +1381,10 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       run: (data) => data.lalaAlphaGains = [], // Surge Vector 리셋할 곳이 여기뿐
       outputStrings: {
-        text: '자기 자리로 흩어져요!',
+        text: {
+          en: 'Spread!',
+          ko: '자기 자리로 흩어져요!',
+        },
       },
     },
     {
@@ -1359,8 +1443,9 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         spread: {
-          en: '(먼저 흩어져요)',
+          en: '(Spread, for later)',
           ja: '(後で散会)',
+          ko: '(먼저 흩어져요)',
         },
       },
     },
@@ -1385,12 +1470,14 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         text: {
-          en: '(안전: ${safe}${arrow})',
+          en: '(${safe}${arrow}, for later)',
           ja: '(後で${safe}${arrow})',
+          ko: '(안전: ${safe}${arrow})',
         },
         stacks: {
-          en: '(먼저 뭉쳐요)',
+          en: '(Stack, for later)',
           ja: '(後で頭割り)',
+          ko: '(먼저 뭉쳐요)',
         },
       },
     },
@@ -1442,8 +1529,9 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         text: {
-          en: '안전: ${safe}${arrow}',
+          en: 'Go to ${safe}${arrow}',
           ja: '${safe}${arrow}へ',
+          ko: '안전: ${safe}${arrow}',
         },
       },
     },
@@ -1456,24 +1544,29 @@ const triggerSet: TriggerSet<Data> = {
         // cactbot-builtin-response
         output.responseOutputStrings = {
           first: {
-            en: '폭탄 피해요!',
+            en: 'Avoid Bomb!',
             ja: '爆弾回避！',
+            ko: '폭탄 피해요!',
           },
           second: {
-            en: '폭탄 위치 기억! 빙글빙글!',
+            en: 'Remember Bomb position!',
             ja: '爆弾の位置をおぼえて！',
+            ko: '폭탄 위치 기억! 빙글빙글!',
           },
           third: {
-            en: '폭탄없는 안전한 곳 찾아요!',
+            en: 'Avoid Bomb!',
             ja: '爆弾回避！',
+            ko: '폭탄없는 안전한 곳 찾아요!',
           },
           fourth: {
-            en: '${safe}${arrow} 쪽 안전한 곳으로! 도넛 조심!',
+            en: 'Go to ${safe}${arrow}, avoid donuts',
             ja: '${safe}${arrow}へ、ドーナツ回避',
+            ko: '${safe}${arrow} 쪽 안전한 곳으로! 도넛 조심!',
           },
           forthMove: {
             en: '${safe}${arrow}',
             ja: '${safe}${arrow}へ',
+            ko: '${safe}${arrow}',
           },
           ...ForceMoveStrings,
         };
@@ -1503,7 +1596,8 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '폭탄 피해서 안전한 곳으로',
+          en: 'Go to safe zone',
+          ko: '폭탄 피해서 안전한 곳으로',
         },
       },
     },
@@ -1551,20 +1645,24 @@ const triggerSet: TriggerSet<Data> = {
       run: (data) => data.stcBullsEyes = [],
       outputStrings: {
         blue: {
-          en: '🟦파랑 밟아요',
+          en: 'Go to Blue',
           ja: '青へ',
+          ko: '🟦파랑 밟아요',
         },
         yellow: {
-          en: '🟨노랑 밟아요',
+          en: 'Go to Yellow',
           ja: '黄色へ',
+          ko: '🟨노랑 밟아요',
         },
         red: {
-          en: '🟥빨강 밟아요',
+          en: 'Go to Red',
           ja: '赤へ',
+          ko: '🟥빨강 밟아요',
         },
         redCheck: {
-          en: '🟥빨강 밟아요 (탱&힐 디버프 봐야되요)',
+          en: 'Go to Red (Have to check Tank & Healer)',
           ja: '赤へ (ただしタンクとヒーラの色確認)',
+          ko: '🟥빨강 밟아요 (탱&힐 디버프 봐야되요)',
         },
       },
     },
@@ -1592,12 +1690,14 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         in: {
-          en: '한가운데로 (바깥으로 흩어질꺼임)',
+          en: 'Middle => Spread outside',
           ja: '真ん中 => 外側で散会',
+          ko: '한가운데로 (바깥으로 흩어질꺼임)',
         },
         out: {
-          en: '바깥으로 (한가운데서 뭉칠꺼임)',
+          en: 'Out => Stack in middle',
           ja: '外 => 真ん中で頭割り',
+          ko: '바깥으로 (한가운데서 뭉칠꺼임)',
         },
       },
     },
@@ -1644,8 +1744,9 @@ const triggerSet: TriggerSet<Data> = {
       run: (data) => data.stcClaws = [],
       outputStrings: {
         text: {
-          en: '내게 데스 손톱이! (${partner})',
+          en: 'Death Claw on YOU! (w/ ${partner})',
           ja: '自分にクロウ (${partner})',
+          ko: '내게 데스 손톱이! (${partner})',
         },
         unknown: Outputs.unknown,
       },
@@ -1671,8 +1772,9 @@ const triggerSet: TriggerSet<Data> = {
       run: (data) => data.stcMissiles = [],
       outputStrings: {
         text: {
-          en: '미사일 + 체인, 한가운데로! (${partner})',
+          en: 'Missile + Tether on YOU! (w/ ${partner})',
           ja: '自分にミサイル+チェイン (${partner})',
+          ko: '미사일 + 체인, 한가운데로! (${partner})',
         },
         unknown: Outputs.unknown,
       },
@@ -1691,7 +1793,8 @@ const triggerSet: TriggerSet<Data> = {
       run: (data) => data.stcSeenPinwheeling = true,
       outputStrings: {
         text: {
-          en: '꼭지점 찾아요!',
+          en: 'Find the angular point!',
+          ko: '꼭지점 찾아요!',
         },
       },
     },
@@ -1707,10 +1810,12 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         clock: {
-          en: '⤾시계 회전',
+          en: '⤾Clockwise',
+          ko: '⤾시계 회전',
         },
         counter: {
-          en: '⤿반시계 회전',
+          en: '⤿Counter Clockwise',
+          ko: '⤿반시계 회전',
         },
       },
     },
@@ -1731,8 +1836,9 @@ const triggerSet: TriggerSet<Data> = {
       run: (data) => data.stcChains = [],
       outputStrings: {
         chain: {
-          en: '내게 체인! (${partner})',
+          en: 'Tether on YOU! (w/ ${partner})',
           ja: '自分にチェイン (${partner})',
+          ko: '내게 체인! (${partner})',
         },
       },
     },
@@ -1746,36 +1852,44 @@ const triggerSet: TriggerSet<Data> = {
         // cactbot-builtin-response
         output.responseOutputStrings = {
           cutchain: {
-            en: '체인 끊어요!',
+            en: 'Break Tether!',
             ja: 'チェイン切る',
+            ko: '체인 끊어요!',
           },
           cutchaintts: {
-            en: 'チェイン切って！',
+            en: 'Cut the chain!',
             ja: 'チェイン切ってね！',
+            ko: 'チェイン切って！',
           },
           deathclaw: {
-            en: '데스 손톱 유도 🔜 뭉쳐요',
+            en: 'Bait Claw => Stack',
             ja: 'クロウ誘導 => 頭割り',
+            ko: '데스 손톱 유도 🔜 뭉쳐요',
           },
           pinoAdjust: {
-            en: '북으로! 자리 조정 페어!',
+            en: 'Pair! (Adjust)',
             ja: '北へ！ 席入れ替え',
+            ko: '북으로! 자리 조정 페어!',
           },
           pinoStacks: {
-            en: '북으로! 조정없이 페어',
+            en: 'Pair!',
             ja: '北へ',
+            ko: '북으로! 조정없이 페어',
           },
           spellStacks: {
-            en: '북으로! 페어',
+            en: 'Pair!',
             ja: '北へ',
+            ko: '북으로! 페어',
           },
           spellLeft: {
-            en: '북으로! 페어 왼쪽 (${partner})',
+            en: 'Pair and left (w/ ${partner})',
             ja: '北の左へ (${partner})',
+            ko: '북으로! 페어 왼쪽 (${partner})',
           },
           spellRight: {
-            en: '북으로! 페어 오른쪽 (${partner})',
+            en: 'Pair and right (w/ ${partner})',
             ja: '北の右へ (${partner})',
+            ko: '북으로! 페어 오른쪽 (${partner})',
           },
           stacks: Outputs.pairStack,
           unknown: Outputs.unknown,

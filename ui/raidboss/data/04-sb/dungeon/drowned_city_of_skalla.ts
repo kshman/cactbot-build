@@ -25,12 +25,12 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '버블 폭발 피해요',
+          en: 'Avoid Bubble Explosions',
           de: 'Vermeide die Blasen-Explosionen',
           fr: 'Évitez les explosions des bulles',
           ja: '泡の爆発から避ける',
           cn: '躲开泡泡爆炸',
-          ko: '거품 폭발 피하기',
+          ko: '버블 폭발 피해요',
         },
       },
     },
@@ -74,12 +74,12 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '꼬리치기!',
+          en: 'tail cleave',
           de: 'Schweif-Flächenangriff',
           fr: 'Évitez la queue',
           ja: 'しっぽ！',
           cn: '尾巴攻击',
-          ko: '꼬리쓸기',
+          ko: '꼬리쓸기!',
         },
       },
     },
@@ -97,12 +97,12 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '내게 도넛 범위',
+          en: 'Ring on YOU',
           de: 'Ring auf DIR',
           fr: 'Anneau sur VOUS',
           ja: '自分にドーナツ範囲',
           cn: '环形AoE点名',
-          ko: '나에게 도넛 장판',
+          ko: '내게 도넛 범위',
         },
       },
     },
@@ -114,12 +114,12 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '내게 십자 범위',
+          en: 'Cross on YOU',
           de: 'Kreuz auf DIR',
           fr: 'Croix sur VOUS',
           ja: '自分に十字範囲',
           cn: '十字AoE点名',
-          ko: '나에게 십자 장판',
+          ko: '내게 십자 범위',
         },
       },
     },

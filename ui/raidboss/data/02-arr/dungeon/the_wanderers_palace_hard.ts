@@ -24,11 +24,11 @@ const triggerSet: TriggerSet<Data> = {
         output.text!({ player: data.party.member(matches.target) }),
       outputStrings: {
         text: {
-          en: '만피: ${player}',
+          en: 'Heal ${player} to full',
           de: 'Heile ${player} voll',
           fr: 'Soin complet sur ${player}',
           cn: '奶满${player}',
-          ko: '완전 회복: ${player}',
+          ko: '만피: ${player}',
         },
       },
     },

@@ -39,12 +39,12 @@ export interface Data extends RaidbossData {
 
 const roleOutputStrings = {
   tankHealer: {
-    en: '탱&힐',
+    en: 'Tank/Healer',
     de: 'Tank/Heiler',
     fr: 'Tank/Healer',
     ja: 'タンク＆ヒーラ',
     cn: '坦克/治疗',
-    ko: '탱/힐',
+    ko: '탱&힐',
   },
   dps: {
     en: 'DPS',
@@ -52,10 +52,10 @@ const roleOutputStrings = {
     fr: 'DPS',
     ja: 'DPS',
     cn: 'DPS',
-    ko: '딜러',
+    ko: 'DPS',
   },
   roleTethers: {
-    en: '줄 받기: ${role}',
+    en: '${role} Tethers',
     de: '${role} Verbindung',
     fr: 'Liens ${role}',
     ja: '線もらう: ${role}',
@@ -63,57 +63,64 @@ const roleOutputStrings = {
     ko: '줄 받기: ${role}',
   },
   roleDebuffs: {
-    en: '점박이 받기: ${role}',
+    en: '${role} Role Calls',
     de: '${role} Dreifäulenoper',
     fr: 'Debuffs ${role}',
     ja: 'デバフもらう: ${role}',
     cn: '${role} 拿毒',
-    ko: '디버프 받기: ${role}',
+    ko: '점박이 받기: ${role}',
   },
   roleEverything: {
-    en: '${role} 전부예욧!',
+    en: '${role} Everything',
     de: '${role} Alles',
     fr: '${role} pour tout',
     ja: '${role} 全てもらう',
     cn: '${role} 处理全部',
-    ko: '${role} 전부 받기',
+    ko: '${role} 전부예욧!',
   },
   roleTowers: {
-    en: '타워: ${role}',
+    en: '${role} Towers',
     de: '${role} Türme',
     fr: 'Tours ${role}',
     ja: '塔: ${role}',
     cn: '${role} 踩塔',
-    ko: '기둥: ${role}',
+    ko: '타워: ${role}',
   },
   unknown: Outputs.unknown,
   // YPP
   getTether: {
-    en: '줄 받아욧!!!',
+    en: 'Get tether!!!',
+    ko: '줄 받아욧!!!',
   },
   getRoleCall: {
-    en: '점박이 받아욧!!!',
+    en: 'Get debuff!!!',
+    ko: '점박이 받아욧!!!',
   },
   passRoleCall: {
-    en: '점박이 건네욧!!!',
+    en: 'Pass debuff!!!',
+    ko: '점박이 건네욧!!!',
   },
   haveRoleCall: {
-    en: '점박이 안 받아도 되욧!!!',
+    en: 'No debuffs!!!',
+    ko: '점박이 안 받아도 되욧!!!',
   },
   stackTankHealer: {
-    en: '북쪽에서 뭉쳐욧!',
+    en: 'Stack in north!',
+    ko: '북쪽에서 뭉쳐욧!',
   },
   stackDps: {
-    en: '남쪽에서 뭉쳐욧!',
+    en: 'Stack in south!',
+    ko: '남쪽에서 뭉쳐욧!',
   },
   getTower: {
-    en: '타워로!',
+    en: 'Get tower!',
+    ko: '타워로!',
   },
 };
 
 const curtainCallOutputStrings = {
   group: {
-    en: '그룹: ${num}',
+    en: 'Group ${num}',
     de: 'Group ${num}',
     fr: 'Groupe ${num}',
     ja: '${num} 組',
@@ -162,12 +169,12 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '메테오 기다려요',
+          en: 'Stack for Puddle AOEs',
           de: 'Stacken (Pfützen)',
           fr: 'Packez les zones au sol d\'AoEs',
           ja: 'AoEを誘導',
           cn: '集合放置AOE',
-          ko: '모여서 장판 한곳에 깔기',
+          ko: '메테오 기다려요',
         },
       },
     },
@@ -189,20 +196,20 @@ const triggerSet: TriggerSet<Data> = {
       run: (data) => data.kickTwo = true,
       outputStrings: {
         baitJumpDir: {
-          en: 'MT 점프 유도: ${dir}?',
+          en: 'Bait Jump ${dir}?',
           de: 'Sprung ködern ${dir}?',
           fr: 'Attirez le saut à l\'${dir}?',
           ja: 'ジャンプ誘導?: ${dir}',
           cn: '引导跳跃 ${dir}?',
-          ko: '점프 유도?: ${dir}',
+          ko: 'MT 점프 유도: ${dir}?',
         },
         baitJump: {
-          en: 'MT 점프 유도',
+          en: 'Bait Jump?',
           de: 'Sprung ködern?',
           fr: 'Attirez le saut ?',
           ja: 'ジャンプ誘導?',
           cn: '引导跳跃?',
-          ko: '점프 유도?',
+          ko: 'MT 점프 유도',
         },
         east: Outputs.east,
         west: Outputs.west,
@@ -216,12 +223,12 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '어스세이커 유도',
+          en: 'Bait Earthshakers?',
           de: 'Erdstoß ködern?',
           fr: 'Orientez les secousses ?',
           ja: 'アスシェイカー誘導?',
           cn: '引导地震?',
-          ko: '부채꼴 공격 유도?',
+          ko: '어스세이커 유도',
         },
       },
     },
@@ -232,12 +239,12 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '물 넉백! 저항해욧!!!',
+          en: 'Middle Knockback',
           de: 'Rückstoß von der Mitte',
           fr: 'Poussée au milieu',
           ja: '真ん中でノックバック',
           cn: '中间击退',
-          ko: '중앙에서 넉백',
+          ko: '물 넉백! 저항해욧!!!',
         },
       },
     },
@@ -420,12 +427,12 @@ const triggerSet: TriggerSet<Data> = {
       alarmText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '[번개] 멀리멀리!',
+          en: 'Thunder',
           de: 'Blitz',
           fr: 'Foudre',
           ja: '雷',
           cn: '雷',
-          ko: '번개',
+          ko: '[번개] 멀리멀리!',
         },
       },
     },
@@ -442,20 +449,20 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         text: {
-          en: '[물] 넉백!',
+          en: 'Well Pinax',
           de: 'Brunnen-Pinax',
           fr: 'Pinax d\'eau',
           ja: '水',
           cn: '水',
-          ko: '물',
+          ko: '[물] 넉백!',
         },
         shiftWell: {
-          en: '[물] => 동서남북',
+          en: 'Well => Shift',
           de: 'Brunnen => Schwingen',
           fr: 'Eau => Frappe mouvante',
           ja: '水 => シフティング',
           cn: '水 => 位移',
-          ko: '물 => 이동공격',
+          ko: '[물] => 동서남북',
         },
       },
     },
@@ -475,12 +482,12 @@ const triggerSet: TriggerSet<Data> = {
         output.responseOutputStrings = {
           knockback: Outputs.knockback,
           middleKnockback: {
-            en: '가운데서 걍 넉백 당해욧!',
+            en: 'Middle Knockback',
             de: 'Rückstoß von der Mitte',
             fr: 'Poussée au milieu',
             ja: '真ん中でノックバック',
             cn: '中间击退',
-            ko: '중앙에서 넉백',
+            ko: '가운데서 걍 넉백 당해욧!',
           },
         };
 
@@ -502,12 +509,12 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.groups!(),
       outputStrings: {
         groups: {
-          en: '[불] 힐러와 뭉치기',
+          en: 'Healer Groups',
           de: 'Heiler-Gruppen',
           fr: 'Groupes sur les heals',
           ja: 'ヒラに頭割り',
           cn: '治疗分摊组',
-          ko: '힐러 그룹 쉐어',
+          ko: '[불] 4:4 힐러',
         },
       },
     },
@@ -518,12 +525,12 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '[북/A] 칼질 클레브!',
+          en: 'North Cleave',
           de: 'Cleave -> Geh in den Norden',
           fr: 'Cleave au nord',
           ja: '北の横',
           cn: '上 (北) 两侧',
-          ko: '북쪽 칼 휘두르기',
+          ko: '[북/A] 칼질 클레브!',
         },
       },
     },
@@ -534,12 +541,12 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '[동/B] 칼질 클레브!',
+          en: 'East Cleave',
           de: 'Cleave -> Geh in den Osten',
           fr: 'Cleave à l\'est',
           ja: '東の横',
           cn: '右 (东) 两侧',
-          ko: '동쪽 칼 휘두르기',
+          ko: '[동/B] 칼질 클레브!',
         },
       },
     },
@@ -550,12 +557,12 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '[남/C] 칼질 클레브!',
+          en: 'South Cleave',
           de: 'Cleave -> Geh in den Süden',
           fr: 'Cleave au sud',
           ja: '南の横',
           cn: '下 (南) 两侧',
-          ko: '남쪽 칼 휘두르기',
+          ko: '[남/C] 칼질 클레브!',
         },
       },
     },
@@ -566,12 +573,12 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '[서/D] 칼질 클레브!',
+          en: 'West Cleave',
           de: 'Cleave -> Geh in den Westen',
           fr: 'Cleave à l\'ouest',
           ja: '西の横',
           cn: '左 (西) 两侧',
-          ko: '서쪽 칼 휘두르기',
+          ko: '[서/D] 칼질 클레브!',
         },
       },
     },
@@ -582,12 +589,12 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '[북/A] 망토 넉백!',
+          en: 'North Cape',
           de: 'Rückstoß -> Geh in den Norden',
           fr: 'Poussée au nord',
           ja: '北でノックバック',
           cn: '上 (北) 击退',
-          ko: '북쪽 망토',
+          ko: '[북/A] 망토 넉백!',
         },
       },
     },
@@ -598,12 +605,12 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '[동/B] 망토 넉백!',
+          en: 'East Cape',
           de: 'Rückstoß -> Geh in den Osten',
           fr: 'Poussée à l\'est',
           ja: '東でノックバック',
           cn: '右 (东) 击退',
-          ko: '동쪽 망토',
+          ko: '[동/B] 망토 넉백!',
         },
       },
     },
@@ -614,12 +621,12 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '[남/C] 망토 넉백!',
+          en: 'South Cape',
           de: 'Rückstoß -> Geh in den Süden',
           fr: 'Poussée au sud',
           ja: '南でノックバック',
           cn: '下 (南) 击退',
-          ko: '남쪽 망토',
+          ko: '[남/C] 망토 넉백!',
         },
       },
     },
@@ -630,12 +637,12 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '[서/D] 망토 넉백!',
+          en: 'West Cape',
           de: 'Rückstoß -> Geh in den Westen',
           fr: 'Poussée à l\'ouest',
           ja: '西でノックバック',
           cn: '左 (西) 击退',
-          ko: '서쪽 망토',
+          ko: '[서/D] 망토 넉백!',
         },
       },
     },
@@ -664,7 +671,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         text: {
-          en: '역할: ${actingRole}',
+          en: 'Acting ${actingRole}',
           de: 'Handel ale ${actingRole}',
           fr: 'Rôle ${actingRole}',
           ja: 'ロール: ${actingRole}',
@@ -673,7 +680,7 @@ const triggerSet: TriggerSet<Data> = {
         },
         dps: roleOutputStrings.dps,
         healer: {
-          en: '힐러',
+          en: 'Healer',
           de: 'Heiler',
           fr: 'Healer',
           ja: 'ヒーラ',
@@ -681,12 +688,12 @@ const triggerSet: TriggerSet<Data> = {
           ko: '힐러',
         },
         tank: {
-          en: '탱크',
+          en: 'Tank',
           de: 'Tank',
           fr: 'Tank',
           ja: 'タンク',
           cn: '坦克',
-          ko: '탱커',
+          ko: '탱크',
         },
       },
     },
@@ -697,12 +704,12 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.rolePositions!(),
       outputStrings: {
         rolePositions: {
-          en: '구슬처리 위치로 가욧!',
+          en: 'Orb role positions',
           de: 'Orb Rollenposition',
           fr: 'Positions pour les orbes de rôles',
           ja: '玉、ロール散開',
           cn: '职能撞球站位',
-          ko: '구슬, 역할별 위치로',
+          ko: '구슬처리 위치로 가욧!',
         },
       },
     },
@@ -721,15 +728,15 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         text: {
-          en: '안전: ${pinax}',
+          en: '${pinax} safe',
           de: '${pinax} sicher',
           fr: '${pinax} safe',
           ja: '安置: ${pinax}',
           cn: '${pinax} 安全',
-          ko: '안전한 곳: ${pinax}',
+          ko: '안전: ${pinax}',
         },
         acid: {
-          en: '독/녹색',
+          en: 'Acid',
           de: 'Gift',
           fr: 'Poison',
           ja: '毒/緑',
@@ -737,7 +744,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '독/녹색',
         },
         lava: {
-          en: '불/빨강',
+          en: 'Lava',
           de: 'Lava',
           fr: 'Feu',
           ja: '炎/赤',
@@ -745,7 +752,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '불/빨강',
         },
         well: {
-          en: '물/하양',
+          en: 'Well',
           de: 'Brunnen',
           fr: 'Eau',
           ja: '水/白',
@@ -753,7 +760,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '물/하양',
         },
         thunder: {
-          en: '번개/파랑',
+          en: 'Thunder',
           de: 'Blitz',
           fr: 'Foudre',
           ja: '雷/青',
@@ -846,12 +853,12 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         text: {
-          en: '${dir1}/${dir2} 먼저예욧!',
+          en: '${dir1}/${dir2} first',
           de: '${dir1}/${dir2} zuerst',
           fr: '${dir1}/${dir2} en premier',
           ja: '${dir1}/${dir2}から',
           cn: '先去 ${dir1}/${dir2}',
-          ko: '${dir1}/${dir2}부터',
+          ko: '${dir1}/${dir2} 먼저예욧!',
         },
         north: Outputs.north,
         east: Outputs.east,
@@ -867,20 +874,20 @@ const triggerSet: TriggerSet<Data> = {
         data.role === 'tank' ? output.tanksInPartyOut!() : output.partyOutTanksIn!(),
       outputStrings: {
         partyOutTanksIn: {
-          en: '안쪽에서 탱크버스터!!!',
+          en: 'Party Out (Tanks In)',
           de: 'Gruppe Raus (Tanks Rein)',
           fr: 'Équipe à l\'extérieur (Tanks à l\'intérieur)',
           ja: 'ボスから離れる (タンクが内側)',
           cn: '小队出 (T进)',
-          ko: '본대 밖 (탱커 안)',
+          ko: '안쪽에서 탱크버스터!!!',
         },
         tanksInPartyOut: {
-          en: '바깥으로 (탱크 안쪽)',
+          en: 'Tanks In (Party Out)',
           de: 'Gruppe Rein (Tanks Raus)',
           fr: 'Tanks à l\'intérieur (Équipe à l\'extérieur',
           ja: 'ボスに足元へ (パーティーは離れる)',
           cn: 'T进 (小队出)',
-          ko: '탱커 안 (본대 밖)',
+          ko: '바깥으로 (탱크 안쪽)',
         },
       },
     },
@@ -892,12 +899,12 @@ const triggerSet: TriggerSet<Data> = {
         data.role === 'tank' ? output.tankbustersOut!() : output.getIn!(),
       outputStrings: {
         tankbustersOut: {
-          en: '바깥쪽에서 탱크버스터!!!',
-          de: 'Raus, Tankbuster',
-          fr: 'À l\'extérieur (Tank busters)',
-          ja: 'タンク離れる',
-          cn: '远离 (坦克死刑)',
-          ko: '바깥쪽으로 (탱버)',
+          en: 'Tanks Out (Party In)',
+          de: 'Tanks Raus (Gruppe Rein)',
+          fr: 'Tanks à l\'extérieur (Équipe à l\'intérieur',
+          ja: 'ボスからはなれる (パーティーが内側)',
+          cn: 'T出 (小队进)',
+          ko: '바깥쪽에서 탱크버스터!!!',
         },
         getIn: Outputs.in,
       },
@@ -913,7 +920,8 @@ const triggerSet: TriggerSet<Data> = {
           tankBuster: Outputs.tankBuster,
           tankBusterOnPlayer: Outputs.tankBusterOnPlayer,
           invulnerable: {
-            en: '내게 탱크버스터! 무적을 써욧!!!',
+            en: 'Tank Buster! Invulnerable!!!',
+            ko: '내게 탱크버스터! 무적을 써욧!!!',
           },
         };
         // response: Responses.sharedTankBuster(),
@@ -949,12 +957,12 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         text: {
-          en: '${dir1}/${dir2} 먼저예욧!',
+          en: '${dir1}/${dir2} first',
           de: '${dir1}/${dir2} zuerst',
           fr: '${dir1}/${dir2} en premier',
           ja: '${dir1}/${dir2}から',
           cn: '先去 ${dir1}/${dir2}',
-          ko: '${dir1}/${dir2}부터',
+          ko: '${dir1}/${dir2} 먼저예욧!',
         },
         north: Outputs.north,
         east: Outputs.east,
@@ -999,28 +1007,28 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         purpleTether: {
-          en: '다쟈, 연결: ${player}',
+          en: 'Purple (with ${player})',
           de: 'Lila (mit ${player})',
           fr: 'Violet (avec ${player})',
           ja: 'ダージャ (${player})',
           cn: '暗线 (${player})',
-          ko: '다쟈 (${player})',
+          ko: '다쟈: ${player}',
         },
         orangeTether: {
-          en: '파이가, 연결: ${player}',
+          en: 'Fire (with ${player})',
           de: 'Feuer (mit ${player})',
           fr: 'Feu (avec ${player})',
           ja: 'ファイガ (${player})',
           cn: '火线 (${player})',
-          ko: '파이가 (${player})',
+          ko: '파이가: ${player}',
         },
         greenTether: {
-          en: '에어로가, 연결: ${player}',
+          en: 'Air (with ${player})',
           de: 'Luft (mit ${player})',
           fr: 'Air (avec ${player})',
           ja: 'エアロガ (${player})',
           cn: '风线 (${player})',
-          ko: '에어로가 (${player})',
+          ko: '에어로가: ${player}',
         },
       },
     },
@@ -1049,34 +1057,34 @@ const triggerSet: TriggerSet<Data> = {
         // cactbot-builtin-response
         output.responseOutputStrings = {
           blueTether: {
-            en: '워터가, 파랑',
+            en: 'Blue Tether',
             de: 'Blaue Verbindung',
             fr: 'Lien bleu',
             ja: 'ワタガ (青)',
             cn: '蓝标连线',
-            ko: '워터가 (파랑)',
+            ko: '워터가, 파랑',
           },
           purpleTether: {
-            en: '다쟈, 보라',
+            en: 'Purple Tether',
             de: 'Lila Verbindung',
             fr: 'lien violet',
             ja: 'ダージャ(紫)',
             cn: '紫标连线',
-            ko: '다쟈 (보라색)',
+            ko: '다쟈, 보라',
           },
           blueTetherDir: {
-            en: '파란줄 (${dir})',
+            en: 'Blue Tether (${dir})',
             de: 'Blaue Verbindung (${dir})',
             fr: 'Lien bleu direction (${dir})',
             cn: '蓝标连线 (${dir})',
-            ko: '워터가 (파랑) (${dir})',
+            ko: '파란줄 (${dir})',
           },
           purpleTetherDir: {
-            en: '보라줄 (${dir})',
+            en: 'Purple Tether (${dir})',
             de: 'Lilane Verbindung (${dir})',
             fr: 'lien violet direction (${dir})',
             cn: '紫标连线 (${dir})',
-            ko: '다쟈 (보라색) (${dir})',
+            ko: '보라줄 (${dir})',
           },
           dirN: Outputs.dirN,
           dirNE: Outputs.dirNE,
@@ -1157,12 +1165,12 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         text: {
-          en: '${dir1}으로 점프시켜욧!',
+          en: 'Bait Jump ${dir1} first',
           de: 'Köder Sprung ${dir1} zuerst',
           fr: 'Attirez le saut à l\'${dir1} en premier',
           ja: 'ジャンプ誘導: ${dir1}',
           cn: '引导跳跃 先去 ${dir1}',
-          ko: '점프 유도: ${dir1} 먼저',
+          ko: '${dir1}으로 점프시켜욧!',
         },
         east: Outputs.east,
         west: Outputs.west,
@@ -1183,12 +1191,12 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '연결된 깃털 부근에서 흩어지기',
+          en: 'Spread at tethered thorn',
           de: 'Verteilen bei der Dornenhecke',
           fr: 'Dispersez-vous vers une épine liée',
           ja: '結ばれた羽の方で散開',
           cn: '在连线荆棘处散开',
-          ko: '연결된 가시 주위로 산개',
+          ko: '연결된 깃털 부근에서 흩어지기',
         },
       },
     },
@@ -1209,12 +1217,12 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         text: {
-          en: '깃털 ${num}번째',
+          en: '${num}',
           de: '${num}',
           fr: '${num}',
           ja: '羽: ${num}番目',
           cn: '${num}',
-          ko: '가시: ${num}번째',
+          ko: '깃털 ${num}번째',
         },
       },
     },
@@ -1270,12 +1278,12 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.protean!(),
       outputStrings: {
         protean: {
-          en: '하데스 비-임!!!!',
+          en: 'Protean',
           de: 'Himmelsrichtungen',
           fr: 'Positions',
           ja: '8方向散開',
           cn: '分散站位',
-          ko: '정해진 위치로 산개',
+          ko: '하데스 비-임!!!!',
         },
       },
     },
@@ -1286,7 +1294,8 @@ const triggerSet: TriggerSet<Data> = {
       alarmText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '파랑: 반대편 한칸, 보라: 가까이 한칸',
+          en: 'Blue: Opposite, Purple: Closed',
+          ko: '파랑: 반대편 한칸, 보라: 가까이 한칸',
         },
       },
     },
@@ -1302,7 +1311,8 @@ const triggerSet: TriggerSet<Data> = {
       alarmText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '뒤로 당겨서 줄 끊어욧!',
+          en: 'Break Tether!',
+          ko: '뒤로 당겨서 줄 끊어욧!',
         },
       },
     },

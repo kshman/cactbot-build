@@ -26,12 +26,12 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '메테오 피해요',
+          en: 'Avoid meteor',
           de: 'Vermeide Meteor',
           fr: 'Évitez le météore',
           ja: 'メテオ回避',
           cn: '远离陨石',
-          ko: '메테오 피하기',
+          ko: '메테오 피해요',
         },
       },
     },
@@ -66,12 +66,12 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '보스 뒤로 갔다 밖으로',
+          en: 'Get behind, then out',
           de: 'Geh hinter, dann raus',
           fr: 'Derrière puis extérieur',
           ja: '後ろ => 外へ',
           cn: '去背后 => 远离',
-          ko: '보스 뒤로 => 밖으로',
+          ko: '보스 뒤로 갔다 밖으로',
         },
       },
     },
@@ -113,12 +113,12 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         clones: {
-          en: '${dir1}${dir2}${dir3}${dir4}',
+          en: 'Clones: ${dir1}->${dir2}->${dir3}->${dir4}',
           de: 'Klone: ${dir1}->${dir2}->${dir3}->${dir4}',
           fr: 'Clones : ${dir1}->${dir2}->${dir3}->${dir4}',
           ja: '${dir1}->${dir2}->${dir3}->${dir4}',
           cn: '分身：${dir1}->${dir2}->${dir3}->${dir4}',
-          ko: '분신: ${dir1}->${dir2}->${dir3}->${dir4}',
+          ko: '분신: ${dir1}${dir2}${dir3}${dir4}',
         },
         unknown: Outputs.unknown,
         ...Directions.outputStringsCardinalDir,
@@ -140,12 +140,12 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         text: {
-          en: '먼저 밖으로 갔다 뭉쳐요: ${player}',
+          en: 'Out first => stack w/ ${player}',
           de: 'Zuerst Raus => Sammeln mit ${player}',
           fr: 'Extérieur d\'abord => package avec ${player}',
           ja: '外へ => あたまわり (${player})',
           cn: '远离 => 与 ${player} 分摊',
-          ko: '밖으로 => ${player} 쉐어',
+          ko: '먼저 밖으로 갔다 뭉쳐요: ${player}',
         },
       },
     },

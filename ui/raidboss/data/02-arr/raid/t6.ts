@@ -146,7 +146,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: 'Évitez Dévoration',
           ja: '捕食を避ける',
           cn: '躲开吞食',
-          ko: '포식 피하기',
+          ko: '포식 피해요',
         },
         jumpInNewThorns: {
           en: 'Devour: Jump In New Thorns',
@@ -154,7 +154,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: 'Dévoration : Sautez dans les ronces',
           ja: '捕食: 新芽に乗る',
           cn: '去新荆棘',
-          ko: '포식: 가시장판 밟기',
+          ko: '포식: 가시장판 밟아요',
         },
         getEaten: {
           en: 'Devour: Get Eaten',
@@ -246,7 +246,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: 'Partagez le laser (sur VOUS)',
           ja: '(自分に)頭割りレーザー',
           cn: '分摊激光点名',
-          ko: '직선 쉐어 대상자',
+          ko: '내게 레이져 (뭉쳐야함)',
         },
         shareLaserOn: {
           en: 'Share Laser (on ${player})',
@@ -254,7 +254,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: 'Partage de laser (sur ${player})',
           ja: '(${player})に頭割りレーザー',
           cn: '分摊激光点(on ${player})',
-          ko: '${player} 직선 쉐어',
+          ko: '뭉쳐요: ${player}',
         },
       },
     },

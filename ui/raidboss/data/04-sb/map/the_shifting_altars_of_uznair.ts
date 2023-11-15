@@ -18,7 +18,7 @@ const uznairOutputStrings = {
     en: 'Adds soon',
     de: 'Bald Adds',
     cn: '小怪即将出现',
-    ko: '곧 쫄 나옴',
+    ko: '곧 쫄 나와요',
   },
 } as const;
 
@@ -70,7 +70,7 @@ const triggerSet: TriggerSet<Data> = {
           en: 'Altar Assembly spawned, kill in order!',
           de: 'Altar-Mandragora erscheinen, in Reihenfolge besiegen!',
           cn: '已生成 神殿蔓德拉战队, 依次击杀!',
-          ko: '만드라즈 등장, 순서대로 잡기!',
+          ko: '만드라즈 등장, 순서대로 잡아요!',
         },
       },
     },

@@ -28,12 +28,12 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '돌진 피해요',
+          en: 'Avoid dashes',
           de: 'Sprint ausweichen',
           fr: 'Évitez les charges',
           ja: 'ブレードを避ける',
           cn: '躲开冲锋',
-          ko: '돌진 피하기',
+          ko: '돌진 피해요',
         },
       },
     },
@@ -67,12 +67,12 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         text: {
-          en: '실드 배시: ${player}',
+          en: 'Heal + shield ${player}',
           de: 'Heilung + Schild ${player}',
           fr: 'Soin + bouclier ${player}',
           ja: 'すぐに${player}をヒールする',
           cn: '马上治疗${player}',
-          ko: '${player} 강타 대상자',
+          ko: '실드 배시: ${player}',
         },
       },
     },
@@ -104,12 +104,12 @@ const triggerSet: TriggerSet<Data> = {
       alarmText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '균열에서 멀어져요',
+          en: 'Away from rifts',
           de: 'Weg von de Ätherspalten',
           fr: 'Éloignez-vous des déchirures',
           ja: '裂け目から離れる',
           cn: '远离黑圈',
-          ko: '균열에서 멀리 떨어지기',
+          ko: '균열에서 멀리 떨어져요',
         },
       },
     },
@@ -143,12 +143,12 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '마칭 나이트 피해요',
+          en: 'Evade marching knights',
           de: 'Marschierenden Rittern ausweichen',
           fr: 'Esquivez les chevaliers',
           ja: 'ナイトを避ける',
           cn: '躲开人马',
-          ko: '자동기사 피하기',
+          ko: '마칭 나이트(자동기사) 피해요',
         },
       },
     },

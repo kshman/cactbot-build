@@ -235,7 +235,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: 'Évitez le laser',
           ja: 'ノックバックレーザーを避ける',
           cn: '躲避击退激光',
-          ko: '레이저 피하기',
+          ko: '레이저 피해요',
         },
       },
     },

@@ -63,12 +63,12 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '내게 에어로 장판',
+          en: 'Puddle on YOU',
           de: 'Fläche auf DIR',
           fr: 'Zone au sol sur VOUS',
           ja: '自分に風',
           cn: '风圈点名',
-          ko: '장판 대상자',
+          ko: '내게 에어로 장판',
         },
       },
     },

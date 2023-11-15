@@ -40,12 +40,12 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.getFront!(),
       outputStrings: {
         getFront: {
-          en: '꼬리치기! 앞으로',
+          en: 'Get Front',
           de: 'Geh nach Vorne',
           fr: 'Allez devant',
           ja: '前へ',
           cn: '去正面',
-          ko: '앞으로',
+          ko: '꼬리치기! 앞으로',
         },
       },
     },
@@ -58,12 +58,12 @@ const triggerSet: TriggerSet<Data> = {
       alarmText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '착지점에서 멀리가욧',
+          en: 'Away from jump',
           de: 'Weg vom Sprung',
           fr: 'Éloignez-vous du saut',
           ja: '着地点から離れる',
           cn: '躲开跳跃',
-          ko: '점프뛴 곳에서 멀리 떨어지기',
+          ko: '착지점에서 멀리가욧',
         },
       },
     },
@@ -211,11 +211,11 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '◎바로 밑에서 => 엉댕이로',
+          en: 'Under => Back',
           de: 'Unter Ihn => Hinter den Boss',
           ja: '下 => 後ろ',
           cn: '脚下 => 背后',
-          ko: '안으로 => 뒤로',
+          ko: '◎바로 밑에서 => 엉댕이로',
         },
       },
     },
@@ -227,11 +227,11 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '↔옆에 있다가 => 엉댕이로',
+          en: 'Sides => Back',
           de: 'Seiten => Hinter den Boss',
           ja: '横 => 後ろ',
           cn: '两侧 => 背后',
-          ko: '옆으로 => 뒤로',
+          ko: '↔옆에 있다가 => 엉댕이로',
         },
       },
     },
@@ -243,11 +243,11 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '◎바로 밑에서 => 앞으로',
+          en: 'Under => Front',
           de: 'Unter Ihn => Vor den Boss',
           ja: '下 => 前',
           cn: '脚下 => 正面',
-          ko: '안으로 => 앞으로',
+          ko: '◎바로 밑에서 => 앞으로',
         },
       },
     },
@@ -259,11 +259,11 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '↔옆에 있다가 => 앞으로',
+          en: 'Sides => Front',
           de: 'Seiten => Vor den Boss',
           ja: '横 => 前',
           cn: '两侧 => 正面',
-          ko: '옆으로 => 앞으로',
+          ko: '↔옆에 있다가 => 앞으로',
         },
       },
     },
@@ -301,18 +301,18 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         northSouth: {
-          en: '남북 끝으로 (앞뒤 확인해야해요)',
+          en: 'Go North / South edge',
           de: 'Geh zur Kante im Norden / Süden',
-          ja: '南・北の角へ',
+          ja: '南北の隅へ',
           cn: '去南北边缘',
-          ko: '남/북쪽 끝으로',
+          ko: '남북 끝으로 (앞뒤 확인해야해요)',
         },
         eastWest: {
-          en: '동서 끝으로 (앞뒤 확인해야해요)',
+          en: 'Go East / West edge',
           de: 'Geh zur Kante im Osten / Westen',
-          ja: '東・西の角へ',
+          ja: '東西の隅へ',
           cn: '去东西边缘',
-          ko: '동/서쪽 끝으로',
+          ko: '동서 끝으로 (앞뒤 확인해야해요)',
         },
       },
     },

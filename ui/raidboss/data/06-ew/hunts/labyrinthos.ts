@@ -24,12 +24,12 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.followCharge!(),
       outputStrings: {
         followCharge: {
-          en: '돌진 따라가서 밑에 붙어욧',
+          en: 'Follow charge',
           de: 'Folge dem Ansturm',
           fr: 'Suivez la charge',
           ja: 'ボス従う',
           cn: '跟随冲锋',
-          ko: '돌진 따라가기',
+          ko: '돌진 따라가서 밑에 붙어욧',
         },
       },
     },
