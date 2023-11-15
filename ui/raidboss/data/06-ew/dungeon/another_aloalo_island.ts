@@ -1,4 +1,4 @@
-import Autumns from '../../../../../resources/autumns';
+import Autumn from '../../../../../resources/autumn';
 import Conditions from '../../../../../resources/conditions';
 import Outputs from '../../../../../resources/outputs';
 import { Responses } from '../../../../../resources/responses';
@@ -1229,7 +1229,7 @@ const triggerSet: TriggerSet<Data> = {
               return output.hamukatsu2left!();
           }
 
-          return Autumns.JobPriority(my.jindex) < Autumns.JobPriority(pm.jindex)
+          return Autumn.jobPriority(my.jindex) < Autumn.jobPriority(pm.jindex)
             ? output.hamukatsu2left!()
             : output.hamukatsu2right!();
         }
@@ -1935,8 +1935,8 @@ const triggerSet: TriggerSet<Data> = {
             return { alertText: output.spellLeft!({ partner: data.party.aJobName(partner) }) };
           }
 
-          const myprior = Autumns.JobPriority(data.party.aJobIndex(data.me)!);
-          const otherprior = Autumns.JobPriority(other.jindex);
+          const myprior = Autumn.jobPriority(data.party.aJobIndex(data.me)!);
+          const otherprior = Autumn.jobPriority(other.jindex);
           return myprior < otherprior
             ? { alertText: output.spellLeft!({ partner: data.party.aJobName(other.name) }) }
             : { alertText: output.spellRight!({ partner: data.party.aJobName(other.name) }) };

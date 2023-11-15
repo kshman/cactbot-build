@@ -1,4 +1,4 @@
-import Autumns, { ArrowOutput8, AutumnIndicator } from '../../../../../resources/autumns';
+import Autumn, { ArrowOutput8, AutumnIndicators } from '../../../../../resources/autumn';
 import Conditions from '../../../../../resources/conditions';
 import Outputs from '../../../../../resources/outputs';
 import { callOverlayHandler } from '../../../../../resources/overlay_plugin_api';
@@ -1882,9 +1882,9 @@ const triggerSet: TriggerSet<Data> = {
           return;
 
         const name = data.party.member(data.me);
-        if (data.options.AutumnStyle && (data.job !== 'BLU' || Autumns.IsBlueName(name.nick))) {
+        if (data.options.AutumnStyle && (data.job !== 'BLU' || Autumn.isRoleName(name.nick))) {
           const pos: TowerLocation[] = [];
-          const isdps = data.job === 'BLU' ? Autumns.IsBluDps(name.nick) : data.role === 'dps';
+          const isdps = data.job === 'BLU' ? Autumn.isDpsName(name.nick) : data.role === 'dps';
           towerList.forEach((value) => {
             const location = value.location;
             if (matches.effectId === engravementIdMap.lightTower) {
@@ -4505,7 +4505,7 @@ const triggerSet: TriggerSet<Data> = {
           data.darknessClones.forEach((clone) => {
             const x = parseFloat(clone.x);
             const y = parseFloat(clone.y);
-            const cloneDir = AutumnIndicator.xyToArrow8Output(x, y, uavCenterX, uavCenterY);
+            const cloneDir = AutumnIndicators.xyToArrow8Output(x, y, uavCenterX, uavCenterY);
             const pairedDir = unsafeMap[cloneDir];
             safeDirs = safeDirs.filter((dir) => dir !== cloneDir && dir !== pairedDir);
           });
@@ -4519,8 +4519,8 @@ const triggerSet: TriggerSet<Data> = {
             arrow = getUltimaRayArrow(data.role === 'dps', dir1, dir2);
           } else {
             const name = data.party.member(data.me);
-            if (Autumns.IsBlueName(name.nick))
-              arrow = getUltimaRayArrow(Autumns.IsBluDps(name.nick), dir1, dir2);
+            if (Autumn.isRoleName(name.nick))
+              arrow = getUltimaRayArrow(Autumn.isDpsName(name.nick), dir1, dir2);
           }
           if (arrow !== undefined)
             return output.moveTo!({ dir: output[arrow]!() });
@@ -4564,7 +4564,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '${dir}으로',
         },
         ...Directions.outputStrings8Dir,
-        ...AutumnIndicator.outputStringsArrow8,
+        ...AutumnIndicators.outputStringsArrow8,
       },
     },
     {
@@ -4593,7 +4593,7 @@ const triggerSet: TriggerSet<Data> = {
 
           const x = parseFloat(matches.x);
           const y = parseFloat(matches.y);
-          const cloneDir = AutumnIndicator.xyToArrow8Output(x, y, uavCenterX, uavCenterY);
+          const cloneDir = AutumnIndicators.xyToArrow8Output(x, y, uavCenterX, uavCenterY);
           const [dir1, dir2] = safeMap[cloneDir];
           if (dir1 === undefined || dir2 === undefined)
             return;
@@ -4602,8 +4602,8 @@ const triggerSet: TriggerSet<Data> = {
             arrow = getUltimaRayArrow(data.role === 'dps', dir1, dir2);
           } else {
             const name = data.party.member(data.me);
-            if (Autumns.IsBlueName(name.nick))
-              arrow = getUltimaRayArrow(Autumns.IsBluDps(name.nick), dir1, dir2);
+            if (Autumn.isRoleName(name.nick))
+              arrow = getUltimaRayArrow(Autumn.isDpsName(name.nick), dir1, dir2);
           }
           if (arrow !== undefined)
             return output.moveTo!({ dir: output[arrow]!() });
@@ -4643,7 +4643,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '${dir}으로',
         },
         ...Directions.outputStrings8Dir,
-        ...AutumnIndicator.outputStringsArrow8,
+        ...AutumnIndicators.outputStringsArrow8,
       },
     },
     {

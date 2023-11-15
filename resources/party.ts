@@ -3,7 +3,7 @@ import { Job, Role } from '../types/job';
 import { PartyMemberParamObject, PartyTrackerOptions } from '../types/party';
 import { LocaleText } from '../types/trigger';
 
-import Autumns from './autumns';
+import Autumn from './autumn';
 import Util from './util';
 
 const emptyRoleToPartyNames = () => {
@@ -67,43 +67,43 @@ const jobLocalizedAbbr: Record<Job, LocaleText> = {
     en: 'GLA',
     ja: '剣術士',
     cn: '剑术',
-    ko: '검술',
+    ko: '검술사',
   },
   PGL: {
     en: 'PGL',
     ja: '格闘士',
     cn: '格斗',
-    ko: '격투',
+    ko: '격투사',
   },
   MRD: {
     en: 'MRD',
     ja: '斧術士',
     cn: '斧术',
-    ko: '도끼',
+    ko: '도끼맨',
   },
   LNC: {
     en: 'LNC',
     ja: '槍術士',
     cn: '枪术',
-    ko: '창술',
+    ko: '랜서',
   },
   ARC: {
     en: 'ARC',
     ja: '弓術士',
     cn: '弓箭',
-    ko: '궁술',
+    ko: '활쟁이',
   },
   CNJ: {
     en: 'CNJ',
     ja: '幻術士',
     cn: '幻术',
-    ko: '환술',
+    ko: '환술사',
   },
   THM: {
     en: 'THM',
     ja: '呪術士',
     cn: '咒术',
-    ko: '주술',
+    ko: '주술사',
   },
   CRP: {
     en: 'CRP',
@@ -115,43 +115,43 @@ const jobLocalizedAbbr: Record<Job, LocaleText> = {
     en: 'BSM',
     ja: '鍛冶',
     cn: '锻铁',
-    ko: '대장',
+    ko: '대장장이',
   },
   ARM: {
     en: 'ARM',
     ja: '甲冑',
     cn: '铸甲',
-    ko: '갑주',
+    ko: '갑주장인',
   },
   GSM: {
     en: 'GSM',
     ja: '彫金',
     cn: '雕金',
-    ko: '보석',
+    ko: '보석장인',
   },
   LTW: {
     en: 'LTW',
     ja: '革細',
     cn: '制革',
-    ko: '가죽',
+    ko: '가죽장인',
   },
   WVR: {
     en: 'WVR',
     ja: '裁縫',
     cn: '裁衣',
-    ko: '재봉',
+    ko: '재봉사',
   },
   ALC: {
     en: 'ALC',
     ja: '錬金',
     cn: '炼金',
-    ko: '연금',
+    ko: '연금술사',
   },
   CUL: {
     en: 'CUL',
     ja: '調理',
     cn: '烹调',
-    ko: '요리',
+    ko: '요리사',
   },
   MIN: {
     en: 'MIN',
@@ -163,7 +163,7 @@ const jobLocalizedAbbr: Record<Job, LocaleText> = {
     en: 'BTN',
     ja: '園芸',
     cn: '园艺',
-    ko: '원예',
+    ko: '농부',
   },
   FSH: {
     en: 'FSH',
@@ -217,13 +217,13 @@ const jobLocalizedAbbr: Record<Job, LocaleText> = {
     en: 'ACN',
     ja: '巴術士',
     cn: '秘术',
-    ko: '비술',
+    ko: '비술사',
   },
   SMN: {
     en: 'SMN',
     ja: '召喚',
     cn: '召唤',
-    ko: '소환',
+    ko: '소환사',
   },
   SCH: {
     en: 'SCH',
@@ -235,7 +235,7 @@ const jobLocalizedAbbr: Record<Job, LocaleText> = {
     en: 'ROG',
     ja: '双剣士',
     cn: '双剑',
-    ko: '쌍검',
+    ko: '쌍검사',
   },
   NIN: {
     en: 'NIN',
@@ -247,25 +247,25 @@ const jobLocalizedAbbr: Record<Job, LocaleText> = {
     en: 'MCH',
     ja: '機工',
     cn: '机工',
-    ko: '기공',
+    ko: '기공사',
   },
   DRK: {
     en: 'DRK',
     ja: '暗黒',
     cn: '暗骑',
-    ko: '암흑',
+    ko: '암흑기사',
   },
   AST: {
     en: 'AST',
     ja: '占星',
     cn: '占星',
-    ko: '점성',
+    ko: '점쟁이',
   },
   SAM: {
     en: 'SAM',
     ja: '侍',
     cn: '武士',
-    ko: '사무',
+    ko: '사무라이',
   },
   RDM: {
     en: 'RDM',
@@ -283,7 +283,7 @@ const jobLocalizedAbbr: Record<Job, LocaleText> = {
     en: 'GNB',
     ja: 'ガンブレ',
     cn: '绝枪',
-    ko: '총칼',
+    ko: '총칼이',
   },
   DNC: {
     en: 'DNC',
@@ -758,7 +758,7 @@ export default class PartyTracker {
     for (const n of names) {
       const m = this.member(n);
       const v = m[label];
-      ls.push(typeof v === 'string' ? v : m.nick);
+      ls.push(typeof v === 'string' ? v : m.toString());
     }
     return ls;
   }
@@ -770,21 +770,21 @@ export default class PartyTracker {
     for (const n of names) {
       const index = this.partyNames.indexOf(n);
       if (index < 0) {
-        const nick = Util.shortName(n, this.options.PlayerNicks);
-        ls.push(nick);
+        const m = this.member(n);
+        ls.push(m.toString());
       } else {
         const m = this.details[index];
         if (m !== undefined)
           ids.push(m.job);
       }
     }
-    const sorted = Autumns.JobPriorityList(ids, 'en');
+    const sorted = Autumn.jobPriorityList(ids, this.options.DisplayLanguage);
     for (const i of sorted)
       ls.push(i ?? '몰?루');
     return ls;
   }
 
-  // 어듬이 정의 잡 인덱
+  // 어듬이 정의 잡 인덱스
   aJobIndex(name: string | undefined): number | undefined {
     if (name === undefined)
       return;
@@ -801,9 +801,10 @@ export default class PartyTracker {
     const partyIndex = this.partyNames.indexOf(name);
     if (partyIndex < 0)
       return;
-    const job = this.details[partyIndex]?.job;
-    if (job === undefined)
+    const num = this.details[partyIndex]?.job;
+    if (num === undefined)
       return;
-    return Autumns.JobName(job);
+    const job = Util.jobEnumToJob(num);
+    return jobLocalizedAbbr[job]?.[this.options.DisplayLanguage];
   }
 }
