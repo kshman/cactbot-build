@@ -2754,6 +2754,7 @@ const triggerSet: TriggerSet<Data> = {
       id: 'P8S Limitless Desolation',
       type: 'StartsUsing',
       netRegex: { id: '75ED', source: 'Hephaistos', capture: false },
+      condition: (data) => !data.options.AutumnStyle,
       response: Responses.spread('alert'),
     },
     {

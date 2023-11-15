@@ -54,6 +54,7 @@ const triggerSet: TriggerSet<Data> = {
       id: 'DiamondEx Adamant Purge West Diamond Rain',
       type: 'StartsUsing',
       netRegex: { source: 'The Diamond Weapon', id: '5F9B', capture: false },
+      condition: (data) => !data.options.AutumnStyle,
       durationSeconds: 15,
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
@@ -71,6 +72,7 @@ const triggerSet: TriggerSet<Data> = {
       id: 'DiamondEx Adamant Purge East Diamond Rain',
       type: 'StartsUsing',
       netRegex: { source: 'The Diamond Weapon', id: '5F9A', capture: false },
+      condition: (data) => !data.options.AutumnStyle,
       durationSeconds: 15,
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
@@ -88,6 +90,7 @@ const triggerSet: TriggerSet<Data> = {
       id: 'DiamondEx Adamant Purge West Diamond Flash',
       type: 'StartsUsing',
       netRegex: { source: 'The Diamond Weapon', id: '5FA5', capture: false },
+      condition: (data) => !data.options.AutumnStyle,
       durationSeconds: 15,
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
@@ -105,6 +108,7 @@ const triggerSet: TriggerSet<Data> = {
       id: 'DiamondEx Adamant Purge East Diamond Flash',
       type: 'StartsUsing',
       netRegex: { source: 'The Diamond Weapon', id: '5FA4', capture: false },
+      condition: (data) => !data.options.AutumnStyle,
       durationSeconds: 15,
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
@@ -122,6 +126,7 @@ const triggerSet: TriggerSet<Data> = {
       id: 'DiamondEx Adamant Purge West Homing Laser',
       type: 'StartsUsing',
       netRegex: { source: 'The Diamond Weapon', id: '5FA3', capture: false },
+      condition: (data) => !data.options.AutumnStyle,
       durationSeconds: 15,
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
@@ -139,6 +144,7 @@ const triggerSet: TriggerSet<Data> = {
       id: 'DiamondEx Adamant Purge East Homing Laser',
       type: 'StartsUsing',
       netRegex: { source: 'The Diamond Weapon', id: '5FA2', capture: false },
+      condition: (data) => !data.options.AutumnStyle,
       durationSeconds: 15,
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
@@ -157,6 +163,7 @@ const triggerSet: TriggerSet<Data> = {
       id: 'DiamondEx Photon Burst',
       type: 'StartsUsing',
       netRegex: { source: 'The Diamond Weapon', id: '5FA8', capture: false },
+      condition: (data) => !data.options.AutumnStyle,
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
@@ -194,6 +201,7 @@ const triggerSet: TriggerSet<Data> = {
       id: 'DiamondEx P2 Zig-Zag',
       type: 'StartsUsing',
       netRegex: { source: 'The Diamond Weapon', id: '5FAF', capture: false },
+      condition: (data) => !data.options.AutumnStyle,
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
@@ -211,6 +219,7 @@ const triggerSet: TriggerSet<Data> = {
       id: 'DiamondEx P2 Zig-Zag Jump',
       type: 'StartsUsing',
       netRegex: { source: 'The Diamond Weapon', id: '5FB2', capture: false },
+      condition: (data) => !data.options.AutumnStyle,
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
@@ -228,6 +237,7 @@ const triggerSet: TriggerSet<Data> = {
       id: 'DiamondEx P2 North/South Jump',
       type: 'StartsUsing',
       netRegex: { source: 'The Diamond Weapon', id: '5FB5', capture: false },
+      condition: (data) => !data.options.AutumnStyle,
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
@@ -245,6 +255,7 @@ const triggerSet: TriggerSet<Data> = {
       id: 'DiamondEx P2 Vertical Cleave',
       type: 'StartsUsing',
       netRegex: { source: 'The Diamond Weapon', id: '5FB7', capture: false },
+      condition: (data) => !data.options.AutumnStyle,
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
@@ -261,6 +272,7 @@ const triggerSet: TriggerSet<Data> = {
       id: 'DiamondEx P2 Articulated Bits',
       type: 'StartsUsing',
       netRegex: { source: 'The Diamond Weapon', id: '5FC1', capture: false },
+      condition: (data) => !data.options.AutumnStyle,
       durationSeconds: 15,
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
@@ -310,6 +322,7 @@ const triggerSet: TriggerSet<Data> = {
       id: 'DiamondEx P3 Articulated Bits',
       type: 'StartsUsing',
       netRegex: { source: 'The Diamond Weapon', id: '5FA9', capture: false },
+      condition: (data) => !data.options.AutumnStyle,
       durationSeconds: 20,
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
@@ -327,6 +340,7 @@ const triggerSet: TriggerSet<Data> = {
       id: 'DiamondEx Diamond Shrapnel',
       type: 'StartsUsing',
       netRegex: { source: 'The Diamond Weapon', id: '5FAC', capture: false },
+      condition: (data) => !data.options.AutumnStyle,
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
@@ -343,6 +357,7 @@ const triggerSet: TriggerSet<Data> = {
       id: 'DiamondEx Burst',
       type: 'StartsUsing',
       netRegex: { source: 'The Diamond Weapon', id: '5FAC', capture: false },
+      condition: (data) => !data.options.AutumnStyle,
       delaySeconds: 15,
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
@@ -353,6 +368,193 @@ const triggerSet: TriggerSet<Data> = {
           ja: '塔を踏む',
           cn: '踩塔',
           ko: '타워 밟아요',
+        },
+      },
+    },
+    // ---------------------------------
+    {
+      // 5FC2이 손톱 휘두르기
+      // 5FA2 오른쪽(산개)
+      // 5FA4 오른쪽(같이맞기)
+      // 5F9A 오른쪽(없음)?
+      id: 'DiamondEx 어듬이 Adamant Purge Right',
+      type: 'StartsUsing',
+      netRegex: { source: 'The Diamond Weapon', id: ['5FA4', '5FA2', '5F9A'], capture: false },
+      condition: (data) => data.options.AutumnStyle,
+      alertText: (_data, _matches, output) => output.text!(),
+      outputStrings: {
+        text: {
+          en: '◁◀◁ Left',
+          ko: '◁◀◁ 왼쪽으로',
+        },
+      },
+    },
+    {
+      // 5FC3이 손톱 휘두르기
+      // 5FA3 왼쪽(산개)
+      // 5FA5 왼쪽(같이맞기)?
+      // 5F9B 왼쪽(없음)
+      id: 'DiamondEx 어듬이 Adamant Purge Left',
+      type: 'StartsUsing',
+      netRegex: { source: 'The Diamond Weapon', id: ['5FA5', '5FA3', '5F9B'], capture: false },
+      condition: (data) => data.options.AutumnStyle,
+      alertText: (_data, _matches, output) => output.text!(),
+      outputStrings: {
+        text: {
+          en: '▷▶▷ Right',
+          ko: '▷▶▷ 오른쪽으로',
+        },
+      },
+    },
+    {
+      id: 'DiamondEx 어듬이 Adamant Purge After Spread',
+      type: 'StartsUsing',
+      netRegex: { source: 'The Diamond Weapon', id: ['5FA3', '5FA2'], capture: false },
+      condition: (data) => data.options.AutumnStyle,
+      delaySeconds: 7,
+      alarmText: (_data, _matches, output) => output.text!(),
+      outputStrings: {
+        text: {
+          en: 'Spread!',
+          ko: '흩어져욧!',
+        },
+      },
+    },
+    {
+      id: 'DiamondEx 어듬이 Adamant Purge After Stack',
+      type: 'StartsUsing',
+      netRegex: { source: 'The Diamond Weapon', id: ['5FA5', '5FA4'], capture: false },
+      condition: (data) => data.options.AutumnStyle,
+      delaySeconds: 7,
+      alarmText: (_data, _matches, output) => output.text!(),
+      outputStrings: {
+        text: {
+          en: 'Stack!',
+          ko: '모두 뭉쳐욧!',
+        },
+      },
+    },
+    {
+      id: 'DiamondEx 어듬이 Photon Burst',
+      type: 'StartsUsing',
+      netRegex: { source: 'The Diamond Weapon', id: '5FCA' },
+      condition: (data) => data.options.AutumnStyle,
+      response: (data, matches, output) => {
+        // cactbot-builtin-response
+        output.responseOutputStrings = {
+          itsme: {
+            en: 'Photon on YOU',
+            ko: '내게 포톤',
+          },
+          photon: {
+            en: 'Photon: ${player}',
+            ko: '포톤: ${player}',
+          },
+        };
+        if (data.me === matches.target)
+          return { alertText: output.itsme!() };
+        return { infoText: output.photon!({ player: data.party.member(matches.target) }) };
+      },
+    },
+    {
+      id: 'DiamondEx 어듬이 Code Chi-Xi-Stigma',
+      type: 'StartsUsing',
+      netRegex: { source: 'The Diamond Weapon', id: '5FAD', capture: false },
+      condition: (data) => data.options.AutumnStyle,
+      infoText: (_data, _matches, output) => output.text!(),
+      outputStrings: {
+        text: {
+          en: 'Jump soon',
+          ko: '가운데서 점프준비',
+        },
+      },
+    },
+    {
+      // 5FFE 왼쪽에 장판 (5FD3 후속)
+      id: 'DiamondEx 어듬이 Airship\'s Bane',
+      type: 'StartsUsing',
+      netRegex: { source: 'The Diamond Weapon', id: '5FFE', capture: false },
+      condition: (data) => data.options.AutumnStyle,
+      alertText: (_data, _matches, output) => output.text!(),
+      outputStrings: {
+        text: {
+          en: 'Avoid puddles',
+          ko: '장판 피해욧',
+        },
+      },
+    },
+    {
+      id: 'DiamondEx 어듬이 Moving',
+      type: 'StartsUsing',
+      netRegex: { source: 'The Diamond Weapon', id: ['5FAF', '5FB2', '5FB5'], capture: false },
+      condition: (data) => data.options.AutumnStyle,
+      infoText: (_data, _matches, output) => output.text!(),
+      outputStrings: {
+        text: {
+          en: 'Go to safe zone',
+          ko: '안전한 곳으로 피해욧',
+        },
+      },
+    },
+    {
+      // 5FB7 -> 5FD0 왼쪽을 보고 달려듬
+      id: 'DiamondEx 어듬이 Vertical Cleave',
+      type: 'StartsUsing',
+      netRegex: { source: 'The Diamond Weapon', id: '5FB7', capture: false },
+      condition: (data) => data.options.AutumnStyle,
+      durationSeconds: 5,
+      response: Responses.knockback(),
+    },
+    {
+      id: 'DiamondEx 어듬이 Articulated Bits',
+      type: 'StartsUsing',
+      netRegex: { source: 'The Diamond Weapon', id: ['5FC1', '5FA9'], capture: false },
+      condition: (data) => data.options.AutumnStyle,
+      infoText: (_data, _matches, output) => output.text!(),
+      outputStrings: {
+        text: {
+          en: 'Bits',
+          ko: '때가 쏙 비트',
+        },
+      },
+    },
+    {
+      id: 'DiamondEx 어듬이 Flood Ray',
+      type: 'StartsUsing',
+      netRegex: { source: 'The Diamond Weapon', id: '5FA6', capture: false },
+      condition: (data) => data.options.AutumnStyle,
+      infoText: (_data, _matches, output) => output.text!(),
+      outputStrings: {
+        text: {
+          en: 'Get Dice Tower',
+          ko: '주사위 들어감요',
+        },
+      },
+    },
+    {
+      id: 'DiamondEx 어듬이 Diamond Shrapnel',
+      type: 'StartsUsing',
+      netRegex: { source: 'The Diamond Weapon', id: '5FAC', capture: false },
+      condition: (data) => data.options.AutumnStyle,
+      alertText: (_data, _matches, output) => output.text!(),
+      outputStrings: {
+        text: {
+          en: 'Drop puddles',
+          ko: '장판깔고 튀어욧',
+        },
+      },
+    },
+    {
+      id: 'DiamondEx 어듬이 Diamond Shrapnel Burst',
+      type: 'StartsUsing',
+      netRegex: { source: 'The Diamond Weapon', id: '5FAC', capture: false },
+      condition: (data) => data.options.AutumnStyle,
+      delaySeconds: 15,
+      alertText: (_data, _matches, output) => output.text!(),
+      outputStrings: {
+        text: {
+          en: 'Get Tower',
+          ko: '탑에 들어가세욧',
         },
       },
     },
