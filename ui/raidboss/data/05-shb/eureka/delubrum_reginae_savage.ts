@@ -791,7 +791,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: 'À gauche, puis à droite',
           ja: '左 => 右',
           cn: '左 => 右',
-          ko: '왼쪽 => 오른쪽',
+          ko: '왼쪽 🔜 오른쪽',
         },
         rightThenLeft: {
           en: 'Right, Then Left',
@@ -799,7 +799,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: 'À droite, puis à gauche',
           ja: '右 => 左',
           cn: '右 => 左',
-          ko: '오른쪽 => 왼쪽',
+          ko: '오른쪽 🔜 왼쪽',
         },
       },
     },
@@ -2086,7 +2086,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: '${dir1} Zone safe => ${dir2} pour le cleave',
           ja: '${dir1}に安置 => ${dir2}範囲攻撃に',
           cn: '去${dir1}方安全点 => 去${dir2}吃顺劈',
-          ko: '${dir1} 안전한 곳 => ${dir2} 클레브 맞아요',
+          ko: '${dir1} 안전한 곳 🔜 ${dir2} 클레브 맞아요',
         },
         safeSpot: {
           en: '${dir} Safe Spot',

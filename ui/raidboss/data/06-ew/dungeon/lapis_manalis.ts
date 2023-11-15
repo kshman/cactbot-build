@@ -114,7 +114,7 @@ const triggerSet: TriggerSet<Data> = {
           en: 'Away from tethered rock',
           de: 'Weg vom verbundenen Felsen',
           cn: '躲避连线石头',
-          ko: '줄 달린 돌에서 멀어져요',
+          ko: '줄 달린 돌에게서 먼곳으로',
         },
       },
     },

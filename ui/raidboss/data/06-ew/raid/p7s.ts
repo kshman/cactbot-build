@@ -709,7 +709,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: '${effect1} => ${effect2} => ${effect3} => ${effect4}',
           ja: '${effect1} => ${effect2} => ${effect3} => ${effect4}',
           cn: '${effect1} => ${effect2} => ${effect3} => ${effect4}',
-          ko: '${effect1} => ${effect2} => ${effect3} => ${effect4}',
+          ko: '${effect1} 🔜 ${effect2} 🔜 ${effect3} 🔜 ${effect4}',
         },
         spread: Outputs.spread,
         stack: Outputs.stackMarker,

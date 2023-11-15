@@ -238,7 +238,7 @@ export default {
     fr: 'Dispersion => Package',
     ja: '散開 => 頭割り',
     cn: '分散 => 集合',
-    ko: '흩어졌다 => 뭉쳐요',
+    ko: '흩어졌다 🔜 뭉쳐요',
   },
   stackThenSpread: {
     en: 'Stack => Spread',
@@ -246,7 +246,7 @@ export default {
     fr: 'Package => Dispersion',
     ja: '頭割り => 散開',
     cn: '集合 => 分散',
-    ko: '뭉쳤다 => 흩어져요',
+    ko: '뭉쳤다 🔜 흩어져요',
   },
   drawIn: {
     // Opposite of a knockback.
@@ -378,7 +378,7 @@ export default {
     fr: 'Intérieur, puis extérieur',
     ja: '中 => 外',
     cn: '先靠近，再远离',
-    ko: '안에서 => 밖으로',
+    ko: '안에서 🔜 밖으로',
   },
   outThenIn: {
     en: 'Out => in',
@@ -386,7 +386,7 @@ export default {
     fr: 'Extérieur, puis intérieur',
     ja: '外 => 中',
     cn: '先远离，再靠近',
-    ko: '밖에서 => 안으로',
+    ko: '밖에서 🔜 안으로',
   },
   backThenFront: {
     en: 'Back => Front',
@@ -394,7 +394,7 @@ export default {
     fr: 'Derrière puis devant',
     ja: '後ろ => 前',
     cn: '后 => 前',
-    ko: '뒤에서 => 앞으로',
+    ko: '뒤에서 🔜 앞으로',
   },
   frontThenBack: {
     en: 'Front => Back',
@@ -402,7 +402,7 @@ export default {
     fr: 'Devant puis derrière',
     ja: '前 => 後ろ',
     cn: '前 => 后',
-    ko: '앞에서 => 뒤로',
+    ko: '앞에서 🔜 뒤로',
   },
   goIntoMiddle: {
     en: 'Get Middle',
@@ -458,7 +458,7 @@ export default {
     fr: 'Allez à Droite/Est =>',
     ja: '右/東へ =>',
     cn: '去右/东边 =>',
-    ko: '오른쪽으로 =>',
+    ko: '오른쪽으로 🡺',
   },
   leftThenRight: {
     en: 'Left => Right',
@@ -466,7 +466,7 @@ export default {
     fr: 'À gauche => À droite',
     ja: '左 => 右',
     cn: '左 => 右',
-    ko: '왼쪽 => 오른쪽',
+    ko: '왼쪽 🔜 오른쪽',
   },
   rightThenLeft: {
     en: 'Right => Left',
@@ -474,7 +474,7 @@ export default {
     fr: 'À droite => À gauche',
     ja: '右 => 左',
     cn: '右 => 左',
-    ko: '오른쪽 => 왼쪽',
+    ko: '오른쪽 🔜 왼쪽',
   },
   goFrontBack: {
     en: 'Go Front/Back',
@@ -596,7 +596,7 @@ export default {
     fr: 'Éloignez-vous de ${player}',
     ja: '${player}から離れる',
     cn: '远离${player}',
-    ko: '멀어져야해욧: ${player}',
+    ko: '멀어져욧: ${player}',
   },
   meteorOnYou: {
     en: 'Meteor on YOU',

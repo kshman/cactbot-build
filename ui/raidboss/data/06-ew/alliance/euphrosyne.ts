@@ -528,7 +528,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: 'Poussée ${dir1} => ${dir2} => ${dir3}',
           ja: 'ノックバック ${dir1} => ${dir2} => ${dir3}',
           cn: '击退 ${dir1} => ${dir2} => ${dir3}',
-          ko: '넉백 ${dir1} => ${dir2} => ${dir3}',
+          ko: '넉백 ${dir1} 🔜 ${dir2} 🔜 ${dir3}',
         },
         dirSW: Outputs.dirSW,
         dirSE: Outputs.dirSE,

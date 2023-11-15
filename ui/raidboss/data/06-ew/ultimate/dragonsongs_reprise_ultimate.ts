@@ -3335,7 +3335,7 @@ const triggerSet: TriggerSet<Data> = {
           de: '${start} => ${rotation}',
           ja: '${start} => ${rotation}',
           cn: '${start} => ${rotation}',
-          ko: '${start} => ${rotation}',
+          ko: '${start} 🔜 ${rotation}',
         },
         backLeft: {
           en: 'Back left',

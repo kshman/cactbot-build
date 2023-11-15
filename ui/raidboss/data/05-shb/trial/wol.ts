@@ -124,7 +124,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: 'Extérieur => Bougez',
           ja: '外 => 動け',
           cn: '钢铁 => 动动动',
-          ko: '밖으로 => 움직여요',
+          ko: '밖으로 🔜 움직여요',
         },
         outStop: {
           en: 'Out => Stop',
@@ -132,7 +132,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: 'Extérieur => Stoppez tout',
           ja: '外 => 動かない',
           cn: '钢铁 => 停停停',
-          ko: '밖으로 => 멈춰요',
+          ko: '밖으로 🔜 멈춰요',
         },
         out: {
           en: 'Out => ???',
@@ -140,7 +140,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: 'Extérieur => ???',
           ja: '外 => ???',
           cn: '钢铁 => ？？？',
-          ko: '밖으로 => ???',
+          ko: '밖으로 🔜 ???',
         },
       },
     },
@@ -163,7 +163,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: 'Intérieur => Bougez',
           ja: '中 => 動け',
           cn: '月环 => 动动动',
-          ko: '안으로 => 움직여요',
+          ko: '안으로 🔜 움직여요',
         },
         underStop: {
           en: 'Under => Stop',
@@ -171,7 +171,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: 'Intérieur => Stoppez tout',
           ja: '中 => 動かない',
           cn: '月环 => 停停停',
-          ko: '안으로 => 멈춰요',
+          ko: '안으로 🔜 멈춰요',
         },
         under: {
           en: 'Under => ???',
@@ -179,7 +179,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: 'Intérieur => ???',
           ja: '中 => ???',
           cn: '月环 => ？？？',
-          ko: '안으로 => ???',
+          ko: '안으로 🔜 ???',
         },
       },
     },

@@ -93,7 +93,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: 'Courez loin du boss',
           ja: 'ボスから離れる',
           cn: '远离Boss',
-          ko: '보스에게서 멀어져요',
+          ko: '보스에게서 먼곳으로',
         },
       },
     },

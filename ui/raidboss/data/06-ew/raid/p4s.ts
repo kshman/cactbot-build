@@ -546,7 +546,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: 'Eau => Frappe mouvante',
           ja: '水 => シフティング',
           cn: '水 => 位移',
-          ko: '[물] => 동서남북',
+          ko: '[물] 🔜 동서남북',
         },
       },
     },

@@ -113,7 +113,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: 'En dessous => Allez derrière l\'orbe ${num}',
           ja: 'ボスに貼り付く=> ${num}番目の玉の後ろへ',
           cn: '去脚下 => 去第${num}个球的终点方向贴边',
-          ko: '밑에 있다가 => ${num}번 구슬 뒤로',
+          ko: '밑에 있다가 🔜 ${num}번 구슬 뒤로',
         },
         bioThenFire: {
           en: 'Get Behind => Under Orb ${num}',
@@ -121,7 +121,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: 'Passez derrière => En dessous l\'orbe ${num}',
           ja: '背面へ => ${num}番目の玉へ',
           cn: '去背后 => 靠近第${num}个球',
-          ko: '뒤에 있다가 => ${num}번 구슬 밑으로',
+          ko: '뒤에 있다가 🔜 ${num}번 구슬 밑으로',
         },
         getUnder: Outputs.getUnder,
         getBehind: Outputs.getBehind,

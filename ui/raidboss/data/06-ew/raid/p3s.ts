@@ -409,7 +409,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: 'Dispersez-vous => Liens oiseaux',
           ja: '散開 => 鳥の線',
           cn: '散开 => 鸟连线',
-          ko: '산개 => 새 줄 연결',
+          ko: '산개 🔜 새 줄 연결',
         },
       },
     },

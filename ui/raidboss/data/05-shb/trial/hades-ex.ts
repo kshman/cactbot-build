@@ -439,14 +439,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         tankBusterOnYou: Outputs.tankBusterOnYou,
         busterOn: Outputs.tankBusterOnPlayer,
-        awayFromPlayer: {
-          en: 'Away from ${player}',
-          de: 'Weg von ${player}',
-          fr: 'Éloignez-vous de ${player}',
-          ja: '${player}から離れ',
-          cn: '远离 ${player}',
-          ko: '멀어져요: ${player}',
-        },
+        awayFromPlayer: Outputs.awayFromPlayer,
       },
     },
     {

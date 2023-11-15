@@ -106,7 +106,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: '${first} => ${second} => ${third}',
           ja: '${first} => ${second} => ${third}',
           cn: '${first} => ${second} => ${third}',
-          ko: '${first} => ${second} => ${third}',
+          ko: '${first} 🔜 ${second} 🔜 ${third}',
         },
       },
     },
@@ -194,7 +194,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: 'Donut court => Donut long',
           ja: '早ドーナツ => 遅ドーナツ',
           cn: '短月环 => 长月环',
-          ko: '짧은 도넛 => 긴 도넛',
+          ko: '짧은 도넛 🔜 긴 도넛',
         },
         superchain3: {
           en: 'Follow Donut (avoid cleave)',

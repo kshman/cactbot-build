@@ -41,7 +41,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: 'Éloignez-vous du météore',
           ja: 'コメットから離れる',
           cn: '远离陨石',
-          ko: '메테오랑 멀어져요',
+          ko: '메테오에게서 먼곳으로',
         },
       },
     },

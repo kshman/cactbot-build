@@ -180,7 +180,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: 'Cardinaux',
           ja: '🟡斜め => 散会',
           cn: '十字',
-          ko: '🟡비스듬 => 흩어져요',
+          ko: '🟡비스듬 🔜 흩어져요',
         },
       },
     },
@@ -215,22 +215,22 @@ const triggerSet: TriggerSet<Data> = {
         p1: {
           en: 'Puff🔘3 => Tail',
           ja: 'たま3個 => 水拭き',
-          ko: '솜털🔘세개 => 꼬리',
+          ko: '솜털🔘세개 🔜 꼬리',
         },
         p2: {
           en: 'Puff🔘4 => Safe zone',
           ja: 'たま4個, 安置を作りましょう',
-          ko: '솜털🔘네개 => 안전지대',
+          ko: '솜털🔘네개 🔜 안전지대',
         },
         p3: {
           en: 'Puff🔘8 => Pot',
           ja: 'たま8個, がんばれ！！',
-          ko: '솜털🔘여덟개 => 항아리',
+          ko: '솜털🔘여덟개 🔜 항아리',
         },
         p4: {
           en: 'Puff🔘4 => Bait tail',
           ja: 'たま4個 => しっぽ誘導',
-          ko: '솜털🔘네개 => 꼬리 유도',
+          ko: '솜털🔘네개 🔜 꼬리 유도',
         },
         px: {
           en: 'Puff🔘',
@@ -489,7 +489,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: 'Écartez-vous en cardinal',
           ja: '十字回避 => 散会',
           cn: '十字分散',
-          ko: '🟡비스듬 => 흩어져요',
+          ko: '🟡비스듬 🔜 흩어져요',
         },
         intercards: {
           en: 'Intercards',
@@ -1197,7 +1197,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: 'Package sur ${player} -> Dispersion',
           ja: '${player}に頭割り => 散会',
           cn: '${player}处分摊 => 分散',
-          ko: '뭉쳤다 => 흩어져요 (${player})',
+          ko: '뭉쳤다 🔜 흩어져요 (${player})',
         },
         stackOnYouThenSpread: {
           en: 'Stack on YOU => Spread',
@@ -1205,7 +1205,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: 'Package sur VOUS -> Dispersion',
           ja: '自分に頭割り => 散会',
           cn: '分摊点名 => 分散',
-          ko: '내게 뭉쳤다 => 흩어져요',
+          ko: '내게 뭉쳤다 🔜 흩어져요',
         },
         spreadThenStack: Outputs.spreadThenStack,
         spreadThenStackOn: {
@@ -1214,7 +1214,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: 'Dispersion -> Package sur ${player}',
           ja: '散会 => ${player}に頭割り',
           cn: '分散 => ${player}处分摊',
-          ko: '흩어졌다 => 뭉쳐요 (${player})',
+          ko: '흩어졌다 🔜 뭉쳐요 (${player})',
         },
         spreadThenStackOnYou: {
           en: 'Spread => Stack on YOU',
@@ -1222,7 +1222,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: 'Dispersion -> package sur VOUS',
           ja: '散会 => 自分に頭割り',
           cn: '分散 => 分摊点名',
-          ko: '흩어졌다 => 내게 뭉쳐요',
+          ko: '흩어졌다 🔜 내게 뭉쳐요',
         },
         spreadThenBait: {
           en: 'Spread => Bait Puddle',
@@ -1238,7 +1238,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: 'Déposez -> Dispersion',
           ja: 'AOE誘導 => 散会',
           cn: '诱导AOE => 分散',
-          ko: '유도했다가 => 흩어져요',
+          ko: '유도했다가 🔜 흩어져요',
         },
       },
     },
@@ -2570,7 +2570,7 @@ const triggerSet: TriggerSet<Data> = {
             fr: 'Attirez barrière 2 -> Attirez les puddles',
             ja: '扇２ => AOE誘導',
             cn: '诱导扇形 2 => 诱导圈圈',
-            ko: '둘째 기둥으로 => 장판 깔아요',
+            ko: '둘째 기둥으로 🔜 장판 깔아요',
           },
           baitWardThree: {
             en: 'Bait Ward 3',

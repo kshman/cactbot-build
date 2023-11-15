@@ -1407,7 +1407,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: 'Éloignez-vous des Cristaux',
           ja: '結晶から離れ',
           cn: '远离结晶',
-          ko: '결정체로부터 멀어져요',
+          ko: '결정체에게서 먼곳으로',
         },
       },
     },
