@@ -20,12 +20,12 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '타워 밟아요',
+          en: 'Get Towers',
           de: 'Türme nehmen',
           fr: 'Prenez les tours',
           ja: '塔を踏む',
           cn: '踩塔',
-          ko: '장판 하나씩 들어가기',
+          ko: '타워 밟아요',
         },
       },
     },
@@ -77,11 +77,11 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '각각 커지는 폭탄 동그라미 밟아요',
+          en: 'Stand in glowing bomb circle',
           de: 'Steh im grün-leuchtenden Kreis der Bombe',
           fr: 'Placez-vous dans le cercle lumineux',
           cn: '站在炸弹发光圈内',
-          ko: '장판에 한명씩 들어가기',
+          ko: '각각 커지는 폭탄 동그라미 밟아요',
         },
       },
     },
@@ -92,11 +92,11 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '3인용 타워 밟아요',
+          en: 'Activate 3 person towers',
           de: 'Aktiviere 3 Spieler-Türme',
           fr: 'Activez les tours avec 3 personnes',
           cn: '3人踩塔',
-          ko: '3인장판 처리하기',
+          ko: '3인용 타워 밟아요',
         },
       },
     },
@@ -113,11 +113,11 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         kill: {
-          en: '잡아요: ${name}',
+          en: 'Kill ${name} add',
           de: 'Besiege ${name} Add',
           fr: 'Tuez l\'add ${name}',
           cn: '击杀 ${name} 小怪',
-          ko: '${name} 잡아요',
+          ko: '잡아요: ${name}',
         },
       },
     },

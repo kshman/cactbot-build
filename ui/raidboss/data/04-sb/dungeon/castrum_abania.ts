@@ -58,11 +58,11 @@ const triggerSet: TriggerSet<Data> = {
       run: (data) => data.calledUseCannon = true,
       outputStrings: {
         text: {
-          en: '보스에게 포탄을',
+          en: 'Fire cannon at boss',
           de: 'Feuere Kanonen auf den Boss',
           fr: 'Tirez le canon sur le boss',
           cn: '用炮射BOSS',
-          ko: '보스 파동탄 맞추기',
+          ko: '보스에게 포탄을',
         },
       },
     },
@@ -93,12 +93,12 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.getTowers!(),
       outputStrings: {
         getTowers: {
-          en: '타워 밟아요',
+          en: 'Get Towers',
           de: 'Türme nehmen',
           fr: 'Prenez les tours',
           ja: '塔を踏む',
           cn: '踩塔',
-          ko: '장판 하나씩 들어가기',
+          ko: '타워 밟아요',
         },
       },
     },
@@ -130,7 +130,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           // Knockback comes from the proximity marker, not the boss.
-          en: '작은 혜성 넉백',
+          en: 'Small comet knockback',
           de: 'Kleiner Kometenrückstoß',
           fr: 'Poussée de la petite comète',
           cn: '小彗星击退',

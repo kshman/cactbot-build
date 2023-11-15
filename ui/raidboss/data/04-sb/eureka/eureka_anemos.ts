@@ -20,12 +20,12 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '드래곤즈 보이스 (안으로)',
+          en: 'Dragon\'s Voice',
           de: 'Stimme Des Drachen',
           fr: 'Voix du dragon',
           ja: '雷電の咆哮',
           cn: '雷电咆哮',
-          ko: '뇌전의 포효',
+          ko: '드래곤즈 보이스 (안으로)',
         },
       },
     },
@@ -42,12 +42,12 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '스와이프',
+          en: 'Swipe',
           de: 'Hieb',
           fr: 'Fauche',
           ja: 'スワイプ',
           cn: '横扫',
-          ko: '휘두르기',
+          ko: '스와이프',
         },
       },
     },
@@ -64,12 +64,12 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '아이 오브 비홀더 (도넛)',
+          en: 'Eye Donut',
           de: 'Augendonut',
           fr: 'Donut œil',
           ja: 'アイ・オブ・ビホルダー',
           cn: '月环',
-          ko: '눈알 도넛 장판',
+          ko: '아이 오브 비홀더 (도넛)',
         },
       },
     },
@@ -80,12 +80,12 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '글로워 레이저',
+          en: 'Glower Laser',
           de: 'Blick Laser',
           fr: 'Regard laser',
           ja: 'グラワー',
           cn: '怒视',
-          ko: '광선',
+          ko: '글로워 레이저',
         },
       },
     },
@@ -109,12 +109,12 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '내게 얼음 구슬!',
+          en: 'Ice ball on you!',
           de: 'Eisball auf dir!',
           fr: 'Boule de glace sur vous !',
           ja: '自分に氷玉',
           cn: '点名冰球！',
-          ko: '얼음 구슬 대상자',
+          ko: '내게 얼음 구슬!',
         },
       },
     },
@@ -144,12 +144,12 @@ const triggerSet: TriggerSet<Data> = {
       alarmText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '로커스트 프레이그 (도넛)',
+          en: 'Plague Donut',
           de: 'Plagen-Donut',
           fr: 'Donut Nuée',
           ja: 'ローカストプレイグ',
           cn: '月环',
-          ko: '역병 도넛 장판',
+          ko: '로커스트 프레이그 (도넛)',
         },
       },
     },
@@ -164,12 +164,12 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         text: {
-          en: '레이스: ${num}',
+          en: 'wraiths: ${num}',
           de: 'Geister: ${num}',
           fr: 'spectres: ${num}',
           ja: 'レイス: ${num}',
           cn: '幽灵击杀: ${num}',
-          ko: '망령: ${num}',
+          ko: '레이스: ${num}',
         },
       },
     },

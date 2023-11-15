@@ -18,7 +18,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '벽 레이저 피해요',
+          en: 'Avoid wall laser',
           de: 'Weiche dem Wand-Laser aus',
           fr: 'Évitez le laser du mur',
           ja: 'レーザーを避ける',
@@ -63,20 +63,20 @@ const triggerSet: TriggerSet<Data> = {
         matches.id === '00A7' ? output.left!() : output.right!(),
       outputStrings: {
         left: {
-          en: '왼쪽으로 돌아요',
+          en: 'Rotate left',
           de: 'Nach links rotieren',
           fr: 'Tournez vers la gauche',
           ja: '左回転',
           cn: '向左转',
-          ko: '왼쪽으로 회전',
+          ko: '왼쪽으로 돌아요',
         },
         right: {
-          en: '오른쪽으로 돌아요',
+          en: 'Rotate right',
           de: 'Nach rechts rotieren',
           fr: 'Tournez vers la droite',
           ja: '右回転',
           cn: '向右转',
-          ko: '오른쪽으로 회전',
+          ko: '오른쪽으로 돌아요',
         },
       },
     },

@@ -44,12 +44,12 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '북쪽 봐요 (조각 봐요)',
+          en: 'Look At Statue',
           de: 'Statue anschauen',
           fr: 'Regardez la statue',
           ja: '神々の像を見て',
           cn: '面对神像',
-          ko: '시선 바라보기',
+          ko: '북쪽 봐요 (조각 봐요)',
         },
       },
     },
@@ -60,12 +60,12 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '남쪽 봐요 (조각 보면 안되요)',
+          en: 'Look Away From Statue',
           de: 'Von Statue wegschauen',
           fr: 'Ne regardez pas la statue',
           ja: '神々の像を見ない',
           cn: '背对神像',
-          ko: '시선 피해요',
+          ko: '남쪽 봐요 (조각 보면 안되요)',
         },
       },
     },
@@ -76,11 +76,11 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '텔레포트 위치 바깥쪽으로',
+          en: 'Get Outside Destination',
           de: 'Geh aus dem Zielkreis raus',
           fr: 'Allez à côté du cercle extérieur',
           cn: '去传送目的地的外圈',
-          ko: '마법진 바깥쪽으로 이동',
+          ko: '텔레포트 위치 바깥쪽으로',
         },
       },
     },
@@ -98,12 +98,12 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '내게 파이어3',
+          en: 'fire on YOU',
           de: 'Feuer auf DIR',
           fr: 'Feu sur VOUS',
           ja: '自分にファイガ',
           cn: '火点名',
-          ko: '파이가 대상자',
+          ko: '내게 파이가',
         },
       },
     },
@@ -121,12 +121,12 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '진짜 선더3',
+          en: 'True Thunder',
           de: 'Wahrer Blitz',
           fr: 'Vraie foudre',
           ja: '真サンダガ',
           cn: '真雷',
-          ko: '진실 선더가',
+          ko: '진짜 선더',
         },
       },
     },
@@ -138,12 +138,12 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '가짜 선더3',
+          en: 'Fake Thunder',
           de: 'Falscher Blitz',
           fr: 'Fausse foudre',
           ja: '偽サンダガ',
           cn: '假雷',
-          ko: '거짓 선더가',
+          ko: '가짜 선더가',
         },
       },
     },
@@ -155,12 +155,12 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '가짜 얼음: 밖으로',
+          en: 'Fake Ice: Get out',
           de: 'Falsches Eis: Rausgehen',
           fr: 'Fausse glace : Sortez',
           ja: '偽ブリザガ: 外へ',
           cn: '假冰：远离',
-          ko: '거짓 블리자가: 밖으로',
+          ko: '가짜 블리자가: 밖으로',
         },
       },
     },
@@ -172,7 +172,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '진짜 얼음: 안으로',
+          en: 'True Ice: Get in',
           de: 'Wahre Eis: Reingehen',
           fr: 'Vraie glace : À l\'intérieur',
           ja: '真ブリザガ: 入る',
@@ -189,12 +189,12 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '가짜 얼음: 안으로',
+          en: 'Fake Ice: Get in',
           de: 'Falsches Eis: Reingehen',
           fr: 'Fausse glace: À l\'intérieur',
           ja: '偽ブリザガ: 入る',
           cn: '假冰：靠近',
-          ko: '거짓 블리자가: 안으로',
+          ko: '가짜 블리자가: 안으로',
         },
       },
     },
@@ -206,12 +206,12 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '진짜 얼음: 밖으로',
+          en: 'True Ice: Get out',
           de: 'Wahres Eis: Rausgehen',
           fr: 'Vraie glace: Sortez',
           ja: '真ブリザガ: 外へ',
           cn: '真冰：远离',
-          ko: '진실 블리자가: 밖으로',
+          ko: '진짜 블리자가: 밖으로',
         },
       },
     },

@@ -22,12 +22,12 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '아쿠아 스피어 잡아요',
+          en: 'Kill Aqua Spheres',
           de: 'Wasserkugeln zerstören',
           fr: 'Détruire les bulles d\'eau',
           ja: 'アクアスフィアを倒す',
           cn: '击杀水球',
-          ko: '물 구체 죽이기',
+          ko: '아쿠아 스피어 잡아요',
         },
       },
     },
@@ -47,7 +47,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         breathless: {
-          en: '호흡 곤란: ${num}',
+          en: 'Breathless: ${num}',
           de: 'Atemnot: ${num}',
           fr: 'Suffocation : ${num}',
           ja: '呼吸困難 :${num}',
@@ -55,12 +55,12 @@ const triggerSet: TriggerSet<Data> = {
           ko: '호흡곤란: ${num}',
         },
         getInBubble: {
-          en: '버블 안으로',
+          en: 'Get In Bubble',
           de: 'Geh in die Blase',
           fr: 'Allez dans une bulle',
           ja: '泡に入る',
           cn: '进气泡',
-          ko: '물방울 안으로',
+          ko: '버블 안으로',
         },
       },
     },
@@ -71,12 +71,12 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '안전한 곳으로 이동',
+          en: 'Move To Safe Spot',
           de: 'Zur sicheren Zone',
           fr: 'Allez en zone safe',
           ja: '安置へ',
           cn: '去安全点',
-          ko: '안전 지대로 이동',
+          ko: '안전한 곳으로 이동',
         },
       },
     },
@@ -93,12 +93,12 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '보스 바라보고 왼쪽으로 피해요',
+          en: 'Find Hashmal; Dodge Left',
           de: 'Finde Hashmallim; Weiche nach Links aus',
           fr: 'Trouvez Hashmal, Esquivez à gauche',
           ja: 'ボスに向かって左に',
           cn: '找到BOSS; 向左躲避',
-          ko: '하쉬말림 찾고, 왼쪽으로 피해요',
+          ko: '하쉬말림 바라보고 왼쪽으로 피해요',
         },
       },
     },
@@ -109,12 +109,12 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '보스 바라보고 오른쪽으로 피해요',
+          en: 'Find Hashmal; Dodge Right',
           de: 'Finde Hashmallim; Weiche nach Rechts aus',
           fr: 'Trouvez Hashmal, Esquivez à droite',
           ja: 'ボスに向かって右に',
           cn: '找到BOSS; 向右躲避',
-          ko: '하쉬말림 찾고, 오른쪽으로 피해요',
+          ko: '하쉬말림 바라보고 오른쪽으로 피해요',
         },
       },
     },
@@ -146,12 +146,12 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '해머 피해요',
+          en: 'Move Away',
           de: 'Weg da',
           fr: 'Éloignez-vous',
           ja: 'ハンマーから離れる',
           cn: '远离大锤落点',
-          ko: '타워 피해요',
+          ko: '해머 피해요',
         },
       },
     },
@@ -163,12 +163,12 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '골렘 잡아요',
+          en: 'Kill Golems',
           de: 'Golems töten',
           fr: 'Tuez les golems',
           ja: 'ゴーレムを倒す',
           cn: '击杀小怪',
-          ko: '골렘 죽이기',
+          ko: '골렘 잡아요',
         },
       },
     },
@@ -207,12 +207,12 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '트램플',
+          en: 'Trample',
           de: 'Zertrampeln',
           fr: 'Fauchage',
           ja: '蹂躙',
           cn: '蹂躏',
-          ko: '유린',
+          ko: '트램플',
         },
       },
     },
@@ -235,12 +235,12 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.getTowers!(),
       outputStrings: {
         getTowers: {
-          en: '타워 밟아요',
+          en: 'Get Towers',
           de: 'Türme nehmen',
           fr: 'Prenez les tours',
           ja: '塔を踏む',
           cn: '踩塔',
-          ko: '타워 하나씩 들어가기',
+          ko: '타워 밟아요',
         },
       },
     },

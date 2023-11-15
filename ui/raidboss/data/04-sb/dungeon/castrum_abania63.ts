@@ -41,11 +41,11 @@ const triggerSet: TriggerSet<Data> = {
       run: (data) => data.calledUseCannon = true,
       outputStrings: {
         text: {
-          en: '보스에게 포탄을',
+          en: 'Fire cannon at boss',
           de: 'Feuere Kanonen auf den Boss',
           fr: 'Tirez le canon sur le boss',
           cn: '用炮射BOSS',
-          ko: '보스 파동탄 맞추기',
+          ko: '보스에게 포탄을',
         },
       },
     },
@@ -62,11 +62,11 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '불 속성 얻어요',
+          en: 'Get Fire Buff',
           de: 'Nimm Feuer Buff',
           fr: 'Prenez le buff de Feu',
           cn: '去火BUFF',
-          ko: '화염 속성 버프 얻기',
+          ko: '불 속성 얻어요',
         },
       },
     },
@@ -77,11 +77,11 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '얼음 속성 얻어요',
+          en: 'Get Ice Buff',
           de: 'Nimm Eis Buff',
           fr: 'Prenez le buff de Glace',
           cn: '去冰BUFF',
-          ko: '빙결 속성 버프 얻기',
+          ko: '얼음 속성 얻어요',
         },
       },
     },
@@ -92,11 +92,11 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '번개 속성 얻어요',
+          en: 'Get Lightning Buff',
           de: 'Nimm Blitz Buff',
           fr: 'Prenez le buff d\'Éclair',
           cn: '去雷BUFF',
-          ko: '뇌격 속성 버프 얻기',
+          ko: '번개 속성 얻어요',
         },
       },
     },
@@ -128,7 +128,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           // Knockback comes from the proximity marker, not the boss.
-          en: '작은 혜성 넉백',
+          en: 'Small comet knockback',
           de: 'Kleiner Kometenrückstoß',
           fr: 'Poussée de la petite comète',
           cn: '小彗星击退',

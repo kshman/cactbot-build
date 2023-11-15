@@ -47,12 +47,12 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '멀리 쿵',
+          en: 'Distant Clap',
           de: 'Donnergrollen',
           fr: 'Tonnerre lointain',
           ja: '遠雷',
           cn: '远雷',
-          ko: '원뢰',
+          ko: '멀리 쿵',
         },
       },
     },
@@ -64,12 +64,12 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '보스 프로보크',
+          en: 'Provoke Boss',
           de: 'Boss abspotten',
           fr: 'Provoquez le Boss',
           ja: '挑発',
           cn: '挑衅',
-          ko: '보스 도발',
+          ko: '보스 프로보크',
         },
       },
     },
@@ -82,12 +82,12 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '보스 프로보크',
+          en: 'Provoke Boss',
           de: 'Boss abspotten',
           fr: 'Provoquez le Boss',
           ja: '挑発',
           cn: '挑衅',
-          ko: '보스 도발',
+          ko: '보스 프로보크',
         },
       },
     },
@@ -113,12 +113,12 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         text: {
-          en: '지금 탱크 리미트브레이크',
+          en: 'Tank LB NOW',
           de: 'JETZT Tank LB',
           fr: 'Transcendance Tank maintenant !',
           ja: '今タンクLB',
           cn: '坦克LB',
-          ko: '탱리밋',
+          ko: '지금 탱크 LB',
         },
       },
     },
@@ -130,12 +130,12 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '바깥에 버블 버려요',
+          en: 'Drop bubble outside',
           de: 'Blase außen ablegen',
           fr: 'Déposez la bulle à l\'extérieur',
           ja: '外にマーカーを置く',
           cn: '边缘放点名',
-          ko: '장판 바깥에 깔기',
+          ko: '바깥에 버블 버려요',
         },
       },
     },
@@ -147,12 +147,12 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '핑크 버블',
+          en: 'Pink bubble',
           de: 'Pinke Blase',
           fr: 'Bulle violette',
           ja: '祟り目',
           cn: '泡泡',
-          ko: '핑크 구슬',
+          ko: '핑크 버블',
         },
       },
     },
@@ -164,12 +164,12 @@ const triggerSet: TriggerSet<Data> = {
       alarmText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '내게 장판x3',
+          en: 'Puddles on YOU',
           de: 'Pfützen auf DIR',
           fr: 'Zones au sol sur VOUS',
           ja: '自分に床範囲',
           cn: '点名',
-          ko: '장판 바깥에 깔기 (3번)',
+          ko: '내게 장판x3',
         },
       },
     },
@@ -181,12 +181,12 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '도망쳐요',
+          en: 'Get away',
           de: 'Weg da',
           fr: 'Éloignez-vous',
           ja: '離れる',
           cn: '远离',
-          ko: '멀리가기',
+          ko: '도망쳐요',
         },
       },
     },
@@ -202,12 +202,12 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '호랑이 나와요',
+          en: 'Tiger Add',
           de: 'Tiger Add',
           fr: 'Add Tigre',
           ja: '虎分離',
           cn: '虎分离',
-          ko: '호랑이 쫄',
+          ko: '호랑이 나와요',
         },
       },
     },
@@ -233,12 +233,12 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (data, _matches, output) => output.text!({ num: data.stakeCount }),
       outputStrings: {
         text: {
-          en: '뭉쳐요#${num}',
+          en: 'Stack #${num}',
           de: 'Stack #${num}',
           fr: 'Packez-vous #${num}',
           ja: '頭割り #${num}',
           cn: '集合 #${num}',
-          ko: '쉐어 #${num}',
+          ko: '뭉쳐요#${num}',
         },
       },
     },

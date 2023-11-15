@@ -51,12 +51,12 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '🔵파랑 밟아요',
+          en: 'Stand in blue',
           de: 'Im Blauen stehen',
           fr: 'Placez-vous dans le bleu',
           ja: '青色を踏む',
           cn: '站在蓝色区域',
-          ko: '파랑장판에 서기',
+          ko: '🔵파랑 밟아요',
         },
       },
     },
@@ -68,12 +68,12 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '🔴빨강 밟아요',
+          en: 'Stand in red',
           de: 'Im Roten stehen',
           fr: 'Placez-vous dans le rouge',
           ja: '赤色を踏む',
           cn: '站在红色区域',
-          ko: '빨강장판에 서기',
+          ko: '🔴빨강 밟아요',
         },
       },
     },
@@ -96,12 +96,12 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '안전한 곳 찾아요',
+          en: 'watch for safe',
           de: 'nach sicherer Position schauen',
           fr: 'Trouvez une zone safe',
           ja: '安置へ',
           cn: '前往安全区',
-          ko: '안전지대 찾기',
+          ko: '안전한 곳 찾아요',
         },
       },
     },
@@ -120,12 +120,12 @@ const triggerSet: TriggerSet<Data> = {
         output.text!({ player: data.party.member(matches.target) }),
       outputStrings: {
         text: {
-          en: '힐 준비: ${player}',
+          en: 'Heal ${player} soon',
           de: 'Bald ${player} heilen',
           fr: 'Soignez ${player} bientôt',
           ja: 'すぐに${player}をヒール',
           cn: '马上奶 ${player}',
-          ko: '${player}힐 준비',
+          ko: '힐 준비: ${player}',
         },
       },
     },
@@ -136,12 +136,12 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '떠다니는 머리 피해요',
+          en: 'Avoid floating heads',
           de: 'Weiche den fliegenden Köpfen aus',
           fr: 'Évitez les têtes flottantes',
           ja: 'ヘッドを避ける',
           cn: '避开漂浮的头',
-          ko: '커얼머리 피해요',
+          ko: '떠다니는 머리 피해요',
         },
       },
     },
@@ -152,12 +152,12 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '마커에서 먼곳으로',
+          en: 'Away from marker',
           de: 'Weg von den Markierungen',
           fr: 'Éloignez-vous du marqueur',
           ja: 'マーカーから離れる',
           cn: '远离标记',
-          ko: '마커에게서 멀어지기',
+          ko: '마커에서 먼곳으로',
         },
       },
     },

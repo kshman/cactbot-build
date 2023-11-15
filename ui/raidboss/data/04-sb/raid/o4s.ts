@@ -195,7 +195,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: 'Brasier sur vous',
           ja: '自分にフレア',
           cn: '核爆点名',
-          ko: '내게 플레어',
+          ko: '플레어 대상자',
         },
       },
     },
@@ -1059,7 +1059,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: 'Brasier sur vous',
           ja: '自分にフレア',
           cn: '核爆点名',
-          ko: '내게 플레어',
+          ko: '플레어 대상자',
         },
         stackTTS: {
           en: 'stack',

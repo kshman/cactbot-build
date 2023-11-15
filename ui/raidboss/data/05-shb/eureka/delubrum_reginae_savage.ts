@@ -2581,7 +2581,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: 'Multiple AoEs',
           ja: '連続AoE',
           cn: '连续AoE',
-          ko: '연속 전체공격',
+          ko: '연속 전체 공격',
         },
       },
     },

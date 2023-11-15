@@ -33,12 +33,12 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '내게 줄',
+          en: 'Lady tether on YOU',
           de: 'Verbindung auf DIR',
           fr: 'Lien sur VOUS',
           ja: '線ついた',
           cn: '连线点名',
-          ko: '화염조 대상자',
+          ko: '내게 줄',
         },
       },
     },

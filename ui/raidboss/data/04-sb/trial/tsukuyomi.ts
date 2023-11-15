@@ -40,15 +40,15 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         lineStackOnYou: {
-          en: '내게 한줄 뭉쳐요',
+          en: 'Line Stack on YOU',
           de: 'Linien Stack auf DIR',
           fr: 'Package en ligne sur VOUS',
           ja: '直線頭割り',
           cn: '直线分摊点名',
-          ko: '내게 뭉쳐요 (직선)',
+          ko: '내게 뭉쳐요',
         },
         lineStackOn: {
-          en: '한줄 뭉쳐요: ${player}',
+          en: 'Line Stack on ${player}',
           de: 'Linien Stack auf ${player}',
           fr: 'Package en ligne sur ${player}',
           ja: '${player}に直線頭割り',
@@ -81,12 +81,12 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '깜장으로 가욧!',
+          en: 'Move to Black!',
           de: 'In\'s schwarze laufen!',
           fr: 'Allez en zone noire !',
           ja: '新月に！',
           cn: '踩黑色！',
-          ko: '검정색으로 이동!',
+          ko: '깜장으로 가욧!',
         },
       },
     },
@@ -102,12 +102,12 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '하양으로 가욧!',
+          en: 'Move to White!',
           de: 'In\'s weiße laufen!',
           fr: 'Allez en zone blanche !',
           ja: '満月に！',
           cn: '踩白色！',
-          ko: '흰색으로 이동!',
+          ko: '하양으로 가욧!',
         },
       },
     },
