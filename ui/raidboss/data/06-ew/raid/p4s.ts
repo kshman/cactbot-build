@@ -248,6 +248,90 @@ const triggerSet: TriggerSet<Data> = {
         },
       },
     },
+    //
+    {
+      id: 'P4S Akanthai Act 1',
+      regex: /Akanthai: Act 1/,
+      beforeSeconds: 2,
+      condition: (data) => data.options.AutumnStyle,
+      infoText: (_data, _matches, output) => output.text!(),
+      outputStrings: {
+        text: {
+          en: '[Act 1]',
+          ko: '[제 1막: 덤불을 헤치며]',
+        },
+      },
+    },
+    //
+    {
+      id: 'P4S Akanthai Act 2',
+      regex: /Akanthai: Act 2/,
+      beforeSeconds: 2,
+      condition: (data) => data.options.AutumnStyle,
+      infoText: (_data, _matches, output) => output.text!(),
+      outputStrings: {
+        text: {
+          en: '[Act 2]',
+          ko: '[제 2막: 탑찾아 돌고돌기]',
+        },
+      },
+    },
+    //
+    {
+      id: 'P4S Akanthai Act 3',
+      regex: /Akanthai: Act 3/,
+      beforeSeconds: 2,
+      condition: (data) => data.options.AutumnStyle,
+      infoText: (_data, _matches, output) => output.text!(),
+      outputStrings: {
+        text: {
+          en: '[Act 3]',
+          ko: '[제 3막: 점프점프 레볼루션]',
+        },
+      },
+    },
+    //
+    {
+      id: 'P4S Akanthai Act 4',
+      regex: /Akanthai: Act 4/,
+      beforeSeconds: 2,
+      condition: (data) => data.options.AutumnStyle,
+      infoText: (_data, _matches, output) => output.text!(),
+      outputStrings: {
+        text: {
+          en: '[Act 4]',
+          ko: '[제 4막: 줄다리기, 그리고 남서로]',
+        },
+      },
+    },
+    //
+    {
+      id: 'P4S Akanthai Finale',
+      regex: /Akanthai: Finale/,
+      beforeSeconds: 2,
+      condition: (data) => data.options.AutumnStyle,
+      infoText: (_data, _matches, output) => output.text!(),
+      outputStrings: {
+        text: {
+          en: '[Finale]',
+          ko: '[종막: 순서대로 타워에 들어가기]',
+        },
+      },
+    },
+    //
+    {
+      id: 'P4S Akanthai Curtain Call',
+      regex: /Akanthai: Curtain Call/,
+      beforeSeconds: 2,
+      condition: (data) => data.options.AutumnStyle,
+      infoText: (_data, _matches, output) => output.text!(),
+      outputStrings: {
+        text: {
+          en: '[Curtain Call]',
+          ko: '[커튼콜: 탱힐 6초전, DPS 11초전]',
+        },
+      },
+    },
   ],
   triggers: [
     {

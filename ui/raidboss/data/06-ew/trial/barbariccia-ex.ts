@@ -46,6 +46,7 @@ const triggerSet: TriggerSet<Data> = {
       id: 'BarbaricciaEx Blow Away',
       regex: /Blow Away/,
       beforeSeconds: 10,
+      condition: (data) => !data.options.AutumnStyle,
       durationSeconds: 5,
       suppressSeconds: 15,
       infoText: (_data, _matches, output) => output.text!(),
@@ -55,6 +56,20 @@ const triggerSet: TriggerSet<Data> = {
           de: 'Sammeln um Flächen zu ködern',
           cn: '集合诱导黄圈',
           ko: '장판 유도하러 뭉쳐요',
+        },
+      },
+    },
+    // 남쪽에 모여 도는 그것
+    {
+      id: 'BarbaricciaEx 어듬이 돌아라 물레야',
+      regex: /Blow Away/,
+      beforeSeconds: 7,
+      condition: (data) => data.options.AutumnStyle,
+      alarmText: (_data, _matches, output) => output.text!(),
+      outputStrings: {
+        text: {
+          en: 'Stack South! Roll & Rolling!',
+          ko: '남쪽에서 뭉쳐욧! 뱅글뱅글!',
         },
       },
     },

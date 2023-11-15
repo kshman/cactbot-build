@@ -290,6 +290,248 @@ const triggerSet: TriggerSet<Data> = {
         },
       },
     },
+    // ST 확인
+    {
+      id: 'P8S 어듬이 타이란트 끝나고 프로보크 안내',
+      regex: /Burst 4/,
+      condition: (data) => data.options.AutumnStyle && data.role === 'tank',
+      alertText: (_data, _matches, output) => output.text!(),
+      outputStrings: {
+        text: {
+          en: 'Provoke if you are ST',
+          ko: 'ST라면 이쯤에서 헤이트 가져올것',
+        },
+      },
+    },
+    // 아이온 1
+    {
+      id: 'P8S 어듬이 아이온 1 버프',
+      regex: /Aioniopyr 1/,
+      beforeSeconds: 3,
+      condition: (data) => data.options.AutumnStyle,
+      infoText: (data, _matches, output) => {
+        if (data.role === 'tank')
+          return output.reprisal!();
+        if (data.CanAddle())
+          return output.addle!();
+      },
+      outputStrings: {
+        reprisal: {
+          en: 'MT Reprisal',
+          ko: 'MT 리프 넣으라우',
+        },
+        addle: {
+          en: 'Caster Addle',
+          ko: '아돌 넣으라우',
+        },
+      },
+    },
+    // 아이온 2
+    {
+      id: 'P8S 어듬이 아이온 2 버프',
+      regex: /Aioniopyr 2/,
+      beforeSeconds: 3,
+      condition: (data) => data.options.AutumnStyle && data.role === 'tank',
+      infoText: (_data, _matches, output) => output.text!(),
+      outputStrings: {
+        text: {
+          en: 'MT Reprisal',
+          ko: 'MT 리프 넣으라우',
+        },
+      },
+    },
+    // 아이온 3
+    {
+      id: 'P8S 어듬이 아이온 3 버프',
+      regex: /Aioniopyr 3/,
+      beforeSeconds: 3,
+      condition: (data) => data.options.AutumnStyle,
+      infoText: (data, _matches, output) => {
+        if (data.role === 'tank')
+          return output.reprisal!();
+        if (data.CanAddle())
+          return output.addle!();
+        if (data.CanSilence())
+          return output.amigo!();
+      },
+      outputStrings: {
+        reprisal: {
+          en: 'MT Reprisal',
+          ko: 'MT 리프 넣으라우',
+        },
+        addle: {
+          en: '(Caster Addle, if available)',
+          ko: '(아돌 남으면 넣으라우)',
+        },
+        amigo: {
+          en: 'Range Buff',
+          ko: '삼바 데 아미고 넣으라우',
+        },
+      },
+    },
+    // 아이온 4
+    {
+      id: 'P8S 어듬이 아이온 4 버프',
+      regex: /Aioniopyr 4/,
+      beforeSeconds: 3,
+      condition: (data) => data.options.AutumnStyle && data.role === 'tank',
+      infoText: (_data, _matches, output) => output.text!(),
+      outputStrings: {
+        text: {
+          en: 'ST Reprisal',
+          ko: 'ST 리프 넣으라우',
+        },
+      },
+    },
+    // 아이온 5
+    {
+      id: 'P8S 어듬이 아이온 5 버프',
+      regex: /Aioniopyr 5/,
+      beforeSeconds: 3,
+      condition: (data) => data.options.AutumnStyle,
+      infoText: (data, _matches, output) => {
+        if (data.role === 'tank')
+          return output.reprisal!();
+        if (data.CanAddle())
+          return output.addle!();
+      },
+      outputStrings: {
+        reprisal: {
+          en: 'MT Reprisal',
+          ko: 'MT 리프 넣으라우',
+        },
+        addle: {
+          en: 'Caster Addle',
+          ko: '아돌 넣으라우',
+        },
+      },
+    },
+    // 아고니아 1
+    {
+      id: 'P8S 어듬이 아고니아 1 버프',
+      regex: /Aionagonia 1/,
+      beforeSeconds: 1,
+      condition: (data) => data.options.AutumnStyle && data.role === 'tank',
+      infoText: (_data, _matches, output) => output.text!(),
+      outputStrings: {
+        text: {
+          en: 'MT Reprisal & Buff',
+          ko: 'MT 리프&세이크 넣으라우',
+        },
+      },
+    },
+    // 아고니아 2
+    {
+      id: 'P8S 어듬이 아고니아 2 버프',
+      regex: /Aionagonia 2/,
+      beforeSeconds: 1,
+      condition: (data) => data.options.AutumnStyle,
+      infoText: (data, _matches, output) => {
+        if (data.role === 'tank')
+          return output.reprisal!();
+        if (data.CanSilence())
+          return output.amigo!();
+      },
+      outputStrings: {
+        reprisal: {
+          en: 'ST Reprisal & Buff',
+          ko: 'ST 리프&그거 넣으라우',
+        },
+        amigo: {
+          en: 'Range Buff',
+          ko: '삼바 데 아미고 넣으라우',
+        },
+      },
+    },
+    // 아고니아 3
+    {
+      id: 'P8S 어듬이 아고니아 3 버프',
+      regex: /Aionagonia 3/,
+      beforeSeconds: 1,
+      condition: (data) => data.options.AutumnStyle,
+      infoText: (data, _matches, output) => {
+        if (data.role === 'tank')
+          return output.reprisal!();
+        if (data.CanAddle())
+          return output.addle!();
+      },
+      outputStrings: {
+        reprisal: {
+          en: 'MT Reprisal',
+          ko: 'MT 리프 넣으라우',
+        },
+        addle: {
+          en: 'Caster Addle',
+          ko: '아돌 넣으라우',
+        },
+      },
+    },
+    // 내추럴 얼라인 안에 있는 엔드 오브 데이즈
+    {
+      id: 'P8S 어듬이 엔드오브데이즈 버프',
+      regex: /Outer End of Days/,
+      condition: (data) => data.options.AutumnStyle,
+      infoText: (data, _matches, output) => {
+        if (data.role !== 'tank' && data.CanSilence())
+          return output.amigo!();
+      },
+      outputStrings: {
+        amigo: {
+          en: 'Range Buff',
+          ko: '삼바 데 아미고 넣으라우',
+        },
+      },
+    },
+    // 하이컨셉 1
+    {
+      id: 'P8S 어듬이 하이컨셉 1 버프',
+      regex: /High Concept 1/,
+      beforeSeconds: 2,
+      condition: (data) => data.options.AutumnStyle,
+      infoText: (data, _matches, output) => {
+        if (data.role === 'tank')
+          return output.reprisal!();
+        if (data.CanAddle())
+          return output.addle!();
+      },
+      outputStrings: {
+        reprisal: {
+          en: 'ST Reprisal',
+          ko: 'ST 리프 넣으라우',
+        },
+        addle: {
+          en: '(Caster Addle, if available)',
+          ko: '(아돌 남으면 넣으라우)',
+        },
+        amigo: {
+          en: 'Range Buff',
+          ko: '삼바 데 아미고 넣으라우',
+        },
+      },
+    },
+    // 하이컨셉 2
+    {
+      id: 'P8S 어듬이 하이컨셉 2 버프',
+      regex: /High Concept 2/,
+      beforeSeconds: 2,
+      condition: (data) => data.options.AutumnStyle,
+      infoText: (data, _matches, output) => {
+        if (data.role === 'tank')
+          return output.reprisal!();
+        if (data.CanSilence())
+          return output.amigo!();
+      },
+      outputStrings: {
+        reprisal: {
+          en: 'ST Reprisal',
+          ko: 'ST 리프 넣으라우',
+        },
+        amigo: {
+          en: 'Range Buff',
+          ko: '삼바 데 아미고 넣으라우',
+        },
+      },
+    },
   ],
   triggers: [
     // ---------------- Part 1 ----------------
@@ -2754,6 +2996,7 @@ const triggerSet: TriggerSet<Data> = {
       id: 'P8S Limitless Desolation',
       type: 'StartsUsing',
       netRegex: { id: '75ED', source: 'Hephaistos', capture: false },
+      condition: (data) => !data.options.AutumnStyle,
       response: Responses.spread('alert'),
     },
     {
@@ -2975,6 +3218,49 @@ const triggerSet: TriggerSet<Data> = {
           ja: '全体攻撃 + 出血',
           cn: '大AOE+流血',
           ko: '아픈 전체 공격 + 출혈 [어서오고]',
+        },
+      },
+    },
+    //
+    {
+      id: 'P8S 어듬이 내추럴 얼라인먼트',
+      type: 'StartsUsing',
+      netRegex: { id: '79BB', source: 'Hephaistos', capture: false },
+      condition: (data) => data.options.AutumnStyle,
+      alertText: (_data, _matches, output) => output.text!(),
+      outputStrings: {
+        text: {
+          en: '[Alignment] Alignment!',
+          ko: '[술식기술] 조정 걸리면 해야겠지',
+        },
+      },
+    },
+    //
+    {
+      id: 'P8S 어듬이 하이 컨셉',
+      type: 'StartsUsing',
+      netRegex: { id: '79AC', source: 'Hephaistos', capture: false },
+      condition: (data) => data.options.AutumnStyle,
+      // delaySeconds: 4,
+      alertText: (_data, _matches, output) => output.text!(),
+      outputStrings: {
+        text: {
+          en: '[High concept] Look for αβγ',
+          ko: '[개념지배] αβγ 잘 봐야겠지',
+        },
+      },
+    },
+    //
+    {
+      id: 'P8S 어듬이 리미틀레스 디솔레이션',
+      type: 'StartsUsing',
+      netRegex: { id: '75ED', source: 'Hephaistos', capture: false },
+      condition: (data) => data.options.AutumnStyle,
+      alertText: (_data, _matches, output) => output.text!(),
+      outputStrings: {
+        text: {
+          en: '[Desolation] Spread',
+          ko: '[만상회신] 자기 자리로 찾아가야겠지',
         },
       },
     },

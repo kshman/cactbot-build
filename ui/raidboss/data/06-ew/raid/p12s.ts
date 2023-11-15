@@ -689,12 +689,313 @@ const triggerSet: TriggerSet<Data> = {
       id: 'P12S 알테마 블레이드',
       regex: /Ultima Blade/,
       beforeSeconds: 4,
+      condition: (data) => data.options.AutumnStyle,
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
           en: 'Big AoE!',
           ja: '強力な全体攻撃！',
           ko: '엄청 아픈 전체 공격!',
+        },
+      },
+    },
+    //
+    {
+      id: 'P12S 어듬이 Pangenesis 전 산개',
+      regex: /Pangenesis/,
+      beforeSeconds: 12,
+      condition: (data) => data.options.AutumnStyle,
+      infoText: (_data, _matches, output) => output.text!(),
+      outputStrings: {
+        text: {
+          en: '[Pangenesis]',
+          ko: '[판제네시스: 나란히 줄 서요]',
+        },
+      },
+    },
+    //
+    {
+      id: 'P12S 어듬이 버프: Ultima 1',
+      regex: /Ultima 1/,
+      beforeSeconds: 7,
+      condition: (data) => data.options.AutumnStyle,
+      infoText: (data, _matches, output) => {
+        if (data.role === 'tank' && data.palladionGrapsTarget === data.me)
+          return output.reprisal!();
+        if (data.CanAddle())
+          return output.addle!();
+      },
+      outputStrings: {
+        reprisal: {
+          en: '[MT Reprisal]',
+          ko: '[MT 리프]',
+        },
+        addle: {
+          en: '[Caster Addle]',
+          ko: '[아돌 넣으라우]',
+        },
+      },
+    },
+    //
+    {
+      id: 'P12S 어듬이 버프: Gaiaochos 1',
+      regex: /Gaiaochos 1/,
+      beforeSeconds: 8,
+      condition: (data) => data.options.AutumnStyle,
+      infoText: (data, _matches, output) => {
+        if (data.role === 'tank' && data.palladionGrapsTarget === data.me)
+          return output.text!();
+      },
+      outputStrings: {
+        text: {
+          en: '[MT Buff]',
+          ko: '[MT 세이크오프]',
+        },
+      },
+    },
+    //
+    {
+      id: 'P12S 어듬이 버프: Ultima 2',
+      regex: /Ultima 2/,
+      beforeSeconds: 8,
+      condition: (data) => data.options.AutumnStyle,
+      infoText: (data, _matches, output) => {
+        if (data.role === 'tank' && data.palladionGrapsTarget === data.me)
+          return output.text!();
+      },
+      outputStrings: {
+        text: {
+          en: '[MT Reprisal]',
+          ko: '[MT 리프]',
+        },
+      },
+    },
+    //
+    {
+      id: 'P12S 어듬이 버프: The Classical Concepts 1',
+      regex: /The Classical Concepts 1/,
+      beforeSeconds: 8,
+      condition: (data) => data.options.AutumnStyle,
+      infoText: (data, _matches, output) => {
+        if (data.role === 'tank' && data.palladionGrapsTarget !== data.me)
+          return output.text!();
+      },
+      outputStrings: {
+        text: {
+          en: '[ST Reprisal]',
+          ko: '[ST 리프]',
+        },
+      },
+    },
+    //
+    {
+      id: 'P12S 어듬이 버프: Ultima 3',
+      regex: /Ultima 3/,
+      beforeSeconds: 8,
+      condition: (data) => data.options.AutumnStyle,
+      infoText: (data, _matches, output) => {
+        if (data.role === 'tank' && data.palladionGrapsTarget !== data.me)
+          return output.text!();
+      },
+      outputStrings: {
+        text: {
+          en: '[ST Buff]',
+          ko: '[ST 세이크오프]',
+        },
+      },
+    },
+    //
+    {
+      id: 'P12S 어듬이 버프: Caloric Theory 1',
+      regex: /Caloric Theory 1/,
+      beforeSeconds: 8,
+      condition: (data) => data.options.AutumnStyle,
+      infoText: (data, _matches, output) => {
+        if (data.role === 'tank' && data.palladionGrapsTarget === data.me)
+          return output.text!();
+      },
+      outputStrings: {
+        text: {
+          en: '[MT Buff]',
+          ko: '[MT 세이크오프]',
+        },
+      },
+    },
+    //
+    {
+      id: 'P12S 어듬이 버프: Ultima 4',
+      regex: /Ultima 4/,
+      beforeSeconds: 8,
+      condition: (data) => data.options.AutumnStyle,
+      infoText: (data, _matches, output) => {
+        if (data.role === 'tank' && data.palladionGrapsTarget !== data.me)
+          return output.text!();
+      },
+      outputStrings: {
+        text: {
+          en: '[ST Reprisal]',
+          ko: '[ST 리프]',
+        },
+      },
+    },
+    //
+    {
+      id: 'P12S 어듬이 버프: Pangenesis',
+      regex: /Pangenesis/,
+      beforeSeconds: 8,
+      condition: (data) => data.options.AutumnStyle,
+      infoText: (data, _matches, output) => {
+        if (data.role === 'tank')
+          return data.palladionGrapsTarget === data.me ? output.mt!() : output.st!();
+      },
+      outputStrings: {
+        mt: {
+          en: '[MT Rprisal]',
+          ko: '[MT 리프]',
+        },
+        st: {
+          en: '[ST Buff]',
+          ko: '[ST 세이크오프]',
+        },
+      },
+    },
+    //
+    {
+      id: 'P12S 어듬이 버프: The Classical Concepts 2',
+      regex: /The Classical Concepts 2/,
+      beforeSeconds: 8,
+      condition: (data) => data.options.AutumnStyle,
+      infoText: (data, _matches, output) => {
+        if (data.role === 'tank' && data.palladionGrapsTarget === data.me)
+          return output.text!();
+      },
+      outputStrings: {
+        text: {
+          en: '[MT Buff]',
+          ko: '[MT 세이크오프]',
+        },
+      },
+    },
+    //
+    {
+      id: 'P12S 어듬이 버프: Ultima 5',
+      regex: /Ultima 5/,
+      beforeSeconds: 8,
+      condition: (data) => data.options.AutumnStyle,
+      infoText: (data, _matches, output) => {
+        if (data.role === 'tank' && data.palladionGrapsTarget === data.me)
+          return output.text!();
+      },
+      outputStrings: {
+        text: {
+          en: '[MT Reprisal]',
+          ko: '[MT 리프]',
+        },
+      },
+    },
+    //
+    {
+      id: 'P12S 어듬이 버프: Caloric Theory 2',
+      regex: /Caloric Theory 2/,
+      beforeSeconds: 8,
+      condition: (data) => data.options.AutumnStyle,
+      infoText: (data, _matches, output) => {
+        if (data.role === 'tank' && data.palladionGrapsTarget !== data.me)
+          return output.text!();
+      },
+      outputStrings: {
+        text: {
+          en: '[ST Reprisal + Buff]',
+          ko: '[ST 리프 + 세이크오프]',
+        },
+      },
+    },
+    //
+    {
+      id: 'P12S 어듬이 버프: Ekpyrosis 2 (cast)',
+      regex: /Ekpyrosis 2 \(cast\)/,
+      beforeSeconds: 8,
+      condition: (data) => data.options.AutumnStyle,
+      infoText: (data, _matches, output) => {
+        if (data.role === 'tank' && data.palladionGrapsTarget === data.me)
+          return output.text!();
+      },
+      outputStrings: {
+        text: {
+          en: '[MT Buff]',
+          ko: '[MT 세이크오프]',
+        },
+      },
+    },
+    //
+    {
+      id: 'P12S 어듬이 버프: Ultima 6',
+      regex: /Ultima 6/,
+      beforeSeconds: 8,
+      condition: (data) => data.options.AutumnStyle,
+      infoText: (data, _matches, output) => {
+        if (data.role === 'tank' && data.palladionGrapsTarget === data.me)
+          return output.text!();
+      },
+      outputStrings: {
+        text: {
+          en: '[MT Reprisal]',
+          ko: '[MT 리프]',
+        },
+      },
+    },
+    //
+    {
+      id: 'P12S 어듬이 버프: Gaiaochos 2',
+      regex: /Gaiaochos 2/,
+      beforeSeconds: 8,
+      condition: (data) => data.options.AutumnStyle,
+      infoText: (data, _matches, output) => {
+        if (data.role === 'tank' && data.palladionGrapsTarget !== data.me)
+          return output.text!();
+      },
+      outputStrings: {
+        text: {
+          en: '[ST Reprisal]',
+          ko: '[ST 리프]',
+        },
+      },
+    },
+    //
+    {
+      id: 'P12S 어듬이 버프: Ultima 7',
+      regex: /Ultima 7/,
+      beforeSeconds: 8,
+      condition: (data) => data.options.AutumnStyle,
+      infoText: (data, _matches, output) => {
+        if (data.role === 'tank' && data.palladionGrapsTarget === data.me)
+          return output.text!();
+      },
+      outputStrings: {
+        text: {
+          en: '[MT Reprisal]',
+          ko: '[MT 리프]',
+        },
+      },
+    },
+    //
+    {
+      id: 'P12S 어듬이 버프: Ultima 8',
+      regex: /Ultima 8/,
+      beforeSeconds: 8,
+      condition: (data) => data.options.AutumnStyle,
+      infoText: (data, _matches, output) => {
+        if (data.role === 'tank')
+          return data.palladionGrapsTarget === data.me ? output.mt!() : output.st!();
+      },
+      outputStrings: {
+        mt: {
+          en: '[MT Buff]',
+          ko: '[MT 세이크오프]',
+        },
+        st: {
+          en: '[ST Rprisal]',
+          ko: '[ST 리프]',
         },
       },
     },
@@ -4833,6 +5134,14 @@ const triggerSet: TriggerSet<Data> = {
       delaySeconds: 0.5,
       suppressSeconds: 2,
       response: Responses.spread('alert'),
+    },
+    //
+    {
+      id: 'P12S 어듬이 프로보크',
+      type: 'Ability',
+      netRegex: { id: ['1D6D', '4783'] },
+      condition: (data) => data.options.AutumnStyle,
+      run: (data, matches) => data.palladionGrapsTarget = matches.source,
     },
   ],
   timelineReplace: [

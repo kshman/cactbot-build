@@ -292,10 +292,10 @@ hideall "--sync--"
 5008.0 "--auto--" #sync / 1[56]:[^:]*:Hephaistos:72C2:/
 5011.0 "--auto--" #sync / 1[56]:[^:]*:Hephaistos:72C2:/
 5011.0 "--sync--" sync / 14:[^:]*:Hephaistos:79DF:/ window 6000,10
-5016.0 "Aioniopyr" sync / 1[56]:[^:]*:Hephaistos:79DF:/
+5016.0 "Aioniopyr 1" sync / 1[56]:[^:]*:Hephaistos:79DF:/
 5019.0 "--auto--" #sync / 1[56]:[^:]*:Hephaistos:72C2:/
 5022.0 "--auto--" #sync / 1[56]:[^:]*:Hephaistos:72C2:/
-5027.2 "Tyrant's Unholy Darkness" sync / 1[56]:[^:]*:Hephaistos:79DD:/
+5027.2 "Tyrant's Unholy Darkness 1" sync / 1[56]:[^:]*:Hephaistos:79DD:/
 5032.2 "--auto--" #sync / 1[56]:[^:]*:Hephaistos:72C2:/
 5035.3 "--auto--" #sync / 1[56]:[^:]*:Hephaistos:72C2:/
 
@@ -307,13 +307,14 @@ hideall "--sync--"
 5064.6 "Forcible Fire II/Forcible Fire III" sync / 1[56]:[^:]*:Hephaistos:(79C0|79BF):/
 
 5064.6 "Ashing Blaze" sync / 1[56]:[^:]*:Hephaistos:(79D7|79D8):/
+5070.0 "Outer End of Days"
 5076.4 "Forcible Trifire/Forcible Difreeze" sync / 1[56]:[^:]*:Hephaistos:(79BD|79BE):/
 5082.4 "Forcible Difreeze/Forcible Trifire" sync / 1[56]:[^:]*:Hephaistos:(79BE|79BD):/
 
-5088.7 "Aioniopyr" sync / 1[56]:[^:]*:Hephaistos:79DF:/ window 20,20
+5088.7 "Aioniopyr 2" sync / 1[56]:[^:]*:Hephaistos:79DF:/ window 20,20
 5091.7 "--auto--" #sync / 1[56]:[^:]*:Hephaistos:72C2:/
 5094.8 "--auto--" #sync / 1[56]:[^:]*:Hephaistos:72C2:/
-5101.9 "Tyrant's Unholy Darkness" sync / 1[56]:[^:]*:Hephaistos:79DD:/
+5101.9 "Tyrant's Unholy Darkness 2" sync / 1[56]:[^:]*:Hephaistos:79DD:/
 5114.1 "--sync--" sync / 1[56]:[^:]*:Hephaistos:79AC:/
 5106.9 "--auto--" #sync / 1[56]:[^:]*:Hephaistos:72C2:/
 5118.6 "High Concept 1" sync / 1[56]:[^:]*:Hephaistos:710A:/ window 20,20
@@ -330,7 +331,7 @@ hideall "--sync--"
 5159.8 "--targetable--"
 5162.8 "Deconceptualize" sync / 1[56]:[^:]*:Hephaistos:7A8E:/
 
-5170.9 "Aioniopyr" sync / 1[56]:[^:]*:Hephaistos:79DF:/ window 20,20
+5170.9 "Aioniopyr 3" sync / 1[56]:[^:]*:Hephaistos:79DF:/ window 20,20
 5174.0 "--auto--" #sync / 1[56]:[^:]*:Hephaistos:72C2:/
 5177.1 "--auto--" #sync / 1[56]:[^:]*:Hephaistos:72C2:/
 5180.1 "--auto--" #sync / 1[56]:[^:]*:Hephaistos:72C2:/
@@ -348,10 +349,10 @@ hideall "--sync--"
 5206.3 "Tyrant's Flare II" #sync / 1[56]:[^:]*:Hephaistos:7A88:/
 5206.3 "Burst 4" #sync / 1[56]:[^:]*:Hephaistos:79D5:/
 
-5213.2 "Aioniopyr" sync / 1[56]:[^:]*:Hephaistos:79DF:/ window 20,20
+5213.2 "Aioniopyr 4" sync / 1[56]:[^:]*:Hephaistos:79DF:/ window 20,20
 5216.3 "--auto--" #sync / 1[56]:[^:]*:Hephaistos:72C2:/
 5219.3 "--auto--" #sync / 1[56]:[^:]*:Hephaistos:72C2:/
-5226.3 "Tyrant's Unholy Darkness" sync / 1[56]:[^:]*:Hephaistos:79DD:/
+5226.3 "Tyrant's Unholy Darkness 3" sync / 1[56]:[^:]*:Hephaistos:79DD:/
 5231.4 "--auto--" #sync / 1[56]:[^:]*:Hephaistos:72C2:/
 5234.4 "--auto--" #sync / 1[56]:[^:]*:Hephaistos:72C2:/
 5241.5 "Natural Alignment 2" sync / 1[56]:[^:]*:Hephaistos:79BB:/
@@ -359,14 +360,15 @@ hideall "--sync--"
 5253.7 "Twist Nature" sync / 1[56]:[^:]*:Hephaistos:79BC:/
 5262.9 "Forcible Fire III/Forcible Fire II" sync / 1[56]:[^:]*:Hephaistos:(79BF|79C0):/
 5268.9 "Forcible Fire II/Forcible Fire III" sync / 1[56]:[^:]*:Hephaistos:(79C0|79BF):/
+5275.0 "Outer End of Days"
 5281.8 "Forcible Trifire/Forcible Difreeze" sync / 1[56]:[^:]*:Hephaistos:(79BD|79BE):/
 5287.9 "Forcible Difreeze/Forcible Trifire" sync / 1[56]:[^:]*:Hephaistos:(79BE|79BD):/
 5293.8 "Ashing Blaze" sync / 1[56]:[^:]*:Hephaistos:(79D7|79D8):/
 
-5301.9 "Aioniopyr" sync / 1[56]:[^:]*:Hephaistos:79DF:/ window 20,20
+5301.9 "Aioniopyr 5" sync / 1[56]:[^:]*:Hephaistos:79DF:/ window 20,20
 5305.0 "--auto--" #sync / 1[56]:[^:]*:Hephaistos:72C2:/
 5308.0 "--auto--" #sync / 1[56]:[^:]*:Hephaistos:72C2:/
-5315.0 "Tyrant's Unholy Darkness" sync / 1[56]:[^:]*:Hephaistos:79DD:/
+5315.0 "Tyrant's Unholy Darkness ¸¶Áö¸·" sync / 1[56]:[^:]*:Hephaistos:79DD:/
 5320.2 "--auto--" #sync / 1[56]:[^:]*:Hephaistos:72C2:/
 
 5327.2 "--sync--" sync / 1[56]:[^:]*:Hephaistos:79AC:/
