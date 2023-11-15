@@ -444,13 +444,10 @@ const roleTanksAndHealers: readonly string[] = [...roleTanks, ...roleHealers] as
 // 어듬이 유틸
 const Autumn = {
   // 어듬이 잡 우선 순위
-  jobPriority: (jobIndex: number): number => {
-    const val = jobIndexToPriority[jobIndex];
-    return val ?? 9999;
-  },
+  jobPriority: (jobIndex: number): number => jobIndexToPriority[jobIndex] ?? 9999,
   // 어듬이 잡 우선 순위 리스트
   jobPriorityList: (indices: number[], lang: Lang): string[] => {
-    const priors = indices.map((x) => Autumn.jobPriority(x)).sort((a, b) => a - b);
+    const priors = indices.map((x) => jobIndexToPriority[x] ?? 9999).sort((a, b) => a - b);
     const jobs = priors.map((x) => jobPriorityToName[x]?.[lang] ?? '???');
     return jobs;
   },
