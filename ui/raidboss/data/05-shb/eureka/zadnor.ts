@@ -1613,7 +1613,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: 'Package en ligne',
           ja: '直線頭割り',
           cn: '直线分摊',
-          ko: '한 줄로 뭉쳐요',
+          ko: '뭉쳐요',
         },
       },
     },
@@ -2228,7 +2228,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       'replaceText': {
         '--lasers--': '--레이저--',
-        '--line stack--': '--직선 쉐어--',
+        '--line stack--': '--뭉쳐요(직선)--',
         '74 Degrees': '물 쏘기',
         'Advanced Death IV': '강화 데스쟈',
         'Advanced Death Ray': '강화 죽음의 광선',

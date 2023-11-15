@@ -565,7 +565,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: 'Positions -> Dispersez-vous -> AoE en ligne -> Extérieur -> Tank cleaves',
           ja: '8方向散開 -> 散開 -> 直線範囲 -> 離れる -> タンクに雷範囲',
           cn: '八方 -> 分散 -> 直线 -> 远离直线 -> T接雷',
-          ko: '8산개 -> 산개 -> 직선 장판 -> 밖으로 -> 탱크클레브',
+          ko: '8산개 -> 산개 -> 직선 장판 -> 밖으로 -> 광역 탱버',
         },
         ttsText: {
           en: 'Lightning Cycle',
@@ -598,7 +598,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: 'Positions -> Groupes -> AoE en ligne -> Déposez au sol -> Éloignez-vous',
           ja: '8方向散開 -> 3方向頭割り -> 直線範囲 -> AoE誘導 -> 離れる',
           cn: '八方 -> 光三向分摊 -> 直线 -> 放光点名 -> 离开',
-          ko: '8산개 -> 홀리 그룹 쉐어 -> 직선 장판 -> 장판 유도 -> 피해요',
+          ko: '8산개 -> 홀리 그룹 쉐어 -> 직선 장판 -> 장판 유도 -> 피하기',
         },
         ttsText: {
           en: 'Holy Cycle',

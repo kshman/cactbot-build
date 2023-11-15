@@ -32,12 +32,12 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '혜성 처리',
+          en: 'Comet Towers',
           de: 'Türme',
           fr: 'Tours de comète',
           ja: 'コメットを処理',
           cn: '踩塔',
-          ko: '혜성 기둥',
+          ko: '혜성 처리',
         },
       },
     },
@@ -50,12 +50,12 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '프로틴, 흩어져요',
+          en: 'Protean',
           de: 'Himmelsrichtungen',
           fr: 'Positions',
           ja: '散開',
           cn: '散开',
-          ko: '위치 산개',
+          ko: '프로틴, 흩어져요',
         },
       },
     },
@@ -86,12 +86,12 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '그리고 오른쪽',
+          en: 'Then Right',
           de: 'Dann Rechts',
           fr: 'À Droite',
           ja: 'そして右へ',
           cn: '然后右',
-          ko: '다음 오른쪽',
+          ko: '그리고 오른쪽',
         },
       },
     },
@@ -109,12 +109,12 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '그리고 왼쪽',
+          en: 'Then Left',
           de: 'Dann Links',
           fr: 'À Gauche',
           ja: 'そして左へ',
           cn: '然后左',
-          ko: '다음 왼쪽',
+          ko: '그리고 왼쪽',
         },
       },
     },
@@ -127,12 +127,12 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '안전한 곳으로',
+          en: 'Go to Safe Spot',
           de: 'Geh zur sicheren Stelle',
           fr: 'Allez dans la zone safe',
           ja: '安全の場所へ移動',
           cn: '前往安全区域',
-          ko: '안전 지대로 이동',
+          ko: '안전한 곳으로',
         },
       },
     },
@@ -145,12 +145,12 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '거울 뒤로',
+          en: 'Hide Behind Door',
           de: 'Hinter der Tür verstecken',
           fr: 'Cachez-vous derrière le mirroir',
           ja: '鏡の後ろに',
           cn: '镜子后躲避',
-          ko: '문 없는 곳 반대쪽으로',
+          ko: '거울 뒤로',
         },
       },
     },
@@ -169,12 +169,12 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '줄 바깥으로 유도',
+          en: 'Point Tether Out',
           de: 'Verbindung nach draußen richten',
           fr: 'Pointez le lien vers l\'extérieur',
           ja: '線を外に引く',
           cn: '连线',
-          ko: '선 연결 바깥으로 빼기',
+          ko: '줄 바깥으로 유도',
         },
       },
     },
@@ -186,14 +186,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       run: (data) => data.waterDarkMarker = true,
       outputStrings: {
-        text: {
-          en: '4:4 힐러',
-          de: 'Bei dem Heiler sammeln',
-          fr: 'Packages sur les heals',
-          ja: 'ヒーラーに集合',
-          cn: '治疗集合',
-          ko: '힐러 모이기',
-        },
+        text: Outputs.healerGroups,
       },
     },
     {
@@ -205,12 +198,12 @@ const triggerSet: TriggerSet<Data> = {
       run: (data) => data.waterDarkMarker = true,
       outputStrings: {
         text: {
-          en: '탱크 밖으로',
+          en: 'Tank Spread',
           de: 'Tanks verteilen',
           fr: 'Tanks, dispersez-vous',
           ja: 'タンクは外に',
           cn: '坦克散开',
-          ko: '탱 산개',
+          ko: '탱크 흩어져요',
         },
       },
     },
@@ -223,14 +216,7 @@ const triggerSet: TriggerSet<Data> = {
       suppressSeconds: 5,
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
-        text: {
-          en: '4:4 힐러',
-          de: 'Bei den Heilern sammeln',
-          fr: 'Packages sur les heals',
-          ja: 'ヒーラーに集合',
-          cn: '治疗集合',
-          ko: '힐러 모이기',
-        },
+        text: Outputs.healerGroups,
       },
     },
     {
@@ -247,12 +233,12 @@ const triggerSet: TriggerSet<Data> = {
       alarmText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '이게요름/라하브레아 서로 멀리',
+          en: 'Move Shades Apart',
           de: 'Schatten auseinander ziehen',
           fr: 'Écartez les spectres',
           ja: 'アシエンを引き離す',
           cn: '拉开无影',
-          ko: '분신 서로 떨어뜨리기',
+          ko: '아시엔 두명 서로 멀리',
         },
       },
     },
@@ -271,12 +257,12 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         text: {
-          en: '곧 탱크 스위치',
+          en: 'tank swap soon',
           de: 'Gleich: Tank swap',
           fr: 'Tank swap bientôt',
           ja: 'まもなく、タンクスイッチ',
           cn: '坦克即将换T',
-          ko: '곧 탱교대',
+          ko: '곧 탱크 스위치',
         },
       },
     },
@@ -295,12 +281,12 @@ const triggerSet: TriggerSet<Data> = {
       run: (data) => data.brand = 'fire',
       outputStrings: {
         text: {
-          en: '이게요름 공격!',
+          en: 'Attack Igeyorhm',
           de: 'Igeyorhm angreifen',
           fr: 'Attaquez Igeyorhm',
           ja: 'イゲオルムを攻撃',
           cn: '攻击以格约姆',
-          ko: '이게요름 공격',
+          ko: '이게요름 공격!',
         },
       },
     },
@@ -313,12 +299,12 @@ const triggerSet: TriggerSet<Data> = {
       run: (data) => data.brand = 'ice',
       outputStrings: {
         text: {
-          en: '라하브레아 공격!',
+          en: 'Attack Lahabrea',
           de: 'Lahabrea angreifen',
           fr: 'Attaquez Lahabrea',
           ja: 'ラハブレアを攻撃',
           cn: '攻击拉哈布雷亚',
-          ko: '라하브레아 공격',
+          ko: '라하브레아 공격!',
         },
       },
     },
@@ -359,12 +345,12 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '탱힐 HP 만땅으로!',
+          en: 'Heal T/H to Full',
           de: 'Heile T/H voll',
           fr: 'Soignez T/H complétement',
           ja: 'タンク／ヒーラーのHPを満タンに',
           cn: '奶满T奶',
-          ko: '탱/힐 풀피로 만들기',
+          ko: '탱힐 HP 만땅으로!',
         },
       },
     },
@@ -385,12 +371,12 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '주거욧',
+          en: 'Get Killed',
           de: 'Stirb',
           fr: 'Mourrez',
           ja: '自殺',
           cn: '自杀',
-          ko: '죽을 정도로 맞기',
+          ko: '주거욧',
         },
       },
     },
@@ -403,12 +389,12 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '내게 에이션트 링',
+          en: 'Donut on YOU',
           de: 'Donut auf DIR',
           fr: 'Donut sur VOUS',
           ja: '自分にエンシェントリング',
           cn: '月环点名',
-          ko: '도넛 징 대상자',
+          ko: '내게 에이션트 링',
         },
       },
     },
@@ -421,12 +407,12 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '그대로 바깥에',
+          en: 'Stay Out',
           de: 'Draußen stehen',
           fr: 'Restez éloigné',
           ja: 'ライトニングを外に安置',
           cn: '外侧放雷',
-          ko: '바깥에 있기',
+          ko: '그대로 바깥에',
         },
       },
     },
@@ -454,12 +440,12 @@ const triggerSet: TriggerSet<Data> = {
         tankBusterOnYou: Outputs.tankBusterOnYou,
         busterOn: Outputs.tankBusterOnPlayer,
         awayFromPlayer: {
-          en: '멀어져요: ${player}',
+          en: 'Away from ${player}',
           de: 'Weg von ${player}',
           fr: 'Éloignez-vous de ${player}',
           ja: '${player}から離れ',
           cn: '远离 ${player}',
-          ko: '"${player}" 탱버',
+          ko: '멀어져요: ${player}',
         },
       },
     },
@@ -470,14 +456,7 @@ const triggerSet: TriggerSet<Data> = {
       suppressSeconds: 1,
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
-        text: {
-          en: '4:4 힐러',
-          de: 'Bei den Heilern sammeln',
-          fr: 'Packages sur les heals',
-          ja: 'ヒーラーに集合',
-          cn: '治疗集合',
-          ko: '힐러 모이기',
-        },
+        text: Outputs.healerGroups,
       },
     },
     {
@@ -500,12 +479,12 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '에테리얼 감옥 부셔요',
+          en: 'Break Aetherial Gaol',
           de: 'Zerstöre Ätherkerker',
           fr: 'Détruisez la Geôle éthérée',
           ja: 'エーテリアル・ジェイルを打ち破す',
           cn: '打破牢狱',
-          ko: '에테르 감옥 부수기',
+          ko: '에테리얼 감옥 부셔요',
         },
       },
     },
@@ -518,12 +497,12 @@ const triggerSet: TriggerSet<Data> = {
       run: (data) => data.flame = true,
       outputStrings: {
         text: {
-          en: '넉백 + 내게 뭉쳐요',
+          en: 'Knockback + Stack on YOU',
           de: 'Rückstoß + sammeln beim DIR',
           fr: 'Poussée + package sur VOUS',
           ja: 'ノックバック + 頭割り',
           cn: '击退 + 集合 点名',
-          ko: '넉백 + 쉐어징 대상자',
+          ko: '넉백 + 내게 뭉쳐요',
         },
       },
     },
@@ -536,12 +515,12 @@ const triggerSet: TriggerSet<Data> = {
       run: (data) => data.freeze = true,
       outputStrings: {
         text: {
-          en: '넉백 + 내게 얼음',
+          en: 'Knockback + Ice on YOU',
           de: 'Rückstoß + Eis auf DIR',
           fr: 'Poussée + Glace sur VOUS',
           ja: '自分に ノックバック + 氷',
           cn: '击退 + 冰 点名',
-          ko: '넉백 + 얼음징 대상자',
+          ko: '넉백 + 내게 얼음',
         },
       },
     },
@@ -553,12 +532,12 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '넉백 + 페어',
+          en: 'Knockback + Stack With Partner',
           de: 'Rückstoß + sammeln beim Partner',
           fr: 'Poussée + packez-vous avec votre partenaire',
           ja: 'パートナーと ノックバック + 頭割り',
           cn: '与伙伴 击退 + 集合',
-          ko: '넉백 + 파트너랑 모이기',
+          ko: '넉백 + 페어',
         },
       },
     },
@@ -571,12 +550,12 @@ const triggerSet: TriggerSet<Data> = {
       run: (data) => data.netherBlast = true,
       outputStrings: {
         text: {
-          en: '내게 장판, 밖에 버려요',
+          en: 'Puddles on YOU',
           de: 'Fläche auf YOU',
           fr: 'Zone au sol sur VOUS',
           ja: 'AoEを外に捨て',
           cn: '水圈点名',
-          ko: '징 대상자',
+          ko: '내게 장판, 밖에 버려요',
         },
       },
     },
@@ -587,14 +566,7 @@ const triggerSet: TriggerSet<Data> = {
       condition: (data) => !data.netherBlast,
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
-        text: {
-          en: '4:4 힐러',
-          de: 'Bei dem Heiler sammeln',
-          fr: 'Packages sur les heals',
-          ja: 'ヒーラーに集合',
-          cn: '治疗集合',
-          ko: '힐러 모이기',
-        },
+        text: Outputs.healerGroups,
       },
     },
     {
@@ -610,12 +582,12 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '앞쪽 한가운데',
+          en: 'Front and Center',
           de: 'Vorne und Mitte',
           fr: 'Devant et au centre',
           ja: '中央',
           cn: '中间前方',
-          ko: '앞 중앙으로',
+          ko: '앞쪽 한가운데',
         },
       },
     },
@@ -628,12 +600,12 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '다크스트림',
+          en: 'Exoflares',
           de: 'Exa-Flares',
           fr: 'Exabrasiers',
           ja: 'ダークストリーム',
           cn: '地火',
-          ko: '엑사플레어',
+          ko: '다크스트림',
         },
       },
     },
@@ -666,12 +638,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         tankBusters: Outputs.tankBusters,
         getTowers: {
-          en: '타워 밟아요',
+          en: 'Get Towers',
           de: 'Türme nehmen',
           fr: 'Allez dans les tours',
           ja: '塔を踏む',
           cn: '踩塔',
-          ko: '타워 들어가기',
+          ko: '타워 밟아요',
         },
       },
     },
@@ -691,12 +663,12 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '곧 전멸이네!',
+          en: 'Enrage',
           de: 'Finalangriff',
           fr: 'Enrage',
           ja: '時間切れ',
           cn: '狂暴',
-          ko: '전멸기',
+          ko: '곧 전멸이네!',
         },
       },
     },

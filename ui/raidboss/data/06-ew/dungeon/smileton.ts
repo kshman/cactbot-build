@@ -35,7 +35,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: 'Poussée (une ligne)',
           ja: '一行ノックバック',
           cn: '击退 (向后一行)',
-          ko: '한 줄 넉백',
+          ko: '한 칸 넉백',
         },
       },
     },

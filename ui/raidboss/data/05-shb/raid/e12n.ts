@@ -81,7 +81,7 @@ const primalOutputStrings = {
     fr: 'Intercardinal',
     ja: '斜め',
     cn: '四角',
-    ko: '대각',
+    ko: '비스듬히',
   },
   '008E008F': {
     en: 'Under + Sides',
@@ -89,7 +89,7 @@ const primalOutputStrings = {
     fr: 'En dessous + Côtés',
     ja: '真ん中 + 横へ',
     cn: '正中间两侧',
-    ko: '보스 아래 + 양옆',
+    ko: '보스 밑 + 옆으로',
   },
   '008E0090': {
     en: 'North/South + Out',
@@ -97,7 +97,7 @@ const primalOutputStrings = {
     fr: 'Nord/Sud + Extérieur',
     ja: '北/南 + 外へ',
     cn: '南北远离',
-    ko: '북/남 + 바깥',
+    ko: '남북 + 바깥',
   },
   '008E0091': {
     en: 'Under + Intercards',
@@ -105,7 +105,7 @@ const primalOutputStrings = {
     fr: 'En dessous + Intercardinal',
     ja: '真ん中 + 斜め',
     cn: '正中间四角',
-    ko: '보스 아래 + 대각',
+    ko: '보스 밑 + 비스듬히',
   },
 };
 
@@ -214,7 +214,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: 'Package sur (${players})',
           ja: '頭割り (${players})',
           cn: '分摊 (${players})',
-          ko: '모이기 (${players})',
+          ko: '뭉쳐요: ${players}',
         },
         stackOnYou: Outputs.stackOnYou,
       },

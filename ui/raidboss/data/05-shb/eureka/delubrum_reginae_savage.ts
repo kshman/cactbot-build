@@ -427,7 +427,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: 'Passez derrière pour le package en ligne',
           ja: '後ろに直線頭割りを準備',
           cn: '去后方，准备直线分摊',
-          ko: '보스 뒤에서 한 줄로 뭉쳐요',
+          ko: '보스 뒤에서 뭉쳐요 (직선)',
         },
       },
     },
@@ -439,14 +439,7 @@ const triggerSet: TriggerSet<Data> = {
         // cactbot-builtin-response
         output.responseOutputStrings = {
           avoidTankCleave: Outputs.avoidTankCleave,
-          sharedTankBuster: {
-            en: 'Shared Tank Buster',
-            de: 'Geteilter Tank Buster',
-            fr: 'Partagez le Tank buster',
-            ja: '頭割りタンクバスター',
-            cn: '分摊死刑',
-            ko: '둘이 맞는 탱크버스터',
-          },
+          sharedTankBuster: Outputs.sharedTankbuster,
         };
 
         if (data.role === 'tank' || data.role === 'healer')
@@ -1403,14 +1396,7 @@ const triggerSet: TriggerSet<Data> = {
         // cactbot-builtin-response
         output.responseOutputStrings = {
           avoidTankCleave: Outputs.avoidTankCleave,
-          sharedTankBuster: {
-            en: 'Shared Tank Buster',
-            de: 'Geteilter Tank Buster',
-            fr: 'Partagez le Tank buster',
-            ja: '頭割りタンクバスター',
-            cn: '分摊死刑',
-            ko: '함께 맞는 탱크버스터',
-          },
+          sharedTankBuster: Outputs.sharedTankbuster,
         };
 
         if (data.role === 'tank' || data.role === 'healer')

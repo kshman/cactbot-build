@@ -192,7 +192,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: 'Packez-vous en ligne sur ${player}',
           ja: '${player}に直線頭割り',
           cn: '${player} 直线分摊',
-          ko: '한 줄로 뭉쳐요: ${player}',
+          ko: '뭉쳐요: ${player}',
         },
       },
     },

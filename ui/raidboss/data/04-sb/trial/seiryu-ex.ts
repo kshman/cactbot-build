@@ -45,7 +45,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: 'Packez-vous en ligne',
           ja: 'スタック',
           cn: '直线分摊',
-          ko: '직선 쉐어',
+          ko: '뭉쳐요',
         },
       },
     },

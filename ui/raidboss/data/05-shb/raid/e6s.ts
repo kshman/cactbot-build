@@ -153,7 +153,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: 'Évitez les griffes',
           ja: '緑の杭に避け',
           cn: '躲避风刃',
-          ko: '초록 발톱 피해요',
+          ko: '초록 발톱 피하기',
         },
       },
     },

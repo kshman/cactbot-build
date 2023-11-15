@@ -19,7 +19,7 @@ const lyheGhiahOutputStrings = {
     en: 'Adds soon',
     de: 'Bald Adds',
     cn: '小怪即将出现',
-    ko: '곧 쫄 나옴',
+    ko: '곧 쫄 나와요',
   },
 } as const;
 
@@ -69,7 +69,7 @@ const triggerSet: TriggerSet<Data> = {
           en: 'Dungeon Crew spawned, kill in order!',
           de: 'Verlies-Mandragora erscheinen, in Reihenfolge besiegen!',
           cn: '已生成 宝库蔓德拉战队, 依次击杀!',
-          ko: '만드라즈 등장, 순서대로 잡기!',
+          ko: '만드라즈 등장, 순서대로 잡아요!',
         },
       },
     },
@@ -238,7 +238,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: 'Packez-vous sur ${player} et regardez ailleurs',
           ja: '${player}に頭割り、見ない',
           cn: '靠近并背对${player}分摊',
-          ko: '${player} 쉐어, 바라보지않기',
+          ko: '뭉치고 바라보면 안되요: ${player}',
         },
       },
     },

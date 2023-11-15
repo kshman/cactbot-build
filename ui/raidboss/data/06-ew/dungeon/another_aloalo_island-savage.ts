@@ -260,8 +260,8 @@ const triggerSet: TriggerSet<Data> = {
       suppressSeconds: 99999,
       infoText: (data, _matches, output) => {
         data.checkOptions = true;
-        if (data.options.AutumnExtend !== undefined) {
-          const ss = data.options.AutumnExtend.split(',');
+        if (data.options.AutumnParameter !== undefined) {
+          const ss = data.options.AutumnParameter.split(',');
           if (ss.length === 1 && ss[0] === 'hm') {
             data.triggerSetConfig.flukeGaleType = 'hamukatsu';
             data.triggerSetConfig.planarTacticsType = 'hamukatsu';

@@ -45,7 +45,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: 'Package en ligne sur VOUS',
           ja: '直線頭割り',
           cn: '直线分摊点名',
-          ko: '직선 쉐어 대상자',
+          ko: '내게 뭉쳐요 (직선)',
         },
         lineStackOn: {
           en: '한줄 뭉쳐요: ${player}',
@@ -53,7 +53,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: 'Package en ligne sur ${player}',
           ja: '${player}に直線頭割り',
           cn: '直线分摊点${player}',
-          ko: '${player} 직선 쉐어',
+          ko: '뭉쳐요: ${player}',
         },
       },
     },

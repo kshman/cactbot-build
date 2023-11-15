@@ -354,7 +354,7 @@ const triggerSet: TriggerSet<Data> = {
             fr: 'Évitez ${player}',
             ja: '${player} に避け',
             cn: '躲开 ${player}',
-            ko: '${player}피해요',
+            ko: '${player}피하기',
           },
         };
         if (!data.boundless)

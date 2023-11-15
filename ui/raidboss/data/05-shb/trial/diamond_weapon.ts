@@ -13,7 +13,7 @@ const sharedOutputStrings = {
     fr: 'Téléportez-vous vers la plateforme est',
     ja: '東の足場へテレポ',
     cn: '传送到右边(东边)平台',
-    ko: '동쪽으로 이동',
+    ko: '동쪽으로 텔레포트',
   },
   teleportWest: {
     en: 'Teleport to west platform',
@@ -21,7 +21,7 @@ const sharedOutputStrings = {
     fr: 'Téléportez-vous vers la plateforme ouest',
     ja: '西の足場へテレポ',
     cn: '传送到左边(西边)平台',
-    ko: '서쪽으로 이동',
+    ko: '서쪽으로 텔레포트',
   },
 };
 
@@ -118,7 +118,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: 'Salve adamantine sur VOUS',
           ja: '自分にダイヤバースト',
           cn: '钻石爆发点名',
-          ko: '장판 대상자',
+          ko: '내게 다아아버스트',
         },
       },
     },
@@ -151,7 +151,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: 'Prenez les tours',
           ja: '塔を踏む',
           cn: '踩塔',
-          ko: '장판 하나씩 들어가기',
+          ko: '타워 밟아요',
         },
       },
     },

@@ -473,7 +473,7 @@ const triggerSet: TriggerSet<Data> = {
           en: 'Tree adds => Line AOEs',
           de: 'Baum Adds => Linien AoEs',
           ja: '木 => 直線AOE',
-          ko: '밖에 나무 등장 => 한 줄 장판',
+          ko: '밖에 나무 등장 => 직선 AOE',
         },
       },
     },

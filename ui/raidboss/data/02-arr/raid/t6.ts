@@ -246,7 +246,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: 'Partagez le laser (sur VOUS)',
           ja: '(自分に)頭割りレーザー',
           cn: '分摊激光点名',
-          ko: '직선 쉐어 대상자',
+          ko: '내게 레이져 (뭉쳐야함)',
         },
         shareLaserOn: {
           en: 'Share Laser (on ${player})',
@@ -254,7 +254,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: 'Partage de laser (sur ${player})',
           ja: '(${player})に頭割りレーザー',
           cn: '分摊激光点(on ${player})',
-          ko: '${player} 직선 쉐어',
+          ko: '뭉쳐요: ${player}',
         },
       },
     },

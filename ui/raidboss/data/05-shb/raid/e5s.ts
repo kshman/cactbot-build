@@ -221,7 +221,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: 'Positions pour les nuages',
           ja: '雷雲散開',
           cn: '雷云站位',
-          ko: '번개 구름 위치 잡아요',
+          ko: '번개 구름 위치 잡기',
         },
       },
     },
