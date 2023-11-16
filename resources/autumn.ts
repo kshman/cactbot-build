@@ -235,7 +235,7 @@ const jobPriorityToName: Record<number, LocaleText> = {
   101: {
     en: 'DRK',
     ja: '暗黒騎士',
-    ko: '암흑기사',
+    ko: '암흑',
   },
   102: {
     en: 'WAR',
@@ -245,12 +245,12 @@ const jobPriorityToName: Record<number, LocaleText> = {
   103: {
     en: 'GNB',
     ja: 'ガンブレ',
-    ko: '총칼이',
+    ko: '총칼',
   },
   104: {
     en: 'PLD',
     ja: 'ナイト',
-    ko: '팔라딘',
+    ko: '팔라',
   },
   201: {
     en: 'WHM',
@@ -275,7 +275,7 @@ const jobPriorityToName: Record<number, LocaleText> = {
   301: {
     en: 'SAM',
     ja: '侍',
-    ko: '사무라이',
+    ko: '사무',
   },
   302: {
     en: 'MNK',
@@ -300,7 +300,7 @@ const jobPriorityToName: Record<number, LocaleText> = {
   401: {
     en: 'MCH',
     ja: '機工士',
-    ko: '기공사',
+    ko: '기공',
   },
   402: {
     en: 'BRD',
@@ -315,7 +315,7 @@ const jobPriorityToName: Record<number, LocaleText> = {
   501: {
     en: 'BLM',
     ja: '黒魔道士',
-    ko: '',
+    ko: '흥마',
   },
   502: {
     en: 'RDM',
@@ -325,7 +325,7 @@ const jobPriorityToName: Record<number, LocaleText> = {
   503: {
     en: 'SMN',
     ja: '召喚士',
-    ko: '소환사',
+    ko: '서모너',
   },
   599: {
     en: 'BLU',
@@ -340,17 +340,17 @@ const jobPriorityToName: Record<number, LocaleText> = {
   8104: {
     en: 'GLA',
     ja: '剣術士',
-    ko: '검술사',
+    ko: '검술',
   },
   8201: {
     en: 'CNH',
     ja: '幻術士',
-    ko: '',
+    ko: '환술',
   },
   8302: {
     en: 'PGL',
     ja: '格闘士',
-    ko: '환술사',
+    ko: '격투',
   },
   8304: {
     en: 'LNC',
@@ -360,7 +360,7 @@ const jobPriorityToName: Record<number, LocaleText> = {
   8305: {
     en: 'ROG',
     ja: '双剣士',
-    ko: '쌍검사',
+    ko: '쌍검',
   },
   8402: {
     en: 'ARC',
@@ -370,12 +370,12 @@ const jobPriorityToName: Record<number, LocaleText> = {
   8501: {
     en: 'THM',
     ja: '呪術士',
-    ko: '주술사',
+    ko: '주술',
   },
   8503: {
     en: 'ACN',
     ja: '巴術士',
-    ko: '비술사',
+    ko: '비술',
   },
   9101: {
     en: 'CRP',
@@ -385,37 +385,37 @@ const jobPriorityToName: Record<number, LocaleText> = {
   9102: {
     en: 'BSM',
     ja: '鍛冶師',
-    ko: '대장장이',
+    ko: '대장',
   },
   9103: {
     en: 'ARM',
     ja: '甲冑師',
-    ko: '갑주장인',
+    ko: '갑주',
   },
   9104: {
     en: 'GSM',
     ja: '彫金師',
-    ko: '보석장인',
+    ko: '보석',
   },
   9105: {
     en: 'LTW',
     ja: '革細工師',
-    ko: '가죽장인',
+    ko: '가죽',
   },
   9106: {
     en: 'WVR',
     ja: '裁縫師',
-    ko: '재봉사',
+    ko: '재봉',
   },
   9107: {
     en: 'ALC',
     ja: '錬金術師',
-    ko: '연금술사',
+    ko: '연금',
   },
   9108: {
     en: 'CUL',
     ja: '調理師',
-    ko: '요리사',
+    ko: '요리',
   },
   9201: {
     en: 'MIN',
