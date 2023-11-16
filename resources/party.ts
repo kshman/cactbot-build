@@ -793,7 +793,7 @@ export default class PartyTracker {
       return {
         name: unknown,
         nick: unknown,
-        atIndex: 9999,
+        atIndex: 0,
         toString: () => unknown,
       };
     }
@@ -807,7 +807,7 @@ export default class PartyTracker {
       ret = {
         name: name,
         nick: nick,
-        atIndex: 9999,
+        atIndex: 0,
       };
     } else {
       const lang = this.options.DisplayLanguage;
@@ -817,14 +817,14 @@ export default class PartyTracker {
       const role = Util.jobToRole(job);
       const roleName = roleLocalized[role]?.[lang] ?? role;
       ret = {
-        role: role,
-        job: job,
         id: partyMember.id,
         jobAbbr: jobAbbr,
         jobFull: jobFull,
         roleName: roleName,
         name: name,
         nick: nick,
+        role: role,
+        job: job,
         atIndex: partyMember.job,
       };
     }

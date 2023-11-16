@@ -182,7 +182,7 @@ export const AutumnIndicators = {
 
 // 직업 인덱스를 우선 순위로
 const jobIndexToPriority: Record<number, number> = {
-  0: 9999, // 몰?루
+  0: 0, // 모험가
   1: 104, // 검술사
   2: 302, // 격투사
   3: 102, // 도끼맨
@@ -227,6 +227,11 @@ const jobIndexToPriority: Record<number, number> = {
 
 // 직업 순위를 이름으로
 const jobPriorityToName: Record<number, LocaleText> = {
+  0: {
+    en: 'ADV',
+    ja: '冒険者',
+    ko: '모험가',
+  },
   101: {
     en: 'DRK',
     ja: '暗黒騎士',
@@ -426,11 +431,6 @@ const jobPriorityToName: Record<number, LocaleText> = {
     en: 'FSH',
     ja: '漁師',
     ko: '어부',
-  },
-  9999: {
-    en: 'ADV',
-    ja: '冒険者',
-    ko: '모험가',
   },
 } as const;
 
