@@ -230,7 +230,7 @@ const triggerSet: TriggerSet<Data> = {
           de: ' => ',
           ja: ' => ',
           cn: ' => ',
-          ko: ' => ',
+          ko: ' 🔜 ',
         },
         unknown: Outputs.unknown,
       },

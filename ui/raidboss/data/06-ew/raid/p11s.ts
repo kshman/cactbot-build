@@ -253,7 +253,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: 'Intérieur => Extérieur + package sur les heals',
           ja: '内側から => 外側へ + 4:4あたまわり',
           cn: '场中集合 => 场边 + 治疗分摊',
-          ko: '한가운데서 뭉쳤다 => 밖으로 + 4:4 뭉쳐요',
+          ko: '한가운데서 뭉쳤다 🔜 밖으로 + 4:4 뭉쳐요',
         },
       },
     },
@@ -289,7 +289,7 @@ const triggerSet: TriggerSet<Data> = {
             fr: 'Vous à l\'intérieur (groupe à l\'extérieur) => Intérieur + Partenaires',
             ja: '真ん中で誘導 => 内側で + ペア',
             cn: '引导月环 => 场中 + 两人分摊',
-            ko: '한가운데서 줄 유도 => 안에서 + 페어',
+            ko: '한가운데서 줄 유도 🔜 안에서 + 페어',
           },
           upheldOnPlayer: {
             en: 'Party Out (${player} in)=> In + Partners',
@@ -297,7 +297,7 @@ const triggerSet: TriggerSet<Data> = {
             fr: 'Groupe à l\'extérieur (${player} intérieur) => Intérieur + Partenaires',
             ja: '外側へ (${player}が内側) => 内側で + ペア',
             cn: '场外 (${player} 引导) => 场中 + 两人分摊',
-            ko: '밖으로 나가있다 => 안으로 + 페어 (줄 처리: ${player})',
+            ko: '밖으로 나가있다 🔜 안으로 + 페어 (줄 처리: ${player})',
           },
           upheldNotOnYou: {
             en: 'Party Out => In + Partners',
@@ -305,7 +305,7 @@ const triggerSet: TriggerSet<Data> = {
             fr: 'Groupe à l\'extérieur => Intérieur + Partenaires',
             ja: '外側へ => 内側で + ペア',
             cn: '场外 => 场中 + 两人分摊',
-            ko: '밖으로 나가있다 => 안으로 + 페어',
+            ko: '밖으로 나가있다 🔜 안으로 + 페어',
           },
         };
 
@@ -384,12 +384,12 @@ const triggerSet: TriggerSet<Data> = {
           },
           partyShadow: {
             en: 'Stack in middle => Go to Ⓐ',
-            ko: '한가운데서 뭉쳤다 => 탱크 쿵Ⓐ 안으로',
+            ko: '한가운데서 뭉쳤다 🔜 탱크 쿵Ⓐ 안으로',
           },
           // 하트오브저지
           tankHeart: {
             en: 'Tether on YOU! Middle => Tower',
-            ko: '내게 줄! 한가운데 => 내 타워로',
+            ko: '내게 줄! 한가운데 🔜 내 타워로',
           },
           partyHeart: {
             en: 'Stack!',
@@ -475,7 +475,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: 'Côtés => Extérieur + Package sur les heals',
           ja: '横 => 外側で + 4:4あたまわり',
           cn: '两侧 => 治疗分摊 + 场外',
-          ko: '옆으로 => 그대로 4:4 뭉쳐요',
+          ko: '옆으로 🔜 그대로 4:4 뭉쳐요',
         },
       },
     },
@@ -493,7 +493,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: 'Côtés => Intérieur + Partenaires',
           ja: '横 => 内側で + ペア',
           cn: '两侧 => 两人分摊 + 场内',
-          ko: '옆에 있다 => 안으로 + 페어',
+          ko: '옆에 있다 🔜 안으로 + 페어',
         },
       },
     },
@@ -576,7 +576,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: 'Poussée => Extérieur + Package sur les heals',
           ja: 'ノックバック => 外側で + 4:4あたまわり',
           cn: '击退 => 治疗分摊 + 场外',
-          ko: '넉백 먼저 => 밖에서 + 4:4 뭉쳐요',
+          ko: '넉백 먼저 🔜 밖에서 + 4:4 뭉쳐요',
         },
       },
     },
@@ -611,7 +611,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: 'Poussée => Intérieur + Partenaires',
           ja: 'ノックバック => 内側で + ペア',
           cn: '击退 => 两人分摊 + 场内',
-          ko: '넉백 먼저 => 안으로 + 페어',
+          ko: '넉백 먼저 🔜 안으로 + 페어',
         },
       },
     },
@@ -646,7 +646,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: 'Allez vers les portails sombres',
           ja: 'やみの方へ',
           cn: '去暗门前',
-          ko: '옆으로 => 🟪포탈 안전',
+          ko: '옆으로 🔜 🟪포탈 안전',
         },
       },
     },
@@ -663,7 +663,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: 'Allez sur les portails de lumière',
           ja: 'ひかりの方へ',
           cn: '去光门前',
-          ko: '옆으로 => 🟨포탈 안전',
+          ko: '옆으로 🔜 🟨포탈 안전',
         },
       },
     },
@@ -852,7 +852,7 @@ const triggerSet: TriggerSet<Data> = {
         else
           data.prsLightAndDarks = myLength === 'near' ? 'darknear' : 'darkfar';
 
-        const myBuddyShort = data.party.aJobName(myBuddy);
+        const myBuddyShort = data.party.jobAbbr(myBuddy);
 
         let alertText: string;
         if (myLength === 'near') {
@@ -868,7 +868,7 @@ const triggerSet: TriggerSet<Data> = {
         }
         if (data.options.AutumnStyle) {
           // 어듬이 스타일 덮어쓰기
-          const myPartner = data.party.aJobName(myBuddy);
+          const myPartner = data.party.jobAbbr(myBuddy);
           let mySide;
           if (data.role === 'dps')
             mySide = myColor === 'dark' ? output.rightSide!() : output.leftSide!();
@@ -893,7 +893,7 @@ const triggerSet: TriggerSet<Data> = {
         const sameLength = playerNames.filter((x) => data.lightDarkTether[x] === myLength);
         const others = sameLength.filter((x) => x !== data.me && x !== myBuddy).sort();
         const [player1, player2] = data.options.AutumnStyle
-          ? others.map((x) => data.party.aJobName(x))
+          ? others.map((x) => data.party.jobAbbr(x))
           : others.map((x) => data.party.member(x));
         if (player1 !== undefined && player2 !== undefined) {
           if (myLength === 'near')
@@ -1035,7 +1035,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Sides => Rotate🟪',
-          ko: '옆으로 => 🟪쪽으로 돌아요',
+          ko: '옆으로 🔜 🟪쪽으로 돌아요',
         },
       },
     },

@@ -478,7 +478,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: '(Écartez-vous => Partenaires, pour après)',
           ja: '(散会 => ペア)',
           cn: '(稍后 分散 => 分摊)',
-          ko: '(흩어졌다 => 페어)',
+          ko: '(흩어졌다 🔜 페어)',
         },
         partnersThenSpread: {
           en: '(partners => spread, for later)',
@@ -486,7 +486,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: '(Partenaires => Écartez-vous, pour après)',
           ja: '(ペア => 散会)',
           cn: '(稍后 分摊 => 分散)',
-          ko: '(페어 => 흩어져요)',
+          ko: '(페어 🔜 흩어져요)',
         },
       },
     },
@@ -508,8 +508,8 @@ const triggerSet: TriggerSet<Data> = {
           data.bondsSecondMechanic = 'stack';
           if (data.options.AutumnStyle)
             return output.spreadThenStack!({
-              player1: data.party.aJobName(data.tetradaemonicTarget[0]),
-              player2: data.party.aJobName(data.tetradaemonicTarget[1]),
+              player1: data.party.jobAbbr(data.tetradaemonicTarget[0]),
+              player2: data.party.jobAbbr(data.tetradaemonicTarget[1]),
             });
           return output.spreadThenStack!({
             player1: data.party.member(data.tetradaemonicTarget[0]),
@@ -520,8 +520,8 @@ const triggerSet: TriggerSet<Data> = {
         data.bondsSecondMechanic = 'spread';
         if (data.options.AutumnStyle)
           return output.stackThenSpread!({
-            player1: data.party.aJobName(data.tetradaemonicTarget[0]),
-            player2: data.party.aJobName(data.tetradaemonicTarget[1]),
+            player1: data.party.jobAbbr(data.tetradaemonicTarget[0]),
+            player2: data.party.jobAbbr(data.tetradaemonicTarget[1]),
           });
         return output.stackThenSpread!({
           player1: data.party.member(data.tetradaemonicTarget[0]),
@@ -535,7 +535,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: '(Écartez-vous => Package par rôle (${player1}, ${player2}), pour après)', // FIXME
           ja: '(散会 => 4:4あたまわり (${player1}, ${player2}))', // FIXME
           cn: '(稍后 分散 => 四人分摊 (${player1}, ${player2}))',
-          ko: '(흩어졌다 => 4:4 뭉쳐요/${player1},${player2})',
+          ko: '(흩어졌다 🔜 4:4 뭉쳐요/${player1},${player2})',
         },
         stackThenSpread: {
           en: '(role stack (${player1}, ${player2}) => spread, for later)',
@@ -543,7 +543,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: '(Package par rôle (${player1}, ${player2}) => Écartez-vous, pour après)', // FIXME
           ja: '(4:4あたまわり (${player1}, ${player2}) => 散会)', // FIXME
           cn: '(稍后 四人分摊 (${player1}, ${player2}) => 分散)',
-          ko: '(4:4 뭉쳤다/${player1},${player2} => 흩어져요)',
+          ko: '(4:4 뭉쳤다/${player1},${player2} 🔜 흩어져요)',
         },
       },
     },
@@ -559,8 +559,8 @@ const triggerSet: TriggerSet<Data> = {
         // We can't make this a `condition` as this is not known until after some delay.
         if (data.options.AutumnStyle && data.bondsSecondMechanic === 'stack')
           return output.spreadThenStack!({
-            player1: data.party.aJobName(data.tetradaemonicTarget[0]),
-            player2: data.party.aJobName(data.tetradaemonicTarget[1]),
+            player1: data.party.jobAbbr(data.tetradaemonicTarget[0]),
+            player2: data.party.jobAbbr(data.tetradaemonicTarget[1]),
           });
         if (data.bondsSecondMechanic === 'stack')
           return output.spreadThenStack!({
@@ -577,7 +577,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: 'Écartez-vous => Package par rôle (${player1}, ${player2})', // FIXME
           ja: '散会 => 4:4あたまわり (${player1}, ${player2})', // FIXME
           cn: '分散 => 四人分摊 (${player1}, ${player2})',
-          ko: '흩어졌다 => 4:4 뭉쳐요/${player1},${player2}',
+          ko: '흩어졌다 🔜 4:4 뭉쳐요/${player1},${player2}',
         },
         spreadThenPartners: {
           en: 'Spread => Partners',
@@ -585,7 +585,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: 'Écartez-vous => Partenaires',
           ja: '散会 => ペア',
           cn: '分散 => 分摊',
-          ko: '흩어졌다 => 페어',
+          ko: '흩어졌다 🔜 페어',
         },
       },
     },
@@ -608,7 +608,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: 'Partenaires => Écartez-vous',
           ja: 'ペア => 散会',
           cn: '分摊 => 分散',
-          ko: '페어 => 흩어져요',
+          ko: '페어 🔜 흩어져요',
         },
       },
     },
@@ -623,8 +623,8 @@ const triggerSet: TriggerSet<Data> = {
         // If this is undefined, then this is the second mechanic and will be called out elsewhere.
         if (data.options.AutumnStyle && data.bondsSecondMechanic === 'spread')
           return output.stackThenSpread!({
-            player1: data.party.aJobName(data.tetradaemonicTarget[0]),
-            player2: data.party.aJobName(data.tetradaemonicTarget[1]),
+            player1: data.party.jobAbbr(data.tetradaemonicTarget[0]),
+            player2: data.party.jobAbbr(data.tetradaemonicTarget[1]),
           });
         if (data.bondsSecondMechanic === 'spread')
           return output.stackThenSpread!({
@@ -639,7 +639,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: 'Package par rôle (${player1}, ${player2}) => Écartez-vous', // FIXME
           ja: '4:4あたまわり (${player1}, ${player2}) => 散会', // FIXME
           cn: '四人分摊 (${player1}, ${player2}) => 分散',
-          ko: '4:4 뭉쳤다/${player1},${player2} => 흩어져요',
+          ko: '4:4 뭉쳤다/${player1},${player2} 🔜 흩어져요',
         },
       },
     },
@@ -659,8 +659,8 @@ const triggerSet: TriggerSet<Data> = {
           return output.partners!();
         if (data.options.AutumnStyle && data.bondsSecondMechanic === 'stack')
           return output.stack!({
-            player1: data.party.aJobName(data.tetradaemonicTarget[0]),
-            player2: data.party.aJobName(data.tetradaemonicTarget[1]),
+            player1: data.party.jobAbbr(data.tetradaemonicTarget[0]),
+            player2: data.party.jobAbbr(data.tetradaemonicTarget[1]),
           });
         if (data.bondsSecondMechanic === 'stack')
           return output.stack!({

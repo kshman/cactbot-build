@@ -1113,14 +1113,14 @@ const triggerSet: TriggerSet<Data> = {
         const stacksOn = !data.options.AutumnStyle
           ? output.stacksOn!({
             glitch: glitch,
-            player1: data.party.aJobName(p1),
-            player2: data.party.aJobName(p2),
+            player1: data.party.jobAbbr(p1),
+            player2: data.party.jobAbbr(p2),
           })
           : output.markerOn!({
             glitch: glitch,
             marker: marker,
-            player1: data.party.aJobName(p1),
-            player2: data.party.aJobName(p2),
+            player1: data.party.jobAbbr(p1),
+            player2: data.party.jobAbbr(p2),
           });
         if (!data.spotlightStacks.includes(data.me))
           return { infoText: stacksOn };
@@ -2445,7 +2445,7 @@ const triggerSet: TriggerSet<Data> = {
           de: '${first} => ${rotate} => ${second}',
           ja: '${first} => ${rotate} => ${second}',
           cn: '${first} => ${rotate} => ${second}',
-          ko: '${first} => ${rotate} => ${second}',
+          ko: '${first} 🔜 ${rotate} 🔜 ${second}',
         },
         rotateRight: {
           en: 'Right',
@@ -2700,14 +2700,14 @@ const triggerSet: TriggerSet<Data> = {
           de: 'Rein => Warte 2',
           ja: '内 => 待機 2',
           cn: '进 => 等 2',
-          ko: '안으로 => 두번 기둘',
+          ko: '안으로 🔜 두번 기둘',
         },
         outWait2: {
           en: 'Out => Wait 2',
           de: 'Raus => Warte 2',
           ja: '外 => 待機 2',
           cn: '出 => 等 2',
-          ko: '밖으로 => 두번 기둘',
+          ko: '밖으로 🔜 두번 기둘',
         },
       },
     },
@@ -2757,14 +2757,14 @@ const triggerSet: TriggerSet<Data> = {
           de: 'Rein => Warte 2',
           ja: '内 => 待機 2',
           cn: '进 => 等 2',
-          ko: '안으로 => 두번 기둘',
+          ko: '안으로 🔜 두번 기둘',
         },
         outWait2: {
           en: 'Out => Wait 2',
           de: 'Raus => Warte 2',
           ja: '外 => 待機 2',
           cn: '出 => 等 2',
-          ko: '밖으로 => 두번 기둘',
+          ko: '밖으로 🔜 두번 기둘',
         },
         SidesIn: Outputs.moveAway,
         SidesOut: {
@@ -2948,7 +2948,7 @@ const triggerSet: TriggerSet<Data> = {
           de: '${start} => ${rotation}',
           ja: '${start} => ${rotation}',
           cn: '${start} => ${rotation}',
-          ko: '${start} => ${rotation}',
+          ko: '${start} 🔜 ${rotation}',
         },
         north: Outputs.north,
         northeast: Outputs.northeast,
@@ -3059,8 +3059,8 @@ const triggerSet: TriggerSet<Data> = {
         if (ms.length === 0)
           return output.noTarget!();
         if (ms.length === 1)
-          return output.onlyOne!({ target: data.party.aJobName(ms[0]) });
-        return output.okTwo!({ t1: data.party.aJobName(ms[0]), t2: data.party.aJobName(ms[1]) });
+          return output.onlyOne!({ target: data.party.jobAbbr(ms[0]) });
+        return output.okTwo!({ t1: data.party.jobAbbr(ms[0]), t2: data.party.jobAbbr(ms[1]) });
       },
       outputStrings: {
         noTarget: {

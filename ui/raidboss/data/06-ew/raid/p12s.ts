@@ -1,4 +1,4 @@
-import Autumns, { ArrowOutput8, AutumnIndicator } from '../../../../../resources/autumns';
+import Autumn, { ArrowOutput8, AutumnIndicators } from '../../../../../resources/autumn';
 import Conditions from '../../../../../resources/conditions';
 import Outputs from '../../../../../resources/outputs';
 import { callOverlayHandler } from '../../../../../resources/overlay_plugin_api';
@@ -1246,73 +1246,73 @@ const triggerSet: TriggerSet<Data> = {
           de: 'Norden + Links von Ihr (dannach Norden)',
           ja: '北 + 北に戻る (左安置)',
           cn: '上 (北) + Boss左侧 (稍后 回上北)',
-          ko: '북쪽 => 되돌아 와욧 [왼쪽]',
+          ko: '북쪽 🔜 되돌아 와욧 [왼쪽]',
         },
         superchain2aLeftNorthSouth: {
           en: 'North + Her Left (then go South)',
           de: 'Norden + Links von Ihr (dannach Süden)',
           ja: '北 + 南へ前進 (左安置)',
           cn: '上 (北) + Boss左侧 (稍后 去下南)',
-          ko: '북쪽 => 계속 전진 [왼쪽]',
+          ko: '북쪽 🔜 계속 전진 [왼쪽]',
         },
         superchain2aLeftSouthNorth: {
           en: 'South + Left (then go North)',
           de: 'Süden + Links (dannach Norden)',
           ja: '南 + 北へ前進 (左安置)',
           cn: '下 (南) + 左 (稍后 去上北)',
-          ko: '남쪽 => 계속 전진 [왼쪽]',
+          ko: '남쪽 🔜 계속 전진 [왼쪽]',
         },
         superchain2aLeftSouthSouth: {
           en: 'South + Left (then back South)',
           de: 'Süden + Links (dannach Süden)',
           ja: '南 + 南に戻る (左安置)',
           cn: '下 (南) + 左 (稍后 回下南)',
-          ko: '남쪽 => 되돌아 와욧 [왼쪽]',
+          ko: '남쪽 🔜 되돌아 와욧 [왼쪽]',
         },
         superchain2aRightNorthNorth: {
           en: 'North + Her Right (then back North)',
           de: 'Norden + Rechts von Ihr (dannach Norden)',
           ja: '北 + 北に戻る (右安置)',
           cn: '上 (北) + Boss右侧 (稍后 回上北)',
-          ko: '북쪽 => 되돌아 와욧 [오른쪽]',
+          ko: '북쪽 🔜 되돌아 와욧 [오른쪽]',
         },
         superchain2aRightNorthSouth: {
           en: 'North + Her Right (then go South)',
           de: 'Norden + Rechts von Ihr (dannach Süden)',
           ja: '北 + 南へ前進 (右安置)',
           cn: '上 (北) + Boss右侧 (稍后 去下南)',
-          ko: '북쪽 => 계속 전진 [오른쪽]',
+          ko: '북쪽 🔜 계속 전진 [오른쪽]',
         },
         superchain2aRightSouthNorth: {
           en: 'South + Right (then go North)',
           de: 'Süden + Rechts (dannach Norden)',
           ja: '南 + 北へ前進 (右安置)',
           cn: '下 (南) + 右 (稍后 去上北)',
-          ko: '남쪽 => 계속 전진 [오른쪽]',
+          ko: '남쪽 🔜 계속 전진 [오른쪽]',
         },
         superchain2aRightSouthSouth: {
           en: 'South + Right (then back South)',
           de: 'Süden + Rechts (dannach Süden)',
           ja: '南 + 南に戻る (右安置)',
           cn: '下 (南) + 右 (稍后 回下南)',
-          ko: '남쪽 => 되돌아 와욧 [오른쪽]',
+          ko: '남쪽 🔜 되돌아 와욧 [오른쪽]',
         },
         //
         aSc2aNn: {
           en: 'North[${dir}] => North again',
-          ko: '북쪽[${dir}] => 다시 북쪽',
+          ko: '북쪽[${dir}] 🔜 다시 북쪽',
         },
         aSc2aNs: {
           en: 'North[${dir}] => Strait South',
-          ko: '북쪽[${dir}] => 전진해서 남쪽',
+          ko: '북쪽[${dir}] 🔜 전진해서 남쪽',
         },
         aSc2aSs: {
           en: 'South[${dir}] => South again',
-          ko: '남쪽[${dir}] => 다시 남쪽',
+          ko: '남쪽[${dir}] 🔜 다시 남쪽',
         },
         aSc2aSn: {
           en: 'South[${dir}] => Strait North',
-          ko: '남쪽[${dir}] => 전진해서 북쪽',
+          ko: '남쪽[${dir}] 🔜 전진해서 북쪽',
         },
         aleft: Outputs.arrowW,
         aright: Outputs.arrowE,
@@ -1444,7 +1444,7 @@ const triggerSet: TriggerSet<Data> = {
           de: '${first} => ${second} => ${third}',
           fr: '${first} => ${second} => ${third}',
           cn: '${first} => ${second} => ${third}',
-          ko: '${first} => ${second} => ${third}',
+          ko: '${first} 🔜 ${second} 🔜 ${third}',
         },
         aleft: Outputs.arrowW,
         aright: Outputs.arrowE,
@@ -1560,28 +1560,28 @@ const triggerSet: TriggerSet<Data> = {
           de: 'Wechseln + Mitte => Zurück nach ${dir}',
           ja: '真ん中 => また${dir} (横へ)',
           cn: '穿 + 去中间 => 回到 ${dir}',
-          ko: '한가운데 => ${dir} 되돌아 가욧 [옆으로]',
+          ko: '한가운데 🔜 ${dir} 되돌아 가욧 [옆으로]',
         },
         superchain2aSwapMidGo: {
           en: 'Swap + Mid => Go ${dir}',
           de: 'Wechseln + Mitte => Geh nach ${dir}',
           ja: '真ん中 => ${dir}前進 (横へ)',
           cn: '穿 + 去中间 => 去 ${dir}',
-          ko: '한가운데 => 계속 전진 ${dir} [옆으로]',
+          ko: '한가운데 🔜 계속 전진 ${dir} [옆으로]',
         },
         superchain2aStayMidBack: {
           en: 'Stay + Mid => Back ${dir}',
           de: 'Bleib stehen + Mitte => Zurück nach ${dir}',
           ja: '真ん中 => また${dir} (止まる)',
           cn: '停 + 去中间 => 回到 ${dir}',
-          ko: '한가운데 => ${dir} 되돌아 가욧',
+          ko: '한가운데 🔜 ${dir} 되돌아 가욧',
         },
         superchain2aStayMidGo: {
           en: 'Stay + Mid => Go ${dir}',
           de: 'Bleib stehen + Mitte => Geh nach ${dir}',
           ja: '真ん中 => ${dir}前進 (止まる)',
           cn: '停 + 去中间 => 去 ${dir}',
-          ko: '한가운데 => 계속 전진 ${dir}',
+          ko: '한가운데 🔜 계속 전진 ${dir}',
         },
         superchain2aSwapProtean: {
           en: 'Swap => Protean + ${dir}',
@@ -1622,11 +1622,11 @@ const triggerSet: TriggerSet<Data> = {
         },
         aSc2aMb: {
           en: 'Mid => Go back ${move}',
-          ko: '한가운데로 => 되돌아 가욧 ${move}',
+          ko: '한가운데로 🔜 되돌아 가욧 ${move}',
         },
         aSc2aMg: {
           en: 'Mid => Go strait ${move}',
-          ko: '한가운데로 => 계속 전진 ${move}',
+          ko: '한가운데로 🔜 계속 전진 ${move}',
         },
         aSc2aBpro: {
           en: 'Go back + Protean ${move}',
@@ -1882,9 +1882,9 @@ const triggerSet: TriggerSet<Data> = {
           return;
 
         const name = data.party.member(data.me);
-        if (data.options.AutumnStyle && (data.job !== 'BLU' || Autumns.IsBlueName(name.nick))) {
+        if (data.options.AutumnStyle && (data.job !== 'BLU' || Autumn.isRoleName(name.nick))) {
           const pos: TowerLocation[] = [];
-          const isdps = data.job === 'BLU' ? Autumns.IsBluDps(name.nick) : data.role === 'dps';
+          const isdps = data.job === 'BLU' ? Autumn.isDpsName(name.nick) : data.role === 'dps';
           towerList.forEach((value) => {
             const location = value.location;
             if (matches.effectId === engravementIdMap.lightTower) {
@@ -2267,7 +2267,7 @@ const triggerSet: TriggerSet<Data> = {
             : output.dark!();
         if (data.options.AutumnStyle) {
           const find = data.engravement3TowerPlayers.find((name) => name !== data.me);
-          const partner = data.party.aJobName(find) ?? output.unknown!();
+          const partner = data.party.jobAbbr(find) ?? output.unknown!();
           return output.towerOnYou!({ color: towerColor, partner: partner });
         }
         const partner =
@@ -3063,7 +3063,7 @@ const triggerSet: TriggerSet<Data> = {
           de: '${move} => ${engrave}',
           ja: '${move} => ${engrave}',
           cn: '${move} => ${engrave}',
-          ko: '${move} => ${engrave}',
+          ko: '${move} 🔜 ${engrave}',
         },
         inThenOut: Outputs.inThenOut,
         outThenIn: Outputs.outThenIn,
@@ -3339,7 +3339,7 @@ const triggerSet: TriggerSet<Data> = {
           en: '${mechanic} => ${dir}',
           de: '${mechanic} => ${dir}',
           cn: '${mechanic} => ${dir}',
-          ko: '${mechanic} => ${dir}',
+          ko: '${mechanic} 🔜 ${dir}',
         },
         protean: {
           en: 'Protean',
@@ -4069,14 +4069,14 @@ const triggerSet: TriggerSet<Data> = {
           de: 'Vermeide Formen => Himmelsrichtungen ködern (Alpha)',
           ja: '回避 => ビーム誘導 (アルファ)',
           cn: '远离方块 => 引导射线 (α)',
-          ko: '피하고 => 빔 유도 (알파)',
+          ko: '피하고 🔜 빔 유도 (알파)',
         },
         baitBetaDebuff: {
           en: 'Avoid Shapes => Bait Proteans (Beta)',
           de: 'Vermeide Formen => Himmelsrichtungen ködern (Beta)',
           ja: '回避 => ビーム誘導 (ベター)',
           cn: '远离方块 => 引导射线 (β)',
-          ko: '피하고 => 빔 유도 (베타)',
+          ko: '피하고 🔜 빔 유도 (베타)',
         },
         default: {
           en: 'Bait Proteans',
@@ -4216,7 +4216,7 @@ const triggerSet: TriggerSet<Data> = {
         const player = myBuddy === undefined
           ? output.unknown!()
           : data.options.AutumnStyle
-          ? data.party.aJobName(myBuddy)
+          ? data.party.jobAbbr(myBuddy)
           : data.party.member(myBuddy);
         if (myRole === 'not') {
           if (strat === 'not')
@@ -4505,7 +4505,7 @@ const triggerSet: TriggerSet<Data> = {
           data.darknessClones.forEach((clone) => {
             const x = parseFloat(clone.x);
             const y = parseFloat(clone.y);
-            const cloneDir = AutumnIndicator.xyToArrow8Output(x, y, uavCenterX, uavCenterY);
+            const cloneDir = AutumnIndicators.xyToArrow8Output(x, y, uavCenterX, uavCenterY);
             const pairedDir = unsafeMap[cloneDir];
             safeDirs = safeDirs.filter((dir) => dir !== cloneDir && dir !== pairedDir);
           });
@@ -4519,8 +4519,8 @@ const triggerSet: TriggerSet<Data> = {
             arrow = getUltimaRayArrow(data.role === 'dps', dir1, dir2);
           } else {
             const name = data.party.member(data.me);
-            if (Autumns.IsBlueName(name.nick))
-              arrow = getUltimaRayArrow(Autumns.IsBluDps(name.nick), dir1, dir2);
+            if (Autumn.isRoleName(name.nick))
+              arrow = getUltimaRayArrow(Autumn.isDpsName(name.nick), dir1, dir2);
           }
           if (arrow !== undefined)
             return output.moveTo!({ dir: output[arrow]!() });
@@ -4564,7 +4564,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '${dir}으로',
         },
         ...Directions.outputStrings8Dir,
-        ...AutumnIndicator.outputStringsArrow8,
+        ...AutumnIndicators.outputStringsArrow8,
       },
     },
     {
@@ -4593,7 +4593,7 @@ const triggerSet: TriggerSet<Data> = {
 
           const x = parseFloat(matches.x);
           const y = parseFloat(matches.y);
-          const cloneDir = AutumnIndicator.xyToArrow8Output(x, y, uavCenterX, uavCenterY);
+          const cloneDir = AutumnIndicators.xyToArrow8Output(x, y, uavCenterX, uavCenterY);
           const [dir1, dir2] = safeMap[cloneDir];
           if (dir1 === undefined || dir2 === undefined)
             return;
@@ -4602,8 +4602,8 @@ const triggerSet: TriggerSet<Data> = {
             arrow = getUltimaRayArrow(data.role === 'dps', dir1, dir2);
           } else {
             const name = data.party.member(data.me);
-            if (Autumns.IsBlueName(name.nick))
-              arrow = getUltimaRayArrow(Autumns.IsBluDps(name.nick), dir1, dir2);
+            if (Autumn.isRoleName(name.nick))
+              arrow = getUltimaRayArrow(Autumn.isDpsName(name.nick), dir1, dir2);
           }
           if (arrow !== undefined)
             return output.moveTo!({ dir: output[arrow]!() });
@@ -4643,7 +4643,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '${dir}으로',
         },
         ...Directions.outputStrings8Dir,
-        ...AutumnIndicator.outputStringsArrow8,
+        ...AutumnIndicators.outputStringsArrow8,
       },
     },
     {
@@ -4669,13 +4669,13 @@ const triggerSet: TriggerSet<Data> = {
           return;
         const partner = matches.source === data.me ? matches.target : matches.source;
         if (data.options.AutumnStyle && data.phase === 'gaiaochos1')
-          return output.uav1!({ partner: data.party.aJobName(partner) });
+          return output.uav1!({ partner: data.party.jobAbbr(partner) });
         if (data.phase === 'gaiaochos1')
           return output.uav1!({ partner: data.party.member(partner) });
         data.seenSecondTethers = true;
         if (data.options.AutumnStyle)
           return output.uav2!({
-            partner: data.party.aJobName(partner),
+            partner: data.party.jobAbbr(partner),
             geocentrism: data.geocentrism2OutputStr ?? output.unknown!(),
           });
         return output.uav2!({
@@ -4859,8 +4859,8 @@ const triggerSet: TriggerSet<Data> = {
         if (data.options.AutumnStyle && index < 0)
           return {
             infoText: output.noBeacon!({
-              player1: data.party.aJobName(data.caloric1First[0]),
-              player2: data.party.aJobName(data.caloric1First[1]),
+              player1: data.party.jobAbbr(data.caloric1First[0]),
+              player2: data.party.jobAbbr(data.caloric1First[1]),
             }),
           };
         if (index < 0)
@@ -4872,7 +4872,7 @@ const triggerSet: TriggerSet<Data> = {
           };
         const partner = index === 0 ? 1 : 0;
         if (data.options.AutumnStyle) {
-          const name = data.party.aJobName(data.caloric1First[partner]);
+          const name = data.party.jobAbbr(data.caloric1First[partner]);
           return { alertText: output.beacon!({ partner: name }) };
         }
         return {
@@ -4983,7 +4983,7 @@ const triggerSet: TriggerSet<Data> = {
             if (stat === myBuff /* && name !== data.me */)
               myTeam.push(name);
           }
-          return { alertText: output.fire!({ team: data.party.aPriorities(myTeam).join(', ') }) };
+          return { alertText: output.fire!({ team: data.party.priorityList(myTeam).join(', ') }) };
         }
 
         if (data.caloric1First.includes(data.me))
@@ -4994,7 +4994,7 @@ const triggerSet: TriggerSet<Data> = {
           if (stat === myBuff && /* name !== data.me && */ !data.caloric1First.includes(name))
             myTeam.push(name);
         }
-        return { alertText: output.wind!({ team: data.party.aPriorities(myTeam).join(', ') }) };
+        return { alertText: output.wind!({ team: data.party.priorityList(myTeam).join(', ') }) };
       },
       run: (data) => {
         data.caloric1First = [];
@@ -5034,7 +5034,7 @@ const triggerSet: TriggerSet<Data> = {
         if (data.me === matches.target)
           return { alarmText: output.fireOnMe!() };
         if (data.options.AutumnStyle && data.palladionGrapsTarget === data.me)
-          return { infoText: output.fireOn!({ player: data.party.aJobName(matches.target) }) };
+          return { infoText: output.fireOn!({ player: data.party.jobAbbr(matches.target) }) };
         if (data.palladionGrapsTarget === data.me)
           return { infoText: output.fireOn!({ player: data.party.member(matches.target) }) };
       },

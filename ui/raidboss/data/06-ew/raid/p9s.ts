@@ -1,4 +1,4 @@
-import { AutumnIndicator } from '../../../../../resources/autumns';
+import { AutumnIndicators } from '../../../../../resources/autumn';
 import Outputs from '../../../../../resources/outputs';
 import { Responses } from '../../../../../resources/responses';
 import { Directions } from '../../../../../resources/util';
@@ -386,7 +386,7 @@ const triggerSet: TriggerSet<Data> = {
           return;
 
         if (data.options.AutumnStyle) {
-          const firstOrb8DirStr = AutumnIndicator.outputFromMarker8Num(firstOrb8Dir);
+          const firstOrb8DirStr = AutumnIndicators.outputFromMarker8Num(firstOrb8Dir);
           if (firstOrb8DirStr === undefined)
             return;
           const firstOrbDir = output[firstOrb8DirStr]!();
@@ -420,12 +420,12 @@ const triggerSet: TriggerSet<Data> = {
           fr: 'Premier orbe ${dir} => ${rotation}',
           ja: '1回目の玉 ${dir} => ${rotation}',
           cn: '第一个球 ${dir} => ${rotation}',
-          ko: '첫 구슬 ${dir} => ${rotation}',
+          ko: '첫 구슬 ${dir} 🔜 ${rotation}',
         },
         clockwise: Outputs.clockwise,
         counterclock: Outputs.counterclockwise,
         ...Directions.outputStrings8Dir,
-        ...AutumnIndicator.outputStringsMarker8,
+        ...AutumnIndicators.outputStringsMarker8,
       },
     },
     // 아니 내꺼랑 비슷해 졌는데 메시지가 계산이 아니고 스태틱이네
@@ -724,7 +724,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: 'Extérieur => Derrière',
           ja: '外側 => 後ろへ',
           cn: '远离 => 去背后',
-          ko: '바깥쪽 => 뒤로',
+          ko: '바깥쪽 🔜 뒤로',
         },
       },
     },
@@ -741,7 +741,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: 'Intérieur => Derrière',
           ja: '内側 => 後ろへ',
           cn: '靠近 => 去背后',
-          ko: '안쪽 => 뒤로',
+          ko: '안쪽 🔜 뒤로',
         },
       },
     },
@@ -758,7 +758,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: 'Extérieur => Devant',
           ja: '外側 => 前へ',
           cn: '远离 => 去面前',
-          ko: '바깥쪽 => 앞으로',
+          ko: '바깥쪽 🔜 앞으로',
         },
       },
     },
@@ -775,7 +775,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: 'Intérieur => Devant',
           ja: '内側 => 前へ',
           cn: '靠近 => 去面前',
-          ko: '안쪽 => 앞으로',
+          ko: '안쪽 🔜 앞으로',
         },
       },
     },
@@ -861,7 +861,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: 'Saut => Restez',
           ja: '突進 => 止まれ',
           cn: '突进 => 停',
-          ko: '푹찍쾅 => 그대로! 남쪽 바라보게!',
+          ko: '푹찍쾅 🔜 그대로! 남쪽 바라보게!',
         },
       },
     },
@@ -877,7 +877,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: 'Saut => Traversez le boss',
           ja: '突進 => 移動',
           cn: '突进 => 穿',
-          ko: '푹찍쾅 => 가로질러! 북쪽 바라보게!',
+          ko: '푹찍쾅 🔜 가로질러! 북쪽 바라보게!',
         },
       },
     },

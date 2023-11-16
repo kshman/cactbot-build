@@ -244,7 +244,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: 'Extérieur + Brasier -> Dispersion',
           ja: '外側＋フレア => 散会',
           cn: '外侧＋核爆 => 分散',
-          ko: '⊗밖으로 + 플레어 => 흩어져요',
+          ko: '⊗밖으로 + 플레어 🔜 흩어져요',
         },
         inStackThenSpread: {
           en: 'In+Stack => Spread',
@@ -252,7 +252,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: 'Intérieur + Package -> Dispersion',
           ja: '内側＋頭割り => 散会',
           cn: '内侧＋分摊 => 分散',
-          ko: '⊙안으로 + 뭉쳤다 => 흩어져요',
+          ko: '⊙안으로 + 뭉쳤다 🔜 흩어져요',
         },
       },
     },

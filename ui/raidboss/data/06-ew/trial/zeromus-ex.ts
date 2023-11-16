@@ -636,7 +636,7 @@ const triggerSet: TriggerSet<Data> = {
           de: 'Türme nehmen => Verteilen',
           fr: 'Prenez les tours -> Écartez-vous',
           cn: '踩塔 => 分散',
-          ko: '타워 밟고 => 흩어져요',
+          ko: '타워 밟고 🔜 흩어져요',
         },
       },
     },
@@ -653,7 +653,7 @@ const triggerSet: TriggerSet<Data> = {
           de: 'Türme nehmen => mit Partner sammeln',
           fr: 'Prenez les tours -> Partenaires',
           cn: '踩塔 => 分摊',
-          ko: '타워 밟고 => 페어',
+          ko: '타워 밟고 🔜 페어',
         },
       },
     },
@@ -860,7 +860,7 @@ const triggerSet: TriggerSet<Data> = {
         if (data.flowLocation === undefined)
           return output.stack!();
         return output[`${data.flowLocation}Stack`]!({
-          player: data.party.aJobName(matches.target),
+          player: data.party.jobAbbr(matches.target),
         });
       },
       run: (data) => delete data.flowLocation,

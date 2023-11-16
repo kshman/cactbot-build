@@ -549,7 +549,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: 'PV Min : Provocation Boss => Cyclone NE en retard',
           ja: 'HP最小: ボスに挑発 => 北東竜巻',
           cn: '最少HP:挑衅BOSS => 东北龙卷风',
-          ko: 'HP 최소: 보스 도발 => 북동쪽 회오리',
+          ko: 'HP 최소: 보스 도발 🔜 북동쪽 회오리',
         },
       },
     },

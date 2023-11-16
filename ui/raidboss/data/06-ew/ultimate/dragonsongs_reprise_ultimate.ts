@@ -1047,7 +1047,7 @@ const triggerSet: TriggerSet<Data> = {
             .sort((a, b) => a.i - b.i);
           return output.tether!({ tether1: m1?.r, tether2: m2?.r });
         }
-        const [s1, s2] = data.prsTethers.slice(-2).map((e) => data.party.aJobName(e));
+        const [s1, s2] = data.prsTethers.slice(-2).map((e) => data.party.jobAbbr(e));
         return output.tether!({ tether1: s1, tether2: s2 });
       },
       run: (data) => {
@@ -1453,7 +1453,7 @@ const triggerSet: TriggerSet<Data> = {
           return output.circleAllCircles!({ num: num, circles: sorted.join(', ') });
         }
 
-        const ss = circles.map((e) => data.party.aJobName(e));
+        const ss = circles.map((e) => data.party.jobAbbr(e));
         return output.circleAllCircles!({ num: num, circles: ss.join(', ') });
       },
       outputStrings: {
@@ -2060,7 +2060,7 @@ const triggerSet: TriggerSet<Data> = {
             .sort((a, b) => a.i - b.i);
           return output.tether!({ tether1: m1?.r, tether2: m2?.r });
         }
-        const [s1, s2] = data.prsTethers.slice(-2).map((e) => data.party.aJobName(e));
+        const [s1, s2] = data.prsTethers.slice(-2).map((e) => data.party.jobAbbr(e));
         return output.tether!({ tether1: s1, tether2: s2 });
       },
       run: (data) => data.prsSeenNidTether = true,
@@ -3335,7 +3335,7 @@ const triggerSet: TriggerSet<Data> = {
           de: '${start} => ${rotation}',
           ja: '${start} => ${rotation}',
           cn: '${start} => ${rotation}',
-          ko: '${start} => ${rotation}',
+          ko: '${start} 🔜 ${rotation}',
         },
         backLeft: {
           en: 'Back left',

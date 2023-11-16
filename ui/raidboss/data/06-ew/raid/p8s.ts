@@ -1460,7 +1460,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: 'Éloignez-vous du saut',
           ja: '離れる',
           cn: '远离跳的方向',
-          ko: '[푹찍] 점프에서 멀어져요',
+          ko: '[푹찍] 점프에게서 먼곳으로',
         },
         impact: {
           en: 'Follow Jump',
@@ -1532,7 +1532,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: '${dir} Ligne noire -> ${concept}',
           ja: '${dir}の黒線 => ${concept}',
           cn: '${dir} 黑线 => ${concept}',
-          ko: '${dir} 깜선으로 => ${concept}',
+          ko: '${dir} 깜선으로 🔜 ${concept}',
         },
         north: prsStrings.north,
         east: prsStrings.east,
@@ -1577,7 +1577,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: '${dir} Ligne noire -> ${action}',
           ja: '${dir}の黒線 => ${action}',
           cn: '${dir} 黑线 => ${action}',
-          ko: '${dir} 깜선으로 => ${action}',
+          ko: '${dir} 깜선으로 🔜 ${action}',
         },
         crush: prsStrings.crush,
         impact: prsStrings.impact,
@@ -1603,7 +1603,7 @@ const triggerSet: TriggerSet<Data> = {
             fr: 'Attendez -> ${dir}',
             ja: '待機 => ${dir}',
             cn: '等待 => ${dir}',
-            ko: '[푹찍] 기다렸다가 => ${dir}',
+            ko: '[푹찍] 기다렸다가 🔜 ${dir}',
           },
           trailblazeKnockback: {
             en: '${dir} Knockback',
@@ -1619,7 +1619,7 @@ const triggerSet: TriggerSet<Data> = {
             fr: '${dir1} Poussée ${dir2}',
             ja: 'ノックバック: ${dir1} => ${dir2}',
             cn: '${dir1} 击退到 ${dir2}',
-            ko: '[넉백] ${dir1} => ${dir2}',
+            ko: '[넉백] ${dir1} 🔜 ${dir2}',
           },
           trailblazeKnockbackSide: {
             en: 'Knockback ${dir}',
@@ -2198,8 +2198,8 @@ const triggerSet: TriggerSet<Data> = {
         const [name1, name2] = data.alignmentTargets.sort();
         if (data.options.AutumnStyle)
           return output.target!({
-            player1: data.party.aJobName(name1),
-            player2: data.party.aJobName(name2),
+            player1: data.party.jobAbbr(name1),
+            player2: data.party.jobAbbr(name2),
             target: data.prsAlignMt ? output.targetDps!() : output.targetTh!(),
           });
         return output.text!({
@@ -2284,7 +2284,7 @@ const triggerSet: TriggerSet<Data> = {
             fr: 'Déposez -> Package',
             ja: '誘導 => 頭割り',
             cn: '诱导 => 分摊',
-            ko: '가운데 모여 깔고 => 다시 뭉쳐욧',
+            ko: '가운데 모여 깔고 🔜 다시 뭉쳐욧',
           },
           baitAndSpread: {
             en: 'Bait => Spread',
@@ -2292,7 +2292,7 @@ const triggerSet: TriggerSet<Data> = {
             fr: 'Déposez -> Écartez-vous',
             ja: '誘導 => 散会',
             cn: '诱导 => 分散',
-            ko: '가운데 모여 깔고 => 흩어져욧',
+            ko: '가운데 모여 깔고 🔜 흩어져욧',
           },
           adjIce: {
             en: 'Ice Groups First!! (${adj})',
@@ -2703,7 +2703,7 @@ const triggerSet: TriggerSet<Data> = {
           baeksu2nd: {
             en: 'Ifrit => with Green',
             ja: 'イフリート合成 => 後で緑と合成 ',
-            ko: '이프리트 조합 => 나중에 녹색이랑 부비부비',
+            ko: '이프리트 조합 🔜 나중에 녹색이랑 부비부비',
           },
           north: Outputs.north,
           south: Outputs.south,

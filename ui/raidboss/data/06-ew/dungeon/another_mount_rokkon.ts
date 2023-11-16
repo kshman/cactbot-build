@@ -350,32 +350,32 @@ const stackSpreadResponse = (
     spreadThenMeleeStack: {
       en: 'Spread => Melees Stack',
       de: 'Verteilen => Nahkämpfer sammeln',
-      ko: '흩어졌다 => 밀리 뭉쳐요',
+      ko: '흩어졌다 🔜 밀리 뭉쳐요',
     },
     spreadThenRoleStack: {
       en: 'Spread => Role Stacks',
       de: 'Verteilen => Rollengruppe sammeln',
-      ko: '흩어졌다 => 롤 뭉쳐요',
+      ko: '흩어졌다 🔜 롤 뭉쳐요',
     },
     spreadThenPartnerStack: {
       en: 'Spread => Partner Stacks',
       de: 'Verteilen => Partner sammeln',
-      ko: '흩어졌다 => 파트너 뭉쳐요',
+      ko: '흩어졌다 🔜 파트너 뭉쳐요',
     },
     meleeStackThenSpread: {
       en: 'Melees Stack => Spread',
       de: 'Nahkämpfer sammeln => Verteilen',
-      ko: '밀리 뭉쳤다 => 흩어져요',
+      ko: '밀리 뭉쳤다 🔜 흩어져요',
     },
     roleStackThenSpread: {
       en: 'Role Stacks => Spread',
       de: 'Rollengruppe sammeln => Verteilen',
-      ko: '롤 뭉쳤다 => 흩어져요',
+      ko: '롤 뭉쳤다 🔜 흩어져요',
     },
     partnerStackThenSpread: {
       en: 'Partner Stacks => Spread',
       de: 'Partner sammeln => Verteilen',
-      ko: '파트너 뭉쳤다 => 흩어져',
+      ko: '파트너 뭉쳤다 🔜 흩어져',
     },
     spreadThenStack: Outputs.spreadThenStack,
     stackThenSpread: Outputs.stackThenSpread,
@@ -542,12 +542,12 @@ const towerResponse = (
     tetherThenBlueTower: {
       en: 'Tether ${num1} => Blue Tower ${num2}',
       de: 'Verbindung ${num1} => Blauer Turm ${num2}',
-      ko: '줄채고#${num1} => 🔵타워로#${num2}',
+      ko: '줄채고#${num1} 🔜 🔵타워로#${num2}',
     },
     tetherThenOrangeTower: {
       en: 'Tether ${num1} => Orange Tower ${num2}',
       de: 'Verbindung ${num1} => Orangener Turm ${num2}',
-      ko: '줄채고#${num1} => 🔴타워로#${num2}',
+      ko: '줄채고#${num1} 🔜 🔴타워로#${num2}',
     },
     tether: {
       en: 'Tether ${num}',
@@ -950,42 +950,42 @@ const triggerSet: TriggerSet<Data> = {
           spreadThenMeleeStack: {
             en: '${inOut} + Spread => ${outIn} + Melees Stack',
             de: '${inOut} + Verteilen => ${outIn} + Nahkämpfer sammeln',
-            ko: '${inOut} + 흩어졌다 => ${outIn} + 밀리 뭉쳐요',
+            ko: '${inOut} + 흩어졌다 🔜 ${outIn} + 밀리 뭉쳐요',
           },
           spreadThenRoleStack: {
             en: '${inOut} + Spread => ${outIn} + Role Stacks',
             de: '${inOut} + Verteilen => ${outIn} + Rollengruppe sammeln',
-            ko: '${inOut} + 흩어졌다 => ${outIn} + 롤 뭉쳐요',
+            ko: '${inOut} + 흩어졌다 🔜 ${outIn} + 롤 뭉쳐요',
           },
           spreadThenPartnerStack: {
             en: '${inOut} + Spread => ${outIn} + Partner Stacks',
             de: '${inOut} + Verteilen => ${outIn} + Partner sammeln',
-            ko: '${inOut} + 흩어졌다 => ${outIn} + 파트너 뭉쳐요',
+            ko: '${inOut} + 흩어졌다 🔜 ${outIn} + 파트너 뭉쳐요',
           },
           meleeStackThenSpread: {
             en: '${inOut} + Melees Stack => ${outIn} + Spread',
             de: '${inOut} + Nahkämpfer sammeln => ${outIn} + Verteilen',
-            ko: '${inOut} + 밀리 뭉쳤다 => ${outIn} + 흩어져요',
+            ko: '${inOut} + 밀리 뭉쳤다 🔜 ${outIn} + 흩어져요',
           },
           roleStackThenSpread: {
             en: '${inOut} + Role Stacks => ${outIn} + Spread',
             de: '${inOut} + Rollengruppe sammeln => ${outIn} + Verteilen',
-            ko: '${inOut} + 롤 뭉쳤다 => ${outIn} + 흩어져요',
+            ko: '${inOut} + 롤 뭉쳤다 🔜 ${outIn} + 흩어져요',
           },
           partnerStackThenSpread: {
             en: '${inOut} + Partner Stacks => ${outIn} + Spread',
             de: '${inOut} + Partner sammeln => ${outIn} + Verteilen',
-            ko: '${inOut} + 파트너 뭉쳤다 => ${outIn} + 흩어져요',
+            ko: '${inOut} + 파트너 뭉쳤다 🔜 ${outIn} + 흩어져요',
           },
           spreadThenStack: {
             en: '${inOut} + Spread => ${outIn} + Stack',
             de: '${inOut} + Verteilen => ${outIn} + Sammeln',
-            ko: '${inOut} + 흩어졌다 => ${outIn} + 뭉쳐요',
+            ko: '${inOut} + 흩어졌다 🔜 ${outIn} + 뭉쳐요',
           },
           stackThenSpread: {
             en: '${inOut} + Stack => ${outIn} + Spread',
             de: '${inOut} + Sammeln => ${outIn} + Verteilen',
-            ko: '${inOut} + 뭉쳤다 => ${outIn} + 흩어져요',
+            ko: '${inOut} + 뭉쳤다 🔜 ${outIn} + 흩어져요',
           },
           stacks: {
             en: 'Stacks: ${player1}, ${player2}',
@@ -1148,7 +1148,7 @@ const triggerSet: TriggerSet<Data> = {
               6: output.awest!(),
               7: output.anw!(),
             }[averagePos],
-            partner: data.party.aJobName(data.prsPartner),
+            partner: data.party.jobAbbr(data.prsPartner),
           };
           if (data.prsDevilishCount === 0) {
             if (data.prsStackFirst)
@@ -1326,7 +1326,7 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: 'Sides (Stay Sides)',
           de: 'Seiten (Seitlich bleiben)',
-          ko: '옆으로 => 그대로 옆으로',
+          ko: '옆으로 🔜 그대로 옆으로',
         },
       },
     },
@@ -1972,7 +1972,7 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: '${text1} => ${text2} => ${text3}',
           de: '${text1} => ${text2} => ${text3}',
-          ko: '${text1} => ${text2} => ${text3}',
+          ko: '${text1} 🔜 ${text2} 🔜 ${text3}',
         },
         ...tripleKasumiFirstOutputStrings,
         ...tripleKasumiFollowupOutputStrings,
@@ -2010,7 +2010,7 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: 'Sides + Out => Stay Out',
           de: 'Seiten + Raus => Bleib drausen',
-          ko: '옆으로 => 그대로 옆으로',
+          ko: '옆으로 🔜 그대로 옆으로',
         },
       },
     },
@@ -2023,7 +2023,7 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: 'Under => Sides + Out',
           de: 'Unter ihn => Seiten + Geh Raus',
-          ko: '안으로 => 옆으로',
+          ko: '안으로 🔜 옆으로',
         },
       },
     },
@@ -2730,7 +2730,7 @@ const triggerSet: TriggerSet<Data> = {
         const isInFirst = matches.id === '8415';
         const inOut = isInFirst ? output.in!() : output.out!();
         const outIn = isInFirst ? output.out!() : output.in!();
-        const args = { inOut: inOut, outIn: outIn, partner: data.party.aJobName(data.prsPartner) };
+        const args = { inOut: inOut, outIn: outIn, partner: data.party.jobAbbr(data.prsPartner) };
         if (data.prsStackFirst)
           return output.stack!(args);
         return output.spread!(args);
@@ -2740,11 +2740,11 @@ const triggerSet: TriggerSet<Data> = {
         in: '[안]', // Outputs.in,
         stack: {
           en: '${inOut} Stack (${partner}) => ${outIn} Spread',
-          ko: '${inOut} 뭉쳤다(${partner}) => ${outIn} 흩어져요',
+          ko: '${inOut} 뭉쳤다(${partner}) 🔜 ${outIn} 흩어져요',
         },
         spread: {
           en: '${inOut} Spread => ${outIn} Stack (${partner})',
-          ko: '${inOut} 흩어졌다 => ${outIn} 뭉쳐요(${partner})',
+          ko: '${inOut} 흩어졌다 🔜 ${outIn} 뭉쳐요(${partner})',
         },
       },
     },
@@ -2787,15 +2787,15 @@ const triggerSet: TriggerSet<Data> = {
         output.responseOutputStrings = {
           c1: {
             en: 'No clouds => Turn around and go to center',
-            ko: '구름 없는 장판쪽 => 돌면서 한가운데',
+            ko: '구름 없는 장판쪽 🔜 돌면서 한가운데',
           },
           c2: {
             en: 'No Cloud 1st => Turn around and go to center',
-            ko: '구름 없는 첫 장판쪽 => 돌면서 한가운데',
+            ko: '구름 없는 첫 장판쪽 🔜 돌면서 한가운데',
           },
           c3: {
             en: 'Opposite 1 cloud => Run to right',
-            ko: '구름 한개 반대족 => 오른쪽 달려',
+            ko: '구름 한개 반대족 🔜 오른쪽 달려',
           },
           cs: {
             en: 'Clouds: ${num}',
@@ -2832,7 +2832,7 @@ const triggerSet: TriggerSet<Data> = {
             return output.stackTank!();
           return output.stackDps!();
         }
-        return output.stack!({ partner: data.party.aJobName(partner) });
+        return output.stack!({ partner: data.party.jobAbbr(partner) });
       },
       outputStrings: {
         stack: {
@@ -2863,17 +2863,17 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (data, _matches, output) => {
         aBuildStackPartner(data, data.sparksCollect, 'E17', 'E18');
         if (data.prsStackFirst)
-          return output.stack!({ partner: data.party.aJobName(data.prsPartner) });
-        return output.spread!({ partner: data.party.aJobName(data.prsPartner) });
+          return output.stack!({ partner: data.party.jobAbbr(data.prsPartner) });
+        return output.spread!({ partner: data.party.jobAbbr(data.prsPartner) });
       },
       outputStrings: {
         stack: {
           en: 'Stack (${partner}) => Spread',
-          ko: '뭉쳤다(${partner}) => 흩어져요',
+          ko: '뭉쳤다(${partner}) 🔜 흩어져요',
         },
         spread: {
           en: 'Spread => Stack (${partner})',
-          ko: '흩어졌다 => 뭉쳐요(${partner})',
+          ko: '흩어졌다 🔜 뭉쳐요(${partner})',
         },
       },
     },
@@ -3416,7 +3416,7 @@ const triggerSet: TriggerSet<Data> = {
           // return { alertText: output.tether!() };
           return;
         }
-        const target = data.party.aJobName(matches.target);
+        const target = data.party.jobAbbr(matches.target);
         return { infoText: output.notether!({ target: target }) };
       },
     },
@@ -3490,11 +3490,11 @@ const triggerSet: TriggerSet<Data> = {
         if (data.prsHaveTether) {
           const left = data.prsTetherCollect.filter((x) => data.me !== x);
           if (left.length === 1)
-            return { alertText: output.tether!({ player: data.party.aJobName(left[0]) }) };
+            return { alertText: output.tether!({ player: data.party.jobAbbr(left[0]) }) };
           return { alertText: output.tetheronly!() };
         }
         if (data.prsTetherCollect.length === 2) {
-          const tethers = data.party.aPriorities(data.prsTetherCollect);
+          const tethers = data.party.priorityList(data.prsTetherCollect);
           return { infoText: output.notether!({ players: tethers.join(', ') }) };
         }
         return { infoText: output.notetheronly!() };

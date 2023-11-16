@@ -1,14 +1,17 @@
 import { BaseOptions } from './data';
+import { Job, Role } from './job';
 import { OutputStringsParamObject } from './trigger';
 
 export type BasePartyMemberParamObject = {
-  role?: string;
-  job?: string;
+  roleName?: string;
+  jobAbbr?: string;
   jobFull?: string;
   id?: string;
   name: string;
   nick: string;
-  jindex: number;
+  role?: Role;
+  job?: Job;
+  jobIndex: number;
 };
 
 export type PartyMemberParamObjectKeys = keyof BasePartyMemberParamObject;

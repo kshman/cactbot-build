@@ -258,7 +258,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: '${first} => ${second} => ${third}',
           ja: '${first} => ${second} => ${third}',
           cn: '${first} => ${second} => ${third}',
-          ko: '${first} => ${second} => ${third}',
+          ko: '${first} 🔜 ${second} 🔜 ${third}',
         },
       },
     },

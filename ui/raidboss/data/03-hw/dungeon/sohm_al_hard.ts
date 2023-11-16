@@ -42,7 +42,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: 'Éloignez-vous des spores',
           ja: 'スポアサックから離れる',
           cn: '远离大孢囊',
-          ko: '큰 포자 주머니에게서 멀어져요',
+          ko: '큰 포자 주머니에게서 먼곳으로',
         },
       },
     },
