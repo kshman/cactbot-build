@@ -2,7 +2,6 @@ import { LocaleText, OutputStrings } from '../types/trigger';
 
 import { Lang } from './languages';
 import Outputs from './outputs';
-import { LocalizedJobAbbr } from './party';
 import { Directions } from './util';
 
 // 어듬이 뱡향 표시
@@ -228,47 +227,211 @@ const jobIndexToPriority: Record<number, number> = {
 
 // 직업 순위를 이름으로
 const jobPriorityToName: Record<number, LocaleText> = {
-  0: LocalizedJobAbbr.NONE,
-  101: LocalizedJobAbbr.DRK,
-  102: LocalizedJobAbbr.WAR,
-  103: LocalizedJobAbbr.GNB,
-  104: LocalizedJobAbbr.PLD,
-  201: LocalizedJobAbbr.WHM,
-  202: LocalizedJobAbbr.AST,
-  203: LocalizedJobAbbr.SGE,
-  204: LocalizedJobAbbr.SCH,
-  301: LocalizedJobAbbr.SAM,
-  302: LocalizedJobAbbr.MNK,
-  303: LocalizedJobAbbr.RPR,
-  304: LocalizedJobAbbr.DRG,
-  305: LocalizedJobAbbr.NIN,
-  401: LocalizedJobAbbr.MCH,
-  402: LocalizedJobAbbr.BRD,
-  403: LocalizedJobAbbr.DNC,
-  501: LocalizedJobAbbr.BLM,
-  502: LocalizedJobAbbr.RDM,
-  503: LocalizedJobAbbr.SMN,
-  599: LocalizedJobAbbr.BLU,
-  8102: LocalizedJobAbbr.MRD,
-  8104: LocalizedJobAbbr.GLA,
-  8201: LocalizedJobAbbr.CNJ,
-  8302: LocalizedJobAbbr.PGL,
-  8304: LocalizedJobAbbr.LNC,
-  8305: LocalizedJobAbbr.ROG,
-  8402: LocalizedJobAbbr.ARC,
-  8501: LocalizedJobAbbr.THM,
-  8503: LocalizedJobAbbr.ACN,
-  9101: LocalizedJobAbbr.CRP,
-  9102: LocalizedJobAbbr.BSM,
-  9103: LocalizedJobAbbr.ARM,
-  9104: LocalizedJobAbbr.GSM,
-  9105: LocalizedJobAbbr.LTW,
-  9106: LocalizedJobAbbr.WVR,
-  9107: LocalizedJobAbbr.ALC,
-  9108: LocalizedJobAbbr.CUL,
-  9201: LocalizedJobAbbr.MIN,
-  9202: LocalizedJobAbbr.BTN,
-  9203: LocalizedJobAbbr.FSH,
+  0: {
+    en: 'ADV',
+    ja: '冒険者',
+    ko: '모험가',
+  },
+  101: {
+    en: 'DRK',
+    ja: '暗黒騎士',
+    ko: '암흑기사',
+  },
+  102: {
+    en: 'WAR',
+    ja: '戦士',
+    ko: '전사',
+  },
+  103: {
+    en: 'GNB',
+    ja: 'ガンブレ',
+    ko: '총칼이',
+  },
+  104: {
+    en: 'PLD',
+    ja: 'ナイト',
+    ko: '팔라딘',
+  },
+  201: {
+    en: 'WHM',
+    ja: '白魔道士',
+    ko: '뱅마',
+  },
+  202: {
+    en: 'AST',
+    ja: '占星術師',
+    ko: '점쟁이',
+  },
+  203: {
+    en: 'SGE',
+    ja: '賢者',
+    ko: '현자',
+  },
+  204: {
+    en: 'SCH',
+    ja: '学者',
+    ko: '학자',
+  },
+  301: {
+    en: 'SAM',
+    ja: '侍',
+    ko: '사무라이',
+  },
+  302: {
+    en: 'MNK',
+    ja: 'モンク',
+    ko: '몽크',
+  },
+  303: {
+    en: 'RPR',
+    ja: 'リーパー ',
+    ko: '리퍼',
+  },
+  304: {
+    en: 'DRG',
+    ja: '竜騎士',
+    ko: '류상',
+  },
+  305: {
+    en: 'NIN',
+    ja: '忍者',
+    ko: '닌자',
+  },
+  401: {
+    en: 'MCH',
+    ja: '機工士',
+    ko: '기공사',
+  },
+  402: {
+    en: 'BRD',
+    ja: '吟遊詩人',
+    ko: '바드',
+  },
+  403: {
+    en: 'DNC',
+    ja: '踊り子',
+    ko: '춤꾼',
+  },
+  501: {
+    en: 'BLM',
+    ja: '黒魔道士',
+    ko: '',
+  },
+  502: {
+    en: 'RDM',
+    ja: '赤魔道士',
+    ko: '레드메',
+  },
+  503: {
+    en: 'SMN',
+    ja: '召喚士',
+    ko: '소환사',
+  },
+  599: {
+    en: 'BLU',
+    ja: '青魔道士',
+    ko: '블루메',
+  },
+  8102: {
+    en: 'MRD',
+    ja: '斧術士',
+    ko: '도끼맨',
+  },
+  8104: {
+    en: 'GLA',
+    ja: '剣術士',
+    ko: '검술사',
+  },
+  8201: {
+    en: 'CNH',
+    ja: '幻術士',
+    ko: '',
+  },
+  8302: {
+    en: 'PGL',
+    ja: '格闘士',
+    ko: '환술사',
+  },
+  8304: {
+    en: 'LNC',
+    ja: '槍術士',
+    ko: '랜서',
+  },
+  8305: {
+    en: 'ROG',
+    ja: '双剣士',
+    ko: '쌍검사',
+  },
+  8402: {
+    en: 'ARC',
+    ja: '弓術士',
+    ko: '활쟁이',
+  },
+  8501: {
+    en: 'THM',
+    ja: '呪術士',
+    ko: '주술사',
+  },
+  8503: {
+    en: 'ACN',
+    ja: '巴術士',
+    ko: '비술사',
+  },
+  9101: {
+    en: 'CRP',
+    ja: '木工師',
+    ko: '목수',
+  },
+  9102: {
+    en: 'BSM',
+    ja: '鍛冶師',
+    ko: '대장장이',
+  },
+  9103: {
+    en: 'ARM',
+    ja: '甲冑師',
+    ko: '갑주장인',
+  },
+  9104: {
+    en: 'GSM',
+    ja: '彫金師',
+    ko: '보석장인',
+  },
+  9105: {
+    en: 'LTW',
+    ja: '革細工師',
+    ko: '가죽장인',
+  },
+  9106: {
+    en: 'WVR',
+    ja: '裁縫師',
+    ko: '재봉사',
+  },
+  9107: {
+    en: 'ALC',
+    ja: '錬金術師',
+    ko: '연금술사',
+  },
+  9108: {
+    en: 'CUL',
+    ja: '調理師',
+    ko: '요리사',
+  },
+  9201: {
+    en: 'MIN',
+    ja: '採掘師',
+    ko: '광부',
+  },
+  9202: {
+    en: 'BTN',
+    ja: '園芸師',
+    ko: '농부',
+  },
+  9203: {
+    en: 'FSH',
+    ja: '漁師',
+    ko: '어부',
+  },
 } as const;
 
 // 롤 이름

@@ -915,7 +915,3 @@ export default class PartyTracker {
     return ls;
   }
 }
-
-export const LocalizedRole = roleLocalized;
-export const LocalizedJobAbbr = jobLocalizedAbbr;
-export const LocalizedJobFull = jobLocalizedFull;
