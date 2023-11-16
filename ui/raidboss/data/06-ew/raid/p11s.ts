@@ -852,7 +852,7 @@ const triggerSet: TriggerSet<Data> = {
         else
           data.prsLightAndDarks = myLength === 'near' ? 'darknear' : 'darkfar';
 
-        const myBuddyShort = data.party.aJobName(myBuddy);
+        const myBuddyShort = data.party.jobAbbr(myBuddy);
 
         let alertText: string;
         if (myLength === 'near') {
@@ -868,7 +868,7 @@ const triggerSet: TriggerSet<Data> = {
         }
         if (data.options.AutumnStyle) {
           // 어듬이 스타일 덮어쓰기
-          const myPartner = data.party.aJobName(myBuddy);
+          const myPartner = data.party.jobAbbr(myBuddy);
           let mySide;
           if (data.role === 'dps')
             mySide = myColor === 'dark' ? output.rightSide!() : output.leftSide!();
@@ -893,7 +893,7 @@ const triggerSet: TriggerSet<Data> = {
         const sameLength = playerNames.filter((x) => data.lightDarkTether[x] === myLength);
         const others = sameLength.filter((x) => x !== data.me && x !== myBuddy).sort();
         const [player1, player2] = data.options.AutumnStyle
-          ? others.map((x) => data.party.aJobName(x))
+          ? others.map((x) => data.party.jobAbbr(x))
           : others.map((x) => data.party.member(x));
         if (player1 !== undefined && player2 !== undefined) {
           if (myLength === 'near')

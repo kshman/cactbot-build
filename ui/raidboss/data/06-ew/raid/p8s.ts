@@ -2198,8 +2198,8 @@ const triggerSet: TriggerSet<Data> = {
         const [name1, name2] = data.alignmentTargets.sort();
         if (data.options.AutumnStyle)
           return output.target!({
-            player1: data.party.aJobName(name1),
-            player2: data.party.aJobName(name2),
+            player1: data.party.jobAbbr(name1),
+            player2: data.party.jobAbbr(name2),
             target: data.prsAlignMt ? output.targetDps!() : output.targetTh!(),
           });
         return output.text!({

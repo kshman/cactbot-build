@@ -329,7 +329,7 @@ const triggerSet: TriggerSet<Data> = {
 
         if (matches.target === data.me)
           return { alertText: output.tankBusterOnYou!() };
-        const target = data.party.member(matches.target);
+        const target = data.party.jobAbbr(matches.target);
         return { infoText: output.tankBusterOnPlayer!({ player: target }) };
       },
     },
@@ -345,7 +345,7 @@ const triggerSet: TriggerSet<Data> = {
       netRegex: { id: '8C63', source: 'Aloalo Kiwakin' },
       condition: (data) => data.CanCleanse(),
       alertText: (data, matches, output) =>
-        output.text!({ player: data.party.aJobName(matches.target) }),
+        output.text!({ player: data.party.jobAbbr(matches.target) }),
       outputStrings: {
         text: {
           en: 'Cleanse ${player}',
@@ -738,7 +738,7 @@ const triggerSet: TriggerSet<Data> = {
         const eid = { bubble: 'E9F', fetters: 'ECC' }[data.ketuBuff];
         const [player] = data.ketuBuffGains
           .filter((x) => x.effectId === eid && x.target !== data.me)
-          .map((x) => data.party.aJobName(x.target));
+          .map((x) => data.party.jobAbbr(x.target));
         if (player === undefined)
           return {
             alertText: output.spread!(),
@@ -906,7 +906,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (data, matches, output) => {
         if (data.me === matches.target)
           return output.itsme!();
-        return output.text!({ player: data.party.aJobName(matches.target) });
+        return output.text!({ player: data.party.jobAbbr(matches.target) });
       },
       outputStrings: {
         itsme: {
@@ -927,7 +927,7 @@ const triggerSet: TriggerSet<Data> = {
       netRegex: { id: '8C4D', source: 'Aloalo Wood Golem' },
       condition: (data) => data.CanCleanse(),
       alertText: (data, matches, output) =>
-        output.text!({ player: data.party.aJobName(matches.target) }),
+        output.text!({ player: data.party.jobAbbr(matches.target) }),
       outputStrings: {
         text: {
           en: 'Cleanse ${player}',
@@ -968,7 +968,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (data, matches, output) => {
         if (data.me === matches.target)
           return output.itsme!();
-        return output.text!({ player: data.party.aJobName(matches.target) });
+        return output.text!({ player: data.party.jobAbbr(matches.target) });
       },
       outputStrings: {
         itsme: {
@@ -1194,7 +1194,7 @@ const triggerSet: TriggerSet<Data> = {
             if (issame)
               return output.poshiume2out!();
             const pair = nums.find((x) => parseInt(x.count) === 2 && x.target !== data.me);
-            const name = pair === undefined ? output.unknown!() : data.party.aJobName(pair.target);
+            const name = pair === undefined ? output.unknown!() : data.party.jobAbbr(pair.target);
             return output.poshiume2in!({ name: name });
           }
           if (mycnt === 3)
@@ -1238,7 +1238,7 @@ const triggerSet: TriggerSet<Data> = {
               return output.hamukatsu2left!();
           }
 
-          return Autumn.jobPriority(my.atIndex) < Autumn.jobPriority(pm.atIndex)
+          return Autumn.jobPriority(my.jobIndex) < Autumn.jobPriority(pm.jobIndex)
             ? output.hamukatsu2left!()
             : output.hamukatsu2right!();
         }
@@ -1629,7 +1629,7 @@ const triggerSet: TriggerSet<Data> = {
         if (data.role === 'healer')
           return output.yellow!();
 
-        const members = data.stcBullsEyes.map((x) => data.party.member(x));
+        const members = data.party.members(data.stcBullsEyes);
         const dps = members.filter((x) => x.role === 'dps');
         if (dps.length === 1)
           return output.red!();
@@ -1737,8 +1737,8 @@ const triggerSet: TriggerSet<Data> = {
         if (!data.stcClaws.includes(data.me))
           return;
         let partner = data.stcClaws[0] !== data.me
-          ? data.party.aJobName(data.stcClaws[0])
-          : data.party.aJobName(data.stcClaws[1]);
+          ? data.party.jobAbbr(data.stcClaws[0])
+          : data.party.jobAbbr(data.stcClaws[1]);
         if (partner === undefined)
           partner = output.unknown!();
         return output.text!({ partner: partner });
@@ -1765,8 +1765,8 @@ const triggerSet: TriggerSet<Data> = {
         if (!data.stcMissiles.includes(data.me))
           return;
         let partner = data.stcMissiles[0] !== data.me
-          ? data.party.aJobName(data.stcMissiles[0])
-          : data.party.aJobName(data.stcMissiles[1]);
+          ? data.party.jobAbbr(data.stcMissiles[0])
+          : data.party.jobAbbr(data.stcMissiles[1]);
         if (partner === undefined)
           partner = output.unknown!();
         return output.text!({ partner: partner });
@@ -1833,7 +1833,8 @@ const triggerSet: TriggerSet<Data> = {
         if (!data.stcChains.includes(data.me))
           return;
         const partner = data.stcChains[0] !== data.me ? data.stcChains[0] : data.stcChains[1];
-        return output.chain!({ partner: data.party.aJobName(partner) });
+        if (partner !== undefined)
+          return output.chain!({ partner: data.party.jobAbbr(partner) });
       },
       run: (data) => data.stcChains = [],
       outputStrings: {
@@ -1905,7 +1906,7 @@ const triggerSet: TriggerSet<Data> = {
           return { infoText: output.stacks!() };
 
         if (data.triggerSetConfig.pinwheelingType === 'pino') {
-          const members = data.stcBullsEyes.map((x) => data.party.member(x));
+          const members = data.party.members(data.stcBullsEyes);
           const roles = members.map((x) => x.role);
 
           const dps = roles.filter((x) => x === 'dps');
@@ -1923,7 +1924,7 @@ const triggerSet: TriggerSet<Data> = {
           if (data.stcBullsEyes.length !== 2)
             return { infoText: output.spellStacks!() };
 
-          const members = data.stcBullsEyes.map((x) => data.party.member(x));
+          const members = data.party.members(data.stcBullsEyes);
           const other = members[members[0]?.name === data.me ? 1 : 0];
           if (other === undefined)
             return { infoText: output.spellStacks!() };
@@ -1934,14 +1935,14 @@ const triggerSet: TriggerSet<Data> = {
             );
             if (partner === undefined)
               return { alertText: output.spellLeft!({ partner: output.unknown!() }) };
-            return { alertText: output.spellLeft!({ partner: data.party.aJobName(partner) }) };
+            return { alertText: output.spellLeft!({ partner: data.party.jobAbbr(partner) }) };
           }
 
-          const myprior = Autumn.jobPriority(data.party.aJobIndex(data.me)!);
-          const otherprior = Autumn.jobPriority(other.atIndex);
+          const myprior = Autumn.jobPriority(data.party.jobIndex(data.me)!);
+          const otherprior = Autumn.jobPriority(other.jobIndex);
           return myprior < otherprior
-            ? { alertText: output.spellLeft!({ partner: data.party.aJobName(other.name) }) }
-            : { alertText: output.spellRight!({ partner: data.party.aJobName(other.name) }) };
+            ? { alertText: output.spellLeft!({ partner: data.party.jobAbbr(other.name) }) }
+            : { alertText: output.spellRight!({ partner: data.party.jobAbbr(other.name) }) };
         }
       },
       run: (data) => {

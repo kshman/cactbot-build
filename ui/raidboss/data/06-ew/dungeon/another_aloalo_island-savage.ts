@@ -332,7 +332,7 @@ const triggerSet: TriggerSet<Data> = {
 
         if (matches.target === data.me)
           return { alertText: output.tankBusterOnYou!() };
-        const target = data.party.member(matches.target);
+        const target = data.party.jobAbbr(matches.target);
         return { infoText: output.tankBusterOnPlayer!({ player: target }) };
       },
     },
@@ -348,7 +348,7 @@ const triggerSet: TriggerSet<Data> = {
       netRegex: { id: '8BC8', source: 'Aloalo Kiwakin' },
       condition: (data) => data.CanCleanse(),
       alertText: (data, matches, output) =>
-        output.text!({ player: data.party.aJobName(matches.target) }),
+        output.text!({ player: data.party.jobAbbr(matches.target) }),
       outputStrings: {
         text: {
           en: 'Cleanse ${player}',
@@ -741,7 +741,7 @@ const triggerSet: TriggerSet<Data> = {
         const eid = { bubble: 'E9F', fetters: 'ECC' }[data.ketuBuff];
         const [player] = data.ketuBuffGains
           .filter((x) => x.effectId === eid && x.target !== data.me)
-          .map((x) => data.party.aJobName(x.target));
+          .map((x) => data.party.jobAbbr(x.target));
         if (player === undefined)
           return {
             alertText: output.spread!(),
@@ -847,10 +847,19 @@ const triggerSet: TriggerSet<Data> = {
       id: 'AAIS Ketuduke Fluke Typhoon Bubble',
       type: 'StartsUsing',
       netRegex: { id: '8AAF', source: 'Ketuduke', capture: false },
-      condition: (data) => data.role === 'dps',
       infoText: (data, _matches, output) => {
         if (data.ketuCrystalAdd.length !== 4 || data.ketuCrystalAdd[0] === undefined)
           return output.text!();
+        if (data.options.AutumnStyle) {
+          if (parseFloat(data.ketuCrystalAdd[0].x) < 0) {
+            if (data.role === 'tank' || data.role === 'dps')
+              return output.left!();
+            return;
+          }
+          if (data.role === 'healer' || data.role === 'dps')
+            return output.right!();
+          return;
+        }
         if (parseFloat(data.ketuCrystalAdd[0].x) < 0)
           return output.left!();
         return output.right!();
@@ -858,16 +867,16 @@ const triggerSet: TriggerSet<Data> = {
       run: (data) => data.ketuCrystalAdd = [],
       outputStrings: {
         text: {
-          en: '(Bubble: Ready!)',
-          ko: '(슬슬 버블 타야 함)',
+          en: '(Ready to Bubble!)',
+          ko: '(슬슬 버블!)',
         },
         left: {
-          en: '(Bubble: Left DPS)',
-          ko: '(왼쪽 DPS가 버블 타야 함)',
+          en: '(Bubble: Left)',
+          ko: '(왼쪽에서 버블!)',
         },
         right: {
           en: '(Bubble: Right DPS)',
-          ko: '(오른쪽 DPS가 버블 타야 함)',
+          ko: '(오른쪽에서 버블)',
         },
       },
     },
@@ -900,7 +909,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (data, matches, output) => {
         if (data.me === matches.target)
           return output.itsme!();
-        return output.text!({ player: data.party.aJobName(matches.target) });
+        return output.text!({ player: data.party.jobAbbr(matches.target) });
       },
       outputStrings: {
         itsme: {
@@ -921,7 +930,7 @@ const triggerSet: TriggerSet<Data> = {
       netRegex: { id: '8BD3', source: 'Aloalo Wood Golem' },
       condition: (data) => data.CanCleanse(),
       alertText: (data, matches, output) =>
-        output.text!({ player: data.party.aJobName(matches.target) }),
+        output.text!({ player: data.party.jobAbbr(matches.target) }),
       outputStrings: {
         text: {
           en: 'Cleanse ${player}',
@@ -962,7 +971,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (data, matches, output) => {
         if (data.me === matches.target)
           return output.itsme!();
-        return output.text!({ player: data.party.aJobName(matches.target) });
+        return output.text!({ player: data.party.jobAbbr(matches.target) });
       },
       outputStrings: {
         itsme: {
@@ -1188,7 +1197,7 @@ const triggerSet: TriggerSet<Data> = {
             if (issame)
               return output.poshiume2out!();
             const pair = nums.find((x) => parseInt(x.count) === 2 && x.target !== data.me);
-            const name = pair === undefined ? output.unknown!() : data.party.aJobName(pair.target);
+            const name = pair === undefined ? output.unknown!() : data.party.jobAbbr(pair.target);
             return output.poshiume2in!({ name: name });
           }
           if (mycnt === 3)
@@ -1232,7 +1241,7 @@ const triggerSet: TriggerSet<Data> = {
               return output.hamukatsu2left!();
           }
 
-          return Autumn.jobPriority(my.atIndex) < Autumn.jobPriority(pm.atIndex)
+          return Autumn.jobPriority(my.jobIndex) < Autumn.jobPriority(pm.jobIndex)
             ? output.hamukatsu2left!()
             : output.hamukatsu2right!();
         }
@@ -1623,27 +1632,15 @@ const triggerSet: TriggerSet<Data> = {
         if (data.role === 'healer')
           return output.yellow!();
 
-        const members = data.stcBullsEyes.map((x) => data.party.member(x));
-        const dps = members.filter((x) => x.roleName === 'dps');
+        const members = data.party.members(data.stcBullsEyes);
+        const dps = members.filter((x) => x.role === 'dps');
         if (dps.length === 1)
           return output.red!();
 
-        const other = dps[0]?.name !== data.me ? dps[0]?.name : dps[1]?.name;
-        if (other === undefined)
-          return output.red!();
-
-        const mi = data.party.aJobIndex(data.me);
-        const oi = data.party.aJobIndex(other);
-        if (mi === undefined || oi === undefined)
-          return output.redCheck!();
-
-        if (mi < oi)
-          return output.red!();
-
-        const roles = members.map((x) => x.roleName);
+        const roles = members.map((x) => x.role);
         if (roles.includes('healer'))
-          return output.blue!();
-        return output.yellow!();
+          return output.redBlue!();
+        return output.redYellow!();
       },
       run: (data) => data.stcBullsEyes = [],
       outputStrings: {
@@ -1662,10 +1659,15 @@ const triggerSet: TriggerSet<Data> = {
           ja: '赤へ',
           ko: '🟥빨강 밟아요',
         },
-        redCheck: {
-          en: 'Go to Red (Have to check Tank & Healer)',
-          ja: '赤へ (ただしタンクとヒーラの色確認)',
-          ko: '🟥빨강 밟아요 (탱&힐 디버프 봐야되요)',
+        redBlue: {
+          en: 'Go to Red (or Blue)',
+          ja: '赤へ (または青)',
+          ko: '🟥빨강(아니면 🟦파랑) 밟아요',
+        },
+        redYellow: {
+          en: 'Go to Red (or Yellow)',
+          ja: '赤へ (または黄色)',
+          ko: '🟥빨강(아니면 🟨노랑) 밟아요',
         },
       },
     },
@@ -1738,8 +1740,8 @@ const triggerSet: TriggerSet<Data> = {
         if (!data.stcClaws.includes(data.me))
           return;
         let partner = data.stcClaws[0] !== data.me
-          ? data.party.aJobName(data.stcClaws[0])
-          : data.party.aJobName(data.stcClaws[1]);
+          ? data.party.jobAbbr(data.stcClaws[0])
+          : data.party.jobAbbr(data.stcClaws[1]);
         if (partner === undefined)
           partner = output.unknown!();
         return output.text!({ partner: partner });
@@ -1766,8 +1768,8 @@ const triggerSet: TriggerSet<Data> = {
         if (!data.stcMissiles.includes(data.me))
           return;
         let partner = data.stcMissiles[0] !== data.me
-          ? data.party.aJobName(data.stcMissiles[0])
-          : data.party.aJobName(data.stcMissiles[1]);
+          ? data.party.jobAbbr(data.stcMissiles[0])
+          : data.party.jobAbbr(data.stcMissiles[1]);
         if (partner === undefined)
           partner = output.unknown!();
         return output.text!({ partner: partner });
@@ -1834,7 +1836,8 @@ const triggerSet: TriggerSet<Data> = {
         if (!data.stcChains.includes(data.me))
           return;
         const partner = data.stcChains[0] !== data.me ? data.stcChains[0] : data.stcChains[1];
-        return output.chain!({ partner: data.party.aJobName(partner) });
+        if (partner !== undefined)
+          return output.chain!({ partner: data.party.jobAbbr(partner) });
       },
       run: (data) => data.stcChains = [],
       outputStrings: {
@@ -1906,8 +1909,8 @@ const triggerSet: TriggerSet<Data> = {
           return { infoText: output.stacks!() };
 
         if (data.triggerSetConfig.pinwheelingType === 'pino') {
-          const members = data.stcBullsEyes.map((x) => data.party.member(x));
-          const roles = members.map((x) => x.roleName);
+          const members = data.party.members(data.stcBullsEyes);
+          const roles = members.map((x) => x.role);
 
           const dps = roles.filter((x) => x === 'dps');
           if (dps.length === 2)
@@ -1924,7 +1927,7 @@ const triggerSet: TriggerSet<Data> = {
           if (data.stcBullsEyes.length !== 2)
             return { infoText: output.spellStacks!() };
 
-          const members = data.stcBullsEyes.map((x) => data.party.member(x));
+          const members = data.party.members(data.stcBullsEyes);
           const other = members[members[0]?.name === data.me ? 1 : 0];
           if (other === undefined)
             return { infoText: output.spellStacks!() };
@@ -1935,14 +1938,14 @@ const triggerSet: TriggerSet<Data> = {
             );
             if (partner === undefined)
               return { alertText: output.spellLeft!({ partner: output.unknown!() }) };
-            return { alertText: output.spellLeft!({ partner: data.party.aJobName(partner) }) };
+            return { alertText: output.spellLeft!({ partner: data.party.jobAbbr(partner) }) };
           }
 
-          const myprior = Autumn.jobPriority(data.party.aJobIndex(data.me)!);
-          const otherprior = Autumn.jobPriority(other.atIndex);
+          const myprior = Autumn.jobPriority(data.party.jobIndex(data.me)!);
+          const otherprior = Autumn.jobPriority(other.jobIndex);
           return myprior < otherprior
-            ? { alertText: output.spellLeft!({ partner: data.party.aJobName(other.name) }) }
-            : { alertText: output.spellRight!({ partner: data.party.aJobName(other.name) }) };
+            ? { alertText: output.spellLeft!({ partner: data.party.jobAbbr(other.name) }) }
+            : { alertText: output.spellRight!({ partner: data.party.jobAbbr(other.name) }) };
         }
       },
       run: (data) => {

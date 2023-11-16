@@ -1113,14 +1113,14 @@ const triggerSet: TriggerSet<Data> = {
         const stacksOn = !data.options.AutumnStyle
           ? output.stacksOn!({
             glitch: glitch,
-            player1: data.party.aJobName(p1),
-            player2: data.party.aJobName(p2),
+            player1: data.party.jobAbbr(p1),
+            player2: data.party.jobAbbr(p2),
           })
           : output.markerOn!({
             glitch: glitch,
             marker: marker,
-            player1: data.party.aJobName(p1),
-            player2: data.party.aJobName(p2),
+            player1: data.party.jobAbbr(p1),
+            player2: data.party.jobAbbr(p2),
           });
         if (!data.spotlightStacks.includes(data.me))
           return { infoText: stacksOn };
@@ -3059,8 +3059,8 @@ const triggerSet: TriggerSet<Data> = {
         if (ms.length === 0)
           return output.noTarget!();
         if (ms.length === 1)
-          return output.onlyOne!({ target: data.party.aJobName(ms[0]) });
-        return output.okTwo!({ t1: data.party.aJobName(ms[0]), t2: data.party.aJobName(ms[1]) });
+          return output.onlyOne!({ target: data.party.jobAbbr(ms[0]) });
+        return output.okTwo!({ t1: data.party.jobAbbr(ms[0]), t2: data.party.jobAbbr(ms[1]) });
       },
       outputStrings: {
         noTarget: {

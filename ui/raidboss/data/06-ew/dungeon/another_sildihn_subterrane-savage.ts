@@ -2716,7 +2716,7 @@ const triggerSet: TriggerSet<Data> = {
           return { alarmText: output.behind!() };
 
         const players: string[] = [];
-        data.firesteelStrikes.forEach((value) => players.push(data.party.aJobName(value)!));
+        data.firesteelStrikes.forEach((value) => players.push(data.party.jobAbbr(value)!));
         return { infoText: output.front!({ players: players.join(', ') }) };
       },
     },

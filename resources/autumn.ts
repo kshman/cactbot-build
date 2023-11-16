@@ -443,23 +443,17 @@ const roleTanksAndHealers: readonly string[] = [...roleTanks, ...roleHealers] as
 
 // 어듬이 유틸
 const Autumn = {
-  // 어듬이 잡 우선 순위
-  jobPriority: (jobIndex: number): number => jobIndexToPriority[jobIndex] ?? 9999,
-  // 어듬이 잡 우선 순위 리스트
-  jobPriorityList: (indices: number[], lang: Lang): string[] => {
-    const priors = indices.map((x) => jobIndexToPriority[x] ?? 9999).sort((a, b) => a - b);
+  jobPriority: (jobindex: number): number => jobIndexToPriority[jobindex] ?? 9999,
+  jobPriorityName: (jobindex: number, lang: Lang) => jobPriorityToName[jobindex]?.[lang] ?? '???',
+  jobPriorityList: (jobindices: number[], lang: Lang): string[] => {
+    const priors = jobindices.map((x) => jobIndexToPriority[x] ?? 9999).sort((a, b) => a - b);
     const jobs = priors.map((x) => jobPriorityToName[x]?.[lang] ?? '???');
     return jobs;
   },
-  // 롤 이름인가
   isRoleName: (name: string) => roleNames.includes(name),
-  // 탱크 롤 이름인가
   isTankName: (name: string) => roleTanks.includes(name),
-  // 힐러 롤 이름인가
   isHealerName: (name: string) => roleHealers.includes(name),
-  // 탱크나 힐러 롤 이름인가
   isTankHealerName: (name: string) => roleTanksAndHealers.includes(name),
-  // DPS 롤 이름인가
   isDpsName: (name: string) => roleDps.includes(name),
 } as const;
 

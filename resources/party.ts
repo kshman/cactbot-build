@@ -793,7 +793,7 @@ export default class PartyTracker {
       return {
         name: unknown,
         nick: unknown,
-        atIndex: 0,
+        jobIndex: 0,
         toString: () => unknown,
       };
     }
@@ -807,7 +807,7 @@ export default class PartyTracker {
       ret = {
         name: name,
         nick: nick,
-        atIndex: 0,
+        jobIndex: 0,
       };
     } else {
       const lang = this.options.DisplayLanguage;
@@ -825,7 +825,7 @@ export default class PartyTracker {
         nick: nick,
         role: role,
         job: job,
-        atIndex: partyMember.job,
+        jobIndex: partyMember.job,
       };
     }
 
@@ -834,27 +834,68 @@ export default class PartyTracker {
       const retVal = ret[this.options.DefaultPlayerLabel];
       if (typeof retVal === 'string')
         return retVal;
+      if (typeof retVal === 'number')
+        return retVal.toString();
       return ret.nick;
     };
 
     return ret;
   }
 
-  // 멤버 목록을 문자열 배열로 만들어 준다
-  aMembers(names: string[], label: string | undefined): string[] {
-    if (label === undefined)
-      label = this.options.DefaultPlayerLabel;
+  // 어듬이 잡 인덱스
+  jobIndex(name: string): number {
+    const partyMember = this.details.find((member) => member.name === name);
+    if (partyMember === undefined)
+      return 0;
+    return partyMember.job;
+  }
+
+  // 어듬이 잡 이름 약자
+  jobAbbr(name?: string): string | undefined {
+    if (name === undefined)
+      return;
+    const partyMember = this.details.find((member) => member.name === name);
+    if (partyMember === undefined)
+      return;
+    const job = Util.jobEnumToJob(partyMember.job);
+    return jobLocalizedAbbr[job]?.[this.options.DisplayLanguage];
+  }
+
+  // 어듬이 잡 이름 전체
+  jobFull(name?: string): string | undefined {
+    if (name === undefined)
+      return;
+    const partyMember = this.details.find((member) => member.name === name);
+    if (partyMember === undefined)
+      return;
+    const job = Util.jobEnumToJob(partyMember.job);
+    return jobLocalizedFull[job]?.[this.options.DisplayLanguage];
+  }
+
+  // 멤버 목록을 만들어 준다
+  members(names: string[]): PartyMemberParamObject[] {
+    const ls: PartyMemberParamObject[] = [];
+    for (const n of names) {
+      const m = this.member(n);
+      ls.push(m);
+    }
+    return ls;
+  }
+
+  // 멤버 목록을 문자열로 만들어 준다
+  memberList(names: string[]): string[] {
+    const label = this.options.DefaultPlayerLabel;
     const ls: string[] = [];
     for (const n of names) {
       const m = this.member(n);
       const v = m[label];
-      ls.push(typeof v === 'string' ? v : m.toString());
+      ls.push(typeof v === 'string' ? v : typeof v === 'number' ? v.toString() : m.nick);
     }
     return ls;
   }
 
   // 어듬이 형식으로 우선 순위 배열을 만들어 준다
-  aPriorities(names: string[]): string[] {
+  priorityList(names: string[]): string[] {
     const ls: string[] = [];
     const ids: number[] = [];
     for (const n of names) {
@@ -870,31 +911,7 @@ export default class PartyTracker {
     }
     const sorted = Autumn.jobPriorityList(ids, this.options.DisplayLanguage);
     for (const i of sorted)
-      ls.push(i ?? '몰?루');
+      ls.push(i);
     return ls;
-  }
-
-  // 어듬이 정의 잡 인덱스
-  aJobIndex(name: string | undefined): number | undefined {
-    if (name === undefined)
-      return;
-    const partyIndex = this.partyNames.indexOf(name);
-    if (partyIndex < 0)
-      return;
-    return this.details[partyIndex]?.job;
-  }
-
-  // 어듬이 정의 잡 이름
-  aJobName(name: string | undefined): string | undefined {
-    if (name === undefined)
-      return;
-    const partyIndex = this.partyNames.indexOf(name);
-    if (partyIndex < 0)
-      return;
-    const num = this.details[partyIndex]?.job;
-    if (num === undefined)
-      return;
-    const job = Util.jobEnumToJob(num);
-    return jobLocalizedAbbr[job]?.[this.options.DisplayLanguage];
   }
 }
