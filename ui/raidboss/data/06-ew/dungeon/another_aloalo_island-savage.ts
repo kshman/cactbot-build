@@ -1624,7 +1624,7 @@ const triggerSet: TriggerSet<Data> = {
           return output.yellow!();
 
         const members = data.stcBullsEyes.map((x) => data.party.member(x));
-        const dps = members.filter((x) => x.role === 'dps');
+        const dps = members.filter((x) => x.roleName === 'dps');
         if (dps.length === 1)
           return output.red!();
 
@@ -1640,7 +1640,7 @@ const triggerSet: TriggerSet<Data> = {
         if (mi < oi)
           return output.red!();
 
-        const roles = members.map((x) => x.role);
+        const roles = members.map((x) => x.roleName);
         if (roles.includes('healer'))
           return output.blue!();
         return output.yellow!();
@@ -1907,7 +1907,7 @@ const triggerSet: TriggerSet<Data> = {
 
         if (data.triggerSetConfig.pinwheelingType === 'pino') {
           const members = data.stcBullsEyes.map((x) => data.party.member(x));
-          const roles = members.map((x) => x.role);
+          const roles = members.map((x) => x.roleName);
 
           const dps = roles.filter((x) => x === 'dps');
           if (dps.length === 2)

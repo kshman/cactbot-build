@@ -817,14 +817,14 @@ export default class PartyTracker {
       const role = Util.jobToRole(job);
       const roleName = roleLocalized[role]?.[lang] ?? role;
       ret = {
+        role: role,
+        job: job,
         id: partyMember.id,
-        job: jobAbbr,
+        jobAbbr: jobAbbr,
         jobFull: jobFull,
-        role: roleName,
+        roleName: roleName,
         name: name,
         nick: nick,
-        atRole: role,
-        atJob: job,
         atIndex: partyMember.job,
       };
     }
