@@ -873,7 +873,7 @@ export default class PartyTracker {
   }
 
   // 멤버 목록을 만들어 준다
-  members(names: string[]): PartyMemberParamObject[] {
+  members(names: readonly string[]): PartyMemberParamObject[] {
     const ls: PartyMemberParamObject[] = [];
     for (const n of names) {
       const m = this.member(n);
@@ -883,7 +883,7 @@ export default class PartyTracker {
   }
 
   // 멤버 목록을 문자열로 만들어 준다
-  memberList(names: string[]): string[] {
+  memberList(names: readonly string[]): string[] {
     const label = this.options.DefaultPlayerLabel;
     const ls: string[] = [];
     for (const n of names) {
@@ -895,7 +895,7 @@ export default class PartyTracker {
   }
 
   // 어듬이 형식으로 우선 순위 배열을 만들어 준다
-  priorityList(names: string[]): string[] {
+  priorityList(names: readonly string[]): string[] {
     const ls: string[] = [];
     const ids: number[] = [];
     for (const n of names) {
@@ -915,3 +915,7 @@ export default class PartyTracker {
     return ls;
   }
 }
+
+export const LocalizedRole = roleLocalized;
+export const LocalizedJobAbbr = jobLocalizedAbbr;
+export const LocalizedJobFull = jobLocalizedFull;
