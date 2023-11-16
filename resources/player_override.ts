@@ -70,7 +70,7 @@ export const addRemotePlayerSelectUI = (lang: Lang): void => {
     fr: 'Sélectionner un joueur\n (la liste se mettra à jour dans une instance)',
     ja: 'プレーヤー名を選択してください\n(インスタンスに入るとリストが更新する)',
     cn: '请选择玩家名称\n(此列表将会在进入副本后更新)',
-    ko: '플레이어를 선택하세요\n(인스턴스 안에 있으면 목록이 갱신되요)',
+    ko: '플레이어를 선택하세요\n(인스턴스에 있으면 리스트가 업데이트됩니다.)',
   };
   const forceTTSByLang = {
     en: 'Force Enable Text To Speech',
@@ -78,7 +78,7 @@ export const addRemotePlayerSelectUI = (lang: Lang): void => {
     fr: 'Forcer l\'activation de la synthèse vocale (TTS)',
     ja: 'TTSを強制的に有効化する',
     cn: '强制启用TTS',
-    ko: '강제로 TTS를 사용해요',
+    ko: 'TTS 기능을 활성화하기',
   };
   const buttonTextByLang = {
     en: 'Start Overlay',

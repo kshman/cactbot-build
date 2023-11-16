@@ -933,7 +933,6 @@ export default {
   num9: numberToOutputString(9),
 
   // 어듬이 추가
-  // 쉐어 탱크버스터
   sharedOrInvinTankbusterOnYou: {
     en: 'Share Tank Buster',
     ja: '自分にタンクシェア',
@@ -950,12 +949,12 @@ export default {
     ko: '따로 따로 탱크버스터',
   },
   pairStack: {
-    en: 'Pair, Stack with partner',
+    en: 'Stack with partner',
     ja: 'ペア',
     ko: '페어, 둘이 맞아요',
   },
   pairStackOnPlayer: {
-    en: 'Pair: ${player}',
+    en: 'Stack: ${player}',
     ja: 'ペア: ${player}',
     ko: '페어 (${player})',
   },

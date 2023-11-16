@@ -432,7 +432,7 @@ const jobPriorityToName: Record<number, LocaleText> = {
     ja: '冒険者',
     ko: '모험가',
   },
-};
+} as const;
 
 // 롤 이름
 const roleTanks: readonly string[] = ['MT', 'ST', 'OT'] as const;

@@ -1232,7 +1232,7 @@ const triggerSet: TriggerSet<Data> = {
               return output.hamukatsu2left!();
           }
 
-          return Autumn.jobPriority(my.jindex) < Autumn.jobPriority(pm.jindex)
+          return Autumn.jobPriority(my.atIndex) < Autumn.jobPriority(pm.atIndex)
             ? output.hamukatsu2left!()
             : output.hamukatsu2right!();
         }
@@ -1939,7 +1939,7 @@ const triggerSet: TriggerSet<Data> = {
           }
 
           const myprior = Autumn.jobPriority(data.party.aJobIndex(data.me)!);
-          const otherprior = Autumn.jobPriority(other.jindex);
+          const otherprior = Autumn.jobPriority(other.atIndex);
           return myprior < otherprior
             ? { alertText: output.spellLeft!({ partner: data.party.aJobName(other.name) }) }
             : { alertText: output.spellRight!({ partner: data.party.aJobName(other.name) }) };
