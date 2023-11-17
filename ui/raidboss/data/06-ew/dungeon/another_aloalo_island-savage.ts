@@ -18,27 +18,27 @@ const ForceMoveStrings = {
   stacks: Outputs.getTogether,
   spread: Outputs.spread,
   forward: {
-    en: 'Mindhack: Forward => ${aim}', // FIXME
+    en: 'Move: Forward => ${aim}', // FIXME
     ja: '強制移動 : 前 => ${aim}',
     ko: '강제이동: 앞 🔜 ${aim}',
   },
   backward: {
-    en: 'Mindhack: Back => ${aim}', // FIXME
+    en: 'Move: Back => ${aim}', // FIXME
     ja: '強制移動 : 後ろ => ${aim}',
     ko: '강제이동: 뒤 🔜 ${aim}',
   },
   left: {
-    en: 'Mindhack: Left => ${aim}', // FIXME
+    en: 'Move: Left => ${aim}', // FIXME
     ja: '強制移動 : 左 => ${aim}',
     ko: '강제이동: 왼쪽 🔜 ${aim}',
   },
   right: {
-    en: 'Mindhack: Right => ${aim}', // FIXME
+    en: 'Move: Right => ${aim}', // FIXME
     ja: '強制移動 : 右 => ${aim}',
     ko: '강제이동: 오른쪽 🔜 ${aim}',
   },
   move: {
-    en: 'Mindhack => ${aim}', // FIXME
+    en: 'Move => ${aim}', // FIXME
     ja: '強制移動 => ${aim}',
     ko: '강제이동 🔜 ${aim}',
   },
@@ -79,7 +79,7 @@ export interface Data extends RaidbossData {
   stcRingRing: number;
   stcBullsEyes: string[];
   stcClaws: string[];
-  stcMissiles: string[];
+  stcMsls: string[];
   stcChains: string[];
   stcSeenPinwheeling: boolean;
   stcSeenPop: boolean;
@@ -181,7 +181,7 @@ const triggerSet: TriggerSet<Data> = {
           '하므까스: 남북고정': 'hamukatsu',
         },
       },
-      default: 'pylene',
+      default: 'hamukatsu',
     },
     {
       id: 'planarTacticsType',
@@ -202,7 +202,7 @@ const triggerSet: TriggerSet<Data> = {
           '하므까스: 3번 한쪽만 사용': 'hamukatsu',
         },
       },
-      default: 'poshiume',
+      default: 'hamukatsu',
     },
     {
       id: 'pinwheelingType',
@@ -240,7 +240,7 @@ const triggerSet: TriggerSet<Data> = {
       stcRingRing: 0,
       stcBullsEyes: [],
       stcClaws: [],
-      stcMissiles: [],
+      stcMsls: [],
       stcChains: [],
       stcSeenPinwheeling: false,
       stcSeenPop: false,
@@ -257,7 +257,7 @@ const triggerSet: TriggerSet<Data> = {
       netRegex: { id: '8BC7', source: 'Aloalo Kiwakin', capture: false },
       condition: (data) => !data.checkOptions,
       delaySeconds: 1,
-      suppressSeconds: 99999,
+      suppressSeconds: 999999,
       infoText: (data, _matches, output) => {
         data.checkOptions = true;
         if (data.options.AutumnParameter !== undefined) {
@@ -280,22 +280,21 @@ const triggerSet: TriggerSet<Data> = {
         }
         const param = output.options!({
           fluke: {
-            'spread': '(없음)',
-            'pylene': '피렌',
-            'hamukatsu': '남북',
+            'spread': output.spread!(),
+            'pylene': output.pylene!(),
+            'hamukatsu': output.flukeNs!(),
           }[data.triggerSetConfig.flukeGaleType],
           planar: {
-            'count': '(카운트)',
-            'poshiume': '양쪽',
-            'hamukatsu': '한쪽',
+            'count': output.count!(),
+            'poshiume': output.planar13!(),
+            'hamukatsu': output.planar3!(),
           }[data.triggerSetConfig.planarTacticsType],
           pin: {
-            'stack': '(없음)',
-            'pino': '피노',
-            'spell': '스펠',
+            'stack': output.stack!(),
+            'pino': output.pino!(),
+            'spell': output.spell!(),
           }[data.triggerSetConfig.pinwheelingType],
         });
-        console.log(`알로 옵션: ${param}`);
         if (data.options.DisplayLanguage === 'en')
           return output.text!({ param: param });
       },
@@ -307,6 +306,42 @@ const triggerSet: TriggerSet<Data> = {
         options: {
           en: '${fluke}/${planar}/${pin}',
           ko: '${fluke}/${planar}/${pin}',
+        },
+        spread: {
+          en: '(spread)',
+          ko: '(없음)',
+        },
+        pylene: {
+          en: 'pylene',
+          ko: '피렌',
+        },
+        flukeNs: {
+          en: 'N-S',
+          ko: '남북',
+        },
+        count: {
+          en: '(count)',
+          ko: '(카운트)',
+        },
+        planar13: {
+          en: '1&3',
+          ko: '양쪽',
+        },
+        planar3: {
+          en: '3',
+          ko: '한쪽',
+        },
+        stack: {
+          en: '(stack)',
+          ko: '(없음)',
+        },
+        pino: {
+          en: 'pino',
+          ko: '피노',
+        },
+        spell: {
+          en: 'spell',
+          ko: '스펠',
         },
       },
     },
@@ -538,27 +573,27 @@ const triggerSet: TriggerSet<Data> = {
         pylene1: {
           en: 'Go to 1',
           ja: '第1区域へ',
-          ko: '1번 칸으로',
+          ko: '[1]',
         },
         pylene2: {
           en: 'Go to 2',
           ja: '第2区域へ',
-          ko: '2번 칸으로',
+          ko: '[2]',
         },
         hamukatsu1: {
           en: 'Go to 1',
           ja: '第1区域の安置マスへ',
-          ko: '1번쪽 안전 칸으로',
+          ko: '[1] 안전 칸',
         },
         hamukatsu2: {
           en: 'Go to 2 safe tile ',
           ja: '第2区域の安置マスへ',
-          ko: '2번쪽 안전 칸으로',
+          ko: '[2] 안전 칸',
         },
         hamukatsuBubble: {
           en: 'Go to 2 safe tile (after knockback)',
           ja: '第2区域の安置マスへ',
-          ko: '2번쪽 넉백하면 안전인 칸으로',
+          ko: '[2] 넉백한담에 🔜 안전 칸',
         },
         goSafeTile: {
           en: 'Go to safe tile',
@@ -739,16 +774,14 @@ const triggerSet: TriggerSet<Data> = {
         if (data.ketuBuff === undefined)
           return;
         const eid = { bubble: 'E9F', fetters: 'ECC' }[data.ketuBuff];
-        const [player] = data.ketuBuffGains
-          .filter((x) => x.effectId === eid && x.target !== data.me)
-          .map((x) => data.party.jobAbbr(x.target));
-        if (player === undefined)
+        const partner = data.ketuBuffGains.find((x) => x.effectId === eid && x.target !== data.me);
+        if (partner === undefined)
           return {
             alertText: output.spread!(),
             infoText: output.safe!({ safe: data.ketuRoarSafe }),
           };
         return {
-          alertText: output[data.ketuBuff]!({ player: player }),
+          alertText: output[data.ketuBuff]!({ player: data.party.jobAbbr(partner.target) }),
           infoText: output.safe!({ safe: data.ketuRoarSafe }),
         };
       },
@@ -777,7 +810,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '쫄 뒤로!',
         },
         bubble: {
-          en: 'Beghind Fetters',
+          en: 'Behind Fetters',
           ja: 'バインドのざこの後ろに',
           ko: '바인드🟡 쫄 뒤로!',
         },
@@ -1046,10 +1079,26 @@ const triggerSet: TriggerSet<Data> = {
         }[blight];
       },
       outputStrings: {
-        front: Outputs.goFront,
-        back: Outputs.getBehind,
-        left: Outputs.left,
-        right: Outputs.right,
+        front: {
+          en: 'Ⓐ Front',
+          ja: 'Ⓐ 前へ',
+          ko: 'Ⓐ 앞으로',
+        },
+        back: {
+          en: 'Ⓒ Behind',
+          ja: 'Ⓒ 背面へ',
+          ko: 'Ⓒ 엉댕이로',
+        },
+        left: {
+          en: 'Ⓓ Left',
+          ja: 'Ⓓ 左へ',
+          ko: 'Ⓓ 왼쪽',
+        },
+        right: {
+          en: 'Ⓑ Right',
+          ja: 'Ⓑ 右へ',
+          ko: 'Ⓑ 오른쪽',
+        },
       },
     },
     {
@@ -1210,16 +1259,14 @@ const triggerSet: TriggerSet<Data> = {
           if (mycnt === 3)
             return output.hamukatsu3!();
 
-          const my = data.party.member(data.me);
-          const [pm] = nums.filter((x) => x.target !== data.me && parseInt(x.count) === 2)
-            .map((x) => data.party.member(x.target));
-          if (my === undefined || pm === undefined)
-            return output.hamukatsu2!();
           const [s1, s2] = stacks;
           if (s1 === undefined || s2 === undefined)
             return output.hamukatsu2!();
+          const pn = nums.find((x) => x.target !== data.me && parseInt(x.count) === 2);
+          if (pn === undefined)
+            return output.hamukatsu2!();
 
-          if (s1 === data.me || s2 === data.me) {
+          if (stacks.includes(data.me)) {
             const other = s1 === data.me ? s2 : s1;
             const surge = nums.find((x) => x.target === other);
             if (surge === undefined)
@@ -1229,8 +1276,8 @@ const triggerSet: TriggerSet<Data> = {
               return output.hamukatsu2left!();
             if (count === 3)
               return output.hamukatsu2right!();
-          } else if (s1 === pm.name || s2 === pm.name) {
-            const other = s1 === pm.name ? s2 : s1;
+          } else if (stacks.includes(pn.target)) {
+            const other = s1 === pn.target ? s2 : s1;
             const surge = nums.find((x) => x.target === other);
             if (surge === undefined)
               return output.hamukatsu2!();
@@ -1241,6 +1288,8 @@ const triggerSet: TriggerSet<Data> = {
               return output.hamukatsu2left!();
           }
 
+          const my = data.party.member(data.me);
+          const pm = data.party.member(pn.target);
           return Autumn.jobPriority(my.jobIndex) < Autumn.jobPriority(pm.jobIndex)
             ? output.hamukatsu2left!()
             : output.hamukatsu2right!();
@@ -1331,12 +1380,12 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         left: {
-          en: 'Mindhack: Left', // FIXME
+          en: 'Move: Left', // FIXME
           ja: '強制移動 : 左',
           ko: '강제이동: 왼쪽',
         },
         right: {
-          en: 'Mindhack: Right', // FIXME
+          en: 'Move: Right', // FIXME
           ja: '強制移動 : 右',
           ko: '강제이동: 오른쪽',
         },
@@ -1739,12 +1788,9 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (data, _matches, output) => {
         if (!data.stcClaws.includes(data.me))
           return;
-        let partner = data.stcClaws[0] !== data.me
-          ? data.party.jobAbbr(data.stcClaws[0])
-          : data.party.jobAbbr(data.stcClaws[1]);
-        if (partner === undefined)
-          partner = output.unknown!();
-        return output.text!({ partner: partner });
+        const partner = data.stcClaws[0] !== data.me ? data.stcClaws[0] : data.stcClaws[1];
+        const abbr = partner !== undefined ? data.party.jobAbbr(partner) : output.unknown!();
+        return output.text!({ partner: abbr });
       },
       run: (data) => data.stcClaws = [],
       outputStrings: {
@@ -1761,20 +1807,17 @@ const triggerSet: TriggerSet<Data> = {
       type: 'Tether',
       netRegex: { id: '0011', source: 'Surprising Missile' },
       condition: (data, matches) => {
-        data.stcMissiles.push(matches.target);
-        return data.stcMissiles.length === 2;
+        data.stcMsls.push(matches.target);
+        return data.stcMsls.length === 2;
       },
       infoText: (data, _matches, output) => {
-        if (!data.stcMissiles.includes(data.me))
+        if (!data.stcMsls.includes(data.me))
           return;
-        let partner = data.stcMissiles[0] !== data.me
-          ? data.party.jobAbbr(data.stcMissiles[0])
-          : data.party.jobAbbr(data.stcMissiles[1]);
-        if (partner === undefined)
-          partner = output.unknown!();
-        return output.text!({ partner: partner });
+        const partner = data.stcMsls[0] !== data.me ? data.stcMsls[0] : data.stcMsls[1];
+        const abbr = partner !== undefined ? data.party.jobAbbr(partner) : output.unknown!();
+        return output.text!({ partner: abbr });
       },
-      run: (data) => data.stcMissiles = [],
+      run: (data) => data.stcMsls = [],
       outputStrings: {
         text: {
           en: 'Missile + Tether on YOU! (w/ ${partner})',
@@ -1836,16 +1879,17 @@ const triggerSet: TriggerSet<Data> = {
         if (!data.stcChains.includes(data.me))
           return;
         const partner = data.stcChains[0] !== data.me ? data.stcChains[0] : data.stcChains[1];
-        if (partner !== undefined)
-          return output.chain!({ partner: data.party.jobAbbr(partner) });
+        const abbr = partner !== undefined ? data.party.jobAbbr(partner) : output.unknown!();
+        return output.text!({ partner: abbr });
       },
       run: (data) => data.stcChains = [],
       outputStrings: {
-        chain: {
+        text: {
           en: 'Tether on YOU! (w/ ${partner})',
           ja: '自分にチェイン (${partner})',
           ko: '내게 체인! (${partner})',
         },
+        unknown: Outputs.unknown,
       },
     },
     {
@@ -1932,10 +1976,9 @@ const triggerSet: TriggerSet<Data> = {
           if (other === undefined)
             return { infoText: output.spellStacks!() };
 
-          if (data.stcChains.includes(other.name)) {
-            const [partner] = data.party.partyNames.filter(
-              (x) => x !== data.me && !data.stcChains.includes(x),
-            );
+          const chains = data.stcChains;
+          if (chains.includes(other.name)) {
+            const partner = data.party.partyNames.find((x) => x !== data.me && !chains.includes(x));
             if (partner === undefined)
               return { alertText: output.spellLeft!({ partner: output.unknown!() }) };
             return { alertText: output.spellLeft!({ partner: data.party.jobAbbr(partner) }) };
