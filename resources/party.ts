@@ -874,23 +874,18 @@ export default class PartyTracker {
 
   // 멤버 목록을 만들어 준다
   members(names: readonly string[]): PartyMemberParamObject[] {
-    const ls: PartyMemberParamObject[] = [];
-    for (const n of names) {
-      const m = this.member(n);
-      ls.push(m);
-    }
-    return ls;
+    const mm = names.map((x) => this.member(x));
+    return mm;
   }
 
   // 멤버 목록을 문자열로 만들어 준다
   memberList(names: readonly string[]): string[] {
     const label = this.options.DefaultPlayerLabel;
-    const ls: string[] = [];
-    for (const n of names) {
-      const m = this.member(n);
+    const ls = names.map((x) => {
+      const m = this.member(x);
       const v = m[label];
-      ls.push(typeof v === 'string' ? v : typeof v === 'number' ? v.toString() : m.nick);
-    }
+      return typeof v === 'string' ? v : typeof v === 'number' ? v.toString() : m.nick;
+    });
     return ls;
   }
 

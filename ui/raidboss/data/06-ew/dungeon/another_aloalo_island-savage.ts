@@ -79,7 +79,7 @@ export interface Data extends RaidbossData {
   stcRingRing: number;
   stcBullsEyes: string[];
   stcClaws: string[];
-  stcMsls: string[];
+  stcMissiles: string[];
   stcChains: string[];
   stcSeenPinwheeling: boolean;
   stcSeenPop: boolean;
@@ -240,7 +240,7 @@ const triggerSet: TriggerSet<Data> = {
       stcRingRing: 0,
       stcBullsEyes: [],
       stcClaws: [],
-      stcMsls: [],
+      stcMissiles: [],
       stcChains: [],
       stcSeenPinwheeling: false,
       stcSeenPop: false,
@@ -931,7 +931,7 @@ const triggerSet: TriggerSet<Data> = {
     {
       id: 'AAIS Wood Golem Ancient Aero III',
       type: 'StartsUsing',
-      netRegex: { id: '8C4C', source: 'Aloalo Wood Golem' },
+      netRegex: { id: '8BD2', source: 'Aloalo Wood Golem' },
       condition: (data) => data.CanSilence(),
       response: Responses.interrupt(),
     },
@@ -1262,8 +1262,8 @@ const triggerSet: TriggerSet<Data> = {
           const [s1, s2] = stacks;
           if (s1 === undefined || s2 === undefined)
             return output.hamukatsu2!();
-          const pn = nums.find((x) => x.target !== data.me && parseInt(x.count) === 2);
-          if (pn === undefined)
+          const partner = nums.find((x) => x.target !== data.me && parseInt(x.count) === 2);
+          if (partner === undefined)
             return output.hamukatsu2!();
 
           if (stacks.includes(data.me)) {
@@ -1276,8 +1276,8 @@ const triggerSet: TriggerSet<Data> = {
               return output.hamukatsu2left!();
             if (count === 3)
               return output.hamukatsu2right!();
-          } else if (stacks.includes(pn.target)) {
-            const other = s1 === pn.target ? s2 : s1;
+          } else if (stacks.includes(partner.target)) {
+            const other = s1 === partner.target ? s2 : s1;
             const surge = nums.find((x) => x.target === other);
             if (surge === undefined)
               return output.hamukatsu2!();
@@ -1289,7 +1289,7 @@ const triggerSet: TriggerSet<Data> = {
           }
 
           const my = data.party.member(data.me);
-          const pm = data.party.member(pn.target);
+          const pm = data.party.member(partner.target);
           return Autumn.jobPriority(my.jobIndex) < Autumn.jobPriority(pm.jobIndex)
             ? output.hamukatsu2left!()
             : output.hamukatsu2right!();
@@ -1547,12 +1547,11 @@ const triggerSet: TriggerSet<Data> = {
       type: 'StartsUsing',
       netRegex: { id: '8D1C', source: 'Statice', capture: false },
       alertText: (data, _matches, output) => {
-        const prev = data.isStackFirst;
-        data.isStackFirst = !data.isStackFirst;
-        if (prev)
+        if (data.isStackFirst)
           return output.stacks!();
         return output.spread!();
       },
+      run: (data) => data.isStackFirst = !data.isStackFirst,
       outputStrings: {
         stacks: Outputs.getTogether,
         spread: Outputs.spread,
@@ -1563,19 +1562,18 @@ const triggerSet: TriggerSet<Data> = {
       type: 'StartsUsing',
       netRegex: { id: '8976', source: 'Statice', capture: false },
       alertText: (data, _matches, output) => {
-        let ret;
         if (data.stcDuration < 10)
-          ret = data.isStackFirst ? output.stacks!() : output.spread!();
-        else if (data.stcDuration < 20)
-          ret = forceMove(output, data.stcMarch, data.isStackFirst);
-        else if (data.stcDuration > 50)
-          ret = forceMove(output, data.stcMarch, data.isStackFirst);
-        else
-          ret = data.isStackFirst ? output.stacks!() : output.spread!();
-        data.isStackFirst = !data.isStackFirst;
-        return ret;
+          return data.isStackFirst ? output.stacks!() : output.spread!();
+        if (data.stcDuration < 20)
+          return forceMove(output, data.stcMarch, data.isStackFirst);
+        if (data.stcDuration > 50)
+          return forceMove(output, data.stcMarch, data.isStackFirst);
+        return data.isStackFirst ? output.stacks!() : output.spread!();
       },
-      run: (data) => data.stcDuration = 0,
+      run: (data) => {
+        data.isStackFirst = !data.isStackFirst;
+        data.stcDuration = 0;
+      },
       outputStrings: {
         ...ForceMoveStrings,
       },
@@ -1725,7 +1723,7 @@ const triggerSet: TriggerSet<Data> = {
       type: 'Ability',
       netRegex: { id: '8980', source: 'Statice', capture: false },
       condition: (data) => !data.stcSeenPop,
-      delaySeconds: 3,
+      delaySeconds: 2.5,
       suppressSeconds: 1,
       response: Responses.knockback(),
     },
@@ -1788,9 +1786,9 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (data, _matches, output) => {
         if (!data.stcClaws.includes(data.me))
           return;
-        const partner = data.stcClaws[0] !== data.me ? data.stcClaws[0] : data.stcClaws[1];
-        const abbr = partner !== undefined ? data.party.jobAbbr(partner) : output.unknown!();
-        return output.text!({ partner: abbr });
+        const partner = data.stcClaws[data.stcClaws[0] !== data.me ? 0 : 1];
+        const name = partner !== undefined ? data.party.jobAbbr(partner) : output.unknown!();
+        return output.text!({ partner: name });
       },
       run: (data) => data.stcClaws = [],
       outputStrings: {
@@ -1807,17 +1805,17 @@ const triggerSet: TriggerSet<Data> = {
       type: 'Tether',
       netRegex: { id: '0011', source: 'Surprising Missile' },
       condition: (data, matches) => {
-        data.stcMsls.push(matches.target);
-        return data.stcMsls.length === 2;
+        data.stcMissiles.push(matches.target);
+        return data.stcMissiles.length === 2;
       },
       infoText: (data, _matches, output) => {
-        if (!data.stcMsls.includes(data.me))
+        if (!data.stcMissiles.includes(data.me))
           return;
-        const partner = data.stcMsls[0] !== data.me ? data.stcMsls[0] : data.stcMsls[1];
-        const abbr = partner !== undefined ? data.party.jobAbbr(partner) : output.unknown!();
-        return output.text!({ partner: abbr });
+        const partner = data.stcMissiles[data.stcMissiles[0] !== data.me ? 0 : 1];
+        const name = partner !== undefined ? data.party.jobAbbr(partner) : output.unknown!();
+        return output.text!({ partner: name });
       },
-      run: (data) => data.stcMsls = [],
+      run: (data) => data.stcMissiles = [],
       outputStrings: {
         text: {
           en: 'Missile + Tether on YOU! (w/ ${partner})',
@@ -1878,9 +1876,9 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (data, _matches, output) => {
         if (!data.stcChains.includes(data.me))
           return;
-        const partner = data.stcChains[0] !== data.me ? data.stcChains[0] : data.stcChains[1];
-        const abbr = partner !== undefined ? data.party.jobAbbr(partner) : output.unknown!();
-        return output.text!({ partner: abbr });
+        const partner = data.stcChains[data.stcChains[0] !== data.me ? 0 : 1];
+        const name = partner !== undefined ? data.party.jobAbbr(partner) : output.unknown!();
+        return output.text!({ partner: name });
       },
       run: (data) => data.stcChains = [],
       outputStrings: {
