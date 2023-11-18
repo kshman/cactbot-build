@@ -1,4 +1,4 @@
-name: Coverage Report
+name: 커버리지 리포트
 
 on:
   push:

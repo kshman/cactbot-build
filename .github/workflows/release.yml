@@ -1,4 +1,4 @@
-name: Create Release Artifact
+name: 릴리즈
 
 on:
   push:
