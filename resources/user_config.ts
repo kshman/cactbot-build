@@ -34,6 +34,9 @@ import _ZoneId from './zone_id';
 const ZoneId = _ZoneId;
 import _ZoneInfo from './zone_info';
 const ZoneInfo = _ZoneInfo;
+import _Autumn, { AutumnDirections as _AutumnDirections } from './autumn';
+const Autumn = _Autumn;
+const AutumnDirections = _AutumnDirections;
 
 // Convince TypeScript and eslint that these are used.  TypeScript doesn't have a great way
 // to disable individual rules, so this is safer than disabling all rules.
@@ -47,6 +50,8 @@ console.assert(Util);
 console.assert(Directions);
 console.assert(ZoneId);
 console.assert(ZoneInfo);
+console.assert(Autumn);
+console.assert(AutumnDirections);
 
 // TODO: move all of these to config.js?
 export type UserFileCallback = (

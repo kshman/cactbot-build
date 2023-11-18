@@ -154,7 +154,7 @@ const outputFromArrow8Num = (dirNum: number): ArrowOutput8 => {
 };
 
 // 어듬이 뱡향 지시
-export const AutumnIndicators = {
+export const AutumnDirections = {
   outputMarker8: outputMarker8,
   outputMarkerCardinal: outputMarkerCardinal,
   outputMarkerIntercard: outputMarkerIntercard,
