@@ -1,4 +1,4 @@
-name: Test
+name: Script Lint
 
 on:
   push:
@@ -7,29 +7,32 @@ on:
     paths:
       - '**/*.js'
       - '**/*.ts'
-      - '**/*.py'
-      - 'package*.json'
-      - 'ui/raidboss/**'
-      - '.github/workflows/test.yml'
+      - '**/*.cjs'
+      - '**/*.mjs'
+      - '**/*.json'
+      - '.github/workflows/script-lint.yml'
       - '.github/actions/setup-js-env/'
   pull_request:
     paths:
       - '**/*.js'
       - '**/*.ts'
-      - '**/*.py'
-      - 'package*.json'
-      - 'ui/raidboss/**'
-      - '.github/workflows/test.yml'
+      - '**/*.cjs'
+      - '**/*.mjs'
+      - '**/*.json'
+      - '.github/workflows/script-lint.yml'
       - '.github/actions/setup-js-env/'
 
 jobs:
-  test:
+  eslint:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-
       - uses: ./.github/actions/setup-js-env
 
-      - name: npm test
+      - name: TypeScript checking
         run: |
-          npm test
+          npm run tsc-no-emit
+
+      - name: npm run lint
+        run: |
+          npm run lint

@@ -1,4 +1,4 @@
-name: Post-Process Test
+name: Coverage Report
 
 on:
   push:
@@ -9,7 +9,7 @@ on:
       - 'ui/raidboss/**'
       - 'ui/oopsyraidsy/**'
       - 'util/**'
-      - '.github/workflows/post-process.yml'
+      - '.github/workflows/coverage-report.yml'
       - '.github/actions/setup-js-env/'
   pull_request:
     paths:
@@ -17,7 +17,7 @@ on:
       - 'ui/raidboss/**'
       - 'ui/oopsyraidsy/**'
       - 'util/**'
-      - '.github/workflows/post-process.yml'
+      - '.github/workflows/coverage-report.yml'
       - '.github/actions/setup-js-env/'
 
 jobs:
@@ -31,7 +31,3 @@ jobs:
       - name: npm run coverage-report
         run: |
           npm run coverage-report
-
-      - name: npm run process-triggers
-        run: |
-          npm run process-triggers
