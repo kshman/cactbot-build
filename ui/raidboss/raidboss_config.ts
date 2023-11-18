@@ -923,7 +923,7 @@ class RaidbossConfigurator {
         if (p0 !== undefined && p1 !== undefined && p2 !== undefined) {
           const div = document.createElement('div');
           div.classList.add('option-input-container', 'trigger-source');
-          const baseUrl = 'https://github.com/quisquous/cactbot/blob/triggers';
+          const baseUrl = 'https://github.com/kshman/cactbot-build/blob/triggers';
           let urlFilepath;
           if (path.length === 3) {
             // 00-misc/general.js
@@ -1888,14 +1888,16 @@ const templateOptions: OptionsTemplate = {
       type: 'html',
       html: {
         // TODO: it'd be nice if OverlayPlugin could open links on the system outside of ACT.
-        en: makeLink('https://quisquous.github.io/cactbot/util/coverage/coverage.html?lang=en'),
-        de: makeLink('https://quisquous.github.io/cactbot/util/coverage/coverage.html?lang=de'),
-        fr: makeLink('https://quisquous.github.io/cactbot/util/coverage/coverage.html?lang=fr'),
-        ja: makeLink('https://quisquous.github.io/cactbot/util/coverage/coverage.html?lang=ja'),
-        cn: makeLink('https://quisquous.github.io/cactbot/util/coverage/coverage.html?lang=cn'),
-        ko: makeLink('https://quisquous.github.io/cactbot/util/coverage/coverage.html?lang=ko'),
+        en: makeLink('https://github.com/kshman/cactbot-build/util/coverage/coverage.html?lang=en'),
+        de: makeLink('https://github.com/kshman/cactbot-build/util/coverage/coverage.html?lang=de'),
+        fr: makeLink('https://github.com/kshman/cactbot-build/util/coverage/coverage.html?lang=fr'),
+        ja: makeLink('https://github.com/kshman/cactbot-build/util/coverage/coverage.html?lang=ja'),
+        cn: makeLink('https://github.com/kshman/cactbot-build/util/coverage/coverage.html?lang=cn'),
+        ko: makeLink('https://github.com/kshman/cactbot-build/util/coverage/coverage.html?lang=ko'),
       },
-      default: makeLink('https://quisquous.github.io/cactbot/util/coverage/coverage.html?lang=en'),
+      default: makeLink(
+        'https://github.com/kshman/cactbot-build/util/coverage/coverage.html?lang=en',
+      ),
     },
     {
       id: 'Debug',

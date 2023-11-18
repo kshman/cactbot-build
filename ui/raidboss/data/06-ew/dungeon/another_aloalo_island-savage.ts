@@ -255,25 +255,26 @@ const triggerSet: TriggerSet<Data> = {
       regex: /--setup--/,
       delaySeconds: 1,
       infoText: (data, _matches, output) => {
-        if (data.settled || data.options.AutumnParameter === undefined)
-          return;
-        data.settled = true;
+        if (data.settled)
+          return output.settle!();
 
-        const ss = data.options.AutumnParameter.split('.');
-        if (ss.length === 1 && ss[0] === 'hm') {
-          data.triggerSetConfig.flukeGaleType = 'hamukatsu';
-          data.triggerSetConfig.planarTacticsType = 'hamukatsu';
-          data.triggerSetConfig.pinwheelingType = 'pino';
-        }
-        if (ss.length === 2) {
-          data.triggerSetConfig.flukeGaleType = ss[0] === 'hm' ? 'hamukatsu' : 'pylene';
-          data.triggerSetConfig.planarTacticsType = ss[1] === 'hm' ? 'hamukatsu' : 'poshiume';
-          data.triggerSetConfig.pinwheelingType = 'pino';
-        }
-        if (ss.length === 3) {
-          data.triggerSetConfig.flukeGaleType = ss[0] === 'hm' ? 'hamukatsu' : 'pylene';
-          data.triggerSetConfig.planarTacticsType = ss[1] === 'hm' ? 'hamukatsu' : 'poshiume';
-          data.triggerSetConfig.pinwheelingType = ss[2] === 'sp' ? 'spell' : 'pino';
+        if (data.options.AutumnParameter !== undefined) {
+          const ss = data.options.AutumnParameter.split('.');
+          if (ss.length === 1 && ss[0] === 'hm') {
+            data.triggerSetConfig.flukeGaleType = 'hamukatsu';
+            data.triggerSetConfig.planarTacticsType = 'hamukatsu';
+            data.triggerSetConfig.pinwheelingType = 'pino';
+          }
+          if (ss.length === 2) {
+            data.triggerSetConfig.flukeGaleType = ss[0] === 'hm' ? 'hamukatsu' : 'pylene';
+            data.triggerSetConfig.planarTacticsType = ss[1] === 'hm' ? 'hamukatsu' : 'poshiume';
+            data.triggerSetConfig.pinwheelingType = 'pino';
+          }
+          if (ss.length === 3) {
+            data.triggerSetConfig.flukeGaleType = ss[0] === 'hm' ? 'hamukatsu' : 'pylene';
+            data.triggerSetConfig.planarTacticsType = ss[1] === 'hm' ? 'hamukatsu' : 'poshiume';
+            data.triggerSetConfig.pinwheelingType = ss[2] === 'sp' ? 'spell' : 'pino';
+          }
         }
 
         const param = output.options!({
@@ -293,10 +294,15 @@ const triggerSet: TriggerSet<Data> = {
             'spell': output.spell!(),
           }[data.triggerSetConfig.pinwheelingType],
         });
-        return output.text!({ param: param });
+        return output.mesg!({ param: param });
       },
+      run: (data) => data.settled = true,
       outputStrings: {
-        text: {
+        settle: {
+          en: '(Settled)',
+          ko: '(설정이 있네요)',
+        },
+        mesg: {
           en: 'Option: ${param}',
           ko: '옵션: ${param}',
         },

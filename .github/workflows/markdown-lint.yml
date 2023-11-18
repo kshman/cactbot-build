@@ -1,0 +1,32 @@
+name: Markdown Lint
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - '*.json'
+      - '**/*.md'
+      - '.github/workflows/markdown-lint.yml'
+      - '.github/actions/setup-js-env/'
+  pull_request:
+    paths:
+      - '*.json'
+      - '**/*.md'
+      - '.github/workflows/markdown-lint.yml'
+      - '.github/actions/setup-js-env/'
+
+jobs:
+  markdownlint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: ./.github/actions/setup-js-env
+
+      - name: Add Custom Problem Matcher
+        run: |
+          echo "::add-matcher::.github/matchers/${{ github.job }}.json"
+
+      - name: npm run markdownlint
+        run: |
+          npm run markdownlint

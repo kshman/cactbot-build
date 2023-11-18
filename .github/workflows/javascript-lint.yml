@@ -1,0 +1,38 @@
+name: JavaScript Lint
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - '**/*.js'
+      - '**/*.ts'
+      - '**/*.cjs'
+      - '**/*.mjs'
+      - '**/*.json'
+      - '.github/workflows/javascript-lint.yml'
+      - '.github/actions/setup-js-env/'
+  pull_request:
+    paths:
+      - '**/*.js'
+      - '**/*.ts'
+      - '**/*.cjs'
+      - '**/*.mjs'
+      - '**/*.json'
+      - '.github/workflows/javascript-lint.yml'
+      - '.github/actions/setup-js-env/'
+
+jobs:
+  eslint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: ./.github/actions/setup-js-env
+
+      - name: TypeScript checking
+        run: |
+          npm run tsc-no-emit
+
+      - name: npm run lint
+        run: |
+          npm run lint
