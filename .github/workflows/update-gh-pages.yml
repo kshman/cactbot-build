@@ -1,4 +1,4 @@
-name: Update gh-pages
+name: 업데이트 gh-pages
 
 on:
   push:

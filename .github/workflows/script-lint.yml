@@ -1,4 +1,4 @@
-name: Script Lint
+name: 스크립트 검사
 
 on:
   push:
