@@ -14,7 +14,7 @@ cp -r $BASE/dist/resources/ $OUT/
 cp $BASE/*.md $OUT/
 
 # manually copy readme due to avoid local user/ files
-mkdir -p $OUT/user/
-cp $BASE/user/README.txt $OUT/user/
-cp $BASE/user/*-example.* $OUT/user/
-cp $BASE/user/test-override.txt $OUT/user/
+# mkdir -p $OUT/user/
+# cp $BASE/user/README.txt $OUT/user/
+# cp $BASE/user/*-example.* $OUT/user/
+# cp $BASE/user/test-override.txt $OUT/user/

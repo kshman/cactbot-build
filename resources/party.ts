@@ -131,49 +131,49 @@ const jobLocalizedAbbr: Record<Job, LocaleText> = {
     fr: 'FRG',
     ja: '鍛冶',
     cn: '锻铁',
-    ko: '대장장이',
+    ko: '대장',
   },
   ARM: {
     en: 'ARM',
     fr: 'ARM',
     ja: '甲冑',
     cn: '铸甲',
-    ko: '갑주장인',
+    ko: '갑주',
   },
   GSM: {
     en: 'GSM',
     fr: 'ORF',
     ja: '彫金',
     cn: '雕金',
-    ko: '보석장인',
+    ko: '보석',
   },
   LTW: {
     en: 'LTW',
     fr: 'TAN',
     ja: '革細',
     cn: '制革',
-    ko: '가죽장인',
+    ko: '가죽',
   },
   WVR: {
     en: 'WVR',
     fr: 'COU',
     ja: '裁縫',
     cn: '裁衣',
-    ko: '재봉사',
+    ko: '재봉',
   },
   ALC: {
     en: 'ALC',
     fr: 'ALC',
     ja: '錬金',
     cn: '炼金',
-    ko: '연금술사',
+    ko: '연금',
   },
   CUL: {
     en: 'CUL',
     fr: 'CUI',
     ja: '調理',
     cn: '烹调',
-    ko: '요리사',
+    ko: '요리',
   },
   MIN: {
     en: 'MIN',
@@ -257,7 +257,7 @@ const jobLocalizedAbbr: Record<Job, LocaleText> = {
     fr: 'INV',
     ja: '召喚',
     cn: '召唤',
-    ko: '소환사',
+    ko: '서모너',
   },
   SCH: {
     en: 'SCH',
@@ -285,14 +285,14 @@ const jobLocalizedAbbr: Record<Job, LocaleText> = {
     fr: 'MCH',
     ja: '機工',
     cn: '机工',
-    ko: '기공사',
+    ko: '기공',
   },
   DRK: {
     en: 'DRK',
     fr: 'CHN',
     ja: '暗黒',
     cn: '暗骑',
-    ko: '암흑기사',
+    ko: '암흑',
   },
   AST: {
     en: 'AST',
@@ -306,21 +306,21 @@ const jobLocalizedAbbr: Record<Job, LocaleText> = {
     fr: 'SAM',
     ja: '侍',
     cn: '武士',
-    ko: '사무라이',
+    ko: '사무',
   },
   RDM: {
     en: 'RDM',
     fr: 'MRG',
     ja: '赤魔',
     cn: '赤魔',
-    ko: '적마',
+    ko: '레드메',
   },
   BLU: {
     en: 'BLU',
     fr: 'MBU',
     ja: '青魔',
     cn: '青魔',
-    ko: '청마',
+    ko: '블루메',
   },
   GNB: {
     en: 'GNB',
@@ -874,23 +874,18 @@ export default class PartyTracker {
 
   // 멤버 목록을 만들어 준다
   members(names: readonly string[]): PartyMemberParamObject[] {
-    const ls: PartyMemberParamObject[] = [];
-    for (const n of names) {
-      const m = this.member(n);
-      ls.push(m);
-    }
-    return ls;
+    const mm = names.map((x) => this.member(x));
+    return mm;
   }
 
   // 멤버 목록을 문자열로 만들어 준다
   memberList(names: readonly string[]): string[] {
     const label = this.options.DefaultPlayerLabel;
-    const ls: string[] = [];
-    for (const n of names) {
-      const m = this.member(n);
+    const ls = names.map((x) => {
+      const m = this.member(x);
       const v = m[label];
-      ls.push(typeof v === 'string' ? v : typeof v === 'number' ? v.toString() : m.nick);
-    }
+      return typeof v === 'string' ? v : typeof v === 'number' ? v.toString() : m.nick;
+    });
     return ls;
   }
 

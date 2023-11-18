@@ -6,6 +6,7 @@
 
 hideall "--Reset--"
 hideall "--sync--"
+hideall "--setup--"
 
 0.0 "--Reset--" sync / 00:0839::.*is no longer sealed/ window 100000 jump 0
 
@@ -19,6 +20,7 @@ hideall "--sync--"
 1000.0 "--sync--" sync / 00:0839::The Dawn Trial will be sealed off/ window 10000,0
 1010.2 "--sync--" sync / 14:[^:]*:Ketuduke:8AD4:/ window 20,20
 1015.2 "Tidal Roar" sync / 1[56]:[^:]*:Ketuduke:8AD4:/
+1015.3 "--setup--"
 
 1022.0 "--middle--" sync / 1[56]:[^:]*:Ketuduke:8A77:/
 1027.0 "Spring Crystals 1" sync / 1[56]:[^:]*:Ketuduke:8AA8:/
@@ -154,6 +156,7 @@ hideall "--sync--"
 2000.0 "--sync--" sync / 00:0839::The Dusk Trial will be sealed off/ window 100000,0
 2006.9 "--sync--" sync / 14:[^:]*:Lala:8C05:/ window 20,20
 2011.6 "Inferno Theorem" sync / 1[56]:[^:]*:Lala:8C05:/
+2011.7 "--setup--"
 
 2013.7 "--middle--" sync / 1[56]:[^:]*:Lala:8874:/
 2018.8 "Angular Addition" sync / 1[56]:[^:]*:Lala:(8BE0|8D2F):/
@@ -262,6 +265,7 @@ hideall "--sync--"
 3000.0 "--sync--" sync / 00:0839::The Midnight Trial will be sealed off/ window 10000,0
 3008.9 "--sync--" sync / 14:[^:]*:Statice:8966:/ window 20,20
 3013.6 "Aero IV" sync / 1[56]:[^:]*:Statice:8966:/
+3013.7 "--setup--"
 
 3017.8 "--middle--" sync / 1[56]:[^:]*:Statice:8927:/
 3023.2 "Trick Reload" sync / 1[56]:[^:]*:Statice:8967:/

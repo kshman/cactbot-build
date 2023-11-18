@@ -146,9 +146,9 @@ hideall "--sync--"
 1197.3 "Pyre Pulse 2" sync / 1[56]:[^:]*:Pallas Athena:833A:/
 1197.3 "Dynamic Atmosphere" sync / 1[56]:[^:]*:Pallas Athena:833B:/
 
-1207.6 "Ekpyrosis (cast)" sync / 1[56]:[^:]*:Pallas Athena:831E:/
-1215.4 "Ekpyrosis (proximity)" sync / 1[56]:[^:]*:Pallas Athena:8683:/
-1218.5 "Ekpyrosis (spread)" sync / 1[56]:[^:]*:Pallas Athena:8322:/
+1207.6 "Ekpyrosis 1 (cast)" sync / 1[56]:[^:]*:Pallas Athena:831E:/
+1215.4 "Ekpyrosis 1 (proximity)" sync / 1[56]:[^:]*:Pallas Athena:8683:/
+1218.5 "Ekpyrosis 1 (spread)" sync / 1[56]:[^:]*:Pallas Athena:8322:/
 
 1226.8 "Ultima 4" sync / 1[56]:[^:]*:Pallas Athena:8682:/
 1241.0 "Pangenesis" sync / 1[56]:[^:]*:Pallas Athena:833F:/
@@ -184,9 +184,9 @@ hideall "--sync--"
 1390.3 "Entropic Excess 8" sync / 1[56]:[^:]*:Pallas Athena:833C:/ window 1.5,1.5
 1390.3 "Dynamic Atmosphere" sync / 1[56]:[^:]*:Pallas Athena:833B:/
 
-1392.6 "Ekpyrosis (cast)" sync / 1[56]:[^:]*:Pallas Athena:831E:/
-1400.4 "Ekpyrosis (proximity)" sync / 1[56]:[^:]*:Pallas Athena:8683:/
-1403.5 "Ekpyrosis (spread)" sync / 1[56]:[^:]*:Pallas Athena:8322:/
+1392.6 "Ekpyrosis 2 (cast)" sync / 1[56]:[^:]*:Pallas Athena:831E:/
+1400.4 "Ekpyrosis 2 (proximity)" sync / 1[56]:[^:]*:Pallas Athena:8683:/
+1403.5 "Ekpyrosis 2 (spread)" sync / 1[56]:[^:]*:Pallas Athena:8322:/
 
 1411.7 "Ultima 6" sync / 1[56]:[^:]*:Pallas Athena:8682:/
 1425.9 "Gaiaochos 2" sync / 1[56]:[^:]*:Pallas Athena:8326:/

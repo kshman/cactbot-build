@@ -42,7 +42,7 @@ const missingOutputFileNames = {
 };
 
 const basePath = () => path.dirname(path.dirname(fileURLToPath(import.meta.url)));
-const baseUrl = 'https://github.com/quisquous/cactbot/blob/main';
+const baseUrl = 'https://github.com/kshman/cactbot-build/blob/main';
 
 const emptyCoverage = (): CoverageEntry => {
   return {
