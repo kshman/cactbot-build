@@ -227,6 +227,48 @@ const jobIndexToPriority: Record<number, number> = {
 
 // 직업 순위를 이름으로
 const jobPriorityToName: Record<number, LocaleText> = {
+  /* 초기화가 안된대서 못쓴다
+  0: LocalizedJobAbbr.NONE,
+  101: LocalizedJobAbbr.DRK,
+  102: LocalizedJobAbbr.WAR,
+  103: LocalizedJobAbbr.GNB,
+  104: LocalizedJobAbbr.PLD,
+  201: LocalizedJobAbbr.WHM,
+  202: LocalizedJobAbbr.AST,
+  203: LocalizedJobAbbr.SGE,
+  204: LocalizedJobAbbr.SCH,
+  301: LocalizedJobAbbr.SAM,
+  302: LocalizedJobAbbr.MNK,
+  303: LocalizedJobAbbr.RPR,
+  304: LocalizedJobAbbr.DRG,
+  305: LocalizedJobAbbr.NIN,
+  401: LocalizedJobAbbr.MCH,
+  402: LocalizedJobAbbr.BRD,
+  403: LocalizedJobAbbr.DNC,
+  501: LocalizedJobAbbr.BLM,
+  502: LocalizedJobAbbr.RDM,
+  503: LocalizedJobAbbr.SMN,
+  599: LocalizedJobAbbr.BLU,
+  8102: LocalizedJobAbbr.MRD,
+  8104: LocalizedJobAbbr.GLA,
+  8201: LocalizedJobAbbr.CNJ,
+  8302: LocalizedJobAbbr.PGL,
+  8304: LocalizedJobAbbr.LNC,
+  8305: LocalizedJobAbbr.ROG,
+  8402: LocalizedJobAbbr.ARC,
+  8501: LocalizedJobAbbr.THM,
+  8503: LocalizedJobAbbr.ACN,
+  9101: LocalizedJobAbbr.CRP,
+  9102: LocalizedJobAbbr.BSM,
+  9103: LocalizedJobAbbr.ARM,
+  9104: LocalizedJobAbbr.GSM,
+  9105: LocalizedJobAbbr.LTW,
+  9106: LocalizedJobAbbr.WVR,
+  9107: LocalizedJobAbbr.ALC,
+  9108: LocalizedJobAbbr.CUL,
+  9201: LocalizedJobAbbr.MIN,
+  9202: LocalizedJobAbbr.BTN,
+  9203: LocalizedJobAbbr.FSH, */
   0: {
     en: 'ADV',
     ja: '冒険者',
@@ -432,7 +474,7 @@ const jobPriorityToName: Record<number, LocaleText> = {
     ja: '漁師',
     ko: '어부',
   },
-} as const;
+};
 
 // 롤 이름
 const roleTanks: readonly string[] = ['MT', 'ST', 'OT'] as const;
