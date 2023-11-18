@@ -437,7 +437,9 @@ const jobPriorityToName: Record<number, LocaleText> = {
 // 롤 이름
 const roleTanks: readonly string[] = ['MT', 'ST', 'OT'] as const;
 const roleHealers: readonly string[] = ['H1', 'H2'] as const;
-const roleDps: readonly string[] = ['D1', 'D2', 'D3', 'D4', 'M1', 'M2', 'R1', 'R2'] as const;
+const roleMelees: readonly string[] = ['D1', 'D2', 'M1', 'M2'];
+const roleRanges: readonly string[] = ['D3', 'D4', 'R1', 'R2'];
+const roleDps: readonly string[] = [...roleMelees, ...roleRanges] as const;
 const roleNames: readonly string[] = [...roleTanks, ...roleHealers, ...roleDps] as const;
 const roleTanksAndHealers: readonly string[] = [...roleTanks, ...roleHealers] as const;
 
