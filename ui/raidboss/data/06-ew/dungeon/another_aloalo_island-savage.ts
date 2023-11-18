@@ -251,7 +251,7 @@ const triggerSet: TriggerSet<Data> = {
   },
   timelineTriggers: [
     {
-      id: 'AAIS Setup',
+      id: 'AAIS 옵션 설정',
       regex: /--setup--/,
       delaySeconds: 1,
       infoText: (data, _matches, output) => {
