@@ -569,12 +569,12 @@ const triggerSet: TriggerSet<Data> = {
         pylene1: {
           en: 'Go to 1',
           ja: '第1区域へ',
-          ko: '[1]',
+          ko: '피렌 [1]',
         },
         pylene2: {
           en: 'Go to 2',
           ja: '第2区域へ',
-          ko: '[2]',
+          ko: '피렌 [2]',
         },
         hamukatsu1: {
           en: 'Go to 1',
