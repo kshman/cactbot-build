@@ -84,7 +84,7 @@ export interface Data extends RaidbossData {
   stcDuration: number;
   //
   isStackFirst: boolean;
-  checkOptions: boolean;
+  settled: boolean;
 }
 
 // Horizontal crystals have a heading of 0, vertical crystals are -pi/2.
@@ -243,38 +243,36 @@ const triggerSet: TriggerSet<Data> = {
       stcSeenPop: false,
       stcDuration: 0,
       isStackFirst: false,
-      checkOptions: false,
+      settled: false,
     };
   },
-  triggers: [
+  timelineTriggers: [
     {
-      // 어드미 옵션 처리
-      id: 'AAI Option Check',
-      type: 'Ability',
-      netRegex: { id: '8C6E', source: 'Aloalo Kiwakin', capture: false },
-      condition: (data) => !data.checkOptions,
+      id: 'AAI Setup',
+      regex: /--setup--/,
       delaySeconds: 1,
-      suppressSeconds: 999999,
       infoText: (data, _matches, output) => {
-        data.checkOptions = true;
-        if (data.options.AutumnParameter !== undefined) {
-          const ss = data.options.AutumnParameter.split(',');
-          if (ss.length === 1 && ss[0] === 'hm') {
-            data.triggerSetConfig.flukeGaleType = 'hamukatsu';
-            data.triggerSetConfig.planarTacticsType = 'hamukatsu';
-            data.triggerSetConfig.pinwheelingType = 'pino';
-          }
-          if (ss.length === 2) {
-            data.triggerSetConfig.flukeGaleType = ss[0] === 'hm' ? 'hamukatsu' : 'pylene';
-            data.triggerSetConfig.planarTacticsType = ss[1] === 'hm' ? 'hamukatsu' : 'poshiume';
-            data.triggerSetConfig.pinwheelingType = 'pino';
-          }
-          if (ss.length === 3) {
-            data.triggerSetConfig.flukeGaleType = ss[0] === 'hm' ? 'hamukatsu' : 'pylene';
-            data.triggerSetConfig.planarTacticsType = ss[1] === 'hm' ? 'hamukatsu' : 'poshiume';
-            data.triggerSetConfig.pinwheelingType = ss[2] === 'sp' ? 'spell' : 'pino';
-          }
+        if (data.settled || data.options.AutumnParameter === undefined)
+          return;
+        data.settled = true;
+
+        const ss = data.options.AutumnParameter.split('.');
+        if (ss.length === 1 && ss[0] === 'hm') {
+          data.triggerSetConfig.flukeGaleType = 'hamukatsu';
+          data.triggerSetConfig.planarTacticsType = 'hamukatsu';
+          data.triggerSetConfig.pinwheelingType = 'pino';
         }
+        if (ss.length === 2) {
+          data.triggerSetConfig.flukeGaleType = ss[0] === 'hm' ? 'hamukatsu' : 'pylene';
+          data.triggerSetConfig.planarTacticsType = ss[1] === 'hm' ? 'hamukatsu' : 'poshiume';
+          data.triggerSetConfig.pinwheelingType = 'pino';
+        }
+        if (ss.length === 3) {
+          data.triggerSetConfig.flukeGaleType = ss[0] === 'hm' ? 'hamukatsu' : 'pylene';
+          data.triggerSetConfig.planarTacticsType = ss[1] === 'hm' ? 'hamukatsu' : 'poshiume';
+          data.triggerSetConfig.pinwheelingType = ss[2] === 'sp' ? 'spell' : 'pino';
+        }
+
         const param = output.options!({
           fluke: {
             'spread': output.spread!(),
@@ -341,6 +339,8 @@ const triggerSet: TriggerSet<Data> = {
         },
       },
     },
+  ],
+  triggers: [
     // ---------------- first trash ----------------
     {
       id: 'AAI Kiwakin Lead Hook',
