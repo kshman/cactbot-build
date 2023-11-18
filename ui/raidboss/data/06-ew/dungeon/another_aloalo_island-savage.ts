@@ -295,8 +295,7 @@ const triggerSet: TriggerSet<Data> = {
             'spell': output.spell!(),
           }[data.triggerSetConfig.pinwheelingType],
         });
-        if (data.options.DisplayLanguage === 'en')
-          return output.text!({ param: param });
+        return output.text!({ param: param });
       },
       outputStrings: {
         text: {
