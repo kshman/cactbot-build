@@ -2,7 +2,7 @@ name: 업데이트 gh-pages
 
 on:
   push:
-    branches: [ main ]
+    branches: [ master ]
 
 jobs:
   check-gh-pages:

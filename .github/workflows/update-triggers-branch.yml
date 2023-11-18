@@ -1,25 +1,11 @@
 name: 업데이트 triggers
 on:
   push:
-    branches: [ main ]
+    branches: [ master ]
 
 jobs:
-  pre-triggers:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Test Output
-        id: pre-triggers
-        shell: bash
-        run: |
-          GITHUB_URL="https://github.com/${{ github.repository }}"
-          if git ls-remote --exit-code --heads $GITHUB_URL triggers; then
-            echo "트리거 브랜치가 있네"
-          else
-            echo "트리거 브랜치가 없다!"
-          fi
   check-triggers:
     runs-on: ubuntu-latest
-    needs: pre-triggers
     outputs:
       found: ${{ steps.check-triggers.outputs.found }}
     steps:

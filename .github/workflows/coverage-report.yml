@@ -3,7 +3,7 @@ name: 커버리지 리포트
 on:
   push:
     branches:
-      - main
+      - master
     paths:
       - 'resources/**'
       - 'ui/raidboss/**'
