@@ -188,6 +188,7 @@ Options.Triggers.push({
       infoText: (data, _matches, output) => {
         if (data.settled)
           return output.settle();
+        data.settled = true;
         if (data.options.AutumnParameter !== undefined) {
           const ss = data.options.AutumnParameter.split('.');
           if (ss.length === 1 && ss[0] === 'hm') {
@@ -225,7 +226,6 @@ Options.Triggers.push({
         });
         return output.mesg({ param: param });
       },
-      run: (data) => data.settled = true,
       outputStrings: {
         settle: {
           en: '(Settled)',
