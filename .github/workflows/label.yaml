@@ -5,14 +5,14 @@ on:
     types: [ opened, synchronize ]
 
 jobs:
-  main:
+  master:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
         with:
-          # force to ci checkout main repo to avoid
+          # force to ci checkout master repo to avoid
           # unexpected PR code to be executed with out github token
-          ref: main
+          ref: master
       - uses: ./.github/actions/setup-js-env
 
       - name: Run Label Script
