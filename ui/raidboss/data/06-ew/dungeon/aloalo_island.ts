@@ -162,7 +162,7 @@ const triggerSet: TriggerSet<Data> = {
     {
       id: 'Aloalo Quaqua Scalding Waves',
       type: 'StartsUsing',
-      netRegex: { id: '8B97', source: 'Anala Familiar', capture: false },
+      netRegex: { id: '8B97', capture: false },
       suppressSeconds: 1,
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
@@ -796,7 +796,6 @@ const triggerSet: TriggerSet<Data> = {
   timelineReplace: [
     {
       'locale': 'de',
-      'missingTranslations': true,
       'replaceSync': {
         'Kairimai Loquloqai': 'Kairimai Loquloqai',
         'Ketuduke': 'Ketuduke',
@@ -836,7 +835,6 @@ const triggerSet: TriggerSet<Data> = {
     },
     {
       'locale': 'ja',
-      'missingTranslations': true,
       'replaceSync': {
         'Kairimai Loquloqai': '神子の祭壇',
         'Ketuduke': 'ケトゥドゥケ',

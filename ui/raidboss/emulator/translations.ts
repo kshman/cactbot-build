@@ -92,7 +92,7 @@ const emulatorImportModal: Translation = {
     fr: 'Progression de l\'importation du fichier journal',
     ja: 'ログファイルのインポート進捗',
     cn: '日志文件导入进度',
-    ko: '로그 파일 불러오기 진행 중',
+    ko: '로그 파일 불러오는 중',
   },
   '.import-progress-modal .modal-body-contents': {
     en: `<h3>Latest encounter:</h3>
@@ -147,13 +147,13 @@ const emulatorImportModal: Translation = {
     行数: <span class="lineCount"></span><br />`,
     ko: `<h3>최신 임무:</h3>
     지역: <span class="zone"></span><br />
-    임무 공간: <span class="encounter"></span><br />
+    전투: <span class="encounter"></span><br />
     시작: <span class="start"></span><br />
     끝: <span class="end"></span><br />
-    임무 시간: <span class="durMins"></span>m<span class="durSecs"></span>s<br />
-    임무 풀링: <span class="pullMins"></span>m<span class="pullSecs"></span>s<br />
-    시작한 사람: <span class="startedBy"></span><br />
-    임무 상태: <span class="endStatus"></span><br />
+    걸린 시간: <span class="durMins"></span>m<span class="durSecs"></span>s<br />
+    풀링 시간: <span class="pullMins"></span>m<span class="pullSecs"></span>s<br />
+    시작한 이: <span class="startedBy"></span><br />
+    끝날 때: <span class="endStatus"></span><br />
     줄 수: <span class="lineCount"></span><br />`,
   },
 } as const;
@@ -396,7 +396,7 @@ const emulatorLabels: Translation = {
     fr: 'Masquer les entrées sautées',
     ja: 'スキップした項目を隠す',
     cn: '隐藏已跳过项目',
-    ko: '스킵 감춤',
+    ko: '스킵 감추기',
   },
   ' label[for=hideCollector]': {
     en: 'Hide Collectors',
@@ -404,7 +404,7 @@ const emulatorLabels: Translation = {
     fr: 'Masquer les entrées collectées',
     ja: '無出力トリガーを隠す',
     cn: '隐藏收集器',
-    ko: '처리 항목 감춤',
+    ko: '연산 감추기',
   },
 } as const;
 
@@ -415,7 +415,7 @@ const emulatorTooltips: Translation = {
     fr: 'Masquer les triggers non-executés',
     ja: '実行されなかったトリガーを隠す',
     cn: '隐藏未执行的触发器',
-    ko: '실행되지 않은 트리거 감춤',
+    ko: '실행되지 않은 트리거 감추기',
   },
   '.triggerHideCollector': {
     en: 'Hide triggers that had no output',
@@ -423,7 +423,7 @@ const emulatorTooltips: Translation = {
     fr: 'Masquer les triggers sans sortie',
     ja: '出力がないトリガーを隠す',
     cn: '隐藏没有输出的触发器',
-    ko: '아웃풋이 없는 트리거 감춤',
+    ko: '출력 없는 트리거 감추기',
   },
   '.connectedIndicator': {
     en: 'Connected to websocket',
@@ -450,7 +450,7 @@ const emulatorEncounterInfo: Translation = {
     fr: 'Charger combat',
     ja: 'エンカウントを読み込む',
     cn: '加载战斗',
-    ko: '임무 읽기',
+    ko: '읽어오기',
   },
   '.encounterParse': {
     en: 'Reparse Encounter',
@@ -458,7 +458,7 @@ const emulatorEncounterInfo: Translation = {
     fr: 'Reparser le combat',
     ja: 'エンカウントを再解析',
     cn: '重新解析战斗',
-    ko: '임무 다시 분석',
+    ko: '다시 분석',
   },
   '.encounterPrune': {
     en: 'Prune Encounter',
@@ -466,7 +466,7 @@ const emulatorEncounterInfo: Translation = {
     fr: 'Combat vide',
     ja: 'エンカウントをカット',
     cn: '裁剪战斗',
-    ko: '임무 자르기',
+    ko: '잘라내기',
   },
   '.encounterDelete': {
     en: 'Delete Encounter',
@@ -498,7 +498,7 @@ const emulatorEncounterInfo: Translation = {
     fr: 'Durée : <span class="label"></span>',
     ja: '持続時間: <span class="label"></span>',
     cn: '持续时间: <span class="label"></span>',
-    ko: '임무 시간: <span class="label"></span>',
+    ko: '걸린 시간: <span class="label"></span>',
   },
   '.encounterName': {
     en: 'Name: <span class="label"></span>',
@@ -514,7 +514,7 @@ const emulatorEncounterInfo: Translation = {
     fr: 'État du démarrage : <span class="label"></span>',
     ja: '開始状態: <span class="label"></span>',
     cn: '开始状态: <span class="label"></span>',
-    ko: '시작 상태: <span class="label"></span>',
+    ko: '시작할 때: <span class="label"></span>',
   },
   '.encounterEndStatus': {
     en: 'End Status: <span class="label"></span>',
@@ -522,7 +522,7 @@ const emulatorEncounterInfo: Translation = {
     fr: 'État de fin : <span class="label"></span>',
     ja: '終了状態: <span class="label"></span>',
     cn: '结束状态: <span class="label"></span>',
-    ko: '종료 상태: <span class="label"></span>',
+    ko: '끝날 때: <span class="label"></span>',
   },
 } as const;
 
@@ -579,7 +579,7 @@ export const emulatorStartStatuses = {
     fr: 'À l\'attaque',
     ja: '戦闘開始',
     cn: '战斗中',
-    ko: '전투 시작',
+    ko: '전투 개시',
   },
 };
 
