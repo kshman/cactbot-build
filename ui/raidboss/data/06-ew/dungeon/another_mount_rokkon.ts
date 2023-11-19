@@ -629,11 +629,16 @@ const triggerSet: TriggerSet<Data> = {
            Partner-Stack bedeuten Supporter+Dps und Supporter+Dps (jede Kombination ist möglich).
            Wenn du zwei Fernkampf-DPS oder zwei Nahkampf-DPS hast, wird es nie "Nahkämpfer" nennen, unabhängig von dieser Konfigurationsoption.
            Es gibt keine Unterstützung für Gruppenkombinationen, die nicht aus zwei Supportern und zwei DPS bestehen.`,
+        ko: `2인 쉐어에서, 함께 쉐어를 맞을 사람의 우선 순위를 지정합니다. 근딜과 탱커를 함께 배치하고 싶다면 근딜이 포함된 옵션을 선택하세요.
+           근딜 쉐어는 근딜+탱커와 힐러+원딜을 의미합니다. 역할별 쉐어는 탱커+힐러와 딜러+딜러를 의미합니다.
+           파트너 쉐어는 탱힐+딜러와 탱힐+딜러를 의미합니다(어떤 조합도 가능).
+           원딜이 두 명 또는 근딜이 두 명일 경우, 이 설정 옵션과 상관없이 "근딜"을 호출하지 않습니다.
+           탱힐 둘, 딜러 둘이 아닌 파티 구성은 지원되지 않습니다.`,
       },
       name: {
         en: 'Stack Selection Order',
         de: 'Sammel-Reihenfolge',
-        ko: '뭉치기 방법 선택',
+        ko: '뭉칠때 우선 순위',
       },
       type: 'select',
       options: {
@@ -1720,6 +1725,8 @@ const triggerSet: TriggerSet<Data> = {
         de:
           `Voll gemischt bedeutet, dass jeder beide Farben hat (zwei von der einen, eine von der anderen).
              Halb gemischt bedeutet, dass zwei Personen beide Farben haben und zwei Personen nur eine Farbe haben`,
+        ko: `완전 혼합은 모든 사람이 두 가지 색을 가지고 있음을 의미합니다 (한 가지 색 두 개, 다른 색 하나).
+             반혼합은 두 사람이 두 가지 종류를 가지고 있고, 다른 두 사람은 모두 같은 색을 가지고 있음을 의미합니다.`,
       },
       type: 'GainsEffect',
       netRegex: { effectId: ['E0D', 'E0E', 'E0F', 'E11', 'E12', 'E13'], capture: false },

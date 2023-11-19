@@ -1634,14 +1634,17 @@ const triggerSet: TriggerSet<Data> = {
         g2: {
           en: '은🥈 두개',
           ja: '銀🥈 二つ',
+          ko: '은🥈 두개',
         },
         s2: {
           en: '금🥇 두개',
           ja: '金🥇 二つ',
+          ko: '금🥇 두개',
         },
         gs: {
           en: '금🥇은🥈 하나씩',
           ja: '金🥇銀🥈 一個ずつ',
+          ko: '금🥇은🥈 하나씩',
         },
       },
     },
@@ -1771,7 +1774,7 @@ const triggerSet: TriggerSet<Data> = {
     {
       id: 'ASS PR Rush of Might',
       type: 'StartsUsing',
-      netRegex: { id: ['7658', '7659', '765A'], source: 'Gladiator Mirage' },
+      netRegex: { id: ['7658', '7659', '765A'] },
       durationSeconds: 9.4,
       infoText: (data, matches, output) => {
         const i2n: { [id: string]: number } = {

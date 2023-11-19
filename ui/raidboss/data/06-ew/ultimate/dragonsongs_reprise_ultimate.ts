@@ -857,6 +857,8 @@ const triggerSet: TriggerSet<Data> = {
         },
         safeSpotsColor: {
           en: '${clr}',
+          ja: '${clr}',
+          ko: '${clr}',
         },
       },
     },
@@ -1028,6 +1030,8 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         leaps: {
           en: '${leaps}',
+          ja: '${leaps}',
+          ko: '${leaps}',
         },
       },
     },
@@ -1058,6 +1062,8 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         tether: {
           en: '${tether1}, ${tether2}',
+          ja: '${tether1}, ${tether2}',
+          ko: '${tether1}, ${tether2}',
         },
       },
     },
@@ -2067,6 +2073,8 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         tether: {
           en: '${tether1}, ${tether2}',
+          ja: '${tether1}, ${tether2}',
+          ko: '${tether1}, ${tether2}',
         },
       },
     },
@@ -2411,6 +2419,8 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         teams: {
           en: '${pos}: ${teams}',
+          ja: '${pos}: ${teams}',
+          ko: '${pos}: ${teams}',
         },
         mynum: {
           en: '${pos}: ${num}',
@@ -2907,19 +2917,6 @@ const triggerSet: TriggerSet<Data> = {
         }
         return output.wingsHead!({ wings: wings, head: head });
       },
-      tts: (data, matches, output) => {
-        if (data.role !== 'tank')
-          return;
-        const isHeadDown = matches.id === '6D23' || matches.id === '6D26';
-        if (data.hallowedWingsCount === 1) {
-          if (isHeadDown)
-            return output.tts1stNear!();
-          return output.tts1stFar!();
-        }
-        if (isHeadDown)
-          return output.tts2ndNear!();
-        return output.tts2ndFar!();
-      },
       outputStrings: {
         // The calls here assume that all players are looking at Hraesvelgr, and thus
         // "Forward" means east and "Backward" means west, and "Left" means
@@ -2994,18 +2991,6 @@ const triggerSet: TriggerSet<Data> = {
           ja: '${wings}, ${head}',
           ko: '한줄: ${wings}, ${head}',
         },
-        tts1stNear: {
-          en: '近くで並んで',
-        },
-        tts1stFar: {
-          en: '遠くに並んで',
-        },
-        tts2ndNear: {
-          en: 'いちばん前',
-        },
-        tts2ndFar: {
-          en: 'いちばん後ろ',
-        },
       },
     },
     {
@@ -3013,7 +2998,6 @@ const triggerSet: TriggerSet<Data> = {
       type: 'StartsUsing',
       netRegex: { id: '6D2B', source: 'Nidhogg', capture: false },
       alertText: (_data, _matches, output) => output.text!(),
-      tts: (_data, _matches, output) => output.tts!(),
       outputStrings: {
         text: {
           // Often cactbot uses "in" and "out", but that's usually hitbox relative vs
@@ -3024,9 +3008,6 @@ const triggerSet: TriggerSet<Data> = {
           cn: '中间',
           ko: '안으로! 날개!',
         },
-        tts: {
-          en: '内側',
-        },
       },
     },
     {
@@ -3034,7 +3015,6 @@ const triggerSet: TriggerSet<Data> = {
       type: 'StartsUsing',
       netRegex: { id: '6D2D', source: 'Nidhogg', capture: false },
       alertText: (_data, _matches, output) => output.text!(),
-      tts: (_data, _matches, output) => output.tts!(),
       outputStrings: {
         text: {
           en: 'Outside',
@@ -3042,9 +3022,6 @@ const triggerSet: TriggerSet<Data> = {
           ja: '外側へ',
           cn: '两侧',
           ko: '바깥으로! 꼬리!',
-        },
-        tts: {
-          en: '外側',
         },
       },
     },
@@ -3128,20 +3105,6 @@ const triggerSet: TriggerSet<Data> = {
           return output.stack!();
         return output.nodebuff!();
       },
-      tts: (data, _matches, output) => {
-        if (data.role !== 'tank')
-          return;
-        if (data.spreadingFlame.length < 4)
-          return;
-        if (data.entangledFlame.length < 2)
-          return;
-
-        if (data.spreadingFlame.includes(data.me))
-          return;
-        if (data.entangledFlame.includes(data.me))
-          return;
-        return output.ttsnobuff!();
-      },
       outputStrings: {
         spread: {
           en: 'Spread',
@@ -3163,9 +3126,6 @@ const triggerSet: TriggerSet<Data> = {
           ja: 'バフなし (頭割り)',
           cn: '无Debuff (分摊)',
           ko: '무직! 흰색⬜과 함께!',
-        },
-        ttsnobuff: {
-          en: 'タンク無職',
         },
       },
     },

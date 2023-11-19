@@ -14,6 +14,7 @@ const emulatorButtons: Translation = {
     fr: 'Oui',
     ja: 'はい',
     cn: '是',
+    ko: '예',
   },
   '.noButton': {
     en: 'No',
@@ -21,6 +22,7 @@ const emulatorButtons: Translation = {
     fr: 'Non',
     ja: 'いいえ',
     cn: '否',
+    ko: '아니오',
   },
   '.closeButton': {
     en: 'Close',
@@ -28,6 +30,7 @@ const emulatorButtons: Translation = {
     fr: 'Fermer',
     ja: '閉じる',
     cn: '关闭',
+    ko: '닫기',
   },
   '.doneButton': {
     en: 'Done<span class="done-btn-timeout"></span>',
@@ -35,6 +38,7 @@ const emulatorButtons: Translation = {
     fr: 'Terminé<span class="done-btn-timeout"></span>',
     ja: '完了<span class="done-btn-timeout"></span>',
     cn: '完成<span class="done-btn-timeout"></span>',
+    ko: '완료<span class="done-btn-timeout"></span>',
   },
   '.loadNetworkLogButton': {
     en: 'Load Network Log',
@@ -42,6 +46,7 @@ const emulatorButtons: Translation = {
     fr: 'Charger le Network Log',
     ja: 'ネットワークログを読み込む',
     cn: '加载网络日志',
+    ko: '네트워크 로그 읽기',
   },
   '.exportDBButton': {
     en: 'Export DB',
@@ -49,6 +54,7 @@ const emulatorButtons: Translation = {
     fr: 'Exporter DB',
     ja: 'DBをエクスポート',
     cn: '导出数据库',
+    ko: 'DB 내보내기',
   },
   '.importDBButton': {
     en: 'Import DB',
@@ -56,6 +62,7 @@ const emulatorButtons: Translation = {
     fr: 'Importer DB',
     ja: 'DBをインポート',
     cn: '导入数据库',
+    ko: 'DB 가져오기',
   },
   '.clearDBButton': {
     en: 'Clear DB',
@@ -63,6 +70,7 @@ const emulatorButtons: Translation = {
     fr: 'Nettoyer DB',
     ja: 'DBをクリア',
     cn: '清除数据库',
+    ko: 'DB 지우기',
   },
 } as const;
 
@@ -73,6 +81,7 @@ const emulatorTitle: Translation = {
     fr: 'Cactbot Raid Emulator',
     ja: 'Cactbot・レイド・エミュレーター',
     cn: 'Cactbot Raid 模拟器',
+    ko: 'Cactbot 레이드 에뮬레이터',
   },
 } as const;
 
@@ -83,6 +92,7 @@ const emulatorImportModal: Translation = {
     fr: 'Progression de l\'importation du fichier journal',
     ja: 'ログファイルのインポート進捗',
     cn: '日志文件导入进度',
+    ko: '로그 파일 불러오기 진행 중',
   },
   '.import-progress-modal .modal-body-contents': {
     en: `<h3>Latest encounter:</h3>
@@ -135,6 +145,16 @@ const emulatorImportModal: Translation = {
     开始于: <span class="startedBy"></span><br />
     结束状态: <span class="endStatus"></span><br />
     行数: <span class="lineCount"></span><br />`,
+    ko: `<h3>최신 임무:</h3>
+    지역: <span class="zone"></span><br />
+    임무 공간: <span class="encounter"></span><br />
+    시작: <span class="start"></span><br />
+    끝: <span class="end"></span><br />
+    임무 시간: <span class="durMins"></span>m<span class="durSecs"></span>s<br />
+    임무 풀링: <span class="pullMins"></span>m<span class="pullSecs"></span>s<br />
+    시작한 사람: <span class="startedBy"></span><br />
+    임무 상태: <span class="endStatus"></span><br />
+    줄 수: <span class="lineCount"></span><br />`,
   },
 } as const;
 
@@ -145,6 +165,7 @@ const emulatorDeleteModal: Translation = {
     fr: 'Effacer la base de données du combat',
     ja: 'エンカウントDBを削除',
     cn: '删除战斗数据库',
+    ko: '임무 DB 삭제',
   },
   '.deleteDBModal .modal-body': {
     en: '<p>You are about to delete the encounter database. Are you sure?</p>',
@@ -152,6 +173,7 @@ const emulatorDeleteModal: Translation = {
     fr: '<p>Vous êtes sur le point de supprimer la base de données du combat. Êtes-vous sûr ?</p>',
     ja: '<p>エンカウントDBを削除します。よろしいですか？</p>',
     cn: '<p>即将删除战斗数据库。确定删除吗？</p>',
+    ko: '<p>임무 DB를 삭제할께요, 계속할까요?</p>',
   },
 } as const;
 
@@ -162,6 +184,7 @@ const emulatorIntroModal: Translation = {
     fr: 'Introduction',
     ja: 'はじめに',
     cn: '简介',
+    ko: '시작하기 전에',
   },
   '.introModal .modal-body': {
     en: `<p>Welcome to the Raid Emulator.</p>
@@ -279,6 +302,29 @@ const emulatorIntroModal: Translation = {
         <li>点击触发器的按钮，可以看到关于它们的详细信息</li>
       </ul>
     </p>`,
+    ko: `<p>레이드 에뮬레이터에예요. 환영해요!</p>
+    <p>이 도구는 전투를 재생하고 트리거아 언제 발동했는지 표시하여 파티 내 모든 플레이어의 입장에서 전투를 재생할 수 있어요.</p>
+    <p>이 도구는<strong>OVERLAY_WS</strong>라고 하는 옵션을 사용합니다. 이를 통해 ngld의 OverlayPlugin과 cactbot의 플러그인을 실행 중인 ACT에 WebSocket 방식으로 접속할 수 있어요.</p>
+    <p>WebSocket으로 연결된 경우, 이 도구는 cactbot/raidboss의 설정을 알아내어 사용할거예요.</p>
+    <p>오버레이는 따로 만들지 않아오 되요.</p>
+    <p>현재 WebSocket의 상태: <span class="d-none websocketConnected text-success">접속하고 있어요</span><span class="websocketDisconnected text-warning">접속되어 있지 않아요</span>.</p>
+    <p>일단, 다음과 같은 방법으로 전투 데이터를 불러와 주세요:</p>
+    <p>
+      <ul>
+        <li><code>%APPDATA%/Advanced Combat Tracker/FFXIVLogs/</code>에서 네트워크 로그를 끌어와서 이 페이지에 놓아주세요</li>
+        <li>아래 있는 <code>네트워크 로그 읽기</code> 버튼을 눌러, <code>%APPDATA%/Advanced Combat Tracker/FFXIVLogs/</code>에 있는 네트워크 로그를 선택하세요.</li>
+      </ul>
+    </p>
+    <p>다음으로 전투를 선택하세요.</p>
+    <p>전투를 선택하면 다음과 같이 해보세요:</p>
+    <p>
+      <ul>
+        <li>플레이어를 변경하려면 오른쪽 파티에서 고르세요</li>
+        <li>위에 타임라인에서 트리거 지시자를 누르면 트리거 이름을 확인할 수 있어요</li>
+        <li>트리거 위에 마우스를 올려 이름을 확인할 수 있어요</li>
+        <li>트리거를 자세히 보려면 그 트리거를 마우스로 눌러 주세요す</li>
+      </ul>
+    </p>`,
   },
 } as const;
 
@@ -289,6 +335,7 @@ const emulatorDisconnectedModal: Translation = {
     fr: 'Actuellement déconnecté',
     ja: '切断されています',
     cn: '已断开连接',
+    ko: '연결이 끊겨있어요',
   },
   '.disconnectedModal .modal-body': {
     en: `<p>Raid Emulator is currently disconnected from ACT.</p>
@@ -331,6 +378,14 @@ const emulatorDisconnectedModal: Translation = {
       <li>警报提示文字的语言: <span class="discLangAlerts"></span></li>
       <li>时间轴文本的语言: <span class="discLangTimeline"></span></li>
     </ul>`,
+    ko: `<p>현재, 레이드 에뮬레이터는 ACT와의 접속이 끊어져 있어요.</p>
+    <p>레이드 에뮬레이터는 raidboss 모듈의 기본값을 사용할거예요. 이 값은 다음과 같아요:</p>
+    <ul>
+      <li>표시 언어: <span class="discLangDisplay"></span></li>
+      <li>기본 경고 출력: 텍스트와 소리</li>
+      <li>경고 언어: <span class="discLangAlerts"></span></li>
+      <li>타임라인 언어: <span class="discLangTimeline"></span></li>
+    </ul>`,
   },
 } as const;
 
@@ -341,6 +396,7 @@ const emulatorLabels: Translation = {
     fr: 'Masquer les entrées sautées',
     ja: 'スキップした項目を隠す',
     cn: '隐藏已跳过项目',
+    ko: '스킵 감춤',
   },
   ' label[for=hideCollector]': {
     en: 'Hide Collectors',
@@ -348,6 +404,7 @@ const emulatorLabels: Translation = {
     fr: 'Masquer les entrées collectées',
     ja: '無出力トリガーを隠す',
     cn: '隐藏收集器',
+    ko: '처리 항목 감춤',
   },
 } as const;
 
@@ -358,6 +415,7 @@ const emulatorTooltips: Translation = {
     fr: 'Masquer les triggers non-executés',
     ja: '実行されなかったトリガーを隠す',
     cn: '隐藏未执行的触发器',
+    ko: '실행되지 않은 트리거 감춤',
   },
   '.triggerHideCollector': {
     en: 'Hide triggers that had no output',
@@ -365,6 +423,7 @@ const emulatorTooltips: Translation = {
     fr: 'Masquer les triggers sans sortie',
     ja: '出力がないトリガーを隠す',
     cn: '隐藏没有输出的触发器',
+    ko: '아웃풋이 없는 트리거 감춤',
   },
   '.connectedIndicator': {
     en: 'Connected to websocket',
@@ -372,6 +431,7 @@ const emulatorTooltips: Translation = {
     fr: 'Connecté au Websocket',
     ja: 'WebSocketに接続済み',
     cn: '连接到websocket',
+    ko: '웹소켓에 연결되었어요',
   },
   '.disconnectedIndicator': {
     en: 'Disconnected from websocket',
@@ -379,6 +439,7 @@ const emulatorTooltips: Translation = {
     fr: 'Déconnecté du Websocket',
     ja: 'WebSocketに接続していません',
     cn: '与websocket断开连接',
+    ko: '웹소켓 연결이 끊겨있어요',
   },
 } as const;
 
@@ -389,6 +450,7 @@ const emulatorEncounterInfo: Translation = {
     fr: 'Charger combat',
     ja: 'エンカウントを読み込む',
     cn: '加载战斗',
+    ko: '임무 읽기',
   },
   '.encounterParse': {
     en: 'Reparse Encounter',
@@ -396,6 +458,7 @@ const emulatorEncounterInfo: Translation = {
     fr: 'Reparser le combat',
     ja: 'エンカウントを再解析',
     cn: '重新解析战斗',
+    ko: '임무 다시 분석',
   },
   '.encounterPrune': {
     en: 'Prune Encounter',
@@ -403,6 +466,7 @@ const emulatorEncounterInfo: Translation = {
     fr: 'Combat vide',
     ja: 'エンカウントをカット',
     cn: '裁剪战斗',
+    ko: '임무 자르기',
   },
   '.encounterDelete': {
     en: 'Delete Encounter',
@@ -410,6 +474,7 @@ const emulatorEncounterInfo: Translation = {
     fr: 'Effacer combat',
     ja: 'エンカウントを削除',
     cn: '删除战斗',
+    ko: '임무 삭제',
   },
   '.encounterZone': {
     en: 'Zone: <span class="label"></span>',
@@ -417,6 +482,7 @@ const emulatorEncounterInfo: Translation = {
     fr: 'Zone : <span class="label"></span>',
     ja: 'ゾーン: <span class="label"></span>',
     cn: '区域: <span class="label"></span>',
+    ko: '지역: <span class="label"></span>',
   },
   '.encounterStart': {
     en: 'Start: <span class="label"></span>',
@@ -424,6 +490,7 @@ const emulatorEncounterInfo: Translation = {
     fr: 'Début : <span class="label"></span>',
     ja: '開始: <span class="label"></span>',
     cn: '开始: <span class="label"></span>',
+    ko: '시작: <span class="label"></span>',
   },
   '.encounterDuration': {
     en: 'Duration: <span class="label"></span>',
@@ -431,6 +498,7 @@ const emulatorEncounterInfo: Translation = {
     fr: 'Durée : <span class="label"></span>',
     ja: '持続時間: <span class="label"></span>',
     cn: '持续时间: <span class="label"></span>',
+    ko: '임무 시간: <span class="label"></span>',
   },
   '.encounterName': {
     en: 'Name: <span class="label"></span>',
@@ -438,6 +506,7 @@ const emulatorEncounterInfo: Translation = {
     fr: 'Nom : <span class="label"></span>',
     ja: '名前: <span class="label"></span>',
     cn: '名称: <span class="label"></span>',
+    ko: '이름: <span class="label"></span>',
   },
   '.encounterStartStatus': {
     en: 'Start Status: <span class="label"></span>',
@@ -445,6 +514,7 @@ const emulatorEncounterInfo: Translation = {
     fr: 'État du démarrage : <span class="label"></span>',
     ja: '開始状態: <span class="label"></span>',
     cn: '开始状态: <span class="label"></span>',
+    ko: '시작 상태: <span class="label"></span>',
   },
   '.encounterEndStatus': {
     en: 'End Status: <span class="label"></span>',
@@ -452,6 +522,7 @@ const emulatorEncounterInfo: Translation = {
     fr: 'État de fin : <span class="label"></span>',
     ja: '終了状態: <span class="label"></span>',
     cn: '结束状态: <span class="label"></span>',
+    ko: '종료 상태: <span class="label"></span>',
   },
 } as const;
 
@@ -484,6 +555,7 @@ export const emulatorStartStatuses = {
     fr: 'Inconnu',
     ja: '不明',
     cn: '未知',
+    ko: '알수없음',
   },
   countdown: {
     en: 'Countdown',
@@ -491,6 +563,7 @@ export const emulatorStartStatuses = {
     fr: 'Compte à rebours',
     ja: 'カウントダウン',
     cn: '倒计时',
+    ko: '카운트다운',
   },
   seal: {
     en: 'Seal',
@@ -498,6 +571,7 @@ export const emulatorStartStatuses = {
     fr: 'Fermeture',
     ja: '封鎖',
     cn: '封锁',
+    ko: '봉쇄',
   },
   engage: {
     en: 'Engage',
@@ -505,6 +579,7 @@ export const emulatorStartStatuses = {
     fr: 'À l\'attaque',
     ja: '戦闘開始',
     cn: '战斗中',
+    ko: '전투 시작',
   },
 };
 
@@ -515,6 +590,7 @@ export const emulatorEndStatuses = {
     fr: 'Inconnu',
     ja: '不明',
     cn: '未知',
+    ko: '알수없음',
   },
   win: {
     en: 'Win',
@@ -522,6 +598,7 @@ export const emulatorEndStatuses = {
     fr: 'Gagné',
     ja: '勝利',
     cn: '胜利',
+    ko: '승리',
   },
   wipe: {
     en: 'Wipe',
@@ -529,6 +606,7 @@ export const emulatorEndStatuses = {
     fr: 'Wipe',
     ja: 'ワイプ',
     cn: '团灭',
+    ko: '전멸',
   },
   cactbotWipe: {
     en: 'Cactbot Wipe',
@@ -536,6 +614,7 @@ export const emulatorEndStatuses = {
     fr: 'Cactbot Wipe',
     ja: 'Cactbotによるワイプ',
     cn: 'Cactbot团灭',
+    ko: 'Cactbot이 전멸 판정',
   },
   unseal: {
     en: 'Unseal',
@@ -543,6 +622,7 @@ export const emulatorEndStatuses = {
     fr: 'Ouverture',
     ja: '解除',
     cn: '解封',
+    ko: '봉쇄 해제',
   },
 };
 

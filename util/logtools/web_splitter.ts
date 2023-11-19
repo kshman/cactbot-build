@@ -15,21 +15,25 @@ const pageText = {
     en: 'Log Splitter and Anonymizer',
     de: 'Log Aufteiler und Anonymisierer',
     cn: '日志分割与匿名器',
+    ko: '로그 분리 및 익명 처리',
   },
   fileDropText: {
     en: 'Drop Network log file here',
     de: 'Network log Datei hier ablegen',
     cn: '将网络日志文件拖放到此处',
+    ko: '네트워크 로그 파일을 여기로 끌어오세요',
   },
   anonInput: {
     en: 'Anonymize Log',
     de: 'Log Anonymisieren',
     cn: '对日志进行匿名化处理',
+    ko: '로그 익명 처리',
   },
   exportInput: {
     en: 'Export',
     de: 'Export',
     cn: '导出',
+    ko: '내보내기',
   },
 } as const;
 
@@ -69,36 +73,43 @@ const buildTable = (state: PageState): void => {
       en: 'Include',
       de: 'Einschließen',
       cn: '包括',
+      ko: '선택',
     },
     startDate: {
       en: 'Date',
       de: 'Datum',
       cn: '日期',
+      ko: '날짜',
     },
     startTime: {
       en: 'Time',
       de: 'Zeit',
       cn: '时间',
+      ko: '시간',
     },
     duration: {
       en: 'Duration',
       de: 'Dauer',
       cn: '持续时间',
+      ko: '임무 시간',
     },
     zone: {
       en: 'Zone',
       de: 'Zone',
       cn: '区域',
+      ko: '지역',
     },
     encounter: {
       en: 'Encounter',
       de: 'Begegnung',
       cn: '战斗',
+      ko: '임무 공간',
     },
     end: {
       en: 'End',
       de: 'Ende',
       cn: '结束方式',
+      ko: '종료 상태',
     },
   } as const;
 
