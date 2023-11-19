@@ -2739,7 +2739,6 @@ const triggerSet: TriggerSet<Data> = {
     },
     {
       'locale': 'de',
-      'missingTranslations': true,
       'replaceSync': {
         'Aqueduct Belladonna': 'Aquädukt-Belladonna',
         'Aqueduct Dryad': 'Aquädukt-Dryade',
@@ -2889,7 +2888,6 @@ const triggerSet: TriggerSet<Data> = {
     },
     {
       'locale': 'ja',
-      'missingTranslations': true,
       'replaceSync': {
         'Aqueduct Belladonna': 'アクアダクト・ベラドンナ',
         'Aqueduct Dryad': 'アクアダクト・ドライアド',
@@ -2964,7 +2962,6 @@ const triggerSet: TriggerSet<Data> = {
     },
     {
       'locale': 'cn',
-      'missingTranslations': true,
       'replaceSync': {
         'Aqueduct Belladonna': '水道剧毒美人',
         'Aqueduct Dryad': '水道树妖',
@@ -3039,7 +3036,6 @@ const triggerSet: TriggerSet<Data> = {
     },
     {
       'locale': 'ko',
-      'missingTranslations': true,
       'replaceSync': {
         'Aqueduct Belladonna': '지하수도 벨라돈나',
         'Aqueduct Dryad': '지하수도 드라이어드',
