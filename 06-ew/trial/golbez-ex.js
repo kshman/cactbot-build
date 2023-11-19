@@ -113,12 +113,17 @@ Options.Triggers.push({
           en: 'NE / SW',
           de: 'NO / SW',
           cn: '右上 (东北) / 左下 (西南)',
+          ko: '북동 / 남서',
         },
         arrowNWSE: {
           en: '🡼🡾',
+          ja: '🡼🡾',
+          ko: '🡼🡾',
         },
         arrowNESW: {
           en: '🡿🡽',
+          ja: '🡿🡽',
+          ko: '🡿🡽',
         },
       },
     },
@@ -410,7 +415,9 @@ Options.Triggers.push({
         clones: {
           en: 'Clones: ${dir1}->${dir2}->${dir3}->${dir4}',
           de: 'Klone: ${dir1}->${dir2}->${dir3}->${dir4}',
+          ja: '分身: ${dir1}->${dir2}->${dir3}->${dir4}',
           cn: '分身：${dir1}->${dir2}->${dir3}->${dir4}',
+          ko: '분신: ${dir1}->${dir2}->${dir3}->${dir4}',
         },
         an: Outputs.arrowN,
         ae: Outputs.arrowE,
@@ -418,6 +425,8 @@ Options.Triggers.push({
         aw: Outputs.arrowW,
         aclones: {
           en: '${d1} ${d2} ${d3} ${d4}',
+          ja: '${d1} ${d2} ${d3} ${d4}',
+          ko: '${d1} ${d2} ${d3} ${d4}',
         },
       },
     },

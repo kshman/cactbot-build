@@ -2130,6 +2130,8 @@ Options.Triggers.push({
         },
         staffSwordCombo: {
           en: '${farText} / ${midText}',
+          ja: '${farText} / ${midText}',
+          ko: '${farText} / ${midText}',
         },
         staffSwordFar: {
           en: 'Far ${northSouth} or ${eastWest}',
@@ -2307,6 +2309,8 @@ Options.Triggers.push({
         },
         staffSwordCombo: {
           en: '${farText} / ${midText}',
+          ja: '${farText} / ${midText}',
+          ko: '${farText} / ${midText}',
         },
         staffSwordFar: {
           en: 'Far ${dir}',
@@ -2324,6 +2328,8 @@ Options.Triggers.push({
         },
         staffSwordSimple: {
           en: '${text}',
+          ja: '${text}',
+          ko: '${text}',
         },
         dirN: Outputs.arrowN,
         dirE: Outputs.arrowE,
@@ -2411,6 +2417,7 @@ Options.Triggers.push({
         },
         staffSwordCombo: {
           en: '${farText} / ${midText}',
+          ko: '${farText} / ${midText}',
         },
         staffSwordFar: {
           en: 'Far ${dir}',
@@ -2422,6 +2429,8 @@ Options.Triggers.push({
         },
         staffSwordSimple: {
           en: '${text}',
+          ja: '${text}',
+          ko: '${text}',
         },
         dirN: Outputs.arrowN,
         dirE: Outputs.arrowE,
