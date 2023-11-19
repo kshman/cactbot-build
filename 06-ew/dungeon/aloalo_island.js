@@ -144,7 +144,7 @@ Options.Triggers.push({
     {
       id: 'Aloalo Quaqua Scalding Waves',
       type: 'StartsUsing',
-      netRegex: { id: '8B97', source: 'Anala Familiar', capture: false },
+      netRegex: { id: '8B97', capture: false },
       suppressSeconds: 1,
       infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
@@ -778,7 +778,6 @@ Options.Triggers.push({
   timelineReplace: [
     {
       'locale': 'de',
-      'missingTranslations': true,
       'replaceSync': {
         'Kairimai Loquloqai': 'Kairimai Loquloqai',
         'Ketuduke': 'Ketuduke',
@@ -818,7 +817,6 @@ Options.Triggers.push({
     },
     {
       'locale': 'ja',
-      'missingTranslations': true,
       'replaceSync': {
         'Kairimai Loquloqai': '神子の祭壇',
         'Ketuduke': 'ケトゥドゥケ',

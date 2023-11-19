@@ -38,6 +38,7 @@ Options.Triggers.push({
         text: {
           en: 'Blue Square Safe',
           de: 'Blaues Viereck sicher',
+          ja: '安置: 青四角',
           ko: '안전: 🟦사각',
         },
       },
@@ -51,7 +52,8 @@ Options.Triggers.push({
         text: {
           en: 'Pink Triangle Safe',
           de: 'Pinkes Dreieck sicher',
-          ko: '안전: 🟣삼각',
+          ja: '安置: 赤三角',
+          ko: '분홍색 삼각',
         },
       },
     },
@@ -70,7 +72,7 @@ Options.Triggers.push({
         cleanse: {
           en: 'Cleanse ${player}\'s Doom',
           de: 'Reinige ${player}\'s Verhängnis',
-          ko: '에스나: ${player}',
+          ja: 'エスナ: ${player}',
         },
       },
     },
@@ -123,6 +125,7 @@ Options.Triggers.push({
         text: {
           en: 'Go Sides on Wall',
           de: 'Geh seitlich an die Wand',
+          ja: '壁の方へ',
           ko: '보스 옆으로!',
         },
       },
@@ -167,6 +170,7 @@ Options.Triggers.push({
       outputStrings: {
         avoid: {
           en: 'Away from orbs',
+          ja: '玉から離れて',
           ko: '구슬 피해요',
         },
       },
@@ -384,7 +388,6 @@ Options.Triggers.push({
     },
     {
       'locale': 'ja',
-      'missingTranslations': true,
       'replaceSync': {
         'Aetheric Charge': '魔力球',
         'Damcyan Antlion': 'ダムシアン・アントリオン',

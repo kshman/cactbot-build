@@ -15,6 +15,7 @@ Options.Triggers.push({
   zoneLabel: {
     en: 'Eureka Orthos (All Floors)',
     de: 'Eureka Orthos (Alle Ebenen)',
+    ja: 'オルト・エウレカ (全層)',
     cn: '正统优雷卡 (全楼层)',
     ko: '에우레카 오르토스 (전체 층)',
   },
@@ -108,7 +109,7 @@ Options.Triggers.push({
           ko: '캐스팅 늦춤(슬로우가)',
         },
         storms: {
-          en: 'HP줄임(밀스톰)',
+          en: 'Storms',
           de: 'Schwäche',
           fr: 'Charybde',
           ja: 'ミールストーム',
@@ -247,8 +248,9 @@ Options.Triggers.push({
       },
       outputStrings: {
         duplicate: {
-          en: '${demiclone} 또 나옴',
+          en: '${demiclone} duplicate',
           de: 'Doppelter ${demiclone}',
+          ja: '${demiclone} 被り',
           cn: '${demiclone} 重复',
           ko: '${demiclone} 또 나옴',
         },

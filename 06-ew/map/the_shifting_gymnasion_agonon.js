@@ -164,6 +164,7 @@ Options.Triggers.push({
         text: {
           en: 'Place Marker on Wall',
           de: 'Markierung an der Wand ablegen',
+          ja: 'マーカーを壁に',
           cn: '在场边放置标记',
           ko: '마커를 벽에 설치',
         },
@@ -198,6 +199,7 @@ Options.Triggers.push({
         text: {
           en: 'Get Behind (Stay Behind)',
           de: 'Geh hinter den Boss (und bleib hinter ihm stehen)',
+          ja: '後ろへ (そのまま後ろ)',
           cn: '去背后 (待在背后)',
           ko: '뒤로 (계속 뒤로)',
         },

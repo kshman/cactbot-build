@@ -602,7 +602,7 @@ Options.Triggers.push({
           en: 'Move Through',
           de: 'Durchlaufen',
           fr: 'Passez à travers',
-          ja: 'ボスをまたいて移動',
+          ja: 'ボスをまたいで移動',
           cn: '穿穿穿',
           ko: '가로 질러요',
         },
