@@ -182,7 +182,7 @@ Options.Triggers.push({
   },
   timelineTriggers: [
     {
-      id: 'AAIS 옵션 설정',
+      id: 'AAIS Options',
       regex: /--setup--/,
       delaySeconds: 1,
       infoText: (data, _matches, output) => {
