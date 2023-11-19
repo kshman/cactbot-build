@@ -1888,15 +1888,15 @@ const templateOptions: OptionsTemplate = {
       type: 'html',
       html: {
         // TODO: it'd be nice if OverlayPlugin could open links on the system outside of ACT.
-        en: makeLink('https://github.com/kshman/cactbot-build/util/coverage/coverage.html?lang=en'),
-        de: makeLink('https://github.com/kshman/cactbot-build/util/coverage/coverage.html?lang=de'),
-        fr: makeLink('https://github.com/kshman/cactbot-build/util/coverage/coverage.html?lang=fr'),
-        ja: makeLink('https://github.com/kshman/cactbot-build/util/coverage/coverage.html?lang=ja'),
-        cn: makeLink('https://github.com/kshman/cactbot-build/util/coverage/coverage.html?lang=cn'),
-        ko: makeLink('https://github.com/kshman/cactbot-build/util/coverage/coverage.html?lang=ko'),
+        en: makeLink('https://kshman.github.io/cactbot-build/util/coverage/coverage.html?lang=en'),
+        de: makeLink('https://kshman.github.io/cactbot-build/util/coverage/coverage.html?lang=de'),
+        fr: makeLink('https://kshman.github.io/cactbot-build/util/coverage/coverage.html?lang=fr'),
+        ja: makeLink('https://kshman.github.io/cactbot-build/util/coverage/coverage.html?lang=ja'),
+        cn: makeLink('https://kshman.github.io/cactbot-build/util/coverage/coverage.html?lang=cn'),
+        ko: makeLink('https://kshman.github.io/cactbot-build/util/coverage/coverage.html?lang=ko'),
       },
       default: makeLink(
-        'https://github.com/kshman/cactbot-build/util/coverage/coverage.html?lang=en',
+        'https://kshman.github.io/cactbot-build/util/coverage/coverage.html?lang=en',
       ),
     },
     {
