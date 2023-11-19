@@ -81,30 +81,14 @@ export interface Data extends RaidbossData {
 // prs string
 export const prsStrings = {
   unknown: Outputs.unknown,
-  north: {
-    en: 'Ⓐ',
-  },
-  east: {
-    en: 'Ⓑ',
-  },
-  south: {
-    en: 'Ⓒ',
-  },
-  west: {
-    en: 'Ⓓ',
-  },
-  northEast: {
-    en: '⓶',
-  },
-  southEast: {
-    en: '⓷',
-  },
-  southWest: {
-    en: '⓸',
-  },
-  northWest: {
-    en: '⓵',
-  },
+  north: Outputs.cmarkA,
+  east: Outputs.cmarkB,
+  south: Outputs.cmarkC,
+  west: Outputs.cmarkD,
+  northEast: Outputs.cnum2,
+  southEast: Outputs.cnum3,
+  southWest: Outputs.cnum4,
+  northWest: Outputs.cnum1,
   crush: {
     en: 'Crash',
     ja: 'クラッシュ',
@@ -2150,6 +2134,8 @@ const triggerSet: TriggerSet<Data> = {
           },
           ttsReverse: {
             en: 'わたしが反転',
+            ja: 'わたしが反転',
+            ko: 'わたしが反転',
           },
         };
         if (!data.inverseMagics[matches.target]) {

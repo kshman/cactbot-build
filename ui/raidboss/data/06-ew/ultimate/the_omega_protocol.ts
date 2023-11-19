@@ -2299,6 +2299,8 @@ const triggerSet: TriggerSet<Data> = {
         },
         staffSwordCombo: {
           en: '${farText} / ${midText}',
+          ja: '${farText} / ${midText}',
+          ko: '${farText} / ${midText}',
         },
         staffSwordFar: {
           en: 'Far ${northSouth} or ${eastWest}',
@@ -2485,6 +2487,8 @@ const triggerSet: TriggerSet<Data> = {
         },
         staffSwordCombo: {
           en: '${farText} / ${midText}',
+          ja: '${farText} / ${midText}',
+          ko: '${farText} / ${midText}',
         },
         staffSwordFar: {
           en: 'Far ${dir}',
@@ -2502,6 +2506,8 @@ const triggerSet: TriggerSet<Data> = {
         },
         staffSwordSimple: {
           en: '${text}',
+          ja: '${text}',
+          ko: '${text}',
         },
         dirN: Outputs.arrowN,
         dirE: Outputs.arrowE,
@@ -2596,6 +2602,7 @@ const triggerSet: TriggerSet<Data> = {
         },
         staffSwordCombo: {
           en: '${farText} / ${midText}',
+          ko: '${farText} / ${midText}',
         },
         staffSwordFar: {
           en: 'Far ${dir}',
@@ -2607,6 +2614,8 @@ const triggerSet: TriggerSet<Data> = {
         },
         staffSwordSimple: {
           en: '${text}',
+          ja: '${text}',
+          ko: '${text}',
         },
         dirN: Outputs.arrowN,
         dirE: Outputs.arrowE,

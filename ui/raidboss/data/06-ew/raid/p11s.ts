@@ -47,25 +47,39 @@ const getHeadmarkerId = (data: Data, matches: NetMatches['HeadMarker']) => {
 
 export const prsJuryOverrulingStrings = {
   proteinpair: {
-    en: '프로틴 (페어)',
+    en: 'Protean (Partner)',
+    ja: '散会 (ペア)',
+    ko: '프로틴 (페어)',
   },
   proteinshare: {
-    en: '프로틴 (4:4 뭉쳐요)',
+    en: 'Protean (4:4 Healer Groups)',
+    ja: '散会 (4:4ヒラと頭割り)',
+    ko: '프로틴 (4:4 뭉쳐요)',
   },
   proteinlightfar: {
-    en: '프로틴: 그자리 그대로',
+    en: 'Protean: Wait',
+    ja: '散会: そのまま',
+    ko: '프로틴: 그자리 그대로',
   },
   proteinlightnear: {
-    en: '프로틴: 🡼90도',
+    en: 'Protean: 🡼90 degree',
+    ja: '散会: 🡼90度',
+    ko: '프로틴: 🡼90도',
   },
   proteindarkfar: {
-    en: '프로틴: 🡸45도',
+    en: 'Protean: 🡸45 degree',
+    ja: '散会: 🡸45度',
+    ko: '프로틴: 🡸45도',
   },
   proteindarknear: {
-    en: '프로틴: 🡼🡹90+45도',
+    en: 'Protean: 🡼🡹90+45 degree',
+    ja: '散会: 🡼🡹90+45度',
+    ko: '프로틴: 🡼🡹90+45도',
   },
   proteinunknown: {
-    en: '프로틴 (${unk})',
+    en: 'Protean (${unk})',
+    ja: '散会 (${unk})',
+    ko: '프로틴 (${unk})',
   },
   unknown: Outputs.unknown,
 };
