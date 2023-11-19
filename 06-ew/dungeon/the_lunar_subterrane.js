@@ -73,6 +73,7 @@ Options.Triggers.push({
           en: 'Cleanse ${player}\'s Doom',
           de: 'Reinige ${player}\'s Verhängnis',
           ja: 'エスナ: ${player}',
+          ko: '에스나: ${player}',
         },
       },
     },
