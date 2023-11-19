@@ -1,4 +1,4 @@
-name: 릴리즈 빌드
+name: 빌드-릴리즈
 
 on:
   push:

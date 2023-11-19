@@ -55,6 +55,7 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: 'Blue Square Safe',
           de: 'Blaues Viereck sicher',
+          ja: '安置: 青四角',
           ko: '안전: 🟦사각',
         },
       },
@@ -68,7 +69,8 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: 'Pink Triangle Safe',
           de: 'Pinkes Dreieck sicher',
-          ko: '안전: 🟣삼각',
+          ja: '安置: 赤三角',
+          ko: '분홍색 삼각',
         },
       },
     },
@@ -87,7 +89,7 @@ const triggerSet: TriggerSet<Data> = {
         cleanse: {
           en: 'Cleanse ${player}\'s Doom',
           de: 'Reinige ${player}\'s Verhängnis',
-          ko: '에스나: ${player}',
+          ja: 'エスナ: ${player}',
         },
       },
     },
@@ -140,6 +142,7 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: 'Go Sides on Wall',
           de: 'Geh seitlich an die Wand',
+          ja: '壁の方へ',
           ko: '보스 옆으로!',
         },
       },
@@ -184,6 +187,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         avoid: {
           en: 'Away from orbs',
+          ja: '玉から離れて',
           ko: '구슬 피해요',
         },
       },
@@ -412,7 +416,6 @@ const triggerSet: TriggerSet<Data> = {
     },
     {
       'locale': 'ja',
-      'missingTranslations': true,
       'replaceSync': {
         'Aetheric Charge': '魔力球',
         'Damcyan Antlion': 'ダムシアン・アントリオン',

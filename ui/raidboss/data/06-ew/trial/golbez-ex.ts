@@ -43,6 +43,7 @@ const galeSphereOutputStrings = {
   dirAndMechanic: {
     en: '${dir} + ${mechanic}',
     de: '${dir} + ${mechanic}',
+    ja: '${dir} + ${mechanic}',
     cn: '${dir} + ${mechanic}',
     ko: '${dir} + ${mechanic}',
   },
@@ -170,12 +171,14 @@ const triggerSet: TriggerSet<Data> = {
         dirNWSE: {
           en: 'NW / SE',
           de: 'NW / SO',
+          ja: '北西 / 南東',
           cn: '左上 (西北) / 右下 (东南)',
           ko: '북서 / 남동',
         },
         dirNESW: {
           en: 'NE / SW',
           de: 'NO / SW',
+          ja: '北東 / 南西',
           cn: '右上 (东北) / 左下 (西南)',
           ko: '북동 / 남서',
         },
@@ -201,7 +204,7 @@ const triggerSet: TriggerSet<Data> = {
           en: 'Bait Circles',
           de: 'Kreise ködern',
           fr: 'Déposez les cercles',
-          ja: 'ゆか誘導',
+          ja: 'AOE誘導',
           cn: '集合放圈',
           ko: '장판 모여 깔아요!',
         },
@@ -248,12 +251,14 @@ const triggerSet: TriggerSet<Data> = {
         backThenFrontThenHealerGroups: {
           en: 'Back => Front => Out => Stacks',
           de: 'Hinten => Vorne => Raus => Sammeln',
+          ja: '後ろ => 前 => 外側 => ペア',
           cn: '后 => 前 => 钢铁 => 集合',
           ko: '뒤에서 🔜 앞으로 🔜 밖으로 🔜 뭉쳐요',
         },
         backThenFrontThenSpread: {
           en: 'Back => Front => Under => Spread',
           de: 'Hinten => Vorne => Unter ihn => Verteilen',
+          ja: '後ろ => 前 => 内側 => 散会',
           cn: '后 => 前 => 月环 => 分散',
           ko: '뒤에서 🔜 앞으로 🔜 밑으로 🔜 흩어져요',
         },
@@ -277,12 +282,14 @@ const triggerSet: TriggerSet<Data> = {
         frontThenHealerGroups: {
           en: 'Front => Out => Stacks',
           de: 'Vorne => Raus => Sammeln',
+          ja: '前 => 外側 => ペア',
           cn: '前 => 钢铁 => 集合',
           ko: '앞에서 🔜 밖으로 🔜 뭉쳐요',
         },
         frontThenSpread: {
           en: 'Front => Under',
           de: 'Vorne => Unter ihn',
+          ja: '前 => 内側',
           cn: '前 => 月环',
           ko: '앞에서 🔜 밑으로',
         },
@@ -298,6 +305,7 @@ const triggerSet: TriggerSet<Data> = {
         outAndSpread: {
           en: 'Spread Out',
           de: 'Außen verteilen',
+          ja: '散会',
           cn: '分散',
           ko: '흩어져요',
         },
@@ -344,7 +352,7 @@ const triggerSet: TriggerSet<Data> = {
           en: 'Role positions',
           de: 'Rollenposition',
           fr: 'Positions par rôle',
-          ja: 'ロール特定位置へ',
+          ja: 'ロール散会',
           cn: '去指定位置',
           ko: '롤 포지션으로',
         },
@@ -370,6 +378,7 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: '(out + healer groups, for later)',
           de: '(raus + Heiler Gruppen, für später)',
+          ja: '(外 + 後でヒーラと4:4頭割り)',
           cn: '(钢铁 + 稍后治疗分组分摊)',
           ko: '(밖에서 + 4:4힐러)',
         },
@@ -385,6 +394,7 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: '(in + spread, for later)',
           de: '(rein + verteilen, für später)',
+          ja: '(中 + 後で散会)',
           cn: '(月环 + 稍后分散)',
           ko: '(안으로 + 흩어져요)',
         },
@@ -594,6 +604,7 @@ const triggerSet: TriggerSet<Data> = {
         safeSpotList: {
           en: '${dir1} => ${dir2} => ${dir3} => ${dir4}',
           de: '${dir1} => ${dir2} => ${dir3} => ${dir4}',
+          ja: '${dir1} => ${dir2} => ${dir3} => ${dir4}',
           cn: '${dir1} => ${dir2} => ${dir3} => ${dir4}',
           ko: '${dir1} 🔜 ${dir2} 🔜 ${dir3} 🔜 ${dir4}',
         },
@@ -692,6 +703,7 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: '${dir} => Healer Groups',
           de: '${dir} => Heiler Gruppen',
+          ja: '${dir} => ヒーラと4:4頭割り',
           cn: '${dir} => 治疗分组分摊',
           ko: '${dir} 🔜 4:4 힐러',
         },
@@ -773,6 +785,7 @@ const triggerSet: TriggerSet<Data> = {
         middleLean: {
           en: 'Middle (lean ${dir})',
           de: 'Mitte (${dir} halten)',
+          ja: '真ん中 (すこし${dir})',
           cn: '中间 (偏 ${dir})',
           ko: '한가운데 (약간 ${dir})',
         },
@@ -791,6 +804,7 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: 'Knockback on YOU',
           de: 'Rückstoß auf DIR',
+          ja: '自分にノックバック',
           cn: '击退点名',
           ko: '내게 넉백!',
         },
@@ -809,6 +823,7 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: 'Flare on YOU',
           de: 'Flare auf DIR',
+          ja: '自分にフレア',
           cn: '陨石点名',
           ko: '내게 플레어!',
         },
@@ -828,6 +843,7 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: 'Get Tower',
           de: 'Nimm Turm',
+          ja: '塔踏み',
           cn: '踩塔',
           ko: '타워 밟아요',
         },

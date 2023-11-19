@@ -223,6 +223,8 @@ const triggerSet: TriggerSet<Data> = {
           '<a href="https://github.com/quisquous/cactbot/releases/tag/v0.28.19" target="_blank">Read Notes</a>',
         de:
           '<a href="https://github.com/quisquous/cactbot/releases/tag/v0.28.19" target="_blank">Notizen lesen</a>',
+        ja:
+          '<a href="https://github.com/quisquous/cactbot/releases/tag/v0.28.19" target="_blank">ノート参考</a>',
         cn:
           '<a href="https://github.com/quisquous/cactbot/releases/tag/v0.28.19" target="_blank">阅读笔记</a>',
         ko:
@@ -962,6 +964,7 @@ const triggerSet: TriggerSet<Data> = {
         remoteGlitch: {
           en: 'Far',
           de: 'Fern',
+          ja: 'ファー',
           cn: '远',
           ko: '[파]',
         },
@@ -1041,6 +1044,7 @@ const triggerSet: TriggerSet<Data> = {
           stacksOn: {
             en: '${glitch} Stacks (${player1}, ${player2})',
             de: '${glitch} Sammeln (${player1}, ${player2})',
+            ja: '${glitch} 頭割り (${player1}, ${player2})',
             cn: '${glitch} 分摊 (${player1}, ${player2})',
             ko: '${glitch} (${player1}, ${player2})',
           },
@@ -3399,7 +3403,6 @@ const triggerSet: TriggerSet<Data> = {
     },
     {
       'locale': 'ja',
-      'missingTranslations': true,
       'replaceSync': {
         'Alpha Omega': 'アルファオメガ',
         'Cosmo Meteor': 'コスモメテオ',
