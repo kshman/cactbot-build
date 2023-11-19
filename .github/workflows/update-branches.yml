@@ -1,0 +1,75 @@
+name: 업데이트-브랜치
+
+on:
+  push:
+    branches: [ master ]
+
+jobs:
+  check-branches:
+    runs-on: ubuntu-latest
+    outputs:
+      ghpages: ${{ steps.check-branches.outputs.ghpages }}
+      triggers: ${{ steps.check-branches.outputs.triggers }}
+    steps:
+      - name: Check gh-pages Exists
+        id: check-branches
+        shell: bash
+        run: |
+          GITHUB_URL="https://github.com/${{ github.repository }}"
+          if git ls-remote --exit-code --heads $GITHUB_URL gh-pages; then
+            echo "ghpages=true" >> $GITHUB_OUTPUT
+            echo "gh-pages 브랜치가 있어요. 업데이트할께요~"
+          else
+            echo "ghpages=false" >> $GITHUB_OUTPUT
+            echo "gh-pages 브랜치가 없어요."
+          fi
+          if git ls-remote --exit-code --heads $GITHUB_URL triggers; then
+            echo "triggers=true" >> $GITHUB_OUTPUT
+            echo "triggers 브랜치가 있어요. 업데이트할께요~"
+          else
+            echo "triggers=false" >> $GITHUB_OUTPUT
+            echo "triggers 브랜치가 없어요."
+          fi
+  update-gh-pages:
+    runs-on: ubuntu-latest
+    needs: check-branches
+    if: needs.check-branches.outputs.ghpages == 'true'
+    steps:
+      - uses: actions/checkout@v3
+      - uses: ./.github/actions/setup-js-env
+
+      - name: Build
+        run: |
+          npm run coverage-report
+          npm run build-gh-pages
+      - name: Deploy
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./dist
+          force_orphan: true
+          user_name: "github-actions"
+          user_email: "github-actions@github.com"
+          commit_message: "페이지 빌드: ${{ github.event.head_commit.message }}"
+          enable_jekyll: true # Don't commit the .nojekyll file
+  update-triggers:
+    runs-on: ubuntu-latest
+    needs: check-branches
+    if: needs.check-branches.outputs.triggers == 'true'
+    steps:
+      - uses: actions/checkout@v3
+      - uses: ./.github/actions/setup-js-env
+
+      - name: Build
+        run: |
+          npm run process-triggers
+      - name: Deploy
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./dist/triggers/ui/raidboss/data
+          publish_branch: triggers
+          user_name: "github-actions"
+          user_email: "github-actions@github.com"
+          commit_message: "트리거 빌드: ${{ github.event.head_commit.message }}"
+          enable_jekyll: true # Don't commit the .nojekyll file

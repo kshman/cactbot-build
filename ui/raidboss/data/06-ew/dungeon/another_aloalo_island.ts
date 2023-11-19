@@ -254,6 +254,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (data, _matches, output) => {
         if (data.settled)
           return output.settle!();
+        data.settled = true;
 
         if (data.options.AutumnParameter !== undefined) {
           const ss = data.options.AutumnParameter.split('.');
@@ -293,7 +294,6 @@ const triggerSet: TriggerSet<Data> = {
         });
         return output.mesg!({ param: param });
       },
-      run: (data) => data.settled = true,
       outputStrings: {
         settle: {
           en: '(Settled)',
