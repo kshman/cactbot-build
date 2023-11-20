@@ -33,7 +33,7 @@ Options.Triggers.push({
       type: 'checkbox',
       default: (options) => {
         const oldSetting = options['cactbote8sUptimeKnockbackStrat'];
-        return typeof oldSetting === 'boolean' ? oldSetting : false;
+        return typeof oldSetting === 'boolean' ? oldSetting : true;
       },
     },
   ],

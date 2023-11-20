@@ -184,13 +184,11 @@ Options.Triggers.push({
     {
       id: 'AAIS Options',
       regex: /--setup--/,
-      delaySeconds: 1,
+      condition: (data) => !data.settled,
       infoText: (data, _matches, output) => {
-        if (data.settled)
-          return output.settle();
         data.settled = true;
         if (data.options.AutumnParameter !== undefined) {
-          const ss = data.options.AutumnParameter.split('.');
+          const ss = data.options.AutumnParameter.split(',');
           if (ss.length === 1 && ss[0] === 'hm') {
             data.triggerSetConfig.flukeGaleType = 'hamukatsu';
             data.triggerSetConfig.planarTacticsType = 'hamukatsu';
@@ -227,10 +225,6 @@ Options.Triggers.push({
         return output.mesg({ param: param });
       },
       outputStrings: {
-        settle: {
-          en: '(Settled)',
-          ko: '(설정이 있네요)',
-        },
         mesg: {
           en: 'Option: ${param}',
           ko: '옵션: ${param}',
@@ -1326,18 +1320,22 @@ Options.Triggers.push({
       outputStrings: {
         num1: {
           en: '[1]',
+          ja: '[1]',
           ko: '[1] 구슬 쪽 🔜 다 피해욧',
         },
         num2: {
           en: '[2]',
+          ja: '[2]',
           ko: '[2] 구슬 쪽 🔜 한번 맞아요',
         },
         num3: {
           en: '[3]',
+          ja: '[3]',
           ko: '[3] 구슬 없는쪽 🔜 두번 맞아요',
         },
         num4: {
           en: '[4]',
+          ja: '[4]',
           ko: '[4] 구슬 없는쪽 🔜 세번 맞아요',
         },
       },
@@ -1350,6 +1348,7 @@ Options.Triggers.push({
       outputStrings: {
         text: {
           en: 'Find outside adds!',
+          ja: 'マップの外にウッドゴーレム！',
           ko: '바깥 쫄 있는데가 북쪽!',
         },
       },
@@ -1363,6 +1362,7 @@ Options.Triggers.push({
       outputStrings: {
         text: {
           en: 'Spread!',
+          ja: '散会！',
           ko: '자기 자리로 흩어져요!',
         },
       },
@@ -1575,6 +1575,7 @@ Options.Triggers.push({
       outputStrings: {
         text: {
           en: 'Go to safe zone',
+          ja: 'ボムを回避しに安置へ',
           ko: '폭탄 피해서 안전한 곳으로',
         },
       },
@@ -1757,6 +1758,7 @@ Options.Triggers.push({
       outputStrings: {
         text: {
           en: 'Find the angular point!',
+          ja: '北を特定して！',
           ko: '꼭지점 찾아요!',
         },
       },
@@ -1774,10 +1776,12 @@ Options.Triggers.push({
       outputStrings: {
         clock: {
           en: '⤾Clockwise',
+          ja: '⤾時計',
           ko: '⤾시계 회전',
         },
         counter: {
           en: '⤿Counter Clockwise',
+          ja: '⤿反時計',
           ko: '⤿반시계 회전',
         },
       },
