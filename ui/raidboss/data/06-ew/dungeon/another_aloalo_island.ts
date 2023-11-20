@@ -250,14 +250,11 @@ const triggerSet: TriggerSet<Data> = {
     {
       id: 'AAI Options',
       regex: /--setup--/,
-      delaySeconds: 1,
+      condition: (data) => !data.settled,
       infoText: (data, _matches, output) => {
-        if (data.settled)
-          return output.settle!();
         data.settled = true;
-
         if (data.options.AutumnParameter !== undefined) {
-          const ss = data.options.AutumnParameter.split('.');
+          const ss = data.options.AutumnParameter.split(',');
           if (ss.length === 1 && ss[0] === 'hm') {
             data.triggerSetConfig.flukeGaleType = 'hamukatsu';
             data.triggerSetConfig.planarTacticsType = 'hamukatsu';
@@ -274,7 +271,6 @@ const triggerSet: TriggerSet<Data> = {
             data.triggerSetConfig.pinwheelingType = ss[2] === 'sp' ? 'spell' : 'pino';
           }
         }
-
         const param = output.options!({
           fluke: {
             'spread': output.spread!(),
@@ -295,10 +291,6 @@ const triggerSet: TriggerSet<Data> = {
         return output.mesg!({ param: param });
       },
       outputStrings: {
-        settle: {
-          en: '(Settled)',
-          ko: '(설정이 있네요)',
-        },
         mesg: {
           en: 'Option: ${param}',
           ko: '옵션: ${param}',
