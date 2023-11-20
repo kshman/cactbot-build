@@ -1409,18 +1409,22 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         num1: {
           en: '[1]',
+          ja: '[1]',
           ko: '[1] 구슬 쪽 🔜 다 피해욧',
         },
         num2: {
           en: '[2]',
+          ja: '[2]',
           ko: '[2] 구슬 쪽 🔜 한번 맞아요',
         },
         num3: {
           en: '[3]',
+          ja: '[3]',
           ko: '[3] 구슬 없는쪽 🔜 두번 맞아요',
         },
         num4: {
           en: '[4]',
+          ja: '[4]',
           ko: '[4] 구슬 없는쪽 🔜 세번 맞아요',
         },
       },
@@ -1433,6 +1437,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Find outside adds!',
+          ja: 'マップの外にウッドゴーレム！',
           ko: '바깥 쫄 있는데가 북쪽!',
         },
       },
@@ -1446,6 +1451,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Spread!',
+          ja: '散会！',
           ko: '자기 자리로 흩어져요!',
         },
       },
@@ -1658,6 +1664,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Go to safe zone',
+          ja: 'ボムを回避しに安置へ',
           ko: '폭탄 피해서 안전한 곳으로',
         },
       },
@@ -1842,6 +1849,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Find the angular point!',
+          ja: '北を特定して！',
           ko: '꼭지점 찾아요!',
         },
       },
@@ -1859,10 +1867,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         clock: {
           en: '⤾Clockwise',
+          ja: '⤾時計',
           ko: '⤾시계 회전',
         },
         counter: {
           en: '⤿Counter Clockwise',
+          ja: '⤿反時計',
           ko: '⤿반시계 회전',
         },
       },
