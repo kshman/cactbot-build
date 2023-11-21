@@ -1256,40 +1256,42 @@ const triggerSet: TriggerSet<Data> = {
           if (mycnt === 3)
             return output.hamukatsu3!();
 
-          const [s1, s2] = stacks;
-          if (s1 === undefined || s2 === undefined)
-            return output.hamukatsu2!();
           const partner = nums.find((x) => x.target !== data.me && parseInt(x.count) === 2);
           if (partner === undefined)
-            return output.hamukatsu2!();
+            return output.hamukatsu2!({ partner: output.unknown!() });
+          const pname = data.party.jobAbbr(partner.target);
+
+          const [s1, s2] = stacks;
+          if (s1 === undefined || s2 === undefined)
+            return output.hamukatsu2!({ partner: pname });
 
           if (stacks.includes(data.me)) {
             const other = s1 === data.me ? s2 : s1;
             const surge = nums.find((x) => x.target === other);
             if (surge === undefined)
-              return output.hamukatsu2!();
+              return output.hamukatsu2!({ partner: pname });
             const count = parseInt(surge.count);
             if (count === 1)
-              return output.hamukatsu2left!();
+              return output.hamukatsu2left!({ partner: pname });
             if (count === 3)
-              return output.hamukatsu2right!();
+              return output.hamukatsu2right!({ partner: pname });
           } else if (stacks.includes(partner.target)) {
             const other = s1 === partner.target ? s2 : s1;
             const surge = nums.find((x) => x.target === other);
             if (surge === undefined)
-              return output.hamukatsu2!();
+              return output.hamukatsu2!({ partner: pname });
             const count = parseInt(surge.count);
             if (count === 1)
-              return output.hamukatsu2right!();
+              return output.hamukatsu2right!({ partner: pname });
             if (count === 3)
-              return output.hamukatsu2left!();
+              return output.hamukatsu2left!({ partner: pname });
           }
 
           const my = data.party.member(data.me);
           const pm = data.party.member(partner.target);
           return Autumn.jobPriority(my.jobIndex) < Autumn.jobPriority(pm.jobIndex)
-            ? output.hamukatsu2left!()
-            : output.hamukatsu2right!();
+            ? output.hamukatsu2left!({ partner: pname })
+            : output.hamukatsu2right!({ partner: pname });
         }
       },
       run: (data) => data.lalaAlphaGains = [],
@@ -1335,19 +1337,19 @@ const triggerSet: TriggerSet<Data> = {
           ko: '[1] 2번과 페어',
         },
         hamukatsu2: {
-          en: '2',
-          ja: '2、1・3とペア',
-          ko: '[2] 1,3번과 페어',
+          en: '2 (${partner})',
+          ja: '2、1・3とペア (${partner})',
+          ko: '[2] 1,3번과 페어 (${partner})',
         },
         hamukatsu2left: {
-          en: '2 Left',
-          ja: '2左、3とペア',
-          ko: '[2/왼쪽] 3번과 페어',
+          en: '2 Left (${partner})',
+          ja: '2左、3とペア (${partner})',
+          ko: '[❰❰🡸2] 3번과 페어 (${partner})',
         },
         hamukatsu2right: {
-          en: '2 Right',
-          ja: '2右、1とペア',
-          ko: '[2/오른쪽] 1번과 페어',
+          en: '2 Right (${partner})',
+          ja: '2右、1とペア (${partner})',
+          ko: '[2🡺❱❱] 1번과 페어 (${partner})',
         },
         hamukatsu3: {
           en: '3',
@@ -1727,7 +1729,7 @@ const triggerSet: TriggerSet<Data> = {
       type: 'Ability',
       netRegex: { id: '8980', source: 'Statice', capture: false },
       condition: (data) => !data.stcSeenPop,
-      delaySeconds: 2.5,
+      delaySeconds: 3,
       suppressSeconds: 1,
       response: Responses.knockback(),
     },
@@ -2008,7 +2010,7 @@ const triggerSet: TriggerSet<Data> = {
       replaceText: {
         'Hydrobullet/Hydrofall': 'Hydrobullet/fall',
         'Hydrofall/Hydrobullet': 'Hydrofall/bullet',
-        'Locked and Loaded/Misload': '탄알 장전',
+        'Locked and Loaded/Misload': 'Bullet Loads',
         'Receding Twintides/Encroaching Twintides': 'Receding/Encroaching Twintides',
         'Far Tide/Near Tide': 'Far/Near Tide',
       },

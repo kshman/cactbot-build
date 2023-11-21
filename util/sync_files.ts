@@ -36,7 +36,7 @@ export type ZoneReplace = {
 
 const zoneReplace: ZoneReplace[] = [
   {
-    // Criterion
+    // Sildihn Criterion
     fileMap: {
       'ui/raidboss/data/06-ew/dungeon/another_sildihn_subterrane.ts':
         'ui/raidboss/data/06-ew/dungeon/another_sildihn_subterrane-savage.ts',
@@ -287,7 +287,7 @@ const zoneReplace: ZoneReplace[] = [
     },
   },
   {
-    // Criterion
+    // Mount Rokkon Criterion
     fileMap: {
       'ui/raidboss/data/06-ew/dungeon/another_mount_rokkon.ts':
         'ui/raidboss/data/06-ew/dungeon/another_mount_rokkon-savage.ts',
@@ -569,10 +569,12 @@ const zoneReplace: ZoneReplace[] = [
     },
   },
   {
-    // Criterion
+    // Aloalo Criterion
     fileMap: {
       'ui/raidboss/data/06-ew/dungeon/another_aloalo_island.ts':
         'ui/raidboss/data/06-ew/dungeon/another_aloalo_island-savage.ts',
+      'ui/oopsyraidsy/data/06-ew/dungeon/another_aloalo_island.ts':
+        'ui/oopsyraidsy/data/06-ew/dungeon/another_aloalo_island-savage.ts',
       'ui/raidboss/data/06-ew/dungeon/another_aloalo_island.txt':
         'ui/raidboss/data/06-ew/dungeon/another_aloalo_island-savage.txt',
     },
@@ -580,7 +582,8 @@ const zoneReplace: ZoneReplace[] = [
     other: {
       'AnotherAloaloIsland': 'AnotherAloaloIslandSavage',
       'another_aloalo_island.txt': 'another_aloalo_island-savage.txt',
-      '# Another Aloalo Island': '# Another Aloalo Island (Savage)',
+      '# ANOTHER ALOALO ISLAND': '# ANOTHER ALOALO ISLAND (SAVAGE)',
+      '\(\'AAI ': '\(\'AAIS ',
     },
     // eslint-disable-next-line max-len
     // grep "^# [A-F0-9]\{4\} " ui/raidboss/data/06-ew/dungeon/another_aloalo_island.txt | sort | sed "s/^..//" | sed "s/^\(....\) \(.*\)$/    '\1': 'TODO', \/\/ \2/"
