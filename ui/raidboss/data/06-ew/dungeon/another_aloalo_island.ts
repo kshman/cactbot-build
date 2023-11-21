@@ -4,45 +4,34 @@ import Outputs from '../../../../../resources/outputs';
 import { Responses } from '../../../../../resources/responses';
 import ZoneId from '../../../../../resources/zone_id';
 import { RaidbossData } from '../../../../../types/data';
-import { PluginCombatantState } from '../../../../../types/event';
 import { NetMatches } from '../../../../../types/net_matches';
 import { Output, TriggerSet } from '../../../../../types/trigger';
 
 type ClockRotation = 'cw' | 'ccw';
 type AloDirection = 'front' | 'back' | 'left' | 'right';
 
-const ForceMoveStrings = {
+const MarchMoveStrings = {
   stacks: Outputs.getTogether,
   spread: Outputs.spread,
   forward: {
-    en: 'Move: Forward => ${aim}', // FIXME
-    ja: '強制移動 : 前 => ${aim}',
-    ko: '강제이동: 앞 🔜 ${aim}',
+    en: 'Move: Forward => ${dest}', // FIXME
+    ja: '強制移動 : 前 => ${dest}',
+    ko: '강제이동: 앞 🔜 ${dest}',
   },
   backward: {
-    en: 'Move: Back => ${aim}', // FIXME
-    ja: '強制移動 : 後ろ => ${aim}',
-    ko: '강제이동: 뒤 🔜 ${aim}',
+    en: 'Move: Back => ${dest}', // FIXME
+    ja: '強制移動 : 後ろ => ${dest}',
+    ko: '강제이동: 뒤 🔜 ${dest}',
   },
   left: {
-    en: 'Move: Left => ${aim}', // FIXME
-    ja: '強制移動 : 左 => ${aim}',
-    ko: '강제이동: 왼쪽 🔜 ${aim}',
+    en: 'Move: Left => ${dest}', // FIXME
+    ja: '強制移動 : 左 => ${dest}',
+    ko: '강제이동: 왼쪽 🔜 ${dest}',
   },
   right: {
-    en: 'Move: Right => ${aim}', // FIXME
-    ja: '強制移動 : 右 => ${aim}',
-    ko: '강제이동: 오른쪽 🔜 ${aim}',
-  },
-  move: {
-    en: 'Move => ${aim}', // FIXME
-    ja: '強制移動 => ${aim}',
-    ko: '강제이동 🔜 ${aim}',
-  },
-  safety: {
-    en: 'Safe zone',
-    ja: '安置へ',
-    ko: '안전한 곳',
+    en: 'Move: Right => ${dest}', // FIXME
+    ja: '強制移動 : 右 => ${dest}',
+    ko: '강제이동: 오른쪽 🔜 ${dest}',
   },
 } as const;
 
@@ -53,16 +42,12 @@ export interface Data extends RaidbossData {
     planarTacticsType: 'count' | 'poshiume' | 'hamukatsu';
     pinwheelingType: 'stack' | 'pino' | 'spell';
   };
-  combatantData: PluginCombatantState[];
   // ketuduke
   ketuCrystalAdd: NetMatches['AddedCombatant'][];
   ketuSpringCrystalCount: number;
   ketuHydroCount: number;
-  ketuHydroStack?: NetMatches['GainsEffect'];
-  ketuHydroSpread?: NetMatches['GainsEffect'];
   ketuBuff?: 'bubble' | 'fetters';
   ketuBuffGains: NetMatches['GainsEffect'][];
-  ketuRoarSafe?: string;
   // lala
   lalaRotation?: ClockRotation;
   lalaTimes?: 3 | 5;
@@ -73,17 +58,16 @@ export interface Data extends RaidbossData {
   // statice
   stcReloads: number;
   stcMisload: number;
+  stcStackSpread: boolean;
   stcRingRing: number;
   stcBullsEyes: string[];
   stcClaws: string[];
   stcMissiles: string[];
   stcChains: string[];
   stcSeenPinwheeling: boolean;
-  stcSeenPop: boolean;
   stcMarch?: AloDirection;
   stcDuration: number;
   //
-  isStackFirst: boolean;
   settled: boolean;
 }
 
@@ -91,20 +75,6 @@ export interface Data extends RaidbossData {
 const isHorizontalCrystal = (line: NetMatches['AddedCombatant']) => {
   const epsilon = 0.1;
   return Math.abs(parseFloat(line.heading)) < epsilon;
-};
-
-// test stack first
-const isStackFirst = (
-  stack?: NetMatches['GainsEffect'],
-  spread?: NetMatches['GainsEffect'],
-): boolean => {
-  if (stack === undefined)
-    return false;
-  const stackTime = parseFloat(stack.duration);
-  if (spread === undefined)
-    return true;
-  const spreadTime = parseFloat(spread.duration);
-  return stackTime < spreadTime;
 };
 
 // test reverse rotation
@@ -117,28 +87,21 @@ const isReverseRotate = (rot: ClockRotation, times: number): boolean => {
 };
 
 //
-const forceMove = (
+const marchMove = (
   output: Output,
-  march?: AloDirection,
-  stackFirst?: boolean,
+  march: AloDirection,
+  stackFirst: boolean,
   safezone?: string,
 ): string => {
-  if (march !== undefined) {
-    const move = {
-      'front': output.forward,
-      'back': output.backward,
-      'left': output.left,
-      'right': output.right,
-    }[march];
-    if (safezone !== undefined)
-      return move!({ aim: safezone });
-    return move!({ aim: stackFirst ? output.stacks!() : output.spread!() });
-  }
+  const move = {
+    'front': output.forward,
+    'back': output.backward,
+    'left': output.left,
+    'right': output.right,
+  }[march];
   if (safezone !== undefined)
-    return safezone;
-  if (stackFirst)
-    return output.stacks!();
-  return output.spread!();
+    return move!({ dest: safezone });
+  return move!({ dest: stackFirst ? output.stacks!() : output.spread!() });
 };
 
 // 주사위를 방향으로
@@ -163,6 +126,7 @@ const triggerSet: TriggerSet<Data> = {
       id: 'flukeGaleType',
       name: {
         en: 'Fluke Gale Strat',
+        ja: 'Fluke Gale タイプ',
         ko: 'Fluke Gale 형식',
       },
       type: 'select',
@@ -171,6 +135,11 @@ const triggerSet: TriggerSet<Data> = {
           'Message only': 'spread',
           'Pylene: Brainless': 'pylene',
           'Hamukasu: North/South static': 'hamukatsu',
+        },
+        ja: {
+          'メッセージ': 'spread',
+          'ぴれん: 脳死法': 'pylene',
+          'ハムカツ: 南北': 'hamukatsu',
         },
         ko: {
           '메시지': 'spread',
@@ -184,6 +153,7 @@ const triggerSet: TriggerSet<Data> = {
       id: 'planarTacticsType',
       name: {
         en: 'Planar Tactics Strat',
+        ja: 'Planar Tactics タイプ',
         ko: 'Planar Tactics 형식',
       },
       type: 'select',
@@ -192,6 +162,11 @@ const triggerSet: TriggerSet<Data> = {
           'Count only': 'count',
           'Poshiume: 3 left or right': 'poshiume',
           'Hamukatsu: 3 right only': 'hamukatsu',
+        },
+        ja: {
+          'カウント表示': 'count',
+          'ぽしうめ: 3番左右': 'poshiume',
+          'ハムカツ: 3番右': 'hamukatsu',
         },
         ko: {
           '카운트 표시': 'count',
@@ -205,6 +180,7 @@ const triggerSet: TriggerSet<Data> = {
       id: 'pinwheelingType',
       name: {
         en: 'Pinwheeling Strat',
+        ja: 'ダート＆ウィル タイプ',
         ko: 'Pinwheeling 형식',
       },
       type: 'select',
@@ -213,6 +189,11 @@ const triggerSet: TriggerSet<Data> = {
           'Message only': 'stack',
           'Pino': 'pino',
           'Spell': 'spell',
+        },
+        ja: {
+          'メッセージ': 'stack',
+          'ぴの(ハムカツ)': 'pino',
+          'spell(Game8)': 'spell',
         },
         ko: {
           '메시지': 'stack',
@@ -226,7 +207,6 @@ const triggerSet: TriggerSet<Data> = {
   timelineFile: 'another_aloalo_island.txt',
   initData: () => {
     return {
-      combatantData: [],
       ketuCrystalAdd: [],
       ketuSpringCrystalCount: 0,
       ketuHydroCount: 0,
@@ -234,15 +214,14 @@ const triggerSet: TriggerSet<Data> = {
       lalaAlphaGains: [],
       stcReloads: 0,
       stcMisload: 0,
+      stcStackSpread: false,
       stcRingRing: 0,
       stcBullsEyes: [],
       stcClaws: [],
       stcMissiles: [],
       stcChains: [],
       stcSeenPinwheeling: false,
-      stcSeenPop: false,
       stcDuration: 0,
-      isStackFirst: false,
       settled: false,
     };
   },
@@ -293,46 +272,57 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         mesg: {
           en: 'Option: ${param}',
+          ja: 'オプション: ${param}',
           ko: '옵션: ${param}',
         },
         options: {
           en: '${fluke}/${planar}/${pin}',
+          ja: '${fluke}/${planar}/${pin}',
           ko: '${fluke}/${planar}/${pin}',
         },
         spread: {
           en: '(spread)',
+          ja: '(なし)',
           ko: '(없음)',
         },
         pylene: {
           en: 'pylene',
+          ja: 'ぴれん',
           ko: '피렌',
         },
         flukeNs: {
           en: 'N-S',
+          ja: '南北',
           ko: '남북',
         },
         count: {
           en: '(count)',
+          ja: '(カウント)',
           ko: '(카운트)',
         },
         planar13: {
           en: '1&3',
+          ja: '両方',
           ko: '양쪽',
         },
         planar3: {
           en: '3',
+          ja: '片方',
           ko: '한쪽',
         },
         stack: {
           en: '(stack)',
+          ja: '(なし)',
           ko: '(없음)',
         },
         pino: {
           en: 'pino',
+          ja: 'ぴの',
           ko: '피노',
         },
         spell: {
           en: 'spell',
+          ja: 'spell',
           ko: '스펠',
         },
       },
@@ -454,8 +444,9 @@ const triggerSet: TriggerSet<Data> = {
     {
       id: 'AAI Ketuduke Bubble Net',
       type: 'StartsUsing',
-      netRegex: { id: '8AAD', source: 'Ketuduke', capture: false },
+      netRegex: { id: ['8AAD', '8AC5'], source: 'Ketuduke', capture: false },
       response: Responses.aoe(),
+      run: (data) => data.ketuBuffGains = [],
     },
     {
       id: 'AAI Ketuduke Spring Crystals',
@@ -484,174 +475,152 @@ const triggerSet: TriggerSet<Data> = {
       // E9F Bubble
       // ECC Fetters
       netRegex: { effectId: ['E9F', 'ECC'] },
-      infoText: (data, matches, output) => {
-        if (data.me !== matches.target)
-          return;
-        data.ketuBuff = matches.effectId === 'E9F' ? 'bubble' : 'fetters';
-        if (data.ketuHydroCount !== 3)
-          return output[data.ketuBuff]!();
+      condition: (data, matches) => {
+        data.ketuBuffGains.push(matches);
+        return data.ketuBuffGains.length === 4;
       },
-      run: (data, matches) => data.ketuBuffGains.push(matches),
+      durationSeconds: 6,
+      alertText: (data, _matches, output) => {
+        const myid = data.ketuBuffGains.find((x) => x.target === data.me)?.effectId;
+        if (myid === undefined)
+          return;
+        data.ketuBuff = myid === 'E9F' ? 'bubble' : 'fetters';
+
+        const partner = data.party.jobAbbr(
+          data.ketuBuffGains.find((x) => x.effectId === myid && x.target !== data.me)?.target,
+        ) ?? output.unknown!();
+        return output[data.ketuBuff]!({ partner: partner });
+      },
+      run: (data) => data.ketuBuffGains,
       outputStrings: {
         bubble: {
-          en: 'Bubble',
-          ja: 'バブル',
-          ko: '🔵버블',
+          en: 'Bubble (w/ ${partner})',
+          ja: 'バブル (${partner})',
+          ko: '🔵버블 (${partner})',
         },
         fetters: {
-          en: 'Fetters',
-          ja: 'バインド',
-          ko: '🟡바인드',
+          en: 'Fetters (w/ ${partner})',
+          ja: 'バインド (${partner})',
+          ko: '🟡바인드 (${partner})',
         },
+        safe: {
+          en: 'Safe: ${safe}',
+          ja: '安置: ${safe}',
+          ko: '안전: ${safe}',
+        },
+        unknown: Outputs.unknown,
       },
     },
     {
-      id: 'AAI Ketuduke Hydrofall Target',
+      id: 'AAI Ketuduke Hydro Counter',
+      type: 'StartsUsing',
+      // 8AB4 = Hydrofall (stack)
+      // 8AB8 = Hydrobullet (spread)
+      netRegex: { id: ['8AB4', '8AB8'], source: 'Ketuduke', capture: false },
+      run: (data) => data.ketuHydroCount++,
+    },
+    {
+      id: 'AAI Ketuduke Hydrobullet Reminder',
       type: 'GainsEffect',
       netRegex: { effectId: 'EA3' },
-      run: (data, matches) => data.ketuHydroStack = matches,
+      condition: (data) => {
+        const bulletHydros: readonly number[] = [2, 4, 5] as const;
+        return bulletHydros.includes(data.ketuHydroCount);
+      },
+      delaySeconds: (_data, matches) => parseFloat(matches.duration) - 5,
+      durationSeconds: 4,
+      suppressSeconds: 5,
+      response: Responses.pairStack('info'),
     },
     {
-      id: 'AAI Ketuduke Hydrobullet Target',
+      id: 'AAI Ketuduke Hydrofall Reminder',
       type: 'GainsEffect',
       netRegex: { effectId: 'EA4' },
-      run: (data, matches) => data.ketuHydroSpread = matches,
-    },
-    {
-      id: 'AAI Ketuduke Fluke Gale Hydro',
-      type: 'GainsEffect',
-      netRegex: { effectId: ['EA3', 'EA4'] },
-      condition: (data) => data.ketuHydroCount === 0 || data.ketuHydroCount === 5,
-      delaySeconds: 0.5,
-      suppressSeconds: 2,
-      infoText: (_data, matches, output) => {
-        if (matches.effectId === 'EA3')
-          return output.stacks!();
-        return output.spread!();
+      condition: (data) => {
+        const fallHydros: readonly number[] = [2, 3, 5] as const;
+        return fallHydros.includes(data.ketuHydroCount);
       },
-      run: (data) => data.ketuHydroCount++,
-      outputStrings: {
-        spread: Outputs.spread,
-        stacks: Outputs.pairStack,
-      },
+      delaySeconds: (_data, matches) => parseFloat(matches.duration) - 5,
+      durationSeconds: 4,
+      suppressSeconds: 5,
+      response: Responses.spread(),
     },
+    // Pylene: https://twitter.com/ff14_pylene99/status/1719665676745650610
+    // Hamukatu Nanboku: https://ffxiv.link/0102424
     {
-      // Pylene: https://twitter.com/ff14_pylene99/status/1719665676745650610
-      // Hamukatu Nanboku: https://ffxiv.link/0102424
-      id: 'AAI Ketuduke Fluke Gale',
-      type: 'Ability',
-      netRegex: { id: '8AB1', source: 'Ketuduke', capture: false },
-      durationSeconds: 8,
-      alertText: (data, _matches, output) => {
-        data.isStackFirst = isStackFirst(data.ketuHydroStack, data.ketuHydroSpread);
+      id: 'AAI Ketuduke Fluke Gale/Hydro 1',
+      type: 'StartsUsing',
+      netRegex: { id: ['8AB4', '8AB8'], source: 'Ketuduke' },
+      condition: (data) => data.ketuHydroCount === 1 || data.ketuHydroCount === 6,
+      delaySeconds: 8,
+      durationSeconds: 12,
+      alertText: (data, matches, output) => {
+        const mech = matches.id === '8AB4' ? output.stacks!() : output.spread!();
 
         if (data.triggerSetConfig.flukeGaleType === 'spread')
-          return output.goSafeTile!();
+          return output.mesg!({ mech: mech });
 
         if (data.triggerSetConfig.flukeGaleType === 'pylene') {
-          if (data.ketuBuff === 'fetters' && !data.isStackFirst)
-            return output.pylene2!();
-          return output.pylene1!();
+          if (data.ketuBuff === 'fetters' && matches.id === '8AB8')
+            return output.pylene2!({ mech: mech });
+          return output.pylene1!({ mech: mech });
         }
 
         if (data.triggerSetConfig.flukeGaleType === 'hamukatsu') {
           if (data.ketuBuff === 'bubble')
-            return output.hamukatsuBubble!();
-          if (data.isStackFirst)
-            return output.hamukatsu1!();
-          return output.hamukatsu2!();
+            return output.hamukatsuBubble!({ mech: mech });
+          if (matches.id === '8AB4')
+            return output.hamukatsu1!({ mech: mech });
+          return output.hamukatsu2!({ mech: mech });
         }
       },
       run: (data) => delete data.ketuBuff,
       outputStrings: {
+        spread: Outputs.spread,
+        stacks: Outputs.pairStack,
+        mesg: {
+          en: 'Go to safe tile => ${mech}',
+          ja: '安置マスへ => ${mech}',
+          ko: '안전 칸으로 🔜 ${mech}',
+        },
         pylene1: {
-          en: 'Go to 1',
-          ja: '第1区域へ',
-          ko: '피렌 [1]',
+          en: 'Go to 1 => ${mech}',
+          ja: '第1区域へ => ${mech}',
+          ko: '피렌 [1] 🔜 ${mech}',
         },
         pylene2: {
-          en: 'Go to 2',
-          ja: '第2区域へ',
-          ko: '피렌 [2]',
+          en: 'Go to 2 => ${mech}',
+          ja: '第2区域へ => ${mech}',
+          ko: '피렌 [2] 🔜 ${mech}',
         },
         hamukatsu1: {
-          en: 'Go to 1',
-          ja: '第1区域の安置マスへ',
-          ko: '[1] 안전 칸',
+          en: 'Go to 1 => ${mech}',
+          ja: '第1区域の安置マスへ => ${mech}',
+          ko: '[1] 안전 칸 🔜 ${mech}',
         },
         hamukatsu2: {
-          en: 'Go to 2 safe tile ',
-          ja: '第2区域の安置マスへ',
-          ko: '[2] 안전 칸',
+          en: 'Go to 2 safe tile  => ${mech}',
+          ja: '第2区域の安置マスへ => ${mech}',
+          ko: '[2] 안전 칸 🔜 ${mech}',
         },
         hamukatsuBubble: {
-          en: 'Go to 2 safe tile (after knockback)',
-          ja: '第2区域の安置マスへ',
-          ko: '[2] 넉백한담에 🔜 안전 칸',
-        },
-        goSafeTile: {
-          en: 'Go to safe tile',
-          ja: '安置マスへ',
-          ko: '안전 타일로',
+          en: 'Go to 2 safe tile (after knockback) => ${mech}',
+          ja: '第2区域の安置マスへ => ${mech}',
+          ko: '[2] (넉백후)안전 칸 🔜 ${mech}',
         },
       },
     },
     {
-      id: 'AAI Ketuduke Blowing Bubbles',
-      type: 'GainsEffect',
-      netRegex: { effectId: ['EA3', 'EA4'], capture: false },
-      condition: (data) => data.ketuHydroCount === 1,
-      delaySeconds: 4,
+      id: 'AAI Ketuduke Blowing Bubbles/Hydro 2',
+      type: 'StartsUsing',
+      netRegex: { id: ['8AB4', '8AB8'], source: 'Ketuduke' },
+      condition: (data) => data.ketuHydroCount === 2,
       durationSeconds: 8,
-      suppressSeconds: 999999,
-      alertText: (data, _matches, output) => {
-        data.isStackFirst = isStackFirst(data.ketuHydroStack, data.ketuHydroSpread);
-        return data.isStackFirst ? output.stacks!() : output.spread!();
-      },
-      run: (data) => data.ketuHydroCount++,
+      alertText: (_data, matches, output) =>
+        matches.id === '8AB4' ? output.stacks!() : output.spread!(),
       outputStrings: {
         stacks: Outputs.stackThenSpread,
         spread: Outputs.spreadThenStack,
-      },
-    },
-    {
-      id: 'AAI Ketuduke Blowing Bubbles Stack Reminder',
-      type: 'GainsEffect',
-      netRegex: { effectId: 'EA3' },
-      condition: (data) => data.ketuHydroCount === 1,
-      delaySeconds: (_data, matches) => parseFloat(matches.duration) - 5,
-      suppressSeconds: 999999,
-      alertText: (data, _matches, output) => {
-        if (!data.isStackFirst)
-          return output.stacks!();
-      },
-      outputStrings: {
-        stacks: Outputs.pairStack,
-      },
-    },
-    {
-      id: 'AAI Ketuduke Blowing Bubbles Spread Reminder',
-      type: 'GainsEffect',
-      netRegex: { effectId: 'EA4' },
-      condition: (data) => data.ketuHydroCount === 1,
-      delaySeconds: (_data, matches) => parseFloat(matches.duration) - 5,
-      suppressSeconds: 999999,
-      alertText: (data, _matches, output) => {
-        if (data.isStackFirst)
-          return output.spread!();
-      },
-      outputStrings: {
-        spread: Outputs.spread,
-      },
-    },
-    {
-      id: 'AAI Ketuduke Twintides Hydrofall Target',
-      type: 'GainsEffect',
-      netRegex: { effectId: 'EA3', capture: false },
-      condition: (data) => data.ketuHydroCount === 2,
-      run: (data) => {
-        data.ketuHydroCount++;
-        data.ketuBuffGains = [];
       },
     },
     {
@@ -662,7 +631,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Out => Stack inside',
-          ja: '外 => ボスの下で頭割り',
+          ja: '外 => 内側でペア',
           ko: '밖에 있다 🔜 안에서 페어',
         },
       },
@@ -675,7 +644,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'In => Stack outside',
-          ja: 'ボスの下 => 外側で頭割り',
+          ja: 'ボスの下 => 外側でペア',
           ko: '안에 있다 🔜 밖에서 페어',
         },
       },
@@ -685,6 +654,8 @@ const triggerSet: TriggerSet<Data> = {
       type: 'AddedCombatant',
       netRegex: { npcNameId: '12607', capture: false },
       condition: (data) => data.ketuSpringCrystalCount === 2 && data.ketuCrystalAdd.length === 4,
+      delaySeconds: 2,
+      durationSeconds: 18,
       infoText: (data, _matches, output) => {
         const horizontal = data.ketuCrystalAdd.filter((x) => isHorizontalCrystal(x));
         const vertical = data.ketuCrystalAdd.filter((x) => !isHorizontalCrystal(x));
@@ -697,8 +668,7 @@ const triggerSet: TriggerSet<Data> = {
         for (const line of vertical) {
           const y = parseFloat(line.y);
           if (y < -10 || y > 10) {
-            data.ketuRoarSafe = output.eastWestSafe!();
-            return output.text!({ safe: data.ketuRoarSafe });
+            return output.text!({ safe: output.eastWestSafe!() });
           }
         }
 
@@ -706,13 +676,11 @@ const triggerSet: TriggerSet<Data> = {
         for (const line of horizontal) {
           const x = parseFloat(line.x);
           if (x < -10 || x > 10) {
-            data.ketuRoarSafe = output.northSouthSafe!();
-            return output.text!({ safe: data.ketuRoarSafe });
+            return output.text!({ safe: output.northSouthSafe!() });
           }
         }
 
-        data.ketuRoarSafe = output.cornersSafe!();
-        return output.text!({ safe: data.ketuRoarSafe });
+        return output.text!({ safe: output.cornersSafe!() });
       },
       outputStrings: {
         northSouthSafe: {
@@ -738,58 +706,11 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: 'AAI Ketuduke Roar Search',
-      type: 'GainsEffect',
-      netRegex: { effectId: 'EA4' },
-      condition: (data) => data.ketuHydroCount === 3,
-      delaySeconds: (_data, matches) => parseFloat(matches.duration) - 10,
-      durationSeconds: 8,
-      suppressSeconds: 999999,
-      response: (data, _matches, output) => {
-        // cactbot-builtin-response
-        output.responseOutputStrings = {
-          spread: Outputs.spread,
-          bubble: {
-            en: 'Bubble (${player})',
-            ja: '散会 (バブル: ${player})',
-            ko: '🔵버블 (${player})',
-          },
-          fetters: {
-            en: 'Fetters (${player})',
-            ja: '散会 (バインド: ${player})',
-            ko: '🟡바인드 (${player})',
-          },
-          safe: {
-            en: 'Safe: ${safe}',
-            ja: '安置: ${safe}',
-            ko: '안전: ${safe}',
-          },
-        };
-        if (data.ketuBuff === undefined)
-          return;
-        const eid = { bubble: 'E9F', fetters: 'ECC' }[data.ketuBuff];
-        const partner = data.ketuBuffGains.find((x) => x.effectId === eid && x.target !== data.me);
-        if (partner === undefined)
-          return {
-            alertText: output.spread!(),
-            infoText: output.safe!({ safe: data.ketuRoarSafe }),
-          };
-        return {
-          alertText: output[data.ketuBuff]!({ player: data.party.jobAbbr(partner.target) }),
-          infoText: output.safe!({ safe: data.ketuRoarSafe }),
-        };
-      },
-      run: (data) => {
-        delete data.ketuRoarSafe;
-        data.ketuHydroCount++;
-        data.ketuBuffGains = [];
-      },
-    },
-    {
       id: 'AAI Ketuduke Roar Move',
       type: 'StartsUsing',
       netRegex: { id: '8AAC', source: 'Spring Crystal', capture: false },
       condition: (data) => data.ketuHydroCount === 4,
+      durationSeconds: 4,
       suppressSeconds: 2,
       alertText: (data, _matches, output) => {
         if (data.ketuBuff === undefined)
@@ -816,59 +737,31 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: 'AAI Ketuduke Angry Seas',
-      type: 'GainsEffect',
-      netRegex: { effectId: ['EA3', 'EA4'], capture: false },
-      condition: (data) => data.ketuHydroCount === 4,
-      delaySeconds: 4.5,
-      suppressSeconds: 999999,
-      alertText: (data, _matches, output) => {
-        data.isStackFirst = isStackFirst(data.ketuHydroStack, data.ketuHydroSpread);
-        return data.isStackFirst ? output.stacks!() : output.spread!();
-      },
-      run: (data) => data.ketuHydroCount++,
+      id: 'AAI Ketuduke Angry Seas/Hydro 5',
+      type: 'StartsUsing',
+      netRegex: { id: ['8AB4', '8AB8'], source: 'Ketuduke' },
+      condition: (data) => data.ketuHydroCount === 5,
+      durationSeconds: 8,
+      alertText: (_data, matches, output) =>
+        matches.id === '8AB4' ? output.stacks!() : output.spread!(),
       outputStrings: {
         stacks: {
           en: 'Knockback => Stack => Spread',
-          ja: 'ノックバック => 頭割り => 散開',
-          ko: '넉백 🔜 뭉쳤다 🔜 흩어져요',
+          ja: 'ノックバック => ペア => 散開',
+          ko: '넉백 🔜 페어 🔜 흩어져요',
         },
         spread: {
           en: 'Knockback => Spread => Stack',
-          ja: 'ノックバック => 散開 => 頭割り',
-          ko: '넉백 🔜 흩어졌다 🔜 뭉쳐요',
+          ja: 'ノックバック => 散開 => ペア',
+          ko: '넉백 🔜 흩어졌다 🔜 페어',
         },
       },
     },
     {
-      id: 'AAI Ketuduke Angry Seas Stack Reminder',
-      type: 'GainsEffect',
-      netRegex: { effectId: 'EA3' },
-      condition: (data) => data.ketuHydroCount === 4,
-      delaySeconds: (_data, matches) => parseFloat(matches.duration) - 5,
-      suppressSeconds: 999999,
-      alertText: (data, _matches, output) => {
-        if (!data.isStackFirst)
-          return output.stacks!();
-      },
-      outputStrings: {
-        stacks: Outputs.pairStack,
-      },
-    },
-    {
-      id: 'AAI Ketuduke Angry Seas Spread Reminder',
-      type: 'GainsEffect',
-      netRegex: { effectId: 'EA4' },
-      condition: (data) => data.ketuHydroCount === 4,
-      delaySeconds: (_data, matches) => parseFloat(matches.duration) - 5,
-      suppressSeconds: 999999,
-      alertText: (data, _matches, output) => {
-        if (data.isStackFirst)
-          return output.spread!();
-      },
-      outputStrings: {
-        spread: Outputs.spread,
-      },
+      id: 'AAI Ketuduke Angry Seas Knockback',
+      type: 'StartsUsing',
+      netRegex: { id: '8AC1', source: 'Ketuduke', capture: false },
+      response: Responses.knockback(),
     },
     {
       id: 'AAI Ketuduke Fluke Typhoon Bubble',
@@ -887,23 +780,28 @@ const triggerSet: TriggerSet<Data> = {
             return output.right!();
           return;
         }
-        if (parseFloat(data.ketuCrystalAdd[0].x) < 0)
-          return output.left!();
-        return output.right!();
+        if (data.role === 'dps') {
+          if (parseFloat(data.ketuCrystalAdd[0].x) < 0)
+            return output.left!();
+          return output.right!();
+        }
       },
       run: (data) => data.ketuCrystalAdd = [],
       outputStrings: {
         text: {
           en: '(Ready to Bubble!)',
+          ja: '(そろそろバブル！)',
           ko: '(슬슬 버블!)',
         },
         left: {
           en: '(Bubble: Left)',
+          ja: '(左からバブル！)',
           ko: '(왼쪽에서 버블!)',
         },
         right: {
           en: '(Bubble: Right DPS)',
-          ko: '(오른쪽에서 버블)',
+          ja: '(右からバブル！)',
+          ko: '(오른쪽에서 버블!)',
         },
       },
     },
@@ -1024,7 +922,7 @@ const triggerSet: TriggerSet<Data> = {
       id: 'AAI Lala Inferno Theorem',
       type: 'StartsUsing',
       netRegex: { id: '88AE', source: 'Lala', capture: false },
-      response: Responses.aoe(),
+      response: Responses.aoe('alert'),
     },
     {
       id: 'AAI Lala Boss Rotate',
@@ -1497,7 +1395,7 @@ const triggerSet: TriggerSet<Data> = {
       netRegex: { id: '8925', source: 'Statice', capture: false },
       preRun: (data) => {
         if (data.stcReloads === 0)
-          data.isStackFirst = false;
+          data.stcStackSpread = false;
         data.stcReloads++;
       },
       infoText: (data, _matches, output) => {
@@ -1518,7 +1416,7 @@ const triggerSet: TriggerSet<Data> = {
       netRegex: { id: '8926', source: 'Statice', capture: false },
       preRun: (data) => {
         if (data.stcReloads === 0)
-          data.isStackFirst = true;
+          data.stcStackSpread = true;
         if (data.stcReloads < 7)
           data.stcMisload = data.stcReloads;
         data.stcReloads++;
@@ -1534,7 +1432,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: '(${safe}${arrow}, for later)',
-          ja: '(後で${safe}${arrow})',
+          ja: '(安置: ${safe}${arrow})',
           ko: '(안전: ${safe}${arrow})',
         },
         stacks: {
@@ -1549,11 +1447,11 @@ const triggerSet: TriggerSet<Data> = {
       type: 'StartsUsing',
       netRegex: { id: '8D1A', source: 'Statice', capture: false },
       alertText: (data, _matches, output) => {
-        if (data.isStackFirst)
+        if (data.stcStackSpread)
           return output.stacks!();
         return output.spread!();
       },
-      run: (data) => data.isStackFirst = !data.isStackFirst,
+      run: (data) => data.stcStackSpread = !data.stcStackSpread,
       outputStrings: {
         stacks: Outputs.getTogether,
         spread: Outputs.spread,
@@ -1564,20 +1462,16 @@ const triggerSet: TriggerSet<Data> = {
       type: 'StartsUsing',
       netRegex: { id: '8959', source: 'Statice', capture: false },
       alertText: (data, _matches, output) => {
-        if (data.stcDuration < 10)
-          return data.isStackFirst ? output.stacks!() : output.spread!();
-        if (data.stcDuration < 20)
-          return forceMove(output, data.stcMarch, data.isStackFirst);
-        if (data.stcDuration > 50)
-          return forceMove(output, data.stcMarch, data.isStackFirst);
-        return data.isStackFirst ? output.stacks!() : output.spread!();
+        if (data.stcMarch !== undefined) {
+          const march = marchMove(output, data.stcMarch, data.stcStackSpread);
+          delete data.stcMarch;
+          return march;
+        }
+        return data.stcStackSpread ? output.stacks!() : output.spread!();
       },
-      run: (data) => {
-        data.isStackFirst = !data.isStackFirst;
-        data.stcDuration = 0;
-      },
+      run: (data) => data.stcStackSpread = !data.stcStackSpread,
       outputStrings: {
-        ...ForceMoveStrings,
+        ...MarchMoveStrings,
       },
     },
     {
@@ -1590,8 +1484,8 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         text: {
-          en: 'Go to ${safe}${arrow}',
-          ja: '${safe}${arrow}へ',
+          en: 'Safe: ${safe}${arrow}',
+          ja: '安置: ${safe}${arrow}',
           ko: '안전: ${safe}${arrow}',
         },
       },
@@ -1600,53 +1494,52 @@ const triggerSet: TriggerSet<Data> = {
       id: 'AAI Statice Ring a Ring o\' Explosions',
       type: 'StartsUsing',
       netRegex: { id: '895C', source: 'Statice', capture: false },
-      durationSeconds: 8,
+      durationSeconds: 6,
       response: (data, _matches, output) => {
         // cactbot-builtin-response
         output.responseOutputStrings = {
-          first: {
+          move1: {
             en: 'Avoid Bomb!',
             ja: '爆弾回避！',
             ko: '폭탄 피해요!',
           },
-          second: {
+          move2: {
             en: 'Remember Bomb position!',
             ja: '爆弾の位置をおぼえて！',
             ko: '폭탄 위치 기억! 빙글빙글!',
           },
-          third: {
+          move3: {
             en: 'Avoid Bomb!',
             ja: '爆弾回避！',
             ko: '폭탄없는 안전한 곳 찾아요!',
           },
-          fourth: {
-            en: 'Go to ${safe}${arrow}, avoid donuts',
+          move4: {
+            en: 'Safe: ${mesg}',
+            ja: '安置: ${mesg}',
+            ko: '안전: ${mesg}',
+          },
+          mesg4: {
+            en: '${safe}${arrow}, avoid donuts',
             ja: '${safe}${arrow}へ、ドーナツ回避',
-            ko: '${safe}${arrow} 쪽 안전한 곳으로! 도넛 조심!',
+            ko: '${safe}${arrow}, 도넛 조심!',
           },
-          forthMove: {
-            en: '${safe}${arrow}',
-            ja: '${safe}${arrow}へ',
-            ko: '${safe}${arrow}',
-          },
-          ...ForceMoveStrings,
+          ...MarchMoveStrings,
         };
         data.stcRingRing++;
         if (data.stcRingRing === 1)
-          return { infoText: output.first!() };
+          return { infoText: output.move1!() };
         if (data.stcRingRing === 2)
-          return { infoText: output.second!() };
+          return { infoText: output.move2!() };
         if (data.stcRingRing === 3)
-          return { infoText: output.third!() };
+          return { infoText: output.move3!() };
         if (data.stcRingRing === 4) {
           const arrow = diceToArrow(data.stcMisload);
-          const fourth = output.fourth!({ safe: data.stcMisload, arrow: arrow });
-          if (data.stcDuration > 39 && data.stcDuration < 50) {
-            const aim = output.forthMove!({ safe: data.stcMisload, arrow: arrow });
-            const move = forceMove(output, data.stcMarch, undefined, aim);
-            return { infoText: fourth, alertText: move };
-          }
-          return { infoText: fourth };
+          const mesg4 = output.mesg4!({ safe: data.stcMisload, arrow: arrow });
+          if (data.stcMarch === undefined || data.stcDuration > 40) // 51초는 나중에 트랩슈팅2
+            return { alertText: output.move4!({ mesg: mesg4 }) };
+          const march = marchMove(output, data.stcMarch, false, mesg4);
+          delete data.stcMarch;
+          return { alertText: march };
         }
       },
     },
@@ -1722,24 +1615,21 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: 'AAI Statice Beguiling Glitter',
-      type: 'Ability',
-      netRegex: { id: '8963', source: 'Statice', capture: false },
-      condition: (data) => !data.stcSeenPop,
-      delaySeconds: 3,
-      suppressSeconds: 1,
+      id: 'AAI Statice Pop',
+      type: 'StartsUsing',
+      netRegex: { id: '894E', source: 'Statice', capture: false },
+      suppressSeconds: 10,
       response: Responses.knockback(),
     },
     {
-      id: 'AAI Statice Beguiling Glitter In/Out',
-      type: 'Ability',
-      netRegex: { id: '8963', source: 'Statice', capture: false },
-      condition: (data) => !data.stcSeenPop,
-      delaySeconds: 8.5,
+      id: 'AAI Statice Pop Trapshooting',
+      type: 'StartsUsing',
+      netRegex: { id: '894E', source: 'Statice', capture: false },
+      delaySeconds: 3,
       durationSeconds: 8,
-      suppressSeconds: 1,
+      suppressSeconds: 10,
       infoText: (data, _matches, output) => {
-        if (data.isStackFirst)
+        if (data.stcStackSpread)
           return output.out!();
         return output.in!();
       },
@@ -1755,12 +1645,6 @@ const triggerSet: TriggerSet<Data> = {
           ko: '바깥으로 (한가운데서 뭉칠꺼임)',
         },
       },
-    },
-    {
-      id: 'AAI Statice Pop',
-      type: 'StartsUsing',
-      netRegex: { id: '894E', source: 'Statice', capture: false },
-      run: (data) => data.stcSeenPop = true,
     },
     {
       id: 'AAI Statice March',
@@ -1790,8 +1674,9 @@ const triggerSet: TriggerSet<Data> = {
         if (!data.stcClaws.includes(data.me))
           return;
         const partner = data.stcClaws[data.stcClaws[0] !== data.me ? 0 : 1];
-        const name = partner !== undefined ? data.party.jobAbbr(partner) : output.unknown!();
-        return output.text!({ partner: name });
+        return output.text!({
+          partner: partner !== undefined ? data.party.jobAbbr(partner) : output.unknown!(),
+        });
       },
       run: (data) => data.stcClaws = [],
       outputStrings: {
@@ -1815,8 +1700,9 @@ const triggerSet: TriggerSet<Data> = {
         if (!data.stcMissiles.includes(data.me))
           return;
         const partner = data.stcMissiles[data.stcMissiles[0] !== data.me ? 0 : 1];
-        const name = partner !== undefined ? data.party.jobAbbr(partner) : output.unknown!();
-        return output.text!({ partner: name });
+        return output.text!({
+          partner: partner !== undefined ? data.party.jobAbbr(partner) : output.unknown!(),
+        });
       },
       run: (data) => data.stcMissiles = [],
       outputStrings: {
@@ -1851,7 +1737,7 @@ const triggerSet: TriggerSet<Data> = {
     {
       id: 'AAI Statice Ball of Fire Rotation',
       type: 'HeadMarker',
-      netRegex: { id: ['009C', '009D'], target: 'Ball of Fire' },
+      netRegex: { id: ['009C', '009D'] },
       durationSeconds: 13,
       infoText: (_data, matches, output) => {
         if (matches.id === '009C')
@@ -1883,8 +1769,9 @@ const triggerSet: TriggerSet<Data> = {
         if (!data.stcChains.includes(data.me))
           return;
         const partner = data.stcChains[data.stcChains[0] !== data.me ? 0 : 1];
-        const name = partner !== undefined ? data.party.jobAbbr(partner) : output.unknown!();
-        return output.text!({ partner: name });
+        return output.text!({
+          partner: partner !== undefined ? data.party.jobAbbr(partner) : output.unknown!(),
+        });
       },
       run: (data) => data.stcChains = [],
       outputStrings: {

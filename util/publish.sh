@@ -11,7 +11,7 @@ cp -r $BIN/CactbotOverlay.dll $OUT/
 cp -r $BIN/CactbotEventSource.dll $OUT/
 cp -r $BASE/dist/ui/ $OUT/
 cp -r $BASE/dist/resources/ $OUT/
-cp $BASE/*.md $OUT/
+#cp $BASE/*.md $OUT/
 
 # manually copy readme due to avoid local user/ files
 # mkdir -p $OUT/user/

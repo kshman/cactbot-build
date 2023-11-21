@@ -35,6 +35,7 @@ module.exports = {
         'moveAround',
         'breakChains',
         'moveChainsTogether',
+        'getTowers',
       ],
       'alert': [
         'tankBuster',
@@ -65,6 +66,7 @@ module.exports = {
         'preyOn',
         'awayFrom',
         'earthshaker',
+        'pairStack',
       ],
       'alarm': [
         'tankBusterSwap',
@@ -79,6 +81,7 @@ module.exports = {
       'alert, info': [
         'tankBuster',
         'preyOn',
+        'sharedOrInvinTankBuster',
       ],
       'alarm, alert': [
         'tankBusterSwap',
