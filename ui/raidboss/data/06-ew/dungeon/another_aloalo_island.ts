@@ -163,6 +163,7 @@ const triggerSet: TriggerSet<Data> = {
       id: 'flukeGaleType',
       name: {
         en: 'Fluke Gale Strat',
+        ja: 'Fluke Gale タイプ',
         ko: 'Fluke Gale 형식',
       },
       type: 'select',
@@ -171,6 +172,11 @@ const triggerSet: TriggerSet<Data> = {
           'Message only': 'spread',
           'Pylene: Brainless': 'pylene',
           'Hamukasu: North/South static': 'hamukatsu',
+        },
+        ja: {
+          'メッセージ': 'spread',
+          'ぴれん: 脳死法': 'pylene',
+          'ハムカツ: 南北': 'hamukatsu',
         },
         ko: {
           '메시지': 'spread',
@@ -184,6 +190,7 @@ const triggerSet: TriggerSet<Data> = {
       id: 'planarTacticsType',
       name: {
         en: 'Planar Tactics Strat',
+        ja: 'Planar Tactics タイプ',
         ko: 'Planar Tactics 형식',
       },
       type: 'select',
@@ -192,6 +199,11 @@ const triggerSet: TriggerSet<Data> = {
           'Count only': 'count',
           'Poshiume: 3 left or right': 'poshiume',
           'Hamukatsu: 3 right only': 'hamukatsu',
+        },
+        ja: {
+          'カウント表示': 'count',
+          'ぽしうめ: 3番左右': 'poshiume',
+          'ハムカツ: 3番右': 'hamukatsu',
         },
         ko: {
           '카운트 표시': 'count',
@@ -205,6 +217,7 @@ const triggerSet: TriggerSet<Data> = {
       id: 'pinwheelingType',
       name: {
         en: 'Pinwheeling Strat',
+        ja: 'ダート＆ウィル タイプ',
         ko: 'Pinwheeling 형식',
       },
       type: 'select',
@@ -213,6 +226,11 @@ const triggerSet: TriggerSet<Data> = {
           'Message only': 'stack',
           'Pino': 'pino',
           'Spell': 'spell',
+        },
+        ja: {
+          'メッセージ': 'stack',
+          'ぴの(ハムカツ)': 'pino',
+          'spell(Game8)': 'spell',
         },
         ko: {
           '메시지': 'stack',
@@ -293,46 +311,57 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         mesg: {
           en: 'Option: ${param}',
+          ja: 'オプション: ${param}',
           ko: '옵션: ${param}',
         },
         options: {
           en: '${fluke}/${planar}/${pin}',
+          ja: '${fluke}/${planar}/${pin}',
           ko: '${fluke}/${planar}/${pin}',
         },
         spread: {
           en: '(spread)',
+          ja: '(なし)',
           ko: '(없음)',
         },
         pylene: {
           en: 'pylene',
+          ja: 'ぴれん',
           ko: '피렌',
         },
         flukeNs: {
           en: 'N-S',
+          ja: '南北',
           ko: '남북',
         },
         count: {
           en: '(count)',
+          ja: '(カウント)',
           ko: '(카운트)',
         },
         planar13: {
           en: '1&3',
+          ja: '両方',
           ko: '양쪽',
         },
         planar3: {
           en: '3',
+          ja: '片方',
           ko: '한쪽',
         },
         stack: {
           en: '(stack)',
+          ja: '(なし)',
           ko: '(없음)',
         },
         pino: {
           en: 'pino',
+          ja: 'ぴの',
           ko: '피노',
         },
         spell: {
           en: 'spell',
+          ja: 'spell',
           ko: '스펠',
         },
       },
@@ -895,15 +924,18 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: '(Ready to Bubble!)',
+          ja: '(そろそろバブル！)',
           ko: '(슬슬 버블!)',
         },
         left: {
           en: '(Bubble: Left)',
+          ja: '(左からバブル！)',
           ko: '(왼쪽에서 버블!)',
         },
         right: {
           en: '(Bubble: Right DPS)',
-          ko: '(오른쪽에서 버블)',
+          ja: '(右からバブル！)',
+          ko: '(오른쪽에서 버블!)',
         },
       },
     },
