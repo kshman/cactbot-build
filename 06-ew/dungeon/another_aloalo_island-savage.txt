@@ -25,22 +25,21 @@ hideall "--setup--"
 1022.0 "--middle--" sync / 1[56]:[^:]*:Ketuduke:8A77:/
 1027.0 "Spring Crystals 1" sync / 1[56]:[^:]*:Ketuduke:8AA8:/
 1034.0 "Bubble Net" sync / 1[56]:[^:]*:Ketuduke:8AAD:/
-1041.0 "Hydrobullet/Hydrofall (buff)" sync / 1[56]:[^:]*:Ketuduke:(8AB8|8AB4):/
+1041.0 "Hydrobullet/Hydrofall 1" sync / 1[56]:[^:]*:Ketuduke:(8AB8|8AB4):/
 1050.0 "Fluke Gale (cast)" sync / 1[56]:[^:]*:Ketuduke:8AB1:/
 1060.0 "Fluke Gale 1" sync / 1[56]:[^:]*:Ketuduke:8AB2:/
 1062.0 "Fluke Gale 2" sync / 1[56]:[^:]*:Ketuduke:8AB3:/
 1065.0 "Saturate" sync / 1[56]:[^:]*:Spring Crystal:8ADC:/
 1065.1 "Hydrobullet/Hydrofall" sync / 1[56]:[^:]*:Ketuduke:(8ADF|8ADE):/
 
-1074.0 "Hydrofall/Hydrobullet (buff)" sync / 1[56]:[^:]*:Ketuduke:(8AB4|8AB8):/
-1077.1 "Hydrobullet/Hydrofall (buff)" sync / 1[56]:[^:]*:Ketuduke:(8C6D|8AB5):/
+1074.0 "Hydrofall/Hydrobullet 2" sync / 1[56]:[^:]*:Ketuduke:(8AB4|8AB8):/
 1084.3 "Blowing Bubbles" sync / 1[56]:[^:]*:Ketuduke:8ABD:/
 1091.4 "Hydrobomb x3" sync / 1[56]:[^:]*:Ketuduke:8AD0:/
 1096.3 "Hydrofall/Hydrobullet" sync / 1[56]:[^:]*:Ketuduke:(8ADE|8ADF):/
 1099.6 "Hydrobomb x3" sync / 1[56]:[^:]*:Ketuduke:8AD0:/
 1102.5 "Hydrobullet/Hydrofall" sync / 1[56]:[^:]*:Ketuduke:(8ADF|8ADE):/
 
-1113.6 "Hydrofall (buff)" sync / 1[56]:[^:]*:Ketuduke:8AB4:/
+1113.6 "Hydrofall 3" sync / 1[56]:[^:]*:Ketuduke:8AB4:/
 1118.9 "Strewn Bubbles" sync / 1[56]:[^:]*:Ketuduke:8ABB:/
 1130.3 "Receding Twintides/Encroaching Twintides" sync / 1[56]:[^:]*:Ketuduke:(8AE7|8AE9):/
 1130.9 "Sphere Shatter 1" sync / 1[56]:[^:]*:Ketuduke:8AE0:/
@@ -48,7 +47,7 @@ hideall "--setup--"
 1134.0 "Sphere Shatter 2" sync / 1[56]:[^:]*:Ketuduke:8AE0:/
 1134.0 "Hydrofall" sync / 1[56]:[^:]*:Ketuduke:8ADE:/
 
-1143.7 "Hydrobullet (buff)" sync / 1[56]:[^:]*:Ketuduke:8AB8:/
+1143.7 "Hydrobullet 4" sync / 1[56]:[^:]*:Ketuduke:8AB8:/
 1149.7 "Roar" sync / 1[56]:[^:]*:Ketuduke:8AC4:/
 1154.6 "Spring Crystals 2" sync / 1[56]:[^:]*:Ketuduke:8AA8:/
 1164.6 "Bubble Net" sync / 1[56]:[^:]*:Ketuduke:8AC5:/
@@ -58,11 +57,11 @@ hideall "--setup--"
 1184.1 "Hundred Lashings" sync / 1[56]:[^:]*:Aloalo Zaratan:8ACA:/
 
 1190.7 "--middle--" sync / 1[56]:[^:]*:Ketuduke:8A77:/
-1199.4 "Hydrofall/Hydrobullet (buff)" sync / 1[56]:[^:]*:Ketuduke:(8AB4|8AB8):/
-1202.4 "Hydrobullet/Hydrofall (buff)" sync / 1[56]:[^:]*:Ketuduke:(8C6D|8AB5):/
+1199.4 "Hydrofall/Hydrobullet 5" sync / 1[56]:[^:]*:Ketuduke:(8AB4|8AB8):/
 1210.4 "Angry Seas" sync / 1[56]:[^:]*:Ketuduke:8AE1:/
 1211.6 "Hydrobullet/Hydrofall" sync / 1[56]:[^:]*:Ketuduke:(8C6D|8AB5):/
 1212.2 "Hydrofall/Hydrobullet" sync / 1[56]:[^:]*:[^:]*:(8ADF|8ADE):/ # this sometimes has the wrong source
+
 1214.8 "Spring Crystals 3" sync / 1[56]:[^:]*:Ketuduke:8AA8:/
 1216.8 "Hydrobullet/Hydrofall" sync / 1[56]:[^:]*:Ketuduke:(8ADF|8ADE):/
 1221.8 "Bubble Net" sync / 1[56]:[^:]*:Ketuduke:8AAD:/
@@ -71,16 +70,16 @@ hideall "--setup--"
 1236.4 "Saturate" sync / 1[56]:[^:]*:Spring Crystal:8ADB:/
 1238.8 "Burst x4" sync / 1[56]:[^:]*:Ketuduke:8AE2:/
 
-1246.8 "Spring Crystals" sync / 1[56]:[^:]*:Ketuduke:8AA8:/
+1246.8 "Spring Crystals 4" sync / 1[56]:[^:]*:Ketuduke:8AA8:/
 1253.8 "Bubble Net" sync / 1[56]:[^:]*:Ketuduke:8AAD:/
-1260.8 "Hydrobullet/Hydrofall (buff)" sync / 1[56]:[^:]*:Ketuduke:(8AB8|8AB4):/
+1260.8 "Hydrobullet/Hydrofall 6" sync / 1[56]:[^:]*:Ketuduke:(8AB8|8AB4):/
 1269.9 "Fluke Gale (cast)" sync / 1[56]:[^:]*:Ketuduke:8AB1:/
 1279.9 "Fluke Gale 1" sync / 1[56]:[^:]*:Ketuduke:8AB2:/
 1281.9 "Fluke Gale 2" sync / 1[56]:[^:]*:Ketuduke:8AB3:/
 1285.0 "Saturate" sync / 1[56]:[^:]*:Spring Crystal:8ADC:/
 1285.0 "Hydrobullet/Hydrofall" sync / 1[56]:[^:]*:Ketuduke:(8ADF|8ADE):/
 
-1294.0 "Hydrofall (buff)" sync / 1[56]:[^:]*:Ketuduke:8AB4:/
+1294.0 "Hydrofall 7" sync / 1[56]:[^:]*:Ketuduke:8AB4:/
 1299.3 "Strewn Bubbles" sync / 1[56]:[^:]*:Ketuduke:8ABB:/
 1310.7 "Receding Twintides/Encroaching Twintides" sync / 1[56]:[^:]*:Ketuduke:(8AE7|8AE9):/
 1311.3 "Sphere Shatter 1" sync / 1[56]:[^:]*:Ketuduke:8AE0:/
