@@ -8,7 +8,6 @@ on:
 jobs:
   create-release:
     runs-on: windows-latest
-    if: ${{ github.repository == 'quisquous/cactbot' }}
     env:
       GITHUB_TOKEN: ${{ secrets.BOT_TOKEN }}
     steps:
@@ -69,7 +68,6 @@ jobs:
 
   create-npm-package:
     runs-on: ubuntu-latest
-    if: ${{ github.repository == 'quisquous/cactbot' }}
     steps:
       - name: Checkout Code
         uses: actions/checkout@v3
