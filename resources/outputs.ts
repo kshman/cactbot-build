@@ -949,9 +949,9 @@ export default {
     ko: '따로 따로 탱크버스터',
   },
   pairStack: {
-    en: 'Stack with partner',
+    en: 'Stack',
     ja: 'ペア',
-    ko: '페어, 둘이 맞아요',
+    ko: '페어',
   },
   pairStackOnPlayer: {
     en: 'Stack: ${player}',
