@@ -16,6 +16,13 @@ Options.Triggers.push({
     };
   },
   triggers: [
+    // ----------------------------------------- Trash
+    {
+      id: 'Aloalo Ahool Soundwave',
+      type: 'StartsUsing',
+      netRegex: { id: '8869', source: 'Aloalo Ahool', capture: false },
+      response: Responses.aoe(),
+    },
     // ----------------------------------------- Quaqua
     {
       id: 'Aloalo Quaqua Made Magic',
@@ -33,13 +40,11 @@ Options.Triggers.push({
           return output.first();
         if (data.quaArmamentsCount === 2)
           return output.second();
-        if (data.quaArmamentsCount === 3)
-          return output.third();
-        return output.text();
+        return output.third();
       },
       outputStrings: {
         first: {
-          en: 'Outside of between Orbs',
+          en: 'Away from Orbs',
           de: 'Außen zwichen den Orbs',
           ja: 'ハンマー、玉の間の外側へ',
           ko: '망치, 피해요',
@@ -51,12 +56,6 @@ Options.Triggers.push({
           ko: '도넛, 안으로',
         },
         third: {
-          en: 'Under Donut Orbs',
-          de: 'Unter Donut Orbs',
-          ja: 'ドーナツ玉の下へ',
-          ko: '도넛 안으로',
-        },
-        text: {
           en: 'Under Donut Far From Axe',
           de: 'Unter Donut und weit weg von der Axt',
           ja: '玉に気を付けて',
@@ -108,14 +107,27 @@ Options.Triggers.push({
       },
     },
     {
-      id: 'Aloalo Quaqua Arcane Armaments Trident',
+      id: 'Aloalo Quaqua Arcane Armaments Water Trident',
       type: 'StartsUsing',
       netRegex: { id: '8B9F', source: 'Quaqua', capture: false },
       infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
-          en: 'Outside between tridents',
+          en: 'Away from tridents',
           de: 'Außen zwichen den Dreizack',
+          ja: '槍の間の外側へ',
+          ko: '바깥에서 창, 떨어져요',
+        },
+      },
+    },
+    {
+      id: 'Aloalo Quaqua Arcane Armaments Poison Trident',
+      type: 'StartsUsing',
+      netRegex: { id: '8BA3', source: 'Quaqua', capture: false },
+      infoText: (_data, _matches, output) => output.text(),
+      outputStrings: {
+        text: {
+          en: 'Avoid spreading trident puddles',
           ja: '槍の間の外側へ',
           ko: '바깥에서 창, 떨어져요',
         },
@@ -126,20 +138,6 @@ Options.Triggers.push({
       type: 'StartsUsing',
       netRegex: { id: '8B95', source: 'Quaqua', capture: false },
       response: Responses.getBehind(),
-    },
-    {
-      id: 'Aloalo Quaqua Howl',
-      type: 'StartsUsing',
-      netRegex: { id: '8B96', source: 'Quaqua', capture: false },
-      infoText: (_data, _matches, output) => output.text(),
-      outputStrings: {
-        text: {
-          en: 'Adds',
-          de: 'Adds',
-          ja: 'ざこギミック',
-          ko: '쫄 나와요',
-        },
-      },
     },
     {
       id: 'Aloalo Quaqua Scalding Waves',
@@ -177,6 +175,7 @@ Options.Triggers.push({
       type: 'StartsUsing',
       netRegex: { id: '8AA5', source: 'Ketuduke', capture: false },
       response: Responses.aoe(),
+      run: (data) => data.isKetuFight = true,
     },
     {
       id: 'Aloalo Ketuduke Encroaching Twintides',
@@ -191,27 +190,13 @@ Options.Triggers.push({
       response: Responses.getOutThenIn(),
     },
     {
-      id: 'Aloalo Ketuduke Roar',
-      type: 'StartsUsing',
-      netRegex: { id: '8A92', source: 'Ketuduke', capture: false },
-      infoText: (_data, _matches, output) => output.text(),
-      outputStrings: {
-        text: {
-          en: 'Adds',
-          de: 'Adds',
-          ja: 'ざこギミック',
-          ko: '쫄 나와요',
-        },
-      },
-    },
-    {
       id: 'Aloalo Ketuduke Fluke Typhoon',
       type: 'StartsUsing',
       netRegex: { id: '8A84', source: 'Ketuduke', capture: false },
       infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
-          en: 'Bubbles 2 tiles knockback',
+          en: 'Bubbles Move 2 Tiles',
           de: 'Blasen 2 Flächen Rückstoß',
           ja: '泡のみ2マスのノックバック',
           ko: '거품만 2칸 넉백',
@@ -239,7 +224,7 @@ Options.Triggers.push({
       infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
-          en: 'Bubbles 2 tiles knockback + Puddles',
+          en: 'Bubbles Move 2 Tiles + Puddles',
           de: 'Blasen 2 Flächen Rückstoß + Flächen',
           ja: '泡のみ2マスのノックバック + ゆか',
           ko: '거품 2칸 넉백 + 곧 장판',
@@ -260,6 +245,65 @@ Options.Triggers.push({
           ja: 'ついてくるAOE回避',
           cn: '躲避追踪AOE',
           ko: '연속 따라오는 장판',
+        },
+      },
+    },
+    {
+      // Path 01
+      id: 'Aloalo Ketuduke Water III',
+      type: 'Tether',
+      netRegex: { id: '0001', source: 'Summoned Apa' },
+      condition: Conditions.targetIsYou(),
+      infoText: (_data, _matches, output) => output.text(),
+      outputStrings: {
+        text: {
+          en: 'Stretch Tether',
+          ko: '줄 늘려요',
+        },
+      },
+    },
+    {
+      // Path 02
+      id: 'Aloalo Ketuduke Tidal Wave',
+      type: 'StartsUsing',
+      netRegex: { id: '8D12', source: 'Ketuduke', capture: false },
+      alertText: (_data, _matches, output) => output.text(),
+      outputStrings: {
+        text: {
+          en: 'Knockback => Get in Bubble',
+          ko: '넉백 🔜 버블 타세요',
+        },
+      },
+    },
+    {
+      // Path 03
+      id: 'Aloalo Ketuduke Zaratan Add',
+      type: 'AddedCombatant',
+      netRegex: { npcNameId: '12539', npcBaseId: '16538', capture: false },
+      condition: (data) => data.isKetuFight,
+      delaySeconds: 16,
+      suppressSeconds: 5,
+      alertText: (_data, _matches, output) => output.text(),
+      outputStrings: {
+        text: {
+          en: 'Get behind non-bubbled Zaratan',
+          ko: '버블에 안들어간 자라탄 뒤로',
+        },
+      },
+    },
+    {
+      // Path 04
+      id: 'Aloalo Ketuduke Ogrebon Add',
+      type: 'AddedCombatant',
+      netRegex: { npcNameId: '12540', capture: false },
+      condition: (data) => data.isKetuFight,
+      delaySeconds: 18,
+      suppressSeconds: 5,
+      alertText: (_data, _matches, output) => output.text(),
+      outputStrings: {
+        text: {
+          en: 'Get in Bubble',
+          ko: '버블 타세요',
         },
       },
     },
@@ -331,8 +375,8 @@ Options.Triggers.push({
           ja: '安置へ移動',
           ko: '빈 곳으로~',
         },
-        front: Outputs.goFront,
-        back: Outputs.getBehind,
+        front: Outputs.front,
+        back: Outputs.back,
         left: Outputs.left,
         right: Outputs.right,
       },
@@ -369,10 +413,10 @@ Options.Triggers.push({
           'E91': 'left',
         }[matches.effectId];
         if (map === undefined)
-          return output.text();
+          return;
         if (data.lalaRotate === undefined)
           return output[map]();
-        if (data.lalaRotate === 'cw')
+        if (data.lalaRotate === 'ccw')
           return {
             'front': output.left(),
             'back': output.right(),
@@ -388,32 +432,25 @@ Options.Triggers.push({
       },
       run: (data) => delete data.lalaRotate,
       outputStrings: {
-        front: Outputs.lookTowardsBoss,
+        front: {
+          en: 'Face Towards Lala',
+          ja: 'ボスを見る',
+          ko: '보스 봐욧',
+        },
         back: {
-          en: 'Look behind',
-          de: 'Schau nach Hinten',
+          en: 'Look Away from Lala',
           ja: '後ろ見て',
           ko: '뒤돌아 봐요',
         },
         left: {
-          en: 'Look right',
-          de: 'Schau nach Rechts',
+          en: 'Left Flank towards Lala',
           ja: '右見て',
           ko: '오른쪽 봐요',
         },
         right: {
-          en: 'Look left',
-          de: 'Schau nach Links',
+          en: 'Right Flank towards Lala',
           ja: '左見て',
           ko: '왼쪽 봐요',
-        },
-        text: {
-          en: 'Point opening at Boss',
-          de: 'Zeige Öffnung zum Boss',
-          fr: 'Pointez l\'ouverture vers Boss',
-          ja: '未解析の方角をボスに向ける',
-          cn: '脚下光环缺口对准boss',
-          ko: '열린 곳을 보스로',
         },
       },
     },
@@ -438,7 +475,7 @@ Options.Triggers.push({
       infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
-          en: 'Bat adds => Big AOEs',
+          en: 'Armadillo adds => Big AOEs',
           de: 'Fledermaus Adds => Große AoEs',
           ja: 'コウモリ => ゆかAOE',
           ko: '밖에 쥐 등장 🔜 큰 장판',
@@ -468,7 +505,7 @@ Options.Triggers.push({
     {
       id: 'Aloalo Lala Calculated Trajectory',
       type: 'GainsEffect',
-      netRegex: { effectId: 'E8[3-6]' },
+      netRegex: { effectId: ['E83', 'E84', 'E85', 'E86'] },
       condition: Conditions.targetIsYou(),
       delaySeconds: 3,
       durationSeconds: 7,
@@ -480,7 +517,7 @@ Options.Triggers.push({
           'E86': 'right',
         }[matches.effectId];
         if (map === undefined)
-          return output.text();
+          return;
         if (data.lalaRotate === undefined)
           return output[map]();
         if (data.lalaRotate === 'cw') {
@@ -500,44 +537,24 @@ Options.Triggers.push({
       },
       run: (data) => delete data.lalaRotate,
       outputStrings: {
-        text: {
-          en: 'Mindhack',
-          de: 'Geistlenkung',
-          fr: 'Piratage mental',
-          ja: '強制移動',
-          cn: '强制移动',
-          ko: '강제이동',
-        },
         front: {
-          en: 'Mindhack: Forward',
-          de: 'Geistlenkung: Vorwärts',
-          fr: 'Piratage mental : Vers l\'avant',
+          en: 'Forward March (1 square)',
           ja: '強制移動 : 前',
-          cn: '强制移动 : 前',
           ko: '강제이동: 앞',
         },
         back: {
-          en: 'Mindhack: Back',
-          de: 'Geistlenkung: Rückwärts',
-          fr: 'Piratage mental : Vers l\'arrière',
+          en: 'Backwards March (1 square)',
           ja: '強制移動 : 後ろ',
-          cn: '强制移动 : 后',
           ko: '강제이동: 뒤',
         },
         left: {
-          en: 'Mindhack: Left',
-          de: 'Geistlenkung: Links',
-          fr: 'Piratage mental : Vers la gauche',
+          en: 'Left March (1 square)',
           ja: '強制移動 : 左',
-          cn: '强制移动 : 左',
           ko: '강제이동: 왼쪽',
         },
         right: {
-          en: 'Mindhack: Right',
-          de: 'Geistlenkung: Rechts',
-          fr: 'Piratage mental : Vers la droite',
+          en: 'Right March (1 square)',
           ja: '強制移動 : 右',
-          cn: '强制移动 : 右',
           ko: '강제이동: 오른쪽',
         },
       },
@@ -777,7 +794,15 @@ Options.Triggers.push({
   ],
   timelineReplace: [
     {
+      locale: 'en',
+      replaceText: {
+        'Receding Twintides/Encroaching Twintides': 'Receding/Encroaching Twintides',
+        'Far Tide/Near Tide': 'Far/Near Tide',
+      },
+    },
+    {
       'locale': 'de',
+      'missingTranslations': true,
       'replaceSync': {
         'Kairimai Loquloqai': 'Kairimai Loquloqai',
         'Ketuduke': 'Ketuduke',
@@ -817,6 +842,7 @@ Options.Triggers.push({
     },
     {
       'locale': 'ja',
+      'missingTranslations': true,
       'replaceSync': {
         'Kairimai Loquloqai': '神子の祭壇',
         'Ketuduke': 'ケトゥドゥケ',
