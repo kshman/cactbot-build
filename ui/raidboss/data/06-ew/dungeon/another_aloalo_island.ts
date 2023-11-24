@@ -523,10 +523,7 @@ const triggerSet: TriggerSet<Data> = {
       id: 'AAI Ketuduke Hydrobullet Reminder',
       type: 'GainsEffect',
       netRegex: { effectId: 'EA3' },
-      condition: (data) => {
-        const bulletHydros: readonly number[] = [2, 4, 5] as const;
-        return bulletHydros.includes(data.ketuHydroCount);
-      },
+      condition: (data) => [2, 4, 5].includes(data.ketuHydroCount),
       delaySeconds: (_data, matches) => parseFloat(matches.duration) - 5,
       durationSeconds: 4,
       suppressSeconds: 5,
@@ -536,10 +533,7 @@ const triggerSet: TriggerSet<Data> = {
       id: 'AAI Ketuduke Hydrofall Reminder',
       type: 'GainsEffect',
       netRegex: { effectId: 'EA4' },
-      condition: (data) => {
-        const fallHydros: readonly number[] = [2, 3, 5] as const;
-        return fallHydros.includes(data.ketuHydroCount);
-      },
+      condition: (data) => [2, 3, 5].includes(data.ketuHydroCount),
       delaySeconds: (_data, matches) => parseFloat(matches.duration) - 5,
       durationSeconds: 4,
       suppressSeconds: 5,
@@ -799,7 +793,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '(왼쪽에서 버블!)',
         },
         right: {
-          en: '(Bubble: Right DPS)',
+          en: '(Bubble: Right)',
           ja: '(右からバブル！)',
           ko: '(오른쪽에서 버블!)',
         },
@@ -1797,11 +1791,6 @@ const triggerSet: TriggerSet<Data> = {
             ja: 'チェイン切る',
             ko: '체인 끊어요!',
           },
-          cutchaintts: {
-            en: 'Cut the chain!',
-            ja: 'チェイン切ってね！',
-            ko: 'チェイン切って！',
-          },
           deathclaw: {
             en: 'Bait Claw => Stack',
             ja: 'クロウ誘導 => 頭割り',
@@ -1836,7 +1825,7 @@ const triggerSet: TriggerSet<Data> = {
           unknown: Outputs.unknown,
         };
         if (data.me === matches.source || data.me === matches.target)
-          return { alarmText: output.cutchain!(), tts: output.cutchaintts!() };
+          return { alarmText: output.cutchain!() };
         if (!data.stcSeenPinwheeling)
           return { alertText: output.deathclaw!() };
 
