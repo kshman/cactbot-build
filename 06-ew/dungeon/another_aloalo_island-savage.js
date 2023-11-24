@@ -465,10 +465,7 @@ Options.Triggers.push({
       id: 'AAIS Ketuduke Hydrobullet Reminder',
       type: 'GainsEffect',
       netRegex: { effectId: 'EA3' },
-      condition: (data) => {
-        const bulletHydros = [2, 4, 5];
-        return bulletHydros.includes(data.ketuHydroCount);
-      },
+      condition: (data) => [2, 4, 5].includes(data.ketuHydroCount),
       delaySeconds: (_data, matches) => parseFloat(matches.duration) - 5,
       durationSeconds: 4,
       suppressSeconds: 5,
@@ -478,10 +475,7 @@ Options.Triggers.push({
       id: 'AAIS Ketuduke Hydrofall Reminder',
       type: 'GainsEffect',
       netRegex: { effectId: 'EA4' },
-      condition: (data) => {
-        const fallHydros = [2, 3, 5];
-        return fallHydros.includes(data.ketuHydroCount);
-      },
+      condition: (data) => [2, 3, 5].includes(data.ketuHydroCount),
       delaySeconds: (_data, matches) => parseFloat(matches.duration) - 5,
       durationSeconds: 4,
       suppressSeconds: 5,
@@ -734,7 +728,7 @@ Options.Triggers.push({
           ko: '(왼쪽에서 버블!)',
         },
         right: {
-          en: '(Bubble: Right DPS)',
+          en: '(Bubble: Right)',
           ja: '(右からバブル！)',
           ko: '(오른쪽에서 버블!)',
         },
@@ -1722,11 +1716,6 @@ Options.Triggers.push({
             ja: 'チェイン切る',
             ko: '체인 끊어요!',
           },
-          cutchaintts: {
-            en: 'Cut the chain!',
-            ja: 'チェイン切ってね！',
-            ko: 'チェイン切って！',
-          },
           deathclaw: {
             en: 'Bait Claw => Stack',
             ja: 'クロウ誘導 => 頭割り',
@@ -1761,7 +1750,7 @@ Options.Triggers.push({
           unknown: Outputs.unknown,
         };
         if (data.me === matches.source || data.me === matches.target)
-          return { alarmText: output.cutchain(), tts: output.cutchaintts() };
+          return { alarmText: output.cutchain() };
         if (!data.stcSeenPinwheeling)
           return { alertText: output.deathclaw() };
         if (data.triggerSetConfig.pinwheelingType === 'stack')

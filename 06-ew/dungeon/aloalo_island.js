@@ -107,13 +107,13 @@ Options.Triggers.push({
       },
     },
     {
-      id: 'Aloalo Quaqua Arcane Armaments Water Trident',
+      id: 'Aloalo Quaqua Arcane Armaments Water Spear',
       type: 'StartsUsing',
       netRegex: { id: '8B9F', source: 'Quaqua', capture: false },
       infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
-          en: 'Away from tridents',
+          en: 'Away from spears',
           de: 'Außen zwichen den Dreizack',
           ja: '槍の間の外側へ',
           ko: '바깥에서 창, 떨어져요',
@@ -121,13 +121,13 @@ Options.Triggers.push({
       },
     },
     {
-      id: 'Aloalo Quaqua Arcane Armaments Poison Trident',
+      id: 'Aloalo Quaqua Arcane Armaments Poison Spear',
       type: 'StartsUsing',
       netRegex: { id: '8BA3', source: 'Quaqua', capture: false },
       infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
-          en: 'Avoid spreading trident puddles',
+          en: 'Avoid spreading spears puddles',
           ja: '槍の間の外側へ',
           ko: '바깥에서 창, 떨어져요',
         },
@@ -624,8 +624,7 @@ Options.Triggers.push({
       type: 'StartsUsing',
       netRegex: { id: '892B', source: 'Statice', capture: false },
       infoText: (data, _matches, output) => {
-        const safe = data.reloadFailed.join(', ');
-        return output.text({ safe: safe });
+        return output.text({ safe: data.reloadFailed });
       },
       outputStrings: {
         text: {
@@ -640,7 +639,25 @@ Options.Triggers.push({
       id: 'Aloalo Statice Aero IV',
       type: 'StartsUsing',
       netRegex: { id: '8929', source: 'Statice', capture: false },
-      response: Responses.aoe('alert'),
+      response: Responses.aoe(),
+    },
+    {
+      id: 'Aloalo Statice Shocking Abandon',
+      type: 'StartsUsing',
+      netRegex: { id: '8928', source: 'Statice' },
+      response: Responses.tankBuster(),
+    },
+    {
+      id: 'Aloalo Statice Fair Flight',
+      type: 'StartsUsing',
+      netRegex: { id: '8946', source: 'Statice', capture: false },
+      infoText: (_data, _matches, output) => output.text(),
+      outputStrings: {
+        text: {
+          en: 'Stand on cushion',
+          ko: '쿠션으로',
+        },
+      },
     },
     // ----------------------------------------- Loquloqui
     {
@@ -657,7 +674,7 @@ Options.Triggers.push({
       infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
-          en: 'Avoid shimmering adds',
+          en: 'Glowing adds get larger',
           de: 'Weiche leuchtenden Adds aus',
           ja: '光ってる物に注意',
           ko: '반짝이는 쫄 조심!',
@@ -708,7 +725,7 @@ Options.Triggers.push({
       infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
-          en: 'Avoid tethers',
+          en: 'Away from tether ends',
           de: 'Weiche Verbindungen aus',
           ja: '縮む線を回避',
           ko: '줄달린 쫄 조심!',
@@ -742,7 +759,7 @@ Options.Triggers.push({
       infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
-          en: 'Last bloom => Go to safe',
+          en: 'Last bloom => Walk into Safe',
           de: 'Letzte Blüte => Geh zum sicheren Bereich',
           ja: '最後の花畑 => 安置へ移動',
           ko: '마지막 풀밭 🔜 안전하게 이동',
@@ -766,15 +783,7 @@ Options.Triggers.push({
       type: 'StartsUsing',
       netRegex: { id: '87CA', source: 'Loquloqui', capture: false },
       durationSeconds: 4.5,
-      alertText: (_data, _matches, output) => output.text(),
-      outputStrings: {
-        text: {
-          en: 'Crush! Go to corner',
-          de: 'Crush! Geh in eine Ecke',
-          ja: 'クラッシュ！隅へ移動',
-          ko: '푹찍쾅! 모서리로!',
-        },
-      },
+      response: Responses.getOut(),
     },
     {
       id: 'Aloalo Loquloqui Stirring of Spirits',
@@ -784,10 +793,10 @@ Options.Triggers.push({
       alertText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
-          en: '4x Knockback',
-          de: '4x Rückstoß',
-          ja: '4x ノックバック',
-          ko: '4연속 넉백! 2번째 암랭',
+          en: '5x Knockback',
+          de: '5x Rückstoß',
+          ja: '5x ノックバック',
+          ko: '5연속 넉백! 2번째 암랭',
         },
       },
     },
@@ -798,6 +807,7 @@ Options.Triggers.push({
       replaceText: {
         'Receding Twintides/Encroaching Twintides': 'Receding/Encroaching Twintides',
         'Far Tide/Near Tide': 'Far/Near Tide',
+        'Meteor/Sledgemagic/Hunks of Junk/Happy Surprise': '--dartboard result--',
       },
     },
     {
