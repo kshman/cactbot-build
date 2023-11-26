@@ -171,8 +171,9 @@ Options.Triggers.push({
     {
       id: 'AAI Options',
       regex: /--setup--/,
-      condition: (data) => !data.settled,
       infoText: (data, _matches, output) => {
+        if (data.settled)
+          return output.settled();
         data.settled = true;
         if (data.options.AutumnParameter !== undefined) {
           const ss = data.options.AutumnParameter.split(',');
@@ -212,6 +213,11 @@ Options.Triggers.push({
         return output.mesg({ param: param });
       },
       outputStrings: {
+        settled: {
+          en: '(Option already settled)',
+          ja: '(設定されています)',
+          ko: '(설정이 있어요)',
+        },
         mesg: {
           en: 'Option: ${param}',
           ja: 'オプション: ${param}',

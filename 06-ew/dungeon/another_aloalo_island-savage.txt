@@ -10,6 +10,31 @@ hideall "--setup--"
 
 0.0 "--Reset--" sync / 00:0839::.*is no longer sealed/ window 100000 jump 0
 
+
+#~~~~~~~~~#
+# TRASH 1 #
+#~~~~~~~~~#
+
+1000.0 "--sync--" sync / 00:0839::The Sands Of Morn will be sealed off/ window 10000,0
+1001.0 "--setup--"
+
+# ALL ENCOUNTER ABILITIES
+# 7A56 --sync-- various auto damage (trash 1)
+# 8BC0 --sync-- damage from Twister tornados
+# 8BC7 Lead Hook casted damage from Kiwakin 3x tankbuster
+# 8BC6 Lead Hook damage from hit 2
+# 8C54 Lead Hook damage from hit 3
+# 8BCC Water III casted damage from Snipper stack marker
+# 8BC8 Sharp Strike casted damage from Kiwakin tank buster with a concussion dot
+# 8BC9 Tail Screw casted damage from Kiwakin baited circle
+# 8BCA Bubble Shower casted damage from Snipper front conal
+# 8BCB Crab Dribble fast casted damage from Snipper back conal after Bubble Shower 8BCA
+# 8C4B Hydrocannon casted damage from Ray front line
+# 8BCE Expulsion casted damage from Ray "get out"
+# 8BCD Electric Whorl casted damage from Ray "get in"
+# 8BD1 Hydroshot casted damage from Monk knockback line with a dot
+# 8C4F Cross Attack casted damage from Monk tankbuster
+
 #~~~~~~~~~~#
 # KETUDUKE #
 #~~~~~~~~~~#
@@ -17,82 +42,82 @@ hideall "--setup--"
 # -p 8AD4:1015.2
 # -ii 8AA7 8AED 8ADD 8AB9 8AB6 8AEB 8A82 8A83 8AE5 8AE6 8AC0 8ADA 8AD9 8AE4 8AC8 8AE3 8A82 8A83
 
-1000.0 "--sync--" sync / 00:0839::The Dawn Trial will be sealed off/ window 10000,0
-1010.2 "--sync--" sync / 14:[^:]*:Ketuduke:8AD4:/ window 20,20
-1015.2 "Tidal Roar" sync / 1[56]:[^:]*:Ketuduke:8AD4:/
-1016.0 "--setup--"
+2000.0 "--sync--" sync / 00:0839::The Dawn Trial will be sealed off/ window 10000,0
+2010.2 "--sync--" sync / 14:[^:]*:Ketuduke:8AD4:/ window 20,20
+2015.2 "Tidal Roar" sync / 1[56]:[^:]*:Ketuduke:8AD4:/
+2016.0 "--setup--"
 
-1022.0 "--middle--" sync / 1[56]:[^:]*:Ketuduke:8A77:/
-1027.0 "Spring Crystals 1" sync / 1[56]:[^:]*:Ketuduke:8AA8:/
-1034.0 "Bubble Net" sync / 1[56]:[^:]*:Ketuduke:8AAD:/
-1041.0 "Hydrobullet/Hydrofall 1" sync / 1[56]:[^:]*:Ketuduke:(8AB8|8AB4):/
-1050.0 "Fluke Gale (cast)" sync / 1[56]:[^:]*:Ketuduke:8AB1:/
-1060.0 "Fluke Gale 1" sync / 1[56]:[^:]*:Ketuduke:8AB2:/
-1062.0 "Fluke Gale 2" sync / 1[56]:[^:]*:Ketuduke:8AB3:/
-1065.0 "Saturate" sync / 1[56]:[^:]*:Spring Crystal:8ADC:/
-1065.1 "Hydrobullet/Hydrofall" sync / 1[56]:[^:]*:Ketuduke:(8ADF|8ADE):/
+2022.0 "--middle--" sync / 1[56]:[^:]*:Ketuduke:8A77:/
+2027.0 "Spring Crystals 1" sync / 1[56]:[^:]*:Ketuduke:8AA8:/
+2034.0 "Bubble Net" sync / 1[56]:[^:]*:Ketuduke:8AAD:/
+2041.0 "Hydrobullet/Hydrofall 1" sync / 1[56]:[^:]*:Ketuduke:(8AB8|8AB4):/
+2050.0 "Fluke Gale (cast)" sync / 1[56]:[^:]*:Ketuduke:8AB1:/
+2060.0 "Fluke Gale 1" sync / 1[56]:[^:]*:Ketuduke:8AB2:/
+2062.0 "Fluke Gale 2" sync / 1[56]:[^:]*:Ketuduke:8AB3:/
+2065.0 "Saturate" sync / 1[56]:[^:]*:Spring Crystal:8ADC:/
+2065.1 "Hydrobullet/Hydrofall" sync / 1[56]:[^:]*:Ketuduke:(8ADF|8ADE):/
 
-1074.0 "Hydrofall/Hydrobullet 2" sync / 1[56]:[^:]*:Ketuduke:(8AB4|8AB8):/
-1084.3 "Blowing Bubbles" sync / 1[56]:[^:]*:Ketuduke:8ABD:/
-1091.4 "Hydrobomb x3" sync / 1[56]:[^:]*:Ketuduke:8AD0:/
-1096.3 "Hydrofall/Hydrobullet" sync / 1[56]:[^:]*:Ketuduke:(8ADE|8ADF):/
-1099.6 "Hydrobomb x3" sync / 1[56]:[^:]*:Ketuduke:8AD0:/
-1102.5 "Hydrobullet/Hydrofall" sync / 1[56]:[^:]*:Ketuduke:(8ADF|8ADE):/
+2074.0 "Hydrofall/Hydrobullet 2" sync / 1[56]:[^:]*:Ketuduke:(8AB4|8AB8):/
+2084.3 "Blowing Bubbles" sync / 1[56]:[^:]*:Ketuduke:8ABD:/
+2091.4 "Hydrobomb x3" sync / 1[56]:[^:]*:Ketuduke:8AD0:/
+2096.3 "Hydrofall/Hydrobullet" sync / 1[56]:[^:]*:Ketuduke:(8ADE|8ADF):/
+2099.6 "Hydrobomb x3" sync / 1[56]:[^:]*:Ketuduke:8AD0:/
+2102.5 "Hydrobullet/Hydrofall" sync / 1[56]:[^:]*:Ketuduke:(8ADF|8ADE):/
 
-1113.6 "Hydrofall 3" sync / 1[56]:[^:]*:Ketuduke:8AB4:/
-1118.9 "Strewn Bubbles" sync / 1[56]:[^:]*:Ketuduke:8ABB:/
-1130.3 "Receding Twintides/Encroaching Twintides" sync / 1[56]:[^:]*:Ketuduke:(8AE7|8AE9):/
-1130.9 "Sphere Shatter 1" sync / 1[56]:[^:]*:Ketuduke:8AE0:/
-1133.4 "Far Tide/Near Tide" sync / 1[56]:[^:]*:Ketuduke:(8AEA|8AE8):/
-1134.0 "Sphere Shatter 2" sync / 1[56]:[^:]*:Ketuduke:8AE0:/
-1134.0 "Hydrofall" sync / 1[56]:[^:]*:Ketuduke:8ADE:/
+2113.6 "Hydrofall 3" sync / 1[56]:[^:]*:Ketuduke:8AB4:/
+2118.9 "Strewn Bubbles" sync / 1[56]:[^:]*:Ketuduke:8ABB:/
+2130.3 "Receding Twintides/Encroaching Twintides" sync / 1[56]:[^:]*:Ketuduke:(8AE7|8AE9):/
+2130.9 "Sphere Shatter 1" sync / 1[56]:[^:]*:Ketuduke:8AE0:/
+2133.4 "Far Tide/Near Tide" sync / 1[56]:[^:]*:Ketuduke:(8AEA|8AE8):/
+2134.0 "Sphere Shatter 2" sync / 1[56]:[^:]*:Ketuduke:8AE0:/
+2134.0 "Hydrofall" sync / 1[56]:[^:]*:Ketuduke:8ADE:/
 
-1143.7 "Hydrobullet 4" sync / 1[56]:[^:]*:Ketuduke:8AB8:/
-1149.7 "Roar" sync / 1[56]:[^:]*:Ketuduke:8AC4:/
-1154.6 "Spring Crystals 2" sync / 1[56]:[^:]*:Ketuduke:8AA8:/
-1164.6 "Bubble Net" sync / 1[56]:[^:]*:Ketuduke:8AC5:/
-1177.0 "Hydrobullet" sync / 1[56]:[^:]*:Ketuduke:8ADF:/
-1177.6 "Saturate" sync / 1[56]:[^:]*:Spring Crystal:8ADC:/
-1182.7 "Updraft" sync / 1[56]:[^:]*:Ketuduke:8AC7:/
-1184.1 "Hundred Lashings" sync / 1[56]:[^:]*:Aloalo Zaratan:8ACA:/
+2143.7 "Hydrobullet 4" sync / 1[56]:[^:]*:Ketuduke:8AB8:/
+2149.7 "Roar" sync / 1[56]:[^:]*:Ketuduke:8AC4:/
+2154.6 "Spring Crystals 2" sync / 1[56]:[^:]*:Ketuduke:8AA8:/
+2164.6 "Bubble Net" sync / 1[56]:[^:]*:Ketuduke:8AC5:/
+2177.0 "Hydrobullet" sync / 1[56]:[^:]*:Ketuduke:8ADF:/
+2177.6 "Saturate" sync / 1[56]:[^:]*:Spring Crystal:8ADC:/
+2182.7 "Updraft" sync / 1[56]:[^:]*:Ketuduke:8AC7:/
+2184.1 "Hundred Lashings" sync / 1[56]:[^:]*:Aloalo Zaratan:8ACA:/
 
-1190.7 "--middle--" sync / 1[56]:[^:]*:Ketuduke:8A77:/
-1199.4 "Hydrofall/Hydrobullet 5" sync / 1[56]:[^:]*:Ketuduke:(8AB4|8AB8):/
-1210.4 "Angry Seas" sync / 1[56]:[^:]*:Ketuduke:8AE1:/
-1211.6 "Hydrobullet/Hydrofall" sync / 1[56]:[^:]*:Ketuduke:(8C6D|8AB5):/
-1212.2 "Hydrofall/Hydrobullet" sync / 1[56]:[^:]*:[^:]*:(8ADF|8ADE):/ # this sometimes has the wrong source
+2190.7 "--middle--" sync / 1[56]:[^:]*:Ketuduke:8A77:/
+2199.4 "Hydrofall/Hydrobullet 5" sync / 1[56]:[^:]*:Ketuduke:(8AB4|8AB8):/
+2210.4 "Angry Seas" sync / 1[56]:[^:]*:Ketuduke:8AE1:/
+2211.6 "Hydrobullet/Hydrofall" sync / 1[56]:[^:]*:Ketuduke:(8C6D|8AB5):/
+2212.2 "Hydrofall/Hydrobullet" sync / 1[56]:[^:]*:[^:]*:(8ADF|8ADE):/ # this sometimes has the wrong source
 
-1214.8 "Spring Crystals 3" sync / 1[56]:[^:]*:Ketuduke:8AA8:/
-1216.8 "Hydrobullet/Hydrofall" sync / 1[56]:[^:]*:Ketuduke:(8ADF|8ADE):/
-1221.8 "Bubble Net" sync / 1[56]:[^:]*:Ketuduke:8AAD:/
-1227.8 "Fluke Typhoon (cast)" sync / 1[56]:[^:]*:Ketuduke:8AAF:/
-1233.8 "Fluke Typhoon" sync / 1[56]:[^:]*:Ketuduke:8AB0:/
-1236.4 "Saturate" sync / 1[56]:[^:]*:Spring Crystal:8ADB:/
-1238.8 "Burst x4" sync / 1[56]:[^:]*:Ketuduke:8AE2:/
+2214.8 "Spring Crystals 3" sync / 1[56]:[^:]*:Ketuduke:8AA8:/
+2216.8 "Hydrobullet/Hydrofall" sync / 1[56]:[^:]*:Ketuduke:(8ADF|8ADE):/
+2221.8 "Bubble Net" sync / 1[56]:[^:]*:Ketuduke:8AAD:/
+2227.8 "Fluke Typhoon (cast)" sync / 1[56]:[^:]*:Ketuduke:8AAF:/
+2233.8 "Fluke Typhoon" sync / 1[56]:[^:]*:Ketuduke:8AB0:/
+2236.4 "Saturate" sync / 1[56]:[^:]*:Spring Crystal:8ADB:/
+2238.8 "Burst x4" sync / 1[56]:[^:]*:Ketuduke:8AE2:/
 
-1246.8 "Spring Crystals 4" sync / 1[56]:[^:]*:Ketuduke:8AA8:/
-1253.8 "Bubble Net" sync / 1[56]:[^:]*:Ketuduke:8AAD:/
-1260.8 "Hydrobullet/Hydrofall 6" sync / 1[56]:[^:]*:Ketuduke:(8AB8|8AB4):/
-1269.9 "Fluke Gale (cast)" sync / 1[56]:[^:]*:Ketuduke:8AB1:/
-1279.9 "Fluke Gale 1" sync / 1[56]:[^:]*:Ketuduke:8AB2:/
-1281.9 "Fluke Gale 2" sync / 1[56]:[^:]*:Ketuduke:8AB3:/
-1285.0 "Saturate" sync / 1[56]:[^:]*:Spring Crystal:8ADC:/
-1285.0 "Hydrobullet/Hydrofall" sync / 1[56]:[^:]*:Ketuduke:(8ADF|8ADE):/
+2246.8 "Spring Crystals 4" sync / 1[56]:[^:]*:Ketuduke:8AA8:/
+2253.8 "Bubble Net" sync / 1[56]:[^:]*:Ketuduke:8AAD:/
+2260.8 "Hydrobullet/Hydrofall 6" sync / 1[56]:[^:]*:Ketuduke:(8AB8|8AB4):/
+2269.9 "Fluke Gale (cast)" sync / 1[56]:[^:]*:Ketuduke:8AB1:/
+2279.9 "Fluke Gale 1" sync / 1[56]:[^:]*:Ketuduke:8AB2:/
+2281.9 "Fluke Gale 2" sync / 1[56]:[^:]*:Ketuduke:8AB3:/
+2285.0 "Saturate" sync / 1[56]:[^:]*:Spring Crystal:8ADC:/
+2285.0 "Hydrobullet/Hydrofall" sync / 1[56]:[^:]*:Ketuduke:(8ADF|8ADE):/
 
-1294.0 "Hydrofall 7" sync / 1[56]:[^:]*:Ketuduke:8AB4:/
-1299.3 "Strewn Bubbles" sync / 1[56]:[^:]*:Ketuduke:8ABB:/
-1310.7 "Receding Twintides/Encroaching Twintides" sync / 1[56]:[^:]*:Ketuduke:(8AE7|8AE9):/
-1311.3 "Sphere Shatter 1" sync / 1[56]:[^:]*:Ketuduke:8AE0:/
-1313.7 "Far Tide/Near Tide" sync / 1[56]:[^:]*:Ketuduke:(8AEA|8AE8):/
-1314.3 "Sphere Shatter 2" sync / 1[56]:[^:]*:Ketuduke:8AE0:/
-1314.4 "Hydrofall" sync / 1[56]:[^:]*:Ketuduke:8ADE:/
+2294.0 "Hydrofall 7" sync / 1[56]:[^:]*:Ketuduke:8AB4:/
+2299.3 "Strewn Bubbles" sync / 1[56]:[^:]*:Ketuduke:8ABB:/
+2310.7 "Receding Twintides/Encroaching Twintides" sync / 1[56]:[^:]*:Ketuduke:(8AE7|8AE9):/
+2311.3 "Sphere Shatter 1" sync / 1[56]:[^:]*:Ketuduke:8AE0:/
+2313.7 "Far Tide/Near Tide" sync / 1[56]:[^:]*:Ketuduke:(8AEA|8AE8):/
+2314.3 "Sphere Shatter 2" sync / 1[56]:[^:]*:Ketuduke:8AE0:/
+2314.4 "Hydrofall" sync / 1[56]:[^:]*:Ketuduke:8ADE:/
 
-1324.8 "Tidal Roar" sync / 1[56]:[^:]*:Ketuduke:8AD4:/
-1342.8 "Tidal Roar (Enrage)" #sync / 1[56]:[^:]*:Ketuduke:8AD6:/
-1343.8 "Tidal Roar (Enrage)" #sync / 1[56]:[^:]*:Ketuduke:8AD8:/
-1345.5 "Tidal Roar (Enrage)" #sync / 1[56]:[^:]*:Ketuduke:8AD7:/
-1346.5 "Tidal Roar (Enrage)" #sync / 1[56]:[^:]*:Ketuduke:8AD8:/
-1348.2 "Tidal Roar (Enrage)" #sync / 1[56]:[^:]*:Ketuduke:8AD7:/
+2324.8 "Tidal Roar" sync / 1[56]:[^:]*:Ketuduke:8AD4:/
+2342.8 "Tidal Roar (Enrage)" #sync / 1[56]:[^:]*:Ketuduke:8AD6:/
+2343.8 "Tidal Roar (Enrage)" #sync / 1[56]:[^:]*:Ketuduke:8AD8:/
+2345.5 "Tidal Roar (Enrage)" #sync / 1[56]:[^:]*:Ketuduke:8AD7:/
+2346.5 "Tidal Roar (Enrage)" #sync / 1[56]:[^:]*:Ketuduke:8AD8:/
+2348.2 "Tidal Roar (Enrage)" #sync / 1[56]:[^:]*:Ketuduke:8AD7:/
 
 # ALL ENCOUNTER ABILITIES
 # 8A77 --sync-- Ketuduke repositioning
@@ -145,6 +170,15 @@ hideall "--setup--"
 # 8AED Tidal Roar damage from 8AD4
 # 8C6D Hydrobullet ability on players to give "spread second" before Blowing Bubbles
 
+
+#~~~~~~~~~#
+# TRASH 2 #
+#~~~~~~~~~#
+
+3000.0 "--sync--" sync / 00:0839::The Roots of Gloam will be sealed off/ window 10000,0
+3001.0 "--setup--"
+
+
 #~~~~~#
 # LALA #
 #~~~~~#
@@ -152,71 +186,71 @@ hideall "--setup--"
 # -p 8C05:2010.9
 # -ii 8BE2 8BE3 8BE4 8BE5 8BE9 8BEA 8BF1 8BF2 8CE1
 
-2000.0 "--sync--" sync / 00:0839::The Dusk Trial will be sealed off/ window 100000,0
-2006.9 "--sync--" sync / 14:[^:]*:Lala:8C05:/ window 20,20
-2011.6 "Inferno Theorem" sync / 1[56]:[^:]*:Lala:8C05:/
-2012.5 "--setup--"
+4000.0 "--sync--" sync / 00:0839::The Dusk Trial will be sealed off/ window 100000,0
+4006.9 "--sync--" sync / 14:[^:]*:Lala:8C05:/ window 20,20
+4011.6 "Inferno Theorem" sync / 1[56]:[^:]*:Lala:8C05:/
+4012.5 "--setup--"
 
-2013.7 "--middle--" sync / 1[56]:[^:]*:Lala:8874:/
-2018.8 "Angular Addition" sync / 1[56]:[^:]*:Lala:(8BE0|8D2F):/
-2026.9 "Arcane Blight" sync / 1[56]:[^:]*:Lala:8BE6:/
+4013.7 "--middle--" sync / 1[56]:[^:]*:Lala:8874:/
+4018.8 "Angular Addition" sync / 1[56]:[^:]*:Lala:(8BE0|8D2F):/
+4026.9 "Arcane Blight" sync / 1[56]:[^:]*:Lala:8BE6:/
 
-2030.1 "--middle--" sync / 1[56]:[^:]*:Lala:8874:/
-2035.2 "Analysis" sync / 1[56]:[^:]*:Lala:8BEC:/
-2040.3 "Arcane Array" sync / 1[56]:[^:]*:Lala:(8BE7|8BF6):/
-2045.4 "Angular Addition" sync / 1[56]:[^:]*:Lala:(8BE0|8D2F):/
-2046.1 "Bright Pulse" sync / 1[56]:[^:]*:Lala:8BE8:/
-2047.4 "Radiance 1" sync / 1[56]:[^:]*:Arcane Globe:8BEB:/
-2053.4 "Arcane Blight" sync / 1[56]:[^:]*:Lala:8BE6:/
-2055.7 "Radiance 2" sync / 1[56]:[^:]*:Arcane Globe:8BEB:/
-2061.5 "Targeted Light" sync / 1[56]:[^:]*:Lala:8CE0:/
+4030.1 "--middle--" sync / 1[56]:[^:]*:Lala:8874:/
+4035.2 "Analysis" sync / 1[56]:[^:]*:Lala:8BEC:/
+4040.3 "Arcane Array" sync / 1[56]:[^:]*:Lala:(8BE7|8BF6):/
+4045.4 "Angular Addition" sync / 1[56]:[^:]*:Lala:(8BE0|8D2F):/
+4046.1 "Bright Pulse" sync / 1[56]:[^:]*:Lala:8BE8:/
+4047.4 "Radiance 1" sync / 1[56]:[^:]*:Arcane Globe:8BEB:/
+4053.4 "Arcane Blight" sync / 1[56]:[^:]*:Lala:8BE6:/
+4055.7 "Radiance 2" sync / 1[56]:[^:]*:Arcane Globe:8BEB:/
+4061.5 "Targeted Light" sync / 1[56]:[^:]*:Lala:8CE0:/
 
-2072.6 "Strategic Strike" sync / 1[56]:[^:]*:Lala:8C04:/
-2085.8 "Planar Tactics" sync / 1[56]:[^:]*:Lala:8BEF:/
-2100.9 "Arcane Mine" sync / 1[56]:[^:]*:Lala:8BF0:/
-2108.4 "Symmetric Surge" sync / 1[56]:[^:]*:Lala:8BF5:/
-2112.7 "Inferno Theorem" sync / 1[56]:[^:]*:Lala:8C05:/
-2122.8 "Strategic Strike" sync / 1[56]:[^:]*:Lala:8C04:/
+4072.6 "Strategic Strike" sync / 1[56]:[^:]*:Lala:8C04:/
+4085.8 "Planar Tactics" sync / 1[56]:[^:]*:Lala:8BEF:/
+4100.9 "Arcane Mine" sync / 1[56]:[^:]*:Lala:8BF0:/
+4108.4 "Symmetric Surge" sync / 1[56]:[^:]*:Lala:8BF5:/
+4112.7 "Inferno Theorem" sync / 1[56]:[^:]*:Lala:8C05:/
+4122.8 "Strategic Strike" sync / 1[56]:[^:]*:Lala:8C04:/
 
-2131.0 "--middle--" sync / 1[56]:[^:]*:Lala:8874:/
-2138.2 "Spatial Tactics" sync / 1[56]:[^:]*:Lala:8BF7:/
-2143.3 "Arcane Array" sync / 1[56]:[^:]*:Lala:(8BE7|8BF6):/
-2149.1 "Bright Pulse" sync / 1[56]:[^:]*:Lala:8BE8:/
-2150.4 "Radiance" sync / 1[56]:[^:]*:Arcane Globe:8D20:/
-2157.4 "Angular Addition" sync / 1[56]:[^:]*:Lala:(8BE0|8D2F):/
-2165.5 "Arcane Blight" sync / 1[56]:[^:]*:Lala:8BE6:/
-2173.6 "Inferno Theorem" sync / 1[56]:[^:]*:Lala:8C05:/
-2184.7 "Inferno Theorem" sync / 1[56]:[^:]*:Lala:8C05:/
+4131.0 "--middle--" sync / 1[56]:[^:]*:Lala:8874:/
+4138.2 "Spatial Tactics" sync / 1[56]:[^:]*:Lala:8BF7:/
+4143.3 "Arcane Array" sync / 1[56]:[^:]*:Lala:(8BE7|8BF6):/
+4149.1 "Bright Pulse" sync / 1[56]:[^:]*:Lala:8BE8:/
+4150.4 "Radiance" sync / 1[56]:[^:]*:Arcane Globe:8D20:/
+4157.4 "Angular Addition" sync / 1[56]:[^:]*:Lala:(8BE0|8D2F):/
+4165.5 "Arcane Blight" sync / 1[56]:[^:]*:Lala:8BE6:/
+4173.6 "Inferno Theorem" sync / 1[56]:[^:]*:Lala:8C05:/
+4184.7 "Inferno Theorem" sync / 1[56]:[^:]*:Lala:8C05:/
 
-2196.8 "Symmetric Surge" sync / 1[56]:[^:]*:Lala:8BF8:/
-2201.9 "Constructive Figure" sync / 1[56]:[^:]*:Lala:8BFA:/
-2207.0 "Arcane Plot" sync / 1[56]:[^:]*:Lala:8BF9:/
-2212.8 "Bright Pulse" sync / 1[56]:[^:]*:Lala:8BE8:/
-2221.1 "Arcane Point" sync / 1[56]:[^:]*:Lala:8BFC:/
-2221.9 "Powerful Light" sync / 1[56]:[^:]*:Lala:8BFD:/
-2230.2 "Explosive Theorem" sync / 1[56]:[^:]*:Lala:8BFE:/
-2230.2 "Explosive Theorem" sync / 1[56]:[^:]*:Lala:8BFF:/
-2234.6 "Symmetric Surge" sync / 1[56]:[^:]*:Lala:8BF5:/
-2235.3 "Telluric Theorem" sync / 1[56]:[^:]*:Lala:8C00:/
-2248.3 "Strategic Strike" sync / 1[56]:[^:]*:Lala:8C04:/
-2256.3 "Inferno Theorem" sync / 1[56]:[^:]*:Lala:8C05:/
+4196.8 "Symmetric Surge" sync / 1[56]:[^:]*:Lala:8BF8:/
+4201.9 "Constructive Figure" sync / 1[56]:[^:]*:Lala:8BFA:/
+4207.0 "Arcane Plot" sync / 1[56]:[^:]*:Lala:8BF9:/
+4212.8 "Bright Pulse" sync / 1[56]:[^:]*:Lala:8BE8:/
+4221.1 "Arcane Point" sync / 1[56]:[^:]*:Lala:8BFC:/
+4221.9 "Powerful Light" sync / 1[56]:[^:]*:Lala:8BFD:/
+4230.2 "Explosive Theorem" sync / 1[56]:[^:]*:Lala:8BFE:/
+4230.2 "Explosive Theorem" sync / 1[56]:[^:]*:Lala:8BFF:/
+4234.6 "Symmetric Surge" sync / 1[56]:[^:]*:Lala:8BF5:/
+4235.3 "Telluric Theorem" sync / 1[56]:[^:]*:Lala:8C00:/
+4248.3 "Strategic Strike" sync / 1[56]:[^:]*:Lala:8C04:/
+4256.3 "Inferno Theorem" sync / 1[56]:[^:]*:Lala:8C05:/
 
-2263.4 "--middle--" sync / 1[56]:[^:]*:Lala:8874:/
-2268.5 "Analysis" sync / 1[56]:[^:]*:Lala:8BEC:/
-2273.6 "Arcane Array" sync / 1[56]:[^:]*:Lala:(8BE7|8BF6):/
-2278.7 "Angular Addition" sync / 1[56]:[^:]*:Lala:(8BE0|8D2F):/
-2279.4 "Bright Pulse" sync / 1[56]:[^:]*:Lala:8BE8:/
-2280.7 "Radiance 1" sync / 1[56]:[^:]*:Arcane Globe:8BEB:/
-2286.7 "Arcane Blight" sync / 1[56]:[^:]*:Lala:8BE6:/
-2289.0 "Radiance 2" sync / 1[56]:[^:]*:Arcane Globe:8BEB:/
-2294.8 "Targeted Light" sync / 1[56]:[^:]*:Lala:8CE0:/
-2306.0 "Strategic Strike" sync / 1[56]:[^:]*:Lala:8C04:/
+4263.4 "--middle--" sync / 1[56]:[^:]*:Lala:8874:/
+4268.5 "Analysis" sync / 1[56]:[^:]*:Lala:8BEC:/
+4273.6 "Arcane Array" sync / 1[56]:[^:]*:Lala:(8BE7|8BF6):/
+4278.7 "Angular Addition" sync / 1[56]:[^:]*:Lala:(8BE0|8D2F):/
+4279.4 "Bright Pulse" sync / 1[56]:[^:]*:Lala:8BE8:/
+4280.7 "Radiance 1" sync / 1[56]:[^:]*:Arcane Globe:8BEB:/
+4286.7 "Arcane Blight" sync / 1[56]:[^:]*:Lala:8BE6:/
+4289.0 "Radiance 2" sync / 1[56]:[^:]*:Arcane Globe:8BEB:/
+4294.8 "Targeted Light" sync / 1[56]:[^:]*:Lala:8CE0:/
+4306.0 "Strategic Strike" sync / 1[56]:[^:]*:Lala:8C04:/
 
-2316.1 "Inferno Theorem" sync / 1[56]:[^:]*:Lala:8C05:/
-2329.5 "Inferno Theorem (Enrage)" sync / 1[56]:[^:]*:Lala:8C25:/
-2331.5 "Inferno Theorem (Enrage)" #sync / 1[56]:[^:]*:Lala:8C26:/
-2333.5 "Inferno Theorem (Enrage)" #sync / 1[56]:[^:]*:Lala:8C26:/
-2335.5 "Inferno Theorem (Enrage)" #sync / 1[56]:[^:]*:Lala:8C26:/
+4316.1 "Inferno Theorem" sync / 1[56]:[^:]*:Lala:8C05:/
+4329.5 "Inferno Theorem (Enrage)" sync / 1[56]:[^:]*:Lala:8C25:/
+4331.5 "Inferno Theorem (Enrage)" #sync / 1[56]:[^:]*:Lala:8C26:/
+4333.5 "Inferno Theorem (Enrage)" #sync / 1[56]:[^:]*:Lala:8C26:/
+4335.5 "Inferno Theorem (Enrage)" #sync / 1[56]:[^:]*:Lala:8C26:/
 
 # ALL ENCOUNTER ABILITIES
 # 8874 --sync--
@@ -254,6 +288,7 @@ hideall "--setup--"
 # 8D20 Radiance
 # 8D2F Angular Addition / Actual
 
+
 #~~~~~~~~#
 # STATICE #
 #~~~~~~~~#
@@ -261,66 +296,66 @@ hideall "--setup--"
 # -ii 8964 8969 896C 896F 8971 8977 8978 897C 897D 8988 89FB 8A6A 8CC2
 # -p 8966:3013.6
 
-3000.0 "--sync--" sync / 00:0839::The Midnight Trial will be sealed off/ window 10000,0
-3008.9 "--sync--" sync / 14:[^:]*:Statice:8966:/ window 20,20
-3013.6 "Aero IV" sync / 1[56]:[^:]*:Statice:8966:/
-3014.5 "--setup--"
+5000.0 "--sync--" sync / 00:0839::The Midnight Trial will be sealed off/ window 10000,0
+5008.9 "--sync--" sync / 14:[^:]*:Statice:8966:/ window 20,20
+5013.6 "Aero IV" sync / 1[56]:[^:]*:Statice:8966:/
+5014.5 "--setup--"
 
-3017.8 "--middle--" sync / 1[56]:[^:]*:Statice:8927:/
-3023.2 "Trick Reload" sync / 1[56]:[^:]*:Statice:8967:/
-3025.3 "Locked and Loaded/Misload x8" duration 8 #sync / 1[56]:[^:]*:Statice:(8925|8926):/
-3037.3 "Trapshooting 1" sync / 1[56]:[^:]*:Statice:8D1C:/
-3047.7 "Trigger Happy" sync / 1[56]:[^:]*:Statice:8968:/
-3055.5 "Ring a Ring o' Explosions" sync / 1[56]:[^:]*:Statice:8979:/
-3069.6 "Trapshooting 2" sync / 1[56]:[^:]*:Statice:8976:/
-3073.6 "Burst" sync / 1[56]:[^:]*:Bomb:897A:/
+5017.8 "--middle--" sync / 1[56]:[^:]*:Statice:8927:/
+5023.2 "Trick Reload" sync / 1[56]:[^:]*:Statice:8967:/
+5025.3 "Locked and Loaded/Misload x8" duration 8 #sync / 1[56]:[^:]*:Statice:(8925|8926):/
+5037.3 "Trapshooting 1" sync / 1[56]:[^:]*:Statice:8D1C:/
+5047.7 "Trigger Happy" sync / 1[56]:[^:]*:Statice:8968:/
+5055.5 "Ring a Ring o' Explosions" sync / 1[56]:[^:]*:Statice:8979:/
+5069.6 "Trapshooting 2" sync / 1[56]:[^:]*:Statice:8976:/
+5073.6 "Burst" sync / 1[56]:[^:]*:Bomb:897A:/
 
-3080.6 "--middle--" sync / 1[56]:[^:]*:Statice:8927:/
-3086.0 "Trick Reload" sync / 1[56]:[^:]*:Statice:8967:/
-3088.1 "Locked and Loaded/Misload x8" duration 8 #sync / 1[56]:[^:]*:Statice:(8925|8926):/
-3099.2 "Ring a Ring o' Explosions" sync / 1[56]:[^:]*:Statice:8979:/
-3104.3 "Dartboard of Dancing Explosives " sync / 1[56]:[^:]*:Statice:8CC0:/
-3118.1 "Trapshooting 1" sync / 1[56]:[^:]*:Statice:8976:/
-3120.0 "Burst" sync / 1[56]:[^:]*:Bomb:897A:/
+5080.6 "--middle--" sync / 1[56]:[^:]*:Statice:8927:/
+5086.0 "Trick Reload" sync / 1[56]:[^:]*:Statice:8967:/
+5088.1 "Locked and Loaded/Misload x8" duration 8 #sync / 1[56]:[^:]*:Statice:(8925|8926):/
+5099.2 "Ring a Ring o' Explosions" sync / 1[56]:[^:]*:Statice:8979:/
+5104.3 "Dartboard of Dancing Explosives " sync / 1[56]:[^:]*:Statice:8CC0:/
+5118.1 "Trapshooting 1" sync / 1[56]:[^:]*:Statice:8976:/
+5120.0 "Burst" sync / 1[56]:[^:]*:Bomb:897A:/
 
-3130.2 "--middle--" sync / 1[56]:[^:]*:Statice:8927:/
-3135.6 "Surprise Balloon" sync / 1[56]:[^:]*:Statice:896A:/
-3142.7 "Beguiling Glitter" sync / 1[56]:[^:]*:Statice:8980:/
-3148.6 "Pop" sync / 1[56]:[^:]*:Statice:896B:/
-3150.3 "Trigger Happy" sync / 1[56]:[^:]*:Statice:8968:/
-3153.6 "Pop" sync / 1[56]:[^:]*:Statice:896B:/
-3158.4 "Trapshooting 2" sync / 1[56]:[^:]*:Statice:8976:/
-3170.5 "Aero IV" sync / 1[56]:[^:]*:Statice:8966:/
+5130.2 "--middle--" sync / 1[56]:[^:]*:Statice:8927:/
+5135.6 "Surprise Balloon" sync / 1[56]:[^:]*:Statice:896A:/
+5142.7 "Beguiling Glitter" sync / 1[56]:[^:]*:Statice:8980:/
+5148.6 "Pop" sync / 1[56]:[^:]*:Statice:896B:/
+5150.3 "Trigger Happy" sync / 1[56]:[^:]*:Statice:8968:/
+5153.6 "Pop" sync / 1[56]:[^:]*:Statice:896B:/
+5158.4 "Trapshooting 2" sync / 1[56]:[^:]*:Statice:8976:/
+5170.5 "Aero IV" sync / 1[56]:[^:]*:Statice:8966:/
 
-3177.7 "--untargetable--" sync / 1[56]:[^:]*:Statice:8927:/
-3182.1 "Ring a Ring o' Explosions" sync / 1[56]:[^:]*:Statice:8979:/
-3187.2 "Present Box" sync / 1[56]:[^:]*:Statice:8972:/
-3192.3 "Fireworks" sync / 1[56]:[^:]*:Statice:897B:/
-3202.3 "Burst" sync / 1[56]:[^:]*:Bomb:897A:/
-3202.4 "Faerie Ring" sync / 1[56]:[^:]*:Surprising Staff:8973:/
+5177.7 "--untargetable--" sync / 1[56]:[^:]*:Statice:8927:/
+5182.1 "Ring a Ring o' Explosions" sync / 1[56]:[^:]*:Statice:8979:/
+5187.2 "Present Box" sync / 1[56]:[^:]*:Statice:8972:/
+5192.3 "Fireworks" sync / 1[56]:[^:]*:Statice:897B:/
+5202.3 "Burst" sync / 1[56]:[^:]*:Bomb:897A:/
+5202.4 "Faerie Ring" sync / 1[56]:[^:]*:Surprising Staff:8973:/
 
-3208.0 "--targetable--"
-3210.4 "Shocking Abandon" sync / 1[56]:[^:]*:Statice:8965:/
-3220.5 "Pinwheeling Dartboard" sync / 1[56]:[^:]*:Statice:8CBF:/
-3229.3 "Fireworks" sync / 1[56]:[^:]*:Statice:897B:/
-3231.2 "Fire Spread" sync / 1[56]:[^:]*:Ball of Fire:8983:/
-3238.3 "Burning Chains" sync / 1[56]:[^:]*:Statice:8CBE:/
-3250.4 "Aero IV" sync / 1[56]:[^:]*:Statice:8966:/
+5208.0 "--targetable--"
+5210.4 "Shocking Abandon" sync / 1[56]:[^:]*:Statice:8965:/
+5220.5 "Pinwheeling Dartboard" sync / 1[56]:[^:]*:Statice:8CBF:/
+5229.3 "Fireworks" sync / 1[56]:[^:]*:Statice:897B:/
+5231.2 "Fire Spread" sync / 1[56]:[^:]*:Ball of Fire:8983:/
+5238.3 "Burning Chains" sync / 1[56]:[^:]*:Statice:8CBE:/
+5250.4 "Aero IV" sync / 1[56]:[^:]*:Statice:8966:/
 
-3257.6 "--middle--" sync / 1[56]:[^:]*:Statice:8927:/
-3263.0 "Beguiling Glitter" sync / 1[56]:[^:]*:Statice:8980:/
-3270.1 "Trick Reload" sync / 1[56]:[^:]*:Statice:8967:/
-3272.1 "Locked and Loaded/Misload x8" duration 8 #sync / 1[56]:[^:]*:Statice:(8925|8926):/
-3284.1 "Trapshooting 1" sync / 1[56]:[^:]*:Statice:8D1C:/
-3291.2 "Present Box" sync / 1[56]:[^:]*:Statice:8972:/
-3297.9 "Ring a Ring o' Explosions" sync / 1[56]:[^:]*:Statice:8979:/
-3305.3 "Trigger Happy" sync / 1[56]:[^:]*:Statice:8968:/
-3305.9 "Faerie Ring" sync / 1[56]:[^:]*:Surprising Staff:8973:/
-3312.1 "Trapshooting 2" sync / 1[56]:[^:]*:Statice:8976:/
-3316.1 "Burst" sync / 1[56]:[^:]*:Bomb:897A:/
-3323.3 "Aero IV" sync / 1[56]:[^:]*:Statice:8966:/
-3331.4 "Aero IV" sync / 1[56]:[^:]*:Statice:8966:/
-3344.6 "Aero IV (Enrage)" sync / 1[56]:[^:]*:Statice:8C23:/
+5257.6 "--middle--" sync / 1[56]:[^:]*:Statice:8927:/
+5263.0 "Beguiling Glitter" sync / 1[56]:[^:]*:Statice:8980:/
+5270.1 "Trick Reload" sync / 1[56]:[^:]*:Statice:8967:/
+5272.1 "Locked and Loaded/Misload x8" duration 8 #sync / 1[56]:[^:]*:Statice:(8925|8926):/
+5284.1 "Trapshooting 1" sync / 1[56]:[^:]*:Statice:8D1C:/
+5291.2 "Present Box" sync / 1[56]:[^:]*:Statice:8972:/
+5297.9 "Ring a Ring o' Explosions" sync / 1[56]:[^:]*:Statice:8979:/
+5305.3 "Trigger Happy" sync / 1[56]:[^:]*:Statice:8968:/
+5305.9 "Faerie Ring" sync / 1[56]:[^:]*:Surprising Staff:8973:/
+5312.1 "Trapshooting 2" sync / 1[56]:[^:]*:Statice:8976:/
+5316.1 "Burst" sync / 1[56]:[^:]*:Bomb:897A:/
+5323.3 "Aero IV" sync / 1[56]:[^:]*:Statice:8966:/
+5331.4 "Aero IV" sync / 1[56]:[^:]*:Statice:8966:/
+5344.6 "Aero IV (Enrage)" sync / 1[56]:[^:]*:Statice:8C23:/
 
 # ALL ENCOUNTER ABILITIES
 # 8925 Locked and Loaded
@@ -358,34 +393,3 @@ hideall "--setup--"
 # 8CC2 Uncommon Ground
 # 8D1C Trapshooting
 
-#~~~~~~~~~#
-# TRASH 1 #
-#~~~~~~~~~#
-
-# ALL ENCOUNTER ABILITIES
-# 7A56 --sync-- various auto damage (trash 1)
-# 8BC0 --sync-- damage from Twister tornados
-# 8BC7 Lead Hook casted damage from Kiwakin 3x tankbuster
-# 8BC6 Lead Hook damage from hit 2
-# 8C54 Lead Hook damage from hit 3
-# 8BCC Water III casted damage from Snipper stack marker
-# 8BC8 Sharp Strike casted damage from Kiwakin tank buster with a concussion dot
-# 8BC9 Tail Screw casted damage from Kiwakin baited circle
-# 8BCA Bubble Shower casted damage from Snipper front conal
-# 8BCB Crab Dribble fast casted damage from Snipper back conal after Bubble Shower 8BCA
-# 8C4B Hydrocannon casted damage from Ray front line
-# 8BCE Expulsion casted damage from Ray "get out"
-# 8BCD Electric Whorl casted damage from Ray "get in"
-# 8BD1 Hydroshot casted damage from Monk knockback line with a dot
-# 8C4F Cross Attack casted damage from Monk tankbuster
-
-#~~~~~~~~~#
-# TRASH 2 #
-#~~~~~~~~~#
-
-# ALL ENCOUNTER ABILITIES
-# 8BD4 Ovation
-# 8C3A Gravity Force
-# 8BD3 Tornado
-# 8C39 Ancient Quaga
-# 8C3C Isle Drop
