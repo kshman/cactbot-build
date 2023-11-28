@@ -1,8 +1,23 @@
+import Conditions from '../../../../../resources/conditions';
 import Outputs from '../../../../../resources/outputs';
 import { Responses } from '../../../../../resources/responses';
 import ZoneId from '../../../../../resources/zone_id';
 import { RaidbossData } from '../../../../../types/data';
 import { TriggerSet } from '../../../../../types/trigger';
+
+// TODO: Thaliak Rheognosis: is knockback always from east? can we determine where to go?
+// TODO: Thaliak Rheognosis Petrine: determine where rocks are somehow and call them
+// TODO: Thaliak Tetraktys: use map effect lines to give safe spots for falling walls
+// TODO: Thaliak Heiroglyphika: use map effect lines to call safe spots for rotating green squares
+// TODO: Llymlaen Dire Straits: use 8CCD/8CCE to call out left => right sort of thing
+// TODO: Llymlaen Serpents' Tide: use 8826/887/8828/8829 line 264 cast locations to call safe spots
+// TODO: Llymlaen Navigator's Trident knockback: call where to be knocked back to with Serpents' Tide combo
+// TODO: Llymlaen Torrential Tridents: use 881B Landing to call where to start and rotation direction
+// TODO: Oschon Trek Shot/Swinging Draw: use 264 cast locations to call safe spots
+// TODO: Eulogia Love's Light: use map effect lines to call where to start and which way to rotate
+// TODO: Eulogia Heiroglyphika: use map effect lines to call safe spots for rotating green squares
+// TODO: Eulogia Solar Fans: do they always jump 4 times, so front/back is safe?
+// TODO: Eulogia Climbing Shot: should tell you to knockback to red or blue
 
 export type EulogiaForm = 'left' | 'right' | 'inside' | 'unknown';
 
@@ -22,7 +37,7 @@ const eulogiaFormMap: { [count: string]: EulogiaForm } = {
 } as const;
 
 export interface Data extends RaidbossData {
-  puddle: boolean;
+  busterTargets: string[];
   soaringMinuet: boolean;
   eulogiaForms: EulogiaForm[];
 }
@@ -33,44 +48,21 @@ const triggerSet: TriggerSet<Data> = {
   timelineFile: 'thaleia.txt',
   initData: () => {
     return {
-      puddle: false,
+      busterTargets: [],
       soaringMinuet: false,
       eulogiaForms: [],
     };
   },
+  timelineTriggers: [
+    {
+      id: 'Thaleia Thaliak Rheognosis Knockback',
+      regex: /^Rheognosis$/,
+      beforeSeconds: 5,
+      suppressSeconds: 5,
+      response: Responses.knockback(),
+    },
+  ],
   triggers: [
-    {
-      id: 'Thaleia Puddle Target',
-      type: 'HeadMarker',
-      netRegex: { id: '008B' },
-      condition: (data, matches) => data.me === matches.target,
-      alertText: (data, _matches, output) => {
-        data.puddle = true;
-        return output.text!();
-      },
-      outputStrings: {
-        text: {
-          en: 'Puddle on YOU',
-          de: 'Fläche auf DIR',
-          fr: 'Flaque sur VOUS',
-          ja: '自分にAOE',
-          ko: '내게 장판! 밖으로!',
-        },
-      },
-    },
-    {
-      id: 'Thaleia Tank Buster Target',
-      type: 'HeadMarker',
-      netRegex: { id: ['0158', '01F4'] },
-      condition: (data, matches) => data.me === matches.target,
-      alertText: (_data, _matches, output) => output.text!(),
-      outputStrings: {
-        text: {
-          en: 'Tank Buster on YOU!',
-          ko: '내게 탱크버스터 장판!',
-        },
-      },
-    },
     {
       id: 'Thaleia Thaliak Katarraktes',
       type: 'StartsUsing',
@@ -80,8 +72,8 @@ const triggerSet: TriggerSet<Data> = {
     {
       id: 'Thaleia Thaliak Thlipsis',
       type: 'StartsUsing',
-      netRegex: { id: '88D8', source: 'Thaliak', capture: false },
-      response: Responses.getTogether(),
+      netRegex: { id: '88D8', source: 'Thaliak' },
+      response: Responses.stackMarkerOn(),
     },
     {
       id: 'Thaleia Thaliak Left Bank',
@@ -96,28 +88,50 @@ const triggerSet: TriggerSet<Data> = {
       response: Responses.goLeft(),
     },
     {
+      id: 'Thaleia Thaliak Left Bank Hieroglyphika',
+      type: 'StartsUsing',
+      netRegex: { id: '8C2C', source: 'Thaliak', capture: false },
+      delaySeconds: 12,
+      response: Responses.goRight(),
+    },
+    {
+      id: 'Thaleia Thaliak Right Bank Hieroglyphika',
+      type: 'StartsUsing',
+      netRegex: { id: '8C2D', source: 'Thaliak', capture: false },
+      delaySeconds: 12,
+      response: Responses.goLeft(),
+    },
+    {
       id: 'Thaleia Thaliak Hydroptosis',
       type: 'StartsUsing',
-      netRegex: { id: '88D4', source: 'Thaliak', capture: false },
-      condition: (data) => !data.puddle,
-      infoText: (_data, _matches, output) => output.text!(),
-      run: (data) => data.puddle = false,
-      outputStrings: {
-        text: {
-          en: 'Bait puddles',
-          de: 'Flächen ködern',
-          fr: 'Déposez les flaques',
-          ja: 'AOE回避',
-          ko: '장판 피해요!',
-        },
-      },
+      netRegex: { id: '88D5', source: 'Thaliak' },
+      condition: Conditions.targetIsYou(),
+      response: Responses.spread(),
     },
     {
       id: 'Thaleia Thaliak Rhyton',
-      type: 'StartsUsing',
-      netRegex: { id: ['88D6', '88D7'], source: 'Thaliak' },
-      condition: (data) => data.role === 'tank',
-      response: Responses.tankBuster(),
+      type: 'HeadMarker',
+      netRegex: { id: '01D7' },
+      delaySeconds: (data, matches) => {
+        data.busterTargets.push(matches.target);
+        return data.busterTargets.length === 3 ? 0 : 0.5;
+      },
+      response: (data, _matches, output) => {
+        // cactbot-builtin-response
+        output.responseOutputStrings = {
+          tankCleaveOnYou: Outputs.tankCleaveOnYou,
+          tankCleaves: Outputs.tankBusterCleaves,
+        };
+
+        if (data.busterTargets.length === 0)
+          return;
+        if (!data.busterTargets.includes(data.me))
+          return { infoText: output.tankCleaves!() };
+        if (data.role !== 'tank' && data.job !== 'BLU')
+          return { alarmText: output.tankCleaveOnYou!() };
+        return { alertText: output.tankCleaveOnYou!() };
+      },
+      run: (data) => data.busterTargets = [],
     },
     {
       id: 'Thaleia Thaliak Rheognosis',
@@ -156,7 +170,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Go to safe zone',
+          en: 'Go to rotated safe zone',
           de: 'Geh zum sichere Feld',
           fr: 'Allez dans une zone sûre',
           ja: '安置へ移動',
@@ -174,7 +188,7 @@ const triggerSet: TriggerSet<Data> = {
       id: 'Thaleia Llymlaen Seafoam Spiral',
       type: 'StartsUsing',
       netRegex: { id: '880D', source: 'Llymlaen', capture: false },
-      response: Responses.getIn(),
+      response: Responses.getUnder(),
     },
     {
       id: 'Thaleia Llymlaen Wind Rose',
@@ -227,8 +241,15 @@ const triggerSet: TriggerSet<Data> = {
     {
       id: 'Thaleia Llymlaen Deep Dive',
       type: 'StartsUsing',
-      netRegex: { id: ['8819', '8834'], source: 'Llymlaen', capture: false },
-      response: Responses.getTogether(),
+      netRegex: { id: ['8819', '8834'], source: 'Llymlaen' },
+      response: Responses.stackMarkerOn(),
+    },
+    {
+      id: 'Thaleia Llymlaen Stormwinds',
+      type: 'StartsUsing',
+      netRegex: { id: '881F', source: 'Llymlaen' },
+      condition: Conditions.targetIsYou(),
+      response: Responses.spread(),
     },
     {
       id: 'Thaleia Llymlaen Torrential Tridents',
@@ -301,15 +322,23 @@ const triggerSet: TriggerSet<Data> = {
     },
     {
       id: 'Thaleia Oschon Flinted Foehn',
-      type: 'StartsUsing',
-      netRegex: { id: ['89A3', '89A4'], source: 'Oschon', capture: false },
-      suppressSeconds: 5,
-      alertText: (_data, _matches, output) => output.text!(),
+      type: 'HeadMarker',
+      netRegex: { id: '013C' },
+      alertText: (data, matches, output) => {
+        if (data.me === matches.target)
+          return output.stackMarkerOnYou!();
+        return output.stackMarkerOn!({ player: data.party.member(matches.target) });
+      },
       outputStrings: {
-        text: {
-          en: 'AoE',
-          ja: '連続全体攻撃',
-          ko: '연속 전체 공격',
+        stackMarkerOn: {
+          en: '6x Stack on ${player}',
+          ja: '6x 全体攻撃: ${player}',
+          ko: '6x 전체 공격: ${player}',
+        },
+        stackMarkerOnYou: {
+          en: '6x Stack on You',
+          ja: '自分に6x全体攻撃',
+          ko: '내게 6x 전체 공격',
         },
       },
     },
@@ -321,11 +350,32 @@ const triggerSet: TriggerSet<Data> = {
       run: (data) => data.soaringMinuet = true,
     },
     {
-      id: 'Thaleia Oschon the Arrow',
-      type: 'StartsUsing',
-      netRegex: { id: ['899B', '899C', '899D', '899E'], source: 'Oschon' },
-      suppressSeconds: 10,
-      response: Responses.tankBuster(),
+      id: 'Thaleia Oschon The Arrow / Eulogia Sunbeam',
+      // 0158 = The Arrow (small)
+      // 0158 = Eulogia Sunbeam
+      // 01F4 = The Arrow (big)
+      type: 'HeadMarker',
+      netRegex: { id: ['0158', '01F4'] },
+      delaySeconds: (data, matches) => {
+        data.busterTargets.push(matches.target);
+        return data.busterTargets.length === 3 ? 0 : 0.5;
+      },
+      response: (data, _matches, output) => {
+        // cactbot-builtin-response
+        output.responseOutputStrings = {
+          tankCleaveOnYou: Outputs.tankCleaveOnYou,
+          tankCleaves: Outputs.tankBusterCleaves,
+        };
+
+        if (data.busterTargets.length === 0)
+          return;
+        if (!data.busterTargets.includes(data.me))
+          return { infoText: output.tankCleaves!() };
+        if (data.role !== 'tank' && data.job !== 'BLU')
+          return { alarmText: output.tankCleaveOnYou!() };
+        return { alertText: output.tankCleaveOnYou!() };
+      },
+      run: (data) => data.busterTargets = [],
     },
     {
       id: 'Thaleia Oschon Climbing Shot',
@@ -350,12 +400,50 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Oschon second phase',
+          en: '(second phase)',
           de: 'Oschon zweite Phase',
           fr: 'Oshon : deuxième phase',
           ja: 'すぐ大きくなる',
           ko: '인제 곧 커져요! 버프 넣지말것!',
         },
+      },
+    },
+    {
+      id: 'Thaleia Oschon Piton Pull NE/SW',
+      type: 'StartsUsing',
+      netRegex: { id: '89A9', source: 'Oschon', capture: false },
+      alertText: (data, _matches, output) => {
+        if (data.options.AutumnStyle)
+          return output.text!({ front: output.arrowNE!(), back: output.arrowSW!() });
+        return output.text!({ front: output.dirNE!(), back: output.dirSW!() });
+      },
+      outputStrings: {
+        text: {
+          en: '${front} / ${back}',
+        },
+        dirNE: Outputs.dirNE,
+        dirSW: Outputs.dirSW,
+        arrowNE: Outputs.arrowNE,
+        arrowSW: Outputs.arrowSW,
+      },
+    },
+    {
+      id: 'Thaleia Oschon Piton Pull NW/SE',
+      type: 'StartsUsing',
+      netRegex: { id: '89AA', source: 'Oschon', capture: false },
+      alertText: (data, _matches, output) => {
+        if (data.options.AutumnStyle)
+          return output.text!({ front: output.arrowNW!(), back: output.arrowSE!() });
+        return output.text!({ front: output.dirNW!(), back: output.dirSE!() });
+      },
+      outputStrings: {
+        text: {
+          en: '${front} / ${back}',
+        },
+        dirNW: Outputs.dirNW,
+        dirSE: Outputs.dirSE,
+        arrowNW: Outputs.arrowNW,
+        arrowSE: Outputs.arrowSE,
       },
     },
     {
@@ -374,32 +462,54 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: 'Thaleia Oschon Wandering Shot',
+      id: 'Thaleia Oschon Wandering Shot North',
       type: 'StartsUsing',
-      netRegex: { id: ['8CF6', '8CF7'], source: 'Oschon', capture: false },
+      netRegex: { id: '8CF6', source: 'Oschon', capture: false },
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Far from Orb',
-          de: 'Weit weg vom Orb',
-          fr: 'Loin de l\'orbe',
-          ja: '玉からはなれて',
-          ko: '구슬에서 먼곳으로!',
+          en: 'South (away from orb)',
+          ja: '南、玉からはなれて',
+          ko: '남쪽! 구슬에서 먼곳으로!',
         },
       },
     },
     {
-      id: 'Thaleia Oschon Wandering Volley',
+      id: 'Thaleia Oschon Wandering Shot South',
       type: 'StartsUsing',
-      netRegex: { id: ['89AC', '89AD'], source: 'Oschon', capture: false },
+      netRegex: { id: '8CF7', source: 'Oschon', capture: false },
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Far from Orb + Knockback',
-          de: 'Weit weg vom Orb + Rückstoß',
-          fr: 'Loin de l\'orbe + Poussée',
-          ja: '玉からはなれて + ノックバック',
-          ko: '구슬에서 먼곳 + 넉백!',
+          en: 'North (away from orb)',
+          ja: '北、玉からはなれて',
+          ko: '북쪽! 구슬에서 먼곳으로!',
+        },
+      },
+    },
+    {
+      id: 'Thaleia Oschon Wandering Volley North',
+      type: 'StartsUsing',
+      netRegex: { id: '89AC', source: 'Oschon', capture: false },
+      alertText: (_data, _matches, output) => output.text!(),
+      outputStrings: {
+        text: {
+          en: 'Knockback to south safe spot',
+          ja: '南、安置へノックバック',
+          ko: '남쪽! 넉백!',
+        },
+      },
+    },
+    {
+      id: 'Thaleia Oschon Wandering Volley South',
+      type: 'StartsUsing',
+      netRegex: { id: '89AD', source: 'Oschon', capture: false },
+      alertText: (_data, _matches, output) => output.text!(),
+      outputStrings: {
+        text: {
+          en: 'Knockback to north safe spot',
+          ja: '北、安置へノックバック',
+          ko: '북쪽! 넉백!',
         },
       },
     },
@@ -437,12 +547,6 @@ const triggerSet: TriggerSet<Data> = {
         inside: Outputs.in,
         unknown: Outputs.unknown,
       },
-    },
-    {
-      id: 'Thaleia Eulogia Sunbeam',
-      type: 'StartsUsing',
-      netRegex: { id: '8A00', source: 'Eulogia' },
-      response: Responses.tankBuster(),
     },
     {
       id: 'Thaleia Eulogia the Whorl',
@@ -490,7 +594,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Go to safe zone',
+          en: 'Go to rotated safe zone',
           de: 'Geh in den sicheren Bereich',
           fr: 'Allez dans une zone sûre',
           ja: '安置へ移動',
@@ -502,7 +606,7 @@ const triggerSet: TriggerSet<Data> = {
       id: 'Thaleia Eulogia Hand of the Destroyer Red',
       type: 'StartsUsing',
       netRegex: { id: '8A47', source: 'Eulogia', capture: false },
-      infoText: (_data, _matches, output) => output.text!(),
+      alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
           en: 'Be on blue half',
@@ -518,7 +622,7 @@ const triggerSet: TriggerSet<Data> = {
       id: 'Thaleia Eulogia Hand of the Destroyer Blue',
       type: 'StartsUsing',
       netRegex: { id: '8A48', source: 'Eulogia', capture: false },
-      infoText: (_data, _matches, output) => output.text!(),
+      alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
           en: 'Be on red half',
@@ -549,8 +653,8 @@ const triggerSet: TriggerSet<Data> = {
     {
       id: 'Thaleia Eulogia Destructive Bolt',
       type: 'StartsUsing',
-      netRegex: { id: '8CEC', source: 'Eulogia', capture: false },
-      response: Responses.getTogether(),
+      netRegex: { id: '8CFD', source: 'Eulogia' },
+      response: Responses.stackMarkerOn(),
     },
     {
       id: 'Thaleia Eulogia Byregot\'s Strike',
@@ -617,16 +721,7 @@ const triggerSet: TriggerSet<Data> = {
       id: 'Thaleia Eulogia Climbing Shot',
       type: 'StartsUsing',
       netRegex: { id: '8D0B', source: 'Eulogia', capture: false },
-      alertText: (_data, _matches, output) => output.text!(),
-      outputStrings: {
-        text: {
-          en: 'Knockback to safe corner',
-          de: 'Rückstoß in die sichere Ecke',
-          fr: 'Poussée dans un coin sûr',
-          ja: '安置へノックバック',
-          ko: '안전한 곳으로 넉백!',
-        },
-      },
+      response: Responses.knockback(),
     },
     {
       id: 'Thaleia Eulogia Soaring Minuet',
@@ -650,67 +745,6 @@ const triggerSet: TriggerSet<Data> = {
     },
     // ---------------------------------------------------------------------
     {
-      id: 'Thaleia 어듬이 Thaliak Tetraktys',
-      type: 'StartsUsing',
-      netRegex: { id: '88C9', source: 'Thaliak', capture: false },
-      durationSeconds: 10,
-      infoText: (_data, _matches, output) => output.text!(),
-      outputStrings: {
-        text: {
-          en: 'Avoid triangles!',
-          ko: '삼각 장판 피해요!',
-        },
-      },
-    },
-    {
-      id: 'Thaleia 어듬이 Thaliak Tetraktuos Kosmos',
-      type: 'StartsUsing',
-      // 88CD, 88CE는 부속임
-      netRegex: { id: '88CC', source: 'Thaliak', capture: false },
-      infoText: (_data, _matches, output) => output.text!(),
-      outputStrings: {
-        text: {
-          en: 'Avoid triangles',
-          ko: '삼각 장판 조심해욧',
-        },
-      },
-    },
-    {
-      id: 'Thaleia 어듬이 Llymlaen Navigator\'s Trident',
-      type: 'StartsUsing',
-      netRegex: { id: '8CCE', source: 'Llymlaen' },
-      infoText: (_data, matches, output) => {
-        if (parseFloat(matches.z) < 0)
-          return output.right!();
-        return output.left!();
-      },
-      outputStrings: {
-        left: {
-          en: 'Right => Left => Knockback',
-          ko: '오른쪽 🔜 왼쪽 🔜 넉백',
-        },
-        right: {
-          en: 'Left => Right => Knockback',
-          ko: '왼쪽 🔜 오른쪽 🔜 넉백',
-        },
-      },
-    },
-    {
-      id: 'Thaleia 어듬이 Llymlaen Stormwhorl',
-      type: 'StartsUsing',
-      netRegex: { id: '881E', source: 'Llymlaen', capture: false },
-      condition: (data) => !data.puddle,
-      suppressSeconds: 5,
-      infoText: (_data, _matches, output) => output.text!(),
-      run: (data) => data.puddle = false,
-      outputStrings: {
-        text: {
-          en: 'Avoid puddles!',
-          ko: '장판 피해요!',
-        },
-      },
-    },
-    {
       id: 'Thaleia 어듬이 Llymlaen Denizens of the Deep',
       type: 'StartsUsing',
       netRegex: { id: '8820', source: 'Llymlaen', capture: false },
@@ -720,32 +754,6 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: 'Serpents come out!',
           ko: '뱀 나와요!',
-        },
-      },
-    },
-    {
-      id: 'Thaleia 어듬이 Llymlaen Maelstrom',
-      type: 'StartsUsing',
-      netRegex: { id: '882A', source: 'Llymlaen', capture: false },
-      suppressSeconds: 5,
-      infoText: (_data, _matches, output) => output.text!(),
-      outputStrings: {
-        text: {
-          en: 'Avoid puddles!',
-          ko: '장판 피해요!',
-        },
-      },
-    },
-    {
-      id: 'Thaleia 어듬이 Oschon Piton Pull',
-      type: 'StartsUsing',
-      netRegex: { id: ['89A9', '89AA', '89AB'], source: 'Oschon', capture: false },
-      suppressSeconds: 5,
-      alertText: (_data, _matches, output) => output.text!(),
-      outputStrings: {
-        text: {
-          en: 'Go to safe corner!',
-          ko: '갈고리 없는 모서리로!',
         },
       },
     },
@@ -762,22 +770,17 @@ const triggerSet: TriggerSet<Data> = {
         },
       },
     },
-    {
-      id: 'Thaleia 어듬이 Oschon Downhill',
-      type: 'StartsUsing',
-      netRegex: { id: '8C45', source: 'Oschon', capture: false },
-      durationSeconds: 3,
-      suppressSeconds: 2,
-      alertText: (_data, _matches, output) => output.text!(),
-      outputStrings: {
-        text: {
-          en: 'Avoid puddles!',
-          ko: '바닥 장판 피해요!',
-        },
-      },
-    },
   ],
   timelineReplace: [
+    {
+      'locale': 'en',
+      'replaceText': {
+        'Left Bank/Right Bank': 'Left/Right Bank',
+        'Right Bank/Left Bank': 'Right/Left Bank',
+        'Left Strait/Right Strait': 'Left/Right Strait',
+        'Blueblossoms/Giltblossoms': 'Blue/Giltblossoms',
+      },
+    },
     {
       'locale': 'de',
       'missingTranslations': true,
@@ -826,10 +829,11 @@ const triggerSet: TriggerSet<Data> = {
         'The Windward Pass': '風の通り道',
       },
       'replaceText': {
+        '\\(cast\\)': '(詠唱)',
         'Altitude': 'アルティチュード',
         'Arrow Trail': 'アロートレイル',
         'As Above, So Below': '死生択一の炎',
-        'Blueblossoms': '青花散',
+        'Blueblossoms/Giltblossoms': '青・黄花散',
         'Byregot\'s Strike': 'ビエルゴズ・ストライク',
         'Climbing Shot': 'クライムシュート',
         'Crash': '衝突',
@@ -846,7 +850,6 @@ const triggerSet: TriggerSet<Data> = {
         'Flinted Foehn': 'フェーンアロー',
         'Frothing Sea': '大洋の白波',
         'Full Bright': '月夜の巡り',
-        'Giltblossoms': '黄花散',
         'Godsbane': 'ゴッズベーン',
         'Great Whirlwind': '大旋風',
         'Hand of the Destroyer': '壊神創幻撃',
@@ -855,8 +858,8 @@ const triggerSet: TriggerSet<Data> = {
         'Hydrostasis': 'ヒュドルスタシス',
         'Katarraktes': 'カタラクティス',
         'Landing': '落着',
-        'Left/Right Bank': '左/右岸氾濫',
-        'Left/Right Strait': '左/右舷掃討',
+        'Left Bank/Right Bank': '左・右岸氾濫',
+        'Left Strait/Right Strait': '左・右舷掃討',
         'Lightning Bolt': '落雷',
         'Lofty Peaks': '風天の霊峰',
         'Love\'s Light': '慈愛の月',
@@ -876,6 +879,7 @@ const triggerSet: TriggerSet<Data> = {
         'Reproduce': '分体生成',
         'Rheognosis': 'レーオノシス',
         'Rhyton': 'リュトン',
+        'Right Bank/Left Bank': '右・左岸氾濫',
         'Seafoam Spiral': '輪の波浪',
         'Second Form': '弐の構え',
         'Serpents\' Tide': '海蛇の進撃',

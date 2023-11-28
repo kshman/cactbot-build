@@ -100,7 +100,7 @@ export default {
     fr: 'Tankbuster cleaves',
     ja: 'MT・ST同時範囲攻撃',
     cn: '双T扇形死刑',
-    ko: '둘다 탱크클레브',
+    ko: '모두 탱크클레브',
   },
   tankBusterCleavesOnYou: {
     en: 'Tank Cleaves on YOU',
