@@ -388,6 +388,8 @@ Options.Triggers.push({
       outputStrings: {
         text: {
           en: '${front} / ${back}',
+          ja: '${front} / ${back}',
+          ko: '${front} / ${back}',
         },
         dirNE: Outputs.dirNE,
         dirSW: Outputs.dirSW,
@@ -407,6 +409,8 @@ Options.Triggers.push({
       outputStrings: {
         text: {
           en: '${front} / ${back}',
+          ja: '${front} / ${back}',
+          ko: '${front} / ${back}',
         },
         dirNW: Outputs.dirNW,
         dirSE: Outputs.dirSE,
