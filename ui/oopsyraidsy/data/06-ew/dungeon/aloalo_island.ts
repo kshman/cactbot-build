@@ -183,6 +183,7 @@ const triggerSet: OopsyTriggerSet<Data> = {
           text: {
             // Corresponds to 0x8CDC ability
             en: 'Targeted Light',
+            de: 'Gezieltes Licht',
             ko: '타겟 라이트',
           },
         };
@@ -191,6 +192,7 @@ const triggerSet: OopsyTriggerSet<Data> = {
     renameMistake('Aloalo Statice Fair Flight', '89F5', 'warn', {
       // Corresponds to 0x8946 ability
       en: 'Fair Flight',
+      de: 'Feenflug',
       ko: '페어 플라이트',
     }),
   ],
