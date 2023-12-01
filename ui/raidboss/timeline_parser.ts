@@ -1,9 +1,15 @@
+import JSON5 from 'json5';
+
 import { Lang } from '../../resources/languages';
 import logDefinitions, { LogDefinitionTypes } from '../../resources/netlog_defs';
 import { buildNetRegexForTrigger } from '../../resources/netregexes';
 import { UnreachableCode } from '../../resources/not_reached';
 import Regexes from '../../resources/regexes';
-import { translateRegex, translateText } from '../../resources/translations';
+import {
+  translateRegex,
+  translateRegexBuildParamAnon,
+  translateText,
+} from '../../resources/translations';
 import { NetParams } from '../../types/net_props';
 import { LooseTimelineTrigger, TriggerAutoConfig } from '../../types/trigger';
 
@@ -26,6 +32,18 @@ const isStringOrStringArray = (value: unknown): value is string | string[] => {
   return typeof value === 'string';
 };
 
+export type TimelineNetParams = { [key: string]: string | string[] };
+const isTimelineNetParams = (value: unknown): value is TimelineNetParams => {
+  if (typeof value !== 'object' || Array.isArray(value))
+    return false;
+  const obj = value as { [key: string]: unknown };
+  for (const innerValue of Object.values(obj)) {
+    if (!isStringOrStringArray(innerValue))
+      return false;
+  }
+  return true;
+};
+
 const isValidNetParams = <T extends LogDefinitionTypes>(
   type: T,
   params: Record<string, unknown>,
@@ -36,6 +54,9 @@ const isValidNetParams = <T extends LogDefinitionTypes>(
       return false;
     // Make sure our value is either a string/int or an array of strings/ints
     if (!isStringOrStringArray(params[key]))
+      return false;
+    // These should never be specified on a timeline net regex.
+    if (key === 'capture' || key === 'timestamp')
       return false;
   }
   return true;
@@ -80,7 +101,7 @@ export type Error = {
 
 export type Sync = {
   id: number;
-  origRegexStr: string;
+  origInput: string | TimelineNetParams;
   regexType: 'parsed' | 'net';
   regex: RegExp;
   start: number;
@@ -480,9 +501,8 @@ export class TimelineParser {
 
     let params: unknown;
     try {
-      // TODO: Use `exec` => `JSON.stringify` => `JSON.parse` instead?
-      // See https://github.com/quisquous/cactbot/pull/5939#issuecomment-1830484703
-      params = JSON.parse(syncCommand.netRegex);
+      // Use json5 here to support bareword keys and different quoting styles.
+      params = JSON5.parse(syncCommand.netRegex);
     } catch (e) {
       this.errors.push({
         lineNumber: lineNumber,
@@ -500,13 +520,21 @@ export class TimelineParser {
       });
       return line;
     }
+
+    const translatedParams = translateRegexBuildParamAnon(
+      params,
+      this.options.ParserLanguage,
+      this.replacements,
+    ).params;
+
+    // The original params should be TimelineNetParams, thus so should the output.
+    if (!isTimelineNetParams(translatedParams))
+      throw new UnreachableCode();
     return this.buildRegexSync(
       uniqueid,
       'net',
-      `${netRegexType} ${syncCommand.netRegex}`,
-      // TODO: Use `translateRegexBuildParam` instead, store off params for use elsewhere.
-      // See https://github.com/quisquous/cactbot/pull/5939#discussion_r1399453530
-      Regexes.parse(this.GetReplacedSync(buildNetRegexForTrigger(netRegexType, params))),
+      translatedParams,
+      Regexes.parse(buildNetRegexForTrigger(netRegexType, translatedParams)),
       syncCommand.args,
       seconds,
       lineNumber,
@@ -545,7 +573,7 @@ export class TimelineParser {
   private buildRegexSync(
     uniqueid: number,
     regexType: 'parsed' | 'net',
-    regex: string,
+    origInput: string | TimelineNetParams,
     parsedRegex: RegExp,
     args: string | undefined,
     seconds: number,
@@ -555,7 +583,7 @@ export class TimelineParser {
   ) {
     const sync: Sync = {
       id: uniqueid,
-      origRegexStr: regex,
+      origInput: origInput,
       regexType: regexType,
       regex: parsedRegex,
       start: seconds - 2.5,
@@ -681,8 +709,18 @@ export class TimelineParser {
       if (lineText)
         line = line.replace(` "${lineText.name}"`, ` "${lineText.text}"`);
       const lineSync = lineToSync[lineNumber];
-      if (lineSync)
-        line = line.replace(`sync /${lineSync.origRegexStr}/`, `sync /${lineSync.regex.source}/`);
+      if (lineSync) {
+        if (typeof lineSync.origInput === 'string') {
+          line = line.replace(`sync /${lineSync.origInput}/`, `sync /${lineSync.regex.source}/`);
+        } else {
+          const translatedParams = translateRegexBuildParamAnon(
+            lineSync.origInput,
+            timeline.options.ParserLanguage,
+            timeline.replacements,
+          ).params;
+          line = line.replace(/{[^}]*}/, `{ ${JSON.stringify(translatedParams)} }`);
+        }
+      }
 
       if (syncErrors?.[lineNumber])
         line += ' #MISSINGSYNC';
