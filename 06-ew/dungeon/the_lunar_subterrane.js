@@ -405,12 +405,12 @@ Options.Triggers.push({
   timelineReplace: [
     {
       'locale': 'de',
-      'missingTranslations': true,
       'replaceSync': {
         'Aetheric Charge': 'magisch(?:e|er|es|en) Sphäre',
         'Damcyan Antlion': 'damcyanisch(?:e|er|es|en) Ameisenlöwe',
         'Dark Elf': 'Dunkelelf',
         'Durante': 'Durante',
+        'Hexing Staff': 'Stab der Dunkelheit',
         'Stone Pillar': 'Steinsäule',
         'The Bloodied Barbican': 'Schlosspforte',
         'The Carnelian Courtyard': 'Schlossgarten',
@@ -455,6 +455,7 @@ Options.Triggers.push({
         'Damcyan Antlion': 'fourmilion de Damcyan',
         'Dark Elf': 'Elfe noir',
         'Durante': 'Durante',
+        'Hexing Staff': 'canne des ténèbres',
         'Stone Pillar': 'colonne',
         'The Bloodied Barbican': 'Portes du château de Baron',
         'The Carnelian Courtyard': 'Cour du château de Baron',
@@ -491,18 +492,20 @@ Options.Triggers.push({
     },
     {
       'locale': 'ja',
-      'missingTranslations': true,
       'replaceSync': {
         'Aetheric Charge': '魔力球',
         'Damcyan Antlion': 'ダムシアン・アントリオン',
         'Dark Elf': 'ダークエルフ',
         'Durante': 'ドゥランテ',
+        'Hexing Staff': '闇の杖',
         'Stone Pillar': '石柱',
         'The Bloodied Barbican': 'バロン城正門',
         'The Carnelian Courtyard': 'バロン城中庭',
         'The Cloven Crystal Square': 'クリスタル広場',
       },
       'replaceText': {
+        '\\(cast\\)': '(詠唱)',
+        '\\(spread\\)': '(散会)',
         'Abyssal Outburst': '暗黒波動',
         'Antipodal Assault': 'アンティポディース・スラスト',
         'Antlion March': 'アントリオンマーチ',
