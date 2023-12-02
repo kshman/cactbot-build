@@ -85,20 +85,20 @@ const triggerSet: OopsyTriggerSet<Data> = {
     'Aloalo Quaqua Ravaging Axe': '8B8A', // circle damage from Arcane Armaments axe
     'Aloalo Quaqua Ringing Quoits': '8B8B', // donut damage from Arcane Armaments ring
     'Aloalo Quaqua Violet Storm': '8B95', // large late telegraph front conal
+    'Aloalo Quaqua Rout 1': '8B91', // initial charge
+    'Aloalo Quaqua Rout 2': '8B92', // followup 3 charges
 
     // Quaqua (left)
     'Aloalo Quaqua Scalding Waves 1': '8B97', // initial fire lines
     'Aloalo Quaqua Scalding Waves 2': '8B98', // bouncing fire lines
-    'Aloalo Quaqua Rout 1': '8B91', // initial charge
-    'Aloalo Quaqua Rout 2': '8B92', // followup 3 charges
     'Aloalo Quaqua Cloud to Ground 1': '8B9C', // initial hit of Drake exaflares
     'Aloalo Quaqua Cloud to Ground 2': '8B9D', // followup hits of Drake exaflares
 
-    // Quaquau (middle)
+    // Quaqua (middle)
     'Aloalo Quaqua Elemental Impact': '8BA0', // initial water spear circles
-    'Aloalo Quauqua Flowing Lance 1': '8BA1', // initial water spear cross
-    'Aloalo Quauqua Flowing Lance 2': '8BA2', // initial water spear cross
-    'Aloalo Quauqua Flowing Lance 3': '8CD1', // followup rotating water spear crosses
+    'Aloalo Quaqua Flowing Lance 1': '8BA1', // initial water spear cross
+    'Aloalo Quaqua Flowing Lance 2': '8BA2', // initial water spear cross
+    'Aloalo Quaqua Flowing Lance 3': '8CD1', // followup rotating water spear crosses
 
     // Quaqua (right)
     'Aloalo Quaqua Fell Forces': '8BA5', // being too close to Aetheric Charge purple orb
@@ -156,7 +156,7 @@ const triggerSet: OopsyTriggerSet<Data> = {
   },
   gainsEffectWarn: {
     // C05 = 9999 duration, C06 = 15s duration
-    'Aloalo Bleed': 'C05', // standing outside Quaqua or in Lala blue squares
+    'Aloalo Bleed': 'C05', // standing outside Quaqua or in Lala blue squares or outside Loquloqui
     // C03 = 9999 duration, C04 = 15s duration
     'Aloalo Dropsy': 'C03', // standing outside Ketuduke
     // BF9 = 9999 duration, BFA = 15s duration

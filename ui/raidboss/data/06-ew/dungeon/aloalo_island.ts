@@ -146,7 +146,8 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Avoid spreading spears puddles',
+          en: 'Avoid spreading spear puddles',
+          de: 'Weiche den größer werdenen Speerflächen aus',
           ja: '槍の間の外側へ',
           ko: '바깥에서 창, 떨어져요',
         },
@@ -453,21 +454,25 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         front: {
           en: 'Face Towards Lala',
+          de: 'Schau Lala an',
           ja: 'ボスを見る',
           ko: '보스 봐욧',
         },
         back: {
           en: 'Look Away from Lala',
+          de: 'Schau von Lala weg',
           ja: '後ろ見て',
           ko: '뒤돌아 봐요',
         },
         left: {
           en: 'Left Flank towards Lala',
+          de: 'Linke Seite zu Lala drehen',
           ja: '右見て',
           ko: '오른쪽 봐요',
         },
         right: {
           en: 'Right Flank towards Lala',
+          de: 'Rechte Seite zu Lala drehen',
           ja: '左見て',
           ko: '왼쪽 봐요',
         },
@@ -558,21 +563,25 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         front: {
           en: 'Forward March (1 square)',
+          de: 'Geistlenkung: Vorwärts',
           ja: '強制移動 : 前',
           ko: '강제이동: 앞',
         },
         back: {
           en: 'Backwards March (1 square)',
+          de: 'Geistlenkung: Rückwärts',
           ja: '強制移動 : 後ろ',
           ko: '강제이동: 뒤',
         },
         left: {
           en: 'Left March (1 square)',
+          de: 'Geistlenkung: Links',
           ja: '強制移動 : 左',
           ko: '강제이동: 왼쪽',
         },
         right: {
           en: 'Right March (1 square)',
+          de: 'Geistlenkung: Rechts',
           ja: '強制移動 : 右',
           ko: '강제이동: 오른쪽',
         },
@@ -583,7 +592,6 @@ const triggerSet: TriggerSet<Data> = {
       id: 'Aloalo Statice Pop',
       type: 'StartsUsing',
       netRegex: { id: '892F', source: 'Statice', capture: false },
-      delaySeconds: 3,
       response: Responses.knockback(),
     },
     {

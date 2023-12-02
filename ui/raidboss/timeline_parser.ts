@@ -530,6 +530,7 @@ export class TimelineParser {
     // The original params should be TimelineNetParams, thus so should the output.
     if (!isTimelineNetParams(translatedParams))
       throw new UnreachableCode();
+
     return this.buildRegexSync(
       uniqueid,
       'net',
