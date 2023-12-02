@@ -129,30 +129,35 @@ const whiteFlameDelayOutputStrings = {
   delay1: {
     en: 'now',
     de: 'jetzt',
+    fr: 'Maintenant',
     cn: '现在!',
     ko: '지금 당장',
   },
   delay2: {
     en: 'soon',
     de: 'bald',
+    fr: 'Bientôt',
     cn: '等1只小怪',
     ko: '첫번째',
   },
   delay3: {
     en: 'delayed',
     de: 'verzögert',
+    fr: 'Retardé',
     cn: '等2只小怪',
     ko: '두번째',
   },
   delay4: {
     en: 'very delayed',
     de: 'sehr verzögert',
+    fr: 'Très retardé',
     cn: '等3只小怪',
     ko: '세번째',
   },
   delay5: {
     en: 'verrry delayed',
     de: 'seeeeehr verzögert',
+    fr: 'Trèèèès retardé',
     cn: '等4只小怪',
     ko: '네번째',
   },
@@ -325,6 +330,7 @@ Options.Triggers.push({
       name: {
         en: 'Paradeigma 2 Tower Strategy',
         de: 'Paradigma 2 Türme Strategy',
+        fr: 'Paradeigma Stratégie 2 Tours',
         ja: 'パラデイグマ2の塔処理方法',
         cn: '范式 2 踩塔方法',
         ko: '파라데이그마 2 타워 공략',
@@ -341,6 +347,12 @@ Options.Triggers.push({
           'Verbindungen gerade rüber + nächstgelegener Quadrant Turm (Game8)': 'quadrant',
           'Turm im Uhrzeigersinn von der Verbindungen': 'clockwise',
           'Keine Strategie: einfach Turmfarbe nennen': 'tower',
+        },
+        fr: {
+          'Basé sur les liens': 'tetherbase',
+          'Lien direct à travers + tour du quadrant le plus proche (Game8)': 'quadrant',
+          'Tour en sens horaire depuis les liens': 'clockwise',
+          'Aucune stratégie : Call des couleur des tours uniquement': 'tower',
         },
         ja: {
           'ぬけまるとGame8': 'quadrant',
@@ -388,6 +400,14 @@ Options.Triggers.push({
           'Δ○X□ (TOXS)': 'tcxs',
           'Just call shape and debuff': 'shapeAndDebuff', // FIXME
         },
+        fr: {
+          'X□○Δ (BPOG)': 'xsct',
+          '○XΔ□ (Lignes)': 'cxts',
+          '○Δ□X (Fusée)': 'ctsx',
+          '○ΔX□ (Arc-en-ciel)': 'ctxs',
+          'Δ○X□ (TOXS)': 'tcxs',
+          'Afficher uniquement la forme et le débuff': 'shapeAndDebuff',
+        },
         cn: {
           'X□○Δ (BPOG)': 'xsct',
           '○XΔ□ (1234笔画)': 'cxts',
@@ -414,6 +434,8 @@ Options.Triggers.push({
           'Only calls final position immediately in chosen pair order with no flip. For example, for BPOG, the blue X (crosses) will be far west. <a href="https://quisquous.github.io/cactbot/resources/images/06ew_raid_p12s_classic2_noflip.webp" target="_blank">Visual</a>',
         de:
           'Nennt die endgültige Position nur sofort in der gewählten Paarreihenfolge ohne Flip.“ Bei BPOG beispielsweise befindet sich das blaue X (Kreuze) weit westlich. <a href="https://quisquous.github.io/cactbot/resources/images/06ew_raid_p12s_classic2_noflip.webp" target="_blank">Visual</a>',
+        fr:
+          'Afficher la position finale uniquement dans l\'ordre des paires choisies, sans inversion. Par exemple, pour le BPOG, le X bleu (croix) sera loin à l\'ouest. <a href="https://quisquous.github.io/cactbot/resources/images/06ew_raid_p12s_classic2_noflip.webp" target="_blank">Visual</a>',
         cn:
           '只报自己图案的最终位置，没有位置变换。例如，对于 BPOG 打法，蓝 X 是第一列（西面最远）。 <a href="https://quisquous.github.io/cactbot/resources/images/06ew_raid_p12s_classic2_noflip.webp" target="_blank">Visual</a>',
         ko:
@@ -422,6 +444,7 @@ Options.Triggers.push({
       name: {
         en: 'Classical Concepts 2: Actual only & no inversion',
         de: 'Classical Concepts 2: Nur tatsächlich & keine Umkehrung',
+        fr: 'Classical Concepts 2 : Actuel uniquement & pas d\'inversion',
         cn: '经典概念2: 实际位置 (没有位置变换)',
         ko: '원소 이데아 2: 반전 없이 실제 위치만 알림',
       },
@@ -433,6 +456,7 @@ Options.Triggers.push({
       name: {
         en: 'Pangenesis: First Towers',
         de: 'Pangenesis: Erste Türme',
+        fr: 'Pangenesis: Première tour',
         cn: '黑白塔',
         ko: '범생설(Pangenesis): 첫번째 기둥',
       },
@@ -445,6 +469,11 @@ Options.Triggers.push({
         },
         de: {
           'Nenne nur benötigte Wechsel': 'agnostic',
+          '0+2 (HRT)': 'not',
+          '1+2 (Yuki/Rinon)': 'one',
+        },
+        fr: {
+          'Afficher uniquement les swaps nécessaires': 'agnostic',
           '0+2 (HRT)': 'not',
           '1+2 (Yuki/Rinon)': 'one',
         },
@@ -962,6 +991,7 @@ Options.Triggers.push({
         clones: {
           en: 'Clones ${dir}',
           de: 'Klone ${dir}',
+          fr: 'Clones ${dir}',
           ja: '${dir}',
           cn: '分身 ${dir}',
           ko: '${dir}으로',
@@ -994,6 +1024,7 @@ Options.Triggers.push({
         insideWestOutsideEast: {
           en: 'Inside West / Outside East',
           de: 'Westen innen / Osten außen',
+          fr: 'Intérieur Ouest / Extérieur Est',
           ja: '西の内側 / 東の外側',
           cn: '内左 (西) / 外右 (东)',
           ko: '서[안] / 동[밖]',
@@ -1001,6 +1032,7 @@ Options.Triggers.push({
         insideEastOutsideWest: {
           en: 'Inside East / Outside West',
           de: 'Osten innen / Westen außen',
+          fr: 'Intérieur Est / Extérieur Ouest',
           ja: '西の外側 / 東の内側',
           cn: '内右 (东) / 外左 (西)',
           ko: '동[안] / 서[밖]',
@@ -1068,6 +1100,7 @@ Options.Triggers.push({
         superchain2aLeftNorthNorth: {
           en: 'North + Her Left (then back North)',
           de: 'Norden + Links von Ihr (dannach Norden)',
+          fr: 'Nord + Sa gauche (puis Nord à nouveau)',
           ja: '北 + 北に戻る (左安置)',
           cn: '上 (北) + Boss左侧 (稍后 回上北)',
           ko: '북쪽 🔜 되돌아 와욧 [왼쪽]',
@@ -1075,6 +1108,7 @@ Options.Triggers.push({
         superchain2aLeftNorthSouth: {
           en: 'North + Her Left (then go South)',
           de: 'Norden + Links von Ihr (dannach Süden)',
+          fr: 'Norf + Sa gauche (puis aller au Sud)',
           ja: '北 + 南へ前進 (左安置)',
           cn: '上 (北) + Boss左侧 (稍后 去下南)',
           ko: '북쪽 🔜 계속 전진 [왼쪽]',
@@ -1082,6 +1116,7 @@ Options.Triggers.push({
         superchain2aLeftSouthNorth: {
           en: 'South + Left (then go North)',
           de: 'Süden + Links (dannach Norden)',
+          fr: 'Sud + Gauche (puis aller au Nord)',
           ja: '南 + 北へ前進 (左安置)',
           cn: '下 (南) + 左 (稍后 去上北)',
           ko: '남쪽 🔜 계속 전진 [왼쪽]',
@@ -1089,6 +1124,7 @@ Options.Triggers.push({
         superchain2aLeftSouthSouth: {
           en: 'South + Left (then back South)',
           de: 'Süden + Links (dannach Süden)',
+          fr: 'Sud + Gauche (puis Sud à nouveau)',
           ja: '南 + 南に戻る (左安置)',
           cn: '下 (南) + 左 (稍后 回下南)',
           ko: '남쪽 🔜 되돌아 와욧 [왼쪽]',
@@ -1096,6 +1132,7 @@ Options.Triggers.push({
         superchain2aRightNorthNorth: {
           en: 'North + Her Right (then back North)',
           de: 'Norden + Rechts von Ihr (dannach Norden)',
+          fr: 'Nord + Sa droite (puis Nord à nouveau)',
           ja: '北 + 北に戻る (右安置)',
           cn: '上 (北) + Boss右侧 (稍后 回上北)',
           ko: '북쪽 🔜 되돌아 와욧 [오른쪽]',
@@ -1103,6 +1140,7 @@ Options.Triggers.push({
         superchain2aRightNorthSouth: {
           en: 'North + Her Right (then go South)',
           de: 'Norden + Rechts von Ihr (dannach Süden)',
+          fr: 'Nord + Sa droite (puis aller au Sud)',
           ja: '北 + 南へ前進 (右安置)',
           cn: '上 (北) + Boss右侧 (稍后 去下南)',
           ko: '북쪽 🔜 계속 전진 [오른쪽]',
@@ -1110,6 +1148,7 @@ Options.Triggers.push({
         superchain2aRightSouthNorth: {
           en: 'South + Right (then go North)',
           de: 'Süden + Rechts (dannach Norden)',
+          fr: 'Sud + Droite (puis aller au Nord)',
           ja: '南 + 北へ前進 (右安置)',
           cn: '下 (南) + 右 (稍后 去上北)',
           ko: '남쪽 🔜 계속 전진 [오른쪽]',
@@ -1117,6 +1156,7 @@ Options.Triggers.push({
         superchain2aRightSouthSouth: {
           en: 'South + Right (then back South)',
           de: 'Süden + Rechts (dannach Süden)',
+          fr: 'Sud + Droite (puis Sud à nouveau)',
           ja: '南 + 南に戻る (右安置)',
           cn: '下 (南) + 右 (稍后 回下南)',
           ko: '남쪽 🔜 되돌아 와욧 [오른쪽]',
@@ -1364,6 +1404,7 @@ Options.Triggers.push({
         superchain2aSwapMidBack: {
           en: 'Swap + Mid => Back ${dir}',
           de: 'Wechseln + Mitte => Zurück nach ${dir}',
+          fr: 'Swap + Milieu => Retour vers ${dir}',
           ja: '真ん中 => また${dir} (横へ)',
           cn: '穿 + 去中间 => 回到 ${dir}',
           ko: '한가운데 🔜 ${dir} 되돌아 가욧 [옆으로]',
@@ -1371,6 +1412,7 @@ Options.Triggers.push({
         superchain2aSwapMidGo: {
           en: 'Swap + Mid => Go ${dir}',
           de: 'Wechseln + Mitte => Geh nach ${dir}',
+          fr: 'Swap + Milieu => Allez ${dir}',
           ja: '真ん中 => ${dir}前進 (横へ)',
           cn: '穿 + 去中间 => 去 ${dir}',
           ko: '한가운데 🔜 계속 전진 ${dir} [옆으로]',
@@ -1378,6 +1420,7 @@ Options.Triggers.push({
         superchain2aStayMidBack: {
           en: 'Stay + Mid => Back ${dir}',
           de: 'Bleib stehen + Mitte => Zurück nach ${dir}',
+          fr: 'Restez + Milieu => Retour vers ${dir}',
           ja: '真ん中 => また${dir} (止まる)',
           cn: '停 + 去中间 => 回到 ${dir}',
           ko: '한가운데 🔜 ${dir} 되돌아 가욧',
@@ -1385,6 +1428,7 @@ Options.Triggers.push({
         superchain2aStayMidGo: {
           en: 'Stay + Mid => Go ${dir}',
           de: 'Bleib stehen + Mitte => Geh nach ${dir}',
+          fr: 'Restez + Milieu => Aller vers ${dir}',
           ja: '真ん中 => ${dir}前進 (止まる)',
           cn: '停 + 去中间 => 去 ${dir}',
           ko: '한가운데 🔜 계속 전진 ${dir}',
@@ -1392,6 +1436,7 @@ Options.Triggers.push({
         superchain2aSwapProtean: {
           en: 'Swap => Protean + ${dir}',
           de: 'Wechseln => Himmelsrichtungen + ${dir}',
+          fr: 'Swap => Position + ${dir}',
           ja: '基本散会 + ${dir} (横へ)',
           cn: '穿 => 八方分散 + ${dir}',
           ko: '${dir} + 프로틴 [옆으로]',
@@ -1399,6 +1444,7 @@ Options.Triggers.push({
         superchain2aStayProtean: {
           en: 'Stay => Protean + ${dir}',
           de: 'Bleib stehen => Himmelsrichtungen + ${dir}',
+          fr: 'Restez => Position + ${dir}',
           ja: '基本散会 + ${dir} (止まる)',
           cn: '停 => 八方分散 + ${dir}',
           ko: '${dir} + 프로틴',
@@ -1406,6 +1452,7 @@ Options.Triggers.push({
         superchain2aSwapPartners: {
           en: 'Swap => Partners + ${dir}',
           de: 'Wechseln => Partner + ${dir}',
+          fr: 'Swap => Partenaires + ${dir}',
           ja: 'ペア + ${dir} (横へ)',
           cn: '穿 => 双人分摊 + ${dir}',
           ko: '${dir} + 페어 [옆으로]',
@@ -1413,6 +1460,7 @@ Options.Triggers.push({
         superchain2aStayPartners: {
           en: 'Stay => Partners + ${dir}',
           de: 'Bleib stehen => Partner + ${dir}',
+          fr: 'Restez => Partenaires + ${dir}',
           ja: 'ペア + ${dir} (止まる)',
           cn: '停 => 双人分摊 + ${dir}',
           ko: '${dir} + 페어',
@@ -1471,6 +1519,7 @@ Options.Triggers.push({
         protean: {
           en: 'Protean',
           de: 'Himmelsrichtungen',
+          fr: 'Positions',
           ja: '基本散会',
           cn: '八方分散',
           ko: '프로틴! 흩어져요',
@@ -1478,6 +1527,7 @@ Options.Triggers.push({
         partners: {
           en: 'Partners',
           de: 'Partner',
+          fr: 'Partenaires',
           ja: 'ペア',
           cn: '双人分摊',
           ko: '페어! 둘이 함께',
@@ -1559,6 +1609,7 @@ Options.Triggers.push({
         lightBeam: {
           en: 'light beam',
           de: 'Heller Laser',
+          fr: 'Rayon de lumière',
           ja: 'ひかりビーム',
           cn: '引导光激光',
           ko: '빛 선',
@@ -1566,6 +1617,7 @@ Options.Triggers.push({
         darkBeam: {
           en: 'dark beam',
           de: 'Dunkler Laser',
+          fr: 'Rayon sombre',
           ja: 'やみビーム',
           cn: '引导暗激光',
           ko: '어둠 선',
@@ -1754,6 +1806,7 @@ Options.Triggers.push({
         lightTowerSide: {
           en: 'Drop light tower ${pos1}/${pos2}',
           de: 'Heller Turm ${pos1}/${pos2} ablegen',
+          fr: 'Déposez la tour de lumière ${pos1}/${pos2}',
           ja: 'ひかり設置 ${pos1}/${pos2}',
           cn: '去 ${pos1}/${pos2} 放光塔',
           ko: '🟡설치 ${pos1} ${pos2}',
@@ -1761,6 +1814,7 @@ Options.Triggers.push({
         darkTowerSide: {
           en: 'Drop dark tower at ${pos1}/${pos2}',
           de: 'Dunkler Turm ${pos1}/${pos2} ablegen',
+          fr: 'Déposez la tour sombre ${pos1}/${pos2}',
           ja: 'やみ設置 ${pos1}/${pos2}',
           cn: '去 ${pos1}/${pos2} 放暗塔',
           ko: '🟣설치 ${pos1} ${pos2}',
@@ -1768,6 +1822,7 @@ Options.Triggers.push({
         lightTowerOneSide: {
           en: 'Drop light tower ${pos1}',
           de: 'Heller Turm ${pos1} ablegen',
+          fr: 'Déposez la tour de lumière ${pos1}',
           ja: 'ひかり設置 ${pos1}',
           cn: '去 ${pos1} 放光塔',
           ko: '🟡설치 ${pos1}',
@@ -1775,6 +1830,7 @@ Options.Triggers.push({
         darkTowerOneSide: {
           en: 'Drop dark tower at ${pos1}',
           de: 'Dunkler Turm ${pos1} ablegen',
+          fr: 'Déposez la tour sombre ${pos1}',
           ja: 'やみ設置 ${pos1}',
           cn: '去 ${pos1} 放暗塔',
           ko: '🟣설치 ${pos1}',
@@ -1782,6 +1838,7 @@ Options.Triggers.push({
         lightTower: {
           en: 'Drop light tower',
           de: 'Heller Turm ablegen',
+          fr: 'Déposez la tour de lumière',
           ja: 'ひかり設置',
           cn: '放光塔',
           ko: '🟡설치',
@@ -1789,6 +1846,7 @@ Options.Triggers.push({
         darkTower: {
           en: 'Drop dark tower',
           de: 'Dunkler Turm ablegen',
+          fr: 'Déposez la tour sombre',
           ja: 'やみ設置',
           cn: '放暗塔',
           ko: '🟣설치',
@@ -1821,6 +1879,7 @@ Options.Triggers.push({
         lightTilt: {
           en: 'Soak dark tower',
           de: 'Dunklen Turm nehmen',
+          fr: 'Prenez la tour sombre',
           ja: 'やみ塔踏み',
           cn: '踩暗塔',
           ko: '🟣밟아요',
@@ -1828,6 +1887,7 @@ Options.Triggers.push({
         darkTilt: {
           en: 'Soak light tower',
           de: 'Hellen Turm nehmen',
+          fr: 'Prenez la tour de lumière',
           ja: 'ひかり塔踏み',
           cn: '踩光塔',
           ko: '🟡밟아요',
@@ -1866,6 +1926,7 @@ Options.Triggers.push({
         spreadLater: {
           en: '(spread later)',
           de: '(später verteilen)',
+          fr: '(Écartez-vous plus tard)',
           cn: '（稍后分散）',
           ko: '(나중에 산개)',
         },
@@ -1891,6 +1952,7 @@ Options.Triggers.push({
         lightBeam: {
           en: 'Soak Dark Tower',
           de: 'Dunklen Turm nehmen',
+          fr: 'Prenez la tour sombre',
           ja: 'やみ塔踏み (右)',
           cn: '踩暗塔',
           ko: '🟣밟아요🡺▶',
@@ -1898,6 +1960,7 @@ Options.Triggers.push({
         darkBeam: {
           en: 'Soak Light Tower',
           de: 'Hellen Turm nehmen',
+          fr: 'Prenez la tour de lumière',
           ja: 'ひかり塔踏み (左)',
           cn: '踩光塔',
           ko: '◀🡸🟡밟아요',
@@ -1905,6 +1968,7 @@ Options.Triggers.push({
         lightTower: {
           en: 'Drop Light Tower',
           de: 'Hellen Turm ablegen',
+          fr: 'Déposez la tour de lumière',
           ja: 'ひかり塔設置 (左)',
           cn: '放光塔',
           ko: '◀🡸🟡설치',
@@ -1912,6 +1976,7 @@ Options.Triggers.push({
         darkTower: {
           en: 'Drop Dark Tower',
           de: 'Dunklen Turm ablegen',
+          fr: 'Déposez la tour sombre',
           ja: 'やみ塔設置 (右)',
           cn: '放暗塔',
           ko: '🟣설치🡺▶',
@@ -1948,6 +2013,7 @@ Options.Triggers.push({
         crossMarked: {
           en: '\'+\' AoE on You',
           de: '\'+\' AoE auf DIR',
+          fr: 'AoE \'+\' sur VOUS',
           ja: '自分に\'+\'',
           cn: '十 点名',
           ko: '➕ 북쪽으로!',
@@ -1955,6 +2021,7 @@ Options.Triggers.push({
         xMarked: {
           en: '\'x\' AoE on You',
           de: '\'x\' AoE auf DIR',
+          fr: 'AoE \'x\' sur VOUS',
           ja: '自分に\'x\'',
           cn: '\'x\' 点名',
           ko: '❌ 남쪽으로!',
@@ -1977,6 +2044,7 @@ Options.Triggers.push({
         crossMarked: {
           en: 'Drop \'+\' AoE',
           de: '\'+\' AoE ablegen',
+          fr: 'Déposez l\'AoE \'+\'',
           ja: '隅へ\'+\'設置',
           cn: '放置 十 点名',
           ko: '➕ 구석에 설치',
@@ -1984,6 +2052,7 @@ Options.Triggers.push({
         xMarked: {
           en: 'Drop \'x\' AoE',
           de: '\'x\' AoE ablegen',
+          fr: 'Déposez l\'AoE \'x\'',
           ja: '中央へ\'x\'設置',
           cn: '放置 \'x\' 点名',
           ko: '❌ 가운데 설치',
@@ -2001,6 +2070,7 @@ Options.Triggers.push({
         baitCleave: {
           en: 'Bait line cleave',
           de: 'Linien AoEs ködern',
+          fr: 'Attirez le cleave en ligne',
           ja: '外からのレーザー誘導',
           cn: '引导射线',
           ko: '레이저 유도',
@@ -2061,6 +2131,7 @@ Options.Triggers.push({
         towerOnYou: {
           en: '${color} Tower on You (w/ ${partner})',
           de: '${color} Turm auf Dir (mit ${partner})',
+          fr: 'Tour ${color} sur vous (avec ${partner})',
           ja: '自分に${color}塔 (${partner})',
           cn: '${color} 塔点名 (+ ${partner})',
           ko: '${color}타워 (${partner})',
@@ -2068,6 +2139,7 @@ Options.Triggers.push({
         light: {
           en: 'Light',
           de: 'Heller',
+          fr: 'de lumière',
           ja: 'ひかり',
           cn: '光',
           ko: '🟡',
@@ -2075,6 +2147,7 @@ Options.Triggers.push({
         dark: {
           en: 'Dark',
           de: 'Dunkler',
+          fr: 'sombre',
           ja: 'やみ',
           cn: '暗',
           ko: '🟣',
@@ -2114,6 +2187,7 @@ Options.Triggers.push({
         towersLater: {
           en: '${color} towers (later)',
           de: '${color} Türme (später)',
+          fr: 'Tours ${color} (plus tard)',
           ja: '塔: ${color}',
           cn: '稍后 ${color} 塔',
           ko: '${color}타워예요',
@@ -2121,6 +2195,7 @@ Options.Triggers.push({
         light: {
           en: 'Light',
           de: 'Helle',
+          fr: 'de lumière',
           ja: 'ひかり',
           cn: '光',
           ko: '🟡',
@@ -2128,6 +2203,7 @@ Options.Triggers.push({
         dark: {
           en: 'Dark',
           de: 'Dunkle',
+          fr: 'sombre',
           ja: 'やみ',
           cn: '暗',
           ko: '🟣',
@@ -2163,6 +2239,7 @@ Options.Triggers.push({
         dropTower: {
           en: 'Drop ${color} Tower (${spot})',
           de: '${color} Turm (${spot})',
+          fr: 'Déposez la tour ${color} (${spot})',
           ja: '${spot}に${color}塔設置',
           cn: '在 ${spot} 放 ${color} 塔',
           ko: '${spot} ${color}설치',
@@ -2170,6 +2247,7 @@ Options.Triggers.push({
         light: {
           en: 'Light',
           de: 'Heller',
+          fr: 'de lumière',
           ja: 'ひかり',
           cn: '光',
           ko: '🟡',
@@ -2177,6 +2255,7 @@ Options.Triggers.push({
         dark: {
           en: 'Dark',
           de: 'Dunkler',
+          fr: 'sombre',
           ja: 'やみ',
           cn: '暗',
           ko: '🟣',
@@ -2184,6 +2263,7 @@ Options.Triggers.push({
         platform: {
           en: 'Platform',
           de: 'Platform',
+          fr: 'Plateforme',
           ja: 'マス内部',
           cn: '平台内',
           ko: '판때기 한가운데 설치',
@@ -2191,6 +2271,7 @@ Options.Triggers.push({
         corner: {
           en: 'Inside Corner',
           de: 'In der Ecke',
+          fr: 'Dans le coin',
           ja: '真ん中のコーナー',
           cn: '平台交叉处',
           ko: '건너편에 닿게 모서리 설치',
@@ -2234,6 +2315,7 @@ Options.Triggers.push({
         soakTower: {
           en: 'Soak ${color} Tower',
           de: '${color} Turm nehmen',
+          fr: 'Prenez la tour ${color}',
           ja: '${color}塔踏み',
           cn: '踩 ${color} 塔',
           ko: '${color}밟아요',
@@ -2241,6 +2323,7 @@ Options.Triggers.push({
         baitCleaves: {
           en: 'Bait line cleave',
           de: 'Linien AoE ködern',
+          fr: 'Attirez le cleave en ligne',
           ja: 'レーザー誘導',
           cn: '引导射线',
           ko: '레이저 유도',
@@ -2248,6 +2331,7 @@ Options.Triggers.push({
         light: {
           en: 'Light',
           de: 'Hellen',
+          fr: 'de lumière',
           ja: 'ひかり',
           cn: '光',
           ko: '🟡',
@@ -2255,6 +2339,7 @@ Options.Triggers.push({
         dark: {
           en: 'Dark',
           de: 'Dunklen',
+          fr: 'sombre',
           ja: 'やみ',
           cn: '暗',
           ko: '🟣',
@@ -2502,7 +2587,7 @@ Options.Triggers.push({
           baitLaser: {
             en: 'Bait (${delay})',
             de: 'Laser Ködern (${delay})',
-            fr: 'Bait le laser (${delay})',
+            fr: 'Bait (${delay})',
             ja: 'レーザー誘導 (${delay})',
             cn: '引导激光 (${delay})',
             ko: '레이저 유도! 안쪽으로! (${delay})',
@@ -2510,7 +2595,7 @@ Options.Triggers.push({
           firstWhiteFlame: {
             en: '(5 and 7 ${delay})',
             de: '(5 und 7 ködern ${delay})',
-            fr: '(5 et 7 bait ${delay})',
+            fr: '(5 et 7 ${delay})',
             ja: '(5と7誘導 ${delay})',
             cn: '(5 和 7 引导 ${delay})',
             ko: '(5, 7 유도 ${delay})',
@@ -2547,7 +2632,7 @@ Options.Triggers.push({
           baitLaser: {
             en: 'Bait (${delay})',
             de: 'Laser Ködern (${delay})',
-            fr: 'Bait le laser (${delay})',
+            fr: 'Bait (${delay})',
             ja: 'レーザー誘導 (${delay})',
             cn: '引导激光 (${delay})',
             ko: '레이저 유도! 안쪽으로! (${delay})',
@@ -2555,7 +2640,7 @@ Options.Triggers.push({
           secondWhiteFlame: {
             en: '(6 and 8 ${delay})',
             de: '(6 und 8 ködern ${delay})',
-            fr: '(6 et 8 bait ${delay})',
+            fr: '(6 et 8 ${delay})',
             ja: '(6と8誘導 ${delay})',
             cn: '(6 和 8 引导 ${delay})',
             ko: '(6, 8 유도 ${delay})',
@@ -2563,7 +2648,7 @@ Options.Triggers.push({
           thirdWhiteFlame: {
             en: '(1 and 3 ${delay})',
             de: '(1 und 3 ködern ${delay})',
-            fr: '(1 et 3 bait ${delay})',
+            fr: '(1 et 3 ${delay})',
             ja: '(1と3誘導 ${delay})',
             cn: '(1 和 3 引导 ${delay})',
             ko: '(1, 3 유도 ${delay})',
@@ -2571,7 +2656,7 @@ Options.Triggers.push({
           fourthWhiteFlame: {
             en: '(2 and 4 ${delay})',
             de: '(2 und 6 ködern ${delay})',
-            fr: '(2 et 4 bait ${delay})',
+            fr: '(2 et 4 ${delay})',
             ja: '(2と4誘導 ${delay})',
             cn: '(2 和 4 引导 ${delay})',
             ko: '(2, 4 유도 ${delay})',
@@ -2745,6 +2830,7 @@ Options.Triggers.push({
         lightBeam: {
           en: 'Light Beam (Stack w/Dark)',
           de: 'Heller Laser (mit Dunkel sammeln)',
+          fr: 'Rayon de lumière (Pack avec sombre)',
           ja: '右塔踏み',
           cn: '光激光（与暗分摊）',
           ko: '🟣밟아요🡺▶',
@@ -2752,6 +2838,7 @@ Options.Triggers.push({
         darkBeam: {
           en: 'Dark Beam (Stack w/Light)',
           de: 'Dunkler Laser (mit Hell sammeln)',
+          fr: 'Rayon sombre (Pack avec la lumière)',
           ja: '左塔踏み',
           cn: '暗激光（与光分摊）',
           ko: '◀🡸🟡밟아요',
@@ -2759,6 +2846,7 @@ Options.Triggers.push({
         lightTower: {
           en: 'Light Tower',
           de: 'Heller Turm',
+          fr: 'Tour de lumière',
           ja: '左塔設置',
           cn: '光塔点名',
           ko: '◀🡸🟡설치',
@@ -2766,6 +2854,7 @@ Options.Triggers.push({
         darkTower: {
           en: 'Dark Tower',
           de: 'Dunkler Turm',
+          fr: 'Tour sombre',
           ja: '右塔設置',
           cn: '暗塔点名',
           ko: '🟣설치🡺▶',
@@ -2773,6 +2862,7 @@ Options.Triggers.push({
         lightTilt: {
           en: 'Light Group',
           de: 'Helle Gruppe',
+          fr: 'Groupe Lumière',
           ja: '左散会',
           cn: '光分摊组',
           ko: '◀🡸흩어져요',
@@ -2780,6 +2870,7 @@ Options.Triggers.push({
         darkTilt: {
           en: 'Dark Group',
           de: 'Dunkle Gruppe',
+          fr: 'Groupe Sombre',
           ja: '右散会',
           cn: '暗分摊组',
           ko: '흩어져요🡺▶',
@@ -2815,6 +2906,7 @@ Options.Triggers.push({
         combined: {
           en: '${move} => ${engrave}',
           de: '${move} => ${engrave}',
+          fr: '${move} => ${engrave}',
           ja: '${move} => ${engrave}',
           cn: '${move} => ${engrave}',
           ko: '${move} 🔜 ${engrave}',
@@ -2824,6 +2916,7 @@ Options.Triggers.push({
         lightBeam: {
           en: 'Soak Dark Tower',
           de: 'Dunklen Turm nehmen',
+          fr: 'Prenez la tour sombre',
           ja: '右塔踏み',
           cn: '踩暗塔',
           ko: '🟣밟아요🡺▶',
@@ -2831,6 +2924,7 @@ Options.Triggers.push({
         darkBeam: {
           en: 'Soak Light Tower',
           de: 'Hellen Turm nehmen',
+          fr: 'Prenez la tour de lumière',
           ja: '左塔踏み',
           cn: '踩光塔',
           ko: '◀🡸🟡밟아요',
@@ -2838,6 +2932,7 @@ Options.Triggers.push({
         lightTower: {
           en: 'Drop Light Tower',
           de: 'Hellen Turm ablegen',
+          fr: 'Déposez la tour de lumière',
           ja: '左塔設置',
           cn: '放光塔',
           ko: '◀🡸🟡설치',
@@ -2845,6 +2940,7 @@ Options.Triggers.push({
         darkTower: {
           en: 'Drop Dark Tower',
           de: 'Dunklen Turm ablegen',
+          fr: 'Déposez la tour sombre',
           ja: '右塔設置',
           cn: '放暗塔',
           ko: '🟣설치🡺▶',
@@ -3000,6 +3096,7 @@ Options.Triggers.push({
         combined: {
           en: '${dir} (Side) => ${mechanic} After',
           de: '${dir} (Seiten) => ${mechanic} danach',
+          fr: '${dir} (Côté) => ${mechanic} ensuite',
           cn: '去 ${dir}(侧) => 稍后 ${mechanic}',
           ko: '${mechanic} [${dir}]',
         },
@@ -3008,36 +3105,42 @@ Options.Triggers.push({
         eastFromSouth: {
           en: 'Right/East',
           de: 'Rechts/Osten',
+          fr: 'Droite/Est',
           cn: '右/东',
           ko: '🡺동쪽',
         },
         eastFromNorth: {
           en: 'Left/East',
           de: 'Links/Osten',
+          fr: 'Gauche/Est',
           cn: '左/东',
           ko: '🡸동쪽',
         },
         westFromSouth: {
           en: 'Left/West',
           de: 'Links/Westen',
+          fr: 'Gauche/Ouest',
           cn: '左/西',
           ko: '🡸서쪽',
         },
         westFromNorth: {
           en: 'Right/West',
           de: 'Rechts/Westen',
+          fr: 'Droite/Ouest',
           cn: '右/西',
           ko: '🡺서쪽',
         },
         protean: {
           en: 'Protean',
           de: 'Himmelsrichtungen',
+          fr: 'Positions',
           cn: '八方分散',
           ko: '프로틴',
         },
         partners: {
           en: 'Partners',
           de: 'Partner',
+          fr: 'Partenaires',
           cn: '两人分摊',
           ko: '페어',
         },
@@ -3074,36 +3177,42 @@ Options.Triggers.push({
         combined: {
           en: '${mechanic} => ${dir}',
           de: '${mechanic} => ${dir}',
+          fr: '${mechanic} => ${dir}',
           cn: '${mechanic} => ${dir}',
           ko: '${mechanic} 🔜 ${dir}',
         },
         protean: {
           en: 'Protean',
           de: 'Himmelsrichtungen',
+          fr: 'Position',
           cn: '八方分散',
           ko: '프로틴',
         },
         partners: {
           en: 'Partners',
           de: 'Partner',
+          fr: 'Partenaires',
           cn: '两人分摊',
           ko: '페어',
         },
         inside: {
           en: 'Inside (avoid clones)',
           de: 'Innen (Klonen ausweichen)',
+          fr: 'Intérieur (évitez les clones)',
           cn: '内侧 (躲避小怪激光)',
           ko: '안으로',
         },
         outside: {
           en: 'Outside (avoid clones)',
           de: 'Außen (Klonen ausweichen)',
+          fr: 'Extérieur (évitez les clones)',
           cn: '外侧 (躲避小怪激光)',
           ko: '바깥으로',
         },
         avoid: {
           en: 'Avoid Line Cleaves',
           de: 'Vermeide Linien AoEs',
+          fr: 'Évitez les cleaves en ligne',
           ja: '直線回避',
           cn: '躲避小怪激光',
           ko: '직선 장판 피해요',
@@ -3139,6 +3248,7 @@ Options.Triggers.push({
         combined: {
           en: '${dir} => Out + ${mechanic}',
           de: '${dir} => Raus + ${mechanic}',
+          fr: '${dir} => Extérieur + ${mechanic}',
           cn: '${dir} => 远离 + ${mechanic}',
           ko: '${dir} 바깥에서 + ${mechanic}',
         },
@@ -3147,12 +3257,14 @@ Options.Triggers.push({
         protean: {
           en: 'Protean',
           de: 'Himmelsrichtungen',
+          fr: 'Positions',
           cn: '八方分散',
           ko: '프로틴',
         },
         partners: {
           en: 'Partners',
           de: 'Partner',
+          fr: 'Partenaires',
           cn: '两人分摊',
           ko: '페어',
         },
@@ -3225,54 +3337,63 @@ Options.Triggers.push({
         outsideNW: {
           en: 'Outside NW',
           de: 'Außerhalb NW',
+          fr: 'Extérieur NO',
           cn: '外侧 左上 (西北)',
           ko: '북서 바깥',
         },
         outsideNE: {
           en: 'Outside NE',
           de: 'Außerhalb NO',
+          fr: 'Extérieur NE',
           cn: '外侧 右上(东北)',
           ko: '북동 바깥',
         },
         insideNW: {
           en: 'Inside NW',
           de: 'Innen NW',
+          fr: 'Intérieur NO',
           cn: '内侧 左上(西北)',
           ko: '북서 안',
         },
         insideNE: {
           en: 'Inside NE',
           de: 'Innen NO',
+          fr: 'Intérieur NE',
           cn: '内侧 右上(东北)',
           ko: '북동 안',
         },
         insideSW: {
           en: 'Inside SW',
           de: 'Innen SW',
+          fr: 'Intérieur SO',
           cn: '内侧 左下(西南)',
           ko: '남서 안',
         },
         insideSE: {
           en: 'Inside SE',
           de: 'Innen SO',
+          fr: 'Intérieur SE',
           cn: '内侧 右下(东南)',
           ko: '남동 안',
         },
         outsideSW: {
           en: 'Outside SW',
           de: 'Außerhalb SW',
+          fr: 'Extérieur SO',
           cn: '外侧 左下(西南)',
           ko: '남서 바깥',
         },
         outsideSE: {
           en: 'Outside SE',
           de: 'Außerhalb SO',
+          fr: 'Extérieur SE',
           cn: '外侧 右下(东南)',
           ko: '남동 바깥',
         },
         default: {
           en: 'Find safe tile',
           de: 'Sichere Fläche finden',
+          fr: 'Trouvez la position sûre',
           cn: '找安全地板',
           ko: '안전한 판때기 찾아요',
         },
@@ -3431,19 +3552,21 @@ Options.Triggers.push({
           classic1: {
             en: '${column}, ${row} => ${intercept}',
             de: '${column}, ${row} => ${intercept}',
+            fr: '${column}, ${row} => ${intercept}',
             cn: '${column}, ${row} => ${intercept}',
             ko: '${column} ${row} ${intercept}',
           },
           classic2initial: {
             en: 'Initial: ${column}, ${row} => ${intercept}',
             de: 'Initial: ${column}, ${row} => ${intercept}',
+            fr: 'Initial : ${column}, ${row} => ${intercept}',
             cn: '先去 ${column}, ${row} => ${intercept}',
             ko: '시작: ${column} ${row} ${intercept}',
           },
           classic2actual: {
             en: 'Actual: ${column}, ${row} => ${intercept}',
             de: 'Tatsächlich: ${column}, ${row} => ${intercept}',
-            ja: '反転: ${column}, ${row} => ${intercept}',
+            fr: 'Actuel : ${column}, ${row} => ${intercept}',
             cn: '去 ${column}, ${row} => ${intercept}',
             ko: '반전: ${column} ${row} ${intercept}',
           },
@@ -3458,77 +3581,77 @@ Options.Triggers.push({
           outsideWest: {
             en: 'Outside West',
             de: 'Außerhalb Westen',
-            ja: '1列',
+            fr: 'Extérieur Ouest',
             cn: '第1列 (左西 外侧)',
             ko: '1열',
           },
           insideWest: {
             en: 'Inside West',
             de: 'Innen Westen',
-            ja: '2列',
+            fr: 'Intérieur Ouest',
             cn: '第2列 (左西 内侧)',
             ko: '2열',
           },
           insideEast: {
             en: 'Inside East',
             de: 'Innen Osten',
-            ja: '3列',
+            fr: 'Intérieur Est',
             cn: '第3列 (右东 内侧)',
             ko: '3列',
           },
           outsideEast: {
             en: 'Outside East',
             de: 'Außerhalb Osten',
-            ja: '4列',
+            fr: 'Extérieur Est',
             cn: '第4列 (右东 外侧)',
             ko: '4열',
           },
           northRow: {
             en: 'North Blue',
             de: 'Norden Blau',
-            ja: '上',
+            fr: 'Nord Bleu',
             cn: '第1个蓝方块',
             ko: '윗쪽',
           },
           middleRow: {
             en: 'Middle Blue',
             de: 'Mitte Blau',
-            ja: '中',
+            fr: 'Milieu Bleu',
             cn: '第2个蓝方块',
             ko: '가운데',
           },
           southRow: {
             en: 'South Blue',
             de: 'Süden Blau',
-            ja: '下',
+            fr: 'Sud Bleu',
             cn: '第3个蓝方块',
             ko: '아래쪽',
           },
           leanNorth: {
             en: 'Lean North',
             de: 'Nördlich halten',
-            ja: '🡹',
+            fr: 'Légèrement au Nord',
             cn: '靠上(北)',
             ko: '🡹',
           },
           leanEast: {
             en: 'Lean East',
             de: 'Östlich halten',
-            ja: '🡺',
+            fr: 'Légèrement à l\'Est',
             cn: '靠右(东)',
             ko: '🡺',
           },
           leanSouth: {
             en: 'Lean South',
             de: 'Südlich halten',
-            ja: '🡻',
+            fr: 'Légèrement au Sud',
             cn: '靠下(南)',
             ko: '🡻',
           },
           leanWest: {
             en: 'Lean West',
             de: 'Westlich halten',
-            ja: '🡸',
+            fr: 'Légèrement à l\'Ouest',
             cn: '靠左(西)',
             ko: '🡸',
           },
@@ -3784,21 +3907,21 @@ Options.Triggers.push({
         baitAlphaDebuff: {
           en: 'Avoid Shapes => Bait Proteans (Alpha)',
           de: 'Vermeide Formen => Himmelsrichtungen ködern (Alpha)',
-          ja: '回避 => ビーム誘導 (アルファ)',
+          fr: 'Évitez les formes => Positions (Alpha)',
           cn: '远离方块 => 引导射线 (α)',
           ko: '피하고 🔜 빔 유도 (알파)',
         },
         baitBetaDebuff: {
           en: 'Avoid Shapes => Bait Proteans (Beta)',
           de: 'Vermeide Formen => Himmelsrichtungen ködern (Beta)',
-          ja: '回避 => ビーム誘導 (ベター)',
+          fr: 'Évitez les formes => Positions (B2ta)',
           cn: '远离方块 => 引导射线 (β)',
           ko: '피하고 🔜 빔 유도 (베타)',
         },
         default: {
           en: 'Bait Proteans',
           de: 'Himmelsrichtungen ködern',
-          ja: 'ビーム誘導',
+          fr: 'Positions',
           cn: '引导射线',
           ko: '빔 유도해요',
         },
@@ -3824,21 +3947,21 @@ Options.Triggers.push({
         baitAlphaDebuff: {
           en: 'Bait Proteans (Alpha)',
           de: 'Himmelsrichtungen ködern (Alpha)',
-          ja: 'ビーム誘導 (アルファ)',
+          fr: 'Positions (Alpha)',
           cn: '引导射线 (α)',
           ko: '빔 유도 (알파)',
         },
         baitBetaDebuff: {
           en: 'Bait Proteans (Beta)',
           de: 'Himmelsrichtungen ködern (Beta)',
-          ja: 'ビーム誘導 (ベター)',
+          fr: 'Positions (Beta)',
           cn: '引导射线 (β)',
           ko: '빔 유도 (베타)',
         },
         default: {
           en: 'Bait Proteans',
           de: 'Himmelsrichtungen ködern',
-          ja: 'ビーム誘導',
+          fr: 'Positions',
           cn: '引导射线',
           ko: '빔 유도해요',
         },
@@ -3859,7 +3982,7 @@ Options.Triggers.push({
         moveAvoid: {
           en: 'Move! (avoid shapes)',
           de: 'Bewegen! (Formen vermeiden)',
-          ja: '回避 (ビームの間)',
+          fr: 'Bougez ! (évitez les formes)',
           cn: '快躲开! (远离方块)',
           ko: '피해욧! (사이사이로)',
         },
@@ -3951,6 +4074,7 @@ Options.Triggers.push({
         nothing: {
           en: 'Nothing (w/${player})',
           de: 'Nichts (mit ${player})',
+          fr: 'Rien (avec ${player})',
           ja: '無職: 2番目の上の塔 (${player})',
           cn: '闲人: 踩第2轮塔 (${player})',
           ko: '무직: 둘째🡹 타워 (${player})',
@@ -3958,12 +4082,14 @@ Options.Triggers.push({
         nothingWithTower: {
           en: 'Nothing (w/${player}) - ${tower}',
           de: 'Nichts (mit ${player}) - ${tower}',
+          fr: 'Rien (avec ${player}) - ${tower}',
           cn: '闲人 (和 ${player}) - ${tower}',
           ko: '무직: ${tower} (${player})',
         },
         one: {
           en: 'One (w/${player})',
           de: 'Eins (mit ${player})',
+          fr: 'Un (avec ${player})',
           ja: '因子1: 1番目の塔 (${player})',
           cn: '单因子: 踩第1轮塔 (${player})',
           ko: '인자1: 첫 타워 (${player})',
@@ -3971,12 +4097,14 @@ Options.Triggers.push({
         oneWithTower: {
           en: 'One (w/${player}) - ${tower}',
           de: 'Eins (mit ${player}) - ${tower}',
+          fr: 'Un (avec ${player}) - ${tower}',
           cn: '单因子 (和 ${player}) - ${tower}',
           ko: '인자1: ${tower} (${player})',
         },
         shortLight: {
           en: 'Short Light (get first dark)',
           de: 'Hell kurz (nimm erstes Dunkel)',
+          fr: 'Lumière courte (prenez le 1er sombre)',
           ja: '早: 1番目のやみ塔',
           cn: '短光: 踩第1轮黑塔',
           ko: '빠름: 첫 🟣검은 타워',
@@ -3984,6 +4112,7 @@ Options.Triggers.push({
         longLight: {
           en: 'Long Light (get second dark)',
           de: 'Hell lang (nimm zweites Dunkel)',
+          fr: 'Lumière long (prenez le 2nd sombre)',
           ja: '遅: 2番目の下のやみ塔',
           cn: '长光: 踩第2轮黑塔',
           ko: '느림: 둘째🡻 🟣검은 타워',
@@ -3991,12 +4120,14 @@ Options.Triggers.push({
         longLightMerge: {
           en: 'Long Light (get second dark - merge first)',
           de: 'Hell lang (nimm zweites Dunkel - zuerst kombinieren)',
+          fr: 'Lumière long (prenez le 2nd sombre - fusionnez d\'abord)',
           cn: '长光 (踩第2轮黑塔 - 先合成)',
           ko: '느림: 둘째 🟣검은 타워 - 먼저 합쳐요',
         },
         shortDark: {
           en: 'Short Dark (get first light)',
           de: 'Dunkel kurz (nimm erstes Hell)',
+          fr: 'Sombre court (prenez la 1ère lumière)',
           ja: '早: 1番目のひかり塔',
           cn: '短暗: 踩第1轮白塔',
           ko: '빠름: 첫 🟡하얀 타워',
@@ -4004,6 +4135,7 @@ Options.Triggers.push({
         longDark: {
           en: 'Long Dark (get second light)',
           de: 'Dunkel lang (nimm zweites Hell)',
+          fr: 'Sombre long (prenez la 2nde lumière)',
           ja: '遅: 2番目の下のひかり塔',
           cn: '长暗: 踩第2轮白塔',
           ko: '느림: 둘째🡻 🟡하얀 타워',
@@ -4011,24 +4143,28 @@ Options.Triggers.push({
         longDarkMerge: {
           en: 'Long Dark (get second light - merge first)',
           de: 'Dunkel lang (nimm zweites Hell - zuerst kombinieren)',
+          fr: 'Sombre long (prenez le 2nde lumière - fusionnez d\'abord)',
           cn: '长暗 (踩第2轮白塔 - 先合成)',
           ko: '느림: 둘째 🟡하얀 타워 - 먼저 합쳐요',
         },
         firstTower: {
           en: 'First Tower',
           de: 'Erster Turm',
+          fr: 'Première tour',
           cn: '1 塔',
           ko: '첫 타워',
         },
         secondTower: {
           en: 'Second Tower',
           de: 'Zweiter Turm',
+          fr: 'Deuxième tour',
           cn: '2 塔',
           ko: '둘째 타워',
         },
         secondTowerMerge: {
           en: 'Second Tower (Merge first)',
           de: 'Zweiter Turm (zuerst kombinieren)',
+          fr: 'Deuxième tour (fusionnez d\'abord)',
           cn: '2 塔 (先合成)',
           ko: '둘째 타워 - 먼저 합쳐요',
         },
@@ -4083,6 +4219,7 @@ Options.Triggers.push({
         slimeTethers: {
           en: 'Get Slime Tethers',
           de: 'Nimm Schleim Verbindung',
+          fr: 'Prenez les liens Slime',
           ja: 'スライムの線取り',
           cn: '接线',
           ko: '끝이지만 무직! 슬라임 채요!',
@@ -4108,6 +4245,7 @@ Options.Triggers.push({
           lightTower: {
             en: 'Light Tower',
             de: 'Heller Turm',
+            fr: 'Tour de lumière',
             ja: 'ひかり塔',
             cn: '踩白塔',
             ko: '🟡하얀 타워',
@@ -4115,6 +4253,7 @@ Options.Triggers.push({
           darkTower: {
             en: 'Dark Tower',
             de: 'Dunkler Turm',
+            fr: 'Tour sombre',
             ja: 'やみ塔',
             cn: '踩黑塔',
             ko: '🟣검은 타워',
@@ -4122,6 +4261,7 @@ Options.Triggers.push({
           lightTowerSwitch: {
             en: 'Light Tower (switch)',
             de: 'Heller Turm (wechsel)',
+            fr: 'Tour de lumière (switch)',
             ja: 'やみ -> ひかり塔',
             cn: '踩白塔 (换色)',
             ko: '🟡하얀 타워 (반대로)',
@@ -4129,6 +4269,7 @@ Options.Triggers.push({
           darkTowerSwitch: {
             en: 'Dark Tower (switch)',
             de: 'Dunkler Turm (wechsel)',
+            fr: 'Tour sombre (switch)',
             ja: 'ひかり -> やみ塔',
             cn: '踩黑塔 (换色)',
             ko: '🟣검은 타워 (반대로)',
@@ -4183,6 +4324,7 @@ Options.Triggers.push({
         stackForTethers: {
           en: 'Stack for Tethers',
           de: 'Sammeln für Verbindungen',
+          fr: 'Packez pour les liens',
           cn: '集合等待连线出现',
           ko: '한가운데 모여요!',
         },
@@ -4265,6 +4407,7 @@ Options.Triggers.push({
         combined: {
           en: '${dir1} / ${dir2} Safe',
           de: '${dir1} / ${dir2} Sicher',
+          fr: '${dir1} / ${dir2} Sûr',
           cn: '${dir1} / ${dir2} 安全',
           ko: '${dir1} / ${dir2} 안전',
         },
@@ -4340,6 +4483,7 @@ Options.Triggers.push({
         combined: {
           en: '${dir1} / ${dir2} Safe',
           de: '${dir1} / ${dir2} Sicher',
+          fr: '${dir1} / ${dir2} Sûr',
           cn: '${dir1} / ${dir2} 安全',
           ko: '${dir1} / ${dir2} 안전',
         },
@@ -4392,6 +4536,7 @@ Options.Triggers.push({
         uav1: {
           en: 'Break tether (w/ ${partner})',
           de: 'Verbindung brechen (mit ${partner})',
+          fr: 'Cassez le lien (avec ${partner})',
           ja: '線切る (${partner})',
           cn: '拉断连线 (和 ${partner})',
           ko: '끊어요! (${partner})',
@@ -4399,6 +4544,7 @@ Options.Triggers.push({
         uav2: {
           en: 'Break tether (w/ ${partner}) => ${geocentrism}',
           de: 'Verbindung brechen (mit ${partner}) => ${geocentrism}',
+          fr: 'Cassez le lien (avec ${partner}) => ${geocentrism}',
           cn: '拉断连线 (和 ${partner}) => ${geocentrism}',
           ko: '끊고 + 흩어져요(${geocentrism}) (${partner})',
         },
@@ -4425,6 +4571,7 @@ Options.Triggers.push({
           blockPartner: {
             en: 'Block tether',
             de: 'Verbindung blockieren',
+            fr: 'Bloquez le lien',
             ja: '相棒の前でビームを受ける',
             cn: '挡枪',
             ko: '줄 앞에 막아줘요',
@@ -4432,6 +4579,7 @@ Options.Triggers.push({
           stretchTether: {
             en: 'Stretch tether',
             de: 'Verbindung lang ziehen',
+            fr: 'Étirez le lien',
             cn: '拉线',
             ko: '줄 늘려요',
           },
@@ -4545,12 +4693,14 @@ Options.Triggers.push({
           noBeacon: {
             en: 'Initial Fire: ${player1}, ${player2}',
             de: 'Initiales Feuer: ${player1}, ${player2}',
+            fr: 'Feu initial : ${player1}, ${player2}',
             cn: '火标记点: ${player1}, ${player2}',
             ko: '첫 불: ${player1}, ${player2}',
           },
           beacon: {
             en: 'Initial Fire (w/ ${partner})',
             de: 'Initiales Feuer (mit ${partner})',
+            fr: 'Feu initial (avec ${partner})',
             ja: '自分に初炎 (${partner})',
             cn: '火标记点名 (和 ${partner})',
             ko: '첫 불! 앞으로! (${partner})',
@@ -4605,6 +4755,7 @@ Options.Triggers.push({
         text: {
           en: 'Fire again',
           de: 'nochmal Feuer',
+          fr: 'Feu à nouveau',
           ja: '再び炎！無職とあたまわり',
           cn: '二次火标记点名',
           ko: '또다시 불! 무직이랑 뭉쳐요',
@@ -4628,6 +4779,7 @@ Options.Triggers.push({
         none: {
           en: 'Stack with Fire',
           de: 'Mit Feuer sammeln',
+          fr: 'Package avec le Feu',
           ja: '無職！炎とあたまわり',
           cn: '与火标记分摊',
           ko: '무직! 불이랑 뭉쳐요!',
@@ -4635,6 +4787,7 @@ Options.Triggers.push({
         wind: {
           en: 'Spread Wind',
           de: 'Wind verteilen',
+          fr: 'Écartez le vent',
           ja: '風！ 散会',
           cn: '风点名散开',
           ko: '바람! 흩어져요!',
@@ -4655,6 +4808,7 @@ Options.Triggers.push({
           fire: {
             en: 'Fire (w/${team})',
             de: 'Feuer (mit ${team})',
+            fr: 'Feu (avec ${team})',
             ja: '自分に炎 (${team})',
             cn: '火标记点名 (和 ${team})',
             ko: '불 (${team})',
@@ -4662,6 +4816,7 @@ Options.Triggers.push({
           wind: {
             en: 'Wind (w/${team})',
             de: 'Wind (mit ${team})',
+            fr: 'Vent (avec ${team})',
             ja: '自分に風 (${team})',
             cn: '风标记点名 (和 ${team})',
             ko: '바람 (${team})',
@@ -4669,6 +4824,7 @@ Options.Triggers.push({
           windBeacon: {
             en: 'Initial Wind',
             de: 'Initial Wind',
+            fr: 'Vent inital',
             ja: '自分に初風',
             cn: '风标记点名',
             ko: '바람, 살짝 옆으로',
@@ -4719,6 +4875,7 @@ Options.Triggers.push({
           fireOn: {
             en: 'Fire on ${player}',
             de: 'Feuer auf ${player}',
+            fr: 'Feu sur ${player}',
             ja: '初炎: ${player}',
             cn: '火标记点 ${player}',
             ko: '불 교대: ${player}',
@@ -4752,6 +4909,7 @@ Options.Triggers.push({
         text: {
           en: 'Wind Spread',
           de: 'Wind verteilen',
+          fr: 'Écartez le vent',
           ja: '自分に風、散会',
           cn: '风点名散开',
           ko: '바람, 흩어져요',
@@ -4770,6 +4928,7 @@ Options.Triggers.push({
           passFire: {
             en: 'Pass Fire',
             de: 'Feuer weitergeben',
+            fr: 'Passez le feu',
             ja: '次に移る！',
             cn: '传火!',
             ko: '불 장판 옮겨욧! 반시계 방향❱❱',
@@ -4813,7 +4972,7 @@ Options.Triggers.push({
         text: {
           en: 'Exaflare + Big AoE!',
           de: 'Exaflare + Große AoE!',
-          fr: 'ExaBrasier + Grosse AoE!',
+          fr: 'Brasier + Grosse AoE !',
           ja: 'エクサフレア + 全体攻撃',
           cn: '地火 + 大AoE伤害!',
           ko: '엑사플레어 + 전체 공격',
