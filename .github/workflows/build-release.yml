@@ -35,7 +35,7 @@ jobs:
               exit 2
           }
           $version = $vss[1]
-          echo "::set-output name=version::$version"
+          echo "version=$version" >> $GITHUB_OUTPUT
       - name: Check Tag Exists
         shell: bash
         run: |

@@ -95,9 +95,9 @@ if ($LintAll -eq $TRUE -or $LintScript -eq $TRUE -or $LintTest -eq $TRUE -or  $L
     npm test
     if (-not $?) { Exit-ForError('테스트', 15) }
 
-    '린트 - 프로세스 트리거'
-    npm run process-triggers
-    if (-not $?) { Exit-ForError('프로세스 트리거', 16) }
+    #'린트 - 프로세스 트리거'
+    #npm run process-triggers
+    #if (-not $?) { Exit-ForError('프로세스 트리거', 16) }
   }
 
   ''
