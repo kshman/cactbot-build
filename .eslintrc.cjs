@@ -30,7 +30,7 @@ const settings = {
     'plugin/',
     'publish/',
     'resources/lib/',
-    '@prs/',
+    'build/',
   ],
   'parser': '@typescript-eslint/parser',
   'parserOptions': {

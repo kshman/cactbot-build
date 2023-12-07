@@ -50,7 +50,7 @@ const outputMarkerIntercard: MarkerOutputIntercard[] = [
   'markerSW',
   'markerNW',
 ];
-const outputStringsMarker8: { [outputString: string]: OutputStrings } = {
+const outputStringsMarker8: OutputStrings = {
   markerN: Outputs.cmarkA,
   markerNE: Outputs.cnum1,
   markerE: Outputs.cmarkB,
@@ -61,14 +61,14 @@ const outputStringsMarker8: { [outputString: string]: OutputStrings } = {
   markerNW: Outputs.cnum4,
   unknown: Outputs.unknown,
 };
-const outputStringsMarkerCardinal: { [outputString: string]: OutputStrings } = {
+const outputStringsMarkerCardinal: OutputStrings = {
   markerN: Outputs.cmarkA,
   markerE: Outputs.cmarkB,
   markerS: Outputs.cmarkC,
   markerW: Outputs.cmarkD,
   unknown: Outputs.unknown,
 };
-const outputStringsMarkerIntercard: { [outputString: string]: OutputStrings } = {
+const outputStringsMarkerIntercard: OutputStrings = {
   markerNE: Outputs.cnum1,
   markerSE: Outputs.cnum2,
   markerSW: Outputs.cnum3,
@@ -123,7 +123,7 @@ const outputArrowIntercard: ArrowOutputIntercard[] = [
   'arrowSW',
   'arrowNW',
 ];
-const outputStringsArrow8: { [outputString: string]: OutputStrings } = {
+const outputStringsArrow8: OutputStrings = {
   arrowN: Outputs.arrowN,
   arrowNE: Outputs.arrowNE,
   arrowE: Outputs.arrowE,
@@ -134,14 +134,14 @@ const outputStringsArrow8: { [outputString: string]: OutputStrings } = {
   arrowNW: Outputs.arrowNW,
   unknown: Outputs.unknown,
 };
-const outputStringsArrowCardinal: { [outputString: string]: OutputStrings } = {
+const outputStringsArrowCardinal: OutputStrings = {
   arrowN: Outputs.arrowN,
   arrowE: Outputs.arrowE,
   arrowS: Outputs.arrowS,
   arrowW: Outputs.arrowW,
   unknown: Outputs.unknown,
 };
-const outputStringsArrowIntercard: { [outputString: string]: OutputStrings } = {
+const outputStringsArrowIntercard: OutputStrings = {
   arrowNE: Outputs.arrowNE,
   arrowSE: Outputs.arrowSE,
   arrowSW: Outputs.arrowSW,

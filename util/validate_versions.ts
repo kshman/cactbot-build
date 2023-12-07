@@ -44,7 +44,11 @@ const validate = () => {
     }
   }
 
-  console.log(`Versions match: ${version}`);
+  const vss = version.split('.');
+  if (vss.length !== 3 || vss[1] === undefined)
+    process.exit(-4);
+
+  console.log(`Versions match: ${vss[1]}`);
   process.exit(0);
 };
 void validate();

@@ -1,6 +1,6 @@
 {
   "name": "cactbot-build",
-  "version": "99.31.0",
+  "version": "99.94.0",
   "license": "Apache-2.0",
   "type": "module",
   "types": "./types",
@@ -31,17 +31,17 @@
     "stylelintfix": "stylelint --fix \"resources/**/*.css\" \"ui/**/*.css\" \"user/**/*.css\" \"test/**/*.css\" \"util/**/*.css\"",
     "markdownlint": "markdownlint . --ignore node_modules --ignore publish --ignore plugin/ThirdParty",
     "test": "mocha",
-    "sync-files": "node --loader ts-node/esm util/sync_files.ts && git diff --exit-code",
+    "sync-files": "ts-node util/sync_files.ts && git diff --exit-code",
     "lint-staged": "lint-staged",
     "coverage-report": "ts-node util/gen_coverage_report.ts",
     "util": "ts-node util/index.ts",
     "find-translations": "npm run util -- findTranslations",
     "translate-timeline": "npm run util -- translateTimeline",
     "generate": "npm run util -- generate",
-    "process-triggers": "node --loader ts-node/esm util/process_triggers_folder.ts",
+    "process-triggers": "ts-node util/process_triggers_folder.ts",
     "generate-log-guide": "ts-node util/gen_log_guide.ts",
     "validate-versions": "ts-node util/validate_versions.ts",
-    "version": "node util/sync_version.cjs && git add -u"
+    "version": "ts-node util/bump_version.ts"
   },
   "devDependencies": {
     "@actions/exec": "^1.1.1",
@@ -121,7 +121,7 @@
     "webpack-merge": "^5.8.0"
   },
   "engines": {
-    "node": ">=18.10.0"
+    "node": ">=18.10.0 <=18.18.2"
   },
   "stylelint": {
     "extends": "stylelint-config-standard"
@@ -143,8 +143,9 @@
       "eslint --max-warnings=0 --plugin tsc --rule 'tsc/config: [2, {configFile: \"./tsconfig.json\"}]'"
     ],
     "*.md": "markdownlint",
+    "*.py": "python -m pylint --errors-only",
     "ui/(raidboss|oopsyraidsy)/data/**": [
-      "node --loader ts-node/esm test/test_data_files.ts"
+      "ts-node test/test_data_files.ts"
     ]
   },
   "dependencies": {

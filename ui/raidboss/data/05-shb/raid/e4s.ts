@@ -5,15 +5,26 @@ import ZoneId from '../../../../../resources/zone_id';
 import { RaidbossData } from '../../../../../types/data';
 import { TriggerSet } from '../../../../../types/trigger';
 
+// TODO: who the tank charge is on?
+
 export interface Data extends RaidbossData {
-  phase?: string;
+  phase?: 'landslide' | 'armor';
   printedBury?: boolean;
+  plateFracture: ('frontLeft' | 'frontRight' | 'backLeft' | 'backRight')[];
+  gaolPlayers: string[];
 }
 
 const triggerSet: TriggerSet<Data> = {
   id: 'EdensGateSepultureSavage',
   zoneId: ZoneId.EdensGateSepultureSavage,
   timelineFile: 'e4s.txt',
+  initData: () => {
+    return {
+      plateFracture: [],
+      gaolPlayers: [],
+      gaolPlayerCount: 0,
+    };
+  },
   timelineTriggers: [
     {
       id: 'E4S Earthen Anguish',
@@ -57,7 +68,14 @@ const triggerSet: TriggerSet<Data> = {
       type: 'HeadMarker',
       netRegex: { id: '00B9' },
       condition: Conditions.targetIsYou(),
-      response: Responses.spread('alert'),
+      infoText: (_data, _matches, output) => output.text!(),
+      outputStrings: {
+        text: {
+          en: 'Yellow Spread',
+          ja: '黄色散会',
+          ko: '🟡노랑 흩어져요',
+        },
+      },
     },
     {
       id: 'E4S Evil Earth',
@@ -81,7 +99,14 @@ const triggerSet: TriggerSet<Data> = {
       type: 'HeadMarker',
       netRegex: { id: '00BA' },
       condition: Conditions.targetIsYou(),
-      response: Responses.stackMarker(),
+      infoText: (_data, _matches, output) => output.text!(),
+      outputStrings: {
+        text: {
+          en: 'Orange Stack',
+          ja: '赤頭割り',
+          ko: '🔴빨강 뭉쳐요',
+        },
+      },
     },
     {
       id: 'E4S Voice of the Land',
@@ -266,6 +291,7 @@ const triggerSet: TriggerSet<Data> = {
       type: 'StartsUsing',
       netRegex: { id: '4124', source: 'Titan Maximum', capture: false },
       response: Responses.bigAoe(),
+      run: (data) => data.plateFracture = [],
     },
     {
       id: 'E4S Earthen Fury with Bleed',
@@ -280,14 +306,7 @@ const triggerSet: TriggerSet<Data> = {
       netRegex: { id: '412F', source: 'Titan Maximum', capture: false },
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
-        text: {
-          en: 'Left, Then Right',
-          de: 'Links, dann Rechts',
-          fr: 'À gauche, puis à droite',
-          ja: '左 => 右',
-          cn: '左 => 右',
-          ko: '왼쪽 🔜 오른쪽',
-        },
+        text: Outputs.leftThenRight,
       },
     },
     {
@@ -296,14 +315,7 @@ const triggerSet: TriggerSet<Data> = {
       netRegex: { id: '4130', source: 'Titan Maximum', capture: false },
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
-        text: {
-          en: 'Right, Then Left',
-          de: 'Rechts, dann Links',
-          fr: 'À droite, puis à gauche',
-          ja: '右 => 左',
-          cn: '右 => 左',
-          ko: '오른쪽 🔜 왼쪽',
-        },
+        text: Outputs.rightThenLeft,
       },
     },
     {
@@ -313,7 +325,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Left, Stay Left',
+          en: 'Left => Stay Left',
           de: 'Links, Links bleiben',
           fr: 'À gauche, puis restez',
           ja: 'ずっと左',
@@ -329,7 +341,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Right, Stay Right',
+          en: 'Right => Stay Right',
           de: 'Rechts, Rechts bleiben',
           fr: 'À droite, puis restez',
           ja: 'ずっと右',
@@ -349,7 +361,14 @@ const triggerSet: TriggerSet<Data> = {
       type: 'HeadMarker',
       netRegex: { id: '00BB' },
       condition: Conditions.targetIsYou(),
-      response: Responses.getOut(),
+      alarmText: (_data, _matches, output) => output.text!(),
+      outputStrings: {
+        text: {
+          en: 'Blue Weight',
+          ja: '青重み',
+          ko: '🔵파랑 혼자 범위',
+        },
+      },
     },
     {
       id: 'E4S Megalith',
@@ -378,90 +397,135 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: 'E4S Granite Gaol',
+      id: 'E4S Granite Gaol Collect',
       type: 'HeadMarker',
       netRegex: { id: '00BF' },
-      condition: Conditions.targetIsYou(),
-      alertText: (_data, _matches, output) => output.text!(),
+      run: (data, matches) => data.gaolPlayers.push(matches.target),
+    },
+    {
+      id: 'E4S Granite Gaol',
+      type: 'HeadMarker',
+      netRegex: { id: '00BF', capture: false },
+      condition: (data) => data.gaolPlayers.length === 2 && data.gaolPlayers.includes(data.me),
+      alarmText: (data, _matches, output) => {
+        const [first, second] = data.gaolPlayers;
+        const other = first === data.me ? second : first;
+        return output.text!({ player: data.party.member(other) });
+      },
       outputStrings: {
         text: {
-          en: 'Gaol on YOU',
-          de: 'Gefängnis auf DIR',
-          fr: 'Geôle sur VOUS',
-          ja: '自分にジェイル',
-          cn: '石牢点名',
-          ko: '화강암 감옥 대상',
+          en: 'Gaol on YOU (w/${player})',
+          ja: '自分にジェイル: (${player})',
+          ko: '내게 감옥 (${player})',
         },
       },
     },
     {
-      // TODO: these could be better called out
-      // On the first set, maybe should tell you where to put the jails,
-      // if it's a consistent strategy to ranged lb the jails.  After that
-      // it could just tell you to "go right" or "go left".
-      // On the second set, could just say "go right" / "go front" and
-      // keep track of which it has seen.
       id: 'E4S Plate Fracture - Front Right',
       type: 'StartsUsing',
       netRegex: { id: '4125', source: 'Titan Maximum', capture: false },
-      infoText: (_data, _matches, output) => output.text!(),
+      durationSeconds: 6,
+      infoText: (data, _matches, output) => {
+        const last = data.plateFracture[data.plateFracture.length - 1];
+        if (data.plateFracture.length === 2 || last === 'backRight')
+          return output.left!();
+        if (data.plateFracture.length === 1 || last === 'frontLeft')
+          return output.back!();
+        return output.leftOrBack!();
+      },
+      run: (data) => data.plateFracture.push('frontRight'),
       outputStrings: {
-        text: {
-          en: 'GET OFF FRONT RIGHT',
-          de: 'VON VORNE RECHTS RUNTER',
-          fr: 'PARTEZ DE L\'AVANT DROITE',
-          ja: '右前壊れるよ',
-          cn: '破坏右前',
-          ko: '앞 오른쪽 피하기',
+        leftOrBack: {
+          en: 'Left (or Back)',
+          de: 'VON VORNE RECHTS RUNTER', // FIXME
+          fr: 'PARTEZ DE L\'AVANT DROITE', // FIXME
+          ja: '右前壊れるよ', // FIXME
+          cn: '破坏右前', // FIXME
+          ko: '앞 오른쪽 피하기', // FIXME
         },
+        left: Outputs.left,
+        back: Outputs.back,
       },
     },
     {
       id: 'E4S Plate Fracture - Back Right',
       type: 'StartsUsing',
       netRegex: { id: '4126', source: 'Titan Maximum', capture: false },
-      infoText: (_data, _matches, output) => output.text!(),
+      durationSeconds: 6,
+      infoText: (data, _matches, output) => {
+        const last = data.plateFracture[data.plateFracture.length - 1];
+        if (data.plateFracture.length === 2 || last === 'frontRight')
+          return output.left!();
+        if (data.plateFracture.length === 1 || last === 'backLeft')
+          return output.front!();
+        return output.leftOrFront!();
+      },
+      run: (data) => data.plateFracture.push('backRight'),
       outputStrings: {
-        text: {
-          en: 'GET OFF BACK RIGHT',
-          de: 'VON HINTEN RECHTS RUNTER',
-          fr: 'PARTEZ DE L\'ARRIÈRE DROITE',
-          ja: '右後ろ壊れるよ',
-          cn: '破坏右后',
-          ko: '뒤 오른쪽 피하기',
+        leftOrFront: {
+          en: 'Left (or Front)',
+          de: 'VON HINTEN RECHTS RUNTER', // FIXME
+          fr: 'PARTEZ DE L\'ARRIÈRE DROITE', // FIXME
+          ja: '右後ろ壊れるよ', // FIXME
+          cn: '破坏右后', // FIXME
+          ko: '뒤 오른쪽 피하기', // FIXME
         },
+        left: Outputs.left,
+        front: Outputs.front,
       },
     },
     {
       id: 'E4S Plate Fracture - Back Left',
       type: 'StartsUsing',
       netRegex: { id: '4127', source: 'Titan Maximum', capture: false },
-      infoText: (_data, _matches, output) => output.text!(),
+      durationSeconds: 6,
+      infoText: (data, _matches, output) => {
+        const last = data.plateFracture[data.plateFracture.length - 1];
+        if (data.plateFracture.length === 2 || last === 'frontLeft')
+          return output.right!();
+        if (data.plateFracture.length === 1 || last === 'backRight')
+          return output.front!();
+        return output.frontOrRight!();
+      },
+      run: (data) => data.plateFracture.push('backLeft'),
       outputStrings: {
-        text: {
-          en: 'GET OFF BACK LEFT',
-          de: 'VON HINTEN LINKS RUNTER',
-          fr: 'PARTEZ DE L\'ARRIÈRE GAUCHE',
-          ja: '左後ろ壊れるよ',
-          cn: '破坏左后',
-          ko: '뒤 왼쪽 피하기',
+        frontOrRight: {
+          en: 'Right (or Front)',
+          de: 'VON HINTEN LINKS RUNTER', // FIXME
+          fr: 'PARTEZ DE L\'ARRIÈRE GAUCHE', // FIXME
+          ja: '左後ろ壊れるよ', // FIXME
+          cn: '破坏左后', // FIXME
+          ko: '뒤 왼쪽 피하기', // FIXME
         },
+        right: Outputs.right,
+        front: Outputs.front,
       },
     },
     {
       id: 'E4S Plate Fracture - Front Left',
       type: 'StartsUsing',
       netRegex: { id: '4128', source: 'Titan Maximum', capture: false },
-      infoText: (_data, _matches, output) => output.text!(),
+      durationSeconds: 6,
+      infoText: (data, _matches, output) => {
+        const last = data.plateFracture[data.plateFracture.length - 1];
+        if (data.plateFracture.length === 2 || last === 'backLeft')
+          return output.right!();
+        if (data.plateFracture.length === 1 || last === 'frontRight')
+          return output.back!();
+        return output.backOrRight!();
+      },
+      run: (data) => data.plateFracture.push('frontLeft'),
       outputStrings: {
-        text: {
-          en: 'GET OFF FRONT LEFT',
-          de: 'VON VORNE LINKS RUNTER',
-          fr: 'PARTEZ DE L\'AVANT GAUCHE',
-          ja: '左前壊れるよ',
-          cn: '破坏左前',
-          ko: '앞 왼쪽 피하기',
+        backOrRight: {
+          en: 'Right (or Back)',
+          de: 'VON VORNE LINKS RUNTER', // FIXME
+          fr: 'PARTEZ DE L\'AVANT GAUCHE', // FIXME
+          ja: '左前壊れるよ', // FIXME
+          cn: '破坏左前', // FIXME
+          ko: '앞 왼쪽 피하기', // FIXME
         },
+        right: Outputs.right,
+        back: Outputs.back,
       },
     },
     {
