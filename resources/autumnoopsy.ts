@@ -1,5 +1,6 @@
 import { OopsyData } from '../types/data';
 import { OopsyMistakeType, OopsyTrigger } from '../types/oopsy';
+import { LocaleText } from '../types/trigger';
 
 import NetRegexes from './netregexes';
 
@@ -61,6 +62,28 @@ const AutumnOopsy = {
           blame: matches.target,
           reportId: matches.targetId,
           text: matches.ability,
+        };
+      },
+    };
+  },
+
+  renameMistake: (
+    triggerId: string,
+    abilityId: string | string[],
+    type: OopsyMistakeType,
+    text: LocaleText,
+  ): OopsyTrigger<OopsyData> => {
+    return {
+      id: triggerId,
+      type: 'Ability',
+      netRegex: NetRegexes.ability({ id: abilityId, ...playerDamageFields }),
+      condition: (data, matches) => data.DamageFromMatches(matches) > 0,
+      mistake: (_data, matches) => {
+        return {
+          type: type,
+          blame: matches.target,
+          reportId: matches.targetId,
+          text: text,
         };
       },
     };

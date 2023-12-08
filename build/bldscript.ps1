@@ -7,7 +7,8 @@
   [switch]$LintAll,
   [switch]$LintScript,
   [switch]$LintTest,
-  [switch]$LintVersion
+  [switch]$LintVersion,
+  [switch]$Bump
 )
 
 '보람찬 작업을 대충했다면!'
@@ -55,24 +56,59 @@ function Exit-ForError([string] $mesg, [int] $ecode) {
   exit $ecode
 }
 
+function Update-VersionInfo {
+  param ([string] $Filename, [string] $Find)
+  try {
+    $text = [System.IO.File]::ReadAllText($Filename);
+    $len = $Find.Length
+    $start = $text.IndexOf($Find)
+    if ($start -le 0) {
+      Write-Host "리드가 없어요!"
+      return
+    }
+    $end = $text.IndexOf('.0', $start);
+    $curv = [int]$text.Substring($start + $len, $end - $start - $len);
+    $nxtv = $curv + 1
+    Write-Host "버전 변경: $curv 🡺 $nxtv ($Filename)"
+
+    $res = $text.Substring(0, $start + $len) + [string]$nxtv + $text.Substring($end);
+    [System.IO.File]::WriteAllText($Filename, $res)
+  }
+  catch {
+    Write-Host "아니... 파일이 없나봄미"
+  }
+}
+
 #
 # 여기가 시작
 #
 
+if ($Bump -eq $TRUE)
+{
+  Write-Host "버전을 올릴꺼예요"
+  Update-VersionInfo '../plugin/CactbotEventSource/Properties/AssemblyInfo.cs' 'AssemblyVersion("99.'
+  Update-VersionInfo '../plugin/CactbotEventSource/Properties/AssemblyInfo.cs' 'AssemblyFileVersion("99.'
+  Update-VersionInfo '../plugin/CactbotOverlay/Properties/AssemblyInfo.cs' 'AssemblyVersion("99.'
+  Update-VersionInfo '../plugin/CactbotOverlay/Properties/AssemblyInfo.cs' 'AssemblyFileVersion("99.'
+  Update-VersionInfo '../package.json' '"version": "99.'
+  Read-Host "버전을 확인하기 위해 멈췄어요"
+  exit 0
+}
+
 # 린트라면
 if ($LintAll -eq $TRUE -or $LintScript -eq $TRUE -or $LintTest -eq $TRUE -or  $LintVersion -eq $TRUE) {
    if ($LintAll -eq $TRUE -or $LintVersion -eq $TRUE) {
-    '린트 - 버전'
+    Write-Host '린트 - 버전'
     npm run validate-versions
     if (-not $?) { Exit-ForError('버전', 17) }
    }
 
   if ($LintAll -eq $TRUE) {
-    '린트 - 마크다운'
+    Write-Host '린트 - 마크다운'
     npm run markdownlint
     if (-not $?) { Exit-ForError('마크 다운', 11) }
 
-    '린트 - CSS'
+    Write-Host '린트 - CSS'
     npm run stylelint
     if (-not $?) { Exit-ForError('CSS', 12) }
 
@@ -82,16 +118,16 @@ if ($LintAll -eq $TRUE -or $LintScript -eq $TRUE -or $LintTest -eq $TRUE -or  $L
   }
 
   if ($LintAll -eq $TRUE -or $LintScript -eq $TRUE) {
-    '린트 - 타입스크립트 검사'
+    Write-Host '린트 - 타입스크립트 검사'
     npm run tsc-no-emit
     if (-not $?) { Exit-ForError('타입스크립트 검사', 13) }
 
-    '린트 - 스크립트'
+    Write-Host '린트 - 스크립트'
     npm run lint
     if (-not $?) { Exit-ForError('스크립트', 14) }
   }
   if ($LintAll -eq $TRUE -or $LintTest -eq $TRUE) {
-    '린트 - 테스트'
+    Write-Host '린트 - 테스트'
     npm test
     if (-not $?) { Exit-ForError('테스트', 15) }
 
@@ -100,16 +136,16 @@ if ($LintAll -eq $TRUE -or $LintScript -eq $TRUE -or $LintTest -eq $TRUE -or  $L
     #if (-not $?) { Exit-ForError('프로세스 트리거', 16) }
   }
 
-  ''
-  '린트 종료'
+  Write-Host ''
+  Write-Host '린트 종료'
   exit 0
 }
 
 # 빌드라면
 $act = $env:APPDATA + "\Advanced Combat Tracker"
 $dest = "$act\Plugins\cactbot"
-"ACT 디렉터리: $act"
-"cactbot 디렉터리: $dest"
+Write-Host "ACT 디렉터리: $act"
+Write-Host "cactbot 디렉터리: $dest"
 
 try {
   # 플러그인
@@ -175,14 +211,14 @@ try {
     if ($doCopy -eq $TRUE) {
       # 플러그인 복사
       if ($doBuildDll -eq $TRUE) {
-        '플러그인 복사'
+        Write-Host '플러그인 복사'
         Remove-Item "$dest\*.dll"
         Copy-Item "..\bin\x64\Release\Cactbot*.dll" -Destination "$dest" -Force
       }
 
       # 데이터 복사
       if ($doBuildNpm -eq $TRUE) {
-        'DIST 복사'
+        Write-Host 'DIST 복사'
         Remove-Directory "$dest\dist"
         Remove-Directory "$dest\resources"
         Remove-Directory "$dest\ui"
@@ -194,12 +230,12 @@ try {
     }
   }
 
-  ''
-  'ㅇㅋ 끝나쓰요!!!'
+  Write-Host ''
+  Write-Host 'ㅇㅋ 끝나쓰요!!!'
 }
 catch {
-  ''
-  '오류가 나쓰요!!!'
+  Write-Host ''
+  Write-Host '오류가 나쓰요!!!'
 
   Write-Error $Error[0]
   Get-LineWithMesg "확인하기 위해 멈췄스요"
