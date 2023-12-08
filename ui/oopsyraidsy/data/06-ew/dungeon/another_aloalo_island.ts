@@ -43,11 +43,17 @@ const triggerSet: OopsyTriggerSet<Data> = {
     'AAI Trigger Happy': '894C', // limit cut dart board
     'AAI Bomb Burst': '895D', // bomb explosion
     'AAI Uncommon Ground': '8CC2', // people who are on the same dartboard color with Bull's-eye
+    'AAI Faerie Ring': '8956', // donut rings during Present Box
+    'AAI Fire Spread 1': '8982', // initial rotating fire (from Ball of Fire)
+    'AAI Fire Spread 2': '89F9', // ongoing rotating fire damage (from Statice)
   },
   damageFail: {
     'AAI Big Burst': '8AC3', // tower failure damage
     'AAI Massive Explosion 1': '889C', // failing to resolve Subractive Suppressor Alpha
     'AAI Massive Explosion 2': '889D', // failing to resolve Subractive Suppressor Beta
+    'AAI Burning Chains': '8CBE', // damage from not breaking chains
+    'AAI Surprising Missile Burst': '8957', // running into Surprising Missile tethered add
+    'AAI Surprising Claw Death by Claw': '8958', // running into Surprising Claw tethered add
   },
   gainsEffectFail: {
     // C03 = 9999 duration, ??? = 15s duration
@@ -63,6 +69,7 @@ const triggerSet: OopsyTriggerSet<Data> = {
     'AAI Powerful Light': '88A6', // spread marker during Symmetric Surge that turns squares blue
     'AAI Explosive Theorem': '88A8', // large spreads with Telluric Theorem puddles
     'AAI Trapshooting Spread': '895B', // spread damage from Trick Reload
+    'AAI Firewords Spread': '8960', // spread damage during Present Box / Pinwheeling Dartboard
   },
   soloWarn: {
     'AAI Snipper Water III': '8C64', // Snipper stack marker
@@ -72,8 +79,15 @@ const triggerSet: OopsyTriggerSet<Data> = {
   soloFail: {
     'AAI Hydrofall': '8AB7', // partner stack debuffs
     'AAI Symmetric Surge': '889E', // two person stack that gives magic vuln up
+    'AAI Fireworks Stack': '895F', // two person stack damage during Present Box / Pinwheeling Dartboard
   },
   triggers: [
+    AutumnOopsy.renameMistake('AAI Tornado', '8BC0', 'fail', {
+      // running into a tornado in the initial trash section
+      en: 'Tornado',
+      ja: '竜巻',
+      ko: '회오리',
+    }),
     AutumnOopsy.pushedIntoWall('AAI Angry Seas', '8AC1'),
     AutumnOopsy.pushedIntoWall('AAI Pop', '894E'),
     AutumnOopsy.nonzeroDamageMistake('AAI Hundred Lashings', ['8AC9', '8ACB'], 'warn'),
