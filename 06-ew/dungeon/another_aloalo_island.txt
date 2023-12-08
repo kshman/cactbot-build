@@ -136,7 +136,7 @@ hideall "--setup--"
 # 8AB4 Hydrofall self-targeted cast that adds stack markers
 # 8AB5 Hydrofall ability on players to give "stack second" before Blowing Bubbles
 # 8AB6 Hydrofall ability on players that adds stack debuffs
-# 8AB7 Hydrofall damage from stack debuuffs
+# 8AB7 Hydrofall damage from stack debuffs
 # 8AB8 Hydrobullet self-targeted cast that adds stack markers
 # 8AB9 Hydrobullet ability on players that adds spread debuffs
 # 8ABA Hydrobullet damage from spread debuffs
@@ -145,7 +145,7 @@ hideall "--setup--"
 # 8ABD Blowing Bubbles self-targeted cast that adds Airy Bubble Adds
 # 8ABE Riptide ability on players from Blowing Bubbles Airy Bubble when you step in one
 # 8ABF Fetters ability on players from Blowing Bubbles Airy Bubble when you step in one after 8ABE Riptide
-# 8AC0 Angry Seas cast and self-targeted ability for 8AC1 red line knockback
+# 8AC0 Angry Seas self-targeted cast for 8AC1 red line knockback
 # 8AC1 Angry Seas cast and knockback damage from red line
 # 8AC2 Burst tower damage
 # 8AC3 Big Burst tower failure damage
@@ -155,7 +155,7 @@ hideall "--setup--"
 # 8AC7 Updraft self-targeted cast to boost adds and players into the air
 # 8AC8 Updraft ability on players for 8AC7 Updraft
 # 8AC9 Hundred Lashings cast and damage for non-bubbled Zaratan 180 cleave (no damage on bubbled players)
-# 8ACA Hundred Lashings cast and self-targeted ability for bubbled Zaratan adds
+# 8ACA Hundred Lashings self-targeted cast for bubbled Zaratan adds
 # 8ACB Hundred Lashings cast and damage for bubbled Zaratan 180 cleave (no damage on non-bubbled players)
 # 8ACC Receding Twintides cast and damage for initial out during out->in
 # 8ACD Near Tide fast cast and damage for second out during in->out with 8ACE Encroaching Twintides
@@ -194,24 +194,24 @@ hideall "--setup--"
 
 4030.1 "--middle--" sync / 1[56]:[^:]*:Lala:8874:/
 4035.2 "Analysis" sync / 1[56]:[^:]*:Lala:8895:/
-4040.3 "Arcane Array" sync / 1[56]:[^:]*:Lala:(8890|889F):/
+4040.3 "Arcane Array 1" sync / 1[56]:[^:]*:Lala:(8890|889F):/
 4045.4 "Angular Addition" sync / 1[56]:[^:]*:Lala:(8889|8D2E):/
 4046.1 "Bright Pulse" sync / 1[56]:[^:]*:Lala:8891:/
 4047.4 "Radiance 1" sync / 1[56]:[^:]*:Arcane Globe:8894:/
 4053.4 "Arcane Blight" sync / 1[56]:[^:]*:Lala:888F:/
-4055.7 "Radiance 2" sync / 1[56]:[^:]*:Arcane Globe:8894:/
+4055.7 "Radiance 2" #sync / 1[56]:[^:]*:Arcane Globe:8894:/
 4061.5 "Targeted Light" sync / 1[56]:[^:]*:Lala:8CDE:/
 
 4072.6 "Strategic Strike" sync / 1[56]:[^:]*:Lala:88AD:/
 4085.8 "Planar Tactics" sync / 1[56]:[^:]*:Lala:8898:/
 4100.9 "Arcane Mine" sync / 1[56]:[^:]*:Lala:8899:/
-4108.4 "Symmetric Surge" sync / 1[56]:[^:]*:Lala:889E:/
+4108.4 "Symmetric Surge x2" sync / 1[56]:[^:]*:Lala:889E:/
 4112.7 "Inferno Theorem" sync / 1[56]:[^:]*:Lala:88AE:/
 4122.8 "Strategic Strike" sync / 1[56]:[^:]*:Lala:88AD:/
 
 4131.0 "--middle--" sync / 1[56]:[^:]*:Lala:8874:/
 4138.2 "Spatial Tactics" sync / 1[56]:[^:]*:Lala:88A0:/
-4143.3 "Arcane Array" sync / 1[56]:[^:]*:Lala:(8890|889F):/
+4143.3 "Arcane Array 2" sync / 1[56]:[^:]*:Lala:(8890|889F):/
 4149.1 "Bright Pulse" sync / 1[56]:[^:]*:Lala:8891:/
 4150.4 "Radiance" sync / 1[56]:[^:]*:Arcane Globe:8D1F:/
 4157.4 "Angular Addition" sync / 1[56]:[^:]*:Lala:(8889|8D2E):/
@@ -226,15 +226,14 @@ hideall "--setup--"
 4221.1 "Arcane Point" sync / 1[56]:[^:]*:Lala:88A5:/
 4221.9 "Powerful Light" sync / 1[56]:[^:]*:Lala:88A6:/
 4230.2 "Explosive Theorem" sync / 1[56]:[^:]*:Lala:88A7:/
-4230.2 "Explosive Theorem" sync / 1[56]:[^:]*:Lala:88A8:/
-4234.6 "Symmetric Surge" sync / 1[56]:[^:]*:Lala:889E:/
+4234.6 "Symmetric Surge x2" sync / 1[56]:[^:]*:Lala:889E:/
 4235.3 "Telluric Theorem" sync / 1[56]:[^:]*:Lala:88A9:/
 4248.3 "Strategic Strike" sync / 1[56]:[^:]*:Lala:88AD:/
 4256.3 "Inferno Theorem" sync / 1[56]:[^:]*:Lala:88AE:/
 
 4263.4 "--middle--" sync / 1[56]:[^:]*:Lala:8874:/
 4268.5 "Analysis" sync / 1[56]:[^:]*:Lala:8895:/
-4273.6 "Arcane Array" sync / 1[56]:[^:]*:Lala:(8890|889F):/
+4273.6 "Arcane Array 3" sync / 1[56]:[^:]*:Lala:(8890|889F):/
 4278.7 "Angular Addition" sync / 1[56]:[^:]*:Lala:(8889|8D2E):/
 4279.4 "Bright Pulse" sync / 1[56]:[^:]*:Lala:8891:/
 4280.7 "Radiance 1" sync / 1[56]:[^:]*:Arcane Globe:8894:/
@@ -318,15 +317,15 @@ hideall "--setup--"
 5130.2 "--middle--" sync / 1[56]:[^:]*:Statice:8927:/
 5135.6 "Surprise Balloon" sync / 1[56]:[^:]*:Statice:894D:/
 5142.7 "Beguiling Glitter" sync / 1[56]:[^:]*:Statice:8963:/
-5148.6 "Pop" sync / 1[56]:[^:]*:Statice:894E:/
+5148.6 "Pop 1" sync / 1[56]:[^:]*:Statice:894E:/
 5150.3 "Trigger Happy" sync / 1[56]:[^:]*:Statice:894B:/
-5153.6 "Pop" sync / 1[56]:[^:]*:Statice:894E:/
+5153.6 "Pop 2" sync / 1[56]:[^:]*:Statice:894E:/
 5158.4 "Trapshooting 2" sync / 1[56]:[^:]*:Statice:8959:/
 5170.5 "Aero IV" sync / 1[56]:[^:]*:Statice:8949:/
 
 5177.7 "--untargetable--" sync / 1[56]:[^:]*:Statice:8927:/
 5182.1 "Ring a Ring o' Explosions" sync / 1[56]:[^:]*:Statice:895C:/
-5187.2 "Present Box" sync / 1[56]:[^:]*:Statice:8955:/
+5187.2 "Present Box 1" sync / 1[56]:[^:]*:Statice:8955:/
 5192.3 "Fireworks" sync / 1[56]:[^:]*:Statice:895E:/
 5202.3 "Burst" sync / 1[56]:[^:]*:Bomb:895D:/
 5202.4 "Faerie Ring" sync / 1[56]:[^:]*:Surprising Staff:8956:/
@@ -344,7 +343,7 @@ hideall "--setup--"
 5270.1 "Trick Reload" sync / 1[56]:[^:]*:Statice:894A:/
 5272.1 "Locked and Loaded/Misload x8" duration 8 #sync / 1[56]:[^:]*:Statice:(8925|8926):/
 5284.1 "Trapshooting 1" sync / 1[56]:[^:]*:Statice:8D1A:/
-5291.2 "Present Box" sync / 1[56]:[^:]*:Statice:8955:/
+5291.2 "Present Box 2" sync / 1[56]:[^:]*:Statice:8955:/
 5297.9 "Ring a Ring o' Explosions" sync / 1[56]:[^:]*:Statice:895C:/
 5305.3 "Trigger Happy" sync / 1[56]:[^:]*:Statice:894B:/
 5305.9 "Faerie Ring" sync / 1[56]:[^:]*:Surprising Staff:8956:/

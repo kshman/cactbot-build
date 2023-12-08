@@ -683,14 +683,14 @@ Options.Triggers.push({
         matches.id === '8AB4' ? output.stacks() : output.spread(),
       outputStrings: {
         stacks: {
-          en: 'Knockback => Stack => Spread',
-          ja: 'ノックバック => ペア => 散開',
-          ko: '넉백 🔜 페어 🔜 흩어져요',
+          en: 'Stack => Spread',
+          ja: 'ペア => 散開',
+          ko: '페어 🔜 흩어져요',
         },
         spread: {
-          en: 'Knockback => Spread => Stack',
-          ja: 'ノックバック => 散開 => ペア',
-          ko: '넉백 🔜 흩어졌다 🔜 페어',
+          en: 'Spread => Stack',
+          ja: '散開 => ペア',
+          ko: '흩어졌다 🔜 페어',
         },
       },
     },
@@ -1546,7 +1546,21 @@ Options.Triggers.push({
       type: 'StartsUsing',
       netRegex: { id: '896B', source: 'Statice', capture: false },
       suppressSeconds: 10,
-      response: Responses.knockback(),
+      alertText: (data, _matches, output) => {
+        const safe = data.stcMisload;
+        if (safe === 0)
+          return output.knockback();
+        const arrow = diceToArrow(data.stcMisload);
+        return output.knockbackSafe({ safe: safe, arrow: arrow });
+      },
+      outputStrings: {
+        knockback: Outputs.knockback,
+        knockbackSafe: {
+          en: 'Knockback to ${safe}${arrow}',
+          ja: 'へノックバック (${safe}${arrow})',
+          ko: '넉백! (${safe}${arrow})',
+        },
+      },
     },
     {
       id: 'AAIS Statice Pop Trapshooting',
@@ -1658,6 +1672,48 @@ Options.Triggers.push({
           en: 'Find the angular point!',
           ja: '北を特定して！',
           ko: '꼭지점 찾아요!',
+        },
+      },
+    },
+    {
+      id: 'AAIS Statice Pinwheeling Dartboard Color',
+      type: 'AddedCombatant',
+      netRegex: { npcNameId: '12507' },
+      infoText: (_data, matches, output) => {
+        const centerX = -200;
+        const centerY = 0;
+        const x = parseFloat(matches.x) - centerX;
+        const y = parseFloat(matches.y) - centerY;
+        // 12 pie slices, the edge of the first one is directly north.
+        // It goes in B R Y order repeating 4 times.
+        // The 0.5 subtraction (12 - 0.5 = 11.5) is because the Homing Pattern
+        // lands directly in the middle of a slice.
+        const dir12 = Math.round(6 - 6 * Math.atan2(x, y) / Math.PI + 11.5) % 12;
+        const colorOffset = dir12 % 3;
+        const colorMap = {
+          0: 'blue',
+          1: 'red',
+          2: 'yellow',
+        };
+        const color = colorMap[colorOffset];
+        if (color !== undefined)
+          return output[color]();
+      },
+      outputStrings: {
+        blue: {
+          en: 'Avoid Blue',
+          ja: '玉は青',
+          ko: '🟦파랑에 구슬',
+        },
+        red: {
+          en: 'Avoid Red',
+          ja: '玉は赤',
+          ko: '🟥빨강에 구슬',
+        },
+        yellow: {
+          en: 'Avoid Yellow',
+          ja: '玉は黄色',
+          ko: '🟨노랑에 구슬',
         },
       },
     },

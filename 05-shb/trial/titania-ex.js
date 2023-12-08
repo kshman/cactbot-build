@@ -121,6 +121,9 @@ Options.Triggers.push({
       outputStrings: {
         breakTether: {
           en: 'Break Tether (w/${player})',
+          ja: '線切る (${player})',
+          cn: '拉断连线 (与${player})',
+          ko: '줄 끊어요 (${player})',
         },
       },
     },
