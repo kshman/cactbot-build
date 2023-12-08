@@ -508,7 +508,7 @@ const triggerSet: TriggerSet<Data> = {
           en: '${num} (with ${player})',
           de: '${num} (mit ${player})',
           ja: '${num} (${player})',
-          cn: '${num} (与 ${player})',
+          cn: '${num} (与${player})',
           ko: '${num}번 (${player})',
         },
         cw: {
@@ -970,18 +970,22 @@ const triggerSet: TriggerSet<Data> = {
         },
         circle: {
           en: 'Circle',
+          ja: '円',
           ko: '동글',
         },
         triangle: {
           en: 'Triangle',
+          ja: '三角',
           ko: '삼각',
         },
         square: {
           en: 'Square',
+          ja: '四角',
           ko: '사각',
         },
         cross: {
           en: 'Cross',
+          ja: 'バツ',
           ko: '엑스',
         },
         num1: Outputs.cnum1,
@@ -990,14 +994,17 @@ const triggerSet: TriggerSet<Data> = {
         num4: Outputs.cnum4,
         text: {
           en: '${glitch} ${mark} (${player})',
+          ja: '${glitch} ${mark} (${player})',
           ko: '${glitch} ${mark} (${player})',
         },
         left: {
           en: 'Left ${glitch} ${num}${mark} (${player})',
+          ja: '❰❰❰❰❰ ${glitch} ${num}${mark} (${player})',
           ko: '❰❰❰❰❰ ${glitch} ${num}${mark} (${player})',
         },
         right: {
           en: 'Right ${glitch} ${num}${mark} (${player})',
+          ja: '${glitch} ${num}${mark} (${player}) ❱❱❱❱❱',
           ko: '${glitch} ${num}${mark} (${player}) ❱❱❱❱❱',
         },
         unknown: Outputs.unknown,
@@ -1218,21 +1225,21 @@ const triggerSet: TriggerSet<Data> = {
             en: 'Stack (w/ ${player1} or ${player2})',
             de: 'Sammeln (mit ${player1} oder ${player2})',
             ja: 'あたまわり (${player1}, ${player2})',
-            cn: '分摊 (与 ${player1} 或 ${player2})',
+            cn: '分摊 (与${player1} 或 ${player2})',
             ko: '뭉쳐요 (${player1}, ${player2})',
           },
           unmarkedStack: {
             en: 'Unmarked Stack (w/ ${player1} or ${player2})',
             de: 'Nicht markiertes Sammeln (mit ${player1} oder ${player2})',
             ja: '無職のあたまわり (${player1}, ${player2})',
-            cn: '无点名分摊 (与 ${player1} 或 ${player2})',
+            cn: '无点名分摊 (与${player1} 或 ${player2})',
             ko: '노 디버프, 뭉쳐요 (${player1}, ${player2})',
           },
           sameDebuffPartner: {
             en: '(same debuff as ${player})',
             de: '(selber Debuff wie ${player})',
             ja: '(${player}と同じデバフ)',
-            cn: '(与 ${player} 相同 debuff)',
+            cn: '(与${player} 相同 debuff)',
             ko: '(같은 디버프: ${player})',
           },
           unknown: Outputs.unknown,
@@ -1785,7 +1792,7 @@ const triggerSet: TriggerSet<Data> = {
             en: 'Monitor (w/${player1}, ${player2})',
             de: 'Bildschirm (w/${player1}, ${player2})',
             ja: '検知 (${player1}, ${player2})',
-            cn: '小电视点名 (与 ${player1}, ${player2})',
+            cn: '小电视点名 (与${player1}, ${player2})',
             ko: '내가 모니터 (${player1}, ${player2})',
           },
           unmarked: {
@@ -1864,7 +1871,7 @@ const triggerSet: TriggerSet<Data> = {
             en: 'Stack on You (w/${player})',
             de: 'Auf DIR sammeln (w/${player})',
             ja: '自分にマーカー (${player})',
-            cn: '分摊点名 (与 ${player})',
+            cn: '分摊点名 (与${player})',
             ko: '내게 뭉쳐요 (${player})',
           },
         };

@@ -1710,7 +1710,7 @@ const triggerSet: TriggerSet<Data> = {
           de: 'Steh im ersten Turm (mit ${player})',
           fr: 'Prenez les tours (avec ${player})',
           ja: 'さきに塔を踏み (+${player})',
-          cn: '踩 1 塔 (与 ${player})',
+          cn: '踩 1 塔 (与${player})',
           ko: '먼저 타워 밟아요 (+${player})',
         },
         spreadFirst: {
@@ -1718,7 +1718,7 @@ const triggerSet: TriggerSet<Data> = {
           de: 'Zuerst verteilen (mit ${player})',
           fr: 'Écartez-vous d\'abord (avec ${player})',
           ja: 'さきに散会 (+${player})',
-          cn: '先分散 (与 ${player})',
+          cn: '先分散 (与${player})',
           ko: '먼저 흩어져요 (+${player})',
         },
         unknown: Outputs.unknown,

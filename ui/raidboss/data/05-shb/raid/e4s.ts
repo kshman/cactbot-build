@@ -73,6 +73,7 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: 'Yellow Spread',
           ja: '黄色散会',
+          cn: '黄标分散',
           ko: '🟡노랑 흩어져요',
         },
       },
@@ -104,6 +105,7 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: 'Orange Stack',
           ja: '赤頭割り',
+          cn: '橙标分摊',
           ko: '🔴빨강 뭉쳐요',
         },
       },
@@ -366,6 +368,7 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: 'Blue Weight',
           ja: '青重み',
+          cn: '蓝标大陆之重',
           ko: '🔵파랑 혼자 범위',
         },
       },
@@ -416,6 +419,7 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: 'Gaol on YOU (w/${player})',
           ja: '自分にジェイル: (${player})',
+          cn: '石牢点名 (与${player})',
           ko: '내게 감옥 (${player})',
         },
       },
@@ -440,7 +444,7 @@ const triggerSet: TriggerSet<Data> = {
           de: 'VON VORNE RECHTS RUNTER', // FIXME
           fr: 'PARTEZ DE L\'AVANT DROITE', // FIXME
           ja: '右前壊れるよ', // FIXME
-          cn: '破坏右前', // FIXME
+          cn: '左 (或 后)',
           ko: '앞 오른쪽 피하기', // FIXME
         },
         left: Outputs.left,
@@ -467,7 +471,7 @@ const triggerSet: TriggerSet<Data> = {
           de: 'VON HINTEN RECHTS RUNTER', // FIXME
           fr: 'PARTEZ DE L\'ARRIÈRE DROITE', // FIXME
           ja: '右後ろ壊れるよ', // FIXME
-          cn: '破坏右后', // FIXME
+          cn: '左 (或 前)',
           ko: '뒤 오른쪽 피하기', // FIXME
         },
         left: Outputs.left,
@@ -494,7 +498,7 @@ const triggerSet: TriggerSet<Data> = {
           de: 'VON HINTEN LINKS RUNTER', // FIXME
           fr: 'PARTEZ DE L\'ARRIÈRE GAUCHE', // FIXME
           ja: '左後ろ壊れるよ', // FIXME
-          cn: '破坏左后', // FIXME
+          cn: '右 (或 前)',
           ko: '뒤 왼쪽 피하기', // FIXME
         },
         right: Outputs.right,
@@ -521,7 +525,7 @@ const triggerSet: TriggerSet<Data> = {
           de: 'VON VORNE LINKS RUNTER', // FIXME
           fr: 'PARTEZ DE L\'AVANT GAUCHE', // FIXME
           ja: '左前壊れるよ', // FIXME
-          cn: '破坏左前', // FIXME
+          cn: '右 (或 后)',
           ko: '앞 왼쪽 피하기', // FIXME
         },
         right: Outputs.right,

@@ -103,6 +103,14 @@ const triggerSet: TriggerSet<Data> = {
              Tanks adjust to where the Red and Green Mirror are located.
              One tank must be inbetween the party, the other closest to Greem Mirror.
              Once Green Mirror goes off, the tanks adjust for Red Mirror.`,
+        cn: `此选项可让 cactbot 提示第四次镜中奇遇的双击退。
+             会在 BOSS 转身期间或之后播报提示, 需要小于 1.4 秒
+             的反应时间来同时躲避绿镜和红镜击退。
+             示例: https://clips.twitch.tv/CreativeDreamyAsparagusKlappa
+             人群在 BOSS 瞬移后分成两组, 分别站在 BOSS 身后。
+             坦克根据红镜和绿镜的位置进行调整。
+             一个坦克必须在分组中间，另一个坦克最靠近绿镜。
+             绿镜熄灭后，坦克调整到红镜位置。`,
       },
       type: 'checkbox',
       default: (options) => {
@@ -215,11 +223,13 @@ const triggerSet: TriggerSet<Data> = {
         scytheNext: {
           en: '(under boss => under mirrors soon)',
           ja: '(ボスの下 => まもなく鏡の下)',
+          cn: '(BOSS 下方 => 即将去镜子下方)',
           ko: '(보스 밑 🔜 곧 거울 아래)',
         },
         axeNext: {
           en: '(out => middle soon)',
           ja: '(外 => まもなく真ん中)',
+          cn: '(外 => 即将去中间)',
           ko: '(밖에서 => 곧 한가운데로)',
         },
       },
@@ -253,11 +263,13 @@ const triggerSet: TriggerSet<Data> = {
         redMirrorWest: {
           en: 'Behind => SW',
           ja: '後ろ => 南西',
+          cn: '后 => 左下 (西南)',
           ko: '뒤에 있다 🔜 🡿남서쪽으로',
         },
         redMirrorEast: {
           en: 'Behind => SE',
           ja: '後ろ => 南東',
+          cn: '后 => 右下 (东南)',
           ko: '뒤에 있다 🔜 남동쪽으로🡾',
         },
         getBehind: Outputs.getBehind,
@@ -279,11 +291,13 @@ const triggerSet: TriggerSet<Data> = {
         redMirrorEast: {
           en: 'Front => NW',
           ja: '前 => 北西',
+          cn: '前 => 左上 (西北)',
           ko: '앞에 있다 🔜 🡼북서쪽으로',
         },
         redMirrorWest: {
           en: 'Front => NE',
           ja: '前 => 北東',
+          cn: '前 => 右上 (东北)',
           ko: '앞에 있다 🔜 북동쪽으로🡽',
         },
         goFront: Outputs.goFront,
@@ -352,7 +366,7 @@ const triggerSet: TriggerSet<Data> = {
           de: 'Frosthieb als nächstes', // FIXME
           fr: 'Taillade de givre bientôt', // FIXME
           ja: '次はフロストスラッシュ', // FIXME
-          cn: '下次攻击前侧面', // FIXME
+          cn: '冰霜斩 (去背后)',
           ko: '다음: 서리 참격', // FIXME
         },
         drivingFrostNext: {
@@ -360,7 +374,7 @@ const triggerSet: TriggerSet<Data> = {
           de: 'Froststoß als nächstes', // FIXME
           fr: 'Percée de givre bientôt', // FIXME
           ja: '次はフロストスラスト', // FIXME
-          cn: '下次攻击后面', // FIXME
+          cn: '冰霜刺 (去前面)',
           ko: '다음: 서리 일격', // FIXME
         },
       },
@@ -392,6 +406,7 @@ const triggerSet: TriggerSet<Data> = {
         cleanse: {
           en: 'Cleanse: ${players}',
           ja: 'エスナ: ${players}',
+          cn: '驱散: ${players}',
           ko: '에스나: ${players}',
         },
       },
@@ -406,6 +421,7 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: 'Star on YOU',
           ja: '自分に星が！',
+          cn: '冰针点名',
           ko: '내게 별이!',
         },
       },
@@ -498,6 +514,7 @@ const triggerSet: TriggerSet<Data> = {
         outThenMiddle: {
           en: 'Out => Middle',
           ja: '外 => 真ん中',
+          cn: '远离 => 中间',
           ko: '밖에 있다 🔜 한가운데로',
         },
         out: Outputs.out,
@@ -522,16 +539,19 @@ const triggerSet: TriggerSet<Data> = {
         getUnderCards: {
           en: 'Under => Under Cardinal Mirrors',
           ja: 'ボスの下 => 十字の鏡の下',
+          cn: '下方 => 正点镜下方',
           ko: '보스 밑 🔜 ➕거울 밑으로',
         },
         getUnderIntercards: {
           en: 'Under => Under Intercard Mirrors',
           ja: 'ボスの下 => 斜め鏡の下',
+          cn: '下方 => 斜点镜下方',
           ko: '보스 밑 🔜 ❌거울 밑으로',
         },
         getUnderUnknown: {
           en: 'Under Boss => Under Mirrors',
           ja: 'ボスの下 => 鏡の下',
+          cn: 'BOSS 下方 => 镜下方',
           ko: '보스 밑 🔜 거울 밑으로',
         },
         getUnder: Outputs.getUnder,
@@ -599,11 +619,13 @@ const triggerSet: TriggerSet<Data> = {
           getFinalTower: {
             en: 'Get Final Tower',
             ja: '最後の塔踏み',
+            cn: '踩最后塔',
             ko: '마지막 타워 밟아요',
           },
           avoidFinalTower: {
             en: 'Avoid Final Tower',
             ja: '最後の塔回避',
+            cn: '躲最后塔',
             ko: '마지막 타워 피해요',
           },
         };
@@ -655,6 +677,7 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: 'Stun Aqueous Aether',
           ja: 'ウォーターにスタン',
+          cn: '眩晕水以太',
           ko: '스턴: 워터(아쿠에오스)',
         },
       },
@@ -754,6 +777,9 @@ const triggerSet: TriggerSet<Data> = {
         en: `Fast means you can go from the 1st to the 3rd safe spot directly.
              Slow means you need to go 1 => 2 => 3 without skipping 2.
              This is for casters who may not want to move as much.`,
+        cn: `快指你可以从第 1 个安全点直接到达第 3 个安全点。
+             慢指你需要走 1 => 2 => 3 ,不跳过 2。
+             适用于不想移动太多的读条职业。`,
       },
       type: 'StartsUsing',
       netRegex: { source: 'Shiva', id: ['4D75', '4D76'] },
@@ -814,11 +840,13 @@ const triggerSet: TriggerSet<Data> = {
         slowText: {
           en: '${dir1} => ${dir2} => ${dir3} (slow)',
           ja: '${dir1} => ${dir2} => ${dir3} (遅)',
+          cn: '${dir1} => ${dir2} => ${dir3} (慢)',
           ko: '${dir1} => ${dir2} => ${dir3} (느린)',
         },
         fastText: {
           en: '${dir1} => ${dir2} => ${dir3} (fast)',
           ja: '${dir1} => ${dir2} => ${dir3} (早)',
+          cn: '${dir1} => ${dir2} => ${dir3} (快)',
           ko: '${dir1} => ${dir2} => ${dir3} (빠른)',
         },
         dirNW: Outputs.dirNW,
@@ -1013,11 +1041,13 @@ const triggerSet: TriggerSet<Data> = {
         redDragonHead: {
           en: 'Pop Head #${num}',
           ja: '${num}番目の竜の頭',
+          cn: '撞头 #${num}',
           ko: '용머리: ${num}번째',
         },
         bluePuddle: {
           en: 'Get Puddle #${num}',
           ja: '${num}番目の踏み',
+          cn: '踩圈 #${num}',
           ko: '줍줍: ${num}번째',
         },
       },
@@ -1145,11 +1175,13 @@ const triggerSet: TriggerSet<Data> = {
         proteanGetFinalTower: {
           en: 'Protean => Get Final Tower',
           ja: '散会 => 最後の塔踏み',
+          cn: '八方分散 => 踩最后塔',
           ko: '프로틴 🔜 마지막 타워 밟아요',
         },
         proteanAvoidFinalTower: {
           en: 'Protean => Avoid Final Tower',
           ja: '散会 => 最後の塔回避',
+          cn: '八方分散 => 躲最后塔',
           ko: '프로틴 🔜 마지막 타워 피해욧',
         },
       },
@@ -1351,13 +1383,13 @@ const triggerSet: TriggerSet<Data> = {
     },
     {
       'locale': 'cn',
-      'missingTranslations': true,
       'replaceSync': {
-        'Shiva': '希瓦',
+        'Earthen Aether': '土以太',
         'Frozen Mirror': '冰面镜',
-        'Mothercrystal': '母水晶',
-        'Luminous Aether': '光以太',
         'great wyrm': '圣龙',
+        'Luminous Aether': '光以太',
+        'Mothercrystal': '母水晶',
+        'Shiva': '希瓦',
       },
       'replaceText': {
         'Absolute Zero': '绝对零度',
