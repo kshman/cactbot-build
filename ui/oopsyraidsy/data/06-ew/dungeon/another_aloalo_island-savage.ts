@@ -3,18 +3,100 @@
 // Edit the source file below and then run `npm run sync-files`
 // Source: ui/oopsyraidsy/data/06-ew/dungeon/another_aloalo_island.ts
 
-import AutumnOopsy from '../../../../../resources/autumnoopsy';
+import NetRegexes from '../../../../../resources/netregexes';
 import ZoneId from '../../../../../resources/zone_id';
 import { OopsyData } from '../../../../../types/data';
-import { OopsyTriggerSet } from '../../../../../types/oopsy';
+import { OopsyMistakeType, OopsyTrigger, OopsyTriggerSet } from '../../../../../types/oopsy';
+import { LocaleText } from '../../../../../types/trigger';
+import { playerDamageFields } from '../../../oopsy_common';
+
+// TODO: people who missed their 8AE2 Burst tower
+// TODO: failing 8BEB Radiance orb damage during Analysis
+// TODO: failing 8CE1 Targeted Light during Analysis
+// TODO: people who failed Subtractive Suppressor Alpha + Beta
+// TODO: walking over 8BF2 Arcane Combustion when you don't have Suppressor
+// TODO: taking extra 8BEA Inferno Divide squares during Spatial Tactics
+// TODO: 01F7(success) and 01F8(fail) check and x markers?
+// TODO: players not in Trapshooting stack 8977
+// TODO: players not in Present Box / Pinwheeling Dartboard two person stack
+
+const renameMistake = (
+  triggerId: string,
+  abilityId: string | string[],
+  type: OopsyMistakeType,
+  text: LocaleText,
+): OopsyTrigger<OopsyData> => {
+  return {
+    id: triggerId,
+    type: 'Ability',
+    netRegex: NetRegexes.ability({ id: abilityId, ...playerDamageFields }),
+    condition: (data, matches) => data.DamageFromMatches(matches) > 0,
+    mistake: (_data, matches) => {
+      return {
+        type: type,
+        blame: matches.target,
+        reportId: matches.targetId,
+        text: text,
+      };
+    },
+  };
+};
 
 export type Data = OopsyData;
+
+// TODO: we could probably move these helpers to some oopsy util.
+const pushedIntoWall = (
+  triggerId: string,
+  abilityId: string | string[],
+): OopsyTrigger<OopsyData> => {
+  return {
+    id: triggerId,
+    type: 'Ability',
+    netRegex: NetRegexes.ability({ id: abilityId, ...playerDamageFields }),
+    condition: (data, matches) => data.DamageFromMatches(matches) > 0,
+    deathReason: (_data, matches) => {
+      return {
+        id: matches.targetId,
+        name: matches.target,
+        text: {
+          en: 'Pushed into wall',
+          de: 'Rückstoß in die Wand',
+          fr: 'Poussé(e) dans le mur',
+          ja: '壁へノックバック',
+          cn: '击退至墙',
+          ko: '넉백',
+        },
+      };
+    },
+  };
+};
+
+const nonzeroDamageMistake = (
+  triggerId: string,
+  abilityId: string | string[],
+  type: OopsyMistakeType,
+): OopsyTrigger<OopsyData> => {
+  return {
+    id: triggerId,
+    type: 'Ability',
+    netRegex: NetRegexes.ability({ id: abilityId, ...playerDamageFields }),
+    condition: (data, matches) => data.DamageFromMatches(matches) > 0,
+    mistake: (_data, matches) => {
+      return {
+        type: type,
+        blame: matches.target,
+        reportId: matches.targetId,
+        text: matches.ability,
+      };
+    },
+  };
+};
 
 const triggerSet: OopsyTriggerSet<Data> = {
   zoneId: ZoneId.AnotherAloaloIslandSavage,
   damageWarn: {
     // Trash 1
-    'AAIS Twister': '8BC0', // Twister tornados
+    'AAIS Twister': '8BCF', // Twister tornados
     'AAIS Kiwakin Tail Screw': '8BC9', // baited circle
     'AAIS Snipper Bubble Shower': '8BCA', // front conal
     'AAIS Snipper Crab Dribble': '8BCB', // fast back conal after Bubble Shower
@@ -47,18 +129,18 @@ const triggerSet: OopsyTriggerSet<Data> = {
     // Statice
     'AAIS Trigger Happy': '8969', // limit cut dart board
     'AAIS Bomb Burst': '897A', // bomb explosion
-    'AAIS Uncommon Ground': '8CC2', // people who are on the same dartboard color with Bull's-eye
+    'AAIS Uncommon Ground': '8CC3', // people who are on the same dartboard color with Bull's-eye
     'AAIS Faerie Ring': '8973', // donut rings during Present Box
-    'AAIS Fire Spread 1': '8983', // initial rotating fire (from Ball of Fire)
+    'AAIS Fire Spread 1': '896F', // initial rotating fire (from Ball of Fire)
     'AAIS Fire Spread 2': '89FB', // ongoing rotating fire damage (from Statice)
   },
   damageFail: {
     'AAIS Big Burst': '8AE3', // tower failure damage
-    'AAIS Massive Explosion 1': '889C', // failing to resolve Subractive Suppressor Alpha
-    'AAIS Massive Explosion 2': '889D', // failing to resolve Subractive Suppressor Beta
-    'AAIS Burning Chains': '8CBE', // damage from not breaking chains
-    'AAIS Surprising Missile Burst': '8957', // running into Surprising Missile tethered add
-    'AAIS Surprising Claw Death by Claw': '8958', // running into Surprising Claw tethered add
+    'AAIS Massive Explosion 1': '8BF3', // failing to resolve Subractive Suppressor Alpha
+    'AAIS Massive Explosion 2': '8BF4', // failing to resolve Subractive Suppressor Beta
+    'AAIS Burning Chains': '8CC1', // damage from not breaking chains
+    'AAIS Surprising Missile Burst': '8974', // running into Surprising Missile tethered add
+    'AAIS Surprising Claw Death by Claw': '8975', // running into Surprising Claw tethered add
   },
   gainsEffectFail: {
     // C03 = 9999 duration, ??? = 15s duration
@@ -87,15 +169,16 @@ const triggerSet: OopsyTriggerSet<Data> = {
     'AAIS Fireworks Stack': '897C', // two person stack damage during Present Box / Pinwheeling Dartboard
   },
   triggers: [
-    AutumnOopsy.renameMistake('AAIS Tornado', '8BC0', 'fail', {
+    renameMistake('AAIS Tornado', '8BCF', 'fail', {
       // running into a tornado in the initial trash section
       en: 'Tornado',
+      de: 'Tornado',
       ja: '竜巻',
       ko: '회오리',
     }),
-    AutumnOopsy.pushedIntoWall('AAIS Angry Seas', '8AE1'),
-    AutumnOopsy.pushedIntoWall('AAIS Pop', '896B'),
-    AutumnOopsy.nonzeroDamageMistake('AAIS Hundred Lashings', ['8AE5', '8AE6'], 'warn'),
+    pushedIntoWall('AAIS Angry Seas', '8AE1'),
+    pushedIntoWall('AAIS Pop', '896B'),
+    nonzeroDamageMistake('AAIS Hundred Lashings', ['8AE5', '8AE6'], 'warn'),
   ],
 };
 

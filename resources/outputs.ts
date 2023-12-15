@@ -958,6 +958,16 @@ export default {
     ja: 'ペア: ${player}',
     ko: '페어 (${player})',
   },
+  spreadThenPair: {
+    en: 'Spread => Stack',
+    ja: '散開 => ペア',
+    ko: '흩어졌다 🔜 페어',
+  },
+  pairThenSpread: {
+    en: 'Stack => Spread',
+    ja: 'ペア => 散開',
+    ko: '페어 🔜 흩어져요',
+  },
   // 화살표
   arrowN: {
     en: '🡹',

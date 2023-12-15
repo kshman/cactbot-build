@@ -594,6 +594,8 @@ const zoneReplace: ZoneReplace[] = [
       '8899': '8BF0',
       '889A': '8BF1',
       '889B': '8BF2',
+      '889C': '8BF3', // Massive Explosion damage from failing to resolve Subractive Suppressor Alpha
+      '889D': '8BF4', // Massive Explosion damage from failing to resolve Subractive Suppressor Beta
       '889E': '8BF5',
       '889F': '8BF6',
       '88A0': '8BF7',
@@ -624,6 +626,8 @@ const zoneReplace: ZoneReplace[] = [
       '8954': '8971',
       '8955': '8972',
       '8956': '8973',
+      '8957': '8974', // Burst high damage from running into Surprising Missile tethered add
+      '8958': '8975', // Death by Claw high damage from running into Surprising Claw tethered add
       '8959': '8976',
       '895A': '8977',
       '895B': '8978',
@@ -633,7 +637,7 @@ const zoneReplace: ZoneReplace[] = [
       '895F': '897C',
       '8960': '897D',
       '8963': '8980',
-      '8982': '8983',
+      '8982': '896F',
       '8987': '8988',
       '89F9': '89FB',
       '8A6A': '8A6A',
@@ -663,8 +667,8 @@ const zoneReplace: ZoneReplace[] = [
       '8ABB': '8ABB',
       '8ABC': '8AE0',
       '8ABD': '8ABD',
-      '8ABE': '8A82',
-      '8ABF': '8A83',
+      '8ABE': '8ABE',
+      '8ABF': '8ABF',
       '8AC0': '8AC0',
       '8AC1': '8AE1',
       '8AC2': '8AE2',
@@ -685,6 +689,7 @@ const zoneReplace: ZoneReplace[] = [
       '8AD1': '8AEB',
       '8AD4': '8AD4',
       '8AD5': '8AED',
+      '8AD6': 'TODO', // Tidal Roar cast and enrage damage
       '8BB8': '8BC9',
       '8BB9': '8BCA',
       '8BBA': '8BCB',
@@ -692,15 +697,17 @@ const zoneReplace: ZoneReplace[] = [
       '8BBD': '8C4B',
       '8BBE': '8BCD',
       '8BBF': '8BCE',
-      '8BC0': '8BC0',
+      '8BC0': '8BCF',
       '8BC1': '8BD4',
       '8BC5': '8C3A',
       '8C23': '8C23',
-      '8C25': '8C25',
+      '8C24': '8C23', // Aero IV post-enrage follow-up damage just in case
+      '8C25': '8C25', // Inferno Theorem cast and enrage damage
+      '8C2F': '8C2F', // Ancient Quaga cast and damage for Islekeeper raidwide enrage
       '8C4C': '8BD2',
       '8C4D': '8BD3',
       '8C4E': '8C39',
-      '8C53': '8C54',
+      '8C53': '8BC4',
       '8C62': '8BC6',
       '8C63': '8BC8',
       '8C64': '8BCC',
@@ -710,6 +717,8 @@ const zoneReplace: ZoneReplace[] = [
       '8C6F': '8C3C',
       '8CBC': '8CBF',
       '8CBD': '8CC0',
+      '8CBE': '8CC1', // Burning Chains damage from not breaking chains
+      '8CC2': '8CC3', // Uncommon Ground heavy damage on people who are on the same dartboard color with Bull's-eye
       '8CDE': '8CE0',
       '8CDF': '8CE1',
       '8D1A': '8D1C',

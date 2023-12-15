@@ -1913,6 +1913,7 @@ const triggerSet: TriggerSet<Data> = {
             de: '(zuerst ${color} mit ${player})',
             ja: '1番 ${color} +${player}',
             cn: '(第一个 ${color} 和 ${player})',
+            ko: '1번 ${color} +${player}',
           },
           orange: {
             en: 'Orange',

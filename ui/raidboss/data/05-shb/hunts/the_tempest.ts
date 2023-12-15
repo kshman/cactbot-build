@@ -98,6 +98,7 @@ const triggerSet: TriggerSet<Data> = {
         avoidStack: {
           en: 'Avoid Stack',
           de: 'Vermeide Sammeln',
+          fr: 'Ne vous packez pas',
           cn: '远离分摊',
           ko: '뭉치면 안되요',
         },

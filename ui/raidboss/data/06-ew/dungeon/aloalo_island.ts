@@ -278,6 +278,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Stretch Tether',
+          de: 'Verbindung langziehen',
           ko: '줄 늘려요',
         },
       },
@@ -291,6 +292,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Knockback => Get in Bubble',
+          de: 'Rückstoß => Geh in eine Blase',
           ko: '넉백 🔜 버블 타세요',
         },
       },
@@ -307,6 +309,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Get behind non-bubbled Zaratan',
+          de: 'Geh hinter einen Zaratan ohne Blase',
           ko: '버블에 안들어간 자라탄 뒤로',
         },
       },
@@ -323,6 +326,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Get in Bubble',
+          de: 'Geh in eine Blase',
           ko: '버블 타세요',
         },
       },
@@ -682,6 +686,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Stand on cushion',
+          de: 'Auf einem Kissen stehen',
           ko: '쿠션으로',
         },
       },
