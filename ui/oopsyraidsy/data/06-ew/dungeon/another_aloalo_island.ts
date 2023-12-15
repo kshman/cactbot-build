@@ -1,9 +1,91 @@
-import AutumnOopsy from '../../../../../resources/autumnoopsy';
+import NetRegexes from '../../../../../resources/netregexes';
 import ZoneId from '../../../../../resources/zone_id';
 import { OopsyData } from '../../../../../types/data';
-import { OopsyTriggerSet } from '../../../../../types/oopsy';
+import { OopsyMistakeType, OopsyTrigger, OopsyTriggerSet } from '../../../../../types/oopsy';
+import { LocaleText } from '../../../../../types/trigger';
+import { playerDamageFields } from '../../../oopsy_common';
+
+// TODO: people who missed their 8AC2 Burst tower
+// TODO: failing 8894 Radiance orb damage during Analysis
+// TODO: failing 8CDF Targeted Light during Analysis
+// TODO: people who failed Subtractive Suppressor Alpha + Beta
+// TODO: walking over 889B Arcane Combustion when you don't have Suppressor
+// TODO: taking extra 8893 Inferno Divide squares during Spatial Tactics
+// TODO: 01F7(success) and 01F8(fail) check and x markers?
+// TODO: players not in Trapshooting stack 895A
+// TODO: players not in Present Box / Pinwheeling Dartboard two person stack
+
+const renameMistake = (
+  triggerId: string,
+  abilityId: string | string[],
+  type: OopsyMistakeType,
+  text: LocaleText,
+): OopsyTrigger<OopsyData> => {
+  return {
+    id: triggerId,
+    type: 'Ability',
+    netRegex: NetRegexes.ability({ id: abilityId, ...playerDamageFields }),
+    condition: (data, matches) => data.DamageFromMatches(matches) > 0,
+    mistake: (_data, matches) => {
+      return {
+        type: type,
+        blame: matches.target,
+        reportId: matches.targetId,
+        text: text,
+      };
+    },
+  };
+};
 
 export type Data = OopsyData;
+
+// TODO: we could probably move these helpers to some oopsy util.
+const pushedIntoWall = (
+  triggerId: string,
+  abilityId: string | string[],
+): OopsyTrigger<OopsyData> => {
+  return {
+    id: triggerId,
+    type: 'Ability',
+    netRegex: NetRegexes.ability({ id: abilityId, ...playerDamageFields }),
+    condition: (data, matches) => data.DamageFromMatches(matches) > 0,
+    deathReason: (_data, matches) => {
+      return {
+        id: matches.targetId,
+        name: matches.target,
+        text: {
+          en: 'Pushed into wall',
+          de: 'Rückstoß in die Wand',
+          fr: 'Poussé(e) dans le mur',
+          ja: '壁へノックバック',
+          cn: '击退至墙',
+          ko: '넉백',
+        },
+      };
+    },
+  };
+};
+
+const nonzeroDamageMistake = (
+  triggerId: string,
+  abilityId: string | string[],
+  type: OopsyMistakeType,
+): OopsyTrigger<OopsyData> => {
+  return {
+    id: triggerId,
+    type: 'Ability',
+    netRegex: NetRegexes.ability({ id: abilityId, ...playerDamageFields }),
+    condition: (data, matches) => data.DamageFromMatches(matches) > 0,
+    mistake: (_data, matches) => {
+      return {
+        type: type,
+        blame: matches.target,
+        reportId: matches.targetId,
+        text: matches.ability,
+      };
+    },
+  };
+};
 
 const triggerSet: OopsyTriggerSet<Data> = {
   zoneId: ZoneId.AnotherAloaloIsland,
@@ -82,15 +164,16 @@ const triggerSet: OopsyTriggerSet<Data> = {
     'AAI Fireworks Stack': '895F', // two person stack damage during Present Box / Pinwheeling Dartboard
   },
   triggers: [
-    AutumnOopsy.renameMistake('AAI Tornado', '8BC0', 'fail', {
+    renameMistake('AAI Tornado', '8BC0', 'fail', {
       // running into a tornado in the initial trash section
       en: 'Tornado',
+      de: 'Tornado',
       ja: '竜巻',
       ko: '회오리',
     }),
-    AutumnOopsy.pushedIntoWall('AAI Angry Seas', '8AC1'),
-    AutumnOopsy.pushedIntoWall('AAI Pop', '894E'),
-    AutumnOopsy.nonzeroDamageMistake('AAI Hundred Lashings', ['8AC9', '8ACB'], 'warn'),
+    pushedIntoWall('AAI Angry Seas', '8AC1'),
+    pushedIntoWall('AAI Pop', '894E'),
+    nonzeroDamageMistake('AAI Hundred Lashings', ['8AC9', '8ACB'], 'warn'),
   ],
 };
 

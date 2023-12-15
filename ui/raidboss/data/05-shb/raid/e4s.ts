@@ -72,9 +72,10 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Yellow Spread',
-          ja: '黄色散会',
+          de: 'Gelb Verteilen',
+          fr: 'Dispersion des jaunes',
           cn: '黄标分散',
-          ko: '🟡노랑 흩어져요',
+          ko: '노란색 산개',
         },
       },
     },
@@ -104,9 +105,10 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Orange Stack',
-          ja: '赤頭割り',
+          de: 'Orange Sammeln',
+          fr: 'Package des oranges',
           cn: '橙标分摊',
-          ko: '🔴빨강 뭉쳐요',
+          ko: '주황색 쉐어',
         },
       },
     },
@@ -332,7 +334,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: 'À gauche, puis restez',
           ja: 'ずっと左',
           cn: '一直在左',
-          ko: '왼쪽 🔜 왼쪽',
+          ko: '왼쪽 => 왼쪽',
         },
       },
     },
@@ -348,7 +350,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: 'À droite, puis restez',
           ja: 'ずっと右',
           cn: '一直在右',
-          ko: '오른쪽 🔜 오른쪽',
+          ko: '오른쪽 => 오른쪽',
         },
       },
     },
@@ -367,9 +369,10 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Blue Weight',
-          ja: '青重み',
+          de: 'Blau Gewicht',
+          fr: 'Poids bleu',
           cn: '蓝标大陆之重',
-          ko: '🔵파랑 혼자 범위',
+          ko: '파란징 대륙의 무게',
         },
       },
     },
@@ -418,9 +421,10 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Gaol on YOU (w/${player})',
-          ja: '自分にジェイル: (${player})',
+          de: 'Gefängnis auf DIR (mit ${player})',
+          fr: 'Geôle sur VOUS (avec ${player})',
           cn: '石牢点名 (与${player})',
-          ko: '내게 감옥 (${player})',
+          ko: '돌감옥 대상자 (+${player})',
         },
       },
     },
@@ -441,11 +445,11 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         leftOrBack: {
           en: 'Left (or Back)',
-          de: 'VON VORNE RECHTS RUNTER', // FIXME
-          fr: 'PARTEZ DE L\'AVANT DROITE', // FIXME
+          de: 'Links (oder Hinten)',
+          fr: 'Gauche (ou Arrière)',
           ja: '右前壊れるよ', // FIXME
           cn: '左 (或 后)',
-          ko: '앞 오른쪽 피하기', // FIXME
+          ko: '왼쪽 (또는 뒤)',
         },
         left: Outputs.left,
         back: Outputs.back,
@@ -468,11 +472,11 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         leftOrFront: {
           en: 'Left (or Front)',
-          de: 'VON HINTEN RECHTS RUNTER', // FIXME
-          fr: 'PARTEZ DE L\'ARRIÈRE DROITE', // FIXME
+          de: 'Links (oder Vorne)',
+          fr: 'Gauche (ou Devant)',
           ja: '右後ろ壊れるよ', // FIXME
           cn: '左 (或 前)',
-          ko: '뒤 오른쪽 피하기', // FIXME
+          ko: '왼쪽 (또는 앞)',
         },
         left: Outputs.left,
         front: Outputs.front,
@@ -495,11 +499,11 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         frontOrRight: {
           en: 'Right (or Front)',
-          de: 'VON HINTEN LINKS RUNTER', // FIXME
-          fr: 'PARTEZ DE L\'ARRIÈRE GAUCHE', // FIXME
+          de: 'Rechts (oder Vorne)',
+          fr: 'Droite (ou Devant)',
           ja: '左後ろ壊れるよ', // FIXME
           cn: '右 (或 前)',
-          ko: '뒤 왼쪽 피하기', // FIXME
+          ko: '오른쪽 (또는 앞)',
         },
         right: Outputs.right,
         front: Outputs.front,
@@ -522,11 +526,11 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         backOrRight: {
           en: 'Right (or Back)',
-          de: 'VON VORNE LINKS RUNTER', // FIXME
-          fr: 'PARTEZ DE L\'AVANT GAUCHE', // FIXME
+          de: 'Rechts (oder Hinten)',
+          fr: 'Droite (ou Arrière)',
           ja: '左前壊れるよ', // FIXME
           cn: '右 (或 后)',
-          ko: '앞 왼쪽 피하기', // FIXME
+          ko: '오른쪽 (또는 뒤)',
         },
         right: Outputs.right,
         back: Outputs.back,

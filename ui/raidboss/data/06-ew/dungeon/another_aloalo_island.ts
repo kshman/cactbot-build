@@ -47,7 +47,7 @@ export interface Data extends RaidbossData {
   ketuSpringCrystalCount: number;
   ketuHydroCount: number;
   ketuBuff?: 'bubble' | 'fetters';
-  ketuBuffGains: NetMatches['GainsEffect'][];
+  ketuBuffCollect: NetMatches['GainsEffect'][];
   // lala
   lalaRotation?: ClockRotation;
   lalaTimes?: 3 | 5;
@@ -210,7 +210,7 @@ const triggerSet: TriggerSet<Data> = {
       ketuCrystalAdd: [],
       ketuSpringCrystalCount: 0,
       ketuHydroCount: 0,
-      ketuBuffGains: [],
+      ketuBuffCollect: [],
       lalaAlphaGains: [],
       stcReloads: 0,
       stcMisload: 0,
@@ -346,11 +346,13 @@ const triggerSet: TriggerSet<Data> = {
         output.responseOutputStrings = {
           tankBusterOnYou: {
             en: '3x Tankbuster on YOU',
+            de: '3x Tankbuster auf DIR',
             ja: '自分に3xタン強',
             ko: '내게 3연속 탱크버스터',
           },
           tankBusterOnPlayer: {
             en: '3x Tankbuster on ${player}',
+            de: '3x Tankbuster auf ${player}',
             ja: '3xタン強: ${player}',
             ko: '3연속 탱크버스터: ${player}',
           },
@@ -431,7 +433,7 @@ const triggerSet: TriggerSet<Data> = {
     {
       id: 'AAI Monk Hydroshot',
       type: 'StartsUsing',
-      netRegex: { id: '8C65', source: 'Aloalo Monk' },
+      netRegex: { id: '8BBE', source: 'Aloalo Monk' },
       condition: Conditions.targetIsYou(),
       response: Responses.knockbackOn(),
     },
@@ -447,13 +449,6 @@ const triggerSet: TriggerSet<Data> = {
       type: 'StartsUsing',
       netRegex: { id: '8AD4', source: 'Ketuduke', capture: false },
       response: Responses.bleedAoe(),
-    },
-    {
-      id: 'AAI Ketuduke Bubble Net',
-      type: 'StartsUsing',
-      netRegex: { id: ['8AAD', '8AC5'], source: 'Ketuduke', capture: false },
-      response: Responses.aoe(),
-      run: (data) => data.ketuBuffGains = [],
     },
     {
       id: 'AAI Ketuduke Spring Crystals',
@@ -477,28 +472,35 @@ const triggerSet: TriggerSet<Data> = {
       run: (data, matches) => data.ketuCrystalAdd.push(matches),
     },
     {
+      id: 'AAI Ketuduke Bubble Net',
+      type: 'StartsUsing',
+      netRegex: { id: ['8AC5', '8AAD'], source: 'Ketuduke', capture: false },
+      response: Responses.aoe(),
+      run: (data) => data.ketuBuffCollect = [],
+    },
+    {
       id: 'AAI Ketuduke Bubble Weave/Foamy Fetters',
       type: 'GainsEffect',
-      // E9F Bubble
-      // ECC Fetters
-      netRegex: { effectId: ['E9F', 'ECC'] },
+      // ECC = Foamy Fetters
+      // E9F = Bubble Weave
+      netRegex: { effectId: ['ECC', 'E9F'] },
       condition: (data, matches) => {
-        data.ketuBuffGains.push(matches);
-        return data.ketuBuffGains.length === 4;
+        data.ketuBuffCollect.push(matches);
+        return data.ketuBuffCollect.length === 4;
       },
       durationSeconds: 6,
       alertText: (data, _matches, output) => {
-        const myid = data.ketuBuffGains.find((x) => x.target === data.me)?.effectId;
+        const myid = data.ketuBuffCollect.find((x) => x.target === data.me)?.effectId;
         if (myid === undefined)
           return;
         data.ketuBuff = myid === 'E9F' ? 'bubble' : 'fetters';
 
         const partner = data.party.jobAbbr(
-          data.ketuBuffGains.find((x) => x.effectId === myid && x.target !== data.me)?.target,
+          data.ketuBuffCollect.find((x) => x.effectId === myid && x.target !== data.me)?.target,
         ) ?? output.unknown!();
         return output[data.ketuBuff]!({ partner: partner });
       },
-      run: (data) => data.ketuBuffGains,
+      run: (data) => data.ketuBuffCollect,
       outputStrings: {
         bubble: {
           en: 'Bubble (w/ ${partner})',
@@ -521,9 +523,9 @@ const triggerSet: TriggerSet<Data> = {
     {
       id: 'AAI Ketuduke Hydro Counter',
       type: 'StartsUsing',
-      // 8AB4 = Hydrofall (stack)
       // 8AB8 = Hydrobullet (spread)
-      netRegex: { id: ['8AB4', '8AB8'], source: 'Ketuduke', capture: false },
+      // 8AB4 = Hydrofall (stack)
+      netRegex: { id: ['8AB8', '8AB4'], source: 'Ketuduke', capture: false },
       run: (data) => data.ketuHydroCount++,
     },
     {
@@ -549,9 +551,9 @@ const triggerSet: TriggerSet<Data> = {
     // Pylene: https://twitter.com/ff14_pylene99/status/1719665676745650610
     // Hamukatu Nanboku: https://ffxiv.link/0102424
     {
-      id: 'AAI Ketuduke Fluke Gale/Hydro 1',
+      id: 'AAI Ketuduke Hydro 1', // Fluke Gale
       type: 'StartsUsing',
-      netRegex: { id: ['8AB4', '8AB8'], source: 'Ketuduke' },
+      netRegex: { id: ['8AB8', '8AB4'], source: 'Ketuduke' },
       condition: (data) => data.ketuHydroCount === 1 || data.ketuHydroCount === 6,
       delaySeconds: 8,
       durationSeconds: 12,
@@ -612,16 +614,16 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: 'AAI Ketuduke Blowing Bubbles/Hydro 2',
+      id: 'AAI Ketuduke Hydro 2', // Blowing Bubbles / Angry Seas
       type: 'StartsUsing',
-      netRegex: { id: ['8AB4', '8AB8'], source: 'Ketuduke' },
-      condition: (data) => data.ketuHydroCount === 2,
+      netRegex: { id: ['8AB8', '8AB4'], source: 'Ketuduke' },
+      condition: (data) => data.ketuHydroCount === 2 || data.ketuHydroCount === 5,
       durationSeconds: 8,
       alertText: (_data, matches, output) =>
         matches.id === '8AB4' ? output.stacks!() : output.spread!(),
       outputStrings: {
-        stacks: Outputs.stackThenSpread,
-        spread: Outputs.spreadThenStack,
+        stacks: Outputs.pairThenSpread,
+        spread: Outputs.spreadThenPair,
       },
     },
     {
@@ -738,27 +740,6 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: 'AAI Ketuduke Angry Seas/Hydro 5',
-      type: 'StartsUsing',
-      netRegex: { id: ['8AB4', '8AB8'], source: 'Ketuduke' },
-      condition: (data) => data.ketuHydroCount === 5,
-      durationSeconds: 8,
-      alertText: (_data, matches, output) =>
-        matches.id === '8AB4' ? output.stacks!() : output.spread!(),
-      outputStrings: {
-        stacks: {
-          en: 'Stack => Spread',
-          ja: 'ペア => 散開',
-          ko: '페어 🔜 흩어져요',
-        },
-        spread: {
-          en: 'Spread => Stack',
-          ja: '散開 => ペア',
-          ko: '흩어졌다 🔜 페어',
-        },
-      },
-    },
-    {
       id: 'AAI Ketuduke Angry Seas Knockback',
       type: 'StartsUsing',
       netRegex: { id: '8AC1', source: 'Ketuduke', capture: false },
@@ -832,34 +813,39 @@ const triggerSet: TriggerSet<Data> = {
       id: 'AAI Wood Golem Tornado',
       type: 'StartsUsing',
       netRegex: { id: '8C4D', source: 'Aloalo Wood Golem' },
-      infoText: (data, matches, output) => {
+      response: (data, matches, output) => {
+        // cactbot-builtin-response
+        output.responseOutputStrings = {
+          tornadoOn: {
+            en: 'Away from ${player}',
+            de: 'Weg von ${player}',
+            ja: 'トルネド: ${player}',
+            ko: '토네이도: ${player}',
+          },
+          tornadoOnYou: {
+            en: 'Tornado on YOU',
+            de: 'Tornado auf DIR',
+            ja: '自分にトルネド',
+            ko: '내게 토네이도',
+          },
+        };
+
         if (data.me === matches.target)
-          return output.itsme!();
-        return output.text!({ player: data.party.jobAbbr(matches.target) });
-      },
-      outputStrings: {
-        itsme: {
-          en: 'Tornado on YOU',
-          ja: '自分にトルネド',
-          ko: '내게 토네이도',
-        },
-        text: {
-          en: 'Tornado on ${player}',
-          ja: 'トルネド: ${player}',
-          ko: '토네이도: ${player}',
-        },
+          return { alertText: output.tornadoOnYou!() };
+        return { infoText: output.tornadoOn!({ player: data.party.jobAbbr(matches.target) }) };
       },
     },
     {
-      id: 'AAI Wood Golem Tornado Cleanse',
-      type: 'Ability',
-      netRegex: { id: '8C4D', source: 'Aloalo Wood Golem' },
+      id: 'AAI Wood Golem Tornado Bind',
+      type: 'GainsEffect',
+      netRegex: { effectId: 'EC0' },
       condition: (data) => data.CanCleanse(),
       alertText: (data, matches, output) =>
         output.text!({ player: data.party.jobAbbr(matches.target) }),
       outputStrings: {
         text: {
           en: 'Cleanse ${player}',
+          de: 'Reinige ${player}',
           ja: 'エスナ: ${player}',
           ko: '에스나: ${player}',
         },
@@ -869,26 +855,7 @@ const triggerSet: TriggerSet<Data> = {
       id: 'AAI Wood Golem Ovation',
       type: 'StartsUsing',
       netRegex: { id: '8BC1', source: 'Aloalo Wood Golem', capture: false },
-      response: Responses.getBehind(),
-    },
-    {
-      id: 'AAI Islekeeper Ancient Quaga',
-      type: 'StartsUsing',
-      netRegex: { id: '8C4E', source: 'Aloalo Islekeeper', capture: false },
-      response: Responses.bleedAoe(),
-    },
-    {
-      id: 'AAI Islekeeper Ancient Quaga Enrage',
-      type: 'StartsUsing',
-      netRegex: { id: '8C2F', source: 'Aloalo Islekeeper', capture: false },
-      alarmText: (_data, _matches, output) => output.text!(),
-      outputStrings: {
-        text: {
-          en: 'Kill!',
-          ja: '倒して！',
-          ko: '죽여야해!',
-        },
-      },
+      response: Responses.getBehind('info'),
     },
     {
       id: 'AAI Islekeeper Gravity Force',
@@ -918,6 +885,26 @@ const triggerSet: TriggerSet<Data> = {
       netRegex: { id: '8C6F', source: 'Aloalo Islekeeper', capture: false },
       response: Responses.moveAway('alert'),
     },
+    {
+      id: 'AAI Islekeeper Ancient Quaga',
+      type: 'StartsUsing',
+      netRegex: { id: '8C4E', source: 'Aloalo Islekeeper', capture: false },
+      response: Responses.bleedAoe(),
+    },
+    {
+      id: 'AAI Islekeeper Ancient Quaga Enrage',
+      type: 'StartsUsing',
+      netRegex: { id: '8C2F', source: 'Aloalo Islekeeper', capture: false },
+      alarmText: (_data, _matches, output) => output.text!(),
+      outputStrings: {
+        text: {
+          en: 'Kill Islekeeper!',
+          de: 'Wächter besiegen!',
+          ja: '倒して！',
+          ko: '죽여야해!',
+        },
+      },
+    },
     // ---------------- lala ----------------
     {
       id: 'AAI Lala Inferno Theorem',
@@ -926,18 +913,14 @@ const triggerSet: TriggerSet<Data> = {
       response: Responses.aoe('alert'),
     },
     {
-      id: 'AAI Lala Boss Rotate',
+      id: 'AAI Lala Rotation Tracker',
       type: 'HeadMarker',
-      // 01E4 Clock
-      // 01E5 Counter Clock
       netRegex: { id: ['01E4', '01E5'], target: 'Lala' },
       run: (data, matches) => data.lalaRotation = matches.id === '01E4' ? 'cw' : 'ccw',
     },
     {
-      id: 'AAI Lala Boss Times',
+      id: 'AAI Lala Angular Addition Tracker',
       type: 'GainsEffect',
-      // F62 Three Times
-      // F63 Five Times
       netRegex: { effectId: ['F62', 'F63'], source: 'Lala' },
       run: (data, matches) => data.lalaTimes = matches.effectId === 'F62' ? 3 : 5,
     },
@@ -971,6 +954,10 @@ const triggerSet: TriggerSet<Data> = {
           'right': output.back!(),
         }[blight];
       },
+      run: (data) => {
+        delete data.lalaTimes;
+        delete data.lalaRotation;
+      },
       outputStrings: {
         front: {
           en: 'Ⓐ Front',
@@ -995,19 +982,15 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: 'AAI Lala My Rotate',
+      id: 'AAI Lala My Rotation Collect',
       type: 'HeadMarker',
-      // 01ED Clock
-      // 01EE Counter Clock
       netRegex: { id: ['01ED', '01EE'] },
       condition: Conditions.targetIsYou(),
       run: (data, matches) => data.lalaMyRotation = matches.id === '01ED' ? 'cw' : 'ccw',
     },
     {
-      id: 'AAI Lala My Times',
+      id: 'AAI Lala My Times Collect',
       type: 'GainsEffect',
-      // E89 Three Times
-      // ECE Five Times
       netRegex: { effectId: ['E89', 'ECE'], source: 'Lala' },
       condition: Conditions.targetIsYou(),
       run: (data, matches) => data.lalaMyTimes = matches.effectId === 'E89' ? 3 : 5,
@@ -1049,7 +1032,7 @@ const triggerSet: TriggerSet<Data> = {
       condition: Conditions.targetIsYou(),
       alertText: (data, _matches, output) => {
         if (data.lalaUnseen === undefined)
-          return output.text!();
+          return;
         if (data.lalaMyRotation === undefined || data.lalaMyTimes === undefined)
           return output[data.lalaUnseen]!();
         if (isReverseRotate(data.lalaMyRotation, data.lalaMyTimes))
@@ -1066,27 +1049,35 @@ const triggerSet: TriggerSet<Data> = {
           'right': output.back!(),
         }[data.lalaUnseen];
       },
+      run: (data) => {
+        delete data.lalaUnseen;
+        delete data.lalaMyTimes;
+        delete data.lalaMyRotation;
+      },
       outputStrings: {
-        front: Outputs.lookTowardsBoss,
+        front: {
+          en: 'Face Towards Lala',
+          de: 'Lala anschauen',
+          ja: 'ボスを見て',
+          ko: '보스 봐욧',
+        },
         back: {
-          en: 'Look behind',
+          en: 'Look Away from Lala',
+          de: 'Von Lala weg schauen',
           ja: '後ろ見て',
           ko: '뒤돌아 봐요',
         },
         left: {
-          en: 'Look right',
+          en: 'Left Flank towards Lala',
+          de: 'Linke Seite zu Lala zeigen',
           ja: '右見て',
           ko: '오른쪽 봐요',
         },
         right: {
-          en: 'Look left',
+          en: 'Right Flank towards Lala',
+          de: 'Rechte Seite zu Lala zeigen',
           ja: '左見て',
           ko: '왼쪽 봐요',
-        },
-        text: {
-          en: 'Point opening at Boss',
-          ja: '開きをボスに向ける',
-          ko: '열린 곳을 보스로',
         },
       },
     },
@@ -1256,8 +1247,9 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: 'AAI Lala March',
+      id: 'AAI Lala Forward March',
       type: 'GainsEffect',
+      // E83 = Forward March
       netRegex: { effectId: 'E83', source: 'Lala' },
       condition: Conditions.targetIsYou(),
       delaySeconds: (_data, matches) => parseFloat(matches.duration) - 7,
@@ -1275,12 +1267,14 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         left: {
-          en: 'Move: Left', // FIXME
+          en: 'Leftward March',
+          de: 'Linker March',
           ja: '強制移動 : 左',
           ko: '강제이동: 왼쪽',
         },
         right: {
-          en: 'Move: Right', // FIXME
+          en: 'Rightward March',
+          de: 'Rechter March',
           ja: '強制移動 : 右',
           ko: '강제이동: 오른쪽',
         },
@@ -1301,22 +1295,26 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         num1: {
-          en: '[1]',
+          en: 'One (avoid all)',
+          de: 'Eins (alles ausweichen)',
           ja: '[1]',
           ko: '[1] 구슬 쪽 🔜 다 피해욧',
         },
         num2: {
-          en: '[2]',
+          en: 'Two (stay middle)',
+          de: 'Zwei (steh in der Mitte)',
           ja: '[2]',
           ko: '[2] 구슬 쪽 🔜 한번 맞아요',
         },
         num3: {
-          en: '[3]',
+          en: 'Three (adjacent to middle)',
+          de: 'Drei (steh neben der Mitte)',
           ja: '[3]',
           ko: '[3] 구슬 없는쪽 🔜 두번 맞아요',
         },
         num4: {
-          en: '[4]',
+          en: 'Four',
+          de: 'Vier',
           ja: '[4]',
           ko: '[4] 구슬 없는쪽 🔜 세번 맞아요',
         },
@@ -1662,7 +1660,7 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: 'AAI Statice March',
+      id: 'AAI Statice Face',
       type: 'GainsEffect',
       netRegex: { effectId: ['DD2', 'DD3', 'DD4', 'DD5'] },
       condition: Conditions.targetIsYou(),
@@ -1946,32 +1944,291 @@ const triggerSet: TriggerSet<Data> = {
     {
       locale: 'en',
       replaceText: {
+        'Far Tide/Near Tide': 'Far/Near Tide',
         'Hydrobullet/Hydrofall': 'Hydrobullet/fall',
         'Hydrofall/Hydrobullet': 'Hydrofall/bullet',
-        'Locked and Loaded/Misload': 'Bullet Loads',
         'Receding Twintides/Encroaching Twintides': 'Receding/Encroaching Twintides',
-        'Far Tide/Near Tide': 'Far/Near Tide',
+      },
+    },
+    {
+      'locale': 'de',
+      'replaceSync': {
+        'Aloalo Golem': 'Aloalo-Holzgolem',
+        'Aloalo Islekeeper': 'Aloalo-Wächter',
+        'Aloalo Kiwakin': 'Aloalo-Kiwakin',
+        'Aloalo Monk': 'Aloalo-Mönch',
+        'Aloalo Ray': 'Aloalo-Rochen',
+        'Aloalo Snipper': 'Aloalo-Schnippler',
+        'Aloalo Wood Golem': 'Aloalo-Holzgolem',
+        'Aloalo Zaratan': 'Aloalo-Zaratan',
+        'Arcane Font': 'arkan(?:e|er|es|en) Körper',
+        'Arcane Globe': 'arkan(?:e|er|es|en) Kugel',
+        'Ball of Fire': 'Feuerkugel',
+        'Bomb': 'Bombe',
+        'Ketuduke': 'Ketuduke',
+        'Lala': 'Lala',
+        'Needle': 'Nadel',
+        'Spring Crystal': 'Wasserquell-Kristall',
+        'Statice': 'Statice',
+        'Surprising Claw': 'Überraschungsklaue',
+        'Surprising Missile': 'Überraschungsrakete',
+        'Surprising Staff': 'Überraschungsstab',
+        'The Dawn Trial': 'Morgenrot-Probe',
+        'The Dusk Trial': 'Abendrot-Probe',
+        'The Midnight Trial': 'Vollmond-Probe',
+      },
+      'replaceText': {
+        '\\(buff\\)': '(Statusveränderung)',
+        '\\(cast\\)': '(wirken)',
+        'Aero II': 'Windra',
+        'Aero IV': 'Windka',
+        'Analysis': 'Analyse',
+        'Angry Seas': 'Zornige Fluten',
+        'Angular Addition': 'Winkeladdition',
+        'Arcane Array': 'Arkanes Spektrum',
+        'Arcane Blight': 'Arkane Fäule',
+        'Arcane Mine': 'Arkane Mine',
+        'Arcane Plot': 'Arkane Flur',
+        'Arcane Point': 'Arkane Stätte',
+        'Beguiling Glitter': 'Irrleuchten',
+        'Blowing Bubbles': 'Pusteblasen',
+        'Bright Pulse': 'Glühen',
+        'Bubble Net': 'Blasennetz',
+        'Burning Chains': 'Brennende Ketten',
+        'Burst': 'Explosion',
+        'Constructive Figure': 'Ruf der Schöpfer',
+        'Dartboard of Dancing Explosives': 'Darts und Drehung',
+        'Encroaching Twintides': 'Ring der Zwiegezeiten',
+        'Explosive Theorem': 'Arkane Fäule',
+        'Faerie Ring': 'Feenring',
+        'Far Tide': 'Ring der Gezeiten',
+        'Fire Spread': 'Brandstiftung',
+        'Fireworks': 'Feuerwerk',
+        'Fluke Gale': 'Flossensturm',
+        'Fluke Typhoon': 'Flossentaifun',
+        'Hundred Lashings': 'Auspeitschung',
+        'Hydrobomb': 'Hydro-Bombe',
+        'Hydrobullet': 'Hydro-Kugel',
+        'Hydrofall': 'Hydro-Sturz',
+        'Inferno Divide': 'Infernale Teilung',
+        'Inferno Theorem': 'Infernales Theorem',
+        'Locked and Loaded': 'Geladen und entsichert',
+        'Misload': 'Fehlladung',
+        'Near Tide': 'Kreis der Gezeiten',
+        'Pinwheeling Dartboard': 'Darts und Rad',
+        'Planar Tactics': 'Flächentaktiken',
+        'Pop': 'Platzen',
+        'Powerful Light': 'Entladenes Licht',
+        'Present Box': 'Geschenkschachtel',
+        'Radiance': 'Radiation',
+        'Receding Twintides': 'Kreis der Zwiegezeiten',
+        'Ring a Ring o\' Explosions': 'Ringel-Ringel-Bombe',
+        '(?<! )Roar': 'Brüllen',
+        'Saturate': 'Wasserfontäne',
+        'Shocking Abandon': 'Schockende Hingabe',
+        'Spatial Tactics': 'Raumtaktiken',
+        'Sphere Shatter': 'Sphärensplitterung',
+        'Spring Crystals': 'Quellkristalle',
+        'Strategic Strike': 'Schwere Attacke',
+        'Strewn Bubbles': 'Streublasen',
+        'Surprise Balloon': 'Überraschungsballon',
+        'Surprise Needle': 'Überraschungsnadel',
+        'Symmetric Surge': 'Symmetrischer Schub',
+        'Targeted Light': 'Gezieltes Licht',
+        'Telluric Theorem': 'Tellurisches Theorem',
+        'Tidal Roar': 'Schrei der Gezeiten',
+        'Trapshooting': 'Tontaubenschuss',
+        'Trick Reload': 'Trickladung',
+        'Trigger Happy': 'Schießwut',
+        'Uncommon Ground': 'Voll ins Schwarze',
+        'Updraft': 'Aufwind',
+      },
+    },
+    {
+      'locale': 'fr',
+      'missingTranslations': true,
+      'replaceSync': {
+        'Aloalo Golem': 'golem sylvestre d\'Aloalo',
+        'Aloalo Islekeeper': 'gardien d\'Aloalo',
+        'Aloalo Kiwakin': 'kiwakin d\'Aloalo',
+        'Aloalo Monk': 'moine d\'Aloalo',
+        'Aloalo Ray': 'raie rayée d\'Aloalo',
+        'Aloalo Snipper': 'cisailleur d\'Aloalo',
+        'Aloalo Wood Golem': 'golem sylvestre d\'Aloalo',
+        'Aloalo Zaratan': 'zaratan d\'Aloalo',
+        'Arcane Font': 'sphère arcanique',
+        'Arcane Globe': 'globe arcanique',
+        'Ball of Fire': 'orbe de feu',
+        'Bomb': 'bombe',
+        'Ketuduke': 'Ketuduke',
+        'Lala': 'Lala',
+        'Needle': 'aiguille',
+        'Spring Crystal': 'cristal de source',
+        'Statice': 'Statice',
+        'Surprising Claw': 'griffe surprise',
+        'Surprising Missile': 'missile surprise',
+        'Surprising Staff': 'sceptre surprise',
+        'The Dawn Trial': 'Épreuve de Dilumu',
+        'The Dusk Trial': 'Épreuve de Qurupe',
+        'The Midnight Trial': 'Épreuve de Nokosero',
+      },
+      'replaceText': {
+        'Aero II': 'Extra Vent',
+        'Aero IV': 'Giga Vent',
+        'Analysis': 'Analyse',
+        'Angry Seas': 'Mer agitée',
+        'Angular Addition': 'Calcul angulaire',
+        'Arcane Array': 'Assemblement arcanique',
+        'Arcane Blight': 'Canon arcanique',
+        'Arcane Mine': 'Mine arcanique',
+        'Arcane Plot': 'Modulateur arcanique',
+        'Arcane Point': 'Pointe arcanique',
+        'Beguiling Glitter': 'Paillettes aveuglantes',
+        'Blowing Bubbles': 'Bulles soufflées',
+        'Bright Pulse': 'Éclat',
+        'Bubble Net': 'Filet de bulles',
+        'Burning Chains': 'Chaînes brûlantes',
+        'Burst': 'Explosion',
+        'Constructive Figure': 'Icône articulée',
+        'Dartboard of Dancing Explosives': 'Duo fléchettes-tourbillon',
+        'Encroaching Twintides': 'Double marée débordante',
+        'Explosive Theorem': 'Théorème explosif',
+        'Faerie Ring': 'Cercle féérique',
+        'Far Tide': 'Marée lointaine',
+        'Fire Spread': 'Nappe de feu',
+        'Fireworks': 'Feu d\'artifice',
+        'Fluke Gale': 'Bourrasque hasardeuse',
+        'Fluke Typhoon': 'Typhon hasardeux',
+        'Hundred Lashings': 'Cent coups de fouet',
+        'Hydrobomb': 'Hydrobombe',
+        'Hydrobullet': 'Barillet hydrique',
+        'Hydrofall': 'Pilonnage hydrique',
+        'Inferno Divide': 'Division infernale',
+        'Inferno Theorem': 'Théorème infernal',
+        'Locked and Loaded': 'Rechargement réussi',
+        'Misload': 'Rechargement raté',
+        'Near Tide': 'Marée proche',
+        'Pinwheeling Dartboard': 'Duo fléchettes-moulinette',
+        'Planar Tactics': 'Tactique planaire',
+        'Pop': 'Rupture',
+        'Powerful Light': 'Explosion sacrée',
+        'Present Box': 'Boîtes cadeaux',
+        'Radiance': 'Irradiation',
+        'Receding Twintides': 'Double marée fuyante',
+        'Ring a Ring o\' Explosions': 'Tempérament explosif',
+        '(?<! )Roar': 'Rugissement',
+        'Saturate': 'Jet d\'eau',
+        'Shocking Abandon': 'Choc renonciateur',
+        'Spatial Tactics': 'Tactique spatiale',
+        'Sphere Shatter': 'Rupture glacée',
+        'Spring Crystals': 'Cristaux de source',
+        'Strategic Strike': 'Coup violent',
+        'Strewn Bubbles': 'Bulles éparpillées',
+        'Surprise Balloon': 'Ballons surprises',
+        'Surprise Needle': 'Aiguille surprise',
+        'Symmetric Surge': 'Déferlement symétrique',
+        'Targeted Light': 'Rayon ciblé',
+        'Telluric Theorem': 'Théorème tellurique',
+        'Tidal Roar': 'Vague rugissante',
+        'Trapshooting': 'Tir au pigeon',
+        'Trick Reload': 'Rechargement habile',
+        'Trigger Happy': 'Gâchette impulsive',
+        'Uncommon Ground': 'Terrain de mésentente',
+        'Updraft': 'Courants ascendants',
       },
     },
     {
       'locale': 'ja',
-      'missingTranslations': true,
       'replaceSync': {
+        'Aloalo Golem': 'アロアロ・ウッドゴーレム',
         'Aloalo Islekeeper': 'アロアロ・キーパー',
         'Aloalo Kiwakin': 'アロアロ・キワキン',
         'Aloalo Monk': 'アロアロ・モンク',
         'Aloalo Ray': 'アロアロ・ストライプレイ',
         'Aloalo Snipper': 'アロアロ・スニッパー',
         'Aloalo Wood Golem': 'アロアロ・ウッドゴーレム',
+        'Aloalo Zaratan': 'アロアロ・ザラタン',
+        'Arcane Font': '立体魔法陣',
+        'Arcane Globe': '球体魔法陣',
+        'Ball of Fire': '火球',
+        'Bomb': '爆弾',
         'Ketuduke': 'ケトゥドゥケ',
         'Lala': 'ララ',
+        'Needle': 'ニードル',
         'Spring Crystal': '湧水のクリスタル',
         'Statice': 'スターチス',
         'Surprising Claw': 'サプライズ・クロー',
         'Surprising Missile': 'サプライズ・ミサイル',
+        'Surprising Staff': 'サプライズ・ロッド',
         'The Dawn Trial': 'ディルムの試練',
         'The Dusk Trial': 'クルペの試練',
         'The Midnight Trial': 'ノコセロの試練',
+      },
+      'replaceText': {
+        '\\(buff\\)': '(バフ)',
+        '\\(cast\\)': '(詠唱)',
+        'Aero II': 'エアロラ',
+        'Aero IV': 'エアロジャ',
+        'Analysis': 'アナライズ',
+        'Angry Seas': 'アングリーシーズ',
+        'Angular Addition': '回転角乗算',
+        'Arcane Array': '複合魔紋',
+        'Arcane Blight': '魔紋砲',
+        'Arcane Mine': '地雷魔紋',
+        'Arcane Plot': '変光魔紋',
+        'Arcane Point': '変光起爆',
+        'Beguiling Glitter': '惑わしの光',
+        'Blowing Bubbles': 'バブルブロワー',
+        'Bright Pulse': '閃光',
+        'Bubble Net': 'バブルネットフィーディング',
+        'Burning Chains': '炎の鎖',
+        'Burst': '爆発',
+        'Constructive Figure': '人形召喚',
+        'Dartboard of Dancing Explosives': 'ダーツ＆ローテーション',
+        'Encroaching Twintides': 'リング・ダブルタイド',
+        'Explosive Theorem': '魔爆法',
+        'Faerie Ring': 'フェアリーリング',
+        'Far Tide': 'リングタイド',
+        'Fire Spread': '放火',
+        'Fireworks': 'ファイアワークフェスティバル',
+        'Fluke Gale': 'フリッパーゲイル',
+        'Fluke Typhoon': 'フリッパータイフーン',
+        'Hundred Lashings': 'めった打ち',
+        'Hydrobomb': 'ハイドロボム',
+        'Hydrobullet': 'ハイドロバレット',
+        'Hydrofall': 'ハイドロフォール',
+        'Inferno Divide': '十火法',
+        'Inferno Theorem': '散火法',
+        'Locked and Loaded': 'リロード成功',
+        'Misload': 'リロード失敗',
+        'Near Tide': 'ラウンドタイド',
+        'Pinwheeling Dartboard': 'ダーツ＆ウィール',
+        'Planar Tactics': '爆雷戦術：面',
+        'Pop': '破裂',
+        'Powerful Light': '光爆',
+        'Present Box': 'プレゼントボックス',
+        'Radiance': '光球爆散',
+        'Receding Twintides': 'ラウンド・ダブルタイド',
+        'Ring a Ring o\' Explosions': 'リンクリンクボム',
+        '(?<! )Roar': '咆哮',
+        'Saturate': '放水',
+        'Shocking Abandon': 'アバンドンショック',
+        'Spatial Tactics': '爆雷戦術：立体',
+        'Sphere Shatter': '破裂',
+        'Spring Crystals': '湧水のクリスタル',
+        'Strategic Strike': '強撃',
+        'Strewn Bubbles': 'バブルストゥルー',
+        'Surprise Balloon': 'サプライズバルーン',
+        'Surprise Needle': 'サプライズニードル',
+        'Symmetric Surge': '双数爆撃',
+        'Targeted Light': '高精度光弾',
+        'Telluric Theorem': '地隆法',
+        'Tidal Roar': 'タイダルロア',
+        'Trapshooting': 'トラップシューティング',
+        'Trick Reload': 'トリックリロード',
+        'Trigger Happy': 'トリガーハッピー',
+        'Uncommon Ground': 'グラウンドシアー',
+        'Updraft': '上昇気流',
       },
     },
   ],
