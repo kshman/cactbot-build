@@ -56,9 +56,10 @@ Options.Triggers.push({
       outputStrings: {
         text: {
           en: 'Yellow Spread',
-          ja: '黄色散会',
+          de: 'Gelb Verteilen',
+          fr: 'Dispersion des jaunes',
           cn: '黄标分散',
-          ko: '🟡노랑 흩어져요',
+          ko: '노란색 산개',
         },
       },
     },
@@ -88,9 +89,10 @@ Options.Triggers.push({
       outputStrings: {
         text: {
           en: 'Orange Stack',
-          ja: '赤頭割り',
+          de: 'Orange Sammeln',
+          fr: 'Package des oranges',
           cn: '橙标分摊',
-          ko: '🔴빨강 뭉쳐요',
+          ko: '주황색 쉐어',
         },
       },
     },
@@ -314,7 +316,7 @@ Options.Triggers.push({
           fr: 'À gauche, puis restez',
           ja: 'ずっと左',
           cn: '一直在左',
-          ko: '왼쪽 🔜 왼쪽',
+          ko: '왼쪽 => 왼쪽',
         },
       },
     },
@@ -330,7 +332,7 @@ Options.Triggers.push({
           fr: 'À droite, puis restez',
           ja: 'ずっと右',
           cn: '一直在右',
-          ko: '오른쪽 🔜 오른쪽',
+          ko: '오른쪽 => 오른쪽',
         },
       },
     },
@@ -349,9 +351,10 @@ Options.Triggers.push({
       outputStrings: {
         text: {
           en: 'Blue Weight',
-          ja: '青重み',
+          de: 'Blau Gewicht',
+          fr: 'Poids bleu',
           cn: '蓝标大陆之重',
-          ko: '🔵파랑 혼자 범위',
+          ko: '파란징 대륙의 무게',
         },
       },
     },
@@ -398,9 +401,10 @@ Options.Triggers.push({
       outputStrings: {
         text: {
           en: 'Gaol on YOU (w/${player})',
-          ja: '自分にジェイル: (${player})',
+          de: 'Gefängnis auf DIR (mit ${player})',
+          fr: 'Geôle sur VOUS (avec ${player})',
           cn: '石牢点名 (与${player})',
-          ko: '내게 감옥 (${player})',
+          ko: '돌감옥 대상자 (+${player})',
         },
       },
     },
@@ -421,11 +425,11 @@ Options.Triggers.push({
       outputStrings: {
         leftOrBack: {
           en: 'Left (or Back)',
-          de: 'VON VORNE RECHTS RUNTER',
-          fr: 'PARTEZ DE L\'AVANT DROITE',
+          de: 'Links (oder Hinten)',
+          fr: 'Gauche (ou Arrière)',
           ja: '右前壊れるよ',
           cn: '左 (或 后)',
-          ko: '앞 오른쪽 피하기', // FIXME
+          ko: '왼쪽 (또는 뒤)',
         },
         left: Outputs.left,
         back: Outputs.back,
@@ -448,11 +452,11 @@ Options.Triggers.push({
       outputStrings: {
         leftOrFront: {
           en: 'Left (or Front)',
-          de: 'VON HINTEN RECHTS RUNTER',
-          fr: 'PARTEZ DE L\'ARRIÈRE DROITE',
+          de: 'Links (oder Vorne)',
+          fr: 'Gauche (ou Devant)',
           ja: '右後ろ壊れるよ',
           cn: '左 (或 前)',
-          ko: '뒤 오른쪽 피하기', // FIXME
+          ko: '왼쪽 (또는 앞)',
         },
         left: Outputs.left,
         front: Outputs.front,
@@ -475,11 +479,11 @@ Options.Triggers.push({
       outputStrings: {
         frontOrRight: {
           en: 'Right (or Front)',
-          de: 'VON HINTEN LINKS RUNTER',
-          fr: 'PARTEZ DE L\'ARRIÈRE GAUCHE',
+          de: 'Rechts (oder Vorne)',
+          fr: 'Droite (ou Devant)',
           ja: '左後ろ壊れるよ',
           cn: '右 (或 前)',
-          ko: '뒤 왼쪽 피하기', // FIXME
+          ko: '오른쪽 (또는 앞)',
         },
         right: Outputs.right,
         front: Outputs.front,
@@ -502,11 +506,11 @@ Options.Triggers.push({
       outputStrings: {
         backOrRight: {
           en: 'Right (or Back)',
-          de: 'VON VORNE LINKS RUNTER',
-          fr: 'PARTEZ DE L\'AVANT GAUCHE',
+          de: 'Rechts (oder Hinten)',
+          fr: 'Droite (ou Arrière)',
           ja: '左前壊れるよ',
           cn: '右 (或 后)',
-          ko: '앞 왼쪽 피하기', // FIXME
+          ko: '오른쪽 (또는 뒤)',
         },
         right: Outputs.right,
         back: Outputs.back,

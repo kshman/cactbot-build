@@ -36,7 +36,7 @@ Options.Triggers.push({
           fr: 'Brisez la geôle sur ${player}',
           ja: '${player}にジェイル',
           cn: '石牢点${player}',
-          ko: '돌감옥: ${player}',
+          ko: '${player} 돌감옥 해제',
         },
         gaolOnYou: {
           en: 'Gaol on YOU',
@@ -44,7 +44,7 @@ Options.Triggers.push({
           fr: 'Geôle sur VOUS',
           ja: '自分にジェイル',
           cn: '石牢点名',
-          ko: '내게 돌감옥',
+          ko: '돌감옥 대상자',
         },
       },
     },

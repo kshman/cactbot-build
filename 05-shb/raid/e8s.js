@@ -34,7 +34,7 @@ Options.Triggers.push({
       name: {
         en: 'Enable uptime knockback strat',
         de: 'Aktiviere Uptime Rückstoß Strategie',
-        fr: 'e8s : activer cactbot pour la strat Uptime Knockback',
+        fr: 'Activer la strat Poussée-Uptime',
         ja: 'エデン零式共鳴編４層：cactbot「ヘヴンリーストライク (ノックバック)」ギミック',
         cn: '启用 cactbot 精确计时防击退策略',
         ko: '정확한 타이밍 넉백방지 공략 사용',
@@ -42,12 +42,30 @@ Options.Triggers.push({
       comment: {
         en: `If you want cactbot to callout Mirror Mirror 4's double knockback, enable this option.
              Callout happens during/after boss turns and requires <1.4s reaction time
-             to avoid both Green and Read Mirror knockbacks.
+             to avoid both Green and Red Mirror knockbacks.
              Example: https://clips.twitch.tv/CreativeDreamyAsparagusKlappa
              Group splits into two groups behind boss after the jump.
              Tanks adjust to where the Red and Green Mirror are located.
              One tank must be inbetween the party, the other closest to Greem Mirror.
              Once Green Mirror goes off, the tanks adjust for Red Mirror.`,
+        de:
+          `Wenn du möchten, dass Cactbot den doppelten Knockback von Spiegelland 4 auslöst, aktivieren Sie diese Option.
+             Die Anzeige erfolgt während/nach den Drehungen des Bosses und erfordert <1,4s Reaktionszeit
+             um sowohl den grünen als auch den roten Spiegel-Rückstoß zu vermeiden.
+             Beispiel: https://clips.twitch.tv/CreativeDreamyAsparagusKlappa
+             Die Gruppe teilt sich nach dem Sprung hinter dem Boss in zwei Gruppen auf.
+             Die Tanks passen sich danach an, wo sich der rote und der grüne Spiegel befinden.
+             Ein Tank muss sich in der Mitte der Gruppe befinden, der andere in der Nähe des grünen Spiegels.
+             Sobald der grüne Spiegel ausgelöst wird, passen sich die Tanks auf den roten Spiegel an.`,
+        fr:
+          `Si vous voulez que cactbot signale le double knockback de Mirror Mirror 4, activez cette option.
+             L'annonce se fait pendant/après les tours du boss et nécessite un temps de réaction < à 1.4s
+             pour éviter les deux poussées du miroir vert et du miroir rouge.
+             Exemple : https://clips.twitch.tv/CreativeDreamyAsparagusKlappa
+             Le groupe se divise en deux groupes derrière le boss après le saut.
+             Les tanks s'adaptent à l'emplacement des miroirs rouge et vert.
+             Un tank doit être entre les deux groupes, l'autre doit être le plus proche du miroir vert.
+             Une fois que le miroir vert s'éteint, les tanks s'ajustent au miroir rouge.`,
         cn: `此选项可让 cactbot 提示第四次镜中奇遇的双击退。
              会在 BOSS 转身期间或之后播报提示, 需要小于 1.4 秒
              的反应时间来同时躲避绿镜和红镜击退。
@@ -56,6 +74,14 @@ Options.Triggers.push({
              坦克根据红镜和绿镜的位置进行调整。
              一个坦克必须在分组中间，另一个坦克最靠近绿镜。
              绿镜熄灭后，坦克调整到红镜位置。`,
+        ko: `캑트봇이 거울 나라 4의 이중 넉백을 호출하게 하려면 이 옵션을 활성화하세요.
+             알람은 보스의 시전 중간이나 이후에 발생하며
+             녹색 및 빨강 거울의 넉백을 모두 피하려면 반응 시간이 1.4초 미만이어야 합니다.
+             예시: https://clips.twitch.tv/CreativeDreamyAsparagusKlappa
+             점프 후 보스 뒤에서 파티가 두 그룹으로 나뉩니다.
+             탱커 빨강 및 초록 거울이 있는 위치에 맞춰 조정합니다.
+             탱커 한 명은 파티 사이에, 다른 한 명은 초록 거울에 가장 가까운 곳에 위치해야 합니다.
+             초록 거울이 발동하면 탱커는 빨강 거울에 맞춰 위치를 조정합니다.`,
       },
       type: 'checkbox',
       default: (options) => {
@@ -166,15 +192,16 @@ Options.Triggers.push({
       outputStrings: {
         scytheNext: {
           en: '(under boss => under mirrors soon)',
-          ja: '(ボスの下 => まもなく鏡の下)',
+          de: '(unter den Boss => gleich unter den Spiegel)',
+          fr: '(sous le boss => sous les miroirs bientôt',
           cn: '(BOSS 下方 => 即将去镜子下方)',
-          ko: '(보스 밑 🔜 곧 거울 아래)',
+          ko: '(보스 밑 => 이후 거울 밑)',
         },
         axeNext: {
           en: '(out => middle soon)',
-          ja: '(外 => まもなく真ん中)',
+          de: '(raus => gleich Mitte)',
           cn: '(外 => 即将去中间)',
-          ko: '(밖에서 => 곧 한가운데로)',
+          ko: '(밖 => 이후 중앙)',
         },
       },
     },
@@ -206,15 +233,17 @@ Options.Triggers.push({
       outputStrings: {
         redMirrorWest: {
           en: 'Behind => SW',
-          ja: '後ろ => 南西',
+          de: 'Hinten => SW',
+          fr: 'Derrière => SO',
           cn: '后 => 左下 (西南)',
-          ko: '뒤에 있다 🔜 🡿남서쪽으로',
+          ko: '뒤 => 남서',
         },
         redMirrorEast: {
           en: 'Behind => SE',
-          ja: '後ろ => 南東',
+          de: 'Hinten => SO',
+          fr: 'Derrière => SE',
           cn: '后 => 右下 (东南)',
-          ko: '뒤에 있다 🔜 남동쪽으로🡾',
+          ko: '뒤 => 남동',
         },
         getBehind: Outputs.getBehind,
       },
@@ -234,15 +263,17 @@ Options.Triggers.push({
       outputStrings: {
         redMirrorEast: {
           en: 'Front => NW',
-          ja: '前 => 北西',
+          de: 'Vorne => NW',
+          fr: 'Devant => NO',
           cn: '前 => 左上 (西北)',
-          ko: '앞에 있다 🔜 🡼북서쪽으로',
+          ko: '앞 => 북서',
         },
         redMirrorWest: {
           en: 'Front => NE',
-          ja: '前 => 北東',
+          de: 'Vorne => NO',
+          fr: 'Devant => NE',
           cn: '前 => 右上 (东北)',
-          ko: '앞에 있다 🔜 북동쪽으로🡽',
+          ko: '앞 => 북동',
         },
         goFront: Outputs.goFront,
       },
@@ -307,19 +338,19 @@ Options.Triggers.push({
       outputStrings: {
         bitingFrostNext: {
           en: 'Biting Next (face outward)',
-          de: 'Frosthieb als nächstes',
-          fr: 'Taillade de givre bientôt',
+          de: 'Frosthieb als nächstes (nach außen drehen)',
+          fr: 'Taillade de givre (pointez vers l\'extérieur)',
           ja: '次はフロストスラッシュ',
           cn: '冰霜斩 (去背后)',
-          ko: '다음: 서리 참격', // FIXME
+          ko: '서리 참격 (뒤로)',
         },
         drivingFrostNext: {
           en: 'Driving Next (face inward)',
-          de: 'Froststoß als nächstes',
-          fr: 'Percée de givre bientôt',
+          de: 'Froststoß als nächstes (nach innen drehen)',
+          fr: 'Percée de givre (pointez vers l\'intérieur)',
           ja: '次はフロストスラスト',
           cn: '冰霜刺 (去前面)',
-          ko: '다음: 서리 일격', // FIXME
+          ko: '서리 일격 (앞으로)',
         },
       },
     },
@@ -349,7 +380,8 @@ Options.Triggers.push({
       outputStrings: {
         cleanse: {
           en: 'Cleanse: ${players}',
-          ja: 'エスナ: ${players}',
+          de: 'Reinige: ${players}',
+          fr: 'Guérison : ${players}',
           cn: '驱散: ${players}',
           ko: '에스나: ${players}',
         },
@@ -364,9 +396,10 @@ Options.Triggers.push({
       outputStrings: {
         text: {
           en: 'Star on YOU',
-          ja: '自分に星が！',
+          de: 'Stern auf DIR',
+          fr: 'Étoile sur VOUS',
           cn: '冰针点名',
-          ko: '내게 별이!',
+          ko: '별 징 대상자',
         },
       },
     },
@@ -457,9 +490,10 @@ Options.Triggers.push({
       outputStrings: {
         outThenMiddle: {
           en: 'Out => Middle',
-          ja: '外 => 真ん中',
+          de: 'Raus => Mitte',
+          fr: 'Extérieur => Milieu',
           cn: '远离 => 中间',
-          ko: '밖에 있다 🔜 한가운데로',
+          ko: '밖 => 중앙',
         },
         out: Outputs.out,
       },
@@ -482,21 +516,24 @@ Options.Triggers.push({
       outputStrings: {
         getUnderCards: {
           en: 'Under => Under Cardinal Mirrors',
-          ja: 'ボスの下 => 十字の鏡の下',
+          de: 'Unter den Boss => Unter Kardinal-Spiegel',
+          fr: 'Dessous => Sous les miroirs cardinaux',
           cn: '下方 => 正点镜下方',
-          ko: '보스 밑 🔜 ➕거울 밑으로',
+          ko: '보스 밑 => 십자 방향 거울 밑',
         },
         getUnderIntercards: {
           en: 'Under => Under Intercard Mirrors',
-          ja: 'ボスの下 => 斜め鏡の下',
+          de: 'Unter den Boss => Unter Interkardinal-Spiegel',
+          fr: 'Dessous => Sous les miroirs intercardinaux',
           cn: '下方 => 斜点镜下方',
-          ko: '보스 밑 🔜 ❌거울 밑으로',
+          ko: '보스 밑 => 대각선 방향 거울 밑',
         },
         getUnderUnknown: {
           en: 'Under Boss => Under Mirrors',
-          ja: 'ボスの下 => 鏡の下',
+          de: 'Unter den Boss => Unter Spiegel',
+          fr: 'Sous le boss => Sous les miroirs',
           cn: 'BOSS 下方 => 镜下方',
-          ko: '보스 밑 🔜 거울 밑으로',
+          ko: '보스 밑 => 거울 밑',
         },
         getUnder: Outputs.getUnder,
       },
@@ -562,15 +599,17 @@ Options.Triggers.push({
         output.responseOutputStrings = {
           getFinalTower: {
             en: 'Get Final Tower',
-            ja: '最後の塔踏み',
+            de: 'Nimm letzten Turm',
+            fr: 'Prenez la tour finale',
             cn: '踩最后塔',
-            ko: '마지막 타워 밟아요',
+            ko: '마지막 기둥 들어가기',
           },
           avoidFinalTower: {
             en: 'Avoid Final Tower',
-            ja: '最後の塔回避',
+            de: 'Vermeide letzten Turm',
+            fr: 'Évitez la tour finale',
             cn: '躲最后塔',
-            ko: '마지막 타워 피해요',
+            ko: '마지막 기둥 피하기',
           },
         };
         const light = data.lightsteepedCount[data.me];
@@ -619,9 +658,10 @@ Options.Triggers.push({
       outputStrings: {
         text: {
           en: 'Stun Aqueous Aether',
-          ja: 'ウォーターにスタン',
+          de: 'Wasseräther unterbrechen',
+          fr: 'Étourdissez l\'ether aqueux',
           cn: '眩晕水以太',
-          ko: '스턴: 워터(아쿠에오스)',
+          ko: '물 에테르 기절',
         },
       },
     },
@@ -719,9 +759,18 @@ Options.Triggers.push({
         en: `Fast means you can go from the 1st to the 3rd safe spot directly.
              Slow means you need to go 1 => 2 => 3 without skipping 2.
              This is for casters who may not want to move as much.`,
+        de: `Schnell bedeutet, dass man direkt vom 1. zum 3. sicheren Punkt gehen kann.
+             Langsam bedeutet, dass man 1 => 2 => 3 gehen muss, ohne 2 zu überspringen.
+             Dies ist für Magier, die sich vielleicht nicht so viel bewegen wollen.`,
+        fr: `Rapide signifie que vous pouvez passer directement du premier au troisième point sûr.
+             Lent signifie que vous devez aller de 1 => 2 => 3 sans omettre 2.
+             C'est pour les lanceurs de sorts qui ne veulent pas se déplacer autant.`,
         cn: `快指你可以从第 1 个安全点直接到达第 3 个安全点。
              慢指你需要走 1 => 2 => 3 ,不跳过 2。
              适用于不想移动太多的读条职业。`,
+        ko: `빠름은 첫 번째 안전 지점에서 세 번째 안전 지점으로 바로 이동할 수 있음을 의미합니다.
+             느림은 2번을 건너뛰지 않고 1번 => 2번 => 3번으로 이동해야 한다는 뜻입니다.
+             많이 움직이고 싶지 않은 캐스터를 위한 옵션입니다.`,
       },
       type: 'StartsUsing',
       netRegex: { source: 'Shiva', id: ['4D75', '4D76'] },
@@ -773,15 +822,17 @@ Options.Triggers.push({
       outputStrings: {
         slowText: {
           en: '${dir1} => ${dir2} => ${dir3} (slow)',
-          ja: '${dir1} => ${dir2} => ${dir3} (遅)',
+          de: '${dir1} => ${dir2} => ${dir3} (langsam)',
+          fr: '${dir1} => ${dir2} => ${dir3} (lent)',
           cn: '${dir1} => ${dir2} => ${dir3} (慢)',
-          ko: '${dir1} => ${dir2} => ${dir3} (느린)',
+          ko: '${dir1} => ${dir2} => ${dir3} (느림)',
         },
         fastText: {
           en: '${dir1} => ${dir2} => ${dir3} (fast)',
-          ja: '${dir1} => ${dir2} => ${dir3} (早)',
+          de: '${dir1} => ${dir2} => ${dir3} (schnell)',
+          fr: '${dir1} => ${dir2} => ${dir3} (rapide)',
           cn: '${dir1} => ${dir2} => ${dir3} (快)',
-          ko: '${dir1} => ${dir2} => ${dir3} (빠른)',
+          ko: '${dir1} => ${dir2} => ${dir3} (빠름)',
         },
         dirNW: Outputs.dirNW,
         dirNE: Outputs.dirNE,
@@ -974,15 +1025,17 @@ Options.Triggers.push({
       outputStrings: {
         redDragonHead: {
           en: 'Pop Head #${num}',
-          ja: '${num}番目の竜の頭',
+          de: 'Nimm Kopf #${num}',
+          fr: 'Tête #${num}',
           cn: '撞头 #${num}',
-          ko: '용머리: ${num}번째',
+          ko: '${num}번 머리 부딪히기',
         },
         bluePuddle: {
           en: 'Get Puddle #${num}',
-          ja: '${num}番目の踏み',
+          de: 'Nimm Fläche #${num}',
+          fr: 'Prenez le puddle #${num}',
           cn: '踩圈 #${num}',
-          ko: '줍줍: ${num}번째',
+          ko: '${num}번 장판 밟기',
         },
       },
     },
@@ -1056,8 +1109,10 @@ Options.Triggers.push({
         },
         bluCleanse: {
           en: 'Exuviation',
-          ja: 'エスナ',
-          ko: '에스나',
+          de: 'Exuviation',
+          fr: 'Exuviation',
+          cn: '蜕皮',
+          ko: '허물 벗기',
         },
       },
     },
@@ -1108,15 +1163,17 @@ Options.Triggers.push({
       outputStrings: {
         proteanGetFinalTower: {
           en: 'Protean => Get Final Tower',
-          ja: '散会 => 最後の塔踏み',
+          de: 'Himmelsrichtung => Nimm letzten Turm',
+          fr: 'Positions => Prenez la tour finale',
           cn: '八方分散 => 踩最后塔',
-          ko: '프로틴 🔜 마지막 타워 밟아요',
+          ko: '8방향 산개 => 마지막 기둥 들어가기',
         },
         proteanAvoidFinalTower: {
           en: 'Protean => Avoid Final Tower',
-          ja: '散会 => 最後の塔回避',
+          de: 'Himmelsrichtung => Vermeide letzten Turm',
+          fr: 'Position => Évitez la tour finale',
           cn: '八方分散 => 躲最后塔',
-          ko: '프로틴 🔜 마지막 타워 피해욧',
+          ko: '8방향 산개 => 마지막 기둥 피하기',
         },
       },
     },
@@ -1124,8 +1181,8 @@ Options.Triggers.push({
   timelineReplace: [
     {
       'locale': 'de',
-      'missingTranslations': true,
       'replaceSync': {
+        'Earthen Aether': 'Erdäther',
         'Frozen Mirror': 'Eisspiegel',
         'great wyrm': 'Körper des heiligen Drachen',
         'Luminous Aether': 'Lichtäther',
@@ -1188,8 +1245,8 @@ Options.Triggers.push({
     },
     {
       'locale': 'fr',
-      'missingTranslations': true,
       'replaceSync': {
+        'Earthen Aether': 'éther de terre',
         'frozen mirror': 'Miroir de glace',
         'great wyrm': 'Dragon divin',
         'luminous Aether': 'Éther de lumière',
@@ -1253,8 +1310,8 @@ Options.Triggers.push({
     },
     {
       'locale': 'ja',
-      'missingTranslations': true,
       'replaceSync': {
+        'Earthen Aether': 'アース・エーテル',
         'frozen mirror': '氷面鏡',
         'great wyrm': '聖竜',
         'luminous Aether': 'ライト・エーテル',
@@ -1381,8 +1438,8 @@ Options.Triggers.push({
     },
     {
       'locale': 'ko',
-      'missingTranslations': true,
       'replaceSync': {
+        'Earthen Aether': '땅 에테르',
         'Shiva': '시바',
         'Frozen Mirror': '얼음 거울',
         'Mothercrystal': '어머니 크리스탈',

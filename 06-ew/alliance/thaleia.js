@@ -37,7 +37,7 @@ Options.Triggers.push({
       id: 'Thaleia Thaliak Katarraktes',
       type: 'StartsUsing',
       netRegex: { id: '88D1', source: 'Thaliak', capture: false },
-      response: Responses.aoe(),
+      response: Responses.bleedAoe(),
     },
     {
       id: 'Thaleia Thaliak Thlipsis',
