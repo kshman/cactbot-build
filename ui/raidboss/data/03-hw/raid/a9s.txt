@@ -9,7 +9,7 @@ hideall "--sync--"
 ### Faust Z
 # -p 1A2B:1006.5
 # The Cranial Plate will be sealed off
-1000.0	"--sync--"	sync / 29:[^:]*:7DC:[^:]*:72F:/ window 10000
+1000.0	"--sync--"	SystemLogMessage { id: "7DC", param1: "72F" } window 10000
 1006.5 "Kaltstrahl" Ability { id: "1A2B", source: "Faust Z" } window 1007,2.5
 1013.6 "Kaltstrahl" Ability { id: "1A2B", source: "Faust Z" }
 1020.7 "Kaltstrahl" Ability { id: "1A2B", source: "Faust Z" }
@@ -49,13 +49,13 @@ hideall "--sync--"
 
 # Phase 1
 # Life Support will be sealed off
-2000.0	"--sync--"	sync / 29:[^:]*:7DC:[^:]*:730:/ window 10000
+2000.0	"--sync--"	SystemLogMessage { id: "7DC", param1: "730" } window 10000
 2010.0 "Stockpile" Ability { id: "1A38", source: "Refurbisher 0" } window 2010,5
 2012.1 "Right Arm Reassembly" Ability { id: "1A2E", source: "Refurbisher 0" }
 2014.3 "Power Generator x2 (NE)"
 2014.3 "Lava (NE)" duration 42
 2023.4 "Scrap" Ability { id: "1A39", source: "Refurbisher 0" }
-2034.4 "--rocks fall--" #sync / 03:........:Scrap:/ 
+2034.4 "--rocks fall--" #AddedCombatant { name: "Scrap" } 
 2039.6 "Scrap Burst" Ability { id: "1A3A", source: "Refurbisher 0" }
 2048.8 "Scrap" Ability { id: "1A39", source: "Refurbisher 0" }
 2055.9 "Scrap" Ability { id: "1A39", source: "Refurbisher 0" }
@@ -83,7 +83,7 @@ hideall "--sync--"
 2173.9 "Lava (SW)" duration 15
 2180.2 "Acid Rain" #Ability { id: "1C0A", source: "Refurbisher 0" }
 2189.3 "Lava (SE)" duration 15
-2195.1 "--rocks fall--" #sync / 03:........:Scrap:/ 
+2195.1 "--rocks fall--" #AddedCombatant { name: "Scrap" } 
 2200.3 "Scrap Burst" Ability { id: "1A3A", source: "Refurbisher 0" }
 
 # Phase 4
@@ -91,7 +91,7 @@ hideall "--sync--"
 2226.5 "Power Generator x1 (SW)"
 2226.5 "Alarum x1 (SW)"
 2226.5 "Lava (SW)" duration 42
-2238.7 "--rocks fall--" #sync / 03:........:Scrap:/ 
+2238.7 "--rocks fall--" #AddedCombatant { name: "Scrap" } 
 2243.9 "Scrap Burst" Ability { id: "1A3A", source: "Refurbisher 0" }
 2253.1 "Scrap" Ability { id: "1A39", source: "Refurbisher 0" }
 2260.2 "Scrap" Ability { id: "1A39", source: "Refurbisher 0" }
@@ -124,7 +124,7 @@ hideall "--sync--"
 2376.4 "Scrap Bomb" Ability { id: "1A3E", source: "Refurbisher 0" }
 2384.6 "Scrap" Ability { id: "1A39", source: "Refurbisher 0" }
 2403.3 "Explosion (NW/SE)" Ability { id: "1A35", source: "Bomb" }
-2398.5 "--rocks fall--" #sync / 03:........:Scrap:/ 
+2398.5 "--rocks fall--" #AddedCombatant { name: "Scrap" } 
 2403.7 "Scrap Burst" Ability { id: "1A3A", source: "Refurbisher 0" }
 
 # Phase 7

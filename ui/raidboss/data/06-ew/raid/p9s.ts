@@ -367,6 +367,7 @@ const triggerSet: TriggerSet<Data> = {
       type: 'StartsUsing',
       netRegex: { id: '817D', source: 'Kokytos', capture: false },
       delaySeconds: 1.5, // allow for orb headmarker data to be collected, and delay so as not to collide with player dash order callout
+      durationSeconds: 10,
       infoText: (data, _matches, output) => {
         let firstOrb8Dir;
         let secondOrb8Dir;
@@ -467,28 +468,28 @@ const triggerSet: TriggerSet<Data> = {
           de: '2: 1. Raus, 3. Turm',
           fr: '2: 1er Saut, 3ème tour',
           cn: '2麻 1火3塔',
-          ko: '2번: 처음 #1 돌진, #3 타워',
+          ko: '2번: 돌진#1 🔜 타워 #3',
         },
         4: {
           en: '4: Second dash, last tower',
           de: '4: 2. Raus, 4. Turm',
           fr: '4: 2nd Saut, Dernière tour',
           cn: '4麻 2火4塔',
-          ko: '4번: #2 돌진, 마지막 #4 타워',
+          ko: '4번: 돌진#2 🔜 타워#4',
         },
         6: {
           en: '6: First tower, third dash',
           de: '6: 1. Turm, 3. Raus',
           fr: '6: 1ère Tour, 3ème Saut',
           cn: '6麻 1塔3火',
-          ko: '6번: 처음 #1 타워, #3 돌진',
+          ko: '6번: 타워#1 🔜 돌진#3',
         },
         8: {
           en: '8: Second tower, last dash',
           de: '8: 2. Turm, 4. Raus',
           fr: '8: 2ème Tour, Dernier Saut',
           cn: '8麻 2塔4火',
-          ko: '8번: #2 타워, 마지막 #4 돌진',
+          ko: '8번: 타워#2 🔜 돌진#4',
         },
         tts: {
           en: '${num}番',
