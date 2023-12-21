@@ -598,6 +598,9 @@ const latestLogDefinitions = {
       y: 7,
       z: 8,
     },
+    playerIds: {
+      4: 5,
+    },
     canAnonymize: true,
     firstOptionalField: undefined,
   },
@@ -617,8 +620,8 @@ const latestLogDefinitions = {
       targetName: 7,
     },
     playerIds: {
-      4: null,
-      5: null,
+      4: 5,
+      6: 7,
     },
     firstOptionalField: undefined,
   },
@@ -1177,46 +1180,6 @@ const latestLogDefinitions = {
     },
     canAnonymize: true,
     firstOptionalField: 9,
-  },
-  SpawnNpcExtra: {
-    type: '265',
-    name: 'SpawnNpcExtra',
-    source: 'OverlayPlugin',
-    messageType: '265',
-    fields: {
-      type: 0,
-      timestamp: 1,
-      sourceId: 2,
-      parentActorId: 3,
-      tetherId: 4,
-    },
-    playerIds: {
-      2: null,
-    },
-    canAnonymize: true,
-    firstOptionalField: undefined,
-  },
-  ActorControlExtra: {
-    type: '266',
-    name: 'ActorControlExtra',
-    source: 'OverlayPlugin',
-    messageType: '266',
-    fields: {
-      type: 0,
-      timestamp: 1,
-      sourceId: 2,
-      category: 3,
-      param1: 4,
-      param2: 5,
-      param3: 6,
-      param4: 7,
-    },
-    blankFields: [6],
-    playerIds: {
-      2: null,
-    },
-    canAnonymize: true,
-    firstOptionalField: undefined,
   },
 } as const;
 
