@@ -65,18 +65,21 @@ const triggerSet: TriggerSet<Data> = {
         first: {
           en: 'Away from Orbs',
           de: 'Außen zwichen den Orbs',
+          fr: 'Éloignez-vous des orbes',
           ja: 'ハンマー、玉の間の外側へ',
           ko: '망치, 피해요',
         },
         second: {
           en: 'Under Orbs',
           de: 'Unter einen Orbs',
+          fr: 'Sous les orbes',
           ja: 'ドーナツ、玉の下へ',
           ko: '도넛, 안으로',
         },
         third: {
           en: 'Under Donut Far From Axe',
           de: 'Unter Donut und weit weg von der Axt',
+          fr: 'Sous le donut loin de l\'Axe',
           ja: '玉に気を付けて',
           ko: '망치, 도넛 조심해요',
         },
@@ -106,6 +109,7 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: '3x Knockback',
           de: '3x Rückstoß',
+          fr: 'Poussée x3',
           ja: '3x ノックバック',
           ko: '3연속 넉백, 1번부터',
         },
@@ -120,6 +124,7 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: '4x Charge',
           de: '4x Ansturm',
+          fr: 'Ruée x4',
           ja: '4x 突進',
           ko: '4연속 돌진',
         },
@@ -134,6 +139,7 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: 'Away from spears',
           de: 'Außen zwichen den Dreizack',
+          fr: 'Éloignez-vous des lances',
           ja: '槍の間の外側へ',
           ko: '바깥에서 창, 떨어져요',
         },
@@ -148,6 +154,7 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: 'Avoid spreading spear puddles',
           de: 'Weiche den größer werdenen Speerflächen aus',
+          fr: 'Évitez d\'éloigner les flaques des lances',
           ja: '槍の間の外側へ',
           ko: '바깥에서 창, 떨어져요',
         },
@@ -218,6 +225,7 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: 'Bubbles Move 2 Tiles',
           de: 'Blasen 2 Flächen Rückstoß',
+          fr: 'Bulles Déplacement de 2 carreaux',
           ja: '泡のみ2マスのノックバック',
           ko: '거품만 2칸 넉백',
         },
@@ -279,6 +287,7 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: 'Stretch Tether',
           de: 'Verbindung langziehen',
+          fr: 'Étirez les liens',
           ko: '줄 늘려요',
         },
       },
@@ -293,6 +302,7 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: 'Knockback => Get in Bubble',
           de: 'Rückstoß => Geh in eine Blase',
+          fr: 'Poussée => Allez dans la bulle',
           ko: '넉백 🔜 버블 타세요',
         },
       },
@@ -310,6 +320,7 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: 'Get behind non-bubbled Zaratan',
           de: 'Geh hinter einen Zaratan ohne Blase',
+          fr: 'Allez derrière le Zaratan sans bulle',
           ko: '버블에 안들어간 자라탄 뒤로',
         },
       },
@@ -327,6 +338,7 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: 'Get in Bubble',
           de: 'Geh in eine Blase',
+          fr: 'Allez dans la bulle',
           ko: '버블 타세요',
         },
       },
@@ -396,6 +408,7 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: 'Go to safe zone',
           de: 'Geh in den sicheren Bereich',
+          fr: 'Allez dans une zone sûre',
           ja: '安置へ移動',
           ko: '빈 곳으로~',
         },
@@ -459,24 +472,28 @@ const triggerSet: TriggerSet<Data> = {
         front: {
           en: 'Face Towards Lala',
           de: 'Schau Lala an',
+          fr: 'Regardez Lala',
           ja: 'ボスを見る',
           ko: '보스 봐욧',
         },
         back: {
           en: 'Look Away from Lala',
           de: 'Schau von Lala weg',
+          fr: 'Ne regardez pas Lala',
           ja: '後ろ見て',
           ko: '뒤돌아 봐요',
         },
         left: {
           en: 'Left Flank towards Lala',
           de: 'Linke Seite zu Lala drehen',
+          fr: 'Flanc gauche vers Lala',
           ja: '右見て',
           ko: '오른쪽 봐요',
         },
         right: {
           en: 'Right Flank towards Lala',
           de: 'Rechte Seite zu Lala drehen',
+          fr: 'Flanc droit vers Lala',
           ja: '左見て',
           ko: '왼쪽 봐요',
         },
@@ -491,6 +508,7 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: 'Seed adds => Donut AOEs',
           de: 'Samen Adds => Donut AoEs',
+          fr: 'Adds graine => AoEs Donut',
           ja: '種 => ドーナツAOE',
           ko: '씨앗 등장 🔜 도넛 장판',
         },
@@ -505,6 +523,7 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: 'Armadillo adds => Big AOEs',
           de: 'Fledermaus Adds => Große AoEs',
+          fr: 'Adds tatou => Grosses AoEs',
           ja: 'コウモリ => ゆかAOE',
           ko: '밖에 쥐 등장 🔜 큰 장판',
         },
@@ -519,6 +538,7 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: 'Tree adds => Line AOEs',
           de: 'Baum Adds => Linien AoEs',
+          fr: 'Adds Arbre => AoEs en ligne',
           ja: '木 => 直線AOE',
           ko: '밖에 나무 등장 🔜 직선 AOE',
         },
@@ -568,24 +588,28 @@ const triggerSet: TriggerSet<Data> = {
         front: {
           en: 'Forward March (1 square)',
           de: 'Geistlenkung: Vorwärts',
+          fr: 'Vers l\'avant (1 carreau)',
           ja: '強制移動 : 前',
           ko: '강제이동: 앞',
         },
         back: {
           en: 'Backwards March (1 square)',
           de: 'Geistlenkung: Rückwärts',
+          fr: 'Vers l\'arrière (1 carreau)',
           ja: '強制移動 : 後ろ',
           ko: '강제이동: 뒤',
         },
         left: {
           en: 'Left March (1 square)',
           de: 'Geistlenkung: Links',
+          fr: 'Vers la gauche (1 carreau)',
           ja: '強制移動 : 左',
           ko: '강제이동: 왼쪽',
         },
         right: {
           en: 'Right March (1 square)',
           de: 'Geistlenkung: Rechts',
+          fr: 'Vers la droite (1 carreau)',
           ja: '強制移動 : 右',
           ko: '강제이동: 오른쪽',
         },
@@ -661,6 +685,7 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: 'Safe: ${safe}',
           de: 'Sicher: ${safe}',
+          fr: 'Sûr : ${safe}',
           ja: '安置: ${safe}',
           ko: '안전: ${safe}',
         },
@@ -687,6 +712,7 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: 'Stand on cushion',
           de: 'Auf einem Kissen stehen',
+          fr: 'Restez sur le coussin',
           ko: '쿠션으로',
         },
       },
@@ -708,6 +734,7 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: 'Glowing adds get larger',
           de: 'Weiche leuchtenden Adds aus',
+          fr: 'Les adds brillants deviennent plus large',
           ja: '光ってる物に注意',
           ko: '반짝이는 쫄 조심!',
         },
@@ -759,6 +786,7 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: 'Away from tether ends',
           de: 'Weiche Verbindungen aus',
+          fr: 'Loin de l\'extrémité du lien',
           ja: '縮む線を回避',
           ko: '줄달린 쫄 조심!',
         },
@@ -793,6 +821,7 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: 'Last bloom => Walk into Safe',
           de: 'Letzte Blüte => Geh zum sicheren Bereich',
+          fr: 'Dernière fleur => Allez dans une zone sûre',
           ja: '最後の花畑 => 安置へ移動',
           ko: '마지막 풀밭 🔜 안전하게 이동',
         },
@@ -827,6 +856,7 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: '5x Knockback',
           de: '5x Rückstoß',
+          fr: 'Poussée x5',
           ja: '5x ノックバック',
           ko: '5연속 넉백! 2번째 암랭',
         },
@@ -973,7 +1003,6 @@ const triggerSet: TriggerSet<Data> = {
     },
     {
       'locale': 'fr',
-      'missingTranslations': true,
       'replaceSync': {
         'Aetheric Charge': 'globe magique',
         'Aloalo Ahool': 'ahool d\'Aloalo',
@@ -1007,6 +1036,7 @@ const triggerSet: TriggerSet<Data> = {
         'Zeal-blind Zozone': 'Zozone le téméraire',
       },
       'replaceText': {
+        '--cleanse--': '--Guérison--',
         '4-tonze Weight': 'Poids de 4 tonz',
         'Aero II': 'Extra Vent',
         'Aero IV': 'Giga Vent',
@@ -1102,6 +1132,7 @@ const triggerSet: TriggerSet<Data> = {
     },
     {
       'locale': 'ja',
+      'missingTranslations': true,
       'replaceSync': {
         'Aetheric Charge': '魔力球',
         'Aloalo Ahool': 'アロアロ・アフール',

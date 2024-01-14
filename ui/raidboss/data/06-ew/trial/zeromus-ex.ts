@@ -331,6 +331,7 @@ const triggerSet: TriggerSet<Data> = {
           en: 'Corners (NE/SW)',
           de: 'Ecken (NO/SW)',
           fr: 'Coins (NE/SO)',
+          ja: '隅へ (北東・南西)',
           cn: '右上/左下角落',
           ko: '구석 (북동/남서)',
         },
@@ -993,13 +994,14 @@ const triggerSet: TriggerSet<Data> = {
     },
     {
       'locale': 'fr',
-      'missingTranslations': true,
       'replaceSync': {
         'Comet': 'comète',
         'Toxic Bubble': 'bulle empoisonnée',
         'Zeromus': 'Zeromus',
       },
       'replaceText': {
+        '--spread--': '--Écartement--',
+        '--towers--': '--Tours--',
         'Abyssal Echoes': 'Écho abyssal',
         'Abyssal Nox': 'Nox abyssal',
         'Akh Rhai': 'Akh Rhai',

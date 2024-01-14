@@ -1,89 +1,14 @@
 import path from 'path';
 
-import fetch from 'node-fetch';
+import { ConsoleLogger, LogLevelKey } from './console_logger';
+import { OutputFileAttributes, XivApi } from './xivapi';
 
-import { CoinachWriter } from './coinach';
+const _WORLD_ID: OutputFileAttributes = {
+  outputFile: 'resources/world_id.ts',
+  type: 'Worlds',
+  header: `// NOTE: This data is filtered to public worlds only (i.e. isPublic: true)
 
-const _OUTPUT_FILE = 'world_id.ts';
-
-const worldFieldMap = {
-  'ID': 'id',
-  'InternalName': 'internalName',
-  'Name': 'name',
-  'Region': 'region',
-  'UserType': 'userType',
-  'DataCenter': 'dataCenter',
-  'IsPublic': 'isPublic',
-} as const;
-
-const dataCenterFieldMap = {
-  'ID': 'id',
-  'Name': 'name',
-} as const;
-
-type ResultDataCenter = {
-  ID: number;
-  Name: string;
-};
-
-type ResultWorld = {
-  ID: number;
-  InternalName: string;
-  Name: string;
-  Region: number;
-  UserType: number;
-  DataCenter: null | ResultDataCenter;
-};
-
-type XivapiResult = {
-  Results: {
-    [key: number]: ResultWorld;
-  };
-};
-
-type DataCenter = {
-  [key in keyof ResultDataCenter as (typeof dataCenterFieldMap)[key]]: ResultDataCenter[key];
-};
-
-type World = {
-  [key in keyof ResultWorld as (typeof worldFieldMap)[key]]: key extends 'DataCenter'
-    ? (DataCenter | undefined)
-    : ResultWorld[key];
-};
-
-const fetchXivapi = async () => {
-  const url = `https://xivapi.com/World?columns=${Object.keys(worldFieldMap).join(',')}`;
-  const response = await fetch(url);
-  const json = (await response.json()) as XivapiResult;
-  return json.Results;
-};
-
-const remapResults = (
-  content: XivapiResult['Results'],
-): Record<number, World> => {
-  const result: Record<number, World> = {};
-  for (const [, data] of Object.entries(content)) {
-    const dc = data.DataCenter === null ? undefined : {
-      id: data.DataCenter.ID,
-      name: data.DataCenter.Name,
-    };
-    result[data.ID] = {
-      id: data.ID,
-      internalName: data.InternalName,
-      name: data.Name,
-      region: data.Region,
-      userType: data.UserType,
-      dataCenter: dc,
-    };
-  }
-  return result;
-};
-
-export default async (): Promise<void> => {
-  const table = remapResults(await fetchXivapi());
-
-  const writer = new CoinachWriter(null, true);
-  const header = `export type DataCenter = {
+  export type DataCenter = {
     id: number;
     name: string;
   };
@@ -109,13 +34,148 @@ export const worldNameToWorld = (name: string): World | undefined => {
     }
   });
 };
-`;
-  await writer.writeTypeScript(
-    path.join('resources', _OUTPUT_FILE),
-    'world_id.ts',
-    header,
-    'Worlds',
-    true,
-    table,
+`,
+  asConst: true,
+};
+
+const _ENDPOINT = 'World';
+
+const _COLUMNS = [
+  'ID',
+  'InternalName',
+  'Name',
+  'Region',
+  'UserType',
+  'DataCenter.ID',
+  'DataCenter.Name',
+  'IsPublic',
+];
+
+type ResultDataCenter = {
+  ID: string | number | null;
+  Name: string | null;
+};
+
+type ResultWorld = {
+  ID: number;
+  InternalName: string | null;
+  Name: string | null;
+  Region: number | null;
+  UserType: number | null;
+  DataCenter: ResultDataCenter;
+  IsPublic: string | number | null;
+};
+
+type XivApiWorld = ResultWorld[];
+
+type OutputDataCenter = {
+  id: number;
+  name: string;
+};
+
+type OutputWorld = {
+  id: number;
+  internalName: string;
+  name: string;
+  region: number;
+  userType: number;
+  dataCenter?: OutputDataCenter;
+  isPublic?: boolean;
+};
+
+type OutputWorldIds = {
+  [id: string]: OutputWorld;
+};
+
+const _SCRIPT_NAME = path.basename(import.meta.url);
+const log = new ConsoleLogger();
+log.setLogLevel('alert');
+
+const scrubDataCenter = (dc: ResultDataCenter): OutputDataCenter | undefined => {
+  if (dc.ID === null || dc.ID === '')
+    return;
+  if (dc.Name === null || dc.Name === '')
+    return;
+  const idNum = typeof dc.ID === 'string' ? parseInt(dc.ID) : dc.ID;
+  return {
+    id: idNum,
+    name: dc.Name,
+  };
+};
+
+const scrubIsPublic = (pub: string | number | null): boolean | undefined => {
+  if (pub === null || pub === '')
+    return;
+  const pubNum = typeof pub === 'string' ? parseInt(pub) : pub;
+  if (pubNum === 0)
+    return false;
+  if (pubNum === 1)
+    return true;
+  return;
+};
+
+const assembleData = (apiData: XivApiWorld): OutputWorldIds => {
+  log.debug('Processing & assembling data...');
+  const formattedData: OutputWorldIds = {};
+
+  for (const data of apiData) {
+    const dc = scrubDataCenter(data.DataCenter);
+    const isPublic = scrubIsPublic(data.IsPublic);
+
+    // there are many hundreds of dev/test/whatever entries in
+    // the World table that substantially clutter the data
+    // for our use cases, we only care about public worlds
+    if (!isPublic) {
+      log.debug(`Found non-public world (ID: ${data.ID} | Name: ${data.Name ?? ''}). Ignoring.`);
+      continue;
+    }
+
+    if (
+      data.InternalName === null ||
+      data.Name === null ||
+      data.Name === '' || // filter out empty strings or we get a ton of trash
+      data.Region === null ||
+      data.UserType === null
+    ) {
+      log.debug(`Data missing for ID: ${data.ID} (Name: ${data.Name ?? ''}). Ignoring.`);
+      continue;
+    }
+    log.debug(
+      `Collected world data for ${dc?.name ?? 'no_data_center'}:${data.Name} (ID: ${data.ID})`,
+    );
+    formattedData[data.ID.toString()] = {
+      id: data.ID,
+      internalName: data.InternalName,
+      name: data.Name,
+      region: data.Region,
+      userType: data.UserType,
+      dataCenter: dc,
+      // isPublic: isPublic, // value is always implicitly 'true' given the filter above
+    };
+  }
+  log.debug('Data assembly/formatting complete.');
+  return formattedData;
+};
+
+export default async (logLevel: LogLevelKey): Promise<void> => {
+  log.setLogLevel(logLevel);
+  log.info(`Starting processing for ${_SCRIPT_NAME}`);
+
+  const api = new XivApi(null, log);
+
+  const apiData = await api.queryApi(
+    _ENDPOINT,
+    _COLUMNS,
+  ) as XivApiWorld;
+
+  const outputData = assembleData(apiData);
+
+  await api.writeFile(
+    _SCRIPT_NAME,
+    _WORLD_ID,
+    outputData,
+    true, // require keys to be returned as strings (because that's the existing format)
   );
+
+  log.successDone(`Completed processing for ${_SCRIPT_NAME}`);
 };

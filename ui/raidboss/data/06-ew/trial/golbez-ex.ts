@@ -43,6 +43,7 @@ const galeSphereOutputStrings = {
   dirAndMechanic: {
     en: '${dir} + ${mechanic}',
     de: '${dir} + ${mechanic}',
+    fr: '${dir} + ${mechanic}',
     ja: '${dir} + ${mechanic}',
     cn: '${dir} + ${mechanic}',
     ko: '${dir} + ${mechanic}',
@@ -171,6 +172,7 @@ const triggerSet: TriggerSet<Data> = {
         dirNWSE: {
           en: 'NW / SE',
           de: 'NW / SO',
+          fr: 'NO / SE',
           ja: '北西 / 南東',
           cn: '左上 (西北) / 右下 (东南)',
           ko: '북서 / 남동',
@@ -178,6 +180,7 @@ const triggerSet: TriggerSet<Data> = {
         dirNESW: {
           en: 'NE / SW',
           de: 'NO / SW',
+          fr: 'NE / SO',
           ja: '北東 / 南西',
           cn: '右上 (东北) / 左下 (西南)',
           ko: '북동 / 남서',
@@ -251,6 +254,7 @@ const triggerSet: TriggerSet<Data> = {
         backThenFrontThenHealerGroups: {
           en: 'Back => Front => Out => Stacks',
           de: 'Hinten => Vorne => Raus => Sammeln',
+          fr: 'Derrière => Devant => Extérieur => Package',
           ja: '後ろ => 前 => 外側 => ペア',
           cn: '后 => 前 => 钢铁 => 集合',
           ko: '뒤에서 🔜 앞으로 🔜 밖으로 🔜 뭉쳐요',
@@ -258,6 +262,7 @@ const triggerSet: TriggerSet<Data> = {
         backThenFrontThenSpread: {
           en: 'Back => Front => Under => Spread',
           de: 'Hinten => Vorne => Unter ihn => Verteilen',
+          fr: 'Derrière => Devant => Dessous => Écartez-vous',
           ja: '後ろ => 前 => 内側 => 散会',
           cn: '后 => 前 => 月环 => 分散',
           ko: '뒤에서 🔜 앞으로 🔜 밑으로 🔜 흩어져요',
@@ -282,6 +287,7 @@ const triggerSet: TriggerSet<Data> = {
         frontThenHealerGroups: {
           en: 'Front => Out => Stacks',
           de: 'Vorne => Raus => Sammeln',
+          fr: 'Devant => Extérieur => Package',
           ja: '前 => 外側 => ペア',
           cn: '前 => 钢铁 => 集合',
           ko: '앞에서 🔜 밖으로 🔜 뭉쳐요',
@@ -289,6 +295,7 @@ const triggerSet: TriggerSet<Data> = {
         frontThenSpread: {
           en: 'Front => Under',
           de: 'Vorne => Unter ihn',
+          fr: 'Devant => Dessous',
           ja: '前 => 内側',
           cn: '前 => 月环',
           ko: '앞에서 🔜 밑으로',
@@ -305,6 +312,7 @@ const triggerSet: TriggerSet<Data> = {
         outAndSpread: {
           en: 'Spread Out',
           de: 'Außen verteilen',
+          fr: 'Écartez-vous',
           ja: '散会',
           cn: '分散',
           ko: '흩어져요',
@@ -378,6 +386,7 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: '(out + healer groups, for later)',
           de: '(raus + Heiler Gruppen, für später)',
+          fr: '(extérieur + gourpes sur les heals, pour après)',
           ja: '(外 + 後でヒーラと4:4頭割り)',
           cn: '(钢铁 + 稍后治疗分组分摊)',
           ko: '(밖에서 + 4:4힐러)',
@@ -394,6 +403,7 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: '(in + spread, for later)',
           de: '(rein + verteilen, für später)',
+          fr: '(intérieur + écartement, pour après)',
           ja: '(中 + 後で散会)',
           cn: '(月环 + 稍后分散)',
           ko: '(안으로 + 흩어져요)',
@@ -493,6 +503,7 @@ const triggerSet: TriggerSet<Data> = {
         clones: {
           en: 'Clones: ${dir1}->${dir2}->${dir3}->${dir4}',
           de: 'Klone: ${dir1}->${dir2}->${dir3}->${dir4}',
+          fr: 'Clones : ${dir1}->${dir2}->${dir3}->${dir4}',
           ja: '分身: ${dir1}->${dir2}->${dir3}->${dir4}',
           cn: '分身：${dir1}->${dir2}->${dir3}->${dir4}',
           ko: '분신: ${dir1}->${dir2}->${dir3}->${dir4}',
@@ -604,6 +615,7 @@ const triggerSet: TriggerSet<Data> = {
         safeSpotList: {
           en: '${dir1} => ${dir2} => ${dir3} => ${dir4}',
           de: '${dir1} => ${dir2} => ${dir3} => ${dir4}',
+          fr: '${dir1} => ${dir2} => ${dir3} => ${dir4}',
           ja: '${dir1} => ${dir2} => ${dir3} => ${dir4}',
           cn: '${dir1} => ${dir2} => ${dir3} => ${dir4}',
           ko: '${dir1} 🔜 ${dir2} 🔜 ${dir3} 🔜 ${dir4}',
@@ -703,6 +715,7 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: '${dir} => Healer Groups',
           de: '${dir} => Heiler Gruppen',
+          fr: '${dir} => Groupe sur les heals',
           ja: '${dir} => ヒーラと4:4頭割り',
           cn: '${dir} => 治疗分组分摊',
           ko: '${dir} 🔜 4:4 힐러',
@@ -785,6 +798,7 @@ const triggerSet: TriggerSet<Data> = {
         middleLean: {
           en: 'Middle (lean ${dir})',
           de: 'Mitte (${dir} halten)',
+          fr: 'Milieu (côté ${dir})',
           ja: '真ん中 (すこし${dir})',
           cn: '中间 (偏 ${dir})',
           ko: '한가운데 (약간 ${dir})',
@@ -804,6 +818,7 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: 'Knockback on YOU',
           de: 'Rückstoß auf DIR',
+          fr: 'Poussée sur VOUS',
           ja: '自分にノックバック',
           cn: '击退点名',
           ko: '내게 넉백!',
@@ -823,6 +838,7 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: 'Flare on YOU',
           de: 'Flare auf DIR',
+          fr: 'Brasier sur VOUS',
           ja: '自分にフレア',
           cn: '陨石点名',
           ko: '내게 플레어!',
@@ -843,6 +859,7 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: 'Get Tower',
           de: 'Nimm Turm',
+          fr: 'Prenez une tour',
           ja: '塔踏み',
           cn: '踩塔',
           ko: '타워 밟아요',
@@ -1002,13 +1019,27 @@ const triggerSet: TriggerSet<Data> = {
     },
     {
       'locale': 'fr',
-      'missingTranslations': true,
       'replaceSync': {
         'Gale Sphere': 'Sphères de vent ténébreux',
         'Golbez': 'Golbez',
         'Shadow Dragon': 'dragonne obscure',
       },
       'replaceText': {
+        '\\(Enrage\\)': '(Enrage)',
+        '\\(big\\)': '(Gros)',
+        '\\(small\\)': '(Petit)',
+        '\\(light parties\\)': '(Petit groupe)',
+        '\\(spread\\)': '(Écartement)',
+        '\\(explode\\)': '(Explosion)',
+        '\\(snapshot\\)': '(Sauvegarde)',
+        '\\(back\\)': '(Arrière)',
+        '\\(cast\\)': '(Incantation)',
+        '\\(front\\)': '(Devant)',
+        '\\(out\\)': '(Extérieur)',
+        '\\(record\\)': '(Enregistrement)',
+        '\\(under\\)': '(Dessous)',
+        '\\(hit\\)': '(Frappe)',
+        '\\(preview\\)': '(Aperçu)',
         'Abyssal Quasar': 'Quasar abyssal',
         'Arctic Assault': 'Assaut arctique',
         'Azdaja\'s Shadow': 'Ombre d\'Azdaja',

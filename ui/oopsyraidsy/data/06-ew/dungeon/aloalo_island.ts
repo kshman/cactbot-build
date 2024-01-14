@@ -184,6 +184,7 @@ const triggerSet: OopsyTriggerSet<Data> = {
             // Corresponds to 0x8CDC ability
             en: 'Targeted Light',
             de: 'Gezieltes Licht',
+            fr: 'Lumière ciblée',
             ko: '타겟 라이트',
           },
         };
@@ -193,6 +194,7 @@ const triggerSet: OopsyTriggerSet<Data> = {
       // Corresponds to 0x8946 ability
       en: 'Fair Flight',
       de: 'Feenflug',
+      fr: 'Vol équitable',
       ko: '페어 플라이트',
     }),
   ],

@@ -478,6 +478,7 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: 'South (away from orb)',
           de: 'Süden (weg vom Orb)',
+          fr: 'Sud (loin de l\'orbe)',
           ja: '南、玉からはなれて',
           ko: '남쪽! 구슬에서 먼곳으로!',
         },
@@ -492,6 +493,7 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: 'North (away from orb)',
           de: 'Norden (weg vom Orb)',
+          fr: 'Nord (loin de l\'orbe)',
           ja: '北、玉からはなれて',
           ko: '북쪽! 구슬에서 먼곳으로!',
         },
@@ -506,6 +508,7 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: 'Knockback to south safe spot',
           de: 'Rückstoß zum südlichen sicheren Zone',
+          fr: 'Poussée vers la zone sûre au Sud',
           ja: '南、安置へノックバック',
           ko: '남쪽! 넉백!',
         },
@@ -520,6 +523,7 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: 'Knockback to north safe spot',
           de: 'Rückstoß zum nördliche sicheren Zone',
+          fr: 'Poussée vers la zone sûre au Nord',
           ja: '北、安置へノックバック',
           ko: '북쪽! 넉백!',
         },
@@ -608,7 +612,7 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: 'Go to rotated safe zone',
           de: 'Geh in den sicheren Bereich',
-          fr: 'Allez dans une zone sûre',
+          fr: 'Allez dans une zone sûre après rotation',
           ja: '安置へ移動',
           ko: '안전한 곳으로',
         },
@@ -716,14 +720,14 @@ const triggerSet: TriggerSet<Data> = {
         red: {
           en: 'Blue is safe',
           de: 'Blau ist sicher',
-          fr: 'Bleu est sûr',
+          fr: 'Le bleu est sûr',
           ja: '青安置',
           ko: '파랑색이 안전',
         },
         blue: {
           en: 'Red is safe',
           de: 'Rot ist sicher',
-          fr: 'Rouge est sûr',
+          fr: 'Le rouge est sûr',
           ja: '赤安置',
           ko: '빨강색이 안전',
         },
@@ -896,7 +900,6 @@ const triggerSet: TriggerSet<Data> = {
     },
     {
       'locale': 'fr',
-      'missingTranslations': true,
       'replaceSync': {
         'Eulogia': 'Eulogie',
         'Llymlaen(?!\')': 'Llymlaen',
@@ -998,7 +1001,6 @@ const triggerSet: TriggerSet<Data> = {
     },
     {
       'locale': 'ja',
-      'missingTranslations': true,
       'replaceSync': {
         'Eulogia': 'エウロギア',
         'Llymlaen(?!\')': 'リムレーン',
