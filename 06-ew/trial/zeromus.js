@@ -13,6 +13,7 @@ Options.Triggers.push({
         text: {
           en: 'Heal to full',
           de: 'Voll heilen',
+          fr: 'Soignez complètement',
           ja: 'HPを全回復する',
           cn: '奶满全队',
           ko: 'HP 만땅으로',
@@ -29,6 +30,7 @@ Options.Triggers.push({
         text: {
           en: 'Away from glowing circles',
           de: 'Weg von den leuchtenden Kreisen',
+          fr: 'Loin des cercles brillants',
           ja: '光っている円から離れる',
           cn: '远离黑洞',
           ko: '바닥 동그라미 피해요',
@@ -46,6 +48,7 @@ Options.Triggers.push({
         lineStackOn: {
           en: '5x line stack on ${player}',
           de: '5x in einer Linie Sammeln auf ${player}',
+          fr: 'Package en ligne x5 sur ${player}',
           ja: '${player}に5回の直線頭割り',
           cn: '${player} 直线分摊 (5次)',
           ko: '5연속 한줄 뭉치기: ${player}',
@@ -63,6 +66,7 @@ Options.Triggers.push({
         text: {
           en: '${dir1} / ${dir2}',
           de: '${dir1} / ${dir2}',
+          fr: '${dir1} / ${dir2}',
           ja: '${dir1} / ${dir2}',
           cn: '${dir1} / ${dir2}',
           ko: '${dir1} / ${dir2}',
@@ -82,6 +86,7 @@ Options.Triggers.push({
         text: {
           en: '${dir1} / ${dir2}',
           de: '${dir1} / ${dir2}',
+          fr: '${dir1} / ${dir2}',
           ja: '${dir1} / ${dir2}',
           cn: '${dir1} / ${dir2}',
           ko: '${dir1} / ${dir2}',
@@ -130,6 +135,7 @@ Options.Triggers.push({
         tower: {
           en: 'Stand in Tower',
           de: 'Steh im Turm',
+          fr: 'Restez dans une tour',
           ja: '塔を踏む',
           cn: '踩塔',
           ko: '타워 밟아요',
@@ -192,6 +198,7 @@ Options.Triggers.push({
         text: {
           en: 'Spread + Stay Out',
           de: 'Verteilen + Draußen stehen',
+          fr: 'Écartez-vous + Extérieur',
           ja: '散開 + 範囲から離れる',
           cn: '分散 + 远离',
           ko: '아크라이: 흩어져서 + 그대로 밖으로',
@@ -239,7 +246,6 @@ Options.Triggers.push({
     },
     {
       'locale': 'fr',
-      'missingTranslations': true,
       'replaceSync': {
         'Comet': 'comète',
         'Zeromus': 'Zeromus',

@@ -96,7 +96,7 @@ Options.Triggers.push({
             ko: '칼 (탱크 스위치)',
           },
           sword: {
-            en: '칼',
+            en: 'Sword',
             de: 'Schwert',
             fr: 'Épée',
             ja: '剣',
@@ -193,7 +193,7 @@ Options.Triggers.push({
       alarmText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
-          en: '내게 아발란체',
+          en: 'Knockback Laser on YOU',
           de: 'Rückstoß-Laser auf DIR',
           fr: 'Poussée-Laser sur VOUS',
           ja: '自分にアバランチ',
@@ -210,7 +210,7 @@ Options.Triggers.push({
       infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
-          en: '아발란체 피해요',
+          en: 'Avoid Laser',
           de: 'Laser ausweichen',
           fr: 'Évitez le laser',
           ja: 'アバランチを避ける',
@@ -251,7 +251,7 @@ Options.Triggers.push({
       },
       outputStrings: {
         text: {
-          en: '얼음: ${player}',
+          en: 'Free ${player}',
           de: 'Befreie ${player}',
           fr: 'Libérez ${player}',
           ja: '${player}を救って',

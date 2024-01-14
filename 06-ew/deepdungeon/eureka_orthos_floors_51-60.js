@@ -27,6 +27,7 @@ Options.Triggers.push({
         text: {
           en: 'Stop attacking ${target}',
           de: 'Stoppe Angriffe auf ${target}',
+          fr: 'Arrêtez d\'attaquer ${target}',
           ja: '攻撃禁止: ${target}',
           cn: '停止攻击 ${target}',
           ko: '반사! 공격 중지: ${target}',
@@ -44,6 +45,7 @@ Options.Triggers.push({
         text: {
           en: 'Break line-of-sight to ${name}',
           de: 'Unterbreche Sichtlinie zu ${name}',
+          fr: 'Masquez le champ de vision vers ${name}',
           ja: '${name}の視線から隠れる',
           cn: '利用掩体卡 ${name} 的视线',
           ko: '시야 밖으로 숨어요: ${name}',

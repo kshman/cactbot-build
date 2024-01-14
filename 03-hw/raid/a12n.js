@@ -11,7 +11,7 @@ Options.Triggers.push({
       alarmText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
-          en: '지금 리미트브레이크!',
+          en: 'Limit break now!',
           de: 'Limit break jetzt!',
           fr: 'Transcendance maintenant !',
           ja: 'タンクLBを！',
