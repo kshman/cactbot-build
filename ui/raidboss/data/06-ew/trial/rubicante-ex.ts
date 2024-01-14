@@ -197,6 +197,9 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: '${dir} (max melee)',
+          de: '${dir} (max Nahkämpfer-Entfernung)',
+          fr: '${dir} (max melee)',
+          cn: '${dir} (最远近战距离)',
           ko: '${dir} (칼 끝 아슬아슬)',
         },
         north: Outputs.north,
@@ -258,6 +261,9 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: '${dir} (max melee)',
+          de: '${dir} (max Nahkämpfer-Entfernung)',
+          fr: '${dir} (max melee)',
+          cn: '${dir} (最远近战距离)',
           ko: '${dir} (칼 끝 아슬아슬)',
         },
         dirNNE: Outputs.dirNNE,
@@ -513,10 +519,16 @@ const triggerSet: TriggerSet<Data> = {
         out: Outputs.out,
         outCardinal: {
           en: 'Out + Cardinal',
+          de: 'Raus + Kardinal',
+          fr: 'Extérieur + Cardinal',
+          cn: '外 + 十字',
           ko: '밖으로 🔜 십자',
         },
         outIntercard: {
           en: 'Out + Intercard',
+          de: 'Raus + Interkardinal',
+          fr: 'Extérieur + Intercardinal',
+          cn: '外 + 四角',
           ko: '밖으로 🔜 비스듬히',
         },
       },
@@ -752,7 +764,7 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: 'RubicanteEx Flamespire Brand Cardinals',
+      id: 'RubicanteEx Flamespire Brand Call',
       type: 'MapEffect',
       netRegex: { location: '04', capture: true },
       suppressSeconds: 15,
@@ -807,6 +819,9 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: '${safe} => ${mech}',
+          de: '${safe} => ${mech}',
+          fr: '${safe} => ${mech}',
+          cn: '${safe} => ${mech}',
           ko: '${safe} 🔜 ${mech}',
         },
         cardinals: {
@@ -843,9 +858,16 @@ const triggerSet: TriggerSet<Data> = {
         },
         supportStack: {
           en: '(supports stack)',
+          de: '(Supporter sammeln)',
+          fr: '(package support)',
+          cn: '(T奶分摊)',
+          ko: '(탱힐 뭉쳐요)',
         },
         dpsStack: {
           en: '(dps stack)',
+          de: '(DPS sammeln)',
+          fr: '(Package DPS)',
+          cn: '(DPS分摊)',
           ko: '(DPS 뭉쳐요)',
         },
       },
@@ -1005,7 +1027,6 @@ const triggerSet: TriggerSet<Data> = {
     },
     {
       'locale': 'fr',
-      'missingTranslations': true,
       'replaceSync': {
         'Circle of Purgatory': 'cercle arcanique du Purgatoire',
         '(?<!Greater )Flamesent': 'flamme démoniaque',

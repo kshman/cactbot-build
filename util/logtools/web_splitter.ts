@@ -14,24 +14,35 @@ const pageText = {
   titleText: {
     en: 'Log Splitter and Anonymizer',
     de: 'Log Aufteiler und Anonymisierer',
+    fr: 'Log Splitter et Anonymiseur',
     cn: '日志分割与匿名器',
     ko: '로그 분리 및 익명 처리',
   },
   fileDropText: {
     en: 'Drop Network log file here',
     de: 'Network log Datei hier ablegen',
+    fr: 'Déposer votre fichier log ici',
     cn: '将网络日志文件拖放到此处',
     ko: '네트워크 로그 파일을 여기로 끌어오세요',
   },
   anonInput: {
     en: 'Anonymize Log',
     de: 'Log Anonymisieren',
+    fr: 'Anonymiser le log',
     cn: '对日志进行匿名化处理',
     ko: '로그 익명 처리',
+  },
+  analysisFilterInput: {
+    en: 'Filter Log for Analysis',
+    de: 'Filter Log für Analysen',
+    fr: 'Filtrer le log pour analyse',
+    cn: '过滤日志进行分析',
+    ko: '분석용 필터 로그',
   },
   exportInput: {
     en: 'Export',
     de: 'Export',
+    fr: 'Exporter',
     cn: '导出',
     ko: '내보내기',
   },
@@ -72,42 +83,49 @@ const buildTable = (state: PageState): void => {
     include: {
       en: 'Include',
       de: 'Einschließen',
+      fr: 'Inclure',
       cn: '包括',
       ko: '선택',
     },
     startDate: {
       en: 'Date',
       de: 'Datum',
+      fr: 'Date',
       cn: '日期',
       ko: '날짜',
     },
     startTime: {
       en: 'Time',
       de: 'Zeit',
+      fr: 'Heure',
       cn: '时间',
       ko: '시간',
     },
     duration: {
       en: 'Duration',
       de: 'Dauer',
+      fr: 'Durée',
       cn: '持续时间',
       ko: '임무 시간',
     },
     zone: {
       en: 'Zone',
       de: 'Zone',
+      fr: 'Zone',
       cn: '区域',
       ko: '지역',
     },
     encounter: {
       en: 'Encounter',
       de: 'Begegnung',
+      fr: 'Adversaire',
       cn: '战斗',
       ko: '임무 공간',
     },
     end: {
       en: 'End',
       de: 'Ende',
+      fr: 'Fin',
       cn: '结束方式',
       ko: '종료 상태',
     },
@@ -192,6 +210,7 @@ class PageState {
     public table: HTMLElement,
     public exportButton: HTMLButtonElement,
     public anonInput: HTMLInputElement,
+    public analysisFilterInput: HTMLInputElement,
     public errorDiv: HTMLElement,
   ) {}
 }
@@ -236,13 +255,20 @@ const doExport = (state: PageState): void => {
   const anonymizer = new Anonymizer();
 
   const anonymizeLogs = state.anonInput.checked;
+  const analysisFilter = state.analysisFilterInput.checked;
 
   for (const idx of selected) {
     const fight = idxToFight[idx];
     if (fight === undefined || fight.startLine === undefined || fight.endLine === undefined)
       continue;
 
-    const splitter = new Splitter(fight.startLine, fight.endLine, notifier, firstTime);
+    const splitter = new Splitter(
+      fight.startLine,
+      fight.endLine,
+      notifier,
+      firstTime,
+      analysisFilter,
+    );
     firstTime = false;
 
     // TODO: we could be smarter here and not loop every time through all lines
@@ -295,6 +321,7 @@ const onLoaded = () => {
   const exportOptions = getElement('export-options');
   const exportButton = getElement('export') as HTMLButtonElement;
   const anonCheckbox = getElement('anon') as HTMLInputElement;
+  const analysisFilterCheckbox = getElement('analysisFilter') as HTMLInputElement;
   const errorDiv = getElement('errors');
 
   const fileDropText: LocaleText = pageText.fileDropText;
@@ -309,6 +336,7 @@ const onLoaded = () => {
     table,
     exportButton,
     anonCheckbox,
+    analysisFilterCheckbox,
     errorDiv,
   );
   fileDrop.addEventListener('drop', (e) => {
@@ -317,6 +345,7 @@ const onLoaded = () => {
   });
 
   setLabelText('anon-label', 'anonInput', lang);
+  setLabelText('analysisFilter-label', 'analysisFilterInput', lang);
   setLabelText('export', 'exportInput', lang);
 
   exportButton.addEventListener('click', () => {

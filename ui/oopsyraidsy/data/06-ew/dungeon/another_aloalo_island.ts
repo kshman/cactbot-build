@@ -167,6 +167,7 @@ const triggerSet: OopsyTriggerSet<Data> = {
       // running into a tornado in the initial trash section
       en: 'Tornado',
       de: 'Tornado',
+      fr: 'Tornade',
       ja: '竜巻',
       ko: '회오리',
     }),

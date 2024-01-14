@@ -646,7 +646,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '흩어져요',
+          en: 'Spread for Bleed',
           de: 'Blutung verteilen',
           fr: 'Dispersez-vous pour le saignement',
           ja: '散開',

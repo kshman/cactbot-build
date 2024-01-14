@@ -2,6 +2,7 @@ import ContentType from '../../resources/content_type';
 import DTFuncs from '../../resources/datetime';
 import NetRegexes, { commonNetRegex } from '../../resources/netregexes';
 import { UnreachableCode } from '../../resources/not_reached';
+import PetData from '../../resources/pet_names';
 import StringFuncs from '../../resources/stringhandlers';
 import ZoneInfo from '../../resources/zone_info';
 import { NetAnyMatches, NetMatches } from '../../types/net_matches';
@@ -26,8 +27,57 @@ type FightEncInfo = ZoneEncInfo & {
   sealName?: string;
   sealId?: string;
   logLines?: string[];
+  inferredStartFromAbility?: boolean;
 };
 
+// Some NPCs can be picked up by our entry processor.
+// We list them out explicitly here so we can ignore them at will.
+export const ignoredCombatants = PetData['en'].concat([
+  '',
+  'Alisaie',
+  'Alisaie\'s Avatar',
+  'Alphinaud',
+  'Alphinaud\'s Avatar',
+  'Arenvald',
+  'Carbuncle',
+  'Carvallain',
+  'Crystal Exarch',
+  'Doman Liberator',
+  'Doman Shaman',
+  'Earthly Star',
+  'Emerald Carbuncle',
+  'Emerald Garuda',
+  'Estinien',
+  'Estinien\'s Avatar',
+  'G\'raha Tia',
+  'G\'raha Tia\'s Avatar',
+  'Gosetsu',
+  'Hien',
+  'Liturgic Bell',
+  'Lyse',
+  'Mikoto',
+  'Minfilia',
+  'Mol Youth',
+  'Moonstone Carbuncle',
+  'Obsidian Carbuncle',
+  'Raubahn',
+  'Resistance Fighter',
+  'Resistance Pikedancer',
+  'Ruby Carbuncle',
+  'Ruby Ifrit',
+  'Ryne',
+  'Thancred',
+  'Thancred\'s Avatar',
+  'Topaz Carbuncle',
+  'Topaz Titan',
+  'Urianger',
+  'Urianger\'s Avatar',
+  'Varshahn',
+  'Y\'shtola',
+  'Y\'shtola\'s Avatar',
+  'Yugiri',
+  'Zero',
+]);
 export class EncounterFinder {
   currentZone: ZoneEncInfo = {};
   currentFight: FightEncInfo = {};
@@ -45,6 +95,7 @@ export class EncounterFinder {
     win: CactbotBaseRegExp<'ActorControl'>;
     wipe: CactbotBaseRegExp<'ActorControl'>;
     commence: CactbotBaseRegExp<'ActorControl'>;
+    inCombat: CactbotBaseRegExp<'InCombat'>;
     playerAttackingMob: CactbotBaseRegExp<'Ability'>;
     mobAttackingPlayer: CactbotBaseRegExp<'Ability'>;
   };
@@ -70,6 +121,7 @@ export class EncounterFinder {
       win: NetRegexes.network6d({ command: '4000000[23]' }),
       wipe: commonNetRegex.wipe,
       commence: NetRegexes.network6d({ command: '4000000[16]' }),
+      inCombat: NetRegexes.inCombat({ inGameCombat: '1', isGameChanged: '1' }),
       playerAttackingMob: NetRegexes.ability({ sourceId: '1.{7}', targetId: '4.{7}' }),
       mobAttackingPlayer: NetRegexes.ability({ sourceId: '4.{7}', targetId: '1.{7}' }),
     };
@@ -187,7 +239,6 @@ export class EncounterFinder {
     const netSeal = this.regex.netSeal.exec(line)?.groups;
     if (netSeal) {
       this.onNetSeal(line, netSeal.param1, netSeal);
-      this.storeStartLine(line, store);
       return;
     }
 
@@ -219,14 +270,35 @@ export class EncounterFinder {
 
     // Most dungeons and some older raid content have zone zeals that indicate encounters.
     // If they don't, we need to start encounters by looking for combat.
+    // InCombat (0x104) log lines (w/ isChanged fields) were implemented in OverlayPlugin v0.19.23.
+    // They are the preferred method of detection, but to maintain backwards compatibility
+    // with prior logs and to account for potentially strange edge cases, we should continue
+    // to use mobAttackingPlayer / playerAttackingMob as a fallback method to detect encounters.
     if (!(this.currentFight.startTime || this.haveWon || this.haveSeenSeals)) {
-      let a = this.regex.playerAttackingMob.exec(line);
-      if (!a)
-        // TODO: This regex catches faerie healing and could potentially give false positives!
-        a = this.regex.mobAttackingPlayer.exec(line);
-      if (a?.groups) {
-        this.onStartFight(line, a.groups, this.currentZone.zoneName);
-        this.storeStartLine(line, store);
+      const combatLine = this.regex.inCombat.exec(line);
+      if (combatLine?.groups) {
+        this.onStartFight(line, combatLine.groups, this.currentZone.zoneName);
+        return;
+      }
+      const pAttack = this.regex.playerAttackingMob.exec(line);
+      if (pAttack?.groups && !ignoredCombatants.includes(pAttack.groups?.target)) {
+        this.onStartFight(line, pAttack.groups, this.currentZone.zoneName);
+        this.currentFight.inferredStartFromAbility = true;
+        return;
+      }
+      const mAttack = this.regex.mobAttackingPlayer.exec(line);
+      if (mAttack?.groups && !ignoredCombatants.includes(mAttack.groups?.source)) {
+        this.onStartFight(line, mAttack.groups, this.currentZone.zoneName);
+        this.currentFight.inferredStartFromAbility = true;
+        return;
+      }
+    }
+
+    // If we've started a fight due to ability use, we should restart the fight on an InCombat line.
+    if (this.currentFight.startTime && this.currentFight.inferredStartFromAbility) {
+      const combatLine = this.regex.inCombat.exec(line);
+      if (combatLine?.groups) {
+        this.onStartFight(line, combatLine.groups, this.currentZone.zoneName);
         return;
       }
     }
@@ -246,7 +318,7 @@ export class EncounterFinder {
   }
   onStartFight(
     line: string,
-    matches: NetMatches['Ability' | 'GameLog' | 'SystemLogMessage'],
+    matches: NetMatches['Ability' | 'GameLog' | 'SystemLogMessage' | 'InCombat'],
     fightName?: string,
     sealId?: string,
   ): void {
@@ -257,6 +329,8 @@ export class EncounterFinder {
       startLine: line,
       startTime: TLFuncs.dateFromMatches(matches),
       zoneId: this.currentZone.zoneId,
+      inferredStartFromAbility: false,
+      logLines: [line],
     };
   }
 
@@ -302,7 +376,7 @@ class EncounterCollector extends EncounterFinder {
 
   override onStartFight(
     line: string,
-    matches: NetMatches['Ability' | 'GameLog' | 'SystemLogMessage'],
+    matches: NetMatches['Ability' | 'GameLog' | 'SystemLogMessage' | 'InCombat'],
     fightName?: string,
     sealId?: string,
   ): void {
@@ -313,6 +387,8 @@ class EncounterCollector extends EncounterFinder {
       startLine: line,
       startTime: TLFuncs.dateFromMatches(matches),
       zoneId: this.currentZone.zoneId,
+      inferredStartFromAbility: false,
+      logLines: [line],
     };
   }
 

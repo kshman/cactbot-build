@@ -1,6 +1,6 @@
 {
   "name": "cactbot-build",
-  "version": "99.100.0",
+  "version": "99.101.0",
   "license": "Apache-2.0",
   "type": "module",
   "types": "./types",
@@ -38,6 +38,7 @@
     "find-translations": "npm run util -- findTranslations",
     "translate-timeline": "npm run util -- translateTimeline",
     "generate": "npm run util -- generate",
+    "query": "npm run util -- query",
     "process-triggers": "node --loader=ts-node/esm util/process_triggers_folder.ts",
     "generate-log-guide": "node --loader=ts-node/esm util/gen_log_guide.ts",
     "validate-versions": "node --loader=ts-node/esm util/validate_versions.ts",

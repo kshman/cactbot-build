@@ -113,7 +113,7 @@ const triggerSet: TriggerSet<Data> = {
             ko: '칼 (탱크 스위치)',
           },
           sword: {
-            en: '칼',
+            en: 'Sword',
             de: 'Schwert',
             fr: 'Épée',
             ja: '剣',
@@ -211,7 +211,7 @@ const triggerSet: TriggerSet<Data> = {
       alarmText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '내게 아발란체',
+          en: 'Knockback Laser on YOU',
           de: 'Rückstoß-Laser auf DIR',
           fr: 'Poussée-Laser sur VOUS',
           ja: '自分にアバランチ',
@@ -228,7 +228,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: '아발란체 피해요',
+          en: 'Avoid Laser',
           de: 'Laser ausweichen',
           fr: 'Évitez le laser',
           ja: 'アバランチを避ける',
@@ -270,7 +270,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         text: {
-          en: '얼음: ${player}',
+          en: 'Free ${player}',
           de: 'Befreie ${player}',
           fr: 'Libérez ${player}',
           ja: '${player}を救って',

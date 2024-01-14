@@ -26,6 +26,7 @@ const interceptionOutputStrings: { [label: string]: LocaleText } = {
   egg: {
     en: 'egg',
     de: 'Ei',
+    fr: 'Œuf',
     ja: 'たまご',
     cn: '蛋',
     ko: '알',
@@ -33,6 +34,7 @@ const interceptionOutputStrings: { [label: string]: LocaleText } = {
   cube: {
     en: 'cubes',
     de: 'Würfel',
+    fr: 'Cube',
     ja: '四角',
     cn: '方块',
     ko: '큐브',
@@ -40,6 +42,7 @@ const interceptionOutputStrings: { [label: string]: LocaleText } = {
   ball: {
     en: 'ball',
     de: 'Ball',
+    fr: 'Balle',
     ja: '円', // 〇
     cn: '球',
     ko: '동글',
