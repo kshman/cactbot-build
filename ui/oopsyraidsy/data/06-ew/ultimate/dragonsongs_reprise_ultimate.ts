@@ -162,7 +162,7 @@ const triggerSet: OopsyTriggerSet<Data> = {
               fr: 'Tour manquée',
               ja: '塔踏み失敗',
               cn: '错过塔',
-              ko: '타워 놓침',
+              ko: '기둥 놓침',
             },
           };
         });

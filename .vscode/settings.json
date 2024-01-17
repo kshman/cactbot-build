@@ -55,5 +55,6 @@
     "tsconfig.json": "tsconfig.*.json,tsconfig-for-webpack.json",
     ".gitignore": ".gitattributes",
     "README.md": "CONTRIBUTING.md,CODE_OF_CONDUCT.md,LICENSE, EXTRA-DSR.md, EXTRA-TOP.md"
-  }
+  },
+  "dotnet.preferCSharpExtension": true
 }
