@@ -9001,6 +9001,7 @@ const data: ZoneInfoType = {
       'en': 'Mount Rokkon',
       'fr': 'Le mont Rokkon - Donjon à embranchements',
       'ja': 'ヴァリアントダンジョン 六根山',
+      'ko': '변형 던전: 육근산',
     },
     'offsetX': -145,
     'offsetY': -820,
@@ -9284,6 +9285,7 @@ const data: ZoneInfoType = {
       'en': 'Another Mount Rokkon',
       'fr': 'Le mont Rokkon annexe - Donjon alternatif',
       'ja': 'アナザーダンジョン 異聞六根山',
+      'ko': '파생 던전: 번외 육근산',
     },
     'offsetX': 0,
     'offsetY': 40,
@@ -9299,6 +9301,7 @@ const data: ZoneInfoType = {
       'en': 'Another Mount Rokkon (Savage)',
       'fr': 'Le mont Rokkon annexe - Donjon alternatif (sadique)',
       'ja': 'アナザーダンジョン 異聞六根山 零式',
+      'ko': '파생 던전: 번외 육근산(영웅)',
     },
     'offsetX': 0,
     'offsetY': 40,
@@ -9324,6 +9327,7 @@ const data: ZoneInfoType = {
     'contentType': 2,
     'exVersion': 4,
     'name': {
+      'cn': '异界深渊月面地下溪谷',
       'de': 'Monduntergrund',
       'en': 'The Lunar Subterrane',
       'fr': 'Le Souterrain lunaire',
@@ -9352,6 +9356,7 @@ const data: ZoneInfoType = {
     'contentType': 4,
     'exVersion': 4,
     'name': {
+      'cn': '泽罗姆斯歼灭战',
       'de': 'Prophetie - Zeromus',
       'en': 'The Abyssal Fracture',
       'fr': 'La Fracture abyssale',
@@ -9366,6 +9371,7 @@ const data: ZoneInfoType = {
     'contentType': 4,
     'exVersion': 4,
     'name': {
+      'cn': '泽罗姆斯歼殛战',
       'de': 'Eschatos - Zeromus',
       'en': 'The Abyssal Fracture (Extreme)',
       'fr': 'La Fracture abyssale (extrême)',
@@ -9412,6 +9418,7 @@ const data: ZoneInfoType = {
     'contentType': 4,
     'exVersion': 4,
     'name': {
+      'cn': '圆桌骑士幻巧战',
       'de': 'Traumprüfung - Singularitäts-Reaktor',
       'en': 'The Singularity Reactor (Unreal)',
       'fr': 'Le Réacteur de singularité (irréel)',
@@ -9454,6 +9461,7 @@ const data: ZoneInfoType = {
     'contentType': 5,
     'exVersion': 4,
     'name': {
+      'cn': '荣华神域塔利亚',
       'de': 'Thaleia',
       'en': 'Thaleia',
       'fr': 'Domaine divin - Thalie',

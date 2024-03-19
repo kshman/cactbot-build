@@ -1,7 +1,7 @@
 /**
  * This Script can be tested locally with
  *
- * export GH_TOKEN=**** GITHUB_REPOSITORY=quisquous/cactbot PR_NUMBER=$NUM
+ * export GH_TOKEN=**** GITHUB_REPOSITORY=kshman/cactbot PR_NUMBER=$NUM
  * node ./.github/scripts/auto-label.cjs
  */
 'use strict';
@@ -26,8 +26,7 @@ const regexLabelMap = {
   '^\\.mocharc.cjs$': ['test'],
   '^eslint/': ['style'],
   '^\\.eslintrc\\.js$': ['style'],
-  '^\\.github/workflows/': ['ci'],
-  '^\\.github/scripts/': ['ci'],
+  '^\\.github/': ['ci'],
   '^plugin/': ['plugin'],
   '^ui/config/': ['config'],
   '^ui/eureka/eureka_config': ['config', 'eureka'],

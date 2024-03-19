@@ -2046,7 +2046,6 @@ const triggerSet: TriggerSet<Data> = {
     },
     {
       'locale': 'fr',
-      'missingTranslations': true,
       'replaceSync': {
         'Aloalo Golem': 'golem sylvestre d\'Aloalo',
         'Aloalo Islekeeper': 'gardien d\'Aloalo',
@@ -2073,6 +2072,8 @@ const triggerSet: TriggerSet<Data> = {
         'The Midnight Trial': 'Épreuve de Nokosero',
       },
       'replaceText': {
+        '\\(buff\\)': '(Buff)',
+        '\\(cast\\)': '(Incantation)',
         'Aero II': 'Extra Vent',
         'Aero IV': 'Giga Vent',
         'Analysis': 'Analyse',

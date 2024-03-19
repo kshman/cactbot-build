@@ -91,7 +91,7 @@ export default {
     de: 'Tank Cleave',
     fr: 'Tank cleave',
     ja: 'タンク範囲攻撃',
-    cn: '顺劈',
+    cn: '范围死刑',
     ko: '탱크클레브',
   },
   tankBusterCleaves: {
@@ -99,7 +99,7 @@ export default {
     de: 'Tankbuster Cleaves',
     fr: 'Tankbuster cleaves',
     ja: 'MT・ST同時範囲攻撃',
-    cn: '双T扇形死刑',
+    cn: '坦克范围死刑',
     ko: '모두 탱크클레브',
   },
   tankBusterCleavesOnYou: {
@@ -107,7 +107,7 @@ export default {
     de: 'Tank Cleaves auf DIR',
     fr: 'Tank cleaves sur VOUS',
     ja: 'MT・ST同時範囲攻撃(自分対象)',
-    cn: '坦克顺劈点名',
+    cn: '坦克范围死刑点名',
     ko: '내게 탱크클레브',
   },
   avoidTankCleave: {
@@ -115,7 +115,7 @@ export default {
     de: 'Tank Cleave ausweichen',
     fr: 'Évitez le tank cleave',
     ja: 'タンク範囲攻撃を避ける',
-    cn: '远离顺劈',
+    cn: '远离范围死刑',
     ko: '탱크클레브 피해욧',
   },
   avoidTankCleaves: {
@@ -123,7 +123,7 @@ export default {
     de: 'Tankbuster Cleaves ausweichen',
     fr: 'Évitez les cleaves (tankbusters)',
     ja: '範囲攻撃を避けて',
-    cn: '躲避双T扇形死刑',
+    cn: '远离坦克范围死刑',
     ko: '탱크클레브 피해욧',
   },
   tankCleaveOnYou: {
@@ -131,7 +131,7 @@ export default {
     de: 'Tank Cleave aud DIR',
     fr: 'Tank cleave sur VOUS',
     ja: '自分に範囲攻撃',
-    cn: '顺劈点名',
+    cn: '范围死刑点名',
     ko: '내게 탱크클레브',
   },
   sharedTankbuster: {
@@ -490,7 +490,7 @@ export default {
     fr: 'Côtés',
     ja: '横へ',
     cn: '去侧面',
-    ko: '옆⇆으로',
+    ko: '옆으로',
   },
   middle: {
     en: 'Middle',

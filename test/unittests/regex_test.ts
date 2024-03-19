@@ -3,6 +3,8 @@ import { assert } from 'chai';
 import Regexes from '../../resources/regexes';
 import regexCaptureTest, { RegexUtilParams } from '../helper/regex_util';
 
+// TODO: add tests for the other (missing) regexes
+
 describe('regex tests', () => {
   it('startsUsing', () => {
     const lines = [
@@ -463,5 +465,119 @@ describe('regex tests', () => {
     assert.equal(matches?.pairType, '7');
     assert.equal(matches?.pairWeaponId, '220');
     assert.equal(matches?.pairWorldID, '63589');
+  });
+  it('npcYell', () => {
+    const lines = [
+      '[15:15:40.585] 266 10A:4001F001:02D2:07AF',
+      '[15:15:54.557] 266 10A:4001F002:02D4:07BE',
+      '[16:02:15.030] 266 10A:E0000000:6B10:2B29',
+    ] as const;
+    regexCaptureTest((params?: RegexUtilParams) => Regexes.npcYell(params), lines);
+
+    const matches = lines[0].match(Regexes.npcYell())?.groups;
+    assert.equal(matches?.npcId, '4001F001');
+    assert.equal(matches?.npcNameId, '02D2');
+    assert.equal(matches?.npcYellId, '07AF');
+  });
+  it('battleTalk2', () => {
+    const lines = [
+      '[16:22:41.421] 267 10B:00000000:80034E2B:02CE:840C:5000:0:2:0:0',
+      '[16:22:17.923] 267 10B:00000000:80034E2B:02D2:8411:7000:0:2:0:0',
+      '[16:23:00.668] 267 10B:4001FFC4:80034E2B:02D5:840F:3000:0:2:0:0',
+    ] as const;
+    regexCaptureTest((params?: RegexUtilParams) => Regexes.battleTalk2(params), lines);
+
+    const matches = lines[0].match(Regexes.battleTalk2())?.groups;
+    assert.equal(matches?.npcId, '00000000');
+    assert.equal(matches?.instance, '80034E2B');
+    assert.equal(matches?.npcNameId, '02CE');
+    assert.equal(matches?.instanceContentTextId, '840C');
+    assert.equal(matches?.displayMs, '5000');
+  });
+  it('countdown', () => {
+    const lines = [
+      '[15:19:48.625] 268 10C:10FF0001:0036:13:00:Tini Poutini',
+      '[15:34:16.428] 268 10C:10FF0002:0036:20:00:Potato Chippy',
+    ] as const;
+    regexCaptureTest((params?: RegexUtilParams) => Regexes.countdown(params), lines);
+
+    const matches = lines[0].match(Regexes.countdown())?.groups;
+    assert.equal(matches?.id, '10FF0001');
+    assert.equal(matches?.worldId, '0036');
+    assert.equal(matches?.countdownTime, '13');
+    assert.equal(matches?.result, '00');
+    assert.equal(matches?.name, 'Tini Poutini');
+  });
+  it('countdownCancel', () => {
+    const lines = [
+      '[15:19:55.349] 269 10D:10FF0001:0036:Tini Poutini',
+      '[15:34:22.894] 269 10D:10FF0002:0036:Potato Chippy',
+    ] as const;
+    regexCaptureTest((params?: RegexUtilParams) => Regexes.countdownCancel(params), lines);
+
+    const matches = lines[0].match(Regexes.countdownCancel())?.groups;
+    assert.equal(matches?.id, '10FF0001');
+    assert.equal(matches?.worldId, '0036');
+    assert.equal(matches?.name, 'Tini Poutini');
+  });
+  it('actorMove', () => {
+    const lines = [
+      '[13:14:37.043] 270 10E:4000F1D3:-2.2034:0002:0014:102.0539:118.1982:0.2136',
+      '[13:18:30.296] 270 10E:4000F44E:2.8366:0002:0014:98.2391:101.9623:0.2136',
+      '[13:18:30.607] 270 10E:4000F44E:-2.5710:0002:0014:98.2391:101.9318:0.2136',
+    ] as const;
+    regexCaptureTest((params?: RegexUtilParams) => Regexes.actorMove(params), lines);
+
+    const matches = lines[0].match(Regexes.actorMove())?.groups;
+    assert.equal(matches?.id, '4000F1D3');
+    assert.equal(matches?.heading, '-2.2034');
+    assert.equal(matches?.x, '102.0539');
+    assert.equal(matches?.y, '118.1982');
+    assert.equal(matches?.z, '0.2136');
+  });
+  it('actorSetPos', () => {
+    const lines = [
+      '[13:20:50.962] 271 10F:4000F3B7:-2.3563:00:00:116.2635:116.2635:0.0000',
+      '[13:20:50.962] 271 10F:4000F3B5:-1.5709:00:00:107.0000:100.0000:0.0000',
+      '[13:20:50.962] 271 10F:4000F3BB:0.2617:00:00:97.4118:90.3407:0.0000',
+    ] as const;
+    regexCaptureTest((params?: RegexUtilParams) => Regexes.actorSetPos(params), lines);
+
+    const matches = lines[0].match(Regexes.actorSetPos())?.groups;
+    assert.equal(matches?.id, '4000F3B7');
+    assert.equal(matches?.heading, '-2.3563');
+    assert.equal(matches?.x, '116.2635');
+    assert.equal(matches?.y, '116.2635');
+    assert.equal(matches?.z, '0.0000');
+  });
+  it('spawnNpcExtra', () => {
+    const lines = [
+      '[15:45:44.226] 272 110:4000226B:E0000000:0000:01',
+      '[15:45:44.226] 272 110:4000226D:E0000000:0000:01',
+      '[01:44:39.557] 272 110:400838F4:E0000000:0000:00',
+    ] as const;
+    regexCaptureTest((params?: RegexUtilParams) => Regexes.spawnNpcExtra(params), lines);
+
+    const matches = lines[0].match(Regexes.spawnNpcExtra())?.groups;
+    assert.equal(matches?.id, '4000226B');
+    assert.equal(matches?.parentId, 'E0000000');
+    assert.equal(matches?.tetherId, '0000');
+    assert.equal(matches?.animationState, '01');
+  });
+  it('actorControlExtra', () => {
+    const lines = [
+      '[10:57:43.477] 273 111:4000A145:003E:1:0:0:0',
+      '[10:58:00.346] 273 111:4000A144:003E:1:1:0:0',
+      '[01:54:27.198] 273 111:40016E0C:003E:1:1:0:0',
+    ] as const;
+    regexCaptureTest((params?: RegexUtilParams) => Regexes.actorControlExtra(params), lines);
+
+    const matches = lines[0].match(Regexes.actorControlExtra())?.groups;
+    assert.equal(matches?.id, '4000A145');
+    assert.equal(matches?.category, '003E');
+    assert.equal(matches?.param1, '1');
+    assert.equal(matches?.param2, '0');
+    assert.equal(matches?.param3, '0');
+    assert.equal(matches?.param4, '0');
   });
 });

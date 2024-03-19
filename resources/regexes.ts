@@ -588,6 +588,87 @@ export default class Regexes {
   }
 
   /**
+   * matches: https://github.com/OverlayPlugin/cactbot/blob/main/docs/LogGuide.md#line-265-0x109-contentfindersettings
+   */
+  static contentFinderSettings(
+    params?: NetParams['ContentFinderSettings'],
+  ): CactbotBaseRegExp<'ContentFinderSettings'> {
+    return buildRegex('ContentFinderSettings', params);
+  }
+
+  /**
+   * matches: https://github.com/OverlayPlugin/cactbot/blob/main/docs/LogGuide.md#line-266-0x10a-npcyell
+   */
+  static npcYell(
+    params?: NetParams['NpcYell'],
+  ): CactbotBaseRegExp<'NpcYell'> {
+    return buildRegex('NpcYell', params);
+  }
+
+  /**
+   * matches: https://github.com/OverlayPlugin/cactbot/blob/main/docs/LogGuide.md#line-267-0x10b-battletalk2
+   */
+  static battleTalk2(
+    params?: NetParams['BattleTalk2'],
+  ): CactbotBaseRegExp<'BattleTalk2'> {
+    return buildRegex('BattleTalk2', params);
+  }
+
+  /**
+   * matches: https://github.com/OverlayPlugin/cactbot/blob/main/docs/LogGuide.md#line-268-0x10c-countdown
+   */
+  static countdown(
+    params?: NetParams['Countdown'],
+  ): CactbotBaseRegExp<'Countdown'> {
+    return buildRegex('Countdown', params);
+  }
+
+  /**
+   * matches: https://github.com/OverlayPlugin/cactbot/blob/main/docs/LogGuide.md#line-269-0x10d-countdowncancel
+   */
+  static countdownCancel(
+    params?: NetParams['CountdownCancel'],
+  ): CactbotBaseRegExp<'CountdownCancel'> {
+    return buildRegex('CountdownCancel', params);
+  }
+
+  /**
+   * matches: https://github.com/OverlayPlugin/cactbot/blob/main/docs/LogGuide.md#line-270-0x10e-actormove
+   */
+  static actorMove(
+    params?: NetParams['ActorMove'],
+  ): CactbotBaseRegExp<'ActorMove'> {
+    return buildRegex('ActorMove', params);
+  }
+
+  /**
+   * matches: https://github.com/OverlayPlugin/cactbot/blob/main/docs/LogGuide.md#line-271-0x10f-actorsetpos
+   */
+  static actorSetPos(
+    params?: NetParams['ActorSetPos'],
+  ): CactbotBaseRegExp<'ActorSetPos'> {
+    return buildRegex('ActorSetPos', params);
+  }
+
+  /**
+   * matches: https://github.com/OverlayPlugin/cactbot/blob/main/docs/LogGuide.md#line-272-0x110-spawnnpcextra
+   */
+  static spawnNpcExtra(
+    params?: NetParams['SpawnNpcExtra'],
+  ): CactbotBaseRegExp<'SpawnNpcExtra'> {
+    return buildRegex('SpawnNpcExtra', params);
+  }
+
+  /**
+   * matches: https://github.com/OverlayPlugin/cactbot/blob/main/docs/LogGuide.md#line-273-0x111-actorcontrolextra
+   */
+  static actorControlExtra(
+    params?: NetParams['ActorControlExtra'],
+  ): CactbotBaseRegExp<'ActorControlExtra'> {
+    return buildRegex('ActorControlExtra', params);
+  }
+
+  /**
    * Helper function for building named capture group
    */
   static maybeCapture(
