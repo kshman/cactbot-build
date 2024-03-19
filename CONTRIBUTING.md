@@ -268,6 +268,15 @@ See: [Oopsy Guide](docs/OopsyraidsyGuide.md#overview)
 
 ## How to Release
 
-Run `npm version patch` or `npm version minor` to add a local commit with a version change.
-Upload this PR.
-Merge the PR and a release will happen.
+1. Run `npm run release`. You will need to provide a release type (patch or minor) and a short
+summary (ideally <100 characters) that will be appended to the release title, and you will
+need to indicate whether the release should be in draft, which allows manual edits to the release notes
+prior to publishing. You can provide this info either through the interactive prompts or
+via command line arguments (use `npm run release -- -h` for a list).  The script will automatically
+update the release attributes in `package.json`, and will then run `npm version`, which will add
+a local commit containing a version bump and the new release attributes.
+
+2. Upload this PR, and a release will happen automatically once the PR is merged.
+
+3. If you set the release to draft (`-d`), make whatever changes are needed to the release notes
+on the `Releases` page, and publish the release.
