@@ -1,7 +1,7 @@
 import JSON5 from 'json5';
 
 import { Lang } from '../../resources/languages';
-import logDefinitions, { LogDefinitionTypes } from '../../resources/netlog_defs';
+import logDefinitions, { LogDefinitionName } from '../../resources/netlog_defs';
 import { buildNetRegexForTrigger } from '../../resources/netregexes';
 import { UnreachableCode } from '../../resources/not_reached';
 import Regexes from '../../resources/regexes';
@@ -15,7 +15,7 @@ import { LooseTimelineTrigger, TriggerAutoConfig } from '../../types/trigger';
 
 import defaultOptions, { RaidbossOptions, TimelineConfig } from './raidboss_options';
 
-const isLogDefinitionTypes = (type: string): type is LogDefinitionTypes => {
+const isLogDefinitionName = (type: string): type is LogDefinitionName => {
   return type in logDefinitions;
 };
 
@@ -44,7 +44,7 @@ const isTimelineNetParams = (value: unknown): value is TimelineNetParams => {
   return true;
 };
 
-const isValidNetParams = <T extends LogDefinitionTypes>(
+const isValidNetParams = <T extends LogDefinitionName>(
   type: T,
   params: Record<string, unknown>,
 ): params is NetParams[T] => {
@@ -133,7 +133,7 @@ export type ParsedText = ParsedPopupText | ParsedTriggerText;
 
 export type Text = ParsedText & { time: number };
 
-const regexes = {
+export const regexes = {
   comment: /^\s*#/,
   commentLine: /#.*$/,
   durationCommand: /(?:[^#]*?\s)?(?<text>duration\s+(?<seconds>[0-9]+(?:\.[0-9]+)?))(\s.*)?$/,
@@ -193,6 +193,7 @@ export class TimelineParser {
     styles?: TimelineStyle[],
     options?: RaidbossOptions,
     zoneId?: number,
+    waitForParse?: boolean,
   ) {
     this.options = options ?? defaultOptions;
     this.perTriggerAutoConfig = this.options.PerTriggerAutoConfig;
@@ -217,10 +218,13 @@ export class TimelineParser {
       });
     }
 
-    this.parse(text, triggers, styles ?? [], uniqueId);
+    // TODO: This is a workaround for now, but whenever this class is refactored,
+    // responsibility for callilng parse() should be moved up to the instantiating code.
+    if (!waitForParse)
+      this.parse(text, triggers, styles ?? [], uniqueId);
   }
 
-  private parse(
+  protected parse(
     text: string,
     triggers: LooseTimelineTrigger[],
     styles: TimelineStyle[],
@@ -240,6 +244,7 @@ export class TimelineParser {
     for (let line of lines) {
       ++lineNumber;
       line = line.trim();
+
       // Drop comments and empty lines.
       if (!line || regexes.comment.test(line))
         continue;
@@ -488,7 +493,7 @@ export class TimelineParser {
     line = line.replace(syncCommand.netRegexType, '').trim();
 
     const netRegexType = syncCommand.netRegexType;
-    if (!isLogDefinitionTypes(netRegexType)) {
+    if (!isLogDefinitionName(netRegexType)) {
       this.errors.push({
         lineNumber: lineNumber,
         line: originalLine,
@@ -496,6 +501,8 @@ export class TimelineParser {
       });
       return line;
     }
+
+    this.parseType(netRegexType, lineNumber);
 
     line = line.replace(syncCommand.netRegex, '').trim();
 
@@ -650,6 +657,12 @@ export class TimelineParser {
       e.duration = parseFloat(durationCommand.seconds);
     }
     return line;
+  }
+
+  // This no-op is intended to be overridden by subclasses, like the one in update_logdefs.ts.
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  public parseType(type: LogDefinitionName, lineNumber: number): void {
+    /* no-op */
   }
 
   private GetReplacedText(text: string): string {

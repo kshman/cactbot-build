@@ -33,18 +33,21 @@ const pageText = {
     ko: '로그 익명 처리',
   },
   analysisFilterInput: {
-    en: 'Filter Log for Analysis',
-    de: 'Filter Log für Analysen',
-    fr: 'Filtrer le log pour analyse',
-    cn: '过滤日志进行分析',
-    ko: '분석용 필터 로그',
+    en: 'Apply Analysis Filter (Dev Only)',
+    fr: 'Appliquer le filtre d\'analyse (Dev seulement)',
+    ko: '분석 필터 적용 (개발용)',
   },
-  exportInput: {
-    en: 'Export',
-    de: 'Export',
-    fr: 'Exporter',
-    cn: '导出',
-    ko: '내보내기',
+  exportSelectedInput: {
+    en: 'Export Selected',
+    fr: 'Experter la sélection',
+    cn: '导出已选择日志',
+    ko: '선택한 것만 내보내기',
+  },
+  exportAllInput: {
+    en: 'Export Entire Log',
+    fr: 'Exporter tout le log',
+    cn: '导出全部日志',
+    ko: '전부 내보내기',
   },
 } as const;
 
@@ -186,7 +189,9 @@ const buildTable = (state: PageState): void => {
         includeCheck.addEventListener('click', () => {
           state.selectedFights[idx] = includeCheck.checked;
           const anyClicked = Object.values(state.selectedFights).reduce((prev, cur) => prev || cur);
-          state.exportButton.disabled = !anyClicked;
+          const globalsChecked = state.anonInput.checked || state.analysisFilterInput.checked;
+          state.exportSelectedButton.disabled = !anyClicked;
+          state.exportAllButton.disabled = anyClicked || !globalsChecked;
         });
         state.table.appendChild(includeCheck);
         continue;
@@ -208,7 +213,8 @@ class PageState {
   constructor(
     public lang: Lang,
     public table: HTMLElement,
-    public exportButton: HTMLButtonElement,
+    public exportSelectedButton: HTMLButtonElement,
+    public exportAllButton: HTMLButtonElement,
     public anonInput: HTMLInputElement,
     public analysisFilterInput: HTMLInputElement,
     public errorDiv: HTMLElement,
@@ -237,7 +243,7 @@ class WebNotifier implements Notifier {
   }
 }
 
-const doExport = (state: PageState): void => {
+const doExportSelected = (state: PageState): void => {
   const selected: number[] = [];
   for (const keyStr in state.selectedFights) {
     const key = parseInt(keyStr);
@@ -273,7 +279,7 @@ const doExport = (state: PageState): void => {
 
     // TODO: we could be smarter here and not loop every time through all lines
     for (const line of state.lines) {
-      splitter.processWithCallback(line, (line) => {
+      splitter.processWithCallback(line, false, (line) => {
         if (anonymizeLogs) {
           const anonLine = anonymizer.process(line, notifier);
           if (anonLine === undefined)
@@ -305,6 +311,40 @@ const doExport = (state: PageState): void => {
     }
   }
 
+  downloadFile(output, filename);
+};
+
+const doExportAll = (state: PageState): void => {
+  const anonymizeLogs = state.anonInput.checked;
+  const analysisFilter = state.analysisFilterInput.checked;
+  const output: string[] = [];
+  const notifier = new WebNotifier(state.errorDiv);
+  const anonymizer = new Anonymizer();
+  const splitter = new Splitter('', '', notifier, true, analysisFilter);
+
+  for (const line of state.lines) {
+    splitter.processWithCallback(line, true, (line) => {
+      if (anonymizeLogs) {
+        const anonLine = anonymizer.process(line, notifier);
+        if (anonLine === undefined)
+          return;
+        output.push(anonLine);
+      } else {
+        output.push(line);
+      }
+    });
+  }
+
+  if (anonymizeLogs) {
+    anonymizer.validateIds(notifier);
+    for (const line of output)
+      anonymizer.validateLine(line, notifier);
+  }
+
+  downloadFile(output, 'processed.log');
+};
+
+const downloadFile = (output: string[], filename: string): void => {
   const blob = new Blob([output.join('\n')], { type: 'text/plain' });
   const a = document.createElement('a');
   a.setAttribute('download', filename);
@@ -319,7 +359,9 @@ const onLoaded = () => {
   const table = getElement('fight-table');
   const fileDrop = getElement('filedrop');
   const exportOptions = getElement('export-options');
-  const exportButton = getElement('export') as HTMLButtonElement;
+  const exportButtons = getElement('export-buttons');
+  const exportSelectedButton = getElement('exportSelected') as HTMLButtonElement;
+  const exportAllButton = getElement('exportAll') as HTMLButtonElement;
   const anonCheckbox = getElement('anon') as HTMLInputElement;
   const analysisFilterCheckbox = getElement('analysisFilter') as HTMLInputElement;
   const errorDiv = getElement('errors');
@@ -334,22 +376,43 @@ const onLoaded = () => {
   const pageState = new PageState(
     lang,
     table,
-    exportButton,
+    exportSelectedButton,
+    exportAllButton,
     anonCheckbox,
     analysisFilterCheckbox,
     errorDiv,
   );
   fileDrop.addEventListener('drop', (e) => {
     exportOptions.classList.remove('hide');
+    exportButtons.classList.remove('hide');
     void dropHandler(e, pageState);
+  });
+
+  anonCheckbox.addEventListener('click', () => {
+    const globalsChecked = anonCheckbox.checked || analysisFilterCheckbox.checked;
+    const anyClicked = Object.values(pageState.selectedFights).length > 0 &&
+      Object.values(pageState.selectedFights).reduce((prev, cur) => prev || cur);
+    pageState.exportAllButton.disabled = !globalsChecked || anyClicked;
+  });
+
+  analysisFilterCheckbox.addEventListener('click', () => {
+    const globalsChecked = anonCheckbox.checked || analysisFilterCheckbox.checked;
+    const anyClicked = Object.values(pageState.selectedFights).length > 0 &&
+      Object.values(pageState.selectedFights).reduce((prev, cur) => prev || cur);
+    pageState.exportAllButton.disabled = !globalsChecked || anyClicked;
   });
 
   setLabelText('anon-label', 'anonInput', lang);
   setLabelText('analysisFilter-label', 'analysisFilterInput', lang);
-  setLabelText('export', 'exportInput', lang);
+  setLabelText('exportSelected', 'exportSelectedInput', lang);
+  setLabelText('exportAll', 'exportAllInput', lang);
 
-  exportButton.addEventListener('click', () => {
-    doExport(pageState);
+  exportSelectedButton.addEventListener('click', () => {
+    doExportSelected(pageState);
+  });
+
+  exportAllButton.addEventListener('click', () => {
+    doExportAll(pageState);
   });
 };
 

@@ -1168,7 +1168,6 @@ const triggerSet: TriggerSet<Data> = {
     },
     {
       'locale': 'fr',
-      'missingTranslations': true,
       'replaceSync': {
         'Arcane Cylinder': 'sphère arcanique orientée',
         'Arcane Sphere': 'sphère arcanique',
@@ -1207,7 +1206,6 @@ const triggerSet: TriggerSet<Data> = {
     },
     {
       'locale': 'ja',
-      'missingTranslations': true,
       'replaceSync': {
         'Arcane Cylinder': '指向魔法陣',
         'Arcane Sphere': '立体魔法陣',

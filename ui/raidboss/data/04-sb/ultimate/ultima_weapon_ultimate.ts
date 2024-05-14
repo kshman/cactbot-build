@@ -82,6 +82,7 @@ const gaolConfig = (id: GaolKey): NamedConfigEntry<GaolKey> => {
       en: `Titan Gaol Order ${numStr}`,
       de: `Titan Gefängnis Reihenfolge ${numStr}`,
       fr: `Ordre geôle de Titan ${numStr}`,
+      ja: `ジェイルの順番 ${numStr}`,
       cn: `泰坦石牢顺序 ${numStr}`,
       ko: `돌감옥 순서 ${numStr}`,
     },
@@ -108,6 +109,8 @@ const triggerSet: TriggerSet<Data> = {
           'Jeder Eintrag kann aus drei Buchstaben des Jobs bestehen (z. B. "war" oder "SGE") oder aus dem vollständigen Namen (z. B. "Tini Poutini"), wobei Groß- und Kleinschreibung nicht berücksichtigt werden. Kleinere Nummern werden in der Reihenfolge der Gefängnisse zuerst aufgeführt. Bei doppelten Aufträgen werden die Spieler alphabetisch sortiert. Jeder nicht aufgeführte Spieler wird am Ende alphabetisch eingeordnet. Leere Einträge werden ignoriert. Wenn Spieler mehrfach nach Namen oder Beruf aufgelistet sind, wird die niedrigere Nummer berücksichtigt.',
         fr:
           'Chaque entrée peut être désigné par les jobs en trois lettres (par exemple "war" ou "SGE") ou le nom complet (par exemple "Tini Poutini"), sans tenir compte des majuscules et minuscules. Les plus petits numéros seront classés en premier dans l\'ordre des geôles. Les doublons seront classés par ordre alphabétique. Toute personne ne figurant pas sur la liste sera ajoutée à la fin par ordre alphabétique. Les entrées vides sont ignorées. Si des joueurs sont listés plusieurs fois par nom ou par fonction, le numéro le plus bas sera pris en compte.',
+        ja:
+          '各項目は、3文字のジョブ名（例: "war" または "SGE"）またはフルネーム（例: "Tini Poutini"）のいずれかを入力できます。大文字小文字は区別されません。番号の小さい順にジェイルの順番リストに登録されます。重複するジョブは名前順に並べ替えられます。リストされていないプレイヤーは名前順に最後に追加されます。空白の項目は無視されます。プレイヤーが名前またはジョブで複数回登録されている場合、小さいほうの番号が使用されます。',
         cn:
           '每个条目可以是三个字母的职业缩写 (例如 "war" 或  "SGE") 或玩家全名（例如 "Tini Poutini"），所有字母不区分大小写。编号较小的将在石牢顺序中排列在前。重复的职业将按姓名字母顺序对玩家进行排序。未列出的队员将按字母顺序添加到末尾。空白条目将被忽略。如果玩家按姓名或职业被多次列出，则以较小编号为准。',
         ko:
@@ -192,6 +195,7 @@ const triggerSet: TriggerSet<Data> = {
           en: 'Eruption Baits',
           de: 'Köder Eruption',
           fr: 'Attirez les éruptions',
+          ja: 'エラプション',
           cn: '诱导地火',
           ko: '용암 분출 유도',
         },
@@ -310,6 +314,7 @@ const triggerSet: TriggerSet<Data> = {
             en: 'Tank Cleave (PARTY OUT)',
             de: 'Tank Cleave (GRUPPE RAUS)',
             fr: 'Tank cleave (Groupe à l\'extérieur)',
+            ja: 'タンク頭割り (PTは外へ)',
             cn: '坦克顺劈 (人群出)',
             ko: '탱크클레브 (본대 밖으로)',
           },
@@ -413,6 +418,7 @@ const triggerSet: TriggerSet<Data> = {
           'Wo sich die beiden Schwestern befinden, die die Tanks blockieren sollen. dir1 ist immer die erste Schwester, die im Norden beginnt und im Uhrzeigersinn verläuft.',
         fr:
           'L\'emplacement des deux sœurs à bloquer pour les tanks. dir1 est toujours le premier emplacement de la sœur en commençant par le nord et en allant dans le sens des aiguilles d\'une montre.',
+        ja: 'タンクがブロックする2人の分身の位置。dir1 は基本的に「北」から始まり、時計回りに最初の分身の位置に戻ります。',
         cn: '两分身待坦克阻挡的位置。dir1 始终是从上 (北) 开始顺时针方向的第一个分身位置',
         ko: '탱커가 막을 두 분신의 위치. dir1은 북쪽에서 시계방향으로 도는 것을 기준으로 항상 첫 번째 분신의 위치입니다',
       },
@@ -469,6 +475,7 @@ const triggerSet: TriggerSet<Data> = {
           en: 'Sisters: ${dir1} / ${dir2}',
           de: 'Schwestern: ${dir1} / ${dir2}',
           fr: 'Sœurs : ${dir1} / ${dir2}',
+          ja: '分身: ${dir1} / ${dir2}',
           cn: '分身：${dir1} / ${dir2}',
           ko: '분신: ${dir1} / ${dir2}',
         },
@@ -493,6 +500,7 @@ const triggerSet: TriggerSet<Data> = {
             en: 'Get Sister Tether!!!',
             de: 'Nimm Verbindung von der Schwester!!!',
             fr: 'Prenez le lien de la sœur !!!',
+            ja: '分身の線を取って!!!',
             cn: '接分身的线!!!',
             ko: '분신 줄 가져가기!!!',
           },
@@ -501,6 +509,7 @@ const triggerSet: TriggerSet<Data> = {
             en: 'Sister Tethers',
             de: 'Schwester Verbindungen',
             fr: 'Lien de la sœur',
+            ja: '分身の線',
             cn: '分身连线',
             ko: '분신 줄',
           },
@@ -509,6 +518,7 @@ const triggerSet: TriggerSet<Data> = {
             en: 'Tether',
             de: 'Verbindungen',
             fr: 'Lien',
+            ja: '線',
             cn: '连线',
             ko: '줄',
           },
@@ -517,6 +527,7 @@ const triggerSet: TriggerSet<Data> = {
             en: 'Tether!!!',
             de: 'Verbindungen!!!',
             fr: 'Lien !!!',
+            ja: '線!!!',
             cn: '连线!!!',
             ko: '줄!!!',
           },
@@ -614,6 +625,7 @@ const triggerSet: TriggerSet<Data> = {
           en: 'Ifrit ${dir}',
           de: 'Ifrit ${dir}',
           fr: 'Ifrit ${dir}',
+          ja: 'イフリート ${dir}',
           cn: '火神 ${dir}',
           ko: '이프리트 ${dir}',
         },
@@ -731,6 +743,7 @@ const triggerSet: TriggerSet<Data> = {
           en: 'Near: ${dir}',
           de: 'Nahe: ${dir}',
           fr: 'Proche : ${dir}',
+          ja: '近いほう: ${dir}',
           cn: '近: ${dir}',
           ko: '가까운 기둥: ${dir}',
         },
@@ -816,6 +829,7 @@ const triggerSet: TriggerSet<Data> = {
           en: 'Fetters (w/${player})',
           de: 'Fesseln (mit ${player})',
           fr: 'Entraves (avec ${player})',
+          ja: '鎖 (相手: ${player})',
           cn: '锁链 (与 /${player})',
           ko: '사슬 (+${player})',
         },
@@ -867,6 +881,9 @@ const triggerSet: TriggerSet<Data> = {
         fr: `Si le premier clou est SE, on annoncera SE/NO pour les Z inversés et les Z normaux.
              Si le premier clou est S, on annoncera SE/NO pour la zone inversée et SW/NO pour la zone normale.
              D'autres ordres de clous sont également possibles, il ne s'agit que d'exemples.`,
+        ja: `最初の楔が南東の場合、逆Zと通常Zの両方で南東/北西に出現します。
+             最初の楔が南の場合、逆Zなら南東/北西、通常Zなら南西/北東に出現します。
+             これは一例で、他の釘の順序もサポートされています。`,
         cn: `如果第一个火神柱在东南，则反向 Z 和正常 Z 都会提示东南/西北
              如果第一个火神柱在南, 则反向 Z 将提示东南/西北，正常 Z 将提示西南/东北。
              这些只是示例, 还支持其他火神柱顺序。`,
@@ -904,6 +921,7 @@ const triggerSet: TriggerSet<Data> = {
           en: '${dir1} / ${dir2}',
           de: '${dir1} / ${dir2}',
           fr: '${dir1} / ${dir2}',
+          ja: '${dir1} / ${dir2}',
           cn: '${dir1} / ${dir2}',
           ko: '${dir1} / ${dir2}',
         },
@@ -924,6 +942,9 @@ const triggerSet: TriggerSet<Data> = {
           `Si le premier clou était en intercardinal, alors le premier dash d'Ifrit est en intercardinal
              et cette annonce optionnelle vous préviens de vous déplacer pour être adjacent à ce premier dash.
              Si vous êtes déjà en sécurité, cette option n'est pas activée.`,
+        ja: `最初の楔が北東、南東、南西、北西なら、最初のイフリートの突進も北東、南東、南西、北西になり、
+             このオプションはその最初のダッシュに隣接するように移動するためのものです。
+             すでに安地にいる場合、これは呼び出されません。`,
         cn: `如果第一个火神柱在对角线上，那么第一次火神冲也在对角线上。
              这个可选提示会提示你移动到第一次火神冲附近的位置。
              如果你已在安全区，则不会输出此提示。`,
@@ -957,6 +978,7 @@ const triggerSet: TriggerSet<Data> = {
           en: 'Adjust 45° ${rotation}',
           de: 'Rotiere 45° ${rotation}',
           fr: 'Ajustez de 45° ${rotation}',
+          ja: '45° ${rotation} に調整',
           cn: '${rotation} 旋转 45°',
           ko: '${rotation} 45° 이동',
         },
@@ -981,6 +1003,10 @@ const triggerSet: TriggerSet<Data> = {
              Le groupe et le soigneur se déplacent de 45 ou 90 degrés.
              Il s'agit d'un mouvement "rapide" si vous devez vous déplacer rapidement pour éviter le dash suivant d'Ifrit.
              Il s'agit d'un mouvement "lent" si vous avez plus de temps pour le faire.`,
+        ja: `これは、最初の突進から連続するイフリート突進の移動方法です。
+             パーティ全体とヒーラーは、45度か90度を判断して移動します。
+             連続突進を避けるために、すぐ移動する必要がある場合は「急」です。
+             余裕がある場合は「遅」となります。`,
         cn: `这是从第一次火神冲附近开始的火神冲主要移动。
              人群和奶妈都将移动 45 度或 90 度。
              "快" 可以让你快速移动，躲避第二次火神冲。
@@ -1056,6 +1082,7 @@ const triggerSet: TriggerSet<Data> = {
           en: '${rotation} 45° to ${dir} (fast)',
           de: '${rotation} 45° nach ${dir} (schnell)',
           fr: '${rotation} 45° vers ${dir} (rapide)',
+          ja: '${rotation} 45° ${dir} に (急)',
           cn: '${rotation} 45° 到 ${dir} (快)',
           ko: '${rotation} 45° ${dir}까지 (빠르게)',
         },
@@ -1063,6 +1090,7 @@ const triggerSet: TriggerSet<Data> = {
           en: '${rotation} 90° to ${dir} (fast)',
           de: '${rotation} 90° nach ${dir} (schnell)',
           fr: '${rotation} 90° vers ${dir} (rapide)',
+          ja: '${rotation} 90° ${dir} に (急)',
           cn: '${rotation} 90° 到 ${dir} (快)',
           ko: '${rotation} 90° ${dir}까지 (빠르게)',
         },
@@ -1070,6 +1098,7 @@ const triggerSet: TriggerSet<Data> = {
           en: '${rotation} 45° to ${dir} (slow)',
           de: '${rotation} 45° nach ${dir} (langsam)',
           fr: '${rotation} 45° vers ${dir} (lent)',
+          ja: '${rotation} 45° ${dir} に (遅)',
           cn: '${rotation} 45° 到 ${dir} (慢)',
           ko: '${rotation} 45° ${dir}까지 (천천히)',
         },
@@ -1077,6 +1106,7 @@ const triggerSet: TriggerSet<Data> = {
           en: '${rotation} 90° to ${dir} (slow)',
           de: '${rotation} 90° nach ${dir} (langsam)',
           fr: '${rotation} 90° vers ${dir} (lent)',
+          ja: '${rotation} 90° ${dir} に (遅)',
           cn: '${rotation} 90° 到 ${dir} (慢)',
           ko: '${rotation} 90° ${dir}까지 (천천히)',
         },
@@ -1286,6 +1316,8 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: 'Everyone to ${num} (${player} died)',
           de: 'Alle zur ${num} (${player} ist gestorben)',
+          fr: 'Tout le monde sur ${num} (${player} est mort)',
+          ja: '${num} で (${player} が死亡)',
           cn: '所有人到 ${num} (${player}死亡)',
           ko: '전부다 ${num} 쪽으로 (${player} 죽음)',
         },
@@ -1314,6 +1346,7 @@ const triggerSet: TriggerSet<Data> = {
           en: 'Caster LB NOW!',
           de: 'Magier LB JETZT!',
           fr: 'LB MAINTENANT !',
+          ja: 'キャスLB！',
           cn: '法系LB!',
           ko: '캐스터 리밋!',
         },
@@ -1332,6 +1365,7 @@ const triggerSet: TriggerSet<Data> = {
           en: 'Healer LB NOW!',
           de: 'Heiler LB JETZT!',
           fr: 'Healer LB MAINTENANT !',
+          ja: 'ヒラLB！',
           cn: '奶妈LB!',
           ko: '힐러 리밋!',
         },
@@ -1349,6 +1383,7 @@ const triggerSet: TriggerSet<Data> = {
           en: 'Melee LB NOW!',
           de: 'Nahkämpfer LB JETZT!',
           fr: 'LB melee MAINTENANT !',
+          ja: '近接LB！',
           cn: '近战LB!',
           ko: '밀리 리밋!',
         },
@@ -1507,6 +1542,7 @@ const triggerSet: TriggerSet<Data> = {
           en: '${dir} => ${rotation} (early safe)',
           de: '${dir} => ${rotation} (früh sicher)',
           fr: '${dir} => ${rotation} (sûr avant)',
+          ja: '${dir} => ${rotation} (先安地)',
           cn: '${dir} => ${rotation} (提前安全)',
           ko: '${dir} 🔜 ${rotation} (안전)',
         },
@@ -1514,6 +1550,7 @@ const triggerSet: TriggerSet<Data> = {
           en: '${dir} => ${rotation}',
           de: '${dir} => ${rotation}',
           fr: '${dir} => ${rotation}',
+          ja: '${dir} => ${rotation}',
           cn: '${dir} => ${rotation}',
           ko: '${dir} 🔜 ${rotation}',
         },
