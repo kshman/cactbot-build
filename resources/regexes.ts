@@ -3,8 +3,8 @@ import { NetParams } from '../types/net_props';
 import { CactbotBaseRegExp } from '../types/net_trigger';
 
 import logDefinitions, {
+  LogDefinitionName,
   logDefinitionsVersions,
-  LogDefinitionTypes,
   LogDefinitionVersions,
   ParseHelperFields,
   RepeatingFieldsDefinitions,
@@ -18,7 +18,7 @@ const matchWithColonsDefault = '(?:[^:]|: )*?';
 const fieldsWithPotentialColons = ['effect', 'ability'];
 
 const defaultParams = <
-  T extends LogDefinitionTypes,
+  T extends LogDefinitionName,
   V extends LogDefinitionVersions,
 >(type: T, version: V, include?: string[]): Partial<ParseHelperFields<T>> => {
   const logType = logDefinitionsVersions[version][type];
@@ -73,7 +73,7 @@ const defaultParams = <
 };
 
 type RepeatingFieldsMap<
-  TBase extends LogDefinitionTypes,
+  TBase extends LogDefinitionName,
   TKey extends RepeatingFieldsTypes = TBase extends RepeatingFieldsTypes ? TBase : never,
 > = {
   [name in RepeatingFieldsDefinitions[TKey]['repeatingFields']['names'][number]]:
@@ -82,7 +82,7 @@ type RepeatingFieldsMap<
 }[];
 
 type RepeatingFieldsMapTypeCheck<
-  TBase extends LogDefinitionTypes,
+  TBase extends LogDefinitionName,
   F extends keyof NetFields[TBase],
   TKey extends RepeatingFieldsTypes = TBase extends RepeatingFieldsTypes ? TBase : never,
 > = F extends RepeatingFieldsDefinitions[TKey]['repeatingFields']['label']
@@ -90,19 +90,19 @@ type RepeatingFieldsMapTypeCheck<
   never;
 
 type RepeatingFieldsMapType<
-  T extends LogDefinitionTypes,
+  T extends LogDefinitionName,
   F extends keyof NetFields[T],
 > = T extends RepeatingFieldsTypes ? RepeatingFieldsMapTypeCheck<T, F>
   : never;
 
-type ParseHelperType<T extends LogDefinitionTypes> =
+type ParseHelperType<T extends LogDefinitionName> =
   & {
     [field in keyof NetFields[T]]?: string | readonly string[] | RepeatingFieldsMapType<T, field>;
   }
   & { capture?: boolean };
 
 const isRepeatingField = <
-  T extends LogDefinitionTypes,
+  T extends LogDefinitionName,
 >(
   repeating: boolean | undefined,
   value: string | readonly string[] | RepeatingFieldsMap<T> | undefined,
@@ -121,7 +121,7 @@ const isRepeatingField = <
   return true;
 };
 
-const parseHelper = <T extends LogDefinitionTypes>(
+const parseHelper = <T extends LogDefinitionName>(
   params: ParseHelperType<T> | undefined,
   defKey: T,
   fields: Partial<ParseHelperFields<T>>,
@@ -561,6 +561,27 @@ export default class Regexes {
   }
 
   /**
+   * matches: https://github.com/OverlayPlugin/cactbot/blob/main/docs/LogGuide.md#line-258-0x102-fatedirector
+   */
+  static fateDirector(params?: NetParams['FateDirector']): CactbotBaseRegExp<'FateDirector'> {
+    return buildRegex('FateDirector', params);
+  }
+
+  /**
+   * matches: https://github.com/OverlayPlugin/cactbot/blob/main/docs/LogGuide.md#line-259-0x103-cedirector
+   */
+  static ceDirector(params?: NetParams['CEDirector']): CactbotBaseRegExp<'CEDirector'> {
+    return buildRegex('CEDirector', params);
+  }
+
+  /**
+   * matches: https://github.com/OverlayPlugin/cactbot/blob/main/docs/LogGuide.md#line-260-0x104-incombat
+   */
+  static inCombat(params?: NetParams['InCombat']): CactbotBaseRegExp<'InCombat'> {
+    return buildRegex('InCombat', params);
+  }
+
+  /**
    * matches: https://github.com/OverlayPlugin/cactbot/blob/main/docs/LogGuide.md#line-261-0x105-combatantmemory
    */
   static combatantMemory(
@@ -666,6 +687,15 @@ export default class Regexes {
     params?: NetParams['ActorControlExtra'],
   ): CactbotBaseRegExp<'ActorControlExtra'> {
     return buildRegex('ActorControlExtra', params);
+  }
+
+  /**
+   * matches: https://github.com/OverlayPlugin/cactbot/blob/main/docs/LogGuide.md#line-274-0x112-actorcontrolselfextra
+   */
+  static actorControlSelfExtra(
+    params?: NetParams['ActorControlSelfExtra'],
+  ): CactbotBaseRegExp<'ActorControlSelfExtra'> {
+    return buildRegex('ActorControlSelfExtra', params);
   }
 
   /**

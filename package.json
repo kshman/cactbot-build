@@ -1,6 +1,6 @@
 {
   "name": "cactbot-build",
-  "version": "99.104.0",
+  "version": "99.105.0",
   "license": "Apache-2.0",
   "type": "module",
   "types": "./types",
@@ -30,6 +30,7 @@
     "stylelint": "stylelint \"resources/**/*.css\" \"ui/**/*.css\" \"user/**/*.css\" \"test/**/*.css\" \"util/**/*.css\"",
     "stylelintfix": "stylelint --fix \"resources/**/*.css\" \"ui/**/*.css\" \"user/**/*.css\" \"test/**/*.css\" \"util/**/*.css\"",
     "markdownlint": "markdownlint . --ignore node_modules --ignore publish --ignore plugin/ThirdParty",
+    "workflowlint": "yamllint -c .yamllint.yml .github/workflows/ && node .github/scripts/lint-workflow.cjs",
     "test": "mocha",
     "sync-files": "node --loader=ts-node/esm util/sync_files.ts && git diff --exit-code",
     "lint-staged": "lint-staged",
@@ -41,10 +42,13 @@
     "query": "npm run util -- query",
     "process-triggers": "node --loader=ts-node/esm util/process_triggers_folder.ts",
     "generate-log-guide": "node --loader=ts-node/esm util/gen_log_guide.ts",
+    "update-logdefs": "node --loader=ts-node/esm util/update_logdefs.ts",
     "validate-versions": "node --loader=ts-node/esm util/validate_versions.ts",
+    "release": "node --loader=ts-node/esm util/do_release.ts",
     "version": "node --loader=ts-node/esm util/bump_version.ts"
   },
   "devDependencies": {
+    "@actions/core": "^1.10.1",
     "@actions/exec": "^1.1.1",
     "@actions/github": "^5.0.0",
     "@actions/http-client": "^1.0.11",

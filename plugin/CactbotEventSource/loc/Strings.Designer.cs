@@ -10,8 +10,8 @@
 
 namespace CactbotEventSource.loc {
     using System;
-
-
+    
+    
     /// <summary>
     ///   A strongly-typed resource class, for looking up localized strings, etc.
     /// </summary>
@@ -23,15 +23,15 @@ namespace CactbotEventSource.loc {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class Strings {
-
+        
         private static global::System.Resources.ResourceManager resourceMan;
-
+        
         private static global::System.Globalization.CultureInfo resourceCulture;
-
+        
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         internal Strings() {
         }
-
+        
         /// <summary>
         ///   Returns the cached ResourceManager instance used by this class.
         /// </summary>
@@ -45,7 +45,7 @@ namespace CactbotEventSource.loc {
                 return resourceMan;
             }
         }
-
+        
         /// <summary>
         ///   Overrides the current thread's CurrentUICulture property for all
         ///   resource lookups using this strongly typed resource class.
@@ -59,7 +59,7 @@ namespace CactbotEventSource.loc {
                 resourceCulture = value;
             }
         }
-
+        
         /// <summary>
         ///   Looks up a localized string similar to ACT: {0} {1}.
         /// </summary>
@@ -68,7 +68,7 @@ namespace CactbotEventSource.loc {
                 return ResourceManager.GetString("ACTBaseInfo", resourceCulture);
             }
         }
-
+        
         /// <summary>
         ///   Looks up a localized string similar to cactbot: {0} {1} (dir: {2}).
         /// </summary>
@@ -77,7 +77,7 @@ namespace CactbotEventSource.loc {
                 return ResourceManager.GetString("CactbotBaseInfo", resourceCulture);
             }
         }
-
+        
         /// <summary>
         ///   Looks up a localized string similar to These overlay(s) appear to be using an out of date cactbot path and likely are no longer receiving updates and working with new content: {0}
         ///
@@ -89,7 +89,7 @@ namespace CactbotEventSource.loc {
                 return ResourceManager.GetString("CactbotPathWarning", resourceCulture);
             }
         }
-
+        
         /// <summary>
         ///   Looks up a localized string similar to Broken Cactbot Overlay Paths.
         /// </summary>
@@ -98,7 +98,7 @@ namespace CactbotEventSource.loc {
                 return ResourceManager.GetString("CactbotPathWarningTitle", resourceCulture);
             }
         }
-
+        
         /// <summary>
         ///   Looks up a localized string similar to cactbot user directory: {0}.
         /// </summary>
@@ -107,7 +107,7 @@ namespace CactbotEventSource.loc {
                 return ResourceManager.GetString("CactbotUserDirectory", resourceCulture);
             }
         }
-
+        
         /// <summary>
         ///   Looks up a localized string similar to Charmap signature found, but conflicting match.
         /// </summary>
@@ -116,7 +116,7 @@ namespace CactbotEventSource.loc {
                 return ResourceManager.GetString("CharmapSignatureConflictingMatchErrorMessage", resourceCulture);
             }
         }
-
+        
         /// <summary>
         ///   Looks up a localized string similar to Charmap signature found {0} matches.
         /// </summary>
@@ -125,7 +125,7 @@ namespace CactbotEventSource.loc {
                 return ResourceManager.GetString("CharmapSignatureFoundMultipleMatchesErrorMessage", resourceCulture);
             }
         }
-
+        
         /// <summary>
         ///   Looks up a localized string similar to Error checking directory: {0}.
         /// </summary>
@@ -134,7 +134,7 @@ namespace CactbotEventSource.loc {
                 return ResourceManager.GetString("CheckDirectoryErrorMessage", resourceCulture);
             }
         }
-
+        
         /// <summary>
         ///   Looks up a localized string similar to Error checking dll rel dir: {0}: {1}.
         /// </summary>
@@ -143,7 +143,7 @@ namespace CactbotEventSource.loc {
                 return ResourceManager.GetString("CheckingDllRelDirErrorMessage", resourceCulture);
             }
         }
-
+        
         /// <summary>
         ///   Looks up a localized string similar to Error checking html rel dir: {0}: {1}.
         /// </summary>
@@ -152,7 +152,7 @@ namespace CactbotEventSource.loc {
                 return ResourceManager.GetString("CheckingHtmlRelDirErrorMessage", resourceCulture);
             }
         }
-
+        
         /// <summary>
         ///   Looks up a localized string similar to Error while determining language: {0}.
         /// </summary>
@@ -161,7 +161,7 @@ namespace CactbotEventSource.loc {
                 return ResourceManager.GetString("DeterminingLanguageErrorMessage", resourceCulture);
             }
         }
-
+        
         /// <summary>
         ///   Looks up a localized string similar to FFXIV Plugin: {0} {1}.
         /// </summary>
@@ -170,7 +170,7 @@ namespace CactbotEventSource.loc {
                 return ResourceManager.GetString("FFXIVPluginBaseInfo", resourceCulture);
             }
         }
-
+        
         /// <summary>
         ///   Looks up a localized string similar to Found DirectX9 FFXIV process. Requires DirectX11..
         /// </summary>
@@ -179,7 +179,7 @@ namespace CactbotEventSource.loc {
                 return ResourceManager.GetString("FoundDX9FFXIVErrorMessage", resourceCulture);
             }
         }
-
+        
         /// <summary>
         ///   Looks up a localized string similar to Error in GetCurrentProcess: {0}.
         /// </summary>
@@ -188,7 +188,7 @@ namespace CactbotEventSource.loc {
                 return ResourceManager.GetString("GetCurrentProcessErrorMessage", resourceCulture);
             }
         }
-
+        
         /// <summary>
         ///   Looks up a localized string similar to Exception in GetGameRegion: {0}.
         /// </summary>
@@ -197,7 +197,7 @@ namespace CactbotEventSource.loc {
                 return ResourceManager.GetString("GetGameRegionException", resourceCulture);
             }
         }
-
+        
         /// <summary>
         ///   Looks up a localized string similar to Ignoring auto-update due to cactbot directory being a .git repo..
         /// </summary>
@@ -206,7 +206,7 @@ namespace CactbotEventSource.loc {
                 return ResourceManager.GetString("IgnoreUpdateDueToDotGitDirectoryMessage", resourceCulture);
             }
         }
-
+        
         /// <summary>
         ///   Looks up a localized string similar to In combat offset signature found {0} matches.
         /// </summary>
@@ -215,7 +215,7 @@ namespace CactbotEventSource.loc {
                 return ResourceManager.GetString("InCombatOffsetSignatureFoundMultipleMatchesErrorMessage", resourceCulture);
             }
         }
-
+        
         /// <summary>
         ///   Looks up a localized string similar to In combat signature found {0} matches.
         /// </summary>
@@ -224,7 +224,7 @@ namespace CactbotEventSource.loc {
                 return ResourceManager.GetString("InCombatSignatureFoundMultipleMatchesErrorMessage", resourceCulture);
             }
         }
-
+        
         /// <summary>
         ///   Looks up a localized string similar to Invalid signature pattern: {0}.
         /// </summary>
@@ -233,7 +233,7 @@ namespace CactbotEventSource.loc {
                 return ResourceManager.GetString("InvalidSignaturePatternErrorMessage", resourceCulture);
             }
         }
-
+        
         /// <summary>
         ///   Looks up a localized string similar to Job signature found {0} matches.
         /// </summary>
@@ -242,7 +242,7 @@ namespace CactbotEventSource.loc {
                 return ResourceManager.GetString("JobSignatureFoundMultipleMatchesErrorMessage", resourceCulture);
             }
         }
-
+        
         /// <summary>
         ///   Looks up a localized string similar to Failed to load LastUpdateCheck setting: {0}.
         /// </summary>
@@ -251,7 +251,7 @@ namespace CactbotEventSource.loc {
                 return ResourceManager.GetString("LoadLastUpdateCheckSettingsFailed", resourceCulture);
             }
         }
-
+        
         /// <summary>
         ///   Looks up a localized string similar to Failed to load OverlayData setting: {0}.
         /// </summary>
@@ -260,7 +260,7 @@ namespace CactbotEventSource.loc {
                 return ResourceManager.GetString("LoadOverlayDataSettingsFailed", resourceCulture);
             }
         }
-
+        
         /// <summary>
         ///   Looks up a localized string similar to Multiple FFXIV_ACT_Plugin.dll plugins loaded.
         /// </summary>
@@ -269,7 +269,7 @@ namespace CactbotEventSource.loc {
                 return ResourceManager.GetString("MultiplePluginsLoadedErrorMessage", resourceCulture);
             }
         }
-
+        
         /// <summary>
         ///   Looks up a localized string similar to No FFXIV_ACT_Plugin.dll found? Can&apos;t set language automatically..
         /// </summary>
@@ -278,7 +278,7 @@ namespace CactbotEventSource.loc {
                 return ResourceManager.GetString("NoFFXIVACTPluginFoundErrorMessage", resourceCulture);
             }
         }
-
+        
         /// <summary>
         ///   Looks up a localized string similar to OverlayPlugin: {0} {1}.
         /// </summary>
@@ -287,7 +287,7 @@ namespace CactbotEventSource.loc {
                 return ResourceManager.GetString("OverlayPluginBaseInfo", resourceCulture);
             }
         }
-
+        
         /// <summary>
         ///   Looks up a localized string similar to Parsing Plugin Language: {0}.
         /// </summary>
@@ -296,7 +296,7 @@ namespace CactbotEventSource.loc {
                 return ResourceManager.GetString("ParsingPluginLanguage", resourceCulture);
             }
         }
-
+        
         /// <summary>
         ///   Looks up a localized string similar to Eureka.
         /// </summary>
@@ -305,7 +305,16 @@ namespace CactbotEventSource.loc {
                 return ResourceManager.GetString("PresetEureka", resourceCulture);
             }
         }
-
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Jobs.
+        /// </summary>
+        internal static string PresetJobs {
+            get {
+                return ResourceManager.GetString("PresetJobs", resourceCulture);
+            }
+        }
+        
         /// <summary>
         ///   Looks up a localized string similar to OopsyRaidsy.
         /// </summary>
@@ -314,7 +323,25 @@ namespace CactbotEventSource.loc {
                 return ResourceManager.GetString("PresetOopsyRaidsy", resourceCulture);
             }
         }
-
+        
+        /// <summary>
+        ///   Looks up a localized string similar to PullCounter.
+        /// </summary>
+        internal static string PresetPullCounter {
+            get {
+                return ResourceManager.GetString("PresetPullCounter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Radar.
+        /// </summary>
+        internal static string PresetRadar {
+            get {
+                return ResourceManager.GetString("PresetRadar", resourceCulture);
+            }
+        }
+        
         /// <summary>
         ///   Looks up a localized string similar to Raidboss Alerts Only.
         /// </summary>
@@ -323,7 +350,7 @@ namespace CactbotEventSource.loc {
                 return ResourceManager.GetString("PresetRaidbossAlertOnly", resourceCulture);
             }
         }
-
+        
         /// <summary>
         ///   Looks up a localized string similar to Raidboss (Combined Alerts &amp; Timeline).
         /// </summary>
@@ -332,7 +359,7 @@ namespace CactbotEventSource.loc {
                 return ResourceManager.GetString("PresetRaidbossCombined", resourceCulture);
             }
         }
-
+        
         /// <summary>
         ///   Looks up a localized string similar to Raidboss Timeline Only.
         /// </summary>
@@ -341,7 +368,16 @@ namespace CactbotEventSource.loc {
                 return ResourceManager.GetString("PresetRaidbossTimelineOnly", resourceCulture);
             }
         }
-
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Rdmty.
+        /// </summary>
+        internal static string PresetRdmty {
+            get {
+                return ResourceManager.GetString("PresetRdmty", resourceCulture);
+            }
+        }
+        
         /// <summary>
         ///   Looks up a localized string similar to Test.
         /// </summary>
@@ -350,7 +386,16 @@ namespace CactbotEventSource.loc {
                 return ResourceManager.GetString("PresetTest", resourceCulture);
             }
         }
-
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Xephero.
+        /// </summary>
+        internal static string PresetXephero {
+            get {
+                return ResourceManager.GetString("PresetXephero", resourceCulture);
+            }
+        }
+        
         /// <summary>
         ///   Looks up a localized string similar to ZeffUI.
         /// </summary>
@@ -359,7 +404,7 @@ namespace CactbotEventSource.loc {
                 return ResourceManager.GetString("PresetZeffUI", resourceCulture);
             }
         }
-
+        
         /// <summary>
         ///   Looks up a localized string similar to Error while registering process changed handler: {0}.
         /// </summary>
@@ -368,7 +413,7 @@ namespace CactbotEventSource.loc {
                 return ResourceManager.GetString("RegisteringProcessErrorMessage", resourceCulture);
             }
         }
-
+        
         /// <summary>
         ///   Looks up a localized string similar to Requires .NET 4.6 or above. Using {0}.
         /// </summary>
@@ -377,7 +422,7 @@ namespace CactbotEventSource.loc {
                 return ResourceManager.GetString("RequireDotNetVersion", resourceCulture);
             }
         }
-
+        
         /// <summary>
         ///   Looks up a localized string similar to Exception in SendFastRateEvents: {0}.
         /// </summary>
@@ -386,7 +431,7 @@ namespace CactbotEventSource.loc {
                 return ResourceManager.GetString("SendFastRateEventsException", resourceCulture);
             }
         }
-
+        
         /// <summary>
         ///   Looks up a localized string similar to Source: {0}.
         /// </summary>
@@ -395,7 +440,7 @@ namespace CactbotEventSource.loc {
                 return ResourceManager.GetString("Source", resourceCulture);
             }
         }
-
+        
         /// <summary>
         ///   Looks up a localized string similar to Stack: {0}.
         /// </summary>
@@ -404,7 +449,7 @@ namespace CactbotEventSource.loc {
                 return ResourceManager.GetString("Stack", resourceCulture);
             }
         }
-
+        
         /// <summary>
         ///   Looks up a localized string similar to System Locale: {0}.
         /// </summary>
@@ -413,7 +458,7 @@ namespace CactbotEventSource.loc {
                 return ResourceManager.GetString("SystemLocale", resourceCulture);
             }
         }
-
+        
         /// <summary>
         ///   Looks up a localized string similar to Unable to auto-update due to unknown cactbot directory.
         /// </summary>
@@ -422,7 +467,7 @@ namespace CactbotEventSource.loc {
                 return ResourceManager.GetString("UnableUpdateDueToUnknownDirectoryErrorMessage", resourceCulture);
             }
         }
-
+        
         /// <summary>
         ///   Looks up a localized string similar to User error file exception: {0}.
         /// </summary>
@@ -431,7 +476,7 @@ namespace CactbotEventSource.loc {
                 return ResourceManager.GetString("UserErrorFileException", resourceCulture);
             }
         }
-
+        
         /// <summary>
         ///   Looks up a localized string similar to Version: {0}.
         /// </summary>

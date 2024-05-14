@@ -1318,6 +1318,7 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: 'Add soon',
           de: 'Bald Add',
+          fr: 'Add bientôt',
           cn: '小怪即将出现',
           ko: '분신 등장',
         },
