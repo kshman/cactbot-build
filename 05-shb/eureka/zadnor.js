@@ -81,6 +81,9 @@ Options.Triggers.push({
   timelineFile: 'zadnor.txt',
   resetWhenOutOfCombat: false,
   triggers: [
+    // https://xivapi.com/LogMessage/916
+    // en: 7 minutes have elapsed since your last activity. [...]
+    // There is no network packet for these log lines; so have to use GameLog.
     {
       id: 'Zadnor Falling Asleep',
       type: 'GameLog',
@@ -2199,7 +2202,7 @@ Options.Triggers.push({
       },
       'replaceText': {
         '--lasers--': '--레이저--',
-        '--line stack--': '--뭉쳐요(직선)--',
+        '--line stack--': '--직선 쉐어--',
         '74 Degrees': '물 쏘기',
         'Advanced Death IV': '강화 데스쟈',
         'Advanced Death Ray': '강화 죽음의 광선',

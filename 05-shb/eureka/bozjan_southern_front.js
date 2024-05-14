@@ -144,6 +144,9 @@ Options.Triggers.push({
     },
   ],
   triggers: [
+    // https://xivapi.com/LogMessage/916
+    // en: 7 minutes have elapsed since your last activity. [...]
+    // There is no network packet for these log lines; so have to use GameLog.
     {
       id: 'Bozja South Falling Asleep',
       type: 'GameLog',
@@ -619,13 +622,12 @@ Options.Triggers.push({
         },
       },
     },
+    // https://xivapi.com/LogMessage/9644
+    // en: Lyon the Beast King would do battle at Majesty's Place...
     {
       id: 'Bozja South Castrum Lyon Passage',
-      type: 'GameLog',
-      netRegex: {
-        line: 'Lyon the Beast King would do battle at Majesty\'s Place.*?',
-        capture: false,
-      },
+      type: 'ActorControlSelfExtra',
+      netRegex: { category: Util.actorControlType.logMsg, param1: '25AC', capture: false },
       alertText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {

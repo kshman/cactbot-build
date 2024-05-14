@@ -11,7 +11,7 @@ hideall "--sync--"
 hideall "--setup--"
 
 # .*is no longer sealed
-0.0 "--Reset--" SystemLogMessage { id: "7DE" } window 100000 jump 0
+0.0 "--Reset--" SystemLogMessage { id: "7DE" } window 0,100000 jump 0
 
 #~~~~~~~~~~#
 # KETUDUKE #
@@ -22,9 +22,9 @@ hideall "--setup--"
 
 # The Dawn Trial will be sealed off
 1000.0 "--sync--" SystemLogMessage { id: "7DC", param1: "1146" } window 10000,0
+1002.0 "--setup--"
 1010.2 "--sync--" StartsUsing { id: "8AD4", source: "Ketuduke" } window 20,20
 1015.2 "Tidal Roar" Ability { id: "8AD4", source: "Ketuduke" }
-1016.0 "--setup--"
 
 1022.0 "--middle--" Ability { id: "8A77", source: "Ketuduke" }
 1027.0 "Spring Crystals 1" Ability { id: "8AA8", source: "Ketuduke" }
@@ -158,9 +158,9 @@ hideall "--setup--"
 
 # The Dusk Trial will be sealed off
 2000.0 "--sync--" SystemLogMessage { id: "7DC", param1: "1147" } window 10000,0
+2002.0 "--setup--"
 2006.1 "--sync--" StartsUsing { id: "8C05", source: "Lala" } window 20,20
 2011.1 "Inferno Theorem" Ability { id: "8C05", source: "Lala" }
-2012.5 "--setup--"
 
 2013.2 "--middle--" Ability { id: "8874", source: "Lala" }
 2018.3 "Angular Addition" Ability { id: ["8BE0", "8D2F"], source: "Lala" }
@@ -285,9 +285,9 @@ hideall "--setup--"
 
 # Midnight Trial will be sealed off
 3000.0 "--sync--" SystemLogMessage { id: "7DC", param1: "1148" } window 10000,0
+3002.0 "--setup--"
 3008.8 "--sync--" StartsUsing { id: "8966", source: "Statice" } window 20,20
 3013.8 "Aero IV" Ability { id: "8966", source: "Statice" }
-3014.5 "--setup--"
 
 3018.0 "--middle--" Ability { id: "8927", source: "Statice" }
 3023.4 "Trick Reload" Ability { id: "8967", source: "Statice" }
