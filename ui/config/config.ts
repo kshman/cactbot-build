@@ -117,6 +117,10 @@ const kPrefixToCategory = {
     cn: '晓月之终途 (6.x)',
     ko: '효월의 종언 (6.x)',
   },
+  '07-dt': {
+    en: 'Dawntrail (DT 7.x)',
+    ko: '황금의 레거시 (7.x)',
+  },
   'user': {
     en: 'User Triggers',
     de: 'Benutzer Trigger',

@@ -35,11 +35,12 @@ const pageText = {
   analysisFilterInput: {
     en: 'Apply Analysis Filter (Dev Only)',
     fr: 'Appliquer le filtre d\'analyse (Dev seulement)',
+    cn: '应用分析过滤器（开发中选项）',
     ko: '분석 필터 적용 (개발용)',
   },
   exportSelectedInput: {
     en: 'Export Selected',
-    fr: 'Experter la sélection',
+    fr: 'Exporter la sélection',
     cn: '导出已选择日志',
     ko: '선택한 것만 내보내기',
   },
@@ -224,7 +225,7 @@ class PageState {
 class WebNotifier implements Notifier {
   constructor(private errorDiv: HTMLElement) {}
 
-  private errorFunc(severity: 'warn' | 'error', reason: string, splitLine?: string[]) {
+  private errorFunc(severity: 'info' | 'warn' | 'error', reason: string, splitLine?: string[]) {
     const splitStr = splitLine === undefined ? '' : `:${splitLine.join('|')}`;
     const outputStr = `${severity}: ${reason}${splitStr}`;
 
@@ -232,6 +233,10 @@ class WebNotifier implements Notifier {
     div.innerHTML = outputStr;
     div.classList.add(severity);
     this.errorDiv.appendChild(div);
+  }
+
+  public info(reason: string, splitLine?: string[]): void {
+    this.errorFunc('info', reason, splitLine);
   }
 
   public warn(reason: string, splitLine?: string[]): void {
