@@ -68,6 +68,10 @@ const exVersionToName = {
     cn: '晓月之终途 (6.x)',
     ko: '효월의 종언 (6.x)',
   },
+  '5': {
+    en: 'Dawntrail (7.x)',
+    ko: '황금의 레거시 (7.x)',
+  },
 } as const;
 
 const exVersionToShortName: { [exVersion: string]: LocaleText } = {
@@ -110,6 +114,10 @@ const exVersionToShortName: { [exVersion: string]: LocaleText } = {
     ja: '暁月',
     cn: '6.X',
     ko: '효월',
+  },
+  '5': {
+    en: 'DT',
+    ko: '황금',
   },
 };
 
