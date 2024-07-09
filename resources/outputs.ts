@@ -86,6 +86,18 @@ export default {
     cn: '坦克死刑',
     ko: '탱크버스터',
   },
+  tetherBusters: {
+    en: 'Tank Tethers',
+    de: 'Tank-Verbindungen',
+    fr: 'Liens Tank',
+    ja: 'タンク線取り',
+    cn: '坦克截线',
+    ko: '줄채고 버스터',
+  },
+  avoidTetherBusters: {
+    en: 'Avoid Tank Tethers',
+    ko: '탱크 줄 피해요',
+  },
   tankCleave: {
     en: 'Tank cleave',
     de: 'Tank Cleave',
@@ -370,7 +382,7 @@ export default {
     fr: 'Sortez de la mêlée',
     ja: '近接の範囲から離れる',
     cn: '离开近战距离',
-    ko: '칼이 닿을락 말락',
+    ko: '칼끝 범위',
   },
   inThenOut: {
     en: 'In => out',
@@ -450,7 +462,7 @@ export default {
     fr: '<= Allez à Gauche/Ouest',
     ja: '<= 左/西へ',
     cn: '<= 去左/西边',
-    ko: '<= 왼쪽으로',
+    ko: '🡸 왼쪽으로',
   },
   getRightAndEast: {
     en: 'Get Right/East =>',

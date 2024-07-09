@@ -21,6 +21,21 @@ export type HuntMap = {
 };
 
 const data: HuntMap = {
+  '13th Child': {
+    'id': '13155',
+    'name': {
+      'de': [
+        'Dreizehnte Kind',
+        'Dreizehnter Kind',
+        'Dreizehntes Kind',
+      ],
+      'en': '13th Child',
+      'fr': 'treizième enfant',
+      'ja': 'サーティーンス・チャイルド',
+      'ko': '서틴스 차일드',
+    },
+    'rank': 'B',
+  },
   'Aegeiros': {
     'id': '10628',
     'name': {
@@ -165,6 +180,21 @@ const data: HuntMap = {
     },
     'rank': 'B',
   },
+  'Atticus the Primogenitor': {
+    'id': '13156',
+    'name': {
+      'de': [
+        'Atticus der Primogenitor',
+        'Atticus die Primogenitor',
+        'Atticus das Primogenitor',
+      ],
+      'en': 'Atticus the Primogenitor',
+      'fr': 'Atticus le primogéniteur',
+      'ja': '先駆けのアティカス',
+      'ko': '시조의 아티쿠스',
+    },
+    'rank': 'S',
+  },
   'Baal': {
     'id': '8897',
     'name': {
@@ -289,7 +319,7 @@ const data: HuntMap = {
         'Burfurlur das Gerissenes',
       ],
       'en': 'Burfurlur the Canny',
-      'fr': 'Le Burfurlur',
+      'fr': 'Burfurlur',
       'ja': 'ブーフールー',
       'ko': '부푸루',
     },
@@ -307,6 +337,17 @@ const data: HuntMap = {
     },
     'rank': 'A',
   },
+  'Cat\'s Eye': {
+    'id': '13436',
+    'name': {
+      'de': 'Katzenauge',
+      'en': 'Cat\'s Eye',
+      'fr': 'Œil-de-chat',
+      'ja': 'キャッツアイ',
+      'ko': '캣츠 아이',
+    },
+    'rank': 'A',
+  },
   'Chernobog': {
     'id': '2967',
     'name': {
@@ -318,6 +359,17 @@ const data: HuntMap = {
       'ko': '체르노보그',
     },
     'rank': 'S',
+  },
+  'Chupacabra': {
+    'id': '13145',
+    'name': {
+      'de': 'Chupacabra',
+      'en': 'Chupacabra',
+      'fr': 'chupacabra',
+      'ja': 'チュパカブラ',
+      'ko': '츄파카브라',
+    },
+    'rank': 'B',
   },
   'Coquecigrue': {
     'id': '8913',
@@ -527,6 +579,17 @@ const data: HuntMap = {
     },
     'rank': 'A',
   },
+  'Gallowsbeak': {
+    'id': '13152',
+    'name': {
+      'de': 'Galgenschnabel',
+      'en': 'Gallowsbeak',
+      'fr': 'Gibec',
+      'ja': 'ギャロウズビーク',
+      'ko': '갤로우즈비크',
+    },
+    'rank': 'B',
+  },
   'Gamma': {
     'id': '5985',
     'name': {
@@ -731,6 +794,17 @@ const data: HuntMap = {
     },
     'rank': 'A',
   },
+  'Ihnuxokiy': {
+    'id': '13444',
+    'name': {
+      'de': 'Ihnuxokiy',
+      'en': 'Ihnuxokiy',
+      'fr': 'Ihnuxokiy',
+      'ja': 'イヌショキー',
+      'ko': '이뉴쇼키',
+    },
+    'rank': 'S',
+  },
   'Indomitable': {
     'id': '8914',
     'name': {
@@ -791,6 +865,17 @@ const data: HuntMap = {
     },
     'rank': 'B',
   },
+  'Keheniheyamewi': {
+    'id': '13401',
+    'name': {
+      'de': 'Keheniheyamewi',
+      'en': 'Keheniheyamewi',
+      'fr': 'Keheniheyamewi',
+      'ja': 'ケヘニヘヤメウィ',
+      'ko': '케헤니헤야메위',
+    },
+    'rank': 'A',
+  },
   'Ker': {
     'id': '10615',
     'name': {
@@ -814,6 +899,27 @@ const data: HuntMap = {
       'ko': '케르의 시종',
     },
     'rank': 'SS-',
+  },
+  'Kirlirger the Abhorrent': {
+    'id': '13360',
+    'name': {
+      'de': [
+        'Kirlirger der Abscheuliche',
+        'Kirlirger der Abscheulicher',
+        'Kirlirger der Abscheuliches',
+        'Kirlirger die Abscheuliche',
+        'Kirlirger die Abscheulicher',
+        'Kirlirger die Abscheuliches',
+        'Kirlirger das Abscheuliche',
+        'Kirlirger das Abscheulicher',
+        'Kirlirger das Abscheuliches',
+      ],
+      'en': 'Kirlirger the Abhorrent',
+      'fr': 'Kirlirger l\'abominable',
+      'ja': '厭忌のキーリーゲー',
+      'ko': '불쾌한 키리게',
+    },
+    'rank': 'S',
   },
   'Kiwa': {
     'id': '6013',
@@ -898,6 +1004,16 @@ const data: HuntMap = {
       'ko': '발라우르',
     },
     'rank': 'S',
+  },
+  'Leafscourge Hadoll Ja': {
+    'id': '13148',
+    'name': {
+      'de': 'Blattgeißel Hadoll Ja',
+      'en': 'Leafscourge Hadoll Ja',
+      'fr': 'Hadoll Ja le foufeuillu',
+      'ja': '緑葉のハドージャ',
+    },
+    'rank': 'B',
   },
   'Leech King': {
     'id': '2935',
@@ -1203,6 +1319,28 @@ const data: HuntMap = {
     },
     'rank': 'B',
   },
+  'Nechuciho': {
+    'id': '13362',
+    'name': {
+      'de': 'Nechuciho',
+      'en': 'Nechuciho',
+      'fr': 'Nechukiho',
+      'ja': 'ネチュキホ',
+      'ko': '네츄키호',
+    },
+    'rank': 'A',
+  },
+  'Neyoozoteel': {
+    'id': '12754',
+    'name': {
+      'de': 'Neyoozoteel',
+      'en': 'Neyoozoteel',
+      'fr': 'Neyozzoteel',
+      'ja': 'ネヨーゾテール',
+      'ko': '네요오조텔',
+    },
+    'rank': 'S',
+  },
   'Nuckelavee': {
     'id': '8906',
     'name': {
@@ -1375,6 +1513,17 @@ const data: HuntMap = {
     },
     'rank': 'B',
   },
+  'Pkuucha': {
+    'id': '13443',
+    'name': {
+      'de': 'Pkuucha',
+      'en': 'Pkuucha',
+      'fr': 'Pkuucha',
+      'ja': 'プクーチャ',
+      'ko': '프쿠우챠',
+    },
+    'rank': 'A',
+  },
   'Pterygotus': {
     'id': '4354',
     'name': {
@@ -1396,6 +1545,17 @@ const data: HuntMap = {
       'fr': 'Pirlasta',
       'ja': 'パイルラスタ',
       'ko': '파일라스터',
+    },
+    'rank': 'A',
+  },
+  'Rrax Yity\'a': {
+    'id': '12753',
+    'name': {
+      'de': 'Rrax Yity\'a',
+      'en': 'Rrax Yity\'a',
+      'fr': 'Rrax Yity\'a',
+      'ja': 'ラシュイチャ',
+      'ko': '라쥬이챠',
     },
     'rank': 'A',
   },
@@ -1447,6 +1607,21 @@ const data: HuntMap = {
     },
     'rank': 'S',
   },
+  'Sally the Sweeper': {
+    'id': '13435',
+    'name': {
+      'de': [
+        'Sally der Fegerin',
+        'Sally die Fegerin',
+        'Sally das Fegerin',
+      ],
+      'en': 'Sally the Sweeper',
+      'fr': 'Sally la balayeuse',
+      'ja': 'サリー・ザ・スイーパー',
+      'ko': '샐리 더 스위퍼',
+    },
+    'rank': 'A',
+  },
   'Salt and Light': {
     'id': '5989',
     'name': {
@@ -1456,6 +1631,17 @@ const data: HuntMap = {
       'fr': 'Salaclux',
       'ja': 'ソルト・アンド・ライト',
       'ko': '빛과 소금',
+    },
+    'rank': 'S',
+  },
+  'Sansheya': {
+    'id': '13399',
+    'name': {
+      'de': 'Sansheya',
+      'en': 'Sansheya',
+      'fr': 'Sansheya',
+      'ja': 'サンシェヤ',
+      'ko': '산세야',
     },
     'rank': 'S',
   },
@@ -1600,6 +1786,17 @@ const data: HuntMap = {
       'ko': '스퀑크',
     },
     'rank': 'B',
+  },
+  'Starcrier': {
+    'id': '12692',
+    'name': {
+      'de': 'Sternschreier',
+      'en': 'Starcrier',
+      'fr': 'furopluminescent',
+      'ja': '幻煌鳥',
+      'ko': '스타크라이어',
+    },
+    'rank': 'A',
   },
   'Stinging Sophie': {
     'id': '2920',
@@ -1749,6 +1946,16 @@ const data: HuntMap = {
     },
     'rank': 'S',
   },
+  'Uktena': {
+    'id': '13151',
+    'name': {
+      'de': 'Uktena',
+      'en': 'Uktena',
+      'fr': 'Uktena',
+      'ja': 'ウクテナ',
+    },
+    'rank': 'B',
+  },
   'Unktehi': {
     'id': '2946',
     'name': {
@@ -1758,6 +1965,17 @@ const data: HuntMap = {
       'fr': 'Unktehi',
       'ja': 'ウンクテヒ',
       'ko': '웅크테히',
+    },
+    'rank': 'A',
+  },
+  'Urna Variabilis': {
+    'id': '13158',
+    'name': {
+      'de': 'Urna Variabilis',
+      'en': 'Urna Variabilis',
+      'fr': 'pod variant',
+      'ja': 'ヴァリアポッド',
+      'ko': '바리아 포드',
     },
     'rank': 'A',
   },
@@ -1861,6 +2079,28 @@ const data: HuntMap = {
     },
     'rank': 'S',
   },
+  'Xty\'iinbek': {
+    'id': '13149',
+    'name': {
+      'de': 'Xty\'iinbek',
+      'en': 'Xty\'iinbek',
+      'fr': 'xty\'iinbek',
+      'ja': 'シュティーンベク',
+      'ko': '슈틴베크',
+    },
+    'rank': 'B',
+  },
+  'Yehehetoaua\'pyo': {
+    'id': '13400',
+    'name': {
+      'de': 'Yehehetoaua\'pyo',
+      'en': 'Yehehetoaua\'pyo',
+      'fr': 'Yehehetoaua\'pyo',
+      'ja': 'エヘヘトーワポ',
+      'ko': '에헤헤토와포',
+    },
+    'rank': 'A',
+  },
   'Yilan': {
     'id': '10625',
     'name': {
@@ -1908,6 +2148,32 @@ const data: HuntMap = {
       'ko': '조나 시커',
     },
     'rank': 'S',
+  },
+  'arch aethereater': {
+    'id': '13406',
+    'name': {
+      'de': 'Herr der Kristallisation',
+      'en': 'arch aethereater',
+      'fr': 'seigneur des cristallisateurs',
+      'ja': 'ロード・オブ・クリスタライザー',
+      'ko': '아크 에테르 이터',
+    },
+    'rank': 'SS+',
+  },
+  'crystal incarnation': {
+    'id': '13407',
+    'name': {
+      'de': [
+        'inkarnierte Kristallisation',
+        'inkarnierter Kristallisation',
+        'inkarniertes Kristallisation',
+      ],
+      'en': 'crystal incarnation',
+      'fr': 'cristallisateur',
+      'ja': 'クリスタライザー',
+      'ko': '크리스탈 인카르네이션',
+    },
+    'rank': 'SS-',
   },
   'daphnia magna': {
     'id': '10641',
@@ -1981,6 +2247,16 @@ const data: HuntMap = {
     },
     'rank': 'SS+',
   },
+  'gargant': {
+    'id': '13153',
+    'name': {
+      'de': 'Gargant',
+      'en': 'gargant',
+      'fr': 'gargant',
+      'ja': 'ガルガント',
+    },
+    'rank': 'B',
+  },
   'genesis rock': {
     'id': '10642',
     'name': {
@@ -1990,6 +2266,16 @@ const data: HuntMap = {
       'fr': 'pierre de la genèse',
       'ja': 'ジェネシスロック',
       'ko': '태초암',
+    },
+    'rank': 'B',
+  },
+  'go\'ozoabek\'be': {
+    'id': '13147',
+    'name': {
+      'de': 'Go\'ozoabek\'be',
+      'en': 'go\'ozoabek\'be',
+      'fr': 'Go\'ozoabek\'be',
+      'ja': 'ゴーゾアックベ',
     },
     'rank': 'B',
   },
@@ -2009,6 +2295,17 @@ const data: HuntMap = {
     },
     'rank': 'B',
   },
+  'heshuala': {
+    'id': '13157',
+    'name': {
+      'de': 'Heshuala',
+      'en': 'heshuala',
+      'fr': 'heshuala',
+      'ja': 'ヘシュワラ',
+      'ko': '헤슈와라',
+    },
+    'rank': 'A',
+  },
   'hulder': {
     'id': '10624',
     'name': {
@@ -2020,6 +2317,16 @@ const data: HuntMap = {
       'ko': '훌드라',
     },
     'rank': 'A',
+  },
+  'jewel bearer': {
+    'id': '13154',
+    'name': {
+      'de': 'Juwelenträger',
+      'en': 'jewel bearer',
+      'fr': 'porte-joyaux',
+      'ja': 'ジュエルベアラー',
+    },
+    'rank': 'B',
   },
   'kaiser behemoth': {
     'id': '4374',
@@ -2057,6 +2364,20 @@ const data: HuntMap = {
     },
     'rank': 'A',
   },
+  'mad maguey': {
+    'id': '13144',
+    'name': {
+      'de': [
+        'aggressive Agave',
+        'aggressiver Agave',
+        'aggressives Agave',
+      ],
+      'en': 'mad maguey',
+      'fr': 'pita dément',
+      'ja': 'マッドマゲイ',
+    },
+    'rank': 'B',
+  },
   'mindflayer': {
     'id': '2955',
     'name': {
@@ -2081,6 +2402,16 @@ const data: HuntMap = {
     },
     'rank': 'A',
   },
+  'nopalitender Fabuloso': {
+    'id': '13150',
+    'name': {
+      'de': 'Feigenkaktor Fabuloso',
+      'en': 'nopalitender Fabuloso',
+      'fr': 'pampa de barbarie fabuleux',
+      'ja': 'ノパルテンダー・ファビュローソー',
+    },
+    'rank': 'B',
+  },
   'petalodus': {
     'id': '10632',
     'name': {
@@ -2090,6 +2421,17 @@ const data: HuntMap = {
       'fr': 'petalodus',
       'ja': 'ペタロドゥス',
       'ko': '페탈로두스',
+    },
+    'rank': 'A',
+  },
+  'queen hawk': {
+    'id': '13361',
+    'name': {
+      'de': 'Falkenkönigin',
+      'en': 'queen hawk',
+      'fr': 'reine des guêpes',
+      'ja': 'クイーンホーク',
+      'ko': '퀸 호크',
     },
     'rank': 'A',
   },
@@ -2104,6 +2446,17 @@ const data: HuntMap = {
       'ko': '악취화',
     },
     'rank': 'A',
+  },
+  'the Forecaster': {
+    'id': '13437',
+    'name': {
+      'de': 'Wetterreporter',
+      'en': 'the Forecaster',
+      'fr': 'Monsieur météo',
+      'ja': 'ウェザーリポーター',
+      'ko': '포어캐스터',
+    },
+    'rank': 'S',
   },
   'the Garlok': {
     'id': '2964',
@@ -2133,6 +2486,17 @@ const data: HuntMap = {
     },
     'rank': 'S',
   },
+  'the Raintriller': {
+    'id': '13442',
+    'name': {
+      'de': 'Regentriller',
+      'en': 'the Raintriller',
+      'fr': 'Trilleur de pluie',
+      'ja': 'レイントリラー',
+      'ko': '레인 스릴러',
+    },
+    'rank': 'A',
+  },
   'the Scarecrow': {
     'id': '4357',
     'name': {
@@ -2141,7 +2505,16 @@ const data: HuntMap = {
       'en': 'the Scarecrow',
       'fr': 'dracosaure primus',
       'ja': 'スケアクロウ',
-      'ko': '허수아비전갈',
+    },
+    'rank': 'B',
+  },
+  'the Slammer': {
+    'id': '13146',
+    'name': {
+      'de': 'Rammkopf',
+      'en': 'the Slammer',
+      'fr': 'Marteleur',
+      'ja': 'ラムヘッド',
     },
     'rank': 'B',
   },
