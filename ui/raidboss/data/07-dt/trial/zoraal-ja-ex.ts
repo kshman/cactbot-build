@@ -393,7 +393,7 @@ const triggerSet: TriggerSet<Data> = {
       id: 'Zoraal Ja Ex Drum of Vollok',
       type: 'StartsUsing',
       netRegex: { id: '938F', source: 'Zoraal Ja', capture: false },
-      delaySeconds: 1,
+      delaySeconds: 0.3, // let Collect run first
       suppressSeconds: 1,
       alertText: (data, _matches, output) => {
         if (data.drumTargets.includes(data.me))
@@ -448,7 +448,7 @@ const triggerSet: TriggerSet<Data> = {
           swordQuad = 'west';
         else if (swordX > 102)
           swordQuad = 'east';
-        else if (swordY < 99)
+        else if (swordY < 98)
           swordQuad = 'north';
         else
           swordQuad = 'south';
@@ -467,7 +467,7 @@ const triggerSet: TriggerSet<Data> = {
         if (data.safeQuadrants.length !== 2 || data.mirrorPlatformLoc === undefined)
           return output.unknown!();
 
-        // Call these as left/right based on whether the player is on the knock plat or not
+        // Call these as left/right based on whether the player is on the mirror plat or not
         // Assume they are facing the boss at this point.
         // There will always be one safe quadrant closest to the boss on each platform.
 
@@ -572,6 +572,12 @@ const triggerSet: TriggerSet<Data> = {
         },
       },
     },
+    // Calling 'Stay'/'Go Across' is based on whether the player receives the chains debuff
+    // and whether they still have the Wind Resistance debuff from jumping for Forward/Backward Half
+    // This can lead to some potentially erroneous results - e.g., a player dies (debuff removed
+    // early), is rezzed on the wrong platform, jumps early, etc.  We could instead call stay/go by
+    // role, but that would break in non-standard comps, and could still lead to the same erroneous
+    // results.  There doesn't seem to be a perfect solution here.
     {
       id: 'Zoraal Ja Ex Burning Chains',
       type: 'GainsEffect',
@@ -629,8 +635,10 @@ const triggerSet: TriggerSet<Data> = {
         },
       },
     },
-    // Use explicit output rather than Outputs.left/Outputs.right for these triggers
-    // Boss likes to jump & rotate, so pure 'left'/'right' can be misleading
+    // Continue to use 'Boss\'s X' output rather than Outputs.left/.right for these triggers
+    // Zoraal Ja jumps and rotates as the line moves through the arena, and players may
+    // change directions, so use boss-relative rather than trying to guess which way the player
+    // is facing.
     {
       id: 'Zoraal Ja Ex Might of Vollok Right Sword',
       type: 'StartsUsing',
@@ -737,9 +745,118 @@ const triggerSet: TriggerSet<Data> = {
     {
       'locale': 'en',
       'replaceText': {
-        'Forward Edge/Backward Edge': 'Forward/Backward Edge',
         'Fiery Edge/Stormy Edge': 'Fiery/Stormy Edge',
+        'Forward Edge/Backward Edge': 'Forward/Backward Edge',
         'Siege of Vollok/Walls of Vollok': 'Siege/Walls of Vollok',
+      },
+    },
+    {
+      'locale': 'de',
+      'missingTranslations': true,
+      'replaceSync': {
+        'Fang': 'Reißzahn',
+        'Zoraal Ja': 'Zoraal Ja',
+      },
+      'replaceText': {
+        '\\(cast\\)': '(wirken)',
+        '\\(damage\\)': '(Schaden)',
+        '\\(enrage\\)': '(Finalangriff)',
+        '\\(lines drop\\)': '',
+        'Actualize': 'Verwirklichung',
+        'Aero III': 'Windga',
+        'Backward Edge': 'Hinterklinge',
+        'Bitter Whirlwind': 'Bitterer Wirbelwind',
+        'Blade Warp': 'Klingensprung',
+        'Burning Chains': 'Brennende Ketten',
+        'Chasm of Vollok': 'Klippe von Vollok',
+        'Dawn of an Age': 'Dämmerung eines Zeitalters',
+        'Drum of Vollok': 'Trommel von Vollok',
+        'Duty\'s Edge': 'Pflichtes Schneide',
+        'Fiery Edge': 'Feurige Klinge',
+        'Forged Track': 'Unbestimmter Pfad',
+        'Forward Edge': 'Vorderklinge',
+        'Greater Gateway': 'Großes Tor der Welten',
+        'Half Circuit': 'Halbe Runde',
+        'Half Full': 'Halbes Ganzes',
+        'Multidirectional Divide': 'Wechselseitige Klingen',
+        'Projection of Triumph': 'Vorhersage von Triumph',
+        'Projection of Turmoil': 'Vorhersage von Aufruhr',
+        'Regicidal Rage': 'Wut des Regizids',
+        'Siege of Vollok': 'Belagerung von Vollok',
+        'Stormy Edge': 'Stürmische Klinge',
+        'Sync(?![-h])': 'Synchro',
+        '(?<! )Vollok': 'Vollok',
+        'Walls of Vollok': 'Mauern von Vollok',
+      },
+    },
+    {
+      'locale': 'fr',
+      'missingTranslations': true,
+      'replaceSync': {
+        'Fang': 'crochet',
+        'Zoraal Ja': 'Zoraal Ja',
+      },
+      'replaceText': {
+        'Actualize': 'Actualisation',
+        'Aero III': 'Méga Vent',
+        'Backward Edge': 'Lames régressives',
+        'Bitter Whirlwind': 'Tourbillon amer',
+        'Blade Warp': 'Invocation incisive',
+        'Burning Chains': 'Chaînes brûlantes',
+        'Chasm of Vollok': 'Trappe de Vollok',
+        'Dawn of an Age': 'Âge de l\'aurore',
+        'Drum of Vollok': 'Coup de Vollok',
+        'Duty\'s Edge': 'Devoir d\'acier',
+        'Fiery Edge': 'Lames de feu',
+        'Forged Track': 'Traque incisive',
+        'Forward Edge': 'Lames saillantes',
+        'Greater Gateway': 'Passerelle enchantée',
+        'Half Circuit': 'Demi-circuit',
+        'Half Full': 'Demi-plénitude',
+        'Multidirectional Divide': 'Division multidirectionnelle',
+        'Projection of Triumph': 'Lames repoussantes',
+        'Projection of Turmoil': 'Salve repoussante',
+        'Regicidal Rage': 'Régicide',
+        'Siege of Vollok': 'Anneau de Vollok',
+        'Stormy Edge': 'Lames de vent',
+        'Sync(?![-h])': 'Synchronisation',
+        '(?<! )Vollok': 'Vollok',
+        'Walls of Vollok': 'Cercle de Vollok',
+      },
+    },
+    {
+      'locale': 'ja',
+      'missingTranslations': true,
+      'replaceSync': {
+        'Fang': '双牙剣',
+        'Zoraal Ja': 'ゾラージャ',
+      },
+      'replaceText': {
+        'Actualize': 'アクチュアライズ',
+        'Aero III': 'エアロガ',
+        'Backward Edge': 'バックワードエッジ',
+        'Bitter Whirlwind': 'ビターウィンド',
+        'Blade Warp': 'サモンエッジ',
+        'Burning Chains': '炎の鎖',
+        'Chasm of Vollok': 'ピット・オブ・ヴォロク',
+        'Dawn of an Age': 'ドーン・エイジ',
+        'Drum of Vollok': 'ノック・オブ・ヴォロク',
+        'Duty\'s Edge': 'デューティエッジ',
+        'Fiery Edge': 'ファイアエッジ',
+        'Forged Track': 'エッジトラック',
+        'Forward Edge': 'フォワードエッジ',
+        'Greater Gateway': 'エンチャント・ゲートウェイ',
+        'Half Circuit': 'ルーズハーフ・サーキット',
+        'Half Full': 'ルーズハーフ',
+        'Multidirectional Divide': 'マルチウェイ',
+        'Projection of Triumph': 'プロジェクション・エッジ',
+        'Projection of Turmoil': 'プロジェクション・バースト',
+        'Regicidal Rage': 'レジサイド',
+        'Siege of Vollok': 'リング・オブ・ヴォロク',
+        'Stormy Edge': 'ウィンドエッジ',
+        'Sync(?![-h])': 'シンクロナス',
+        '(?<! )Vollok': 'エッジ・ザ・ヴォロク',
+        'Walls of Vollok': 'サークル・オブ・ヴォロク',
       },
     },
   ],
