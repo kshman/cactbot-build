@@ -436,7 +436,7 @@ const triggerSet: TriggerSet<Data> = {
         },
         insideNS: {
           en: 'Inner North/South Diamonds - ${lean}',
-          ko: '칼질! 안쪽 남북 ${lean}',
+          ko: '칼질! 안쪽 남북 (${lean})',
         },
         leanWest: {
           en: 'Lean West',
@@ -448,11 +448,11 @@ const triggerSet: TriggerSet<Data> = {
         },
         intercardsEast: {
           en: 'Outer Intercard Diamonds - East',
-          ko: '칼질! 바깥쪽 동쪽',
+          ko: '칼질! 바깥쪽 비스듬히 동쪽',
         },
         intercardsWest: {
           en: 'Outer Intercard Diamonds - West',
-          ko: '칼질! 바깥쪽 서쪽',
+          ko: '칼질! 바깥쪽 비스듬히 서쪽',
         },
       },
     },
@@ -672,7 +672,7 @@ const triggerSet: TriggerSet<Data> = {
         },
         combo: {
           en: '${fireWindCombo} + ${tile}',
-          ko: '${fireWindCombo} + ${tile}',
+          ko: '${fireWindCombo} [${tile}]',
         },
         unknown: {
           en: 'Avoid Swords',
@@ -838,15 +838,15 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         unknown: {
           en: 'Safe Quadrant + Spread Out',
-          ko: '안전한 사분면 + 흩어져요',
+          ko: '안전한 칸으로 + 흩어져요',
         },
         left: {
           en: '<= Front Left Quadrant + Spread Out',
-          ko: '❰❰❰앞 왼쪽 사분면 + 흩어져요',
+          ko: '▲앞쪽 🡸왼쪽 + 흩어져요',
         },
         right: {
           en: 'Front Right Quadrant + Spread Out =>',
-          ko: '앞 오른쪽 사분면 + 흩어져요❱❱❱',
+          ko: '▲앞쪽 🡺오른쪽 + 흩어져요',
         },
       },
     },
@@ -930,11 +930,11 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         left: {
           en: 'Boss\'s Left',
-          ko: '칼질! 왼쪽으로!!',
+          ko: '🡸왼쪽으로!!',
         },
         right: {
           en: 'Boss\'s Right',
-          ko: '오른쪽!!',
+          ko: '🡺오른쪽으로!!',
         },
         in: Outputs.in,
         out: Outputs.out,
@@ -957,7 +957,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         rightSword: {
           en: 'Boss\'s Left',
-          ko: '칼질! 왼쪽으로!!',
+          ko: '칼질! 🡸왼쪽으로!!',
         },
       },
     },
@@ -970,7 +970,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         leftSword: {
           en: 'Boss\'s Right',
-          ko: '칼질! 오른쪽으로!!',
+          ko: '칼질! 🡺오른쪽으로!!',
         },
       },
     },
