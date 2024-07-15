@@ -428,31 +428,31 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         insideWest: {
           en: 'Inner West Diamond',
-          ko: '칼질! 안쪽 서쪽',
+          ko: '칼질! 가운데칸 🡸왼쪽',
         },
         insideEast: {
           en: 'Inner East Diamond',
-          ko: '칼질! 안쪽 동쪽',
+          ko: '칼질! 가운데칸 🡺오른쪽',
         },
         insideNS: {
           en: 'Inner North/South Diamonds - ${lean}',
-          ko: '칼질! 안쪽 남북 ${lean}',
+          ko: '칼질! 가운데칸 ⇅위아래 (${lean})',
         },
         leanWest: {
           en: 'Lean West',
-          ko: '약깐 서쪽',
+          ko: '살짝 🡸왼쪽',
         },
         leanEast: {
           en: 'Lean East',
-          ko: '약깐 동쪽',
+          ko: '살짝 🡺오른쪽',
         },
         intercardsEast: {
           en: 'Outer Intercard Diamonds - East',
-          ko: '칼질! 바깥쪽 동쪽',
+          ko: '칼질! 바깥칸 비스듬히 🡸왼쪽',
         },
         intercardsWest: {
           en: 'Outer Intercard Diamonds - West',
-          ko: '칼질! 바깥쪽 서쪽',
+          ko: '칼질! 바깥칸 비스듬히 🡺오른쪽',
         },
       },
     },
@@ -647,20 +647,32 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         leanLeft: {
           en: '<= Inside Left (Facing Boss)',
-          ko: '❰❰❰왼쪽 안으로',
+          ko: '가운데칸 🡸왼쪽',
         },
         leanRight: {
           en: 'Inside Right (Facing Boss) =>',
-          ko: '오른쪽 안으로❱❱❱',
+          ko: '가운테칸 🡺오른쪽',
         },
         corner: {
           en: 'Corners Safe',
           ko: '구석 안전',
         },
-        northwest: Outputs.northwest,
-        northeast: Outputs.northeast,
-        southeast: Outputs.southeast,
-        southwest: Outputs.southwest,
+        northwest: {
+          en: 'Northwest',
+          ko: '🡼',
+        },
+        northeast: {
+          en: 'Northeast',
+          ko: '🡽',
+        },
+        southeast: {
+          en: 'Southeast',
+          ko: '🡾',
+        },
+        southwest: {
+          en: 'Southwest',
+          ko: '🡿',
+        },
         fire: {
           en: 'Go Far',
           ko: '불장판',
@@ -668,7 +680,7 @@ const triggerSet: TriggerSet<Data> = {
         wind: Outputs.knockback,
         fireWindSafe: {
           en: '${fireWind} ${safeDir}',
-          ko: '${fireWind} (${safeDir})',
+          ko: '${fireWind}${safeDir}',
         },
         combo: {
           en: '${fireWindCombo} + ${tile}',
@@ -838,15 +850,15 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         unknown: {
           en: 'Safe Quadrant + Spread Out',
-          ko: '안전한 사분면 + 흩어져요',
+          ko: '안전한 칸으로 + 흩어져요',
         },
         left: {
           en: '<= Front Left Quadrant + Spread Out',
-          ko: '❰❰❰앞 왼쪽 사분면 + 흩어져요',
+          ko: '🡼앞왼쪽 + 흩어져요',
         },
         right: {
           en: 'Front Right Quadrant + Spread Out =>',
-          ko: '앞 오른쪽 사분면 + 흩어져요❱❱❱',
+          ko: '🡽앞오른쪽 + 흩어져요',
         },
       },
     },
@@ -930,11 +942,11 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         left: {
           en: 'Boss\'s Left',
-          ko: '칼질! 왼쪽으로!!',
+          ko: '🡸왼쪽으로!!',
         },
         right: {
           en: 'Boss\'s Right',
-          ko: '오른쪽!!',
+          ko: '🡺오른쪽으로!!',
         },
         in: Outputs.in,
         out: Outputs.out,
@@ -957,7 +969,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         rightSword: {
           en: 'Boss\'s Left',
-          ko: '칼질! 왼쪽으로!!',
+          ko: '칼질! 🡸왼쪽으로!!',
         },
       },
     },
@@ -970,7 +982,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         leftSword: {
           en: 'Boss\'s Right',
-          ko: '칼질! 오른쪽으로!!',
+          ko: '칼질! 🡺오른쪽으로!!',
         },
       },
     },
