@@ -8,8 +8,10 @@
 hideall "--Reset--"
 hideall "--sync--"
 
+0.0 "--Reset--" ActorControl { command: "4000000F" } window 0,100000 jump 0
 0.0 "--sync--" InCombat { inGameCombat: "1" } window 0,1
-17.7 "Brutal Impact x4" Ability { id: "93D6", source: "Brute Bomber" }
+13.0 "--sync--" StartsUsing { id: "93D6", source: "Brute Bomber" }
+17.7 "Brutal Impact x4" Ability { id: "93D6", source: "Brute Bomber" } duration 3
 28.0 "Knuckle Sandwich" Ability { id: "93D5", source: "Brute Bomber" }
 35.2 "--north--" Ability { id: "93AB", source: "Brute Bomber" }
 43.1 "Brutal Lariat (cast)" Ability { id: ["9AD4", "9AD5"], source: "Brute Bomber" }
@@ -42,7 +44,7 @@ hideall "--sync--"
 211.9 "--middle--" Ability { id: "93AB", source: "Brute Bomber" }
 218.3 "Brutal Burn (cast)" Ability { id: "9428", source: "Brute Bomber" }
 218.7 "Brutal Burn (damage)" Ability { id: "9429", source: "Brute Bomber" }
-225.4 "Brutal Impact x6" Ability { id: "93D6", source: "Brute Bomber" }
+225.4 "Brutal Impact x6" Ability { id: "93D6", source: "Brute Bomber" } duration 5
 232.0 "--north--" Ability { id: "93AB", source: "Brute Bomber" }
 239.9 "Lariat Combo (cast)" Ability { id: ["9ADC", "9ADD", "9ADE", "9ADF"], source: "Brute Bomber" }
 241.1 "Lariat Combo (damage)" Ability { id: ["9AE4", "9AE5"], source: "Brute Bomber" }
@@ -59,7 +61,7 @@ hideall "--sync--"
 287.4 "--middle--" Ability { id: "93AB", source: "Brute Bomber" }
 293.7 "Brutal Burn (cast)" Ability { id: "9428", source: "Brute Bomber" }
 294.3 "Brutal Burn (damage)" Ability { id: "9429", source: "Brute Bomber" }
-301.0 "Brutal Impact x6" Ability { id: "93D6", source: "Brute Bomber" }
+301.0 "Brutal Impact x6" Ability { id: "93D6", source: "Brute Bomber" } duration 5
 317.6 "Fuses of Fury" Ability { id: "93B6", source: "Brute Bomber" }
 320.0 "--north--" Ability { id: "93AB", source: "Brute Bomber" }
 326.0 "Self-destruct (short)" Ability { id: "93B8", source: "Lit Fuse" }
@@ -68,7 +70,7 @@ hideall "--sync--"
 329.0 "Lariat Combo (damage)" Ability { id: ["9AE4", "9AE5"], source: "Brute Bomber" }
 333.3 "Lariat Combo (damage)" Ability { id: ["9AE6", "9AE7"], source: "Brute Bomber" }
 336.0 "--middle--" Ability { id: "93AB", source: "Brute Bomber" }
-343.0 "Brutal Impact x6" Ability { id: "93D6", source: "Brute Bomber" }
+343.0 "Brutal Impact x6" Ability { id: "93D6", source: "Brute Bomber" } duration 5
 357.6 "Knuckle Sandwich" Ability { id: "93D5", source: "Brute Bomber" }
 369.7 "Barbarous Barrage" Ability { id: "93B2", source: "Brute Bomber" }
 375.8 "Fuses of Fury" Ability { id: "93B6", source: "Brute Bomber" }
@@ -79,6 +81,6 @@ hideall "--sync--"
 393.2 "Murderous Mist" Ability { id: "93B5", source: "Brute Bomber" }
 400.9 "Brutal Burn (cast)" Ability { id: "9428", source: "Brute Bomber" }
 401.3 "Brutal Burn (damage)" Ability { id: "9429", source: "Brute Bomber" }
-408.0 "Brutal Impact x6" Ability { id: "93D6", source: "Brute Bomber" }
+408.0 "Brutal Impact x6" Ability { id: "93D6", source: "Brute Bomber" } duration 5
 422.7 "Knuckle Sandwich" Ability { id: "93D5", source: "Brute Bomber" }
 434.8 "--middle--" Ability { id: "93AB", source: "Brute Bomber" } forcejump "loop"
