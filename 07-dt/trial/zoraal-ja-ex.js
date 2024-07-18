@@ -343,7 +343,6 @@ Options.Triggers.push({
       condition: (data) => data.phase === 'swords' && !data.seenHalfCircuit,
       durationSeconds: 6,
       alertText: (data, matches, output) => {
-        // We should already have 8 safe tiles from Sword Collect
         // To make this call somewhat reasonable, use the following priority system
         // for calling a safe tile, depending on sword cleave:
         //   1. insideEast/insideWest
@@ -1038,7 +1037,6 @@ Options.Triggers.push({
     },
     {
       'locale': 'de',
-      'missingTranslations': true,
       'replaceSync': {
         'Fang': 'Reißzahn',
         'Zoraal Ja': 'Zoraal Ja',
@@ -1047,7 +1045,7 @@ Options.Triggers.push({
         '\\(cast\\)': '(wirken)',
         '\\(damage\\)': '(Schaden)',
         '\\(enrage\\)': '(Finalangriff)',
-        '\\(lines drop\\)': '',
+        '\\(lines drop\\)': '(Linien kommen)',
         'Actualize': 'Verwirklichung',
         'Aero III': 'Windga',
         'Backward Edge': 'Hinterklinge',
@@ -1064,6 +1062,7 @@ Options.Triggers.push({
         'Greater Gateway': 'Großes Tor der Welten',
         'Half Circuit': 'Halbe Runde',
         'Half Full': 'Halbes Ganzes',
+        'Might of Vollok': 'Macht von Vollok',
         'Multidirectional Divide': 'Wechselseitige Klingen',
         'Projection of Triumph': 'Vorhersage von Triumph',
         'Projection of Turmoil': 'Vorhersage von Aufruhr',
@@ -1099,6 +1098,7 @@ Options.Triggers.push({
         'Greater Gateway': 'Passerelle enchantée',
         'Half Circuit': 'Demi-circuit',
         'Half Full': 'Demi-plénitude',
+        'Might of Vollok': 'Puissance de Vollok',
         'Multidirectional Divide': 'Division multidirectionnelle',
         'Projection of Triumph': 'Lames repoussantes',
         'Projection of Turmoil': 'Salve repoussante',
@@ -1134,6 +1134,7 @@ Options.Triggers.push({
         'Greater Gateway': 'エンチャント・ゲートウェイ',
         'Half Circuit': 'ルーズハーフ・サーキット',
         'Half Full': 'ルーズハーフ',
+        'Might of Vollok': 'パワー・オブ・ヴォロク',
         'Multidirectional Divide': 'マルチウェイ',
         'Projection of Triumph': 'プロジェクション・エッジ',
         'Projection of Turmoil': 'プロジェクション・バースト',

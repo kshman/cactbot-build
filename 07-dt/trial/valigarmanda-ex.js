@@ -282,12 +282,12 @@ Options.Triggers.push({
     // ------------- STORM PHASE -------------
     //
     {
-      id: 'Valigarmanda Ex Skyruin (Storm)',
+      id: 'Valigarmanda Ex Skyruin Storm',
       type: 'StartsUsing',
       netRegex: { id: '95C3', source: 'Valigarmanda', capture: false },
-      // This is a long !(~11s) cast bar, although logs show a 5.7s cast time,
+      // This is a long (~11s) cast bar, although logs show a 5.7s cast time,
       // followed by a 4.2 cast of '8FD3' (Skyruin) which is the actual damage.
-      // Use the original cast + delay so people can change the alert time.
+      // Use the original cast + delay so people can change the alert timing.
       delaySeconds: 6,
       response: Responses.bleedAoe(),
     },
@@ -320,6 +320,7 @@ Options.Triggers.push({
     // 901D is the 'Hail of Feathers' cast from the first feather to drop
     // Use 'StartsUsingExtra', as 'StartsUsing' positions can be stale.
     {
+      //
       id: 'Valigarmanda Ex Hail of Feathers',
       type: 'StartsUsingExtra',
       netRegex: { id: '901D' },
@@ -433,17 +434,17 @@ Options.Triggers.push({
         const posY = parseFloat(matches.y);
         // 5 spheres will spawn in 6 possible y positions: 87.5, 92.5, 97.5, 102.5, 107.5, 112.5
         if (posY < 88)
-          data.arcaneLaneSafe = data.arcaneLaneSafe.filter((l) => l !== 'northFront');
+          data.arcaneLaneSafe = data.arcaneLaneSafe.filter((lane) => lane !== 'northFront');
         else if (posY < 93)
-          data.arcaneLaneSafe = data.arcaneLaneSafe.filter((l) => l !== 'northBack');
+          data.arcaneLaneSafe = data.arcaneLaneSafe.filter((lane) => lane !== 'northBack');
         else if (posY < 98)
-          data.arcaneLaneSafe = data.arcaneLaneSafe.filter((l) => l !== 'middleFront');
+          data.arcaneLaneSafe = data.arcaneLaneSafe.filter((lane) => lane !== 'middleFront');
         else if (posY < 103)
-          data.arcaneLaneSafe = data.arcaneLaneSafe.filter((l) => l !== 'middleBack');
+          data.arcaneLaneSafe = data.arcaneLaneSafe.filter((lane) => lane !== 'middleBack');
         else if (posY < 108)
-          data.arcaneLaneSafe = data.arcaneLaneSafe.filter((l) => l !== 'southFront');
+          data.arcaneLaneSafe = data.arcaneLaneSafe.filter((lane) => lane !== 'southFront');
         else
-          data.arcaneLaneSafe = data.arcaneLaneSafe.filter((l) => l !== 'southBack');
+          data.arcaneLaneSafe = data.arcaneLaneSafe.filter((lane) => lane !== 'southBack');
       },
     },
     {
@@ -669,7 +670,7 @@ Options.Triggers.push({
       type: 'AddedCombatant',
       netRegex: { name: 'Arcane Sphere' },
       condition: (data) => data.phase === 'ice',
-      alarmText: (data, matches, output) => {
+      alertText: (data, matches, output) => {
         const posY = parseFloat(matches.y);
         if (posY > 90)
           return;
@@ -870,7 +871,6 @@ Options.Triggers.push({
     },
     {
       'locale': 'fr',
-      'missingTranslations': true,
       'replaceSync': {
         'Arcane Sphere': 'sphère arcanique',
         'Feather of Ruin': 'plume de Valigarmanda',
@@ -909,6 +909,15 @@ Options.Triggers.push({
         'Valigarmanda': 'Valigarmanda',
         'Volcanic Drop': 'Obus volcanique',
         'Wrath Unfurled': 'Rage déployée',
+        '\\(cast\\)': '(Incante)',
+        '\\(damage\\)': '(Dommage)',
+        '\\(enrage\\)': '(Enrage)',
+        '\\(fire phase\\)': '(Phase de Feu)',
+        '\\(ice phase\\)': '(Phase de Glace)',
+        '\\(ice or storm phase?\\)': '(Phase de Feu ou de Glace)',
+        '\\(knockback\\)': '(Poussée)',
+        '\\(storm phase\\)': '(Phase Orageuse)',
+        '\\(tower\\)': '(Tour)',
       },
     },
     {
