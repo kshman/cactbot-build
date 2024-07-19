@@ -211,10 +211,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         cardsIntercards: {
           en: 'Cards => Intercards',
+          de: 'Karten => Interkardinal',
           ko: '십자 🔜 비스듬히',
         },
         intercardsCards: {
           en: 'Intercards => Cards',
+          de: 'Interkardinal => Karten',
           ko: '비스듬 🔜 십자로',
         },
       },
@@ -228,7 +230,8 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Aim for uncracked tile',
-          ko: '안부셔진 타일로 튕기게',
+          de: 'Ziehle auf nich gerissene Fläche',
+          ko: '안부셔진 타일로 튕겨요',
         },
       },
     },
@@ -265,6 +268,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'West => East at marker',
+          de: 'Westen => Osten bei der Markierung',
           ko: '서쪽 🔜 동쪽 마커로',
         },
       },
@@ -278,6 +282,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'East => West at marker',
+          de: 'Osten => Westen bei der Markierung',
           ko: '동쪽 🔜 서쪽 마커로',
         },
       },
@@ -291,6 +296,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'West => East at marker',
+          de: 'Westen => Osten bei der Markierung',
           ko: '서쪽 🔜 동쪽 마커로',
         },
       },
@@ -304,6 +310,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'East => West at marker',
+          de: 'Osten => Westen bei der Markierung',
           ko: '동쪽 🔜 서쪽 마커로',
         },
       },

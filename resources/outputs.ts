@@ -96,6 +96,8 @@ export default {
   },
   avoidTetherBusters: {
     en: 'Avoid Tank Tethers',
+    fr: 'Évitez les liens des Tanks',
+    ja: 'タンクの線を避けて',
     ko: '탱크 줄 피해요',
   },
   tankCleave: {

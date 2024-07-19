@@ -71,6 +71,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Knockback Towers',
+          de: 'Rückstoß Türme',
           ko: '타워 넉백',
         },
       },
@@ -101,6 +102,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Long => Short',
+          de: 'Lange => Kurz',
           ko: '긴거 🔜 짧은거',
         },
       },
@@ -114,6 +116,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'East, then West',
+          de: 'Osten, dann Westen',
           ko: '동쪽갔다, 서쪽으로',
         },
       },
@@ -127,6 +130,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'East, stay East',
+          de: 'Osten, bleib Osten',
           ko: '동쪽가서, 그대로',
         },
       },
@@ -140,6 +144,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'West, then East',
+          de: 'Westen, dann Osten',
           ko: '서쪽갔다, 동쪽으로',
         },
       },
@@ -153,6 +158,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'West, stay West',
+          de: 'Westen, bleib Westen',
           ko: '서쪽가서, 그대로',
         },
       },
