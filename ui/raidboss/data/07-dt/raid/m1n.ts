@@ -178,24 +178,24 @@ console.assert(headMarkerData);
 const triggerSet: TriggerSet<Data> = {
   id: 'AacLightHeavyweightM1',
   zoneId: ZoneId.AacLightHeavyweightM1,
-  timelineFile: 'r1n.txt',
+  timelineFile: 'm1n.txt',
   triggers: [
     {
-      id: 'R1N One-two Paw Right Left',
+      id: 'M1N One-two Paw Right Left',
       type: 'StartsUsing',
       netRegex: { id: '9309', source: 'Black Cat', capture: false },
       durationSeconds: 9.5,
       response: Responses.goLeftThenRight(),
     },
     {
-      id: 'R1N One-two Paw Left Right',
+      id: 'M1N One-two Paw Left Right',
       type: 'StartsUsing',
       netRegex: { id: '930C', source: 'Black Cat', capture: false },
       durationSeconds: 9.5,
       response: Responses.goRightThenLeft(),
     },
     {
-      id: 'R1N Black Cat Crossing',
+      id: 'M1N Black Cat Crossing',
       type: 'StartsUsingExtra',
       netRegex: { id: '9311', capture: true },
       suppressSeconds: 5,
@@ -211,16 +211,18 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         cardsIntercards: {
           en: 'Cards => Intercards',
+          de: 'Karten => Interkardinal',
           ko: '십자 🔜 비스듬히',
         },
         intercardsCards: {
           en: 'Intercards => Cards',
+          de: 'Interkardinal => Karten',
           ko: '비스듬 🔜 십자로',
         },
       },
     },
     {
-      id: 'R1N Elevate and Eviscerate',
+      id: 'M1N Elevate and Eviscerate',
       type: 'StartsUsing',
       netRegex: { id: '9317', source: ['Black Cat', 'Copy Cat'], capture: true },
       condition: Conditions.targetIsYou(),
@@ -228,36 +230,37 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Aim for uncracked tile',
-          ko: '안부셔진 타일로 튕기게',
+          de: 'Ziehle auf nich gerissene Fläche',
+          ko: '안부셔진 타일로 튕겨요',
         },
       },
     },
     {
-      id: 'R1N Bloody Scratch',
+      id: 'M1N Bloody Scratch',
       type: 'StartsUsing',
       netRegex: { id: '9340', source: 'Black Cat', capture: false },
       response: Responses.aoe(),
     },
     {
-      id: 'R1N Biscuit Maker',
+      id: 'M1N Biscuit Maker',
       type: 'StartsUsing',
       netRegex: { id: '934A', source: 'Black Cat', capture: true },
       response: Responses.tankBuster(),
     },
     {
-      id: 'R1N Clawful',
+      id: 'M1N Clawful',
       type: 'StartsUsing',
       netRegex: { id: '933C', source: 'Black Cat', capture: true },
       response: Responses.stackMarkerOn(),
     },
     {
-      id: 'R1N Overshadow',
+      id: 'M1N Overshadow',
       type: 'StartsUsing',
       netRegex: { id: '9319', source: 'Black Cat', capture: true },
       response: Responses.stackMarkerOn(),
     },
     {
-      id: 'R1N Leaping One-two Paw West West East',
+      id: 'M1N Leaping One-two Paw West West East',
       type: 'StartsUsing',
       netRegex: { id: '931F', source: 'Black Cat', capture: false },
       durationSeconds: 10.5,
@@ -265,12 +268,13 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'West => East at marker',
+          de: 'Westen => Osten bei der Markierung',
           ko: '서쪽 🔜 동쪽 마커로',
         },
       },
     },
     {
-      id: 'R1N Leaping One-two Paw West East West',
+      id: 'M1N Leaping One-two Paw West East West',
       type: 'StartsUsing',
       netRegex: { id: '9320', source: 'Black Cat', capture: false },
       durationSeconds: 10.5,
@@ -278,12 +282,13 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'East => West at marker',
+          de: 'Osten => Westen bei der Markierung',
           ko: '동쪽 🔜 서쪽 마커로',
         },
       },
     },
     {
-      id: 'R1N Leaping One-two Paw East West East',
+      id: 'M1N Leaping One-two Paw East West East',
       type: 'StartsUsing',
       netRegex: { id: '9321', source: 'Black Cat', capture: false },
       durationSeconds: 10.5,
@@ -291,12 +296,13 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'West => East at marker',
+          de: 'Westen => Osten bei der Markierung',
           ko: '서쪽 🔜 동쪽 마커로',
         },
       },
     },
     {
-      id: 'R1N Leaping One-two Paw East East West',
+      id: 'M1N Leaping One-two Paw East East West',
       type: 'StartsUsing',
       netRegex: { id: '9322', source: 'Black Cat', capture: false },
       durationSeconds: 10.5,
@@ -304,12 +310,13 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'East => West at marker',
+          de: 'Osten => Westen bei der Markierung',
           ko: '동쪽 🔜 서쪽 마커로',
         },
       },
     },
     {
-      id: 'R1N Shockwave 931D',
+      id: 'M1N Shockwave 931D',
       type: 'StartsUsing',
       netRegex: { id: '931D', source: 'Black Cat', capture: false },
       response: Responses.knockback(),

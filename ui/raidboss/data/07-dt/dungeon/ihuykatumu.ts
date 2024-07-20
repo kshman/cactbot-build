@@ -29,7 +29,7 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: 'Get under Flytrap',
           de: 'Geh unter die Fliegenfalle',
-          ko: 'ㅍㄹ라이트랩 아래로',
+          ko: '나무 놈 아래로',
         },
       },
     },
@@ -43,7 +43,7 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: 'Stay out of inhale',
           de: 'Steh auserhalb des Soges',
-          ko: '흡입 밖에서 기둘',
+          ko: '부채꼴 피해요',
         },
       },
     },
@@ -73,7 +73,7 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: 'Dodge Ivy cleaves (small)',
           de: 'Efeu-Cleave ausweichen (klein)',
-          ko: 'Ivy 클레브 피해요 (작은거)',
+          ko: '좁은 장판 피해요',
         },
       },
     },
@@ -88,7 +88,7 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: 'Dodge Ivy cleaves (big)',
           de: 'Efeu-Cleave ausweichen (groß)',
-          ko: 'Ivy 클레브 피해요 (큰거)',
+          ko: '넓은 장판 피해요',
         },
       },
     },
@@ -128,7 +128,7 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: 'Away on 3rd jump',
           de: 'Weg vom 3. Sprung',
-          ko: '세번째 점프랑 멀어져요',
+          ko: '점프 세번 🔜 장판 피해요',
         },
       },
     },
@@ -142,7 +142,7 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: 'Away on 3rd jump',
           de: 'Weg vom 3. Sprung',
-          ko: '세번째 점프랑 멀어져요',
+          ko: '점프 세번 🔜 장판 피해요',
         },
       },
     },
