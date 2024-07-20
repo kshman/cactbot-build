@@ -1,3 +1,4 @@
+import { AutumnDirections } from '../../../../../resources/autumn';
 import Outputs from '../../../../../resources/outputs';
 import { callOverlayHandler } from '../../../../../resources/overlay_plugin_api';
 import { Responses } from '../../../../../resources/responses';
@@ -23,22 +24,38 @@ type B9AMapKeys = keyof typeof effectB9AMap;
 type B9AMapValues = typeof effectB9AMap[B9AMapKeys];
 
 const directionOutputStrings = {
-  dirN: Outputs.dirN,
-  dirE: Outputs.dirE,
-  dirS: Outputs.dirS,
-  dirW: Outputs.dirW,
-  goLeft: Outputs.left,
-  goRight: Outputs.right,
+  dirN: {
+    en: 'N',
+    ja: '北',
+    ko: '▲',
+  },
+  dirE: {
+    en: 'E',
+    ja: '東',
+    ko: '▶',
+  },
+  dirS: {
+    en: 'S',
+    ja: '南',
+    ko: '▼',
+  },
+  dirW: {
+    en: 'W',
+    ja: '西',
+    ko: '◀',
+  },
+  goLeft: Outputs.getLeftAndWest,
+  goRight: Outputs.getRightAndEast,
   unknown: Outputs.unknown,
   separator: {
     en: ' => ',
     de: ' => ',
-    ko: ' 🔜 ',
+    ko: ' ',
   },
   combo: {
     en: '${dirs}',
     de: '${dirs}',
-    ko: '${dirs}',
+    ko: '안전: ${dirs}',
   },
 } as const;
 
@@ -111,7 +128,7 @@ const headMarkerData = {
 const triggerSet: TriggerSet<Data> = {
   id: 'AacLightHeavyweightM4',
   zoneId: ZoneId.AacLightHeavyweightM4,
-  timelineFile: 'r4n.txt',
+  timelineFile: 'm4n.txt',
   initData: () => ({
     expectedBlasts: 0,
     storedBlasts: [],
@@ -122,7 +139,7 @@ const triggerSet: TriggerSet<Data> = {
   }),
   triggers: [
     {
-      id: 'R4N Actor Collector',
+      id: 'M4N Actor Collector',
       type: 'StartsUsing',
       netRegex: { id: '92C7', source: 'Wicked Thunder', capture: false },
       promise: async (data) => {
@@ -132,7 +149,7 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: 'R4N ActorSetPos Collector',
+      id: 'M4N ActorSetPos Collector',
       type: 'ActorSetPos',
       netRegex: { id: '4[0-9A-F]{7}', capture: true },
       run: (data, matches) => {
@@ -147,7 +164,7 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: 'R4N Clone Cleave Collector',
+      id: 'M4N Clone Cleave Collector',
       type: 'CombatantMemory',
       // Filter to only enemy actors for performance
       // TODO: Change this to an ActorControlExtra line if OverlayPlugin adds SetModelState as a valid category
@@ -184,7 +201,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       // Delay half a second to allow `ActorSetPos` line to happen as well
       delaySeconds: 0.5,
-      durationSeconds: 7.3,
+      durationSeconds: 9, // 7.3,
       suppressSeconds: 1,
       infoText: (data, _matches, output) => {
         const dirs = data.storedCleaves.map((entry) => {
@@ -205,38 +222,38 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: directionOutputStrings,
     },
     {
-      id: 'R4N Headmarker Soaring Soulpress Stack',
+      id: 'M4N Headmarker Soaring Soulpress Stack',
       type: 'HeadMarker',
       netRegex: { id: headMarkerData.stack, capture: true },
       response: Responses.stackMarkerOn(),
     },
     {
-      id: 'R4N Headmarker Wicked Bolt Multi Hit Stack',
+      id: 'M4N Headmarker Wicked Bolt Multi Hit Stack',
       type: 'HeadMarker',
       netRegex: { id: headMarkerData.multiHitStack, capture: true },
       response: Responses.stackMarkerOn(),
     },
     {
-      id: 'R4N Headmarker Thunderstorm Spread',
+      id: 'M4N Headmarker Thunderstorm Spread',
       type: 'HeadMarker',
       netRegex: { id: headMarkerData.spread, capture: false },
       suppressSeconds: 5,
       response: Responses.spread(),
     },
     {
-      id: 'R4N Headmarker Wicked Jolt Tankbuster',
+      id: 'M4N Headmarker Wicked Jolt Tankbuster',
       type: 'HeadMarker',
       netRegex: { id: headMarkerData.tankBusterLine, capture: true },
       response: Responses.tankBuster(),
     },
     {
-      id: 'R4N Wrath of Zeus',
+      id: 'M4N Wrath of Zeus',
       type: 'StartsUsing',
       netRegex: { id: '92C7', source: 'Wicked Thunder', capture: false },
       response: Responses.aoe(),
     },
     {
-      id: 'R4N Sidewise Spark Counter',
+      id: 'M4N Sidewise Spark Counter',
       type: 'StartsUsing',
       netRegex: { id: ['92BC', '92BD', '92BE', '92BF'], source: 'Wicked Thunder', capture: false },
       delaySeconds: 1,
@@ -248,7 +265,7 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: 'R4N Sidewise Spark',
+      id: 'M4N Sidewise Spark',
       type: 'StartsUsing',
       // IDs for safe spots are C/E = left safe, D/F = right safe
       netRegex: { id: ['92BC', '92BE', '92BD', '92BF'], source: 'Wicked Thunder', capture: true },
@@ -258,7 +275,7 @@ const triggerSet: TriggerSet<Data> = {
         if (data.sidewiseSparkCounter === 0)
           return ['92BC', '92BE'].includes(matches.id) ? output.goLeft!() : output.goRight!();
 
-        const dirs = data.storedCleaves.map((entry) => {
+        let dirs = data.storedCleaves.map((entry) => {
           const actor = data.actors.find((actor) => actor.ID === entry.id);
           if (actor === undefined)
             return output.unknown!();
@@ -268,6 +285,9 @@ const triggerSet: TriggerSet<Data> = {
         });
 
         dirs.push(['92BC', '92BE'].includes(matches.id) ? 'dirW' : 'dirE');
+
+        if (dirs.length === 5)
+          dirs = dirs.slice(2);
 
         const mappedDirs = dirs.map((dir) => output[dir]!());
 
@@ -279,37 +299,37 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: directionOutputStrings,
     },
     {
-      id: 'R4N Left Roll',
+      id: 'M4N Left Roll',
       type: 'Ability',
       netRegex: { id: '92AC', source: 'Wicked Thunder', capture: false },
       response: Responses.goWest(),
     },
     {
-      id: 'R4N Right Roll',
+      id: 'M4N Right Roll',
       type: 'Ability',
       netRegex: { id: '92AB', source: 'Wicked Thunder', capture: false },
       response: Responses.goEast(),
     },
     {
-      id: 'R4N Threefold Blast Initializer',
+      id: 'M4N Threefold Blast Initializer',
       type: 'StartsUsing',
       netRegex: { id: ['92AD', '92B0'], source: 'Wicked Thunder', capture: false },
       run: (data) => data.expectedBlasts = 3,
     },
     {
-      id: 'R4N Fourfold Blast Initializer',
+      id: 'M4N Fourfold Blast Initializer',
       type: 'StartsUsing',
       netRegex: { id: ['9B4F', '9B55'], source: 'Wicked Thunder', capture: false },
       run: (data) => data.expectedBlasts = 4,
     },
     {
-      id: 'R4N Fivefold Blast Initializer',
+      id: 'M4N Fivefold Blast Initializer',
       type: 'StartsUsing',
       netRegex: { id: ['9B56', '9B57'], source: 'Wicked Thunder', capture: false },
       run: (data) => data.expectedBlasts = 5,
     },
     {
-      id: 'R4N XFold Blast Collector',
+      id: 'M4N XFold Blast Collector',
       type: 'GainsEffect',
       netRegex: { effectId: 'B9A', count: Object.values(effectB9AMap), capture: true },
       condition: (data, matches) => {
@@ -339,7 +359,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: directionOutputStrings,
     },
     {
-      id: 'R4N Bewitching Flight Right Safe',
+      id: 'M4N Bewitching Flight Right Safe',
       type: 'StartsUsing',
       netRegex: { id: '8DE4', source: 'Wicked Thunder', capture: false },
       // Disabled until we have a better way to phrase this.
@@ -353,7 +373,7 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: 'R4N Bewitching Flight South Safe',
+      id: 'M4N Bewitching Flight South Safe',
       type: 'StartsUsing',
       netRegex: { id: '8DE4', source: 'Wicked Replica', capture: false },
       // Disabled until we have a better way to phrase this.
@@ -367,7 +387,7 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: 'R4N Bewitching Flight Left Safe',
+      id: 'M4N Bewitching Flight Left Safe',
       type: 'StartsUsing',
       netRegex: { id: '8DE6', source: 'Wicked Thunder', capture: false },
       // Disabled until we have a better way to phrase this.
@@ -381,7 +401,7 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: 'R4N Bewitching Flight North Safe',
+      id: 'M4N Bewitching Flight North Safe',
       type: 'StartsUsing',
       netRegex: { id: '8DE6', source: 'Wicked Replica', capture: false },
       // Disabled until we have a better way to phrase this.
@@ -395,7 +415,7 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: 'R4N Witch Hunt',
+      id: 'M4N Witch Hunt',
       type: 'StartsUsingExtra',
       netRegex: { id: '92B5', capture: true },
       condition: (data, matches) => {
@@ -468,14 +488,14 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         outToIn: {
           en: '${dir}, Out => In',
-          ko: '${dir}, 밖에서 🔜 안으로',
+          ko: '${dir} 안에 있다 🔜 밖으로',
         },
         inToOut: {
           en: '${dir}, In => Out',
-          ko: '${dir}, 안에서 🔜 밖으로',
+          ko: '${dir} 밖에 있다 🔜 안으로',
         },
         unknown: Outputs.unknown,
-        ...Directions.outputStrings8Dir,
+        ...AutumnDirections.outputStringsDirToArrow8,
       },
     },
   ],

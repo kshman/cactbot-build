@@ -148,6 +148,31 @@ const outputStringsArrowIntercard: OutputStrings = {
   arrowNW: Outputs.arrowNW,
   unknown: Outputs.unknown,
 };
+const outputStringsDirToArrow8: OutputStrings = {
+  dirN: Outputs.arrowN,
+  dirNE: Outputs.arrowNE,
+  dirE: Outputs.arrowE,
+  dirSE: Outputs.arrowSE,
+  dirS: Outputs.arrowS,
+  dirSW: Outputs.arrowSW,
+  dirW: Outputs.arrowW,
+  dirNW: Outputs.arrowNW,
+  unknown: Outputs.unknown,
+};
+const outputStringsDirToArrowCardinal: OutputStrings = {
+  dirN: Outputs.arrowN,
+  dirE: Outputs.arrowE,
+  dirS: Outputs.arrowS,
+  dirW: Outputs.arrowW,
+  unknown: Outputs.unknown,
+};
+const outputStringsDirToArrowIntercard: OutputStrings = {
+  dirNE: Outputs.arrowNE,
+  dirSE: Outputs.arrowSE,
+  dirSW: Outputs.arrowSW,
+  dirNW: Outputs.arrowNW,
+  unknown: Outputs.unknown,
+};
 
 const outputFromArrow8Num = (dirNum: number): ArrowOutput8 => {
   return outputArrow8[dirNum] ?? 'unknown';
@@ -173,6 +198,9 @@ export const AutumnDirections = {
   outputStringsArrow8: outputStringsArrow8,
   outputStringsArrowCardinal: outputStringsArrowCardinal,
   outputStringsArrowIntercard: outputStringsArrowIntercard,
+  outputStringsDirToArrow8: outputStringsDirToArrow8,
+  outputStringsDirToArrowCardinal: outputStringsDirToArrowCardinal,
+  outputStringsDirToArrowIntercard: outputStringsDirToArrowIntercard,
   outputFromArrow8Num: outputFromArrow8Num,
   xyToArrow8Output: (x: number, y: number, cx: number, cy: number): ArrowOutput8 => {
     const n = Directions.xyTo8DirNum(x, y, cx, cy);
