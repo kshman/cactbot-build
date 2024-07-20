@@ -15,58 +15,59 @@ console.assert(headMarkerData);
 Options.Triggers.push({
   id: 'AacLightHeavyweightM3',
   zoneId: ZoneId.AacLightHeavyweightM3,
-  timelineFile: 'r3n.txt',
+  timelineFile: 'm3n.txt',
   triggers: [
     {
-      id: 'R3N Brutal Burn',
+      id: 'M3N Brutal Burn',
       type: 'StartsUsing',
       netRegex: { id: '9429', source: 'Brute Bomber', capture: true },
       response: Responses.stackMarkerOn(),
     },
     {
-      id: 'R3N Brutal Impact',
+      id: 'M3N Brutal Impact',
       type: 'StartsUsing',
       netRegex: { id: '93D6', source: 'Brute Bomber', capture: false },
       response: Responses.aoe(),
     },
     {
-      id: 'R3N Knuckle Sandwich',
+      id: 'M3N Knuckle Sandwich',
       type: 'StartsUsing',
       netRegex: { id: '93D5', source: 'Brute Bomber', capture: true },
       response: Responses.tankBuster(),
     },
     {
-      id: 'R3N Brutal Lariat 9AD4',
+      id: 'M3N Brutal Lariat 9AD4',
       type: 'StartsUsing',
       netRegex: { id: '9AD4', source: 'Brute Bomber', capture: false },
       response: Responses.goEast(),
     },
     {
-      id: 'R3N Brutal Lariat 9AD5',
+      id: 'M3N Brutal Lariat 9AD5',
       type: 'StartsUsing',
       netRegex: { id: '9AD5', source: 'Brute Bomber', capture: false },
       response: Responses.goWest(),
     },
     {
-      id: 'R3N Murderous Mist',
+      id: 'M3N Murderous Mist',
       type: 'StartsUsing',
       netRegex: { id: '93B5', source: 'Brute Bomber', capture: false },
       response: Responses.getBehind(),
     },
     {
-      id: 'R3N Barbarous Barrage',
+      id: 'M3N Barbarous Barrage',
       type: 'StartsUsing',
       netRegex: { id: '93B2', source: 'Brute Bomber', capture: false },
       infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Knockback Towers',
+          de: 'Rückstoß Türme',
           ko: '타워 넉백',
         },
       },
     },
     {
-      id: 'R3N Fire Spin Clockwise',
+      id: 'M3N Fire Spin Clockwise',
       type: 'StartsUsing',
       netRegex: { id: '93D0', source: 'Brute Bomber', capture: false },
       infoText: (_data, _matches, output) => output.text(),
@@ -75,7 +76,7 @@ Options.Triggers.push({
       },
     },
     {
-      id: 'R3N Fire Spin Counterclockwise',
+      id: 'M3N Fire Spin Counterclockwise',
       type: 'StartsUsing',
       netRegex: { id: '93D1', source: 'Brute Bomber', capture: false },
       infoText: (_data, _matches, output) => output.text(),
@@ -84,19 +85,20 @@ Options.Triggers.push({
       },
     },
     {
-      id: 'R3N Fuses of Fury',
+      id: 'M3N Fuses of Fury',
       type: 'StartsUsing',
       netRegex: { id: '93B6', source: 'Brute Bomber', capture: false },
       infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Long => Short',
+          de: 'Lange => Kurz',
           ko: '긴거 🔜 짧은거',
         },
       },
     },
     {
-      id: 'R3N Lariat Combo East to West',
+      id: 'M3N Lariat Combo East to West',
       type: 'StartsUsing',
       netRegex: { id: '9ADC', source: 'Brute Bomber', capture: false },
       durationSeconds: 15,
@@ -104,12 +106,13 @@ Options.Triggers.push({
       outputStrings: {
         text: {
           en: 'East, then West',
+          de: 'Osten, dann Westen',
           ko: '동쪽갔다, 서쪽으로',
         },
       },
     },
     {
-      id: 'R3N Lariat Combo East to East',
+      id: 'M3N Lariat Combo East to East',
       type: 'StartsUsing',
       netRegex: { id: '9ADD', source: 'Brute Bomber', capture: false },
       durationSeconds: 15,
@@ -117,12 +120,13 @@ Options.Triggers.push({
       outputStrings: {
         text: {
           en: 'East, stay East',
+          de: 'Osten, bleib Osten',
           ko: '동쪽가서, 그대로',
         },
       },
     },
     {
-      id: 'R3N Lariat Combo West to East',
+      id: 'M3N Lariat Combo West to East',
       type: 'StartsUsing',
       netRegex: { id: '9ADE', source: 'Brute Bomber', capture: false },
       durationSeconds: 15,
@@ -130,12 +134,13 @@ Options.Triggers.push({
       outputStrings: {
         text: {
           en: 'West, then East',
+          de: 'Westen, dann Osten',
           ko: '서쪽갔다, 동쪽으로',
         },
       },
     },
     {
-      id: 'R3N Lariat Combo West to West',
+      id: 'M3N Lariat Combo West to West',
       type: 'StartsUsing',
       netRegex: { id: '9ADF', source: 'Brute Bomber', capture: false },
       durationSeconds: 15,
@@ -143,12 +148,13 @@ Options.Triggers.push({
       outputStrings: {
         text: {
           en: 'West, stay West',
+          de: 'Westen, bleib Westen',
           ko: '서쪽가서, 그대로',
         },
       },
     },
     {
-      id: 'R3N Infernal Spin Clockwise',
+      id: 'M3N Infernal Spin Clockwise',
       type: 'StartsUsing',
       netRegex: { id: '9B42', source: 'Brute Bomber', capture: false },
       infoText: (_data, _matches, output) => output.text(),
@@ -157,7 +163,7 @@ Options.Triggers.push({
       },
     },
     {
-      id: 'R3N Infernal Spin Counterclockwise',
+      id: 'M3N Infernal Spin Counterclockwise',
       type: 'StartsUsing',
       netRegex: { id: '9B43', source: 'Brute Bomber', capture: false },
       infoText: (_data, _matches, output) => output.text(),

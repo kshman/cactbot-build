@@ -131,10 +131,16 @@ const crossMapSouthCorner = {
 const stayGoOutputStrings = {
   stay: {
     en: 'Stay',
+    de: 'Bleib Stehen',
+    fr: 'Restez',
+    ja: 'そのまま跳ばない',
     ko: '그대로',
   },
   goAcross: {
     en: 'Go Across',
+    de: 'Geh rüber',
+    fr: 'Traversez',
+    ja: '反対側へ跳ぶ',
     ko: '건너가서',
   },
 };
@@ -200,11 +206,17 @@ Options.Triggers.push({
       outputStrings: {
         frontRight: {
           en: 'Front + Boss\'s Right',
+          de: 'Vorne + Rechts vom Boss',
+          fr: 'Devant + Droite du boss',
+          ja: '前方 + ボスの右側',
           ko: '▲앞쪽 🡸왼쪽',
         },
         ...stayGoOutputStrings,
         frontRightKnockaround: {
           en: 'Front + Boss\'s Right (${stayGo})',
+          de: 'Vorne + Rechts vom Boss (${stayGo})',
+          fr: 'Devant + Droite du boss (${stayGo})',
+          ja: '前方 + ボスの右側 (${stayGo})',
           ko: '${stayGo} ▲앞쪽 🡸왼쪽',
         },
       },
@@ -224,11 +236,17 @@ Options.Triggers.push({
       outputStrings: {
         frontLeft: {
           en: 'Front + Boss\'s Left',
+          de: 'Vorne + Links vom Boss',
+          fr: 'Devant + Gauche du boss',
+          ja: '前方 + ボスの左側',
           ko: '▲앞쪽 🡺오른쪽',
         },
         ...stayGoOutputStrings,
         frontLeftKnockaround: {
           en: 'Front + Boss\'s Left (${stayGo})',
+          de: 'Vorne + Links vom Boss (${stayGo})',
+          fr: 'Devant + Gauche du boss(${stayGo})',
+          ja: '前方 + ボスの左側 (${stayGo})',
           ko: '${stayGo} ▲앞쪽 🡺오른쪽',
         },
       },
@@ -248,11 +266,17 @@ Options.Triggers.push({
       outputStrings: {
         backRight: {
           en: 'Behind + Boss\'s Left',
+          de: 'Hinten + Links vom Boss',
+          fr: 'Derrière + Gauche du boss',
+          ja: '後方 + ボスの左側',
           ko: '▼뒤쪽 🡸왼쪽',
         },
         ...stayGoOutputStrings,
         backRightKnockaround: {
           en: 'Behind + Boss\'s Left (${stayGo})',
+          de: 'Hinten + Links vom Boss (${stayGo})',
+          fr: 'Derrière + Gauche du boss (${stayGo})',
+          ja: '後方 + ボスの左側 (${stayGo})',
           ko: '${stayGo} ▼뒤쪽 🡸왼쪽',
         },
       },
@@ -272,11 +296,17 @@ Options.Triggers.push({
       outputStrings: {
         backLeft: {
           en: 'Behind + Boss\'s Right',
+          de: 'Hinten + Rechts vom Boss',
+          fr: 'Derrière + Droite du boss',
+          ja: '後方 + ボスの右側',
           ko: '▼뒤쪽 🡺오른쪽',
         },
         ...stayGoOutputStrings,
         backLeftKnockaround: {
           en: 'Behind + Boss\'s Right (${stayGo})',
+          de: 'Hinten + Rechts vom Boss (${stayGo})',
+          fr: 'Derrière + Droite du boss (${stayGo})',
+          ja: '後方 + ボスの右側 (${stayGo})',
           ko: '${stayGo} ▼뒤쪽 🡺오른쪽',
         },
       },
@@ -367,30 +397,51 @@ Options.Triggers.push({
       outputStrings: {
         insideWest: {
           en: 'Inner West Diamond',
+          de: 'Innerer Westlicher Diamant',
+          fr: 'Diamant intérieur Ouest',
+          ja: '内側 西の床へ',
           ko: '칼질! 가운데칸 🡸왼쪽',
         },
         insideEast: {
           en: 'Inner East Diamond',
+          de: 'Innerer Östlicher Diamant',
+          fr: 'Diamant intérieur Est',
+          ja: '内側 東の床へ',
           ko: '칼질! 가운데칸 🡺오른쪽',
         },
         insideNS: {
           en: 'Inner North/South Diamonds - ${lean}',
+          de: 'Innerer Nördlicher/Südlicher Diamant - ${lean}',
+          fr: 'Diamant intérieur Nord/Sud - ${lean}',
+          ja: '内側 南/北の床へ - ${lean}',
           ko: '칼질! 가운데칸 ⇅위아래 (${lean})',
         },
         leanWest: {
           en: 'Lean West',
+          de: 'Westlich halten',
+          fr: 'Vers l\'Ouest',
+          ja: '西寄り',
           ko: '살짝 🡸왼쪽',
         },
         leanEast: {
           en: 'Lean East',
+          de: 'Östlich halten',
+          fr: 'Vers l\'Est',
+          ja: '東寄り',
           ko: '살짝 🡺오른쪽',
         },
         intercardsEast: {
           en: 'Outer Intercard Diamonds - East',
+          de: 'Äußere Interkardinale Diamanten - Osten',
+          fr: 'Diamant extérieur intercardinal - Est',
+          ja: '外側 斜めの床 - 東',
           ko: '칼질! 바깥칸 비스듬히 🡸왼쪽',
         },
         intercardsWest: {
           en: 'Outer Intercard Diamonds - West',
+          de: 'Äußere Interkardinale Diamanten - Westen',
+          fr: 'Diamant extérieur intercardinal - Ouest',
+          ja: '外側 斜めの床 - 西',
           ko: '칼질! 바깥칸 비스듬히 🡺오른쪽',
         },
       },
@@ -569,14 +620,23 @@ Options.Triggers.push({
       outputStrings: {
         leanLeft: {
           en: '<= Inside Left (Facing Boss)',
+          de: '<= Innen links (Boss anschauen)',
+          fr: '<= Gauche intérieur (en regardant le boss)',
+          ja: '<= 左内側 (ボス正面)',
           ko: '가운데칸 🡸왼쪽',
         },
         leanRight: {
           en: 'Inside Right (Facing Boss) =>',
+          de: 'Innen Rechts (Boss anschauen) =>',
+          fr: 'Droite intérieur (en regardant le boss) =>',
+          ja: '右内側 (ボス正面) =>',
           ko: '가운테칸 🡺오른쪽',
         },
         corner: {
           en: 'Corners Safe',
+          de: 'Ecken sicher',
+          fr: 'Coins sûrs',
+          ja: '隅が安地',
           ko: '구석 안전',
         },
         northwest: {
@@ -597,19 +657,30 @@ Options.Triggers.push({
         },
         fire: {
           en: 'Go Far',
+          de: 'Weit gehen',
+          ja: '離れて',
           ko: '불장판',
         },
         wind: Outputs.knockback,
         fireWindSafe: {
           en: '${fireWind} ${safeDir}',
+          de: '${fireWind} ${safeDir}',
+          fr: '${fireWind} ${safeDir}',
+          ja: '${fireWind} ${safeDir}',
           ko: '${fireWind}${safeDir}',
         },
         combo: {
           en: '${fireWindCombo} + ${tile}',
+          de: '${fireWindCombo} + ${tile}',
+          fr: '${fireWindCombo} + ${tile}',
+          ja: '${fireWindCombo} + ${tile}',
           ko: '${fireWindCombo} + ${tile}',
         },
         unknown: {
           en: 'Avoid Swords',
+          de: 'Vermeide Schwerter',
+          fr: 'Évitez les épées',
+          ja: '剣を避けて',
           ko: '칼 피해요',
         },
       },
@@ -646,10 +717,16 @@ Options.Triggers.push({
       outputStrings: {
         enumOnYou: {
           en: 'Partner stack (on you)',
+          de: 'Mit Partner sammeln (auf dir)',
+          fr: 'Package partenaire (sur vous)',
+          ja: 'ペア頭割り（自分が対象）',
           ko: '내게 드럼! 산개 위치로!',
         },
         enumKnockback: {
           en: 'Partner stack (knockback)',
+          de: 'Mit Partner sammeln (Rückstoß)',
+          fr: 'Package partenaire (poussée)',
+          ja: 'ペア頭割り（跳ばされる）',
           ko: '넉백당해 날라가욧!',
         },
       },
@@ -765,14 +842,23 @@ Options.Triggers.push({
       outputStrings: {
         unknown: {
           en: 'Safe Quadrant + Spread Out',
+          de: 'Sicherer Quadrant + Verteilen',
+          fr: 'Quadrant sûr + Dispersion',
+          ja: '安地で散開',
           ko: '안전한 칸으로 + 흩어져요',
         },
         left: {
           en: '<= Front Left Quadrant + Spread Out',
+          de: '<= Vorderer linker Quadrant + Verteilen',
+          fr: '<= Quadrant avant gauche + Dispersion',
+          ja: '<= 前方左の床へ + 散開',
           ko: '🡼앞왼쪽 + 흩어져요',
         },
         right: {
           en: 'Front Right Quadrant + Spread Out =>',
+          de: 'Vorderer rechter Quadrant + Verteilen =>',
+          fr: 'Quadrant avant droit + Dispersion =>',
+          ja: '前方右の床へ + 散開 =>',
           ko: '🡽앞오른쪽 + 흩어져요',
         },
       },
@@ -828,6 +914,9 @@ Options.Triggers.push({
         ...stayGoOutputStrings,
         combo: {
           en: '${breakChains} (${stayGo})',
+          de: '${breakChains} (${stayGo})',
+          fr: '${breakChains} (${stayGo})',
+          ja: '${breakChains} (${stayGo})',
           ko: '${stayGo} ${breakChains}',
         },
       },
@@ -857,16 +946,25 @@ Options.Triggers.push({
       outputStrings: {
         left: {
           en: 'Boss\'s Left',
+          de: 'Links vom Boss',
+          fr: 'À gauche du boss',
+          ja: 'ボスの左側',
           ko: '🡸왼쪽으로!!',
         },
         right: {
           en: 'Boss\'s Right',
+          de: 'Rechts vom Boss',
+          fr: 'À droite du boss',
+          ja: 'ボスの右側',
           ko: '🡺오른쪽으로!!',
         },
         in: Outputs.in,
         out: Outputs.out,
         combo: {
           en: '${inOut} + ${side}',
+          de: '${inOut} + ${side}',
+          fr: '${inOut} + ${side}',
+          ja: '${inOut} + ${side}',
           ko: '칼질! ${inOut} + ${side}',
         },
       },
@@ -884,6 +982,9 @@ Options.Triggers.push({
       outputStrings: {
         rightSword: {
           en: 'Boss\'s Left',
+          de: 'Links vom Boss',
+          fr: 'À gauche du boss',
+          ja: 'ボスの左側',
           ko: '칼질! 🡸왼쪽으로!!',
         },
       },
@@ -897,6 +998,9 @@ Options.Triggers.push({
       outputStrings: {
         leftSword: {
           en: 'Boss\'s Right',
+          de: 'Rechts vom Boss',
+          fr: 'À droite du boss',
+          ja: 'ボスの右側',
           ko: '칼질! 🡺오른쪽으로!!',
         },
       },
@@ -934,18 +1038,30 @@ Options.Triggers.push({
       outputStrings: {
         inside: {
           en: 'Inside Safe',
+          de: 'Innen sicher',
+          fr: 'Intérieur sûr',
+          ja: '内側が安地',
           ko: '안쪽 안전',
         },
         eastWest: {
           en: 'Inside East/West Safe',
+          de: 'Innen Osten/Westen sicher',
+          fr: 'Intérieur Est/Ouest sûr',
+          ja: '内側 東/西が安地',
           ko: '안쪽 동서 안전',
         },
         northSouth: {
           en: 'Inside North/South Safe',
+          de: 'Innen Norden/Süden sicher',
+          fr: 'Intérieur Nord/Sud sûr',
+          ja: '内側 北/南が安地',
           ko: '안쪽 남북 안전',
         },
         intercard: {
-          en: 'Ouside Intercards Safe (Avoid Corners)',
+          en: 'Outside Intercards Safe (Avoid Corners)',
+          de: 'Außen Interkardinal sicher (Ecken vermeiden)',
+          fr: 'Intercardinal extérieur sûr (Évitez les coins)',
+          ja: '外側 斜めが安地（隅に注意）',
           ko: '바깥쪽 비스듬 안전 (구석은 피해요)',
         },
       },
