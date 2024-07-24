@@ -29,6 +29,8 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: 'Get under Flytrap',
           de: 'Geh unter die Fliegenfalle',
+          ja: 'ドーナツ範囲に入る',
+          cn: '进入月环',
           ko: '나무 놈 아래로',
         },
       },
@@ -43,6 +45,8 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: 'Stay out of inhale',
           de: 'Steh auserhalb des Soges',
+          ja: '吸い込む範囲から離れる',
+          cn: '躲开 Boss 吸气 + 全场 AoE',
           ko: '부채꼴 피해요',
         },
       },
@@ -73,6 +77,8 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: 'Dodge Ivy cleaves (small)',
           de: 'Efeu-Cleave ausweichen (klein)',
+          ja: '植物の直線範囲攻撃を避ける (小)',
+          cn: '注意触手直线AoE (小)',
           ko: '좁은 장판 피해요',
         },
       },
@@ -88,6 +94,8 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: 'Dodge Ivy cleaves (big)',
           de: 'Efeu-Cleave ausweichen (groß)',
+          ja: '植物の直線範囲攻撃を避ける (大)',
+          cn: '注意触手直线AoE (大)',
           ko: '넓은 장판 피해요',
         },
       },
@@ -128,6 +136,8 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: 'Away on 3rd jump',
           de: 'Weg vom 3. Sprung',
+          ja: '3回目のジャンプ目標地点から離れる',
+          cn: '远离第三次跳跃落点',
           ko: '점프 세번 🔜 장판 피해요',
         },
       },
@@ -142,6 +152,8 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: 'Away on 3rd jump',
           de: 'Weg vom 3. Sprung',
+          ja: '3回目のジャンプ目標地点から離れる',
+          cn: '远离第三次跳跃落点',
           ko: '점프 세번 🔜 장판 피해요',
         },
       },
@@ -163,7 +175,9 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: 'In, then follow jump',
           de: 'Rein, dann Sprüngen folgen',
-          ko: '안으로, 그담에 점프 따라가요',
+          ja: 'ドーナツ、そしてボスを追いかける',
+          cn: '进入月环 => 去BOSS身后',
+          ko: '도넛 안으로 🔜 보스 점프 후 엉댕이로',
         },
       },
     },
@@ -177,6 +191,8 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: 'Avoid Whirlwind star lines',
           de: 'Wirbelwind-Sternenlinien vermeiden',
+          ja: '風の8方向直線攻撃から避ける',
+          cn: '注意风圈星形的直线AoE',
           ko: '별모양 회오리 피해요',
         },
       },
@@ -191,6 +207,8 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: 'Avoid Whirlwind star lines',
           de: 'Wirbelwind-Sternenlinien vermeiden',
+          ja: '風の8方向直線攻撃から避ける',
+          cn: '注意风圈星形的直线AoE',
           ko: '별모양 회오리 피해요',
         },
       },
@@ -205,6 +223,8 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: 'Avoid Whirlwind star lines',
           de: 'Wirbelwind-Sternenlinien vermeiden',
+          ja: '風の8方向直線攻撃から避ける',
+          cn: '注意风圈星形的直线AoE',
           ko: '별모양 회오리 피해요',
         },
       },
@@ -304,7 +324,6 @@ const triggerSet: TriggerSet<Data> = {
     },
     {
       'locale': 'ja',
-      'missingTranslations': true,
       'replaceSync': {
         'Apollyon': 'アポリオン',
         'Drowsie': 'ドラウジー',
