@@ -27,17 +27,21 @@ const directionOutputStrings = {
     ja: '西',
     ko: '◀',
   },
+  unknown: Outputs.unknown,
   goLeft: Outputs.getLeftAndWest,
   goRight: Outputs.getRightAndEast,
-  unknown: Outputs.unknown,
   separator: {
     en: ' => ',
     de: ' => ',
+    ja: ' => ',
+    cn: ' => ',
     ko: ' ',
   },
   combo: {
     en: '${dirs}',
     de: '${dirs}',
+    ja: '${dirs}',
+    cn: '${dirs}',
     ko: '안전: ${dirs}',
   },
 };
@@ -156,7 +160,7 @@ Options.Triggers.push({
       },
       // Delay half a second to allow `ActorSetPos` line to happen as well
       delaySeconds: 0.5,
-      durationSeconds: 9,
+      durationSeconds: 7.3,
       suppressSeconds: 1,
       infoText: (data, _matches, output) => {
         const dirs = data.storedCleaves.map((entry) => {
@@ -315,7 +319,10 @@ Options.Triggers.push({
       outputStrings: {
         text: {
           en: 'East offset safe',
-          ko: '동쪽 옵셋 안전',
+          de: 'Ost-Offset sicher',
+          ja: '最東端の床へ',
+          cn: '右(东)侧 安全',
+          ko: '가장 동쪽 바닥으로',
         },
       },
     },
@@ -329,7 +336,10 @@ Options.Triggers.push({
       outputStrings: {
         text: {
           en: 'South offset safe',
-          ko: '남쪽 옵셋 안전',
+          de: 'Süd-Offset sicher',
+          ja: '最南端の床へ',
+          cn: '下(南)侧 安全',
+          ko: '가장 남쪽 바닥으로',
         },
       },
     },
@@ -343,7 +353,10 @@ Options.Triggers.push({
       outputStrings: {
         text: {
           en: 'West offset safe',
-          ko: '서쪽 옵셋 안전',
+          de: 'West-Offset sicher',
+          ja: '最西端の床へ',
+          cn: '左(西)侧 安全',
+          ko: '가장 서쪽 바닥으로',
         },
       },
     },
@@ -357,7 +370,10 @@ Options.Triggers.push({
       outputStrings: {
         text: {
           en: 'North offset safe',
-          ko: '북쪽 옵셋 안전',
+          de: 'Nord-Offset sicher',
+          ja: '最北端の床へ',
+          cn: '上(北)侧 安全',
+          ko: '가장 북쪽 바닥으로',
         },
       },
     },
@@ -502,16 +518,22 @@ Options.Triggers.push({
     },
     {
       'locale': 'ja',
-      'missingTranslations': true,
       'replaceSync': {
         'Wicked Replica': 'ウィケッドサンダーの幻影',
         'Wicked Thunder': 'ウィケッドサンダー',
       },
       'replaceText': {
+        'west--': '西--',
+        '--east': '--東',
+        '\\(cast\\)': '(詠唱)',
+        '\\(clone\\)': '(分身)',
+        '\\(damage\\)': '(ダメージ)',
         'Bewitching Flight': 'フライングウィッチ',
         'Burst': '爆発',
         'Fivefold Blast': 'クインティカノン',
         'Fourfold Blast': 'クアドラカノン',
+        'Right Roll': 'ライトロール',
+        'Left Roll': 'レフトロール',
         'Shadows\' Sabbath': 'ブラックサバト',
         'Sidewise Spark': 'サイドスパーク',
         'Soaring Soulpress': 'フライング・ソウルプレス',
