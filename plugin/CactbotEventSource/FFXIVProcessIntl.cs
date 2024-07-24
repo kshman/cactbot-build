@@ -277,6 +277,8 @@ namespace Cactbot {
                 return JObject.FromObject(*(SageJobMemory*)&p[0]);
             case EntityJob.RPR:
                 return JObject.FromObject(*(ReaperJobMemory*)&p[0]);
+            case EntityJob.VPR:
+                return JObject.FromObject(*(ViperJobMemory*)&p[0]);
             case EntityJob.PCT:
                 return JObject.FromObject(*(PictomancerJobMemory*)&p[0]);
           }
@@ -546,6 +548,12 @@ namespace Cactbot {
       public bool paradox {
         get {
           return enochian_state.HasFlag(EnochianFlags.Paradox);
+        }
+      }
+
+      public int astralSoulStacks {
+        get {
+          return ((int)enochian_state >> 2) & 0x7; // = 0b111, to get the last 3 bits.
         }
       }
     };
@@ -923,6 +931,47 @@ namespace Cactbot {
       [FieldOffset(0x05)]
       public byte voidShroud;
     }
+
+    [StructLayout(LayoutKind.Explicit)]
+    public struct ViperJobMemory {
+      public enum AdvancedCombo : byte {
+        Dreadwinder = 1,
+        HuntersCoil = 2,
+        SwiftskinsCoil = 3,
+        PitOfDread = 4,
+        HuntersDen = 5,
+        SwiftskinsDen = 6,
+        Reawaken = 7,
+        FirstGeneration = 8,
+        SecondGeneration = 9,
+        ThirdGeneration = 10,
+        FourthGeneration = 11,
+      }
+
+      [FieldOffset(0x00)]
+      public byte rattlingCoilStacks;
+
+      [FieldOffset(0x01)]
+      public byte anguineTribute;
+
+      [FieldOffset(0x02)]
+      public byte serpentOffering;
+
+      [NonSerialized]
+      [FieldOffset(0x03)]
+      private AdvancedCombo _advancedCombo;
+
+      public string advancedCombo {
+        get {
+          return _advancedCombo.ToString();
+        }
+      }
+
+      [FieldOffset(0x06)]
+      public ushort reawakenedTimer;
+    }
+
+
 
     [StructLayout(LayoutKind.Explicit)]
     public struct PictomancerJobMemory {

@@ -202,22 +202,21 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, matches, output) => {
         const heading = parseFloat(matches.heading);
         const dir = Directions.hdgTo8DirNum(heading);
-        if (dir % 2 === 0) {
+        if (dir % 2 === 0)
           // `dir % 2 === 0` = this is aimed at a cardinal, so intercards safe first
           return output.cardsIntercards!();
-        }
         return output.intercardsCards!();
       },
       outputStrings: {
         cardsIntercards: {
           en: 'Cards => Intercards',
           de: 'Karten => Interkardinal',
-          ko: '십자 🔜 비스듬히',
+          ko: '비스듬 🔜 십자로',
         },
         intercardsCards: {
           en: 'Intercards => Cards',
           de: 'Interkardinal => Karten',
-          ko: '비스듬 🔜 십자로',
+          ko: '십자 🔜 비스듬히',
         },
       },
     },
@@ -269,7 +268,7 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: 'West => East at marker',
           de: 'Westen => Osten bei der Markierung',
-          ko: '서쪽 🔜 동쪽 마커로',
+          ko: '서쪽 🔜 마커의 동쪽',
         },
       },
     },
@@ -283,7 +282,7 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: 'East => West at marker',
           de: 'Osten => Westen bei der Markierung',
-          ko: '동쪽 🔜 서쪽 마커로',
+          ko: '동쪽 🔜 마커의 서쪽',
         },
       },
     },
@@ -297,7 +296,7 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: 'West => East at marker',
           de: 'Westen => Osten bei der Markierung',
-          ko: '서쪽 🔜 동쪽 마커로',
+          ko: '서쪽 🔜 마커의 동쪽',
         },
       },
     },
@@ -311,7 +310,7 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: 'East => West at marker',
           de: 'Osten => Westen bei der Markierung',
-          ko: '동쪽 🔜 서쪽 마커로',
+          ko: '동쪽 🔜 마커의 서쪽',
         },
       },
     },
