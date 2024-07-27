@@ -432,6 +432,8 @@ export class CactbotConfigurator {
       const args = Array.isArray(path) ? path : [path];
       const info = JSON.stringify([group, ...args].join(', '));
       console.error(
+        // FIXME:
+        // eslint-disable-next-line @typescript-eslint/no-base-to-string
         `Unexpected type: ${info}, ${objOrValue.toString()}, ${typeof objOrValue}, ${typeof defaultValue}`,
       );
       return defaultValue;
