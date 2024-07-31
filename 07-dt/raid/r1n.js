@@ -19,130 +19,194 @@ const mapEffectTileOverlay = {
 const mapEffectData = {
   '00': {
     'location': '00',
+    'centerX': 85,
+    'centerY': 85,
     ...mapEffectTileState,
   },
   '01': {
     'location': '01',
+    'centerX': 95,
+    'centerY': 85,
     ...mapEffectTileState,
   },
   '02': {
     'location': '02',
+    'centerX': 105,
+    'centerY': 85,
     ...mapEffectTileState,
   },
   '03': {
     'location': '03',
+    'centerX': 115,
+    'centerY': 85,
     ...mapEffectTileState,
   },
   '04': {
     'location': '04',
+    'centerX': 85,
+    'centerY': 95,
     ...mapEffectTileState,
   },
   '05': {
     'location': '05',
+    'centerX': 95,
+    'centerY': 95,
     ...mapEffectTileState,
   },
   '06': {
     'location': '06',
+    'centerX': 105,
+    'centerY': 95,
     ...mapEffectTileState,
   },
   '07': {
     'location': '07',
+    'centerX': 115,
+    'centerY': 95,
     ...mapEffectTileState,
   },
   '08': {
     'location': '08',
+    'centerX': 85,
+    'centerY': 105,
     ...mapEffectTileState,
   },
   '09': {
     'location': '09',
+    'centerX': 95,
+    'centerY': 105,
     ...mapEffectTileState,
   },
   '0A': {
     'location': '0A',
+    'centerX': 105,
+    'centerY': 105,
     ...mapEffectTileState,
   },
   '0B': {
     'location': '0B',
+    'centerX': 115,
+    'centerY': 105,
     ...mapEffectTileState,
   },
   '0C': {
     'location': '0C',
+    'centerX': 85,
+    'centerY': 115,
     ...mapEffectTileState,
   },
   '0D': {
     'location': '0D',
+    'centerX': 95,
+    'centerY': 115,
     ...mapEffectTileState,
   },
   '0E': {
     'location': '0E',
+    'centerX': 105,
+    'centerY': 115,
     ...mapEffectTileState,
   },
   '0F': {
     'location': '0F',
+    'centerX': 115,
+    'centerY': 115,
     ...mapEffectTileState,
   },
   '10': {
     'location': '10',
+    'centerX': 85,
+    'centerY': 85,
     ...mapEffectTileOverlay,
   },
   '11': {
     'location': '11',
+    'centerX': 95,
+    'centerY': 85,
     ...mapEffectTileOverlay,
   },
   '12': {
     'location': '12',
+    'centerX': 105,
+    'centerY': 85,
     ...mapEffectTileOverlay,
   },
   '13': {
     'location': '13',
+    'centerX': 115,
+    'centerY': 85,
     ...mapEffectTileOverlay,
   },
   '14': {
     'location': '14',
+    'centerX': 85,
+    'centerY': 95,
     ...mapEffectTileOverlay,
   },
   '15': {
     'location': '15',
+    'centerX': 95,
+    'centerY': 95,
     ...mapEffectTileOverlay,
   },
   '16': {
     'location': '16',
+    'centerX': 105,
+    'centerY': 95,
     ...mapEffectTileOverlay,
   },
   '17': {
     'location': '17',
+    'centerX': 115,
+    'centerY': 95,
     ...mapEffectTileOverlay,
   },
   '18': {
     'location': '18',
+    'centerX': 85,
+    'centerY': 105,
     ...mapEffectTileOverlay,
   },
   '19': {
     'location': '19',
+    'centerX': 95,
+    'centerY': 105,
     ...mapEffectTileOverlay,
   },
   '1A': {
     'location': '1A',
+    'centerX': 105,
+    'centerY': 105,
     ...mapEffectTileOverlay,
   },
   '1B': {
     'location': '1B',
+    'centerX': 115,
+    'centerY': 105,
     ...mapEffectTileOverlay,
   },
   '1C': {
     'location': '1C',
+    'centerX': 85,
+    'centerY': 115,
     ...mapEffectTileOverlay,
   },
   '1D': {
     'location': '1D',
+    'centerX': 95,
+    'centerY': 115,
     ...mapEffectTileOverlay,
   },
   '1E': {
     'location': '1E',
+    'centerX': 105,
+    'centerY': 115,
     ...mapEffectTileOverlay,
   },
   '1F': {
     'location': '1F',
+    'centerX': 115,
+    'centerY': 115,
     ...mapEffectTileOverlay,
   },
 };
@@ -163,24 +227,112 @@ console.assert(headMarkerData);
 Options.Triggers.push({
   id: 'AacLightHeavyweightM1',
   zoneId: ZoneId.AacLightHeavyweightM1,
-  timelineFile: 'm1n.txt',
+  timelineFile: 'r1n.txt',
+  initData: () => ({
+    actorSetPosTracker: {},
+    mouserDangerSquares: [],
+  }),
   triggers: [
     {
-      id: 'M1N One-two Paw Right Left',
+      id: 'R1N ActorSetPos Collector',
+      type: 'ActorSetPos',
+      netRegex: { id: '4[0-9A-F]{7}', capture: true },
+      run: (data, matches) => {
+        data.actorSetPosTracker[matches.id] = matches;
+      },
+    },
+    {
+      id: 'R1N Mouser',
+      type: 'StartsUsing',
+      netRegex: { id: ['9315', '996B'], capture: true },
+      condition: (data, matches) => {
+        const actorSetPosLine = data.actorSetPosTracker[matches.sourceId];
+        if (actorSetPosLine === undefined)
+          return false;
+        const x = parseFloat(actorSetPosLine.x);
+        const y = parseFloat(actorSetPosLine.y);
+        /*
+                Exmaple lines:
+                ActorSetPos to middle of danger square
+                271|2024-07-16T21:52:30.1570000-04:00|40011591|-0.0001|00|00|85.0000|115.0000|0.0000|568c67125874f71f
+                StartsUsing, 9315 = first hit, 996B = second hit
+                20|2024-07-16T21:52:30.2340000-04:00|40011591|Black Cat|9315|unknown_9315|40011591|Black Cat|0.700|85.00|115.00|0.00|0.00|64ce76ea56417e29
+                Rest of lines not relevant for trigger, but show cast target is north middle edge of square, facing south
+                263|2024-07-16T21:52:30.2340000-04:00|40011591|9315|84.994|109.989|0.000|0.000|dc062eb396f50364
+                21|2024-07-16T21:52:31.2130000-04:00|40011591|Black Cat|9315|unknown_9315|40011591|Black Cat|1B|93158000|0|0|0|0|0|0|0|0|0|0|0|0|0|0|44|44|0|10000|||85.00|115.00|0.00|0.00|44|44|0|10000|||85.00|115.00|0.00|0.00|00008530|0|1|00||01|9315|9315|0.200|7FFF|9ed19cd6e527be66
+                264|2024-07-16T21:52:31.2130000-04:00|40011591|9315|00008530|0|||||9177fd99528a2344
+                 */
+        const loc = Object.values(mapEffectData)
+          .find((tile) =>
+            tile.location.startsWith('0') && Math.abs(tile.centerX - x) < 1 &&
+            Math.abs(tile.centerY - y) < 1
+          );
+        if (loc === undefined)
+          return false;
+        data.mouserDangerSquares.push(loc.location);
+        // If we have one or three matches for sw/se inner squares, and this was one of those squares
+        // give the player a callout
+        const swseEntries = data.mouserDangerSquares
+          .filter((square) => ['09', '0A'].includes(square)).length;
+        if ((swseEntries === 1 || swseEntries === 3) && ['09', '0A'].includes(loc.location))
+          return true;
+        return false;
+      },
+      durationSeconds: (data) => {
+        const swseEntries = data.mouserDangerSquares
+          .filter((square) => ['09', '0A'].includes(square)).length;
+        if (swseEntries === 1)
+          return 9;
+        return 11;
+      },
+      infoText: (data, _matches, output) => {
+        const entries = data.mouserDangerSquares.filter((square) => ['09', '0A'].includes(square));
+        const dirs = entries.map((e) => e === '09' ? 'dirSE' : 'dirSW')
+          .map((e) => output[e]());
+        return output.combo({ dirs: dirs.join(output.separator()) });
+      },
+      outputStrings: {
+        ...Directions.outputStrings8Dir,
+        separator: {
+          en: ' => ',
+          de: ' => ',
+          ja: ' => ',
+          cn: ' => ',
+          ko: ' 🔜 ',
+        },
+        combo: {
+          en: '${dirs}',
+          de: '${dirs}',
+          ja: '${dirs}',
+          cn: '${dirs}',
+          ko: '${dirs}',
+        },
+      },
+    },
+    {
+      id: 'R1N Mouser Cleanup',
+      type: 'StartsUsing',
+      netRegex: { id: ['9315', '996B'], capture: false },
+      delaySeconds: 15,
+      suppressSeconds: 15,
+      run: (data) => data.mouserDangerSquares = [],
+    },
+    {
+      id: 'R1N One-two Paw Right Left',
       type: 'StartsUsing',
       netRegex: { id: '9309', source: 'Black Cat', capture: false },
       durationSeconds: 9.5,
       response: Responses.goLeftThenRight(),
     },
     {
-      id: 'M1N One-two Paw Left Right',
+      id: 'R1N One-two Paw Left Right',
       type: 'StartsUsing',
       netRegex: { id: '930C', source: 'Black Cat', capture: false },
       durationSeconds: 9.5,
       response: Responses.goRightThenLeft(),
     },
     {
-      id: 'M1N Black Cat Crossing',
+      id: 'R1N Black Cat Crossing',
       type: 'StartsUsingExtra',
       netRegex: { id: '9311', capture: true },
       suppressSeconds: 5,
@@ -189,24 +341,24 @@ Options.Triggers.push({
         const dir = Directions.hdgTo8DirNum(heading);
         if (dir % 2 === 0)
           // `dir % 2 === 0` = this is aimed at a cardinal, so intercards safe first
-          return output.cardsIntercards();
-        return output.intercardsCards();
+          return output.intercardsCards();
+        return output.cardsIntercards();
       },
       outputStrings: {
         cardsIntercards: {
           en: 'Cards => Intercards',
           de: 'Karten => Interkardinal',
-          ko: '비스듬 🔜 십자로',
+          ko: '십자 🔜 비스듬히',
         },
         intercardsCards: {
           en: 'Intercards => Cards',
           de: 'Interkardinal => Karten',
-          ko: '십자 🔜 비스듬히',
+          ko: '비스듬 🔜 십자로',
         },
       },
     },
     {
-      id: 'M1N Elevate and Eviscerate',
+      id: 'R1N Elevate and Eviscerate',
       type: 'StartsUsing',
       netRegex: { id: '9317', source: ['Black Cat', 'Copy Cat'], capture: true },
       condition: Conditions.targetIsYou(),
@@ -220,31 +372,31 @@ Options.Triggers.push({
       },
     },
     {
-      id: 'M1N Bloody Scratch',
+      id: 'R1N Bloody Scratch',
       type: 'StartsUsing',
       netRegex: { id: '9340', source: 'Black Cat', capture: false },
       response: Responses.aoe(),
     },
     {
-      id: 'M1N Biscuit Maker',
+      id: 'R1N Biscuit Maker',
       type: 'StartsUsing',
       netRegex: { id: '934A', source: 'Black Cat', capture: true },
       response: Responses.tankBuster(),
     },
     {
-      id: 'M1N Clawful',
+      id: 'R1N Clawful',
       type: 'StartsUsing',
       netRegex: { id: '933C', source: 'Black Cat', capture: true },
       response: Responses.stackMarkerOn(),
     },
     {
-      id: 'M1N Overshadow',
+      id: 'R1N Overshadow',
       type: 'StartsUsing',
       netRegex: { id: '9319', source: 'Black Cat', capture: true },
       response: Responses.stackMarkerOn(),
     },
     {
-      id: 'M1N Leaping One-two Paw West West East',
+      id: 'R1N Leaping One-two Paw West West East',
       type: 'StartsUsing',
       netRegex: { id: '931F', source: 'Black Cat', capture: false },
       durationSeconds: 10.5,
@@ -258,7 +410,7 @@ Options.Triggers.push({
       },
     },
     {
-      id: 'M1N Leaping One-two Paw West East West',
+      id: 'R1N Leaping One-two Paw West East West',
       type: 'StartsUsing',
       netRegex: { id: '9320', source: 'Black Cat', capture: false },
       durationSeconds: 10.5,
@@ -272,7 +424,7 @@ Options.Triggers.push({
       },
     },
     {
-      id: 'M1N Leaping One-two Paw East West East',
+      id: 'R1N Leaping One-two Paw East West East',
       type: 'StartsUsing',
       netRegex: { id: '9321', source: 'Black Cat', capture: false },
       durationSeconds: 10.5,
@@ -286,7 +438,7 @@ Options.Triggers.push({
       },
     },
     {
-      id: 'M1N Leaping One-two Paw East East West',
+      id: 'R1N Leaping One-two Paw East East West',
       type: 'StartsUsing',
       netRegex: { id: '9322', source: 'Black Cat', capture: false },
       durationSeconds: 10.5,
@@ -300,7 +452,7 @@ Options.Triggers.push({
       },
     },
     {
-      id: 'M1N Shockwave 931D',
+      id: 'R1N Shockwave 931D',
       type: 'StartsUsing',
       netRegex: { id: '931D', source: 'Black Cat', capture: false },
       response: Responses.knockback(),
@@ -338,7 +490,6 @@ Options.Triggers.push({
     },
     {
       'locale': 'fr',
-      'missingTranslations': true,
       'replaceSync': {
         'Black Cat': 'Black Cat',
         'Copy Cat': 'double félin',
@@ -359,11 +510,15 @@ Options.Triggers.push({
         'Overshadow': 'Ombragement',
         'Predaceous Pounce': 'Prédation preste',
         'Shockwave': 'Onde de choc',
+        '\\(cast\\)': '(Incantation)',
+        '\\(damage\\)': '(Dommage)',
+        '\\(hits\\)': '(Coup)',
+        '\\(jump\\)': '(Saut)',
+        '\\(telegraphs\\)': '(Télégraphes)',
       },
     },
     {
       'locale': 'ja',
-      'missingTranslations': true,
       'replaceSync': {
         'Black Cat': 'ブラックキャット',
         'Copy Cat': 'コピーキャット',
