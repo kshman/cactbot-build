@@ -50,6 +50,7 @@ const directionOutputStrings = {
   separator: {
     en: ' => ',
     de: ' => ',
+    fr: ' => ',
     ja: ' => ',
     cn: ' => ',
     ko: ' ',
@@ -57,6 +58,7 @@ const directionOutputStrings = {
   combo: {
     en: '${dirs}',
     de: '${dirs}',
+    fr: '${dirs}',
     ja: '${dirs}',
     cn: '${dirs}',
     ko: '안전: ${dirs}',
@@ -132,7 +134,7 @@ const headMarkerData = {
 const triggerSet: TriggerSet<Data> = {
   id: 'AacLightHeavyweightM4',
   zoneId: ZoneId.AacLightHeavyweightM4,
-  timelineFile: 'm4n.txt',
+  timelineFile: 'r4n.txt',
   initData: () => ({
     expectedBlasts: 0,
     storedBlasts: [],
@@ -143,7 +145,7 @@ const triggerSet: TriggerSet<Data> = {
   }),
   triggers: [
     {
-      id: 'M4N Actor Collector',
+      id: 'R4N Actor Collector',
       type: 'StartsUsing',
       netRegex: { id: '92C7', source: 'Wicked Thunder', capture: false },
       promise: async (data) => {
@@ -153,7 +155,7 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: 'M4N ActorSetPos Collector',
+      id: 'R4N ActorSetPos Collector',
       type: 'ActorSetPos',
       netRegex: { id: '4[0-9A-F]{7}', capture: true },
       run: (data, matches) => {
@@ -168,7 +170,7 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: 'M4N Clone Cleave Collector',
+      id: 'R4N Clone Cleave Collector',
       type: 'CombatantMemory',
       // Filter to only enemy actors for performance
       // TODO: Change this to an ActorControlExtra line if OverlayPlugin adds SetModelState as a valid category
@@ -226,38 +228,38 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: directionOutputStrings,
     },
     {
-      id: 'M4N Headmarker Soaring Soulpress Stack',
+      id: 'R4N Headmarker Soaring Soulpress Stack',
       type: 'HeadMarker',
       netRegex: { id: headMarkerData.stack, capture: true },
       response: Responses.stackMarkerOn(),
     },
     {
-      id: 'M4N Headmarker Wicked Bolt Multi Hit Stack',
+      id: 'R4N Headmarker Wicked Bolt Multi Hit Stack',
       type: 'HeadMarker',
       netRegex: { id: headMarkerData.multiHitStack, capture: true },
       response: Responses.stackMarkerOn(),
     },
     {
-      id: 'M4N Headmarker Thunderstorm Spread',
+      id: 'R4N Headmarker Thunderstorm Spread',
       type: 'HeadMarker',
       netRegex: { id: headMarkerData.spread, capture: false },
       suppressSeconds: 5,
       response: Responses.spread(),
     },
     {
-      id: 'M4N Headmarker Wicked Jolt Tankbuster',
+      id: 'R4N Headmarker Wicked Jolt Tankbuster',
       type: 'HeadMarker',
       netRegex: { id: headMarkerData.tankBusterLine, capture: true },
       response: Responses.tankBuster(),
     },
     {
-      id: 'M4N Wrath of Zeus',
+      id: 'R4N Wrath of Zeus',
       type: 'StartsUsing',
       netRegex: { id: '92C7', source: 'Wicked Thunder', capture: false },
       response: Responses.aoe(),
     },
     {
-      id: 'M4N Sidewise Spark Counter',
+      id: 'R4N Sidewise Spark Counter',
       type: 'StartsUsing',
       netRegex: { id: ['92BC', '92BD', '92BE', '92BF'], source: 'Wicked Thunder', capture: false },
       delaySeconds: 1,
@@ -269,7 +271,7 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: 'M4N Sidewise Spark',
+      id: 'R4N Sidewise Spark',
       type: 'StartsUsing',
       // IDs for safe spots are C/E = left safe, D/F = right safe
       netRegex: { id: ['92BC', '92BE', '92BD', '92BF'], source: 'Wicked Thunder', capture: true },
@@ -303,37 +305,37 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: directionOutputStrings,
     },
     {
-      id: 'M4N Left Roll',
+      id: 'R4N Left Roll',
       type: 'Ability',
       netRegex: { id: '92AC', source: 'Wicked Thunder', capture: false },
       response: Responses.goWest(),
     },
     {
-      id: 'M4N Right Roll',
+      id: 'R4N Right Roll',
       type: 'Ability',
       netRegex: { id: '92AB', source: 'Wicked Thunder', capture: false },
       response: Responses.goEast(),
     },
     {
-      id: 'M4N Threefold Blast Initializer',
+      id: 'R4N Threefold Blast Initializer',
       type: 'StartsUsing',
       netRegex: { id: ['92AD', '92B0'], source: 'Wicked Thunder', capture: false },
       run: (data) => data.expectedBlasts = 3,
     },
     {
-      id: 'M4N Fourfold Blast Initializer',
+      id: 'R4N Fourfold Blast Initializer',
       type: 'StartsUsing',
       netRegex: { id: ['9B4F', '9B55'], source: 'Wicked Thunder', capture: false },
       run: (data) => data.expectedBlasts = 4,
     },
     {
-      id: 'M4N Fivefold Blast Initializer',
+      id: 'R4N Fivefold Blast Initializer',
       type: 'StartsUsing',
       netRegex: { id: ['9B56', '9B57'], source: 'Wicked Thunder', capture: false },
       run: (data) => data.expectedBlasts = 5,
     },
     {
-      id: 'M4N XFold Blast Collector',
+      id: 'R4N XFold Blast Collector',
       type: 'GainsEffect',
       netRegex: { effectId: 'B9A', count: Object.values(effectB9AMap), capture: true },
       condition: (data, matches) => {
@@ -363,7 +365,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: directionOutputStrings,
     },
     {
-      id: 'M4N Bewitching Flight Right Safe',
+      id: 'R4N Bewitching Flight Right Safe',
       type: 'StartsUsing',
       netRegex: { id: '8DE4', source: 'Wicked Thunder', capture: false },
       // Disabled until we have a better way to phrase this.
@@ -373,6 +375,7 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: 'East offset safe',
           de: 'Ost-Offset sicher',
+          fr: 'Offset Est sûr',
           ja: '最東端の床へ',
           cn: '右(东)侧 安全',
           ko: '가장 동쪽 바닥으로',
@@ -380,7 +383,7 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: 'M4N Bewitching Flight South Safe',
+      id: 'R4N Bewitching Flight South Safe',
       type: 'StartsUsing',
       netRegex: { id: '8DE4', source: 'Wicked Replica', capture: false },
       // Disabled until we have a better way to phrase this.
@@ -390,6 +393,7 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: 'South offset safe',
           de: 'Süd-Offset sicher',
+          fr: 'Offset Sud sûr',
           ja: '最南端の床へ',
           cn: '下(南)侧 安全',
           ko: '가장 남쪽 바닥으로',
@@ -397,7 +401,7 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: 'M4N Bewitching Flight Left Safe',
+      id: 'R4N Bewitching Flight Left Safe',
       type: 'StartsUsing',
       netRegex: { id: '8DE6', source: 'Wicked Thunder', capture: false },
       // Disabled until we have a better way to phrase this.
@@ -407,6 +411,7 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: 'West offset safe',
           de: 'West-Offset sicher',
+          fr: 'Offset Ouest sûr',
           ja: '最西端の床へ',
           cn: '左(西)侧 安全',
           ko: '가장 서쪽 바닥으로',
@@ -414,7 +419,7 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: 'M4N Bewitching Flight North Safe',
+      id: 'R4N Bewitching Flight North Safe',
       type: 'StartsUsing',
       netRegex: { id: '8DE6', source: 'Wicked Replica', capture: false },
       // Disabled until we have a better way to phrase this.
@@ -424,6 +429,7 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: 'North offset safe',
           de: 'Nord-Offset sicher',
+          fr: 'Offset Nord sûr',
           ja: '最北端の床へ',
           cn: '上(北)侧 安全',
           ko: '가장 북쪽 바닥으로',
@@ -431,7 +437,7 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: 'M4N Witch Hunt',
+      id: 'R4N Witch Hunt',
       type: 'StartsUsingExtra',
       netRegex: { id: '92B5', capture: true },
       condition: (data, matches) => {
@@ -551,12 +557,18 @@ const triggerSet: TriggerSet<Data> = {
     },
     {
       'locale': 'fr',
-      'missingTranslations': true,
       'replaceSync': {
-        'Wicked Replica': 'copie de Wicked Thunder',
+        'Wicked Replica': 'Copie de Wicked Thunder',
         'Wicked Thunder': 'Wicked Thunder',
       },
       'replaceText': {
+        'Left Roll': 'Rouleau gauche',
+        'Right Roll': 'Rouleau droite',
+        'west--': 'Est--',
+        '--east': '--Ouest',
+        '\\(cast\\)': '(Incantation)',
+        '\\(clone\\)': '(Clone)',
+        '\\(damage\\)': '(Dommage)',
         'Bewitching Flight': 'Vol enchanteur',
         'Burst': 'Explosion',
         'Fivefold Blast': 'Penta-canon',

@@ -5,9 +5,9 @@ import { TriggerSet } from '../../../../../types/trigger';
 export type Data = RaidbossData;
 
 const triggerSet: TriggerSet<Data> = {
-  id: 'AacLightHeavyweightM1Savage',
-  zoneId: ZoneId.AacLightHeavyweightM1Savage,
-  timelineFile: 'm1s.txt',
+  id: 'AacLightHeavyweightM4Savage',
+  zoneId: ZoneId.AacLightHeavyweightM4Savage,
+  timelineFile: 'r4s.txt',
   triggers: [],
 };
 

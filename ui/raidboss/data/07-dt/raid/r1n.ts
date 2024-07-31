@@ -246,14 +246,14 @@ export interface Data extends RaidbossData {
 const triggerSet: TriggerSet<Data> = {
   id: 'AacLightHeavyweightM1',
   zoneId: ZoneId.AacLightHeavyweightM1,
-  timelineFile: 'm1n.txt',
+  timelineFile: 'r1n.txt',
   initData: () => ({
     actorSetPosTracker: {},
     mouserDangerSquares: [],
   }),
   triggers: [
     {
-      id: 'M1N ActorSetPos Collector',
+      id: 'R1N ActorSetPos Collector',
       type: 'ActorSetPos',
       netRegex: { id: '4[0-9A-F]{7}', capture: true },
       run: (data, matches) => {
@@ -261,7 +261,7 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: 'M1N Mouser',
+      id: 'R1N Mouser',
       type: 'StartsUsing',
       netRegex: { id: ['9315', '996B'], capture: true },
       condition: (data, matches) => {
@@ -332,7 +332,7 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: 'M1N Mouser Cleanup',
+      id: 'R1N Mouser Cleanup',
       type: 'StartsUsing',
       netRegex: { id: ['9315', '996B'], capture: false },
       delaySeconds: 15,
@@ -340,21 +340,21 @@ const triggerSet: TriggerSet<Data> = {
       run: (data) => data.mouserDangerSquares = [],
     },
     {
-      id: 'M1N One-two Paw Right Left',
+      id: 'R1N One-two Paw Right Left',
       type: 'StartsUsing',
       netRegex: { id: '9309', source: 'Black Cat', capture: false },
       durationSeconds: 9.5,
       response: Responses.goLeftThenRight(),
     },
     {
-      id: 'M1N One-two Paw Left Right',
+      id: 'R1N One-two Paw Left Right',
       type: 'StartsUsing',
       netRegex: { id: '930C', source: 'Black Cat', capture: false },
       durationSeconds: 9.5,
       response: Responses.goRightThenLeft(),
     },
     {
-      id: 'M1N Black Cat Crossing',
+      id: 'R1N Black Cat Crossing',
       type: 'StartsUsingExtra',
       netRegex: { id: '9311', capture: true },
       suppressSeconds: 5,
@@ -363,24 +363,24 @@ const triggerSet: TriggerSet<Data> = {
         const dir = Directions.hdgTo8DirNum(heading);
         if (dir % 2 === 0)
           // `dir % 2 === 0` = this is aimed at a cardinal, so intercards safe first
-          return output.cardsIntercards!();
-        return output.intercardsCards!();
+          return output.intercardsCards!();
+        return output.cardsIntercards!();
       },
       outputStrings: {
         cardsIntercards: {
           en: 'Cards => Intercards',
           de: 'Karten => Interkardinal',
-          ko: '비스듬 🔜 십자로',
+          ko: '십자 🔜 비스듬히',
         },
         intercardsCards: {
           en: 'Intercards => Cards',
           de: 'Interkardinal => Karten',
-          ko: '십자 🔜 비스듬히',
+          ko: '비스듬 🔜 십자로',
         },
       },
     },
     {
-      id: 'M1N Elevate and Eviscerate',
+      id: 'R1N Elevate and Eviscerate',
       type: 'StartsUsing',
       netRegex: { id: '9317', source: ['Black Cat', 'Copy Cat'], capture: true },
       condition: Conditions.targetIsYou(),
@@ -394,31 +394,31 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: 'M1N Bloody Scratch',
+      id: 'R1N Bloody Scratch',
       type: 'StartsUsing',
       netRegex: { id: '9340', source: 'Black Cat', capture: false },
       response: Responses.aoe(),
     },
     {
-      id: 'M1N Biscuit Maker',
+      id: 'R1N Biscuit Maker',
       type: 'StartsUsing',
       netRegex: { id: '934A', source: 'Black Cat', capture: true },
       response: Responses.tankBuster(),
     },
     {
-      id: 'M1N Clawful',
+      id: 'R1N Clawful',
       type: 'StartsUsing',
       netRegex: { id: '933C', source: 'Black Cat', capture: true },
       response: Responses.stackMarkerOn(),
     },
     {
-      id: 'M1N Overshadow',
+      id: 'R1N Overshadow',
       type: 'StartsUsing',
       netRegex: { id: '9319', source: 'Black Cat', capture: true },
       response: Responses.stackMarkerOn(),
     },
     {
-      id: 'M1N Leaping One-two Paw West West East',
+      id: 'R1N Leaping One-two Paw West West East',
       type: 'StartsUsing',
       netRegex: { id: '931F', source: 'Black Cat', capture: false },
       durationSeconds: 10.5,
@@ -432,7 +432,7 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: 'M1N Leaping One-two Paw West East West',
+      id: 'R1N Leaping One-two Paw West East West',
       type: 'StartsUsing',
       netRegex: { id: '9320', source: 'Black Cat', capture: false },
       durationSeconds: 10.5,
@@ -446,7 +446,7 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: 'M1N Leaping One-two Paw East West East',
+      id: 'R1N Leaping One-two Paw East West East',
       type: 'StartsUsing',
       netRegex: { id: '9321', source: 'Black Cat', capture: false },
       durationSeconds: 10.5,
@@ -460,7 +460,7 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: 'M1N Leaping One-two Paw East East West',
+      id: 'R1N Leaping One-two Paw East East West',
       type: 'StartsUsing',
       netRegex: { id: '9322', source: 'Black Cat', capture: false },
       durationSeconds: 10.5,
@@ -474,7 +474,7 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: 'M1N Shockwave 931D',
+      id: 'R1N Shockwave 931D',
       type: 'StartsUsing',
       netRegex: { id: '931D', source: 'Black Cat', capture: false },
       response: Responses.knockback(),
@@ -512,7 +512,6 @@ const triggerSet: TriggerSet<Data> = {
     },
     {
       'locale': 'fr',
-      'missingTranslations': true,
       'replaceSync': {
         'Black Cat': 'Black Cat',
         'Copy Cat': 'double félin',
@@ -533,11 +532,15 @@ const triggerSet: TriggerSet<Data> = {
         'Overshadow': 'Ombragement',
         'Predaceous Pounce': 'Prédation preste',
         'Shockwave': 'Onde de choc',
+        '\\(cast\\)': '(Incantation)',
+        '\\(damage\\)': '(Dommage)',
+        '\\(hits\\)': '(Coup)',
+        '\\(jump\\)': '(Saut)',
+        '\\(telegraphs\\)': '(Télégraphes)',
       },
     },
     {
       'locale': 'ja',
-      'missingTranslations': true,
       'replaceSync': {
         'Black Cat': 'ブラックキャット',
         'Copy Cat': 'コピーキャット',
