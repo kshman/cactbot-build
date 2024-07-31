@@ -26,65 +26,65 @@ console.assert(headMarkerData);
 const triggerSet: TriggerSet<Data> = {
   id: 'AacLightHeavyweightM2',
   zoneId: ZoneId.AacLightHeavyweightM2,
-  timelineFile: 'm2n.txt',
+  timelineFile: 'r2n.txt',
   triggers: [
     {
-      id: 'M2N Call Me Honey',
+      id: 'R2N Call Me Honey',
       type: 'StartsUsing',
       netRegex: { id: '9164', source: 'Honey B. Lovely', capture: false },
       response: Responses.aoe(),
     },
     {
-      id: 'M2N Honey Beeline',
+      id: 'R2N Honey Beeline',
       type: 'StartsUsing',
       netRegex: { id: ['9B39', '9B3B'], source: 'Honey B. Lovely', capture: false },
       response: Responses.goSides(),
     },
     {
-      id: 'M2N Tempting Twist',
+      id: 'R2N Tempting Twist',
       type: 'StartsUsing',
       netRegex: { id: ['9B3A', '9B3C'], source: 'Honey B. Lovely', capture: false },
       response: Responses.getUnder(),
     },
     {
-      id: 'M2N Honeyed Breeze',
+      id: 'R2N Honeyed Breeze',
       type: 'StartsUsing',
       netRegex: { id: '9167', source: 'Honey B. Lovely', capture: true },
       response: Responses.tankBuster(),
     },
     {
-      id: 'M2N Drop of Venom',
+      id: 'R2N Drop of Venom',
       type: 'StartsUsing',
       netRegex: { id: '9170', source: 'Honey B. Lovely', capture: true },
       response: Responses.stackMarkerOn(),
     },
     {
-      id: 'M2N Blow Kiss',
+      id: 'R2N Blow Kiss',
       type: 'StartsUsing',
       netRegex: { id: '9173', source: 'Honey B. Lovely', capture: false },
       response: Responses.awayFromFront(),
     },
     {
-      id: 'M2N Heartsore',
+      id: 'R2N Heartsore',
       type: 'StartsUsing',
       netRegex: { id: '917A', source: 'Honey B. Lovely', capture: false },
       suppressSeconds: 5,
       response: Responses.spread(),
     },
     {
-      id: 'M2N Loveseeker',
+      id: 'R2N Loveseeker',
       type: 'StartsUsing',
       netRegex: { id: '9AC1', source: 'Honey B. Lovely', capture: false },
       response: Responses.getOut(),
     },
     {
-      id: 'M2N Honey B. Finale',
+      id: 'R2N Honey B. Finale',
       type: 'StartsUsing',
       netRegex: { id: '917B', source: 'Honey B. Lovely', capture: false },
       response: Responses.aoe(),
     },
     {
-      id: 'M2N Heartsick',
+      id: 'R2N Heartsick',
       type: 'StartsUsing',
       netRegex: { id: '9B8D', source: 'Honey B. Lovely', capture: false },
       suppressSeconds: 1,
@@ -128,7 +128,6 @@ const triggerSet: TriggerSet<Data> = {
     },
     {
       'locale': 'fr',
-      'missingTranslations': true,
       'replaceSync': {
         'Honey B. Lovely': 'Honey B. Lovely',
       },
@@ -154,7 +153,6 @@ const triggerSet: TriggerSet<Data> = {
     },
     {
       'locale': 'ja',
-      'missingTranslations': true,
       'replaceSync': {
         'Honey B. Lovely': 'ハニー・B・ラブリー',
       },
