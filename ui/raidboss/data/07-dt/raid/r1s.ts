@@ -20,18 +20,12 @@ export interface Data extends RaidbossData {
   }[];
 }
 
-const headmarkers = {
-  tankswap: '00DA',
-  quadaoe: '00F4',
-  spread: '0178',
-  pawprint: '021A',
-};
-
 // MapEffect tile map:
 // 00 01 02 03
 // 04 05 06 07
 // 08 09 0A 0B
 // 0C 0D 0E 0F
+// +0x10 is a duplicate used for E&E knockback display
 
 const mapEffectTileState = {
   'cracked': '00020001',
@@ -39,6 +33,12 @@ const mapEffectTileState = {
   'broken': '00200010',
   'refreshing': '00800004', // refreshing from cracked
   'rebuilding': '01000004', // rebuilding from broken
+} as const;
+
+const mapEffectTileOverlay = {
+  'clear': '00040004',
+  'willBreak': '00080010',
+  'willCrack': '00200004',
 } as const;
 
 const mapEffectData = {
@@ -138,6 +138,113 @@ const mapEffectData = {
     'centerY': 115,
     ...mapEffectTileState,
   },
+  '10': {
+    'location': '10',
+    'centerX': 85,
+    'centerY': 85,
+    ...mapEffectTileOverlay,
+  },
+  '11': {
+    'location': '11',
+    'centerX': 95,
+    'centerY': 85,
+    ...mapEffectTileOverlay,
+  },
+  '12': {
+    'location': '12',
+    'centerX': 105,
+    'centerY': 85,
+    ...mapEffectTileOverlay,
+  },
+  '13': {
+    'location': '13',
+    'centerX': 115,
+    'centerY': 85,
+    ...mapEffectTileOverlay,
+  },
+  '14': {
+    'location': '14',
+    'centerX': 85,
+    'centerY': 95,
+    ...mapEffectTileOverlay,
+  },
+  '15': {
+    'location': '15',
+    'centerX': 95,
+    'centerY': 95,
+    ...mapEffectTileOverlay,
+  },
+  '16': {
+    'location': '16',
+    'centerX': 105,
+    'centerY': 95,
+    ...mapEffectTileOverlay,
+  },
+  '17': {
+    'location': '17',
+    'centerX': 115,
+    'centerY': 95,
+    ...mapEffectTileOverlay,
+  },
+  '18': {
+    'location': '18',
+    'centerX': 85,
+    'centerY': 105,
+    ...mapEffectTileOverlay,
+  },
+  '19': {
+    'location': '19',
+    'centerX': 95,
+    'centerY': 105,
+    ...mapEffectTileOverlay,
+  },
+  '1A': {
+    'location': '1A',
+    'centerX': 105,
+    'centerY': 105,
+    ...mapEffectTileOverlay,
+  },
+  '1B': {
+    'location': '1B',
+    'centerX': 115,
+    'centerY': 105,
+    ...mapEffectTileOverlay,
+  },
+  '1C': {
+    'location': '1C',
+    'centerX': 85,
+    'centerY': 115,
+    ...mapEffectTileOverlay,
+  },
+  '1D': {
+    'location': '1D',
+    'centerX': 95,
+    'centerY': 115,
+    ...mapEffectTileOverlay,
+  },
+  '1E': {
+    'location': '1E',
+    'centerX': 105,
+    'centerY': 115,
+    ...mapEffectTileOverlay,
+  },
+  '1F': {
+    'location': '1F',
+    'centerX': 115,
+    'centerY': 115,
+    ...mapEffectTileOverlay,
+  },
+} as const;
+
+const headMarkerData = {
+  // Vfx Path: tank_lockon02k1
+  tankbuster: '00DA',
+  // Vfx Path: lockon8_t0w
+  lineStack: '00F4',
+  // Vfx Path: loc05sp_05a_se_p
+  spreadMarker: '0178',
+  // Vfx Path: m0884_vanish_7sec_p1
+  pawprint: '021A',
 } as const;
 
 const triggerSet: TriggerSet<Data> = {
@@ -176,10 +283,9 @@ const triggerSet: TriggerSet<Data> = {
       id: 'R1S Bloody Scratch',
       type: 'StartsUsing',
       netRegex: { id: '9494', source: 'Black Cat', capture: false },
-      response: Responses.aoe(),
+      response: Responses.bigAoe(),
       run: (data) => data.seenLeapJump = false,
     },
-    // ================== 테스트 ==================
     {
       id: 'R1S ActorSetPos Collector',
       type: 'ActorSetPos',
@@ -200,7 +306,10 @@ const triggerSet: TriggerSet<Data> = {
         const y = parseFloat(actorSetPosLine.y);
 
         const loc = Object.values(mapEffectData)
-          .find((tile) => Math.abs(tile.centerX - x) < 1 && Math.abs(tile.centerY - y) < 1);
+          .find((tile) =>
+            tile.location.startsWith('0') && Math.abs(tile.centerX - x) < 1 &&
+            Math.abs(tile.centerY - y) < 1
+          );
         if (loc === undefined)
           return false;
 
@@ -237,14 +346,17 @@ const triggerSet: TriggerSet<Data> = {
         ...Directions.outputStrings8Dir,
         swSeStay: {
           en: '${dir1} ${sep} ${dir2} (Stay)',
+          ja: '${dir1} ${sep} ${dir2} (そのまま)',
           ko: '${dir1} ${sep} ${dir2} (그대로)',
         },
         separator: {
           en: ' => ',
+          ja: ' => ',
           ko: ' 🔜 ',
         },
         combo: {
           en: '${dirs}',
+          ja: '${dirs}',
           ko: '${dirs}',
         },
       },
@@ -252,14 +364,14 @@ const triggerSet: TriggerSet<Data> = {
     {
       id: 'R1S Headmarker Spread Markers',
       type: 'HeadMarker',
-      netRegex: { id: headmarkers.spread, capture: false },
+      netRegex: { id: headMarkerData.spreadMarker, capture: false },
       suppressSeconds: 5,
       response: Responses.spread(),
     },
     {
       id: 'R1S Headmarker Pawprint Collector',
       type: 'HeadMarker',
-      netRegex: { id: headmarkers.pawprint, capture: true },
+      netRegex: { id: headMarkerData.pawprint, capture: true },
       run: (data, matches) => data.lastPawprintTarget = matches.target,
     },
     {
@@ -271,6 +383,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Launch Forward (Aim for uncracked tile)',
+          ja: '前方吹き飛ばし (割れていない床を狙って)',
           ko: '내게 어퍼컷 넉백!',
         },
       },
@@ -287,6 +400,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: '${name} (${target}) Launch',
+          ja: '${name} (${target}) に吹き飛ばし',
           ko: '어퍼컷: ${name} (${target})',
         },
       },
@@ -300,6 +414,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Stand on uncracked tile',
+          ja: '割れてない床に立って',
           ko: '내게 내려 찍기!',
         },
       },
@@ -316,6 +431,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: '${name} (${target}) Stun',
+          ja: '${name} (${target}) にスタン',
           ko: '내려 찍기: ${name} (${target})',
         },
       },
@@ -328,6 +444,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         partner: {
           en: 'Partner Stacks',
+          ja: 'ペア',
           ko: '십자로 둘씩!',
         },
       },
@@ -355,6 +472,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         rolePositions: {
           en: 'Role positions',
+          ja: 'ロールの担当位置へ',
           ko: '같은 롤끼리 뭉쳐요',
         },
       },
@@ -465,7 +583,7 @@ const triggerSet: TriggerSet<Data> = {
     {
       id: 'R1S PRS headmarker quad aoe',
       type: 'HeadMarker',
-      netRegex: { id: headmarkers.quadaoe, capture: true },
+      netRegex: { id: headMarkerData.lineStack, capture: true },
       condition: (data, matches) => data.me === matches.target,
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
@@ -496,12 +614,114 @@ const triggerSet: TriggerSet<Data> = {
   ],
   timelineReplace: [
     {
+      'locale': 'de',
+      'missingTranslations': true,
+      'replaceSync': {
+        'Black Cat': 'Schwarze Katze',
+        'Copy Cat': 'felin(?:e|er|es|en) Nachahmung',
+        'Soulshade': 'Seelenschatten',
+      },
+      'replaceText': {
+        '\\(First\\)': '(Erster)',
+        '\\(Second\\)': '(Zweiter)',
+        '\\(cast\\)': '(wirken)',
+        '\\(damage\\)': '(Schaden)',
+        '\\(enrage\\)': '(Finalangriff)',
+        '\\(hit\\)': '(Treffer)',
+        '\\(hits\\)': '(Treffer)',
+        '\\(jump\\)': '(Sprung)',
+        '\\(knockback\\)': '(Rückstoß)',
+        '\\(stacks\\)': '(Sammeln)',
+        '\\(telegraphs\\)': '(Anzeige)',
+        '\\(tethers\\)': '(Verbindungen)',
+        'Biscuit Maker': 'Milchtritt',
+        'Bloody Scratch': 'Blutiger Rundumkratzer',
+        'Copycat': 'Feline Nachahmung',
+        'Double Swipe': 'Doppelte Kralle',
+        'Elevate and Eviscerate': 'Präziser Höhenflug',
+        'Grimalkin Gale': 'Katerstrophaler Wind',
+        'Impact': 'Impakt',
+        'Leaping One-two Paw': 'Doppelklauensprung',
+        'Leaping Quadruple Crossing': 'Vierfachklauensprung',
+        'Mouser': 'Mäusejagd',
+        'Nailchipper': 'Krallenschneider',
+        'Nine Lives': 'Sieben Leben',
+        '(?<! )One-two Paw': 'Doppelklaue',
+        'Overshadow': 'Überschattung',
+        'Predaceous Pounce': 'Feliner Beutezug',
+        '(?<! )Quadruple Crossing': 'Vierfachklaue',
+        'Quadruple Swipe': 'Vierfache Kralle',
+        'Raining Cats': 'Katzenterror',
+        'Shockwave': 'Schockwelle',
+        'Soulshade': 'Seelenschatten',
+        'Splintering Nails': 'Spreizklaue',
+        'Tempestuous Tear': 'Stürmischer Schlitzer',
+      },
+    },
+    {
+      'locale': 'fr',
+      'missingTranslations': true,
+      'replaceSync': {
+        'Black Cat': 'Black Cat',
+        'Copy Cat': 'double félin',
+        'Soulshade': 'ombre d\'âme',
+      },
+      'replaceText': {
+        'Biscuit Maker': 'Coup de tatane',
+        'Bloody Scratch': 'Griffure sanglante',
+        'Copycat': 'Double félin',
+        'Double Swipe': 'Double fauchage',
+        'Elevate and Eviscerate': 'Élévation éviscérante',
+        'Grimalkin Gale': 'Rafale féline',
+        'Impact': 'Impact',
+        'Leaping One-two Paw': 'Griffade un-deux bondissante',
+        'Leaping Quadruple Crossing': 'Quadruple griffade bondissante',
+        'Mouser': 'Carnage dératiseur',
+        'Nailchipper': 'Charcutage félin',
+        'Nine Lives': 'Neuf-Vies',
+        '(?<! )One-two Paw': 'Griffade un-deux',
+        'Overshadow': 'Ombragement',
+        'Predaceous Pounce': 'Prédation preste',
+        '(?<! )Quadruple Crossing': 'Quadruple griffade',
+        'Quadruple Swipe': 'Quadruple fauchage',
+        'Raining Cats': 'Chataclysme',
+        'Shockwave': 'Onde de choc',
+        'Soulshade': 'ombre d\'âme',
+        'Splintering Nails': 'Griffade brisante',
+        'Tempestuous Tear': 'Déchiquetage diluvien',
+      },
+    },
+    {
       'locale': 'ja',
       'missingTranslations': true,
       'replaceSync': {
-        // 'Black Cat': 'ブラックキャット',
+        'Black Cat': 'ブラックキャット',
         'Copy Cat': 'コピーキャット',
         'Soulshade': 'ソウルシェード',
+      },
+      'replaceText': {
+        'Biscuit Maker': 'ビスケットメーカー',
+        'Bloody Scratch': 'ブラッディースクラッチ',
+        'Copycat': 'コピーキャット',
+        'Double Swipe': 'ダブルクロウ',
+        'Elevate and Eviscerate': 'エレベート・エビセレート',
+        'Grimalkin Gale': 'キャッタクリスム・ゲイル',
+        'Impact': '衝撃',
+        'Leaping One-two Paw': 'リーピング・デュアルネイル',
+        'Leaping Quadruple Crossing': 'リーピング・クアドラプルネイル',
+        'Mouser': 'マウサーラッシュ',
+        'Nailchipper': 'ネイルチッパー',
+        'Nine Lives': 'ナインライヴス',
+        '(?<! )One-two Paw': 'デュアルネイル',
+        'Overshadow': 'オーバーシャドウ',
+        'Predaceous Pounce': 'キャッツレイド',
+        '(?<! )Quadruple Crossing': 'クアドラプルネイル',
+        'Quadruple Swipe': 'クァッドクロウ',
+        'Raining Cats': 'レイニングキャッツ',
+        'Shockwave': '衝撃波',
+        'Soulshade': 'ソウルシェード',
+        'Splintering Nails': 'スプレッドネイル',
+        'Tempestuous Tear': 'テンペストテアー',
       },
     },
   ],
