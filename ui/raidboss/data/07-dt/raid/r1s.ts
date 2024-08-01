@@ -280,11 +280,14 @@ const triggerSet: TriggerSet<Data> = {
       type: 'StartsUsing',
       netRegex: { id: '9446', source: 'Copy Cat', capture: false },
       condition: (data) => data.me !== data.lastPawprintTarget,
-      infoText: (data, _matches, output) => output.text!({ target: data.lastPawprintTarget }),
+      infoText: (data, _matches, output) => {
+        const target = data.party.member(data.lastPawprintTarget);
+        return output.text!({ target: target.jobAbbr, name: target.nick });
+      },
       outputStrings: {
         text: {
-          en: '${target} Launch',
-          ko: '어퍼컷: ${target}',
+          en: '${name} (${target}) Launch',
+          ko: '어퍼컷: ${name} (${target})',
         },
       },
     },
@@ -306,11 +309,14 @@ const triggerSet: TriggerSet<Data> = {
       type: 'StartsUsing',
       netRegex: { id: '9448', source: 'Copy Cat', capture: false },
       condition: (data) => data.me !== data.lastPawprintTarget,
-      infoText: (data, _matches, output) => output.text!({ target: data.lastPawprintTarget }),
+      infoText: (data, _matches, output) => {
+        const target = data.party.member(data.lastPawprintTarget);
+        return output.text!({ target: target.jobAbbr, name: target.nick });
+      },
       outputStrings: {
         text: {
-          en: '${target} Stun',
-          ko: '내려 찍기: ${target}',
+          en: '${name} (${target}) Stun',
+          ko: '내려 찍기: ${name} (${target})',
         },
       },
     },
