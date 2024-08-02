@@ -427,8 +427,8 @@ const triggerSet: TriggerSet<Data> = {
           ko: '뭉쳐요: ${target}',
         },
         stacks2: {
-          en: 'Stacks: ${target1}, ${target2}',
-          ko: '뭉쳐요: ${target1}, ${target2}',
+          en: 'Stacks: ${target1}/${target2}',
+          ko: '뭉쳐요: ${target1}/${target2}',
         },
       },
     },
