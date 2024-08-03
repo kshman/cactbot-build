@@ -7,15 +7,10 @@ import { TriggerSet } from '../../../../../types/trigger';
 /*
 하트 0
 [22:50:42.951] StatusAdd 1A:F52:Unknown_F52:9999.00:E0000000:::*****:*****:2DA:140893:
-[22:50:42.951] StatusAdd 1A:F52:Unknown_F52:9999.00:E0000000:::*****::*****:2DA:201192:
 하트 1
 [22:50:42.951] StatusAdd 1A:F53:Infatuated:9999.00:E0000000:::*****::*****:2DB:139559:
-[22:50:42.951] StatusAdd 1A:F53:Infatuated:9999.00:E0000000:::*****:V:*****:2DB:202626:
-[22:50:42.951] StatusAdd 1A:F53:Infatuated:9999.00:E0000000:::*****::*****:2DB:121048:
-[22:50:42.951] StatusAdd 1A:F53:Infatuated:9999.00:E0000000:::*****::*****:2DB:127700:
 하트 2
 [22:50:42.951] StatusAdd 1A:F54:Head Over Heels:9999.00:E0000000:::*****::*****:2DC:126707:
-[22:50:42.951] StatusAdd 1A:F54:Head Over Heels:9999.00:E0000000:::*****::*****:2DC:139950:
 */
 
 export interface Data extends RaidbossData {

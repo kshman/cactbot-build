@@ -1,5 +1,5 @@
 import Conditions from '../../../../../resources/conditions';
-import Outputs from '../../../../../resources/outputs';
+// import Outputs from '../../../../../resources/outputs';
 import { Responses } from '../../../../../resources/responses';
 import ZoneId from '../../../../../resources/zone_id';
 import { RaidbossData } from '../../../../../types/data';
@@ -67,7 +67,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Away + Spread',
-          ko: '멀리 + 흩어져요',
+          ko: '멀리갔다 + 흩어져요',
         },
       },
     },
@@ -93,7 +93,10 @@ const triggerSet: TriggerSet<Data> = {
         return output.getBehind!();
       },
       outputStrings: {
-        getBehind: Outputs.getBehind,
+        getBehind: {
+          en: 'Get Behind',
+          ko: '엉댕이로 넉백',
+        },
         getHit: {
           en: 'Get hit by mist',
           ko: '안개에 맞아요',
@@ -108,7 +111,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Away + Partners',
-          ko: '멀리 + 둘이 함께',
+          ko: '멀리갔다 + 둘이 함께',
         },
       },
     },
@@ -157,7 +160,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Short Fuse',
-          ko: '짧은 도화선',
+          ko: '내게 짧은 도화선',
         },
       },
     },
@@ -170,7 +173,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Long Fuse',
-          ko: '긴 도화선',
+          ko: '내게 긴 도화선',
         },
       },
     },
@@ -187,11 +190,11 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         short: {
           en: 'Short Fuse',
-          ko: '짧은 도화선',
+          ko: '내게 짧은 도화선',
         },
         long: {
           en: 'Long Fuse',
-          ko: '긴 도화선',
+          ko: '내게 긴 도화선',
         },
       },
     },
