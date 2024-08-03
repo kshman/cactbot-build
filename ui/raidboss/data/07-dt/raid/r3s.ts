@@ -198,6 +198,30 @@ const triggerSet: TriggerSet<Data> = {
         },
       },
     },
+    {
+      id: 'R3S Octoboom Bombarian Special',
+      type: 'StartsUsing',
+      netRegex: { id: '9752', source: 'Brute Bomber', capture: false },
+      infoText: (_data, _matches, output) => output.text!(),
+      outputStrings: {
+        text: {
+          en: 'Out => In => Knockback => Spread',
+          ko: '밖에서 🔜 안으로 🔜 넉백 🔜 흩어져요',
+        },
+      },
+    },
+    {
+      id: 'R3S Quadroboom Bombarian Special',
+      type: 'StartsUsing',
+      netRegex: { id: '940A', source: 'Brute Bomber', capture: false },
+      infoText: (_data, _matches, output) => output.text!(),
+      outputStrings: {
+        text: {
+          en: 'Out => In => Knockback => Partners',
+          ko: '밖에서 🔜 안으로 🔜 넉백 🔜 둘이 함께',
+        },
+      },
+    },
   ],
   timelineReplace: [
     {
