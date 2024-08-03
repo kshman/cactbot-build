@@ -251,6 +251,8 @@ const jobIndexToPriority: Record<number, number> = {
   38: 403, // 춤꾼
   39: 303, // 리퍼
   40: 203, // 현자
+  41: 306, // 바이퍼
+  42: 504, // 붓쟁이
 } as const;
 
 // 직업 순위를 이름으로
@@ -367,6 +369,11 @@ const jobPriorityToName: Record<number, LocaleText> = {
     ja: '忍者',
     ko: '닌자',
   },
+  306: {
+    en: 'VPR',
+    ja: 'ヴァイパー',
+    ko: '바이퍼',
+  },
   401: {
     en: 'MCH',
     ja: '機工士',
@@ -396,6 +403,11 @@ const jobPriorityToName: Record<number, LocaleText> = {
     en: 'SMN',
     ja: '召喚士',
     ko: '서모너',
+  },
+  504: {
+    en: 'PCT',
+    ja: 'ピクトマンサー',
+    ko: '붓쟁이',
   },
   599: {
     en: 'BLU',
