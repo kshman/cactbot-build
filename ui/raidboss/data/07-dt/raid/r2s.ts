@@ -16,8 +16,8 @@ import { TriggerSet } from '../../../../../types/trigger';
 export interface Data extends RaidbossData {
   partnersSpreadCounter: number;
   storedPartnersSpread?: 'partners' | 'spread';
+  beat?: 1 | 2 | 3;
   //
-  livePhase?: number;
   myHearts: number;
   heartShed: string[];
   poisonPop?: number;
@@ -46,6 +46,20 @@ const triggerSet: TriggerSet<Data> = {
     heartShed: [],
   }),
   triggers: [
+    {
+      id: 'R2S Beat Tracker',
+      type: 'StartsUsing',
+      netRegex: { id: ['9C24', '9C25', '9C26'], capture: true },
+      run: (data, matches) => {
+        if (matches.id === '9C24')
+          data.beat = 1;
+        else if (matches.id === '9C25')
+          data.beat = 2;
+        else
+          data.beat = 3;
+        data.heartShed = [];
+      },
+    },
     {
       id: 'R2S Headmarker Shared Tankbuster',
       type: 'HeadMarker',
@@ -234,19 +248,6 @@ const triggerSet: TriggerSet<Data> = {
     },
     // ====== PRS ======
     {
-      id: 'R2S Honey B. Live phases',
-      type: 'StartsUsing',
-      netRegex: { id: ['9C24', '9C25', '9C26'], source: 'Honey B. Lovely' },
-      run: (data, matches) => {
-        data.livePhase = {
-          '9C24': 1,
-          '9C25': 2,
-          '9C26': 3,
-        }[matches.id];
-        data.heartShed = [];
-      },
-    },
-    {
       id: 'R2S PRS Alarum Spread',
       type: 'HeadMarker',
       netRegex: { id: headMarkerData.spreadMarker1 },
@@ -289,11 +290,11 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         s26: {
           en: '26s Poison',
-          ko: '(장판 먼저 버려요)',
+          ko: '(바깥쪽에 장판 버릴거예요)',
         },
         s46: {
           en: '46s Poison',
-          ko: '(탑 먼저 밟아요)',
+          ko: '(한가운데 🔜 탑 밟을거예요)',
         },
       },
     },
@@ -356,7 +357,7 @@ const triggerSet: TriggerSet<Data> = {
       netRegex: { effectId: 'F52' },
       condition: (data, matches) => data.me === matches.target,
       infoText: (data, _matches, output) => {
-        if (data.livePhase === 2)
+        if (data.beat === 2)
           return output.live2!();
       },
       run: (data) => data.myHearts = 0,
@@ -373,14 +374,14 @@ const triggerSet: TriggerSet<Data> = {
       netRegex: { effectId: 'F53' },
       condition: (data, matches) => data.me === matches.target,
       infoText: (data, _matches, output) => {
-        if (data.livePhase === 2)
+        if (data.beat === 2)
           return output.live2!();
       },
       run: (data) => data.myHearts = 1,
       outputStrings: {
         live2: {
           en: 'Tower or bait aoe',
-          ko: '타워 밟거나 장판 유도',
+          ko: '남쪽 대기 🔜 타워 밟거나 장판 유도',
         },
       },
     },
@@ -396,20 +397,20 @@ const triggerSet: TriggerSet<Data> = {
       type: 'HeadMarker',
       netRegex: { id: headMarkerData.heartStackMarker },
       condition: (data, matches) => {
-        if (data.livePhase === 1)
+        if (data.beat === 1)
           return true;
-        if (data.livePhase === 2 && data.myHearts === 0) {
+        if (data.beat === 2 && data.myHearts === 0) {
           data.heartShed.push(matches.target);
           return data.heartShed.length === 2;
         }
         return false;
       },
       infoText: (data, matches, output) => {
-        if (data.livePhase === 1) {
+        if (data.beat === 1) {
           const target = data.party.member(matches.target);
           return output.stacks1!({ target: target.jobAbbr });
         }
-        if (data.livePhase === 2 && data.heartShed.length === 2) {
+        if (data.beat === 2 && data.heartShed.length === 2) {
           const target1 = data.party.member(data.heartShed[0]);
           const target2 = data.party.member(data.heartShed[1]);
           return output.stacks2!({ target1: target1.jobAbbr, target2: target2.jobAbbr });
