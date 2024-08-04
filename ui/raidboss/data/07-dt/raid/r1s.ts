@@ -671,7 +671,6 @@ const triggerSet: TriggerSet<Data> = {
   timelineReplace: [
     {
       'locale': 'de',
-      'missingTranslations': true,
       'replaceSync': {
         'Black Cat': 'Schwarze Katze',
         'Copy Cat': 'felin(?:e|er|es|en) Nachahmung',

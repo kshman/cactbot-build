@@ -34,18 +34,21 @@ const pageText = {
   },
   analysisFilterInput: {
     en: 'Apply Analysis Filter (Dev Only)',
+    de: 'Analysefilter anwenden (Nur für Entwickler)',
     fr: 'Appliquer le filtre d\'analyse (Dev seulement)',
     cn: '应用分析过滤器（开发中选项）',
     ko: '분석 필터 적용 (개발용)',
   },
   exportSelectedInput: {
     en: 'Export Selected',
+    de: 'Ausgewählte exportieren',
     fr: 'Exporter la sélection',
     cn: '导出已选择日志',
     ko: '선택한 것만 내보내기',
   },
   exportAllInput: {
     en: 'Export Entire Log',
+    de: 'Gesamten Log exportieren',
     fr: 'Exporter tout le log',
     cn: '导出全部日志',
     ko: '전부 내보내기',
