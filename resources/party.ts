@@ -402,14 +402,14 @@ const jobLocalizedAbbr: Record<Job, LocaleText> = {
     de: 'VPR',
     fr: 'VPR',
     ja: 'ヴァイパー',
-    ko: '바이퍼',
+    ko: '해적',
   },
   PCT: {
     en: 'PCT',
     de: 'PKT',
     fr: 'PIC',
     ja: 'ピクトマンサー',
-    ko: '픽토맨서',
+    ko: '붓쟁이',
   },
 };
 
