@@ -5,7 +5,7 @@ import ZoneId from '../../../../../resources/zone_id';
 import { RaidbossData } from '../../../../../types/data';
 import { TriggerSet } from '../../../../../types/trigger';
 
-type Phase = 'final' | 'field';
+type Phase = 'final' | 'field' | 'foe';
 
 export interface Data extends RaidbossData {
   phaseTracker: number;
@@ -184,6 +184,7 @@ const triggerSet: TriggerSet<Data> = {
       id: 'R3S Octoboom Bombarian Special',
       type: 'StartsUsing',
       netRegex: { id: '9752', source: 'Brute Bomber', capture: false },
+      durationSeconds: 27,
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
@@ -197,6 +198,7 @@ const triggerSet: TriggerSet<Data> = {
       id: 'R3S Quadroboom Bombarian Special',
       type: 'StartsUsing',
       netRegex: { id: '940A', source: 'Brute Bomber', capture: false },
+      durationSeconds: 27,
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
@@ -215,6 +217,7 @@ const triggerSet: TriggerSet<Data> = {
         const map: { [id: string]: Phase } = {
           '9406': 'final',
           '93EE': 'field',
+          '9403': 'foe',
         } as const;
         data.phase = map[matches.id];
       },
@@ -357,6 +360,34 @@ const triggerSet: TriggerSet<Data> = {
           en: '${target}',
           ja: '${target}',
           ko: '${target}',
+        },
+      },
+    },
+    {
+      id: 'R3S Octoboom Bombarian Special Out',
+      type: 'StartsUsing',
+      netRegex: { id: ['9752', '940A'], source: 'Brute Bomber', capture: false },
+      delaySeconds: 10.5,
+      alarmText: (_data, _matches, output) => output.text!(),
+      outputStrings: {
+        text: {
+          en: 'Out',
+          ja: '外側',
+          ko: '밖으로 피해욧!',
+        },
+      },
+    },
+    {
+      id: 'R3S PRS Spin Spread',
+      type: 'Ability',
+      netRegex: { id: '9BAF', source: 'Brute Bomber', capture: false },
+      delaySeconds: 4,
+      alertText: (_data, _matches, output) => output.text!(),
+      outputStrings: {
+        text: {
+          en: 'Spread',
+          ja: '散開',
+          ko: '흩어져서 자기 자리로!',
         },
       },
     },
