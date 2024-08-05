@@ -27,6 +27,21 @@ const triggerSet: TriggerSet<Data> = {
     myFuse: undefined,
     fieldList: [],
   }),
+  timelineTriggers: [
+    {
+      id: 'R3S 탱크 스위치 확인',
+      regex: /탱크 스위치 확인/,
+      beforeSeconds: 1,
+      condition: (data) => data.party.isTank(data.me),
+      alarmText: (_data, _matches, output) => output.text!(),
+      outputStrings: {
+        text: {
+          en: 'Check Tank Swap',
+          ko: '탱크 스위치 확인!',
+        },
+      },
+    },
+  ],
   triggers: [
     {
       id: 'R3S Phase Tracker',
@@ -226,6 +241,7 @@ const triggerSet: TriggerSet<Data> = {
       id: 'R3S PRS Fuse Job',
       type: 'GainsEffect',
       netRegex: { effectId: 'FB8', capture: true },
+      condition: (data) => data.phase === 'final',
       suppressSeconds: 5,
       infoText: (data, matches, output) => {
         if (data.party.isDPS(matches.target))
@@ -247,7 +263,7 @@ const triggerSet: TriggerSet<Data> = {
       id: 'R3S PRS Short Fuse',
       type: 'GainsEffect',
       netRegex: { effectId: 'FB8', capture: true },
-      condition: Conditions.targetIsYou(),
+      condition: (data, matches) => data.phase === 'final' && data.me === matches.target,
       alertText: (data, _matches, output) => {
         data.myFuse = 'short';
         return output.text!();
@@ -264,7 +280,7 @@ const triggerSet: TriggerSet<Data> = {
       id: 'R3S PRS Long Fuse',
       type: 'GainsEffect',
       netRegex: { effectId: 'FB9', capture: true },
-      condition: Conditions.targetIsYou(),
+      condition: (data, matches) => data.phase === 'final' && data.me === matches.target,
       alertText: (data, _matches, output) => {
         data.myFuse = 'long';
         return output.text!();
@@ -367,7 +383,7 @@ const triggerSet: TriggerSet<Data> = {
       id: 'R3S Octoboom Bombarian Special Out',
       type: 'StartsUsing',
       netRegex: { id: ['9752', '940A'], source: 'Brute Bomber', capture: false },
-      delaySeconds: 10.5,
+      delaySeconds: 12,
       alarmText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
@@ -395,6 +411,7 @@ const triggerSet: TriggerSet<Data> = {
   timelineReplace: [
     {
       'locale': 'de',
+      'missingTranslations': true,
       'replaceSync': {
         'Brute Bomber': 'Brutalo Bomber',
         'Brute Distortion': 'Brutalo Bomber-Phantom',
