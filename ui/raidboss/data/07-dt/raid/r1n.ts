@@ -21,67 +21,7 @@ const mapEffectTileState = {
   'rebuilding': '01000004', // rebuilding from broken
 } as const;
 
-const mapEffectTileOverlay = {
-  'clear': '00040004',
-  'willBreak': '00080010',
-  'willCrack': '00200004',
-} as const;
-
 const mapEffectData = {
-  '00': {
-    'location': '00',
-    'centerX': 85,
-    'centerY': 85,
-    ...mapEffectTileState,
-  },
-  '01': {
-    'location': '01',
-    'centerX': 95,
-    'centerY': 85,
-    ...mapEffectTileState,
-  },
-  '02': {
-    'location': '02',
-    'centerX': 105,
-    'centerY': 85,
-    ...mapEffectTileState,
-  },
-  '03': {
-    'location': '03',
-    'centerX': 115,
-    'centerY': 85,
-    ...mapEffectTileState,
-  },
-  '04': {
-    'location': '04',
-    'centerX': 85,
-    'centerY': 95,
-    ...mapEffectTileState,
-  },
-  '05': {
-    'location': '05',
-    'centerX': 95,
-    'centerY': 95,
-    ...mapEffectTileState,
-  },
-  '06': {
-    'location': '06',
-    'centerX': 105,
-    'centerY': 95,
-    ...mapEffectTileState,
-  },
-  '07': {
-    'location': '07',
-    'centerX': 115,
-    'centerY': 95,
-    ...mapEffectTileState,
-  },
-  '08': {
-    'location': '08',
-    'centerX': 85,
-    'centerY': 105,
-    ...mapEffectTileState,
-  },
   '09': {
     'location': '09',
     'centerX': 95,
@@ -94,134 +34,7 @@ const mapEffectData = {
     'centerY': 105,
     ...mapEffectTileState,
   },
-  '0B': {
-    'location': '0B',
-    'centerX': 115,
-    'centerY': 105,
-    ...mapEffectTileState,
-  },
-  '0C': {
-    'location': '0C',
-    'centerX': 85,
-    'centerY': 115,
-    ...mapEffectTileState,
-  },
-  '0D': {
-    'location': '0D',
-    'centerX': 95,
-    'centerY': 115,
-    ...mapEffectTileState,
-  },
-  '0E': {
-    'location': '0E',
-    'centerX': 105,
-    'centerY': 115,
-    ...mapEffectTileState,
-  },
-  '0F': {
-    'location': '0F',
-    'centerX': 115,
-    'centerY': 115,
-    ...mapEffectTileState,
-  },
-  '10': {
-    'location': '10',
-    'centerX': 85,
-    'centerY': 85,
-    ...mapEffectTileOverlay,
-  },
-  '11': {
-    'location': '11',
-    'centerX': 95,
-    'centerY': 85,
-    ...mapEffectTileOverlay,
-  },
-  '12': {
-    'location': '12',
-    'centerX': 105,
-    'centerY': 85,
-    ...mapEffectTileOverlay,
-  },
-  '13': {
-    'location': '13',
-    'centerX': 115,
-    'centerY': 85,
-    ...mapEffectTileOverlay,
-  },
-  '14': {
-    'location': '14',
-    'centerX': 85,
-    'centerY': 95,
-    ...mapEffectTileOverlay,
-  },
-  '15': {
-    'location': '15',
-    'centerX': 95,
-    'centerY': 95,
-    ...mapEffectTileOverlay,
-  },
-  '16': {
-    'location': '16',
-    'centerX': 105,
-    'centerY': 95,
-    ...mapEffectTileOverlay,
-  },
-  '17': {
-    'location': '17',
-    'centerX': 115,
-    'centerY': 95,
-    ...mapEffectTileOverlay,
-  },
-  '18': {
-    'location': '18',
-    'centerX': 85,
-    'centerY': 105,
-    ...mapEffectTileOverlay,
-  },
-  '19': {
-    'location': '19',
-    'centerX': 95,
-    'centerY': 105,
-    ...mapEffectTileOverlay,
-  },
-  '1A': {
-    'location': '1A',
-    'centerX': 105,
-    'centerY': 105,
-    ...mapEffectTileOverlay,
-  },
-  '1B': {
-    'location': '1B',
-    'centerX': 115,
-    'centerY': 105,
-    ...mapEffectTileOverlay,
-  },
-  '1C': {
-    'location': '1C',
-    'centerX': 85,
-    'centerY': 115,
-    ...mapEffectTileOverlay,
-  },
-  '1D': {
-    'location': '1D',
-    'centerX': 95,
-    'centerY': 115,
-    ...mapEffectTileOverlay,
-  },
-  '1E': {
-    'location': '1E',
-    'centerX': 105,
-    'centerY': 115,
-    ...mapEffectTileOverlay,
-  },
-  '1F': {
-    'location': '1F',
-    'centerX': 115,
-    'centerY': 115,
-    ...mapEffectTileOverlay,
-  },
 } as const;
-console.assert(mapEffectData);
 
 const headMarkerData = {
   // Vfx Path: com_share1f
@@ -235,11 +48,10 @@ console.assert(headMarkerData);
 
 export interface Data extends RaidbossData {
   actorSetPosTracker: { [id: string]: NetMatches['ActorSetPos'] };
-  mouserDangerSquares: (typeof mapEffectData)[keyof typeof mapEffectData]['location'][];
+  mouserMatchedTile?: (typeof mapEffectData)[keyof typeof mapEffectData]['location'];
 }
 
 // TODO:
-// Mouser
 // Predaceous Pounce
 // Leaping Black Cat Crossing
 
@@ -249,7 +61,6 @@ const triggerSet: TriggerSet<Data> = {
   timelineFile: 'r1n.txt',
   initData: () => ({
     actorSetPosTracker: {},
-    mouserDangerSquares: [],
   }),
   triggers: [
     {
@@ -263,7 +74,7 @@ const triggerSet: TriggerSet<Data> = {
     {
       id: 'R1N Mouser',
       type: 'StartsUsing',
-      netRegex: { id: ['9315', '996B'], capture: true },
+      netRegex: { id: '996B', capture: true },
       condition: (data, matches) => {
         const actorSetPosLine = data.actorSetPosTracker[matches.sourceId];
         if (actorSetPosLine === undefined)
@@ -289,32 +100,41 @@ const triggerSet: TriggerSet<Data> = {
         if (loc === undefined)
           return false;
 
-        data.mouserDangerSquares.push(loc.location);
-        // If we have one or three matches for sw/se inner squares, and this was one of those squares
-        // give the player a callout
-        const swseEntries = data.mouserDangerSquares
-          .filter((square) => ['09', '0A'].includes(square)).length;
-        if ((swseEntries === 1 || swseEntries === 3) && ['09', '0A'].includes(loc.location))
-          return true;
+        const tile = loc.location;
 
-        return false;
+        if (tile !== '09' && tile !== '0A')
+          return false;
+
+        data.mouserMatchedTile = tile;
+        return true;
       },
-      durationSeconds: (data) => {
-        const swseEntries = data.mouserDangerSquares
-          .filter((square) => ['09', '0A'].includes(square)).length;
-        if (swseEntries === 1)
-          return 9;
-        return 11;
-      },
+      // We don't need a suppressSeconds since only one of the SW/SE tiles will get hit twice
+      durationSeconds: 11,
       infoText: (data, _matches, output) => {
-        const entries = data.mouserDangerSquares.filter((square) => ['09', '0A'].includes(square));
-        const dirs = entries.map((e) => e === '09' ? 'dirSE' : 'dirSW')
-          .map((e) => output[e]!());
+        const dangerTile = data.mouserMatchedTile;
+        if (dangerTile === undefined)
+          return false;
+
+        // Danger tile is SW, so safe movement is SW => SE (Stay)
+        if (dangerTile === '09') {
+          return output.swSeStay!({
+            dir1: output['dirSW']!(),
+            sep: output.separator!(),
+            dir2: output['dirSE']!(),
+          });
+        }
+
+        const dirs = ['dirSW', 'dirSE', 'dirSW'].map((e) => output[e]!());
 
         return output.combo!({ dirs: dirs.join(output.separator!()) });
       },
+      run: (data) => delete data.mouserMatchedTile,
       outputStrings: {
         ...Directions.outputStrings8Dir,
+        swSeStay: {
+          en: '${dir1} ${sep} ${dir2} (Stay)',
+          ko: '${dir1} ${sep} ${dir2} (그대로)',
+        },
         separator: {
           en: ' => ',
           de: ' => ',
@@ -330,14 +150,6 @@ const triggerSet: TriggerSet<Data> = {
           ko: '${dirs}',
         },
       },
-    },
-    {
-      id: 'R1N Mouser Cleanup',
-      type: 'StartsUsing',
-      netRegex: { id: ['9315', '996B'], capture: false },
-      delaySeconds: 15,
-      suppressSeconds: 15,
-      run: (data) => data.mouserDangerSquares = [],
     },
     {
       id: 'R1N One-two Paw Right Left',
@@ -370,11 +182,13 @@ const triggerSet: TriggerSet<Data> = {
         cardsIntercards: {
           en: 'Cards => Intercards',
           de: 'Karten => Interkardinal',
+          ja: '十字 => 斜め',
           ko: '십자 🔜 비스듬히',
         },
         intercardsCards: {
           en: 'Intercards => Cards',
           de: 'Interkardinal => Karten',
+          ja: '斜め => 十字',
           ko: '비스듬 🔜 십자로',
         },
       },
@@ -389,6 +203,7 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: 'Aim for uncracked tile',
           de: 'Ziehle auf nich gerissene Fläche',
+          ja: '割れていない床を狙う',
           ko: '안부셔진 타일로 튕겨요',
         },
       },
@@ -427,6 +242,7 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: 'West => East at marker',
           de: 'Westen => Osten bei der Markierung',
+          ja: 'マーカーの西 => マーカーの東',
           ko: '서쪽 🔜 마커의 동쪽',
         },
       },
@@ -441,6 +257,7 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: 'East => West at marker',
           de: 'Osten => Westen bei der Markierung',
+          ja: 'マーカーの東 => マーカーの西',
           ko: '동쪽 🔜 마커의 서쪽',
         },
       },
@@ -455,6 +272,7 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: 'West => East at marker',
           de: 'Westen => Osten bei der Markierung',
+          ja: 'マーカーの西 => マーカーの東',
           ko: '서쪽 🔜 마커의 동쪽',
         },
       },
@@ -469,6 +287,7 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: 'East => West at marker',
           de: 'Osten => Westen bei der Markierung',
+          ja: 'マーカーの東 => マーカーの西',
           ko: '동쪽 🔜 마커의 서쪽',
         },
       },

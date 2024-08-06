@@ -1,3 +1,4 @@
+import Conditions from '../../../../../resources/conditions';
 import Outputs from '../../../../../resources/outputs';
 import { Responses } from '../../../../../resources/responses';
 import { Directions } from '../../../../../resources/util';
@@ -43,6 +44,7 @@ export interface Data extends RaidbossData {
 const mapEffectTileState = {
   'cracked': '00020001',
   'clear': '00040004',
+  'quickRebuid': '00080004', // rebuilding from broken, rapidly
   'broken': '00200010',
   'refreshing': '00800004', // refreshing from cracked
   'rebuilding': '01000004', // rebuilding from broken
@@ -105,7 +107,7 @@ const triggerSet: TriggerSet<Data> = {
     {
       id: 'R1S Shockwave Knockback Safe Directions',
       type: 'MapEffect',
-      netRegex: { location: ['00', '03'], flags: '00080004', capture: true },
+      netRegex: { location: ['00', '03'], flags: mapEffectTileState.quickRebuid, capture: true },
       infoText: (_data, matches, output) => {
         if (matches.location === '00')
           return output.nwSE!();
@@ -222,6 +224,20 @@ const triggerSet: TriggerSet<Data> = {
           en: '${dirs}',
           ja: '${dirs}',
           ko: '${dirs}',
+        },
+      },
+    },
+    {
+      id: 'R1S Headmarker Nailchipper Spread',
+      type: 'HeadMarker',
+      netRegex: { id: headMarkerData.spreadMarker1, capture: true },
+      condition: Conditions.targetIsYou(),
+      suppressSeconds: 5,
+      infoText: (_data, _matches, output) => output.outSpread!(),
+      outputStrings: {
+        outSpread: {
+          en: 'Out + Spread',
+          ko: '내게 장판! 흩어져요',
         },
       },
     },
@@ -509,24 +525,24 @@ const triggerSet: TriggerSet<Data> = {
         dirE: Outputs.dirE,
         dirW: Outputs.dirW,
         in: {
-          en: 'In => Out',
-          ko: '안에서 🔜 밖으로',
+          en: 'In + Healer Stacks => Out',
+          ko: '안에서 4:4힐러 🔜 밖으로',
         },
         out: {
-          en: 'Out => In',
-          ko: '밖에서 🔜 안으로',
+          en: 'Out + Healer Stacks => In',
+          ko: '밖에서 4:4힐러🔜 안으로',
         },
         healerStacks: {
-          en: 'Go ${dir}, ${inOut}, Healer Stacks',
-          ko: '${dir}쪽 🔜 ${inOut} 🔜 4:4힐러',
+          en: 'Go ${dir} => ${inOut}',
+          ko: '${dir}쪽 🔜 ${inOut}',
         },
         proximity: {
-          en: 'Go ${dir}, Proximity Baits/Spreads',
+          en: 'Go ${dir} => Proximity Baits + Spreads',
           ko: '${dir}쪽 🔜 부채꼴 유도!',
         },
         aHealerStacks: {
-          en: '${inOut}, Healer Stacks',
-          ko: '${inOut} 🔜 4:4힐러',
+          en: '${inOut}',
+          ko: '${inOut}',
         },
         aProximity: {
           en: 'Proximity Baits/Spreads',
@@ -634,19 +650,6 @@ const triggerSet: TriggerSet<Data> = {
         left: Outputs.left,
         right: Outputs.right,
         unknown: Outputs.unknown,
-      },
-    },
-    {
-      id: 'R1S PRS Headmarker Nailchipper',
-      type: 'HeadMarker',
-      netRegex: { id: headMarkerData.spreadMarker1, capture: true },
-      condition: (data, matches) => data.me === matches.target,
-      alertText: (_data, _matches, output) => output.text!(),
-      outputStrings: {
-        text: {
-          en: 'Spead',
-          ko: '내게 장판! 밖으로!',
-        },
       },
     },
     /*
