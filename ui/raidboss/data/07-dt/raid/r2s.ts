@@ -61,6 +61,44 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
+      id: 'R2S Heart Debuff',
+      type: 'GainsEffect',
+      netRegex: { effectId: ['F52', 'F53', 'F54'], capture: true },
+      condition: (data, matches) => !data.options.AutumnStyle && data.me === matches.target,
+      delaySeconds: (data) => data.beat === 1 ? 17 : 0,
+      suppressSeconds: (data) => {
+        if (data.beat === 1)
+          return 120;
+        if (data.beat === 2)
+          return 70;
+
+        // We don't care about heart stacks during beat 3
+        return 9999;
+      },
+      infoText: (data, matches, output) => {
+        if (data.beat === 1) {
+          return output.beatOne!();
+        }
+        if (data.beat === 2) {
+          if (matches.effectId === 'F52')
+            return output.beatTwoZeroHearts!();
+          if (matches.effectId === 'F53')
+            return output.beatTwoOneHearts!();
+        }
+      },
+      outputStrings: {
+        beatOne: {
+          en: 'Soak towers - need 2-3 hearts',
+        },
+        beatTwoZeroHearts: {
+          en: 'Puddles & Stacks',
+        },
+        beatTwoOneHearts: {
+          en: 'Spreads & Towers',
+        },
+      },
+    },
+    {
       id: 'R2S Headmarker Shared Tankbuster',
       type: 'HeadMarker',
       netRegex: { id: headMarkerData.sharedBuster },
@@ -95,6 +133,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Stored Partners',
+          ja: 'あとでペア',
           ko: '나중에 둘이 페어',
         },
       },
@@ -108,6 +147,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Stored Spread',
+          ja: 'あとで散開',
           ko: '나중에 흩어져요',
         },
       },
@@ -121,6 +161,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Stored Partners',
+          ja: 'あとでペア',
           ko: '나중에 둘이 페어',
         },
       },
@@ -134,6 +175,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Stored Spread',
+          ja: 'あとで散開',
           ko: '나중에 흩어져요',
         },
       },
@@ -163,10 +205,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         spread: {
           en: 'Spread',
+          ja: '散開',
           ko: '흩어져요',
         },
         partners: {
           en: 'Partners',
+          ja: 'ペア',
           ko: '둘이 페어',
         },
         unknown: Outputs.unknown,
@@ -217,6 +261,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Under Intercards => Out => Cards',
+          ja: '斜め内側 => 外側 => 十字',
           ko: '밑❌ 🔜 바깥❌ 🔜 바깥➕',
         },
       },
@@ -230,6 +275,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Out Cards => Intercards => Under',
+          ja: '外十字 => 外斜め => 内側',
           ko: '바깥➕ 🔜 바깥❌ 🔜 밑❌',
         },
       },

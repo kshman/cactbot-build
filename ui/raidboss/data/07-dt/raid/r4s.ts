@@ -1,3 +1,4 @@
+import { AutumnDirections } from '../../../../../resources/autumn';
 import Conditions from '../../../../../resources/conditions';
 import { UnreachableCode } from '../../../../../resources/not_reached';
 import Outputs from '../../../../../resources/outputs';
@@ -25,7 +26,10 @@ type NearFar = 'near' | 'far'; // wherever you are...
 type InOut = 'in' | 'out';
 type NorthSouth = 'north' | 'south';
 type LeftRight = 'left' | 'right';
-
+type CondenserMap = {
+  long: string[];
+  short: string[];
+};
 type AetherialId = keyof typeof aetherialAbility;
 type AetherialEffect = 'iceRight' | 'iceLeft' | 'fireRight' | 'fireLeft';
 type MidnightState = 'gun' | 'wings';
@@ -118,21 +122,55 @@ const isSwordQuiverId = (id: string): id is keyof typeof swordQuiverSafeMap => {
 // For now, call the in/out, the party safe spot, and the bait spot; users can customize.
 // If/once standard strats develop, this would be a good thing to revisit.
 const witchHuntAlertOutputStrings = {
-  in: Outputs.in,
-  out: Outputs.out,
+  in: {
+    en: 'In',
+    ko: '안',
+  },
+  out: {
+    en: 'Out',
+    ko: '바깥',
+  },
   near: {
     en: 'Baits Close (Party Far)',
-    ko: '가까이 유도 (파티 멀리)',
+    ko: '가까이 (파티 멀리)',
   },
   far: {
     en: 'Baits Far (Party Close)',
-    ko: '멀리 유도 (파티 가까이)',
+    ko: '멀리 (파티 가까이)',
   },
   combo: {
     en: '${inOut} => ${bait}',
     ko: '${inOut} 🔜 ${bait}',
   },
   unknown: Outputs.unknown,
+  markerOn: {
+    en: 'Stand on Marker',
+    ko: '마커 밟아요',
+  },
+  markerOut: {
+    en: 'Stand Outside Marker',
+    ko: '마커 바깥',
+  },
+  crossInside: {
+    en: 'Inside Cross',
+    ko: '십자 안쪽',
+  },
+  crossOn: {
+    en: 'On Cross',
+    ko: '십자 위로',
+  },
+  targetOn: {
+    en: 'Stand on Target Circle',
+    ko: '타겟서클 밟아요',
+  },
+  targetOut: {
+    en: 'Stand Outside Target Circle',
+    ko: '타겟서클 바깥',
+  },
+  prCombo: {
+    en: '${inOut} => ${bait}',
+    ko: '${bait} (${inOut}으로)',
+  },
 } as const;
 
 const tailThrustOutputStrings = {
@@ -184,6 +222,7 @@ export interface Data extends RaidbossData {
   starEffect?: 'partners' | 'spread';
   witchgleamSelfCount: number;
   condenserTimer?: 'short' | 'long';
+  condenserMap: CondenserMap;
   electronStreamSafe?: 'yellow' | 'blue';
   electronStreamSide?: NorthSouth;
   seenConductorDebuffs: boolean;
@@ -212,6 +251,9 @@ export interface Data extends RaidbossData {
     left: number[][];
     right: number[][];
   };
+  // PRS
+  myRole?: 'tank' | 'healer' | 'melee' | 'ranged';
+  witchHuntFirst?: InOut;
 }
 
 const triggerSet: TriggerSet<Data> = {
@@ -228,6 +270,10 @@ const triggerSet: TriggerSet<Data> = {
       electromines: {},
       electrominesSafe: [],
       witchgleamSelfCount: 0,
+      condenserMap: {
+        long: [],
+        short: [],
+      },
       seenConductorDebuffs: false,
       fulminousFieldCount: 0,
       conductionPointTargets: [],
@@ -305,7 +351,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         avoid: {
           en: 'Avoid Front + Side Cleaves',
-          ko: '앞 + 옆 클레브 피해요',
+          ko: '격자 장판 피해요',
         },
       },
     },
@@ -332,15 +378,21 @@ const triggerSet: TriggerSet<Data> = {
       },
       run: (data) => delete data.bewitchingBurstSafe,
       outputStrings: {
-        in: Outputs.in,
-        out: Outputs.out,
+        in: {
+          en: 'In',
+          ko: '안쪽 가운데서',
+        },
+        out: {
+          en: 'Out',
+          ko: '바깥 모서리로',
+        },
         spreadAvoid: {
           en: 'Spread (Avoid Side Cleaves)',
-          ko: '흩어져요 (옆 클레브 피해요)',
+          ko: '흩어져요 (장판 피해요)',
         },
         combo: {
           en: '${inOut} + ${spread}',
-          ko: '${inOut} + ${spread}',
+          ko: '${inOut} ${spread}',
         },
       },
     },
@@ -376,19 +428,25 @@ const triggerSet: TriggerSet<Data> = {
       },
       run: (data) => data.seenBasicWitchHunt = true,
       outputStrings: {
-        in: Outputs.in,
-        out: Outputs.out,
+        in: {
+          en: 'In',
+          ko: '안쪽',
+        },
+        out: {
+          en: 'Out',
+          ko: '바깥',
+        },
         near: {
           en: 'Spread (Be Closer)',
-          ko: '흩어져요 (가까이)',
+          ko: '가까이서 흩어져요',
         },
         far: {
           en: 'Spread (Be Further)',
-          ko: '흩어져요 (멀리)',
+          ko: '멀리서 흩어져요',
         },
         combo: {
           en: '${inOut} + ${spread}',
-          ko: '${inOut} + ${spread}',
+          ko: '${inOut} ${spread}',
         },
       },
     },
@@ -421,6 +479,7 @@ const triggerSet: TriggerSet<Data> = {
         if (matches.id === '95E0')
           aoeOrder = aoeOrder.reverse();
         data.witchHuntAoESafe = aoeOrder[0];
+        data.witchHuntFirst = aoeOrder[0];
 
         // assumes Near first; if Far first, just reverse
         let baitOrder: NearFar[] = ['near', 'far', 'near', 'far'];
@@ -428,6 +487,15 @@ const triggerSet: TriggerSet<Data> = {
           baitOrder = [];
         else if (data.witchHuntBait === 'far')
           baitOrder = baitOrder.reverse();
+
+        if (data.options.AutumnStyle) {
+          const res: string[] = [];
+          for (let i = 0; i < aoeOrder.length; ++i) {
+            const inOut = aoeOrder[i]!;
+            res.push(output[inOut]!());
+          }
+          return output.baitCombo!({ allBaits: res.join(output.separator!()) });
+        }
 
         const baits: string[] = [];
         for (let i = 0; i < aoeOrder.length; ++i) {
@@ -438,8 +506,14 @@ const triggerSet: TriggerSet<Data> = {
         return output.baitCombo!({ allBaits: baits.join(output.separator!()) });
       },
       outputStrings: {
-        in: Outputs.in,
-        out: Outputs.out,
+        in: {
+          en: 'In',
+          ko: '안',
+        },
+        out: {
+          en: 'Out',
+          ko: '밖',
+        },
         near: {
           en: 'Close',
           ko: '가까이',
@@ -461,7 +535,7 @@ const triggerSet: TriggerSet<Data> = {
         },
         baitCombo: {
           en: 'Baits: ${allBaits}',
-          ko: '유도: ${allBaits}',
+          ko: '(${allBaits})',
         },
         unknown: Outputs.unknown,
       },
@@ -484,6 +558,26 @@ const triggerSet: TriggerSet<Data> = {
         if (data.witchHuntBait !== undefined)
           data.witchHuntBait = data.witchHuntBait === 'near' ? 'far' : 'near';
 
+        const role = data.myRole;
+        if (role !== undefined && data.witchHuntFirst !== undefined) {
+          if (data.witchHuntFirst === 'in') {
+            if (role === 'tank')
+              return output.prCombo!({ inOut: output[inOut]!(), bait: output.targetOn!() });
+            if (role === 'healer')
+              return output.prCombo!({ inOut: output[inOut]!(), bait: output.markerOut!() });
+            if (role === 'melee')
+              return output.prCombo!({ inOut: output[inOut]!(), bait: output.targetOut!() });
+            return output.prCombo!({ inOut: output[inOut]!(), bait: output.markerOn!() });
+          }
+          if (role === 'tank')
+            return output.prCombo!({ inOut: output[inOut]!(), bait: output.markerOn!() });
+          if (role === 'healer')
+            return output.prCombo!({ inOut: output[inOut]!(), bait: output.crossOn!() });
+          if (role === 'melee')
+            return output.prCombo!({ inOut: output[inOut]!(), bait: output.markerOut!() });
+          return output.prCombo!({ inOut: output[inOut]!(), bait: output.crossInside!() });
+        }
+
         return output.combo!({ inOut: output[inOut]!(), bait: output[bait]!() });
       },
       outputStrings: witchHuntAlertOutputStrings,
@@ -503,6 +597,26 @@ const triggerSet: TriggerSet<Data> = {
           data.witchHuntAoESafe = data.witchHuntAoESafe === 'in' ? 'out' : 'in';
         if (data.witchHuntBait !== undefined)
           data.witchHuntBait = data.witchHuntBait === 'near' ? 'far' : 'near';
+
+        const role = data.myRole;
+        if (role !== undefined && data.witchHuntFirst !== undefined) {
+          if (data.witchHuntFirst === 'in') {
+            if (role === 'tank')
+              return output.prCombo!({ inOut: output[inOut]!(), bait: output.markerOn!() });
+            if (role === 'healer')
+              return output.prCombo!({ inOut: output[inOut]!(), bait: output.crossOn!() });
+            if (role === 'melee')
+              return output.prCombo!({ inOut: output[inOut]!(), bait: output.markerOut!() });
+            return output.prCombo!({ inOut: output[inOut]!(), bait: output.crossInside!() });
+          }
+          if (role === 'tank')
+            return output.prCombo!({ inOut: output[inOut]!(), bait: output.targetOn!() });
+          if (role === 'healer')
+            return output.prCombo!({ inOut: output[inOut]!(), bait: output.markerOut!() });
+          if (role === 'melee')
+            return output.prCombo!({ inOut: output[inOut]!(), bait: output.targetOut!() });
+          return output.prCombo!({ inOut: output[inOut]!(), bait: output.markerOn!() });
+        }
 
         return output.combo!({ inOut: output[inOut]!(), bait: output[bait]!() });
       },
@@ -524,6 +638,26 @@ const triggerSet: TriggerSet<Data> = {
         if (data.witchHuntBait !== undefined)
           data.witchHuntBait = data.witchHuntBait === 'near' ? 'far' : 'near';
 
+        const role = data.myRole;
+        if (role !== undefined && data.witchHuntFirst !== undefined) {
+          if (data.witchHuntFirst === 'in') {
+            if (role === 'tank')
+              return output.prCombo!({ inOut: output[inOut]!(), bait: output.targetOut!() });
+            if (role === 'healer')
+              return output.prCombo!({ inOut: output[inOut]!(), bait: output.markerOn!() });
+            if (role === 'melee')
+              return output.prCombo!({ inOut: output[inOut]!(), bait: output.targetOn!() });
+            return output.prCombo!({ inOut: output[inOut]!(), bait: output.markerOut!() });
+          }
+          if (role === 'tank')
+            return output.prCombo!({ inOut: output[inOut]!(), bait: output.markerOut!() });
+          if (role === 'healer')
+            return output.prCombo!({ inOut: output[inOut]!(), bait: output.crossInside!() });
+          if (role === 'melee')
+            return output.prCombo!({ inOut: output[inOut]!(), bait: output.markerOn!() });
+          return output.prCombo!({ inOut: output[inOut]!(), bait: output.crossOn!() });
+        }
+
         return output.combo!({ inOut: output[inOut]!(), bait: output[bait]!() });
       },
       outputStrings: witchHuntAlertOutputStrings,
@@ -537,6 +671,27 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (data, _matches, output) => {
         const inOut = data.witchHuntAoESafe ?? output.unknown!();
         const bait = data.witchHuntBait ?? output.unknown!();
+
+        const role = data.myRole;
+        if (role !== undefined && data.witchHuntFirst !== undefined) {
+          if (data.witchHuntFirst === 'in') {
+            if (role === 'tank')
+              return output.prCombo!({ inOut: output[inOut]!(), bait: output.markerOut!() });
+            if (role === 'healer')
+              return output.prCombo!({ inOut: output[inOut]!(), bait: output.crossInside!() });
+            if (role === 'melee')
+              return output.prCombo!({ inOut: output[inOut]!(), bait: output.markerOn!() });
+            return output.prCombo!({ inOut: output[inOut]!(), bait: output.crossOn!() });
+          }
+          if (role === 'tank')
+            return output.prCombo!({ inOut: output[inOut]!(), bait: output.targetOut!() });
+          if (role === 'healer')
+            return output.prCombo!({ inOut: output[inOut]!(), bait: output.markerOn!() });
+          if (role === 'melee')
+            return output.prCombo!({ inOut: output[inOut]!(), bait: output.targetOn!() });
+          return output.prCombo!({ inOut: output[inOut]!(), bait: output.markerOut!() });
+        }
+
         return output.combo!({ inOut: output[inOut]!(), bait: output[bait]!() });
       },
       outputStrings: witchHuntAlertOutputStrings,
@@ -555,8 +710,16 @@ const triggerSet: TriggerSet<Data> = {
         return output.protean!();
       },
       outputStrings: {
-        cardinals: Outputs.cardinals,
-        protean: Outputs.protean,
+        cardinals: {
+          en: 'Cardinals',
+          ja: '十字回避',
+          ko: '십자로! (사실 남북으로)',
+        },
+        protean: {
+          en: 'Protean',
+          ja: '基本散会',
+          ko: '자기 자리로!',
+        },
       },
     },
     {
@@ -621,7 +784,19 @@ const triggerSet: TriggerSet<Data> = {
         const safeDir = data.electrominesSafe.length !== 1
           ? 'unknown'
           : data.electrominesSafe[0]!;
-        const safeDirStr = output[safeDir]!();
+        let safeDirStr = output[safeDir]!();
+        if (data.options.AutumnStyle) {
+          const dirMap: { [dir: string]: string } = {
+            dirNE: 'markerNE',
+            dirSE: 'markerSE',
+            dirNW: 'markerNW',
+            dirSW: 'markerSW',
+            unknown: 'unknown',
+          };
+          const marker = dirMap[safeDir];
+          if (marker !== undefined)
+            safeDirStr = output[marker]!();
+        }
 
         const starEffect = data.starEffect ?? 'unknown';
         const starEffectStr = output[starEffect]!();
@@ -634,6 +809,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         ...Directions.outputStringsIntercardDir,
+        ...AutumnDirections.outputStringsMarkerIntercard,
         partners: Outputs.stackPartner,
         spread: Outputs.spread,
         combo: {
@@ -643,10 +819,34 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
+      id: 'R4S Electrical Condenser Debuff Collect',
+      type: 'GainsEffect',
+      netRegex: { effectId: 'F9F', capture: true },
+      condition: Conditions.targetIsNotYou(),
+      run: (data, matches) => {
+        data.condenserTimer = parseFloat(matches.duration) > 30 ? 'long' : 'short';
+        if (data.options.AutumnStyle) {
+          const member = data.party.member(matches.target);
+          const jobName = member.jobAbbr ?? member.nick;
+          if (data.condenserTimer === 'long')
+            data.condenserMap.long.push(jobName);
+          else
+            data.condenserMap.short.push(jobName);
+          return;
+        }
+        const shortName = data.party.member(matches.target).nick;
+        if (data.condenserTimer === 'long')
+          data.condenserMap.long.push(shortName);
+        else
+          data.condenserMap.short.push(shortName);
+      },
+    },
+    {
       id: 'R4S Electrical Condenser Debuff Initial',
       type: 'GainsEffect',
       netRegex: { effectId: 'F9F', capture: true },
       condition: Conditions.targetIsYou(),
+      delaySeconds: 0.5,
       infoText: (data, matches, output) => {
         data.condenserTimer = parseFloat(matches.duration) > 30 ? 'long' : 'short';
         // Long debuff players will pick up an extra stack later.
@@ -654,20 +854,23 @@ const triggerSet: TriggerSet<Data> = {
         if (data.condenserTimer === 'long')
           data.witchgleamSelfCount++;
 
+        // Some strats use long/short debuff assignments to do position swaps for EE2.
+        const same = data.condenserMap[data.condenserTimer].join(', ');
+
         // Note: Taking unexpected lightning damage from Four/Eight Star, Sparks, or Sidewise Spark
         // will cause the stack count to increase. We could try to try to track that, but it makes
         // the final mechanic resolvable only under certain conditions (which still cause deaths),
         // so don't bother for now.  PRs welcome? :)
-        return output[data.condenserTimer]!();
+        return output[data.condenserTimer]!({ same: same });
       },
       outputStrings: {
         short: {
-          en: 'Short Debuff',
-          ko: '짧은 디버프',
+          en: 'Short Debuff (w/ ${same})',
+          ko: '짧은 디버프 (${same})',
         },
         long: {
-          en: 'Long Debuff',
-          ko: '긴 디버프',
+          en: 'Long Debuff (w/ ${same})',
+          ko: '긴 디버프 (${same})',
         },
       },
     },
@@ -690,7 +893,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         spread: {
           en: 'Spread (${stacks} stacks)',
-          ko: '흩어져요 (${stacks} 중첩)',
+          ko: '흩어져요 (${stacks}스택)',
         },
       },
     },
@@ -705,9 +908,24 @@ const triggerSet: TriggerSet<Data> = {
       delaySeconds: 0.2,
       alertText: (data, matches, output) => {
         const starEffect = data.starEffect ?? 'unknown';
+
+        // Some strats have stack/spread positions based on Witchgleam stack count,
+        // so for the long debuffs, add that info (both for positioning and as a reminder).
+        const reminder = data.condenserTimer === 'long'
+          ? output.stacks!({ stacks: data.witchgleamSelfCount })
+          : '';
+
         if (matches.id === '95EC')
-          return output.combo!({ dir: output.west!(), mech: output[starEffect]!() });
-        return output.combo!({ dir: output.east!(), mech: output[starEffect]!() });
+          return output.combo!({
+            dir: output.west!(),
+            mech: output[starEffect]!(),
+            remind: reminder,
+          });
+        return output.combo!({
+          dir: output.east!(),
+          mech: output[starEffect]!(),
+          remind: reminder,
+        });
       },
       outputStrings: {
         east: Outputs.east,
@@ -715,9 +933,13 @@ const triggerSet: TriggerSet<Data> = {
         partners: Outputs.stackPartner,
         spread: Outputs.spread,
         unknown: Outputs.unknown,
+        stacks: {
+          en: '(${stacks} stacks after)',
+          ko: '(나중에 ${stacks}스택)',
+        },
         combo: {
-          en: '${dir} => ${mech}',
-          ko: '${dir} 🔜 ${mech}',
+          en: '${dir} => ${mech} ${remind}',
+          ko: '${dir} 🔜 ${mech} ${remind}',
         },
       },
     },
@@ -789,7 +1011,7 @@ const triggerSet: TriggerSet<Data> = {
         output.responseOutputStrings = {
           swap: {
             en: 'Swap Sides',
-            ko: '반대편으로 이동',
+            ko: '반대편으로',
           },
           stay: {
             en: 'Stay',
@@ -862,11 +1084,11 @@ const triggerSet: TriggerSet<Data> = {
         },
         spinningConductor: {
           en: 'Small AoE on You',
-          ko: '내게 작은 AOE',
+          ko: '내게 장판',
         },
         roundhouseConductor: {
           en: 'Donut AoE on You',
-          ko: '내게 도넛 AOE',
+          ko: '내게 도넛',
         },
         colliderConductor: {
           en: 'Get Hit by Cone',
@@ -1621,6 +1843,40 @@ const triggerSet: TriggerSet<Data> = {
         return output[swordQuiverSafeMap[id]]!();
       },
       outputStrings: swordQuiverOutputStrings,
+    },
+    // ========== PRS ==========
+    {
+      id: 'R4S PRS Detect Role',
+      type: 'StartsUsing',
+      netRegex: { id: '95EF', source: 'Wicked Thunder', capture: false },
+      suppressSeconds: 9999999,
+      run: (data) => {
+        if (!data.options.AutumnStyle) {
+          data.myRole = undefined;
+        } else if (data.role === 'tank') {
+          data.myRole = 'tank';
+        } else if (data.role === 'healer') {
+          data.myRole = 'healer';
+        } else if (data.CanFeint()) {
+          data.myRole = 'melee';
+        } else {
+          const aparam = data.options.AutumnParameter;
+          if (aparam !== undefined && (aparam === 'D1' || aparam === 'D2'))
+            data.myRole = 'melee';
+          else
+            data.myRole = 'ranged';
+        }
+      },
+    },
+  ],
+  timelineReplace: [
+    {
+      'locale': 'ja',
+      'missingTranslations': true,
+      'replaceSync': {
+        'Electromine': 'エレクトリックマイン',
+        'Wicked Thunder': 'ウィケッドサンダー',
+      },
     },
   ],
 };
