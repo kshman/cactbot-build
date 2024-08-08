@@ -190,6 +190,14 @@ export default {
     cn: '分散',
     ko: '흩어져요',
   },
+  protean: {
+    en: 'Protean',
+    de: 'Himmelsrichtungen',
+    fr: 'Positions',
+    ja: '基本散会',
+    cn: '八方分散',
+    ko: '프로틴',
+  },
   stackMarker: {
     // for stack marker situations
     en: 'Stack',
@@ -232,6 +240,14 @@ export default {
     cn: '靠近 ${player}集合',
     ko: '뭉쳐욧: ${player}',
   },
+  stackPartner: {
+    en: 'Stack With Partner',
+    de: 'Mit Partner stacken',
+    fr: 'Packez-vous avec votre partenaire',
+    ja: 'ペア',
+    cn: '与搭档集合',
+    ko: '둘이 뭉쳐요',
+  },
   stackMiddle: {
     en: 'Stack in middle',
     de: 'In der Mitte sammeln',
@@ -239,6 +255,14 @@ export default {
     ja: '中央で頭割り',
     cn: '中间集合',
     ko: '한가운데서 뭉쳐욧',
+  },
+  baitPuddles: {
+    en: 'Bait puddles',
+    de: 'Flächen Ködern',
+    fr: 'Attirez les flaques',
+    ja: 'AOE誘導',
+    cn: '诱导圈圈',
+    ko: '장판 유도',
   },
   // For general more-than-one-stack-at-a-time situations
   stacks: {
@@ -727,6 +751,22 @@ export default {
     ja: '???',
     cn: '???',
     ko: '몰?루',
+  },
+  cardinals: {
+    en: 'Cardinals',
+    de: 'Kardinal',
+    fr: 'Cardinaux',
+    ja: '十字回避',
+    cn: '十字',
+    ko: '십자로',
+  },
+  intercards: {
+    en: 'Intercards',
+    de: 'Interkardinal',
+    fr: 'Intercardinal',
+    ja: '斜めへ',
+    cn: '四角',
+    ko: '비스듬히',
   },
   north: {
     en: 'North',
