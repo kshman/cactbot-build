@@ -176,19 +176,19 @@ const witchHuntAlertOutputStrings = {
 const tailThrustOutputStrings = {
   iceLeft: {
     en: 'Double Knockback (<== Start on Left)',
-    ko: '이중 넉백 (◀🡸 왼쪽 시작)',
+    ko: '두번 넉백 (◀🡸 왼쪽 시작)',
   },
   iceRight: {
     en: 'Double Knockback (Start on Right ==>)',
-    ko: '이중 넉백 (오른쪽 시작 🡺▶)',
+    ko: '두번 넉백 (오른쪽 시작 🡺▶)',
   },
   fireLeft: {
     en: 'Fire - Start Front + Right ==>',
-    ko: '불 - 앞 + 오른쪽 시작 🡺▶',
+    ko: '🔥불 (오른쪽 시작 🡺▶)',
   },
   fireRight: {
     en: '<== Fire - Start Front + Left',
-    ko: '◀🡸 불 - 앞 + 왼쪽 시작',
+    ko: '🔥불 (◀🡸 왼쪽 시작)',
   },
   unknown: Outputs.unknown,
 } as const;
@@ -253,6 +253,7 @@ export interface Data extends RaidbossData {
   };
   // PRS
   myRole?: 'tank' | 'healer' | 'melee' | 'ranged';
+  imDps?: boolean;
   witchHuntFirst?: InOut;
 }
 
@@ -303,6 +304,19 @@ const triggerSet: TriggerSet<Data> = {
       beforeSeconds: 4,
       durationSeconds: 13,
       response: Responses.bigAoe(),
+    },
+    {
+      id: 'R4S Cannonbolt',
+      regex: /Cannonbolt/,
+      beforeSeconds: 8,
+      durationSeconds: 6,
+      alertText: (_data, _matches, output) => output.text!(),
+      outputStrings: {
+        text: {
+          en: 'South',
+          ko: '남쪽으로!',
+        },
+      },
     },
   ],
   triggers: [
@@ -906,12 +920,14 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (data, _matches, output) => {
         if (data.options.AutumnStyle) {
           const count = data.witchgleamSelfCount;
-          const spread = (data.myRole === 'tank' || data.myRole === 'healer')
-            ? count === 2 ? 'leftBottom' : 'leftTop'
+          const pos = data.imDps
+            ? count === 2
+              ? 'rightBottom'
+              : 'rightTop'
             : count === 2
-            ? 'rightBottom'
-            : 'rightTop';
-          return output[spread]!({ stacks: count });
+            ? 'leftBottom'
+            : 'leftTop';
+          return output[pos]!({ stacks: count });
         }
         return output.spread!({ stacks: data.witchgleamSelfCount });
       },
@@ -951,18 +967,10 @@ const triggerSet: TriggerSet<Data> = {
         let starEffect = data.starEffect ?? 'unknown';
 
         if (data.options.AutumnStyle && starEffect === 'partners') {
-          const count = data.witchgleamSelfCount;
-          if (count === 2) {
-            if (data.myRole === 'tank' || data.myRole === 'healer')
-              starEffect = 'pairNorth';
-            else
-              starEffect = 'pairSouth';
-          } else {
-            if (data.myRole === 'tank' || data.myRole === 'healer')
-              starEffect = 'pairSide';
-            else
-              starEffect = 'pairCenter';
-          }
+          if (data.witchgleamSelfCount === 2)
+            starEffect = data.imDps ? 'pairSouth' : 'pairNorth';
+          else
+            starEffect = data.imDps ? 'pairCenter' : 'pairSide';
         }
 
         // Some strats have stack/spread positions based on Witchgleam stack count,
@@ -1130,7 +1138,21 @@ const triggerSet: TriggerSet<Data> = {
       netRegex: { effectId: ['FA2', 'FA3', 'FA4', 'FA5', 'FA6'] },
       condition: Conditions.targetIsYou(),
       durationSeconds: 5,
-      alertText: (_data, matches, output) => {
+      alertText: (data, matches, output) => {
+        if (data.options.AutumnStyle) {
+          switch (matches.effectId) {
+            case 'FA2':
+              return output.remoteCurrent!();
+            case 'FA3':
+              return output.proximateCurrent!();
+            case 'FA4':
+              return data.imDps ? output.spinningInside!() : output.spinningOutside!();
+            case 'FA5':
+              return data.imDps ? output.roundhouseInside!() : output.roundhouseOutside!();
+            case 'FA6':
+              return output.colliderConductor!();
+          }
+        }
         switch (matches.effectId) {
           case 'FA2':
             return output.remoteCurrent!();
@@ -1148,23 +1170,39 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         remoteCurrent: {
           en: 'Far Cone on You',
-          ko: '내게 멀리 부채꼴',
+          ko: '🔵내게 멀리 부채꼴',
         },
         proximateCurrent: {
           en: 'Near Cone on You',
-          ko: '내게 가까이 부채꼴',
+          ko: '🟢내게 가까이 부채꼴',
         },
         spinningConductor: {
           en: 'Small AoE on You',
-          ko: '내게 장판',
+          ko: '●내게 장판',
         },
         roundhouseConductor: {
           en: 'Donut AoE on You',
-          ko: '내게 도넛',
+          ko: '◎내게 도넛',
         },
         colliderConductor: {
           en: 'Get Hit by Cone',
-          ko: '부채꼴 맞아요',
+          ko: '🟣부채꼴 맞아요 (바깥쪽)',
+        },
+        spinningInside: {
+          en: 'Small AoE (Inside)',
+          ko: '●내게 장판 (가운데쪽)',
+        },
+        spinningOutside: {
+          en: 'Small AoE (Outside)',
+          ko: '●내게 장판 (모서리쪽)',
+        },
+        roundhouseInside: {
+          en: 'Donut AoE on You (Inside)',
+          ko: '◎내게 도넛 (가운데쪽)',
+        },
+        roundhouseOutside: {
+          en: 'Donut AoE on You (Outside)',
+          ko: '◎내게 도넛 (모서리쪽)',
         },
       },
     },
@@ -1326,7 +1364,7 @@ const triggerSet: TriggerSet<Data> = {
       type: 'StartsUsing',
       netRegex: { id: '9612', source: 'Wicked Thunder', capture: false },
       condition: (data) => data.secondTwilightCleaveSafe === undefined,
-      response: Responses.getIn(),
+      response: Responses.goMiddle(),
     },
     {
       id: 'R4S Aetherial Conversion',
@@ -1735,19 +1773,19 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         yellowLong: {
           en: 'Long Yellow Debuff (Towers First)',
-          ko: '긴 노란 디버프 (타워 먼저)',
+          ko: '긴 🟡노랑 (타워 먼저)',
         },
         blueLong: {
           en: 'Long Blue Debuff (Towers First)',
-          ko: '긴 파란 디버프 (타워 먼저)',
+          ko: '긴 🔵파랑 (타워 먼저)',
         },
         yellowShort: {
           en: 'Short Yellow Debuff (Cannons First)',
-          ko: '짧은 노란 디버프 (대포 먼저)',
+          ko: '짧은 🟡노랑 (빔 먼저)',
         },
         blueShort: {
           en: 'Short Blue Debuff (Cannons First)',
-          ko: '짧은 파란 디버프 (대포 먼저)',
+          ko: '짧은 🔵파랑 (빔 먼저)',
         },
       },
     },
@@ -1884,11 +1922,11 @@ const triggerSet: TriggerSet<Data> = {
         },
         yellowShort: {
           en: 'Blue Cannon (${loc}) - Point ${bait}',
-          ko: '파란 대포 (${loc}) - ${bait}번째',
+          ko: '🔵빔 (${loc}) - ${bait} 방향으로',
         },
         blueShort: {
           en: 'Yellow Cannon (${loc}) - Point ${bait}',
-          ko: '노란 대포 (${loc}) - ${bait}번째',
+          ko: '🟡빔 (${loc}) - ${bait} 방향으로',
         },
       },
     },
@@ -1923,6 +1961,7 @@ const triggerSet: TriggerSet<Data> = {
       netRegex: { id: '95EF', source: 'Wicked Thunder', capture: false },
       suppressSeconds: 9999999,
       run: (data) => {
+        data.imDps = data.party.isDPS(data.me);
         if (!data.options.AutumnStyle) {
           data.myRole = undefined;
         } else if (data.role === 'tank') {
