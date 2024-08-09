@@ -110,19 +110,19 @@ const witchHuntAlertOutputStrings = {
 const tailThrustOutputStrings = {
   iceLeft: {
     en: 'Double Knockback (<== Start on Left)',
-    ko: '이중 넉백 (◀🡸 왼쪽 시작)',
+    ko: '두번 넉백 (◀🡸 왼쪽 시작)',
   },
   iceRight: {
     en: 'Double Knockback (Start on Right ==>)',
-    ko: '이중 넉백 (오른쪽 시작 🡺▶)',
+    ko: '두번 넉백 (오른쪽 시작 🡺▶)',
   },
   fireLeft: {
     en: 'Fire - Start Front + Right ==>',
-    ko: '불 - 앞 + 오른쪽 시작 🡺▶',
+    ko: '🔥불 (오른쪽 시작 🡺▶)',
   },
   fireRight: {
     en: '<== Fire - Start Front + Left',
-    ko: '◀🡸 불 - 앞 + 왼쪽 시작',
+    ko: '🔥불 (◀🡸 왼쪽 시작)',
   },
   unknown: Outputs.unknown,
 };
@@ -187,6 +187,19 @@ Options.Triggers.push({
       beforeSeconds: 4,
       durationSeconds: 13,
       response: Responses.bigAoe(),
+    },
+    {
+      id: 'R4S Cannonbolt',
+      regex: /Cannonbolt/,
+      beforeSeconds: 8,
+      durationSeconds: 6,
+      alertText: (_data, _matches, output) => output.text(),
+      outputStrings: {
+        text: {
+          en: 'South',
+          ko: '남쪽으로!',
+        },
+      },
     },
   ],
   triggers: [
@@ -261,15 +274,15 @@ Options.Triggers.push({
       outputStrings: {
         in: {
           en: 'In',
-          ko: '안쪽 가운데서',
+          ko: '가운데서',
         },
         out: {
           en: 'Out',
-          ko: '바깥 모서리로',
+          ko: '모서리로',
         },
         spreadAvoid: {
           en: 'Spread (Avoid Side Cleaves)',
-          ko: '흩어져요 (장판 피해요)',
+          ko: '흩어져요',
         },
         combo: {
           en: '${inOut} + ${spread}',
@@ -300,6 +313,13 @@ Options.Triggers.push({
       alertText: (data, _matches, output) => {
         if (data.witchHuntBait === undefined || data.bewitchingBurstSafe === undefined)
           return;
+        if (data.options.AutumnStyle) {
+          const inOut = output[data.bewitchingBurstSafe]();
+          const spread = data.witchHuntBait === 'near'
+            ? (data.hasForkedLightning ? output.farFoked() : output.near())
+            : (data.hasForkedLightning ? output.nearFoked() : output.far());
+          return output.combo({ inOut: inOut, spread: spread });
+        }
         const inOut = output[data.bewitchingBurstSafe]();
         const spread = data.witchHuntBait === 'near'
           ? (data.hasForkedLightning ? output.far() : output.near())
@@ -310,23 +330,31 @@ Options.Triggers.push({
       outputStrings: {
         in: {
           en: 'In',
-          ko: '안쪽',
+          ko: '가운데',
         },
         out: {
           en: 'Out',
-          ko: '바깥',
+          ko: '모서리',
         },
         near: {
           en: 'Spread (Be Closer)',
-          ko: '가까이서 흩어져요',
+          ko: '안',
         },
         far: {
           en: 'Spread (Be Further)',
-          ko: '멀리서 흩어져요',
+          ko: '바깥',
+        },
+        nearFoked: {
+          en: 'Spread (Be Closer)',
+          ko: '🗲안',
+        },
+        farFoked: {
+          en: 'Spread (Be Further)',
+          ko: '🗲바깥',
         },
         combo: {
           en: '${inOut} + ${spread}',
-          ko: '${inOut} ${spread}',
+          ko: '${spread}으로 (${inOut})',
         },
       },
     },
@@ -577,7 +605,7 @@ Options.Triggers.push({
         cardinals: {
           en: 'Cardinals',
           ja: '十字回避',
-          ko: '십자로! (사실 남북으로)',
+          ko: '십자로!',
         },
         protean: {
           en: 'Protean',
@@ -747,12 +775,39 @@ Options.Triggers.push({
       condition: Conditions.targetIsYou(),
       delaySeconds: (_data, matches) => parseFloat(matches.duration) - 7,
       alertText: (data, _matches, output) => {
+        if (data.options.AutumnStyle) {
+          const count = data.witchgleamSelfCount;
+          const pos = data.imDps
+            ? count === 2
+              ? 'rightBottom'
+              : 'rightTop'
+            : count === 2
+            ? 'leftBottom'
+            : 'leftTop';
+          return output[pos]({ stacks: count });
+        }
         return output.spread({ stacks: data.witchgleamSelfCount });
       },
       outputStrings: {
         spread: {
           en: 'Spread (${stacks} stacks)',
           ko: '흩어져요 (${stacks}스택)',
+        },
+        leftTop: {
+          en: 'Left Top (${stacks} stacks)',
+          ko: '왼쪽 위 (${stacks}스택)',
+        },
+        leftBottom: {
+          en: 'Left Bottom (${stacks} stacks)',
+          ko: '왼쪽 아래 (${stacks}스택)',
+        },
+        rightTop: {
+          en: 'Right Top (${stacks} stacks)',
+          ko: '오른쪽 위 (${stacks}스택)',
+        },
+        rightBottom: {
+          en: 'Right Bottom (${stacks} stacks)',
+          ko: '오른쪽 아래 (${stacks}스택)',
         },
       },
     },
@@ -766,7 +821,13 @@ Options.Triggers.push({
       // so slight delay just in case there's a race condition issue
       delaySeconds: 0.2,
       alertText: (data, matches, output) => {
-        const starEffect = data.starEffect ?? 'unknown';
+        let starEffect = data.starEffect ?? 'unknown';
+        if (data.options.AutumnStyle && starEffect === 'partners') {
+          if (data.witchgleamSelfCount === 2)
+            starEffect = data.imDps ? 'pairSouth' : 'pairNorth';
+          else
+            starEffect = data.imDps ? 'pairCenter' : 'pairSide';
+        }
         // Some strats have stack/spread positions based on Witchgleam stack count,
         // so for the long debuffs, add that info (both for positioning and as a reminder).
         const reminder = data.condenserTimer === 'long'
@@ -792,11 +853,27 @@ Options.Triggers.push({
         unknown: Outputs.unknown,
         stacks: {
           en: '(${stacks} stacks after)',
-          ko: '(나중에 ${stacks}스택)',
+          ko: '(${stacks}스택)',
         },
         combo: {
           en: '${dir} => ${mech} ${remind}',
           ko: '${dir} 🔜 ${mech} ${remind}',
+        },
+        pairNorth: {
+          en: 'Pair North',
+          ko: '북쪽에서 둘이',
+        },
+        pairSouth: {
+          en: 'Pair South',
+          ko: '남쪽에서 둘이',
+        },
+        pairSide: {
+          en: 'Pair Sides',
+          ko: '옆쪽에서 둘이',
+        },
+        pairCenter: {
+          en: 'Pair Center',
+          ko: '가운데에서 둘이',
         },
       },
     },
@@ -908,7 +985,21 @@ Options.Triggers.push({
       netRegex: { effectId: ['FA2', 'FA3', 'FA4', 'FA5', 'FA6'] },
       condition: Conditions.targetIsYou(),
       durationSeconds: 5,
-      alertText: (_data, matches, output) => {
+      alertText: (data, matches, output) => {
+        if (data.options.AutumnStyle) {
+          switch (matches.effectId) {
+            case 'FA2':
+              return output.remoteCurrent();
+            case 'FA3':
+              return output.proximateCurrent();
+            case 'FA4':
+              return data.imDps ? output.spinningInside() : output.spinningOutside();
+            case 'FA5':
+              return data.imDps ? output.roundhouseInside() : output.roundhouseOutside();
+            case 'FA6':
+              return output.colliderConductor();
+          }
+        }
         switch (matches.effectId) {
           case 'FA2':
             return output.remoteCurrent();
@@ -926,23 +1017,39 @@ Options.Triggers.push({
       outputStrings: {
         remoteCurrent: {
           en: 'Far Cone on You',
-          ko: '내게 멀리 원뿔',
+          ko: '🔵내게 멀리 부채꼴',
         },
         proximateCurrent: {
           en: 'Near Cone on You',
-          ko: '내게 가까이 원뿔',
+          ko: '🟢내게 가까이 부채꼴',
         },
         spinningConductor: {
           en: 'Small AoE on You',
-          ko: '내게 장판',
+          ko: '●내게 장판',
         },
         roundhouseConductor: {
           en: 'Donut AoE on You',
-          ko: '내게 도넛',
+          ko: '◎내게 도넛',
         },
         colliderConductor: {
           en: 'Get Hit by Cone',
-          ko: '원뿔 맞아요',
+          ko: '🟣부채꼴 맞아요 (바깥쪽)',
+        },
+        spinningInside: {
+          en: 'Small AoE (Inside)',
+          ko: '●내게 장판 (가운데쪽)',
+        },
+        spinningOutside: {
+          en: 'Small AoE (Outside)',
+          ko: '●내게 장판 (모서리쪽)',
+        },
+        roundhouseInside: {
+          en: 'Donut AoE on You (Inside)',
+          ko: '◎내게 도넛 (가운데쪽)',
+        },
+        roundhouseOutside: {
+          en: 'Donut AoE on You (Outside)',
+          ko: '◎내게 도넛 (모서리쪽)',
         },
       },
     },
@@ -1098,7 +1205,7 @@ Options.Triggers.push({
       type: 'StartsUsing',
       netRegex: { id: '9612', source: 'Wicked Thunder', capture: false },
       condition: (data) => data.secondTwilightCleaveSafe === undefined,
-      response: Responses.getIn(),
+      response: Responses.goMiddle(),
     },
     {
       id: 'R4S Aetherial Conversion',
@@ -1478,19 +1585,19 @@ Options.Triggers.push({
       outputStrings: {
         yellowLong: {
           en: 'Long Yellow Debuff (Towers First)',
-          ko: '긴 노란 디버프 (타워 먼저)',
+          ko: '긴 🟡노랑 (타워 먼저)',
         },
         blueLong: {
           en: 'Long Blue Debuff (Towers First)',
-          ko: '긴 파란 디버프 (타워 먼저)',
+          ko: '긴 🔵파랑 (타워 먼저)',
         },
         yellowShort: {
           en: 'Short Yellow Debuff (Cannons First)',
-          ko: '짧은 노란 디버프 (대포 먼저)',
+          ko: '짧은 🟡노랑 (빔 먼저)',
         },
         blueShort: {
           en: 'Short Blue Debuff (Cannons First)',
-          ko: '짧은 파란 디버프 (대포 먼저)',
+          ko: '짧은 🔵파랑 (빔 먼저)',
         },
       },
     },
@@ -1619,11 +1726,11 @@ Options.Triggers.push({
         },
         yellowShort: {
           en: 'Blue Cannon (${loc}) - Point ${bait}',
-          ko: '파란 대포 (${loc}) - ${bait}번째',
+          ko: '🔵빔 (${loc}) - ${bait} 방향으로',
         },
         blueShort: {
           en: 'Yellow Cannon (${loc}) - Point ${bait}',
-          ko: '노란 대포 (${loc}) - ${bait}번째',
+          ko: '🟡빔 (${loc}) - ${bait} 방향으로',
         },
       },
     },
@@ -1656,6 +1763,7 @@ Options.Triggers.push({
       netRegex: { id: '95EF', source: 'Wicked Thunder', capture: false },
       suppressSeconds: 9999999,
       run: (data) => {
+        data.imDps = data.party.isDPS(data.me);
         if (!data.options.AutumnStyle) {
           data.myRole = undefined;
         } else if (data.role === 'tank') {
@@ -1671,6 +1779,42 @@ Options.Triggers.push({
           else
             data.myRole = 'ranged';
         }
+      },
+    },
+    {
+      id: 'R4S PRS Electrical Condenser Long',
+      type: 'GainsEffect',
+      netRegex: { effectId: 'F9F', capture: true },
+      condition: (_data, matches) => parseFloat(matches.duration) > 40,
+      delaySeconds: (_data, matches) => parseFloat(matches.duration) - 7,
+      suppressSeconds: 5,
+      infoText: (data, _matches, output) => {
+        if (data.condenserTimer === 'short')
+          return output.text();
+      },
+      outputStrings: {
+        text: {
+          en: 'Stack south',
+          ko: '아래쪽 가운데서 뭉쳐요',
+        },
+      },
+    },
+    {
+      id: 'R4S PRS Electrical Condenser Short',
+      type: 'GainsEffect',
+      netRegex: { effectId: 'F9F', capture: true },
+      condition: (_data, matches) => parseFloat(matches.duration) < 24,
+      delaySeconds: (_data, matches) => parseFloat(matches.duration) - 7,
+      suppressSeconds: 5,
+      infoText: (data, _matches, output) => {
+        if (data.condenserTimer === 'long')
+          return output.text();
+      },
+      outputStrings: {
+        text: {
+          en: 'Stack south',
+          ko: '아래쪽 가운데서 뭉쳐요',
+        },
       },
     },
   ],
