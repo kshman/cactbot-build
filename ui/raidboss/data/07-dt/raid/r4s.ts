@@ -128,7 +128,7 @@ const witchHuntAlertOutputStrings = {
   },
   out: {
     en: 'Out',
-    ko: '바깥',
+    ko: '밖',
   },
   near: {
     en: 'Baits Close (Party Far)',
@@ -145,50 +145,50 @@ const witchHuntAlertOutputStrings = {
   unknown: Outputs.unknown,
   markerOn: {
     en: 'Stand on Marker',
-    ko: '마커 밟아요',
+    ko: '●마커 밟아요',
   },
   markerOut: {
     en: 'Stand Outside Marker',
-    ko: '마커 바깥',
+    ko: '●마커 바깥',
   },
   crossInside: {
     en: 'Inside Cross',
-    ko: '십자 안쪽',
+    ko: '➕십자 안쪽',
   },
   crossOn: {
     en: 'On Cross',
-    ko: '십자 위로',
+    ko: '➕십자 밟아요',
   },
   targetOn: {
     en: 'Stand on Target Circle',
-    ko: '타겟서클 밟아요',
+    ko: '◎타겟서클 밟아요',
   },
   targetOut: {
     en: 'Stand Outside Target Circle',
-    ko: '타겟서클 바깥',
+    ko: '◎타겟서클 바깥',
   },
   prCombo: {
     en: '${inOut} => ${bait}',
-    ko: '${bait} (${inOut}으로)',
+    ko: '${bait} (${inOut})',
   },
 } as const;
 
 const tailThrustOutputStrings = {
   iceLeft: {
     en: 'Double Knockback (<== Start on Left)',
-    ko: '두번 넉백 (◀🡸 왼쪽 시작)',
+    ko: '두번 넉백 (❰❰❰왼쪽 시작)',
   },
   iceRight: {
     en: 'Double Knockback (Start on Right ==>)',
-    ko: '두번 넉백 (오른쪽 시작 🡺▶)',
+    ko: '두번 넉백 (오른쪽 시작❱❱❱)',
   },
   fireLeft: {
     en: 'Fire - Start Front + Right ==>',
-    ko: '🔥불 (오른쪽 시작 🡺▶)',
+    ko: '🔥불 (오른쪽 시작❱❱❱)',
   },
   fireRight: {
     en: '<== Fire - Start Front + Left',
-    ko: '🔥불 (◀🡸 왼쪽 시작)',
+    ko: '🔥불 (❰❰❰왼쪽 시작)',
   },
   unknown: Outputs.unknown,
 } as const;
@@ -318,6 +318,35 @@ const triggerSet: TriggerSet<Data> = {
         },
       },
     },
+    {
+      id: 'R4S Mustad Bomb stack',
+      regex: /Mustard Bomb \(spread \+ tethers\)/,
+      beforeSeconds: 15,
+      infoText: (data, _matches, output) =>
+        data.myRole === 'tank' ? output.tank!() : output.nonTank!(),
+      outputStrings: {
+        tank: {
+          en: 'Tank Tethers',
+          ko: '머스타드 폭탄, 줄받을 준비',
+        },
+        nonTank: {
+          en: 'Stack',
+          ko: '머스타드 폭탄, 한가운데 뭉쳐요',
+        },
+      },
+    },
+    {
+      id: 'R4S Wicked Fire prepare',
+      regex: /Wicked Fire \(puddles drop\)/,
+      beforeSeconds: 10,
+      infoText: (_data, _matches, output) => output.text!(),
+      outputStrings: {
+        text: {
+          en: 'Go center',
+          ko: '장판 유도할거임 한가운데로!',
+        },
+      },
+    },
   ],
   triggers: [
     {
@@ -394,11 +423,11 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         in: {
           en: 'In',
-          ko: '가운데서',
+          ko: '❱❱가운데서❰❰',
         },
         out: {
           en: 'Out',
-          ko: '모서리로',
+          ko: '❰❰모서리로❱❱',
         },
         spreadAvoid: {
           en: 'Spread (Avoid Side Cleaves)',
@@ -460,23 +489,23 @@ const triggerSet: TriggerSet<Data> = {
         },
         near: {
           en: 'Spread (Be Closer)',
-          ko: '안',
+          ko: '보스 근처로',
         },
         far: {
           en: 'Spread (Be Further)',
-          ko: '바깥',
+          ko: '바깥쪽 칸',
         },
         nearFoked: {
           en: 'Spread (Be Closer)',
-          ko: '🗲안',
+          ko: '🗲보스 근처로',
         },
         farFoked: {
           en: 'Spread (Be Further)',
-          ko: '🗲바깥',
+          ko: '🗲바깥쪽 칸',
         },
         combo: {
           en: '${inOut} + ${spread}',
-          ko: '${spread}으로 (${inOut})',
+          ko: '${spread} (${inOut})',
         },
       },
     },
@@ -732,7 +761,7 @@ const triggerSet: TriggerSet<Data> = {
       id: 'R4S Electrope Edge Positions',
       type: 'StartsUsing',
       netRegex: { id: '95C5', source: 'Wicked Thunder', capture: false },
-      alertText: (data, _matches, output) => {
+      infoText: (data, _matches, output) => {
         // On the first cast, it will spawn intercardinal mines that are hit by Witchgleams.
         // On the second cast, players will be hit by Witchgleams.
         if (Object.keys(data.electromines).length === 0)
@@ -841,10 +870,10 @@ const triggerSet: TriggerSet<Data> = {
         ...Directions.outputStringsIntercardDir,
         ...AutumnDirections.outputStringsMarkerIntercard,
         partners: Outputs.stackPartner,
-        spread: Outputs.spread,
+        spread: Outputs.spreadOwn,
         combo: {
           en: '${dir} => ${mech}',
-          ko: '${dir} 🔜 ${mech}',
+          ko: '${dir} ${mech}',
         },
       },
     },
@@ -919,15 +948,14 @@ const triggerSet: TriggerSet<Data> = {
       delaySeconds: (_data, matches) => parseFloat(matches.duration) - 7,
       alertText: (data, _matches, output) => {
         if (data.options.AutumnStyle) {
-          const count = data.witchgleamSelfCount;
           const pos = data.imDps
-            ? count === 2
+            ? data.witchgleamSelfCount === 2
               ? 'rightBottom'
               : 'rightTop'
-            : count === 2
+            : data.witchgleamSelfCount === 2
             ? 'leftBottom'
             : 'leftTop';
-          return output[pos]!({ stacks: count });
+          return output[pos]!();
         }
         return output.spread!({ stacks: data.witchgleamSelfCount });
       },
@@ -937,20 +965,20 @@ const triggerSet: TriggerSet<Data> = {
           ko: '흩어져요 (${stacks}스택)',
         },
         leftTop: {
-          en: 'Left Top (${stacks} stacks)',
-          ko: '왼쪽 위 (${stacks}스택)',
+          en: 'Left Top',
+          ko: '🡼왼쪽 위',
         },
         leftBottom: {
-          en: 'Left Bottom (${stacks} stacks)',
-          ko: '왼쪽 아래 (${stacks}스택)',
+          en: 'Left Bottom',
+          ko: '🡿왼쪽 아래',
         },
         rightTop: {
-          en: 'Right Top (${stacks} stacks)',
-          ko: '오른쪽 위 (${stacks}스택)',
+          en: 'Right Top',
+          ko: '🡽오른쪽 위',
         },
         rightBottom: {
-          en: 'Right Bottom (${stacks} stacks)',
-          ko: '오른쪽 아래 (${stacks}스택)',
+          en: 'Right Bottom',
+          ko: '🡾오른쪽 아래',
         },
       },
     },
@@ -966,18 +994,25 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (data, matches, output) => {
         let starEffect = data.starEffect ?? 'unknown';
 
-        if (data.options.AutumnStyle && starEffect === 'partners') {
-          if (data.witchgleamSelfCount === 2)
-            starEffect = data.imDps ? 'pairSouth' : 'pairNorth';
-          else
-            starEffect = data.imDps ? 'pairCenter' : 'pairSide';
-        }
-
         // Some strats have stack/spread positions based on Witchgleam stack count,
         // so for the long debuffs, add that info (both for positioning and as a reminder).
-        const reminder = data.condenserTimer === 'long'
+        let reminder = data.condenserTimer === 'long'
           ? output.stacks!({ stacks: data.witchgleamSelfCount })
           : '';
+
+        if (data.options.AutumnStyle) {
+          reminder = '';
+          if (starEffect === 'partners') {
+            if (data.witchgleamSelfCount === 2)
+              starEffect = data.imDps ? 'pairSouth' : 'pairNorth';
+            else {
+              if (data.imDps)
+                starEffect = 'pairCenter';
+              else
+                starEffect = matches.id === '95EC' ? 'pairWest' : 'pairEast';
+            }
+          }
+        }
 
         if (matches.id === '95EC')
           return output.combo!({
@@ -995,7 +1030,7 @@ const triggerSet: TriggerSet<Data> = {
         east: Outputs.east,
         west: Outputs.west,
         partners: Outputs.stackPartner,
-        spread: Outputs.spread,
+        spread: Outputs.spreadOwn,
         unknown: Outputs.unknown,
         stacks: {
           en: '(${stacks} stacks after)',
@@ -1007,19 +1042,23 @@ const triggerSet: TriggerSet<Data> = {
         },
         pairNorth: {
           en: 'Pair North',
-          ko: '북쪽에서 둘이',
+          ko: 'Ⓐ 둘이',
         },
         pairSouth: {
           en: 'Pair South',
-          ko: '남쪽에서 둘이',
+          ko: 'Ⓒ 둘이',
         },
-        pairSide: {
-          en: 'Pair Sides',
-          ko: '옆쪽에서 둘이',
+        pairWest: {
+          en: 'Pair South',
+          ko: 'Ⓓ 둘이',
+        },
+        pairEast: {
+          en: 'Pair South',
+          ko: 'Ⓑ 둘이',
         },
         pairCenter: {
           en: 'Pair Center',
-          ko: '가운데에서 둘이',
+          ko: '한가운데 둘이',
         },
       },
     },
@@ -1138,21 +1177,7 @@ const triggerSet: TriggerSet<Data> = {
       netRegex: { effectId: ['FA2', 'FA3', 'FA4', 'FA5', 'FA6'] },
       condition: Conditions.targetIsYou(),
       durationSeconds: 5,
-      alertText: (data, matches, output) => {
-        if (data.options.AutumnStyle) {
-          switch (matches.effectId) {
-            case 'FA2':
-              return output.remoteCurrent!();
-            case 'FA3':
-              return output.proximateCurrent!();
-            case 'FA4':
-              return data.imDps ? output.spinningInside!() : output.spinningOutside!();
-            case 'FA5':
-              return data.imDps ? output.roundhouseInside!() : output.roundhouseOutside!();
-            case 'FA6':
-              return output.colliderConductor!();
-          }
-        }
+      alertText: (_data, matches, output) => {
         switch (matches.effectId) {
           case 'FA2':
             return output.remoteCurrent!();
@@ -1170,39 +1195,23 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         remoteCurrent: {
           en: 'Far Cone on You',
-          ko: '🔵내게 멀리 부채꼴',
+          ko: '🔵멀리 (앞뒤로)',
         },
         proximateCurrent: {
           en: 'Near Cone on You',
-          ko: '🟢내게 가까이 부채꼴',
+          ko: '🟢가까이 (앞뒤로)',
         },
         spinningConductor: {
           en: 'Small AoE on You',
-          ko: '●내게 장판',
+          ko: '●장판 (옆으로)',
         },
         roundhouseConductor: {
           en: 'Donut AoE on You',
-          ko: '◎내게 도넛',
+          ko: '🍩도넛 (옆으로)',
         },
         colliderConductor: {
           en: 'Get Hit by Cone',
           ko: '🟣부채꼴 맞아요 (바깥쪽)',
-        },
-        spinningInside: {
-          en: 'Small AoE (Inside)',
-          ko: '●내게 장판 (가운데쪽)',
-        },
-        spinningOutside: {
-          en: 'Small AoE (Outside)',
-          ko: '●내게 장판 (모서리쪽)',
-        },
-        roundhouseInside: {
-          en: 'Donut AoE on You (Inside)',
-          ko: '◎내게 도넛 (가운데쪽)',
-        },
-        roundhouseOutside: {
-          en: 'Donut AoE on You (Outside)',
-          ko: '◎내게 도넛 (모서리쪽)',
         },
       },
     },
@@ -1216,7 +1225,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         dodge: {
           en: 'Dodge w/Partner x7',
-          ko: '파트너와 함께 피하기 x7',
+          ko: '파트너와 왓다갔다 x7',
         },
       },
     },
@@ -1309,7 +1318,7 @@ const triggerSet: TriggerSet<Data> = {
         data.role === 'tank' ? output.tank!() : output.nonTank!(),
       outputStrings: {
         tank: Outputs.tetherBusters,
-        nonTank: Outputs.spread,
+        nonTank: Outputs.spreadOwn,
       },
     },
     {
@@ -1331,7 +1340,7 @@ const triggerSet: TriggerSet<Data> = {
       netRegex: { id: '961F', source: 'Wicked Thunder', capture: false },
       delaySeconds: 0.2,
       suppressSeconds: 1,
-      infoText: (data, _matches, output) => {
+      alertText: (data, _matches, output) => {
         if (data.mustardBombTargets.includes(data.me))
           return output.passDebuff!();
         else if (!data.kindlingCauldronTargets.includes(data.me))
@@ -1625,7 +1634,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         towers: {
           en: 'Tower Positions',
-          ko: '타워 위치',
+          ko: '타워 밟을 위치로!',
         },
       },
     },
@@ -1700,7 +1709,7 @@ const triggerSet: TriggerSet<Data> = {
         right: Outputs.right,
         safe: {
           en: '${side}: Start at ${first}',
-          ko: '${side}: ${first}번째부터 시작',
+          ko: '${side}: ${first}번으로!',
         },
         unknown: Outputs.unknown,
       },
@@ -1781,11 +1790,11 @@ const triggerSet: TriggerSet<Data> = {
         },
         yellowShort: {
           en: 'Short Yellow Debuff (Cannons First)',
-          ko: '짧은 🟡노랑 (빔 먼저)',
+          ko: '짧은 🟡노랑 (🟦빔 먼저)',
         },
         blueShort: {
           en: 'Short Blue Debuff (Cannons First)',
-          ko: '짧은 🔵파랑 (빔 먼저)',
+          ko: '짧은 🔵파랑 (🟨빔 먼저)',
         },
       },
     },
@@ -1888,13 +1897,33 @@ const triggerSet: TriggerSet<Data> = {
           cannonBaitStr = data.sunriseTowerSpots === 'northSouth'
             ? output.eastWest!()
             : output.northSouth!();
+          if (data.options.AutumnStyle) {
+            let arrow = 'unknown';
+            if (data.sunriseTowerSpots === 'northSouth')
+              arrow = data.imDps ? 'arrowN' : 'arrowS';
+            else
+              arrow = data.imDps ? 'arrowE' : 'arrowW';
+            towerSoakStr = output[arrow]!();
+          }
         }
 
         if (task === 'yellowShort' || task === 'blueShort') {
           const cannonLocs = task === 'yellowShort' ? blueCannons : yellowCannons;
+          if (data.options.AutumnStyle) {
+            const locPriors = ['dirNE', 'dirSE', 'dirSW', 'dirNW', 'unknown'] as const;
+            const arrowNames = ['arrowNE', 'arrowSE', 'arrowSW', 'arrowNW', 'unknown'] as const;
+            const first = cannonLocs[0] !== undefined ? locPriors.indexOf(cannonLocs[0]) : 4;
+            const second = cannonLocs[1] !== undefined ? locPriors.indexOf(cannonLocs[1]) : 4;
+            const select = data.imDps ? Math.min(first, second) : Math.max(first, second);
+            const mine = output[arrowNames[select]!]!();
+            const res = task === 'yellowShort' ? 'aYellow' : 'aBlue';
+            return output[res]!({ loc: mine, bait: cannonBaitStr });
+          }
           const locStr = cannonLocs.map((loc) => output[loc]!()).join('/');
           return output[task]!({ loc: locStr, bait: cannonBaitStr });
         }
+        if (data.options.AutumnStyle)
+          return output.aLong!({ bait: towerSoakStr });
         return output[task]!({ bait: towerSoakStr });
       },
       run: (data) => {
@@ -1914,20 +1943,33 @@ const triggerSet: TriggerSet<Data> = {
         },
         yellowLong: {
           en: 'Soak Tower (${bait})',
-          ko: '타워 밟아요 (${bait})',
+          ko: '${bait} 타워 밟아요',
         },
         blueLong: {
           en: 'Soak Tower (${bait})',
-          ko: '타워 밟아요 (${bait})',
+          ko: '${bait} 타워 밟아요',
         },
         yellowShort: {
           en: 'Blue Cannon (${loc}) - Point ${bait}',
-          ko: '🔵빔 (${loc}) - ${bait} 방향으로',
+          ko: '🟦빔 ${loc} ${bait} 유도',
         },
         blueShort: {
           en: 'Yellow Cannon (${loc}) - Point ${bait}',
-          ko: '🟡빔 (${loc}) - ${bait} 방향으로',
+          ko: '🟨빔 ${loc} ${bait} 유도',
         },
+        aLong: {
+          en: 'Soak Tower (${bait})',
+          ko: '타워${bait} 밟아요',
+        },
+        aYellow: {
+          en: 'Blue Cannon (${loc}) - Point ${bait}',
+          ko: '🟦빔${loc} (${bait} 유도)',
+        },
+        aBlue: {
+          en: 'Yellow Cannon (${loc}) - Point ${bait}',
+          ko: '🟨빔${loc} (${bait} 유도)',
+        },
+        ...AutumnDirections.outputStringsArrow8,
       },
     },
 

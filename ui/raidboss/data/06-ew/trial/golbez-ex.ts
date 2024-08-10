@@ -49,7 +49,7 @@ const galeSphereOutputStrings = {
     ko: '${dir} + ${mechanic}',
   },
   healerGroups: Outputs.healerGroups,
-  partnerStack: Outputs.pairStack,
+  partnerStack: Outputs.stackPartner,
   an: Outputs.arrowS,
   ae: Outputs.arrowW,
   as: Outputs.arrowN,
@@ -347,7 +347,7 @@ const triggerSet: TriggerSet<Data> = {
       suppressSeconds: 3,
       alertText: (_data, _matches, output) => output.partnerStack!(),
       outputStrings: {
-        partnerStack: Outputs.pairStack,
+        partnerStack: Outputs.stackPartner,
       },
     },
     {

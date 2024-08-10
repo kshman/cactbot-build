@@ -723,7 +723,7 @@ const triggerSet: TriggerSet<Data> = {
           return output.spread!();
       },
       outputStrings: {
-        stack: Outputs.pairStack,
+        stack: Outputs.stackPartner,
         spread: Outputs.spread,
       },
     },

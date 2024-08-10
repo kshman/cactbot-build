@@ -418,7 +418,7 @@ const triggerSet: TriggerSet<Data> = {
           return output.partnerStack!();
       },
       outputStrings: {
-        partnerStack: Outputs.pairStack,
+        partnerStack: Outputs.stackPartner,
       },
     },
     {

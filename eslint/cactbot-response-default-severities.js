@@ -67,7 +67,7 @@ module.exports = {
         'preyOn',
         'awayFrom',
         'earthshaker',
-        'pairStack',
+        'stackPartner',
       ],
       'alarm': [
         'tankBusterSwap',
