@@ -124,22 +124,27 @@ const isSwordQuiverId = (id: string): id is keyof typeof swordQuiverSafeMap => {
 const witchHuntAlertOutputStrings = {
   in: {
     en: 'In',
+    ja: '中へ',
     ko: '안',
   },
   out: {
     en: 'Out',
+    ja: '外へ',
     ko: '밖',
   },
   near: {
     en: 'Baits Close (Party Far)',
+    ja: '近づいて誘導 (他は離れる)',
     ko: '가까이 (파티 멀리)',
   },
   far: {
     en: 'Baits Far (Party Close)',
+    ja: '離れて誘導 (他は近づく)',
     ko: '멀리 (파티 가까이)',
   },
   combo: {
     en: '${inOut} => ${bait}',
+    ja: '${inOut} => ${bait}',
     ko: '${inOut} 🔜 ${bait}',
   },
   unknown: Outputs.unknown,
@@ -176,18 +181,22 @@ const witchHuntAlertOutputStrings = {
 const tailThrustOutputStrings = {
   iceLeft: {
     en: 'Double Knockback (<== Start on Left)',
+    ja: '2連続ノックバック (<== 左から開始)',
     ko: '두번 넉백 (❰❰❰왼쪽 시작)',
   },
   iceRight: {
     en: 'Double Knockback (Start on Right ==>)',
+    ja: '2連続ノックバック (右から開始 ==>)',
     ko: '두번 넉백 (오른쪽 시작❱❱❱)',
   },
   fireLeft: {
     en: 'Fire - Start Front + Right ==>',
+    ja: '火 - 最前列 + 右側へ ==>',
     ko: '🔥불 (오른쪽 시작❱❱❱)',
   },
   fireRight: {
     en: '<== Fire - Start Front + Left',
+    ja: '<== 火 - 最前列 + 左側へ',
     ko: '🔥불 (❰❰❰왼쪽 시작)',
   },
   unknown: Outputs.unknown,
@@ -196,14 +205,17 @@ const tailThrustOutputStrings = {
 const swordQuiverOutputStrings = {
   frontAndSides: {
     en: 'Go Front / Sides',
+    ja: '前方 / 横側 へ',
     ko: '🡸🡹🡺앞옆으로',
   },
   frontAndBack: {
     en: 'Go Front / Back',
+    ja: '前方 / 後方 へ',
     ko: '🡹🡻앞뒤로',
   },
   sidesAndBack: {
     en: 'Go Sides / Back',
+    ja: '横 / 後方 へ',
     ko: '🡸🡻🡺옆뒤로',
   },
 } as const;
@@ -319,23 +331,6 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: 'R4S Mustad Bomb stack',
-      regex: /Mustard Bomb \(spread \+ tethers\)/,
-      beforeSeconds: 15,
-      infoText: (data, _matches, output) =>
-        data.myRole === 'tank' ? output.tank!() : output.nonTank!(),
-      outputStrings: {
-        tank: {
-          en: 'Tank Tethers',
-          ko: '머스타드 폭탄, 줄받을 준비',
-        },
-        nonTank: {
-          en: 'Stack',
-          ko: '머스타드 폭탄, 한가운데 뭉쳐요',
-        },
-      },
-    },
-    {
       id: 'R4S Wicked Fire prepare',
       regex: /Wicked Fire \(puddles drop\)/,
       beforeSeconds: 10,
@@ -394,6 +389,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         avoid: {
           en: 'Avoid Front + Side Cleaves',
+          ja: '縦と横の範囲を避けて',
           ko: '격자 장판 피해요',
         },
       },
@@ -423,18 +419,22 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         in: {
           en: 'In',
+          ja: '中へ',
           ko: '❱❱가운데서❰❰',
         },
         out: {
           en: 'Out',
+          ja: '外へ',
           ko: '❰❰모서리로❱❱',
         },
         spreadAvoid: {
           en: 'Spread (Avoid Side Cleaves)',
+          ja: '散開 (横の範囲を避けて)',
           ko: '흩어져요',
         },
         combo: {
           en: '${inOut} + ${spread}',
+          ja: '${inOut} + ${spread}',
           ko: '${inOut} ${spread}',
         },
       },
@@ -481,30 +481,37 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         in: {
           en: 'In',
+          ja: '中へ',
           ko: '가운데',
         },
         out: {
           en: 'Out',
+          ja: '外へ',
           ko: '모서리',
         },
         near: {
           en: 'Spread (Be Closer)',
+          ja: '散開(近づく)',
           ko: '보스 근처로',
         },
         far: {
           en: 'Spread (Be Further)',
+          ja: '散開(離れる)',
           ko: '바깥쪽 칸',
         },
         nearFoked: {
           en: 'Spread (Be Closer)',
+          ja: '散開(近づく)',
           ko: '🗲보스 근처로',
         },
         farFoked: {
           en: 'Spread (Be Further)',
+          ja: '散開(離れる)',
           ko: '🗲바깥쪽 칸',
         },
         combo: {
           en: '${inOut} + ${spread}',
+          ja: '${inOut} + ${spread}',
           ko: '${spread} (${inOut})',
         },
       },
@@ -567,18 +574,22 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         in: {
           en: 'In',
+          ja: '中へ',
           ko: '안',
         },
         out: {
           en: 'Out',
+          ja: '外へ',
           ko: '밖',
         },
         near: {
           en: 'Close',
+          ja: '近づく',
           ko: '가까이',
         },
         far: {
           en: 'Far',
+          ja: '離れる',
           ko: '멀리',
         },
         separator: {
@@ -590,10 +601,12 @@ const triggerSet: TriggerSet<Data> = {
         },
         baitStep: {
           en: '${inOut} (${bait})',
+          ja: '${inOut} (${bait})',
           ko: '${inOut} (${bait})',
         },
         baitCombo: {
           en: 'Baits: ${allBaits}',
+          ja: '誘導: ${allBaits}',
           ko: '(${allBaits})',
         },
         unknown: Outputs.unknown,
@@ -868,13 +881,14 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         ...Directions.outputStringsIntercardDir,
-        ...AutumnDirections.outputStringsMarkerIntercard,
         partners: Outputs.stackPartner,
         spread: Outputs.spreadOwn,
         combo: {
           en: '${dir} => ${mech}',
+          ja: '${dir} => ${mech}',
           ko: '${dir} ${mech}',
         },
+        ...AutumnDirections.outputStringsMarkerIntercard,
       },
     },
     {
@@ -925,10 +939,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         short: {
           en: 'Short Debuff (w/ ${same})',
+          ja: '短いデバフ (同じく/ ${same})',
           ko: '짧은 디버프 (${same})',
         },
         long: {
           en: 'Long Debuff (w/ ${same})',
+          ja: '長いデバフ (同じく/ ${same})',
           ko: '긴 디버프 (${same})',
         },
       },
@@ -962,6 +978,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         spread: {
           en: 'Spread (${stacks} stacks)',
+          ja: '散開 (${stacks} 回のほう)',
           ko: '흩어져요 (${stacks}스택)',
         },
         leftTop: {
@@ -1034,10 +1051,12 @@ const triggerSet: TriggerSet<Data> = {
         unknown: Outputs.unknown,
         stacks: {
           en: '(${stacks} stacks after)',
+          ja: '(${stacks} 回のほう)',
           ko: '(${stacks}스택)',
         },
         combo: {
           en: '${dir} => ${mech} ${remind}',
+          ja: '${dir} => ${mech} ${remind}',
           ko: '${dir} 🔜 ${mech} ${remind}',
         },
         pairNorth: {
@@ -1110,10 +1129,12 @@ const triggerSet: TriggerSet<Data> = {
         unknown: Outputs.unknown,
         tank: {
           en: '${dir} - Be in Front',
+          ja: '${dir} - ボス近くで受けて',
           ko: '${dir} - 앞에서 막아요',
         },
         nonTank: {
           en: '${dir} - Behind Tank',
+          ja: '${dir} - タンクの後ろへ',
           ko: '${dir} - 탱크 뒤로',
         },
       },
@@ -1130,19 +1151,23 @@ const triggerSet: TriggerSet<Data> = {
         output.responseOutputStrings = {
           swap: {
             en: 'Swap Sides',
+            ja: '場所を交代',
             ko: '반대편으로',
           },
           stay: {
             en: 'Stay',
+            ja: 'そのまま',
             ko: '그대로',
           },
           unknown: Outputs.unknown,
           tank: {
             en: '${dir} - Be in Front',
+            ja: '${dir} - ボス近くで受けて',
             ko: '${dir} - 앞에서 막아요',
           },
           nonTank: {
             en: '${dir} - Behind Tank',
+            ja: '${dir} - タンクの後ろへ',
             ko: '${dir} - 탱크 뒤로',
           },
         };
@@ -1195,22 +1220,27 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         remoteCurrent: {
           en: 'Far Cone on You',
+          ja: '自分から遠い人に扇範囲',
           ko: '🔵멀리 (앞뒤로)',
         },
         proximateCurrent: {
           en: 'Near Cone on You',
+          ja: '自分から近い人に扇範囲',
           ko: '🟢가까이 (앞뒤로)',
         },
         spinningConductor: {
           en: 'Small AoE on You',
+          ja: '自分に小さい円範囲',
           ko: '●장판 (옆으로)',
         },
         roundhouseConductor: {
           en: 'Donut AoE on You',
+          ja: '自分にドーナツ範囲',
           ko: '🍩도넛 (옆으로)',
         },
         colliderConductor: {
           en: 'Get Hit by Cone',
+          ja: '扇範囲に当たって',
           ko: '🟣부채꼴 맞아요 (바깥쪽)',
         },
       },
@@ -1225,6 +1255,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         dodge: {
           en: 'Dodge w/Partner x7',
+          ja: '相方と避ける x7',
           ko: '파트너와 왓다갔다 x7',
         },
       },
@@ -1269,10 +1300,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         near: {
           en: 'In Front of Partner',
+          ja: '相方の前へ',
           ko: '파트너 앞에서 막아요',
         },
         far: {
           en: 'Behind Partner',
+          ja: '相方の後ろへ',
           ko: '파트너 뒤로',
         },
       },
@@ -1353,10 +1386,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         passDebuff: {
           en: 'Pass Debuff',
+          ja: 'デバフを渡して',
           ko: '디버프 건네줘요',
         },
         getDebuff: {
           en: 'Get Debuff',
+          ja: 'デバフを取って',
           ko: '디버프 받아요',
         },
       },
@@ -1393,6 +1428,7 @@ const triggerSet: TriggerSet<Data> = {
         ...tailThrustOutputStrings,
         stored: {
           en: 'Stored: ${effect}',
+          ja: 'あとで: ${effect}',
           ko: '저장: ${effect}',
         },
       },
@@ -1418,6 +1454,7 @@ const triggerSet: TriggerSet<Data> = {
         output.responseOutputStrings = {
           lb3: {
             en: 'LB3!',
+            ja: 'タンク LB3!',
             ko: '탱크 리미트 브레이크!',
           },
         };
@@ -1508,6 +1545,7 @@ const triggerSet: TriggerSet<Data> = {
         sides: Outputs.sides,
         combo: {
           en: '${dir} => ${inSides}',
+          ja: '${dir} => ${inSides}',
           ko: '${dir} 🔜 ${inSides}',
         },
       },
@@ -1576,6 +1614,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         combo: {
           en: '${dir} => ${mech}',
+          ja: '${dir} => ${mech}',
           ko: '${dir} 🔜 ${mech}',
         },
         cardinals: Outputs.cardinals,
@@ -1607,6 +1646,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         combo: {
           en: '${dir} => ${mech}',
+          ja: '${dir} => ${mech}',
           ko: '${dir} 🔜 ${mech}',
         },
         cardinals: Outputs.cardinals,
@@ -1634,6 +1674,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         towers: {
           en: 'Tower Positions',
+          ja: '塔の位置へ',
           ko: '타워 밟을 위치로!',
         },
       },
@@ -1709,6 +1750,7 @@ const triggerSet: TriggerSet<Data> = {
         right: Outputs.right,
         safe: {
           en: '${side}: Start at ${first}',
+          ja: '${side}: まずは ${first} から',
           ko: '${side}: ${first}번으로!',
         },
         unknown: Outputs.unknown,
@@ -1754,6 +1796,7 @@ const triggerSet: TriggerSet<Data> = {
         },
         safe: {
           en: '${side} Side: ${order}',
+          ja: '${side} : ${order}',
           ko: '${side}: ${order}',
         },
         unknown: Outputs.unknown,
@@ -1782,18 +1825,22 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         yellowLong: {
           en: 'Long Yellow Debuff (Towers First)',
+          ja: '長い黄色デバフ (塔から)',
           ko: '긴 🟡노랑 (타워 먼저)',
         },
         blueLong: {
           en: 'Long Blue Debuff (Towers First)',
+          ja: '長い青色デバフ (塔から)',
           ko: '긴 🔵파랑 (타워 먼저)',
         },
         yellowShort: {
           en: 'Short Yellow Debuff (Cannons First)',
+          ja: '短い黄色デバフ (ビーム誘導から)',
           ko: '짧은 🟡노랑 (🟦빔 먼저)',
         },
         blueShort: {
           en: 'Short Blue Debuff (Cannons First)',
+          ja: '短い青色デバフ (ビーム誘導から)',
           ko: '짧은 🔵파랑 (🟨빔 먼저)',
         },
       },
@@ -1935,26 +1982,32 @@ const triggerSet: TriggerSet<Data> = {
         ...Directions.outputStringsIntercardDir,
         northSouth: {
           en: 'N/S',
+          ja: '南/北',
           ko: '남북',
         },
         eastWest: {
           en: 'E/W',
+          ja: '東/西',
           ko: '동서',
         },
         yellowLong: {
           en: 'Soak Tower (${bait})',
+          ja: '塔を踏んで (${bait})',
           ko: '${bait} 타워 밟아요',
         },
         blueLong: {
           en: 'Soak Tower (${bait})',
+          ja: '塔を踏んで (${bait})',
           ko: '${bait} 타워 밟아요',
         },
         yellowShort: {
           en: 'Blue Cannon (${loc}) - Point ${bait}',
+          ja: '青いビーム誘導 (${loc}) - ${bait}',
           ko: '🟦빔 ${loc} ${bait} 유도',
         },
         blueShort: {
           en: 'Yellow Cannon (${loc}) - Point ${bait}',
+          ja: '黄色いビーム誘導 (${loc}) - ${bait}',
           ko: '🟨빔 ${loc} ${bait} 유도',
         },
         aLong: {
