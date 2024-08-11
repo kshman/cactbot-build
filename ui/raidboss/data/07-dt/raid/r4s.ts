@@ -1221,12 +1221,12 @@ const triggerSet: TriggerSet<Data> = {
         remoteCurrent: {
           en: 'Far Cone on You',
           ja: '自分から遠い人に扇範囲',
-          ko: '🔵멀리 (앞뒤로)',
+          ko: '🔵멀리 (앞으로)',
         },
         proximateCurrent: {
           en: 'Near Cone on You',
           ja: '自分から近い人に扇範囲',
-          ko: '🟢가까이 (앞뒤로)',
+          ko: '🟢가까이 (앞으로)',
         },
         spinningConductor: {
           en: 'Small AoE on You',
@@ -1241,7 +1241,7 @@ const triggerSet: TriggerSet<Data> = {
         colliderConductor: {
           en: 'Get Hit by Cone',
           ja: '扇範囲に当たって',
-          ko: '🟣부채꼴 맞아요 (바깥쪽)',
+          ko: '🟣부채꼴 맞아요 (뒤로)',
         },
       },
     },
@@ -1620,7 +1620,7 @@ const triggerSet: TriggerSet<Data> = {
         cardinals: Outputs.cardinals,
         intercards: Outputs.intercards,
         partners: Outputs.stackPartner,
-        spread: Outputs.spread,
+        spread: Outputs.spreadSolo,
       },
     },
     {
@@ -1652,7 +1652,7 @@ const triggerSet: TriggerSet<Data> = {
         cardinals: Outputs.cardinals,
         intercards: Outputs.intercards,
         partners: Outputs.stackPartner,
-        spread: Outputs.spread,
+        spread: Outputs.spreadSolo,
         unknown: Outputs.unknown,
       },
     },
