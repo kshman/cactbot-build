@@ -1,4 +1,5 @@
 import Conditions from '../../../../../resources/conditions';
+import Outputs from '../../../../../resources/outputs';
 import { Responses } from '../../../../../resources/responses';
 import ZoneId from '../../../../../resources/zone_id';
 import { RaidbossData } from '../../../../../types/data';
@@ -43,9 +44,16 @@ const triggerSet: TriggerSet<Data> = {
       id: 'Alexandria AntivirusX Interferon Collect',
       type: 'AddedCombatant',
       netRegex: { name: ['Interferon C', 'Interferon R'] },
-      run: (data, matches) => {
-        const call = matches.name === 'Interferon C' ? 'Avoid' : 'In';
+      run: (data, matches, output) => {
+        const call = matches.name === 'Interferon C' ? output.avoid!() : output.in!();
         data.interferonCalls.push(call);
+      },
+      outputStrings: {
+        avoid: {
+          en: 'Avoid',
+          ko: '피해요',
+        },
+        in: Outputs.in,
       },
     },
     {
