@@ -371,7 +371,7 @@ const jobLocalizedAbbr: Record<Job, LocaleText> = {
     fr: 'PSB',
     ja: 'ガンブレ',
     cn: '绝枪',
-    ko: '총칼이',
+    ko: '총칼',
   },
   DNC: {
     en: 'DNC',
@@ -952,7 +952,7 @@ export default class PartyTracker {
         return retVal;
       if (typeof retVal === 'number')
         return retVal.toString();
-      return ret.nick;
+      return ret.jobAbbr ?? ret.nick;
     };
 
     return ret;

@@ -620,7 +620,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       run: (data, _matches, output) => data.footfallsConcept = output.text!(),
       outputStrings: {
-        text: Outputs.pairStack,
+        text: Outputs.stackPartner,
       },
     },
     {
@@ -695,7 +695,7 @@ const triggerSet: TriggerSet<Data> = {
           cn: '黑线外侧 + 2人分摊',
           ko: '숫자 마커 + 페어',
         },
-        stacks: Outputs.pairStack,
+        stacks: Outputs.stackPartner,
       },
     },
     {

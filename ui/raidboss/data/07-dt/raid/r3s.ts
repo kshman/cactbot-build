@@ -1,22 +1,86 @@
+import { AutumnDirections } from '../../../../../resources/autumn';
 import Conditions from '../../../../../resources/conditions';
 // import Outputs from '../../../../../resources/outputs';
+import { callOverlayHandler } from '../../../../../resources/overlay_plugin_api';
 import { Responses } from '../../../../../resources/responses';
+import { Directions } from '../../../../../resources/util';
 import ZoneId from '../../../../../resources/zone_id';
 import { RaidbossData } from '../../../../../types/data';
 import { TriggerSet } from '../../../../../types/trigger';
 
 type Phase = 'final' | 'field' | 'foe';
 
+type TagTeamClone = {
+  dir: number;
+  cleave: number;
+};
+
 export interface Data extends RaidbossData {
   phaseTracker: number;
+  tagTeamCloneTethered?: number;
+  tagTeamClones: TagTeamClone[];
   //
   phase?: Phase;
   myFuse: 'short' | 'long' | undefined;
   fieldList: string[];
 }
 
-// TODO: Lariat Combo during second KB towers?
 // TODO: <foo>boom Special delayed in/out triggers?
+
+const getSafeSpotsFromClones = (
+  myClone: TagTeamClone,
+  otherClone: TagTeamClone,
+  murderousMistDir?: number,
+): [number[], number] => {
+  let safeSpots = [...Array(8).keys()];
+
+  const lastSafeSpots = Array<number>(8).fill(0);
+
+  // Trim the three dirs that aren't getting hit by myClone
+  for (let idx = 0; idx < 3; ++idx) {
+    const dir = (myClone.cleave + 3 + idx) % 8;
+    safeSpots = safeSpots.filter((spot) => dir !== spot);
+  }
+
+  // Trim the five dirs that are getting hit by otherClone
+  for (let idx = 0; idx < 5; ++idx) {
+    const dir = (otherClone.cleave + 6 + idx) % 8;
+    safeSpots = safeSpots.filter((spot) => dir !== spot);
+    // Track that this spot is getting hit for the last safe spot calc
+    if (lastSafeSpots[dir] !== undefined)
+      lastSafeSpots[dir]++;
+  }
+
+  // Handle Murderous Mist if that's getting passed in
+  if (murderousMistDir !== undefined) {
+    // Invert to get the "safe" spot behind boss
+    murderousMistDir = (murderousMistDir + 4) % 8;
+    safeSpots = safeSpots.filter((spot) => murderousMistDir !== spot);
+  }
+
+  // Figure out where our final safe spot is
+  for (let idx = 0; idx < 5; ++idx) {
+    const dir = (myClone.cleave + 6 + idx) % 8;
+    if (lastSafeSpots[dir] !== undefined)
+      lastSafeSpots[dir]++;
+  }
+
+  const lastSafeSpot = (lastSafeSpots.findIndex((count) => count === 0) + 4) % 8;
+
+  return [safeSpots, lastSafeSpot];
+};
+
+const tagTeamOutputStrings = {
+  ...Directions.outputStrings8Dir,
+  safeDirs: {
+    en: 'Safe: ${dirs} => ${last}',
+    ko: '안전: ${dirs} 🔜 ${last}',
+  },
+  separator: {
+    en: '/',
+    ko: ' / ',
+  },
+} as const;
 
 const triggerSet: TriggerSet<Data> = {
   id: 'AacLightHeavyweightM3Savage',
@@ -24,24 +88,11 @@ const triggerSet: TriggerSet<Data> = {
   timelineFile: 'r3s.txt',
   initData: () => ({
     phaseTracker: 0,
+    tagTeamClones: [],
+    //
     myFuse: undefined,
     fieldList: [],
   }),
-  timelineTriggers: [
-    {
-      id: 'R3S 탱크 스위치 확인',
-      regex: /탱크 스위치 확인/,
-      beforeSeconds: 1,
-      condition: (data) => data.party.isTank(data.me),
-      alarmText: (_data, _matches, output) => output.text!(),
-      outputStrings: {
-        text: {
-          en: 'Check Tank Swap',
-          ko: '탱크 스위치 확인!',
-        },
-      },
-    },
-  ],
   triggers: [
     {
       id: 'R3S Phase Tracker',
@@ -223,6 +274,209 @@ const triggerSet: TriggerSet<Data> = {
         },
       },
     },
+    {
+      id: 'R3S Tag Team Tether',
+      type: 'Tether',
+      // The clone uses ID `0112`, the boss uses ID `0113`.
+      netRegex: { id: '0112', capture: true },
+      condition: Conditions.targetIsYou(),
+      promise: async (data, matches) => {
+        const actors = (await callOverlayHandler({
+          call: 'getCombatants',
+          ids: [parseInt(matches.sourceId, 16)],
+        })).combatants;
+
+        const actor = actors[0];
+
+        if (actors.length !== 1 || actor === undefined) {
+          console.error(`R3S Tag Team Tether: Wrong actor count ${actors.length}`);
+          return;
+        }
+
+        data.tagTeamCloneTethered = Directions.xyTo8DirNum(actor.PosX, actor.PosY, 100, 100);
+      },
+      infoText: (data, _matches, output) => {
+        if (data.options.AutumnStyle) {
+          const mark = AutumnDirections.outputFromMarker8Num(data.tagTeamCloneTethered ?? -1);
+          return output.tetheredTo!({ dir: output[mark]!() });
+        }
+        const dir = output[Directions.outputFrom8DirNum(data.tagTeamCloneTethered ?? -1)]!();
+        return output.tetheredTo!({ dir: dir });
+      },
+      outputStrings: {
+        ...Directions.outputStringsCardinalDir,
+        tetheredTo: {
+          en: 'Tethered to ${dir} clone',
+          ko: '분신 줄: ${dir}',
+        },
+        ...AutumnDirections.outputStringsMarkerCardinal,
+      },
+    },
+    {
+      id: 'R3S Tag Team Clone',
+      type: 'StartsUsing',
+      netRegex: { id: ['9B2C', '9B2E', '9BD8', '9BDA'], source: 'Brute Distortion', capture: true },
+      condition: (data, matches) => {
+        const x = parseFloat(matches.x);
+        const y = parseFloat(matches.y);
+        const cloneDir = Directions.xyTo8DirNum(x, y, 100, 100);
+        const cleaveAdjust = ['9B2C', '9BD8'].includes(matches.id) ? 6 : 2;
+        const cleaveDir = (cloneDir + cleaveAdjust) % 8;
+        data.tagTeamClones.push({
+          cleave: cleaveDir,
+          dir: cloneDir,
+        });
+        if (data.phaseTracker === 1 && data.tagTeamClones.length === 2)
+          return true;
+        return false;
+      },
+      durationSeconds: 10.7,
+      infoText: (data, _matches, output) => {
+        const myClone = data.tagTeamClones.find((clone) => clone.dir === data.tagTeamCloneTethered);
+        const otherClone = data.tagTeamClones.find((clone) =>
+          clone.dir !== data.tagTeamCloneTethered
+        );
+
+        if (myClone === undefined) {
+          console.error('R3S Tag Team Clone: Missing myClone', data.tagTeamClones);
+          return;
+        }
+
+        if (otherClone === undefined) {
+          console.error('R3S Tag Team Clone: Missing otherClone', data.tagTeamClones);
+          return;
+        }
+
+        const [safeSpots, lastSafeSpot] = getSafeSpotsFromClones(myClone, otherClone);
+
+        return output.safeDirs!({
+          dirs: safeSpots
+            .map((dir) => output[Directions.outputFrom8DirNum(dir)]!())
+            .join(output.separator!()),
+          last: output[Directions.outputFrom8DirNum(lastSafeSpot)]!(),
+        });
+      },
+      run: (data) => {
+        data.tagTeamCloneTethered = undefined;
+        data.tagTeamClones = [];
+      },
+      outputStrings: tagTeamOutputStrings,
+    },
+    {
+      id: 'R3S Tag Team Murderous Mist',
+      type: 'StartsUsingExtra',
+      netRegex: { id: '9BD7', capture: true },
+      // Sometimes this MM cast is before the clones, sometimes it's after
+      delaySeconds: 0.1,
+      durationSeconds: 12.7,
+      infoText: (data, matches, output) => {
+        const myClone = data.tagTeamClones.find((clone) => clone.dir === data.tagTeamCloneTethered);
+        const otherClone = data.tagTeamClones.find((clone) =>
+          clone.dir !== data.tagTeamCloneTethered
+        );
+
+        if (myClone === undefined) {
+          console.error('R3S Tag Team Clone: Missing myClone', data.tagTeamClones);
+          return;
+        }
+
+        if (otherClone === undefined) {
+          console.error('R3S Tag Team Clone: Missing otherClone', data.tagTeamClones);
+          return;
+        }
+
+        const murderousMistDir = Directions.hdgTo8DirNum(parseFloat(matches.heading));
+
+        const [safeSpots, lastSafeSpot] = getSafeSpotsFromClones(
+          myClone,
+          otherClone,
+          murderousMistDir,
+        );
+
+        return output.safeDirs!({
+          dirs: safeSpots
+            .map((dir) => output[Directions.outputFrom8DirNum(dir)]!())
+            .join(output.separator!()),
+          last: output[Directions.outputFrom8DirNum(lastSafeSpot)]!(),
+        });
+      },
+      run: (data) => {
+        data.tagTeamCloneTethered = undefined;
+        data.tagTeamClones = [];
+      },
+      outputStrings: tagTeamOutputStrings,
+    },
+    {
+      id: 'R3S KB Towers 2 Lariat Combo',
+      type: 'StartsUsing',
+      netRegex: { id: ['9AE8', '9AE9', '9AEA', '9AEB'], source: 'Brute Bomber', capture: true },
+      durationSeconds: 11,
+      infoText: (_data, matches, output) => {
+        const x = parseFloat(matches.x);
+        const y = parseFloat(matches.y);
+        const bossDir = Directions.xyTo8DirNum(x, y, 100, 100);
+
+        const firstCleaveDir = ['9AE8', '9AE9'].includes(matches.id) ? 'right' : 'left';
+        const secondCleaveDir = ['9AE8', '9AEB'].includes(matches.id) ? 'right' : 'left';
+
+        let firstSafeSpots = [...Array(8).keys()];
+        let secondSafeSpots = [...firstSafeSpots];
+
+        for (let idx = 0; idx < 5; ++idx) {
+          const dir = (bossDir + (firstCleaveDir === 'left' ? 0 : 4) + idx) % 8;
+          firstSafeSpots = firstSafeSpots.filter((spot) => spot !== dir);
+        }
+
+        for (let idx = 0; idx < 5; ++idx) {
+          const dir = (bossDir + (secondCleaveDir === 'right' ? 0 : 4) + idx) % 8;
+          secondSafeSpots = secondSafeSpots.filter((spot) => spot !== dir);
+        }
+
+        // Filter cards from first spots, need to get KB'd to intercard
+        firstSafeSpots = firstSafeSpots.filter((spot) => (spot % 2) !== 0);
+
+        // Only include card for second spot
+        secondSafeSpots = secondSafeSpots.filter((spot) => (spot % 2) === 0);
+
+        const [firstDir1, firstDir2] = firstSafeSpots;
+
+        const secondDir = secondSafeSpots[0];
+
+        if (firstDir1 === undefined || firstDir2 === undefined || secondDir === undefined) {
+          console.error(
+            'Failed to find safe dirs for second KB towers',
+            matches,
+            firstSafeSpots,
+            secondSafeSpots,
+          );
+          return output['unknown']!();
+        }
+
+        if (firstCleaveDir === secondCleaveDir) {
+          return output.comboGo!({
+            firstDir1: output[Directions.outputFrom8DirNum(firstDir1)]!(),
+            firstDir2: output[Directions.outputFrom8DirNum(firstDir2)]!(),
+            secondDir: output[Directions.outputFrom8DirNum(secondDir)]!(),
+          });
+        }
+        return output.comboStay!({
+          firstDir1: output[Directions.outputFrom8DirNum(firstDir1)]!(),
+          firstDir2: output[Directions.outputFrom8DirNum(firstDir2)]!(),
+          secondDir: output[Directions.outputFrom8DirNum(secondDir)]!(),
+        });
+      },
+      outputStrings: {
+        ...Directions.outputStrings8Dir,
+        comboGo: {
+          en: 'Knockback ${firstDir1}/${firstDir2} => Go ${secondDir}',
+          ko: '넉백 ${firstDir1}/${firstDir2} 🔜 ${secondDir}으로',
+        },
+        comboStay: {
+          en: 'Knockback ${firstDir1}/${firstDir2}, Stay ${secondDir}',
+          ko: '넉백 ${firstDir1}/${firstDir2}, 그대로 ${secondDir}',
+        },
+      },
+    },
     // ========== PRS ==========
     {
       id: 'R3S PRS Phase',
@@ -380,7 +634,7 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: 'R3S Octoboom Bombarian Special Out',
+      id: 'R3S PRS Bombarian Special Out',
       type: 'StartsUsing',
       netRegex: { id: ['9752', '940A'], source: 'Brute Bomber', capture: false },
       delaySeconds: 12,

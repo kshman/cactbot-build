@@ -196,7 +196,7 @@ export default {
     fr: 'Positions',
     ja: '基本散会',
     cn: '八方分散',
-    ko: '프로틴',
+    ko: '자기 자리로',
   },
   stackMarker: {
     // for stack marker situations
@@ -1012,25 +1012,30 @@ export default {
     ja: '2人同時タンク強攻撃',
     ko: '따로 따로 탱크버스터',
   },
-  pairStack: {
-    en: 'Stack',
-    ja: 'ペア',
-    ko: '페어',
-  },
-  pairStackOnPlayer: {
+  stackPartnerOnPlayer: {
     en: 'Stack: ${player}',
     ja: 'ペア: ${player}',
-    ko: '페어 (${player})',
+    ko: '둘이: (${player})',
   },
   spreadThenPair: {
     en: 'Spread => Stack',
     ja: '散開 => ペア',
-    ko: '흩어졌다 🔜 페어',
+    ko: '흩어졌다 🔜 둘이 뭉쳐요',
   },
   pairThenSpread: {
     en: 'Stack => Spread',
     ja: 'ペア => 散開',
-    ko: '페어 🔜 흩어져요',
+    ko: '둘이 뭉쳣다 🔜 흩어져요',
+  },
+  spreadOwn: {
+    en: 'Spread',
+    ja: '散会',
+    ko: '자기 자리로 흩어져요',
+  },
+  spreadSolo: {
+    en: 'Spread',
+    ja: '散開',
+    ko: '흩어져서 혼자',
   },
   // 화살표
   arrowN: {
