@@ -93,21 +93,6 @@ const triggerSet: TriggerSet<Data> = {
     myFuse: undefined,
     fieldList: [],
   }),
-  timelineTriggers: [
-    {
-      id: 'R3S 탱크 스위치 확인',
-      regex: /탱크 스위치 확인/,
-      beforeSeconds: 1,
-      condition: (data) => data.party.isTank(data.me),
-      alarmText: (_data, _matches, output) => output.text!(),
-      outputStrings: {
-        text: {
-          en: 'Check Tank Swap',
-          ko: '탱크 스위치 확인!',
-        },
-      },
-    },
-  ],
   triggers: [
     {
       id: 'R3S Phase Tracker',

@@ -150,11 +150,11 @@ const witchHuntAlertOutputStrings = {
   unknown: Outputs.unknown,
   markerOn: {
     en: 'Stand on Marker',
-    ko: '●마커 밟아요',
+    ko: '⚪마커 밟아요',
   },
   markerOut: {
     en: 'Stand Outside Marker',
-    ko: '●마커 바깥',
+    ko: '⚪마커 바깥',
   },
   crossInside: {
     en: 'Inside Cross',
@@ -425,7 +425,7 @@ const triggerSet: TriggerSet<Data> = {
         out: {
           en: 'Out',
           ja: '外へ',
-          ko: '❰❰모서리로❱❱',
+          ko: '❰❰바깥으로❱❱',
         },
         spreadAvoid: {
           en: 'Spread (Avoid Side Cleaves)',
@@ -487,7 +487,7 @@ const triggerSet: TriggerSet<Data> = {
         out: {
           en: 'Out',
           ja: '外へ',
-          ko: '모서리',
+          ko: '바깥쪽',
         },
         near: {
           en: 'Spread (Be Closer)',
@@ -497,7 +497,7 @@ const triggerSet: TriggerSet<Data> = {
         far: {
           en: 'Spread (Be Further)',
           ja: '散開(離れる)',
-          ko: '바깥쪽 칸',
+          ko: '멀리',
         },
         nearFoked: {
           en: 'Spread (Be Closer)',
@@ -507,7 +507,7 @@ const triggerSet: TriggerSet<Data> = {
         farFoked: {
           en: 'Spread (Be Further)',
           ja: '散開(離れる)',
-          ko: '🗲바깥쪽 칸',
+          ko: '🗲멀리',
         },
         combo: {
           en: '${inOut} + ${spread}',
@@ -900,7 +900,7 @@ const triggerSet: TriggerSet<Data> = {
         data.condenserTimer = parseFloat(matches.duration) > 30 ? 'long' : 'short';
         if (data.options.AutumnStyle) {
           const member = data.party.member(matches.target);
-          const jobName = member.jobAbbr ?? member.nick;
+          const jobName = member.nick; // member.jobAbbr ?? member.nick;
           if (data.condenserTimer === 'long')
             data.condenserMap.long.push(jobName);
           else
@@ -954,7 +954,24 @@ const triggerSet: TriggerSet<Data> = {
       type: 'Ability',
       netRegex: { id: '9786' },
       condition: Conditions.targetIsYou(),
-      run: (data) => data.witchgleamSelfCount++,
+      durationSeconds: 3,
+      infoText: (data, _matches, output) => {
+        data.witchgleamSelfCount++;
+        if (data.condenserTimer === 'long') {
+          return output.longStacks!({ times: data.witchgleamSelfCount - 1 });
+        }
+        return output.shortStacks!({ times: data.witchgleamSelfCount });
+      },
+      outputStrings: {
+        shortStacks: {
+          en: 'short ${times}',
+          ko: '짧은 ${times} 스택',
+        },
+        longStacks: {
+          en: 'long ${times}',
+          ko: '긴 ${times} 스택',
+        },
+      },
     },
     {
       id: 'R4S Electrical Condenser Debuff Expiring',
@@ -1221,17 +1238,17 @@ const triggerSet: TriggerSet<Data> = {
         remoteCurrent: {
           en: 'Far Cone on You',
           ja: '自分から遠い人に扇範囲',
-          ko: '🔵멀리 (앞으로)',
+          ko: '🔵파랑 (앞으로)',
         },
         proximateCurrent: {
           en: 'Near Cone on You',
           ja: '自分から近い人に扇範囲',
-          ko: '🟢가까이 (앞으로)',
+          ko: '🟢초록 (앞으로)',
         },
         spinningConductor: {
           en: 'Small AoE on You',
           ja: '自分に小さい円範囲',
-          ko: '●장판 (옆으로)',
+          ko: '⚫장판 (옆으로)',
         },
         roundhouseConductor: {
           en: 'Donut AoE on You',
@@ -1301,7 +1318,7 @@ const triggerSet: TriggerSet<Data> = {
         near: {
           en: 'In Front of Partner',
           ja: '相方の前へ',
-          ko: '파트너 앞에서 막아요',
+          ko: '파트너 앞에서 막아줘요',
         },
         far: {
           en: 'Behind Partner',
@@ -1751,7 +1768,7 @@ const triggerSet: TriggerSet<Data> = {
         safe: {
           en: '${side}: Start at ${first}',
           ja: '${side}: まずは ${first} から',
-          ko: '${side}: ${first}번으로!',
+          ko: '${side}: ${first}번으로',
         },
         unknown: Outputs.unknown,
       },
