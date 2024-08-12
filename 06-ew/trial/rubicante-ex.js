@@ -374,7 +374,7 @@ Options.Triggers.push({
       suppressSeconds: 5,
       infoText: (_data, _matches, output) => output.stack(),
       outputStrings: {
-        stack: Outputs.pairStack,
+        stack: Outputs.stackPartner,
       },
     },
     {

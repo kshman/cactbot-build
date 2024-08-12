@@ -74,17 +74,48 @@ Options.Triggers.push({
     {
       id: 'R2S Headmarker Shared Tankbuster',
       type: 'HeadMarker',
-      netRegex: { id: headMarkerData.sharedBuster },
+      netRegex: { id: headMarkerData.sharedBuster, capture: true },
       suppressSeconds: 5,
       response: Responses.sharedTankBuster(),
     },
     {
       id: 'R2S Headmarker Cone Tankbuster',
       type: 'HeadMarker',
-      netRegex: { id: headMarkerData.tankLaser },
+      netRegex: { id: headMarkerData.tankLaser, capture: true },
       suppressSeconds: 5,
       response: Responses.tankCleave(),
     },
+    /*
+        {
+          id: 'R2S Headmarker Spread',
+          type: 'HeadMarker',
+          netRegex: { id: headMarkerData.spreadMarker2, capture: false },
+          suppressSeconds: 5,
+          response: Responses.spread(),
+        },
+        {
+          id: 'R2S Headmarker Alarm Pheromones Puddle',
+          type: 'HeadMarker',
+          netRegex: { id: headMarkerData.spreadMarker1, capture: true },
+          condition: Conditions.targetIsYou(),
+          alertText: (_data, _matches, output) => output.text!(),
+          outputStrings: {
+            text: {
+              en: 'Drop Puddle Outside',
+            },
+          },
+        },
+        {
+          id: 'R2S Headmarker Party Stacks',
+          type: 'HeadMarker',
+          netRegex: { id: headMarkerData.heartStackMarker, capture: false },
+          suppressSeconds: 1,
+          infoText: (_data, _matches, output) => output.stacks!(),
+          outputStrings: {
+            stacks: Outputs.stacks,
+          },
+        },
+        */
     {
       id: 'R2S Call Me Honey',
       type: 'StartsUsing',

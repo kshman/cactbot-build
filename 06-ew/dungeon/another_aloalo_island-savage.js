@@ -479,7 +479,7 @@ Options.Triggers.push({
       delaySeconds: (_data, matches) => parseFloat(matches.duration) - 5,
       durationSeconds: 4,
       suppressSeconds: 5,
-      response: Responses.pairStack('info'),
+      response: Responses.stackPartner('info'),
     },
     {
       id: 'AAIS Ketuduke Hydrofall Reminder',
@@ -520,7 +520,7 @@ Options.Triggers.push({
       run: (data) => delete data.ketuBuff,
       outputStrings: {
         spread: Outputs.spread,
-        stacks: Outputs.pairStack,
+        stacks: Outputs.stackPartner,
         mesg: {
           en: 'Go to safe tile => ${mech}',
           ja: '安置マスへ => ${mech}',
@@ -1297,7 +1297,7 @@ Options.Triggers.push({
         const duration = parseFloat(matches.duration);
         return duration > 0.99 && duration < 1.9;
       },
-      response: Responses.pairStack(),
+      response: Responses.stackPartner(),
     },
     // ---------------- statice ----------------
     {
@@ -1807,7 +1807,7 @@ Options.Triggers.push({
             ja: '北の右へ (${partner})',
             ko: '북으로! 페어 오른쪽 (${partner})',
           },
-          stacks: Outputs.pairStack,
+          stacks: Outputs.stackPartner,
           unknown: Outputs.unknown,
         };
         if (data.me === matches.source || data.me === matches.target)

@@ -677,7 +677,7 @@ Options.Triggers.push({
           return output.spread();
       },
       outputStrings: {
-        stack: Outputs.pairStack,
+        stack: Outputs.stackPartner,
         spread: Outputs.spread,
       },
     },

@@ -53,7 +53,7 @@ hideall "--sync--"
 157.9 "Diveboom" Ability { id: "93E3", source: "Brute Bomber" }
 158.6 "--middle--" Ability { id: "93F4", source: "Brute Bomber" }
 166.3 "Brutal Impact x6" Ability { id: "9425", source: "Brute Bomber" } duration 5.2
-177.6 "Knuckle Sandwich" Ability { id: "9423", source: "Brute Bomber" } duration 5.1
+177.6 "Knuckle Sandwich x6" Ability { id: "9423", source: "Brute Bomber" } duration 5.1
 189.0 "--middle--" Ability { id: "93F4", source: "Brute Bomber" }
 
 195.4 "Tag Team" Ability { id: "93E7", source: "Brute Bomber" }
@@ -82,7 +82,7 @@ hideall "--sync--"
 305.3 "--sync--" Ability { id: "93F0", source: "Brute Bomber" }
 305.3 "Mana Explosion x8" duration 30
 345.5 "--sync--" Ability { id: "93F1", source: "Brute Bomber" }
-353.7 "Knuckle Sandwich x8" Ability { id: "9423", source: "Brute Bomber" } duration 5.1
+353.7 "Knuckle Sandwich x6" Ability { id: "9423", source: "Brute Bomber" } duration 5.1
 364.0 "--middle--" Ability { id: "93F4", source: "Brute Bomber" }
 
 370.8 "Doping Draught" Ability { id: "9427", source: "Brute Bomber" }
@@ -104,7 +104,6 @@ hideall "--sync--"
 469.3 "Octoboom Dive/Quadroboom Dive (cast)" Ability { id: ["93DE", "93E0", "93DF", "93E1"], source: "Brute Bomber" }
 470.2 "Octoboom Dive/Quadroboom Dive (damage)" Ability { id: ["93EC", "93F6", "93ED", "93F6"], source: "Brute Bomber" }
 473.4 "Diveboom" Ability { id: "93E3", source: "Brute Bomber" }
-474.0 "탱크 스위치 확인" duration 5
 474.5 "--middle--" Ability { id: "93F4", source: "Brute Bomber" }
 482.7 "Brutal Impact x8" Ability { id: "9425", source: "Brute Bomber" } duration 7.3
 496.1 "Knuckle Sandwich x8" Ability { id: "9423", source: "Brute Bomber" } duration 7.4
@@ -130,7 +129,6 @@ hideall "--sync--"
 593.2 "Lariat Combo" Ability { id: "9AF0", source: "Brute Bomber" }
 597.6 "Lariat Combo" Ability { id: "9AED", source: "Brute Bomber" }
 597.6 "Lariat Combo" Ability { id: "9AF3", source: "Brute Bomber" }
-599.0 "탱크 스위치 확인" duration 5
 600.2 "--middle--" Ability { id: "93F4", source: "Brute Bomber" }
 613.0 "Knuckle Sandwich x8" Ability { id: "9423", source: "Brute Bomber" } duration 7.4
 628.4 "--middle--" Ability { id: "93F4", source: "Brute Bomber" }

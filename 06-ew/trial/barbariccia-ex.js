@@ -394,7 +394,7 @@ Options.Triggers.push({
           return output.partnerStack();
       },
       outputStrings: {
-        partnerStack: Outputs.pairStack,
+        partnerStack: Outputs.stackPartner,
       },
     },
     {
