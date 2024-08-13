@@ -1558,7 +1558,7 @@ const triggerSet: TriggerSet<Data> = {
       run: (data) => delete data.secondTwilightCleaveSafe,
       outputStrings: {
         ...Directions.outputStringsIntercardDir,
-        in: Outputs.in,
+        in: Outputs.middle,
         sides: Outputs.sides,
         combo: {
           en: '${dir} => ${inSides}',
