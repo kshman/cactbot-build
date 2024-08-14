@@ -161,6 +161,7 @@ const raidEmulatorOnLoad = async () => {
     options.SpokenAlertsEnabled = false;
     options.GroupSpokenAlertsEnabled = false;
     options.AutumnStyle = false;
+    options.OnlyAutumn = false;
   }
 
   const emulator = new RaidEmulator(options);

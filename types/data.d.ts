@@ -19,6 +19,7 @@ export interface BaseOptions {
   SystemInfo: SystemInfo;
   Debug: boolean;
   AutumnStyle: boolean;
+  OnlyAutumn: boolean;
   AutumnParameter?: string;
   [key: string]: unknown;
 }

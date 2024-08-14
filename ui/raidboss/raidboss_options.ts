@@ -123,6 +123,7 @@ const defaultRaidbossConfigOptions = {
   AlarmRumbleWeak: 0.75,
   AlarmRumbleStrong: 0.75,
   AutumnStyle: false,
+  OnlyAutumn: false,
 };
 type RaidbossConfigOptions = typeof defaultRaidbossConfigOptions;
 

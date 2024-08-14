@@ -112,6 +112,7 @@ export type TriggerAutoConfig = {
   SoundAlertsEnabled?: boolean;
   SpokenAlertsEnabled?: boolean;
   AutumnStyle?: boolean;
+  OnlyAutumn?: boolean;
 };
 
 // Config UI options that apply to an entire trigger set.

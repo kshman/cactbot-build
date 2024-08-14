@@ -2543,6 +2543,16 @@ const templateOptions: OptionsTemplate = {
       type: 'checkbox',
       default: false,
     },
+    {
+      id: 'OnlyAutumn',
+      name: {
+        en: 'Only for Autumn',
+        ja: 'オヅミ専用',
+        ko: '어듬이 전용',
+      },
+      type: 'checkbox',
+      default: false,
+    },
   ],
 };
 
