@@ -139,17 +139,17 @@ const swordQuiverOutputStrings = {
   frontAndSides: {
     en: 'Go Front / Sides',
     ja: '前方 / 横側 へ',
-    ko: '🡸🡹🡺앞옆으로',
+    ko: '🡸🡹🡹🡺앞옆으로',
   },
   frontAndBack: {
     en: 'Go Front / Back',
     ja: '前方 / 後方 へ',
-    ko: '🡹🡻앞뒤로',
+    ko: '🡹🡹🡻🡻앞뒤로',
   },
   sidesAndBack: {
     en: 'Go Sides / Back',
     ja: '横 / 後方 へ',
-    ko: '🡸🡻🡺옆뒤로',
+    ko: '🡸🡻🡻🡺옆뒤로',
   },
 };
 Options.Triggers.push({
@@ -210,18 +210,6 @@ Options.Triggers.push({
         text: {
           en: 'South',
           ko: '남쪽으로!',
-        },
-      },
-    },
-    {
-      id: 'R4S Wicked Fire prepare',
-      regex: /Wicked Fire \(puddles drop\)/,
-      beforeSeconds: 10,
-      infoText: (_data, _matches, output) => output.text(),
-      outputStrings: {
-        text: {
-          en: 'Go center',
-          ko: '장판 유도할거임 한가운데로!',
         },
       },
     },
@@ -300,7 +288,7 @@ Options.Triggers.push({
         in: {
           en: 'In',
           ja: '中へ',
-          ko: '❱❱가운데서❰❰',
+          ko: '❱❱한가운데❰❰',
         },
         out: {
           en: 'Out',
@@ -360,7 +348,7 @@ Options.Triggers.push({
         in: {
           en: 'In',
           ja: '中へ',
-          ko: '가운데',
+          ko: '한가운데',
         },
         out: {
           en: 'Out',
@@ -415,7 +403,7 @@ Options.Triggers.push({
       // Cast time is almost the same as the GainsEffect
       // so slight delay just in case there's a race condition issue
       delaySeconds: 0.2,
-      durationSeconds: 24,
+      durationSeconds: (data) => data.options.OnlyAutumn ? 6 : 24,
       infoText: (data, matches, output) => {
         // assumes Narrowing; if Widening, just reverse
         let aoeOrder = ['in', 'out', 'in', 'out'];
@@ -429,6 +417,8 @@ Options.Triggers.push({
           baitOrder = [];
         else if (data.witchHuntBait === 'far')
           baitOrder = baitOrder.reverse();
+        if (data.options.OnlyAutumn)
+          return data.witchHuntFirst === 'in' ? output.startIn() : output.startOut();
         if (data.options.AutumnStyle) {
           const res = [];
           for (let i = 0; i < aoeOrder.length; ++i) {
@@ -483,6 +473,16 @@ Options.Triggers.push({
           ja: '誘導: ${allBaits}',
           ko: '(${allBaits})',
         },
+        startIn: {
+          en: 'Start In',
+          ja: '最初は中へ',
+          ko: '안쪽부터',
+        },
+        startOut: {
+          en: 'Start Out',
+          ja: '最初は外へ',
+          ko: '바깥쪽부터',
+        },
         unknown: Outputs.unknown,
       },
     },
@@ -494,7 +494,7 @@ Options.Triggers.push({
       netRegex: { id: ['95E0', '95E1'], source: 'Wicked Thunder', capture: false },
       delaySeconds: 7,
       durationSeconds: 7,
-      alertText: (data, _matches, output) => {
+      infoText: (data, _matches, output) => {
         const inOut = data.witchHuntAoESafe ?? output.unknown();
         const bait = data.witchHuntBait ?? output.unknown();
         // flip things for the next call
@@ -531,7 +531,7 @@ Options.Triggers.push({
       netRegex: { id: ['95E0', '95E1'], source: 'Wicked Thunder', capture: false },
       delaySeconds: 14,
       durationSeconds: 3.2,
-      alertText: (data, _matches, output) => {
+      infoText: (data, _matches, output) => {
         const inOut = data.witchHuntAoESafe ?? output.unknown();
         const bait = data.witchHuntBait ?? output.unknown();
         // flip things for the next call
@@ -568,7 +568,7 @@ Options.Triggers.push({
       netRegex: { id: ['95E0', '95E1'], source: 'Wicked Thunder', capture: false },
       delaySeconds: 17.4,
       durationSeconds: 3.2,
-      alertText: (data, _matches, output) => {
+      infoText: (data, _matches, output) => {
         const inOut = data.witchHuntAoESafe ?? output.unknown();
         const bait = data.witchHuntBait ?? output.unknown();
         // flip things for the next call
@@ -605,7 +605,7 @@ Options.Triggers.push({
       netRegex: { id: ['95E0', '95E1'], source: 'Wicked Thunder', capture: false },
       delaySeconds: 20.8,
       durationSeconds: 3.2,
-      alertText: (data, _matches, output) => {
+      infoText: (data, _matches, output) => {
         const inOut = data.witchHuntAoESafe ?? output.unknown();
         const bait = data.witchHuntBait ?? output.unknown();
         const role = data.myRole;
@@ -791,7 +791,8 @@ Options.Triggers.push({
         // will cause the stack count to increase. We could try to try to track that, but it makes
         // the final mechanic resolvable only under certain conditions (which still cause deaths),
         // so don't bother for now.  PRs welcome? :)
-        return output[data.condenserTimer]({ same: same });
+        if (!data.options.OnlyAutumn)
+          return output[data.condenserTimer]({ same: same });
       },
       outputStrings: {
         short: {
@@ -814,6 +815,8 @@ Options.Triggers.push({
       durationSeconds: 3,
       infoText: (data, _matches, output) => {
         data.witchgleamSelfCount++;
+        if (data.options.OnlyAutumn)
+          return;
         if (data.condenserTimer === 'long') {
           return output.longStacks({ times: data.witchgleamSelfCount - 1 });
         }
@@ -837,6 +840,8 @@ Options.Triggers.push({
       condition: Conditions.targetIsYou(),
       delaySeconds: (_data, matches) => parseFloat(matches.duration) - 7,
       alertText: (data, _matches, output) => {
+        if (data.options.OnlyAutumn)
+          return;
         if (data.options.AutumnStyle) {
           const pos = data.imDps
             ? data.witchgleamSelfCount === 2
@@ -882,7 +887,7 @@ Options.Triggers.push({
       // Cast time is almost the same as the GainsEffect
       // so slight delay just in case there's a race condition issue
       delaySeconds: 0.2,
-      alertText: (data, matches, output) => {
+      infoText: (data, matches, output) => {
         let starEffect = data.starEffect ?? 'unknown';
         // Some strats have stack/spread positions based on Witchgleam stack count,
         // so for the long debuffs, add that info (both for positioning and as a reminder).
@@ -987,6 +992,8 @@ Options.Triggers.push({
           data.electronStreamSide = matches.id === '95D6' ? 'north' : 'south';
         else if (data.electronStreamSafe === 'blue')
           data.electronStreamSide = matches.id === '95D6' ? 'south' : 'north';
+        if (data.options.OnlyAutumn)
+          return;
         const safeDir = data.electronStreamSide ?? 'unknown';
         if (data.role === 'tank')
           return output.tank({ dir: output[safeDir]() });
@@ -1050,6 +1057,8 @@ Options.Triggers.push({
           dir = safeSide === data.electronStreamSide ? 'stay' : 'swap';
           data.electronStreamSide = safeSide; // for the next comparison
         }
+        if (data.options.OnlyAutumn)
+          return;
         const text = data.role === 'tank'
           ? output.tank({ dir: output[dir]() })
           : output.nonTank({ dir: output[dir]() });
@@ -1114,12 +1123,13 @@ Options.Triggers.push({
       id: 'R4S Fulminous Field',
       type: 'Ability',
       netRegex: { id: '98D3', source: 'Wicked Thunder', capture: false },
+      condition: Conditions.notOnlyAutumn(),
       infoText: (_data, _matches, output) => output.dodge(),
       outputStrings: {
         dodge: {
           en: 'Dodge w/Partner x7',
           ja: '相方と避ける x7',
-          ko: '파트너와 왓다갔다 x7',
+          ko: '파트너랑 왓다갔다 x7',
         },
       },
     },
@@ -1134,7 +1144,7 @@ Options.Triggers.push({
           data.fulminousFieldCount = 1;
         else
           data.fulminousFieldCount++;
-        if (data.fulminousFieldCount === 3)
+        if (data.fulminousFieldCount === 3 && !data.options.OnlyAutumn)
           return output.spread();
       },
       outputStrings: {
@@ -1153,7 +1163,7 @@ Options.Triggers.push({
       netRegex: { id: '98CE', source: 'Wicked Thunder', capture: false },
       delaySeconds: 0.2,
       suppressSeconds: 1,
-      alertText: (data, _matches, output) => {
+      infoText: (data, _matches, output) => {
         if (data.conductionPointTargets.includes(data.me))
           return output.far();
         return output.near();
@@ -1206,6 +1216,7 @@ Options.Triggers.push({
       id: 'R4S Mustard Bomb Initial',
       type: 'StartsUsing',
       netRegex: { id: '961E', source: 'Wicked Thunder', capture: false },
+      condition: Conditions.notOnlyAutumn(),
       infoText: (data, _matches, output) => data.role === 'tank' ? output.tank() : output.nonTank(),
       outputStrings: {
         tank: Outputs.tetherBusters,
@@ -1279,7 +1290,7 @@ Options.Triggers.push({
         // First time - no stored call (since the mech happens next), just save the effect
         const firstTime = data.aetherialEffect === undefined;
         data.aetherialEffect = aetherialAbility[matches.id];
-        if (!firstTime)
+        if (!firstTime && !data.options.OnlyAutumn)
           return output.stored({ effect: output[data.aetherialEffect]() });
       },
       outputStrings: {
@@ -1297,6 +1308,7 @@ Options.Triggers.push({
       // 9606-9609 correspond to the id casts for the triggering Aetherial Conversion,
       // but we don't care which is which at this point because we've already stored the effect
       netRegex: { id: ['9606', '9607', '9608', '9609'], source: 'Wicked Thunder', capture: false },
+      condition: Conditions.notOnlyAutumn(),
       alertText: (data, _matches, output) => output[data.aetherialEffect ?? 'unknown'](),
       outputStrings: tailThrustOutputStrings,
     },
@@ -1324,7 +1336,7 @@ Options.Triggers.push({
       id: 'R4S Wicked Blaze',
       type: 'HeadMarker',
       netRegex: { id: '013C', capture: false },
-      condition: (data) => data.phase === 'crosstail',
+      condition: (data) => data.phase === 'crosstail' && !data.options.OnlyAutumn,
       suppressSeconds: 1,
       infoText: (_data, _matches, output) => output.stacks(),
       outputStrings: {
@@ -1336,6 +1348,7 @@ Options.Triggers.push({
       id: 'R4S Wicked Fire',
       type: 'StartsUsing',
       netRegex: { id: '9630', source: 'Wicked Thunder', capture: false },
+      condition: Conditions.notOnlyAutumn(),
       infoText: (_data, _matches, output) => output.bait(),
       outputStrings: {
         bait: Outputs.baitPuddles,
@@ -1392,7 +1405,7 @@ Options.Triggers.push({
       run: (data) => delete data.secondTwilightCleaveSafe,
       outputStrings: {
         ...Directions.outputStringsIntercardDir,
-        in: Outputs.in,
+        in: Outputs.middle,
         sides: Outputs.sides,
         combo: {
           en: '${dir} => ${inSides}',
@@ -1511,6 +1524,7 @@ Options.Triggers.push({
       // use the ability line of the preceding Flame Slash cast, as the cast time
       // for Raining Swords is very short.
       netRegex: { id: '9614', source: 'Wicked Thunder', capture: false },
+      condition: Conditions.notOnlyAutumn(),
       alertText: (_data, _matches, output) => output.towers(),
       outputStrings: {
         towers: {
@@ -1585,7 +1599,7 @@ Options.Triggers.push({
         safe: {
           en: '${side}: Start at ${first}',
           ja: '${side}: まずは ${first} から',
-          ko: '${side}: ${first}번으로',
+          ko: '${first}번으로 (${side})',
         },
         unknown: Outputs.unknown,
       },
@@ -1609,6 +1623,8 @@ Options.Triggers.push({
         ];
         // Trim our last possible spot based on existing three safe spots
         safeSpots.push([0, 1, 2, 3].filter((spot) => !safeSpots.includes(spot))[0] ?? 0);
+        if (data.options.AutumnStyle)
+          return output.aSafe({ order: safeSpots.map((i) => i + 1).join(output.separator()) });
         return output.safe({
           side: output[mySide](),
           order: safeSpots.map((i) => i + 1).join(output.separator()),
@@ -1628,6 +1644,11 @@ Options.Triggers.push({
           en: '${side} Side: ${order}',
           ja: '${side} : ${order}',
           ko: '${side}: ${order}',
+        },
+        aSafe: {
+          en: '${order}',
+          ja: '${order}',
+          ko: '${order}',
         },
         unknown: Outputs.unknown,
       },
@@ -1655,22 +1676,22 @@ Options.Triggers.push({
         yellowLong: {
           en: 'Long Yellow Debuff (Towers First)',
           ja: '長い黄色デバフ (塔から)',
-          ko: '긴 🟡노랑 (타워 먼저)',
+          ko: '긴 🟡노랑 (타워)',
         },
         blueLong: {
           en: 'Long Blue Debuff (Towers First)',
           ja: '長い青色デバフ (塔から)',
-          ko: '긴 🔵파랑 (타워 먼저)',
+          ko: '긴 🔵파랑 (타워)',
         },
         yellowShort: {
           en: 'Short Yellow Debuff (Cannons First)',
           ja: '短い黄色デバフ (ビーム誘導から)',
-          ko: '짧은 🟡노랑 (🟦빔 먼저)',
+          ko: '짧은 🟡노랑 (빔)',
         },
         blueShort: {
           en: 'Short Blue Debuff (Cannons First)',
           ja: '短い青色デバフ (ビーム誘導から)',
-          ko: '짧은 🔵파랑 (🟨빔 먼저)',
+          ko: '짧은 🔵파랑 (빔)',
         },
       },
     },
@@ -1785,7 +1806,7 @@ Options.Triggers.push({
             const select = data.imDps ? Math.min(first, second) : Math.max(first, second);
             const mine = output[arrowNames[select]]();
             const res = task === 'yellowShort' ? 'aYellow' : 'aBlue';
-            return output[res]({ loc: mine, bait: cannonBaitStr });
+            return output[res]({ loc: mine });
           }
           const locStr = cannonLocs.map((loc) => output[loc]()).join('/');
           return output[task]({ loc: locStr, bait: cannonBaitStr });
@@ -1833,15 +1854,15 @@ Options.Triggers.push({
         },
         aLong: {
           en: 'Soak Tower (${bait})',
-          ko: '타워${bait} 밟아요',
+          ko: '${bait}타워 밟아요',
         },
         aYellow: {
-          en: 'Blue Cannon (${loc}) - Point ${bait}',
-          ko: '🟦빔${loc} (${bait} 유도)',
+          en: 'Blue Cannon (${loc})',
+          ko: '${loc}🟦빔',
         },
         aBlue: {
-          en: 'Yellow Cannon (${loc}) - Point ${bait}',
-          ko: '🟨빔${loc} (${bait} 유도)',
+          en: 'Yellow Cannon (${loc})',
+          ko: '${loc}🟨빔',
         },
         ...AutumnDirections.outputStringsArrow8,
       },
@@ -1897,7 +1918,7 @@ Options.Triggers.push({
       id: 'R4S PRS Electrical Condenser Long',
       type: 'GainsEffect',
       netRegex: { effectId: 'F9F', capture: true },
-      condition: (_data, matches) => parseFloat(matches.duration) > 40,
+      condition: (data, matches) => !data.options.OnlyAutumn && parseFloat(matches.duration) > 40,
       delaySeconds: (_data, matches) => parseFloat(matches.duration) - 7,
       suppressSeconds: 5,
       infoText: (data, _matches, output) => {
@@ -1915,7 +1936,7 @@ Options.Triggers.push({
       id: 'R4S PRS Electrical Condenser Short',
       type: 'GainsEffect',
       netRegex: { effectId: 'F9F', capture: true },
-      condition: (_data, matches) => parseFloat(matches.duration) < 24,
+      condition: (data, matches) => !data.options.OnlyAutumn && parseFloat(matches.duration) < 24,
       delaySeconds: (_data, matches) => parseFloat(matches.duration) - 7,
       suppressSeconds: 5,
       infoText: (data, _matches, output) => {
@@ -2006,7 +2027,7 @@ Options.Triggers.push({
         '\\(second set\\)': '(Zweites Set)',
         '\\(second sparks detonate\\)': '(zweiter Funken explodiert)',
         '\\(second towers/cannons resolve\\)': '(zweiten Turm/Kanone spielen)',
-        '\\(spread + tethers\\)': '(verteilen + Verbindungen)',
+        '\\(spread \\+ tethers\\)': '(verteilen + Verbindungen)',
         '\\(third mines hit\\)': '(Dritte Minen Treffer)',
         '\\(third set\\)': '(Drittes Set)',
       },

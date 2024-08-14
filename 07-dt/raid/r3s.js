@@ -1,5 +1,9 @@
-// import Outputs from '../../../../../resources/outputs';
 // TODO: <foo>boom Special delayed in/out triggers?
+const getMarkerFromDir = (dir) => {
+  const markers = ['Ⓐ', '②', 'Ⓑ', '③', 'Ⓒ', '④', 'Ⓓ', '①'];
+  const res = markers[dir];
+  return res !== undefined ? res : '???';
+};
 const getSafeSpotsFromClones = (myClone, otherClone, murderousMistDir) => {
   let safeSpots = [...Array(8).keys()];
   const lastSafeSpots = Array(8).fill(0);
@@ -29,6 +33,8 @@ const getSafeSpotsFromClones = (myClone, otherClone, murderousMistDir) => {
       lastSafeSpots[dir]++;
   }
   const lastSafeSpot = (lastSafeSpots.findIndex((count) => count === 0) + 4) % 8;
+  // 십자는 빼자
+  safeSpots = safeSpots.filter((spot) => spot % 2 !== 0);
   return [safeSpots, lastSafeSpot];
 };
 const tagTeamOutputStrings = {
@@ -115,7 +121,7 @@ Options.Triggers.push({
         text: {
           en: 'Away + Spread',
           ja: '離れて + 散開',
-          ko: '멀리가서 + 흩어져요 (보스점프)',
+          ko: '멀리가서 + 흩어져요',
         },
       },
     },
@@ -129,28 +135,7 @@ Options.Triggers.push({
         text: {
           en: 'Knockback + Spread',
           ja: 'ノックバック + 散開',
-          ko: '넉백 + 흩어져요 (보스점프)',
-        },
-      },
-    },
-    {
-      id: 'R3S Murderous Mist',
-      type: 'StartsUsing',
-      netRegex: { id: '93FE', source: 'Brute Bomber', capture: false },
-      infoText: (data, _matches, output) => {
-        if (data.phaseTracker > 0)
-          return output.getHit();
-        return output.getBehind();
-      },
-      outputStrings: {
-        getBehind: {
-          en: 'Get Behind',
-          ko: '엉댕이로 넉백',
-        },
-        getHit: {
-          en: 'Get hit by mist',
-          ja: 'ミストに当たって',
-          ko: '안개에 맞아요',
+          ko: '넉백 + 흩어져요',
         },
       },
     },
@@ -203,34 +188,6 @@ Options.Triggers.push({
           en: 'In + Partners',
           ja: '内側 + ペア',
           ko: '안으로 + 둘이 함께',
-        },
-      },
-    },
-    {
-      id: 'R3S Octoboom Bombarian Special',
-      type: 'StartsUsing',
-      netRegex: { id: '9752', source: 'Brute Bomber', capture: false },
-      durationSeconds: 27,
-      infoText: (_data, _matches, output) => output.text(),
-      outputStrings: {
-        text: {
-          en: 'Out => In => Knockback => Spread',
-          ja: '外側 => 内側 => ノックバック => 散開',
-          ko: '밖에서 🔜 안으로 🔜 넉백 🔜 흩어져요',
-        },
-      },
-    },
-    {
-      id: 'R3S Quadroboom Bombarian Special',
-      type: 'StartsUsing',
-      netRegex: { id: '940A', source: 'Brute Bomber', capture: false },
-      durationSeconds: 27,
-      infoText: (_data, _matches, output) => output.text(),
-      outputStrings: {
-        text: {
-          en: 'Out => In => Knockback => Partners',
-          ja: '外側 => 内側 => ノックバック => ペア',
-          ko: '밖에서 🔜 안으로 🔜 넉백 🔜 둘이 함께',
         },
       },
     },
@@ -302,6 +259,12 @@ Options.Triggers.push({
           return;
         }
         const [safeSpots, lastSafeSpot] = getSafeSpotsFromClones(myClone, otherClone);
+        if (data.options.AutumnStyle) {
+          return output.safeDirs({
+            dirs: safeSpots.map((dir) => getMarkerFromDir(dir)).join(''),
+            last: getMarkerFromDir(lastSafeSpot),
+          });
+        }
         return output.safeDirs({
           dirs: safeSpots
             .map((dir) => output[Directions.outputFrom8DirNum(dir)]())
@@ -341,6 +304,12 @@ Options.Triggers.push({
           otherClone,
           murderousMistDir,
         );
+        if (data.options.AutumnStyle) {
+          return output.safeDirs({
+            dirs: safeSpots.map((dir) => getMarkerFromDir(dir)).join(''),
+            last: getMarkerFromDir(lastSafeSpot),
+          });
+        }
         return output.safeDirs({
           dirs: safeSpots
             .map((dir) => output[Directions.outputFrom8DirNum(dir)]())
@@ -359,7 +328,7 @@ Options.Triggers.push({
       type: 'StartsUsing',
       netRegex: { id: ['9AE8', '9AE9', '9AEA', '9AEB'], source: 'Brute Bomber', capture: true },
       durationSeconds: 11,
-      infoText: (_data, matches, output) => {
+      infoText: (data, matches, output) => {
         const x = parseFloat(matches.x);
         const y = parseFloat(matches.y);
         const bossDir = Directions.xyTo8DirNum(x, y, 100, 100);
@@ -390,6 +359,20 @@ Options.Triggers.push({
           );
           return output['unknown']();
         }
+        if (data.options.AutumnStyle) {
+          if (firstCleaveDir === secondCleaveDir) {
+            return output.aGo({
+              firstDir1: getMarkerFromDir(firstDir1),
+              firstDir2: getMarkerFromDir(firstDir2),
+              secondDir: getMarkerFromDir(secondDir),
+            });
+          }
+          return output.aStay({
+            firstDir1: getMarkerFromDir(firstDir1),
+            firstDir2: getMarkerFromDir(firstDir2),
+            secondDir: getMarkerFromDir(secondDir),
+          });
+        }
         if (firstCleaveDir === secondCleaveDir) {
           return output.comboGo({
             firstDir1: output[Directions.outputFrom8DirNum(firstDir1)](),
@@ -407,11 +390,19 @@ Options.Triggers.push({
         ...Directions.outputStrings8Dir,
         comboGo: {
           en: 'Knockback ${firstDir1}/${firstDir2} => Go ${secondDir}',
-          ko: '넉백 ${firstDir1}/${firstDir2} 🔜 ${secondDir}으로',
+          ko: '넉백: ${firstDir1}/${firstDir2} 🔜 ${secondDir}쪽',
         },
         comboStay: {
           en: 'Knockback ${firstDir1}/${firstDir2}, Stay ${secondDir}',
-          ko: '넉백 ${firstDir1}/${firstDir2}, 그대로 ${secondDir}',
+          ko: '넉백: ${firstDir1}/${firstDir2}, 그대로 ${secondDir}쪽',
+        },
+        aGo: {
+          en: 'Knockback ${firstDir1}/${firstDir2} => Go ${secondDir}',
+          ko: '넉백: ${firstDir1}/${firstDir2} 🔜 ${secondDir}',
+        },
+        aStay: {
+          en: 'Knockback ${firstDir1}/${firstDir2}, Stay ${secondDir}',
+          ko: '넉백: ${firstDir1}/${firstDir2}, 그대로 ${secondDir}',
         },
       },
     },
@@ -419,97 +410,44 @@ Options.Triggers.push({
     {
       id: 'R3S PRS Phase',
       type: 'StartsUsing',
-      netRegex: { id: ['9406', '93EE'], source: 'Brute Bomber' },
+      netRegex: { id: ['9403', '9406', '93EE'], source: 'Brute Bomber' },
       run: (data, matches) => {
         const map = {
+          '9403': 'foe',
           '9406': 'final',
           '93EE': 'field',
-          '9403': 'foe',
         };
         data.phase = map[matches.id];
       },
     },
     {
-      id: 'R3S PRS Fuse Job',
+      id: 'R3S Final Fusedown',
       type: 'GainsEffect',
-      netRegex: { effectId: 'FB8', capture: true },
-      condition: (data) => data.phase === 'final',
-      suppressSeconds: 5,
-      infoText: (data, matches, output) => {
-        if (data.party.isDPS(matches.target))
-          return output.dps();
-        return output.th();
-      },
-      outputStrings: {
-        th: {
-          en: 'DPS long fuse',
-          ko: 'DPS가 긴 도화선',
-        },
-        dps: {
-          en: 'TH long fuse',
-          ko: '탱힐이 긴 도화선',
-        },
-      },
-    },
-    {
-      id: 'R3S PRS Short Fuse',
-      type: 'GainsEffect',
-      netRegex: { effectId: 'FB8', capture: true },
+      netRegex: { effectId: ['FB8', 'FB9'], capture: true },
       condition: (data, matches) => data.phase === 'final' && data.me === matches.target,
-      alertText: (data, _matches, output) => {
-        data.myFuse = 'short';
-        return output.text();
-      },
-      outputStrings: {
-        text: {
-          en: 'Short Fuse',
-          ja: '短い導火線',
-          ko: '내게 짧은 도화선 🔜 먼저 폭탄 처리',
-        },
-      },
-    },
-    {
-      id: 'R3S PRS Long Fuse',
-      type: 'GainsEffect',
-      netRegex: { effectId: 'FB9', capture: true },
-      condition: (data, matches) => data.phase === 'final' && data.me === matches.target,
-      alertText: (data, _matches, output) => {
-        data.myFuse = 'long';
-        return output.text();
-      },
-      outputStrings: {
-        text: {
-          en: 'Long Fuse',
-          ja: '長い導火線',
-          ko: '내게 긴 도화선 🔜 먼저 모여 피해요',
-        },
-      },
-    },
-    {
-      id: 'R3S PRS Fuse Magic Vulnerability',
-      type: 'GainsEffect',
-      netRegex: { effectId: 'B7D', capture: false },
-      condition: (data) => data.phase === 'final' && data.myFuse !== undefined,
-      suppressSeconds: 1,
-      alertText: (data, _matches, output) => {
-        if (data.myFuse === 'short')
+      alertText: (data, matches, output) => {
+        if (matches.effectId === 'FB8') {
+          data.myFuse = 'short';
           return output.short();
+        }
+        data.myFuse = 'long';
         return output.long();
       },
-      run: (data) => data.myFuse = undefined,
       outputStrings: {
         short: {
-          en: 'Spread for evade bomb',
-          ko: '모여서 폭탄 피해요!',
+          en: 'Short Fuse',
+          ja: '短い導火線',
+          ko: '먼저 흩어져요! (짧은 도화선)',
         },
         long: {
-          en: 'Spread for bomb',
-          ko: '폭탄 처리하러 자기 자리로!',
+          en: 'Long Fuse',
+          ja: '長い導火線',
+          ko: '먼저 뭉쳐요! (긴 도화선)',
         },
       },
     },
     {
-      id: 'R3S PRS Fuse Field',
+      id: 'R3S Fuse Field',
       type: 'GainsEffect',
       netRegex: { effectId: 'FB4' },
       condition: Conditions.targetIsYou(),
@@ -518,12 +456,8 @@ Options.Triggers.push({
         const thFirst = ['ST', 'H1', 'H2', 'D1', 'D2', 'D3', 'D4'];
         const dpsFirst = ['D2', 'D3', 'D4', 'MT', 'ST', 'H1', 'H2'];
         if (parseFloat(matches.duration) < 30) {
-          if (data.party.isDPS(data.me)) {
-            data.fieldList = dpsFirst;
-            return output.shortDps();
-          }
-          data.fieldList = thFirst;
-          return data.party.isTank(data.me) ? output.shortTank() : output.short();
+          data.fieldList = data.party.isDPS(data.me) ? dpsFirst : thFirst;
+          return output.short();
         }
         data.fieldList = data.party.isDPS(data.me) ? thFirst : dpsFirst;
         return output.long();
@@ -539,27 +473,17 @@ Options.Triggers.push({
           ja: '短い導火線',
           ko: '내게 짧은 도화선',
         },
-        shortTank: {
-          en: 'Short Fuse (Tank)',
-          ja: '短い導火線 (タンク)',
-          ko: '내게 짧은 도화선 (MT면 바로 터쳐요)',
-        },
-        shortDps: {
-          en: 'Short Fuse (DPS)',
-          ja: '短い導火線 (DPS)',
-          ko: '내게 짧은 도화선 (D1이면 바로 터쳐요)',
-        },
       },
     },
     {
-      id: 'R3S PRS Field Magic Vulnerability',
+      id: 'R3S Fuse Field Next',
       type: 'GainsEffect',
       netRegex: { effectId: 'B7D', capture: false },
       condition: (data) => data.phase === 'field' && data.fieldList.length > 0,
       delaySeconds: 2,
       durationSeconds: 2,
       suppressSeconds: 1,
-      alertText: (data, _matches, output) => {
+      infoText: (data, _matches, output) => {
         const target = data.fieldList.shift();
         return output.text({ target: target });
       },
@@ -572,31 +496,34 @@ Options.Triggers.push({
       },
     },
     {
-      id: 'R3S PRS Bombarian Special Out',
+      id: 'R3S Bombarian Special',
       type: 'StartsUsing',
-      netRegex: { id: ['9752', '940A'], source: 'Brute Bomber', capture: false },
-      delaySeconds: 12,
-      alarmText: (_data, _matches, output) => output.text(),
-      outputStrings: {
-        text: {
-          en: 'Out',
-          ja: '外側',
-          ko: '밖으로 피해욧!',
-        },
+      netRegex: { id: ['9752', '940A'], source: 'Brute Bomber', capture: true },
+      delaySeconds: (data) => data.options.OnlyAutumn ? 20 : 0,
+      durationSeconds: (data) => data.options.OnlyAutumn ? 7 : 27,
+      infoText: (data, matches, output) => {
+        if (data.options.OnlyAutumn) {
+          if (matches.id === '9752')
+            return output.spread();
+          return output.pair();
+        }
+        if (matches.id === '9752')
+          return output.fullSpread();
+        return output.fullPair();
       },
-    },
-    {
-      id: 'R3S PRS Spin Spread',
-      type: 'Ability',
-      netRegex: { id: '9BAF', source: 'Brute Bomber', capture: false },
-      delaySeconds: 4,
-      alertText: (_data, _matches, output) => output.text(),
       outputStrings: {
-        text: {
-          en: 'Spread',
-          ja: '散開',
-          ko: '흩어져서 자기 자리로!',
+        fullSpread: {
+          en: 'Out => In => Knockback => Spread',
+          ja: '外側 => 内側 => ノックバック => 散開',
+          ko: '밖에서 🔜 안으로 🔜 넉백 🔜 흩어져요',
         },
+        fullPair: {
+          en: 'Out => In => Knockback => Partners',
+          ja: '外側 => 内側 => ノックバック => ペア',
+          ko: '밖에서 🔜 안으로 🔜 넉백 🔜 둘이 함께',
+        },
+        spread: Outputs.spreadOwn,
+        pair: Outputs.stackPartner,
       },
     },
   ],

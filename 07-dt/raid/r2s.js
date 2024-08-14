@@ -35,43 +35,6 @@ Options.Triggers.push({
       },
     },
     {
-      id: 'R2S Heart Debuff',
-      type: 'GainsEffect',
-      netRegex: { effectId: ['F52', 'F53', 'F54'], capture: true },
-      condition: (data, matches) => !data.options.AutumnStyle && data.me === matches.target,
-      delaySeconds: (data) => data.beat === 1 ? 17 : 0,
-      suppressSeconds: (data) => {
-        if (data.beat === 1)
-          return 120;
-        if (data.beat === 2)
-          return 70;
-        // We don't care about heart stacks during beat 3
-        return 9999;
-      },
-      infoText: (data, matches, output) => {
-        if (data.beat === 1) {
-          return output.beatOne();
-        }
-        if (data.beat === 2) {
-          if (matches.effectId === 'F52')
-            return output.beatTwoZeroHearts();
-          if (matches.effectId === 'F53')
-            return output.beatTwoOneHearts();
-        }
-      },
-      outputStrings: {
-        beatOne: {
-          en: 'Soak towers - need 2-3 hearts',
-        },
-        beatTwoZeroHearts: {
-          en: 'Puddles & Stacks',
-        },
-        beatTwoOneHearts: {
-          en: 'Spreads & Towers',
-        },
-      },
-    },
-    {
       id: 'R2S Headmarker Shared Tankbuster',
       type: 'HeadMarker',
       netRegex: { id: headMarkerData.sharedBuster, capture: true },
@@ -85,37 +48,91 @@ Options.Triggers.push({
       suppressSeconds: 5,
       response: Responses.tankCleave(),
     },
-    /*
-        {
-          id: 'R2S Headmarker Spread',
-          type: 'HeadMarker',
-          netRegex: { id: headMarkerData.spreadMarker2, capture: false },
-          suppressSeconds: 5,
-          response: Responses.spread(),
+    {
+      id: 'R2S Headmarker Spread',
+      type: 'HeadMarker',
+      netRegex: { id: headMarkerData.spreadMarker2, capture: true },
+      condition: (data, matches) => {
+        if (data.myHearts !== 1)
+          return false;
+        data.heartShed.push(matches.target);
+        return data.heartShed.length === 2;
+      },
+      infoText: (data, _matches, output) => {
+        const dps = data.party.isDPS(data.me);
+        if (data.heartShed.includes(data.me))
+          return dps ? output.bairDps() : output.baitTh();
+        return dps ? output.towerDps() : output.towerTh();
+      },
+      run: (data) => data.heartShed = [],
+      outputStrings: {
+        baitTh: {
+          en: 'Drop AOE',
+          ko: '서쪽 바깥에 장판 버려요!',
         },
-        {
-          id: 'R2S Headmarker Alarm Pheromones Puddle',
-          type: 'HeadMarker',
-          netRegex: { id: headMarkerData.spreadMarker1, capture: true },
-          condition: Conditions.targetIsYou(),
-          alertText: (_data, _matches, output) => output.text!(),
-          outputStrings: {
-            text: {
-              en: 'Drop Puddle Outside',
-            },
-          },
+        bairDps: {
+          en: 'Drop AOE',
+          ko: '동쪽 바깥에 장판 버려요!',
         },
-        {
-          id: 'R2S Headmarker Party Stacks',
-          type: 'HeadMarker',
-          netRegex: { id: headMarkerData.heartStackMarker, capture: false },
-          suppressSeconds: 1,
-          infoText: (_data, _matches, output) => output.stacks!(),
-          outputStrings: {
-            stacks: Outputs.stacks,
-          },
+        towerTh: {
+          en: 'Soak Tower',
+          ko: '북/서 타워 밟아요',
         },
-        */
+        towerDps: {
+          en: 'Soak Tower',
+          ko: '남/동 타워 밟아요',
+        },
+      },
+    },
+    {
+      id: 'R2S Headmarker Alarm Pheromones Puddle',
+      type: 'HeadMarker',
+      netRegex: { id: headMarkerData.spreadMarker1, capture: true },
+      condition: Conditions.targetIsYou(),
+      alertText: (_data, _matches, output) => output.text(),
+      outputStrings: {
+        text: {
+          en: 'Drop Puddle Outside',
+          ko: '바깥에 장판 버려요!',
+        },
+      },
+    },
+    {
+      id: 'R2S Headmarker Party Stacks',
+      type: 'HeadMarker',
+      netRegex: { id: headMarkerData.heartStackMarker, capture: true },
+      condition: (data, matches) => {
+        if (data.beat === 1)
+          return true;
+        if (data.beat === 2 && data.myHearts === 0) {
+          data.heartShed.push(matches.target);
+          return data.heartShed.length === 2;
+        }
+        return false;
+      },
+      infoText: (data, matches, output) => {
+        if (data.beat === 1) {
+          const target = data.party.member(matches.target);
+          return output.stacks1({ target: target.nick });
+        }
+        if (data.beat === 2 && data.heartShed.length === 2) {
+          const target1 = data.party.member(data.heartShed[0]);
+          const target2 = data.party.member(data.heartShed[1]);
+          return output.stacks2({ target1: target1.nick, target2: target2.nick });
+        }
+      },
+      run: (data) => data.heartShed = [],
+      outputStrings: {
+        stacks1: {
+          en: 'Stacks: ${target}',
+          ko: '뭉쳐요: ${target}',
+        },
+        stacks2: {
+          en: 'Stacks: ${target1}/${target2}',
+          ko: '뭉쳐요: ${target1}/${target2}',
+        },
+      },
+    },
     {
       id: 'R2S Call Me Honey',
       type: 'StartsUsing',
@@ -129,58 +146,30 @@ Options.Triggers.push({
       run: (data) => data.partnersSpreadCounter++,
     },
     {
-      id: 'R2S Drop of Venom',
+      id: 'R2S Drop of Venom/Love',
       type: 'StartsUsing',
-      netRegex: { id: '9185', source: 'Honey B. Lovely', capture: false },
-      alarmText: (_data, _matches, output) => output.text(),
+      netRegex: { id: ['9185', '9B09'], source: 'Honey B. Lovely', capture: false },
+      infoText: (_data, _matches, output) => output.text(),
       run: (data) => data.storedPartnersSpread = 'partners',
       outputStrings: {
         text: {
           en: 'Stored Partners',
           ja: 'あとでペア',
-          ko: '나중에 둘이 페어',
+          ko: '(나중에 둘이 페어)',
         },
       },
     },
     {
-      id: 'R2S Splash of Venom',
+      id: 'R2S Splash of Venom/Love',
       type: 'StartsUsing',
-      netRegex: { id: '9184', source: 'Honey B. Lovely', capture: false },
-      alarmText: (_data, _matches, output) => output.text(),
+      netRegex: { id: ['9184', '9B08'], source: 'Honey B. Lovely', capture: false },
+      infoText: (_data, _matches, output) => output.text(),
       run: (data) => data.storedPartnersSpread = 'spread',
       outputStrings: {
         text: {
           en: 'Stored Spread',
           ja: 'あとで散開',
-          ko: '나중에 흩어져요',
-        },
-      },
-    },
-    {
-      id: 'R2S Drop of Love',
-      type: 'StartsUsing',
-      netRegex: { id: '9B09', source: 'Honey B. Lovely', capture: false },
-      alarmText: (_data, _matches, output) => output.text(),
-      run: (data) => data.storedPartnersSpread = 'partners',
-      outputStrings: {
-        text: {
-          en: 'Stored Partners',
-          ja: 'あとでペア',
-          ko: '나중에 둘이 페어',
-        },
-      },
-    },
-    {
-      id: 'R2S Spread Love',
-      type: 'StartsUsing',
-      netRegex: { id: '9B08', source: 'Honey B. Lovely', capture: false },
-      alarmText: (_data, _matches, output) => output.text(),
-      run: (data) => data.storedPartnersSpread = 'spread',
-      outputStrings: {
-        text: {
-          en: 'Stored Spread',
-          ja: 'あとで散開',
-          ko: '나중에 흩어져요',
+          ko: '(나중에 흩어져요)',
         },
       },
     },
@@ -224,30 +213,20 @@ Options.Triggers.push({
       id: 'R2S Honey Beeline',
       type: 'StartsUsing',
       netRegex: { id: ['9186', '9B0C'], source: 'Honey B. Lovely', capture: false },
+      condition: Conditions.notOnlyAutumn(),
       response: Responses.goSides(),
     },
     {
       id: 'R2S Tempting Twist',
       type: 'StartsUsing',
       netRegex: { id: ['9187', '9B0D'], source: 'Honey B. Lovely', capture: false },
+      condition: Conditions.notOnlyAutumn(),
       response: Responses.getUnder(),
     },
     {
-      id: 'R2S Honey B. Live: 1st Beat',
+      id: 'R2S Honey B. Live Beats',
       type: 'StartsUsing',
-      netRegex: { id: '9C24', source: 'Honey B. Lovely', capture: false },
-      response: Responses.aoe(),
-    },
-    {
-      id: 'R2S Honey B. Live: 2nd Beat',
-      type: 'StartsUsing',
-      netRegex: { id: '9C25', source: 'Honey B. Lovely', capture: false },
-      response: Responses.aoe(),
-    },
-    {
-      id: 'R2S Honey B. Live: 3rd Beat',
-      type: 'StartsUsing',
-      netRegex: { id: '9C26', source: 'Honey B. Lovely', capture: false },
+      netRegex: { id: ['9C24', '9C25', '9C26'], source: 'Honey B. Lovely', capture: false },
       response: Responses.aoe(),
     },
     {
@@ -260,6 +239,7 @@ Options.Triggers.push({
       id: 'R2S Centerstage Combo',
       type: 'StartsUsing',
       netRegex: { id: '91AC', source: 'Honey B. Lovely', capture: false },
+      condition: Conditions.notOnlyAutumn(),
       durationSeconds: 9,
       infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
@@ -274,6 +254,7 @@ Options.Triggers.push({
       id: 'R2S Outerstage Combo',
       type: 'StartsUsing',
       netRegex: { id: '91AD', source: 'Honey B. Lovely', capture: false },
+      condition: Conditions.notOnlyAutumn(),
       durationSeconds: 9,
       infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
@@ -298,22 +279,10 @@ Options.Triggers.push({
     },
     // ====== PRS ======
     {
-      id: 'R2S PRS Alarum Spread',
-      type: 'HeadMarker',
-      netRegex: { id: headMarkerData.spreadMarker1 },
-      condition: (data, matches) => data.me === matches.target,
-      alertText: (_data, _matches, output) => output.text(),
-      outputStrings: {
-        text: {
-          en: 'Spread Marker on YOU',
-          ko: '바깥에 장판 버려요!',
-        },
-      },
-    },
-    {
-      id: 'R2S PRS Bee Sting',
+      id: 'R2S Bee Sting',
       type: 'StartsUsing',
       netRegex: { id: '91A8', source: 'Honey B. Lovely', capture: false },
+      condition: Conditions.notOnlyAutumn(),
       suppressSeconds: 5,
       infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
@@ -324,10 +293,10 @@ Options.Triggers.push({
       },
     },
     {
-      id: 'R2S PRS Poison \'n\' Pop',
+      id: 'R2S Poison \'n\' Pop',
       type: 'GainsEffect',
       netRegex: { effectId: 'F5E' },
-      condition: (data, matches) => data.me === matches.target,
+      condition: Conditions.targetIsYou(),
       infoText: (data, matches, output) => {
         const len = parseFloat(matches.duration);
         if (len < 30) { // 26초
@@ -339,22 +308,22 @@ Options.Triggers.push({
       },
       outputStrings: {
         s26: {
-          en: '26s Poison',
+          en: '(Bait AOE outside later)',
           ko: '(바깥쪽에 장판 버릴거예요)',
         },
         s46: {
-          en: '46s Poison',
+          en: '(Soak Tower later)',
           ko: '(한가운데 🔜 탑 밟을거예요)',
         },
       },
     },
     {
-      id: 'R2S PRS Laceration',
+      id: 'R2S Laceration',
       type: 'Ability',
       netRegex: { id: '91B2', source: 'Honey B. Lovely', capture: false },
       condition: (data) => data.poisonPop !== undefined,
       delaySeconds: 2.5,
-      alertText: (data, _matches, output) => {
+      infoText: (data, _matches, output) => {
         if (data.poisonPop === 26) {
           data.poisonPop = 46;
           return output.aoe();
@@ -364,45 +333,31 @@ Options.Triggers.push({
       },
       outputStrings: {
         aoe: {
-          en: 'Drop AOE',
+          en: 'Bait AOE',
           ko: '바깥쪽에 장판 버려요',
         },
         puddle: {
-          en: 'Puddle',
+          en: 'Soak Tower',
           ko: '한가운데 🔜 탑 밟아요',
         },
       },
     },
     {
-      id: 'R2S PRS Beeloved Venom: α',
+      id: 'R2S Beeloved Venom',
       type: 'GainsEffect',
-      netRegex: { effectId: 'F5C' },
-      condition: (data, matches) => data.me === matches.target,
+      netRegex: { effectId: ['F5C', 'F5D'] },
+      condition: Conditions.targetIsYou(),
       delaySeconds: (_data, matches) => parseFloat(matches.duration) - 6,
       alertText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
-          en: 'Beeloved Venom: α',
-          ko: '알파 독! 한가운데서 터쳐요!',
+          en: 'Go Center!',
+          ko: '한가운데서 터쳐요!',
         },
       },
     },
     {
-      id: 'R2S PRS Beeloved Venom: β',
-      type: 'GainsEffect',
-      netRegex: { effectId: 'F5D' },
-      condition: (data, matches) => data.me === matches.target,
-      delaySeconds: (_data, matches) => parseFloat(matches.duration) - 6,
-      alertText: (_data, _matches, output) => output.text(),
-      outputStrings: {
-        text: {
-          en: 'Beeloved Venom: β',
-          ko: '베타 독! 한가운데서 터쳐요!',
-        },
-      },
-    },
-    {
-      id: 'R2S PRS no heart',
+      id: 'R2S no Heart',
       type: 'GainsEffect',
       netRegex: { effectId: 'F52' },
       condition: (data, matches) => data.me === matches.target,
@@ -413,13 +368,13 @@ Options.Triggers.push({
       run: (data) => data.myHearts = 0,
       outputStrings: {
         live2: {
-          en: 'Bait puddle',
-          ko: '한가운데 모였다 🔜 장판 유도',
+          en: 'Bait AOE',
+          ko: '한가운데로 🔜 장판 유도',
         },
       },
     },
     {
-      id: 'R2S PRS Infatuated heart',
+      id: 'R2S Infatuated Heart',
       type: 'GainsEffect',
       netRegex: { effectId: 'F53' },
       condition: (data, matches) => data.me === matches.target,
@@ -430,89 +385,17 @@ Options.Triggers.push({
       run: (data) => data.myHearts = 1,
       outputStrings: {
         live2: {
-          en: 'Tower or bait aoe',
-          ko: '남쪽 대기 🔜 타워 밟거나 장판 유도',
+          en: 'Tower or bait AOE',
+          ko: '남쪽으로 🔜 타워 또는 장판',
         },
       },
     },
     {
-      id: 'R2S PRS Head Over Heels heart',
+      id: 'R2S Head Over Heels Heart',
       type: 'GainsEffect',
       netRegex: { effectId: 'F54' },
       condition: (data, matches) => data.me === matches.target,
       run: (data) => data.myHearts = 2,
-    },
-    {
-      id: 'R2S PRS Headmarker Party Stacks',
-      type: 'HeadMarker',
-      netRegex: { id: headMarkerData.heartStackMarker },
-      condition: (data, matches) => {
-        if (data.beat === 1)
-          return true;
-        if (data.beat === 2 && data.myHearts === 0) {
-          data.heartShed.push(matches.target);
-          return data.heartShed.length === 2;
-        }
-        return false;
-      },
-      infoText: (data, matches, output) => {
-        if (data.beat === 1) {
-          const target = data.party.member(matches.target);
-          return output.stacks1({ target: target.jobAbbr });
-        }
-        if (data.beat === 2 && data.heartShed.length === 2) {
-          const target1 = data.party.member(data.heartShed[0]);
-          const target2 = data.party.member(data.heartShed[1]);
-          return output.stacks2({ target1: target1.jobAbbr, target2: target2.jobAbbr });
-        }
-      },
-      run: (data) => data.heartShed = [],
-      outputStrings: {
-        stacks1: {
-          en: 'Stacks: ${target}',
-          ko: '뭉쳐요: ${target}',
-        },
-        stacks2: {
-          en: 'Stacks: ${target1}/${target2}',
-          ko: '뭉쳐요: ${target1}/${target2}',
-        },
-      },
-    },
-    {
-      id: 'R2S PRS Headmarker Spread',
-      type: 'HeadMarker',
-      netRegex: { id: headMarkerData.spreadMarker2 },
-      condition: (data, matches) => {
-        if (data.myHearts !== 1)
-          return false;
-        data.heartShed.push(matches.target);
-        return data.heartShed.length === 2;
-      },
-      infoText: (data, _matches, output) => {
-        const dps = data.party.isDPS(data.me);
-        if (data.heartShed.includes(data.me))
-          return dps ? output.bairDps() : output.baitTh();
-        return dps ? output.towerDps() : output.towerTh();
-      },
-      run: (data) => data.heartShed = [],
-      outputStrings: {
-        baitTh: {
-          en: 'T/H Drop AOE',
-          ko: '서쪽 바깥에 장판 버려요!',
-        },
-        bairDps: {
-          en: 'DPS Drop AOE',
-          ko: '동쪽 바깥에 장판 버려요!',
-        },
-        towerTh: {
-          en: 'T/H Tower',
-          ko: '북/서 타워 밟아요',
-        },
-        towerDps: {
-          en: 'DPS Tower',
-          ko: '남/동 타워 밟아요',
-        },
-      },
     },
   ],
   timelineReplace: [
