@@ -129,6 +129,7 @@ const triggerSet: TriggerSet<Data> = {
       id: 'R1S One-two Paw Right Left',
       type: 'StartsUsing',
       netRegex: { id: '9436', source: 'Black Cat', capture: false },
+      condition: Conditions.notOnlyAutumn(),
       durationSeconds: 9.5,
       response: Responses.goLeftThenRight(),
     },
@@ -136,6 +137,7 @@ const triggerSet: TriggerSet<Data> = {
       id: 'R1S One-two Paw Left Right',
       type: 'StartsUsing',
       netRegex: { id: '9439', source: 'Black Cat', capture: false },
+      condition: Conditions.notOnlyAutumn(),
       durationSeconds: 9.5,
       response: Responses.goRightThenLeft(),
     },
@@ -275,13 +277,13 @@ const triggerSet: TriggerSet<Data> = {
       condition: (data) => data.me !== data.lastPawprintTarget,
       infoText: (data, _matches, output) => {
         const target = data.party.member(data.lastPawprintTarget);
-        return output.text!({ target: target.jobAbbr, name: target.nick });
+        return output.text!({ name: target.nick });
       },
       outputStrings: {
         text: {
-          en: '${name} (${target}) Launch',
-          ja: '${name} (${target}) に吹き飛ばし',
-          ko: '어퍼컷: ${name} (${target})',
+          en: '${name} Launch',
+          ja: '${name}に吹き飛ばし',
+          ko: '어퍼컷: ${name}',
         },
       },
     },
@@ -306,13 +308,13 @@ const triggerSet: TriggerSet<Data> = {
       condition: (data) => data.me !== data.lastPawprintTarget,
       infoText: (data, _matches, output) => {
         const target = data.party.member(data.lastPawprintTarget);
-        return output.text!({ target: target.jobAbbr, name: target.nick });
+        return output.text!({ name: target.nick });
       },
       outputStrings: {
         text: {
-          en: '${name} (${target}) Stun',
-          ja: '${name} (${target}) にスタン',
-          ko: '내려 찍기: ${name} (${target})',
+          en: '${name} Stun',
+          ja: '${name}にスタン',
+          ko: '내려 찍기: ${name}',
         },
       },
     },
@@ -362,6 +364,8 @@ const triggerSet: TriggerSet<Data> = {
       type: 'StartsUsing',
       netRegex: { id: ['944D', '944E', '944F', '9450'], source: 'Black Cat', capture: true },
       infoText: (data, matches, output) => {
+        if (data.options.OnlyAutumn)
+          return;
         if (data.options.AutumnStyle) {
           if (matches.id === '944D' || matches.id === '9450')
             return output.outsideIn!();
@@ -552,7 +556,7 @@ const triggerSet: TriggerSet<Data> = {
     },
     // ================== PRS ==================
     {
-      id: 'R1S PRS Quadruple Crossing',
+      id: 'R1S Quadruple Crossing',
       type: 'StartsUsing',
       netRegex: { id: '943C', source: 'Black Cat', capture: false },
       infoText: (_data, _matches, output) => output.text!(),
@@ -564,7 +568,7 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: 'R1S PRS Quadruple Swipe Soulshade',
+      id: 'R1S Quadruple Swipe Soulshade',
       type: 'StartsUsing',
       netRegex: { id: '9480', source: 'Soulshade', capture: false },
       suppressSeconds: 5,
@@ -577,7 +581,7 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: 'R1S PRS Double Swipe Soulshade',
+      id: 'R1S Double Swipe Soulshade',
       type: 'StartsUsing',
       netRegex: { id: '9482', source: 'Soulshade', capture: false },
       suppressSeconds: 5,
@@ -587,7 +591,7 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: 'R1S PRS Grimalkin Gale',
+      id: 'R1S Grimalkin Gale',
       type: 'StartsUsing',
       netRegex: { id: '9B84', source: 'Black Cat', capture: false },
       suppressSeconds: 5,
@@ -598,21 +602,21 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: 'R1S PRS Leftward Memory',
+      id: 'R1S Leftward Memory',
       type: 'GainsEffect',
       netRegex: { effectId: 'FD3', target: 'Black Cat', capture: false },
       condition: (data) => data.seenLeapJump,
       run: (data) => data.lastLeapDir = 'left',
     },
     {
-      id: 'R1S PRS Rightward Memory',
+      id: 'R1S Rightward Memory',
       type: 'GainsEffect',
       netRegex: { effectId: 'FD2', target: 'Black Cat', capture: false },
       condition: (data) => data.seenLeapJump,
       run: (data) => data.lastLeapDir = 'right',
     },
     {
-      id: 'R1S PRS Tether for wards',
+      id: 'R1S Tether for wards',
       type: 'Tether',
       netRegex: { id: '0066', source: 'Soulshade', capture: true },
       condition: (data) => data.seenLeapJump,
@@ -652,24 +656,6 @@ const triggerSet: TriggerSet<Data> = {
         unknown: Outputs.unknown,
       },
     },
-    /*
-    {
-      id: 'R1S PRS headmarker test',
-      type: 'HeadMarker',
-      netRegex: {},
-      condition: (data, matches) => data.me === matches.target,
-      infoText: (data, matches, output) => {
-        const id = getHeadmarkerId(data, matches);
-        const dest = matches.target;
-        return output.text!({ marker: id, dest: dest });
-      },
-      outputStrings: {
-        text: {
-          en: '[marker: ${marker} -> ${dest}]',
-        },
-      },
-    },
-    */
   ],
   timelineReplace: [
     {

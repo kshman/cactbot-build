@@ -246,7 +246,7 @@ export default {
     fr: 'Packez-vous avec votre partenaire',
     ja: 'ペア',
     cn: '与搭档集合',
-    ko: '둘이 뭉쳐요',
+    ko: '둘이 함께',
   },
   stackMiddle: {
     en: 'Stack in middle',
