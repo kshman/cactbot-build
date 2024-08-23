@@ -5,19 +5,11 @@ import ZoneId from '../../../../../resources/zone_id';
 import { RaidbossData } from '../../../../../types/data';
 import { TriggerSet } from '../../../../../types/trigger';
 
-/*
-하트 0
-[22:50:42.951] StatusAdd 1A:F52:Unknown_F52:9999.00:E0000000:::*****:*****:2DA:140893:
-하트 1
-[22:50:42.951] StatusAdd 1A:F53:Infatuated:9999.00:E0000000:::*****::*****:2DB:139559:
-하트 2
-[22:50:42.951] StatusAdd 1A:F54:Head Over Heels:9999.00:E0000000:::*****::*****:2DC:126707:
-*/
-
 export interface Data extends RaidbossData {
   partnersSpreadCounter: number;
   storedPartnersSpread?: 'partners' | 'spread';
   beat?: 1 | 2 | 3;
+  tankLaserCollect: string[];
   //
   myHearts: number;
   heartShed: string[];
@@ -43,6 +35,7 @@ const triggerSet: TriggerSet<Data> = {
   timelineFile: 'r2s.txt',
   initData: () => ({
     partnersSpreadCounter: 0,
+    tankLaserCollect: [],
     myHearts: 0,
     heartShed: [],
   }),
@@ -69,11 +62,28 @@ const triggerSet: TriggerSet<Data> = {
       response: Responses.sharedTankBuster(),
     },
     {
-      id: 'R2S Headmarker Cone Tankbuster',
+      id: 'R2S Headmarker Cone Tankbuster Collect',
       type: 'HeadMarker',
       netRegex: { id: headMarkerData.tankLaser, capture: true },
+      run: (data, matches) => data.tankLaserCollect.push(matches.target),
+    },
+    {
+      id: 'R2S Headmarker Cone Tankbuster',
+      type: 'HeadMarker',
+      netRegex: { id: headMarkerData.tankLaser, capture: false },
+      delaySeconds: 0.1,
       suppressSeconds: 5,
-      response: Responses.tankCleave(),
+      alertText: (data, _matches, output) => {
+        if (data.tankLaserCollect.includes(data.me))
+          return output.cleaveOnYou!();
+        if (!data.options.OnlyAutumn)
+          return output.avoidCleave!();
+      },
+      run: (data) => data.tankLaserCollect = [],
+      outputStrings: {
+        cleaveOnYou: Outputs.tankCleaveOnYou,
+        avoidCleave: Outputs.avoidTankCleave,
+      },
     },
     {
       id: 'R2S Headmarker Spread',
@@ -306,20 +316,6 @@ const triggerSet: TriggerSet<Data> = {
     },
     // ====== PRS ======
     {
-      id: 'R2S Bee Sting',
-      type: 'StartsUsing',
-      netRegex: { id: '91A8', source: 'Honey B. Lovely', capture: false },
-      condition: Conditions.notOnlyAutumn(),
-      suppressSeconds: 5,
-      infoText: (_data, _matches, output) => output.text!(),
-      outputStrings: {
-        text: {
-          en: 'Bee Sting',
-          ko: '4:4 뭉쳐요',
-        },
-      },
-    },
-    {
       id: 'R2S Poison \'n\' Pop',
       type: 'GainsEffect',
       netRegex: { effectId: 'F5E' },
@@ -374,7 +370,7 @@ const triggerSet: TriggerSet<Data> = {
       type: 'GainsEffect',
       netRegex: { effectId: ['F5C', 'F5D'] },
       condition: Conditions.targetIsYou(),
-      delaySeconds: (_data, matches) => parseFloat(matches.duration) - 6,
+      delaySeconds: (_data, matches) => parseFloat(matches.duration) - 7,
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
@@ -467,6 +463,7 @@ const triggerSet: TriggerSet<Data> = {
         '\\(damage\\)': '(Schaden)',
         '\\(drop\\)': '(Tropfen)',
         '\\(enrage\\)': '(Finalangriff)',
+        '\\(stun for': '(Betäubung für',
       },
     },
     {
