@@ -139,17 +139,17 @@ const swordQuiverOutputStrings = {
   frontAndSides: {
     en: 'Go Front / Sides',
     ja: '前方 / 横側 へ',
-    ko: '🡸🡹🡹🡺앞옆으로',
+    ko: '🡸🡹앞옆으로🡹🡺',
   },
   frontAndBack: {
     en: 'Go Front / Back',
     ja: '前方 / 後方 へ',
-    ko: '🡹🡹🡻🡻앞뒤로',
+    ko: '🡹🡻앞뒤로🡹🡻',
   },
   sidesAndBack: {
     en: 'Go Sides / Back',
     ja: '横 / 後方 へ',
-    ko: '🡸🡻🡻🡺옆뒤로',
+    ko: '🡸🡻옆뒤로🡻🡺',
   },
 };
 Options.Triggers.push({
@@ -200,19 +200,6 @@ Options.Triggers.push({
       durationSeconds: 13,
       response: Responses.bigAoe(),
     },
-    {
-      id: 'R4S Cannonbolt',
-      regex: /Cannonbolt/,
-      beforeSeconds: 8,
-      durationSeconds: 6,
-      alertText: (_data, _matches, output) => output.text(),
-      outputStrings: {
-        text: {
-          en: 'South',
-          ko: '남쪽으로!',
-        },
-      },
-    },
   ],
   triggers: [
     {
@@ -252,7 +239,8 @@ Options.Triggers.push({
     {
       id: 'R4S Bewitching Flight',
       type: 'StartsUsing',
-      netRegex: { id: '9671', source: 'Wicked Thunder', capture: false },
+      netRegex: { id: ['9671', '8DEF'], source: 'Wicked Thunder', capture: false },
+      condition: Conditions.notOnlyAutumn(),
       infoText: (_data, _matches, output) => output.avoid(),
       outputStrings: {
         avoid: {
@@ -812,7 +800,7 @@ Options.Triggers.push({
       type: 'Ability',
       netRegex: { id: '9786' },
       condition: Conditions.targetIsYou(),
-      durationSeconds: 3,
+      durationSeconds: 2,
       infoText: (data, _matches, output) => {
         data.witchgleamSelfCount++;
         if (data.options.OnlyAutumn)
@@ -1273,7 +1261,7 @@ Options.Triggers.push({
       response: Responses.goSides(),
     },
     {
-      id: 'R4S Wicked Special In',
+      id: 'R4S Wicked Special Middle',
       type: 'StartsUsing',
       netRegex: { id: '9612', source: 'Wicked Thunder', capture: false },
       condition: (data) => data.secondTwilightCleaveSafe === undefined,
@@ -1399,18 +1387,18 @@ Options.Triggers.push({
         if (dir === undefined)
           throw new UnreachableCode();
         return matches.id === '9610'
-          ? output.combo({ dir: output[dir](), inSides: output.sides() })
-          : output.combo({ dir: output[dir](), inSides: output.in() });
+          ? output.combo({ dir: output[dir](), middleSides: output.sides() })
+          : output.combo({ dir: output[dir](), middleSides: output.middle() });
       },
       run: (data) => delete data.secondTwilightCleaveSafe,
       outputStrings: {
         ...Directions.outputStringsIntercardDir,
-        in: Outputs.middle,
+        middle: Outputs.middle,
         sides: Outputs.sides,
         combo: {
-          en: '${dir} => ${inSides}',
-          ja: '${dir} => ${inSides}',
-          ko: '${dir} 🔜 ${inSides}',
+          en: '${dir} => ${middleSides}',
+          ja: '${dir} => ${middleSides}',
+          ko: '${dir} 🔜 ${middleSides}',
         },
       },
     },
@@ -1468,13 +1456,24 @@ Options.Triggers.push({
         const dirStr = data.midnightFirstAdds === 'wings'
           ? (data.midnightCardFirst ? output.cardinals() : output.intercards())
           : (data.midnightCardFirst ? output.intercards() : output.cardinals());
-        return output.combo({ dir: dirStr, mech: firstMechStr });
+        const typeStr = data.midnightFirstAdds === 'wings' ? output.wings() : output.guns();
+        return output.combo({ dir: dirStr, type: typeStr, mech: firstMechStr });
       },
       outputStrings: {
         combo: {
-          en: '${dir} => ${mech}',
-          ja: '${dir} => ${mech}',
-          ko: '${dir} 🔜 ${mech}',
+          en: '${dir} + ${type} + ${mech}',
+          ja: '${dir} + ${type} + ${mech}',
+          ko: '${dir} 🔜 ${mech} (${type})',
+        },
+        guns: {
+          en: 'Avoid Line',
+          cn: '躲避直线',
+          ko: '직선',
+        },
+        wings: {
+          en: 'Donut',
+          cn: '月环',
+          ko: '도넛',
         },
         cardinals: Outputs.cardinals,
         intercards: Outputs.intercards,
@@ -1496,13 +1495,24 @@ Options.Triggers.push({
         const dirStr = data.midnightSecondAdds === 'wings'
           ? (secondAddsOnCards ? output.cardinals() : output.intercards())
           : (secondAddsOnCards ? output.intercards() : output.cardinals());
-        return output.combo({ dir: dirStr, mech: secondMechStr });
+        const typeStr = data.midnightSecondAdds === 'wings' ? output.wings() : output.guns();
+        return output.combo({ dir: dirStr, type: typeStr, mech: secondMechStr });
       },
       outputStrings: {
         combo: {
-          en: '${dir} => ${mech}',
-          ja: '${dir} => ${mech}',
-          ko: '${dir} 🔜 ${mech}',
+          en: '${dir} + ${type} + ${mech}',
+          ja: '${dir} + ${type} + ${mech}',
+          ko: '${dir} 🔜 ${mech} (${type})',
+        },
+        guns: {
+          en: 'Avoid Line',
+          cn: '躲避直线',
+          ko: '직선',
+        },
+        wings: {
+          en: 'Donut',
+          cn: '月环',
+          ko: '도넛',
         },
         cardinals: Outputs.cardinals,
         intercards: Outputs.intercards,
@@ -1702,6 +1712,7 @@ Options.Triggers.push({
       netRegex: { id: '4.{7}', category: actorControlCategoryMap.setModelState, param1: '1C' },
       condition: (data) => data.phase === 'sunrise' && !data.seenFirstSunrise,
       // they both face opposite or adjacent, so we only need one to resolve the mechanic
+      delaySeconds: 0.2,
       suppressSeconds: 1,
       run: (data, matches) => {
         const id = matches.id;
@@ -2022,14 +2033,14 @@ Options.Triggers.push({
         '\\(mines\\)': '(Minen)',
         '\\(players\\)': '(Spieler)',
         '\\(puddles drop\\)': '(Flächen kommen)',
-        '\\(second hit\\)': '(Zweiter Treffer)',
-        '\\(second mines hit\\)': '(Zweiter Minen Treffer)',
-        '\\(second set\\)': '(Zweites Set)',
+        '\\(second hit\\)': '(zweiter Treffer)',
+        '\\(second mines hit\\)': '(zweiter Minen Treffer)',
+        '\\(second set\\)': '(zweites Set)',
         '\\(second sparks detonate\\)': '(zweiter Funken explodiert)',
         '\\(second towers/cannons resolve\\)': '(zweiten Turm/Kanone spielen)',
         '\\(spread \\+ tethers\\)': '(verteilen + Verbindungen)',
-        '\\(third mines hit\\)': '(Dritte Minen Treffer)',
-        '\\(third set\\)': '(Drittes Set)',
+        '\\(third mines hit\\)': '(dritte Minen Treffer)',
+        '\\(third set\\)': '(drittes Set)',
       },
     },
     {
