@@ -239,12 +239,13 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         outSpread: {
           en: 'Out + Spread',
+          ja: '外へ + 散開',
           ko: '내게 장판! 흩어져요',
         },
       },
     },
     {
-      id: 'R1S Headmarker Grimalkin Gale',
+      id: 'R1S Headmarker Grimalkin Gale Spread',
       type: 'HeadMarker',
       netRegex: { id: headMarkerData.spreadMarker2, capture: false },
       suppressSeconds: 5,
@@ -322,7 +323,7 @@ const triggerSet: TriggerSet<Data> = {
       id: 'R1S Quadruple Swipe',
       type: 'StartsUsing',
       netRegex: { id: '945D', source: 'Black Cat', capture: false },
-      alertText: (_data, _matches, output) => output.partner!(),
+      infoText: (_data, _matches, output) => output.partner!(),
       outputStrings: {
         partner: {
           en: 'Partner Stacks',
@@ -335,7 +336,7 @@ const triggerSet: TriggerSet<Data> = {
       id: 'R1S Double Swipe',
       type: 'StartsUsing',
       netRegex: { id: '945F', source: 'Black Cat', capture: false },
-      alertText: (_data, _matches, output) => output.healerStacks!(),
+      infoText: (_data, _matches, output) => output.healerStacks!(),
       outputStrings: {
         healerStacks: Outputs.healerGroups,
       },
@@ -355,7 +356,7 @@ const triggerSet: TriggerSet<Data> = {
         rolePositions: {
           en: 'Role positions',
           ja: 'ロールの担当位置へ',
-          ko: '같은 롤끼리 뭉쳐요',
+          ko: '같은 롤 뭉쳐요',
         },
       },
     },
@@ -404,14 +405,17 @@ const triggerSet: TriggerSet<Data> = {
         dirW: Outputs.dirW,
         insideOut: {
           en: 'Inside => Outside',
+          ja: '内側 => 外側',
           ko: '안에서 🔜 밖으로',
         },
         outsideIn: {
           en: 'Outside => Inside',
+          ja: '外側 => 内側',
           ko: '밖에서 🔜 안으로',
         },
         combo: {
           en: '${dir}, ${cleaves}',
+          ja: '${dir}, ${cleaves}',
           ko: '${dir}쪽 🔜 ${cleaves}',
         },
         unknown: Outputs.unknown,
@@ -435,6 +439,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         proximity: {
           en: 'Proximity baits at target',
+          ja: 'ボスに近づいて誘導',
           ko: '자기 자리로! 부채꼴 유도',
         },
         unknown: Outputs.unknown,
@@ -507,13 +512,13 @@ const triggerSet: TriggerSet<Data> = {
             data.storedLeaps.quadCross.resolved = true;
             let dir: 'dirE' | 'dirW';
 
-            if (data.storedLeaps.oneTwoPaw.northSouth === 'north') {
-              if (data.storedLeaps.oneTwoPaw.leftRight === 'left')
+            if (data.storedLeaps.quadCross.northSouth === 'north') {
+              if (data.storedLeaps.quadCross.leftRight === 'left')
                 dir = 'dirE';
               else
                 dir = 'dirW';
             } else {
-              if (data.storedLeaps.oneTwoPaw.leftRight === 'left')
+              if (data.storedLeaps.quadCross.leftRight === 'left')
                 dir = 'dirW';
               else
                 dir = 'dirE';
@@ -530,31 +535,36 @@ const triggerSet: TriggerSet<Data> = {
         dirW: Outputs.dirW,
         in: {
           en: 'In + Healer Stacks => Out',
+          ja: '中へ + ヒラ頭割り => 外へ',
           ko: '안에서 4:4힐러 🔜 밖으로',
         },
         out: {
           en: 'Out + Healer Stacks => In',
+          ja: '外へ + ヒラ頭割り => 中へ',
           ko: '밖에서 4:4힐러🔜 안으로',
         },
         healerStacks: {
           en: 'Go ${dir} => ${inOut}',
+          ja: '${dir} へ => ${inOut}',
           ko: '${dir}쪽 🔜 ${inOut}',
         },
         proximity: {
           en: 'Go ${dir} => Proximity Baits + Spreads',
+          ja: '${dir} へ => ボスに近づいて誘導 + 散開',
           ko: '${dir}쪽 🔜 부채꼴 유도!',
         },
         aHealerStacks: {
           en: '${inOut}',
+          ja: '${inOut}',
           ko: '${inOut}',
         },
         aProximity: {
           en: 'Proximity Baits/Spreads',
+          ja: 'ボスに近づいて誘導 + 散開',
           ko: '자기 자리로! 부채꼴 유도',
         },
       },
     },
-    // ================== PRS ==================
     {
       id: 'R1S Quadruple Crossing',
       type: 'StartsUsing',
@@ -563,6 +573,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Proximity baits at target',
+          ja: 'ボスに近づいて誘導 + 散開',
           ko: '자기 자리로! 부채꼴 유도',
         },
       },
@@ -576,6 +587,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Pair',
+          ja: 'ペア',
           ko: '십자로 둘씩!',
         },
       },
@@ -645,10 +657,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         bait: {
           en: 'Bait: ${dir}',
+          ja: '誘導: ${dir}',
           ko: '유도: ${dir}으로',
         },
         baitBait: {
           en: 'Bait: ${dir1} => ${dir2}',
+          ja: '誘導: ${dir1} => ${dir2}',
           ko: '유도: ${dir1} 🔜 ${dir2}',
         },
         left: Outputs.left,
@@ -704,13 +718,24 @@ const triggerSet: TriggerSet<Data> = {
     },
     {
       'locale': 'fr',
-      'missingTranslations': true,
       'replaceSync': {
         'Black Cat': 'Black Cat',
         'Copy Cat': 'double félin',
         'Soulshade': 'ombre d\'âme',
       },
       'replaceText': {
+        '\\(First\\)': '(Premier)',
+        '\\(Second\\)': '(Deuxième)',
+        '\\(cast\\)': '(Incante)',
+        '\\(damage\\)': '(Dommage)',
+        '\\(enrage\\)': '(Enrage)',
+        '\\(hit\\)': '(Coup)',
+        '\\(hits\\)': '(Coups)',
+        '\\(jump\\)': '(Saut)',
+        '\\(knockback\\)': '(Poussée)',
+        '\\(stacks\\)': '(Package)',
+        '\\(telegraphs\\)': '(Télégraphe)',
+        '\\(tethers\\)': '(Liens)',
         'Biscuit Maker': 'Coup de tatane',
         'Bloody Scratch': 'Griffure sanglante',
         'Copycat': 'Double félin',

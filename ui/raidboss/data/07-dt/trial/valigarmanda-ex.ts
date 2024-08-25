@@ -35,14 +35,17 @@ const mtFireIds = Object.keys(mtFireIdToSafeMap);
 const mtFireOutputStrings: { [K in WedgeSafeSpot]: LocaleText } = {
   leftWedgeSafe: {
     en: '<= Left Wedge Safe',
+    ja: '<= 左が安地',
     ko: '❰❰❰왼쪽',
   },
   middleWedgeSafe: {
     en: 'Middle Wedge Safe',
+    ja: '中央が安地',
     ko: '◎가운데◎',
   },
   rightWedgeSafe: {
     en: 'Right Wedge Safe =>',
+    ja: '右が安地 =>',
     ko: '오른쪽❱❱❱',
   },
 };
@@ -50,10 +53,12 @@ const mtFireOutputStrings: { [K in WedgeSafeSpot]: LocaleText } = {
 const bigAoeOutputStrings: OutputStrings = {
   cone: {
     en: 'Front Corner',
+    ja: '前方の角へ',
     ko: '🡼🡽앞 구석',
   },
   donut: {
     en: 'Donut (In)',
+    ja: 'ドーナツの中へ',
     ko: '도넛 안',
   },
   out: Outputs.outOfMelee,
@@ -168,6 +173,7 @@ const triggerSet: TriggerSet<Data> = {
         ...bigAoeOutputStrings,
         combo: {
           en: '${type} => Stack w/Partner',
+          ja: '${type} => ペアで頭割り',
           ko: '${type} 🔜 페어',
         },
       },
@@ -204,7 +210,6 @@ const triggerSet: TriggerSet<Data> = {
         healerGroups: {
           en: 'Healer Groups',
           ja: 'ヒラに頭割り',
-          cn: '治疗分摊组',
           ko: '4:4 힐러 🔜 장판 세개',
         },
       },
@@ -222,6 +227,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         soakSwap: {
           en: 'Tank Tower (soak/swap)',
+          ja: 'タンク塔 (踏む/スイッチ)',
           ko: '탱크 타워로 (교대로)',
         },
       },
@@ -274,14 +280,17 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         combo: {
           en: 'Kill Adds + Healer Groups ${role}',
+          ja: '雑魚を倒して + ヒラグループ ${role}',
           ko: '쫄 + 4:4 힐러 ${role}',
         },
         tank: {
           en: '(be in front)',
+          ja: '(前へ)',
           ko: '(맨 앞으로)',
         },
         nonTank: {
           en: '(behind tank)',
+          ja: '(タンクの後ろへ)',
           ko: '(탱크 뒤로)',
         },
       },
@@ -388,14 +397,17 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         killFeather: {
           en: 'Kill Feather + Stand in safe tile',
+          ja: '羽を壊す => 安全な床へ',
           ko: '깃털 잡으면서 + 안전 타일로',
         },
         killLeft: {
           en: 'Kill Left Feather',
+          ja: '羽を壊す',
           ko: '오른쪽 깃털 잡아요',
         },
         killRight: {
           en: 'Kill Right Feather',
+          ja: '羽を壊す',
           ko: '왼쪽 깃털 잡아요',
         },
       },
@@ -415,10 +427,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         ice: {
           en: 'Spread - elevated tile',
+          ja: '散開 - 高台',
           ko: '흩어져요 ▲뜨는 타일',
         },
         lightning: {
           en: 'Spread - ground tile',
+          ja: '散開 - 地面',
           ko: '흩어져요 ▼바닥 타일',
         },
       },
@@ -444,6 +458,7 @@ const triggerSet: TriggerSet<Data> = {
         ...bigAoeOutputStrings,
         combo: {
           en: '${type} => Bait Puddles',
+          ja: '${type} => 捨てて',
           ko: '${type} + 모여있다 🔜 바로 이동(장판)',
         },
       },
@@ -495,34 +510,42 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         avoid: {
           en: 'Dodge spheres - elevated tile',
+          ja: '玉を避ける - 高台',
           ko: '(어딘지 모름) 동글 피하면서 ▲뜨는 타일로',
         },
         combo: {
           en: '${dir} - elevated tile',
+          ja: '${dir} - 高台',
           ko: '${dir} ▲뜨는 타일',
         },
         northFront: {
-          en: 'North Row, Front Lane',
+          en: 'North Row, Front Half',
+          ja: '北側の前方へ',
           ko: '북쪽 앞열',
         },
         northBack: {
-          en: 'North Row, Back Lane',
+          en: 'North Row, Back Half',
+          ja: '北側の後方へ',
           ko: '북쪽 뒷열',
         },
         middleFront: {
-          en: 'Middle Row, Front Lane',
+          en: 'Middle Row, Front Half',
+          ja: '中央の前方へ',
           ko: '가운데 앞열',
         },
         middleBack: {
-          en: 'Middle Row, Back Lane',
+          en: 'Middle Row, Back Half',
+          ja: '中央の後方へ',
           ko: '가운데 뒷열',
         },
         southFront: {
-          en: 'South Row, Front Lane',
+          en: 'South Row, Front Half',
+          ja: '南側の前方へ',
           ko: '남쪽 앞열',
         },
         southBack: {
-          en: 'South Row, Back Lane',
+          en: 'South Row, Back Half',
+          ja: '南側の後方へ',
           ko: '남쪽 뒷열',
         },
       },
@@ -545,10 +568,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         ice: {
           en: 'Spread - elevated tile',
+          ja: '散開 - 高台',
           ko: '흩어져요 ▲뜨는 타일',
         },
         lightning: {
           en: 'Spread - ground tile',
+          ja: '散開 - 地面',
           ko: '흩어져요 ▼바닥 타일',
         },
       },
@@ -565,10 +590,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         soakTower: {
           en: 'Soak Tower',
+          ja: '塔を踏む',
           ko: '타워 밟아요',
         },
         avoidTower: {
           en: 'Avoid Tower',
+          ja: '塔を避ける',
           ko: '타워 피해요',
         },
       },
@@ -675,26 +702,32 @@ const triggerSet: TriggerSet<Data> = {
         ...bigAoeOutputStrings,
         backLeft: {
           en: 'Be Back/Left',
+          ja: '後ろ/左へ',
           ko: '🡿뒤/왼쪽으로',
         },
         frontRight: {
           en: 'Be Front/Right',
+          ja: '前/右へ',
           ko: '🡽앞/오른쪽으로',
         },
         coneNWSafe: {
           en: 'NW Safe',
+          ja: '左上(北西) 安地',
           ko: '🡼북서 안전',
         },
         coneNESafe: {
           en: 'NE Safe',
+          ja: '右上(北東) 安地',
           ko: '🡽북동 안전',
         },
         unknown: {
           en: 'Dodge Avalanche',
+          ja: '雪崩を避けて',
           ko: '(눈사태 피해요)',
         },
         combo: {
           en: '${type} - ${safe}',
+          ja: '${type} - ${safe}',
           ko: '${type} ${safe}',
         },
       },
@@ -752,14 +785,17 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         dodgeLeft: {
           en: '<= Go Left (Dodge Avalanche)',
+          ja: '<= 左へ (雪崩を避けて)',
           ko: '❰❰❰왼쪽으로 (눈사태)',
         },
         dodgeRight: {
           en: 'Go Right (Dodge Avalanche) =>',
+          ja: '右へ => (雪崩を避けて)',
           ko: '오른쪽으로 (눈사태)❱❱❱',
         },
         unknown: {
           en: 'Dodge Avalanche',
+          ja: '雪崩を避けて',
           ko: '눈사태 피해요',
         },
       },
@@ -802,14 +838,17 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         dodgeLeft: {
           en: '<= Go Left (Dodge Avalanche)',
+          ja: '<= 左へ (雪崩を避けて)',
           ko: '❰❰❰왼쪽으로 (눈사태)',
         },
         dodgeRight: {
           en: 'Go Right (Dodge Avalanche) =>',
+          ja: '右へ => (雪崩を避けて)',
           ko: '오른쪽으로 (눈사태)❱❱❱',
         },
         unknown: {
           en: 'Dodge Avalanche',
+          ja: '雪崩を避けて',
           ko: '눈사태 피해요',
         },
       },
@@ -962,7 +1001,6 @@ const triggerSet: TriggerSet<Data> = {
     },
     {
       'locale': 'ja',
-      'missingTranslations': true,
       'replaceSync': {
         'Arcane Sphere': '立体魔法陣',
         'Feather of Ruin': 'ヴァリガルマンダの羽根',
