@@ -6,6 +6,7 @@ import { RaidbossData } from '../../../../../types/data';
 import { TriggerSet } from '../../../../../types/trigger';
 
 // TODO: Add basically anything to help with the doll charges.
+// TODO: Warning for the falling Ferris wheel.
 // TODO: Determine safe spots for Tea Awhirl
 // TODO: Determine safe spots for Toiling Teapots
 
@@ -33,7 +34,7 @@ const triggerSet: TriggerSet<Data> = {
     },
     {
       id: 'Strayborough Deadwalk Falling Nightmare',
-      type: 'StartsUsing',
+      type: 'Ability',
       netRegex: { id: '8EAE', source: 'His Royal Headness Leonogg I', capture: false },
       infoText: (_data, _matches, output) => output.nightmare!(),
       outputStrings: {
@@ -134,7 +135,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '줄 늘려요!',
         },
         fleshTether: {
-          en: 'Become ghost, then stretch tether',
+          en: 'Become ghost => stretch tether',
           ko: '유령으로 🔜 줄 늘려요!',
         },
       },
@@ -225,8 +226,8 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.dodgeLines!(),
       outputStrings: {
         dodgeLines: {
-          en: 'Start mid -- Dodge lines',
-          ko: '한가운데부터 -- 선 피해요',
+          en: 'Start mid => Dodge lines',
+          ko: '한가운데 🔜 선 피해요',
         },
       },
     },

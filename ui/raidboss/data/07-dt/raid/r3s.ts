@@ -21,7 +21,6 @@ export interface Data extends RaidbossData {
   tagTeamClones: TagTeamClone[];
   //
   phase?: Phase;
-  myFuse: 'short' | 'long' | undefined;
   fieldList: string[];
 }
 
@@ -40,7 +39,7 @@ const getSafeSpotsFromClones = (
 ): [number[], number] => {
   let safeSpots = [...Array(8).keys()];
 
-  const lastSafeSpots = Array<number>(8).fill(0);
+  const lastSafeSpots: number[] = [];
 
   // Trim the three dirs that aren't getting hit by myClone
   for (let idx = 0; idx < 3; ++idx) {
@@ -98,10 +97,22 @@ const triggerSet: TriggerSet<Data> = {
     phaseTracker: 0,
     tagTeamClones: [],
     //
-    myFuse: undefined,
     fieldList: [],
   }),
   triggers: [
+    {
+      id: 'R3S Phase',
+      type: 'StartsUsing',
+      netRegex: { id: ['9403', '9406', '93EE'], source: 'Brute Bomber' },
+      run: (data, matches) => {
+        const map: { [id: string]: Phase } = {
+          '9403': 'foe',
+          '9406': 'final',
+          '93EE': 'field',
+        } as const;
+        data.phase = map[matches.id];
+      },
+    },
     {
       id: 'R3S Phase Tracker',
       type: 'GainsEffect',
@@ -157,7 +168,6 @@ const triggerSet: TriggerSet<Data> = {
       id: 'R3S Octoboom Dive Proximity',
       type: 'StartsUsing',
       netRegex: { id: '93DE', source: 'Brute Bomber', capture: false },
-      durationSeconds: 8,
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
@@ -171,7 +181,6 @@ const triggerSet: TriggerSet<Data> = {
       id: 'R3S Octoboom Dive Knockback',
       type: 'StartsUsing',
       netRegex: { id: '93DF', source: 'Brute Bomber', capture: false },
-      durationSeconds: 8,
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
@@ -234,6 +243,133 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
+      id: 'R3S Short Fuse',
+      type: 'GainsEffect',
+      netRegex: { effectId: 'FB8', capture: true },
+      condition: (data, matches) => data.phase === 'final' && data.me === matches.target,
+      infoText: (_data, _matches, output) => output.text!(),
+      outputStrings: {
+        text: {
+          en: 'Short Fuse',
+          ja: '短い導火線',
+          ko: '먼저 흩어져요! (짧은 도화선)',
+        },
+      },
+    },
+    {
+      id: 'R3S Long Fuse',
+      type: 'GainsEffect',
+      netRegex: { effectId: 'FB9', capture: true },
+      condition: (data, matches) => data.phase === 'final' && data.me === matches.target,
+      infoText: (_data, _matches, output) => output.text!(),
+      outputStrings: {
+        text: {
+          en: 'Long Fuse',
+          ja: '長い導火線',
+          ko: '먼저 뭉쳐요! (긴 도화선)',
+        },
+      },
+    },
+    {
+      id: 'R3S Fuse Field',
+      type: 'GainsEffect',
+      netRegex: { effectId: 'FB4' },
+      condition: Conditions.targetIsYou(),
+      infoText: (data, matches, output) => {
+        // MT>ST>H1>H2／D1>D2>D3>D4
+        const thFirst = ['ST', 'H1', 'H2', 'D1', 'D2', 'D3', 'D4'];
+        const dpsFirst = ['D2', 'D3', 'D4', 'MT', 'ST', 'H1', 'H2'];
+        if (parseFloat(matches.duration) < 30) {
+          data.fieldList = data.party.isDPS(data.me) ? dpsFirst : thFirst;
+          return output.short!();
+        }
+        data.fieldList = data.party.isDPS(data.me) ? thFirst : dpsFirst;
+        return output.long!();
+      },
+      outputStrings: {
+        short: {
+          en: 'Short Fuse',
+          ja: '短い導火線',
+          ko: '짧은 도화선',
+        },
+        long: {
+          en: 'Long Fuse',
+          ja: '長い導火線',
+          ko: '긴 도화선',
+        },
+      },
+    },
+    {
+      id: 'R3S Fuse Field Next',
+      type: 'GainsEffect',
+      netRegex: { effectId: 'B7D', capture: false },
+      condition: (data) => data.phase === 'field' && data.fieldList.length > 0,
+      delaySeconds: 2,
+      durationSeconds: 2,
+      suppressSeconds: 1,
+      infoText: (data, _matches, output) => {
+        const target = data.fieldList.shift();
+        return output.text!({ target: target });
+      },
+      outputStrings: {
+        text: {
+          en: '${target}',
+          ja: '${target}',
+          ko: '${target}',
+        },
+      },
+    },
+    {
+      id: 'R3S Octoboom Bombarian Special',
+      type: 'StartsUsing',
+      netRegex: { id: '9752', source: 'Brute Bomber', capture: false },
+      condition: Conditions.notOnlyAutumn(),
+      infoText: (_data, _matches, output) => output.text!(),
+      outputStrings: {
+        text: {
+          en: 'Out => In => Knockback => Spread',
+          ja: '外側 => 内側 => ノックバック => 散開',
+          ko: '밖에서 🔜 안으로 🔜 넉백 🔜 흩어져요',
+        },
+      },
+    },
+    {
+      id: 'R3S Octoboom Bombarian Special Reminder',
+      type: 'StartsUsing',
+      netRegex: { id: '9752', source: 'Brute Bomber', capture: false },
+      delaySeconds: 20,
+      durationSeconds: 7,
+      alertText: (_data, _matches, output) => output.spread!(),
+      outputStrings: {
+        spread: Outputs.spread,
+      },
+    },
+    {
+      id: 'R3S Quadroboom Bombarian Special',
+      type: 'StartsUsing',
+      netRegex: { id: '940A', source: 'Brute Bomber', capture: false },
+      condition: Conditions.notOnlyAutumn(),
+      infoText: (_data, _matches, output) => output.text!(),
+      outputStrings: {
+        text: {
+          en: 'Out => In => Knockback => Partners',
+          ja: '外側 => 内側 => ノックバック => ペア',
+          ko: '밖에서 🔜 안으로 🔜 넉백 🔜 둘이 함께',
+        },
+      },
+    },
+    {
+      id: 'R3S Quadroboom Bombarian Special Reminder',
+      type: 'StartsUsing',
+      netRegex: { id: '940A', source: 'Brute Bomber', capture: false },
+      delaySeconds: 20,
+      durationSeconds: 7,
+      alertText: (_data, _matches, output) => output.stack!(),
+      outputStrings: {
+        stack: Outputs.stackPartner,
+      },
+    },
+    {
       id: 'R3S Tag Team Tether',
       type: 'Tether',
       // The clone uses ID `0112`, the boss uses ID `0113`.
@@ -274,11 +410,23 @@ const triggerSet: TriggerSet<Data> = {
     {
       id: 'R3S Tag Team Clone',
       type: 'StartsUsing',
+      /*
+        Clones spawn on a random cardinal. They do one lariat dash across, then another one back.
+        There are two sets of IDs, one for Tag Team 1, and one for Tag Team 2.
+        IDs:
+        9B2C - TT1, Right -> Left
+        9B2E - TT1, Left -> Right
+        9BD8 - TT2, Right -> Left
+        9BDA - TT2, Left -> Right
+      */
       netRegex: { id: ['9B2C', '9B2E', '9BD8', '9BDA'], source: 'Brute Distortion', capture: true },
       condition: (data, matches) => {
         const x = parseFloat(matches.x);
         const y = parseFloat(matches.y);
         const cloneDir = Directions.xyTo8DirNum(x, y, 100, 100);
+        // Increment clockwise from our starting position to get the cleave direction.
+        // If this is a right cleave, increment by 6 (South + 6 = East)
+        // Otherwise, increment 2 positions (South + 2 = West)
         const cleaveAdjust = ['9B2C', '9BD8'].includes(matches.id) ? 6 : 2;
         const cleaveDir = (cloneDir + cleaveAdjust) % 8;
         data.tagTeamClones.push({
@@ -382,6 +530,18 @@ const triggerSet: TriggerSet<Data> = {
     {
       id: 'R3S KB Towers 2 Lariat Combo',
       type: 'StartsUsing',
+      /*
+        Boss jumps to a random cardinal. Does one lariat dash across, then another one back.
+        IDs:
+        9AE8 - Right cleave, then right cleave again.
+             - If north, then east safe, then west. (go)
+        9AE9 - Right cleave, then left cleave.
+             - If north, then east safe, then east. (stay)
+        9AEA - Left cleave, then left cleave again.
+             - If north, then west safe, then east. (go)
+        9AEB - Left cleave, then right cleave.
+             - If north, then west safe, then west. (stay)
+      */
       netRegex: { id: ['9AE8', '9AE9', '9AEA', '9AEB'], source: 'Brute Bomber', capture: true },
       durationSeconds: 11,
       infoText: (data, matches, output) => {
@@ -396,11 +556,15 @@ const triggerSet: TriggerSet<Data> = {
         let secondSafeSpots = [...firstSafeSpots];
 
         for (let idx = 0; idx < 5; ++idx) {
+          // Starting at boss position, treat the 5 positions clockwise as unsafe
+          // If this is a right cleave instead, then start opposite of boss
           const dir = (bossDir + (firstCleaveDir === 'left' ? 0 : 4) + idx) % 8;
           firstSafeSpots = firstSafeSpots.filter((spot) => spot !== dir);
         }
 
         for (let idx = 0; idx < 5; ++idx) {
+          // Starting opposite boss position, treat the 5 positions clockwise as unsafe
+          // If this is a right cleave instead, then start at boss
           const dir = (bossDir + (secondCleaveDir === 'right' ? 0 : 4) + idx) % 8;
           secondSafeSpots = secondSafeSpots.filter((spot) => spot !== dir);
         }
@@ -473,131 +637,10 @@ const triggerSet: TriggerSet<Data> = {
         },
       },
     },
-    // ========== PRS ==========
-    {
-      id: 'R3S PRS Phase',
-      type: 'StartsUsing',
-      netRegex: { id: ['9403', '9406', '93EE'], source: 'Brute Bomber' },
-      run: (data, matches) => {
-        const map: { [id: string]: Phase } = {
-          '9403': 'foe',
-          '9406': 'final',
-          '93EE': 'field',
-        } as const;
-        data.phase = map[matches.id];
-      },
-    },
-    {
-      id: 'R3S Final Fusedown',
-      type: 'GainsEffect',
-      netRegex: { effectId: ['FB8', 'FB9'], capture: true },
-      condition: (data, matches) => data.phase === 'final' && data.me === matches.target,
-      alertText: (data, matches, output) => {
-        if (matches.effectId === 'FB8') {
-          data.myFuse = 'short';
-          return output.short!();
-        }
-        data.myFuse = 'long';
-        return output.long!();
-      },
-      outputStrings: {
-        short: {
-          en: 'Short Fuse',
-          ja: '短い導火線',
-          ko: '먼저 흩어져요! (짧은 도화선)',
-        },
-        long: {
-          en: 'Long Fuse',
-          ja: '長い導火線',
-          ko: '먼저 뭉쳐요! (긴 도화선)',
-        },
-      },
-    },
-    {
-      id: 'R3S Fuse Field',
-      type: 'GainsEffect',
-      netRegex: { effectId: 'FB4' },
-      condition: Conditions.targetIsYou(),
-      infoText: (data, matches, output) => {
-        // MT>ST>H1>H2／D1>D2>D3>D4
-        const thFirst = ['ST', 'H1', 'H2', 'D1', 'D2', 'D3', 'D4'];
-        const dpsFirst = ['D2', 'D3', 'D4', 'MT', 'ST', 'H1', 'H2'];
-        if (parseFloat(matches.duration) < 30) {
-          data.fieldList = data.party.isDPS(data.me) ? dpsFirst : thFirst;
-          return output.short!();
-        }
-        data.fieldList = data.party.isDPS(data.me) ? thFirst : dpsFirst;
-        return output.long!();
-      },
-      outputStrings: {
-        long: {
-          en: 'Long Fuse',
-          ja: '長い導火線',
-          ko: '내게 긴 도화선',
-        },
-        short: {
-          en: 'Short Fuse',
-          ja: '短い導火線',
-          ko: '내게 짧은 도화선',
-        },
-      },
-    },
-    {
-      id: 'R3S Fuse Field Next',
-      type: 'GainsEffect',
-      netRegex: { effectId: 'B7D', capture: false },
-      condition: (data) => data.phase === 'field' && data.fieldList.length > 0,
-      delaySeconds: 2,
-      durationSeconds: 2,
-      suppressSeconds: 1,
-      infoText: (data, _matches, output) => {
-        const target = data.fieldList.shift();
-        return output.text!({ target: target });
-      },
-      outputStrings: {
-        text: {
-          en: '${target}',
-          ja: '${target}',
-          ko: '${target}',
-        },
-      },
-    },
-    {
-      id: 'R3S Bombarian Special',
-      type: 'StartsUsing',
-      netRegex: { id: ['9752', '940A'], source: 'Brute Bomber', capture: true },
-      delaySeconds: (data) => data.options.OnlyAutumn ? 20 : 0,
-      durationSeconds: (data) => data.options.OnlyAutumn ? 7 : 27,
-      infoText: (data, matches, output) => {
-        if (data.options.OnlyAutumn) {
-          if (matches.id === '9752')
-            return output.spread!();
-          return output.pair!();
-        }
-        if (matches.id === '9752')
-          return output.fullSpread!();
-        return output.fullPair!();
-      },
-      outputStrings: {
-        fullSpread: {
-          en: 'Out => In => Knockback => Spread',
-          ja: '外側 => 内側 => ノックバック => 散開',
-          ko: '밖에서 🔜 안으로 🔜 넉백 🔜 흩어져요',
-        },
-        fullPair: {
-          en: 'Out => In => Knockback => Partners',
-          ja: '外側 => 内側 => ノックバック => ペア',
-          ko: '밖에서 🔜 안으로 🔜 넉백 🔜 둘이 함께',
-        },
-        spread: Outputs.spreadOwn,
-        pair: Outputs.stackPartner,
-      },
-    },
   ],
   timelineReplace: [
     {
       'locale': 'de',
-      'missingTranslations': true,
       'replaceSync': {
         'Brute Bomber': 'Brutalo Bomber',
         'Brute Distortion': 'Brutalo Bomber-Phantom',

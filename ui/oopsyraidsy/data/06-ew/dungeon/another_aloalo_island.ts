@@ -168,7 +168,7 @@ const triggerSet: OopsyTriggerSet<Data> = {
       en: 'Tornado',
       de: 'Tornado',
       fr: 'Tornade',
-      ja: '竜巻',
+      ja: 'トルネド',
       cn: '龙卷风',
       ko: '회오리',
     }),

@@ -1629,13 +1629,25 @@ const triggerSet: TriggerSet<Data> = {
           ? (data.midnightCardFirst ? output.cardinals!() : output.intercards!())
           : (data.midnightCardFirst ? output.intercards!() : output.cardinals!());
 
-        return output.combo!({ dir: dirStr, mech: firstMechStr });
+        const typeStr = data.midnightFirstAdds === 'wings' ? output.wings!() : output.guns!();
+
+        return output.combo!({ dir: dirStr, type: typeStr, mech: firstMechStr });
       },
       outputStrings: {
         combo: {
-          en: '${dir} => ${mech}',
-          ja: '${dir} => ${mech}',
-          ko: '${dir} 🔜 ${mech}',
+          en: '${dir} + ${type} + ${mech}',
+          ja: '${dir} + ${type} + ${mech}',
+          ko: '${dir} 🔜 ${mech} (${type})',
+        },
+        guns: {
+          en: 'Avoid Line',
+          cn: '躲避直线',
+          ko: '직선',
+        },
+        wings: {
+          en: 'Donut',
+          cn: '月环',
+          ko: '도넛',
         },
         cardinals: Outputs.cardinals,
         intercards: Outputs.intercards,
@@ -1661,13 +1673,25 @@ const triggerSet: TriggerSet<Data> = {
           ? (secondAddsOnCards ? output.cardinals!() : output.intercards!())
           : (secondAddsOnCards ? output.intercards!() : output.cardinals!());
 
-        return output.combo!({ dir: dirStr, mech: secondMechStr });
+        const typeStr = data.midnightSecondAdds === 'wings' ? output.wings!() : output.guns!();
+
+        return output.combo!({ dir: dirStr, type: typeStr, mech: secondMechStr });
       },
       outputStrings: {
         combo: {
-          en: '${dir} => ${mech}',
-          ja: '${dir} => ${mech}',
-          ko: '${dir} 🔜 ${mech}',
+          en: '${dir} + ${type} + ${mech}',
+          ja: '${dir} + ${type} + ${mech}',
+          ko: '${dir} 🔜 ${mech} (${type})',
+        },
+        guns: {
+          en: 'Avoid Line',
+          cn: '躲避直线',
+          ko: '직선',
+        },
+        wings: {
+          en: 'Donut',
+          cn: '月环',
+          ko: '도넛',
         },
         cardinals: Outputs.cardinals,
         intercards: Outputs.intercards,
