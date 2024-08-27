@@ -47,7 +47,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Out (then behind)',
-          ko: '밖으로 (그리고 엉댕이로)',
+          ko: '밖으로 🔜 엉댕이로',
         },
       },
     },
@@ -65,7 +65,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Follow jump (then out => behind)',
-          ko: '점프 따라가요 (그리고 밖으로 🔜 엉댕이로)',
+          ko: '점프 따라가면서 🔜 밖으로 🔜 엉댕이로',
         },
       },
     },

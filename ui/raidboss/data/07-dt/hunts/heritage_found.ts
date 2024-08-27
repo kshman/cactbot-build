@@ -127,7 +127,7 @@ const triggerSet: TriggerSet<Data> = {
         },
         attract: {
           en: 'Forced draw-in',
-          ko: '강제 끌어당기기',
+          ko: '강제 땡기기',
         },
         combo: {
           en: '${magnet} => ${dir}',
@@ -160,7 +160,7 @@ const triggerSet: TriggerSet<Data> = {
         },
         attract: {
           en: 'Forced draw-in',
-          ko: '강제 끌어당기기',
+          ko: '강제 땡기기',
         },
         combo: {
           en: '${magnet} => ${dir}',

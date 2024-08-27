@@ -58,7 +58,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         dodge: {
           en: 'Dodge cleaves x4',
-          ko: '클레브 4번 피해요',
+          ko: '휘두르기 피해요 (4번)',
         },
         behind: {
           en: 'Behind + Left (for 3) => Go Front',

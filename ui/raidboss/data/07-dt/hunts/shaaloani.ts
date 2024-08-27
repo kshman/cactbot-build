@@ -54,7 +54,7 @@ const triggerSet: TriggerSet<Data> = {
       type: 'StartsUsing',
       // Unclear why there are two ids for this, but both are used.
       netRegex: { id: ['9C7F', '96FB'], source: 'Keheniheyamewi', capture: false },
-      response: Responses.outOfMelee('alert'),
+      response: Responses.getOut(),
     },
     {
       id: 'Hunt Keheni Slippery Scatterscourge',
@@ -64,7 +64,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Follow dash (in after)',
-          ko: '돌진 따라가요 (그리고 안으로)',
+          ko: '돌진 따라가요 🔜 안으로',
         },
       },
     },
@@ -84,19 +84,19 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         forward: {
           en: 'Forced March: Forward (later)',
-          ko: '강제이동: 앞으로 (나중에)',
+          ko: '(나중에 강제이동: 앞으로)',
         },
         backward: {
           en: 'Forced March: Backward (later)',
-          ko: '강제이동: 뒤로 (나중에)',
+          ko: '(나중에 강제이동: 뒤로)',
         },
         left: {
           en: 'Forced March: Left (later)',
-          ko: '강제이동: 왼쪽으로 (나중에)',
+          ko: '(나중에 강제이동: 왼쪽으로)',
         },
         right: {
           en: 'Forced March: Right (later)',
-          ko: '강제이동: 오른쪽으로 (나중에)',
+          ko: '(나중에 강제이동: 오른쪽으로)',
         },
       },
     },
