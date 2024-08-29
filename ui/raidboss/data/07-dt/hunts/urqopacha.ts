@@ -58,7 +58,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         dodge: {
           en: 'Dodge cleaves x4',
-          ko: '클레브 4번 피해요',
+          ko: '휘두르기 피해요 (4번)',
         },
         behind: {
           en: 'Behind + Left (for 3) => Go Front',
@@ -190,7 +190,32 @@ const triggerSet: TriggerSet<Data> = {
     },
     // ****** S-RANK: Kirlirger the Abhorrent ****** //
   ],
-  timelineReplace: [],
+  timelineReplace: [
+    {
+      'locale': 'de',
+      'replaceSync': {
+        'Nechuciho': 'Nechuciho',
+        'Queen Hawk': 'Falkenkönigin',
+        'Kirlirger the Abhorrent': 'Kirlirger (?:der|die|das) Abscheuliche[rs]?',
+      },
+    },
+    {
+      'locale': 'fr',
+      'replaceSync': {
+        'Nechuciho': 'Nechukiho',
+        'Queen Hawk': 'reine des guêpes',
+        'Kirlirger the Abhorrent': 'Kirlirger l\'abominable',
+      },
+    },
+    {
+      'locale': 'ja',
+      'replaceSync': {
+        'Nechuciho': 'ネチュキホ',
+        'Queen Hawk': 'クイーンホーク',
+        'Kirlirger the Abhorrent': '厭忌のキーリーゲー',
+      },
+    },
+  ],
 };
 
 export default triggerSet;

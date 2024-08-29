@@ -28,6 +28,7 @@ export interface Data extends RaidbossData {
 
 const getMarkerFromDir = (dir: number): string => {
   const markers = ['Ⓐ', '②', 'Ⓑ', '③', 'Ⓒ', '④', 'Ⓓ', '①'] as const;
+  // const markers = ['Ⓐ', '①', 'Ⓑ', '②', 'Ⓒ', '③', 'Ⓓ', '④'] as const;
   const res = markers[dir];
   return res !== undefined ? res : '???';
 };
@@ -52,8 +53,7 @@ const getSafeSpotsFromClones = (
     const dir = (otherClone.cleave + 6 + idx) % 8;
     safeSpots = safeSpots.filter((spot) => dir !== spot);
     // Track that this spot is getting hit for the last safe spot calc
-    if (lastSafeSpots[dir] !== undefined)
-      lastSafeSpots[dir]++;
+    lastSafeSpots[dir]++;
   }
 
   // Handle Murderous Mist if that's getting passed in
@@ -66,8 +66,7 @@ const getSafeSpotsFromClones = (
   // Figure out where our final safe spot is
   for (let idx = 0; idx < 5; ++idx) {
     const dir = (myClone.cleave + 6 + idx) % 8;
-    if (lastSafeSpots[dir] !== undefined)
-      lastSafeSpots[dir]++;
+    lastSafeSpots[dir]++;
   }
 
   const lastSafeSpot = (lastSafeSpots.findIndex((count) => count === 0) + 4) % 8;
@@ -339,9 +338,9 @@ const triggerSet: TriggerSet<Data> = {
       netRegex: { id: '9752', source: 'Brute Bomber', capture: false },
       delaySeconds: 20,
       durationSeconds: 7,
-      alertText: (_data, _matches, output) => output.spread!(),
+      infoText: (_data, _matches, output) => output.spread!(),
       outputStrings: {
-        spread: Outputs.spread,
+        spread: Outputs.spreadOwn,
       },
     },
     {
@@ -364,7 +363,7 @@ const triggerSet: TriggerSet<Data> = {
       netRegex: { id: '940A', source: 'Brute Bomber', capture: false },
       delaySeconds: 20,
       durationSeconds: 7,
-      alertText: (_data, _matches, output) => output.stack!(),
+      infoText: (_data, _matches, output) => output.stack!(),
       outputStrings: {
         stack: Outputs.stackPartner,
       },
