@@ -196,7 +196,7 @@ export default {
     fr: 'Diffamation sur VOUS',
     ja: '自分に巨大な爆発',
     cn: '大圈点名',
-    ko: '내게 슈퍼 폭발',
+    ko: '내게 대폭발',
   },
   protean: {
     en: 'Protean',
@@ -262,7 +262,7 @@ export default {
     fr: 'Packez-vous au milieu',
     ja: '中央で頭割り',
     cn: '中间集合',
-    ko: '한가운데서 뭉쳐욧',
+    ko: '가운데서 뭉쳐요',
   },
   baitPuddles: {
     en: 'Bait puddles',
@@ -466,7 +466,7 @@ export default {
     fr: 'Allez au milieu',
     ja: '中へ',
     cn: '去中间',
-    ko: '한가운데로',
+    ko: '가운데로',
   },
   front: {
     en: 'Front',
@@ -554,7 +554,7 @@ export default {
     fr: 'Milieu',
     ja: '中へ',
     cn: '中间',
-    ko: '한가운데',
+    ko: '가운데',
   },
   clockwise: {
     en: 'Clockwise',
@@ -1053,6 +1053,21 @@ export default {
     en: 'Spread',
     ja: '散開',
     ko: '흩어져서 혼자',
+  },
+  stackCenter: {
+    en: 'Stack in center',
+    ja: '真ん中で頭割り',
+    ko: '한가운데서 뭉쳐욧',
+  },
+  goIntoCenter: {
+    en: 'Get Center',
+    ja: '真ん中へ',
+    ko: '한가운데로',
+  },
+  center: {
+    en: 'Center',
+    ja: '真ん中',
+    ko: '한가운데',
   },
   // 화살표
   arrowN: {

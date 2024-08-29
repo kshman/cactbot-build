@@ -44,7 +44,7 @@ const poisonOutputStrings = {
   defamations: {
     en: 'Defamations',
     ja: '自分に巨大な爆発',
-    ko: '바깥쪽에서 대폭발',
+    ko: '대폭발! 바깥으로',
   },
   in: {
     en: 'In (Avoid Defamations)',
@@ -518,7 +518,7 @@ const triggerSet: TriggerSet<Data> = {
         merge: {
           en: 'Merge Soon w/ ${player}',
           ja: '${player} と重なって',
-          ko: '곧 문대요: ${player}',
+          ko: '문대요: ${player}',
         },
         unknown: Outputs.unknown,
       },
@@ -550,7 +550,7 @@ const triggerSet: TriggerSet<Data> = {
         merge: {
           en: 'Merge: ${alpha} + ${beta}',
           ja: '組み合わせ: ${alpha} + ${beta}',
-          ko: '문대요: ${alpha} + ${beta}',
+          ko: '문댈 차례: ${alpha} + ${beta}',
         },
         unknown: Outputs.unknown,
       },
