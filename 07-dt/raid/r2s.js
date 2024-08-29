@@ -14,12 +14,13 @@ const poisonOutputStrings = {
   defamationOnYou: Outputs.defamationOnYou,
   defamations: {
     en: 'Defamations',
-    ko: '바깥쪽에서 대폭발',
+    ja: '自分に巨大な爆発',
+    ko: '대폭발! 바깥으로',
   },
   in: {
     en: 'In (Avoid Defamations)',
-    de: 'Mitte (weiche den AoEs aus)',
-    cn: '한가운데 (곧 타워)',
+    ja: '中央へ (巨大な爆発を避けて)',
+    ko: '한가운데 (곧 타워)',
   },
 };
 const beelovedDebuffDurationOrder = [12, 28, 44, 62];
@@ -128,6 +129,7 @@ Options.Triggers.push({
       outputStrings: {
         text: {
           en: 'Drop Puddle Outside',
+          ja: '外側に捨てて',
           ko: '바깥에 장판 버려요!',
         },
       },
@@ -226,14 +228,17 @@ Options.Triggers.push({
       outputStrings: {
         middle: {
           en: '(middle after)',
+          ja: '(後で内側へ)',
           ko: '(나중에 가운데로)',
         },
         partners: {
           en: '(middle + partners after)',
+          ja: '(後で内側へ + ペア)',
           ko: '(나중에 가운데 + 둘이)',
         },
         spread: {
           en: '(middle + spread after)',
+          ja: '(後で内側へ + 散開)',
           ko: '(나중에 가운데 + 흩어져요)',
         },
       },
@@ -286,14 +291,17 @@ Options.Triggers.push({
       outputStrings: {
         out: {
           en: '(out after)',
+          ja: '(後で外側へ)',
           ko: '(나중에 바깥으로)',
         },
         partners: {
           en: '(out + partners after)',
+          ja: '(後で外側へ + ペア)',
           ko: '(나중에 바깥 + 둘이)',
         },
         spread: {
           en: '(out + spread after)',
+          ja: '(後で外側へ + 散開)',
           ko: '(나중에 바깥 + 흩어져요)',
         },
       },
@@ -475,7 +483,8 @@ Options.Triggers.push({
       outputStrings: {
         merge: {
           en: 'Merge Soon w/ ${player}',
-          ko: '곧 문대요: ${player}',
+          ja: '${player} と重なって',
+          ko: '문대요: ${player}',
         },
         unknown: Outputs.unknown,
       },
@@ -503,7 +512,8 @@ Options.Triggers.push({
       outputStrings: {
         merge: {
           en: 'Merge: ${alpha} + ${beta}',
-          ko: '문대요: ${alpha} + ${beta}',
+          ja: '組み合わせ: ${alpha} + ${beta}',
+          ko: '문댈 차례: ${alpha} + ${beta}',
         },
         unknown: Outputs.unknown,
       },
