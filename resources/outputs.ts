@@ -596,7 +596,7 @@ export default {
     fr: 'Éloignez-vous du devant',
     ja: '前方から離れる',
     cn: '远离正面',
-    ko: '앞쪽은 위험해',
+    ko: '앞쪽은 피해요',
   },
   sleepTarget: {
     en: 'Sleep ${name}',
