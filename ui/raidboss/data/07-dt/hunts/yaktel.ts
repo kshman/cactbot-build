@@ -24,7 +24,7 @@ const triggerSet: TriggerSet<Data> = {
       id: 'Hunt Starcrier Wingsbreadth Winds',
       type: 'StartsUsing',
       netRegex: { id: '90AE', source: 'Starcrier', capture: false },
-      response: Responses.getOut(),
+      response: Responses.outOfMelee('alert'),
     },
     {
       id: 'Hunt Starcrier Stormwall Winds',

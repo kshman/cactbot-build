@@ -296,7 +296,7 @@ const triggerSet: TriggerSet<Data> = {
       'locale': 'fr',
       'replaceSync': {
         'Nechuciho': 'Nechukiho',
-        'Queen Hawk': 'reine des guêpes',
+        'Queen Hawk': 'Reine des guêpes',
         'Kirlirger the Abhorrent': 'Kirlirger l\'abominable',
       },
     },

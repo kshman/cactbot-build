@@ -384,7 +384,7 @@ const triggerSet: TriggerSet<Data> = {
       'locale': 'fr',
       'replaceSync': {
         'Heshuala': 'Heshuala',
-        'Urna Variabilis': 'pod variant',
+        'Urna Variabilis': 'Pod variant',
         'Atticus the Primogenitor': 'Atticus le primogéniteur',
       },
     },

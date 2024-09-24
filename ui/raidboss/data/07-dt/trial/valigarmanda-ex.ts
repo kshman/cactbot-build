@@ -12,8 +12,6 @@ export interface Data extends RaidbossData {
   arcaneLaneSafe: ArcaneLane[];
   avalancheSafe?: 'frontRight' | 'backLeft';
   iceSphereAttackCount: number;
-  //
-  prFeatureLocation?: 'left' | 'right';
 }
 
 // Vali uses uncasted abilities to move between left, middle, and right.
@@ -365,13 +363,10 @@ const triggerSet: TriggerSet<Data> = {
       id: 'Valigarmanda Ex Hail of Feathers',
       type: 'StartsUsingExtra',
       netRegex: { id: '901D' },
-      alertText: (data, matches, output) => {
+      alertText: (_data, matches, output) => {
         const posX = parseFloat(matches.x);
-        if (posX < 100) {
-          data.prFeatureLocation = 'right';
+        if (posX < 100)
           return output.startEast!();
-        }
-        data.prFeatureLocation = 'left';
         return output.startWest!();
       },
       outputStrings: {
@@ -387,28 +382,12 @@ const triggerSet: TriggerSet<Data> = {
       delaySeconds: 5,
       durationSeconds: 8,
       suppressSeconds: 99999,
-      infoText: (data, _matches, output) => {
-        if (data.prFeatureLocation === 'left')
-          return output.killLeft!();
-        else if (data.prFeatureLocation === 'right')
-          return output.killRight!();
-        return output.killFeather!();
-      },
+      infoText: (_data, _matches, output) => output.killFeather!(),
       outputStrings: {
         killFeather: {
-          en: 'Kill Feather + Stand in safe tile',
+          en: 'Kill Feather => Stand in safe tile',
           ja: '羽を壊す => 安全な床へ',
           ko: '깃털 잡으면서 + 안전 타일로',
-        },
-        killLeft: {
-          en: 'Kill Left Feather',
-          ja: '羽を壊す',
-          ko: '오른쪽 깃털 잡아요',
-        },
-        killRight: {
-          en: 'Kill Right Feather',
-          ja: '羽を壊す',
-          ko: '왼쪽 깃털 잡아요',
         },
       },
     },

@@ -153,7 +153,7 @@ const triggerSet: TriggerSet<Data> = {
     {
       'locale': 'fr',
       'replaceSync': {
-        'Arch Aethereater': 'seigneur des cristallisateurs',
+        'Arch Aethereater': 'Seigneur des cristallisateurs',
       },
     },
     {

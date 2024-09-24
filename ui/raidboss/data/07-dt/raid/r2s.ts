@@ -134,19 +134,19 @@ const triggerSet: TriggerSet<Data> = {
       run: (data) => data.heartShed = [],
       outputStrings: {
         baitTh: {
-          en: 'Drop AOE',
+          en: 'Drop west',
           ko: '서쪽 바깥에 장판 버려요!',
         },
         bairDps: {
-          en: 'Drop AOE',
+          en: 'Drop east',
           ko: '동쪽 바깥에 장판 버려요!',
         },
         towerTh: {
-          en: 'Soak Tower',
+          en: 'N/W tower',
           ko: '북/서 타워 밟아요',
         },
         towerDps: {
-          en: 'Soak Tower',
+          en: 'S/E tower',
           ko: '남/동 타워 밟아요',
         },
       },
@@ -221,7 +221,7 @@ const triggerSet: TriggerSet<Data> = {
       run: (data) => data.storedPartnersSpread = 'partners',
       outputStrings: {
         text: {
-          en: 'Stored Partners',
+          en: 'Stored: Partners',
           ja: 'あとでペア',
           ko: '(나중에 둘이 페어)',
         },
@@ -235,7 +235,7 @@ const triggerSet: TriggerSet<Data> = {
       run: (data) => data.storedPartnersSpread = 'spread',
       outputStrings: {
         text: {
-          en: 'Stored Spread',
+          en: 'Stored: Spread',
           ja: 'あとで散開',
           ko: '(나중에 흩어져요)',
         },
@@ -644,10 +644,9 @@ const triggerSet: TriggerSet<Data> = {
     },
     {
       'locale': 'fr',
-      'missingTranslations': true,
       'replaceSync': {
         'Honey B. Lovely': 'Honey B. Lovely',
-        'Sweetheart': 'cœur chaleureux',
+        'Sweetheart': 'Cœur chaleureux',
       },
       'replaceText': {
         'Alarm Pheromones': 'Phéromones d\'alerte',
@@ -680,6 +679,11 @@ const triggerSet: TriggerSet<Data> = {
         'Spread Love': 'Pluie d\'amour',
         'Stinging Slash': 'Taillade tueuse',
         'Tempting Twist': 'Tourbillon tentateur',
+        '\\(cast\\)': '(Incante)',
+        '\\(damage\\)': '(Dommage)',
+        '\\(drop\\)': '(Goutte)',
+        '\\(enrage\\)': '(Enrage)',
+        '\\(stun for': '(Étourdi pour',
       },
     },
     {

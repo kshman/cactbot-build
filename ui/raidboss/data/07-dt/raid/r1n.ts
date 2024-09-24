@@ -137,16 +137,12 @@ const triggerSet: TriggerSet<Data> = {
         },
         separator: {
           en: ' => ',
-          de: ' => ',
           ja: ' => ',
-          cn: ' => ',
           ko: ' 🔜 ',
         },
         combo: {
           en: '${dirs}',
-          de: '${dirs}',
           ja: '${dirs}',
-          cn: '${dirs}',
           ko: '${dirs}',
         },
       },
@@ -181,13 +177,11 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         cardsIntercards: {
           en: 'Cards => Intercards',
-          de: 'Karten => Interkardinal',
           ja: '十字 => 斜め',
           ko: '십자 🔜 비스듬히',
         },
         intercardsCards: {
           en: 'Intercards => Cards',
-          de: 'Interkardinal => Karten',
           ja: '斜め => 十字',
           ko: '비스듬 🔜 십자로',
         },
@@ -202,7 +196,6 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Aim for uncracked tile',
-          de: 'Ziehle auf nich gerissene Fläche',
           ja: '割れていない床を狙う',
           ko: '안부셔진 타일로 튕겨요',
         },
@@ -241,7 +234,6 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'West => East at marker',
-          de: 'Westen => Osten bei der Markierung',
           ja: 'マーカーの西 => マーカーの東',
           ko: '서쪽 🔜 마커의 동쪽',
         },
@@ -256,7 +248,6 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'East => West at marker',
-          de: 'Osten => Westen bei der Markierung',
           ja: 'マーカーの東 => マーカーの西',
           ko: '동쪽 🔜 마커의 서쪽',
         },
@@ -271,7 +262,6 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'West => East at marker',
-          de: 'Westen => Osten bei der Markierung',
           ja: 'マーカーの西 => マーカーの東',
           ko: '서쪽 🔜 마커의 동쪽',
         },
@@ -286,7 +276,6 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'East => West at marker',
-          de: 'Osten => Westen bei der Markierung',
           ja: 'マーカーの東 => マーカーの西',
           ko: '동쪽 🔜 마커의 서쪽',
         },
