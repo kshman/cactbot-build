@@ -63,10 +63,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         donut: {
           en: 'Donut (In)',
-          de: 'Donut (Rein)',
-          fr: 'Donut (Intérieur)',
           ja: 'ドーナツの中へ',
-          cn: '中间月环',
           ko: '도넛 안으로',
         },
       },
@@ -90,10 +87,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         cone: {
           en: 'Front Corner',
-          de: 'Vordere Ecken',
-          fr: 'Coin devant',
           ja: '前方の角へ',
-          cn: '前面角落',
           ko: '앞쪽 모서리로',
         },
       },
@@ -148,18 +142,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         soakTower: {
           en: 'Soak Tower',
-          de: 'Turm nehmen',
-          fr: 'Prenez la Tour',
           ja: '塔を踏む',
-          cn: '踩塔',
           ko: '타워 밟아요',
         },
         avoidTower: {
           en: 'Avoid Tower',
-          de: 'Turm vermeiden',
-          fr: 'Évitez la tour',
           ja: '塔を避ける',
-          cn: '远离塔',
           ko: '타워 피해요',
         },
       },
@@ -240,58 +228,37 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         avoid: {
           en: 'Dodge spheres',
-          de: 'Spheren ausweichen',
-          fr: 'Évitez les sphères',
           ja: '玉を避ける',
-          cn: '躲开球',
           ko: '장판 피해요',
         },
         northFront: {
           en: 'North Row, Front Half',
-          de: 'Nördliche Reihe, Vordere Hälfte',
-          fr: 'Ligne Nord, Moitié avant',
           ja: '北側の前方へ',
-          cn: '上(北)行 前半',
           ko: '북쪽 줄, 앞부분',
         },
         northBack: {
           en: 'North Row, Back Half',
-          de: 'Nördliche Reihe, Hintere Hälfte',
-          fr: 'Ligne Nord, Moitié arrière',
           ja: '北側の後方へ',
-          cn: '上(北)行 后半',
           ko: '북쪽 줄, 뒷부분',
         },
         middleFront: {
           en: 'Middle Row, Front Half',
-          de: 'Mittlere Reihe, Vordere Hälfte',
-          fr: 'Ligne centrale, Moitié avant',
           ja: '中央の前方へ',
-          cn: '中间行 前半',
           ko: '가운데 줄, 앞부분',
         },
         middleBack: {
           en: 'Middle Row, Back Half',
-          de: 'Mittlere Reihe, Hintere Hälfte',
-          fr: 'Ligne centrale, Moitié arrière',
           ja: '中央の後方へ',
-          cn: '中间行 后半',
           ko: '가운데 줄, 뒷부분',
         },
         southFront: {
           en: 'South Row, Front Half',
-          de: 'Südliche Reihe, Vordere Hälfte',
-          fr: 'Ligne Sud, Moitié avant',
           ja: '南側の前方へ',
-          cn: '下(南)行 前半',
           ko: '남쪽 줄, 앞부분',
         },
         southBack: {
           en: 'South Row, Back Half',
-          de: 'Südliche Reihe, Hintere Hälfte',
-          fr: 'Ligne Sud, Moitié arrière',
           ja: '南側の後方へ',
-          cn: '下(南)行 后半',
           ko: '남쪽 줄, 뒷부분',
         },
       },
@@ -313,18 +280,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         backLeft: {
           en: 'Be Back/Left',
-          de: 'Sei Hinten/Links',
-          fr: 'Arrière/Gauche',
           ja: '後ろ/左へ',
-          cn: '左/后 安全',
           ko: '뒤/왼쪽으로',
         },
         frontRight: {
           en: 'Be Front/Right',
-          de: 'Sei Vorne/Rechts',
-          fr: 'Devant/Droite',
           ja: '前/右へ',
-          cn: '右/前 安全',
           ko: '앞/오른쪽으로',
         },
       },
@@ -448,13 +409,17 @@ const triggerSet: TriggerSet<Data> = {
     },
     {
       'locale': 'fr',
-      'missingTranslations': true,
       'replaceSync': {
         'Arcane Sphere': 'sphère arcanique',
         'Flame-kissed Beacon': 'pylône de feu',
         'Valigarmanda': 'Valigarmanda',
       },
       'replaceText': {
+        '\\(AoEs\\)': '(AoEs)',
+        '\\(ice phase\\)': '(Phase de glace)',
+        '\\(knockback\\)': '(Poussée)',
+        '\\(storm phase\\)': '(Phase d\'orage)',
+        '\\(tower\\)': '(Tour)',
         'Arcane Lightning': 'Éclairs foudroyants',
         'Blighted Bolt': 'Éclairs de foudre catastrophiques',
         'Calamitous Cry': 'Cri calamiteux',

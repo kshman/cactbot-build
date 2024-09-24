@@ -52,7 +52,7 @@ const triggerSet: TriggerSet<Data> = {
       type: 'StartsUsing',
       // Unclear why there are two ids for this, but both are used.
       netRegex: { id: ['9C7F', '96FB'], source: 'Keheniheyamewi', capture: false },
-      response: Responses.getOut(),
+      response: Responses.outOfMelee('alert'),
     },
     {
       id: 'Hunt Keheni Slippery Scatterscourge',

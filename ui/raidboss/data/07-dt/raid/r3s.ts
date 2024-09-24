@@ -40,7 +40,7 @@ const getSafeSpotsFromClones = (
 ): [number[], number] => {
   let safeSpots = [...Array(8).keys()];
 
-  const lastSafeSpots: number[] = [];
+  const lastSafeSpots = Array<number>(8).fill(0);
 
   // Trim the three dirs that aren't getting hit by myClone
   for (let idx = 0; idx < 3; ++idx) {
@@ -80,10 +80,12 @@ const tagTeamOutputStrings = {
   ...Directions.outputStrings8Dir,
   safeDirs: {
     en: 'Safe: ${dirs} => ${last}',
+    ja: '安地: ${dirs} => ${last}',
     ko: '안전: ${dirs} 🔜 ${last}',
   },
   separator: {
     en: '/',
+    ja: '/',
     ko: ' / ',
   },
 } as const;
@@ -401,6 +403,7 @@ const triggerSet: TriggerSet<Data> = {
         ...Directions.outputStringsCardinalDir,
         tetheredTo: {
           en: 'Tethered to ${dir} clone',
+          ja: '${dir} の分身に繋がれた',
           ko: '분신 줄: ${dir}',
         },
         ...AutumnDirections.outputStringsMarkerCardinal,
@@ -620,10 +623,12 @@ const triggerSet: TriggerSet<Data> = {
         ...Directions.outputStrings8Dir,
         comboGo: {
           en: 'Knockback ${firstDir1}/${firstDir2} => Go ${secondDir}',
+          ja: 'ノックバック ${firstDir1}/${firstDir2} => ${secondDir} へ移動',
           ko: '넉백: ${firstDir1}/${firstDir2} 🔜 ${secondDir}쪽',
         },
         comboStay: {
           en: 'Knockback ${firstDir1}/${firstDir2}, Stay ${secondDir}',
+          ja: 'ノックバック ${firstDir1}/${firstDir2} => ${secondDir} で待機',
           ko: '넉백: ${firstDir1}/${firstDir2}, 그대로 ${secondDir}쪽',
         },
         aGo: {
@@ -680,13 +685,15 @@ const triggerSet: TriggerSet<Data> = {
     },
     {
       'locale': 'fr',
-      'missingTranslations': true,
       'replaceSync': {
         'Brute Bomber': 'Brute Bomber',
-        'Brute Distortion': 'double de Brute Bomber',
-        'Lit Fuse': 'bombo à mèche',
+        'Brute Distortion': 'Double de Brute Bomber',
+        'Lit Fuse': 'Bombo à mèche',
       },
       'replaceText': {
+        '\\(cast\\)': '(Incante)',
+        '\\(damage\\)': '(Dommage)',
+        '\\(enrage\\)': '(Enrage)',
         'Barbarous Barrage': 'Bombardement brutal',
         'Blazing Lariat': 'Lariat embrasé',
         'Bombarian Flame': 'Feu brutal',
