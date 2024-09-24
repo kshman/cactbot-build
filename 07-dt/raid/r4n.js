@@ -7,43 +7,18 @@ const effectB9AMap = {
   blueCircleBack: '2D4',
 };
 const directionOutputStrings = {
-  dirN: {
-    en: 'N',
-    ja: '北',
-    ko: '▲',
-  },
-  dirE: {
-    en: 'E',
-    ja: '東',
-    ko: '▶',
-  },
-  dirS: {
-    en: 'S',
-    ja: '南',
-    ko: '▼',
-  },
-  dirW: {
-    en: 'W',
-    ja: '西',
-    ko: '◀',
-  },
+  ...Directions.outputStringsCardinalDir,
   unknown: Outputs.unknown,
   goLeft: Outputs.getLeftAndWest,
   goRight: Outputs.getRightAndEast,
   separator: {
     en: ' => ',
-    de: ' => ',
-    fr: ' => ',
     ja: ' => ',
-    cn: ' => ',
     ko: ' ',
   },
   combo: {
     en: '${dirs}',
-    de: '${dirs}',
-    fr: '${dirs}',
     ja: '${dirs}',
-    cn: '${dirs}',
     ko: '안전: ${dirs}',
   },
 };
@@ -321,10 +296,7 @@ Options.Triggers.push({
       outputStrings: {
         text: {
           en: 'East offset safe',
-          de: 'Ost-Offset sicher',
-          fr: 'Offset Est sûr',
           ja: '最東端の床へ',
-          cn: '右(东)侧 安全',
           ko: '가장 동쪽 바닥으로',
         },
       },
@@ -339,10 +311,7 @@ Options.Triggers.push({
       outputStrings: {
         text: {
           en: 'South offset safe',
-          de: 'Süd-Offset sicher',
-          fr: 'Offset Sud sûr',
           ja: '最南端の床へ',
-          cn: '下(南)侧 安全',
           ko: '가장 남쪽 바닥으로',
         },
       },
@@ -357,10 +326,7 @@ Options.Triggers.push({
       outputStrings: {
         text: {
           en: 'West offset safe',
-          de: 'West-Offset sicher',
-          fr: 'Offset Ouest sûr',
           ja: '最西端の床へ',
-          cn: '左(西)侧 安全',
           ko: '가장 서쪽 바닥으로',
         },
       },
@@ -375,10 +341,7 @@ Options.Triggers.push({
       outputStrings: {
         text: {
           en: 'North offset safe',
-          de: 'Nord-Offset sicher',
-          fr: 'Offset Nord sûr',
           ja: '最北端の床へ',
-          cn: '上(北)侧 安全',
           ko: '가장 북쪽 바닥으로',
         },
       },
@@ -450,14 +413,16 @@ Options.Triggers.push({
       outputStrings: {
         outToIn: {
           en: '${dir}, Out => In',
+          ja: '${dir}, 外側 => 内側',
           ko: '${dir} 안에 있다 🔜 밖으로',
         },
         inToOut: {
           en: '${dir}, In => Out',
+          ja: '${dir}, 内側 => 外側',
           ko: '${dir} 밖에 있다 🔜 안으로',
         },
         unknown: Outputs.unknown,
-        ...AutumnDirections.outputStringsDirToArrow8,
+        ...Directions.outputStrings8Dir,
       },
     },
   ],

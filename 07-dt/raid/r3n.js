@@ -61,7 +61,7 @@ Options.Triggers.push({
       outputStrings: {
         text: {
           en: 'Knockback Towers',
-          de: 'Rückstoß Türme',
+          ja: 'ノックバック 塔',
           ko: '타워 넉백',
         },
       },
@@ -92,7 +92,7 @@ Options.Triggers.push({
       outputStrings: {
         text: {
           en: 'Long => Short',
-          de: 'Lange => Kurz',
+          ja: '導火線の長い方 => 短い方',
           ko: '긴거 🔜 짧은거',
         },
       },
@@ -106,7 +106,7 @@ Options.Triggers.push({
       outputStrings: {
         text: {
           en: 'East, then West',
-          de: 'Osten, dann Westen',
+          ja: '東、そして西',
           ko: '동쪽갔다, 서쪽으로',
         },
       },
@@ -120,7 +120,7 @@ Options.Triggers.push({
       outputStrings: {
         text: {
           en: 'East, stay East',
-          de: 'Osten, bleib Osten',
+          ja: '東にそのまま',
           ko: '동쪽가서, 그대로',
         },
       },
@@ -134,7 +134,7 @@ Options.Triggers.push({
       outputStrings: {
         text: {
           en: 'West, then East',
-          de: 'Westen, dann Osten',
+          ja: '西、そして東',
           ko: '서쪽갔다, 동쪽으로',
         },
       },
@@ -148,7 +148,7 @@ Options.Triggers.push({
       outputStrings: {
         text: {
           en: 'West, stay West',
-          de: 'Westen, bleib Westen',
+          ja: '西にそのまま',
           ko: '서쪽가서, 그대로',
         },
       },

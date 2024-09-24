@@ -143,7 +143,7 @@ Options.Triggers.push({
     {
       'locale': 'fr',
       'replaceSync': {
-        'Arch Aethereater': 'seigneur des cristallisateurs',
+        'Arch Aethereater': 'Seigneur des cristallisateurs',
       },
     },
     {

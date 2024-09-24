@@ -230,13 +230,13 @@ Options.Triggers.push({
       condition: (data) => data.me !== data.lastPawprintTarget,
       infoText: (data, _matches, output) => {
         const target = data.party.member(data.lastPawprintTarget);
-        return output.text({ name: target.nick });
+        return output.text({ target: target.nick });
       },
       outputStrings: {
         text: {
-          en: '${name} Launch',
-          ja: '${name}に吹き飛ばし',
-          ko: '어퍼컷: ${name}',
+          en: '${target} Launch',
+          ja: '${target} に吹き飛ばし',
+          ko: '어퍼컷: ${target}',
         },
       },
     },
@@ -261,13 +261,13 @@ Options.Triggers.push({
       condition: (data) => data.me !== data.lastPawprintTarget,
       infoText: (data, _matches, output) => {
         const target = data.party.member(data.lastPawprintTarget);
-        return output.text({ name: target.nick });
+        return output.text({ target: target.nick });
       },
       outputStrings: {
         text: {
-          en: '${name} Stun',
-          ja: '${name}にスタン',
-          ko: '내려 찍기: ${name}',
+          en: '${target} Stun',
+          ja: '${target} にスタン',
+          ko: '내려 찍기: ${target}',
         },
       },
     },
