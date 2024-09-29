@@ -300,7 +300,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         avoid: {
           en: 'Avoid Tethered Cleave',
-          ko: '연결 클레브 피해요',
+          ko: '돌진 장판 피해요',
         },
       },
     },
@@ -416,6 +416,14 @@ const triggerSet: TriggerSet<Data> = {
         'Keheniheyamewi': 'ケヘニヘヤメウィ',
         'Yehehetoaua\'pyo': 'エヘヘトーワポ',
         'Sansheya': 'サンシェヤ',
+      },
+    },
+    {
+      'locale': 'cn',
+      'replaceSync': {
+        'Keheniheyamewi': '凯海尼海亚麦尤伊',
+        'Yehehetoaua\'pyo': '艾海海陶瓦泡',
+        'Sansheya': '山谢亚',
       },
     },
   ],
