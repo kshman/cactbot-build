@@ -245,7 +245,7 @@ Options.Triggers.push({
             fr: 'Tank cleave (Groupe à l\'extérieur)',
             ja: 'タンク頭割り (PTは外へ)',
             cn: '坦克顺劈 (人群出)',
-            ko: '탱크클레브 (본대 밖으로)',
+            ko: '탱크 쪼개기 (본대 밖으로)',
           },
         };
         if (data.slipstreamCount === 1 || data.slipstreamCount > 4)

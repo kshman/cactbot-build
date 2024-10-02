@@ -158,5 +158,13 @@ Options.Triggers.push({
         'Neyoozoteel': 'ネヨーゾテール',
       },
     },
+    {
+      'locale': 'cn',
+      'replaceSync': {
+        'Starcrier': '幻煌鸟',
+        'Rrax Yity\'a': '血鸣鼠',
+        'Neyoozoteel': '内尤佐缇',
+      },
+    },
   ],
 });

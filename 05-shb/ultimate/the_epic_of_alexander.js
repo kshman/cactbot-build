@@ -748,7 +748,7 @@ Options.Triggers.push({
           fr: 'Poussée Cleave sur VOUS',
           ja: '自分にクリーブ',
           cn: '击退顺劈点名',
-          ko: '나에게 넉백 클레브',
+          ko: '나에게 넉백 쪼개기',
         },
         knockback: Outputs.knockback,
       },

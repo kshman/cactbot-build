@@ -106,7 +106,7 @@ Options.Triggers.push({
             fr: 'Évitez le cleave sur le tank',
             ja: 'タンク範囲攻撃回避',
             cn: '躲避坦克顺劈',
-            ko: '탱크클레브 피해요',
+            ko: '탱크 쪼개기 피해요',
           },
         };
         if (data.tankbusters.includes(data.me))
@@ -290,7 +290,7 @@ Options.Triggers.push({
             fr: 'Évitez les cleaves sur le tank',
             ja: 'タンク範囲攻撃回避',
             cn: '躲避坦克顺劈',
-            ko: '탱크클레브 피해욧',
+            ko: '탱크 쪼개기 피해욧',
           },
         };
         if (data.tankbusters.includes(data.me))
@@ -569,7 +569,7 @@ Options.Triggers.push({
             fr: 'Évitez les cleaves sur le tank',
             ja: 'タンク範囲攻撃回避',
             cn: '躲避坦克顺劈',
-            ko: '탱크클레브 피해욧',
+            ko: '탱크 쪼개기 피해욧',
           },
         };
         if (data.tankbusters.includes(data.me))

@@ -277,5 +277,13 @@ Options.Triggers.push({
         'Ihnuxokiy': 'イヌショキー',
       },
     },
+    {
+      'locale': 'cn',
+      'replaceSync': {
+        'Pkuucha': '普库恰',
+        'The Raintriller': '惊雨蟾蜍',
+        'Ihnuxokiy': '伊努索奇',
+      },
+    },
   ],
 });

@@ -420,7 +420,7 @@ Options.Triggers.push({
           fr: 'Cleave devant',
           ja: '正面から離れ',
           cn: '离开正面',
-          ko: '정면 물러서요 (정면 클레브)',
+          ko: '정면 물러서요 (정면 쪼개기)',
         },
       },
     },

@@ -40,7 +40,7 @@ Options.Triggers.push({
           fr: 'Plongeon sur le Main Tank',
           ja: 'MTに飛んでくる',
           cn: '凶鸟跳点MT',
-          ko: '탱크클레브',
+          ko: '탱크 쪼개기',
         },
       },
     },

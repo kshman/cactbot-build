@@ -428,7 +428,7 @@ Options.Triggers.push({
           fr: 'Arcs : Cleave sur VOUS',
           ja: '自分に扇形AoE',
           cn: '扇形AOE点名',
-          ko: '내게 전압 클레브',
+          ko: '내게 전압 쪼개기',
         },
       },
     },
@@ -452,7 +452,7 @@ Options.Triggers.push({
             fr: 'Tank laser cleave sur VOUS',
             ja: '自分にタンクレーザー',
             cn: '坦克直线激光点名',
-            ko: '내게 탱크 레이저 클레브',
+            ko: '내게 탱크 레이저 쪼개기',
           },
           avoidTankCleaves: {
             en: 'Avoid tank laser cleaves',
@@ -460,7 +460,7 @@ Options.Triggers.push({
             fr: 'Évitez les Tanks laser cleaves',
             ja: 'タンクレーザーを避ける',
             cn: '躲避坦克直线激光',
-            ko: '탱크 레이저 클레브 피해요',
+            ko: '탱크 레이저 쪼개기 피해요',
           },
         };
         if (data.role === 'tank' || matches.target === data.me)
@@ -660,7 +660,7 @@ Options.Triggers.push({
           fr: 'Cleave #${num} sur VOUS',
           ja: '自分に直線AoE #${num}',
           cn: '直线劈砍#${num}点名',
-          ko: '내게 클레브 #${num}번',
+          ko: '내게 쪼개기 #${num}번',
         },
         unknown: Outputs.unknown,
       },
