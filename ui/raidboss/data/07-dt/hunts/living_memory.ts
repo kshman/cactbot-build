@@ -88,7 +88,7 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: 'Hunt Cat\'s Eye Bloodshot Gaze',
+      id: 'Hunt Cat\'s Eye Bloodshot Gaze + Look Away',
       type: 'StartsUsing',
       netRegex: { id: '9673', source: 'Cat\'s Eye', capture: false },
       alertText: (_data, _matches, output) => output.text!(),
@@ -96,6 +96,18 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: 'Stack (face away from target)',
           ko: '뭉쳐요 (눈깔 보면 안되요)',
+        },
+      },
+    },
+    {
+      id: 'Hunt Cat\'s Eye Bloodshot Gaze + Look Toward',
+      type: 'StartsUsing',
+      netRegex: { id: '9AF4', source: 'Cat\'s Eye', capture: false },
+      alertText: (_data, _matches, output) => output.text!(),
+      outputStrings: {
+        text: {
+          en: 'Stack (face toward target)',
+          ko: '뭉쳐요 (눈깔 바라봐요)',
         },
       },
     },
@@ -247,6 +259,14 @@ const triggerSet: TriggerSet<Data> = {
         'Cat\'s Eye': 'キャッツアイ',
         'Sally the Sweeper': 'サリー・ザ・スイーパー',
         'The Forecaster': 'ウェザーリポーター',
+      },
+    },
+    {
+      'locale': 'cn',
+      'replaceSync': {
+        'Cat\'s Eye': '猫眼',
+        'Sally the Sweeper': '清除者萨利',
+        'The Forecaster': '天气预报机器人',
       },
     },
   ],

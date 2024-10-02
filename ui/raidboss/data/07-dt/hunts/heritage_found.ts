@@ -333,7 +333,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         rotate: {
           en: 'Start ${dir3} => ${dir1} => ${dir2} (Keep Rotating)',
-          ko: '${dir3} 🔜 ${dir1} 🔜 ${dir2} (반복)',
+          ko: '${dir3} 🔜 ${dir1} 🔜 ${dir2} (돌아요)',
         },
         earlyDelay: {
           en: 'Start ${dir3} => ${dir1} (for 2) => ${dir3} => ${dir2}',
@@ -394,6 +394,14 @@ const triggerSet: TriggerSet<Data> = {
         'Heshuala': 'ヘシュワラ',
         'Urna Variabilis': 'ヴァリアポッド',
         'Atticus the Primogenitor': '先駆けのアティカス',
+      },
+    },
+    {
+      'locale': 'cn',
+      'replaceSync': {
+        'Heshuala': '海休瓦拉',
+        'Urna Variabilis': '多变装置',
+        'Atticus the Primogenitor': '先驱勇士 阿提卡斯',
       },
     },
   ],

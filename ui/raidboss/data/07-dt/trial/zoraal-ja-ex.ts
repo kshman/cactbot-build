@@ -177,6 +177,9 @@ const stayGoOutputStrings: OutputStrings = {
 };
 
 export interface Data extends RaidbossData {
+  readonly triggerSetConfig: {
+    chasmVollokPriority: 'inside' | 'north' | 'south' | 'northSouth';
+  };
   phase: Phase;
   unsafeTiles: TileName[];
   forgedTrackSafeTiles: TileName[];
@@ -199,6 +202,27 @@ export interface Data extends RaidbossData {
 const triggerSet: TriggerSet<Data> = {
   id: 'EverkeepExtreme',
   zoneId: ZoneId.EverkeepExtreme,
+  config: [
+    {
+      id: 'chasmVollokPriority',
+      name: {
+        en: 'Chasm of Vollok Safe Spot Priority',
+      },
+      comment: {
+        en: 'Select which safe spots have priority during callouts.',
+      },
+      type: 'select',
+      options: {
+        en: {
+          'Inside Tiles': 'inside',
+          'North and South Corner': 'northSouth',
+          'North Corner': 'north',
+          'South Corner': 'south',
+        },
+      },
+      default: 'inside',
+    },
+  ],
   timelineFile: 'zoraal-ja-ex.txt',
   initData: () => {
     return {
@@ -411,26 +435,66 @@ const triggerSet: TriggerSet<Data> = {
       condition: (data) => data.phase === 'swords' && !data.seenHalfCircuit,
       durationSeconds: 6,
       alertText: (data, matches, output) => {
-        // To make this call somewhat reasonable, use the following priority system
-        // for calling a safe tile, depending on sword cleave:
+        // To make this call somewhat reasonable, we need a priority system
+        // for which tiles to call.
+        //
+        // This is configurable with the following options:
+        //
+        // inside tiles:
         //   1. insideEast/insideWest
         //   2. insideNorth/insideSouth, lean E/W
         //   3. If all inside are bad, the outer intercard pairs (E/W depending on cleave)
+        //
+        // north and south corners:
+        //   1. north/south corner, lean E/W
+        //   2. insideNorth/insideSouth, lean E/W
+        //   3. outer intercard pairs (E/W) depending on cleave
+        //
+        // north corner:
+        //   Same as north/south, but call only the north side
+        //
+        // south corner:
+        //   Same as north/South, but call only the south side
         const safeSide = matches.id === '9368' ? 'west' : 'east';
         const leanOutput = matches.id === '9368' ? output.leanWest!() : output.leanEast!();
 
-        const safeTiles = tileNames.filter((tile) => !data.unsafeTiles.includes(tile));
+        const safeTiles: TileName[] = tileNames.filter((tile) => !data.unsafeTiles.includes(tile));
         if (safeTiles.length !== 8)
           return;
 
-        if (safeSide === 'west' && safeTiles.includes('insideWest'))
-          return output.insideWest!();
-        else if (safeSide === 'east' && safeTiles.includes('insideEast'))
+        const insidePriority: TileName[] = ['insideEast', 'insideNorth'];
+        const northSouthPriority: TileName[] = ['northCorner', 'insideNorth'];
+
+        const priority = data.triggerSetConfig.chasmVollokPriority === 'inside'
+          ? insidePriority
+          : northSouthPriority;
+
+        const safeTile = priority.find((tile) => safeTiles.includes(tile));
+
+        if (safeTile === 'insideEast') {
+          // insideEast is always safe together with insideWest
+          if (safeSide === 'west')
+            return output.insideWest!();
           return output.insideEast!();
-        else if (safeTiles.includes('insideNorth'))
+        } else if (safeTile === 'insideNorth') {
+          // insideNorth is always safe together with insideSouth
+          if (data.triggerSetConfig.chasmVollokPriority === 'north')
+            return output.insideN!({ lean: leanOutput });
+          if (data.triggerSetConfig.chasmVollokPriority === 'south')
+            return output.insideS!({ lean: leanOutput });
           return output.insideNS!({ lean: leanOutput });
-        else if (safeSide === 'east')
+        } else if (safeTile === 'northCorner') {
+          // northCorner is always safe together with southCorner
+          if (data.triggerSetConfig.chasmVollokPriority === 'north')
+            return output.cornerN!({ lean: leanOutput });
+          if (data.triggerSetConfig.chasmVollokPriority === 'south')
+            return output.cornerS!({ lean: leanOutput });
+          return output.cornerNS!({ lean: leanOutput });
+        }
+        // If none of the above were safe, the outer intercards are.
+        if (safeSide === 'east') {
           return output.intercardsEast!();
+        }
         return output.intercardsWest!();
       },
       run: (data) => data.unsafeTiles = [],
@@ -438,17 +502,37 @@ const triggerSet: TriggerSet<Data> = {
         insideWest: {
           en: 'Inner West Diamond',
           ja: '内側 西の床へ',
-          ko: '칼질! 가운데칸 🡸왼쪽',
+          ko: '안쪽칸 🡸왼쪽',
         },
         insideEast: {
           en: 'Inner East Diamond',
           ja: '内側 東の床へ',
-          ko: '칼질! 가운데칸 🡺오른쪽',
+          ko: '안쪽칸 🡺오른쪽',
         },
         insideNS: {
           en: 'Inner North/South Diamonds - ${lean}',
           ja: '内側 南/北の床へ - ${lean}',
-          ko: '칼질! 가운데칸 ⇅위아래 (${lean})',
+          ko: '안쪽칸 ⇅위아래 (${lean})',
+        },
+        insideN: {
+          en: 'Inner North Diamond - ${lean}',
+          ko: '안쪽칸 🡹위로 (${lean})',
+        },
+        insideS: {
+          en: 'Inner South Diamond - ${lean}',
+          ko: '안쪽칸 🡻아래로 (${lean})',
+        },
+        cornerNS: {
+          en: 'North/South Corner Diamonds - ${lean}',
+          ko: '⇅위아래 구석 (${lean})',
+        },
+        cornerN: {
+          en: 'North Corner Diamond - ${lean}',
+          ko: '🡹위쪽 구석 (${lean})',
+        },
+        cornerS: {
+          en: 'South Corner Diamond - ${lean}',
+          ko: '🡻아래쪽 구석 (${lean})',
         },
         leanWest: {
           en: 'Lean West',
@@ -463,12 +547,12 @@ const triggerSet: TriggerSet<Data> = {
         intercardsEast: {
           en: 'Outer Intercard Diamonds - East',
           ja: '外側 斜めの床 - 東',
-          ko: '칼질! 바깥칸 비스듬히 🡸왼쪽',
+          ko: '바깥칸 비스듬히 🡸왼쪽',
         },
         intercardsWest: {
           en: 'Outer Intercard Diamonds - West',
           ja: '外側 斜めの床 - 西',
-          ko: '칼질! 바깥칸 비스듬히 🡺오른쪽',
+          ko: '바깥칸 비스듬히 🡺오른쪽',
         },
       },
     },
@@ -1034,20 +1118,41 @@ const triggerSet: TriggerSet<Data> = {
         // 1. All inside tiles safe.
         // 2. No inside tiles safe (all intercard pairs safe).
         // 3-6.  Inside East&West OR North&South safe.
-        const safeTiles = tileNames.filter((tile) => !data.unsafeTiles.includes(tile));
+        const safeTiles: TileName[] = tileNames.filter((tile) => !data.unsafeTiles.includes(tile));
         if (safeTiles.length !== 8)
           return;
 
-        const eastWestSafe = safeTiles.includes('insideEast') && safeTiles.includes('insideWest');
-        const northSouthSafe = safeTiles.includes('insideNorth') &&
-          safeTiles.includes('insideSouth');
+        const insidePriority: TileName[] = ['insideEast', 'insideNorth'];
+        const northSouthPriority: TileName[] = ['northCorner', 'insideNorth'];
 
-        if (eastWestSafe && northSouthSafe)
+        const priority = data.triggerSetConfig.chasmVollokPriority === 'inside'
+          ? insidePriority
+          : northSouthPriority;
+
+        const safeTile = priority.find((tile) => safeTiles.includes(tile));
+        const insideSafe = safeTiles.includes('insideEast') && safeTiles.includes('insideNorth');
+
+        if (insideSafe) {
+          // Always prefer inside safe first
           return output.inside!();
-        else if (eastWestSafe)
+        } else if (safeTile === 'insideEast') {
+          // insideEast is always safe together with insideWest
           return output.eastWest!();
-        else if (northSouthSafe)
-          return output.northSouth!();
+        } else if (safeTile === 'insideNorth') {
+          // insideNorth is always safe together with insideSouth
+          if (data.triggerSetConfig.chasmVollokPriority === 'north')
+            return output.insideN!();
+          if (data.triggerSetConfig.chasmVollokPriority === 'south')
+            return output.insideS!();
+          return output.insideNS!();
+        } else if (safeTile === 'northCorner') {
+          // northCorner is always safe together with southCorner
+          if (data.triggerSetConfig.chasmVollokPriority === 'north')
+            return output.cornerN!();
+          if (data.triggerSetConfig.chasmVollokPriority === 'south')
+            return output.cornerS!();
+          return output.cornerNS!();
+        }
         return output.intercard!();
       },
       run: (data) => data.unsafeTiles = [],
@@ -1062,10 +1167,35 @@ const triggerSet: TriggerSet<Data> = {
           ja: '内側 東/西が安地',
           ko: '안쪽 동서 안전',
         },
-        northSouth: {
+        insideNS: {
           en: 'Inside North/South Safe',
           ja: '内側 北/南が安地',
           ko: '안쪽 남북 안전',
+        },
+        insideN: {
+          en: 'Inside North Safe',
+          ja: '内側 北が安地',
+          ko: '안쪽 🡹북쪽 안전',
+        },
+        insideS: {
+          en: 'Inside South Safe',
+          ja: '内側 南が安地',
+          ko: '안쪽 🡻남쪽 안전',
+        },
+        cornerNS: {
+          en: 'North/South Corners Safe',
+          ja: '北/南の隅が安地',
+          ko: '⇅남북 구석 안전',
+        },
+        cornerN: {
+          en: 'North Corner Safe',
+          ja: '北の隅が安地',
+          ko: '🡹북쪽 구석 안전',
+        },
+        cornerS: {
+          en: 'South Corner Safe',
+          ja: '南の隅が安地',
+          ko: '🡻남쪽 구석 안전',
         },
         intercard: {
           en: 'Outside Intercards Safe (Avoid Corners)',
@@ -1270,6 +1400,45 @@ const triggerSet: TriggerSet<Data> = {
         'Sync(?![-h])': 'シンクロナス',
         '(?<! )Vollok': 'エッジ・ザ・ヴォロク',
         'Walls of Vollok': 'サークル・オブ・ヴォロク',
+      },
+    },
+    {
+      'locale': 'cn',
+      'replaceSync': {
+        'Fang': '双牙剑',
+        'Zoraal Ja': '佐拉加',
+      },
+      'replaceText': {
+        '\\(cast\\)': '(咏唱)',
+        '\\(damage\\)': '(伤害)',
+        '\\(enrage\\)': '(狂暴)',
+        '\\(lines drop\\)': '(直线落下)',
+        'Actualize': '自我实现',
+        'Aero III': '暴风',
+        'Backward Edge': '后向斩',
+        'Bitter Whirlwind': '愤恨之风',
+        'Blade Warp': '利刃召唤',
+        'Burning Chains': '火焰链',
+        'Chasm of Vollok': '无敌裂斩',
+        'Dawn of an Age': '新曦世纪',
+        'Drum of Vollok': '无敌之击',
+        'Duty\'s Edge': '责任之刃',
+        'Fiery Edge': '烈火刃',
+        'Forged Track': '利刃冲',
+        'Forward Edge': '前向斩',
+        'Greater Gateway': '附魔通路',
+        'Half Circuit': '回旋半身残',
+        'Half Full': '半身残',
+        'Might of Vollok': '无敌之力',
+        'Multidirectional Divide': '多向斩',
+        'Projection of Triumph': '情感投射：利刃',
+        'Projection of Turmoil': '情感投射：爆发',
+        'Regicidal Rage': '弑君之怒行',
+        'Siege of Vollok': '无敌之环',
+        'Stormy Edge': '暴风刃',
+        'Sync(?![-h])': '同步',
+        '(?<! )Vollok': '无敌刃',
+        'Walls of Vollok': '无敌之圆',
       },
     },
   ],

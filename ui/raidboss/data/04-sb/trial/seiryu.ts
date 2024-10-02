@@ -134,7 +134,7 @@ const triggerSet: TriggerSet<Data> = {
           de: 'Cleave nach draußen zeigen',
           fr: 'Orientez les liens de cleave vers l\'extérieur',
           cn: '将顺劈连线指向场外',
-          ko: '클레브 줄을 바깥으로 유도',
+          ko: '쪼개기 줄을 바깥으로 유도',
         },
       },
     },

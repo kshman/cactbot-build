@@ -74,7 +74,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         frozen: {
           en: 'Frozen soon',
-          ko: '곧 얼어요',
+          ko: '움직여요! (곧 얼어요)',
         },
       },
     },
@@ -160,6 +160,12 @@ const triggerSet: TriggerSet<Data> = {
       'locale': 'ja',
       'replaceSync': {
         'Arch Aethereater': 'ロード・オブ・クリスタライザー',
+      },
+    },
+    {
+      'locale': 'cn',
+      'replaceSync': {
+        'Arch Aethereater': '水晶化身之王',
       },
     },
   ],

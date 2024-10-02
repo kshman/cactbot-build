@@ -510,7 +510,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: 'Cleave du Guerrier sur VOUS',
           ja: '自分に戦士の範囲攻撃',
           cn: '战士顺劈点名',
-          ko: '내게 전사의 클레브',
+          ko: '내게 전사 쪼개기',
         },
       },
     },
