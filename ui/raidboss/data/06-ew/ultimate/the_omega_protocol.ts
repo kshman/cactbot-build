@@ -774,7 +774,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: 'Tank Cleaves',
           ja: 'タンク前方攻撃',
           cn: '坦克顺劈',
-          ko: '탱크클레브',
+          ko: '탱크 쪼개기',
         },
       },
     },

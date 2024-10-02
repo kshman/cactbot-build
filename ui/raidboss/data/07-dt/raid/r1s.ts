@@ -110,19 +110,29 @@ const triggerSet: TriggerSet<Data> = {
       netRegex: { location: ['00', '03'], flags: mapEffectTileState.quickRebuid, capture: true },
       infoText: (_data, matches, output) => {
         if (matches.location === '00')
-          return output.nwSE!();
+          return output.knockback!({
+            pos1: output.northwest!(),
+            pos2: output.southeast!(),
+          });
 
-        return output.neSW!();
+        return output.knockback!({
+          pos1: output.northeast!(),
+          pos2: output.southwest!(),
+        });
       },
       outputStrings: {
-        nwSE: {
-          en: 'Knockback (NW/SE Safe)',
-          ko: '넉백! 🡼🡾',
+        knockback: {
+          en: 'Knockback (${pos1}/${pos2} Safe)',
+          de: 'Rückstoß (${pos1}/${pos2} sicher)',
+          fr: 'Poussée (${pos1}/${pos2} sûr)',
+          ja: 'ノックバック (${pos1}/${pos2} が安地)',
+          cn: '击退 (${pos1}/${pos2} 安全)',
+          ko: '넉백 (${pos1}, ${pos2})',
         },
-        neSW: {
-          en: 'Knockback (NE/SW Safe)',
-          ko: '넉백! 🡿🡽',
-        },
+        northeast: Outputs.dirNE,
+        northwest: Outputs.dirNW,
+        southeast: Outputs.dirSE,
+        southwest: Outputs.dirSW,
       },
     },
     {

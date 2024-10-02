@@ -108,7 +108,7 @@ export default {
     fr: 'Tank cleave',
     ja: 'タンク範囲攻撃',
     cn: '范围死刑',
-    ko: '탱크클레브',
+    ko: '탱크 쪼개기',
   },
   tankBusterCleaves: {
     en: 'Tank Buster Cleaves',
@@ -116,7 +116,7 @@ export default {
     fr: 'Tankbuster cleaves',
     ja: 'MT・ST同時範囲攻撃',
     cn: '坦克范围死刑',
-    ko: '모두 탱크클레브',
+    ko: '탱크 동시에 쪼개기',
   },
   tankBusterCleavesOnYou: {
     en: 'Tank Cleaves on YOU',
@@ -124,7 +124,7 @@ export default {
     fr: 'Tank cleaves sur VOUS',
     ja: 'MT・ST同時範囲攻撃(自分対象)',
     cn: '坦克范围死刑点名',
-    ko: '내게 탱크클레브',
+    ko: '내게 탱크 쪼개기',
   },
   avoidTankCleave: {
     en: 'Avoid tank cleave',
@@ -132,7 +132,7 @@ export default {
     fr: 'Évitez le tank cleave',
     ja: 'タンク範囲攻撃を避ける',
     cn: '远离范围死刑',
-    ko: '탱크클레브 피해욧',
+    ko: '탱크 쪼개기 피해욧',
   },
   avoidTankCleaves: {
     en: 'Avoid Tank Cleaves',
@@ -140,7 +140,7 @@ export default {
     fr: 'Évitez les cleaves (tankbusters)',
     ja: '範囲攻撃を避けて',
     cn: '远离坦克范围死刑',
-    ko: '탱크클레브 피해욧',
+    ko: '탱크 쪼개기 피해욧',
   },
   tankCleaveOnYou: {
     en: 'Tank cleave on YOU',
@@ -148,7 +148,7 @@ export default {
     fr: 'Tank cleave sur VOUS',
     ja: '自分に範囲攻撃',
     cn: '范围死刑点名',
-    ko: '내게 탱크클레브',
+    ko: '내게 탱크 쪼개기',
   },
   sharedTankbuster: {
     en: 'Shared Tank Buster',
@@ -277,6 +277,7 @@ export default {
     en: 'Stacks',
     de: 'Sammeln',
     fr: 'Package',
+    ja: '頭割り',
     cn: '分摊',
     ko: '뭉쳐욧',
   },
@@ -427,6 +428,11 @@ export default {
     ja: '近接の範囲から離れる',
     cn: '离开近战距离',
     ko: '칼끝 범위',
+  },
+  // be just outside the boss's target circle
+  outOfHitbox: {
+    en: 'Out of hitbox',
+    ko: '히트박스 밖으로',
   },
   inThenOut: {
     en: 'In => out',

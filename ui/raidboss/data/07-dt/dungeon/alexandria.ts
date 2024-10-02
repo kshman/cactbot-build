@@ -94,7 +94,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         spreadDontStack: {
           en: 'Cleave -- Don\'t stack!',
-          ko: '클레브 -- 뭉치면 안되요!',
+          ko: '쪼개기 -- 뭉치면 안되요!',
         },
       },
     },

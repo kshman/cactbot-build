@@ -176,7 +176,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: 'Cleave sur ${target} -> Intérieur',
           ja: '${target}が対象 => 内側へ',
           cn: '引导 ${target} -> 去脚下',
-          ko: '클레브: ${target} -> 안으로',
+          ko: '쪼개기: ${target} -> 안으로',
         },
         cleaveOnYou: {
           en: 'Cleave on YOU -> stay in',
@@ -184,7 +184,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: 'Cleave sur VOUS -> Restez à l\'intérieur',
           ja: '自分が対象 => 内側へ',
           cn: '引导 -> 站在脚下',
-          ko: '내게 클레브 -> 그대로 안으로',
+          ko: '내게 쪼개기 -> 그대로 안으로',
         },
       },
     },

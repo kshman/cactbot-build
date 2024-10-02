@@ -899,7 +899,7 @@ const triggerSet: TriggerSet<Data> = {
             fr: 'Placez-vous ${side} du Cleave (+2 chaud)',
             ja: '${side}側へ (炎属性+2)',
             cn: '去${side}侧 (火+2)',
-            ko: '${side} 클레브 맞아요 (+2 불속성)',
+            ko: '${side} 쪼개기 맞아요 (+2 불속성)',
           },
           plusOne: {
             en: 'Be in ${side} Cleave (+1 Hot)',
@@ -907,7 +907,7 @@ const triggerSet: TriggerSet<Data> = {
             fr: 'Placez-vous ${side} du Cleave (+1 chaud)',
             ja: '${side}側へ (炎属性+1)',
             cn: '去${side}侧 (火+1)',
-            ko: '${side} 클레브 맞아요(+1 불속성)',
+            ko: '${side} 쪼개기 맞아요(+1 불속성)',
           },
           minusOne: {
             en: 'Be in ${side} Cleave (-1 Cold)',
@@ -915,7 +915,7 @@ const triggerSet: TriggerSet<Data> = {
             fr: 'Placez-vous ${side} du Cleave (-1 froid)',
             ja: '${side}側へ (氷属性-1)',
             cn: '去${side}侧 (冰-1)',
-            ko: '${side} 클레브 맞아요 (-1 얼음속성)',
+            ko: '${side} 쪼개기 맞아요 (-1 얼음속성)',
           },
           minusTwo: {
             en: 'Be in ${side} Cleave (-2 Cold)',
@@ -923,7 +923,7 @@ const triggerSet: TriggerSet<Data> = {
             fr: 'Placez-vous ${side} du Cleave (-2 froid)',
             ja: '${side}側へ (氷属性-2)',
             cn: '去${side}侧 (冰-2)',
-            ko: '${side} 클레브 맞아요 (-2 얼음속성)',
+            ko: '${side} 쪼개기 맞아요 (-2 얼음속성)',
           },
           avoid: {
             en: 'Go ${side} (avoid!)',

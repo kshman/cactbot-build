@@ -182,7 +182,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: 'Vril + Cleave sur VOUS',
           ja: '自分に波動 (エーテル)',
           cn: '元气 死刑点名',
-          ko: '브릴 + 내게 탱크클레브',
+          ko: '브릴 + 내게 탱크 쪼개기',
         },
         cleaveOnYou: {
           en: 'Cleave on YOU',
@@ -190,7 +190,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: 'Cleave sur VOUS',
           ja: '自分に波動',
           cn: '死刑点名',
-          ko: '내게 탱크클레브',
+          ko: '내게 탱크 쪼개기',
         },
       },
     },

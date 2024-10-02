@@ -224,7 +224,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: 'Ne vous packez pas ! (tank cleave)',
           ja: '集まらない! (タンクへのスラッシュ)',
           cn: '别去集合！（坦克顺劈）',
-          ko: '뭉치면 안되요! (탱크클레브)',
+          ko: '뭉치면 안되요! (탱크 쪼개기)',
         },
       },
     },
