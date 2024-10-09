@@ -1007,6 +1007,16 @@ export default {
     cn: ' => ',
     ko: ' 🔜 ',
   },
+  // for combo mechanics/names
+  and: {
+    en: ' + ',
+    ko: ' + ',
+  },
+  // for either/or directions or mechanics
+  or: {
+    en: ' / ',
+    ko: ' / ',
+  },
   // Literal numbers.
   num0: numberToOutputString(0),
   num1: numberToOutputString(1),
