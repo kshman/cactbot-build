@@ -21,7 +21,7 @@ const triggerSet: TriggerSet<Data> = {
   ],
   triggers: [
     {
-      id: 'A4S Discord Marker',
+      id: 'A4S Discoid Marker',
       type: 'HeadMarker',
       netRegex: { id: '00AE' },
       alertText: (data, matches, output) => {

@@ -543,7 +543,7 @@ const triggerSet: TriggerSet<Data> = {
       run: (data) => delete data.shakerTargets,
       outputStrings: {
         avoidEarthshakers: {
-          en: '어스 퀘이커 피해요',
+          en: 'avoid earthshakers',
           de: 'Stöße ausweichen',
           fr: 'Évitez les secousses',
           ja: 'アースシェーカーに避け',

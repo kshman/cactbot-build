@@ -180,13 +180,13 @@ const witchHuntAlertOutputStrings = {
 
 const tailThrustOutputStrings = {
   iceLeft: {
-    en: 'Double Knockback (<== Start on Left)',
-    ja: '2連続ノックバック (<== 左から開始)',
+    en: '<== (Start on Left) Double Knockback',
+    ja: '<== (左から開始) 2連続ノックバック',
     ko: '두번 넉백 (❰❰❰왼쪽 시작)',
   },
   iceRight: {
-    en: 'Double Knockback (Start on Right ==>)',
-    ja: '2連続ノックバック (右から開始 ==>)',
+    en: '(Start on Right) Double Knockback ==>',
+    ja: '(右から開始) 2連続ノックバック ==>',
     ko: '두번 넉백 (오른쪽 시작❱❱❱)',
   },
   fireLeft: {
@@ -1095,13 +1095,13 @@ const triggerSet: TriggerSet<Data> = {
       id: 'R4S Left Roll',
       type: 'Ability',
       netRegex: { id: '95D3', source: 'Wicked Thunder', capture: false },
-      response: Responses.goLeft(),
+      response: Responses.goWest(),
     },
     {
       id: 'R4S Right Roll',
       type: 'Ability',
       netRegex: { id: '95D2', source: 'Wicked Thunder', capture: false },
-      response: Responses.goRight(),
+      response: Responses.goEast(),
     },
     {
       id: 'R4S Electron Stream Debuff',
@@ -1395,11 +1395,18 @@ const triggerSet: TriggerSet<Data> = {
       netRegex: { id: '961F', source: 'Wicked Thunder', capture: false },
       delaySeconds: 0.2,
       suppressSeconds: 1,
-      alertText: (data, _matches, output) => {
-        if (data.mustardBombTargets.includes(data.me))
-          return output.passDebuff!();
-        else if (!data.kindlingCauldronTargets.includes(data.me))
+      infoText: (data, _matches, output) => {
+        if (data.mustardBombTargets.includes(data.me)) {
+          const safePlayers = data.party.partyNames.filter((m) =>
+            !data.kindlingCauldronTargets.includes(m) &&
+            !data.mustardBombTargets.includes(m)
+          );
+          const toStr = safePlayers.map((m) => data.party.member(m).nick).join(', ');
+
+          return output.passDebuff!({ to: toStr });
+        } else if (!data.kindlingCauldronTargets.includes(data.me)) {
           return output.getDebuff!();
+        }
       },
       run: (data) => {
         data.mustardBombTargets = [];
@@ -1407,9 +1414,9 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         passDebuff: {
-          en: 'Pass Debuff',
-          ja: 'デバフを渡して',
-          ko: '디버프 건네줘요',
+          en: 'Pass Debuff (${to})',
+          ja: 'デバフを渡して (${to})',
+          ko: '디버프 건네줘요 (${to})',
         },
         getDebuff: {
           en: 'Get Debuff',

@@ -211,7 +211,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         antilight: {
-          en: '안티라이트',
+          en: 'Antilight',
           de: 'Dunkellicht',
           fr: 'Lumière obscure',
           ja: '暗黒光',
@@ -219,7 +219,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '안티라이트',
         },
         levitate: {
-          en: '레비테이트',
+          en: 'Levitate',
           de: 'Levitation',
           fr: 'Lévitation',
           ja: '浮上',

@@ -367,7 +367,7 @@ const triggerSet: TriggerSet<Data> = {
       type: 'checkbox',
       default: (options) => {
         const oldSetting = options['cactbotWormholeStrat'];
-        return typeof oldSetting === 'boolean' ? oldSetting : true;
+        return typeof oldSetting === 'boolean' ? oldSetting : false;
       },
     },
   ],
@@ -1592,7 +1592,6 @@ const triggerSet: TriggerSet<Data> = {
           de: 'Links vom Robot; Nach Außen schauen; 3. Fläche',
           fr: 'À gauche du Robot; Regardez à l\'extérieur; 3rd zone au sol',
           ja: '右上 外向き 懺悔3回目',
-          cn: '左-->机器人; 面向外侧; 水圈#3',
           ko: '왼쪽 위 / 참회 #3',
         },
         marker2: {
@@ -1600,7 +1599,6 @@ const triggerSet: TriggerSet<Data> = {
           de: 'Hinten Rechts gegenüber vom Robot; zur Mitte schauen; 3. Fläche',
           fr: 'Revenez à l\'opposé droite du Robot; Regardez au milieu; 3rd zone au sol',
           ja: '左下 内向き 懺悔3回目',
-          cn: '右后<--机器人; 面向中间; 水圈#3',
           ko: '오른쪽 위 / 참회 #3',
         },
         marker3: {
@@ -1608,7 +1606,6 @@ const triggerSet: TriggerSet<Data> = {
           de: 'Hinten Links gegenüber vom Robot; keine Fläche',
           fr: 'Revenez à l\'opposé gauche du Robot; Pas de zone au sol',
           ja: '左上',
-          cn: '左后<--机器人; 无水圈',
           ko: '왼쪽 아래',
         },
         marker4: {
@@ -1616,7 +1613,6 @@ const triggerSet: TriggerSet<Data> = {
           de: 'Rechts vom Robot; keine Fläche',
           fr: 'À droite du Robot; Pas de zone au sol',
           ja: '右下',
-          cn: '右-->机器人; 无水圈',
           ko: '오른쪽 아래',
         },
         marker5: {
@@ -1624,7 +1620,6 @@ const triggerSet: TriggerSet<Data> = {
           de: 'Linke Robot Seite -> 1. Fläche',
           fr: 'Côté gauche du Robot-> 1st zone au sol',
           ja: '右ちょい上 懺悔1回目',
-          cn: '机器人左侧 --> 水圈#1',
           ko: '왼쪽 / 참회 #1',
         },
         marker6: {
@@ -1632,7 +1627,6 @@ const triggerSet: TriggerSet<Data> = {
           de: 'Rechte Robot Seite -> 1. Fläche',
           fr: 'Côté droit du Robot-> 1st zone au sol',
           ja: '左ちょい上 懺悔1回目',
-          cn: '机器人右侧 --> 水圈#1',
           ko: '오른쪽 / 참회 #1',
         },
         marker7: {
@@ -1640,7 +1634,6 @@ const triggerSet: TriggerSet<Data> = {
           de: 'Linke Robot Seite -> cardinal; 2. Fläche',
           fr: 'Côté gauche du Robot -> cardinal; 2nd zone au sol',
           ja: '右ちょい上 懺悔2回目',
-          cn: '机器人左侧 --> 边; 水圈#2',
           ko: '왼쪽 / 참회 #2',
         },
         marker8: {
@@ -1648,7 +1641,6 @@ const triggerSet: TriggerSet<Data> = {
           de: 'Rechte Robot Seite -> cardinal; 2. Fläche',
           fr: 'Côté droit du Robot -> cardinal; 2nd zone au sol',
           ja: '左ちょい上 懺悔2回目',
-          cn: '机器人右侧 --> 边; 水圈#2',
           ko: '오른쪽 / 참회 #2',
         },
       },
@@ -3022,7 +3014,7 @@ const triggerSet: TriggerSet<Data> = {
         'Alpha Sword': '阿尔法之剑',
         'Apocalyptic Ray': '末世宣言',
         'Cascade': '倾泻',
-        'Chakrams': '轮轮',
+        'Chakrams': '飞轮',
         'Chastening Heat': '神罚射线',
         'Collective Reprobation': '群体断罪',
         'Divine Judgment': '神圣审判',
