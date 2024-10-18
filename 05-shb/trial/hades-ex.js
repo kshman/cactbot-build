@@ -649,7 +649,6 @@ Options.Triggers.push({
   timelineReplace: [
     {
       'locale': 'de',
-      'missingTranslations': true,
       'replaceSync': {
         'Aetherial Gaol': 'Ätherkerker',
         'Arcane Font': 'Arkan(?:e|er|es|en) Körper',
@@ -714,7 +713,6 @@ Options.Triggers.push({
     },
     {
       'locale': 'fr',
-      'missingTranslations': true,
       'replaceSync': {
         'Aetherial Gaol': 'Geôle Éthérée',
         'Arcane Font': 'Solide Arcanique',
@@ -779,7 +777,6 @@ Options.Triggers.push({
     },
     {
       'locale': 'ja',
-      'missingTranslations': true,
       'replaceSync': {
         'Arcane Font': '立体魔法陣',
         'Arcane Globe': '球体魔法陣',
@@ -789,7 +786,6 @@ Options.Triggers.push({
         'Lahabrea\'s Shade': 'ラハブレアの影',
         'Lahabrea\'s and Igeyorhm\'s Shades': 'ラハブレアとイゲオルム',
         'Nabriales\'s Shade': 'ナプリアレスの影',
-        'Our plea transcends': 'その強き願いは、魂の境界さえ超えた……！',
         'Shadow of the Ancients': '古代人の影',
         'Aetherial Gaol': 'エーテリアル・ジェイル',
       },
@@ -845,7 +841,6 @@ Options.Triggers.push({
     },
     {
       'locale': 'cn',
-      'missingTranslations': true,
       'replaceSync': {
         'Aetherial Gaol': '以太牢狱',
         'Arcane Font': '立体魔法阵',
@@ -856,7 +851,6 @@ Options.Triggers.push({
         'Lahabrea\'s Shade': '拉哈布雷亚之影',
         'Lahabrea\'s and Igeyorhm\'s Shades': '拉哈布雷亚与以格约姆之影',
         'Nabriales\'s Shade': '那布里亚勒斯之影',
-        'Our plea transcends': '你们强大的意志已超越肉体与灵魂的境界！',
         'Shadow of the Ancients': '古代人之影',
       },
       'replaceText': {
@@ -911,7 +905,6 @@ Options.Triggers.push({
     },
     {
       'locale': 'ko',
-      'missingTranslations': true,
       'replaceSync': {
         'Aetherial Gaol': '에테르 감옥',
         'Arcane Font': '입체 마법진',

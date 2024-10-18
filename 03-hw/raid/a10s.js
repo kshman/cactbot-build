@@ -288,7 +288,7 @@ Options.Triggers.push({
           en: 'Hit Boss With Ice',
           de: 'Boss mit Eis treffen',
           fr: 'Frappez le boss avec la Glace',
-          ja: '氷を踏む',
+          ja: '氷を踏んでボスを打つ',
           cn: '踩冰晶陷阱',
           ko: '보스에게 얼음함정 맞히기',
         },

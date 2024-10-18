@@ -501,7 +501,7 @@ Options.Triggers.push({
       type: 'Ability',
       netRegex: { id: '1018', source: 'Ser Vellguine' },
       condition: (data) => data.phase === 5,
-      alertText: (_data, matches, output) => {
+      infoText: (_data, matches, output) => {
         const knightNum = Directions.hdgTo8DirNum(parseFloat(matches.heading));
         const knightDir = Directions.outputFrom8DirNum(knightNum);
         const [dir1, dir2] = [knightDir, unsafeMap[knightDir]].sort();

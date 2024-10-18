@@ -103,6 +103,7 @@ Options.Triggers.push({
       // Deathgaze has two separate casts for this
       // Which one appears to depend on whether it's used alongside Bolt of Darkness
       // Mechanically the handling is the same
+      // FIXME: This is not only a knockback. Players stand too close will take massive damage.
       id: 'Dun Scaith Aero 3',
       type: 'StartsUsing',
       netRegex: { id: ['1C7B', '1C8D'], source: 'Deathgaze Hollow', capture: false },
@@ -423,7 +424,7 @@ Options.Triggers.push({
           en: 'Avoid line AoEs',
           de: 'Weiche den Linien AoEs aus',
           fr: 'Évitez les AoEs en ligne',
-          ja: 'スカアハの正面に立たない',
+          ja: '直線AoEを避ける',
           cn: '躲开boss正面路线',
           ko: '직선 장판 피해요',
         },
@@ -465,6 +466,8 @@ Options.Triggers.push({
       },
     },
     {
+      // FIXME: Connla Spawn with a proximity damage, not normal AOE.
+      // Also, it will gain damage increase when close to Scathach.
       id: 'Dun Scaith Connla Spawn',
       type: 'StartsUsing',
       netRegex: { id: '1CD1', source: 'Connla', capture: false },
@@ -520,6 +523,8 @@ Options.Triggers.push({
       response: Responses.lookAway(),
     },
     {
+      // FIXME: This is a buff that prevent boss from stun to avoid interuption of next action.
+      // Due to the increase of player damage, it almost only cast before Ruinous Omen.
       id: 'Dun Scaith Noctoshield',
       type: 'GainsEffect',
       netRegex: { target: 'Diabolos', effectId: '1AA', capture: false },
