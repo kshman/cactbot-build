@@ -371,11 +371,15 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         right: {
-          en: '(Far North lane: Knockback Right ==>)',
+          en: '(Far North lane: Knockback Right) ==>',
+          fr: '(Ligne nord éloignée : Poussée droite) ==>',
+          cn: '(第一行: 向右击退) ==>',
           ko: '(북쪽 바깥쪽 줄: 오른쪽 넉백 ❱❱❱)',
         },
         left: {
-          en: '(<== Far North lane: Knockback Left)',
+          en: '<== (Far North lane: Knockback Left)',
+          fr: '<== (Ligne sur éloignée : Poussée gauche)',
+          cn: '<== (第一行: 向左击退)',
           ko: '(❰❰❰ 북쪽 바깥쪽 줄: 왼쪽 넉백)',
         },
       },

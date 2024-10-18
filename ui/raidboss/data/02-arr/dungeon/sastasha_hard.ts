@@ -44,6 +44,7 @@ const triggerSet: TriggerSet<Data> = {
           en: 'Tail Screw on ${player}',
           de: 'Schweifschraube auf ${player}',
           fr: 'Coup de queue sur ${player}',
+          ja: '${player} にテールスクリュー',
           cn: '螺旋尾点${player}',
           ko: '테일 스크류: ${player}',
         },

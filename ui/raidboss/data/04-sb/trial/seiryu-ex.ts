@@ -165,7 +165,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         spreadDpsGetTowers: {
-          en: '흩어져요 (DPS가 타워)',
+          en: 'Spread (dps get towers)',
           de: 'Verteilen (nicht in den Turm)',
           fr: 'Dispersion (DPS prenez les tours)',
           ja: '散開 (DPSが塔)',
@@ -173,7 +173,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '흩어져요 (DPS가 타워)',
         },
         spreadTanksHealersGetTowers: {
-          en: '흩어져요 (탱힐 타워)',
+          en: 'Spread (tanks/healers get towers)',
           de: 'Verteilen (nicht in den Turm)',
           fr: 'Dispersion (Tanks/Healers prenez les tours)',
           ja: '散開 (タンクヒラが塔)',

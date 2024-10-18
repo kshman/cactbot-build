@@ -286,7 +286,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       'replaceText': {
         '\\(Jump\\)': '(점프)',
-        '\\(Cleave\\)': '(탱크 쪼개기)',
+        '\\(Cleave\\)': '(광역 탱버)',
         'Adamant Purge': '장갑 전개',
         'Adamant Sphere': '다이아몬드 구체',
         'Aetherial Bullet': '에테르 탄환',
