@@ -118,6 +118,10 @@ if ($LintAll -eq $TRUE -or $LintScript -eq $TRUE -or $LintTest -eq $TRUE -or  $L
   }
 
   if ($LintAll -eq $TRUE -or $LintScript -eq $TRUE) {
+    Write-Host '린트 - 연동 파일 검사'
+    npm run sync-files
+    if (-not $?) { Exit-ForError('연동 파일 검사', 17) }
+
     Write-Host '린트 - 타입스크립트 검사'
     npm run tsc-no-emit
     if (-not $?) { Exit-ForError('타입스크립트 검사', 13) }

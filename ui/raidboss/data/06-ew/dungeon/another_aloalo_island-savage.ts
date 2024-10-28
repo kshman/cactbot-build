@@ -12,6 +12,11 @@ import { RaidbossData } from '../../../../../types/data';
 import { NetMatches } from '../../../../../types/net_matches';
 import { Output, TriggerSet } from '../../../../../types/trigger';
 
+// 피렌/포시: /e prex py,po,pi
+// 하므/포시: /e prex hm,po,pi
+// 피렌/하므: /e prex py,hm,pi
+// 모두 하므: /e prex hm,hm,pi
+
 type ClockRotation = 'cw' | 'ccw';
 type AloDirection = 'front' | 'back' | 'left' | 'right';
 
