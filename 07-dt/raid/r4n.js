@@ -7,14 +7,31 @@ const effectB9AMap = {
   blueCircleBack: '2D4',
 };
 const directionOutputStrings = {
-  ...Directions.outputStringsCardinalDir,
+  ...Directions.outputStrings8Dir,
   unknown: Outputs.unknown,
   goLeft: Outputs.getLeftAndWest,
   goRight: Outputs.getRightAndEast,
+  stay: {
+    en: 'Stay',
+    ko: '그대로',
+  },
+  num2: Outputs.num2,
   separator: {
     en: ' => ',
     ja: ' => ',
     ko: ' ',
+  },
+  intercardStay: {
+    en: '${dir} => Stay',
+    ko: '${dir} 🔜 그대로',
+  },
+  numHits: {
+    en: '${dir} x${num}',
+    de: '${dir} x${num}',
+    fr: '${dir} x${num}',
+    ja: '${dir} x${num}',
+    cn: '${dir} x${num}',
+    ko: '${dir} x${num}',
   },
   combo: {
     en: '${dirs}',
@@ -34,6 +51,32 @@ const isEffectB9AValue = (value) => {
   if (value === undefined)
     return false;
   return Object.values(effectB9AMap).includes(value);
+};
+const getCleaveDirs = (actors, storedCleaves) => {
+  const dirs = storedCleaves.map((entry) => {
+    const actor = actors.find((actor) => actor.ID === entry.id);
+    if (actor === undefined)
+      return 'unknown';
+    const actorFacing = Directions.hdgTo4DirNum(actor.Heading);
+    const offset = entry.dir === 'left' ? 1 : -1;
+    return Directions.outputFromCardinalNum((actorFacing + 4 + offset) % 4);
+  });
+  if (dirs.length === 1)
+    return dirs;
+  // Check if all directions lead to the same intercard. If so, there's no
+  // reason to call a sequence. We don't need to check the cardinals,
+  // because it will only be true either when there is exactly one element,
+  // or in the extremely unlikely event that every clone pointed in the same
+  // direction.
+  if (dirs.every((dir) => ['dirN', 'dirE'].includes(dir)))
+    return ['dirNE'];
+  if (dirs.every((dir) => ['dirS', 'dirE'].includes(dir)))
+    return ['dirSE'];
+  if (dirs.every((dir) => ['dirS', 'dirW'].includes(dir)))
+    return ['dirSW'];
+  if (dirs.every((dir) => ['dirN', 'dirW'].includes(dir)))
+    return ['dirNW'];
+  return dirs;
 };
 const npcYellData = {
   // Offsets: 456920,494045,510794
@@ -140,15 +183,12 @@ Options.Triggers.push({
       durationSeconds: 7.3,
       suppressSeconds: 1,
       infoText: (data, _matches, output) => {
-        const dirs = data.storedCleaves.map((entry) => {
-          const actor = data.actors.find((actor) => actor.ID === entry.id);
-          if (actor === undefined)
-            return output.unknown();
-          const actorFacing = Directions.hdgTo4DirNum(actor.Heading);
-          const offset = entry.dir === 'left' ? 1 : -1;
-          return Directions.outputFromCardinalNum((actorFacing + 4 + offset) % 4);
-        }).map((dir) => output[dir]());
-        return output.combo({ dirs: dirs.join(output.separator()) });
+        const dirs = getCleaveDirs(data.actors, data.storedCleaves);
+        const mappedDirs = dirs.map((dir) => output[dir]());
+        /* if we collapsed the callout to intercard, include x2 */
+        if (mappedDirs.length === 1 && data.storedCleaves.length === 2)
+          return output.numHits({ dir: mappedDirs[0], num: output.num2() });
+        return output.combo({ dirs: mappedDirs.join(output.separator()) });
       },
       run: (data) => {
         if (data.expectedCleaves === 1)
@@ -206,20 +246,26 @@ Options.Triggers.push({
       netRegex: { id: ['92BC', '92BE', '92BD', '92BF'], source: 'Wicked Thunder', capture: true },
       durationSeconds: 7.3,
       infoText: (data, matches, output) => {
+        const cleaveDir = ['92BC', '92BE'].includes(matches.id) ? 'right' : 'left';
+        const actorID = parseInt(matches.sourceId, 16);
         // If this is the first cleave, it's boss relative because boss isn't fixed north
-        if (data.sidewiseSparkCounter === 0)
-          return ['92BC', '92BE'].includes(matches.id) ? output.goLeft() : output.goRight();
-        let dirs = data.storedCleaves.map((entry) => {
-          const actor = data.actors.find((actor) => actor.ID === entry.id);
-          if (actor === undefined)
-            return output.unknown();
-          const actorFacing = Directions.hdgTo4DirNum(actor.Heading);
-          const offset = entry.dir === 'left' ? 1 : -1;
-          return Directions.outputFromCardinalNum((actorFacing + 4 + offset) % 4);
+        if (data.storedCleaves.length === 0)
+          return cleaveDir === 'right' ? output.goLeft() : output.goRight();
+        data.storedCleaves.push({
+          dir: cleaveDir,
+          id: actorID,
         });
-        dirs.push(['92BC', '92BE'].includes(matches.id) ? 'dirW' : 'dirE');
-        if (dirs.length === 5)
-          dirs = dirs.slice(2);
+        // If we got 5 hits, the first 2 were already called out while
+        // collecting the clone hits. Don't repeat them.
+        const remainingHits = data.storedCleaves.length === 5
+          ? data.storedCleaves.slice(-3)
+          : data.storedCleaves;
+        const dirs = getCleaveDirs(data.actors, remainingHits);
+        if (dirs.length === 1) {
+          const dir = dirs[0];
+          const mappedDir = output[dir]();
+          return output.intercardStay({ dir: mappedDir });
+        }
         const mappedDirs = dirs.map((dir) => output[dir]());
         return output.combo({ dirs: mappedDirs.join(output.separator()) });
       },
@@ -560,6 +606,39 @@ Options.Triggers.push({
         'Wicked Jolt': 'ウィケッドジョルト',
         'Witch Hunt': 'ウィッチハント',
         'Wrath of Zeus': 'ラス・オブ・ゼウス',
+      },
+    },
+    {
+      'locale': 'cn',
+      'replaceSync': {
+        'Wicked Replica': '狡雷的幻影',
+        'Wicked Thunder': '狡雷',
+      },
+      'replaceText': {
+        'Left Roll': '左列',
+        'Right Roll': '右列',
+        'west--': '西--',
+        '--east': '--东',
+        '\\(cast\\)': '(咏唱)',
+        '\\(clone\\)': '(幻影)',
+        '\\(damage\\)': '(伤害)',
+        'Bewitching Flight': '魔女回翔',
+        'Burst': '爆炸',
+        'Fivefold Blast': '五重加农炮',
+        'Fourfold Blast': '四重加农炮',
+        'Shadows\' Sabbath': '黑色安息日',
+        'Sidewise Spark': '侧方电火花',
+        'Soaring Soulpress': '碎魂跃',
+        'Stampeding Thunder': '奔雷炮',
+        'Threefold Blast': '三重加农炮',
+        'Thunderslam': '雷炸',
+        'Thunderstorm': '雷暴',
+        'Wicked Bolt': '狡诡落雷',
+        'Wicked Cannon': '狡诡加农炮',
+        'Wicked Hypercannon': '狡诡聚能加农炮',
+        'Wicked Jolt': '狡诡摇荡',
+        'Witch Hunt': '猎杀女巫',
+        'Wrath of Zeus': '宙斯之怒',
       },
     },
   ],
