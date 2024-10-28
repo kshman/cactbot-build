@@ -24,6 +24,7 @@ const data: HuntMap = {
   '13th Child': {
     'id': '13155',
     'name': {
+      'cn': '第十三个孩子',
       'de': [
         'Dreizehnte Kind',
         'Dreizehnter Kind',
@@ -183,6 +184,7 @@ const data: HuntMap = {
   'Atticus the Primogenitor': {
     'id': '13156',
     'name': {
+      'cn': '先驱勇士 阿提卡斯',
       'de': [
         'Atticus der Primogenitor',
         'Atticus die Primogenitor',
@@ -340,6 +342,7 @@ const data: HuntMap = {
   'Cat\'s Eye': {
     'id': '13436',
     'name': {
+      'cn': '猫眼',
       'de': 'Katzenauge',
       'en': 'Cat\'s Eye',
       'fr': 'Œil-de-chat',
@@ -363,6 +366,7 @@ const data: HuntMap = {
   'Chupacabra': {
     'id': '13145',
     'name': {
+      'cn': '卓伯卡布拉',
       'de': 'Chupacabra',
       'en': 'Chupacabra',
       'fr': 'chupacabra',
@@ -582,6 +586,7 @@ const data: HuntMap = {
   'Gallowsbeak': {
     'id': '13152',
     'name': {
+      'cn': '斩首魔鸟',
       'de': 'Galgenschnabel',
       'en': 'Gallowsbeak',
       'fr': 'Gibec',
@@ -797,6 +802,7 @@ const data: HuntMap = {
   'Ihnuxokiy': {
     'id': '13444',
     'name': {
+      'cn': '伊努索奇',
       'de': 'Ihnuxokiy',
       'en': 'Ihnuxokiy',
       'fr': 'Ihnuxokiy',
@@ -868,6 +874,7 @@ const data: HuntMap = {
   'Keheniheyamewi': {
     'id': '13401',
     'name': {
+      'cn': '凯海尼海亚麦尤伊',
       'de': 'Keheniheyamewi',
       'en': 'Keheniheyamewi',
       'fr': 'Keheniheyamewi',
@@ -903,6 +910,7 @@ const data: HuntMap = {
   'Kirlirger the Abhorrent': {
     'id': '13360',
     'name': {
+      'cn': '厌忌之人 奇里格',
       'de': [
         'Kirlirger der Abscheuliche',
         'Kirlirger der Abscheulicher',
@@ -1008,6 +1016,7 @@ const data: HuntMap = {
   'Leafscourge Hadoll Ja': {
     'id': '13148',
     'name': {
+      'cn': '绿叶飞花 哈杜加',
       'de': 'Blattgeißel Hadoll Ja',
       'en': 'Leafscourge Hadoll Ja',
       'fr': 'Hadoll Ja le foufeuillu',
@@ -1322,6 +1331,7 @@ const data: HuntMap = {
   'Nechuciho': {
     'id': '13362',
     'name': {
+      'cn': '内丘奇霍',
       'de': 'Nechuciho',
       'en': 'Nechuciho',
       'fr': 'Nechukiho',
@@ -1333,6 +1343,7 @@ const data: HuntMap = {
   'Neyoozoteel': {
     'id': '12754',
     'name': {
+      'cn': '内尤佐缇',
       'de': 'Neyoozoteel',
       'en': 'Neyoozoteel',
       'fr': 'Neyozzoteel',
@@ -1516,6 +1527,7 @@ const data: HuntMap = {
   'Pkuucha': {
     'id': '13443',
     'name': {
+      'cn': '普库恰',
       'de': 'Pkuucha',
       'en': 'Pkuucha',
       'fr': 'Pkuucha',
@@ -1551,6 +1563,7 @@ const data: HuntMap = {
   'Rrax Yity\'a': {
     'id': '12753',
     'name': {
+      'cn': '血鸣鼠',
       'de': 'Rrax Yity\'a',
       'en': 'Rrax Yity\'a',
       'fr': 'Rrax Yity\'a',
@@ -1610,6 +1623,7 @@ const data: HuntMap = {
   'Sally the Sweeper': {
     'id': '13435',
     'name': {
+      'cn': '清扫者萨莉',
       'de': [
         'Sally der Fegerin',
         'Sally die Fegerin',
@@ -1637,6 +1651,7 @@ const data: HuntMap = {
   'Sansheya': {
     'id': '13399',
     'name': {
+      'cn': '山谢亚',
       'de': 'Sansheya',
       'en': 'Sansheya',
       'fr': 'Sansheya',
@@ -1790,6 +1805,7 @@ const data: HuntMap = {
   'Starcrier': {
     'id': '12692',
     'name': {
+      'cn': '幻煌鸟',
       'de': 'Sternschreier',
       'en': 'Starcrier',
       'fr': 'furopluminescent',
@@ -1949,6 +1965,7 @@ const data: HuntMap = {
   'Uktena': {
     'id': '13151',
     'name': {
+      'cn': '乌克提纳',
       'de': 'Uktena',
       'en': 'Uktena',
       'fr': 'Uktena',
@@ -1971,6 +1988,7 @@ const data: HuntMap = {
   'Urna Variabilis': {
     'id': '13158',
     'name': {
+      'cn': '多变装置',
       'de': 'Urna Variabilis',
       'en': 'Urna Variabilis',
       'fr': 'pod variant',
@@ -2082,6 +2100,7 @@ const data: HuntMap = {
   'Xty\'iinbek': {
     'id': '13149',
     'name': {
+      'cn': '休提因别克',
       'de': 'Xty\'iinbek',
       'en': 'Xty\'iinbek',
       'fr': 'xty\'iinbek',
@@ -2093,6 +2112,7 @@ const data: HuntMap = {
   'Yehehetoaua\'pyo': {
     'id': '13400',
     'name': {
+      'cn': '艾海海陶瓦泡',
       'de': 'Yehehetoaua\'pyo',
       'en': 'Yehehetoaua\'pyo',
       'fr': 'Yehehetoaua\'pyo',
@@ -2152,6 +2172,7 @@ const data: HuntMap = {
   'arch aethereater': {
     'id': '13406',
     'name': {
+      'cn': '水晶化身之王',
       'de': 'Herr der Kristallisation',
       'en': 'arch aethereater',
       'fr': 'seigneur des cristallisateurs',
@@ -2163,6 +2184,7 @@ const data: HuntMap = {
   'crystal incarnation': {
     'id': '13407',
     'name': {
+      'cn': '水晶化身',
       'de': [
         'inkarnierte Kristallisation',
         'inkarnierter Kristallisation',
@@ -2250,6 +2272,7 @@ const data: HuntMap = {
   'gargant': {
     'id': '13153',
     'name': {
+      'cn': '高康特',
       'de': 'Gargant',
       'en': 'gargant',
       'fr': 'gargant',
@@ -2272,6 +2295,7 @@ const data: HuntMap = {
   'go\'ozoabek\'be': {
     'id': '13147',
     'name': {
+      'cn': '格沃佐拜柯拜',
       'de': 'Go\'ozoabek\'be',
       'en': 'go\'ozoabek\'be',
       'fr': 'Go\'ozoabek\'be',
@@ -2298,6 +2322,7 @@ const data: HuntMap = {
   'heshuala': {
     'id': '13157',
     'name': {
+      'cn': '海休瓦拉',
       'de': 'Heshuala',
       'en': 'heshuala',
       'fr': 'heshuala',
@@ -2321,6 +2346,7 @@ const data: HuntMap = {
   'jewel bearer': {
     'id': '13154',
     'name': {
+      'cn': '携宝精',
       'de': 'Juwelenträger',
       'en': 'jewel bearer',
       'fr': 'porte-joyaux',
@@ -2367,6 +2393,7 @@ const data: HuntMap = {
   'mad maguey': {
     'id': '13144',
     'name': {
+      'cn': '疯狂龙舌兰',
       'de': [
         'aggressive Agave',
         'aggressiver Agave',
@@ -2405,6 +2432,7 @@ const data: HuntMap = {
   'nopalitender Fabuloso': {
     'id': '13150',
     'name': {
+      'cn': '绝妙圆扇刺',
       'de': 'Feigenkaktor Fabuloso',
       'en': 'nopalitender Fabuloso',
       'fr': 'pampa de barbarie fabuleux',
@@ -2427,6 +2455,7 @@ const data: HuntMap = {
   'queen hawk': {
     'id': '13361',
     'name': {
+      'cn': '女王鹰蜂',
       'de': 'Falkenkönigin',
       'en': 'queen hawk',
       'fr': 'reine des guêpes',
@@ -2450,6 +2479,7 @@ const data: HuntMap = {
   'the Forecaster': {
     'id': '13437',
     'name': {
+      'cn': '天气预报机器人',
       'de': 'Wetterreporter',
       'en': 'the Forecaster',
       'fr': 'Monsieur météo',
@@ -2489,6 +2519,7 @@ const data: HuntMap = {
   'the Raintriller': {
     'id': '13442',
     'name': {
+      'cn': '惊雨蟾蜍',
       'de': 'Regentriller',
       'en': 'the Raintriller',
       'fr': 'Trilleur de pluie',
@@ -2511,6 +2542,7 @@ const data: HuntMap = {
   'the Slammer': {
     'id': '13146',
     'name': {
+      'cn': '撞角头',
       'de': 'Rammkopf',
       'en': 'the Slammer',
       'fr': 'Marteleur',
