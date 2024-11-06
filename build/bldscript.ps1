@@ -8,6 +8,7 @@
   [switch]$LintScript,
   [switch]$LintTest,
   [switch]$LintVersion,
+  [switch]$LintSync,
   [switch]$Bump
 )
 
@@ -96,7 +97,7 @@ if ($Bump -eq $TRUE)
 }
 
 # 린트라면
-if ($LintAll -eq $TRUE -or $LintScript -eq $TRUE -or $LintTest -eq $TRUE -or  $LintVersion -eq $TRUE) {
+if ($LintAll -eq $TRUE -or $LintScript -eq $TRUE -or $LintTest -eq $TRUE -or  $LintVersion -eq $TRUE -or $LintSync -eq $TRUE) {
    if ($LintAll -eq $TRUE -or $LintVersion -eq $TRUE) {
     Write-Host '린트 - 버전'
     npm run validate-versions
@@ -134,6 +135,11 @@ if ($LintAll -eq $TRUE -or $LintScript -eq $TRUE -or $LintTest -eq $TRUE -or  $L
     #'린트 - 프로세스 트리거'
     #npm run process-triggers
     #if (-not $?) { Exit-ForError('프로세스 트리거', 16) }
+  }
+  if ($LintSync -eq $TRUE) {
+    Write-Host '린트 - 연동 파일 검사'
+    npm run sync-files
+    if (-not $?) { Exit-ForError('연동 파일 검사', 17) }
   }
 
   Write-Host ''

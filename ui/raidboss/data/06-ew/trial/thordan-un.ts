@@ -529,7 +529,7 @@ const triggerSet: TriggerSet<Data> = {
       type: 'Ability',
       netRegex: { id: '89B7', source: 'Ser Vellguine' }, // Shared ability from all knights when they teleport in.
       condition: (data) => data.phase === 5,
-      alertText: (_data, matches, output) => {
+      infoText: (_data, matches, output) => {
         const knightNum = Directions.hdgTo8DirNum(parseFloat(matches.heading));
         const knightDir = Directions.outputFrom8DirNum(knightNum);
         const [dir1, dir2] = [knightDir, unsafeMap[knightDir]].sort();
