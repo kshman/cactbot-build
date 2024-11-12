@@ -361,7 +361,7 @@ const triggerSet: TriggerSet<Data> = {
       id: 'E11S Burnished Glory',
       type: 'StartsUsing',
       netRegex: { source: 'Fatebreaker', id: '56A4', capture: false },
-      response: Responses.bigAoe(),
+      response: Responses.bleedAoe(),
     },
     {
       id: 'E11S Powder Mark',
