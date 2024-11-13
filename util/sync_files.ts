@@ -727,6 +727,54 @@ const zoneReplace: ZoneReplace[] = [
       '8D2E': '8D2F', // Angular Addition self-targeted ability to give boss V
     },
   },
+  {
+    // 백호
+    fileMap: {
+      'ui/raidboss/data/04-sb/trial/byakko-ex.ts': 'ui/raidboss/data/07-dt/trial/byakko-un.ts',
+      'ui/raidboss/data/04-sb/trial/byakko-ex.txt': 'ui/raidboss/data/07-dt/trial/byakko-un.txt',
+      'ui/oopsyraidsy/data/04-sb/trial/byakko-ex.ts':
+        'ui/oopsyraidsy/data/07-dt/trial/byakko-un.ts',
+    },
+    prefix: { 'ByaEx': 'ByaUN' },
+    other: {
+      'TheJadeStoaExtreme': 'TheJadeStoaUnreal',
+      'Byakko Extreme': 'Byakko (UNREAL)',
+      'byakko-ex.txt': 'byakko-un.txt',
+    },
+    id: {
+      '25D1': '9BF4',
+      '265E': '9BF7',
+      '2756': '9BF8',
+      '2757': '9BF9',
+      '27D9': '9BFA',
+      '27DA': '9BFB',
+      '27DB': '9BFC',
+      '27DC': '9BFD',
+      '27DD': '9BFE',
+      '27DE': '9BFF',
+      '27DF': '9C00',
+      '27E0': '9C01',
+      '27E1': '9C02',
+      '27E2': '9C03',
+      '27E4': '9C05',
+      '27E5': '9C06',
+      '27E7': '9C08',
+      '27E8': '9C09',
+      '27EB': '9C0C',
+      '27ED': '9C0E',
+      '27EE': '9C0F',
+      '27F1': '9C12',
+      '27F3': '9C15',
+      '27F4': '9C16',
+      '27F7': '9C17',
+      '27F9': '9C19',
+      '27FA': '9C1A',
+      '27FB': '9C1B',
+      '29E4': '9C20',
+      '2A09': '9C21',
+      '2A2A': '9C22',
+    },
+  },
 ];
 
 const processFile = (filename: string, zone: ZoneReplace, inputText: string): string => {
