@@ -965,7 +965,7 @@ Options.Triggers.push({
         id: '0089',
         capture: false,
       },
-      // Yellow tether between Knight and Warrior gives them a Physical Vulnerability Down debuff.
+      // Purple tether between Knight and Warrior gives them a Magical Vulnerability Down debuff.
       infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
@@ -2287,8 +2287,8 @@ Options.Triggers.push({
             en: 'Invuln Tank Buster',
             de: 'Unverwundbarkeit für Tank Buster benutzen',
             fr: 'Invincible sur le Tank buster',
-            ja: 'タンクバスター (被ダメージ上昇付き)',
-            cn: '易伤死刑',
+            ja: 'インビンでタンクバスターを受ける',
+            cn: '开无敌吃死刑',
             ko: '무적으로 탱크버스터 맞아요',
           },
         };

@@ -100,8 +100,8 @@ const orbOutputStrings = {
     en: 'Rings',
     de: 'Ringe',
     fr: 'Anneaux',
-    ja: 'ドーナツ',
-    cn: '月环',
+    ja: '地震',
+    cn: '扩散地震',
     ko: '도넛',
   },
 };
