@@ -1,0 +1,211 @@
+# -p A04B:1000.0 -ii A008 A009 A00D A00E A00F A010 A018 A026 A027 A02F A030 A053 A054 A056
+
+# Phase one pulled from -r XwHyk2NAKnbzZLf7 -rf 3
+# Phase two pulled from -r GBaArv7yzHnXck8D -rf 17
+# A lot of manual cleanup applied
+
+# Phase one
+0.0 "--sync--" InCombat { inGameCombat: "1" } window 0,1
+12.9 "--sync--" StartsUsing { id: "A00C", source: "Queen Eternal" }
+15.6 "Aethertithe" Ability { id: "A00C", source: "Queen Eternal" } duration 27.8
+27.4 "Retribute" Ability { id: "A011", source: "Queen Eternal" }
+28.3 "Retribute" #Ability { id: "A012", source: "Queen Eternal" }
+36.4 "Retribute" Ability { id: "A011", source: "Queen Eternal" }
+37.3 "Retribute" #Ability { id: "A012", source: "Queen Eternal" }
+45.4 "Retribute" Ability { id: "A011", source: "Queen Eternal" }
+46.3 "Retribute" #Ability { id: "A012", source: "Queen Eternal" }
+58.7 "Virtual Shift" Ability { id: "A019", source: "Queen Eternal" }
+
+# Wind miniphase
+67.8 "Laws of Wind" Ability { id: "A023", source: "Queen Eternal" }
+72.8 "Aeroquell" Ability { id: "A025", source: "Queen Eternal" }
+85.8 "Legitimate Force" Ability { id: ["A01E", "A020"], source: "Queen Eternal" }
+88.8 "Legitimate Force" Ability { id: ["A021", "A022"], source: "Queen Eternal" }
+91.9 "Wind of Change" #Ability { id: "A024", source: "Queen Eternal" }
+99.8 "World Shatter" Ability { id: "A01C", source: "Queen Eternal" }
+# End wind miniphase
+
+111.8 "Prosecution of War" Ability { id: "A00A", source: "Queen Eternal" }
+114.9 "Prosecution of War" Ability { id: "A00B", source: "Queen Eternal" }
+125.6 "Divide and Conquer x8" Ability { id: "A017", source: "Queen Eternal" } duration 7
+136.6 "Divide and Conquer" Ability { id: "7729", source: "Queen Eternal" }
+144.6 "Royal Domain" Ability { id: "A04E", source: "Queen Eternal" }
+157.7 "Virtual Shift" Ability { id: "A01A", source: "Queen Eternal" }
+
+# Earth miniphase
+166.8 "Laws of Earth" Ability { id: "A028", source: "Queen Eternal" }
+177.9 "Legitimate Force" Ability { id: ["A01E", "A020"], source: "Queen Eternal" }
+181.0 "Legitimate Force" Ability { id: ["A021", "A022"], source: "Queen Eternal" }
+186.0 "Burst" Ability { id: "A029", source: "Queen Eternal" }
+198.1 "Gravitational Empire" Ability { id: "A02B", source: "Queen Eternal" }
+199.1 "Gravity Pillar" Ability { id: "A02C", source: "Queen Eternal" }
+199.1 "Gravity Ray" Ability { id: "A02D", source: "Queen Eternal" }
+199.9 "Burst" Ability { id: "A029", source: "Queen Eternal" }
+204.2 "Meteor Impact" Ability { id: "A02E", source: "Queen Eternal" }
+211.3 "Meteor Impact" Ability { id: "A02E", source: "Queen Eternal" }
+225.4 "Weighty Blow (cast)" Ability { id: "A033", source: "Queen Eternal" }
+226.0 "Weighty Blow (orb)" Ability { id: "A032", source: "Virtual Boulder" }
+229.1 "Weighty Blow (orb)" Ability { id: "A032", source: "Virtual Boulder" }
+232.2 "Weighty Blow (orb)" Ability { id: "A032", source: "Virtual Boulder" }
+235.3 "Weighty Blow (orb)" Ability { id: "A032", source: "Virtual Boulder" }
+240.5 "World Shatter" Ability { id: "A01C", source: "Queen Eternal" }
+# End earth miniphase
+
+252.6 "Prosecution of War" Ability { id: "A00A", source: "Queen Eternal" }
+255.7 "Prosecution of War" Ability { id: "A00B", source: "Queen Eternal" }
+261.7 "Coronation" Ability { id: "A013", source: "Queen Eternal" }
+267.8 "Atomic Ray (cast)" Ability { id: "A015", source: "Queen Eternal" }
+273.8 "Ruthless Regalia" Ability { id: "A014", source: "Queen Eternal" }
+274.9 "Atomic Ray (damage)" Ability { id: "A016", source: "Queen Eternal" }
+291.0 "Absolute Authority" Ability { id: "A041", source: "Queen Eternal" } duration 13.4
+300.9 "Absolute Authority (Flares/Stack)" Ability { id: "A046", source: "Queen Eternal" }
+305.0 "Absolute Authority (Dorito Stack)" Ability { id: "A048", source: "Queen Eternal" }
+312.1 "Absolute Authority (Knockback)" Ability { id: "A045", source: "Queen Eternal" }
+329.2 "Virtual Shift" Ability { id: "A01B", source: "Queen Eternal" }
+
+# Ice miniphase
+338.3 "Laws of Ice" Ability { id: "A035", source: "Queen Eternal" }
+339.3 "Laws of Ice" Ability { id: "A036", source: "Queen Eternal" }
+355.5 "Rush" Ability { id: "A037", source: "Ice Pillar" }
+363.3 "Legitimate Force" Ability { id: ["A01E", "A020"], source: "Queen Eternal" }
+366.4 "Legitimate Force" Ability { id: ["A021", "A022"], source: "Queen Eternal" }
+376.4 "Laws of Ice" Ability { id: "A035", source: "Queen Eternal" }
+377.4 "Laws of Ice" Ability { id: "A036", source: "Queen Eternal" }
+382.5 "Drear Rising" Ability { id: "A03E", source: "Queen Eternal" }
+383.5 "Ice Dart" Ability { id: "A03F", source: "Queen Eternal" }
+383.5 "Raised Tribute" Ability { id: "A040", source: "Queen Eternal" }
+389.5 "Drear Rising" Ability { id: "A03E", source: "Queen Eternal" }
+390.5 "Ice Dart" Ability { id: "A03F", source: "Queen Eternal" }
+390.5 "Raised Tribute" Ability { id: "A040", source: "Queen Eternal" }
+396.5 "Drear Rising" Ability { id: "A03E", source: "Queen Eternal" }
+397.5 "Ice Dart" Ability { id: "A03F", source: "Queen Eternal" }
+397.5 "Raised Tribute" Ability { id: "A040", source: "Queen Eternal" }
+403.5 "Drear Rising" Ability { id: "A03E", source: "Queen Eternal" }
+404.5 "Ice Dart" Ability { id: "A03F", source: "Queen Eternal" }
+404.5 "Raised Tribute" Ability { id: "A040", source: "Queen Eternal" }
+412.6 "World Shatter" Ability { id: "A01C", source: "Queen Eternal" }
+# End ice miniphase
+
+425.6 "Prosecution of War" Ability { id: "A00A", source: "Queen Eternal" }
+428.7 "Prosecution of War" Ability { id: "A00B", source: "Queen Eternal" }
+441.7 "Royal Domain" Ability { id: "A04E", source: "Queen Eternal" }
+455.8 "Legitimate Force" Ability { id: ["A01E", "A020"], source: "Queen Eternal" }
+458.9 "Legitimate Force" Ability { id: ["A021", "A022"], source: "Queen Eternal" }
+466.9 "Royal Domain" Ability { id: "A04E", source: "Queen Eternal" }
+485.0 "Authority Eternal" Ability { id: "A04A", source: "Queen Eternal" }
+485.2 "Authority Eternal (Enrage)" Ability { id: "A04C", source: "Queen Eternal" }
+
+# Phase two
+1000.0 "Authority Eternal" Ability { id: "A04B", source: "Queen Eternal" } window 1000.0,0
+1009.8 "--sync--" Ability { id: "A04D", source: "Queen Eternal" }
+
+# Radical Shift 1
+1039.8 "Radical Shift" Ability { id: "A04F", source: "Queen Eternal" }
+1044.9 "Radical Shift" Ability { id: "A050", source: "Queen Eternal" }
+1058.9 "Radical Shift" Ability { id: "A04F", source: "Queen Eternal" }
+1064.0 "Radical Shift" Ability { id: "A050", source: "Queen Eternal" }
+1072.0 "World Shatter" Ability { id: "7692", source: "Queen Eternal" }
+
+# Exaflares, front aoe + tank towers
+1083.0 "Dimensional Distortion" Ability { id: "A052", source: "Queen Eternal" } duration 7.3
+1094.2 "Tyranny's Grasp" Ability { id: "A055", source: "Queen Eternal" }
+1095.4 "Tyranny's Grasp" Ability { id: "A057", source: "Queen Eternal" }
+1098.2 "Tyranny's Grasp" Ability { id: "76D2", source: "Queen Eternal" }
+
+# damage spam
+1099.4 "Dying Memory x7" duration 6.6 #Ability { id: "A059", source: "Queen Eternal" }
+1107.1 "Dying Memory (big)" Ability { id: "4E4A", source: "Queen Eternal" }
+1115.2 "Royal Banishment x7" Ability { id: "A05A", source: "Queen Eternal" } duration 6.9
+1125.1 "Royal Banishment (big)" Ability { id: "A05C", source: "Queen Eternal" }
+
+# Radical Shift 2
+1147.4 "Radical Shift" Ability { id: "A04F", source: "Queen Eternal" }
+1152.5 "Radical Shift" Ability { id: "A050", source: "Queen Eternal" }
+1166.5 "Radical Shift" Ability { id: "A04F", source: "Queen Eternal" }
+1171.6 "Radical Shift" Ability { id: "A050", source: "Queen Eternal" }
+1179.6 "World Shatter" Ability { id: "7692", source: "Queen Eternal" }
+
+1200.7 "Preservation (Enrage)" Ability { id: "A05D", source: "Queen Eternal" }
+
+# ALL ENCOUNTER ABILITIES
+# 4E4A Dying Memory
+# 7692 World Shatter
+# 76D2 Tyranny's Grasp
+# 7729 Divide and Conquer
+# A008 --sync-- __P1 autoattack__
+# A009 --sync-- __P2 autoattack__
+# A00A Prosecution of War __Tankbuster__
+# A00B Prosecution of War __Tankbuster__
+# A00C Aethertithe __Initial Cast__
+# A00D Aethertithe __Repeated Hits__
+# A00E Aethertithe __Last Hit__
+# A00F Aethertithe __Extra damage spike__
+# A010 Aethertithe __Extra damage spike__
+# A011 Retribute __LP line stack__
+# A012 Retribute __LP line stack__
+# A013 Coronation
+# A015 Atomic Ray
+# A016 Atomic Ray
+# A017 Divide and Conquer __Individual lines__
+# A018 Divide and Conquer __All lines re-fire__
+# A019 Virtual Shift
+# A01A Virtual Shift
+# A01B Virtual Shift
+# A01C World Shatter
+# A01E Legitimate Force __East safe, then west safe__
+# A020 Legitimate Force __West safe, then east safe__
+# A021 Legitimate Force __Followup hit for A020__
+# A022 Legitimate Force __Followup hit for A01E__
+# A023 Laws of Wind __Does nothing?__
+# A024 --sync-- __East/West Wind of Change knockback__
+# A025 Aeroquell __Healer stacks__
+# A026 Biting Chains __Damage for not breaking chains fast enough__
+# A027 Aero IV __Twister repeated knockback__
+# A028 Laws of Earth __Spawns the gravity pillars__
+# A029 Burst __Tower soak damage__
+# A02B Gravitational Empire
+# A02C Gravity Pillar
+# A02D Gravity Ray
+# A02E Meteor Impact __Cast__
+# A02F Meteor Impact __Actual meteor drops, on platform__
+# A030 Meteor Impact __Actual meteor drops, off platform__
+# A032 --sync-- __Weighty Blow orbs__
+# A033 Weighty Blow __Cast__
+# A035 Laws of Ice __Spawns/respawns bridges__
+# A036 Laws of Ice __Spawns/respawns bridges__
+# A037 Rush
+# A038 Rush
+# A039 Rush
+# A03A Rush
+# A03B Rush __Icecicle failure__
+# A03C Rush __Icecicle failure__
+# A03D Shatter __Icecicle failure__
+# A03E Drear Rising
+# A03F Ice Dart
+# A040 Raised Tribute
+# A041 Absolute Authority __Cast__
+# A042 Absolute Authority __Puddles__
+# A043 Absolute Authority __Puddles__
+# A044 Absolute Authority __Repeated small damage__
+# A045 Absolute Authority __Knockback damage__
+# A046 Absolute Authority __Flare marker damage__
+# A047 Absolute Authority __Stack marker damage__
+# A048 Absolute Authority __Dorito stack damage, success__
+# A049 Absolute Authority __Dorito stack damage, failure__
+# A04A Authority Eternal
+# A04B Authority Eternal
+# A04D --sync--
+# A04E Royal Domain
+# A04F Radical Shift
+# A050 Radical Shift
+# A052 Dimensional Distortion
+# A053 Dimensional Distortion
+# A054 Dimensional Distortion
+# A055 Tyranny's Grasp
+# A056 --sync--
+# A057 Tyranny's Grasp
+# A059 Dying Memory
+# A05A Royal Banishment
+# A05B Royal Banishment
+# A05C Royal Banishment
+# A05D Preservation
