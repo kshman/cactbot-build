@@ -6,7 +6,7 @@
 ### Byakko (UNREAL)
 # -p 9BFD:10.9
 # -it Hakutei / -it Byakko
-# -ii 27E3 27F6 265D 29A3 27EF 27F0 25CF 9C16 27E6 2944 27E9
+# -ii 9C04 9C16 265D 29A3 27EF 27F0 25CF 9C15 9C07 2944 9C0A
 
 hideall "--sync--"
 hideall "--Reset--"
@@ -51,12 +51,12 @@ hideall "Answer On High"
 
 ### Phase 2: zzz x infinity
 191.1 "--sync--" Ability { id: "9C0F", source: "Byakko" } window 200,5
-197.2 "Sweep the Leg" Ability { id: "9C15", source: "Byakko" }
+197.2 "Sweep the Leg" Ability { id: "9C14", source: "Byakko" }
 208.1 "Imperial Guard" Ability { id: "9C12", source: "Hakutei" }
 208.4 "--sync--" Ability { id: "9C0F", source: "Byakko" }
 220.2 "Imperial Guard" Ability { id: "9C12", source: "Hakutei" }
 222.6 "--sync--" Ability { id: "9C0F", source: "Byakko" }
-228.7 "Sweep the Leg" Ability { id: "9C15", source: "Byakko" }
+228.7 "Sweep the Leg" Ability { id: "9C14", source: "Byakko" }
 237.3 "Imperial Guard" Ability { id: "9C12", source: "Hakutei" }
 
 
@@ -101,9 +101,9 @@ hideall "Answer On High"
 423.9 "The Voice Of Thunder" Ability { id: "9C17", source: "Hakutei" }
 436.5 "Storm Pulse x2" Ability { id: "9BFD", source: "Byakko" }
 447.1 "The Roar Of Thunder" Ability { id: "9C19", source: "Hakutei" }
-450.6 "--sync--" Ability { id: "29E5", source: "Hakutei" }
+450.6 "--sync--" Ability { id: "9C20", source: "Hakutei" }
 
-451.5 "--sync--" Ability { id: "9C20", source: "Byakko" }
+451.5 "--sync--" Ability { id: "9C1F", source: "Byakko" }
 453.5 "--sync--" Ability { id: "9BF9", source: "Byakko" }
 459.3 "Fire and Lightning" Ability { id: "9BFA", source: "Byakko" }
 474.5 "Storm Pulse x2" Ability { id: "9BFD", source: "Byakko" }

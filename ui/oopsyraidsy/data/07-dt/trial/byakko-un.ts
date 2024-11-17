@@ -16,12 +16,12 @@ const triggerSet: OopsyTriggerSet<Data> = {
   zoneId: ZoneId.TheJadeStoaUnreal,
   damageWarn: {
     // Popping Unrelenting Anguish bubbles
-    'ByaUN Aratama': '27F6',
+    'ByaUN Aratama': '9C16',
     // Stepping in growing orb
-    'ByaUN Vacuum Claw': '27E9',
+    'ByaUN Vacuum Claw': '9C0A',
     // Lightning Puddles
     'ByaUN Hunderfold Havoc 1': '9C06',
-    'ByaUN Hunderfold Havoc 2': '27E6',
+    'ByaUN Hunderfold Havoc 2': '9C07',
   },
   damageFail: {
     'ByaUN Sweep The Leg': '9BFC',
@@ -35,7 +35,7 @@ const triggerSet: OopsyTriggerSet<Data> = {
       // Pink bubble collision
       id: 'ByaUN Ominous Wind',
       type: 'Ability',
-      netRegex: NetRegexes.ability({ id: '27EC', ...playerDamageFields }),
+      netRegex: NetRegexes.ability({ id: '9C0D', ...playerDamageFields }),
       mistake: (_data, matches) => {
         return {
           type: 'warn',

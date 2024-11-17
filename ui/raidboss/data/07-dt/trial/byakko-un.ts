@@ -29,7 +29,7 @@ const triggerSet: TriggerSet<Data> = {
     {
       id: 'ByaUN Flying Donut',
       type: 'StartsUsing',
-      netRegex: { id: '9C16', source: 'Byakko', capture: false },
+      netRegex: { id: '9C15', source: 'Byakko', capture: false },
       response: Responses.getIn(),
     },
     {

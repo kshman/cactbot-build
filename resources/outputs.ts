@@ -188,7 +188,7 @@ export default {
     fr: 'Dispersez-vous',
     ja: '散開',
     cn: '分散',
-    ko: '산개',
+    ko: '흩어져요',
   },
   defamationOnYou: {
     en: 'Defamation on YOU',
@@ -514,7 +514,7 @@ export default {
     fr: '<= Allez à Gauche/Ouest',
     ja: '<= 左/西へ',
     cn: '<= 去左/西边',
-    ko: '🡸 왼쪽으로',
+    ko: '🡸왼쪽으로',
   },
   getRightAndEast: {
     en: 'Get Right/East =>',
@@ -522,7 +522,7 @@ export default {
     fr: 'Allez à Droite/Est =>',
     ja: '右/東へ =>',
     cn: '去右/东边 =>',
-    ko: '오른쪽으로 🡺',
+    ko: '오른쪽으로🡺',
   },
   leftThenRight: {
     en: 'Left => Right',
@@ -530,7 +530,7 @@ export default {
     fr: 'À gauche => À droite',
     ja: '左 => 右',
     cn: '左 => 右',
-    ko: '왼쪽 🔜 오른쪽',
+    ko: '🡸왼쪽 🔜 오른쪽',
   },
   rightThenLeft: {
     en: 'Right => Left',
@@ -538,7 +538,7 @@ export default {
     fr: 'À droite => À gauche',
     ja: '右 => 左',
     cn: '右 => 左',
-    ko: '오른쪽 🔜 왼쪽',
+    ko: '오른쪽🡺 🔜 왼쪽',
   },
   goFrontBack: {
     en: 'Go Front/Back',
