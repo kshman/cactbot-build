@@ -11,29 +11,29 @@ import { playerDamageFields } from '../../../oopsy_common';
 
 export type Data = OopsyData;
 
-// Byakko (UNREAL)
+// Byakko Unreal
 const triggerSet: OopsyTriggerSet<Data> = {
   zoneId: ZoneId.TheJadeStoaUnreal,
   damageWarn: {
     // Popping Unrelenting Anguish bubbles
-    'ByaUN Aratama': '9C16',
+    'ByakkoUn Aratama': '9C16',
     // Stepping in growing orb
-    'ByaUN Vacuum Claw': '9C0A',
+    'ByakkoUn Vacuum Claw': '9C0A',
     // Lightning Puddles
-    'ByaUN Hunderfold Havoc 1': '9C06',
-    'ByaUN Hunderfold Havoc 2': '9C07',
+    'ByakkoUn Hunderfold Havoc 1': '9C06',
+    'ByakkoUn Hunderfold Havoc 2': '9C07',
   },
   damageFail: {
-    'ByaUN Sweep The Leg': '9BFC',
-    'ByaUN Fire and Lightning': '9BFF',
-    'ByaUN Distant Clap': '9BFE',
+    'ByakkoUn Sweep The Leg': '9BFC',
+    'ByakkoUn Fire and Lightning': '9BFF',
+    'ByakkoUn Distant Clap': '9BFE',
     // Midphase line attack
-    'ByaUN Imperial Guard': '9C12',
+    'ByakkoUn Imperial Guard': '9C12',
   },
   triggers: [
     {
       // Pink bubble collision
-      id: 'ByaUN Ominous Wind',
+      id: 'ByakkoUn Ominous Wind',
       type: 'Ability',
       netRegex: NetRegexes.ability({ id: '9C0D', ...playerDamageFields }),
       mistake: (_data, matches) => {

@@ -1,15 +1,23 @@
 import Conditions from '../../../../../resources/conditions';
+import { UnreachableCode } from '../../../../../resources/not_reached';
 import Outputs from '../../../../../resources/outputs';
 import { callOverlayHandler } from '../../../../../resources/overlay_plugin_api';
 import { Responses } from '../../../../../resources/responses';
+import { DirectionOutputCardinal, Directions } from '../../../../../resources/util';
 import ZoneId from '../../../../../resources/zone_id';
 import { RaidbossData } from '../../../../../types/data';
 import { TriggerSet } from '../../../../../types/trigger';
 
 // TODO:
 // Earth phase boulders, track the amount that hit platform and specify off for second set if 8 have already hit?
-// Coronation followup trigger for the memorized lines, not sure how to word this
+// Divide and Conquer followup trigger for the memorized lines, not sure how to word this
 // Ice phase, tethers + line stack, might need a strat option for this
+
+type CoronationLaser = {
+  dir: Exclude<DirectionOutputCardinal, 'unknown'>;
+  side: Exclude<DirectionOutputCardinal, 'unknown'>;
+  name: string;
+};
 
 export interface Data extends RaidbossData {
   actorPositions: { [id: string]: { x: number; y: number } };
@@ -19,6 +27,8 @@ export interface Data extends RaidbossData {
   absoluteAuthorityDebuff: 'stack' | 'spread';
   radicalShiftCWPlatform?: 'wind' | 'earth' | 'ice';
   radicalShiftCCWPlatform?: 'wind' | 'earth' | 'ice';
+  coronationLasers: CoronationLaser[];
+  aDrears: number;
 }
 
 const triggerSet: TriggerSet<Data> = {
@@ -30,6 +40,8 @@ const triggerSet: TriggerSet<Data> = {
     gravitationalEmpireMech: 'tower',
     phase: 'p1',
     actorPositions: {},
+    coronationLasers: [],
+    aDrears: 0,
   }),
   triggers: [
     // Phase trackers
@@ -324,7 +336,7 @@ const triggerSet: TriggerSet<Data> = {
     {
       id: 'QueenEternal Ex Earth Phase Boulder',
       type: 'HeadMarker',
-      netRegex: { id: '00DB', capture: false },
+      netRegex: { id: '022F', capture: false },
       suppressSeconds: 1,
       response: Responses.spread(),
     },
@@ -343,15 +355,101 @@ const triggerSet: TriggerSet<Data> = {
 
     // After earth
     {
-      id: 'QueenEternal Ex Coronation',
+      id: 'QueenEternal Ex Coronation Laser Collector',
       type: 'StartsUsing',
       netRegex: { id: 'A013', source: 'Queen Eternal', capture: false },
-      infoText: (_data, _matches, output) => output.text!(),
+      promise: async (data) => {
+        const combatants = (await callOverlayHandler({
+          call: 'getCombatants',
+        }));
+
+        if (combatants === null) {
+          console.error(`Coronation Laser Collector: null data`);
+          return;
+        }
+
+        const lasers = combatants.combatants.filter((c) => c.BNpcID === 18043);
+
+        if (lasers.length !== 4) {
+          console.error(
+            `Coronation Laser Collector: expected 4, got ${combatants.combatants.length}`,
+          );
+          return;
+        }
+
+        for (const laser of lasers) {
+          data.actorPositions[laser.ID?.toString(16).toUpperCase() ?? ''] = {
+            x: laser.PosX,
+            y: laser.PosY,
+          };
+        }
+      },
+    },
+    {
+      id: 'QueenEternal Ex Coronation Laser Tether Collector',
+      type: 'Tether',
+      netRegex: { id: ['010E', '010F'], capture: true },
+      infoText: (data, matches, output) => {
+        const idToSideMap: { [id: string]: number } = {
+          '010E': -1, // 'left',
+          '010F': 1, // 'right',
+        } as const;
+
+        const offset = idToSideMap[matches.id];
+        const pos = data.actorPositions[matches.targetId];
+
+        if (offset === undefined || pos === undefined) {
+          console.error(
+            `Coronation Laser Tether Collector: ${offset ?? 'undefined'}, ${JSON.stringify(pos)}`,
+          );
+          return output.unknown!();
+        }
+
+        const laserDirNum = Directions.xyTo4DirNum(pos.x, pos.y, 100.0, 100.0);
+        const sideDirNum = (4 + laserDirNum + offset) % 4;
+
+        const laserDir = Directions.outputFromCardinalNum(laserDirNum);
+        const sideDir = Directions.outputFromCardinalNum(sideDirNum);
+
+        if (laserDir === 'unknown' || sideDir === 'unknown') {
+          console.error(
+            `Coronation Laser Tether Collector: laserDir = ${laserDir}, sideDir = ${sideDir}`,
+          );
+          return output.unknown!();
+        }
+
+        data.coronationLasers.push({
+          dir: laserDir,
+          side: sideDir,
+          name: matches.source,
+        });
+
+        if (data.coronationLasers.length < 8)
+          return;
+
+        const myLaser = data.coronationLasers.find((laser) => laser.name === data.me);
+
+        if (myLaser === undefined)
+          throw new UnreachableCode();
+
+        const partnerLaser = data.coronationLasers.find((laser) =>
+          laser.dir === myLaser.dir && laser !== myLaser
+        );
+
+        return output.text!({
+          laserDir: output[myLaser.dir]!(),
+          sideDir: output[myLaser.side]!(),
+          partner: data.party.member(partnerLaser?.name),
+        });
+      },
       outputStrings: {
+        ...Directions.outputStringsCardinalDir,
         text: {
-          en: 'Spread, aim lasers',
-          ko: '지정 위치로 줄다리기',
+          en: '${laserDir} laser, ${sideDir} side, w/ ${partner}',
+          cn: '${laserDir} 激光, ${sideDir} 侧, 和 ${partner}',
+          ko: '${laserDir}쪽 레이저, ${sideDir}쪽으로 (${partner})',
         },
+        unknown: Outputs.unknown,
       },
     },
     {
@@ -581,6 +679,24 @@ const triggerSet: TriggerSet<Data> = {
         tank: {
           en: 'Tank Towers => AoE',
           ko: '탱크 타워 🔜 전체공격',
+        },
+      },
+    },
+    {
+      id: 'QueenEternal Ex Drear Rising',
+      type: 'Ability',
+      netRegex: { id: 'A03E', capture: false },
+      condition: (data) => data.role === 'tank',
+      delaySeconds: 6,
+      alertText: (data, _matches, output) => {
+        data.aDrears++;
+        if (data.aDrears === 2)
+          return output.text!();
+      },
+      outputStrings: {
+        text: {
+          en: 'Tank invuln',
+          ko: '탱크 무적!',
         },
       },
     },
