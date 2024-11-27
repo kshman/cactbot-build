@@ -1,116 +1,117 @@
-# -p A04B:1000.0 -ii A008 A009 A00D A00E A00F A010 A018 A026 A027 A02F A030 A053 A054 A056
+# -p A04B:1000.0 -ii A008 A009 A00D A00E A00F A010 A011 A018 A026 A027 A02F A030 A053 A054 A056
 
 # Phase one pulled from -r XwHyk2NAKnbzZLf7 -rf 3
 # Phase two pulled from -r GBaArv7yzHnXck8D -rf 17
 # A lot of manual cleanup applied
 
+hideall "--Reset--"
+hideall "--sync--"
+
 # Phase one
 0.0 "--sync--" InCombat { inGameCombat: "1" } window 0,1
-12.9 "--sync--" StartsUsing { id: "A00C", source: "Queen Eternal" }
-15.6 "Aethertithe" Ability { id: "A00C", source: "Queen Eternal" } duration 27.8
-27.4 "Retribute" Ability { id: "A011", source: "Queen Eternal" }
-28.3 "Retribute" #Ability { id: "A012", source: "Queen Eternal" }
-36.4 "Retribute" Ability { id: "A011", source: "Queen Eternal" }
-37.3 "Retribute" #Ability { id: "A012", source: "Queen Eternal" }
-45.4 "Retribute" Ability { id: "A011", source: "Queen Eternal" }
-46.3 "Retribute" #Ability { id: "A012", source: "Queen Eternal" }
-58.7 "Virtual Shift" Ability { id: "A019", source: "Queen Eternal" }
+13.1 "--sync--" StartsUsing { id: "A00C", source: "Queen Eternal" }
+15.8 "Aethertithe" Ability { id: "A00C", source: "Queen Eternal" } duration 27.8
+28.9 "Retribute" Ability { id: "A012", source: "Queen Eternal" }
+38.1 "Retribute" Ability { id: "A012", source: "Queen Eternal" }
+47.3 "Retribute" Ability { id: "A012", source: "Queen Eternal" }
+59.7 "Virtual Shift" Ability { id: "A019", source: "Queen Eternal" } window 59.7,10
 
 # Wind miniphase
-67.8 "Laws of Wind" Ability { id: "A023", source: "Queen Eternal" }
-72.8 "Aeroquell" Ability { id: "A025", source: "Queen Eternal" }
-85.8 "Legitimate Force" Ability { id: ["A01E", "A020"], source: "Queen Eternal" }
-88.8 "Legitimate Force" Ability { id: ["A021", "A022"], source: "Queen Eternal" }
-91.9 "Wind of Change" #Ability { id: "A024", source: "Queen Eternal" }
-99.8 "World Shatter" Ability { id: "A01C", source: "Queen Eternal" }
+68.8 "Laws of Wind" Ability { id: "A023", source: "Queen Eternal" }
+73.8 "Aeroquell" Ability { id: "A025", source: "Queen Eternal" }
+86.8 "Legitimate Force" Ability { id: ["A01E", "A020"], source: "Queen Eternal" }
+89.9 "Legitimate Force" Ability { id: ["A021", "A022"], source: "Queen Eternal" }
+93.0 "Wind of Change" #Ability { id: "A024", source: "Queen Eternal" }
+100.9 "World Shatter" Ability { id: "A01C", source: "Queen Eternal" }
 # End wind miniphase
 
-111.8 "Prosecution of War" Ability { id: "A00A", source: "Queen Eternal" }
-114.9 "Prosecution of War" Ability { id: "A00B", source: "Queen Eternal" }
-125.6 "Divide and Conquer x8" Ability { id: "A017", source: "Queen Eternal" } duration 7
-136.6 "Divide and Conquer" Ability { id: "7729", source: "Queen Eternal" }
-144.6 "Royal Domain" Ability { id: "A04E", source: "Queen Eternal" }
-157.7 "Virtual Shift" Ability { id: "A01A", source: "Queen Eternal" }
+113.0 "Prosecution of War 1" Ability { id: "A00A", source: "Queen Eternal" }
+116.1 "Prosecution of War 2" Ability { id: "A00B", source: "Queen Eternal" }
+126.8 "Divide and Conquer x8" Ability { id: "A017", source: "Queen Eternal" } duration 7
+# TODO: Better timeline name here.
+137.9 "Divide and Conquer" Ability { id: "7729", source: "Queen Eternal" }
+145.9 "Royal Domain" Ability { id: "A04E", source: "Queen Eternal" }
+159.1 "Virtual Shift" Ability { id: "A01A", source: "Queen Eternal" } window 159.1,10
 
 # Earth miniphase
-166.8 "Laws of Earth" Ability { id: "A028", source: "Queen Eternal" }
-177.9 "Legitimate Force" Ability { id: ["A01E", "A020"], source: "Queen Eternal" }
-181.0 "Legitimate Force" Ability { id: ["A021", "A022"], source: "Queen Eternal" }
-186.0 "Burst" Ability { id: "A029", source: "Queen Eternal" }
-198.1 "Gravitational Empire" Ability { id: "A02B", source: "Queen Eternal" }
-199.1 "Gravity Pillar" Ability { id: "A02C", source: "Queen Eternal" }
-199.1 "Gravity Ray" Ability { id: "A02D", source: "Queen Eternal" }
-199.9 "Burst" Ability { id: "A029", source: "Queen Eternal" }
-204.2 "Meteor Impact" Ability { id: "A02E", source: "Queen Eternal" }
-211.3 "Meteor Impact" Ability { id: "A02E", source: "Queen Eternal" }
-225.4 "Weighty Blow (cast)" Ability { id: "A033", source: "Queen Eternal" }
-226.0 "Weighty Blow (orb)" Ability { id: "A032", source: "Virtual Boulder" }
-229.1 "Weighty Blow (orb)" Ability { id: "A032", source: "Virtual Boulder" }
-232.2 "Weighty Blow (orb)" Ability { id: "A032", source: "Virtual Boulder" }
-235.3 "Weighty Blow (orb)" Ability { id: "A032", source: "Virtual Boulder" }
-240.5 "World Shatter" Ability { id: "A01C", source: "Queen Eternal" }
+168.2 "Laws of Earth" Ability { id: "A028", source: "Queen Eternal" }
+179.3 "Legitimate Force Left/Right" Ability { id: ["A01E", "A020"], source: "Queen Eternal" }
+182.4 "Legitimate Force Right/Left" Ability { id: ["A021", "A022"], source: "Queen Eternal" }
+187.4 "Burst" Ability { id: "A029", source: "Queen Eternal" }
+199.5 "Gravitational Empire" Ability { id: "A02B", source: "Queen Eternal" }
+200.5 "Gravity Pillar" Ability { id: "A02C", source: "Queen Eternal" }
+200.5 "Gravity Ray" Ability { id: "A02D", source: "Queen Eternal" }
+201.4 "Burst" Ability { id: "A029", source: "Queen Eternal" }
+205.7 "Meteor Impact 1" Ability { id: "A02E", source: "Queen Eternal" }
+212.8 "Meteor Impact 2" Ability { id: "A02E", source: "Queen Eternal" }
+226.9 "Weighty Blow (cast)" Ability { id: "A033", source: "Queen Eternal" }
+226.9 "Weighty Blow 1 (orb)" Ability { id: "A032", source: "Virtual Boulder" }
+230.0 "Weighty Blow 2 (orb)" Ability { id: "A032", source: "Virtual Boulder" }
+233.1 "Weighty Blow 3 (orb)" Ability { id: "A032", source: "Virtual Boulder" }
+236.2 "Weighty Blow 4 (orb)" Ability { id: "A032", source: "Virtual Boulder" }
+241.8 "World Shatter" Ability { id: "A01C", source: "Queen Eternal" }
 # End earth miniphase
 
-252.6 "Prosecution of War" Ability { id: "A00A", source: "Queen Eternal" }
-255.7 "Prosecution of War" Ability { id: "A00B", source: "Queen Eternal" }
-261.7 "Coronation" Ability { id: "A013", source: "Queen Eternal" }
-267.8 "Atomic Ray (cast)" Ability { id: "A015", source: "Queen Eternal" }
-273.8 "Ruthless Regalia" Ability { id: "A014", source: "Queen Eternal" }
-274.9 "Atomic Ray (damage)" Ability { id: "A016", source: "Queen Eternal" }
-291.0 "Absolute Authority" Ability { id: "A041", source: "Queen Eternal" } duration 13.4
-300.9 "Absolute Authority (Flares/Stack)" Ability { id: "A046", source: "Queen Eternal" }
-305.0 "Absolute Authority (Dorito Stack)" Ability { id: "A048", source: "Queen Eternal" }
-312.1 "Absolute Authority (Knockback)" Ability { id: "A045", source: "Queen Eternal" }
-329.2 "Virtual Shift" Ability { id: "A01B", source: "Queen Eternal" }
+254.0 "Prosecution of War 1" Ability { id: "A00A", source: "Queen Eternal" }
+257.1 "Prosecution of War 2" Ability { id: "A00B", source: "Queen Eternal" }
+263.2 "Coronation" Ability { id: "A013", source: "Queen Eternal" }
+269.3 "Atomic Ray (cast)" Ability { id: "A015", source: "Queen Eternal" }
+275.3 "Ruthless Regalia" Ability { id: "A014", source: "Queen Eternal" }
+276.4 "Atomic Ray (damage)" Ability { id: "A016", source: "Queen Eternal" }
+292.5 "Absolute Authority" Ability { id: "A041", source: "Queen Eternal" } duration 13.4
+302.4 "Absolute Authority (Flares/Stack)" Ability { id: "A046", source: "Queen Eternal" }
+306.6 "Absolute Authority (Dorito Stack)" Ability { id: "A048", source: "Queen Eternal" }
+313.5 "Absolute Authority (Knockback)" Ability { id: "A045", source: "Queen Eternal" }
+330.7 "Virtual Shift" Ability { id: "A01B", source: "Queen Eternal" } window 330.7,10
 
 # Ice miniphase
-338.3 "Laws of Ice" Ability { id: "A035", source: "Queen Eternal" }
-339.3 "Laws of Ice" Ability { id: "A036", source: "Queen Eternal" }
-355.5 "Rush" Ability { id: "A037", source: "Ice Pillar" }
-363.3 "Legitimate Force" Ability { id: ["A01E", "A020"], source: "Queen Eternal" }
-366.4 "Legitimate Force" Ability { id: ["A021", "A022"], source: "Queen Eternal" }
-376.4 "Laws of Ice" Ability { id: "A035", source: "Queen Eternal" }
-377.4 "Laws of Ice" Ability { id: "A036", source: "Queen Eternal" }
-382.5 "Drear Rising" Ability { id: "A03E", source: "Queen Eternal" }
-383.5 "Ice Dart" Ability { id: "A03F", source: "Queen Eternal" }
-383.5 "Raised Tribute" Ability { id: "A040", source: "Queen Eternal" }
-389.5 "Drear Rising" Ability { id: "A03E", source: "Queen Eternal" }
-390.5 "Ice Dart" Ability { id: "A03F", source: "Queen Eternal" }
-390.5 "Raised Tribute" Ability { id: "A040", source: "Queen Eternal" }
-396.5 "Drear Rising" Ability { id: "A03E", source: "Queen Eternal" }
-397.5 "Ice Dart" Ability { id: "A03F", source: "Queen Eternal" }
-397.5 "Raised Tribute" Ability { id: "A040", source: "Queen Eternal" }
-403.5 "Drear Rising" Ability { id: "A03E", source: "Queen Eternal" }
-404.5 "Ice Dart" Ability { id: "A03F", source: "Queen Eternal" }
-404.5 "Raised Tribute" Ability { id: "A040", source: "Queen Eternal" }
-412.6 "World Shatter" Ability { id: "A01C", source: "Queen Eternal" }
+339.8 "Laws of Ice (motion)" Ability { id: "A035", source: "Queen Eternal" }
+340.8 "Laws of Ice (platforms)" Ability { id: "A036", source: "Queen Eternal" }
+357.0 "Rush" Ability { id: "A037", source: "Ice Pillar" }
+364.8 "Legitimate Force Left/Right" Ability { id: ["A01E", "A020"], source: "Queen Eternal" }
+367.9 "Legitimate Force Right/Left" Ability { id: ["A021", "A022"], source: "Queen Eternal" }
+378.0 "Laws of Ice (motion)" Ability { id: "A035", source: "Queen Eternal" }
+379.0 "Laws of Ice (platforms)" Ability { id: "A036", source: "Queen Eternal" }
+384.1 "Drear Rising" Ability { id: "A03E", source: "Queen Eternal" }
+385.1 "Ice Dart" #Ability { id: "A03F", source: "Queen Eternal" }
+385.1 "Raised Tribute" #Ability { id: "A040", source: "Queen Eternal" }
+391.2 "Drear Rising" Ability { id: "A03E", source: "Queen Eternal" }
+392.2 "Ice Dart" #Ability { id: "A03F", source: "Queen Eternal" }
+392.2 "Raised Tribute" #Ability { id: "A040", source: "Queen Eternal" }
+398.3 "Drear Rising" Ability { id: "A03E", source: "Queen Eternal" }
+399.3 "Ice Dart" #Ability { id: "A03F", source: "Queen Eternal" }
+399.3 "Raised Tribute" #Ability { id: "A040", source: "Queen Eternal" }
+405.4 "Drear Rising" Ability { id: "A03E", source: "Queen Eternal" }
+406.4 "Ice Dart" #Ability { id: "A03F", source: "Queen Eternal" }
+406.4 "Raised Tribute" #Ability { id: "A040", source: "Queen Eternal" }
+414.5 "World Shatter" Ability { id: "A01C", source: "Queen Eternal" }
 # End ice miniphase
 
-425.6 "Prosecution of War" Ability { id: "A00A", source: "Queen Eternal" }
-428.7 "Prosecution of War" Ability { id: "A00B", source: "Queen Eternal" }
-441.7 "Royal Domain" Ability { id: "A04E", source: "Queen Eternal" }
-455.8 "Legitimate Force" Ability { id: ["A01E", "A020"], source: "Queen Eternal" }
-458.9 "Legitimate Force" Ability { id: ["A021", "A022"], source: "Queen Eternal" }
-466.9 "Royal Domain" Ability { id: "A04E", source: "Queen Eternal" }
-485.0 "Authority Eternal" Ability { id: "A04A", source: "Queen Eternal" }
-485.2 "Authority Eternal (Enrage)" Ability { id: "A04C", source: "Queen Eternal" }
+427.5 "Prosecution of War 1" Ability { id: "A00A", source: "Queen Eternal" }
+430.6 "Prosecution of War 2" Ability { id: "A00B", source: "Queen Eternal" }
+443.6 "Royal Domain" Ability { id: "A04E", source: "Queen Eternal" }
+457.7 "Legitimate Force Left/Right" Ability { id: ["A01E", "A020"], source: "Queen Eternal" }
+460.8 "Legitimate Force Right/Left" Ability { id: ["A021", "A022"], source: "Queen Eternal" }
+468.8 "Royal Domain" Ability { id: "A04E", source: "Queen Eternal" }
+486.9 "Authority Eternal" Ability { id: "A04A", source: "Queen Eternal" }
+487.1 "Authority Eternal (Enrage)" Ability { id: "A04C", source: "Queen Eternal" }
 
 # Phase two
 1000.0 "Authority Eternal" Ability { id: "A04B", source: "Queen Eternal" } window 1000.0,0
 1009.8 "--sync--" Ability { id: "A04D", source: "Queen Eternal" }
 
 # Radical Shift 1
-1039.8 "Radical Shift" Ability { id: "A04F", source: "Queen Eternal" }
-1044.9 "Radical Shift" Ability { id: "A050", source: "Queen Eternal" }
-1058.9 "Radical Shift" Ability { id: "A04F", source: "Queen Eternal" }
-1064.0 "Radical Shift" Ability { id: "A050", source: "Queen Eternal" }
+1039.8 "Radical Shift (rotate)" Ability { id: "A04F", source: "Queen Eternal" }
+1044.9 "Radical Shift (spread)" Ability { id: "A050", source: "Queen Eternal" }
+1058.9 "Radical Shift (rotate)" Ability { id: "A04F", source: "Queen Eternal" }
+1064.0 "Radical Shift (spread)" Ability { id: "A050", source: "Queen Eternal" }
 1072.0 "World Shatter" Ability { id: "7692", source: "Queen Eternal" }
 
 # Exaflares, front aoe + tank towers
 1083.0 "Dimensional Distortion" Ability { id: "A052", source: "Queen Eternal" } duration 7.3
-1094.2 "Tyranny's Grasp" Ability { id: "A055", source: "Queen Eternal" }
-1095.4 "Tyranny's Grasp" Ability { id: "A057", source: "Queen Eternal" }
-1098.2 "Tyranny's Grasp" Ability { id: "76D2", source: "Queen Eternal" }
+1094.2 "Tyranny's Grasp (front)" Ability { id: "A055", source: "Queen Eternal" }
+1095.4 "Tyranny's Grasp (left tower)" Ability { id: "A057", source: "Queen Eternal" }
+1098.2 "Tyranny's Grasp (right tower)" Ability { id: "76D2", source: "Queen Eternal" }
 
 # damage spam
 1099.4 "Dying Memory x7" duration 6.6 #Ability { id: "A059", source: "Queen Eternal" }
@@ -119,10 +120,10 @@
 1125.1 "Royal Banishment (big)" Ability { id: "A05C", source: "Queen Eternal" }
 
 # Radical Shift 2
-1147.4 "Radical Shift" Ability { id: "A04F", source: "Queen Eternal" }
-1152.5 "Radical Shift" Ability { id: "A050", source: "Queen Eternal" }
-1166.5 "Radical Shift" Ability { id: "A04F", source: "Queen Eternal" }
-1171.6 "Radical Shift" Ability { id: "A050", source: "Queen Eternal" }
+1147.4 "Radical Shift (rotate)" Ability { id: "A04F", source: "Queen Eternal" }
+1152.5 "Radical Shift (spread)" Ability { id: "A050", source: "Queen Eternal" }
+1166.5 "Radical Shift (rotate)" Ability { id: "A04F", source: "Queen Eternal" }
+1171.6 "Radical Shift (spread)" Ability { id: "A050", source: "Queen Eternal" }
 1179.6 "World Shatter" Ability { id: "7692", source: "Queen Eternal" }
 
 1200.7 "Preservation (Enrage)" Ability { id: "A05D", source: "Queen Eternal" }

@@ -904,7 +904,7 @@ const triggerSet: TriggerSet<Data> = {
     {
       id: 'AAIS Islekeeper Ancient Quaga Enrage',
       type: 'StartsUsing',
-      netRegex: { id: '8C2F', source: 'Aloalo Islekeeper', capture: false },
+      netRegex: { id: 'TODO', source: 'Aloalo Islekeeper', capture: false },
       alarmText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {

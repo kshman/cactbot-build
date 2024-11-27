@@ -569,7 +569,7 @@ const zoneReplace: ZoneReplace[] = [
     other: {
       'AnotherAloaloIsland': 'AnotherAloaloIslandSavage',
       'another_aloalo_island.txt': 'another_aloalo_island-savage.txt',
-      '# ANOTHER ALOALO ISLAND': '# ANOTHER ALOALO ISLAND (SAVAGE)',
+      '# Another Aloalo Island': '# Another Aloalo Island (Savage)',
       '\(\'AAI ': '\(\'AAIS ',
     },
     // eslint-disable-next-line max-len
@@ -620,10 +620,9 @@ const zoneReplace: ZoneReplace[] = [
       '894A': '8967', // Trick Reload self-targeted cast to load gun with 8925/8926
       '894B': '8968', // Trigger Happy self-targeted cast for limit cut dart board
       '894C': '8969', // Trigger Happy cast and damage for limit cut dart board (filled pie slice)
-      '894D': '896A',
+      '894D': '8927', // Surprise Balloon self-targeted cast
       '894E': '896B', // Pop knockback from Surprise Balloon being popped
       '894F': '896C', // Surprise Needle short cast and ability blue line aoe from needle adds that pop balloons
-      '8952': '896F',
       '8954': '8971', // Uncommon Ground light damage on people who are not on a dartboard color with Bull's-eye
       '8955': '8972', // Present Box self-targeted cast for bombs/donuts/missiles/hands
       '8956': '8973', // Faerie Ring cast and damage for donut rings during Present Box
@@ -701,10 +700,10 @@ const zoneReplace: ZoneReplace[] = [
       '8BC0': '8BCF', // --sync-- damage from Twister tornados
       '8BC1': '8BD4', // Ovation cast and damage from Wood Golem front line aoe
       '8BC5': '8C3A', // Gravity Force cast and stack damage from Islekeeper
-      '8C23': '8C23',
-      '8C24': '8C23', // Aero IV post-enrage follow-up damage just in case
-      '8C25': '8C25', // Inferno Theorem cast and enrage damage
-      '8C2F': '8C2F', // Ancient Quaga cast and damage for Islekeeper raidwide enrage
+      '8C23': 'TODO', // Aero IV cast and enrage damage
+      '8C24': 'TODO', // Aero IV post-enrage follow-up damage just in case
+      '8C25': 'TODO', // Inferno Theorem cast and enrage damage
+      '8C2F': 'TODO', // Ancient Quaga cast and damage for Islekeeper raidwide enrage
       '8C4C': '8BD2', // Ancient Aero III interruptable cast and damage for Wood Golem raidwide
       '8C4D': '8BD3', // Tornado cast and damage from Wood Golem that binds the initial target and heavies all targets
       '8C4E': '8C39', // Ancient Quaga cast and damage for Islekeeper raidwide
@@ -728,51 +727,56 @@ const zoneReplace: ZoneReplace[] = [
     },
   },
   {
-    // 백호
     fileMap: {
       'ui/raidboss/data/04-sb/trial/byakko-ex.ts': 'ui/raidboss/data/07-dt/trial/byakko-un.ts',
       'ui/raidboss/data/04-sb/trial/byakko-ex.txt': 'ui/raidboss/data/07-dt/trial/byakko-un.txt',
       'ui/oopsyraidsy/data/04-sb/trial/byakko-ex.ts':
         'ui/oopsyraidsy/data/07-dt/trial/byakko-un.ts',
     },
-    prefix: { 'ByaEx': 'ByaUN' },
+    prefix: { 'ByakkoEx': 'ByakkoUn' },
     other: {
       'TheJadeStoaExtreme': 'TheJadeStoaUnreal',
-      'Byakko Extreme': 'Byakko (UNREAL)',
+      'Byakko Extreme': 'Byakko Unreal',
       'byakko-ex.txt': 'byakko-un.txt',
     },
     id: {
-      '25D1': '9BF4',
-      '265E': '9BF7',
-      '2756': '9BF8',
-      '2757': '9BF9',
-      '27D9': '9BFA',
-      '27DA': '9BFB',
-      '27DB': '9BFC',
-      '27DC': '9BFD',
-      '27DD': '9BFE',
-      '27DE': '9BFF',
-      '27DF': '9C00',
-      '27E0': '9C01',
-      '27E1': '9C02',
-      '27E2': '9C03',
-      '27E4': '9C05',
-      '27E5': '9C06',
-      '27E7': '9C08',
-      '27E8': '9C09',
-      '27EB': '9C0C',
-      '27ED': '9C0E',
-      '27EE': '9C0F',
-      '27F1': '9C12',
-      '27F3': '9C15',
-      '27F4': '9C16',
-      '27F7': '9C17',
-      '27F9': '9C19',
-      '27FA': '9C1A',
-      '27FB': '9C1B',
-      '29E4': '9C20',
-      '2A09': '9C21',
-      '2A2A': '9C22',
+      '25D1': '9BF4', // Dance Of The Incomplete
+      '265E': '9BF7', // --Hakutei sync--
+      '2756': '9BF8', // State Of Shock 2
+      '2757': '9BF9', // --reposition--
+      '27D9': '9BFA', // Fire And Lightning
+      '27DA': '9BFB', // Heavenly Strike
+      '27DB': '9BFC', // Sweep The Leg
+      '27DC': '9BFD', // Storm Pulse
+      '27DD': '9BFE', // Distant Clap
+      '27DE': '9BFF', // Fire And Lightning
+      '27DF': '9C00', // Steel Claw
+      '27E0': '9C01', // State of Shock 1
+      '27E1': '9C02', // Clutch
+      '27E2': '9C03', // Highest Stakes
+      '27E3': '9C04', // Highest Stakes
+      '27E4': '9C05', // Answer On High
+      '27E5': '9C06', // Hundredfold Havoc 1
+      '27E6': '9C07', // Hundredfold Havoc 2
+      '27E7': '9C08', // Bombogenesis
+      '27E8': '9C09', // Gale Force
+      '27E9': '9C0A', // Vacuum Claw
+      '27EB': '9C0C', // Ominous Wind
+      '27EC': '9C0D', // Ominous Wind Collision
+      '27ED': '9C0E', // Unrelenting Anguish
+      '27EE': '9C0F', // [Phase 2 opener]
+      '27F1': '9C12', // Imperial Guard
+      '27F3': '9C14', // Sweep The Leg
+      '27F4': '9C15', // Sweep The Leg
+      '27F6': '9C16', // Aratama
+      '27F7': '9C17', // The Voice Of Thunder
+      '27F9': '9C19', // The Roar Of Thunder
+      '27FA': '9C1A', // White Herald
+      '27FB': '9C1B', // Fell Swoop
+      '29E4': '9C1F', // --sync--
+      '29E5': '9C20', // --Hakutei sync--
+      '2A09': '9C21', // Storm Pulse Enrage
+      '2A2A': '9C22', // [Phase 3 opener]
     },
   },
 ];
