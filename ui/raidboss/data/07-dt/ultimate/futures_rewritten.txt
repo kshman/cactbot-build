@@ -6,6 +6,8 @@
 hideall "--Reset--"
 hideall "--sync--"
 
+# P1
+
 0.0 "--sync--" InCombat { inGameCombat: "1" } window 0,1
 13.9 "--sync--" Ability { id: ["9CD0", "9CD4"], source: "Fatebreaker" } # Cyclonic Break castbar
 14.6 "Cyclonic Break 1 (targeted)" Ability { id: "9CD1", source: "Fatebreaker" }
@@ -17,7 +19,6 @@ hideall "--sync--"
 28.5 "--center--" Ability { id: "9CED", source: "Fatebreaker" }
 35.2 "Utopian Sky" Ability { id: ["9CDA", "9CDB"], source: "Fatebreaker" }
 35.2 "--untargetable--"
-
 
 40.6 "Burn Mark" Ability { id: "9CE9", source: "Fatebreaker" }
 49.5 "--sync--" Ability { id: "9CDD", source: "Fatebreaker's Image" } # Blasting Zone castbar
@@ -120,3 +121,31 @@ hideall "--sync--"
 # 9CED --sync--: --center--
 # 9D89 Cyclonic Break: Utopian Sky Protean castbar, fire
 # 9D8A Cyckonic Break: Utopian Sky Protean castbar, lightning
+
+# P2
+200.0 "--sync--" StartsUsing { id: "9CFF", source: "Usurper of Frost" } window 210,5
+205.0 "Quadruple Slap" Ability { id: "9CFF", source: "Usurper of Frost" }
+209.1 "Quadruple Slap" Ability { id: "9D00", source: "Usurper of Frost" }
+214.1 "--sync--" Ability { id: "9CEF", source: "Usurper of Frost" }
+218.4 "Mirror Image" Ability { id: "9CF4", source: "Usurper of Frost" }
+225.5 "Diamond Dust" Ability { id: "9D05", source: "Usurper of Frost" }
+234.2 "Axe/Scythe Kick" Ability { id: ["9D0A", "9D0B"], source: "Oracle's Reflection" }
+235.1 "the House of Light" Ability { id: "9D0E", source: "Usurper of Frost" }
+236.9 "Frigid Stone" Ability { id: "9D07", source: "Usurper of Frost" }
+237.3 "Icicle Impact" Ability { id: "9D06", source: "Usurper of Frost" }
+241.2 "Heavenly Strike" Ability { id: "9D0F", source: "Usurper of Frost" }
+241.3 "Icicle Impact" Ability { id: "9D06", source: "Usurper of Frost" }
+244.0 "Frigid Needle" #Ability { id: "9D09", source: "Usurper of Frost" }
+244.3 "Sinbound Holy" Ability { id: "9D10", source: "Oracle's Reflection" }
+245.2 "Icicle Impact" Ability { id: "9D06", source: "Usurper of Frost" }
+253.4 "Shining Armor" Ability { id: "9CF9", source: "Usurper of Frost" }
+253.4 "Frost Armor" Ability { id: "9CF8", source: "Oracle's Reflection" }
+260.2 "Twin Stillness" #Ability { id: "9D01", source: "Oracle's Reflection" }
+262.3 "Twin Stillness" #Ability { id: "9D04", source: "Oracle's Reflection" }
+273.0 "Hallowed Ray" Ability { id: "9D12", source: "Usurper of Frost" }
+273.4 "Hallowed Ray" Ability { id: "9D13", source: "Usurper of Frost" }
+282.7 "Mirror, Mirror" Ability { id: "9CF3", source: "Usurper of Frost" }
+296.8 "Axe/Scythe Kick" Ability { id: ["9D0A", "9D0B"], source: "Usurper of Frost" }
+296.8 "Reflected Kick" Ability { id: ["9D0C", "9D0D"] }
+297.4 "the House of Light" #Ability { id: "9D0E", source: "氷面鏡" }
+297.4 "the House of Light" #Ability { id: "9D0E", source: "Usurper of Frost" }

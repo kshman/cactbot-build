@@ -4,9 +4,11 @@ import ZoneId from '../../../../../resources/zone_id';
 import { RaidbossData } from '../../../../../types/data';
 import { TriggerSet } from '../../../../../types/trigger';
 
+type Phase = 'p1' | 'p2';
 type RedBlue = 'red' | 'blue';
 
 export interface Data extends RaidbossData {
+  phase: Phase;
   fateColor?: RedBlue;
   fateBurnished?: boolean;
   fateFallIndex: number;
@@ -19,12 +21,30 @@ const triggerSet: TriggerSet<Data> = {
   zoneId: ZoneId.FuturesRewrittenUltimate,
   timelineFile: 'futures_rewritten.txt',
   initData: () => ({
+    phase: 'p1',
     fateFallIndex: 0,
     fateFallMyIndex: 0,
     fateFallColors: [],
   }),
   timelineTriggers: [],
   triggers: [
+    {
+      id: 'Flu Phase Tracker',
+      type: 'StartsUsing',
+      netRegex: { id: ['9CD0', '9CD4', '9CFF'], capture: true },
+      run: (data, matches) => {
+        switch (matches.id) {
+          case '9CD0':
+          case '9CD4':
+            data.phase = 'p1';
+            break;
+          case '9CFF':
+            data.phase = 'p2';
+            break;
+        }
+      },
+    },
+    // //////////////// PHASE 1 //////////////////
     {
       id: 'Flu P1 Cyclonic Break',
       type: 'StartsUsing',
@@ -35,21 +55,14 @@ const triggerSet: TriggerSet<Data> = {
         return output.spread!();
       },
       outputStrings: {
-        pair: {
-          en: 'Pair',
-          ko: '왓다갔다 페어',
-        },
-        spread: {
-          en: 'Spread',
-          ko: '왔다갔다 흩어져요',
-        },
+        pair: Outputs.pair,
+        spread: Outputs.spread,
       },
     },
     {
       id: 'Flu P1 Powder Mark Trail',
       type: 'StartsUsing',
       netRegex: { id: '9CE8', source: 'Fatebreaker' },
-      durationSeconds: 5,
       response: Responses.tankBusterSwap(),
     },
     {
@@ -67,12 +80,12 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         stack: {
-          en: 'Stack later (red)',
-          ko: '나중에 뭉쳐요 (🔴빨강)',
+          en: 'Stack later',
+          ko: '나중에 🔴뭉쳐요',
         },
         spread: {
-          en: 'Spread later (blue)',
-          ko: '나중에 흩어져요 (🔵파랑)',
+          en: 'Spread later',
+          ko: '나중에 🔵흩어져요',
         },
       },
     },
@@ -106,13 +119,21 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         pair: {
           en: 'Stack',
-          ko: '자기 자리로 🔜 페어',
+          ko: '자기 자리로 🔜 🔴페어',
         },
         spread: {
           en: 'Spread',
-          ko: '자기 자리로 🔜 흩어져요',
+          ko: '자기 자리로 🔜 🔵흩어져요',
         },
       },
+    },
+    {
+      id: 'Flu P1 Image\'s Blastburn',
+      type: 'StartsUsing',
+      netRegex: { id: '9CE2', source: 'Fatebreaker\'s Image' },
+      delaySeconds: (_data, matches) => parseFloat(matches.castTime) - 2,
+      durationSeconds: 3,
+      response: Responses.knockback(),
     },
     {
       id: 'Flu P1 Burnished Glory',
@@ -146,31 +167,38 @@ const triggerSet: TriggerSet<Data> = {
       id: 'Flu P1 Fall Tether',
       type: 'Tether',
       netRegex: { id: ['00F9', '011F'] },
-      condition: (data, _matches) => data.fateBurnished,
+      condition: (data, _matches) => data.phase === 'p1' && data.fateBurnished,
       durationSeconds: 4,
-      alertText: (data, matches, output) => {
+      response: (data, matches, output) => {
+        // cactbot-builtin-response
+        output.responseOutputStrings = {
+          text: {
+            en: '${num} ${color}',
+            ko: '내가 ${num}번째 ${color}',
+          },
+          red: {
+            en: 'Red',
+            ko: '🔴빨강',
+          },
+          blue: {
+            en: 'Blue',
+            ko: '🔵파랑',
+          },
+          move: {
+            en: 'Go position',
+            ko: '맡은 위치로!',
+          },
+        };
         const color = matches.id === '00F9' ? 'red' : 'blue';
         data.fateFallColors[data.fateFallIndex] = color;
         data.fateFallIndex++;
         if (matches.target === data.me) {
           data.fateFallMyIndex = data.fateFallIndex;
           const colorName = color === 'red' ? output.red!() : output.blue!();
-          return output.text!({ num: data.fateFallIndex, color: colorName });
+          return { alertText: output.text!({ num: data.fateFallIndex, color: colorName }) };
         }
-      },
-      outputStrings: {
-        text: {
-          en: '${num} ${color}',
-          ko: '내가 ${num}번째 ${color}',
-        },
-        red: {
-          en: 'Red',
-          ko: '🔴빨강',
-        },
-        blue: {
-          en: 'Blue',
-          ko: '🔵파랑',
-        },
+        if (data.fateFallMyIndex === 0 && data.fateFallIndex === 4)
+          return { infoText: output.move!() };
       },
     },
     {
@@ -183,7 +211,7 @@ const triggerSet: TriggerSet<Data> = {
         let colors = data.fateFallColors.map((c) => c === 'red' ? output.red!() : output.blue!());
         if (data.options.OnlyAutumn) {
           const aclrs = [];
-          if (data.fateFallMyIndex % 2 === 0) {
+          if (data.fateFallMyIndex === 2 || data.fateFallMyIndex === 4) {
             aclrs.push(data.fateFallColors[1]);
             aclrs.push(data.fateFallColors[3]);
           } else {
@@ -211,44 +239,104 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: 'Flu P1 Burnt Strike',
+      id: 'Flu P1 Blastburn',
       type: 'StartsUsing',
-      netRegex: { id: ['9CC1', '9CC5'], source: 'Fatebreaker' },
+      netRegex: { id: '9CC2', source: 'Fatebreaker' },
+      delaySeconds: (_data, matches) => parseFloat(matches.castTime) - 2,
+      durationSeconds: 3,
+      response: Responses.knockback(),
+    },
+    {
+      id: 'Flu P1 Burnout',
+      type: 'StartsUsing',
+      netRegex: { id: '9CC6', source: 'Fatebreaker' },
+      delaySeconds: (_data, matches) => parseFloat(matches.castTime) - 2.5,
+      durationSeconds: 3,
+      response: Responses.getOut(),
+    },
+    // //////////////// PHASE 2 //////////////////
+    {
+      id: 'Flu P2 Quadruple Slap',
+      type: 'StartsUsing',
+      netRegex: { id: '9CFF', source: 'Usurper of Frost' },
+      response: Responses.tankBusterSwap(),
+    },
+    {
+      id: 'Flu P2 Diamond Dust',
+      type: 'StartsUsing',
+      netRegex: { id: '9D05', source: 'Usurper of Frost', capture: false },
+      response: Responses.bigAoe(),
+    },
+    {
+      id: 'Flu P2 Axe Kick',
+      type: 'StartsUsing',
+      netRegex: { id: '9D0A', source: 'Oracle\'s Reflection', capture: false },
+      response: Responses.getOut(),
+    },
+    {
+      id: 'Flu P2 Scythe Kick',
+      type: 'StartsUsing',
+      netRegex: { id: '9D0B', source: 'Oracle\'s Reflection', capture: false },
+      response: Responses.getIn(),
+    },
+    {
+      id: 'Flu P2 Flower Target',
+      type: 'HeadMarker',
+      netRegex: { id: '0159' },
       durationSeconds: 5,
+      suppressSeconds: 1,
       infoText: (data, matches, output) => {
-        const act = data.role === 'tank' ? output.buster!() : output.tower!();
-        if (matches.id === '9CC1')
-          return output.red!({ act: act });
-        return output.blue!({ act: act });
+        const target = data.party.member(matches.target);
+        if (data.role === 'dps') {
+          if (target.role === 'dps')
+            return output.flower!();
+          return output.bait!();
+        }
+        if (target.role === 'dps')
+          return output.bait!();
+        return output.flower!();
       },
       outputStrings: {
-        red: {
-          en: 'Knockback => ${act}',
-          ko: '장판 넉백 🔜 ${act} (🔴빨강)',
+        flower: {
+          en: 'Flower on YOU',
+          ko: '내게 얼음꽃 (먼쪽)',
         },
-        blue: {
-          en: 'Go position => ${act}',
-          ko: '담당 위치로 🔜 ${act} (🔵파랑)',
-        },
-        tower: {
-          en: 'Tower',
-          ko: '타워 밟아요',
-        },
-        buster: {
-          en: 'Buster',
-          ko: '폭발 처리',
+        bait: {
+          en: 'Bait cone',
+          ko: '원뿔 유도 (가까운쪽)',
         },
       },
+    },
+    {
+      id: 'Flu P2 DD Knockback',
+      type: 'StartsUsing',
+      netRegex: { id: '9D10', source: 'Oracle\'s Reflection', capture: false },
+      // 9D10 Sinbound Holy
+      delaySeconds: 1,
+      durationSeconds: 3,
+      response: Responses.knockback(),
     },
   ],
   timelineReplace: [
     {
-      locale: 'en',
-      replaceText: {
+      'locale': 'en',
+      'replaceText': {
         'Sinbound Fire III/Sinbound Thunder III': 'Sinbound Fire/Thunder',
+      },
+    },
+    {
+      'locale': 'ja',
+      'missingTranslations': true,
+      'replaceSync': {
+        'Fatebreaker': 'フェイトブレイカー',
+        '\'s Image': 'の幻影',
+        'Usurper of Frost': 'シヴァ・ミトロン',
+        'Oracle\'s Reflection': '巫女の鏡像',
       },
     },
   ],
 };
 
 export default triggerSet;
+
+// FLU / FUTURES REWRITTEN / 絶エデン / 絶もうひとつの未来
