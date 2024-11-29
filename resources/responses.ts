@@ -656,7 +656,7 @@ export const Responses = {
       return combined;
     };
   },
-  stackPartner: (sev?: Severity) => staticResponse(defaultAlertText(sev), Outputs.stackPartner),
+  stackPartner: (sev?: Severity) => staticResponse(defaultInfoText(sev), Outputs.stackPartner),
 } as const;
 
 // Don't give `Responses` a type in its declaration so that it can be treated as more strict

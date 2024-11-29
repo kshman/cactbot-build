@@ -4,6 +4,7 @@ import { Responses } from '../../../../../resources/responses';
 import { Directions } from '../../../../../resources/util';
 import ZoneId from '../../../../../resources/zone_id';
 import { RaidbossData } from '../../../../../types/data';
+import { Role } from '../../../../../types/job';
 import { NetMatches } from '../../../../../types/net_matches';
 import { TriggerSet } from '../../../../../types/trigger';
 
@@ -17,6 +18,9 @@ export interface Data extends RaidbossData {
   p1Color?: RedBlue;
   p1Falled?: boolean;
   p1FallColors: RedBlue[];
+  p1FallRoles: Role[];
+  p2Knockback?: number;
+  p2Frosted?: boolean;
 }
 
 const triggerSet: TriggerSet<Data> = {
@@ -28,6 +32,7 @@ const triggerSet: TriggerSet<Data> = {
     actors: {},
     safeMarkers: [],
     p1FallColors: [],
+    p1FallRoles: [],
   }),
   timelineTriggers: [],
   triggers: [
@@ -60,15 +65,17 @@ const triggerSet: TriggerSet<Data> = {
       id: 'FRU P1 Cyclonic Break Fire',
       type: 'StartsUsing',
       netRegex: { id: ['9CD0', '9D89'], capture: false },
+      durationSeconds: 7,
       infoText: (_data, _matches, output) => output.pair!(),
       outputStrings: {
-        pair: Outputs.pair,
+        pair: Outputs.stackPartner,
       },
     },
     {
       id: 'FRU P1 Cyclonic Break Lightning',
       type: 'StartsUsing',
       netRegex: { id: ['9CD4', '9D8A'], capture: false },
+      durationSeconds: 7,
       infoText: (_data, _matches, output) => output.spread!(),
       outputStrings: {
         spread: Outputs.spread,
@@ -81,27 +88,10 @@ const triggerSet: TriggerSet<Data> = {
       response: Responses.tankBusterSwap(),
     },
     {
-      id: 'FRU P1 Utopian Sky',
+      id: 'FRU P1 Utopian Sky Collector',
       type: 'StartsUsing',
       netRegex: { id: ['9CDA', '9CDB'], source: 'Fatebreaker' },
-      infoText: (data, matches, output) => {
-        if (matches.id === '9CDA') {
-          data.p1Color = 'red';
-          return output.stack!();
-        }
-        data.p1Color = 'blue';
-        return output.spread!();
-      },
-      outputStrings: {
-        stack: {
-          en: '(Stack later)',
-          ko: '(나중에 🔴뭉쳐요)',
-        },
-        spread: {
-          en: '(Spread later)',
-          ko: '(나중에 🔵흩어져요)',
-        },
-      },
+      run: (data, matches) => data.p1Color = matches.id === '9CDA' ? 'red' : 'blue',
     },
     {
       id: 'FRU P1 Concealed Safe Zone',
@@ -144,7 +134,7 @@ const triggerSet: TriggerSet<Data> = {
       id: 'FRU P1 Turn of the Heavens Fire',
       type: 'StartsUsing',
       netRegex: { id: '9CD6', source: 'Fatebreaker\'s Image', capture: false },
-      durationSeconds: 8,
+      durationSeconds: 11,
       infoText: (_data, _matches, output) => output.blueSafe!(),
       outputStrings: {
         blueSafe: {
@@ -157,7 +147,7 @@ const triggerSet: TriggerSet<Data> = {
       id: 'FRU P1 Turn of the Heavens Lightning',
       type: 'StartsUsing',
       netRegex: { id: '9CD7', source: 'Fatebreaker\'s Image', capture: false },
-      durationSeconds: 8,
+      durationSeconds: 11,
       infoText: (_data, _matches, output) => output.redSafe!(),
       outputStrings: {
         redSafe: {
@@ -170,7 +160,7 @@ const triggerSet: TriggerSet<Data> = {
       id: 'FRU P1 Blastburn',
       type: 'StartsUsing',
       netRegex: { id: ['9CC2', '9CE2'] },
-      delaySeconds: (_data, matches) => parseFloat(matches.castTime) - 2,
+      delaySeconds: (_data, matches) => parseFloat(matches.castTime) - 3,
       durationSeconds: 3,
       response: Responses.knockback(),
     },
@@ -178,7 +168,7 @@ const triggerSet: TriggerSet<Data> = {
       id: 'FRU P1 Burnout',
       type: 'StartsUsing',
       netRegex: { id: ['9CC6', '9CE4'] },
-      delaySeconds: (_data, matches) => parseFloat(matches.castTime) - 2.5,
+      delaySeconds: (_data, matches) => parseFloat(matches.castTime) - 3.5,
       durationSeconds: 3,
       response: Responses.getOut(),
     },
@@ -193,19 +183,11 @@ const triggerSet: TriggerSet<Data> = {
       id: 'FRU P1 Fall of Faith',
       type: 'StartsUsing',
       netRegex: { id: '9CEA', source: 'Fatebreaker', capture: false },
-      delaySeconds: 6,
-      infoText: (data, _matches, output) => {
-        if (data.p1Falled)
-          return;
+      condition: (data) => !data.p1Falled,
+      run: (data, _matches) => {
         data.p1Falled = true;
         data.p1FallColors = [];
-        return output.text!();
-      },
-      outputStrings: {
-        text: {
-          en: 'Check tethers',
-          ko: '줄다리기 순서 확인',
-        },
+        data.p1FallRoles = [];
       },
     },
     {
@@ -213,20 +195,34 @@ const triggerSet: TriggerSet<Data> = {
       type: 'Tether',
       netRegex: { id: ['00F9', '011F'] },
       condition: (data, _matches) => data.phase === 'p1' && data.p1Falled,
-      durationSeconds: 4,
+      durationSeconds: 3,
       alertText: (data, matches, output) => {
         const color = matches.id === '00F9' ? 'red' : 'blue';
         data.p1FallColors.push(color);
-        if (matches.target === data.me)
+        if (matches.target === data.me) {
+          data.p1FallRoles = [];
           return output.mine!({ num: data.p1FallColors.length, color: output[color]!() });
+        }
+
+        if (data.options.OnlyAutumn) {
+          // 힐러 둘 다 안걸리면 어듬이는 오른쪽으로
+          const member = data.party.member(matches.target);
+          data.p1FallRoles.push(member.role ?? 'none');
+          if (data.p1FallRoles.length === 4) {
+            const healers = data.p1FallRoles.filter((r) => r === 'healer').length;
+            return healers === 0 ? output.getRightAndEast!() : output.getLeftAndWest!();
+          }
+        }
       },
       outputStrings: {
-        red: Outputs.red,
-        blue: Outputs.blue,
         mine: {
           en: '${num} ${color}',
           ko: '내가 ${num}번째 ${color}',
         },
+        red: Outputs.red,
+        blue: Outputs.blue,
+        getLeftAndWest: Outputs.getLeftAndWest,
+        getRightAndEast: Outputs.getRightAndEast,
       },
     },
     {
@@ -263,6 +259,12 @@ const triggerSet: TriggerSet<Data> = {
       response: Responses.bigAoe(),
     },
     {
+      id: 'FRU P2 Icicle Impact',
+      type: 'StartsUsing',
+      netRegex: { id: '9D06', source: 'Usurper of Frost', capture: false },
+      suppressSeconds: 1,
+    },
+    {
       id: 'FRU P2 Axe Kick',
       type: 'StartsUsing',
       netRegex: { id: '9D0A', source: 'Oracle\'s Reflection', capture: false },
@@ -273,6 +275,16 @@ const triggerSet: TriggerSet<Data> = {
       type: 'StartsUsing',
       netRegex: { id: '9D0B', source: 'Oracle\'s Reflection', capture: false },
       response: Responses.getIn(),
+      /*
+      alertText: (data, _matches, output) => {
+        if (data.p2Frosted && data.role !== 'tank' && !data.CanFeint())
+          return;
+        return output.in!();
+      },
+      outputStrings: {
+        in: Outputs.in,
+      },
+      */
     },
     {
       id: 'FRU P2 Flower Target',
@@ -281,35 +293,85 @@ const triggerSet: TriggerSet<Data> = {
       durationSeconds: 5,
       suppressSeconds: 1,
       infoText: (data, matches, output) => {
+        let cardinal = false;
+        const actors = Object.values(data.actors);
+        if (actors.length >= 3 && actors[1] !== undefined) {
+          data.p2Knockback = Directions.hdgTo8DirNum(parseFloat(actors[1].heading));
+          if (data.p2Knockback % 2 === 0)
+            cardinal = true;
+        }
+        const [rf, rb] = cardinal ? ['intercard', 'cardinal'] : ['cardinal', 'intercard'];
+
         const target = data.party.member(matches.target);
         if (data.role === 'dps') {
           if (target.role === 'dps')
-            return output.flower!();
-          return output.bait!();
+            return output.flower!({ ind: output[rf]!() });
+          return output.bait!({ ind: output[rb]!() });
         }
         if (target.role === 'dps')
-          return output.bait!();
-        return output.flower!();
+          return output.bait!({ ind: output[rb]!() });
+        return output.flower!({ ind: output[rf]!() });
       },
+      run: (data, _matches) => data.actors = {},
       outputStrings: {
         flower: {
-          en: 'Flower on YOU',
-          ko: '내게 얼음꽃 (먼쪽)',
+          en: '${ind} => Bait Flower',
+          ko: '${ind} 🔜 얼음꽃 설치',
         },
         bait: {
-          en: 'Bait cone',
-          ko: '원뿔 유도 (가까운쪽, 유도하고 움직이지마)',
+          en: '${ind} => Bait Cone',
+          ko: '${ind} 🔜 원뿔 유도',
+        },
+        cardinal: {
+          en: 'cardinal',
+          ko: '십자로',
+        },
+        intercard: {
+          en: 'intercard',
+          ko: '비스듬히',
         },
       },
     },
     {
       id: 'FRU P2 DD Knockback',
       type: 'StartsUsing',
-      netRegex: { id: '9D10', source: 'Oracle\'s Reflection', capture: false },
-      // 9D10 Sinbound Holy
-      delaySeconds: 1,
-      durationSeconds: 3,
-      response: Responses.knockback(),
+      netRegex: { id: ['9D0A', '9D0B'], source: 'Oracle\'s Reflection', capture: false },
+      condition: (data) => !data.p2Frosted,
+      delaySeconds: 9,
+      durationSeconds: 5,
+      alertText: (data, _matches, output) => {
+        if (data.p2Knockback === undefined)
+          return output.knockback!({ dir1: output.unknown!(), dir2: output.unknown!() });
+        let values = [data.p2Knockback, (data.p2Knockback + 4) % 8];
+        if (values[0]! > values[1]!)
+          values = values.reverse();
+        const dir1 = AutumnDirections.outputFromMarker8Num(values[0]!);
+        const dir2 = AutumnDirections.outputFromMarker8Num(values[1]!);
+        if (data.options.OnlyAutumn) {
+          // 어듬이는 MT팀이예여
+          const autumnDir: MarkerOutput8[] = ['markerN', 'markerNE', 'markerW', 'markerNW'];
+          const dir = autumnDir.includes(dir1) ? dir1 : dir2;
+          return output.autumn!({
+            dir: output[dir]!(),
+            dir1: output[dir1]!(),
+            dir2: output[dir2]!(),
+          });
+        }
+        return output.knockback!({ dir1: output[dir1]!(), dir2: output[dir2]!() });
+      },
+      run: (data, _matches) => data.p2Knockback = undefined,
+      outputStrings: {
+        knockback: {
+          en: 'Knockback ${dir1} / ${dir2}',
+          ko: '넉백 ${dir1}${dir2}',
+        },
+        autumn: {
+          en: 'Knockback ${dir} (${dir1} / ${dir2})',
+          ko: '넉백 ${dir} (${dir1}${dir2})',
+        },
+        unknown: Outputs.unknown,
+        ...AutumnDirections.outputStringsMarker8,
+      },
     },
     {
       id: 'FRU P2 Twin Stillness',
@@ -323,6 +385,54 @@ const triggerSet: TriggerSet<Data> = {
       netRegex: { source: 'Oracle\'s Reflection', id: '9D02', capture: false },
       response: Responses.getFrontThenBack('alert'),
     },
+    {
+      // 이거 대체할 수 있는 방법이 있을까? p2Frosted 변수를 안쓰는 쪽으로
+      id: 'FRU P2 Frosted',
+      type: 'Ability',
+      netRegex: { id: '9CF8', source: 'Oracle\'s Reflection', capture: false },
+      run: (data) => data.p2Frosted = true,
+    },
+    {
+      id: 'FRU P2 Hallowed Ray',
+      type: 'StartsUsing',
+      netRegex: { id: '9D12', capture: false },
+      response: Responses.aoe(),
+    },
+    {
+      id: 'FRU P2 Mirror Mirror',
+      type: 'StartsUsing',
+      netRegex: { id: '9CF3', capture: false },
+      infoText: (data, _matches, output) => {
+        if (data.role === 'tank' || data.CanFeint())
+          return output.oppose!();
+        return output.mirror!();
+      },
+      outputStrings: {
+        oppose: {
+          en: 'Opposition White Mirror',
+          ko: '흰 거울 반대쪽으로',
+        },
+        mirror: {
+          en: 'Go White Mirror',
+          ko: '흰 거울 쪽으로',
+        },
+      },
+    },
+    {
+      id: 'FRU P2 Banish III Pair',
+      type: 'StartsUsing',
+      netRegex: { id: '9D1C', capture: false },
+      response: Responses.stackPartner('info'),
+    },
+    {
+      id: 'FRU P2 Banish III Spread',
+      type: 'StartsUsing',
+      netRegex: { id: '9D1D', capture: false },
+      response: Responses.spread(),
+    },
+    // //////////////// PHASE 3 //////////////////
+    // //////////////// PHASE 4 //////////////////
+    // //////////////// PHASE 5 //////////////////
   ],
   timelineReplace: [
     {
@@ -346,4 +456,4 @@ const triggerSet: TriggerSet<Data> = {
 
 export default triggerSet;
 
-// FRU / FUTURES REWRITTEN / 絶エデン / 絶もうひとつの未来
+// FRU / FUTURES REWRITTEN (Ultimate) / 絶エデン / 絶もうひとつの未来

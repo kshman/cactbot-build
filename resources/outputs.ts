@@ -254,7 +254,7 @@ export default {
     fr: 'Packez-vous avec votre partenaire',
     ja: 'ペア',
     cn: '与搭档集合',
-    ko: '둘이 함께',
+    ko: '둘이 페어',
   },
   stackMiddle: {
     en: 'Stack in middle',
@@ -1090,11 +1090,6 @@ export default {
     en: 'Center',
     ja: '真ん中',
     ko: '한가운데',
-  },
-  pair: {
-    en: 'Pair',
-    ja: 'ペア',
-    ko: '둘이 페어',
   },
   // 화살표
   arrowN: {
