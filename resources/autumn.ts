@@ -75,7 +75,7 @@ const outputStringsMarkerIntercard: OutputStrings = {
   markerNW: Outputs.cnum4,
   unknown: Outputs.unknown,
 };
-const outputFromMarker8Num = (dirNum: number): MarkerOutput8 => {
+const outputFromMarker8NumFunc = (dirNum: number): MarkerOutput8 => {
   return outputMarker8[dirNum] ?? 'unknown';
 };
 
@@ -174,7 +174,7 @@ const outputStringsDirToArrowIntercard: OutputStrings = {
   unknown: Outputs.unknown,
 };
 
-const outputFromArrow8Num = (dirNum: number): ArrowOutput8 => {
+const outputFromArrow8NumFunc = (dirNum: number): ArrowOutput8 => {
   return outputArrow8[dirNum] ?? 'unknown';
 };
 
@@ -186,10 +186,10 @@ export const AutumnDirections = {
   outputStringsMarker8: outputStringsMarker8,
   outputStringsMarkerCardinal: outputStringsMarkerCardinal,
   outputStringsMarkerIntercard: outputStringsMarkerIntercard,
-  outputFromMarker8Num: outputFromMarker8Num,
+  outputFromMarker8Num: outputFromMarker8NumFunc,
   xyToMarker8Output: (x: number, y: number, cx: number, cy: number): MarkerOutput8 => {
     const n = Directions.xyTo8DirNum(x, y, cx, cy);
-    return outputFromMarker8Num(n);
+    return outputFromMarker8NumFunc(n);
   },
 
   outputArrow8: outputArrow8,
@@ -201,10 +201,10 @@ export const AutumnDirections = {
   outputStringsDirToArrow8: outputStringsDirToArrow8,
   outputStringsDirToArrowCardinal: outputStringsDirToArrowCardinal,
   outputStringsDirToArrowIntercard: outputStringsDirToArrowIntercard,
-  outputFromArrow8Num: outputFromArrow8Num,
+  outputFromArrow8Num: outputFromArrow8NumFunc,
   xyToArrow8Output: (x: number, y: number, cx: number, cy: number): ArrowOutput8 => {
     const n = Directions.xyTo8DirNum(x, y, cx, cy);
-    return outputFromArrow8Num(n);
+    return outputFromArrow8NumFunc(n);
   },
 };
 

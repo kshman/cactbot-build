@@ -1204,4 +1204,33 @@ export default {
     ja: 'Ⓓ',
     ko: 'Ⓓ',
   },
+  // 색깔
+  red: {
+    en: 'Red',
+    ko: '🔴빨강',
+  },
+  blue: {
+    en: 'Blue',
+    ko: '🔵파랑',
+  },
+  yellow: {
+    en: 'Yellow',
+    ko: '🟡노랑',
+  },
+  green: {
+    en: 'Green',
+    ko: '🟢초록',
+  },
+  purple: {
+    en: 'Purple',
+    ko: '🟣보라',
+  },
+  white: {
+    en: 'White',
+    ko: '⚪하양',
+  },
+  black: {
+    en: 'Black',
+    ko: '⚫검정',
+  },
 } as const;

@@ -1,7 +1,10 @@
+import { AutumnDirections, MarkerOutput8 } from '../../../../../resources/autumn';
 import Outputs from '../../../../../resources/outputs';
 import { Responses } from '../../../../../resources/responses';
+import { Directions } from '../../../../../resources/util';
 import ZoneId from '../../../../../resources/zone_id';
 import { RaidbossData } from '../../../../../types/data';
+import { NetMatches } from '../../../../../types/net_matches';
 import { TriggerSet } from '../../../../../types/trigger';
 
 type Phase = 'p1' | 'p2';
@@ -9,11 +12,11 @@ type RedBlue = 'red' | 'blue';
 
 export interface Data extends RaidbossData {
   phase: Phase;
-  fateColor?: RedBlue;
-  fateBurnished?: boolean;
-  fateFallIndex: number;
-  fateFallMyIndex: number;
-  fateFallColors: RedBlue[];
+  actors: { [id: string]: NetMatches['ActorSetPos'] };
+  safeMarkers: MarkerOutput8[];
+  p1Color?: RedBlue;
+  p1Falled?: boolean;
+  p1FallColors: RedBlue[];
 }
 
 const triggerSet: TriggerSet<Data> = {
@@ -22,14 +25,14 @@ const triggerSet: TriggerSet<Data> = {
   timelineFile: 'futures_rewritten.txt',
   initData: () => ({
     phase: 'p1',
-    fateFallIndex: 0,
-    fateFallMyIndex: 0,
-    fateFallColors: [],
+    actors: {},
+    safeMarkers: [],
+    p1FallColors: [],
   }),
   timelineTriggers: [],
   triggers: [
     {
-      id: 'Flu Phase Tracker',
+      id: 'FRU Phase Tracker',
       type: 'StartsUsing',
       netRegex: { id: ['9CD0', '9CD4', '9CFF'], capture: true },
       run: (data, matches) => {
@@ -42,118 +45,160 @@ const triggerSet: TriggerSet<Data> = {
             data.phase = 'p2';
             break;
         }
+        data.actors = {};
+        data.safeMarkers = [...AutumnDirections.outputMarker8];
       },
+    },
+    {
+      id: 'FRU Actor Collector',
+      type: 'ActorSetPos',
+      netRegex: { id: '4[0-9A-F]{7}', capture: true },
+      run: (data, matches) => data.actors[matches.id] = matches,
     },
     // //////////////// PHASE 1 //////////////////
     {
-      id: 'Flu P1 Cyclonic Break',
+      id: 'FRU P1 Cyclonic Break Fire',
       type: 'StartsUsing',
-      netRegex: { id: ['9CD0', '9CD4'], source: 'Fatebreaker' },
-      infoText: (_data, matches, output) => {
-        if (matches.id === '9CD0')
-          return output.pair!();
-        return output.spread!();
-      },
+      netRegex: { id: ['9CD0', '9D89'], capture: false },
+      infoText: (_data, _matches, output) => output.pair!(),
       outputStrings: {
         pair: Outputs.pair,
+      },
+    },
+    {
+      id: 'FRU P1 Cyclonic Break Lightning',
+      type: 'StartsUsing',
+      netRegex: { id: ['9CD4', '9D8A'], capture: false },
+      infoText: (_data, _matches, output) => output.spread!(),
+      outputStrings: {
         spread: Outputs.spread,
       },
     },
     {
-      id: 'Flu P1 Powder Mark Trail',
+      id: 'FRU P1 Powder Mark Trail',
       type: 'StartsUsing',
       netRegex: { id: '9CE8', source: 'Fatebreaker' },
       response: Responses.tankBusterSwap(),
     },
     {
-      id: 'Flu P1 Utopian Sky',
+      id: 'FRU P1 Utopian Sky',
       type: 'StartsUsing',
       netRegex: { id: ['9CDA', '9CDB'], source: 'Fatebreaker' },
-      durationSeconds: 5,
       infoText: (data, matches, output) => {
         if (matches.id === '9CDA') {
-          data.fateColor = 'red';
+          data.p1Color = 'red';
           return output.stack!();
         }
-        data.fateColor = 'blue';
+        data.p1Color = 'blue';
         return output.spread!();
       },
       outputStrings: {
         stack: {
-          en: 'Stack later',
-          ko: '나중에 🔴뭉쳐요',
+          en: '(Stack later)',
+          ko: '(나중에 🔴뭉쳐요)',
         },
         spread: {
-          en: 'Spread later',
-          ko: '나중에 🔵흩어져요',
+          en: '(Spread later)',
+          ko: '(나중에 🔵흩어져요)',
         },
       },
     },
     {
-      id: 'Flu P1 Blasting Zone',
-      type: 'StartsUsing',
-      netRegex: { id: '9CDE', source: 'Fatebreaker\'s Image', capture: false },
-      durationSeconds: 5,
-      suppressSeconds: 1,
-      infoText: (data, _matches, output) => {
-        if (data.fateColor === 'red')
-          return output.stack!();
-        return output.spread!();
+      id: 'FRU P1 Concealed Safe Zone',
+      type: 'ActorControlExtra',
+      netRegex: { category: '003F', param1: '4', capture: true },
+      condition: (data) => data.p1Color !== undefined,
+      durationSeconds: 7,
+      infoText: (data, matches, output) => {
+        const image = data.actors[matches.id];
+        if (image === undefined)
+          return;
+        const dir1 = Directions.hdgTo8DirNum(parseFloat(image.heading));
+        const dir2 = (dir1 + 4) % 8;
+        data.safeMarkers = data.safeMarkers.filter((dir) =>
+          dir !== AutumnDirections.outputFromMarker8Num(dir1) &&
+          dir !== AutumnDirections.outputFromMarker8Num(dir2)
+        );
+        if (data.safeMarkers.length !== 2)
+          return;
+        const [m1, m2] = data.safeMarkers;
+        if (m1 === undefined || m2 === undefined)
+          return;
+        return output.text!({
+          dir1: output[m1]!(),
+          dir2: output[m2]!(),
+          action: data.p1Color === 'red' ? output.stack!() : output.spread!(),
+        });
       },
       outputStrings: {
+        text: {
+          en: '${dir1} / ${dir2} => ${action}',
+          ko: '${dir1}${dir2} 🔜 ${action}',
+        },
         stack: Outputs.stacks,
         spread: Outputs.spread,
+        ...AutumnDirections.outputStringsMarker8,
       },
     },
     {
-      id: 'Flu P1 Image\'s Cyclonic Break',
+      id: 'FRU P1 Turn of the Heavens Fire',
       type: 'StartsUsing',
-      netRegex: { id: ['9D89', '9D8A'], source: 'Fatebreaker\'s Image' },
-      delaySeconds: 2,
-      durationSeconds: 5,
-      infoText: (_data, matches, output) => {
-        if (matches.id === '9D89')
-          return output.pair!();
-        return output.spread!();
-      },
+      netRegex: { id: '9CD6', source: 'Fatebreaker\'s Image', capture: false },
+      durationSeconds: 8,
+      infoText: (_data, _matches, output) => output.blueSafe!(),
       outputStrings: {
-        pair: {
-          en: 'Stack',
-          ko: '자기 자리로 🔜 🔴페어',
-        },
-        spread: {
-          en: 'Spread',
-          ko: '자기 자리로 🔜 🔵흩어져요',
+        blueSafe: {
+          en: 'Blue Safe',
+          ko: '🔵파랑 안전',
         },
       },
     },
     {
-      id: 'Flu P1 Image\'s Blastburn',
+      id: 'FRU P1 Turn of the Heavens Lightning',
       type: 'StartsUsing',
-      netRegex: { id: '9CE2', source: 'Fatebreaker\'s Image' },
+      netRegex: { id: '9CD7', source: 'Fatebreaker\'s Image', capture: false },
+      durationSeconds: 8,
+      infoText: (_data, _matches, output) => output.redSafe!(),
+      outputStrings: {
+        redSafe: {
+          en: 'Red Safe',
+          ko: '🔴빨강 안전',
+        },
+      },
+    },
+    {
+      id: 'FRU P1 Blastburn',
+      type: 'StartsUsing',
+      netRegex: { id: ['9CC2', '9CE2'] },
       delaySeconds: (_data, matches) => parseFloat(matches.castTime) - 2,
       durationSeconds: 3,
       response: Responses.knockback(),
     },
     {
-      id: 'Flu P1 Burnished Glory',
+      id: 'FRU P1 Burnout',
+      type: 'StartsUsing',
+      netRegex: { id: ['9CC6', '9CE4'] },
+      delaySeconds: (_data, matches) => parseFloat(matches.castTime) - 2.5,
+      durationSeconds: 3,
+      response: Responses.getOut(),
+    },
+    {
+      id: 'FRU P1 Burnished Glory',
       type: 'StartsUsing',
       netRegex: { id: '9CEA', source: 'Fatebreaker', capture: false },
       durationSeconds: 5,
       response: Responses.bleedAoe(),
     },
     {
-      id: 'Flu P1 Fall of Faith',
+      id: 'FRU P1 Fall of Faith',
       type: 'StartsUsing',
       netRegex: { id: '9CEA', source: 'Fatebreaker', capture: false },
       delaySeconds: 6,
       infoText: (data, _matches, output) => {
-        if (data.fateBurnished)
+        if (data.p1Falled)
           return;
-        data.fateBurnished = true;
-        data.fateFallIndex = 0;
-        data.fateFallMyIndex = 0;
-        data.fateFallColors = [];
+        data.p1Falled = true;
+        data.p1FallColors = [];
         return output.text!();
       },
       outputStrings: {
@@ -164,123 +209,73 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: 'Flu P1 Fall Tether',
+      id: 'FRU P1 Fall of Faith Collector',
       type: 'Tether',
       netRegex: { id: ['00F9', '011F'] },
-      condition: (data, _matches) => data.phase === 'p1' && data.fateBurnished,
+      condition: (data, _matches) => data.phase === 'p1' && data.p1Falled,
       durationSeconds: 4,
-      response: (data, matches, output) => {
-        // cactbot-builtin-response
-        output.responseOutputStrings = {
-          text: {
-            en: '${num} ${color}',
-            ko: '내가 ${num}번째 ${color}',
-          },
-          red: {
-            en: 'Red',
-            ko: '🔴빨강',
-          },
-          blue: {
-            en: 'Blue',
-            ko: '🔵파랑',
-          },
-          move: {
-            en: 'Go position',
-            ko: '맡은 위치로!',
-          },
-        };
+      alertText: (data, matches, output) => {
         const color = matches.id === '00F9' ? 'red' : 'blue';
-        data.fateFallColors[data.fateFallIndex] = color;
-        data.fateFallIndex++;
-        if (matches.target === data.me) {
-          data.fateFallMyIndex = data.fateFallIndex;
-          const colorName = color === 'red' ? output.red!() : output.blue!();
-          return { alertText: output.text!({ num: data.fateFallIndex, color: colorName }) };
-        }
-        if (data.fateFallMyIndex === 0 && data.fateFallIndex === 4)
-          return { infoText: output.move!() };
+        data.p1FallColors.push(color);
+        if (matches.target === data.me)
+          return output.mine!({ num: data.p1FallColors.length, color: output[color]!() });
+      },
+      outputStrings: {
+        red: Outputs.red,
+        blue: Outputs.blue,
+        mine: {
+          en: '${num} ${color}',
+          ko: '내가 ${num}번째 ${color}',
+        },
       },
     },
     {
-      id: 'Flu P1 Fall of Faith Alert',
+      id: 'FRU P1 Fall of Faith Order',
       type: 'Ability',
       netRegex: { id: ['9CC9', '9CCC'], source: 'Fatebreaker', capture: false },
-      condition: (data) => data.fateFallColors.length === 4,
+      condition: (data) => data.p1FallColors.length === 4,
       durationSeconds: 10,
       infoText: (data, _matches, output) => {
-        let colors = data.fateFallColors.map((c) => c === 'red' ? output.red!() : output.blue!());
-        if (data.options.OnlyAutumn) {
-          const aclrs = [];
-          if (data.fateFallMyIndex === 2 || data.fateFallMyIndex === 4) {
-            aclrs.push(data.fateFallColors[1]);
-            aclrs.push(data.fateFallColors[3]);
-          } else {
-            aclrs.push(data.fateFallColors[0]);
-            aclrs.push(data.fateFallColors[2]);
-          }
-          colors = aclrs.map((c) => c === 'red' ? output.red!() : output.blue!());
-        }
-        return output.text!({ res: colors.join(output.next!()) });
+        const colors = data.p1FallColors.map((c) => output[c]!());
+        return output.res!({ res: colors.join(output.next!()) });
       },
       outputStrings: {
+        red: Outputs.red,
+        blue: Outputs.blue,
         next: Outputs.next,
-        text: {
+        res: {
           en: '${res}',
           ko: '${res}',
         },
-        red: {
-          en: 'Red',
-          ko: '🔴빨강',
-        },
-        blue: {
-          en: 'Blue',
-          ko: '🔵파랑',
-        },
       },
-    },
-    {
-      id: 'Flu P1 Blastburn',
-      type: 'StartsUsing',
-      netRegex: { id: '9CC2', source: 'Fatebreaker' },
-      delaySeconds: (_data, matches) => parseFloat(matches.castTime) - 2,
-      durationSeconds: 3,
-      response: Responses.knockback(),
-    },
-    {
-      id: 'Flu P1 Burnout',
-      type: 'StartsUsing',
-      netRegex: { id: '9CC6', source: 'Fatebreaker' },
-      delaySeconds: (_data, matches) => parseFloat(matches.castTime) - 2.5,
-      durationSeconds: 3,
-      response: Responses.getOut(),
     },
     // //////////////// PHASE 2 //////////////////
     {
-      id: 'Flu P2 Quadruple Slap',
+      id: 'FRU P2 Quadruple Slap',
       type: 'StartsUsing',
       netRegex: { id: '9CFF', source: 'Usurper of Frost' },
       response: Responses.tankBusterSwap(),
     },
     {
-      id: 'Flu P2 Diamond Dust',
+      id: 'FRU P2 Diamond Dust',
       type: 'StartsUsing',
       netRegex: { id: '9D05', source: 'Usurper of Frost', capture: false },
       response: Responses.bigAoe(),
     },
     {
-      id: 'Flu P2 Axe Kick',
+      id: 'FRU P2 Axe Kick',
       type: 'StartsUsing',
       netRegex: { id: '9D0A', source: 'Oracle\'s Reflection', capture: false },
       response: Responses.getOut(),
     },
     {
-      id: 'Flu P2 Scythe Kick',
+      id: 'FRU P2 Scythe Kick',
       type: 'StartsUsing',
       netRegex: { id: '9D0B', source: 'Oracle\'s Reflection', capture: false },
       response: Responses.getIn(),
     },
     {
-      id: 'Flu P2 Flower Target',
+      id: 'FRU P2 Flower Target',
       type: 'HeadMarker',
       netRegex: { id: '0159' },
       durationSeconds: 5,
@@ -303,18 +298,30 @@ const triggerSet: TriggerSet<Data> = {
         },
         bait: {
           en: 'Bait cone',
-          ko: '원뿔 유도 (가까운쪽)',
+          ko: '원뿔 유도 (가까운쪽, 유도하고 움직이지마)',
         },
       },
     },
     {
-      id: 'Flu P2 DD Knockback',
+      id: 'FRU P2 DD Knockback',
       type: 'StartsUsing',
       netRegex: { id: '9D10', source: 'Oracle\'s Reflection', capture: false },
       // 9D10 Sinbound Holy
       delaySeconds: 1,
       durationSeconds: 3,
       response: Responses.knockback(),
+    },
+    {
+      id: 'FRU P2 Twin Stillness',
+      type: 'StartsUsing',
+      netRegex: { source: 'Oracle\'s Reflection', id: '9D01', capture: false },
+      response: Responses.getBackThenFront('alert'),
+    },
+    {
+      id: 'FRU P2 Twin Silence',
+      type: 'StartsUsing',
+      netRegex: { source: 'Oracle\'s Reflection', id: '9D02', capture: false },
+      response: Responses.getFrontThenBack('alert'),
     },
   ],
   timelineReplace: [
@@ -339,4 +346,4 @@ const triggerSet: TriggerSet<Data> = {
 
 export default triggerSet;
 
-// FLU / FUTURES REWRITTEN / 絶エデン / 絶もうひとつの未来
+// FRU / FUTURES REWRITTEN / 絶エデン / 絶もうひとつの未来
