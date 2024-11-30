@@ -254,7 +254,7 @@ export default {
     fr: 'Packez-vous avec votre partenaire',
     ja: 'ペア',
     cn: '与搭档集合',
-    ko: '둘이 함께',
+    ko: '둘이 페어',
   },
   stackMiddle: {
     en: 'Stack in middle',
@@ -1198,5 +1198,34 @@ export default {
     en: 'Ⓓ',
     ja: 'Ⓓ',
     ko: 'Ⓓ',
+  },
+  // 색깔
+  red: {
+    en: 'Red',
+    ko: '🔴빨강',
+  },
+  blue: {
+    en: 'Blue',
+    ko: '🔵파랑',
+  },
+  yellow: {
+    en: 'Yellow',
+    ko: '🟡노랑',
+  },
+  green: {
+    en: 'Green',
+    ko: '🟢초록',
+  },
+  purple: {
+    en: 'Purple',
+    ko: '🟣보라',
+  },
+  white: {
+    en: 'White',
+    ko: '⚪하양',
+  },
+  black: {
+    en: 'Black',
+    ko: '⚫검정',
   },
 } as const;
