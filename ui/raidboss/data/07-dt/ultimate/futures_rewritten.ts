@@ -342,11 +342,11 @@ const triggerSet: TriggerSet<Data> = {
     {
       id: 'FRU P2 DD Knockback',
       type: 'StartsUsing',
-      netRegex: { id: '9D0E', source: 'Oracle\'s Reflection', capture: false },
-      // 9D0E the House of Light
-      delaySeconds: 8,
-      durationSeconds: 5,
-      alertText: (data, _matches, output) => {
+      netRegex: { id: '9D05', source: 'Usurper of Frost', capture: false },
+      // 9D0E Diamond Dust
+      delaySeconds: 14,
+      durationSeconds: 7,
+      infoText: (data, _matches, output) => {
         if (data.p2Knockback === undefined)
           return output.knockback!({ dir1: output.unknown!(), dir2: output.unknown!() });
         let values = [data.p2Knockback, (data.p2Knockback + 4) % 8];
