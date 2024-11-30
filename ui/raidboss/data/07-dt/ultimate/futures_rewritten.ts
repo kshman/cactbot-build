@@ -14,13 +14,13 @@ type RedBlue = 'red' | 'blue';
 export interface Data extends RaidbossData {
   phase: Phase;
   actors: { [id: string]: NetMatches['ActorSetPos'] };
-  safeMarkers: MarkerOutput8[];
-  p1Color?: RedBlue;
+  p1SafeMarkers: MarkerOutput8[];
+  p1UtopianColor?: RedBlue;
   p1Falled?: boolean;
   p1FallColors: RedBlue[];
   p1FallRoles: Role[];
+  p1FallSide?: 'left' | 'right';
   p2Knockback?: number;
-  p2Frosted?: boolean;
 }
 
 const triggerSet: TriggerSet<Data> = {
@@ -30,7 +30,7 @@ const triggerSet: TriggerSet<Data> = {
   initData: () => ({
     phase: 'p1',
     actors: {},
-    safeMarkers: [],
+    p1SafeMarkers: [...AutumnDirections.outputMarker8],
     p1FallColors: [],
     p1FallRoles: [],
   }),
@@ -51,7 +51,6 @@ const triggerSet: TriggerSet<Data> = {
             break;
         }
         data.actors = {};
-        data.safeMarkers = [...AutumnDirections.outputMarker8];
       },
     },
     {
@@ -91,33 +90,29 @@ const triggerSet: TriggerSet<Data> = {
       id: 'FRU P1 Utopian Sky Collector',
       type: 'StartsUsing',
       netRegex: { id: ['9CDA', '9CDB'], source: 'Fatebreaker' },
-      run: (data, matches) => data.p1Color = matches.id === '9CDA' ? 'red' : 'blue',
+      run: (data, matches) => data.p1UtopianColor = matches.id === '9CDA' ? 'red' : 'blue',
     },
     {
       id: 'FRU P1 Concealed Safe Zone',
       type: 'ActorControlExtra',
       netRegex: { category: '003F', param1: '4', capture: true },
-      condition: (data) => data.p1Color !== undefined,
+      condition: (data) => data.phase === 'p1' && data.p1UtopianColor !== undefined,
       durationSeconds: 7,
       infoText: (data, matches, output) => {
         const image = data.actors[matches.id];
         if (image === undefined)
           return;
-        const dir1 = Directions.hdgTo8DirNum(parseFloat(image.heading));
-        const dir2 = (dir1 + 4) % 8;
-        data.safeMarkers = data.safeMarkers.filter((dir) =>
-          dir !== AutumnDirections.outputFromMarker8Num(dir1) &&
-          dir !== AutumnDirections.outputFromMarker8Num(dir2)
-        );
-        if (data.safeMarkers.length !== 2)
+        const dir = Directions.hdgTo8DirNum(parseFloat(image.heading));
+        const dir1 = AutumnDirections.outputFromMarker8Num(dir);
+        const dir2 = AutumnDirections.outputFromMarker8Num((dir + 4) % 8);
+        data.p1SafeMarkers = data.p1SafeMarkers.filter((dir) => dir !== dir1 && dir !== dir2);
+        if (data.p1SafeMarkers.length !== 2)
           return;
-        const [m1, m2] = data.safeMarkers;
-        if (m1 === undefined || m2 === undefined)
-          return;
+        const [m1, m2] = data.p1SafeMarkers;
         return output.text!({
-          dir1: output[m1]!(),
-          dir2: output[m2]!(),
-          action: data.p1Color === 'red' ? output.stack!() : output.spread!(),
+          dir1: output[m1!]!(),
+          dir2: output[m2!]!(),
+          action: data.p1UtopianColor === 'red' ? output.stack!() : output.spread!(),
         });
       },
       outputStrings: {
@@ -131,25 +126,20 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: 'FRU P1 Turn of the Heavens Fire',
+      id: 'FRU P1 Turn of the Heavens',
       type: 'StartsUsing',
-      netRegex: { id: '9CD6', source: 'Fatebreaker\'s Image', capture: false },
+      netRegex: { id: ['9CD6', '9CD7'], source: 'Fatebreaker\'s Image' },
       durationSeconds: 11,
-      infoText: (_data, _matches, output) => output.blueSafe!(),
+      infoText: (_data, matches, output) => {
+        if (matches.id === '9CD6')
+          return output.blueSafe!();
+        return output.redSafe!();
+      },
       outputStrings: {
         blueSafe: {
           en: 'Blue Safe',
           ko: '🔵파랑 안전',
         },
-      },
-    },
-    {
-      id: 'FRU P1 Turn of the Heavens Lightning',
-      type: 'StartsUsing',
-      netRegex: { id: '9CD7', source: 'Fatebreaker\'s Image', capture: false },
-      durationSeconds: 11,
-      infoText: (_data, _matches, output) => output.redSafe!(),
-      outputStrings: {
         redSafe: {
           en: 'Red Safe',
           ko: '🔴빨강 안전',
@@ -157,20 +147,30 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: 'FRU P1 Blastburn',
+      id: 'FRU P1 Burnt Strike Blastburn',
       type: 'StartsUsing',
-      netRegex: { id: ['9CC2', '9CE2'] },
-      delaySeconds: (_data, matches) => parseFloat(matches.castTime) - 3,
-      durationSeconds: 3,
-      response: Responses.knockback(),
+      netRegex: { id: ['9CC1', '9CE1'], capture: false },
+      durationSeconds: 6,
+      alertText: (_data, _matches, output) => output.text!(),
+      outputStrings: {
+        text: {
+          en: 'Line Cleave => Knockback',
+          ko: '직선 장판 🔜 넉백',
+        },
+      },
     },
     {
-      id: 'FRU P1 Burnout',
+      id: 'FRU P1 Burnt Strike Burnout',
       type: 'StartsUsing',
-      netRegex: { id: ['9CC6', '9CE4'] },
-      delaySeconds: (_data, matches) => parseFloat(matches.castTime) - 3.5,
-      durationSeconds: 3,
-      response: Responses.getOut(),
+      netRegex: { id: ['9CC5', '9CE3'], capture: false },
+      durationSeconds: 6,
+      alertText: (_data, _matches, output) => output.text!(),
+      outputStrings: {
+        text: {
+          en: 'Line Cleave => Out',
+          ko: '직선 장판 🔜 바깥으로',
+        },
+      },
     },
     {
       id: 'FRU P1 Burnished Glory',
@@ -199,9 +199,11 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (data, matches, output) => {
         const color = matches.id === '00F9' ? 'red' : 'blue';
         data.p1FallColors.push(color);
+        const index = data.p1FallColors.length;
         if (matches.target === data.me) {
           data.p1FallRoles = [];
-          return output.mine!({ num: data.p1FallColors.length, color: output[color]!() });
+          data.p1FallSide = index % 2 === 0 ? 'right' : 'left';
+          return output.mine!({ num: index, color: output[color]!() });
         }
 
         if (data.options.OnlyAutumn) {
@@ -210,7 +212,12 @@ const triggerSet: TriggerSet<Data> = {
           data.p1FallRoles.push(member.role ?? 'none');
           if (data.p1FallRoles.length === 4) {
             const healers = data.p1FallRoles.filter((r) => r === 'healer').length;
-            return healers === 0 ? output.getRightAndEast!() : output.getLeftAndWest!();
+            if (healers === 0) {
+              data.p1FallSide = 'right';
+              return output.getRightAndEast!();
+            }
+            data.p1FallSide = 'left';
+            return output.getLeftAndWest!();
           }
         }
       },
@@ -232,7 +239,13 @@ const triggerSet: TriggerSet<Data> = {
       condition: (data) => data.p1FallColors.length === 4,
       durationSeconds: 10,
       infoText: (data, _matches, output) => {
-        const colors = data.p1FallColors.map((c) => output[c]!());
+        let colors;
+        if (data.p1FallSide === undefined)
+          colors = data.p1FallColors.map((c) => output[c]!());
+        else if (data.p1FallSide === 'left')
+          colors = [data.p1FallColors[0], data.p1FallColors[2]].map((c) => output[c!]!());
+        else
+          colors = [data.p1FallColors[1], data.p1FallColors[3]].map((c) => output[c!]!());
         return output.res!({ res: colors.join(output.next!()) });
       },
       outputStrings: {
@@ -273,18 +286,12 @@ const triggerSet: TriggerSet<Data> = {
     {
       id: 'FRU P2 Scythe Kick',
       type: 'StartsUsing',
-      netRegex: { id: '9D0B', source: 'Oracle\'s Reflection', capture: false },
+      netRegex: {
+        id: '9D0B',
+        source: ['Oracle\'s Reflection', 'Usurper of Frost'],
+        capture: false,
+      },
       response: Responses.getIn(),
-      /*
-      alertText: (data, _matches, output) => {
-        if (data.p2Frosted && data.role !== 'tank' && !data.CanFeint())
-          return;
-        return output.in!();
-      },
-      outputStrings: {
-        in: Outputs.in,
-      },
-      */
     },
     {
       id: 'FRU P2 Flower Target',
@@ -335,9 +342,9 @@ const triggerSet: TriggerSet<Data> = {
     {
       id: 'FRU P2 DD Knockback',
       type: 'StartsUsing',
-      netRegex: { id: ['9D0A', '9D0B'], source: 'Oracle\'s Reflection', capture: false },
-      condition: (data) => !data.p2Frosted,
-      delaySeconds: 9,
+      netRegex: { id: '9D0E', source: 'Oracle\'s Reflection', capture: false },
+      // 9D0E the House of Light
+      delaySeconds: 8,
       durationSeconds: 5,
       alertText: (data, _matches, output) => {
         if (data.p2Knockback === undefined)
@@ -347,6 +354,7 @@ const triggerSet: TriggerSet<Data> = {
           values = values.reverse();
         const dir1 = AutumnDirections.outputFromMarker8Num(values[0]!);
         const dir2 = AutumnDirections.outputFromMarker8Num(values[1]!);
+
         if (data.options.OnlyAutumn) {
           // 어듬이는 MT팀이예여
           const autumnDir: MarkerOutput8[] = ['markerN', 'markerNE', 'markerW', 'markerNW'];
@@ -384,13 +392,6 @@ const triggerSet: TriggerSet<Data> = {
       type: 'StartsUsing',
       netRegex: { source: 'Oracle\'s Reflection', id: '9D02', capture: false },
       response: Responses.getFrontThenBack('alert'),
-    },
-    {
-      // 이거 대체할 수 있는 방법이 있을까? p2Frosted 변수를 안쓰는 쪽으로
-      id: 'FRU P2 Frosted',
-      type: 'Ability',
-      netRegex: { id: '9CF8', source: 'Oracle\'s Reflection', capture: false },
-      run: (data) => data.p2Frosted = true,
     },
     {
       id: 'FRU P2 Hallowed Ray',
