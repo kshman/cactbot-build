@@ -147,30 +147,20 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: 'FRU P1 Burnt Strike Blastburn',
+      id: 'FRU P1 Blastburn',
       type: 'StartsUsing',
-      netRegex: { id: ['9CC1', '9CE1'], capture: false },
-      durationSeconds: 6,
-      alertText: (_data, _matches, output) => output.text!(),
-      outputStrings: {
-        text: {
-          en: 'Line Cleave => Knockback',
-          ko: '직선 장판 🔜 넉백',
-        },
-      },
+      netRegex: { id: ['9CC2', '9CE2'] },
+      delaySeconds: (_data, matches) => parseFloat(matches.castTime) - 2,
+      durationSeconds: 2.5,
+      response: Responses.knockback(),
     },
     {
-      id: 'FRU P1 Burnt Strike Burnout',
+      id: 'FRU P1 Burnout',
       type: 'StartsUsing',
-      netRegex: { id: ['9CC5', '9CE3'], capture: false },
-      durationSeconds: 6,
-      alertText: (_data, _matches, output) => output.text!(),
-      outputStrings: {
-        text: {
-          en: 'Line Cleave => Out',
-          ko: '직선 장판 🔜 바깥으로',
-        },
-      },
+      netRegex: { id: ['9CC6', '9CE4'] },
+      delaySeconds: (_data, matches) => parseFloat(matches.castTime) - 3,
+      durationSeconds: 2.5,
+      response: Responses.getOut(),
     },
     {
       id: 'FRU P1 Burnished Glory',
@@ -302,7 +292,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (data, matches, output) => {
         let cardinal = false;
         const actors = Object.values(data.actors);
-        if (actors.length >= 3 && actors[1] !== undefined) {
+        if (actors.length >= 2 && actors[1] !== undefined) {
           data.p2Knockback = Directions.hdgTo8DirNum(parseFloat(actors[1].heading));
           if (data.p2Knockback % 2 === 0)
             cardinal = true;
@@ -343,12 +333,11 @@ const triggerSet: TriggerSet<Data> = {
       id: 'FRU P2 DD Knockback',
       type: 'StartsUsing',
       netRegex: { id: '9D05', source: 'Usurper of Frost', capture: false },
-      // 9D0E Diamond Dust
-      delaySeconds: 14,
-      durationSeconds: 7,
+      delaySeconds: 16.5,
+      durationSeconds: 5,
       infoText: (data, _matches, output) => {
         if (data.p2Knockback === undefined)
-          return output.knockback!({ dir1: output.unknown!(), dir2: output.unknown!() });
+          return output.autumn!({ dir: output.unknown!() });
         let values = [data.p2Knockback, (data.p2Knockback + 4) % 8];
         if (values[0]! > values[1]!)
           values = values.reverse();
@@ -359,11 +348,7 @@ const triggerSet: TriggerSet<Data> = {
           // 어듬이는 MT팀이예여
           const autumnDir: MarkerOutput8[] = ['markerN', 'markerNE', 'markerW', 'markerNW'];
           const dir = autumnDir.includes(dir1) ? dir1 : dir2;
-          return output.autumn!({
-            dir: output[dir]!(),
-            dir1: output[dir1]!(),
-            dir2: output[dir2]!(),
-          });
+          return output.autumn!({ dir: output[dir]!() });
         }
         return output.knockback!({ dir1: output[dir1]!(), dir2: output[dir2]!() });
       },
@@ -374,8 +359,8 @@ const triggerSet: TriggerSet<Data> = {
           ko: '넉백 ${dir1}${dir2}',
         },
         autumn: {
-          en: 'Knockback ${dir} (${dir1} / ${dir2})',
-          ko: '넉백 ${dir} (${dir1}${dir2})',
+          en: 'Knockback ${dir}',
+          ko: '넉백 ${dir}',
         },
         unknown: Outputs.unknown,
         ...AutumnDirections.outputStringsMarker8,
