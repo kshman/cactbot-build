@@ -534,12 +534,11 @@ const triggerSet: TriggerSet<Data> = {
   timelineReplace: [
     {
       'locale': 'de',
-      'missingTranslations': true,
       'replaceSync': {
         'Cat\'s Eye': 'Katzenauge',
         'Sally the Sweeper': 'Sally (?:der|die|das) Fegerin',
         'The Forecaster': 'Wetterreporter',
-        // 'Mica the Magical Mu': 'Mica (?:der|die|das) Magisch[rs] Mu',
+        'Mica the Magical Mu': 'Mica (?:der|die|das) Magisch(?:e|er|es|en) Mu',
       },
     },
     {

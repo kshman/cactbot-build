@@ -473,7 +473,7 @@ const triggerSet: TriggerSet<Data> = {
         '\\(corners\\)': '(四角)',
         '\\(front\\)': '(前方)',
         '\\(lasers\\)': '(激光)',
-        '\\(sides\\)': '(四边)',
+        '\\(sides\\)': '(两侧)',
         '\\(triangle\\)': '(三角)',
       },
     },
