@@ -204,7 +204,7 @@ export default {
     fr: 'Positions',
     ja: '基本散会',
     cn: '八方分散',
-    ko: '자기 자리로',
+    ko: '맡은 자리로',
   },
   stackMarker: {
     // for stack marker situations
@@ -1069,7 +1069,7 @@ export default {
   spreadOwn: {
     en: 'Spread',
     ja: '散会',
-    ko: '자기 자리로 흩어져요',
+    ko: '맡은 자리로 흩어져요',
   },
   spreadSolo: {
     en: 'Spread',

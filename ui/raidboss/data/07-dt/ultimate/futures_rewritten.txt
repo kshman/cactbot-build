@@ -130,23 +130,94 @@ hideall "--sync--"
 214.1 "--sync--" Ability { id: "9CEF", source: "Usurper of Frost" }
 218.4 "Mirror Image" Ability { id: "9CF4", source: "Usurper of Frost" }
 225.5 "Diamond Dust" Ability { id: "9D05", source: "Usurper of Frost" }
-234.2 "Axe/Scythe Kick" Ability { id: ["9D0A", "9D0B"], source: "Oracle's Reflection" }
-235.1 "the House of Light" Ability { id: "9D0E", source: "Usurper of Frost" }
+234.4 "Axe/Scythe Kick" Ability { id: ["9D0A", "9D0B"], source: "Oracle's Reflection" }
+235.3 "the House of Light" Ability { id: "9D0E", source: "Usurper of Frost" }
 236.9 "Frigid Stone" Ability { id: "9D07", source: "Usurper of Frost" }
 237.3 "Icicle Impact" Ability { id: "9D06", source: "Usurper of Frost" }
 241.2 "Heavenly Strike" Ability { id: "9D0F", source: "Usurper of Frost" }
 241.3 "Icicle Impact" Ability { id: "9D06", source: "Usurper of Frost" }
 244.0 "Frigid Needle" #Ability { id: "9D09", source: "Usurper of Frost" }
 244.3 "Sinbound Holy" Ability { id: "9D10", source: "Oracle's Reflection" }
+245.2 "Sinbound Holy" #Ability { id: "9D11", source: "Oracle's Reflection" }
 245.2 "Icicle Impact" Ability { id: "9D06", source: "Usurper of Frost" }
-253.4 "Shining Armor" Ability { id: "9CF9", source: "Usurper of Frost" }
-253.4 "Frost Armor" Ability { id: "9CF8", source: "Oracle's Reflection" }
-260.2 "Twin Stillness/Silence" Ability { id: ["9D01", "9D02"], source: "Oracle's Reflection" }
-262.3 "Twin Stillness/Silence" #Ability { id: "9D04", source: "Oracle's Reflection" }
-273.0 "Hallowed Ray" Ability { id: "9D12", source: "Usurper of Frost" }
-273.4 "Hallowed Ray" Ability { id: "9D13", source: "Usurper of Frost" }
-282.7 "Mirror, Mirror" Ability { id: "9CF3", source: "Usurper of Frost" }
-296.8 "Scythe Kick" Ability { id: "9D0B", source: "Usurper of Frost" }
-296.8 "Reflected Kick" Ability { id: ["9D0C", "9D0D"] }
-297.4 "the House of Light" #Ability { id: "9D0E", source: "氷面鏡" }
-297.4 "the House of Light" #Ability { id: "9D0E", source: "Usurper of Frost" }
+246.8 "Sinbound Holy" #Ability { id: "9D11", source: "Oracle's Reflection" }
+248.5 "Sinbound Holy" #Ability { id: "9D11", source: "Oracle's Reflection" }
+250.1 "Sinbound Holy" #Ability { id: "9D11", source: "Oracle's Reflection" }
+253.8 "Frost Armor" Ability { id: "9CF8", source: "Oracle's Reflection" }
+253.8 "Shining Armor" Ability { id: "9CF9", source: "Usurper of Frost" }
+260.4 "Twin Stillness/Silence" Ability { id: ["9D01", "9D02"], source: "Oracle's Reflection" }
+262.5 "Twin Stillness/Silence" #Ability { id: ["9D03", "9D04"], source: "Oracle's Reflection" }
+273.3 "Hallowed Ray" Ability { id: "9D12", source: "Usurper of Frost" }
+274.0 "Hallowed Ray" Ability { id: "9D13", source: "Usurper of Frost" }
+283.0 "Mirror, Mirror" Ability { id: "9CF3", source: "Usurper of Frost" }
+297.1 "Scythe Kick" Ability { id: "9D0B", source: "Usurper of Frost" }
+297.1 "Reflected Scythe Kick" Ability { id: "9D0C", source: "Frozen Mirror" }
+297.6 "the House of Light" #Ability { id: "9D0E", source: "Usurper of Frost" }
+297.6 "the House of Light" #Ability { id: "9D0E", source: "Usurper of Frost" }
+306.7 "Reflected Scythe Kick" Ability { id: "9D0D", source: "Frozen Mirror" }
+307.4 "the House of Light" #Ability { id: "9D0E", source: "Usurper of Frost" }
+307.4 "the House of Light" #Ability { id: "9D0E", source: "Frozen Mirror" }
+312.7 "Banish III" Ability { id: ["9D1C", "9D1D"], source: "Usurper of Frost" }
+322.2 "Light Rampant" Ability { id: "9D14", source: "Usurper of Frost" }
+330.0 "Luminous Hammer" #Ability { id: "9D1A", source: "Usurper of Frost" }
+331.6 "Luminous Hammer" #Ability { id: "9D1A", source: "Usurper of Frost" }
+333.2 "Luminous Hammer" #Ability { id: "9D1A", source: "Usurper of Frost" }
+333.3 "Bright Hunger" #Ability { id: "9D15", source: "Usurper of Frost" }
+333.3 "Bright Hunger" #Ability { id: "9D15", source: "Usurper of Frost" }
+334.6 "Luminous Hammer" #Ability { id: "9D1A", source: "Usurper of Frost" }
+336.2 "Luminous Hammer" #Ability { id: "9D1A", source: "Usurper of Frost" }
+339.0 "Powerful Light" Ability { id: "9D19", source: "Usurper of Frost" }
+341.5 "Burst" #Ability { id: "9D1B", source: "聖なる光" }
+344.6 "Burst" #Ability { id: "9D1B", source: "聖なる光" }
+348.0 "Bright Hunger" Ability { id: "9D15", source: "Usurper of Frost" }
+351.1 "Banish III" Ability { id: ["9D1C", "9D1D"], source: "Usurper of Frost" }
+359.4 "the House of Light" Ability { id: "9CFD", source: "Usurper of Frost" }
+365.7 "--sync--" Ability { id: "9CEF", source: "Usurper of Frost" }
+378.7 "Absolute Zero (Enrage)" Ability { id: "9D20", source: "Usurper of Frost" }
+#379.6 "Absolute Zero" Ability { id: "9D8D", source: "Usurper of Frost" }
+#382.0 "Swelling Frost" Ability { id: "9D21", source: "Usurper of Frost" }
+
+# P2-P3 연결
+#500.0 "Sinbound Blizzard III" Ability { id: "9D42", source: "crystal of darkness" }
+#500.0 "Sinbound Blizzard III" Ability { id: "9D46", source: "crystal of darkness" }
+#501.0 "Hiemal Storm" Ability { id: "9D40", source: "crystal of light" }
+#501.0 "Hiemal Storm" Ability { id: "9D3F", source: "crystal of light" }
+#504.2 "Hiemal Storm" Ability { id: "9D40", source: "crystal of light" }
+#504.2 "Hiemal Storm" Ability { id: "9D3F", source: "crystal of light" }
+#505.2 "Sinbound Blizzard III" Ability { id: "9D42", source: "crystal of darkness" }
+#505.2 "Sinbound Blizzard III" Ability { id: "9D46", source: "crystal of darkness" }
+#507.5 "Hiemal Storm" Ability { id: "9D40", source: "crystal of light" }
+#507.5 "Hiemal Storm" Ability { id: "9D3F", source: "crystal of light" }
+#507.5 "Hiemal Ray" #Ability { id: "9D41", source: "crystal of light" }
+#509.7 "Hiemal Ray" #Ability { id: "9D41", source: "crystal of light" }
+#510.7 "Sinbound Blizzard III" Ability { id: "9D42", source: "crystal of darkness" }
+#510.7 "Sinbound Blizzard III" Ability { id: "9D46", source: "crystal of darkness" }
+#516.0 "Sinbound Blizzard III" Ability { id: "9D42", source: "crystal of darkness" }
+#516.0 "Sinbound Blizzard III" Ability { id: "9D46", source: "crystal of darkness" }
+#521.3 "Sinbound Blizzard III" Ability { id: "9D42", source: "crystal of darkness" }
+#521.3 "Sinbound Blizzard III" Ability { id: "9D46", source: "crystal of darkness" }
+#526.6 "Sinbound Blizzard III" Ability { id: "9D42", source: "crystal of darkness" }
+#526.6 "Sinbound Blizzard III" Ability { id: "9D46", source: "crystal of darkness" }
+
+# P3
+600.0 "--sync--" Ability { id: "9CB9", source: "Gaia" } window 610,5 # Icecrusher
+615.3 "--sync--" Ability { id: "9D22", source: "Usurper of Frost" } # Junction
+633.6 "Hell's Judgment" Ability { id: "9D49", source: "Oracle of Darkness" }
+636.8 "--sync--" Ability { id: "9CB5", source: "Oracle of Darkness" }
+647.5 "Ultimate Relativity" Ability { id: "9D4A", source: "Oracle of Darkness" }
+657.1 "Speed/Slow/Quicken" Ability { id: ["9D65", "9D67", "9D66"], source: "Oracle of Darkness" }
+659.2 "Unholy Darkness" Ability { id: "9D55", source: "Oracle of Darkness" }
+664.1 "Sinbound Meltdown" #Ability { id: "9D63", source: "delight's hourglass" }
+666.2 "Sinbound Meltdown" #Ability { id: "9D64", source: "delight's hourglass" }
+667.2 "Sinbound Meltdown" #Ability { id: "9D64", source: "delight's hourglass" }
+668.2 "Sinbound Meltdown" #Ability { id: "9D64", source: "delight's hourglass" }
+669.0 "Unholy Darkness" Ability { id: "9D55", source: "Oracle of Darkness" }
+669.3 "Sinbound Meltdown" #Ability { id: "9D64", source: "delight's hourglass" }
+670.3 "Sinbound Meltdown" #Ability { id: "9D64", source: "delight's hourglass" }
+671.3 "Sinbound Meltdown" #Ability { id: "9D64", source: "delight's hourglass" }
+672.3 "Sinbound Meltdown" #Ability { id: "9D64", source: "delight's hourglass" }
+673.3 "Sinbound Meltdown" #Ability { id: "9D64", source: "delight's hourglass" }
+673.7 "Sinbound Meltdown" #Ability { id: "9D63", source: "delight's hourglass" }
+674.3 "Sinbound Meltdown" #Ability { id: "9D64", source: "delight's hourglass" }
+675.9 "Sinbound Meltdown" #Ability { id: "9D64", source: "delight's hourglass" }
+676.9 "Sinbound Meltdown" #Ability { id: "9D64", source: "delight's hourglass" }
