@@ -166,5 +166,13 @@ Options.Triggers.push({
         'Neyoozoteel': '内尤佐缇',
       },
     },
+    {
+      'locale': 'ko',
+      'replaceSync': {
+        'Starcrier': '환황조',
+        'Rrax Yity\'a': '라슈이챠',
+        'Neyoozoteel': '네요조텔',
+      },
+    },
   ],
 });

@@ -92,4 +92,34 @@ Options.Triggers.push({
       response: Responses.tankBuster(),
     },
   ],
+  timelineReplace: [
+    {
+      'locale': 'de',
+      'replaceSync': {
+        'Bull Apollyon': 'Bullen-Apollyon',
+        'Golden Molter': 'Golden(?:e|er|es|en) Wandler',
+      },
+    },
+    {
+      'locale': 'fr',
+      'replaceSync': {
+        'Bull Apollyon': 'apollyon buffle',
+        'Golden Molter': 'transmueur doré',
+      },
+    },
+    {
+      'locale': 'ja',
+      'replaceSync': {
+        'Bull Apollyon': 'ブルアポリオン',
+        'Golden Molter': 'ゴールデン・モルター',
+      },
+    },
+    {
+      'locale': 'cn',
+      'replaceSync': {
+        'Bull Apollyon': '莽撞亚波伦',
+        'Golden Molter': '黄金蜕皮蜥',
+      },
+    },
+  ],
 });
