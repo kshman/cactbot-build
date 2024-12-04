@@ -206,10 +206,12 @@ const triggerSet: TriggerSet<Data> = {
     {
       id: 'chasmVollokPriority',
       name: {
-        en: 'Chasm of Vollok Safe Spot Priority',
+        en: 'Chasm Of Vollok Safe Spot Priority',
+        ko: '볼로크의 함정 안전지대 우선순위',
       },
       comment: {
         en: 'Select which safe spots have priority during callouts.',
+        ko: '안전지대 중 호출 우선순위가 높은 곳을 선택하세요.',
       },
       type: 'select',
       options: {
@@ -218,6 +220,12 @@ const triggerSet: TriggerSet<Data> = {
           'North and South Corner': 'northSouth',
           'North Corner': 'north',
           'South Corner': 'south',
+        },
+        ko: {
+          '중앙': 'inside',
+          '남북 구석': 'northSouth',
+          '북쪽 구석': 'north',
+          '남쪽 구석': 'south',
         },
       },
       default: 'inside',
@@ -243,13 +251,13 @@ const triggerSet: TriggerSet<Data> = {
     {
       id: 'Zoraal Ja Ex Phase Tracker',
       type: 'StartsUsing',
-      // 9397 - Dawn of an Age
-      // 938F - Drum of Vollok
-      // 938A - Projection of Triumph
+      // 9397 - Dawn Of An Age
+      // 938F - Drum Of Vollok
+      // 938A - Projection Of Triumph
       // 93A2 - Multidirectional Divide (needed to reset to arena phase before enrage)
       netRegex: { id: ['9397', '938F', '938A', '93A2'], source: 'Zoraal Ja' },
       run: (data, matches) => {
-        // Knockaround is preceded by a 'Dawn of an Age' cast, but catching 'Drum of Vollok'
+        // Knockaround is preceded by a 'Dawn Of An Age' cast, but catching 'Drum Of Vollok'
         // allows us to detect phase correctly.
         if (matches.id === '9397')
           data.phase = 'swords';
@@ -388,7 +396,7 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: 'Zoraal Ja Ex Dawn of an Age',
+      id: 'Zoraal Ja Ex Dawn Of An Age',
       type: 'StartsUsing',
       netRegex: { id: '9397', source: 'Zoraal Ja', capture: false },
       response: Responses.aoe(),
@@ -398,7 +406,7 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: 'Zoraal Ja Ex Chasm of Vollok Sword Collect',
+      id: 'Zoraal Ja Ex Chasm Of Vollok Sword Collect',
       type: 'StartsUsing',
       netRegex: { id: '9399', source: 'Fang' },
       run: (data, matches) => {
@@ -426,7 +434,7 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: 'Zoraal Ja Ex Chasm of Vollok + Half Full',
+      id: 'Zoraal Ja Ex Chasm Of Vollok + Half Full',
       type: 'StartsUsing',
       // 9368 - Right Sword (left/west safe)
       // 9369 - Left Sword (right/east safe)
@@ -585,6 +593,8 @@ const triggerSet: TriggerSet<Data> = {
           data.lineCleaveSetup = 'swCross';
         else if (matches.location === '03')
           data.lineCleaveSetup = 'seCross';
+        else
+          console.error('Could not determine Forged Track setup.');
       },
     },
     {
@@ -596,8 +606,8 @@ const triggerSet: TriggerSet<Data> = {
         if (data.fireWindSetup === undefined)
           return;
 
-        // Same as Chasm of Vollok, remap the sword position to a corresponding main platform tile
-        // But unlike Chasm of Vollok, these Fang actors are positioned at the bak of the tiles,
+        // Same as Chasm Of Vollok, remap the sword position to a corresponding main platform tile
+        // But unlike Chasm Of Vollok, these Fang actors are positioned at the bak of the tiles,
         // so we need a slightly different mirrorAdjust value
         const mirrorAdjust = 22.98; // sqrt(5^2 + 5^2) * 3.25
         const swordY = parseFloat(matches.y) + mirrorAdjust;
@@ -614,8 +624,12 @@ const triggerSet: TriggerSet<Data> = {
         }
 
         const swordTile = findClosestTile(swordX, swordY);
-        if (swordTile === 'unknown')
+        if (swordTile === 'unknown') {
+          console.error(
+            `Could not map fire/wind sword at [x:${matches.x}, y: ${matches.y}] to tile.`,
+          );
           return;
+        }
 
         // To avoid repeated nested if/else statements, assume we're seeing fireInside.
         // At the end, check the real value, and if it's fireOutside, just flip this bool
@@ -643,8 +657,10 @@ const triggerSet: TriggerSet<Data> = {
           data.fireWindSafeDir = 'southwest';
         else if (swordTile === 'westCorner')
           data.fireWindSafeDir = 'northeast';
-        else
+        else {
+          console.error(`Could not determine fireWindSafeDir for swordTile ${swordTile}`);
           return;
+        }
 
         data.forgedTrackSafeTiles = forgedTrackSafeLanes[data.fireWindSafeDir];
 
@@ -658,10 +674,16 @@ const triggerSet: TriggerSet<Data> = {
       type: 'StartsUsing',
       netRegex: { id: '939C', source: 'Fang' },
       condition: (data, matches) => data.phase === 'swords' && parseFloat(matches.y) > 115, // line cleave swords
-      delaySeconds: 0.2, // let Fire/Wind Collect run first
+      delaySeconds: 0.4, // let Fire/Wind Collect run first
       run: (data, matches) => {
-        if (data.lineCleaveSetup === undefined || data.forgedTrackSafeTiles.length !== 4)
+        if (data.lineCleaveSetup === undefined || data.forgedTrackSafeTiles.length !== 4) {
+          console.error(
+            `Could not determine lineCleaveSetup (${
+              data.lineCleaveSetup ?? 'undef'
+            }) or valid safe tiles (${data.forgedTrackSafeTiles.join(',')}).`,
+          );
           return;
+        }
 
         const mirrorAdjust = 22.98; // sqrt(5^2 + 5^2) * 3.25
         const swordY = parseFloat(matches.y) - mirrorAdjust;
@@ -677,15 +699,21 @@ const triggerSet: TriggerSet<Data> = {
           lineCleavePlatform = 'southeast';
         }
         const swordTile = findClosestTile(swordX, swordY);
-        if (swordTile === 'unknown')
-          return `Unknown Tile`;
+        if (swordTile === 'unknown') {
+          console.error(`Could not map cleave sword at [x:${matches.x}, y: ${matches.y}] to tile.`);
+          return;
+        }
 
         const unsafeTiles = swordTile === 'southCorner'
           ? crossMapSouthCorner[data.lineCleaveSetup][lineCleavePlatform]
           : crossMap[data.lineCleaveSetup][swordTile];
 
-        if (unsafeTiles === undefined)
+        if (unsafeTiles === undefined) {
+          console.error(
+            `Could not determine unsafe tiles for cleave sword at [x:${matches.x}, y: ${matches.y}]`,
+          );
           return;
+        }
         data.unsafeTiles.push(...unsafeTiles);
       },
     },
@@ -694,7 +722,7 @@ const triggerSet: TriggerSet<Data> = {
       type: 'StartsUsing',
       netRegex: { id: '935F', source: 'Zoraal Ja', capture: false },
       condition: (data) => data.phase === 'swords',
-      delaySeconds: 0.4, // let the collectors finish
+      delaySeconds: 0.6, // let the collectors finish
       durationSeconds: 9,
       alertText: (data, _matches, output) => {
         if (data.fireWindEffect === undefined)
@@ -714,8 +742,11 @@ const triggerSet: TriggerSet<Data> = {
         const safeTiles = data.forgedTrackSafeTiles.filter((tile) =>
           !data.unsafeTiles.includes(tile)
         );
-        if (safeTiles.length !== 2)
-          return `WTF? ${safeTiles.length} = ${safeTiles.join('|')}`;
+        if (safeTiles.length !== 2) {
+          console.error(`Expected 2 safe tiles, got ${safeTiles.length}: ${safeTiles.join(',')}`);
+          return output.unknown!();
+        }
+
         const [safe0] = safeTiles;
         if (safe0 === undefined)
           return fireWindSafeOutput;
@@ -810,13 +841,13 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: 'Zoraal Ja Ex Drum of Vollok Collect',
+      id: 'Zoraal Ja Ex Drum Of Vollok Collect',
       type: 'StartsUsing',
       netRegex: { id: '938F', source: 'Zoraal Ja' },
       run: (data, matches) => data.drumTargets.push(matches.target),
     },
     {
-      id: 'Zoraal Ja Ex Drum of Vollok',
+      id: 'Zoraal Ja Ex Drum Of Vollok',
       type: 'StartsUsing',
       netRegex: { id: '938F', source: 'Zoraal Ja', capture: false },
       delaySeconds: 0.3, // let Collect run first
@@ -1076,7 +1107,7 @@ const triggerSet: TriggerSet<Data> = {
     // change directions, so use boss-relative rather than trying to guess which way the player
     // is facing.
     {
-      id: 'Zoraal Ja Ex Might of Vollok Right Sword',
+      id: 'Zoraal Ja Ex Might Of Vollok Right Sword',
       type: 'StartsUsing',
       netRegex: { id: '9368', source: 'Zoraal Ja', capture: false },
       condition: (data) => data.phase === 'lines' && data.seenHalfCircuit,
@@ -1090,7 +1121,7 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: 'Zoraal Ja Ex Might of Vollok Left Sword',
+      id: 'Zoraal Ja Ex Might Of Vollok Left Sword',
       type: 'StartsUsing',
       netRegex: { id: '9369', source: 'Zoraal Ja', capture: false },
       condition: (data) => data.phase === 'lines' && data.seenHalfCircuit,
@@ -1104,8 +1135,8 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      // This Chasm of Vollok happens in swords2 and has no Half Full cleave.
-      id: 'Zoraal Ja Ex Chasm of Vollok No Cleave',
+      // This Chasm Of Vollok happens in swords2 and has no Half Full cleave.
+      id: 'Zoraal Ja Ex Chasm Of Vollok No Cleave',
       type: 'StartsUsing',
       netRegex: { id: '9399', source: 'Fang', capture: false },
       condition: (data) => data.phase === 'swords' && data.seenHalfCircuit,
@@ -1286,7 +1317,7 @@ const triggerSet: TriggerSet<Data> = {
       'replaceText': {
         'Fiery Edge/Stormy Edge': 'Fiery/Stormy Edge',
         'Forward Edge/Backward Edge': 'Forward/Backward Edge',
-        'Siege of Vollok/Walls of Vollok': 'Siege/Walls of Vollok',
+        'Siege Of Vollok/Walls Of Vollok': 'Siege/Walls Of Vollok',
       },
     },
     {
@@ -1306,9 +1337,9 @@ const triggerSet: TriggerSet<Data> = {
         'Bitter Whirlwind': 'Bitterer Wirbelwind',
         'Blade Warp': 'Klingensprung',
         'Burning Chains': 'Brennende Ketten',
-        'Chasm of Vollok': 'Klippe von Vollok',
-        'Dawn of an Age': 'Dämmerung eines Zeitalters',
-        'Drum of Vollok': 'Trommel von Vollok',
+        'Chasm Of Vollok': 'Klippe von Vollok',
+        'Dawn Of An Age': 'Dämmerung eines Zeitalters',
+        'Drum Of Vollok': 'Trommel von Vollok',
         'Duty\'s Edge': 'Pflichtes Schneide',
         'Fiery Edge': 'Feurige Klinge',
         'Forged Track': 'Unbestimmter Pfad',
@@ -1316,16 +1347,16 @@ const triggerSet: TriggerSet<Data> = {
         'Greater Gateway': 'Großes Tor der Welten',
         'Half Circuit': 'Halbe Runde',
         'Half Full': 'Halbes Ganzes',
-        'Might of Vollok': 'Macht von Vollok',
+        'Might Of Vollok': 'Macht von Vollok',
         'Multidirectional Divide': 'Wechselseitige Klingen',
-        'Projection of Triumph': 'Vorhersage von Triumph',
-        'Projection of Turmoil': 'Vorhersage von Aufruhr',
+        'Projection Of Triumph': 'Vorhersage von Triumph',
+        'Projection Of Turmoil': 'Vorhersage von Aufruhr',
         'Regicidal Rage': 'Wut des Regizids',
-        'Siege of Vollok': 'Belagerung von Vollok',
+        'Siege Of Vollok': 'Belagerung von Vollok',
         'Stormy Edge': 'Stürmische Klinge',
         'Sync(?![-h])': 'Synchro',
         '(?<! )Vollok': 'Vollok',
-        'Walls of Vollok': 'Mauern von Vollok',
+        'Walls Of Vollok': 'Mauern von Vollok',
       },
     },
     {
@@ -1345,9 +1376,9 @@ const triggerSet: TriggerSet<Data> = {
         'Bitter Whirlwind': 'Tourbillon amer',
         'Blade Warp': 'Invocation incisive',
         'Burning Chains': 'Chaînes brûlantes',
-        'Chasm of Vollok': 'Trappe de Vollok',
-        'Dawn of an Age': 'Âge de l\'aurore',
-        'Drum of Vollok': 'Coup de Vollok',
+        'Chasm Of Vollok': 'Trappe de Vollok',
+        'Dawn Of An Age': 'Âge de l\'aurore',
+        'Drum Of Vollok': 'Coup de Vollok',
         'Duty\'s Edge': 'Devoir d\'acier',
         'Fiery Edge': 'Lames de feu',
         'Forged Track': 'Traque incisive',
@@ -1355,16 +1386,16 @@ const triggerSet: TriggerSet<Data> = {
         'Greater Gateway': 'Passerelle enchantée',
         'Half Circuit': 'Demi-circuit',
         'Half Full': 'Demi-plénitude',
-        'Might of Vollok': 'Puissance de Vollok',
+        'Might Of Vollok': 'Puissance de Vollok',
         'Multidirectional Divide': 'Division multidirectionnelle',
-        'Projection of Triumph': 'Lames repoussantes',
-        'Projection of Turmoil': 'Salve repoussante',
+        'Projection Of Triumph': 'Lames repoussantes',
+        'Projection Of Turmoil': 'Salve repoussante',
         'Regicidal Rage': 'Régicide',
-        'Siege of Vollok': 'Anneau de Vollok',
+        'Siege Of Vollok': 'Anneau de Vollok',
         'Stormy Edge': 'Lames de vent',
         'Sync(?![-h])': 'Synchronisation',
         '(?<! )Vollok': 'Vollok',
-        'Walls of Vollok': 'Cercle de Vollok',
+        'Walls Of Vollok': 'Cercle de Vollok',
       },
     },
     {
@@ -1380,9 +1411,9 @@ const triggerSet: TriggerSet<Data> = {
         'Bitter Whirlwind': 'ビターウィンド',
         'Blade Warp': 'サモンエッジ',
         'Burning Chains': '炎の鎖',
-        'Chasm of Vollok': 'ピット・オブ・ヴォロク',
-        'Dawn of an Age': 'ドーン・エイジ',
-        'Drum of Vollok': 'ノック・オブ・ヴォロク',
+        'Chasm Of Vollok': 'ピット・オブ・ヴォロク',
+        'Dawn Of An Age': 'ドーン・エイジ',
+        'Drum Of Vollok': 'ノック・オブ・ヴォロク',
         'Duty\'s Edge': 'デューティエッジ',
         'Fiery Edge': 'ファイアエッジ',
         'Forged Track': 'エッジトラック',
@@ -1390,16 +1421,16 @@ const triggerSet: TriggerSet<Data> = {
         'Greater Gateway': 'エンチャント・ゲートウェイ',
         'Half Circuit': 'ルーズハーフ・サーキット',
         'Half Full': 'ルーズハーフ',
-        'Might of Vollok': 'パワー・オブ・ヴォロク',
+        'Might Of Vollok': 'パワー・オブ・ヴォロク',
         'Multidirectional Divide': 'マルチウェイ',
-        'Projection of Triumph': 'プロジェクション・エッジ',
-        'Projection of Turmoil': 'プロジェクション・バースト',
+        'Projection Of Triumph': 'プロジェクション・エッジ',
+        'Projection Of Turmoil': 'プロジェクション・バースト',
         'Regicidal Rage': 'レジサイド',
-        'Siege of Vollok': 'リング・オブ・ヴォロク',
+        'Siege Of Vollok': 'リング・オブ・ヴォロク',
         'Stormy Edge': 'ウィンドエッジ',
         'Sync(?![-h])': 'シンクロナス',
         '(?<! )Vollok': 'エッジ・ザ・ヴォロク',
-        'Walls of Vollok': 'サークル・オブ・ヴォロク',
+        'Walls Of Vollok': 'サークル・オブ・ヴォロク',
       },
     },
     {
@@ -1412,16 +1443,16 @@ const triggerSet: TriggerSet<Data> = {
         '\\(cast\\)': '(咏唱)',
         '\\(damage\\)': '(伤害)',
         '\\(enrage\\)': '(狂暴)',
-        '\\(lines drop\\)': '(直线落下)',
+        '\\(lines drop\\)': '(放置直线)',
         'Actualize': '自我实现',
         'Aero III': '暴风',
         'Backward Edge': '后向斩',
         'Bitter Whirlwind': '愤恨之风',
         'Blade Warp': '利刃召唤',
         'Burning Chains': '火焰链',
-        'Chasm of Vollok': '无敌裂斩',
-        'Dawn of an Age': '新曦世纪',
-        'Drum of Vollok': '无敌之击',
+        'Chasm Of Vollok': '无敌裂斩',
+        'Dawn Of An Age': '新曦世纪',
+        'Drum Of Vollok': '无敌之击',
         'Duty\'s Edge': '责任之刃',
         'Fiery Edge': '烈火刃',
         'Forged Track': '利刃冲',
@@ -1429,16 +1460,55 @@ const triggerSet: TriggerSet<Data> = {
         'Greater Gateway': '附魔通路',
         'Half Circuit': '回旋半身残',
         'Half Full': '半身残',
-        'Might of Vollok': '无敌之力',
+        'Might Of Vollok': '无敌之力',
         'Multidirectional Divide': '多向斩',
-        'Projection of Triumph': '情感投射：利刃',
-        'Projection of Turmoil': '情感投射：爆发',
+        'Projection Of Triumph': '情感投射：利刃',
+        'Projection Of Turmoil': '情感投射：爆发',
         'Regicidal Rage': '弑君之怒行',
-        'Siege of Vollok': '无敌之环',
+        'Siege Of Vollok': '无敌之环',
         'Stormy Edge': '暴风刃',
         'Sync(?![-h])': '同步',
         '(?<! )Vollok': '无敌刃',
-        'Walls of Vollok': '无敌之圆',
+        'Walls Of Vollok': '无敌之圆',
+      },
+    },
+    {
+      'locale': 'ko',
+      'replaceSync': {
+        'Fang': '쌍송곳니',
+        'Zoraal Ja': '조라쟈',
+      },
+      'replaceText': {
+        '\\(cast\\)': '(시전)',
+        '\\(damage\\)': '(피해)',
+        '\\(enrage\\)': '(전멸기)',
+        '\\(lines drop\\)': '(장판 생성)',
+        'Actualize': '실현',
+        'Aero III': '에어로가',
+        'Backward Edge': '후진 칼날',
+        'Bitter Whirlwind': '쓰라린 바람',
+        'Blade Warp': '칼날 소환',
+        'Burning Chains': '불꽃 사슬',
+        'Chasm Of Vollok': '볼로크의 함정',
+        'Dawn Of An Age': '새로운 시대',
+        'Drum Of Vollok': '볼로크의 강타',
+        'Duty\'s Edge': '책무의 칼날',
+        'Fiery Edge': '화염 칼날',
+        'Forged Track': '칼날 궤적',
+        'Forward Edge': '전진 칼날',
+        'Greater Gateway': '마법 통로',
+        'Half Circuit': '회전 반면참',
+        'Half Full': '반면참',
+        'Might Of Vollok': '볼로크의 힘',
+        'Multidirectional Divide': '다방향 참격',
+        'Projection Of Triumph': '칼날 투영',
+        'Projection Of Turmoil': '폭발 투영',
+        'Regicidal Rage': '국왕 시해',
+        'Siege Of Vollok': '볼로크의 고리',
+        'Stormy Edge': '폭풍 칼날',
+        'Sync(?![-h])': '칼날 동기화',
+        '(?<! )Vollok': '볼로크의 칼날',
+        'Walls Of Vollok': '볼로크의 원',
       },
     },
   ],

@@ -534,12 +534,11 @@ const triggerSet: TriggerSet<Data> = {
   timelineReplace: [
     {
       'locale': 'de',
-      'missingTranslations': true,
       'replaceSync': {
         'Cat\'s Eye': 'Katzenauge',
         'Sally the Sweeper': 'Sally (?:der|die|das) Fegerin',
         'The Forecaster': 'Wetterreporter',
-        // 'Mica the Magical Mu': 'Mica (?:der|die|das) Magisch[rs] Mu',
+        'Mica the Magical Mu': 'Mica (?:der|die|das) Magisch(?:e|er|es|en) Mu',
       },
     },
     {
@@ -567,6 +566,15 @@ const triggerSet: TriggerSet<Data> = {
         'Sally the Sweeper': '清除者萨利',
         'The Forecaster': '天气预报机器人',
         'Mica the Magical Mu': '亩鼠米卡',
+      },
+    },
+    {
+      'locale': 'ko',
+      'replaceSync': {
+        'Cat\'s Eye': '캣츠아이',
+        'Sally the Sweeper': '청소부 샐리',
+        'The Forecaster': '기상예보기',
+        'Mica the Magical Mu': '마술다람쥐 마이카',
       },
     },
   ],
