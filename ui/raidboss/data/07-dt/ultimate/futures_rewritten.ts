@@ -1,5 +1,5 @@
 import { AutumnDirections, MarkerOutput8 } from '../../../../../resources/autumn';
-import Conditions from '../../../../../resources/conditions';
+// import Conditions from '../../../../../resources/conditions';
 import { UnreachableCode } from '../../../../../resources/not_reached';
 import Outputs from '../../../../../resources/outputs';
 import { Responses } from '../../../../../resources/responses';
@@ -348,11 +348,11 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         flower: {
           en: '${kick} + ${ind} => Bait Flower',
-          ko: '${kick} + ${ind} 🔜 얼음꽃 설치',
+          ko: '${kick} + ${ind} 🔜 얼음꽃',
         },
         cone: {
           en: '${kick} + ${ind} => Bait Cone',
-          ko: '${kick} + ${ind} 🔜 원뿔 유도',
+          ko: '${kick} + ${ind} 🔜 원뿔',
         },
         cardinal: {
           en: 'Cardinal',
@@ -414,6 +414,19 @@ const triggerSet: TriggerSet<Data> = {
       response: Responses.getFrontThenBack('alert'),
     },
     {
+      id: 'FRU P2 Twin Slip',
+      type: 'StartsUsing',
+      netRegex: { id: ['9D01', '9D02'], source: 'Oracle\'s Reflection', capture: true },
+      delaySeconds: (_data, matches) => parseFloat(matches.castTime) - 0.5,
+      alarmText: (_data, _matches, output) => output.text!(),
+      outputStrings: {
+        text: {
+          en: 'Slip',
+          ko: '미끄러져요!',
+        },
+      },
+    },
+    {
       id: 'FRU P2 Hallowed Ray',
       type: 'StartsUsing',
       netRegex: { id: '9D12', capture: false },
@@ -441,7 +454,7 @@ const triggerSet: TriggerSet<Data> = {
       id: 'FRU P2 Chains of Evelasting Light',
       type: 'GainsEffect',
       netRegex: { effectId: '103D' },
-      condition: Conditions.targetIsYou(),
+      condition: (data, matches) => !data.options.OnlyAutumn && data.me === matches.target,
       durationSeconds: 6,
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
@@ -463,8 +476,19 @@ const triggerSet: TriggerSet<Data> = {
       },
       durationSeconds: 6,
       infoText: (data, _matches, output) => {
-        if (!data.p2Curses.includes(data.me))
+        if (!data.p2Curses.includes(data.me)) {
+          if (data.options.OnlyAutumn) {
+            // 어듬이 전용
+            const p1 = data.party.member(data.p2Curses.shift());
+            const p2 = data.party.member(data.p2Curses.shift());
+            if (p1 === undefined || p2 === undefined)
+              return;
+            if (p1.job === 'AST' || p2.job === 'AST' || p1.job === 'WHM' || p2.job === 'WHM')
+              return output.chain!({ mark: output.cnum4!() });
+            return output.chain!({ mark: output.cmarkC!() });
+          }
           return;
+        }
         const partner = data.party.member(data.p2Curses.find((p) => p !== data.me));
         if (partner === undefined)
           return output.text!({ player: output.unknown!() });
@@ -478,12 +502,18 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'AOE on YOU (${player})',
-          ko: '내게 장판 (${player})',
+          ko: '내게 장판! (${player})',
         },
         autumn: {
           en: 'AOE ${dir} (${player})',
-          ko: '장판, ${dir} (${player})',
+          ko: '내게 장판! ${dir} (${player})',
         },
+        chain: {
+          en: 'Chain ${mark}',
+          ko: '내게 체인! ${mark} 마커로!',
+        },
+        cnum4: Outputs.cnum4,
+        cmarkC: Outputs.cmarkC,
         left: Outputs.getLeftAndWest,
         right: Outputs.getRightAndEast,
         unknown: Outputs.unknown,
@@ -871,6 +901,7 @@ const triggerSet: TriggerSet<Data> = {
         'Oracle\'s Reflection': '巫女の鏡像',
         'Frozen Mirror': '氷面鏡',
         'Oracle of Darkness': '闇の巫女',
+        'Pandora': 'パンドラ・ミトロン',
       },
       'replaceText': {
         'Blastburn': 'バーンブラスト',
