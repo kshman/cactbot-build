@@ -67,7 +67,6 @@ export interface Data extends RaidbossData {
   p2Curses: string[];
   p2Relativity?: 'ultimate';
   p2Ultimate: { [name: string]: number };
-  p2UltimateKeys: string[];
   p2UltimateAutumn: string[];
 }
 
@@ -83,7 +82,6 @@ const triggerSet: TriggerSet<Data> = {
     p1FallRoles: [],
     p2Curses: [],
     p2Ultimate: {},
-    p2UltimateKeys: [],
     p2UltimateAutumn: [],
   }),
   timelineTriggers: [],
@@ -349,12 +347,12 @@ const triggerSet: TriggerSet<Data> = {
       run: (data, _matches) => data.actors = {},
       outputStrings: {
         flower: {
-          en: '${ind} ${kick} => Bait Flower',
-          ko: '${ind} ${kick} 🔜 얼음꽃 설치',
+          en: '${kick} + ${ind} => Bait Flower',
+          ko: '${kick} + ${ind} 🔜 얼음꽃 설치',
         },
         cone: {
-          en: '${ind} ${kick} => Bait Cone',
-          ko: '${ind} ${kick} 🔜 원뿔 유도',
+          en: '${kick} + ${ind} => Bait Cone',
+          ko: '${kick} + ${ind} 🔜 원뿔 유도',
         },
         cardinal: {
           en: 'Cardinal',
@@ -362,7 +360,7 @@ const triggerSet: TriggerSet<Data> = {
         },
         intercard: {
           en: 'Intercard',
-          ko: '비스듬히',
+          ko: '비스듬',
         },
         axe: Outputs.out,
         scythe: Outputs.in,
@@ -541,11 +539,8 @@ const triggerSet: TriggerSet<Data> = {
         if (keys === undefined || keys.length === 0)
           return;
         for (const key of keys) {
-          if (key === undefined) {
-            data.p2UltimateKeys = [];
+          if (key === undefined)
             throw new UnreachableCode();
-          }
-          data.p2UltimateKeys.push(key);
         }
         if (data.options.OnlyAutumn) {
           // 어듬이는 TH팀이예여
@@ -621,8 +616,8 @@ const triggerSet: TriggerSet<Data> = {
       type: 'StartsUsing',
       netRegex: { source: 'Oracle of Darkness', id: '9D4A', capture: false },
       condition: (data) => data.p2Relativity === 'ultimate',
-      delaySeconds: 10 - 3 + 11, // 11
-      durationSeconds: 3,
+      delaySeconds: 5 + 11, // 11
+      durationSeconds: 4.5,
       alertText: (data, _matches, output) => {
         const mesg = data.p2UltimateAutumn.shift();
         if (mesg !== undefined)
@@ -641,8 +636,8 @@ const triggerSet: TriggerSet<Data> = {
       type: 'StartsUsing',
       netRegex: { source: 'Oracle of Darkness', id: '9D4A', capture: false },
       condition: (data) => data.p2Relativity === 'ultimate',
-      delaySeconds: 10 - 3 + 16, // 16
-      durationSeconds: 3,
+      delaySeconds: 6 + 16, // 16
+      durationSeconds: 3.5,
       alertText: (data, _matches, output) => {
         const mesg = data.p2UltimateAutumn.shift();
         if (mesg !== undefined)
@@ -660,8 +655,8 @@ const triggerSet: TriggerSet<Data> = {
       type: 'StartsUsing',
       netRegex: { source: 'Oracle of Darkness', id: '9D4A', capture: false },
       condition: (data) => data.p2Relativity === 'ultimate',
-      delaySeconds: 10 - 3 + 21, // 21
-      durationSeconds: 3,
+      delaySeconds: 6 + 21, // 21
+      durationSeconds: 3.5,
       alertText: (data, _matches, output) => {
         const mesg = data.p2UltimateAutumn.shift();
         if (mesg !== undefined)
@@ -679,8 +674,8 @@ const triggerSet: TriggerSet<Data> = {
       type: 'StartsUsing',
       netRegex: { source: 'Oracle of Darkness', id: '9D4A', capture: false },
       condition: (data) => data.p2Relativity === 'ultimate',
-      delaySeconds: 10 - 3 + 26, // 26
-      durationSeconds: 3,
+      delaySeconds: 6 + 26, // 26
+      durationSeconds: 3.5,
       alertText: (data, _matches, output) => {
         const mesg = data.p2UltimateAutumn.shift();
         if (mesg !== undefined)
@@ -698,8 +693,8 @@ const triggerSet: TriggerSet<Data> = {
       type: 'StartsUsing',
       netRegex: { source: 'Oracle of Darkness', id: '9D4A', capture: false },
       condition: (data) => data.p2Relativity === 'ultimate',
-      delaySeconds: 10 - 3 + 31, // 31
-      durationSeconds: 3,
+      delaySeconds: 6 + 31, // 31
+      durationSeconds: 3.5,
       alertText: (data, _matches, output) => {
         const mesg = data.p2UltimateAutumn.shift();
         if (mesg !== undefined)
@@ -717,8 +712,8 @@ const triggerSet: TriggerSet<Data> = {
       type: 'StartsUsing',
       netRegex: { source: 'Oracle of Darkness', id: '9D4A', capture: false },
       condition: (data) => data.p2Relativity === 'ultimate',
-      delaySeconds: 10 - 3 + 42, // 42
-      durationSeconds: 3,
+      delaySeconds: 5 + 42, // 42
+      durationSeconds: 4.5,
       alertText: (data, _matches, output) => {
         const mesg = data.p2UltimateAutumn.shift();
         if (mesg !== undefined)
@@ -747,7 +742,7 @@ const triggerSet: TriggerSet<Data> = {
         },
         tanksOutPartyIn: {
           en: 'Tanks Out (Party In)',
-          ko: '바깥으로 유도 (파티는 안)',
+          ko: '바깥으로 (파티는 안)',
         },
       },
     },
