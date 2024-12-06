@@ -1932,7 +1932,7 @@ const triggerSet: TriggerSet<Data> = {
             return { alertText: output.spellLeft!({ partner: data.party.jobAbbr(partner) }) };
           }
 
-          const myprior = Autumn.jobPriority(data.party.jobIndex(data.me)!);
+          const myprior = Autumn.jobPriority(data.party.jobIndex(data.me));
           const otherprior = Autumn.jobPriority(other.jobIndex);
           return myprior < otherprior
             ? { alertText: output.spellLeft!({ partner: data.party.jobAbbr(other.name) }) }
