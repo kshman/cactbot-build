@@ -1069,7 +1069,7 @@ export default {
   spreadOwn: {
     en: 'Spread',
     ja: '散会',
-    ko: '맡은 자리로 흩어져요',
+    ko: '맡은 자리로',
   },
   spreadSolo: {
     en: 'Spread',
@@ -1090,6 +1090,11 @@ export default {
     en: 'Center',
     ja: '真ん中',
     ko: '한가운데',
+  },
+  stay: {
+    en: 'Stay',
+    ja: 'そのまま待機',
+    ko: '그대로 대기',
   },
   // 화살표
   arrowN: {
