@@ -419,7 +419,7 @@ export default {
     fr: 'Extérieur',
     ja: '外へ',
     cn: '远离',
-    ko: '밖으로',
+    ko: '바깥으로',
   },
   outOfMelee: {
     en: 'Out of melee',
