@@ -1,5 +1,5 @@
 import { AutumnDirections } from '../../../../../resources/autumn';
-// import Conditions from '../../../../../resources/conditions';
+import Conditions from '../../../../../resources/conditions';
 import { UnreachableCode } from '../../../../../resources/not_reached';
 import Outputs from '../../../../../resources/outputs';
 import { Responses } from '../../../../../resources/responses';
@@ -38,6 +38,9 @@ const p3UltimateIdKey: { [effectId: string]: string } = {
 } as const;
 
 export interface Data extends RaidbossData {
+  readonly triggerSetConfig: {
+    autumnConcealed: boolean;
+  };
   phase: Phase;
   p1SafeMarkers: number[];
   p1Utopian?: 'stack' | 'spread';
@@ -47,7 +50,9 @@ export interface Data extends RaidbossData {
   p2Kick?: 'axe' | 'scythe';
   p2Icicle?: number;
   p2Stone?: boolean;
-  p2Curses: PartyMemberParamObject[];
+  p2Puddles: PartyMemberParamObject[];
+  p2Lights?: number;
+  p2Cursed?: boolean;
   p3Relativity?: 'ultimate';
   p3Ultimate: { [name: string]: number };
   p3Umesg: string[];
@@ -60,12 +65,27 @@ export interface Data extends RaidbossData {
 const triggerSet: TriggerSet<Data> = {
   id: 'FuturesRewrittenUltimate',
   zoneId: ZoneId.FuturesRewrittenUltimate,
+  config: [
+    {
+      id: 'autumnConcealed',
+      name: {
+        en: 'Autumn style concealed',
+        ko: '어듬이 스타일 concealed',
+      },
+      comment: {
+        en: 'Autumn style concealed',
+        ko: '어듬이 스타일 concealed',
+      },
+      type: 'checkbox',
+      default: (options) => options.OnlyAutumn,
+    },
+  ],
   timelineFile: 'futures_rewritten.txt',
   initData: () => ({
     phase: 'p1',
     p1SafeMarkers: [...AutumnDirections.outputNumber8],
     p1FallTethers: [],
-    p2Curses: [],
+    p2Puddles: [],
     p3Ultimate: {},
     p3Umesg: [],
     actors: {},
@@ -169,12 +189,32 @@ const triggerSet: TriggerSet<Data> = {
       run: (data, matches) => data.p1Utopian = matches.id === '9CDA' ? 'stack' : 'spread',
     },
     {
-      id: 'FRU P1 Concealed Collect',
+      id: 'FRU P1 Concealed',
       type: 'ActorControlExtra',
       netRegex: { category: '003F', param1: '4', capture: true },
       condition: (data) => data.phase === 'p1' && data.p1Utopian !== undefined,
-      durationSeconds: 2.5,
-      alertText: (data, matches, output) => {
+      durationSeconds: (data) => data.triggerSetConfig.autumnConcealed ? 7.5 : 2.5,
+      response: (data, matches, output) => {
+        // cactbot-builtin-response
+        output.responseOutputStrings = {
+          front: {
+            en: '(Go Front)',
+            ja: '(前へ)',
+            ko: '(앞으로, 내자리 아님)',
+          },
+          stay: {
+            en: '(Stay)',
+            ja: '(そのまま待機)',
+            ko: '(당첨, 그대로 대기)',
+          },
+          safe: {
+            en: '${action} ${dir1} / ${dir2}',
+            ko: '${action} ${dir1}${dir2}',
+          },
+          stack: Outputs.stacks,
+          spread: Outputs.spreadOwn,
+          ...AutumnDirections.outputStringsMarker8,
+        };
         const image = data.actors[matches.id];
         if (image === undefined)
           return;
@@ -185,27 +225,26 @@ const triggerSet: TriggerSet<Data> = {
           return;
 
         // 어듬이 제공
+        if (data.triggerSetConfig.autumnConcealed) {
+          const dir1 = AutumnDirections.outputFromMarker8Num(data.p1SafeMarkers.shift()!);
+          const dir2 = AutumnDirections.outputFromMarker8Num(data.p1SafeMarkers.shift()!);
+          return {
+            infoText: output.safe!({
+              action: output[data.p1Utopian!]!(),
+              dir1: output[dir1]!(),
+              dir2: output[dir2]!(),
+            }),
+          };
+        }
         if (data.my !== undefined) {
           if (data.p1SafeMarkers.includes(data.my.p))
-            return output.stay!();
-          return output.front!();
+            return { alertText: output.stay!() };
+          return { alertText: output.front!() };
         }
-      },
-      outputStrings: {
-        front: {
-          en: '(Go Front)',
-          ja: '(前へ)',
-          ko: '(앞으로, 내자리 아님)',
-        },
-        stay: {
-          en: '(Stay)',
-          ja: '(そのまま待機)',
-          ko: '(당첨, 그대로 대기)',
-        },
       },
     },
     {
-      id: 'FRU P1 Concealed Safe',
+      id: 'FRU P1 Concealed Left',
       type: 'StartsUsing',
       netRegex: { id: ['9CDA', '9CDB'], source: 'Fatebreaker', capture: false },
       delaySeconds: 11,
@@ -215,12 +254,15 @@ const triggerSet: TriggerSet<Data> = {
           return;
         const dir1 = AutumnDirections.outputFromMarker8Num(data.p1SafeMarkers.shift()!);
         const dir2 = AutumnDirections.outputFromMarker8Num(data.p1SafeMarkers.shift()!);
-        const action = output[data.p1Utopian!]!();
-        return output.text!({ action: action, dir1: output[dir1]!(), dir2: output[dir2]!() });
+        return output.safe!({
+          action: output[data.p1Utopian!]!(),
+          dir1: output[dir1]!(),
+          dir2: output[dir2]!(),
+        });
       },
       run: (data) => delete data.p1Utopian,
       outputStrings: {
-        text: {
+        safe: {
           en: '${action} ${dir1} / ${dir2}',
           ko: '${action} ${dir1}${dir2}',
         },
@@ -576,14 +618,20 @@ const triggerSet: TriggerSet<Data> = {
       response: Responses.spread(),
     },
     {
-      id: 'FRU P2 Curse of Everlasting Light',
+      id: 'FRU P2 Light Rampant',
+      type: 'StartsUsing',
+      netRegex: { id: '9D14', capture: false },
+      response: Responses.aoe(),
+    },
+    {
+      id: 'FRU P2 Light Rampant Debuff',
       type: 'HeadMarker',
       netRegex: { id: '0177' },
       condition: (data, matches) => {
         if (data.phase !== 'p2')
           return;
-        data.p2Curses.push(data.party.member(matches.target));
-        return data.p2Curses.length === 2;
+        data.p2Puddles.push(data.party.member(matches.target));
+        return data.p2Puddles.length === 2;
       },
       durationSeconds: 6,
       response: (data, _matches, output) => {
@@ -605,20 +653,61 @@ const triggerSet: TriggerSet<Data> = {
           cmarkC: Outputs.cmarkC,
           unknown: Outputs.unknown,
         };
-        if (!data.p2Curses.some((p) => p.name === data.me)) {
+        if (!data.p2Puddles.some((p) => p.name === data.me)) {
           if (data.options.OnlyAutumn && data.role === 'tank') {
             // 어듬이 전용
             const cps: string[] = ['AST', 'WHM'];
-            const marker = data.p2Curses.some((p) => cps.includes(p.job!)) ? 'cnum4' : 'cmarkC';
+            const marker = data.p2Puddles.some((p) => cps.includes(p.job!)) ? 'cnum4' : 'cmarkC';
             return { alertText: output.chain!({ mark: output[marker]!() }) };
           }
           // 장판이 없어요 (Chains of Evelasting Light: effectId '103D')
           return { infoText: output.spread!() };
         }
-        const partner = data.p2Curses.find((p) => p.name !== data.me);
+        const partner = data.p2Puddles.find((p) => p.name !== data.me);
         if (partner === undefined)
           return { infoText: output.aoe!({ player: output.unknown!() }) };
         return { infoText: output.aoe!({ player: partner.nick }) };
+      },
+    },
+    {
+      id: 'FRU P2 Lightsteeped Gain',
+      type: 'GainsEffect',
+      netRegex: { effectId: '8D1' },
+      condition: Conditions.targetIsYou(),
+      run: (data, matches) => data.p2Lights = parseInt(matches.count),
+    },
+    {
+      id: 'FRU P2 Curse of Everlasting Light',
+      type: 'LosesEffect',
+      netRegex: { effectId: '103E', capture: false },
+      durationSeconds: 3,
+      suppressSeconds: 1,
+      alertText: (data, _matches, output) => {
+        if (data.p2Lights === 2) {
+          data.p2Cursed = true;
+          return output.tower!();
+        }
+      },
+      outputStrings: {
+        tower: {
+          en: 'Tower',
+          ko: '타워 밟아요!',
+        },
+      },
+    },
+    {
+      id: 'FRU P2 Bright Hunger',
+      type: 'Ability',
+      netRegex: { source: 'Usurper of Frost', id: '9D15' },
+      condition: (data, matches) =>
+        matches.target === data.me && data.p2Cursed && data.p2Lights === 2,
+      durationSeconds: 3,
+      alertText: (_data, _matches, output) => output.text!(),
+      outputStrings: {
+        text: {
+          en: 'Out of tower',
+          ko: '타워에서 나와요!',
+        },
       },
     },
     {
