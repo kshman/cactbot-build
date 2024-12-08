@@ -419,7 +419,7 @@ export default {
     fr: 'Extérieur',
     ja: '外へ',
     cn: '远离',
-    ko: '밖으로',
+    ko: '바깥으로',
   },
   outOfMelee: {
     en: 'Out of melee',
@@ -1095,6 +1095,16 @@ export default {
     en: 'Stay',
     ja: 'そのまま待機',
     ko: '그대로 대기',
+  },
+  inside: {
+    en: 'Inside',
+    ja: '内側',
+    ko: '안쪽',
+  },
+  outside: {
+    en: 'Outside',
+    ja: '外側',
+    ko: '바깥쪽',
   },
   // 화살표
   arrowN: {

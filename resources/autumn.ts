@@ -5,6 +5,10 @@ import Outputs from './outputs';
 import { Directions } from './util';
 
 // 어듬이 뱡향 표시
+const outputNumber8: number[] = [0, 1, 2, 3, 4, 5, 6, 7];
+const outputNumberCardinal: number[] = [0, 1, 2, 3];
+const outputNumberIntercard: number[] = [0, 1, 2, 3];
+
 export type MarkerOutput8 =
   | 'markerN'
   | 'markerNE'
@@ -180,6 +184,10 @@ const outputFromArrow8NumFunc = (dirNum: number): ArrowOutput8 => {
 
 // 어듬이 뱡향 지시
 export const AutumnDirections = {
+  outputNumber8: outputNumber8,
+  outputNumberCardinal: outputNumberCardinal,
+  outputNumberIntercard: outputNumberIntercard,
+
   outputMarker8: outputMarker8,
   outputMarkerCardinal: outputMarkerCardinal,
   outputMarkerIntercard: outputMarkerIntercard,
