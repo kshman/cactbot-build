@@ -200,12 +200,12 @@ const triggerSet: TriggerSet<Data> = {
           front: {
             en: '(Go Front)',
             ja: '(前へ)',
-            ko: '(앞으로, 내자리 아님)',
+            ko: '(앞으로, 움직일 준비)',
           },
           stay: {
             en: '(Stay)',
             ja: '(そのまま待機)',
-            ko: '(당첨, 그대로 대기)',
+            ko: '(당첨, 그자리 그대로)',
           },
           safe: {
             en: '${action} ${dir1} / ${dir2}',
@@ -275,7 +275,8 @@ const triggerSet: TriggerSet<Data> = {
       id: 'FRU P1 Turn of the Heavens',
       type: 'StartsUsing',
       netRegex: { id: ['9CD6', '9CD7'], source: 'Fatebreaker\'s Image' },
-      durationSeconds: 11,
+      delaySeconds: 5,
+      durationSeconds: 7,
       infoText: (_data, matches, output) => {
         const safe = matches.id === '9CD6' ? 'blue' : 'red';
         return output.text!({ safe: output[safe]!() });
@@ -331,8 +332,12 @@ const triggerSet: TriggerSet<Data> = {
         data.p1FallTethers.push({ target: target, color: color });
         const count = data.p1FallTethers.length;
         if (matches.target === data.me) {
-          data.p1FallSide = count % 2 === 0 ? 'right' : 'left';
-          return output.text!({ num: count, color: output[color]!() });
+          if (count % 2 === 0) {
+            data.p1FallSide = 'right';
+            return output.right!({ num: count, color: output[color]!() });
+          }
+          data.p1FallSide = 'left';
+          return output.left!({ num: count, color: output[color]!() });
         }
 
         // 어듬이 전용
@@ -340,17 +345,21 @@ const triggerSet: TriggerSet<Data> = {
           // 어듬이는 탱크 아니면 렌지 아니면 캐스터
           data.p1FallSide = 'right';
           if (data.role === 'tank') {
-            const healers = data.p1FallTethers.filter((d) => d.target.role === 'healer').length;
-            if (healers !== 0)
+            const hs = data.p1FallTethers.filter((d) => d.target.role === 'healer').length;
+            if (hs !== 0)
               data.p1FallSide = 'left';
           }
           return data.p1FallSide === 'left' ? output.getLeftAndWest!() : output.getRightAndEast!();
         }
       },
       outputStrings: {
-        text: {
-          en: '${num} ${color}',
-          ko: '내가 ${num}번째 ${color}',
+        left: {
+          en: 'Left ${num} ${color}',
+          ko: '🡸${num}번 ${color}',
+        },
+        right: {
+          en: 'Right ${num} ${color}',
+          ko: '${num}번 ${color}🡺',
         },
         red: Outputs.red,
         blue: Outputs.blue,
@@ -395,7 +404,7 @@ const triggerSet: TriggerSet<Data> = {
       id: 'FRU P2 Diamond Dust',
       type: 'StartsUsing',
       netRegex: { id: '9D05', source: 'Usurper of Frost', capture: false },
-      response: Responses.bigAoe(),
+      response: Responses.aoe(),
     },
     {
       id: 'FRU P2 Axe/Scythe Kick Collect',
@@ -436,15 +445,23 @@ const triggerSet: TriggerSet<Data> = {
       run: (data, _matches) => data.actors = {},
       outputStrings: {
         needle: {
-          en: '${kick} + ${ind} (Bait Flower)',
-          ko: '${kick} + ${ind} (얼음꽃 설치)',
+          en: '${kick} + ${ind} + Bait Flower',
+          ko: '${ind}${kick} 얼음 바늘',
         },
         stone: {
-          en: '${kick} + ${ind} (Bait Cone)',
-          ko: '${kick} + ${ind} (원뿔 유도)',
+          en: '${kick} + ${ind} + Bait Cone',
+          ko: '${ind}${kick} 원뿔',
         },
-        cardinal: Outputs.cardinals,
-        intercard: Outputs.intercards,
+        cardinal: {
+          en: 'Cardinals',
+          ja: '十字',
+          ko: '➕',
+        },
+        intercard: {
+          en: 'Intercards',
+          ja: '斜め',
+          ko: '❌',
+        },
         axe: Outputs.outside,
         scythe: Outputs.inside,
       },
@@ -633,7 +650,7 @@ const triggerSet: TriggerSet<Data> = {
         data.p2Puddles.push(data.party.member(matches.target));
         return data.p2Puddles.length === 2;
       },
-      durationSeconds: 6,
+      durationSeconds: 5,
       response: (data, _matches, output) => {
         // cactbot-builtin-response
         output.responseOutputStrings = {
@@ -643,7 +660,7 @@ const triggerSet: TriggerSet<Data> = {
           },
           chain: {
             en: 'Chain on YOU ${mark}',
-            ko: '내게 체인! ${mark} 마커로!',
+            ko: '${mark}마커로! 체인!',
           },
           spread: {
             en: 'Chain on YOU',
