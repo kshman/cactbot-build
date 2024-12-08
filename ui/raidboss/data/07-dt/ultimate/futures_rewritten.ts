@@ -70,10 +70,12 @@ const triggerSet: TriggerSet<Data> = {
       id: 'autumnConcealed',
       name: {
         en: 'Autumn style concealed',
+        ja: '秋のスタイル concealed',
         ko: '어듬이 스타일 concealed',
       },
       comment: {
         en: 'Autumn style concealed',
+        ja: '秋のスタイル concealed',
         ko: '어듬이 스타일 concealed',
       },
       type: 'checkbox',
@@ -112,14 +114,17 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         none: {
           en: 'No members data',
+          ja: 'メンバーデータがありません',
           ko: '멤버 데이터가 없어요',
         },
         empty: {
           en: 'No my data',
+          ja: '自分のデータがありません',
           ko: '내 데이터가 없어요',
         },
         ok: {
           en: 'Data OK',
+          ja: 'データ確認完了',
           ko: '데이터 확인',
         },
       },
@@ -209,6 +214,7 @@ const triggerSet: TriggerSet<Data> = {
           },
           safe: {
             en: '${action} ${dir1} / ${dir2}',
+            ja: '${action} ${dir1}${dir2}',
             ko: '${action} ${dir1}${dir2}',
           },
           stack: Outputs.stacks,
@@ -264,6 +270,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         safe: {
           en: '${action} ${dir1} / ${dir2}',
+          ja: '${action} ${dir1}${dir2}',
           ko: '${action} ${dir1}${dir2}',
         },
         stack: Outputs.stacks,
@@ -284,6 +291,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: '${safe} Safe',
+          ja: '${safe} 安置',
           ko: '${safe} 안전',
         },
         blue: Outputs.blue,
@@ -355,10 +363,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         left: {
           en: 'Left ${num} ${color}',
+          ja: '🡸${num}番目 ${color}',
           ko: '🡸${num}번 ${color}',
         },
         right: {
           en: 'Right ${num} ${color}',
+          ja: '${num}番目 ${color}🡺',
           ko: '${num}번 ${color}🡺',
         },
         red: Outputs.red,
@@ -446,10 +456,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         needle: {
           en: '${kick} + ${ind} + Bait Flower',
+          ja: '${kick} + ${ind} + AOE',
           ko: '${ind}${kick} 얼음 바늘',
         },
         stone: {
           en: '${kick} + ${ind} + Bait Cone',
+          ja: '${kick} + ${ind} + 扇',
           ko: '${ind}${kick} 원뿔',
         },
         cardinal: {
@@ -496,10 +508,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         knockback: {
           en: 'Knockback ${dir1} / ${dir2}',
+          ja: 'ノックバック ${dir1}${dir2}',
           ko: '넉백 ${dir1}${dir2}',
         },
         autumn: {
           en: 'Knockback ${dir}',
+          ja: 'ノックバック ${dir}',
           ko: '넉백 ${dir}',
         },
         unknown: Outputs.unknown,
@@ -524,10 +538,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Go center',
+          ja: '中央へ',
           ko: '장판 피해욧! 한가운데로!',
         },
         tts: {
           en: 'center',
+          ja: '動いて！',
           ko: '動いて！',
         },
       },
@@ -555,10 +571,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Slip',
+          ja: 'スリップ',
           ko: '미끄러져요!',
         },
         tts: {
           en: 'slip',
+          ja: '動いて！',
           ko: '動いて！',
         },
       },
@@ -656,14 +674,17 @@ const triggerSet: TriggerSet<Data> = {
         output.responseOutputStrings = {
           aoe: {
             en: 'AOE on YOU (${player})',
+            ja: '自分にAOE (${player})',
             ko: '내게 장판! (${player})',
           },
           chain: {
             en: 'Chain on YOU ${mark}',
+            ja: '自分に連鎖 (${mark})',
             ko: '${mark}마커로! 체인!',
           },
           spread: {
             en: 'Chain on YOU',
+            ja: '自分に連鎖',
             ko: '내게 체인, 맡은 자리로',
           },
           cnum4: Outputs.cnum4,
@@ -708,6 +729,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         tower: {
           en: 'Tower',
+          ja: '塔踏み',
           ko: '타워 밟아요!',
         },
       },
@@ -723,6 +745,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Out of tower',
+          ja: '塔から出てて',
           ko: '타워에서 나와요!',
         },
       },
@@ -786,38 +809,47 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         next: {
           en: ' => ',
+          ja: ' => ',
           ko: ' ',
         },
         stack: {
           en: 'Stacks',
+          ja: '頭割り',
           ko: '🔘',
         },
         fire: {
           en: 'Fire',
+          ja: 'ファイガ',
           ko: '🔥',
         },
         shadoweye: {
           en: 'Gaze',
+          ja: '視線',
           ko: '👁️',
         },
         eruption: {
           en: 'Spread',
+          ja: '散会',
           ko: '🔅',
         },
         beam: {
           en: 'Beam',
+          ja: 'ビーム',
           ko: '🔦',
         },
         water: {
           en: 'Water',
+          ja: 'ウォタガ',
           ko: '💧',
         },
         blizzard: {
           en: 'Blizzard',
+          ja: 'ブリザガ',
           ko: '❄️',
         },
         return: {
           en: 'Return',
+          ja: 'リターン',
           ko: '↻',
         },
       },
@@ -834,10 +866,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         partyInTanksOut: {
           en: 'Party In (Tanks Out)',
+          ja: '中へ (タンクは外)',
           ko: '안으로 (탱크가 밖으로)',
         },
         tanksOutPartyIn: {
           en: 'Tanks Out (Party In)',
+          ja: '外へ (タンクは中)',
           ko: '바깥으로 (파티는 안)',
         },
       },
@@ -855,10 +889,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         partyOutTanksIn: {
           en: 'Party Out (Tanks In)',
+          ja: '外へ (タンクは中)',
           ko: '밖으로 (탱크가 안으로)',
         },
         tanksInPartyOut: {
           en: 'Tanks In (Party Out)',
+          ja: '中へ (タンクは外)',
           ko: '보스 밑으로 (파티는 바깥)',
         },
       },
