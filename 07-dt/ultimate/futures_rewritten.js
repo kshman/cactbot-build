@@ -1,29 +1,3 @@
-// import Conditions from '../../../../../resources/conditions';
-const centerX = 100;
-const centerY = 100;
-const p1ConcealedStrings = {
-  concealed: {
-    en: '${action} ${dir1} / ${dir2}',
-    ko: '${action} ${dir1}${dir2}',
-  },
-  autumn: {
-    en: '${action} ${dir}',
-    ko: '${action} ${dir}',
-  },
-  stack: Outputs.stacks,
-  spread: Outputs.spreadOwn,
-  front: {
-    en: '(Go Front)',
-    ja: '(前へ)',
-    ko: '(앞으로, 내자리 아님)',
-  },
-  stay: {
-    en: '(Stay)',
-    ja: '(そのまま待機)',
-    ko: '(당첨, 그대로 대기)',
-  },
-  ...AutumnDirections.outputStringsMarker8,
-};
 const p3UltimateIdKey = {
   '996': 'stack',
   '997': 'fire',
@@ -34,86 +8,93 @@ const p3UltimateIdKey = {
   '99E': 'blizzard',
   '9A0': 'return',
 };
-const p3UltimateStrings = {
-  stack: Outputs.stacks,
-  fire: {
-    en: 'Fire',
-    ko: '파이가',
-  },
-  shadoweye: {
-    en: 'Gaze',
-    ko: '시선',
-  },
-  eruption: Outputs.spread,
-  beam: {
-    en: 'Beam',
-    ko: '빔유도',
-  },
-  water: {
-    en: 'Water',
-    ko: '워터가',
-  },
-  blizzard: {
-    en: 'Blizzard',
-    ko: '블리자가',
-  },
-  return: {
-    en: 'Return',
-    ko: '회귀',
-  },
-};
 Options.Triggers.push({
   id: 'FuturesRewrittenUltimate',
   zoneId: ZoneId.FuturesRewrittenUltimate,
   config: [
     {
-      id: 'consealedSafeType',
+      id: 'autumnConcealed',
       name: {
-        en: 'Consealed Safe Type',
-        ko: '숨겨진 안전 위치',
+        en: 'Autumn style concealed',
+        ko: '어듬이 스타일 concealed',
       },
-      type: 'select',
-      options: {
-        en: {
-          'Normal': 'normal',
-          'Autumn': 'autumn',
-        },
-        ko: {
-          '그냥 알림': 'normal',
-          '어듬이 전용': 'autumn',
-        },
+      comment: {
+        en: 'Autumn style concealed',
+        ko: '어듬이 스타일 concealed',
       },
-      default: 'autumn',
+      type: 'checkbox',
+      default: (options) => options.OnlyAutumn,
     },
   ],
   timelineFile: 'futures_rewritten.txt',
   initData: () => ({
     phase: 'p1',
+    p1SafeMarkers: [...AutumnDirections.outputNumber8],
+    p1FallTethers: [],
+    p2Puddles: [],
+    p3Ultimate: {},
+    p3Umesg: [],
     actors: {},
-    p1SafeMarkers: [...AutumnDirections.outputMarker8],
-    p1FallColors: [],
-    p1FallRoles: [],
-    p2Curses: [],
-    p2Ultimate: {},
-    p2UltimateAutumn: [],
   }),
-  timelineTriggers: [],
+  timelineTriggers: [
+    {
+      id: 'FRU 데이터 확인',
+      regex: /--setup--/,
+      delaySeconds: 1,
+      durationSeconds: 2,
+      infoText: (data, _matches, output) => {
+        if (!data.members)
+          return output.none();
+        for (let i = 0; i < data.members.length; i++) {
+          const m = data.members[i];
+          if (m)
+            m.i = i;
+        }
+        data.my = data.members.find((m) => m.j === data.job && m.n === data.me);
+        if (!data.my)
+          return output.empty();
+        return output.ok();
+      },
+      outputStrings: {
+        none: {
+          en: 'No members data',
+          ko: '멤버 데이터가 없어요',
+        },
+        empty: {
+          en: 'No my data',
+          ko: '내 데이터가 없어요',
+        },
+        ok: {
+          en: 'Data OK',
+          ko: '데이터 확인',
+        },
+      },
+    },
+  ],
   triggers: [
     {
       id: 'FRU Phase Tracker',
       type: 'StartsUsing',
-      netRegex: { id: ['9CD0', '9CD4', '9CFF', '9D49'], capture: true },
+      netRegex: { id: ['9CD0', '9CD4', '9CFF', '9D49', '9D36', '9D72'], capture: true },
       run: (data, matches) => {
         switch (matches.id) {
-          case '9CD0':
-          case '9CD4':
+          case '9CD0': // cyclonic break fire
+          case '9CD4': // cyclonic break lightning
             data.phase = 'p1';
             break;
-          case '9CFF':
+          case '9CFF': // quadruple slap
             data.phase = 'p2';
             break;
-          case '9D49': // hell judgement
+          case '9D49': // hell's judgement
             data.phase = 'p3';
+            break;
+          case '9D36': // materialization
+            data.phase = 'p4';
+            break;
+          case '9D72': // fulgent blade
+            if (data.phase === 'p5')
+              return;
+            data.phase = 'p5';
             break;
         }
         data.actors = {};
@@ -123,7 +104,7 @@ Options.Triggers.push({
       id: 'FRU Actor Collect',
       type: 'ActorSetPos',
       netRegex: { id: '4[0-9A-F]{7}', capture: true },
-      condition: (data) => data.phase === 'p1',
+      condition: (data) => data.phase === 'p1' || data.phase === 'p2',
       run: (data, matches) => data.actors[matches.id] = matches,
     },
     // //////////////// PHASE 1 //////////////////
@@ -151,71 +132,96 @@ Options.Triggers.push({
       id: 'FRU P1 Utopian Sky Collect',
       type: 'StartsUsing',
       netRegex: { id: ['9CDA', '9CDB'], source: 'Fatebreaker' },
-      run: (data, matches) => data.p1UtopianColor = matches.id === '9CDA' ? 'red' : 'blue',
+      run: (data, matches) => data.p1Utopian = matches.id === '9CDA' ? 'stack' : 'spread',
     },
     {
-      id: 'FRU P1 Concealed Safe',
+      id: 'FRU P1 Concealed',
       type: 'ActorControlExtra',
       netRegex: { category: '003F', param1: '4', capture: true },
-      condition: (data) => data.phase === 'p1' && data.p1UtopianColor !== undefined,
-      delaySeconds: 0.5,
-      durationSeconds: (data) => data.triggerSetConfig.consealedSafeType === 'autumn' ? 2.5 : 7,
+      condition: (data) => data.phase === 'p1' && data.p1Utopian !== undefined,
+      durationSeconds: (data) => data.triggerSetConfig.autumnConcealed ? 7.5 : 2.5,
       response: (data, matches, output) => {
         // cactbot-builtin-response
         output.responseOutputStrings = {
-          ...p1ConcealedStrings,
+          front: {
+            en: '(Go Front)',
+            ja: '(前へ)',
+            ko: '(앞으로, 움직일 준비)',
+          },
+          stay: {
+            en: '(Stay)',
+            ja: '(そのまま待機)',
+            ko: '(당첨, 그자리 그대로)',
+          },
+          safe: {
+            en: '${action} ${dir1} / ${dir2}',
+            ko: '${action} ${dir1}${dir2}',
+          },
+          stack: Outputs.stacks,
+          spread: Outputs.spreadOwn,
+          ...AutumnDirections.outputStringsMarker8,
         };
         const image = data.actors[matches.id];
         if (image === undefined)
           return;
-        const dir = Directions.hdgTo8DirNum(parseFloat(image.heading));
-        const dir1 = AutumnDirections.outputFromMarker8Num(dir);
-        const dir2 = AutumnDirections.outputFromMarker8Num((dir + 4) % 8);
+        const dir1 = Directions.hdgTo8DirNum(parseFloat(image.heading));
+        const dir2 = (dir1 + 4) % 8;
         data.p1SafeMarkers = data.p1SafeMarkers.filter((d) => d !== dir1 && d !== dir2);
         if (data.p1SafeMarkers.length !== 2)
           return;
-        const [m1, m2] = data.p1SafeMarkers;
-        if (data.triggerSetConfig.consealedSafeType === 'autumn') {
-          // 어듬이 전용
-          const autumnDir = ['markerN', 'markerNW', 'markerW', 'markerSW'];
-          data.p1SafeAutumn = autumnDir.includes(m1) ? m1 : m2;
-          if (data.p1SafeAutumn === 'markerN')
+        // 어듬이 제공
+        if (data.triggerSetConfig.autumnConcealed) {
+          const dir1 = AutumnDirections.outputFromMarker8Num(data.p1SafeMarkers.shift());
+          const dir2 = AutumnDirections.outputFromMarker8Num(data.p1SafeMarkers.shift());
+          return {
+            infoText: output.safe({
+              action: output[data.p1Utopian](),
+              dir1: output[dir1](),
+              dir2: output[dir2](),
+            }),
+          };
+        }
+        if (data.my !== undefined) {
+          if (data.p1SafeMarkers.includes(data.my.p))
             return { alertText: output.stay() };
           return { alertText: output.front() };
         }
-        const action = data.p1UtopianColor === 'red' ? output.stack() : output.spread();
-        return {
-          infoText: output.concealed({
-            dir1: output[m1](),
-            dir2: output[m2](),
-            action: action,
-          }),
-        };
       },
     },
     {
-      id: 'FRU P1 Concealed Autumn',
+      id: 'FRU P1 Concealed Left',
       type: 'StartsUsing',
       netRegex: { id: ['9CDA', '9CDB'], source: 'Fatebreaker', capture: false },
-      condition: (data) => data.triggerSetConfig.consealedSafeType === 'autumn',
-      delaySeconds: 11.5,
+      delaySeconds: 11,
       durationSeconds: 6,
       infoText: (data, _matches, output) => {
-        if (data.p1SafeAutumn === undefined)
+        if (data.p1SafeMarkers.length !== 2)
           return;
-        const action = data.p1UtopianColor === 'red' ? output.stack() : output.spread();
-        return output.autumn({ dir: output[data.p1SafeAutumn](), action: action });
+        const dir1 = AutumnDirections.outputFromMarker8Num(data.p1SafeMarkers.shift());
+        const dir2 = AutumnDirections.outputFromMarker8Num(data.p1SafeMarkers.shift());
+        return output.safe({
+          action: output[data.p1Utopian](),
+          dir1: output[dir1](),
+          dir2: output[dir2](),
+        });
       },
-      run: (data) => delete data.p1SafeAutumn,
+      run: (data) => delete data.p1Utopian,
       outputStrings: {
-        ...p1ConcealedStrings,
+        safe: {
+          en: '${action} ${dir1} / ${dir2}',
+          ko: '${action} ${dir1}${dir2}',
+        },
+        stack: Outputs.stacks,
+        spread: Outputs.spreadOwn,
+        ...AutumnDirections.outputStringsMarker8,
       },
     },
     {
       id: 'FRU P1 Turn of the Heavens',
       type: 'StartsUsing',
       netRegex: { id: ['9CD6', '9CD7'], source: 'Fatebreaker\'s Image' },
-      durationSeconds: 11,
+      delaySeconds: 5,
+      durationSeconds: 7,
       infoText: (_data, matches, output) => {
         const safe = matches.id === '9CD6' ? 'blue' : 'red';
         return output.text({ safe: output[safe]() });
@@ -257,11 +263,7 @@ Options.Triggers.push({
       type: 'StartsUsing',
       netRegex: { id: '9CEA', source: 'Fatebreaker', capture: false },
       condition: (data) => !data.p1Falled,
-      run: (data, _matches) => {
-        data.p1Falled = true;
-        data.p1FallColors = [];
-        data.p1FallRoles = [];
-      },
+      run: (data, _matches) => data.p1Falled = true,
     },
     {
       id: 'FRU P1 Fall of Faith Collect',
@@ -270,33 +272,38 @@ Options.Triggers.push({
       condition: (data, _matches) => data.phase === 'p1' && data.p1Falled,
       durationSeconds: 3,
       alertText: (data, matches, output) => {
+        const target = data.party.member(matches.target);
         const color = matches.id === '00F9' ? 'red' : 'blue';
-        data.p1FallColors.push(color);
-        const index = data.p1FallColors.length;
+        data.p1FallTethers.push({ target: target, color: color });
+        const count = data.p1FallTethers.length;
         if (matches.target === data.me) {
-          data.p1FallRoles = [];
-          data.p1FallSide = index % 2 === 0 ? 'right' : 'left';
-          return output.mine({ num: index, color: output[color]() });
-        }
-        if (data.options.OnlyAutumn) {
-          // 힐러 둘 다 안걸리면 어듬이는 오른쪽으로
-          const member = data.party.member(matches.target);
-          data.p1FallRoles.push(member.role ?? 'none');
-          if (data.p1FallRoles.length === 4) {
-            const healers = data.p1FallRoles.filter((r) => r === 'healer').length;
-            if (healers === 0) {
-              data.p1FallSide = 'right';
-              return output.getRightAndEast();
-            }
-            data.p1FallSide = 'left';
-            return output.getLeftAndWest();
+          if (count % 2 === 0) {
+            data.p1FallSide = 'right';
+            return output.right({ num: count, color: output[color]() });
           }
+          data.p1FallSide = 'left';
+          return output.left({ num: count, color: output[color]() });
+        }
+        // 어듬이 전용
+        if (data.options.OnlyAutumn && count === 4 && data.p1FallSide === undefined) {
+          // 어듬이는 탱크 아니면 렌지 아니면 캐스터
+          data.p1FallSide = 'right';
+          if (data.role === 'tank') {
+            const hs = data.p1FallTethers.filter((d) => d.target.role === 'healer').length;
+            if (hs !== 0)
+              data.p1FallSide = 'left';
+          }
+          return data.p1FallSide === 'left' ? output.getLeftAndWest() : output.getRightAndEast();
         }
       },
       outputStrings: {
-        mine: {
-          en: '${num} ${color}',
-          ko: '내가 ${num}번째 ${color}',
+        left: {
+          en: 'Left ${num} ${color}',
+          ko: '🡸${num}번 ${color}',
+        },
+        right: {
+          en: 'Right ${num} ${color}',
+          ko: '${num}번 ${color}🡺',
         },
         red: Outputs.red,
         blue: Outputs.blue,
@@ -308,26 +315,26 @@ Options.Triggers.push({
       id: 'FRU P1 Fall of Faith Order',
       type: 'Ability',
       netRegex: { id: ['9CC9', '9CCC'], source: 'Fatebreaker', capture: false },
-      condition: (data) => data.p1FallColors.length === 4,
+      condition: (data) => data.p1FallTethers.length === 4,
       durationSeconds: 10,
       infoText: (data, _matches, output) => {
         let colors;
         if (data.p1FallSide === undefined)
-          colors = data.p1FallColors.map((c) => output[c]());
+          colors = data.p1FallTethers.map((c) => output[c.color]());
         else if (data.p1FallSide === 'left')
-          colors = [data.p1FallColors[0], data.p1FallColors[2]].map((c) => output[c]());
+          colors = [data.p1FallTethers[0], data.p1FallTethers[2]].map((c) => output[c.color]());
         else
-          colors = [data.p1FallColors[1], data.p1FallColors[3]].map((c) => output[c]());
-        return output.res({ res: colors.join(output.next()) });
+          colors = [data.p1FallTethers[1], data.p1FallTethers[3]].map((c) => output[c.color]());
+        return colors.join(output.next());
+      },
+      run: (data) => {
+        data.p1FallTethers = [];
+        delete data.p1FallSide;
       },
       outputStrings: {
         red: Outputs.red,
         blue: Outputs.blue,
         next: Outputs.next,
-        res: {
-          en: '${res}',
-          ko: '${res}',
-        },
       },
     },
     // //////////////// PHASE 2 //////////////////
@@ -341,7 +348,7 @@ Options.Triggers.push({
       id: 'FRU P2 Diamond Dust',
       type: 'StartsUsing',
       netRegex: { id: '9D05', source: 'Usurper of Frost', capture: false },
-      response: Responses.bigAoe(),
+      response: Responses.aoe(),
     },
     {
       id: 'FRU P2 Axe/Scythe Kick Collect',
@@ -350,100 +357,84 @@ Options.Triggers.push({
       run: (data, matches) => data.p2Kick = matches.id === '9D0A' ? 'axe' : 'scythe',
     },
     {
-      id: 'FRU P2 Icicle Impact Initial Collect',
-      type: 'StartsUsing',
-      netRegex: { id: '9D06' },
-      suppressSeconds: 1,
-      run: (data, matches) => {
-        const x = parseInt(matches.x);
-        const y = parseInt(matches.y);
-        data.p2Knockback = Directions.xyTo8DirNum(x, y, centerX, centerY);
-      },
-    },
-    {
-      id: 'FRU P2 Frigid Stone',
+      id: 'FRU P2 Frigid Stone/Needle',
       type: 'HeadMarker',
       netRegex: { id: '0159' },
       durationSeconds: 5,
       suppressSeconds: 1,
       alertText: (data, matches, output) => {
-        const cardinal = data.p2Knockback !== undefined && data.p2Knockback % 2 === 0;
-        const [rf, rb] = cardinal ? ['intercard', 'cardinal'] : ['cardinal', 'intercard'];
+        let cardinal = false;
+        const actors = Object.values(data.actors);
+        if (actors.length >= 2 && actors[1] !== undefined) {
+          data.p2Icicle = Directions.hdgTo8DirNum(parseFloat(actors[1].heading));
+          if (data.p2Icicle % 2 === 0)
+            cardinal = true;
+        }
+        const [rn, rs] = cardinal ? ['intercard', 'cardinal'] : ['cardinal', 'intercard'];
         const kick = data.p2Kick === undefined ? '' : output[data.p2Kick]();
         const target = data.party.member(matches.target);
-        if (data.options.OnlyAutumn) {
-          // 어듬이는 TH팀이예여
-          data.p2Flower = target.role === 'dps' ? false : true;
-        }
+        data.p2Stone = true;
         if (data.role === 'dps') {
-          if (target.role === 'dps')
-            return output.flower({ kick: kick, ind: output[rf]() });
-          return output.cone({ kick: kick, ind: output[rb]() });
+          if (target.role !== 'dps')
+            return output.stone({ kick: kick, ind: output[rs]() });
+          data.p2Stone = false;
+          return output.needle({ kick: kick, ind: output[rn]() });
         }
         if (target.role === 'dps')
-          return output.cone({ kick: kick, ind: output[rb]() });
-        return output.flower({ kick: kick, ind: output[rf]() });
+          return output.stone({ kick: kick, ind: output[rs]() });
+        data.p2Stone = false;
+        return output.needle({ kick: kick, ind: output[rn]() });
       },
       run: (data, _matches) => data.actors = {},
       outputStrings: {
-        flower: {
-          en: '${kick} + ${ind} => Bait Flower',
-          ko: '${kick} + ${ind} (얼음꽃 설치)',
+        needle: {
+          en: '${kick} + ${ind} + Bait Flower',
+          ko: '${ind}${kick} 얼음 바늘',
         },
-        cone: {
-          en: '${kick} + ${ind} => Bait Cone',
-          ko: '${kick} + ${ind} (원뿔 유도)',
+        stone: {
+          en: '${kick} + ${ind} + Bait Cone',
+          ko: '${ind}${kick} 원뿔',
         },
         cardinal: {
-          en: 'Cardinal',
-          ko: '십자',
+          en: 'Cardinals',
+          ja: '十字',
+          ko: '➕',
         },
         intercard: {
-          en: 'Intercard',
-          ko: '비스듬',
+          en: 'Intercards',
+          ja: '斜め',
+          ko: '❌',
         },
-        axe: Outputs.out,
-        scythe: Outputs.in,
-      },
-    },
-    {
-      id: 'FRU P2 Axe Kick Frigid Needle',
-      type: 'StartsUsing',
-      netRegex: { id: '9D0A', source: 'Oracle\'s Reflection' },
-      condition: (data, _matches) => data.options.OnlyAutumn,
-      delaySeconds: (_data, matches) => parseFloat(matches.castTime) - 0.5,
-      alarmText: (data, _matches, output) => {
-        if (data.p2Flower !== undefined && !data.p2Flower)
-          return output.text();
-      },
-      outputStrings: {
-        text: {
-          en: 'Go center',
-          ko: '움직여요! 한가운데로!',
-        },
+        axe: Outputs.outside,
+        scythe: Outputs.inside,
       },
     },
     {
       id: 'FRU P2 Heavenly Strike',
       type: 'Ability',
-      netRegex: { id: '9D07', source: 'Usurper of Frost', capture: false },
+      // 버근가 소스가 이상해
+      // AOEActionEffect 16:4002699C:Usurper of Frost:9D07:Frigid Stone:
+      // AOEActionEffect 16:40013FF1:Fatebreaker's Image:9D07:Frigid Stone:
+      netRegex: { id: '9D07', capture: false },
       durationSeconds: 5,
       suppressSeconds: 1,
       infoText: (data, _matches, output) => {
-        if (data.p2Knockback === undefined)
+        if (data.p2Icicle === undefined)
           return output.autumn({ dir: output.unknown() });
-        const dir = data.p2Knockback;
-        const m1 = AutumnDirections.outputFromMarker8Num(dir < 4 ? dir : dir - 4);
-        const m2 = AutumnDirections.outputFromMarker8Num(dir < 4 ? dir + 4 : dir);
-        if (data.options.OnlyAutumn) {
-          // 어듬이는 MT팀이예여
-          const autumnDir = ['markerN', 'markerNE', 'markerW', 'markerNW'];
-          const dir = autumnDir.includes(m1) ? m1 : m2;
-          return output.autumn({ dir: output[dir]() });
+        const dir = data.p2Icicle;
+        const dir1 = dir < 4 ? dir : dir - 4;
+        const dir2 = dir < 4 ? dir + 4 : dir;
+        // 어듬이 제공
+        if (data.my !== undefined) {
+          const dirs = data.my.t === 1 ? [0, 1, 6, 7] : [2, 3, 4, 5];
+          const res = AutumnDirections.outputFromMarker8Num(dirs.includes(dir1) ? dir1 : dir2);
+          return output.autumn({ dir: output[res]() });
         }
+        const m1 = AutumnDirections.outputFromMarker8Num(dir1);
+        const m2 = AutumnDirections.outputFromMarker8Num(dir2);
         return output.knockback({ dir1: output[m1](), dir2: output[m2]() });
       },
-      run: (data, _matches) => data.p2Knockback = undefined,
+      run: (data, _matches) => delete data.p2Icicle,
       outputStrings: {
         knockback: {
           en: 'Knockback ${dir1} / ${dir2}',
@@ -455,6 +446,32 @@ Options.Triggers.push({
         },
         unknown: Outputs.unknown,
         ...AutumnDirections.outputStringsMarker8,
+      },
+    },
+    {
+      id: 'FRU P2 Axe Kick Frigid Needle',
+      type: 'StartsUsing',
+      netRegex: { id: '9D0A', source: 'Oracle\'s Reflection' },
+      delaySeconds: (_data, matches) => parseFloat(matches.castTime) - 0.5,
+      durationSeconds: 2,
+      alarmText: (data, _matches, output) => {
+        if (data.p2Stone !== undefined && data.p2Stone)
+          return output.text();
+      },
+      tts: (data, _matches, output) => {
+        if (data.p2Stone !== undefined && data.p2Stone)
+          return output.tts();
+      },
+      run: (data) => delete data.p2Stone,
+      outputStrings: {
+        text: {
+          en: 'Go center',
+          ko: '장판 피해욧! 한가운데로!',
+        },
+        tts: {
+          en: 'center',
+          ko: '動いて！',
+        },
       },
     },
     {
@@ -474,11 +491,17 @@ Options.Triggers.push({
       type: 'StartsUsing',
       netRegex: { id: ['9D01', '9D02'], source: 'Oracle\'s Reflection', capture: true },
       delaySeconds: (_data, matches) => parseFloat(matches.castTime) - 0.5,
+      durationSeconds: 2,
       alarmText: (_data, _matches, output) => output.text(),
+      tts: (_data, _matches, output) => output.tts(),
       outputStrings: {
         text: {
           en: 'Slip',
           ko: '미끄러져요!',
+        },
+        tts: {
+          en: 'slip',
+          ko: '動いて！',
         },
       },
     },
@@ -488,6 +511,59 @@ Options.Triggers.push({
       netRegex: { id: '9D12', capture: false },
       response: Responses.aoe(),
     },
+    {
+      id: 'FRU P2 Mirror, Mirror',
+      type: 'Ability',
+      netRegex: { id: '9CF3', capture: false },
+      run: (data) => data.actors = {},
+    },
+    /* 이거 안된다... 훔
+        {
+          id: 'FRU P2 Blue Mirror',
+          // 257 101:800375BF:02000100:08:00:0000 빨강
+          // 257 101:800375BF:02000100:02:00:0000 빨강
+          // 257 101:800375BF:00020001:04:00:0000 하양
+          // 271 10F:40014546:-2.3563:00:00:114.1421:114.1421:0.0000
+          // 271 10F:40014547:-0.7855:00:00:114.1421:85.8579:0.0000
+          // 271 10F:40014548:0.7853:00:00:85.8579:85.8579:0.0000
+          type: 'MapEffect',
+          netRegex: { flags: '00020001', location: '04', capture: false },
+          infoText: (data, _matches, output) => {
+            const actors = Object.values(data.actors);
+            if (actors.length < 3)
+              return;
+            const sorted = actors.sort((a, b) => parseInt(b.id, 16) - parseInt(a.id, 16));
+            const dir = Directions.hdgTo8DirNum(parseFloat(sorted[0]!.heading));
+            if (data.my !== undefined) {
+              // 어듬이 제공
+              if (data.my.mm === 1) {
+                const res = AutumnDirections.outputFromMarker8Num((dir + 4) % 8);
+                return output.oppo!({ mark: output[res]!() });
+              }
+              const res = AutumnDirections.outputFromMarker8Num(dir);
+              return output.blue!({ mark: output[res]!() });
+            }
+            const m1 = AutumnDirections.outputFromMarker8Num(dir < 4 ? dir : dir - 4);
+            const m2 = AutumnDirections.outputFromMarker8Num(dir < 4 ? dir + 4 : dir);
+            return output.mirror!({ m1: output[m1]!(), m2: output[m2]!() });
+          },
+          outputStrings: {
+            blue: {
+              en: 'Blue Mirror ${mark}',
+              ko: '파란 거울 ${mark}',
+            },
+            oppo: {
+              en: 'Opposite ${mark}',
+              ko: '반대 거울 ${mark}',
+            },
+            mirror: {
+              en: 'Mirror ${m1} / ${m2}',
+              ko: '거울 ${m1}${m2}',
+            },
+            ...AutumnDirections.outputStringsMarker8,
+          },
+        },
+        */
     {
       id: 'FRU P2 Banish III Pair',
       type: 'StartsUsing',
@@ -501,64 +577,96 @@ Options.Triggers.push({
       response: Responses.spread(),
     },
     {
-      id: 'FRU P2 Chains of Evelasting Light',
-      type: 'GainsEffect',
-      netRegex: { effectId: '103D' },
-      condition: (data, matches) => !data.options.OnlyAutumn && data.me === matches.target,
-      durationSeconds: 6,
-      infoText: (_data, _matches, output) => output.text(),
-      outputStrings: {
-        text: {
-          en: 'Chain',
-          ko: '내게 체인, 맡은 자리로',
-        },
-      },
+      id: 'FRU P2 Light Rampant',
+      type: 'StartsUsing',
+      netRegex: { id: '9D14', capture: false },
+      response: Responses.aoe(),
     },
     {
-      id: 'FRU P2 Curse of Everlasting Light',
+      id: 'FRU P2 Light Rampant Debuff',
       type: 'HeadMarker',
       netRegex: { id: '0177' },
       condition: (data, matches) => {
         if (data.phase !== 'p2')
           return;
-        data.p2Curses.push(matches.target);
-        return data.p2Curses.length === 2;
+        data.p2Puddles.push(data.party.member(matches.target));
+        return data.p2Puddles.length === 2;
       },
-      durationSeconds: 6,
+      durationSeconds: 5,
       response: (data, _matches, output) => {
         // cactbot-builtin-response
         output.responseOutputStrings = {
-          text: {
+          aoe: {
             en: 'AOE on YOU (${player})',
             ko: '내게 장판! (${player})',
           },
           chain: {
-            en: 'Chain ${mark}',
-            ko: '내게 체인! ${mark} 마커로!',
+            en: 'Chain on YOU ${mark}',
+            ko: '${mark}마커로! 체인!',
+          },
+          spread: {
+            en: 'Chain on YOU',
+            ko: '내게 체인, 맡은 자리로',
           },
           cnum4: Outputs.cnum4,
           cmarkC: Outputs.cmarkC,
-          left: Outputs.getLeftAndWest,
-          right: Outputs.getRightAndEast,
           unknown: Outputs.unknown,
         };
-        if (!data.p2Curses.includes(data.me)) {
-          if (data.options.OnlyAutumn) {
+        if (!data.p2Puddles.some((p) => p.name === data.me)) {
+          if (data.options.OnlyAutumn && data.role === 'tank') {
             // 어듬이 전용
-            const p1 = data.party.member(data.p2Curses.shift());
-            const p2 = data.party.member(data.p2Curses.shift());
-            if (p1 === undefined || p2 === undefined)
-              return;
-            if (p1.job === 'AST' || p2.job === 'AST' || p1.job === 'WHM' || p2.job === 'WHM')
-              return { alertText: output.chain({ mark: output.cnum4() }) };
-            return { alertText: output.chain({ mark: output.cmarkC() }) };
+            const cps = ['AST', 'WHM'];
+            const marker = data.p2Puddles.some((p) => cps.includes(p.job)) ? 'cnum4' : 'cmarkC';
+            return { alertText: output.chain({ mark: output[marker]() }) };
           }
-          return;
+          // 장판이 없어요 (Chains of Evelasting Light: effectId '103D')
+          return { infoText: output.spread() };
         }
-        const partner = data.party.member(data.p2Curses.find((p) => p !== data.me));
+        const partner = data.p2Puddles.find((p) => p.name !== data.me);
         if (partner === undefined)
-          return { infoText: output.text({ player: output.unknown() }) };
-        return { infoText: output.text({ player: partner.nick }) };
+          return { infoText: output.aoe({ player: output.unknown() }) };
+        return { infoText: output.aoe({ player: partner.nick }) };
+      },
+    },
+    {
+      id: 'FRU P2 Lightsteeped Gain',
+      type: 'GainsEffect',
+      netRegex: { effectId: '8D1' },
+      condition: Conditions.targetIsYou(),
+      run: (data, matches) => data.p2Lights = parseInt(matches.count),
+    },
+    {
+      id: 'FRU P2 Curse of Everlasting Light',
+      type: 'LosesEffect',
+      netRegex: { effectId: '103E', capture: false },
+      durationSeconds: 3,
+      suppressSeconds: 1,
+      alertText: (data, _matches, output) => {
+        if (data.p2Lights === 2) {
+          data.p2Cursed = true;
+          return output.tower();
+        }
+      },
+      outputStrings: {
+        tower: {
+          en: 'Tower',
+          ko: '타워 밟아요!',
+        },
+      },
+    },
+    {
+      id: 'FRU P2 Bright Hunger',
+      type: 'Ability',
+      netRegex: { source: 'Usurper of Frost', id: '9D15' },
+      condition: (data, matches) =>
+        matches.target === data.me && data.p2Cursed && data.p2Lights === 2,
+      durationSeconds: 3,
+      alertText: (_data, _matches, output) => output.text(),
+      outputStrings: {
+        text: {
+          en: 'Out of tower',
+          ko: '타워에서 나와요!',
+        },
       },
     },
     {
@@ -576,7 +684,7 @@ Options.Triggers.push({
       type: 'StartsUsing',
       netRegex: { source: 'Oracle of Darkness', id: '9D4A', capture: false },
       response: Responses.bigAoe(),
-      run: (data) => data.p2Relativity = 'ultimate',
+      run: (data) => data.p3Relativity = 'ultimate',
     },
     {
       id: 'FRU P3 Ultimate Relativity Debuff Collect',
@@ -590,22 +698,22 @@ Options.Triggers.push({
       // 99E Spell-in-Waiting: Dark Blizzard III
       // 9A0 Spell-in-Waiting: Return
       netRegex: { effectId: ['99[678BCDE]', '9A0'] },
-      condition: (data, matches) => data.p2Relativity === 'ultimate' && matches.target === data.me,
+      condition: (data, matches) => data.p3Relativity === 'ultimate' && matches.target === data.me,
       run: (data, matches) => {
-        data.p2Ultimate[matches.effectId.toUpperCase()] = parseFloat(matches.duration);
+        data.p3Ultimate[matches.effectId.toUpperCase()] = parseFloat(matches.duration);
       },
     },
     {
       id: 'FRU P3 Ultimate Relativity Debuff',
       type: 'GainsEffect',
       netRegex: { effectId: '99B', capture: false },
-      condition: (data) => data.p2Relativity === 'ultimate',
+      condition: (data) => data.p3Relativity === 'ultimate',
       delaySeconds: 0.1,
-      durationSeconds: (data) => data.options.OnlyAutumn ? 6 : 41,
+      durationSeconds: (data) => data.options.OnlyAutumn ? 5 : 41,
       suppressSeconds: 0.1,
       infoText: (data, _matches, output) => {
-        const ids = Object.keys(data.p2Ultimate).sort((a, b) =>
-          (data.p2Ultimate[a] ?? 0) - (data.p2Ultimate[b] ?? 0)
+        const ids = Object.keys(data.p3Ultimate).sort((a, b) =>
+          (data.p3Ultimate[a] ?? 0) - (data.p3Ultimate[b] ?? 0)
         );
         const keys = ids.map((id) => p3UltimateIdKey[id]);
         if (keys === undefined || keys.length === 0)
@@ -614,187 +722,45 @@ Options.Triggers.push({
           if (key === undefined)
             throw new UnreachableCode();
         }
-        if (data.options.OnlyAutumn) {
-          // 어듬이는 TH팀이예여
-          let role;
-          if (data.p2Ultimate['99E'] !== undefined)
-            role = 'blizzard';
-          else {
-            const fire = data.p2Ultimate['997'];
-            if (fire === undefined)
-              role = 'none';
-            else if (fire > 30)
-              role = 'fire31';
-            else if (fire > 20)
-              role = 'fire21';
-            else
-              role = 'fire11';
-          }
-          if (role === undefined)
-            throw new UnreachableCode();
-          switch (role) {
-            case 'blizzard': // attack3
-              data.p2UltimateAutumn.push('한가운데서 뭉쳐요');
-              data.p2UltimateAutumn.push('모래시계 리턴 설치');
-              data.p2UltimateAutumn.push('🡻블리자가 버려요');
-              data.p2UltimateAutumn.push('🡻빔 유도');
-              data.p2UltimateAutumn.push('한가운데서 뭉쳐요');
-              data.p2UltimateAutumn.push('한가운데서 바깥봐요');
-              return '🡻블리자가 (attack3)';
-            case 'fire11': // attack3
-              data.p2UltimateAutumn.push('🡻파이가 버려요');
-              data.p2UltimateAutumn.push('모래시계 리턴 설치');
-              data.p2UltimateAutumn.push('한가운데서 뭉쳐요');
-              data.p2UltimateAutumn.push('🡻빔 유도');
-              data.p2UltimateAutumn.push('한가운데서 뭉쳐요');
-              data.p2UltimateAutumn.push('한가운데서 바깥봐요');
-              return '🡻빠른 파이가 (attack3)';
-            case 'fire21': // stop1
-              data.p2UltimateAutumn.push('한가운데서 뭉쳐요');
-              data.p2UltimateAutumn.push('모래시계 리턴 설치');
-              data.p2UltimateAutumn.push('🡸파이가 버려요');
-              data.p2UltimateAutumn.push('(기둘려요)');
-              data.p2UltimateAutumn.push('한가운데서 뭉쳐요');
-              data.p2UltimateAutumn.push('🡸빔 유도 🔜 피하면서 바깥봐요');
-              return '🡸중간 파이가 (stop1)';
-            case 'fire31': // bind1 또는 bind2
-              data.p2UltimateAutumn.push('한가운데서 뭉쳐요');
-              data.p2UltimateAutumn.push('🡿빔 유도');
-              data.p2UltimateAutumn.push('한가운데서 뭉쳐요');
-              data.p2UltimateAutumn.push('한가운데 리턴 설치');
-              data.p2UltimateAutumn.push('🡿파이가 버려요');
-              data.p2UltimateAutumn.push('한가운데서 바깥봐요');
-              return '🡿느린 파이가 (바인드 마커 달아!!!)';
-            case 'none': // attack3
-              data.p2UltimateAutumn.push('한가운데서 뭉쳐요');
-              data.p2UltimateAutumn.push('모래시계 리턴 설치');
-              data.p2UltimateAutumn.push('한가운데서 뭉쳐요');
-              data.p2UltimateAutumn.push('🡻빔 유도');
-              data.p2UltimateAutumn.push('한가운데서 뭉쳐요');
-              data.p2UltimateAutumn.push('한가운데서 바깥봐요');
-              return '🡻무직 (attack3)';
-          }
-        }
         const res = keys.map((key) => output[key]());
         return res.join(output.next());
       },
       outputStrings: {
-        ...p3UltimateStrings,
-        next: Outputs.next,
-      },
-    },
-    {
-      id: 'FRU P3 절 시간압축 #1',
-      type: 'StartsUsing',
-      netRegex: { source: 'Oracle of Darkness', id: '9D4A', capture: false },
-      condition: (data) => data.p2Relativity === 'ultimate',
-      delaySeconds: 5 + 11,
-      durationSeconds: 4.5,
-      alertText: (data, _matches, output) => {
-        const mesg = data.p2UltimateAutumn.shift();
-        if (mesg !== undefined)
-          return output.text({ mesg: mesg });
-        return '응?';
-      },
-      outputStrings: {
-        text: {
-          en: '${mesg}',
-          ko: '${mesg}',
+        next: {
+          en: ' => ',
+          ko: ' ',
         },
-      },
-    },
-    {
-      id: 'FRU P3 절 시간압축 #2',
-      type: 'StartsUsing',
-      netRegex: { source: 'Oracle of Darkness', id: '9D4A', capture: false },
-      condition: (data) => data.p2Relativity === 'ultimate',
-      delaySeconds: 6 + 16,
-      durationSeconds: 3.5,
-      alertText: (data, _matches, output) => {
-        const mesg = data.p2UltimateAutumn.shift();
-        if (mesg !== undefined)
-          return output.text({ mesg: mesg });
-      },
-      outputStrings: {
-        text: {
-          en: '${mesg}',
-          ko: '${mesg}',
+        stack: {
+          en: 'Stacks',
+          ko: '🔘',
         },
-      },
-    },
-    {
-      id: 'FRU P3 절 시간압축 #3',
-      type: 'StartsUsing',
-      netRegex: { source: 'Oracle of Darkness', id: '9D4A', capture: false },
-      condition: (data) => data.p2Relativity === 'ultimate',
-      delaySeconds: 6 + 21,
-      durationSeconds: 3.5,
-      alertText: (data, _matches, output) => {
-        const mesg = data.p2UltimateAutumn.shift();
-        if (mesg !== undefined)
-          return output.text({ mesg: mesg });
-      },
-      outputStrings: {
-        text: {
-          en: '${mesg}',
-          ko: '${mesg}',
+        fire: {
+          en: 'Fire',
+          ko: '🔥',
         },
-      },
-    },
-    {
-      id: 'FRU P3 절 시간압축 #4',
-      type: 'StartsUsing',
-      netRegex: { source: 'Oracle of Darkness', id: '9D4A', capture: false },
-      condition: (data) => data.p2Relativity === 'ultimate',
-      delaySeconds: 6 + 26,
-      durationSeconds: 3.5,
-      alertText: (data, _matches, output) => {
-        const mesg = data.p2UltimateAutumn.shift();
-        if (mesg !== undefined)
-          return output.text({ mesg: mesg });
-      },
-      outputStrings: {
-        text: {
-          en: '${mesg}',
-          ko: '${mesg}',
+        shadoweye: {
+          en: 'Gaze',
+          ko: '👁️',
         },
-      },
-    },
-    {
-      id: 'FRU P3 절 시간압축 #5',
-      type: 'StartsUsing',
-      netRegex: { source: 'Oracle of Darkness', id: '9D4A', capture: false },
-      condition: (data) => data.p2Relativity === 'ultimate',
-      delaySeconds: 6 + 31,
-      durationSeconds: 3.5,
-      alertText: (data, _matches, output) => {
-        const mesg = data.p2UltimateAutumn.shift();
-        if (mesg !== undefined)
-          return output.text({ mesg: mesg });
-      },
-      outputStrings: {
-        text: {
-          en: '${mesg}',
-          ko: '${mesg}',
+        eruption: {
+          en: 'Spread',
+          ko: '🔅',
         },
-      },
-    },
-    {
-      id: 'FRU P3 절 시간압축 #6',
-      type: 'StartsUsing',
-      netRegex: { source: 'Oracle of Darkness', id: '9D4A', capture: false },
-      condition: (data) => data.p2Relativity === 'ultimate',
-      delaySeconds: 5 + 42,
-      durationSeconds: 4.5,
-      alertText: (data, _matches, output) => {
-        const mesg = data.p2UltimateAutumn.shift();
-        if (mesg !== undefined)
-          return output.text({ mesg: mesg });
-      },
-      outputStrings: {
-        text: {
-          en: '${mesg}',
-          ko: '${mesg}',
+        beam: {
+          en: 'Beam',
+          ko: '🔦',
+        },
+        water: {
+          en: 'Water',
+          ko: '💧',
+        },
+        blizzard: {
+          en: 'Blizzard',
+          ko: '❄️',
+        },
+        return: {
+          en: 'Return',
+          ko: '↻',
         },
       },
     },
