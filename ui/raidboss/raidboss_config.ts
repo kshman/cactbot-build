@@ -2537,7 +2537,7 @@ const templateOptions: OptionsTemplate = {
       id: 'AutumnStyle',
       name: {
         en: 'With Autumn\'s Style',
-        ja: 'オヅミと一緒に',
+        ja: '秋と一緒に',
         ko: '어듬이와 함게',
       },
       type: 'checkbox',
@@ -2547,7 +2547,7 @@ const templateOptions: OptionsTemplate = {
       id: 'OnlyAutumn',
       name: {
         en: 'Only for Autumn',
-        ja: 'オヅミ専用',
+        ja: '秋専用',
         ko: '어듬이 전용',
       },
       type: 'checkbox',

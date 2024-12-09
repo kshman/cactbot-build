@@ -1,6 +1,5 @@
 import { AutumnDirections } from '../../../../../resources/autumn';
 import Conditions from '../../../../../resources/conditions';
-import { UnreachableCode } from '../../../../../resources/not_reached';
 import Outputs from '../../../../../resources/outputs';
 import { Responses } from '../../../../../resources/responses';
 import { Directions } from '../../../../../resources/util';
@@ -10,11 +9,10 @@ import { NetMatches } from '../../../../../types/net_matches';
 import { PartyMemberParamObject } from '../../../../../types/party';
 import { TriggerSet } from '../../../../../types/trigger';
 
+const centerX = 100;
+const centerY = 100;
+
 type Phase = 'p1' | 'p2' | 'p3' | 'p4' | 'p5';
-type FallOfFaithTether = {
-  target: PartyMemberParamObject;
-  color: 'red' | 'blue';
-};
 type PrsFru = {
   r: string; // 롤
   j: string; // 직업
@@ -26,20 +24,47 @@ type PrsFru = {
   i: number; // 순번
 };
 
-const p3UltimateIdKey: { [effectId: string]: string } = {
-  '996': 'stack',
-  '997': 'fire',
-  '998': 'shadoweye',
-  '99C': 'eruption',
-  '99B': 'beam',
-  '99D': 'water',
-  '99E': 'blizzard',
-  '9A0': 'return',
-} as const;
+// P1
+type FallOfFaithTether = {
+  target: PartyMemberParamObject;
+  color: 'red' | 'blue';
+};
+
+// P2
+type SlipClockPos = 'same' | 'oppo' | 'cw' | 'ccw' | 'unknown';
+const calcClockPos = (start: number, compare: number): SlipClockPos => {
+  const delta = (compare - start + 8) % 8;
+  if (delta === 0)
+    return 'same';
+  else if (delta < 4)
+    return 'cw';
+  else if (delta === 4)
+    return 'oppo';
+  return 'ccw';
+};
+
+// P3
+type UltimateRelativityRole = 'f11' | 'f21' | 'f31' | 'ice';
+const findNorthDirNum = (dirs: number[]): number => {
+  for (let i = 0; i < dirs.length; i++) {
+    for (let j = i + 1; j < dirs.length; j++) {
+      const [dir1, dir2] = [dirs[i], dirs[j]];
+      if (dir1 === undefined || dir2 === undefined)
+        return -1;
+      const diff = Math.abs(dir1 - dir2);
+      if (diff === 2)
+        return Math.min(dir1, dir2) + 1;
+      else if (diff === 6) // wrap around
+        return (Math.max(dir1, dir2) + 1) % 8;
+    }
+  }
+  return -1;
+};
 
 export interface Data extends RaidbossData {
   readonly triggerSetConfig: {
     autumnConcealed: boolean;
+    sinboundRotate: 'aacc' | 'addposonly'; // aacc = always away, cursed clockwise
   };
   phase: Phase;
   p1SafeMarkers: number[];
@@ -48,14 +73,15 @@ export interface Data extends RaidbossData {
   p1FallSide?: 'left' | 'right';
   p1FallTethers: FallOfFaithTether[];
   p2Kick?: 'axe' | 'scythe';
-  p2Icicle?: number;
+  p2Knockback?: number;
   p2Stone?: boolean;
   p2Puddles: PartyMemberParamObject[];
   p2Lights?: number;
   p2Cursed?: boolean;
-  p3Relativity?: 'ultimate';
-  p3Ultimate: { [name: string]: number };
-  p3Umesg: string[];
+  p3Role?: UltimateRelativityRole;
+  p3Strat: string[];
+  p3HourGlasses: { [id: string]: NetMatches['AddedCombatant'] };
+  p3NorangTethers: number[];
   //
   members?: PrsFru[];
   my?: PrsFru;
@@ -69,15 +95,37 @@ const triggerSet: TriggerSet<Data> = {
     {
       id: 'autumnConcealed',
       name: {
-        en: 'Autumn style concealed',
-        ko: '어듬이 스타일 concealed',
+        en: 'P1 Autumn style concealed',
+        ja: 'P1 秋のスタイル concealed',
+        ko: 'P1 어듬이 스타일 concealed',
       },
       comment: {
         en: 'Autumn style concealed',
+        ja: '秋のスタイル concealed',
         ko: '어듬이 스타일 concealed',
       },
       type: 'checkbox',
       default: (options) => options.OnlyAutumn,
+    },
+    {
+      id: 'sinboundRotate',
+      comment: {
+        en:
+          `Always Away, Cursed Clockwise: <a href="https://pastebin.com/ue7w9jJH" target="_blank">LesBin<a>`,
+      },
+      name: {
+        en: 'P2 Diamond Dust / Sinbound Holy',
+        ja: 'P2 ダイアモンドダスト / シンバウンドホーリー',
+        ko: 'P2 다이아몬드 더스트 / 신바운드 홀리',
+      },
+      type: 'select',
+      options: {
+        en: {
+          'Always Away, Cursed Clockwise': 'aacc',
+          'Call Add Position Only': 'addposonly',
+        },
+      },
+      default: 'aacc', // `addposonly` is not super helpful, and 'aacc' seems to be predominant
     },
   ],
   timelineFile: 'futures_rewritten.txt',
@@ -88,6 +136,9 @@ const triggerSet: TriggerSet<Data> = {
     p2Puddles: [],
     p3Ultimate: {},
     p3Umesg: [],
+    p3Strat: [],
+    p3HourGlasses: {},
+    p3NorangTethers: [],
     actors: {},
   }),
   timelineTriggers: [
@@ -112,14 +163,17 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         none: {
           en: 'No members data',
+          ja: 'メンバーデータがありません',
           ko: '멤버 데이터가 없어요',
         },
         empty: {
           en: 'No my data',
+          ja: '自分のデータがありません',
           ko: '내 데이터가 없어요',
         },
         ok: {
           en: 'Data OK',
+          ja: 'データ確認完了',
           ko: '데이터 확인',
         },
       },
@@ -209,6 +263,7 @@ const triggerSet: TriggerSet<Data> = {
           },
           safe: {
             en: '${action} ${dir1} / ${dir2}',
+            ja: '${action} ${dir1}${dir2}',
             ko: '${action} ${dir1}${dir2}',
           },
           stack: Outputs.stacks,
@@ -244,7 +299,7 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: 'FRU P1 Concealed Left',
+      id: 'FRU P1 Concealed Safe',
       type: 'StartsUsing',
       netRegex: { id: ['9CDA', '9CDB'], source: 'Fatebreaker', capture: false },
       delaySeconds: 11,
@@ -264,6 +319,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         safe: {
           en: '${action} ${dir1} / ${dir2}',
+          ja: '${action} ${dir1}${dir2}',
           ko: '${action} ${dir1}${dir2}',
         },
         stack: Outputs.stacks,
@@ -284,6 +340,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: '${safe} Safe',
+          ja: '${safe} 安置',
           ko: '${safe} 안전',
         },
         blue: Outputs.blue,
@@ -355,10 +412,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         left: {
           en: 'Left ${num} ${color}',
+          ja: '🡸${num}番目 ${color}',
           ko: '🡸${num}번 ${color}',
         },
         right: {
           en: 'Right ${num} ${color}',
+          ja: '${num}番目 ${color}🡺',
           ko: '${num}번 ${color}🡺',
         },
         red: Outputs.red,
@@ -404,7 +463,7 @@ const triggerSet: TriggerSet<Data> = {
       id: 'FRU P2 Diamond Dust',
       type: 'StartsUsing',
       netRegex: { id: '9D05', source: 'Usurper of Frost', capture: false },
-      response: Responses.aoe(),
+      response: Responses.bigAoe(),
     },
     {
       id: 'FRU P2 Axe/Scythe Kick Collect',
@@ -422,8 +481,8 @@ const triggerSet: TriggerSet<Data> = {
         let cardinal = false;
         const actors = Object.values(data.actors);
         if (actors.length >= 2 && actors[1] !== undefined) {
-          data.p2Icicle = Directions.hdgTo8DirNum(parseFloat(actors[1].heading));
-          if (data.p2Icicle % 2 === 0)
+          data.p2Knockback = Directions.hdgTo8DirNum(parseFloat(actors[1].heading));
+          if (data.p2Knockback % 2 === 0)
             cardinal = true;
         }
         const [rn, rs] = cardinal ? ['intercard', 'cardinal'] : ['cardinal', 'intercard'];
@@ -446,21 +505,23 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         needle: {
           en: '${kick} + ${ind} + Bait Flower',
-          ko: '${ind}${kick} 얼음 바늘',
+          ja: '${kick} + ${ind} + AOE',
+          ko: '${ind} ${kick} + 얼음꽃 배치',
         },
         stone: {
           en: '${kick} + ${ind} + Bait Cone',
-          ko: '${ind}${kick} 원뿔',
+          ja: '${kick} + ${ind} + 扇',
+          ko: '${ind} ${kick} + 원뿔 유도',
         },
         cardinal: {
           en: 'Cardinals',
           ja: '十字',
-          ko: '➕',
+          ko: '➕십자',
         },
         intercard: {
           en: 'Intercards',
           ja: '斜め',
-          ko: '❌',
+          ko: '❌비스듬히',
         },
         axe: Outputs.outside,
         scythe: Outputs.inside,
@@ -469,16 +530,13 @@ const triggerSet: TriggerSet<Data> = {
     {
       id: 'FRU P2 Heavenly Strike',
       type: 'Ability',
-      // 버근가 소스가 이상해
-      // AOEActionEffect 16:4002699C:Usurper of Frost:9D07:Frigid Stone:
-      // AOEActionEffect 16:40013FF1:Fatebreaker's Image:9D07:Frigid Stone:
       netRegex: { id: '9D07', capture: false },
       durationSeconds: 5,
       suppressSeconds: 1,
       infoText: (data, _matches, output) => {
-        if (data.p2Icicle === undefined)
+        if (data.p2Knockback === undefined)
           return output.autumn!({ dir: output.unknown!() });
-        const dir = data.p2Icicle;
+        const dir = data.p2Knockback;
         const dir1 = dir < 4 ? dir : dir - 4;
         const dir2 = dir < 4 ? dir + 4 : dir;
 
@@ -492,14 +550,16 @@ const triggerSet: TriggerSet<Data> = {
         const m2 = AutumnDirections.outputFromMarker8Num(dir2);
         return output.knockback!({ dir1: output[m1]!(), dir2: output[m2]!() });
       },
-      run: (data, _matches) => delete data.p2Icicle,
+      run: (data, _matches) => delete data.p2Knockback,
       outputStrings: {
         knockback: {
           en: 'Knockback ${dir1} / ${dir2}',
+          ja: 'ノックバック ${dir1}${dir2}',
           ko: '넉백 ${dir1}${dir2}',
         },
         autumn: {
           en: 'Knockback ${dir}',
+          ja: 'ノックバック ${dir}',
           ko: '넉백 ${dir}',
         },
         unknown: Outputs.unknown,
@@ -516,21 +576,85 @@ const triggerSet: TriggerSet<Data> = {
         if (data.p2Stone !== undefined && data.p2Stone)
           return output.text!();
       },
-      tts: (data, _matches, output) => {
-        if (data.p2Stone !== undefined && data.p2Stone)
-          return output.tts!();
-      },
       run: (data) => delete data.p2Stone,
       outputStrings: {
         text: {
           en: 'Go center',
+          ja: '中央へ',
           ko: '장판 피해욧! 한가운데로!',
         },
-        tts: {
-          en: 'center',
-          ko: '動いて！',
+      },
+    },
+    {
+      id: 'FRU P2 Twin Knockback Collect',
+      type: 'StartsUsing',
+      netRegex: { id: '9D10' },
+      run: (data, matches) =>
+        data.p2Knockback = AutumnDirections.posConv8(matches.x, matches.y, centerX, centerY),
+    },
+    {
+      // #538
+      id: 'FRU P2 Sinbound Holy Rotation',
+      type: 'Ability',
+      netRegex: { id: '9D0F' },
+      condition: Conditions.targetIsYou(),
+      durationSeconds: 5,
+      infoText: (data, matches, output) => {
+        const start = AutumnDirections.posConv8(matches.targetX, matches.targetY, centerX, centerY);
+        const relPos = calcClockPos(start, data.p2Knockback!);
+        if (data.triggerSetConfig.sinboundRotate === 'aacc')
+          switch (relPos) {
+            case 'same':
+            case 'oppo':
+              return output.aaccCursed!();
+            case 'cw':
+              return output.aaccRotateCCW!();
+            case 'ccw':
+              return output.aaccRotateCW!();
+            default:
+              break;
+          }
+        return output[relPos]!();
+      },
+      run: (data, _matches) => delete data.p2Knockback,
+      outputStrings: {
+        aaccCursed: {
+          en: 'Cursed Add - Fast Clockwise',
+          ko: '빠른 시계방향',
+        },
+        aaccRotateCCW: {
+          en: 'Rotate Counterclockwise (away from add)',
+          ko: '반시계방향 (린 멀리)',
+        },
+        aaccRotateCW: {
+          en: 'Rotate Clockwise (away from add)',
+          ko: '시계방향 (린 멀리)',
+        },
+        same: {
+          en: 'Add is on knockback',
+          ko: '넉백한 곳에 린',
+        },
+        oppo: {
+          en: 'Add is opposite knockback',
+          ko: '넉백 반대쪽에 린',
+        },
+        cw: {
+          en: 'Add is clockwise',
+          ko: '린이 시계방향',
+        },
+        ccw: {
+          en: 'Add is counterclockwise',
+          ko: '린이 반시계방향',
         },
       },
+    },
+    {
+      id: 'FRU P2 Shining Armor',
+      type: 'GainsEffect',
+      netRegex: { effectId: '8E1', capture: false },
+      suppressSeconds: 1,
+      countdownSeconds: 4.9,
+      response: Responses.lookAway('alert'),
     },
     {
       id: 'FRU P2 Twin Stillness',
@@ -551,15 +675,11 @@ const triggerSet: TriggerSet<Data> = {
       delaySeconds: (_data, matches) => parseFloat(matches.castTime) - 0.5,
       durationSeconds: 2,
       alarmText: (_data, _matches, output) => output.text!(),
-      tts: (_data, _matches, output) => output.tts!(),
       outputStrings: {
         text: {
           en: 'Slip',
+          ja: 'スリップ',
           ko: '미끄러져요!',
-        },
-        tts: {
-          en: 'slip',
-          ko: '動いて！',
         },
       },
     },
@@ -567,7 +687,7 @@ const triggerSet: TriggerSet<Data> = {
       id: 'FRU P2 Hallowed Ray',
       type: 'StartsUsing',
       netRegex: { id: '9D12', capture: false },
-      response: Responses.aoe(),
+      response: Responses.bigAoe(),
     },
     {
       id: 'FRU P2 Mirror, Mirror',
@@ -655,15 +775,18 @@ const triggerSet: TriggerSet<Data> = {
         // cactbot-builtin-response
         output.responseOutputStrings = {
           aoe: {
-            en: 'AOE on YOU (${player})',
+            en: 'Puddle on YOU (${player})',
+            ja: '自分にAOE (${player})',
             ko: '내게 장판! (${player})',
           },
           chain: {
-            en: 'Chain on YOU ${mark}',
+            en: 'Tether on YOU (go ${mark})',
+            ja: '自分に鎖 (${mark}へ)',
             ko: '${mark}마커로! 체인!',
           },
           spread: {
-            en: 'Chain on YOU',
+            en: 'Tether on YOU',
+            ja: '自分に連鎖',
             ko: '내게 체인, 맡은 자리로',
           },
           cnum4: Outputs.cnum4,
@@ -699,17 +822,25 @@ const triggerSet: TriggerSet<Data> = {
       netRegex: { effectId: '103E', capture: false },
       durationSeconds: 3,
       suppressSeconds: 1,
-      alertText: (data, _matches, output) => {
+      response: (data, _matches, output) => {
+        // cactbot-builtin-response
+        output.responseOutputStrings = {
+          tower: {
+            en: 'Soak tower',
+            ja: '塔踏み',
+            ko: '타워 밟아요!',
+          },
+          avoid: {
+            en: 'Avoid tower',
+            ja: '塔を避ける',
+            ko: '타워 피해요',
+          },
+        };
         if (data.p2Lights === 2) {
           data.p2Cursed = true;
-          return output.tower!();
+          return { alertText: output.tower!() };
         }
-      },
-      outputStrings: {
-        tower: {
-          en: 'Tower',
-          ko: '타워 밟아요!',
-        },
+        return { infoText: output.avoid!() };
       },
     },
     {
@@ -723,6 +854,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Out of tower',
+          ja: '塔から出てて',
           ko: '타워에서 나와요!',
         },
       },
@@ -731,96 +863,102 @@ const triggerSet: TriggerSet<Data> = {
       id: 'FRU P2 the House of Light',
       type: 'StartsUsing',
       netRegex: { source: 'Usurper of Frost', id: '9CFD', capture: false },
-      infoText: (_data, _matches, output) => output.spread!(),
-      outputStrings: {
-        spread: Outputs.spreadOwn,
-      },
+      response: Responses.protean(),
+    },
+    {
+      id: 'FRU P2 Absolute Zero',
+      type: 'StartsUsing',
+      netRegex: { id: '9D20', source: 'Usurper of Frost', capture: false },
+      delaySeconds: 4,
+      response: Responses.bigAoe(),
+    },
+    {
+      id: 'FRU Intermission AOE',
+      type: 'WasDefeated',
+      netRegex: { target: 'Ice Veil', capture: false },
+      delaySeconds: 5,
+      response: Responses.bigAoe(),
     },
     // //////////////// PHASE 3 //////////////////
     {
       id: 'FRU P3 Ultimate Relativity',
       type: 'StartsUsing',
       netRegex: { source: 'Oracle of Darkness', id: '9D4A', capture: false },
+      delaySeconds: 4,
       response: Responses.bigAoe(),
-      run: (data) => data.p3Relativity = 'ultimate',
     },
     {
-      id: 'FRU P3 Ultimate Relativity Debuff Collect',
+      // 바깥에서 사용자 처리
+      // https://x.com/PoneKoni/status/1862307791781900513
+      // https://jp.finalfantasyxiv.com/lodestone/character/13307902/blog/5491265/
+      id: 'FRU P3 Ultimate Relativity Autumn',
       type: 'GainsEffect',
-      // 996 Spell-in-Waiting: Unholy Darkness
       // 997 Spell-in-Waiting: Dark Fire III
-      // 998 Spell-in-Waiting: Shadoweye
-      // 99C Spell-in-Waiting: Dark Eruption
-      // 99B 빔 유도?
-      // 99D Spell-in-Waiting: Dark Water III
       // 99E Spell-in-Waiting: Dark Blizzard III
-      // 9A0 Spell-in-Waiting: Return
-      netRegex: { effectId: ['99[678BCDE]', '9A0'] },
-      condition: (data, matches) => data.p3Relativity === 'ultimate' && matches.target === data.me,
+      netRegex: { effectId: ['997', '99E'] },
+      condition: Conditions.targetIsYou(),
       run: (data, matches) => {
-        data.p3Ultimate[matches.effectId.toUpperCase()] = parseFloat(matches.duration);
+        if (matches.effectId === '99E')
+          data.p3Role = 'ice';
+        else {
+          const duration = parseFloat(matches.duration);
+          if (duration > 30)
+            data.p3Role = 'f31';
+          else if (duration > 20)
+            data.p3Role = 'f21';
+          else
+            data.p3Role = 'f11';
+        }
       },
     },
     {
-      id: 'FRU P3 Ultimate Relativity Debuff',
-      type: 'GainsEffect',
-      netRegex: { effectId: '99B', capture: false },
-      condition: (data) => data.p3Relativity === 'ultimate',
-      delaySeconds: 0.1,
-      durationSeconds: (data) => data.options.OnlyAutumn ? 5 : 41,
-      suppressSeconds: 0.1,
-      infoText: (data, _matches, output) => {
-        const ids = Object.keys(data.p3Ultimate).sort((a, b) =>
-          (data.p3Ultimate[a] ?? 0) - (data.p3Ultimate[b] ?? 0)
-        );
-        const keys = ids.map((id) => p3UltimateIdKey[id]);
-        if (keys === undefined || keys.length === 0)
+      id: 'FRU P3 Ultimate Relativity Hourglasses Collect',
+      type: 'AddedCombatant',
+      netRegex: { npcBaseId: '17832' },
+      run: (data, matches) => data.p3HourGlasses[matches.id] = matches,
+    },
+    {
+      id: 'FRU P3 Ultimate Relativity North',
+      type: 'Tether',
+      netRegex: { id: '0086' },
+      infoText: (data, matches, output) => {
+        const id = matches.sourceId;
+        const hourglass = data.p3HourGlasses[id];
+        if (hourglass === undefined)
           return;
-        for (const key of keys) {
-          if (key === undefined)
-            throw new UnreachableCode();
-        }
-        const res = keys.map((key) => output[key!]!());
-        return res.join(output.next!());
+        const dir = AutumnDirections.posConv8(hourglass.x, hourglass.y, centerX, centerY);
+        data.p3NorangTethers.push(dir);
+        if (data.p3NorangTethers.length !== 3)
+          return;
+
+        const north = findNorthDirNum(data.p3NorangTethers);
+        data.p3HourGlasses = {};
+        data.p3NorangTethers = [];
+
+        if (north === -1)
+          return output.text!({ mark: output.unknown!() });
+        const trueNorth = (north + 4) % 8;
+        return output.text!({ mark: output[AutumnDirections.outputFromMarker8Num(trueNorth)]!() });
       },
       outputStrings: {
-        next: {
-          en: ' => ',
-          ko: ' ',
+        text: {
+          en: 'North: ${mark}',
+          ja: '北: ${mark}',
+          ko: '북쪽: ${mark}',
         },
-        stack: {
-          en: 'Stacks',
-          ko: '🔘',
-        },
-        fire: {
-          en: 'Fire',
-          ko: '🔥',
-        },
-        shadoweye: {
-          en: 'Gaze',
-          ko: '👁️',
-        },
-        eruption: {
-          en: 'Spread',
-          ko: '🔅',
-        },
-        beam: {
-          en: 'Beam',
-          ko: '🔦',
-        },
-        water: {
-          en: 'Water',
-          ko: '💧',
-        },
-        blizzard: {
-          en: 'Blizzard',
-          ko: '❄️',
-        },
-        return: {
-          en: 'Return',
-          ko: '↻',
-        },
+        unknown: Outputs.unknown,
+        ...AutumnDirections.outputStringsMarker8,
       },
+    },
+    {
+      id: 'FRU P3 Ultimate Relativity Look Out',
+      type: 'GainsEffect',
+      // 99B - Rewind triggered
+      netRegex: { effectId: '99B' },
+      condition: Conditions.targetIsYou(),
+      delaySeconds: (_data, matches) => parseFloat(matches.duration) - 4,
+      countdownSeconds: (_data, matches) => parseFloat(matches.duration),
+      response: Responses.lookAway('alarm'),
     },
     {
       id: 'FRU P3 Darkest Dance',
@@ -834,10 +972,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         partyInTanksOut: {
           en: 'Party In (Tanks Out)',
+          ja: '中へ (タンクは外)',
           ko: '안으로 (탱크가 밖으로)',
         },
         tanksOutPartyIn: {
           en: 'Tanks Out (Party In)',
+          ja: '外へ (タンクは中)',
           ko: '바깥으로 (파티는 안)',
         },
       },
@@ -855,10 +995,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         partyOutTanksIn: {
           en: 'Party Out (Tanks In)',
+          ja: '外へ (タンクは中)',
           ko: '밖으로 (탱크가 안으로)',
         },
         tanksInPartyOut: {
           en: 'Tanks In (Party Out)',
+          ja: '中へ (タンクは外)',
           ko: '보스 밑으로 (파티는 바깥)',
         },
       },
@@ -898,15 +1040,20 @@ const triggerSet: TriggerSet<Data> = {
     {
       'locale': 'en',
       'replaceText': {
+        'Axe Kick/Scythe Kick': 'Axe/Scythe Kick',
+        'Shining Armor + Frost Armor': 'Shining + Frost Armor',
         'Sinbound Fire III/Sinbound Thunder III': 'Sinbound Fire/Thunder',
       },
     },
     {
-      'locale': 'de',
       'missingTranslations': true,
+      'locale': 'de',
       'replaceSync': {
         'Fatebreaker(?!\')': 'fusioniert(?:e|er|es|en) Ascian',
         'Fatebreaker\'s Image': 'Abbild des fusionierten Ascians',
+        'Usurper of Frost': 'Shiva-Mitron',
+        'Oracle\'s Reflection': 'Spiegelbild des Orakels',
+        'Ice Veil': 'Immerfrost-Kristall',
       },
       'replaceText': {
         'Blastburn': 'Brandstoß',
@@ -930,11 +1077,14 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      'locale': 'fr',
       'missingTranslations': true,
+      'locale': 'fr',
       'replaceSync': {
         'Fatebreaker(?!\')': 'Sabreur de destins',
         'Fatebreaker\'s Image': 'double du Sabreur de destins',
+        'Usurper of Frost': 'Shiva-Mitron',
+        'Oracle\'s Reflection': 'reflet de la prêtresse',
+        'Ice Veil': 'bloc de glaces éternelles',
       },
       'replaceText': {
         'Blastburn': 'Explosion brûlante',
@@ -965,6 +1115,7 @@ const triggerSet: TriggerSet<Data> = {
         'Fatebreaker\'s Image': 'フェイトブレイカーの幻影',
         'Usurper of Frost': 'シヴァ・ミトロン',
         'Oracle\'s Reflection': '巫女の鏡像',
+        'Ice Veil': '永久氷晶',
         'Frozen Mirror': '氷面鏡',
         'Oracle of Darkness': '闇の巫女',
         'Pandora': 'パンドラ・ミトロン',
