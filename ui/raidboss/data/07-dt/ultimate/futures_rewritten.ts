@@ -71,7 +71,7 @@ export interface Data extends RaidbossData {
   p1Utopian?: 'stack' | 'spread';
   p1Falled?: boolean;
   p1FallSide?: 'left' | 'right';
-  p1FallTethers: FallOfFaithTether[];
+  p1FallJul: FallOfFaithTether[];
   p2Kick?: 'axe' | 'scythe';
   p2Knockback?: number;
   p2Stone?: boolean;
@@ -80,8 +80,8 @@ export interface Data extends RaidbossData {
   p2Cursed?: boolean;
   p3Role?: UltimateRelativityRole;
   p3Strat: string[];
-  p3HourGlasses: { [id: string]: NetMatches['AddedCombatant'] };
-  p3NorangTethers: number[];
+  p3Sigyes: { [id: string]: NetMatches['AddedCombatant'] };
+  p3NoranJul: number[];
   //
   members?: PrsFru[];
   my?: PrsFru;
@@ -124,6 +124,14 @@ const triggerSet: TriggerSet<Data> = {
           'Always Away, Cursed Clockwise': 'aacc',
           'Call Add Position Only': 'addposonly',
         },
+        ja: {
+          'いつも遠く、呪い時計回り': 'aacc',
+          'リンの位置だけ呼ぶ': 'addposonly',
+        },
+        ko: {
+          '언제나 린에서 멀리, 저주 시계방향': 'aacc',
+          '린 위치만 부르기': 'addposonly',
+        },
       },
       default: 'aacc', // `addposonly` is not super helpful, and 'aacc' seems to be predominant
     },
@@ -132,13 +140,13 @@ const triggerSet: TriggerSet<Data> = {
   initData: () => ({
     phase: 'p1',
     p1SafeMarkers: [...AutumnDirections.outputNumber8],
-    p1FallTethers: [],
+    p1FallJul: [],
     p2Puddles: [],
     p3Ultimate: {},
     p3Umesg: [],
     p3Strat: [],
-    p3HourGlasses: {},
-    p3NorangTethers: [],
+    p3Sigyes: {},
+    p3NoranJul: [],
     actors: {},
   }),
   timelineTriggers: [
@@ -386,8 +394,8 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (data, matches, output) => {
         const target = data.party.member(matches.target);
         const color = matches.id === '00F9' ? 'red' : 'blue';
-        data.p1FallTethers.push({ target: target, color: color });
-        const count = data.p1FallTethers.length;
+        data.p1FallJul.push({ target: target, color: color });
+        const count = data.p1FallJul.length;
         if (matches.target === data.me) {
           if (count % 2 === 0) {
             data.p1FallSide = 'right';
@@ -402,7 +410,7 @@ const triggerSet: TriggerSet<Data> = {
           // 어듬이는 탱크 아니면 렌지 아니면 캐스터
           data.p1FallSide = 'right';
           if (data.role === 'tank') {
-            const hs = data.p1FallTethers.filter((d) => d.target.role === 'healer').length;
+            const hs = data.p1FallJul.filter((d) => d.target.role === 'healer').length;
             if (hs !== 0)
               data.p1FallSide = 'left';
           }
@@ -430,20 +438,20 @@ const triggerSet: TriggerSet<Data> = {
       id: 'FRU P1 Fall of Faith Order',
       type: 'Ability',
       netRegex: { id: ['9CC9', '9CCC'], source: 'Fatebreaker', capture: false },
-      condition: (data) => data.p1FallTethers.length === 4,
+      condition: (data) => data.p1FallJul.length === 4,
       durationSeconds: 10,
       infoText: (data, _matches, output) => {
         let colors;
         if (data.p1FallSide === undefined)
-          colors = data.p1FallTethers.map((c) => output[c.color]!());
+          colors = data.p1FallJul.map((c) => output[c.color]!());
         else if (data.p1FallSide === 'left')
-          colors = [data.p1FallTethers[0], data.p1FallTethers[2]].map((c) => output[c!.color]!());
+          colors = [data.p1FallJul[0], data.p1FallJul[2]].map((c) => output[c!.color]!());
         else
-          colors = [data.p1FallTethers[1], data.p1FallTethers[3]].map((c) => output[c!.color]!());
+          colors = [data.p1FallJul[1], data.p1FallJul[3]].map((c) => output[c!.color]!());
         return colors.join(output.next!());
       },
       run: (data) => {
-        data.p1FallTethers = [];
+        data.p1FallJul = [];
         delete data.p1FallSide;
       },
       outputStrings: {
@@ -477,54 +485,73 @@ const triggerSet: TriggerSet<Data> = {
       netRegex: { id: '0159' },
       durationSeconds: 5,
       suppressSeconds: 1,
-      alertText: (data, matches, output) => {
+      // countdownSeconds: 5,
+      response: (data, matches, output) => {
+        // cactbot-builtin-response
+        output.responseOutputStrings = {
+          needle: {
+            en: '${kick} => Bait Flower',
+            ja: '${kick} => ゆか捨て',
+            ko: '${kick} 🔜 ◈장판 버려욧',
+          },
+          stone: {
+            en: '${kick} => Bait Cone',
+            ja: '${kick} => 扇',
+            ko: '${kick} 🔜 ▲원뿔 유도',
+          },
+          cw: {
+            en: 'Intercards',
+            ja: '斜め',
+            ko: '시계방향 ❌비스듬히',
+          },
+          axe: Outputs.outside,
+          scythe: Outputs.inside,
+          unknown: Outputs.unknown,
+        };
+        const kick = data.p2Kick === undefined ? output.unknown!() : output[data.p2Kick]!();
         let cardinal = false;
         const actors = Object.values(data.actors);
         if (actors.length >= 2 && actors[1] !== undefined) {
-          data.p2Knockback = Directions.hdgTo8DirNum(parseFloat(actors[1].heading));
+          data.p2Knockback = AutumnDirections.hdgConv8(actors[1].heading);
           if (data.p2Knockback % 2 === 0)
             cardinal = true;
         }
-        const [rn, rs] = cardinal ? ['intercard', 'cardinal'] : ['cardinal', 'intercard'];
-        const kick = data.p2Kick === undefined ? '' : output[data.p2Kick]!();
-
         const target = data.party.member(matches.target);
-        data.p2Stone = true;
-        if (data.role === 'dps') {
-          if (target.role !== 'dps')
-            return output.stone!({ kick: kick, ind: output[rs]!() });
-          data.p2Stone = false;
-          return output.needle!({ kick: kick, ind: output[rn]!() });
+        data.p2Stone = target.role === 'dps' ? data.role !== 'dps' : data.role === 'dps';
+        if (data.p2Stone) {
+          if (cardinal)
+            return { alertText: output.stone!({ kick: kick }) };
+          return {
+            alertText: output.stone!({ kick: kick }),
+            infoText: output.cw!(),
+          };
         }
-        if (target.role === 'dps')
-          return output.stone!({ kick: kick, ind: output[rs]!() });
-        data.p2Stone = false;
-        return output.needle!({ kick: kick, ind: output[rn]!() });
+        if (!cardinal)
+          return { alertText: output.needle!({ kick: kick }) };
+        return {
+          alertText: output.needle!({ kick: kick }),
+          infoText: output.cw!(),
+        };
       },
       run: (data, _matches) => data.actors = {},
+    },
+    {
+      id: 'FRU P2 Axe Kick Frigid Needle',
+      type: 'StartsUsing',
+      netRegex: { id: '9D0A', source: 'Oracle\'s Reflection' },
+      delaySeconds: (_data, matches) => parseFloat(matches.castTime) - 0.5,
+      durationSeconds: 2,
+      alertText: (data, _matches, output) => {
+        if (data.p2Stone !== undefined && data.p2Stone)
+          return output.text!();
+      },
+      run: (data) => delete data.p2Stone,
       outputStrings: {
-        needle: {
-          en: '${kick} + ${ind} + Bait Flower',
-          ja: '${kick} + ${ind} + AOE',
-          ko: '${ind} ${kick} + 얼음꽃 배치',
+        text: {
+          en: 'Go center',
+          ja: '中央へ',
+          ko: '장판 피해욧! 한가운데로!',
         },
-        stone: {
-          en: '${kick} + ${ind} + Bait Cone',
-          ja: '${kick} + ${ind} + 扇',
-          ko: '${ind} ${kick} + 원뿔 유도',
-        },
-        cardinal: {
-          en: 'Cardinals',
-          ja: '十字',
-          ko: '➕십자',
-        },
-        intercard: {
-          en: 'Intercards',
-          ja: '斜め',
-          ko: '❌비스듬히',
-        },
-        axe: Outputs.outside,
-        scythe: Outputs.inside,
       },
     },
     {
@@ -564,25 +591,6 @@ const triggerSet: TriggerSet<Data> = {
         },
         unknown: Outputs.unknown,
         ...AutumnDirections.outputStringsMarker8,
-      },
-    },
-    {
-      id: 'FRU P2 Axe Kick Frigid Needle',
-      type: 'StartsUsing',
-      netRegex: { id: '9D0A', source: 'Oracle\'s Reflection' },
-      delaySeconds: (_data, matches) => parseFloat(matches.castTime) - 0.5,
-      durationSeconds: 2,
-      alarmText: (data, _matches, output) => {
-        if (data.p2Stone !== undefined && data.p2Stone)
-          return output.text!();
-      },
-      run: (data) => delete data.p2Stone,
-      outputStrings: {
-        text: {
-          en: 'Go center',
-          ja: '中央へ',
-          ko: '장판 피해욧! 한가운데로!',
-        },
       },
     },
     {
@@ -657,24 +665,36 @@ const triggerSet: TriggerSet<Data> = {
       response: Responses.lookAway('alert'),
     },
     {
-      id: 'FRU P2 Twin Stillness',
+      id: 'FRU P2 Twin Sillness/Silence',
       type: 'StartsUsing',
-      netRegex: { source: 'Oracle\'s Reflection', id: '9D01', capture: false },
-      response: Responses.getBackThenFront('alert'),
-    },
-    {
-      id: 'FRU P2 Twin Silence',
-      type: 'StartsUsing',
-      netRegex: { source: 'Oracle\'s Reflection', id: '9D02', capture: false },
-      response: Responses.getFrontThenBack('alert'),
+      netRegex: { source: 'Oracle\'s Reflection', id: ['9D01', '9D02'] },
+      durationSeconds: 2.8, // 캐스팅 시간은 3.2초
+      countdownSeconds: 2.8,
+      infoText: (_data, matches, output) => {
+        if (matches.id === '9D01')
+          return output.back!();
+        return output.front!();
+      },
+      outputStrings: {
+        front: {
+          en: 'Front',
+          ja: '前へ',
+          ko: '앞으로',
+        },
+        back: {
+          en: 'Back',
+          ja: '後ろへ',
+          ko: '뒤로',
+        },
+      },
     },
     {
       id: 'FRU P2 Twin Slip',
       type: 'StartsUsing',
-      netRegex: { id: ['9D01', '9D02'], source: 'Oracle\'s Reflection', capture: true },
-      delaySeconds: (_data, matches) => parseFloat(matches.castTime) - 0.5,
+      netRegex: { id: ['9D01', '9D02'], source: 'Oracle\'s Reflection' },
+      delaySeconds: (_data, matches) => parseFloat(matches.castTime) - 0.4,
       durationSeconds: 2,
-      alarmText: (_data, _matches, output) => output.text!(),
+      alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
           en: 'Slip',
@@ -915,7 +935,7 @@ const triggerSet: TriggerSet<Data> = {
       id: 'FRU P3 Ultimate Relativity Hourglasses Collect',
       type: 'AddedCombatant',
       netRegex: { npcBaseId: '17832' },
-      run: (data, matches) => data.p3HourGlasses[matches.id] = matches,
+      run: (data, matches) => data.p3Sigyes[matches.id] = matches,
     },
     {
       id: 'FRU P3 Ultimate Relativity North',
@@ -923,17 +943,17 @@ const triggerSet: TriggerSet<Data> = {
       netRegex: { id: '0086' },
       infoText: (data, matches, output) => {
         const id = matches.sourceId;
-        const hourglass = data.p3HourGlasses[id];
+        const hourglass = data.p3Sigyes[id];
         if (hourglass === undefined)
           return;
         const dir = AutumnDirections.posConv8(hourglass.x, hourglass.y, centerX, centerY);
-        data.p3NorangTethers.push(dir);
-        if (data.p3NorangTethers.length !== 3)
+        data.p3NoranJul.push(dir);
+        if (data.p3NoranJul.length !== 3)
           return;
 
-        const north = findNorthDirNum(data.p3NorangTethers);
-        data.p3HourGlasses = {};
-        data.p3NorangTethers = [];
+        const north = findNorthDirNum(data.p3NoranJul);
+        data.p3Sigyes = {};
+        data.p3NoranJul = [];
 
         if (north === -1)
           return output.text!({ mark: output.unknown!() });
