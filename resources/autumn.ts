@@ -5,6 +5,30 @@ import Outputs from './outputs';
 import { Directions } from './util';
 
 // 어듬이 뱡향 표시
+const posConv16 = (sx: string, sy: string, cx: number, cy: number): number => {
+  const x = parseFloat(sx) - cx;
+  const y = parseFloat(sy) - cy;
+  return Math.round(8 - 8 * Math.atan2(x, y) / Math.PI) % 16;
+};
+const posConv8 = (sx: string, sy: string, cx: number, cy: number): number => {
+  const x = parseFloat(sx) - cx;
+  const y = parseFloat(sy) - cy;
+  return Math.round(4 - 4 * Math.atan2(x, y) / Math.PI) % 8;
+};
+const posConv4 = (sx: string, sy: string, cx: number, cy: number): number => {
+  const x = parseFloat(sx) - cx;
+  const y = parseFloat(sy) - cy;
+  return Math.round(2 - 2 * Math.atan2(x, y) / Math.PI) % 4;
+};
+
+const hdgConv8 = (heading: string): number => {
+  return (Math.round(4 - 4 * parseFloat(heading) / Math.PI) % 8 + 8) % 8;
+};
+
+const hdgConv4 = (heading: string): number => {
+  return (Math.round(2 - parseFloat(heading) * 2 / Math.PI) % 4 + 4) % 4;
+};
+
 const outputNumber8: number[] = [0, 1, 2, 3, 4, 5, 6, 7];
 const outputNumberCardinal: number[] = [0, 1, 2, 3];
 const outputNumberIntercard: number[] = [0, 1, 2, 3];
@@ -184,6 +208,12 @@ const outputFromArrow8NumFunc = (dirNum: number): ArrowOutput8 => {
 
 // 어듬이 뱡향 지시
 export const AutumnDirections = {
+  posConv16: posConv16,
+  posConv8: posConv8,
+  posConv4: posConv4,
+  hdgConv8: hdgConv8,
+  hdgConv4: hdgConv4,
+
   outputNumber8: outputNumber8,
   outputNumberCardinal: outputNumberCardinal,
   outputNumberIntercard: outputNumberIntercard,

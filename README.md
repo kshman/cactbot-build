@@ -1,6 +1,6 @@
 # cactbot (ffxiv raiding overlay)
 
-Here is **NOT** official repository. Visit <hhttps://github.com/OverlayPlugin/cactbot> for official cactbot.
+Here is **NOT** official repository. Visit <https://github.com/OverlayPlugin/cactbot> for official cactbot.
 
 This repository is made for testing of cactbot. No gurrenty support.
 
