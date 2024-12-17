@@ -977,7 +977,8 @@ const triggerSet: TriggerSet<Data> = {
       netRegex: { effectId: '99B' },
       condition: Conditions.targetIsYou(),
       delaySeconds: (_data, matches) => parseFloat(matches.duration) - 4,
-      countdownSeconds: (_data, matches) => parseFloat(matches.duration),
+      durationSeconds: 3.9,
+      countdownSeconds: 3.9,
       response: Responses.lookAway('alarm'),
     },
     {

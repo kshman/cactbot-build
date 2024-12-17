@@ -199,7 +199,13 @@ const triggerSet: TriggerSet<Data> = {
       response: Responses.bigAoe(),
     },
     {
-      id: 'Jeuno1 Fafnir Winged Terror',
+      id: 'Jeuno1 Fafnir Winged Terror Tail',
+      type: 'StartsUsing',
+      netRegex: { id: '9F8E', source: 'Fafnir the Forgotten', capture: false },
+      response: Responses.goSides(),
+    },
+    {
+      id: 'Jeuno1 Fafnir Winged Terror Wing',
       type: 'StartsUsing',
       netRegex: { id: '9F8F', source: 'Fafnir the Forgotten', capture: false },
       response: Responses.getIn(),
@@ -238,7 +244,18 @@ const triggerSet: TriggerSet<Data> = {
       response: Responses.aoe(),
     },
   ],
-  timelineReplace: [],
+  timelineReplace: [
+    {
+      'locale': 'ja',
+      'missingTranslations': true,
+      'replaceSync': {
+        'Prishe of the Distant Chains': 'Prishe of the Distant Chains',
+        'Fafnir the Forgotten': 'Fafnir',
+        'Ark Angel TT': 'Ark Angel TT',
+        'Ark Angel EV': 'Ark Angel EV',
+      },
+    },
+  ],
 };
 
 export default triggerSet;
