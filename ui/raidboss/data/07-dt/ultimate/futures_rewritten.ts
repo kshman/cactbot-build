@@ -12,7 +12,7 @@ import { TriggerSet } from '../../../../../types/trigger';
 const centerX = 100;
 const centerY = 100;
 
-type Phase = 'p1' | 'p2' | 'p3' | 'p4' | 'p5';
+type Phase = 'p1' | 'p2' | 'p3ur' | 'p3ap' | 'p4' | 'p5';
 type PrsFru = {
   r: string; // 롤
   j: string; // 직업
@@ -26,8 +26,8 @@ type PrsFru = {
 
 // P1
 type FallOfFaithTether = {
-  target: PartyMemberParamObject;
   color: 'red' | 'blue';
+  target: PartyMemberParamObject;
 };
 
 // P2
@@ -60,6 +60,10 @@ const findNorthDirNum = (dirs: number[]): number => {
   }
   return -1;
 };
+type DarkWaterContainer = {
+  time: number;
+  target: PartyMemberParamObject;
+};
 
 export interface Data extends RaidbossData {
   readonly triggerSetConfig: {
@@ -82,6 +86,8 @@ export interface Data extends RaidbossData {
   p3Strat: string[];
   p3Sigyes: { [id: string]: NetMatches['AddedCombatant'] };
   p3NoranJul: number[];
+  p3DarkWater: DarkWaterContainer[];
+  p3MyDark?: DarkWaterContainer;
   //
   members?: PrsFru[];
   my?: PrsFru;
@@ -147,6 +153,7 @@ const triggerSet: TriggerSet<Data> = {
     p3Strat: [],
     p3Sigyes: {},
     p3NoranJul: [],
+    p3DarkWater: [],
     actors: {},
   }),
   timelineTriggers: [
@@ -191,7 +198,7 @@ const triggerSet: TriggerSet<Data> = {
     {
       id: 'FRU Phase Tracker',
       type: 'StartsUsing',
-      netRegex: { id: ['9CD0', '9CD4', '9CFF', '9D49', '9D36', '9D72'], capture: true },
+      netRegex: { id: ['9CD0', '9CD4', '9CFF', '9D49', '9D62', '9D36', '9D72'], capture: true },
       run: (data, matches) => {
         switch (matches.id) {
           case '9CD0': // cyclonic break fire
@@ -202,7 +209,10 @@ const triggerSet: TriggerSet<Data> = {
             data.phase = 'p2';
             break;
           case '9D49': // hell's judgement
-            data.phase = 'p3';
+            data.phase = 'p3ur';
+            break;
+          case '9D62': // black halo
+            data.phase = 'p3ap';
             break;
           case '9D36': // materialization
             data.phase = 'p4';
@@ -977,7 +987,8 @@ const triggerSet: TriggerSet<Data> = {
       netRegex: { effectId: '99B' },
       condition: Conditions.targetIsYou(),
       delaySeconds: (_data, matches) => parseFloat(matches.duration) - 4,
-      countdownSeconds: (_data, matches) => parseFloat(matches.duration),
+      durationSeconds: 3.9,
+      countdownSeconds: 3.9,
       response: Responses.lookAway('alarm'),
     },
     {
@@ -1043,6 +1054,99 @@ const triggerSet: TriggerSet<Data> = {
       type: 'StartsUsing',
       netRegex: { source: 'Oracle Of Darkness', id: '9D62' },
       response: Responses.sharedOrInvinTankBuster(),
+    },
+    {
+      id: 'FRU P3 Shockwave Pulsar',
+      type: 'StartsUsing',
+      netRegex: { source: 'Oracle of Darkness', id: '9D5A', capture: false },
+      response: Responses.bigAoe(),
+    },
+    {
+      id: 'FRU P3 Dark Water III',
+      type: 'GainsEffect',
+      netRegex: { effectId: '99D' },
+      condition: (data, matches) => {
+        if (data.phase !== 'p3ap')
+          return false;
+        const item = {
+          target: data.party.member(matches.target),
+          time: parseFloat(matches.duration),
+        };
+        data.p3DarkWater.push(item);
+        if (data.me === matches.target)
+          data.p3MyDark = item;
+        return data.p3DarkWater.length === 6;
+      },
+      response: (data, _matches, output) => {
+        // cactbot-builtin-response
+        output.responseOutputStrings = {
+          none: {
+            en: 'No Dark Water (${with})',
+            ko: '무직 (${with})',
+          },
+          pot: {
+            en: '${time}s (${with})',
+            ko: '${time}초 (${with})',
+          },
+          stand: {
+            en: '${role} (${with})',
+            ko: '${role} (${with})',
+          },
+          move: {
+            en: 'Move - ${role} (${with})',
+            ko: '반대 팀으로 - ${role} (${with})',
+          },
+          sec: {
+            en: '${time}s',
+            ko: '${time}초',
+          },
+          white: {
+            en: 'None',
+            ko: '무직',
+          },
+          unknown: Outputs.unknown,
+        };
+        if (data.options.OnlyAutumn) {
+          // 어듬이 전용
+          let role;
+          let partner;
+          if (data.p3MyDark === undefined) {
+            role = output.white!();
+            const names = data.p3DarkWater.map((d) => d.target.name);
+            const f = data.party.partyNames.filter((d) => !names.includes(d) && d !== data.me);
+            partner = f.length !== 0 && f[0] !== undefined ? data.party.member(f[0]) : undefined;
+          } else {
+            role = output.sec!({ time: data.p3MyDark.time });
+            const my = data.p3MyDark;
+            const s = data.p3DarkWater.filter((d) => d.time === my.time && d.target !== my.target);
+            partner = s.length !== 0 && s[0] !== undefined ? s[0].target : undefined;
+          }
+          if (partner !== undefined) {
+            if (data.role === 'tank') {
+              if (partner.role === 'dps')
+                return { infoText: output.stand!({ role: role, with: partner.nick }) };
+              return { alertText: output.move!({ role: role, with: partner.nick }) };
+            } else if (data.role === 'dps') {
+              if (partner.job === 'PCT' || partner.job === 'BLM')
+                return { alertText: output.move!({ role: role, with: partner.nick }) };
+              return { infoText: output.stand!({ role: role, with: partner.nick }) };
+            }
+          }
+        }
+        let res;
+        if (data.p3MyDark === undefined) {
+          const names = data.p3DarkWater.map((d) => d.target.name);
+          const f = data.party.partyNames.filter((d) => !names.includes(d) && d !== data.me);
+          const p = f.length !== 0 && f[0] !== undefined ? data.party.member(f[0]) : undefined;
+          res = output.none!({ with: p !== undefined ? p.nick : output.unknown!() });
+        } else {
+          const my = data.p3MyDark;
+          const s = data.p3DarkWater.filter((d) => d.time === my.time && d.target !== my.target);
+          const p = s.length !== 0 && s[0] !== undefined ? s[0].target : undefined;
+          res = output.pot!({ time: my.time, with: p !== undefined ? p.nick : output.unknown!() });
+        }
+        return { infoText: res };
+      },
     },
     // //////////////// PHASE 4 //////////////////
     // //////////////// PHASE 5 //////////////////
