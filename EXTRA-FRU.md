@@ -173,7 +173,7 @@ Options.Triggers.push({
       id: 'FRU+ P3 시간압축 절 #6',
       type: 'StartsUsing',
       netRegex: { source: ['Oracle of Darkness', '闇の巫女'], id: '9D4A', capture: false },
-      delaySeconds: 10 - 4 + 42, // 42
+      delaySeconds: 10 - 4 + 36, // 36
       durationSeconds: 4,
       alertText: (data, _matches, _output) => data.p3Strat.shift() ?? '#6',
     },
