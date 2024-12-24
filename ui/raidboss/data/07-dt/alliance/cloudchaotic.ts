@@ -6,7 +6,6 @@ import { RaidbossData } from '../../../../../types/data';
 import { TriggerSet } from '../../../../../types/trigger';
 
 export interface Data extends RaidbossData {
-  no?: number;
   grimDebuff?: string;
   grimCast?: 'enaero' | 'endeath' | 'unknown';
   targets: string[];
@@ -27,7 +26,7 @@ const triggerSet: TriggerSet<Data> = {
       id: 'CloudChaotic Blade of Darkness',
       type: 'StartsUsing',
       netRegex: { id: ['9DFB', '9DFD', '9DFF'], source: 'Cloud of Darkness' },
-      delaySeconds: (_data, matches) => parseFloat(matches.castTime),
+      durationSeconds: 5,
       infoText: (_data, matches, output) => {
         switch (matches.id) {
           case '9DFB':
@@ -48,7 +47,6 @@ const triggerSet: TriggerSet<Data> = {
       id: 'CloudChaotic Deluge of Darkness',
       type: 'StartsUsing',
       netRegex: { id: '9E3D', source: 'Cloud of Darkness', capture: false },
-      delaySeconds: 2,
       durationSeconds: 5,
       response: Responses.aoe(),
       run: (data) => data.targets = [],
@@ -57,17 +55,8 @@ const triggerSet: TriggerSet<Data> = {
       id: 'CloudChaotic Grim Tether',
       type: 'Tether',
       netRegex: { id: ['012C', '012D'] },
-      infoText: (data, matches, output) => {
-        data.no = (data.no ?? 0) + 1;
-        data.grimDebuff = matches.id;
-        return output.text!({ num: data.no });
-      },
-      outputStrings: {
-        text: {
-          en: 'Tether #${num}',
-          ko: '줄 #${num}',
-        },
-      },
+      condition: Conditions.targetIsYou(),
+      run: (data, matches) => data.grimDebuff = matches.id,
     },
     {
       id: 'CloudChaotic Death IV', // _rsv_40515_-1_1_0_0_SE2DC5B04_EE2DC5B04
@@ -111,13 +100,7 @@ const triggerSet: TriggerSet<Data> = {
       netRegex: { id: '0228' },
       condition: Conditions.targetIsYou(),
       alertText: (data, _matches, output) => {
-        if (data.grimCast === 'endeath') {
-          // 012C 뒤에서 앞으로
-          // 012D 앞에서 뒤로
-          // 사실 잘 모르겟슴
-          return data.grimDebuff === '012C' ? output.back!() : output.front!();
-        }
-        if (data.grimCast === 'enaero') {
+        if (data.grimCast === 'endeath' || data.grimCast === 'enaero') {
           // 012C 뒤에서 앞으로
           // 012D 앞에서 뒤로
           return data.grimDebuff === '012C' ? output.back!() : output.front!();
@@ -132,11 +115,11 @@ const triggerSet: TriggerSet<Data> = {
         },
         front: {
           en: 'Front',
-          ko: '앞쪽에서 주먹',
+          ko: '앞쪽에서 주먹 🔜 앞으로',
         },
         back: {
           en: 'Back',
-          ko: '뒤쪽에서 주먹',
+          ko: '뒤쪽에서 주먹 🔜 뒤로',
         },
       },
     },
