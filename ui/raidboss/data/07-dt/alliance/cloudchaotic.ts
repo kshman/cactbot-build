@@ -6,8 +6,9 @@ import { RaidbossData } from '../../../../../types/data';
 import { TriggerSet } from '../../../../../types/trigger';
 
 export interface Data extends RaidbossData {
-  grimDebuff?: string;
-  grimCast?: 'enaero' | 'endeath' | 'unknown';
+  blades: number;
+  grim: 'front' | 'back' | 'unknown';
+  scast: 'endeath' | 'unaero' | 'unknown';
   targets: string[];
 }
 
@@ -17,13 +18,16 @@ const triggerSet: TriggerSet<Data> = {
   timelineFile: 'cloudchaotic.txt',
   initData: () => {
     return {
+      blades: 0,
+      grim: 'unknown',
+      scast: 'unknown',
       targets: [],
     };
   },
   timelineTriggers: [],
   triggers: [
     {
-      id: 'CloudChaotic Blade of Darkness',
+      id: 'CCloud Blade of Darkness',
       type: 'StartsUsing',
       netRegex: { id: ['9DFB', '9DFD', '9DFF'], source: 'Cloud of Darkness' },
       durationSeconds: 5,
@@ -44,87 +48,125 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: 'CloudChaotic Deluge of Darkness',
+      id: 'CCloud Deluge of Darkness',
       type: 'StartsUsing',
-      netRegex: { id: '9E3D', source: 'Cloud of Darkness', capture: false },
+      netRegex: { id: ['9E3D', '9E01'], source: 'Cloud of Darkness', capture: false },
       durationSeconds: 5,
-      response: Responses.aoe(),
+      response: Responses.bigAoe(),
       run: (data) => data.targets = [],
     },
     {
-      id: 'CloudChaotic Grim Tether',
+      // 012C 뒤에서 앞으로
+      // 012D 앞에서 뒤로
+      id: 'CCloud Grim Tether',
       type: 'Tether',
       netRegex: { id: ['012C', '012D'] },
-      condition: Conditions.targetIsYou(),
-      run: (data, matches) => data.grimDebuff = matches.id,
+      condition: (data, matches) => data.me === matches.target || data.me === matches.source,
+      infoText: (data, matches, output) => {
+        if (matches.id === '012C') {
+          data.grim = 'back';
+          return output.back!();
+        }
+        data.grim = 'front';
+        return output.front!();
+      },
+      outputStrings: {
+        front: {
+          en: '(Move forward, later)',
+          ko: '(앞에서 주먹 🔜 앞으로)',
+        },
+        back: {
+          en: '(Move backward, later)',
+          ko: '(뒤에서 주먹 🔜 뒤로)',
+        },
+      },
     },
     {
-      id: 'CloudChaotic Death IV', // _rsv_40515_-1_1_0_0_SE2DC5B04_EE2DC5B04
+      id: 'CCloud Death IV', // _rsv_40515_-1_1_0_0_SE2DC5B04_EE2DC5B04
       type: 'StartsUsing',
       netRegex: { id: '9E43', source: 'Cloud of Darkness', capture: false },
+      durationSeconds: 4,
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
           en: 'Out => In',
-          ko: '(암렝) 밖에서 🔜 안으로',
+          ko: '밖에서 끌려서 🔜 안으로',
         },
       },
     },
     {
-      id: 'CloudChaotic Aero IV', // _rsv_40524_-1_1_0_0_SE2DC5B04_EE2DC5B04
+      id: 'CCloud Aero IV', // _rsv_40524_-1_1_0_0_SE2DC5B04_EE2DC5B04
       type: 'StartsUsing',
       netRegex: { id: '9E4C', source: 'Cloud of Darkness', capture: false },
+      durationSeconds: 4,
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
           en: 'Knockback',
-          ko: '(암렝) 넉백',
+          ko: '가운데 부근 넉백',
         },
       },
     },
     {
-      id: 'CloudChaotic Endeath IV', // _rsv_40531_-1_1_0_0_SE2DC5B04_EE2DC5B04
+      id: 'CCloud Endeath IV', // _rsv_40531_-1_1_0_0_SE2DC5B04_EE2DC5B04
       type: 'StartsUsing',
       netRegex: { id: '9E53', source: 'Cloud of Darkness', capture: false },
-      run: (data) => data.grimCast = 'endeath',
+      run: (data) => data.scast = 'endeath',
     },
     {
-      id: 'CloudChaotic Unaero IV',
+      id: 'CCloud Unaero IV', // _rsv_40532_-1_1_0_0_SE2DC5B04_EE2DC5B04
       type: 'StartsUsing',
       netRegex: { id: '9E54', source: 'Cloud of Darkness', capture: false },
-      run: (data) => data.grimCast = 'enaero',
+      run: (data) => data.scast = 'unaero',
     },
     {
-      id: 'CloudChaotic Target',
-      type: 'HeadMarker',
-      netRegex: { id: '0228' },
-      condition: Conditions.targetIsYou(),
-      alertText: (data, _matches, output) => {
-        if (data.grimCast === 'endeath' || data.grimCast === 'enaero') {
-          // 012C 뒤에서 앞으로
-          // 012D 앞에서 뒤로
-          return data.grimDebuff === '012C' ? output.back!() : output.front!();
-        }
-        return output.target!();
+      id: 'CCloud En&Un',
+      type: 'StartsUsing',
+      netRegex: { id: ['9DFB', '9DFD', '9DFF'], source: 'Cloud of Darkness' },
+      condition: (data) => {
+        data.blades++;
+        return data.blades === 4;
       },
-      run: (data) => delete data.grimCast,
+      delaySeconds: (_data, matches) => parseFloat(matches.castTime) - 2,
+      durationSeconds: 4,
+      alertText: (data, _matches, output) => {
+        data.blades = 0;
+        return output[data.scast]!();
+      },
       outputStrings: {
-        target: {
-          en: 'You are target',
-          ko: '내가 타겟!',
+        endeath: {
+          en: 'Out => In',
+          ko: '밖에서 끌려서 🔜 안으로',
         },
+        unaero: {
+          en: 'Knockback',
+          ko: '가운데 부근 넉백',
+        },
+        unknown: Outputs.unknown,
+      },
+    },
+    {
+      id: 'CCloud Target Move',
+      type: 'GainsEffect',
+      netRegex: { effectId: '1055' }, // _rsv_4181_-1_1_0_0_S74CFC3B0_E74CFC3B0
+      condition: Conditions.targetIsYou(),
+      delaySeconds: (_data, matches) => parseFloat(matches.duration) - 0.5,
+      durationSeconds: 1.5,
+      alarmText: (data, _matches, output) => output[data.grim]!(),
+      outputStrings: {
         front: {
-          en: 'Front',
-          ko: '앞쪽에서 주먹 🔜 앞으로',
+          en: 'Move forward!',
+          ko: '앞으로!',
         },
         back: {
-          en: 'Back',
-          ko: '뒤쪽에서 주먹 🔜 뒤로',
+          en: 'Move backward!',
+          ko: '뒤로!',
         },
+        unknown: Outputs.unknown,
       },
     },
     {
-      id: 'CloudChaotic Flare',
+      id: 'CCloud Flare',
       type: 'HeadMarker',
       netRegex: { id: '015A' },
       condition: (data, matches) => {
@@ -149,7 +191,7 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: 'CloudChaotic Unholy Stack',
+      id: 'CCloud Unholy Stack',
       type: 'HeadMarker',
       netRegex: { id: '0064', capture: false },
       suppressSeconds: 1,
@@ -159,15 +201,25 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: 'CloudChaotic Break IV',
+      id: 'CCloud Break IV',
       type: 'StartsUsing',
       netRegex: { id: '9E51', source: 'Sinister Eye', capture: false },
       durationSeconds: 3,
       suppressSeconds: 1,
-      alarmText: (_data, _matches, output) => output.text!(),
+      alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
-        text: '시선 조심!',
+        text: {
+          en: 'Gaze',
+          ko: '시선 조심!',
+        },
       },
+    },
+    {
+      id: 'CCloud Dark Dominion',
+      type: 'StartsUsing',
+      netRegex: { id: '9E08', source: 'Cloud of Darkness', capture: false },
+      durationSeconds: 5,
+      response: Responses.aoe(),
     },
   ],
 };
