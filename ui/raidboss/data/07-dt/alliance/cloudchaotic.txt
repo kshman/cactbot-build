@@ -1,2 +1,0 @@
-hideall "--sync--"
-hideall "--Reset--"

@@ -9,18 +9,20 @@ export interface Data extends RaidbossData {
   blades: number;
   grim: 'front' | 'back' | 'unknown';
   scast: 'endeath' | 'unaero' | 'unknown';
+  type: 'in' | 'out' | 'unknown';
   targets: string[];
 }
 
 const triggerSet: TriggerSet<Data> = {
   id: 'TheCloudOfDarknessChaotic',
   zoneId: ZoneId.TheCloudOfDarknessChaotic,
-  timelineFile: 'cloudchaotic.txt',
+  timelineFile: 'ccloud.txt',
   initData: () => {
     return {
       blades: 0,
       grim: 'unknown',
       scast: 'unknown',
+      type: 'unknown',
       targets: [],
     };
   },
@@ -52,7 +54,7 @@ const triggerSet: TriggerSet<Data> = {
       type: 'StartsUsing',
       netRegex: { id: ['9E3D', '9E01'], source: 'Cloud of Darkness', capture: false },
       durationSeconds: 5,
-      response: Responses.bigAoe(),
+      response: Responses.bleedAoe(),
       run: (data) => data.targets = [],
     },
     {
@@ -86,26 +88,14 @@ const triggerSet: TriggerSet<Data> = {
       type: 'StartsUsing',
       netRegex: { id: '9E43', source: 'Cloud of Darkness', capture: false },
       durationSeconds: 4,
-      infoText: (_data, _matches, output) => output.text!(),
-      outputStrings: {
-        text: {
-          en: 'Out => In',
-          ko: '밖에서 끌려서 🔜 안으로',
-        },
-      },
+      response: Responses.getOutThenIn(),
     },
     {
       id: 'CCloud Aero IV', // _rsv_40524_-1_1_0_0_SE2DC5B04_EE2DC5B04
       type: 'StartsUsing',
       netRegex: { id: '9E4C', source: 'Cloud of Darkness', capture: false },
       durationSeconds: 4,
-      infoText: (_data, _matches, output) => output.text!(),
-      outputStrings: {
-        text: {
-          en: 'Knockback',
-          ko: '가운데 부근 넉백',
-        },
-      },
+      response: Responses.knockback(),
     },
     {
       id: 'CCloud Endeath IV', // _rsv_40531_-1_1_0_0_SE2DC5B04_EE2DC5B04
@@ -134,13 +124,27 @@ const triggerSet: TriggerSet<Data> = {
         return output[data.scast]!();
       },
       outputStrings: {
-        endeath: {
-          en: 'Out => In',
-          ko: '밖에서 끌려서 🔜 안으로',
+        endeath: Outputs.outThenIn,
+        unaero: Outputs.knockback,
+        unknown: Outputs.unknown,
+      },
+    },
+    {
+      id: 'CCloud Target Premove',
+      type: 'GainsEffect',
+      netRegex: { effectId: '1055' }, // _rsv_4181_-1_1_0_0_S74CFC3B0_E74CFC3B0
+      condition: Conditions.targetIsYou(),
+      delaySeconds: (_data, matches) => parseFloat(matches.duration) - 4,
+      durationSeconds: 3.5,
+      infoText: (data, _matches, output) => output[data.grim]!(),
+      outputStrings: {
+        front: {
+          en: '(Forward soon)',
+          ko: '(곧 앞으로, 보스 봐요)',
         },
-        unaero: {
-          en: 'Knockback',
-          ko: '가운데 부근 넉백',
+        back: {
+          en: '(Backward soon)',
+          ko: '(곧 뒤로, 벽 봐요)',
         },
         unknown: Outputs.unknown,
       },
@@ -191,6 +195,18 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
+      id: 'CCloud Rapid-sequence Particle Beam',
+      type: 'StartsUsing',
+      netRegex: { id: '9E40', source: 'Cloud of Darkness', capture: false },
+      infoText: (_data, _matches, output) => output.text!(),
+      outputStrings: {
+        text: {
+          en: 'Charge beams',
+          ko: '연속 레이저',
+        },
+      },
+    },
+    {
       id: 'CCloud Unholy Stack',
       type: 'HeadMarker',
       netRegex: { id: '0064', capture: false },
@@ -215,11 +231,158 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
+      id: 'CCloud Darkness Gain',
+      type: 'GainsEffect',
+      netRegex: { effectId: ['1051', '1052'] },
+      condition: Conditions.targetIsYou(),
+      run: (data, matches) => data.type = matches.effectId === '1051' ? 'in' : 'out',
+    },
+    {
+      id: 'CCloud Darkness Lose',
+      type: 'LosesEffect',
+      netRegex: { effectId: ['1051', '1052'] },
+      condition: Conditions.targetIsYou(),
+      run: (data) => data.type = 'unknown',
+    },
+    {
       id: 'CCloud Dark Dominion',
       type: 'StartsUsing',
       netRegex: { id: '9E08', source: 'Cloud of Darkness', capture: false },
       durationSeconds: 5,
       response: Responses.aoe(),
+    },
+    {
+      id: 'CCloud Ghastly Gloom',
+      type: 'StartsUsing',
+      netRegex: { id: ['9E09', '9E0B'], source: 'Cloud of Darkness' },
+      durationSeconds: 5,
+      infoText: (_data, matches, output) => {
+        if (matches.id === '9E09')
+          return output.in!();
+        return output.out!();
+      },
+      outputStrings: {
+        in: {
+          en: 'In',
+          ko: '도넛, 안으로!',
+        },
+        out: {
+          en: 'Out',
+          ko: '십자, 모서리로!',
+        },
+      },
+    },
+    {
+      id: 'CCloud Flood of Darkness Interrupt',
+      type: 'StartsUsing',
+      netRegex: { id: '9E37', source: 'Stygian Shadow', capture: true },
+      condition: (data) => data.type === 'out',
+      response: Responses.interruptIfPossible(),
+    },
+    {
+      id: 'CCloud Evil Seed',
+      type: 'GainsEffect',
+      netRegex: { effectId: '953' },
+      condition: Conditions.targetIsYou(),
+      delaySeconds: (_data, matches) => parseFloat(matches.duration) - 3,
+      countdownSeconds: 3,
+      alertText: (_data, _matches, output) => output.text!(),
+      outputStrings: {
+        text: {
+          en: 'Beam',
+          ko: '바깥 봐요!',
+        },
+      },
+    },
+    {
+      id: 'CCloud Seed Target',
+      type: 'HeadMarker',
+      netRegex: { id: '000C' },
+      condition: Conditions.targetIsYou(),
+      alertText: (_data, _matches, output) => output.text!(),
+      outputStrings: {
+        text: {
+          en: 'Seed on YOU',
+          ko: '내게 씨앗! 갖다 버려요!',
+        },
+      },
+    },
+    {
+      id: 'CCloud Excruciate',
+      type: 'StartsUsing',
+      netRegex: { id: '9E36', source: 'Stygian Shadow', capture: true },
+      response: Responses.tankBuster(),
+    },
+    {
+      id: 'CCloud Diffusive-force Particle Beam', // _rsv_40464_-1_1_0_0_SE2DC5B04_EE2DC5B04
+      type: 'StartsUsing',
+      netRegex: { id: '9E10', source: 'Cloud of Darkness', capture: false },
+      response: Responses.spread('alert'),
+    },
+    {
+      id: 'CCloud Chaos-condensed Particle Beam',
+      type: 'StartsUsing',
+      netRegex: { id: '9E0D', source: 'Cloud of Darkness', capture: false },
+      response: Responses.stackMarker(),
+    },
+    {
+      id: 'CCloud Active-pivot Particle Beam',
+      type: 'StartsUsing',
+      netRegex: { id: ['9E13', '9E15'], source: 'Cloud of Darkness', capture: true },
+      infoText: (_data, matches, output) => {
+        return matches.id === '9E13' ? output.clockwise!() : output.counterClockwise!();
+      },
+      outputStrings: {
+        clockwise: Outputs.clockwise,
+        counterClockwise: Outputs.counterclockwise,
+      },
+    },
+    {
+      id: 'CCloud Lateral-core Phaser',
+      type: 'StartsUsing',
+      netRegex: { id: '9E2F', source: 'Stygian Shadow', capture: false },
+      condition: (data) => data.type === 'out',
+      infoText: (_data, _matches, output) => output.text!(),
+      outputStrings: {
+        text: {
+          en: 'Sides => middle',
+          ko: '옆 🔜 가운데로',
+        },
+      },
+    },
+    {
+      id: 'CCloud Core-lateral Phaser',
+      type: 'StartsUsing',
+      netRegex: { id: '9E30', source: 'Stygian Shadow', capture: false },
+      condition: (data) => data.type === 'out',
+      infoText: (_data, _matches, output) => output.text!(),
+      outputStrings: {
+        text: {
+          en: 'Middle => sides',
+          ko: '가운데 🔜 옆으로',
+        },
+      },
+    },
+    {
+      id: 'CCloud Bait Bramble',
+      type: 'HeadMarker',
+      netRegex: { id: '0227', capture: true },
+      condition: Conditions.targetIsYou(),
+      infoText: (_data, _matches, output) => output.text!(),
+      outputStrings: {
+        text: {
+          en: 'Place Bramble',
+          ko: '장판 유도',
+        },
+      },
+    },
+    {
+      id: 'CCloud Atomos Spawn',
+      type: 'AddedCombatant',
+      // 13626 = Atomos
+      netRegex: { npcNameId: '13626', capture: false },
+      suppressSeconds: 1,
+      response: Responses.killAdds(),
     },
   ],
 };
