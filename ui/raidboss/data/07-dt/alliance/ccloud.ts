@@ -232,6 +232,14 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
+      id: 'CCloud Atomos Spawn',
+      type: 'AddedCombatant',
+      // 13626 = Atomos
+      netRegex: { npcNameId: '13626', capture: false },
+      suppressSeconds: 1,
+      response: Responses.killAdds(),
+    },
+    {
       id: 'CCloud Darkness Gain',
       type: 'GainsEffect',
       netRegex: { effectId: ['1051', '1052'] },
@@ -352,12 +360,19 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: 'CCloud Atomos Spawn',
-      type: 'AddedCombatant',
-      // 13626 = Atomos
-      netRegex: { npcNameId: '13626', capture: false },
+      id: 'CCloud Looming Chaos',
+      type: 'StartsUsing',
+      netRegex: { id: 'A2C9', source: 'Stygian Shadow', capture: false },
+      condition: (data) => data.type === 'out',
+      durationSeconds: 5,
       suppressSeconds: 1,
-      response: Responses.killAdds(),
+      infoText: (_data, _matches, output) => output.text!(),
+      outputStrings: {
+        text: {
+          en: 'Align',
+          ko: '자리 정렬, 줄 준비',
+        },
+      },
     },
   ],
 };
