@@ -134,8 +134,9 @@ const triggerSet: TriggerSet<Data> = {
       type: 'GainsEffect',
       netRegex: { effectId: '1055' }, // _rsv_4181_-1_1_0_0_S74CFC3B0_E74CFC3B0
       condition: Conditions.targetIsYou(),
-      delaySeconds: (_data, matches) => parseFloat(matches.duration) - 4,
-      durationSeconds: 3.5,
+      delaySeconds: (_data, matches) => parseFloat(matches.duration) - 5,
+      durationSeconds: 4.5,
+      countdownSeconds: 4.5,
       infoText: (data, _matches, output) => output[data.grim]!(),
       outputStrings: {
         front: {
@@ -258,8 +259,8 @@ const triggerSet: TriggerSet<Data> = {
       durationSeconds: 5,
       infoText: (_data, matches, output) => {
         if (matches.id === '9E09')
-          return output.in!();
-        return output.out!();
+          return output.out!();
+        return output.in!();
       },
       outputStrings: {
         in: {
@@ -277,6 +278,7 @@ const triggerSet: TriggerSet<Data> = {
       type: 'StartsUsing',
       netRegex: { id: '9E37', source: 'Stygian Shadow', capture: true },
       condition: (data) => data.type === 'out',
+      suppressSeconds: 1,
       response: Responses.interruptIfPossible(),
     },
     {
@@ -285,7 +287,6 @@ const triggerSet: TriggerSet<Data> = {
       netRegex: { effectId: '953' },
       condition: Conditions.targetIsYou(),
       delaySeconds: (_data, matches) => parseFloat(matches.duration) - 3,
-      countdownSeconds: 3,
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
@@ -338,37 +339,11 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: 'CCloud Lateral-core Phaser',
-      type: 'StartsUsing',
-      netRegex: { id: '9E2F', source: 'Stygian Shadow', capture: false },
-      condition: (data) => data.type === 'out',
-      infoText: (_data, _matches, output) => output.text!(),
-      outputStrings: {
-        text: {
-          en: 'Sides => middle',
-          ko: '옆 🔜 가운데로',
-        },
-      },
-    },
-    {
-      id: 'CCloud Core-lateral Phaser',
-      type: 'StartsUsing',
-      netRegex: { id: '9E30', source: 'Stygian Shadow', capture: false },
-      condition: (data) => data.type === 'out',
-      infoText: (_data, _matches, output) => output.text!(),
-      outputStrings: {
-        text: {
-          en: 'Middle => sides',
-          ko: '가운데 🔜 옆으로',
-        },
-      },
-    },
-    {
       id: 'CCloud Bait Bramble',
       type: 'HeadMarker',
       netRegex: { id: '0227', capture: true },
       condition: Conditions.targetIsYou(),
-      infoText: (_data, _matches, output) => output.text!(),
+      alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
           en: 'Place Bramble',
