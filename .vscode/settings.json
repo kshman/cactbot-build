@@ -33,7 +33,7 @@
     "package.json": ".npmrc,package-lock.json, yarn.lock,.editorconfig,.eslintrc.cjs,.markdownlint.yml,.mocharc.cjs",
     "tsconfig.json": "tsconfig.*.json,tsconfig-for-webpack.json",
     ".gitignore": ".gitattributes",
-    "README.md": "CONTRIBUTING.md,CODE_OF_CONDUCT.md,LICENSE, EXTRA-DSR.md, EXTRA-TOP.md"
+    "README.md": "CONTRIBUTING.md,CODE_OF_CONDUCT.md,LICENSE, EXTRA-DSR.md, EXTRA-TOP.md, EXTRA-FRU.md"
   },
   "explorer.experimental.fileNesting.enabled": true,
   "explorer.experimental.fileNesting.patterns": {

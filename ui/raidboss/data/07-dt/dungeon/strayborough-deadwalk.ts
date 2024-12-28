@@ -161,7 +161,7 @@ const triggerSet: TriggerSet<Data> = {
         },
         stayGhost: {
           en: 'Stay a ghost',
-          ko: '그대로 유령인 채로',
+          ko: '그대로 유령으로',
         },
       },
     },
@@ -189,7 +189,7 @@ const triggerSet: TriggerSet<Data> = {
         },
         stayFlesh: {
           en: 'Avoid ghost tiles',
-          ko: '사람은 사람 그대로',
+          ko: '사람 그대로 (유령되면 안돼요)',
         },
       },
     },

@@ -915,6 +915,7 @@ const triggerSet: TriggerSet<Data> = {
       type: 'StartsUsing',
       netRegex: { source: 'Oracle of Darkness', id: '9D4A', capture: false },
       delaySeconds: 4,
+      durationSeconds: 5,
       response: Responses.bigAoe(),
     },
     {
@@ -951,7 +952,7 @@ const triggerSet: TriggerSet<Data> = {
       id: 'FRU P3 Ultimate Relativity North',
       type: 'Tether',
       netRegex: { id: '0086' },
-      infoText: (data, matches, output) => {
+      alertText: (data, matches, output) => {
         const id = matches.sourceId;
         const hourglass = data.p3Sigyes[id];
         if (hourglass === undefined)
