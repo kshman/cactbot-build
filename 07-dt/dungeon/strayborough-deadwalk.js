@@ -144,7 +144,7 @@ Options.Triggers.push({
         },
         stayGhost: {
           en: 'Stay a ghost',
-          ko: '그대로 유령인 채로',
+          ko: '그대로 유령으로',
         },
       },
     },
@@ -172,7 +172,7 @@ Options.Triggers.push({
         },
         stayFlesh: {
           en: 'Avoid ghost tiles',
-          ko: '사람은 사람 그대로',
+          ko: '사람 그대로 (유령되면 안돼요)',
         },
       },
     },

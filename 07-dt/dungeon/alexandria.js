@@ -113,7 +113,7 @@ Options.Triggers.push({
       outputStrings: {
         avoidLightning: {
           en: 'Out of lightning triangle',
-          ko: '번개 삼각형 피해요',
+          ko: '전기 삼각형 피해요',
         },
       },
     },
