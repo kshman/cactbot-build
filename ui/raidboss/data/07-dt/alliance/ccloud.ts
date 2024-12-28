@@ -134,9 +134,9 @@ const triggerSet: TriggerSet<Data> = {
       type: 'GainsEffect',
       netRegex: { effectId: '1055' }, // _rsv_4181_-1_1_0_0_S74CFC3B0_E74CFC3B0
       condition: Conditions.targetIsYou(),
-      delaySeconds: (_data, matches) => parseFloat(matches.duration) - 5,
-      durationSeconds: 4.5,
-      countdownSeconds: 4.5,
+      delaySeconds: (_data, matches) => parseFloat(matches.duration) - 6,
+      durationSeconds: 5.5,
+      countdownSeconds: 5.5,
       infoText: (data, _matches, output) => output[data.grim]!(),
       outputStrings: {
         front: {
@@ -304,15 +304,28 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: 'CCloud Seed Target',
+      id: 'CCloud Bait Bramble',
+      type: 'HeadMarker',
+      netRegex: { id: '0227', capture: true },
+      condition: Conditions.targetIsYou(),
+      alertText: (_data, _matches, output) => output.text!(),
+      outputStrings: {
+        text: {
+          en: 'Place Bramble',
+          ko: '씨앗 장판 버려요',
+        },
+      },
+    },
+    {
+      id: 'CCloud Bramble Tether',
       type: 'HeadMarker',
       netRegex: { id: '000C' },
       condition: Conditions.targetIsYou(),
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Seed on YOU',
-          ko: '내게 씨앗! 갖다 버려요!',
+          en: 'Tether on YOU',
+          ko: '내게 덩쿨! 곧 끊어요!',
         },
       },
     },
@@ -347,19 +360,6 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: 'CCloud Bait Bramble',
-      type: 'HeadMarker',
-      netRegex: { id: '0227', capture: true },
-      condition: Conditions.targetIsYou(),
-      alertText: (_data, _matches, output) => output.text!(),
-      outputStrings: {
-        text: {
-          en: 'Place Bramble',
-          ko: '장판 유도',
-        },
-      },
-    },
-    {
       id: 'CCloud Looming Chaos',
       type: 'StartsUsing',
       netRegex: { id: 'A2C9', source: 'Stygian Shadow', capture: false },
@@ -372,6 +372,17 @@ const triggerSet: TriggerSet<Data> = {
           en: 'Align',
           ko: '자리 정렬, 줄 준비',
         },
+      },
+    },
+  ],
+  timelineReplace: [
+    {
+      'locale': 'ja',
+      'missingTranslations': true,
+      'replaceSync': {
+        'Cloud of Darkness': '暗闇の雲',
+        'Sinister Eye': '邪眼',
+        'Stygian Shadow': '闇より出づる者',
       },
     },
   ],
