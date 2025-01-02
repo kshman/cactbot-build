@@ -17,21 +17,26 @@ Options.Triggers.push({
       id: 'CCloud Blade of Darkness',
       type: 'StartsUsing',
       netRegex: { id: ['9DFB', '9DFD', '9DFF'], source: 'Cloud of Darkness' },
-      durationSeconds: 5,
-      infoText: (_data, matches, output) => {
-        switch (matches.id) {
-          case '9DFB':
-            return output.right();
-          case '9DFD':
-            return output.left();
-          case '9DFF':
-            return output.out();
-        }
+      durationSeconds: (data) => data.scast === 'unknown' ? 5 : 8,
+      infoText: (data, matches, output) => {
+        const action = matches.id === '9DFB' ? 'right' : matches.id === '9DFD' ? 'left' : 'out';
+        const mesg = output[action]();
+        if (data.scast === 'unknown')
+          return mesg;
+        const scast = output[data.scast]();
+        data.scast = 'unknown';
+        return output.combo({ action: mesg, scast: scast });
       },
       outputStrings: {
+        combo: {
+          en: '${action} => ${scast}',
+          ko: '${action} 🔜 ${scast}',
+        },
         out: Outputs.out,
         left: Outputs.getLeftAndWest,
         right: Outputs.getRightAndEast,
+        death: Outputs.outThenIn,
+        aero: Outputs.knockback,
       },
     },
     {
@@ -41,6 +46,20 @@ Options.Triggers.push({
       durationSeconds: 5,
       response: Responses.bleedAoe(),
       run: (data) => data.targets = [],
+    },
+    {
+      id: 'CCloud Doom',
+      type: 'GainsEffect',
+      netRegex: { effectId: 'D24' },
+      condition: (data, matches) => data.CanCleanse() && data.party.inParty(matches.target),
+      suppressSeconds: 1,
+      alertText: (_data, _matches, output) => output.text(),
+      outputStrings: {
+        text: {
+          en: 'Cleanse Doom',
+          ko: '에스나 써줘요!',
+        },
+      },
     },
     {
       // 012C 뒤에서 앞으로
@@ -86,33 +105,13 @@ Options.Triggers.push({
       id: 'CCloud Endeath IV',
       type: 'StartsUsing',
       netRegex: { id: '9E53', source: 'Cloud of Darkness', capture: false },
-      run: (data) => data.scast = 'endeath',
+      run: (data) => data.scast = 'death',
     },
     {
-      id: 'CCloud Unaero IV',
+      id: 'CCloud Enaero IV',
       type: 'StartsUsing',
       netRegex: { id: '9E54', source: 'Cloud of Darkness', capture: false },
-      run: (data) => data.scast = 'unaero',
-    },
-    {
-      id: 'CCloud En&Un',
-      type: 'StartsUsing',
-      netRegex: { id: ['9DFB', '9DFD', '9DFF'], source: 'Cloud of Darkness' },
-      condition: (data) => {
-        data.blades++;
-        return data.blades === 4;
-      },
-      delaySeconds: (_data, matches) => parseFloat(matches.castTime) - 2,
-      durationSeconds: 4,
-      alertText: (data, _matches, output) => {
-        data.blades = 0;
-        return output[data.scast]();
-      },
-      outputStrings: {
-        endeath: Outputs.outThenIn,
-        unaero: Outputs.knockback,
-        unknown: Outputs.unknown,
-      },
+      run: (data) => data.scast = 'aero',
     },
     {
       id: 'CCloud Target Premove',
@@ -208,13 +207,13 @@ Options.Triggers.push({
       netRegex: { id: '9E51', source: 'Sinister Eye', capture: false },
       durationSeconds: 3,
       suppressSeconds: 1,
-      alertText: (_data, _matches, output) => output.text(),
-      outputStrings: {
-        text: {
-          en: 'Gaze',
-          ko: '시선 조심!',
-        },
-      },
+      response: Responses.lookAway(),
+    },
+    {
+      id: 'CCloud Flood of Darkness',
+      type: 'StartsUsing',
+      netRegex: { id: ['9E3E', '9E07'], source: 'Cloud of Darkness', capture: false },
+      response: Responses.aoe(),
     },
     {
       id: 'CCloud Atomos Spawn',
@@ -239,6 +238,23 @@ Options.Triggers.push({
       run: (data) => data.type = 'unknown',
     },
     {
+      id: 'CCloud Position',
+      type: 'Ability',
+      netRegex: { id: ['9E08', '9E2E'], capture: false },
+      suppressSeconds: 1,
+      promise: async (data) => {
+        const actors = (await callOverlayHandler({
+          call: 'getCombatants',
+        })).combatants;
+        const me = actors.find((actor) => actor.Name === data.me);
+        if (!me) {
+          console.error(`위치 확인: 나는 어디에? (${data.me})`);
+        } else {
+          data.pos = me.PosX < 100 ? 'east' : 'west';
+        }
+      },
+    },
+    {
       id: 'CCloud Dark Dominion',
       type: 'StartsUsing',
       netRegex: { id: '9E08', source: 'Cloud of Darkness', capture: false },
@@ -246,15 +262,24 @@ Options.Triggers.push({
       response: Responses.aoe(),
     },
     {
+      id: 'CCloud Particle Concentration',
+      type: 'Ability',
+      netRegex: { id: '9E18', source: 'Cloud Of Darkness', capture: false },
+      durationSeconds: 6,
+      infoText: (_data, _matches, output) => output.text(),
+      outputStrings: {
+        text: {
+          en: 'Get Towers',
+          ko: '타워 밟아요!',
+        },
+      },
+    },
+    {
       id: 'CCloud Ghastly Gloom',
       type: 'StartsUsing',
       netRegex: { id: ['9E09', '9E0B'], source: 'Cloud of Darkness' },
       durationSeconds: 5,
-      infoText: (_data, matches, output) => {
-        if (matches.id === '9E09')
-          return output.out();
-        return output.in();
-      },
+      infoText: (_data, matches, output) => matches.id === '9E09' ? output.out() : output.in(),
       outputStrings: {
         in: {
           en: 'In',
@@ -269,8 +294,11 @@ Options.Triggers.push({
     {
       id: 'CCloud Flood of Darkness Interrupt',
       type: 'StartsUsing',
-      netRegex: { id: '9E37', source: 'Stygian Shadow', capture: true },
-      condition: (data) => data.type === 'out',
+      netRegex: { id: '9E37', source: 'Stygian Shadow' },
+      condition: (data, matches) => {
+        const pos = parseFloat(matches.x) < 100 ? 'east' : 'west';
+        return data.type === 'out' && data.pos === pos;
+      },
       suppressSeconds: 1,
       response: Responses.interruptIfPossible(),
     },
@@ -291,7 +319,7 @@ Options.Triggers.push({
     {
       id: 'CCloud Bait Bramble',
       type: 'HeadMarker',
-      netRegex: { id: '0227', capture: true },
+      netRegex: { id: '0227' },
       condition: Conditions.targetIsYou(),
       alertText: (_data, _matches, output) => output.text(),
       outputStrings: {
@@ -302,9 +330,9 @@ Options.Triggers.push({
       },
     },
     {
-      id: 'CCloud Bramble Tether',
-      type: 'HeadMarker',
-      netRegex: { id: '000C' },
+      id: 'CCloud Vine Tether',
+      type: 'GainsEffect',
+      netRegex: { effectId: '1BD' },
       condition: Conditions.targetIsYou(),
       alertText: (_data, _matches, output) => output.text(),
       outputStrings: {
@@ -317,7 +345,7 @@ Options.Triggers.push({
     {
       id: 'CCloud Excruciate',
       type: 'StartsUsing',
-      netRegex: { id: '9E36', source: 'Stygian Shadow', capture: true },
+      netRegex: { id: '9E36', source: 'Stygian Shadow' },
       response: Responses.tankBuster(),
     },
     {
@@ -333,15 +361,32 @@ Options.Triggers.push({
       response: Responses.stackMarker(),
     },
     {
+      id: 'CCloud Curse Of Darkness AoE',
+      type: 'StartsUsing',
+      netRegex: { id: '9E33', source: 'Stygian Shadow', capture: false },
+      response: Responses.aoe(),
+    },
+    {
       id: 'CCloud Active-pivot Particle Beam',
       type: 'StartsUsing',
-      netRegex: { id: ['9E13', '9E15'], source: 'Cloud of Darkness', capture: true },
-      infoText: (_data, matches, output) => {
-        return matches.id === '9E13' ? output.clockwise() : output.counterClockwise();
-      },
+      netRegex: { id: ['9E13', '9E15'], source: 'Cloud of Darkness' },
+      infoText: (_data, matches, output) => matches.id === '9E13' ? output.cw() : output.ccw(),
       outputStrings: {
-        clockwise: Outputs.clockwise,
-        counterClockwise: Outputs.counterclockwise,
+        cw: Outputs.clockwise,
+        ccw: Outputs.counterclockwise,
+      },
+    },
+    {
+      id: 'CCloud Feint Particle Beam',
+      type: 'HeadMarker',
+      netRegex: { id: '00C5' },
+      condition: Conditions.targetIsYou(),
+      alertText: (_data, _matches, output) => output.text(),
+      outputStrings: {
+        text: {
+          en: 'Chasing AoE on YOU',
+          ko: '내게 장판이 따라와요! 돌아요!',
+        },
       },
     },
     {
@@ -352,6 +397,7 @@ Options.Triggers.push({
       durationSeconds: 5,
       suppressSeconds: 1,
       infoText: (_data, _matches, output) => output.text(),
+      run: (data) => delete data.pos,
       outputStrings: {
         text: {
           en: 'Align',
