@@ -31,6 +31,31 @@ const triggerSet: TriggerSet<Data> = {
   timelineTriggers: [],
   triggers: [
     {
+      id: 'CCloud Tank Debuff',
+      type: 'GainsEffect',
+      netRegex: { effectId: '1122', capture: true },
+      condition: (data, matches) => {
+        if (data.role !== 'tank' || !data.party.inParty(matches.target))
+          return false;
+        return parseInt(matches.count) >= 5;
+      },
+      alertText: (data, matches, output) => {
+        if (data.me === matches.target)
+          return output.shirk!();
+        return output.provoke!();
+      },
+      outputStrings: {
+        provoke: {
+          en: 'Provoke',
+          ko: '프로보크!',
+        },
+        shirk: {
+          en: 'Shirk',
+          ko: '셔크 날려요!',
+        },
+      },
+    },
+    {
       id: 'CCloud Blade of Darkness',
       type: 'StartsUsing',
       netRegex: { id: ['9DFB', '9DFD', '9DFF'], source: 'Cloud of Darkness' },
@@ -136,7 +161,6 @@ const triggerSet: TriggerSet<Data> = {
       netRegex: { effectId: '1055' }, // _rsv_4181_-1_1_0_0_S74CFC3B0_E74CFC3B0
       condition: Conditions.targetIsYou(),
       delaySeconds: (_data, matches) => parseFloat(matches.duration) - 6,
-      durationSeconds: 5.5,
       countdownSeconds: 5.5,
       infoText: (data, _matches, output) => output[data.grim]!(),
       outputStrings: {

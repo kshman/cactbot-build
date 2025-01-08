@@ -88,6 +88,8 @@ export interface Data extends RaidbossData {
   p3NoranJul: number[];
   p3DarkWater: DarkWaterContainer[];
   p3MyDark?: DarkWaterContainer;
+  p4Tether: string[];
+  p4DarkWater: string[];
   //
   members?: PrsFru[];
   my?: PrsFru;
@@ -154,6 +156,8 @@ const triggerSet: TriggerSet<Data> = {
     p3Sigyes: {},
     p3NoranJul: [],
     p3DarkWater: [],
+    p4Tether: [],
+    p4DarkWater: [],
     actors: {},
   }),
   timelineTriggers: [
@@ -421,7 +425,10 @@ const triggerSet: TriggerSet<Data> = {
           data.p1FallSide = 'right';
           if (data.role === 'tank') {
             const hs = data.p1FallJul.filter((d) => d.target.role === 'healer').length;
-            if (hs !== 0)
+            if (hs === 2)
+              data.p1FallSide = 'left';
+            const ts = data.p1FallJul.filter((d) => d.target.role === 'tank').length;
+            if ((hs + ts) === 2)
               data.p1FallSide = 'left';
           }
           return data.p1FallSide === 'left' ? output.getLeftAndWest!() : output.getRightAndEast!();
@@ -992,6 +999,7 @@ const triggerSet: TriggerSet<Data> = {
       countdownSeconds: 3.9,
       response: Responses.lookAway('alarm'),
     },
+    /*
     {
       id: 'FRU P3 Darkest Dance',
       type: 'StartsUsing',
@@ -1050,6 +1058,7 @@ const triggerSet: TriggerSet<Data> = {
       suppressSeconds: 1,
       response: Responses.spread(),
     },
+    */
     {
       id: 'FRU P3 Black Halo',
       type: 'StartsUsing',
@@ -1078,6 +1087,7 @@ const triggerSet: TriggerSet<Data> = {
           data.p3MyDark = item;
         return data.p3DarkWater.length === 6;
       },
+      durationSeconds: 6,
       response: (data, _matches, output) => {
         // cactbot-builtin-response
         output.responseOutputStrings = {
@@ -1090,8 +1100,8 @@ const triggerSet: TriggerSet<Data> = {
             ko: '${time}초 (${with})',
           },
           stand: {
-            en: '${role} (${with})',
-            ko: '${role} (${with})',
+            en: 'Stand - ${role} (${with})',
+            ko: '그대로 - ${role} (${with})',
           },
           move: {
             en: 'Move - ${role} (${with})',
@@ -1149,7 +1159,146 @@ const triggerSet: TriggerSet<Data> = {
         return { infoText: res };
       },
     },
+    {
+      id: 'FRU P3 Ap1',
+      type: 'GainsEffect',
+      netRegex: { effectId: '99D' },
+      condition: (data, matches) => data.phase === 'p3ap' && parseFloat(matches.duration) < 11,
+      delaySeconds: 6,
+      durationSeconds: 6,
+      suppressSeconds: 1,
+      response: Responses.stackThenSpread(),
+    },
+    {
+      id: 'FRU P3 Ap2',
+      type: 'Ability',
+      netRegex: { id: '9D52', source: 'Oracle of Darkness', capture: false },
+      condition: (data) => data.phase === 'p3ap',
+      delaySeconds: 1,
+      suppressSeconds: 1,
+      response: Responses.stackMarker(),
+    },
+    {
+      id: 'FRU P3 Ap3 Darkest Dance',
+      type: 'Ability',
+      netRegex: { id: '9CF5', source: 'Oracle of Darkness', capture: false },
+      durationSeconds: 7,
+      alertText: (_data, _matches, output) => output.text!(),
+      outputStrings: {
+        text: {
+          en: 'Knockback => Stacks',
+          ja: 'ノックバック => あたまわり',
+          ko: '넉백 🔜 뭉쳐요',
+        },
+      },
+    },
+    {
+      id: 'FRU P3 Memory\'s End',
+      type: 'StartsUsing',
+      netRegex: { id: '9D6C', source: 'Oracle of Darkness', capture: false },
+      delaySeconds: 4,
+      response: Responses.bigAoe(),
+    },
     // //////////////// PHASE 4 //////////////////
+    {
+      id: 'FRU P4 Akh Rhai',
+      type: 'GainsEffect',
+      netRegex: { effectId: '8E1', capture: false },
+      condition: (data) => data.phase === 'p4',
+      delaySeconds: 4.7,
+      suppressSeconds: 1,
+      response: Responses.moveAway('alert'),
+    },
+    {
+      id: 'FRU P4 Darklit Dragonsong',
+      type: 'StartsUsing',
+      netRegex: { id: '9D6D', source: 'Oracle of Darkness', capture: false },
+      response: Responses.bigAoe(),
+    },
+    {
+      id: 'FRU P4 Refulgent Chain Collect',
+      type: 'GainsEffect',
+      netRegex: { effectId: '8CD' },
+      condition: (data) => data.phase === 'p4',
+      run: (data, matches) => data.p4Tether.push(matches.target),
+    },
+    {
+      id: 'FRU P4 Dark Water III',
+      type: 'GainsEffect',
+      netRegex: { effectId: '99D' },
+      condition: (data, matches) => {
+        if (data.phase !== 'p4')
+          return false;
+        data.p4DarkWater.push(matches.target);
+        if (data.p4DarkWater.length === 2)
+          return true;
+        return false;
+      },
+      delaySeconds: 2.5,
+      durationSeconds: 5,
+      infoText: (data, _matches, output) => {
+        const players = data.p4DarkWater.map((p) => data.party.member(p).nick).join(', ');
+        return output.text!({ players: players });
+      },
+      outputStrings: {
+        text: {
+          en: '(stacks on ${players})',
+          ko: '(나중에 뭉쳐요: ${players})',
+        },
+      },
+    },
+    {
+      id: 'FRU P4 Path of Light',
+      type: 'StartsUsing',
+      netRegex: { id: '9CFB', source: 'Usurper of Frost', capture: false },
+      delaySeconds: 3,
+      alertText: (data, _matches, output) =>
+        data.p4Tether.includes(data.me) ? output.tether!() : output.bait!(),
+      outputStrings: {
+        tether: {
+          en: 'Soak Tower',
+          ko: '타워 밟아요',
+        },
+        bait: {
+          en: 'Bait Cleave',
+          ko: '▲원뿔 유도',
+        },
+      },
+    },
+    {
+      id: 'FRU P4 Spirit Taker',
+      type: 'StartsUsing',
+      netRegex: { id: '9D60', source: 'Oracle of Darkness', capture: false },
+      condition: (data) => data.phase === 'p4',
+      delaySeconds: 0.5,
+      durationSeconds: 2,
+      response: Responses.spread('alert'),
+    },
+    {
+      id: 'FRU P4 Hallowed Wings',
+      type: 'StartsUsing',
+      netRegex: { id: ['9D23', '9D24'], source: 'Usurper of Frost' },
+      condition: (data) => data.phase === 'p4',
+      delaySeconds: 1,
+      infoText: (_data, matches, output) => {
+        const dir = matches.id === '9D23' ? 'east' : 'west';
+        return output.combo!({ dir: output[dir]!() });
+      },
+      outputStrings: {
+        combo: {
+          en: '${dir} => Stacks',
+          ko: '${dir} 🔜 뭉쳐욧',
+        },
+        east: Outputs.east,
+        west: Outputs.west,
+      },
+    },
+    {
+      id: 'FRU P4 Crystallize Time',
+      type: 'StartsUsing',
+      netRegex: { id: '9D6A', source: 'Oracle of Darkness', capture: false },
+      response: Responses.bigAoe(),
+    },
     // //////////////// PHASE 5 //////////////////
 
     // CFB Dark Registance Down II
@@ -1168,68 +1317,9 @@ const triggerSet: TriggerSet<Data> = {
         'Axe Kick/Scythe Kick': 'Axe/Scythe Kick',
         'Shining Armor + Frost Armor': 'Shining + Frost Armor',
         'Sinbound Fire III/Sinbound Thunder III': 'Sinbound Fire/Thunder',
-      },
-    },
-    {
-      'missingTranslations': true,
-      'locale': 'de',
-      'replaceSync': {
-        'Fatebreaker(?!\')': 'fusioniert(?:e|er|es|en) Ascian',
-        'Fatebreaker\'s Image': 'Abbild des fusionierten Ascians',
-        'Usurper of Frost': 'Shiva-Mitron',
-        'Oracle\'s Reflection': 'Spiegelbild des Orakels',
-        'Ice Veil': 'Immerfrost-Kristall',
-      },
-      'replaceText': {
-        'Blastburn': 'Brandstoß',
-        'Blasting Zone': 'Erda-Detonation',
-        'Burn Mark': 'Brandmal',
-        'Burnished Glory': 'Leuchtende Aureole',
-        'Burnout': 'Brandentladung',
-        'Burnt Strike': 'Brandschlag',
-        'Cyclonic Break': 'Zyklon-Brecher',
-        'Explosion': 'Explosion',
-        'Fall Of Faith': 'Sünden-Erdspaltung',
-        'Floating Fetters': 'Schwebende Fesseln',
-        'Powder Mark Trail': 'Stetes Pulvermal',
-        'Sinblaze': 'Sündenglut',
-        'Sinbound Fire III': 'Sünden-Feuga',
-        'Sinbound Thunder III': 'Sünden-Blitzga',
-        'Sinsmite': 'Sündenblitz',
-        'Sinsmoke': 'Sündenflamme',
-        'Turn Of The Heavens': 'Kreislauf der Wiedergeburt',
-        'Utopian Sky': 'Paradiestrennung',
-      },
-    },
-    {
-      'missingTranslations': true,
-      'locale': 'fr',
-      'replaceSync': {
-        'Fatebreaker(?!\')': 'Sabreur de destins',
-        'Fatebreaker\'s Image': 'double du Sabreur de destins',
-        'Usurper of Frost': 'Shiva-Mitron',
-        'Oracle\'s Reflection': 'reflet de la prêtresse',
-        'Ice Veil': 'bloc de glaces éternelles',
-      },
-      'replaceText': {
-        'Blastburn': 'Explosion brûlante',
-        'Blasting Zone': 'Zone de destruction',
-        'Burn Mark': 'Marque explosive',
-        'Burnished Glory': 'Halo luminescent',
-        'Burnout': 'Combustion totale',
-        'Burnt Strike': 'Frappe brûlante',
-        'Cyclonic Break': 'Brisement cyclonique',
-        'Explosion': 'Explosion',
-        'Fall Of Faith': 'Section illuminée',
-        'Floating Fetters': 'Entraves flottantes',
-        'Powder Mark Trail': 'Marquage fatal enchaîné',
-        'Sinblaze': 'Embrasement authentique',
-        'Sinbound Fire III': 'Méga Feu authentique',
-        'Sinbound Thunder III': 'Méga Foudre authentique',
-        'Sinsmite': 'Éclair du péché',
-        'Sinsmoke': 'Flammes du péché',
-        'Turn Of The Heavens': 'Cercles rituels',
-        'Utopian Sky': 'Ultime paradis',
+        'Dark Fire III/Unholy Darkness': '(spreads/stack)',
+        'Dark Fire III/Dark Blizzard III/Unholy Darkness': '(spreads/donut/stack)',
+        'Shadoweye/Dark Water III/Dark Eruption': '(gazes/stack/spreads)',
       },
     },
     {
