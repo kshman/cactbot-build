@@ -192,11 +192,11 @@ const triggerSet: TriggerSet<Data> = {
       delaySeconds: 10,
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
-        text: {
+        text: { // In fact mostly Tank takes all tethers.
           en: 'Spread Tethers',
           de: 'Verbindungen Verteilen',
           fr: 'Dispersez les liens',
-          ja: '散開、線を断つ',
+          ja: '線を重ならないように散開',
           cn: '散开扯断连线',
           ko: '줄! 이건 탱크 혼자 처리',
         },
@@ -995,7 +995,7 @@ const triggerSet: TriggerSet<Data> = {
         'Shockwave': '冲击波',
         'Short-Range Missile': '短途导弹',
         'Shrapnel Impact': '残骸坠落',
-        'Spin': '回转',
+        'Spin': '中央/侧方旋转攻击',
         'Surface Missile': '对地导弹',
         'Systematic Airstrike': '空袭阵型',
         'Systematic Siege': '包围阵型',

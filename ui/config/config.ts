@@ -68,7 +68,7 @@ const kDirectoryDefaultText = {
 };
 
 // Translating data folders to a category name.
-const kPrefixToCategory = {
+export const kPrefixToCategory = {
   '00-misc': {
     en: 'General Triggers',
     de: 'General Trigger',

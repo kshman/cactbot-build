@@ -346,7 +346,7 @@ const triggerSet: TriggerSet<Data> = {
         'Dark Shock': '黑暗冲击',
         'Dark Well': '黑暗爆碎',
         'Direct Seeding': '直接播种',
-        '(?<! )Far Wind': '(?<! )远风',
+        '(?<! )Far Wind': '(?<! )晴岚',
         'Fire\'s Domain': '炎狱杀',
         'Fire\'s Ire': '炎狱闪',
         'Gardener\'s Hymn': '育芽之谣',

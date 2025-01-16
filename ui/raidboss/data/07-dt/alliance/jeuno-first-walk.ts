@@ -14,7 +14,7 @@ export interface Data extends RaidbossData {
 const triggerSet: TriggerSet<Data> = {
   id: 'JeunoTheFirstWalk',
   zoneId: ZoneId.JeunoTheFirstWalk,
-  timelineFile: 'jeuno1st.txt',
+  timelineFile: 'jeuno-first-walk.txt',
   initData: () => {
     return {
       cleaves: [],
@@ -24,13 +24,13 @@ const triggerSet: TriggerSet<Data> = {
   triggers: [
     // Prishe
     {
-      id: 'Jeuno1 Prishe Banishga',
+      id: 'Jeuno First Walk Prishe Banishga',
       type: 'StartsUsing',
       netRegex: { id: '9FE7', source: 'Prishe Of The Distant Chains', capture: false },
       response: Responses.aoe(),
     },
     {
-      id: 'Jeuno1 Prishe Knuckle Sandwich',
+      id: 'Jeuno First Walk Prishe Knuckle Sandwich',
       type: 'StartsUsing',
       netRegex: { id: ['9FE8', '9FE9', '9FEA'], source: 'Prishe Of The Distant Chains' },
       durationSeconds: 5,
@@ -58,20 +58,25 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: 'Jeuno1 Preshe Nullifying Dropkick',
+      id: 'Jeuno First Walk Preshe Nullifying Dropkick',
       type: 'HeadMarker',
       netRegex: { id: '023A' },
       response: Responses.sharedTankBuster('alert'),
     },
-    // 9FF2 Banish Storm
     {
-      id: 'Jeuno1 Preshe Banishga IV',
-      type: 'StartsUsing',
-      netRegex: { id: '9FFA', source: 'Prishe of the Distant Chains', capture: false },
-      response: Responses.aoe(),
+      id: 'Jeuno First Walk Prishe Banish Storm',
+      type: 'Ability', // This resolves before the AoEs even appear
+      netRegex: { id: '9FF2', source: 'Prishe Of The Distant Chains', capture: false },
+      alertText: (_data, _matches, output) => output.avoidCircles!(),
+      outputStrings: {
+        avoidCircles: {
+          en: 'Avoid radiating circles',
+          ko: '방사원 피해요',
+        },
+      },
     },
     {
-      id: 'Jeuno1 Preshe Tabris Divinevalley',
+      id: 'Jeuno First Walk Preshe Holy',
       type: 'HeadMarker',
       netRegex: { id: '00D7' },
       condition: Conditions.targetIsYou(),
@@ -84,7 +89,7 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: 'Jeuno1 Prishe Auroral Uppercut',
+      id: 'Jeuno First Walk Prishe Auroral Uppercut',
       type: 'StartsUsing',
       netRegex: { id: ['9FF6', '9FF7', '9FF8'], source: 'Prishe Of The Distant Chains' },
       durationSeconds: 5,
@@ -112,38 +117,60 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: 'Jeuno1 Preshe Asuran Fists',
+      id: 'Jeuno First Walk Preshe Banishga IV',
       type: 'StartsUsing',
-      netRegex: { id: '9FFC', source: 'Prishe of the Distant Chains', capture: false },
-      infoText: (_data, _matches, output) => output.text!(),
+      netRegex: { id: '9FFA', source: 'Prishe of the Distant Chains', capture: false },
+      response: Responses.aoe(),
+    },
+    {
+      id: 'Jeuno First Walk Prishe Banishga IV Orbs',
+      type: 'Ability',
+      netRegex: { id: '9FFA', source: 'Prishe Of The Distant Chains', capture: false },
+      durationSeconds: 6,
+      suppressSeconds: 1,
+      alertText: (_data, _matches, output) => output.avoidOrbs!(),
       outputStrings: {
-        text: {
-          en: 'Stack on Tower',
-          ko: '타워 🔜 연속 전체 공격',
+        avoidOrbs: {
+          en: 'Avoid exploding orbs',
+          ko: '폭파 동글이 피해요',
         },
       },
     },
-    // fafnir
     {
-      id: 'Jeuno1 Fafnir Dark Matter Blast',
+      id: 'Jeuno First Walk Preshe Asuran Fists',
+      type: 'StartsUsing',
+      netRegex: { id: '9FFC', source: 'Prishe of the Distant Chains', capture: false },
+      durationSeconds: 6,
+      response: Responses.stackMarker(),
+    },
+    {
+      id: 'Jeuno First Walk Aquarius Hundred Fists',
+      type: 'StartsUsing',
+      netRegex: { id: '9EC8', source: 'Aquarius', capture: true },
+      response: Responses.interruptIfPossible(),
+    },
+    {
+      id: 'Jeuno First Walk Fafnir Dark Matter Blast',
       type: 'StartsUsing',
       netRegex: { id: '9F96', source: 'Fafnir the Forgotten', capture: false },
       response: Responses.aoe(),
     },
     {
-      id: 'Jeuno1 Fafnir Spike Flail',
+      id: 'Jeuno First Walk Fafnir Spike Flail',
       type: 'StartsUsing',
       netRegex: { id: '9F6B', source: 'Fafnir the Forgotten', capture: false },
-      infoText: (_data, _matches, output) => output.text!(),
-      outputStrings: {
-        text: {
-          en: 'Tail',
-          ko: '꼬리치기, 앞으로',
-        },
-      },
+      durationSeconds: 7,
+      response: Responses.goFront('info'),
     },
     {
-      id: 'Jeuno1 Fafnir Touchdown Windup',
+      id: 'Jeuno First Walk Fafnir Dragon Breath Call',
+      type: 'StartsUsing',
+      netRegex: { id: '9F6E', source: 'Fafnir the Forgotten', capture: false },
+      durationSeconds: 7,
+      response: Responses.getUnder(),
+    },
+    {
+      id: 'Jeuno First Walk Fafnir Touchdown Windup',
       type: 'StartsUsing',
       netRegex: { id: '9F70', source: 'Fafnir the Forgotten', capture: false },
       infoText: (_data, _matches, output) => output.text!(),
@@ -155,37 +182,20 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: 'Jeuno1 Fafnir Dragon Breath Call',
-      type: 'StartsUsing',
-      netRegex: { id: '9F6E', source: 'Fafnir the Forgotten', capture: false },
-      infoText: (_data, _matches, output) => output.text!(),
-      outputStrings: {
-        text: {
-          en: 'Breath',
-          ko: '브레스, 안으로',
-        },
-      },
-    },
-    {
-      id: 'Jeuno1 Fafnir Baleful Breath',
+      id: 'Jeuno First Walk Fafnir Baleful Breath',
       type: 'StartsUsing',
       netRegex: { id: '9BF2', source: 'Fafnir the Forgotten', capture: false },
-      infoText: (_data, _matches, output) => output.text!(),
-      outputStrings: {
-        text: {
-          en: 'Stack',
-          ko: '전체 공격, 뭉쳐요',
-        },
-      },
+      durationSeconds: 7,
+      response: Responses.stackMarker(),
     },
     {
-      id: 'Jeuno1 Fafnir Sharp Spike Collect',
+      id: 'Jeuno First Walk Fafnir Sharp Spike Collect',
       type: 'HeadMarker',
       netRegex: { id: '0156' },
       run: (data, matches) => data.cleaves.push(matches.target),
     },
     {
-      id: 'Jeuno1 Fafnir Sharp Spike',
+      id: 'Jeuno First Walk Fafnir Sharp Spike',
       type: 'StartsUsing',
       netRegex: { id: '9F97', source: 'Fafnir the Forgotten', capture: false },
       delaySeconds: 0.5,
@@ -203,39 +213,84 @@ const triggerSet: TriggerSet<Data> = {
       run: (data) => data.cleaves = [],
     },
     {
-      id: 'Jeuno1 Fafnir Horrid Roar Spread',
+      id: 'Jeuno First Walk Fafnir Horrid Roar Spread',
       type: 'HeadMarker',
       netRegex: { id: '01F3' },
       condition: Conditions.targetIsYou(),
       response: Responses.spread(),
     },
     {
-      id: 'Jeuno1 Fafnir Hurricane Wing',
-      type: 'StartsUsing',
-      netRegex: { id: '9F71', source: 'Fafnir the Forgotten', capture: false },
-      response: Responses.bigAoe(),
-    },
-    {
-      id: 'Jeuno1 Fafnir Absolute Terror',
+      id: 'Jeuno First Walk Fafnir Absolute Terror',
       type: 'StartsUsing',
       netRegex: { id: '9F8D', source: 'Fafnir the Forgotten', capture: false },
       response: Responses.goSides(),
     },
     {
-      id: 'Jeuno1 Fafnir Winged Terror',
+      id: 'Jeuno First Walk Fafnir Winged Terror',
       type: 'StartsUsing',
       netRegex: { id: '9F8F', source: 'Fafnir the Forgotten', capture: false },
-      response: Responses.getIn(),
+      response: Responses.goMiddle(),
     },
-    // Ark Angel
     {
-      id: 'Jeuno1 Ark Angel MR CloudSplitter Collect',
+      id: 'Jeuno First Walk Fafnir Hurricane Wing',
+      type: 'StartsUsing',
+      netRegex: { id: '9F71', source: 'Fafnir the Forgotten', capture: false },
+      durationSeconds: 7,
+      infoText: (_data, _matches, output) => output.outerFirst!(),
+      outputStrings: {
+        outerFirst: {
+          en: 'AoE x10',
+          ko: '전체 공격 x10',
+        },
+      },
+    },
+    {
+      id: 'Jeuno First Walk Sprinkler Mysterious Light',
+      type: 'StartsUsing',
+      netRegex: { id: 'A2C3', source: 'Sprinkler', capture: true },
+      suppressSeconds: 1, // These can overlap, so make sure there's a bit of separation.
+      response: Responses.lookAwayFromSource(),
+    },
+    {
+      id: 'Jeuno First Walk Despot Scrapline Storm',
+      type: 'StartsUsing',
+      netRegex: { id: '9ECA', source: 'Despot', capture: false },
+      response: Responses.getOutThenIn(),
+    },
+    {
+      id: 'Jeuno First Walk Despot Panzerfaust',
+      type: 'StartsUsing',
+      netRegex: { id: 'A2E2', source: 'Despot', capture: true },
+      response: Responses.interruptIfPossible(),
+    },
+    {
+      id: 'Jeuno First Walk Angels Decisive Battle',
+      type: 'Tether',
+      netRegex: { id: '012B', capture: true },
+      condition: (data, matches) => {
+        return matches.source === data.me || matches.target === data.me;
+      },
+      alertText: (_data, matches, output) => {
+        if (matches.sourceId.startsWith('4'))
+          return output.attackAngel!({ angel: matches.source });
+        if (matches.targetId.startsWith('4'))
+          return output.attackAngel!({ angel: matches.target });
+      },
+      outputStrings: {
+        attackAngel: {
+          en: 'Attack ${angel}',
+          cn: '공격: ${angel}',
+        },
+      },
+    },
+    {
+      id: 'Jeuno First Walk Ark Angel MR CloudSplitter Collect',
       type: 'HeadMarker',
       netRegex: { id: '01D0' },
       run: (data, matches) => data.cleaves.push(matches.target),
     },
     {
-      id: 'Jeuno1 Ark Angel MR CloudSplitter',
+      id: 'Jeuno First Walk Ark Angel MR CloudSplitter',
       type: 'StartsUsing',
       netRegex: { id: 'A077', source: 'Ark Angel MR', capture: false },
       delaySeconds: 0.5,
@@ -253,21 +308,27 @@ const triggerSet: TriggerSet<Data> = {
       run: (data) => data.cleaves = [],
     },
     {
-      id: 'Jeuno1 Ark Angel MR Spiral Finish',
-      type: 'StartsUsing',
-      netRegex: { id: 'A06C', source: 'Ark Angel MR', capture: false },
-      delaySeconds: 5.5,
-      response: Responses.knockback(),
-    },
-    {
-      id: 'Jeuno1 Ark Angel GK Gekko',
+      id: 'Jeuno First Walk Ark Angel GK Gekko',
       type: 'StartsUsing',
       netRegex: { id: 'A07A', source: 'Ark Angel GK' },
       durationSeconds: (_data, matches) => parseFloat(matches.castTime),
       response: Responses.lookAwayFromSource(),
     },
     {
-      id: 'Jeuno1 Ark Angel GK Dragonfall',
+      id: 'Jeuno First Walk Ark Angel TT Meteor',
+      type: 'StartsUsing',
+      netRegex: { id: 'A08A', source: 'Ark Angel TT' },
+      response: Responses.interruptIfPossible('alert'),
+    },
+    {
+      id: 'Jeuno First Walk Ark Angel MR Spiral Finish',
+      type: 'StartsUsing',
+      netRegex: { id: 'A06C', source: 'Ark Angel MR', capture: false },
+      delaySeconds: 5.5,
+      response: Responses.knockback(),
+    },
+    {
+      id: 'Jeuno First Walk Ark Angel GK Dragonfall',
       type: 'StartsUsing',
       netRegex: { id: 'A07E', source: 'Ark Angel GK', capture: false },
       alertText: (_data, _matches, output) => output.stacks!(),
@@ -276,19 +337,13 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: 'Jeuno1 Ark Angel GK Arrogance Incarnate',
+      id: 'Jeuno First Walk Ark Angel GK Arrogance Incarnate',
       type: 'HeadMarker',
       netRegex: { id: '0131' },
       response: Responses.stackMarkerOn(),
     },
     {
-      id: 'Jeuno1 Ark Angel TT Meteor',
-      type: 'StartsUsing',
-      netRegex: { id: 'A08A', source: 'Ark Angel TT' },
-      response: Responses.interruptIfPossible('alert'),
-    },
-    {
-      id: 'Jeuno1 Ark Angel TT Guillotine',
+      id: 'Jeuno First Walk Ark Angel TT Guillotine',
       type: 'StartsUsing',
       netRegex: { id: 'A067', source: 'Ark Angel TT', capture: false },
       alertText: (_data, _matches, output) => output.text!(),
@@ -300,26 +355,44 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: 'Jeuno1 Ark Angel EV Dominion Slash',
+      id: 'Jeuno First Walk Ark Angel EV Dominion Slash',
       type: 'StartsUsing',
       netRegex: { id: 'A085', source: 'Ark Angel EV', capture: false },
       response: Responses.aoe(),
     },
     {
-      id: 'Jeuno1 Ark Angel EV Holy',
+      id: 'Jeuno First Walk Ark Angel EV Holy',
       type: 'StartsUsing',
       netRegex: { id: 'A089', source: 'Ark Angel EV', capture: false },
       response: Responses.aoe(),
     },
     {
-      id: 'Jeuno1 4M Critical Reaver',
-      type: 'StartsUsing',
-      netRegex: { id: 'A13B', source: 'Ark Angel HM' },
-      durationSeconds: 5,
-      response: Responses.interruptIfPossible('alert'),
+      id: 'Jeuno First Walk Angels Proud Palisade',
+      type: 'AddedCombatant',
+      netRegex: { npcBaseId: '18260', capture: false }, // Ark Shield
+      alertText: (_data, _matches, output) => output.killShield!(),
+      outputStrings: {
+        killShield: {
+          en: 'Kill Ark Shield',
+          ko: '방패 부셔요!',
+        },
+      },
     },
     {
-      id: 'Jeuno1 Ark Angel Chasing Tether',
+      id: 'Jeuno First Walk Angels Mijin Gakure',
+      type: 'LosesEffect',
+      netRegex: { effectId: '1140', capture: false }, // Uninterrupted
+      condition: (data) => data.CanSilence(),
+      alarmText: (_data, _matches, output) => output.interruptHM!(),
+      outputStrings: {
+        interruptHM: {
+          en: 'Interrupt HM',
+          ko: 'HM에게 인터럽트!',
+        },
+      },
+    },
+    {
+      id: 'Jeuno First Walk Ark Angel Chasing Tether',
       type: 'Tether',
       netRegex: { id: '0125' },
       condition: (data, matches) => [matches.source, matches.target].includes(data.me),
@@ -332,9 +405,15 @@ const triggerSet: TriggerSet<Data> = {
         },
       },
     },
-    // Shadow Lord
     {
-      id: 'Jeuno1 Shadow Lord Giga Slash',
+      id: 'Jeuno First Walk 4M Critical Reaver',
+      type: 'StartsUsing',
+      netRegex: { id: 'A13B', source: 'Ark Angel HM' },
+      durationSeconds: 5,
+      response: Responses.interruptIfPossible('alert'),
+    },
+    {
+      id: 'Jeuno First Walk Shadow Lord Giga Slash',
       type: 'StartsUsing',
       netRegex: { id: ['9F3E', '9F3F'], source: 'Shadow Lord' },
       durationSeconds: 10,
@@ -344,20 +423,12 @@ const triggerSet: TriggerSet<Data> = {
         return output.lr!();
       },
       outputStrings: {
-        lr: {
-          en: 'Left => Right',
-          ja: '左 => 右',
-          ko: '왼쪽 🔜 오른쪽',
-        },
-        rl: {
-          en: 'Right => Left',
-          ja: '右 => 左',
-          ko: '오른쪽 🔜 왼쪽',
-        },
+        lr: Outputs.leftThenRight,
+        rl: Outputs.rightThenLeft,
       },
     },
     {
-      id: 'Jeuno1 Lordly Shadow Giga Slash',
+      id: 'Jeuno First Walk Lordly Shadow Giga Slash',
       type: 'StartsUsing',
       netRegex: { id: ['9F3E', '9F3F'], source: 'Lordly Shadow' },
       durationSeconds: 10,
@@ -380,7 +451,7 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: 'Jeuno1 Shadow Lord Implosion',
+      id: 'Jeuno First Walk Shadow Lord Implosion',
       type: 'StartsUsing',
       netRegex: { id: ['9F44', '9F45'], source: 'Shadow Lord' },
       durationSeconds: 7,
@@ -401,7 +472,7 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: 'Jeuno1 Lordly Shadow Implosion',
+      id: 'Jeuno First Walk Lordly Shadow Implosion',
       type: 'StartsUsing',
       netRegex: { id: ['9F44', '9F45'], source: 'Lordly Shadow' },
       delaySeconds: 3,
@@ -423,32 +494,32 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: 'Jeuno1 Shadow Lord Flames Of Hatred',
+      id: 'Jeuno First Walk Shadow Lord Flames Of Hatred',
       type: 'StartsUsing',
       netRegex: { id: '9F69', source: 'Shadow Lord', capture: false },
       response: Responses.aoe(),
     },
     {
-      id: 'Jeuno1 Shadow Lord Cthonic Fury',
+      id: 'Jeuno First Walk Shadow Lord Cthonic Fury',
       type: 'StartsUsing',
       netRegex: { id: '9F4A', source: 'Shadow Lord', capture: false },
       durationSeconds: 6,
       response: Responses.aoe(),
     },
     {
-      id: 'Jeuno1 Shadow Lord Burning Battlements',
+      id: 'Jeuno First Walk Shadow Lord Burning Battlements',
       type: 'StartsUsing',
       netRegex: { id: '9F4F', source: 'Shadow Lord', capture: false },
       run: (data) => data.burning = 'battle',
     },
     {
-      id: 'Jeuno1 Shadow Lord Burning Keep',
+      id: 'Jeuno First Walk Shadow Lord Burning Keep',
       type: 'StartsUsing',
       netRegex: { id: '9F4E', source: 'Shadow Lord', capture: false },
       run: (data) => data.burning = 'keep',
     },
     {
-      id: 'Jeuno1 Shadow Lord Burning Moat',
+      id: 'Jeuno First Walk Shadow Lord Burning Moat',
       type: 'StartsUsing',
       netRegex: { id: '9F4D', source: 'Shadow Lord', capture: false },
       delaySeconds: 0.3,
@@ -477,7 +548,7 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: 'Jeuno1 Shadow Lord Burning Court',
+      id: 'Jeuno First Walk Shadow Lord Burning Court',
       type: 'StartsUsing',
       netRegex: { id: '9F4C', source: 'Shadow Lord', capture: false },
       delaySeconds: 0.3,
@@ -506,26 +577,26 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: 'Jeuno1 Shadow Lord Echoes Of Agony',
+      id: 'Jeuno First Walk Shadow Lord Echoes Of Agony',
       type: 'HeadMarker',
       netRegex: { id: '0221' },
       response: Responses.stackMarkerOn(),
     },
     {
-      id: 'Jeuno1 Shadow Lord Tera Slash',
+      id: 'Jeuno First Walk Shadow Lord Tera Slash',
       type: 'SystemLogMessage',
       netRegex: { id: '29AB', capture: false },
       durationSeconds: 10,
       response: Responses.bigAoe('alert'),
     },
     {
-      id: 'Jeuno1 Shadow Lord Unbridled Rage Collect',
+      id: 'Jeuno First Walk Shadow Lord Unbridled Rage Collect',
       type: 'HeadMarker',
       netRegex: { id: '01D7' },
       run: (data, matches) => data.cleaves.push(matches.target),
     },
     {
-      id: 'Jeuno1 Shadow Lord Unbridled Rage',
+      id: 'Jeuno First Walk Shadow Lord Unbridled Rage',
       type: 'StartsUsing',
       netRegex: { id: '9F67', source: 'Shadow Lord', capture: false },
       delaySeconds: 0.5,
@@ -541,14 +612,14 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: 'Jeuno1 Shadow Lord Dark Nova',
+      id: 'Jeuno First Walk Shadow Lord Dark Nova',
       type: 'HeadMarker',
       netRegex: { id: '0137' },
       condition: Conditions.targetIsYou(),
       response: Responses.spread(),
     },
     {
-      id: 'Jeuno1 Shadow Lord Binding Sigil',
+      id: 'Jeuno First Walk Shadow Lord Binding Sigil',
       type: 'StartsUsing',
       netRegex: { id: '9F55', capture: false },
       durationSeconds: 10,
@@ -561,14 +632,14 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: 'Jeuno1 Shadow Lord Damning Strikes',
+      id: 'Jeuno First Walk Shadow Lord Damning Strikes',
       type: 'StartsUsing',
       netRegex: { id: '9F57', capture: false },
       durationSeconds: 5,
       response: Responses.getTowers(),
     },
     {
-      id: 'Jeuno1 Shadow Lord Nightfall Slash',
+      id: 'Jeuno First Walk Shadow Lord Nightfall Slash',
       type: 'StartsUsing',
       netRegex: { id: ['A424', 'A425', 'A426', 'A427'], source: 'Shadow Lord' },
       durationSeconds: 10,
@@ -601,7 +672,7 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: 'Jeuno1 Shadow Lord Doom Arc',
+      id: 'Jeuno First Walk Shadow Lord Doom Arc',
       type: 'StartsUsing',
       netRegex: { id: '9F66', source: 'Shadow Lord', capture: false },
       durationSeconds: 14,
@@ -609,6 +680,16 @@ const triggerSet: TriggerSet<Data> = {
     },
   ],
   timelineReplace: [
+    {
+      'locale': 'en',
+      'replaceText': {
+        'Absolute Terror/Winged Terror': 'Absolute/Winged Terror',
+        'Winged Terror/Absolute Terror': 'Winged/Absolute Terror',
+        'Tachi: Yukikaze': 'Yukikaze',
+        'Tachi: Gekko': 'Gekko',
+        'Tachi: Kasha': 'Kasha',
+      },
+    },
     {
       'locale': 'ja',
       'missingTranslations': true,
