@@ -170,6 +170,9 @@ export interface Data extends RaidbossData {
 const triggerSet: TriggerSet<Data> = {
   id: 'Shaaloani',
   zoneId: ZoneId.Shaaloani,
+  comments: {
+    en: 'Hunts and Ttokrrone boss FATE',
+  },
   initData: () => ({
     yeheheTurnBuffs: [],
     ttokSandOrbs: [],

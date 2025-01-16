@@ -406,6 +406,9 @@ const emulatorLabels: Translation = {
     cn: '隐藏收集器',
     ko: '연산 감추기',
   },
+  ' label[for=hideGeneral]': {
+    en: 'Hide General',
+  },
 } as const;
 
 const emulatorTooltips: Translation = {
@@ -424,6 +427,9 @@ const emulatorTooltips: Translation = {
     ja: '出力がないトリガーを隠す',
     cn: '隐藏没有输出的触发器',
     ko: '출력 없는 트리거 감추기',
+  },
+  '.triggerHideGeneral': {
+    en: 'Hide triggers that are not for a specific zone',
   },
   '.connectedIndicator': {
     en: 'Connected to websocket',

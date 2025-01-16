@@ -72,7 +72,7 @@ const triggerSet: TriggerSet<Data> = {
           en: 'Break chain on ${player}',
           de: 'Kette von ${player} brechen',
           fr: 'Cassez les chaînes de ${player}',
-          ja: '${player}の線を取る',
+          ja: '${player}の線を断つ',
           cn: '截断${player}的线',
           ko: '체인 끊어요: ${player}',
         },

@@ -25,14 +25,7 @@ export interface Data extends RaidbossData {
 const phaserOutputStrings = {
   sides: Outputs.sides,
   out: Outputs.out,
-  healerStacks: {
-    en: 'Healer Stacks',
-    de: 'Bei den Heilern sammeln',
-    fr: 'Packages sur les heals',
-    ja: 'ヒーラーに集合',
-    cn: '治疗集合',
-    ko: '힐러 모이기',
-  },
+  healerStacks: Outputs.healerGroups,
   tankSpread: {
     en: 'Tank Spread',
     de: 'Tanks verteilen',
@@ -495,7 +488,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: 'Orientez le laser vers l\'extérieur',
           ja: 'レーザーを外に向ける',
           cn: '向外引导激光',
-          ko: '바깥 바라보기 (레이저 유도)',
+          ko: '바깥 봐요 (레이저 유도)',
         },
       },
     },
