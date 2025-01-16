@@ -387,11 +387,63 @@ const triggerSet: TriggerSet<Data> = {
       response: Responses.bleedAoe(),
     },
     {
+      id: 'FRU P1 Sinsmoke Tether',
+      type: 'Tether',
+      netRegex: { id: '00F9' },
+      condition: (data, matches) => {
+        if (data.p1Falled)
+          return false;
+        const target = data.party.member(matches.target);
+        data.p1FallTethers.push({ target: target, color: 'red' });
+        return data.p1FallTethers.length === 2;
+      },
+      infoText: (data, _matches, output) => {
+        const r1 = data.p1FallTethers[0]?.target.role;
+        const r2 = data.p1FallTethers[1]?.target.role;
+        if (r1 === undefined || r2 === undefined)
+          return;
+        if (r1 === 'tank' && r2 === 'tank')
+          return output.tt!();
+        if (r1 === 'healer' && r2 === 'healer')
+          return output.hh!();
+        if (r1 === 'dps' && r2 === 'dps')
+          return output.dps!();
+        if ((r1 === 'tank' || r1 === 'healer') && (r2 === 'tank' || r2 === 'healer'))
+          return output.th!();
+        return output.none!();
+      },
+      outputStrings: {
+        tt: {
+          en: '(Tank-Tank)',
+          ko: '(탱크 조정)',
+        },
+        hh: {
+          en: '(Healer-Healer)',
+          ko: '(힐러 조정)',
+        },
+        dps: {
+          en: '(Dps)',
+          ko: '(DPS 조정)',
+        },
+        th: {
+          en: '(Tank-Healer)',
+          ko: '(탱크/힐러 조정)',
+        },
+        none: {
+          en: '(No adjust)',
+          ko: '(조정 없음)',
+        },
+      },
+    },
+    {
       id: 'FRU P1 Fall of Faith',
       type: 'StartsUsing',
       netRegex: { id: '9CEA', source: 'Fatebreaker', capture: false },
       condition: (data) => !data.p1Falled,
-      run: (data, _matches) => data.p1Falled = true,
+      run: (data, _matches) => {
+        data.p1FallTethers = [];
+        data.p1Falled = true;
+      },
     },
     {
       id: 'FRU P1 Fall of Faith Collect',
