@@ -1,4 +1,0 @@
-## Jeuno: The First Walk
-
-hideall "--sync--"
-hideall "--Reset--"

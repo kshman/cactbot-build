@@ -297,7 +297,7 @@ Options.Triggers.push({
         'The Gathering Ring': '佐尔玛刻祭场',
       },
       'replaceText': {
-        '\\(circles\\)': '圈',
+        '\\(circles\\)': '(预兆)',
         '\\(explosions\\)': '(爆炸)',
         '--Levin orbs--': '--电球--',
         'Akh Morn': '死亡轮回',

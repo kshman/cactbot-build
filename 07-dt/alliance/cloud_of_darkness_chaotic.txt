@@ -1,11 +1,14 @@
 ### THE CLOUD OF DARKNESS (CHAOTIC)
+# ZoneId: 1241
+
+# -ii 9E0E 9E0F 9E11 9E12 9E14 9E16 9E17 9E1F 9E21 9E22 9E24 9E25 9E26 9E27 9E28 9E29 9E3B 9E3C 9E41 9E45 9E46 9E48 9E49 9E4B 9E4E 9E51 9E52 A183
+# -it "Stygian Shadow"
+# Cloud of Darkness and Atomos do not have 34 NameToggle lines
 
 hideall "--Reset--"
 hideall "--sync--"
 
 0.0 "--Reset--" ActorControl { command: "4000000F" } window 0,100000 jump 0
-
-# 551에서 가져옴
 
 # opener
 0.0 "--sync--" InCombat { inGameCombat: "1" } window 0,1

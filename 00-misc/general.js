@@ -5,6 +5,9 @@ const caresAboutTankStuff = (data) => {
 Options.Triggers.push({
   id: 'CactbotGeneral',
   zoneId: ZoneId.MatchAll,
+  comments: {
+    en: 'General triggers for all occasions and zones',
+  },
   triggers: [
     {
       id: 'General Provoke',
@@ -65,7 +68,7 @@ Options.Triggers.push({
           fr: 'Provocation: ${player} (manquée)',
           ja: '挑発: ${player} (タゲなし)',
           cn: '挑衅: ${player} (无目标)',
-          ko: '개구리: ${player} (빗나감)',
+          ko: '개구리: ${player} (빗나갔네!)',
         },
       },
     },

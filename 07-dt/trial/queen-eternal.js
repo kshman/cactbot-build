@@ -54,6 +54,12 @@ Options.Triggers.push({
       },
     },
     {
+      id: 'Queen Eternal Virtual Shift',
+      type: 'StartsUsing',
+      netRegex: { id: ['8EFE', '8EFF', '8F00'], source: 'Queen Eternal', capture: false },
+      response: Responses.aoe(),
+    },
+    {
       id: 'Queen Eternal Aethertithe Light Repeated AOE',
       type: 'StartsUsing',
       netRegex: { id: '8EFC', source: 'Queen Eternal', capture: false },
@@ -214,6 +220,18 @@ Options.Triggers.push({
       },
     },
     {
+      id: 'Queen Eternal Divide And Conquer',
+      type: 'HeadMarker',
+      netRegex: { id: '0209', capture: true },
+      condition: (data, matches) => {
+        // These markers are "targeted" on Sphene and "sourced" from the player.
+        // This is a pattern we've seen with some other laser headmarker mechanics in Dawntrail.
+        // Only the player ID is given.
+        return data.party.nameFromId(matches.data0) === data.me;
+      },
+      response: Responses.spread(),
+    },
+    {
       id: 'Queen Eternal Authoritys Gaze Store',
       type: 'GainsEffect',
       netRegex: { effectId: 'EE7', capture: true },
@@ -277,6 +295,12 @@ Options.Triggers.push({
       response: Responses.stopEverything(),
     },
     {
+      id: 'Queen Eternal Absolute Authority Raidwide',
+      type: 'StartsUsing',
+      netRegex: { id: '9A6B', source: 'Queen Eternal', capture: false },
+      response: Responses.aoe(),
+    },
+    {
       id: 'Queen Eternal Absolute Authority Flares',
       type: 'HeadMarker',
       netRegex: { id: '0147', capture: true },
@@ -295,6 +319,26 @@ Options.Triggers.push({
       netRegex: { id: '0037', capture: true },
       condition: Conditions.targetIsYou(),
       response: Responses.doritoStack(),
+    },
+    {
+      id: 'Queen Eternal Dynastic Diadem',
+      type: 'StartsUsing',
+      netRegex: { id: '9C7A', source: 'Queen Eternal', capture: false },
+      response: Responses.getUnder(),
+    },
+    {
+      id: 'Queen Eternal Royal Banishment AOE',
+      type: 'StartsUsing',
+      netRegex: { id: '8F24', source: 'Queen Eternal', capture: false },
+      durationSeconds: 30,
+      infoText: (_data, _matches, output) => output.fiveAOE(),
+      outputStrings: {
+        fiveAOE: {
+          en: '5x AoEs',
+          cn: 'AoE (5次)',
+          ko: '전체공격 (5x)',
+        },
+      },
     },
   ],
 });

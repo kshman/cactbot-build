@@ -100,14 +100,7 @@ Options.Triggers.push({
         // cactbot-builtin-response
         output.responseOutputStrings = {
           tankCleaveOnYou: Outputs.tankCleaveOnYou,
-          tankCleaves: {
-            en: 'Avoid Tank Cleaves',
-            de: 'Weiche Tank-Cleaves aus',
-            fr: 'Évitez le cleave sur le tank',
-            ja: 'タンク範囲攻撃回避',
-            cn: '躲避坦克顺劈',
-            ko: '탱크 쪼개기 피해요',
-          },
+          tankCleaves: Outputs.avoidTankCleaves,
         };
         if (data.tankbusters.includes(data.me))
           return { alertText: output.tankCleaveOnYou() };
@@ -284,14 +277,7 @@ Options.Triggers.push({
         // cactbot-builtin-response
         output.responseOutputStrings = {
           tankCleaveOnYou: Outputs.tankCleaveOnYou,
-          tankCleaves: {
-            en: 'Avoid Tank Cleaves',
-            de: 'Weiche Tank-Cleaves aus',
-            fr: 'Évitez les cleaves sur le tank',
-            ja: 'タンク範囲攻撃回避',
-            cn: '躲避坦克顺劈',
-            ko: '탱크 쪼개기 피해욧',
-          },
+          tankCleaves: Outputs.avoidTankCleaves,
         };
         if (data.tankbusters.includes(data.me))
           return { alertText: output.tankCleaveOnYou() };
@@ -563,14 +549,7 @@ Options.Triggers.push({
         // cactbot-builtin-response
         output.responseOutputStrings = {
           tankCleaveOnYou: Outputs.tankCleaveOnYou,
-          tankCleaves: {
-            en: 'Avoid Tank Cleaves',
-            de: 'Weiche den Tank-Cleaves aus',
-            fr: 'Évitez les cleaves sur le tank',
-            ja: 'タンク範囲攻撃回避',
-            cn: '躲避坦克顺劈',
-            ko: '탱크 쪼개기 피해욧',
-          },
+          tankCleaves: Outputs.avoidTankCleaves,
         };
         if (data.tankbusters.includes(data.me))
           return { alertText: output.tankCleaveOnYou() };
@@ -1004,9 +983,9 @@ Options.Triggers.push({
       },
       'replaceText': {
         '--hammer--': '--锤子--',
-        '\(fake\)': '假',
-        '\(proximity\)': '近',
-        '\(summon\)': '召唤',
+        '\(fake\)': '(假)',
+        '\(proximity\)': '(距离衰减)',
+        '\(summon\)': '(召唤)',
         'Advent of the Eighth': '彗星环',
         'As Above, So Below': '生死抉择之炎',
         'Balance': '灵魂的清算',

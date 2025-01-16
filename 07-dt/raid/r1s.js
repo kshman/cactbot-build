@@ -58,10 +58,6 @@ Options.Triggers.push({
       oneTwoPaw: {},
       quadCross: {},
     },
-    //
-    seenLeapJump: false,
-    leapTetherCount: 0,
-    leapInfo: [],
   }),
   triggers: [
     {
@@ -98,7 +94,6 @@ Options.Triggers.push({
       id: 'R1S One-two Paw Right Left',
       type: 'StartsUsing',
       netRegex: { id: '9436', source: 'Black Cat', capture: false },
-      condition: Conditions.notOnlyAutumn(),
       durationSeconds: 9.5,
       response: Responses.goLeftThenRight(),
     },
@@ -106,7 +101,6 @@ Options.Triggers.push({
       id: 'R1S One-two Paw Left Right',
       type: 'StartsUsing',
       netRegex: { id: '9439', source: 'Black Cat', capture: false },
-      condition: Conditions.notOnlyAutumn(),
       durationSeconds: 9.5,
       response: Responses.goRightThenLeft(),
     },
@@ -114,14 +108,13 @@ Options.Triggers.push({
       id: 'R1S Biscuit Maker',
       type: 'StartsUsing',
       netRegex: { id: '9495', source: 'Black Cat', capture: true },
-      response: Responses.tankBusterSwap(),
+      response: Responses.tankBuster(),
     },
     {
       id: 'R1S Bloody Scratch',
       type: 'StartsUsing',
       netRegex: { id: '9494', source: 'Black Cat', capture: false },
       response: Responses.bigAoe(),
-      run: (data) => data.seenLeapJump = false,
     },
     {
       id: 'R1S ActorSetPos Collector',
@@ -232,11 +225,12 @@ Options.Triggers.push({
       type: 'StartsUsing',
       netRegex: { id: '9446', source: 'Copy Cat', capture: false },
       condition: (data) => data.me === data.lastPawprintTarget,
-      alertText: (_data, _matches, output) => output.text(),
+      infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Launch Forward (Aim for uncracked tile)',
           ja: '前方吹き飛ばし (割れていない床を狙って)',
+          cn: '向前击飞 (瞄准完好的地板)',
           ko: '내게 어퍼컷 넉백!',
         },
       },
@@ -246,14 +240,12 @@ Options.Triggers.push({
       type: 'StartsUsing',
       netRegex: { id: '9446', source: 'Copy Cat', capture: false },
       condition: (data) => data.me !== data.lastPawprintTarget,
-      infoText: (data, _matches, output) => {
-        const target = data.party.member(data.lastPawprintTarget);
-        return output.text({ target: target.nick });
-      },
+      infoText: (data, _matches, output) => output.text({ target: data.lastPawprintTarget }),
       outputStrings: {
         text: {
           en: '${target} Launch',
           ja: '${target} に吹き飛ばし',
+          cn: '${target} 击飞',
           ko: '어퍼컷: ${target}',
         },
       },
@@ -263,11 +255,12 @@ Options.Triggers.push({
       type: 'StartsUsing',
       netRegex: { id: '9448', source: 'Copy Cat', capture: false },
       condition: (data) => data.me === data.lastPawprintTarget,
-      alertText: (_data, _matches, output) => output.text(),
+      infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Stand on uncracked tile',
           ja: '割れてない床に立って',
+          cn: '被砸 (站在完好的场地)',
           ko: '내게 내려 찍기!',
         },
       },
@@ -277,14 +270,12 @@ Options.Triggers.push({
       type: 'StartsUsing',
       netRegex: { id: '9448', source: 'Copy Cat', capture: false },
       condition: (data) => data.me !== data.lastPawprintTarget,
-      infoText: (data, _matches, output) => {
-        const target = data.party.member(data.lastPawprintTarget);
-        return output.text({ target: target.nick });
-      },
+      infoText: (data, _matches, output) => output.text({ target: data.lastPawprintTarget }),
       outputStrings: {
         text: {
           en: '${target} Stun',
           ja: '${target} にスタン',
+          cn: '${target} 被砸',
           ko: '내려 찍기: ${target}',
         },
       },
@@ -298,7 +289,23 @@ Options.Triggers.push({
         partner: {
           en: 'Partner Stacks',
           ja: 'ペア',
-          ko: '십자로 둘씩!',
+          cn: '和搭档分摊',
+          ko: '십자로 페어!',
+        },
+      },
+    },
+    {
+      id: 'R1S Delayed Quadruple Swipe',
+      type: 'StartsUsing',
+      netRegex: { id: '945D', source: 'Black Cat', capture: false },
+      delaySeconds: 24.4,
+      infoText: (_data, _matches, output) => output.partner(),
+      outputStrings: {
+        partner: {
+          en: 'Partner Stacks',
+          ja: 'ペア',
+          cn: '和搭档分摊',
+          ko: '십자로 페어!',
         },
       },
     },
@@ -306,6 +313,16 @@ Options.Triggers.push({
       id: 'R1S Double Swipe',
       type: 'StartsUsing',
       netRegex: { id: '945F', source: 'Black Cat', capture: false },
+      infoText: (_data, _matches, output) => output.healerStacks(),
+      outputStrings: {
+        healerStacks: Outputs.healerGroups,
+      },
+    },
+    {
+      id: 'R1S Delayed Double Swipe',
+      type: 'StartsUsing',
+      netRegex: { id: '945F', source: 'Black Cat', capture: false },
+      delaySeconds: 24.4,
       infoText: (_data, _matches, output) => output.healerStacks(),
       outputStrings: {
         healerStacks: Outputs.healerGroups,
@@ -326,6 +343,7 @@ Options.Triggers.push({
         rolePositions: {
           en: 'Role positions',
           ja: 'ロールの担当位置へ',
+          cn: '职能分散站位',
           ko: '같은 롤 뭉쳐요',
         },
       },
@@ -334,16 +352,7 @@ Options.Triggers.push({
       id: 'R1S Leaping One-two Paw',
       type: 'StartsUsing',
       netRegex: { id: ['944D', '944E', '944F', '9450'], source: 'Black Cat', capture: true },
-      infoText: (data, matches, output) => {
-        if (data.options.OnlyAutumn)
-          return;
-        if (data.options.AutumnStyle) {
-          if (matches.id === '944D' || matches.id === '9450')
-            return output.outsideIn();
-          else if (matches.id === '944E' || matches.id === '944F')
-            return output.insideOut();
-          return output.unknown();
-        }
+      infoText: (_data, matches, output) => {
         if (matches.id === '944D') {
           return output.combo({ dir: output.dirW(), cleaves: output.outsideIn() });
         } else if (matches.id === '944E') {
@@ -376,17 +385,20 @@ Options.Triggers.push({
         insideOut: {
           en: 'Inside => Outside',
           ja: '内側 => 外側',
+          cn: '场内 => 场外',
           ko: '안에서 🔜 밖으로',
         },
         outsideIn: {
           en: 'Outside => Inside',
           ja: '外側 => 内側',
+          cn: '场外 => 场内',
           ko: '밖에서 🔜 안으로',
         },
         combo: {
           en: '${dir}, ${cleaves}',
           ja: '${dir}, ${cleaves}',
-          ko: '${dir}쪽 🔜 ${cleaves}',
+          cn: '${dir}, ${cleaves}',
+          ko: '${dir}쪽, ${cleaves}',
         },
         unknown: Outputs.unknown,
       },
@@ -410,6 +422,7 @@ Options.Triggers.push({
         proximity: {
           en: 'Proximity baits at target',
           ja: 'ボスに近づいて誘導',
+          cn: '靠近引导站位',
           ko: '자기 자리로! 부채꼴 유도',
         },
         unknown: Outputs.unknown,
@@ -464,8 +477,6 @@ Options.Triggers.push({
             let inOut = 'in';
             if (data.storedLeaps.oneTwoPaw.leftRight !== data.storedLeaps.oneTwoPaw.firstCleaveSide)
               inOut = 'out';
-            if (data.options.AutumnStyle)
-              return output.aHealerStacks({ inOut: output[inOut]() });
             return output.healerStacks({ dir: output[dir](), inOut: output[inOut]() });
           }
           if (
@@ -485,8 +496,6 @@ Options.Triggers.push({
               else
                 dir = 'dirE';
             }
-            if (data.options.AutumnStyle)
-              return output.aProximity();
             return output.proximity({ dir: output[dir]() });
           }
         }
@@ -497,138 +506,27 @@ Options.Triggers.push({
         in: {
           en: 'In + Healer Stacks => Out',
           ja: '中へ + ヒラ頭割り => 外へ',
+          cn: '场内 + 治疗分组分摊 => 场外',
           ko: '안에서 4:4힐러 🔜 밖으로',
         },
         out: {
           en: 'Out + Healer Stacks => In',
           ja: '外へ + ヒラ頭割り => 中へ',
+          cn: '场外 + 治疗分组分摊 => 场内',
           ko: '밖에서 4:4힐러🔜 안으로',
         },
         healerStacks: {
           en: 'Go ${dir} => ${inOut}',
           ja: '${dir} へ => ${inOut}',
+          cn: '去 ${dir} => ${inOut}',
           ko: '${dir}쪽 🔜 ${inOut}',
         },
         proximity: {
           en: 'Go ${dir} => Proximity Baits + Spreads',
           ja: '${dir} へ => ボスに近づいて誘導 + 散開',
+          cn: '去 ${dir} => 引导站位 + 分散',
           ko: '${dir}쪽 🔜 부채꼴 유도!',
         },
-        aHealerStacks: {
-          en: '${inOut}',
-          ja: '${inOut}',
-          ko: '${inOut}',
-        },
-        aProximity: {
-          en: 'Proximity Baits/Spreads',
-          ja: 'ボスに近づいて誘導 + 散開',
-          ko: '자기 자리로! 부채꼴 유도',
-        },
-      },
-    },
-    {
-      id: 'R1S Quadruple Crossing',
-      type: 'StartsUsing',
-      netRegex: { id: '943C', source: 'Black Cat', capture: false },
-      infoText: (_data, _matches, output) => output.text(),
-      outputStrings: {
-        text: {
-          en: 'Proximity baits at target',
-          ja: 'ボスに近づいて誘導 + 散開',
-          ko: '자기 자리로! 부채꼴 유도',
-        },
-      },
-    },
-    {
-      id: 'R1S Quadruple Swipe Soulshade',
-      type: 'StartsUsing',
-      netRegex: { id: '9480', source: 'Soulshade', capture: false },
-      suppressSeconds: 5,
-      alertText: (_data, _matches, output) => output.text(),
-      outputStrings: {
-        text: {
-          en: 'Pair',
-          ja: 'ペア',
-          ko: '십자로 둘씩!',
-        },
-      },
-    },
-    {
-      id: 'R1S Double Swipe Soulshade',
-      type: 'StartsUsing',
-      netRegex: { id: '9482', source: 'Soulshade', capture: false },
-      suppressSeconds: 5,
-      alertText: (_data, _matches, output) => output.text(),
-      outputStrings: {
-        text: Outputs.healerGroups,
-      },
-    },
-    {
-      id: 'R1S Grimalkin Gale',
-      type: 'StartsUsing',
-      netRegex: { id: '9B84', source: 'Black Cat', capture: false },
-      suppressSeconds: 5,
-      run: (data) => {
-        data.seenLeapJump = true;
-        data.leapTetherCount = 0;
-        data.leapInfo = [];
-      },
-    },
-    {
-      id: 'R1S Leftward Memory',
-      type: 'GainsEffect',
-      netRegex: { effectId: 'FD3', target: 'Black Cat', capture: false },
-      condition: (data) => data.seenLeapJump,
-      run: (data) => data.lastLeapDir = 'left',
-    },
-    {
-      id: 'R1S Rightward Memory',
-      type: 'GainsEffect',
-      netRegex: { effectId: 'FD2', target: 'Black Cat', capture: false },
-      condition: (data) => data.seenLeapJump,
-      run: (data) => data.lastLeapDir = 'right',
-    },
-    {
-      id: 'R1S Tether for wards',
-      type: 'Tether',
-      netRegex: { id: '0066', source: 'Soulshade', capture: true },
-      condition: (data) => data.seenLeapJump,
-      durationSeconds: 8,
-      alertText: (data, matches, output) => {
-        data.leapTetherCount++;
-        if (data.leapTetherCount <= 2 && data.lastLeapDir !== undefined) {
-          data.leapInfo.push({ id: matches.sourceId, dir: data.lastLeapDir });
-          // found: '찾음: ${id}, ${dir}',
-          // return output.found!({ id: matches.sourceId, dir: data.lastLeapDir });
-          return;
-        }
-        const leap = data.leapInfo.find((e) => e.id === matches.sourceId);
-        if (leap === undefined)
-          return output.unknown();
-        const other = data.leapInfo.find((e) => e.id !== matches.sourceId);
-        if (other !== undefined) {
-          data.leapInfo = data.leapInfo.filter((e) => e.id !== matches.sourceId);
-          const dir1 = leap.dir === 'left' ? output.left() : output.right();
-          const dir2 = other.dir === 'left' ? output.left() : output.right();
-          return output.baitBait({ dir1: dir1, dir2: dir2 });
-        }
-        const dir = leap.dir === 'left' ? output.left() : output.right();
-        return output.bait({ dir: dir });
-      },
-      outputStrings: {
-        bait: {
-          en: 'Bait: ${dir}',
-          ja: '誘導: ${dir}',
-          ko: '유도: ${dir}으로',
-        },
-        baitBait: {
-          en: 'Bait: ${dir1} => ${dir2}',
-          ja: '誘導: ${dir1} => ${dir2}',
-          ko: '유도: ${dir1} 🔜 ${dir2}',
-        },
-        left: Outputs.left,
-        right: Outputs.right,
-        unknown: Outputs.unknown,
       },
     },
   ],
@@ -778,7 +676,7 @@ Options.Triggers.push({
         'Bloody Scratch': '血腥抓挠',
         'Copycat': '模仿之猫',
         'Double Swipe': '双重利爪',
-        'Elevate and Eviscerate': '击飞开膛',
+        'Elevate and Eviscerate': '腾身开膛',
         'Grimalkin Gale': '猫怪突风',
         'Impact': '冲击',
         'Leaping One-two Paw': '猫跳二连尖甲',
@@ -796,6 +694,50 @@ Options.Triggers.push({
         'Soulshade': '灵魂之影',
         'Splintering Nails': '碎裂尖甲',
         'Tempestuous Tear': '暴风裂',
+      },
+    },
+    {
+      'locale': 'ko',
+      'replaceSync': {
+        'Black Cat': '블랙 캣',
+        'Copy Cat': '카피 캣',
+        'Soulshade': '그림자 영혼',
+      },
+      'replaceText': {
+        '\\(First\\)': '(1)',
+        '\\(Second\\)': '(2)',
+        '\\(cast\\)': '(시전)',
+        '\\(damage\\)': '(피해)',
+        '\\(enrage\\)': '(전멸기)',
+        '\\(hit\\)': '(명중)',
+        '\\(hits\\)': '(명중)',
+        '\\(jump\\)': '(점프)',
+        '\\(knockback\\)': '(넉백)',
+        '\\(stacks\\)': '(쉐어)',
+        '\\(telegraphs\\)': '(전조)',
+        '\\(tethers\\)': '(선)',
+        'Biscuit Maker': '꾹꾹이',
+        'Bloody Scratch': '피묻은 손톱자국',
+        'Copycat': '카피 캣',
+        'Double Swipe': '이중 할퀴기',
+        'Elevate and Eviscerate': '고양이 주먹',
+        'Grimalkin Gale': '고양이 돌풍',
+        'Impact': '충격',
+        'Leaping One-two Paw': '도약 2연속 손톱',
+        'Leaping Quadruple Crossing': '도약 4연속 손톱',
+        'Mouser': '생쥐 몰이',
+        'Nailchipper': '손톱 갈기',
+        'Nine Lives': '아홉 목숨',
+        '(?<! )One-two Paw': '2연속 손톱',
+        'Overshadow': '그림자 드리우기',
+        'Predaceous Pounce': '고양이 우다다',
+        '(?<! )Quadruple Crossing': '4연속 손톱',
+        'Quadruple Swipe': '사중 할퀴기',
+        'Raining Cats': '손톱 세례',
+        'Shockwave': '충격파',
+        'Soulshade': '그림자 영혼',
+        'Splintering Nails': '손톱 분리',
+        'Tempestuous Tear': '폭풍 가르기',
       },
     },
   ],

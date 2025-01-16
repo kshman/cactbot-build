@@ -192,7 +192,7 @@ Options.Triggers.push({
           en: 'Knockback -> Out of Middle',
           de: 'Rückstoß -> Raus aus der Mitte',
           fr: 'Poussée -> Sortez du milieu',
-          ja: 'ノックバック -> 外へ',
+          ja: 'ノックバック -> 横へ',
           cn: '击退 -> 去外面',
           ko: '넉백 -> 바깥쪽 (한가운데 있다가 죽어요)',
         },

@@ -121,5 +121,12 @@ Options.Triggers.push({
         'Golden Molter': '黄金蜕皮蜥',
       },
     },
+    {
+      'locale': 'ko',
+      'replaceSync': {
+        'Bull Apollyon': '황소 아폴리온',
+        'Golden Molter': '황금 허물',
+      },
+    },
   ],
 });
