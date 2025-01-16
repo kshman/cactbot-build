@@ -1099,12 +1099,12 @@ export default {
   inside: {
     en: 'Inside',
     ja: '内側',
-    ko: '안쪽',
+    ko: '안',
   },
   outside: {
     en: 'Outside',
     ja: '外側',
-    ko: '바깥쪽',
+    ko: '바깥',
   },
   // 화살표
   arrowN: {
