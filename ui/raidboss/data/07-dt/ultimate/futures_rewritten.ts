@@ -1,6 +1,7 @@
 import { AutumnDirections } from '../../../../../resources/autumn';
 import Conditions from '../../../../../resources/conditions';
 import Outputs from '../../../../../resources/outputs';
+import { callOverlayHandler } from '../../../../../resources/overlay_plugin_api';
 import { Responses } from '../../../../../resources/responses';
 import { Directions } from '../../../../../resources/util';
 import ZoneId from '../../../../../resources/zone_id';
@@ -102,6 +103,10 @@ export interface Data extends RaidbossData {
   p3NoranJul: number[];
   p3DarkWater: DarkWaterContainer[];
   p3MyDark?: DarkWaterContainer;
+  p3ApocInit?: number;
+  p3ApocSwap?: boolean;
+  p3ApocNo?: number;
+  p3ApocRot?: 1 | -1; // 1 = clockwise, -1 = counterclockwise
   //
   p4Tether: string[];
   p4DarkWater: string[];
@@ -1063,8 +1068,8 @@ const triggerSet: TriggerSet<Data> = {
     {
       id: 'FRU P3 Ultimate Relativity Look Out',
       type: 'GainsEffect',
-      // 99B - Rewind triggered
-      netRegex: { effectId: '99B' },
+      // 994 - Return
+      netRegex: { effectId: '994' },
       condition: (data, matches) => data.phase === 'p3ur' && data.me === matches.target,
       delaySeconds: (_data, matches) => parseFloat(matches.duration) - 4,
       countdownSeconds: 4,
@@ -1151,12 +1156,18 @@ const triggerSet: TriggerSet<Data> = {
           }
           if (partner !== undefined) {
             if (data.role === 'tank') {
-              if (partner.role === 'dps')
+              if (partner.role === 'dps') {
+                // data.p3ApocSwap = false;
                 return { infoText: output.stand!({ role: role, with: partner.nick }) };
+              }
+              // data.p3ApocSwap = true;
               return { alertText: output.move!({ role: role, with: partner.nick }) };
             } else if (data.role === 'dps') {
-              if (partner.job === 'PCT' || partner.job === 'BLM')
+              if (partner.job === 'PCT' || partner.job === 'BLM') {
+                // data.p3ApocSwap = true;
                 return { alertText: output.move!({ role: role, with: partner.nick }) };
+              }
+              // data.p3ApocSwap = false;
               return { infoText: output.stand!({ role: role, with: partner.nick }) };
             }
           }
@@ -1177,14 +1188,175 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: 'FRU P3 Ap1',
+      id: 'FRU P3 Apoc Side',
+      type: 'GainsEffect',
+      netRegex: { effectId: '99D', capture: false }, // Spell-in-Waiting: Dark Water III
+      condition: (data) => data.phase === 'p3ap',
+      suppressSeconds: 1,
+      promise: async (data) => {
+        const combatantData = await callOverlayHandler({
+          call: 'getCombatants',
+          names: [data.me],
+        });
+        const me = combatantData.combatants[0];
+        if (!me)
+          return;
+        data.p3ApocInit = Directions.xyTo4DirNum(me.PosX, me.PosY, centerX, centerY);
+      },
+    },
+    {
+      id: 'FRU P3 Apoc Swap Check',
+      type: 'Ability',
+      netRegex: { id: '9D4F' },
+      condition: (data, matches) => data.phase === 'p3ap' && data.me === matches.target,
+      run: (data, matches) => {
+        if (data.p3ApocSwap !== undefined)
+          return;
+        const x = parseFloat(matches.targetX);
+        const y = parseFloat(matches.targetY);
+        const stackSide = Directions.xyTo4DirNum(x, y, centerX, centerY);
+        data.p3ApocSwap = data.p3ApocInit !== stackSide;
+      },
+    },
+    {
+      id: 'FRU P3 Apoc Collect',
+      type: 'CombatantMemory',
+      netRegex: { change: 'Add', pair: [{ key: 'BNpcID', value: '1EB0FF' }] },
+      condition: (data) => data.phase === 'p3ap',
+      run: (data, matches) => {
+        const x = parseFloat(matches.pairPosX ?? '0');
+        const y = parseFloat(matches.pairPosY ?? '0');
+        const isCenterActor = Math.round(x) === 100 && Math.round(y) === 100;
+        const hdg = parseFloat(matches.pairHeading ?? '0');
+
+        if (data.p3ApocNo === undefined && isCenterActor)
+          data.p3ApocNo = Directions.hdgTo8DirNum(hdg);
+        else if (data.p3ApocRot === undefined && !isCenterActor) {
+          const pos = Directions.xyTo8DirNum(x, y, centerX, centerY);
+          const face = Directions.hdgTo8DirNum(hdg);
+          const rel = calcClockPos(pos, face);
+          data.p3ApocRot = rel === 'cw' ? 1 : (rel === 'ccw' ? -1 : undefined);
+        }
+      },
+    },
+    {
+      // Silent early infoText with safe dirs
+      id: 'FRU P3 Apoc Safe Early',
+      type: 'CombatantMemory',
+      netRegex: { change: 'Add', pair: [{ key: 'BNpcID', value: '1EB0FF' }], capture: false },
+      condition: (data) => data.phase === 'p3ap',
+      delaySeconds: 0.9, // collect + short delay to avoid collision with Dark Water Debuff
+      durationSeconds: 8.2,
+      suppressSeconds: 1,
+      soundVolume: 0,
+      infoText: (data, _matches, output) => {
+        const startNum = data.p3ApocNo;
+        const rotationDir = data.p3ApocRot;
+        if (startNum === undefined || rotationDir === undefined)
+          return;
+
+        // Safe spot(s) are 1 behind the starting dir and it's opposite (+4)
+        const safe = [
+          (startNum - rotationDir + 8) % 8,
+          (startNum + 4 - rotationDir + 8) % 8,
+        ];
+        safe.sort((a, b) => a - b);
+
+        const safeStr = safe
+          .map((dir) => output[AutumnDirections.outputMarker8[dir] ?? 'unknown']!()).join('');
+        return output.safe!({ dir1: safeStr });
+      },
+      tts: null,
+      outputStrings: {
+        safe: {
+          en: '(Apoc safe later: ${dir1})',
+          ko: '(아포 안전 ${dir1})',
+        },
+        ...AutumnDirections.outputStringsMarker8,
+      },
+    },
+    {
+      // Displays during Spirit Taker
+      id: 'FRU P3 Apoc Safe',
+      type: 'CombatantMemory',
+      netRegex: { change: 'Add', pair: [{ key: 'BNpcID', value: '1EB0FF' }], capture: false },
+      condition: (data) => data.phase === 'p3ap',
+      delaySeconds: 9.2,
+      durationSeconds: 11,
+      suppressSeconds: 1,
+      infoText: (data, _matches, output) => {
+        const startNum = data.p3ApocNo;
+        const rotationDir = data.p3ApocRot;
+        if (startNum === undefined || rotationDir === undefined)
+          return;
+
+        // Safe spot(s) are 1 behind the starting dir and it's opposite (+4)
+        // Melees lean one additional dir away from the rotation direction
+        const safe = [
+          (startNum - rotationDir + 8) % 8,
+          (startNum + 4 - rotationDir + 8) % 8,
+        ];
+
+        const toward = [
+          (safe[0]! - rotationDir + 8) % 8,
+          (safe[1]! - rotationDir + 8) % 8,
+        ];
+
+        // We shouldn't just sort safe[], and toward[], since the elements are paired
+        // and sorting might impact order of just one and not both.
+        if (safe[0]! > safe[1]!) {
+          safe.reverse();
+          toward.reverse();
+        }
+
+        let safeStr = output['unknown']!();
+        let towardStr = output['unknown']!();
+
+        if (data.options.AutumnStyle) {
+          const dpsDirs = [2, 3, 4, 5];
+          const suppDirs = [6, 7, 0, 1];
+          const myDirs = data.role === 'dps'
+            ? (data.p3ApocSwap ? suppDirs : dpsDirs)
+            : (data.p3ApocSwap ? dpsDirs : suppDirs);
+
+          // use the index from safe, so we can make sure we're giving the correct 'toward'.
+          const idx = safe.findIndex((idx) => myDirs.includes(idx));
+          if (idx === -1)
+            return output.safe!({ dir1: safeStr, dir2: towardStr });
+
+          const safeDir = safe[idx];
+          const towardDir = toward[idx];
+          if (safeDir === undefined || towardDir === undefined)
+            return output.safe!({ dir1: safeStr, dir2: towardStr });
+
+          safeStr = output[AutumnDirections.outputMarker8[safeDir] ?? 'unknown']!();
+          towardStr = output[AutumnDirections.outputMarker8[towardDir] ?? 'unknown']!();
+          return output.safe!({ dir1: safeStr, dir2: towardStr });
+        }
+
+        safeStr = safe
+          .map((dir) => output[AutumnDirections.outputMarker8[dir] ?? 'unknown']!()).join();
+        towardStr = toward
+          .map((dir) => output[AutumnDirections.outputMarker8[dir] ?? 'unknown']!()).join();
+        return output.safe!({ dir1: safeStr, dir2: towardStr });
+      },
+      outputStrings: {
+        safe: {
+          en: 'Safe: ${dir1} (lean ${dir2})',
+          ko: '${dir1} ▶ ${dir2}쪽',
+        },
+        ...AutumnDirections.outputStringsMarker8,
+      },
+    },
+    {
+      id: 'FRU P3 Apoc1',
       type: 'GainsEffect',
       netRegex: { effectId: '99D', capture: false },
       condition: (data) => data.phase === 'p3ap',
       delaySeconds: 6,
       durationSeconds: 3.5,
       suppressSeconds: 1,
-      response: Responses.stackThenSpread(),
+      response: Responses.stackMarker(),
     },
     {
       // Fire this just before the first Dark Water debuffs expire (10.0s).
@@ -1200,7 +1372,7 @@ const triggerSet: TriggerSet<Data> = {
       response: Responses.spread('alert'),
     },
     {
-      id: 'FRU P3 Ap2',
+      id: 'FRU P3 Apoc2',
       type: 'Ability',
       netRegex: { id: '9D52', source: 'Oracle of Darkness', capture: false },
       condition: (data) => data.phase === 'p3ap',
@@ -1209,7 +1381,7 @@ const triggerSet: TriggerSet<Data> = {
       response: Responses.stackMarker(),
     },
     {
-      id: 'FRU P3 Ap3 Darkest Dance',
+      id: 'FRU P3 Apoc3 Darkest Dance',
       type: 'Ability',
       netRegex: { id: '9CF5', source: 'Oracle of Darkness', capture: false },
       durationSeconds: 7,
@@ -1361,6 +1533,15 @@ const triggerSet: TriggerSet<Data> = {
         'Usurper of Frost': 'Shiva-Mitron',
         'Oracle\'s Reflection': 'Spiegelbild des Orakels',
         'Ice Veil': 'Immerfrost-Kristall',
+        'Frozen Mirror': 'Eisspiegel',
+        'Holy Light': 'heilig\\[a\\] Licht',
+        'Crystal of Darkness': '[^:]+', // FIXME
+        'Crystal of Light': 'Lichtkristall',
+        'Oracle of Darkness': 'Orakel\\[p\\] der Dunkelheit',
+        'Fragment of Fate': '[^:]+', // FIXME
+        'Sorrow\'s Hourglass': 'Sanduhr\\[p\\] der Sorge',
+        'Drachen Wanderer': 'Seele\\[p\\] des heiligen Drachen',
+        'Pandora': '[^:]+', // FIXME
       },
       'replaceText': {
         'Blastburn': 'Brandstoß',
@@ -1392,6 +1573,15 @@ const triggerSet: TriggerSet<Data> = {
         'Usurper of Frost': 'Shiva-Mitron',
         'Oracle\'s Reflection': 'reflet de la prêtresse',
         'Ice Veil': 'bloc de glaces éternelles',
+        'Frozen Mirror': 'miroir de glace',
+        'Holy Light': 'lumière sacrée',
+        'Crystal of Darkness': '[^:]+', // FIXME
+        'Crystal of Light': 'cristal de Lumière',
+        'Oracle of Darkness': 'prêtresse des Ténèbres',
+        'Fragment of Fate': '[^:]+', // FIXME
+        'Sorrow\'s Hourglass': 'sablier de chagrin',
+        'Drachen Wanderer': 'esprit du Dragon divin',
+        'Pandora': '[^:]+', // FIXME
       },
       'replaceText': {
         'Blastburn': 'Explosion brûlante',
@@ -1423,6 +1613,15 @@ const triggerSet: TriggerSet<Data> = {
         'Usurper of Frost': 'シヴァ・ミトロン',
         'Oracle\'s Reflection': '巫女の鏡像',
         'Ice Veil': '永久氷晶',
+        'Frozen Mirror': '氷面鏡',
+        'Holy Light': '聖なる光',
+        'Crystal of Darkness': '闇水晶',
+        'Crystal of Light': '光水晶',
+        'Oracle of Darkness': '闇の巫女',
+        'Fragment of Fate': '未来の欠片',
+        'Sorrow\'s Hourglass': '悲しみの砂時計',
+        'Drachen Wanderer': '聖竜気',
+        'Pandora': 'パンドラ・ミトロン',
       },
       'replaceText': {
         'Blastburn': 'バーンブラスト',

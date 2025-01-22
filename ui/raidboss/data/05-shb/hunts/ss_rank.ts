@@ -21,6 +21,9 @@ const triggerSet: TriggerSet<Data> = {
     cn: 'SS 级狩猎怪',
     ko: 'SS급 몹',
   },
+  comments: {
+    en: 'SS Rank Hunts',
+  },
   triggers: [
     {
       id: 'Hunt Rebellion Royal Decree',
