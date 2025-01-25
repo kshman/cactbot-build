@@ -1499,11 +1499,26 @@ const triggerSet: TriggerSet<Data> = {
       // 9D5B 이게 원래 소머 댄스 (Oracle of Darkness)
       netRegex: { id: '9D23', source: 'Usurper of Frost', capture: false },
       condition: (data) => data.phase === 'p4' && data.arole === 'MT',
+      durationSeconds: 3,
       alertText: (_data, _matches, output) => output.tank!(),
       outputStrings: {
         tank: {
           en: 'Go Edge + bait buster',
           ko: '혼자 맵끝 + 무적!',
+        },
+      },
+    },
+    {
+      id: 'FRU P4 Somber Dance Follow',
+      type: 'Ability',
+      netRegex: { id: '9D5B', source: 'Oracle of Darkness', capture: false },
+      condition: (data) => data.phase === 'p4' && data.arole === 'MT',
+      durationSeconds: 2,
+      alertText: (_data, _matches, output) => output.tank!(),
+      outputStrings: {
+        tank: {
+          en: 'Close to Oracle',
+          ko: '가이아 밑으로!',
         },
       },
     },
@@ -1619,19 +1634,19 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         eruption: {
           en: 'North',
-          ko: '🡹보라 / 이럽션',
+          ko: '🡹🟣보라 / 이럽션',
         },
         unholy: {
           en: 'South',
-          ko: '🡻보라 바깥 / 언홀리',
+          ko: '🡻🟣보라 바깥 / 언홀리',
         },
         water: {
           en: 'South',
-          ko: '🡻보라 바깥 / 워터',
+          ko: '🡻🟣보라 바깥 / 워터',
         },
         bice: {
           en: 'South',
-          ko: '🡻보라 바깥 / 블리자드',
+          ko: '🡻🟣보라 바깥 / 블리자드',
         },
         lrice: {
           en: 'West',
@@ -1643,11 +1658,11 @@ const triggerSet: TriggerSet<Data> = {
         },
         laero: {
           en: 'South',
-          ko: '🡻빈쪽 안쪽 / 에어로',
+          ko: '🡻⚪빈쪽 안쪽 / 에어로',
         },
         raero: {
           en: 'South',
-          ko: '🡻보라 안쪽 / 에어로',
+          ko: '🡻🟣보라 안쪽 / 에어로',
         },
         unknown: Outputs.unknown,
       },
@@ -1672,31 +1687,31 @@ const triggerSet: TriggerSet<Data> = {
         },
         unholy: {
           en: 'Stacks',
-          ko: '에어로 뭉쳐요 (넉백 주의)',
+          ko: '에어로 뭉치고 🔜 넉백',
         },
         water: {
           en: 'Stacks',
-          ko: '에어로 뭉쳐요 (넉백 주의)',
+          ko: '에어로 뭉치고 🔜 넉백',
         },
         bice: {
           en: 'Stacks',
-          ko: '에어로 뭉쳐요 (넉백 주의)',
+          ko: '에어로 뭉치고 🔜 넉백',
         },
         lrice: {
           en: '',
-          ko: '(용머리)',
+          ko: '용머리',
         },
         rrice: {
           en: '',
-          ko: '(용머리)',
+          ko: '용머리',
         },
         laero: {
           en: 'Cross point',
-          ko: '선 겹치는 곳으로',
+          ko: '럭비공 모서리으로',
         },
         raero: {
           en: 'Cross point',
-          ko: '선 겹치는 곳으로',
+          ko: '럭비공 모서리으로',
         },
         unknown: Outputs.unknown,
       },
@@ -1718,19 +1733,19 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         eruption: {
           en: 'Stay',
-          ko: '(그대로)',
+          ko: '뭉치고 🔜 피해요',
         },
         unholy: {
           en: 'Knockback',
-          ko: '넉백 🔜 이럽션 뭉쳐요',
+          ko: '이럽션 뭉치고 🔜 피해요',
         },
         water: {
           en: 'Knockback',
-          ko: '넉백 🔜 이럽션 뭉쳐요',
+          ko: '이럽션 뭉치고 🔜 피해요',
         },
         bice: {
           en: 'Knockback',
-          ko: '넉백 🔜 이럽션 뭉쳐요',
+          ko: '이럽션 뭉치고 🔜 피해요',
         },
         lrice: {
           en: 'North',
@@ -1741,12 +1756,12 @@ const triggerSet: TriggerSet<Data> = {
           ko: '북쪽으로',
         },
         laero: {
-          en: 'Move south',
-          ko: '남쪽 안쪽 🔜 용머리',
+          en: 'Go inside',
+          ko: '안쪽으로 + 용머리',
         },
         raero: {
-          en: 'Move south',
-          ko: '남쪽 안쪽 🔜 용머리',
+          en: 'Go inside',
+          ko: '안쪽으로 + 용머리',
         },
         unknown: Outputs.unknown,
       },
