@@ -530,7 +530,7 @@ export default {
     fr: 'À gauche => À droite',
     ja: '左 => 右',
     cn: '左 => 右',
-    ko: '🡸왼쪽 🔜 오른쪽',
+    ko: '왼쪽 🔜 오른쪽',
   },
   rightThenLeft: {
     en: 'Right => Left',
@@ -538,7 +538,7 @@ export default {
     fr: 'À droite => À gauche',
     ja: '右 => 左',
     cn: '右 => 左',
-    ko: '오른쪽🡺 🔜 왼쪽',
+    ko: '오른쪽 🔜 왼쪽',
   },
   goFrontBack: {
     en: 'Go Front/Back',
@@ -1105,6 +1105,11 @@ export default {
     en: 'Outside',
     ja: '外側',
     ko: '바깥',
+  },
+  corner: {
+    en: 'Corner',
+    ja: '角へ',
+    ko: '모서리로',
   },
   // 화살표
   arrowN: {

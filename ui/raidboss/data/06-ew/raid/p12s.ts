@@ -1936,7 +1936,7 @@ const triggerSet: TriggerSet<Data> = {
         const name = data.party.member(data.me);
         if (data.options.AutumnStyle && (data.job !== 'BLU' || Autumn.isRoleName(name.nick))) {
           const pos: TowerLocation[] = [];
-          const isdps = data.job === 'BLU' ? Autumn.isDpsName(name.nick) : data.role === 'dps';
+          const isdps = data.job === 'BLU' ? Autumn.isRoleDps(name.nick) : data.role === 'dps';
           towerList.forEach((value) => {
             const location = value.location;
             if (matches.effectId === engravementIdMap.lightTower) {
@@ -4662,7 +4662,7 @@ const triggerSet: TriggerSet<Data> = {
           } else {
             const name = data.party.member(data.me);
             if (Autumn.isRoleName(name.nick))
-              arrow = getUltimaRayArrow(Autumn.isDpsName(name.nick), dir1, dir2);
+              arrow = getUltimaRayArrow(Autumn.isRoleDps(name.nick), dir1, dir2);
           }
           if (arrow !== undefined)
             return output.moveTo!({ dir: output[arrow]!() });
@@ -4746,7 +4746,7 @@ const triggerSet: TriggerSet<Data> = {
           } else {
             const name = data.party.member(data.me);
             if (Autumn.isRoleName(name.nick))
-              arrow = getUltimaRayArrow(Autumn.isDpsName(name.nick), dir1, dir2);
+              arrow = getUltimaRayArrow(Autumn.isRoleDps(name.nick), dir1, dir2);
           }
           if (arrow !== undefined)
             return output.moveTo!({ dir: output[arrow]!() });
