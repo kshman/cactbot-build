@@ -14,14 +14,13 @@ const centerY = 100;
 type RedBlue = 'red' | 'blue';
 
 // Phase
-type Phase = 'p1' | 'p2' | 'p3ur' | 'p3ap' | 'p4' | 'p5' | 'unknown';
+type Phase = 'p1' | 'p2' | 'p3ur' | 'p3ap' | 'p4dd' | 'p4ct' | 'p5' | 'unknown';
 const phases: { [id: string]: Phase } = {
   '9CFF': 'p2', // Quadruple Slap (pre-Diamond Dust)
   '9D49': 'p3ur', // Hell's Judgment (pre-Ultimate Relativity)
   '9D4D': 'p3ap', // Spell-in-Waiting: Refrain (pre-Apocalypse)
-  '9D36': 'p4', // Materialization (pre-Darklit Dragonsong)
-  // '9D36': 'p4ds', // Materialization (pre-Darklit Dragonsong)
-  // '9D6A': 'p4ct', // Crystallize Time
+  '9D36': 'p4dd', // Materialization (pre-Darklit Dragonsong)
+  '9D6A': 'p4ct', // Crystallize Time
   '9D72': 'p5', // Fulgent Blade
 };
 
@@ -125,7 +124,6 @@ export interface Data extends RaidbossData {
   p1Falled?: boolean;
   p1FallSide?: 'left' | 'right';
   p1FallTethers: FallOfFaithTether[];
-  p1Actors: { [id: string]: NetMatches['ActorSetPos'] };
   //
   p2Kick?: 'axe' | 'scythe';
   p2Icicle: number[];
@@ -137,7 +135,6 @@ export interface Data extends RaidbossData {
   //
   p3Role?: UltimateRelativityRole;
   p3Strat: string[];
-  p3Sigyes: { [id: string]: NetMatches['AddedCombatant'] };
   p3NoranJul: number[];
   p3DarkWater: DarkWaterContainer[];
   p3MyDark?: DarkWaterContainer;
@@ -145,11 +142,15 @@ export interface Data extends RaidbossData {
   p3ApocNo?: number;
   p3ApocRot?: 1 | -1; // 1 = clockwise, -1 = counterclockwise
   //
+  p4Fragment?: boolean; // 참이면 북쪽, 거짓은 남쪽
   p4Tether: string[];
   p4DarkWater: string[];
-  p4Arkmon?: number;
   p4Crystallize: Crystallize[];
   p4MyCrystallize?: Crystallize;
+  p4Parun?: 'left' | 'right';
+  //
+  actors: { [id: string]: NetMatches['ActorSetPos'] };
+  hourglasses: { [id: string]: NetMatches['AddedCombatant'] };
 }
 
 const triggerSet: TriggerSet<Data> = {
@@ -203,7 +204,6 @@ const triggerSet: TriggerSet<Data> = {
   timelineFile: 'futures_rewritten.txt',
   initData: () => ({
     phase: 'p1',
-    p1Actors: {},
     p1SafeMarkers: [...AutumnDirections.outputNumber8],
     p1FallTethers: [],
     p2Icicle: [],
@@ -211,12 +211,13 @@ const triggerSet: TriggerSet<Data> = {
     p3Ultimate: {},
     p3Umesg: [],
     p3Strat: [],
-    p3Sigyes: {},
     p3NoranJul: [],
     p3DarkWater: [],
     p4Tether: [],
     p4DarkWater: [],
     p4Crystallize: [],
+    actors: {},
+    hourglasses: {},
   }),
   timelineTriggers: [
     {
@@ -244,7 +245,11 @@ const triggerSet: TriggerSet<Data> = {
       id: 'FRU Phase Tracker',
       type: 'StartsUsing',
       netRegex: { id: Object.keys(phases) },
-      run: (data, matches) => data.phase = phases[matches.id] ?? 'unknown',
+      run: (data, matches) => {
+        data.phase = phases[matches.id] ?? 'unknown';
+        data.actors = {};
+        data.hourglasses = {};
+      },
     },
     // //////////////// PHASE 1 //////////////////
     {
@@ -252,7 +257,7 @@ const triggerSet: TriggerSet<Data> = {
       type: 'ActorSetPos',
       netRegex: { id: '4[0-9A-F]{7}' },
       condition: (data) => data.phase === 'p1',
-      run: (data, matches) => data.p1Actors[matches.id] = matches,
+      run: (data, matches) => data.actors[matches.id] = matches,
     },
     {
       id: 'FRU P1 Cyclonic Break Fire',
@@ -308,7 +313,7 @@ const triggerSet: TriggerSet<Data> = {
           spread: Outputs.spreadOwn,
           ...AutumnDirections.outputStringsMarker8,
         };
-        const image = data.p1Actors[matches.id];
+        const image = data.actors[matches.id];
         if (image === undefined)
           return;
         const dir1 = Directions.hdgTo8DirNum(parseFloat(image.heading));
@@ -555,6 +560,18 @@ const triggerSet: TriggerSet<Data> = {
         red: Outputs.red,
         blue: Outputs.blue,
         next: Outputs.next,
+      },
+    },
+    {
+      id: 'FRU P1 Clean',
+      type: 'StartsUsing',
+      netRegex: { id: '9CC0', source: 'Fatebreaker', capture: false },
+      run: (data) => {
+        data.p1SafeMarkers = [];
+        delete data.p1Utopian;
+        delete data.p1Falled;
+        delete data.p1FallSide;
+        data.p1FallTethers = [];
       },
     },
     // //////////////// PHASE 2 //////////////////
@@ -950,6 +967,15 @@ const triggerSet: TriggerSet<Data> = {
       netRegex: { id: '9D20', source: 'Usurper of Frost', capture: false },
       delaySeconds: 4,
       response: Responses.bigAoe(),
+      run: (data) => {
+        delete data.p2Kick;
+        data.p2Icicle = [];
+        delete data.p2Knockback;
+        delete data.p2Stone;
+        data.p2Puddles = [];
+        delete data.p2Lights;
+        delete data.p2Cursed;
+      },
     },
     // //////////////// Intermission / Crystals //////////////////
     {
@@ -1002,7 +1028,7 @@ const triggerSet: TriggerSet<Data> = {
       id: 'FRU P3 Ultimate Relativity Hourglasses Collect',
       type: 'AddedCombatant',
       netRegex: { npcBaseId: '17832' },
-      run: (data, matches) => data.p3Sigyes[matches.id] = matches,
+      run: (data, matches) => data.hourglasses[matches.id] = matches,
     },
     {
       id: 'FRU P3 Ultimate Relativity North',
@@ -1011,7 +1037,7 @@ const triggerSet: TriggerSet<Data> = {
       condition: (data) => data.phase === 'p3ur',
       alertText: (data, matches, output) => {
         const id = matches.sourceId;
-        const hourglass = data.p3Sigyes[id];
+        const hourglass = data.hourglasses[id];
         if (hourglass === undefined)
           return;
         const dir = AutumnDirections.posConv8(hourglass.x, hourglass.y, centerX, centerY);
@@ -1020,7 +1046,7 @@ const triggerSet: TriggerSet<Data> = {
           return;
 
         const north = findNorthDirNum(data.p3NoranJul);
-        data.p3Sigyes = {};
+        data.hourglasses = {};
         data.p3NoranJul = [];
 
         if (north === -1)
@@ -1207,7 +1233,6 @@ const triggerSet: TriggerSet<Data> = {
         const rotationDir = data.p3ApocRot;
         if (startNum === undefined || rotationDir === undefined)
           return;
-        const rot = rotationDir === 1 ? 'ccw' : 'cw'; // 반대임!
 
         // Safe spot(s) are 1 behind the starting dir and it's opposite (+4)
         const safe = [
@@ -1215,6 +1240,7 @@ const triggerSet: TriggerSet<Data> = {
           (startNum + 4 - rotationDir + 8) % 8,
         ];
         safe.sort((a, b) => a - b);
+        const rot = rotationDir === 1 ? 'ccw' : 'cw'; // 반대임!
 
         if (data.options.OnlyAutumn) {
           const dps = [2, 3, 4, 5];
@@ -1223,8 +1249,8 @@ const triggerSet: TriggerSet<Data> = {
             ? (data.p3ApocSwap ? supp : dps)
             : (data.p3ApocSwap ? dps : supp);
           const dir = grp.includes(safe[0]!) ? safe[0] : safe[1];
-          const mrk = AutumnDirections.outputMarker8[dir!];
-          return output.safe!({ dir1: output[mrk ?? 'unknown']!(), rot: output[rot]!() });
+          const mrk = AutumnDirections.outputMarker8[dir!] ?? 'unknown';
+          return output.safe!({ dir1: output[mrk]!(), rot: output[rot]!() });
         }
 
         const safeStr = safe
@@ -1234,16 +1260,16 @@ const triggerSet: TriggerSet<Data> = {
       tts: null,
       outputStrings: {
         safe: {
-          en: '(Apoc safe later: ${dir1}, ${rot})',
-          ko: '(아포 ${dir1} ${rot})',
+          en: '(Apoc safe: ${dir1}, ${rot})',
+          ko: '(아포: ${dir1} ${rot})',
         },
         cw: {
           en: 'cw',
-          ko: '시계⤾',
+          ko: '🡸왼쪽', // '시계⤾',
         },
         ccw: {
           en: 'ccw',
-          ko: '반시계⤿',
+          ko: '오른쪽🡺', // '반시계⤿',
         },
         ...AutumnDirections.outputStringsMarker8,
       },
@@ -1329,7 +1355,7 @@ const triggerSet: TriggerSet<Data> = {
       // Fire this just before the first Dark Water debuffs expire (10.0s).
       // A tiny bit early (0.2s) won't cause people to leave the stack, but the reaction
       // time on Spirit Taker is very short so the little extra helps.
-      id: 'FRU P3 Apoc Spirit Taker',
+      id: 'FRU P3 Apoc2 Spirit Taker',
       type: 'GainsEffect',
       netRegex: { effectId: '99D', capture: false },
       condition: (data) => data.phase === 'p3ap',
@@ -1339,46 +1365,37 @@ const triggerSet: TriggerSet<Data> = {
       response: Responses.spread('alert'),
     },
     {
-      id: 'FRU P3 Apoc2 Dark Eruption',
+      id: 'FRU P3 Apoc3 Dark Eruption',
       type: 'StartsUsing',
       netRegex: { id: '9D51', source: 'Oracle of Darkness', capture: false },
       condition: (data) => data.phase === 'p3ap',
       delaySeconds: 4.3, // 4.7초
-      durationSeconds: 6,
+      durationSeconds: 4,
       alertText: (data, _matches, output) => {
         const startNum = data.p3ApocNo;
         const rotationDir = data.p3ApocRot;
         if (startNum === undefined || rotationDir === undefined)
           return;
-        const safe = (startNum - rotationDir + 8) % 8;
-        if (safe % 2 === 0)
-          return output.cardinals!();
-        return output.intercards!();
+        const safe = ((startNum - rotationDir + 8) % 8) % 2 === 0 ? 'cardinals' : 'intercards';
+        return output.mesg!({ safe: output[safe]!() });
       },
       outputStrings: {
+        mesg: {
+          en: '${safe} => Stacks',
+          ko: '${safe}회피 🔜 뭉쳐요',
+        },
         cardinals: {
-          en: 'Cardinals => Stacks',
-          ko: '➕회피 🔜 뭉쳐요',
+          en: 'Cardinals',
+          ko: '➕',
         },
         intercards: {
-          en: 'Intercards => Stacks',
-          ko: '❌회피 🔜 뭉쳐요',
+          en: 'Intercards',
+          ko: '❌',
         },
       },
     },
-    /*
     {
-      id: 'FRU P3 Apoc2',
-      type: 'Ability',
-      netRegex: { id: '9D52', source: 'Oracle of Darkness', capture: false },
-      condition: (data) => data.phase === 'p3ap',
-      delaySeconds: 1,
-      suppressSeconds: 1,
-      response: Responses.stackMarker(),
-    },
-    */
-    {
-      id: 'FRU P3 Apoc3 Darkest Dance',
+      id: 'FRU P3 Apoc4 Darkest Dance',
       type: 'Ability',
       netRegex: { id: '9CF5', source: 'Oracle of Darkness', capture: false },
       durationSeconds: 7,
@@ -1397,13 +1414,41 @@ const triggerSet: TriggerSet<Data> = {
       netRegex: { id: '9D6C', source: 'Oracle of Darkness', capture: false },
       delaySeconds: 4,
       response: Responses.bigAoe(),
+      run: (data) => {
+        delete data.p3Role;
+        data.p3Strat = [];
+        data.p3NoranJul = [];
+        data.p3DarkWater = [];
+        delete data.p3MyDark;
+        delete data.p3ApocSwap;
+        delete data.p3ApocNo;
+        delete data.p3ApocRot;
+      },
     },
     // //////////////// PHASE 4 //////////////////
+    {
+      id: 'FRU P4 Fragment of Fate',
+      type: 'AddedCombatant',
+      netRegex: { npcBaseId: '17841' },
+      durationSeconds: 4,
+      infoText: (data, matches, output) => {
+        data.p4Fragment = parseFloat(matches.y) < centerY ? true : false;
+        return output.text!({ dir: data.p4Fragment ? output.north!() : output.south!() });
+      },
+      outputStrings: {
+        text: {
+          en: '(Fragment of Fate: ${dir})',
+          ko: '(구슬이: ${dir})',
+        },
+        north: Outputs.north,
+        south: Outputs.south,
+      },
+    },
     {
       id: 'FRU P4 Akh Rhai',
       type: 'GainsEffect',
       netRegex: { effectId: '8E1', capture: false },
-      condition: (data) => data.phase === 'p4',
+      condition: (data) => data.phase === 'p4dd',
       delaySeconds: 4.7,
       suppressSeconds: 1,
       response: Responses.moveAway('alert'),
@@ -1418,7 +1463,7 @@ const triggerSet: TriggerSet<Data> = {
       id: 'FRU P4 Refulgent Chain Collect',
       type: 'GainsEffect',
       netRegex: { effectId: '8CD' },
-      condition: (data) => data.phase === 'p4',
+      condition: (data) => data.phase === 'p4dd',
       run: (data, matches) => data.p4Tether.push(matches.target),
     },
     {
@@ -1426,7 +1471,7 @@ const triggerSet: TriggerSet<Data> = {
       type: 'GainsEffect',
       netRegex: { effectId: '99D' },
       condition: (data, matches) => {
-        if (data.phase !== 'p4')
+        if (data.phase !== 'p4dd')
           return false;
         data.p4DarkWater.push(matches.target);
         if (data.p4DarkWater.length === 2)
@@ -1468,7 +1513,7 @@ const triggerSet: TriggerSet<Data> = {
       id: 'FRU P4 Spirit Taker',
       type: 'StartsUsing',
       netRegex: { id: '9D60', source: 'Oracle of Darkness', capture: false },
-      condition: (data) => data.phase === 'p4',
+      condition: (data) => data.phase === 'p4dd' || data.phase === 'p4ct',
       delaySeconds: 0.5,
       durationSeconds: 2,
       response: Responses.spread('alert'),
@@ -1477,9 +1522,10 @@ const triggerSet: TriggerSet<Data> = {
       id: 'FRU P4 Hallowed Wings',
       type: 'StartsUsing',
       netRegex: { id: ['9D23', '9D24'], source: 'Usurper of Frost' },
-      condition: (data) => data.phase === 'p4',
+      condition: (data) => data.phase === 'p4dd',
       delaySeconds: 1,
       infoText: (_data, matches, output) => {
+        // 구슬이 위치도 판단해야 하능가?
         const dir = matches.id === '9D23' ? 'east' : 'west';
         return output.combo!({ dir: output[dir]!() });
       },
@@ -1498,13 +1544,13 @@ const triggerSet: TriggerSet<Data> = {
       // 9D23 할로우드 윙 (Usurper of Frost)
       // 9D5B 이게 원래 소머 댄스 (Oracle of Darkness)
       netRegex: { id: '9D23', source: 'Usurper of Frost', capture: false },
-      condition: (data) => data.phase === 'p4' && data.arole === 'MT',
+      condition: (data) => data.phase === 'p4dd' && data.arole === 'MT',
       durationSeconds: 3,
       alertText: (_data, _matches, output) => output.tank!(),
       outputStrings: {
         tank: {
-          en: 'Go Edge + bait buster',
-          ko: '혼자 맵끝 + 무적!',
+          en: 'Bait far + Tank buster',
+          ko: '멀리 유도 + 무적!',
         },
       },
     },
@@ -1512,7 +1558,7 @@ const triggerSet: TriggerSet<Data> = {
       id: 'FRU P4 Somber Dance Follow',
       type: 'Ability',
       netRegex: { id: '9D5B', source: 'Oracle of Darkness', capture: false },
-      condition: (data) => data.phase === 'p4' && data.arole === 'MT',
+      condition: (data) => data.phase === 'p4dd' && data.arole === 'MT',
       durationSeconds: 2,
       alertText: (_data, _matches, output) => output.tank!(),
       outputStrings: {
@@ -1526,12 +1572,11 @@ const triggerSet: TriggerSet<Data> = {
       id: 'FRU P4 Ark Mon',
       type: 'StartsUsing',
       netRegex: { id: '9D6E', source: 'Oracle of Darkness', capture: false },
-      condition: (data) => data.phase === 'p4',
       infoText: (data, _matches, output) => {
-        data.p4Arkmon = (data.p4Arkmon ?? 0) + 1;
-        if (data.p4Arkmon === 1 && data.arole === 'MT')
-          return output.tank!();
-        if (data.p4Arkmon === 2 && data.arole === 'ST')
+        if (
+          (data.phase === 'p4dd' && data.arole === 'MT') ||
+          (data.phase === 'p4ct' && data.arole === 'ST')
+        )
           return output.tank!();
         return output.party!();
       },
@@ -1550,7 +1595,6 @@ const triggerSet: TriggerSet<Data> = {
       id: 'FRU P4 Morn Afah',
       type: 'StartsUsing',
       netRegex: { id: '9D70', source: 'Oracle of Darkness', capture: false },
-      condition: (data) => data.phase === 'p4',
       response: Responses.stackMarker(),
     },
     {
@@ -1558,12 +1602,19 @@ const triggerSet: TriggerSet<Data> = {
       type: 'StartsUsing',
       netRegex: { id: '9D6A', source: 'Oracle of Darkness', capture: false },
       response: Responses.bigAoe(),
+      run: (data) => data.hourglasses = {},
     },
     {
-      id: 'FRU P4 CT Collect',
+      id: 'FRU P4 Crystallize Time Hourglasses Collect',
+      type: 'AddedCombatant',
+      netRegex: { npcBaseId: '17837' },
+      run: (data, matches) => data.hourglasses[matches.id] = matches,
+    },
+    {
+      id: 'FRU P4 Crystallize Time Debuff Collect',
       type: 'GainsEffect',
       netRegex: { effectId: ['CBF', 'CC0', '996', '99C', '99D', '99E', '99F'] },
-      condition: (data) => data.phase === 'p4',
+      condition: (data) => data.phase === 'p4ct',
       run: (data, matches) => {
         let target = data.p4Crystallize.find((x) => x.dest.name === matches.target);
         if (target === undefined) {
@@ -1596,29 +1647,49 @@ const triggerSet: TriggerSet<Data> = {
     },
     {
       id: 'FRU P4 CT1',
-      type: 'StartsUsing',
-      netRegex: { id: '9D6A', source: 'Oracle of Darkness', capture: false },
-      delaySeconds: 11,
-      durationSeconds: 8,
-      infoText: (data, _matches, output) => {
+      type: 'Tether',
+      netRegex: { id: '0085' },
+      condition: (data) => data.phase === 'p4ct' && data.p4Parun === undefined,
+      durationSeconds: 6,
+      infoText: (data, matches, output) => {
+        const id = matches.sourceId;
+        // 시계 먼저
+        const hg = data.hourglasses[id];
+        if (hg === undefined)
+          return;
+        const x = parseFloat(hg.x);
+        const y = parseFloat(hg.y);
+        if (data.p4Fragment && y < centerY)
+          data.p4Parun = x < centerX ? 'left' : 'right';
+        if (!data.p4Fragment && y > centerY)
+          data.p4Parun = x > centerX ? 'left' : 'right';
+        if (data.p4Parun === undefined)
+          return;
+
+        // 그담에 크리스탈라이즈
         const my = data.p4Crystallize.find((x) => x.dest.name === data.me);
         if (my === undefined || my.color === undefined || my.debuf === undefined)
-          return '허...';
+          return;
         data.p4MyCrystallize = my;
+        let arrow = '';
         if (my.debuf === '99C') {
           // 이럽션
           my.action = 'eruption';
+          arrow = data.p4Parun === 'left' ? output.arrowNW!() : output.arrowNE!();
         } else if (my.debuf === '996') {
           // 언홀리
           my.action = 'unholy';
+          arrow = data.p4Parun === 'left' ? output.arrowSE!() : output.arrowSW!();
         } else if (my.debuf === '99D') {
           // 워터
           my.action = 'water';
+          arrow = data.p4Parun === 'left' ? output.arrowSE!() : output.arrowSW!();
         } else if (my.debuf === '99E') {
           // 블리자드
-          if (my.color === 'blue')
+          if (my.color === 'blue') {
             my.action = 'bice';
-          else {
+            arrow = data.p4Parun === 'left' ? output.arrowSE!() : output.arrowSW!();
+          } else {
             const o = data.p4Crystallize.find((x) =>
               x.debuf === '99E' && x.color === 'red' && x.dest.name !== data.me
             );
@@ -1629,41 +1700,45 @@ const triggerSet: TriggerSet<Data> = {
           const o = data.p4Crystallize.find((x) => x.debuf === '99F' && x.dest.name !== data.me);
           my.action = calcRolePriority(data, o?.dest) ? 'laero' : 'raero';
         }
-        return output[my.action]!();
+        return output[my.action]!({ arrow: arrow });
       },
       outputStrings: {
         eruption: {
-          en: 'North',
-          ko: '🡹🟣보라 / 이럽션',
+          en: '${arrow} North',
+          ko: '${arrow} 🫂이럽션',
         },
         unholy: {
-          en: 'South',
-          ko: '🡻🟣보라 바깥 / 언홀리',
+          en: '${arrow} South',
+          ko: '${arrow} 🪜언홀리',
         },
         water: {
-          en: 'South',
-          ko: '🡻🟣보라 바깥 / 워터',
+          en: '${arrow} South',
+          ko: '${arrow} 💧워터',
         },
         bice: {
-          en: 'South',
-          ko: '🡻🟣보라 바깥 / 블리자드',
+          en: '${arrow} South',
+          ko: '${arrow} ❄️블리자드',
         },
         lrice: {
-          en: 'West',
-          ko: '🡸9시 / 블리자드',
+          en: 'West${arrow}',
+          ko: '🡸 ❄️블리자드${arrow}',
         },
         rrice: {
-          en: 'East',
-          ko: '🡺3시 / 블리자드',
+          en: 'East${arrow}',
+          ko: '🡺 ❄️블리자드${arrow}',
         },
         laero: {
-          en: 'South',
-          ko: '🡻⚪빈쪽 안쪽 / 에어로',
+          en: 'Southwest${arrow}',
+          ko: '🡿 🍃에어로${arrow}',
         },
         raero: {
-          en: 'South',
-          ko: '🡻🟣보라 안쪽 / 에어로',
+          en: 'Southeast${arrow}',
+          ko: '🡾 🍃에어로${arrow}',
         },
+        arrowNW: Outputs.arrowNW,
+        arrowNE: Outputs.arrowNE,
+        arrowSW: Outputs.arrowSW,
+        arrowSE: Outputs.arrowSE,
         unknown: Outputs.unknown,
       },
     },
@@ -1672,7 +1747,7 @@ const triggerSet: TriggerSet<Data> = {
       type: 'GainsEffect',
       // 워터
       netRegex: { effectId: '99D' },
-      condition: (data) => data.phase === 'p4',
+      condition: (data) => data.phase === 'p4ct',
       delaySeconds: (_data, matches) => parseFloat(matches.duration) - 0.5,
       durationSeconds: 2,
       infoText: (data, _matches, output) => {
@@ -1682,27 +1757,27 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         eruption: {
-          en: '',
-          ko: '',
+          en: '(Stay)',
+          ko: '(그대로)',
         },
         unholy: {
-          en: 'Stacks',
+          en: 'Stacks => Knockback',
           ko: '에어로 뭉치고 🔜 넉백',
         },
         water: {
-          en: 'Stacks',
+          en: 'Stacks => Knockback',
           ko: '에어로 뭉치고 🔜 넉백',
         },
         bice: {
-          en: 'Stacks',
+          en: 'Stacks => Knockback',
           ko: '에어로 뭉치고 🔜 넉백',
         },
         lrice: {
-          en: '',
+          en: 'Dragon head',
           ko: '용머리',
         },
         rrice: {
-          en: '',
+          en: 'Dragon head',
           ko: '용머리',
         },
         laero: {
@@ -1721,7 +1796,7 @@ const triggerSet: TriggerSet<Data> = {
       type: 'GainsEffect',
       // 블리자가
       netRegex: { effectId: '99E' },
-      condition: (data) => data.phase === 'p4',
+      condition: (data) => data.phase === 'p4ct',
       delaySeconds: (_data, matches) => parseFloat(matches.duration) - 0.5,
       durationSeconds: 2,
       suppressSeconds: 0.5,
@@ -1732,19 +1807,19 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         eruption: {
-          en: 'Stay',
+          en: 'Stacks',
           ko: '뭉치고 🔜 피해요',
         },
         unholy: {
-          en: 'Knockback',
+          en: 'Stacks',
           ko: '이럽션 뭉치고 🔜 피해요',
         },
         water: {
-          en: 'Knockback',
+          en: 'Stacks',
           ko: '이럽션 뭉치고 🔜 피해요',
         },
         bice: {
-          en: 'Knockback',
+          en: 'Stacks',
           ko: '이럽션 뭉치고 🔜 피해요',
         },
         lrice: {
@@ -1756,22 +1831,24 @@ const triggerSet: TriggerSet<Data> = {
           ko: '북쪽으로',
         },
         laero: {
-          en: 'Go inside',
-          ko: '안쪽으로 + 용머리',
+          en: 'Dragon head',
+          ko: '피하면서 + 용머리',
         },
         raero: {
-          en: 'Go inside',
-          ko: '안쪽으로 + 용머리',
+          en: 'Dragon head',
+          ko: '피하면서 + 용머리',
         },
         unknown: Outputs.unknown,
       },
     },
     {
       id: 'FRU P4 CT4',
-      type: 'StartsUsing',
-      netRegex: { id: '9D6A', source: 'Oracle of Darkness', capture: false },
-      delaySeconds: 40,
-      durationSeconds: 3.5,
+      type: 'GainsEffect',
+      netRegex: { effectId: '99B' },
+      condition: (data, matches) => data.phase === 'p4ct' && data.me === matches.target,
+      delaySeconds: 33 - 4,
+      durationSeconds: 4,
+      countdownSeconds: 4,
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
@@ -1783,22 +1860,34 @@ const triggerSet: TriggerSet<Data> = {
     {
       id: 'FRU P4 CT Return',
       type: 'GainsEffect',
-      netRegex: { effectId: '99B' },
-      condition: (data, matches) => data.phase === 'p4' && data.me === matches.target,
-      delaySeconds: (data, matches) =>
-        parseFloat(matches.duration) - (data.role === 'tank' ? 4 : 3),
-      countdownSeconds: (data) => data.role === 'tank' ? 4 : 3,
-      alarmText: (data, _matches, output) =>
+      netRegex: { effectId: '994' },
+      condition: (data, matches) => data.phase === 'p4ct' && data.me === matches.target,
+      delaySeconds: (_data, matches) => parseFloat(matches.duration) - 3,
+      countdownSeconds: 3,
+      alertText: (data, _matches, output) =>
         data.role === 'tank' ? output.tank!() : output.party!(),
       outputStrings: {
         tank: {
           en: 'Buf + Arm\'s length',
-          ko: '40% 경감 + 암렝',
+          ko: '40% 경감 + 암렝!',
         },
         party: {
           en: 'Arm\'s length',
-          ko: '암렝',
+          ko: '암렝!',
         },
+      },
+    },
+    {
+      id: 'FRU P4 Clean',
+      type: 'StartsUsing',
+      netRegex: { id: '9D71', source: 'Oracle of Darkness', capture: false },
+      run: (data) => {
+        delete data.p4Fragment;
+        data.p4Tether = [];
+        data.p4DarkWater = [];
+        data.p4Crystallize = [];
+        delete data.p4MyCrystallize;
+        delete data.p4Parun;
       },
     },
     // //////////////// PHASE 5 //////////////////
