@@ -81,31 +81,65 @@ type Crystallize = {
     | 'unknown';
   dest: PartyMemberParamObject;
 };
-const calcRolePriority = (data: Data, dest?: PartyMemberParamObject): boolean => {
+const calcRolePriority = (lh2: boolean, data: Data, dest?: PartyMemberParamObject): boolean => {
   // 우선 순위가 높으면 참, 아니면 거짓
   if (data.arole === undefined || dest === undefined)
     return true;
-  if (data.arole === 'MT') {
-    if (dest.role === 'tank' || dest.role === 'healer')
-      return false;
-  } else if (data.arole === 'ST') {
-    if (dest.role === 'healer')
-      return false;
-  } else if (data.role === 'healer') {
-    if (dest.role === 'healer')
-      return data.arole === 'H1' ? true : false;
-  } else {
-    if (dest.role === 'tank' || dest.role === 'healer')
-      return false;
-    if (data.arole === 'D1' || data.arole === 'D2') {
-      if (Util.canFeint(dest.job!) && data.arole === 'D2')
+  if (lh2 === false) {
+    // H1 H2 ST MT D1 D2 D3 D4
+    if (data.arole === 'MT') {
+      if (dest.role === 'tank' || dest.role === 'healer')
         return false;
-    } else if (data.arole === 'D3') {
-      if (Util.canFeint(dest.job!))
+    } else if (data.arole === 'ST') {
+      if (dest.role === 'healer')
+        return false;
+    } else if (data.role === 'healer') {
+      if (dest.role === 'healer')
+        return data.arole === 'H1' ? true : false;
+    } else {
+      if (dest.role === 'tank' || dest.role === 'healer')
+        return false;
+      if (data.arole === 'D1' || data.arole === 'D2') {
+        if (Util.canFeint(dest.job!) && data.arole === 'D2')
+          return false;
+      } else if (data.arole === 'D3') {
+        if (Util.canFeint(dest.job!))
+          return false;
+      } else {
+        // 캐스터는 무조건 false
+        return false;
+      }
+    }
+  } else {
+    // H1 ST MT D1 D2 D3 D4 H2
+    if (data.arole === 'MT') {
+      if (dest.role === 'tank')
+        return false;
+      if (dest.job === 'WHM' || dest.job === 'AST')
+        return false;
+    } else if (data.arole === 'ST') {
+      if (dest.job === 'WHM' || dest.job === 'AST')
+        return false;
+    } else if (data.role === 'healer') {
+      if (data.arole === 'H2')
         return false;
     } else {
-      // 캐스터는 무조건 false
-      return false;
+      if (dest.role === 'tank')
+        return false;
+      else if (dest.role === 'healer') {
+        if (dest.job === 'SCH' || dest.job === 'SGE')
+          return true;
+        return false;
+      } else if (data.arole === 'D1' || data.arole === 'D2') {
+        if (Util.canFeint(dest.job!) && data.arole === 'D2')
+          return false;
+      } else if (data.arole === 'D3') {
+        if (Util.canFeint(dest.job!))
+          return false;
+      } else {
+        // 캐스터는 무조건 false
+        return false;
+      }
     }
   }
   return true;
@@ -115,6 +149,7 @@ export interface Data extends RaidbossData {
   readonly triggerSetConfig: {
     autumnConcealed: boolean;
     sinboundRotate: 'aacc' | 'addposonly'; // aacc = always away, cursed clockwise
+    ctPriority: boolean;
   };
   arole?: AutumnRoles;
   phase: Phase;
@@ -199,6 +234,19 @@ const triggerSet: TriggerSet<Data> = {
         },
       },
       default: 'aacc', // `addposonly` is not super helpful, and 'aacc' seems to be predominant
+    },
+    {
+      id: 'ctPriority',
+      name: {
+        en: 'P4 Crystallize Time priority',
+        ko: 'P1 크리스탈라이즈 타임 H2를 맨 뒤로',
+      },
+      comment: {
+        en: 'P4 Crystallize Time priority',
+        ko: 'P1 크리스탈라이즈 타임 H2를 맨 뒤로',
+      },
+      type: 'checkbox',
+      default: false,
     },
   ],
   timelineFile: 'futures_rewritten.txt',
@@ -1693,12 +1741,16 @@ const triggerSet: TriggerSet<Data> = {
             const o = data.p4Crystallize.find((x) =>
               x.debuf === '99E' && x.color === 'red' && x.dest.name !== data.me
             );
-            my.action = calcRolePriority(data, o?.dest) ? 'lrice' : 'rrice';
+            my.action = calcRolePriority(data.triggerSetConfig.ctPriority, data, o?.dest)
+              ? 'lrice'
+              : 'rrice';
           }
         } else if (my.debuf === '99F') {
           // 에어로
           const o = data.p4Crystallize.find((x) => x.debuf === '99F' && x.dest.name !== data.me);
-          my.action = calcRolePriority(data, o?.dest) ? 'laero' : 'raero';
+          my.action = calcRolePriority(data.triggerSetConfig.ctPriority, data, o?.dest)
+            ? 'laero'
+            : 'raero';
         }
         return output[my.action]!({ arrow: arrow });
       },
@@ -1798,7 +1850,7 @@ const triggerSet: TriggerSet<Data> = {
       netRegex: { effectId: '99E' },
       condition: (data) => data.phase === 'p4ct',
       delaySeconds: (_data, matches) => parseFloat(matches.duration) - 0.5,
-      durationSeconds: 2,
+      durationSeconds: 5,
       suppressSeconds: 0.5,
       infoText: (data, _matches, output) => {
         if (data.p4MyCrystallize === undefined)
@@ -1824,11 +1876,11 @@ const triggerSet: TriggerSet<Data> = {
         },
         lrice: {
           en: 'North',
-          ko: '북쪽으로',
+          ko: '북쪽으로 🔜 피해요',
         },
         rrice: {
           en: 'North',
-          ko: '북쪽으로',
+          ko: '북쪽으로 🔜 피해요',
         },
         laero: {
           en: 'Dragon head',
