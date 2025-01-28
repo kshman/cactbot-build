@@ -560,7 +560,7 @@ const triggerSet: TriggerSet<Data> = {
       netRegex: { id: '2B55', source: 'Garuda', capture: false },
       // Run this after the initial Garuda trigger and just piggyback off its call to `getCombatants`
       // We're just looking to pluck the four possible IDs from the array pre-emptively to avoid doing
-      // that filter on every `CombatantMemory` line
+      // that filter on every `SetActorPos` line
       delaySeconds: 25,
       run: (data) => {
         data.possibleIfritIDs = data.combatantData
@@ -570,14 +570,14 @@ const triggerSet: TriggerSet<Data> = {
     },
     {
       id: 'UWU Ifrit Initial Dash Collector',
-      type: 'CombatantMemory',
+      type: 'ActorSetPos',
       // Filter to only enemy actors for performance
       netRegex: { id: '4[0-9A-Fa-f]{7}', capture: true },
       condition: (data, matches) => {
         if (!data.possibleIfritIDs.includes(matches.id))
           return false;
-        const posXVal = parseFloat(matches.pairPosX ?? '0');
-        const posYVal = parseFloat(matches.pairPosY ?? '0');
+        const posXVal = parseFloat(matches.x ?? '0');
+        const posYVal = parseFloat(matches.y ?? '0');
 
         if (posXVal === 0 || posYVal === 0)
           return false;
@@ -593,8 +593,8 @@ const triggerSet: TriggerSet<Data> = {
       },
       suppressSeconds: 9999,
       infoText: (data, matches, output) => {
-        const posXVal = parseFloat(matches.pairPosX ?? '0');
-        const posYVal = parseFloat(matches.pairPosY ?? '0');
+        const posXVal = parseFloat(matches.x ?? '0');
+        const posYVal = parseFloat(matches.y ?? '0');
 
         let ifritDir: DirectionOutputCardinal = 'unknown';
 
@@ -884,9 +884,9 @@ const triggerSet: TriggerSet<Data> = {
         ja: `最初の楔が南東の場合、逆Zと通常Zの両方で南東/北西に出現します。
              最初の楔が南の場合、逆Zなら南東/北西、通常Zなら南西/北東に出現します。
              これは一例で、他の釘の順序もサポートされています。`,
-        cn: `如果第一个火神柱在东南，则反向 Z 和正常 Z 都会提示东南/西北
-             如果第一个火神柱在南, 则反向 Z 将提示东南/西北，正常 Z 将提示西南/东北。
-             这些只是示例, 还支持其他火神柱顺序。`,
+        cn: `如果第一个火神柱在右下，则反向 Z 和正常 Z 都会提示右下/左上
+             如果第一个火神柱在下, 则反向 Z 将提示右下/左上，正常 Z 将提示左下/右上。
+             这些只是举例, 其他火神柱顺序也支持。`,
         ko: `첫 번째 기둥이 남동쪽인 경우, 역방향 Z와 일반 Z 모두에 대해 남동/북서를 호출합니다.
              첫 번째 기둥이 남쪽인 경우, 역방향 Z는 남동/북서를, 일반 Z는 남서/북동를 호출합니다.
              다른 기둥 순서도 지원되며, 이는 예시일 뿐입니다.`,
@@ -1009,8 +1009,8 @@ const triggerSet: TriggerSet<Data> = {
              余裕がある場合は「遅」となります。`,
         cn: `这是从第一次火神冲附近开始的火神冲主要移动。
              人群和奶妈都将移动 45 度或 90 度。
-             "快" 可以让你快速移动，躲避第二次火神冲。
-             "慢" 当你有足够的时间来移动时使用。`,
+             "快" 表示需要快速移动才能躲开火神冲。
+             "慢" 表示移动时间相对比较充足。`,
         ko: `첫 번째 돌진 직후부터 시작되는 이프리트 돌진의 주요 동선입니다.
              본대와 힐러 모두 45도 또는 90도로 움직입니다.
              이프리트의 후속 돌진을 피하기 위해 빠르게 이동해야 하는 경우 "빠른" 이동입니다.

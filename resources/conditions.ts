@@ -27,10 +27,10 @@ export default {
   autumnStyle(): (data: Data) => boolean {
     return (data: Data) => data.options.AutumnStyle;
   },
-  onlyAutumn(): (data: Data) => boolean {
-    return (data: Data) => data.options.OnlyAutumn;
+  autumnOnly(): (data: Data) => boolean {
+    return (data: Data) => data.options.AutumnOnly;
   },
-  notOnlyAutumn(): (data: Data) => boolean {
-    return (data: Data) => !data.options.OnlyAutumn;
+  notAutumnOnly(): (data: Data) => boolean {
+    return (data: Data) => !data.options.AutumnOnly;
   },
 };

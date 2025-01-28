@@ -1,4 +1,4 @@
-import Autumn, { AutumnDirections, AutumnRoles } from '../../../../../resources/autumn';
+import Autumn, { AutumnDirections } from '../../../../../resources/autumn';
 import Conditions from '../../../../../resources/conditions';
 import Outputs from '../../../../../resources/outputs';
 import { Responses } from '../../../../../resources/responses';
@@ -83,27 +83,27 @@ type Crystallize = {
 };
 const calcRolePriority = (lh2: boolean, data: Data, dest?: PartyMemberParamObject): boolean => {
   // 우선 순위가 높으면 참, 아니면 거짓
-  if (data.arole === undefined || dest === undefined)
+  if (data.moks === 'none' || dest === undefined)
     return true;
   if (lh2 === false) {
     // H1 H2 ST MT D1 D2 D3 D4
-    if (data.arole === 'MT') {
+    if (data.moks === 'MT') {
       if (dest.role === 'tank' || dest.role === 'healer')
         return false;
-    } else if (data.arole === 'ST') {
+    } else if (data.moks === 'ST') {
       if (dest.role === 'healer')
         return false;
     } else if (data.role === 'healer') {
       if (dest.role === 'healer')
-        return data.arole === 'H1' ? true : false;
+        return data.moks === 'H1' ? true : false;
     } else {
       if (dest.role === 'tank' || dest.role === 'healer')
         return false;
-      if (data.arole === 'D1' || data.arole === 'D2') {
-        if (Util.canFeint(dest.job!) && data.arole === 'D2')
+      if (data.moks === 'D1' || data.moks === 'D2') {
+        if (Util.isMeleeDpsJob(dest.job!) && data.moks === 'D2')
           return false;
-      } else if (data.arole === 'D3') {
-        if (Util.canFeint(dest.job!))
+      } else if (data.moks === 'D3') {
+        if (Util.isMeleeDpsJob(dest.job!))
           return false;
       } else {
         // 캐스터는 무조건 false
@@ -112,16 +112,16 @@ const calcRolePriority = (lh2: boolean, data: Data, dest?: PartyMemberParamObjec
     }
   } else {
     // H1 ST MT D1 D2 D3 D4 H2
-    if (data.arole === 'MT') {
+    if (data.moks === 'MT') {
       if (dest.role === 'tank')
         return false;
       if (dest.job === 'WHM' || dest.job === 'AST')
         return false;
-    } else if (data.arole === 'ST') {
+    } else if (data.moks === 'ST') {
       if (dest.job === 'WHM' || dest.job === 'AST')
         return false;
     } else if (data.role === 'healer') {
-      if (data.arole === 'H2')
+      if (data.moks === 'H2')
         return false;
     } else {
       if (dest.role === 'tank')
@@ -130,11 +130,11 @@ const calcRolePriority = (lh2: boolean, data: Data, dest?: PartyMemberParamObjec
         if (dest.job === 'SCH' || dest.job === 'SGE')
           return true;
         return false;
-      } else if (data.arole === 'D1' || data.arole === 'D2') {
-        if (Util.canFeint(dest.job!) && data.arole === 'D2')
+      } else if (data.moks === 'D1' || data.moks === 'D2') {
+        if (Util.isMeleeDpsJob(dest.job!) && data.moks === 'D2')
           return false;
-      } else if (data.arole === 'D3') {
-        if (Util.canFeint(dest.job!))
+      } else if (data.moks === 'D3') {
+        if (Util.isMeleeDpsJob(dest.job!))
           return false;
       } else {
         // 캐스터는 무조건 false
@@ -151,7 +151,6 @@ export interface Data extends RaidbossData {
     sinboundRotate: 'aacc' | 'addposonly'; // aacc = always away, cursed clockwise
     ctPriority: boolean;
   };
-  arole?: AutumnRoles;
   phase: Phase;
   //
   p1SafeMarkers: number[];
@@ -205,7 +204,7 @@ const triggerSet: TriggerSet<Data> = {
         ko: '어듬이 스타일 concealed',
       },
       type: 'checkbox',
-      default: (options) => options.OnlyAutumn,
+      default: (options) => options.AutumnOnly,
     },
     {
       id: 'sinboundRotate',
@@ -267,28 +266,21 @@ const triggerSet: TriggerSet<Data> = {
     actors: {},
     hourglasses: {},
   }),
-  timelineTriggers: [
+  timelineTriggers: [],
+  triggers: [
     {
-      id: 'FRU 데이터 확인',
-      regex: /--setup--/,
-      delaySeconds: 1,
+      id: 'FRU 시작!',
+      type: 'InCombat',
+      netRegex: { inGameCombat: '1', capture: false },
       durationSeconds: 2,
-      infoText: (data, _matches, output) => {
-        data.arole = Autumn.roleDetect(data);
-        if (data.arole === undefined)
-          return;
-        return output.ok!({ role: data.arole });
-      },
+      infoText: (data, _matches, output) => output.ok!({ moks: data.moks }),
       outputStrings: {
         ok: {
-          en: 'Role checked: ${role}',
-          ja: 'ロール確認: ${role}',
-          ko: '역할 확인: ${role}',
+          en: 'Combat: ${moks}',
+          ko: '시작: ${moks}',
         },
       },
     },
-  ],
-  triggers: [
     {
       id: 'FRU Phase Tracker',
       type: 'StartsUsing',
@@ -371,7 +363,7 @@ const triggerSet: TriggerSet<Data> = {
           return;
 
         // 어듬이 제공
-        if (data.triggerSetConfig.autumnConcealed) {
+        if (data.triggerSetConfig.autumnConcealed || data.moks === 'none') {
           const dir1 = AutumnDirections.outputFromMarker8Num(data.p1SafeMarkers.shift()!);
           const dir2 = AutumnDirections.outputFromMarker8Num(data.p1SafeMarkers.shift()!);
           return {
@@ -382,21 +374,20 @@ const triggerSet: TriggerSet<Data> = {
             }),
           };
         }
-        if (data.arole !== undefined) {
-          const pm = {
-            'MT': 0,
-            'ST': 1,
-            'H1': 6,
-            'H2': 4,
-            'D1': 5,
-            'D2': 3,
-            'D3': 7,
-            'D4': 2,
-          };
-          if (data.p1SafeMarkers.includes(pm[data.arole]))
-            return { alertText: output.stay!() };
-          return { alertText: output.front!() };
-        }
+        const pm = {
+          'MT': 0,
+          'ST': 1,
+          'H1': 6,
+          'H2': 4,
+          'D1': 5,
+          'D2': 3,
+          'D3': 7,
+          'D4': 2,
+          'none': 0, // 없으면 걍 MT
+        };
+        if (data.p1SafeMarkers.includes(pm[data.moks]))
+          return { alertText: output.stay!() };
+        return { alertText: output.front!() };
       },
     },
     {
@@ -551,7 +542,7 @@ const triggerSet: TriggerSet<Data> = {
         }
 
         // 어듬이 전용
-        if (data.options.OnlyAutumn && count === 4 && data.p1FallSide === undefined) {
+        if (data.options.AutumnOnly && count === 4 && data.p1FallSide === undefined) {
           // 어듬이는 탱크 아니면 렌지 아니면 캐스터
           data.p1FallSide = 'right';
           if (data.role === 'tank') {
@@ -738,8 +729,8 @@ const triggerSet: TriggerSet<Data> = {
         const dir2 = dir < 4 ? dir + 4 : dir;
 
         // 어듬이 제공
-        if (data.arole !== undefined) {
-          const dirs = Autumn.isTeamMt(data.arole) ? [0, 1, 6, 7] : [2, 3, 4, 5];
+        if (data.options.AutumnStyle && data.moks !== 'none') {
+          const dirs = Autumn.isTeamMt(data.moks) ? [0, 1, 6, 7] : [2, 3, 4, 5];
           const res = AutumnDirections.outputFromMarker8Num(dirs.includes(dir1) ? dir1 : dir2);
           return output.akb!({ dir: output[res]!() });
         }
@@ -936,7 +927,7 @@ const triggerSet: TriggerSet<Data> = {
           unknown: Outputs.unknown,
         };
         if (!data.p2Puddles.some((p) => p.name === data.me)) {
-          if (data.options.OnlyAutumn) {
+          if (data.options.AutumnOnly) {
             // 어듬이 전용, 탱크만 햇음
             if (data.role === 'tank') {
               const cps: string[] = ['AST', 'WHM'];
@@ -1186,7 +1177,7 @@ const triggerSet: TriggerSet<Data> = {
           },
           unknown: Outputs.unknown,
         };
-        if (data.options.OnlyAutumn) {
+        if (data.options.AutumnOnly) {
           // 어듬이 전용
           let role;
           let partner;
@@ -1214,7 +1205,7 @@ const triggerSet: TriggerSet<Data> = {
                 data.p3ApocSwap = false;
                 return { infoText: output.stand!({ role: role, with: partner.nick }) };
               }
-              if (data.arole !== 'H2') {
+              if (data.moks !== 'H2') {
                 data.p3ApocSwap = false;
                 return { infoText: output.stand!({ role: role, with: partner.nick }) };
               }
@@ -1290,7 +1281,7 @@ const triggerSet: TriggerSet<Data> = {
         safe.sort((a, b) => a - b);
         const rot = rotationDir === 1 ? 'ccw' : 'cw'; // 반대임!
 
-        if (data.options.OnlyAutumn) {
+        if (data.options.AutumnOnly) {
           const dps = [2, 3, 4, 5];
           const supp = [0, 1, 6, 7];
           const grp = data.role === 'dps'
@@ -1592,7 +1583,7 @@ const triggerSet: TriggerSet<Data> = {
       // 9D23 할로우드 윙 (Usurper of Frost)
       // 9D5B 이게 원래 소머 댄스 (Oracle of Darkness)
       netRegex: { id: '9D23', source: 'Usurper of Frost', capture: false },
-      condition: (data) => data.phase === 'p4dd' && data.arole === 'MT',
+      condition: (data) => data.phase === 'p4dd' && data.moks === 'MT',
       durationSeconds: 3,
       alertText: (_data, _matches, output) => output.tank!(),
       outputStrings: {
@@ -1606,7 +1597,7 @@ const triggerSet: TriggerSet<Data> = {
       id: 'FRU P4 Somber Dance Follow',
       type: 'Ability',
       netRegex: { id: '9D5B', source: 'Oracle of Darkness', capture: false },
-      condition: (data) => data.phase === 'p4dd' && data.arole === 'MT',
+      condition: (data) => data.phase === 'p4dd' && data.moks === 'MT',
       durationSeconds: 2,
       alertText: (_data, _matches, output) => output.tank!(),
       outputStrings: {
@@ -1622,8 +1613,8 @@ const triggerSet: TriggerSet<Data> = {
       netRegex: { id: '9D6E', source: 'Oracle of Darkness', capture: false },
       infoText: (data, _matches, output) => {
         if (
-          (data.phase === 'p4dd' && data.arole === 'MT') ||
-          (data.phase === 'p4ct' && data.arole === 'ST')
+          (data.phase === 'p4dd' && data.moks === 'MT') ||
+          (data.phase === 'p4ct' && data.moks === 'ST')
         )
           return output.tank!();
         return output.party!();
@@ -1994,6 +1985,102 @@ const triggerSet: TriggerSet<Data> = {
         'Sinsmoke': 'Sündenflamme',
         'Turn Of The Heavens': 'Kreislauf der Wiedergeburt',
         'Utopian Sky': 'Paradiestrennung',
+        'the Path of Darkness': 'Pfad der Dunkelheit',
+        'Cruel Path of Light': '[^\|]+', // FIXME
+        'Cruel Path of Darkness': 'Umbrales Prisma',
+        'Icecrusher': '[^\|]+', // FIXME
+        'Unmitigated Explosion': 'Detonation',
+        'Solemn Charge': 'Wütende Durchbohrung',
+        'Bow Shock': 'Schockpatrone',
+        'Brightfire': 'Lichtflamme',
+        'Bound of Faith': 'Sünden-Erdstoß',
+        'Edge of Oblivion': '[^\|]+', // FIXME
+        'Mirror, Mirror': 'Spiegelland',
+        'Mirror Image': 'Spiegelbild',
+        'Darkest Dance': 'Finsterer Tanz',
+        'Frost Armor': 'Frostrüstung',
+        'Shining Armor': 'Funkelnde Rüstung',
+        'Drachen Armor': 'Drachenrüstung',
+        'the Path of Light': 'Pfad des Lichts',
+        'the House of Light': 'Tsunami des Lichts',
+        'Quadruple Slap': 'Quadraschlag',
+        'Twin Stillness': 'Zwillingsschwerter der Stille',
+        'Twin Silence': 'Zwillingsschwerter der Ruhe',
+        'Diamond Dust': 'Diamantenstaub',
+        'Icicle Impact': 'Eiszapfen-Schlag',
+        'Frigid Stone': 'Eisstein',
+        'Frigid Needle': 'Eisnadel',
+        'Axe Kick': 'Axttritt',
+        '(?<!Reflected )Scythe Kick': 'Abwehrtritt',
+        'Reflected Scythe Kick': 'Spiegelung: Abwehrtritt',
+        'Heavenly Strike': 'Himmelszorn',
+        'Sinbound Holy': 'Sünden-Sanctus',
+        'Hallowed Ray': 'Heiliger Strahl',
+        'Light Rampant': 'Überflutendes Licht',
+        'Bright Hunger': 'Erosionslicht',
+        'Inescapable Illumination': 'Expositionslicht',
+        'Refulgent Fate': 'Fluch des Lichts',
+        'Lightsteep': 'Exzessives Licht',
+        'Powerful Light': 'Entladenes Licht',
+        'Luminous Hammer': 'Gleißende Erosion',
+        'Burst': 'Einschlag',
+        'Banish III(?! )': 'Verbannga',
+        'Banish III Divided': 'Geteiltes Verbannga',
+        'Absolute Zero': 'Absoluter Nullpunkt',
+        'Swelling Frost': 'Frostwoge',
+        'Junction': 'Kopplung',
+        'Hallowed Wings': 'Heilige Schwingen',
+        'Wings Dark and Light': '[^\|]+', // FIXME
+        'Polarizing Paths': '[^\|]+', // FIXME
+        'Sinbound Meltdown': 'Sündenschmelze',
+        'Sinbound Fire(?! )': 'Sünden-Feuer',
+        'Akh Rhai': 'Akh Rhai',
+        'Darklit Dragonsong': '[^\|]+', // FIXME
+        'Crystallize Time': '[^\|]+', // FIXME
+        'Longing of the Lost': 'Heiliger Drache',
+        'Joyless Dragonsong': 'Drachenlied der Verzweiflung',
+        'Materialization': 'Konkretion',
+        'Akh Morn': 'Akh Morn',
+        'Morn Afah': 'Morn Afah',
+        'Tidal Light': 'Welle des Lichts',
+        'Hiemal Storm': 'Hiemaler Sturm',
+        'Hiemal Ray': 'Hiemaler Strahl',
+        'Sinbound Blizzard III': 'Sünden-Eisga',
+        'Endless Ice Age': 'Lichtflut',
+        'Depths of Oblivion': '[^\|]+', // FIXME
+        'Memory Paradox': '[^\|]+', // FIXME
+        'Paradise Lost': 'Verlorenes Paradies',
+        'Hell\'s Judgment': 'Höllenurteil',
+        'Ultimate Relativity': 'Fatale Relativität',
+        'Return': 'Rückführung',
+        'Return IV': 'Giga-Rückführung',
+        'Spell-in-Waiting Refrain': 'Inkantatische Verzögerung',
+        'Dark Water III': 'Dunkel-Aquaga',
+        'Dark Eruption': 'Dunkle Eruption',
+        'Dark Fire III': 'Dunkel-Feuga',
+        'Unholy Darkness': 'Unheiliges Dunkel',
+        'Shadoweye': 'Schattenauge',
+        'Dark Blizzard III': 'Dunkel-Eisga',
+        'Dark Aero III': 'Dunkel-Windga',
+        'Quietus': 'Quietus',
+        'Shockwave Pulsar': 'Schockwellenpulsar',
+        'Somber Dance': 'Düsterer Tanz',
+        'Shell Crusher': 'Hüllenbrecher',
+        'Spirit Taker': 'Geistesdieb',
+        'Black Halo': 'Geschwärzter Schein',
+        'Speed': 'Geschwindigkeit',
+        'Quicken': 'Schnell',
+        'Slow': 'Gemach',
+        'Apocalypse': 'Apokalypse',
+        'Maelstrom': 'Mahlstrom',
+        'Memory\'s End': 'Ende der Erinnerungen',
+        'Fulgent Blade': '[^\|]+', // FIXME
+        'Polarizing Strikes': '[^\|]+', // FIXME
+        'Paradise Regained': 'Wiedergewonnenes Paradies',
+        'Twin Poles': '[^\|]+', // FIXME
+        'Pandora\'s Box': '[^\|]+', // FIXME
+        'Cyckonic Break': 'Zyklon-Brecher',
+        'Fated Burn Mark': 'Todesmal',
       },
     },
     {
@@ -2034,6 +2121,102 @@ const triggerSet: TriggerSet<Data> = {
         'Sinsmoke': 'Flammes du péché',
         'Turn Of The Heavens': 'Cercles rituels',
         'Utopian Sky': 'Ultime paradis',
+        'the Path of Darkness': 'Voie de Ténèbres',
+        'Cruel Path of Light': '[^\|]+', // FIXME
+        'Cruel Path of Darkness': 'Déluge de Ténèbres',
+        'Icecrusher': '[^\|]+', // FIXME
+        'Unmitigated Explosion': 'Explosion',
+        'Solemn Charge': 'Charge perçante',
+        'Bow Shock': 'Arc de choc',
+        'Brightfire': 'Flammes de Lumière',
+        'Bound of Faith': 'Percée illuminée',
+        'Edge of Oblivion': '[^\|]+', // FIXME
+        'Mirror, Mirror': 'Monde des miroirs',
+        'Mirror Image': 'Double dans le miroir',
+        'Darkest Dance': 'Danse de la nuit profonde',
+        'Frost Armor': 'Armure de givre',
+        'Shining Armor': 'Armure scintillante',
+        'Drachen Armor': 'Armure des dragons',
+        'the Path of Light': 'Voie de Lumière',
+        'the House of Light': 'Raz-de-lumière',
+        'Quadruple Slap': 'Frappe quadruplée',
+        'Twin Stillness': 'Entaille de la quiétude',
+        'Twin Silence': 'Entaille de la tranquilité',
+        'Diamond Dust': 'Poussière de diamant',
+        'Icicle Impact': 'Impact de stalactite',
+        'Frigid Stone': 'Rocher de glace',
+        'Frigid Needle': 'Dards de glace',
+        'Axe Kick': 'Jambe pourfendeuse',
+        '(?<!Reflected )Scythe Kick': 'Jambe faucheuse',
+        'Reflected Scythe Kick': 'Réverbération : Jambe faucheuse',
+        'Heavenly Strike': 'Frappe céleste',
+        'Sinbound Holy': 'Miracle authentique',
+        'Hallowed Ray': 'Rayon Miracle',
+        'Light Rampant': 'Débordement de Lumière',
+        'Bright Hunger': 'Lumière dévorante',
+        'Inescapable Illumination': 'Lumière révélatrice',
+        'Refulgent Fate': 'Lien de Lumière',
+        'Lightsteep': 'Lumière excédentaire',
+        'Powerful Light': 'Explosion sacrée',
+        'Luminous Hammer': 'Érosion lumineuse',
+        'Burst': 'Explosion',
+        'Banish III(?! )': 'Méga Bannissement',
+        'Banish III Divided': 'Méga Bannissement fractionné',
+        'Absolute Zero': 'Zéro absolu',
+        'Swelling Frost': 'Vague de glace',
+        'Junction': 'Jonction',
+        'Hallowed Wings': 'Aile sacrée',
+        'Wings Dark and Light': '[^\|]+', // FIXME
+        'Polarizing Paths': '[^\|]+', // FIXME
+        'Sinbound Meltdown': 'Fusion authentique',
+        'Sinbound Fire(?! )': 'Feu authentique',
+        'Akh Rhai': 'Akh Rhai',
+        'Darklit Dragonsong': '[^\|]+', // FIXME
+        'Crystallize Time': '[^\|]+', // FIXME
+        'Longing of the Lost': 'Esprit du Dragon divin',
+        'Joyless Dragonsong': 'Chant de désespoir',
+        'Materialization': 'Concrétisation',
+        'Akh Morn': 'Akh Morn',
+        'Morn Afah': 'Morn Afah',
+        'Tidal Light': 'Grand torrent de Lumière',
+        'Hiemal Storm': 'Tempête hiémale',
+        'Hiemal Ray': 'Rayon hiémal',
+        'Sinbound Blizzard III': 'Méga Glace authentique',
+        'Endless Ice Age': 'Déluge de Lumière',
+        'Depths of Oblivion': '[^\|]+', // FIXME
+        'Memory Paradox': '[^\|]+', // FIXME
+        'Paradise Lost': 'Paradis perdu',
+        'Hell\'s Judgment': 'Jugement dernier',
+        'Ultimate Relativity': 'Compression temporelle fatale',
+        'Return': 'Retour',
+        'Return IV': 'Giga Retour',
+        'Spell-in-Waiting Refrain': 'Déphasage incantatoire',
+        'Dark Water III': 'Méga Eau ténébreuse',
+        'Dark Eruption': 'Éruption ténébreuse',
+        'Dark Fire III': 'Méga Feu ténébreux',
+        'Unholy Darkness': 'Miracle ténébreux',
+        'Shadoweye': 'Œil de l\'ombre',
+        'Dark Blizzard III': 'Méga Glace ténébreuse',
+        'Dark Aero III': 'Méga Vent ténébreux',
+        'Quietus': 'Quietus',
+        'Shockwave Pulsar': 'Pulsar à onde de choc',
+        'Somber Dance': 'Danse du crépuscule',
+        'Shell Crusher': 'Broyeur de carapace',
+        'Spirit Taker': 'Arracheur d\'esprit',
+        'Black Halo': 'Halo de noirceur',
+        'Speed': 'Vitesse',
+        'Quicken': 'Accélération',
+        'Slow': 'Lenteur',
+        'Apocalypse': 'Apocalypse',
+        'Maelstrom': 'Maelström',
+        'Memory\'s End': 'Mort des souvenirs',
+        'Fulgent Blade': '[^\|]+', // FIXME
+        'Polarizing Strikes': '[^\|]+', // FIXME
+        'Paradise Regained': 'Paradis retrouvé',
+        'Twin Poles': '[^\|]+', // FIXME
+        'Pandora\'s Box': '[^\|]+', // FIXME
+        'Cyckonic Break': 'Brisement cyclonique',
+        'Fated Burn Mark': 'Marque de mort explosive',
       },
     },
     {
@@ -2074,6 +2257,102 @@ const triggerSet: TriggerSet<Data> = {
         'Sinsmoke': 'シンフレイム',
         'Turn Of The Heavens': '転輪召',
         'Utopian Sky': '楽園絶技',
+        'the Path of Darkness': '闇の波動',
+        'Cruel Path of Light': '光の重波動',
+        'Cruel Path of Darkness': '闇の重波動',
+        'Icecrusher': '削氷撃',
+        'Unmitigated Explosion': '大爆発',
+        'Solemn Charge': 'チャージスラスト',
+        'Bow Shock': 'バウショック',
+        'Brightfire': '光炎',
+        'Bound of Faith': 'シンソイルスラスト',
+        'Edge of Oblivion': '忘却の此方',
+        'Mirror, Mirror': '鏡の国',
+        'Mirror Image': '鏡写し',
+        'Darkest Dance': '暗夜の舞踏技',
+        'Frost Armor': 'フロストアーマー',
+        'Shining Armor': 'ブライトアーマー',
+        'Drachen Armor': 'ドラゴンアーマー',
+        'the Path of Light': '光の波動',
+        'the House of Light': '光の津波',
+        'Quadruple Slap': 'クアドラストライク',
+        'Twin Stillness': '静寂の双剣技',
+        'Twin Silence': '閑寂の双剣技',
+        'Diamond Dust': 'ダイアモンドダスト',
+        'Icicle Impact': 'アイシクルインパクト',
+        'Frigid Stone': 'アイスストーン',
+        'Frigid Needle': 'アイスニードル',
+        'Axe Kick': 'アクスキック',
+        '(?<!Reflected )Scythe Kick': 'サイスキック',
+        'Reflected Scythe Kick': 'ミラーリング・サイスキック',
+        'Heavenly Strike': 'ヘヴンリーストライク',
+        'Sinbound Holy': 'シンホーリー',
+        'Hallowed Ray': 'ホーリーレイ',
+        'Light Rampant': '光の暴走',
+        'Bright Hunger': '浸食光',
+        'Inescapable Illumination': '曝露光',
+        'Refulgent Fate': '光の呪縛',
+        'Lightsteep': '過剰光',
+        'Powerful Light': '光爆',
+        'Luminous Hammer': 'ルミナスイロード',
+        'Burst': '爆発',
+        'Banish III(?! )': 'バニシュガ',
+        'Banish III Divided': 'ディバイデッド・バニシュガ',
+        'Absolute Zero': '絶対零度',
+        'Swelling Frost': '凍波',
+        'Junction': 'ジャンクション',
+        'Hallowed Wings': 'ホーリーウィング',
+        'Wings Dark and Light': '光と闇の片翼',
+        'Polarizing Paths': '星霊の剣',
+        'Sinbound Meltdown': 'シンメルトン',
+        'Sinbound Fire(?! )': 'シンファイア',
+        'Akh Rhai': 'アク・ラーイ',
+        'Darklit Dragonsong': '光と闇の竜詩',
+        'Crystallize Time': '時間結晶',
+        'Longing of the Lost': '聖竜気',
+        'Joyless Dragonsong': '絶望の竜詩',
+        'Materialization': '具象化',
+        'Akh Morn': 'アク・モーン',
+        'Morn Afah': 'モーン・アファー',
+        'Tidal Light': '光の大波',
+        'Hiemal Storm': 'ハイマルストーム',
+        'Hiemal Ray': 'ハイマルレイ',
+        'Sinbound Blizzard III': 'シンブリザガ',
+        'Endless Ice Age': '光の氾濫',
+        'Depths of Oblivion': '忘却の彼方',
+        'Memory Paradox': 'メモリー·パラドックス',
+        'Paradise Lost': '失楽園',
+        'Hell\'s Judgment': 'ヘル・ジャッジメント',
+        'Ultimate Relativity': '時間圧縮・絶',
+        'Return': 'リターン',
+        'Return IV': 'リタンジャ',
+        'Spell-in-Waiting Refrain': 'ディレイスペル・リフレイン',
+        'Dark Water III': 'ダークウォタガ',
+        'Dark Eruption': 'ダークエラプション',
+        'Dark Fire III': 'ダークファイガ',
+        'Unholy Darkness': 'ダークホーリー',
+        'Shadoweye': 'シャドウアイ',
+        'Dark Blizzard III': 'ダークブリザガ',
+        'Dark Aero III': 'ダークエアロガ',
+        'Quietus': 'クワイタス',
+        'Shockwave Pulsar': 'ショックウェーブ・パルサー',
+        'Somber Dance': '宵闇の舞踏技',
+        'Shell Crusher': 'シェルクラッシャー',
+        'Spirit Taker': 'スピリットテイカー',
+        'Black Halo': 'ブラックヘイロー',
+        'Speed': 'スピード',
+        'Quicken': 'クイック',
+        'Slow': 'スロウ',
+        'Apocalypse': 'アポカリプス',
+        'Maelstrom': 'メイルシュトローム',
+        'Memory\'s End': 'エンド・オブ・メモリーズ',
+        'Fulgent Blade': '光塵の剣',
+        'Polarizing Strikes': '星霊の剣',
+        'Paradise Regained': 'パラダイスリゲイン',
+        'Twin Poles': '光と闇の双剣技',
+        'Pandora\'s Box': 'パンドラの櫃',
+        'Cyckonic Break': 'サイクロニックブレイク',
+        'Fated Burn Mark': '死爆印',
       },
     },
   ],

@@ -1,9 +1,9 @@
-import { RaidbossData } from '../types/data';
+import { Job } from '../types/job';
 import { LocaleText, OutputStrings } from '../types/trigger';
 
 import { Lang } from './languages';
 import Outputs from './outputs';
-import { Directions } from './util';
+import Util, { Directions } from './util';
 
 // 어듬이 뱡향 표시
 const posConv16 = (sx: string, sy: string, cx: number, cy: number): number => {
@@ -555,19 +555,19 @@ const jobPriorityToName: Record<number, LocaleText> = {
   },
 };
 
-// 롤 이름
-const roleTanks: readonly string[] = ['MT', 'ST'] as const;
-const roleHealers: readonly string[] = ['H1', 'H2'] as const;
-const roleMelees: readonly string[] = ['D1', 'D2'];
-const roleRanges: readonly string[] = ['D3', 'D4'];
-const roleDps: readonly string[] = [...roleMelees, ...roleRanges] as const;
-const roleTanksAndHealers: readonly string[] = [...roleTanks, ...roleHealers] as const;
-const roleNames: readonly string[] = [...roleTanks, ...roleHealers, ...roleDps] as const;
-const teamMt: readonly string[] = ['MT', 'H1', 'D1', 'D3'];
-const teamSt: readonly string[] = ['ST', 'H2', 'D2', 'D4'];
+// 몫 이름
+const moksTanks: readonly string[] = ['MT', 'ST'] as const;
+const moksHealers: readonly string[] = ['H1', 'H2'] as const;
+const moksMelees: readonly string[] = ['D1', 'D2'];
+const moksRanges: readonly string[] = ['D3', 'D4'];
+const moksDps: readonly string[] = [...moksMelees, ...moksRanges] as const;
+const moksTanksAndHealers: readonly string[] = [...moksTanks, ...moksHealers] as const;
+const moksNames: readonly string[] = [...moksTanks, ...moksHealers, ...moksDps] as const;
+const teamMtMoks: readonly string[] = ['MT', 'H1', 'D1', 'D3'];
+const teamStMoks: readonly string[] = ['ST', 'H2', 'D2', 'D4'];
 
-// 롤 타입
-export type AutumnRoles = 'MT' | 'ST' | 'H1' | 'H2' | 'D1' | 'D2' | 'D3' | 'D4';
+// 몫 타입
+export type AutumnMoks = 'MT' | 'ST' | 'H1' | 'H2' | 'D1' | 'D2' | 'D3' | 'D4' | 'none';
 
 // 어듬이 유틸
 const Autumn = {
@@ -579,34 +579,34 @@ const Autumn = {
     return jobs;
   },
 
-  isRoleName: (name: string) => roleNames.includes(name),
-  isRoleTank: (name: string) => roleTanks.includes(name),
-  isRoleHealer: (name: string) => roleHealers.includes(name),
-  isRoleTankHealer: (name: string) => roleTanksAndHealers.includes(name),
-  isRoleDps: (name: string) => roleDps.includes(name),
-  isTeamMt: (name: string) => teamMt.includes(name),
-  isTeamSt: (name: string) => teamSt.includes(name),
+  isMoksName: (name: string) => moksNames.includes(name),
+  isMoksTank: (name: string) => moksTanks.includes(name),
+  isMoksHealer: (name: string) => moksHealers.includes(name),
+  isMoksTankHealer: (name: string) => moksTanksAndHealers.includes(name),
+  isMoksDps: (name: string) => moksDps.includes(name),
+  isTeamMt: (name: string) => teamMtMoks.includes(name),
+  isTeamSt: (name: string) => teamStMoks.includes(name),
 
-  roleDetect: (data: RaidbossData): AutumnRoles | undefined => {
-    if (!data.options.AutumnStyle)
-      return undefined;
-    const ap = data.options.AutumnParameter;
-    if (ap !== undefined && roleNames.includes(ap))
-      return ap as AutumnRoles;
-    if (data.role === 'tank')
-      return 'MT'; // 기본 탱크는 MT
-    if (data.role === 'healer') {
-      if (data.job === 'WHM' || data.job === 'AST')
-        return 'H1';
-      return 'H2';
+  parseMoks: (job: Job, param?: string): AutumnMoks => {
+    if (param !== undefined) {
+      // 몫은 인수 0번 고정
+      const ss = param.split(',');
+      if (ss.length > 0 && ss[0] !== undefined && moksNames.includes(ss[0]))
+        return ss[0] as AutumnMoks;
     }
-    if (data.CanFeint())
-      return 'D1'; // 페인트가 가능하면 D1
-    if (data.CanSilence())
-      return 'D3'; // 인터럽트가 가능하면 D3
-    if (data.CanAddle())
-      return 'D4'; // 애들이 가능하면 D4
-    return undefined;
+    if (Util.isTankJob(job))
+      return 'MT'; // 기본 탱크는 MT, ST는 지정 전용
+    if (Util.isPureHealerJob(job))
+      return 'H1'; // 퓨어 힐러는 H1
+    if (Util.isBarrierHealerJob(job))
+      return 'H2'; // 바리어 힐러는 H2
+    if (Util.isMeleeDpsJob(job))
+      return 'D1'; // 밀리는 D1, D2는 지정 전용
+    if (Util.isRangedDpsJob(job))
+      return 'D3'; // 렌지는 D3
+    if (Util.isCasterDpsJob(job))
+      return 'D4'; // 캐슷은 D4
+    return 'none';
   },
 } as const;
 

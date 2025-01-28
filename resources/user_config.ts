@@ -122,7 +122,7 @@ class UserConfig {
       },
       Debug: false,
       AutumnStyle: false,
-      OnlyAutumn: false,
+      AutumnOnly: false,
     };
   }
 

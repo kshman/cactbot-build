@@ -423,11 +423,11 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         text: {
-          en: '${dir1} (x2) => ${dir2} => ${dir3} (x2) => ${dir4}',
+          en: '${dir1} (x2) => ${dir2} (x2) => ${dir3} => ${dir4}',
           de: '${dir1} (x2) => ${dir2} (x2) => ${dir3} => ${dir4}',
           fr: '${dir1} (x2) => ${dir2} (x2) => ${dir3} => ${dir4}',
           cn: '${dir1} (x2) => ${dir2} (x2) => ${dir3} => ${dir4}',
-          ko: '${dir1} (x2) => ${dir2} => ${dir3} (x2) => ${dir4}',
+          ko: '${dir1} (x2) => ${dir2} (x2) => ${dir3} => ${dir4}',
         },
         dirSE: Outputs.dirSE,
         dirSW: Outputs.dirSW,
@@ -440,7 +440,8 @@ const triggerSet: TriggerSet<Data> = {
     {
       'locale': 'en',
       'replaceText': {
-        'Pedestal Purge/Wheel Of Deincarnation/Bladewise': 'Purge/Wheel/Bladewise',
+        '(?<! )Pedestal Purge/Wheel Of Deincarnation/Bladewise': 'Purge/Wheel/Bladewise',
+        'Iconography: Pedestal Purge/Wheel Of Deincarnation/Bladewise': 'Icon: Purge/Wheel/Blade',
       },
     },
     {

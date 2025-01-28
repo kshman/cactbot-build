@@ -1934,9 +1934,9 @@ const triggerSet: TriggerSet<Data> = {
           return;
 
         const name = data.party.member(data.me);
-        if (data.options.AutumnStyle && (data.job !== 'BLU' || Autumn.isRoleName(name.nick))) {
+        if (data.options.AutumnStyle && (data.job !== 'BLU' || Autumn.isMoksName(name.nick))) {
           const pos: TowerLocation[] = [];
-          const isdps = data.job === 'BLU' ? Autumn.isRoleDps(name.nick) : data.role === 'dps';
+          const isdps = data.job === 'BLU' ? Autumn.isMoksDps(name.nick) : data.role === 'dps';
           towerList.forEach((value) => {
             const location = value.location;
             if (matches.effectId === engravementIdMap.lightTower) {
@@ -4661,8 +4661,8 @@ const triggerSet: TriggerSet<Data> = {
             arrow = getUltimaRayArrow(data.role === 'dps', dir1, dir2);
           } else {
             const name = data.party.member(data.me);
-            if (Autumn.isRoleName(name.nick))
-              arrow = getUltimaRayArrow(Autumn.isRoleDps(name.nick), dir1, dir2);
+            if (Autumn.isMoksName(name.nick))
+              arrow = getUltimaRayArrow(Autumn.isMoksDps(name.nick), dir1, dir2);
           }
           if (arrow !== undefined)
             return output.moveTo!({ dir: output[arrow]!() });
@@ -4745,8 +4745,8 @@ const triggerSet: TriggerSet<Data> = {
             arrow = getUltimaRayArrow(data.role === 'dps', dir1, dir2);
           } else {
             const name = data.party.member(data.me);
-            if (Autumn.isRoleName(name.nick))
-              arrow = getUltimaRayArrow(Autumn.isRoleDps(name.nick), dir1, dir2);
+            if (Autumn.isMoksName(name.nick))
+              arrow = getUltimaRayArrow(Autumn.isMoksDps(name.nick), dir1, dir2);
           }
           if (arrow !== undefined)
             return output.moveTo!({ dir: output[arrow]!() });

@@ -63,6 +63,8 @@ const allRoles = ['tank', 'healer', 'dps', 'crafter', 'gatherer', 'none'] as Rol
 
 const tankJobs: Job[] = ['GLA', 'PLD', 'MRD', 'WAR', 'DRK', 'GNB'];
 const healerJobs: Job[] = ['CNJ', 'WHM', 'SCH', 'AST', 'SGE'];
+const healerPureJobs: Job[] = ['CNJ', 'WHM', 'AST'];
+const healerBarrierJobs: Job[] = ['SCH', 'SGE'];
 const meleeDpsJobs: Job[] = ['PGL', 'MNK', 'LNC', 'DRG', 'ROG', 'NIN', 'SAM', 'RPR', 'VPR'];
 const rangedDpsJobs: Job[] = ['ARC', 'BRD', 'DNC', 'MCH'];
 const casterDpsJobs: Job[] = ['BLU', 'RDM', 'BLM', 'SMN', 'ACN', 'THM', 'PCT'];
@@ -468,6 +470,8 @@ const Util = {
   getAllRoles: (): readonly Role[] => allRoles,
   isTankJob: (job: Job) => tankJobs.includes(job),
   isHealerJob: (job: Job) => healerJobs.includes(job),
+  isPureHealerJob: (job: Job) => healerPureJobs.includes(job),
+  isBarrierHealerJob: (job: Job) => healerBarrierJobs.includes(job),
   isMeleeDpsJob: (job: Job) => meleeDpsJobs.includes(job),
   isRangedDpsJob: (job: Job) => rangedDpsJobs.includes(job),
   isCasterDpsJob: (job: Job) => casterDpsJobs.includes(job),
