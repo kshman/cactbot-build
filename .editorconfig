@@ -13,3 +13,6 @@ indent_style = space
 [*.{js,json,cjs,mjs,ts,yml,yaml}]
 indent_size = 2
 quote_type = single
+
+[*.py]
+indent_size = 4

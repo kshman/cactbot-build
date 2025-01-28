@@ -175,13 +175,9 @@ export class DamageTracker {
           return true;
         return false;
       },
-      ShortName: (name?: string) => this.playerStateTracker.partyTracker.member(name).toString(),
       IsPlayerId: IsPlayerId,
       DamageFromMatches: (matches: NetMatches['Ability']) => UnscrambleDamage(matches?.damage),
       options: this.options,
-
-      // Deprecated.
-      ParseLocaleFloat: parseFloat,
     };
 
     let triggerData = {};

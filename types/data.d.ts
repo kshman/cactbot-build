@@ -1,3 +1,4 @@
+import { AutumnMoks } from '../resources/autumn';
 import { Lang } from '../resources/languages';
 import PartyTracker from '../resources/party';
 import { ConfigValue } from '../resources/user_config';
@@ -18,9 +19,9 @@ export interface BaseOptions {
   Skin?: string;
   SystemInfo: SystemInfo;
   Debug: boolean;
-  AutumnStyle: boolean;
-  OnlyAutumn: boolean;
   AutumnParameter?: string;
+  AutumnStyle: boolean;
+  AutumnOnly: boolean;
   [key: string]: unknown;
 }
 
@@ -28,6 +29,7 @@ export interface RaidbossData {
   job: Job;
   me: string;
   role: Role;
+  moks: AutumnMoks;
   party: PartyTracker;
   lang: Lang;
   parserLang: Lang;
@@ -36,11 +38,7 @@ export interface RaidbossData {
   options: BaseOptions;
   inCombat: boolean;
   triggerSetConfig: { [key: string]: ConfigValue };
-  /** @deprecated Use data.party.member instead */
-  ShortName: (x?: string) => string;
   StopCombat: () => void;
-  /** @deprecated Use parseFloat instead */
-  ParseLocaleFloat: (string: string) => number;
   CanStun: () => boolean;
   CanSilence: () => boolean;
   CanSleep: () => boolean;
@@ -56,12 +54,7 @@ export interface OopsyData {
   party: PartyTracker;
   inCombat: boolean;
   IsImmune: (x?: string) => boolean;
-  /** @deprecated Use data.party.member instead */
-  ShortName: (x?: string) => string;
   IsPlayerId: (x?: string) => boolean;
   DamageFromMatches: (matches: NetMatches['Ability']) => number;
   options: OopsyOptions;
-
-  /** @deprecated Use parseFloat instead */
-  ParseLocaleFloat: (string: string) => number;
 }

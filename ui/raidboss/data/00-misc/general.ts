@@ -19,7 +19,7 @@ const triggerSet: TriggerSet<Data> = {
     {
       id: 'General Provoke',
       comment: {
-        cn: '仅在非自身小队成员释放“挑衅”且自身为坦克/治疗/青魔法师时触发。',
+        cn: '仅在自身或团队成员释放“挑衅”且自身为坦克/治疗/青魔法师时触发。',
       },
       type: 'Ability',
       netRegex: { id: '1D6D' },

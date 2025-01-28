@@ -50,7 +50,7 @@ const triggerSet: TriggerSet<Data> = {
       id: 'Queen Eternal Legitimate Force',
       type: 'StartsUsing',
       netRegex: { id: ['8F1E', '8F1F', '8F20', '8F21'], source: 'Queen Eternal', capture: true },
-      alertText: (_data, matches, output) => {
+      infoText: (_data, matches, output) => {
         if (matches.id === '8F1E')
           return output.stayRight!();
         else if (matches.id === '8F1F')
@@ -79,12 +79,12 @@ const triggerSet: TriggerSet<Data> = {
       id: 'Queen Eternal Aethertithe Light Repeated AOE',
       type: 'StartsUsing',
       netRegex: { id: '8EFC', source: 'Queen Eternal', capture: false },
-      durationSeconds: 30,
+      durationSeconds: 3,
       infoText: (_data, _matches, output) => output.repeatedAOE!(),
       outputStrings: {
         repeatedAOE: {
           en: 'Continuous light AoE',
-          ko: '연속 빛 장판',
+          ko: '연속 격자 장판',
         },
       },
     },
@@ -97,7 +97,7 @@ const triggerSet: TriggerSet<Data> = {
       id: 'Queen Eternal Aethertithe Cones',
       type: 'MapEffect',
       netRegex: { flags: ['04000100', '08000100', '10000100'], capture: true },
-      alertText: (_data, matches, output) => {
+      infoText: (_data, matches, output) => {
         if (matches.flags === '04000100')
           return output.goRight!();
         else if (matches.flags === '08000100')
@@ -107,11 +107,7 @@ const triggerSet: TriggerSet<Data> = {
         return output.unknown!();
       },
       outputStrings: {
-        frontCorners: {
-          en: 'Front Corner',
-          ja: '前方の角へ',
-          ko: '앞쪽 구석으로',
-        },
+        frontCorners: Outputs.corner,
         goLeft: Outputs.left,
         goRight: Outputs.right,
         unknown: Outputs.unknown,
@@ -132,7 +128,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         regaliaYou: {
           en: 'Laser tether on YOU',
-          ko: '내게 레이저 줄',
+          ko: '내게 유도 레이저 줄',
         },
       },
     },
@@ -160,7 +156,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         floating: {
           en: 'Gravitation -- Levitating',
-          ko: '올라가욧!',
+          ko: '곧 뜰꺼예요!',
         },
       },
     },
@@ -177,7 +173,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         falling: {
           en: 'Gravitation -- Falling',
-          ko: '내려가욧!',
+          ko: '곧 내려가요!',
         },
       },
     },
@@ -194,7 +190,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         floating: {
           en: 'Gravitation -- Levitating',
-          ko: '올라가욧!',
+          ko: '곧 뜰꺼예요!',
         },
       },
     },
@@ -202,7 +198,7 @@ const triggerSet: TriggerSet<Data> = {
       id: 'Queen Eternal Castellation',
       type: 'Ability',
       netRegex: { id: '8F05', capture: false },
-      alertText: (data, _matches, output) => {
+      infoText: (data, _matches, output) => {
         if (data.playerFloating)
           return output.floatCastle!();
         return output.fallCastle!();
@@ -215,11 +211,11 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         fallCastle: {
           en: 'In front of ground windows',
-          ko: '바닥 구멍 앞으로',
+          ko: '아랫쪽 구멍으로',
         },
         floatCastle: {
           en: 'In front of middle windows',
-          ko: '중간 구멍 앞으로',
+          ko: '윗쪽 구멍으로',
         },
       },
     },
@@ -231,7 +227,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         getInDonut: {
           en: 'Get in robot circle',
-          ko: '로봇 동그라미 안으로',
+          ko: '로봇 동글이 안으로',
         },
       },
     },
@@ -269,19 +265,21 @@ const triggerSet: TriggerSet<Data> = {
       netRegex: { effectId: 'EE7', capture: true },
       delaySeconds: (_data, matches) => parseFloat(matches.duration) - 5,
       suppressSeconds: 5,
-      alarmText: (data, _matches, output) => {
+      alertText: (data, _matches, output) => {
         if (data.shriekTargets.includes(data.me)) {
           const otherShriek = data.shriekTargets.filter((target) => target !== data.me)[0];
-          return output.shriekYou!({ otherTarget: otherShriek });
+          const m = data.party.member(otherShriek);
+          return output.shriekYou!({ otherTarget: m.nick });
         }
-        const joinedTargets = data.shriekTargets.join(', ');
+        const mm = data.shriekTargets.map((x) => data.party.member(x).nick);
+        const joinedTargets = mm.join(', ');
         return output.shriekOthers!({ comboTargets: joinedTargets });
       },
       run: (data) => data.shriekTargets = [],
       outputStrings: {
         shriekYou: {
           en: 'Gaze -- look away from ${otherTarget}',
-          ko: '눈깔! 피해욧: ${otherTarget}',
+          ko: '내게 눈깔! 자리 비켜줘욧! (${otherTarget})',
         },
         shriekOthers: {
           en: 'Look away from ${comboTargets}',
@@ -346,13 +344,13 @@ const triggerSet: TriggerSet<Data> = {
       id: 'Queen Eternal Royal Banishment AOE',
       type: 'StartsUsing',
       netRegex: { id: '8F24', source: 'Queen Eternal', capture: false },
-      durationSeconds: 30,
+      durationSeconds: 5,
       infoText: (_data, _matches, output) => output.fiveAOE!(),
       outputStrings: {
         fiveAOE: {
           en: '5x AoEs',
           cn: 'AoE (5次)',
-          ko: '전체공격 (5x)',
+          ko: '5x 전체공격',
         },
       },
     },

@@ -1,42 +1,6 @@
 # FRU 사용자 정의 기능 설명
 
-현 시점에서 사용자 파일에 넣을 설정은 다음과 같아요.
-
-```javascript
-Options.Triggers.push({
-  zoneId: ZoneId.FuturesRewrittenUltimate,
-  timelineTriggers: [
-    {
-      id: 'FRU+ 데이터 설정',
-      regex: /--setup--/,
-      run: (data) => {
-        data.members = [
-          { r: 'MT', j: 'WAR', t: 1, p: 0, mm: 1, n: '전사' },
-          { r: 'ST', j: 'DRK', t: 2, p: 4, mm: 1, n: '암흑이' },
-          { r: 'H1', j: 'WHM', t: 1, p: 6, mm: 2, n: '뱅마' },
-          { r: 'H2', j: 'SCH', t: 2, p: 2, mm: 2, n: '요정이' },
-          { r: 'D1', j: 'SAM', t: 1, p: 5, mm: 1, n: '샘레이미' },
-          { r: 'D2', j: 'NIN', t: 2, p: 3, mm: 1, n: '나루터' },
-          { r: 'D3', j: 'DNC', t: 1, p: 7, mm: 2, n: '춤꾼' },
-          { r: 'D4', j: 'PCT', t: 2, p: 1, mm: 2, n: '붓쟁이' },
-      },
-    },
-  ],
-});
-```
-
-|필드|설명|
-|------|---------|
-|r|역할. MT,ST,H1,H2,D1,D2,D3,D4의 값 중 하나|
-|j|잡. 이 필드는 사실 쓰지 않아요|
-|n|게임 내 캐릭터 이름|
-|t|팀. 1=MT팀 / 2=ST팀|
-|p|Concealed에서 방향 0=북쪽...7:북서쪽|
-|mm|Blue Mirror 팀|
-
----
-
-다음은 시간압축-절을 위한 특별한 스크립트예요. JapanDC에서 쓰는 방식을 설명했어요
+시간압축-절을 위한 특별한 스크립트예요. JapanDC에서 쓰는 방식을 설명했어요
 
 ```javascript
   triggers: [

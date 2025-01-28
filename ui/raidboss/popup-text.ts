@@ -1,3 +1,4 @@
+import Autumn, { AutumnMoks } from '../../resources/autumn';
 import { Lang } from '../../resources/languages';
 import { buildNetRegexForTrigger, commonNetRegex } from '../../resources/netregexes';
 import { UnreachableCode } from '../../resources/not_reached';
@@ -148,7 +149,7 @@ const onTriggerException = (trigger: ProcessedTrigger, e: unknown) => {
   if (e === null || typeof e !== 'object')
     return;
 
-  let str = `Error in trigger: ${trigger.id !== undefined ? trigger.id : '[unknown trigger id]'}`;
+  let str = `트리거 오류: ${trigger.id !== undefined ? trigger.id : '[알 수 없는 트리거 아이디]'}`;
 
   if (trigger.filename !== undefined)
     str += ` (${trigger.filename})`;
@@ -240,10 +241,10 @@ class OrderedTriggerList {
 
       // TODO: be verbose now while this is fresh, but hide this output behind debug flags later.
       const triggerFile = (trigger: ProcessedTrigger) =>
-        trigger.filename !== undefined ? `'${trigger.filename}'` : 'user override';
+        trigger.filename !== undefined ? `'${trigger.filename}'` : '사용자 정의';
       const oldFile = triggerFile(oldTrigger);
       const newFile = triggerFile(trigger);
-      console.log(`Overriding '${trigger.id}' from ${oldFile} with ${newFile}.`);
+      console.log(`덮어쓴 트리거 '${trigger.id}' ${oldFile} 파일을 ${newFile} 파일로.`);
 
       this.triggers[idx] = trigger;
       return;
@@ -315,14 +316,14 @@ class TriggerOutputProxy {
             return true;
           }
           console.error(
-            `Invalid responseOutputStrings on trigger ${target.trigger.id ?? 'Unknown'}`,
+            `잘못된 responseOutputStrings (트리거: ${target.trigger.id ?? 'Unknown'})`,
           );
           return false;
         }
 
         // Be kind to user triggers that do weird things, and just console error this
         // instead of throwing an exception.
-        console.error(`Invalid property '${String(property)}' on output.`);
+        console.error(`잘못된 출력 속성 '${String(property)}'.`);
         return false;
       },
 
@@ -349,7 +350,7 @@ class TriggerOutputProxy {
           if (str === undefined)
             str = target.getReplacement(target.outputStrings[name], params, name, id);
           if (str === undefined) {
-            console.error(`Trigger ${target.trigger.id ?? ''} has missing outputString ${name}.`);
+            console.error(`트리거 ${target.trigger.id ?? ''}, outputString이 없어요: ${name}.`);
             return target.unknownValue;
           }
           return str;
@@ -368,14 +369,14 @@ class TriggerOutputProxy {
     if (typeof val === 'string' || typeof val === 'number')
       return val.toString();
     if (typeof val !== 'object') {
-      console.error(`Trigger ${id} has non-string param value ${key}.`);
+      console.error(`트리거 ${id}, 문자열이 아닌 파라미터 값이 있어요: ${key}.`);
       return this.unknownValue;
     }
 
     if (Array.isArray(val)) {
       // Don't allow nesting arrays here, e.g. [player1, [player2, player3]].
       if (isNestedArray) {
-        console.error(`Trigger ${id} passed nested arrays to param value ${key}.`);
+        console.error(`트리거 ${id}, 중첩 배열로 파라미터 값을 전달했어요: ${key}.`);
         return this.unknownValue;
       }
 
@@ -402,11 +403,11 @@ class TriggerOutputProxy {
 
       if (retVal === undefined || retVal === null) {
         console.error(
-          `Trigger ${id} is referencing non-existent object property ${key}.${prop}.`,
+          `트리거 ${id}, 존재하지 않는 개체 속성을 참조했어요: ${key}.${prop}.`,
         );
       } else {
         console.error(
-          `Trigger ${id} is referencing object property ${key}.${prop} with incorrect type ${typeof retVal}.`,
+          `트리거 ${id}, 잘못된 타입으로 개체 속성을 참조했어요: ${key}.${prop} (${typeof retVal}).`,
         );
       }
     }
@@ -416,7 +417,7 @@ class TriggerOutputProxy {
     const toStringFunc = val['toString'];
     if (typeof toStringFunc !== 'function') {
       console.error(
-        `Trigger ${id} has non-func ${key}.toString property.`,
+        `트리거 ${id}, 함수가 아닌 ${key}.toString 속성을 갖고있어요요.`,
       );
       return this.unknownValue;
     }
@@ -424,7 +425,7 @@ class TriggerOutputProxy {
     const toStringVal: unknown = toStringFunc();
     if (typeof toStringVal !== 'string' && typeof toStringVal !== 'number') {
       console.error(
-        `Trigger ${id} returned non-string ${typeof toStringVal} from ${key}.toString().`,
+        `트리거 ${id}, 문자열이 아닌 값을 반환했어요: ${typeof toStringVal} (${key}.toString()).`,
       );
       return this.unknownValue;
     }
@@ -453,7 +454,7 @@ class TriggerOutputProxy {
       value = template[this.displayLang] ?? template['en'];
 
     if (typeof value !== 'string') {
-      console.error(`Trigger ${id} has invalid outputString ${name}.`, JSON.stringify(template));
+      console.error(`트리거 ${id}, 잘못된 outputString값을 갖고 있어요: ${name}.`, JSON.stringify(template));
       return;
     }
 
@@ -466,7 +467,7 @@ class TriggerOutputProxy {
           // Only a warning here (for user triggers), but mocha tests will error out for this case
           // If the user specifies extra parts, just ignore them
           if (parts.length > 2)
-            console.warn(`Trigger ${id} has extra path parts for object parameter ${key}.`);
+            console.warn(`트리거 ${id}, 확장 경로 부분을 개체 파라미티로 갖고 있어요: ${key}.`);
           key = parts[0] ?? '';
           prop = parts[1];
         }
@@ -477,7 +478,7 @@ class TriggerOutputProxy {
         }
       }
 
-      console.error(`Trigger ${id} can't replace ${key} in ${JSON.stringify(template)}.`);
+      console.error(`트리거 ${id}, 바꿔 쓸 수 없어요: ${key} (${JSON.stringify(template)}).`);
       return this.unknownValue;
     });
   }
@@ -575,6 +576,7 @@ export class PopupText {
   protected me = '';
   protected job: Job = 'NONE';
   protected role: Role = 'none';
+  protected moks: AutumnMoks = 'none';
   protected triggerSets: ProcessedTriggerSet[] = [];
   protected triggerSetsById: { [id: string]: ProcessedTriggerSet } = {};
   protected triggerSetConfig: { [key: string]: ConfigValue } = {};
@@ -674,15 +676,15 @@ export class PopupText {
         continue;
 
       if (typeof json !== 'object') {
-        console.log(`Unexpected JSON from ${filename}, expected an array`);
+        console.log(`잘못된 JSON: ${filename}, 배열이 아니네요`);
         continue;
       }
       if (!json.triggers) {
-        console.log(`Unexpected JSON from ${filename}, expected a triggers`);
+        console.log(`잘못된 JSON: ${filename}, 트리거가 아니네요`);
         continue;
       }
       if (typeof json.triggers !== 'object' || !(json.triggers.length >= 0)) {
-        console.log(`Unexpected JSON from ${filename}, expected triggers to be an array`);
+        console.log(`잘못된 JSON: ${filename}, 배열 트리거가 아니네요`);
         continue;
       }
       const processedSet = {
@@ -701,9 +703,7 @@ export class PopupText {
         return true;
       if (this.triggerSetsById[triggerSet.id] !== undefined) {
         console.log(
-          `${
-            triggerSet.filename ?? '???'
-          } has duplicate triggerSet id ${triggerSet.id}, ignoring triggers`,
+          `${triggerSet.filename ?? '???'} , 중복된 triggerSet 아이디: ${triggerSet.id}, 무시해요`,
         );
         return false;
       }
@@ -765,14 +765,14 @@ export class PopupText {
       const haveZoneRegex = 'zoneRegex' in set;
       const haveZoneId = 'zoneId' in set;
       if (!haveZoneRegex && !haveZoneId || haveZoneRegex && haveZoneId) {
-        console.error(`Trigger set must include exactly one of zoneRegex or zoneId property`);
+        console.error(`트리거 셋은 zoneRegex 또는 zoneId 속성 중 하나가 정확히 포함해야 해요`);
         continue;
       }
       if (haveZoneId && set.zoneId === undefined) {
         const filename = set.filename !== undefined ? `'${set.filename}'` : '(user file)';
         console.error(
-          `Trigger set has zoneId, but with nothing specified in ${filename}.  ` +
-            `Did you misspell the ZoneId.ZoneName?`,
+          `트리거 셋이 zoneId를 갖고 있지만, ${filename} 파일에 없는거 같아요.  ` +
+            `혹시 ZoneId.ZoneName를 잘못썼나요?`,
         );
         continue;
       }
@@ -790,7 +790,7 @@ export class PopupText {
         let zoneRegex = origZoneRegex;
         if (typeof zoneRegex !== 'object') {
           console.error(
-            `zoneRegex must be translatable object or regexp: ${JSON.stringify(origZoneRegex)}`,
+            `zoneRegex는 번역 가능한 개체이거나 regexp여야 해요: ${JSON.stringify(origZoneRegex)}`,
           );
           continue;
         } else if (!(zoneRegex instanceof RegExp)) {
@@ -800,12 +800,12 @@ export class PopupText {
           } else if (zoneRegex['en']) {
             zoneRegex = zoneRegex['en'];
           } else {
-            console.error(`unknown zoneRegex parser language: ${JSON.stringify(origZoneRegex)}`);
+            console.error(`알 수 없는 zoneRegex 분석기 언어: ${JSON.stringify(origZoneRegex)}`);
             continue;
           }
 
           if (!(zoneRegex instanceof RegExp)) {
-            console.error(`zoneRegex must be regexp: ${JSON.stringify(origZoneRegex)}`);
+            console.error(`zoneRegex는 반드시 regexp여야 해요: ${JSON.stringify(origZoneRegex)}`);
             continue;
           }
         }
@@ -815,11 +815,11 @@ export class PopupText {
 
       if (this.options.Debug) {
         if (set.id !== undefined)
-          console.log(`Loading id ${set.id}`);
+          console.log(`읽는 중: id ${set.id}`);
         else if (set.filename !== undefined)
-          console.log(`Loading ${set.filename}`);
+          console.log(`읽는 중: ${set.filename}`);
         else
-          console.log('Loading user triggers for zone');
+          console.log('읽는 중: 지역 사용자 트리거');
       }
 
       const triggerSetAutoConfig = set.id !== undefined
@@ -912,7 +912,7 @@ export class PopupText {
                 const trans = translateRegex(defaultNetRegex, this.parserLang, set.timelineReplace);
                 trigger.localNetRegex = Regexes.parse(trans);
               } else if (trigger.type === undefined) {
-                console.error(`Trigger ${id}: without type property needs RegExp as netRegex`);
+                console.error(`트리거 ${id}: 타입 없는 속성은 netRegex로 RegExp가 필요해요`);
               } else {
                 const re = buildNetRegexForTrigger(
                   trigger.type,
@@ -933,14 +933,14 @@ export class PopupText {
           ) {
             // All triggers are added for consistency reasons in overriding/disabling, however
             // show an error if for some reason we haven't been able to build a regex.
-            console.error(`Trigger ${id}: missing regex and netRegex; trigger will be ignored`);
+            console.error(`트리거 ${id}: 누락된 regex 및 netRegex; 트리거 무시해요`);
           }
         }
       }
 
       if (set.overrideTimelineFile) {
-        const filename = set.filename !== undefined ? `'${set.filename}'` : '(user file)';
-        console.log(`Overriding timeline from ${filename}.`);
+        const filename = set.filename !== undefined ? `'${set.filename}'` : '(사용자 파일일)';
+        console.log(`타입라인 덮어쓰기: ${filename}.`);
 
         // If the timeline file override is set, all previously loaded timeline info is dropped.
         // Styles, triggers, and translations are kept, as they may still apply to the new one.
@@ -956,7 +956,7 @@ export class PopupText {
         } else {
           // Note: For user files, this should get handled by raidboss_config.js,
           // where `timelineFile` should get converted to `timeline`.
-          console.error(`Can't specify timelineFile in non-manifest file:${set.timelineFile}`);
+          console.error(`manifest에 등록하지 않은 timelineFile은 쓸 수 없어요:${set.timelineFile}`);
         }
       }
 
@@ -1021,6 +1021,7 @@ export class PopupText {
     this.me = e.detail.name;
     this.job = e.detail.job;
     this.role = Util.jobToRole(this.job);
+    this.moks = Autumn.parseMoks(this.job, this.options.AutumnParameter);
     this.ReloadTimelines();
   }
 
@@ -1048,6 +1049,7 @@ export class PopupText {
 
   Reset(): void {
     Util.clearWatchCombatants();
+    this.moks = Autumn.parseMoks(this.job, this.options.AutumnParameter);
     this.data = this.getDataObject();
     this.StopTimers();
     this.triggerSuppress = {};
@@ -1243,7 +1245,7 @@ export class PopupText {
         if (this.trigger.output)
           return this.trigger.output;
 
-        console.log(`Missing trigger.output for trigger ${trigger.id ?? 'Unknown'}`);
+        console.log(`트리거에 trigger.output이 없어요: ${trigger.id ?? '알 수 없음'}`);
         return defaultOutput;
       },
     };
@@ -1398,11 +1400,11 @@ export class PopupText {
 
         // Make sure we actually get a Promise back from the function
         if (Promise.resolve(promise) !== promise) {
-          console.error(`Trigger ${id}: promise function did not return a promise`);
+          console.error(`트리거 ${id}: promise 함수가 promise를 반환하지 않았어요요`);
           promise = undefined;
         }
       } else {
-        console.error(`Trigger ${id}: promise defined but not a function`);
+        console.error(`트리거 ${id}: promise를 정의했으나 함수가 아니네요`);
       }
     }
     return promise;
@@ -1609,7 +1611,7 @@ export class PopupText {
         const parts = text.split('{{CD}}');
         if (parts.length > 2) {
           // if more than one marker, remove them all and append the countdown
-          console.log(`Too many {{CD}} markers specified in output text: ${text}`);
+          console.log(`너무 많은 {{CD}} 마커가 출력 텍스트에 있어요: ${text}`);
           div.innerHTML = div.innerHTML.replaceAll('{{CD}}', '');
           div.appendChild(span);
         } else {
@@ -1728,6 +1730,7 @@ export class PopupText {
       me: this.me,
       job: this.job,
       role: this.role,
+      moks: this.moks,
       party: this.partyTracker,
       lang: this.parserLang,
       parserLang: this.parserLang,
@@ -1736,9 +1739,7 @@ export class PopupText {
       options: this.options,
       inCombat: this.inCombat,
       triggerSetConfig: this.triggerSetConfig,
-      ShortName: (name?: string) => Util.shortName(name, this.options.PlayerNicks),
       StopCombat: () => this.SetInCombat(false),
-      ParseLocaleFloat: parseFloat,
       CanStun: () => Util.canStun(this.job),
       CanSilence: () => Util.canSilence(this.job),
       CanSleep: () => Util.canSleep(this.job),
@@ -1758,8 +1759,8 @@ export class PopupText {
           ...initData,
         };
       } else {
-        console.log(`Error in file: ${initObj.file}: these triggers may not work;
-        initData function returned invalid object: ${init.toString()}`);
+        console.log(`파일에 오류: ${initObj.file}: 이 트리거들은 작동하지 않을거예요;
+        initData 함수가 잘못된 개체를 반환했어요: ${init.toString()}`);
       }
     }
 
