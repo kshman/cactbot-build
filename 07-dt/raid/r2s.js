@@ -75,7 +75,7 @@ Options.Triggers.push({
       alertText: (data, _matches, output) => {
         if (data.tankLaserCollect.includes(data.me))
           return output.cleaveOnYou();
-        if (!data.options.OnlyAutumn)
+        if (!data.options.AutumnOnly)
           return output.avoidCleave();
       },
       run: (data) => data.tankLaserCollect = [],
@@ -352,7 +352,7 @@ Options.Triggers.push({
       id: 'R2S Centerstage Combo',
       type: 'StartsUsing',
       netRegex: { id: '91AC', source: 'Honey B. Lovely', capture: false },
-      condition: Conditions.notOnlyAutumn(),
+      condition: Conditions.notAutumnOnly(),
       durationSeconds: 9,
       infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
@@ -367,7 +367,7 @@ Options.Triggers.push({
       id: 'R2S Outerstage Combo',
       type: 'StartsUsing',
       netRegex: { id: '91AD', source: 'Honey B. Lovely', capture: false },
-      condition: Conditions.notOnlyAutumn(),
+      condition: Conditions.notAutumnOnly(),
       durationSeconds: 9,
       infoText: (_data, _matches, output) => output.text(),
       outputStrings: {

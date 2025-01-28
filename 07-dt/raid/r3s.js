@@ -283,7 +283,7 @@ Options.Triggers.push({
       id: 'R3S Octoboom Bombarian Special',
       type: 'StartsUsing',
       netRegex: { id: '9752', source: 'Brute Bomber', capture: false },
-      condition: Conditions.notOnlyAutumn(),
+      condition: Conditions.notAutumnOnly(),
       infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
@@ -308,7 +308,7 @@ Options.Triggers.push({
       id: 'R3S Quadroboom Bombarian Special',
       type: 'StartsUsing',
       netRegex: { id: '940A', source: 'Brute Bomber', capture: false },
-      condition: Conditions.notOnlyAutumn(),
+      condition: Conditions.notAutumnOnly(),
       infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {

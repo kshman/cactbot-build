@@ -204,6 +204,19 @@ Options.Triggers.push({
   ],
   triggers: [
     {
+      id: 'R4S 시작!',
+      type: 'InCombat',
+      netRegex: { inGameCombat: '1', capture: false },
+      durationSeconds: 2,
+      infoText: (data, _matches, output) => output.ok({ moks: data.moks }),
+      outputStrings: {
+        ok: {
+          en: 'Combat: ${moks}',
+          ko: '시작: ${moks}',
+        },
+      },
+    },
+    {
       id: 'R4S Phase Tracker',
       type: 'StartsUsing',
       netRegex: { id: Object.keys(phaseMap), source: 'Wicked Thunder' },
@@ -241,7 +254,7 @@ Options.Triggers.push({
       id: 'R4S Bewitching Flight',
       type: 'StartsUsing',
       netRegex: { id: ['9671', '8DEF'], source: 'Wicked Thunder', capture: false },
-      condition: Conditions.notOnlyAutumn(),
+      condition: Conditions.notAutumnOnly(),
       infoText: (_data, _matches, output) => output.avoid(),
       outputStrings: {
         avoid: {
@@ -392,7 +405,7 @@ Options.Triggers.push({
       // Cast time is almost the same as the GainsEffect
       // so slight delay just in case there's a race condition issue
       delaySeconds: 0.2,
-      durationSeconds: (data) => data.options.OnlyAutumn ? 6 : 24,
+      durationSeconds: (data) => data.options.AutumnOnly ? 6 : 24,
       infoText: (data, matches, output) => {
         // assumes Narrowing; if Widening, just reverse
         let aoeOrder = ['in', 'out', 'in', 'out'];
@@ -406,7 +419,7 @@ Options.Triggers.push({
           baitOrder = [];
         else if (data.witchHuntBait === 'far')
           baitOrder = baitOrder.reverse();
-        if (data.options.OnlyAutumn)
+        if (data.options.AutumnOnly)
           return data.witchHuntFirst === 'in' ? output.startIn() : output.startOut();
         if (data.options.AutumnStyle) {
           const res = [];
@@ -489,22 +502,22 @@ Options.Triggers.push({
           data.witchHuntAoESafe = data.witchHuntAoESafe === 'in' ? 'out' : 'in';
         if (data.witchHuntBait !== undefined)
           data.witchHuntBait = data.witchHuntBait === 'near' ? 'far' : 'near';
-        const role = data.myRole;
-        if (role !== undefined && data.witchHuntFirst !== undefined) {
+        if (data.witchHuntFirst !== undefined) {
+          const moks = data.moks;
           if (data.witchHuntFirst === 'in') {
-            if (role === 'tank')
+            if (moks === 'MT' || moks === 'ST')
               return output.prCombo({ inOut: output[inOut](), bait: output.targetOn() });
-            if (role === 'healer')
+            if (moks === 'H1' || moks === 'H2')
               return output.prCombo({ inOut: output[inOut](), bait: output.markerOut() });
-            if (role === 'melee')
+            if (moks === 'D1' || moks === 'D2')
               return output.prCombo({ inOut: output[inOut](), bait: output.targetOut() });
             return output.prCombo({ inOut: output[inOut](), bait: output.markerOn() });
           }
-          if (role === 'tank')
+          if (moks === 'MT' || moks === 'ST')
             return output.prCombo({ inOut: output[inOut](), bait: output.markerOn() });
-          if (role === 'healer')
+          if (moks === 'H1' || moks === 'H2')
             return output.prCombo({ inOut: output[inOut](), bait: output.crossOn() });
-          if (role === 'melee')
+          if (moks === 'D1' || moks === 'D2')
             return output.prCombo({ inOut: output[inOut](), bait: output.markerOut() });
           return output.prCombo({ inOut: output[inOut](), bait: output.crossInside() });
         }
@@ -526,22 +539,22 @@ Options.Triggers.push({
           data.witchHuntAoESafe = data.witchHuntAoESafe === 'in' ? 'out' : 'in';
         if (data.witchHuntBait !== undefined)
           data.witchHuntBait = data.witchHuntBait === 'near' ? 'far' : 'near';
-        const role = data.myRole;
-        if (role !== undefined && data.witchHuntFirst !== undefined) {
+        if (data.witchHuntFirst !== undefined) {
+          const moks = data.moks;
           if (data.witchHuntFirst === 'in') {
-            if (role === 'tank')
+            if (moks === 'MT' || moks === 'ST')
               return output.prCombo({ inOut: output[inOut](), bait: output.markerOn() });
-            if (role === 'healer')
+            if (moks === 'H1' || moks === 'H2')
               return output.prCombo({ inOut: output[inOut](), bait: output.crossOn() });
-            if (role === 'melee')
+            if (moks === 'D1' || moks === 'D2')
               return output.prCombo({ inOut: output[inOut](), bait: output.markerOut() });
             return output.prCombo({ inOut: output[inOut](), bait: output.crossInside() });
           }
-          if (role === 'tank')
+          if (moks === 'MT' || moks === 'ST')
             return output.prCombo({ inOut: output[inOut](), bait: output.targetOn() });
-          if (role === 'healer')
+          if (moks === 'H1' || moks === 'H2')
             return output.prCombo({ inOut: output[inOut](), bait: output.markerOut() });
-          if (role === 'melee')
+          if (moks === 'D1' || moks === 'D2')
             return output.prCombo({ inOut: output[inOut](), bait: output.targetOut() });
           return output.prCombo({ inOut: output[inOut](), bait: output.markerOn() });
         }
@@ -563,22 +576,22 @@ Options.Triggers.push({
           data.witchHuntAoESafe = data.witchHuntAoESafe === 'in' ? 'out' : 'in';
         if (data.witchHuntBait !== undefined)
           data.witchHuntBait = data.witchHuntBait === 'near' ? 'far' : 'near';
-        const role = data.myRole;
-        if (role !== undefined && data.witchHuntFirst !== undefined) {
+        if (data.witchHuntFirst !== undefined) {
+          const moks = data.moks;
           if (data.witchHuntFirst === 'in') {
-            if (role === 'tank')
+            if (moks === 'MT' || moks === 'ST')
               return output.prCombo({ inOut: output[inOut](), bait: output.targetOut() });
-            if (role === 'healer')
+            if (moks === 'H1' || moks === 'H2')
               return output.prCombo({ inOut: output[inOut](), bait: output.markerOn() });
-            if (role === 'melee')
+            if (moks === 'D1' || moks === 'D2')
               return output.prCombo({ inOut: output[inOut](), bait: output.targetOn() });
             return output.prCombo({ inOut: output[inOut](), bait: output.markerOut() });
           }
-          if (role === 'tank')
+          if (moks === 'MT' || moks === 'ST')
             return output.prCombo({ inOut: output[inOut](), bait: output.markerOut() });
-          if (role === 'healer')
+          if (moks === 'H1' || moks === 'H2')
             return output.prCombo({ inOut: output[inOut](), bait: output.crossInside() });
-          if (role === 'melee')
+          if (moks === 'D1' || moks === 'D2')
             return output.prCombo({ inOut: output[inOut](), bait: output.markerOn() });
           return output.prCombo({ inOut: output[inOut](), bait: output.crossOn() });
         }
@@ -595,22 +608,22 @@ Options.Triggers.push({
       infoText: (data, _matches, output) => {
         const inOut = data.witchHuntAoESafe ?? output.unknown();
         const bait = data.witchHuntBait ?? output.unknown();
-        const role = data.myRole;
-        if (role !== undefined && data.witchHuntFirst !== undefined) {
+        if (data.witchHuntFirst !== undefined) {
+          const moks = data.moks;
           if (data.witchHuntFirst === 'in') {
-            if (role === 'tank')
+            if (moks === 'MT' || moks === 'ST')
               return output.prCombo({ inOut: output[inOut](), bait: output.markerOut() });
-            if (role === 'healer')
+            if (moks === 'H1' || moks === 'H2')
               return output.prCombo({ inOut: output[inOut](), bait: output.crossInside() });
-            if (role === 'melee')
+            if (moks === 'D1' || moks === 'D2')
               return output.prCombo({ inOut: output[inOut](), bait: output.markerOn() });
             return output.prCombo({ inOut: output[inOut](), bait: output.crossOn() });
           }
-          if (role === 'tank')
+          if (moks === 'MT' || moks === 'ST')
             return output.prCombo({ inOut: output[inOut](), bait: output.targetOut() });
-          if (role === 'healer')
+          if (moks === 'H1' || moks === 'H2')
             return output.prCombo({ inOut: output[inOut](), bait: output.markerOn() });
-          if (role === 'melee')
+          if (moks === 'D1' || moks === 'D2')
             return output.prCombo({ inOut: output[inOut](), bait: output.targetOn() });
           return output.prCombo({ inOut: output[inOut](), bait: output.markerOut() });
         }
@@ -778,7 +791,7 @@ Options.Triggers.push({
         // will cause the stack count to increase. We could try to try to track that, but it makes
         // the final mechanic resolvable only under certain conditions (which still cause deaths),
         // so don't bother for now.  PRs welcome? :)
-        if (!data.options.OnlyAutumn)
+        if (!data.options.AutumnOnly)
           return output[data.condenserTimer]({ same: same });
       },
       outputStrings: {
@@ -802,7 +815,7 @@ Options.Triggers.push({
       durationSeconds: 2,
       infoText: (data, _matches, output) => {
         data.witchgleamSelfCount++;
-        if (data.options.OnlyAutumn)
+        if (data.options.AutumnOnly)
           return;
         if (data.condenserTimer === 'long') {
           return output.longStacks({ times: data.witchgleamSelfCount - 1 });
@@ -827,16 +840,12 @@ Options.Triggers.push({
       condition: Conditions.targetIsYou(),
       delaySeconds: (_data, matches) => parseFloat(matches.duration) - 7,
       alertText: (data, _matches, output) => {
-        if (data.options.OnlyAutumn)
+        if (data.options.AutumnOnly)
           return;
         if (data.options.AutumnStyle) {
-          const pos = data.imDps
-            ? data.witchgleamSelfCount === 2
-              ? 'rightBottom'
-              : 'rightTop'
-            : data.witchgleamSelfCount === 2
-            ? 'leftBottom'
-            : 'leftTop';
+          const pos = data.party.isDPS(data.me)
+            ? (data.witchgleamSelfCount === 2 ? 'rightBottom' : 'rightTop')
+            : (data.witchgleamSelfCount === 2 ? 'leftBottom' : 'leftTop');
           return output[pos]();
         }
         return output.spread({ stacks: data.witchgleamSelfCount });
@@ -885,9 +894,9 @@ Options.Triggers.push({
           reminder = '';
           if (starEffect === 'partners') {
             if (data.witchgleamSelfCount === 2)
-              starEffect = data.imDps ? 'pairSouth' : 'pairNorth';
+              starEffect = data.party.isDPS(data.me) ? 'pairSouth' : 'pairNorth';
             else {
-              if (data.imDps)
+              if (data.party.isDPS(data.me))
                 starEffect = 'pairCenter';
               else
                 starEffect = matches.id === '95EC' ? 'pairWest' : 'pairEast';
@@ -979,7 +988,7 @@ Options.Triggers.push({
           data.electronStreamSide = matches.id === '95D6' ? 'north' : 'south';
         else if (data.electronStreamSafe === 'blue')
           data.electronStreamSide = matches.id === '95D6' ? 'south' : 'north';
-        if (data.options.OnlyAutumn)
+        if (data.options.AutumnOnly)
           return;
         const safeDir = data.electronStreamSide ?? 'unknown';
         if (data.role === 'tank')
@@ -1044,7 +1053,7 @@ Options.Triggers.push({
           dir = safeSide === data.electronStreamSide ? 'stay' : 'swap';
           data.electronStreamSide = safeSide; // for the next comparison
         }
-        if (data.options.OnlyAutumn)
+        if (data.options.AutumnOnly)
           return;
         const text = data.role === 'tank'
           ? output.tank({ dir: output[dir]() })
@@ -1110,7 +1119,7 @@ Options.Triggers.push({
       id: 'R4S Fulminous Field',
       type: 'Ability',
       netRegex: { id: '98D3', source: 'Wicked Thunder', capture: false },
-      condition: Conditions.notOnlyAutumn(),
+      condition: Conditions.notAutumnOnly(),
       infoText: (_data, _matches, output) => output.dodge(),
       outputStrings: {
         dodge: {
@@ -1131,7 +1140,7 @@ Options.Triggers.push({
           data.fulminousFieldCount = 1;
         else
           data.fulminousFieldCount++;
-        if (data.fulminousFieldCount === 3 && !data.options.OnlyAutumn)
+        if (data.fulminousFieldCount === 3 && !data.options.AutumnOnly)
           return output.spread();
       },
       outputStrings: {
@@ -1209,7 +1218,7 @@ Options.Triggers.push({
       id: 'R4S Mustard Bomb Initial',
       type: 'StartsUsing',
       netRegex: { id: '961E', source: 'Wicked Thunder', capture: false },
-      condition: Conditions.notOnlyAutumn(),
+      condition: Conditions.notAutumnOnly(),
       infoText: (data, _matches, output) => data.role === 'tank' ? output.tank() : output.nonTank(),
       outputStrings: {
         tank: Outputs.tetherBusters,
@@ -1289,7 +1298,7 @@ Options.Triggers.push({
         // First time - no stored call (since the mech happens next), just save the effect
         const firstTime = data.aetherialEffect === undefined;
         data.aetherialEffect = aetherialAbility[matches.id];
-        if (!firstTime && !data.options.OnlyAutumn)
+        if (!firstTime && !data.options.AutumnOnly)
           return output.stored({ effect: output[data.aetherialEffect]() });
       },
       outputStrings: {
@@ -1307,7 +1316,7 @@ Options.Triggers.push({
       // 9606-9609 correspond to the id casts for the triggering Aetherial Conversion,
       // but we don't care which is which at this point because we've already stored the effect
       netRegex: { id: ['9606', '9607', '9608', '9609'], source: 'Wicked Thunder', capture: false },
-      condition: Conditions.notOnlyAutumn(),
+      condition: Conditions.notAutumnOnly(),
       alertText: (data, _matches, output) => output[data.aetherialEffect ?? 'unknown'](),
       outputStrings: tailThrustOutputStrings,
     },
@@ -1335,7 +1344,7 @@ Options.Triggers.push({
       id: 'R4S Wicked Blaze',
       type: 'HeadMarker',
       netRegex: { id: '013C', capture: false },
-      condition: (data) => data.phase === 'crosstail' && !data.options.OnlyAutumn,
+      condition: (data) => data.phase === 'crosstail' && !data.options.AutumnOnly,
       suppressSeconds: 1,
       infoText: (_data, _matches, output) => output.stacks(),
       outputStrings: {
@@ -1562,7 +1571,7 @@ Options.Triggers.push({
       // use the ability line of the preceding Flame Slash cast, as the cast time
       // for Raining Swords is very short.
       netRegex: { id: '9614', source: 'Wicked Thunder', capture: false },
-      condition: Conditions.notOnlyAutumn(),
+      condition: Conditions.notAutumnOnly(),
       alertText: (_data, _matches, output) => output.towers(),
       outputStrings: {
         towers: {
@@ -1815,6 +1824,7 @@ Options.Triggers.push({
           'blueLong': 'blueShort',
         };
         const task = data.seenFirstSunrise ? swapMap[data.ionClusterDebuff] : data.ionClusterDebuff;
+        const isdps = data.party.isDPS(data.me);
         // use bracket notation because cactbot eslint doesn't handle spread operators
         // in outputStrings; see #266 for more info
         let towerSoakStr = output['unknown']();
@@ -1827,9 +1837,9 @@ Options.Triggers.push({
           if (data.options.AutumnStyle) {
             let arrow = 'unknown';
             if (data.sunriseTowerSpots === 'northSouth')
-              arrow = data.imDps ? 'arrowN' : 'arrowS';
+              arrow = isdps ? 'arrowN' : 'arrowS';
             else
-              arrow = data.imDps ? 'arrowE' : 'arrowW';
+              arrow = isdps ? 'arrowE' : 'arrowW';
             towerSoakStr = output[arrow]();
           }
         }
@@ -1840,7 +1850,7 @@ Options.Triggers.push({
             const arrowNames = ['arrowNE', 'arrowSE', 'arrowSW', 'arrowNW', 'unknown'];
             const first = cannonLocs[0] !== undefined ? locPriors.indexOf(cannonLocs[0]) : 4;
             const second = cannonLocs[1] !== undefined ? locPriors.indexOf(cannonLocs[1]) : 4;
-            const select = data.imDps ? Math.min(first, second) : Math.max(first, second);
+            const select = isdps ? Math.min(first, second) : Math.max(first, second);
             const mine = output[arrowNames[select]]();
             const res = task === 'yellowShort' ? 'aYellow' : 'aBlue';
             return output[res]({ loc: mine });
@@ -1928,34 +1938,10 @@ Options.Triggers.push({
     },
     // ========== PRS ==========
     {
-      id: 'R4S PRS Detect Role',
-      type: 'StartsUsing',
-      netRegex: { id: '95EF', source: 'Wicked Thunder', capture: false },
-      suppressSeconds: 9999999,
-      run: (data) => {
-        data.imDps = data.party.isDPS(data.me);
-        if (!data.options.AutumnStyle) {
-          data.myRole = undefined;
-        } else if (data.role === 'tank') {
-          data.myRole = 'tank';
-        } else if (data.role === 'healer') {
-          data.myRole = 'healer';
-        } else if (data.CanFeint()) {
-          data.myRole = 'melee';
-        } else {
-          const aparam = data.options.AutumnParameter;
-          if (aparam !== undefined && (aparam === 'D1' || aparam === 'D2'))
-            data.myRole = 'melee';
-          else
-            data.myRole = 'ranged';
-        }
-      },
-    },
-    {
       id: 'R4S PRS Electrical Condenser Long',
       type: 'GainsEffect',
       netRegex: { effectId: 'F9F', capture: true },
-      condition: (data, matches) => !data.options.OnlyAutumn && parseFloat(matches.duration) > 40,
+      condition: (data, matches) => !data.options.AutumnOnly && parseFloat(matches.duration) > 40,
       delaySeconds: (_data, matches) => parseFloat(matches.duration) - 7,
       suppressSeconds: 5,
       infoText: (data, _matches, output) => {
@@ -1973,7 +1959,7 @@ Options.Triggers.push({
       id: 'R4S PRS Electrical Condenser Short',
       type: 'GainsEffect',
       netRegex: { effectId: 'F9F', capture: true },
-      condition: (data, matches) => !data.options.OnlyAutumn && parseFloat(matches.duration) < 24,
+      condition: (data, matches) => !data.options.AutumnOnly && parseFloat(matches.duration) < 24,
       delaySeconds: (_data, matches) => parseFloat(matches.duration) - 7,
       suppressSeconds: 5,
       infoText: (data, _matches, output) => {
