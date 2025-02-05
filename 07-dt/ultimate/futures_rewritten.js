@@ -1328,12 +1328,29 @@ Options.Triggers.push({
       type: 'Ability',
       netRegex: { id: '9CF5', source: 'Oracle of Darkness', capture: false },
       durationSeconds: 7,
-      alertText: (_data, _matches, output) => output.text(),
+      alertText: (data, _matches, output) => {
+        if (data.options.AutumnOnly) {
+          if (data.role !== 'dps')
+            return data.p3ApocSwap ? output.right() : output.left();
+          return data.p3ApocSwap ? output.left() : output.right();
+        }
+        return output.text();
+      },
       outputStrings: {
         text: {
           en: 'Knockback => Stacks',
           ja: 'ノックバック => あたまわり',
           ko: '넉백 🔜 뭉쳐요',
+        },
+        left: {
+          en: 'Left Knockback => Stacks',
+          ja: '左ノックバック => あたまわり',
+          ko: '🡸왼쪽 넉백 🔜 뭉쳐요',
+        },
+        right: {
+          en: 'Right Knockback => Stacks',
+          ja: '右ノックバック => あたまわり',
+          ko: '오른쪽🡺 넉백 🔜 뭉쳐요',
         },
       },
     },
@@ -1822,6 +1839,34 @@ Options.Triggers.push({
       },
     },
     // //////////////// PHASE 5 //////////////////
+    {
+      id: 'FRU P5 Fulgent Blade',
+      type: 'StartsUsing',
+      netRegex: { id: '9D72', source: 'Pandora', capture: false },
+      response: Responses.bigAoe(),
+    },
+    {
+      id: 'FRU P5 Ark Morn',
+      type: 'StartsUsing',
+      netRegex: { id: '9D76', source: 'Pandora', capture: false },
+      infoText: (_data, _matches, output) => output.text(),
+      outputStrings: {
+        text: Outputs.healerGroups,
+      },
+    },
+    {
+      id: 'FRU P5 Pandora\'s Box',
+      type: 'StartsUsing',
+      netRegex: { id: '9D86', source: 'Pandora', capture: false },
+      delaySeconds: 7,
+      alarmText: (_data, _matches, output) => output.text(),
+      outputStrings: {
+        text: {
+          en: 'Tank LB!',
+          ko: '탱크 리미트브레이크!',
+        },
+      },
+    },
   ],
   timelineReplace: [
     {

@@ -80,7 +80,7 @@ Options.Triggers.push({
           de: 'Laser Verbindungen',
           fr: 'Liens laser',
           ja: 'レーザー線',
-          cn: '镭射连线',
+          cn: '激光连线',
           ko: '레이저 선',
         },
       },

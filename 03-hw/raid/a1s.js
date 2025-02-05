@@ -20,7 +20,7 @@ Options.Triggers.push({
           de: 'Bald abheben',
           fr: 'Décollage bientôt',
           ja: '緊急上昇',
-          cn: '上升',
+          cn: '即将上天',
           ko: '긴급 상승',
         },
       },

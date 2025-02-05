@@ -7,6 +7,7 @@ Options.Triggers.push({
   zoneId: ZoneId.MatchAll,
   comments: {
     en: 'General triggers for all occasions and zones',
+    cn: '适用于所有场合和区域的通用触发器',
   },
   triggers: [
     {
@@ -38,7 +39,7 @@ Options.Triggers.push({
     {
       id: 'General Frog Legs',
       comment: {
-        cn: '仅在非自身小队成员释放“蛙腿”且自身为坦克/治疗/青魔法师时触发。',
+        cn: '仅在自身或团队成员释放“蛙腿”且自身为坦克/治疗/青魔法师时触发。',
       },
       type: 'Ability',
       netRegex: { id: '4783' },
@@ -75,7 +76,7 @@ Options.Triggers.push({
     {
       id: 'General Shirk',
       comment: {
-        cn: '仅在非自身小队成员释放“退避”且自身为坦克/治疗/青魔法师时触发。',
+        cn: '仅在自身或团队成员释放“退避”且自身为坦克/治疗/青魔法师时触发。',
       },
       type: 'Ability',
       netRegex: { id: '1D71' },
@@ -100,7 +101,7 @@ Options.Triggers.push({
     {
       id: 'General Holmgang',
       comment: {
-        cn: '仅在非自身小队成员释放“死斗”且自身为坦克/治疗/青魔法师时触发。',
+        cn: '仅在自身或团队成员释放“死斗”且自身为坦克/治疗/青魔法师时触发。',
       },
       type: 'Ability',
       netRegex: { id: '2B' },
@@ -125,7 +126,7 @@ Options.Triggers.push({
     {
       id: 'General Hallowed',
       comment: {
-        cn: '仅在非自身小队成员释放“神圣领域”且自身为坦克/治疗/青魔法师时触发。',
+        cn: '仅在自身或团队成员释放“神圣领域”且自身为坦克/治疗/青魔法师时触发。',
       },
       type: 'Ability',
       netRegex: { id: '1E' },
@@ -150,7 +151,7 @@ Options.Triggers.push({
     {
       id: 'General Superbolide',
       comment: {
-        cn: '仅在非自身小队成员释放“超火流星”且自身为坦克/治疗/青魔法师时触发。',
+        cn: '仅在自身或团队成员释放“超火流星”且自身为坦克/治疗/青魔法师时触发。',
       },
       type: 'Ability',
       netRegex: { id: '3F18' },
@@ -175,7 +176,7 @@ Options.Triggers.push({
     {
       id: 'General Living',
       comment: {
-        cn: '仅在非自身小队成员释放“行尸走肉”且自身为坦克/治疗/青魔法师时触发。',
+        cn: '仅在自身或团队成员释放“行尸走肉”且自身为坦克/治疗/青魔法师时触发。',
       },
       type: 'Ability',
       netRegex: { id: 'E36' },
@@ -200,7 +201,7 @@ Options.Triggers.push({
     {
       id: 'General Walking',
       comment: {
-        cn: '仅在非自身小队成员获得“死而不僵”且自身为坦克/治疗/青魔法师时触发。',
+        cn: '仅在自身或团队成员获得“死而不僵”且自身为坦克/治疗/青魔法师时触发。',
       },
       type: 'GainsEffect',
       netRegex: { effectId: '32B' },

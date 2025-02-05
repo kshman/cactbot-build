@@ -3,6 +3,7 @@ Options.Triggers.push({
   zoneId: ZoneId.BaelsarsWall,
   comments: {
     en: 'pre-6.3 rework',
+    cn: '6.3改版前',
   },
   timelineFile: 'baelsars_wall.txt',
   timelineTriggers: [
@@ -90,7 +91,7 @@ Options.Triggers.push({
           de: 'Kette von ${player} brechen',
           fr: 'Cassez la chaînes sur ${player}',
           ja: '${player}の線を破れ',
-          cn: '截断${player}的线',
+          cn: '击破 ${player} 的锁链',
           ko: '사슬 부셔요: ${player}',
         },
       },
