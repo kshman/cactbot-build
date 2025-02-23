@@ -60,7 +60,7 @@ const findNorthDirNum = (dirs: number[]): number => {
   }
   return -1;
 };
-type DarkWaterContainer = {
+type DarkWaterTime = {
   time: number;
   dest: PartyMemberParamObject;
 };
@@ -148,7 +148,7 @@ const calcRolePriority = (lh2: boolean, data: Data, dest?: PartyMemberParamObjec
 export interface Data extends RaidbossData {
   readonly triggerSetConfig: {
     autumnConcealed: boolean;
-    sinboundRotate: 'aacc' | 'addposonly'; // aacc = always away, cursed clockwise
+    darklit: 'healerPlantNW' | 'none';
     ctPriority: boolean;
   };
   phase: Phase;
@@ -170,18 +170,22 @@ export interface Data extends RaidbossData {
   p3Role?: UltimateRelativityRole;
   p3Strat: string[];
   p3NoranJul: number[];
-  p3DarkWater: DarkWaterContainer[];
-  p3MyDark?: DarkWaterContainer;
+  p3DarkWater: DarkWaterTime[];
+  p3MyDark?: DarkWaterTime;
   p3ApocSwap?: boolean;
   p3ApocNo?: number;
   p3ApocRot?: 1 | -1; // 1 = clockwise, -1 = counterclockwise
   //
   p4Fragment?: boolean; // 참이면 북쪽, 거짓은 남쪽
-  p4Tether: string[];
-  p4DarkWater: string[];
+  p4AyTetherCount: number;
+  p4AyTethers: { [player: string]: string[] };
+  p4AyCleaves: string[];
+  p4AyStacks: string[];
+  p4AyTowerLoc?: 'north' | 'south';
   p4Crystallize: Crystallize[];
   p4MyCrystallize?: Crystallize;
   p4Parun?: 'left' | 'right';
+  p4Tidals: number[];
   //
   actors: { [id: string]: NetMatches['ActorSetPos'] };
   hourglasses: { [id: string]: NetMatches['AddedCombatant'] };
@@ -207,42 +211,38 @@ const triggerSet: TriggerSet<Data> = {
       default: (options) => options.AutumnOnly,
     },
     {
-      id: 'sinboundRotate',
+      id: 'darklit',
       comment: {
         en:
-          `Always Away, Cursed Clockwise: <a href="https://pastebin.com/ue7w9jJH" target="_blank">LesBin<a>`,
+          `Role Quadrants, Healer Plant NW: <a href="https://pastebin.com/ue7w9jJH" target="_blank">LesBin<a>`,
+        ko: `역할별 산개, 힐러는 언제나 북서: <a href="https://pastebin.com/ue7w9jJH" target="_blank">LesBin<a>`,
       },
       name: {
-        en: 'P2 Diamond Dust / Sinbound Holy',
-        ja: 'P2 ダイアモンドダスト / シンバウンドホーリー',
-        ko: 'P2 다이아몬드 더스트 / 신바운드 홀리',
+        en: 'P4 Darklit Dragonsong',
+        ko: 'P4 다크릿 드래곤송',
       },
       type: 'select',
       options: {
         en: {
-          'Always Away, Cursed Clockwise': 'aacc',
-          'Call Add Position Only': 'addposonly',
-        },
-        ja: {
-          'いつも遠く、呪い時計回り': 'aacc',
-          'リンの位置だけ呼ぶ': 'addposonly',
+          'Role Quads, Healer Plant NW': 'healerPlantNW',
+          'Call Tower/Cone Only': 'none',
         },
         ko: {
-          '언제나 린에서 멀리, 저주 시계방향': 'aacc',
-          '린 위치만 부르기': 'addposonly',
+          '역할별 산개, 힐러는 언제나 북서': 'healerPlantNW',
+          '타워/부채꼴 알림': 'none',
         },
       },
-      default: 'aacc', // `addposonly` is not super helpful, and 'aacc' seems to be predominant
+      default: 'healerPlantNW',
     },
     {
       id: 'ctPriority',
       name: {
-        en: 'P4 Crystallize Time priority',
-        ko: 'P1 크리스탈라이즈 타임 H2를 맨 뒤로',
+        en: 'P4 Crystallize Time, H2 as the last',
+        ko: 'P4 크리스탈라이즈 타임 H2를 맨 뒤로',
       },
       comment: {
-        en: 'P4 Crystallize Time priority',
-        ko: 'P1 크리스탈라이즈 타임 H2를 맨 뒤로',
+        en: 'P4 Crystallize Time, H2 as the last',
+        ko: 'P4 크리스탈라이즈 타임 H2를 맨 뒤로',
       },
       type: 'checkbox',
       default: false,
@@ -260,11 +260,15 @@ const triggerSet: TriggerSet<Data> = {
     p3Strat: [],
     p3NoranJul: [],
     p3DarkWater: [],
-    p4Tether: [],
-    p4DarkWater: [],
+    p4AyTetherCount: 0,
+    p4AyTethers: {},
+    p4AyCleaves: [],
+    p4AyStacks: [],
     p4Crystallize: [],
+    p4Tidals: [],
     actors: {},
     hourglasses: {},
+    //
   }),
   timelineTriggers: [],
   triggers: [
@@ -272,7 +276,8 @@ const triggerSet: TriggerSet<Data> = {
       id: 'FRU 시작!',
       type: 'InCombat',
       netRegex: { inGameCombat: '1', capture: false },
-      durationSeconds: 2,
+      durationSeconds: 3.5,
+      soundVolume: 0,
       infoText: (data, _matches, output) => output.ok!({ moks: data.moks }),
       outputStrings: {
         ok: {
@@ -342,7 +347,7 @@ const triggerSet: TriggerSet<Data> = {
           stay: {
             en: '(Stay)',
             ja: '(そのまま待機)',
-            ko: '(당첨, 대기해욧)',
+            ko: '(당첨, 그대로)',
           },
           safe: {
             en: '${action} ${dir1} / ${dir2}',
@@ -386,7 +391,7 @@ const triggerSet: TriggerSet<Data> = {
           'none': 0, // 없으면 걍 MT
         };
         if (data.p1SafeMarkers.includes(pm[data.moks]))
-          return { alertText: output.stay!() };
+          return { infoText: output.stay!() };
         return { alertText: output.front!() };
       },
     },
@@ -755,68 +760,6 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: 'FRU P2 Twin Knockback Collect',
-      type: 'StartsUsing',
-      netRegex: { id: '9D10' },
-      run: (data, matches) =>
-        data.p2Knockback = AutumnDirections.posConv8(matches.x, matches.y, centerX, centerY),
-    },
-    {
-      id: 'FRU P2 Sinbound Holy Rotation',
-      type: 'Ability',
-      netRegex: { id: '9D0F' },
-      condition: Conditions.targetIsYou(),
-      durationSeconds: 5,
-      infoText: (data, matches, output) => {
-        const start = AutumnDirections.posConv8(matches.targetX, matches.targetY, centerX, centerY);
-        const relPos = calcClockPos(start, data.p2Knockback!);
-        if (data.triggerSetConfig.sinboundRotate === 'aacc')
-          switch (relPos) {
-            case 'same':
-            case 'oppo':
-              return output.aaccCursed!();
-            case 'cw':
-              return output.aaccRotateCCW!();
-            case 'ccw':
-              return output.aaccRotateCW!();
-            default:
-              break;
-          }
-        return output[relPos]!();
-      },
-      run: (data, _matches) => delete data.p2Knockback,
-      outputStrings: {
-        aaccCursed: {
-          en: 'Cursed Add - Fast Clockwise',
-          ko: '빠른 시계방향',
-        },
-        aaccRotateCCW: {
-          en: 'Rotate Counterclockwise (away from add)',
-          ko: '반시계방향 (린 멀리)',
-        },
-        aaccRotateCW: {
-          en: 'Rotate Clockwise (away from add)',
-          ko: '시계방향 (린 멀리)',
-        },
-        same: {
-          en: 'Add is on knockback',
-          ko: '넉백한 곳에 린',
-        },
-        oppo: {
-          en: 'Add is opposite knockback',
-          ko: '넉백 반대쪽에 린',
-        },
-        cw: {
-          en: 'Add is clockwise',
-          ko: '린이 시계방향',
-        },
-        ccw: {
-          en: 'Add is counterclockwise',
-          ko: '린이 반시계방향',
-        },
-      },
-    },
-    {
       id: 'FRU P2 Shining Armor',
       type: 'GainsEffect',
       netRegex: { effectId: '8E1', capture: false },
@@ -1067,6 +1010,7 @@ const triggerSet: TriggerSet<Data> = {
       id: 'FRU P3 Ultimate Relativity Hourglasses Collect',
       type: 'AddedCombatant',
       netRegex: { npcBaseId: '17832' },
+      condition: (data) => data.phase === 'p3ur',
       run: (data, matches) => data.hourglasses[matches.id] = matches,
     },
     {
@@ -1421,7 +1365,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         mesg: {
           en: '${safe} => Stacks',
-          ko: '${safe}회피 🔜 뭉쳐요',
+          ko: '${safe}뭉쳐요',
         },
         cardinals: {
           en: 'Cardinals',
@@ -1438,29 +1382,12 @@ const triggerSet: TriggerSet<Data> = {
       type: 'Ability',
       netRegex: { id: '9CF5', source: 'Oracle of Darkness', capture: false },
       durationSeconds: 7,
-      alertText: (data, _matches, output) => {
-        if (data.options.AutumnOnly) {
-          if (data.role !== 'dps')
-            return data.p3ApocSwap ? output.right!() : output.left!();
-          return data.p3ApocSwap ? output.left!() : output.right!();
-        }
-        return output.text!();
-      },
+      alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
           en: 'Knockback => Stacks',
           ja: 'ノックバック => あたまわり',
           ko: '넉백 🔜 뭉쳐요',
-        },
-        left: {
-          en: 'Left Knockback => Stacks',
-          ja: '左ノックバック => あたまわり',
-          ko: '🡸왼쪽 넉백 🔜 뭉쳐요',
-        },
-        right: {
-          en: 'Right Knockback => Stacks',
-          ja: '右ノックバック => あたまわり',
-          ko: '오른쪽🡺 넉백 🔜 뭉쳐요',
         },
       },
     },
@@ -1486,7 +1413,7 @@ const triggerSet: TriggerSet<Data> = {
       id: 'FRU P4 Fragment of Fate',
       type: 'AddedCombatant',
       netRegex: { npcBaseId: '17841' },
-      durationSeconds: 4,
+      durationSeconds: 6,
       infoText: (data, matches, output) => {
         data.p4Fragment = parseFloat(matches.y) < centerY ? true : false;
         return output.text!({ dir: data.p4Fragment ? output.north!() : output.south!() });
@@ -1505,9 +1432,48 @@ const triggerSet: TriggerSet<Data> = {
       type: 'GainsEffect',
       netRegex: { effectId: '8E1', capture: false },
       condition: (data) => data.phase === 'p4dd',
-      delaySeconds: 4.7,
+      delaySeconds: 4.9,
+      durationSeconds: 2.5,
       suppressSeconds: 1,
       response: Responses.moveAway('alert'),
+    },
+    {
+      id: 'FRU P4 Ark Mon',
+      type: 'StartsUsing',
+      netRegex: { id: '9D6E', source: 'Oracle of Darkness', capture: false },
+      infoText: (data, _matches, output) => {
+        if (
+          (data.phase === 'p4dd' && data.moks === 'ST') ||
+          (data.phase === 'p4ct' && data.moks === 'MT')
+        )
+          return output.tank!();
+        return output.party!();
+      },
+      outputStrings: {
+        tank: {
+          en: 'Out of center + Akh Mon',
+          ko: '혼자 바깥쪽 + 램파트',
+        },
+        party: {
+          en: 'Get Under + Share',
+          ko: '보스 밑 + 뭉쳐요',
+        },
+      },
+    },
+    {
+      id: 'FRU P4 Morn Afah',
+      type: 'StartsUsing',
+      netRegex: { id: '9D70', source: 'Oracle of Darkness', capture: false },
+      durationSeconds: 5,
+      response: Responses.getTogether(),
+    },
+    {
+      id: 'FRU P4 Spirit Taker',
+      type: 'StartsUsing',
+      netRegex: { id: '9D60', source: 'Oracle of Darkness', capture: false },
+      delaySeconds: 0.5,
+      durationSeconds: 2,
+      response: Responses.spread('alert'),
     },
     {
       id: 'FRU P4 Darklit Dragonsong',
@@ -1516,63 +1482,287 @@ const triggerSet: TriggerSet<Data> = {
       response: Responses.bigAoe(),
     },
     {
-      id: 'FRU P4 Refulgent Chain Collect',
+      id: 'FRU P4 Darklit Stacks Collect',
       type: 'GainsEffect',
-      netRegex: { effectId: '8CD' },
+      netRegex: { effectId: '99D' }, // Spell-in-Waiting: Dark Water III
       condition: (data) => data.phase === 'p4dd',
-      run: (data, matches) => data.p4Tether.push(matches.target),
+      run: (data, matches) => data.p4AyStacks.push(matches.target),
     },
     {
-      id: 'FRU P4 Dark Water III',
-      type: 'GainsEffect',
-      netRegex: { effectId: '99D' },
-      condition: (data, matches) => {
-        if (data.phase !== 'p4dd')
-          return false;
-        data.p4DarkWater.push(matches.target);
-        if (data.p4DarkWater.length === 2)
-          return true;
-        return false;
+      id: 'FRU P4 Darklit Tether + Cleave Collect',
+      type: 'Tether',
+      netRegex: { id: '006E' }, // Refulgent Chain
+      condition: (data) => data.phase === 'p4dd',
+      run: (data, matches) => {
+        data.p4AyTetherCount++;
+        (data.p4AyTethers[matches.source] ??= []).push(matches.target);
+        (data.p4AyTethers[matches.target] ??= []).push(matches.source);
+
+        if (data.p4AyTetherCount === 4)
+          data.p4AyCleaves = data.party.partyNames.filter(
+            (name) => !(Object.keys(data.p4AyTethers).includes(name)),
+          );
       },
-      delaySeconds: 2.5,
-      durationSeconds: 5,
-      infoText: (data, _matches, output) => {
-        const players = data.p4DarkWater.map((p) => data.party.member(p).nick).join(', ');
-        return output.text!({ players: players });
-      },
-      outputStrings: {
-        text: {
-          en: '(stacks on ${players})',
-          ko: '(나중에 뭉쳐요: ${players})',
-        },
+    },
+    // The logic for tether swaps, bait swaps, and possible stack swaps is fairly concise.
+    // It's not comprehensive (specifically, we can't determine which DPS need to flex
+    // and when for the cone baits), but otherwise it's accurate.  See inline comments.
+    {
+      id: 'FRU P4 Darklit Tower / Bait',
+      type: 'Tether',
+      netRegex: { id: '006E', capture: false }, // Refulgent Chain
+      condition: (data) => data.phase === 'p4dd' && data.p4AyTetherCount === 4,
+      durationSeconds: 9,
+      response: (data, _matches, output) => {
+        // cactbot-builtin-response
+        output.responseOutputStrings = {
+          towerNoSwap: {
+            en: 'Tower (no swaps)',
+            ko: '타워 밟아요',
+          },
+          towerOtherSwap: {
+            en: 'Tower (${p1} + ${p2} swap)',
+            ko: '타워 밟아요 (${p1}, ${p2})',
+          },
+          towerYouSwap: {
+            en: 'Tower (swap w/${player})',
+            ko: '자리 바꾸고 타워로! (${player})',
+          },
+          tower: { // if no strat set, or cannot determine
+            en: 'Tower',
+            ko: '타워 밟아요',
+          },
+          bait: { // for supports in healerPlantNW, or no strat
+            en: 'Bait Cone',
+            ko: '▲부채꼴 유도',
+          },
+          baitDPS: { // for DPS in healerPlantNW
+            en: 'Bait Cone (w/ ${otherDps})',
+            ko: '▲부채꼴 유도 (${otherDps})',
+          },
+        };
+
+        const isHealerPlantNW = data.triggerSetConfig.darklit === 'healerPlantNW';
+
+        const baitPlayers = data.p4AyCleaves;
+        const towerPlayers = Object.keys(data.p4AyTethers);
+        const myMech = baitPlayers.includes(data.me)
+          ? 'bait'
+          : (towerPlayers.includes(data.me) ? 'tower' : 'none');
+
+        if (myMech === 'none')
+          return;
+        else if (baitPlayers.length !== 4 || towerPlayers.length !== 4)
+          return { alertText: output[myMech]!() };
+        else if (!isHealerPlantNW)
+          return { alertText: output[myMech]!() };
+
+        // Identify the tethered player with the stack marker.
+        const towerStackPlayer = data.p4AyStacks.filter((p) => towerPlayers.includes(p))[0];
+
+        const defaultOutput = { alertText: output[myMech]!() };
+
+        // Map out roles and sanity check that we have 1 tank, 1 healer, and 2 dps in each group
+        // (for the inevitable TankFRU, SoloHealerFRU, etc.)
+        let towerTank = '';
+        let towerHealer = '';
+        const towerDps: string[] = [];
+        for (const player of towerPlayers) {
+          const role = data.party.member(player).role;
+          if (role === 'tank')
+            towerTank = player;
+          else if (role === 'healer')
+            towerHealer = player;
+          else if (role === 'dps')
+            towerDps.push(player);
+          else
+            return defaultOutput;
+        }
+        if (towerTank === '' || towerHealer === '' || towerDps.length !== 2)
+          return defaultOutput;
+
+        let baitTank = '';
+        let baitHealer = '';
+        const baitDps: string[] = [];
+        for (const player of baitPlayers) {
+          const role = data.party.member(player).role;
+          if (role === 'tank')
+            baitTank = player;
+          else if (role === 'healer')
+            baitHealer = player;
+          else if (role === 'dps')
+            baitDps.push(player);
+          else
+            return defaultOutput;
+        }
+        if (baitTank === '' || baitHealer === '' || baitDps.length !== 2)
+          return defaultOutput;
+
+        // Handle tower stuff first.
+        // Figuring out the pattern (bowtie, box, hourglass) to determine who should swap would
+        // (a) require knowing which DPS is which role (M1, M2, R1, R2), or (b) trying to infer
+        // roles + swaps based on player positions when tethers go out. Both options are messy.
+        // But we can make this simple, because tethers always connect 1 tank, 1 healer, and 2 DPS:
+        //   - If a dps is tethered to both a tank & healer, it's bowtie - no swaps.
+        //   - If not, the dps tethered to the tank swaps with the tank (true for hourglass + box).
+        // Once we know this, we also now know whether the tower player with the stack marker
+        // will be in the north or south group (for healerPlantNW).
+
+        // Check if a dps has tank + healer tethers; if so, bowtie. Done.
+        const towerDps1 = towerDps[0] ?? '';
+        const towerDps1Tethers = data.p4AyTethers[towerDps1];
+        if (towerDps1Tethers?.includes(towerTank) && towerDps1Tethers?.includes(towerHealer)) {
+          if (isHealerPlantNW && [towerTank, towerHealer].includes(towerStackPlayer ?? ''))
+            data.p4AyTowerLoc = 'north';
+          else if (isHealerPlantNW)
+            data.p4AyTowerLoc = 'south';
+
+          if (myMech === 'tower')
+            return { infoText: output.towerNoSwap!() };
+        } else {
+          // Not bowtie, so find the DPS that's tethered to the tank.
+          const dpsWithTank = towerDps.find((dps) => data.p4AyTethers[dps]?.includes(towerTank));
+          if (dpsWithTank === undefined)
+            return defaultOutput;
+
+          if (isHealerPlantNW && [towerHealer, dpsWithTank].includes(towerStackPlayer ?? ''))
+            data.p4AyTowerLoc = 'north';
+          else if (isHealerPlantNW)
+            data.p4AyTowerLoc = 'south';
+
+          if (myMech === 'tower') {
+            if (dpsWithTank === data.me)
+              return {
+                alertText: output.towerYouSwap!({
+                  player: data.party.member(towerTank).toString(),
+                }),
+              };
+            else if (towerTank === data.me)
+              return {
+                alertText: output.towerYouSwap!({
+                  player: data.party.member(dpsWithTank).toString(),
+                }),
+              };
+            return {
+              infoText: output.towerOtherSwap!({
+                p1: data.party.member(dpsWithTank).toString(),
+                p2: data.party.member(towerTank).toString(),
+              }),
+            };
+          }
+        }
+
+        // Bait players last.
+        // To properly figure out side-flexing (e.g. M1 and M2 are both baiting), again, we'd need
+        // to know who was in what role or infer it from positions, and no clean solution.
+        // So, instead, we can tell the tank and healer to bait, and we can tell the DPS
+        // who the other DPS baiter is, and let them figure out if that requires a swap. /shrug
+        if ([baitTank, baitHealer].includes(data.me))
+          return { infoText: output.bait!() };
+        else if (baitDps.includes(data.me)) {
+          const otherDps = baitDps.find((dps) => dps !== data.me);
+          if (otherDps === undefined)
+            return defaultOutput;
+          return {
+            alertText: output.baitDPS!({
+              otherDps: data.party.member(otherDps).toString(),
+            }),
+          };
+        }
+
+        return defaultOutput;
       },
     },
     {
-      id: 'FRU P4 Path of Light',
-      type: 'StartsUsing',
-      netRegex: { id: '9CFB', source: 'Usurper of Frost', capture: false },
-      delaySeconds: 3,
-      alertText: (data, _matches, output) =>
-        data.p4Tether.includes(data.me) ? output.tether!() : output.bait!(),
-      outputStrings: {
-        tether: {
-          en: 'Soak Tower',
-          ko: '타워 밟아요',
-        },
-        bait: {
-          en: 'Bait Cleave',
-          ko: '▲부채꼴 유도',
-        },
+      id: 'FRU P4 Darklit Cleave Stack',
+      type: 'Tether',
+      netRegex: { id: '006E', capture: false }, // Refulgent Chain
+      condition: (data) => data.phase === 'p4dd' && data.p4AyTetherCount === 4,
+      delaySeconds: 2, // a little breathing room to process the tower/bait call
+      durationSeconds: 7,
+      response: (data, _matches, output) => {
+        // cactbot-builtin-response
+        output.responseOutputStrings = {
+          stackOnYou: { // default/fallthrough
+            en: '(stack on you later)',
+            ko: '(나랑 뭉쳐요)',
+          },
+          // stack is on you
+          stackOnYouNoSwap: {
+            en: '(stack on you later - no swap)',
+            ko: '(그대로 나랑 뭉쳐요)',
+          },
+          stackOnYouSwap: {
+            en: '(stacks: You swap)',
+            ko: '(뭉치기 자리 조정)',
+          },
+          // stack on someone else (not your role), so you may be required to swap
+          stackOnYouSwapWith: {
+            en: '(stacks: swap w/ ${other})',
+            ko: '(뭉치기 조정: ${other})',
+          },
+        };
+        const isHealerPlantNW = data.triggerSetConfig.darklit === 'healerPlantNW';
+
+        // Only bother with output if the player is baiting, and if we can tell which baiter has the stack
+        const baitPlayers = data.p4AyCleaves;
+        const baitStackPlayer = data.p4AyStacks.find((p) => baitPlayers.includes(p));
+        if (baitStackPlayer === undefined || !baitPlayers.includes(data.me))
+          return {};
+        const stackName = data.party.member(baitStackPlayer).toString();
+
+        const isStackOnMe = data.me === baitStackPlayer;
+        const defaultOutput = isStackOnMe ? { infoText: output.stackOnYou!() } : {};
+        const myRole = data.role;
+        const stackRole = data.party.member(baitStackPlayer).role;
+        if (stackRole === undefined)
+          return defaultOutput;
+
+        // Sanity check for non-standard party comp, or this trigger won't work
+        const tankCount = baitPlayers.filter((p) => data.party.member(p)?.role === 'tank').length;
+        const healerCount =
+          baitPlayers.filter((p) => data.party.member(p)?.role === 'healer').length;
+        const dpsCount = baitPlayers.filter((p) => data.party.member(p)?.role === 'dps').length;
+        if (tankCount !== 1 || healerCount !== 1 || dpsCount !== 2)
+          return defaultOutput;
+
+        const baitStackLoc = stackRole === 'dps' ? 'south' : 'north';
+        if (data.p4AyTowerLoc === undefined || !isHealerPlantNW)
+          return defaultOutput;
+        const towerStackLoc = data.p4AyTowerLoc;
+
+        // if stacks are already split N/S, no swaps required
+        // TODO: Could return an infoText indicating the baiter with the stack doesn't need to swap?
+        if (baitStackLoc !== towerStackLoc)
+          return isStackOnMe
+            ? { infoText: output.stackOnYouNoSwap!() }
+            : defaultOutput; // could return a infoText indicating no swaps are needed?
+
+        // stacks are together, so we need to call for a swap
+        if (isStackOnMe)
+          return { alertText: output.stackOnYouSwap!() };
+
+        // if the stack is on the other dps/support, player doesn't have to do anything
+        // TODO: Could return an infoTexts indicating the bait with the stack needs to swap?
+        if (
+          (myRole === 'dps' && stackRole === 'dps') ||
+          (myRole === 'healer' && stackRole === 'tank') ||
+          (myRole === 'tank' && stackRole === 'healer')
+        )
+          return defaultOutput;
+
+        // if the stack is on the other role, the player may have to swap
+        // but we don't know which DPS is the melee (for tank swap) or ranged (for healer swap)
+        // so we have to leave it up to the player to figure out
+        if (myRole === 'healer' || myRole === 'tank')
+          return { alertText: output.stackOnYouSwapWith!({ other: stackName }) };
+        else if (myRole === 'dps' && stackRole === 'healer')
+          return { alertText: output.stackOnYouSwapWith!({ other: stackName }) };
+        else if (myRole === 'dps' && stackRole === 'tank')
+          return { alertText: output.stackOnYouSwapWith!({ other: stackName }) };
+
+        return defaultOutput;
       },
-    },
-    {
-      id: 'FRU P4 Spirit Taker',
-      type: 'StartsUsing',
-      netRegex: { id: '9D60', source: 'Oracle of Darkness', capture: false },
-      condition: (data) => data.phase === 'p4dd' || data.phase === 'p4ct',
-      delaySeconds: 0.5,
-      durationSeconds: 2,
-      response: Responses.spread('alert'),
     },
     {
       id: 'FRU P4 Hallowed Wings',
@@ -1599,7 +1789,7 @@ const triggerSet: TriggerSet<Data> = {
       type: 'Ability',
       // 9D23 할로우드 윙 (Usurper of Frost)
       // 9D5B 이게 원래 소머 댄스 (Oracle of Darkness)
-      netRegex: { id: '9D23', source: 'Usurper of Frost', capture: false },
+      netRegex: { id: '9D23', capture: false },
       condition: (data) => data.phase === 'p4dd' && data.moks === 'MT',
       durationSeconds: 3,
       alertText: (_data, _matches, output) => output.tank!(),
@@ -1613,7 +1803,7 @@ const triggerSet: TriggerSet<Data> = {
     {
       id: 'FRU P4 Somber Dance Follow',
       type: 'Ability',
-      netRegex: { id: '9D5B', source: 'Oracle of Darkness', capture: false },
+      netRegex: { id: '9D5B', capture: false },
       condition: (data) => data.phase === 'p4dd' && data.moks === 'MT',
       durationSeconds: 2,
       alertText: (_data, _matches, output) => output.tank!(),
@@ -1625,38 +1815,10 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: 'FRU P4 Ark Mon',
-      type: 'StartsUsing',
-      netRegex: { id: '9D6E', source: 'Oracle of Darkness', capture: false },
-      infoText: (data, _matches, output) => {
-        if (
-          (data.phase === 'p4dd' && data.moks === 'MT') ||
-          (data.phase === 'p4ct' && data.moks === 'ST')
-        )
-          return output.tank!();
-        return output.party!();
-      },
-      outputStrings: {
-        tank: {
-          en: 'Out of center + Akh Mon',
-          ko: '혼자 바깥쪽 + 램파트',
-        },
-        party: {
-          en: 'Get Under + Share',
-          ko: '보스 밑 + 뭉쳐요',
-        },
-      },
-    },
-    {
-      id: 'FRU P4 Morn Afah',
-      type: 'StartsUsing',
-      netRegex: { id: '9D70', source: 'Oracle of Darkness', capture: false },
-      response: Responses.stackMarker(),
-    },
-    {
       id: 'FRU P4 Crystallize Time',
       type: 'StartsUsing',
       netRegex: { id: '9D6A', source: 'Oracle of Darkness', capture: false },
+      durationSeconds: 7,
       response: Responses.bigAoe(),
       run: (data) => data.hourglasses = {},
     },
@@ -1664,6 +1826,7 @@ const triggerSet: TriggerSet<Data> = {
       id: 'FRU P4 Crystallize Time Hourglasses Collect',
       type: 'AddedCombatant',
       netRegex: { npcBaseId: '17837' },
+      condition: (data) => data.phase === 'p4ct',
       run: (data, matches) => data.hourglasses[matches.id] = matches,
     },
     {
@@ -1764,35 +1927,35 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         eruption: {
-          en: '${arrow} North',
+          en: '${arrow} Eruption',
           ko: '${arrow} 🫂이럽션',
         },
         unholy: {
-          en: '${arrow} South',
+          en: '${arrow} Unholy',
           ko: '${arrow} 🪜언홀리',
         },
         water: {
-          en: '${arrow} South',
+          en: '${arrow} Water',
           ko: '${arrow} 💧워터',
         },
         bice: {
-          en: '${arrow} South',
+          en: '${arrow} Blizzard',
           ko: '${arrow} ❄️블리자드',
         },
         lrice: {
-          en: 'West${arrow}',
+          en: 'Left Blizzard${arrow}',
           ko: '🡸 ❄️블리자드${arrow}',
         },
         rrice: {
-          en: 'East${arrow}',
+          en: 'Right Blizzard${arrow}',
           ko: '🡺 ❄️블리자드${arrow}',
         },
         laero: {
-          en: 'Southwest${arrow}',
+          en: 'Left Aero${arrow}',
           ko: '🡿 🍃에어로${arrow}',
         },
         raero: {
-          en: 'Southeast${arrow}',
+          en: 'Right Aero${arrow}',
           ko: '🡾 🍃에어로${arrow}',
         },
         arrowNW: Outputs.arrowNW,
@@ -1842,11 +2005,11 @@ const triggerSet: TriggerSet<Data> = {
         },
         laero: {
           en: 'Cross point',
-          ko: '럭비공 모서리으로',
+          ko: '럭비공 모서리',
         },
         raero: {
           en: 'Cross point',
-          ko: '럭비공 모서리으로',
+          ko: '럭비공 모서리',
         },
         unknown: Outputs.unknown,
       },
@@ -1902,19 +2065,79 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: 'FRU P4 CT4',
-      type: 'GainsEffect',
-      netRegex: { effectId: '99B' },
-      condition: (data, matches) => data.phase === 'p4ct' && data.me === matches.target,
-      delaySeconds: 33 - 4,
-      durationSeconds: 4,
-      countdownSeconds: 4,
-      infoText: (_data, _matches, output) => output.text!(),
+      id: 'FRU P4 CT Blue Cleanse',
+      type: 'Ability',
+      netRegex: { id: '9D55', capture: false }, // Unholy Darkness
+      condition: (data) => data.phase === 'p4ct',
+      delaySeconds: 2,
+      durationSeconds: 6,
+      suppressSeconds: 1,
+      infoText: (data, _matches, output) => {
+        if (data.p4MyCrystallize === undefined)
+          return;
+        if (data.p4MyCrystallize.color !== 'blue')
+          return;
+        return output.cleanse!();
+      },
       outputStrings: {
-        text: {
-          en: 'Place return',
-          ko: '리턴 설치 위치로!',
+        cleanse: {
+          en: 'Cleanse',
+          ko: '용머리 줏어요',
         },
+      },
+    },
+    {
+      id: 'FRU P4 Tidal Light Collect',
+      type: 'StartsUsing',
+      netRegex: { id: '9D3B' },
+      condition: (data) => data.phase === 'p4ct',
+      run: (data, matches) => {
+        const dir = AutumnDirections.posConv8(matches.x, matches.y, centerX, centerY);
+        data.p4Tidals.push(dir);
+      },
+    },
+    {
+      id: 'FRU P4 CT Drop Rewind',
+      type: 'GainsEffect',
+      netRegex: { effectId: '1070' }, // Spell-in-Waiting: Return
+      condition: (data, matches) => data.phase === 'p4ct' && data.me === matches.target,
+      delaySeconds: (_data, matches) => parseFloat(matches.duration) - 6,
+      countdownSeconds: 6,
+      infoText: (data, _matches, output) => {
+        const unknownStr = output.rewind!({ spot: output.unknown!() });
+        if (data.p4Tidals.length !== 2)
+          return unknownStr;
+
+        // re-use findURNorthDirNum() to find the intercard between the two starting Tidal spots
+        const intersectDirNum = findNorthDirNum(data.p4Tidals);
+        if (intersectDirNum === -1)
+          return unknownStr;
+
+        if (data.options.AutumnOnly) {
+          const north = [0, 1, 7];
+          const mk = north.includes(intersectDirNum) ? output.marka!() : output.markc!();
+          return output.arewind!({ spot: mk });
+        }
+
+        const dir = AutumnDirections.outputFromMarker8Num(intersectDirNum);
+        if (dir === undefined)
+          return unknownStr;
+
+        return output.rewind!({ spot: output[dir]!() });
+      },
+      outputStrings: {
+        rewind: {
+          en: 'Drop Rewind: ${spot}',
+          ko: '리턴 설치 ${spot}',
+        },
+        arewind: {
+          en: 'Drop Rewind: near ${spot}',
+          ko: '리턴 설치 ${spot}기준',
+        },
+        marka: Outputs.cmarkA,
+        markc: Outputs.cmarkC,
+        unknown: Outputs.unknown,
+        ...AutumnDirections.outputStringsMarker8,
       },
     },
     {
@@ -1928,11 +2151,11 @@ const triggerSet: TriggerSet<Data> = {
         data.role === 'tank' ? output.tank!() : output.party!(),
       outputStrings: {
         tank: {
-          en: 'Buf + Arm\'s length',
-          ko: '40% 경감 + 암렝!',
+          en: 'Buf + Knockback',
+          ko: '경감 + 암렝!',
         },
         party: {
-          en: 'Arm\'s length',
+          en: 'Knockback',
           ko: '암렝!',
         },
       },
@@ -1943,11 +2166,14 @@ const triggerSet: TriggerSet<Data> = {
       netRegex: { id: '9D71', source: 'Oracle of Darkness', capture: false },
       run: (data) => {
         delete data.p4Fragment;
-        data.p4Tether = [];
-        data.p4DarkWater = [];
+        data.p4AyTethers = {};
+        data.p4AyCleaves = [];
+        data.p4AyStacks = [];
+        delete data.p4AyTowerLoc;
         data.p4Crystallize = [];
         delete data.p4MyCrystallize;
         delete data.p4Parun;
+        data.p4Tidals = [];
       },
     },
     // //////////////// PHASE 5 //////////////////
@@ -1979,6 +2205,9 @@ const triggerSet: TriggerSet<Data> = {
         },
       },
     },
+    // //////////////////////////////////////////////
+    // p4 test
+    // //////////////////////////////////////////////
   ],
   timelineReplace: [
     {
@@ -1990,6 +2219,10 @@ const triggerSet: TriggerSet<Data> = {
         'Dark Fire III/Unholy Darkness': '(spreads/stack)',
         'Dark Fire III/Dark Blizzard III/Unholy Darkness': '(spreads/donut/stack)',
         'Shadoweye/Dark Water III/Dark Eruption': '(gazes/stack/spreads)',
+        'Dark Water III + Hallowed Wings': '(cleave + stacks)',
+        'Dark Blizzard III + Dark Eruption + Dark Aero III': '(donut + spread + KBs)',
+        'The Path of Darkness + The Path of Light': '(exa-lines)',
+        'Cruel Path of Darkness + Cruel Path of Light': 'Polarizing Paths',
       },
     },
     {

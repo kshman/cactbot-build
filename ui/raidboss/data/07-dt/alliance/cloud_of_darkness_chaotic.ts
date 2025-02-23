@@ -61,6 +61,7 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: 'Cleanse Doom',
           ja: '死の宣告にエスナ',
+          cn: '驱散死宣',
           ko: '에스나 써줘요!',
         },
       },
@@ -107,6 +108,8 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         combo: {
           en: '${action} => ${scast}',
+          ja: '${action} => ${scast}',
+          cn: '${action} => ${scast}',
           ko: '${action} 🔜 ${scast}',
         },
         out: Outputs.out,
