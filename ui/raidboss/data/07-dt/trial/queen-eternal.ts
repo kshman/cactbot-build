@@ -84,6 +84,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         repeatedAOE: {
           en: 'Continuous light AoE',
+          cn: '连续小AoE',
           ko: '연속 격자 장판',
         },
       },
@@ -128,6 +129,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         regaliaYou: {
           en: 'Laser tether on YOU',
+          cn: '激光连线点名',
           ko: '내게 유도 레이저 줄',
         },
       },
@@ -156,6 +158,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         floating: {
           en: 'Gravitation -- Levitating',
+          cn: '重力 -- 上浮',
           ko: '곧 뜰꺼예요!',
         },
       },
@@ -173,6 +176,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         falling: {
           en: 'Gravitation -- Falling',
+          cn: '重力 -- 下降',
           ko: '곧 내려가요!',
         },
       },
@@ -190,6 +194,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         floating: {
           en: 'Gravitation -- Levitating',
+          cn: '重力 -- 上浮',
           ko: '곧 뜰꺼예요!',
         },
       },
@@ -211,10 +216,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         fallCastle: {
           en: 'In front of ground windows',
+          cn: '正对下层空洞',
           ko: '아랫쪽 구멍으로',
         },
         floatCastle: {
           en: 'In front of middle windows',
+          cn: '正对上层空洞',
           ko: '윗쪽 구멍으로',
         },
       },
@@ -227,6 +234,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         getInDonut: {
           en: 'Get in robot circle',
+          cn: '小月环',
           ko: '로봇 동글이 안으로',
         },
       },
@@ -255,6 +263,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         gazeLater: {
           en: 'Gaze on you soon',
+          cn: '石化眼点名',
           ko: '내게 곧 눈깔',
         },
       },
@@ -279,10 +288,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         shriekYou: {
           en: 'Gaze -- look away from ${otherTarget}',
+          cn: '石化眼 -- 背对 ${otherTarget}',
           ko: '내게 눈깔! 자리 비켜줘욧! (${otherTarget})',
         },
         shriekOthers: {
           en: 'Look away from ${comboTargets}',
+          cn: '背对 ${comboTargets}',
           ko: '보면 안되요: ${comboTargets}',
         },
       },
@@ -296,6 +307,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         bombLater: {
           en: 'Acceleration Bomb soon',
+          cn: '稍后 加速度炸弹',
           ko: '곧 가속 폭탄',
         },
       },
@@ -323,6 +335,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         flareMarker: {
           en: 'Flare on YOU',
+          cn: '核爆点名',
           ko: '내게 플레어',
         },
       },
@@ -352,6 +365,46 @@ const triggerSet: TriggerSet<Data> = {
           cn: 'AoE (5次)',
           ko: '5x 전체공격',
         },
+      },
+    },
+  ],
+  timelineReplace: [
+    {
+      'locale': 'cn',
+      'replaceSync': {
+        'Queen Eternal': '永恒女王',
+      },
+      'replaceText': {
+        '\\(abandonment\\)': '(孤独感)',
+        '\\(all\\)': '(全体)',
+        '\\(cast\\)': '(咏唱)',
+        '\\(cones': '(锥形',
+        '\\(flare\\)': '(核爆)',
+        '\\(gaze\\)': '(石化光)',
+        '\\(pre-cast\\)': '(预咏唱)',
+        '\\(puddles': '(放圈',
+        '\\(raidwide\\)': '(全域)',
+        '\\(single\\)': '(单体)',
+        '\\(stun\\)': '(眩晕)',
+        'Absolute Authority': '绝对君权',
+        'Aethertithe': '以太税',
+        'Authority\'s Hold': '空间掌控：制动',
+        'Besiegement': '激突',
+        'Brutal Crown': '王权残暴',
+        'Castellation': '护城墙',
+        'Coronation': '终端发射',
+        'Divide And Conquer': '分治法',
+        'Downburst': '下行突风',
+        'Dynastic Diadem': '王冠之力',
+        'Legitimate Force': '合法武力',
+        'Morning Stars': '黎明的群星',
+        'Powerful Gust': '强风',
+        'Prosecution Of War': '诉诸武力',
+        'Royal Banishment': '放逐射线',
+        'Royal Domain': '王土',
+        'Ruthless Regalia': '王法无情',
+        'Virtual Shift': '虚景切换',
+        'Waltz of the Regalia': '王权圆舞曲',
       },
     },
   ],
