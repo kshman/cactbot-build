@@ -34,6 +34,7 @@ Options.Triggers.push({
         text: {
           en: 'Cleanse Doom',
           ja: '死の宣告にエスナ',
+          cn: '驱散死宣',
           ko: '에스나 써줘요!',
         },
       },
@@ -80,6 +81,8 @@ Options.Triggers.push({
       outputStrings: {
         combo: {
           en: '${action} => ${scast}',
+          ja: '${action} => ${scast}',
+          cn: '${action} => ${scast}',
           ko: '${action} 🔜 ${scast}',
         },
         out: Outputs.out,

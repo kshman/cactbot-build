@@ -1,8 +1,18 @@
-// Note: without extra network data that is not exposed, it seems impossible to know where Titan
-// looks briefly before jumping for Geocrush. A getCombatants trigger on NameToggle 00 was
-// extremely inaccurate and so that is likely too late to know.
 const centerX = 100;
 const centerY = 100;
+// Using the "from" point, returns the heading (in radians) between the
+// negative (south) y-axis and the ray to the "to" point.
+const getRelativeHdg = (toX, toY, fromX, fromY) => {
+  const deltaX = toX - fromX;
+  const deltaY = toY - fromY;
+  return Math.atan2(deltaX, deltaY);
+};
+const jumpSites = [
+  { jump: 'dirW', x: 86.0, y: 100.0, safe: 'dirE' },
+  { jump: 'dirE', x: 114.0, y: 100.0, safe: 'dirW' },
+  { jump: 'dirN', x: 100.0, y: 86.0, safe: 'dirS' },
+  { jump: 'dirS', x: 100.0, y: 114.0, safe: 'dirN' },
+];
 const gaolConfig = (id) => {
   // Since these are all explicit string types, get the number from the string.
   const numStr = id.replace('gaolOrder', '');
@@ -82,6 +92,7 @@ Options.Triggers.push({
       nailDeaths: {},
       nailDeathOrder: [],
       ifritUntargetableCount: 0,
+      seenTitanFirstJump: false,
       titanGaols: [],
       titanBury: [],
       ifritRadiantPlumeLocations: [],
@@ -244,7 +255,7 @@ Options.Triggers.push({
             de: 'Tank Cleave (GRUPPE RAUS)',
             fr: 'Tank cleave (Groupe à l\'extérieur)',
             ja: 'タンク頭割り (PTは外へ)',
-            cn: '坦克顺劈 (人群出)',
+            cn: '坦克顺劈 (人群避开)',
             ko: '탱크 쪼개기 (본대 밖으로)',
           },
         };
@@ -345,7 +356,7 @@ Options.Triggers.push({
         fr:
           'L\'emplacement des deux sœurs à bloquer pour les tanks. dir1 est toujours le premier emplacement de la sœur en commençant par le nord et en allant dans le sens des aiguilles d\'une montre.',
         ja: 'タンクがブロックする2人の分身の位置。dir1 は基本的に「北」から始まり、時計回りに最初の分身の位置に戻ります。',
-        cn: '两分身待坦克阻挡的位置。dir1 始终是从上 (北) 开始顺时针方向的第一个分身位置',
+        cn: '两分身待坦克阻挡的位置。dir1 始终是从地图上方开始顺时针方向的第一个分身位置',
         ko: '탱커가 막을 두 분신의 위치. dir1은 북쪽에서 시계방향으로 도는 것을 기준으로 항상 첫 번째 분신의 위치입니다',
       },
       type: 'StartsUsing',
@@ -1017,12 +1028,71 @@ Options.Triggers.push({
           de: 'Stack',
           fr: 'Packez-vous',
           ja: '頭割り',
-          cn: '集合',
+          cn: '集合分摊',
           ko: '뭉쳐요',
         },
       },
     },
     // --------- Titan ----------
+    {
+      id: 'UWU Titan Last Move Collector',
+      type: 'ActorMove',
+      netRegex: { id: '4[0-9a-fA-F]{7}', capture: true },
+      condition: (data, matches) =>
+        data.phase === 'titan' &&
+        data.bossId.titan === matches.id,
+      run: (data, matches) => {
+        data.lastTitanMove = matches;
+      },
+    },
+    {
+      id: 'UWU Titan Jump Direction',
+      type: 'NameToggle',
+      netRegex: { id: '4[0-9a-fA-F]{7}', toggle: '00', capture: true },
+      condition: (data, matches) =>
+        data.phase === 'titan' &&
+        data.bossId.titan === matches.id &&
+        data.lastTitanMove !== undefined,
+      // There is sometimes a "late" ActorMove packet that can arrive anywhere from ~45-180ms after
+      // the NameToggle packet. A delay of 0.4s should be enough for safety without a belated call.
+      delaySeconds: 0.4,
+      alertText: (data, _matches, output) => {
+        const unknownStr = output.safe({ dir: output.unknown() });
+        const lastMove = data.lastTitanMove;
+        // For the first jump, if the MT maintains precise north-facing positioning until the jump,
+        // it's possible no ActorMove packet will be sent.
+        // In that case, assume Titan is north-facing (south safe).
+        if (lastMove === undefined)
+          return data.seenTitanFirstJump ? unknownStr : output.safe({ dir: output['dirS']() });
+        const titanX = parseFloat(lastMove.x);
+        const titanY = parseFloat(lastMove.y);
+        const titanHdg = parseFloat(lastMove.heading);
+        // Titan's final heading will be facing one of the four cardinal jump sites.
+        // We can identify the correct site by comparing Titan's heading to the heading of the
+        // jump site (toward Titan) where the difference is +/-pi -- in other words, a
+        // 180-degree angle deviation indicative of an identical ray.
+        for (const site of jumpSites) {
+          const hdgToTitan = getRelativeHdg(titanX, titanY, site.x, site.y);
+          const ray = Math.abs(titanHdg - hdgToTitan);
+          if (ray >= 3 && ray <= 3.28) // should be pi, but allow for rounding errors etc.
+            return output.safe({ dir: output[site.safe]() });
+        }
+        return unknownStr;
+      },
+      run: (data) => data.seenTitanFirstJump = true,
+      outputStrings: {
+        safe: {
+          en: 'Safe: ${dir}',
+          de: 'Sicher: ${dir}',
+          fr: 'Sur : ${dir}',
+          ja: '安地: ${dir}',
+          cn: '安全区: ${dir}',
+          ko: '안전: ${dir}',
+        },
+        unknown: Outputs.unknown,
+        ...Directions.outputStringsCardinalDir,
+      },
+    },
     {
       id: 'UWU Titan Bury Direction',
       type: 'AddedCombatant',
@@ -1474,7 +1544,7 @@ Options.Triggers.push({
           de: 'Laser (Norden)',
           fr: 'Laser (Nord)',
           ja: 'レーザー (北)',
-          cn: '右侧激光',
+          cn: '上半场激光',
           ko: '북쪽 레이저',
         },
       },
@@ -1490,7 +1560,7 @@ Options.Triggers.push({
           de: 'Laser (Osten)',
           fr: 'Laser (Est)',
           ja: 'レーザー (東)',
-          cn: '左侧激光',
+          cn: '右半场激光',
           ko: '동쪽 레이저',
         },
       },

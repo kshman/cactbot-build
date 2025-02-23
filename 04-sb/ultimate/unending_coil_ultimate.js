@@ -2,6 +2,16 @@ const resetTrio = (data, trio) => {
   data.trio = trio;
   data.shakers = [];
   data.megaStack = [];
+  data.combatantData = {};
+};
+const posToAngle = (pos) => {
+  return xyStringToAngle(pos.x, pos.y);
+};
+const xyStringToAngle = (x, y) => {
+  return xyToAngle(parseFloat(x), parseFloat(y));
+};
+const xyToAngle = (x, y) => {
+  return (Math.round(180 - 180 * Math.atan2(x, y) / Math.PI) % 360);
 };
 const centerX = 0;
 const centerY = 0;
@@ -133,12 +143,37 @@ const findDragonMarks = (array) => {
 Options.Triggers.push({
   id: 'TheUnendingCoilOfBahamutUltimate',
   zoneId: ZoneId.TheUnendingCoilOfBahamutUltimate,
+  config: [
+    {
+      id: 'heavensfallTowerPosition',
+      comment: {
+        en:
+          `With a tower at Nael being position 1, rotating clockwise, your tower position. e.g. H1 in <a href="https://clees.me/guides/ucob/" target="_blank">Clees' guide</a> is position 7.`,
+      },
+      name: {
+        en: 'P3 Heavensfall Tower Position',
+      },
+      type: 'select',
+      options: {
+        en: {
+          'Disable tower callout': 'disabled',
+          'Position 1': '0',
+          'Position 2': '1',
+          'Position 3': '2',
+          'Position 4': '3',
+          'Position 5': '4',
+          'Position 6': '5',
+          'Position 7': '6',
+          'Position 8': '7',
+        },
+      },
+      default: 'disabled',
+    },
+  ],
   timelineFile: 'unending_coil_ultimate.txt',
   initData: () => {
     return {
       partyList: {},
-      monitoringHP: false,
-      hpThresholds: [0, 0, 0.75, 0.45],
       currentPhase: 2,
       fireDebuff: false,
       iceDebuff: false,
@@ -158,10 +193,12 @@ Options.Triggers.push({
       unsafeThirdMark: false,
       naelDiveMarkerCount: 0,
       trioSourceIds: {},
-      combatantData: [],
+      combatantData: {},
+      heavensfallTowerSpots: [],
       shakers: [],
       megaStack: [],
       octetMarker: [],
+      octetTwinDir: -1,
       exaflareCount: 0,
       akhMornCount: 0,
       mornAfahCount: 0,
@@ -235,48 +272,43 @@ Options.Triggers.push({
       id: 'UCU Quickmarch Phase',
       type: 'StartsUsing',
       netRegex: { id: '26E2', source: 'Bahamut Prime', capture: false },
+      delaySeconds: 1,
       run: (data) => resetTrio(data, 'quickmarch'),
     },
     {
       id: 'UCU Blackfire Phase',
       type: 'StartsUsing',
       netRegex: { id: '26E3', source: 'Bahamut Prime', capture: false },
+      delaySeconds: 1,
       run: (data) => resetTrio(data, 'blackfire'),
     },
     {
       id: 'UCU Fellruin Phase',
       type: 'StartsUsing',
       netRegex: { id: '26E4', source: 'Bahamut Prime', capture: false },
+      delaySeconds: 1,
       run: (data) => resetTrio(data, 'fellruin'),
     },
     {
       id: 'UCU Heavensfall Phase',
       type: 'StartsUsing',
       netRegex: { id: '26E5', source: 'Bahamut Prime', capture: false },
+      delaySeconds: 1,
       run: (data) => resetTrio(data, 'heavensfall'),
     },
     {
       id: 'UCU Tenstrike Phase',
       type: 'StartsUsing',
       netRegex: { id: '26E6', source: 'Bahamut Prime', capture: false },
+      delaySeconds: 1,
       run: (data) => resetTrio(data, 'tenstrike'),
     },
     {
       id: 'UCU Octet Phase',
       type: 'StartsUsing',
       netRegex: { id: '26E7', source: 'Bahamut Prime', capture: false },
+      delaySeconds: 1,
       run: (data) => resetTrio(data, 'octet'),
-    },
-    {
-      id: 'UCU Ragnarok Party Tracker',
-      type: 'Ability',
-      netRegex: { id: '26B8', source: 'Ragnarok' },
-      run: (data, matches) => {
-        // This happens once during the nael transition and again during
-        // the heavensfall trio.  This should proooobably hit all 8
-        // people by the time you get to octet.
-        data.partyList[matches.target] = true;
-      },
     },
     // --- Twintania ---
     {
@@ -322,7 +354,7 @@ Options.Triggers.push({
           de: 'Ausbrüten auf DIR',
           fr: 'Éclosion sur VOUS',
           ja: '自分に魔力爆散',
-          cn: '点名魔力爆散',
+          cn: '黑球点名',
           ko: '내게 마력연성',
         },
       },
@@ -345,7 +377,7 @@ Options.Triggers.push({
           de: 'Ausbrüten: ${players}',
           fr: 'Éclosion : ${players}',
           ja: '魔力爆散${players}',
-          cn: '魔力爆散${players}',
+          cn: '黑球点：${players}',
           ko: '마력연성: ${players}',
         },
       },
@@ -359,25 +391,14 @@ Options.Triggers.push({
     },
     {
       id: 'UCU Twintania Phase Change Watcher',
-      type: 'StartsUsing',
-      // On Twister or Generate.
-      netRegex: { id: '26A[AE]', source: 'Twintania' },
-      condition: (data) => !data.monitoringHP && data.hpThresholds[data.currentPhase] !== undefined,
-      preRun: (data) => data.monitoringHP = true,
-      promise: (data, matches) =>
-        Util.watchCombatant({
-          ids: [parseInt(matches.sourceId, 16)],
-        }, (ret) => {
-          return ret.combatants.some((c) => {
-            const currentHPCheck = data.hpThresholds[data.currentPhase] ?? -1;
-            return c.CurrentHP / c.MaxHP <= currentHPCheck;
-          });
-        }),
+      type: 'CombatantMemory',
+      // When Neurolink spawns
+      netRegex: { id: '40[0-9A-F]{6}', pair: [{ key: 'BNpcID', value: '1E88FF' }], capture: false },
+      condition: (data) => data.currentPhase < 4,
       sound: 'Long',
       infoText: (data, _matches, output) => output.text({ num: data.currentPhase }),
       run: (data) => {
         data.currentPhase++;
-        data.monitoringHP = false;
       },
       outputStrings: {
         text: {
@@ -443,7 +464,7 @@ Options.Triggers.push({
           de: 'Stack => Rein',
           fr: 'Packez-vous => Intérieur',
           ja: '頭割り => 密着',
-          cn: '集合 => 靠近',
+          cn: '分摊 => 靠近',
           ko: '뭉쳤다 🔜 안으로',
         },
       },
@@ -461,7 +482,7 @@ Options.Triggers.push({
           de: 'Stack => Raus',
           fr: 'Packez-vous => Extérieur',
           ja: '頭割り => 離れ',
-          cn: '集合 => 远离',
+          cn: '分摊 => 远离',
           ko: '뭉쳤다 🔜 밖으로',
         },
       },
@@ -479,7 +500,7 @@ Options.Triggers.push({
           de: 'Rein => Stack',
           fr: 'Intérieur => Packez-vous',
           ja: '密着 => 頭割り',
-          cn: '靠近 => 集合',
+          cn: '靠近 => 分摊',
           ko: '안으로 🔜 뭉쳐요',
         },
       },
@@ -518,7 +539,7 @@ Options.Triggers.push({
           de: 'Weg vom Tank => Stack',
           fr: 'Éloignez-vous du tank => Packez-vous',
           ja: 'タンクから離れ => 頭割り',
-          cn: '远离坦克 => 集合',
+          cn: '远离坦克 => 分摊',
           ko: '탱크 피했다 🔜 뭉쳐요',
         },
       },
@@ -615,7 +636,7 @@ Options.Triggers.push({
           de: 'Rein => Verteilen => Stack',
           fr: 'Intérieur => Dispersion => Package',
           ja: '密着 => 散開 => 頭割り',
-          cn: '靠近 => 分散 => 集合',
+          cn: '靠近 => 分散 => 分摊',
           ko: '안으로 🔜 흩어졌다 🔜 뭉쳐요',
         },
       },
@@ -634,7 +655,7 @@ Options.Triggers.push({
           de: 'Raus => Stack => Verteilen',
           fr: 'Extérieur => Package => Dispersion',
           ja: '離れ => 頭割り => 散開',
-          cn: '远离 => 集合 => 分散',
+          cn: '远离 => 分摊 => 分散',
           ko: '밖으로 🔜 뭉쳤다 🔜 흩어져요',
         },
       },
@@ -653,7 +674,7 @@ Options.Triggers.push({
           de: 'Raus => Verteilen => Stack',
           fr: 'Extérieur => Dispersion => Package',
           ja: '離れ => 散開 => 頭割り',
-          cn: '远离 => 分散 => 集合',
+          cn: '远离 => 分散 => 分摊',
           ko: '밖으로 🔜 흩어졌다 🔜 뭉쳐요',
         },
       },
@@ -839,7 +860,7 @@ Options.Triggers.push({
           de: 'Feuer INNEN',
           fr: 'Feu à l\'INTÉRIEUR',
           ja: 'ファイアボールは密着',
-          cn: '火1 分摊',
+          cn: '人群火1',
           ko: '파이어볼 함께 맞아요',
         },
       },
@@ -870,7 +891,7 @@ Options.Triggers.push({
           de: 'Feuer AUßEN',
           fr: 'Feu à l\'EXTÉRIEUR',
           ja: 'ファイアボールは離れ',
-          cn: '火2 出人群',
+          cn: '单吃火2',
           ko: '파이어볼 밖으로',
         },
         fireOutBeInIt: {
@@ -878,7 +899,7 @@ Options.Triggers.push({
           de: 'Feuer AUßEN: Drin sein',
           fr: 'Feu à l\'EXTÉRIEUR : Allez dessus',
           ja: 'ファイアボールは離れ: 自分に密着',
-          cn: '火2 补火',
+          cn: '去吃火2',
           ko: '파이어볼 밖으로: 나는 함께 맞기',
         },
       },
@@ -914,7 +935,7 @@ Options.Triggers.push({
           de: 'Feuer INNEN',
           fr: 'Feu à l\'INTÉRIEUR',
           ja: 'ファイアボールは密着',
-          cn: '火3 分摊',
+          cn: '人群火3',
           ko: '파이어볼 함께 맞아요',
         },
         fireInPlayersOut: {
@@ -922,7 +943,7 @@ Options.Triggers.push({
           de: 'Feuer INNEN (${players} raus)',
           fr: 'Feu à l\'INTÉRIEUR (${players} évitez)',
           ja: 'ファイアボールは密着 (${players}は外へ)',
-          cn: '火3 (${players}躲避)',
+          cn: '人群火3 (${players}躲避)',
           ko: '파이어볼 함께 맞아요 (피해요: ${players})',
         },
         fireInAvoid: {
@@ -930,7 +951,7 @@ Options.Triggers.push({
           de: 'Feuer INNEN: AUSWEICHEN!',
           fr: 'Feu à l\'INTÉRIEUR : ÉVITEZ !',
           ja: 'ファイアボールは密着: 自分に離れ',
-          cn: '火3 躲避！',
+          cn: '躲避人群火3！',
           ko: '파이어볼 함께 맞아요: 나는 피해요',
         },
       },
@@ -966,7 +987,7 @@ Options.Triggers.push({
           de: 'Feuer INNEN',
           fr: 'Feu à l\'INTÉRIEUR',
           ja: 'ファイアボール密着',
-          cn: '火4 分摊',
+          cn: '人群火4',
           ko: '파이어볼 함께 맞아요',
         },
         fireInAvoid: {
@@ -974,7 +995,7 @@ Options.Triggers.push({
           de: 'Feuer INNEN: AUSWEICHEN!',
           fr: 'Feu à l\'INTÉRIEUR : ÉVITEZ !',
           ja: 'ファイアボールは密着: 自分に離れ',
-          cn: '火4 躲避！',
+          cn: '躲避人群火4！',
           ko: '파이어볼 함께 맞아요: 나는 피해요',
         },
       },
@@ -1005,9 +1026,12 @@ Options.Triggers.push({
         });
         data.wideThirdDive = result.wideThirdDive;
         data.unsafeThirdMark = result.unsafeThirdMark;
-        // In case you forget, print marks in the log.
-        // TODO: Maybe only if Options.Debug?
-        console.log(data.naelMarks.join(', ') + (data.wideThirdDive ? ' (WIDE)' : ''));
+        if (data.options.Debug) {
+          // In case you forget, print marks in the log.
+          console.log(
+            `UCU Dragon Tracker${data.naelMarks.join(', ')}${data.wideThirdDive ? ' (WIDE)' : ''}`,
+          );
+        }
       },
     },
     {
@@ -1071,7 +1095,7 @@ Options.Triggers.push({
           de: 'Gehe nach ${dir} mit dem Marker',
           fr: 'Allez direction ${dir} avec le marqueur',
           ja: 'マーカー付いたまま${dir}へ',
-          cn: '带着点名去${dir}',
+          cn: '去 ${dir} 引导俯冲',
           ko: '${dir}으로 이동',
         },
         ...Directions.outputStrings8Dir,
@@ -1094,7 +1118,7 @@ Options.Triggers.push({
           de: 'Sturz #${num} : ${player}',
           fr: 'Plongeon #${num} : ${player}',
           ja: 'ダイブ${num}番目:${player}',
-          cn: '冲 #${num}: ${player}',
+          cn: '第 ${num} 次俯冲点: ${player}',
           ko: '다이브#${num}: ${player}',
         },
       },
@@ -1117,7 +1141,7 @@ Options.Triggers.push({
         data.octetMarker.push(matches.target);
         if (data.octetMarker.length !== 7)
           return;
-        const partyList = Object.keys(data.partyList);
+        const partyList = data.party.details.map((p) => p.name);
         if (partyList.length !== 8) {
           console.error(`Octet error: bad party list size: ${JSON.stringify(partyList)}`);
           return;
@@ -1212,59 +1236,30 @@ Options.Triggers.push({
       },
     },
     {
-      id: 'UCU Octet Twin Marker',
+      id: 'UCU Octet Twin Bait',
       type: 'HeadMarker',
       netRegex: { id: '0029', capture: false },
       condition: (data) => data.trio === 'octet',
       delaySeconds: 0.5,
-      alarmText: (data, _matches, output) => {
-        if (data.lastOctetMarker === data.me)
-          return output.twinOnYou();
-      },
-      infoText: (data, _matches, output) => {
+      alertText: (data, _matches, output) => {
         if (data.lastOctetMarker === undefined)
-          return output.twinOnUnknown();
-        // If this person is not alive, then everybody should stack,
-        // but tracking whether folks are alive or not is a mess.
-        if (data.lastOctetMarker !== data.me)
-          return output.twinOnPlayer({ player: data.party.member(data.lastOctetMarker) });
-      },
-      tts: (data, _matches, output) => {
-        if (data.lastOctetMarker === undefined || data.lastOctetMarker === data.me)
-          return output.stackTTS();
+          return output.twinOnUnknown({
+            unknown: output.unknown(),
+            dir: output[Directions.outputFrom8DirNum(data.octetTwinDir)](),
+          });
+        return output.twinOnPlayer({
+          player: data.party.member(data.lastOctetMarker),
+          dir: output[Directions.outputFrom8DirNum(data.octetTwinDir)](),
+        });
       },
       outputStrings: {
-        twinOnYou: {
-          en: 'YOU Stack for Twin',
-          de: 'DU stackst für Twintania',
-          fr: 'Packez-vous pour Gémellia',
-          ja: '自分にタニアには頭割り',
-          cn: '双塔集合',
-          ko: '내게 타니아 뭉쳐요',
-        },
+        ...Directions.outputStrings8Dir,
+        unknown: Outputs.unknown,
         twinOnPlayer: {
-          en: '8: ${player} (twin)',
-          de: '8: ${player} (Twintania)',
-          fr: '8 : ${player} (Gémellia)',
-          ja: '8: ${player} (ツインタニア)',
-          cn: '8: ${player} (双塔)',
-          ko: '8: ${player} (트윈타니아)',
+          en: '${player} Bait Twin (${dir})',
         },
         twinOnUnknown: {
-          en: '8: ??? (twin)',
-          de: '8: ??? (Twintania)',
-          fr: '8 : ??? (Gémellia)',
-          ja: '8: ??? (ツインタニア)',
-          cn: '8: ??? (双塔)',
-          ko: '8: ??? (트윈타니아)',
-        },
-        stackTTS: {
-          en: 'stack for twin',
-          de: 'stek für twintania',
-          fr: 'Packez-vous pour Gémellia',
-          ja: '頭割り',
-          cn: '双塔集合',
-          ko: '트윈타니아 옆으로',
+          en: '${unknown} Bait Twin (${dir})',
         },
       },
     },
@@ -1280,7 +1275,7 @@ Options.Triggers.push({
           de: 'Wirbelstürme',
           fr: 'Tornades',
           ja: 'ツイスター',
-          cn: '旋风冲',
+          cn: '旋风',
           ko: '트위스터',
         },
       },
@@ -1356,30 +1351,22 @@ Options.Triggers.push({
       condition: (data) => data.trio === 'quickmarch',
       run: (data, matches) => data.trioSourceIds.twin = parseInt(matches.sourceId, 16),
     },
-    // For Blackfire:
-    // After bosses jump, there's no clear log line we can trigger off of to find Nael's position
-    // until it's effectively too late.  The best way to do this seems to be to fire the trigger
-    // with a delay when Bahamut uses Blackfire Trio before all 3 bosses jump.
     {
       id: 'UCU Blackfire Party Dir',
-      type: 'Ability',
-      netRegex: { id: '26E3', source: 'Bahamut Prime', capture: false },
-      condition: (data) => data.trio === 'blackfire',
-      delaySeconds: 3.5,
-      promise: async (data) => {
-        if (data.trioSourceIds.nael === undefined)
-          return;
-        data.combatantData = [];
-        data.combatantData = (await callOverlayHandler({
-          call: 'getCombatants',
-          ids: [data.trioSourceIds.nael],
-        })).combatants;
+      type: 'ActorSetPos',
+      netRegex: { capture: true },
+      condition: (data, matches) => {
+        if (data.trio !== 'blackfire')
+          return false;
+        if (parseInt(matches.id, 16) !== data.trioSourceIds.nael)
+          return false;
+        return true;
       },
-      alertText: (data, _matches, output) => {
-        if (data.combatantData[0] === undefined)
-          return;
-        const nael = data.combatantData[0];
-        const naelDirOutput = Directions.combatantStatePosTo8DirOutput(nael, centerX, centerY);
+      suppressSeconds: 9999,
+      alertText: (_data, matches, output) => {
+        const posX = parseFloat(matches.x);
+        const posY = parseFloat(matches.y);
+        const naelDirOutput = Directions.xyTo8DirOutput(posX, posY, centerX, centerY);
         return output.naelPosition({ dir: output[naelDirOutput]() });
       },
       outputStrings: {
@@ -1405,7 +1392,7 @@ Options.Triggers.push({
           de: 'Megaflare Stack',
           fr: 'Mégabrasier, packez-vous',
           ja: 'メガフレア頭割り',
-          cn: '百万核爆集合',
+          cn: '分摊百万核爆',
           ko: '기가플레어 뭉쳐요',
         },
       },
@@ -1467,7 +1454,7 @@ Options.Triggers.push({
           de: 'Turm',
           fr: 'Tour',
           ja: 'タワー',
-          cn: '塔',
+          cn: '踩塔',
           ko: '타워',
         },
       },
@@ -1495,7 +1482,7 @@ Options.Triggers.push({
           de: '${player} (Twin) hat Megaflare',
           fr: '${player} (Gémellia) a mégabrasier',
           ja: '${player} (ツインタニア) メガ頭割り',
-          cn: '${player} (双塔) 分摊点名',
+          cn: '双塔俯冲点分摊 （${player})',
           ko: '${player} (트윈 징 대상자) 🔜 뭉쳐요',
         },
         twinHasTower: {
@@ -1503,49 +1490,52 @@ Options.Triggers.push({
           de: '${player} (Twin) braucht einen Turm',
           fr: '${player} (Gémellia) ont besoin d\'une tour',
           ja: '${player} (ツインタニア) 塔を踏む',
-          cn: '${player} (双塔) 需要踩塔',
+          cn: '双塔俯冲点踩塔（${player}）',
           ko: '${player} (트윈 징 대상자) 🔜 타워',
         },
       },
     },
     {
       id: 'UCU Heavensfall Nael Spot',
-      type: 'StartsUsing',
-      // Grab position data once Bahamut begins casting Megaflare Dive
-      netRegex: { id: '26E1', source: 'Bahamut Prime', capture: false },
-      condition: (data) => data.trio === 'heavensfall',
-      promise: async (data) => {
-        data.combatantData = [];
-        if (
-          data.trioSourceIds.nael === undefined ||
-          data.trioSourceIds.twin === undefined ||
-          data.trioSourceIds.bahamut === undefined
-        )
-          return;
-        data.combatantData = (await callOverlayHandler({
-          call: 'getCombatants',
-          ids: [data.trioSourceIds.nael, data.trioSourceIds.bahamut, data.trioSourceIds.twin],
-        })).combatants;
+      type: 'ActorSetPos',
+      netRegex: { capture: true },
+      condition: (data, matches) => {
+        if (data.trio !== 'heavensfall')
+          return false;
+        if (!Object.values(data.trioSourceIds).includes(parseInt(matches.id, 16)))
+          return false;
+        // Can't use suppressSeconds since this is a collector trigger
+        // so just return false if we already have 3 actors stored
+        if (Object.keys(data.combatantData).length >= 3)
+          return false;
+        return true;
+      },
+      preRun: (data, matches) => {
+        data.combatantData[parseInt(matches.id, 16)] = matches;
       },
       alertText: (data, _matches, output) => {
+        if (Object.keys(data.combatantData).length < 3)
+          return;
         // Bosses line up adjacent to one another, but don't necessarily have discrete directional positions (based on 8Dir scale).
         // But we can calculate their position as an angle (relative to circular arena): 0 = N, 90 = E, 180 = S, 270 = W, etc.
         let naelAngle;
         let bahamutAngle;
         let twinAngle;
         let naelPos = 'unknown';
-        for (const mob of data.combatantData) {
-          const mobAngle = (Math.round(180 - 180 * Math.atan2(mob.PosX, mob.PosY) / Math.PI) % 360);
+        for (const mob of Object.values(data.combatantData)) {
+          const mobAngle = posToAngle(mob);
+          const mobId = parseInt(mob.id, 16);
           // As OP does not return combatants in the order, they were passed, match based on sourceId.
-          if (mob.ID === data.trioSourceIds.nael)
+          if (mobId === data.trioSourceIds.nael)
             naelAngle = mobAngle;
-          else if (mob.ID === data.trioSourceIds.bahamut)
+          else if (mobId === data.trioSourceIds.bahamut)
             bahamutAngle = mobAngle;
-          else if (mob.ID === data.trioSourceIds.twin)
+          else if (mobId === data.trioSourceIds.twin)
             twinAngle = mobAngle;
         }
         if (naelAngle === undefined || bahamutAngle === undefined || twinAngle === undefined)
           return;
+        data.heavensfallNaelAngle = naelAngle;
         if (naelAngle >= 0 && bahamutAngle >= 0 && twinAngle >= 0) {
           if (isClockwise(naelAngle, bahamutAngle))
             naelPos = isClockwise(naelAngle, twinAngle) ? 'left' : 'middle';
@@ -1566,6 +1556,47 @@ Options.Triggers.push({
         middle: Outputs.middle,
         right: Outputs.right,
         unknown: Outputs.unknown,
+      },
+    },
+    {
+      id: 'UCU Heavensfall Tower Spot',
+      type: 'StartsUsingExtra',
+      netRegex: { id: '26DF', capture: true },
+      condition: (data) => {
+        return data.triggerSetConfig.heavensfallTowerPosition !== 'disabled' &&
+          data.trio === 'heavensfall';
+      },
+      preRun: (data, matches) => {
+        data.heavensfallTowerSpots.push(matches);
+      },
+      durationSeconds: 8,
+      infoText: (data, _matches, output) => {
+        if (data.heavensfallTowerSpots.length < 8)
+          return;
+        const naelAngle = data.heavensfallNaelAngle;
+        if (naelAngle === undefined)
+          return;
+        const wantedIdx = parseInt(data.triggerSetConfig.heavensfallTowerPosition);
+        const towers = data.heavensfallTowerSpots.sort((l, r) => posToAngle(l) - posToAngle(r));
+        const towersMap = towers.map((t) =>
+          Directions.xyTo16DirNum(parseFloat(t.x), parseFloat(t.y), centerX, centerY)
+        );
+        let naelIdx = towers.findIndex((t) => posToAngle(t) >= naelAngle);
+        if (naelIdx < 0)
+          naelIdx += 8;
+        const towerDir = towersMap[(wantedIdx + naelIdx) % 8];
+        const myTowerDir = towerDir !== undefined
+          ? Directions.output16Dir[towerDir] ?? 'unknown'
+          : 'unknown';
+        return output.tower({
+          dir: output[myTowerDir](),
+        });
+      },
+      outputStrings: {
+        tower: {
+          en: 'Tower: ${dir}',
+        },
+        ...Directions.outputStrings16Dir,
       },
     },
     {
@@ -1622,14 +1653,14 @@ Options.Triggers.push({
           de: 'Kein Erdstoß; im süden sammeln',
           fr: 'Pas de Secousse; packez-vous au Sud.',
           ja: 'シェイカーない；頭割りで南',
-          cn: '无点名，南侧集合',
+          cn: '无点名，正下方分摊',
           ko: '마커 없음, 남쪽서 뭉쳐요',
         },
         tenstrikeNotOnYou: {
           en: 'Stack on safe spot',
           de: 'In Sicherheit steken',
           fr: 'Packez-vous au point safe',
-          ja: '頭割りで安全',
+          ja: '安置へ集合',
           cn: '安全点集合',
           ko: '안전한 곳에서 뭉쳐요',
         },
@@ -1641,31 +1672,41 @@ Options.Triggers.push({
     // with a delay when Bahamut uses Grand Octet before all 3 bosses jump.
     {
       id: 'UCU Grand Octet Run & Rotate',
-      type: 'Ability',
-      // Grab mob position data after dragons/bosses are positioned
-      netRegex: { id: '26E7', source: 'Bahamut Prime', capture: false },
-      delaySeconds: 4.8,
-      promise: async (data) => {
-        data.combatantData = [];
-        if (
-          data.trioSourceIds.nael === undefined ||
-          data.trioSourceIds.bahamut === undefined
-        )
-          return;
-        data.combatantData = (await callOverlayHandler({
-          call: 'getCombatants',
-          ids: [data.trioSourceIds.nael, data.trioSourceIds.bahamut],
-        })).combatants;
+      type: 'ActorSetPos',
+      netRegex: { capture: true },
+      condition: (data, matches) => {
+        if (data.trio !== 'octet')
+          return false;
+        if (!Object.values(data.trioSourceIds).includes(parseInt(matches.id, 16)))
+          return false;
+        // Can't use suppressSeconds since this is a collector trigger
+        // so just return false if we already have 3 actors stored
+        if (Object.keys(data.combatantData).length >= 3)
+          return false;
+        return true;
+      },
+      preRun: (data, matches) => {
+        data.combatantData[parseInt(matches.id, 16)] = matches;
       },
       alertText: (data, _matches, output) => {
+        if (Object.keys(data.combatantData).length < 3)
+          return;
         let naelDirIdx;
         let bahaDirIdx;
-        for (const mob of data.combatantData) {
-          const mobDirIdx = Directions.combatantStatePosTo8Dir(mob, centerX, centerY);
-          if (mob.ID === data.trioSourceIds.nael)
+        for (const mob of Object.values(data.combatantData)) {
+          const mobId = parseInt(mob.id, 16);
+          const mobDirIdx = Directions.xyTo8DirNum(
+            parseFloat(mob.x),
+            parseFloat(mob.y),
+            centerX,
+            centerY,
+          );
+          if (mobId === data.trioSourceIds.nael)
             naelDirIdx = mobDirIdx;
-          else if (mob.ID === data.trioSourceIds.bahamut)
+          else if (mobId === data.trioSourceIds.bahamut)
             bahaDirIdx = mobDirIdx;
+          else if (mobId === data.trioSourceIds.twin)
+            data.octetTwinDir = mobDirIdx;
         }
         if (naelDirIdx === undefined || bahaDirIdx === undefined)
           return;
@@ -1770,19 +1811,46 @@ Options.Triggers.push({
       },
     },
     {
-      id: 'UCU Exaflare',
+      id: 'UCU Exaflare Direction',
+      type: 'StartsUsingExtra',
+      netRegex: { id: '26F0', capture: true },
+      suppressSeconds: 20,
+      infoText: (_data, matches, output) => {
+        const towardsDirNum = Directions.hdgTo8DirNum(parseFloat(matches.heading));
+        const towardsDir = Directions.outputFrom8DirNum(towardsDirNum);
+        const startDir = Directions.outputFrom8DirNum((towardsDirNum + 4) % 8);
+        return output.text({
+          dir1: output[startDir](),
+          dir2: output[towardsDir](),
+        });
+      },
+      tts: (_data, matches, output) => {
+        const towardsDirNum = Directions.hdgTo8DirNum(parseFloat(matches.heading));
+        const towardsDir = Directions.outputFrom8DirNum(towardsDirNum);
+        const startDir = Directions.outputFrom8DirNum((towardsDirNum + 4) % 8);
+        return output.tts({
+          dir1: output[startDir](),
+          dir2: output[towardsDir](),
+        });
+      },
+      outputStrings: {
+        ...Directions.outputStrings8Dir,
+        text: {
+          en: 'Exaflares ${dir1} -> ${dir2}',
+        },
+        tts: {
+          en: 'Exaflares ${dir1} towards ${dir2}',
+        },
+      },
+    },
+    {
+      id: 'UCU Morn Afah Enrage Spread Warning',
       type: 'StartsUsing',
-      netRegex: { id: '26EF', source: 'Bahamut Prime', capture: false },
-      preRun: (data) => data.exaflareCount++,
-      infoText: (data, _matches, output) => output.text({ num: data.exaflareCount }),
+      netRegex: { id: '26ED', source: 'Bahamut Prime', capture: false },
+      alarmText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
-          en: 'Exaflare #${num}',
-          de: 'Exaflare #${num}',
-          fr: 'ExaBrasier #${num}',
-          ja: 'エクサフレア${num}回',
-          cn: '百京核爆 #${num}',
-          ko: '엑사플레어 ${num}',
+          en: 'Spread (Enrage)',
         },
       },
     },
@@ -1792,13 +1860,14 @@ Options.Triggers.push({
       'locale': 'de',
       'replaceSync': {
         'Bahamut Prime': 'Prim-Bahamut',
-        'Fang of Light': 'Lichtklaue',
+        'Fang Of Light': 'Lichtklaue',
         'Firehorn': 'Feuerhorn',
         'Iceclaw': 'Eisklaue',
-        'Nael Deus Darnus': 'Nael deus Darnus',
         'Nael Geminus': 'Nael Geminus',
+        'Nael deus Darnus': 'Nael deus Darnus',
+        'Phoenix': 'Phönix',
         'Ragnarok': 'Ragnarök',
-        'Tail of Darkness': 'Dunkelschweif',
+        'Tail Of Darkness': 'Dunkelschweif',
         'Thunderwing': 'Donnerschwinge',
         'Twintania': 'Twintania',
       },
@@ -1806,7 +1875,7 @@ Options.Triggers.push({
         '--push--': '--stoß--',
         'Aetheric Profusion': 'Ätherische Profusion',
         'Akh Morn': 'Akh Morn',
-        'Bahamut Marker': 'Bahamut Marker',
+        'Bahamut Marker': 'Bahamut Markierung',
         'Bahamut\'s Claw': 'Klauen Bahamuts',
         'Bahamut\'s Favor': 'Bahamuts Segen',
         'Blackfire Trio': 'Schwarzfeuer-Trio',
@@ -1823,7 +1892,7 @@ Options.Triggers.push({
         'Earth Shaker': 'Erdstoß',
         'Exaflare': 'Exaflare',
         'Fellruin Trio': 'Untergangs-Trio',
-        'Fireball(?! Soak)': 'Feuerball',
+        'Fireball': 'Feuerball',
         'Flames Of Rebirth': 'Flammen der Wiedergeburt',
         'Flare Breath': 'Flare-Atem',
         'Flatten': 'Einebnen',
@@ -1833,24 +1902,27 @@ Options.Triggers.push({
         'Heavensfall Trio': 'Himmelssturz-Trio',
         'Heavensfall(?! )': 'Himmelssturz',
         'Hypernova': 'Supernova',
+        'Iron Chariot': 'Eiserner Streitwagen',
         'Liquid Hell': 'Höllenschmelze',
         'Lunar Dive': 'Lunarer Sturz',
-        '(?<! )Marker(?!\\w)': 'Marker',
-        'Megaflare(?! Dive)': 'Megaflare',
+        'Lunar Dynamo': 'Lunarer Dynamo',
+        '(?<! )Marker(?!\\w)': 'Markierung',
         'Megaflare Dive': 'Megaflare-Sturz',
+        'Megaflare(?! Dive)': 'Megaflare',
         'Meteor Stream': 'Meteorflug',
         'Meteor/Dive or Dive/Beam': 'Meteor/Sturzflug oder Sturzflug/Strahl',
         'Morn Afah': 'Morn Afah',
-        'Nael Marker': 'Nael Marker',
-        'Pepperoni': 'Salami',
-        'Plummet(?!\/)': 'Herabstürzen',
+        'Nael Marker': 'Nael Markierung',
+        'Pepperoni': 'Megaflare Markierung',
+        'Plummet(?!/)': 'Herabstürzen',
         'Quickmarch Trio': 'Todesmarsch-Trio',
         'Random Combo Attack': 'Zufälliger Komboangriff',
-        '(?<!\/)Ravensbeak': 'Bradamante',
+        '(?<!/)Ravensbeak': 'Bradamante',
+        'Raven Dive': 'Bahamuts Schwinge',
         'Seventh Umbral Era': 'Siebte Ära des Schattens',
         'Spread': 'Verteilen',
         'Stack': 'Sammeln',
-        'Targeted Fire': 'Feuer auf Ziel',
+        'Targeted Fire': 'Gezieltes Feuer',
         'Tempest Wing': 'Sturm-Schwinge',
         'Tenstrike Trio': 'Zehnschlag-Trio',
         'Teraflare': 'Teraflare',
@@ -1858,24 +1930,24 @@ Options.Triggers.push({
         'Thermionic Beam': 'Thermionischer Strahl',
         'Thermionic Burst': 'Thermionische Eruption',
         'Towers': 'Türme',
-        'Triple Nael Quote': 'Drei Nael Zitate',
-        'Twin Marker': 'Twin Marker',
+        'Triple Nael Quote': 'Dreifaches Nael Zitat',
+        'Twin Marker': 'Twintania Markierung',
         'Twister': 'Wirbelsturm',
         'Twisting Dive': 'Spiralschwinge',
-        'Wings of Salvation': 'Rettende Schwinge',
+        'Wings Of Salvation': 'Rettende Schwinge',
       },
     },
     {
       'locale': 'fr',
       'replaceSync': {
         'Bahamut Prime': 'Primo-Bahamut',
-        'Fang of Light': 'croc de lumière',
+        'Fang Of Light': 'croc de lumière',
         'Firehorn': 'corne-de-feu',
         'Iceclaw': 'griffe-de-glace',
         'Nael Deus Darnus': 'Nael deus Darnus',
         'Nael Geminus': 'Nael Geminus',
         'Ragnarok': 'Ragnarok',
-        'Tail of Darkness': 'queue de ténèbres',
+        'Tail Of Darkness': 'queue de ténèbres',
         'Thunderwing': 'aile-de-foudre',
         'Twintania': 'Gémellia',
       },
@@ -1942,20 +2014,21 @@ Options.Triggers.push({
         'Twin Marker': 'Marqueur de Gémellia',
         'Twister': 'Grande trombe',
         'Twisting Dive': 'Plongeon-trombe',
-        'Wings of Salvation': 'Aile de la salvation',
+        'Wings Of Salvation': 'Aile de la salvation',
       },
     },
     {
       'locale': 'ja',
+      'missingTranslations': true,
       'replaceSync': {
         'Bahamut Prime': 'バハムート・プライム',
-        'Fang of Light': 'ライトファング',
+        'Fang Of Light': 'ライトファング',
         'Firehorn': 'ファイアホーン',
         'Iceclaw': 'アイスクロウ',
         'Nael Deus Darnus': 'ネール・デウス・ダーナス',
         'Nael Geminus': 'ネール・ジェミナス',
         'Ragnarok': 'ラグナロク',
-        'Tail of Darkness': 'ダークテイル',
+        'Tail Of Darkness': 'ダークテイル',
         'Thunderwing': 'サンダーウィング',
         'Twintania': 'ツインタニア',
       },
@@ -2019,20 +2092,21 @@ Options.Triggers.push({
         'Twin Marker': 'Twin Marker',
         'Twister': 'ツイスター',
         'Twisting Dive': 'ツイスターダイブ',
-        'Wings of Salvation': 'サルヴェーションウィング',
+        'Wings Of Salvation': 'サルヴェーションウィング',
       },
     },
     {
       'locale': 'cn',
+      'missingTranslations': true,
       'replaceSync': {
         'Bahamut Prime': '至尊巴哈姆特',
-        'Fang of Light': '光牙',
+        'Fang Of Light': '光牙',
         'Firehorn': '火角',
         'Iceclaw': '冰爪',
         'Nael Deus Darnus': '奈尔·神·达纳斯',
         'Nael Geminus': '奈尔双生子',
         'Ragnarok': '诸神黄昏',
-        'Tail of Darkness': '暗尾',
+        'Tail Of Darkness': '暗尾',
         'Thunderwing': '雷翼',
         'Twintania': '双塔尼亚',
       },
@@ -2092,24 +2166,25 @@ Options.Triggers.push({
         'Thermionic Beam': '热离子光束',
         'Thermionic Burst': '热离子爆发',
         'Towers': '塔',
-        'Triple Nael Quote': '三黑球',
+        'Triple Nael Quote': '奈尔台词三连',
         'Twin Marker': '双塔标记',
         'Twister': '旋风',
         'Twisting Dive': '旋风冲',
-        'Wings of Salvation': '救世之翼',
+        'Wings Of Salvation': '救世之翼',
       },
     },
     {
       'locale': 'ko',
+      'missingTranslations': true,
       'replaceSync': {
         'Bahamut Prime': '바하무트 프라임',
-        'Fang of Light': '빛의 송곳니',
+        'Fang Of Light': '빛의 송곳니',
         'Firehorn': '화염뿔',
         'Iceclaw': '얼음발톱',
         'Nael Deus Darnus': '넬 데우스 다르누스',
         'Nael Geminus': '넬 게미누스',
         'Ragnarok': '라그나로크',
-        'Tail of Darkness': '어둠의 꼬리',
+        'Tail Of Darkness': '어둠의 꼬리',
         'Thunderwing': '번개날개',
         'Twintania': '트윈타니아',
       },
@@ -2168,12 +2243,12 @@ Options.Triggers.push({
         'Thermionic . Dynamo/Chariot': '열전자 + 달/강철',
         'Thermionic Beam': '열전자 광선',
         'Thermionic Burst': '열전자 폭발',
-        'Towers': '타워',
+        'Towers': '기둥',
         'Triple Nael Quote': '넬 3회 대사',
         'Twin Marker': '트윈 징',
         'Twister': '회오리',
         'Twisting Dive': '회오리 강하',
-        'Wings of Salvation': '구원의 날개',
+        'Wings Of Salvation': '구원의 날개',
       },
     },
   ],
