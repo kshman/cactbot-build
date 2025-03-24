@@ -181,9 +181,13 @@ Options.Triggers.push({
       id: 'FRU 시작!',
       type: 'InCombat',
       netRegex: { inGameCombat: '1', capture: false },
+      condition: (data) => !data.firstOfAll,
       durationSeconds: 3.5,
       soundVolume: 0,
-      infoText: (data, _matches, output) => output.ok({ moks: data.moks }),
+      infoText: (data, _matches, output) => {
+        data.firstOfAll = true;
+        return output.ok({ moks: data.moks });
+      },
       outputStrings: {
         ok: {
           en: 'Combat: ${moks}',
@@ -200,6 +204,14 @@ Options.Triggers.push({
         data.actors = {};
         data.hourglasses = {};
       },
+    },
+    {
+      // TODO: 플레이어 아이디 얻어오는 기능을 플러그인으로
+      id: 'FRU Find Player ID',
+      type: 'Ability',
+      netRegex: { id: '9CEA', source: 'Fatebreaker' },
+      condition: (data, matches) => data.me === matches.target,
+      run: (data, matches) => data.myId = matches.targetId,
     },
     // //////////////// PHASE 1 //////////////////
     {
@@ -1927,24 +1939,87 @@ Options.Triggers.push({
       },
     },
     {
+      id: 'FRU P4 CT Blue SignMarker',
+      type: 'NetworkTargetMarker',
+      netRegex: { operation: 'Add' },
+      condition: (data, matches) => data.phase === 'p4ct' && data.myId === matches.targetId,
+      run: (data, matches) => {
+        if (data.p4MyMarker !== undefined)
+          return;
+        const mkmap = {
+          '0': 'mark1',
+          '1': 'mark2',
+          '2': 'mark3',
+          '3': 'mark4',
+        };
+        data.p4MyMarker = mkmap[matches.waymark];
+      },
+    },
+    {
       id: 'FRU P4 CT Blue Cleanse',
       type: 'Ability',
       netRegex: { id: '9D55', capture: false },
       condition: (data) => data.phase === 'p4ct',
       delaySeconds: 2,
-      durationSeconds: 6,
+      durationSeconds: 7,
       suppressSeconds: 1,
       infoText: (data, _matches, output) => {
         if (data.p4MyCrystallize === undefined)
           return;
         if (data.p4MyCrystallize.color !== 'blue')
           return;
+        if (data.options.AutumnStyle && data.p4MyMarker !== undefined)
+          return output.pick({ num: output[data.p4MyMarker]() });
         return output.cleanse();
       },
       outputStrings: {
         cleanse: {
           en: 'Cleanse',
           ko: '용머리 줏어요',
+        },
+        pick: {
+          en: 'Cleanse ${num}',
+          ko: '용머리 줏어요 ${num}',
+        },
+        mark1: Outputs.cnum1,
+        mark2: Outputs.cnum2,
+        mark3: Outputs.cnum3,
+        mark4: Outputs.cnum4,
+      },
+    },
+    {
+      id: 'FRU P4 CT Blue Direction',
+      type: 'Ability',
+      netRegex: { id: '9D55', capture: false },
+      condition: (data) => data.options.AutumnOnly && data.phase === 'p4ct',
+      delaySeconds: 2,
+      durationSeconds: 7,
+      suppressSeconds: 1,
+      soundVolume: 0,
+      infoText: (data, _matches, output) => {
+        if (data.p4MyCrystallize === undefined)
+          return;
+        if (data.p4MyCrystallize.color !== 'blue')
+          return;
+        if (data.p4MyMarker !== undefined)
+          return output[data.p4MyMarker]();
+      },
+      outputStrings: {
+        mark1: {
+          en: 'left',
+          ko: '🡸🡸🡸🡸🡸🡸',
+        },
+        mark2: {
+          en: 'left-top',
+          ko: '🡼🡼🡼🡼🡼🡼',
+        },
+        mark3: {
+          en: 'right-top',
+          ko: '🡽🡽🡽🡽🡽🡽',
+        },
+        mark4: {
+          en: 'right',
+          ko: '🡺🡺🡺🡺🡺🡺',
         },
       },
     },
@@ -2029,6 +2104,7 @@ Options.Triggers.push({
         delete data.p4AyTowerLoc;
         data.p4Crystallize = [];
         delete data.p4MyCrystallize;
+        delete data.p4MyMarker;
         delete data.p4Parun;
         data.p4Tidals = [];
       },
@@ -2038,6 +2114,7 @@ Options.Triggers.push({
       id: 'FRU P5 Fulgent Blade',
       type: 'StartsUsing',
       netRegex: { id: '9D72', source: 'Pandora', capture: false },
+      durationSeconds: 6,
       response: Responses.bigAoe(),
     },
     {
@@ -2048,6 +2125,93 @@ Options.Triggers.push({
       outputStrings: {
         text: Outputs.healerGroups,
       },
+    },
+    {
+      id: 'FRU P5 Wings #1',
+      type: 'StartsUsing',
+      netRegex: { id: ['9D29', '9D79'] },
+      // 9D29 DARK
+      // 9D79 LIGHT
+      durationSeconds: 5,
+      response: (data, matches, output) => {
+        // cactbot-builtin-response
+        output.responseOutputStrings = {
+          dark: {
+            en: 'Dark (right safe)',
+            ko: '어두운 날개 (왼쪽 안전)',
+          },
+          light: {
+            en: 'Light (left safe)',
+            ko: '밝은 날개 (오른쪽 안전)',
+          },
+          mdark: {
+            en: 'Outside',
+            ko: '[다크] 밖으로!',
+          },
+          mlight: {
+            en: 'Inside',
+            ko: '[라이트] 안으로',
+          },
+          sdark: {
+            en: 'Close to boss',
+            ko: '[🡸다크] 보스 발 밑으로!',
+          },
+          slight: {
+            en: 'Far from boss',
+            ko: '[라이트🡺] 멀리 멀리!',
+          },
+          provoke: {
+            en: 'Provoke!',
+            ko: '프로보크!',
+          },
+        };
+        data.p5IsDark = matches.id === '9D29';
+        if (data.options.AutumnOnly && data.role === 'tank') {
+          if (data.moks === 'MT')
+            return { alertText: data.p5IsDark ? output.mdark() : output.mlight() };
+          const msg = data.p5IsDark ? output.sdark() : output.slight();
+          return { alertText: msg, infoText: output.provoke() };
+        }
+        return { infoText: data.p5IsDark ? output.dark() : output.light() };
+      },
+    },
+    {
+      id: 'FRU P5 Wings #2',
+      type: 'StartsUsing',
+      netRegex: { id: ['9D29', '9D79'], capture: false },
+      condition: (data) => data.options.AutumnOnly && data.role === 'tank',
+      delaySeconds: 6.8,
+      durationSeconds: 5,
+      response: (data, _matches, output) => {
+        // cactbot-builtin-response
+        output.responseOutputStrings = {
+          mdark: {
+            en: 'Far from boss',
+            ko: '멀리 떨어져욧!',
+          },
+          mlight: {
+            en: 'Close to boss',
+            ko: '보스 발 밑으로!',
+          },
+          sdark: {
+            en: 'Inside',
+            ko: '안으로!',
+          },
+          slight: {
+            en: 'Outside',
+            ko: '밖으로!',
+          },
+          provoke: {
+            en: 'Provoke!',
+            ko: '프로보크!',
+          },
+        };
+        if (data.moks !== 'MT')
+          return { alertText: data.p5IsDark ? output.sdark() : output.slight() };
+        const msg = data.p5IsDark ? output.mdark() : output.mlight();
+        return { alertText: msg, infoText: output.provoke() };
+      },
+      run: (data) => delete data.p5IsDark,
     },
     {
       id: 'FRU P5 Pandora\'s Box',
@@ -2062,9 +2226,6 @@ Options.Triggers.push({
         },
       },
     },
-    // //////////////////////////////////////////////
-    // p4 test
-    // //////////////////////////////////////////////
   ],
   timelineReplace: [
     {
