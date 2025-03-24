@@ -45,7 +45,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: 'Tuez la Luminescence et restez près du boss',
           ja: '光球を倒してボスに近づく',
           cn: '击杀幻光球, 靠近BOSS',
-          ko: '루미너신스(빛구슬) 잡고 보스에게 부비부비',
+          ko: '빛구슬 잡고 보스에게 부비부비',
         },
       },
     },
