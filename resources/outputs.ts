@@ -1094,7 +1094,7 @@ export default {
   stay: {
     en: 'Stay',
     ja: 'そのまま待機',
-    ko: '그대로 대기',
+    ko: '그대로',
   },
   inside: {
     en: 'Inside',
