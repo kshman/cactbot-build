@@ -1,12 +1,9 @@
 Options.Triggers.push({
-  id: 'TheSunkenTempleOfQarn',
-  zoneId: ZoneId.TheSunkenTempleOfQarn,
-  comments: {
-    en: 'pre-7.2 rework',
-  },
+  id: 'TheSunkenTempleOfQarn71',
+  zoneId: ZoneId.TheSunkenTempleOfQarn71,
   triggers: [
     {
-      id: 'Sunken Quarn Doom',
+      id: 'Sunken Quarn71 Doom',
       type: 'GainsEffect',
       netRegex: { effectId: 'D2' },
       condition: Conditions.targetIsYou(),
@@ -18,7 +15,7 @@ Options.Triggers.push({
           fr: 'Marchez sur la plaque qui brille',
           ja: '光る床に乗る',
           cn: '踩发光地板',
-          ko: '빛나는 발판 밟아요',
+          ko: '빛나는 발판 밟기',
         },
       },
     },
