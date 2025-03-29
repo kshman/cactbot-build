@@ -36,7 +36,7 @@ const tiltOutputStrings = {
     de: 'Nach Osten gehen (starke Neigung)',
     fr: 'Allez à l\'Est (Inclinaison forte)',
     ja: '東へ (大きい斜め)',
-    cn: '去东边（大倾斜）',
+    cn: '去右边（大倾斜）',
     ko: '동쪽으로 (크게 기울어요)',
   },
   goEastSoftTilt: {
@@ -44,7 +44,7 @@ const tiltOutputStrings = {
     de: 'Nach Osten gehen (leichte Neigung)',
     fr: 'Allez à l\'Est (Inclinaison faible)',
     ja: '東へ (小さい斜め)',
-    cn: '去东边（小倾斜）',
+    cn: '去右边（小倾斜）',
     ko: '동쪽으로 (작게 기울어요)',
   },
   goWestHardTilt: {
@@ -52,7 +52,7 @@ const tiltOutputStrings = {
     de: 'Nach Westen gehen (starke Neigung)',
     fr: 'Allez à l\'Ouest (Inclinaison forte)',
     ja: '西へ (大きい斜め)',
-    cn: '去西边（大倾斜）',
+    cn: '去左边（大倾斜）',
     ko: '서쪽으로 (크게 기울어요)',
   },
   goWestSoftTilt: {
@@ -60,7 +60,7 @@ const tiltOutputStrings = {
     de: 'Nach Westen gehen (leichte Neigung)',
     fr: 'Allez à l\'Ouest (Inclinaison faible)',
     ja: '西へ (小さい斜め)',
-    cn: '去西边（小倾斜）',
+    cn: '去左边（小倾斜）',
     ko: '서쪽으로 (작게 기울어요)',
   },
 };
@@ -94,7 +94,7 @@ Options.Triggers.push({
           de: 'Ansturm-Angriff ausweichen',
           fr: 'Évitez l\'attaque Charge',
           ja: '突進回避',
-          cn: '躲避击飞',
+          cn: '躲避冲锋',
           ko: '돌진 공격 피해요',
         },
       },
