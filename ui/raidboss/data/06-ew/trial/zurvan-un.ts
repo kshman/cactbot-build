@@ -154,7 +154,7 @@ const triggerSet: TriggerSet<Data> = {
           de: 'Verteilen -- Nicht aufeinander!',
           fr: 'Écartez-vous - Ne vous packez pas !',
           ja: '散開 -- 重ならないで！',
-          cn: '分散 -- 不要集合!',
+          cn: '分散 -- 别去分摊！',
           ko: '흩어져요! 뭉치면 주거!',
         },
       },
@@ -194,7 +194,7 @@ const triggerSet: TriggerSet<Data> = {
           de: 'Auserhalb der Hitbox stehen',
           fr: 'Restez à l\'extérieur de la hitbox',
           ja: '範囲攻撃を避ける', // FIXME
-          cn: '站在判定圈外',
+          cn: '站在目标圈外',
           ko: '센터 서클 밖에서 기둘',
         },
       },
