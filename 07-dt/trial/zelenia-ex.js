@@ -61,13 +61,13 @@ Options.Triggers.push({
       },
       outputStrings: {
         donut: {
-          en: 'Donut',
-          ja: 'ドーナツ、塔踏み',
+          en: 'Get towers',
+          ja: '塔踏み',
           ko: '도넛, 타워로',
         },
         circle: {
-          en: 'Circle',
-          ja: '円、散会',
+          en: 'Spread',
+          ja: '散会',
           ko: '동글이, 흩어져요',
         },
       },
@@ -101,11 +101,13 @@ Options.Triggers.push({
           return;
         data.falls = [];
         data.fallRes = [];
-        let move = data.role === 'dps' ? 'out' : 'in';
-        if (data.phase === 'esc') {
-          // 두번째꺼부터 해야하므로 1,2순서 그래야 2번이 두번째
-          const bait = data.donutRole === data.role ? bait2 : bait1;
-          move = bait === 'near' ? 'in' : 'out';
+        let move;
+        if (data.phase !== 'esc')
+          move = data.role === 'dps' ? 'out' : 'in';
+        else {
+          move = data.donutRole === data.role
+            ? (bait1 === 'near' ? 'out' : 'in')
+            : (bait1 === 'near' ? 'in' : 'out');
         }
         const move1 = move;
         const move2 = move1 === 'in' ? 'out' : 'in';
@@ -124,6 +126,10 @@ Options.Triggers.push({
         }
         const join = data.fallRes.map((v) => output[v]()).join(output.split());
         data.fallPrev = data.fallRes.shift();
+        if (data.phase === 'esc' && data.donutRole === data.role) {
+          data.fallPrev = undefined;
+          return output.mesg({ ind: output.stack(), res: join });
+        }
         const ind = move1 === 'in' ? output.inside() : output.outside();
         return output.mesg({ ind: ind, res: join });
       },
@@ -135,6 +141,7 @@ Options.Triggers.push({
         },
         inside: Outputs.in,
         outside: Outputs.out,
+        stack: Outputs.stackMarker,
         in: {
           en: 'In',
           ja: '内',
@@ -146,8 +153,8 @@ Options.Triggers.push({
           ko: '🡻',
         },
         split: {
-          en: ', ',
-          ja: ', ',
+          en: '/',
+          ja: '/',
           ko: '',
         },
       },
@@ -180,15 +187,15 @@ Options.Triggers.push({
             ko: '🡻',
           },
           split: {
-            en: ', ',
-            ja: ', ',
+            en: '/',
+            ja: '/',
             ko: '',
           },
         };
         const join = data.fallRes.map((v) => output[v]()).join(output.split());
         const prev = data.fallPrev;
         const move = data.fallRes.shift();
-        if (prev === undefined || move === undefined)
+        if (move === undefined)
           return;
         data.fallPrev = move;
         if (prev === move)
@@ -235,7 +242,7 @@ Options.Triggers.push({
         text: {
           en: 'Start from north/east',
           ja: '北/東から',
-          ko: 'Ⓐ/Ⓑ 시작',
+          ko: 'Ⓐ/Ⓑ 두칸으로 (1식)',
         },
       },
     },
@@ -265,12 +272,12 @@ Options.Triggers.push({
         in: {
           en: 'In first',
           ja: '内から',
-          ko: '한칸 안쪽으로',
+          ko: '한칸 안쪽으로 (2식)',
         },
         out: {
           en: 'Out first',
           ja: '外から',
-          ko: '두칸 바깥 오른쪽으로',
+          ko: '두칸 바깥쪽으로 (2식)',
         },
       },
     },
@@ -286,12 +293,12 @@ Options.Triggers.push({
         in: {
           en: 'In second',
           ja: '内へ',
-          ko: '왼쪽 안 🔜 오른쪽',
+          ko: '안으로 🔜 피해요',
         },
         out: {
           en: 'Out second',
           ja: '外へ',
-          ko: '밖으로 🔜 오른쪽',
+          ko: '바깥으로 🔜 피해요',
         },
       },
     },
@@ -304,9 +311,9 @@ Options.Triggers.push({
       run: (data) => data.roses = [],
       outputStrings: {
         text: {
-          en: 'Find north',
-          ja: '◣◢を北に',
-          ko: '◣◢ 기준 맡은 자리로',
+          en: 'Spread',
+          ja: '三式',
+          ko: '맡은 자리로 (3식◣◢ 십자 타워)',
         },
       },
     },
@@ -333,7 +340,7 @@ Options.Triggers.push({
           ko: '내게 장미, 그대로',
         },
         tower: {
-          en: 'Get tower',
+          en: 'Get towers',
           ja: '塔踏み',
           ko: '타워 밟아요',
         },
@@ -350,12 +357,12 @@ Options.Triggers.push({
         sup: {
           en: 'Stack north',
           ja: '北に集合',
-          ko: '북쪽에서 탱힐 뭉쳐요',
+          ko: 'TH 북쪽에서 뭉쳐요',
         },
         dps: {
           en: 'Stack south',
           ja: '南に集合',
-          ko: '남쪽에서 DPS 뭉쳐요',
+          ko: 'DPS 남쪽에서 뭉쳐요',
         },
       },
     },
@@ -384,8 +391,8 @@ Options.Triggers.push({
       outputStrings: {
         text: {
           en: 'Find north',
-          ja: '◣◢を北に',
-          ko: '◣◢ 기준 남쪽으로',
+          ja: '四式',
+          ko: '남쪽으로 (4식◣◢ 꽃밭)',
         },
       },
     },
@@ -478,7 +485,7 @@ Options.Triggers.push({
         text: {
           en: 'Watch outside object',
           ja: '外の直線攻撃確認',
-          ko: '돌진 공격 없는곳!',
+          ko: '돌진+꽃밭 없는곳으로',
         },
       },
     },
@@ -542,7 +549,7 @@ Options.Triggers.push({
         text: {
           en: 'Spread',
           ja: '散会',
-          ko: '맡은 분면 자리로',
+          ko: '맡은 분면으로',
         },
       },
     },
