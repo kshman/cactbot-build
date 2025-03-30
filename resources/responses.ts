@@ -611,6 +611,7 @@ export const Responses = {
   },
   wakeUp: (sev?: Severity) => staticResponse(defaultAlarmText(sev), Outputs.wakeUp),
   getTowers: (sev?: Severity) => staticResponse(defaultInfoText(sev), Outputs.getTowers),
+  stackPartner: (sev?: Severity) => staticResponse(defaultInfoText(sev), Outputs.stackPartner),
   sharedOrInvinTankBuster: (targetSev?: Severity, otherSev?: Severity) => {
     const outputStrings = {
       sharedOrInvinTankbusterOnYou: Outputs.sharedOrInvinTankbusterOnYou,
@@ -625,13 +626,11 @@ export const Responses = {
           return;
         return output.sharedTankbuster?.();
       }
-
       if (target === data.me)
         return output.sharedOrInvinTankbusterOnYou?.();
       if (data.role === 'tank' || data.role === 'healer')
         return output.sharedOrInvinTankbusterOnPlayer?.({ player: data.party.member(target) });
     };
-
     const otherFunc = (data: Data, matches: TargetedMatches, output: Output) => {
       const target = getTarget(matches);
       if (target === undefined) {
@@ -641,10 +640,8 @@ export const Responses = {
       }
       if (target === data.me || data.role === 'tank' || data.role === 'healer')
         return;
-
       return output.avoidCleave?.();
     };
-
     const combined = combineFuncs(
       defaultAlertText(targetSev),
       targetFunc,
@@ -657,7 +654,32 @@ export const Responses = {
       return combined;
     };
   },
-  stackPartner: (sev?: Severity) => staticResponse(defaultInfoText(sev), Outputs.stackPartner),
+  tetherBuster: (targetSev?: Severity, otherSev?: Severity) => {
+    const outputStrings = {
+      tetherBusters: Outputs.tetherBusters,
+      avoidTetherBusters: Outputs.avoidTetherBusters,
+    };
+    const targetFunc = (data: Data, _matches: unknown, output: Output) => {
+      if (data.role === 'tank' || data.moks === 'MT' || data.moks === 'ST')
+        return output.tetherBusters?.();
+    };
+    const otherFunc = (data: Data, _matches: unknown, output: Output) => {
+      if (data.role === 'tank' || data.moks === 'MT' || data.moks === 'ST')
+        return;
+      return output.avoidTetherBusters?.();
+    };
+    const combined = combineFuncs(
+      defaultAlertText(targetSev),
+      targetFunc,
+      defaultInfoText(otherSev),
+      otherFunc,
+    );
+    return (_data: Data, _matches: unknown, output: Output) => {
+      // cactbot-builtin-response
+      output.responseOutputStrings = outputStrings;
+      return combined;
+    };
+  },
 } as const;
 
 // Don't give `Responses` a type in its declaration so that it can be treated as more strict
