@@ -752,7 +752,7 @@ const triggerSet: TriggerSet<Data> = {
 
         // 어듬이 제공
         if (data.options.AutumnStyle && data.moks !== 'none') {
-          const dirs = Autumn.isTeamMt(data.moks) ? [0, 1, 6, 7] : [2, 3, 4, 5];
+          const dirs = Autumn.inMainTeam(data.moks) ? [0, 1, 6, 7] : [2, 3, 4, 5];
           const res = AutumnDirections.outputFromMarker8Num(dirs.includes(dir1) ? dir1 : dir2);
           return output.akb!({ dir: output[res]!() });
         }

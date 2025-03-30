@@ -1,4 +1,4 @@
-import { Job } from '../types/job';
+import { Job, Role } from '../types/job';
 import { LocaleText, OutputStrings } from '../types/trigger';
 
 import { Lang } from './languages';
@@ -579,15 +579,16 @@ const Autumn = {
     return jobs;
   },
 
-  isMoksName: (name: string) => moksNames.includes(name),
-  isMoksTank: (name: string) => moksTanks.includes(name),
-  isMoksHealer: (name: string) => moksHealers.includes(name),
-  isMoksTankHealer: (name: string) => moksTanksAndHealers.includes(name),
-  isMoksDps: (name: string) => moksDps.includes(name),
-  isTeamMt: (name: string) => teamMtMoks.includes(name),
-  isTeamSt: (name: string) => teamStMoks.includes(name),
+  isMoksName: (moksName: string) => moksNames.includes(moksName),
+  isTank: (moksName: string) => moksTanks.includes(moksName),
+  isHealer: (moksName: string) => moksHealers.includes(moksName),
+  isSupport: (moksName: string) => moksTanksAndHealers.includes(moksName),
+  isDps: (moksName: string) => moksDps.includes(moksName),
+  inMainTeam: (moksName: string) => teamMtMoks.includes(moksName),
+  inSubTeam: (moksName: string) => teamStMoks.includes(moksName),
 
   parseMoks: (job: Job, param?: string): AutumnMoks => {
+    // BLU는 어디까지나 인수로만
     if (param !== undefined) {
       // 몫은 인수 0번 고정
       const ss = param.split(',');
@@ -606,6 +607,15 @@ const Autumn = {
       return 'D3'; // 렌지는 D3
     if (Util.isCasterDpsJob(job))
       return 'D4'; // 캐슷은 D4
+    return 'none';
+  },
+  moksToRole: (moks: AutumnMoks): Role => {
+    if (moksTanks.includes(moks))
+      return 'tank';
+    if (moksHealers.includes(moks))
+      return 'healer';
+    if (moksDps.includes(moks))
+      return 'dps';
     return 'none';
   },
 } as const;

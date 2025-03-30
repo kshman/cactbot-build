@@ -1933,10 +1933,9 @@ const triggerSet: TriggerSet<Data> = {
         if (tower0 === undefined || tower1 === undefined)
           return;
 
-        const name = data.party.member(data.me);
-        if (data.options.AutumnStyle && (data.job !== 'BLU' || Autumn.isMoksName(name.nick))) {
+        if (data.options.AutumnStyle) {
           const pos: TowerLocation[] = [];
-          const isdps = data.job === 'BLU' ? Autumn.isMoksDps(name.nick) : data.role === 'dps';
+          const isdps = Autumn.isDps(data.moks);
           towerList.forEach((value) => {
             const location = value.location;
             if (matches.effectId === engravementIdMap.lightTower) {
@@ -4657,13 +4656,7 @@ const triggerSet: TriggerSet<Data> = {
           if (dir1 === undefined || dir2 === undefined)
             return;
           let arrow = undefined;
-          if (data.job !== 'BLU') {
-            arrow = getUltimaRayArrow(data.role === 'dps', dir1, dir2);
-          } else {
-            const name = data.party.member(data.me);
-            if (Autumn.isMoksName(name.nick))
-              arrow = getUltimaRayArrow(Autumn.isMoksDps(name.nick), dir1, dir2);
-          }
+          arrow = getUltimaRayArrow(Autumn.isDps(data.moks), dir1, dir2);
           if (arrow !== undefined)
             return output.moveTo!({ dir: output[arrow]!() });
           return output.combined!({ dir1: output[dir1]!(), dir2: output[dir2]!() });
@@ -4741,13 +4734,7 @@ const triggerSet: TriggerSet<Data> = {
           if (dir1 === undefined || dir2 === undefined)
             return;
           let arrow = undefined;
-          if (data.job !== 'BLU') {
-            arrow = getUltimaRayArrow(data.role === 'dps', dir1, dir2);
-          } else {
-            const name = data.party.member(data.me);
-            if (Autumn.isMoksName(name.nick))
-              arrow = getUltimaRayArrow(Autumn.isMoksDps(name.nick), dir1, dir2);
-          }
+          arrow = getUltimaRayArrow(Autumn.isDps(data.moks), dir1, dir2);
           if (arrow !== undefined)
             return output.moveTo!({ dir: output[arrow]!() });
           return output.combined!({ dir1: output[dir1]!(), dir2: output[dir2]!() });
