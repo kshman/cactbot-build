@@ -1,12 +1,37 @@
-const phaseMap = {
-  'A8B5': 'add',
-  'A8CD': 'mov',
-  'A8B9': '1st',
-  'AA14': '2nd',
-  'AA15': '3rd',
-  'AA16': '4th',
-  'AA17': '5th',
-  'AA18': '6th', // Roseblood: 6th Bloom
+const phases = {
+  A8B5: 'add',
+  A8B9: '1st',
+  AA14: '2nd',
+  AA15: '3rd',
+  AA16: '4th',
+  AA17: '5th',
+  AA18: '6th', // Roseblood: 6th Bloom
+};
+const fallOutputs = {
+  mesg: {
+    en: '${ind} (${res})',
+    ja: '${ind} (${res})',
+    ko: '${ind} ${res}',
+  },
+  stack: Outputs.stackMarker,
+  inside: Outputs.in,
+  outside: Outputs.out,
+  stay: Outputs.stay,
+  in: {
+    en: 'In',
+    ja: '内',
+    ko: '🡹',
+  },
+  out: {
+    en: 'Out',
+    ja: '外',
+    ko: '🡻',
+  },
+  split: {
+    en: '/',
+    ja: '/',
+    ko: '',
+  },
 };
 // RECOLLECTION (EXTREME)
 Options.Triggers.push({
@@ -18,21 +43,15 @@ Options.Triggers.push({
       phase: 'door',
       falls: [],
       fallRes: [],
-      roses: [],
     };
   },
   triggers: [
     {
       id: 'ZeleniaEx Phase Tracker',
       type: 'StartsUsing',
-      netRegex: { id: Object.keys(phaseMap), source: 'Zelenia' },
+      netRegex: { id: Object.keys(phases), source: 'Zelenia' },
       suppressSeconds: 1,
-      run: (data, matches) => {
-        const phase = phaseMap[matches.id];
-        if (phase === undefined)
-          throw new UnreachableCode();
-        data.phase = phase;
-      },
+      run: (data, matches) => data.phase = phases[matches.id] ?? 'unknown',
     },
     {
       id: 'ZeleniaEx Thorned Catharsis',
@@ -49,7 +68,7 @@ Options.Triggers.push({
       response: Responses.protean(),
     },
     {
-      id: 'ZeleniaEx My shock',
+      id: 'ZeleniaEx My Shock',
       type: 'HeadMarker',
       netRegex: { id: ['0244', '0245'] },
       condition: (data, matches) => data.phase === 'door' && data.me === matches.target,
@@ -77,16 +96,7 @@ Options.Triggers.push({
       type: 'StartsUsing',
       netRegex: { id: 'A89F', source: 'Zelenia', capture: false },
       durationSeconds: 5,
-      response: (data, _matches, output) => {
-        // cactbot-builtin-response
-        output.responseOutputStrings = {
-          tetherBusters: Outputs.tetherBusters,
-          avoidTetherBusters: Outputs.avoidTetherBusters,
-        };
-        if (data.role === 'tank')
-          return { alertText: output.tetherBusters() };
-        return { infoText: output.avoidTetherBusters() };
-      },
+      response: Responses.tetherBuster(),
     },
     {
       id: 'ZeleniaEx Escelons\' Fall',
@@ -102,10 +112,10 @@ Options.Triggers.push({
         data.falls = [];
         data.fallRes = [];
         let move;
-        if (data.phase !== 'esc')
+        if (data.phase !== 'shade')
           move = data.role === 'dps' ? 'out' : 'in';
         else {
-          move = data.donutRole === data.role
+          move = data.donut === data.role
             ? (bait1 === 'near' ? 'out' : 'in')
             : (bait1 === 'near' ? 'in' : 'out');
         }
@@ -126,7 +136,7 @@ Options.Triggers.push({
         }
         const join = data.fallRes.map((v) => output[v]()).join(output.split());
         data.fallPrev = data.fallRes.shift();
-        if (data.phase === 'esc' && data.donutRole === data.role) {
+        if (data.phase === 'shade' && data.donut === data.role) {
           data.fallPrev = undefined;
           return output.mesg({ ind: output.stack(), res: join });
         }
@@ -134,29 +144,7 @@ Options.Triggers.push({
         return output.mesg({ ind: ind, res: join });
       },
       outputStrings: {
-        mesg: {
-          en: '${ind} (${res})',
-          ja: '${ind} (${res})',
-          ko: '${ind} ${res}',
-        },
-        inside: Outputs.in,
-        outside: Outputs.out,
-        stack: Outputs.stackMarker,
-        in: {
-          en: 'In',
-          ja: '内',
-          ko: '🡹',
-        },
-        out: {
-          en: 'Out',
-          ja: '外',
-          ko: '🡻',
-        },
-        split: {
-          en: '/',
-          ja: '/',
-          ko: '',
-        },
+        ...fallOutputs,
       },
     },
     {
@@ -168,35 +156,13 @@ Options.Triggers.push({
       response: (data, _matches, output) => {
         // cactbot-builtin-response
         output.responseOutputStrings = {
-          mesg: {
-            en: '${ind} (${res})',
-            ja: '${ind} (${res})',
-            ko: '${ind} ${res}',
-          },
-          inside: Outputs.in,
-          outside: Outputs.out,
-          stay: Outputs.stay,
-          in: {
-            en: 'In',
-            ja: '内',
-            ko: '🡹',
-          },
-          out: {
-            en: 'Out',
-            ja: '外',
-            ko: '🡻',
-          },
-          split: {
-            en: '/',
-            ja: '/',
-            ko: '',
-          },
+          ...fallOutputs,
         };
         const join = data.fallRes.map((v) => output[v]()).join(output.split());
-        const prev = data.fallPrev;
         const move = data.fallRes.shift();
         if (move === undefined)
           return;
+        const prev = data.fallPrev;
         data.fallPrev = move;
         if (prev === move)
           return { infoText: output.mesg({ ind: output.stay(), res: join }) };
@@ -222,7 +188,7 @@ Options.Triggers.push({
       type: 'Tether',
       netRegex: { id: '0011' },
       condition: (data, matches) => data.me === matches.target,
-      durationSeconds: 5,
+      durationSeconds: 3,
       alertText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
@@ -233,6 +199,13 @@ Options.Triggers.push({
       },
     },
     {
+      id: 'ZeleniaEx Perfumed Quietus',
+      type: 'StartsUsing',
+      netRegex: { id: 'A8CD', source: 'Zelenia', capture: false },
+      delaySeconds: 4,
+      response: Responses.bigAoe(),
+    },
+    {
       id: 'ZeleniaEx Roseblood Bloom',
       type: 'StartsUsing',
       netRegex: { id: 'A8B9', source: 'Zelenia', capture: false },
@@ -240,10 +213,20 @@ Options.Triggers.push({
       infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
-          en: 'Start from north/east',
-          ja: '北/東から',
-          ko: 'Ⓐ/Ⓑ 두칸으로 (1식)',
+          en: 'First bloom',
+          ja: '(一式)',
+          ko: '(1식)',
         },
+      },
+    },
+    {
+      id: 'ZeleniaEx 1st Rotation',
+      type: 'HeadMarker',
+      netRegex: { id: ['00A7', '00A8'], capture: true },
+      infoText: (_data, matches, output) => matches.id === '00A7' ? output.cw() : output.ccw(),
+      outputStrings: {
+        cw: Outputs.clockwise,
+        ccw: Outputs.counterclockwise,
       },
     },
     {
@@ -254,51 +237,86 @@ Options.Triggers.push({
       response: Responses.spread('alert'),
     },
     {
-      id: 'ZeleniaEx 2nd A.Thunder IV',
+      id: 'ZeleniaEx Roseblood: 2nd Bloom',
       type: 'StartsUsing',
-      netRegex: { id: ['A9BA', 'A9BB'], source: 'Zelenia' },
-      condition: (data) => data.phase === '2nd',
+      netRegex: { id: 'AA14', source: 'Zelenia', capture: false },
       durationSeconds: 5,
-      suppressSeconds: 5,
-      infoText: (data, matches, output) => {
-        if (matches.id === 'A9BA') {
-          data.athunder4 = 'in';
-          return output.out();
-        }
-        data.athunder4 = 'out';
-        return output.in();
-      },
+      infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
-        in: {
-          en: 'In first',
-          ja: '内から',
-          ko: '한칸 안쪽으로 (2식)',
-        },
-        out: {
-          en: 'Out first',
-          ja: '外から',
-          ko: '두칸 바깥쪽으로 (2식)',
+        text: {
+          en: 'Second bloom',
+          ja: '(二式)',
+          ko: '(2식)',
         },
       },
     },
     {
-      id: 'ZeleniaEx 2nd A.Thunder IV Next',
+      id: 'ZeleniaEx A.Thunder IV',
+      type: 'StartsUsing',
+      netRegex: { id: ['A9BA', 'A9BB'], source: 'Zelenia' },
+      durationSeconds: 5,
+      suppressSeconds: 5,
+      infoText: (data, matches, output) => {
+        if (data.phase === '2nd')
+          return matches.id === 'A9BA' ? output.out2nd() : output.in2nd();
+        if (data.phase === '5th')
+          return matches.id === 'A9BA' ? output.out5th() : output.in5th();
+      },
+      outputStrings: {
+        in2nd: {
+          en: 'In first',
+          ja: '内から',
+          ko: '한칸 안쪽으로',
+        },
+        out2nd: {
+          en: 'Out first',
+          ja: '外から',
+          ko: '두칸 바깥쪽으로',
+        },
+        in5th: {
+          en: 'In',
+          ja: '内から',
+          ko: '안으로',
+        },
+        out5th: {
+          en: 'Out',
+          ja: '外から',
+          ko: '바깥으로',
+        },
+      },
+    },
+    {
+      id: 'ZeleniaEx A.Thunder IV Next',
       type: 'Ability',
-      netRegex: { id: ['A9BA', 'A9BB'], source: 'Zelenia', capture: false },
-      condition: (data) => data.phase === '2nd' && data.athunder4 !== undefined,
+      netRegex: { id: ['A9BA', 'A9BB'], source: 'Zelenia' },
       durationSeconds: 4,
       suppressSeconds: 5,
-      infoText: (data, _matches, output) => output[data.athunder4](),
+      infoText: (data, matches, output) => {
+        if (data.phase === '2nd')
+          return matches.id === 'A9BA' ? output.in2nd() : output.out2nd();
+        if (data.phase === '5th')
+          return matches.id === 'A9BA' ? output.in5th() : output.out5th();
+      },
       outputStrings: {
-        in: {
+        in2nd: {
           en: 'In second',
           ja: '内へ',
           ko: '안으로 🔜 피해요',
         },
-        out: {
+        out2nd: {
           en: 'Out second',
           ja: '外へ',
           ko: '바깥으로 🔜 피해요',
+        },
+        in5th: {
+          en: 'In',
+          ja: '内へ',
+          ko: '🡼방향 안으로',
+        },
+        out5th: {
+          en: 'Out',
+          ja: '外へ',
+          ko: '🡼방향 바깥으로',
         },
       },
     },
@@ -308,77 +326,87 @@ Options.Triggers.push({
       netRegex: { id: 'AA15', source: 'Zelenia', capture: false },
       durationSeconds: 6,
       infoText: (_data, _matches, output) => output.text(),
-      run: (data) => data.roses = [],
       outputStrings: {
         text: {
-          en: 'Spread',
-          ja: '三式',
-          ko: '맡은 자리로 (3식◣◢ 십자 타워)',
+          en: 'Third bloom',
+          ja: '(三式)',
+          ko: '(3식 십자 타워)',
         },
       },
     },
     {
-      id: 'ZeleniaEx 3rd Rose',
+      id: 'ZeleniaEx Rose',
       type: 'HeadMarker',
       netRegex: { id: '0250' },
-      condition: (data, matches) => {
-        if (data.phase !== '3rd')
-          return false;
-        data.roses.push(matches.target);
-        return data.roses.length === 4;
-      },
       durationSeconds: 5,
-      infoText: (data, _matches, output) => {
-        if (data.roses.includes(data.me))
-          return output.rose();
-        return output.tower();
+      suppressSeconds: 5,
+      infoText: (data, matches, output) => {
+        const tdps = data.party.isDPS(matches.target);
+        const idps = data.role === 'dps';
+        const rose = tdps === idps;
+        if (data.phase === '3rd')
+          return rose ? output.hold() : output.tower();
+        if (data.phase === '4th')
+          return rose ? output.hold() : output.spread();
+        if (data.phase === '6th')
+          return rose ? output.zigzag() : output.tower();
       },
       outputStrings: {
-        rose: {
+        hold: {
           en: 'Hold position',
           ja: '薔薇',
           ko: '내게 장미, 그대로',
+        },
+        zigzag: {
+          en: 'Hold position',
+          ja: '薔薇',
+          ko: '내게 장미, 타워와 지그재그',
         },
         tower: {
           en: 'Get towers',
           ja: '塔踏み',
           ko: '타워 밟아요',
         },
+        spread: {
+          en: 'Spread',
+          ja: '散会',
+          ko: '북쪽에서 흩어져요',
+        },
       },
     },
     {
-      id: 'ZeleniaEx Shade\'s shock',
+      id: 'ZeleniaEx Shade\'s Shock',
       type: 'StartsUsing',
       netRegex: { id: 'A8A1', source: 'Zelenia\'s Shade', capture: false },
       durationSeconds: 5,
       infoText: (data, _matches, output) => data.role === 'dps' ? output.dps() : output.sup(),
-      run: (data) => data.phase = 'esc',
+      run: (data) => data.phase = 'shade',
       outputStrings: {
         sup: {
           en: 'Stack north',
           ja: '北に集合',
-          ko: 'TH 북쪽에서 뭉쳐요',
+          ko: 'TH 북쪽에서 모여요',
         },
         dps: {
           en: 'Stack south',
           ja: '南に集合',
-          ko: 'DPS 남쪽에서 뭉쳐요',
+          ko: 'DPS 남쪽에서 모여요',
         },
       },
     },
     {
-      id: 'ZeleniaEx Shade\'s shock target',
+      id: 'ZeleniaEx Shade\'s Shock Determine Donut',
       type: 'HeadMarker',
       netRegex: { id: '0244' },
-      condition: (data) => data.phase === 'esc',
+      condition: (data) => data.phase === 'shade',
       suppressSeconds: 1,
       run: (data, matches) => {
         if (data.party.isDPS(matches.target))
-          data.donutRole = 'dps';
+          data.donut = 'dps';
         else if (data.role === 'dps')
-          data.donutRole = 'unknown';
+          data.donut = 'unknown';
         else
-          data.donutRole = data.role;
+          data.donut = data.role;
       },
     },
     {
@@ -387,41 +415,11 @@ Options.Triggers.push({
       netRegex: { id: 'AA16', source: 'Zelenia', capture: false },
       durationSeconds: 6,
       infoText: (_data, _matches, output) => output.text(),
-      run: (data) => data.roses = [],
       outputStrings: {
         text: {
-          en: 'Find north',
-          ja: '四式',
-          ko: '남쪽으로 (4식◣◢ 꽃밭)',
-        },
-      },
-    },
-    {
-      id: 'ZeleniaEx 4th Rose',
-      type: 'HeadMarker',
-      netRegex: { id: '0250' },
-      condition: (data, matches) => {
-        if (data.phase !== '4th')
-          return false;
-        data.roses.push(matches.target);
-        return data.roses.length === 4;
-      },
-      durationSeconds: 5,
-      infoText: (data, _matches, output) => {
-        if (data.roses.includes(data.me))
-          return output.rose();
-        return output.spread();
-      },
-      outputStrings: {
-        rose: {
-          en: 'Hold position',
-          ja: '薔薇',
-          ko: '내게 장미, 그대로',
-        },
-        spread: {
-          en: 'Spread',
-          ja: '散会',
-          ko: '북쪽에서 흩어져요',
+          en: 'Fourth bloom',
+          ja: '(四式)',
+          ko: '(4식 꽃밭)',
         },
       },
     },
@@ -458,17 +456,12 @@ Options.Triggers.push({
       type: 'StartsUsing',
       netRegex: { id: ['A8B0', 'A8B1'], source: 'Zelenia\'s Shade' },
       delaySeconds: 2,
-      durationSeconds: 3.5,
-      alertText: (_data, matches, output) => {
-        const y = parseFloat(matches.y);
-        if (y < 100) {
-          if (matches.id === 'A8B0')
-            return output.right();
-          return output.left();
-        }
-        if (matches.id === 'A8B0')
-          return output.left();
-        return output.right();
+      durationSeconds: 3,
+      infoText: (_data, matches, output) => {
+        let left = matches.id === 'A8B0';
+        if (parseFloat(matches.y) < 100)
+          left = !left;
+        return left ? output.left() : output.right();
       },
       outputStrings: {
         left: Outputs.left,
@@ -476,66 +469,51 @@ Options.Triggers.push({
       },
     },
     {
-      id: 'ZeleniaEx Valorous Ascension',
+      id: 'ZeleniaEx Roseblood: 5th Bloom',
       type: 'StartsUsing',
-      netRegex: { id: 'A8C7', source: 'Zelenia', capture: false },
-      durationSeconds: 3,
+      netRegex: { id: 'AA17', source: 'Zelenia', capture: false },
+      durationSeconds: 5,
       infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
-          en: 'Watch outside object',
-          ja: '外の直線攻撃確認',
-          ko: '돌진+꽃밭 없는곳으로',
+          en: 'Fifth bloom',
+          ja: '(五式)',
+          ko: '(5식 돌진)',
         },
       },
     },
     {
-      id: 'ZeleniaEx 5th A.Thunder IV',
-      type: 'StartsUsing',
-      netRegex: { id: ['A9BA', 'A9BB'], source: 'Zelenia' },
-      condition: (data) => data.phase === '5th',
-      durationSeconds: 5,
-      suppressSeconds: 5,
-      infoText: (data, matches, output) => {
-        if (matches.id === 'A9BA') {
-          data.athunder4 = 'in';
-          return output.out();
-        }
-        data.athunder4 = 'out';
-        return output.in();
+      id: 'ZeleniaEx 5th Chakram',
+      type: 'ActorSetPos',
+      netRegex: { id: '40[0-9A-F]{6}', capture: true },
+      condition: (data, matches) => {
+        if (data.phase !== '5th')
+          return false;
+        if (Math.abs(100 - parseFloat(matches.x)) < 2)
+          return false;
+        if (Math.abs(100 - parseFloat(matches.y)) < 2)
+          return false;
+        return true;
+      },
+      suppressSeconds: 9999,
+      infoText: (_data, matches, output) => {
+        const w = parseFloat(matches.x) < 100;
+        const n = parseFloat(matches.y) < 100;
+        const dir = n
+          ? (w ? output.se() : output.sw())
+          : (w ? output.ne() : output.nw());
+        return output.text({ dir: dir });
       },
       outputStrings: {
-        in: {
-          en: 'In',
-          ja: '内から',
-          ko: '안으로',
+        text: {
+          en: 'Start ${dir}',
+          ja: '${dir}から',
+          ko: '${dir}부터',
         },
-        out: {
-          en: 'Out',
-          ja: '外から',
-          ko: '바깥으로',
-        },
-      },
-    },
-    {
-      id: 'ZeleniaEx 5th A.Thunder IV Next',
-      type: 'Ability',
-      netRegex: { id: ['A9BA', 'A9BB'], source: 'Zelenia', capture: false },
-      condition: (data) => data.phase === '5th' && data.athunder4 !== undefined,
-      durationSeconds: 4,
-      suppressSeconds: 5,
-      infoText: (data, _matches, output) => output[data.athunder4](),
-      outputStrings: {
-        in: {
-          en: 'In',
-          ja: '内へ',
-          ko: '🡼방향 안으로',
-        },
-        out: {
-          en: 'Out',
-          ja: '外へ',
-          ko: '🡼방향 바깥으로',
-        },
+        ne: Outputs.northeast,
+        se: Outputs.southeast,
+        sw: Outputs.southwest,
+        nw: Outputs.northwest,
       },
     },
     {
@@ -544,41 +522,11 @@ Options.Triggers.push({
       netRegex: { id: 'AA18', source: 'Zelenia', capture: false },
       durationSeconds: 5,
       infoText: (_data, _matches, output) => output.text(),
-      run: (data) => data.roses = [],
       outputStrings: {
         text: {
-          en: 'Spread',
-          ja: '散会',
-          ko: '맡은 분면으로',
-        },
-      },
-    },
-    {
-      id: 'ZeleniaEx 6th Rose',
-      type: 'HeadMarker',
-      netRegex: { id: '0250' },
-      condition: (data, matches) => {
-        if (data.phase !== '6th')
-          return false;
-        data.roses.push(matches.target);
-        return data.roses.length === 4;
-      },
-      durationSeconds: 5,
-      infoText: (data, _matches, output) => {
-        if (data.roses.includes(data.me))
-          return output.rose();
-        return output.tower();
-      },
-      outputStrings: {
-        rose: {
-          en: 'Hold position',
-          ja: '薔薇',
-          ko: '내게 장미, 타워와 지그재그',
-        },
-        tower: {
-          en: 'Get tower',
-          ja: '塔踏み',
-          ko: '타워 밟아요',
+          en: 'Sixth bloom',
+          ja: '(六式)',
+          ko: '(6식 지그재그)',
         },
       },
     },
