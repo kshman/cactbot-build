@@ -229,6 +229,10 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         away: {
           en: 'Away from adds',
+          de: 'Weg von den Adds',
+          fr: 'Éloignez-vous des adds',
+          cn: '远离小怪',
+          ko: '쫄들과 멀어지기',
         },
       },
     },
@@ -241,6 +245,10 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         dodgeCombo: {
           en: 'Dodge contracting swords (front/back combo after)',
+          de: 'Weiche den Schwertern aus (vorne/hinten Kombo danach)',
+          fr: 'Esquivez les épées combattantes (combo avant/arrière ensuite)',
+          cn: '躲避向内步进 AOE (然后前后刀)',
+          ko: '모여드는 칼 피하기 (이후 앞/뒤 콤보)',
         },
       },
     },
@@ -254,6 +262,10 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         dodge: {
           en: 'Dodge expanding swords',
+          de: 'Weiche den ausbreitenden Schwertern aus',
+          fr: 'Évitez les épées en expansion',
+          cn: '躲避向外步进 AOE',
+          ko: '퍼져 나가는 칼 피하기',
         },
       },
     },
@@ -304,7 +316,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (data, _matches, output) => {
         if (data.bitterReapingTargets.includes(data.me))
           return output.busterOnYou!();
-        const players = data.bitterReapingTargets.map((x) => data.party.member(x).nick).join(
+        const players = data.bitterReapingTargets.map((x) => data.party.member(x)).join(
           output.and!(),
         );
         return output.busters!({ player: players });
@@ -358,6 +370,10 @@ const triggerSet: TriggerSet<Data> = {
         westCorner: Outputs.west,
         unknown: {
           en: 'Avoid swords',
+          de: 'Weiche den Schwertern aus',
+          fr: 'Évitez les épées',
+          cn: '躲避剑',
+          ko: '칼 피하기',
         },
       },
     },
@@ -410,18 +426,38 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         insideNorth: {
           en: 'Inner North Diamond',
+          de: 'Innerer Nord-Diamant',
+          fr: 'Diamand nord intérieur',
+          cn: '上内侧方格',
+          ko: '안 북쪽 칸',
         },
         insideEast: {
           en: 'Inner East Diamond',
+          de: 'Innerer Ost-Diamant',
+          fr: 'Diamand est intérieur',
+          cn: '右内侧方格',
+          ko: '안 동쪽 칸',
         },
         insideSouth: {
           en: 'Inner South Diamond',
+          de: 'Innerer Süd-Diamant',
+          fr: 'Diamand sud intérieur',
+          cn: '下内侧方格',
+          ko: '안 남쪽 칸',
         },
         insideWest: {
           en: 'Inner West Diamond',
+          de: 'Innerer West-Diamant',
+          fr: 'Diamand est intérieur',
+          cn: '左内侧方格',
+          ko: '안 서쪽 칸',
         },
         unknown: {
           en: 'Avoid Line Cleaves',
+          de: 'Weiche den Linien-Cleaves aus',
+          fr: 'Évitez les cleaves en ligne',
+          cn: '躲避直线剑击',
+          ko: '직선 장판 피하기',
         },
       },
     },

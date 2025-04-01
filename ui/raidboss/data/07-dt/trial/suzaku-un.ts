@@ -3,11 +3,17 @@
 // Edit the source file below and then run `npm run sync-files`
 // Source: ui/raidboss/data/04-sb/trial/suzaku-ex.ts
 
+import Conditions from '../../../../../resources/conditions';
 import Outputs from '../../../../../resources/outputs';
 import { Responses } from '../../../../../resources/responses';
 import ZoneId from '../../../../../resources/zone_id';
 import { RaidbossData } from '../../../../../types/data';
 import { TriggerSet } from '../../../../../types/trigger';
+
+// TODO: Remind user to bait exactly one bird with Rekindle.
+// TODO: MapEffect out the Hotspot patterns
+// TODO: Figure out Close-Quarter Crescendo
+// TODO: Call Incandescent Interlude towers
 
 export type Data = RaidbossData;
 
@@ -18,13 +24,32 @@ const triggerSet: TriggerSet<Data> = {
   timelineFile: 'suzaku-un.txt',
   triggers: [
     {
-      id: 'SuzUn Cremate',
+      id: 'SuzakuUn Screams Of The Damned',
       type: 'StartsUsing',
-      netRegex: { id: 'A7FB', source: 'Suzaku' },
+      netRegex: { id: 'A7FC', source: 'Suzaku', capture: false },
+      response: Responses.aoe(),
+    },
+    {
+      id: 'SuzakuUn Rekindle',
+      type: 'HeadMarker',
+      netRegex: { id: '008B', capture: true },
+      condition: Conditions.targetIsYou(),
+      response: Responses.spread(),
+    },
+    {
+      id: 'SuzakuUn Cremate',
+      type: 'StartsUsing',
+      netRegex: { id: 'A7FB', source: 'Suzaku', capture: true },
       response: Responses.tankBuster(),
     },
     {
-      id: 'SuzUn Phantom Flurry',
+      id: 'SuzakuUn Southron Star',
+      type: 'StartsUsing',
+      netRegex: { id: 'A807', source: 'Suzaku', capture: false },
+      response: Responses.aoe(),
+    },
+    { // Non-capturing because her initial castbar is self-targeted.
+      id: 'SuzakuUn Phantom Flurry Buster',
       type: 'StartsUsing',
       netRegex: { id: 'A804', source: 'Suzaku', capture: false },
       alertText: (_data, _matches, output) => output.text!(),
@@ -33,13 +58,25 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: 'SuzUn Mesmerizing Melody',
+      id: 'SuzakuUn Phantom Flurry Behind',
+      type: 'Ability',
+      netRegex: { id: 'A804', source: 'Suzaku', capture: false },
+      response: Responses.getBehind(),
+    },
+    {
+      id: 'SuzakuUn Scathing Net',
+      type: 'HeadMarker',
+      netRegex: { id: '00A1', capture: true },
+      response: Responses.stackMarkerOn(),
+    },
+    {
+      id: 'SuzakuUn Mesmerizing Melody',
       type: 'StartsUsing',
       netRegex: { id: 'A802', source: 'Suzaku', capture: false },
       response: Responses.getOut(),
     },
     {
-      id: 'SuzUn Ruthless Refrain',
+      id: 'SuzakuUn Ruthless Refrain',
       type: 'StartsUsing',
       netRegex: { id: 'A803', source: 'Suzaku', capture: false },
       response: Responses.getIn(),

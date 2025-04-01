@@ -786,7 +786,7 @@ const zoneReplace: ZoneReplace[] = [
       'ui/oopsyraidsy/data/04-sb/trial/suzaku-ex.ts':
         'ui/oopsyraidsy/data/07-dt/trial/suzaku-un.ts',
     },
-    prefix: { 'SuzEx': 'SuzUn' },
+    prefix: { 'SuzakuEx': 'SuzakuUn' },
     other: {
       'HellsKierExtreme': 'HellsKierUnreal',
       'Suzaku Extreme': 'Suzaku Unreal',
