@@ -1,4 +1,3 @@
-import { AutumnDirections } from '../../../../../resources/autumn';
 import Outputs from '../../../../../resources/outputs';
 import { Responses } from '../../../../../resources/responses';
 import ZoneId from '../../../../../resources/zone_id';
@@ -6,7 +5,7 @@ import { RaidbossData } from '../../../../../types/data';
 import { TriggerSet } from '../../../../../types/trigger';
 
 type News = 'north' | 'east' | 'south' | 'west' | 'unknown';
-type AbsType = { id: string; prior: number; type: boolean };
+type AbsType = { id: string; count: number; type: boolean };
 
 const snapTwistIds: { [id: string]: [number, News] } = {
   'A728': [2, 'west'],
@@ -31,10 +30,25 @@ const snapTwistIds: { [id: string]: [number, News] } = {
   'A73E': [4, 'east'],
 };
 
+const frogIds: { [id: string]: News } = {
+  'A70A': 'north',
+  'A70B': 'south',
+  'A70C': 'west',
+  'A70D': 'east',
+};
+
+const dancedIds = [
+  '9BE2',
+  '9BE3',
+  'A36C',
+  'A36D',
+  'A36E',
+  'A36F',
+] as const;
+
 export interface Data extends RaidbossData {
   side?: 'role' | 'light';
   infernal: number;
-  cone: 'card' | 'inter' | 'unknown';
   frogs: News[];
   collect: string[];
   abs: AbsType[];
@@ -146,10 +160,10 @@ const triggerSet: TriggerSet<Data> = {
       netRegex: { effectId: '116D' },
       condition: (data, matches) => data.infernal === 2 && data.me === matches.target,
       durationSeconds: 9,
-      alertText: (data, matches, output) => {
+      alertText: (_data, matches, output) => {
         if (parseFloat(matches.duration) < 14)
           return output.spot!();
-        return output.bait!({ dir: output[data.cone]!() });
+        return output.bait!();
       },
       outputStrings: {
         spot: {
@@ -157,8 +171,8 @@ const triggerSet: TriggerSet<Data> = {
           ko: '조명 밟아요',
         },
         bait: {
-          en: 'Bait Frog: ${dir}',
-          ko: '${dir} 개구리 유도',
+          en: 'Bait Frog',
+          ko: '개구리 부채 유도',
         },
         card: Outputs.cardinals,
         inter: Outputs.intercards,
@@ -172,11 +186,9 @@ const triggerSet: TriggerSet<Data> = {
       condition: (data, matches) => data.infernal === 2 && data.me === matches.target,
       delaySeconds: 11,
       durationSeconds: 8,
-      alertText: (data, matches, output) => {
-        if (parseFloat(matches.duration) < 14) {
-          const s = data.cone === 'card' ? 'inter' : data.cone === 'inter' ? 'card' : 'unknown';
-          return output.bait!({ dir: output[s]!() });
-        }
+      alertText: (_data, matches, output) => {
+        if (parseFloat(matches.duration) < 14)
+          return output.bait!();
         return output.spot!();
       },
       outputStrings: {
@@ -185,8 +197,8 @@ const triggerSet: TriggerSet<Data> = {
           ko: '조명 밟아요',
         },
         bait: {
-          en: 'Bait Frog: ${dir}',
-          ko: '${dir} 개구리 유도',
+          en: 'Bait Frog',
+          ko: '개구리 부채 유도',
         },
         card: Outputs.cardinals,
         inter: Outputs.intercards,
@@ -236,31 +248,35 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: 'R5S Frog Collect',
-      type: 'ActorControlExtra',
+      id: 'R5S Frog Dance Collect',
+      type: 'StartsUsing',
+      netRegex: { id: Object.keys(frogIds), source: 'Frogtourage' },
+      run: (data, matches) => data.frogs.push(frogIds[matches.id] ?? 'unknown'),
+      // 다른 방법
       // [00:18:16.002] 273 111:40012007:003F:5:0:0:0
-      netRegex: { id: '40[0-9A-F]{6}', category: '003F' },
-      run: (data, matches) => {
-        const dances: { [id: string]: News } = {
-          '5': 'west',
-          '7': 'east',
-          '1F': 'north',
-          '20': 'south',
-        };
-        const dir = dances[matches.param1];
-        if (dir === undefined)
-          return;
-        data.frogs.push(dir);
-      },
+      // type: 'ActorControlExtra',
+      // netRegex: { id: '40[0-9A-F]{6}', category: '003F' },
+      // run: (data, matches) => {
+      //   const dances: { [id: string]: News } = {
+      //     '5': 'west',
+      //     '7': 'east',
+      //     '1F': 'north',
+      //     '20': 'south',
+      //   };
+      //   const dir = dances[matches.param1];
+      //   if (dir === undefined)
+      //     return;
+      //   data.frogs.push(dir);
+      // },
     },
     {
       id: 'R5S Alpha Beta',
       type: 'GainsEffect',
       netRegex: { effectId: ['116E', '116F'] },
       run: (data, matches) => {
-        const dur = parseFloat(matches.duration);
+        const count = parseFloat(matches.duration) + performance.now();
         const type = matches.effectId === '116E';
-        data.abs.push({ id: matches.target, prior: dur, type: type });
+        data.abs.push({ id: matches.target, count: count, type: type });
       },
     },
     {
@@ -270,7 +286,7 @@ const triggerSet: TriggerSet<Data> = {
       condition: (data, matches) => data.me === matches.target,
       delaySeconds: (_data, matches) => parseFloat(matches.duration) - 4,
       countdownSeconds: 4,
-      alarmText: (data, _matches, output) => output.text!({ order: data.order }),
+      alertText: (data, _matches, output) => output.text!({ order: data.order }),
       outputStrings: {
         text: {
           en: 'Get together (${order})',
@@ -293,7 +309,7 @@ const triggerSet: TriggerSet<Data> = {
         let target = undefined;
         const my = data.abs.find((x) => x.id === data.me);
         if (my !== undefined) {
-          const sorted = data.abs.sort((x, y) => x.prior - y.prior);
+          const sorted = data.abs.sort((x, y) => x.count - y.count);
           const abm = sorted.filter((x) => x.type === my.type);
           const abo = sorted.filter((x) => x.type !== my.type);
           data.order = abm.findIndex((x) => x.id === data.me);
@@ -302,7 +318,9 @@ const triggerSet: TriggerSet<Data> = {
         }
 
         if (data.order !== undefined) {
-          if (target === undefined)
+          if (data.options.AutumnStyle)
+            target = target === undefined ? output.unknown!() : target.jobFull;
+          else if (target === undefined)
             target = output.unknown!();
           return output.combo!({ dir: output[curr]!(), order: data.order, target: target });
         }
@@ -328,28 +346,31 @@ const triggerSet: TriggerSet<Data> = {
     {
       id: 'R5S Frog Dance',
       type: 'Ability',
-      netRegex: { id: ['9BE2', '9BE3', 'A36[C-F]'], capture: false },
+      netRegex: { id: dancedIds, capture: false },
       durationSeconds: 2,
-      response: (data, _matches, output) => {
-        // cactbot-builtin-response
-        output.responseOutputStrings = {
-          text: {
-            en: '${dir}',
-            ko: '${dir}으로',
-          },
-          east: Outputs.east,
-          west: Outputs.west,
-          north: Outputs.north,
-          south: Outputs.south,
-          stay: Outputs.stay,
-        };
+      infoText: (data, _matches, output) => {
         const prev = data.frogs.shift();
         const curr = data.frogs[0];
         if (curr === undefined)
           return;
         if (prev === curr)
-          return { infoText: output.stay!() };
-        return { alertText: output.text!({ dir: output[curr]!() }) };
+          return output.stay!();
+        return output.text!({ dir: output[curr]!() });
+      },
+      outputStrings: {
+        text: {
+          en: '${dir}',
+          ko: '${dir}으로',
+        },
+        stay: {
+          en: '(Stay)',
+          ja: '(そのまま)',
+          ko: '(그대로)',
+        },
+        east: Outputs.east,
+        west: Outputs.west,
+        north: Outputs.north,
+        south: Outputs.south,
       },
     },
     {
@@ -394,18 +415,6 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: 'R5S Frog Burn',
-      type: 'ActorSetPos',
-      netRegex: { id: '40[0-9A-F]{6}', capture: true },
-      condition: (data) => data.infernal > 1,
-      suppressSeconds: 20,
-      run: (data, matches) => {
-        const dir = AutumnDirections.hdgConv8(matches.heading);
-        const cardinal = [0, 2, 4, 8];
-        data.cone = cardinal.includes(dir) ? 'inter' : 'card';
-      },
-    },
-    {
       id: 'R5S Do the Hustle',
       type: 'StartsUsing',
       netRegex: { id: ['A724', 'A725'], source: 'Dancing Green', capture: false },
@@ -413,11 +422,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Go to safe zone',
-          ko: '보스 춤사위 확인해요!',
+          ko: '보스 춤사위!',
         },
       },
     },
     // Moonburn 어캄
+    // 테스트
   ],
   timelineReplace: [
     {
@@ -425,6 +435,7 @@ const triggerSet: TriggerSet<Data> = {
       'missingTranslations': true,
       'replaceSync': {
         'Dancing Green': 'ダンシング・グリーン',
+        'Frogtourage': 'フロッグダンサー',
       },
     },
   ],

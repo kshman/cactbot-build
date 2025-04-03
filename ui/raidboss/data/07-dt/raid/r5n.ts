@@ -346,9 +346,9 @@ const triggerSet: TriggerSet<Data> = {
     },
     {
       id: 'R5N Deep Cut',
-      type: 'HeadMarker',
-      netRegex: { id: headMarkerData.tankLaser, capture: true },
-      response: Responses.tankCleave(),
+      type: 'StartsUsing',
+      netRegex: { id: 'A6C6', source: 'Dancing Green', capture: true },
+      response: Responses.tankBuster(),
     },
     {
       id: 'R5N Full Beat',

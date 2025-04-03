@@ -297,7 +297,6 @@ const triggerSet: TriggerSet<Data> = {
       response: Responses.aoe(),
     },
     {
-      // cast is self-targeted on boss
       id: 'R6N Pudding Party',
       type: 'HeadMarker',
       netRegex: { id: headMarkerData.stack, capture: true },
@@ -305,8 +304,8 @@ const triggerSet: TriggerSet<Data> = {
     },
     {
       id: 'R6N Color Riot',
-      type: 'HeadMarker',
-      netRegex: { id: headMarkerData.tankbuster, capture: true },
+      type: 'StartsUsing',
+      netRegex: { id: 'A670', source: 'Sugar Riot', capture: true },
       response: Responses.tankCleave(),
     },
     {
