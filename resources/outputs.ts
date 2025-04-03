@@ -1084,6 +1084,11 @@ export default {
     ja: '散開',
     ko: '흩어져서 혼자',
   },
+  stackGroup: {
+    en: 'Groups',
+    ja: '4:4頭割り',
+    ko: '4:4',
+  },
   stackCenter: {
     en: 'Stack in center',
     ja: '真ん中で頭割り',

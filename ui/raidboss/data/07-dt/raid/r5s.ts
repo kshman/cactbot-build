@@ -160,6 +160,7 @@ const triggerSet: TriggerSet<Data> = {
       netRegex: { effectId: '116D' },
       condition: (data, matches) => data.infernal === 2 && data.me === matches.target,
       durationSeconds: 9,
+      countdownSeconds: 9,
       alertText: (_data, matches, output) => {
         if (parseFloat(matches.duration) < 14)
           return output.spot!();
@@ -186,6 +187,7 @@ const triggerSet: TriggerSet<Data> = {
       condition: (data, matches) => data.infernal === 2 && data.me === matches.target,
       delaySeconds: 11,
       durationSeconds: 8,
+      countdownSeconds: 8,
       alertText: (_data, matches, output) => {
         if (parseFloat(matches.duration) < 14)
           return output.bait!();
@@ -402,6 +404,7 @@ const triggerSet: TriggerSet<Data> = {
         b8: Outputs.protean,
       },
     },
+    /* 당장은 필요 없음
     {
       id: 'R5S Frogtourage',
       type: 'StartsUsing',
@@ -414,6 +417,7 @@ const triggerSet: TriggerSet<Data> = {
         },
       },
     },
+    */
     {
       id: 'R5S Do the Hustle',
       type: 'StartsUsing',
