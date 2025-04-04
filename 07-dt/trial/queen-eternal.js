@@ -262,9 +262,9 @@ Options.Triggers.push({
         if (data.shriekTargets.includes(data.me)) {
           const otherShriek = data.shriekTargets.filter((target) => target !== data.me)[0];
           const m = data.party.member(otherShriek);
-          return output.shriekYou({ otherTarget: m.nick });
+          return output.shriekYou({ otherTarget: m });
         }
-        const mm = data.shriekTargets.map((x) => data.party.member(x).nick);
+        const mm = data.shriekTargets.map((x) => data.party.member(x));
         const joinedTargets = mm.join(', ');
         return output.shriekOthers({ comboTargets: joinedTargets });
       },
@@ -353,6 +353,101 @@ Options.Triggers.push({
     },
   ],
   timelineReplace: [
+    {
+      'locale': 'de',
+      'missingTranslations': true,
+      'replaceSync': {
+        'Queen Eternal': 'Ewig(?:e|er|es|en) Königin',
+      },
+      'replaceText': {
+        '\\(abandonment\\)': '(Rote Dreiecke sammeln)',
+        '\\(all\\)': '(alle)',
+        '\\(cast\\)': '(wirken)',
+        '\\(cones\\)': '(Kegel)',
+        '\\(flare\\)': '(Flare)',
+        '\\(gaze\\)': '(Blick)',
+        '\\(pre-cast\\)': '(vor-wirken)',
+        '\\(puddles\\)': '(Flächen)',
+        '\\(raidwide\\)': '(raidweit)',
+        '\\(single\\)': '(einzel)',
+        '\\(stun\\)': '(Betäubung)',
+        'Absolute Authority': 'Absolute Autorität',
+        'Aethertithe': 'Ätherzehnt',
+        'Authority\'s Hold': 'Raumkontrolle: Ausbremsung',
+        'Besiegement': 'Durchschlag',
+        'Brutal Crown': 'Herrschaftsgewalt',
+        'Castellation': 'Kastellierung',
+        'Coronation': 'Krönung',
+        'Divide and Conquer': 'Teile und Herrsche',
+        'Downburst': 'Fallböe',
+        'Dynastic Diadem': 'Dynastisches Diadem',
+        'Legitimate Force': 'Legitime Herrschaft',
+        'Morning Stars': '',
+        'Powerful Gust': 'Starke Bö',
+        'Prosecution Of War': 'Kriegsklagen',
+        'Royal Banishment': 'Königliche Verbannung',
+        'Royal Domain': 'Hoheitsgebiet',
+        'Ruthless Regalia': 'Unbarmherzigkeit der Krone',
+        'Virtual Shift': 'Virtueller Umschwung',
+        'Waltz of the Regalia': 'Insignienwalzer',
+      },
+    },
+    {
+      'locale': 'fr',
+      'missingTranslations': true,
+      'replaceSync': {
+        'Queen Eternal': 'Reine Éternité',
+      },
+      'replaceText': {
+        'Absolute Authority': 'Autorité absolue',
+        'Aethertithe': 'Dîme d\'éther',
+        'Authority\'s Hold': 'Soumission absolue : explosion',
+        'Besiegement': 'Impact intense',
+        'Brutal Crown': 'Règne impitoyable',
+        'Castellation': 'Fortification',
+        'Coronation': 'Déploiement',
+        'Divide and Conquer': 'Diviser pour mieux régner',
+        'Downburst': 'Rafale descendante',
+        'Dynastic Diadem': 'Diadème dynastique',
+        'Legitimate Force': 'Force légitime',
+        'Morning Stars': '',
+        'Powerful Gust': 'Rafale latérale',
+        'Prosecution Of War': 'Réquisitoire guerrier',
+        'Royal Banishment': 'Bannissement royal',
+        'Royal Domain': 'Domaine royal',
+        'Ruthless Regalia': 'Monarchie brutale',
+        'Virtual Shift': 'Transfert virtuel',
+        'Waltz of the Regalia': 'Valse régalienne',
+      },
+    },
+    {
+      'locale': 'ja',
+      'missingTranslations': true,
+      'replaceSync': {
+        'Queen Eternal': 'エターナルクイーン',
+      },
+      'replaceText': {
+        'Absolute Authority': 'アブソリュート・オーソリティ',
+        'Aethertithe': 'エーテルレヴィー',
+        'Authority\'s Hold': '空間掌握：制動',
+        'Besiegement': '激突',
+        'Brutal Crown': 'ブルータルレガリア',
+        'Castellation': 'キャスタレーション',
+        'Coronation': '端末射出',
+        'Divide and Conquer': 'ディバイド・アンド・コンカー',
+        'Downburst': 'ダウンバースト',
+        'Dynastic Diadem': 'サークレットフォース',
+        'Legitimate Force': 'レジティメート・フォース',
+        'Morning Stars': '',
+        'Powerful Gust': '強風',
+        'Prosecution Of War': 'プロセキューション・ウォー',
+        'Royal Banishment': 'バニッシュレイ',
+        'Royal Domain': 'ロイヤルドメイン',
+        'Ruthless Regalia': 'ルースレスレガリア',
+        'Virtual Shift': 'ヴァーチャルシフト',
+        'Waltz of the Regalia': 'レガリア・ワルツ',
+      },
+    },
     {
       'locale': 'cn',
       'replaceSync': {

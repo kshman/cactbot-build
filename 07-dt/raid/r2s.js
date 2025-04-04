@@ -150,12 +150,12 @@ Options.Triggers.push({
       infoText: (data, matches, output) => {
         if (data.beat === 1) {
           const target = data.party.member(matches.target);
-          return output.stacks1({ target: target.nick });
+          return output.stacks1({ target: target });
         }
         if (data.beat === 2 && data.heartShed.length === 2) {
           const target1 = data.party.member(data.heartShed[0]);
           const target2 = data.party.member(data.heartShed[1]);
-          return output.stacks2({ target1: target1.nick, target2: target2.nick });
+          return output.stacks2({ target1: target1, target2: target2 });
         }
       },
       run: (data) => data.heartShed = [],
@@ -468,16 +468,15 @@ Options.Triggers.push({
       condition: Conditions.targetIsYou(),
       delaySeconds: (_data, matches) => parseFloat(matches.duration) - 10,
       alertText: (data, _matches, output) => {
-        let partner = output.unknown();
+        const unknown = output.unknown();
         const myType = data.beelovedType;
         if (myType === undefined)
-          return output.merge({ player: partner });
+          return output.merge({ player: unknown });
         const orderIdx = data.beelovedDebuffs[myType].indexOf(data.me);
         if (orderIdx === -1)
-          return output.merge({ player: partner });
+          return output.merge({ player: unknown });
         const partnerType = myType === 'alpha' ? 'beta' : 'alpha';
-        partner = data.party.member(data.beelovedDebuffs[partnerType][orderIdx]).nick ??
-          output.unknown();
+        const partner = data.party.member(data.beelovedDebuffs[partnerType][orderIdx]) ?? unknown;
         return output.merge({ player: partner });
       },
       outputStrings: {
@@ -505,8 +504,8 @@ Options.Triggers.push({
         // no alert if we're one of the players; that's handled by Player Merge
         if (alpha === data.me || beta === data.me)
           return;
-        const alphaShort = data.party.member(alpha).nick ?? output.unknown();
-        const betaShort = data.party.member(beta).nick ?? output.unknown();
+        const alphaShort = data.party.member(alpha) ?? output.unknown();
+        const betaShort = data.party.member(beta) ?? output.unknown();
         return output.merge({ alpha: alphaShort, beta: betaShort });
       },
       outputStrings: {

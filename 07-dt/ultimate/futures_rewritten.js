@@ -647,7 +647,7 @@ Options.Triggers.push({
         const dir2 = dir < 4 ? dir + 4 : dir;
         // 어듬이 제공
         if (data.options.AutumnStyle && data.moks !== 'none') {
-          const dirs = Autumn.isTeamMt(data.moks) ? [0, 1, 6, 7] : [2, 3, 4, 5];
+          const dirs = Autumn.inMainTeam(data.moks) ? [0, 1, 6, 7] : [2, 3, 4, 5];
           const res = AutumnDirections.outputFromMarker8Num(dirs.includes(dir1) ? dir1 : dir2);
           return output.akb({ dir: output[res]() });
         }
@@ -1459,7 +1459,7 @@ Options.Triggers.push({
         let towerHealer = '';
         const towerDps = [];
         for (const player of towerPlayers) {
-          const role = data.party.member(player).role;
+          const role = data.party.roleName(player);
           if (role === 'tank')
             towerTank = player;
           else if (role === 'healer')
@@ -1475,7 +1475,7 @@ Options.Triggers.push({
         let baitHealer = '';
         const baitDps = [];
         for (const player of baitPlayers) {
-          const role = data.party.member(player).role;
+          const role = data.party.roleName(player);
           if (role === 'tank')
             baitTank = player;
           else if (role === 'healer')
@@ -1519,19 +1519,19 @@ Options.Triggers.push({
             if (dpsWithTank === data.me)
               return {
                 alertText: output.towerYouSwap({
-                  player: data.party.member(towerTank).toString(),
+                  player: data.party.member(towerTank),
                 }),
               };
             else if (towerTank === data.me)
               return {
                 alertText: output.towerYouSwap({
-                  player: data.party.member(dpsWithTank).toString(),
+                  player: data.party.member(dpsWithTank),
                 }),
               };
             return {
               infoText: output.towerOtherSwap({
-                p1: data.party.member(dpsWithTank).toString(),
-                p2: data.party.member(towerTank).toString(),
+                p1: data.party.member(dpsWithTank),
+                p2: data.party.member(towerTank),
               }),
             };
           }
@@ -1549,7 +1549,7 @@ Options.Triggers.push({
             return defaultOutput;
           return {
             alertText: output.baitDPS({
-              otherDps: data.party.member(otherDps).toString(),
+              otherDps: data.party.member(otherDps),
             }),
           };
         }
@@ -1591,11 +1591,11 @@ Options.Triggers.push({
         const baitStackPlayer = data.p4AyStacks.find((p) => baitPlayers.includes(p));
         if (baitStackPlayer === undefined || !baitPlayers.includes(data.me))
           return {};
-        const stackName = data.party.member(baitStackPlayer).toString();
+        const stackName = data.party.member(baitStackPlayer);
         const isStackOnMe = data.me === baitStackPlayer;
         const defaultOutput = isStackOnMe ? { infoText: output.stackOnYou() } : {};
         const myRole = data.role;
-        const stackRole = data.party.member(baitStackPlayer).role;
+        const stackRole = data.party.roleName(baitStackPlayer);
         if (stackRole === undefined)
           return defaultOutput;
         // Sanity check for non-standard party comp, or this trigger won't work
