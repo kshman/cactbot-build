@@ -1087,7 +1087,7 @@ export default {
   stackGroup: {
     en: 'Groups',
     ja: '4:4頭割り',
-    ko: '4:4',
+    ko: '4:4 뭉쳐요',
   },
   stackCenter: {
     en: 'Stack in center',

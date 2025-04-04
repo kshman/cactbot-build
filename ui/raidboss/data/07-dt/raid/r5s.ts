@@ -383,18 +383,6 @@ const triggerSet: TriggerSet<Data> = {
       response: Responses.aoe(),
     },
     {
-      id: 'R5S Ride The Waves',
-      type: 'StartsUsing',
-      netRegex: { id: 'A754', source: 'Dancing Green', capture: false },
-      infoText: (_data, _matches, output) => output.text!(),
-      outputStrings: {
-        text: {
-          en: 'Wave + Spread',
-          ko: '비트 + 흩어져요',
-        },
-      },
-    },
-    {
       id: 'R5S Beats',
       type: 'StartsUsing',
       netRegex: { id: ['A75B', 'A75D'], source: 'Dancing Green' },
@@ -404,20 +392,6 @@ const triggerSet: TriggerSet<Data> = {
         b8: Outputs.protean,
       },
     },
-    /* 당장은 필요 없음
-    {
-      id: 'R5S Frogtourage',
-      type: 'StartsUsing',
-      netRegex: { id: 'A75F', source: 'Dancing Green', capture: false },
-      infoText: (_data, _matches, output) => output.text!(),
-      outputStrings: {
-        text: {
-          en: 'Frog dancers',
-          ko: '개구리 춤꾼',
-        },
-      },
-    },
-    */
     {
       id: 'R5S Do the Hustle',
       type: 'StartsUsing',
@@ -432,6 +406,34 @@ const triggerSet: TriggerSet<Data> = {
     },
     // Moonburn 어캄
     // 테스트
+    /* 당장은 필요 없음
+    {
+      id: 'R5S Ride The Waves',
+      type: 'StartsUsing',
+      netRegex: { id: 'A754', source: 'Dancing Green', capture: false },
+      infoText: (_data, _matches, output) => output.text!(),
+      outputStrings: {
+        text: {
+          en: 'Wave + Spread',
+          ko: '비트 + 흩어져요',
+        },
+      },
+    },
+    */
+    /* 당장은 필요 없음
+    {
+      id: 'R5S Frogtourage',
+      type: 'StartsUsing',
+      netRegex: { id: 'A75F', source: 'Dancing Green', capture: false },
+      infoText: (_data, _matches, output) => output.text!(),
+      outputStrings: {
+        text: {
+          en: 'Frog dancers',
+          ko: '개구리 춤꾼',
+        },
+      },
+    },
+    */
   ],
   timelineReplace: [
     {

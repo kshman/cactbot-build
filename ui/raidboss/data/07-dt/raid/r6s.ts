@@ -5,31 +5,19 @@ import ZoneId from '../../../../../resources/zone_id';
 import { RaidbossData } from '../../../../../types/data';
 import { TriggerSet } from '../../../../../types/trigger';
 
-type Marks = 'wing' | 'unknown';
-type DebuffType = { name: string; count: number };
-
-/* 너무 많아서 다른 방법으로
-const doubleIds = [
-  'A67D', 'A67E', 'A67F', 'A680', 'A681', 'A682', 'A68D',
-  'A68E', 'A68F', 'A690', 'A691', 'A692', 'A693', 'A697',
-  'A699',
-];
-*/
-
 const doubleFlags = {
   'painted': 0x1,
   'heaven': 0x2,
   'molbol': 0x4,
   'succubus': 0x8,
-};
+} as const;
 
 export interface Data extends RaidbossData {
-  bomb?: 'cold' | 'warm';
-  mark?: Marks;
-  crush?: 'pair' | 'light';
+  bomb?: 'cold' | 'warm' | 'unknown';
+  crush?: 'pair' | 'light' | 'unknown';
   style: number;
   target?: string;
-  debuffs: DebuffType[];
+  debuffs: { name: string; count: number }[];
 }
 
 const triggerSet: TriggerSet<Data> = {
@@ -37,8 +25,8 @@ const triggerSet: TriggerSet<Data> = {
   zoneId: ZoneId.AacCruiserweightM2Savage,
   timelineFile: 'r6s.txt',
   initData: () => ({
-    debuffs: [],
     style: 0,
+    debuffs: [],
   }),
   triggers: [
     {
@@ -58,7 +46,7 @@ const triggerSet: TriggerSet<Data> = {
         output.responseOutputStrings = {
           bait: {
             en: 'Bait Tank Cleave',
-            ko: '탱크 클레브 유도해욧',
+            ko: '첫 탱크 클레브',
           },
           cold: {
             en: 'Bait cold ${act}',
@@ -87,39 +75,39 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: 'R6S Cold Bomb',
+      id: 'R6S Cold/Warm Bomb Collect',
       type: 'Ability',
-      netRegex: { id: 'A693', source: 'Sugar Riot' },
+      netRegex: { id: ['A693', 'A694'], source: 'Sugar Riot' },
       condition: (data, matches) => data.me === matches.target,
-      run: (data) => data.bomb = 'cold',
+      run: (data, matches) => data.bomb = matches.id === 'A693' ? 'cold' : 'warm',
     },
     {
-      id: 'R6S Warm Bomb',
-      type: 'Ability',
-      netRegex: { id: 'A694', source: 'Sugar Riot' },
-      condition: (data, matches) => data.me === matches.target,
-      run: (data) => data.bomb = 'warm',
-    },
-    {
-      id: 'R6S Wingmark Collect',
+      id: 'R6S Color Crash Collect',
       type: 'StartsUsing',
-      netRegex: { id: 'A676', source: 'Sugar Riot', capture: false },
-      run: (data) => data.mark = 'wing',
+      netRegex: { id: ['A68B', 'A68D'], source: 'Sugar Riot' },
+      run: (data, matches) => data.crush = matches.id === 'A68B' ? 'light' : 'pair',
     },
     {
       id: 'R6S Wingmark',
       type: 'GainsEffect',
       netRegex: { effectId: '1162' },
-      condition: (data, matches) => data.me === matches.target,
-      delaySeconds: (_data, matches) => parseFloat(matches.duration) - 8.5,
-      infoText: (data, _matches, output) => {
-        const act = output[data.crush ?? 'unknown']!();
-        return output.text!({ act: act });
+      delaySeconds: (_data, matches) => parseFloat(matches.duration) - 4,
+      durationSeconds: 4,
+      countdownSeconds: 4,
+      suppressSeconds: 10,
+      alertText: (data, _matches, output) => {
+        if (data.crush === undefined)
+          return output.text!();
+        return output.combo!({ act: output[data.crush]!() });
       },
       outputStrings: {
         text: {
-          en: 'Wing => ${act}',
-          ko: '날라서 🔜 ${act}',
+          en: 'Warp',
+          ko: '나르샤!',
+        },
+        combo: {
+          en: 'Warp => ${act}',
+          ko: '나르샤! (${act})',
         },
         pair: Outputs.stackPartner,
         light: Outputs.stackGroup,
@@ -128,11 +116,20 @@ const triggerSet: TriggerSet<Data> = {
     },
     {
       id: 'R6S Color Crash',
-      type: 'StartsUsing',
-      netRegex: { id: ['A68B', 'A68D'], source: 'Sugar Riot' },
-      run: (data, matches) => {
-        data.crush = matches.id === 'A68B' ? 'light' : 'pair';
-        data.style = 0;
+      type: 'GainsEffect',
+      netRegex: { effectId: '1162' },
+      delaySeconds: (_data, matches) => parseFloat(matches.duration),
+      durationSeconds: 5,
+      suppressSeconds: 10,
+      infoText: (data, _matches, output) => {
+        if (data.crush !== undefined)
+          return output[data.crush]!();
+      },
+      run: (data) => delete data.crush,
+      outputStrings: {
+        pair: Outputs.stackPartner,
+        light: Outputs.stackGroup,
+        unknown: Outputs.unknown,
       },
     },
     {
@@ -160,6 +157,71 @@ const triggerSet: TriggerSet<Data> = {
       run: (data) => data.style |= doubleFlags.heaven,
     },
     {
+      id: 'R6S Double Style',
+      type: 'StartsUsing',
+      // 아이디는 컬러 크래시
+      netRegex: { id: ['A68B', 'A68D'], source: 'Sugar Riot', capture: false },
+      delaySeconds: 12,
+      durationSeconds: 6,
+      infoText: (data, _matches, output) => {
+        if (data.style === doubleFlags.succubus) // 서큐버스 2
+          return output.succubus!();
+        else if (data.style === doubleFlags.molbol)
+          return output.molbol!(); // 모르볼 2
+        else if (data.style === (doubleFlags.succubus | doubleFlags.molbol))
+          return output.succubusMolbol!(); // 서큐버스 + 모르볼
+        else if ((data.style & doubleFlags.painted) !== 0) {
+          // 폭탄도 있음
+          if ((data.style & doubleFlags.succubus) !== 0)
+            return output.paintedSuccubus!(); // 서큐버스와 함께
+          if ((data.style & doubleFlags.molbol) !== 0)
+            return output.paintedMolbol!(); // 몰볼과 함께
+        } else if ((data.style & doubleFlags.heaven) !== 0) {
+          // 날개 폭탄도 있음
+          if ((data.style & doubleFlags.succubus) !== 0)
+            return output.heavenSuccubus!(); // 서큐버스와 함께
+          if ((data.style & doubleFlags.molbol) !== 0)
+            return output.heavenMolbol!(); // 몰볼과 함께
+        }
+        return output.unknown!(); // 몰?루
+      },
+      run: (data) => data.style = 0,
+      outputStrings: {
+        unknown: {
+          en: 'Unknown',
+          ko: '(몰?루 알아서 피해욧!)',
+        },
+        succubus: {
+          en: 'Succubus x2',
+          ko: '(서큐 있는곳)',
+        },
+        molbol: {
+          en: 'Molbol x2',
+          ko: '(몰볼 없는곳)',
+        },
+        succubusMolbol: {
+          en: 'Succubus + Molbol',
+          ko: '(서큐 있는 + 몰볼 없는)',
+        },
+        paintedSuccubus: {
+          en: 'Painted + Succubus',
+          ko: '(폭탄 쪽 + 서큐 있는)',
+        },
+        paintedMolbol: {
+          en: 'Painted + Molbol',
+          ko: '(폭탄 쪽 + 몰볼 없는)',
+        },
+        heavenSuccubus: {
+          en: 'Heaven + Succubus',
+          ko: '(날개 없고 + 서큐 있는)',
+        },
+        heavenMolbol: {
+          en: 'Heaven + Molbol',
+          ko: '(날개 없고 + 몰볼 없는)',
+        },
+      },
+    },
+    {
       id: 'R6S Sticky Mousse',
       type: 'StartsUsing',
       netRegex: { id: 'A695', source: 'Sugar Riot', capture: false },
@@ -169,12 +231,9 @@ const triggerSet: TriggerSet<Data> = {
       id: 'R6S Sticky Groups',
       type: 'Ability',
       netRegex: { id: 'A695', source: 'Sugar Riot', capture: false },
-      infoText: (_data, _matches, output) => output.text!(),
+      infoText: (_data, _matches, output) => output.light!(),
       outputStrings: {
-        text: {
-          en: 'Light party',
-          ko: '4:4 뭉쳐요',
-        },
+        light: Outputs.stackGroup,
       },
     },
     {
@@ -184,7 +243,7 @@ const triggerSet: TriggerSet<Data> = {
       run: (data) => data.debuffs = [],
     },
     {
-      id: 'R6S Sand Defamation Collect',
+      id: 'R6S Sand Debuffs',
       type: 'GainsEffect',
       netRegex: { effectId: '1166' },
       infoText: (data, matches, output) => {
@@ -211,25 +270,46 @@ const triggerSet: TriggerSet<Data> = {
       type: 'GainsEffect',
       netRegex: { effectId: '1166' },
       condition: (data, matches) => data.me === matches.target,
-      delaySeconds: (_data, matches) => parseFloat(matches.duration) - 10,
-      countdownSeconds: 10,
-      infoText: (data, matches, output) => {
-        const count = parseFloat(matches.duration);
-        const p = data.debuffs.find((x) => x.name !== data.me && x.count === count);
-        if (p === undefined)
-          return;
-        const m = data.party.member(p.name);
-        if (data.options.AutumnStyle)
-          return output.text!({ partner: m.jobFull });
-        return output.text!({ partner: m });
-      },
+      delaySeconds: (_data, matches) => parseFloat(matches.duration) - 6,
+      countdownSeconds: 6,
+      alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Defamation (w/ ${partner})',
-          ko: '내게 대폭발 (${partner})',
+          en: 'Defamation on YOU',
+          ko: '내게 대폭발',
         },
       },
     },
+    {
+      id: 'R6S Tether Heaven Bomb',
+      type: 'Tether',
+      netRegex: { id: '013F', target: 'Sugar Riot' },
+      condition: (data, matches) => data.me === matches.source,
+      infoText: (_data, _matches, output) => output.text!(),
+      outputStrings: {
+        text: {
+          en: 'Wing bomb',
+          ko: '날개 폭탄, 바깥 모래로',
+        },
+      },
+    },
+    {
+      id: 'R6S Tether Painted Bomb',
+      type: 'Tether',
+      netRegex: { id: '0140', target: 'Sugar Riot' },
+      condition: (data, matches) => data.me === matches.source,
+      infoText: (_data, _matches, output) => output.text!(),
+      outputStrings: {
+        text: {
+          en: 'Painted bomb',
+          ko: '폭탄, 흐르는 모래로',
+        },
+      },
+    },
+    // 아래를 참고로 안전지대 만들 수도 있을듯
+    // [21:05:56.654] AddCombatant 03:40028A71:Mouthwatering Morbol:00:64:0000:00::13828:18340:188300:188300:10000:10000:::100.00:100.00:0.00:0.00
+    // [21:06:12.420] 271 10F:40028A71:-1.5709:00:00:120.0000:100.0000:0.0000 이거 ActorSetPos
+    // [21:06:15.443] Tether 23:40028A71:Mouthwatering Morbol:400289A1:Sugar Riot:0000:0000:0140:400289A1:000F:0000
   ],
 };
 
