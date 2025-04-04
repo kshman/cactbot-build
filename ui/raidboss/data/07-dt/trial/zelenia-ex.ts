@@ -1,3 +1,4 @@
+import Autumn from '../../../../../resources/autumn';
 import Outputs from '../../../../../resources/outputs';
 import { Responses } from '../../../../../resources/responses';
 import ZoneId from '../../../../../resources/zone_id';
@@ -100,7 +101,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         donut: {
-          en: 'Get towers',
+          en: 'Get tower',
           ja: '塔踏み',
           ko: '도넛, 타워로',
         },
@@ -135,7 +136,7 @@ const triggerSet: TriggerSet<Data> = {
 
         let move;
         if (data.phase !== 'shade')
-          move = data.role === 'dps' ? 'out' : 'in';
+          move = Autumn.isDps(data.moks) ? 'out' : 'in';
         else {
           move = data.donut === data.role
             ? (bait1 === 'near' ? 'out' : 'in')
@@ -246,10 +247,21 @@ const triggerSet: TriggerSet<Data> = {
       id: 'ZeleniaEx 1st Rotation',
       type: 'HeadMarker',
       netRegex: { id: ['00A7', '00A8'], capture: true },
-      infoText: (_data, matches, output) => matches.id === '00A7' ? output.cw!() : output.ccw!(),
+      infoText: (_data, matches, output) => {
+        if (matches.id === '00A7')
+          return output.text!({ dir: output.east!(), rot: output.cw!() });
+        return output.text!({ dir: output.north!(), rot: output.ccw!() });
+      },
       outputStrings: {
+        text: {
+          en: '${dir} ${rot}',
+          ja: '${dir} ${rot}',
+          ko: '${dir} ${rot}',
+        },
         cw: Outputs.clockwise,
         ccw: Outputs.counterclockwise,
+        north: Outputs.north,
+        east: Outputs.east,
       },
     },
     {
@@ -353,7 +365,7 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: 'Third bloom',
           ja: '(三式)',
-          ko: '(3식 십자 타워)',
+          ko: '(3식: 십자 타워)',
         },
       },
     },
@@ -365,7 +377,7 @@ const triggerSet: TriggerSet<Data> = {
       suppressSeconds: 5,
       infoText: (data, matches, output) => {
         const tdps = data.party.isDPS(matches.target);
-        const idps = data.role === 'dps';
+        const idps = Autumn.isDps(data.moks);
         const rose = tdps === idps;
         if (data.phase === '3rd')
           return rose ? output.hold!() : output.tower!();
@@ -402,7 +414,7 @@ const triggerSet: TriggerSet<Data> = {
       type: 'StartsUsing',
       netRegex: { id: 'A8A1', source: 'Zelenia\'s Shade', capture: false },
       durationSeconds: 5,
-      infoText: (data, _matches, output) => data.role === 'dps' ? output.dps!() : output.sup!(),
+      infoText: (data, _matches, output) => Autumn.isDps(data.moks) ? output.dps!() : output.sup!(),
       run: (data) => data.phase = 'shade',
       outputStrings: {
         sup: {
@@ -426,7 +438,7 @@ const triggerSet: TriggerSet<Data> = {
       run: (data, matches) => {
         if (data.party.isDPS(matches.target))
           data.donut = 'dps';
-        else if (data.role === 'dps')
+        else if (Autumn.isDps(data.moks))
           data.donut = 'unknown';
         else
           data.donut = data.role;
@@ -442,7 +454,7 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: 'Fourth bloom',
           ja: '(四式)',
-          ko: '(4식 꽃밭)',
+          ko: '(4식: 남북 꽃밭)',
         },
       },
     },
@@ -501,7 +513,7 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: 'Fifth bloom',
           ja: '(五式)',
-          ko: '(5식 돌진)',
+          ko: '(5식: 차크람)',
         },
       },
     },
@@ -524,14 +536,14 @@ const triggerSet: TriggerSet<Data> = {
         const n = parseFloat(matches.y) < 100;
         const dir = n
           ? (w ? output.se!() : output.sw!())
-          : (w ? output.ne!() : output.nw!());
+          : (w ? output.nw!() : output.ne!());
         return output.text!({ dir: dir });
       },
       outputStrings: {
         text: {
           en: 'Start ${dir}',
-          ja: '${dir}から',
-          ko: '${dir}부터',
+          ja: '${dir}へ',
+          ko: '${dir}으로',
         },
         ne: Outputs.northeast,
         se: Outputs.southeast,
@@ -549,7 +561,7 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: 'Sixth bloom',
           ja: '(六式)',
-          ko: '(6식 지그재그)',
+          ko: '(6식: 지그재그)',
         },
       },
     },

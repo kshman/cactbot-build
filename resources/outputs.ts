@@ -232,6 +232,14 @@ export default {
     cn: '双奶分组分摊',
     ko: '4:4 힐러',
   },
+  rolePositions: {
+    en: 'Role positions',
+    de: 'Rollenposition',
+    fr: 'Positions par rôle',
+    ja: 'ロール散会',
+    cn: '职能三刀站位',
+    ko: '롤 뭉쳐요',
+  },
   stackOnYou: {
     en: 'Stack on YOU',
     de: 'Auf DIR sammeln',
@@ -1075,6 +1083,11 @@ export default {
     en: 'Spread',
     ja: '散開',
     ko: '흩어져서 혼자',
+  },
+  stackGroup: {
+    en: 'Groups',
+    ja: '4:4頭割り',
+    ko: '4:4 뭉쳐요',
   },
   stackCenter: {
     en: 'Stack in center',

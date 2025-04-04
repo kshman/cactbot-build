@@ -992,6 +992,11 @@ export default class PartyTracker {
     return jobLocalizedFull[job]?.[this.options.DisplayLanguage];
   }
 
+  // 어듬이 롤 이름
+  roleName(name: string): string | undefined {
+    return this.nameToRole_[name];
+  }
+
   // 멤버 목록을 만들어 준다
   members(names: readonly string[]): PartyMemberParamObject[] {
     const mm = names.map((x) => this.member(x));

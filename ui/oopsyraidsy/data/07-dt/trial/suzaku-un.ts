@@ -25,24 +25,24 @@ export type Data = OopsyData;
 const triggerSet: OopsyTriggerSet<Data> = {
   zoneId: ZoneId.HellsKierUnreal,
   damageWarn: {
-    'SuzakuEx Rout': 'A813', // untargetable phase 1 charge across the arena
-    'SuzakuEx Fleeting Summer': 'A7FD', // targeted conal
-    'SuzakuEx Scarlet Tail Feather Wing And A Prayer': 'A7FE', // circle aoe from unkilled plume
-    'SuzakuEx Scarlet Plume Wing And A Prayer': 'A76E', // circle aoe from unkilled plume
-    'SuzakuEx Ashes To Ashes': 'A7FA', // Scarlet Lady add, raidwide explosion if not killed in time
-    'SuzakuEx Well Of Flame': 'A809', // targeted wide line aoe
-    'SuzakuEx Hotspot': 'A80A', // platform fire when the runes are activated
+    'SuzakuUn Rout': 'A813', // untargetable phase 1 charge across the arena
+    'SuzakuUn Fleeting Summer': 'A7FD', // targeted conal
+    'SuzakuUn Scarlet Tail Feather Wing And A Prayer': 'A7FE', // circle aoe from unkilled plume
+    'SuzakuUn Scarlet Plume Wing And A Prayer': 'A76E', // circle aoe from unkilled plume
+    'SuzakuUn Ashes To Ashes': 'A7FA', // Scarlet Lady add, raidwide explosion if not killed in time
+    'SuzakuUn Well Of Flame': 'A809', // targeted wide line aoe
+    'SuzakuUn Hotspot': 'A80A', // platform fire when the runes are activated
   },
   damageFail: {
-    'SuzakuEx Immolate': 'A80D', // Tower mechanic failure on Incadescent Interlude (party failure, not personal)
-    'SuzakuEx Phantom Flurry': 'A806', // "phantom half" final hit of Phantom Flurry
+    'SuzakuUn Immolate': 'A80D', // Tower mechanic failure on Incadescent Interlude (party failure, not personal)
+    'SuzakuUn Phantom Flurry': 'A806', // "phantom half" final hit of Phantom Flurry
   },
   soloWarn: {
-    'SuzakuEx Scathing Net': 'A7F8', // stack marker
+    'SuzakuUn Scathing Net': 'A7F8', // stack marker
   },
   triggers: [
     {
-      id: 'SuzakuEx Ruthless Refrain',
+      id: 'SuzakuUn Ruthless Refrain',
       type: 'Ability',
       netRegex: NetRegexes.ability({ id: 'A803', ...playerDamageFields }),
       deathReason: (_data, matches) => {
@@ -61,7 +61,7 @@ const triggerSet: OopsyTriggerSet<Data> = {
       },
     },
     {
-      id: 'SuzakuEx Mesmerizing Melody',
+      id: 'SuzakuUn Mesmerizing Melody',
       type: 'Ability',
       netRegex: NetRegexes.ability({ id: 'A802', ...playerDamageFields }),
       deathReason: (_data, matches) => {
