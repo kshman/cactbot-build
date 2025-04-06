@@ -1,23 +1,48 @@
-import Autumn from '../../../../../resources/autumn';
+import Autumn, { AutumnDirections } from '../../../../../resources/autumn';
 import Outputs from '../../../../../resources/outputs';
 import { Responses } from '../../../../../resources/responses';
+import { Directions } from '../../../../../resources/util';
 import ZoneId from '../../../../../resources/zone_id';
 import { RaidbossData } from '../../../../../types/data';
+import { NetMatches } from '../../../../../types/net_matches';
 import { TriggerSet } from '../../../../../types/trigger';
 
-const doubleFlags = {
-  'painted': 0x1,
-  'heaven': 0x2,
-  'molbol': 0x4,
-  'succubus': 0x8,
+type Styles = 'molb' | 'succ' | 'bomb' | 'wing';
+type StyleItem = { l: Styles; r: Styles; c: number };
+const styleMap: { [id: string]: StyleItem } = {
+  '93CA': { l: 'molb', r: 'succ', c: 2 },
+  '9408': { l: 'succ', r: 'molb', c: 2 },
+  'A67D': { l: 'molb', r: 'molb', c: 2 },
+  'A67E': { l: 'succ', r: 'succ', c: 2 },
+  'A67F': { l: 'bomb', r: 'succ', c: 4 },
+  'A680': { l: 'wing', r: 'succ', c: 4 },
+  'A681': { l: 'bomb', r: 'molb', c: 4 },
+  'A682': { l: 'wing', r: 'molb', c: 4 },
+};
+const styleFlags = {
+  'bomb': 0x1,
+  'wing': 0x2,
+  'molb': 0x4,
+  'succ': 0x8,
 } as const;
+const getStyleConer = (dir: number): number[] => {
+  const map: { [dir: number]: [number, number] } = {
+    0: [1, 7],
+    2: [1, 3],
+    4: [3, 5],
+    6: [5, 7],
+  };
+  return map[dir] ?? [];
+};
 
 export interface Data extends RaidbossData {
   bomb?: 'cold' | 'warm' | 'unknown';
   crush?: 'pair' | 'light' | 'unknown';
-  style: number;
+  style?: StyleItem;
   target?: string;
   debuffs: { name: string; count: number }[];
+  actors: { [id: string]: NetMatches['ActorSetPos'] };
+  tethers: { [id: string]: NetMatches['Tether'] };
 }
 
 const triggerSet: TriggerSet<Data> = {
@@ -25,8 +50,10 @@ const triggerSet: TriggerSet<Data> = {
   zoneId: ZoneId.AacCruiserweightM2Savage,
   timelineFile: 'r6s.txt',
   initData: () => ({
-    style: 0,
+    stether: 0,
     debuffs: [],
+    actors: {},
+    tethers: {},
   }),
   triggers: [
     {
@@ -133,92 +160,150 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: 'R6S Double Tether Succubus',
-      type: 'Tether',
-      netRegex: { source: 'Candied Succubus', capture: false },
-      run: (data) => data.style |= doubleFlags.succubus,
+      id: 'R6S Double Actors Collect',
+      type: 'ActorSetPos',
+      netRegex: { id: '4[0-9A-Fa-f]{7}', capture: true },
+      run: (data, matches) => data.actors[matches.id] = matches,
     },
     {
-      id: 'R6S Double Tether Morbol',
-      type: 'Tether',
-      netRegex: { source: 'Mouthwatering Morbol', capture: false },
-      run: (data) => data.style |= doubleFlags.molbol,
-    },
-    {
-      id: 'R6S Double Tether Paint Bomb',
-      type: 'Tether',
-      netRegex: { source: 'Paint Bomb', capture: false },
-      run: (data) => data.style |= doubleFlags.painted,
-    },
-    {
-      id: 'R6S Double Tether Heaven Bomb',
-      type: 'Tether',
-      netRegex: { source: 'Heaven Bomb', capture: false },
-      run: (data) => data.style |= doubleFlags.heaven,
+      id: 'R6S Double Style Collect',
+      type: 'StartsUsing',
+      netRegex: { id: Object.keys(styleMap), source: 'Sugar Riot', capture: true },
+      run: (data, matches) => data.style = styleMap[matches.id],
     },
     {
       id: 'R6S Double Style',
-      type: 'StartsUsing',
-      // 아이디는 컬러 크래시
-      netRegex: { id: ['A68B', 'A68D'], source: 'Sugar Riot', capture: false },
-      delaySeconds: 12,
-      durationSeconds: 6,
+      type: 'Tether',
+      netRegex: { targetId: '4[0-9A-Fa-f]{7}', id: ['013F', '0140'], capture: true },
+      condition: (data) => data.style !== undefined,
+      preRun: (data, matches) => data.tethers[matches.sourceId] = matches,
+      durationSeconds: 5,
       infoText: (data, _matches, output) => {
-        if (data.style === doubleFlags.succubus) // 서큐버스 2
-          return output.succubus!();
-        else if (data.style === doubleFlags.molbol)
-          return output.molbol!(); // 모르볼 2
-        else if (data.style === (doubleFlags.succubus | doubleFlags.molbol))
-          return output.succubusMolbol!(); // 서큐버스 + 모르볼
-        else if ((data.style & doubleFlags.painted) !== 0) {
-          // 폭탄도 있음
-          if ((data.style & doubleFlags.succubus) !== 0)
-            return output.paintedSuccubus!(); // 서큐버스와 함께
-          if ((data.style & doubleFlags.molbol) !== 0)
-            return output.paintedMolbol!(); // 몰볼과 함께
-        } else if ((data.style & doubleFlags.heaven) !== 0) {
-          // 날개 폭탄도 있음
-          if ((data.style & doubleFlags.succubus) !== 0)
-            return output.heavenSuccubus!(); // 서큐버스와 함께
-          if ((data.style & doubleFlags.molbol) !== 0)
-            return output.heavenMolbol!(); // 몰볼과 함께
+        const style = data.style;
+        if (style === undefined)
+          return;
+        if (Object.keys(data.tethers).length < style.c)
+          return;
+
+        const tethers = Object.entries(data.tethers);
+        data.tethers = {};
+
+        let comb = 0;
+        let safes = [1, 3, 5, 7];
+        for (const [id, tether] of tethers) {
+          const a = data.actors[id];
+          if (a === undefined)
+            return;
+
+          const x = parseFloat(a.x);
+          const y = parseFloat(a.y);
+          const mx = ((x - 100) * -1) + 100;
+          const adir = Directions.xyTo8DirNum(x, y, 100, 100);
+          const mdir = Directions.xyTo8DirNum(mx, y, 100, 100);
+          const corners = getStyleConer(adir);
+          const mob = style[tether.id === '013F' ? 'l' : 'r'];
+          switch (mob) {
+            case 'bomb':
+              safes = safes.filter((dir) => dir !== adir);
+              break;
+            case 'wing':
+              safes = safes.filter((dir) => dir !== mdir);
+              break;
+            case 'succ':
+              safes = safes.filter((dir) => !corners.includes(dir));
+              break;
+            case 'molb':
+              safes = safes.filter((dir) => corners.includes(dir));
+              break;
+          }
+          comb |= styleFlags[mob];
         }
-        return output.unknown!(); // 몰?루
+
+        const [dir] = safes;
+        if (safes.length !== 1 || dir === undefined) {
+          console.log(`R6S Double Style - 헐랭 데이터가 잘못됨`);
+          return;
+        }
+
+        const diags: { [id: number]: number } = { 1: 5, 3: 7, 5: 1, 7: 3 } as const;
+        const start = diags[dir];
+        if (start === undefined)
+          return output.unknown!();
+
+        if (data.options.AutumnStyle) {
+          let mesg = output.unknown!();
+          if (comb === styleFlags.succ) // 서큐버스 2
+            mesg = output.succ!();
+          else if (comb === styleFlags.molb)
+            mesg = output.molb!(); // 몰볼 2
+          else if (comb === (styleFlags.succ | styleFlags.molb))
+            mesg = output.succmolb!(); // 서큐버스 + 몰볼
+          else if ((comb & styleFlags.bomb) !== 0) {
+            if ((comb & styleFlags.succ) !== 0)
+              mesg = output.bombsucc!(); // 폭탄 + 서큐버스
+            if ((comb & styleFlags.molb) !== 0)
+              mesg = output.bombmolb!(); // 폭탄 + 몰볼
+          } else if ((comb & styleFlags.wing) !== 0) {
+            if ((comb & styleFlags.succ) !== 0)
+              mesg = output.wingsucc!(); // 날개 + 서큐버스
+            if ((comb & styleFlags.molb) !== 0)
+              mesg = output.wingmolb!(); // 날개 + 몰볼
+          }
+          const ar = AutumnDirections.outputFromArrow8Num(start);
+          const mk = AutumnDirections.outputFromMarker8Num(start);
+          return output.atext!({
+            arrow: output[ar]!(),
+            mark: output[mk]!(),
+            mesg: mesg,
+          });
+        }
+
+        const dir1 = Directions.outputFrom8DirNum(start);
+        const dir2 = Directions.outputFrom8DirNum(dir);
+        return output.text!({ dir1: output[dir1]!(), dir2: output[dir2]!() });
       },
-      run: (data) => data.style = 0,
       outputStrings: {
-        unknown: {
-          en: 'Unknown',
-          ko: '(몰?루 알아서 피해욧!)',
+        text: {
+          en: 'Start ${dir1}, launch towards ${dir2}',
+          cn: '从 ${dir1}, 向 ${dir2} 发射',
+          ko: '${dir1} 시작, ${dir2}로',
         },
-        succubus: {
+        atext: {
+          en: '${arrow}${mark} ${mesg}',
+          ko: '${arrow}${mark} ${mesg}',
+        },
+        succ: {
           en: 'Succubus x2',
-          ko: '(서큐 있는곳)',
+          ko: '서큐쪽',
         },
-        molbol: {
+        molb: {
           en: 'Molbol x2',
-          ko: '(몰볼 없는곳)',
+          ko: '몰볼 안됨',
         },
-        succubusMolbol: {
+        succmolb: {
           en: 'Succubus + Molbol',
-          ko: '(서큐 있는 + 몰볼 없는)',
+          ko: '서큐 + 몰볼 안됨',
         },
-        paintedSuccubus: {
+        bombsucc: {
           en: 'Painted + Succubus',
-          ko: '(폭탄 쪽 + 서큐 있는)',
+          ko: '폭탄 + 서큐',
         },
-        paintedMolbol: {
+        bombmolb: {
           en: 'Painted + Molbol',
-          ko: '(폭탄 쪽 + 몰볼 없는)',
+          ko: '폭탄 + 몰볼 안됨',
         },
-        heavenSuccubus: {
+        wingsucc: {
           en: 'Heaven + Succubus',
-          ko: '(날개 없고 + 서큐 있는)',
+          ko: '날개 안됨 + 서큐',
         },
-        heavenMolbol: {
+        wingmolb: {
           en: 'Heaven + Molbol',
-          ko: '(날개 없고 + 몰볼 없는)',
+          ko: '날개 안됨 + 몰볼 안됨',
         },
+        ...AutumnDirections.outputStringsArrowIntercard,
+        ...AutumnDirections.outputStringsMarkerIntercard,
+        ...Directions.outputStringsIntercardDir,
+        unknown: Outputs.unknown,
       },
     },
     {
@@ -306,10 +391,43 @@ const triggerSet: TriggerSet<Data> = {
         },
       },
     },
+    /* 이게 아닌데
+    {
+      id: 'R6S Moussacre',
+      type: 'Ability',
+      // A6BA 한번만
+      // A6BB 사람한테 4명
+      netRegex: { id: 'A6BA', target: 'Sugar Riot' },
+      suppressSeconds: 1,
+      // response: Responses.getTowers('alert'),
+      alertText: (_data, _matches, output) => output.text!(),
+      outputStrings: {
+        text: {
+          en: 'Get Towers',
+          ko: '번개 터지면 타워로',
+        },
+      },
+    },
+    */
     // 아래를 참고로 안전지대 만들 수도 있을듯
     // [21:05:56.654] AddCombatant 03:40028A71:Mouthwatering Morbol:00:64:0000:00::13828:18340:188300:188300:10000:10000:::100.00:100.00:0.00:0.00
     // [21:06:12.420] 271 10F:40028A71:-1.5709:00:00:120.0000:100.0000:0.0000 이거 ActorSetPos
     // [21:06:15.443] Tether 23:40028A71:Mouthwatering Morbol:400289A1:Sugar Riot:0000:0000:0140:400289A1:000F:0000
+  ],
+  timelineReplace: [
+    {
+      'locale': 'ja',
+      'missingTranslations': true,
+      'replaceSync': {
+        'Sugar Riot': 'シュガーライオット',
+        // フェザーサークル
+        // シュガーズプリン
+        // シュガーズアロー
+        // グラフィティボム
+        // シュガーズモルボル
+        // シュガーズサキュバス
+      },
+    },
   ],
 };
 

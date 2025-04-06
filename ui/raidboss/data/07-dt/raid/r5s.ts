@@ -350,29 +350,30 @@ const triggerSet: TriggerSet<Data> = {
       type: 'Ability',
       netRegex: { id: dancedIds, capture: false },
       durationSeconds: 2,
-      infoText: (data, _matches, output) => {
+      response: (data, _matches, output) => {
+        // cactbot-builtin-response
+        output.responseOutputStrings = {
+          text: {
+            en: '${dir}',
+            ko: '${dir}으로',
+          },
+          stay: {
+            en: '(Stay)',
+            ja: '(そのまま)',
+            ko: '(그대로)',
+          },
+          east: Outputs.east,
+          west: Outputs.west,
+          north: Outputs.north,
+          south: Outputs.south,
+        };
         const prev = data.frogs.shift();
         const curr = data.frogs[0];
         if (curr === undefined)
           return;
         if (prev === curr)
-          return output.stay!();
-        return output.text!({ dir: output[curr]!() });
-      },
-      outputStrings: {
-        text: {
-          en: '${dir}',
-          ko: '${dir}으로',
-        },
-        stay: {
-          en: '(Stay)',
-          ja: '(そのまま)',
-          ko: '(그대로)',
-        },
-        east: Outputs.east,
-        west: Outputs.west,
-        north: Outputs.north,
-        south: Outputs.south,
+          return { infoText: output.stay!() };
+        return { alertText: output.text!({ dir: output[curr]!() }) };
       },
     },
     {
