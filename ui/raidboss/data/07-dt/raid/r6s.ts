@@ -172,6 +172,7 @@ const triggerSet: TriggerSet<Data> = {
       run: (data, matches) => data.style = styleMap[matches.id],
     },
     {
+      // #650
       id: 'R6S Double Style',
       type: 'Tether',
       netRegex: { targetId: '4[0-9A-Fa-f]{7}', id: ['013F', '0140'], capture: true },
@@ -179,17 +180,16 @@ const triggerSet: TriggerSet<Data> = {
       preRun: (data, matches) => data.tethers[matches.sourceId] = matches,
       durationSeconds: 5,
       infoText: (data, _matches, output) => {
-        const style = data.style;
-        if (style === undefined)
+        if (data.style === undefined)
           return;
-        if (Object.keys(data.tethers).length < style.c)
+        if (Object.keys(data.tethers).length < data.style.c)
           return;
-
-        const tethers = Object.entries(data.tethers);
-        data.tethers = {};
 
         let comb = 0;
         let safes = [1, 3, 5, 7];
+        const tethers = Object.entries(data.tethers);
+        data.tethers = {};
+
         for (const [id, tether] of tethers) {
           const a = data.actors[id];
           if (a === undefined)
@@ -201,7 +201,7 @@ const triggerSet: TriggerSet<Data> = {
           const adir = Directions.xyTo8DirNum(x, y, 100, 100);
           const mdir = Directions.xyTo8DirNum(mx, y, 100, 100);
           const corners = getStyleConer(adir);
-          const mob = style[tether.id === '013F' ? 'l' : 'r'];
+          const mob = data.style[tether.id === '013F' ? 'l' : 'r'];
           switch (mob) {
             case 'bomb':
               safes = safes.filter((dir) => dir !== adir);
@@ -313,15 +313,6 @@ const triggerSet: TriggerSet<Data> = {
       response: Responses.protean(),
     },
     {
-      id: 'R6S Sticky Groups',
-      type: 'Ability',
-      netRegex: { id: 'A695', source: 'Sugar Riot', capture: false },
-      infoText: (_data, _matches, output) => output.light!(),
-      outputStrings: {
-        light: Outputs.stackGroup,
-      },
-    },
-    {
       id: 'R6S Sugarscape',
       type: 'StartsUsing',
       netRegex: { id: 'A668', source: 'Sugar Riot', capture: false },
@@ -374,7 +365,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Wing bomb',
-          ko: '날개 폭탄, 바깥 모래로',
+          ko: '날개 폭탄, 그냥 모래로',
         },
       },
     },
@@ -409,10 +400,6 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     */
-    // 아래를 참고로 안전지대 만들 수도 있을듯
-    // [21:05:56.654] AddCombatant 03:40028A71:Mouthwatering Morbol:00:64:0000:00::13828:18340:188300:188300:10000:10000:::100.00:100.00:0.00:0.00
-    // [21:06:12.420] 271 10F:40028A71:-1.5709:00:00:120.0000:100.0000:0.0000 이거 ActorSetPos
-    // [21:06:15.443] Tether 23:40028A71:Mouthwatering Morbol:400289A1:Sugar Riot:0000:0000:0140:400289A1:000F:0000
   ],
   timelineReplace: [
     {
