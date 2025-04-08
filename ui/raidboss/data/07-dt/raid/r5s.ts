@@ -11,9 +11,11 @@ const snapTwistIds: { [id: string]: [number, News] } = {
   'A728': [2, 'west'],
   'A729': [2, 'west'],
   'A72A': [2, 'west'],
+  'A4DB': [2, 'west'],
   'A72B': [2, 'east'],
   'A72C': [2, 'east'],
   'A72D': [2, 'east'],
+  'A4DC': [2, 'east'],
   'A730': [3, 'west'],
   'A731': [3, 'west'],
   'A732': [3, 'west'],
@@ -25,9 +27,11 @@ const snapTwistIds: { [id: string]: [number, News] } = {
   'A739': [4, 'west'],
   'A73A': [4, 'west'],
   'A73B': [4, 'west'],
+  'A4DF': [4, 'west'],
   'A73C': [4, 'east'],
   'A73D': [4, 'east'],
   'A73E': [4, 'east'],
+  'A4E0': [4, 'east'],
 };
 
 const frogIds: { [id: string]: News } = {

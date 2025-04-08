@@ -36,6 +36,7 @@ const getStyleConer = (dir: number): number[] => {
 };
 
 export interface Data extends RaidbossData {
+  mode: 'none' | 'crash';
   bomb?: 'cold' | 'warm' | 'unknown';
   crush?: 'pair' | 'light' | 'unknown';
   style?: StyleItem;
@@ -50,6 +51,7 @@ const triggerSet: TriggerSet<Data> = {
   zoneId: ZoneId.AacCruiserweightM2Savage,
   timelineFile: 'r6s.txt',
   initData: () => ({
+    mode: 'none',
     stether: 0,
     debuffs: [],
     actors: {},
@@ -112,7 +114,13 @@ const triggerSet: TriggerSet<Data> = {
       id: 'R6S Color Crash Collect',
       type: 'StartsUsing',
       netRegex: { id: ['A68B', 'A68D'], source: 'Sugar Riot' },
-      run: (data, matches) => data.crush = matches.id === 'A68B' ? 'light' : 'pair',
+      run: (data, matches) => {
+        data.mode = 'crash';
+        data.crush = matches.id === 'A68B' ? 'light' : 'pair';
+        data.actors = {};
+        data.tethers = {};
+        delete data.style;
+      },
     },
     {
       id: 'R6S Wingmark',
@@ -152,7 +160,10 @@ const triggerSet: TriggerSet<Data> = {
         if (data.crush !== undefined)
           return output[data.crush]!();
       },
-      run: (data) => delete data.crush,
+      run: (data) => {
+        data.mode = 'none';
+        delete data.crush;
+      },
       outputStrings: {
         pair: Outputs.stackPartner,
         light: Outputs.stackGroup,
@@ -163,12 +174,14 @@ const triggerSet: TriggerSet<Data> = {
       id: 'R6S Double Actors Collect',
       type: 'ActorSetPos',
       netRegex: { id: '4[0-9A-Fa-f]{7}', capture: true },
+      condition: (data) => data.mode === 'crash',
       run: (data, matches) => data.actors[matches.id] = matches,
     },
     {
       id: 'R6S Double Style Collect',
       type: 'StartsUsing',
       netRegex: { id: Object.keys(styleMap), source: 'Sugar Riot', capture: true },
+      condition: (data) => data.mode === 'crash',
       run: (data, matches) => data.style = styleMap[matches.id],
     },
     {
@@ -176,7 +189,7 @@ const triggerSet: TriggerSet<Data> = {
       id: 'R6S Double Style',
       type: 'Tether',
       netRegex: { targetId: '4[0-9A-Fa-f]{7}', id: ['013F', '0140'], capture: true },
-      condition: (data) => data.style !== undefined,
+      condition: (data) => data.mode === 'crash' && data.style !== undefined,
       preRun: (data, matches) => data.tethers[matches.sourceId] = matches,
       durationSeconds: 5,
       infoText: (data, _matches, output) => {
@@ -249,8 +262,10 @@ const triggerSet: TriggerSet<Data> = {
             if ((comb & styleFlags.molb) !== 0)
               mesg = output.wingmolb!(); // 날개 + 몰볼
           }
+          const jpmap: { [id: number]: number } = { 1: 3, 3: 5, 5: 7, 7: 1 } as const;
+          const jpstart = jpmap[start]!;
           const ar = AutumnDirections.outputFromArrow8Num(start);
-          const mk = AutumnDirections.outputFromMarker8Num(start);
+          const mk = AutumnDirections.outputFromMarker8Num(jpstart);
           return output.atext!({
             arrow: output[ar]!(),
             mark: output[mk]!(),
@@ -382,6 +397,70 @@ const triggerSet: TriggerSet<Data> = {
         },
       },
     },
+    /*
+    {
+      id: 'R6S Sweet Shot',
+      type: 'AddedCombatant',
+      netRegex: { npcNameId: '13826', capture: false },
+      durationSeconds: 5,
+      suppressSeconds: 5,
+      infoText: (_data, _matches, output) => output.text!(),
+      outputStrings: {
+        text: {
+          en: 'Arrows grid',
+          ko: '화살 격자 장판',
+        },
+      },
+    },
+    */
+    {
+      id: 'R6S Double Style Arrows',
+      type: 'StartsUsing',
+      netRegex: { id: 'A689', target: 'Sugar Riot', capture: false },
+      durationSeconds: 5,
+      infoText: (_data, _matches, output) => output.text!(),
+      outputStrings: {
+        text: {
+          en: 'Arrows grid',
+          ko: '화살 격자 장판',
+        },
+      },
+    },
+    {
+      id: 'R6S Thunder Target',
+      type: 'HeadMarker',
+      netRegex: { id: '025A' },
+      condition: (data, matches) => data.me === matches.target,
+      alertText: (data, _matches, output) => {
+        if (data.role === 'dps')
+          return output.right!();
+        return output.left!();
+      },
+      outputStrings: {
+        left: {
+          en: 'Thunder on YOU',
+          ko: '내게 번개! 왼쪽 섬으로',
+        },
+        right: {
+          en: 'Thunder on YOU',
+          ko: '내게 번개! 오른쪽 섬으로',
+        },
+      },
+    },
+    {
+      id: 'R6S Pudding Party',
+      type: 'StartsUsing',
+      netRegex: { id: 'A66D', source: 'Sugar Riot', capture: false },
+      durationSeconds: 9,
+      infoText: (_data, _matches, output) => output.fiveAOE!(),
+      outputStrings: {
+        fiveAOE: {
+          en: '5x AoEs',
+          ko: '5x 전체공격',
+        },
+      },
+    },
+    // Taste of Thunder/Fire 알 방법을 모르겠다
     /* 이게 아닌데
     {
       id: 'R6S Moussacre',
