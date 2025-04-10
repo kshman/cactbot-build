@@ -1,9 +1,8 @@
+import Outputs from '../../../../../resources/outputs';
 import { Responses } from '../../../../../resources/responses';
 import ZoneId from '../../../../../resources/zone_id';
 import { RaidbossData } from '../../../../../types/data';
 import { TriggerSet } from '../../../../../types/trigger';
-
-export type Data = RaidbossData;
 
 const mapEffectData = {
   // Deathwall dropping
@@ -285,10 +284,17 @@ const headMarkerData = {
   'lightningSpread': '024D',
 } as const;
 
+export interface Data extends RaidbossData {
+  colorRiotTargets: string[];
+}
+
 const triggerSet: TriggerSet<Data> = {
   id: 'AacCruiserweightM2',
   zoneId: ZoneId.AacCruiserweightM2,
   timelineFile: 'r6n.txt',
+  initData: () => ({
+    colorRiotTargets: [],
+  }),
   triggers: [
     {
       id: 'R6N Mousse Mural',
@@ -297,16 +303,34 @@ const triggerSet: TriggerSet<Data> = {
       response: Responses.aoe(),
     },
     {
+      // cast is self-targeted on boss
       id: 'R6N Pudding Party',
       type: 'HeadMarker',
       netRegex: { id: headMarkerData.stack, capture: true },
       response: Responses.stackMarkerOn(),
     },
     {
+      // cast is self-targeted on boss
       id: 'R6N Color Riot',
-      type: 'StartsUsing',
-      netRegex: { id: 'A670', source: 'Sugar Riot', capture: true },
-      response: Responses.tankCleave(),
+      type: 'HeadMarker',
+      netRegex: { id: headMarkerData.tankbuster, capture: true },
+      infoText: (data, matches, output) => {
+        data.colorRiotTargets.push(matches.target);
+        if (data.colorRiotTargets.length < 2)
+          return;
+
+        if (data.colorRiotTargets.includes(data.me))
+          return output.cleaveOnYou!();
+        return output.avoidCleave!();
+      },
+      run: (data) => {
+        if (data.colorRiotTargets.length >= 2)
+          data.colorRiotTargets = [];
+      },
+      outputStrings: {
+        cleaveOnYou: Outputs.tankCleaveOnYou,
+        avoidCleave: Outputs.avoidTankCleave,
+      },
     },
     {
       id: 'R6N Mousse Touch-up',
@@ -324,7 +348,8 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         stacks: {
           en: 'Healer Groups (in water)',
-          ko: '물안에서 4:4',
+          cn: '治疗分组分摊 (站在水里)',
+          ko: '물에서 힐러 그룹 쉐어',
         },
       },
     },
@@ -337,7 +362,8 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         spread: {
           en: 'Spread (not in water)',
-          ko: '물 밖에서 흩어져요',
+          cn: '分散 (站在岸上)',
+          ko: '땅에서 산개',
         },
       },
     },
