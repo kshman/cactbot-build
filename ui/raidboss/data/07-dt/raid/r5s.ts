@@ -5,7 +5,6 @@ import { RaidbossData } from '../../../../../types/data';
 import { TriggerSet } from '../../../../../types/trigger';
 
 type News = 'north' | 'east' | 'south' | 'west' | 'unknown';
-type AbsType = { id: string; count: number; type: boolean };
 
 const snapTwistIds: { [id: string]: [number, News] } = {
   'A728': [2, 'west'],
@@ -55,7 +54,7 @@ export interface Data extends RaidbossData {
   infernal: number;
   frogs: News[];
   collect: string[];
-  abs: AbsType[];
+  waves: { alpha: number; beta: number };
   order?: number;
 }
 
@@ -68,7 +67,7 @@ const triggerSet: TriggerSet<Data> = {
     cone: 'unknown',
     frogs: [],
     collect: [],
-    abs: [],
+    waves: { alpha: 0, beta: 0 },
   }),
   triggers: [
     {
@@ -96,8 +95,6 @@ const triggerSet: TriggerSet<Data> = {
     {
       id: 'R5S Flip to Side',
       type: 'StartsUsing',
-      // A780 A: 롤 산개
-      // A781 B: 4:4
       netRegex: { id: ['A780', 'A781'], source: 'Dancing Green' },
       run: (data, matches) => data.side = matches.id === 'A780' ? 'role' : 'light',
     },
@@ -206,9 +203,6 @@ const triggerSet: TriggerSet<Data> = {
           en: 'Bait Frog',
           ko: '개구리 부채 유도',
         },
-        card: Outputs.cardinals,
-        inter: Outputs.intercards,
-        unknown: Outputs.unknown,
       },
     },
     {
@@ -223,7 +217,7 @@ const triggerSet: TriggerSet<Data> = {
       id: 'R5S Inside Get Out',
       type: 'Ability',
       netRegex: { id: 'A77C', source: 'Dancing Green', capture: false },
-      response: Responses.getIn('info'),
+      response: Responses.getIn(),
     },
     {
       id: 'R5S Outside In',
@@ -237,15 +231,21 @@ const triggerSet: TriggerSet<Data> = {
       id: 'R5S Outside Get In',
       type: 'Ability',
       netRegex: { id: 'A77E', source: 'Dancing Green', capture: false },
-      response: Responses.getOut('info'),
+      response: Responses.getOut(),
     },
     {
-      id: 'R5S Arcady Night Fever', // Arcady Night Encore
+      id: 'R5S Arcady Night Fever', // +Arcady Night Encore
       type: 'StartsUsing',
       netRegex: { id: ['A760', 'A370'], source: 'Dancing Green', capture: false },
       // A765 -> A765, A764 안팎일걸로 추정
-      infoText: (_data, _matches, output) => output.text!(),
-      run: (data) => data.frogs = [],
+      infoText: (data, _matches, output) => {
+        if (data.options.AutumnStyle)
+          return output.text!();
+      },
+      run: (data) => {
+        data.frogs = [];
+        delete data.order;
+      },
       outputStrings: {
         text: {
           en: 'Night Fever',
@@ -258,35 +258,26 @@ const triggerSet: TriggerSet<Data> = {
       type: 'StartsUsing',
       netRegex: { id: Object.keys(frogIds), source: 'Frogtourage' },
       run: (data, matches) => data.frogs.push(frogIds[matches.id] ?? 'unknown'),
-      // 다른 방법
-      // [00:18:16.002] 273 111:40012007:003F:5:0:0:0
-      // type: 'ActorControlExtra',
-      // netRegex: { id: '40[0-9A-F]{6}', category: '003F' },
-      // run: (data, matches) => {
-      //   const dances: { [id: string]: News } = {
-      //     '5': 'west',
-      //     '7': 'east',
-      //     '1F': 'north',
-      //     '20': 'south',
-      //   };
-      //   const dir = dances[matches.param1];
-      //   if (dir === undefined)
-      //     return;
-      //   data.frogs.push(dir);
-      // },
     },
     {
-      id: 'R5S Alpha Beta',
+      id: 'R5S Wavelength Merge Order',
       type: 'GainsEffect',
       netRegex: { effectId: ['116E', '116F'] },
       run: (data, matches) => {
-        const count = parseFloat(matches.duration) + performance.now();
-        const type = matches.effectId === '116E';
-        data.abs.push({ id: matches.target, count: count, type: type });
+        matches.effectId === '116E' ? data.waves.alpha++ : data.waves.beta++;
+        if (data.me !== matches.target)
+          return;
+        if (matches.effectId === '116E') {
+          const alphas: { [num: number]: number } = { 1: 3, 2: 1, 3: 2, 4: 4 } as const;
+          data.order = alphas[data.waves.alpha];
+        } else {
+          const betas: { [num: number]: number } = { 1: 4, 2: 2, 3: 1, 4: 3 } as const;
+          data.order = betas[data.waves.beta];
+        }
       },
     },
     {
-      id: 'R5S My Alpha Beta',
+      id: 'R5S Wavelength Merge Reminder',
       type: 'GainsEffect',
       netRegex: { effectId: ['116E', '116F'] },
       condition: (data, matches) => data.me === matches.target,
@@ -310,37 +301,18 @@ const triggerSet: TriggerSet<Data> = {
         const curr = data.frogs[0];
         if (curr === undefined) // 이게 없을리가 있나
           return;
-
-        data.order = undefined;
-        let target = undefined;
-        const my = data.abs.find((x) => x.id === data.me);
-        if (my !== undefined) {
-          const sorted = data.abs.sort((x, y) => x.count - y.count);
-          const abm = sorted.filter((x) => x.type === my.type);
-          const abo = sorted.filter((x) => x.type !== my.type);
-          data.order = abm.findIndex((x) => x.id === data.me);
-          target = data.party.member(abo[data.order]?.id);
-          data.order++;
-        }
-
-        if (data.order !== undefined) {
-          if (data.options.AutumnStyle)
-            target = target === undefined ? output.unknown!() : target.jobFull;
-          else if (target === undefined)
-            target = output.unknown!();
-          return output.combo!({ dir: output[curr]!(), order: data.order, target: target });
-        }
+        if (data.order !== undefined)
+          return output.combo!({ dir: output[curr]!(), order: data.order });
         return output.text!({ dir: output[curr]!() });
       },
-      run: (data) => data.abs = [],
       outputStrings: {
         text: {
           en: '${dir}',
           ko: '${dir}으로',
         },
         combo: {
-          en: '${dir} (${order} w/${target}',
-          ko: '${dir}으로 (${order}번째, ${target})',
+          en: '${dir} (${order})',
+          ko: '${dir}으로 (${order}번째)',
         },
         east: Outputs.east,
         west: Outputs.west,
@@ -401,6 +373,7 @@ const triggerSet: TriggerSet<Data> = {
       id: 'R5S Do the Hustle',
       type: 'StartsUsing',
       netRegex: { id: ['A724', 'A725'], source: 'Dancing Green', capture: false },
+      condition: (data) => data.options.AutumnStyle,
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
@@ -409,44 +382,58 @@ const triggerSet: TriggerSet<Data> = {
         },
       },
     },
-    // Moonburn 어캄
-    // 테스트
-    /* 당장은 필요 없음
     {
       id: 'R5S Ride The Waves',
       type: 'StartsUsing',
       netRegex: { id: 'A754', source: 'Dancing Green', capture: false },
+      condition: (data) => data.options.AutumnStyle,
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
           en: 'Wave + Spread',
-          ko: '비트 + 흩어져요',
+          ko: '북에서 내려오는 장판 웨이브!',
         },
       },
     },
-    */
-    /* 당장은 필요 없음
-    {
-      id: 'R5S Frogtourage',
-      type: 'StartsUsing',
-      netRegex: { id: 'A75F', source: 'Dancing Green', capture: false },
-      infoText: (_data, _matches, output) => output.text!(),
-      outputStrings: {
-        text: {
-          en: 'Frog dancers',
-          ko: '개구리 춤꾼',
-        },
-      },
-    },
-    */
   ],
   timelineReplace: [
     {
-      'locale': 'ja',
-      'missingTranslations': true,
-      'replaceSync': {
+      locale: 'ja',
+      replaceSync: {
         'Dancing Green': 'ダンシング・グリーン',
-        'Frogtourage': 'フロッグダンサー',
+        'Frogtourage': 'カモン！ フロッグダンサー',
+      },
+      replaceText: {
+        'Deep Cut': 'ディープカット',
+        'Flip to A-side': 'ジングル予約A',
+        'Flip to B-side': 'ジングル予約B',
+        '2-snap Twist & Drop the Needle': '2ポイント、ポーズ&ジングル',
+        '3-snap Twist & Drop the Needle': '3ポイント、ポーズ&ジングル',
+        '4-snap Twist & Drop the Needle': '4ポイント、ポーズ&ジングル',
+        'Play A-side': 'ラウドジングルA',
+        'Play B-side': 'ラウドジングルB',
+        'Celebrate Good Times': 'セレブレート・グッドタイムズ',
+        'Disco Infernal': 'ディスコインファーナル',
+        'Funky Floor': 'ダンシングフィールド',
+        'Inside Out': 'インサイドアウト',
+        'Outside In': 'アウトサイドイン',
+        'Ensemble Assemble': 'ダンサーズ・アッセンブル',
+        'Arcady Night Fever': 'アルカディア・ナイトフィーバー',
+        'Get Down!': 'ゲットダウン！',
+        'Let\'s Dance': 'レッツダンス！',
+        'Freak Out': '静音爆発',
+        'Let\'s Pose': 'レッツポーズ！',
+        'Ride the Waves': 'ウェーブ・オン・ウェーブ',
+        'Quarter Beats': '4ビート',
+        'Eighth Beats': '8ビート',
+        'Frogtourage': 'カモン！ フロッグダンサー',
+        'Moonburn': 'ムーンバーン',
+        'Back-up Dance': 'ダンシングウェーブ',
+        'Arcady Night Encore Starts': 'ナイトフィーバー・アンコール',
+        'Let\'s Dance! Remix': 'レッツダンス・ダンス・ダンス！',
+        'Do the Hustle': 'ドゥ・ザ・ハッスル',
+        'Frogtourage Finale': 'ファイナル・アッセンブル',
+        'Hi-NRG Fever': 'ハイエナジー・ナイトフィーバー',
       },
     },
   ],

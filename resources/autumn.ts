@@ -247,6 +247,9 @@ export const AutumnDirections = {
   },
 };
 
+// 파라미터
+const getParam = (param: string): string[] => param.split(',');
+
 // 직업 인덱스를 우선 순위로
 const jobIndexToPriority: Record<number, number> = {
   0: 0, // 모험가
@@ -587,11 +590,19 @@ const Autumn = {
   inMainTeam: (moksName: string) => teamMtMoks.includes(moksName),
   inSubTeam: (moksName: string) => teamStMoks.includes(moksName),
 
+  getParams: getParam,
+  hasParam: (find: string, param?: string): boolean => {
+    if (param === undefined)
+      return false;
+    const ss = getParam(param);
+    return ss.includes(find);
+  },
+
   parseMoks: (job: Job, param?: string): AutumnMoks => {
     // BLU는 어디까지나 인수로만
     if (param !== undefined) {
       // 몫은 인수 0번 고정
-      const ss = param.split(',');
+      const ss = getParam(param);
       if (ss.length > 0 && ss[0] !== undefined && moksNames.includes(ss[0]))
         return ss[0] as AutumnMoks;
     }

@@ -7,43 +7,41 @@ import { RaidbossData } from '../../../../../types/data';
 import { NetMatches } from '../../../../../types/net_matches';
 import { TriggerSet } from '../../../../../types/trigger';
 
-type Styles = 'molb' | 'succ' | 'bomb' | 'wing';
+type Styles = 'mbol' | 'succ' | 'bomb' | 'wing';
 type StyleItem = { l: Styles; r: Styles; c: number };
 const styleMap: { [id: string]: StyleItem } = {
-  '93CA': { l: 'molb', r: 'succ', c: 2 },
-  '9408': { l: 'succ', r: 'molb', c: 2 },
-  'A67D': { l: 'molb', r: 'molb', c: 2 },
+  '93CA': { l: 'mbol', r: 'succ', c: 2 },
+  '9408': { l: 'succ', r: 'mbol', c: 2 },
+  'A67D': { l: 'mbol', r: 'mbol', c: 2 },
   'A67E': { l: 'succ', r: 'succ', c: 2 },
   'A67F': { l: 'bomb', r: 'succ', c: 4 },
   'A680': { l: 'wing', r: 'succ', c: 4 },
-  'A681': { l: 'bomb', r: 'molb', c: 4 },
-  'A682': { l: 'wing', r: 'molb', c: 4 },
+  'A681': { l: 'bomb', r: 'mbol', c: 4 },
+  'A682': { l: 'wing', r: 'mbol', c: 4 },
 };
 const styleFlags = {
-  'bomb': 0x1,
-  'wing': 0x2,
-  'molb': 0x4,
-  'succ': 0x8,
+  'mbol': 0x1,
+  'succ': 0x2,
+  'bomb': 0x4,
+  'wing': 0x8,
 } as const;
-const getStyleConer = (dir: number): number[] => {
-  const map: { [dir: number]: [number, number] } = {
-    0: [1, 7],
-    2: [1, 3],
-    4: [3, 5],
-    6: [5, 7],
-  };
-  return map[dir] ?? [];
+const styleCorner: { [dir: number]: [number, number] } = {
+  0: [1, 7],
+  2: [1, 3],
+  4: [3, 5],
+  6: [5, 7],
 };
+const getStyleConer = (dir: number): number[] => styleCorner[dir] ?? [];
 
 export interface Data extends RaidbossData {
-  mode: 'none' | 'crash';
-  bomb?: 'cold' | 'warm' | 'unknown';
-  crush?: 'pair' | 'light' | 'unknown';
-  style?: StyleItem;
-  target?: string;
-  debuffs: { name: string; count: number }[];
-  actors: { [id: string]: NetMatches['ActorSetPos'] };
-  tethers: { [id: string]: NetMatches['Tether'] };
+  hate?: string;
+  riot?: 'cold' | 'warm';
+  isCrush?: boolean;
+  crushAction?: 'pair' | 'light';
+  styleItem?: StyleItem;
+  styleActors: { [id: string]: NetMatches['ActorSetPos'] };
+  styleTethers: { [id: string]: NetMatches['Tether'] };
+  sandDebuffs: { name: string; count: number }[];
 }
 
 const triggerSet: TriggerSet<Data> = {
@@ -51,13 +49,17 @@ const triggerSet: TriggerSet<Data> = {
   zoneId: ZoneId.AacCruiserweightM2Savage,
   timelineFile: 'r6s.txt',
   initData: () => ({
-    mode: 'none',
-    stether: 0,
-    debuffs: [],
-    actors: {},
-    tethers: {},
+    styleActors: {},
+    styleTethers: {},
+    sandDebuffs: [],
   }),
   triggers: [
+    {
+      id: 'R6S Auto Attack',
+      type: 'Ability',
+      netRegex: { id: 'A7B4', source: 'Sugar Riot' },
+      run: (data, matches) => data.hate = matches.target,
+    },
     {
       id: 'R6S Mousse Mural',
       type: 'StartsUsing',
@@ -91,11 +93,11 @@ const triggerSet: TriggerSet<Data> = {
         };
         if (!Autumn.isTank(data.moks))
           return { infoText: output.avoidCleave!() };
-        if (data.bomb === 'cold') {
+        if (data.riot === 'cold') {
           // 웜 유도할 것
           const act = matches.id === 'A691' ? output.out!() : output.in!();
           return { alertText: output.warm!({ act: act }) };
-        } else if (data.bomb === 'warm') {
+        } else if (data.riot === 'warm') {
           // 콜드 유도할 것
           const act = matches.id === 'A692' ? output.out!() : output.in!();
           return { alertText: output.cold!({ act: act }) };
@@ -104,22 +106,22 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: 'R6S Cold/Warm Bomb Collect',
+      id: 'R6S Cold/Warm Collect',
       type: 'Ability',
       netRegex: { id: ['A693', 'A694'], source: 'Sugar Riot' },
       condition: (data, matches) => data.me === matches.target,
-      run: (data, matches) => data.bomb = matches.id === 'A693' ? 'cold' : 'warm',
+      run: (data, matches) => data.riot = matches.id === 'A693' ? 'cold' : 'warm',
     },
     {
       id: 'R6S Color Crash Collect',
       type: 'StartsUsing',
       netRegex: { id: ['A68B', 'A68D'], source: 'Sugar Riot' },
       run: (data, matches) => {
-        data.mode = 'crash';
-        data.crush = matches.id === 'A68B' ? 'light' : 'pair';
-        data.actors = {};
-        data.tethers = {};
-        delete data.style;
+        data.isCrush = true;
+        data.crushAction = matches.id === 'A68B' ? 'light' : 'pair';
+        data.styleActors = {};
+        data.styleTethers = {};
+        delete data.styleItem;
       },
     },
     {
@@ -131,9 +133,9 @@ const triggerSet: TriggerSet<Data> = {
       countdownSeconds: 4,
       suppressSeconds: 10,
       alertText: (data, _matches, output) => {
-        if (data.crush === undefined)
+        if (data.crushAction === undefined)
           return output.text!();
-        return output.combo!({ act: output[data.crush]!() });
+        return output.combo!({ act: output[data.crushAction]!() });
       },
       outputStrings: {
         text: {
@@ -157,12 +159,12 @@ const triggerSet: TriggerSet<Data> = {
       durationSeconds: 5,
       suppressSeconds: 10,
       infoText: (data, _matches, output) => {
-        if (data.crush !== undefined)
-          return output[data.crush]!();
+        if (data.crushAction !== undefined)
+          return output[data.crushAction]!();
       },
       run: (data) => {
-        data.mode = 'none';
-        delete data.crush;
+        delete data.isCrush;
+        delete data.crushAction;
       },
       outputStrings: {
         pair: Outputs.stackPartner,
@@ -174,37 +176,37 @@ const triggerSet: TriggerSet<Data> = {
       id: 'R6S Double Actors Collect',
       type: 'ActorSetPos',
       netRegex: { id: '4[0-9A-Fa-f]{7}', capture: true },
-      condition: (data) => data.mode === 'crash',
-      run: (data, matches) => data.actors[matches.id] = matches,
+      condition: (data) => data.isCrush,
+      run: (data, matches) => data.styleActors[matches.id] = matches,
     },
     {
       id: 'R6S Double Style Collect',
       type: 'StartsUsing',
       netRegex: { id: Object.keys(styleMap), source: 'Sugar Riot', capture: true },
-      condition: (data) => data.mode === 'crash',
-      run: (data, matches) => data.style = styleMap[matches.id],
+      condition: (data) => data.isCrush,
+      run: (data, matches) => data.styleItem = styleMap[matches.id],
     },
     {
       // #650
       id: 'R6S Double Style',
       type: 'Tether',
       netRegex: { targetId: '4[0-9A-Fa-f]{7}', id: ['013F', '0140'], capture: true },
-      condition: (data) => data.mode === 'crash' && data.style !== undefined,
-      preRun: (data, matches) => data.tethers[matches.sourceId] = matches,
+      condition: (data) => data.isCrush && data.styleItem !== undefined,
+      preRun: (data, matches) => data.styleTethers[matches.sourceId] = matches,
       durationSeconds: 5,
       infoText: (data, _matches, output) => {
-        if (data.style === undefined)
+        if (data.styleItem === undefined)
           return;
-        if (Object.keys(data.tethers).length < data.style.c)
+        if (Object.keys(data.styleTethers).length < data.styleItem.c)
           return;
 
         let comb = 0;
         let safes = [1, 3, 5, 7];
-        const tethers = Object.entries(data.tethers);
-        data.tethers = {};
+        const tethers = Object.entries(data.styleTethers);
+        data.styleTethers = {};
 
         for (const [id, tether] of tethers) {
-          const a = data.actors[id];
+          const a = data.styleActors[id];
           if (a === undefined)
             return;
 
@@ -214,7 +216,7 @@ const triggerSet: TriggerSet<Data> = {
           const adir = Directions.xyTo8DirNum(x, y, 100, 100);
           const mdir = Directions.xyTo8DirNum(mx, y, 100, 100);
           const corners = getStyleConer(adir);
-          const mob = data.style[tether.id === '013F' ? 'l' : 'r'];
+          const mob = data.styleItem[tether.id === '013F' ? 'l' : 'r'];
           switch (mob) {
             case 'bomb':
               safes = safes.filter((dir) => dir !== adir);
@@ -225,7 +227,7 @@ const triggerSet: TriggerSet<Data> = {
             case 'succ':
               safes = safes.filter((dir) => !corners.includes(dir));
               break;
-            case 'molb':
+            case 'mbol':
               safes = safes.filter((dir) => corners.includes(dir));
               break;
           }
@@ -247,25 +249,28 @@ const triggerSet: TriggerSet<Data> = {
           let mesg = output.unknown!();
           if (comb === styleFlags.succ) // 서큐버스 2
             mesg = output.succ!();
-          else if (comb === styleFlags.molb)
+          else if (comb === styleFlags.mbol)
             mesg = output.molb!(); // 몰볼 2
-          else if (comb === (styleFlags.succ | styleFlags.molb))
+          else if (comb === (styleFlags.succ | styleFlags.mbol))
             mesg = output.succmolb!(); // 서큐버스 + 몰볼
           else if ((comb & styleFlags.bomb) !== 0) {
             if ((comb & styleFlags.succ) !== 0)
               mesg = output.bombsucc!(); // 폭탄 + 서큐버스
-            if ((comb & styleFlags.molb) !== 0)
+            if ((comb & styleFlags.mbol) !== 0)
               mesg = output.bombmolb!(); // 폭탄 + 몰볼
           } else if ((comb & styleFlags.wing) !== 0) {
             if ((comb & styleFlags.succ) !== 0)
               mesg = output.wingsucc!(); // 날개 + 서큐버스
-            if ((comb & styleFlags.molb) !== 0)
+            if ((comb & styleFlags.mbol) !== 0)
               mesg = output.wingmolb!(); // 날개 + 몰볼
           }
-          const jpmap: { [id: number]: number } = { 1: 3, 3: 5, 5: 7, 7: 1 } as const;
-          const jpstart = jpmap[start]!;
+          let omk = start;
+          if (!Autumn.hasParam('markex', data.options.AutumnParameter)) {
+            const exmap: { [id: number]: number } = { 1: 3, 3: 5, 5: 7, 7: 1 } as const;
+            omk = exmap[start]!;
+          }
           const ar = AutumnDirections.outputFromArrow8Num(start);
-          const mk = AutumnDirections.outputFromMarker8Num(jpstart);
+          const mk = AutumnDirections.outputFromMarker8Num(omk);
           return output.atext!({
             arrow: output[ar]!(),
             mark: output[mk]!(),
@@ -331,7 +336,7 @@ const triggerSet: TriggerSet<Data> = {
       id: 'R6S Sugarscape',
       type: 'StartsUsing',
       netRegex: { id: 'A668', source: 'Sugar Riot', capture: false },
-      run: (data) => data.debuffs = [],
+      run: (data) => data.sandDebuffs = [],
     },
     {
       id: 'R6S Sand Debuffs',
@@ -339,11 +344,17 @@ const triggerSet: TriggerSet<Data> = {
       netRegex: { effectId: '1166' },
       infoText: (data, matches, output) => {
         const count = parseFloat(matches.duration);
-        data.debuffs.push({ name: matches.target, count: count });
-        if (data.debuffs.length < 4 || !Autumn.isTank(data.moks))
+        data.sandDebuffs.push({ name: matches.target, count: count });
+        if (data.sandDebuffs.length < 4 || !Autumn.isTank(data.moks))
           return;
-        const itsme = data.debuffs.findIndex((x) => x.name === data.me);
-        return itsme === -1 ? output.provoke!() : output.shirk!();
+        const itsme = data.sandDebuffs.findIndex((x) => x.name === data.me);
+        if (itsme === -1) {
+          if (data.hate !== data.me)
+            return output.provoke!();
+          return;
+        }
+        if (data.hate === data.me)
+          return output.shirk!();
       },
       outputStrings: {
         shirk: {
@@ -397,61 +408,91 @@ const triggerSet: TriggerSet<Data> = {
         },
       },
     },
-    /*
     {
-      id: 'R6S Sweet Shot',
-      type: 'AddedCombatant',
-      netRegex: { npcNameId: '13826', capture: false },
-      durationSeconds: 5,
-      suppressSeconds: 5,
-      infoText: (_data, _matches, output) => output.text!(),
-      outputStrings: {
-        text: {
-          en: 'Arrows grid',
-          ko: '화살 격자 장판',
-        },
+      id: 'R6S Manxome Windersnatch',
+      type: 'Ability',
+      netRegex: { id: 'A6AD', source: 'Jabberwock' },
+      durationSeconds: 3,
+      response: (data, matches, output) => {
+        // cactbot-builtin-response
+        output.responseOutputStrings = {
+          wock: {
+            en: 'Jabberwock appears',
+            ko: '재버워크 나왔어요',
+          },
+          bind: {
+            en: 'Jabberwock binds YOU',
+            ko: '내게 재버워크 바인드!',
+          },
+        };
+        if (data.me === matches.target)
+          return { alertText: output.bind!() };
+        return { infoText: output.wock!() };
       },
     },
-    */
+    {
+      id: 'R6S Ready Ore Not',
+      type: 'StartsUsing',
+      netRegex: { id: 'A6AA', source: 'Sugar Riot', capture: false },
+      response: Responses.aoe(),
+    },
     {
       id: 'R6S Double Style Arrows',
       type: 'StartsUsing',
-      netRegex: { id: 'A689', target: 'Sugar Riot', capture: false },
+      netRegex: { id: ['A687', 'A689'], source: 'Sugar Riot' },
       durationSeconds: 5,
-      infoText: (_data, _matches, output) => output.text!(),
+      infoText: (_data, matches, output) => {
+        const act = matches.id === 'A687' ? 'group' : 'spread';
+        return output.text!({ act: output[act]!() });
+      },
       outputStrings: {
         text: {
-          en: 'Arrows grid',
-          ko: '화살 격자 장판',
+          en: '${act} + Arrows grid',
+          ko: '${act} + 화살 격자 장판',
         },
+        group: Outputs.healerGroups,
+        spread: Outputs.spread,
       },
     },
     {
       id: 'R6S Thunder Target',
       type: 'HeadMarker',
       netRegex: { id: '025A' },
-      condition: (data, matches) => data.me === matches.target,
-      alertText: (data, _matches, output) => {
+      durationSeconds: 4,
+      response: (data, matches, output) => {
+        // cactbot-builtin-response
+        output.responseOutputStrings = {
+          left: {
+            en: 'Thunder on YOU',
+            ko: '내게 번개! 왼쪽 섬으로',
+          },
+          right: {
+            en: 'Thunder on YOU',
+            ko: '내게 번개! 오른쪽 섬으로',
+          },
+          provoke: {
+            en: '(provoke)',
+            ko: '(프로보크)',
+          },
+        };
+        if (data.me !== matches.target) {
+          if (data.role !== 'tank')
+            return;
+          const m = data.party.member(matches.target);
+          if (m.role !== 'tank')
+            return;
+          return { infoText: output.provoke!() };
+        }
         if (data.role === 'dps')
-          return output.right!();
-        return output.left!();
-      },
-      outputStrings: {
-        left: {
-          en: 'Thunder on YOU',
-          ko: '내게 번개! 왼쪽 섬으로',
-        },
-        right: {
-          en: 'Thunder on YOU',
-          ko: '내게 번개! 오른쪽 섬으로',
-        },
+          return { alertText: output.right!() };
+        return { alertText: output.left!() };
       },
     },
     {
       id: 'R6S Pudding Party',
       type: 'StartsUsing',
       netRegex: { id: 'A66D', source: 'Sugar Riot', capture: false },
-      durationSeconds: 9,
+      durationSeconds: 8,
       infoText: (_data, _matches, output) => output.fiveAOE!(),
       outputStrings: {
         fiveAOE: {
@@ -460,38 +501,35 @@ const triggerSet: TriggerSet<Data> = {
         },
       },
     },
-    // Taste of Thunder/Fire 알 방법을 모르겠다
-    /* 이게 아닌데
     {
-      id: 'R6S Moussacre',
-      type: 'Ability',
-      // A6BA 한번만
-      // A6BB 사람한테 4명
-      netRegex: { id: 'A6BA', target: 'Sugar Riot' },
-      suppressSeconds: 1,
-      // response: Responses.getTowers('alert'),
-      alertText: (_data, _matches, output) => output.text!(),
+      id: 'R6S Last Layer',
+      type: 'StartsUsing',
+      netRegex: { id: 'A66D', source: 'Sugar Riot', capture: false },
+      delaySeconds: 8.7,
+      infoText: (_data, _matches, output) => output.spread!(),
       outputStrings: {
-        text: {
-          en: 'Get Towers',
-          ko: '번개 터지면 타워로',
+        spread: {
+          en: 'Go to island',
+          ko: '맡은 섬으로!',
         },
       },
     },
-    */
+    {
+      id: 'R6S Taste of Thunder',
+      type: 'StartsUsing',
+      netRegex: { id: 'A69D', source: 'Sugar Riot', capture: false },
+      durationSeconds: 3,
+      suppressSeconds: 5,
+      response: Responses.moveAway(),
+    },
   ],
   timelineReplace: [
     {
       'locale': 'ja',
       'missingTranslations': true,
       'replaceSync': {
+        'Jabberwock': 'ジャバウォック',
         'Sugar Riot': 'シュガーライオット',
-        // フェザーサークル
-        // シュガーズプリン
-        // シュガーズアロー
-        // グラフィティボム
-        // シュガーズモルボル
-        // シュガーズサキュバス
       },
     },
   ],

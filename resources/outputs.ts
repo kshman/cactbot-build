@@ -237,7 +237,7 @@ export default {
     de: 'Rollenposition',
     fr: 'Positions par rôle',
     ja: 'ロール散会',
-    cn: '职能三刀站位',
+    cn: '职能分散站位',
     ko: '롤 뭉쳐요',
   },
   stackOnYou: {
@@ -440,6 +440,7 @@ export default {
   // be just outside the boss's target circle
   outOfHitbox: {
     en: 'Out of hitbox',
+    de: 'Raus aus der Hitbox',
     fr: 'Extérieur de la hitbox',
     cn: '离开目标圈',
     ko: '히트박스 밖으로',
@@ -578,7 +579,7 @@ export default {
     fr: 'Sens horaire',
     ja: '時針回り',
     cn: '顺时针',
-    ko: '❰❰시계방향',
+    ko: '시계방향',
   },
   counterclockwise: {
     en: 'Counter-clock',
@@ -586,7 +587,7 @@ export default {
     fr: 'Anti-horaire',
     ja: '反時針回り',
     cn: '逆时针',
-    ko: '반시계방향❱❱',
+    ko: '반시계방향',
   },
   // killAdds is used for adds that will always be available
   killAdds: {
@@ -1020,6 +1021,7 @@ export default {
   // for combo mechanics/names
   and: {
     en: ' + ',
+    de: ' + ',
     fr: ' + ',
     cn: ' + ',
     ko: ' + ',
@@ -1027,6 +1029,7 @@ export default {
   // for either/or directions or mechanics
   or: {
     en: ' / ',
+    de: ' / ',
     fr: ' / ',
     cn: ' / ',
     ko: ' / ',
