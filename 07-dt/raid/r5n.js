@@ -278,6 +278,9 @@ Options.Triggers.push({
   id: 'AacCruiserweightM1',
   zoneId: ZoneId.AacCruiserweightM1,
   timelineFile: 'r5n.txt',
+  initData: () => ({
+    deepCutTargets: [],
+  }),
   triggers: [
     {
       id: 'R5N Do the Hustle West Safe',
@@ -298,10 +301,26 @@ Options.Triggers.push({
       },
     },
     {
+      // cast is self-targeted on boss
       id: 'R5N Deep Cut',
-      type: 'StartsUsing',
-      netRegex: { id: 'A6C6', source: 'Dancing Green', capture: true },
-      response: Responses.tankBuster(),
+      type: 'HeadMarker',
+      netRegex: { id: headMarkerData.tankLaser, capture: true },
+      infoText: (data, matches, output) => {
+        data.deepCutTargets.push(matches.target);
+        if (data.deepCutTargets.length < 2)
+          return;
+        if (data.deepCutTargets.includes(data.me))
+          return output.cleaveOnYou();
+        return output.avoidCleave();
+      },
+      run: (data) => {
+        if (data.deepCutTargets.length >= 2)
+          data.deepCutTargets = [];
+      },
+      outputStrings: {
+        cleaveOnYou: Outputs.tankCleaveOnYou,
+        avoidCleave: Outputs.avoidTankCleave,
+      },
     },
     {
       id: 'R5N Full Beat',
