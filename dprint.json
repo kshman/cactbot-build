@@ -6,6 +6,7 @@
   ],
   "excludes": [
     "**/node_modules",
+    "./build/",
     "./dist/",
     "./npm-package/",
     "./plugin/ThirdParty/",
