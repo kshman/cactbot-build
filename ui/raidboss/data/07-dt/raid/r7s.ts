@@ -338,18 +338,8 @@ const triggerSet: TriggerSet<Data> = {
       id: 'R7S Strange Seeds Index',
       type: 'StartsUsing',
       netRegex: { id: 'A598', source: 'Brute Abombinator', capture: false },
-      durationSeconds: 2,
       suppressSeconds: 1,
-      infoText: (data, _matches, output) => {
-        data.seeds++;
-        return output.text!({ num: data.seeds });
-      },
-      outputStrings: {
-        text: {
-          en: '(Seed ${num})',
-          ko: '(씨 심기 #${num})',
-        },
-      },
+      run: (data) => data.seeds++,
     },
     {
       id: 'R7S Strange Seeds',
@@ -358,19 +348,11 @@ const triggerSet: TriggerSet<Data> = {
       condition: Conditions.targetIsYou(),
       delaySeconds: 0.1,
       durationSeconds: 3,
-      alertText: (data, _matches, output) => {
-        if (data.seeds % 2 === 0)
-          return output.even!();
-        return output.odd!();
-      },
+      alertText: (data, _matches, output) => output.text!({ num: data.seeds }),
       outputStrings: {
-        odd: {
-          en: 'Seed on YOU',
-          ko: '내게 홀수 씨앗!',
-        },
-        even: {
-          en: 'Seed on YOU',
-          ko: '내게 짝수 씨앗!',
+        text: {
+          en: 'Seed #${num} on YOU',
+          ko: '내게 ${num}번째 씨앗!',
         },
       },
     },
