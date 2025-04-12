@@ -587,6 +587,8 @@ const Autumn = {
   isHealer: (moksName: string) => moksHealers.includes(moksName),
   isSupport: (moksName: string) => moksTanksAndHealers.includes(moksName),
   isDps: (moksName: string) => moksDps.includes(moksName),
+  isMelee: (moksName: string) => moksMelees.includes(moksName),
+  isRange: (moksName: string) => moksRanges.includes(moksName),
   inMainTeam: (moksName: string) => teamMtMoks.includes(moksName),
   inSubTeam: (moksName: string) => teamStMoks.includes(moksName),
 

@@ -443,7 +443,7 @@ export default {
     de: 'Raus aus der Hitbox',
     fr: 'Extérieur de la hitbox',
     cn: '离开目标圈',
-    ko: '히트박스 밖으로',
+    ko: '센터 밖으로',
   },
   inThenOut: {
     en: 'In => out',

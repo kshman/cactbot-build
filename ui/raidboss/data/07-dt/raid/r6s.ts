@@ -437,6 +437,19 @@ const triggerSet: TriggerSet<Data> = {
       response: Responses.aoe(),
     },
     {
+      id: 'R6S Single Style',
+      type: 'StartsUsing',
+      netRegex: { id: '9A3D', source: 'Sugar Riot', capture: false },
+      durationSeconds: 5,
+      infoText: (_data, _matches, output) => output.text!(),
+      outputStrings: {
+        text: {
+          en: 'Avoid arrows grid',
+          ko: '화살 격자 장판',
+        },
+      },
+    },
+    {
       id: 'R6S Double Style Arrows',
       type: 'StartsUsing',
       netRegex: { id: ['A687', 'A689'], source: 'Sugar Riot' },
@@ -453,6 +466,14 @@ const triggerSet: TriggerSet<Data> = {
         group: Outputs.healerGroups,
         spread: Outputs.spread,
       },
+    },
+    {
+      id: 'R6S Taste of Thunder',
+      type: 'StartsUsing',
+      netRegex: { id: 'A69D', source: 'Sugar Riot', capture: false },
+      durationSeconds: 3,
+      suppressSeconds: 5,
+      response: Responses.moveAway(),
     },
     {
       id: 'R6S Thunder Target',
@@ -513,14 +534,6 @@ const triggerSet: TriggerSet<Data> = {
           ko: '맡은 섬으로!',
         },
       },
-    },
-    {
-      id: 'R6S Taste of Thunder',
-      type: 'StartsUsing',
-      netRegex: { id: 'A69D', source: 'Sugar Riot', capture: false },
-      durationSeconds: 3,
-      suppressSeconds: 5,
-      response: Responses.moveAway(),
     },
   ],
   timelineReplace: [
