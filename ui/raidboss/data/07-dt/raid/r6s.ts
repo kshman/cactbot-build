@@ -374,12 +374,9 @@ const triggerSet: TriggerSet<Data> = {
       condition: (data, matches) => data.me === matches.target,
       delaySeconds: (_data, matches) => parseFloat(matches.duration) - 6,
       countdownSeconds: 6,
-      alertText: (_data, _matches, output) => output.text!(),
+      alertText: (_data, _matches, output) => output.defamation!(),
       outputStrings: {
-        text: {
-          en: 'Defamation on YOU',
-          ko: '내게 대폭발',
-        },
+        defamation: Outputs.defamationOnYou,
       },
     },
     {
@@ -590,9 +587,9 @@ const triggerSet: TriggerSet<Data> = {
       'locale': 'fr',
       'missingTranslations': true,
       'replaceSync': {
-        'Mouthwatering Morbol': 'morbol mielleux',
+        'Mouthwatering Morbol': 'Morbol mielleux',
         'Sugar Riot': 'Sugar Riot',
-        'Sweet Shot': 'flèche sirupeuse',
+        'Sweet Shot': 'Flèche sirupeuse',
       },
       'replaceText': {
         'Artistic Anarchy': 'Anarchie artistique',

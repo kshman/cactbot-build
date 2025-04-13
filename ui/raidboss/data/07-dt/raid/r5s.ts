@@ -385,7 +385,7 @@ const triggerSet: TriggerSet<Data> = {
       'locale': 'fr',
       'replaceSync': {
         'Dancing Green': 'Dancing Green',
-        'Frogtourage': 'danceur batracien',
+        'Frogtourage': 'Danceur batracien',
       },
       'replaceText': {},
     },

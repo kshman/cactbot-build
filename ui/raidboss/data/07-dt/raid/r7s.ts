@@ -28,6 +28,7 @@ const swingStrings = {
 
 export interface Data extends RaidbossData {
   phase: Phase;
+  hate?: string;
   sr?: 'club' | 'blade' | 'unknown';
   seeds: number;
   srcnt: number;
@@ -53,6 +54,12 @@ const triggerSet: TriggerSet<Data> = {
       netRegex: { id: Object.keys(phases), source: 'Brute Abombinator' },
       suppressSeconds: 1,
       run: (data, matches) => data.phase = phases[matches.id as keyof typeof phases] ?? 'unknown',
+    },
+    {
+      id: 'R7S Auto Attack',
+      type: 'Ability',
+      netRegex: { id: 'A55A', source: 'Brute Abombinator' },
+      run: (data, matches) => data.hate = matches.target,
     },
     {
       id: 'R7S Brutal Impact',
@@ -117,28 +124,35 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: 'R7S Seeds Collect',
-      type: 'HeadMarker',
-      netRegex: { id: '0177' },
-      run: (data, matches) => data.collect.push(matches.target),
-    },
-    {
       id: 'R7S Seeds',
       type: 'HeadMarker',
-      netRegex: { id: '0177', capture: false },
-      delaySeconds: 0.1,
+      netRegex: { id: '0177' },
       durationSeconds: 5,
-      suppressSeconds: 1,
-      alertText: (data, _matches, output) => {
-        const mech = data.collect.includes(data.me) ? 'seed' : 'puddle';
-        return output[mech]!();
+      alertText: (data, matches, output) => {
+        data.collect.push(matches.target);
+        if (data.me === matches.target)
+          return output.seed!();
       },
-      run: (data) => data.collect = [],
       outputStrings: {
         seed: {
           en: 'Bait seed',
           ko: '내게 씨앗!',
         },
+      },
+    },
+    {
+      id: 'R7S Seeds Puddle',
+      type: 'HeadMarker',
+      netRegex: { id: '0177', capture: false },
+      delaySeconds: 0.1,
+      durationSeconds: 5,
+      suppressSeconds: 1,
+      infoText: (data, _matches, output) => {
+        if (!data.collect.includes(data.me))
+          return output.puddle!();
+      },
+      run: (data) => data.collect = [],
+      outputStrings: {
         puddle: {
           en: 'Bait puddles',
           ko: '내게 장판x3',
@@ -171,7 +185,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Interrupt',
-          ko: '와인딩 쫄에 인터럽드!!',
+          ko: '와인딩 인터럽드!!',
         },
       },
     },
@@ -235,17 +249,13 @@ const triggerSet: TriggerSet<Data> = {
       netRegex: { id: ['A57F', 'A580'], source: 'Brute Abombinator', capture: false },
       delaySeconds: (data) => {
         const delay = swingDelay[data.srcnt];
-        if (delay === undefined)
-          return 0;
-        return delay;
+        return delay === undefined ? 0 : delay;
       },
       durationSeconds: 5,
       infoText: (data, _matches, output) => {
-        const delay = swingDelay[data.srcnt];
-        if (delay !== undefined) {
-          const sr = data.sr ?? 'unknown';
-          return output[sr]!();
-        }
+        if (swingDelay[data.srcnt] === undefined)
+          return;
+        return output[data.sr ?? 'unknown']!();
       },
       run: (data) => data.srcnt++,
       outputStrings: {
@@ -256,7 +266,7 @@ const triggerSet: TriggerSet<Data> = {
       id: 'R7S Glower Power',
       type: 'StartsUsing',
       netRegex: { id: ['A585', 'A94A'], source: 'Brute Abombinator' },
-      durationSeconds: (_data, matches) => matches.id === 'A585' ? 5 : 2.5,
+      durationSeconds: (_data, matches) => matches.id === 'A585' ? 5 : 2,
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
@@ -280,9 +290,9 @@ const triggerSet: TriggerSet<Data> = {
       response: (data, matches, output) => {
         // cactbot-builtin-response
         output.responseOutputStrings = {
-          bait: {
-            en: 'Bait explosion',
-            ko: '내게 플레어, 멀리멀리!',
+          flare: {
+            en: 'Flare on YOU',
+            ko: '내게 플레어!',
           },
           provoke: {
             en: '(Provoke)',
@@ -290,7 +300,7 @@ const triggerSet: TriggerSet<Data> = {
           },
         };
         if (data.me === matches.target)
-          return { alertText: output.bait!() };
+          return { alertText: output.flare!() };
         if (Autumn.isTank(data.moks) && data.thorny !== data.me)
           return { infoText: output.provoke!() };
       },
@@ -417,19 +427,22 @@ const triggerSet: TriggerSet<Data> = {
             ko: '타워 피해욧!',
           },
           tank: {
-            en: 'MT get tower',
-            ko: 'MT 무적으로 타워!',
+            en: 'Tank tower',
+            ko: '탱크 무적으로 타워!',
           },
-          mine: {
+          tower: {
             en: 'Get tower',
             ko: '내가 무적으로 타워!',
           },
         };
         if (Autumn.isTank(data.moks)) {
-          if (data.slaminator === undefined)
-            return { alertText: output.tank!() };
+          if (data.slaminator === undefined) {
+            if (data.hate === data.me)
+              return { alertText: output.tower!() };
+            return { infoText: output.tank!() };
+          }
           if (data.slaminator !== data.me)
-            return { alertText: output.mine!() };
+            return { alertText: output.tower!() };
         }
         return { infoText: output.avoid!() };
       },
@@ -449,13 +462,13 @@ const triggerSet: TriggerSet<Data> = {
       id: 'R7S Debris Pair',
       type: 'HeadMarker',
       netRegex: { id: '005D', capture: false },
-      condition: (data) => data.phase === 'debris',
+      countdownSeconds: 4.5,
       suppressSeconds: 1,
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
           en: 'Cardinal Pair',
-          ko: '십자로 모서리 둘이 페어',
+          ko: '십자로 둘이 페어',
         },
       },
     },
