@@ -37,7 +37,7 @@ export interface Data extends RaidbossData {
   hate?: string;
   riot?: 'cold' | 'warm';
   isCrush?: boolean;
-  crushAction?: 'pair' | 'light';
+  crushMech?: 'pair' | 'light';
   styleItem?: StyleItem;
   styleActors: { [id: string]: NetMatches['ActorSetPos'] };
   styleTethers: { [id: string]: NetMatches['Tether'] };
@@ -118,7 +118,7 @@ const triggerSet: TriggerSet<Data> = {
       netRegex: { id: ['A68B', 'A68D'], source: 'Sugar Riot' },
       run: (data, matches) => {
         data.isCrush = true;
-        data.crushAction = matches.id === 'A68B' ? 'light' : 'pair';
+        data.crushMech = matches.id === 'A68B' ? 'light' : 'pair';
         data.styleActors = {};
         data.styleTethers = {};
         delete data.styleItem;
@@ -133,9 +133,9 @@ const triggerSet: TriggerSet<Data> = {
       countdownSeconds: 4,
       suppressSeconds: 10,
       alertText: (data, _matches, output) => {
-        if (data.crushAction === undefined)
+        if (data.crushMech === undefined)
           return output.text!();
-        return output.combo!({ act: output[data.crushAction]!() });
+        return output.combo!({ act: output[data.crushMech]!() });
       },
       outputStrings: {
         text: {
@@ -159,12 +159,12 @@ const triggerSet: TriggerSet<Data> = {
       durationSeconds: 5,
       suppressSeconds: 10,
       infoText: (data, _matches, output) => {
-        if (data.crushAction !== undefined)
-          return output[data.crushAction]!();
+        if (data.crushMech !== undefined)
+          return output[data.crushMech]!();
       },
       run: (data) => {
         delete data.isCrush;
-        delete data.crushAction;
+        delete data.crushMech;
       },
       outputStrings: {
         pair: Outputs.stackPartner,
@@ -175,14 +175,14 @@ const triggerSet: TriggerSet<Data> = {
     {
       id: 'R6S Double Actors Collect',
       type: 'ActorSetPos',
-      netRegex: { id: '4[0-9A-Fa-f]{7}', capture: true },
+      netRegex: { id: '4[0-9A-Fa-f]{7}' },
       condition: (data) => data.isCrush,
       run: (data, matches) => data.styleActors[matches.id] = matches,
     },
     {
       id: 'R6S Double Style Collect',
       type: 'StartsUsing',
-      netRegex: { id: Object.keys(styleMap), source: 'Sugar Riot', capture: true },
+      netRegex: { id: Object.keys(styleMap), source: 'Sugar Riot' },
       condition: (data) => data.isCrush,
       run: (data, matches) => data.styleItem = styleMap[matches.id],
     },
@@ -190,7 +190,7 @@ const triggerSet: TriggerSet<Data> = {
       // #650
       id: 'R6S Double Style',
       type: 'Tether',
-      netRegex: { targetId: '4[0-9A-Fa-f]{7}', id: ['013F', '0140'], capture: true },
+      netRegex: { targetId: '4[0-9A-Fa-f]{7}', id: ['013F', '0140'] },
       condition: (data) => data.isCrush && data.styleItem !== undefined,
       preRun: (data, matches) => data.styleTethers[matches.sourceId] = matches,
       durationSeconds: 5,
@@ -250,19 +250,19 @@ const triggerSet: TriggerSet<Data> = {
           if (comb === styleFlags.succ) // 서큐버스 2
             mesg = output.succ!();
           else if (comb === styleFlags.mbol)
-            mesg = output.molb!(); // 몰볼 2
+            mesg = output.mbol!(); // 몰볼 2
           else if (comb === (styleFlags.succ | styleFlags.mbol))
-            mesg = output.succmolb!(); // 서큐버스 + 몰볼
+            mesg = output.succmbol!(); // 서큐버스 + 몰볼
           else if ((comb & styleFlags.bomb) !== 0) {
             if ((comb & styleFlags.succ) !== 0)
               mesg = output.bombsucc!(); // 폭탄 + 서큐버스
             if ((comb & styleFlags.mbol) !== 0)
-              mesg = output.bombmolb!(); // 폭탄 + 몰볼
+              mesg = output.bombmbol!(); // 폭탄 + 몰볼
           } else if ((comb & styleFlags.wing) !== 0) {
             if ((comb & styleFlags.succ) !== 0)
               mesg = output.wingsucc!(); // 날개 + 서큐버스
             if ((comb & styleFlags.mbol) !== 0)
-              mesg = output.wingmolb!(); // 날개 + 몰볼
+              mesg = output.wingmbol!(); // 날개 + 몰볼
           }
           let omk = start;
           if (!Autumn.hasParam('markex', data.options.AutumnParameter)) {
@@ -296,11 +296,11 @@ const triggerSet: TriggerSet<Data> = {
           en: 'Succubus x2',
           ko: '서큐쪽',
         },
-        molb: {
+        mbol: {
           en: 'Molbol x2',
           ko: '몰볼 안됨',
         },
-        succmolb: {
+        succmbol: {
           en: 'Succubus + Molbol',
           ko: '서큐 + 몰볼 안됨',
         },
@@ -308,7 +308,7 @@ const triggerSet: TriggerSet<Data> = {
           en: 'Painted + Succubus',
           ko: '폭탄 + 서큐',
         },
-        bombmolb: {
+        bombmbol: {
           en: 'Painted + Molbol',
           ko: '폭탄 + 몰볼 안됨',
         },
@@ -316,7 +316,7 @@ const triggerSet: TriggerSet<Data> = {
           en: 'Heaven + Succubus',
           ko: '날개 안됨 + 서큐',
         },
-        wingmolb: {
+        wingmbol: {
           en: 'Heaven + Molbol',
           ko: '날개 안됨 + 몰볼 안됨',
         },
@@ -374,12 +374,9 @@ const triggerSet: TriggerSet<Data> = {
       condition: (data, matches) => data.me === matches.target,
       delaySeconds: (_data, matches) => parseFloat(matches.duration) - 6,
       countdownSeconds: 6,
-      alertText: (_data, _matches, output) => output.text!(),
+      alertText: (_data, _matches, output) => output.defamation!(),
       outputStrings: {
-        text: {
-          en: 'Defamation on YOU',
-          ko: '내게 대폭발',
-        },
+        defamation: Outputs.defamationOnYou,
       },
     },
     {
@@ -437,6 +434,19 @@ const triggerSet: TriggerSet<Data> = {
       response: Responses.aoe(),
     },
     {
+      id: 'R6S Single Style',
+      type: 'StartsUsing',
+      netRegex: { id: '9A3D', source: 'Sugar Riot', capture: false },
+      durationSeconds: 5,
+      infoText: (_data, _matches, output) => output.text!(),
+      outputStrings: {
+        text: {
+          en: 'Avoid arrows grid',
+          ko: '화살 격자 장판',
+        },
+      },
+    },
+    {
       id: 'R6S Double Style Arrows',
       type: 'StartsUsing',
       netRegex: { id: ['A687', 'A689'], source: 'Sugar Riot' },
@@ -453,6 +463,14 @@ const triggerSet: TriggerSet<Data> = {
         group: Outputs.healerGroups,
         spread: Outputs.spread,
       },
+    },
+    {
+      id: 'R6S Taste of Thunder',
+      type: 'StartsUsing',
+      netRegex: { id: 'A69D', source: 'Sugar Riot', capture: false },
+      durationSeconds: 3,
+      suppressSeconds: 5,
+      response: Responses.moveAway(),
     },
     {
       id: 'R6S Thunder Target',
@@ -514,22 +532,140 @@ const triggerSet: TriggerSet<Data> = {
         },
       },
     },
-    {
-      id: 'R6S Taste of Thunder',
-      type: 'StartsUsing',
-      netRegex: { id: 'A69D', source: 'Sugar Riot', capture: false },
-      durationSeconds: 3,
-      suppressSeconds: 5,
-      response: Responses.moveAway(),
-    },
   ],
   timelineReplace: [
+    {
+      'locale': 'de',
+      'missingTranslations': true,
+      'replaceSync': {
+        'Mouthwatering Morbol': 'Zucker-Morbol',
+        'Sugar Riot': 'Zuckerschock',
+        'Sweet Shot': 'Zuckerpfeil',
+      },
+      'replaceText': {
+        '\\(cast\\)': '(wirken)',
+        '\\(snapshot\\)': '(Speichern)',
+        '--Yan targetable--': '--Putschi anvisierbar--',
+        '--2x Mu targetable--': '--2x Mu anvisierbar--',
+        '--Gimme Cat targetable--': '--Bettelcat anvisierbar--',
+        '--2x Feather Ray targetable--': '--2x Federrochen anvisierbar--',
+        '--Jabberwock targetable--': '--Brabbelback anvisierbar--',
+        'Artistic Anarchy': 'Artistische Anarchie',
+        'Bad Breath': 'Schlechter Atem',
+        'Brûlée': 'Wärmeentladung',
+        'Burst': 'Explosion',
+        'Color Clash': 'Farbbruch',
+        'Color Riot': 'Farbenschock',
+        'Cool Bomb': 'Kalte Farbbombe',
+        'Crowd Brûlée': 'Hitzeentladung',
+        'Dark Mist': 'Schattenhauch',
+        'Double Style': 'Doppel-Graffiti',
+        'Layer': 'Feinschliff',
+        'Levin Drop': 'Stromfluss',
+        'Lightning Bolt': 'Blitzschlag',
+        'Lightning Storm': 'Blitzsturm',
+        'Live Painting': 'Sofortkunst',
+        'Moussacre': 'Mousse-Marsch',
+        'Mousse Drip': 'Mousse-Spritzer',
+        'Mousse Mural': 'Mousse-Regen',
+        'Pudding Graf': 'Pudding-Platzer',
+        'Pudding Party': 'Pudding-Party',
+        'Ready Ore Not': 'Edelstein-Regen',
+        'Rush': 'Stürmen',
+        'Single Style': 'Einzel-Graffiti',
+        'Soul Sugar': 'Zuckerseele',
+        'Spray Pain': 'Nadelschuss',
+        'Sticky Mousse': 'Klebriges Mousse',
+        'Sugarscape': 'Landschaftsmalerei',
+        'Taste of Fire': 'Zuckerfeuer',
+        'Taste of Thunder': 'Zuckerblitz',
+        'Warm Bomb': 'Warme Farbbombe',
+        'Wingmark': 'Flügelzeichen',
+      },
+    },
+    {
+      'locale': 'fr',
+      'missingTranslations': true,
+      'replaceSync': {
+        'Mouthwatering Morbol': 'Morbol mielleux',
+        'Sugar Riot': 'Sugar Riot',
+        'Sweet Shot': 'Flèche sirupeuse',
+      },
+      'replaceText': {
+        'Artistic Anarchy': 'Anarchie artistique',
+        'Bad Breath': 'Mauvaise haleine',
+        'Brûlée': 'Dissipation thermique',
+        'Burst': 'Explosion',
+        'Color Clash': 'Impact chromatique',
+        'Color Riot': 'Révolte chromatique',
+        'Cool Bomb': 'Bombe de couleurs froides',
+        'Crowd Brûlée': 'Dissipation enflammée',
+        'Dark Mist': 'Brume funèbre',
+        'Double Style': 'Double graffiti',
+        'Layer': 'Retouche',
+        'Levin Drop': 'Courant électrique',
+        'Lightning Bolt': 'Fulguration',
+        'Lightning Storm': 'Pluie d\'éclairs',
+        'Live Painting': 'Peinture vivante',
+        'Moussacre': 'Défilé de mousse',
+        'Mousse Drip': 'Mousse éclaboussante',
+        'Mousse Mural': 'Averse de mousse',
+        'Pudding Graf': 'Pudding pétulent',
+        'Pudding Party': 'Fête du flan',
+        'Ready Ore Not': 'Gemmes la pluie !',
+        'Rush': 'Ruée',
+        'Single Style': 'Graffiti simple',
+        'Soul Sugar': 'Âme en sucre',
+        'Spray Pain': 'Aiguilles foudroyantes',
+        'Sticky Mousse': 'Mousse collante',
+        'Sugarscape': 'Nature morte',
+        'Taste of Fire': 'Feu sirupeux',
+        'Taste of Thunder': 'Foudre sucrée',
+        'Warm Bomb': 'Bombe de couleurs chaudes',
+        'Wingmark': 'Emblème ailé',
+      },
+    },
     {
       'locale': 'ja',
       'missingTranslations': true,
       'replaceSync': {
         'Jabberwock': 'ジャバウォック',
+        'Mouthwatering Morbol': 'シュガーズモルボル',
         'Sugar Riot': 'シュガーライオット',
+        'Sweet Shot': 'シュガーズアロー',
+      },
+      'replaceText': {
+        'Artistic Anarchy': 'アーティスティック・アナーキー',
+        'Bad Breath': '臭い息',
+        'Brûlée': '熱放散',
+        'Burst': '爆発',
+        'Color Clash': 'カラークラッシュ',
+        'Color Riot': 'カラーライオット',
+        'Cool Bomb': 'コールドペイントボム',
+        'Crowd Brûlée': '重熱放散',
+        'Dark Mist': 'ダークミスト',
+        'Double Style': 'ダブル・グラフィティ',
+        'Layer': 'アレンジ',
+        'Levin Drop': '雷流',
+        'Lightning Bolt': 'いなずま',
+        'Lightning Storm': '百雷',
+        'Live Painting': 'ライブペインティング',
+        'Moussacre': 'ムース大行進',
+        'Mousse Drip': 'びちゃっとムース',
+        'Mousse Mural': 'ムースシャワー',
+        'Pudding Graf': 'ぼっかんプリン',
+        'Pudding Party': 'プリンパーティー',
+        'Ready Ore Not': '原石あげる',
+        'Rush': '突進',
+        'Single Style': 'シングル・グラフィティ',
+        'Soul Sugar': 'シュガーソウル',
+        'Spray Pain': '針飛ばし',
+        'Sticky Mousse': 'ねばねばムース',
+        'Sugarscape': 'ランドスケープ',
+        'Taste of Fire': 'シュガーファイア',
+        'Taste of Thunder': 'シュガーサンダー',
+        'Warm Bomb': 'ウォームペイントボム',
+        'Wingmark': 'ウイングマーク',
       },
     },
   ],

@@ -22,7 +22,7 @@ const numberToOutputString = function(n: number): FullLocaleText {
 // * the value of each property should be a single object with localized keys
 export default {
   aoe: {
-    en: 'AoE',
+    en: 'Raidwide',
     de: 'AoE',
     fr: 'AoE',
     ja: '全体攻撃',
@@ -30,7 +30,7 @@ export default {
     ko: '전체 공격',
   },
   bigAoe: {
-    en: 'Big AoE!',
+    en: 'Big Raidwide!',
     de: 'Große AoE!',
     fr: 'Grosse AoE !',
     ja: '強力な全体攻撃',
@@ -38,7 +38,7 @@ export default {
     ko: '아주 아픈 전체 공격!',
   },
   bleedAoe: {
-    en: 'AoE + Bleed',
+    en: 'Raidwide + Bleed',
     de: 'AoE + Blutung',
     fr: 'AoE + Saignement',
     ja: '全体攻撃 + DoT',
@@ -443,7 +443,7 @@ export default {
     de: 'Raus aus der Hitbox',
     fr: 'Extérieur de la hitbox',
     cn: '离开目标圈',
-    ko: '히트박스 밖으로',
+    ko: '센터 밖으로',
   },
   inThenOut: {
     en: 'In => out',

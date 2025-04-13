@@ -32,14 +32,12 @@ const snapTwistIds: { [id: string]: [number, News] } = {
   'A73E': [4, 'east'],
   'A4E0': [4, 'east'],
 };
-
 const frogIds: { [id: string]: News } = {
   'A70A': 'north',
   'A70B': 'south',
   'A70C': 'west',
   'A70D': 'east',
 };
-
 const dancedIds = [
   '9BE2',
   '9BE3',
@@ -50,10 +48,10 @@ const dancedIds = [
 ] as const;
 
 export interface Data extends RaidbossData {
+  deepcs: string[];
   side?: 'role' | 'light';
   infernal: number;
   frogs: News[];
-  collect: string[];
   waves: { alpha: number; beta: number };
   order?: number;
 }
@@ -63,10 +61,9 @@ const triggerSet: TriggerSet<Data> = {
   zoneId: ZoneId.AacCruiserweightM1Savage,
   timelineFile: 'r5s.txt',
   initData: () => ({
+    deepcs: [],
     infernal: 0,
-    cone: 'unknown',
     frogs: [],
-    collect: [],
     waves: { alpha: 0, beta: 0 },
   }),
   triggers: [
@@ -80,16 +77,16 @@ const triggerSet: TriggerSet<Data> = {
           cleaveOnYou: Outputs.tankCleaveOnYou,
           avoidCleave: Outputs.avoidTankCleave,
         };
-        data.collect.push(matches.target);
-        if (data.collect.length < 2)
+        data.deepcs.push(matches.target);
+        if (data.deepcs.length < 2)
           return;
-        if (data.collect.includes(data.me))
+        if (data.deepcs.includes(data.me))
           return { alertText: output.cleaveOnYou!() };
         return { infoText: output.avoidCleave!() };
       },
       run: (data) => {
-        if (data.collect.length >= 2)
-          data.collect = [];
+        if (data.deepcs.length >= 2)
+          data.deepcs = [];
       },
     },
     {
@@ -99,24 +96,24 @@ const triggerSet: TriggerSet<Data> = {
       run: (data, matches) => data.side = matches.id === 'A780' ? 'role' : 'light',
     },
     {
-      id: 'R5S Snap Needle',
+      id: 'R5S Snap Twist',
       type: 'StartsUsing',
       netRegex: { id: Object.keys(snapTwistIds), source: 'Dancing Green' },
       durationSeconds: 10,
       infoText: (data, matches, output) => {
-        const snap = snapTwistIds[matches.id];
-        if (snap === undefined)
+        const st = snapTwistIds[matches.id];
+        if (st === undefined)
           return;
-        const cnt = snap[0];
-        const dir = output[snap[1]]!();
-        const act = output[data.side ?? 'unknown']!();
-        return output.text!({ dir: dir, cnt: cnt, act: act });
+        const cnt = st[0];
+        const dir = output[st[1]]!();
+        const mech = output[data.side ?? 'unknown']!();
+        return output.text!({ dir: dir, cnt: cnt, mech: mech });
       },
       run: (data) => delete data.side,
       outputStrings: {
         text: {
-          en: '${dir} x${cnt} => ${act}',
-          ko: '${dir} ${cnt}번 🔜 ${act}',
+          en: '${dir} (${cnt} hits) => ${mech}',
+          ko: '${dir}x${cnt} 🔜 ${mech}',
         },
         east: Outputs.east,
         west: Outputs.west,
@@ -237,7 +234,6 @@ const triggerSet: TriggerSet<Data> = {
       id: 'R5S Arcady Night Fever', // +Arcady Night Encore
       type: 'StartsUsing',
       netRegex: { id: ['A760', 'A370'], source: 'Dancing Green', capture: false },
-      // A765 -> A765, A764 안팎일걸로 추정
       infoText: (data, _matches, output) => {
         if (data.options.AutumnStyle)
           return output.text!();
@@ -248,16 +244,10 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         text: {
-          en: 'Night Fever',
+          en: 'Arcady Night In & Out',
           ko: '연속 안팎 + 부채꼴',
         },
       },
-    },
-    {
-      id: 'R5S Frog Dance Collect',
-      type: 'StartsUsing',
-      netRegex: { id: Object.keys(frogIds), source: 'Frogtourage' },
-      run: (data, matches) => data.frogs.push(frogIds[matches.id] ?? 'unknown'),
     },
     {
       id: 'R5S Wavelength Merge Order',
@@ -286,10 +276,16 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (data, _matches, output) => output.text!({ order: data.order }),
       outputStrings: {
         text: {
-          en: 'Get together (${order})',
-          ko: '문대요! (${order}번째)',
+          en: 'Merge α + β (${order})',
+          ko: 'αβ 문대요! (${order}번째)',
         },
       },
+    },
+    {
+      id: 'R5S Frog Dance Collect',
+      type: 'StartsUsing',
+      netRegex: { id: Object.keys(frogIds), source: 'Frogtourage' },
+      run: (data, matches) => data.frogs.push(frogIds[matches.id] ?? 'unknown'),
     },
     {
       id: 'R5S Let\'s Dance!', // Let's Dance Remix
@@ -300,7 +296,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (data, _matches, output) => {
         const curr = data.frogs[0];
         if (curr === undefined) // 이게 없을리가 있나
-          return;
+          return output.unknown!();
         if (data.order !== undefined)
           return output.combo!({ dir: output[curr]!(), order: data.order });
         return output.text!({ dir: output[curr]!() });
@@ -353,13 +349,6 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: 'R5S Let\'s Pose!',
-      type: 'StartsUsing',
-      netRegex: { id: ['A76F', 'A770'], source: 'Dancing Green', capture: false },
-      durationSeconds: 5,
-      response: Responses.aoe(),
-    },
-    {
       id: 'R5S Beats',
       type: 'StartsUsing',
       netRegex: { id: ['A75B', 'A75D'], source: 'Dancing Green' },
@@ -367,19 +356,6 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         b4: Outputs.stackPartner,
         b8: Outputs.protean,
-      },
-    },
-    {
-      id: 'R5S Do the Hustle',
-      type: 'StartsUsing',
-      netRegex: { id: ['A724', 'A725'], source: 'Dancing Green', capture: false },
-      condition: (data) => data.options.AutumnStyle,
-      infoText: (_data, _matches, output) => output.text!(),
-      outputStrings: {
-        text: {
-          en: 'Go to safe zone',
-          ko: '보스 춤사위!',
-        },
       },
     },
     {
@@ -398,12 +374,28 @@ const triggerSet: TriggerSet<Data> = {
   ],
   timelineReplace: [
     {
-      locale: 'ja',
-      replaceSync: {
+      'locale': 'de',
+      'replaceSync': {
+        'Dancing Green': 'Springhis Khan',
+        'Frogtourage': 'Schenkelschwinger',
+      },
+      'replaceText': {},
+    },
+    {
+      'locale': 'fr',
+      'replaceSync': {
+        'Dancing Green': 'Dancing Green',
+        'Frogtourage': 'Danceur batracien',
+      },
+      'replaceText': {},
+    },
+    {
+      'locale': 'ja',
+      'replaceSync': {
         'Dancing Green': 'ダンシング・グリーン',
         'Frogtourage': 'カモン！ フロッグダンサー',
       },
-      replaceText: {
+      'replaceText': {
         'Deep Cut': 'ディープカット',
         'Flip to A-side': 'ジングル予約A',
         'Flip to B-side': 'ジングル予約B',
