@@ -1,5 +1,5 @@
+import { AutumnDirections } from '../../../../../resources/autumn';
 import Conditions from '../../../../../resources/conditions';
-import { UnreachableCode } from '../../../../../resources/not_reached';
 import Outputs from '../../../../../resources/outputs';
 import { callOverlayHandler } from '../../../../../resources/overlay_plugin_api';
 import { Responses } from '../../../../../resources/responses';
@@ -8,59 +8,31 @@ import ZoneId from '../../../../../resources/zone_id';
 import { RaidbossData } from '../../../../../types/data';
 import { TriggerSet } from '../../../../../types/trigger';
 
-type Phase = 'one' | 'adds' | 'rage' | 'moonlight';
-
-export interface Data extends RaidbossData {
-  phase: Phase;
-  // Phase 1
-  reignDir?: number;
-  decayAddCount: number;
-  stoneWindCallGroup?: number;
-  surgeTracker: number;
-  packPredationTracker: number;
-  packPredationTargets: string[];
-  stoneWindDebuff?: 'stone' | 'wind';
-  isFirstRage: boolean;
-  hasSpread?: boolean;
-  stackOnPlayer?: string;
-  shadowchase?: number;
-  // Phase 2
-}
-
-const centerX = 100;
-const centerY = 100;
-const eminentReign1 = 'A911'; // N=>S, SW=>NE, SE=>NW
-const eminentReign2 = 'A912'; // S=>N, NW=>SE, NE=>SW
-const revolutionaryReign1 = 'A913'; // N=>S, SW=>NE, SE=>NW
-const revolutionaryReign2 = 'A914'; // S=>N, NW=>SE, NE=>SW
-
-const phaseMap: { [id: string]: Phase } = {
-  'A3C8': 'adds', // Tactical Pack
-  'A3CB': 'rage', // Ravenous Saber
+const phases = {
+  'A3C8': 'pack', // Tactical Pack
+  'A3CB': 'saber', // Ravenous Saber
   'A3C1': 'moonlight', // Beckon Moonlight
-};
-
-const headMarkerData = {
-  // Shared tankbuster marker
-  'tankbuster': '0256',
-  // Adds red headmarker showing you will be targeted by Predation
-  'predation': '0017',
-  // Stony tether from Wolf of Stone
-  'stoneTether': '014F',
-  // Windy Tether from Wolf of Wind
-  'windTether': '0150',
-  // Big, pulsing, 4-arrow stack marker
-  'eightHitStack': '013C',
-  // Spread marker used in Terrestial Rage and Beckon Moonlight
-  'spread': '008B',
-  // Stack marker used in Terrestial Rage and Beckon Moonlight
-  'stack': '005D',
 } as const;
+type Phase = (typeof phases)[keyof typeof phases] | 'door' | 'unknown';
 
-const stoneWindOutputStrings = {
-  stoneWindNum: {
+const fangIds: { [id: string]: string } = {
+  'A39D': 'windPlus',
+  'A39E': 'windCross',
+  'A3A1': 'stonePlus',
+  'A3A2': 'stoneCross',
+} as const;
+const reignIds: { [id: string]: string } = {
+  'A911': 'eminent1',
+  'A912': 'eminent2',
+  'A913': 'revolutionary1',
+  'A914': 'revolutionary2',
+} as const;
+const reignKeys = Object.keys(reignIds);
+
+const swStrings = {
+  combo: {
     en: '${debuff} ${num}',
-    ko: '${debuff} ${num}',
+    ko: '${debuff} ${num}번째',
   },
   stone: {
     en: 'Stone',
@@ -71,92 +43,93 @@ const stoneWindOutputStrings = {
     ko: '바람',
   },
   unknown: Outputs.unknown,
-};
+} as const;
+
+const centerX = 100;
+const centerY = 100;
+
+export interface Data extends RaidbossData {
+  phase: Phase;
+  // Phase 1
+  reign?: number;
+  decays: number;
+  swGroup?: number;
+  swDebuff?: 'stone' | 'wind';
+  surge: number;
+  packs: number;
+  raged?: boolean;
+  spread?: boolean;
+  stack?: string;
+  chase?: number;
+  // Phase 2
+  //
+  collect: string[];
+}
 
 const triggerSet: TriggerSet<Data> = {
   id: 'AacCruiserweightM4Savage',
   zoneId: ZoneId.AacCruiserweightM4Savage,
   timelineFile: 'r8s.txt',
   initData: () => ({
-    phase: 'one',
-    decayAddCount: 0,
-    packPredationTracker: 0,
-    packPredationTargets: [],
-    surgeTracker: 0,
-    isFirstRage: true,
+    phase: 'door',
+    decays: 0,
+    packs: 0,
+    collect: [],
+    surge: 0,
   }),
   triggers: [
     {
       id: 'R8S Phase Tracker',
       type: 'StartsUsing',
-      netRegex: { id: Object.keys(phaseMap), source: 'Howling Blade' },
+      netRegex: { id: Object.keys(phases), source: 'Howling Blade' },
       suppressSeconds: 1,
-      run: (data, matches) => {
-        const phase = phaseMap[matches.id];
-        if (phase === undefined)
-          throw new UnreachableCode();
-
-        data.phase = phase;
-      },
+      run: (data, matches) => data.phase = phases[matches.id as keyof typeof phases] ?? 'unknown',
     },
     {
       id: 'R8S Extraplanar Pursuit',
       type: 'StartsUsing',
       netRegex: { id: 'A3DA', source: 'Howling Blade', capture: false },
-      response: Responses.bigAoe(),
+      response: Responses.aoe(),
     },
     {
       id: 'R8S Windfang/Stonefang',
       type: 'StartsUsing',
-      netRegex: { id: ['A39E', 'A39D', 'A3A1', 'A3A2'], source: 'Howling Blade', capture: true },
+      netRegex: { id: Object.keys(fangIds), source: 'Howling Blade', capture: true },
       infoText: (_data, matches, output) => {
-        const windfangCards = 'A39D';
-        const windfangInter = 'A39E';
-        const stonefangCards = 'A3A1';
-        const stonefangInter = 'A3A2';
-        // A39F is cast for both A39D (card windfang) and A39E (intercard windfang)
-        // A3B0 is cast for both A3A1 (card stonefang) and A3A2 (intercard stonefang)
-        switch (matches.id) {
-          case windfangCards:
-            return output.inInterCardsPartners!();
-          case windfangInter:
-            return output.inCardsPartners!();
-          case stonefangCards:
-            return output.outInterCardsProtean!();
-          case stonefangInter:
-            return output.outCardsProtean!();
-        }
+        const fang = fangIds[matches.id];
+        if (fang !== undefined)
+          return output[fang]!();
       },
       outputStrings: {
-        inCardsPartners: {
-          en: 'In + Cards + Partners',
-          ko: '십자 안으로 + 둘이 페어',
+        windPlus: {
+          en: 'In + Cardinal + Partners',
+          ko: '➕안으로 + 둘이 페어',
         },
-        inInterCardsPartners: {
+        windCross: {
           en: 'In + Intercards + Partners',
-          ko: '비스듬 안으로 + 둘이 페어',
+          ko: '❌안으로 + 둘이 페어',
         },
-        outCardsProtean: {
-          en: 'Out + Cards + Protean',
-          ko: '십자 바깥으로 + 맡은 자리로',
+        stonePlus: {
+          en: 'Out + Cardinal + Protean',
+          ko: '➕바깥으로 + 맡은 자리로',
         },
-        outInterCardsProtean: {
+        stoneCross: {
           en: 'Out + InterCards + Protean',
-          ko: '비스듬 바깥으로 + 맡은 자리로',
+          ko: '❌바깥으로 + 맡은 자리로',
         },
       },
     },
     {
       id: 'R8S Eminent/Revolutionary Reign',
       type: 'StartsUsing',
-      netRegex: { id: ['A911', 'A912', 'A913', 'A914'], source: 'Howling Blade', capture: true },
+      netRegex: { id: reignKeys, source: 'Howling Blade', capture: true },
       infoText: (_data, matches, output) => {
-        switch (matches.id) {
-          case eminentReign1:
-          case eminentReign2:
+        switch (reignIds[matches.id]) {
+          case 'eminent1':
+          case 'eminent2':
             return output.inLater!();
-          case revolutionaryReign1:
-          case revolutionaryReign2:
+          case 'revolutionary1':
+          case 'revolutionary2':
             return output.outLater!();
         }
       },
@@ -174,7 +147,7 @@ const triggerSet: TriggerSet<Data> = {
     {
       id: 'R8S Eminent/Revolutionary Reign Direction',
       type: 'StartsUsing',
-      netRegex: { id: ['A911', 'A912', 'A913', 'A914'], source: 'Howling Blade', capture: true },
+      netRegex: { id: reignKeys, source: 'Howling Blade', capture: true },
       delaySeconds: (_data, matches) => parseFloat(matches.castTime) + 1.2,
       promise: async (data, matches) => {
         const actors = (await callOverlayHandler({
@@ -189,48 +162,48 @@ const triggerSet: TriggerSet<Data> = {
           return;
         }
 
-        switch (matches.id) {
-          case eminentReign1:
-          case eminentReign2:
-            data.reignDir = (Directions.hdgTo8DirNum(actor.Heading) + 4) % 8;
+        switch (reignIds[matches.id]) {
+          case 'eminent1':
+          case 'eminent2':
+            data.reign = (Directions.hdgTo8DirNum(actor.Heading) + 4) % 8;
             break;
-          case revolutionaryReign1:
-          case revolutionaryReign2:
-            data.reignDir = Directions.hdgTo8DirNum(actor.Heading);
+          case 'revolutionary1':
+          case 'revolutionary2':
+            data.reign = Directions.hdgTo8DirNum(actor.Heading);
             break;
         }
       },
       infoText: (data, matches, output) => {
-        const dir = output[Directions.outputFrom8DirNum(data.reignDir ?? -1)]!();
-        switch (matches.id) {
-          case eminentReign1:
-          case eminentReign2:
-            return output.inDir!({ dir: dir });
-          case revolutionaryReign1:
-          case revolutionaryReign2:
-            return output.outDir!({ dir: dir });
+        const arrow = output[AutumnDirections.outputFromArrow8Num(data.reign ?? -1)]!();
+        switch (reignIds[matches.id]) {
+          case 'eminent1':
+          case 'eminent2':
+            return output.inDir!({ dir: arrow });
+          case 'revolutionary1':
+          case 'revolutionary2':
+            return output.outDir!({ dir: arrow });
         }
       },
       run: (data) => {
-        data.reignDir = undefined;
+        data.reign = undefined;
       },
       outputStrings: {
-        ...Directions.outputStrings8Dir,
         inDir: {
           en: 'In ${dir}',
-          ko: '안으로 ${dir}',
+          ko: '${dir}안으로',
         },
         outDir: {
           en: 'Out ${dir}',
-          ko: '바깥으로 ${dir}',
+          ko: '${dir}바깥으로',
         },
+        ...AutumnDirections.outputStringsArrow8,
       },
     },
     {
       id: 'R8S Millenial Decay',
       type: 'StartsUsing',
       netRegex: { id: 'A3B2', source: 'Howling Blade', capture: false },
-      response: Responses.bigAoe(),
+      response: Responses.aoe(),
     },
     {
       id: 'R8S Aero III',
@@ -253,8 +226,6 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Stack x8',
-          de: 'Sammeln x8',
-          fr: 'Package x8',
           ja: '頭割り x8',
           cn: '8次分摊',
           ko: '뭉쳐욧 x8',
@@ -269,16 +240,14 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (data, matches, output) => {
         // 1st add always spawns N or S, and 2nd add always spawns intercardinal
         // we only need the position of the 2nd add to determine rotation
-        data.decayAddCount++;
-        if (data.decayAddCount !== 2)
+        data.decays++;
+        if (data.decays !== 2)
           return;
 
-        const addX = parseFloat(matches.x);
-        const addY = parseFloat(matches.y);
-        const addDir = Directions.xyTo8DirNum(addX, addY, centerX, centerY);
-        if (addDir === 1 || addDir === 5)
+        const dir = AutumnDirections.posConv8(matches.x, matches.y, centerX, centerY);
+        if (dir === 1 || dir === 5)
           return output.clockwise!();
-        else if (addDir === 3 || addDir === 7)
+        else if (dir === 3 || dir === 7)
           return output.counterclockwise!();
       },
       outputStrings: {
@@ -296,21 +265,21 @@ const triggerSet: TriggerSet<Data> = {
       id: 'R8S Tactical Pack Tethers',
       // TODO: Call East/West instead of add?
       type: 'Tether',
-      netRegex: { id: [headMarkerData.stoneTether, headMarkerData.windTether], capture: true },
+      netRegex: { id: ['014F', '0150'], capture: true },
       condition: (data, matches) => data.me === matches.source,
       infoText: (_data, matches, output) => {
-        if (matches.id === headMarkerData.stoneTether)
+        if (matches.id === '014F')
           return output.side!({ wolf: output.wolfOfWind!() });
         return output.side!({ wolf: output.wolfOfStone!() });
       },
       outputStrings: {
         wolfOfWind: {
           en: 'Green',
-          ko: '녹색',
+          ko: '🟩녹색',
         },
         wolfOfStone: {
           en: 'Yellow',
-          ko: '노란색',
+          ko: '🟨노란색',
         },
         side: {
           en: '${wolf} Side',
@@ -323,32 +292,19 @@ const triggerSet: TriggerSet<Data> = {
       // Durations could be 21s, 37s, or 54s
       type: 'GainsEffect',
       netRegex: { effectId: ['1127', '1128'], capture: true },
-      condition: (data, matches) => {
-        return data.me === matches.target && data.phase === 'adds';
-      },
+      condition: (data, matches) => data.me === matches.target && data.phase === 'pack',
       response: (data, matches, output) => {
         // cactbot-builtin-response
-        output.responseOutputStrings = stoneWindOutputStrings;
+        output.responseOutputStrings = swStrings;
 
         // 1127 = Stone (Yellow Cube) Debuff
         // 1128 = Wind (Green Sphere) Debuff
-        const cubeDebuffId = '1127';
-        data.stoneWindDebuff = matches.effectId === cubeDebuffId ? 'stone' : 'wind';
+        const time = parseFloat(matches.duration);
+        data.swDebuff = matches.effectId === '1127' ? 'stone' : 'wind';
+        data.swGroup = time < 22 ? 1 : time < 38 ? 2 : 3;
 
-        if (parseFloat(matches.duration) < 22) {
-          data.stoneWindCallGroup = 1;
-        } else if (parseFloat(matches.duration) < 38) {
-          data.stoneWindCallGroup = 2;
-        } else {
-          data.stoneWindCallGroup = 3;
-        }
-
-        return {
-          infoText: output.stoneWindNum!({
-            debuff: output[data.stoneWindDebuff]!(),
-            num: data.stoneWindCallGroup,
-          }),
-        };
+        const debuff = output[data.swDebuff]!();
+        return { infoText: output.combo!({ debuff: debuff, num: data.swGroup }) };
       },
     },
     {
@@ -360,23 +316,22 @@ const triggerSet: TriggerSet<Data> = {
       // A3E2 (Alpha Wind) from Wolf of Stone
       id: 'R8S Pack Predation',
       type: 'HeadMarker',
-      netRegex: { id: headMarkerData.predation },
+      netRegex: { id: '0017' },
       infoText: (data, matches, output) => {
-        data.packPredationTargets.push(matches.target);
-        if (data.packPredationTargets.length < 2)
+        data.collect.push(matches.target);
+        if (data.collect.length < 2)
           return;
 
         // Increment count for group tracking
-        data.packPredationTracker = data.packPredationTracker + 1;
+        data.packs = data.packs + 1;
 
-        const name1 = data.party.member(data.packPredationTargets[0]);
-        const name2 = data.party.member(data.packPredationTargets[1]);
-
-        return output.predationOnPlayers!({ player1: name1, player2: name2 });
+        const p1 = data.party.member(data.collect[0]);
+        const p2 = data.party.member(data.collect[1]);
+        return output.predationOnPlayers!({ player1: p1.jobAbbr, player2: p2.jobAbbr });
       },
       run: (data) => {
-        if (data.packPredationTargets.length >= 2)
-          data.packPredationTargets = [];
+        if (data.collect.length >= 2)
+          data.collect = [];
       },
       outputStrings: {
         predationOnPlayers: {
@@ -393,105 +348,97 @@ const triggerSet: TriggerSet<Data> = {
       // A3ED (Wind Surge) from Font of Wind Aether
       type: 'GainsEffect',
       netRegex: { effectId: 'B7D', capture: true },
-      condition: (data, matches) => data.phase === 'adds' && parseFloat(matches.duration) < 2,
+      condition: (data, matches) => data.phase === 'pack' && parseFloat(matches.duration) < 2,
       // Magic Vulnerabilities from Pack Predation and Alpha Wind are 0.96s
       delaySeconds: (_data, matches) => parseFloat(matches.duration),
       suppressSeconds: 1,
       infoText: (data, _matches, output) => {
-        if (data.stoneWindCallGroup === data.packPredationTracker) {
-          return output.stoneWindNum!({
-            debuff: output[data.stoneWindDebuff ?? 'unknown']!(),
-            num: data.stoneWindCallGroup,
-          });
+        if (data.swGroup === data.packs) {
+          const debuff = output[data.swDebuff ?? 'unknown']!();
+          return output.combo!({ debuff: debuff, num: data.swGroup });
         }
       },
-      outputStrings: stoneWindOutputStrings,
+      outputStrings: swStrings,
     },
     {
       id: 'R8S Tactical Pack Cleanup',
       type: 'LosesEffect',
       netRegex: { effectId: ['1127', '1128'], capture: true },
       condition: Conditions.targetIsYou(),
-      run: (data) => data.stoneWindCallGroup = undefined,
+      run: (data) => data.swGroup = undefined,
     },
     {
       id: 'R8S Tactical Pack Second Pop',
       // Timing based on Tether and Magic Vulnerability (3.96s)
       type: 'GainsEffect',
       netRegex: { effectId: 'B7D', capture: true },
-      condition: (data, matches) => {
-        return data.phase === 'adds' && parseFloat(matches.duration) > 2;
-      },
-      preRun: (data) => data.surgeTracker = data.surgeTracker + 1,
+      condition: (data, matches) => data.phase === 'pack' && parseFloat(matches.duration) > 2,
+      preRun: (data) => data.surge = data.surge + 1,
       delaySeconds: (_data, matches) => parseFloat(matches.duration),
       suppressSeconds: 1,
       alarmText: (data, _matches, output) => {
-        const surge = data.surgeTracker;
-        if (data.stoneWindCallGroup === data.packPredationTracker) {
+        const surge = data.surge;
+        if (data.swGroup === data.packs) {
           if (surge === 1 || surge === 3 || surge === 5) {
-            return output.stoneWindNum!({
-              debuff: output[data.stoneWindDebuff ?? 'unknown']!(),
-              num: data.stoneWindCallGroup,
-            });
+            const debuff = output[data.swDebuff ?? 'unknown']!();
+            return output.combo!({ debuff: debuff, num: data.swGroup });
           }
         }
       },
-      outputStrings: stoneWindOutputStrings,
+      outputStrings: swStrings,
     },
     {
       id: 'R8S Spread/Stack Collect',
       type: 'HeadMarker',
-      netRegex: { id: [headMarkerData.stack, headMarkerData.spread] },
+      netRegex: { id: ['005D', '008B'] },
       run: (data, matches) => {
-        const id = matches.id;
-        const target = matches.target;
-        if (headMarkerData.stack === id)
-          data.stackOnPlayer = target;
-        if (headMarkerData.spread === id && target === data.me)
-          data.hasSpread = true;
+        if (matches.id === '005D')
+          data.stack = matches.target;
+        else if (matches.target === data.me)
+          data.spread = true;
       },
     },
     {
       id: 'R8S Terrestrial Rage Spread/Stack',
       type: 'HeadMarker',
-      netRegex: { id: [headMarkerData.stack, headMarkerData.spread], capture: false },
-      condition: (data) => data.phase === 'rage',
+      netRegex: { id: ['005D', '008B'], capture: false },
+      condition: (data) => data.phase === 'saber',
       delaySeconds: 0.1,
       suppressSeconds: 1,
       infoText: (data, _matches, output) => {
-        if (data.hasSpread)
-          return data.isFirstRage ? output.spreadThenStack!() : output.spread!();
-
-        if (data.stackOnPlayer === data.me)
-          return data.isFirstRage
-            ? output.stackThenSpread!({
-              stack: output.stackOnYou!(),
-            })
-            : output.stackOnYou!();
-
-        if (data.stackOnPlayer !== undefined) {
-          const name = data.party.member(data.stackOnPlayer);
-          return data.isFirstRage
-            ? output.stackThenSpread!({
-              stack: output.stackOnPlayer!({ player: name }),
-            })
-            : output.stackOnPlayer!({ player: name });
+        if (data.raged) {
+          if (data.spread)
+            return output.spread!();
+          if (data.stack === data.me)
+            return output.stackOnYou!();
+          const name = data.party.member(data.stack);
+          return output.stackOnPlayer!({ player: name.jobAbbr });
         }
+        if (data.spread)
+          return output.spreadThenStack!();
+        if (data.stack === data.me)
+          return output.OnYouThenSpread!();
+        const name = data.party.member(data.stack);
+        return output.OnPlayerThenSpread!({ player: name.jobAbbr });
       },
       run: (data) => {
-        data.stackOnPlayer = undefined;
-        data.hasSpread = undefined;
-        data.isFirstRage = false;
+        data.stack = undefined;
+        data.spread = undefined;
+        data.raged = true;
       },
       outputStrings: {
         spreadThenStack: Outputs.spreadThenStack,
-        stackThenSpread: {
-          en: '${stack} => Spread',
-          ko: '${stack} 🔜 흩어져요',
-        },
         spread: Outputs.spread,
         stackOnPlayer: Outputs.stackOnPlayer,
         stackOnYou: Outputs.stackOnYou,
+        OnPlayerThenSpread: {
+          en: 'Stack on ${player} => Spread',
+          ko: '뭉쳤다(${player}) 🔜 흩어져요',
+        },
+        OnYouThenSpread: {
+          en: 'Stack on YOU => Spread',
+          ko: '내게 뭉쳤다 🔜 흩어져요',
+        },
       },
     },
     {
@@ -518,25 +465,25 @@ const triggerSet: TriggerSet<Data> = {
           return;
         }
 
-        data.shadowchase = Directions.xyTo16DirNum(actor.PosX, actor.PosY, centerX, centerY);
+        data.chase = Directions.xyTo16DirNum(actor.PosX, actor.PosY, centerX, centerY);
       },
       infoText: (data, _matches, output) => {
-        if (data.shadowchase === 0)
+        if (data.chase === 0)
           return output.orientN!();
-        if (data.shadowchase === 8)
+        if (data.chase === 8)
           return output.orientNE!();
       },
       run: (data) => {
-        data.shadowchase = undefined;
+        data.chase = undefined;
       },
       outputStrings: {
         orientN: {
           en: 'Orient N, Behind Clone',
-          ko: '북쪽 기준, 클론 뒤로',
+          ko: '(북쪽 기준) 클론 뒤로',
         },
         orientNE: {
           en: 'Orient NE, Behind Clone',
-          ko: '북동쪽 기준, 클론 뒤로',
+          ko: '(북동쪽 기준) 클론 뒤로',
         },
       },
     },
@@ -579,44 +526,45 @@ const triggerSet: TriggerSet<Data> = {
     {
       id: 'R8S Beckon Moonlight Spread/Stack',
       type: 'HeadMarker',
-      netRegex: { id: [headMarkerData.stack, headMarkerData.spread], capture: false },
+      netRegex: { id: ['005D', '008B'], capture: false },
       condition: (data) => data.phase === 'moonlight',
       delaySeconds: 0.1,
       suppressSeconds: 1,
       infoText: (data, _matches, output) => {
-        if (data.hasSpread)
-          return data.isFirstRage ? output.spreadThenStack!() : output.spread!();
-
-        if (data.stackOnPlayer === data.me)
-          return data.isFirstRage
-            ? output.stackThenSpread!({
-              stack: output.stackOnYou!(),
-            })
-            : output.stackOnYou!();
-
-        if (data.stackOnPlayer !== undefined) {
-          const name = data.party.member(data.stackOnPlayer);
-          return data.isFirstRage
-            ? output.stackThenSpread!({
-              stack: output.stackOnPlayer!({ player: name }),
-            })
-            : output.stackOnPlayer!({ player: name });
+        if (data.raged) {
+          if (data.spread)
+            return output.spread!();
+          if (data.stack === data.me)
+            return output.stackOnYou!();
+          const name = data.party.member(data.stack);
+          return output.stackOnPlayer!({ player: name.jobAbbr });
         }
+
+        if (data.spread)
+          return output.spreadThenStack!();
+        if (data.stack === data.me)
+          return output.OnYouThenSpread!();
+        const name = data.party.member(data.stack);
+        return output.OnPlayerThenSpread!({ player: name.jobAbbr });
       },
       run: (data) => {
-        data.stackOnPlayer = undefined;
-        data.hasSpread = undefined;
-        data.isFirstRage = false;
+        data.stack = undefined;
+        data.spread = undefined;
+        data.raged = true;
       },
       outputStrings: {
         spreadThenStack: Outputs.spreadThenStack,
-        stackThenSpread: {
-          en: '${stack} => Spread',
-          ko: '${stack} 🔜 흩어져요',
-        },
         spread: Outputs.spread,
         stackOnPlayer: Outputs.stackOnPlayer,
         stackOnYou: Outputs.stackOnYou,
+        OnPlayerThenSpread: {
+          en: 'Stack on ${player} => Spread',
+          ko: '뭉쳤다(${player}) 🔜 흩어져요',
+        },
+        OnYouThenSpread: {
+          en: 'Stack on YOU => Spread',
+          ko: '내게 뭉쳤다 🔜 흩어져요',
+        },
       },
     },
     {
@@ -630,6 +578,16 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         cardinals: Outputs.cardinals,
+      },
+    },
+  ],
+  timelineReplace: [
+    {
+      'locale': 'ja',
+      'missingTranslations': true,
+      'replaceSync': {
+        'Howling Blade': 'ハウリングブレード',
+        'Wolf of Stone': '土の狼頭',
       },
     },
   ],

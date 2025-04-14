@@ -185,7 +185,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Interrupt',
-          ko: '와인딩 인터럽드!!',
+          ko: '와인딩 인터럽트!!',
         },
       },
     },
@@ -258,9 +258,7 @@ const triggerSet: TriggerSet<Data> = {
         return output[data.sr ?? 'unknown']!();
       },
       run: (data) => data.srcnt++,
-      outputStrings: {
-        ...swingStrings,
-      },
+      outputStrings: swingStrings,
     },
     {
       id: 'R7S Glower Power',
@@ -390,9 +388,7 @@ const triggerSet: TriggerSet<Data> = {
           return output.club!();
         return output.blade!();
       },
-      outputStrings: {
-        ...swingStrings,
-      },
+      outputStrings: swingStrings,
     },
     {
       id: 'R7S Lashing Lariat',
