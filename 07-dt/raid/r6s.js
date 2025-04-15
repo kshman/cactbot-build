@@ -167,7 +167,7 @@ Options.Triggers.push({
       // #650
       id: 'R6S Double Style',
       type: 'Tether',
-      netRegex: { targetId: '4[0-9A-Fa-f]{7}', id: ['013F', '0140'] },
+      netRegex: { sourceId: '4[0-9A-Fa-f]{7}', id: ['013F', '0140'] },
       condition: (data) => data.isCrush && data.styleItem !== undefined,
       preRun: (data, matches) => data.styleTethers[matches.sourceId] = matches,
       durationSeconds: 5,
@@ -208,10 +208,8 @@ Options.Triggers.push({
           comb |= styleFlags[mob];
         }
         const [dir] = safes;
-        if (safes.length !== 1 || dir === undefined) {
-          console.log(`R6S Double Style - 헐랭 데이터가 잘못됨`);
+        if (safes.length !== 1 || dir === undefined)
           return;
-        }
         const diags = { 1: 5, 3: 7, 5: 1, 7: 3 };
         const start = diags[dir];
         if (start === undefined)
@@ -240,8 +238,8 @@ Options.Triggers.push({
             const exmap = { 1: 3, 3: 5, 5: 7, 7: 1 };
             omk = exmap[start];
           }
-          const ar = AutumnDirections.outputFromArrow8Num(start);
-          const mk = AutumnDirections.outputFromMarker8Num(omk);
+          const ar = AutumnDir.arrowFromNum(start);
+          const mk = AutumnDir.markFromNum(omk);
           return output.atext({
             arrow: output[ar](),
             mark: output[mk](),
@@ -290,8 +288,8 @@ Options.Triggers.push({
           en: 'Heaven + Molbol',
           ko: '날개 안됨 + 몰볼 안됨',
         },
-        ...AutumnDirections.outputStringsArrowIntercard,
-        ...AutumnDirections.outputStringsMarkerIntercard,
+        ...AutumnDir.stringsArrowCross,
+        ...AutumnDir.stringsMarkCross,
         ...Directions.outputStringsIntercardDir,
         unknown: Outputs.unknown,
       },

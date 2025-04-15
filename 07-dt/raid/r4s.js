@@ -747,7 +747,7 @@ Options.Triggers.push({
           ja: '${dir} => ${mech}',
           ko: '${dir} ${mech}',
         },
-        ...AutumnDirections.outputStringsMarkerIntercard,
+        ...AutumnDir.stringsMarkCross,
       },
     },
     {
@@ -1900,7 +1900,7 @@ Options.Triggers.push({
           en: 'Yellow Cannon (${loc})',
           ko: '${loc}🟨빔',
         },
-        ...AutumnDirections.outputStringsArrow8,
+        ...AutumnDir.stringsArrow,
       },
     },
     // Finale

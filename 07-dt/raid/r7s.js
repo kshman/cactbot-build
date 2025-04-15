@@ -163,7 +163,7 @@ Options.Triggers.push({
       outputStrings: {
         text: {
           en: 'Interrupt',
-          ko: '와인딩 인터럽드!!',
+          ko: '와인딩 인터럽트!!',
         },
       },
     },
@@ -236,9 +236,7 @@ Options.Triggers.push({
         return output[data.sr ?? 'unknown']();
       },
       run: (data) => data.srcnt++,
-      outputStrings: {
-        ...swingStrings,
-      },
+      outputStrings: swingStrings,
     },
     {
       id: 'R7S Glower Power',
@@ -368,9 +366,7 @@ Options.Triggers.push({
           return output.club();
         return output.blade();
       },
-      outputStrings: {
-        ...swingStrings,
-      },
+      outputStrings: swingStrings,
     },
     {
       id: 'R7S Lashing Lariat',

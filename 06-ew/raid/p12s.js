@@ -4356,7 +4356,7 @@ Options.Triggers.push({
           data.darknessClones.forEach((clone) => {
             const x = parseFloat(clone.x);
             const y = parseFloat(clone.y);
-            const cloneDir = AutumnDirections.xyToArrow8Output(x, y, uavCenterX, uavCenterY);
+            const cloneDir = AutumnDir.xyToArrow(x, y, uavCenterX, uavCenterY);
             const pairedDir = unsafeMap[cloneDir];
             safeDirs = safeDirs.filter((dir) => dir !== cloneDir && dir !== pairedDir);
           });
@@ -4409,7 +4409,7 @@ Options.Triggers.push({
           ko: '${dir}으로',
         },
         ...Directions.outputStrings8Dir,
-        ...AutumnDirections.outputStringsArrow8,
+        ...AutumnDir.stringsArrow,
       },
     },
     {
@@ -4436,7 +4436,7 @@ Options.Triggers.push({
           };
           const x = parseFloat(matches.x);
           const y = parseFloat(matches.y);
-          const cloneDir = AutumnDirections.xyToArrow8Output(x, y, uavCenterX, uavCenterY);
+          const cloneDir = AutumnDir.xyToArrow(x, y, uavCenterX, uavCenterY);
           const [dir1, dir2] = safeMap[cloneDir];
           if (dir1 === undefined || dir2 === undefined)
             return;
@@ -4479,7 +4479,7 @@ Options.Triggers.push({
           ko: '${dir}으로',
         },
         ...Directions.outputStrings8Dir,
-        ...AutumnDirections.outputStringsArrow8,
+        ...AutumnDir.stringsArrow,
       },
     },
     {
