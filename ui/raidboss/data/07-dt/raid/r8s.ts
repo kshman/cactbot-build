@@ -1,9 +1,8 @@
-import { AutumnDirections } from '../../../../../resources/autumn';
+import { AutumnDir } from '../../../../../resources/autumn';
 import Conditions from '../../../../../resources/conditions';
 import Outputs from '../../../../../resources/outputs';
 import { callOverlayHandler } from '../../../../../resources/overlay_plugin_api';
 import { Responses } from '../../../../../resources/responses';
-import { Directions } from '../../../../../resources/util';
 import ZoneId from '../../../../../resources/zone_id';
 import { RaidbossData } from '../../../../../types/data';
 import { TriggerSet } from '../../../../../types/trigger';
@@ -13,7 +12,7 @@ const phases = {
   'A3CB': 'saber', // Ravenous Saber
   'A3C1': 'moonlight', // Beckon Moonlight
 } as const;
-type Phase = (typeof phases)[keyof typeof phases] | 'door' | 'unknown';
+type Phase = (typeof phases)[keyof typeof phases] | 'door' | '2nd' | 'unknown';
 
 const fangIds: { [id: string]: string } = {
   'A39D': 'windPlus',
@@ -60,7 +59,7 @@ export interface Data extends RaidbossData {
   raged?: boolean;
   spread?: boolean;
   stack?: string;
-  chase?: number;
+  moonbeams: number[];
   // Phase 2
   //
   collect: string[];
@@ -74,8 +73,9 @@ const triggerSet: TriggerSet<Data> = {
     phase: 'door',
     decays: 0,
     packs: 0,
-    collect: [],
     surge: 0,
+    moonbeams: [],
+    collect: [],
   }),
   triggers: [
     {
@@ -83,7 +83,20 @@ const triggerSet: TriggerSet<Data> = {
       type: 'StartsUsing',
       netRegex: { id: Object.keys(phases), source: 'Howling Blade' },
       suppressSeconds: 1,
-      run: (data, matches) => data.phase = phases[matches.id as keyof typeof phases] ?? 'unknown',
+      run: (data, matches) => {
+        data.phase = phases[matches.id as keyof typeof phases] ?? 'unknown';
+        data.raged = false;
+      },
+    },
+    {
+      id: 'R8S Phase Tracker 2',
+      type: 'Ability',
+      netRegex: { id: 'A82D', source: 'Howling Blade', capture: false },
+      suppressSeconds: 1,
+      run: (data) => {
+        data.phase = '2nd';
+        data.collect = [];
+      },
     },
     {
       id: 'R8S Extraplanar Pursuit',
@@ -127,19 +140,19 @@ const triggerSet: TriggerSet<Data> = {
         switch (reignIds[matches.id]) {
           case 'eminent1':
           case 'eminent2':
-            return output.inLater!();
+            return output.in!();
           case 'revolutionary1':
           case 'revolutionary2':
-            return output.outLater!();
+            return output.out!();
         }
       },
       outputStrings: {
-        inLater: {
-          en: '(In Later)',
+        in: {
+          en: '(In later)',
           ko: '(나중에 안으로)',
         },
-        outLater: {
-          en: '(Out Later)',
+        out: {
+          en: '(Out later)',
           ko: '(나중에 바깥으로)',
         },
       },
@@ -165,45 +178,45 @@ const triggerSet: TriggerSet<Data> = {
         switch (reignIds[matches.id]) {
           case 'eminent1':
           case 'eminent2':
-            data.reign = (Directions.hdgTo8DirNum(actor.Heading) + 4) % 8;
+            data.reign = AutumnDir.hdgNum8(actor.Heading, true);
             break;
           case 'revolutionary1':
           case 'revolutionary2':
-            data.reign = Directions.hdgTo8DirNum(actor.Heading);
+            data.reign = AutumnDir.hdgNum8(actor.Heading);
             break;
         }
       },
       infoText: (data, matches, output) => {
-        const arrow = output[AutumnDirections.outputFromArrow8Num(data.reign ?? -1)]!();
+        const mk = output[AutumnDir.markFromNum(data.reign ?? -1)]!();
         switch (reignIds[matches.id]) {
           case 'eminent1':
           case 'eminent2':
-            return output.inDir!({ dir: arrow });
+            return output.in!({ dir: mk });
           case 'revolutionary1':
           case 'revolutionary2':
-            return output.outDir!({ dir: arrow });
+            return output.out!({ dir: mk });
         }
       },
       run: (data) => {
         data.reign = undefined;
       },
       outputStrings: {
-        inDir: {
+        in: {
           en: 'In ${dir}',
           ko: '${dir}안으로',
         },
-        outDir: {
+        out: {
           en: 'Out ${dir}',
           ko: '${dir}바깥으로',
         },
-        ...AutumnDirections.outputStringsArrow8,
+        ...AutumnDir.stringsMark,
       },
     },
     {
       id: 'R8S Millenial Decay',
       type: 'StartsUsing',
       netRegex: { id: 'A3B2', source: 'Howling Blade', capture: false },
-      response: Responses.aoe(),
+      response: Responses.bigAoe(),
     },
     {
       id: 'R8S Aero III',
@@ -244,7 +257,7 @@ const triggerSet: TriggerSet<Data> = {
         if (data.decays !== 2)
           return;
 
-        const dir = AutumnDirections.posConv8(matches.x, matches.y, centerX, centerY);
+        const dir = AutumnDir.posConv8(matches.x, matches.y, centerX, centerY);
         if (dir === 1 || dir === 5)
           return output.clockwise!();
         else if (dir === 3 || dir === 7)
@@ -293,19 +306,17 @@ const triggerSet: TriggerSet<Data> = {
       type: 'GainsEffect',
       netRegex: { effectId: ['1127', '1128'], capture: true },
       condition: (data, matches) => data.me === matches.target && data.phase === 'pack',
-      response: (data, matches, output) => {
-        // cactbot-builtin-response
-        output.responseOutputStrings = swStrings;
-
+      infoText: (data, matches, output) => {
         // 1127 = Stone (Yellow Cube) Debuff
         // 1128 = Wind (Green Sphere) Debuff
         const time = parseFloat(matches.duration);
-        data.swDebuff = matches.effectId === '1127' ? 'stone' : 'wind';
         data.swGroup = time < 22 ? 1 : time < 38 ? 2 : 3;
+        data.swDebuff = matches.effectId === '1127' ? 'stone' : 'wind';
 
         const debuff = output[data.swDebuff]!();
-        return { infoText: output.combo!({ debuff: debuff, num: data.swGroup }) };
+        return output.combo!({ debuff: debuff, num: data.swGroup });
       },
+      outputStrings: swStrings,
     },
     {
       // headmarkers with casts:
@@ -317,13 +328,14 @@ const triggerSet: TriggerSet<Data> = {
       id: 'R8S Pack Predation',
       type: 'HeadMarker',
       netRegex: { id: '0017' },
+      condition: (data) => data.phase === 'pack',
       infoText: (data, matches, output) => {
         data.collect.push(matches.target);
         if (data.collect.length < 2)
           return;
 
         // Increment count for group tracking
-        data.packs = data.packs + 1;
+        data.packs++;
 
         const p1 = data.party.member(data.collect[0]);
         const p2 = data.party.member(data.collect[1]);
@@ -400,6 +412,13 @@ const triggerSet: TriggerSet<Data> = {
     },
     {
       id: 'R8S Terrestrial Rage Spread/Stack',
+      // For Shadowchase (A3BC), actors available roughly 2.9s after cast
+      // Only need one of the 5 actors to determine pattern
+      // Ids are sequential, starting 2 less than the boss
+      // Two patterns (in order of IDs):
+      // S, WSW, NW, NE, ESE
+      // N, ENE, SE, SW, WNW
+      // TODO: Add orientation call?
       type: 'HeadMarker',
       netRegex: { id: ['005D', '008B'], capture: false },
       condition: (data) => data.phase === 'saber',
@@ -408,18 +427,18 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (data, _matches, output) => {
         if (data.raged) {
           if (data.spread)
-            return output.spread!();
+            return output.spreadClone!();
           if (data.stack === data.me)
-            return output.stackOnYou!();
+            return output.OnYouClone!();
           const name = data.party.member(data.stack);
-          return output.stackOnPlayer!({ player: name.jobAbbr });
+          return output.OnPlayerClone!({ player: name.jobAbbr });
         }
         if (data.spread)
-          return output.spreadThenStack!();
+          return output.spreadStack!();
         if (data.stack === data.me)
-          return output.OnYouThenSpread!();
+          return output.OnYouSpread!();
         const name = data.party.member(data.stack);
-        return output.OnPlayerThenSpread!({ player: name.jobAbbr });
+        return output.OnPlayerSpread!({ player: name.jobAbbr });
       },
       run: (data) => {
         data.stack = undefined;
@@ -427,63 +446,26 @@ const triggerSet: TriggerSet<Data> = {
         data.raged = true;
       },
       outputStrings: {
-        spreadThenStack: Outputs.spreadThenStack,
-        spread: Outputs.spread,
-        stackOnPlayer: Outputs.stackOnPlayer,
-        stackOnYou: Outputs.stackOnYou,
-        OnPlayerThenSpread: {
+        spreadStack: Outputs.spreadThenStack,
+        spreadClone: {
+          en: 'Spread (Behind Clones)',
+          ko: '흩어져요 (클론 뒤로)',
+        },
+        OnPlayerSpread: {
           en: 'Stack on ${player} => Spread',
           ko: '뭉쳤다(${player}) 🔜 흩어져요',
         },
-        OnYouThenSpread: {
+        OnYouSpread: {
           en: 'Stack on YOU => Spread',
           ko: '내게 뭉쳤다 🔜 흩어져요',
         },
-      },
-    },
-    {
-      id: 'R8S Shadowchase',
-      // Only need one of the 5 actors to determine pattern
-      // Ids are sequential, starting 2 less than the boss
-      // Two patterns (in order of IDs):
-      // S, WSW, NW, NE, ESE
-      // N, ENE, SE, SW, WNW
-      // TODO: Split the call for if have stack/spread
-      type: 'StartsUsing',
-      netRegex: { id: 'A3BC', source: 'Howling Blade', capture: true },
-      delaySeconds: (_data, matches) => parseFloat(matches.castTime) + 2.9,
-      promise: async (data, matches) => {
-        const actors = (await callOverlayHandler({
-          call: 'getCombatants',
-          ids: [parseInt(matches.sourceId, 16) - 2],
-        })).combatants;
-        const actor = actors[0];
-        if (actors.length !== 1 || actor === undefined) {
-          console.error(
-            `R8S Shadowchase Direction: Wrong actor count ${actors.length}`,
-          );
-          return;
-        }
-
-        data.chase = Directions.xyTo16DirNum(actor.PosX, actor.PosY, centerX, centerY);
-      },
-      infoText: (data, _matches, output) => {
-        if (data.chase === 0)
-          return output.orientN!();
-        if (data.chase === 8)
-          return output.orientNE!();
-      },
-      run: (data) => {
-        data.chase = undefined;
-      },
-      outputStrings: {
-        orientN: {
-          en: 'Orient N, Behind Clone',
-          ko: '(북쪽 기준) 클론 뒤로',
+        OnPlayerClone: {
+          en: 'Stack on ${player} (Behind Clones)',
+          ko: '뭉쳐욧: ${player} (클론 뒤로)',
         },
-        orientNE: {
-          en: 'Orient NE, Behind Clone',
-          ko: '(북동쪽 기준) 클론 뒤로',
+        OnYouClone: {
+          en: 'Stack on YOU (Behind Clones)',
+          ko: '내게 뭉쳐요 (클론 뒤로)',
         },
       },
     },
@@ -511,16 +493,184 @@ const triggerSet: TriggerSet<Data> = {
       netRegex: { id: 'A78E', source: 'Wolf of Stone', capture: true },
       suppressSeconds: 1,
       infoText: (_data, matches, output) => {
-        const hdg = parseFloat(matches.heading);
-        const dirOut = Directions.outputFrom8DirNum((Directions.hdgTo8DirNum(hdg) + 4) % 8);
-        return output.linesFromDir!({ dir: output[dirOut]!() });
+        const hdg = AutumnDir.hdgConv8(matches.heading, true);
+        const mk = AutumnDir.markFromNum(hdg);
+        return output.linesFromDir!({ dir: output[mk]!() });
       },
       outputStrings: {
-        ...Directions.outputStrings8Dir,
         linesFromDir: {
           en: 'Lines from ${dir}',
-          ko: '${dir}에서 줄',
+          ko: '줄: ${dir}',
         },
+        ...AutumnDir.stringsMark,
+      },
+    },
+    {
+      id: 'R8S Beckon Moonlight Quadrants',
+      type: 'Ability',
+      // A3E0 => Right cleave self-cast
+      // A3E1 => Left cleave self-cast
+      netRegex: { id: ['A3E0', 'A3E1'], source: 'Moonlit Shadow', capture: true },
+      delaySeconds: 0.1,
+      durationSeconds: (data) => data.moonbeams.length < 2 ? 2 : 10,
+      promise: async (data, matches) => {
+        const actors = (await callOverlayHandler({
+          call: 'getCombatants',
+          ids: [parseInt(matches.sourceId, 16)],
+        })).combatants;
+        const actor = actors[0];
+        if (actors.length !== 1 || actor === undefined) {
+          console.error(
+            `R8S Beckon Moonlight Quadrants: Wrong actor count ${actors.length}`,
+          );
+          return;
+        }
+
+        const dirNum = AutumnDir.xyToNum8(actor.PosX, actor.PosY, centerX, centerY);
+        // Moonbeam's Bite (A3C2 Left / A3C3 Right) half-room cleaves
+        // Defining the cleaved side
+        if (matches.id === 'A3E0') {
+          const counterclock = dirNum === 0 ? 6 : dirNum - 2;
+          data.moonbeams.push(counterclock);
+        }
+        if (matches.id === 'A3E1') {
+          const clockwise = (dirNum + 2) % 8;
+          data.moonbeams.push(clockwise);
+        }
+      },
+      infoText: (data, _matches, output) => {
+        if (data.moonbeams.length === 1 || data.moonbeams.length === 3)
+          return;
+
+        const quadrants = [1, 3, 5, 7];
+        // When there are multiple safe spots, output cardinal
+        const intersToCard = (dirNum1: number, dirNum2: number) => {
+          // Northeast and Northwest
+          if (dirNum1 === 1 && dirNum2 === 7 || dirNum2 === 7 && dirNum1 === 1)
+            return 0;
+          // Northeast and Southeast
+          if (dirNum1 === 1 && dirNum2 === 3 || dirNum1 === 3 && dirNum2 === 1)
+            return 2;
+          // Southeast and Southwest
+          if (dirNum1 === 3 && dirNum2 === 5 || dirNum1 === 5 && dirNum2 === 3)
+            return 4;
+          // Southwest and Northwest
+          if (dirNum1 === 5 && dirNum2 === 7 || dirNum1 === 7 && dirNum2 === 5)
+            return 6;
+        };
+
+        const beam1 = data.moonbeams[0] ?? -1;
+        const beam2 = data.moonbeams[1] ?? -1;
+        let safe1 = quadrants.filter((q) => q !== beam1 + 1);
+        safe1 = safe1.filter((q) => q !== beam1 - 1);
+        safe1 = safe1.filter((q) => q !== beam2 + 1);
+        safe1 = safe1.filter((q) => q !== beam2 - 1);
+
+        // Early output for first two
+        if (data.moonbeams.length === 2) {
+          if (safe1.length === 2) {
+            if (safe1[0] === undefined || safe1[1] === undefined) {
+              console.error(
+                `R8S Beckon Moonlight Quadrants: Early safeQuad missing.`,
+              );
+              return;
+            }
+            const dirNum = intersToCard(safe1[0], safe1[1]);
+            const half = output[AutumnDir.markFromNum(dirNum ?? -1)]!();
+            return output.safeHalf!({ half: half });
+          }
+          if (safe1.length === 1) {
+            const quad = output[AutumnDir.markFromNum(safe1[0] ?? -1)]!();
+            return output.safeQuad!({ quad: quad });
+          }
+          console.error(
+            `R8S Beckon Moonlight Quadrants: Early safeQuad missing.`,
+          );
+          return;
+        }
+
+        const beam3 = data.moonbeams[2] ?? -1;
+        const beam4 = data.moonbeams[3] ?? -1;
+        let safe2 = quadrants.filter((q) => q !== beam3 + 1);
+        safe2 = safe2.filter((q) => q !== beam3 - 1);
+        safe2 = safe2.filter((q) => q !== beam4 + 1);
+        safe2 = safe2.filter((q) => q !== beam4 - 1);
+
+        if (safe1[0] === undefined || safe2[0] === undefined) {
+          console.error(
+            `R8S Beckon Moonlight Quadrants: First safeQuads missing`,
+          );
+          return;
+        }
+
+        if (safe1.length === 2 && safe2.length === 2) {
+          if (safe1[1] === undefined || safe2[1] === undefined) {
+            console.error(
+              `R8S Beckon Moonlight Quadrants: Second safeQuads missing.`,
+            );
+            return;
+          }
+          const dirNum1 = intersToCard(safe1[0], safe1[1]);
+          const dirNum2 = intersToCard(safe2[0], safe2[1]);
+          const half1 = output[AutumnDir.markFromNum(dirNum1 ?? -1)]!();
+          const half2 = output[AutumnDir.markFromNum(dirNum2 ?? -1)]!();
+          return output.safeHalves!({ half1: half1, half2: half2 });
+        }
+        if (safe1.length === 2) {
+          if (safe1[1] === undefined) {
+            console.error(
+              `R8S Beckon Moonlight Quadrants: First safeQuad missing.`,
+            );
+            return;
+          }
+          const dirNum = intersToCard(safe1[0], safe1[1]);
+          const half = output[AutumnDir.markFromNum(dirNum ?? -1)]!();
+          const quad = output[AutumnDir.markFromNum(safe2[0] ?? -1)]!();
+          return output.safeHalfFirst!({ half: half, quad: quad });
+        }
+        if (safe2.length === 2) {
+          if (safe2[1] === undefined) {
+            console.error(
+              `R8S Beckon Moonlight Quadrants: Second safeQuad missing.`,
+            );
+            return;
+          }
+          const dirNum = intersToCard(safe2[0], safe2[1]);
+          const quad = output[AutumnDir.markFromNum(safe1[0] ?? -1)]!();
+          const half = output[AutumnDir.markFromNum(dirNum ?? -1)]!();
+          return output.safeHalfSecond!({ quad: quad, half: half });
+        }
+
+        const quad1 = output[AutumnDir.markFromNum(safe1[0] ?? -1)]!();
+        const quad2 = output[AutumnDir.markFromNum(safe2[0] ?? -1)]!();
+        return output.safeQuadrants!({ quad1: quad1, quad2: quad2 });
+      },
+      outputStrings: {
+        safeQuad: {
+          en: '${quad}',
+          ko: '안전: ${quad}',
+        },
+        safeQuadrants: {
+          en: '${quad1} => ${quad2}',
+          ko: '안전: ${quad1} 🔜 ${quad2}',
+        },
+        safeHalf: {
+          en: '${half}',
+          ko: '안전: ${half}',
+        },
+        safeHalfFirst: {
+          en: '${half} => ${quad}',
+          ko: '안전: ${half} 🔜 ${quad}',
+        },
+        safeHalfSecond: {
+          en: '${quad} => ${half}',
+          ko: '안전: ${quad} 🔜 ${half}',
+        },
+        safeHalves: {
+          en: '${half1} => ${half2}',
+          ko: '안전: ${half1} 🔜 ${half2}',
+        },
+        ...AutumnDir.stringsMark,
       },
     },
     {
@@ -580,6 +730,51 @@ const triggerSet: TriggerSet<Data> = {
         cardinals: Outputs.cardinals,
       },
     },
+    // Phase 2
+    // TODO: Timeline based callout for light parties for Quake III
+    // TODO: Timeline base callout for mooncleaver bait
+    {
+      id: 'R8S Quake III',
+      type: 'StartsUsing',
+      netRegex: { id: 'A45A', source: 'Howling Blade', capture: false },
+      response: Responses.bigAoe(),
+    },
+    {
+      id: 'R8S Twinbite',
+      type: 'StartsUsing',
+      netRegex: { id: 'A4CD', source: 'Howling Blade', capture: true },
+      response: Responses.tankBuster(),
+    },
+    {
+      // headmarkers with casts:
+      // A467 (Elemental Purge)
+      // A468 (Aerotemporal Blast) on one random non-tank
+      // A469 (Geotemporal Blast) on one Tank
+      id: 'R8S Elemental Purge Targets',
+      type: 'HeadMarker',
+      netRegex: { id: '0017' },
+      condition: (data) => data.phase === '2nd',
+      infoText: (data, matches, output) => {
+        data.collect.push(matches.target);
+        if (data.collect.length < 2)
+          return;
+
+        const name1 = data.party.member(data.collect[0]);
+        const name2 = data.party.member(data.collect[1]);
+
+        return output.purgeOnPlayers!({ player1: name1.jobAbbr, player2: name2.jobAbbr });
+      },
+      run: (data) => {
+        if (data.collect.length >= 2)
+          data.collect = [];
+      },
+      outputStrings: {
+        purgeOnPlayers: {
+          en: 'Elemental Purge on ${player1} and ${player2}',
+          ko: '퍼지: ${player1}, ${player2}',
+        },
+      },
+    },
   ],
   timelineReplace: [
     {
@@ -587,6 +782,7 @@ const triggerSet: TriggerSet<Data> = {
       'missingTranslations': true,
       'replaceSync': {
         'Howling Blade': 'ハウリングブレード',
+        'Moonlit Shadow': 'ハウリングブレードの幻影',
         'Wolf of Stone': '土の狼頭',
       },
     },

@@ -1,4 +1,4 @@
-import { AutumnDirections } from '../../../../../resources/autumn';
+import { AutumnDir } from '../../../../../resources/autumn';
 import Conditions from '../../../../../resources/conditions';
 import Outputs from '../../../../../resources/outputs';
 import { callOverlayHandler } from '../../../../../resources/overlay_plugin_api';
@@ -393,7 +393,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       infoText: (data, _matches, output) => {
         if (data.options.AutumnStyle) {
-          const mark = AutumnDirections.outputFromMarker8Num(data.tagTeamCloneTethered ?? -1);
+          const mark = AutumnDir.markFromNum(data.tagTeamCloneTethered ?? -1);
           return output.tetheredTo!({ dir: output[mark]!() });
         }
         const dir = output[Directions.outputFrom8DirNum(data.tagTeamCloneTethered ?? -1)]!();
@@ -406,7 +406,7 @@ const triggerSet: TriggerSet<Data> = {
           ja: '${dir} の分身に繋がれた',
           ko: '분신 줄: ${dir}',
         },
-        ...AutumnDirections.outputStringsMarkerCardinal,
+        ...AutumnDir.stringsMarkPlus,
       },
     },
     {

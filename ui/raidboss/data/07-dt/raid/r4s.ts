@@ -1,4 +1,4 @@
-import { AutumnDirections } from '../../../../../resources/autumn';
+import { AutumnDir } from '../../../../../resources/autumn';
 import Conditions from '../../../../../resources/conditions';
 import { UnreachableCode } from '../../../../../resources/not_reached';
 import Outputs from '../../../../../resources/outputs';
@@ -887,7 +887,7 @@ const triggerSet: TriggerSet<Data> = {
           ja: '${dir} => ${mech}',
           ko: '${dir} ${mech}',
         },
-        ...AutumnDirections.outputStringsMarkerIntercard,
+        ...AutumnDir.stringsMarkCross,
       },
     },
     {
@@ -2108,7 +2108,7 @@ const triggerSet: TriggerSet<Data> = {
           en: 'Yellow Cannon (${loc})',
           ko: '${loc}🟨빔',
         },
-        ...AutumnDirections.outputStringsArrow8,
+        ...AutumnDir.stringsArrow,
       },
     },
 

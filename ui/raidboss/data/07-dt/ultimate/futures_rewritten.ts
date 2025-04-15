@@ -1,4 +1,4 @@
-import Autumn, { AutumnDirections } from '../../../../../resources/autumn';
+import Autumn, { AutumnDir } from '../../../../../resources/autumn';
 import Conditions from '../../../../../resources/conditions';
 import Outputs from '../../../../../resources/outputs';
 import { Responses } from '../../../../../resources/responses';
@@ -256,7 +256,7 @@ const triggerSet: TriggerSet<Data> = {
   timelineFile: 'futures_rewritten.txt',
   initData: () => ({
     phase: 'p1',
-    p1SafeMarkers: [...AutumnDirections.outputNumber8],
+    p1SafeMarkers: [...AutumnDir.outputNum],
     p1FallTethers: [],
     p2Icicle: [],
     p2Puddles: [],
@@ -373,7 +373,7 @@ const triggerSet: TriggerSet<Data> = {
           },
           stack: Outputs.stacks,
           spread: Outputs.spreadOwn,
-          ...AutumnDirections.outputStringsMarker8,
+          ...AutumnDir.stringsMark,
         };
         const image = data.actors[matches.id];
         if (image === undefined)
@@ -386,8 +386,8 @@ const triggerSet: TriggerSet<Data> = {
 
         // 어듬이 제공
         if (data.triggerSetConfig.autumnConcealed || data.moks === 'none') {
-          const dir1 = AutumnDirections.outputFromMarker8Num(data.p1SafeMarkers.shift()!);
-          const dir2 = AutumnDirections.outputFromMarker8Num(data.p1SafeMarkers.shift()!);
+          const dir1 = AutumnDir.markFromNum(data.p1SafeMarkers.shift()!);
+          const dir2 = AutumnDir.markFromNum(data.p1SafeMarkers.shift()!);
           return {
             infoText: output.safe!({
               action: output[data.p1Utopian!]!(),
@@ -421,8 +421,8 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (data, _matches, output) => {
         if (data.p1SafeMarkers.length !== 2)
           return;
-        const dir1 = AutumnDirections.outputFromMarker8Num(data.p1SafeMarkers.shift()!);
-        const dir2 = AutumnDirections.outputFromMarker8Num(data.p1SafeMarkers.shift()!);
+        const dir1 = AutumnDir.markFromNum(data.p1SafeMarkers.shift()!);
+        const dir2 = AutumnDir.markFromNum(data.p1SafeMarkers.shift()!);
         return output.safe!({
           action: output[data.p1Utopian!]!(),
           dir1: output[dir1]!(),
@@ -438,7 +438,7 @@ const triggerSet: TriggerSet<Data> = {
         },
         stack: Outputs.stacks,
         spread: Outputs.spreadOwn,
-        ...AutumnDirections.outputStringsMarker8,
+        ...AutumnDir.stringsMark,
       },
     },
     {
@@ -660,7 +660,7 @@ const triggerSet: TriggerSet<Data> = {
       netRegex: { id: '9D06' },
       condition: (data) => data.p2Icicle.length < 2,
       run: (data, matches) => {
-        const dir = AutumnDirections.posConv8(matches.x, matches.y, centerX, centerY);
+        const dir = AutumnDir.posConv8(matches.x, matches.y, centerX, centerY);
         data.p2Icicle.push(dir);
       },
     },
@@ -753,11 +753,11 @@ const triggerSet: TriggerSet<Data> = {
         // 어듬이 제공
         if (data.options.AutumnStyle && data.moks !== 'none') {
           const dirs = Autumn.inMainTeam(data.moks) ? [0, 1, 6, 7] : [2, 3, 4, 5];
-          const res = AutumnDirections.outputFromMarker8Num(dirs.includes(dir1) ? dir1 : dir2);
+          const res = AutumnDir.markFromNum(dirs.includes(dir1) ? dir1 : dir2);
           return output.akb!({ dir: output[res]!() });
         }
-        const m1 = AutumnDirections.outputFromMarker8Num(dir1);
-        const m2 = AutumnDirections.outputFromMarker8Num(dir2);
+        const m1 = AutumnDir.markFromNum(dir1);
+        const m2 = AutumnDir.markFromNum(dir2);
         return output.knockback!({ dir1: output[m1]!(), dir2: output[m2]!() });
       },
       run: (data, _matches) => delete data.p2Knockback,
@@ -773,7 +773,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '넉백 ${dir}',
         },
         unknown: Outputs.unknown,
-        ...AutumnDirections.outputStringsMarker8,
+        ...AutumnDir.stringsMark,
       },
     },
     {
@@ -1040,7 +1040,7 @@ const triggerSet: TriggerSet<Data> = {
         const hourglass = data.hourglasses[id];
         if (hourglass === undefined)
           return;
-        const dir = AutumnDirections.posConv8(hourglass.x, hourglass.y, centerX, centerY);
+        const dir = AutumnDir.posConv8(hourglass.x, hourglass.y, centerX, centerY);
         data.p3NoranJul.push(dir);
         if (data.p3NoranJul.length !== 3)
           return;
@@ -1052,7 +1052,7 @@ const triggerSet: TriggerSet<Data> = {
         if (north === -1)
           return output.text!({ mark: output.unknown!() });
         const trueNorth = (north + 4) % 8;
-        return output.text!({ mark: output[AutumnDirections.outputFromMarker8Num(trueNorth)]!() });
+        return output.text!({ mark: output[AutumnDir.markFromNum(trueNorth)]!() });
       },
       outputStrings: {
         text: {
@@ -1061,7 +1061,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '북쪽: ${mark}',
         },
         unknown: Outputs.unknown,
-        ...AutumnDirections.outputStringsMarker8,
+        ...AutumnDir.stringsMark,
       },
     },
     {
@@ -1249,12 +1249,12 @@ const triggerSet: TriggerSet<Data> = {
             ? (data.p3ApocSwap ? supp : dps)
             : (data.p3ApocSwap ? dps : supp);
           const dir = grp.includes(safe[0]!) ? safe[0] : safe[1];
-          const mrk = AutumnDirections.outputMarker8[dir!] ?? 'unknown';
+          const mrk = AutumnDir.outputMark[dir!] ?? 'unknown';
           return output.safe!({ dir1: output[mrk]!(), rot: output[rot]!() });
         }
 
         const safeStr = safe
-          .map((dir) => output[AutumnDirections.outputMarker8[dir] ?? 'unknown']!()).join('');
+          .map((dir) => output[AutumnDir.outputMark[dir] ?? 'unknown']!()).join('');
         return output.safe!({ dir1: safeStr, rot: output[rot]!() });
       },
       tts: null,
@@ -1271,7 +1271,7 @@ const triggerSet: TriggerSet<Data> = {
           en: 'ccw',
           ko: '오른쪽🡺', // '반시계⤿',
         },
-        ...AutumnDirections.outputStringsMarker8,
+        ...AutumnDir.stringsMark,
       },
     },
     {
@@ -1327,8 +1327,8 @@ const triggerSet: TriggerSet<Data> = {
         if (safeDir === undefined || towardDir === undefined)
           return output.safe!({ dir1: safeStr, dir2: towardStr });
 
-        safeStr = output[AutumnDirections.outputMarker8[safeDir] ?? 'unknown']!();
-        towardStr = output[AutumnDirections.outputMarker8[towardDir] ?? 'unknown']!();
+        safeStr = output[AutumnDir.outputMark[safeDir] ?? 'unknown']!();
+        towardStr = output[AutumnDir.outputMark[towardDir] ?? 'unknown']!();
         if (data.p3ApocRot !== 1)
           return output.safe!({ dir1: towardStr, dir2: safeStr });
         return output.safe!({ dir1: safeStr, dir2: towardStr });
@@ -1338,7 +1338,7 @@ const triggerSet: TriggerSet<Data> = {
           en: 'Safe: ${dir1} (lean ${dir2})',
           ko: '${dir1} ▶ ${dir2}',
         },
-        ...AutumnDirections.outputStringsMarker8,
+        ...AutumnDir.stringsMark,
       },
     },
     {
@@ -2172,7 +2172,7 @@ const triggerSet: TriggerSet<Data> = {
       netRegex: { id: '9D3B' },
       condition: (data) => data.phase === 'p4ct',
       run: (data, matches) => {
-        const dir = AutumnDirections.posConv8(matches.x, matches.y, centerX, centerY);
+        const dir = AutumnDir.posConv8(matches.x, matches.y, centerX, centerY);
         data.p4Tidals.push(dir);
       },
     },
@@ -2199,7 +2199,7 @@ const triggerSet: TriggerSet<Data> = {
           return output.arewind!({ spot: mk });
         }
 
-        const dir = AutumnDirections.outputFromMarker8Num(intersectDirNum);
+        const dir = AutumnDir.markFromNum(intersectDirNum);
         if (dir === undefined)
           return unknownStr;
 
@@ -2217,7 +2217,7 @@ const triggerSet: TriggerSet<Data> = {
         marka: Outputs.cmarkA,
         markc: Outputs.cmarkC,
         unknown: Outputs.unknown,
-        ...AutumnDirections.outputStringsMarker8,
+        ...AutumnDir.stringsMark,
       },
     },
     {

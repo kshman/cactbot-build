@@ -1,4 +1,4 @@
-import { AutumnDirections } from '../../../../../resources/autumn';
+import { AutumnDir } from '../../../../../resources/autumn';
 import Outputs from '../../../../../resources/outputs';
 import { Responses } from '../../../../../resources/responses';
 import { Directions } from '../../../../../resources/util';
@@ -387,7 +387,7 @@ const triggerSet: TriggerSet<Data> = {
           return;
 
         if (data.options.AutumnStyle) {
-          const firstOrb8DirStr = AutumnDirections.outputFromMarker8Num(firstOrb8Dir);
+          const firstOrb8DirStr = AutumnDir.markFromNum(firstOrb8Dir);
           if (firstOrb8DirStr === undefined)
             return;
           const firstOrbDir = output[firstOrb8DirStr]!();
@@ -426,7 +426,7 @@ const triggerSet: TriggerSet<Data> = {
         clockwise: Outputs.clockwise,
         counterclock: Outputs.counterclockwise,
         ...Directions.outputStrings8Dir,
-        ...AutumnDirections.outputStringsMarker8,
+        ...AutumnDir.stringsMark,
       },
     },
     // 아니 내꺼랑 비슷해 졌는데 메시지가 계산이 아니고 스태틱이네
