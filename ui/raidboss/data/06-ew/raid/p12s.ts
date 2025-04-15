@@ -1,4 +1,4 @@
-import Autumn, { ArrowOutput8, AutumnDirections } from '../../../../../resources/autumn';
+import Autumn, { ArrowOutput8, AutumnDir } from '../../../../../resources/autumn';
 import Conditions from '../../../../../resources/conditions';
 import Outputs from '../../../../../resources/outputs';
 import { callOverlayHandler } from '../../../../../resources/overlay_plugin_api';
@@ -4646,7 +4646,7 @@ const triggerSet: TriggerSet<Data> = {
           data.darknessClones.forEach((clone) => {
             const x = parseFloat(clone.x);
             const y = parseFloat(clone.y);
-            const cloneDir = AutumnDirections.xyToArrow8Output(x, y, uavCenterX, uavCenterY);
+            const cloneDir = AutumnDir.xyToArrow(x, y, uavCenterX, uavCenterY);
             const pairedDir = unsafeMap[cloneDir];
             safeDirs = safeDirs.filter((dir) => dir !== cloneDir && dir !== pairedDir);
           });
@@ -4700,7 +4700,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '${dir}으로',
         },
         ...Directions.outputStrings8Dir,
-        ...AutumnDirections.outputStringsArrow8,
+        ...AutumnDir.stringsArrow,
       },
     },
     {
@@ -4729,7 +4729,7 @@ const triggerSet: TriggerSet<Data> = {
 
           const x = parseFloat(matches.x);
           const y = parseFloat(matches.y);
-          const cloneDir = AutumnDirections.xyToArrow8Output(x, y, uavCenterX, uavCenterY);
+          const cloneDir = AutumnDir.xyToArrow(x, y, uavCenterX, uavCenterY);
           const [dir1, dir2] = safeMap[cloneDir];
           if (dir1 === undefined || dir2 === undefined)
             return;
@@ -4774,7 +4774,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '${dir}으로',
         },
         ...Directions.outputStrings8Dir,
-        ...AutumnDirections.outputStringsArrow8,
+        ...AutumnDir.stringsArrow,
       },
     },
     {

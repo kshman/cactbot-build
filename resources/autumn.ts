@@ -3,36 +3,55 @@ import { LocaleText, OutputStrings } from '../types/trigger';
 
 import { Lang } from './languages';
 import Outputs from './outputs';
-import Util, { Directions } from './util';
+import Util from './util';
 
 // 어듬이 뱡향 표시
-const posConv16 = (sx: string, sy: string, cx: number, cy: number): number => {
-  const x = parseFloat(sx) - cx;
-  const y = parseFloat(sy) - cy;
-  return Math.round(8 - 8 * Math.atan2(x, y) / Math.PI) % 16;
+const checkOpDir8 = (dir: number, test: boolean): number => {
+  return test ? (dir + 4) % 8 : dir;
 };
-const posConv8 = (sx: string, sy: string, cx: number, cy: number): number => {
+const checkOpDir4 = (dir: number, test: boolean): number => {
+  return test ? (dir + 2) % 4 : dir;
+};
+
+const posConv8 = (sx: string, sy: string, cx: number, cy: number, cop = false): number => {
   const x = parseFloat(sx) - cx;
   const y = parseFloat(sy) - cy;
+  const n = Math.round(4 - 4 * Math.atan2(x, y) / Math.PI) % 8;
+  return checkOpDir8(n, cop);
+};
+const posConv4 = (sx: string, sy: string, cx: number, cy: number, cop = false): number => {
+  const x = parseFloat(sx) - cx;
+  const y = parseFloat(sy) - cy;
+  const n = Math.round(2 - 2 * Math.atan2(x, y) / Math.PI) % 4;
+  return checkOpDir4(n, cop);
+};
+
+const hdgConv8 = (heading: string, cop = false): number => {
+  const n = (Math.round(4 - 4 * parseFloat(heading) / Math.PI) % 8 + 8) % 8;
+  return checkOpDir8(n, cop);
+};
+const hdgConv4 = (heading: string, cop = false): number => {
+  const n = (Math.round(2 - parseFloat(heading) * 2 / Math.PI) % 4 + 4) % 4;
+  return checkOpDir4(n, cop);
+};
+const hdgNum8 = (heading: number, cop = false): number => {
+  const n = (Math.round(4 - 4 * heading / Math.PI) % 8 + 8) % 8;
+  return checkOpDir8(n, cop);
+};
+const hdgNum4 = (heading: number, cop = false): number => {
+  const n = (Math.round(2 - heading * 2 / Math.PI) % 4 + 4) % 4;
+  return checkOpDir4(n, cop);
+};
+
+const xyToNum8 = (x: number, y: number, centerX: number, centerY: number): number => {
+  x = x - centerX;
+  y = y - centerY;
   return Math.round(4 - 4 * Math.atan2(x, y) / Math.PI) % 8;
 };
-const posConv4 = (sx: string, sy: string, cx: number, cy: number): number => {
-  const x = parseFloat(sx) - cx;
-  const y = parseFloat(sy) - cy;
-  return Math.round(2 - 2 * Math.atan2(x, y) / Math.PI) % 4;
-};
 
-const hdgConv8 = (heading: string): number => {
-  return (Math.round(4 - 4 * parseFloat(heading) / Math.PI) % 8 + 8) % 8;
-};
-
-const hdgConv4 = (heading: string): number => {
-  return (Math.round(2 - parseFloat(heading) * 2 / Math.PI) % 4 + 4) % 4;
-};
-
-const outputNumber8: number[] = [0, 1, 2, 3, 4, 5, 6, 7];
-const outputNumberCardinal: number[] = [0, 1, 2, 3];
-const outputNumberIntercard: number[] = [0, 1, 2, 3];
+const outputNum: number[] = [0, 1, 2, 3, 4, 5, 6, 7];
+const outputNumPlus: number[] = [0, 1, 2, 3];
+const outputNumCross: number[] = [0, 1, 2, 3];
 
 export type MarkerOutput8 =
   | 'markerN'
@@ -57,7 +76,7 @@ export type MarkerOutputIntercard =
   | 'markerNW'
   | 'unknown';
 
-const outputMarker8: MarkerOutput8[] = [
+const outputMark: MarkerOutput8[] = [
   'markerN',
   'markerNE',
   'markerE',
@@ -67,19 +86,20 @@ const outputMarker8: MarkerOutput8[] = [
   'markerW',
   'markerNW',
 ];
-const outputMarkerCardinal: MarkerOutputCardinal[] = [
+const outputMarkPlus: MarkerOutputCardinal[] = [
   'markerN',
   'markerE',
   'markerS',
   'markerW',
 ];
-const outputMarkerIntercard: MarkerOutputIntercard[] = [
+const outputMarkCross: MarkerOutputIntercard[] = [
   'markerNE',
   'markerSE',
   'markerSW',
   'markerNW',
 ];
-const outputStringsMarker8: OutputStrings = {
+
+const stringsMark: OutputStrings = {
   markerN: Outputs.cmarkA,
   markerNE: Outputs.cnum1,
   markerE: Outputs.cmarkB,
@@ -90,22 +110,23 @@ const outputStringsMarker8: OutputStrings = {
   markerNW: Outputs.cnum4,
   unknown: Outputs.unknown,
 };
-const outputStringsMarkerCardinal: OutputStrings = {
+const stringsMarkPlus: OutputStrings = {
   markerN: Outputs.cmarkA,
   markerE: Outputs.cmarkB,
   markerS: Outputs.cmarkC,
   markerW: Outputs.cmarkD,
   unknown: Outputs.unknown,
 };
-const outputStringsMarkerIntercard: OutputStrings = {
+const stringsMarkCross: OutputStrings = {
   markerNE: Outputs.cnum1,
   markerSE: Outputs.cnum2,
   markerSW: Outputs.cnum3,
   markerNW: Outputs.cnum4,
   unknown: Outputs.unknown,
 };
-const outputFromMarker8NumFunc = (dirNum: number): MarkerOutput8 => {
-  return outputMarker8[dirNum] ?? 'unknown';
+
+const markFromNumFunc = (dirNum: number): MarkerOutput8 => {
+  return outputMark[dirNum] ?? 'unknown';
 };
 
 export type ArrowOutput8 =
@@ -130,7 +151,8 @@ export type ArrowOutputIntercard =
   | 'arrowSW'
   | 'arrowNW'
   | 'unknown';
-const outputArrow8: ArrowOutput8[] = [
+
+const outputArrow: ArrowOutput8[] = [
   'arrowN',
   'arrowNE',
   'arrowE',
@@ -140,19 +162,20 @@ const outputArrow8: ArrowOutput8[] = [
   'arrowW',
   'arrowNW',
 ];
-const outputArrowCardinal: ArrowOutputCardinal[] = [
+const outputArrowPlus: ArrowOutputCardinal[] = [
   'arrowN',
   'arrowE',
   'arrowS',
   'arrowW',
 ];
-const outputArrowIntercard: ArrowOutputIntercard[] = [
+const outputArrowCross: ArrowOutputIntercard[] = [
   'arrowNE',
   'arrowSE',
   'arrowSW',
   'arrowNW',
 ];
-const outputStringsArrow8: OutputStrings = {
+
+const stringsArrow: OutputStrings = {
   arrowN: Outputs.arrowN,
   arrowNE: Outputs.arrowNE,
   arrowE: Outputs.arrowE,
@@ -163,21 +186,21 @@ const outputStringsArrow8: OutputStrings = {
   arrowNW: Outputs.arrowNW,
   unknown: Outputs.unknown,
 };
-const outputStringsArrowCardinal: OutputStrings = {
+const stringsArrowPlus: OutputStrings = {
   arrowN: Outputs.arrowN,
   arrowE: Outputs.arrowE,
   arrowS: Outputs.arrowS,
   arrowW: Outputs.arrowW,
   unknown: Outputs.unknown,
 };
-const outputStringsArrowIntercard: OutputStrings = {
+const stringsArrowCross: OutputStrings = {
   arrowNE: Outputs.arrowNE,
   arrowSE: Outputs.arrowSE,
   arrowSW: Outputs.arrowSW,
   arrowNW: Outputs.arrowNW,
   unknown: Outputs.unknown,
 };
-const outputStringsDirToArrow8: OutputStrings = {
+const stringsDirArrow: OutputStrings = {
   dirN: Outputs.arrowN,
   dirNE: Outputs.arrowNE,
   dirE: Outputs.arrowE,
@@ -188,14 +211,14 @@ const outputStringsDirToArrow8: OutputStrings = {
   dirNW: Outputs.arrowNW,
   unknown: Outputs.unknown,
 };
-const outputStringsDirToArrowCardinal: OutputStrings = {
+const stringsDirArrowPlus: OutputStrings = {
   dirN: Outputs.arrowN,
   dirE: Outputs.arrowE,
   dirS: Outputs.arrowS,
   dirW: Outputs.arrowW,
   unknown: Outputs.unknown,
 };
-const outputStringsDirToArrowIntercard: OutputStrings = {
+const stringsDirArrowCross: OutputStrings = {
   dirNE: Outputs.arrowNE,
   dirSE: Outputs.arrowSE,
   dirSW: Outputs.arrowSW,
@@ -203,47 +226,49 @@ const outputStringsDirToArrowIntercard: OutputStrings = {
   unknown: Outputs.unknown,
 };
 
-const outputFromArrow8NumFunc = (dirNum: number): ArrowOutput8 => {
-  return outputArrow8[dirNum] ?? 'unknown';
+const arrowFromNumFunc = (dirNum: number): ArrowOutput8 => {
+  return outputArrow[dirNum] ?? 'unknown';
 };
 
 // 어듬이 뱡향 지시
-export const AutumnDirections = {
-  posConv16: posConv16,
+export const AutumnDir = {
   posConv8: posConv8,
   posConv4: posConv4,
   hdgConv8: hdgConv8,
   hdgConv4: hdgConv4,
+  hdgNum8: hdgNum8,
+  hdgNum4: hdgNum4,
+  xyToNum8: xyToNum8,
 
-  outputNumber8: outputNumber8,
-  outputNumberCardinal: outputNumberCardinal,
-  outputNumberIntercard: outputNumberIntercard,
+  outputNum: outputNum,
+  outputNumPlus: outputNumPlus,
+  outputNumCross: outputNumCross,
 
-  outputMarker8: outputMarker8,
-  outputMarkerCardinal: outputMarkerCardinal,
-  outputMarkerIntercard: outputMarkerIntercard,
-  outputStringsMarker8: outputStringsMarker8,
-  outputStringsMarkerCardinal: outputStringsMarkerCardinal,
-  outputStringsMarkerIntercard: outputStringsMarkerIntercard,
-  outputFromMarker8Num: outputFromMarker8NumFunc,
-  xyToMarker8Output: (x: number, y: number, cx: number, cy: number): MarkerOutput8 => {
-    const n = Directions.xyTo8DirNum(x, y, cx, cy);
-    return outputFromMarker8NumFunc(n);
+  outputMark: outputMark,
+  outputMarkPlus: outputMarkPlus,
+  outputMarkCross: outputMarkCross,
+  stringsMark: stringsMark,
+  stringsMarkPlus: stringsMarkPlus,
+  stringsMarkCross: stringsMarkCross,
+  markFromNum: markFromNumFunc,
+  xyToMark: (x: number, y: number, cx: number, cy: number): MarkerOutput8 => {
+    const n = xyToNum8(x, y, cx, cy);
+    return markFromNumFunc(n);
   },
 
-  outputArrow8: outputArrow8,
-  outputArrowCardinal: outputArrowCardinal,
-  outputArrowIntercard: outputArrowIntercard,
-  outputStringsArrow8: outputStringsArrow8,
-  outputStringsArrowCardinal: outputStringsArrowCardinal,
-  outputStringsArrowIntercard: outputStringsArrowIntercard,
-  outputStringsDirToArrow8: outputStringsDirToArrow8,
-  outputStringsDirToArrowCardinal: outputStringsDirToArrowCardinal,
-  outputStringsDirToArrowIntercard: outputStringsDirToArrowIntercard,
-  outputFromArrow8Num: outputFromArrow8NumFunc,
-  xyToArrow8Output: (x: number, y: number, cx: number, cy: number): ArrowOutput8 => {
-    const n = Directions.xyTo8DirNum(x, y, cx, cy);
-    return outputFromArrow8NumFunc(n);
+  outputArrow: outputArrow,
+  outputArrowPlus: outputArrowPlus,
+  outputArrowCross: outputArrowCross,
+  stringsArrow: stringsArrow,
+  stringsArrowPlus: stringsArrowPlus,
+  stringsArrowCross: stringsArrowCross,
+  stringsDirArrow: stringsDirArrow,
+  stringsDirArrowPlus: stringsDirArrowPlus,
+  stringsDirArrowCross: stringsDirArrowCross,
+  arrowFromNum: arrowFromNumFunc,
+  xyToArrow: (x: number, y: number, cx: number, cy: number): ArrowOutput8 => {
+    const n = xyToNum8(x, y, cx, cy);
+    return arrowFromNumFunc(n);
   },
 };
 
