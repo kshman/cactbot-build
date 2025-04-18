@@ -43,6 +43,17 @@ const swStrings = {
   },
   unknown: Outputs.unknown,
 } as const;
+const moonStrings = {
+  safeQuad: {
+    en: '${quad}',
+    ko: '안전: ${quad}',
+  },
+  safeQuadrants: {
+    en: '${quad1} => ${quad2}',
+    ko: '안전: ${quad1} 🔜 ${quad2}',
+  },
+  ...AutumnDir.stringsMark,
+} as const;
 
 const centerX = 100;
 const centerY = 100;
@@ -52,15 +63,20 @@ export interface Data extends RaidbossData {
   // Phase 1
   reign?: number;
   decays: number;
-  swGroup?: number;
-  swDebuff?: 'stone' | 'wind';
+  galedir?: number;
+  galecnt: number;
+  swgrp?: number;
+  swstat?: 'stone' | 'wind';
   surge: number;
   packs: number;
   raged?: boolean;
   spread?: boolean;
   stack?: string;
-  moonbeams: number[];
+  moonindex: number;
+  moonquad?: string;
+  moonbites: number[];
   // Phase 2
+  hblow?: 'in' | 'out';
   //
   collect: string[];
 }
@@ -72,9 +88,11 @@ const triggerSet: TriggerSet<Data> = {
   initData: () => ({
     phase: 'door',
     decays: 0,
+    galecnt: 0,
     packs: 0,
     surge: 0,
-    moonbeams: [],
+    moonindex: 0,
+    moonbites: [],
     collect: [],
   }),
   triggers: [
@@ -105,7 +123,7 @@ const triggerSet: TriggerSet<Data> = {
       response: Responses.aoe(),
     },
     {
-      id: 'R8S Windfang/Stonefang',
+      id: 'R8S Fangs',
       type: 'StartsUsing',
       netRegex: { id: Object.keys(fangIds), source: 'Howling Blade', capture: true },
       infoText: (_data, matches, output) => {
@@ -133,7 +151,7 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: 'R8S Eminent/Revolutionary Reign',
+      id: 'R8S Reigns',
       type: 'StartsUsing',
       netRegex: { id: reignKeys, source: 'Howling Blade', capture: true },
       infoText: (_data, matches, output) => {
@@ -149,16 +167,16 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         in: {
           en: '(In later)',
-          ko: '(나중에 안으로)',
+          ko: '(나중에 보스 가까이)',
         },
         out: {
           en: '(Out later)',
-          ko: '(나중에 바깥으로)',
+          ko: '(나중에 보스 멀리멀리)',
         },
       },
     },
     {
-      id: 'R8S Eminent/Revolutionary Reign Direction',
+      id: 'R8S Reigns Direction',
       type: 'StartsUsing',
       netRegex: { id: reignKeys, source: 'Howling Blade', capture: true },
       delaySeconds: (_data, matches) => parseFloat(matches.castTime) + 1.2,
@@ -168,12 +186,8 @@ const triggerSet: TriggerSet<Data> = {
           ids: [parseInt(matches.sourceId, 16)],
         })).combatants;
         const actor = actors[0];
-        if (actors.length !== 1 || actor === undefined) {
-          console.error(
-            `R8S Eminent/Revolutionary Reign Direction: Wrong actor count ${actors.length}`,
-          );
+        if (actors.length !== 1 || actor === undefined)
           return;
-        }
 
         switch (reignIds[matches.id]) {
           case 'eminent1':
@@ -203,11 +217,11 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         in: {
           en: 'In ${dir}',
-          ko: '${dir}안으로',
+          ko: '${dir} 보스 가까이',
         },
         out: {
           en: 'Out ${dir}',
-          ko: '${dir}바깥으로',
+          ko: '${dir} 보스 멀리멀리',
         },
         ...AutumnDir.stringsMark,
       },
@@ -275,6 +289,46 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
+      id: 'R8S Prowling Gale Tower/Tether',
+      // Calls each tether or get towers
+      // TODO: Support getting a tower and tether?
+      type: 'Tether',
+      netRegex: { id: '0039', capture: true },
+      preRun: (data) => data.galecnt = data.galecnt + 1,
+      promise: async (data, matches) => {
+        if (data.me !== matches.target)
+          return;
+        const actors = (await callOverlayHandler({
+          call: 'getCombatants',
+          ids: [parseInt(matches.sourceId, 16)],
+        })).combatants;
+        const actor = actors[0];
+        if (actors.length !== 1 || actor === undefined)
+          return;
+
+        const dirNum = AutumnDir.xyToNum8(actor.PosX, actor.PosY, centerX, centerY);
+        data.galedir = (dirNum + 4) % 8;
+      },
+      infoText: (data, matches, output) => {
+        if (data.galedir !== undefined && data.me === matches.target) {
+          // This will trigger for each tether a player has
+          const dir = output[AutumnDir.markFromNum(data.galedir)]!();
+          return output.stretchTetherDir!({ dir: dir });
+        }
+
+        if (data.galedir === undefined && data.galecnt === 4)
+          return output.getTowers!();
+      },
+      outputStrings: {
+        getTowers: Outputs.getTowers,
+        stretchTetherDir: {
+          en: 'Stretch tether: ${dir}',
+          ko: '줄 늘려요: ${dir}',
+        },
+        ...AutumnDir.stringsMark,
+      },
+    },
+    {
       id: 'R8S Tactical Pack Tethers',
       // TODO: Call East/West instead of add?
       type: 'Tether',
@@ -296,7 +350,7 @@ const triggerSet: TriggerSet<Data> = {
         },
         side: {
           en: '${wolf} Side',
-          ko: '${wolf} 옆으로',
+          ko: '${wolf}으로!',
         },
       },
     },
@@ -310,11 +364,11 @@ const triggerSet: TriggerSet<Data> = {
         // 1127 = Stone (Yellow Cube) Debuff
         // 1128 = Wind (Green Sphere) Debuff
         const time = parseFloat(matches.duration);
-        data.swGroup = time < 22 ? 1 : time < 38 ? 2 : 3;
-        data.swDebuff = matches.effectId === '1127' ? 'stone' : 'wind';
+        data.swgrp = time < 22 ? 1 : time < 38 ? 2 : 3;
+        data.swstat = matches.effectId === '1127' ? 'stone' : 'wind';
 
-        const debuff = output[data.swDebuff]!();
-        return output.combo!({ debuff: debuff, num: data.swGroup });
+        const debuff = output[data.swstat]!();
+        return output.combo!({ debuff: debuff, num: data.swgrp });
       },
       outputStrings: swStrings,
     },
@@ -329,7 +383,18 @@ const triggerSet: TriggerSet<Data> = {
       type: 'HeadMarker',
       netRegex: { id: '0017' },
       condition: (data) => data.phase === 'pack',
-      infoText: (data, matches, output) => {
+      response: (data, matches, output) => {
+        // cactbot-builtin-response
+        output.responseOutputStrings = {
+          onPlayers: {
+            en: 'Predation on ${player1} and ${player2}',
+            ko: '(포식: ${player1}, ${player2})',
+          },
+          onYou: {
+            en: 'Predation on YOU',
+            ko: '내게 포식!',
+          },
+        };
         data.collect.push(matches.target);
         if (data.collect.length < 2)
           return;
@@ -337,19 +402,16 @@ const triggerSet: TriggerSet<Data> = {
         // Increment count for group tracking
         data.packs++;
 
+        if (data.collect.includes(data.me))
+          return { alertText: output.onYou!() };
+
         const p1 = data.party.member(data.collect[0]);
         const p2 = data.party.member(data.collect[1]);
-        return output.predationOnPlayers!({ player1: p1.jobAbbr, player2: p2.jobAbbr });
+        return { infoText: output.onPlayers!({ player1: p1.jobAbbr, player2: p2.jobAbbr }) };
       },
       run: (data) => {
         if (data.collect.length >= 2)
           data.collect = [];
-      },
-      outputStrings: {
-        predationOnPlayers: {
-          en: 'Predation on ${player1} and ${player2}',
-          ko: '포식: ${player1}, ${player2}',
-        },
       },
     },
     {
@@ -365,9 +427,9 @@ const triggerSet: TriggerSet<Data> = {
       delaySeconds: (_data, matches) => parseFloat(matches.duration),
       suppressSeconds: 1,
       infoText: (data, _matches, output) => {
-        if (data.swGroup === data.packs) {
-          const debuff = output[data.swDebuff ?? 'unknown']!();
-          return output.combo!({ debuff: debuff, num: data.swGroup });
+        if (data.swgrp === data.packs) {
+          const debuff = output[data.swstat ?? 'unknown']!();
+          return output.combo!({ debuff: debuff, num: data.swgrp });
         }
       },
       outputStrings: swStrings,
@@ -377,7 +439,7 @@ const triggerSet: TriggerSet<Data> = {
       type: 'LosesEffect',
       netRegex: { effectId: ['1127', '1128'], capture: true },
       condition: Conditions.targetIsYou(),
-      run: (data) => data.swGroup = undefined,
+      run: (data) => data.swgrp = undefined,
     },
     {
       id: 'R8S Tactical Pack Second Pop',
@@ -390,10 +452,10 @@ const triggerSet: TriggerSet<Data> = {
       suppressSeconds: 1,
       alarmText: (data, _matches, output) => {
         const surge = data.surge;
-        if (data.swGroup === data.packs) {
+        if (data.swgrp === data.packs) {
           if (surge === 1 || surge === 3 || surge === 5) {
-            const debuff = output[data.swDebuff ?? 'unknown']!();
-            return output.combo!({ debuff: debuff, num: data.swGroup });
+            const debuff = output[data.swstat ?? 'unknown']!();
+            return output.combo!({ debuff: debuff, num: data.swgrp });
           }
         }
       },
@@ -512,166 +574,67 @@ const triggerSet: TriggerSet<Data> = {
       // A3E1 => Left cleave self-cast
       netRegex: { id: ['A3E0', 'A3E1'], source: 'Moonlit Shadow', capture: true },
       delaySeconds: 0.1,
-      durationSeconds: (data) => data.moonbeams.length < 2 ? 2 : 10,
+      durationSeconds: (data) => data.moonbites.length < 2 ? 2 : 10,
       promise: async (data, matches) => {
         const actors = (await callOverlayHandler({
           call: 'getCombatants',
           ids: [parseInt(matches.sourceId, 16)],
         })).combatants;
         const actor = actors[0];
-        if (actors.length !== 1 || actor === undefined) {
-          console.error(
-            `R8S Beckon Moonlight Quadrants: Wrong actor count ${actors.length}`,
-          );
+        if (actors.length !== 1 || actor === undefined)
           return;
-        }
 
         const dirNum = AutumnDir.xyToNum8(actor.PosX, actor.PosY, centerX, centerY);
         // Moonbeam's Bite (A3C2 Left / A3C3 Right) half-room cleaves
         // Defining the cleaved side
         if (matches.id === 'A3E0') {
           const counterclock = dirNum === 0 ? 6 : dirNum - 2;
-          data.moonbeams.push(counterclock);
+          data.moonbites.push(counterclock);
         }
         if (matches.id === 'A3E1') {
           const clockwise = (dirNum + 2) % 8;
-          data.moonbeams.push(clockwise);
+          data.moonbites.push(clockwise);
         }
       },
       infoText: (data, _matches, output) => {
-        if (data.moonbeams.length === 1 || data.moonbeams.length === 3)
+        if (data.moonbites.length === 1 || data.moonbites.length === 3)
           return;
 
         const quadrants = [1, 3, 5, 7];
-        // When there are multiple safe spots, output cardinal
-        const intersToCard = (dirNum1: number, dirNum2: number) => {
-          // Northeast and Northwest
-          if (dirNum1 === 1 && dirNum2 === 7 || dirNum2 === 7 && dirNum1 === 1)
-            return 0;
-          // Northeast and Southeast
-          if (dirNum1 === 1 && dirNum2 === 3 || dirNum1 === 3 && dirNum2 === 1)
-            return 2;
-          // Southeast and Southwest
-          if (dirNum1 === 3 && dirNum2 === 5 || dirNum1 === 5 && dirNum2 === 3)
-            return 4;
-          // Southwest and Northwest
-          if (dirNum1 === 5 && dirNum2 === 7 || dirNum1 === 7 && dirNum2 === 5)
-            return 6;
-        };
-
-        const beam1 = data.moonbeams[0] ?? -1;
-        const beam2 = data.moonbeams[1] ?? -1;
+        const beam1 = data.moonbites[0] ?? -1;
+        const beam2 = data.moonbites[1] ?? -1;
         let safe1 = quadrants.filter((q) => q !== beam1 + 1);
-        safe1 = safe1.filter((q) => q !== beam1 - 1);
+        safe1 = safe1.filter((q) => q !== (beam1 === 0 ? 7 : beam1 - 1));
         safe1 = safe1.filter((q) => q !== beam2 + 1);
-        safe1 = safe1.filter((q) => q !== beam2 - 1);
+        safe1 = safe1.filter((q) => q !== (beam2 === 0 ? 7 : beam2 - 1));
 
         // Early output for first two
-        if (data.moonbeams.length === 2) {
-          if (safe1.length === 2) {
-            if (safe1[0] === undefined || safe1[1] === undefined) {
-              console.error(
-                `R8S Beckon Moonlight Quadrants: Early safeQuad missing.`,
-              );
-              return;
-            }
-            const dirNum = intersToCard(safe1[0], safe1[1]);
-            const half = output[AutumnDir.markFromNum(dirNum ?? -1)]!();
-            return output.safeHalf!({ half: half });
-          }
-          if (safe1.length === 1) {
-            const quad = output[AutumnDir.markFromNum(safe1[0] ?? -1)]!();
-            return output.safeQuad!({ quad: quad });
-          }
-          console.error(
-            `R8S Beckon Moonlight Quadrants: Early safeQuad missing.`,
-          );
-          return;
-        }
-
-        const beam3 = data.moonbeams[2] ?? -1;
-        const beam4 = data.moonbeams[3] ?? -1;
-        let safe2 = quadrants.filter((q) => q !== beam3 + 1);
-        safe2 = safe2.filter((q) => q !== beam3 - 1);
-        safe2 = safe2.filter((q) => q !== beam4 + 1);
-        safe2 = safe2.filter((q) => q !== beam4 - 1);
-
-        if (safe1[0] === undefined || safe2[0] === undefined) {
-          console.error(
-            `R8S Beckon Moonlight Quadrants: First safeQuads missing`,
-          );
-          return;
-        }
-
-        if (safe1.length === 2 && safe2.length === 2) {
-          if (safe1[1] === undefined || safe2[1] === undefined) {
-            console.error(
-              `R8S Beckon Moonlight Quadrants: Second safeQuads missing.`,
-            );
+        if (data.moonbites.length === 2) {
+          if (safe1.length !== 1 || safe1[0] === undefined)
             return;
-          }
-          const dirNum1 = intersToCard(safe1[0], safe1[1]);
-          const dirNum2 = intersToCard(safe2[0], safe2[1]);
-          const half1 = output[AutumnDir.markFromNum(dirNum1 ?? -1)]!();
-          const half2 = output[AutumnDir.markFromNum(dirNum2 ?? -1)]!();
-          return output.safeHalves!({ half1: half1, half2: half2 });
-        }
-        if (safe1.length === 2) {
-          if (safe1[1] === undefined) {
-            console.error(
-              `R8S Beckon Moonlight Quadrants: First safeQuad missing.`,
-            );
-            return;
-          }
-          const dirNum = intersToCard(safe1[0], safe1[1]);
-          const half = output[AutumnDir.markFromNum(dirNum ?? -1)]!();
-          const quad = output[AutumnDir.markFromNum(safe2[0] ?? -1)]!();
-          return output.safeHalfFirst!({ half: half, quad: quad });
-        }
-        if (safe2.length === 2) {
-          if (safe2[1] === undefined) {
-            console.error(
-              `R8S Beckon Moonlight Quadrants: Second safeQuad missing.`,
-            );
-            return;
-          }
-          const dirNum = intersToCard(safe2[0], safe2[1]);
           const quad = output[AutumnDir.markFromNum(safe1[0] ?? -1)]!();
-          const half = output[AutumnDir.markFromNum(dirNum ?? -1)]!();
-          return output.safeHalfSecond!({ quad: quad, half: half });
+          return output.safeQuad!({ quad: quad });
         }
+
+        const beam3 = data.moonbites[2] ?? -1;
+        const beam4 = data.moonbites[3] ?? -1;
+        let safe2 = quadrants.filter((q) => q !== beam3 + 1);
+        safe2 = safe2.filter((q) => q !== (beam3 === 0 ? 7 : beam3 - 1));
+        safe2 = safe2.filter((q) => q !== beam4 + 1);
+        safe2 = safe2.filter((q) => q !== (beam4 === 0 ? 7 : beam4 - 1));
+
+        if (safe1[0] === undefined || safe2[0] === undefined)
+          return;
+        if (safe1.length !== 1)
+          return;
+        if (safe2.length !== 1)
+          return;
 
         const quad1 = output[AutumnDir.markFromNum(safe1[0] ?? -1)]!();
-        const quad2 = output[AutumnDir.markFromNum(safe2[0] ?? -1)]!();
-        return output.safeQuadrants!({ quad1: quad1, quad2: quad2 });
+        data.moonquad = output[AutumnDir.markFromNum(safe2[0] ?? -1)]!();
+        return output.safeQuadrants!({ quad1: quad1, quad2: data.moonquad });
       },
-      outputStrings: {
-        safeQuad: {
-          en: '${quad}',
-          ko: '안전: ${quad}',
-        },
-        safeQuadrants: {
-          en: '${quad1} => ${quad2}',
-          ko: '안전: ${quad1} 🔜 ${quad2}',
-        },
-        safeHalf: {
-          en: '${half}',
-          ko: '안전: ${half}',
-        },
-        safeHalfFirst: {
-          en: '${half} => ${quad}',
-          ko: '안전: ${half} 🔜 ${quad}',
-        },
-        safeHalfSecond: {
-          en: '${quad} => ${half}',
-          ko: '안전: ${quad} 🔜 ${half}',
-        },
-        safeHalves: {
-          en: '${half1} => ${half2}',
-          ko: '안전: ${half1} 🔜 ${half2}',
-        },
-        ...AutumnDir.stringsMark,
-      },
+      outputStrings: moonStrings,
     },
     {
       id: 'R8S Beckon Moonlight Spread/Stack',
@@ -718,6 +681,20 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
+      id: 'R8S Beckon Moonlight Quadrant Two',
+      type: 'StartsUsing',
+      // A3C2 => Moonbeam's Bite dash with Left cleave
+      // A3C3 => Moonbeam's Bite dash with Right cleave
+      netRegex: { id: ['A3C2', 'A3C3'], source: 'Moonlit Shadow', capture: true },
+      condition: (data) => {
+        data.moonindex++;
+        return data.moonindex === 2;
+      },
+      delaySeconds: (_data, matches) => parseFloat(matches.castTime),
+      infoText: (data, _matches, output) => output.safeQuad!({ quad: data.moonquad }),
+      outputStrings: moonStrings,
+    },
+    {
       id: 'R8S Weal of Stone Cardinals',
       // This appears to always be cardinals safe
       type: 'StartsUsing',
@@ -740,10 +717,63 @@ const triggerSet: TriggerSet<Data> = {
       response: Responses.bigAoe(),
     },
     {
+      // headmarkers with casts:
+      // A45D (Ultraviolent Ray)
+      // TODO: Determine platform to move to based on player positions/role?
+      id: 'R8S Ultraviolent Ray Target',
+      type: 'HeadMarker',
+      netRegex: { id: '000E' },
+      condition: Conditions.targetIsYou(),
+      infoText: (_data, _matches, output) => {
+        return output.uvRayOnYou!();
+      },
+      outputStrings: {
+        uvRayOnYou: {
+          en: 'UV Ray on YOU',
+          ko: '내게 UV레이',
+        },
+      },
+    },
+    {
       id: 'R8S Twinbite',
       type: 'StartsUsing',
       netRegex: { id: 'A4CD', source: 'Howling Blade', capture: true },
       response: Responses.tankBuster(),
+    },
+    {
+      id: 'R8S Fanged Maw/Perimeter Collect',
+      // A463 Fanged Maw (In cleave)
+      // A464 Fanged Perimeter (Out cleave)
+      type: 'StartsUsing',
+      netRegex: { id: ['A463', 'A464'], source: 'Gleaming Fang', capture: true },
+      run: (data, matches) => data.hblow = matches.id === 'A463' ? 'out' : 'in',
+    },
+    {
+      id: 'R8S Hero\'s Blow',
+      // Has two casts
+      // A45F for Hero's Blow Left cleave
+      // A460 for Hero's Blow Left cleave damage
+      // A461 Hero's Blow Right cleave
+      // A462 Hero's Blow Right cleave damage
+      type: 'StartsUsing',
+      netRegex: { id: ['A45F', 'A461'], source: 'Howling Blade', capture: true },
+      delaySeconds: 0.1,
+      infoText: (data, matches, output) => {
+        const dir = matches.id === 'A45F' ? output.right!() : output.left!();
+        const inout = output[data.hblow ?? 'unknown']!();
+        return output.text!({ inout: inout, dir: dir });
+      },
+      outputStrings: {
+        in: Outputs.in,
+        out: Outputs.out,
+        left: Outputs.left,
+        right: Outputs.right,
+        text: {
+          en: '${inout} + ${dir}',
+          ko: '${inout} + ${dir}',
+        },
+        unknown: Outputs.unknown,
+      },
     },
     {
       // headmarkers with casts:
@@ -784,6 +814,7 @@ const triggerSet: TriggerSet<Data> = {
         'Howling Blade': 'ハウリングブレード',
         'Moonlit Shadow': 'ハウリングブレードの幻影',
         'Wolf of Stone': '土の狼頭',
+        'Gleaming Fang': '光の牙',
       },
     },
   ],

@@ -1,7 +1,9 @@
+import { AutumnDir, MarkerOutputPlus } from '../../../../../resources/autumn';
 import Outputs from '../../../../../resources/outputs';
 import { Responses } from '../../../../../resources/responses';
 import ZoneId from '../../../../../resources/zone_id';
 import { RaidbossData } from '../../../../../types/data';
+import { NetMatches } from '../../../../../types/net_matches';
 import { TriggerSet } from '../../../../../types/trigger';
 
 type News = 'north' | 'east' | 'south' | 'west' | 'unknown';
@@ -38,6 +40,12 @@ const frogIds: { [id: string]: News } = {
   'A70C': 'west',
   'A70D': 'east',
 };
+const dthIds: { [id: string]: 'left' | 'right' } = {
+  'A775': 'right',
+  'A776': 'left',
+  'A724': 'right',
+  'A725': 'left',
+};
 const dancedIds = [
   '9BE2',
   '9BE3',
@@ -47,6 +55,21 @@ const dancedIds = [
   'A36F',
 ] as const;
 
+const getHustleDir = (matches: NetMatches['StartsUsing']): MarkerOutputPlus[] => {
+  const left = dthIds[matches.id] === 'left';
+  const headingAdjust = left ? -(Math.PI / 8) : (Math.PI / 8);
+  let snappedHeading = (parseFloat(matches.heading) + headingAdjust) % Math.PI;
+  if (snappedHeading < -Math.PI)
+    snappedHeading = Math.PI - snappedHeading;
+  snappedHeading %= Math.PI;
+  const snapped = AutumnDir.hdgNum4(snappedHeading);
+  const other = ((snapped + 4) + (left ? 1 : -1)) % 4;
+  return [
+    AutumnDir.outputMarkPlus[snapped] ?? 'unknown',
+    AutumnDir.outputMarkPlus[other] ?? 'unknown',
+  ];
+};
+
 export interface Data extends RaidbossData {
   deepcs: string[];
   side?: 'role' | 'light';
@@ -54,6 +77,8 @@ export interface Data extends RaidbossData {
   frogs: News[];
   waves: { alpha: number; beta: number };
   order?: number;
+  hustles: NetMatches['StartsUsing'][];
+  hustlecnt: number;
 }
 
 const triggerSet: TriggerSet<Data> = {
@@ -65,6 +90,8 @@ const triggerSet: TriggerSet<Data> = {
     infernal: 0,
     frogs: [],
     waves: { alpha: 0, beta: 0 },
+    hustles: [],
+    hustlecnt: 0,
   }),
   triggers: [
     {
@@ -371,10 +398,85 @@ const triggerSet: TriggerSet<Data> = {
         },
       },
     },
+    {
+      id: 'R5S Do the Hustle',
+      type: 'StartsUsing',
+      netRegex: { id: Object.keys(dthIds) },
+      preRun: (data, matches) => data.hustles.push(matches),
+      infoText: (data, _matches, output) => {
+        // Order is double cleave, double cleave, single cleave, triple cleave
+        const expected = [2, 2, 1, 3] as const;
+        if (data.hustles.length < (expected[data.hustlecnt] ?? 0))
+          return;
+
+        const cleaves = data.hustles;
+        const count = data.hustlecnt;
+        data.hustles = [];
+        data.hustlecnt++;
+
+        // Double cleaves from clones
+        if (count === 0 || count === 1) {
+          const [cleave1, cleave2] = cleaves;
+          if (cleave1 === undefined || cleave2 === undefined)
+            return;
+          const safe1 = getHustleDir(cleave1);
+          const safe2 = getHustleDir(cleave2);
+          for (const dir of safe1) {
+            if (safe2.includes(dir))
+              return output[dir]!();
+          }
+          return output['unknown']!();
+        }
+
+        // Single boss cleave
+        if (count === 2) {
+          const [cleave1] = cleaves;
+          if (cleave1 === undefined)
+            return;
+          return dthIds[cleave1.id] === 'left' ? output['markerE']!() : output['markerW']!();
+        }
+
+        // Double cleaves from clones plus boss cleave
+        if (count === 3) {
+          const cleave3 = cleaves.find((cleave) => ['A724', 'A725'].includes(cleave.id));
+          const [cleave1, cleave2] = cleaves.filter((c) => c !== cleave3);
+          if (cleave1 === undefined || cleave2 === undefined || cleave3 === undefined)
+            return;
+          const safe1 = getHustleDir(cleave1);
+          const safe2 = getHustleDir(cleave2);
+          let safe: MarkerOutputPlus = 'unknown';
+          for (const dir of safe1) {
+            if (safe2.includes(dir))
+              safe = dir;
+          }
+          const arrow = dthIds[cleave3.id] === 'left' ? 'arrowE' : 'arrowW';
+          return output.combo!({ marker: output[safe]!(), arrow: output[arrow]!() });
+        }
+        return output['unknown']!();
+      },
+      outputStrings: {
+        combo: {
+          en: '${marker} ${arrow}',
+          ko: '${marker} ${arrow}',
+        },
+        ...AutumnDir.stringsMarkPlus,
+        ...AutumnDir.stringsArrowPlus,
+      },
+    },
   ],
   timelineReplace: [
     {
+      locale: 'en',
+      replaceText: {
+        'Flip to A-side/Flip to B-side': 'Flip to A/B-side',
+        'Play A-side/Play B-side': 'Play A/B-side',
+        '2-snap Twist & Drop the Needle/3-snap Twist & Drop the Needle/4-snap Twist & Drop the Needle':
+          '2/3/4-snap Twist',
+      },
+    },
+    {
       'locale': 'de',
+      'missingTranslations': true,
       'replaceSync': {
         'Dancing Green': 'Springhis Khan',
         'Frogtourage': 'Schenkelschwinger',
@@ -383,6 +485,7 @@ const triggerSet: TriggerSet<Data> = {
     },
     {
       'locale': 'fr',
+      'missingTranslations': true,
       'replaceSync': {
         'Dancing Green': 'Dancing Green',
         'Frogtourage': 'Danceur batracien',
@@ -391,6 +494,7 @@ const triggerSet: TriggerSet<Data> = {
     },
     {
       'locale': 'ja',
+      'missingTranslations': true,
       'replaceSync': {
         'Dancing Green': 'ダンシング・グリーン',
         'Frogtourage': 'カモン！ フロッグダンサー',
@@ -412,13 +516,13 @@ const triggerSet: TriggerSet<Data> = {
         'Ensemble Assemble': 'ダンサーズ・アッセンブル',
         'Arcady Night Fever': 'アルカディア・ナイトフィーバー',
         'Get Down!': 'ゲットダウン！',
-        'Let\'s Dance': 'レッツダンス！',
+        'Let\'s Dance(?!!)': 'レッツダンス！',
         'Freak Out': '静音爆発',
         'Let\'s Pose': 'レッツポーズ！',
         'Ride the Waves': 'ウェーブ・オン・ウェーブ',
         'Quarter Beats': '4ビート',
         'Eighth Beats': '8ビート',
-        'Frogtourage': 'カモン！ フロッグダンサー',
+        'Frogtourage(?! )': 'カモン！ フロッグダンサー',
         'Moonburn': 'ムーンバーン',
         'Back-up Dance': 'ダンシングウェーブ',
         'Arcady Night Encore Starts': 'ナイトフィーバー・アンコール',
