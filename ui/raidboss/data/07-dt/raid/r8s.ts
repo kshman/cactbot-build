@@ -77,6 +77,7 @@ export interface Data extends RaidbossData {
   moonbites: number[];
   // Phase 2
   hblow?: 'in' | 'out';
+  platforms: number;
   //
   collect: string[];
 }
@@ -93,6 +94,7 @@ const triggerSet: TriggerSet<Data> = {
     surge: 0,
     moonindex: 0,
     moonbites: [],
+    platforms: 5,
     collect: [],
   }),
   triggers: [
@@ -233,33 +235,6 @@ const triggerSet: TriggerSet<Data> = {
       response: Responses.bigAoe(),
     },
     {
-      id: 'R8S Aero III',
-      type: 'StartsUsing',
-      netRegex: { id: 'A3B7', source: 'Howling Blade', capture: false },
-      response: Responses.knockback(),
-    },
-    {
-      id: 'R8S Titanic Pursuit',
-      type: 'StartsUsing',
-      netRegex: { id: 'A3C7', source: 'Howling Blade', capture: false },
-      response: Responses.aoe(),
-    },
-    {
-      id: 'R8S Tracking Tremors',
-      type: 'StartsUsing',
-      netRegex: { id: 'A3B9', source: 'Howling Blade', capture: false },
-      durationSeconds: 9,
-      infoText: (_data, _matches, output) => output.text!(),
-      outputStrings: {
-        text: {
-          en: 'Stack x8',
-          ja: '頭割り x8',
-          cn: '8次分摊',
-          ko: '뭉쳐욧 x8',
-        },
-      },
-    },
-    {
       id: 'R8S Breath of Decay Rotation',
       type: 'StartsUsing',
       netRegex: { id: 'A3B4', source: 'Wolf of Wind', capture: true },
@@ -289,12 +264,25 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
+      id: 'R8S Aero III',
+      // Happens twice, but Prowling Gale occurs simultaneously on the second one
+      type: 'StartsUsing',
+      netRegex: { id: 'A3B7', source: 'Howling Blade', capture: false },
+      suppressSeconds: 16,
+      response: Responses.knockback(),
+    },
+    {
       id: 'R8S Prowling Gale Tower/Tether',
       // Calls each tether or get towers
       // TODO: Support getting a tower and tether?
       type: 'Tether',
       netRegex: { id: '0039', capture: true },
-      preRun: (data) => data.galecnt = data.galecnt + 1,
+      preRun: (data, matches) => {
+        // Set galeTetherDirNum to avoid triggering tower call
+        if (data.me === matches.target)
+          data.galedir = -1;
+        data.galecnt++;
+      },
       promise: async (data, matches) => {
         if (data.me !== matches.target)
           return;
@@ -313,20 +301,60 @@ const triggerSet: TriggerSet<Data> = {
         if (data.galedir !== undefined && data.me === matches.target) {
           // This will trigger for each tether a player has
           const dir = output[AutumnDir.markFromNum(data.galedir)]!();
-          return output.stretchTetherDir!({ dir: dir });
+          return output.knockbackTetherDir!({ dir: dir });
         }
 
         if (data.galedir === undefined && data.galecnt === 4)
-          return output.getTowers!();
+          return output.knockbackTowers!();
       },
       outputStrings: {
-        getTowers: Outputs.getTowers,
-        stretchTetherDir: {
-          en: 'Stretch tether: ${dir}',
-          ko: '줄 늘려요: ${dir}',
+        knockbackTetherDir: {
+          en: 'Knockback tether: ${dir}',
+          ko: '넉백 줄: ${dir}',
+        },
+        knockbackTowers: {
+          en: 'Knockback Towers',
+          ko: '넉백 타워',
         },
         ...AutumnDir.stringsMark,
       },
+    },
+    {
+      id: 'R8S Titanic Pursuit',
+      type: 'StartsUsing',
+      netRegex: { id: 'A3C7', source: 'Howling Blade', capture: false },
+      response: Responses.aoe(),
+    },
+    {
+      id: 'R8S Tracking Tremors',
+      type: 'StartsUsing',
+      netRegex: { id: 'A3B9', source: 'Howling Blade', capture: false },
+      durationSeconds: 9,
+      infoText: (_data, _matches, output) => output.text!(),
+      outputStrings: {
+        text: {
+          en: 'Stack x8',
+          ja: '頭割り x8',
+          cn: '8次分摊',
+          ko: '뭉쳐욧 x8',
+        },
+      },
+    },
+    {
+      id: 'R8S Great Divide',
+      type: 'HeadMarker',
+      netRegex: { id: '0256', capture: true },
+      response: Responses.sharedTankBuster(),
+    },
+    {
+      id: 'R8S Howling Havoc',
+      // There are two additional casts, but only the Wolf Of Stone cast one (A3DD) does damage
+      // A3DC Howling Havoc from Wolf of Stone self-cast
+      // A3DB Howling Havoc from Wolf of Wind self-cast
+      type: 'StartsUsing',
+      netRegex: { id: 'A3DD', source: 'Wolf Of Stone', capture: false },
+      delaySeconds: 2,
+      response: Responses.aoe(),
     },
     {
       id: 'R8S Tactical Pack Tethers',
@@ -460,6 +488,13 @@ const triggerSet: TriggerSet<Data> = {
         }
       },
       outputStrings: swStrings,
+    },
+    {
+      id: 'R8S Ravenous Saber',
+      type: 'StartsUsing',
+      netRegex: { id: 'A749', source: 'Howling Blade', capture: false },
+      durationSeconds: 7,
+      response: Responses.bigAoe(),
     },
     {
       id: 'R8S Spread/Stack Collect',
@@ -714,7 +749,10 @@ const triggerSet: TriggerSet<Data> = {
       id: 'R8S Quake III',
       type: 'StartsUsing',
       netRegex: { id: 'A45A', source: 'Howling Blade', capture: false },
-      response: Responses.bigAoe(),
+      alertText: (_data, _matches, output) => output.healerGroups!(),
+      outputStrings: {
+        healerGroups: Outputs.healerGroups,
+      },
     },
     {
       // headmarkers with casts:
@@ -802,6 +840,38 @@ const triggerSet: TriggerSet<Data> = {
         purgeOnPlayers: {
           en: 'Elemental Purge on ${player1} and ${player2}',
           ko: '퍼지: ${player1}, ${player2}',
+        },
+      },
+    },
+    {
+      id: 'R8S Howling Eight',
+      type: 'StartsUsing',
+      netRegex: { id: 'A494', source: 'Howling Blade', capture: false },
+      durationSeconds: 15,
+      infoText: (_data, _matches, output) => output.text!(),
+      outputStrings: {
+        text: {
+          en: 'Stack x8',
+          ja: '頭割り x8',
+          ko: '뭉쳐요 x8',
+        },
+      },
+    },
+    {
+      id: 'R8S Mooncleaver Platform',
+      // Trigger on last hit of Howling Eight (AA0A for first set, A494 others)
+      type: 'Ability',
+      netRegex: { id: ['A494', 'AA0A'], source: 'Howling Blade', capture: false },
+      condition: (data) => {
+        // Tracking how many platforms will remain
+        data.platforms--;
+        return data.platforms > 0;
+      },
+      infoText: (_data, _matches, output) => output.changePlatform!(),
+      outputStrings: {
+        changePlatform: {
+          en: 'Change Platform',
+          ko: '플랫폼 갈아타요',
         },
       },
     },
