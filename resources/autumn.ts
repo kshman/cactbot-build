@@ -53,7 +53,7 @@ const outputNum: number[] = [0, 1, 2, 3, 4, 5, 6, 7];
 const outputNumPlus: number[] = [0, 1, 2, 3];
 const outputNumCross: number[] = [0, 1, 2, 3];
 
-export type MarkerOutput8 =
+export type MarkerOutput =
   | 'markerN'
   | 'markerNE'
   | 'markerE'
@@ -63,20 +63,20 @@ export type MarkerOutput8 =
   | 'markerW'
   | 'markerNW'
   | 'unknown';
-export type MarkerOutputCardinal =
+export type MarkerOutputPlus =
   | 'markerN'
   | 'markerE'
   | 'markerS'
   | 'markerW'
   | 'unknown';
-export type MarkerOutputIntercard =
+export type MarkerOutputCross =
   | 'markerNE'
   | 'markerSE'
   | 'markerSW'
   | 'markerNW'
   | 'unknown';
 
-const outputMark: MarkerOutput8[] = [
+const outputMark: MarkerOutput[] = [
   'markerN',
   'markerNE',
   'markerE',
@@ -86,13 +86,13 @@ const outputMark: MarkerOutput8[] = [
   'markerW',
   'markerNW',
 ];
-const outputMarkPlus: MarkerOutputCardinal[] = [
+const outputMarkPlus: MarkerOutputPlus[] = [
   'markerN',
   'markerE',
   'markerS',
   'markerW',
 ];
-const outputMarkCross: MarkerOutputIntercard[] = [
+const outputMarkCross: MarkerOutputCross[] = [
   'markerNE',
   'markerSE',
   'markerSW',
@@ -125,11 +125,11 @@ const stringsMarkCross: OutputStrings = {
   unknown: Outputs.unknown,
 };
 
-const markFromNumFunc = (dirNum: number): MarkerOutput8 => {
+const markFromNumFunc = (dirNum: number): MarkerOutput => {
   return outputMark[dirNum] ?? 'unknown';
 };
 
-export type ArrowOutput8 =
+export type ArrowOutput =
   | 'arrowN'
   | 'arrowNE'
   | 'arrowE'
@@ -139,20 +139,20 @@ export type ArrowOutput8 =
   | 'arrowW'
   | 'arrowNW'
   | 'unknown';
-export type ArrowOutputCardinal =
+export type ArrowOutputPlus =
   | 'arrowN'
   | 'arrowE'
   | 'arrowS'
   | 'arrowW'
   | 'unknown';
-export type ArrowOutputIntercard =
+export type ArrowOutputCross =
   | 'arrowNE'
   | 'arrowSE'
   | 'arrowSW'
   | 'arrowNW'
   | 'unknown';
 
-const outputArrow: ArrowOutput8[] = [
+const outputArrow: ArrowOutput[] = [
   'arrowN',
   'arrowNE',
   'arrowE',
@@ -162,13 +162,13 @@ const outputArrow: ArrowOutput8[] = [
   'arrowW',
   'arrowNW',
 ];
-const outputArrowPlus: ArrowOutputCardinal[] = [
+const outputArrowPlus: ArrowOutputPlus[] = [
   'arrowN',
   'arrowE',
   'arrowS',
   'arrowW',
 ];
-const outputArrowCross: ArrowOutputIntercard[] = [
+const outputArrowCross: ArrowOutputCross[] = [
   'arrowNE',
   'arrowSE',
   'arrowSW',
@@ -226,7 +226,7 @@ const stringsDirArrowCross: OutputStrings = {
   unknown: Outputs.unknown,
 };
 
-const arrowFromNumFunc = (dirNum: number): ArrowOutput8 => {
+const arrowFromNumFunc = (dirNum: number): ArrowOutput => {
   return outputArrow[dirNum] ?? 'unknown';
 };
 
@@ -251,7 +251,7 @@ export const AutumnDir = {
   stringsMarkPlus: stringsMarkPlus,
   stringsMarkCross: stringsMarkCross,
   markFromNum: markFromNumFunc,
-  xyToMark: (x: number, y: number, cx: number, cy: number): MarkerOutput8 => {
+  xyToMark: (x: number, y: number, cx: number, cy: number): MarkerOutput => {
     const n = xyToNum8(x, y, cx, cy);
     return markFromNumFunc(n);
   },
@@ -266,7 +266,7 @@ export const AutumnDir = {
   stringsDirArrowPlus: stringsDirArrowPlus,
   stringsDirArrowCross: stringsDirArrowCross,
   arrowFromNum: arrowFromNumFunc,
-  xyToArrow: (x: number, y: number, cx: number, cy: number): ArrowOutput8 => {
+  xyToArrow: (x: number, y: number, cx: number, cy: number): ArrowOutput => {
     const n = xyToNum8(x, y, cx, cy);
     return arrowFromNumFunc(n);
   },

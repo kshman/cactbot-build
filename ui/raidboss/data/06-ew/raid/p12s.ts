@@ -1,4 +1,4 @@
-import Autumn, { ArrowOutput8, AutumnDir } from '../../../../../resources/autumn';
+import Autumn, { ArrowOutput, AutumnDir } from '../../../../../resources/autumn';
 import Conditions from '../../../../../resources/conditions';
 import Outputs from '../../../../../resources/outputs';
 import { callOverlayHandler } from '../../../../../resources/overlay_plugin_api';
@@ -369,9 +369,9 @@ const getPalladionRayEscape = (
   return output.raydown!({ safe: safe });
 };
 
-const ultimaRayDpsArrows: ArrowOutput8[] = ['arrowE', 'arrowSE', 'arrowS', 'arrowSW'];
+const ultimaRayDpsArrows: ArrowOutput[] = ['arrowE', 'arrowSE', 'arrowS', 'arrowSW'];
 
-const getUltimaRayArrow = (isDps: boolean, dir1: ArrowOutput8, dir2: ArrowOutput8) => {
+const getUltimaRayArrow = (isDps: boolean, dir1: ArrowOutput, dir2: ArrowOutput) => {
   if (isDps) {
     if (ultimaRayDpsArrows.includes(dir1))
       return dir1;
@@ -4632,7 +4632,7 @@ const triggerSet: TriggerSet<Data> = {
         const uavCenterY = 90;
 
         if (data.options.AutumnStyle) {
-          const unsafeMap: Partial<Record<ArrowOutput8, ArrowOutput8>> = {
+          const unsafeMap: Partial<Record<ArrowOutput, ArrowOutput>> = {
             arrowN: 'arrowS',
             arrowNE: 'arrowSW',
             arrowE: 'arrowW',
@@ -4642,7 +4642,7 @@ const triggerSet: TriggerSet<Data> = {
             arrowW: 'arrowE',
             arrowNW: 'arrowSE',
           } as const;
-          let safeDirs = Object.keys(unsafeMap) as ArrowOutput8[];
+          let safeDirs = Object.keys(unsafeMap) as ArrowOutput[];
           data.darknessClones.forEach((clone) => {
             const x = parseFloat(clone.x);
             const y = parseFloat(clone.y);
@@ -4714,7 +4714,7 @@ const triggerSet: TriggerSet<Data> = {
         const uavCenterY = 90;
 
         if (data.options.AutumnStyle) {
-          const safeMap: Record<ArrowOutput8, readonly ArrowOutput8[]> = {
+          const safeMap: Record<ArrowOutput, readonly ArrowOutput[]> = {
             // for each dir, identify the two dirs 90 degrees away
             arrowN: ['arrowW', 'arrowE'],
             arrowNE: ['arrowNW', 'arrowSE'],
