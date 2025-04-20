@@ -31,7 +31,6 @@ npm-package/
 build/백업
 build/작업용
 build/타임라인
-build/git-pull-fork.cmd
 actions-latest.json
 signatures-global-latest.json
 statuses-latest.json
