@@ -356,7 +356,7 @@ Options.Triggers.push({
       outputStrings: {
         text: {
           en: 'Wing bomb',
-          ko: '날개 폭탄, 그냥 모래로',
+          ko: '날개 폭탄, 모래로',
         },
       },
     },
@@ -369,7 +369,7 @@ Options.Triggers.push({
       outputStrings: {
         text: {
           en: 'Painted bomb',
-          ko: '폭탄, 흐르는 모래로',
+          ko: '그냥 폭탄, 늪으로!',
         },
       },
     },
@@ -482,8 +482,10 @@ Options.Triggers.push({
       infoText: (_data, _matches, output) => output.fiveAOE(),
       outputStrings: {
         fiveAOE: {
-          en: '5x AoEs',
-          ko: '5x 전체공격',
+          en: 'Raidwide x5',
+          ja: '頭割り x5',
+          cn: '5次分摊',
+          ko: '뭉쳐욧 x5',
         },
       },
     },
