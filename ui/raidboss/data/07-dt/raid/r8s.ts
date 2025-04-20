@@ -77,6 +77,7 @@ export interface Data extends RaidbossData {
   moonbites: number[];
   // Phase 2
   hblow?: 'in' | 'out';
+  twofold?: boolean;
   platforms: number;
   //
   collect: string[];
@@ -255,11 +256,11 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         clockwise: {
           en: '<== Clockwise',
-          ko: '❰❰❰시계방향',
+          ko: '❰❰❰왼쪽으로',
         },
         counterclockwise: {
           en: 'Counterclockwise ==>',
-          ko: '반시계방향❱❱❱',
+          ko: '오른쪽으로❱❱❱',
         },
       },
     },
@@ -352,8 +353,9 @@ const triggerSet: TriggerSet<Data> = {
       // A3DC Howling Havoc from Wolf of Stone self-cast
       // A3DB Howling Havoc from Wolf of Wind self-cast
       type: 'StartsUsing',
-      netRegex: { id: 'A3DD', source: 'Wolf Of Stone', capture: false },
-      delaySeconds: 2,
+      netRegex: { id: 'A3DD', source: 'Wolf Of Stone', capture: true },
+      // 4.7s castTime
+      delaySeconds: (_data, matches) => parseFloat(matches.castTime) - 2,
       response: Responses.aoe(),
     },
     {
@@ -844,6 +846,45 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
+      id: 'R8S Twofold Tempest Tether',
+      type: 'Tether',
+      netRegex: { id: '0054', capture: true },
+      infoText: (data, matches, output) => {
+        if (matches.target === data.me) {
+          data.twofold = true;
+          return output.tetherOnYou!();
+        }
+        data.twofold = false;
+        const player = data.party.member(matches.target);
+        return output.tetherOnPlayer!({ player: player });
+      },
+      outputStrings: {
+        tetherOnYou: {
+          en: 'Twinfold Tether on YOU',
+          ko: '내게 줄',
+        },
+        tetherOnPlayer: {
+          en: 'Twinfold Tether on ${player}',
+          ko: '줄: ${player}',
+        },
+      },
+    },
+    {
+      id: 'R8S Twofold Tempest Tether Pass',
+      // Call pass after the puddle has been dropped
+      type: 'Ability',
+      netRegex: { id: 'A472', source: 'Howling Blade', capture: false },
+      condition: (data) => data.twofold,
+      suppressSeconds: 1,
+      infoText: (_data, _matches, output) => output.passTether!(),
+      outputStrings: {
+        passTether: {
+          en: 'Pass Tether',
+          ko: '줄 건네요',
+        },
+      },
+    },
+    {
       id: 'R8S Howling Eight',
       type: 'StartsUsing',
       netRegex: { id: 'A494', source: 'Howling Blade', capture: false },
@@ -853,7 +894,8 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: 'Stack x8',
           ja: '頭割り x8',
-          ko: '뭉쳐요 x8',
+          cn: '8次分摊',
+          ko: '뭉쳐욧 x8',
         },
       },
     },
