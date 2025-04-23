@@ -117,16 +117,25 @@ Options.Triggers.push({
         ...Directions.outputStrings8Dir,
         swSeStay: {
           en: '${dir1} ${sep} ${dir2} (Stay)',
+          de: '${dir1} ${sep} ${dir2} (bleib Stehen)',
+          fr: '${dir1} ${sep} ${dir2} (Restez)',
+          cn: '${dir1} ${sep} ${dir2} (不动)',
           ko: '${dir1} ${sep} ${dir2} (그대로)',
         },
         separator: {
           en: ' => ',
+          de: ' => ',
+          fr: ' => ',
           ja: ' => ',
-          ko: ' 🔜 ',
+          cn: ' => ',
+          ko: ' => ',
         },
         combo: {
           en: '${dirs}',
+          de: '${dirs}',
+          fr: '${dirs}',
           ja: '${dirs}',
+          cn: '${dirs}',
           ko: '${dirs}',
         },
       },
@@ -161,12 +170,18 @@ Options.Triggers.push({
       outputStrings: {
         cardsIntercards: {
           en: 'Cards => Intercards',
+          de: 'Karten => Interkardinal',
+          fr: 'Cardinal => Intercardinal',
           ja: '十字 => 斜め',
+          cn: '十字 => 斜角',
           ko: '십자 🔜 비스듬히',
         },
         intercardsCards: {
           en: 'Intercards => Cards',
+          de: 'Interkardinal => Karten',
+          fr: 'Intercardinal => Cardinal',
           ja: '斜め => 十字',
+          cn: '斜角 => 十字',
           ko: '비스듬 🔜 십자로',
         },
       },
@@ -180,7 +195,10 @@ Options.Triggers.push({
       outputStrings: {
         text: {
           en: 'Aim for uncracked tile',
+          de: 'Ziehle auf nich gerissene Fläche',
+          fr: 'Visez une tuile non-brisée',
           ja: '割れていない床を狙う',
+          cn: '瞄准完好的平台',
           ko: '안부셔진 타일로 튕겨요',
         },
       },
@@ -218,7 +236,10 @@ Options.Triggers.push({
       outputStrings: {
         text: {
           en: 'West => East at marker',
+          de: 'Westen => Osten bei der Markierung',
+          fr: 'Ouest => Est depuis le marqueur',
           ja: 'マーカーの西 => マーカーの東',
+          cn: '标记左侧 => 标记右侧',
           ko: '서쪽 🔜 마커의 동쪽',
         },
       },
@@ -232,7 +253,10 @@ Options.Triggers.push({
       outputStrings: {
         text: {
           en: 'East => West at marker',
+          de: 'Osten => Westen bei der Markierung',
+          fr: 'Est => Ouest depuis le marqueur',
           ja: 'マーカーの東 => マーカーの西',
+          cn: '标记右侧 => 标记左侧',
           ko: '동쪽 🔜 마커의 서쪽',
         },
       },
@@ -246,7 +270,10 @@ Options.Triggers.push({
       outputStrings: {
         text: {
           en: 'West => East at marker',
+          de: 'Westen => Osten bei der Markierung',
+          fr: 'Ouest => Est depuis le marqueur',
           ja: 'マーカーの西 => マーカーの東',
+          cn: '标记左侧 => 标记右侧',
           ko: '서쪽 🔜 마커의 동쪽',
         },
       },
@@ -260,7 +287,10 @@ Options.Triggers.push({
       outputStrings: {
         text: {
           en: 'East => West at marker',
+          de: 'Osten => Westen bei der Markierung',
+          fr: 'Est => Ouest depuis le marqueur',
           ja: 'マーカーの東 => マーカーの西',
+          cn: '标记右侧 => 标记左侧',
           ko: '동쪽 🔜 마커의 서쪽',
         },
       },

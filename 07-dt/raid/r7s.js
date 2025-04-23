@@ -138,36 +138,6 @@ Options.Triggers.push({
       },
     },
     {
-      id: 'R7S Blooming Abomination',
-      type: 'AddedCombatant',
-      netRegex: { npcNameId: '13755', capture: false },
-      condition: (data) => Autumn.isTank(data.moks),
-      delaySeconds: 2,
-      suppressSeconds: 1,
-      infoText: (_data, _matches, output) => output.text(),
-      outputStrings: {
-        text: {
-          en: 'Catch adds',
-          ko: '쫄 헤이트!',
-        },
-      },
-    },
-    {
-      id: 'R7S Winding Wildwinds',
-      type: 'StartsUsing',
-      netRegex: { id: 'A90D', source: 'Blooming Abomination', capture: false },
-      condition: (data) => data.CanSilence(),
-      durationSeconds: 5,
-      suppressSeconds: 5,
-      infoText: (_data, _matches, output) => output.text(),
-      outputStrings: {
-        text: {
-          en: 'Interrupt',
-          ko: '와인딩 인터럽트!!',
-        },
-      },
-    },
-    {
       id: 'R7S Quarry Swamp',
       type: 'StartsUsing',
       netRegex: { id: 'A575', source: 'Brute Abombinator', capture: false },
@@ -302,19 +272,6 @@ Options.Triggers.push({
       },
     },
     {
-      id: 'R7S Sporesplosion',
-      type: 'StartsUsing',
-      netRegex: { id: 'A58A', source: 'Brute Abombinator', capture: false },
-      durationSeconds: 10,
-      infoText: (_data, _matches, output) => output.text(),
-      outputStrings: {
-        text: {
-          en: '3 => 1',
-          ko: '3 🔜 1',
-        },
-      },
-    },
-    {
       id: 'R7S Demolition Deathmatch',
       type: 'StartsUsing',
       netRegex: { id: 'A596', source: 'Brute Abombinator', capture: false },
@@ -343,19 +300,22 @@ Options.Triggers.push({
       },
     },
     {
+      id: 'R7S Killer Seeds',
+      type: 'StartsUsing',
+      netRegex: { id: 'A59B', source: 'Brute Abombinator', capture: false },
+      suppressSeconds: 1,
+      alertText: (_data, _matches, output) => output.text(),
+      outputStrings: {
+        text: Outputs.stackPartner,
+      },
+    },
+    {
       id: 'R7S Powerslam',
       type: 'StartsUsing',
       netRegex: { id: 'A59E', source: 'Brute Abombinator', capture: false },
       durationSeconds: 5,
-      response: Responses.bigAoe(),
+      response: Responses.bigAoe('alert'),
     },
-    /*
-        {
-          id: 'R7S Stoneringer 2',
-          type: 'StartsUsing',
-          netRegex: { id: ['A5A0', 'A5A1'], source: 'Brute Abombinator' },
-        },
-        */
     {
       id: 'R7S Stoneringer 2 Brutish Swing',
       type: 'StartsUsing',
@@ -448,6 +408,13 @@ Options.Triggers.push({
     },
   ],
   timelineReplace: [
+    {
+      'locale': 'en',
+      'replaceText': {
+        'Smash Here/Smash There': 'Smash Here/There',
+        'Winding Wildwinds/Crossing Crosswinds': 'Wildwinds/Crosswinds',
+      },
+    },
     {
       'locale': 'ja',
       'missingTranslations': true,
