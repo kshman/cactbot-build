@@ -84,6 +84,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         repeatedAOE: {
           en: 'Continuous light AoE',
+          de: 'Durchgehende Licht AoE',
           cn: '连续小AoE',
           ko: '연속 격자 장판',
         },
@@ -129,6 +130,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         regaliaYou: {
           en: 'Laser tether on YOU',
+          de: 'Laserverbindung auf DIR',
           cn: '激光连线点名',
           ko: '내게 유도 레이저 줄',
         },
@@ -158,6 +160,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         floating: {
           en: 'Gravitation -- Levitating',
+          de: 'Gravitation -- Schweben',
           cn: '重力 -- 上浮',
           ko: '곧 뜰꺼예요!',
         },
@@ -176,6 +179,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         falling: {
           en: 'Gravitation -- Falling',
+          de: 'Gravitation -- Fallen',
           cn: '重力 -- 下降',
           ko: '곧 내려가요!',
         },
@@ -194,6 +198,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         floating: {
           en: 'Gravitation -- Levitating',
+          de: 'Gravitation -- Schweben',
           cn: '重力 -- 上浮',
           ko: '곧 뜰꺼예요!',
         },
@@ -216,11 +221,13 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         fallCastle: {
           en: 'In front of ground windows',
+          de: 'Sei vor dem Fenster am Boden',
           cn: '正对下层空洞',
           ko: '아랫쪽 구멍으로',
         },
         floatCastle: {
           en: 'In front of middle windows',
+          de: 'Sei vor dem Fenster in der Mitte',
           cn: '正对上层空洞',
           ko: '윗쪽 구멍으로',
         },
@@ -234,6 +241,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         getInDonut: {
           en: 'Get in robot circle',
+          de: 'Geh in den Roboterkreis',
           cn: '小月环',
           ko: '로봇 동글이 안으로',
         },
@@ -263,6 +271,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         gazeLater: {
           en: 'Gaze on you soon',
+          de: 'Bald: Blick auf dir',
           cn: '石化眼点名',
           ko: '내게 곧 눈깔',
         },
@@ -288,11 +297,13 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         shriekYou: {
           en: 'Gaze -- look away from ${otherTarget}',
+          de: 'Blick -- schau weg von ${otherTarget}',
           cn: '石化眼 -- 背对 ${otherTarget}',
           ko: '내게 눈깔! 자리 비켜줘욧! (${otherTarget})',
         },
         shriekOthers: {
           en: 'Look away from ${comboTargets}',
+          de: 'Schau weg von ${comboTargets}',
           cn: '背对 ${comboTargets}',
           ko: '보면 안되요: ${comboTargets}',
         },
@@ -307,6 +318,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         bombLater: {
           en: 'Acceleration Bomb soon',
+          de: 'Bald: Beschleunigungsbombe',
           cn: '稍后 加速度炸弹',
           ko: '곧 가속 폭탄',
         },
@@ -335,6 +347,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         flareMarker: {
           en: 'Flare on YOU',
+          de: 'Flare auf DIR',
           cn: '核爆点名',
           ko: '내게 플레어',
         },
@@ -362,6 +375,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         fiveAOE: {
           en: '5x AoEs',
+          de: '5x AoEs',
           cn: 'AoE (5次)',
           ko: '5x 전체공격',
         },
@@ -488,7 +502,7 @@ const triggerSet: TriggerSet<Data> = {
         'Brutal Crown': '王权残暴',
         'Castellation': '护城墙',
         'Coronation': '终端发射',
-        'Divide And Conquer': '分治法',
+        'Divide and Conquer': '分治法',
         'Downburst': '下行突风',
         'Dynastic Diadem': '王冠之力',
         'Legitimate Force': '合法武力',
