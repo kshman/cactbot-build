@@ -340,9 +340,9 @@ const triggerSet: TriggerSet<Data> = {
       netRegex: { id: '9752', source: 'Brute Bomber', capture: false },
       delaySeconds: 20,
       durationSeconds: 7,
-      infoText: (_data, _matches, output) => output.spread!(),
+      infoText: (_data, _matches, output) => output.positions!(),
       outputStrings: {
-        spread: Outputs.spreadOwn,
+        positions: Outputs.positions,
       },
     },
     {

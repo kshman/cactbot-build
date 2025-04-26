@@ -372,7 +372,7 @@ const triggerSet: TriggerSet<Data> = {
             ko: '${action} ${dir1}${dir2}',
           },
           stack: Outputs.stacks,
-          spread: Outputs.spreadOwn,
+          spread: Outputs.positions,
           ...AutumnDir.stringsMark,
         };
         const image = data.actors[matches.id];
@@ -437,7 +437,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '${action} ${dir1}${dir2}',
         },
         stack: Outputs.stacks,
-        spread: Outputs.spreadOwn,
+        spread: Outputs.positions,
         ...AutumnDir.stringsMark,
       },
     },

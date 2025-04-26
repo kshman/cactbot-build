@@ -147,7 +147,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '나르샤! (${act})',
         },
         pair: Outputs.stackPartner,
-        light: Outputs.stackGroup,
+        light: Outputs.healerGroups,
         unknown: Outputs.unknown,
       },
     },
@@ -168,7 +168,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         pair: Outputs.stackPartner,
-        light: Outputs.stackGroup,
+        light: Outputs.healerGroups,
         unknown: Outputs.unknown,
       },
     },
@@ -262,16 +262,11 @@ const triggerSet: TriggerSet<Data> = {
             if ((comb & styleFlags.mbol) !== 0)
               mesg = output.wingmbol!(); // 날개 + 몰볼
           }
-          let omk = start;
-          if (!Autumn.hasParam('markex', data.options.AutumnParameter)) {
-            const exmap: { [id: number]: number } = { 1: 3, 3: 5, 5: 7, 7: 1 } as const;
-            omk = exmap[start]!;
-          }
           const ar = AutumnDir.arrowFromNum(start);
-          const mk = AutumnDir.markFromNum(omk);
+          const dir = Directions.outputFrom8DirNum(start);
           return output.atext!({
             arrow: output[ar]!(),
-            mark: output[mk]!(),
+            dir: output[dir]!(),
             mesg: mesg,
           });
         }
@@ -287,8 +282,8 @@ const triggerSet: TriggerSet<Data> = {
           ko: '${dir1} 시작, ${dir2}로',
         },
         atext: {
-          en: '${arrow}${mark} ${mesg}',
-          ko: '${arrow}${mark} ${mesg}',
+          en: '${arrow}${dir} ${mesg}',
+          ko: '${arrow}${dir} ${mesg}',
         },
         succ: {
           en: 'Succubus x2',
@@ -319,7 +314,6 @@ const triggerSet: TriggerSet<Data> = {
           ko: '날개 안됨 + 몰볼 안됨',
         },
         ...AutumnDir.stringsArrowCross,
-        ...AutumnDir.stringsMarkCross,
         ...Directions.outputStringsIntercardDir,
         unknown: Outputs.unknown,
       },
