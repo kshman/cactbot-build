@@ -91,14 +91,13 @@ export interface Data extends RaidbossData {
   // Phase 1
   decays: number;
   gales: number;
-  swnum?: number;
-  swval?: 'stone' | 'wind';
-  surge: number;
-  packs: number;
-  spread?: boolean;
-  moonindex: number;
-  moonbites: number[];
-  moonquad?: number;
+  tpnum?: number;
+  tpswv?: 'stone' | 'wind';
+  tpsurge: number;
+  tpcount: number;
+  bmindex: number;
+  bmbites: number[];
+  bmquad?: number;
   // Phase 2
   hblow?: 'in' | 'out';
   hsafe?: number;
@@ -112,6 +111,7 @@ export interface Data extends RaidbossData {
   chindex: number;
   platforms: number;
   //
+  spread?: boolean;
   collect: string[];
 }
 
@@ -123,10 +123,10 @@ const triggerSet: TriggerSet<Data> = {
     phase: 'door',
     decays: 0,
     gales: 0,
-    packs: 0,
-    surge: 0,
-    moonindex: 0,
-    moonbites: [],
+    tpcount: 0,
+    tpsurge: 0,
+    bmindex: 0,
+    bmbites: [],
     tfindex: 0,
     chindex: 0,
     platforms: 5,
@@ -384,13 +384,13 @@ const triggerSet: TriggerSet<Data> = {
         // 1127 = Stone (Yellow Cube) Debuff
         // 1128 = Wind (Green Sphere) Debuff
         const time = parseFloat(matches.duration);
-        data.swnum = time < 22 ? 1 : time < 38 ? 2 : 3;
-        data.swval = matches.effectId === '1127' ? 'stone' : 'wind';
+        data.tpnum = time < 22 ? 1 : time < 38 ? 2 : 3;
+        data.tpswv = matches.effectId === '1127' ? 'stone' : 'wind';
       },
       durationSeconds: 5,
       infoText: (data, _matches, output) => {
-        const debuff = output[data.swval ?? 'unknown']!();
-        return output.combo!({ debuff: debuff, num: data.swnum });
+        const debuff = output[data.tpswv ?? 'unknown']!();
+        return output.combo!({ debuff: debuff, num: data.tpnum });
       },
       outputStrings: swStrings,
     },
@@ -400,7 +400,7 @@ const triggerSet: TriggerSet<Data> = {
       netRegex: { id: '0017', capture: false },
       condition: (data) => data.phase === 'pack',
       suppressSeconds: 1,
-      run: (data) => data.packs++,
+      run: (data) => data.tpcount++,
     },
     {
       id: 'R8S Tactical Pack Wind',
@@ -408,11 +408,11 @@ const triggerSet: TriggerSet<Data> = {
       netRegex: { effectId: 'B7D', capture: true },
       // Magic Vulnerabilities from Pack Predation and Alpha Wind are 0.96s
       condition: (data, matches) =>
-        data.phase === 'pack' && data.swval === 'wind' && parseFloat(matches.duration) < 2,
+        data.phase === 'pack' && data.tpswv === 'wind' && parseFloat(matches.duration) < 2,
       delaySeconds: (_data, matches) => parseFloat(matches.duration) - 0.5,
       suppressSeconds: 1,
       alertText: (data, _matches, output) => {
-        if (data.swnum === data.packs)
+        if (data.tpnum === data.tpcount)
           return output.now!({ debuff: output.wind!() });
       },
       outputStrings: swStrings,
@@ -423,12 +423,12 @@ const triggerSet: TriggerSet<Data> = {
       netRegex: { effectId: 'B7D', capture: true },
       // Timing based on Tether and Magic Vulnerability (3.96s)
       condition: (data, matches) =>
-        data.phase === 'pack' && data.swval === 'stone' && parseFloat(matches.duration) > 2,
-      preRun: (data) => data.surge = data.surge + 1,
+        data.phase === 'pack' && data.tpswv === 'stone' && parseFloat(matches.duration) > 2,
+      preRun: (data) => data.tpsurge = data.tpsurge + 1,
       delaySeconds: (_data, matches) => parseFloat(matches.duration) - 0.5,
       suppressSeconds: 1,
       alertText: (data, _matches, output) => {
-        if (data.swnum === data.packs && (data.surge % 2) === 1)
+        if (data.tpnum === data.tpcount && (data.tpsurge % 2) === 1)
           return output.now!({ debuff: output.stone!() });
       },
       outputStrings: swStrings,
@@ -438,7 +438,7 @@ const triggerSet: TriggerSet<Data> = {
       type: 'LosesEffect',
       netRegex: { effectId: ['1127', '1128'], capture: true },
       condition: Conditions.targetIsYou(),
-      run: (data) => data.swnum = undefined,
+      run: (data) => data.tpnum = undefined,
     },
     {
       id: 'R8S Ravenous Saber',
@@ -527,7 +527,7 @@ const triggerSet: TriggerSet<Data> = {
       // A3E1 => Left cleave self-cast
       netRegex: { id: ['A3E0', 'A3E1'], source: 'Moonlit Shadow', capture: true },
       delaySeconds: 0.1,
-      durationSeconds: (data) => data.moonbites.length < 2 ? 2 : 10,
+      durationSeconds: (data) => data.bmbites.length < 2 ? 2 : 10,
       promise: async (data, matches) => {
         const actors = (await callOverlayHandler({
           call: 'getCombatants',
@@ -542,26 +542,26 @@ const triggerSet: TriggerSet<Data> = {
         // Defining the cleaved side
         if (matches.id === 'A3E0') {
           const ccw = num === 0 ? 6 : num - 2;
-          data.moonbites.push(ccw);
+          data.bmbites.push(ccw);
         } else {
           const cw = (num + 2) % 8;
-          data.moonbites.push(cw);
+          data.bmbites.push(cw);
         }
       },
       infoText: (data, _matches, output) => {
-        if (data.moonbites.length === 1 || data.moonbites.length === 3)
+        if (data.bmbites.length === 1 || data.bmbites.length === 3)
           return;
 
         const cquad = [1, 3, 5, 7];
-        const beam1 = data.moonbites[0] ?? -1;
-        const beam2 = data.moonbites[1] ?? -1;
+        const beam1 = data.bmbites[0] ?? -1;
+        const beam2 = data.bmbites[1] ?? -1;
         let safe1 = cquad.filter((q) => q !== beam1 + 1);
         safe1 = safe1.filter((q) => q !== (beam1 === 0 ? 7 : beam1 - 1));
         safe1 = safe1.filter((q) => q !== beam2 + 1);
         safe1 = safe1.filter((q) => q !== (beam2 === 0 ? 7 : beam2 - 1));
 
         // Early output for first two
-        if (data.moonbites.length === 2) {
+        if (data.bmbites.length === 2) {
           if (safe1.length !== 1 || safe1[0] === undefined)
             return;
 
@@ -571,8 +571,8 @@ const triggerSet: TriggerSet<Data> = {
           return output.safe!({ arrow: a, quad: q });
         }
 
-        const beam3 = data.moonbites[2] ?? -1;
-        const beam4 = data.moonbites[3] ?? -1;
+        const beam3 = data.bmbites[2] ?? -1;
+        const beam4 = data.bmbites[3] ?? -1;
         let safe2 = cquad.filter((q) => q !== beam3 + 1);
         safe2 = safe2.filter((q) => q !== (beam3 === 0 ? 7 : beam3 - 1));
         safe2 = safe2.filter((q) => q !== beam4 + 1);
@@ -590,7 +590,7 @@ const triggerSet: TriggerSet<Data> = {
         const q2 = output[Directions.outputFrom8DirNum(v2)]!();
         const a1 = output[AutumnDir.arrowFromNum(v1)]!();
         const a2 = output[AutumnDir.arrowFromNum(v2)]!();
-        data.moonquad = v2;
+        data.bmquad = v2;
         return output.saves!({ arrow1: a1, quad1: q1, arrow2: a2, quad2: q2 });
       },
       outputStrings: moonStrings,
@@ -624,12 +624,12 @@ const triggerSet: TriggerSet<Data> = {
       // A3C3 => Moonbeam's Bite dash with Right cleave
       netRegex: { id: ['A3C2', 'A3C3'], source: 'Moonlit Shadow', capture: true },
       condition: (data) => {
-        data.moonindex++;
-        return data.moonindex === 2;
+        data.bmindex++;
+        return data.bmindex === 2;
       },
       delaySeconds: (_data, matches) => parseFloat(matches.castTime),
       infoText: (data, _matches, output) => {
-        const v = data.moonquad ?? -1;
+        const v = data.bmquad ?? -1;
         const q = output[Directions.outputFrom8DirNum(v)]!();
         const a = output[AutumnDir.arrowFromNum(v)]!();
         return output.safe!({ arrow: a, quad: q });
