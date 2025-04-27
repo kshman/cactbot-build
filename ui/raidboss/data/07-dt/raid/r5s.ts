@@ -1,6 +1,7 @@
-import { AutumnDir, MarkerOutputPlus } from '../../../../../resources/autumn';
+import { AutumnDir } from '../../../../../resources/autumn';
 import Outputs from '../../../../../resources/outputs';
 import { Responses } from '../../../../../resources/responses';
+import { DirectionOutputCardinal } from '../../../../../resources/util';
 import ZoneId from '../../../../../resources/zone_id';
 import { RaidbossData } from '../../../../../types/data';
 import { NetMatches } from '../../../../../types/net_matches';
@@ -55,7 +56,7 @@ const dancedIds = [
   'A36F',
 ] as const;
 
-const getHustleDir = (matches: NetMatches['StartsUsing']): MarkerOutputPlus[] => {
+const getHustleDir = (matches: NetMatches['StartsUsing']): DirectionOutputCardinal[] => {
   const left = dthIds[matches.id] === 'left';
   const headingAdjust = left ? -(Math.PI / 8) : (Math.PI / 8);
   let snappedHeading = (parseFloat(matches.heading) + headingAdjust) % Math.PI;
@@ -65,8 +66,8 @@ const getHustleDir = (matches: NetMatches['StartsUsing']): MarkerOutputPlus[] =>
   const snapped = AutumnDir.hdgNum4(snappedHeading);
   const other = ((snapped + 4) + (left ? 1 : -1)) % 4;
   return [
-    AutumnDir.outputMarkPlus[snapped] ?? 'unknown',
-    AutumnDir.outputMarkPlus[other] ?? 'unknown',
+    AutumnDir.outputDirPlus[snapped] ?? 'unknown',
+    AutumnDir.outputDirPlus[other] ?? 'unknown',
   ];
 };
 
@@ -444,24 +445,16 @@ const triggerSet: TriggerSet<Data> = {
             return;
           const safe1 = getHustleDir(cleave1);
           const safe2 = getHustleDir(cleave2);
-          let safe: MarkerOutputPlus = 'unknown';
+          let safe: DirectionOutputCardinal = 'unknown';
           for (const dir of safe1) {
             if (safe2.includes(dir))
               safe = dir;
           }
-          const arrow = dthIds[cleave3.id] === 'left' ? 'arrowE' : 'arrowW';
-          return output.combo!({ marker: output[safe]!(), arrow: output[arrow]!() });
+          return output[safe]!();
         }
         return output['unknown']!();
       },
-      outputStrings: {
-        combo: {
-          en: '${marker} ${arrow}',
-          ko: '${marker} ${arrow}',
-        },
-        ...AutumnDir.stringsMarkPlus,
-        ...AutumnDir.stringsArrowPlus,
-      },
+      outputStrings: AutumnDir.stringsAimPlus,
     },
   ],
   timelineReplace: [

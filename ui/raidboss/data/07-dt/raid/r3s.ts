@@ -1,4 +1,3 @@
-import { AutumnDir } from '../../../../../resources/autumn';
 import Conditions from '../../../../../resources/conditions';
 import Outputs from '../../../../../resources/outputs';
 import { callOverlayHandler } from '../../../../../resources/overlay_plugin_api';
@@ -392,10 +391,6 @@ const triggerSet: TriggerSet<Data> = {
         data.tagTeamCloneTethered = Directions.xyTo8DirNum(actor.PosX, actor.PosY, 100, 100);
       },
       infoText: (data, _matches, output) => {
-        if (data.options.AutumnStyle) {
-          const mark = AutumnDir.markFromNum(data.tagTeamCloneTethered ?? -1);
-          return output.tetheredTo!({ dir: output[mark]!() });
-        }
         const dir = output[Directions.outputFrom8DirNum(data.tagTeamCloneTethered ?? -1)]!();
         return output.tetheredTo!({ dir: dir });
       },
@@ -406,7 +401,6 @@ const triggerSet: TriggerSet<Data> = {
           ja: '${dir} の分身に繋がれた',
           ko: '분신 줄: ${dir}',
         },
-        ...AutumnDir.stringsMarkPlus,
       },
     },
     {

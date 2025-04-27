@@ -262,17 +262,12 @@ const triggerSet: TriggerSet<Data> = {
             if ((comb & styleFlags.mbol) !== 0)
               mesg = output.wingmbol!(); // 날개 + 몰볼
           }
-          const ar = AutumnDir.arrowFromNum(start);
-          const dir = Directions.outputFrom8DirNum(start);
-          return output.atext!({
-            arrow: output[ar]!(),
-            dir: output[dir]!(),
-            mesg: mesg,
-          });
+          const dir = AutumnDir.dirFromNum(start);
+          return output.atext!({ dir: output[dir]!(), mesg: mesg });
         }
 
-        const dir1 = Directions.outputFrom8DirNum(start);
-        const dir2 = Directions.outputFrom8DirNum(dir);
+        const dir1 = AutumnDir.dirFromNum(start);
+        const dir2 = AutumnDir.dirFromNum(dir);
         return output.text!({ dir1: output[dir1]!(), dir2: output[dir2]!() });
       },
       outputStrings: {
@@ -282,8 +277,8 @@ const triggerSet: TriggerSet<Data> = {
           ko: '${dir1} 시작, ${dir2}로',
         },
         atext: {
-          en: '${arrow}${dir} ${mesg}',
-          ko: '${arrow}${dir} ${mesg}',
+          en: '${dir} ${mesg}',
+          ko: '${dir} ${mesg}',
         },
         succ: {
           en: 'Succubus x2',
@@ -313,9 +308,8 @@ const triggerSet: TriggerSet<Data> = {
           en: 'Heaven + Molbol',
           ko: '날개 안됨 + 몰볼 안됨',
         },
-        ...AutumnDir.stringsArrowCross,
-        ...Directions.outputStringsIntercardDir,
         unknown: Outputs.unknown,
+        ...AutumnDir.stringsAimCross,
       },
     },
     {

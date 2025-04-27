@@ -3,7 +3,6 @@ import Conditions from '../../../../../resources/conditions';
 import Outputs from '../../../../../resources/outputs';
 import { callOverlayHandler } from '../../../../../resources/overlay_plugin_api';
 import { Responses } from '../../../../../resources/responses';
-import { Directions } from '../../../../../resources/util';
 import ZoneId from '../../../../../resources/zone_id';
 import { RaidbossData } from '../../../../../types/data';
 import { TriggerSet } from '../../../../../types/trigger';
@@ -43,15 +42,14 @@ const swStrings = {
 } as const;
 const moonStrings = {
   safe: {
-    en: '${arrow}${quad}',
-    ko: '${arrow}${quad}',
+    en: '${quad}',
+    ko: '${quad}',
   },
   saves: {
-    en: '${arrow1}${quad1} => ${arrow2}${quad2}',
-    ko: '${arrow1}${quad1} 🔜 ${arrow2}${quad2}',
+    en: '${quad1} => ${quad2}',
+    ko: '${quad1} 🔜 ${quad2}',
   },
-  ...AutumnDir.stringsArrowCross,
-  ...Directions.outputStringsIntercardDir,
+  ...AutumnDir.stringsAimCross,
 } as const;
 const championStrings = {
   cw: Outputs.clockwise,
@@ -91,13 +89,15 @@ export interface Data extends RaidbossData {
   // Phase 1
   decays: number;
   gales: number;
+  twdir?: 'EW' | 'NS';
+  twfall?: 'NESW' | 'SENW';
   tpnum?: number;
   tpswv?: 'stone' | 'wind';
   tpsurge: number;
   tpcount: number;
   bmindex: number;
   bmbites: number[];
-  bmquad?: number;
+  bmquad?: string;
   // Phase 2
   hblow?: 'in' | 'out';
   hsafe?: number;
@@ -319,10 +319,67 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
+      id: 'R8S Terrestrial Titans Towerfall Collect',
+      type: 'StartsUsingExtra',
+      netRegex: { id: 'A3C5', capture: true },
+      suppressSeconds: 1,
+      run: (data, matches) => {
+        if (matches.heading === undefined)
+          return;
+        const towerfallDir = (hdg: number): 'SENW' | 'NESW' | undefined =>
+          hdg === 1 || hdg === 5 ? 'SENW' : hdg === 3 || hdg === 7 ? 'NESW' : undefined;
+        const x = parseFloat(matches.x);
+        const hdg = AutumnDir.hdgConv8(matches.heading);
+
+        // East/West Towers are (93, 100) and (107, 100)
+        // North/South Towers are (100, 93) and (100, 107)
+        data.twdir = (x >= 92 && x <= 94) || (x >= 106 && x <= 108) ? 'EW' : 'NS';
+        data.twfall = towerfallDir(hdg);
+      },
+    },
+    {
       id: 'R8S Titanic Pursuit',
       type: 'StartsUsing',
       netRegex: { id: 'A3C7', source: 'Howling Blade', capture: false },
       response: Responses.aoe(),
+    },
+    {
+      id: 'R8S Terrestrial Titans Safe Spot',
+      type: 'StatusEffect',
+      netRegex: { data3: '036D0808', target: 'Gleaming Fang', capture: true },
+      condition: (_data, matches) => {
+        const hdg = AutumnDir.hdgConv8(matches.heading);
+        // Only trigger on the actor targetting intercards
+        return hdg === 1 || hdg === 3 || hdg === 5 || hdg === 7;
+      },
+      durationSeconds: 4.5,
+      infoText: (data, matches, output) => {
+        if (matches.x === undefined || matches.y === undefined)
+          return;
+        const x = parseFloat(matches.x);
+        const y = parseFloat(matches.y);
+        const fall = data.twfall;
+        const dirs = data.twdir;
+
+        if (fall === 'SENW') {
+          if ((dirs === 'EW' && y < 100) || (dirs === 'NS' && x > 100))
+            return output.dirNW!();
+          if ((dirs === 'EW' && y > 100) || (dirs === 'NS' && x < 100))
+            return output.dirSE!();
+        } else if (fall === 'NESW') {
+          if ((dirs === 'EW' && y < 100) || (dirs === 'NS' && x < 100))
+            return output.dirNE!();
+          if ((dirs === 'EW' && y > 100) || (dirs === 'NS' && x > 100))
+            return output.dirSW!();
+        }
+      },
+      outputStrings: {
+        dirNW: Outputs.aimNW,
+        dirNE: Outputs.aimNE,
+        dirSW: Outputs.aimSW,
+        dirSE: Outputs.aimSE,
+        // ...AutumnDir.stringsAim, // 이거 하나면 되는데 오류가 나서!
+      },
     },
     {
       id: 'R8S Tracking Tremors',
@@ -565,10 +622,8 @@ const triggerSet: TriggerSet<Data> = {
           if (safe1.length !== 1 || safe1[0] === undefined)
             return;
 
-          const v = safe1[0] ?? -1;
-          const q = output[Directions.outputFrom8DirNum(v)]!();
-          const a = output[AutumnDir.arrowFromNum(v)]!();
-          return output.safe!({ arrow: a, quad: q });
+          const q = AutumnDir.dirFromNum(safe1[0] ?? -1);
+          return output.safe!({ quad: output[q]!() });
         }
 
         const beam3 = data.bmbites[2] ?? -1;
@@ -585,13 +640,9 @@ const triggerSet: TriggerSet<Data> = {
         if (safe2.length !== 1)
           return;
 
-        const [v1, v2] = [safe1[0] ?? -1, safe2[0] ?? -1];
-        const q1 = output[Directions.outputFrom8DirNum(v1)]!();
-        const q2 = output[Directions.outputFrom8DirNum(v2)]!();
-        const a1 = output[AutumnDir.arrowFromNum(v1)]!();
-        const a2 = output[AutumnDir.arrowFromNum(v2)]!();
-        data.bmquad = v2;
-        return output.saves!({ arrow1: a1, quad1: q1, arrow2: a2, quad2: q2 });
+        const q1 = output[AutumnDir.dirFromNum(safe1[0] ?? -1)]!();
+        data.bmquad = output[AutumnDir.dirFromNum(safe2[0] ?? -1)]!();
+        return output.saves!({ quad1: q1, quad2: data.bmquad });
       },
       outputStrings: moonStrings,
     },
@@ -628,12 +679,7 @@ const triggerSet: TriggerSet<Data> = {
         return data.bmindex === 2;
       },
       delaySeconds: (_data, matches) => parseFloat(matches.castTime),
-      infoText: (data, _matches, output) => {
-        const v = data.bmquad ?? -1;
-        const q = output[Directions.outputFrom8DirNum(v)]!();
-        const a = output[AutumnDir.arrowFromNum(v)]!();
-        return output.safe!({ arrow: a, quad: q });
-      },
+      infoText: (data, _matches, output) => output.safe!({ quad: data.bmquad }),
       outputStrings: moonStrings,
     },
     {
@@ -718,7 +764,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       infoText: (data, _matches, output) => {
         const inout = output[data.hblow ?? 'unknown']!();
-        const dir = output[AutumnDir.arrowFromNum(data.hsafe ?? -1)]!();
+        const dir = output[AutumnDir.dirFromNum(data.hsafe ?? -1)]!();
         return output.text!({ inout: inout, dir: dir });
       },
       outputStrings: {
@@ -729,7 +775,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '${inout} + ${dir}',
         },
         unknown: Outputs.unknown,
-        ...AutumnDir.stringsArrow,
+        ...AutumnDir.stringsAim,
       },
     },
     {
@@ -824,7 +870,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         passTetherDir: {
           en: 'Pass Tether to ${dir}',
-          ko: '줄 넘겨요: ${dir}${dir}',
+          ko: '줄 넘겨요: ${dir}',
         },
         tetherOnYou: {
           en: 'Tether on YOU',
@@ -832,9 +878,9 @@ const triggerSet: TriggerSet<Data> = {
         },
         tetherOnDir: {
           en: 'Tether on ${dir}',
-          ko: '줄: ${dir}${dir}',
+          ko: '줄: ${dir}',
         },
-        ...AutumnDir.stringsDirArrowCross,
+        ...AutumnDir.stringsAimCross,
       },
     },
     {
@@ -883,13 +929,13 @@ const triggerSet: TriggerSet<Data> = {
         },
         passTetherDir: {
           en: 'Pass Tether ${dir}',
-          ko: '줄 넘겨요: ${dir}${dir}',
+          ko: '줄 넘겨요: ${dir}',
         },
         tetherOnDir: {
           en: 'Tether On ${dir}',
-          ko: '줄: ${dir}${dir}',
+          ko: '줄: ${dir}',
         },
-        ...AutumnDir.stringsDirArrowCross,
+        ...AutumnDir.stringsAimCross,
       },
     },
     {

@@ -1,4 +1,4 @@
-import Autumn, { ArrowOutput, AutumnDir } from '../../../../../resources/autumn';
+import Autumn, { AutumnDir } from '../../../../../resources/autumn';
 import Conditions from '../../../../../resources/conditions';
 import Outputs from '../../../../../resources/outputs';
 import { callOverlayHandler } from '../../../../../resources/overlay_plugin_api';
@@ -369,18 +369,17 @@ const getPalladionRayEscape = (
   return output.raydown!({ safe: safe });
 };
 
-const ultimaRayDpsArrows: ArrowOutput[] = ['arrowE', 'arrowSE', 'arrowS', 'arrowSW'];
-
-const getUltimaRayArrow = (isDps: boolean, dir1: ArrowOutput, dir2: ArrowOutput) => {
+const getUltimaRayRole = (isDps: boolean, dir1: string, dir2: string) => {
+  const dirs: readonly string[] = ['dirE', 'dirSE', 'dirS', 'dirSW'] as const;
   if (isDps) {
-    if (ultimaRayDpsArrows.includes(dir1))
+    if (dirs.includes(dir1))
       return dir1;
-    if (ultimaRayDpsArrows.includes(dir2))
+    if (dirs.includes(dir2))
       return dir2;
   } else {
-    if (!ultimaRayDpsArrows.includes(dir1))
+    if (!dirs.includes(dir1))
       return dir1;
-    if (!ultimaRayDpsArrows.includes(dir2))
+    if (!dirs.includes(dir2))
       return dir2;
   }
   return undefined;
@@ -4631,37 +4630,6 @@ const triggerSet: TriggerSet<Data> = {
         const uavCenterX = 100;
         const uavCenterY = 90;
 
-        if (data.options.AutumnStyle) {
-          const unsafeMap: Partial<Record<ArrowOutput, ArrowOutput>> = {
-            arrowN: 'arrowS',
-            arrowNE: 'arrowSW',
-            arrowE: 'arrowW',
-            arrowSE: 'arrowNW',
-            arrowS: 'arrowN',
-            arrowSW: 'arrowNE',
-            arrowW: 'arrowE',
-            arrowNW: 'arrowSE',
-          } as const;
-          let safeDirs = Object.keys(unsafeMap) as ArrowOutput[];
-          data.darknessClones.forEach((clone) => {
-            const x = parseFloat(clone.x);
-            const y = parseFloat(clone.y);
-            const cloneDir = AutumnDir.xyToArrow(x, y, uavCenterX, uavCenterY);
-            const pairedDir = unsafeMap[cloneDir];
-            safeDirs = safeDirs.filter((dir) => dir !== cloneDir && dir !== pairedDir);
-          });
-          if (safeDirs.length !== 2)
-            return;
-          const [dir1, dir2] = safeDirs.sort();
-          if (dir1 === undefined || dir2 === undefined)
-            return;
-          let arrow = undefined;
-          arrow = getUltimaRayArrow(Autumn.isDps(data.moks), dir1, dir2);
-          if (arrow !== undefined)
-            return output.moveTo!({ dir: output[arrow]!() });
-          return output.combined!({ dir1: output[dir1]!(), dir2: output[dir2]!() });
-        }
-
         const unsafeMap: Partial<Record<DirectionOutput8, DirectionOutput8>> = {
           dirN: 'dirS',
           dirNE: 'dirSW',
@@ -4685,6 +4653,9 @@ const triggerSet: TriggerSet<Data> = {
         const [dir1, dir2] = safeDirs.sort();
         if (dir1 === undefined || dir2 === undefined)
           return;
+        const res = getUltimaRayRole(Autumn.isDps(data.moks), dir1, dir2);
+        if (res !== undefined)
+          return output.moveTo!({ dir: output[res]!() });
         return output.combined!({ dir1: output[dir1]!(), dir2: output[dir2]!() });
       },
       outputStrings: {
@@ -4693,14 +4664,13 @@ const triggerSet: TriggerSet<Data> = {
           de: '${dir1} / ${dir2} Sicher',
           fr: '${dir1} / ${dir2} Sûr',
           cn: '${dir1} / ${dir2} 安全',
-          ko: '${dir1} / ${dir2} 안전',
+          ko: '안전: ${dir1} ${dir2}',
         },
         moveTo: {
           en: '${dir}',
           ko: '${dir}으로',
         },
-        ...Directions.outputStrings8Dir,
-        ...AutumnDir.stringsArrow,
+        ...AutumnDir.stringsAim,
       },
     },
     {
@@ -4712,33 +4682,6 @@ const triggerSet: TriggerSet<Data> = {
         // during 'UAV' phase, the center of the circular arena is [100, 90]
         const uavCenterX = 100;
         const uavCenterY = 90;
-
-        if (data.options.AutumnStyle) {
-          const safeMap: Record<ArrowOutput, readonly ArrowOutput[]> = {
-            // for each dir, identify the two dirs 90 degrees away
-            arrowN: ['arrowW', 'arrowE'],
-            arrowNE: ['arrowNW', 'arrowSE'],
-            arrowE: ['arrowN', 'arrowS'],
-            arrowSE: ['arrowNE', 'arrowSW'],
-            arrowS: ['arrowW', 'arrowE'],
-            arrowSW: ['arrowNW', 'arrowSE'],
-            arrowW: ['arrowN', 'arrowS'],
-            arrowNW: ['arrowNE', 'arrowSW'],
-            unknown: [],
-          } as const;
-
-          const x = parseFloat(matches.x);
-          const y = parseFloat(matches.y);
-          const cloneDir = AutumnDir.xyToArrow(x, y, uavCenterX, uavCenterY);
-          const [dir1, dir2] = safeMap[cloneDir];
-          if (dir1 === undefined || dir2 === undefined)
-            return;
-          let arrow = undefined;
-          arrow = getUltimaRayArrow(Autumn.isDps(data.moks), dir1, dir2);
-          if (arrow !== undefined)
-            return output.moveTo!({ dir: output[arrow]!() });
-          return output.combined!({ dir1: output[dir1]!(), dir2: output[dir2]!() });
-        }
 
         const safeMap: Record<DirectionOutput8, readonly DirectionOutput8[]> = {
           // for each dir, identify the two dirs 90 degrees away
@@ -4759,6 +4702,9 @@ const triggerSet: TriggerSet<Data> = {
         const [dir1, dir2] = safeMap[cloneDir];
         if (dir1 === undefined || dir2 === undefined)
           return;
+        const res = getUltimaRayRole(Autumn.isDps(data.moks), dir1, dir2);
+        if (res !== undefined)
+          return output.moveTo!({ dir: output[res]!() });
         return output.combined!({ dir1: output[dir1]!(), dir2: output[dir2]!() });
       },
       outputStrings: {
@@ -4767,14 +4713,13 @@ const triggerSet: TriggerSet<Data> = {
           de: '${dir1} / ${dir2} Sicher',
           fr: '${dir1} / ${dir2} Sûr',
           cn: '${dir1} / ${dir2} 安全',
-          ko: '${dir1} / ${dir2} 안전',
+          ko: '안전: ${dir1} ${dir2}',
         },
         moveTo: {
           en: '${dir}',
           ko: '${dir}으로',
         },
-        ...Directions.outputStrings8Dir,
-        ...AutumnDir.stringsArrow,
+        ...AutumnDir.stringsAim,
       },
     },
     {
