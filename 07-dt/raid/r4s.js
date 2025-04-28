@@ -741,7 +741,7 @@ Options.Triggers.push({
       outputStrings: {
         ...Directions.outputStringsIntercardDir,
         partners: Outputs.stackPartner,
-        spread: Outputs.spreadOwn,
+        spread: Outputs.positions,
         combo: {
           en: '${dir} => ${mech}',
           ja: '${dir} => ${mech}',
@@ -908,7 +908,7 @@ Options.Triggers.push({
         east: Outputs.east,
         west: Outputs.west,
         partners: Outputs.stackPartner,
-        spread: Outputs.spreadOwn,
+        spread: Outputs.positions,
         unknown: Outputs.unknown,
         stacks: {
           en: '(${stacks} stacks after)',
@@ -1211,7 +1211,7 @@ Options.Triggers.push({
       infoText: (data, _matches, output) => data.role === 'tank' ? output.tank() : output.nonTank(),
       outputStrings: {
         tank: Outputs.tetherBusters,
-        nonTank: Outputs.spreadOwn,
+        nonTank: Outputs.positions,
       },
     },
     {
@@ -1504,7 +1504,11 @@ Options.Triggers.push({
         cardinals: Outputs.cardinals,
         intercards: Outputs.intercards,
         partners: Outputs.stackPartner,
-        spread: Outputs.spreadSolo,
+        spread: {
+          en: 'Spread',
+          ja: '散開',
+          ko: '흩어져서 혼자',
+        },
       },
     },
     {
@@ -1543,7 +1547,11 @@ Options.Triggers.push({
         cardinals: Outputs.cardinals,
         intercards: Outputs.intercards,
         partners: Outputs.stackPartner,
-        spread: Outputs.spreadSolo,
+        spread: {
+          en: 'Spread',
+          ja: '散開',
+          ko: '흩어져서 혼자',
+        },
         unknown: Outputs.unknown,
       },
     },

@@ -272,7 +272,7 @@ Options.Triggers.push({
             ko: '${action} ${dir1}${dir2}',
           },
           stack: Outputs.stacks,
-          spread: Outputs.spreadOwn,
+          spread: Outputs.positions,
           ...AutumnDir.stringsMark,
         };
         const image = data.actors[matches.id];
@@ -285,8 +285,8 @@ Options.Triggers.push({
           return;
         // 어듬이 제공
         if (data.triggerSetConfig.autumnConcealed || data.moks === 'none') {
-          const dir1 = AutumnDir.markFromNum(data.p1SafeMarkers.shift());
-          const dir2 = AutumnDir.markFromNum(data.p1SafeMarkers.shift());
+          const dir1 = AutumnDir.dirFromNum(data.p1SafeMarkers.shift());
+          const dir2 = AutumnDir.dirFromNum(data.p1SafeMarkers.shift());
           return {
             infoText: output.safe({
               action: output[data.p1Utopian](),
@@ -320,8 +320,8 @@ Options.Triggers.push({
       infoText: (data, _matches, output) => {
         if (data.p1SafeMarkers.length !== 2)
           return;
-        const dir1 = AutumnDir.markFromNum(data.p1SafeMarkers.shift());
-        const dir2 = AutumnDir.markFromNum(data.p1SafeMarkers.shift());
+        const dir1 = AutumnDir.dirFromNum(data.p1SafeMarkers.shift());
+        const dir2 = AutumnDir.dirFromNum(data.p1SafeMarkers.shift());
         return output.safe({
           action: output[data.p1Utopian](),
           dir1: output[dir1](),
@@ -336,7 +336,7 @@ Options.Triggers.push({
           ko: '${action} ${dir1}${dir2}',
         },
         stack: Outputs.stacks,
-        spread: Outputs.spreadOwn,
+        spread: Outputs.positions,
         ...AutumnDir.stringsMark,
       },
     },
@@ -648,11 +648,11 @@ Options.Triggers.push({
         // 어듬이 제공
         if (data.options.AutumnStyle && data.moks !== 'none') {
           const dirs = Autumn.inMainTeam(data.moks) ? [0, 1, 6, 7] : [2, 3, 4, 5];
-          const res = AutumnDir.markFromNum(dirs.includes(dir1) ? dir1 : dir2);
+          const res = AutumnDir.dirFromNum(dirs.includes(dir1) ? dir1 : dir2);
           return output.akb({ dir: output[res]() });
         }
-        const m1 = AutumnDir.markFromNum(dir1);
-        const m2 = AutumnDir.markFromNum(dir2);
+        const m1 = AutumnDir.dirFromNum(dir1);
+        const m2 = AutumnDir.dirFromNum(dir2);
         return output.knockback({ dir1: output[m1](), dir2: output[m2]() });
       },
       run: (data, _matches) => delete data.p2Knockback,
@@ -945,7 +945,7 @@ Options.Triggers.push({
         if (north === -1)
           return output.text({ mark: output.unknown() });
         const trueNorth = (north + 4) % 8;
-        return output.text({ mark: output[AutumnDir.markFromNum(trueNorth)]() });
+        return output.text({ mark: output[AutumnDir.dirFromNum(trueNorth)]() });
       },
       outputStrings: {
         text: {
@@ -1139,11 +1139,11 @@ Options.Triggers.push({
             ? (data.p3ApocSwap ? supp : dps)
             : (data.p3ApocSwap ? dps : supp);
           const dir = grp.includes(safe[0]) ? safe[0] : safe[1];
-          const mrk = AutumnDir.outputMark[dir] ?? 'unknown';
+          const mrk = AutumnDir.dirFromNum(dir ?? -1);
           return output.safe({ dir1: output[mrk](), rot: output[rot]() });
         }
         const safeStr = safe
-          .map((dir) => output[AutumnDir.outputMark[dir] ?? 'unknown']()).join('');
+          .map((dir) => output[AutumnDir.dirFromNum(dir ?? -1)]()).join('');
         return output.safe({ dir1: safeStr, rot: output[rot]() });
       },
       tts: null,
@@ -1208,8 +1208,8 @@ Options.Triggers.push({
         const towardDir = toward[idx];
         if (safeDir === undefined || towardDir === undefined)
           return output.safe({ dir1: safeStr, dir2: towardStr });
-        safeStr = output[AutumnDir.outputMark[safeDir] ?? 'unknown']();
-        towardStr = output[AutumnDir.outputMark[towardDir] ?? 'unknown']();
+        safeStr = output[AutumnDir.dirFromNum(safeDir)]();
+        towardStr = output[AutumnDir.dirFromNum(towardDir)]();
         if (data.p3ApocRot !== 1)
           return output.safe({ dir1: towardStr, dir2: safeStr });
         return output.safe({ dir1: safeStr, dir2: towardStr });
@@ -2053,7 +2053,7 @@ Options.Triggers.push({
           const mk = north.includes(intersectDirNum) ? output.marka() : output.markc();
           return output.arewind({ spot: mk });
         }
-        const dir = AutumnDir.markFromNum(intersectDirNum);
+        const dir = AutumnDir.dirFromNum(intersectDirNum);
         if (dir === undefined)
           return unknownStr;
         return output.rewind({ spot: output[dir]() });
@@ -2250,8 +2250,8 @@ Options.Triggers.push({
         'Crystal of Light': 'Kristall des Lichts',
         'Delight\'s Hourglass': 'Sanduhr der Freude',
         'Drachen Wanderer': 'Seele des heiligen Drachen',
-        'Fatebreaker\'s Image': 'Abbild des fusionierten Ascians',
-        'Fatebreaker(?!\')': 'fusioniert(?:e|er|es|en) Ascian',
+        'Fatebreaker\'s Image': 'Abbild des Banns der Hoffnung',
+        'Fatebreaker(?!\')': 'Bann der Hoffnung',
         'Fragment of Fate': 'Splitter des Schicksals',
         'Frozen Mirror': 'Eisspiegel',
         'Holy Light': 'heilig(?:e|er|es|en) Licht',

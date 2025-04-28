@@ -16,7 +16,11 @@ const fallOutputs = {
   stack: Outputs.stackMarker,
   inside: Outputs.in,
   outside: Outputs.out,
-  stay: Outputs.stay,
+  stay: {
+    en: 'Stay',
+    ja: 'そのまま',
+    ko: '그대로',
+  },
   in: {
     en: 'In',
     ja: '内',

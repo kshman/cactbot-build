@@ -343,18 +343,6 @@ Options.Triggers.push({
         }
         if (firstOrb8Dir === undefined || secondOrb8Dir === undefined)
           return;
-        if (data.options.AutumnStyle) {
-          const firstOrb8DirStr = AutumnDir.markFromNum(firstOrb8Dir);
-          if (firstOrb8DirStr === undefined)
-            return;
-          const firstOrbDir = output[firstOrb8DirStr]();
-          const rotationDir = (secondOrb8Dir - firstOrb8Dir + 8) % 8 === 2
-            ? output.clockwise()
-            : output.counterclock();
-          if (firstOrbDir !== undefined && rotationDir !== undefined)
-            return output.text({ dir: firstOrbDir, rotation: rotationDir });
-          return;
-        }
         const firstOrb8DirStr = Directions.outputFrom8DirNum(firstOrb8Dir);
         if (firstOrb8DirStr === undefined)
           return;
@@ -378,7 +366,6 @@ Options.Triggers.push({
         clockwise: Outputs.clockwise,
         counterclock: Outputs.counterclockwise,
         ...Directions.outputStrings8Dir,
-        ...AutumnDir.stringsMark,
       },
     },
     // 아니 내꺼랑 비슷해 졌는데 메시지가 계산이 아니고 스태틱이네

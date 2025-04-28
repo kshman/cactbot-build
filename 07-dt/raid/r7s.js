@@ -21,6 +21,7 @@ Options.Triggers.push({
   timelineFile: 'r7s.txt',
   initData: () => ({
     phase: 'door',
+    smashes: 0,
     seeds: 0,
     srcnt: 0,
     collect: [],
@@ -91,8 +92,17 @@ Options.Triggers.push({
           club: Outputs.out,
           unknown: Outputs.unknown,
         };
+        data.smashes++;
         const sr = data.sr ?? 'unknown';
-        const tank = Autumn.isTank(data.moks);
+        let tank = Autumn.isTank(data.moks);
+        if (tank) {
+          // 1번은 MT가 2번은 ST가
+          // 3,4번은 둘이 함께
+          if (data.smashes === 1 && data.hate !== data.me)
+            tank = false;
+          if (data.smashes === 2 && data.hate === data.me)
+            tank = false;
+        }
         const smash = matches.id === 'A55F'
           ? (tank ? 'htank' : 'hother')
           : (tank ? 'ttank' : 'tother');
@@ -134,6 +144,24 @@ Options.Triggers.push({
         puddle: {
           en: 'Bait puddles',
           ko: '내게 장판x3',
+        },
+      },
+    },
+    {
+      id: 'R7S Winding Wildwinds',
+      type: 'StartsUsing',
+      netRegex: { id: 'A90D', source: 'Blooming Abomination', capture: false },
+      condition: Conditions.autumnOnly(),
+      durationSeconds: 5,
+      suppressSeconds: 5,
+      infoText: (data, _matches, output) => {
+        if (Autumn.isTank(data.moks))
+          return output.winding();
+      },
+      outputStrings: {
+        winding: {
+          en: 'Interrupt',
+          ko: 'Winding Wildwinds 인터럽트!!',
         },
       },
     },

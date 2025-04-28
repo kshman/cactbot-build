@@ -54,8 +54,8 @@ const getHustleDir = (matches) => {
   const snapped = AutumnDir.hdgNum4(snappedHeading);
   const other = ((snapped + 4) + (left ? 1 : -1)) % 4;
   return [
-    AutumnDir.outputMarkPlus[snapped] ?? 'unknown',
-    AutumnDir.outputMarkPlus[other] ?? 'unknown',
+    AutumnDir.outputDirPlus[snapped] ?? 'unknown',
+    AutumnDir.outputDirPlus[other] ?? 'unknown',
   ];
 };
 Options.Triggers.push({
@@ -422,19 +422,11 @@ Options.Triggers.push({
             if (safe2.includes(dir))
               safe = dir;
           }
-          const arrow = dthIds[cleave3.id] === 'left' ? 'arrowE' : 'arrowW';
-          return output.combo({ marker: output[safe](), arrow: output[arrow]() });
+          return output[safe]();
         }
         return output['unknown']();
       },
-      outputStrings: {
-        combo: {
-          en: '${marker} ${arrow}',
-          ko: '${marker} ${arrow}',
-        },
-        ...AutumnDir.stringsMarkPlus,
-        ...AutumnDir.stringsArrowPlus,
-      },
+      outputStrings: AutumnDir.stringsAimPlus,
     },
   ],
   timelineReplace: [

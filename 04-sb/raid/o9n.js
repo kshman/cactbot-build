@@ -123,12 +123,12 @@ Options.Triggers.push({
       alertText: (data, _matches, output) => {
         if (data.stackMarker?.includes(data.me))
           return output.stackOnYou();
-        return output.stackGroups();
+        return output.stack44();
       },
       run: (data) => delete data.stackMarker,
       outputStrings: {
         stackOnYou: Outputs.stackOnYou,
-        stackGroups: {
+        stack44: {
           en: 'Split into stack groups',
           de: 'In Sammel-Gruppen aufteilen',
           fr: 'Divisez-vous en groupes packés',

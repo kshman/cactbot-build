@@ -299,9 +299,9 @@ Options.Triggers.push({
       netRegex: { id: '9752', source: 'Brute Bomber', capture: false },
       delaySeconds: 20,
       durationSeconds: 7,
-      infoText: (_data, _matches, output) => output.spread(),
+      infoText: (_data, _matches, output) => output.positions(),
       outputStrings: {
-        spread: Outputs.spreadOwn,
+        positions: Outputs.positions,
       },
     },
     {
@@ -348,10 +348,6 @@ Options.Triggers.push({
         data.tagTeamCloneTethered = Directions.xyTo8DirNum(actor.PosX, actor.PosY, 100, 100);
       },
       infoText: (data, _matches, output) => {
-        if (data.options.AutumnStyle) {
-          const mark = AutumnDir.markFromNum(data.tagTeamCloneTethered ?? -1);
-          return output.tetheredTo({ dir: output[mark]() });
-        }
         const dir = output[Directions.outputFrom8DirNum(data.tagTeamCloneTethered ?? -1)]();
         return output.tetheredTo({ dir: dir });
       },
@@ -362,7 +358,6 @@ Options.Triggers.push({
           ja: '${dir} の分身に繋がれた',
           ko: '분신 줄: ${dir}',
         },
-        ...AutumnDir.stringsMarkPlus,
       },
     },
     {
