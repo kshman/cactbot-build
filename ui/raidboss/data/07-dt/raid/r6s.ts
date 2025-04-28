@@ -147,7 +147,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '나르샤! (${act})',
         },
         pair: Outputs.stackPartner,
-        light: Outputs.stackGroup,
+        light: Outputs.healerGroups,
         unknown: Outputs.unknown,
       },
     },
@@ -168,7 +168,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         pair: Outputs.stackPartner,
-        light: Outputs.stackGroup,
+        light: Outputs.healerGroups,
         unknown: Outputs.unknown,
       },
     },
@@ -262,22 +262,12 @@ const triggerSet: TriggerSet<Data> = {
             if ((comb & styleFlags.mbol) !== 0)
               mesg = output.wingmbol!(); // 날개 + 몰볼
           }
-          let omk = start;
-          if (!Autumn.hasParam('markex', data.options.AutumnParameter)) {
-            const exmap: { [id: number]: number } = { 1: 3, 3: 5, 5: 7, 7: 1 } as const;
-            omk = exmap[start]!;
-          }
-          const ar = AutumnDir.arrowFromNum(start);
-          const mk = AutumnDir.markFromNum(omk);
-          return output.atext!({
-            arrow: output[ar]!(),
-            mark: output[mk]!(),
-            mesg: mesg,
-          });
+          const dir = AutumnDir.dirFromNum(start);
+          return output.atext!({ dir: output[dir]!(), mesg: mesg });
         }
 
-        const dir1 = Directions.outputFrom8DirNum(start);
-        const dir2 = Directions.outputFrom8DirNum(dir);
+        const dir1 = AutumnDir.dirFromNum(start);
+        const dir2 = AutumnDir.dirFromNum(dir);
         return output.text!({ dir1: output[dir1]!(), dir2: output[dir2]!() });
       },
       outputStrings: {
@@ -287,8 +277,8 @@ const triggerSet: TriggerSet<Data> = {
           ko: '${dir1} 시작, ${dir2}로',
         },
         atext: {
-          en: '${arrow}${mark} ${mesg}',
-          ko: '${arrow}${mark} ${mesg}',
+          en: '${dir} ${mesg}',
+          ko: '${dir} ${mesg}',
         },
         succ: {
           en: 'Succubus x2',
@@ -318,10 +308,8 @@ const triggerSet: TriggerSet<Data> = {
           en: 'Heaven + Molbol',
           ko: '날개 안됨 + 몰볼 안됨',
         },
-        ...AutumnDir.stringsArrowCross,
-        ...AutumnDir.stringsMarkCross,
-        ...Directions.outputStringsIntercardDir,
         unknown: Outputs.unknown,
+        ...AutumnDir.stringsAimCross,
       },
     },
     {

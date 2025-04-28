@@ -1065,11 +1065,6 @@ export default {
     ja: '2人同時タンク強攻撃',
     ko: '따로 따로 탱크버스터',
   },
-  stackPartnerOnPlayer: {
-    en: 'Stack: ${player}',
-    ja: 'ペア: ${player}',
-    ko: '둘이: (${player})',
-  },
   spreadThenPair: {
     en: 'Spread => Stack',
     ja: '散開 => ペア',
@@ -1080,40 +1075,10 @@ export default {
     ja: 'ペア => 散開',
     ko: '둘이 뭉쳣다 🔜 흩어져요',
   },
-  spreadOwn: {
-    en: 'Spread',
+  positions: {
+    en: 'Positions',
     ja: '散会',
     ko: '맡은 자리로',
-  },
-  spreadSolo: {
-    en: 'Spread',
-    ja: '散開',
-    ko: '흩어져서 혼자',
-  },
-  stackGroup: {
-    en: 'Groups',
-    ja: '4:4頭割り',
-    ko: '4:4 뭉쳐요',
-  },
-  stackCenter: {
-    en: 'Stack in center',
-    ja: '真ん中で頭割り',
-    ko: '한가운데서 뭉쳐욧',
-  },
-  goIntoCenter: {
-    en: 'Get Center',
-    ja: '真ん中へ',
-    ko: '한가운데로',
-  },
-  center: {
-    en: 'Center',
-    ja: '真ん中',
-    ko: '한가운데',
-  },
-  stay: {
-    en: 'Stay',
-    ja: 'そのまま待機',
-    ko: '그대로',
   },
   inside: {
     en: 'Inside',
@@ -1170,6 +1135,47 @@ export default {
     en: '🡼',
     ja: '🡼',
     ko: '🡼',
+  },
+  // 화살표 + 방향
+  aimN: {
+    en: '🡹N',
+    ja: '🡹北',
+    ko: '🡹북',
+  },
+  aimNE: {
+    en: '🡽NE',
+    ja: '🡽北東',
+    ko: '🡽북동',
+  },
+  aimE: {
+    en: '🡺E',
+    ja: '🡺東',
+    ko: '🡺동',
+  },
+  aimSE: {
+    en: '🡾SE',
+    ja: '🡾南東',
+    ko: '🡾남동',
+  },
+  aimS: {
+    en: '🡻S',
+    ja: '🡻南',
+    ko: '🡻남',
+  },
+  aimSW: {
+    en: '🡿SW',
+    ja: '🡿南西',
+    ko: '🡿남서',
+  },
+  aimW: {
+    en: '🡸W',
+    ja: '🡸西',
+    ko: '🡸서',
+  },
+  aimNW: {
+    en: '🡼NW',
+    ja: '🡼北西',
+    ko: '🡼북서',
   },
   // 서클 넘버
   cnum1: {

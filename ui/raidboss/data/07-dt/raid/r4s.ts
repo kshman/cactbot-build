@@ -881,7 +881,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         ...Directions.outputStringsIntercardDir,
         partners: Outputs.stackPartner,
-        spread: Outputs.spreadOwn,
+        spread: Outputs.positions,
         combo: {
           en: '${dir} => ${mech}',
           ja: '${dir} => ${mech}',
@@ -1053,7 +1053,7 @@ const triggerSet: TriggerSet<Data> = {
         east: Outputs.east,
         west: Outputs.west,
         partners: Outputs.stackPartner,
-        spread: Outputs.spreadOwn,
+        spread: Outputs.positions,
         unknown: Outputs.unknown,
         stacks: {
           en: '(${stacks} stacks after)',
@@ -1371,7 +1371,7 @@ const triggerSet: TriggerSet<Data> = {
         data.role === 'tank' ? output.tank!() : output.nonTank!(),
       outputStrings: {
         tank: Outputs.tetherBusters,
-        nonTank: Outputs.spreadOwn,
+        nonTank: Outputs.positions,
       },
     },
     {
@@ -1685,7 +1685,11 @@ const triggerSet: TriggerSet<Data> = {
         cardinals: Outputs.cardinals,
         intercards: Outputs.intercards,
         partners: Outputs.stackPartner,
-        spread: Outputs.spreadSolo,
+        spread: {
+          en: 'Spread',
+          ja: '散開',
+          ko: '흩어져서 혼자',
+        },
       },
     },
     {
@@ -1729,7 +1733,11 @@ const triggerSet: TriggerSet<Data> = {
         cardinals: Outputs.cardinals,
         intercards: Outputs.intercards,
         partners: Outputs.stackPartner,
-        spread: Outputs.spreadSolo,
+        spread: {
+          en: 'Spread',
+          ja: '散開',
+          ko: '흩어져서 혼자',
+        },
         unknown: Outputs.unknown,
       },
     },
