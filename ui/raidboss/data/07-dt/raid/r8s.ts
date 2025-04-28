@@ -90,7 +90,7 @@ export interface Data extends RaidbossData {
   decays: number;
   gales: number;
   twdir?: 'EW' | 'NS';
-  twfall?: 'NESW' | 'SENW';
+  twsafe?: 'NESW' | 'SENW';
   tpnum?: number;
   tpswv?: 'stone' | 'wind';
   tpsurge: number;
@@ -320,21 +320,26 @@ const triggerSet: TriggerSet<Data> = {
     },
     {
       id: 'R8S Terrestrial Titans Towerfall Collect',
+      // A3C5 Terrestrial Titans
+      // A3C6 Towerfall
+      // East/West Towers are (93, 100) and (107, 100)
+      // North/South Towers are (100, 93) and (100, 107)
       type: 'StartsUsingExtra',
       netRegex: { id: 'A3C5', capture: true },
       suppressSeconds: 1,
       run: (data, matches) => {
-        if (matches.heading === undefined)
-          return;
-        const towerfallDir = (hdg: number): 'SENW' | 'NESW' | undefined =>
+        const getTowerFallSafe = (hdg: number): 'SENW' | 'NESW' | undefined =>
           hdg === 1 || hdg === 5 ? 'SENW' : hdg === 3 || hdg === 7 ? 'NESW' : undefined;
         const x = parseFloat(matches.x);
+        const y = parseFloat(matches.y);
         const hdg = AutumnDir.hdgConv8(matches.heading);
 
-        // East/West Towers are (93, 100) and (107, 100)
-        // North/South Towers are (100, 93) and (100, 107)
-        data.twdir = (x >= 92 && x <= 94) || (x >= 106 && x <= 108) ? 'EW' : 'NS';
-        data.twfall = towerfallDir(hdg);
+        // towerDirs will be undefined if we receive bad coords
+        if ((x >= 92 && x <= 94) || (x >= 106 && x <= 108))
+          data.twdir = 'EW';
+        else if ((y >= 92 && y <= 94) || (y >= 106 && y <= 108))
+          data.twdir = 'NS';
+        data.twsafe = getTowerFallSafe(hdg);
       },
     },
     {
@@ -345,6 +350,9 @@ const triggerSet: TriggerSet<Data> = {
     },
     {
       id: 'R8S Terrestrial Titans Safe Spot',
+      // Gleaming Fangs are at:
+      // NS Towers: (108, 100) E, (92, 100) W
+      // EW Towers: (100, 92) N, (100, 108) S
       type: 'StatusEffect',
       netRegex: { data3: '036D0808', target: 'Gleaming Fang', capture: true },
       condition: (_data, matches) => {
@@ -354,32 +362,34 @@ const triggerSet: TriggerSet<Data> = {
       },
       durationSeconds: 4.5,
       infoText: (data, matches, output) => {
-        if (matches.x === undefined || matches.y === undefined)
+        if (data.twsafe === undefined)
           return;
         const x = parseFloat(matches.x);
         const y = parseFloat(matches.y);
-        const fall = data.twfall;
+        const fall = data.twsafe;
+
+        // Assume towerDirs from Fang if received bad coords for towers
+        if (data.twdir === undefined) {
+          data.twdir = (y > 99 && y < 100) ? 'NS' : (x > 99 && x < 101) ? 'EW' : undefined;
+          if (data.twdir === undefined)
+            return;
+        }
         const dirs = data.twdir;
 
+        // 이게 뭔가 이상하면 x >< 요기 부호가 바꿔보자
         if (fall === 'SENW') {
-          if ((dirs === 'EW' && y < 100) || (dirs === 'NS' && x > 100))
-            return output.dirNW!();
-          if ((dirs === 'EW' && y > 100) || (dirs === 'NS' && x < 100))
-            return output.dirSE!();
-        } else if (fall === 'NESW') {
           if ((dirs === 'EW' && y < 100) || (dirs === 'NS' && x < 100))
-            return output.dirNE!();
+            return output['dirNW']!();
           if ((dirs === 'EW' && y > 100) || (dirs === 'NS' && x > 100))
-            return output.dirSW!();
+            return output['dirSE']!();
+        } else if (fall === 'NESW') {
+          if ((dirs === 'EW' && y < 100) || (dirs === 'NS' && x > 100))
+            return output['dirNE']!();
+          if ((dirs === 'EW' && y > 100) || (dirs === 'NS' && x < 100))
+            return output['dirSW']!();
         }
       },
-      outputStrings: {
-        dirNW: Outputs.aimNW,
-        dirNE: Outputs.aimNE,
-        dirSW: Outputs.aimSW,
-        dirSE: Outputs.aimSE,
-        // ...AutumnDir.stringsAim, // 이거 하나면 되는데 오류가 나서!
-      },
+      outputStrings: AutumnDir.stringsAim,
     },
     {
       id: 'R8S Tracking Tremors',
