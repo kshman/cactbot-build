@@ -1,4 +1,4 @@
-import { AutumnDir } from '../../../../../resources/autumn';
+import Autumn, { AutumnDir } from '../../../../../resources/autumn';
 import Conditions from '../../../../../resources/conditions';
 import Outputs from '../../../../../resources/outputs';
 import { callOverlayHandler } from '../../../../../resources/overlay_plugin_api';
@@ -166,6 +166,41 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: 'UV Positions',
           ko: 'UV 자리로',
+        },
+      },
+    },
+    {
+      id: 'R8S Mooncleaver Bait',
+      regex: /Mooncleaver$/,
+      beforeSeconds: 11, // 3.7s castTime
+      infoText: (_data, _matches, output) => output.text!(),
+      outputStrings: {
+        text: {
+          en: 'Bait Mooncleaver',
+          ko: '문클레버 유도',
+        },
+      },
+    },
+    {
+      id: 'R8S Mooncleaver Wait',
+      regex: /Mooncleaver [1-4]$/,
+      beforeSeconds: 7, // 2.7s castTime
+      infoText: (_data, _matches, output) => output.text!(),
+      outputStrings: {
+        text: {
+          en: 'Wait for Mooncleaver',
+          ko: '문클레버 기둘려요',
+        },
+      },
+    },
+    {
+      id: 'R8S Howling Eight Initial Position',
+      regex: /Ultraviolent Ray 4/,
+      infoText: (_data, _matches, output) => output.text!(),
+      outputStrings: {
+        text: {
+          en: 'Howling Eight Position',
+          ko: 'Howling Eight Position',
         },
       },
     },
@@ -539,7 +574,7 @@ const triggerSet: TriggerSet<Data> = {
       id: 'R8S Shadowchase',
       type: 'StartsUsing',
       netRegex: { id: 'A3BC', source: 'Howling Blade', capture: true },
-      delaySeconds: (_data, matches) => parseFloat(matches.castTime) - 0.5,
+      delaySeconds: (_data, matches) => parseFloat(matches.castTime) - 1,
       durationSeconds: 5.5,
       alertText: (data, _matches, output) => {
         const mech = data.spread ? output.stack!() : output.spread!();
@@ -578,12 +613,20 @@ const triggerSet: TriggerSet<Data> = {
       type: 'StartsUsing',
       netRegex: { id: 'A78E', source: 'Wolf of Stone', capture: false },
       suppressSeconds: 1,
-      infoText: (_data, _matches, output) => output.lines!(),
+      infoText: (data, _matches, output) => {
+        if (Autumn.isTank(data.moks))
+          return output.tank!();
+        return output.lines!();
+      },
       run: (data) => data.spread = undefined,
       outputStrings: {
         lines: {
           en: 'Lines',
           ko: '직선 장판',
+        },
+        tank: {
+          en: 'Lines',
+          ko: '직선 장판 + 탱크 스위치',
         },
       },
     },
@@ -670,7 +713,7 @@ const triggerSet: TriggerSet<Data> = {
       condition: (data) => data.phase === 'moonlight',
       delaySeconds: 0.1,
       durationSeconds: 4.5,
-      suppressSeconds: 1,
+      suppressSeconds: 10,
       alertText: (data, _matches, output) => data.spread ? output.spread!() : output.stack!(),
       run: (data) => data.spread = undefined,
       outputStrings: {
@@ -684,13 +727,21 @@ const triggerSet: TriggerSet<Data> = {
       // A3C2 => Moonbeam's Bite dash with Left cleave
       // A3C3 => Moonbeam's Bite dash with Right cleave
       netRegex: { id: ['A3C2', 'A3C3'], source: 'Moonlit Shadow', capture: true },
-      condition: (data) => {
-        data.bmindex++;
-        return data.bmindex === 2;
-      },
       delaySeconds: (_data, matches) => parseFloat(matches.castTime),
-      infoText: (data, _matches, output) => output.safe!({ quad: data.bmquad }),
-      outputStrings: moonStrings,
+      durationSeconds: 4,
+      response: (data, _matches, output) => {
+        // cactbot-builtin-response
+        output.responseOutputStrings = {
+          spread: Outputs.positions,
+          stack: Outputs.stacks,
+          ...moonStrings,
+        };
+        data.bmindex++;
+        if (data.bmindex === 2)
+          return { infoText: output.safe!({ quad: data.bmquad }) };
+        if (data.bmindex === 3)
+          return { alertText: data.spread ? output.spread!() : output.stack!() };
+      },
     },
     {
       id: 'R8S Weal of Stone Cardinals',
@@ -713,6 +764,18 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.healerGroups!(),
       outputStrings: {
         healerGroups: Outputs.healerGroups,
+      },
+    },
+    {
+      id: 'R8S Mooncleaver',
+      type: 'StartsUsing',
+      netRegex: { id: 'A465', source: 'Howling Blade', capture: false },
+      infoText: (_data, _matches, output) => output.changePlatform!(),
+      outputStrings: {
+        changePlatform: {
+          en: 'Change Platform',
+          ko: '플랫폼 바꿔요',
+        },
       },
     },
     {
@@ -817,6 +880,12 @@ const triggerSet: TriggerSet<Data> = {
           ko: '퍼지: ${player1}, ${player2}',
         },
       },
+    },
+    {
+      id: 'R8S Twofold Tempest Tether Tracker',
+      type: 'Tether',
+      netRegex: { id: '0054', capture: true },
+      run: (data, matches) => data.twofold = matches.target === data.me,
     },
     {
       id: 'R8S Twofold Tempest Initial Tether',
@@ -1135,8 +1204,11 @@ const triggerSet: TriggerSet<Data> = {
     },
     {
       id: 'R8S Howling Eight',
+      // AA02 Howling Eight, first cast
+      // A494 Howling Eight, subsequent first casts
+      // Suggested Party => Tank Immune => Tank Share => Tank Immune => Party
       type: 'StartsUsing',
-      netRegex: { id: 'A494', source: 'Howling Blade', capture: false },
+      netRegex: { id: ['AA02', 'A494'], source: 'Howling Blade', capture: false },
       durationSeconds: 15,
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
@@ -1149,21 +1221,45 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: 'R8S Mooncleaver Platform',
-      // Trigger on last hit of Howling Eight (AA0A for first set, A494 others)
-      type: 'Ability',
-      netRegex: { id: ['A494', 'AA0A'], source: 'Howling Blade', capture: false },
+      id: 'R8S Mooncleaver (Enrage Sequence)',
+      // Mooncleaver (474C) used during enrage targets a player about 0.45s after
+      // last hit of Howling Eight (AA0A for first set, A49C others)
+      type: 'StartsUsing',
+      netRegex: { id: 'A74C', source: 'Howling Blade', capture: false },
       condition: (data) => {
         // Tracking how many platforms will remain
         data.platforms--;
         return data.platforms !== 0;
       },
       suppressSeconds: 1,
-      infoText: (_data, _matches, output) => output.changePlatform!(),
+      infoText: (data, _matches, output) => {
+        switch (data.platforms) {
+          case 4:
+            return output.changePlatform1!();
+          case 3:
+            return output.changePlatform2!();
+          case 2:
+            return output.changePlatform3!();
+          case 1:
+            return output.finalPlatform!();
+        }
+      },
       outputStrings: {
-        changePlatform: {
-          en: 'Change Platform',
-          ko: '다른 플랫폼으로!',
+        changePlatform1: {
+          en: 'Change Platform 1',
+          ko: '플랫폼1 ',
+        },
+        changePlatform2: {
+          en: 'Change Platform 2',
+          ko: '플랫폼2',
+        },
+        changePlatform3: {
+          en: 'Change Platform 3',
+          ko: '플랫폼3',
+        },
+        finalPlatform: {
+          en: 'Change Platform (Final)',
+          ko: '마지막 플랫폼',
         },
       },
     },
