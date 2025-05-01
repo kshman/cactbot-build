@@ -99,8 +99,9 @@ export interface Data extends RaidbossData {
   bmbites: number[];
   bmquad?: string;
   // Phase 2
-  hblow?: 'in' | 'out';
+  heroes: number;
   hsafe?: number;
+  hblow?: 'in' | 'out';
   twofold?: boolean;
   tfdir?: string;
   tfindex: number;
@@ -127,6 +128,7 @@ const triggerSet: TriggerSet<Data> = {
     tpsurge: 0,
     bmindex: 0,
     bmbites: [],
+    heroes: 0,
     tfindex: 0,
     chindex: 0,
     platforms: 5,
@@ -141,19 +143,39 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Light Party Platform',
-          ko: '플랫폼에서 4:4',
+          ko: '(담당 플랫폼으로)',
+        },
+      },
+    },
+    {
+      id: 'R8S Avoid Twinbite',
+      regex: /Twinbite/,
+      beforeSeconds: 9,
+      infoText: (data, _matches, output) => {
+        if (Autumn.isTank(data.moks))
+          return output.tank!();
+        return output.other!();
+      },
+      outputStrings: {
+        tank: {
+          en: 'Tank Buster Platform',
+          ko: '(탱크 버스터 플랫폼으로)',
+        },
+        other: {
+          en: 'Avoid Tank Buster Platform',
+          ko: '(버스터 플랫폼 피해요)',
         },
       },
     },
     {
       id: 'R8S Ultraviolent Positions',
       regex: /Ultraviolent Ray [123]/,
-      beforeSeconds: 8,
+      beforeSeconds: 7,
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
           en: 'UV Positions',
-          ko: 'UV 자리로',
+          ko: '(나란히 정렬)',
         },
       },
     },
@@ -165,7 +187,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'UV Positions',
-          ko: 'UV 자리로',
+          ko: '(나란히 정렬)',
         },
       },
     },
@@ -177,19 +199,19 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Bait Mooncleaver',
-          ko: '문클레버 유도',
+          ko: '(문클레버, 기준 플랫폼으로)',
         },
       },
     },
     {
-      id: 'R8S Mooncleaver Wait',
-      regex: /Mooncleaver [1-4]$/,
-      beforeSeconds: 7, // 2.7s castTime
+      id: 'R8S Rise of the Positions',
+      regex: /Rise of the Hunter\'s Blade/,
+      beforeSeconds: 14,
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Wait for Mooncleaver',
-          ko: '문클레버 기둘려요',
+          en: 'Rise Positions',
+          ko: '(줄다리기 플랫폼으로)',
         },
       },
     },
@@ -200,7 +222,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Howling Eight Position',
-          ko: 'Howling Eight Position',
+          ko: '(기준 플랫폼으로)',
         },
       },
     },
@@ -411,7 +433,7 @@ const triggerSet: TriggerSet<Data> = {
         }
         const dirs = data.twdir;
 
-        // 이게 뭔가 이상하면 x >< 요기 부호가 바꿔보자
+        // 이게 뭔가 이상하면 x 비교 부호가 바꿔보자
         if (fall === 'SENW') {
           if ((dirs === 'EW' && y < 100) || (dirs === 'NS' && x < 100))
             return output['dirNW']!();
@@ -774,7 +796,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         changePlatform: {
           en: 'Change Platform',
-          ko: '플랫폼 바꿔요',
+          ko: '다른 플랫폼으로',
         },
       },
     },
@@ -786,13 +808,14 @@ const triggerSet: TriggerSet<Data> = {
       type: 'HeadMarker',
       netRegex: { id: '000E' },
       condition: Conditions.targetIsYou(),
-      infoText: (_data, _matches, output) => {
+      durationSeconds: 3,
+      alertText: (_data, _matches, output) => {
         return output.uvRayOnYou!();
       },
       outputStrings: {
         uvRayOnYou: {
           en: 'UV Ray on YOU',
-          ko: '내게 UV레이',
+          ko: '내게 레이저가!',
         },
       },
     },
@@ -812,72 +835,89 @@ const triggerSet: TriggerSet<Data> = {
     },
     {
       id: 'R8S Hero\'s Blow',
-      // Has two casts
-      // A45F for Hero's Blow Left cleave
-      // A460 for Hero's Blow Left cleave damage
-      // A461 Hero's Blow Right cleave
-      // A462 Hero's Blow Right cleave damage
-      // Hero's Blow targets a player, the player could be anywhere
-      // Call relative to boss facing
+      // A45F Hero's Blow Left
+      // A461 Hero's Blow Right
       type: 'StartsUsing',
       netRegex: { id: ['A45F', 'A461'], source: 'Howling Blade', capture: true },
       delaySeconds: 0.3,
-      promise: async (data, matches) => {
-        const actors = (await callOverlayHandler({
-          call: 'getCombatants',
-          ids: [parseInt(matches.sourceId, 16)],
-        })).combatants;
-        const actor = actors[0];
-        if (actors.length !== 1 || actor === undefined)
-          return;
-
-        data.hsafe = matches.id === 'A45F'
-          ? Math.abs(AutumnDir.hdgNum8(actor.Heading) - 4) % 16
-          : (AutumnDir.hdgNum8(actor.Heading) + 4) % 16;
-      },
-      infoText: (data, _matches, output) => {
+      infoText: (data, matches, output) => {
         const inout = output[data.hblow ?? 'unknown']!();
-        const dir = output[AutumnDir.dirFromNum(data.hsafe ?? -1)]!();
-        return output.text!({ inout: inout, dir: dir });
+        const dir = matches.id === 'A45F' ? 'right' : 'left';
+        return output.text!({ inout: inout, dir: output[dir]!() });
       },
+      run: (data) => data.hsafe = undefined,
       outputStrings: {
         in: Outputs.in,
         out: Outputs.out,
+        left: Outputs.arrowW,
+        right: Outputs.arrowE,
         text: {
           en: '${inout} + ${dir}',
-          ko: '${inout} + ${dir}',
+          ko: '${dir}${inout}',
         },
-        unknown: Outputs.unknown,
-        ...AutumnDir.stringsAim,
       },
     },
     {
-      // headmarkers with casts:
-      // A467 (Elemental Purge)
-      // A468 (Aerotemporal Blast) on one random non-tank
-      // A469 (Geotemporal Blast) on one Tank
-      id: 'R8S Elemental Purge Targets',
+      id: 'R8S Ultraviolent Ray 4',
+      type: 'Ability',
+      netRegex: { id: ['A45F', 'A461'], source: 'Howling Blade', capture: false },
+      durationSeconds: 4,
+      alertText: (data, _matches, output) => {
+        data.heroes++;
+        if (data.heroes === 2)
+          return output.text!();
+      },
+      outputStrings: {
+        text: {
+          en: 'UV Positions',
+          ko: '담당 플랫폼으로! (곧 나란히)',
+        },
+      },
+    },
+    {
+      id: 'R8S Elemental Purge Tank',
       type: 'HeadMarker',
       netRegex: { id: '0017' },
       condition: (data) => data.phase === '2nd',
       infoText: (data, matches, output) => {
-        data.collect.push(matches.target);
-        if (data.collect.length < 2)
+        const m = data.party.member(matches.target);
+        if (m.role_ !== 'tank')
           return;
-
-        const name1 = data.party.member(data.collect[0]);
-        const name2 = data.party.member(data.collect[1]);
-
-        return output.purgeOnPlayers!({ player1: name1, player2: name2 });
-      },
-      run: (data) => {
-        if (data.collect.length >= 2)
-          data.collect = [];
+        return output.purge!({ name: m, job: m.job });
       },
       outputStrings: {
-        purgeOnPlayers: {
-          en: 'Elemental Purge on ${player1} and ${player2}',
-          ko: '퍼지: ${player1}, ${player2}',
+        purge: {
+          en: 'Purge: ${name} (${job})',
+          ko: '퍼지: ${name} (${job})',
+        },
+      },
+    },
+    {
+      id: 'R8S Prowling Gale Pair',
+      type: 'StartsUsing',
+      netRegex: { id: 'A46E', source: 'Howling Blade', capture: false },
+      condition: (data) => data.phase === '2nd',
+      infoText: (_data, _matches, output) => output.towers!(),
+      outputStrings: {
+        towers: {
+          en: 'Towers',
+          ko: '페어 타워 위치로',
+        },
+      },
+    },
+    {
+      id: 'R8S Twofold Preparation',
+      type: 'StartsUsing',
+      netRegex: { id: 'A46F', source: 'Howling Blade' },
+      condition: (data) => data.phase === '2nd',
+      delaySeconds: (_data, matches) => parseFloat(matches.castTime) - 1.5,
+      durationSeconds: 3,
+      suppressSeconds: 1,
+      alertText: (_data, _matches, output) => output.move!(),
+      outputStrings: {
+        move: {
+          en: 'Light Party Platforms',
+          ko: '담당 플랫폼으로!',
         },
       },
     },
@@ -1036,11 +1076,11 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         cw: {
           en: '<== Clockwise',
-          ko: '❰❰❰왼쪽으로',
+          ko: '❰❰❰시계방향',
         },
         ccw: {
           en: 'Counterclockwise ==>',
-          ko: '오른쪽으로❱❱❱',
+          ko: '반시계방향❱❱❱',
         },
       },
     },
@@ -1194,11 +1234,11 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         closeTetherOnYou: {
           en: 'Close Tether on YOU',
-          ko: '내게 가까운 줄',
+          ko: '내게 "붙어요" 줄',
         },
         farTetherOnYou: {
           en: 'Far Tether on YOU',
-          ko: '내게 멀리 줄',
+          ko: '내게 "떨어져요" 줄',
         },
       },
     },
@@ -1235,31 +1275,21 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (data, _matches, output) => {
         switch (data.platforms) {
           case 4:
-            return output.changePlatform1!();
           case 3:
-            return output.changePlatform2!();
           case 2:
-            return output.changePlatform3!();
+            return output.changePlatform!();
           case 1:
             return output.finalPlatform!();
         }
       },
       outputStrings: {
-        changePlatform1: {
-          en: 'Change Platform 1',
-          ko: '플랫폼1 ',
-        },
-        changePlatform2: {
-          en: 'Change Platform 2',
-          ko: '플랫폼2',
-        },
-        changePlatform3: {
-          en: 'Change Platform 3',
-          ko: '플랫폼3',
+        changePlatform: {
+          en: 'Change Platform',
+          ko: '플랫폼 옮겨요 ',
         },
         finalPlatform: {
           en: 'Change Platform (Final)',
-          ko: '마지막 플랫폼',
+          ko: '마지막 플랫폼으로',
         },
       },
     },
