@@ -209,24 +209,9 @@ const triggerSet: TriggerSet<Data> = {
           : 'leftRight';
         const kbDir = data.windKnockbackDir;
 
-        if (data.options.AutumnStyle)
-          return output.aCombo!({
-            safe: output[safeDir]!(),
-            kbDir: kbDir === undefined ? output.unknown!() : output[kbDir]!(),
-          });
-
-        if (kbDir === undefined) {
-          return output.comboUnknown!({
-            break: output.break!(),
-            safe: output[safeDir]!(),
-            unk: output.unknown!(),
-          });
-        }
-
-        return output.combo!({
-          break: output.break!(),
+        return output.aCombo!({
           safe: output[safeDir]!(),
-          kbDir: output[kbDir]!(),
+          kbDir: kbDir === undefined ? output.unknown!() : output[kbDir]!(),
         });
       },
       outputStrings: {
@@ -485,14 +470,8 @@ const triggerSet: TriggerSet<Data> = {
       netRegex: { effectId: '105A', capture: false },
       delaySeconds: 1,
       suppressSeconds: 1,
-      infoText: (data, _matches, output) => {
-        if (data.options.AutumnStyle)
-          return data.absoluteAuthorityDebuff === 'spread' ? output.aFlare!() : output.aStack!();
-        return output.combo!({
-          stackSpread: output[data.absoluteAuthorityDebuff]!(),
-          dorito: output.dorito!(),
-        });
-      },
+      infoText: (data, _matches, output) =>
+        data.absoluteAuthorityDebuff === 'spread' ? output.aFlare!() : output.aStack!(),
       outputStrings: {
         spread: {
           en: 'Flare Marker Spread',

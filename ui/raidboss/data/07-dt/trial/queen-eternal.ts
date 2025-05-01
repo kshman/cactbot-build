@@ -109,7 +109,11 @@ const triggerSet: TriggerSet<Data> = {
         return output.unknown!();
       },
       outputStrings: {
-        frontCorners: Outputs.corner,
+        frontCorners: {
+          en: 'Corner',
+          ja: '角へ',
+          ko: '모서리로',
+        },
         goLeft: Outputs.left,
         goRight: Outputs.right,
         unknown: Outputs.unknown,

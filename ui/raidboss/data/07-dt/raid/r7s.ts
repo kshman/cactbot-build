@@ -1,4 +1,4 @@
-import Autumn from '../../../../../resources/autumn';
+import Autumn, { AutumnCond } from '../../../../../resources/autumn';
 import Conditions from '../../../../../resources/conditions';
 import Outputs from '../../../../../resources/outputs';
 import { Responses } from '../../../../../resources/responses';
@@ -175,7 +175,7 @@ const triggerSet: TriggerSet<Data> = {
       id: 'R7S Winding Wildwinds',
       type: 'StartsUsing',
       netRegex: { id: 'A90D', source: 'Blooming Abomination', capture: false },
-      condition: Conditions.autumnOnly(),
+      condition: AutumnCond.onlyAutumn(),
       durationSeconds: 5,
       suppressSeconds: 5,
       infoText: (data, _matches, output) => {

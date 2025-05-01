@@ -243,42 +243,30 @@ const triggerSet: TriggerSet<Data> = {
         if (start === undefined)
           return output.unknown!();
 
-        if (data.options.AutumnStyle) {
-          let mesg = output.unknown!();
-          if (comb === styleFlags.succ) // 서큐버스 2
-            mesg = output.succ!();
-          else if (comb === styleFlags.mbol)
-            mesg = output.mbol!(); // 몰볼 2
-          else if (comb === (styleFlags.succ | styleFlags.mbol))
-            mesg = output.succmbol!(); // 서큐버스 + 몰볼
-          else if ((comb & styleFlags.bomb) !== 0) {
-            if ((comb & styleFlags.succ) !== 0)
-              mesg = output.bombsucc!(); // 폭탄 + 서큐버스
-            if ((comb & styleFlags.mbol) !== 0)
-              mesg = output.bombmbol!(); // 폭탄 + 몰볼
-          } else if ((comb & styleFlags.wing) !== 0) {
-            if ((comb & styleFlags.succ) !== 0)
-              mesg = output.wingsucc!(); // 날개 + 서큐버스
-            if ((comb & styleFlags.mbol) !== 0)
-              mesg = output.wingmbol!(); // 날개 + 몰볼
-          }
-          const dir = AutumnDir.dirFromNum(start);
-          return output.atext!({ dir: output[dir]!(), mesg: mesg });
+        let mesg = output.unknown!();
+        if (comb === styleFlags.succ) // 서큐버스 2
+          mesg = output.succ!();
+        else if (comb === styleFlags.mbol)
+          mesg = output.mbol!(); // 몰볼 2
+        else if (comb === (styleFlags.succ | styleFlags.mbol))
+          mesg = output.succmbol!(); // 서큐버스 + 몰볼
+        else if ((comb & styleFlags.bomb) !== 0) {
+          if ((comb & styleFlags.succ) !== 0)
+            mesg = output.bombsucc!(); // 폭탄 + 서큐버스
+          if ((comb & styleFlags.mbol) !== 0)
+            mesg = output.bombmbol!(); // 폭탄 + 몰볼
+        } else if ((comb & styleFlags.wing) !== 0) {
+          if ((comb & styleFlags.succ) !== 0)
+            mesg = output.wingsucc!(); // 날개 + 서큐버스
+          if ((comb & styleFlags.mbol) !== 0)
+            mesg = output.wingmbol!(); // 날개 + 몰볼
         }
-
-        const dir1 = AutumnDir.dirFromNum(start);
-        const dir2 = AutumnDir.dirFromNum(dir);
-        return output.text!({ dir1: output[dir1]!(), dir2: output[dir2]!() });
+        return output.text!({ dir: output[AutumnDir.dirFromNum(start)]!(), mesg: mesg });
       },
       outputStrings: {
         text: {
-          en: 'Start ${dir1}, launch towards ${dir2}',
-          cn: '从 ${dir1}, 向 ${dir2} 发射',
-          ko: '${dir1} 시작, ${dir2}로',
-        },
-        atext: {
           en: '${dir} ${mesg}',
-          ko: '${dir} ${mesg}',
+          ko: '${dir} (${mesg})',
         },
         succ: {
           en: 'Succubus x2',

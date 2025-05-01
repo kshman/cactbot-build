@@ -1,4 +1,4 @@
-import Autumn, { AutumnDir } from '../../../../../resources/autumn';
+import Autumn, { AutumnCond, AutumnDir } from '../../../../../resources/autumn';
 import Conditions from '../../../../../resources/conditions';
 import Outputs from '../../../../../resources/outputs';
 import { callOverlayHandler } from '../../../../../resources/overlay_plugin_api';
@@ -313,7 +313,7 @@ const triggerSet: TriggerSet<Data> = {
       // Happens twice, but Prowling Gale occurs simultaneously on the second one
       type: 'StartsUsing',
       netRegex: { id: 'A3B7', source: 'Howling Blade', capture: false },
-      condition: Conditions.notAutumnOnly(),
+      condition: AutumnCond.notOnlyAutumn(),
       suppressSeconds: 16,
       response: Responses.knockback(),
     },
@@ -594,7 +594,7 @@ const triggerSet: TriggerSet<Data> = {
       // Call to move behind Dragon Head after clones dash
       type: 'StartsUsing',
       netRegex: { id: 'A3BD', source: 'Howling Blade', capture: true },
-      condition: Conditions.notAutumnOnly(),
+      condition: AutumnCond.notOnlyAutumn(),
       delaySeconds: (_data, matches) => parseFloat(matches.castTime),
       suppressSeconds: 1,
       infoText: (_data, _matches, output) => {
@@ -868,7 +868,7 @@ const triggerSet: TriggerSet<Data> = {
         const name1 = data.party.member(data.collect[0]);
         const name2 = data.party.member(data.collect[1]);
 
-        return output.purgeOnPlayers!({ player1: name1.jobAbbr, player2: name2.jobAbbr });
+        return output.purgeOnPlayers!({ player1: name1, player2: name2 });
       },
       run: (data) => {
         if (data.collect.length >= 2)

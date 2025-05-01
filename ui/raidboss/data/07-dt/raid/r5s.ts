@@ -262,10 +262,7 @@ const triggerSet: TriggerSet<Data> = {
       id: 'R5S Arcady Night Fever', // +Arcady Night Encore
       type: 'StartsUsing',
       netRegex: { id: ['A760', 'A370'], source: 'Dancing Green', capture: false },
-      infoText: (data, _matches, output) => {
-        if (data.options.AutumnStyle)
-          return output.text!();
-      },
+      infoText: (_data, _matches, output) => output.text!(),
       run: (data) => {
         data.frogs = [];
         delete data.order;
@@ -390,7 +387,6 @@ const triggerSet: TriggerSet<Data> = {
       id: 'R5S Ride The Waves',
       type: 'StartsUsing',
       netRegex: { id: 'A754', source: 'Dancing Green', capture: false },
-      condition: (data) => data.options.AutumnStyle,
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {

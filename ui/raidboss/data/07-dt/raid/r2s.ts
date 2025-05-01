@@ -1,3 +1,4 @@
+import { AutumnCond } from '../../../../../resources/autumn';
 import Conditions from '../../../../../resources/conditions';
 import Outputs from '../../../../../resources/outputs';
 import { Responses } from '../../../../../resources/responses';
@@ -383,7 +384,7 @@ const triggerSet: TriggerSet<Data> = {
       id: 'R2S Centerstage Combo',
       type: 'StartsUsing',
       netRegex: { id: '91AC', source: 'Honey B. Lovely', capture: false },
-      condition: Conditions.notAutumnOnly(),
+      condition: AutumnCond.notOnlyAutumn(),
       durationSeconds: 9,
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
@@ -398,7 +399,7 @@ const triggerSet: TriggerSet<Data> = {
       id: 'R2S Outerstage Combo',
       type: 'StartsUsing',
       netRegex: { id: '91AD', source: 'Honey B. Lovely', capture: false },
-      condition: Conditions.notAutumnOnly(),
+      condition: AutumnCond.notOnlyAutumn(),
       durationSeconds: 9,
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {

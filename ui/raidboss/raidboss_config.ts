@@ -2556,16 +2556,6 @@ const templateOptions: OptionsTemplate = {
       default: 0.75,
     },
     {
-      id: 'AutumnStyle',
-      name: {
-        en: 'With Autumn\'s Style',
-        ja: '秋と一緒に',
-        ko: '어듬이와 함게',
-      },
-      type: 'checkbox',
-      default: false,
-    },
-    {
       id: 'AutumnOnly',
       name: {
         en: 'Only for Autumn',

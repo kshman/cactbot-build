@@ -3,7 +3,6 @@ import { Job, Role } from '../types/job';
 import { PartyMemberParamObject, PartyTrackerOptions } from '../types/party';
 import { LocaleText } from '../types/trigger';
 
-import Autumn from './autumn';
 import Util from './util';
 
 const emptyRoleToPartyNames = () => {
@@ -403,7 +402,7 @@ const jobLocalizedAbbr: Record<Job, LocaleText> = {
     fr: 'VPR',
     ja: 'ヴァイパー',
     cn: '蝰蛇',
-    ko: '해적',
+    ko: '바이퍼',
   },
   PCT: {
     en: 'PCT',
@@ -913,7 +912,6 @@ export default class PartyTracker {
       return {
         name: unknown,
         nick: unknown,
-        jobIndex: 0,
         toString: () => unknown,
       };
     }
@@ -927,7 +925,6 @@ export default class PartyTracker {
       ret = {
         name: name,
         nick: nick,
-        jobIndex: 0,
       };
     } else {
       const lang = this.options.DisplayLanguage;
@@ -938,14 +935,13 @@ export default class PartyTracker {
       const roleName = roleLocalized[role]?.[lang] ?? role;
       ret = {
         id: partyMember.id,
-        jobAbbr: jobAbbr,
+        job: jobAbbr,
         jobFull: jobFull,
-        roleName: roleName,
+        role: roleName,
         name: name,
         nick: nick,
-        role: role,
-        job: job,
-        jobIndex: partyMember.job,
+        role_: role,
+        job_: job,
       };
     }
 
@@ -954,84 +950,15 @@ export default class PartyTracker {
       const retVal = ret[this.options.DefaultPlayerLabel];
       if (typeof retVal === 'string')
         return retVal;
-      if (typeof retVal === 'number')
-        return retVal.toString();
-      return ret.jobAbbr ?? ret.nick;
+      return ret.nick;
     };
 
     return ret;
   }
 
-  // 어듬이 잡 인덱스
-  jobIndex(name: string): number {
-    const partyMember = this.details.find((member) => member.name === name);
-    if (partyMember === undefined)
-      return 0;
-    return partyMember.job;
-  }
-
-  // 어듬이 잡 이름 약자
-  jobAbbr(name?: string): string | undefined {
-    if (name === undefined)
-      return;
-    const partyMember = this.details.find((member) => member.name === name);
-    if (partyMember === undefined)
-      return;
-    const job = Util.jobEnumToJob(partyMember.job);
-    return jobLocalizedAbbr[job]?.[this.options.DisplayLanguage];
-  }
-
-  // 어듬이 잡 이름 전체
-  jobFull(name?: string): string | undefined {
-    if (name === undefined)
-      return;
-    const partyMember = this.details.find((member) => member.name === name);
-    if (partyMember === undefined)
-      return;
-    const job = Util.jobEnumToJob(partyMember.job);
-    return jobLocalizedFull[job]?.[this.options.DisplayLanguage];
-  }
-
-  // 어듬이 롤 이름
-  roleName(name: string): string | undefined {
-    return this.nameToRole_[name];
-  }
-
   // 멤버 목록을 만들어 준다
-  members(names: readonly string[]): PartyMemberParamObject[] {
+  memberList(names: readonly string[]): PartyMemberParamObject[] {
     const mm = names.map((x) => this.member(x));
     return mm;
-  }
-
-  // 멤버 목록을 문자열로 만들어 준다
-  memberList(names: readonly string[]): string[] {
-    const label = this.options.DefaultPlayerLabel;
-    const ls = names.map((x) => {
-      const m = this.member(x);
-      const v = m[label];
-      return typeof v === 'string' ? v : typeof v === 'number' ? v.toString() : m.nick;
-    });
-    return ls;
-  }
-
-  // 어듬이 형식으로 우선 순위 배열을 만들어 준다
-  priorityList(names: readonly string[]): string[] {
-    const ls: string[] = [];
-    const ids: number[] = [];
-    for (const n of names) {
-      const index = this.partyNames.indexOf(n);
-      if (index < 0) {
-        const m = this.member(n);
-        ls.push(m.toString());
-      } else {
-        const m = this.details[index];
-        if (m !== undefined)
-          ids.push(m.job);
-      }
-    }
-    const sorted = Autumn.jobPriorityList(ids, this.options.DisplayLanguage);
-    for (const i of sorted)
-      ls.push(i);
-    return ls;
   }
 }

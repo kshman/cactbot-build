@@ -34,8 +34,9 @@ import _ZoneId from './zone_id';
 const ZoneId = _ZoneId;
 import _ZoneInfo from './zone_info';
 const ZoneInfo = _ZoneInfo;
-import _Autumn, { AutumnDir as _AutumnDir } from './autumn';
+import _Autumn, { AutumnCond as _AutumnCond, AutumnDir as _AutumnDir } from './autumn';
 const Autumn = _Autumn;
+const AutumnCond = _AutumnCond;
 const AutumnDir = _AutumnDir;
 
 // Convince TypeScript and eslint that these are used.  TypeScript doesn't have a great way
@@ -51,6 +52,7 @@ console.assert(Directions);
 console.assert(ZoneId);
 console.assert(ZoneInfo);
 console.assert(Autumn);
+console.assert(AutumnCond);
 console.assert(AutumnDir);
 
 // TODO: move all of these to config.js?
@@ -133,7 +135,6 @@ class UserConfig {
         gameRegion: 'International',
       },
       Debug: false,
-      AutumnStyle: false,
       AutumnOnly: false,
     };
   }

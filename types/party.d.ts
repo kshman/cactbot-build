@@ -3,15 +3,14 @@ import { Job, Role } from './job';
 import { OutputStringsParamObject } from './trigger';
 
 export type BasePartyMemberParamObject = {
-  roleName?: string;
-  jobAbbr?: string;
+  role?: string;
+  job?: string;
   jobFull?: string;
   id?: string;
   name: string;
   nick: string;
-  role?: Role;
-  job?: Job;
-  jobIndex: number;
+  role_?: Role;
+  job_?: Job;
 };
 
 export type PartyMemberParamObjectKeys = keyof BasePartyMemberParamObject;

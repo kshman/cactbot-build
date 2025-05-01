@@ -668,25 +668,11 @@ const triggerSet: TriggerSet<Data> = {
       },
       infoText: (data, matches, output) => {
         data.prsDefm = (data.prsDefm ?? 0) + 1;
-        if (data.me === matches.target) {
-          if (!data.options.AutumnStyle)
-            return output.defamation!();
-          return output.defNum!({ num: data.prsDefm });
-        }
+        if (data.me === matches.target)
+          return output.defamation!();
       },
       outputStrings: {
-        defamation: {
-          en: 'Defamation on YOU',
-          de: 'Ehrenstrafe aud DIR',
-          fr: 'Diffamation sur VOUS',
-          ja: '自分に巨大な爆発',
-          cn: '大圈点名',
-          ko: '내게 서클',
-        },
-        defNum: {
-          en: 'Defamation ${num} on YOU',
-          ko: '내게 #${num} 🔵폭탄',
-        },
+        defamation: Outputs.defamationOnYou,
       },
     },
     {

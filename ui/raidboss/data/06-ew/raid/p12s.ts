@@ -717,7 +717,6 @@ const triggerSet: TriggerSet<Data> = {
       id: 'P12S 알테마 블레이드',
       regex: /Ultima Blade/,
       beforeSeconds: 4,
-      condition: (data) => data.options.AutumnStyle,
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
@@ -732,298 +731,11 @@ const triggerSet: TriggerSet<Data> = {
       id: 'P12S 어듬이 Pangenesis 전 산개',
       regex: /Pangenesis/,
       beforeSeconds: 12,
-      condition: (data) => data.options.AutumnStyle,
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
           en: '[Pangenesis]',
           ko: '[판제네시스: 나란히 줄 서요]',
-        },
-      },
-    },
-    //
-    {
-      id: 'P12S 어듬이 버프: Ultima 1',
-      regex: /Ultima 1/,
-      beforeSeconds: 7,
-      condition: (data) => data.options.AutumnStyle,
-      infoText: (data, _matches, output) => {
-        if (data.role === 'tank' && data.palladionGrapsTarget === data.me)
-          return output.reprisal!();
-        if (data.CanAddle())
-          return output.addle!();
-      },
-      outputStrings: {
-        reprisal: {
-          en: '[MT Reprisal]',
-          ko: '[MT 리프]',
-        },
-        addle: {
-          en: '[Caster Addle]',
-          ko: '[아돌 넣으라우]',
-        },
-      },
-    },
-    //
-    {
-      id: 'P12S 어듬이 버프: Gaiaochos 1',
-      regex: /Gaiaochos 1/,
-      beforeSeconds: 8,
-      condition: (data) => data.options.AutumnStyle,
-      infoText: (data, _matches, output) => {
-        if (data.role === 'tank' && data.palladionGrapsTarget === data.me)
-          return output.text!();
-      },
-      outputStrings: {
-        text: {
-          en: '[MT Buff]',
-          ko: '[MT 세이크오프]',
-        },
-      },
-    },
-    //
-    {
-      id: 'P12S 어듬이 버프: Ultima 2',
-      regex: /Ultima 2/,
-      beforeSeconds: 8,
-      condition: (data) => data.options.AutumnStyle,
-      infoText: (data, _matches, output) => {
-        if (data.role === 'tank' && data.palladionGrapsTarget === data.me)
-          return output.text!();
-      },
-      outputStrings: {
-        text: {
-          en: '[MT Reprisal]',
-          ko: '[MT 리프]',
-        },
-      },
-    },
-    //
-    {
-      id: 'P12S 어듬이 버프: The Classical Concepts 1',
-      regex: /The Classical Concepts 1/,
-      beforeSeconds: 8,
-      condition: (data) => data.options.AutumnStyle,
-      infoText: (data, _matches, output) => {
-        if (data.role === 'tank' && data.palladionGrapsTarget !== data.me)
-          return output.text!();
-      },
-      outputStrings: {
-        text: {
-          en: '[ST Reprisal]',
-          ko: '[ST 리프]',
-        },
-      },
-    },
-    //
-    {
-      id: 'P12S 어듬이 버프: Ultima 3',
-      regex: /Ultima 3/,
-      beforeSeconds: 8,
-      condition: (data) => data.options.AutumnStyle,
-      infoText: (data, _matches, output) => {
-        if (data.role === 'tank' && data.palladionGrapsTarget !== data.me)
-          return output.text!();
-      },
-      outputStrings: {
-        text: {
-          en: '[ST Buff]',
-          ko: '[ST 세이크오프]',
-        },
-      },
-    },
-    //
-    {
-      id: 'P12S 어듬이 버프: Caloric Theory 1',
-      regex: /Caloric Theory 1/,
-      beforeSeconds: 8,
-      condition: (data) => data.options.AutumnStyle,
-      infoText: (data, _matches, output) => {
-        if (data.role === 'tank' && data.palladionGrapsTarget === data.me)
-          return output.text!();
-      },
-      outputStrings: {
-        text: {
-          en: '[MT Buff]',
-          ko: '[MT 세이크오프]',
-        },
-      },
-    },
-    //
-    {
-      id: 'P12S 어듬이 버프: Ultima 4',
-      regex: /Ultima 4/,
-      beforeSeconds: 8,
-      condition: (data) => data.options.AutumnStyle,
-      infoText: (data, _matches, output) => {
-        if (data.role === 'tank' && data.palladionGrapsTarget !== data.me)
-          return output.text!();
-      },
-      outputStrings: {
-        text: {
-          en: '[ST Reprisal]',
-          ko: '[ST 리프]',
-        },
-      },
-    },
-    //
-    {
-      id: 'P12S 어듬이 버프: Pangenesis',
-      regex: /Pangenesis/,
-      beforeSeconds: 8,
-      condition: (data) => data.options.AutumnStyle,
-      infoText: (data, _matches, output) => {
-        if (data.role === 'tank')
-          return data.palladionGrapsTarget === data.me ? output.mt!() : output.st!();
-      },
-      outputStrings: {
-        mt: {
-          en: '[MT Rprisal]',
-          ko: '[MT 리프]',
-        },
-        st: {
-          en: '[ST Buff]',
-          ko: '[ST 세이크오프]',
-        },
-      },
-    },
-    //
-    {
-      id: 'P12S 어듬이 버프: The Classical Concepts 2',
-      regex: /The Classical Concepts 2/,
-      beforeSeconds: 8,
-      condition: (data) => data.options.AutumnStyle,
-      infoText: (data, _matches, output) => {
-        if (data.role === 'tank' && data.palladionGrapsTarget === data.me)
-          return output.text!();
-      },
-      outputStrings: {
-        text: {
-          en: '[MT Buff]',
-          ko: '[MT 세이크오프]',
-        },
-      },
-    },
-    //
-    {
-      id: 'P12S 어듬이 버프: Ultima 5',
-      regex: /Ultima 5/,
-      beforeSeconds: 8,
-      condition: (data) => data.options.AutumnStyle,
-      infoText: (data, _matches, output) => {
-        if (data.role === 'tank' && data.palladionGrapsTarget === data.me)
-          return output.text!();
-      },
-      outputStrings: {
-        text: {
-          en: '[MT Reprisal]',
-          ko: '[MT 리프]',
-        },
-      },
-    },
-    //
-    {
-      id: 'P12S 어듬이 버프: Caloric Theory 2',
-      regex: /Caloric Theory 2/,
-      beforeSeconds: 8,
-      condition: (data) => data.options.AutumnStyle,
-      infoText: (data, _matches, output) => {
-        if (data.role === 'tank' && data.palladionGrapsTarget !== data.me)
-          return output.text!();
-      },
-      outputStrings: {
-        text: {
-          en: '[ST Reprisal + Buff]',
-          ko: '[ST 리프 + 세이크오프]',
-        },
-      },
-    },
-    //
-    {
-      id: 'P12S 어듬이 버프: Ekpyrosis 2 (cast)',
-      regex: /Ekpyrosis 2 \(cast\)/,
-      beforeSeconds: 8,
-      condition: (data) => data.options.AutumnStyle,
-      infoText: (data, _matches, output) => {
-        if (data.role === 'tank' && data.palladionGrapsTarget === data.me)
-          return output.text!();
-      },
-      outputStrings: {
-        text: {
-          en: '[MT Buff]',
-          ko: '[MT 세이크오프]',
-        },
-      },
-    },
-    //
-    {
-      id: 'P12S 어듬이 버프: Ultima 6',
-      regex: /Ultima 6/,
-      beforeSeconds: 8,
-      condition: (data) => data.options.AutumnStyle,
-      infoText: (data, _matches, output) => {
-        if (data.role === 'tank' && data.palladionGrapsTarget === data.me)
-          return output.text!();
-      },
-      outputStrings: {
-        text: {
-          en: '[MT Reprisal]',
-          ko: '[MT 리프]',
-        },
-      },
-    },
-    //
-    {
-      id: 'P12S 어듬이 버프: Gaiaochos 2',
-      regex: /Gaiaochos 2/,
-      beforeSeconds: 8,
-      condition: (data) => data.options.AutumnStyle,
-      infoText: (data, _matches, output) => {
-        if (data.role === 'tank' && data.palladionGrapsTarget !== data.me)
-          return output.text!();
-      },
-      outputStrings: {
-        text: {
-          en: '[ST Reprisal]',
-          ko: '[ST 리프]',
-        },
-      },
-    },
-    //
-    {
-      id: 'P12S 어듬이 버프: Ultima 7',
-      regex: /Ultima 7/,
-      beforeSeconds: 8,
-      condition: (data) => data.options.AutumnStyle,
-      infoText: (data, _matches, output) => {
-        if (data.role === 'tank' && data.palladionGrapsTarget === data.me)
-          return output.text!();
-      },
-      outputStrings: {
-        text: {
-          en: '[MT Reprisal]',
-          ko: '[MT 리프]',
-        },
-      },
-    },
-    //
-    {
-      id: 'P12S 어듬이 버프: Ultima 8',
-      regex: /Ultima 8/,
-      beforeSeconds: 8,
-      condition: (data) => data.options.AutumnStyle,
-      infoText: (data, _matches, output) => {
-        if (data.role === 'tank')
-          return data.palladionGrapsTarget === data.me ? output.mt!() : output.st!();
-      },
-      outputStrings: {
-        mt: {
-          en: '[MT Buff]',
-          ko: '[MT 세이크오프]',
-        },
-        st: {
-          en: '[ST Rprisal]',
-          ko: '[ST 리프]',
         },
       },
     },
@@ -1132,28 +844,25 @@ const triggerSet: TriggerSet<Data> = {
         const y = data.combatantData[0]?.PosY;
         if (y === undefined)
           return output.clones!({ dir: output.unknown!() });
-        if (data.options.AutumnStyle) {
-          let cloneSide;
-          if (y > centerY) {
-            if (data.role === 'tank') {
-              data.prsNorth = false;
-              cloneSide = 'south';
-            } else {
-              data.prsNorth = true;
-              cloneSide = 'north';
-            }
+
+        let cloneSide;
+        if (y > centerY) {
+          if (data.role === 'tank') {
+            data.prsNorth = false;
+            cloneSide = 'south';
           } else {
-            if (data.role === 'tank') {
-              data.prsNorth = true;
-              cloneSide = 'north';
-            } else {
-              data.prsNorth = false;
-              cloneSide = 'south';
-            }
+            data.prsNorth = true;
+            cloneSide = 'north';
           }
-          return output.clones!({ dir: output[cloneSide]!() });
+        } else {
+          if (data.role === 'tank') {
+            data.prsNorth = true;
+            cloneSide = 'north';
+          } else {
+            data.prsNorth = false;
+            cloneSide = 'south';
+          }
         }
-        const cloneSide = y > centerY ? 'south' : 'north';
         return output.clones!({ dir: output[cloneSide]!() });
       },
       outputStrings: {
@@ -1222,121 +931,25 @@ const triggerSet: TriggerSet<Data> = {
         const firstDir = data.superchain2aFirstDir;
         const secondDir = data.superchain2aSecondDir;
 
-        if (data.options.AutumnStyle) {
-          if (data.phase !== 'superchain2a') {
-            if (data.prsNorth)
-              return isLeftAttack ? output.aleft!() : output.aright!();
-            return isLeftAttack ? output.aright!() : output.aleft!();
-          }
-
-          const dir = isLeftAttack ? output.aright!() : output.aleft!();
-          if (firstDir === 'north') {
-            if (secondDir === 'north')
-              return output.aSc2aNn!({ dir: dir });
-            return output.aSc2aNs!({ dir: dir });
-          }
-          if (secondDir === 'north')
-            return output.aSc2aSn!({ dir: dir });
-          return output.aSc2aSs!({ dir: dir });
+        if (data.phase !== 'superchain2a') {
+          if (data.prsNorth)
+            return isLeftAttack ? output.aleft!() : output.aright!();
+          return isLeftAttack ? output.aright!() : output.aleft!();
         }
 
-        if (data.phase !== 'superchain2a' || firstDir === undefined || secondDir === undefined)
-          return isLeftAttack ? output.right!() : output.left!();
-
-        if (isLeftAttack) {
-          if (firstDir === 'north') {
-            if (secondDir === 'north')
-              return output.superchain2aRightNorthNorth!();
-            return output.superchain2aRightNorthSouth!();
-          }
-          if (secondDir === 'north')
-            return output.superchain2aRightSouthNorth!();
-          return output.superchain2aRightSouthSouth!();
-        }
-
+        const dir = isLeftAttack ? output.aright!() : output.aleft!();
         if (firstDir === 'north') {
           if (secondDir === 'north')
-            return output.superchain2aLeftNorthNorth!();
-          return output.superchain2aLeftNorthSouth!();
+            return output.aSc2aNn!({ dir: dir });
+          return output.aSc2aNs!({ dir: dir });
         }
         if (secondDir === 'north')
-          return output.superchain2aLeftSouthNorth!();
-        return output.superchain2aLeftSouthSouth!();
+          return output.aSc2aSn!({ dir: dir });
+        return output.aSc2aSs!({ dir: dir });
       },
       outputStrings: {
         left: Outputs.left,
         right: Outputs.right,
-        // This could *also* say partners, but it's always partners and that feels like
-        // too much information.  The "after" call could be in an info text or something,
-        // but the wings are also calling out info text too.  This is a compromise.
-        // Sorry also for spelling this out so explicitly, but I suspect some people
-        // might want different left/right calls based on North/South boss facing
-        // and it's nice to have a "go through" or "go back" description too.
-        superchain2aLeftNorthNorth: {
-          en: 'North + Her Left (then back North)',
-          de: 'Norden + Links von Ihr (dannach Norden)',
-          fr: 'Nord + Sa gauche (puis Nord à nouveau)',
-          ja: '北 + 北に戻る (左安置)',
-          cn: '上 (北) + Boss左侧 (稍后 回上北)',
-          ko: '북쪽 🔜 되돌아 와욧 [왼쪽]',
-        },
-        superchain2aLeftNorthSouth: {
-          en: 'North + Her Left (then go South)',
-          de: 'Norden + Links von Ihr (dannach Süden)',
-          fr: 'Norf + Sa gauche (puis aller au Sud)',
-          ja: '北 + 南へ前進 (左安置)',
-          cn: '上 (北) + Boss左侧 (稍后 去下南)',
-          ko: '북쪽 🔜 계속 전진 [왼쪽]',
-        },
-        superchain2aLeftSouthNorth: {
-          en: 'South + Left (then go North)',
-          de: 'Süden + Links (dannach Norden)',
-          fr: 'Sud + Gauche (puis aller au Nord)',
-          ja: '南 + 北へ前進 (左安置)',
-          cn: '下 (南) + 左 (稍后 去上北)',
-          ko: '남쪽 🔜 계속 전진 [왼쪽]',
-        },
-        superchain2aLeftSouthSouth: {
-          en: 'South + Left (then back South)',
-          de: 'Süden + Links (dannach Süden)',
-          fr: 'Sud + Gauche (puis Sud à nouveau)',
-          ja: '南 + 南に戻る (左安置)',
-          cn: '下 (南) + 左 (稍后 回下南)',
-          ko: '남쪽 🔜 되돌아 와욧 [왼쪽]',
-        },
-        superchain2aRightNorthNorth: {
-          en: 'North + Her Right (then back North)',
-          de: 'Norden + Rechts von Ihr (dannach Norden)',
-          fr: 'Nord + Sa droite (puis Nord à nouveau)',
-          ja: '北 + 北に戻る (右安置)',
-          cn: '上 (北) + Boss右侧 (稍后 回上北)',
-          ko: '북쪽 🔜 되돌아 와욧 [오른쪽]',
-        },
-        superchain2aRightNorthSouth: {
-          en: 'North + Her Right (then go South)',
-          de: 'Norden + Rechts von Ihr (dannach Süden)',
-          fr: 'Nord + Sa droite (puis aller au Sud)',
-          ja: '北 + 南へ前進 (右安置)',
-          cn: '上 (北) + Boss右侧 (稍后 去下南)',
-          ko: '북쪽 🔜 계속 전진 [오른쪽]',
-        },
-        superchain2aRightSouthNorth: {
-          en: 'South + Right (then go North)',
-          de: 'Süden + Rechts (dannach Norden)',
-          fr: 'Sud + Droite (puis aller au Nord)',
-          ja: '南 + 北へ前進 (右安置)',
-          cn: '下 (南) + 右 (稍后 去上北)',
-          ko: '남쪽 🔜 계속 전진 [오른쪽]',
-        },
-        superchain2aRightSouthSouth: {
-          en: 'South + Right (then back South)',
-          de: 'Süden + Rechts (dannach Süden)',
-          fr: 'Sud + Droite (puis Sud à nouveau)',
-          ja: '南 + 南に戻る (右安置)',
-          cn: '下 (南) + 右 (稍后 回下南)',
-          ko: '남쪽 🔜 되돌아 와욧 [오른쪽]',
-        },
-        //
         aSc2aNn: {
           en: 'North[${dir}] => North again',
           ko: '북쪽[${dir}] 🔜 다시 북쪽',
@@ -1382,8 +995,6 @@ const triggerSet: TriggerSet<Data> = {
         const isSecondLeft = second === wings.middleLeftSecond;
         const isThirdLeft = third === wings.topLeftThird || third === wings.bottomLeftThird;
 
-        const firstStr = isFirstLeft ? output.right!() : output.left!();
-
         const isFirstTop = first === wings.topLeftFirst || first === wings.topRightFirst;
         let secondCall: 'swap' | 'stay';
         let thirdCall: 'swap' | 'stay';
@@ -1397,48 +1008,33 @@ const triggerSet: TriggerSet<Data> = {
 
         data.wingCalls = [secondCall, thirdCall];
 
-        if (data.options.AutumnStyle) {
-          if (data.phase === 'superchain2a') {
-            if (third === undefined) {
-              if (secondCall === 'stay')
-                return output.secondWingCallStay!();
-              return output.secondWingCallSwap!();
-            }
-
-            return output.aall!({
-              first: isFirstLeft ? output.aright!() : output.aleft!(),
-              second: output[secondCall]!(),
-              third: output[thirdCall]!(),
-            });
-          }
-
+        if (data.phase === 'superchain2a') {
           if (third === undefined) {
             if (secondCall === 'stay')
               return output.secondWingCallStay!();
             return output.secondWingCallSwap!();
           }
 
-          let afirst;
-          if (data.prsNorth)
-            afirst = isFirstLeft ? output.aleft!() : output.aright!();
-          else
-            afirst = isFirstLeft ? output.aright!() : output.aleft!();
           return output.aall!({
-            first: afirst,
+            first: isFirstLeft ? output.aright!() : output.aleft!(),
             second: output[secondCall]!(),
             third: output[thirdCall]!(),
           });
         }
 
-        // This is the second call only.
         if (third === undefined) {
           if (secondCall === 'stay')
             return output.secondWingCallStay!();
           return output.secondWingCallSwap!();
         }
 
-        return output.allThreeWings!({
-          first: firstStr,
+        let afirst;
+        if (data.prsNorth)
+          afirst = isFirstLeft ? output.aleft!() : output.aright!();
+        else
+          afirst = isFirstLeft ? output.aright!() : output.aleft!();
+        return output.aall!({
+          first: afirst,
           second: output[secondCall]!(),
           third: output[thirdCall]!(),
         });
@@ -1514,68 +1110,31 @@ const triggerSet: TriggerSet<Data> = {
         const secondDir = data.superchain2aSecondDir;
         const secondMech = data.superchain2aSecondMech;
 
-        if (data.options.AutumnStyle) {
-          if (data.phase !== 'superchain2a') {
-            if (call === 'swap')
-              return output.swap!();
-            return output.stay!();
-          }
-
-          const isSecondWing = data.wingCalls.length === 1;
-          if (isSecondWing) {
-            const isReturnBack = firstDir === secondDir;
-            const move = call !== 'swap' ? '' : output.a2swap!();
-            if (isReturnBack)
-              return output.aSc2aMb!({ move: move });
-            return output.aSc2aMg!({ move: move });
-          }
-
-          const isProtean = secondMech === 'protean';
-          const move = call !== 'swap' ? '' : output.a2swap!();
-          if (firstDir === secondDir) {
-            if (isProtean)
-              return output.aSc2aBpro!({ move: move });
-            return output.aSc2aBtwo!({ move: move });
-          }
-          if (isProtean)
-            return output.aSc2aGpro!({ move: move });
-          return output.aSc2aGtwo!({ move: move });
-        }
-
-        if (
-          data.phase !== 'superchain2a' || firstDir === undefined || secondDir === undefined ||
-          secondMech === undefined
-        ) {
+        if (data.phase !== 'superchain2a') {
           if (call === 'swap')
             return output.swap!();
           return output.stay!();
         }
 
-        // Second wing call (when middle) during Superchain IIA.
         const isSecondWing = data.wingCalls.length === 1;
-        const finalDir = secondDir === 'north' ? output.north!() : output.south!();
         if (isSecondWing) {
           const isReturnBack = firstDir === secondDir;
-          if (call === 'swap') {
-            if (isReturnBack)
-              return output.superchain2aSwapMidBack!({ dir: finalDir });
-            return output.superchain2aSwapMidGo!({ dir: finalDir });
-          }
+          const move = call !== 'swap' ? '' : output.a2swap!();
           if (isReturnBack)
-            return output.superchain2aStayMidBack!({ dir: finalDir });
-          return output.superchain2aStayMidGo!({ dir: finalDir });
+            return output.aSc2aMb!({ move: move });
+          return output.aSc2aMg!({ move: move });
         }
 
-        // Third wing call (when at final destination).
         const isProtean = secondMech === 'protean';
-        if (call === 'swap') {
+        const move = call !== 'swap' ? '' : output.a2swap!();
+        if (firstDir === secondDir) {
           if (isProtean)
-            return output.superchain2aSwapProtean!({ dir: finalDir });
-          return output.superchain2aSwapPartners!({ dir: finalDir });
+            return output.aSc2aBpro!({ move: move });
+          return output.aSc2aBtwo!({ move: move });
         }
         if (isProtean)
-          return output.superchain2aStayProtean!({ dir: finalDir });
-        return output.superchain2aStayPartners!({ dir: finalDir });
+          return output.aSc2aGpro!({ move: move });
+        return output.aSc2aGtwo!({ move: move });
       },
       outputStrings: {
         swap: {
@@ -1594,73 +1153,6 @@ const triggerSet: TriggerSet<Data> = {
           cn: '停',
           ko: '그대로',
         },
-        superchain2aSwapMidBack: {
-          en: 'Swap + Mid => Back ${dir}',
-          de: 'Wechseln + Mitte => Zurück nach ${dir}',
-          fr: 'Swap + Milieu => Retour vers ${dir}',
-          ja: '真ん中 => また${dir} (横へ)',
-          cn: '穿 + 去中间 => 回到 ${dir}',
-          ko: '한가운데 🔜 ${dir} 되돌아 가욧 [옆으로]',
-        },
-        superchain2aSwapMidGo: {
-          en: 'Swap + Mid => Go ${dir}',
-          de: 'Wechseln + Mitte => Geh nach ${dir}',
-          fr: 'Swap + Milieu => Allez ${dir}',
-          ja: '真ん中 => ${dir}前進 (横へ)',
-          cn: '穿 + 去中间 => 去 ${dir}',
-          ko: '한가운데 🔜 계속 전진 ${dir} [옆으로]',
-        },
-        superchain2aStayMidBack: {
-          en: 'Stay + Mid => Back ${dir}',
-          de: 'Bleib stehen + Mitte => Zurück nach ${dir}',
-          fr: 'Restez + Milieu => Retour vers ${dir}',
-          ja: '真ん中 => また${dir} (止まる)',
-          cn: '停 + 去中间 => 回到 ${dir}',
-          ko: '한가운데 🔜 ${dir} 되돌아 가욧',
-        },
-        superchain2aStayMidGo: {
-          en: 'Stay + Mid => Go ${dir}',
-          de: 'Bleib stehen + Mitte => Geh nach ${dir}',
-          fr: 'Restez + Milieu => Aller vers ${dir}',
-          ja: '真ん中 => ${dir}前進 (止まる)',
-          cn: '停 + 去中间 => 去 ${dir}',
-          ko: '한가운데 🔜 계속 전진 ${dir}',
-        },
-        superchain2aSwapProtean: {
-          en: 'Swap => Protean + ${dir}',
-          de: 'Wechseln => Himmelsrichtungen + ${dir}',
-          fr: 'Swap => Position + ${dir}',
-          ja: '基本散会 + ${dir} (横へ)',
-          cn: '穿 => 八方分散 + ${dir}',
-          ko: '${dir} + 프로틴 [옆으로]',
-        },
-        superchain2aStayProtean: {
-          en: 'Stay => Protean + ${dir}',
-          de: 'Bleib stehen => Himmelsrichtungen + ${dir}',
-          fr: 'Restez => Position + ${dir}',
-          ja: '基本散会 + ${dir} (止まる)',
-          cn: '停 => 八方分散 + ${dir}',
-          ko: '${dir} + 프로틴',
-        },
-        superchain2aSwapPartners: {
-          en: 'Swap => Partners + ${dir}',
-          de: 'Wechseln => Partner + ${dir}',
-          fr: 'Swap => Partenaires + ${dir}',
-          ja: 'ペア + ${dir} (横へ)',
-          cn: '穿 => 双人分摊 + ${dir}',
-          ko: '${dir} + 페어 [옆으로]',
-        },
-        superchain2aStayPartners: {
-          en: 'Stay => Partners + ${dir}',
-          de: 'Bleib stehen => Partner + ${dir}',
-          fr: 'Restez => Partenaires + ${dir}',
-          ja: 'ペア + ${dir} (止まる)',
-          cn: '停 => 双人分摊 + ${dir}',
-          ko: '${dir} + 페어',
-        },
-        north: Outputs.north,
-        south: Outputs.south,
-        //
         aleft: Outputs.arrowW,
         aright: Outputs.arrowE,
         a2swap: {
@@ -1732,7 +1224,7 @@ const triggerSet: TriggerSet<Data> = {
       id: 'P12S 줄다리기 보라',
       type: 'Tether',
       netRegex: { id: ['00EA', '00FB'] },
-      condition: (data, matches) => data.options.AutumnStyle && data.me === matches.target,
+      condition: Conditions.targetIsYou(),
       durationSeconds: 7,
       suppressSeconds: 10,
       infoText: (_data, _matches, output) => output.text!(),
@@ -1747,7 +1239,7 @@ const triggerSet: TriggerSet<Data> = {
       id: 'P12S 줄다리기 노랑',
       type: 'Tether',
       netRegex: { id: ['00E9', '00FA'] },
-      condition: (data, matches) => data.options.AutumnStyle && data.me === matches.target,
+      condition: Conditions.targetIsYou(),
       durationSeconds: 7,
       suppressSeconds: 10,
       infoText: (_data, _matches, output) => output.text!(),
@@ -1785,37 +1277,6 @@ const triggerSet: TriggerSet<Data> = {
           return;
         data.engravement1TetherPlayers[matches.sourceId] = tetherType;
         data.engravement1TetherIds.push(parseInt(matches.sourceId, 16));
-      },
-    },
-    {
-      id: 'P12S Engravement 1 Beam',
-      type: 'StartsUsing',
-      netRegex: { id: Object.keys(tetherAbilityToTowerMap), source: 'Anthropos' },
-      condition: (data) => !data.options.AutumnStyle && data.engravementCounter === 1,
-      alertText: (data, matches, output) => {
-        if (data.me === matches.target) {
-          if (matches.id === '82F1')
-            return output.lightBeam!();
-          return output.darkBeam!();
-        }
-      },
-      outputStrings: {
-        lightBeam: {
-          en: 'light beam',
-          de: 'Heller Laser',
-          fr: 'Rayon de lumière',
-          ja: 'ひかりビーム',
-          cn: '引导光激光',
-          ko: '빛 선',
-        },
-        darkBeam: {
-          en: 'dark beam',
-          de: 'Dunkler Laser',
-          fr: 'Rayon sombre',
-          ja: 'やみビーム',
-          cn: '引导暗激光',
-          ko: '어둠 선',
-        },
       },
     },
     {
@@ -1914,110 +1375,41 @@ const triggerSet: TriggerSet<Data> = {
 
         // Now use strategy and towerList (which only contains the correct color for the player)
         // to call out two spots or sort down to one spot.
-        const cactbotMap: { [dir in TowerLocation]: string } = {
+        const outputMap: { [dir in TowerLocation]: string } = {
           NW: output.northwest!(),
           NE: output.northeast!(),
           SE: output.southeast!(),
           SW: output.southwest!(),
         } as const;
-        const autumnMap: { [dir in TowerLocation]: string } = {
-          NW: output.anw!(),
-          NE: output.ane!(),
-          SE: output.ase!(),
-          SW: output.asw!(),
-        } as const;
-        const outputMap = data.options.AutumnStyle ? autumnMap : cactbotMap;
 
         const [tower0, tower1] = towerList;
         if (tower0 === undefined || tower1 === undefined)
           return;
 
-        if (data.options.AutumnStyle) {
-          const pos: TowerLocation[] = [];
-          const isdps = Autumn.isDps(data.moks);
-          towerList.forEach((value) => {
-            const location = value.location;
-            if (matches.effectId === engravementIdMap.lightTower) {
-              if (
-                (location === 'NE' && isdps) ||
-                (location === 'NW' && !isdps) ||
-                location === 'SE'
-              )
-                pos.push(location);
-            } else {
-              if (
-                (location === 'NE' && isdps) ||
-                (location === 'NW' && !isdps) ||
-                location === 'SE' || location === 'SW'
-              )
-                pos.push(location);
-            }
-          });
-          const posoutput = pos.map((x) => outputMap[x]).join(' ');
-          if (matches.effectId === engravementIdMap.lightTower)
-            return output.lightTowerOneSide!({ pos1: posoutput });
-          return output.darkTowerOneSide!({ pos1: posoutput });
-        }
-
-        if (towerStrategy === 'clockwise' || towerStrategy === 'quadrant') {
+        const pos: TowerLocation[] = [];
+        const isdps = Autumn.isDps(data.moks);
+        towerList.forEach((value) => {
+          const location = value.location;
           if (matches.effectId === engravementIdMap.lightTower) {
-            return output.lightTowerSide!({
-              pos1: outputMap[tower0.location],
-              pos2: outputMap[tower1.location],
-            });
-          }
-
-          return output.darkTowerSide!({
-            pos1: outputMap[tower0.location],
-            pos2: outputMap[tower1.location],
-          });
-        } else if (towerStrategy === 'tetherbase') {
-          let towerResult: TowerLocation | undefined;
-
-          // Do the sort by role
-          if (data.role === 'dps') {
-            if (tower0.clone === 'WSW' || tower0.clone === 'WNW') {
-              towerResult = tower0.location;
-            } else if (tower1.clone === 'WSW' || tower1.clone === 'WNW') {
-              towerResult = tower1.location;
-            } else if (tower0.clone === 'SSW' || tower0.clone === 'SSE') {
-              towerResult = tower0.location;
-            } else if (tower1.clone === 'SSW' || tower1.clone === 'SSE') {
-              towerResult = tower1.location;
-            } else if (tower0.clone === 'ENE' || tower0.clone === 'ESE') {
-              towerResult = tower0.location;
-            } else if (tower1.clone === 'ENE' || tower1.clone === 'ESE') {
-              towerResult = tower1.location;
-            }
+            if (
+              (location === 'NE' && isdps) ||
+              (location === 'NW' && !isdps) ||
+              location === 'SE'
+            )
+              pos.push(location);
           } else {
-            if (tower0.clone === 'NNW' || tower0.clone === 'NNE') {
-              towerResult = tower0.location;
-            } else if (tower1.clone === 'NNW' || tower1.clone === 'NNE') {
-              towerResult = tower1.location;
-            } else if (tower0.clone === 'ENE' || tower0.clone === 'ESE') {
-              towerResult = tower0.location;
-            } else if (tower1.clone === 'ENE' || tower1.clone === 'ESE') {
-              towerResult = tower1.location;
-            } else if (tower0.clone === 'SSW' || tower0.clone === 'SSE') {
-              towerResult = tower0.location;
-            } else if (tower1.clone === 'SSW' || tower1.clone === 'SSE') {
-              towerResult = tower1.location;
-            }
+            if (
+              (location === 'NE' && isdps) ||
+              (location === 'NW' && !isdps) ||
+              location === 'SE' || location === 'SW'
+            )
+              pos.push(location);
           }
-
-          if (towerResult === undefined)
-            return;
-
-          if (matches.effectId === engravementIdMap.lightTower) {
-            return output.lightTowerOneSide!({
-              pos1: outputMap[towerResult],
-            });
-          }
-
-          return output.darkTowerOneSide!({
-            pos1: outputMap[towerResult],
-          });
-        }
+        });
+        const posoutput = pos.map((x) => outputMap[x]).join(' ');
+        if (matches.effectId === engravementIdMap.lightTower)
+          return output.lightTowerOneSide!({ pos1: posoutput });
+        return output.darkTowerOneSide!({ pos1: posoutput });
       },
       outputStrings: {
         lightTowerSide: {
@@ -2068,14 +1460,10 @@ const triggerSet: TriggerSet<Data> = {
           cn: '放暗塔',
           ko: '🟣설치',
         },
-        northeast: Outputs.northeast,
-        northwest: Outputs.northwest,
-        southeast: Outputs.southeast,
-        southwest: Outputs.southwest,
-        ane: Outputs.arrowNE,
-        anw: Outputs.arrowNW,
-        ase: Outputs.arrowSE,
-        asw: Outputs.arrowSW,
+        northeast: Outputs.aimNE,
+        northwest: Outputs.aimNW,
+        southeast: Outputs.aimSE,
+        southwest: Outputs.aimSW,
       },
     },
     {
@@ -2130,24 +1518,6 @@ const triggerSet: TriggerSet<Data> = {
       condition: (data, matches) => data.engravementCounter === 2 && data.me === matches.target,
       suppressSeconds: 30,
       run: (data, matches) => data.engravement2MyLabel = engravementLabelMap[matches.effectId],
-    },
-    {
-      id: 'P12S Engravement 2 Heavensflame Soul Early',
-      type: 'GainsEffect',
-      netRegex: { effectId: 'DFA' },
-      condition: (data, matches) =>
-        !data.options.AutumnStyle && data.engravementCounter === 2 && data.me === matches.target,
-      delaySeconds: 6.5, // display a reminder as the player is moving into the second orb stack groups
-      infoText: (_data, _matches, output) => output.spreadLater!(),
-      outputStrings: {
-        spreadLater: {
-          en: '(spread later)',
-          de: '(später verteilen)',
-          fr: '(Écartez-vous plus tard)',
-          cn: '（稍后分散）',
-          ko: '(나중에 산개)',
-        },
-      },
     },
     // darkTower/lightTower are 20s, but lightBeam/darkBeam are shorter and swap to lightTilt/darkTilt before the mechanic resolves.
     // So use a fixed delay rather than one based on effect duration.
@@ -2333,14 +1703,8 @@ const triggerSet: TriggerSet<Data> = {
           towerColor = data.engravement3TowerType === 'lightTower'
             ? output.light!()
             : output.dark!();
-        if (data.options.AutumnStyle) {
-          const find = data.engravement3TowerPlayers.find((name) => name !== data.me);
-          const partner = data.party.jobAbbr(find) ?? output.unknown!();
-          return output.towerOnYou!({ color: towerColor, partner: partner });
-        }
-        const partner =
-          data.party.member(data.engravement3TowerPlayers.find((name) => name !== data.me)) ??
-            output.unknown!();
+        const find = data.engravement3TowerPlayers.find((name) => name !== data.me);
+        const partner = data.party.member(find) ?? output.unknown!();
         return output.towerOnYou!({ color: towerColor, partner: partner });
       },
       outputStrings: {
@@ -2699,7 +2063,7 @@ const triggerSet: TriggerSet<Data> = {
       type: 'HeadMarker',
       netRegex: {},
       condition: Conditions.targetIsYou(),
-      durationSeconds: (data) => data.options.AutumnStyle ? 4 : 20,
+      durationSeconds: 4,
       alertText: (data, matches, output) => {
         const id = getHeadmarkerId(data, matches);
         if (!limitCutIds.includes(id))
@@ -3667,7 +3031,6 @@ const triggerSet: TriggerSet<Data> = {
       id: 'P12S 테오의 알테마',
       type: 'StartsUsing',
       netRegex: { id: '82FA', capture: false },
-      condition: (data) => data.options.AutumnStyle,
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
@@ -3798,16 +3161,10 @@ const triggerSet: TriggerSet<Data> = {
         return 0; // for Panta Rhei, fire immediately once cast starts
       },
       durationSeconds: (data, matches) => {
-        if (data.options.AutumnStyle) {
-          if (data.phase === 'classical1')
-            return 11;
-          if (matches.id === '8331')
-            return 16;
-        }
         if (data.phase === 'classical1')
-          return 12; // keep active until shapes tether
+          return 11;
         if (matches.id === '8331')
-          return 7; // for classical2 initial, display initially to allow player to find (stand in) initial position
+          return 16;
         return 9.7; // for Panta Rhei, display until shape inversion completes
       },
       response: (data, matches, output) => {
@@ -4171,43 +3528,13 @@ const triggerSet: TriggerSet<Data> = {
       condition: (data, matches) => data.me === matches.target && data.phase === 'classical1',
       // shapes use 8333 (Implode) at t+5.6s, and 8324 (Palladian Ray cleaves) snapshots at t+8.9s
       durationSeconds: 8,
-      alertText: (data, _matches, output) => {
-        if (data.options.AutumnStyle)
-          return getPalladionRayEscape('classical1', data.conceptPair, data.conceptDebuff, output);
-        if (data.conceptDebuff === undefined)
-          return output.default!();
-        return data.conceptDebuff === 'alpha'
-          ? output.baitAlphaDebuff!()
-          : output.baitBetaDebuff!();
-      },
+      alertText: (data, _matches, output) =>
+        getPalladionRayEscape('classical1', data.conceptPair, data.conceptDebuff, output),
       run: (data) => {
         delete data.conceptPair;
         delete data.conceptDebuff;
       },
-      outputStrings: {
-        baitAlphaDebuff: {
-          en: 'Avoid Shapes => Bait Proteans (Alpha)',
-          de: 'Vermeide Formen => Himmelsrichtungen ködern (Alpha)',
-          fr: 'Évitez les formes => Positions (Alpha)',
-          cn: '远离方块 => 引导射线 (α)',
-          ko: '피하고 🔜 빔 유도 (알파)',
-        },
-        baitBetaDebuff: {
-          en: 'Avoid Shapes => Bait Proteans (Beta)',
-          de: 'Vermeide Formen => Himmelsrichtungen ködern (Beta)',
-          fr: 'Évitez les formes => Positions (B2ta)',
-          cn: '远离方块 => 引导射线 (β)',
-          ko: '피하고 🔜 빔 유도 (베타)',
-        },
-        default: {
-          en: 'Bait Proteans',
-          de: 'Himmelsrichtungen ködern',
-          fr: 'Positions',
-          cn: '引导射线',
-          ko: '빔 유도해요',
-        },
-        ...palladionRayOutputStrings,
-      },
+      outputStrings: palladionRayOutputStrings,
     },
     {
       id: 'P12S Palladian Ray 2 Initial',
@@ -4215,39 +3542,9 @@ const triggerSet: TriggerSet<Data> = {
       netRegex: { id: '0001', source: ['Concept of Fire', 'Concept of Earth'] },
       condition: (data, matches) => data.me === matches.target && data.phase === 'classical2',
       durationSeconds: 6,
-      alertText: (data, _matches, output) => {
-        if (data.options.AutumnStyle)
-          return getPalladionRayEscape('classical2', data.conceptPair, data.conceptDebuff, output);
-        if (data.conceptDebuff === undefined)
-          return output.default!();
-        return data.conceptDebuff === 'alpha'
-          ? output.baitAlphaDebuff!()
-          : output.baitBetaDebuff!();
-      },
-      outputStrings: {
-        baitAlphaDebuff: {
-          en: 'Bait Proteans (Alpha)',
-          de: 'Himmelsrichtungen ködern (Alpha)',
-          fr: 'Positions (Alpha)',
-          cn: '引导射线 (α)',
-          ko: '빔 유도 (알파)',
-        },
-        baitBetaDebuff: {
-          en: 'Bait Proteans (Beta)',
-          de: 'Himmelsrichtungen ködern (Beta)',
-          fr: 'Positions (Beta)',
-          cn: '引导射线 (β)',
-          ko: '빔 유도 (베타)',
-        },
-        default: {
-          en: 'Bait Proteans',
-          de: 'Himmelsrichtungen ködern',
-          fr: 'Positions',
-          cn: '引导射线',
-          ko: '빔 유도해요',
-        },
-        ...palladionRayOutputStrings,
-      },
+      alertText: (data, _matches, output) =>
+        getPalladionRayEscape('classical2', data.conceptPair, data.conceptDebuff, output),
+      outputStrings: palladionRayOutputStrings,
     },
     {
       id: 'P12S Palladian Ray Followup',
@@ -4336,8 +3633,6 @@ const triggerSet: TriggerSet<Data> = {
         });
         const player = myBuddy === undefined
           ? output.unknown!()
-          : data.options.AutumnStyle
-          ? data.party.jobAbbr(myBuddy)
           : data.party.member(myBuddy);
         if (myRole === 'not') {
           if (strat === 'not')
@@ -4604,7 +3899,7 @@ const triggerSet: TriggerSet<Data> = {
       id: 'P12S Summon Darkness Preposition',
       type: 'StartsUsing',
       netRegex: { id: '832F', source: 'Pallas Athena', capture: false },
-      condition: (data) => !data.options.AutumnStyle && data.seenSecondTethers === false,
+      condition: (data) => data.seenSecondTethers === false,
       infoText: (_data, _matches, output) => output.stackForTethers!(),
       outputStrings: {
         stackForTethers: {
@@ -4744,16 +4039,9 @@ const triggerSet: TriggerSet<Data> = {
         if (matches.source !== data.me && matches.target !== data.me)
           return;
         const partner = matches.source === data.me ? matches.target : matches.source;
-        if (data.options.AutumnStyle && data.phase === 'gaiaochos1')
-          return output.uav1!({ partner: data.party.jobAbbr(partner) });
         if (data.phase === 'gaiaochos1')
           return output.uav1!({ partner: data.party.member(partner) });
         data.seenSecondTethers = true;
-        if (data.options.AutumnStyle)
-          return output.uav2!({
-            partner: data.party.jobAbbr(partner),
-            geocentrism: data.geocentrism2OutputStr ?? output.unknown!(),
-          });
         return output.uav2!({
           partner: data.party.member(partner),
           geocentrism: data.geocentrism2OutputStr ?? output.unknown!(),
@@ -4877,7 +4165,6 @@ const triggerSet: TriggerSet<Data> = {
       id: 'P12S 크러시 헬름',
       type: 'StartsUsing',
       netRegex: { id: '8317', source: 'Pallas Athena', capture: false },
-      condition: (data) => data.options.AutumnStyle,
       durationSeconds: 7,
       alertText: (data, _matches, output) => {
         if (data.role === 'tank')
@@ -4938,13 +4225,6 @@ const triggerSet: TriggerSet<Data> = {
         if (data.caloric1First.length !== 2)
           return;
         const index = data.caloric1First.indexOf(data.me);
-        if (data.options.AutumnStyle && index < 0)
-          return {
-            infoText: output.noBeacon!({
-              player1: data.party.jobAbbr(data.caloric1First[0]),
-              player2: data.party.jobAbbr(data.caloric1First[1]),
-            }),
-          };
         if (index < 0)
           return {
             infoText: output.noBeacon!({
@@ -4953,10 +4233,6 @@ const triggerSet: TriggerSet<Data> = {
             }),
           };
         const partner = index === 0 ? 1 : 0;
-        if (data.options.AutumnStyle) {
-          const name = data.party.jobAbbr(data.caloric1First[partner]);
-          return { alertText: output.beacon!({ partner: name }) };
-        }
         return {
           alertText: output.beacon!({ partner: data.party.member(data.caloric1First[partner]) }),
         };
@@ -5071,7 +4347,8 @@ const triggerSet: TriggerSet<Data> = {
             if (stat === myBuff /* && name !== data.me */)
               myTeam.push(name);
           }
-          return { alertText: output.fire!({ team: data.party.priorityList(myTeam).join(', ') }) };
+          const team = data.party.memberList(myTeam).map((x) => x.toString());
+          return { alertText: output.fire!({ team: team.join(', ') }) };
         }
 
         if (data.caloric1First.includes(data.me))
@@ -5082,7 +4359,8 @@ const triggerSet: TriggerSet<Data> = {
           if (stat === myBuff && /* name !== data.me && */ !data.caloric1First.includes(name))
             myTeam.push(name);
         }
-        return { alertText: output.wind!({ team: data.party.priorityList(myTeam).join(', ') }) };
+        const team = data.party.memberList(myTeam).map((x) => x.toString());
+        return { alertText: output.wind!({ team: team.join(', ') }) };
       },
       run: (data) => {
         data.caloric1First = [];
@@ -5122,8 +4400,6 @@ const triggerSet: TriggerSet<Data> = {
           return;
         if (data.me === matches.target)
           return { alarmText: output.fireOnMe!() };
-        if (data.options.AutumnStyle && data.palladionGrapsTarget === data.me)
-          return { infoText: output.fireOn!({ player: data.party.jobAbbr(matches.target) }) };
         if (data.palladionGrapsTarget === data.me)
           return { infoText: output.fireOn!({ player: data.party.member(matches.target) }) };
       },
@@ -5231,7 +4507,6 @@ const triggerSet: TriggerSet<Data> = {
       id: 'P12S 어듬이 프로보크',
       type: 'Ability',
       netRegex: { id: ['1D6D', '4783'] },
-      condition: (data) => data.options.AutumnStyle,
       run: (data, matches) => data.palladionGrapsTarget = matches.source,
     },
   ],

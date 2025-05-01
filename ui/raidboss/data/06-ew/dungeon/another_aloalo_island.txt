@@ -3,7 +3,6 @@
 
 hideall "--Reset--"
 hideall "--sync--"
-hideall "--setup--"
 
 # .*is no longer sealed
 0.0 "--Reset--" SystemLogMessage { id: "7DE" } window 0,100000 jump 0
@@ -17,7 +16,6 @@ hideall "--setup--"
 
 # The Dawn Trial will be sealed off
 1000.0 "--sync--" SystemLogMessage { id: "7DC", param1: "1146" } window 10000,0
-1002.0 "--setup--"
 1010.2 "--sync--" StartsUsing { id: "8AD4", source: "Ketuduke" } window 20,20
 1015.2 "Tidal Roar" Ability { id: "8AD4", source: "Ketuduke" }
 
@@ -153,7 +151,6 @@ hideall "--setup--"
 
 # The Dusk Trial will be sealed off
 2000.0 "--sync--" SystemLogMessage { id: "7DC", param1: "1147" } window 10000,0
-2002.0 "--setup--"
 2006.1 "--sync--" StartsUsing { id: "88AE", source: "Lala" } window 20,20
 2011.1 "Inferno Theorem" Ability { id: "88AE", source: "Lala" }
 
@@ -280,7 +277,6 @@ hideall "--setup--"
 
 # Midnight Trial will be sealed off
 3000.0 "--sync--" SystemLogMessage { id: "7DC", param1: "1148" } window 10000,0
-3002.0 "--setup--"
 3008.8 "--sync--" StartsUsing { id: "8949", source: "Statice" } window 20,20
 3013.8 "Aero IV" Ability { id: "8949", source: "Statice" }
 

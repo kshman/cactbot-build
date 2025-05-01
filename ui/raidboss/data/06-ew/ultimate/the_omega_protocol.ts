@@ -620,20 +620,14 @@ const triggerSet: TriggerSet<Data> = {
         // cactbot-builtin-response
         output.responseOutputStrings = {
           tower: {
-            en: 'Tower ${num}',
-            de: 'Turm ${num}',
-            fr: 'Tour ${num}',
-            ja: '塔 ${num}',
-            cn: '塔 ${num}',
-            ko: '타워로! ${num}',
+            en: 'Tower!',
+            ja: '塔へ！',
+            ko: '타워로!',
           },
           tether: {
-            en: 'Tether ${num}',
-            de: 'Verbindung ${num}',
-            fr: 'Lien ${num}',
-            ja: '線 ${num}',
-            cn: '线 ${num}',
-            ko: '줄채요! ${num}',
+            en: 'Tether!',
+            ja: '線取り！',
+            ko: '줄채요!',
           },
           numNoMechanic: {
             en: '${num}',
@@ -642,16 +636,6 @@ const triggerSet: TriggerSet<Data> = {
             ja: '${num}',
             cn: '${num}',
             ko: '${num}',
-          },
-          simpleTower: {
-            en: 'Tower!',
-            ja: '塔へ！',
-            ko: '타워로!',
-          },
-          simpleTether: {
-            en: 'Tether!',
-            ja: '線取り！',
-            ko: '줄채요!',
           },
         };
 
@@ -662,18 +646,10 @@ const triggerSet: TriggerSet<Data> = {
         if (myNum === undefined)
           return { infoText: output.numNoMechanic!({ num: mechanicNum }) };
 
-        if (data.options.AutumnStyle) {
-          if (myNum === mechanicNum)
-            return { alertText: output.simpleTower!() };
-          if (mechanicNum === myNum + 2 || mechanicNum === myNum - 2)
-            return { alertText: output.simpleTether!() };
-          return { infoText: output.numNoMechanic!({ num: mechanicNum }) };
-        }
-
         if (myNum === mechanicNum)
-          return { alertText: output.tower!({ num: mechanicNum }) };
+          return { alertText: output.tower!() };
         if (mechanicNum === myNum + 2 || mechanicNum === myNum - 2)
-          return { alertText: output.tether!({ num: mechanicNum }) };
+          return { alertText: output.tether!() };
         return { infoText: output.numNoMechanic!({ num: mechanicNum }) };
       },
     },
@@ -729,14 +705,6 @@ const triggerSet: TriggerSet<Data> = {
             ko: '${num}',
           },
           spread: {
-            en: '${num} Out (on YOU)',
-            de: '${num} Raus (auf Dir)',
-            fr: '${num} Extérieur (sur VOUS)',
-            ja: '${num} 外へ',
-            cn: '${num} 出 (点名)',
-            ko: '${num} 밖으로!',
-          },
-          spreadMesg: {
             en: 'Out!',
             ja: '外へ',
             ko: '밖으로!',
@@ -747,11 +715,8 @@ const triggerSet: TriggerSet<Data> = {
         if (mechanicNum >= 5)
           return;
         const myNum = data.inLine[data.me];
-        if (myNum === mechanicNum) {
-          if (!data.options.AutumnStyle)
-            return { alertText: output.spread!({ num: mechanicNum }) };
-          return { alertText: output.spreadMesg!() };
-        }
+        if (myNum === mechanicNum)
+          return { alertText: output.spread!() };
         return { infoText: output.lineStack!({ num: mechanicNum }) };
       },
     },
@@ -1018,10 +983,10 @@ const triggerSet: TriggerSet<Data> = {
           ja: 'バツ',
           ko: '엑스',
         },
-        num1: Outputs.cnum1,
-        num2: Outputs.cnum2,
-        num3: Outputs.cnum3,
-        num4: Outputs.cnum4,
+        num1: Outputs.arrowNE,
+        num2: Outputs.arrowSE,
+        num3: Outputs.arrowSW,
+        num4: Outputs.arrowNW,
         text: {
           en: '${glitch} ${mark} (${player})',
           ja: '${glitch} ${mark} (${player})',
@@ -1081,14 +1046,6 @@ const triggerSet: TriggerSet<Data> = {
             ko: '엑스',
           },
           stacksOn: {
-            en: '${glitch} Stacks (${player1}, ${player2})',
-            de: '${glitch} Sammeln (${player1}, ${player2})',
-            fr: 'Package ${glitch} (${player1}, ${player2})',
-            ja: '${glitch} 頭割り (${player1}, ${player2})',
-            cn: '${glitch} 分摊 (${player1}, ${player2})',
-            ko: '${glitch} (${player1}, ${player2})',
-          },
-          markerOn: {
             en: '${glitch} ${marker} (${player1}, ${player2})',
             ja: '${glitch} ${marker} (${player1}, ${player2})',
             ko: '${glitch} ${marker} (${player1}, ${player2})',
@@ -1148,24 +1105,21 @@ const triggerSet: TriggerSet<Data> = {
             }
           } */
           // 그냥 알랴줌
-          const ouch = !data.options.AutumnStyle
-            ? output.stacksOn!({ glitch: glitch, player1: m1.r, player2: m2.r })
-            : output.markerOn!({ glitch: glitch, marker: marker, player1: m1.r, player2: m2.r });
-          return { infoText: ouch };
-        }
-
-        const stacksOn = !data.options.AutumnStyle
-          ? output.stacksOn!({
-            glitch: glitch,
-            player1: data.party.jobAbbr(p1),
-            player2: data.party.jobAbbr(p2),
-          })
-          : output.markerOn!({
+          const stacksOn = output.stacksOn!({
             glitch: glitch,
             marker: marker,
-            player1: data.party.jobAbbr(p1),
-            player2: data.party.jobAbbr(p2),
+            player1: m1.r,
+            player2: m2.r,
           });
+          return { infoText: stacksOn };
+        }
+
+        const stacksOn = output.stacksOn!({
+          glitch: glitch,
+          marker: marker,
+          player1: data.party.member(p1),
+          player2: data.party.member(p2),
+        });
         if (!data.spotlightStacks.includes(data.me))
           return { infoText: stacksOn };
         return {
@@ -2398,18 +2352,18 @@ const triggerSet: TriggerSet<Data> = {
           cn: '中 ${northSouth} 或 ${eastWest}',
           ko: '중간 ${northSouth}${eastWest}',
         },
-        dirN: Outputs.arrowN,
-        dirE: Outputs.arrowE,
-        dirS: Outputs.arrowS,
-        dirW: Outputs.arrowW,
-        dirNNW: Outputs.cnum4,
-        dirNNE: Outputs.cnum1,
-        dirENE: Outputs.cnum1,
-        dirESE: Outputs.cnum2,
-        dirSSE: Outputs.cnum2,
-        dirSSW: Outputs.cnum3,
-        dirWSW: Outputs.cnum4,
-        dirWNW: Outputs.cnum5,
+        dirN: Outputs.aimN,
+        dirE: Outputs.aimE,
+        dirS: Outputs.aimS,
+        dirW: Outputs.aimW,
+        dirNNW: Outputs.aimNW,
+        dirNNE: Outputs.aimNE,
+        dirENE: Outputs.aimNE,
+        dirESE: Outputs.aimSE,
+        dirSSE: Outputs.aimSE,
+        dirSSW: Outputs.aimSW,
+        dirWSW: Outputs.aimSW,
+        dirWNW: Outputs.aimNW,
       },
     },
     {
@@ -3173,8 +3127,8 @@ const triggerSet: TriggerSet<Data> = {
         if (ms.length === 0)
           return output.noTarget!();
         if (ms.length === 1)
-          return output.onlyOne!({ target: data.party.jobAbbr(ms[0]) });
-        return output.okTwo!({ t1: data.party.jobAbbr(ms[0]), t2: data.party.jobAbbr(ms[1]) });
+          return output.onlyOne!({ target: data.party.member(ms[0]) });
+        return output.okTwo!({ t1: data.party.member(ms[0]), t2: data.party.member(ms[1]) });
       },
       outputStrings: {
         noTarget: {

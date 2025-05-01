@@ -1021,7 +1021,7 @@ export class PopupText {
     this.me = e.detail.name;
     this.job = e.detail.job;
     this.role = Util.jobToRole(this.job);
-    this.moks = Autumn.parseMoks(this.job, this.options.AutumnParameter);
+    this.moks = Autumn.parseMoks(this.job, this.options.AutumnParam);
     this.ReloadTimelines();
   }
 
@@ -1049,7 +1049,7 @@ export class PopupText {
 
   Reset(): void {
     Util.clearWatchCombatants();
-    this.moks = Autumn.parseMoks(this.job, this.options.AutumnParameter);
+    this.moks = Autumn.parseMoks(this.job, this.options.AutumnParam);
     this.data = this.getDataObject();
     this.StopTimers();
     this.triggerSuppress = {};
