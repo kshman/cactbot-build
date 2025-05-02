@@ -883,12 +883,24 @@ const triggerSet: TriggerSet<Data> = {
         const m = data.party.member(matches.target);
         if (m.role_ !== 'tank')
           return;
-        return output.purge!({ name: m, job: m.job });
+        if (!Autumn.isTank(data.moks))
+          return output.purge!({ name: m, job: m.job });
+        if (data.me === matches.target)
+          return output.itsme!();
+        return output.provoke!();
       },
       outputStrings: {
         purge: {
           en: 'Purge: ${name} (${job})',
           ko: '퍼지: ${name} (${job})',
+        },
+        itsme: {
+          en: 'Purge on YOU',
+          ko: '(내게 퍼지! 헤이트 넘겨요)',
+        },
+        provoke: {
+          en: '(Provoke)',
+          ko: '(프로보크)',
         },
       },
     },

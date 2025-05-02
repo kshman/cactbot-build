@@ -199,7 +199,7 @@ const triggerSet: TriggerSet<Data> = {
         },
         bait: {
           en: 'Bait Frog',
-          ko: '개구리 부채 유도',
+          ko: '개굴 부채 유도',
         },
         card: Outputs.cardinals,
         inter: Outputs.intercards,
@@ -226,7 +226,7 @@ const triggerSet: TriggerSet<Data> = {
         },
         bait: {
           en: 'Bait Frog',
-          ko: '개구리 부채 유도',
+          ko: '개굴 부채 유도',
         },
       },
     },
@@ -262,16 +262,9 @@ const triggerSet: TriggerSet<Data> = {
       id: 'R5S Arcady Night Fever', // +Arcady Night Encore
       type: 'StartsUsing',
       netRegex: { id: ['A760', 'A370'], source: 'Dancing Green', capture: false },
-      infoText: (_data, _matches, output) => output.text!(),
       run: (data) => {
         data.frogs = [];
         delete data.order;
-      },
-      outputStrings: {
-        text: {
-          en: 'Arcady Night In & Out',
-          ko: '연속 안팎 + 부채꼴',
-        },
       },
     },
     {
@@ -292,28 +285,13 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: 'R5S Wavelength Merge Reminder',
-      type: 'GainsEffect',
-      netRegex: { effectId: ['116E', '116F'] },
-      condition: (data, matches) => data.me === matches.target,
-      delaySeconds: (_data, matches) => parseFloat(matches.duration) - 4,
-      countdownSeconds: 4,
-      alertText: (data, _matches, output) => output.text!({ order: data.order }),
-      outputStrings: {
-        text: {
-          en: 'Merge α + β (${order})',
-          ko: 'αβ 문대요! (${order}번째)',
-        },
-      },
-    },
-    {
       id: 'R5S Frog Dance Collect',
       type: 'StartsUsing',
       netRegex: { id: Object.keys(frogIds), source: 'Frogtourage' },
       run: (data, matches) => data.frogs.push(frogIds[matches.id] ?? 'unknown'),
     },
     {
-      id: 'R5S Let\'s Dance!', // Let's Dance Remix
+      id: 'R5S Let\'s Dance!', // +Let's Dance Remix
       type: 'StartsUsing',
       netRegex: { id: ['A76A', 'A390'], source: 'Dancing Green', capture: false },
       delaySeconds: 2,
@@ -384,18 +362,6 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: 'R5S Ride The Waves',
-      type: 'StartsUsing',
-      netRegex: { id: 'A754', source: 'Dancing Green', capture: false },
-      infoText: (_data, _matches, output) => output.text!(),
-      outputStrings: {
-        text: {
-          en: 'Wave + Spread',
-          ko: '북에서 내려오는 장판 웨이브!',
-        },
-      },
-    },
-    {
       id: 'R5S Do the Hustle',
       type: 'StartsUsing',
       netRegex: { id: Object.keys(dthIds) },
@@ -430,7 +396,7 @@ const triggerSet: TriggerSet<Data> = {
           const [cleave1] = cleaves;
           if (cleave1 === undefined)
             return;
-          return dthIds[cleave1.id] === 'left' ? output['markerE']!() : output['markerW']!();
+          return dthIds[cleave1.id] === 'left' ? output['dirE']!() : output['dirW']!();
         }
 
         // Double cleaves from clones plus boss cleave
