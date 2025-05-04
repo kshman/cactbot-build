@@ -86,11 +86,9 @@ const centerY = 100;
 
 export interface Data extends RaidbossData {
   phase: Phase;
-  // Phase 1
+  // 전반부
   decays: number;
   gales: number;
-  twdir?: 'EW' | 'NS';
-  twsafe?: 'NESW' | 'SENW';
   tpnum?: number;
   tpswv?: 'stone' | 'wind';
   tpsurge: number;
@@ -98,7 +96,7 @@ export interface Data extends RaidbossData {
   bmindex: number;
   bmbites: number[];
   bmquad?: string;
-  // Phase 2
+  // 후반부
   heroes: number;
   hsafe?: number;
   hblow?: 'in' | 'out';
@@ -199,7 +197,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Bait Mooncleaver',
-          ko: '(문클레버, 기준 플랫폼으로)',
+          ko: '(문클레버, 처음 플랫폼으로)',
         },
       },
     },
@@ -207,11 +205,30 @@ const triggerSet: TriggerSet<Data> = {
       id: 'R8S Rise of the Positions',
       regex: /Rise of the Hunter\'s Blade/,
       beforeSeconds: 14,
-      infoText: (_data, _matches, output) => output.text!(),
+      infoText: (data, _matches, output) => {
+        const extra = Autumn.isTank(data.moks)
+          ? output.tank!()
+          : Autumn.isHealer(data.moks)
+          ? output.healer!()
+          : output.dps!();
+        return output.text!({ extra: extra });
+      },
       outputStrings: {
         text: {
-          en: 'Rise Positions',
-          ko: '(줄다리기 플랫폼으로)',
+          en: 'Rise Positions - ${extra}',
+          ko: '(줄다리기 ${extra} 플랫폼으로)',
+        },
+        tank: {
+          en: 'Left top',
+          ko: '왼쪽 위🡼',
+        },
+        healer: {
+          en: 'Base',
+          ko: '처음🡻',
+        },
+        dps: {
+          en: 'Right',
+          ko: '오른쪽🡺',
         },
       },
     },
@@ -222,7 +239,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Howling Eight Position',
-          ko: '(기준 플랫폼으로)',
+          ko: '(처음 플랫폼으로)',
         },
       },
     },
@@ -245,6 +262,7 @@ const triggerSet: TriggerSet<Data> = {
         data.collect = [];
       },
     },
+    // //////////////////// 전반부 ////////////////////
     {
       id: 'R8S Extraplanar Pursuit',
       type: 'StartsUsing',
@@ -264,18 +282,22 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         windPlus: {
           en: 'In + Cardinal + Partners',
+          ja: '➕内側 + ペア',
           ko: '➕안으로 + 둘이 페어',
         },
         windCross: {
           en: 'In + Intercards + Partners',
+          ja: '❌内側 + ペア',
           ko: '❌안으로 + 둘이 페어',
         },
         stonePlus: {
           en: 'Out + Cardinal + Protean',
+          ja: '➕外側 + 散会',
           ko: '➕바깥으로 + 맡은 자리로',
         },
         stoneCross: {
           en: 'Out + InterCards + Protean',
+          ja: '❌外側 + 散会',
           ko: '❌바깥으로 + 맡은 자리로',
         },
       },
@@ -293,10 +315,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         in: {
           en: 'In',
+          ja: 'ボスに近づく',
           ko: '보스랑 붙어요',
         },
         out: {
           en: 'Out',
+          ja: 'ボスから離れる',
           ko: '보스 멀리멀리',
         },
       },
@@ -322,17 +346,18 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         left: {
           en: '<== Clockwise',
+          ja: '❰❰❰時計回り',
           ko: '❰❰❰왼쪽으로',
         },
         right: {
           en: 'Counterclockwise ==>',
+          ja: '反時計回り❱❱❱',
           ko: '오른쪽으로❱❱❱',
         },
       },
     },
     {
       id: 'R8S Aero III',
-      // Happens twice, but Prowling Gale occurs simultaneously on the second one
       type: 'StartsUsing',
       netRegex: { id: 'A3B7', source: 'Howling Blade', capture: false },
       condition: AutumnCond.notOnlyAutumn(),
@@ -349,6 +374,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         puddle: {
           en: 'Puddle on YOU',
+          ja: '自分にAOE',
           ko: '내게 장판!',
         },
       },
@@ -367,36 +393,14 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         knockbackTether: {
           en: 'Knockback Tether',
-          ko: '줄 당겨요',
+          ja: 'ノックバック + 線誘導',
+          ko: '줄처리 넉백',
         },
         knockbackTowers: {
           en: 'Knockback Towers',
-          ko: '타워로 넉백',
+          ja: 'ノックバック + 塔踏み',
+          ko: '타워 밟기 넉백',
         },
-      },
-    },
-    {
-      id: 'R8S Terrestrial Titans Towerfall Collect',
-      // A3C5 Terrestrial Titans
-      // A3C6 Towerfall
-      // East/West Towers are (93, 100) and (107, 100)
-      // North/South Towers are (100, 93) and (100, 107)
-      type: 'StartsUsingExtra',
-      netRegex: { id: 'A3C5', capture: true },
-      suppressSeconds: 1,
-      run: (data, matches) => {
-        const getTowerFallSafe = (hdg: number): 'SENW' | 'NESW' | undefined =>
-          hdg === 1 || hdg === 5 ? 'SENW' : hdg === 3 || hdg === 7 ? 'NESW' : undefined;
-        const x = parseFloat(matches.x);
-        const y = parseFloat(matches.y);
-        const hdg = AutumnDir.hdgConv8(matches.heading);
-
-        // towerDirs will be undefined if we receive bad coords
-        if ((x >= 92 && x <= 94) || (x >= 106 && x <= 108))
-          data.twdir = 'EW';
-        else if ((y >= 92 && y <= 94) || (y >= 106 && y <= 108))
-          data.twdir = 'NS';
-        data.twsafe = getTowerFallSafe(hdg);
       },
     },
     {
@@ -404,49 +408,6 @@ const triggerSet: TriggerSet<Data> = {
       type: 'StartsUsing',
       netRegex: { id: 'A3C7', source: 'Howling Blade', capture: false },
       response: Responses.aoe(),
-    },
-    {
-      id: 'R8S Terrestrial Titans Safe Spot',
-      // Gleaming Fangs are at:
-      // NS Towers: (108, 100) E, (92, 100) W
-      // EW Towers: (100, 92) N, (100, 108) S
-      type: 'StatusEffect',
-      netRegex: { data3: '036D0808', target: 'Gleaming Fang', capture: true },
-      condition: (_data, matches) => {
-        const hdg = AutumnDir.hdgConv8(matches.heading);
-        // Only trigger on the actor targetting intercards
-        return hdg === 1 || hdg === 3 || hdg === 5 || hdg === 7;
-      },
-      durationSeconds: 4.5,
-      infoText: (data, matches, output) => {
-        if (data.twsafe === undefined)
-          return;
-        const x = parseFloat(matches.x);
-        const y = parseFloat(matches.y);
-        const fall = data.twsafe;
-
-        // Assume towerDirs from Fang if received bad coords for towers
-        if (data.twdir === undefined) {
-          data.twdir = (y > 99 && y < 100) ? 'NS' : (x > 99 && x < 101) ? 'EW' : undefined;
-          if (data.twdir === undefined)
-            return;
-        }
-        const dirs = data.twdir;
-
-        // 이게 뭔가 이상하면 x 비교 부호가 바꿔보자
-        if (fall === 'SENW') {
-          if ((dirs === 'EW' && y < 100) || (dirs === 'NS' && x < 100))
-            return output['dirNW']!();
-          if ((dirs === 'EW' && y > 100) || (dirs === 'NS' && x > 100))
-            return output['dirSE']!();
-        } else if (fall === 'NESW') {
-          if ((dirs === 'EW' && y < 100) || (dirs === 'NS' && x > 100))
-            return output['dirNE']!();
-          if ((dirs === 'EW' && y > 100) || (dirs === 'NS' && x < 100))
-            return output['dirSW']!();
-        }
-      },
-      outputStrings: AutumnDir.stringsAim,
     },
     {
       id: 'R8S Tracking Tremors',
@@ -471,12 +432,8 @@ const triggerSet: TriggerSet<Data> = {
     },
     {
       id: 'R8S Howling Havoc',
-      // There are two additional casts, but only the Wolf Of Stone cast one (A3DD) does damage
-      // A3DC Howling Havoc from Wolf of Stone self-cast
-      // A3DB Howling Havoc from Wolf of Wind self-cast
       type: 'StartsUsing',
       netRegex: { id: 'A3DD', source: 'Wolf Of Stone', capture: true },
-      // 4.7s castTime
       delaySeconds: (_data, matches) => parseFloat(matches.castTime) - 2,
       response: Responses.aoe(),
     },
@@ -612,45 +569,27 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: 'R8S Shadowchase Rotate',
-      // Call to move behind Dragon Head after clones dash
-      type: 'StartsUsing',
-      netRegex: { id: 'A3BD', source: 'Howling Blade', capture: true },
-      condition: AutumnCond.notOnlyAutumn(),
-      delaySeconds: (_data, matches) => parseFloat(matches.castTime),
-      suppressSeconds: 1,
-      infoText: (_data, _matches, output) => {
-        return output.rotate!();
-      },
-      outputStrings: {
-        rotate: {
-          en: 'Rotate',
-          ko: '옆에 용머리쪽으로',
-        },
-      },
-    },
-    {
       id: 'R8S Weal of Stone',
-      // TODO: Call direction that the heads are firing from, needs OverlayPlugin
       type: 'StartsUsing',
       netRegex: { id: 'A78E', source: 'Wolf of Stone', capture: false },
       suppressSeconds: 1,
-      infoText: (data, _matches, output) => {
+      response: (data, _matches, output) => {
+        // cactbot-builtin-response
+        output.responseOutputStrings = {
+          lines: {
+            en: 'Lines',
+            ko: '직선 장판',
+          },
+          tank: {
+            en: 'Lines',
+            ko: '직선 장판 + 탱크 스위치',
+          },
+        };
         if (Autumn.isTank(data.moks))
-          return output.tank!();
-        return output.lines!();
+          return { alertText: output.tank!() };
+        return { infoText: output.lines!() };
       },
       run: (data) => data.spread = undefined,
-      outputStrings: {
-        lines: {
-          en: 'Lines',
-          ko: '직선 장판',
-        },
-        tank: {
-          en: 'Lines',
-          ko: '직선 장판 + 탱크 스위치',
-        },
-      },
     },
     {
       id: 'R8S Beckon Moonlight Quadrants',
@@ -776,9 +715,7 @@ const triggerSet: TriggerSet<Data> = {
         cardinals: Outputs.cardinals,
       },
     },
-    // Phase 2
-    // TODO: Timeline based callout for light parties for Quake III
-    // TODO: Timeline base callout for mooncleaver bait
+    // //////////////////// 후반부 ////////////////////
     {
       id: 'R8S Quake III',
       type: 'StartsUsing',
@@ -801,9 +738,6 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      // headmarkers with casts:
-      // A45D (Ultraviolent Ray)
-      // TODO: Determine platform to move to based on player positions/role?
       id: 'R8S Ultraviolent Ray Target',
       type: 'HeadMarker',
       netRegex: { id: '000E' },
