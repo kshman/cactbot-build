@@ -17,11 +17,13 @@ const swingDelay = [8, 30.5, 28] as const;
 const swingStrings = {
   blade: {
     en: 'Close to boss',
+    ja: 'ドーナツ、ボスに近づいて！',
     ko: '도넛, 보스랑 붙어요!',
   },
   club: {
     en: 'Far from boss',
-    ko: '장판, 보스와 멀리!',
+    ja: 'ゆか、ボスから離れる',
+    ko: '장판, 보스 멀리멀리!',
   },
   unknown: Outputs.unknown,
 };
@@ -72,6 +74,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Raidwide',
+          ja: '連続全体攻撃',
           ko: '연속 전체 공격',
         },
       },
@@ -93,22 +96,27 @@ const triggerSet: TriggerSet<Data> = {
         output.responseOutputStrings = {
           text: {
             en: '${sr} => ${smash}',
+            ja: '${sr} 🔜 ${smash}',
             ko: '${sr} 🔜 ${smash}',
           },
           htank: {
             en: 'Closest Tank Share',
+            ja: 'タンク近いシェア',
             ko: '가까이 버스터',
           },
           hother: {
             en: 'Far from boss',
+            ja: 'ボスから離れる',
             ko: '보스 멀리',
           },
           ttank: {
             en: 'Far Tank Share',
+            ja: 'タンク遠いシェア',
             ko: '멀리 버스터',
           },
           tother: {
             en: 'Close to boss',
+            ja: 'ボスに近づく',
             ko: '보스 가까이',
           },
           blade: Outputs.in,
@@ -147,6 +155,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         seed: {
           en: 'Bait seed',
+          ja: '自分に種',
           ko: '내게 씨앗!',
         },
       },
@@ -166,6 +175,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         puddle: {
           en: 'Bait puddles',
+          ja: '自分にゆかx3',
           ko: '내게 장판x3',
         },
       },
@@ -185,6 +195,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         winding: {
           en: 'Interrupt',
+          ja: 'インタラプト',
           ko: 'Winding Wildwinds 인터럽트!!',
         },
       },
@@ -198,6 +209,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Hide behind adds',
+          ja: '雑魚の後ろに隠れる',
           ko: '쫄 뒤로 숨어욧',
         },
       },
@@ -211,6 +223,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Stack => Protean',
+          ja: '頭割り 🔜 散会',
           ko: '뭉쳤다 🔜 맡은 자리로',
         },
       },
@@ -233,6 +246,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Go North!',
+          ja: '北へ！',
           ko: '북으로! 쿵해욧!',
         },
       },
@@ -269,6 +283,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Line AOE + Spread',
+          ja: '直線範囲攻撃 + 散会',
           ko: '직선 장판 + 흩어져요',
         },
       },
@@ -290,10 +305,12 @@ const triggerSet: TriggerSet<Data> = {
         output.responseOutputStrings = {
           flare: {
             en: 'Flare on YOU',
+            ja: '自分にフレア',
             ko: '내게 플레어!',
           },
           provoke: {
             en: '(Provoke)',
+            ja: '(挑発)',
             ko: '(프로보크)',
           },
         };
@@ -319,6 +336,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Tether on YOU',
+          ja: '自分に線',
           ko: '내게 가시덤불 줄',
         },
       },
@@ -347,6 +365,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Seed #${num} on YOU',
+          ja: '自分に${num}番目の種',
           ko: '내게 ${num}번째 씨앗!',
         },
       },
@@ -392,10 +411,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         left: {
           en: 'Left',
+          ja: '左へ',
           ko: '왼쪽으로!',
         },
         right: {
           en: 'Right',
+          ja: '右へ',
           ko: '오른쪽으로!',
         },
       },
@@ -410,14 +431,17 @@ const triggerSet: TriggerSet<Data> = {
         output.responseOutputStrings = {
           avoid: {
             en: 'Avoid tower!',
+            ja: '塔避ける！',
             ko: '타워 피해욧!',
           },
           tank: {
             en: 'Tank tower',
+            ja: 'タンク塔踏み',
             ko: '탱크 무적으로 타워!',
           },
           tower: {
             en: 'Get tower',
+            ja: '塔踏み',
             ko: '내가 무적으로 타워!',
           },
         };
@@ -454,6 +478,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Cardinal Pair',
+          ja: '十字にペア',
           ko: '십자로 둘이 페어',
         },
       },

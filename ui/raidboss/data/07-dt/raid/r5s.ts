@@ -141,6 +141,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: '${dir} (${cnt} hits) => ${mech}',
+          ja: '${dir}x${cnt} 🔜 ${mech}',
           ko: '${dir}x${cnt} 🔜 ${mech}',
         },
         east: Outputs.east,
@@ -176,6 +177,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Go to spotlight',
+          ja: 'スポットライトへ',
           ko: '조명 밟아요',
         },
       },
@@ -195,10 +197,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         spot: {
           en: 'Go to spotlight',
+          ja: 'スポットライトへ',
           ko: '조명 밟아요',
         },
         bait: {
           en: 'Bait Frog',
+          ja: 'カエルの扇誘導',
           ko: '개굴 부채 유도',
         },
         card: Outputs.cardinals,
@@ -222,10 +226,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         spot: {
           en: 'Go to spotlight',
+          ja: 'スポットライトへ',
           ko: '조명 밟아요',
         },
         bait: {
           en: 'Bait Frog',
+          ja: 'カエルの扇誘導',
           ko: '개굴 부채 유도',
         },
       },
@@ -307,10 +313,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: '${dir}',
+          ja: '${dir}へ',
           ko: '${dir}으로',
         },
         combo: {
           en: '${dir} (${order})',
+          ja: '${dir} (${order}番目)',
           ko: '${dir}으로 (${order}번째)',
         },
         east: Outputs.east,
@@ -330,6 +338,7 @@ const triggerSet: TriggerSet<Data> = {
         output.responseOutputStrings = {
           text: {
             en: '${dir}',
+            ja: '${dir}へ',
             ko: '${dir}으로',
           },
           stay: {

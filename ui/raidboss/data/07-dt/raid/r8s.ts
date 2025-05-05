@@ -704,6 +704,7 @@ const triggerSet: TriggerSet<Data> = {
         right: Outputs.arrowE,
         text: {
           en: '${inout} + ${dir}',
+          ja: '${dir}${inout}',
           ko: '${dir}${inout}',
         },
       },
