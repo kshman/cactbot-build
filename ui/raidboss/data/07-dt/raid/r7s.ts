@@ -1,4 +1,4 @@
-import Autumn from '../../../../../resources/autumn';
+import Autumn, { AutumnCond } from '../../../../../resources/autumn';
 import Conditions from '../../../../../resources/conditions';
 import Outputs from '../../../../../resources/outputs';
 import { Responses } from '../../../../../resources/responses';
@@ -17,11 +17,13 @@ const swingDelay = [8, 30.5, 28] as const;
 const swingStrings = {
   blade: {
     en: 'Close to boss',
+    ja: 'ドーナツ、ボスに近づいて！',
     ko: '도넛, 보스랑 붙어요!',
   },
   club: {
     en: 'Far from boss',
-    ko: '장판, 보스와 멀리!',
+    ja: 'ゆか、ボスから離れる',
+    ko: '장판, 보스 멀리멀리!',
   },
   unknown: Outputs.unknown,
 };
@@ -72,6 +74,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Raidwide',
+          ja: '連続全体攻撃',
           ko: '연속 전체 공격',
         },
       },
@@ -93,22 +96,27 @@ const triggerSet: TriggerSet<Data> = {
         output.responseOutputStrings = {
           text: {
             en: '${sr} => ${smash}',
+            ja: '${sr} 🔜 ${smash}',
             ko: '${sr} 🔜 ${smash}',
           },
           htank: {
             en: 'Closest Tank Share',
+            ja: 'タンク近いシェア',
             ko: '가까이 버스터',
           },
           hother: {
             en: 'Far from boss',
+            ja: 'ボスから離れる',
             ko: '보스 멀리',
           },
           ttank: {
             en: 'Far Tank Share',
+            ja: 'タンク遠いシェア',
             ko: '멀리 버스터',
           },
           tother: {
             en: 'Close to boss',
+            ja: 'ボスに近づく',
             ko: '보스 가까이',
           },
           blade: Outputs.in,
@@ -147,6 +155,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         seed: {
           en: 'Bait seed',
+          ja: '自分に種',
           ko: '내게 씨앗!',
         },
       },
@@ -166,6 +175,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         puddle: {
           en: 'Bait puddles',
+          ja: '自分にゆかx3',
           ko: '내게 장판x3',
         },
       },
@@ -175,7 +185,7 @@ const triggerSet: TriggerSet<Data> = {
       id: 'R7S Winding Wildwinds',
       type: 'StartsUsing',
       netRegex: { id: 'A90D', source: 'Blooming Abomination', capture: false },
-      condition: Conditions.autumnOnly(),
+      condition: AutumnCond.onlyAutumn(),
       durationSeconds: 5,
       suppressSeconds: 5,
       infoText: (data, _matches, output) => {
@@ -185,6 +195,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         winding: {
           en: 'Interrupt',
+          ja: 'インタラプト',
           ko: 'Winding Wildwinds 인터럽트!!',
         },
       },
@@ -198,6 +209,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Hide behind adds',
+          ja: '雑魚の後ろに隠れる',
           ko: '쫄 뒤로 숨어욧',
         },
       },
@@ -211,6 +223,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Stack => Protean',
+          ja: '頭割り 🔜 散会',
           ko: '뭉쳤다 🔜 맡은 자리로',
         },
       },
@@ -233,6 +246,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Go North!',
+          ja: '北へ！',
           ko: '북으로! 쿵해욧!',
         },
       },
@@ -269,6 +283,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Line AOE + Spread',
+          ja: '直線範囲攻撃 + 散会',
           ko: '직선 장판 + 흩어져요',
         },
       },
@@ -290,10 +305,12 @@ const triggerSet: TriggerSet<Data> = {
         output.responseOutputStrings = {
           flare: {
             en: 'Flare on YOU',
+            ja: '自分にフレア',
             ko: '내게 플레어!',
           },
           provoke: {
             en: '(Provoke)',
+            ja: '(挑発)',
             ko: '(프로보크)',
           },
         };
@@ -319,6 +336,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Tether on YOU',
+          ja: '自分に線',
           ko: '내게 가시덤불 줄',
         },
       },
@@ -347,6 +365,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Seed #${num} on YOU',
+          ja: '自分に${num}番目の種',
           ko: '내게 ${num}번째 씨앗!',
         },
       },
@@ -392,10 +411,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         left: {
           en: 'Left',
+          ja: '左へ',
           ko: '왼쪽으로!',
         },
         right: {
           en: 'Right',
+          ja: '右へ',
           ko: '오른쪽으로!',
         },
       },
@@ -410,14 +431,17 @@ const triggerSet: TriggerSet<Data> = {
         output.responseOutputStrings = {
           avoid: {
             en: 'Avoid tower!',
+            ja: '塔避ける！',
             ko: '타워 피해욧!',
           },
           tank: {
             en: 'Tank tower',
+            ja: 'タンク塔踏み',
             ko: '탱크 무적으로 타워!',
           },
           tower: {
             en: 'Get tower',
+            ja: '塔踏み',
             ko: '내가 무적으로 타워!',
           },
         };
@@ -454,6 +478,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Cardinal Pair',
+          ja: '十字にペア',
           ko: '십자로 둘이 페어',
         },
       },
@@ -468,11 +493,146 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
+      'locale': 'de',
+      'missingTranslations': true,
+      'replaceSync': {
+        'Blooming Abomination': 'Biestinator-Spross',
+        'Brute Abombinator': 'Brutalo Biestinator',
+      },
+      'replaceText': {
+        '\\(adds': '(Adds',
+        'cast\\)': 'Wirken)',
+        '\\(enrage\\)': '(Finalangriff)',
+        '\\(puddles\\)': '(Flächen)',
+        '\\(seeds drop\\)': '(Saaten ablegen)',
+        'Abominable Blink': 'Brutalo-Funken',
+        'Brutal Impact': 'Knallender Impakt',
+        'Brutal Smash': 'Brutalo-Schlag',
+        'Brutish Swing': 'Brutalo-Schwung',
+        'Crossing Crosswinds': 'Kreuzwind',
+        'Debris Deathmatch': 'Dornenwand-Todeskampf',
+        'Demolition Deathmatch': 'Dornengebäude-Todeskampf',
+        'Electrogenetic Force': 'Blitzschlag',
+        'Explosion': 'Explosion',
+        'Glower Power': 'Brutalo-Blick',
+        'Grappling Ivy': 'Efeuhaken',
+        'Hurricane Force': 'Sturmgewalt',
+        '(?<! )Impact': 'Impakt',
+        'Killer Seeds': 'Schwerer Samen',
+        'Lashing Lariat': 'Efeu-Lariat',
+        'Neo Bombarian Special': 'Neo-Brutalo-Spezial',
+        'Pollen': 'Pollen',
+        'Powerslam': 'Bombensturz',
+        'Pulp Smash': 'Dornenschlag',
+        'Quarry Swamp': 'Versteinernde Welle',
+        'Revenge of the Vines': 'Welt der Dornen',
+        'Roots of Evil': 'Dornenglühen',
+        'Sinister Seeds': 'Streusamen',
+        'Slaminator': 'Brutalo-Sturz',
+        'Smash Here': 'Naher Schlag',
+        'Smash There': 'Ferner Schlag',
+        'Special Bombarian Special': 'Ultimativer Brutalo-Spezial',
+        'Spore Sac': 'Sporensack',
+        'Sporesplosion': 'Sporenwolke',
+        'Stoneringer(?![s ])': 'Steinwaffe',
+        'Stoneringer 2: Stoneringers': 'Steinwaffen-Kombo',
+        'Strange Seeds': 'Verwehte Samen',
+        'Tendrils of Terror': 'Dornenzaun',
+        'The Unpotted': 'Dornenwelle',
+        'Thorny Deathmatch': 'Dornen-Todeskampf',
+        'Winding Wildwinds': 'Kreiswind',
+      },
+    },
+    {
+      'locale': 'fr',
+      'missingTranslations': true,
+      'replaceSync': {
+        'Blooming Abomination': 'germe de Bombinator',
+        'Brute Abombinator': 'Brute Bombinator',
+      },
+      'replaceText': {
+        'Abominable Blink': 'Étincelle brutale',
+        'Brutal Impact': 'Impact brutal',
+        'Brutal Smash': 'Impact brutal',
+        'Brutish Swing': 'Swing brutal',
+        'Crossing Crosswinds': 'Bourrasque croisée',
+        'Debris Deathmatch': 'Mise à mort épineuse emprisonnée',
+        'Demolition Deathmatch': 'Mise à mort épineuse gigantesque',
+        'Electrogenetic Force': 'Doigt filiforme',
+        'Explosion': 'Explosion',
+        'Glower Power': 'Regard brutal',
+        'Grappling Ivy': 'Projection spinescente',
+        'Hurricane Force': 'Grande tempête de vent',
+        '(?<! )Impact(?! )': 'Ensevelissement',
+        'Killer Seeds': 'Grosse graine',
+        'Lashing Lariat': 'Lariat épineux',
+        'Neo Bombarian Special': 'Néo-spéciale brutale',
+        'Pollen': 'Pollen',
+        'Powerslam': 'Explongeon',
+        'Pulp Smash': 'Impact épineux',
+        'Quarry Swamp': 'Vague de pétrification',
+        'Revenge of the Vines': 'Règne des épines',
+        'Roots of Evil': 'Poussée d\'épines',
+        'Sinister Seeds': 'Éparpillement des graines',
+        'Slaminator': 'Plongeon brutal',
+        'Smash Here': 'Balayage proche',
+        'Smash There': 'Balayage éloigné',
+        'Special Bombarian Special': 'Spéciale brutale ultime',
+        'Spore Sac': 'Sac de spores',
+        'Sporesplosion': 'Nuage de spores',
+        'Stoneringer(?![s ])': 'Arme de pierre',
+        'Stoneringer 2: Stoneringers': 'Armes de pierre jumelles',
+        'Strange Seeds': 'Dissémination de graines',
+        'Tendrils of Terror': 'Grille épineuse',
+        'The Unpotted': 'Onde épineuse',
+        'Thorny Deathmatch': 'Mise à mort épineuse',
+        'Winding Wildwinds': 'Bourrasque circulaire',
+      },
+    },
+    {
       'locale': 'ja',
       'missingTranslations': true,
       'replaceSync': {
+        'Blooming Abomination': 'アボミネータースプラウト',
         'Brute Abombinator': 'ブルートアボミネーター',
-        'Blooming Abombinator': 'アボミネータースプラウト',
+      },
+      'replaceText': {
+        'Abominable Blink': 'ブルートスパーク',
+        'Brutal Impact': 'スマッシュインパクト',
+        'Brutal Smash': 'ブルートスマッシュ',
+        'Brutish Swing': 'ブルートスイング',
+        'Crossing Crosswinds': 'クロッシングゲイル',
+        'Debris Deathmatch': 'ソーンデスマッチ・ウォール',
+        'Demolition Deathmatch': 'ソーンデスマッチ・ビルディング',
+        'Electrogenetic Force': '雷撃',
+        'Explosion': '爆発',
+        'Glower Power': 'ブルートグラワー',
+        'Grappling Ivy': 'アイビーグラップル',
+        'Hurricane Force': '大暴風',
+        '(?<! )Impact': '衝撃',
+        'Killer Seeds': 'ヘビーシード',
+        'Lashing Lariat': 'アイビーラリアット',
+        'Neo Bombarian Special': 'ネオ・ボンバリアンスペシャル',
+        'Pollen': '花粉',
+        'Powerslam': 'パワーダイブ',
+        'Pulp Smash': 'ソーンスマッシュ',
+        'Quarry Swamp': '石化の波動',
+        'Revenge of the Vines': 'ソーンワールド',
+        'Roots of Evil': 'ソーングロウ',
+        'Sinister Seeds': 'スキャッターシード',
+        'Slaminator': 'ブルートダイブ',
+        'Smash Here': 'ニア・スマッシュ',
+        'Smash There': 'ファー・スマッシュ',
+        'Special Bombarian Special': 'アルティメット・ボンバリアンスペシャル',
+        'Spore Sac': 'スポアサック',
+        'Sporesplosion': 'スポアクラウド',
+        'Stoneringer(?![s ])': 'ストーンウェポン',
+        'Stoneringer 2: Stoneringers': 'ストーンウェポン：ツイン',
+        'Strange Seeds': 'ブロウシード',
+        'Tendrils of Terror': 'ソーンフェンス',
+        'The Unpotted': 'ソーンウェーブ',
+        'Thorny Deathmatch': 'ソーンデスマッチ',
+        'Winding Wildwinds': 'リングゲイル',
       },
     },
   ],

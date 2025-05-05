@@ -417,44 +417,34 @@ const triggerSet: TriggerSet<Data> = {
       id: 'Thaleia Oschon Piton Pull NE/SW',
       type: 'StartsUsing',
       netRegex: { id: '89A9', source: 'Oschon', capture: false },
-      alertText: (data, _matches, output) => {
-        if (data.options.AutumnStyle)
-          return output.text!({ front: output.arrowSW!(), back: output.arrowNE!() });
-        return output.text!({ front: output.dirNE!(), back: output.dirSW!() });
-      },
+      alertText: (_data, _matches, output) =>
+        output.text!({ front: output.dirNE!(), back: output.dirSW!() }),
       outputStrings: {
         text: {
           en: '${front} / ${back}',
           de: '${front} / ${back}',
           ja: '${front} / ${back}',
-          ko: '${front} / ${back}',
+          ko: '${front} ${back}',
         },
-        dirNE: Outputs.dirNE,
-        dirSW: Outputs.dirSW,
-        arrowNE: Outputs.arrowNE,
-        arrowSW: Outputs.arrowSW,
+        dirNE: Outputs.aimNE,
+        dirSW: Outputs.aimSW,
       },
     },
     {
       id: 'Thaleia Oschon Piton Pull NW/SE',
       type: 'StartsUsing',
       netRegex: { id: '89AA', source: 'Oschon', capture: false },
-      alertText: (data, _matches, output) => {
-        if (data.options.AutumnStyle)
-          return output.text!({ front: output.arrowNW!(), back: output.arrowSE!() });
-        return output.text!({ front: output.dirNW!(), back: output.dirSE!() });
-      },
+      alertText: (_data, _matches, output) =>
+        output.text!({ front: output.dirNW!(), back: output.dirSE!() }),
       outputStrings: {
         text: {
           en: '${front} / ${back}',
           de: '${front} / ${back}',
           ja: '${front} / ${back}',
-          ko: '${front} / ${back}',
+          ko: '${front} ${back}',
         },
-        dirNW: Outputs.dirNW,
-        dirSE: Outputs.dirSE,
-        arrowNW: Outputs.arrowNW,
-        arrowSE: Outputs.arrowSE,
+        dirNW: Outputs.aimNW,
+        dirSE: Outputs.aimSE,
       },
     },
     {

@@ -35,10 +35,10 @@ const arcticAssaultQuadrants: { [location: string]: ArcticAssaultSafeSpot } = {
 
 const galeSphereOutputStrings = {
   middle: Outputs.middle,
-  n: Outputs.north,
-  e: Outputs.east,
-  s: Outputs.south,
-  w: Outputs.west,
+  n: Outputs.arrowS,
+  e: Outputs.arrowW,
+  s: Outputs.arrowN,
+  w: Outputs.arrowE,
   unknown: Outputs.unknown,
   dirAndMechanic: {
     en: '${dir} + ${mechanic}',
@@ -50,11 +50,6 @@ const galeSphereOutputStrings = {
   },
   healerGroups: Outputs.healerGroups,
   partnerStack: Outputs.stackPartner,
-  an: Outputs.arrowS,
-  ae: Outputs.arrowW,
-  as: Outputs.arrowN,
-  aw: Outputs.arrowE,
-  amiddle: Outputs.middle,
 } as const;
 
 export interface Data extends RaidbossData {
@@ -158,33 +153,11 @@ const triggerSet: TriggerSet<Data> = {
         if (data.terrastormCount === 2)
           return;
 
-        if (data.options.AutumnStyle) {
-          if (data.terrastormDir === 'nw')
-            return output.arrowNESW!();
-          return output.arrowNWSE!();
-        }
-
         if (data.terrastormDir === 'nw')
-          return output.dirNESW!();
-        return output.dirNWSE!();
+          return output.arrowNESW!();
+        return output.arrowNWSE!();
       },
       outputStrings: {
-        dirNWSE: {
-          en: 'NW / SE',
-          de: 'NW / SO',
-          fr: 'NO / SE',
-          ja: '北西 / 南東',
-          cn: '左上 (西北) / 右下 (东南)',
-          ko: '북서 / 남동',
-        },
-        dirNESW: {
-          en: 'NE / SW',
-          de: 'NO / SW',
-          fr: 'NE / SO',
-          ja: '北東 / 南西',
-          cn: '右上 (东北) / 左下 (西南)',
-          ko: '북동 / 남서',
-        },
         arrowNWSE: {
           en: '🡼🡾',
           ja: '🡼🡾',
@@ -445,27 +418,6 @@ const triggerSet: TriggerSet<Data> = {
       type: 'Ability',
       netRegex: { id: '84(?:4F|50|51|52)', source: 'Golbez\'s Shadow', capture: true },
       infoText: (data, matches, output) => {
-        if (data.options.AutumnStyle) {
-          switch (matches.id) {
-            case '844F':
-              data.galeSphereShadows.push('an');
-              break;
-            case '8450':
-              data.galeSphereShadows.push('ae');
-              break;
-            case '8451':
-              data.galeSphereShadows.push('aw');
-              break;
-            case '8452':
-              data.galeSphereShadows.push('as');
-              break;
-          }
-          if (data.galeSphereShadows.length < 4)
-            return;
-          const [d1, d2, d3, d4] = data.galeSphereShadows;
-          return output.aclones!({ d1: d1, d2: d2, d3: d3, d4: d4 });
-        }
-
         switch (matches.id) {
           case '844F':
             data.galeSphereShadows.push('n');
@@ -480,39 +432,19 @@ const triggerSet: TriggerSet<Data> = {
             data.galeSphereShadows.push('s');
             break;
         }
-
         if (data.galeSphereShadows.length < 4)
           return;
-
-        const [dir1, dir2, dir3, dir4] = data.galeSphereShadows;
-
-        return output.clones!({
-          dir1: dir1,
-          dir2: dir2,
-          dir3: dir3,
-          dir4: dir4,
-        });
+        const [d1, d2, d3, d4] = data.galeSphereShadows;
+        return output.clones!({ d1: d1, d2: d2, d3: d3, d4: d4 });
       },
       run: (data) => data.galeSphereShadows = [],
       outputStrings: {
-        n: Outputs.dirN,
-        e: Outputs.dirE,
-        s: Outputs.dirS,
-        w: Outputs.dirW,
         unknown: Outputs.unknown,
+        n: Outputs.arrowN,
+        e: Outputs.arrowE,
+        s: Outputs.arrowS,
+        w: Outputs.arrowW,
         clones: {
-          en: 'Clones: ${dir1}->${dir2}->${dir3}->${dir4}',
-          de: 'Klone: ${dir1}->${dir2}->${dir3}->${dir4}',
-          fr: 'Clones : ${dir1}->${dir2}->${dir3}->${dir4}',
-          ja: '分身: ${dir1}->${dir2}->${dir3}->${dir4}',
-          cn: '分身：${dir1}->${dir2}->${dir3}->${dir4}',
-          ko: '분신: ${dir1}->${dir2}->${dir3}->${dir4}',
-        },
-        an: Outputs.arrowN,
-        ae: Outputs.arrowE,
-        as: Outputs.arrowS,
-        aw: Outputs.arrowW,
-        aclones: {
           en: '${d1} ${d2} ${d3} ${d4}',
           ja: '${d1} ${d2} ${d3} ${d4}',
           ko: '${d1} ${d2} ${d3} ${d4}',
@@ -600,16 +532,8 @@ const triggerSet: TriggerSet<Data> = {
           data.galeSafeSpots.push(safeSpots[dir]);
         data.galeSphereCasts = [];
 
-        if (data.options.AutumnStyle) {
-          const dirs = data.galeSafeSpots.map((x) => output[`a${x}`]!());
-          return dirs.join(' ');
-        }
-
-        const [dir1, dir2, dir3, dir4] = data.galeSafeSpots.map((x) => output[x]!());
-        if (dir1 === undefined || dir2 === undefined || dir3 === undefined || dir4 === undefined)
-          return;
-
-        return output.safeSpotList!({ dir1: dir1, dir2: dir2, dir3: dir3, dir4: dir4 });
+        const dirs = data.galeSafeSpots.map((x) => output[x]!());
+        return dirs.join(' ');
       },
       outputStrings: {
         safeSpotList: {
@@ -693,42 +617,20 @@ const triggerSet: TriggerSet<Data> = {
         if (isSafe1Safe && isSafe2Safe || !isSafe1Safe && !isSafe2Safe)
           return;
 
-        if (data.options.AutumnStyle) {
-          const arr = {
-            ne: output.ane!(),
-            se: output.ase!(),
-            sw: output.asw!(),
-            nw: output.anw!(),
-          }[isSafe1Safe ? safe1 : safe2];
-          return output.atext!({ dir: arr });
-        }
-
-        const dir = {
-          ne: output.northeast!(),
-          se: output.southeast!(),
-          sw: output.southwest!(),
-          nw: output.northwest!(),
+        const arr = {
+          ne: output.ane!(),
+          se: output.ase!(),
+          sw: output.asw!(),
+          nw: output.anw!(),
         }[isSafe1Safe ? safe1 : safe2];
-        return output.text!({ dir: dir });
+        return output.text!({ dir: arr });
       },
       outputStrings: {
-        text: {
-          en: '${dir} => Healer Groups',
-          de: '${dir} => Heiler Gruppen',
-          fr: '${dir} => Groupe sur les heals',
-          ja: '${dir} => ヒーラと4:4頭割り',
-          cn: '${dir} => 治疗分组分摊',
-          ko: '${dir} 🔜 4:4 힐러',
-        },
-        northeast: Outputs.northeast,
-        southeast: Outputs.southeast,
-        southwest: Outputs.southwest,
-        northwest: Outputs.northwest,
         ane: Outputs.arrowNE,
         ase: Outputs.arrowSE,
         asw: Outputs.arrowSW,
         anw: Outputs.arrowNW,
-        atext: {
+        text: {
           en: '${dir} Healer Groups',
           ko: '${dir} 4:4 힐러',
         },

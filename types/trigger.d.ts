@@ -111,7 +111,6 @@ export type TriggerAutoConfig = {
   TextAlertsEnabled?: boolean;
   SoundAlertsEnabled?: boolean;
   SpokenAlertsEnabled?: boolean;
-  AutumnStyle?: boolean;
   AutumnOnly?: boolean;
 };
 

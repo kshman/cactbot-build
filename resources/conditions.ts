@@ -24,13 +24,4 @@ export default {
     return (data: Data) =>
       data.role === 'tank' || data.role === 'healer' || data.CanFeint() || data.job === 'BLU';
   },
-  autumnStyle(): (data: Data) => boolean {
-    return (data: Data) => data.options.AutumnStyle;
-  },
-  autumnOnly(): (data: Data) => boolean {
-    return (data: Data) => data.options.AutumnOnly;
-  },
-  notAutumnOnly(): (data: Data) => boolean {
-    return (data: Data) => !data.options.AutumnOnly;
-  },
 };

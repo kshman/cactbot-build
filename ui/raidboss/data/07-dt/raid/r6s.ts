@@ -77,14 +77,17 @@ const triggerSet: TriggerSet<Data> = {
         output.responseOutputStrings = {
           bait: {
             en: 'Bait Tank Cleave',
+            ja: 'タンク範囲誘導',
             ko: '첫 탱크 클레브',
           },
           cold: {
             en: 'Bait cold ${act}',
+            ja: '${act} 🔵誘導',
             ko: '${act} 🔵유도해욧',
           },
           warm: {
             en: 'Bait warm ${act}',
+            ja: '${act} 🔴誘導',
             ko: '${act} 🔴유도해욧',
           },
           in: Outputs.in,
@@ -140,10 +143,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Warp',
+          ja: 'ワープ',
           ko: '나르샤!',
         },
         combo: {
           en: 'Warp => ${act}',
+          ja: 'ワープ (${act})',
           ko: '나르샤! (${act})',
         },
         pair: Outputs.stackPartner,
@@ -243,69 +248,65 @@ const triggerSet: TriggerSet<Data> = {
         if (start === undefined)
           return output.unknown!();
 
-        if (data.options.AutumnStyle) {
-          let mesg = output.unknown!();
-          if (comb === styleFlags.succ) // 서큐버스 2
-            mesg = output.succ!();
-          else if (comb === styleFlags.mbol)
-            mesg = output.mbol!(); // 몰볼 2
-          else if (comb === (styleFlags.succ | styleFlags.mbol))
-            mesg = output.succmbol!(); // 서큐버스 + 몰볼
-          else if ((comb & styleFlags.bomb) !== 0) {
-            if ((comb & styleFlags.succ) !== 0)
-              mesg = output.bombsucc!(); // 폭탄 + 서큐버스
-            if ((comb & styleFlags.mbol) !== 0)
-              mesg = output.bombmbol!(); // 폭탄 + 몰볼
-          } else if ((comb & styleFlags.wing) !== 0) {
-            if ((comb & styleFlags.succ) !== 0)
-              mesg = output.wingsucc!(); // 날개 + 서큐버스
-            if ((comb & styleFlags.mbol) !== 0)
-              mesg = output.wingmbol!(); // 날개 + 몰볼
-          }
-          const dir = AutumnDir.dirFromNum(start);
-          return output.atext!({ dir: output[dir]!(), mesg: mesg });
+        let mesg = output.unknown!();
+        if (comb === styleFlags.succ) // 서큐버스 2
+          mesg = output.succ!();
+        else if (comb === styleFlags.mbol)
+          mesg = output.mbol!(); // 몰볼 2
+        else if (comb === (styleFlags.succ | styleFlags.mbol))
+          mesg = output.succmbol!(); // 서큐버스 + 몰볼
+        else if ((comb & styleFlags.bomb) !== 0) {
+          if ((comb & styleFlags.succ) !== 0)
+            mesg = output.bombsucc!(); // 폭탄 + 서큐버스
+          if ((comb & styleFlags.mbol) !== 0)
+            mesg = output.bombmbol!(); // 폭탄 + 몰볼
+        } else if ((comb & styleFlags.wing) !== 0) {
+          if ((comb & styleFlags.succ) !== 0)
+            mesg = output.wingsucc!(); // 날개 + 서큐버스
+          if ((comb & styleFlags.mbol) !== 0)
+            mesg = output.wingmbol!(); // 날개 + 몰볼
         }
-
-        const dir1 = AutumnDir.dirFromNum(start);
-        const dir2 = AutumnDir.dirFromNum(dir);
-        return output.text!({ dir1: output[dir1]!(), dir2: output[dir2]!() });
+        return output.text!({ dir: output[AutumnDir.dirFromNum(start)]!(), mesg: mesg });
       },
       outputStrings: {
         text: {
-          en: 'Start ${dir1}, launch towards ${dir2}',
-          cn: '从 ${dir1}, 向 ${dir2} 发射',
-          ko: '${dir1} 시작, ${dir2}로',
-        },
-        atext: {
           en: '${dir} ${mesg}',
-          ko: '${dir} ${mesg}',
+          ja: '${dir} (${mesg})',
+          ko: '${dir} (${mesg})',
         },
         succ: {
           en: 'Succubus x2',
+          ja: 'サキュバス x2',
           ko: '서큐쪽',
         },
         mbol: {
           en: 'Molbol x2',
+          ja: 'モルボル x2',
           ko: '몰볼 안됨',
         },
         succmbol: {
           en: 'Succubus + Molbol',
+          ja: 'サキュバス + モルボル',
           ko: '서큐 + 몰볼 안됨',
         },
         bombsucc: {
           en: 'Painted + Succubus',
+          ja: '爆誕 + サキュバス',
           ko: '폭탄 + 서큐',
         },
         bombmbol: {
           en: 'Painted + Molbol',
+          ja: '爆誕 + モルボル',
           ko: '폭탄 + 몰볼 안됨',
         },
         wingsucc: {
           en: 'Heaven + Succubus',
+          ja: '羽根つき + サキュバス',
           ko: '날개 안됨 + 서큐',
         },
         wingmbol: {
           en: 'Heaven + Molbol',
+          ja: '羽根つき + モルボル',
           ko: '날개 안됨 + 몰볼 안됨',
         },
         unknown: Outputs.unknown,
@@ -345,10 +346,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         shirk: {
           en: '(shirk)',
+          ja: '(シャク)',
           ko: '(헤이트 넘겨줘요)',
         },
         provoke: {
           en: '(provoke)',
+          ja: '(挑発)',
           ko: '(프로보크)',
         },
       },
@@ -374,6 +377,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Wing bomb',
+          ja: '羽根爆弾、砂へ',
           ko: '날개 폭탄, 모래로',
         },
       },
@@ -387,6 +391,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Painted bomb',
+          ja: '爆弾、流砂へ',
           ko: '그냥 폭탄, 늪으로!',
         },
       },
@@ -401,10 +406,12 @@ const triggerSet: TriggerSet<Data> = {
         output.responseOutputStrings = {
           wock: {
             en: 'Jabberwock appears',
+            ja: 'ジャバウォック出現',
             ko: '재버워크 나왔어요',
           },
           bind: {
             en: 'Jabberwock binds YOU',
+            ja: 'ジャバウォックがわたしに！',
             ko: '내게 재버워크 바인드!',
           },
         };
@@ -428,6 +435,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Avoid arrows grid',
+          ja: '矢印のグリッド',
           ko: '화살 격자 장판',
         },
       },
@@ -444,6 +452,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: '${act} + Arrows grid',
+          ja: '${act} + 矢印のグリッド',
           ko: '${act} + 화살 격자 장판',
         },
         group: Outputs.healerGroups,
@@ -468,14 +477,17 @@ const triggerSet: TriggerSet<Data> = {
         output.responseOutputStrings = {
           left: {
             en: 'Thunder on YOU',
+            ja: '自分に雷！左の島へ',
             ko: '내게 번개! 왼쪽 섬으로',
           },
           right: {
             en: 'Thunder on YOU',
+            ja: '自分に雷！右の島へ',
             ko: '내게 번개! 오른쪽 섬으로',
           },
           provoke: {
             en: '(provoke)',
+            ja: '(挑発)',
             ko: '(프로보크)',
           },
         };
@@ -502,7 +514,6 @@ const triggerSet: TriggerSet<Data> = {
         fiveAOE: {
           en: 'Raidwide x5',
           ja: '頭割り x5',
-          cn: '5次分摊',
           ko: '뭉쳐욧 x5',
         },
       },
@@ -516,6 +527,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         spread: {
           en: 'Go to island',
+          ja: '担当の島へ',
           ko: '맡은 섬으로!',
         },
       },
@@ -533,11 +545,11 @@ const triggerSet: TriggerSet<Data> = {
       'replaceText': {
         '\\(cast\\)': '(wirken)',
         '\\(snapshot\\)': '(Speichern)',
-        '--Yan targetable--': '--Putschi anvisierbar--',
+        '--2x Feather Ray targetable--': '--2x Federrochen anvisierbar--',
         '--2x Mu targetable--': '--2x Mu anvisierbar--',
         '--Gimme Cat targetable--': '--Bettelcat anvisierbar--',
-        '--2x Feather Ray targetable--': '--2x Federrochen anvisierbar--',
         '--Jabberwock targetable--': '--Brabbelback anvisierbar--',
+        '--Yan targetable--': '--Putschi anvisierbar--',
         'Artistic Anarchy': 'Artistische Anarchie',
         'Bad Breath': 'Schlechter Atem',
         'Brûlée': 'Wärmeentladung',
@@ -617,7 +629,6 @@ const triggerSet: TriggerSet<Data> = {
       'locale': 'ja',
       'missingTranslations': true,
       'replaceSync': {
-        'Jabberwock': 'ジャバウォック',
         'Mouthwatering Morbol': 'シュガーズモルボル',
         'Sugar Riot': 'シュガーライオット',
         'Sweet Shot': 'シュガーズアロー',

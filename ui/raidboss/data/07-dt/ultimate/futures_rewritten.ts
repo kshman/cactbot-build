@@ -100,10 +100,10 @@ const calcRolePriority = (lh2: boolean, data: Data, dest?: PartyMemberParamObjec
       if (dest.role === 'tank' || dest.role === 'healer')
         return false;
       if (data.moks === 'D1' || data.moks === 'D2') {
-        if (Util.isMeleeDpsJob(dest.job!) && data.moks === 'D2')
+        if (Util.isMeleeDpsJob(dest.job_!) && data.moks === 'D2')
           return false;
       } else if (data.moks === 'D3') {
-        if (Util.isMeleeDpsJob(dest.job!))
+        if (Util.isMeleeDpsJob(dest.job_!))
           return false;
       } else {
         // 캐스터는 무조건 false
@@ -131,10 +131,10 @@ const calcRolePriority = (lh2: boolean, data: Data, dest?: PartyMemberParamObjec
           return true;
         return false;
       } else if (data.moks === 'D1' || data.moks === 'D2') {
-        if (Util.isMeleeDpsJob(dest.job!) && data.moks === 'D2')
+        if (Util.isMeleeDpsJob(dest.job_!) && data.moks === 'D2')
           return false;
       } else if (data.moks === 'D3') {
-        if (Util.isMeleeDpsJob(dest.job!))
+        if (Util.isMeleeDpsJob(dest.job_!))
           return false;
       } else {
         // 캐스터는 무조건 false
@@ -373,7 +373,7 @@ const triggerSet: TriggerSet<Data> = {
           },
           stack: Outputs.stacks,
           spread: Outputs.positions,
-          ...AutumnDir.stringsMark,
+          ...AutumnDir.stringsAim,
         };
         const image = data.actors[matches.id];
         if (image === undefined)
@@ -438,7 +438,7 @@ const triggerSet: TriggerSet<Data> = {
         },
         stack: Outputs.stacks,
         spread: Outputs.positions,
-        ...AutumnDir.stringsMark,
+        ...AutumnDir.stringsAim,
       },
     },
     {
@@ -489,7 +489,7 @@ const triggerSet: TriggerSet<Data> = {
       type: 'Tether',
       netRegex: { id: '00F9' },
       condition: (data, matches) => {
-        if (data.p1Falled || !data.options.AutumnStyle)
+        if (data.p1Falled)
           return false;
         const target = data.party.member(matches.target);
         data.p1FallTethers.push({ dest: target, color: 'red' });
@@ -713,8 +713,16 @@ const triggerSet: TriggerSet<Data> = {
           ja: '斜め',
           ko: '❌비스듬',
         },
-        axe: Outputs.outside,
-        scythe: Outputs.inside,
+        axe: {
+          en: 'Outside',
+          ja: '外側',
+          ko: '바깥',
+        },
+        scythe: {
+          en: 'Inside',
+          ja: '内側',
+          ko: '안',
+        },
         unknown: Outputs.unknown,
       },
     },
@@ -745,35 +753,24 @@ const triggerSet: TriggerSet<Data> = {
       suppressSeconds: 1,
       infoText: (data, _matches, output) => {
         if (data.p2Knockback === undefined)
-          return output.akb!({ dir: output.unknown!() });
+          return output.knockback!({ dir: output.unknown!() });
         const dir = data.p2Knockback;
         const dir1 = dir < 4 ? dir : dir - 4;
         const dir2 = dir < 4 ? dir + 4 : dir;
 
-        // 어듬이 제공
-        if (data.options.AutumnStyle && data.moks !== 'none') {
-          const dirs = Autumn.inMainTeam(data.moks) ? [0, 1, 6, 7] : [2, 3, 4, 5];
-          const res = AutumnDir.dirFromNum(dirs.includes(dir1) ? dir1 : dir2);
-          return output.akb!({ dir: output[res]!() });
-        }
-        const m1 = AutumnDir.dirFromNum(dir1);
-        const m2 = AutumnDir.dirFromNum(dir2);
-        return output.knockback!({ dir1: output[m1]!(), dir2: output[m2]!() });
+        const dirs = Autumn.inMainTeam(data.moks) ? [0, 1, 6, 7] : [2, 3, 4, 5];
+        const res = AutumnDir.dirFromNum(dirs.includes(dir1) ? dir1 : dir2);
+        return output.knockback!({ dir: output[res]!() });
       },
       run: (data, _matches) => delete data.p2Knockback,
       outputStrings: {
         knockback: {
-          en: 'Knockback ${dir1} / ${dir2}',
-          ja: 'ノックバック ${dir1}${dir2}',
-          ko: '넉백 ${dir1}${dir2}',
-        },
-        akb: {
           en: 'Knockback ${dir}',
           ja: 'ノックバック ${dir}',
           ko: '넉백 ${dir}',
         },
         unknown: Outputs.unknown,
-        ...AutumnDir.stringsMark,
+        ...AutumnDir.stringsAim,
       },
     },
     {
@@ -882,8 +879,8 @@ const triggerSet: TriggerSet<Data> = {
             ja: '自分に連鎖',
             ko: '내게 체인, 맡은 자리로',
           },
-          cnum4: Outputs.cnum4,
-          cmarkC: Outputs.cmarkC,
+          cnum4: Outputs.aimNW,
+          cmarkC: Outputs.aimS,
           unknown: Outputs.unknown,
         };
         if (!data.p2Puddles.some((p) => p.name === data.me)) {
@@ -1061,7 +1058,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '북쪽: ${mark}',
         },
         unknown: Outputs.unknown,
-        ...AutumnDir.stringsMark,
+        ...AutumnDir.stringsAim,
       },
     },
     {
@@ -1271,7 +1268,7 @@ const triggerSet: TriggerSet<Data> = {
           en: 'ccw',
           ko: '오른쪽🡺', // '반시계⤿',
         },
-        ...AutumnDir.stringsMark,
+        ...AutumnDir.stringsAim,
       },
     },
     {
@@ -1338,7 +1335,7 @@ const triggerSet: TriggerSet<Data> = {
           en: 'Safe: ${dir1} (lean ${dir2})',
           ko: '${dir1} ▶ ${dir2}',
         },
-        ...AutumnDir.stringsMark,
+        ...AutumnDir.stringsAim,
       },
     },
     {
@@ -1585,7 +1582,7 @@ const triggerSet: TriggerSet<Data> = {
         let towerHealer = '';
         const towerDps: string[] = [];
         for (const player of towerPlayers) {
-          const role = data.party.roleName(player);
+          const role = (data.party.member(player)).role_;
           if (role === 'tank')
             towerTank = player;
           else if (role === 'healer')
@@ -1602,7 +1599,7 @@ const triggerSet: TriggerSet<Data> = {
         let baitHealer = '';
         const baitDps: string[] = [];
         for (const player of baitPlayers) {
-          const role = data.party.roleName(player);
+          const role = (data.party.member(player)).role_;
           if (role === 'tank')
             baitTank = player;
           else if (role === 'healer')
@@ -1731,7 +1728,7 @@ const triggerSet: TriggerSet<Data> = {
         const isStackOnMe = data.me === baitStackPlayer;
         const defaultOutput = isStackOnMe ? { infoText: output.stackOnYou!() } : {};
         const myRole = data.role;
-        const stackRole = data.party.roleName(baitStackPlayer);
+        const stackRole = (data.party.member(baitStackPlayer)).role_;
         if (stackRole === undefined)
           return defaultOutput;
 
@@ -2111,7 +2108,7 @@ const triggerSet: TriggerSet<Data> = {
           return;
         if (data.p4MyCrystallize.color !== 'blue')
           return;
-        if (data.options.AutumnStyle && data.p4MyMarker !== undefined)
+        if (data.p4MyMarker !== undefined)
           return output.pick!({ num: output[data.p4MyMarker]!() });
         return output.cleanse!();
       },
@@ -2124,10 +2121,10 @@ const triggerSet: TriggerSet<Data> = {
           en: 'Cleanse ${num}',
           ko: '용머리 줏어요 ${num}',
         },
-        mark1: Outputs.cnum1,
-        mark2: Outputs.cnum2,
-        mark3: Outputs.cnum3,
-        mark4: Outputs.cnum4,
+        mark1: Outputs.aimNE,
+        mark2: Outputs.aimSE,
+        mark3: Outputs.aimSW,
+        mark4: Outputs.aimNW,
       },
     },
     {
@@ -2195,7 +2192,7 @@ const triggerSet: TriggerSet<Data> = {
 
         if (data.options.AutumnOnly) {
           const north = [0, 1, 7];
-          const mk = north.includes(intersectDirNum) ? output.marka!() : output.markc!();
+          const mk = output[north.includes(intersectDirNum) ? 'dirN' : 'dirS']!();
           return output.arewind!({ spot: mk });
         }
 
@@ -2214,10 +2211,8 @@ const triggerSet: TriggerSet<Data> = {
           en: 'Drop Rewind: near ${spot}',
           ko: '리턴 설치 ${spot}기준',
         },
-        marka: Outputs.cmarkA,
-        markc: Outputs.cmarkC,
         unknown: Outputs.unknown,
-        ...AutumnDir.stringsMark,
+        ...AutumnDir.stringsAim,
       },
     },
     {

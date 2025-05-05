@@ -1,79 +1,51 @@
-import Autumn from '../../../../../resources/autumn';
 import Conditions from '../../../../../resources/conditions';
 import Outputs from '../../../../../resources/outputs';
 import { Responses } from '../../../../../resources/responses';
 import ZoneId from '../../../../../resources/zone_id';
 import { RaidbossData } from '../../../../../types/data';
+import { PluginCombatantState } from '../../../../../types/event';
 import { NetMatches } from '../../../../../types/net_matches';
-import { Output, TriggerSet } from '../../../../../types/trigger';
+import { TriggerSet } from '../../../../../types/trigger';
 
-// 피렌/포시: /e prex py,po,pi
-// 하므/포시: /e prex hm,po,pi
-// 피렌/하므: /e prex py,hm,pi
-// 모두 하므: /e prex hm,hm,pi
-
-type ClockRotation = 'cw' | 'ccw';
-type AloDirection = 'front' | 'back' | 'left' | 'right';
-
-const MarchMoveStrings = {
-  stacks: Outputs.getTogether,
-  spread: Outputs.spread,
-  forward: {
-    en: 'Move: Forward => ${dest}', // FIXME
-    ja: '強制移動 : 前 => ${dest}',
-    ko: '강제이동: 앞 🔜 ${dest}',
-  },
-  backward: {
-    en: 'Move: Back => ${dest}', // FIXME
-    ja: '強制移動 : 後ろ => ${dest}',
-    ko: '강제이동: 뒤 🔜 ${dest}',
-  },
-  left: {
-    en: 'Move: Left => ${dest}', // FIXME
-    ja: '強制移動 : 左 => ${dest}',
-    ko: '강제이동: 왼쪽 🔜 ${dest}',
-  },
-  right: {
-    en: 'Move: Right => ${dest}', // FIXME
-    ja: '強制移動 : 右 => ${dest}',
-    ko: '강제이동: 오른쪽 🔜 ${dest}',
-  },
-} as const;
+// TODO: add callout for Monk Hydroshot target
+// TODO: sc3 should say which bubble to take to the other side (for everyone)
+// TODO: figure out directions for Lala for Radiance orbs
+// TODO: map effects for Lala
+// TODO: Lala Planar Tactics could add config strats and tell you who to stack with
+// TODO: Statice colors could add config strats for role-based colors + melee flex
 
 export interface Data extends RaidbossData {
-  readonly triggerSetConfig: {
-    stackOrder: 'meleeRolesPartners' | 'rolesPartners';
-    flukeGaleType: 'spread' | 'pylene' | 'hamukatsu';
-    planarTacticsType: 'count' | 'poshiume' | 'hamukatsu';
-    pinwheelingType: 'stack' | 'pino' | 'spell';
-  };
-  // ketuduke
-  ketuCrystalAdd: NetMatches['AddedCombatant'][];
+  combatantData: PluginCombatantState[];
   ketuSpringCrystalCount: number;
-  ketuHydroCount: number;
+  ketuCrystalAdd: NetMatches['AddedCombatant'][];
+  ketuHydroBuffCount: number;
+  ketuHydroBuffIsSpreadFirst?: boolean;
+  ketuHydroBuffIsRoleStacks?: boolean;
   ketuBuff?: 'bubble' | 'fetters';
+  ketuBuffPartner?: string;
   ketuBuffCollect: NetMatches['GainsEffect'][];
-  // lala
-  lalaRotation?: ClockRotation;
-  lalaTimes?: 3 | 5;
-  lalaMyRotation?: ClockRotation;
-  lalaMyTimes?: 3 | 5;
-  lalaUnseen?: AloDirection;
-  lalaAlphaGains: NetMatches['GainsEffect'][];
-  // statice
-  stcReloads: number;
-  stcMisload: number;
-  stcStackSpread: boolean;
-  stcRingRing: number;
-  stcBullsEyes: string[];
-  stcClaws: string[];
-  stcMissiles: string[];
-  stcChains: string[];
-  stcSeenPinwheeling: boolean;
-  stcMarch?: AloDirection;
-  stcDuration: number;
-  //
-  settled: boolean;
+  ketuStackTargets: string[];
+  ketuTwintidesNext?: 'out' | 'in';
+  lalaBossRotation?: 'clock' | 'counter';
+  lalaBossTimes?: 3 | 5;
+  lalaBossInitialSafe?: 'north' | 'east' | 'south' | 'west';
+  lalaUnseen?: 'front' | 'left' | 'right' | 'back';
+  lalaPlayerTimes?: 3 | 5;
+  lalaPlayerRotation?: 'clock' | 'counter';
+  lalaSubAlpha: NetMatches['GainsEffect'][];
+  staticeBullet: NetMatches['Ability'][];
+  staticeTriggerHappy?: number;
+  staticePopTriggerHappyNum?: number;
+  staticeTrapshooting: ('stack' | 'spread' | undefined)[];
+  staticeDart: NetMatches['GainsEffect'][];
+  staticePresentBoxCount: number;
+  staticeMissileCollect: NetMatches['AddedCombatant'][];
+  staticeMissileIdToDir: { [id: string]: number };
+  staticeMissileTether: NetMatches['Tether'][];
+  staticeClawTether: NetMatches['Tether'][];
+  staticeIsPinwheelingDartboard?: boolean;
+  staticeHomingColor?: 'blue' | 'yellow' | 'red';
+  staticeDartboardTether: NetMatches['HeadMarker'][];
 }
 
 // Horizontal crystals have a heading of 0, vertical crystals are -pi/2.
@@ -82,260 +54,94 @@ const isHorizontalCrystal = (line: NetMatches['AddedCombatant']) => {
   return Math.abs(parseFloat(line.heading)) < epsilon;
 };
 
-// test reverse rotation
-const isReverseRotate = (rot: ClockRotation, times: number): boolean => {
-  if (rot === 'cw' && times === 3)
-    return true;
-  if (rot === 'ccw' && times === 5)
-    return true;
-  return false;
-};
+const headmarkerIds = {
+  tethers: '0061',
+  enumeration: '015B',
+} as const;
 
-//
-const marchMove = (
-  output: Output,
-  march: AloDirection,
-  stackFirst: boolean,
-  safezone?: string,
-): string => {
-  const move = {
-    'front': output.forward,
-    'back': output.backward,
-    'left': output.left,
-    'right': output.right,
-  }[march];
-  if (safezone !== undefined)
-    return move!({ dest: safezone });
-  return move!({ dest: stackFirst ? output.stacks!() : output.spread!() });
-};
-
-// 주사위를 방향으로
-const diceToArrow = (no: number): string => {
-  const arrowMap: { [dice: number]: string } = {
-    1: '🡹',
-    2: '🡽',
-    3: '🡾',
-    4: '🡻',
-    5: '🡿',
-    6: '🡼',
-  } as const;
-  const ret = arrowMap[no];
-  return ret === undefined ? 'ꔫ' : ret;
+// TODO: this maybe should be a method on party?
+const isStandardLightParty = (data: Data): boolean => {
+  const supports = [...data.party.healerNames, ...data.party.tankNames];
+  const dps = data.party.dpsNames;
+  return supports.length === 2 && dps.length === 2;
 };
 
 const triggerSet: TriggerSet<Data> = {
   id: 'AnotherAloaloIsland',
   zoneId: ZoneId.AnotherAloaloIsland,
-  config: [
-    {
-      id: 'flukeGaleType',
-      name: {
-        en: 'Fluke Gale Strat',
-        ja: 'Fluke Gale タイプ',
-        ko: 'Fluke Gale 형식',
-      },
-      type: 'select',
-      options: {
-        en: {
-          'Message only': 'spread',
-          'Pylene: Brainless': 'pylene',
-          'Hamukasu: North/South static': 'hamukatsu',
-        },
-        ja: {
-          'メッセージ': 'spread',
-          'ぴれん: 脳死法': 'pylene',
-          'ハムカツ: 南北': 'hamukatsu',
-        },
-        ko: {
-          '메시지': 'spread',
-          '피렌: 뇌사': 'pylene',
-          '하므까스: 남북고정': 'hamukatsu',
-        },
-      },
-      default: 'hamukatsu',
-    },
-    {
-      id: 'planarTacticsType',
-      name: {
-        en: 'Planar Tactics Strat',
-        ja: 'Planar Tactics タイプ',
-        ko: 'Planar Tactics 형식',
-      },
-      type: 'select',
-      options: {
-        en: {
-          'Count only': 'count',
-          'Poshiume: 3 left or right': 'poshiume',
-          'Hamukatsu: 3 right only': 'hamukatsu',
-        },
-        ja: {
-          'カウント表示': 'count',
-          'ぽしうめ: 3番左右': 'poshiume',
-          'ハムカツ: 3番右': 'hamukatsu',
-        },
-        ko: {
-          '카운트 표시': 'count',
-          '포시우메: 3번 좌우 사용': 'poshiume',
-          '하므까스: 3번 한쪽만 사용': 'hamukatsu',
-        },
-      },
-      default: 'hamukatsu',
-    },
-    {
-      id: 'pinwheelingType',
-      name: {
-        en: 'Pinwheeling Strat',
-        ja: 'ダート＆ウィル タイプ',
-        ko: 'Pinwheeling 형식',
-      },
-      type: 'select',
-      options: {
-        en: {
-          'Message only': 'stack',
-          'Pino': 'pino',
-          'Spell': 'spell',
-        },
-        ja: {
-          'メッセージ': 'stack',
-          'ぴの(ハムカツ)': 'pino',
-          'spell(Game8)': 'spell',
-        },
-        ko: {
-          '메시지': 'stack',
-          '피노': 'pino',
-          '스펠': 'spell',
-        },
-      },
-      default: 'pino',
-    },
-  ],
   timelineFile: 'another_aloalo_island.txt',
   initData: () => {
     return {
-      ketuCrystalAdd: [],
+      combatantData: [],
       ketuSpringCrystalCount: 0,
-      ketuHydroCount: 0,
+      ketuCrystalAdd: [],
+      ketuHydroBuffCount: 0,
       ketuBuffCollect: [],
-      lalaAlphaGains: [],
-      stcReloads: 0,
-      stcMisload: 0,
-      stcStackSpread: false,
-      stcRingRing: 0,
-      stcBullsEyes: [],
-      stcClaws: [],
-      stcMissiles: [],
-      stcChains: [],
-      stcSeenPinwheeling: false,
-      stcDuration: 0,
-      settled: false,
+      ketuStackTargets: [],
+      lalaSubAlpha: [],
+      staticeBullet: [],
+      staticeTrapshooting: [],
+      staticeDart: [],
+      staticePresentBoxCount: 0,
+      staticeMissileCollect: [],
+      staticeMissileIdToDir: {},
+      staticeMissileTether: [],
+      staticeClawTether: [],
+      staticeDartboardTether: [],
     };
   },
   timelineTriggers: [
     {
-      id: 'AAI Options',
-      regex: /--setup--/,
-      infoText: (data, _matches, output) => {
-        if (data.settled)
-          return output.settled!();
-        data.settled = true;
-
-        if (data.options.AutumnParameter !== undefined) {
-          const ss = data.options.AutumnParameter.split(',');
-          if (ss.length === 1 && ss[0] === 'hm') {
-            data.triggerSetConfig.flukeGaleType = 'hamukatsu';
-            data.triggerSetConfig.planarTacticsType = 'hamukatsu';
-            data.triggerSetConfig.pinwheelingType = 'pino';
-          }
-          if (ss.length === 2) {
-            data.triggerSetConfig.flukeGaleType = ss[0] === 'hm' ? 'hamukatsu' : 'pylene';
-            data.triggerSetConfig.planarTacticsType = ss[1] === 'hm' ? 'hamukatsu' : 'poshiume';
-            data.triggerSetConfig.pinwheelingType = 'pino';
-          }
-          if (ss.length === 3) {
-            data.triggerSetConfig.flukeGaleType = ss[0] === 'hm' ? 'hamukatsu' : 'pylene';
-            data.triggerSetConfig.planarTacticsType = ss[1] === 'hm' ? 'hamukatsu' : 'poshiume';
-            data.triggerSetConfig.pinwheelingType = ss[2] === 'sp' ? 'spell' : 'pino';
-          }
-        }
-        const param = output.options!({
-          fluke: {
-            'spread': output.spread!(),
-            'pylene': output.pylene!(),
-            'hamukatsu': output.flukeNs!(),
-          }[data.triggerSetConfig.flukeGaleType],
-          planar: {
-            'count': output.count!(),
-            'poshiume': output.planar13!(),
-            'hamukatsu': output.planar3!(),
-          }[data.triggerSetConfig.planarTacticsType],
-          pin: {
-            'stack': output.stack!(),
-            'pino': output.pino!(),
-            'spell': output.spell!(),
-          }[data.triggerSetConfig.pinwheelingType],
-        });
-        return output.mesg!({ param: param });
+      id: 'AAI Lala Radiance',
+      regex: /^Radiance \d/,
+      beforeSeconds: 4,
+      alertText: (data, _matches, output) => {
+        // TODO: could figure out directions here and say "Point left at NW Orb"
+        const dir = data.lalaUnseen;
+        if (dir === undefined)
+          return output.orbGeneral!();
+        return {
+          front: output.orbDirFront!(),
+          back: output.orbDirBack!(),
+          left: output.orbDirLeft!(),
+          right: output.orbDirRight!(),
+        }[dir];
       },
       outputStrings: {
-        settled: {
-          en: '(Option already settled)',
-          ja: '(設定されています)',
-          ko: '(설정이 있어요)',
+        orbDirFront: {
+          en: 'Face Towards Orb',
+          de: 'Den Orb anschauen',
+          fr: 'Pointez l\'orbe',
+          cn: '面向球',
+          ko: '구슬쪽 보기',
         },
-        mesg: {
-          en: 'Option: ${param}',
-          ja: 'オプション: ${param}',
-          ko: '옵션: ${param}',
+        orbDirBack: {
+          en: 'Face Away from Orb',
+          de: 'Weg vom Orb schauen',
+          fr: 'Ne pointez pas l\'orbe',
+          cn: '背对球',
+          ko: '뒷면을 구슬쪽으로',
         },
-        options: {
-          en: '${fluke}/${planar}/${pin}',
-          ja: '${fluke}/${planar}/${pin}',
-          ko: '${fluke}/${planar}/${pin}',
+        orbDirLeft: {
+          en: 'Point Left at Orb',
+          de: 'Zeige links auf den Orb',
+          fr: 'Pointez à gauche de l\'orbe',
+          cn: '左侧对准球',
+          ko: '왼쪽면을 구슬쪽으로',
         },
-        spread: {
-          en: '(spread)',
-          ja: '(なし)',
-          ko: '(없음)',
+        orbDirRight: {
+          en: 'Point Right at Orb',
+          de: 'Zeige Rechts auf den Orb',
+          fr: 'Pointez à droite de l\'orbe',
+          cn: '右侧对准球',
+          ko: '오른쪽면을 구슬쪽으로',
         },
-        pylene: {
-          en: 'pylene',
-          ja: 'ぴれん',
-          ko: '피렌',
-        },
-        flukeNs: {
-          en: 'N-S',
-          ja: '南北',
-          ko: '남북',
-        },
-        count: {
-          en: '(count)',
-          ja: '(カウント)',
-          ko: '(카운트)',
-        },
-        planar13: {
-          en: '1&3',
-          ja: '両方',
-          ko: '양쪽',
-        },
-        planar3: {
-          en: '3',
-          ja: '片方',
-          ko: '한쪽',
-        },
-        stack: {
-          en: '(stack)',
-          ja: '(なし)',
-          ko: '(없음)',
-        },
-        pino: {
-          en: 'pino',
-          ja: 'ぴの',
-          ko: '피노',
-        },
-        spell: {
-          en: 'spell',
-          ja: 'spell',
-          ko: '스펠',
+        orbGeneral: {
+          en: 'Point opening at Orb',
+          de: 'Zeige die Öffnung auf den Orb',
+          fr: 'Pointez l\'orbe',
+          cn: '开口侧对准球',
+          ko: '열린면을 수슬쪽으로',
         },
       },
     },
@@ -352,20 +158,22 @@ const triggerSet: TriggerSet<Data> = {
           tankBusterOnYou: {
             en: '3x Tankbuster on YOU',
             de: '3x Tankbuster auf DIR',
-            ja: '自分に3xタン強',
-            ko: '내게 3연속 탱크버스터',
+            fr: 'Tankbuster x3 sur VOUS',
+            cn: '3x 坦克死刑点名',
+            ko: '3x 탱버 대상자',
           },
           tankBusterOnPlayer: {
             en: '3x Tankbuster on ${player}',
             de: '3x Tankbuster auf ${player}',
-            ja: '3xタン強: ${player}',
-            ko: '3연속 탱크버스터: ${player}',
+            fr: 'Tankbuster x3 sur ${player}',
+            cn: '3x 坦克死刑点 ${player}',
+            ko: '3x 탱버 ${player}',
           },
         };
 
         if (matches.target === data.me)
           return { alertText: output.tankBusterOnYou!() };
-        const target = data.party.jobAbbr(matches.target);
+        const target = data.party.member(matches.target);
         return { infoText: output.tankBusterOnPlayer!({ player: target }) };
       },
     },
@@ -374,21 +182,6 @@ const triggerSet: TriggerSet<Data> = {
       type: 'StartsUsing',
       netRegex: { id: '8C63', source: 'Aloalo Kiwakin' },
       response: Responses.tankBuster(),
-    },
-    {
-      id: 'AAI Kiwakin Sharp Strike Cleanse',
-      type: 'Ability',
-      netRegex: { id: '8C63', source: 'Aloalo Kiwakin' },
-      condition: (data) => data.CanCleanse(),
-      alertText: (data, matches, output) =>
-        output.text!({ player: data.party.jobAbbr(matches.target) }),
-      outputStrings: {
-        text: {
-          en: 'Cleanse ${player}',
-          ja: 'エスナ: ${player}',
-          ko: '에스나: ${player}',
-        },
-      },
     },
     {
       id: 'AAI Kiwakin Tail Screw',
@@ -407,7 +200,7 @@ const triggerSet: TriggerSet<Data> = {
       id: 'AAI Snipper Bubble Shower',
       type: 'StartsUsing',
       netRegex: { id: '8BB9', source: 'Aloalo Snipper', capture: false },
-      response: Responses.goSides(),
+      response: Responses.getBackThenFront(),
     },
     {
       id: 'AAI Snipper Crab Dribble',
@@ -433,12 +226,12 @@ const triggerSet: TriggerSet<Data> = {
       id: 'AAI Ray Electric Whorl',
       type: 'StartsUsing',
       netRegex: { id: '8BBE', source: 'Aloalo Ray', capture: false },
-      response: Responses.getUnder('alert'),
+      response: Responses.getUnder(),
     },
     {
       id: 'AAI Monk Hydroshot',
       type: 'StartsUsing',
-      netRegex: { id: '8BBE', source: 'Aloalo Monk' },
+      netRegex: { id: '8C65', source: 'Aloalo Monk' },
       condition: Conditions.targetIsYou(),
       response: Responses.knockbackOn(),
     },
@@ -461,17 +254,18 @@ const triggerSet: TriggerSet<Data> = {
       netRegex: { id: '8AA8', source: 'Ketuduke', capture: false },
       run: (data) => {
         data.ketuSpringCrystalCount++;
-        data.ketuCrystalAdd = [];
+        // Note: cannot clear `data.ketuCrystalAdd` here as there has been at least one case
+        // where AddCombatant (coming from memory, so racy) is partially before this cast.
       },
     },
     {
-      id: 'AAI Ketuduke Spring Crystal 1 Collect',
-      type: 'AddedCombatant',
-      netRegex: { npcNameId: '12606' },
-      run: (data, matches) => data.ketuCrystalAdd.push(matches),
+      id: 'AAI Ketuduke Spring Crystals Saturate Cleanup',
+      type: 'StartsUsing',
+      netRegex: { id: ['8AAB', '8AAC'], capture: false },
+      run: (data) => data.ketuCrystalAdd = [],
     },
     {
-      id: 'AAI Ketuduke Spring Crystal 2 Collect',
+      id: 'AAI Ketuduke Spring Crystal Collect',
       type: 'AddedCombatant',
       netRegex: { npcNameId: '12607' },
       run: (data, matches) => data.ketuCrystalAdd.push(matches),
@@ -481,166 +275,421 @@ const triggerSet: TriggerSet<Data> = {
       type: 'StartsUsing',
       netRegex: { id: ['8AC5', '8AAD'], source: 'Ketuduke', capture: false },
       response: Responses.aoe(),
-      run: (data) => data.ketuBuffCollect = [],
     },
     {
-      id: 'AAI Ketuduke Bubble Weave/Foamy Fetters',
+      id: 'AAI Ketuduke Foamy Fetters Bubble Weave',
       type: 'GainsEffect',
       // ECC = Foamy Fetters
       // E9F = Bubble Weave
       netRegex: { effectId: ['ECC', 'E9F'] },
-      condition: (data, matches) => {
+      delaySeconds: (data, matches) => {
         data.ketuBuffCollect.push(matches);
-        return data.ketuBuffCollect.length === 4;
+        return data.ketuBuffCollect.length === 4 ? 0 : 0.5;
       },
-      durationSeconds: 6,
       alertText: (data, _matches, output) => {
-        const myid = data.ketuBuffCollect.find((x) => x.target === data.me)?.effectId;
-        if (myid === undefined)
+        if (data.ketuBuffCollect.length === 0)
           return;
-        data.ketuBuff = myid === 'E9F' ? 'bubble' : 'fetters';
 
-        const partner = data.party.jobAbbr(
-          data.ketuBuffCollect.find((x) => x.effectId === myid && x.target !== data.me)?.target,
-        ) ?? output.unknown!();
-        return output[data.ketuBuff]!({ partner: partner });
+        const myBuff = data.ketuBuffCollect.find((x) => x.target === data.me)?.effectId;
+        if (myBuff === undefined)
+          return;
+        data.ketuBuff = myBuff === 'ECC' ? 'fetters' : 'bubble';
+        data.ketuBuffPartner = data.ketuBuffCollect.find((x) => {
+          return x.target !== data.me && x.effectId === myBuff;
+        })?.target;
+        const player = data.party.member(data.ketuBuffPartner);
+
+        // To avoid too many calls, we'll call this out later for the Fluke Gale
+        // versions of this.
+        if (data.ketuSpringCrystalCount === 1 || data.ketuSpringCrystalCount === 4)
+          return;
+
+        if (data.ketuBuff === 'fetters')
+          return output.fetters!({ player: player });
+        return output.bubble!({ player: player });
       },
-      run: (data) => data.ketuBuffCollect,
+      run: (data) => data.ketuBuffCollect = [],
       outputStrings: {
-        bubble: {
-          en: 'Bubble (w/ ${partner})',
-          ja: 'バブル (${partner})',
-          ko: '🔵버블 (${partner})',
-        },
         fetters: {
-          en: 'Fetters (w/ ${partner})',
-          ja: 'バインド (${partner})',
-          ko: '🟡바인드 (${partner})',
+          en: 'Fetters (w/${player})',
+          de: 'Fesseln (mit ${player})',
+          fr: 'Entraves (avec ${player})',
+          cn: '止步 (和 ${player})',
+          ko: '속박 (+ ${player})',
         },
-        safe: {
-          en: 'Safe: ${safe}',
-          ja: '安置: ${safe}',
-          ko: '안전: ${safe}',
+        bubble: {
+          en: 'Bubble (w/${player})',
+          de: 'Blase (mit ${player})',
+          fr: 'Bulles (avec ${player})',
+          cn: '泡泡 (和 ${player})',
+          ko: '거품 (+ ${player})',
         },
-        unknown: Outputs.unknown,
       },
     },
     {
-      id: 'AAI Ketuduke Hydro Counter',
+      id: 'AAI Ketuduke Hydro Buff Counter',
       type: 'StartsUsing',
       // 8AB8 = Hydrobullet (spread)
       // 8AB4 = Hydrofall (stack)
       netRegex: { id: ['8AB8', '8AB4'], source: 'Ketuduke', capture: false },
-      run: (data) => data.ketuHydroCount++,
+      run: (data) => {
+        data.ketuHydroBuffCount++;
+        delete data.ketuHydroBuffIsSpreadFirst;
+        delete data.ketuHydroBuffIsRoleStacks;
+      },
     },
     {
-      id: 'AAI Ketuduke Hydrobullet Reminder',
-      type: 'GainsEffect',
-      netRegex: { effectId: 'EA3' },
-      condition: (data) => [2, 4, 5].includes(data.ketuHydroCount),
-      delaySeconds: (_data, matches) => parseFloat(matches.duration) - 5,
-      durationSeconds: 4,
-      suppressSeconds: 5,
-      response: Responses.stackPartner('info'),
-    },
-    {
-      id: 'AAI Ketuduke Hydrofall Reminder',
-      type: 'GainsEffect',
-      netRegex: { effectId: 'EA4' },
-      condition: (data) => [2, 3, 5].includes(data.ketuHydroCount),
-      delaySeconds: (_data, matches) => parseFloat(matches.duration) - 5,
-      durationSeconds: 4,
-      suppressSeconds: 5,
-      response: Responses.spread(),
-    },
-    // Pylene: https://twitter.com/ff14_pylene99/status/1719665676745650610
-    // Hamukatu Nanboku: https://ffxiv.link/0102424
-    {
-      id: 'AAI Ketuduke Hydro 1', // Fluke Gale
+      id: 'AAI Ketuduke Hydro Buff 1',
+      comment: {
+        en: `These directions assume that you always pick a square in the same
+             quadrant as the crystal specified.
+             For brevity, "next to" always means horizontal east/west of something.
+             See trigger source for diagrams in comments.`,
+        de: `Diese Anweisungen gehen davon aus, dass Sie immer ein Quadrat im gleichen
+             Quadranten wie der angegebene Kristall liegt.
+             Der Einfachheit halber bedeutet "neben" immer horizontal östlich/westlich von etwas.
+             Siehe Triggerquelle für Diagramme in den Kommentaren.`,
+        fr: `Ces instructions supposent que vous choisissez toujours une case dans le même
+             quadrant que le cristal spécifié.
+             Par souci de concision, "à côté de" signifie toujours horizontal
+             à l'est ou à l'ouest de quelque chose.
+             Voir le déclencheur source pour les diagrammes dans les commentaires.`,
+        cn: `这些方向假设你一直选的是同一面向的四块地板方格上的水晶。
+             简洁起见，"相邻" 指的是左右水平相邻的某一个水晶。
+             请参阅触发器源代码注释中的图表。`,
+        ko: `이곳의 방향 지시는 항상 지정된 수정과 같은 사분면에 있는 정사각형을 선택한다고 가정합니다.
+             간결성을 위해, '옆'은 항상 무언가의 동쪽/서쪽을 의미합니다.
+             트리거 소스코드에 주석으로 작성된 다이어그램을 참고하세요.`,
+      },
       type: 'StartsUsing',
       netRegex: { id: ['8AB8', '8AB4'], source: 'Ketuduke' },
-      condition: (data) => data.ketuHydroCount === 1 || data.ketuHydroCount === 6,
-      delaySeconds: 8,
-      durationSeconds: 12,
+      condition: (data) => data.ketuHydroBuffCount === 1 || data.ketuHydroBuffCount === 6,
+      durationSeconds: 10,
       alertText: (data, matches, output) => {
-        const mech = matches.id === '8AB4' ? output.stacks!() : output.spread!();
+        if (data.ketuBuff === undefined)
+          return;
 
-        if (data.triggerSetConfig.flukeGaleType === 'spread')
-          return output.mesg!({ mech: mech });
+        const isPlayerDPS = data.party.isDPS(data.me);
+        const isPartnerDPS = data.ketuBuffPartner !== undefined
+          ? data.party.isDPS(data.ketuBuffPartner)
+          : undefined;
+        const isBubbleNetPartnerSameRole = isPlayerDPS === isPartnerDPS &&
+          isStandardLightParty(data);
 
-        if (data.triggerSetConfig.flukeGaleType === 'pylene') {
-          if (data.ketuBuff === 'fetters' && matches.id === '8AB8')
-            return output.pylene2!({ mech: mech });
-          return output.pylene1!({ mech: mech });
-        }
+        // Simplify callout in vast majority of cases where there's a normal light party setup
+        // and you and the two dps and two supports get the same debuff, so no need to list
+        // your partner.
+        //
+        // Otherwise, if you're doing this nonstandard for some reason or somebody is dead
+        // you can know if you need to flex.
+        const isSpread = matches.id === '8AB8';
+        const bubbleStr = data.ketuBuff === 'bubble' ? output.bubbleBuff!() : output.fettersBuff!();
+        // We don't know about role stacks at this point, as this is just the initial cast bar.
+        const stackStr = isSpread ? output.spread!() : output.stacks!();
+        if (isBubbleNetPartnerSameRole || data.ketuBuffPartner === undefined)
+          return output.bubbleNetMech!({ fettersBubble: bubbleStr, spreadStack: stackStr });
+        return output.bubbleNetMechPartner!({
+          fettersBubble: bubbleStr,
+          spreadStack: stackStr,
+          player: data.party.member(data.ketuBuffPartner),
+        });
+      },
+      infoText: (data, matches, output) => {
+        // If somebody died and missed a debuff, good luck.
+        if (data.ketuBuff === undefined)
+          return;
 
-        if (data.triggerSetConfig.flukeGaleType === 'hamukatsu') {
-          if (data.ketuBuff === 'bubble')
-            return output.hamukatsuBubble!({ mech: mech });
-          if (matches.id === '8AB4')
-            return output.hamukatsu1!({ mech: mech });
-          return output.hamukatsu2!({ mech: mech });
+        // Bubble always does the same thing.
+        if (data.ketuBuff === 'bubble')
+          return output.bubbleAnything!();
+
+        // Two layouts, one with each crystal in its own column ("split")
+        // and one with two columns that have an H and a V in that same column ("columns").
+        // Wind doesn't matter, as "1" will always be on the horizontal crystals.
+        // These can be flipped somewhat, but the solution is always the same.
+        // Horizontal crystals are always in lc1 wind, and vertical crystals are always
+        // in lc2 wind. Players with bubbles always go either (1) adjacent to a horizontal
+        // crystal OR (2) diagonal of a vertical crystal. Either one works, but it
+        // depends on how you split your priorities / wind which one you'd take.
+        //
+        // Legend: V = vertical crystal, H = horizontal crystal
+        //         1 = limit cut wind 1, 2 = limit cut wind 2
+        //         f = fetters, b = bubble (if placed in lc1)
+        //
+        // STACK FETTERS COLUMNS (kitty to horizontal)
+        //     2                   2
+        //   + - - - - +         + - - - - +
+        //   | V     f | 1       |     H f | 1
+        //   |     H b |    =>   |     V   |
+        //   | H b     |         | V       |
+        // 1 |   f V   |       1 | H f     |
+        //   + - - - - +         + - - - - +
+        //           2                   2
+        //
+        // STACK FETTERS SPLIT (on horizontal)
+        //           2                   2
+        //   + - - - - +         + - - - - +
+        // 1 |     V   |       1 |   V     |
+        //   | H b     |    =>   | f H     |
+        //   |   V     |         |     V   |
+        //   |     b H | 1       |     H f | 1
+        //   + - - - - +         + - - - - +
+        //     2                   2
+        //
+        // SPREAD FETTERS COLUMNS (adjacent to vertical)
+        //     2                   2
+        //   + - - - - +         + - - - - +
+        //   | V f     | 1       |   f H b | 1
+        //   |     H b |    =>   |     V   |
+        //   | H b     |         | V       |
+        // 1 |     V f |       1 | H b   f |
+        //   + - - - - +         + - - - - +
+        //           2                   2
+        //
+        // SPREAD FETTERS SPLIT (kitty to vertical)
+        //     2                   2
+        //   + - - - - +         + - - - - +
+        //   |   V     | 1       |     V   | 1
+        //   | f   b H |    =>   | f   H b |
+        //   |     V   |         |   V     |
+        // 1 | H b   f |       1 | b H   f |
+        //   + - - - - +         + - - - - +
+        //           2                   2
+
+        const isSpread = matches.id === '8AB8';
+        const horizontal = data.ketuCrystalAdd.filter((x) => isHorizontalCrystal(x));
+        const vertical = data.ketuCrystalAdd.filter((x) => !isHorizontalCrystal(x));
+
+        const [firstHorizontal] = horizontal;
+        if (horizontal.length !== 2 || vertical.length !== 2 || firstHorizontal === undefined)
+          return;
+        const firstHorizX = parseFloat(firstHorizontal.x);
+        // It's split if no vertical is in the same column as either horizontal.
+        const isSplitLayout =
+          vertical.find((line) => Math.abs(parseFloat(line.x) - firstHorizX) < 1) === undefined;
+
+        if (isSpread)
+          return isSplitLayout ? output.fettersSpreadSplit!() : output.fettersSpreadColumn!();
+        return isSplitLayout ? output.fettersStackSplit!() : output.fettersStackColumn!();
+      },
+      outputStrings: {
+        bubbleNetMech: {
+          en: '${fettersBubble} + ${spreadStack}',
+          de: '${fettersBubble} + ${spreadStack}',
+          fr: '${fettersBubble} + ${spreadStack}',
+          cn: '${fettersBubble} + ${spreadStack}',
+          ko: '${fettersBubble} + ${spreadStack}',
+        },
+        bubbleNetMechPartner: {
+          en: '${fettersBubble} + ${spreadStack} (w/${player})',
+          de: '${fettersBubble} + ${spreadStack} (mit ${player})',
+          fr: '${fettersBubble} + ${spreadStack} (avec ${player})',
+          cn: '${fettersBubble} + ${spreadStack} (和 ${player})',
+          ko: '${fettersBubble} + ${spreadStack} (+ ${player})',
+        },
+        bubbleBuff: {
+          en: 'Bubble',
+          de: 'Blase',
+          fr: 'Bulle',
+          cn: '泡泡',
+          ko: '거품',
+        },
+        fettersBuff: {
+          en: 'Fetters',
+          de: 'Ketten',
+          fr: 'Entraves',
+          cn: '止步',
+          ko: '속박',
+        },
+        spread: Outputs.spread,
+        stacks: {
+          en: 'Stacks',
+          de: 'Sammeln',
+          fr: 'Package',
+          cn: '分摊',
+          ko: '쉐어',
+        },
+        bubbleAnything: {
+          en: 'Diagonal of Vertical / Next to Horizontal ',
+          de: 'Diagonale der Vertikalen / Neben Horizontal',
+          fr: 'Diagonale de la verticale / À côté de l\'horizontale',
+          cn: '竖水晶对角线 / 左右相邻的横水晶',
+          ko: '세로 수정의 대각선 / 가로 수정의 옆',
+        },
+        fettersSpreadSplit: {
+          en: 'Diagonal of Vertical',
+          de: 'Diagonale der Vertikalen',
+          fr: 'Diagonale de la verticale',
+          cn: '竖水晶对角线',
+          ko: '세로 수정의 대각선',
+        },
+        fettersSpreadColumn: {
+          en: 'Next to Vertical',
+          de: 'Neben Vertikal',
+          fr: 'À côté de la verticale',
+          cn: '左右相邻的竖水晶',
+          ko: '가로 수정의 옆',
+        },
+        fettersStackSplit: {
+          en: 'On Horizontal',
+          de: 'Auf Horizontal',
+          fr: 'Sur l\'horizontale',
+          cn: '横水晶上',
+          ko: '가로 수정이 있는 곳',
+        },
+        fettersStackColumn: {
+          en: 'Diagonal of Horizontal',
+          de: 'Diagonale der Horizontalen',
+          fr: 'Diagonale de l\'horizontale',
+          cn: '横水晶对角线',
+          ko: '가로 수정의 대각선',
+        },
+      },
+    },
+    {
+      id: 'AAI Ketuduke Hydro Buff Double',
+      type: 'StartsUsing',
+      netRegex: { id: ['8AB8', '8AB4'], source: 'Ketuduke' },
+      condition: (data) => data.ketuHydroBuffCount === 2 || data.ketuHydroBuffCount === 5,
+      alertText: (data, matches, output) => {
+        data.ketuHydroBuffIsSpreadFirst = matches.id === '8AB8';
+        return data.ketuHydroBuffIsSpreadFirst ? output.spread!() : output.stacks!();
+      },
+      outputStrings: {
+        spread: {
+          en: 'Spread => Stacks',
+          de: 'Verteilen => Sammeln',
+          fr: 'Écarté => Package',
+          cn: '分散 => 分摊',
+          ko: '산개 => 쉐어',
+        },
+        stacks: {
+          en: 'Stacks => Spread',
+          de: 'Sammeln => Verteilen',
+          fr: 'Package => Écarté',
+          cn: '分摊 => 分散',
+          ko: '쉐어 => 산개',
+        },
+      },
+    },
+    {
+      id: 'AAI Ketuduke Hydro Buff Double Followup',
+      type: 'Ability',
+      netRegex: { id: ['8ABA', '8AB7'], source: 'Ketuduke' },
+      suppressSeconds: 10,
+      infoText: (data, matches, output) => {
+        const wasSpread = matches.id === '8ABA';
+        if (wasSpread && data.ketuHydroBuffIsSpreadFirst === true) {
+          if (data.ketuHydroBuffIsRoleStacks)
+            return output.roleStacks!();
+          return output.stacks!();
+        } else if (!wasSpread && data.ketuHydroBuffIsSpreadFirst === false) {
+          return output.spread!();
         }
       },
-      run: (data) => delete data.ketuBuff,
       outputStrings: {
         spread: Outputs.spread,
-        stacks: Outputs.stackPartner,
-        mesg: {
-          en: 'Go to safe tile => ${mech}',
-          ja: '安置マスへ => ${mech}',
-          ko: '안전 칸으로 🔜 ${mech}',
+        stacks: {
+          en: 'Stacks',
+          de: 'Sammeln',
+          fr: 'Package',
+          cn: '分摊',
+          ko: '쉐어',
         },
-        pylene1: {
-          en: 'Go to 1 => ${mech}',
-          ja: '第1区域へ => ${mech}',
-          ko: '피렌 [1] 🔜 ${mech}',
-        },
-        pylene2: {
-          en: 'Go to 2 => ${mech}',
-          ja: '第2区域へ => ${mech}',
-          ko: '피렌 [2] 🔜 ${mech}',
-        },
-        hamukatsu1: {
-          en: 'Go to 1 => ${mech}',
-          ja: '第1区域の安置マスへ => ${mech}',
-          ko: '[1] 안전 칸 🔜 ${mech}',
-        },
-        hamukatsu2: {
-          en: 'Go to 2 safe tile  => ${mech}',
-          ja: '第2区域の安置マスへ => ${mech}',
-          ko: '[2] 안전 칸 🔜 ${mech}',
-        },
-        hamukatsuBubble: {
-          en: 'Go to 2 safe tile (after knockback) => ${mech}',
-          ja: '第2区域の安置マスへ => ${mech}',
-          ko: '[2] (넉백후)안전 칸 🔜 ${mech}',
+        roleStacks: {
+          en: 'Role Stacks',
+          de: 'Rollengruppe sammeln',
+          fr: 'Package par rôle',
+          cn: '职能分摊',
+          ko: '역할별 쉐어',
         },
       },
     },
     {
-      id: 'AAI Ketuduke Hydro 2', // Blowing Bubbles / Angry Seas
-      type: 'StartsUsing',
-      netRegex: { id: ['8AB8', '8AB4'], source: 'Ketuduke' },
-      condition: (data) => data.ketuHydroCount === 2 || data.ketuHydroCount === 5,
-      durationSeconds: 8,
-      alertText: (_data, matches, output) =>
-        matches.id === '8AB4' ? output.stacks!() : output.spread!(),
+      id: 'AAI Ketuduke Hydrofall Role Stack Warning',
+      type: 'GainsEffect',
+      netRegex: { effectId: 'EA3' },
+      delaySeconds: (data, matches) => {
+        data.ketuStackTargets.push(matches.target);
+        return data.ketuStackTargets.length === 2 ? 0 : 0.5;
+      },
+      alarmText: (data, _matches, output) => {
+        const [stack1, stack2] = data.ketuStackTargets;
+        if (data.ketuStackTargets.length !== 2 || stack1 === undefined || stack2 === undefined)
+          return;
+
+        // Sorry, non-standard light party comps.
+        if (!isStandardLightParty(data))
+          return;
+
+        const isStack1DPS = data.party.isDPS(stack1);
+        const isStack2DPS = data.party.isDPS(stack2);
+
+        // If both stacks are on dps or neither stack is on a dps, then you have
+        // standard "partner" stacks of one support and one dps. If one is on a dps
+        // and one is on a support (which can happen if somebody dies), then
+        // you (probably) need to have role stacks.
+        if (isStack1DPS === isStack2DPS)
+          return;
+
+        data.ketuHydroBuffIsRoleStacks = true;
+
+        // Handle Blowing Bubbles/Angry Seas spread+stack combo.
+        if (data.ketuHydroBuffIsSpreadFirst === true)
+          return output.spreadThenRoleStacks!();
+        else if (data.ketuHydroBuffIsSpreadFirst === false)
+          return output.roleStacksThenSpread!();
+        return output.roleStacks!();
+      },
+      run: (data) => data.ketuStackTargets = [],
       outputStrings: {
-        stacks: Outputs.pairThenSpread,
-        spread: Outputs.spreadThenPair,
+        roleStacks: {
+          en: 'Role Stacks',
+          de: 'Rollengruppe sammeln',
+          fr: 'Package par rôle',
+          cn: '职能分摊',
+          ko: '역할별 쉐어',
+        },
+        spreadThenRoleStacks: {
+          en: 'Spread => Role Stacks',
+          de: 'Verteilen => Rollengruppe sammeln',
+          fr: 'Écarté => Package par rôle',
+          cn: '分散 => 职能分摊',
+          ko: '산개 => 역할별 쉐어',
+        },
+        roleStacksThenSpread: {
+          en: 'Role Stacks => Spread',
+          de: 'Rollengruppe sammeln => Verteilen',
+          fr: 'Package par rôle => Écarté',
+          cn: '职能分摊 => 分散',
+          ko: '역할별 쉐어 => 산개',
+        },
       },
     },
     {
       id: 'AAI Ketuduke Receding Twintides',
       type: 'StartsUsing',
       netRegex: { id: '8ACC', source: 'Ketuduke', capture: false },
-      alertText: (_data, _matches, output) => output.text!(),
+      alertText: (data, _matches, output) => {
+        if (data.ketuHydroBuffIsRoleStacks)
+          return output.outInRoleStacks!();
+        return output.outInStacks!();
+      },
+      run: (data) => data.ketuTwintidesNext = 'in',
       outputStrings: {
-        text: {
-          en: 'Out => Stack inside',
-          ja: '外 => 内側でペア',
-          ko: '밖에 있다 🔜 안에서 페어',
+        outInStacks: {
+          en: 'Out => In + Stacks',
+          de: 'Raus => Rein + sammeln',
+          fr: 'Extérieur => Intérieur + Package',
+          cn: '远离 => 靠近 + 分摊',
+          ko: '밖 => 안 + 쉐어',
+        },
+        outInRoleStacks: {
+          en: 'Out => In + Role Stacks',
+          de: 'Raus => Rein + Rollengruppe sammeln',
+          fr: 'Extérieur => Intérieur + Package par rôle',
+          cn: '远离 => 靠近 + 职能分摊',
+          ko: '밖 => 안 + 역할별 쉐어',
         },
       },
     },
@@ -648,12 +697,69 @@ const triggerSet: TriggerSet<Data> = {
       id: 'AAI Ketuduke Encroaching Twintides',
       type: 'StartsUsing',
       netRegex: { id: '8ACE', source: 'Ketuduke', capture: false },
-      alertText: (_data, _matches, output) => output.text!(),
+      alertText: (data, _matches, output) => {
+        if (data.ketuHydroBuffIsRoleStacks)
+          return output.inOutRoleStacks!();
+        return output.inOutStacks!();
+      },
+      run: (data) => data.ketuTwintidesNext = 'out',
+      outputStrings: {
+        inOutStacks: {
+          en: 'In => Out + Stacks',
+          de: 'Rein => Raus + sammeln',
+          fr: 'Intérieur => Extérieur + Package',
+          cn: '靠近 => 远离 + 分摊',
+          ko: '안 => 밖 + 쉐어',
+        },
+        inOutRoleStacks: {
+          en: 'In => Out + Role Stacks',
+          de: 'Rein => Raus + Rollengruppe sammeln',
+          fr: 'Intérieur => Extérieur + Package par rôle',
+          cn: '靠近 => 远离 + 职能分摊',
+          ko: '안 => 밖 + 역할별 쉐어',
+        },
+      },
+    },
+    {
+      id: 'AAI Ketuduke Twintides Followup',
+      type: 'Ability',
+      // 8ABC = Sphere Shatter, which happens slightly after the Twintides hit.
+      // You can technically start moving along the safe Sphere Shatter side 0.5s earlier
+      // after the initial out/in, but this is hard to explain.
+      netRegex: { id: '8ABC', source: 'Ketuduke', capture: false },
+      suppressSeconds: 5,
+      infoText: (data, _matches, output) => {
+        const mech = data.ketuTwintidesNext;
+        if (mech === undefined)
+          return;
+        const mechStr = output[mech]!();
+        const stackStr = data.ketuHydroBuffIsRoleStacks ? output.roleStacks!() : output.stack!();
+        return output.text!({ inOut: mechStr, stack: stackStr });
+      },
+      run: (data) => delete data.ketuTwintidesNext,
       outputStrings: {
         text: {
-          en: 'In => Stack outside',
-          ja: 'ボスの下 => 外側でペア',
-          ko: '안에 있다 🔜 밖에서 페어',
+          en: '${inOut} + ${stack}',
+          de: '${inOut} + ${stack}',
+          fr: '${inOut} + ${stack}',
+          cn: '${inOut} + ${stack}',
+          ko: '${inOut} + ${stack}',
+        },
+        in: Outputs.in,
+        out: Outputs.out,
+        stack: {
+          en: 'Stacks',
+          de: 'Sammeln',
+          fr: 'Package',
+          cn: '分摊',
+          ko: '쉐어',
+        },
+        roleStacks: {
+          en: 'Role Stacks',
+          de: 'Rollengruppe sammeln',
+          fr: 'Package par rôle',
+          cn: '职能分摊',
+          ko: '역할별 쉐어',
         },
       },
     },
@@ -662,9 +768,11 @@ const triggerSet: TriggerSet<Data> = {
       type: 'AddedCombatant',
       netRegex: { npcNameId: '12607', capture: false },
       condition: (data) => data.ketuSpringCrystalCount === 2 && data.ketuCrystalAdd.length === 4,
-      delaySeconds: 2,
-      durationSeconds: 18,
-      infoText: (data, _matches, output) => {
+      // We could call this absurdly early, but knowing this doesn't help with anything
+      // until you know what your debuff is, so move it later both so it is less absurd
+      // futuresight and so you don't have to remember it as long.
+      delaySeconds: 5,
+      alertText: (data, _matches, output) => {
         const horizontal = data.ketuCrystalAdd.filter((x) => isHorizontalCrystal(x));
         const vertical = data.ketuCrystalAdd.filter((x) => !isHorizontalCrystal(x));
         if (horizontal.length !== 2 || vertical.length !== 2)
@@ -675,134 +783,75 @@ const triggerSet: TriggerSet<Data> = {
         // Check if any verticals are on the outer vertical edges.
         for (const line of vertical) {
           const y = parseFloat(line.y);
-          if (y < -10 || y > 10) {
-            return output.text!({ safe: output.eastWestSafe!() });
-          }
+          if (y < -10 || y > 10)
+            return output.eastWestSafe!();
         }
 
         // Check if any horizontals are on the outer horizontal edges.
         for (const line of horizontal) {
           const x = parseFloat(line.x);
-          if (x < -10 || x > 10) {
-            return output.text!({ safe: output.northSouthSafe!() });
-          }
+          if (x < -10 || x > 10)
+            return output.northSouthSafe!();
         }
 
-        return output.text!({ safe: output.cornersSafe!() });
+        return output.cornersSafe!();
       },
       outputStrings: {
         northSouthSafe: {
           en: 'North/South',
-          ja: '南・北',
-          ko: '⇅남북',
+          de: 'Norden/Süden',
+          fr: 'Nord/Sud',
+          cn: '上/下',
+          ko: '북/남',
         },
         eastWestSafe: {
           en: 'East/West',
-          ja: '東・西',
-          ko: '⇆동서',
+          de: 'Osten/Westen',
+          fr: 'Est/Ouest',
+          cn: '左/右',
+          ko: '동/서',
         },
         cornersSafe: {
           en: 'Corners',
-          ja: '隅へ',
-          ko: '❌구석',
-        },
-        text: {
-          en: 'Safe: ${safe}',
-          ja: '安置: ${safe}',
-          ko: '안전: ${safe}',
+          de: 'Ecken',
+          fr: 'Coins',
+          cn: '四角',
+          ko: '구석',
         },
       },
     },
     {
-      id: 'AAI Ketuduke Roar Move',
-      type: 'StartsUsing',
-      netRegex: { id: '8AAC', source: 'Spring Crystal', capture: false },
-      condition: (data) => data.ketuHydroCount === 4,
-      durationSeconds: 4,
-      suppressSeconds: 2,
-      alertText: (data, _matches, output) => {
-        if (data.ketuBuff === undefined)
-          return output.text!();
-        return output[data.ketuBuff]!();
-      },
-      run: (data) => delete data.ketuBuff,
-      outputStrings: {
-        text: {
-          en: 'Behind add',
-          ja: 'ざこの後ろに',
-          ko: '쫄 뒤로!',
-        },
-        bubble: {
-          en: 'Behind Fetters',
-          ja: 'バインドのざこの後ろに',
-          ko: '바인드🟡 쫄 뒤로!',
-        },
-        fetters: {
-          en: 'Behind Bubble',
-          ja: 'バブルのざこの後ろに',
-          ko: '버블🔵 쫄 뒤로!',
-        },
-      },
-    },
-    {
-      id: 'AAI Ketuduke Angry Seas Knockback',
+      id: 'AAI Ketuduke Angry Seas',
       type: 'StartsUsing',
       netRegex: { id: '8AC1', source: 'Ketuduke', capture: false },
-      response: Responses.knockback(),
-    },
-    {
-      id: 'AAI Ketuduke Fluke Typhoon Bubble',
-      type: 'StartsUsing',
-      netRegex: { id: '8AAF', source: 'Ketuduke', capture: false },
-      infoText: (data, _matches, output) => {
-        if (data.ketuCrystalAdd.length !== 4 || data.ketuCrystalAdd[0] === undefined)
-          return output.text!();
-        if (data.options.AutumnStyle) {
-          if (parseFloat(data.ketuCrystalAdd[0].x) < 0) {
-            if (data.role === 'tank' || data.role === 'dps')
-              return output.left!();
-            return;
-          }
-          if (data.role === 'healer' || data.role === 'dps')
-            return output.right!();
-          return;
-        }
-        if (data.role === 'dps') {
-          if (parseFloat(data.ketuCrystalAdd[0].x) < 0)
-            return output.left!();
-          return output.right!();
-        }
+      alertText: (data, _matches, output) => {
+        if (data.ketuHydroBuffIsSpreadFirst)
+          return output.knockbackSpread!();
+        if (data.ketuHydroBuffIsRoleStacks)
+          return output.knockbackRoleStacks!();
+        return output.knockbackStacks!();
       },
-      run: (data) => data.ketuCrystalAdd = [],
       outputStrings: {
-        text: {
-          en: '(Ready to Bubble!)',
-          ja: '(そろそろバブル！)',
-          ko: '(슬슬 버블!)',
+        knockbackSpread: {
+          en: 'Knockback => Spread',
+          de: 'Rückstoß => verteilen',
+          fr: 'Pousée => Écartez-vous',
+          cn: '击退 => 分散',
+          ko: '넉백 => 산개',
         },
-        left: {
-          en: '(Bubble: Left)',
-          ja: '(左からバブル！)',
-          ko: '(왼쪽에서 버블!)',
+        knockbackStacks: {
+          en: 'Knockback => Stacks',
+          de: 'Rückstoß => sammeln',
+          fr: 'Poussée => Package',
+          cn: '击退 => 分摊',
+          ko: '넉백 => 쉐어',
         },
-        right: {
-          en: '(Bubble: Right)',
-          ja: '(右からバブル！)',
-          ko: '(오른쪽에서 버블!)',
-        },
-      },
-    },
-    {
-      id: 'AAI Ketuduke Fluke Typhoon Tower',
-      type: 'Ability',
-      netRegex: { id: '8AB0', source: 'Ketuduke', capture: false },
-      suppressSeconds: 5,
-      alertText: (_data, _matches, output) => output.text!(),
-      outputStrings: {
-        text: {
-          en: 'Get Tower',
-          ja: '塔踏み',
-          ko: '장판 피하면서 타워 밟아요',
+        knockbackRoleStacks: {
+          en: 'Knockback => Role Stacks',
+          de: 'Rückstoß => Rollengruppe sammeln',
+          fr: 'Poussée => Package par rôle',
+          cn: '击退 => 职能分摊',
+          ko: '넉백 => 역할별 쉐어',
         },
       },
     },
@@ -812,7 +861,7 @@ const triggerSet: TriggerSet<Data> = {
       type: 'StartsUsing',
       netRegex: { id: '8C4C', source: 'Aloalo Wood Golem' },
       condition: (data) => data.CanSilence(),
-      response: Responses.interrupt(),
+      response: Responses.interrupt('alarm'),
     },
     {
       id: 'AAI Wood Golem Tornado',
@@ -824,20 +873,22 @@ const triggerSet: TriggerSet<Data> = {
           tornadoOn: {
             en: 'Away from ${player}',
             de: 'Weg von ${player}',
-            ja: 'トルネド: ${player}',
-            ko: '토네이도: ${player}',
+            fr: 'Loin de ${player}',
+            cn: '远离 ${player}',
+            ko: '${player}에게서 떨어지기',
           },
           tornadoOnYou: {
             en: 'Tornado on YOU',
             de: 'Tornado auf DIR',
-            ja: '自分にトルネド',
-            ko: '내게 토네이도',
+            fr: 'Tornade sur VOUS',
+            cn: '龙卷风点名',
+            ko: '토네이도 대상자',
           },
         };
 
         if (data.me === matches.target)
           return { alertText: output.tornadoOnYou!() };
-        return { infoText: output.tornadoOn!({ player: data.party.jobAbbr(matches.target) }) };
+        return { infoText: output.tornadoOn!({ player: data.party.member(matches.target) }) };
       },
     },
     {
@@ -845,14 +896,16 @@ const triggerSet: TriggerSet<Data> = {
       type: 'GainsEffect',
       netRegex: { effectId: 'EC0' },
       condition: (data) => data.CanCleanse(),
-      alertText: (data, matches, output) =>
-        output.text!({ player: data.party.jobAbbr(matches.target) }),
+      infoText: (data, matches, output) => {
+        return output.text!({ player: data.party.member(matches.target) });
+      },
       outputStrings: {
         text: {
           en: 'Cleanse ${player}',
           de: 'Reinige ${player}',
-          ja: 'エスナ: ${player}',
-          ko: '에스나: ${player}',
+          fr: 'Guérissez ${player}',
+          cn: '康复 ${player}',
+          ko: '${player} 디버프 해제',
         },
       },
     },
@@ -866,29 +919,22 @@ const triggerSet: TriggerSet<Data> = {
       id: 'AAI Islekeeper Gravity Force',
       type: 'StartsUsing',
       netRegex: { id: '8BC5', source: 'Aloalo Islekeeper' },
-      infoText: (data, matches, output) => {
-        if (data.me === matches.target)
-          return output.itsme!();
-        return output.text!({ player: data.party.jobAbbr(matches.target) });
-      },
-      outputStrings: {
-        itsme: {
-          en: 'Stack on YOU',
-          ja: '自分にグラビデフォース',
-          ko: '내게 중력',
-        },
-        text: {
-          en: 'Stack on ${player}',
-          ja: 'グラビデフォース: ${player}',
-          ko: '중력: ${player}',
-        },
-      },
+      response: Responses.stackMarkerOn(),
     },
     {
       id: 'AAI Islekeeper Isle Drop',
       type: 'StartsUsing',
       netRegex: { id: '8C6F', source: 'Aloalo Islekeeper', capture: false },
-      response: Responses.moveAway('alert'),
+      infoText: (_data, _matches, output) => output.text!(),
+      outputStrings: {
+        text: {
+          en: 'Get Behind + Out',
+          de: 'Geh nach Hinten + Raus',
+          fr: 'Derrière + Extérieur',
+          cn: '去背后 + 远离',
+          ko: '뒤로 + 밖으로',
+        },
+      },
     },
     {
       id: 'AAI Islekeeper Ancient Quaga',
@@ -905,184 +951,179 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: 'Kill Islekeeper!',
           de: 'Wächter besiegen!',
-          ja: '倒して！',
-          ko: '죽여야해!',
+          fr: 'Tuez le gardien !',
+          cn: '击杀 阿罗阿罗守卫!',
+          ko: '섬지킴이 잡기!',
         },
       },
     },
-    // ---------------- lala ----------------
+    // ---------------- Lala ----------------
     {
       id: 'AAI Lala Inferno Theorem',
       type: 'StartsUsing',
       netRegex: { id: '88AE', source: 'Lala', capture: false },
-      response: Responses.aoe('alert'),
+      response: Responses.aoe(),
     },
     {
       id: 'AAI Lala Rotation Tracker',
       type: 'HeadMarker',
       netRegex: { id: ['01E4', '01E5'], target: 'Lala' },
-      run: (data, matches) => data.lalaRotation = matches.id === '01E4' ? 'cw' : 'ccw',
+      run: (data, matches) => data.lalaBossRotation = matches.id === '01E4' ? 'clock' : 'counter',
     },
     {
       id: 'AAI Lala Angular Addition Tracker',
-      type: 'GainsEffect',
-      netRegex: { effectId: ['F62', 'F63'], source: 'Lala' },
-      run: (data, matches) => data.lalaTimes = matches.effectId === 'F62' ? 3 : 5,
+      type: 'Ability',
+      netRegex: { id: ['8889', '8D2E'], source: 'Lala' },
+      run: (data, matches) => data.lalaBossTimes = matches.id === '8889' ? 3 : 5,
     },
     {
-      id: 'AAI LaLa Arcane Blight',
+      id: 'AAI Lala Arcane Blight',
       type: 'StartsUsing',
       netRegex: { id: ['888B', '888C', '888D', '888E'], source: 'Lala' },
-      delaySeconds: 0.5,
       alertText: (data, matches, output) => {
-        const blightMap: { [count: string]: AloDirection } = {
-          '888B': 'back',
-          '888C': 'front',
-          '888D': 'right',
-          '888E': 'left',
-        } as const;
-        const blight = blightMap[matches.id.toUpperCase()]!;
-        if (data.lalaRotation === undefined || data.lalaTimes === undefined)
-          return output[blight]!();
-        if (isReverseRotate(data.lalaRotation, data.lalaTimes)) {
-          return {
-            'front': output.left!(),
-            'back': output.right!(),
-            'left': output.back!(),
-            'right': output.front!(),
-          }[blight];
-        }
+        const initialDir = {
+          '888B': 2, // initial back safe
+          '888C': 0, // initial front safe
+          '888D': 1, // initial right safe
+          '888E': 3, // initial left safe
+        }[matches.id];
+        if (initialDir === undefined)
+          return;
+        if (data.lalaBossTimes === undefined)
+          return;
+        if (data.lalaBossRotation === undefined)
+          return;
+        const rotationFactor = data.lalaBossRotation === 'clock' ? 1 : -1;
+        const finalDir = (initialDir + rotationFactor * data.lalaBossTimes + 8) % 4;
+
+        const diff = (finalDir - initialDir + 4) % 4;
+        if (diff !== 1 && diff !== 3)
+          return;
         return {
-          'front': output.right!(),
-          'back': output.left!(),
-          'left': output.front!(),
-          'right': output.back!(),
-        }[blight];
+          0: output.front!(),
+          1: output.right!(),
+          2: output.back!(),
+          3: output.left!(),
+        }[finalDir];
       },
       run: (data) => {
-        delete data.lalaTimes;
-        delete data.lalaRotation;
+        delete data.lalaBossTimes;
+        delete data.lalaBossRotation;
       },
       outputStrings: {
-        front: {
-          en: 'Ⓐ Front',
-          ja: 'Ⓐ 前へ',
-          ko: 'Ⓐ 앞으로',
-        },
-        back: {
-          en: 'Ⓒ Behind',
-          ja: 'Ⓒ 背面へ',
-          ko: 'Ⓒ 엉댕이로',
-        },
-        left: {
-          en: 'Ⓓ Left',
-          ja: 'Ⓓ 左へ',
-          ko: 'Ⓓ 왼쪽',
-        },
-        right: {
-          en: 'Ⓑ Right',
-          ja: 'Ⓑ 右へ',
-          ko: 'Ⓑ 오른쪽',
-        },
-      },
-    },
-    {
-      id: 'AAI Lala My Rotation Collect',
-      type: 'HeadMarker',
-      netRegex: { id: ['01ED', '01EE'] },
-      condition: Conditions.targetIsYou(),
-      run: (data, matches) => data.lalaMyRotation = matches.id === '01ED' ? 'cw' : 'ccw',
-    },
-    {
-      id: 'AAI Lala My Times Collect',
-      type: 'GainsEffect',
-      netRegex: { effectId: ['E89', 'ECE'], source: 'Lala' },
-      condition: Conditions.targetIsYou(),
-      run: (data, matches) => data.lalaMyTimes = matches.effectId === 'E89' ? 3 : 5,
-    },
-    {
-      id: 'AAI Lala Unseen',
-      type: 'GainsEffect',
-      netRegex: { effectId: ['E8E', 'E8F', 'E90', 'E91'], source: 'Lala' },
-      condition: Conditions.targetIsYou(),
-      durationSeconds: 15,
-      infoText: (data, matches, output) => {
-        const unseenMap: { [effectId: string]: AloDirection } = {
-          E8E: 'front',
-          E8F: 'back',
-          E90: 'right',
-          E91: 'left',
-        } as const;
-        data.lalaUnseen = unseenMap[matches.effectId];
-        const unseen = data.lalaUnseen ?? 'unknown';
-        return output.open!({ unseen: output[unseen]!() });
-      },
-      outputStrings: {
-        open: {
-          en: 'Open: ${unseen}',
-          ja: '開: ${unseen}',
-          ko: '뚤린 곳: ${unseen}',
-        },
         front: Outputs.front,
         back: Outputs.back,
         left: Outputs.left,
         right: Outputs.right,
-        unknown: Outputs.unknown,
+      },
+    },
+    {
+      id: 'AAI Lala Analysis Collect',
+      type: 'GainsEffect',
+      netRegex: { effectId: ['E8E', 'E8F', 'E90', 'E91'] },
+      condition: Conditions.targetIsYou(),
+      run: (data, matches) => {
+        const effectMap: { [effectId: string]: typeof data.lalaUnseen } = {
+          'E8E': 'front',
+          'E8F': 'back',
+          'E90': 'right',
+          'E91': 'left',
+        } as const;
+        data.lalaUnseen = effectMap[matches.effectId];
+      },
+    },
+    {
+      id: 'AAI Lala Times Collect',
+      type: 'GainsEffect',
+      netRegex: { effectId: ['E89', 'ECE'] },
+      condition: Conditions.targetIsYou(),
+      run: (data, matches) => {
+        const effectMap: { [effectId: string]: typeof data.lalaPlayerTimes } = {
+          'E89': 3,
+          'ECE': 5,
+        } as const;
+        data.lalaPlayerTimes = effectMap[matches.effectId];
+      },
+    },
+    {
+      id: 'AAI Lala Player Rotation Collect',
+      type: 'HeadMarker',
+      netRegex: { id: ['01ED', '01EE'] },
+      condition: Conditions.targetIsYou(),
+      run: (data, matches) => {
+        const idMap: { [id: string]: typeof data.lalaPlayerRotation } = {
+          '01ED': 'counter',
+          '01EE': 'clock',
+        } as const;
+        data.lalaPlayerRotation = idMap[matches.id];
       },
     },
     {
       id: 'AAI Lala Targeted Light',
       type: 'StartsUsing',
-      netRegex: { id: '8CDF', source: 'Lala' },
-      condition: Conditions.targetIsYou(),
+      netRegex: { id: '8CDE', source: 'Lala', capture: false },
       alertText: (data, _matches, output) => {
-        if (data.lalaUnseen === undefined)
+        const initialUnseen = data.lalaUnseen;
+        if (initialUnseen === undefined)
           return;
-        if (data.lalaMyRotation === undefined || data.lalaMyTimes === undefined)
-          return output[data.lalaUnseen]!();
-        if (isReverseRotate(data.lalaMyRotation, data.lalaMyTimes))
-          return {
-            'front': output.left!(),
-            'back': output.right!(),
-            'left': output.back!(),
-            'right': output.front!(),
-          }[data.lalaUnseen];
+
+        const initialDir = {
+          front: 0,
+          right: 1,
+          back: 2,
+          left: 3,
+        }[initialUnseen];
+
+        const rotation = data.lalaPlayerRotation;
+        if (rotation === undefined)
+          return;
+        const times = data.lalaPlayerTimes;
+        if (times === undefined)
+          return;
+
+        // The safe spot rotates, so the player counter-rotates.
+        const rotationFactor = rotation === 'clock' ? -1 : 1;
+        const finalDir = (initialDir + rotationFactor * times + 8) % 4;
+
         return {
-          'front': output.right!(),
-          'back': output.left!(),
-          'left': output.front!(),
-          'right': output.back!(),
-        }[data.lalaUnseen];
+          0: output.front!(),
+          1: output.right!(),
+          2: output.back!(),
+          3: output.left!(),
+        }[finalDir];
       },
       run: (data) => {
         delete data.lalaUnseen;
-        delete data.lalaMyTimes;
-        delete data.lalaMyRotation;
+        delete data.lalaPlayerTimes;
       },
       outputStrings: {
         front: {
           en: 'Face Towards Lala',
           de: 'Lala anschauen',
-          ja: 'ボスを見て',
-          ko: '보스 봐욧',
+          fr: 'Regardez Lala',
+          cn: '面向拉拉鲁',
+          ko: '라라 쳐다보기',
         },
         back: {
           en: 'Look Away from Lala',
           de: 'Von Lala weg schauen',
-          ja: '後ろ見て',
-          ko: '뒤돌아 봐요',
+          fr: 'Ne regardez pas Lala',
+          cn: '背对拉拉鲁',
+          ko: '라라에게서 뒤돌기',
         },
         left: {
           en: 'Left Flank towards Lala',
           de: 'Linke Seite zu Lala zeigen',
-          ja: '右見て',
-          ko: '오른쪽 봐요',
+          fr: 'Flanc gauche vers Lala',
+          cn: '左侧朝向拉拉鲁',
+          ko: '왼쪽면을 라라쪽으로',
         },
         right: {
           en: 'Right Flank towards Lala',
           de: 'Rechte Seite zu Lala zeigen',
-          ja: '左見て',
-          ko: '왼쪽 봐요',
+          fr: 'Flanc droit vers Lala',
+          cn: '右侧朝向拉拉鲁',
+          ko: '오른쪽면을 라라쪽으로',
         },
       },
     },
@@ -1092,195 +1133,180 @@ const triggerSet: TriggerSet<Data> = {
       netRegex: { id: '88AD', source: 'Lala' },
       response: Responses.tankBuster(),
     },
-    // Poshiume: https://twitter.com/posiumesan/status/1719545249302008122
-    // Hamukatsu: https://youtu.be/QqLg3DXxCVA?t=298
     {
       id: 'AAI Lala Planar Tactics',
       type: 'GainsEffect',
-      // E8B Surge Vector
-      // E8C Subtractive Suppressor Alpha
-      netRegex: { effectId: ['E8B', 'E8C'], source: 'Lala' },
+      // E8B = Surge Vector
+      // E8C = Subtractive Suppressor Alpha
+      netRegex: { effectId: ['E8C', 'E8B'] },
       condition: (data, matches) => {
-        data.lalaAlphaGains.push(matches);
-        return data.lalaAlphaGains.length === 6;
+        data.lalaSubAlpha.push(matches);
+        return data.lalaSubAlpha.length === 6;
       },
-      durationSeconds: 10,
-      suppressSeconds: 999999,
-      infoText: (data, _matches, output) => {
-        const strat = data.triggerSetConfig.planarTacticsType;
-        const stacks = data.lalaAlphaGains.filter((x) => x.effectId === 'E8B').map((x) => x.target);
-        const nums = data.lalaAlphaGains.filter((x) => x.effectId === 'E8C');
-        const mystr = nums.find((x) => x.target === data.me)?.count;
-        if (mystr === undefined)
+      durationSeconds: 7,
+      // Only run once, as Surge Vector is used again.
+      suppressSeconds: 9999999,
+      response: (data, _matches, output) => {
+        // cactbot-builtin-response
+        output.responseOutputStrings = {
+          one: {
+            en: 'One',
+            de: 'Eins',
+            fr: 'Un',
+            cn: '1',
+            ko: '1',
+          },
+          bigTwo: {
+            en: 'Two (stack with three)',
+            de: 'Zwei (sammeln mit Drei)',
+            fr: 'Deux (Pack avec Trois)',
+            cn: '2 (和3分摊)',
+            ko: '2 (3과 쉐어)',
+          },
+          smallTwo: {
+            en: 'Two (stack with one)',
+            de: 'Zwei (sammeln mit Eins)',
+            fr: 'Deux (Pack avec Un',
+            cn: '2 (和1分摊)',
+            ko: '2 (1과 쉐어)',
+          },
+          eitherTwo: {
+            en: 'Either Two (w/${player})',
+            de: 'Eine Zwei (mit ${player})',
+            fr: 'Un des deux (avec ${player})',
+            cn: '2 (和 ${player})',
+            ko: '2 (+ ${player})',
+          },
+          three: {
+            en: 'Three',
+            de: 'Drei',
+            fr: 'Trois',
+            cn: '3',
+            ko: '3',
+          },
+          // This is just a raidcall so you can direct your friends.
+          smallTwoOn: {
+            en: '(Two with one: ${players})',
+            de: '(Zwei mit Eins: ${players})',
+            fr: '(Deux avec Un : ${players})',
+            cn: '(和1分摊的2: ${players})',
+            ko: '(2+1: ${players})',
+          },
+          unknownNum: {
+            en: '${num}',
+            de: '${num}',
+            fr: '${num}',
+            cn: '${num}',
+            ko: '${num}',
+          },
+          num1: Outputs.num1,
+          num2: Outputs.num2,
+          num3: Outputs.num3,
+          num4: Outputs.num4,
+        };
+
+        // For brevity, this code calls "small two" the two that stacks with one
+        // and the "big two" the two that stacks with three.
+        const stacks = data.lalaSubAlpha.filter((x) => x.effectId === 'E8B').map((x) => x.target);
+        const nums = data.lalaSubAlpha.filter((x) => x.effectId === 'E8C');
+        const myNumberStr = nums.find((x) => x.target === data.me)?.count;
+        if (myNumberStr === undefined)
           return;
-        const mycnt = parseInt(mystr);
+        const myNumber = parseInt(myNumberStr);
+        if (myNumber < 1 || myNumber > 4)
+          return;
 
-        if (stacks.length !== 2 || nums.length !== 4 || strat === 'count')
-          return output.count!({ num: mycnt });
+        const defaultOutput = {
+          alertText: output.unknownNum!({ num: output[`num${myNumber}`]!() }),
+        } as const;
 
-        if (data.triggerSetConfig.planarTacticsType === 'poshiume') {
-          const [s1, s2] = stacks;
-          let issame;
-          if (s1 === undefined || s2 === undefined)
-            issame = false;
-          else {
-            const dps1 = data.party.isDPS(s1);
-            const dps2 = data.party.isDPS(s2);
-            issame = (dps1 && dps2) || (!dps1 && !dps2);
-          }
+        if (stacks.length !== 2 || nums.length !== 4)
+          return defaultOutput;
 
-          if (mycnt === 1)
-            return issame ? output.poshiume1in!() : output.poshiume1out!();
-          if (mycnt === 2) {
-            if (issame)
-              return output.poshiume2out!();
-            const pair = nums.find((x) => parseInt(x.count) === 2 && x.target !== data.me);
-            const name = pair === undefined ? output.unknown!() : data.party.jobAbbr(pair.target);
-            return output.poshiume2in!({ name: name });
-          }
-          if (mycnt === 3)
-            return issame ? output.poshiume3right!() : output.poshiume3left!();
+        const one = nums.find((x) => parseInt(x.count) === 1)?.target;
+        if (one === undefined)
+          return defaultOutput;
+        const isOneStack = stacks.includes(one);
+        const twos = nums.filter((x) => parseInt(x.count) === 2).map((x) => x.target);
+
+        const smallTwos: string[] = [];
+        for (const thisTwo of twos) {
+          // can this two stack with the one?
+          const isThisTwoStack = stacks.includes(thisTwo);
+          if (isThisTwoStack && !isOneStack || !isThisTwoStack && isOneStack)
+            smallTwos.push(thisTwo);
         }
 
-        if (data.triggerSetConfig.planarTacticsType === 'hamukatsu') {
-          if (mycnt === 1)
-            return output.hamukatsu1!();
-          if (mycnt === 3)
-            return output.hamukatsu3!();
+        const [smallTwo1, smallTwo2] = smallTwos;
+        if (smallTwos.length === 0 || smallTwo1 === undefined)
+          return defaultOutput;
 
-          const partner = nums.find((x) => x.target !== data.me && parseInt(x.count) === 2);
-          if (partner === undefined)
-            return output.hamukatsu2!({ partner: output.unknown!() });
-          const pname = data.party.jobAbbr(partner.target);
+        const isPlayerSmallTwo = smallTwos.includes(data.me);
 
-          const [s1, s2] = stacks;
-          if (s1 === undefined || s2 === undefined)
-            return output.hamukatsu2!({ partner: pname });
-
-          if (stacks.includes(data.me)) {
-            const other = s1 === data.me ? s2 : s1;
-            const surge = nums.find((x) => x.target === other);
-            if (surge === undefined)
-              return output.hamukatsu2!({ partner: pname });
-            const count = parseInt(surge.count);
-            if (count === 1)
-              return output.hamukatsu2left!({ partner: pname });
-            if (count === 3)
-              return output.hamukatsu2right!({ partner: pname });
-          } else if (stacks.includes(partner.target)) {
-            const other = s1 === partner.target ? s2 : s1;
-            const surge = nums.find((x) => x.target === other);
-            if (surge === undefined)
-              return output.hamukatsu2!({ partner: pname });
-            const count = parseInt(surge.count);
-            if (count === 1)
-              return output.hamukatsu2right!({ partner: pname });
-            if (count === 3)
-              return output.hamukatsu2left!({ partner: pname });
-          }
-
-          const my = data.party.member(data.me);
-          const pm = data.party.member(partner.target);
-          return Autumn.jobPriority(my.jobIndex) < Autumn.jobPriority(pm.jobIndex)
-            ? output.hamukatsu2left!({ partner: pname })
-            : output.hamukatsu2right!({ partner: pname });
+        // Worst case adjust
+        if (isPlayerSmallTwo && smallTwo2 !== undefined) {
+          const otherPlayer = smallTwo1 === data.me ? smallTwo2 : smallTwo1;
+          return { alarmText: output.eitherTwo!({ player: data.party.member(otherPlayer) }) };
         }
-      },
-      run: (data) => data.lalaAlphaGains = [],
-      outputStrings: {
-        count: {
-          en: '${num}',
-          ja: 'カウント: ${num}',
-          ko: '번호: ${num}',
-        },
-        poshiume1out: {
-          en: '1 Outside',
-          ja: '1外、3とペア',
-          ko: '[1/바깥] 3번과 페어',
-        },
-        poshiume1in: {
-          en: '1 Inside',
-          ja: '1内、2とペア',
-          ko: '[1/안쪽] 2번과 페어',
-        },
-        poshiume2out: {
-          en: '2 Outside',
-          ja: '2外、1・3とペア',
-          ko: '[2/바깥] 1,3번과 페어',
-        },
-        poshiume2in: {
-          en: '2 Inside (w/ ${name})',
-          ja: '2内、2とペア (${name})',
-          ko: '[2/안쪽] 2번과 페어 (${name})',
-        },
-        poshiume3left: {
-          en: '3 Left',
-          ja: '3左から、1とペア',
-          ko: '[3/아래줄 왼쪽] 1번과 페어',
-        },
-        poshiume3right: {
-          en: '3 Right',
-          ja: '3右から、2とペア',
-          ko: '[3/아래줄 오른쪽] 2번과 페어',
-        },
-        hamukatsu1: {
-          en: '1',
-          ja: '1、2とペア',
-          ko: '[1] 2번과 페어',
-        },
-        hamukatsu2: {
-          en: '2 (${partner})',
-          ja: '2、1・3とペア (${partner})',
-          ko: '[2] 1,3번과 페어 (${partner})',
-        },
-        hamukatsu2left: {
-          en: '2 Left (${partner})',
-          ja: '2左、3とペア (${partner})',
-          ko: '[❰❰🡸2] 3번과 페어 (${partner})',
-        },
-        hamukatsu2right: {
-          en: '2 Right (${partner})',
-          ja: '2右、1とペア (${partner})',
-          ko: '[2🡺❱❱] 1번과 페어 (${partner})',
-        },
-        hamukatsu3: {
-          en: '3',
-          ja: '3、2とペア',
-          ko: '[3] 2번과 페어',
-        },
-        unknown: Outputs.unknown,
+
+        let playerRole: string;
+        if (one === data.me) {
+          playerRole = output.one!();
+        } else if (twos.includes(data.me)) {
+          playerRole = isPlayerSmallTwo ? output.smallTwo!() : output.bigTwo!();
+        } else {
+          playerRole = output.three!();
+        }
+
+        if (isPlayerSmallTwo)
+          return { alertText: playerRole };
+
+        return {
+          alertText: playerRole,
+          infoText: output.smallTwoOn!({ players: smallTwos.map((x) => data.party.member(x)) }),
+        };
       },
     },
     {
       id: 'AAI Lala Forward March',
       type: 'GainsEffect',
       // E83 = Forward March
-      netRegex: { effectId: 'E83', source: 'Lala' },
+      netRegex: { effectId: 'E83' },
       condition: Conditions.targetIsYou(),
-      delaySeconds: (_data, matches) => parseFloat(matches.duration) - 7,
-      durationSeconds: 7,
+      delaySeconds: (_data, matches) => parseFloat(matches.duration) - 8,
+      durationSeconds: 4,
       alertText: (data, _matches, output) => {
-        if (data.lalaMyRotation === undefined || data.lalaMyTimes === undefined)
+        const rotation = data.lalaPlayerRotation;
+        if (rotation === undefined)
           return;
-        if (isReverseRotate(data.lalaMyRotation, data.lalaMyTimes))
+        const times = data.lalaPlayerTimes;
+        if (times === undefined)
+          return;
+
+        const rotationFactor = rotation === 'clock' ? 1 : -1;
+        const finalDir = (rotationFactor * times + 8) % 4;
+        if (finalDir === 1)
           return output.left!();
-        return output.right!();
+        if (finalDir === 3)
+          return output.right!();
       },
       run: (data) => {
-        delete data.lalaMyRotation;
-        delete data.lalaMyTimes;
+        delete data.lalaPlayerRotation;
+        delete data.lalaPlayerTimes;
       },
       outputStrings: {
         left: {
           en: 'Leftward March',
           de: 'Linker March',
-          ja: '強制移動 : 左',
+          fr: 'Marche à gauche',
+          cn: '强制移动: 左',
           ko: '강제이동: 왼쪽',
         },
         right: {
           en: 'Rightward March',
           de: 'Rechter March',
-          ja: '強制移動 : 右',
+          fr: 'Marche à droite',
+          cn: '强制移动: 右',
           ko: '강제이동: 오른쪽',
         },
       },
@@ -1288,11 +1314,11 @@ const triggerSet: TriggerSet<Data> = {
     {
       id: 'AAI Lala Spatial Tactics',
       type: 'GainsEffect',
-      // E8D Subtractive Suppressor Beta
-      netRegex: { effectId: 'E8D', source: 'Lala' },
+      // E8D = Subtractive Suppressor Beta
+      netRegex: { effectId: 'E8D' },
       condition: Conditions.targetIsYou(),
-      suppressSeconds: 20,
-      infoText: (_data, matches, output) => {
+      suppressSeconds: 999999,
+      alertText: (_data, matches, output) => {
         const num = parseInt(matches.count);
         if (num < 1 || num > 4)
           return;
@@ -1302,435 +1328,392 @@ const triggerSet: TriggerSet<Data> = {
         num1: {
           en: 'One (avoid all)',
           de: 'Eins (alles ausweichen)',
-          ja: '[1]',
-          ko: '[1] 구슬 쪽 🔜 다 피해욧',
+          fr: 'Un (Évitez tout)',
+          cn: '1 (躲开全部)',
+          ko: '1 (전부 피하기)',
         },
         num2: {
           en: 'Two (stay middle)',
           de: 'Zwei (steh in der Mitte)',
-          ja: '[2]',
-          ko: '[2] 구슬 쪽 🔜 한번 맞아요',
+          fr: 'Deux (Restez au centre)',
+          cn: '2 (待在中间)',
+          ko: '2 (중앙에 머물기)',
         },
         num3: {
           en: 'Three (adjacent to middle)',
           de: 'Drei (steh neben der Mitte)',
-          ja: '[3]',
-          ko: '[3] 구슬 없는쪽 🔜 두번 맞아요',
+          fr: 'Trois (adjacent au centre)',
+          cn: '3 (中间相邻)',
+          ko: '3 (중앙에서 옆 칸)',
         },
         num4: {
           en: 'Four',
           de: 'Vier',
-          ja: '[4]',
-          ko: '[4] 구슬 없는쪽 🔜 세번 맞아요',
+          fr: 'Quatre',
+          cn: '4',
+          ko: '4',
         },
       },
     },
-    {
-      id: 'AAI Lala Arcane Plot',
-      type: 'StartsUsing',
-      netRegex: { id: '88A2', source: 'Lala', capture: false },
-      infoText: (_data, _matches, output) => output.text!(),
-      outputStrings: {
-        text: {
-          en: 'Find outside adds!',
-          ja: 'マップの外にウッドゴーレム！',
-          ko: '바깥 쫄 있는데가 북쪽!',
-        },
-      },
-    },
-    {
-      id: 'AAI Lala Arcane Point',
-      type: 'StartsUsing',
-      netRegex: { id: '88A5', source: 'Lala', capture: false },
-      infoText: (_data, _matches, output) => output.text!(),
-      run: (data) => data.lalaAlphaGains = [], // Surge Vector 리셋할 곳이 여기뿐
-      outputStrings: {
-        text: {
-          en: 'Spread!',
-          ja: '散会！',
-          ko: '자기 자리로 흩어져요!',
-        },
-      },
-    },
-    {
-      id: 'AAI Lala Arcane Point Spread',
-      type: 'GainsEffect',
-      // B7D Magic Vulnerability Up (여기서는 1.96임)
-      netRegex: { effectId: 'B7D', source: 'Lala' },
-      condition: (data, matches) => {
-        if (data.me !== matches.target)
-          return;
-        return parseFloat(matches.duration) > 1.9;
-      },
-      response: Responses.spread('alert'),
-    },
-    {
-      id: 'AAI Lala Arcane Point Stack',
-      type: 'GainsEffect',
-      // B7D Magic Vulnerability Up (여기서는 1.0임)
-      netRegex: { effectId: 'B7D', source: 'Lala' },
-      condition: (data, matches) => {
-        if (data.me !== matches.target)
-          return;
-        const duration = parseFloat(matches.duration);
-        return duration > 0.99 && duration < 1.9;
-      },
-      response: Responses.stackPartner(),
-    },
-    // ---------------- statice ----------------
+    // ---------------- Statice ----------------
     {
       id: 'AAI Statice Aero IV',
       type: 'StartsUsing',
       netRegex: { id: '8949', source: 'Statice', capture: false },
-      response: Responses.aoe('alert'),
+      response: Responses.aoe(),
     },
     {
       id: 'AAI Statice Trick Reload',
-      type: 'StartsUsing',
-      netRegex: { id: '894A', source: 'Statice', capture: false },
+      type: 'Ability',
+      // 8925 = Locked and Loaded
+      // 8926 = Misload
+      netRegex: { id: ['8925', '8926'], source: 'Statice' },
+      preRun: (data, matches) => data.staticeBullet.push(matches),
+      alertText: (data, _matches, output) => {
+        // Statice loads 8 bullets, two are duds.
+        // The first and the last are always opposite, and one of them is a dud.
+        // The first/ last bullets are for Trapshooting and the middle six are for Trigger Happy.
+        const [bullet] = data.staticeBullet;
+        if (data.staticeBullet.length !== 1 || bullet === undefined)
+          return;
+        const isStack = bullet.id === '8926';
+        data.staticeTrapshooting = isStack ? ['stack', 'spread'] : ['spread', 'stack'];
+        return isStack ? output.stackThenSpread!() : output.spreadThenStack!();
+      },
+      infoText: (data, _matches, output) => {
+        const lastBullet = data.staticeBullet[data.staticeBullet.length - 1];
+        if (data.staticeBullet.length < 2 || data.staticeBullet.length > 7)
+          return;
+        if (lastBullet?.id !== '8926')
+          return;
+        data.staticeTriggerHappy = data.staticeBullet.length - 1;
+        return output.numSafeLater!({ num: output[`num${data.staticeTriggerHappy}`]!() });
+      },
       run: (data) => {
-        data.stcReloads = 0;
-        data.stcMisload = 0;
-      },
-    },
-    {
-      id: 'AAI Statice Locked and Loaded',
-      type: 'Ability',
-      netRegex: { id: '8925', source: 'Statice', capture: false },
-      preRun: (data) => {
-        if (data.stcReloads === 0)
-          data.stcStackSpread = false;
-        data.stcReloads++;
-      },
-      infoText: (data, _matches, output) => {
-        if (data.stcReloads === 1)
-          return output.spread!();
+        if (data.staticeBullet.length === 8)
+          data.staticeBullet = [];
       },
       outputStrings: {
-        spread: {
-          en: '(Spread, for later)',
-          ja: '(後で散会)',
-          ko: '(먼저 흩어져요)',
+        stackThenSpread: Outputs.stackThenSpread,
+        spreadThenStack: Outputs.spreadThenStack,
+        numSafeLater: {
+          en: '(${num} safe later)',
+          de: '(${num} später sicher)',
+          fr: '(${num} sûr ensuite)',
+          cn: '(稍后 ${num} 安全)',
+          ko: '(나중에 ${num} 안전)',
         },
+        num1: Outputs.num1,
+        num2: Outputs.num2,
+        num3: Outputs.num3,
+        num4: Outputs.num4,
+        num5: Outputs.num5,
+        num6: Outputs.num6,
       },
     },
     {
-      id: 'AAI Statice Misload',
-      type: 'Ability',
-      netRegex: { id: '8926', source: 'Statice', capture: false },
-      preRun: (data) => {
-        if (data.stcReloads === 0)
-          data.stcStackSpread = true;
-        if (data.stcReloads < 7)
-          data.stcMisload = data.stcReloads;
-        data.stcReloads++;
-      },
-      infoText: (data, _matches, output) => {
-        if (data.stcReloads === 1)
-          return output.stacks!();
-        if (data.stcReloads < 8) {
-          const arrow = diceToArrow(data.stcMisload);
-          return output.text!({ safe: data.stcMisload, arrow: arrow });
-        }
-      },
-      outputStrings: {
-        text: {
-          en: '(${safe}${arrow}, for later)',
-          ja: '(安置: ${safe}${arrow})',
-          ko: '(안전: ${safe}${arrow})',
-        },
-        stacks: {
-          en: '(Stack, for later)',
-          ja: '(後で頭割り)',
-          ko: '(먼저 뭉쳐요)',
-        },
-      },
-    },
-    {
-      id: 'AAI Statice Trapshooting 1',
+      id: 'AAI Statice Trapshooting',
       type: 'StartsUsing',
-      netRegex: { id: '8D1A', source: 'Statice', capture: false },
+      netRegex: { id: ['8D1A', '8959'], source: 'Statice', capture: false },
       alertText: (data, _matches, output) => {
-        if (data.stcStackSpread)
-          return output.stacks!();
-        return output.spread!();
+        const mech = data.staticeTrapshooting.shift();
+        if (mech === undefined)
+          return;
+        return output[mech]!();
       },
-      run: (data) => data.stcStackSpread = !data.stcStackSpread,
       outputStrings: {
-        stacks: Outputs.getTogether,
         spread: Outputs.spread,
-      },
-    },
-    {
-      id: 'AAI Statice Trapshooting 2',
-      type: 'StartsUsing',
-      netRegex: { id: '8959', source: 'Statice', capture: false },
-      alertText: (data, _matches, output) => {
-        if (data.stcMarch !== undefined) {
-          const march = marchMove(output, data.stcMarch, data.stcStackSpread);
-          delete data.stcMarch;
-          return march;
-        }
-        return data.stcStackSpread ? output.stacks!() : output.spread!();
-      },
-      run: (data) => data.stcStackSpread = !data.stcStackSpread,
-      outputStrings: {
-        ...MarchMoveStrings,
+        stack: Outputs.stackMarker,
       },
     },
     {
       id: 'AAI Statice Trigger Happy',
       type: 'StartsUsing',
       netRegex: { id: '894B', source: 'Statice', capture: false },
-      infoText: (data, _matches, output) => {
-        const arrow = diceToArrow(data.stcMisload);
-        return output.text!({ safe: data.stcMisload, arrow: arrow });
+      alertText: (data, _matches, output) => {
+        const num = data.staticeTriggerHappy;
+        if (num === undefined)
+          return;
+        return output[`num${num}`]!();
       },
+      run: (data) => delete data.staticeTriggerHappy,
       outputStrings: {
-        text: {
-          en: 'Safe: ${safe}${arrow}',
-          ja: '安置: ${safe}${arrow}',
-          ko: '안전: ${safe}${arrow}',
-        },
+        num1: Outputs.num1,
+        num2: Outputs.num2,
+        num3: Outputs.num3,
+        num4: Outputs.num4,
+        num5: Outputs.num5,
+        num6: Outputs.num6,
       },
     },
     {
-      id: 'AAI Statice Ring a Ring o\' Explosions',
-      type: 'StartsUsing',
-      netRegex: { id: '895C', source: 'Statice', capture: false },
-      durationSeconds: 6,
+      id: 'AAI Statice Bull\'s-eye',
+      type: 'GainsEffect',
+      netRegex: { effectId: 'E9E' },
+      delaySeconds: (data, matches) => {
+        // Note: this collects for the pinwheeling dartboard version too.
+        data.staticeDart.push(matches);
+        return data.staticeDart.length === 3 ? 0 : 0.5;
+      },
       response: (data, _matches, output) => {
         // cactbot-builtin-response
         output.responseOutputStrings = {
-          move1: {
-            en: 'Avoid Bomb!',
-            ja: '爆弾回避！',
-            ko: '폭탄 피해요!',
+          dartOnYou: {
+            en: 'Dart on YOU',
+            de: 'Dart auf DIR',
+            fr: 'Dard sur VOUS',
+            cn: '飞镖点名',
+            ko: '다트 대상자',
           },
-          move2: {
-            en: 'Remember Bomb position!',
-            ja: '爆弾の位置をおぼえて！',
-            ko: '폭탄 위치 기억! 빙글빙글!',
+          noDartOnYou: {
+            en: 'No Dart',
+            de: 'Kein Dart',
+            fr: 'Pas de Dard',
+            cn: '无飞镖',
+            ko: '다트 없음',
           },
-          move3: {
-            en: 'Avoid Bomb!',
-            ja: '爆弾回避！',
-            ko: '폭탄없는 안전한 곳 찾아요!',
+          flexCall: {
+            en: '(${player} unmarked)',
+            de: '(${player} unmarkiert)',
+            fr: '(${player} non-marqué)',
+            cn: '(${player} 无标记)',
+            ko: '(${player} 다트 없음)',
           },
-          move4: {
-            en: 'Safe: ${mesg}',
-            ja: '安置: ${mesg}',
-            ko: '안전: ${mesg}',
-          },
-          mesg4: {
-            en: '${safe}${arrow}, avoid donuts',
-            ja: '${safe}${arrow}へ、ドーナツ回避',
-            ko: '${safe}${arrow}, 도넛 조심!',
-          },
-          ...MarchMoveStrings,
         };
-        data.stcRingRing++;
-        if (data.stcRingRing === 1)
-          return { infoText: output.move1!() };
-        if (data.stcRingRing === 2)
-          return { infoText: output.move2!() };
-        if (data.stcRingRing === 3)
-          return { infoText: output.move3!() };
-        if (data.stcRingRing === 4) {
-          const arrow = diceToArrow(data.stcMisload);
-          const mesg4 = output.mesg4!({ safe: data.stcMisload, arrow: arrow });
-          if (data.stcMarch === undefined || data.stcDuration > 40) // 51초는 나중에 트랩슈팅2
-            return { alertText: output.move4!({ mesg: mesg4 }) };
-          const march = marchMove(output, data.stcMarch, false, mesg4);
-          delete data.stcMarch;
-          return { alertText: march };
-        }
+
+        if (data.staticeIsPinwheelingDartboard)
+          return;
+
+        if (data.staticeDart.length === 0)
+          return;
+
+        const dartTargets = data.staticeDart.map((x) => x.target);
+
+        if (!dartTargets.includes(data.me))
+          return { alertText: output.noDartOnYou!() };
+
+        const partyNames = data.party.partyNames;
+
+        const flexers = partyNames.filter((x) => !dartTargets.includes(x));
+        const [flex] = flexers;
+        const flexPlayer = flexers.length === 1 ? data.party.member(flex) : undefined;
+
+        return {
+          alertText: output.dartOnYou!(),
+          infoText: output.flexCall!({ player: flexPlayer }),
+        };
       },
+      run: (data) => data.staticeDart = [],
     },
     {
-      id: 'AAI Statice Dartboard of Dancing Explosives',
-      type: 'Ability',
-      netRegex: { id: '8CBD', source: 'Statice', capture: false },
-      infoText: (_data, _matches, output) => output.text!(),
-      outputStrings: {
-        text: {
-          en: 'Go to safe zone',
-          ja: 'ボムを回避しに安置へ',
-          ko: '폭탄 피해서 안전한 곳으로',
-        },
-      },
-    },
-    {
-      id: 'AAI Statice Bull\'s-eye Collect',
-      type: 'GainsEffect',
-      netRegex: { effectId: 'E9E' },
-      run: (data, matches) => data.stcBullsEyes.push(matches.target),
-    },
-    {
-      id: 'AAI Statice Bull\'s-eye 1',
-      type: 'GainsEffect',
-      netRegex: { effectId: 'E9E' },
-      condition: (data) => !data.stcSeenPinwheeling,
-      delaySeconds: (_data, matches) => parseFloat(matches.duration) - 5,
-      suppressSeconds: 1,
+      id: 'AAI Statice Surprise Balloon Reminder',
+      // This is an early reminder for the following Trigger Happy with knockback.
+      // However, because there's a tight window to immuune both knockbacks,
+      // call this ~15s early (in case anybody forgot).
+      type: 'StartsUsing',
+      netRegex: { id: '894D', source: 'Statice', capture: false },
       infoText: (data, _matches, output) => {
-        if (data.role === 'tank')
-          return output.blue!();
-        if (data.role === 'healer')
-          return output.yellow!();
-
-        const members = data.party.members(data.stcBullsEyes);
-        const dps = members.filter((x) => x.role === 'dps');
-        if (dps.length === 1)
-          return output.red!();
-
-        const roles = members.map((x) => x.role);
-        if (roles.includes('healer'))
-          return output.redBlue!();
-        return output.redYellow!();
+        const num = data.staticeTriggerHappy;
+        if (num === undefined)
+          return;
+        // We'll re-call this out with the knockback warning.
+        // However, also clear `data.staticeTriggerHappy` to avoid double callouts.
+        data.staticePopTriggerHappyNum = num;
+        return output.numSafeSoon!({ num: output[`num${num}`]!() });
       },
-      run: (data) => data.stcBullsEyes = [],
+      run: (data) => delete data.staticeTriggerHappy,
       outputStrings: {
-        blue: {
-          en: 'Go to Blue',
-          ja: '青へ',
-          ko: '🟦파랑 밟아요',
+        numSafeSoon: {
+          en: '(${num} safe soon)',
+          de: '(${num} gleich sicher)',
+          fr: '(${num} bientôt sûr',
+          cn: '(稍后 ${num} 安全)',
+          ko: '(나중에 ${num} 안전)',
         },
-        yellow: {
-          en: 'Go to Yellow',
-          ja: '黄色へ',
-          ko: '🟨노랑 밟아요',
-        },
-        red: {
-          en: 'Go to Red',
-          ja: '赤へ',
-          ko: '🟥빨강 밟아요',
-        },
-        redBlue: {
-          en: 'Go to Red (or Blue)',
-          ja: '赤へ (または青)',
-          ko: '🟥빨강(아니면 🟦파랑) 밟아요',
-        },
-        redYellow: {
-          en: 'Go to Red (or Yellow)',
-          ja: '赤へ (または黄色)',
-          ko: '🟥빨강(아니면 🟨노랑) 밟아요',
-        },
+        num1: Outputs.num1,
+        num2: Outputs.num2,
+        num3: Outputs.num3,
+        num4: Outputs.num4,
+        num5: Outputs.num5,
+        num6: Outputs.num6,
       },
     },
     {
       id: 'AAI Statice Pop',
       type: 'StartsUsing',
+      // TODO: this might need a slight delay
       netRegex: { id: '894E', source: 'Statice', capture: false },
-      suppressSeconds: 10,
+      suppressSeconds: 20,
       alertText: (data, _matches, output) => {
-        const safe = data.stcMisload;
-        if (safe === 0)
+        const num = data.staticePopTriggerHappyNum;
+        if (num === undefined)
           return output.knockback!();
-        const arrow = diceToArrow(data.stcMisload);
-        return output.knockbackSafe!({ safe: safe, arrow: arrow });
+
+        const numStr = output[`num${num}`]!();
+        return output.knockbackToNum!({ num: numStr });
       },
+      run: (data) => delete data.staticePopTriggerHappyNum,
       outputStrings: {
+        knockbackToNum: {
+          en: 'Knockback => ${num}',
+          de: 'Rückstoß => ${num}',
+          fr: 'Poussée => ${num}',
+          cn: '击退 => ${num}',
+          ko: '넉백 => ${num}',
+        },
         knockback: Outputs.knockback,
-        knockbackSafe: {
-          en: 'Knockback to ${safe}${arrow}',
-          ja: 'へノックバック (${safe}${arrow})',
-          ko: '넉백! (${safe}${arrow})',
-        },
-      },
-    },
-    {
-      id: 'AAI Statice Pop Trapshooting',
-      type: 'StartsUsing',
-      netRegex: { id: '894E', source: 'Statice', capture: false },
-      delaySeconds: 3,
-      durationSeconds: 8,
-      suppressSeconds: 10,
-      infoText: (data, _matches, output) => {
-        if (data.stcStackSpread)
-          return output.out!();
-        return output.in!();
-      },
-      outputStrings: {
-        in: {
-          en: 'Middle => Spread outside',
-          ja: '真ん中 => 外側で散会',
-          ko: '한가운데로 (바깥으로 흩어질꺼임)',
-        },
-        out: {
-          en: 'Out => Stack in middle',
-          ja: '外 => 真ん中で頭割り',
-          ko: '바깥으로 (한가운데서 뭉칠꺼임)',
-        },
+        num1: Outputs.num1,
+        num2: Outputs.num2,
+        num3: Outputs.num3,
+        num4: Outputs.num4,
+        num5: Outputs.num5,
+        num6: Outputs.num6,
       },
     },
     {
       id: 'AAI Statice Face',
       type: 'GainsEffect',
+      // DD2 = Forward March
+      // DD3 = About Face
+      // DD4 = Left Face
+      // DD5 = Right Face
       netRegex: { effectId: ['DD2', 'DD3', 'DD4', 'DD5'] },
       condition: Conditions.targetIsYou(),
-      run: (data, matches) => {
-        const marchMap: { [effectIds: string]: AloDirection } = {
-          DD2: 'front',
-          DD3: 'back',
-          DD4: 'left',
-          DD5: 'right',
-        } as const;
-        data.stcMarch = marchMap[matches.effectId];
-        data.stcDuration = parseFloat(matches.duration);
+      delaySeconds: (_data, matches) => parseFloat(matches.duration) - 7,
+      durationSeconds: 5,
+      alertText: (data, matches, output) => {
+        let mech = output.unknown!();
+
+        const num = data.staticeTriggerHappy;
+        if (num !== undefined) {
+          mech = output[`num${num}`]!();
+          delete data.staticeTriggerHappy;
+        } else {
+          const mechName = data.staticeTrapshooting.shift();
+          mech = mechName === undefined ? output.unknown!() : output[mechName]!();
+        }
+
+        return {
+          'DD2': output.forward!({ mech: mech }),
+          'DD3': output.backward!({ mech: mech }),
+          'DD4': output.left!({ mech: mech }),
+          'DD5': output.right!({ mech: mech }),
+        }[matches.effectId];
       },
-    },
-    {
-      id: 'AAI Statice Surprising Claw',
-      type: 'Tether',
-      netRegex: { id: '0011', source: 'Surprising Claw' },
-      condition: (data, matches) => {
-        data.stcClaws.push(matches.target);
-        return data.stcClaws.length === 2;
-      },
-      infoText: (data, _matches, output) => {
-        if (!data.stcClaws.includes(data.me))
-          return;
-        const partner = data.stcClaws[data.stcClaws[0] !== data.me ? 0 : 1];
-        return output.text!({
-          partner: partner !== undefined ? data.party.jobAbbr(partner) : output.unknown!(),
-        });
-      },
-      run: (data) => data.stcClaws = [],
       outputStrings: {
-        text: {
-          en: 'Death Claw on YOU! (w/ ${partner})',
-          ja: '自分にクロウ (${partner})',
-          ko: '내게 데스 손톱이! (${partner})',
+        forward: {
+          en: 'Forward March => ${mech}',
+          de: 'Vorwärtsmarsch => ${mech}',
+          fr: 'Marche en avant => ${mech}',
+          cn: '强制移动：前 => ${mech}',
+          ko: '강제이동: 앞 => ${mech}',
         },
+        backward: {
+          en: 'Backward March => ${mech}',
+          de: 'Rückwärtsmarsch => ${mech}',
+          fr: 'Marche en arrière => ${mech}',
+          cn: '强制移动：后 => ${mech}',
+          ko: '강제이동: 뒤 => ${mech}',
+        },
+        left: {
+          en: 'Left March => ${mech}',
+          de: 'Marsch Links => ${mech}',
+          fr: 'Marche à gauche => ${mech}',
+          cn: '强制移动：左 => ${mech}',
+          ko: '강제이동: 왼쪽 => ${mech}',
+        },
+        right: {
+          en: 'Right March => ${mech}',
+          de: 'Marsch Rechts => ${mech}',
+          fr: 'Marche à droite => ${mech}',
+          cn: '强制移动：右 => ${mech}',
+          ko: '강제이동: 오른쪽 => ${mech}',
+        },
+        spread: Outputs.spread,
+        stack: Outputs.stackMarker,
+        num1: Outputs.num1,
+        num2: Outputs.num2,
+        num3: Outputs.num3,
+        num4: Outputs.num4,
+        num5: Outputs.num5,
+        num6: Outputs.num6,
         unknown: Outputs.unknown,
       },
     },
     {
-      id: 'AAI Statice Surprising Missile',
+      id: 'AAI Statice Present Box Counter',
+      // This happens ~1s prior to ActorControlExtra on bomb.
+      type: 'StartsUsing',
+      netRegex: { id: '8955', source: 'Statice', capture: false },
+      run: (data) => data.staticePresentBoxCount++,
+    },
+    {
+      id: 'AAI Statice Present Box Missile',
       type: 'Tether',
-      netRegex: { id: '0011', source: 'Surprising Missile' },
-      condition: (data, matches) => {
-        data.stcMissiles.push(matches.target);
-        return data.stcMissiles.length === 2;
+      netRegex: { source: 'Surprising Missile', id: '0011' },
+      delaySeconds: (data, matches) => {
+        data.staticeMissileTether.push(matches);
+        return data.staticeMissileTether.length === 2 ? 0 : 0.5;
       },
-      infoText: (data, _matches, output) => {
-        if (!data.stcMissiles.includes(data.me))
+      durationSeconds: 7,
+      response: (data, _matches, output) => {
+        // cactbot-builtin-response
+        output.responseOutputStrings = {
+          missileOnYou: {
+            en: 'Bait Tethers => Missile Spread',
+            de: 'Verbindungen ködern => Verteilen mit Raketen',
+            fr: 'Attirez les liens => Écartez les missiles',
+            cn: '引导拉线 => 导弹分散',
+            ko: '사슬 유도 => 미사일 산개',
+          },
+        };
+
+        if (data.staticeMissileTether.length !== 2)
           return;
-        const partner = data.stcMissiles[data.stcMissiles[0] !== data.me ? 0 : 1];
-        return output.text!({
-          partner: partner !== undefined ? data.party.jobAbbr(partner) : output.unknown!(),
-        });
+
+        const missileTether = data.staticeMissileTether.find((x) => x.target === data.me);
+        if (missileTether === undefined)
+          return;
+
+        return { alertText: output.missileOnYou!() };
       },
-      run: (data) => data.stcMissiles = [],
+      run: (data) => data.staticeMissileTether = [],
+    },
+    {
+      id: 'AAI Statice Present Box Claw',
+      type: 'Tether',
+      netRegex: { source: 'Surprising Claw', id: '0011' },
+      delaySeconds: (data, matches) => {
+        data.staticeClawTether.push(matches);
+        return data.staticeClawTether.length === 2 ? 0 : 0.5;
+      },
+      durationSeconds: 7,
+      alertText: (data, _matches, output) => {
+        if (data.staticeClawTether.length !== 2)
+          return;
+        if (!data.staticeClawTether.map((x) => x.target).includes(data.me))
+          return;
+        return output.stack!();
+      },
+      run: (data) => data.staticeClawTether = [],
       outputStrings: {
-        text: {
-          en: 'Missile + Tether on YOU! (w/ ${partner})',
-          ja: '自分にミサイル+チェイン (${partner})',
-          ko: '미사일 + 체인, 한가운데로! (${partner})',
+        stack: {
+          en: 'Juke Claw => Stack',
+          de: 'Zieh Klaue => Sammeln',
+          fr: 'Griffe => Package',
+          cn: '爪子连线 => 分摊',
+          ko: '손아귀 => 쉐어',
         },
-        unknown: Outputs.unknown,
       },
+    },
+    {
+      id: 'AAI Statice Burning Chains',
+      type: 'GainsEffect',
+      netRegex: { effectId: '301' },
+      condition: Conditions.targetIsYou(),
+      // TODO: add a strategy for dart colors and say where to go here
+      // for the Pinwheeling Dartboard if you have a dart.
+      response: Responses.breakChains(),
     },
     {
       id: 'AAI Statice Shocking Abandon',
@@ -1739,24 +1722,58 @@ const triggerSet: TriggerSet<Data> = {
       response: Responses.tankBuster(),
     },
     {
-      id: 'AAI Statice Pinwheeling Dartboard',
-      type: 'Ability',
+      id: 'AAI Statice Pinwheeling Dartboard Tracker',
+      type: 'StartsUsing',
       netRegex: { id: '8CBC', source: 'Statice', capture: false },
-      alertText: (_data, _matches, output) => output.text!(),
-      run: (data) => data.stcSeenPinwheeling = true,
-      outputStrings: {
-        text: {
-          en: 'Find the angular point!',
-          ja: '北を特定して！',
-          ko: '꼭지점 찾아요!',
-        },
-      },
+      run: (data) => data.staticeIsPinwheelingDartboard = true,
     },
     {
       id: 'AAI Statice Pinwheeling Dartboard Color',
       type: 'AddedCombatant',
       netRegex: { npcNameId: '12507' },
-      infoText: (_data, matches, output) => {
+      durationSeconds: 6,
+      response: (data, matches, output) => {
+        // cactbot-builtin-response
+        output.responseOutputStrings = {
+          dartOnYou: {
+            en: 'Dart (w/${player})',
+            de: 'Dart (mit ${player})',
+            fr: 'Dard (avec ${player})',
+            cn: '飞镖 (和 ${player})',
+            ko: '다트 (+ ${player})',
+          },
+          noDartOnYou: {
+            en: 'No Dart',
+            de: 'Kein Dart',
+            fr: 'Pas de dard',
+            cn: '无飞镖',
+            ko: '다트 없음',
+          },
+          blue: {
+            en: 'Avoid Blue',
+            de: 'Vermeide Blau',
+            fr: 'Évitez le bleu',
+            cn: '躲避蓝色',
+            ko: '파란색 피하기',
+          },
+          red: {
+            en: 'Avoid Red',
+            de: 'Vermeide Rot',
+            fr: 'Évitez le rouge',
+            cn: '躲避红色',
+            ko: '빨간색 피하기',
+          },
+          yellow: {
+            en: 'Avoid Yellow',
+            de: 'Vermeide Gelb',
+            fr: 'Évitez le jaune',
+            cn: '躲避黄色',
+            ko: '노란색 피하기',
+          },
+        };
+
+        let infoText: string | undefined;
+
         const centerX = -200;
         const centerY = 0;
         const x = parseFloat(matches.x) - centerX;
@@ -1769,179 +1786,74 @@ const triggerSet: TriggerSet<Data> = {
         const dir12 = Math.round(6 - 6 * Math.atan2(x, y) / Math.PI + 11.5) % 12;
 
         const colorOffset = dir12 % 3;
-        const colorMap: { [offset: number]: string } = {
+        const colorMap: { [offset: number]: typeof data.staticeHomingColor } = {
           0: 'blue',
           1: 'red',
           2: 'yellow',
         } as const;
-        const color = colorMap[colorOffset];
-        if (color !== undefined)
-          return output[color]!();
-      },
-      outputStrings: {
-        blue: {
-          en: 'Avoid Blue',
-          ja: '玉は青',
-          ko: '🟦파랑에 구슬',
-        },
-        red: {
-          en: 'Avoid Red',
-          ja: '玉は赤',
-          ko: '🟥빨강에 구슬',
-        },
-        yellow: {
-          en: 'Avoid Yellow',
-          ja: '玉は黄色',
-          ko: '🟨노랑에 구슬',
-        },
+
+        data.staticeHomingColor = colorMap[colorOffset];
+        if (data.staticeHomingColor !== undefined)
+          infoText = output[data.staticeHomingColor]!();
+
+        if (data.staticeDart.length !== 2)
+          return { infoText };
+
+        const dartTargets = data.staticeDart.map((x) => x.target);
+        if (!dartTargets.includes(data.me))
+          return { alertText: output.noDartOnYou!(), infoText: infoText };
+
+        const [target1, target2] = dartTargets;
+        if (target1 === undefined || target2 === undefined)
+          return { infoText };
+        const otherTarget = data.party.member(target1 === data.me ? target2 : target1);
+        return { alertText: output.dartOnYou!({ player: otherTarget }), infoText: infoText };
       },
     },
     {
-      id: 'AAI Statice Ball of Fire Rotation',
+      id: 'AAI Statice Pinwheeling Dartboard Mech',
       type: 'HeadMarker',
-      netRegex: { id: ['009C', '009D'] },
-      durationSeconds: 13,
-      infoText: (_data, matches, output) => {
-        if (matches.id === '009C')
-          return output.clock!();
-        return output.counter!();
-      },
-      outputStrings: {
-        clock: {
-          en: '⤾Clockwise',
-          ja: '⤾時計',
-          ko: '⤾시계 회전',
-        },
-        counter: {
-          en: '⤿Counter Clockwise',
-          ja: '⤿反時計',
-          ko: '⤿반시계 회전',
-        },
-      },
-    },
-    {
-      id: 'AAI Statice Burning Chains',
-      type: 'HeadMarker',
-      netRegex: { id: '0061' },
-      condition: (data, matches) => {
-        data.stcChains.push(matches.target);
-        return data.stcChains.length === 2;
+      netRegex: { id: headmarkerIds.tethers },
+      condition: (data) => data.staticeIsPinwheelingDartboard,
+      delaySeconds: (data, matches) => {
+        data.staticeDartboardTether.push(matches);
+        return data.staticeDartboardTether.length === 2 ? 0 : 0.5;
       },
       alertText: (data, _matches, output) => {
-        if (!data.stcChains.includes(data.me))
+        if (data.staticeDartboardTether.length !== 2)
           return;
-        const partner = data.stcChains[data.stcChains[0] !== data.me ? 0 : 1];
-        return output.text!({
-          partner: partner !== undefined ? data.party.jobAbbr(partner) : output.unknown!(),
-        });
+
+        const tethers = data.staticeDartboardTether.map((x) => x.target);
+
+        if (tethers.includes(data.me)) {
+          const [tether1, tether2] = tethers;
+          const other = data.party.member(tether1 === data.me ? tether2 : tether1);
+          return output.tether!({ player: other });
+        }
+
+        const partyNames = data.party.partyNames;
+        const nonTethers = partyNames.filter((x) => !tethers.includes(x));
+        const [stack1, stack2] = nonTethers;
+        const other = data.party.member(stack1 === data.me ? stack2 : stack1);
+        return output.stack!({ player: other });
       },
-      run: (data) => data.stcChains = [],
+      run: (data) => data.staticeDartboardTether = [],
       outputStrings: {
-        text: {
-          en: 'Tether on YOU! (w/ ${partner})',
-          ja: '自分にチェイン (${partner})',
-          ko: '내게 체인! (${partner})',
+        // TODO: maybe this should remind you of dart color
+        tether: {
+          en: 'Tether w/${player}',
+          de: 'Verbindung mit ${player}',
+          fr: 'Lien avec ${player}',
+          cn: '连线 和 ${player}',
+          ko: '사슬 +${player}',
         },
-        unknown: Outputs.unknown,
-      },
-    },
-    {
-      // Pino: https://twitter.com/pino_mujuuryoku/status/1720127076190306359
-      // Spell: https://twitter.com/spell_ff14/status/1720068760068120970
-      id: 'AAI Statice Break Burning Chains',
-      type: 'Tether',
-      netRegex: { id: '0009' },
-      response: (data, matches, output) => {
-        // cactbot-builtin-response
-        output.responseOutputStrings = {
-          cutchain: {
-            en: 'Break Tether!',
-            ja: 'チェイン切る',
-            ko: '체인 끊어요!',
-          },
-          deathclaw: {
-            en: 'Bait Claw => Stack',
-            ja: 'クロウ誘導 => 頭割り',
-            ko: '데스 손톱 유도 🔜 뭉쳐요',
-          },
-          pinoAdjust: {
-            en: 'Pair! (Adjust)',
-            ja: '北へ！ 席入れ替え',
-            ko: '북으로! 자리 조정 페어!',
-          },
-          pinoStacks: {
-            en: 'Pair!',
-            ja: '北へ',
-            ko: '북으로! 조정없이 페어',
-          },
-          spellStacks: {
-            en: 'Pair!',
-            ja: '北へ',
-            ko: '북으로! 페어',
-          },
-          spellLeft: {
-            en: 'Pair and left (w/ ${partner})',
-            ja: '北の左へ (${partner})',
-            ko: '북으로! 페어 왼쪽 (${partner})',
-          },
-          spellRight: {
-            en: 'Pair and right (w/ ${partner})',
-            ja: '北の右へ (${partner})',
-            ko: '북으로! 페어 오른쪽 (${partner})',
-          },
-          stacks: Outputs.stackPartner,
-          unknown: Outputs.unknown,
-        };
-        if (data.me === matches.source || data.me === matches.target)
-          return { alarmText: output.cutchain!() };
-        if (!data.stcSeenPinwheeling)
-          return { alertText: output.deathclaw!() };
-
-        if (data.triggerSetConfig.pinwheelingType === 'stack')
-          return { infoText: output.stacks!() };
-
-        if (data.triggerSetConfig.pinwheelingType === 'pino') {
-          const members = data.party.members(data.stcBullsEyes);
-          const roles = members.map((x) => x.role);
-
-          const dps = roles.filter((x) => x === 'dps');
-          if (dps.length === 2)
-            return { alertText: output.pinoAdjust!() };
-
-          const th = roles.filter((x) => x === 'tank' || x === 'healer');
-          if (th.length === 2)
-            return { alertText: output.pinoAdjust!() };
-
-          return { infoText: output.pinoStacks!() };
-        }
-
-        if (data.triggerSetConfig.pinwheelingType === 'spell') {
-          if (data.stcBullsEyes.length !== 2)
-            return { infoText: output.spellStacks!() };
-
-          const members = data.party.members(data.stcBullsEyes);
-          const other = members[members[0]?.name === data.me ? 1 : 0];
-          if (other === undefined)
-            return { infoText: output.spellStacks!() };
-
-          const chains = data.stcChains;
-          if (chains.includes(other.name)) {
-            const partner = data.party.partyNames.find((x) => x !== data.me && !chains.includes(x));
-            if (partner === undefined)
-              return { alertText: output.spellLeft!({ partner: output.unknown!() }) };
-            return { alertText: output.spellLeft!({ partner: data.party.jobAbbr(partner) }) };
-          }
-
-          const myprior = Autumn.jobPriority(data.party.jobIndex(data.me));
-          const otherprior = Autumn.jobPriority(other.jobIndex);
-          return myprior < otherprior
-            ? { alertText: output.spellLeft!({ partner: data.party.jobAbbr(other.name) }) }
-            : { alertText: output.spellRight!({ partner: data.party.jobAbbr(other.name) }) };
-        }
-      },
-      run: (data) => {
-        data.stcChains = [];
-        data.stcBullsEyes = [];
+        stack: {
+          en: 'Stack w/${player}',
+          de: 'Sammeln mit ${player}',
+          fr: 'Package avec ${player}',
+          cn: '分摊 和 ${player}',
+          ko: '쉐어 +${player}',
+        },
       },
     },
   ],
@@ -2171,8 +2083,6 @@ const triggerSet: TriggerSet<Data> = {
         'The Midnight Trial': 'ノコセロの試練',
       },
       'replaceText': {
-        '\\(buff\\)': '(バフ)',
-        '\\(cast\\)': '(詠唱)',
         'Aero II': 'エアロラ',
         'Aero IV': 'エアロジャ',
         'Analysis': 'アナライズ',

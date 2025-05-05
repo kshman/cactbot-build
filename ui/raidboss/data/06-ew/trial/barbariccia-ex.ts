@@ -46,7 +46,6 @@ const triggerSet: TriggerSet<Data> = {
       id: 'BarbaricciaEx Blow Away',
       regex: /Blow Away/,
       beforeSeconds: 10,
-      condition: (data) => !data.options.AutumnStyle,
       durationSeconds: 5,
       suppressSeconds: 15,
       infoText: (_data, _matches, output) => output.text!(),
@@ -65,7 +64,6 @@ const triggerSet: TriggerSet<Data> = {
       id: 'BarbaricciaEx 어듬이 돌아라 물레야',
       regex: /Blow Away/,
       beforeSeconds: 7,
-      condition: (data) => data.options.AutumnStyle,
       alarmText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
