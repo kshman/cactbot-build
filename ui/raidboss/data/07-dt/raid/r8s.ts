@@ -7,6 +7,9 @@ import ZoneId from '../../../../../resources/zone_id';
 import { RaidbossData } from '../../../../../types/data';
 import { TriggerSet } from '../../../../../types/trigger';
 
+const centerX = 100;
+const centerY = 100;
+
 const phases = {
   'A3C8': 'pack', // Tactical Pack
   'A3CB': 'saber', // Ravenous Saber
@@ -24,36 +27,26 @@ const fangPairs: { [id: string]: string } = {
 const swStrings = {
   combo: {
     en: '${debuff} ${num}',
+    ja: '(${debuff} ${num}番目)',
     ko: '(${debuff} ${num}번째)',
   },
   now: {
     en: '${debuff} Now!',
+    ja: '今 ${debuff}',
     ko: '지금 문대요: ${debuff}',
   },
   stone: {
     en: 'Stone',
+    ja: '🟡石',
     ko: '🟡돌멩이',
   },
   wind: {
     en: 'Wind',
+    ja: '🟢風',
     ko: '🟢바람',
   },
   unknown: Outputs.unknown,
 } as const;
-const moonStrings = {
-  safe: {
-    en: '${quad}',
-    ko: '${quad}',
-  },
-  saves: {
-    en: '${quad1} => ${quad2}',
-    ko: '${quad1} 🔜 ${quad2}',
-  },
-  ...AutumnDir.stringsAimCross,
-} as const;
-
-const centerX = 100;
-const centerY = 100;
 
 export interface Data extends RaidbossData {
   phase: Phase;
@@ -61,16 +54,15 @@ export interface Data extends RaidbossData {
   decays: number;
   gales: number;
   tpnum?: number;
-  tpvsw?: 'stone' | 'wind';
-  tpcnt: number;
-  tpsgm: number;
-  bmcnt: number;
-  bmbts: number[];
-  bmquad?: string;
+  tpvalue?: 'stone' | 'wind';
+  tpcount: number;
+  tpsurge: number;
+  bmcleaves: number;
+  bmbites: number[];
   // 후반부
   heroes: number;
   hsafe?: number;
-  hblow?: 'in' | 'out';
+  hfang?: 'in' | 'out';
   enrage: number;
   //
   spread?: boolean;
@@ -84,12 +76,11 @@ const triggerSet: TriggerSet<Data> = {
     phase: 'door',
     decays: 0,
     gales: 0,
-    tpcnt: 0,
-    tpsgm: 0,
-    bmcnt: 0,
-    bmbts: [],
+    tpcount: 0,
+    tpsurge: 0,
+    bmcleaves: 0,
+    bmbites: [],
     heroes: 0,
-    chindex: 0,
     enrage: 5,
   }),
   timelineTriggers: [
@@ -133,7 +124,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'UV Positions',
-          ko: '(나란히 정렬)',
+          ko: '(나란히 나란히)',
         },
       },
     },
@@ -145,7 +136,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'UV Positions',
-          ko: '(나란히 정렬)',
+          ko: '(나란히 나란히)',
         },
       },
     },
@@ -157,7 +148,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Bait Mooncleaver',
-          ko: '(문클레버, 처음 플랫폼으로)',
+          ko: '(처음 플랫폼으로)',
         },
       },
     },
@@ -350,7 +341,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         knockbackTether: {
           en: 'Knockback Tether',
-          ja: 'ノックバック + 線誘導',
+          ja: 'ノックバック + 扇',
           ko: '줄처리 넉백',
         },
         knockbackTowers: {
@@ -376,7 +367,6 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: 'Stack x8',
           ja: '頭割り x8',
-          cn: '8次分摊',
           ko: '뭉쳐욧 x8',
         },
       },
@@ -404,10 +394,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         wind: {
           en: 'Green side',
+          ja: '🟩風の方',
           ko: '🟩바람으로',
         },
         stone: {
           en: 'Yellow side',
+          ja: '🟨石の方',
           ko: '🟨돌멩이로',
         },
       },
@@ -423,11 +415,11 @@ const triggerSet: TriggerSet<Data> = {
         // 1128 = Wind (Green Sphere) Debuff
         const time = parseFloat(matches.duration);
         data.tpnum = time < 22 ? 1 : time < 38 ? 2 : 3;
-        data.tpvsw = matches.effectId === '1127' ? 'stone' : 'wind';
+        data.tpvalue = matches.effectId === '1127' ? 'stone' : 'wind';
       },
       durationSeconds: 5,
       infoText: (data, _matches, output) => {
-        const debuff = output[data.tpvsw ?? 'unknown']!();
+        const debuff = output[data.tpvalue ?? 'unknown']!();
         return output.combo!({ debuff: debuff, num: data.tpnum });
       },
       outputStrings: swStrings,
@@ -438,7 +430,7 @@ const triggerSet: TriggerSet<Data> = {
       netRegex: { id: '0017', capture: false },
       condition: (data) => data.phase === 'pack',
       suppressSeconds: 1,
-      run: (data) => data.tpcnt++,
+      run: (data) => data.tpcount++,
     },
     {
       id: 'R8S Tactical Pack Wind',
@@ -446,11 +438,11 @@ const triggerSet: TriggerSet<Data> = {
       netRegex: { effectId: 'B7D', capture: true },
       // Magic Vulnerabilities from Pack Predation and Alpha Wind are 0.96s
       condition: (data, matches) =>
-        data.phase === 'pack' && data.tpvsw === 'wind' && parseFloat(matches.duration) < 2,
+        data.phase === 'pack' && data.tpvalue === 'wind' && parseFloat(matches.duration) < 2,
       delaySeconds: (_data, matches) => parseFloat(matches.duration) - 0.5,
       suppressSeconds: 1,
       alertText: (data, _matches, output) => {
-        if (data.tpnum === data.tpcnt)
+        if (data.tpnum === data.tpcount)
           return output.now!({ debuff: output.wind!() });
       },
       outputStrings: swStrings,
@@ -461,12 +453,12 @@ const triggerSet: TriggerSet<Data> = {
       netRegex: { effectId: 'B7D', capture: true },
       // Timing based on Tether and Magic Vulnerability (3.96s)
       condition: (data, matches) =>
-        data.phase === 'pack' && data.tpvsw === 'stone' && parseFloat(matches.duration) > 2,
-      preRun: (data) => data.tpsgm++,
+        data.phase === 'pack' && data.tpvalue === 'stone' && parseFloat(matches.duration) > 2,
+      preRun: (data) => data.tpsurge++,
       delaySeconds: (_data, matches) => parseFloat(matches.duration) - 0.5,
       suppressSeconds: 1,
       alertText: (data, _matches, output) => {
-        if (data.tpnum === data.tpcnt && (data.tpsgm % 2) === 1)
+        if (data.tpnum === data.tpcount && (data.tpsurge % 2) === 1)
           return output.now!({ debuff: output.stone!() });
       },
       outputStrings: swStrings,
@@ -493,7 +485,7 @@ const triggerSet: TriggerSet<Data> = {
       run: (data) => data.spread = true,
     },
     {
-      id: 'R8S Terrestrial Rage Spread/Stack',
+      id: 'R8S Terrestrial Rage Stack',
       type: 'HeadMarker',
       netRegex: { id: '005D', capture: false },
       condition: (data) => data.phase === 'saber',
@@ -519,6 +511,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         move: {
           en: 'Move! => ${mech}',
+          ja: '回避! 🔜 ${mech}',
           ko: '피해요! 🔜 ${mech}',
         },
         spread: Outputs.positions,
@@ -530,32 +523,22 @@ const triggerSet: TriggerSet<Data> = {
       type: 'StartsUsing',
       netRegex: { id: 'A78E', source: 'Wolf of Stone', capture: false },
       suppressSeconds: 1,
-      response: (data, _matches, output) => {
-        // cactbot-builtin-response
-        output.responseOutputStrings = {
-          lines: {
-            en: 'Lines',
-            ko: '직선 장판',
-          },
-          tank: {
-            en: 'Lines',
-            ko: '직선 장판 + 탱크 스위치',
-          },
-        };
-        if (Autumn.isTank(data.moks))
-          return { alertText: output.tank!() };
-        return { infoText: output.lines!() };
-      },
+      infoText: (_data, _matches, output) => output.lines!(),
       run: (data) => data.spread = undefined,
+      outputStrings: {
+        lines: {
+          en: 'Lines',
+          ja: '直線AOE',
+          ko: '직선 장판',
+        },
+      },
     },
     {
-      id: 'R8S Beckon Moonlight Quadrants',
+      id: 'R8S Beckon Moonlight',
       type: 'Ability',
-      // A3E0 => Right cleave self-cast
-      // A3E1 => Left cleave self-cast
       netRegex: { id: ['A3E0', 'A3E1'], source: 'Moonlit Shadow', capture: true },
       delaySeconds: 0.1,
-      durationSeconds: (data) => data.bmbts.length < 2 ? 2 : 10,
+      // durationSeconds: (data) => data.bmbites.length < 2 ? 2 : 10,
       promise: async (data, matches) => {
         const actors = (await callOverlayHandler({
           call: 'getCombatants',
@@ -566,66 +549,48 @@ const triggerSet: TriggerSet<Data> = {
           return;
 
         const num = AutumnDir.xyToNum8(actor.PosX, actor.PosY, centerX, centerY);
-        // Moonbeam's Bite (A3C2 Left / A3C3 Right) half-room cleaves
-        // Defining the cleaved side
         if (matches.id === 'A3E0') {
           const ccw = num === 0 ? 6 : num - 2;
-          data.bmbts.push(ccw);
+          data.bmbites.push(ccw);
         } else {
           const cw = (num + 2) % 8;
-          data.bmbts.push(cw);
+          data.bmbites.push(cw);
         }
       },
       infoText: (data, _matches, output) => {
-        if (data.bmbts.length === 1 || data.bmbts.length === 3)
+        if (data.bmbites.length !== 2)
           return;
 
-        const cquad = [1, 3, 5, 7];
-        const beam1 = data.bmbts[0] ?? -1;
-        const beam2 = data.bmbts[1] ?? -1;
-        let safe1 = cquad.filter((q) => q !== beam1 + 1);
-        safe1 = safe1.filter((q) => q !== (beam1 === 0 ? 7 : beam1 - 1));
-        safe1 = safe1.filter((q) => q !== beam2 + 1);
-        safe1 = safe1.filter((q) => q !== (beam2 === 0 ? 7 : beam2 - 1));
-
-        // Early output for first two
-        if (data.bmbts.length === 2) {
-          if (safe1.length !== 1 || safe1[0] === undefined)
-            return;
-
-          const q = AutumnDir.dirFromNum(safe1[0] ?? -1);
-          return output.safe!({ quad: output[q]!() });
-        }
-
-        const beam3 = data.bmbts[2] ?? -1;
-        const beam4 = data.bmbts[3] ?? -1;
-        let safe2 = cquad.filter((q) => q !== beam3 + 1);
-        safe2 = safe2.filter((q) => q !== (beam3 === 0 ? 7 : beam3 - 1));
-        safe2 = safe2.filter((q) => q !== beam4 + 1);
-        safe2 = safe2.filter((q) => q !== (beam4 === 0 ? 7 : beam4 - 1));
-
-        if (safe1[0] === undefined || safe2[0] === undefined)
-          return;
-        if (safe1.length !== 1)
-          return;
-        if (safe2.length !== 1)
+        const b1 = data.bmbites[0] ?? -1;
+        const b2 = data.bmbites[1] ?? -1;
+        let safe = [1, 3, 5, 7].filter((q) => q !== b1 + 1);
+        safe = safe.filter((q) => q !== (b1 === 0 ? 7 : b1 - 1));
+        safe = safe.filter((q) => q !== b2 + 1);
+        safe = safe.filter((q) => q !== (b2 === 0 ? 7 : b2 - 1));
+        if (safe.length !== 1 || safe[0] === undefined)
           return;
 
-        const q1 = output[AutumnDir.dirFromNum(safe1[0] ?? -1)]!();
-        data.bmquad = output[AutumnDir.dirFromNum(safe2[0] ?? -1)]!();
-        return output.saves!({ quad1: q1, quad2: data.bmquad });
+        const q = AutumnDir.dirFromNum(safe[0] ?? -1);
+        return output.safe!({ quad: output[q]!() });
       },
-      outputStrings: moonStrings,
+      outputStrings: {
+        safe: {
+          en: '${quad}',
+          ja: '${quad}',
+          ko: '${quad}',
+        },
+        ...AutumnDir.stringsAimCross,
+      },
     },
     {
-      id: 'R8S Beckon Moonlight Spread Collect',
+      id: 'R8S Beckon Moonlight Spread',
       type: 'HeadMarker',
       netRegex: { id: '008B' },
       condition: (data, matches) => data.phase === 'beckon' && data.me === matches.target,
       run: (data) => data.spread = true,
     },
     {
-      id: 'R8S Beckon Moonlight Spread/Stack',
+      id: 'R8S Beckon Moonlight Stack',
       type: 'HeadMarker',
       netRegex: { id: '005D', capture: false },
       condition: (data) => data.phase === 'beckon',
@@ -640,36 +605,33 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: 'R8S Beckon Moonlight Quadrant Two',
+      id: 'R8S Beckon Moonlight Cleave',
       type: 'StartsUsing',
-      // A3C2 => Moonbeam's Bite dash with Left cleave
-      // A3C3 => Moonbeam's Bite dash with Right cleave
       netRegex: { id: ['A3C2', 'A3C3'], source: 'Moonlit Shadow', capture: true },
       delaySeconds: (_data, matches) => parseFloat(matches.castTime),
-      durationSeconds: 4,
-      response: (data, _matches, output) => {
-        // cactbot-builtin-response
-        output.responseOutputStrings = {
-          spread: Outputs.positions,
-          stack: Outputs.stacks,
-          ...moonStrings,
-        };
-        data.bmcnt++;
-        if (data.bmcnt === 2)
-          return { infoText: output.safe!({ quad: data.bmquad }) };
-        if (data.bmcnt === 3)
-          return { alertText: data.spread ? output.spread!() : output.stack!() };
+      durationSeconds: 3,
+      alertText: (data, _matches, output) => {
+        data.bmcleaves++;
+        if (data.bmcleaves === 3)
+          return data.spread ? output.spread!() : output.stack!();
+      },
+      outputStrings: {
+        spread: Outputs.positions,
+        stack: Outputs.stacks,
       },
     },
     {
       id: 'R8S Weal of Stone Cardinals',
-      // This appears to always be cardinals safe
       type: 'StartsUsing',
       netRegex: { id: 'A792', source: 'Wolf of Stone', capture: false },
       suppressSeconds: 1,
-      infoText: (_data, _matches, output) => output.cardinals!(),
+      infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
-        cardinals: Outputs.cardinals,
+        text: {
+          en: 'Cardinals',
+          ja: '竜の頭、十字回避',
+          ko: '용머리! 십자로',
+        },
       },
     },
     // //////////////////// 후반부 ////////////////////
@@ -690,6 +652,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         changePlatform: {
           en: 'Change Platform',
+          ja: '別のプラットフォームへ',
           ko: '다른 플랫폼으로',
         },
       },
@@ -706,7 +669,8 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         uvRayOnYou: {
           en: 'UV Ray on YOU',
-          ko: '내게 레이저가!',
+          ja: '自分に❄️レイ',
+          ko: '내게 ❄️레이저가!',
         },
       },
     },
@@ -720,7 +684,7 @@ const triggerSet: TriggerSet<Data> = {
       id: 'R8S Fanged Maw/Perimeter Collect',
       type: 'StartsUsing',
       netRegex: { id: ['A463', 'A464'], source: 'Gleaming Fang', capture: true },
-      run: (data, matches) => data.hblow = matches.id === 'A463' ? 'out' : 'in',
+      run: (data, matches) => data.hfang = matches.id === 'A463' ? 'out' : 'in',
     },
     {
       id: 'R8S Hero\'s Blow',
@@ -728,7 +692,7 @@ const triggerSet: TriggerSet<Data> = {
       netRegex: { id: ['A45F', 'A461'], source: 'Howling Blade', capture: true },
       delaySeconds: 0.3,
       infoText: (data, matches, output) => {
-        const inout = output[data.hblow ?? 'unknown']!();
+        const inout = output[data.hfang ?? 'unknown']!();
         const dir = matches.id === 'A45F' ? 'right' : 'left';
         return output.text!({ inout: inout, dir: output[dir]!() });
       },
@@ -757,6 +721,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'UV Positions',
+          ja: '担当プラットフォームへ',
           ko: '담당 플랫폼으로! (곧 나란히)',
         },
       },
@@ -767,26 +732,30 @@ const triggerSet: TriggerSet<Data> = {
       netRegex: { id: '0017' },
       condition: (data) => data.phase === '2nd',
       infoText: (data, matches, output) => {
+        // 블루메 친화적이지 않음
         const m = data.party.member(matches.target);
         if (m.role_ !== 'tank')
           return;
         if (!Autumn.isTank(data.moks))
-          return output.purge!({ name: m, job: m.job });
+          return output.purge!({ target: m });
         if (data.me === matches.target)
           return output.itsme!();
         return output.provoke!();
       },
       outputStrings: {
         purge: {
-          en: 'Purge: ${name} (${job})',
-          ko: '퍼지: ${name} (${job})',
+          en: 'Purge: ${target}',
+          ja: 'パージ: ${target}',
+          ko: '퍼지: ${target}',
         },
         itsme: {
           en: 'Purge on YOU',
+          ja: '(自分にパージ、シャク)',
           ko: '(내게 퍼지! 헤이트 넘겨요)',
         },
         provoke: {
           en: '(Provoke)',
+          ja: '(挑発)',
           ko: '(프로보크)',
         },
       },
@@ -800,6 +769,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         towers: {
           en: 'Towers',
+          ja: 'まもなくペア',
           ko: '페어 준비! 위치로',
         },
       },
@@ -816,6 +786,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         move: {
           en: 'Light Party Platforms',
+          ja: '担当プラットフォームへ',
           ko: '담당 플랫폼으로!',
         },
       },
@@ -829,10 +800,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         close: {
           en: 'Close Tether on YOU',
+          ja: '自分に🟩近づく線',
           ko: '내게 🟩붙어 줄',
         },
         far: {
           en: 'Far Tether on YOU',
+          ja: '自分に🟦離れる線',
           ko: '내게 🟦떨어져 줄',
         },
       },
@@ -847,7 +820,6 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: 'Stack x8',
           ja: '頭割り x8',
-          cn: '8次分摊',
           ko: '뭉쳐욧 x8',
         },
       },
@@ -870,10 +842,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         changePlatform: {
           en: 'Change Platform',
+          ja: '別のプラットフォームへ',
           ko: '플랫폼 옮겨요 ',
         },
         finalPlatform: {
           en: 'Change Platform (Final)',
+          ja: '最後のプラットフォームへ',
           ko: '마지막 플랫폼으로',
         },
       },
