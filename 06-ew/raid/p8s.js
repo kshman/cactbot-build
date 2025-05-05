@@ -3,14 +3,14 @@ const perfectedConcepts = ['alpha', 'beta', 'gamma'];
 // prs string
 const prsStrings = {
   unknown: Outputs.unknown,
-  north: Outputs.cmarkA,
-  east: Outputs.cmarkB,
-  south: Outputs.cmarkC,
-  west: Outputs.cmarkD,
-  northEast: Outputs.cnum2,
-  southEast: Outputs.cnum3,
-  southWest: Outputs.cnum4,
-  northWest: Outputs.cnum1,
+  north: Outputs.aimN,
+  east: Outputs.aimE,
+  south: Outputs.aimS,
+  west: Outputs.aimW,
+  northEast: Outputs.aimNE,
+  southEast: Outputs.aimSE,
+  southWest: Outputs.aimSW,
+  northWest: Outputs.aimNW,
   crush: {
     en: 'Crash',
     ja: 'クラッシュ',
@@ -51,18 +51,13 @@ const headingTo8Dir = (heading) => {
   return (2 - Math.round(heading * 8 / Math.PI) / 2 + 2) % 8;
 };
 const ventOutputStrings = {
-  comboDir: {
+  combo: {
     en: '${dir1} / ${dir2}',
     de: '${dir1} / ${dir2}',
     fr: '${dir1} / ${dir2}',
     ja: '${dir1} / ${dir2}',
     cn: '${dir1} / ${dir2}',
     ko: '${dir1} / ${dir2}',
-  },
-  comboArrow: {
-    en: '${dir1}${dir2} ${arr1}${arr2}',
-    ja: '${dir1}${dir2} ${arr1}${arr2}',
-    ko: '${dir1}${dir2} ${arr1}${arr2}',
   },
   north: prsStrings.north,
   east: prsStrings.east,
@@ -72,14 +67,10 @@ const ventOutputStrings = {
   dirSE: prsStrings.southEast,
   dirSW: prsStrings.southWest,
   dirNW: prsStrings.northWest,
-  arrNE: Outputs.arrowNE,
-  arrSE: Outputs.arrowSE,
-  arrSW: Outputs.arrowSW,
-  arrNW: Outputs.arrowNW,
   unknown: Outputs.unknown,
 };
 // Shared alertText for vent triggers, using `ventOutputStrings` above.
-const ventOutput = (autumStyle, unsafeSpots, output) => {
+const ventOutput = (unsafeSpots, output) => {
   const [unsafe0, unsafe1] = [...unsafeSpots].sort();
   if (unsafe0 === undefined || unsafe1 === undefined)
     throw new UnreachableCode();
@@ -107,19 +98,9 @@ const ventOutput = (autumStyle, unsafeSpots, output) => {
     5: output.dirSE(),
     7: output.dirSW(),
   };
-  const safeArrowMap = {
-    1: output.arrNW(),
-    3: output.arrNE(),
-    5: output.arrSE(),
-    7: output.arrSW(),
-  };
   const safeStr0 = safeIntercardMap[unsafe0] ?? output.unknown();
   const safeStr1 = safeIntercardMap[unsafe1] ?? output.unknown();
-  if (!autumStyle)
-    return output.comboDir({ dir1: safeStr0, dir2: safeStr1 });
-  const safeArr0 = safeArrowMap[unsafe0] ?? output.unknown();
-  const safeArr1 = safeArrowMap[unsafe1] ?? output.unknown();
-  return output.comboArrow({ dir1: safeStr0, dir2: safeStr1, arr1: safeArr0, arr2: safeArr1 });
+  return output.combo({ dir1: safeStr0, dir2: safeStr1 });
 };
 const arcaneChannelFlags = '00020001'; // mapEffect flags for tower tile effect
 Options.Triggers.push({
@@ -177,248 +158,6 @@ Options.Triggers.push({
           ja: 'タンクオートアタック',
           cn: '坦克平A',
           ko: '탱크 오토 어택!',
-        },
-      },
-    },
-    // ST 확인
-    {
-      id: 'P8S 어듬이 타이란트 끝나고 프로보크 안내',
-      regex: /Burst 4/,
-      condition: (data) => data.options.AutumnStyle && data.role === 'tank',
-      alertText: (_data, _matches, output) => output.text(),
-      outputStrings: {
-        text: {
-          en: 'Provoke if you are ST',
-          ko: 'ST라면 이쯤에서 헤이트 가져올것',
-        },
-      },
-    },
-    // 아이온 1
-    {
-      id: 'P8S 어듬이 아이온 1 버프',
-      regex: /Aioniopyr 1/,
-      beforeSeconds: 3,
-      condition: (data) => data.options.AutumnStyle,
-      infoText: (data, _matches, output) => {
-        if (data.role === 'tank')
-          return output.reprisal();
-        if (data.CanAddle())
-          return output.addle();
-      },
-      outputStrings: {
-        reprisal: {
-          en: 'MT Reprisal',
-          ko: 'MT 리프 넣으라우',
-        },
-        addle: {
-          en: 'Caster Addle',
-          ko: '아돌 넣으라우',
-        },
-      },
-    },
-    // 아이온 2
-    {
-      id: 'P8S 어듬이 아이온 2 버프',
-      regex: /Aioniopyr 2/,
-      beforeSeconds: 3,
-      condition: (data) => data.options.AutumnStyle && data.role === 'tank',
-      infoText: (_data, _matches, output) => output.text(),
-      outputStrings: {
-        text: {
-          en: 'MT Reprisal',
-          ko: 'MT 리프 넣으라우',
-        },
-      },
-    },
-    // 아이온 3
-    {
-      id: 'P8S 어듬이 아이온 3 버프',
-      regex: /Aioniopyr 3/,
-      beforeSeconds: 3,
-      condition: (data) => data.options.AutumnStyle,
-      infoText: (data, _matches, output) => {
-        if (data.role === 'tank')
-          return output.reprisal();
-        if (data.CanAddle())
-          return output.addle();
-        if (data.CanSilence())
-          return output.amigo();
-      },
-      outputStrings: {
-        reprisal: {
-          en: 'MT Reprisal',
-          ko: 'MT 리프 넣으라우',
-        },
-        addle: {
-          en: '(Caster Addle, if available)',
-          ko: '(아돌 남으면 넣으라우)',
-        },
-        amigo: {
-          en: 'Range Buff',
-          ko: '삼바 데 아미고 넣으라우',
-        },
-      },
-    },
-    // 아이온 4
-    {
-      id: 'P8S 어듬이 아이온 4 버프',
-      regex: /Aioniopyr 4/,
-      beforeSeconds: 3,
-      condition: (data) => data.options.AutumnStyle && data.role === 'tank',
-      infoText: (_data, _matches, output) => output.text(),
-      outputStrings: {
-        text: {
-          en: 'ST Reprisal',
-          ko: 'ST 리프 넣으라우',
-        },
-      },
-    },
-    // 아이온 5
-    {
-      id: 'P8S 어듬이 아이온 5 버프',
-      regex: /Aioniopyr 5/,
-      beforeSeconds: 3,
-      condition: (data) => data.options.AutumnStyle,
-      infoText: (data, _matches, output) => {
-        if (data.role === 'tank')
-          return output.reprisal();
-        if (data.CanAddle())
-          return output.addle();
-      },
-      outputStrings: {
-        reprisal: {
-          en: 'MT Reprisal',
-          ko: 'MT 리프 넣으라우',
-        },
-        addle: {
-          en: 'Caster Addle',
-          ko: '아돌 넣으라우',
-        },
-      },
-    },
-    // 아고니아 1
-    {
-      id: 'P8S 어듬이 아고니아 1 버프',
-      regex: /Aionagonia 1/,
-      beforeSeconds: 1,
-      condition: (data) => data.options.AutumnStyle && data.role === 'tank',
-      infoText: (_data, _matches, output) => output.text(),
-      outputStrings: {
-        text: {
-          en: 'MT Reprisal & Buff',
-          ko: 'MT 리프&세이크 넣으라우',
-        },
-      },
-    },
-    // 아고니아 2
-    {
-      id: 'P8S 어듬이 아고니아 2 버프',
-      regex: /Aionagonia 2/,
-      beforeSeconds: 1,
-      condition: (data) => data.options.AutumnStyle,
-      infoText: (data, _matches, output) => {
-        if (data.role === 'tank')
-          return output.reprisal();
-        if (data.CanSilence())
-          return output.amigo();
-      },
-      outputStrings: {
-        reprisal: {
-          en: 'ST Reprisal & Buff',
-          ko: 'ST 리프&그거 넣으라우',
-        },
-        amigo: {
-          en: 'Range Buff',
-          ko: '삼바 데 아미고 넣으라우',
-        },
-      },
-    },
-    // 아고니아 3
-    {
-      id: 'P8S 어듬이 아고니아 3 버프',
-      regex: /Aionagonia 3/,
-      beforeSeconds: 1,
-      condition: (data) => data.options.AutumnStyle,
-      infoText: (data, _matches, output) => {
-        if (data.role === 'tank')
-          return output.reprisal();
-        if (data.CanAddle())
-          return output.addle();
-      },
-      outputStrings: {
-        reprisal: {
-          en: 'MT Reprisal',
-          ko: 'MT 리프 넣으라우',
-        },
-        addle: {
-          en: 'Caster Addle',
-          ko: '아돌 넣으라우',
-        },
-      },
-    },
-    // 내추럴 얼라인 안에 있는 엔드 오브 데이즈
-    {
-      id: 'P8S 어듬이 엔드오브데이즈 버프',
-      regex: /Outer End of Days/,
-      condition: (data) => data.options.AutumnStyle,
-      infoText: (data, _matches, output) => {
-        if (data.role !== 'tank' && data.CanSilence())
-          return output.amigo();
-      },
-      outputStrings: {
-        amigo: {
-          en: 'Range Buff',
-          ko: '삼바 데 아미고 넣으라우',
-        },
-      },
-    },
-    // 하이컨셉 1
-    {
-      id: 'P8S 어듬이 하이컨셉 1 버프',
-      regex: /High Concept 1/,
-      beforeSeconds: 2,
-      condition: (data) => data.options.AutumnStyle,
-      infoText: (data, _matches, output) => {
-        if (data.role === 'tank')
-          return output.reprisal();
-        if (data.CanAddle())
-          return output.addle();
-      },
-      outputStrings: {
-        reprisal: {
-          en: 'ST Reprisal',
-          ko: 'ST 리프 넣으라우',
-        },
-        addle: {
-          en: '(Caster Addle, if available)',
-          ko: '(아돌 남으면 넣으라우)',
-        },
-        amigo: {
-          en: 'Range Buff',
-          ko: '삼바 데 아미고 넣으라우',
-        },
-      },
-    },
-    // 하이컨셉 2
-    {
-      id: 'P8S 어듬이 하이컨셉 2 버프',
-      regex: /High Concept 2/,
-      beforeSeconds: 2,
-      condition: (data) => data.options.AutumnStyle,
-      infoText: (data, _matches, output) => {
-        if (data.role === 'tank')
-          return output.reprisal();
-        if (data.CanSilence())
-          return output.amigo();
-      },
-      outputStrings: {
-        reprisal: {
-          en: 'ST Reprisal',
-          ko: 'ST 리프 넣으라우',
-        },
-        amigo: {
-          en: 'Range Buff',
-          ko: '삼바 데 아미고 넣으라우',
         },
       },
     },
@@ -939,23 +678,9 @@ Options.Triggers.push({
           6: output.dirW(),
           7: output.dirNW(),
         };
-        const arrowMap = {
-          0: output.arrN(),
-          1: output.arrNE(),
-          2: output.arrE(),
-          3: output.arrSE(),
-          4: output.arrS(),
-          5: output.arrSW(),
-          6: output.arrW(),
-          7: output.arrNW(),
-        };
         const dir1 = outputMap[d0] ?? output.unknown();
         const dir2 = outputMap[d1] ?? output.unknown();
-        if (!data.options.AutumnStyle)
-          return output.gorgons({ dir1: dir1, dir2: dir2 });
-        const arr1 = arrowMap[d0] ?? output.unknown();
-        const arr2 = arrowMap[d1] ?? output.unknown();
-        return output.gorgonsArrow({ dir1: dir1, dir2: dir2, arr1: arr1, arr2: arr2 });
+        return output.gorgons({ dir1: dir1, dir2: dir2 });
       },
       outputStrings: {
         cardinals: {
@@ -981,10 +706,6 @@ Options.Triggers.push({
           ja: 'ゴルゴン：${dir1}/${dir2}',
           cn: '蛇: ${dir1}/${dir2}',
           ko: '고르곤: ${dir1}${dir2}',
-        },
-        gorgonsArrow: {
-          en: '${dir1}${dir2} ${arr1}${arr2} Gorgons',
-          ko: '고르곤: ${dir1}${dir2} ${arr1}${arr2}',
         },
         dirN: prsStrings.north,
         dirNE: prsStrings.northEast,
@@ -1712,7 +1433,7 @@ Options.Triggers.push({
         if (data.combatantData.length === 0)
           return;
         const unsafeSpots = data.combatantData.map((c) => positionTo8Dir(c));
-        return ventOutput(data.options.AutumnStyle, unsafeSpots, output);
+        return ventOutput(unsafeSpots, output);
       },
       run: (data) => data.ventCasts = [],
       outputStrings: ventOutputStrings,
@@ -1769,7 +1490,7 @@ Options.Triggers.push({
             unsafeSpots.push(7);
           }
         }
-        return ventOutput(data.options.AutumnStyle, unsafeSpots, output);
+        return ventOutput(unsafeSpots, output);
       },
       run: (data) => data.ventCasts = [],
       outputStrings: ventOutputStrings,
@@ -2033,42 +1754,25 @@ Options.Triggers.push({
       sound: '',
       infoText: (data, _matches, output) => {
         const [name1, name2] = data.alignmentTargets.sort();
-        if (data.options.AutumnStyle)
-          return output.target({
-            player1: data.party.jobAbbr(name1),
-            player2: data.party.jobAbbr(name2),
-            target: data.prsAlignMt ? output.targetDps() : output.targetTh(),
-          });
-        return output.text({
+        return output.target({
           player1: data.party.member(name1),
           player2: data.party.member(name2),
+          target: data.prsAlignMt ? output.dps() : output.supp(),
         });
-      },
-      tts: (data, _matches, _output) => {
-        if (data.role === 'tank' && data.prsAlignMt)
-          return 'タンクが調整役';
       },
       run: (data) => data.alignmentTargets = [],
       outputStrings: {
-        text: {
-          en: 'Alignment on ${player1}, ${player2}',
-          de: 'Anpassung auf ${player1}, ${player2}',
-          fr: 'Alignement sur ${player1}, ${player2}',
-          ja: '記述：${player1}, ${player2}',
-          cn: '记述点 ${player1}, ${player2}',
-          ko: '동글: ${player1}, ${player2}',
-        },
         target: {
           en: 'Alignment on ${player1}, ${player2} (${target})',
           ja: '紫丸：${player1}, ${player2} (${target})',
           ko: '동글: ${player1}, ${player2} (${target})',
         },
-        targetTh: {
+        supp: {
           en: 'T&H => D1 Adjust',
           ja: 'TH',
           ko: '탱힐 → D1 조정',
         },
-        targetDps: {
+        dps: {
           en: 'DPS => MT Adjust',
           ja: 'DPS',
           ko: 'DPS → MT 조정',
@@ -2166,8 +1870,6 @@ Options.Triggers.push({
         if (!isReversed && id === ids.fireThenIce || isReversed && id === ids.iceThenFire)
           return { [key]: output.fire() };
         if (!isReversed && id === ids.iceThenFire || isReversed && id === ids.fireThenIce) {
-          if (!data.options.AutumnStyle)
-            return { [key]: output.ice() };
           const adj = data.prsAlignMt ? output.adjMt() : output.adjD1();
           return { [key]: output.adjIce({ adj: adj }) };
         }
@@ -2202,11 +1904,8 @@ Options.Triggers.push({
           return output.spread();
         if (id === ids.ice)
           return output.fire();
-        if (id === ids.fire) {
-          if (!data.options.AutumnStyle)
-            return output.ice();
+        if (id === ids.fire)
           return output.adjIce({ adj: data.prsAlignMt ? output.adjMt() : output.adjD1() });
-        }
       },
       run: (data) => data.seenFirstAlignmentStackSpread = true,
       outputStrings: {
@@ -2804,7 +2503,6 @@ Options.Triggers.push({
       id: 'P8S Limitless Desolation',
       type: 'StartsUsing',
       netRegex: { id: '75ED', source: 'Hephaistos', capture: false },
-      condition: (data) => !data.options.AutumnStyle,
       response: Responses.spread('alert'),
     },
     {
@@ -3034,7 +2732,6 @@ Options.Triggers.push({
       id: 'P8S 어듬이 내추럴 얼라인먼트',
       type: 'StartsUsing',
       netRegex: { id: '79BB', source: 'Hephaistos', capture: false },
-      condition: (data) => data.options.AutumnStyle,
       alertText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
@@ -3048,7 +2745,6 @@ Options.Triggers.push({
       id: 'P8S 어듬이 하이 컨셉',
       type: 'StartsUsing',
       netRegex: { id: '79AC', source: 'Hephaistos', capture: false },
-      condition: (data) => data.options.AutumnStyle,
       // delaySeconds: 4,
       alertText: (_data, _matches, output) => output.text(),
       outputStrings: {
@@ -3063,7 +2759,6 @@ Options.Triggers.push({
       id: 'P8S 어듬이 리미틀레스 디솔레이션',
       type: 'StartsUsing',
       netRegex: { id: '75ED', source: 'Hephaistos', capture: false },
-      condition: (data) => data.options.AutumnStyle,
       alertText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {

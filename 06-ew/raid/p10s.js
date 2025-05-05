@@ -169,36 +169,17 @@ Options.Triggers.push({
           const x = data.combatantData[0]?.PosX;
           if (x === undefined)
             return output.default();
-          if (data.options.AutumnStyle) {
-            let arrow;
-            if (x > 100)
-              arrow = output.aright();
-            else if (x < 100)
-              arrow = output.aleft();
-            if (arrow === undefined)
-              return output.default();
-            return output.atether({ arrow: arrow });
-          }
-          let wingDir;
-          if (x > 100) {
-            wingDir = output.east();
-          } else if (x < 100) {
-            wingDir = output.west();
-          }
-          if (wingDir !== undefined)
-            return output.tetherside({ dir: wingDir });
-          return output.default();
+          let arrow;
+          if (x > 100)
+            arrow = output.right();
+          else if (x < 100)
+            arrow = output.left();
+          if (arrow === undefined)
+            return output.default();
+          return output.tether({ arrow: arrow });
         }
       },
       outputStrings: {
-        tetherside: {
-          en: 'Point ${dir} Tether Away',
-          de: 'Zeige ${dir} Verbindung weg',
-          fr: 'Orientez le lien à l\'extérieur - ${dir}',
-          ja: '線伸ばし ${dir}',
-          cn: '向 ${dir} 外侧引导',
-          ko: '줄 땡겨요: ${dir}',
-        },
         default: {
           en: 'Point Tether Away',
           de: 'Zeige Verbindung weg',
@@ -207,28 +188,12 @@ Options.Triggers.push({
           cn: '向外引导',
           ko: '줄 땡겨요',
         },
-        west: {
-          en: 'Left/West',
-          de: 'Links/Westen',
-          fr: 'Gauche/Ouest',
-          ja: '左/西へ',
-          cn: '左(西)',
-          ko: '왼쪽/서쪽',
-        },
-        east: {
-          en: 'Right/East',
-          de: 'Rechts/Osten',
-          fr: 'Droite/Est',
-          ja: '右/東へ',
-          cn: '右(东)',
-          ko: '오른쪽/동쪽',
-        },
-        atether: {
+        tether: {
           en: 'Point Tether Away: ${arrow}${arrow}',
           ko: '줄 땡겨요: ${arrow}${arrow}',
         },
-        aleft: Outputs.arrowW,
-        aright: Outputs.arrowE,
+        left: Outputs.arrowW,
+        right: Outputs.arrowE,
       },
     },
     {
@@ -470,22 +435,12 @@ Options.Triggers.push({
         const duration = parseFloat(matches.duration);
         if (duration > data.daemonicBondsTime) {
           data.bondsSecondMechanic = 'stack';
-          if (data.options.AutumnStyle)
-            return output.spreadThenStack({
-              player1: data.party.jobAbbr(data.tetradaemonicTarget[0]),
-              player2: data.party.jobAbbr(data.tetradaemonicTarget[1]),
-            });
           return output.spreadThenStack({
             player1: data.party.member(data.tetradaemonicTarget[0]),
             player2: data.party.member(data.tetradaemonicTarget[1]),
           });
         }
         data.bondsSecondMechanic = 'spread';
-        if (data.options.AutumnStyle)
-          return output.stackThenSpread({
-            player1: data.party.jobAbbr(data.tetradaemonicTarget[0]),
-            player2: data.party.jobAbbr(data.tetradaemonicTarget[1]),
-          });
         return output.stackThenSpread({
           player1: data.party.member(data.tetradaemonicTarget[0]),
           player2: data.party.member(data.tetradaemonicTarget[1]),
@@ -520,11 +475,6 @@ Options.Triggers.push({
       alertText: (data, _matches, output) => {
         // If this is undefined, then this is the second mechanic and will be called out elsewhere.
         // We can't make this a `condition` as this is not known until after some delay.
-        if (data.options.AutumnStyle && data.bondsSecondMechanic === 'stack')
-          return output.spreadThenStack({
-            player1: data.party.jobAbbr(data.tetradaemonicTarget[0]),
-            player2: data.party.jobAbbr(data.tetradaemonicTarget[1]),
-          });
         if (data.bondsSecondMechanic === 'stack')
           return output.spreadThenStack({
             player1: data.party.member(data.tetradaemonicTarget[0]),
@@ -584,11 +534,6 @@ Options.Triggers.push({
       suppressSeconds: 5,
       alertText: (data, _matches, output) => {
         // If this is undefined, then this is the second mechanic and will be called out elsewhere.
-        if (data.options.AutumnStyle && data.bondsSecondMechanic === 'spread')
-          return output.stackThenSpread({
-            player1: data.party.jobAbbr(data.tetradaemonicTarget[0]),
-            player2: data.party.jobAbbr(data.tetradaemonicTarget[1]),
-          });
         if (data.bondsSecondMechanic === 'spread')
           return output.stackThenSpread({
             player1: data.party.member(data.tetradaemonicTarget[0]),
@@ -620,11 +565,6 @@ Options.Triggers.push({
           return output.spread();
         if (data.bondsSecondMechanic === 'partners')
           return output.partners();
-        if (data.options.AutumnStyle && data.bondsSecondMechanic === 'stack')
-          return output.stack({
-            player1: data.party.jobAbbr(data.tetradaemonicTarget[0]),
-            player2: data.party.jobAbbr(data.tetradaemonicTarget[1]),
-          });
         if (data.bondsSecondMechanic === 'stack')
           return output.stack({
             player1: data.party.member(data.tetradaemonicTarget[0]),

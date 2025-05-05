@@ -306,23 +306,14 @@ Options.Triggers.push({
         // We know that the swords will land in all 4 corners plus twice in
         // the center areas. Predict the last two swords by removing the
         // ones we've already gotten.
-        const spawns = data.options.AutumnStyle
-          ? [
-            output.arrowNE(),
-            output.arrowNW(),
-            output.arrowSE(),
-            output.arrowSW(),
-            output.middle(),
-            output.middle(),
-          ]
-          : [
-            output.dirNE(),
-            output.dirNW(),
-            output.dirSE(),
-            output.dirSW(),
-            output.middle(),
-            output.middle(),
-          ];
+        const spawns = [
+          output.dirNE(),
+          output.dirNW(),
+          output.dirSE(),
+          output.dirSW(),
+          output.middle(),
+          output.middle(),
+        ];
         const [s4, s5] = spawns.filter((x) => ![s0, s1, s2, s3].includes(x));
         if (
           s0 === undefined || s1 === undefined || s2 === undefined || s3 === undefined ||
@@ -334,14 +325,9 @@ Options.Triggers.push({
         // Therefore, if the first two are not the same, they are not the middle
         // and so the first safe is the middle set of swords (s4, s5).
         const firstSafeIsMiddle = s0 !== s1;
-        if (data.options.AutumnStyle) {
-          if (firstSafeIsMiddle)
-            return output.aMidFirst({ middle: s4, dir1: s0, dir2: s1 });
-          return output.aMidLast({ middle: s0, dir1: s4, dir2: s5 });
-        }
         if (firstSafeIsMiddle)
-          return output.middleFirst({ middle: s4, dir1: s0, dir2: s1 });
-        return output.middleLast({ middle: s0, dir1: s4, dir2: s5 });
+          return output.aMidFirst({ middle: s4, dir1: s0, dir2: s1 });
+        return output.aMidLast({ middle: s0, dir1: s4, dir2: s5 });
       },
       outputStrings: {
         dirNE: Outputs.dirNE,

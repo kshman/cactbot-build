@@ -11,8 +11,6 @@ const headmarkerMap = {
   // The Dark Beckons, but also Umbral Rays
   stack: '003E',
 };
-const centerX = 100;
-const centerY = 100;
 Options.Triggers.push({
   id: 'TheAbyssalFractureExtreme',
   zoneId: ZoneId.TheAbyssalFractureExtreme,
@@ -141,23 +139,9 @@ Options.Triggers.push({
       id: 'ZeromusEx Visceral Whirl NE Safe',
       type: 'StartsUsing',
       netRegex: { id: '8B43', source: 'Zeromus', capture: false },
-      infoText: (data, _matches, output) => {
-        if (data.options.AutumnStyle)
-          return output.atext();
-        return output.text({ dir1: output.ne(), dir2: output.sw() });
-      },
+      infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
-          en: '${dir1} / ${dir2}',
-          de: '${dir1} / ${dir2}',
-          fr: '${dir1} / ${dir2}',
-          ja: '${dir1} / ${dir2}',
-          cn: '${dir1} / ${dir2}',
-          ko: '${dir1} / ${dir2}',
-        },
-        ne: Outputs.northeast,
-        sw: Outputs.southwest,
-        atext: {
           en: 'Safe: 🡿🡽 (Right)',
           ko: '안전: 🡿🡽 (오른쪽)',
         },
@@ -167,23 +151,9 @@ Options.Triggers.push({
       id: 'ZeromusEx Visceral Whirl NW Safe',
       type: 'StartsUsing',
       netRegex: { id: '8B46', source: 'Zeromus', capture: false },
-      infoText: (data, _matches, output) => {
-        if (data.options.AutumnStyle)
-          return output.atext();
-        return output.text({ dir1: output.nw(), dir2: output.se() });
-      },
+      infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
-          en: '${dir1} / ${dir2}',
-          de: '${dir1} / ${dir2}',
-          fr: '${dir1} / ${dir2}',
-          ja: '${dir1} / ${dir2}',
-          cn: '${dir1} / ${dir2}',
-          ko: '${dir1} / ${dir2}',
-        },
-        nw: Outputs.northwest,
-        se: Outputs.southeast,
-        atext: {
           en: 'Safe: 🡼🡾 (Left)',
           ko: '안전: 🡼🡾 (왼쪽)',
         },
@@ -197,138 +167,9 @@ Options.Triggers.push({
       run: (data) => data.miasmicBlasts = [],
     },
     {
-      id: 'ZeromusEx Miasmic Blast Safe Spots',
-      type: 'StartsUsing',
-      netRegex: { id: '8B49', source: 'Zeromus', capture: true },
-      condition: (data) => !data.options.AutumnStyle,
-      delaySeconds: 0.5,
-      promise: async (data, matches) => {
-        const combatants = (await callOverlayHandler({
-          call: 'getCombatants',
-          ids: [parseInt(matches.sourceId, 16)],
-        })).combatants;
-        if (combatants.length !== 1)
-          return;
-        const combatant = combatants[0];
-        if (combatant === undefined)
-          return;
-        data.miasmicBlasts.push(combatant);
-      },
-      alertText: (data, _matches, output) => {
-        if (data.miasmicBlasts.length !== 3) {
-          return;
-        }
-        // Blasts can spawn center, on cardinals (+/-14 from center), or on intercards (+/-7 from center).
-        // Unsafe spots vary for each of the 9 possible spawn points, but are always the same *relative* to that type.
-        // So apply a fixed set of modifiers based on type, regardless of spawn point, to eliminate unsafe spots.
-        const cardinal16Dirs = [0, 4, 8, 12];
-        const intercard16Dirs = [2, 6, 10, 14];
-        const unsafe16DirModifiers = {
-          cardinal: [-1, 0, 1, 4, 5, 11, 12],
-          intercard: [-2, 0, 2, 3, 8, 13],
-        };
-        // Filter to north half.
-        const validSafeSpots = [
-          'dirNNE',
-          'dirNE',
-          'dirENE',
-          'dirWNW',
-          'dirNW',
-          'dirNNW',
-        ];
-        let possibleSafeSpots = [...validSafeSpots];
-        for (const blast of data.miasmicBlasts) {
-          // special case for center - don't need to find relative dirs, just remove all intercards
-          if (Math.round(blast.PosX) === 100 && Math.round(blast.PosY) === 100)
-            intercard16Dirs.forEach((intercard) =>
-              possibleSafeSpots = possibleSafeSpots.filter((dir) =>
-                dir !== Directions.output16Dir[intercard]
-              )
-            );
-          else {
-            const blastPos16Dir = Directions.xyTo16DirNum(blast.PosX, blast.PosY, centerX, centerY);
-            const relativeUnsafeDirs = cardinal16Dirs.includes(blastPos16Dir)
-              ? unsafe16DirModifiers.cardinal
-              : unsafe16DirModifiers.intercard;
-            for (const relativeUnsafeDir of relativeUnsafeDirs) {
-              const actualUnsafeDir = (16 + blastPos16Dir + relativeUnsafeDir) % 16;
-              possibleSafeSpots = possibleSafeSpots.filter((dir) =>
-                dir !== Directions.output16Dir[actualUnsafeDir]
-              );
-            }
-          }
-        }
-        if (possibleSafeSpots.length !== 1)
-          return output.avoidUnknown();
-        const [safeDir] = possibleSafeSpots;
-        if (safeDir === undefined)
-          return output.avoidUnknown();
-        return output[safeDir]();
-      },
-      outputStrings: {
-        avoidUnknown: {
-          en: 'Avoid Line Cleaves',
-          de: 'Weiche den Linien Cleaves aus',
-          fr: 'Évitez les cleaves en ligne',
-          ja: '直線AOE回避',
-          cn: '远离十字AOE',
-          ko: '직선 장판 피해요',
-        },
-        dirNNE: {
-          en: 'North Wall (NNE/WSW)',
-          de: 'Nördliche Wand (NNO/WSW)',
-          fr: 'Mur Nord (NNE/OSO)',
-          ja: '1時・8時',
-          cn: '右上前方/左下侧边',
-          ko: '1시/8시',
-        },
-        dirNNW: {
-          en: 'North Wall (NNW/ESE)',
-          de: 'Nördliche Wand (NNW/OSO)',
-          fr: 'Mur Nord (NNO/ESE)',
-          ja: '11時・4時',
-          cn: '左上前方/右下侧边',
-          ko: '11시/4시',
-        },
-        dirNE: {
-          en: 'Corners (NE/SW)',
-          de: 'Ecken (NO/SW)',
-          fr: 'Coins (NE/SO)',
-          ja: '隅へ (北東・南西)',
-          cn: '右上/左下角落',
-          ko: '구석 (북동/남서)',
-        },
-        dirNW: {
-          en: 'Corners (NW/SE)',
-          de: 'Ecken (NW/SO)',
-          fr: 'Coins (NO/SE)',
-          ja: '隅へ (北西・南東)',
-          cn: '左上/右下角落',
-          ko: '구석 (북서/남동)',
-        },
-        dirENE: {
-          en: 'East Wall (ENE/SSW)',
-          de: 'Östliche Wand (ONO/SSW)',
-          fr: 'Mur Est (ENE/SSO)',
-          ja: '2時・7時',
-          cn: '右上侧边/左下后方',
-          ko: '2시/7시',
-        },
-        dirWNW: {
-          en: 'West Wall (WNW/SSE)',
-          de: 'Westliche Wand (WNW/SSO)',
-          fr: 'Mur Ouest (ONO/SSE)',
-          ja: '10時・5時',
-          cn: '左上侧边/右下后方',
-          ko: '10시/5시',
-        },
-      },
-    },
-    {
       id: 'ZeromusEx PR Miasmic Blast',
       type: 'StartsUsing',
       netRegex: { id: '8B49', capture: true },
-      condition: (data) => data.options.AutumnStyle,
       delaySeconds: 0.5,
       promise: async (data, matches) => {
         const combatants = (await callOverlayHandler({
@@ -391,12 +232,12 @@ Options.Triggers.push({
           en: 'Safe: ${safe}',
           ko: '안전 마커: ${safe}',
         },
-        WNW: Outputs.cnum4,
-        NW: Outputs.cnum1,
-        NNW: Outputs.cmarkA,
-        NNE: Outputs.cmarkB,
-        NE: Outputs.cnum2,
-        ENE: Outputs.cnum3,
+        WNW: Outputs.aimNW,
+        NW: Outputs.aimNW,
+        NNW: Outputs.aimNW,
+        NNE: Outputs.aimNE,
+        NE: Outputs.aimNE,
+        ENE: Outputs.aimNE,
         unknown: Outputs.unknown,
       },
     },
@@ -417,7 +258,7 @@ Options.Triggers.push({
       delaySeconds: (_data, matches) => parseFloat(matches.duration) - 6,
       durationSeconds: 5,
       alarmText: (data, _matches, output) => {
-        if (!data.options.AutumnStyle || data.forkedPlayers.length !== 2)
+        if (data.forkedPlayers.length !== 2)
           return output.forkedLightning();
         const [p1, p2] = data.forkedPlayers;
         if (p1 === data.me)
@@ -531,28 +372,18 @@ Options.Triggers.push({
       netRegex: { id: '8B3C', source: 'Zeromus', capture: false },
       alarmText: (data, _matches, output) => {
         if (data.me === data.blackHolePlayer)
-          return data.options.AutumnStyle ? output.aHole() : output.blackHole();
+          return output.blackHole();
       },
-      alertText: (data, _matches, output) =>
-        data.options.AutumnStyle ? output.ane() : output.northeast(),
+      alertText: (_data, _matches, output) => output.northeast(),
       run: (data) => delete data.blackHolePlayer,
       outputStrings: {
-        northeast: Outputs.northeast,
-        blackHole: {
-          en: 'East Black Hole on Wall',
-          de: 'Schwarzes Loch an die östliche Wand',
-          fr: 'Trou noir Est sur Mur',
-          ja: '右にブラックホール',
-          cn: '右上放置黑洞',
-          ko: '내게 블랙홀: 오른쪽 벽',
-        },
-        aHole: {
-          en: 'Back Hole on YOU: ②🡺',
-          ko: '내게 블랙홀: ②🡺마커',
-        },
-        ane: {
+        northeast: {
           en: 'Safe: 🡺',
           ko: '안전: 🡺',
+        },
+        blackHole: {
+          en: 'Back Hole on YOU: ②🡺',
+          ko: '내게 블랙홀: ②🡺마커',
         },
       },
     },
@@ -562,28 +393,18 @@ Options.Triggers.push({
       netRegex: { id: '8B3D', source: 'Zeromus', capture: false },
       alarmText: (data, _matches, output) => {
         if (data.me === data.blackHolePlayer)
-          return data.options.AutumnStyle ? output.aHole() : output.blackHole();
+          return output.blackHole();
       },
-      alertText: (data, _matches, output) =>
-        data.options.AutumnStyle ? output.anw() : output.northwest(),
+      alertText: (_data, _matches, output) => output.northwest(),
       run: (data) => delete data.blackHolePlayer,
       outputStrings: {
-        northwest: Outputs.northwest,
-        blackHole: {
-          en: 'West Black Hole on Wall',
-          de: 'Schwarzes Loch an die westliche Wand',
-          fr: 'Trou noir Ouest sur Mur',
-          ja: '左にブラックホール',
-          cn: '左上放置黑洞',
-          ko: '내게 블랙홀: 왼쪽 벽',
-        },
-        aHole: {
-          en: 'Back Hole on YOU홀: 🡸①',
-          ko: '내게 블랙홀: 🡸①마커',
-        },
-        anw: {
+        northwest: {
           en: 'Safe: 🡸',
           ko: '안전: 🡸',
+        },
+        blackHole: {
+          en: 'Back Hole on YOU홀: 🡸①',
+          ko: '내게 블랙홀: 🡸①마커',
         },
       },
     },
@@ -842,7 +663,7 @@ Options.Triggers.push({
         if (data.flowLocation === undefined)
           return output.stack();
         return output[`${data.flowLocation}Stack`]({
-          player: data.party.jobAbbr(matches.target),
+          player: data.party.member(matches.target),
         });
       },
       run: (data) => delete data.flowLocation,
@@ -879,7 +700,6 @@ Options.Triggers.push({
       id: 'ZeromusEx PR Big Bang Enrage',
       type: 'StartsUsing',
       netRegex: { id: '8C1E', capture: false },
-      condition: (data) => data.options.AutumnStyle,
       durationSeconds: 9.7,
       infoText: (_data, _matches, output) => output.text(),
       outputStrings: {

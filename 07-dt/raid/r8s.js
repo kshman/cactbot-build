@@ -1,7 +1,9 @@
+const centerX = 100;
+const centerY = 100;
 const phases = {
   'A3C8': 'pack',
   'A3CB': 'saber',
-  'A3C1': 'moonlight', // Beckon Moonlight
+  'A3C1': 'beckon', // Beckon Moonlight
 };
 const fangPairs = {
   'A39D': 'windPlus',
@@ -12,64 +14,26 @@ const fangPairs = {
 const swStrings = {
   combo: {
     en: '${debuff} ${num}',
+    ja: '(${debuff} ${num}番目)',
     ko: '(${debuff} ${num}번째)',
   },
   now: {
     en: '${debuff} Now!',
+    ja: '今 ${debuff}',
     ko: '지금 문대요: ${debuff}',
   },
   stone: {
     en: 'Stone',
+    ja: '🟡石',
     ko: '🟡돌멩이',
   },
   wind: {
     en: 'Wind',
+    ja: '🟢風',
     ko: '🟢바람',
   },
   unknown: Outputs.unknown,
 };
-const moonStrings = {
-  safe: {
-    en: '${quad}',
-    ko: '${quad}',
-  },
-  saves: {
-    en: '${quad1} => ${quad2}',
-    ko: '${quad1} 🔜 ${quad2}',
-  },
-  ...AutumnDir.stringsAimCross,
-};
-const championStrings = {
-  cw: Outputs.clockwise,
-  ccw: Outputs.counterclockwise,
-  in: Outputs.in,
-  out: Outputs.out,
-  donut: {
-    en: 'Donut',
-    ko: '도넛',
-  },
-  sides: Outputs.sides,
-  mechanics: {
-    en: '(${dir}) ${mech1} => ${mech2} => ${mech3} => ${mech4} => ${mech5}',
-    ko: '(${dir}) ${mech1} 🔜 ${mech2} 🔜 ${mech3} 🔜 ${mech4} 🔜 ${mech5}',
-  },
-  left: Outputs.left,
-  right: Outputs.right,
-  leftSide: {
-    en: 'Left Side',
-    ko: '왼쪽으로',
-  },
-  rightSide: {
-    en: 'Right Side',
-    ko: '오른쪽으로',
-  },
-  dirMechanic: {
-    en: '${dir} ${mech}',
-    ko: '${dir} ${mech}',
-  },
-};
-const centerX = 100;
-const centerY = 100;
 Options.Triggers.push({
   id: 'AacCruiserweightM4Savage',
   zoneId: ZoneId.AacCruiserweightM4Savage,
@@ -80,12 +44,10 @@ Options.Triggers.push({
     gales: 0,
     tpcount: 0,
     tpsurge: 0,
-    bmindex: 0,
+    bmcleaves: 0,
     bmbites: [],
-    tfindex: 0,
-    chindex: 0,
-    platforms: 5,
-    collect: [],
+    heroes: 0,
+    enrage: 5,
   }),
   timelineTriggers: [
     {
@@ -96,19 +58,39 @@ Options.Triggers.push({
       outputStrings: {
         text: {
           en: 'Light Party Platform',
-          ko: '플랫폼에서 4:4',
+          ko: '(담당 플랫폼으로)',
+        },
+      },
+    },
+    {
+      id: 'R8S Avoid Twinbite',
+      regex: /Twinbite/,
+      beforeSeconds: 9,
+      infoText: (data, _matches, output) => {
+        if (Autumn.isTank(data.moks))
+          return output.tank();
+        return output.other();
+      },
+      outputStrings: {
+        tank: {
+          en: 'Tank Buster Platform',
+          ko: '(탱크 버스터 플랫폼으로)',
+        },
+        other: {
+          en: 'Avoid Tank Buster Platform',
+          ko: '(버스터 플랫폼 피해요)',
         },
       },
     },
     {
       id: 'R8S Ultraviolent Positions',
       regex: /Ultraviolent Ray [123]/,
-      beforeSeconds: 8,
+      beforeSeconds: 7,
       infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'UV Positions',
-          ko: 'UV 자리로',
+          ko: '(나란히 나란히)',
         },
       },
     },
@@ -120,7 +102,61 @@ Options.Triggers.push({
       outputStrings: {
         text: {
           en: 'UV Positions',
-          ko: 'UV 자리로',
+          ko: '(나란히 나란히)',
+        },
+      },
+    },
+    {
+      id: 'R8S Mooncleaver Bait',
+      regex: /Mooncleaver$/,
+      beforeSeconds: 11,
+      infoText: (_data, _matches, output) => output.text(),
+      outputStrings: {
+        text: {
+          en: 'Bait Mooncleaver',
+          ko: '(처음 플랫폼으로)',
+        },
+      },
+    },
+    {
+      id: 'R8S Rise of the Positions',
+      regex: /Rise of the Hunter\'s Blade/,
+      beforeSeconds: 14,
+      infoText: (data, _matches, output) => {
+        const extra = Autumn.isTank(data.moks)
+          ? output.tank()
+          : Autumn.isHealer(data.moks)
+          ? output.healer()
+          : output.dps();
+        return output.text({ extra: extra });
+      },
+      outputStrings: {
+        text: {
+          en: 'Rise Positions - ${extra}',
+          ko: '(줄다리기 ${extra} 플랫폼으로)',
+        },
+        tank: {
+          en: 'Left top',
+          ko: '왼쪽 위🡼',
+        },
+        healer: {
+          en: 'Base',
+          ko: '처음🡻',
+        },
+        dps: {
+          en: 'Right',
+          ko: '오른쪽🡺',
+        },
+      },
+    },
+    {
+      id: 'R8S Howling Eight Initial Position',
+      regex: /Ultraviolent Ray 4/,
+      infoText: (_data, _matches, output) => output.text(),
+      outputStrings: {
+        text: {
+          en: 'Howling Eight Position',
+          ko: '(처음 플랫폼으로)',
         },
       },
     },
@@ -138,11 +174,9 @@ Options.Triggers.push({
       type: 'Ability',
       netRegex: { id: 'A82D', source: 'Howling Blade', capture: false },
       suppressSeconds: 1,
-      run: (data) => {
-        data.phase = '2nd';
-        data.collect = [];
-      },
+      run: (data) => data.phase = '2nd',
     },
+    // //////////////////// 전반부 ////////////////////
     {
       id: 'R8S Extraplanar Pursuit',
       type: 'StartsUsing',
@@ -162,18 +196,22 @@ Options.Triggers.push({
       outputStrings: {
         windPlus: {
           en: 'In + Cardinal + Partners',
+          ja: '➕内側 + ペア',
           ko: '➕안으로 + 둘이 페어',
         },
         windCross: {
           en: 'In + Intercards + Partners',
+          ja: '❌内側 + ペア',
           ko: '❌안으로 + 둘이 페어',
         },
         stonePlus: {
           en: 'Out + Cardinal + Protean',
+          ja: '➕外側 + 散会',
           ko: '➕바깥으로 + 맡은 자리로',
         },
         stoneCross: {
           en: 'Out + InterCards + Protean',
+          ja: '❌外側 + 散会',
           ko: '❌바깥으로 + 맡은 자리로',
         },
       },
@@ -191,10 +229,12 @@ Options.Triggers.push({
       outputStrings: {
         in: {
           en: 'In',
+          ja: 'ボスに近づく',
           ko: '보스랑 붙어요',
         },
         out: {
           en: 'Out',
+          ja: 'ボスから離れる',
           ko: '보스 멀리멀리',
         },
       },
@@ -220,20 +260,21 @@ Options.Triggers.push({
       outputStrings: {
         left: {
           en: '<== Clockwise',
+          ja: '❰❰❰時計回り',
           ko: '❰❰❰왼쪽으로',
         },
         right: {
           en: 'Counterclockwise ==>',
+          ja: '反時計回り❱❱❱',
           ko: '오른쪽으로❱❱❱',
         },
       },
     },
     {
       id: 'R8S Aero III',
-      // Happens twice, but Prowling Gale occurs simultaneously on the second one
       type: 'StartsUsing',
       netRegex: { id: 'A3B7', source: 'Howling Blade', capture: false },
-      condition: Conditions.notAutumnOnly(),
+      condition: AutumnCond.notOnlyAutumn(),
       suppressSeconds: 16,
       response: Responses.knockback(),
     },
@@ -247,6 +288,7 @@ Options.Triggers.push({
       outputStrings: {
         puddle: {
           en: 'Puddle on YOU',
+          ja: '自分にAOE',
           ko: '내게 장판!',
         },
       },
@@ -265,35 +307,14 @@ Options.Triggers.push({
       outputStrings: {
         knockbackTether: {
           en: 'Knockback Tether',
-          ko: '줄 당겨요',
+          ja: 'ノックバック + 扇',
+          ko: '줄처리 넉백',
         },
         knockbackTowers: {
           en: 'Knockback Towers',
-          ko: '타워로 넉백',
+          ja: 'ノックバック + 塔踏み',
+          ko: '타워 밟기 넉백',
         },
-      },
-    },
-    {
-      id: 'R8S Terrestrial Titans Towerfall Collect',
-      // A3C5 Terrestrial Titans
-      // A3C6 Towerfall
-      // East/West Towers are (93, 100) and (107, 100)
-      // North/South Towers are (100, 93) and (100, 107)
-      type: 'StartsUsingExtra',
-      netRegex: { id: 'A3C5', capture: true },
-      suppressSeconds: 1,
-      run: (data, matches) => {
-        const getTowerFallSafe = (hdg) =>
-          hdg === 1 || hdg === 5 ? 'SENW' : hdg === 3 || hdg === 7 ? 'NESW' : undefined;
-        const x = parseFloat(matches.x);
-        const y = parseFloat(matches.y);
-        const hdg = AutumnDir.hdgConv8(matches.heading);
-        // towerDirs will be undefined if we receive bad coords
-        if ((x >= 92 && x <= 94) || (x >= 106 && x <= 108))
-          data.twdir = 'EW';
-        else if ((y >= 92 && y <= 94) || (y >= 106 && y <= 108))
-          data.twdir = 'NS';
-        data.twsafe = getTowerFallSafe(hdg);
       },
     },
     {
@@ -301,47 +322,6 @@ Options.Triggers.push({
       type: 'StartsUsing',
       netRegex: { id: 'A3C7', source: 'Howling Blade', capture: false },
       response: Responses.aoe(),
-    },
-    {
-      id: 'R8S Terrestrial Titans Safe Spot',
-      // Gleaming Fangs are at:
-      // NS Towers: (108, 100) E, (92, 100) W
-      // EW Towers: (100, 92) N, (100, 108) S
-      type: 'StatusEffect',
-      netRegex: { data3: '036D0808', target: 'Gleaming Fang', capture: true },
-      condition: (_data, matches) => {
-        const hdg = AutumnDir.hdgConv8(matches.heading);
-        // Only trigger on the actor targetting intercards
-        return hdg === 1 || hdg === 3 || hdg === 5 || hdg === 7;
-      },
-      durationSeconds: 4.5,
-      infoText: (data, matches, output) => {
-        if (data.twsafe === undefined)
-          return;
-        const x = parseFloat(matches.x);
-        const y = parseFloat(matches.y);
-        const fall = data.twsafe;
-        // Assume towerDirs from Fang if received bad coords for towers
-        if (data.twdir === undefined) {
-          data.twdir = (y > 99 && y < 100) ? 'NS' : (x > 99 && x < 101) ? 'EW' : undefined;
-          if (data.twdir === undefined)
-            return;
-        }
-        const dirs = data.twdir;
-        // 이게 뭔가 이상하면 x >< 요기 부호가 바꿔보자
-        if (fall === 'SENW') {
-          if ((dirs === 'EW' && y < 100) || (dirs === 'NS' && x < 100))
-            return output['dirNW']();
-          if ((dirs === 'EW' && y > 100) || (dirs === 'NS' && x > 100))
-            return output['dirSE']();
-        } else if (fall === 'NESW') {
-          if ((dirs === 'EW' && y < 100) || (dirs === 'NS' && x > 100))
-            return output['dirNE']();
-          if ((dirs === 'EW' && y > 100) || (dirs === 'NS' && x < 100))
-            return output['dirSW']();
-        }
-      },
-      outputStrings: AutumnDir.stringsAim,
     },
     {
       id: 'R8S Tracking Tremors',
@@ -353,7 +333,6 @@ Options.Triggers.push({
         text: {
           en: 'Stack x8',
           ja: '頭割り x8',
-          cn: '8次分摊',
           ko: '뭉쳐욧 x8',
         },
       },
@@ -366,12 +345,8 @@ Options.Triggers.push({
     },
     {
       id: 'R8S Howling Havoc',
-      // There are two additional casts, but only the Wolf Of Stone cast one (A3DD) does damage
-      // A3DC Howling Havoc from Wolf of Stone self-cast
-      // A3DB Howling Havoc from Wolf of Wind self-cast
       type: 'StartsUsing',
       netRegex: { id: 'A3DD', source: 'Wolf Of Stone', capture: true },
-      // 4.7s castTime
       delaySeconds: (_data, matches) => parseFloat(matches.castTime) - 2,
       response: Responses.aoe(),
     },
@@ -384,10 +359,12 @@ Options.Triggers.push({
       outputStrings: {
         wind: {
           en: 'Green side',
+          ja: '🟩風の方',
           ko: '🟩바람으로',
         },
         stone: {
           en: 'Yellow side',
+          ja: '🟨石の方',
           ko: '🟨돌멩이로',
         },
       },
@@ -403,11 +380,11 @@ Options.Triggers.push({
         // 1128 = Wind (Green Sphere) Debuff
         const time = parseFloat(matches.duration);
         data.tpnum = time < 22 ? 1 : time < 38 ? 2 : 3;
-        data.tpswv = matches.effectId === '1127' ? 'stone' : 'wind';
+        data.tpvalue = matches.effectId === '1127' ? 'stone' : 'wind';
       },
       durationSeconds: 5,
       infoText: (data, _matches, output) => {
-        const debuff = output[data.tpswv ?? 'unknown']();
+        const debuff = output[data.tpvalue ?? 'unknown']();
         return output.combo({ debuff: debuff, num: data.tpnum });
       },
       outputStrings: swStrings,
@@ -426,7 +403,7 @@ Options.Triggers.push({
       netRegex: { effectId: 'B7D', capture: true },
       // Magic Vulnerabilities from Pack Predation and Alpha Wind are 0.96s
       condition: (data, matches) =>
-        data.phase === 'pack' && data.tpswv === 'wind' && parseFloat(matches.duration) < 2,
+        data.phase === 'pack' && data.tpvalue === 'wind' && parseFloat(matches.duration) < 2,
       delaySeconds: (_data, matches) => parseFloat(matches.duration) - 0.5,
       suppressSeconds: 1,
       alertText: (data, _matches, output) => {
@@ -441,8 +418,8 @@ Options.Triggers.push({
       netRegex: { effectId: 'B7D', capture: true },
       // Timing based on Tether and Magic Vulnerability (3.96s)
       condition: (data, matches) =>
-        data.phase === 'pack' && data.tpswv === 'stone' && parseFloat(matches.duration) > 2,
-      preRun: (data) => data.tpsurge = data.tpsurge + 1,
+        data.phase === 'pack' && data.tpvalue === 'stone' && parseFloat(matches.duration) > 2,
+      preRun: (data) => data.tpsurge++,
       delaySeconds: (_data, matches) => parseFloat(matches.duration) - 0.5,
       suppressSeconds: 1,
       alertText: (data, _matches, output) => {
@@ -473,7 +450,7 @@ Options.Triggers.push({
       run: (data) => data.spread = true,
     },
     {
-      id: 'R8S Terrestrial Rage Spread/Stack',
+      id: 'R8S Terrestrial Rage Stack',
       type: 'HeadMarker',
       netRegex: { id: '005D', capture: false },
       condition: (data) => data.phase === 'saber',
@@ -490,7 +467,7 @@ Options.Triggers.push({
       id: 'R8S Shadowchase',
       type: 'StartsUsing',
       netRegex: { id: 'A3BC', source: 'Howling Blade', capture: true },
-      delaySeconds: (_data, matches) => parseFloat(matches.castTime) - 0.5,
+      delaySeconds: (_data, matches) => parseFloat(matches.castTime) - 1,
       durationSeconds: 5.5,
       alertText: (data, _matches, output) => {
         const mech = data.spread ? output.stack() : output.spread();
@@ -499,6 +476,7 @@ Options.Triggers.push({
       outputStrings: {
         move: {
           en: 'Move! => ${mech}',
+          ja: '回避! 🔜 ${mech}',
           ko: '피해요! 🔜 ${mech}',
         },
         spread: Outputs.positions,
@@ -506,26 +484,7 @@ Options.Triggers.push({
       },
     },
     {
-      id: 'R8S Shadowchase Rotate',
-      // Call to move behind Dragon Head after clones dash
-      type: 'StartsUsing',
-      netRegex: { id: 'A3BD', source: 'Howling Blade', capture: true },
-      condition: Conditions.notAutumnOnly(),
-      delaySeconds: (_data, matches) => parseFloat(matches.castTime),
-      suppressSeconds: 1,
-      infoText: (_data, _matches, output) => {
-        return output.rotate();
-      },
-      outputStrings: {
-        rotate: {
-          en: 'Rotate',
-          ko: '옆에 용머리쪽으로',
-        },
-      },
-    },
-    {
       id: 'R8S Weal of Stone',
-      // TODO: Call direction that the heads are firing from, needs OverlayPlugin
       type: 'StartsUsing',
       netRegex: { id: 'A78E', source: 'Wolf of Stone', capture: false },
       suppressSeconds: 1,
@@ -534,18 +493,17 @@ Options.Triggers.push({
       outputStrings: {
         lines: {
           en: 'Lines',
+          ja: '直線AOE',
           ko: '직선 장판',
         },
       },
     },
     {
-      id: 'R8S Beckon Moonlight Quadrants',
+      id: 'R8S Beckon Moonlight',
       type: 'Ability',
-      // A3E0 => Right cleave self-cast
-      // A3E1 => Left cleave self-cast
       netRegex: { id: ['A3E0', 'A3E1'], source: 'Moonlit Shadow', capture: true },
       delaySeconds: 0.1,
-      durationSeconds: (data) => data.bmbites.length < 2 ? 2 : 10,
+      // durationSeconds: (data) => data.bmbites.length < 2 ? 2 : 10,
       promise: async (data, matches) => {
         const actors = (await callOverlayHandler({
           call: 'getCombatants',
@@ -555,8 +513,6 @@ Options.Triggers.push({
         if (actors.length !== 1 || actor === undefined)
           return;
         const num = AutumnDir.xyToNum8(actor.PosX, actor.PosY, centerX, centerY);
-        // Moonbeam's Bite (A3C2 Left / A3C3 Right) half-room cleaves
-        // Defining the cleaved side
         if (matches.id === 'A3E0') {
           const ccw = num === 0 ? 6 : num - 2;
           data.bmbites.push(ccw);
@@ -566,55 +522,43 @@ Options.Triggers.push({
         }
       },
       infoText: (data, _matches, output) => {
-        if (data.bmbites.length === 1 || data.bmbites.length === 3)
+        if (data.bmbites.length !== 2)
           return;
-        const cquad = [1, 3, 5, 7];
-        const beam1 = data.bmbites[0] ?? -1;
-        const beam2 = data.bmbites[1] ?? -1;
-        let safe1 = cquad.filter((q) => q !== beam1 + 1);
-        safe1 = safe1.filter((q) => q !== (beam1 === 0 ? 7 : beam1 - 1));
-        safe1 = safe1.filter((q) => q !== beam2 + 1);
-        safe1 = safe1.filter((q) => q !== (beam2 === 0 ? 7 : beam2 - 1));
-        // Early output for first two
-        if (data.bmbites.length === 2) {
-          if (safe1.length !== 1 || safe1[0] === undefined)
-            return;
-          const q = AutumnDir.dirFromNum(safe1[0] ?? -1);
-          return output.safe({ quad: output[q]() });
-        }
-        const beam3 = data.bmbites[2] ?? -1;
-        const beam4 = data.bmbites[3] ?? -1;
-        let safe2 = cquad.filter((q) => q !== beam3 + 1);
-        safe2 = safe2.filter((q) => q !== (beam3 === 0 ? 7 : beam3 - 1));
-        safe2 = safe2.filter((q) => q !== beam4 + 1);
-        safe2 = safe2.filter((q) => q !== (beam4 === 0 ? 7 : beam4 - 1));
-        if (safe1[0] === undefined || safe2[0] === undefined)
+        const b1 = data.bmbites[0] ?? -1;
+        const b2 = data.bmbites[1] ?? -1;
+        let safe = [1, 3, 5, 7].filter((q) => q !== b1 + 1);
+        safe = safe.filter((q) => q !== (b1 === 0 ? 7 : b1 - 1));
+        safe = safe.filter((q) => q !== b2 + 1);
+        safe = safe.filter((q) => q !== (b2 === 0 ? 7 : b2 - 1));
+        if (safe.length !== 1 || safe[0] === undefined)
           return;
-        if (safe1.length !== 1)
-          return;
-        if (safe2.length !== 1)
-          return;
-        const q1 = output[AutumnDir.dirFromNum(safe1[0] ?? -1)]();
-        data.bmquad = output[AutumnDir.dirFromNum(safe2[0] ?? -1)]();
-        return output.saves({ quad1: q1, quad2: data.bmquad });
+        const q = AutumnDir.dirFromNum(safe[0] ?? -1);
+        return output.safe({ quad: output[q]() });
       },
-      outputStrings: moonStrings,
+      outputStrings: {
+        safe: {
+          en: '${quad}',
+          ja: '${quad}',
+          ko: '${quad}',
+        },
+        ...AutumnDir.stringsAimCross,
+      },
     },
     {
-      id: 'R8S Beckon Moonlight Spread Collect',
+      id: 'R8S Beckon Moonlight Spread',
       type: 'HeadMarker',
       netRegex: { id: '008B' },
-      condition: (data, matches) => data.phase === 'moonlight' && data.me === matches.target,
+      condition: (data, matches) => data.phase === 'beckon' && data.me === matches.target,
       run: (data) => data.spread = true,
     },
     {
-      id: 'R8S Beckon Moonlight Spread/Stack',
+      id: 'R8S Beckon Moonlight Stack',
       type: 'HeadMarker',
       netRegex: { id: '005D', capture: false },
-      condition: (data) => data.phase === 'moonlight',
+      condition: (data) => data.phase === 'beckon',
       delaySeconds: 0.1,
       durationSeconds: 4.5,
-      suppressSeconds: 1,
+      suppressSeconds: 10,
       alertText: (data, _matches, output) => data.spread ? output.spread() : output.stack(),
       run: (data) => data.spread = undefined,
       outputStrings: {
@@ -623,33 +567,36 @@ Options.Triggers.push({
       },
     },
     {
-      id: 'R8S Beckon Moonlight Quadrant Two',
+      id: 'R8S Beckon Moonlight Cleave',
       type: 'StartsUsing',
-      // A3C2 => Moonbeam's Bite dash with Left cleave
-      // A3C3 => Moonbeam's Bite dash with Right cleave
       netRegex: { id: ['A3C2', 'A3C3'], source: 'Moonlit Shadow', capture: true },
-      condition: (data) => {
-        data.bmindex++;
-        return data.bmindex === 2;
-      },
       delaySeconds: (_data, matches) => parseFloat(matches.castTime),
-      infoText: (data, _matches, output) => output.safe({ quad: data.bmquad }),
-      outputStrings: moonStrings,
+      durationSeconds: 3,
+      alertText: (data, _matches, output) => {
+        data.bmcleaves++;
+        if (data.bmcleaves === 3)
+          return data.spread ? output.spread() : output.stack();
+      },
+      outputStrings: {
+        spread: Outputs.positions,
+        stack: Outputs.stacks,
+      },
     },
     {
       id: 'R8S Weal of Stone Cardinals',
-      // This appears to always be cardinals safe
       type: 'StartsUsing',
       netRegex: { id: 'A792', source: 'Wolf of Stone', capture: false },
       suppressSeconds: 1,
-      infoText: (_data, _matches, output) => output.cardinals(),
+      infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
-        cardinals: Outputs.cardinals,
+        text: {
+          en: 'Cardinals',
+          ja: '竜の頭、十字回避',
+          ko: '용머리! 십자로',
+        },
       },
     },
-    // Phase 2
-    // TODO: Timeline based callout for light parties for Quake III
-    // TODO: Timeline base callout for mooncleaver bait
+    // //////////////////// 후반부 ////////////////////
     {
       id: 'R8S Quake III',
       type: 'StartsUsing',
@@ -660,20 +607,32 @@ Options.Triggers.push({
       },
     },
     {
-      // headmarkers with casts:
-      // A45D (Ultraviolent Ray)
-      // TODO: Determine platform to move to based on player positions/role?
+      id: 'R8S Mooncleaver',
+      type: 'StartsUsing',
+      netRegex: { id: 'A465', source: 'Howling Blade', capture: false },
+      infoText: (_data, _matches, output) => output.changePlatform(),
+      outputStrings: {
+        changePlatform: {
+          en: 'Change Platform',
+          ja: '別のプラットフォームへ',
+          ko: '다른 플랫폼으로',
+        },
+      },
+    },
+    {
       id: 'R8S Ultraviolent Ray Target',
       type: 'HeadMarker',
       netRegex: { id: '000E' },
       condition: Conditions.targetIsYou(),
-      infoText: (_data, _matches, output) => {
+      durationSeconds: 3,
+      alertText: (_data, _matches, output) => {
         return output.uvRayOnYou();
       },
       outputStrings: {
         uvRayOnYou: {
           en: 'UV Ray on YOU',
-          ko: '내게 UV레이',
+          ja: '自分に❄️レイ',
+          ko: '내게 ❄️레이저가!',
         },
       },
     },
@@ -685,412 +644,174 @@ Options.Triggers.push({
     },
     {
       id: 'R8S Fanged Maw/Perimeter Collect',
-      // A463 Fanged Maw (In cleave)
-      // A464 Fanged Perimeter (Out cleave)
       type: 'StartsUsing',
       netRegex: { id: ['A463', 'A464'], source: 'Gleaming Fang', capture: true },
-      run: (data, matches) => data.hblow = matches.id === 'A463' ? 'out' : 'in',
+      run: (data, matches) => data.hfang = matches.id === 'A463' ? 'out' : 'in',
     },
     {
       id: 'R8S Hero\'s Blow',
-      // Has two casts
-      // A45F for Hero's Blow Left cleave
-      // A460 for Hero's Blow Left cleave damage
-      // A461 Hero's Blow Right cleave
-      // A462 Hero's Blow Right cleave damage
-      // Hero's Blow targets a player, the player could be anywhere
-      // Call relative to boss facing
       type: 'StartsUsing',
       netRegex: { id: ['A45F', 'A461'], source: 'Howling Blade', capture: true },
       delaySeconds: 0.3,
-      promise: async (data, matches) => {
-        const actors = (await callOverlayHandler({
-          call: 'getCombatants',
-          ids: [parseInt(matches.sourceId, 16)],
-        })).combatants;
-        const actor = actors[0];
-        if (actors.length !== 1 || actor === undefined)
-          return;
-        data.hsafe = matches.id === 'A45F'
-          ? Math.abs(AutumnDir.hdgNum8(actor.Heading) - 4) % 16
-          : (AutumnDir.hdgNum8(actor.Heading) + 4) % 16;
+      infoText: (data, matches, output) => {
+        const inout = output[data.hfang ?? 'unknown']();
+        const dir = matches.id === 'A45F' ? 'right' : 'left';
+        return output.text({ inout: inout, dir: output[dir]() });
       },
-      infoText: (data, _matches, output) => {
-        const inout = output[data.hblow ?? 'unknown']();
-        const dir = output[AutumnDir.dirFromNum(data.hsafe ?? -1)]();
-        return output.text({ inout: inout, dir: dir });
-      },
+      run: (data) => data.hsafe = undefined,
       outputStrings: {
         in: Outputs.in,
         out: Outputs.out,
+        left: Outputs.arrowW,
+        right: Outputs.arrowE,
         text: {
           en: '${inout} + ${dir}',
-          ko: '${inout} + ${dir}',
+          ja: '${dir}${inout}',
+          ko: '${dir}${inout}',
         },
-        unknown: Outputs.unknown,
-        ...AutumnDir.stringsAim,
       },
     },
     {
-      // headmarkers with casts:
-      // A467 (Elemental Purge)
-      // A468 (Aerotemporal Blast) on one random non-tank
-      // A469 (Geotemporal Blast) on one Tank
-      id: 'R8S Elemental Purge Targets',
+      id: 'R8S Ultraviolent Ray 4',
+      type: 'Ability',
+      netRegex: { id: ['A45F', 'A461'], source: 'Howling Blade', capture: false },
+      durationSeconds: 4,
+      alertText: (data, _matches, output) => {
+        data.heroes++;
+        if (data.heroes === 2)
+          return output.text();
+      },
+      outputStrings: {
+        text: {
+          en: 'UV Positions',
+          ja: '担当プラットフォームへ',
+          ko: '담당 플랫폼으로! (곧 나란히)',
+        },
+      },
+    },
+    {
+      id: 'R8S Elemental Purge Tank',
       type: 'HeadMarker',
       netRegex: { id: '0017' },
       condition: (data) => data.phase === '2nd',
       infoText: (data, matches, output) => {
-        data.collect.push(matches.target);
-        if (data.collect.length < 2)
+        // 블루메 친화적이지 않음
+        const m = data.party.member(matches.target);
+        if (m.role_ !== 'tank')
           return;
-        const name1 = data.party.member(data.collect[0]);
-        const name2 = data.party.member(data.collect[1]);
-        return output.purgeOnPlayers({ player1: name1.jobAbbr, player2: name2.jobAbbr });
-      },
-      run: (data) => {
-        if (data.collect.length >= 2)
-          data.collect = [];
+        if (!Autumn.isTank(data.moks))
+          return output.purge({ target: m });
+        if (data.me === matches.target)
+          return output.itsme();
+        return output.provoke();
       },
       outputStrings: {
-        purgeOnPlayers: {
-          en: 'Elemental Purge on ${player1} and ${player2}',
-          ko: '퍼지: ${player1}, ${player2}',
+        purge: {
+          en: 'Purge: ${target}',
+          ja: 'パージ: ${target}',
+          ko: '퍼지: ${target}',
+        },
+        itsme: {
+          en: 'Purge on YOU',
+          ja: '(自分にパージ、シャク)',
+          ko: '(내게 퍼지! 헤이트 넘겨요)',
+        },
+        provoke: {
+          en: '(Provoke)',
+          ja: '(挑発)',
+          ko: '(프로보크)',
         },
       },
     },
     {
-      id: 'R8S Twofold Tempest Initial Tether',
-      type: 'Tether',
-      netRegex: { id: '0054', capture: true },
-      suppressSeconds: 50,
-      promise: async (data, matches) => {
-        const actors = (await callOverlayHandler({
-          call: 'getCombatants',
-          ids: [parseInt(matches.sourceId, 16)],
-        })).combatants;
-        const actor = actors[0];
-        if (actors.length !== 1 || actor === undefined)
-          return;
-        const northTwoPlatforms = 94;
-        const dirNS = actor.PosY < northTwoPlatforms ? 'N' : 'S';
-        const dirEW = actor.PosX > centerX ? 'E' : 'W';
-        if (dirNS === 'N' && dirEW === 'E')
-          data.tfdir = 'dirNE';
-        else if (dirNS === 'S' && dirEW === 'E')
-          data.tfdir = 'dirSE';
-        else if (dirNS === 'S' && dirEW === 'W')
-          data.tfdir = 'dirSW';
-        else if (dirNS === 'N' && dirEW === 'W')
-          data.tfdir = 'dirNW';
-      },
-      infoText: (data, _matches, output) => {
-        // Default starting tether locations
-        const startingDir1 = 'dirSE';
-        const startingDir2 = 'dirSW';
-        const initialDir = data.tfdir ?? 'unknown';
-        switch (initialDir) {
-          case startingDir1:
-          case startingDir2:
-            if (data.twofold)
-              return output.tetherOnYou();
-            return output.tetherOnDir({ dir: output[initialDir]() });
-          case 'dirNE':
-            if (data.twofold)
-              return output.passTetherDir({ dir: output[startingDir1]() });
-            return output.tetherOnDir({ dir: output[startingDir1]() });
-          case 'dirNW':
-            if (data.twofold)
-              return output.passTetherDir({ dir: output[startingDir2]() });
-            return output.tetherOnDir({ dir: output[startingDir2]() });
-          case 'unknown':
-            return output.tetherOnDir({ dir: output['unknown']() });
-        }
-      },
-      run: (data) => {
-        // Set initialDir if pass was needed
-        if (data.tfdir === 'dirNE')
-          data.tfdir = 'dirSE';
-        if (data.tfdir === 'dirNW')
-          data.tfdir = 'dirSW';
-      },
+      id: 'R8S Prowling Gale Pair',
+      type: 'StartsUsing',
+      netRegex: { id: 'A46E', source: 'Howling Blade', capture: false },
+      condition: (data) => data.phase === '2nd',
+      infoText: (_data, _matches, output) => output.towers(),
       outputStrings: {
-        passTetherDir: {
-          en: 'Pass Tether to ${dir}',
-          ko: '줄 넘겨요: ${dir}',
+        towers: {
+          en: 'Towers',
+          ja: 'まもなくペア',
+          ko: '페어 준비! 위치로',
         },
-        tetherOnYou: {
-          en: 'Tether on YOU',
-          ko: '내게 줄',
-        },
-        tetherOnDir: {
-          en: 'Tether on ${dir}',
-          ko: '줄: ${dir}',
-        },
-        ...AutumnDir.stringsAimCross,
       },
     },
     {
-      id: 'R8S Twofold Tempest Tether Pass',
-      // Call pass after the puddle has been dropped
-      type: 'Ability',
-      netRegex: { id: 'A472', source: 'Howling Blade', capture: false },
-      condition: (data) => data.twofold,
+      id: 'R8S Twofold Preparation',
+      type: 'StartsUsing',
+      netRegex: { id: 'A46F', source: 'Howling Blade' },
+      condition: (data) => data.phase === '2nd',
+      delaySeconds: (_data, matches) => parseFloat(matches.castTime) - 1.5,
+      durationSeconds: 3,
       suppressSeconds: 1,
-      infoText: (data, _matches, output) => {
-        if (data.twofold) {
-          if (data.tfdir === 'unknown')
-            return output.passTether();
-          if (data.tfindex === 1) {
-            const passDir = data.tfdir === 'dirSE' ? 'dirNE' : 'dirNW';
-            return output.passTetherDir({ dir: output[passDir]() });
-          }
-          if (data.tfindex === 2) {
-            const passDir = data.tfdir === 'dirSE' ? 'dirNW' : 'dirNE';
-            return output.passTetherDir({ dir: output[passDir]() });
-          }
-          if (data.tfindex === 3) {
-            const passDir = data.tfdir === 'dirSE' ? 'dirSW' : 'dirSE';
-            return output.passTetherDir({ dir: output[passDir]() });
-          }
-        }
-        if (data.tfdir === 'unknown')
-          return output.tetherOnDir({ dir: Outputs.unknown });
-        if (data.tfindex === 1) {
-          const passDir = data.tfdir === 'dirSE' ? 'dirNE' : 'dirNW';
-          return output.tetherOnDir({ dir: output[passDir]() });
-        }
-        if (data.tfindex === 2) {
-          const passDir = data.tfdir === 'dirSE' ? 'dirNW' : 'dirNE';
-          return output.tetherOnDir({ dir: output[passDir]() });
-        }
-        if (data.tfindex === 3) {
-          const passDir = data.tfdir === 'dirSE' ? 'dirSW' : 'dirSE';
-          return output.tetherOnDir({ dir: output[passDir]() });
-        }
-      },
+      alertText: (_data, _matches, output) => output.move(),
       outputStrings: {
-        passTether: {
-          en: 'Pass Tether',
-          ko: '줄 넘겨요',
-        },
-        passTetherDir: {
-          en: 'Pass Tether ${dir}',
-          ko: '줄 넘겨요: ${dir}',
-        },
-        tetherOnDir: {
-          en: 'Tether On ${dir}',
-          ko: '줄: ${dir}',
-        },
-        ...AutumnDir.stringsAimCross,
-      },
-    },
-    {
-      // headmarker on boss with casts:
-      // A477 Champion's Circuit (clockwise)
-      // A478 Champion's Circuit (counterclockwise)
-      // Followed by instant cast turns:
-      // A4A1 Champion's Circuit (clockwise)
-      // A4A2 Champion's Circuit (counterclockwise)
-      // TODO: Have starting direction?
-      id: 'R8S Champion\'s Circuit Direction',
-      type: 'HeadMarker',
-      netRegex: { id: ['01F5', '01F6'] },
-      infoText: (_data, matches, output) => {
-        if (matches.id === '01F5')
-          return output.cw();
-        return output.ccw();
-      },
-      outputStrings: {
-        cw: {
-          en: '<== Clockwise',
-          ko: '❰❰❰왼쪽으로',
-        },
-        ccw: {
-          en: 'Counterclockwise ==>',
-          ko: '오른쪽으로❱❱❱',
+        move: {
+          en: 'Light Party Platforms',
+          ja: '担当プラットフォームへ',
+          ko: '담당 플랫폼으로!',
         },
       },
-    },
-    {
-      id: 'R8S Champion\'s Circuit Mechanic Order',
-      // First Casts:
-      // A479 Champion's Circuit Sides safe (middle cleave)
-      // A47A Champion's Circuit Donut
-      // A47B Champion's Circuit In safe (halfmoon cleave)
-      // A47C Champion's Circuit Out safe (in circle)
-      // A47D Champion's Circuit In safe (halfmoon cleave)
-      // Subsequent Casts:
-      // A47E Champion's Circuit Sides (middle cleave)
-      // A47F Champion's Circuit Donut
-      // A480 Champion's Circuit In safe (halfmoon cleave)
-      // A481 Champion's Circuit Out safe (in circle)
-      // A482 Champion's Circuit In safe (halfmoon cleave)
-      // Actor casting the donut is trackable to center of its platform
-      // 100,    117.5  Center of S platform
-      // 83.36,  105.41 Center of SW platform
-      // 89.71,  85.84  Center of NW platform
-      // 110.29, 85.84  Center of NE platform
-      // 116.64, 105.41 Center of SE platform
-      type: 'StartsUsing',
-      netRegex: { id: 'A47A', source: 'Howling Blade', capture: true },
-      delaySeconds: 0.3,
-      durationSeconds: 26,
-      promise: async (data, matches) => {
-        const actors = (await callOverlayHandler({
-          call: 'getCombatants',
-          ids: [parseInt(matches.sourceId, 16)],
-        })).combatants;
-        const actor = actors[0];
-        if (actors.length !== 1 || actor === undefined)
-          return;
-        data.chdonut = actor.PosX;
-      },
-      infoText: (data, _matches, output) => {
-        if (data.chclock === undefined || data.chdonut === undefined)
-          return;
-        // Static orders
-        const order = ['donut', 'in', 'out', 'in', 'sides'];
-        const order1 = ['in', 'out', 'in', 'sides', 'donut'];
-        const order2 = ['out', 'in', 'sides', 'donut', 'in'];
-        const order3 = ['in', 'sides', 'donut', 'in', 'out'];
-        const order4 = ['sides', 'donut', 'in', 'out', 'in'];
-        let newOrder;
-        const x = data.chdonut;
-        if (x > 99 && x < 101) {
-          // S Platform
-          newOrder = order;
-        } else if (x > 82 && x < 85) {
-          // SW Platform
-          newOrder = order1;
-        } else if (x > 88 && x < 91) {
-          // NW Platform
-          newOrder = order2;
-        } else if (x > 109 && x < 112) {
-          // NE Platform
-          newOrder = order3;
-        } else if (x > 115 && x < 118) {
-          // SE Platform
-          newOrder = order4;
-        }
-        // Failed to get clock or matching x coords
-        if (
-          newOrder === undefined || newOrder[0] === undefined ||
-          newOrder[1] === undefined || newOrder[2] === undefined ||
-          newOrder[3] === undefined || newOrder[4] === undefined
-        )
-          return;
-        data.chorder = newOrder;
-        return output.mechanics({
-          dir: output[data.chclock](),
-          mech1: output[newOrder[0]](),
-          mech2: output[newOrder[1]](),
-          mech3: output[newOrder[2]](),
-          mech4: output[newOrder[3]](),
-          mech5: output[newOrder[4]](),
-        });
-      },
-      outputStrings: championStrings,
-    },
-    {
-      id: 'R8S Champion\'s Circuit Safe Spot',
-      // Gleaming Fang for the South Platform is at 96, 126.5 or 104, 126.5
-      // A476 Gleaming Barrage
-      type: 'StartsUsing',
-      netRegex: { id: 'A476', source: 'Gleaming Fang', capture: true },
-      promise: async (data, matches) => {
-        const actors = (await callOverlayHandler({
-          call: 'getCombatants',
-          ids: [parseInt(matches.sourceId, 16)],
-        })).combatants;
-        const actor = actors[0];
-        if (actors.length !== 1 || actor === undefined)
-          return;
-        const dirNum = AutumnDir.xyToNum8(actor.PosX, actor.PosY, centerX, centerY);
-        if (dirNum === 4)
-          data.chfang = actor.PosX;
-      },
-      infoText: (data, _matches, output) => {
-        // Have not found the south fang yet
-        if (data.chfang === undefined)
-          return;
-        const dir = data.chfang < 100 ? output.right() : output.left();
-        if (
-          data.chorder === undefined ||
-          data.chorder[data.chindex] === undefined
-        )
-          return;
-        if (data.chorder[data.chindex] === 'sides')
-          return data.chfang < 100 ? output.rightSide() : output.leftSide();
-        const mech = data.chorder[data.chindex];
-        if (mech === undefined)
-          return;
-        return output.dirMechanic({ dir: dir, mech: output[mech]() });
-      },
-      run: (data) => {
-        if (data.chfang !== undefined) {
-          data.chindex = data.chindex + 1;
-          data.chfang = undefined;
-        }
-      },
-      outputStrings: championStrings,
     },
     {
       id: 'R8S Lone Wolf\'s Lament Tethers',
       type: 'Tether',
       netRegex: { id: ['013E', '013D'] },
-      condition: (data, matches) => {
-        if (data.me === matches.target || data.me === matches.source)
-          return true;
-        return false;
-      },
-      infoText: (_data, matches, output) => {
-        if (matches.id === '013E')
-          return output.farTetherOnYou();
-        return output.closeTetherOnYou();
-      },
+      condition: (data, matches) => data.me === matches.target || data.me === matches.source,
+      infoText: (_data, matches, output) => matches.id === '013E' ? output.far() : output.close(),
       outputStrings: {
-        closeTetherOnYou: {
+        close: {
           en: 'Close Tether on YOU',
-          ko: '내게 가까운 줄',
+          ja: '自分に🟩近づく線',
+          ko: '내게 🟩붙어 줄',
         },
-        farTetherOnYou: {
+        far: {
           en: 'Far Tether on YOU',
-          ko: '내게 멀리 줄',
+          ja: '自分に🟦離れる線',
+          ko: '내게 🟦떨어져 줄',
         },
       },
     },
     {
       id: 'R8S Howling Eight',
       type: 'StartsUsing',
-      netRegex: { id: 'A494', source: 'Howling Blade', capture: false },
+      netRegex: { id: ['AA02', 'A494'], source: 'Howling Blade', capture: false },
       durationSeconds: 15,
       infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Stack x8',
           ja: '頭割り x8',
-          cn: '8次分摊',
           ko: '뭉쳐욧 x8',
         },
       },
     },
     {
-      id: 'R8S Mooncleaver Platform',
-      // Trigger on last hit of Howling Eight (AA0A for first set, A494 others)
-      type: 'Ability',
-      netRegex: { id: ['A494', 'AA0A'], source: 'Howling Blade', capture: false },
+      id: 'R8S Mooncleaver (Enrage Sequence)',
+      type: 'StartsUsing',
+      netRegex: { id: 'A74C', source: 'Howling Blade', capture: false },
       condition: (data) => {
-        // Tracking how many platforms will remain
-        data.platforms--;
-        return data.platforms !== 0;
+        data.enrage--;
+        return data.enrage !== 0;
       },
       suppressSeconds: 1,
-      infoText: (_data, _matches, output) => output.changePlatform(),
+      infoText: (data, _matches, output) => {
+        if (data.enrage > 1)
+          return output.changePlatform();
+        if (data.enrage === 1)
+          return output.finalPlatform();
+      },
       outputStrings: {
         changePlatform: {
           en: 'Change Platform',
-          ko: '다른 플랫폼으로!',
+          ja: '別のプラットフォームへ',
+          ko: '플랫폼 옮겨요 ',
+        },
+        finalPlatform: {
+          en: 'Change Platform (Final)',
+          ja: '最後のプラットフォームへ',
+          ko: '마지막 플랫폼으로',
         },
       },
     },

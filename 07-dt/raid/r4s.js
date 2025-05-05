@@ -254,7 +254,7 @@ Options.Triggers.push({
       id: 'R4S Bewitching Flight',
       type: 'StartsUsing',
       netRegex: { id: ['9671', '8DEF'], source: 'Wicked Thunder', capture: false },
-      condition: Conditions.notAutumnOnly(),
+      condition: AutumnCond.notOnlyAutumn(),
       infoText: (_data, _matches, output) => output.avoid(),
       outputStrings: {
         avoid: {
@@ -332,17 +332,10 @@ Options.Triggers.push({
       alertText: (data, _matches, output) => {
         if (data.witchHuntBait === undefined || data.bewitchingBurstSafe === undefined)
           return;
-        if (data.options.AutumnStyle) {
-          const inOut = output[data.bewitchingBurstSafe]();
-          const spread = data.witchHuntBait === 'near'
-            ? (data.hasForkedLightning ? output.farFoked() : output.near())
-            : (data.hasForkedLightning ? output.nearFoked() : output.far());
-          return output.combo({ inOut: inOut, spread: spread });
-        }
         const inOut = output[data.bewitchingBurstSafe]();
         const spread = data.witchHuntBait === 'near'
-          ? (data.hasForkedLightning ? output.far() : output.near())
-          : (data.hasForkedLightning ? output.near() : output.far());
+          ? (data.hasForkedLightning ? output.farFoked() : output.near())
+          : (data.hasForkedLightning ? output.nearFoked() : output.far());
         return output.combo({ inOut: inOut, spread: spread });
       },
       run: (data) => data.seenBasicWitchHunt = true,
@@ -413,29 +406,14 @@ Options.Triggers.push({
           aoeOrder = aoeOrder.reverse();
         data.witchHuntAoESafe = aoeOrder[0];
         data.witchHuntFirst = aoeOrder[0];
-        // assumes Near first; if Far first, just reverse
-        let baitOrder = ['near', 'far', 'near', 'far'];
-        if (data.witchHuntBait === undefined)
-          baitOrder = [];
-        else if (data.witchHuntBait === 'far')
-          baitOrder = baitOrder.reverse();
         if (data.options.AutumnOnly)
           return data.witchHuntFirst === 'in' ? output.startIn() : output.startOut();
-        if (data.options.AutumnStyle) {
-          const res = [];
-          for (let i = 0; i < aoeOrder.length; ++i) {
-            const inOut = aoeOrder[i];
-            res.push(output[inOut]());
-          }
-          return output.baitCombo({ allBaits: res.join(output.separator()) });
-        }
-        const baits = [];
+        const res = [];
         for (let i = 0; i < aoeOrder.length; ++i) {
           const inOut = aoeOrder[i];
-          const bait = baitOrder[i] ?? output.unknown();
-          baits.push(output.baitStep({ inOut: output[inOut](), bait: output[bait]() }));
+          res.push(output[inOut]());
         }
-        return output.baitCombo({ allBaits: baits.join(output.separator()) });
+        return output.baitCombo({ allBaits: res.join(output.separator()) });
       },
       outputStrings: {
         in: {
@@ -717,19 +695,7 @@ Options.Triggers.push({
         const safeDir = data.electrominesSafe.length !== 1
           ? 'unknown'
           : data.electrominesSafe[0];
-        let safeDirStr = output[safeDir]();
-        if (data.options.AutumnStyle) {
-          const dirMap = {
-            dirNE: 'markerNE',
-            dirSE: 'markerSE',
-            dirNW: 'markerNW',
-            dirSW: 'markerSW',
-            unknown: 'unknown',
-          };
-          const marker = dirMap[safeDir];
-          if (marker !== undefined)
-            safeDirStr = output[marker]();
-        }
+        const safeDirStr = output[safeDir]();
         const starEffect = data.starEffect ?? 'unknown';
         const starEffectStr = output[starEffect]();
         return output.combo({ dir: safeDirStr, mech: starEffectStr });
@@ -739,7 +705,6 @@ Options.Triggers.push({
         delete data.starEffect;
       },
       outputStrings: {
-        ...Directions.outputStringsIntercardDir,
         partners: Outputs.stackPartner,
         spread: Outputs.positions,
         combo: {
@@ -747,7 +712,7 @@ Options.Triggers.push({
           ja: '${dir} => ${mech}',
           ko: '${dir} ${mech}',
         },
-        ...AutumnDir.stringsMarkCross,
+        ...AutumnDir.stringsAimCross,
       },
     },
     {
@@ -831,20 +796,12 @@ Options.Triggers.push({
       alertText: (data, _matches, output) => {
         if (data.options.AutumnOnly)
           return;
-        if (data.options.AutumnStyle) {
-          const pos = data.party.isDPS(data.me)
-            ? (data.witchgleamSelfCount === 2 ? 'rightBottom' : 'rightTop')
-            : (data.witchgleamSelfCount === 2 ? 'leftBottom' : 'leftTop');
-          return output[pos]();
-        }
-        return output.spread({ stacks: data.witchgleamSelfCount });
+        const pos = data.party.isDPS(data.me)
+          ? (data.witchgleamSelfCount === 2 ? 'rightBottom' : 'rightTop')
+          : (data.witchgleamSelfCount === 2 ? 'leftBottom' : 'leftTop');
+        return output[pos]();
       },
       outputStrings: {
-        spread: {
-          en: 'Spread (${stacks} stacks)',
-          ja: '散開 (${stacks} 回のほう)',
-          ko: '흩어져요 (${stacks}스택)',
-        },
         leftTop: {
           en: 'Left Top',
           ko: '🡼왼쪽 위',
@@ -879,17 +836,15 @@ Options.Triggers.push({
         let reminder = data.condenserTimer === 'long'
           ? output.stacks({ stacks: data.witchgleamSelfCount })
           : '';
-        if (data.options.AutumnStyle) {
-          reminder = '';
-          if (starEffect === 'partners') {
-            if (data.witchgleamSelfCount === 2)
-              starEffect = data.party.isDPS(data.me) ? 'pairSouth' : 'pairNorth';
-            else {
-              if (data.party.isDPS(data.me))
-                starEffect = 'pairCenter';
-              else
-                starEffect = matches.id === '95EC' ? 'pairWest' : 'pairEast';
-            }
+        reminder = '';
+        if (starEffect === 'partners') {
+          if (data.witchgleamSelfCount === 2)
+            starEffect = data.party.isDPS(data.me) ? 'pairSouth' : 'pairNorth';
+          else {
+            if (data.party.isDPS(data.me))
+              starEffect = 'pairCenter';
+            else
+              starEffect = matches.id === '95EC' ? 'pairWest' : 'pairEast';
           }
         }
         if (matches.id === '95EC')
@@ -1108,7 +1063,7 @@ Options.Triggers.push({
       id: 'R4S Fulminous Field',
       type: 'Ability',
       netRegex: { id: '98D3', source: 'Wicked Thunder', capture: false },
-      condition: Conditions.notAutumnOnly(),
+      condition: AutumnCond.notOnlyAutumn(),
       infoText: (_data, _matches, output) => output.dodge(),
       outputStrings: {
         dodge: {
@@ -1207,7 +1162,7 @@ Options.Triggers.push({
       id: 'R4S Mustard Bomb Initial',
       type: 'StartsUsing',
       netRegex: { id: '961E', source: 'Wicked Thunder', capture: false },
-      condition: Conditions.notAutumnOnly(),
+      condition: AutumnCond.notOnlyAutumn(),
       infoText: (data, _matches, output) => data.role === 'tank' ? output.tank() : output.nonTank(),
       outputStrings: {
         tank: Outputs.tetherBusters,
@@ -1305,7 +1260,7 @@ Options.Triggers.push({
       // 9606-9609 correspond to the id casts for the triggering Aetherial Conversion,
       // but we don't care which is which at this point because we've already stored the effect
       netRegex: { id: ['9606', '9607', '9608', '9609'], source: 'Wicked Thunder', capture: false },
-      condition: Conditions.notAutumnOnly(),
+      condition: AutumnCond.notOnlyAutumn(),
       alertText: (data, _matches, output) => output[data.aetherialEffect ?? 'unknown'](),
       outputStrings: tailThrustOutputStrings,
     },
@@ -1568,7 +1523,7 @@ Options.Triggers.push({
       // use the ability line of the preceding Flame Slash cast, as the cast time
       // for Raining Swords is very short.
       netRegex: { id: '9614', source: 'Wicked Thunder', capture: false },
-      condition: Conditions.notAutumnOnly(),
+      condition: AutumnCond.notOnlyAutumn(),
       alertText: (_data, _matches, output) => output.towers(),
       outputStrings: {
         towers: {
@@ -1667,12 +1622,7 @@ Options.Triggers.push({
         ];
         // Trim our last possible spot based on existing three safe spots
         safeSpots.push([0, 1, 2, 3].filter((spot) => !safeSpots.includes(spot))[0] ?? 0);
-        if (data.options.AutumnStyle)
-          return output.aSafe({ order: safeSpots.map((i) => i + 1).join(output.separator()) });
-        return output.safe({
-          side: output[mySide](),
-          order: safeSpots.map((i) => i + 1).join(output.separator()),
-        });
+        return output.safe({ order: safeSpots.map((i) => i + 1).join(output.separator()) });
       },
       outputStrings: {
         left: Outputs.left,
@@ -1683,11 +1633,6 @@ Options.Triggers.push({
           ko: ' 🔜 ',
         },
         safe: {
-          en: '${side} Side: ${order}',
-          ja: '${side} : ${order}',
-          ko: '${side}: ${order}',
-        },
-        aSafe: {
           en: '${order}',
           ja: '${order}',
           ko: '${order}',
@@ -1825,39 +1770,22 @@ Options.Triggers.push({
         // use bracket notation because cactbot eslint doesn't handle spread operators
         // in outputStrings; see #266 for more info
         let towerSoakStr = output['unknown']();
-        let cannonBaitStr = output['unknown']();
         if (data.sunriseTowerSpots !== undefined) {
-          towerSoakStr = output[data.sunriseTowerSpots]();
-          cannonBaitStr = data.sunriseTowerSpots === 'northSouth'
-            ? output.eastWest()
-            : output.northSouth();
-          if (data.options.AutumnStyle) {
-            let arrow = 'unknown';
-            if (data.sunriseTowerSpots === 'northSouth')
-              arrow = isdps ? 'arrowN' : 'arrowS';
-            else
-              arrow = isdps ? 'arrowE' : 'arrowW';
-            towerSoakStr = output[arrow]();
-          }
+          towerSoakStr = (data.sunriseTowerSpots === 'northSouth')
+            ? (isdps ? 'dirN' : 'dirS')
+            : (isdps ? 'dirE' : 'dirW');
         }
         if (task === 'yellowShort' || task === 'blueShort') {
           const cannonLocs = task === 'yellowShort' ? blueCannons : yellowCannons;
-          if (data.options.AutumnStyle) {
-            const locPriors = ['dirNE', 'dirSE', 'dirSW', 'dirNW', 'unknown'];
-            const arrowNames = ['arrowNE', 'arrowSE', 'arrowSW', 'arrowNW', 'unknown'];
-            const first = cannonLocs[0] !== undefined ? locPriors.indexOf(cannonLocs[0]) : 4;
-            const second = cannonLocs[1] !== undefined ? locPriors.indexOf(cannonLocs[1]) : 4;
-            const select = isdps ? Math.min(first, second) : Math.max(first, second);
-            const mine = output[arrowNames[select]]();
-            const res = task === 'yellowShort' ? 'aYellow' : 'aBlue';
-            return output[res]({ loc: mine });
-          }
-          const locStr = cannonLocs.map((loc) => output[loc]()).join('/');
-          return output[task]({ loc: locStr, bait: cannonBaitStr });
+          const locPriors = ['dirNE', 'dirSE', 'dirSW', 'dirNW', 'unknown'];
+          const first = cannonLocs[0] !== undefined ? locPriors.indexOf(cannonLocs[0]) : 4;
+          const second = cannonLocs[1] !== undefined ? locPriors.indexOf(cannonLocs[1]) : 4;
+          const select = isdps ? Math.min(first, second) : Math.max(first, second);
+          const mine = output[locPriors[select]]();
+          const res = task === 'yellowShort' ? 'yellow' : 'blue';
+          return output[res]({ loc: mine });
         }
-        if (data.options.AutumnStyle)
-          return output.aLong({ bait: towerSoakStr });
-        return output[task]({ bait: towerSoakStr });
+        return output.long({ bait: towerSoakStr });
       },
       run: (data) => {
         data.sunriseCannons = [];
@@ -1865,7 +1793,6 @@ Options.Triggers.push({
         delete data.sunriseTowerSpots;
       },
       outputStrings: {
-        ...Directions.outputStringsIntercardDir,
         northSouth: {
           en: 'N/S',
           ja: '南/北',
@@ -1896,15 +1823,15 @@ Options.Triggers.push({
           ja: '黄色いビーム誘導 (${loc}) - ${bait}',
           ko: '🟨빔 ${loc} ${bait} 유도',
         },
-        aLong: {
+        long: {
           en: 'Soak Tower (${bait})',
           ko: '${bait}타워 밟아요',
         },
-        aYellow: {
+        yellow: {
           en: 'Blue Cannon (${loc})',
           ko: '${loc}🟦빔',
         },
-        aBlue: {
+        blue: {
           en: 'Yellow Cannon (${loc})',
           ko: '${loc}🟨빔',
         },

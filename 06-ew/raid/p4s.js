@@ -205,7 +205,6 @@ Options.Triggers.push({
       id: 'P4S Akanthai Act 1',
       regex: /Akanthai: Act 1/,
       beforeSeconds: 2,
-      condition: (data) => data.options.AutumnStyle,
       infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
@@ -219,7 +218,6 @@ Options.Triggers.push({
       id: 'P4S Akanthai Act 2',
       regex: /Akanthai: Act 2/,
       beforeSeconds: 2,
-      condition: (data) => data.options.AutumnStyle,
       infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
@@ -233,7 +231,6 @@ Options.Triggers.push({
       id: 'P4S Akanthai Act 3',
       regex: /Akanthai: Act 3/,
       beforeSeconds: 2,
-      condition: (data) => data.options.AutumnStyle,
       infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
@@ -247,7 +244,6 @@ Options.Triggers.push({
       id: 'P4S Akanthai Act 4',
       regex: /Akanthai: Act 4/,
       beforeSeconds: 2,
-      condition: (data) => data.options.AutumnStyle,
       infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
@@ -261,7 +257,6 @@ Options.Triggers.push({
       id: 'P4S Akanthai Finale',
       regex: /Akanthai: Finale/,
       beforeSeconds: 2,
-      condition: (data) => data.options.AutumnStyle,
       infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
@@ -275,7 +270,6 @@ Options.Triggers.push({
       id: 'P4S Akanthai Curtain Call',
       regex: /Akanthai: Curtain Call/,
       beforeSeconds: 2,
-      condition: (data) => data.options.AutumnStyle,
       infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {

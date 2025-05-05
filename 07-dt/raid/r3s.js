@@ -283,7 +283,7 @@ Options.Triggers.push({
       id: 'R3S Octoboom Bombarian Special',
       type: 'StartsUsing',
       netRegex: { id: '9752', source: 'Brute Bomber', capture: false },
-      condition: Conditions.notAutumnOnly(),
+      condition: AutumnCond.notOnlyAutumn(),
       infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
@@ -308,7 +308,7 @@ Options.Triggers.push({
       id: 'R3S Quadroboom Bombarian Special',
       type: 'StartsUsing',
       netRegex: { id: '940A', source: 'Brute Bomber', capture: false },
-      condition: Conditions.notAutumnOnly(),
+      condition: AutumnCond.notOnlyAutumn(),
       infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
@@ -405,17 +405,9 @@ Options.Triggers.push({
           return;
         }
         const [safeSpots, lastSafeSpot] = getSafeSpotsFromClones(myClone, otherClone);
-        if (data.options.AutumnStyle) {
-          return output.safeDirs({
-            dirs: safeSpots.map((dir) => getMarkerFromDir(dir)).join(''),
-            last: getMarkerFromDir(lastSafeSpot),
-          });
-        }
         return output.safeDirs({
-          dirs: safeSpots
-            .map((dir) => output[Directions.outputFrom8DirNum(dir)]())
-            .join(output.separator()),
-          last: output[Directions.outputFrom8DirNum(lastSafeSpot)](),
+          dirs: safeSpots.map((dir) => getMarkerFromDir(dir)).join(''),
+          last: getMarkerFromDir(lastSafeSpot),
         });
       },
       run: (data) => {
@@ -450,17 +442,9 @@ Options.Triggers.push({
           otherClone,
           murderousMistDir,
         );
-        if (data.options.AutumnStyle) {
-          return output.safeDirs({
-            dirs: safeSpots.map((dir) => getMarkerFromDir(dir)).join(''),
-            last: getMarkerFromDir(lastSafeSpot),
-          });
-        }
         return output.safeDirs({
-          dirs: safeSpots
-            .map((dir) => output[Directions.outputFrom8DirNum(dir)]())
-            .join(output.separator()),
-          last: output[Directions.outputFrom8DirNum(lastSafeSpot)](),
+          dirs: safeSpots.map((dir) => getMarkerFromDir(dir)).join(''),
+          last: getMarkerFromDir(lastSafeSpot),
         });
       },
       run: (data) => {
@@ -486,7 +470,7 @@ Options.Triggers.push({
             */
       netRegex: { id: ['9AE8', '9AE9', '9AEA', '9AEB'], source: 'Brute Bomber', capture: true },
       durationSeconds: 11,
-      infoText: (data, matches, output) => {
+      infoText: (_data, matches, output) => {
         const x = parseFloat(matches.x);
         const y = parseFloat(matches.y);
         const bossDir = Directions.xyTo8DirNum(x, y, 100, 100);
@@ -521,31 +505,17 @@ Options.Triggers.push({
           );
           return output['unknown']();
         }
-        if (data.options.AutumnStyle) {
-          if (firstCleaveDir === secondCleaveDir) {
-            return output.aGo({
-              firstDir1: getMarkerFromDir(firstDir1),
-              firstDir2: getMarkerFromDir(firstDir2),
-              secondDir: getMarkerFromDir(secondDir),
-            });
-          }
-          return output.aStay({
+        if (firstCleaveDir === secondCleaveDir) {
+          return output.aGo({
             firstDir1: getMarkerFromDir(firstDir1),
             firstDir2: getMarkerFromDir(firstDir2),
             secondDir: getMarkerFromDir(secondDir),
           });
         }
-        if (firstCleaveDir === secondCleaveDir) {
-          return output.comboGo({
-            firstDir1: output[Directions.outputFrom8DirNum(firstDir1)](),
-            firstDir2: output[Directions.outputFrom8DirNum(firstDir2)](),
-            secondDir: output[Directions.outputFrom8DirNum(secondDir)](),
-          });
-        }
-        return output.comboStay({
-          firstDir1: output[Directions.outputFrom8DirNum(firstDir1)](),
-          firstDir2: output[Directions.outputFrom8DirNum(firstDir2)](),
-          secondDir: output[Directions.outputFrom8DirNum(secondDir)](),
+        return output.aStay({
+          firstDir1: getMarkerFromDir(firstDir1),
+          firstDir2: getMarkerFromDir(firstDir2),
+          secondDir: getMarkerFromDir(secondDir),
         });
       },
       outputStrings: {

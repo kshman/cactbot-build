@@ -888,7 +888,7 @@ Options.Triggers.push({
             .sort((a, b) => a.i - b.i);
           return output.tether({ tether1: m1?.r, tether2: m2?.r });
         }
-        const [s1, s2] = data.prsTethers.slice(-2).map((e) => data.party.jobAbbr(e));
+        const [s1, s2] = data.prsTethers.slice(-2).map((e) => data.party.member(e));
         return output.tether({ tether1: s1, tether2: s2 });
       },
       run: (data) => {
@@ -1289,7 +1289,7 @@ Options.Triggers.push({
           const sorted = members.sort((a, b) => a.ni - b.ni).map((e) => e.r);
           return output.circleAllCircles({ num: num, circles: sorted.join(', ') });
         }
-        const ss = circles.map((e) => data.party.jobAbbr(e));
+        const ss = circles.map((e) => data.party.member(e));
         return output.circleAllCircles({ num: num, circles: ss.join(', ') });
       },
       outputStrings: {
@@ -1914,7 +1914,7 @@ Options.Triggers.push({
             .sort((a, b) => a.i - b.i);
           return output.tether({ tether1: m1?.r, tether2: m2?.r });
         }
-        const [s1, s2] = data.prsTethers.slice(-2).map((e) => data.party.jobAbbr(e));
+        const [s1, s2] = data.prsTethers.slice(-2).map((e) => data.party.member(e));
         return output.tether({ tether1: s1, tether2: s2 });
       },
       run: (data) => data.prsSeenNidTether = true,

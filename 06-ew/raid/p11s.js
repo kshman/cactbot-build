@@ -273,14 +273,6 @@ Options.Triggers.push({
             cn: '引导月环 => 场中 + 两人分摊',
             ko: '한가운데서 줄 유도 🔜 안에서 + 페어',
           },
-          upheldOnPlayer: {
-            en: 'Party Out (${player} in)=> In + Partners',
-            de: 'Gruppe raus (${player} rein)=> Rein + Partner',
-            fr: 'Groupe à l\'extérieur (${player} intérieur) => Intérieur + Partenaires',
-            ja: '外側へ (${player}が内側) => 内側で + ペア',
-            cn: '场外 (${player} 引导) => 场中 + 两人分摊',
-            ko: '밖으로 나가있다 🔜 안으로 + 페어 (줄 처리: ${player})',
-          },
           upheldNotOnYou: {
             en: 'Party Out => In + Partners',
             de: 'Party Raus => Rein + Partner',
@@ -295,9 +287,7 @@ Options.Triggers.push({
           return { alertText: output.upheldNotOnYou() };
         if (tether.target === data.me)
           return { alarmText: output.upheldOnYou() };
-        if (data.options.AutumnStyle)
-          return { alertText: output.upheldNotOnYou() };
-        return { alertText: output.upheldOnPlayer({ player: data.party.member(tether.target) }) };
+        return { alertText: output.upheldNotOnYou() };
       },
       run: (data) => data.upheldTethers = [],
     },
@@ -820,7 +810,7 @@ Options.Triggers.push({
           data.prsLightAndDarks = myLength === 'near' ? 'lightnear' : 'lightfar';
         else
           data.prsLightAndDarks = myLength === 'near' ? 'darknear' : 'darkfar';
-        const myBuddyShort = data.party.jobAbbr(myBuddy);
+        const myBuddyShort = data.party.member(myBuddy);
         let alertText;
         if (myLength === 'near') {
           if (myColor === 'light')
@@ -833,33 +823,28 @@ Options.Triggers.push({
           else
             alertText = output.darkFar({ player: myBuddyShort, role: myBuddyRole });
         }
-        if (data.options.AutumnStyle) {
-          // 어듬이 스타일 덮어쓰기
-          const myPartner = data.party.jobAbbr(myBuddy);
-          let mySide;
-          if (data.role === 'dps')
-            mySide = myColor === 'dark' ? output.rightSide() : output.leftSide();
+        const myPartner = data.party.member(myBuddy);
+        let mySide;
+        if (data.role === 'dps')
+          mySide = myColor === 'dark' ? output.rightSide() : output.leftSide();
+        else
+          mySide = myColor === 'dark' ? output.leftSide() : output.rightSide();
+        if (myLength === 'near') {
+          if (myColor === 'light')
+            alertText = output.lnSide({ player: myPartner, side: mySide });
           else
-            mySide = myColor === 'dark' ? output.leftSide() : output.rightSide();
-          if (myLength === 'near') {
-            if (myColor === 'light')
-              alertText = output.lnSide({ player: myPartner, side: mySide });
-            else
-              alertText = output.dnSide({ player: myPartner, side: mySide });
-          } else {
-            if (myColor === 'light')
-              alertText = output.lfSide({ player: myPartner, side: mySide });
-            else
-              alertText = output.dfSide({ player: myPartner, side: mySide });
-          }
+            alertText = output.dnSide({ player: myPartner, side: mySide });
+        } else {
+          if (myColor === 'light')
+            alertText = output.lfSide({ player: myPartner, side: mySide });
+          else
+            alertText = output.dfSide({ player: myPartner, side: mySide });
         }
         let infoText = undefined;
         const playerNames = Object.keys(data.lightDarkTether);
         const sameLength = playerNames.filter((x) => data.lightDarkTether[x] === myLength);
         const others = sameLength.filter((x) => x !== data.me && x !== myBuddy).sort();
-        const [player1, player2] = data.options.AutumnStyle
-          ? others.map((x) => data.party.jobAbbr(x))
-          : others.map((x) => data.party.member(x));
+        const [player1, player2] = others.map((x) => data.party.member(x));
         if (player1 !== undefined && player2 !== undefined) {
           if (myLength === 'near')
             infoText = output.otherNear({ player1: player1, player2: player2 });

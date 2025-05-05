@@ -352,7 +352,7 @@ Options.Triggers.push({
       id: 'R2S Centerstage Combo',
       type: 'StartsUsing',
       netRegex: { id: '91AC', source: 'Honey B. Lovely', capture: false },
-      condition: Conditions.notAutumnOnly(),
+      condition: AutumnCond.notOnlyAutumn(),
       durationSeconds: 9,
       infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
@@ -367,7 +367,7 @@ Options.Triggers.push({
       id: 'R2S Outerstage Combo',
       type: 'StartsUsing',
       netRegex: { id: '91AD', source: 'Honey B. Lovely', capture: false },
-      condition: Conditions.notAutumnOnly(),
+      condition: AutumnCond.notOnlyAutumn(),
       durationSeconds: 9,
       infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
