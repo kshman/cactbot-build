@@ -163,6 +163,8 @@ const triggerSet: TriggerSet<Data> = {
         healerGroups: Outputs.healerGroups,
         combo: {
           en: '${dir1}/${dir2}, ${groups}',
+          de: '${dir1}/${dir2}, ${groups}',
+          fr: '${dir1}/${dir2}, ${groups}',
           ja: '${dir1}/${dir2}, ${groups}',
           cn: '${dir1}/${dir2}, ${groups}',
           ko: '${groups} (${dir1}/${dir2})',
@@ -170,6 +172,8 @@ const triggerSet: TriggerSet<Data> = {
         unknown: Outputs.unknown,
         unknownCombo: {
           en: '${unk} => ${groups}',
+          de: '${unk} => ${groups}',
+          fr: '${unk} => ${groups}',
           ja: '${unk} => ${groups}',
           cn: '${unk} => ${groups}',
           ko: '${groups} (${unk})',
@@ -219,11 +223,17 @@ const triggerSet: TriggerSet<Data> = {
         rightLeft: Outputs.rightThenLeft,
         left: {
           en: 'Knockback Left',
+          de: 'Rückstoß Links',
+          fr: 'Poussée Gauche',
+          ja: '左へノックバック',
           cn: '向左击退',
           ko: '🡸왼쪽 넉백',
         },
         right: {
           en: 'Knockback Right',
+          de: 'Rückstoß Rechts',
+          fr: 'Pousée Droite',
+          ja: '右へノックバック',
           cn: '向右击退',
           ko: '오른쪽🡺 넉백',
         },
@@ -231,12 +241,16 @@ const triggerSet: TriggerSet<Data> = {
         unknown: Outputs.unknown,
         combo: {
           en: '${break} => ${safe} => ${kbDir}',
+          de: '${break} => ${safe} => ${kbDir}',
+          fr: '${break} => ${safe} => ${kbDir}',
           ja: '${break} => ${safe} => ${kbDir}',
           cn: '${break} => ${safe} => ${kbDir}',
           ko: '${break} 🔜 ${safe} 🔜 ${kbDir}',
         },
         comboUnknown: {
           en: '${break} => ${safe} => ${unk}',
+          de: '${break} => ${safe} => ${unk}',
+          fr: '${break} => ${safe} => ${unk}',
           ja: '${break} => ${safe} => ${unk}',
           cn: '${break} => ${safe} => ${unk}',
           ko: '${break} 🔜 ${safe} 🔜 ${unk}',
@@ -267,6 +281,8 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         up: {
           en: 'Up',
+          de: 'Hoch',
+          fr: 'En haut',
           cn: '上浮',
           ko: '공중부양',
         },
@@ -281,6 +297,8 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         downSoak: {
           en: 'Down, soak tower',
+          de: 'Runter, Turm nehmen',
+          fr: 'En bas, prenez une tour',
           cn: '下降 => 踩塔',
           ko: '땅으로, 타워 밟아요',
         },
@@ -304,6 +322,9 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         cone: {
           en: 'Cone on YOU',
+          de: 'Kegel auf DIR',
+          fr: 'Cône sur VOUS',
+          ja: '扇範囲処理',
           cn: '扇形点名',
           ko: '내게 줄, 앞으로!',
         },
@@ -323,6 +344,9 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         downSoak: {
           en: 'Down, soak tower',
+          de: 'Runter, Turm nehmen',
+          fr: 'En bas, prenez une tour',
+          ja: '下へ => 塔を踏む',
           cn: '下降 => 踩塔',
           ko: '땅으로, 타워 밟아요',
         },
@@ -343,6 +367,9 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Hide behind rocks',
+          de: 'Hinter den Steinen verstecken',
+          fr: 'Cachez-vous derrière les rochers',
+          ja: '岩の後ろに隠れる',
           cn: '躲在石头后',
           ko: '돌 뒤에 숨어요',
         },
@@ -442,6 +469,9 @@ const triggerSet: TriggerSet<Data> = {
         ...Directions.outputStringsCardinalDir,
         text: {
           en: '${laserDir} laser, ${sideDir} side, w/ ${partner}',
+          de: '${laserDir} Laser, ${sideDir} Seite, mit ${partner}',
+          fr: 'Laser ${laserDir} , côté ${sideDir}, avec ${partner}',
+          ja: '${laserDir} レーザー、${sideDir} 側、${partner} と一緒',
           cn: '${laserDir} 激光, ${sideDir} 侧, 和 ${partner}',
           ko: '${laserDir}쪽 레이저, ${sideDir}쪽으로 (${partner})',
         },
@@ -475,6 +505,9 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         spread: {
           en: 'Flare Marker Spread',
+          de: 'Flare Markierung verteilen',
+          fr: 'Dispersion marqueur Brasier',
+          ja: 'フレアマーカーさんかい',
           cn: '核爆点名分散',
           ko: '내게 플레어',
         },
@@ -482,6 +515,8 @@ const triggerSet: TriggerSet<Data> = {
         dorito: Outputs.doritoStack,
         combo: {
           en: '${stackSpread} => ${dorito}',
+          de: '${stackSpread} => ${dorito}',
+          fr: '${stackSpread} => ${dorito}',
           ja: '${stackSpread} => ${dorito}',
           cn: '${stackSpread} => ${dorito}',
           ko: '${stackSpread} 🔜 ${dorito}',
@@ -550,16 +585,25 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         unknown: {
           en: 'Spread ???, stretch tethers',
+          de: 'Verteilen ???, Verbindungen lang ziehen',
+          fr: 'Dispersion ???, étirez les liens',
+          ja: 'さんかいして、線をのばす',
           cn: '???分散, 拉线至变色',
           ko: '??? 선 늘려요',
         },
         west: {
           en: 'Spread West, stretch tethers',
+          de: 'Verteilen Westen, Verbindungen lang ziehen',
+          fr: 'Dispersion Est, étirez les liens',
+          ja: '西側にさんかいして、線をのばす',
           cn: '左分散, 拉线至变色',
           ko: '🡸서쪽으로 늘려요',
         },
         east: {
           en: 'Spread East, stretch tethers',
+          de: 'Verteilen Osten, Verbindungen lang ziehen',
+          fr: 'Dispersion Ouest, étirez les liens',
+          ja: '東側にさんかいして、線をのばす',
           cn: '右分散, 拉线至变色',
           ko: '동쪽으로🡺 늘려요',
         },
@@ -626,21 +670,32 @@ const triggerSet: TriggerSet<Data> = {
         unknown: Outputs.unknown,
         wind: {
           en: 'Wind/Green',
+          de: 'Wind/Grün',
+          fr: 'Vent/Vert',
+          ja: '風/緑',
           cn: '风/绿地板',
           ko: '녹색 (바람)',
         },
         earth: {
           en: 'Earth/Yellow',
+          de: 'Erde/Gelb',
+          fr: 'Terre/Jaune',
+          ja: '土/黄',
           cn: '土/黄地板',
           ko: '노랑 (땅)',
         },
         ice: {
           en: 'Ice/Blue',
+          de: 'Eis/Blau',
+          fr: 'Glace/Bleu',
+          ja: '氷/青',
           cn: '冰/蓝地板',
           ko: '파랑 (얼음)',
         },
         combo: {
           en: '${elem} => ${spread}',
+          de: '${elem} => ${spread}',
+          fr: '${elem} => ${spread}',
           ja: '${elem} => ${spread}',
           cn: '${elem} => ${spread}',
           ko: '${elem} 🔜 ${spread}',

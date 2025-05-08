@@ -92,7 +92,10 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         stacks: {
           en: 'Stacks',
+          de: 'Sammeln',
+          fr: 'Package',
           ja: '集合',
+          cn: '分组分摊',
           ko: '뭉쳐요!',
         },
       },
