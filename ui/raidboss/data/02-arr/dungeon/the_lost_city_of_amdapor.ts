@@ -25,10 +25,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Drop Puddle Outside',
-          de: 'Fläche draußen ablegen',
-          fr: 'Déposez les flaques à l\'extérieur',
           ja: '外周に捨てる',
-          cn: '远离放置圈圈',
           ko: '바깥쪽에 장판 버려요',
         },
       },

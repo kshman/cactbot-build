@@ -73,7 +73,7 @@ const triggerSet: TriggerSet<Data> = {
           en: 'Provoke: ${player}',
           de: 'Herausforderung: ${player}',
           fr: 'Provocation : ${player}',
-          ja: '挑発: ${player}',
+          ja: 'フロッグレッグ: ${player}',
           cn: '挑衅: ${player}',
           ko: '개구리: ${player}',
         },
@@ -81,7 +81,7 @@ const triggerSet: TriggerSet<Data> = {
           en: 'Provoke: ${player} (missed)',
           de: 'Herausforderung: ${player} (verfehlt)',
           fr: 'Provocation : ${player} (manquée)',
-          ja: '挑発: ${player} (タゲなし)',
+          ja: 'フロッグレッグ: ${player} (はずれ！)',
           cn: '挑衅: ${player} (无目标)',
           ko: '개구리: ${player} (빗나갔네!)',
         },
@@ -244,24 +244,6 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      // 0039 is the system message channel, when the current player commences a ready check,
-      // the message is sent to this channel; when a ready check is invoked by others, then it
-      // would be sent to the 0239 channel.  (Sometimes this is also sent to 0139, unknown why?)
-      id: 'General Ready Check',
-      comment: {
-        cn: '在队友发起准备确认时，播放D.Va的“Game on”音效(^-^)V',
-        ko: '파티원이 준비 확인을 사용하면, D.Va의 "Game on" 사운드를 재생합니다.',
-      },
-      type: 'GameLog',
-      netRegex: {
-        line: '(?:You have commenced a ready check|\\y{Name} has initiated a ready check).*?',
-        code: ['0039', '0139', '0239'],
-        capture: false,
-      },
-      sound: '../../resources/sounds/Overwatch/D.Va_-_Game_on.webm',
-      soundVolume: 0.6,
-    },
-    {
       // https://xivapi.com/LogMessage/916
       // en: 7 minutes have elapsed since your last activity. [...]
       // There is no network packet for these log lines; so have to use GameLog.
@@ -269,6 +251,23 @@ const triggerSet: TriggerSet<Data> = {
       type: 'GameLog',
       netRegex: { line: '7 minutes have elapsed since your last activity..*?', capture: false },
       response: Responses.wakeUp(),
+    },
+    {
+      id: 'General 내가 죽다니!!!',
+      type: 'WasDefeated',
+      netRegex: {},
+      condition: (data, matches) => data.me === matches.target,
+      alarmText: (_data, _matches, output) => output.text!(),
+      outputStrings: {
+        text: {
+          en: 'What?! I\'m dead?!',
+          de: 'Ich bin tot! Wie kann das sein?!',
+          fr: 'Je suis mort ! Comment est-ce possible ?!',
+          ja: '私が死ぬなんて！ありえない！！！',
+          cn: '我死了！怎么可能！！！',
+          ko: '내가 죽다니!!! 이럴수가!!!',
+        },
+      },
     },
   ],
   timelineReplace: [

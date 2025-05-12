@@ -16,10 +16,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Stack (ignore adds)',
-          de: 'Sammeln (Adds ignorieren)',
-          fr: 'Packez-vous: ne tuez pas les Adds',
-          ja: '集合 (雑魚無視)',
-          cn: '集合 (忽略小怪)',
+          ja: '頭割り (雑魚無視)',
           ko: '뭉쳐요 (쫄은 무시)',
         },
       },

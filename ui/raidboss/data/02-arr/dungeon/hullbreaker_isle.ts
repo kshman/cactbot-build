@@ -23,10 +23,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Shake Banana tree',
-          de: 'Bananenbaum schütteln',
-          fr: 'Secouez le bananier',
           ja: 'バナナの木を振って',
-          cn: '摇晃香蕉树',
           ko: '바나나 나무 흔들어요',
         },
       },
