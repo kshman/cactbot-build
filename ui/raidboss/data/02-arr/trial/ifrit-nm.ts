@@ -30,10 +30,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Kill Nail',
-          de: 'infernalische Fessel zerstören',
-          fr: 'Détruisez le clou',
           ja: '炎獄の楔を討つ',
-          cn: '击杀火狱之楔',
           ko: '말뚝 부셔요',
         },
       },

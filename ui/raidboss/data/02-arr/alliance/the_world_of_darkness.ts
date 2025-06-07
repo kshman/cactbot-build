@@ -54,13 +54,13 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         red: {
           en: 'Get Behind (Red)',
-          ja: 'ボスの後ろに (赤)',
-          ko: '뒷쪽 🔴빨강으로',
+          ja: '後ろ🔴赤',
+          ko: '뒷쪽 🔴빨강',
         },
         white: {
           en: 'Get in Front (White)',
-          ja: 'ボスの前に (白)',
-          ko: '앞쪽 ⚪하양으로',
+          ja: '前⚪白',
+          ko: '앞쪽 ⚪하양',
         },
       },
     },
@@ -81,23 +81,9 @@ const triggerSet: TriggerSet<Data> = {
         cleanse: {
           en: 'Run to Cleanse Circle',
           ja: '床の光っている円範囲へ',
-          ko: '동그라미 밟고 데스 지워요',
+          ko: '둠: 동글이 밟아욧욧',
         },
       },
-    },
-    {
-      id: 'Angra Mainyu Level 100 Flare Marker',
-      type: 'HeadMarker',
-      netRegex: { id: '002C' },
-      condition: Conditions.targetIsNotYou(),
-      response: Responses.awayFrom(),
-    },
-    {
-      id: 'Angra Mainyu Level 150 Death Marker',
-      type: 'HeadMarker',
-      netRegex: { id: '002D' },
-      condition: Conditions.targetIsNotYou(),
-      response: Responses.awayFrom(),
     },
   ],
   timelineReplace: [
