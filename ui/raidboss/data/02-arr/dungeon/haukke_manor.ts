@@ -60,10 +60,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Kill Sentry',
-          de: 'Wachposten besiegen',
-          fr: 'Tuez la sentinelle',
           ja: '守衛を倒す',
-          cn: '击杀守卫',
           ko: '센트리 잡아요',
         },
       },

@@ -25,11 +25,8 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Go Behind Statue',
-          de: 'Geh hinter die Statue',
-          fr: 'Cachez vous derriere une statue',
           ja: '像の後ろへ',
-          cn: '躲在雕像后',
-          ko: '조각상 뒤에 숨어요',
+          ko: '조각상 뒤로',
         },
       },
     },
@@ -41,10 +38,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Kill luminescence and stay close to boss',
-          de: 'Besiege die Photosphäre und steh nahe am Boss',
-          fr: 'Tuez la Luminescence et restez près du boss',
           ja: '光球を倒してボスに近づく',
-          cn: '击杀幻光球, 靠近BOSS',
           ko: '빛구슬 잡고 보스에게 부비부비',
         },
       },

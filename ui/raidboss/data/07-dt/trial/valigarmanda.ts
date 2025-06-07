@@ -63,7 +63,10 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         donut: {
           en: 'Donut (In)',
+          de: 'Donut (Rein)',
+          fr: 'Donut (Intérieur)',
           ja: 'ドーナツの中へ',
+          cn: '中间月环',
           ko: '도넛 안으로',
         },
       },
@@ -87,7 +90,10 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         cone: {
           en: 'Front Corner',
+          de: 'Vordere Ecken',
+          fr: 'Coin devant',
           ja: '前方の角へ',
+          cn: '前面角落',
           ko: '앞쪽 모서리로',
         },
       },
@@ -142,12 +148,18 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         soakTower: {
           en: 'Soak Tower',
+          de: 'Turm nehmen',
+          fr: 'Prenez la Tour',
           ja: '塔を踏む',
+          cn: '踩塔',
           ko: '타워 밟아요',
         },
         avoidTower: {
           en: 'Avoid Tower',
+          de: 'Turm vermeiden',
+          fr: 'Évitez la tour',
           ja: '塔を避ける',
+          cn: '远离塔',
           ko: '타워 피해요',
         },
       },
@@ -170,6 +182,10 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Be on elevated tile',
+          de: 'Sei auf einer schwebenden Fläche',
+          fr: 'Restez sur une tuile surélevée',
+          ja: '風エリアで浮く',
+          cn: '站在浮空方块',
           ko: '뜨는 타일로',
         },
       },
@@ -183,6 +199,10 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Be on ground tile - avoid feathers',
+          de: 'Sei auf einer Boden-Fläche - vermeide Federn',
+          fr: 'Restez sur une tuile au sol - Évitez les plumes',
+          ja: '地上で羽を避ける',
+          cn: '站在地面方块 - 躲避羽毛',
           ko: '바닥 타일로 (깃털 피해요)',
         },
       },
@@ -228,37 +248,58 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         avoid: {
           en: 'Dodge spheres',
+          de: 'Spheren ausweichen',
+          fr: 'Évitez les sphères',
           ja: '玉を避ける',
+          cn: '躲开球',
           ko: '장판 피해요',
         },
         northFront: {
           en: 'North Row, Front Half',
+          de: 'Nördliche Reihe, Vordere Hälfte',
+          fr: 'Ligne Nord, Moitié avant',
           ja: '北側の前方へ',
+          cn: '第一行前半',
           ko: '북쪽 줄, 앞부분',
         },
         northBack: {
           en: 'North Row, Back Half',
+          de: 'Nördliche Reihe, Hintere Hälfte',
+          fr: 'Ligne Nord, Moitié arrière',
           ja: '北側の後方へ',
+          cn: '第一行后半',
           ko: '북쪽 줄, 뒷부분',
         },
         middleFront: {
           en: 'Middle Row, Front Half',
+          de: 'Mittlere Reihe, Vordere Hälfte',
+          fr: 'Ligne centrale, Moitié avant',
           ja: '中央の前方へ',
+          cn: '第二行前半',
           ko: '가운데 줄, 앞부분',
         },
         middleBack: {
           en: 'Middle Row, Back Half',
+          de: 'Mittlere Reihe, Hintere Hälfte',
+          fr: 'Ligne centrale, Moitié arrière',
           ja: '中央の後方へ',
+          cn: '第二行后半',
           ko: '가운데 줄, 뒷부분',
         },
         southFront: {
           en: 'South Row, Front Half',
+          de: 'Südliche Reihe, Vordere Hälfte',
+          fr: 'Ligne Sud, Moitié avant',
           ja: '南側の前方へ',
+          cn: '第三行前半',
           ko: '남쪽 줄, 앞부분',
         },
         southBack: {
           en: 'South Row, Back Half',
+          de: 'Südliche Reihe, Hintere Hälfte',
+          fr: 'Ligne Sud, Moitié arrière',
           ja: '南側の後方へ',
+          cn: '第三行后半',
           ko: '남쪽 줄, 뒷부분',
         },
       },
@@ -280,12 +321,18 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         backLeft: {
           en: 'Be Back/Left',
+          de: 'Sei Hinten/Links',
+          fr: 'Arrière/Gauche',
           ja: '後ろ/左へ',
+          cn: '左/后 安全',
           ko: '뒤/왼쪽으로',
         },
         frontRight: {
           en: 'Be Front/Right',
+          de: 'Sei Vorne/Rechts',
+          fr: 'Devant/Droite',
           ja: '前/右へ',
+          cn: '右/前 安全',
           ko: '앞/오른쪽으로',
         },
       },
@@ -309,6 +356,10 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Dodge star lines',
+          de: 'Wiche Sternen-Linien aus',
+          fr: 'Esquivez les lignes depuis les étoiles',
+          ja: '8方向直線を避ける',
+          cn: '躲避星形直线',
           ko: '방사 장판 피해요',
         },
       },
@@ -359,6 +410,10 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Bait/dodge puddles x3',
+          de: 'Köder und weiche Flächen aus x3',
+          fr: 'Déposez/Esquivez les puddles x3',
+          ja: '円範囲を捨てる ×3',
+          cn: '诱导/躲避圈圈 x3',
           ko: '장판x3 유도/피해요',
         },
       },

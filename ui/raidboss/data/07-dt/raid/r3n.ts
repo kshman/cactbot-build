@@ -71,7 +71,10 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Knockback Towers',
+          de: 'Rückstoß Türme',
+          fr: 'Poussée depuis les tours',
           ja: 'ノックバック 塔',
+          cn: '击退塔',
           ko: '타워 넉백',
         },
       },
@@ -102,7 +105,10 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Long => Short',
+          de: 'Lange => Kurz',
+          fr: 'Long => Court',
           ja: '導火線の長い方 => 短い方',
+          cn: '长引线 => 短引线',
           ko: '긴거 🔜 짧은거',
         },
       },
@@ -116,7 +122,10 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'East, then West',
+          de: 'Osten, dann Westen',
+          fr: 'Est, puis Ouest',
           ja: '東、そして西',
+          cn: '右 => 左',
           ko: '동쪽갔다, 서쪽으로',
         },
       },
@@ -130,7 +139,10 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'East, stay East',
+          de: 'Osten, bleib Osten',
+          fr: 'Est, restez à l\'Est',
           ja: '東にそのまま',
+          cn: '右 => 待在同侧',
           ko: '동쪽가서, 그대로',
         },
       },
@@ -144,7 +156,10 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'West, then East',
+          de: 'Westen, dann Osten',
+          fr: 'Ouest, puis Est',
           ja: '西、そして東',
+          cn: '左 => 右',
           ko: '서쪽갔다, 동쪽으로',
         },
       },
@@ -158,7 +173,10 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'West, stay West',
+          de: 'Westen, bleib Westen',
+          fr: 'Ouest, restez à l\'Ouest',
           ja: '西にそのまま',
+          cn: '左 => 待在同侧',
           ko: '서쪽가서, 그대로',
         },
       },
