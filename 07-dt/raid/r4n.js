@@ -9,20 +9,29 @@ const effectB9AMap = {
 const directionOutputStrings = {
   ...Directions.outputStrings8Dir,
   unknown: Outputs.unknown,
-  goLeft: Outputs.getLeftAndWest,
-  goRight: Outputs.getRightAndEast,
+  goLeft: Outputs.left,
+  goRight: Outputs.right,
   stay: {
     en: 'Stay',
+    de: 'Bleib stehen',
+    fr: 'Restez',
+    cn: '停',
     ko: '그대로',
   },
   num2: Outputs.num2,
   separator: {
     en: ' => ',
+    de: ' => ',
+    fr: ' => ',
     ja: ' => ',
+    cn: ' => ',
     ko: ' ',
   },
   intercardStay: {
     en: '${dir} => Stay',
+    de: '${dir} => Bleib stehen',
+    fr: '${dir} => Restez',
+    cn: '${dir} => 停',
     ko: '${dir} 🔜 그대로',
   },
   numHits: {
@@ -35,7 +44,10 @@ const directionOutputStrings = {
   },
   combo: {
     en: '${dirs}',
+    de: '${dirs}',
+    fr: '${dirs}',
     ja: '${dirs}',
+    cn: '${dirs}',
     ko: '안전: ${dirs}',
   },
 };
@@ -372,7 +384,10 @@ Options.Triggers.push({
       outputStrings: {
         text: {
           en: 'East offset safe',
+          de: 'Ost-Offset sicher',
+          fr: 'Offset Est sûr',
           ja: '最東端の床へ',
+          cn: '偏右侧安全',
           ko: '가장 동쪽 바닥으로',
         },
       },
@@ -387,7 +402,10 @@ Options.Triggers.push({
       outputStrings: {
         text: {
           en: 'South offset safe',
+          de: 'Süd-Offset sicher',
+          fr: 'Offset Sud sûr',
           ja: '最南端の床へ',
+          cn: '偏下侧安全',
           ko: '가장 남쪽 바닥으로',
         },
       },
@@ -402,7 +420,10 @@ Options.Triggers.push({
       outputStrings: {
         text: {
           en: 'West offset safe',
+          de: 'West-Offset sicher',
+          fr: 'Offset Ouest sûr',
           ja: '最西端の床へ',
+          cn: '偏左侧安全',
           ko: '가장 서쪽 바닥으로',
         },
       },
@@ -417,7 +438,10 @@ Options.Triggers.push({
       outputStrings: {
         text: {
           en: 'North offset safe',
+          de: 'Nord-Offset sicher',
+          fr: 'Offset Nord sûr',
           ja: '最北端の床へ',
+          cn: '偏上侧安全',
           ko: '가장 북쪽 바닥으로',
         },
       },
@@ -489,12 +513,18 @@ Options.Triggers.push({
       outputStrings: {
         outToIn: {
           en: '${dir}, Out => In',
+          de: '${dir}, Raus => Rein',
+          fr: '${dir}, Extérieur => Intérieur',
           ja: '${dir}, 外側 => 内側',
+          cn: '${dir}, 远离 => 靠近',
           ko: '${dir} 안에 있다 🔜 밖으로',
         },
         inToOut: {
           en: '${dir}, In => Out',
+          de: '${dir}, Rein => Raus',
+          fr: '${dir}, Intérieur => Extérieur',
           ja: '${dir}, 内側 => 外側',
+          cn: '${dir}, 靠近 => 远离',
           ko: '${dir} 밖에 있다 🔜 안으로',
         },
         unknown: Outputs.unknown,

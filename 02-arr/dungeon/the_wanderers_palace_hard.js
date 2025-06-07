@@ -18,11 +18,8 @@ Options.Triggers.push({
       outputStrings: {
         text: {
           en: 'Heal ${player} to full',
-          de: 'Heile ${player} voll',
-          fr: 'Soin complet sur ${player}',
           ja: '${player} を全回復して',
-          cn: '奶满${player}',
-          ko: '만피: ${player}',
+          ko: 'HP만땅: ${player}',
         },
       },
     },

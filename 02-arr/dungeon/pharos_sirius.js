@@ -23,10 +23,7 @@ Options.Triggers.push({
       outputStrings: {
         text: {
           en: 'Spread: Stacks Explode Soon',
-          de: 'Verteilen: Kristallstacks explodieren bald',
-          fr: 'Écartez-vous : les cristaux vont exploser',
           ja: '散開: クリスタルがすぐ爆発する',
-          cn: '散开: 即将爆炸',
           ko: '흩어져요: 곧 크리스탈 폭발',
         },
       },
@@ -41,11 +38,8 @@ Options.Triggers.push({
       outputStrings: {
         text: {
           en: 'Heal ${player} to full',
-          de: 'Heile ${player} voll',
-          fr: 'Soin complet sur ${player}',
           ja: '${player} を全回復して',
-          cn: '奶满${player}',
-          ko: '만피로: ${player}',
+          ko: 'HP만땅: ${player}',
         },
       },
     },

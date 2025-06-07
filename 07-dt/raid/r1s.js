@@ -177,17 +177,26 @@ Options.Triggers.push({
         ...Directions.outputStrings8Dir,
         swSeStay: {
           en: '${dir1} ${sep} ${dir2} (Stay)',
+          de: '${dir1} ${sep} ${dir2} (Stehen bleiben)',
+          fr: '${dir1} ${sep} ${dir2} (Restez)',
           ja: '${dir1} ${sep} ${dir2} (そのまま)',
+          cn: '${dir1} ${sep} ${dir2} (不动)',
           ko: '${dir1} ${sep} ${dir2} (그대로)',
         },
         separator: {
           en: ' => ',
+          de: ' => ',
+          fr: ' => ',
           ja: ' => ',
+          cn: ' => ',
           ko: ' 🔜 ',
         },
         combo: {
           en: '${dirs}',
+          de: '${dirs}',
+          fr: '${dirs}',
           ja: '${dirs}',
+          cn: '${dirs}',
           ko: '${dirs}',
         },
       },
@@ -202,7 +211,10 @@ Options.Triggers.push({
       outputStrings: {
         outSpread: {
           en: 'Out + Spread',
+          de: 'Raus + Verteilen',
+          fr: 'Extérieur + Dispersion',
           ja: '外へ + 散開',
+          cn: '远离 + 分散',
           ko: '내게 장판! 흩어져요',
         },
       },
@@ -229,6 +241,8 @@ Options.Triggers.push({
       outputStrings: {
         text: {
           en: 'Launch Forward (Aim for uncracked tile)',
+          de: 'Schlag Vorwärts (Ziel auf eine ganze Fläche)',
+          fr: 'Saut vers l\'avant (Visez une tuile saine)',
           ja: '前方吹き飛ばし (割れていない床を狙って)',
           cn: '向前击飞 (瞄准完好的地板)',
           ko: '내게 어퍼컷 넉백!',
@@ -244,6 +258,8 @@ Options.Triggers.push({
       outputStrings: {
         text: {
           en: '${target} Launch',
+          de: '${target} Start',
+          fr: '${target} Saut',
           ja: '${target} に吹き飛ばし',
           cn: '${target} 击飞',
           ko: '어퍼컷: ${target}',
@@ -259,6 +275,8 @@ Options.Triggers.push({
       outputStrings: {
         text: {
           en: 'Stand on uncracked tile',
+          de: 'Steh auf einer ganzen Fläche',
+          fr: 'Restez sur une tuile saine',
           ja: '割れてない床に立って',
           cn: '被砸 (站在完好的场地)',
           ko: '내게 내려 찍기!',
@@ -274,6 +292,8 @@ Options.Triggers.push({
       outputStrings: {
         text: {
           en: '${target} Stun',
+          de: '${target} Betäubung',
+          fr: '${target} Étourdissment',
           ja: '${target} にスタン',
           cn: '${target} 被砸',
           ko: '내려 찍기: ${target}',
@@ -288,6 +308,8 @@ Options.Triggers.push({
       outputStrings: {
         partner: {
           en: 'Partner Stacks',
+          de: 'Partner sammeln',
+          fr: 'Package partenaire',
           ja: 'ペア',
           cn: '和搭档分摊',
           ko: '십자로 페어!',
@@ -303,6 +325,8 @@ Options.Triggers.push({
       outputStrings: {
         partner: {
           en: 'Partner Stacks',
+          de: 'Partner sammeln',
+          fr: 'Package partenaire',
           ja: 'ペア',
           cn: '和搭档分摊',
           ko: '십자로 페어!',
@@ -342,6 +366,8 @@ Options.Triggers.push({
       outputStrings: {
         rolePositions: {
           en: 'Role positions',
+          de: 'Rollenposition',
+          fr: 'Positions par rôle',
           ja: 'ロールの担当位置へ',
           cn: '职能分散站位',
           ko: '같은 롤 뭉쳐요',
@@ -384,18 +410,24 @@ Options.Triggers.push({
         dirW: Outputs.dirW,
         insideOut: {
           en: 'Inside => Outside',
+          de: 'Rein => Raus',
+          fr: 'Intérieur => Extérieur',
           ja: '内側 => 外側',
           cn: '场内 => 场外',
           ko: '안에서 🔜 밖으로',
         },
         outsideIn: {
           en: 'Outside => Inside',
+          de: 'Raus => Rein',
+          fr: 'Extérieur => Intérieur',
           ja: '外側 => 内側',
           cn: '场外 => 场内',
           ko: '밖에서 🔜 안으로',
         },
         combo: {
           en: '${dir}, ${cleaves}',
+          de: '${dir}, ${cleaves}',
+          fr: '${dir}, ${cleaves}',
           ja: '${dir}, ${cleaves}',
           cn: '${dir}, ${cleaves}',
           ko: '${dir}쪽, ${cleaves}',
@@ -421,6 +453,8 @@ Options.Triggers.push({
       outputStrings: {
         proximity: {
           en: 'Proximity baits at target',
+          de: 'Nah-Distanz-Köder vom Ziel',
+          fr: 'Baits proches de la cible',
           ja: 'ボスに近づいて誘導',
           cn: '靠近引导站位',
           ko: '자기 자리로! 부채꼴 유도',
@@ -505,24 +539,32 @@ Options.Triggers.push({
         dirW: Outputs.dirW,
         in: {
           en: 'In + Healer Stacks => Out',
+          de: 'Rein + Auf Heiler sammeln => Raus',
+          fr: 'Intérieur + Packs sur les heals => Extérieur',
           ja: '中へ + ヒラ頭割り => 外へ',
           cn: '场内 + 治疗分组分摊 => 场外',
           ko: '안에서 4:4힐러 🔜 밖으로',
         },
         out: {
           en: 'Out + Healer Stacks => In',
+          de: 'Raus + Auf Heiler sammeln => Rein',
+          fr: 'Extérieur + Packs sur les heals => Intérieur',
           ja: '外へ + ヒラ頭割り => 中へ',
           cn: '场外 + 治疗分组分摊 => 场内',
           ko: '밖에서 4:4힐러🔜 안으로',
         },
         healerStacks: {
           en: 'Go ${dir} => ${inOut}',
+          de: 'Geh nach ${dir} => ${inOut}',
+          fr: 'Allez ${dir} => ${inOut}',
           ja: '${dir} へ => ${inOut}',
           cn: '去 ${dir} => ${inOut}',
           ko: '${dir}쪽 🔜 ${inOut}',
         },
         proximity: {
           en: 'Go ${dir} => Proximity Baits + Spreads',
+          de: 'Geh nach ${dir} => Nah-Distanz-Köder + Verteilen',
+          fr: 'Allez ${dir} => Baits proches + Dispersion',
           ja: '${dir} へ => ボスに近づいて誘導 + 散開',
           cn: '去 ${dir} => 引导站位 + 分散',
           ko: '${dir}쪽 🔜 부채꼴 유도!',

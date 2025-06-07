@@ -12,10 +12,7 @@ Options.Triggers.push({
       outputStrings: {
         text: {
           en: 'Esuna ${player}',
-          de: 'Medica ${player}',
-          fr: 'Guérison sur ${player}',
           ja: '${player} にエスナ',
-          cn: '驱散: ${player}',
           ko: '에스나: ${player}',
         },
       },
@@ -35,10 +32,7 @@ Options.Triggers.push({
         stun: Outputs.stunTarget,
         tailScrewOn: {
           en: 'Tail Screw on ${player}',
-          de: 'Schweifschraube auf ${player}',
-          fr: 'Coup de queue sur ${player}',
           ja: '${player} にテールスクリュー',
-          cn: '螺旋尾点${player}',
           ko: '테일 스크류: ${player}',
         },
       },

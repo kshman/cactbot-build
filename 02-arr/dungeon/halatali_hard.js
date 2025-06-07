@@ -10,10 +10,7 @@ Options.Triggers.push({
       outputStrings: {
         text: {
           en: 'Use the Orb',
-          de: 'Orb benutzen',
-          fr: 'Utilisez l\'Orbe',
           ja: 'オーブを使う',
-          cn: '使用幽暗珠',
           ko: '구슬 만져요',
         },
       },
@@ -26,10 +23,7 @@ Options.Triggers.push({
       outputStrings: {
         text: {
           en: 'Use the Nail',
-          de: 'Nagel benutzen',
-          fr: 'Utilisez L\'Épine',
           ja: '釘を使う',
-          cn: '使用咒具',
           ko: '손톱 만져요',
         },
       },
