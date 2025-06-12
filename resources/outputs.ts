@@ -478,6 +478,14 @@ export default {
     cn: '前 => 后',
     ko: '앞에서 🔜 뒤로',
   },
+  sidesThenFrontBack: {
+    en: 'Sides => Front/Back',
+    ko: '옆에서 🔜 앞뒤로',
+  },
+  frontBackThenSides: {
+    en: 'Front/Back => Sides',
+    ko: '앞뒤에서 🔜 옆으로',
+  },
   goIntoMiddle: {
     en: 'Get Middle',
     de: 'in die Mitte gehen',
