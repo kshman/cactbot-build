@@ -53,6 +53,10 @@ const triggerSet: TriggerSet<Data> = {
   zoneId: ZoneId.HeritageFound,
   comments: {
     en: 'A Rank Hunts',
+    de: 'A Rang Hohe Jagd',
+    fr: 'Chasse de rang A',
+    cn: 'A级狩猎怪',
+    ko: 'A급 마물',
   },
   initData: () => ({
     atticusCleaves: [],
@@ -79,10 +83,16 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         cardinals: {
           en: '(cardinals later)',
+          de: '(später Kardinal)',
+          fr: '(cardinaux après)',
+          cn: '(稍后去正点)',
           ko: '(나중에 십자)',
         },
         intercards: {
           en: '(intercards later)',
+          de: '(später Interkardinal)',
+          fr: '(intercardinaux après)',
+          cn: '(稍后去斜角)',
           ko: '(나중에 비스듬히)',
         },
       },
@@ -165,14 +175,23 @@ const triggerSet: TriggerSet<Data> = {
         out: Outputs.out,
         repel: {
           en: 'Forced knockback',
+          de: 'Erzwungener Rückstoß',
+          fr: 'Poussée forcée',
+          cn: '强制击退',
           ko: '강제 넉백',
         },
         attract: {
           en: 'Forced draw-in',
+          de: 'Erzwungenes Rein-Ziehen',
+          fr: 'Aspiration forcée',
+          cn: '强制吸引',
           ko: '강제 땡기기',
         },
         combo: {
           en: '${magnet} => ${dir}',
+          de: '${magnet} => ${dir}',
+          fr: '${magnet} => ${dir}',
+          cn: '${magnet} => ${dir}',
           ko: '${magnet} 🔜 ${dir}',
         },
       },
@@ -198,14 +217,23 @@ const triggerSet: TriggerSet<Data> = {
         in: Outputs.in,
         repel: {
           en: 'Forced knockback',
+          de: 'Erzwungener Rückstoß',
+          fr: 'Poussée forcée',
+          cn: '强制击退',
           ko: '강제 넉백',
         },
         attract: {
           en: 'Forced draw-in',
+          de: 'Erzwungenes Rein-Ziehen',
+          fr: 'Aspiration forcée',
+          cn: '强制吸引',
           ko: '강제 땡기기',
         },
         combo: {
           en: '${magnet} => ${dir}',
+          de: '${magnet} => ${dir}',
+          fr: '${magnet} => ${dir}',
+          cn: '${magnet} => ${dir}',
           ko: '${magnet} 🔜 ${dir}',
         },
       },
@@ -275,6 +303,9 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         combo: {
           en: 'Start ${dir1} => ${dir2}',
+          de: 'Starte ${dir1} => ${dir2}',
+          fr: 'Start ${dir1} => ${dir2}',
+          cn: '先 ${dir1} => ${dir2}',
           ko: '${dir1} 🔜 ${dir2}',
         },
         front: Outputs.front,
@@ -336,26 +367,44 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         rotate: {
           en: 'Start ${dir3} => ${dir1} => ${dir2} (Keep Rotating)',
+          de: 'Starte ${dir3} => ${dir1} => ${dir2} (Weiter Rotieren)',
+          fr: 'Départ ${dir3} => ${dir1} => ${dir2} (Continuez à tourner)',
+          cn: '先 ${dir3} => ${dir1} => ${dir2} (继续旋转)',
           ko: '${dir3} 🔜 ${dir1} 🔜 ${dir2} (돌아요)',
         },
         earlyDelay: {
           en: 'Start ${dir3} => ${dir1} (for 2) => ${dir3} => ${dir2}',
+          de: 'Starte ${dir3} => ${dir1} (für 2) => ${dir3} => ${dir2}',
+          fr: 'Départ ${dir3} => ${dir1} (pour 2) => ${dir3} => ${dir2}',
+          cn: '先 ${dir3} => ${dir1} (2) => ${dir3} => ${dir2}',
           ko: '${dir3} 🔜 ${dir1} (2번) 🔜 ${dir3} 🔜 ${dir2}',
         },
         lateDelay1: {
           en: 'Start ${dir3} => ${dir1} => ${dir2} (for 2) => ${dir1}',
+          de: 'Starte ${dir3} => ${dir1} => ${dir2} (für 2) => ${dir1}',
+          fr: 'Départ ${dir3} => ${dir1} => ${dir2} (pour 2) => ${dir1}',
+          cn: '先 ${dir3} => ${dir1} => ${dir2} (2) => ${dir1}',
           ko: '${dir3} 🔜 ${dir1} 🔜 ${dir2} (2번) 🔜 ${dir1}',
         },
         lateDelay3: {
           en: 'Start ${dir3} => ${dir1} => ${dir2} (for 2) => ${dir3}',
+          de: 'Starte ${dir3} => ${dir1} => ${dir2} (für 2) => ${dir3}',
+          fr: 'Départ ${dir3} => ${dir1} => ${dir2} (pour 2) => ${dir3}',
+          cn: '先 ${dir3} => ${dir1} => ${dir2} (2) => ${dir3}',
           ko: '${dir3} 🔜 ${dir1} 🔜 ${dir2} (2번) 🔜 ${dir3}',
         },
         bigDelay2: {
           en: 'Start ${dir3} => ${dir1} (for 3) => ${dir2}',
+          de: 'Starte ${dir3} => ${dir1} (für 3) => ${dir2}',
+          fr: 'Départ ${dir3} => ${dir1} (pour 3) => ${dir2}',
+          cn: '先 ${dir3} => ${dir1} (3) => ${dir2}',
           ko: '${dir3} 🔜 ${dir1} (3번) 🔜 ${dir2}',
         },
         bigDelay3: {
           en: 'Start ${dir3} => ${dir1} (for 3) => ${dir3}',
+          de: 'Starte ${dir3} => ${dir1} (für 3) => ${dir3}',
+          fr: 'Départ ${dir3} => ${dir1} (pour 3) => ${dir3}',
+          cn: '先 ${dir3} => ${dir1} (3) => ${dir3}',
           ko: '${dir3} 🔜 ${dir1} (3번) 🔜 ${dir3}',
         },
         front: Outputs.front,

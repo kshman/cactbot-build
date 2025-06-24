@@ -114,6 +114,9 @@ const cardOutputStrings = {
   unknown: Outputs.unknown,
   start: {
     en: 'Start ${dir}',
+    de: 'Starte ${dir}',
+    fr: 'Début ${dir}',
+    cn: '${dir} 开始',
     ko: '시작: ${dir}',
   },
 };
@@ -133,6 +136,10 @@ const triggerSet: TriggerSet<Data> = {
   zoneId: ZoneId.LivingMemory,
   comments: {
     en: 'A Rank Hunts and Mica the Magical Mu boss FATE',
+    de: 'A Rang Hohe Jagd und Mica das Magische Mu Boss FATE',
+    fr: 'Chasse de rang A et ALÉA Mica le boss Mu Magique',
+    cn: 'A级狩猎怪和亩鼠米卡特殊FATE',
+    ko: 'A급 마물, 마술다람쥐 마이카 특수돌발',
   },
   initData: () => ({
     executionSafe: [],
@@ -160,6 +167,9 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Face away from landing marker',
+          de: 'Schau weg von der Ziel-Markierung',
+          fr: 'Orientez-vous ailleurs du marqueur d\'arrivée',
+          cn: '背对落地点',
           ko: '착지점 바라보면 안되요!',
         },
       },
@@ -174,6 +184,9 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Face toward landing marker',
+          de: 'Schau zur Ziel-Markierung',
+          fr: 'Orientez-vous vers le marqueur d\'arrivée',
+          cn: '面向落地点',
           ko: '착지점 바라봐요!',
         },
       },
@@ -186,6 +199,9 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Stack (face away from target)',
+          de: 'Sammeln (Schau weg vom Ziel)',
+          fr: 'Pack (ne regardez pas la cible)',
+          cn: '分摊 (背对目标)',
           ko: '뭉쳐요 (눈깔 보면 안되요)',
         },
       },
@@ -198,6 +214,9 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Stack (face toward target)',
+          de: 'Sammeln (Schau das Ziel an)',
+          fr: 'Pack (regardez la cible)',
+          cn: '分摊 (面向目标)',
           ko: '뭉쳐요 (눈깔 바라봐요)',
         },
       },
@@ -355,6 +374,9 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         avoid: {
           en: 'Dodge puddles',
+          de: 'Weiche den Flächen aus',
+          fr: 'Évitez les flaques',
+          cn: '躲避圈圈',
           ko: '장판 피해요',
         },
       },

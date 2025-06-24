@@ -37,6 +37,10 @@ const triggerSet: TriggerSet<Data> = {
   zoneId: ZoneId.Kozamauka,
   comments: {
     en: 'A Rank Hunts',
+    de: 'A Rang Hohe Jagd',
+    fr: 'Chasse de rang A',
+    cn: 'A级狩猎怪',
+    ko: 'A급 마물',
   },
   initData: () => ({
     nextDoReMisery: [],
@@ -51,6 +55,9 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Out (then behind)',
+          de: 'Raus (danach Hinten)',
+          fr: 'Extérieur (puis derrière)',
+          cn: '远离 (然后去背后)',
           ko: '밖으로 🔜 엉댕이로',
         },
       },
@@ -69,6 +76,9 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Follow jump (then out => behind)',
+          de: 'Sprung folgen (dann Raus => Hinten)',
+          fr: 'Suivez le saut (puis extérieur => derrière)',
+          cn: '跟随跳跃 (然后远离 => 背后)',
           ko: '점프 따라가서 🔜 밖으로 🔜 엉댕이로',
         },
       },
@@ -82,6 +92,9 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Out => Behind',
+          de: 'Raus => Hinten',
+          fr: 'Extérieur => Derrière',
+          cn: '远离 => 背后',
           ko: '밖으로 🔜 엉댕이로',
         },
       },
@@ -213,14 +226,23 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         combo: {
           en: 'Forced March: ${foreBack} => ${leftRight}',
+          de: 'Geistlenkung: ${foreBack} => ${leftRight}',
+          fr: 'Marche forcée : ${foreBack} => ${leftRight}',
+          cn: '强制移动: ${foreBack} => ${leftRight}',
           ko: '강제이동: ${foreBack} 🔜 ${leftRight}',
         },
         forward: {
           en: 'Forward',
+          de: 'vorwärts',
+          fr: 'Avant',
+          cn: '前',
           ko: '앞',
         },
         backward: {
           en: 'Backward',
+          de: 'rückwärts',
+          fr: 'Arrière',
+          cn: '后',
           ko: '뒤',
         },
         left: Outputs.left,
@@ -244,6 +266,9 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         combo: {
           en: 'Forced March: ${leftRight}',
+          de: 'Geistlenkung: ${leftRight}',
+          fr: 'Marche forcée : ${leftRight}',
+          cn: '强制移动: ${leftRight}',
           ko: '강제이동: ${leftRight}',
         },
         left: Outputs.left,
@@ -265,6 +290,9 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         combo: {
           en: '${behind} => ${inOut}',
+          de: '${behind} => ${inOut}',
+          fr: '${behind} => ${inOut}',
+          cn: '${behind} => ${inOut}',
           ko: '${behind} 🔜 ${inOut}',
         },
         behind: Outputs.getBehind,

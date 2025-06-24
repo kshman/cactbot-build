@@ -17,6 +17,10 @@ const triggerSet: TriggerSet<Data> = {
   zoneId: ZoneId.YakTel,
   comments: {
     en: 'A Rank Hunts',
+    de: 'A Rang Hohe Jagd',
+    fr: 'Chasse de rang A',
+    cn: 'A级狩猎怪',
+    ko: 'A급 마물',
   },
   initData: () => ({
     rraxTriplicateSafe: [],
@@ -110,6 +114,9 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         stackThenBehind: {
           en: 'Stack => Away From Front',
+          de: 'Sammeln => Weg von Vorne',
+          fr: 'Package => Loin du devant',
+          cn: '集合 => 远离正面',
           ko: '뭉쳤다 🔜 앞쪽은 피해요',
         },
       },

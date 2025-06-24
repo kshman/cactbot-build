@@ -69,26 +69,44 @@ const ttokrroneTempestSandspoutOutputStrings = {
   front: Outputs.front,
   rear: {
     en: 'rear',
+    de: 'hinten',
+    fr: 'arrière',
+    cn: '后',
     ko: '뒤로',
   },
   rightFlank: {
     en: 'right flank',
+    de: 'rechte Flanke',
+    fr: 'flanc gauche',
+    cn: '右侧',
     ko: '오른쪽 옆으로',
   },
   leftFlank: {
     en: 'left flank',
+    de: 'linke Flanke',
+    fr: 'flanc droit',
+    cn: '左侧',
     ko: '왼쪽 옆으로',
   },
   triple: {
     en: '${inOut} + ${dir2} + ${dir3}',
+    de: '${inOut} + ${dir2} + ${dir3}',
+    fr: '${inOut} + ${dir2} + ${dir3}',
+    cn: '${inOut} + ${dir2} + ${dir3}',
     ko: '${inOut} + ${dir2} + ${dir3}',
   },
   double: {
     en: '${inOut} + ${dir2}',
+    de: '${inOut} + ${dir2}',
+    fr: '${inOut} + ${dir2}',
+    cn: '${inOut} + ${dir2}',
     ko: '${inOut} + ${dir2}',
   },
   awayFrom: {
     en: '${out} + avoid ${dir}',
+    de: '${out} + vermeide ${dir}',
+    fr: '${out} + évitez ${dir}',
+    cn: '${out} + 躲避 ${dir}',
     ko: '${out} + ${dir} 피해요',
   },
 } as const;
@@ -106,14 +124,23 @@ const ttokrroneDesertTempestIds = Object.keys(ttokrroneDesertTempest);
 const ttokrroneDustdevilOutputStrings = {
   outOfHitbox: {
     en: 'Out of hitbox + stay out',
+    de: 'Raus aus der Hitbox + bleib drausen',
+    fr: 'Extérieur de la hitbox + restez à l\'extérieur',
+    cn: '判定圈外 + 待在外面',
     ko: '히트박스 밖으로 + 그대로 바깥',
   },
   rotateFront: {
     en: 'Rotating frontal cleave', // ${dir}'
+    de: 'Rotierende Frontal-Cleaves',
+    fr: 'Cleave frontal tournant',
+    cn: '旋转正面顺劈',
     ko: '전방 회전 쪼개기', // ${dir}'
   },
   rotateRear: {
     en: 'Rotating rear cleave', // ${dir}'
+    de: 'Rotierende Hinten-Cleaves',
+    fr: 'Cleave arrière tournant',
+    cn: '旋转背后顺劈',
     ko: '후방 회전 쪼개기', // ${dir}'
   },
 } as const;
@@ -172,6 +199,10 @@ const triggerSet: TriggerSet<Data> = {
   zoneId: ZoneId.Shaaloani,
   comments: {
     en: 'A Rank Hunts and Ttokrrone boss FATE',
+    de: 'A Rang Hohe Jagd und Ttokrrone Boss FATE',
+    fr: 'Chasse de rang A et ALÉA Boss Ttokrrone',
+    cn: 'A级狩猎怪和得酷热涅特殊FATE',
+    ko: 'A급 마물, 토크로네 특수돌발',
   },
   initData: () => ({
     yeheheTurnBuffs: [],
@@ -205,6 +236,9 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Follow dash (in after)',
+          de: 'Folge dem Ansturm (danach Rein)',
+          fr: 'Suivez la ruée (intérieur ensuite)',
+          cn: '跟随冲锋',
           ko: '돌진 따라가요 🔜 안으로',
         },
       },
@@ -225,18 +259,30 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         forward: {
           en: 'Forced March: Forward (later)',
+          de: 'Geistlenkung: vorwärts (später)',
+          fr: 'Marche forcée : Avant (après)',
+          cn: '(稍后 强制移动: 前)',
           ko: '(나중에 강제이동: 앞으로)',
         },
         backward: {
           en: 'Forced March: Backward (later)',
+          de: 'Geistlenkung: rückwärts (später)',
+          fr: 'Marche forcée : Arrière (après)',
+          cn: '(稍后 强制移动: 后)',
           ko: '(나중에 강제이동: 뒤로)',
         },
         left: {
           en: 'Forced March: Left (later)',
+          de: 'Geistlenkung: links (später)',
+          fr: 'Marche forcée : Gauche (après)',
+          cn: '(稍后 强制移动: 左)',
           ko: '(나중에 강제이동: 왼쪽으로)',
         },
         right: {
           en: 'Forced March: Right (later)',
+          de: 'Geistlenkung: rechts (später)',
+          fr: 'Marche forcée : Droite (après)',
+          cn: '(稍后 强制移动: 右)',
           ko: '(나중에 강제이동: 오른쪽으로)',
         },
       },
@@ -255,18 +301,30 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         forward: {
           en: 'Forced March: Forward',
+          de: 'Geistlenkung: vorwärts',
+          fr: 'Marche forcée : Avant',
+          cn: '强制移动: 前',
           ko: '강제이동: 앞으로',
         },
         backward: {
           en: 'Forced March: Backward',
+          de: 'Geistlenkung: rückwärts',
+          fr: 'Marche forcée : Arrière',
+          cn: '强制移动: 后',
           ko: '강제이동: 뒤로',
         },
         left: {
           en: 'Forced March: Left',
+          de: 'Geistlenkung: links',
+          fr: 'Marche forcée : Gauche',
+          cn: '强制移动: 左',
           ko: '강제이동: 왼쪽으로',
         },
         right: {
           en: 'Forced March: Right',
+          de: 'Geistlenkung: rechts',
+          fr: 'Marche forcée : Droite',
+          cn: '强制移动: 右',
           ko: '강제이동: 오른쪽으로',
         },
       },
@@ -443,6 +501,9 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         avoid: {
           en: 'Avoid Tethered Cleave',
+          de: 'Vermeide Verbundene-Kegelangriff',
+          fr: 'Évitez le cleave du lien',
+          cn: '躲避连线冲锋',
           ko: '돌진 장판 피해요',
         },
       },
@@ -492,6 +553,9 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         haloLeft: {
           en: 'Right => Left + In',
+          de: 'Rechts => Links + Rein',
+          fr: 'Droite => Gauche + Intérieur',
+          cn: '右 => 左 + 内',
           ko: '오른쪽 🔜 왼쪽 + 안으로',
         },
       },
@@ -505,6 +569,9 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         haloRight: {
           en: 'Left => Right + In',
+          de: 'Links => Rechts + Rein',
+          fr: 'Gauche => Droite + Intérieur',
+          cn: '左 => 右 + 内',
           ko: '왼쪽 🔜 오른쪽 + 안으로',
         },
       },
@@ -518,6 +585,9 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         veilLeft: {
           en: 'Right => Left + Out',
+          de: 'Rechts => Links + Raus',
+          fr: 'Droite => Gauche + Extérieur',
+          cn: '右 => 左 + 外',
           ko: '오른쪽 🔜 왼쪽 + 바깥으로',
         },
       },
@@ -531,6 +601,9 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         veilRight: {
           en: 'Left => Right + Out',
+          de: 'Links => Rechts + Raus',
+          fr: 'Gauche => Droite + Extérieur',
+          cn: '左 => 右 + 外',
           ko: '왼쪽 🔜 오른쪽 + 바깥으로',
         },
       },
@@ -727,6 +800,9 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         dodge: {
           en: 'Go to safe side of first dash => move in after',
+          de: 'Gehe auf die sichere Seite des ersten Ansturms => geh danach Rein',
+          fr: 'Allez du côté sûr après le 1er dash => allez à l\'intérieur ensuite',
+          cn: '前往首次冲锋两侧 => 躲进去',
           ko: '첫 돌진의 안전한 곳으로 (나중에 안으로)',
         },
       },
@@ -743,6 +819,9 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         avoidSpheres: {
           en: 'Avoid exploding sand spheres',
+          de: 'Weiche explodierenden Sand-Sphären aus',
+          fr: 'Évitez les sphères de sables explosives',
+          cn: '躲避沙球爆炸',
           ko: '폭발 모래 덩어리 피해요',
         },
       },

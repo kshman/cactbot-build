@@ -98,6 +98,8 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Watch boss for dash',
+          fr: 'Regardez la position du boss pour la ruée',
+          cn: '观察 BOSS 冲锋',
         },
       },
     },
@@ -156,6 +158,8 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         spread: {
           en: 'Spread in ${quad} quadrant',
+          fr: 'Écartez-vous dans le quandrant ${quad}',
+          cn: '在 ${quad} 象限分散',
         },
         dirNE: Outputs.dirNE,
         dirSE: Outputs.dirSE,
@@ -220,6 +224,8 @@ const triggerSet: TriggerSet<Data> = {
         ...Directions.outputStrings8Dir,
         cleave: {
           en: '${dir} half safe',
+          fr: '${dir} moitié sûre',
+          cn: '${dir} 半安全',
         },
       },
     },
@@ -243,6 +249,8 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Dodge wall turrets',
+          fr: 'Esquivez les tourelles murales',
+          cn: '躲避墙壁炮台',
         },
       },
     },
@@ -254,6 +262,8 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Spread (all cones expand!)',
+          fr: 'Écartez-vous (les cônes s\'agrandissent)',
+          cn: '分散 (所有扇形扩大!)',
         },
       },
     },
@@ -265,6 +275,8 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Get behind + Spread',
+          fr: 'Allez derrière + Dispersion',
+          cn: '后 + 分散',
         },
       },
     },
@@ -364,12 +376,18 @@ const triggerSet: TriggerSet<Data> = {
         unknown: Outputs.unknown,
         dodge: {
           en: 'Inner ${first} => Inner ${second} ${move}',
+          fr: 'Intérieur ${first} => Intérieur ${second} ${move}',
+          cn: '内 ${first} => 内 ${second} ${move}',
         },
         moveAfterLaser: {
           en: '(after wall laser)',
+          fr: '(après les lasers)',
+          cn: '(然后墙壁激光)',
         },
         moveAfterOrb: {
           en: '(after orb explosion)',
+          fr: '(après les explosions des orbes)',
+          cn: '(然后球爆炸)',
         },
       },
     },
@@ -390,6 +408,44 @@ const triggerSet: TriggerSet<Data> = {
       condition: (data) => data.marchMove === 'moveAfterOrb',
       response: Responses.moveAway(),
       run: (data) => data.marchMove = undefined,
+    },
+  ],
+  timelineReplace: [
+    {
+      'locale': 'cn',
+      'replaceSync': {
+        'Coordinate Bit': '灵变块',
+        'Coordinate Turret': '灵变炮塔',
+        'Gargant': '高康特',
+        'Sand Sphere': '沙球',
+        'Soldier S0': '士兵S0',
+        'Valia Pira': '灵变柱',
+      },
+      'replaceText': {
+        '\\(cast\\)': '(咏唱)',
+        'Aerial Ambush': '伏击',
+        'Almighty Racket': '强力之声',
+        'Bloodmarch': '转移妖红珠',
+        'Chilling Chirp': '恐吓虫鸣',
+        'Coordinate March': '启动指令',
+        'Deterrent Pulse': '灵变射线',
+        'Earthsong': '大地之歌',
+        'Electric Excess': '雷转质电火花',
+        'Electric Field': '灵变电火花',
+        'Electray': '雷转质射线',
+        'Enforcement Ray': '增援射线',
+        'Entropic Sphere': '熵球',
+        'Field of Scorn': '厄运冲击',
+        'Hypercharged Light': '雷转质光',
+        'Neutralize Front Lines': '前方电中和',
+        'Ordered Fire': '支援炮击',
+        'Sector Bisector': '幻影半斩',
+        'Sedimentary Debris': '崩落',
+        'Sphere Shatter': '碎裂',
+        'Static Force': '裂斩波',
+        'Thunderous Slash': '闪雷斩',
+        'Trap Jaws': '捕猎钳',
+      },
     },
   ],
 };

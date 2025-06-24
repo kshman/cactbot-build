@@ -29,6 +29,10 @@ const triggerSet: TriggerSet<Data> = {
   },
   comments: {
     en: 'SS Rank Hunts',
+    de: 'SS Rang Hohe Jagd',
+    fr: 'Chasse de rang SS',
+    cn: 'SS级狩猎怪',
+    ko: 'SS급 마물',
   },
   triggers: [
     {
@@ -77,6 +81,9 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         frozen: {
           en: 'Frozen soon',
+          de: 'Bald einfrieren',
+          fr: 'Gelé bientôt',
+          cn: '即将冻结',
           ko: '움직여요! (곧 얼어요)',
         },
       },
@@ -102,6 +109,9 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         iceLeft: {
           en: 'Right => Get Under',
+          de: 'Rechts => Geh unter den Gegner',
+          fr: 'Droite => Allez dessous',
+          cn: '右 => 身下',
           ko: '오른쪽 🔜 보스 밑으로',
         },
       },
@@ -115,6 +125,9 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         iceRight: {
           en: 'Left => Get Under',
+          de: 'Links => Geh unter den Gegner',
+          fr: 'Gauche => Allez dessous',
+          cn: '左 => 身下',
           ko: '왼쪽 🔜 보스 밑으로',
         },
       },
@@ -128,6 +141,9 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         fireRight: {
           en: 'Left => Out',
+          de: 'Links => Raus',
+          fr: 'Droite => Extérieur',
+          cn: '左 => 远离',
           ko: '왼쪽 🔜 밖으로',
         },
       },
@@ -141,6 +157,9 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         fireLeft: {
           en: 'Right => Out',
+          de: 'Rechts => Raus',
+          fr: 'Gauche => Extérieur',
+          cn: '右 => 远离',
           ko: '오른쪽 🔜 밖으로',
         },
       },

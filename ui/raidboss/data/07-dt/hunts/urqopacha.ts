@@ -22,6 +22,10 @@ const triggerSet: TriggerSet<Data> = {
   zoneId: ZoneId.Urqopacha,
   comments: {
     en: 'A Rank Hunts',
+    de: 'A Rang Hohe Jagd',
+    fr: 'Chasse de rang A',
+    cn: 'A级狩猎怪',
+    ko: 'A급 마물',
   },
   triggers: [
     // ****** A-RANK: Nechuciho ****** //
@@ -59,18 +63,30 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         dodge: {
           en: 'Dodge cleaves x4',
+          de: 'Weiche Cleaves aus x4',
+          fr: 'Esquivez les cleaves x4',
+          cn: '躲避顺劈 x4',
           ko: '휘두르기 피해요 (4번)',
         },
         behind: {
           en: 'Behind + Left (for 3) => Go Front',
+          de: 'Hinten + Links (für 3) => Geh nach Vorne',
+          fr: 'Derrière + Gauche (pour 3) => Allez devant',
+          cn: '后 + 左(3次) => 前',
           ko: '뒤로 + 왼쪽 (3번) 🔜 앞으로',
         },
         right: {
           en: 'Right (for 2) => Left => Front',
+          de: 'Rechts (für 2) => Links => Vorne',
+          fr: 'Droite (pour 2) => Gauche => Devant',
+          cn: '右(2次) => 左 => 前',
           ko: '오른쪽 (2번) 🔜 왼쪽 🔜 앞으로',
         },
         front: {
           en: 'Front + Left (stay)',
+          de: 'Vorne + Links (bleib stehen)',
+          fr: 'Devant + Gauche (restez)',
+          cn: '前 + 左 (不动)',
           ko: '앞으로 + 왼쪽 (그대로)',
         },
       },
@@ -96,6 +112,9 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         leftFront: {
           en: 'Left => Front',
+          de: 'Links => Vorne',
+          fr: 'Gauche => Devant',
+          cn: '左 => 前',
           ko: '왼쪽 🔜 앞으로',
         },
       },
@@ -124,6 +143,9 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Out + Stay Out',
+          de: 'Raus + Bleib drausen',
+          fr: 'Extérieur + Restez',
+          cn: '远离 + 保持远离',
           ko: '밖으로 (그대로)',
         },
       },
@@ -137,6 +159,9 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'In + Stay In',
+          de: 'Rein + Bleib drinnen',
+          fr: 'Intérieur + Restez',
+          cn: '靠近 + 保持靠近',
           ko: '안으로 (그대로)',
         },
       },
@@ -161,18 +186,30 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         forward: {
           en: 'Forced March: Forward',
+          de: 'Geistlenkung: vorwärts',
+          fr: 'Marche forcée : Avant',
+          cn: '强制移动: 前',
           ko: '강제이동: 앞으로',
         },
         backward: {
           en: 'Forced March: Backward',
+          de: 'Geistlenkung: rückwärts',
+          fr: 'Marche forcée : Arrière',
+          cn: '强制移动: 后',
           ko: '강제이동: 뒤로',
         },
         left: {
           en: 'Forced March: Left',
+          de: 'Geistlenkung: links',
+          fr: 'Marche forcée : Gauche',
+          cn: '强制移动: 左',
           ko: '강제이동: 왼쪽',
         },
         right: {
           en: 'Forced March: Right',
+          de: 'Geistlenkung: rechts',
+          fr: 'Marche forcée : Droite',
+          cn: '强制移动: 右',
           ko: '강제이동: 오른쪽',
         },
       },

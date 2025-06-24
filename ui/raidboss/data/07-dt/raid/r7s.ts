@@ -494,12 +494,12 @@ const triggerSet: TriggerSet<Data> = {
     },
     {
       'locale': 'de',
-      'missingTranslations': true,
       'replaceSync': {
         'Blooming Abomination': 'Biestinator-Spross',
         'Brute Abombinator': 'Brutalo Biestinator',
       },
       'replaceText': {
+        '--middile--': '--mitte--',
         '\\(adds': '(Adds',
         'cast\\)': 'Wirken)',
         '\\(enrage\\)': '(Finalangriff)',
@@ -545,12 +545,17 @@ const triggerSet: TriggerSet<Data> = {
     },
     {
       'locale': 'fr',
-      'missingTranslations': true,
       'replaceSync': {
-        'Blooming Abomination': 'germe de Bombinator',
+        'Blooming Abomination': 'Germe de Bombinator',
         'Brute Abombinator': 'Brute Bombinator',
       },
       'replaceText': {
+        '--middile--': '-- Millieu --',
+        '\\(adds': '(Adds',
+        'cast\\)': 'incantation)',
+        '\\(enrage\\)': '(Enrage)',
+        '\\(puddles\\)': '(Puddles)',
+        '\\(seeds drop\\)': '(Dépose des graines)',
         'Abominable Blink': 'Étincelle brutale',
         'Brutal Impact': 'Impact brutal',
         'Brutal Smash': 'Impact brutal',
