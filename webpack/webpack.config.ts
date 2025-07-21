@@ -187,7 +187,11 @@ export default (
           test: /data[\\\/]\w*_manifest\.txt$/,
           use: [
             {
-              loader: './webpack/loaders/manifest-loader.ts',
+              // loader: './webpack/loaders/manifest-loader.ts',
+              // TS안되므로 다음과 같이 변경. 아래 두줄은 원래 한줄임
+              // npx tsc webpack/loaders/manifest-loader.ts --outDir webpack/loaders
+              // --module commonjs --esModuleInterop
+              loader: './webpack/loaders/manifest-loader.cjs',
             },
           ],
         },
