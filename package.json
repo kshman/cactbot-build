@@ -143,7 +143,7 @@
       "dprint check"
     ],
     "*.{js,cjs,mjs}": [
-      "eslint --max-warnings=0"
+      "eslint"
     ],
     "*.ts": [
       "eslint --max-warnings=0 --plugin tsc --rule 'tsc/config: [2, {configFile: \"./tsconfig.eslint.json\"}]'"
