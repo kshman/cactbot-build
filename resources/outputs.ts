@@ -582,7 +582,7 @@ export default {
     fr: 'Milieu',
     ja: '中へ',
     cn: '中间',
-    ko: '가운데',
+    ko: '가운데로',
   },
   clockwise: {
     en: 'Clockwise',
