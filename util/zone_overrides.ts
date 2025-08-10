@@ -60,6 +60,7 @@ const _SYNTHETIC_IDS: NameKeyToTerritoryId = {
   'ContainmentBayZ1T9Unreal': 1157,
   'TheSingularityReactorUnreal': 1175,
   'TheJadeStoaUnreal': 1239,
+  'HellsKierUnreal': 1272,
   // rename to something friendly/useful
   'TheMaskedCarnivale': 796,
   // 6.2 revamp
@@ -92,6 +93,8 @@ const _SYNTHETIC_IDS: NameKeyToTerritoryId = {
   // 7.2 revamp
   'TheSunkenTempleOfQarn71': 163,
   'TheBorderlandRuinsSecure71': 376,
+  // 7.3 revamp
+  'CuttersCry72': 170,
 };
 
 // This will override the data-soourced ContentType with our own value.
