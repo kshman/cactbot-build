@@ -1,8 +1,10 @@
-import Autumn from '../../../../../resources/autumn';
+import Autumn, { AutumnDir } from '../../../../../resources/autumn';
 import Conditions from '../../../../../resources/conditions';
 import { UnreachableCode } from '../../../../../resources/not_reached';
 import Outputs from '../../../../../resources/outputs';
+import { callOverlayHandler } from '../../../../../resources/overlay_plugin_api';
 import { Responses } from '../../../../../resources/responses';
+import { DirectionOutput8, Directions } from '../../../../../resources/util';
 import ZoneId from '../../../../../resources/zone_id';
 import { RaidbossData } from '../../../../../types/data';
 import { TriggerSet } from '../../../../../types/trigger';
@@ -10,7 +12,6 @@ import { TriggerSet } from '../../../../../types/trigger';
 // TODO:
 // Party adds phase stuff?
 // Individual adds phase mechs for non-healer?
-// P2 stuff
 
 export type ReapingSafeDir = 'out' | 'in' | 'mid' | 'sides';
 const reapingHeadmarkerMap: { [id: string]: ReapingSafeDir } = {
@@ -20,15 +21,20 @@ const reapingHeadmarkerMap: { [id: string]: ReapingSafeDir } = {
   '025F': 'sides',
 } as const;
 
+export type LoomingSpecterDir = 'north' | 'middle' | 'south';
+
 export interface Data extends RaidbossData {
+  macabreTowerCount: number;
+  circleOfLivesCounter: number;
+  cropCircleOrder: ReapingSafeDir[];
+  cropCircleActors: { [effectId: string]: number };
+  specterCount: number;
   reapingSafeDirs: ReapingSafeDir[];
   reapingCounter: number;
   mementoMoriCount: number;
   grandCrossSpreads: string[];
   actorPositions: { [id: string]: { x: number; y: number; heading: number } };
-  spector?: boolean;
-  massMacabre?: boolean;
-  macabreMark: number;
+  loomingSpecterLocs: LoomingSpecterDir[];
 }
 
 const triggerSet: TriggerSet<Data> = {
@@ -41,13 +47,29 @@ const triggerSet: TriggerSet<Data> = {
     reapingCounter: 0,
     reapingSafeDirs: [],
     grandCrossSpreads: [],
-    macabreMark: 0,
+    loomingSpecterLocs: [],
+    specterCount: 0,
+    cropCircleActors: {},
+    cropCircleOrder: [],
+    circleOfLivesCounter: 0,
+    macabreTowerCount: 0,
   }),
   triggers: [
     {
-      id: 'NecronEx ActorPos Tracker',
+      id: 'NecronEx ActorSetPos Tracker',
       type: 'ActorSetPos',
-      netRegex: { id: '4[0-9A-Fa-f]', capture: true },
+      netRegex: { id: '4[0-9A-Fa-f]{7}', capture: true },
+      run: (data, matches) =>
+        data.actorPositions[matches.id] = {
+          x: parseFloat(matches.x),
+          y: parseFloat(matches.y),
+          heading: parseFloat(matches.heading),
+        },
+    },
+    {
+      id: 'NecronEx AddedCombatant Tracker',
+      type: 'AddedCombatant',
+      netRegex: { npcNameId: '14095', capture: true },
       run: (data, matches) =>
         data.actorPositions[matches.id] = {
           x: parseFloat(matches.x),
@@ -94,18 +116,17 @@ const triggerSet: TriggerSet<Data> = {
       id: 'NecronEx Cold Grip',
       type: 'StartsUsing',
       netRegex: { id: ['AE09', 'AE0A'], capture: true },
-      infoText: (_data, matches, output) =>
-        output.text!({
-          mid: output.middle!(),
-          side: output[matches.id === 'AE0A' ? 'east' : 'west']!(),
-        }),
+      infoText: (_data, matches, output) => output[matches.id === 'AE0A' ? 'east' : 'west']!(),
       outputStrings: {
-        middle: Outputs.middle,
-        east: Outputs.east,
-        west: Outputs.west,
-        text: {
-          en: '${mid} => ${side}',
-          ko: '${mid} 🔜 ${side}으로',
+        east: {
+          en: 'Middle => East',
+          ja: '中央 => 東',
+          ko: '동쪽으로❱❱❱',
+        },
+        west: {
+          en: 'Middle => West',
+          ja: '中央 => 西',
+          ko: '❰❰❰서쪽으로',
         },
       },
     },
@@ -127,31 +148,31 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         lightWest: {
-          en: 'Light West, Dark East => Spread',
-          ko: '🟡빛 서쪽, 🟣어둠 동쪽 🔜 흩어져요',
+          en: 'Light West => Spread',
+          ko: '🟡빛 서쪽 🔜 흩어져요',
         },
         lightEast: {
-          en: 'Dark West, Light East => Spread',
-          ko: '🟣어둠 서쪽, 🟡빛 동쪽 🔜 흩어져요',
+          en: 'Light East => Spread',
+          ko: '🟡빛 동쪽 🔜 흩어져요',
         },
         aWest: {
           en: 'Go West => Spread',
-          ko: '서쪽에서 🔜 맡은 자리로',
+          ko: '❰❰❰서쪽 맡은 자리로',
         },
         aEast: {
           en: 'Go East => Spread',
-          ko: '동쪽에서 🔜 맡은 자리로',
+          ko: '동쪽 맡은 자리로❱❱❱',
         },
       },
     },
     {
       id: 'NecronEx Soul Reaping Collector',
       type: 'StartsUsing',
-      netRegex: { id: 'AE0C', capture: false },
+      netRegex: { id: ['AE0C', 'AE14'], capture: false },
       run: (data) => data.reapingCounter++,
     },
     {
-      id: 'NecronEx Reaping Headmarker',
+      id: 'NecronEx Reaping Headmarker Collector',
       type: 'HeadMarker',
       netRegex: { id: ['025C', '025D', '025E', '025F'], capture: true },
       preRun: (data, matches) => {
@@ -169,7 +190,8 @@ const triggerSet: TriggerSet<Data> = {
 
         if (data.reapingCounter === 1)
           return output[dir]!();
-        return output.stored!({ dir: output[dir]!() });
+        else if (data.reapingCounter === 2)
+          return output.stored!({ dir: output[dir]!() });
       },
       outputStrings: {
         in: Outputs.in,
@@ -205,10 +227,7 @@ const triggerSet: TriggerSet<Data> = {
         mid: Outputs.middle,
         unknown: Outputs.unknown,
         healerStacks: Outputs.healerGroups,
-        partners: {
-          en: 'Partners',
-          ko: '둘이 페어',
-        },
+        partners: Outputs.stackPartner,
         text: {
           en: '${dir} + ${mech}',
           ko: '${dir} + ${mech}',
@@ -222,10 +241,8 @@ const triggerSet: TriggerSet<Data> = {
       condition: Conditions.targetIsYou(),
       durationSeconds: 5,
       infoText: (data, _matches, output) => {
-        if (data.spector) {
-          data.spector = false;
+        if (data.specterCount === 1)
           return output.spector!();
-        }
         return output.bait!();
       },
       outputStrings: {
@@ -235,7 +252,7 @@ const triggerSet: TriggerSet<Data> = {
         },
         spector: {
           en: 'Spread => Bait',
-          ko: '손 떨구고 🔜 한가운데로 유도',
+          ko: '손 떨구고 🔜 함께 유도',
         },
       },
     },
@@ -283,9 +300,9 @@ const triggerSet: TriggerSet<Data> = {
           return;
 
         const spread = data.grandCrossSpreads.includes(data.me);
+        data.grandCrossSpreads = [];
         return output[spread ? 'spread' : 'tower']!();
       },
-      run: (data) => data.grandCrossSpreads = [],
       outputStrings: {
         spread: Outputs.spread,
         tower: {
@@ -295,7 +312,7 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: 'NecronEx 그랜드 크로스 흩쳐',
+      id: 'NecronEx 그랜드 크로스 타워/흩터',
       type: 'HeadMarker',
       netRegex: { id: '0263', capture: true },
       condition: (data) => data.options.AutumnOnly && data.job !== 'BLU',
@@ -334,33 +351,169 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: 'NecronEx Specter of Death',
-      type: 'StartsUsing',
-      netRegex: { id: 'AE3E', capture: false },
-      run: (data) => data.spector = true,
+      id: 'NecronEx Looming Specter Collector',
+      type: 'Tether',
+      netRegex: { id: '0066', capture: true },
+      // 0.3s delay to ensure `ActorSetPos` has fired properly
+      delaySeconds: 0.3,
+      run: (data, matches) => {
+        const pos = data.actorPositions[matches.sourceId];
+
+        if (pos === undefined) {
+          console.error(
+            `Looming Specter Collector: Missing actor data for ${matches.sourceId}`,
+            data.actorPositions,
+          );
+          return;
+        }
+
+        let dir: LoomingSpecterDir;
+
+        if (pos.y < 99)
+          dir = 'north';
+        else if (pos.y > 101)
+          dir = 'south';
+        else
+          dir = 'middle';
+
+        data.loomingSpecterLocs.push(dir);
+      },
     },
     {
-      id: 'NecronEx 요시 그란도 시즌',
+      id: 'NecronEx Specter of Death Counter',
+      type: 'StartsUsing',
+      netRegex: { id: 'AE3E', capture: false },
+      run: (data) => data.specterCount++,
+    },
+    {
+      id: 'NecronEx Specter of Death First',
+      type: 'StartsUsing',
+      netRegex: { id: 'AE3E', capture: false },
+      condition: (data) => data.specterCount === 1,
+      delaySeconds: 1,
+      infoText: (data, _matches, output) => {
+        let rows: LoomingSpecterDir[] = ['middle', 'north', 'south'];
+        rows = rows.filter((r) => !data.loomingSpecterLocs.includes(r));
+        const row = rows[0];
+
+        if (row === undefined || rows.length > 1) {
+          console.error(`Specter of Death First: Invalid row info`, row, rows);
+          return;
+        }
+
+        return output.text!({
+          row: output[row]!(),
+          positions: output.positions!(),
+        });
+      },
+      run: (data) => data.loomingSpecterLocs = [],
+      outputStrings: {
+        positions: Outputs.positions,
+        middle: {
+          en: 'Middle Row',
+          ko: '가운데',
+        },
+        north: {
+          en: 'North Row',
+          ko: '🡹북쪽',
+        },
+        south: {
+          en: 'South Row',
+          ko: '🡻남쪽',
+        },
+        text: {
+          en: '${row} + ${positions}',
+          ko: '${row} + ${positions}',
+        },
+      },
+    },
+    {
+      id: 'NecronEx Crop Circle Collector',
+      type: 'GainsEffect',
+      netRegex: { effectId: '808', count: ['3B8', '3B9', '3BA', '3BB'], capture: true },
+      condition: (data, matches) => {
+        data.cropCircleActors[matches.count] = parseInt(matches.targetId, 16);
+
+        if (Object.keys(data.cropCircleActors).length < 4)
+          return false;
+
+        return true;
+      },
+      suppressSeconds: 60,
+      promise: async (data) => {
+        const actors = (await callOverlayHandler({
+          call: 'getCombatants',
+          ids: Object.values(data.cropCircleActors),
+        })).combatants;
+
+        const filteredActors = actors.filter((a) => a.PosZ < 5);
+
+        const bottomActor = filteredActors[0];
+
+        if (filteredActors.length !== 1 || bottomActor === undefined) {
+          console.error(
+            `Crop Circle Collector: Wrong combatants count ${actors.length}`,
+            actors,
+          );
+          return;
+        }
+
+        const bottomActorCount =
+          Object.entries(data.cropCircleActors).filter((e) => e[1] === bottomActor.ID)[0];
+
+        if (bottomActorCount === undefined) {
+          console.error(
+            `Crop Circle Collector: Missing bottomActorCount match`,
+            data.cropCircleActors,
+            bottomActor,
+          );
+          return;
+        }
+
+        const offset = parseInt(bottomActorCount[0], 16) - 0x3B8;
+
+        data.cropCircleOrder = [...data.reapingSafeDirs, ...data.reapingSafeDirs].slice(
+          offset,
+          offset + 4,
+        );
+      },
+    },
+    {
+      id: 'NecronEx The Second/Fourth Season',
       type: 'StartsUsing',
       netRegex: { id: ['B06F', 'B070'], capture: true },
       durationSeconds: 18,
       infoText: (data, matches, output) => {
-        if (data.reapingSafeDirs.length !== 4)
+        const [dir1, dir2, dir3, dir4] = data.cropCircleOrder;
+
+        if (
+          data.cropCircleOrder.length !== 4 || dir1 === undefined || dir2 === undefined ||
+          dir3 === undefined || dir4 === undefined
+        ) {
+          console.error(
+            `Crop Circle Collector: Invalid safe dir info`,
+            data.cropCircleOrder,
+          );
           return;
-        const splitter = output.splitter!();
-        const join = data.reapingSafeDirs.map((dir) => output[dir]!()).join(splitter);
+        }
         const mech = matches.id === 'B06F' ? 'healerStacks' : 'partners';
-        return output.text!({ join: join, season: output[mech]!() });
+
+        return output.text!({
+          dir1: output[dir1]!(),
+          dir2: output[dir2]!(),
+          dir3: output[dir3]!(),
+          dir4: output[dir4]!(),
+          mech: output[mech]!(),
+        });
       },
       run: (data) => {
+        data.cropCircleActors = {};
+        data.cropCircleActors = {};
         data.reapingSafeDirs = [];
-        data.massMacabre = false;
+        data.cropCircleOrder = [];
+        data.cropCircleActors = {};
       },
       outputStrings: {
-        text: {
-          en: '${join} + ${season}',
-          ko: '${join} (${season})',
-        },
         in: {
           en: 'In',
           ja: '中',
@@ -374,17 +527,12 @@ const triggerSet: TriggerSet<Data> = {
         sides: {
           en: 'Sides',
           ja: '横',
-          ko: '옆',
+          ko: '옆쪽',
         },
         mid: {
           en: 'Middle',
           ja: '中',
           ko: '가운데',
-        },
-        splitter: {
-          en: ', ',
-          ja: ' / ',
-          ko: ' / ',
         },
         healerStacks: {
           en: 'Healer',
@@ -396,35 +544,130 @@ const triggerSet: TriggerSet<Data> = {
           ja: 'ペア',
           ko: '페어',
         },
+        text: {
+          en: '${dir1} => ${dir2} => ${dir3} => ${dir4} + ${mech}',
+          ko: '${dir1} / ${dir2} / ${dir3} / ${dir4} (${mech})',
+        },
       },
     },
     {
-      id: 'NecronEx Mass Macabre',
+      id: 'NecronEx Circle of Lives',
       type: 'StartsUsing',
-      netRegex: { id: 'AE33', capture: false },
-      run: (data) => {
-        data.massMacabre = true;
-        data.macabreMark = 0;
-      },
-    },
-    {
-      id: 'NecronEx Macabre Mark',
-      type: 'GainsEffect',
-      netRegex: { effectId: 'B7D', capture: true },
-      condition: (data, matches) => data.massMacabre && data.me === matches.target,
-      delaySeconds: (_data, matches) => parseFloat(matches.duration),
-      infoText: (data, _matches, output) => {
-        if (data.macabreMark >= 3)
+      netRegex: { id: 'AE38', capture: true },
+      preRun: (data) => data.circleOfLivesCounter++,
+      delaySeconds: 0.2,
+      durationSeconds: 6.5,
+      infoText: (data, matches, output) => {
+        const pos = data.actorPositions[matches.sourceId];
+
+        if (pos === undefined) {
+          console.error(
+            `Circle of Lives: Missing actor data for ${matches.sourceId}`,
+            data.actorPositions,
+          );
           return;
-        data.macabreMark++;
-        return output.tower!();
+        }
+
+        let safe: DirectionOutput8 | 'middle';
+
+        if (Math.abs(pos.x - 100) < 1)
+          safe = 'middle';
+        else
+          safe = Directions.xyTo8DirOutput(pos.x, pos.y, 100, 100);
+
+        // First 5 are part of the first set of mechs
+        if (data.circleOfLivesCounter <= 5) {
+          if (data.circleOfLivesCounter !== 3)
+            return output[safe]!();
+          return output.delay!({
+            dir: output[safe]!(),
+          });
+        }
+
+        // 6 and 8 are part of the second set, no hands going off during these
+        if (data.circleOfLivesCounter === 6 || data.circleOfLivesCounter === 8) {
+          return output[safe]!();
+        }
+
+        // Deal with the hands for 7 and 9
+        const row = data.loomingSpecterLocs[0];
+
+        if (row === undefined || data.loomingSpecterLocs.length > 2) {
+          console.error(`Circle of Lives: Invalid row info`, row, data.loomingSpecterLocs);
+          return;
+        }
+
+        let towards: 'dirN' | 'dirS' | 'middle';
+
+        if (row === 'middle') {
+          if (pos.y < 100)
+            towards = 'dirN';
+          else
+            towards = 'dirS';
+        } else
+          towards = 'middle';
+
+        // Clean up data.loomingSpecterLocs here instead of in run to avoid duplicating
+        // condition logic
+        data.loomingSpecterLocs = [];
+
+        return output.lean!({
+          dir: output[safe]!(),
+          to: output[towards]!(),
+        });
       },
       outputStrings: {
-        tower: {
-          en: 'Get Towers',
-          ja: '塔を踏む',
-          ko: '타워 밟아요',
+        ...AutumnDir.stringsAim,
+        middle: Outputs.middle,
+        delay: {
+          en: 'Wait for hand => ${dir}',
+          ko: '손 기다렸다가 ${dir}',
         },
+        lean: {
+          en: '${dir}, lean ${to}',
+          ko: '${dir}, ${to}쪽으로',
+        },
+      },
+    },
+    {
+      id: 'NecronEx Mass Macabre Initial',
+      type: 'StartsUsing',
+      netRegex: { id: 'AE33', capture: false },
+      infoText: (_data, _matches, output) => output.towerPos!(),
+      outputStrings: {
+        towerPos: {
+          en: 'Preposition for LP towers',
+          ko: '(타워 준비)',
+        },
+      },
+    },
+    {
+      id: 'NecronEx Mass Macabre Counter',
+      type: 'Ability',
+      netRegex: { id: 'AF13', capture: true },
+      condition: Conditions.targetIsYou(),
+      run: (data) => data.macabreTowerCount++,
+    },
+    {
+      id: 'NecronEx Mass Macabre Next',
+      type: 'Ability',
+      netRegex: { id: 'AF13', capture: true },
+      condition: (data, matches) =>
+        Conditions.targetIsYou()(data, matches) && data.macabreTowerCount < 5,
+      delaySeconds: 4,
+      alertText: (data, _matches, output) => {
+        if (data.role === 'tank' && data.macabreTowerCount > 2) {
+          // Tanks deal with buster after 2nd tower
+          return;
+        }
+        return output.soakNext!();
+      },
+      outputStrings: {
+        soakNext: {
+          en: 'Soak Next Tower',
+          ko: '다음 타워로',
+        },
+        tankBuster: Outputs.tankBuster,
       },
     },
   ],

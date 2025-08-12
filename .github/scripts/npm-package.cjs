@@ -16,9 +16,21 @@ async function main() {
   // force pwd to at .../cactbot/
   process.chdir(projectRoot);
 
-  fs.rmSync('npm-package', { recursive: true, force: true });
-  fs.rmSync('dist', { recursive: true, force: true });
-  fs.mkdirSync('npm-package');
+  try {
+    fs.rmSync('npm-package', { recursive: true, force: true });
+  } catch {
+    // ignore
+  }
+  try {
+    fs.rmSync('dist', { recursive: true, force: true });
+  } catch {
+    // ignore
+  }
+  try {
+    fs.mkdirSync('npm-package');
+  } catch {
+    // ignore
+  }
 
   await exec('npx tsc -p tsconfig.npm.json --declaration');
   fs.renameSync('dist/ui', 'npm-package/ui');
@@ -37,5 +49,6 @@ async function main() {
 }
 
 main().catch((e) => {
-  throw e;
+  console.error(e);
+  process.exit(1);
 });

@@ -86,7 +86,7 @@ const getLabels = async (github, owner, repo, pullNumber) => {
    * @type {ChangedFileContent[]}
    */
   const changedFilesContent = await Promise.all(
-    changedFiles.map((f) => async () => {
+    changedFiles.map(async (f) => {
       const from = await httpClient.get(rawUrl(owner, repo, fromSha, f.filename));
       const to = await httpClient.get(rawUrl(owner, repo, toSha, f.filename));
       return {
@@ -94,14 +94,19 @@ const getLabels = async (github, owner, repo, pullNumber) => {
         from: await readBody(from),
         to: await readBody(to),
       };
-    }).map((f) => f()),
+    }),
   );
 
   const changedLang = getTimelineReplaceChanges(changedFilesContent);
-  changedLang.push(...nonNullUnique(lodash.flatten(changedFiles.map((f) => {
-    if (['.js', '.ts'].includes(path.extname(f.filename)))
-      return parseChangedLang(f.patch);
-  }))));
+  changedLang.push(...nonNullUnique(
+    lodash.flatten(
+      changedFiles.map((f) => {
+        if (['.js', '.ts'].includes(path.extname(f.filename)))
+          return parseChangedLang(f.patch);
+        return [];
+      }),
+    ).filter(Boolean),
+  ));
 
   // by file path
   const changedModule = nonNullUnique(lodash.flatten(changedFiles.map((f) => {
@@ -219,13 +224,15 @@ const getTimelineReplace = (fileContent) => {
     parser: babelParser,
   });
 
-  const exportDefault = ast.program.body
-    .filter((body) => body.type === 'ExportDefaultDeclaration')[0];
+  const exportDefault = ast.program.body.find(
+    (body) => body.type === 'ExportDefaultDeclaration',
+  );
   if (!exportDefault)
     return;
 
-  const timelineReplace = exportDefault.declaration.properties
-    .filter((prop) => prop.key.type === 'Identifier' && prop.key.name === 'timelineReplace')[0];
+  const timelineReplace = exportDefault.declaration.properties.find(
+    (prop) => prop.key.type === 'Identifier' && prop.key.name === 'timelineReplace',
+  );
   if (!timelineReplace)
     return;
 
@@ -247,6 +254,13 @@ const run = async () => {
   const owner = github.context.repo.owner;
   const repo = github.context.repo.repo;
   const pullNumber = parseInt(process.env.PR_NUMBER, 10);
+
+  if (!process.env.GH_TOKEN) {
+    throw new Error('GH_TOKEN 환경 변수가 필요합니다.');
+  }
+  if (!process.env.PR_NUMBER || isNaN(pullNumber)) {
+    throw new Error('PR_NUMBER 환경 변수가 필요하며 숫자여야 합니다.');
+  }
 
   const octokit = github.getOctokit(process.env.GH_TOKEN);
 
