@@ -1234,17 +1234,21 @@ const triggerSet: TriggerSet<Data> = {
         // 5 bombs drop, and then a 6th later.
         // They all drop on one half of the arena, and then 3 on one half and 2 on the other.
         // e.g. all 5 drop on north half, 3 on west half, 2 on east half.
-        const numDir = [0, 0, 0, 0]; // north, east, south, west
+        let n0 = 0;
+        let n1 = 0;
+        let n2 = 0;
+        let n3 = 0;
         for (const bomb of bombs) {
           if (bomb.y < centerY)
-            numDir[0]++;
+            n0++;
           else
-            numDir[2]++;
+            n2++;
           if (bomb.x < centerX)
-            numDir[3]++;
+            n3++;
           else
-            numDir[1]++;
+            n1++;
         }
+        const numDir = [n0, n1, n2, n3]; // north, east, south, west
 
         for (let idx = 0; idx < numDir.length; ++idx) {
           if (numDir[idx] !== 5)
