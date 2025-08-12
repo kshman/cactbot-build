@@ -1,4 +1,4 @@
-name: 업데이트-브랜치
+name: 브랜치
 
 on:
   push:
