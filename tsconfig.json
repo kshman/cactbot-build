@@ -5,7 +5,6 @@
   "compilerOptions": {
     "target": "ES2022",
     "module": "ES2022",
-    "moduleResolution": "bundler",
     "allowJs": true,
     "strict": true,
     "declaration": true,
@@ -20,6 +19,7 @@
     "checkJs": false,
     "sourceMap": true,
     "allowSyntheticDefaultImports": true,
+    "moduleResolution": "bundler",
     "outDir": "./dist",
     "noImplicitAny": true,
     "noImplicitThis": true,
