@@ -16,8 +16,8 @@ hideall "--sync--"
 
 0.0 "--sync--" InCombat { inGameCombat: "1" } window 0,1
 8.0 "--sync" StartsUsing { id: "AE30", source: "Necron" }
-14.8 "Blue Shockwave" Ability { id: "AE31", source: "Necron" }
-18.9 "Blue Shockwave" Ability { id: "AE31", source: "Necron" }
+14.8 "Blue Shockwave 1" Ability { id: "AE31", source: "Necron" }
+18.9 "Blue Shockwave 2" Ability { id: "AE31", source: "Necron" }
 
 # Fear of Death 1
 28.9 "Fear of Death (cast)" Ability { id: "AE06", source: "Necron" }
@@ -43,8 +43,8 @@ hideall "--sync--"
 98.7 "Choking Grasp (puddles)" Ability { id: "AE08", source: "Icy Hands" }
 102.9 "The End's Embrace" #Ability { id: "AE36", source: "Necron" }
 109.0 "Choking Grasp" #Ability { id: "AE17", source: "Icy Hands" }
-114.0 "Blue Shockwave" Ability { id: "AE31", source: "Necron" }
-118.1 "Blue Shockwave" Ability { id: "AE31", source: "Necron" }
+114.0 "Blue Shockwave 1" Ability { id: "AE31", source: "Necron" }
+118.1 "Blue Shockwave 2" Ability { id: "AE31", source: "Necron" }
 124.1 "Twofold Blight/Fourfold Blight" Ability { id: ["AE0D", "AE0E"], source: "Necron" }
 125.3 "Aetherblight" Ability { id: ["AE40", "B07F", "B080", "B081"], source: "Necron" }
 125.4 "Shockwave" Ability { id: ["AE0F", "AE10"], source: "Necron" }
@@ -118,8 +118,8 @@ hideall "--sync--"
 447.1 "Mass Macabre" Ability { id: "AE33", source: "Necron" }
 454.2 "Memento Mori" Ability { id: ["AE15", "AE16"], source: "Necron" }
 460.3 "Choking Grasp" Ability { id: "AE17", source: "Icy Hands" }
-465.8 "Blue Shockwave" Ability { id: "AE31", source: "Necron" }
-469.9 "Blue Shockwave" Ability { id: "AE31", source: "Necron" }
+465.8 "Blue Shockwave 1" Ability { id: "AE31", source: "Necron" }
+469.9 "Blue Shockwave 2" Ability { id: "AE31", source: "Necron" }
 477.0 "Cold Grip" Ability { id: "AE44", source: "Necron" }
 478.7 "Existential Dread" Ability { id: "AE0B", source: "Necron" }
 
