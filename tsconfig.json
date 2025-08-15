@@ -5,6 +5,7 @@
   "compilerOptions": {
     "target": "ES2022",
     "module": "ES2022",
+    "moduleResolution": "bundler",
     "allowJs": true,
     "strict": true,
     "declaration": true,
@@ -13,7 +14,6 @@
       "node"
     ],
     "composite": true,
-    "moduleResolution": "bundler",
     "skipLibCheck": false,
     "esModuleInterop": true,
     "rootDir": "./",
