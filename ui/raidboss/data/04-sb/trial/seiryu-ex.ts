@@ -1,9 +1,9 @@
 import Outputs from '../../../../../resources/outputs';
 import { Responses } from '../../../../../resources/responses';
+import { Directions } from '../../../../../resources/util';
 import ZoneId from '../../../../../resources/zone_id';
 import { RaidbossData } from '../../../../../types/data';
 import { TriggerSet } from '../../../../../types/trigger';
-
 export interface Data extends RaidbossData {
   blazing?: boolean;
   markers?: string[];
@@ -22,14 +22,7 @@ const triggerSet: TriggerSet<Data> = {
       beforeSeconds: 4,
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
-        text: {
-          en: 'stack with your group',
-          de: 'mit der Gruppe stacken',
-          fr: 'Packez avec votre groupe',
-          ja: 'グループ別にスタック',
-          cn: '双组分摊',
-          ko: '4:4 뭉쳐요',
-        },
+        text: Outputs.healerGroups,
       },
     },
     {
@@ -39,31 +32,24 @@ const triggerSet: TriggerSet<Data> = {
       suppressSeconds: 10,
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
-        text: {
-          en: 'line stack',
-          de: 'Linien-Stack',
-          fr: 'Packez-vous en ligne',
-          ja: 'スタック',
-          cn: '直线分摊',
-          ko: '뭉쳐요',
-        },
+        text: Outputs.stackMarker,
       },
     },
     {
       id: 'SeiryuEx Tether',
       regex: /Kanabo/,
       beforeSeconds: 7,
-      condition: (data) => data.role === 'tank' || data.job === 'BLU',
-      alertText: (_data, _matches, output) => output.text!(),
+      alertText: (data, _matches, output) => {
+        if (data.role === 'tank' || data.job === 'BLU')
+          return output.grabTether!();
+        return output.avoidTether!();
+      },
       outputStrings: {
-        text: {
-          en: 'Grab Tether, Point Away',
-          de: 'Verbindung nehmen und wegdrehen',
-          fr: 'Prenez le lien, pointez vers l\'extérieur',
-          ja: '線を取って外に向ける',
-          cn: '接线引导',
+        grabTether: {
+          en: 'Grab Tank Tether, Point Cleave Away',
           ko: '줄 채고, 바깥으로 유도',
         },
+        avoidTether: Outputs.avoidTankCleaves,
       },
     },
   ],
@@ -73,6 +59,12 @@ const triggerSet: TriggerSet<Data> = {
       type: 'StartsUsing',
       netRegex: { id: '37E4', source: 'Seiryu', capture: false },
       run: (data) => data.blazing = true,
+    },
+    {
+      id: 'SeiryuEx Fifth Element',
+      type: 'StartsUsing',
+      netRegex: { id: '37C3', source: 'Seiryu', capture: false },
+      response: Responses.aoe(),
     },
     {
       id: 'SeiryuEx Cursekeeper',
@@ -132,14 +124,7 @@ const triggerSet: TriggerSet<Data> = {
       delaySeconds: 1,
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
-        text: {
-          en: 'Stack for Puddle AOEs',
-          de: 'Stacken (Pfützen)',
-          fr: 'Packez-vous pour l\'AoE',
-          ja: 'スタック',
-          cn: '集合放置AOE',
-          ko: '한가운데 뭉쳐요',
-        },
+        text: Outputs.baitPuddles,
       },
     },
     {
@@ -230,31 +215,42 @@ const triggerSet: TriggerSet<Data> = {
     },
     {
       id: 'SeiryuEx Find Sneks',
-      type: 'StartsUsing',
-      netRegex: { id: '37F7', capture: false },
-      alarmText: (data, _matches, output) => {
+      type: 'StartsUsingExtra',
+      netRegex: { id: '37F7', capture: true },
+      alarmText: (data, matches, output) => {
+        // Blue Orochi spawn east or west with heading of either -1.57 or 1.57.
+        // Invert their spawn heading to find the safe location.
+        // No source because sometimes the name field is stale.
+        const safeDir4Num = (Directions.hdgTo4DirNum(parseFloat(matches.heading)) + 2) % 4;
+        if (safeDir4Num !== 1 && safeDir4Num !== 3) {
+          if (data.withForce === undefined)
+            return output.goToUnknownSnakes!();
+          return output.outOfMiddleUnknownSnakes!();
+        }
+        const safeDir = Directions.outputFromCardinalNum(safeDir4Num);
         if (data.withForce === undefined)
-          return output.goToSnakes!();
-
-        return output.outOfMiddleTowardSnakes!();
+          return output.goToSnakes!({ dir: output[safeDir]!() });
+        return output.outOfMiddleTowardSnakes!({ dir: output[safeDir]!() });
       },
       run: (data) => data.withForce = true,
       outputStrings: {
+        dirE: Outputs.east,
+        dirW: Outputs.west,
         goToSnakes: {
-          en: 'Go To Snakes',
-          de: 'Zu den Schlangen',
-          fr: 'Allez vers les serpents',
-          ja: '蛇側へ',
-          cn: '靠近蛇蛇',
-          ko: '뱀들 있는 곳으로',
+          en: 'Go ${dir} Toward Snakes',
+          ko: '뱀 ${dir}으로 가요',
+        },
+        goToUnknownSnakes: {
+          en: 'Go Toward Snakes',
+          ko: '뱀 쪽으로 가요',
         },
         outOfMiddleTowardSnakes: {
-          en: 'Out of Middle, Toward Snakes',
-          de: 'Raus aus der Mitte, Zu den Schlangen',
-          fr: 'Sortez du milieu, vers les serpents',
-          ja: '真ん中からずれて蛇に向く',
-          cn: '靠近中心，面向蛇蛇',
-          ko: '한가운데 피하면서, 뱀들 쪽으로',
+          en: 'Out Of Middle, Knockback To ${dir}',
+          ko: '가운데는 위험! ${dir}으로 넉백',
+        },
+        outOfMiddleUnknownSnakes: {
+          en: 'Out Of Middle, Knockback Toward Snakes',
+          ko: '가운데는 위험! 뱀 쪽으로 넉백',
         },
       },
     },
@@ -281,7 +277,7 @@ const triggerSet: TriggerSet<Data> = {
           de: 'Im Süden stacken',
           fr: 'Packez-vous au sud',
           ja: '南でスタック',
-          cn: '南侧集合',
+          cn: '下半场边缘分摊',
           ko: '남쪽에서 뭉쳐요',
         },
         stackIfNoTether: {
@@ -289,7 +285,7 @@ const triggerSet: TriggerSet<Data> = {
           de: 'Stacken, wenn keine Verbindung',
           fr: 'Packez-vous si pas de lien',
           ja: '線無しはスタック',
-          cn: '未连线则集合',
+          cn: '无连线则去分摊',
           ko: '줄 없으면 뭉쳐요',
         },
       },
@@ -331,7 +327,7 @@ const triggerSet: TriggerSet<Data> = {
     {
       id: 'SeiryuEx Swim Lessons',
       type: 'StartsUsing',
-      netRegex: { id: '37CB', source: 'Seiryu', capture: false },
+      netRegex: { id: '37CB', capture: false },
       delaySeconds: 28,
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
@@ -340,7 +336,7 @@ const triggerSet: TriggerSet<Data> = {
           de: 'Sprinten',
           fr: 'Sprintez',
           ja: 'スプリント',
-          cn: '冲冲冲',
+          cn: '冲刺上岸！',
           ko: '스프린트 써요!',
         },
       },

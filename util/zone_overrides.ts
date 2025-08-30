@@ -273,6 +273,22 @@ const _SYNTHETIC_ZONE_INFO: ZoneInfoType = {
     'sizeFactor': 400,
     'weatherRate': 93,
   },
+  1272: {
+    'contentType': 4,
+    'exVersion': 5,
+    'name': {
+      'cn': '朱雀幻巧战',
+      'de': 'Traumprüfung - Suzaku',
+      'en': 'Hells\' Kier (Unreal)',
+      'fr': 'Le Nid des Lamentations (irréel)',
+      'ja': '幻朱雀征魂戦',
+      'ko': '환 주작 토벌전',
+    },
+    'offsetX': -100,
+    'offsetY': -100,
+    'sizeFactor': 400,
+    'weatherRate': 98,
+  },
 
   // 6.2 updates - content removed/reworked
   143: {
@@ -665,6 +681,23 @@ const _SYNTHETIC_ZONE_INFO: ZoneInfoType = {
     'offsetX': 0,
     'offsetY': 0,
     'sizeFactor': 100,
+    'weatherRate': 0,
+  },
+  // 7.3 updates - content removed/reworked
+  170: {
+    'contentType': 2,
+    'exVersion': 0,
+    'name': {
+      'cn': '(7.2)流沙迷宫樵鸣洞',
+      'de': '(7.2)Sägerschrei',
+      'en': '(7.2)Cutter\'s Cry',
+      'fr': '(7.2)Le Gouffre hurlant',
+      'ja': '(7.2)流砂迷宮 カッターズクライ',
+      'ko': '(7.2)나무꾼의 비명',
+    },
+    'offsetX': 0,
+    'offsetY': 0,
+    'sizeFactor': 200,
     'weatherRate': 0,
   },
 };
