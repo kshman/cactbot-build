@@ -76,6 +76,12 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
+      id: 'Occult Crescent Cloister Demon Tidal Breath',
+      type: 'StartsUsing',
+      netRegex: { source: 'Cloister Demon', id: 'A190', capture: false },
+      response: Responses.getBehind(),
+    },
+    {
       id: 'Occult Crescent Berserker Scathing Sweep',
       type: 'StartsUsing',
       netRegex: { source: 'Crescent Berserker', id: 'A6C3', capture: false },
@@ -160,6 +166,24 @@ const triggerSet: TriggerSet<Data> = {
       netRegex: { source: 'Death Claw', id: ['A16C', 'A173'], capture: false },
       response: Responses.getFrontBackThenSides('alert'),
     },
+    {
+      id: 'Occult Crescent Repaired Lion Holy Blaze',
+      type: 'StartsUsing',
+      netRegex: { source: 'Repaired Lion', id: 'A151', capture: false },
+      response: Responses.awayFromFront(),
+    },
+    {
+      id: 'Occult Crescent Repaired Lion Scratch',
+      type: 'StartsUsing',
+      netRegex: { source: 'Repaired Lion', id: 'A155', capture: true },
+      response: Responses.tankBuster(),
+    },
+    {
+      id: 'Occult Crescent Nymian Petalodus Hydrocleave',
+      type: 'StartsUsing',
+      netRegex: { source: 'Nymian Petalodus', id: 'A88D', capture: false },
+      response: Responses.awayFromFront(),
+    },
   ],
   timelineReplace: [
     {
@@ -170,6 +194,7 @@ const triggerSet: TriggerSet<Data> = {
     },
     {
       'locale': 'cn',
+      'missingTranslations': true,
       'replaceSync': {
         'Ball of Fire': '火球',
         'Black Star': '黑色天星',
