@@ -10434,7 +10434,7 @@ const data: ZoneInfoType = {
       'en': 'The Occult Crescent: South Horn',
       'fr': 'Île de Lunule méridionale',
       'ja': '蜃気楼の島 クレセントアイル：南征編',
-      'ko': '신기루의 섬 크레센트 아일: 정남편',
+      'ko': '초승달 섬: 남부편',
     },
     'offsetX': 0,
     'offsetY': 0,

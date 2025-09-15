@@ -205,8 +205,8 @@ if ($in -eq '3')
   if (-not $?) { Exit-ForError('버전', 33) }
 }
 
-# 플러그인 빌드
-if ($in -eq '1')
+# 플러그인 빌드 예전꺼
+if ($in -eq '9999')
 {
   $vspath = $Env:VS_PATH
   if (-not (Test-Path "$vspath"))
@@ -223,6 +223,18 @@ if ($in -eq '1')
       Get-LineWithMesg "엇.... msbuild 오류가 있네요"
       exit 12
     }
+  }
+}
+
+# 플러그인 빌드
+if ($in -eq '1')
+{
+  $vspath = "C:\Program Files\Microsoft Visual Studio\2022\Community"
+  $ENV:PATH = "$vspath\MSBuild\Current\Bin;${ENV:PATH}";
+  msbuild -p:Configuration=Release -p:Platform=x64 "..\plugin\Cactbot.sln" -t:rebuild
+  if (-not $?) {
+    Get-LineWithMesg "엇.... msbuild 오류가 있네요"
+    exit 12
   }
 }
 
