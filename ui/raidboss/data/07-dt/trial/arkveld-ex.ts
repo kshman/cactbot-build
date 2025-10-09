@@ -23,7 +23,7 @@ const diceMap: { [id: string]: number } = {
   '019B': 8,
 } as const;
 
-const diceDuration: number[] = [8, 11, 14, 17, 20, 23, 26, 29] as const;
+// const diceDuration: number[] = [8, 11, 14, 17, 20, 23, 26, 29] as const;
 
 // the Windward Wilds (Extreme)
 const triggerSet: TriggerSet<Data> = {
@@ -212,9 +212,9 @@ const triggerSet: TriggerSet<Data> = {
       type: 'HeadMarker',
       netRegex: { id: Object.keys(diceMap) },
       condition: (data, matches) => data.me === matches.target,
-      preRun: (data, matches) => data.dice = diceMap[matches.id],
-      durationSeconds: (data) => data.dice ? diceDuration[data.dice - 1] : 0,
-      infoText: (data, _matches, output) => {
+      durationSeconds: 6,
+      infoText: (data, matches, output) => {
+        data.dice = diceMap[matches.id];
         if (!data.dice)
           return;
         if (data.dice < 5)
@@ -240,7 +240,7 @@ const triggerSet: TriggerSet<Data> = {
       // ABB6 반시계, 1이 왼쪽
       netRegex: { id: ['ABB3', 'ABB6'] },
       delaySeconds: 0.5,
-      durationSeconds: 5,
+      durationSeconds: 4,
       response: (data, matches, output) => {
         // cactbot-builtin-response
         output.responseOutputStrings = {
@@ -268,6 +268,7 @@ const triggerSet: TriggerSet<Data> = {
       id: 'ArkveldEx Chase Dice',
       type: 'StartsUsing',
       netRegex: { id: 'ABB8', capture: false },
+      durationSeconds: 4,
       response: (data, _matches, output) => {
         // cactbot-builtin-response
         output.responseOutputStrings = {
