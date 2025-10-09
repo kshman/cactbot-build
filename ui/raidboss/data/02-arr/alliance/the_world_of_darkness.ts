@@ -55,12 +55,12 @@ const triggerSet: TriggerSet<Data> = {
         red: {
           en: 'Get Behind (Red)',
           ja: '後ろ🔴赤',
-          ko: '뒷쪽 🔴빨강',
+          ko: '뒷쪽 🔴빨강으로',
         },
         white: {
           en: 'Get in Front (White)',
           ja: '前⚪白',
-          ko: '앞쪽 ⚪하양',
+          ko: '앞쪽 ⚪하양으로',
         },
       },
     },
@@ -81,7 +81,7 @@ const triggerSet: TriggerSet<Data> = {
         cleanse: {
           en: 'Run to Cleanse Circle',
           ja: '床の光っている円範囲へ',
-          ko: '둠: 동글이 밟아욧욧',
+          ko: '둠: 동글이 밟아욧!',
         },
       },
     },

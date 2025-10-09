@@ -13,19 +13,19 @@ const triggerSet: TriggerSet<Data> = {
       id: 'Amdapor Keep Liquefy Middle',
       type: 'StartsUsing',
       netRegex: { id: '415', source: 'Demon Wall', capture: false },
-      response: Responses.goSides(),
+      response: Responses.goSides('info'),
     },
     {
       id: 'Amdapor Keep Liquefy Sides',
       type: 'StartsUsing',
       netRegex: { id: '416', source: 'Demon Wall', capture: false },
-      response: Responses.goMiddle(),
+      response: Responses.goMiddle('info'),
     },
     {
       id: 'Amdapor Keep Repel',
       type: 'StartsUsing',
       netRegex: { id: '417', source: 'Demon Wall', capture: false },
-      response: Responses.knockback(),
+      response: Responses.knockback('info'),
     },
   ],
   timelineReplace: [

@@ -19,7 +19,7 @@
     "build": "cross-env TS_NODE_PROJECT=\"tsconfig.webpack.json\" webpack --progress --config webpack/webpack.prod.ts",
     "build-gh-pages": "cross-env TS_NODE_PROJECT=\"tsconfig.webpack.json\" webpack --config webpack/webpack.ghpages.ts",
     "start": "cross-env TS_NODE_PROJECT=\"tsconfig.webpack.json\" webpack serve --config webpack/webpack.dev.ts",
-    "fetch-deps": "node --loader=ts-node/esm util/fetch_deps.ts",
+    "fetch-deps": "node --loader=ts-node/esm ./util/fetch_deps.ts",
     "tsc-no-emit": "tsc --noEmit",
     "lint": "run-s lint:**",
     "lint:dprint": "dprint check",
@@ -50,7 +50,7 @@
   "devDependencies": {
     "@actions/core": "^1.10.1",
     "@actions/exec": "^1.1.1",
-    "@actions/github": "^6.0.1",
+    "@actions/github": "^5.0.0",
     "@actions/http-client": "^1.0.11",
     "@babel/core": "^7.14.5",
     "@babel/preset-env": "^7.14.5",
@@ -106,11 +106,11 @@
     "markdown-magic": "^2.5.2",
     "markdownlint-cli": "^0.31.1",
     "mini-css-extract-plugin": "^1.6.0",
-    "mocha": "^11.7.1",
+    "mocha": "^9.2.2",
     "node-fetch": "^3.2.10",
     "npm-run-all": "^4.1.5",
     "postcss": "^8.3.5",
-    "proxy-agent": "^6.5.0",
+    "proxy-agent": "^5.0.0",
     "recast": "^0.20.4",
     "simple-git": "^3.27.0",
     "style-loader": "^3.3.1",
@@ -121,9 +121,9 @@
     "ts-node": "^10.9.2",
     "tsconfig-paths": "^3.9.0",
     "typescript": "^5.1.6",
-    "webpack": "^5.101.0",
-    "webpack-cli": "^4.10.0",
-    "webpack-dev-server": "^5.2.1",
+    "webpack": "^5.76.0",
+    "webpack-cli": "^4.9.2",
+    "webpack-dev-server": "^4.9.0",
     "webpack-merge": "^5.8.0"
   },
   "engines": {
@@ -143,7 +143,7 @@
       "dprint check"
     ],
     "*.{js,cjs,mjs}": [
-      "eslint"
+      "eslint --max-warnings=0"
     ],
     "*.ts": [
       "eslint --max-warnings=0 --plugin tsc --rule 'tsc/config: [2, {configFile: \"./tsconfig.eslint.json\"}]'"

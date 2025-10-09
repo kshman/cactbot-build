@@ -8,6 +8,15 @@ import CombatantState from './CombatantState';
 import LineEvent, {
   isLineEvent0x03,
   isLineEvent0x105,
+  isLineEvent0x107,
+  isLineEvent0x108,
+  isLineEvent0x10A,
+  isLineEvent0x10B,
+  isLineEvent0x10E,
+  isLineEvent0x10F,
+  isLineEvent0x110,
+  isLineEvent0x111,
+  isLineEvent0x112,
   isLineEventAbility,
   isLineEventJobLevel,
   isLineEventSource,
@@ -46,8 +55,7 @@ export default class CombatantTracker {
         const state = this.extractStateFromLine(line);
 
         this.addCombatantFromSourceLine(line, state);
-        eventTracker[line.id] = eventTracker[line.id] ?? 0;
-        ++eventTracker[line.id];
+        eventTracker[line.id] = (eventTracker[line.id] ?? 0) + 1;
         this.combatants[line.id]?.pushPartialState(line.timestamp, state);
       }
 
@@ -55,16 +63,72 @@ export default class CombatantTracker {
         const state = this.extractStateFromTargetLine(line);
 
         this.addCombatantFromTargetLine(line, state);
-        eventTracker[line.targetId] = eventTracker[line.targetId] ?? 0;
-        ++eventTracker[line.targetId];
+        eventTracker[line.targetId] = (eventTracker[line.targetId] ?? 0) + 1;
         this.combatants[line.targetId]?.pushPartialState(line.timestamp, state);
       }
 
       if (isLineEvent0x105(line)) {
         this.addCombatantFromCombatantMemoryLine(line);
-        eventTracker[line.idHex] = eventTracker[line.idHex] ?? 0;
-        ++eventTracker[line.idHex];
+        eventTracker[line.idHex] = (eventTracker[line.idHex] ?? 0) + 1;
         this.combatants[line.idHex]?.pushPartialState(line.timestamp, line.state);
+      }
+
+      // StartsUsingExtra / AbilityExtra
+      if (isLineEvent0x107(line) || isLineEvent0x108(line)) {
+        const c = this.initCombatant(line.id);
+        c?.pushPartialState(line.timestamp, {
+          PosX: line.x,
+          PosY: line.y,
+          PosZ: line.z,
+          Heading: line.heading,
+        });
+      }
+
+      // NpcYell / BattleTalk2
+      if (isLineEvent0x10A(line) || isLineEvent0x10B(line)) {
+        const c = this.initCombatant(line.npcId);
+        c?.pushPartialState(line.timestamp, {});
+      }
+
+      // ActorMove / ActorSetPos
+      if (isLineEvent0x10E(line) || isLineEvent0x10F(line)) {
+        const c = this.initCombatant(line.id);
+        c?.pushPartialState(line.timestamp, {
+          PosX: line.x,
+          PosY: line.y,
+          PosZ: line.z,
+          Heading: line.heading,
+        });
+      }
+
+      // SpawnNPCExtra
+      if (isLineEvent0x110(line)) {
+        const c = this.initCombatant(line.id);
+        c?.pushPartialState(line.timestamp, {
+          OwnerID: parseInt(line.parentId, 16),
+        });
+      }
+
+      // ActorControlExtra
+      if (isLineEvent0x111(line)) {
+        const c = this.initCombatant(line.id);
+        const state: Partial<CombatantState> = {};
+        const category = parseInt(line.category, 16);
+        if (category === 0x3F) {
+          state.WeaponId = parseInt(line.param1, 16);
+        }
+        c?.pushPartialState(line.timestamp, state);
+      }
+
+      // ActorControlSelfExtra
+      if (isLineEvent0x112(line)) {
+        const c = this.initCombatant(line.id);
+        const state: Partial<CombatantState> = {};
+        const category = parseInt(line.category, 16);
+        if (category === 0x3F) {
+          state.WeaponId = parseInt(line.param1, 16);
+        }
+        c?.pushPartialState(line.timestamp, state);
       }
     }
 

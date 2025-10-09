@@ -39,7 +39,7 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: 'Kill luminescence and stay close to boss',
           ja: '光球を倒してボスに近づく',
-          ko: '빛구슬 잡고 보스에게 부비부비',
+          ko: '빛구슬 파워로 보스 부비부비',
         },
       },
     },

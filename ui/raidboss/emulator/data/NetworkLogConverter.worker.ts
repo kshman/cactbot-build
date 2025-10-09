@@ -87,7 +87,6 @@ ctx.addEventListener('message', (msg) => {
         }
       }
     }
-
     if (lines.length > 0) {
       lines = logConverter.convertLines(lines, repo);
       localLogHandler.parseLogs(lines);
