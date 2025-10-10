@@ -10,6 +10,7 @@ export interface Data extends RaidbossData {
   dice?: number;
   chaseDir?: 'cw' | 'ccw';
   chases: number;
+  beams: number;
 }
 
 const diceMap: { [id: string]: number } = {
@@ -33,6 +34,7 @@ const triggerSet: TriggerSet<Data> = {
   initData: () => ({
     resonance: 0,
     chases: 0,
+    beams: 0,
   }),
   triggers: [
     {
@@ -44,12 +46,16 @@ const triggerSet: TriggerSet<Data> = {
     {
       id: 'ArkveldEx 날개짓',
       type: 'StartsUsing',
-      // 43891 왼쪽
-      // 43892 오른쪽
-      netRegex: { id: ['AB73', 'AB74'] },
+      // AB73 왼쪽
+      // AB74 오른쪽
+      // B019 왼쪽
+      // B020 오른쪽
+      netRegex: { id: ['AB73', 'AB74', 'B019', 'B020'] },
       durationSeconds: 3,
       infoText: (_data, matches, output) => {
-        const dir = matches.id === 'AB74' ? output.left!() : output.right!();
+        const dir = matches.id === 'AB74' || matches.id === 'B020'
+          ? output.left!()
+          : output.right!();
         return output.text!({ direction: dir });
       },
       outputStrings: {
@@ -59,6 +65,20 @@ const triggerSet: TriggerSet<Data> = {
         },
         left: Outputs.left,
         right: Outputs.right,
+      },
+    },
+    {
+      id: 'ArkveldEx 날개짓 이동',
+      type: 'StartsUsing',
+      netRegex: { id: ['AB73', 'AB74', 'B019', 'B020'] },
+      delaySeconds: (_data, matches) => parseFloat(matches.castTime) - 0.2,
+      durationSeconds: 2,
+      alertText: (_data, _matches, output) => output.move!(),
+      outputStrings: {
+        move: {
+          en: 'Move',
+          ko: '움직여요!',
+        },
       },
     },
     {
@@ -89,8 +109,7 @@ const triggerSet: TriggerSet<Data> = {
         },
       },
     },
-    /*
-    {
+    /* {
       id: 'ArkveldEx White Flash',
       type: 'StartsUsing',
       netRegex: { id: 'AB82', capture: false },
@@ -99,8 +118,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: Outputs.healerGroups,
       },
-    },
-    */
+    }, */
     {
       id: 'ArkveldEx Rush',
       type: 'StartsUsing',
@@ -129,7 +147,8 @@ const triggerSet: TriggerSet<Data> = {
       type: 'StartsUsing',
       // 43916 왼쪽
       // 43918 오른쪽
-      netRegex: { id: ['AB8C', 'AB8E'] },
+      // B034 왼쪽
+      netRegex: { id: ['AB8C', 'AB8E', 'B032', 'B034'] },
       durationSeconds: 4,
       response: (data, matches, output) => {
         // cactbot-builtin-response
@@ -145,7 +164,9 @@ const triggerSet: TriggerSet<Data> = {
           left: Outputs.left,
           right: Outputs.right,
         };
-        const dir = matches.id === 'AB8E' ? output.left!() : output.right!();
+        const dir = matches.id === 'AB8E' || matches.id === 'B034'
+          ? output.left!()
+          : output.right!();
         if (data.wildEnergy)
           return { alertText: output.spread!({ direction: dir }) };
         return { infoText: output.text!({ direction: dir }) };
@@ -155,7 +176,7 @@ const triggerSet: TriggerSet<Data> = {
     {
       id: 'ArkveldEx Steeltail Thrust',
       type: 'StartsUsing',
-      netRegex: { id: 'ABAD', capture: false },
+      netRegex: { id: ['ABAD', 'B035'], capture: false },
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
@@ -244,14 +265,14 @@ const triggerSet: TriggerSet<Data> = {
       response: (data, matches, output) => {
         // cactbot-builtin-response
         output.responseOutputStrings = {
-          cw1: { en: 'East', ko: '오른쪽으로' },
-          cw2: { en: 'South', ko: '남쪽으로' },
-          cw3: { en: 'West', ko: '왼쪽으로' },
-          cw4: { en: 'North', ko: '북쪽으로' },
-          ccw1: { en: 'West', ko: '왼쪽으로' },
-          ccw2: { en: 'South', ko: '남쪽으로' },
-          ccw3: { en: 'East', ko: '오른쪽으로' },
-          ccw4: { en: 'North', ko: '북쪽으로' },
+          cw1: { en: 'East', ko: '오른쪽🡆으로' },
+          cw2: { en: 'South', ko: '남쪽🡇으로' },
+          cw3: { en: 'West', ko: '왼쪽🡄으로' },
+          cw4: { en: 'North', ko: '북쪽🡅으로' },
+          ccw1: { en: 'West', ko: '왼쪽🡄으로' },
+          ccw2: { en: 'South', ko: '남쪽🡇으로' },
+          ccw3: { en: 'East', ko: '오른쪽🡆으로' },
+          ccw4: { en: 'North', ko: '북쪽🡅으로' },
           others: { en: 'Go center', ko: '한가운데서 대기' },
         };
         data.chaseDir = matches.id === 'ABB3' ? 'cw' : 'ccw';
@@ -272,17 +293,17 @@ const triggerSet: TriggerSet<Data> = {
       response: (data, _matches, output) => {
         // cactbot-builtin-response
         output.responseOutputStrings = {
-          cw5: { en: 'East', ko: '오른쪽으로' },
-          cw6: { en: 'South', ko: '남쪽으로' },
-          cw7: { en: 'West', ko: '왼쪽으로' },
-          cw8: { en: 'North', ko: '북쪽으로' },
-          ccw5: { en: 'West', ko: '왼쪽으로' },
-          ccw6: { en: 'South', ko: '남쪽으로' },
-          ccw7: { en: 'East', ko: '오른쪽으로' },
-          ccw8: { en: 'North', ko: '북쪽으로' },
+          cw5: { en: 'East', ko: '오른쪽🡆으로' },
+          cw6: { en: 'South', ko: '남쪽🡇으로' },
+          cw7: { en: 'West', ko: '왼쪽🡄으로' },
+          cw8: { en: 'North', ko: '북쪽🡅으로' },
+          ccw5: { en: 'West', ko: '왼쪽🡄으로' },
+          ccw6: { en: 'South', ko: '남쪽🡇으로' },
+          ccw7: { en: 'East', ko: '오른쪽🡆으로' },
+          ccw8: { en: 'North', ko: '북쪽🡅으로' },
           avoid: {
             en: 'Avoid!',
-            ko: '피해요!',
+            ko: '한가운데로 피해욧!',
           },
         };
         data.chases = (data.chases ?? 0) + 1;
@@ -292,6 +313,74 @@ const triggerSet: TriggerSet<Data> = {
           const res = `${data.chaseDir}${data.dice}` as const;
           return { alertText: output[res]!() };
         }
+      },
+    },
+    /* {
+      id: 'ArkveldEx Wyvern\'s Weal',
+      type: 'StartsUsing',
+      netRegex: { id: 'ABA0', capture: false },
+      infoText: (_data, _matches, output) => output.text!(),
+      run: (data) => data.beams = 0,
+      outputStrings: {
+        text: {
+          en: 'Bait beams',
+          ko: '3단 빔 유도',
+        },
+      },
+    }, */
+    {
+      id: 'ArkveldEx Weal Beam',
+      type: 'HeadMarker',
+      netRegex: { id: '01D6' },
+      durationSeconds: 5,
+      response: (data, matches, output) => {
+        // cactbot-builtin-response
+        output.responseOutputStrings = {
+          unknown: Outputs.unknown,
+          west: Outputs.west,
+          east: Outputs.east,
+          beamMe: {
+            en: 'Beams on YOU, go ${direction}!',
+            ko: '나에게 빔! ${direction}으로!',
+          },
+          partyMove: {
+            en: 'Go ${direction}, later',
+            ko: '(${direction}으로)',
+          },
+        };
+        const beamer: string[] = ['east', 'west', 'east'];
+        const party: string[] = ['west', 'east', 'west'];
+        const cur = data.beams++;
+        if (data.me === matches.target) {
+          const dir = output[beamer[cur] ?? 'unknown']!();
+          return { alertText: output[dir]!() };
+        }
+        const dir = output[party[cur] ?? 'unknown']!();
+        return { infoText: output.partyMove!({ direction: dir }) };
+      },
+    },
+    {
+      id: 'ArkveldEx Wrathful Rattle',
+      type: 'StartsUsing',
+      netRegex: { id: 'ABA7', capture: false },
+      infoText: (_data, _matches, output) => output.text!(),
+      outputStrings: {
+        text: {
+          en: 'Waves',
+          ko: '연속 물결 장판',
+        },
+      },
+    },
+    {
+      id: 'ArkveldEx Roar + Exaflare',
+      type: 'StartsUsing',
+      netRegex: { id: 'ABAF', capture: false },
+      infoText: (_data, _matches, output) => output.text!(),
+      outputStrings: {
+        text: {
+          en: 'AoE + Exaflare',
+          ko: '전체 공격 🔜 엑사플레어',
+        },
       },
     },
   ],
