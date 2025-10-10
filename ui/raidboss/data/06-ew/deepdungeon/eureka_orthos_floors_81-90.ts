@@ -155,7 +155,7 @@ const triggerSet: TriggerSet<Data> = {
           de: 'Geh in eine Intercardinale Himmelsrichtung vom Boss',
           fr: 'Allez en intercardinal du boss',
           ja: 'ボスの斜めへ',
-          cn: '去Boss的对角线方向',
+          cn: '去Boss的斜角方向',
           ko: '보스 비스듬히 피해요',
         },
       },
@@ -348,6 +348,7 @@ const triggerSet: TriggerSet<Data> = {
         between: {
           en: '${safe}, between eggs',
           de: '${safe}, zwichen den Eiern',
+          fr: '${safe}, entre les œufs',
           ja: '${safe}, たまごの間',
           cn: '${safe}, 蛋中间',
           ko: '${safe}, 알 사이',
