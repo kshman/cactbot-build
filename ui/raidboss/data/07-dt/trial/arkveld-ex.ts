@@ -23,8 +23,6 @@ const diceMap: { [id: string]: number } = {
   '019B': 8,
 } as const;
 
-// const diceDuration: number[] = [8, 11, 14, 17, 20, 23, 26, 29] as const;
-
 // the Windward Wilds (Extreme)
 const triggerSet: TriggerSet<Data> = {
   id: 'ArkveldEx',
@@ -44,10 +42,6 @@ const triggerSet: TriggerSet<Data> = {
     {
       id: 'ArkveldEx 날개짓',
       type: 'StartsUsing',
-      // AB73 왼쪽
-      // AB74 오른쪽
-      // B019 왼쪽
-      // B020 오른쪽
       netRegex: { id: ['AB73', 'AB74', 'B019', 'B020'] },
       durationSeconds: 3,
       infoText: (_data, matches, output) => {
@@ -65,11 +59,11 @@ const triggerSet: TriggerSet<Data> = {
         right: Outputs.right,
       },
     },
-    {
-      id: 'ArkveldEx 날개짓 이동 전반',
+    /* {
+      id: 'ArkveldEx 날개짓 이동',
       type: 'StartsUsing',
-      netRegex: { id: ['AB73', 'AB74'], capture: false },
-      delaySeconds: 6.5,
+      netRegex: { id: ['AB73', 'AB74', 'B019', 'B020'] },
+      delaySeconds: (_data, matches) => parseFloat(matches.castTime) - 0.2,
       durationSeconds: 2,
       alertText: (_data, _matches, output) => output.move!(),
       outputStrings: {
@@ -78,21 +72,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '움직여요!',
         },
       },
-    },
-    {
-      id: 'ArkveldEx 날개짓 이동 후반',
-      type: 'StartsUsing',
-      netRegex: { id: ['B019', 'B020'], capture: false },
-      delaySeconds: 7.5,
-      durationSeconds: 2,
-      alertText: (_data, _matches, output) => output.move!(),
-      outputStrings: {
-        move: {
-          en: 'Move',
-          ko: '움직여요!',
-        },
-      },
-    },
+    }, */
     {
       id: 'ArkveldEx 빨간 돌진',
       type: 'StartsUsing',
@@ -157,10 +137,7 @@ const triggerSet: TriggerSet<Data> = {
     {
       id: 'ArkveldEx Wyvern\'s Ouroblade',
       type: 'StartsUsing',
-      // 43916 왼쪽
-      // 43918 오른쪽
-      // B034 왼쪽
-      netRegex: { id: ['AB8C', 'AB8E', 'B032', 'B034'] },
+      netRegex: { id: ['AB8C', 'AB8E', 'B031', 'B032'] },
       durationSeconds: 4,
       response: (data, matches, output) => {
         // cactbot-builtin-response
@@ -176,7 +153,7 @@ const triggerSet: TriggerSet<Data> = {
           left: Outputs.left,
           right: Outputs.right,
         };
-        const dir = matches.id === 'AB8E' || matches.id === 'B034'
+        const dir = matches.id === 'AB8E' || matches.id === 'B032'
           ? output.left!()
           : output.right!();
         if (data.wildEnergy)
@@ -300,7 +277,7 @@ const triggerSet: TriggerSet<Data> = {
     {
       id: 'ArkveldEx Chase Dice',
       type: 'StartsUsing',
-      netRegex: { id: 'ABB8', capture: false },
+      netRegex: { id: ['ABB5', 'ABB8'], capture: false },
       durationSeconds: 4,
       response: (data, _matches, output) => {
         // cactbot-builtin-response
@@ -323,7 +300,7 @@ const triggerSet: TriggerSet<Data> = {
         data.chases++;
         if (data.chases === data.dice)
           return { infoText: output.avoid!() };
-        if (data.chases < 5 && (data.chases + 4) === data.dice) {
+        if ((data.chases + 4) === data.dice) {
           const res = `${data.chaseDir}${data.dice}` as const;
           return { alertText: output[res]!() };
         }
@@ -338,11 +315,11 @@ const triggerSet: TriggerSet<Data> = {
         // cactbot-builtin-response
         output.responseOutputStrings = {
           beamMe: {
-            en: 'Beams on YOU',
+            en: 'Beam on YOU',
             ko: '나에게 빔!',
           },
           partyMove: {
-            en: '(Avoid beams)',
+            en: '(Avoid beam)',
             ko: '(빔 피해요)',
           },
         };
@@ -380,3 +357,5 @@ const triggerSet: TriggerSet<Data> = {
 };
 
 export default triggerSet;
+
+// 추출: StartsCasting 14:([^:]*):Guardian Arkveld:([^:]*)
