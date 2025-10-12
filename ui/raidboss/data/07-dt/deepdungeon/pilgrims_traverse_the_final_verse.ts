@@ -42,7 +42,7 @@ const triggerSet: TriggerSet<Data> = {
       id: 'PT 99 Eminent Grief Ball of Fire',
       type: 'Ability',
       netRegex: { id: ['AC1D', 'AC24'], source: 'Eminent Grief', capture: false },
-      response: Responses.moveAway('alert'),
+      response: Responses.moveAway('alarm'),
     },
     {
       id: 'PT 99 Eminent Grief Chains of Condemnation',
@@ -51,11 +51,11 @@ const triggerSet: TriggerSet<Data> = {
       netRegex: { id: ['AC20', 'AC26'], source: 'Eminent Grief', capture: true },
       delaySeconds: (_data, matches) => parseFloat(matches.castTime) - 3,
       durationSeconds: 6,
-      alarmText: (_data, _matches, outputs) => outputs.text!(),
+      alertText: (_data, _matches, outputs) => outputs.text!(),
       outputStrings: {
         text: {
           en: 'AoE + Stop Moving!',
-          ko: '전체 공격 + 움직이면 안되요!',
+          ko: '전체 공격 + 동작 그만!',
         },
       },
     },
@@ -65,6 +65,7 @@ const triggerSet: TriggerSet<Data> = {
       type: 'Ability',
       netRegex: { id: 'AC32', source: 'Devoured Eater', capture: false },
       delaySeconds: 3,
+      suppressSeconds: 1,
       response: Responses.moveAway('alert'),
     },
     {
@@ -110,7 +111,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Get Light debuff',
-          ko: '빛🟡 디버프 받아요',
+          ko: '빛🟡 받아요',
         },
       },
     },
@@ -123,7 +124,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Get Dark debuff',
-          ko: '어둠⚫️ 디버프 받아요',
+          ko: '어둠⚫️ 받아요',
         },
       },
     },
@@ -166,7 +167,7 @@ const triggerSet: TriggerSet<Data> = {
         },
         leftRightSafe: {
           en: 'Check safe side',
-          ko: '안전한 옆 확인해요',
+          ko: '좌우 안전한 곳 확인해요',
         },
       },
     },
@@ -175,11 +176,26 @@ const triggerSet: TriggerSet<Data> = {
       type: 'StartsUsing',
       netRegex: { id: 'AC2F', source: 'Eminent Grief', capture: false },
       suppressSeconds: 1,
-      alarmText: (_data, _matches, outputs) => outputs.text!(),
+      alertText: (_data, _matches, outputs) => outputs.text!(),
       outputStrings: {
         text: {
           en: 'Avoid Exaflares',
           ko: '엑사플레어 피해요',
+        },
+      },
+    },
+    {
+      id: 'PT 99 Eminent Grief 불의 알',
+      type: 'StartsUsing',
+      netRegex: { id: 'AC2F', source: 'Eminent Grief', capture: false },
+      delaySeconds: 20,
+      durationSeconds: 4,
+      suppressSeconds: 1,
+      alertText: (_data, _matches, outputs) => outputs.text!(),
+      outputStrings: {
+        text: {
+          en: '(Spread, later)',
+          ko: '(구슬 대비, 흩어져요)',
         },
       },
     },

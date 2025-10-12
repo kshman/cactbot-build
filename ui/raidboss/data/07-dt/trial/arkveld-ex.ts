@@ -10,7 +10,6 @@ export interface Data extends RaidbossData {
   dice?: number;
   chaseDir?: 'cw' | 'ccw';
   chases: number;
-  beams: number;
 }
 
 const diceMap: { [id: string]: number } = {
@@ -34,7 +33,6 @@ const triggerSet: TriggerSet<Data> = {
   initData: () => ({
     resonance: 0,
     chases: 0,
-    beams: 0,
   }),
   triggers: [
     {
@@ -68,10 +66,24 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: 'ArkveldEx 날개짓 이동',
+      id: 'ArkveldEx 날개짓 이동 전반',
       type: 'StartsUsing',
-      netRegex: { id: ['AB73', 'AB74', 'B019', 'B020'] },
-      delaySeconds: (_data, matches) => parseFloat(matches.castTime) - 0.2,
+      netRegex: { id: ['AB73', 'AB74'], capture: false },
+      delaySeconds: 6.5,
+      durationSeconds: 2,
+      alertText: (_data, _matches, output) => output.move!(),
+      outputStrings: {
+        move: {
+          en: 'Move',
+          ko: '움직여요!',
+        },
+      },
+    },
+    {
+      id: 'ArkveldEx 날개짓 이동 후반',
+      type: 'StartsUsing',
+      netRegex: { id: ['B019', 'B020'], capture: false },
+      delaySeconds: 7.5,
       durationSeconds: 2,
       alertText: (_data, _matches, output) => output.move!(),
       outputStrings: {
@@ -84,7 +96,7 @@ const triggerSet: TriggerSet<Data> = {
     {
       id: 'ArkveldEx 빨간 돌진',
       type: 'StartsUsing',
-      netRegex: { id: 'AB81', capture: false },
+      netRegex: { id: ['B030', 'B037'], capture: false },
       durationSeconds: 5,
       suppressSeconds: 1,
       infoText: (_data, _matches, output) => output.text!(),
@@ -98,7 +110,7 @@ const triggerSet: TriggerSet<Data> = {
     {
       id: 'ArkveldEx 하얀 돌진',
       type: 'StartsUsing',
-      netRegex: { id: 'AB82', capture: false },
+      netRegex: { id: ['B02B', 'B045'], capture: false },
       durationSeconds: 5,
       suppressSeconds: 1,
       infoText: (_data, _matches, output) => output.text!(),
@@ -275,9 +287,9 @@ const triggerSet: TriggerSet<Data> = {
           ccw4: { en: 'North', ko: '북쪽🡅으로' },
           others: { en: 'Go center', ko: '한가운데서 대기' },
         };
-        data.chaseDir = matches.id === 'ABB3' ? 'cw' : 'ccw';
         if (data.dice === undefined)
           return;
+        data.chaseDir = matches.id === 'ABB3' ? 'cw' : 'ccw';
         if (data.dice > 4)
           return { infoText: output.others!() };
         const res = `${data.chaseDir}${data.dice}` as const;
@@ -306,7 +318,9 @@ const triggerSet: TriggerSet<Data> = {
             ko: '한가운데로 피해욧!',
           },
         };
-        data.chases = (data.chases ?? 0) + 1;
+        if (data.dice === undefined)
+          return;
+        data.chases++;
         if (data.chases === data.dice)
           return { infoText: output.avoid!() };
         if (data.chases < 5 && (data.chases + 4) === data.dice) {
@@ -315,19 +329,6 @@ const triggerSet: TriggerSet<Data> = {
         }
       },
     },
-    /* {
-      id: 'ArkveldEx Wyvern\'s Weal',
-      type: 'StartsUsing',
-      netRegex: { id: 'ABA0', capture: false },
-      infoText: (_data, _matches, output) => output.text!(),
-      run: (data) => data.beams = 0,
-      outputStrings: {
-        text: {
-          en: 'Bait beams',
-          ko: '3단 빔 유도',
-        },
-      },
-    }, */
     {
       id: 'ArkveldEx Weal Beam',
       type: 'HeadMarker',
@@ -336,27 +337,19 @@ const triggerSet: TriggerSet<Data> = {
       response: (data, matches, output) => {
         // cactbot-builtin-response
         output.responseOutputStrings = {
-          unknown: Outputs.unknown,
-          west: Outputs.west,
-          east: Outputs.east,
           beamMe: {
-            en: 'Beams on YOU, go ${direction}!',
-            ko: '나에게 빔! ${direction}으로!',
+            en: 'Beams on YOU',
+            ko: '나에게 빔!',
           },
           partyMove: {
-            en: 'Go ${direction}, later',
-            ko: '(${direction}으로)',
+            en: '(Avoid beams)',
+            ko: '(빔 피해요)',
           },
         };
-        const beamer: string[] = ['east', 'west', 'east'];
-        const party: string[] = ['west', 'east', 'west'];
-        const cur = data.beams++;
         if (data.me === matches.target) {
-          const dir = output[beamer[cur] ?? 'unknown']!();
-          return { alertText: output[dir]!() };
+          return { alertText: output.beamMe!() };
         }
-        const dir = output[party[cur] ?? 'unknown']!();
-        return { infoText: output.partyMove!({ direction: dir }) };
+        return { infoText: output.partyMove!() };
       },
     },
     {
