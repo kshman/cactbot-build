@@ -4,77 +4,63 @@ import ZoneId from '../../../../../resources/zone_id';
 import { RaidbossData } from '../../../../../types/data';
 import { TriggerSet } from '../../../../../types/trigger';
 
-// Triggers applicable to all Palace of the Dead floors.
+// Triggers applicable to all Pilgrim's Traverse floors.
 
 export type Data = RaidbossData;
 
 const triggerSet: TriggerSet<Data> = {
-  id: 'ThePalaceOfTheDeadGeneral',
+  id: 'PilgrimsTraverseGeneral',
   zoneId: [
-    ZoneId.ThePalaceOfTheDeadFloors1_10,
-    ZoneId.ThePalaceOfTheDeadFloors11_20,
-    ZoneId.ThePalaceOfTheDeadFloors21_30,
-    ZoneId.ThePalaceOfTheDeadFloors31_40,
-    ZoneId.ThePalaceOfTheDeadFloors41_50,
-    ZoneId.ThePalaceOfTheDeadFloors51_60,
-    ZoneId.ThePalaceOfTheDeadFloors61_70,
-    ZoneId.ThePalaceOfTheDeadFloors71_80,
-    ZoneId.ThePalaceOfTheDeadFloors81_90,
-    ZoneId.ThePalaceOfTheDeadFloors91_100,
-    ZoneId.ThePalaceOfTheDeadFloors101_110,
-    ZoneId.ThePalaceOfTheDeadFloors111_120,
-    ZoneId.ThePalaceOfTheDeadFloors121_130,
-    ZoneId.ThePalaceOfTheDeadFloors131_140,
-    ZoneId.ThePalaceOfTheDeadFloors141_150,
-    ZoneId.ThePalaceOfTheDeadFloors151_160,
-    ZoneId.ThePalaceOfTheDeadFloors161_170,
-    ZoneId.ThePalaceOfTheDeadFloors171_180,
-    ZoneId.ThePalaceOfTheDeadFloors181_190,
-    ZoneId.ThePalaceOfTheDeadFloors191_200,
+    ZoneId.PilgrimsTraverseStones1_10,
+    ZoneId.PilgrimsTraverseStones11_20,
+    ZoneId.PilgrimsTraverseStones21_30,
+    ZoneId.PilgrimsTraverseStones31_40,
+    ZoneId.PilgrimsTraverseStones41_50,
+    ZoneId.PilgrimsTraverseStones51_60,
+    ZoneId.PilgrimsTraverseStones61_70,
+    ZoneId.PilgrimsTraverseStones71_80,
+    ZoneId.PilgrimsTraverseStones81_90,
+    ZoneId.PilgrimsTraverseStones91_100,
   ],
   zoneLabel: {
-    en: 'The Palace of the Dead (All Floors)',
-    de: 'Palast der Toten (Alle Ebenen)',
-    fr: 'Le palais des morts (Tous les étages)',
-    ja: '死者の宮殿 (全階層)',
-    cn: '死者宫殿 (全楼层)',
-    ko: '망자의 궁전 (전체 층)',
+    en: 'Pilgrim\'s Traverse (All Stones)',
+    ko: '필그림 트래버스 (모든 층)',
   },
 
   triggers: [
     // ---------------- Mimics ----------------
     {
-      id: 'PotD General Mimic Spawn',
-      // 2566 = Mimic (appears to be same npcNameId all floors)
-      // floor 1-30 bronze chests, can stun or interrupt
-      // floor 31-40 silver chests, can stun or interrupt
-      // floor 41+ gold chests, can interrupt, immune to stun
+      id: 'PT General Mimic Spawn',
+      // 14264 = Mimic (floor 1-30 bronze chests, can stun or interrupt)
+      // 14265 = Mimic (floor 31-60 silver chests, can stun or interrupt)
+      // 14266 = Mimic (floor 61+ gold chests, can interrupt, immune to stun)
       // TODO: some Mimics may spawn after transference between floors and get called early before being found
       type: 'AddedCombatant',
-      netRegex: { npcNameId: '2566', capture: false },
+      netRegex: { npcNameId: ['14264', '14265', '14266'], capture: false },
+      suppressSeconds: 1,
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
           en: 'Mimic spawned!',
           de: 'Mimik ist erschienen!',
-          fr: 'Un mime est apparu !',
+          fr: 'Un mimic apparait !',
           ja: 'ミミック！',
           cn: '已生成 拟态怪!',
-          ko: '미믹 등장!',
+          ko: '미믹이 나왔어요!',
         },
       },
     },
     {
-      id: 'PotD General Mimic Infatuation',
+      id: 'PT General Mimic Malice',
       // inflicts Accursed Pox (43F) if not interrupted
       type: 'StartsUsing',
-      netRegex: { id: '18FD', source: 'Mimic' },
+      netRegex: { id: 'AF34', source: 'Mimic' },
       response: Responses.interruptIfPossible(),
     },
-    // ---------------- Pomanders ----------------
+    // ---------------- Pomanders and Juniper Incense ----------------
     {
-      id: 'PotD General Pomander Duplicate',
-      // duplicate pomander message: https://v2.xivapi.com/api/sheet/LogMessage/7222
+      id: 'PT General Pomander Duplicate',
+      // duplicate item message: https://v2.xivapi.com/api/sheet/LogMessage/7222
       // en: You return the pomander of ${pomander} to the coffer. You cannot carry any more of that item.
       type: 'SystemLogMessage',
       netRegex: { id: '1C36' },
@@ -102,16 +88,16 @@ const triggerSet: TriggerSet<Data> = {
             return output.duplicate!({ pomander: output.witching!() });
           case 11:
             return output.duplicate!({ pomander: output.serenity!() });
-          case 12:
-            return output.duplicate!({ pomander: output.rage!() });
-          case 13:
-            return output.duplicate!({ pomander: output.lust!() });
           case 14:
             return output.duplicate!({ pomander: output.intuition!() });
           case 15:
             return output.duplicate!({ pomander: output.raising!() });
-          case 16:
-            return output.duplicate!({ pomander: output.resolution!() });
+          case 36:
+            return output.duplicate!({ pomander: output.haste!() });
+          case 37:
+            return output.duplicate!({ pomander: output.purification!() });
+          case 38:
+            return output.duplicate!({ pomander: output.devotion!() });
           default:
             return output.duplicate!({ pomander: output.unknown!() });
         }
@@ -120,10 +106,10 @@ const triggerSet: TriggerSet<Data> = {
         duplicate: {
           en: '${pomander} duplicate',
           de: 'Doppelter ${pomander}',
-          fr: '${pomander} dupliqué',
+          fr: '${pomander} dupliqué(e)',
           ja: '${pomander} 被り',
           cn: '${pomander} 重复',
-          ko: '${pomander} 중복',
+          ko: '${pomander} 또 나옴',
         },
         // pomanders: https://v2.xivapi.com/api/sheet/DeepDungeonItem
         safety: {
@@ -132,7 +118,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: 'Désamorçage',
           ja: '呪印解除',
           cn: '咒印解除',
-          ko: '함정 해제',
+          ko: '함정 해제(Safety)',
         },
         sight: {
           en: 'Sight',
@@ -140,7 +126,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: 'Localisation',
           ja: 'サイトロ',
           cn: '全景',
-          ko: '사이트로',
+          ko: '사이트로(Sight)',
         },
         strength: {
           en: 'Strength',
@@ -148,7 +134,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: 'Puissance',
           ja: '自己強化',
           cn: '强化自身',
-          ko: '자기 강화',
+          ko: '자기 강화(Strength)',
         },
         steel: {
           en: 'Steel',
@@ -156,7 +142,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: 'Protection',
           ja: '防御強化',
           cn: '强化防御',
-          ko: '방어 강화',
+          ko: '방어 강화(Steel)',
         },
         affluence: {
           en: 'Affluence',
@@ -164,7 +150,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: 'Décèlement',
           ja: '宝箱増加',
           cn: '宝箱增加',
-          ko: '보물상자 증가',
+          ko: '보물상자 증가(Affluence)',
         },
         flight: {
           en: 'Flight',
@@ -172,7 +158,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: 'Sécurisation',
           ja: '敵排除',
           cn: '减少敌人',
-          ko: '적 감소',
+          ko: '적 감소(Flight)',
         },
         alteration: {
           en: 'Alteration',
@@ -180,7 +166,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: 'Affaiblissement',
           ja: '敵変化',
           cn: '改变敌人',
-          ko: '적 대체',
+          ko: '적 변화(Alteration)',
         },
         purity: {
           en: 'Purity',
@@ -188,7 +174,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: 'Anti-maléfice',
           ja: '解呪',
           cn: '解咒',
-          ko: '저주 해제',
+          ko: '저주 해제(Purity)',
         },
         fortune: {
           en: 'Fortune',
@@ -196,7 +182,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: 'Chance',
           ja: '運気上昇',
           cn: '运气上升',
-          ko: '운 상승',
+          ko: '운 상승(Fortune)',
         },
         witching: {
           en: 'Witching',
@@ -204,7 +190,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: 'Mutation',
           ja: '形態変化',
           cn: '形态变化',
-          ko: '적 변형',
+          ko: '적 변형(Witching)',
         },
         serenity: {
           en: 'Serenity',
@@ -212,23 +198,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: 'Dissipation',
           ja: '魔法効果解除',
           cn: '魔法效果解除',
-          ko: '마법 효과 해제',
-        },
-        rage: {
-          en: 'Rage',
-          de: 'Manticoren',
-          fr: 'Manticore',
-          ja: 'マンティコア化',
-          cn: '曼提克化',
-          ko: '만티코어 변신',
-        },
-        lust: {
-          en: 'Lust',
-          de: 'Sukkuben',
-          fr: 'Succube',
-          ja: 'サキュバス化',
-          cn: '梦魔化',
-          ko: '서큐버스 변신',
+          ko: '마법 효과 해제(Serenity)',
         },
         intuition: {
           en: 'Intuition',
@@ -236,7 +206,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: 'Intuition',
           ja: '財宝感知',
           cn: '感知宝藏',
-          ko: '보물 탐지',
+          ko: '보물 탐지(Intuition)',
         },
         raising: {
           en: 'Raising',
@@ -244,69 +214,93 @@ const triggerSet: TriggerSet<Data> = {
           fr: 'Résurrection',
           ja: 'リレイズ',
           cn: '重生',
-          ko: '리레이즈',
+          ko: '리레이즈(Raising)',
         },
-        resolution: {
-          en: 'Resolution',
-          de: 'Kuribu',
-          fr: 'Kuribu',
-          ja: 'クリブ化',
-          cn: '基路伯化',
-          ko: '쿠리부 변신',
+        haste: {
+          en: 'Haste',
+          ko: '헤이스트(Haste)',
+        },
+        purification: {
+          en: 'Purification',
+          ko: '이상 현상 바리어(Purification)',
+        },
+        devotion: {
+          en: 'Devotion',
+          ko: '헌신(Devotion)',
+        },
+        unknown: Outputs.unknown,
+      },
+    },
+    {
+      id: 'PT General Incense Duplicate',
+      // two different SystemLogMessage depending on which incense
+      // duplicate incense message 1: https://v2.xivapi.com/api/sheet/LogMessage/9208
+      // duplicate incense message 2: https://v2.xivapi.com/api/sheet/LogMessage/10287
+      // en: You return the piece of ${incense} incense to the coffer. You cannot carry any more of that item.
+      type: 'SystemLogMessage',
+      netRegex: { id: ['23F8', '282F'] },
+      infoText: (_data, matches, output) => {
+        const id = matches.id;
+        const param1 = parseInt(matches.param1, 16);
+
+        // incense items are in two different tables: DeepDungeonDemiclone and DeepDungeonMagicStone
+        // https://v2.xivapi.com/api/sheet/DeepDungeonDemiclone
+        // https://v2.xivapi.com/api/sheet/DeepDungeonMagicStone
+        if (id === '23F8' && param1 === 5) {
+          // incense is from DeepDungeonMagicStone
+          return output.duplicate!({ incense: output.poisonfruit!() });
+        }
+
+        if (id === '282F') {
+          // incense is from DeepDungeonDemiclone
+          switch (param1) {
+            case 4:
+              return output.duplicate!({ incense: output.mazeroot!() });
+            case 5:
+              return output.duplicate!({ incense: output.barkbalm!() });
+          }
+        }
+
+        return output.duplicate!({ incense: output.unknown!() });
+      },
+      outputStrings: {
+        duplicate: {
+          en: '${incense} duplicate',
+          ko: '${incense} 또 나옴',
+        },
+        mazeroot: {
+          en: 'Mazeroot',
+          ko: '미로뿌리(Mazeroot)',
+        },
+        barkbalm: {
+          en: 'Barkbalm',
+          ko: '나무껍질연고(Barkbalm)',
+        },
+        poisonfruit: {
+          en: 'Poisonfruit',
+          ko: '독과일(Poisonfruit)',
         },
         unknown: Outputs.unknown,
       },
     },
     // ---------------- Floor Notifications ----------------
     {
-      id: 'PotD General Cairn of Passage',
+      id: 'PT General Pylon of Passage',
       // portal to transfer between floors
-      // Cairn of Passage activation message: https://v2.xivapi.com/api/sheet/LogMessage/7245
-      // en: The Cairn of Passage is activated!
+      // Pylon of Passage activation message: https://v2.xivapi.com/api/sheet/LogMessage/7245
+      // en: The Pylon of Passage is activated!
       type: 'SystemLogMessage',
       netRegex: { id: '1C4D', capture: false },
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Cairn of Passage activated',
-          de: 'Wegleuchte aktiviert',
-          fr: 'La pierre de téléportation s\'est activée',
+          en: 'Pylon of Passage activated',
+          de: 'Translokator aktiviert',
+          fr: 'Pylone de téléportation activé',
           ja: '転移が出来ます',
-          cn: '转移石冢已启动',
-          ko: '전송 석탑 활성화',
+          cn: '传送装置已启动',
+          ko: '다음 층으로 갈 수 있어요',
         },
-      },
-    },
-  ],
-  timelineReplace: [
-    {
-      'locale': 'de',
-      'replaceSync': {
-        'Mimic': 'Nachahmung',
-      },
-    },
-    {
-      'locale': 'fr',
-      'replaceSync': {
-        'Mimic': 'Mime',
-      },
-    },
-    {
-      'locale': 'ja',
-      'replaceSync': {
-        'Mimic': 'ものまね',
-      },
-    },
-    {
-      'locale': 'cn',
-      'replaceSync': {
-        'Mimic': '模仿',
-      },
-    },
-    {
-      'locale': 'ko',
-      'replaceSync': {
-        'Mimic': '흉내',
       },
     },
   ],
