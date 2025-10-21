@@ -6,6 +6,7 @@ import { RaidbossData } from '../../../../../types/data';
 import { TriggerSet } from '../../../../../types/trigger';
 
 // Pilgrim's Traverse Stone 99/The Final Verse
+// TODO: Bounds of Sin dodge direction
 // TODO: Abysal Blaze left/right safe spots
 // TODO: timeline
 
@@ -27,11 +28,11 @@ const triggerSet: TriggerSet<Data> = {
       id: 'PT 99 Devoured Eater Blade of First Light',
       type: 'StartsUsing',
       netRegex: { id: ['AC21', 'AC22', 'AC27', 'AC28'], source: 'Devoured Eater', capture: true },
-      alertText: (_data, matches, outputs) => {
+      alertText: (_data, matches, output) => {
         const id = matches.id;
         if (id === 'AC21' || id === 'AC27')
-          return outputs.sides!();
-        return outputs.middle!();
+          return output.sides!();
+        return output.middle!();
       },
       outputStrings: {
         sides: Outputs.sides,
@@ -49,8 +50,9 @@ const triggerSet: TriggerSet<Data> = {
       // raidwide + applies 11D2 Chains of Condemnation for 3s; heavy damage if moving
       type: 'StartsUsing',
       netRegex: { id: ['AC20', 'AC26'], source: 'Eminent Grief', capture: true },
-      delaySeconds: (_data, matches) => parseFloat(matches.castTime) - 3,
-      durationSeconds: 6,
+      delaySeconds: (_data, matches) => parseFloat(matches.castTime) - 5,
+      countdownSeconds: 5,
+      durationSeconds: 8,
       alertText: (_data, _matches, outputs) => outputs.text!(),
       outputStrings: {
         text: {
@@ -62,10 +64,10 @@ const triggerSet: TriggerSet<Data> = {
     {
       id: 'PT 99 Devoured Eater Bounds of Sin',
       // applies 119E Bind for 3s
+      // AC33 = sequential damage cast, may have good position data for dodge direction
       type: 'Ability',
       netRegex: { id: 'AC32', source: 'Devoured Eater', capture: false },
       delaySeconds: 3,
-      suppressSeconds: 1,
       response: Responses.moveAway('alert'),
     },
     {
@@ -74,7 +76,7 @@ const triggerSet: TriggerSet<Data> = {
       type: 'HeadMarker',
       netRegex: { id: '00EA', capture: true },
       condition: Conditions.targetIsYou(),
-      alertText: (_data, _matches, outputs) => outputs.text!(),
+      alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
           en: 'Laser on YOU',
@@ -86,7 +88,7 @@ const triggerSet: TriggerSet<Data> = {
       id: 'PT 99 Eminent Grief Spinelash',
       type: 'StartsUsing',
       netRegex: { id: 'B03E', source: 'Eminent Grief', capture: false },
-      infoText: (_data, _matches, outputs) => outputs.text!(),
+      infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
           en: 'Avoid laser',
@@ -103,11 +105,14 @@ const triggerSet: TriggerSet<Data> = {
     },
     {
       id: 'PT 99 Eminent Grief Drain Aether',
-      // AC3[BD] = failstate casts?
+      // AC38 = short cast
+      // AC39 = long cast
+      // [AC3B, AC3D] = failstate casts?
       type: 'StartsUsing',
       netRegex: { id: ['AC38', 'AC39'], source: 'Eminent Grief', capture: true },
-      delaySeconds: (_data, matches) => parseFloat(matches.castTime) - 3,
-      alertText: (_data, _matches, outputs) => outputs.text!(),
+      delaySeconds: (_data, matches) =>
+        matches.id === 'AC38' ? 0 : parseFloat(matches.castTime) - 5,
+      alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
           en: 'Get Light debuff',
@@ -117,10 +122,13 @@ const triggerSet: TriggerSet<Data> = {
     },
     {
       id: 'PT 99 Devoured Eater Drain Aether',
+      // AC3A = short cast
+      // AC3C = long cast
       type: 'StartsUsing',
       netRegex: { id: ['AC3A', 'AC3C'], source: 'Devoured Eater', capture: true },
-      delaySeconds: (_data, matches) => parseFloat(matches.castTime) - 3,
-      alertText: (_data, _matches, outputs) => outputs.text!(),
+      delaySeconds: (_data, matches) =>
+        matches.id === 'AC3A' ? 0 : parseFloat(matches.castTime) - 4,
+      alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
           en: 'Get Dark debuff',
@@ -134,6 +142,7 @@ const triggerSet: TriggerSet<Data> = {
       // AC2B = first cast, vertical exaflares, left or right safe
       // AC2C = second instant cast, horizontal exaflares, back safe
       // AC2D = second instant cast, vertical exaflares, left or right safe
+      // AC2E = used approximately 7s after each horizontal/vertical indicator, may have good data for starting positions
       // AC2F = diamonds glow, exaflares start at end of cast
       // AC30 = instant, exaflare explosion/damage
       type: 'Ability',
@@ -155,7 +164,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: '${safe}, for later',
-          ko: '(${safe})',
+          ko: '(나중에 ${safe})',
         },
         frontSafe: {
           en: 'Front safe',
@@ -167,7 +176,7 @@ const triggerSet: TriggerSet<Data> = {
         },
         leftRightSafe: {
           en: 'Check safe side',
-          ko: '좌우 안전한 곳 확인해요',
+          ko: '좌우 안전한 곳 찾아봐요',
         },
       },
     },
@@ -195,8 +204,31 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: '(Spread, later)',
-          ko: '(구슬 대비, 흩어져요)',
+          ko: '(곧 구슬, 흩어져요)',
         },
+      },
+    },
+  ],
+  timelineReplace: [
+    {
+      'locale': 'de',
+      'replaceSync': {
+        'Devoured Eater': 'erodiert(?:e|er|es|en) Sündenvertilger',
+        'Eminent Grief': 'Eminent(?:e|er|es|en) Trauer',
+      },
+    },
+    {
+      'locale': 'fr',
+      'replaceSync': {
+        'Devoured Eater': 'purgateur dévoré',
+        'Eminent Grief': 'Pontife du Chagrin',
+      },
+    },
+    {
+      'locale': 'ja',
+      'replaceSync': {
+        'Devoured Eater': '侵蝕された罪喰い',
+        'Eminent Grief': 'エミネントグリーフ',
       },
     },
   ],
