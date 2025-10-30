@@ -50,13 +50,14 @@ const triggerSet: TriggerSet<Data> = {
       // raidwide + applies 11D2 Chains of Condemnation for 3s; heavy damage if moving
       type: 'StartsUsing',
       netRegex: { id: ['AC20', 'AC26'], source: 'Eminent Grief', capture: true },
-      delaySeconds: (_data, matches) => parseFloat(matches.castTime) - 5,
-      countdownSeconds: 5,
-      durationSeconds: 8,
-      alertText: (_data, _matches, outputs) => outputs.text!(),
+      delaySeconds: (_data, matches) => parseFloat(matches.castTime) - 3,
+      countdownSeconds: 3,
+      durationSeconds: 6,
+      alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
           en: 'AoE + Stop Moving!',
+          ja: '全体攻撃 + 止まれ!',
           ko: '전체 공격 + 동작 그만!',
         },
       },
@@ -80,6 +81,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Laser on YOU',
+          ja: '自分にレーザー',
           ko: '내게 레이저!',
         },
       },
@@ -92,6 +94,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Avoid laser',
+          ja: 'レーザーを避ける',
           ko: '레이저 피해요',
         },
       },
@@ -116,6 +119,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Get Light debuff',
+          ja: '光デバフを受ける',
           ko: '빛🟡 받아요',
         },
       },
@@ -132,6 +136,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Get Dark debuff',
+          ja: '闇デバフを受ける',
           ko: '어둠⚫️ 받아요',
         },
       },
@@ -148,34 +153,38 @@ const triggerSet: TriggerSet<Data> = {
       type: 'Ability',
       netRegex: { id: ['AC2A', 'AC2B', 'AC2C', 'AC2D'], source: 'Eminent Grief', capture: true },
       durationSeconds: 10,
-      infoText: (_data, matches, outputs) => {
+      infoText: (_data, matches, output) => {
         const id = matches.id;
         switch (id) {
           case 'AC2A':
-            return outputs.text!({ safe: outputs.frontSafe!() });
+            return output.text!({ safe: output.front!() });
           case 'AC2B':
-            return outputs.text!({ safe: outputs.leftRightSafe!() });
+            return output.text!({ safe: output.side!() });
           case 'AC2C':
-            return outputs.text!({ safe: outputs.backSafe!() });
+            return output.text!({ safe: output.back!() });
           case 'AC2D':
-            return outputs.text!({ safe: outputs.leftRightSafe!() });
+            return output.text!({ safe: output.side!() });
         }
       },
       outputStrings: {
         text: {
           en: '${safe}, for later',
+          ja: '${safe}、あとで',
           ko: '(나중에 ${safe})',
         },
-        frontSafe: {
+        front: {
           en: 'Front safe',
+          ja: '前方が安置',
           ko: '앞쪽이 안전',
         },
-        backSafe: {
+        back: {
           en: 'Back safe',
+          ja: '後方が安置',
           ko: '뒤쪽이 안전',
         },
-        leftRightSafe: {
+        side: {
           en: 'Check safe side',
+          ja: '横の安置を確認',
           ko: '좌우 안전한 곳 찾아봐요',
         },
       },
@@ -185,26 +194,12 @@ const triggerSet: TriggerSet<Data> = {
       type: 'StartsUsing',
       netRegex: { id: 'AC2F', source: 'Eminent Grief', capture: false },
       suppressSeconds: 1,
-      alertText: (_data, _matches, outputs) => outputs.text!(),
+      alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
           en: 'Avoid Exaflares',
+          ja: 'エクサフレアを避ける',
           ko: '엑사플레어 피해요',
-        },
-      },
-    },
-    {
-      id: 'PT 99 Eminent Grief 불의 알',
-      type: 'StartsUsing',
-      netRegex: { id: 'AC2F', source: 'Eminent Grief', capture: false },
-      delaySeconds: 20,
-      durationSeconds: 4,
-      suppressSeconds: 1,
-      alertText: (_data, _matches, outputs) => outputs.text!(),
-      outputStrings: {
-        text: {
-          en: '(Spread, later)',
-          ko: '(곧 구슬, 흩어져요)',
         },
       },
     },
