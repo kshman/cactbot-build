@@ -218,14 +218,23 @@ const triggerSet: TriggerSet<Data> = {
         },
         haste: {
           en: 'Haste',
+          de: 'Hast',
+          fr: 'Hâte',
+          ja: 'ヘイスト',
           ko: '헤이스트(Haste)',
         },
         purification: {
           en: 'Purification',
+          de: 'Reinigung',
+          fr: 'Purification',
+          ja: '浄化の守り',
           ko: '이상 현상 바리어(Purification)',
         },
         devotion: {
           en: 'Devotion',
+          de: 'Weisung',
+          fr: 'Dévotion',
+          ja: '巡礼の導き',
           ko: '헌신(Devotion)',
         },
         unknown: Outputs.unknown,
@@ -266,18 +275,31 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         duplicate: {
           en: '${incense} duplicate',
+          de: 'Doppelter ${incense}',
+          fr: '${incense} dupliqué(e)',
+          ja: '${incense} 被り',
+          cn: '${incense} 重复',
           ko: '${incense} 또 나옴',
         },
         mazeroot: {
           en: 'Mazeroot',
+          de: 'Wandelwurz',
+          fr: 'Sagacité',
+          ja: '明敏',
           ko: '미로뿌리(Mazeroot)',
         },
         barkbalm: {
           en: 'Barkbalm',
+          de: 'Sakralharz',
+          fr: 'Quiétude',
+          ja: '安寧',
           ko: '나무껍질연고(Barkbalm)',
         },
         poisonfruit: {
           en: 'Poisonfruit',
+          de: 'Todesbeeren',
+          fr: 'Fatalité',
+          ja: '宿命',
           ko: '독과일(Poisonfruit)',
         },
         unknown: Outputs.unknown,
@@ -301,6 +323,38 @@ const triggerSet: TriggerSet<Data> = {
           cn: '传送装置已启动',
           ko: '다음 층으로 갈 수 있어요',
         },
+      },
+    },
+  ],
+  timelineReplace: [
+    {
+      'locale': 'de',
+      'replaceSync': {
+        'Mimic': 'Mimik',
+      },
+    },
+    {
+      'locale': 'fr',
+      'replaceSync': {
+        'Mimic': 'Mimic',
+      },
+    },
+    {
+      'locale': 'ja',
+      'replaceSync': {
+        'Mimic': 'ミミック',
+      },
+    },
+    {
+      'locale': 'cn',
+      'replaceSync': {
+        'Mimic': '拟态怪',
+      },
+    },
+    {
+      'locale': 'ko',
+      'replaceSync': {
+        'Mimic': '미믹',
       },
     },
   ],

@@ -5,6 +5,8 @@ import ZoneId from '../../../../../resources/zone_id';
 import { RaidbossData } from '../../../../../types/data';
 import { TriggerSet } from '../../../../../types/trigger';
 
+// Pilgrim's Traverse Stones 61-70
+
 type DirectionOutputCardinalRelative =
   | 'front'
   | 'right'
@@ -31,7 +33,136 @@ export interface Data extends RaidbossData {
 const triggerSet: TriggerSet<Data> = {
   id: 'PilgrimsTraverseStones61_70',
   zoneId: ZoneId.PilgrimsTraverseStones61_70,
+
   triggers: [
+    // ---------------- Stone 61-69 Mobs ----------------
+    {
+      id: 'PT 61-70 Forgiven Doubt Body Press',
+      type: 'StartsUsing',
+      netRegex: { id: 'AECC', source: 'Forgiven Doubt', capture: false },
+      response: Responses.outOfMelee(),
+    },
+    {
+      id: 'PT 61-70 Traverse Cliffmole Head Butt',
+      type: 'StartsUsing',
+      netRegex: { id: 'AEC4', source: 'Traverse Cliffmole', capture: false },
+      response: Responses.awayFromFront(),
+    },
+    {
+      id: 'PT 61-70 Forgiven Riot Right-sided Shockwave',
+      type: 'StartsUsing',
+      netRegex: { id: 'A4E6', source: 'Forgiven Riot', capture: false },
+      response: Responses.goLeftThenRight(),
+    },
+    {
+      id: 'PT 61-70 Forgiven Riot Left-sided Shockwave',
+      type: 'StartsUsing',
+      netRegex: { id: 'A4E8', source: 'Forgiven Riot', capture: false },
+      response: Responses.goRightThenLeft(),
+    },
+    {
+      id: 'PT 61-70 Traverse Gnome Plain Pound',
+      type: 'StartsUsing',
+      netRegex: { id: 'AED1', source: 'Traverse Gnome', capture: false },
+      response: Responses.outOfMelee(),
+    },
+    {
+      id: 'PT 61-70 Forgiven Grudge Crystalline Stingers',
+      type: 'StartsUsing',
+      netRegex: { id: 'A610', source: 'Forgiven Grudge', capture: true },
+      response: Responses.stunIfPossible(),
+    },
+    {
+      id: 'PT 61-70 Forgiven Grudge Hailfire',
+      type: 'StartsUsing',
+      netRegex: { id: 'A613', source: 'Forgiven Grudge', capture: false },
+      response: Responses.getBehind(),
+    },
+    {
+      id: 'PT 61-70 Traverse Talos Accelerate',
+      // follows-up with A615 Subduction PBAoE, then A616 Settling Stone donut (both instant cast)
+      type: 'StartsUsing',
+      netRegex: { id: 'A614', source: 'Traverse Talos', capture: false },
+      alertText: (_data, _matches, output) => output.text!(),
+      outputStrings: {
+        text: {
+          en: 'Away from jump => Get Under or Out',
+        },
+      },
+    },
+    {
+      id: 'PT 61-70 Forgiven Attachment Sewer Water Front',
+      type: 'StartsUsing',
+      netRegex: { id: 'AECE', source: 'Forgiven Attachment', capture: false },
+      response: Responses.getBehind(),
+    },
+    {
+      id: 'PT 61-70 Forgiven Attachment Sewer Water Back',
+      type: 'StartsUsing',
+      netRegex: { id: 'AECF', source: 'Forgiven Attachment', capture: false },
+      response: Responses.goFront('alert'),
+    },
+    {
+      id: 'PT 61-70 Forgiven Contention Several Thousand Needles',
+      type: 'StartsUsing',
+      netRegex: { id: 'A4EC', source: 'Forgiven Contention', capture: false },
+      response: Responses.getBehind(),
+    },
+    {
+      id: 'PT 61-70 Forgiven Imparity Rockslide',
+      type: 'StartsUsing',
+      netRegex: { id: 'AEC7', source: 'Forgiven Imparity', capture: false },
+      response: Responses.getIntercards(),
+    },
+    {
+      id: 'PT 61-70 Traverse Queen Unfinal Sting',
+      type: 'StartsUsing',
+      netRegex: { id: 'A60E', source: 'Traverse Queen', capture: false },
+      response: Responses.awayFromFront(),
+    },
+    {
+      id: 'PT 61-70 Traverse Queen Final Sting',
+      // enrage on targeted player
+      type: 'StartsUsing',
+      netRegex: { id: 'A60F', source: 'Traverse Queen', capture: true },
+      alertText: (data, matches, output) => {
+        const target = matches.target;
+        if (target === undefined)
+          return output.sting!();
+        if (target === data.me)
+          return output.stingOnYou!();
+        return output.stingOnPlayer!({ player: data.party.member(target) });
+      },
+      outputStrings: {
+        sting: {
+          en: 'Final Sting',
+        },
+        stingOnYou: {
+          en: 'Final Sting on YOU',
+        },
+        stingOnPlayer: {
+          en: 'Final Sting on ${player}',
+        },
+      },
+    },
+    {
+      id: 'PT 61-70 Traverse Ngozi Landslip',
+      type: 'StartsUsing',
+      netRegex: { id: 'AED3', source: 'Traverse Ngozi', capture: false },
+      response: Responses.getBehind(),
+    },
+    {
+      id: 'PT 61-70 Forgiven Voracity Stone Gaze',
+      type: 'StartsUsing',
+      netRegex: { id: 'AECA', source: 'Forgiven Voracity', capture: false },
+      response: Responses.awayFromFront(),
+    },
+    {
+      id: 'PT 61-70 Forgiven Voracity Body Slam',
+      type: 'StartsUsing',
+      netRegex: { id: 'AECB', source: 'Forgiven Voracity', capture: false },
+      response: Responses.outOfMelee(),
+    },
     // ---------------- Stone 70 Boss: Forgiven Zeal ----------------
     // A993 = Zealous Glower dummy self-cast, back-to-front line
     // A98E = Zealous Glower dummy self-cast, front-to-back line
