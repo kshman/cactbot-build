@@ -71,6 +71,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: '${knockback} ${dir4} => ${dir1}',
+          cn: '${knockback} ${dir4} => ${dir1}',
           ko: '${knockback} ${dir4} 🔜 ${dir1}',
         },
         knockback: Outputs.knockback,
@@ -95,6 +96,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Seed on YOU',
+          cn: '种子点名',
           ko: '내게 씨앗!',
         },
       },

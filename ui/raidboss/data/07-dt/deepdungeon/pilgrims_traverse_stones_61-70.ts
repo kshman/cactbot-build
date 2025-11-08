@@ -87,6 +87,8 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Away from jump => Get Under or Out',
+          cn: '远离跳跃 => 去脚下或外面',
+          ko: '점프 먼곳으로 🔜 밑이나 밖으로',
         },
       },
     },
@@ -136,12 +138,18 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         sting: {
           en: 'Final Sting',
+          cn: '终极针',
+          ko: '파이널 스팅',
         },
         stingOnYou: {
           en: 'Final Sting on YOU',
+          cn: '终极针点名',
+          ko: '내게 파이널 스팅!',
         },
         stingOnPlayer: {
           en: 'Final Sting on ${player}',
+          cn: '终极针点${player}',
+          ko: '파이널 스팅: ${player}',
         },
       },
     },
@@ -195,14 +203,17 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Dodge ${dir}',
+          cn: '${dir} 躲避',
           ko: '${dir} 피해요!',
         },
         backFront: {
           en: 'Back-to-front',
+          cn: '后到前',
           ko: '앞에서 뒤로',
         },
         frontBack: {
           en: 'Front-to-back',
+          cn: '前到后',
           ko: '뒤에서 앞으로',
         },
       },
@@ -225,6 +236,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Dodge ${dir}',
+          cn: '${dir} 躲避',
           ko: '${dir}으로 피해요!',
         },
         clockwise: Outputs.clockwise,
@@ -304,14 +316,17 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         repeat: {
           en: '${dir4} => ${dir1} x3 => ${dir8} => ${dir5} x3',
+          cn: '${dir4} => ${dir1} x3 => ${dir8} => ${dir5} x3',
           ko: '${dir4} 🔜 ${dir1}x3 🔜 ${dir8} 🔜 ${dir5}x3',
         },
         rewind: {
           en: '${dir4} => ${dir1} x6 => ${dir4}',
+          cn: '${dir4} => ${dir1} x6 => ${dir4}',
           ko: '${dir4} 🔜 ${dir1}x6 🔜 ${dir4}',
         },
         avoid: {
           en: 'Avoid swipes x8',
+          cn: '避开顺劈 x8',
           ko: '스와이프x8 피해요!',
         },
         left: Outputs.left,

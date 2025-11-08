@@ -31,14 +31,17 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         enrage: {
           en: 'Parasitism',
+          cn: '捕食行动',
           ko: '기생충',
         },
         enrageOnYou: {
           en: 'Parasitism on YOU',
+          cn: '捕食行动点名',
           ko: '내게 기생충!',
         },
         enrageOnPlayer: {
           en: 'Parasitism on ${player}',
+          cn: '捕食行动点 ${player}',
           ko: '기생충: ${player}',
         },
       },
@@ -100,14 +103,17 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         middleOrOuter: {
           en: 'Get Middle or Outer ring',
+          cn: '去中圈或外圈',
           ko: '중간 / 바깥 링으로',
         },
         innerOrOuter: {
           en: 'Get Inner or Outer ring',
+          cn: '去内圈或外圈',
           ko: '안쪽 / 바깥 링으로',
         },
         innerOrMiddle: {
           en: 'Get Inner or Middle ring',
+          cn: '去内圈或中圈',
           ko: '안쪽 / 중간 링으로',
         },
       },
@@ -145,6 +151,7 @@ const triggerSet: TriggerSet<Data> = {
         right: Outputs.right,
         text: {
           en: '${dir}, Behind Hand',
+          cn: '${dir}, 去手后',
           ko: '${dir}, 손 뒤로',
         },
       },

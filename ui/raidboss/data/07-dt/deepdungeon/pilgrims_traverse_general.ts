@@ -24,6 +24,7 @@ const triggerSet: TriggerSet<Data> = {
   ],
   zoneLabel: {
     en: 'Pilgrim\'s Traverse (All Stones)',
+    cn: '朝圣交错路 (全朝圣路)',
     ko: '필그림 트래버스 (모든 층)',
   },
 
@@ -221,6 +222,7 @@ const triggerSet: TriggerSet<Data> = {
           de: 'Hast',
           fr: 'Hâte',
           ja: 'ヘイスト',
+          cn: '加速',
           ko: '헤이스트(Haste)',
         },
         purification: {
@@ -228,6 +230,7 @@ const triggerSet: TriggerSet<Data> = {
           de: 'Reinigung',
           fr: 'Purification',
           ja: '浄化の守り',
+          cn: '净化护符',
           ko: '이상 현상 바리어(Purification)',
         },
         devotion: {
@@ -235,6 +238,7 @@ const triggerSet: TriggerSet<Data> = {
           de: 'Weisung',
           fr: 'Dévotion',
           ja: '巡礼の導き',
+          cn: '朝圣的指引',
           ko: '헌신(Devotion)',
         },
         unknown: Outputs.unknown,
@@ -286,6 +290,7 @@ const triggerSet: TriggerSet<Data> = {
           de: 'Wandelwurz',
           fr: 'Sagacité',
           ja: '明敏',
+          cn: '敏慧',
           ko: '미로뿌리(Mazeroot)',
         },
         barkbalm: {
@@ -293,6 +298,7 @@ const triggerSet: TriggerSet<Data> = {
           de: 'Sakralharz',
           fr: 'Quiétude',
           ja: '安寧',
+          cn: '安宁',
           ko: '나무껍질연고(Barkbalm)',
         },
         poisonfruit: {
@@ -300,6 +306,7 @@ const triggerSet: TriggerSet<Data> = {
           de: 'Todesbeeren',
           fr: 'Fatalité',
           ja: '宿命',
+          cn: '宿命',
           ko: '독과일(Poisonfruit)',
         },
         unknown: Outputs.unknown,
