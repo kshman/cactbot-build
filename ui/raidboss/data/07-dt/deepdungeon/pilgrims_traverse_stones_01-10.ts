@@ -71,11 +71,13 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         safe: {
           en: 'Go ${safe} + Out',
+          de: 'Geh nach ${safe} + Raus',
           cn: '去 ${safe} + 外',
           ko: '${safe} + 밖으로',
         },
         unknownSafe: {
           en: 'Out + Avoid shrublet explosions',
+          de: 'Raus + Vermeide Blumling Explosionen',
           cn: '外 + 避开花小人爆炸',
           ko: '밖으로 + 덤불 폭발 피해요',
         },
@@ -99,9 +101,32 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Away from jump x4',
+          de: 'Weg vom Sprung x4',
           cn: '远离跳跃 x4',
           ko: '점프 피해요x4',
         },
+      },
+    },
+  ],
+  timelineReplace: [
+    {
+      'locale': 'de',
+      'replaceSync': {
+        'Ornamental Leafman': 'Blumerich',
+      },
+    },
+    {
+      'locale': 'fr',
+      'missingTranslations': true,
+      'replaceSync': {
+        'Ornamental Leafman': 'enfleuri',
+      },
+    },
+    {
+      'locale': 'ja',
+      'missingTranslations': true,
+      'replaceSync': {
+        'Ornamental Leafman': '花人',
       },
     },
   ],

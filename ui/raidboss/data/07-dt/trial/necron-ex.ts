@@ -593,7 +593,6 @@ const triggerSet: TriggerSet<Data> = {
     },
     {
       'locale': 'de',
-      'missingTranslations': true,
       'replaceSync': {
         'Azure Aether': 'azur(?:e|er|es|en) Äther',
         'Beckoning Hands': 'lockend(?:e|er|es|en) Hand',

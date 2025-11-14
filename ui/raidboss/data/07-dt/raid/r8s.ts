@@ -863,7 +863,6 @@ const triggerSet: TriggerSet<Data> = {
     },
     {
       'locale': 'de',
-      'missingTranslations': true,
       'replaceSync': {
         'Gleaming Fang': 'Lichtreißer',
         'Howling Blade': 'Heulende Klinge',
@@ -876,6 +875,11 @@ const triggerSet: TriggerSet<Data> = {
         '--adds-targetable--': '--Adds-anvisierbar--',
         '--shadow ': '--Schatten ',
         '--tank/line aoes--': '--Tank/Linien AoEs--',
+        '\\(circles\\)': '(Kreise)',
+        '\\(cones\\)': '(Kegel)',
+        '\\(enrage\\)': '(Finalangriff)',
+        '\\(Platform\\)': '(Plattform)',
+        '\\(Towers\\)': '(Türme)',
         'Aero III': 'Windga',
         'Aerotemporal Blast': 'Temporärer Wind',
         'Alpha Stone': 'Erde des Lichtwolfs',
@@ -936,7 +940,6 @@ const triggerSet: TriggerSet<Data> = {
     },
     {
       'locale': 'fr',
-      'missingTranslations': true,
       'replaceSync': {
         'Gleaming Fang': 'croc de lumière',
         'Howling Blade': 'Howling Blade',
@@ -946,6 +949,14 @@ const triggerSet: TriggerSet<Data> = {
         'Wolf of Wind': 'loup du vent',
       },
       'replaceText': {
+        '--adds-targetable--': '--Adds ciblables--',
+        '--shadow ': '--Ombre ',
+        '--tank/line aoes--': '--AOE Tank/En ligne--',
+        '\\(circles\\)': '(Cercles)',
+        '\\(cones\\)': '(Cônes)',
+        '\\(enrage\\)': '(Enrage)',
+        '\\(Platform\\)': '(Plateforme)',
+        '\\(Towers\\)': '(Tours)',
         'Aero III': 'Méga Vent',
         'Aerotemporal Blast': 'Assaut tempétueux à retardement',
         'Alpha Stone': 'Terre du loup radieux',

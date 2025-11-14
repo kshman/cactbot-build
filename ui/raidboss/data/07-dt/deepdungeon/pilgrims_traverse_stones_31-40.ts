@@ -61,6 +61,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Avoid jump => Out',
+          de: 'Sprung vermeiden => Raus',
           cn: '避开跳跃 => 外',
           ko: '점프 피하고 🔜 밖으로',
         },
@@ -97,6 +98,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: '${mech} x3',
+          de: '${mech} x3',
           cn: '${mech} x3',
           ko: '${mech}x3',
         },
@@ -115,6 +117,46 @@ const triggerSet: TriggerSet<Data> = {
       type: 'StartsUsing',
       netRegex: { id: 'B042', source: 'Forgiven Naivety', capture: false },
       response: Responses.getIn(),
+    },
+  ],
+  timelineReplace: [
+    {
+      'locale': 'de',
+      'replaceSync': {
+        'Forgiven Naivety': 'geläutert(?:e|er|es|en) Naivität',
+        'Forgiven Petulance': 'geläutert(?:e|er|es|en) Launenhaftigkeit',
+        'Forgiven Plague': 'geläutert(?:e|er|es|en) Plage',
+        'Forgiven Prejudice': 'geläutert(?:e|er|es|en) Voreingenommenheit',
+        'Traverse Inquisitor': 'Wallfahrt-Inquisitor',
+        'Traverse Pegasus': 'Wallfahrt-Pegasus',
+        'Traverse Soldierstone': 'Wallfahrt-Steinsoldat',
+      },
+    },
+    {
+      'locale': 'fr',
+      'missingTranslations': true,
+      'replaceSync': {
+        'Forgiven Naivety': 'naïveté pardonnée',
+        'Forgiven Petulance': 'irascibilité pardonnée',
+        'Forgiven Plague': 'peste pardonnée',
+        'Forgiven Prejudice': 'préjugé pardonné',
+        'Traverse Inquisitor': 'inquisiteur du pèlerinage',
+        'Traverse Pegasus': 'pégase du pèlerinage',
+        'Traverse Soldierstone': 'soldat de pierre du pèlerinage',
+      },
+    },
+    {
+      'locale': 'ja',
+      'missingTranslations': true,
+      'replaceSync': {
+        'Forgiven Naivety': 'フォーギヴン・ナイヴテイ',
+        'Forgiven Petulance': 'フォーギヴン・ペチュランス',
+        'Forgiven Plague': 'フォーギヴン・プレイグ',
+        'Forgiven Prejudice': 'フォーギヴン・プレジュディス',
+        'Traverse Inquisitor': 'トラバース・インクイジター',
+        'Traverse Pegasus': 'トラバース・ペガサス',
+        'Traverse Soldierstone': 'トラバース・ストーンソルジャー',
+      },
     },
   ],
 };

@@ -73,6 +73,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Stand on a rock',
+          de: 'Steh auf einem Stein',
           cn: '站在一块岩石上',
           ko: '바위 위로 올라서요',
         },
@@ -104,9 +105,50 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Stand in quicksand',
+          de: 'Im Treibsand stehen',
           cn: '站在流沙里',
           ko: '모래 웅덩이에 올라서요',
         },
+      },
+    },
+  ],
+  timelineReplace: [
+    {
+      'locale': 'de',
+      'replaceSync': {
+        'Ogbunabali': 'Ogbunabali',
+        'Traverse Anaconda': 'Wallfahrt-Anakonda',
+        'Traverse Petreffigy': 'Wallfahrt-Bildnis',
+        'Traverse Pincerbeak': 'Wallfahrt-Zwicker',
+        'Traverse Triffid': 'Wallfahrt-Triffid',
+        'Traverse Troubadour': 'Wallfahrt-Tolba',
+        'Traverse Weapon': 'Wallfahrt-Waffe',
+      },
+    },
+    {
+      'locale': 'fr',
+      'missingTranslations': true,
+      'replaceSync': {
+        'Ogbunabali': 'Ogbunabali',
+        'Traverse Anaconda': 'anaconda du pèlerinage',
+        'Traverse Petreffigy': 'effigie du pèlerinage',
+        'Traverse Pincerbeak': 'bec-pinceur du pèlerinage',
+        'Traverse Triffid': 'triffide du pèlerinage',
+        'Traverse Troubadour': 'tolba du pèlerinage',
+        'Traverse Weapon': 'arme du pèlerinage',
+      },
+    },
+    {
+      'locale': 'ja',
+      'missingTranslations': true,
+      'replaceSync': {
+        'Ogbunabali': 'オグブナバリ',
+        'Traverse Anaconda': 'トラバース・アナコンダ',
+        'Traverse Petreffigy': 'トラバース・エフィジィ',
+        'Traverse Pincerbeak': 'トラバース・ピンサービーク',
+        'Traverse Triffid': 'トラバース・トリフィド',
+        'Traverse Troubadour': 'トラバース・トルバ',
+        'Traverse Weapon': 'トラバース・ウェポン',
       },
     },
   ],

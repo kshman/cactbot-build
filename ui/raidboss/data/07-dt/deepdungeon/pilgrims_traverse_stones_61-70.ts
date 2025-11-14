@@ -87,6 +87,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Away from jump => Get Under or Out',
+          de: 'Weg vom Sprung => Geh Unter oder Raus',
           cn: '远离跳跃 => 去脚下或外面',
           ko: '점프 먼곳으로 🔜 밑이나 밖으로',
         },
@@ -138,16 +139,19 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         sting: {
           en: 'Final Sting',
+          de: 'Schlussstich',
           cn: '终极针',
           ko: '파이널 스팅',
         },
         stingOnYou: {
           en: 'Final Sting on YOU',
+          de: 'Schlussstich auf DIR',
           cn: '终极针点名',
           ko: '내게 파이널 스팅!',
         },
         stingOnPlayer: {
           en: 'Final Sting on ${player}',
+          de: 'Schlussstich auf ${player}',
           cn: '终极针点${player}',
           ko: '파이널 스팅: ${player}',
         },
@@ -203,16 +207,19 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Dodge ${dir}',
+          de: 'Ausweichen ${dir}',
           cn: '${dir} 躲避',
           ko: '${dir} 피해요!',
         },
         backFront: {
           en: 'Back-to-front',
+          de: 'Hinten-nach-Vorne',
           cn: '后到前',
           ko: '앞에서 뒤로',
         },
         frontBack: {
           en: 'Front-to-back',
+          de: 'Vorne-nach-Hinten',
           cn: '前到后',
           ko: '뒤에서 앞으로',
         },
@@ -236,6 +243,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Dodge ${dir}',
+          de: 'Ausweichen ${dir}',
           cn: '${dir} 躲避',
           ko: '${dir}으로 피해요!',
         },
@@ -316,16 +324,19 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         repeat: {
           en: '${dir4} => ${dir1} x3 => ${dir8} => ${dir5} x3',
+          de: '${dir4} => ${dir1} x3 => ${dir8} => ${dir5} x3',
           cn: '${dir4} => ${dir1} x3 => ${dir8} => ${dir5} x3',
           ko: '${dir4} 🔜 ${dir1}x3 🔜 ${dir8} 🔜 ${dir5}x3',
         },
         rewind: {
           en: '${dir4} => ${dir1} x6 => ${dir4}',
+          de: '${dir4} => ${dir1} x6 => ${dir4}',
           cn: '${dir4} => ${dir1} x6 => ${dir4}',
           ko: '${dir4} 🔜 ${dir1}x6 🔜 ${dir4}',
         },
         avoid: {
           en: 'Avoid swipes x8',
+          de: 'Vermeide Schwung x8',
           cn: '避开顺劈 x8',
           ko: '스와이프x8 피해요!',
         },
@@ -333,6 +344,64 @@ const triggerSet: TriggerSet<Data> = {
         right: Outputs.right,
         front: Outputs.front,
         back: Outputs.back,
+      },
+    },
+  ],
+  timelineReplace: [
+    {
+      'locale': 'de',
+      'replaceSync': {
+        'Forgiven Attachment': 'geläutert(?:e|er|es|en) Anhänglichkeit',
+        'Forgiven Contention': 'geläutert(?:e|er|es|en) Streitlust',
+        'Forgiven Doubt': 'geläutert(?:e|er|es|en) Zweifel',
+        'Forgiven Grudge': 'geläutert(?:e|er|es|en) Missgunst',
+        'Forgiven Imparity': 'geläutert(?:e|er|es|en) Ungleichheit',
+        'Forgiven Riot': 'geläutert(?:e|er|es|en) Randale',
+        'Forgiven Voracity': 'geläutert(?:e|er|es|en) Unersättlichkeit',
+        'Forgiven Zeal': 'geläutert(?:e|er|es|en) Übereifer',
+        'Traverse Cliffmole': 'Wallfahrt-Klippenmull',
+        'Traverse Gnome': 'Wallfahrt-Gnom',
+        'Traverse Ngozi': 'Wallfahrt-Ngozi',
+        'Traverse Queen': 'Wallfahrt-Bienenkönigin',
+        'Traverse Talos': 'Wallfahrt-Talos',
+      },
+    },
+    {
+      'locale': 'fr',
+      'missingTranslations': true,
+      'replaceSync': {
+        'Forgiven Attachment': 'attachement pardonné',
+        'Forgiven Contention': 'contention pardonnée',
+        'Forgiven Doubt': 'doute pardonné',
+        'Forgiven Grudge': 'rancune pardonnée',
+        'Forgiven Imparity': 'inégalité pardonnée',
+        'Forgiven Riot': 'révolte pardonnée',
+        'Forgiven Voracity': 'voracité pardonnée',
+        'Forgiven Zeal': 'zèle pardonné',
+        'Traverse Cliffmole': 'taupe des falaises du pèlerinage',
+        'Traverse Gnome': 'gnome du pèlerinage',
+        'Traverse Ngozi': 'ngozi du pèlerinage',
+        'Traverse Queen': 'reine des abeilles du pèlerinage',
+        'Traverse Talos': 'talos du pèlerinage',
+      },
+    },
+    {
+      'locale': 'ja',
+      'missingTranslations': true,
+      'replaceSync': {
+        'Forgiven Attachment': 'フォーギヴン・アタッチメント',
+        'Forgiven Contention': 'フォーギヴン・コンテンション',
+        'Forgiven Doubt': 'フォーギヴン・ダウト',
+        'Forgiven Grudge': 'フォーギヴン・グラッジ',
+        'Forgiven Imparity': 'フォーギヴン・イムパリティー',
+        'Forgiven Riot': 'フォーギヴン・ライオティング',
+        'Forgiven Voracity': 'フォーギヴン・ヴォラシティ',
+        'Forgiven Zeal': 'フォーギヴン・ズィール',
+        'Traverse Cliffmole': 'トラバース・クリフモール',
+        'Traverse Gnome': 'トラバース・ノーム',
+        'Traverse Ngozi': 'トラバース・ンゴツィ',
+        'Traverse Queen': 'トラバース・クイーンビー',
+        'Traverse Talos': 'トラバース・タロース',
       },
     },
   ],
