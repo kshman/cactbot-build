@@ -5,6 +5,9 @@ import ZoneId from '../../../../../resources/zone_id';
 import { RaidbossData } from '../../../../../types/data';
 import { TriggerSet } from '../../../../../types/trigger';
 
+// Pilgrim's Traverse Stones 71-80
+// TODO: Forgiven Profanity Static Shock safe spot
+
 export interface Data extends RaidbossData {
   prowlingDeath?: 'shadowOfDeath' | 'nowhereToRun';
 }
@@ -12,7 +15,136 @@ export interface Data extends RaidbossData {
 const triggerSet: TriggerSet<Data> = {
   id: 'PilgrimsTraverseStones71_80',
   zoneId: ZoneId.PilgrimsTraverseStones71_80,
+
   triggers: [
+    // ---------------- Stone 71-79 Mobs ----------------
+    {
+      id: 'PT 71-80 Traverse Scissorjaws Sandblast',
+      type: 'StartsUsing',
+      netRegex: { id: 'AEE1', source: 'Traverse Scissorjaws', capture: false },
+      response: Responses.awayFromFront(),
+    },
+    {
+      id: 'PT 71-80 Forgiven Unbelief Gravel Shower',
+      type: 'StartsUsing',
+      netRegex: { id: 'AEDB', source: 'Forgiven Unbelief', capture: false },
+      response: Responses.awayFromFront(),
+    },
+    {
+      id: 'PT 71-80 Traverse Huldu Fracture',
+      type: 'StartsUsing',
+      netRegex: { id: 'A712', source: 'Traverse Huldu', capture: false },
+      response: Responses.outOfMelee(),
+    },
+    {
+      id: 'PT 71-80 Traverse Huldu Self-destruct',
+      // explodes in a letal PBAoE after death
+      type: 'StartsUsing',
+      netRegex: { id: 'A713', source: 'Traverse Huldu', capture: false },
+      response: Responses.getOut(),
+    },
+    {
+      id: 'PT 71-80 Forgiven Spite Growing Circles of Ablution',
+      type: 'StartsUsing',
+      netRegex: { id: 'A652', source: 'Forgiven Spite', capture: false },
+      response: Responses.getOutThenIn(),
+    },
+    {
+      id: 'PT 71-80 Forgiven Spite Shrinking Circles of Ablution',
+      type: 'StartsUsing',
+      netRegex: { id: 'A6FC', source: 'Forgiven Spite', capture: false },
+      response: Responses.getInThenOut(),
+    },
+    {
+      id: 'PT 71-80 Forgiven Arrogance Hail of Heels',
+      type: 'StartsUsing',
+      netRegex: { id: 'AED7', source: 'Forgiven Arrogance', capture: false },
+      alertText: (_data, _matches, output) => output.text!(),
+      outputStrings: {
+        text: {
+          en: 'Get Behind x4',
+          ko: '엉댕이로x4',
+        },
+      },
+    },
+    {
+      id: 'PT 71-80 Traverse Worm Earthquake',
+      type: 'StartsUsing',
+      netRegex: { id: 'AEDF', source: 'Traverse Worm', capture: false },
+      response: Responses.getOut(),
+    },
+    {
+      id: 'PT 71-80 Forgiven Dissention Mighty Spin',
+      type: 'StartsUsing',
+      netRegex: { id: 'A618', source: 'Forgiven Dissention', capture: false },
+      response: Responses.getOut(),
+    },
+    {
+      id: 'PT 71-80 Forgiven Dissention Trounce',
+      type: 'StartsUsing',
+      netRegex: { id: 'A61A', source: 'Forgiven Dissention', capture: false },
+      response: Responses.getBehind(),
+    },
+    {
+      id: 'PT 71-80 Forgiven Corruption Forward Barrage',
+      type: 'StartsUsing',
+      netRegex: { id: 'A651', source: 'Forgiven Corruption', capture: false },
+      response: Responses.awayFromFront(),
+    },
+    {
+      id: 'PT 71-80 Forgiven Corruption Rolling Barrage',
+      type: 'StartsUsing',
+      netRegex: { id: 'A61B', source: 'Forgiven Corruption', capture: true },
+      delaySeconds: (_data, matches) => parseFloat(matches.castTime) - 4,
+      alertText: (_data, matches, output) => output.breakLOS!({ name: matches.source }),
+      outputStrings: {
+        breakLOS: {
+          en: 'Break line-of-sight to ${name}',
+          de: 'Unterbreche Sichtlinie zu ${name}',
+          fr: 'Masquez le champ de vision vers ${name}',
+          ja: '${name}の視線から隠れる',
+          cn: '利用掩体卡 ${name} 的视线',
+          ko: '시선 잘라요: ${name}',
+        },
+      },
+    },
+    {
+      id: 'PT 71-80 Traverse Amemet Topple',
+      type: 'StartsUsing',
+      netRegex: { id: 'AEDD', source: 'Traverse Amemet', capture: false },
+      response: Responses.outOfMelee(),
+    },
+    {
+      id: 'PT 71-80 Forgiven Slander Metamorphic Blast',
+      type: 'StartsUsing',
+      netRegex: { id: 'AED9', source: 'Forgiven Slander', capture: false },
+      response: Responses.getBehind(),
+    },
+    {
+      id: 'PT 71-80 Forgiven Slander Orogenic Storm',
+      // medium-sized AoE, locks-on to a player ground position at start of cast
+      type: 'StartsUsing',
+      netRegex: { id: 'AEDA', source: 'Forgiven Slander', capture: false },
+      alertText: (_data, _matches, output) => output.text!(),
+      outputStrings: {
+        text: {
+          en: 'Avoid AoE',
+          ko: '장판 피해요!',
+        },
+      },
+    },
+    {
+      id: 'PT 71-80 Forgiven Vanity Cross Lasers',
+      type: 'StartsUsing',
+      netRegex: { id: 'AED5', source: 'Forgiven Vanity', capture: false },
+      response: Responses.getIntercards(),
+    },
+    {
+      id: 'PT 71-80 Forgiven Vanity Peripheral Lasers',
+      type: 'StartsUsing',
+      netRegex: { id: 'AED6', source: 'Forgiven Vanity', capture: false },
+      response: Responses.getIn(),
+    },
     // ---------------- Stone 80 Boss: Forgiven Profanity ----------------
     // A9C9 = Roaring Ring dummy self-cast, donut + front cleave
     // A9CB = Roaring Ring dummy self-cast, donut + back cleave
@@ -44,7 +176,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: '${in} + ${backFront}',
-          ko: '${backFront} + ${in}',
+          ko: '${backFront}+${in}',
         },
         back: Outputs.back,
         front: Outputs.front,
@@ -70,7 +202,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: '${out} + ${backFront}',
-          ko: '${backFront} + ${out}',
+          ko: '${backFront}+${out}',
         },
         back: Outputs.back,
         front: Outputs.front,
