@@ -60,6 +60,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Go Front + Right',
+          cn: '去前面 + 右侧',
           ko: '앞+오른쪽으로',
         },
       },
@@ -72,6 +73,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Go Front + Left',
+          cn: '去前面 + 左侧',
           ko: '앞+왼쪽으로',
         },
       },
@@ -104,6 +106,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: '${count}x attacks => Out of Melee',
+          cn: '${count}次攻击 => 离开近战范围',
           ko: '공격x${count} 🔜 근접 피해요',
         },
       },
@@ -136,6 +139,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Avoid AoE',
+          cn: '避开AoE',
           ko: '장판 피해욧',
         },
       },
