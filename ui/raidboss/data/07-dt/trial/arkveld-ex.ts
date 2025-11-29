@@ -25,7 +25,7 @@ const diceMap: { [id: string]: number } = {
 
 // the Windward Wilds (Extreme)
 const triggerSet: TriggerSet<Data> = {
-  id: 'ArkveldEx',
+  id: 'TheWindwardWildsExtreme',
   zoneId: ZoneId.TheWindwardWildsExtreme,
   timelineFile: 'arkveld-ex.txt',
   initData: () => ({
@@ -59,20 +59,6 @@ const triggerSet: TriggerSet<Data> = {
         right: Outputs.right,
       },
     },
-    /* {
-      id: 'ArkveldEx 날개짓 이동',
-      type: 'StartsUsing',
-      netRegex: { id: ['AB73', 'AB74', 'B019', 'B020'] },
-      delaySeconds: (_data, matches) => parseFloat(matches.castTime) - 0.2,
-      durationSeconds: 2,
-      alertText: (_data, _matches, output) => output.move!(),
-      outputStrings: {
-        move: {
-          en: 'Move',
-          ko: '움직여요!',
-        },
-      },
-    }, */
     {
       id: 'ArkveldEx 빨간 돌진',
       type: 'StartsUsing',
@@ -351,6 +337,40 @@ const triggerSet: TriggerSet<Data> = {
           en: 'AoE + Exaflare',
           ko: '전체 공격 🔜 엑사플레어',
         },
+      },
+    },
+  ],
+  timelineReplace: [
+    {
+      'locale': 'cn',
+      'replaceSync': {
+        'Guardian Arkveld': '护锁刃龙',
+      },
+      'replaceText': {
+        '\\(aoes\\)': '(圆形AOE)',
+        '\\(dash\\)': '(冲锋)',
+        '\\(raidwide\\)': '(全屏)',
+        '\\(wing\\)': '(翅膀)',
+        'Aetheric Resonance': '地脉共振',
+        'Chainblade Blow': '锁刃敲打',
+        'Chainblade Charge': '锁刃下挥',
+        'Clamorous Chase': '锁刃跃动',
+        'Dragonspark': '龙光',
+        'Forged Fury': '护龙乱击',
+        'Greater Resonance': '护龙大共振',
+        'Guardian Resonance': '护龙共振',
+        'Roar': '咆哮',
+        'Rush': '突进',
+        'Siegeflight': '锁刃飞翔突进',
+        'Steeltail Thrust': '龙尾突刺',
+        'White Flash': '白光',
+        'Wild Energy': '龙光扩散',
+        'Wrathful Rattle': '锁哭龙闪·改',
+        'Wyvern\'s Ouroblade': '回旋锁刃【龙闪】',
+        'Wyvern\'s Radiance': '龙闪',
+        'Wyvern\'s Rattle': '锁哭龙闪',
+        'Wyvern\'s Vengeance': '波状龙闪',
+        'Wyvern\'s Weal': '龙闪炮',
       },
     },
   ],

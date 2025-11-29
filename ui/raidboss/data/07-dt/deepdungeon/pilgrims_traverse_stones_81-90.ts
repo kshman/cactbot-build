@@ -43,14 +43,17 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         maul: {
           en: 'Maul',
+          cn: '咬杀',
           ko: '마울',
         },
         maulOnYou: {
           en: 'Maul on YOU',
+          cn: '咬杀点名',
           ko: '내게 마울',
         },
         maulOnPlayer: {
           en: 'Maul on ${player}',
+          cn: '咬杀点 ${player}',
           ko: '마울: ${player}',
         },
       },
@@ -101,14 +104,17 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         heat: {
           en: 'Pyretic, Avoid AoE',
+          cn: '热病, 避开AoE',
           ko: '파이레틱, 장판 피해욧',
         },
         heatOnYou: {
           en: 'Pyretic on YOU, Away from Group => Stop Everything!',
+          cn: '热病点名, 远离小队成员 => 停止一切行动!',
           ko: '내게 파이레틱, 혼자 멀리 🔜 그대로 멈춰욧!',
         },
         heatOnPlayer: {
           en: 'Pyretic on ${player}, Avoid AoE',
+          cn: '热病点 ${player}, 避开AoE',
           ko: '파이레틱: ${player}, 장판 피해욧',
         },
       },
@@ -144,6 +150,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Avoid AoE',
+          cn: '避开AoE',
           ko: '장판 피해욧',
         },
       },
@@ -171,6 +178,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: '${count}x attacks => Get Behind',
+          cn: '${count}次攻击 => 靠近',
           ko: '공격x${count} 🔜 엉댕이로',
         },
       },
@@ -198,7 +206,8 @@ const triggerSet: TriggerSet<Data> = {
           en: 'Break line-of-sight to ${name}',
           de: 'Unterbreche Sichtlinie zu ${name}',
           fr: 'Masquez le champ de vision vers ${name}',
-          ja: '${name}の視線を遮れ',
+          ja: '${name}の視線から隠れる',
+          cn: '利用掩体卡 ${name} 的视线',
           ko: '시선 잘라요: ${name}',
         },
       },
@@ -225,6 +234,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Get Behind + Left',
+          cn: '去背后 + 左侧',
           ko: '뒤+왼쪽으로',
         },
       },
@@ -237,6 +247,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Get Behind + Right',
+          cn: '去背后 + 右侧',
           ko: '뒤+오른쪽으로',
         },
       },
