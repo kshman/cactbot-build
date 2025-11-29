@@ -229,7 +229,7 @@ if ($in -eq '9999')
 # 플러그인 빌드
 if ($in -eq '1')
 {
-  $vspath = "C:\Program Files\Microsoft Visual Studio\2022\Community"
+  $vspath = "C:\Program Files\Microsoft Visual Studio\18\Community"
   $ENV:PATH = "$vspath\MSBuild\Current\Bin;${ENV:PATH}";
   msbuild -p:Configuration=Release -p:Platform=x64 "..\plugin\Cactbot.sln" -t:rebuild
   if (-not $?) {
