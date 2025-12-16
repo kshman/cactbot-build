@@ -272,13 +272,13 @@ const contentTypeToLabel: {
       en: 'Occult Crescent',
       fr: 'Croissant Occulte',
       cn: '蜃景幻界新月岛',
-      ko: '오컬트 크레센트',
+      ko: '초승달 섬',
     },
     short: {
       en: 'Occult',
       fr: 'Croissant',
       cn: '新月岛',
-      ko: '오컬트',
+      ko: '초승달 섬',
     },
   },
   [ContentType.DisciplesOfTheLand]: {
@@ -333,7 +333,7 @@ const contentTypeToLabel: {
     full: {
       en: 'Deep Dungeon Extra Content',
       cn: '深层迷宫额外内容',
-      ko: '딥 던전 확장 콘텐츠',
+      ko: '딥 던전 추가 컨텐츠',
     },
     short: {
       en: 'DD+',

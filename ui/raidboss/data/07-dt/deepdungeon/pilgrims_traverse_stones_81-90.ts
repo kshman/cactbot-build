@@ -43,18 +43,21 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         maul: {
           en: 'Maul',
+          de: 'Zerknirscher',
           cn: '咬杀',
-          ko: '마울',
+          ko: '학대',
         },
         maulOnYou: {
           en: 'Maul on YOU',
+          de: 'Zerknirscher auf DIR',
           cn: '咬杀点名',
-          ko: '내게 마울',
+          ko: '내게 학대',
         },
         maulOnPlayer: {
           en: 'Maul on ${player}',
+          de: 'Zerknirscher auf ${player}',
           cn: '咬杀点 ${player}',
-          ko: '마울: ${player}',
+          ko: '학대: ${player}',
         },
       },
     },
@@ -150,6 +153,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Avoid AoE',
+          de: 'Vermeide AoE',
           cn: '避开AoE',
           ko: '장판 피해욧',
         },
@@ -178,6 +182,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: '${count}x attacks => Get Behind',
+          de: '${count}x Attacken => Geh Hinter',
           cn: '${count}次攻击 => 靠近',
           ko: '공격x${count} 🔜 엉댕이로',
         },
@@ -234,6 +239,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Get Behind + Left',
+          de: 'Geh Hinten + Links',
           cn: '去背后 + 左侧',
           ko: '뒤+왼쪽으로',
         },
@@ -247,6 +253,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Get Behind + Right',
+          de: 'Geh Hinten + Rechts',
           cn: '去背后 + 右侧',
           ko: '뒤+오른쪽으로',
         },
@@ -269,6 +276,67 @@ const triggerSet: TriggerSet<Data> = {
       type: 'StartsUsing',
       netRegex: { id: 'ACEA', source: 'Malacoda', capture: false },
       response: Responses.knockback(),
+    },
+  ],
+  timelineReplace: [
+    {
+      'locale': 'de',
+      'replaceSync': {
+        'Invoked Arch Demon': 'gerufen(?:e|er|es|en) Erzdämon',
+        'Invoked Baal': 'gerufen(?:e|er|es|en) Bael',
+        'Invoked Caym': 'gerufen(?:e|er|es|en) Caym',
+        'Invoked Cerberus': 'gerufen(?:e|er|es|en) Cerberus',
+        'Invoked Gremlin': 'gerufen(?:e|er|es|en) Gremlin',
+        'Invoked Humbaba': 'gerufen(?:e|er|es|en) Hunbaba',
+        'Invoked Satana': 'gerufen(?:e|er|es|en) Satana',
+        'Invoked Succubus': 'gerufen(?:e|er|es|en) Sukkubus',
+        'Invoked Troubadour': 'gerufen(?:e|er|es|en) Troubadour',
+        'Malacoda': 'Malacoda',
+        'Traverse Cama': 'Wallfahrt-Cama',
+        'Traverse Cubus': 'Wallfahrt-Lunte',
+        'Traverse Gnoll': 'Wallfahrt-Gnoll',
+        'Traverse Rider': 'Wallfahrt-Reiter',
+      },
+    },
+    {
+      'locale': 'fr',
+      'missingTranslations': true,
+      'replaceSync': {
+        'Invoked Arch Demon': 'archidémon invoqué',
+        'Invoked Baal': 'baël invoqué',
+        'Invoked Caym': 'caym invoqué',
+        'Invoked Cerberus': 'cerbère invoqué',
+        'Invoked Gremlin': 'gremlin invoqué',
+        'Invoked Humbaba': 'humbaba invoqué',
+        'Invoked Satana': 'minisatana invoqué',
+        'Invoked Succubus': 'succube invoqué',
+        'Invoked Troubadour': 'troubadour invoqué',
+        'Malacoda': 'Malacoda',
+        'Traverse Cama': 'chama du pèlerinage',
+        'Traverse Cubus': 'oléofuror du pèlerinage',
+        'Traverse Gnoll': 'gnole du pèlerinage',
+        'Traverse Rider': 'cavalier du pèlerinage',
+      },
+    },
+    {
+      'locale': 'ja',
+      'missingTranslations': true,
+      'replaceSync': {
+        'Invoked Arch Demon': 'インヴォークド・アークデーモン',
+        'Invoked Baal': 'インヴォークド・バエル',
+        'Invoked Caym': 'インヴォークド・カイム',
+        'Invoked Cerberus': 'インヴォークド・ケルベロス',
+        'Invoked Gremlin': 'インヴォークド・グレムリン',
+        'Invoked Humbaba': 'インヴォークド・フンババ',
+        'Invoked Satana': 'インヴォークド・サタナジュニア',
+        'Invoked Succubus': 'インヴォークド・サキュバス',
+        'Invoked Troubadour': 'インヴォークド・トルバドゥール',
+        'Malacoda': 'マラコーダ',
+        'Traverse Cama': 'トラバース・キャマ',
+        'Traverse Cubus': 'トラバース・カブス',
+        'Traverse Gnoll': 'トラバース・ノール',
+        'Traverse Rider': 'トラバース・ライダー',
+      },
     },
   ],
 };
