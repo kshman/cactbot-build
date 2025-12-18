@@ -16,12 +16,12 @@ export type Data = OopsyData;
 const triggerSet: OopsyTriggerSet<Data> = {
   zoneId: ZoneId.TsukuyomisPainUnreal,
   damageWarn: {
-    'TsukuyomiUn Moonlight Lunar Halo': '2BD6', // donut from orbs in final phase
-    'TsukuyomiUn Moonfall': '2BD1', // meteor drop big circles
-    'TsukuyomiUn Moondust Crater': '2CD7', // meteor explosions later
-    'TsukuyomiUn Dancing Fan Tsukui-No-Maiogi': '2BC6', // fan circle aoe
-    'TsukuyomiUn Waxing Grudge': '2BDE', // melee range circle from Full Moon buff
-    'TsukuyomiUn Waning Grudge': '2BDF', // donut from New Moon Buff
+    'TsukuyomiUn Moonlight Lunar Halo': 'B14A', // donut from orbs in final phase
+    'TsukuyomiUn Moonfall': 'B145', // meteor drop big circles
+    'TsukuyomiUn Moondust Crater': 'B160', // meteor explosions later
+    'TsukuyomiUn Dancing Fan Tsukui-No-Maiogi': 'B13A', // fan circle aoe
+    'TsukuyomiUn Waxing Grudge': 'B152', // melee range circle from Full Moon buff
+    'TsukuyomiUn Waning Grudge': 'B153', // donut from New Moon Buff
     'TsukuyomiUn Dark Blade': 'B14E', // right-side cleave
     'TsukuyomiUn Bright Blade': 'B14F', // left side cleave
   },
@@ -30,7 +30,7 @@ const triggerSet: OopsyTriggerSet<Data> = {
   },
   soloWarn: {
     'TsukuyomiUn Lead Of The Underworld': 'B132', // "Beg for Mercy!" stack
-    'TsukuyomiUn Lunacy': '2BDD', // 4x stack marker
+    'TsukuyomiUn Lunacy': 'B151', // 4x stack marker
   },
   triggers: [
     {
