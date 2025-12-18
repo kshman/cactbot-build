@@ -3971,9 +3971,9 @@ const triggerSet: TriggerSet<Data> = {
         const y = parseFloat(matches.y);
         const loc = getPuddleLocation(x, y);
         if (loc === undefined) {
-          console.error(
+          /* console.error(
             `Occult Crescent Marble Dragon Imitation Rain 2 Dodge 1: Unexpected puddle location (${x}, ${y})`,
-          );
+          ); */
           return;
         }
 
