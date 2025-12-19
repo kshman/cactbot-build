@@ -1,7 +1,7 @@
 ### HELL ON RAILS (EXTREME)
 # ZoneId: 1308
 
-# -ii B294
+# -ii B237 B24E B251 B287 B288 B289 B258 B259 B25C B26E B271 B276 B277 B278 B27A B27B B280 B28A B28B B28D B28E B290 B294 B599 B59A
 # -it "Doomtrain" "Aether"
 # -p B24C:500
 
@@ -52,23 +52,22 @@ hideall "--sync--"
 
 # Add phase, timings are very, very loose here
 159.8 "--targetable--"
-168.0 "--sync--" HeadMarker { id: '019C' } window 12,12
-175.8 "Aetherochar/Aetherosote"
-175.9 "Aetherial Ray" Ability { id: "B27D", source: "Ghost Train" }
+166.7 "--sync--" HeadMarker { id: '019C' } window 12,12
+174.5 "Aetherochar/Aetherosote"
+174.6 "Aetherial Ray"
 182.8 "--sync--" HeadMarker { id: '019C' } window 12,12
 190.6 "Aetherochar/Aetherosote"
-190.7 "Aetherial Ray" Ability { id: "B27D", source: "Ghost Train" }
-198.9 "--sync--" HeadMarker { id: '019C' } window 12,12
-206.7 "Aetherochar/Aetherosote"
-206.8 "Aetherial Ray" Ability { id: "B27D", source: "Ghost Train" }
-214.8 "--sync--" HeadMarker { id: '019C' } window 12,12
-222.6 "Aetherochar/Aetherosote"
-222.7 "Aetherial Ray" Ability { id: "B27D", source: "Ghost Train" }
-230.7 "--sync--" HeadMarker { id: '019C' } window 12,12
-238.5 "Aetherochar/Aetherosote"
-238.6 "Aetherial Ray" Ability { id: "B27D", source: "Ghost Train" }
-
-# TODO: Add phase enrage timing?
+190.7 "Aetherial Ray"
+197.7 "--sync--" HeadMarker { id: '019C' } window 12,12
+205.5 "Aetherochar/Aetherosote"
+205.6 "Aetherial Ray"
+211.1 "--sync--" HeadMarker { id: '019C' } window 12,12
+218.9 "Aetherochar/Aetherosote"
+219.0 "Aetherial Ray"
+224.1 "--sync--" HeadMarker { id: '019C' } window 12,12
+231.9 "Aetherochar/Aetherosote"
+232.0 "Aetherial Ray"
+234.8 "--untargetable--" NameToggle { name: "Aether" } window 12,12 forcejump "adds-enrage"
 
 # Sync to invisible cast that starts phase change animation
 500.0 "--sync--" Ability { id: "B24C", source: "Doomtrain" } window 500.0,0
@@ -153,6 +152,11 @@ hideall "--sync--"
 920.4 "Third Rail (detonate)" Ability { id: "B262", source: "Doomtrain" }
 930.4 "Derailment Siege x7" Ability { id: "B286", source: "Doomtrain" } duration 7.1
 952.6 "Derail (enrage)" Ability { id: "B28E", source: "Doomtrain" }
+
+# For sync reasons, adds enrage is after end of fight timeline
+2000.0 label "adds-enrage"
+2004.2 "--sync--" Ability { id: "B24C", source: "Doomtrain" }
+2019.3 "Runaway Train (enrage)" Ability { id: "B24D", source: "Doomtrain" }
 
 
 # IGNORED ABILITIES

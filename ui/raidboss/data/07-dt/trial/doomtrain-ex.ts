@@ -2,12 +2,17 @@ import { AutumnDir } from '../../../../../resources/autumn';
 import Conditions from '../../../../../resources/conditions';
 import Outputs from '../../../../../resources/outputs';
 import { Responses } from '../../../../../resources/responses';
-import { DirectionOutputCardinal, Directions } from '../../../../../resources/util';
+import {
+  DirectionOutput16,
+  DirectionOutputCardinal,
+  Directions,
+} from '../../../../../resources/util';
 import ZoneId from '../../../../../resources/zone_id';
 import { RaidbossData } from '../../../../../types/data';
 import { TriggerSet } from '../../../../../types/trigger';
 
 // @TODO:
+
 // Could get a slightly more accurate prediction for add phase train stop location
 // by adding additional rotation based on delta time between the mechanic headmarker
 // and the tank headmarkers
@@ -55,10 +60,10 @@ export interface Data extends RaidbossData {
   hailMoveCount: number;
   hailRotationDir: 'CW' | 'CCW';
   phase: 'car1' | 'car2' | 'add' | 'car3' | 'car4' | 'car5' | 'car6';
-  cleaveTrainSpeed: 'slow' | 'fast';
+  addTrainSpeed: 'slow' | 'fast';
   addCleaveOnMe: boolean;
-  trainCleaveDir: number;
-  cleaveTrainId: string;
+  addTrainId: string;
+  addTrainDir: DirectionOutput16;
   storedKBMech?: 'pairs' | 'spread';
   turretDir: 'east' | 'west';
   car2MechCount: number;
@@ -72,10 +77,10 @@ const triggerSet: TriggerSet<Data> = {
   timelineFile: 'doomtrain-ex.txt',
   initData: () => ({
     actorPositions: {},
-    cleaveTrainId: '',
+    addTrainId: '',
     addCleaveOnMe: false,
-    trainCleaveDir: -1,
-    cleaveTrainSpeed: 'slow',
+    addCleaveDir: -1,
+    addTrainSpeed: 'slow',
     phase: 'car1',
     turretDir: 'east',
     car2MechCount: 0,
@@ -85,6 +90,7 @@ const triggerSet: TriggerSet<Data> = {
     hailActorId: '',
     hailRotationDir: 'CW',
     psychokinesisCount: 0,
+    addTrainDir: 'unknown',
   }),
   timelineTriggers: [
     {
@@ -95,6 +101,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         bait: {
           en: 'Bait Puddles',
+          ko: '모여서 장판 유도',
         },
       },
     },
@@ -182,12 +189,13 @@ const triggerSet: TriggerSet<Data> = {
       preRun: (data, matches) => {
         data.storedKBMech = matches.id === 'B260' ? 'pairs' : 'spread';
       },
+      durationSeconds: 5,
       infoText: (data, _matches, output) =>
         output.text!({ mech: output[data.storedKBMech ?? 'unknown']!() }),
       outputStrings: {
         text: {
           en: 'Stored ${mech}',
-          ko: '(저장: ${mech})',
+          ko: '(나중에 ${mech})',
         },
         pairs: Outputs.stackPartner,
         spread: Outputs.spread,
@@ -205,6 +213,7 @@ const triggerSet: TriggerSet<Data> = {
       type: 'StartsUsing',
       netRegex: { id: ['B266', 'B280'], capture: true },
       condition: (data) => data.phase === 'car1',
+      durationSeconds: 8,
       infoText: (data, matches, output) =>
         output.text!({
           mech1: output[matches.id === 'B266' ? 'knockback' : 'drawIn']!(),
@@ -235,6 +244,7 @@ const triggerSet: TriggerSet<Data> = {
       type: 'StartsUsing',
       netRegex: { id: ['B271', 'B272', 'B273', 'B276'], capture: false },
       condition: (data) => data.phase === 'car2' && data.car2MechCount === 1,
+      durationSeconds: 5,
       infoText: (data, _matches, output) => output.text!({ turretDir: output[data.turretDir]!() }),
       run: (data) => data.car2MechCount++,
       outputStrings: {
@@ -242,7 +252,7 @@ const triggerSet: TriggerSet<Data> = {
         west: Outputs.west,
         text: {
           en: 'LoS ${turretDir} => Tankbusters',
-          ko: '시선 ${turretDir} 🔜 탱크버스터', // LoS = Line of Sight
+          ko: '${turretDir} 포대 🔜 탱크버스터',
         },
       },
     },
@@ -251,6 +261,7 @@ const triggerSet: TriggerSet<Data> = {
       type: 'StartsUsing',
       netRegex: { id: ['B266', 'B280'], capture: true },
       condition: (data) => data.phase === 'car2',
+      durationSeconds: 11,
       infoText: (data, matches, output) =>
         output.text!({
           turretDir: output[data.turretDir]!(),
@@ -261,7 +272,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'LoS ${turretDir} => ${mech1} => Dodge Lasers => ${mech2}',
-          ko: '시선 ${turretDir} 🔜 ${mech1} 🔜 레이저 피하고 🔜 ${mech2}', // LoS = Line of Sight
+          ko: '${turretDir} 포대 🔜 ${mech1} 🔜 레이저 🔜 ${mech2}',
         },
         unknown: Outputs.unknown,
         east: Outputs.east,
@@ -279,95 +290,96 @@ const triggerSet: TriggerSet<Data> = {
       netRegex: { moveType: ['0096', '00FA'] },
       suppressSeconds: 9999,
       run: (data, matches) => {
-        data.cleaveTrainId = matches.id;
+        data.addTrainId = matches.id;
       },
     },
     {
       id: 'DoomtrainEx Add Train Speed Collector',
       type: 'ActorMove',
       netRegex: { moveType: ['0096', '00FA'] },
-      condition: (data, matches) => matches.id === data.cleaveTrainId,
+      condition: (data, matches) =>
+        matches.id === data.addTrainId && data.addTrainDir === 'unknown',
       run: (data, matches) => {
-        data.cleaveTrainSpeed = matches.unknown2 === '0096' ? 'slow' : 'fast';
+        data.addTrainSpeed = matches.moveType === '0096' ? 'slow' : 'fast';
+      },
+    },
+    {
+      id: 'DoomtrainEx Add Train Direction Predictor',
+      type: 'HeadMarker',
+      netRegex: { id: '027F', capture: true },
+      infoText: (data, matches, output) => {
+        const actor = data.actorPositions[data.addTrainId];
+        if (actor === undefined)
+          return;
+
+        let addCleaveDir = Math.atan2(actor.x - arenas.add.x, actor.y - arenas.add.y);
+
+        // Slow rotates 3.122 rads base
+        const slowMoveBase = 3.122;
+        // Plus 0.0005666 rads per millisecond of delay since ActorMove was last recorded
+        const slowMoveDelta = 0.0005666;
+
+        // Same info, but for fast movement
+        const fastMoveBase = 4.1697;
+        const fastMoveDelta = 0.00061112;
+
+        const deltaMs = new Date(matches.timestamp).getTime() - actor.time;
+
+        if (data.addTrainSpeed === 'slow') {
+          addCleaveDir -= slowMoveBase + (slowMoveDelta * deltaMs);
+        } else {
+          addCleaveDir -= fastMoveBase + (fastMoveDelta * deltaMs);
+        }
+
+        if (addCleaveDir < -Math.PI) {
+          addCleaveDir += Math.PI * 2;
+        }
+
+        const dirNum = Directions.hdgTo8DirNum(addCleaveDir);
+        data.addTrainDir = dirNum !== undefined
+          ? Directions.output8Dir[dirNum] ?? 'unknown'
+          : 'unknown';
+
+        return output.text!({ dir: output[data.addTrainDir]!() });
+      },
+      outputStrings: {
+        ...AutumnDir.stringsArrow,
+        text: {
+          en: 'Train cleaves from ${dir}',
+          ko: '안쪽 기차: ${dir}',
+        },
       },
     },
     {
       id: 'DoomtrainEx Add Mechanics',
       type: 'HeadMarker',
       netRegex: { id: ['027D', '027E'], capture: true },
-      condition: (data) => !data.options.AutumnOnly,
       infoText: (data, matches, output) => {
-        data.trainCleaveDir ??= 0;
         const addMech = matches.id === '027D' ? 'healerStacks' : 'spread';
-        const mech = data.addCleaveOnMe ? output.cleave!() : output[addMech]!();
-        const dirNum = Directions.hdgTo16DirNum(data.trainCleaveDir);
-        const dirTxt = dirNum !== undefined ? Directions.output16Dir[dirNum ?? -1] : 'unknown';
-        const dir = output[dirTxt ?? 'unknown']!();
+        const mech = data.addTrainSpeed ? output.cleave!() : output[addMech]!();
+        const dir = output[data.addTrainDir]!();
         return output.text!({
           dir: dir,
           mech: mech,
         });
       },
+      run: (data) => {
+        data.addCleaveOnMe = false;
+      },
       outputStrings: {
-        healerStacks: Outputs.healerGroups,
-        spread: Outputs.spread,
-        cleave: Outputs.tankCleaveOnYou,
-        unknown: Outputs.unknown,
-        ...Directions.outputStrings16Dir,
-        text: {
-          en: 'Train ${dir}, ${mech}',
-          ko: '기차 ${dir}, ${mech}',
+        healerStacks: {
+          en: 'Healer Groups',
+          ja: 'ヒラに頭割り',
+          ko: '3:3 힐러',
         },
-      },
-    },
-    {
-      id: 'DoomtrainEx Autumn Mechanics',
-      type: 'HeadMarker',
-      netRegex: { id: ['027D', '027E'], capture: true },
-      condition: (data) => data.options.AutumnOnly,
-      infoText: (data, matches, output) => {
-        data.trainCleaveDir ??= 0;
-        const addMech = matches.id === '027D' ? 'healerStacks' : 'spread';
-        const mech = data.addCleaveOnMe ? output.cleave!() : output[addMech]!();
-        const dirNum = Directions.hdgTo8DirNum(data.trainCleaveDir);
-        const dirTxt = dirNum !== undefined ? AutumnDir.outputDir[dirNum ?? -1] : 'unknown';
-        const dir = output[dirTxt ?? 'unknown']!();
-        return output.text!({
-          dir: dir,
-          mech: mech,
-        });
-      },
-      outputStrings: {
-        healerStacks: Outputs.healerGroups,
         spread: Outputs.spread,
         cleave: Outputs.tankCleaveOnYou,
         unknown: Outputs.unknown,
         ...AutumnDir.stringsArrow,
         text: {
           en: 'Train ${dir}, ${mech}',
-          ko: '기차${dir}, ${mech}',
+          ko: '${mech} (안쪽 기차: ${dir})',
         },
-      },
-    },
-    {
-      id: 'DoomtrainEx Add Tank Cleave Location Prediction',
-      type: 'HeadMarker',
-      netRegex: { id: '019C', capture: false },
-      suppressSeconds: 1,
-      run: (data) => {
-        const actor = data.actorPositions[data.cleaveTrainId];
-        if (actor === undefined)
-          return;
-        data.trainCleaveDir = Math.atan2(actor.x - arenas.add.x, actor.y - arenas.add.y);
-        if (data.cleaveTrainSpeed === 'slow') {
-          data.trainCleaveDir -= 2;
-        } else {
-          data.trainCleaveDir -= 3;
-        }
-
-        if (data.trainCleaveDir < -Math.PI) {
-          data.trainCleaveDir += Math.PI * 2;
-        }
       },
     },
     {
@@ -397,7 +409,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Tower x3 => Next Platform',
-          ko: '타워x3 🔜 다음 플랫폼',
+          ko: '타워x3 🔜 다음 차량으로',
         },
       },
     },
@@ -410,7 +422,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Tower x4 => Next Platform',
-          ko: '타워x4 🔜 다음 플랫폼',
+          ko: '타워x4 🔜 다음 차량으로',
         },
       },
     },
@@ -470,6 +482,7 @@ const triggerSet: TriggerSet<Data> = {
       type: 'ActorMove',
       netRegex: { capture: true },
       condition: (data, matches) => data.hailActorId === matches.id,
+      durationSeconds: 6,
       suppressSeconds: 14,
       infoText: (data, _matches, output) => {
         // Easy cases first
@@ -479,7 +492,7 @@ const triggerSet: TriggerSet<Data> = {
           data.hailLastPos = Directions.outputCardinalDir[(oldIdx + 2) % 4] ?? 'unknown';
         } else if (data.hailMoveCount === 3) {
           // Now we determine CW or CCW
-          const actor = data.actorPositions[data.cleaveTrainId];
+          const actor = data.actorPositions[data.addTrainId];
           if (actor === undefined)
             return;
 
@@ -496,15 +509,16 @@ const triggerSet: TriggerSet<Data> = {
         }
 
         const idx = (Directions.outputCardinalDir.indexOf(data.hailLastPos) + 2) % 4;
+        const ridx = (idx + 2) % 4;
         return output.text!({
-          dir: output[Directions.outputCardinalDir[idx] ?? 'unknown']!(),
+          dir: output[Directions.outputCardinalDir[ridx] ?? 'unknown']!(),
         });
       },
       outputStrings: {
-        ...AutumnDir.stringsArrow,
+        ...Directions.outputStrings8Dir,
         text: {
           en: '${dir} => Stacks',
-          ko: '${dir} 뭉쳐요',
+          ko: '{dir}쪽으로',
         },
       },
     },
@@ -525,7 +539,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Tower x5 => Next Platform',
-          ko: '타워x5 🔜 다음 플랫폼',
+          ko: '타워x5 🔜 다음 차량으로',
         },
       },
     },
@@ -559,7 +573,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Tower x6 => Next Platform',
+          en: 'Tower x6 => Enrage!',
           ko: '타워x6 🔜 전멸!',
         },
       },
@@ -580,17 +594,17 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         up: {
           en: 'Up (dodge turrets)',
-          ko: '위 (포탑 피해요)',
+          ko: '위 (+포대 피해요)',
         },
         down: {
           en: 'Down (dodge turrets)',
-          ko: '아래 (포탑 피해요)',
+          ko: '아래 (+포대 피해요)',
         },
         east: Outputs.east,
         west: Outputs.west,
         text: {
           en: 'LoS ${turretDir}',
-          ko: '시선 ${turretDir}', // LoS = Line of Sight
+          ko: '${turretDir} 포대',
         },
       },
     },
