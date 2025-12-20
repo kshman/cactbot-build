@@ -54,11 +54,11 @@ const arenas = {
 } as const;
 
 export interface Data extends RaidbossData {
+  hailNeedMotion: boolean;
   psychokinesisCount: number;
   hailLastPos: DirectionOutputCardinal;
   hailActorId: string;
   hailMoveCount: number;
-  hailRotationDir: 'CW' | 'CCW';
   phase: 'car1' | 'car2' | 'add' | 'car3' | 'car4' | 'car5' | 'car6';
   addTrainSpeed: 'slow' | 'fast';
   addCleaveOnMe: boolean;
@@ -88,9 +88,9 @@ const triggerSet: TriggerSet<Data> = {
     hailLastPos: 'dirN',
     hailMoveCount: -1,
     hailActorId: '',
-    hailRotationDir: 'CW',
     psychokinesisCount: 0,
     addTrainDir: 'unknown',
+    hailNeedMotion: true,
   }),
   timelineTriggers: [
     {
@@ -101,7 +101,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         bait: {
           en: 'Bait Puddles',
-          ko: '모여서 장판 유도',
+          ko: '딱 장판 유도',
         },
       },
     },
@@ -189,7 +189,6 @@ const triggerSet: TriggerSet<Data> = {
       preRun: (data, matches) => {
         data.storedKBMech = matches.id === 'B260' ? 'pairs' : 'spread';
       },
-      durationSeconds: 5,
       infoText: (data, _matches, output) =>
         output.text!({ mech: output[data.storedKBMech ?? 'unknown']!() }),
       outputStrings: {
@@ -213,7 +212,7 @@ const triggerSet: TriggerSet<Data> = {
       type: 'StartsUsing',
       netRegex: { id: ['B266', 'B280'], capture: true },
       condition: (data) => data.phase === 'car1',
-      durationSeconds: 8,
+      durationSeconds: 5,
       infoText: (data, matches, output) =>
         output.text!({
           mech1: output[matches.id === 'B266' ? 'knockback' : 'drawIn']!(),
@@ -262,17 +261,32 @@ const triggerSet: TriggerSet<Data> = {
       netRegex: { id: ['B266', 'B280'], capture: true },
       condition: (data) => data.phase === 'car2',
       durationSeconds: 11,
-      infoText: (data, matches, output) =>
-        output.text!({
+      infoText: (data, matches, output) => {
+        let mech1;
+        if (matches.id === 'B266') {
+          mech1 = output.express!({ knockback: output.knockback!() });
+        } else {
+          mech1 = output.windpipe!({ drawIn: output.drawIn!() });
+        }
+        return output.text!({
           turretDir: output[data.turretDir]!(),
-          mech1: output[matches.id === 'B266' ? 'knockback' : 'drawIn']!(),
+          mech1: mech1,
           mech2: output[data.storedKBMech ?? 'unknown']!(),
-        }),
+        });
+      },
       run: (data) => data.car2MechCount++,
       outputStrings: {
         text: {
-          en: 'LoS ${turretDir} => ${mech1} => Dodge Lasers => ${mech2}',
-          ko: '${turretDir} 포대 🔜 ${mech1} 🔜 레이저 🔜 ${mech2}',
+          en: 'LoS ${turretDir} => ${mech1} => ${mech2}',
+          ko: '${turretDir} 포대 🔜 ${mech1} 🔜 ${mech2}',
+        },
+        express: {
+          en: '${knockback} => Dodge Lasers',
+          ko: '${knockback} 🔜 레이저',
+        },
+        windpipe: {
+          en: '${drawIn} => Away from Front',
+          ko: '${drawIn}',
         },
         unknown: Outputs.unknown,
         east: Outputs.east,
@@ -365,6 +379,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       run: (data) => {
         data.addCleaveOnMe = false;
+        data.addTrainDir = 'unknown';
       },
       outputStrings: {
         healerStacks: {
@@ -409,7 +424,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Tower x3 => Next Platform',
-          ko: '타워x3 🔜 다음 차량으로',
+          ko: '모여서 타워x3 🔜 다음 차량으로',
         },
       },
     },
@@ -419,10 +434,11 @@ const triggerSet: TriggerSet<Data> = {
       type: 'StartsUsing',
       netRegex: { id: 'B284', capture: false },
       infoText: (_data, _matches, output) => output.text!(),
+      run: (data) => data.hailActorId = '',
       outputStrings: {
         text: {
           en: 'Tower x4 => Next Platform',
-          ko: '타워x4 🔜 다음 차량으로',
+          ko: 'MT의 타워x4 🔜 다음 차량으로',
         },
       },
     },
@@ -472,18 +488,28 @@ const triggerSet: TriggerSet<Data> = {
     },
     {
       id: 'DoomtrainEx Hail of Thunder Actor Finder',
-      type: 'SpawnNpcExtra',
-      netRegex: { capture: true },
+      type: 'CombatantMemory',
+      netRegex: {
+        change: 'Add',
+        id: '4[0-9A-F]{7}',
+        pair: [{ key: 'BNpcID', value: '4A36' }],
+        capture: true,
+      },
       condition: (data) => data.hailActorId === 'need',
       run: (data, matches) => data.hailActorId = matches.id,
+    },
+    {
+      id: 'DoomtrainEx Hail of Thunder Stacks',
+      type: 'Ability',
+      netRegex: { id: 'B292', capture: false },
+      run: (data) => data.hailNeedMotion = true,
     },
     {
       id: 'DoomtrainEx Hail of Thunder Motion Detector',
       type: 'ActorMove',
       netRegex: { capture: true },
-      condition: (data, matches) => data.hailActorId === matches.id,
-      durationSeconds: 6,
-      suppressSeconds: 14,
+      condition: (data, matches) => data.hailActorId === matches.id && data.hailNeedMotion,
+      preRun: (data) => data.hailNeedMotion = false,
       infoText: (data, _matches, output) => {
         // Easy cases first
         // data.hailMoveCount === 4, no-op
@@ -498,27 +524,40 @@ const triggerSet: TriggerSet<Data> = {
 
           const arena = data.phase === 'car4' ? 4 : 6;
 
-          const oldAngle = Math.PI - ((oldIdx / 4) * (Math.PI * 2));
-          const newAngle = Math.atan2(actor.x - arenas[arena].x, actor.y - arenas[arena].y);
+          const oldAngle = (Math.PI * 2) + (Math.PI - ((oldIdx / 4) * (Math.PI * 2)));
+          const newAngle = (Math.PI * 2) +
+            (Math.atan2(actor.x - arenas[arena].x, actor.y - arenas[arena].y));
 
-          if (oldAngle < newAngle)
-            data.hailLastPos = Directions.outputCardinalDir[(oldIdx + 3) % 4] ?? 'unknown';
-          else
-            data.hailLastPos = Directions.outputCardinalDir[Math.abs((oldIdx - 3) % 4)] ??
-              'unknown';
+          if (oldAngle < newAngle) {
+            // Probably CCW, but check for wrap around
+            if ((newAngle - oldAngle) > Math.PI) {
+              // CW instead
+              data.hailLastPos = Directions.outputCardinalDir[(oldIdx + 3) % 4] ?? 'unknown';
+            } else {
+              data.hailLastPos = Directions.outputCardinalDir[(oldIdx + 1) % 4] ?? 'unknown';
+            }
+          } else {
+            // Probably CW, but check for wrap around
+            if ((oldAngle - newAngle) > Math.PI) {
+              // CCW instead
+              data.hailLastPos = Directions.outputCardinalDir[(oldIdx + 1) % 4] ?? 'unknown';
+            } else {
+              data.hailLastPos = Directions.outputCardinalDir[(oldIdx + 3) % 4] ?? 'unknown';
+            }
+          }
         }
 
         const idx = (Directions.outputCardinalDir.indexOf(data.hailLastPos) + 2) % 4;
-        const ridx = (idx + 2) % 4;
+        // const ridx = (idx + 2) % 4;
         return output.text!({
-          dir: output[Directions.outputCardinalDir[ridx] ?? 'unknown']!(),
+          dir: output[Directions.outputCardinalDir[idx] ?? 'unknown']!(),
         });
       },
       outputStrings: {
         ...Directions.outputStrings8Dir,
         text: {
           en: '${dir} => Stacks',
-          ko: '{dir}쪽으로',
+          ko: '(안전: {dir}쪽)',
         },
       },
     },
@@ -539,7 +578,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Tower x5 => Next Platform',
-          ko: '타워x5 🔜 다음 차량으로',
+          ko: 'ST의 타워x5 🔜 다음 차량으로',
         },
       },
     },
@@ -557,11 +596,11 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         spreadIntoBait: {
           en: 'Spread AoEs => Bait Puddles',
-          ko: '흩어져서 장판 🔜 장판 유도',
+          ko: '흩어져 장판 🔜 장판 유도',
         },
         spreadIntoBuster: {
           en: 'Spread AoEs => Tankbusters',
-          ko: '흩어져서 장판 🔜 탱크버스터',
+          ko: '흩어져 장판 🔜 탱크버스터',
         },
       },
     },
@@ -574,7 +613,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Tower x6 => Enrage!',
-          ko: '타워x6 🔜 전멸!',
+          ko: '모여서 타워x6 🔜 전멸!',
         },
       },
     },
@@ -613,18 +652,40 @@ const triggerSet: TriggerSet<Data> = {
       type: 'StartsUsing',
       netRegex: { id: ['B266', 'B280'], capture: true },
       condition: (data) => data.phase === 'car6',
+      durationSeconds: 11,
       infoText: (data, matches, output) => {
+        let mech1;
+        if (matches.id === 'B266') {
+          mech1 = output.express!({ knockback: output.knockback!() });
+        } else {
+          mech1 = output.windpipe!({ drawIn: output.drawIn!() });
+        }
+        const mech3 = data.car6MechCount === 3
+          ? output.tbFollowup!({ mech3: output.tankbuster!() })
+          : '';
         return output.text!({
-          mech1: output[matches.id === 'B266' ? 'knockback' : 'drawIn']!(),
+          mech1: mech1,
           mech2: output[data.storedKBMech ?? 'unknown']!(),
-          mech3: output.tankbuster!(),
+          mech3: mech3,
         });
       },
       run: (data) => data.car6MechCount++,
       outputStrings: {
         text: {
-          en: '${mech1} => ${mech2} => ${mech3}',
-          ko: '${mech1} 🔜 ${mech2} 🔜 ${mech3}',
+          en: '${mech1} => ${mech2}${mech3}',
+          ko: '${mech1} 🔜 ${mech2}${mech3}',
+        },
+        express: {
+          en: '${knockback} => Dodge Lasers',
+          ko: '${knockback} 🔜 레이저',
+        },
+        windpipe: {
+          en: '${drawIn} => Away from Front',
+          ko: '${drawIn}',
+        },
+        tbFollowup: {
+          en: ' => ${mech3}',
+          ko: ' 🔜 ${mech3}',
         },
         unknown: Outputs.unknown,
         knockback: Outputs.knockback,
