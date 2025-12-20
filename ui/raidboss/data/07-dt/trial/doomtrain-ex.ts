@@ -262,6 +262,8 @@ const triggerSet: TriggerSet<Data> = {
       condition: (data) => data.phase === 'car2',
       durationSeconds: 11,
       infoText: (data, matches, output) => {
+        if (data.options.AutumnOnly)
+          return;
         let mech1;
         if (matches.id === 'B266') {
           mech1 = output.express!({ knockback: output.knockback!() });
@@ -353,6 +355,9 @@ const triggerSet: TriggerSet<Data> = {
         data.addTrainDir = dirNum !== undefined
           ? Directions.output8Dir[dirNum] ?? 'unknown'
           : 'unknown';
+
+        if (data.options.AutumnOnly)
+          return;
 
         return output.text!({ dir: output[data.addTrainDir]!() });
       },
@@ -557,7 +562,7 @@ const triggerSet: TriggerSet<Data> = {
         ...Directions.outputStrings8Dir,
         text: {
           en: '${dir} => Stacks',
-          ko: '(안전: {dir}쪽)',
+          ko: '뭉쳐요! (${dir}쪽)',
         },
       },
     },
@@ -573,7 +578,7 @@ const triggerSet: TriggerSet<Data> = {
     {
       id: 'DoomtrainEx Derailment Siege Car5',
       type: 'StartsUsing',
-      netRegex: { id: 'B284', capture: false },
+      netRegex: { id: 'B285', capture: false },
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
@@ -654,6 +659,9 @@ const triggerSet: TriggerSet<Data> = {
       condition: (data) => data.phase === 'car6',
       durationSeconds: 11,
       infoText: (data, matches, output) => {
+        if (data.options.AutumnOnly)
+          return;
+
         let mech1;
         if (matches.id === 'B266') {
           mech1 = output.express!({ knockback: output.knockback!() });
