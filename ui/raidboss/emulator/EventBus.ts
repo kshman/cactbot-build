@@ -53,6 +53,7 @@ export default class EventBus {
       return;
 
     for (const l of this.listeners[event] ?? []) {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
       const res = l.callback.apply(l.scope, eventArguments);
       await Promise.resolve(res);
     }

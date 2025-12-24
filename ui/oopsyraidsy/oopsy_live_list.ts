@@ -357,15 +357,15 @@ export class OopsyLiveList implements MistakeObserver {
       // copied message
       const msg = document.createElement('div');
       msg.classList.add('copied-msg');
-      msg.innerText = kCopiedMessage[this.options.DisplayLanguage] || kCopiedMessage['en'];
+      const lang = this.options.DisplayLanguage as keyof typeof kCopiedMessage;
+      msg.innerText = kCopiedMessage[lang] ?? kCopiedMessage.en;
       msg.style.width = `${div.clientWidth}px`;
       msg.style.height = `${div.clientHeight}px`;
 
       div.appendChild(msg);
       window.setTimeout(() => {
         // oopsy live list may have been hidden/destroyed before the timeout happens.
-        if (msg.parentNode)
-          div.removeChild(msg);
+        msg.parentNode?.removeChild(msg);
       }, 1000);
     });
     this.items.push(div);

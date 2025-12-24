@@ -2,6 +2,7 @@
 import crypto from 'crypto';
 import { createReadStream } from 'fs';
 import fs from 'fs/promises';
+import { Agent } from 'http';
 import path from 'path';
 
 import chalk from 'chalk';
@@ -52,7 +53,10 @@ const endsWith = (s: string, suffix: Iterable<string>): boolean => {
 };
 
 const downloadFile = async (url: string, localPath: string): Promise<void> => {
-  const res = await fetch(url, { agent: ProxyAgent() });
+  // `proxy-agent` returns an Agent-like object; create it with `new`
+  // and cast to `http.Agent` to satisfy node-fetch's TypeScript typing.
+  const agent = new ProxyAgent() as unknown as Agent;
+  const res = await fetch(url, { agent });
   await fs.writeFile(localPath, new DataView(await res.arrayBuffer()));
 };
 
@@ -156,6 +160,7 @@ export const main = async (updateHashes = false): Promise<void> => {
       await Promise.all(
         Array.from(tmp, (key) => async () => {
           const meta = deps[key];
+          // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
           if (_.isEmpty(meta) || !meta)
             return;
           const log = (...args: unknown[]) => console.log(chalk.red(`${key}:`), ...args);

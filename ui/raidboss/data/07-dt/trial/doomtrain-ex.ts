@@ -582,7 +582,7 @@ const triggerSet: TriggerSet<Data> = {
         unknown: Outputs.unknown,
         text: {
           en: '${dir} Safe + Stacks',
-          ko: '뭉쳐요! (안전: ${dir}쪽)',
+          ko: '뭉쳐요! (안전: ${dir})',
         },
       },
     },

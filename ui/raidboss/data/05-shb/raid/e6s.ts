@@ -30,6 +30,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: 'Ifrit',
           ja: 'イフリート',
           cn: '伊弗利特',
+          tc: '伊弗利特',
           ko: '이프리트',
         };
 
@@ -39,6 +40,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: 'Raktapaksa',
           ja: 'ラクタパクシャ',
           cn: '赤翼罗羯坨博叉',
+          tc: '赤翼罗羯坨博叉',
           ko: '락타팍샤',
         };
 

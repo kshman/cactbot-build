@@ -911,8 +911,10 @@ const zoneReplace: ZoneReplace[] = [
   },
   { // 츠쿠 언렬
     fileMap: {
-      'ui/raidboss/data/04-sb/trial/tsukuyomi-ex.ts': 'ui/raidboss/data/07-dt/trial/tsukuyomi-un.ts',
-      'ui/raidboss/data/04-sb/trial/tsukuyomi-ex.txt': 'ui/raidboss/data/07-dt/trial/tsukuyomi-un.txt',
+      'ui/raidboss/data/04-sb/trial/tsukuyomi-ex.ts':
+        'ui/raidboss/data/07-dt/trial/tsukuyomi-un.ts',
+      'ui/raidboss/data/04-sb/trial/tsukuyomi-ex.txt':
+        'ui/raidboss/data/07-dt/trial/tsukuyomi-un.txt',
       'ui/oopsyraidsy/data/04-sb/trial/tsukuyomi-ex.ts':
         'ui/oopsyraidsy/data/07-dt/trial/tsukuyomi-un.ts',
     },

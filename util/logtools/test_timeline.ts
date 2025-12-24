@@ -55,7 +55,7 @@ const testLineArray = async (
   const repo = new LogRepository();
   const lineEvents = lines.map((line) => ParseLine.parse(repo, line)).filter((l) =>
     l !== undefined
-  ) as LineEvent[];
+  );
   return await testLineEvents(lineEvents, timelineName, driftWarn, driftFail);
 };
 

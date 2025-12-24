@@ -160,6 +160,8 @@ if ($in -eq '7')
 # 린트 (스크립트)
 if ($in -eq '4' -or $in -eq '3')
 {
+  cd ..
+
   Write-Host '린트 (타입스크립트)'
   npm run tsc-no-emit
   if (-not $?) { Exit-ForError('타입스크립트', 41) }

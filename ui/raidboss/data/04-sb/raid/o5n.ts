@@ -55,6 +55,7 @@ const triggerSet: TriggerSet<Data> = {
           de: 'Geist in das Licht ködern',
           fr: 'Attirez le fantôme dans la lumière',
           cn: '诱导幽灵进光圈',
+          tc: '誘導幽靈進光圈',
           ko: '유령을 빛 장판으로 유도',
         },
       },
@@ -72,6 +73,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: 'Déposez la marque au loin',
           ja: '魔界の光', // FIXME
           cn: '远离放置光点名',
+          tc: '遠離放置光點名',
           ko: '빛 장판 버려요',
         },
       },
@@ -95,6 +97,7 @@ const triggerSet: TriggerSet<Data> = {
           de: 'Geist berühren',
           fr: 'Touchez le fantôme',
           cn: '撞幽灵',
+          tc: '撞幽靈',
           ko: '유령 만져요',
         },
       },
@@ -179,7 +182,7 @@ const triggerSet: TriggerSet<Data> = {
       'replaceText': {
         'Acid Rain': '酸雨',
         'Add Wave': '一波小怪',
-        'Crossing Whistle': '交叉汽笛',
+        'Crossing Whistle': '魔界汽笛（直线）',
         'Diabolic Chimney': '魔界喷烟',
         'Diabolic Headlamp': '魔界前照灯',
         'Diabolic Light': '魔界光',
@@ -190,7 +193,7 @@ const triggerSet: TriggerSet<Data> = {
         'Ghosts': '幽灵',
         'Head On': '追尾',
         'Saintly Beam': '圣光射线',
-        'Tether Whistle': '连线汽笛',
+        'Tether Whistle': '魔界汽笛（连线）',
       },
     },
     {

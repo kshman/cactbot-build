@@ -33,7 +33,8 @@ const triggerSet: TriggerSet<Data> = {
           de: 'Kugel-Verbindungen',
           fr: 'Liens orbes',
           ja: '線',
-          cn: '连线',
+          cn: '接线',
+          tc: '接線',
           ko: '구슬 줄',
         },
       },
@@ -64,7 +65,8 @@ const triggerSet: TriggerSet<Data> = {
           en: 'Stack for Donuts',
           de: 'Für Donuts sammeln',
           fr: 'Packez-vous pour les donuts',
-          cn: '集合水环',
+          cn: '集合放月环',
+          tc: '集合放月環',
           ko: '도넛장판! 뭉쳐요',
         },
       },
@@ -114,6 +116,7 @@ const triggerSet: TriggerSet<Data> = {
           de: 'Flare weit weg ablegen',
           fr: 'Déposez le brasier au loin',
           cn: '核爆放在远处',
+          tc: '核爆放在遠處',
           ko: '플레어 바깥에 버려요',
         },
       },
@@ -134,16 +137,17 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (data, _matches, output) => {
         if (data.stackMarker?.includes(data.me))
           return output.stackOnYou!();
-        return output.stack44!();
+        return output.stackGroups!();
       },
       run: (data) => delete data.stackMarker,
       outputStrings: {
         stackOnYou: Outputs.stackOnYou,
-        stack44: {
+        stackGroups: {
           en: 'Split into stack groups',
           de: 'In Sammel-Gruppen aufteilen',
           fr: 'Divisez-vous en groupes packés',
           cn: '分组分摊',
+          tc: '分組分攤',
           ko: '4:4 뭉쳐요',
         },
       },
@@ -254,7 +258,7 @@ const triggerSet: TriggerSet<Data> = {
         'Damning Edict': '诅咒敕令',
         'Earthquake': '大地震',
         'Fiendish Orbs': '追踪',
-        'Knock(?! )': '中弹',
+        'Knock(?! )': '轰击',
         'Long/Lat Implosion': '经/纬度聚爆',
         'Soul of Chaos': '混沌之魂',
         'Stray Flames': '混沌之炎',

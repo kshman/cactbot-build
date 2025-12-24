@@ -314,7 +314,7 @@ const triggerSet: TriggerSet<Data> = {
         'Stab': '찌르기',
         'System Error': '시스템 오류',
         'Thunder II': '선더라',
-        'Towers': '타워',
+        'Towers': '기둥',
         'Triflame': '세 갈래 화염',
         'Wheel': '바퀴',
         'Wild Speed': '폭주',
