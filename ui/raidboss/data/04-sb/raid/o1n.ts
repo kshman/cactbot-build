@@ -37,6 +37,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: 'Aile déferlante : Placez-vous à côté du boss',
           ja: 'ブレスウィング: ボスに近づく',
           cn: '站boss附近',
+          tc: '站boss附近',
           ko: '브레스 윙: 보스 옆으로',
         },
       },

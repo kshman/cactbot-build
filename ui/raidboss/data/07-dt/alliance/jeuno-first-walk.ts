@@ -1119,7 +1119,7 @@ const triggerSet: TriggerSet<Data> = {
         'Asuran Fists': 'Poings d\'Asura',
         'Auroral Uppercut': 'Uppercut auroral',
         'Baleful Breath': 'Souffle maléfique',
-        'Banish(?![\\w| ])': 'Bannissement',
+        'Banish(?!(ga| Storm))': 'Bannissement',
         'Banish Storm': 'Tempête bannissante',
         'Banishga(?! )': 'OmniBannissement',
         'Banishga IV': 'OmniBannissement IV',

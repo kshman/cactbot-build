@@ -23,6 +23,12 @@ const triggerSet: TriggerSet<Data> = {
   timelineFile: 'tsukuyomi-un.txt',
   triggers: [
     {
+      id: 'TsukuyomiUn Reprimand',
+      type: 'StartsUsing',
+      netRegex: { id: 'B12E', source: 'Tsukuyomi', capture: false },
+      response: Responses.aoe(),
+    },
+    {
       id: 'TsukuyomiUn Nightfall Gun',
       type: 'StartsUsing',
       netRegex: { id: 'B130', source: 'Tsukuyomi', capture: false },
@@ -32,7 +38,7 @@ const triggerSet: TriggerSet<Data> = {
       id: 'TsukuyomiUn Nightfall Spear',
       type: 'StartsUsing',
       netRegex: { id: 'B131', source: 'Tsukuyomi', capture: false },
-      response: Responses.spread(),
+      response: Responses.rolePositions(),
     },
     {
       id: 'TsukuyomiUn Torment',
@@ -64,6 +70,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: 'Éloignez-vous de l\'avant',
           ja: '正面から離れる',
           cn: '远离正面',
+          tc: '遠離正面',
           ko: '정면 피해요',
         },
         tankBusterOnYou: Outputs.tankBusterOnYou,
@@ -99,6 +106,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: 'À gauche + Extérieur',
           ja: '左へ + 外へ',
           cn: '左边 + 远离',
+          tc: '左邊 + 遠離',
           ko: '왼쪽 + 밖으로',
         },
         leftAndIn: {
@@ -107,6 +115,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: 'À gauche + Intérieur',
           ja: '左へ + 中へ',
           cn: '左边 + 靠近',
+          tc: '左邊 + 靠近',
           ko: '왼쪽 + 안으로',
         },
       },
@@ -127,6 +136,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: 'À droite + Extérieur',
           ja: '右へ + 外へ',
           cn: '右边 + 远离',
+          tc: '右邊 + 遠離',
           ko: '오른쪽 + 밖으로',
         },
         rightAndIn: {
@@ -135,6 +145,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: 'À droite + Intérieur',
           ja: '右へ + 中へ',
           cn: '右边 + 靠近',
+          tc: '右邊 + 靠近',
           ko: '오른쪽 + 안으로',
         },
       },
@@ -214,6 +225,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: 'Allez en zone noire !',
           ja: '新月に！',
           cn: '踩黑色！',
+          tc: '踩黑色！',
           ko: '깜장으로 가욧!',
         },
       },
@@ -242,7 +254,7 @@ const triggerSet: TriggerSet<Data> = {
       condition: (data, matches) => {
         if (matches.target !== data.me)
           return false;
-        return data.moonlitCount !== undefined && data.moonlitCount >= 4;
+        return data.moonshadowedCount !== undefined && data.moonshadowedCount >= 4;
       },
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
@@ -252,6 +264,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: 'Allez en zone blanche !',
           ja: '満月に！',
           cn: '踩白色！',
+          tc: '踩白色！',
           ko: '하양으로 가욧!',
         },
       },

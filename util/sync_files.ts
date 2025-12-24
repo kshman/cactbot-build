@@ -909,7 +909,7 @@ const zoneReplace: ZoneReplace[] = [
       '3CA9': 'AC03', // Fifth Element (enrage)
     },
   },
-  { // 츠쿠 언렬
+  { // Tsukuyomi Unreal
     fileMap: {
       'ui/raidboss/data/04-sb/trial/tsukuyomi-ex.ts':
         'ui/raidboss/data/07-dt/trial/tsukuyomi-un.ts',
@@ -925,6 +925,14 @@ const zoneReplace: ZoneReplace[] = [
       'tsukuyomi-ex.txt': 'tsukuyomi-un.txt',
     },
     // Primary offset 8574
+    //
+    // IDs confirmed unchanged:
+    // 2BCA -- Specter of Zenos spawn?
+    // 2BCB -- Specter of Gosetsu spawn?
+    // 2BFD -- --sync--
+    // 2CAE -- Yotsuyu Nightbloom
+    // 2CD6 -- Specter of Gosetsu exit?
+    // 2EDF -- --sync--
     id: {
       '2BBA': 'B12E', // Reprimand
       '2BBB': 'B12F', // Torment unto Death
@@ -953,6 +961,8 @@ const zoneReplace: ZoneReplace[] = [
       '2BDD': 'B151', // Lunacy
       '2BDE': 'B152', // Waxing Grudge
       '2BDF': 'B153', // Waning Grudge
+      '2BE0': 'B154', // Lunacy Enrage begins
+      '2BE1': 'B155', // Lunacy Enrage
       '2BE3': 'B157', // --sync--
       '2CA8': 'B158', // Unmoving Troika
       '2CA9': 'B159', // Unmoving Troika

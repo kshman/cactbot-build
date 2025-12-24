@@ -76,6 +76,7 @@ const triggerSet: TriggerSet<Data> = {
           en: '${knockback} ${dir4} => ${dir1}',
           de: '${knockback} ${dir4} => ${dir1}',
           cn: '${knockback} ${dir4} => ${dir1}',
+          tc: '${knockback} ${dir4} => ${dir1}',
           ko: '${knockback} ${dir4} 🔜 ${dir1}',
         },
         knockback: Outputs.knockback,
@@ -102,6 +103,7 @@ const triggerSet: TriggerSet<Data> = {
           en: 'Seed on YOU',
           de: 'Samen auf DIR',
           cn: '种子点名',
+          tc: '種子點名',
           ko: '내게 씨앗!',
         },
       },
@@ -126,6 +128,12 @@ const triggerSet: TriggerSet<Data> = {
       'missingTranslations': true,
       'replaceSync': {
         'Forgiven Emulation': 'フォーギヴン・エミュレーション',
+      },
+    },
+    {
+      'locale': 'ko',
+      'replaceSync': {
+        'Forgiven Emulation': '면죄된 모방',
       },
     },
   ],
