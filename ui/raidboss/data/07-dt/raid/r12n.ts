@@ -188,6 +188,7 @@ const triggerSet: TriggerSet<Data> = {
       id: 'R12N Feral Fission Party Stack',
       type: 'HeadMarker',
       netRegex: { id: headMarkerData['feralFissionStack'], capture: true },
+      durationSeconds: 5.1,
       response: Responses.stackMarkerOn(),
     },
     {
@@ -195,12 +196,22 @@ const triggerSet: TriggerSet<Data> = {
       type: 'HeadMarker',
       netRegex: { id: headMarkerData['tankbuster'], capture: true },
       condition: Conditions.targetIsYou(),
+      durationSeconds: 5.1,
       response: Responses.tankBuster(),
     },
     {
       id: 'R12N Feral Fission Spread',
       type: 'HeadMarker',
       netRegex: { id: headMarkerData['feralFissionSpread'], capture: true },
+      condition: Conditions.targetIsYou(),
+      durationSeconds: 5,
+      suppressSeconds: 1,
+      response: Responses.spread(),
+    },
+    {
+      id: 'R12N Dramatic Lysis Spread',
+      type: 'HeadMarker',
+      netRegex: { id: headMarkerData['dramaticLysisSpread'], capture: true },
       condition: Conditions.targetIsYou(),
       suppressSeconds: 1,
       response: Responses.spread(),
@@ -209,26 +220,30 @@ const triggerSet: TriggerSet<Data> = {
       id: 'R12N The Fixer',
       type: 'StartsUsing',
       netRegex: { id: 'B494', source: 'Lindwurm', capture: false },
+      durationSeconds: 4.7,
       response: Responses.aoe(),
     },
     {
       id: 'R12N Bloodshed Cleaving West',
       type: 'StartsUsing',
       netRegex: { id: 'B465', source: 'Lindwurm', capture: false },
+      durationSeconds: 7.6,
       response: Responses.goEast(),
     },
     {
       id: 'R12N Bloodshed Cleaving East',
       type: 'StartsUsing',
       netRegex: { id: 'B466', source: 'Lindwurm', capture: false },
+      durationSeconds: 7.6,
       response: Responses.goWest(),
     },
     {
       id: 'R12N Ravenous Reach',
       type: 'StartsUsingExtra',
       netRegex: { id: 'B46D', capture: true },
+      durationSeconds: 10.3,
       alertText: (_data, matches, output) => {
-        if (parseFloat(matches.x) < 100)
+        if (parseFloat(matches.x) < center.x)
           return output.west!();
         return output.east!();
       },
@@ -265,6 +280,7 @@ const triggerSet: TriggerSet<Data> = {
         capture: false,
       },
       delaySeconds: 0.3,
+      durationSeconds: 6.6,
       suppressSeconds: 1,
       infoText: (data, _matches, output) => {
         // @TODO: Better text/logic for safe spots maybe? Don't have enough data to determine if there are
@@ -286,7 +302,7 @@ const triggerSet: TriggerSet<Data> = {
         },
         launchAway: {
           en: 'Launch away from expanding blobs',
-          ko: '커지는 살덩이 피해서 넉백',
+          ko: '커지는 살덩이 피해 넉백',
         },
       },
     },
@@ -295,6 +311,7 @@ const triggerSet: TriggerSet<Data> = {
       type: 'GainsEffect',
       netRegex: { effectId: ['128B', '128C'], capture: true },
       condition: Conditions.targetIsYou(),
+      durationSeconds: 7,
       infoText: (_data, matches, output) => {
         return output[matches.effectId === '128B' ? 'forward' : 'back']!();
       },
@@ -315,9 +332,47 @@ const triggerSet: TriggerSet<Data> = {
       id: 'R12N Cruel Coil Collector',
       type: 'Ability',
       netRegex: { id: ['B11B', 'B11C'], source: 'Lindwurm', capture: true },
-      alertText: (_data, matches, output) => output[matches.id === 'B11B' ? 'dirNW' : 'dirSE']!(),
+      delaySeconds: 3,
+      durationSeconds: 6.1,
+      alertText: (_data, matches, output) =>
+        output.text!({
+          dir: output[matches.id === 'B11B' ? 'dirNW' : 'dirSE']!(),
+        }),
       outputStrings: {
+        text: {
+          en: 'Escape (${dir} CW)',
+          ko: '피해요: ${dir}쪽',
+        },
         ...Directions.outputStringsIntercardDir,
+      },
+    },
+    {
+      id: 'R12N Hemorrhagic Projection',
+      type: 'GainsEffect',
+      netRegex: { effectId: '808', count: ['408', '409', '40A', '40B'], capture: true },
+      condition: Conditions.targetIsYou(),
+      durationSeconds: 7,
+      infoText: (_data, matches, output) => {
+        let dir: 'front' | 'right' | 'back' | 'left';
+        if (matches.count === '408')
+          dir = 'front';
+        else if (matches.count === '409')
+          dir = 'right';
+        else if (matches.count === '40A')
+          dir = 'back';
+        else
+          dir = 'left';
+        return output.text!({ dir: output[dir]!() });
+      },
+      outputStrings: {
+        front: Outputs.front,
+        right: Outputs.right,
+        back: Outputs.back,
+        left: Outputs.left,
+        text: {
+          en: 'Cleaving ${dir}, point out',
+          ko: '부채꼴: ${dir}',
+        },
       },
     },
     {
@@ -333,11 +388,12 @@ const triggerSet: TriggerSet<Data> = {
       id: 'R12N Feral Fission',
       type: 'Ability',
       netRegex: { id: 'B478', source: 'Lindwurm', capture: false },
+      durationSeconds: 6,
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
           en: 'Away from snakes, platform breaking',
-          ko: '뱀 터널 피해요, 바닥 무너져요',
+          ko: '뱀 터널 피해요',
         },
       },
     },
@@ -349,6 +405,7 @@ const triggerSet: TriggerSet<Data> = {
       preRun: (data, matches) => {
         data.tilePhaseHeadIds.push(matches.id);
       },
+      durationSeconds: 7,
       infoText: (data, _matches, output) => {
         if (data.tilePhaseHeadIds.length < 2)
           return;
@@ -367,6 +424,10 @@ const triggerSet: TriggerSet<Data> = {
 
         if (head1Pos.startsWith('out') && head2Pos.startsWith('out'))
           return output.middle!();
+        if (head1Pos.endsWith('E') && head2Pos.endsWith('E'))
+          return output.west!();
+        if (head1Pos.endsWith('W') && head2Pos.endsWith('W'))
+          return output.east!();
 
         const positions: TileHeadPos[] = [...tileHeadPositions].filter((pos) =>
           pos !== head1Pos && pos !== head2Pos
@@ -386,25 +447,27 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         middle: Outputs.middle,
+        east: Outputs.getRightAndEast,
+        west: Outputs.getLeftAndWest,
         outW: {
           en: 'Out West',
-          ko: '서쪽 바깥',
+          ko: '1열',
         },
         inW: {
           en: 'In West',
-          ko: '서쪽 안',
+          ko: '2열',
         },
         inE: {
           en: 'In East',
-          ko: '동쪽 안',
+          ko: '3열',
         },
         outE: {
           en: 'Out East',
-          ko: '동쪽 바깥',
+          ko: '4열',
         },
         text: {
           en: '${dir1}/${dir2}',
-          ko: '${dir1}/${dir2}',
+          ko: '안전: ${dir1}, ${dir2}',
         },
       },
     },
@@ -412,7 +475,7 @@ const triggerSet: TriggerSet<Data> = {
       id: 'R12N Mindless Flesh',
       type: 'StartsUsing',
       netRegex: {
-        id: ['BBD8', 'BBD9', 'BBDA', 'BBDB', 'BBDC', 'BBDD', 'BBDE', 'BBDF'],
+        id: ['BBD8', 'BBD9', 'BBDA', 'BBDB', 'BBDC', 'BBDD', 'BBDE'],
         source: 'Lindwurm',
         capture: false,
       },
@@ -421,7 +484,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Dodge lines',
-          ko: '선형 장판 피해요',
+          ko: '연속 장판 피해요',
         },
       },
     },
@@ -431,6 +494,22 @@ const triggerSet: TriggerSet<Data> = {
       netRegex: { id: 'BCF3', source: 'Lindwurm', capture: false },
       suppressSeconds: 1,
       response: Responses.spread(),
+    },
+    {
+      id: 'R12N Mindless Flesh Huge',
+      type: 'StartsUsingExtra',
+      netRegex: { id: 'BBDF', capture: true },
+      delaySeconds: 9,
+      durationSeconds: 6.8,
+      infoText: (_data, matches, output) => {
+        if (parseFloat(matches.x) < center.x)
+          return output.east!();
+        return output.west!();
+      },
+      outputStrings: {
+        west: Outputs.getLeftAndWest,
+        east: Outputs.getRightAndEast,
+      },
     },
   ],
 };

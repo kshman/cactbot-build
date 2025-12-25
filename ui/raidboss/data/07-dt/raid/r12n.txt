@@ -1,14 +1,24 @@
 ### AAC HEAVYWEIGHT (M4)
 # ZoneId: 1326
 
-# -ii B491 B467 B468
+# -ii B467 B468 B469 B46A B46B B46E B472 B477 B47C B491 B492 B536 B53C B768 B9BD B9C0 BBE0
+# -it "Lindwurm"
+# -p BBD5:998.2
+# The phase above won't always work, it depends on what state the boss was in when it died
+# (none|left|right|both) arms transformed, each produces a different ability to de-transform
 
 hideall "--Reset--"
 hideall "--sync--"
 
+# At the end of P1, when the boss drops below 10%, it starts a separate soft enrage
+# loop. Scattered through the timeline are extra syncs to catch an out-of-place
+# tankbuster cast, which is what denotes the start of the enrage loop.
+hideall "--p1-enrage-sync--"
+
 0.0 "--Reset--" ActorControl { command: "4000000F" } window 0,100000 jump 0
 
 0.0 "--sync--" InCombat { inGameCombat: "1" } window 0,1
+6.7 "--sync--" StartsUsing { id: "B494", source: "Lindwurm" } window 6.7,10
 11.4 "The Fixer" Ability { id: "B494", source: "Lindwurm" }
 19.2 "Bloodshed" Ability { id: ["B465", "B466"], source: "Lindwurm" }
 27.3 "Serpentine Scourge" Ability { id: "B9BB", source: "Lindwurm" }
@@ -34,7 +44,7 @@ hideall "--sync--"
 148.3 "--sync--" Ability { id: "B7C6", source: "Lindwurm" }
 
 # Feral Fission
-161.3 label "p1-loop"
+158.6 label "p1-loop"
 161.3 "Feral Fission" Ability { id: "B478", source: "Lindwurm" }
 162.9 "Grand Entrance x8" duration 2 #Ability { id: "B47B", source: "Lindwurm" }
 169.6 "Bring Down the House" Ability { id: "B47D", source: "Lindwurm" }
@@ -47,12 +57,15 @@ hideall "--sync--"
 211.1 "Fourth-Wall Fusion" Ability { id: "B484", source: "Lindwurm" }
 219.7 "Burst" Ability { id: "B46F", source: "Lindwurm" }
 
-# TODO: Cone cast here (Hemorrhagic Projection) doesn't match with VOD???
 226.8 "Bloodshed" Ability { id: ["B465", "B466"], source: "Lindwurm" }
+# Cone cast here (Hemorrhagic Projection) is an invisible late instant cast
+# Does not align with the visual indicator since the visual is a 0x808 status effect on players
+# not an actual cast
 227.1 "Hemorrhagic Projection" Ability { id: "B485", source: "Lindwurm" }
 235.0 "Serpentine Scourge" Ability { id: "B9BB", source: "Lindwurm" }
 242.5 "Splattershed" Ability { id: "B9C5", source: "Lindwurm" }
 244.2 "--sync--" Ability { id: "B490", source: "Lindwurm" }
+253.0 "--p1-enrage-sync--" StartsUsing { id: "B492" } window 159.0,0 jump "p1-enrage-loop"
 258.8 "Visceral Burst" Ability { id: "B493", source: "Lindwurm" }
 
 # Cruel Coil 2
@@ -71,15 +84,28 @@ hideall "--sync--"
 334.3 "Burst" Ability { id: "B46F", source: "Lindwurm" }
 339.6 "The Fixer" Ability { id: "B494", source: "Lindwurm" }
 
-351.7 "--sync--" Ability { id: "B478", source: "Lindwurm" } forcejump "p1-loop"
+348.9 "--p1-enrage-sync--" StartsUsing { id: "B492" } window 87.5,0 jump "p1-enrage-loop"
+349.0 "--sync--" StartsUsing { id: "B478", source: "Lindwurm" } forcejump "p1-loop"
 
-# Phase two, this sync is the "death" animation
-1000.0 "--sync--" Ability { id: "BBD5", source: "Lindwurm" } window 1000,0
-1028.1 label "p2-loop"
-1028.1 "Mindless Flesh x5" Ability { id: ["BBD8", "BBD9"], source: "Lindwurm" } duration 7.2
-1034.3 "Dramatic Lysis" Ability { id: "BCF3", source: "Lindwurm" }
-1051.8 "Splattershed" Ability { id: "BBE1", source: "Lindwurm" }
-1062.8 "--sync--" Ability { id: ["BBD8", "BBD9"], source: "Lindwurm" } forcejump "p2-loop"
+500.0 label "p1-enrage-loop"
+504.7 "Visceral Burst" Ability { id: "B493", source: "Lindwurm" }
+517.7 "The Fixer" Ability { id: "B494", source: "Lindwurm" }
+529.8 "The Fixer" Ability { id: "B494", source: "Lindwurm" }
+540.9 "Grotesquerie" Ability { id: "B481", source: "Lindwurm" }
+548.1 "Shockwave" Ability { id: "B482", source: "Lindwurm" }
+549.3 "Burst" Ability { id: "B46F", source: "Lindwurm" }
+556.0 "Hemorrhagic Projection" Ability { id: "B485", source: "Lindwurm" }
+563.3 "--sync--" StartsUsing { id: "B492" } forcejump "p1-enrage-loop"
+
+# Phase two, this sync is the announcer "The battle is decided! Victory goes to the champion!" text
+1000.0 "--sync--" ActorControl { command: "80000027", data0: "10", data1: "02", data2: "330A" } window 1000,0
+1020.2 "--targetable--"
+1026.3 label "p2-loop"
+1026.3 "Mindless Flesh x5" Ability { id: ["BBD8", "BBD9"], source: "Lindwurm" } duration 7.2
+1032.5 "Dramatic Lysis" Ability { id: "BCF3", source: "Lindwurm" }
+1039.5 "Mindless Flesh (huge)" Ability { id: "BBDF", source: "Lindwurm" }
+1050.0 "Splattershed" Ability { id: "BBE1", source: "Lindwurm" }
+1061.0 "--sync--" Ability { id: ["BBD8", "BBD9"], source: "Lindwurm" } forcejump "p2-loop"
 
 # IGNORED ABILITIES
 # B467 Serpentine Scourge: VFX for left/right cleave, not snapshot
