@@ -274,6 +274,7 @@ const triggerSet: TriggerSet<Data> = {
       run: (data, matches) => data.dividingWingsEntangling.push(matches.target),
       outputStrings: {
         text: {
+          // TODO: should we say "on posts" or "on back wall" based on count?
           en: 'Overlap Webs',
           ja: 'ウェブ重なる',
           ko: '거미줄 겹치기',

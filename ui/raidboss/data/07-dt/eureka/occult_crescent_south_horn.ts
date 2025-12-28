@@ -4667,7 +4667,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '숫자에서 시작',
         },
         pattern1: {
-          en: '⅄ Daggers', // Displays an upside down Y,
+          en: '⅄ Daggers', // Displays an upside down Y
           ja: '⅄ Daggers', // Displays an upside down Y,
           ko: '⅄ 단검',
         },

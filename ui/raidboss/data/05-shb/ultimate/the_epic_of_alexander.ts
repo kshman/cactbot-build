@@ -2065,6 +2065,9 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         unknown: {
+          // If you don't know, it's probably best for you to pretend like
+          // you're running E->S so that there's a jump there and you
+          // don't kill your friends stacking north.
           en: 'No Clone: maybe purple E->S ???',
           ja: 'クローン無し: 多分東から南???',
           ko: '분신 없음: 아마도 동→남 ???',
@@ -2085,6 +2088,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '보라/접촉금지/선없음: 동→서',
         },
         orangeNoTether: {
+          // This person also has the shared sentence.
           en: 'Orange, no tether: E->N',
           ja: '接触禁止, 線無し: 東から北へ',
           ko: '노랑/접촉금지/선없음: 동→북',
@@ -2401,6 +2405,8 @@ const triggerSet: TriggerSet<Data> = {
         north: Outputs.north,
         east: Outputs.east,
         south: {
+          // It is a bit different in JA/CN that players should go middle instead of south,
+          // so leave it alone.
           en: 'South',
           ja: '中央へ',
           ko: '가운데로',

@@ -149,6 +149,8 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
+          // "Intercardinals" may confuse people between absolute and relative,
+          // so add in the "of boss" just to be extra clear.
           en: 'Go Intercardinal of Boss',
           ja: 'ボスの斜めへ',
           ko: '보스 비스듬히 피해요',

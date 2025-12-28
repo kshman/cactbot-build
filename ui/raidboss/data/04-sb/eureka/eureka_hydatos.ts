@@ -562,11 +562,17 @@ const triggerSet: TriggerSet<Data> = {
         data.blackHoleCount = (data.blackHoleCount ?? 0) + 1;
       },
       alarmText: (data, _matches, output) => output.blackHole!({ num: data.blackHoleCount }),
+      tts: (data, _matches, output) => output.blackHoleTTS!({ num: data.blackHoleCount }),
       outputStrings: {
         blackHole: {
           en: 'Black Hole ${num} / 6',
           ja: 'ブラックホール: ${num} / 6',
           ko: '블랙홀: ${num} / 6',
+        },
+        blackHoleTTS: {
+          en: 'Black Hole ${num}',
+          ja: 'ブラックホール ${num}',
+          ko: '블랙홀${num}',
         },
       },
     },

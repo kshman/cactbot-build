@@ -79,11 +79,13 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         southeast: {
+          // .. or anywhere not NW
           en: 'Kill Alarum SE',
           ja: '南東のアラームを倒す',
           ko: '남동쪽 경보기 없애기',
         },
         southwest: {
+          // ... or anywhere not NW/SE
           en: 'Kill Alarum SW',
           ja: '南西のアラームを倒す',
           ko: '남서쪽 경보기 없애기',

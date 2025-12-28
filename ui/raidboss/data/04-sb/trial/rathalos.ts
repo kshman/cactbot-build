@@ -51,6 +51,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
+          // TODO: we could be fancier and say "Run through" or something for #2.
           en: 'Left Flank (or out)',
           ja: 'Left Flank (or out)',
           ko: '왼쪽 옆 (또는 멀찍이)',
@@ -72,6 +73,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
+          // For ranged players, Rush is different than Flaming Recoil because they may have to move.
           en: 'Avoid Charge',
           ja: 'Avoid Charge',
           ko: '돌진 피해요',

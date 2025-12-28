@@ -534,6 +534,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         unknown: {
+          // "Follow Other People ;)"
           en: 'Go ???',
           ja: '??? へ',
           ko: '???쪽으로',

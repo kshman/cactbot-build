@@ -80,20 +80,6 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: 'Aloalo Quaqua Arcane Armaments Action',
-      type: 'Ability',
-      netRegex: { id: '8B88', source: 'Quaqua', capture: false },
-      delaySeconds: 2,
-      alertText: (_data, _matches, output) => output.text!(),
-      outputStrings: {
-        text: {
-          en: 'Go to safe NOW!',
-          ja: '安置へ移動',
-          ko: '지금 피해요!',
-        },
-      },
-    },
-    {
       id: 'Aloalo Quaqua Arcane Armaments Knockback',
       type: 'StartsUsing',
       netRegex: { id: '8B8C', source: 'Quaqua', capture: false },
@@ -152,20 +138,6 @@ const triggerSet: TriggerSet<Data> = {
       response: Responses.getBehind(),
     },
     {
-      id: 'Aloalo Quaqua Scalding Waves',
-      type: 'StartsUsing',
-      netRegex: { id: '8B97', capture: false },
-      suppressSeconds: 1,
-      infoText: (_data, _matches, output) => output.text!(),
-      outputStrings: {
-        text: {
-          en: 'Avoid fire puddle',
-          ja: 'Avoid fire puddle',
-          ko: '불 장판 조심해요~',
-        },
-      },
-    },
-    {
       id: 'Aloalo Quaqua Arcane Intervention',
       type: 'StartsUsing',
       netRegex: { id: '8BAE', source: 'Quaqua', capture: false },
@@ -209,46 +181,6 @@ const triggerSet: TriggerSet<Data> = {
           en: 'Bubbles Move 2 Tiles',
           ja: '泡のみ2マスのノックバック',
           ko: '거품만 2칸 넉백',
-        },
-      },
-    },
-    {
-      id: 'Aloalo Ketuduke Updraft',
-      type: 'StartsUsing',
-      netRegex: { id: '8D0F', source: 'Ketuduke', capture: false },
-      infoText: (_data, _matches, output) => output.text!(),
-      outputStrings: {
-        text: {
-          en: 'Bubbles float',
-          ja: '泡のみ浮上',
-          ko: '거품만 공중 띄우기',
-        },
-      },
-    },
-    {
-      id: 'Aloalo Ketuduke Hydrobomb',
-      type: 'StartsUsing',
-      netRegex: { id: '8D0F', source: 'Ketuduke', capture: false },
-      infoText: (_data, _matches, output) => output.text!(),
-      outputStrings: {
-        text: {
-          en: 'Bubbles Move 2 Tiles + Puddles',
-          ja: '泡のみ2マスのノックバック + ゆか',
-          ko: '거품 2칸 넉백 + 곧 장판',
-        },
-      },
-    },
-    {
-      id: 'Aloalo Ketuduke Hydrobomb Chasing',
-      type: 'Ability',
-      netRegex: { id: '8D0F', source: 'Ketuduke', capture: false },
-      delaySeconds: 1.5,
-      infoText: (_data, _matches, output) => output.text!(),
-      outputStrings: {
-        text: {
-          en: 'Avoid Chasing AOEs',
-          ja: 'ついてくるAOE回避',
-          ko: '연속 따라오는 장판',
         },
       },
     },
@@ -386,19 +318,6 @@ const triggerSet: TriggerSet<Data> = {
         back: Outputs.back,
         left: Outputs.left,
         right: Outputs.right,
-      },
-    },
-    {
-      id: 'Aloalo Lala Arcane Plot',
-      type: 'StartsUsing',
-      netRegex: { id: ['8875', '8876'], source: 'Lala', capture: false },
-      infoText: (_data, _matches, output) => output.text!(),
-      outputStrings: {
-        text: {
-          en: 'Remember puddles',
-          ja: 'Remember puddles',
-          ko: '장판 위치 봐둬요',
-        },
       },
     },
     {
@@ -572,32 +491,6 @@ const triggerSet: TriggerSet<Data> = {
       response: Responses.knockback(),
     },
     {
-      id: 'Aloalo Statice 4-tonze Weight',
-      type: 'StartsUsing',
-      netRegex: { id: '8931', source: 'Statice', capture: false },
-      infoText: (_data, _matches, output) => output.text!(),
-      outputStrings: {
-        text: {
-          en: 'Avoid 4-tons',
-          ja: '4トン回避',
-          ko: '4톤 피해요',
-        },
-      },
-    },
-    {
-      id: 'Aloalo Statice Pinwheel',
-      type: 'StartsUsing',
-      netRegex: { id: '8933', source: 'Statice', capture: false },
-      infoText: (_data, _matches, output) => output.text!(),
-      outputStrings: {
-        text: {
-          en: 'Avoid fire lines',
-          ja: 'ぐるぐる火を回避',
-          ko: '빙글빙글 불기둥 피해요',
-        },
-      },
-    },
-    {
       id: 'Aloalo Statice Trick Reload',
       type: 'StartsUsing',
       netRegex: { id: '892A', source: 'Statice', capture: false },
@@ -666,12 +559,12 @@ const triggerSet: TriggerSet<Data> = {
       id: 'Aloalo Loquloqui Long-lost Light',
       type: 'StartsUsing',
       netRegex: { id: '87BC', source: 'Loquloqui', capture: false },
-      response: Responses.aoe('alert'),
+      response: Responses.aoe(),
     },
     {
       id: 'Aloalo Loquloqui O Life, Flourish',
       type: 'StartsUsing',
-      netRegex: { id: '893C', source: 'Loquloqui', capture: false },
+      netRegex: { id: '87C4', source: 'Loquloqui', capture: false },
       durationSeconds: 10,
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
@@ -679,34 +572,6 @@ const triggerSet: TriggerSet<Data> = {
           en: 'Glowing adds get larger',
           ja: '光ってる物に注意',
           ko: '반짝이는 쫄 조심!',
-        },
-      },
-    },
-    {
-      id: 'Aloalo Uolosapa Loqua Rush',
-      type: 'StartsUsing',
-      netRegex: { id: ['87C0', '87C1'], source: 'Uolosapa Loqua', capture: false },
-      suppressSeconds: 5,
-      infoText: (_data, _matches, output) => output.text!(),
-      outputStrings: {
-        text: {
-          en: 'Birds charge',
-          ja: '鳥の突進',
-          ko: '참새가 날아든다!',
-        },
-      },
-    },
-    {
-      id: 'Aloalo Repuruba Loqua Turnabout',
-      type: 'StartsUsing',
-      netRegex: { id: ['87C2', '87C3'], source: 'Repuruba Loqua', capture: false },
-      suppressSeconds: 5,
-      infoText: (_data, _matches, output) => output.text!(),
-      outputStrings: {
-        text: {
-          en: 'Avoid AOEs',
-          ja: 'AOE回避',
-          ko: '장판 피해요!',
         },
       },
     },
@@ -731,20 +596,6 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: 'Aloalo Loquloqui Pliant Petals',
-      type: 'StartsUsing',
-      netRegex: { id: '87C6', source: 'Loquloqui', capture: false },
-      suppressSeconds: 1,
-      infoText: (_data, _matches, output) => output.text!(),
-      outputStrings: {
-        text: {
-          en: 'After shrink, appear big AoE',
-          ja: 'After shrink, appear big AoE',
-          ko: '줕 붙으면 크게 터져요!',
-        },
-      },
-    },
-    {
       id: 'Aloalo Loquloqui Land Wave',
       type: 'StartsUsing',
       netRegex: { id: '87BD', source: 'Loquloqui', capture: false },
@@ -761,19 +612,6 @@ const triggerSet: TriggerSet<Data> = {
           en: 'Last bloom => Walk into Safe',
           ja: '最後の花畑 => 安置へ移動',
           ko: '마지막 풀밭 🔜 안전하게 이동',
-        },
-      },
-    },
-    {
-      id: 'Aloalo Loquloqui O Sky, Be Mine',
-      type: 'StartsUsing',
-      netRegex: { id: '87C9', source: 'Loquloqui', capture: false },
-      infoText: (_data, _matches, output) => output.text!(),
-      outputStrings: {
-        text: {
-          en: 'BIG BOSS!',
-          ja: 'BIG BOSS!',
-          ko: '보스가 커지네!',
         },
       },
     },
@@ -1102,7 +940,6 @@ const triggerSet: TriggerSet<Data> = {
         'Zeal-blind Zozone': '粗忽のゾゾネ',
       },
       'replaceText': {
-        '--cleanse--': '--エスナ--',
         '4-tonze Weight': '4トンズ',
         'Aero II': 'エアロラ',
         'Aero IV': 'エアロジャ',

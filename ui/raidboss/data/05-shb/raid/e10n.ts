@@ -138,6 +138,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
+          // TODO: this could be better if we knew where the shadow was
           en: 'Away From Black Lines',
           ja: '黒い線から離れる',
           ko: '그림자 피해요',

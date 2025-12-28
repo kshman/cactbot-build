@@ -436,6 +436,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
+          // e.g. E / NE / NW platforms
           en: 'Rotate right',
           ja: '右へ（反時計回り）',
           ko: '오른쪽으로 돌아요',
@@ -449,6 +450,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
+          // NW / NE / E platforms
           en: 'Rotate left',
           ja: '左へ（時計回り）',
           ko: '왼쪽으로 돌아요',

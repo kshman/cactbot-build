@@ -455,6 +455,8 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
+          // TODO: this could be better if we knew where the shadow was
+          // TODO: this also happens twice, with tethers
           en: 'Be On Squiggles',
           ja: '曲線上待機',
           ko: '구불구불한 선 쪽으로',

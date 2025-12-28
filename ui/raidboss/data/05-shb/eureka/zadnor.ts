@@ -185,6 +185,8 @@ const triggerSet: TriggerSet<Data> = {
           ko: '안전지대로 넉백',
         },
         knockbackExplosion: {
+          // Can't trust people to make a safe spot,
+          // so using knockback prevention is probably the best advice.
           en: 'Knockback (prevent)',
           ja: 'ノックバック軽減',
           ko: '넉백 (거리유지 추천)',
@@ -566,6 +568,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
+          // TODO: should this be a response/output?
           en: 'Out of Front',
           ja: '正面から離れる',
           ko: '정면 피하기',
@@ -679,6 +682,11 @@ const triggerSet: TriggerSet<Data> = {
           ko: '시계바늘의 수직 방향으로 이동',
         },
         threeClocks: {
+          // This is...not the best instruction.  The real instruction is "if all clock hands are
+          // parallel then go perpendicular, HOWEVER if exactly one clock hand is perpendicular
+          // to the other two, then go where it points", which is several novels too long for
+          // trigger text.  However, given that we explain two clocks, it feels wrong to not
+          // have a trigger for three clocks.  "Mechanics Are Happening <se.6>"
           en: 'Dodge Three Clocks',
           ja: '時計3つを避ける',
           ko: '시계 3개 피하기',
@@ -813,6 +821,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
+          // TODO: should this be a response/output?
           en: 'Get In Front',
           ja: 'ボスの正面へ',
           ko: '정면에 서기',
@@ -869,6 +878,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
+          // TODO: this is also an aoe, and this is a pretty poor description.
           en: 'Go to small orb',
           ja: '小さい玉へ',
           ko: '작은 구체쪽으로',
@@ -1196,6 +1206,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
+          // TODO: this is "titan line bombs".  Is there a better wording here?
           en: 'Go to third line',
           ja: '3本目の線へ',
           ko: '세번째 장판으로',
@@ -1282,6 +1293,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
+          // TODO: during spiral scourge could be "get under middle/outer light orb"?
           en: 'Get Under Light Orb',
           ja: '白玉へ',
           ko: '하얀 구슬 안으로',

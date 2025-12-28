@@ -102,6 +102,9 @@ const triggerSet: TriggerSet<Data> = {
       alarmText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
+          // This isn't quite "flare on you", because there's a follow-up large ground
+          // "Big Bang" circle that appears from where this is dropped, on top of the
+          // proximity damage.  So this is trying to communicate more of a GTFO.
           en: 'Drop Flare Away',
           ja: 'Drop Flare Away',
           ko: '플레어 바깥에 버려요',

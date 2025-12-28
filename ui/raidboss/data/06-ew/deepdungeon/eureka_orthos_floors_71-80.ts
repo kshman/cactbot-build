@@ -62,6 +62,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.getBehind!(),
       outputStrings: {
         getBehind: {
+          // Telegraphed Killing Paw swipe (81A9) followed by untelegraphed Savage Swipe (7F8E).
           en: 'Get Behind (Stay Behind)',
           ja: '背面へ (そのまま背面)',
           ko: '원투 펀치! 뒤로!',

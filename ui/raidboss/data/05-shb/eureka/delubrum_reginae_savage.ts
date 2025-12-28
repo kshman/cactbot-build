@@ -103,6 +103,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
+          // Comets have impact damage when dropping, so warn to avoid this.
           en: 'Get in for comets',
           ja: '中で避ける',
           ko: '중앙에서 운석 맞기',
@@ -390,6 +391,8 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
+          // "Intercardinals" may confuse people between absolute and relative,
+          // so add in the "of boss" just to be extra clear.
           en: 'Go Intercardinal of Boss',
           ja: 'ボスの斜めへ',
           ko: '보스의 대각선 방향으로 피하기',
@@ -1105,6 +1108,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
+          // Hard to say "point the opening in the circle around you at the gunner" succinctly.
           en: 'Point at the Gunner',
           ja: '切り目をガンナーに向く',
           ko: '총사쪽으로 위치 맞추기',
@@ -1120,6 +1124,7 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
+          // This gunner is always in the northwest during Queen, vs in Guard where it is tankable.
           en: 'Point at the Gunner (in northwest)',
           ja: '切り目を (北西) ガンナーに向く',
           ko: '(북서쪽에 있는) 총사쪽으로 위치 맞추기',

@@ -124,6 +124,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
+          // Knockback comes from the proximity marker, not the boss.
           en: 'Small comet knockback',
           ja: 'Small comet knockback',
           ko: '작은 혜성 넉백',

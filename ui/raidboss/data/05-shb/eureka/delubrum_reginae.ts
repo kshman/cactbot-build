@@ -404,6 +404,8 @@ const triggerSet: TriggerSet<Data> = {
           ko: '못 피하는 넉백',
         },
         knockbackAvoid: {
+          // This is also unavoidable, but that's really wordy and hopefully
+          // you figured that out the first time.
           en: 'Knockback (Avoid Adds)',
           ja: 'ノックバック (雑魚に触らない)',
           ko: '넉백 (쫄 피해요)',

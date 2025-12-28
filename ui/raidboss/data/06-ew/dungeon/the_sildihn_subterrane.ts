@@ -393,6 +393,8 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
+          // TODO: how do you word this???
+          // "Do the mechanic <se.6>"
           en: 'Avoid Crosses from Silkie and Puffs',
           ja: 'ボスとたまの斜め',
           ko: '🔵십자 장판: 보스와 솜털',
