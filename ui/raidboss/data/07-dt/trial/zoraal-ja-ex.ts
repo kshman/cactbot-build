@@ -806,18 +806,22 @@ const triggerSet: TriggerSet<Data> = {
         },
         northwest: {
           en: 'Northwest',
+          ja: 'Northwest',
           ko: '🡼',
         },
         northeast: {
           en: 'Northeast',
+          ja: 'Northeast',
           ko: '🡽',
         },
         southeast: {
           en: 'Southeast',
+          ja: 'Southeast',
           ko: '🡾',
         },
         southwest: {
           en: 'Southwest',
+          ja: 'Southwest',
           ko: '🡿',
         },
         fire: {
@@ -1044,6 +1048,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Stack',
+          ja: 'Stack',
           ko: '연속 AOE 칼질',
         },
       },
@@ -1259,6 +1264,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Donuts and spheres',
+          ja: 'Donuts and spheres',
           ko: '도넛과 동글이 피하기',
         },
       },
@@ -1275,6 +1281,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Line and stacks',
+          ja: 'Line and stacks',
           ko: '빨간줄 한명씩 처리! 북으로!',
         },
       },
@@ -1295,30 +1302,37 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         next1: {
           en: 'H2',
+          ja: 'H2',
           ko: 'H2',
         },
         next2: {
           en: 'D4',
+          ja: 'D4',
           ko: 'D4',
         },
         next3: {
           en: 'D3',
+          ja: 'D3',
           ko: 'D3',
         },
         next4: {
           en: 'D2',
+          ja: 'D2',
           ko: 'D2',
         },
         next5: {
           en: 'D1',
+          ja: 'D1',
           ko: 'D1',
         },
         next6: {
           en: 'ST',
+          ja: 'ST',
           ko: 'ST',
         },
         next7: {
           en: 'MT',
+          ja: 'MT',
           ko: 'MT',
         },
       },

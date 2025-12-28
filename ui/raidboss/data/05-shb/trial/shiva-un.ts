@@ -36,10 +36,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Party Share Tankbuster',
-          de: 'Tankbuster mit der Gruppe Teilen',
-          fr: 'Partagez le Tank buster avec le groupe',
           ja: '頭割りタンクバスター',
-          cn: '团队分摊死刑',
           ko: '파티 쉐어 탱버',
         },
       },
@@ -214,10 +211,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Knockback Laser on YOU',
-          de: 'Rückstoß-Laser auf DIR',
-          fr: 'Poussée-Laser sur VOUS',
           ja: '自分にノックバックレーザー',
-          cn: '击退激光点名',
           ko: '넉백 레이저 대상자',
         },
       },
@@ -231,10 +225,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Avoid Laser',
-          de: 'Laser ausweichen',
-          fr: 'Évitez le laser',
           ja: 'ノックバックレーザーを避ける',
-          cn: '躲避击退激光',
           ko: '레이저 피해요',
         },
       },
@@ -272,10 +263,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Free ${player}',
-          de: 'Befreie ${player}',
-          fr: 'Libérez ${player}',
           ja: '${player}を救って',
-          cn: '解救${player}',
           ko: '${player}감옥 해제',
         },
       },

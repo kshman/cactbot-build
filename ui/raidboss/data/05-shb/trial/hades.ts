@@ -41,10 +41,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         awayFromPlayer: {
           en: 'Away From ${player}',
-          de: 'Weg von ${player}',
-          fr: 'Éloignez-vous de ${player}',
           ja: '${player} から離れる',
-          cn: '远离 ${player}',
           ko: '피해요: ${player}',
         },
         tankBusterOnYou: Outputs.tankBusterOnYou,
@@ -71,10 +68,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Dodge Giant Circles',
-          de: 'Weiche dem großen Kreis aus',
-          fr: 'Esquivez les cercles géants',
           ja: '降ったサークルを避ける',
-          cn: '躲避大圈',
           ko: '떨어지는 동글들 피해요',
         },
       },
@@ -118,10 +112,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Cleanse Doom In Circle',
-          de: 'Entferne Verhängnis mit den Kreisen',
-          fr: 'Purifiez-vous du Glas dans le cercle',
           ja: '光った輪を踏む、死の宣告を消す',
-          cn: '踩光圈',
           ko: '모든 타워 밟아야해요',
         },
       },
@@ -134,10 +125,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Right Knockback',
-          de: 'Rechter Knockback',
-          fr: 'Poussée à droite',
           ja: '東／右からノックバック',
-          cn: '右侧击退',
           ko: '오른쪽 넉백',
         },
       },
@@ -150,10 +138,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Left Knockback',
-          de: 'Linker Knockback',
-          fr: 'Poussée à gauche',
           ja: '西／左からノックバック',
-          cn: '左侧击退',
           ko: '왼쪽 넉백',
         },
       },
@@ -176,10 +161,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Tank Buster Spread',
-          de: 'Tank Buster verteilen',
-          fr: 'Tank buster, dispersez-vous',
           ja: 'タンクバスター、散開',
-          cn: '坦克死刑分散',
           ko: '탱크버스터 흩어져요',
         },
       },
@@ -193,10 +175,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Drop Marker Outside',
-          de: 'Marker außen ablegen',
-          fr: 'Déposez la marque à l\'extérieur',
           ja: '外周に安置',
-          cn: '外侧放点名',
           ko: '바깥쪽에 마커 버려요',
         },
       },
@@ -210,10 +189,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Fetters on YOU',
-          de: 'Fessel auf DIR',
-          fr: 'Entraves sur VOUS',
           ja: '自分に拘束',
-          cn: '锁链点名',
           ko: '내게 바인드',
         },
       },
@@ -238,10 +214,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Kill Jail',
-          de: 'Gefängniss zerstören',
-          fr: 'Détruisez la prison',
           ja: 'ジェイルに攻撃',
-          cn: '攻击牢狱',
           ko: '감옥을 매우 쳐라',
         },
       },
@@ -262,10 +235,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Spread (Don\'t Stack!)',
-          de: 'Verteilen (Ohne stacken)',
-          fr: 'Dispersez-vous (Pas de package !)',
           ja: '散開（重ならないように）',
-          cn: '分散（不要重合!）',
           ko: '흩어져요 (뭉치면 주거요!)',
         },
       },

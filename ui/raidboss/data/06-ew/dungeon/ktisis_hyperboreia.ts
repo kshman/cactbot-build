@@ -95,18 +95,12 @@ const triggerSet: TriggerSet<Data> = {
         goFront: Outputs.goFront,
         backRight: {
           en: 'Get behind and right',
-          de: 'Nach Hinten und Rechts',
-          fr: 'Allez derrière et à droite',
           ja: '右後ろ',
-          cn: '去右后',
           ko: '오른쪽 뒤로',
         },
         backLeft: {
           en: 'Get behind and left',
-          de: 'Nach Hinten und Links',
-          fr: 'Allez derrière et à gauche',
           ja: '左後ろ',
-          cn: '去左后',
           ko: '왼쪽 뒤로',
         },
       },
@@ -149,10 +143,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Hide behind unbroken meteor',
-          de: 'Hinter einem nicht zerbrochenen Meteor verstecken',
-          fr: 'Cachez-vous derrière le météore intact',
           ja: '壊れていないメテオの後ろへ',
-          cn: '躲在未破碎的陨石后',
           ko: '멀쩡한 메테오 뒤로',
         },
       },

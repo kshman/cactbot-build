@@ -59,10 +59,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         knockbackStack: {
           en: 'Knockback Stack',
-          de: 'Rückstoß sammeln',
-          fr: 'Package + Poussée',
           ja: 'ノックバック＋頭割り',
-          cn: '集合击退',
           ko: '넉백 기술이네, 뭉쳐욧',
         },
       },
@@ -106,10 +103,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Forward March Away',
-          de: 'Geistlenkung vorwärts',
-          fr: 'Marche forcée en avant',
           ja: '強制移動：前',
-          cn: '强制移动: 前',
           ko: '강제이동: 앞',
         },
       },
@@ -124,10 +118,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Backwards March Away',
-          de: 'Geistlenkung rückwärts',
-          fr: 'Marche forcée en arrière',
           ja: '強制移動：後ろ',
-          cn: '强制移动: 后',
           ko: '강제이동: 뒤',
         },
       },
@@ -141,10 +132,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Left March Away',
-          de: 'Geistlenkung links',
-          fr: 'Marche forcée à gauche',
           ja: '強制移動：左',
-          cn: '强制移动: 左',
           ko: '강제이동: 왼쪽',
         },
       },
@@ -158,10 +146,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Right March Away',
-          de: 'Geistlenkung rechts',
-          fr: 'Marche forcée à droite',
           ja: '強制移動：右',
-          cn: '强制移动: 右',
           ko: '강제이동: 오른쪽',
         },
       },
@@ -277,10 +262,7 @@ const triggerSet: TriggerSet<Data> = {
         right: Outputs.right,
         text: {
           en: '${dir1} => ${dir2} => ${dir3} => ${dir4}',
-          de: '${dir1} => ${dir2} => ${dir3} => ${dir4}',
-          fr: '${dir1} => ${dir2} => ${dir3} => ${dir4}',
           ja: '${dir1} => ${dir2} => ${dir3} => ${dir4}',
-          cn: '${dir1} => ${dir2} => ${dir3} => ${dir4}',
           ko: '${dir1} 🔜 ${dir2} 🔜 ${dir3} 🔜 ${dir4}',
         },
       },
@@ -389,34 +371,22 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         forward: {
           en: 'Forward March',
-          de: 'Geistlenkung vorwärts',
-          fr: 'Marche avant',
           ja: '強制移動: 前',
-          cn: '强制移动: 前',
           ko: '강제이동: 앞',
         },
         backward: {
           en: 'Backward March',
-          de: 'Geistlenkung rückwärts',
-          fr: 'Marche arrière',
           ja: '強制移動: 後ろ',
-          cn: '强制移动: 后',
           ko: '강제이동: 뒤',
         },
         left: {
           en: 'Left March',
-          de: 'Geistlenkung links',
-          fr: 'Marche à gauche',
           ja: '強制移動: 左',
-          cn: '强制移动: 左',
           ko: '강제이동: 왼쪽',
         },
         right: {
           en: 'Right March',
-          de: 'Geistlenkung rechts',
-          fr: 'Marche à droite',
           ja: '強制移動: 右',
-          cn: '强制移动: 右',
           ko: '강제이동: 오른쪽',
         },
       },
@@ -438,18 +408,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         red: {
           en: 'Blue => Red',
-          de: 'Blau => Rot',
-          fr: 'Bleu => Rouge',
           ja: '青 => 赤',
-          cn: '蓝 => 红',
           ko: '파랑 🔜 빨강',
         },
         blue: {
           en: 'Red => Blue',
-          de: 'Rot => Blau',
-          fr: 'Rouge => Bleu',
           ja: '赤 => 青',
-          cn: '红 => 蓝',
           ko: '빨강 🔜 파랑',
         },
       },

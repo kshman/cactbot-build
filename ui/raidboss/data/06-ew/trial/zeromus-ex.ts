@@ -90,10 +90,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Heal to full',
-          de: 'Voll heilen',
-          fr: 'Soin complet',
           ja: 'HPを満タンに',
-          cn: '奶满全队',
           ko: 'HP 만땅으로!',
         },
       },
@@ -112,18 +109,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         lineStackOn: {
           en: '${num}x line stack on ${player}',
-          de: '${num}x in einer Linie sammeln mit ${player}',
-          fr: 'Package en ligne ${num}x sur ${player}',
           ja: '${num}x 直線頭割り (${player})',
-          cn: '${num}x 直线分摊 (${player})',
           ko: '${num}연속 사브레 스레드: ${player}',
         },
         lineStackOnYou: {
           en: '${num}x line stack on YOU',
-          de: '${num}x in einer Linie sammeln mit DIR',
-          fr: 'Package en ligne ${num}x sur VOUS',
           ja: '自分に${num}x 直線頭割り',
-          cn: '${num}x 直线分摊点名',
           ko: '내게 ${num}연속 사브레 스레드',
         },
       },
@@ -170,6 +161,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Safe: 🡿🡽 (Right)',
+          ja: 'Safe: 🡿🡽 (Right)',
           ko: '안전: 🡿🡽 (오른쪽)',
         },
       },
@@ -182,6 +174,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Safe: 🡼🡾 (Left)',
+          ja: 'Safe: 🡼🡾 (Left)',
           ko: '안전: 🡼🡾 (왼쪽)',
         },
       },
@@ -266,6 +259,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Safe: ${safe}',
+          ja: 'Safe: ${safe}',
           ko: '안전 마커: ${safe}',
         },
         WNW: Outputs.aimNW,
@@ -304,14 +298,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         forkedLightning: {
           en: 'Spread (forked lightning)',
-          de: 'Verteilen (Gabelblitz)',
-          fr: 'Écartez-vous (Éclair ramifié)',
           ja: '散会 (自分にAOE)',
-          cn: '分散（闪电点名）',
           ko: '라이트닝! 흩어져요',
         },
         lightiningWith: {
           en: 'Spread (+${partner})',
+          ja: 'Spread (+${partner})',
           ko: '라이트닝! 흩어져요 (+${partner})',
         },
       },
@@ -367,10 +359,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Group middle for tethers',
-          de: 'Gruppe in die Mitte für Verbindungen',
-          fr: 'Groupe au centre pour les liens',
           ja: '真ん中で線連結を待つ',
-          cn: '集合等待连线',
           ko: '즐빼기! 가운데 뭉쳐요',
         },
       },
@@ -388,10 +377,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         breakTether: {
           en: 'Break tether (w/ ${partner})',
-          de: 'Verbindung brechen (mit ${partner})',
-          fr: 'Cassez le lien (avec ${partner})',
           ja: '線切る (${partner})',
-          cn: '拉断连线 (和 ${partner})',
           ko: '줄 끊어요: ${partner}',
         },
       },
@@ -415,10 +401,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         northeast: {
           en: 'Safe: 🡺',
+          ja: 'Safe: 🡺',
           ko: '안전: 🡺',
         },
         blackHole: {
           en: 'Back Hole on YOU: ②🡺',
+          ja: 'Back Hole on YOU: ②🡺',
           ko: '내게 블랙홀: ②🡺마커',
         },
       },
@@ -436,10 +424,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         northwest: {
           en: 'Safe: 🡸',
+          ja: 'Safe: 🡸',
           ko: '안전: 🡸',
         },
         blackHole: {
           en: 'Back Hole on YOU홀: 🡸①',
+          ja: 'Back Hole on YOU홀: 🡸①',
           ko: '내게 블랙홀: 🡸①마커',
         },
       },
@@ -460,10 +450,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Get Towers => Spread',
-          de: 'Türme nehmen => Verteilen',
-          fr: 'Prenez les tours -> Écartez-vous',
           ja: '塔踏み => 散会',
-          cn: '踩塔 => 分散',
           ko: '타워 밟고 🔜 흩어져요',
         },
       },
@@ -478,10 +465,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Get Towers => Partner Stacks',
-          de: 'Türme nehmen => mit Partner sammeln',
-          fr: 'Prenez les tours -> Partenaires',
           ja: '塔踏み => ペア',
-          cn: '踩塔 => 分摊',
           ko: '타워 밟고 🔜 페어',
         },
       },
@@ -503,18 +487,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         stackWithNox: {
           en: 'Partner Stack + Chasing Nox',
-          de: 'Mit Partner Sammeln + verfolgendes Nox',
-          fr: 'Package partenaires + Nox',
           ja: 'ペア + ついてくるAOE',
-          cn: '分摊 + 步进点名',
           ko: '페어 + 따라오는 구슬',
         },
         spreadWithNox: {
           en: 'Spread + Chasing Nox',
-          de: 'Verteilen + verfolgendes Nox',
-          fr: 'Écartez-vous + Nox',
           ja: '散会 + ついてくるAOE',
-          cn: '分散 + 步进点名',
           ko: '흩어지고 + 따라오는 구슬',
         },
       },
@@ -575,26 +553,17 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         north: {
           en: 'Out of North',
-          de: 'Weg vom Norden',
-          fr: 'En dehors du Nord',
           ja: '北危険',
-          cn: '远离北边',
           ko: '어비스: 앞쪽이 위험해요',
         },
         middle: {
           en: 'Out of Middle',
-          de: 'Weg von der Mitte',
-          fr: 'En dehors du milieu',
           ja: '中央危険',
-          cn: '远离中间',
           ko: '어비스: 가운데가 위험해요',
         },
         south: {
           en: 'Out of South',
-          de: 'Weg vom Süden',
-          fr: 'En dehors du Sud',
           ja: '南危険',
-          cn: '远离南边',
           ko: '어비스: 뒤쪽이 위험해요',
         },
       },
@@ -614,26 +583,17 @@ const triggerSet: TriggerSet<Data> = {
         spread: Outputs.spread,
         northSpread: {
           en: 'Spread Middle/South',
-          de: 'Verteilen Mitte/Süden',
-          fr: 'Écartez-vous Milieu/Sud',
           ja: '中央・南で散会',
-          cn: '中间/南边 分散',
           ko: '흩어져요: 가운데/뒤쪽',
         },
         middleSpread: {
           en: 'Spread North/South',
-          de: 'Verteilen Norden/Süden',
-          fr: 'Écartez-vous Nord/Sud',
           ja: '北・南で散会',
-          cn: '北边/南边 分散',
           ko: '흩어져요: 앞쪽/뒤쪽',
         },
         southSpread: {
           en: 'Spread North/Middle',
-          de: 'Verteilen Norden/Mitte',
-          fr: 'Écartez-vous Nord/Milieu',
           ja: '北・中央で散会',
-          cn: '北边/中间 分散',
           ko: '흩어져요: 앞쪽/가운데',
         },
       },
@@ -659,34 +619,22 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         enumeration: {
           en: 'Enumeration',
-          de: 'Enumeration',
-          fr: 'Énumération',
           ja: 'エアーバンプ',
-          cn: '蓝圈分摊',
           ko: '페어',
         },
         northEnumeration: {
           en: 'Enumeration Middle/South',
-          de: 'Enumeration Mitte/Süden',
-          fr: 'Énumération Milieu/Sud',
           ja: '中央・南でエアーバンプ',
-          cn: '中间/南边 蓝圈分摊',
           ko: '페어: 가운데/뒤쪽',
         },
         middleEnumeration: {
           en: 'Enumeration North/South',
-          de: 'Enumeration Norden/Süden',
-          fr: 'Énumération Nord/Sud',
           ja: '北・南でエアーバンプ',
-          cn: '北边/南边 蓝圈分摊',
           ko: '페어: 앞쪽/뒤쪽',
         },
         southEnumeration: {
           en: 'Enumeration North/Middle',
-          de: 'Enumeration Norden/Mitte',
-          fr: 'Énumération Nord/Milieu',
           ja: '北・中央でエアーバンプ',
-          cn: '北边/中间 蓝圈分摊',
           ko: '페어: 앞쪽/가운데',
         },
       },
@@ -708,26 +656,17 @@ const triggerSet: TriggerSet<Data> = {
         stack: Outputs.stackMarker,
         northStack: {
           en: 'Stack Middle (${player}',
-          de: 'Mittig sammeln (${player})',
-          fr: 'Packez-vous au milieu (${player})',
           ja: '中央で頭割り (${player})',
-          cn: '中间分摊 (${player})',
           ko: '뭉쳐요: ${player} + 가운데',
         },
         middleStack: {
           en: 'Stack North (${player}',
-          de: 'Nördlich sammeln (${player})',
-          fr: 'Packez-vous au Nord (${player})',
           ja: '北で頭割り (${player})',
-          cn: '北边分摊 (${player})',
           ko: '뭉쳐요: ${player} + 앞쪽',
         },
         southStack: {
           en: 'Stack North/Middle (${player}',
-          de: 'Nördlich/Mittig sammeln (${player})',
-          fr: 'Packez-vous au Nord/milieu (${player})',
           ja: '北・中央で頭割り (${player})',
-          cn: '北边/中间 分摊 (${player})',
           ko: '뭉쳐요: ${player} + 앞쪽/가운데',
         },
       },
@@ -742,6 +681,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Enrage!',
+          ja: 'Enrage!',
           ko: '전멸 공격!',
         },
       },

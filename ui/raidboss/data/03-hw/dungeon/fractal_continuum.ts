@@ -63,10 +63,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Use a cage',
-          de: 'Benutze einen Käfig',
-          fr: 'Utilisez un incubateur',
           ja: 'キメラ培養器を使う',
-          cn: '打开笼子',
           ko: '키메라 한 마리 해방해요',
         },
       },
@@ -80,10 +77,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Cleanse bomb',
-          de: 'Reinige Bomben-Debuff',
-          fr: 'Guérison => Debuff bombe',
           ja: 'エスナ：魔科学爆弾',
-          cn: '康复魔炸弹',
           ko: '폭탄 에스나',
         },
       },

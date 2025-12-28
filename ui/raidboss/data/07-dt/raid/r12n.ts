@@ -298,10 +298,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         moveAway: {
           en: 'Away from expanding blobs',
+          ja: 'Away from expanding blobs',
           ko: '커지는 살덩이 피해요',
         },
         launchAway: {
           en: 'Launch away from expanding blobs',
+          ja: 'Launch away from expanding blobs',
           ko: '커지는 살덩이 피해 넉백',
         },
       },
@@ -318,10 +320,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         forward: {
           en: 'Launching forward',
+          ja: 'Launching forward',
           ko: '앞으로 넉백',
         },
         back: {
           en: 'Launching backward',
+          ja: 'Launching backward',
           ko: '뒤로 넉백',
         },
       },
@@ -343,6 +347,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Escape (${dir} CW)',
+          ja: 'Escape (${dir} CW)',
           ko: '피해요: ${dir}쪽',
         },
         ...Directions.outputStringsIntercardDir,
@@ -373,6 +378,7 @@ const triggerSet: TriggerSet<Data> = {
         left: Outputs.left,
         text: {
           en: 'Cleaving ${dir}, point out',
+          ja: 'Cleaving ${dir}, point out',
           ko: '부채꼴: ${dir}',
         },
       },
@@ -395,6 +401,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Away from snakes, platform breaking',
+          ja: 'Away from snakes, platform breaking',
           ko: '뱀 터널 피해요',
         },
       },
@@ -455,22 +462,27 @@ const triggerSet: TriggerSet<Data> = {
         west: Outputs.getLeftAndWest,
         outW: {
           en: 'Out West',
+          ja: 'Out West',
           ko: '1열',
         },
         inW: {
           en: 'In West',
+          ja: 'In West',
           ko: '2열',
         },
         inE: {
           en: 'In East',
+          ja: 'In East',
           ko: '3열',
         },
         outE: {
           en: 'Out East',
+          ja: 'Out East',
           ko: '4열',
         },
         text: {
           en: '${dir1}/${dir2}',
+          ja: '${dir1}/${dir2}',
           ko: '안전: ${dir1}, ${dir2}',
         },
       },
@@ -488,6 +500,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Dodge lines',
+          ja: 'Dodge lines',
           ko: '연속 장판 피해요',
         },
       },

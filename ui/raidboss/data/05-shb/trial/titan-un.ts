@@ -38,10 +38,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Gaoler Adds',
-          de: 'graniten Kerkermeister Adds',
-          fr: 'Adds Geôlier',
           ja: '雑魚: 子タイタン',
-          cn: '小土豆出现',
           ko: '화강암 감옥 쫄',
         },
       },
@@ -54,10 +51,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Double Weight',
-          de: 'Doppeltes Gaias Gewicht',
-          fr: 'Double poids',
           ja: '大地の重み2連',
-          cn: '二连流沙',
           ko: '2연속 대지의 무게',
         },
       },
@@ -81,18 +75,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         jailOnYou: {
           en: 'Jail on YOU',
-          de: 'Gefängnis auf DIR',
-          fr: 'Geôle sur VOUS',
           ja: '自分にジェイル',
-          cn: '石牢点名',
           ko: '돌감옥 대상자',
         },
         jails: {
           en: 'Jails',
-          de: 'Gefängnis',
-          fr: 'Geôles',
           ja: 'ジェイル',
-          cn: '石牢',
           ko: '돌감옥',
         },
       },

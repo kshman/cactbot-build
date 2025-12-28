@@ -67,8 +67,6 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Blue Square Safe',
-          de: 'Blaues Viereck sicher',
-          fr: 'Les carrés bleu sont sûrs',
           ja: '安置: 青四角',
           ko: '안전: 🟦사각',
         },
@@ -82,8 +80,6 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Pink Triangle Safe',
-          de: 'Pinkes Dreieck sicher',
-          fr: 'Les triangles rose sont sûrs',
           ja: '安置: 赤三角',
           ko: '분홍색 삼각',
         },
@@ -168,25 +164,21 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         northeast: {
           en: 'Inner northeast safe',
-          de: 'Innen nordöstlich sicher',
           ja: '安置: 🡽',
           ko: '안전: 🡽',
         },
         northwest: {
           en: 'Inner northwest safe',
-          de: 'Innen nordwestlich sicher',
           ja: '安置: 🡼',
           ko: '안전: 🡼',
         },
         southeast: {
           en: 'Inner southeast safe',
-          de: 'Innen südöstlich sicher',
           ja: '安置: 🡾',
           ko: '안전: 🡾',
         },
         southwest: {
           en: 'Inner southwest safe',
-          de: 'Innen südwestlich sicher',
           ja: '安置: 🡿',
           ko: '안전: 🡿',
         },
@@ -207,8 +199,6 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         cleanse: {
           en: 'Cleanse ${player}\'s Doom',
-          de: 'Reinige ${player}\'s Verhängnis',
-          fr: 'Guérissez le Glas de ${player}',
           ja: 'エスナ: ${player}',
           ko: '에스나: ${player}',
         },
@@ -262,8 +252,6 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Go Sides on Wall',
-          de: 'Geh seitlich an die Wand',
-          fr: 'Allez sur les côtés du mur',
           ja: '壁の方へ',
           ko: '보스 옆으로!',
         },
@@ -283,10 +271,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Get Behind and Out',
-          de: 'Geh nach Hinten und Raus',
-          fr: 'Passez derrière et à l\'extérieur',
           ja: '後ろの外側へ',
-          cn: '去背后远离',
           ko: '보스 뒷쪽 바깥으로',
         },
       },
@@ -309,8 +294,6 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         avoid: {
           en: 'Away from orbs',
-          de: 'Weg von den Orbs',
-          fr: 'Éloignez-vous des orbes',
           ja: '玉から離れて',
           ko: '구슬 피해요',
         },

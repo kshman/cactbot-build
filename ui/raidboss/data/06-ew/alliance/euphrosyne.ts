@@ -100,34 +100,22 @@ const triggerSet: TriggerSet<Data> = {
         out: Outputs.out,
         outWithForwards: {
           en: 'Forwards March Out',
-          de: 'Geisterlenkung Vorwärts Raus',
-          fr: 'Marche forcée avant vers l\'extérieur',
           ja: '強制移動 : 前 => 外へ',
-          cn: '向前强制移动到钢铁外',
           ko: '강제이동: 앞 🡺 밖으로',
         },
         outWithBackwards: {
           en: 'Backwards March Out',
-          de: 'Geisterlenkung Rückwärts Raus',
-          fr: 'Marche forcée arrière vers l\'extérieur',
           ja: '強制移動 : 後ろ => 外へ',
-          cn: '向后强制移动到钢铁外',
           ko: '강제이동: 뒤 🡺 밖으로',
         },
         outWithLeft: {
           en: 'Left March Out',
-          de: 'Geisterlenkung Links Raus',
-          fr: 'Marche forcée gauche vers l\'extérieur',
           ja: '強制移動 : 左 => 外へ',
-          cn: '向左强制移动到钢铁外',
           ko: '강제이동: 왼쪽 🡺 밖으로',
         },
         outWithRight: {
           en: 'Right March Out',
-          de: 'Geisterlenkung Rechts Raus',
-          fr: 'Marche forcée droite vers l\'extérieur',
           ja: '強制移動 : 右 => 外へ',
-          cn: '向右强制移动到钢铁外',
           ko: '강제이동: 오른쪽 🡺 밖으로',
         },
       },
@@ -150,34 +138,22 @@ const triggerSet: TriggerSet<Data> = {
         in: Outputs.in,
         inWithForwards: {
           en: 'Forwards March In',
-          de: 'Geisterlenkung Vorwärts Rein',
-          fr: 'Marche forcée avant vers l\'intérieur',
           ja: '強制移動 : 前 => 中へ',
-          cn: '向前强制移动到月环内',
           ko: '강제이동: 앞 🡺 안으로',
         },
         inWithBackwards: {
           en: 'Backwards March In',
-          de: 'Geisterlenkung Rückwärts Rein',
-          fr: 'Marche forcée arrière vers l\'intérieur',
           ja: '強制移動 : 後ろ => 中へ',
-          cn: '向后强制移动到月环内',
           ko: '강제이동: 뒤 🡺 안으로',
         },
         inWithLeft: {
           en: 'Left March In',
-          de: 'Geisterlenkung Links Rein',
-          fr: 'Marche forcée gauche vers l\'intérieur',
           ja: '強制移動 : 左 => 中へ',
-          cn: '向左强制移动到月环内',
           ko: '강제이동: 왼쪽 🡺 안으로',
         },
         inWithRight: {
           en: 'Right March In',
-          de: 'Geisterlenkung Rechts Rein',
-          fr: 'Marche forcée droite vers l\'intérieur',
           ja: '強制移動 : 右 => 中へ',
-          cn: '向右强制移动到月环内',
           ko: '강제이동: 오른쪽 🡺 안으로',
         },
       },
@@ -305,34 +281,22 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         lookAway: {
           en: '(look away soon)',
-          de: '(bald wegschauen)',
-          fr: '(regardez ailleurs bientôt)',
           ja: '(見ない)',
-          cn: '(稍后背对)',
           ko: '(곧 뒤를 봐요)',
         },
         lookTowards: {
           en: '(look towards soon)',
-          de: '(bald hinschauen)',
-          fr: '(regardez devant bientôt)',
           ja: '(ボスを見て)',
-          cn: '(稍后看向)',
           ko: '(곧 앞을 봐요)',
         },
         pyretic: {
           en: '(pyretic soon)',
-          de: '(bald Pyretisch)',
-          fr: '(feu bientôt)',
           ja: '(止まれ)',
-          cn: '(稍后热病)',
           ko: '(곧 불덩이)',
         },
         freeze: {
           en: '(freeze soon)',
-          de: '(bald Kühlung)',
-          fr: '(gel bientôt)',
           ja: '(動く)',
-          cn: '(稍后冻结)',
           ko: '(곧 얼음)',
         },
       },
@@ -368,18 +332,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         lookAway: {
           en: 'Look Away from Nymeia',
-          de: 'Schau weg von Nymeia',
-          fr: 'Ne regardez pas Nymeia',
           ja: 'ニメーヤさま見ない',
-          cn: '背对妮美雅',
           ko: '니메이아 보면 안되요',
         },
         lookTowards: {
           en: 'Look Towards Nymeia',
-          de: 'Schau zu Nymeia',
-          fr: 'Regardez Nymeia',
           ja: 'ニメーヤさまを見る',
-          cn: '看向妮美雅',
           ko: '니메이아 바라봐요',
         },
         stopEverything: Outputs.stopEverything,
@@ -413,10 +371,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Spread (avoid purple)',
-          de: 'Verteilen (vermeide den lilanen Riss)',
-          fr: 'Écartez-vous (évitez les fissures violettes)',
           ja: '散会 (紫回避)',
-          cn: '分散 (远离紫色区域)',
           ko: '흩어져요 (보라🟣 피해요)',
         },
       },
@@ -429,10 +384,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Stand in purple fissure',
-          de: 'Im lilanen Riss stehen',
-          fr: 'Restez sur une fissure violette',
           ja: '紫踏み',
-          cn: '站进紫色区域',
           ko: '보라🟣 균열 위로',
         },
       },
@@ -524,10 +476,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         knockback: {
           en: 'Knockback ${dir1} => ${dir2} => ${dir3}',
-          de: 'Rückstoß ${dir1} => ${dir2} => ${dir3}',
-          fr: 'Poussée ${dir1} => ${dir2} => ${dir3}',
           ja: 'ノックバック ${dir1} => ${dir2} => ${dir3}',
-          cn: '击退 ${dir1} => ${dir2} => ${dir3}',
           ko: '넉백 ${dir1} 🔜 ${dir2} 🔜 ${dir3}',
         },
         dirSW: Outputs.dirSW,
@@ -581,10 +530,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: '${dir1} > ${dir2} > ${dir3} > ${dir4}',
-          de: '${dir1} > ${dir2} > ${dir3} > ${dir4}',
-          fr: '${dir1} > ${dir2} > ${dir3} > ${dir4}',
           ja: '${dir1} > ${dir2} > ${dir3} > ${dir4}',
-          cn: '${dir1} > ${dir2} > ${dir3} > ${dir4}',
           ko: '${dir1} > ${dir2} > ${dir3} > ${dir4}',
         },
         out: Outputs.out,
@@ -642,10 +588,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         getTowers: {
           en: 'Get Towers',
-          de: 'Türme nehmen',
-          fr: 'Prenez les tours',
           ja: '塔踏み',
-          cn: '踩塔',
           ko: '타워 밟아요',
         },
       },
@@ -706,10 +649,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         out: {
           en: 'Get Out (avoid ring)',
-          de: 'Geh raus (vermeide den Ring)',
-          fr: 'Sortez (évitez l\'anneau)',
           ja: '外へ (ドーナツ回避)',
-          cn: '远离 (躲避圆环)',
           ko: '⊗밖으로 (링◎ 피해요)',
         },
       },
@@ -764,10 +704,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Sides of Moon',
-          de: 'Geh seitlich des Mondes',
-          fr: 'Côtés de la lune',
           ja: '月の横',
-          cn: '去月亮两侧',
           ko: '달 옆쪽으로',
         },
       },
@@ -780,10 +717,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Go to dark moon',
-          de: 'Geh zum dunklen Mond',
-          fr: 'Allez sur une lune noire',
           ja: '暗い月へ',
-          cn: '去暗月亮',
           ko: '어두운 달로',
         },
       },
@@ -852,34 +786,22 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         frontLeft: {
           en: 'Front Left',
-          de: 'Vorne Links',
-          fr: 'Avant Gauche',
           ja: '前左',
-          cn: '左前',
           ko: '앞 + 왼쪽',
         },
         frontRight: {
           en: 'Front Right',
-          de: 'Vorne Rechts',
-          fr: 'Avant Droit',
           ja: '前右',
-          cn: '右前',
           ko: '앞 + 오른쪽',
         },
         backLeft: {
           en: 'Back Left',
-          de: 'Hinten Links',
-          fr: 'Arrière Gauche',
           ja: '後左',
-          cn: '左后',
           ko: '뒤 + 왼쪽',
         },
         backRight: {
           en: 'Back Right',
-          de: 'Hinten Rechts',
-          fr: 'Arrière Droit',
           ja: '後ろ右',
-          cn: '右后',
           ko: '뒤 오른쪽',
         },
       },
@@ -896,10 +818,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         tankLaserOnYou: {
           en: 'Tank Laser on YOU',
-          de: 'Tank Laser auf DIR',
-          fr: 'Tank laser sur VOUS',
           ja: '自分にタンクレーザー',
-          cn: '坦克激光点名',
           ko: '내게 탱크 레이저가!',
         },
       },
@@ -919,10 +838,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         avoidTankLaser: {
           en: 'Avoid Tank Laser',
-          de: 'Weiche dem Tanklaser aus',
-          fr: 'Évitez le tank laser',
           ja: 'タンクレーザー回避',
-          cn: '躲避坦克激光',
           ko: '탱크 레이저 피해요',
         },
       },

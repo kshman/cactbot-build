@@ -35,10 +35,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'puddle on you',
-          de: 'Fläche auf DIR',
-          fr: 'Zone au sol sur VOUS',
           ja: '自分に水溜り',
-          cn: '水球点名',
           ko: '내게 물 장판',
         },
       },
@@ -57,10 +54,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Away From Swimming Shark',
-          de: 'Weg vom schwimmenden Hai',
-          fr: 'Éloignez-vous du requin qui nage',
           ja: '水中サメから離れる',
-          cn: '远离水中BOSS',
           ko: '물 속 상어 피해요',
         },
       },
@@ -73,10 +67,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Sides of Swimming Shark',
-          de: 'Zu den Seiten vom schwimmenden Hai',
-          fr: 'Sur les côtés du requin qui nage',
           ja: '水中サメの側へ',
-          cn: '去水中BOSS的两侧',
           ko: '물 속 상어 옆으로',
         },
       },
@@ -128,10 +119,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'grab orbs',
-          de: 'Orbs nehmen',
-          fr: 'Prenez les orbes',
           ja: '雷丸を得る',
-          cn: '吃球',
           ko: '구슬 주워요',
         },
       },

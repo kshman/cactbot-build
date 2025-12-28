@@ -47,10 +47,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Shadow Side',
-          de: 'Schatten Seite',
-          fr: 'Allez du côté de l\'ombre',
           ja: '影と同じ側へ',
-          cn: '影子同侧',
           ko: '그림자 쪽으로',
         },
       },
@@ -63,10 +60,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Opposite Shadow',
-          de: 'Gegenüber des Schattens',
-          fr: 'Allez du côté opposé à l\'ombre',
           ja: '影の反対側へ',
-          cn: '影子异侧',
           ko: '그림자 반대쪽으로',
         },
       },
@@ -85,10 +79,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Go Left of Shadow',
-          de: 'Geh links vom Schatten',
-          fr: 'Allez à gauche de l\'ombre',
           ja: '影の左へ',
-          cn: '影子左侧',
           ko: '그림자 왼쪽으로',
         },
       },
@@ -101,10 +92,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Go Right of Shadow',
-          de: 'Geh rechts vom Schatten',
-          fr: 'Allez à droite de l\'ombre',
           ja: '影の右へ',
-          cn: '影子右侧',
           ko: '그림자 오른쪽으로',
         },
       },
@@ -117,10 +105,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Go Left of Shadows',
-          de: 'Geh links vom Schatten',
-          fr: 'Allez à gauche des ombres',
           ja: '影の左へ',
-          cn: '影子左侧',
           ko: '그림자 왼쪽',
         },
       },
@@ -133,10 +118,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Go Right of Shadows',
-          de: 'Geh rechts vom Schatten',
-          fr: 'Allez à droite des ombres',
           ja: '影の右へ',
-          cn: '影子右侧',
           ko: '그림자 오른쪽',
         },
       },
@@ -180,10 +162,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         avoidStack: {
           en: 'Avoid Stack!',
-          de: 'Nicht Sammeln!',
-          fr: 'Ne vous packez pas !',
           ja: '重ならない！',
-          cn: '不要重合!',
           ko: '공격 피하기',
         },
         stack: Outputs.stackMarker,
@@ -229,18 +208,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         dropShadow: {
           en: 'Drop Shadow ${dir}',
-          de: 'Schatten im ${dir} ablegen',
-          fr: 'Déposez l\'ombre du côté ${dir}',
           ja: '${dir}へ、影を捨てる',
-          cn: '${dir}放影子',
           ko: '${dir}에 그림자 놓기',
         },
         leftCleave: {
           en: 'Left Cleave',
-          de: 'Linker Cleave',
-          fr: 'Cleave gauche',
           ja: '左半面へ攻撃',
-          cn: '左侧顺劈',
           ko: '왼쪽 공격',
         },
         ...directions,
@@ -279,18 +252,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         dropShadow: {
           en: 'Drop Shadow ${dir}',
-          de: 'Schatten im ${dir} ablegen',
-          fr: 'Déposez l\'ombre du côté ${dir}',
           ja: '${dir}へ、影を捨てる',
-          cn: '${dir}放影子',
           ko: '${dir}에 그림자 놓기',
         },
         rightCleave: {
           en: 'Right Cleave',
-          de: 'Rechter Cleave',
-          fr: 'Cleave droit',
           ja: '右半面へ攻撃',
-          cn: '右侧顺劈',
           ko: '오른쪽 공격',
         },
         ...directions,
@@ -325,10 +292,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Drop Shadow Out',
-          de: 'Schatten draußen ablegen',
-          fr: 'Déposez l\'ombre à l\'extérieur',
           ja: '影を外周に捨てる',
-          cn: '影子放到外圈',
           ko: '바깥쪽에 그림자 떨어뜨리기',
         },
       },
@@ -394,10 +358,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: '1 out, 2+3 in',
-          de: '1 raus, 2+3 rein',
-          fr: '1 extérieur, 2+3 intérieur',
           ja: '1番入らない、2/3番入る',
-          cn: '麻将1出，2+3进',
           ko: '1 바깥, 2+3 안쪽',
         },
       },
@@ -410,10 +371,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: '2 out, 1+3 in',
-          de: '2 raus, 1+3 rein',
-          fr: '2 extérieur, 1+3 intérieur',
           ja: '2番入らない、1/3番入る',
-          cn: '麻将2出，1+3进',
           ko: '2 바깥, 1+3 안쪽',
         },
       },
@@ -427,10 +385,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: '3 out, 1+2 in',
-          de: '3 raus, 1+2 rein',
-          fr: '3 extérieur, 1+2 intérieur',
           ja: '3番入らない、1/2番入る',
-          cn: '麻将3出，1+2进',
           ko: '3 바깥, 1+2 안쪽',
         },
       },
@@ -445,10 +400,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Drop Shadow Out',
-          de: 'Schatten draußen ablegen',
-          fr: 'Déposez l\'ombre à l\'extérieur',
           ja: '影を外周に捨てる',
-          cn: '影子放到外圈',
           ko: '바깥쪽에 그림자 떨어뜨리기',
         },
       },
@@ -476,10 +428,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Orbs',
-          de: 'Orbs',
-          fr: 'Orbes',
           ja: '玉',
-          cn: '球',
           ko: '구슬',
         },
       },
@@ -492,10 +441,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Watch Tethered Dog',
-          de: 'Achte auf den verbundenen Hund',
-          fr: 'Regardez le chien lié',
           ja: '線で繋がった分身を注視',
-          cn: '找连线的狗',
           ko: '연결된 쫄 지켜보기',
         },
       },
@@ -509,13 +455,8 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          // TODO: this could be better if we knew where the shadow was
-          // TODO: this also happens twice, with tethers
           en: 'Be On Squiggles',
-          de: 'Sei auf den geschwungenen Linien',
-          fr: 'Allez sur l\'ombre tordue',
           ja: '曲線上待機',
-          cn: '站到连线为曲线的一侧',
           ko: '구불구불한 선 쪽으로',
         },
       },
@@ -531,10 +472,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Away From Squiggles',
-          de: 'Weg von den geschwungenen Linien',
-          fr: 'Éloignez-vous de l\'ombre tordue',
           ja: '安置へ',
-          cn: '远离连线为曲线的一侧',
           ko: '곧은 선 쪽으로',
         },
       },
@@ -550,10 +488,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Shadow Side',
-          de: 'Schatten Seite',
-          fr: 'Allez du côté de l\'ombre',
           ja: '影と同じ側へ',
-          cn: '影子同侧',
           ko: '그림자 쪽으로',
         },
       },
@@ -567,10 +502,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Opposite Shadow',
-          de: 'Gegenüber des Schattens',
-          fr: 'Allez du côté opposé à l\'ombre',
           ja: '影の反対側へ',
-          cn: '影子异侧',
           ko: '그림자 반대쪽',
         },
       },
@@ -583,10 +515,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Cleaves with towers',
-          de: 'Cleaves mit Türmen',
-          fr: 'Cleaves avec Tours',
           ja: '従僕 + 塔',
-          cn: '影子+塔',
           ko: '기둥이랑 그림자 유도 동시에',
         },
       },
@@ -600,10 +529,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Towers first, then cleaves',
-          de: 'Zuerst Türme, dann cleaves',
-          fr: 'Tours en premier puis cleaves',
           ja: 'まずは塔、そして従僕',
-          cn: '先塔后影子',
           ko: '기둥 먼저, 그다음 그림자 유도',
         },
       },
@@ -621,18 +547,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         firstPitchBog: {
           en: 'Puddles outside',
-          de: 'Flächen nach draußen',
-          fr: 'Zones au sol à l\'extérieur',
           ja: '外周に捨てる',
-          cn: '点名放到外圈',
           ko: '장판 바깥쪽에 깔기',
         },
         secondPitchBog: {
           en: 'Final Puddle Positions',
-          de: 'Flächen interkardinal ablegen',
-          fr: 'Zones au sol en intercardinal',
           ja: '最後のスワンプ',
-          cn: '最后一次点名放到外圈',
           ko: '각자 장판 위치로',
         },
       },
@@ -672,10 +592,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Pick up Puddles',
-          de: 'Fläche nehmen',
-          fr: 'Prenez les zones au sol',
           ja: 'スワンプを踏む',
-          cn: '踩放下的沼泽',
           ko: '장판 밟아서 그림자 선 가져오기',
         },
       },

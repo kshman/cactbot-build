@@ -27,10 +27,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Avoid Arrow',
-          de: 'Pfeil ausweichen',
-          fr: 'Évitez la flèche',
           ja: '矢印を避ける',
-          cn: '躲箭头',
           ko: '화살표 피해요',
         },
       },
@@ -104,10 +101,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Avoid Hands',
-          de: 'Händen ausweichen',
-          fr: 'Évitez les mains',
           ja: '手を避ける',
-          cn: '躲手',
           ko: '손 피해요',
         },
       },

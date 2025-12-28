@@ -61,7 +61,6 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: 'Cleanse Doom',
           ja: '死の宣告にエスナ',
-          cn: '驱散死宣',
           ko: '에스나 써줘요!',
         },
       },
@@ -83,10 +82,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         provoke: {
           en: 'Provoke',
+          ja: 'Provoke',
           ko: '프로보크!',
         },
         shirk: {
           en: 'Shirk',
+          ja: 'Shirk',
           ko: '셔크 날려요!',
         },
       },
@@ -109,7 +110,6 @@ const triggerSet: TriggerSet<Data> = {
         combo: {
           en: '${action} => ${scast}',
           ja: '${action} => ${scast}',
-          cn: '${action} => ${scast}',
           ko: '${action} 🔜 ${scast}',
         },
         out: Outputs.out,
@@ -143,10 +143,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         front: {
           en: '(Move forward, later)',
+          ja: '(Move forward, later)',
           ko: '(앞에서 주먹 🔜 앞으로)',
         },
         back: {
           en: '(Move backward, later)',
+          ja: '(Move backward, later)',
           ko: '(뒤에서 주먹 🔜 뒤로)',
         },
       },
@@ -162,10 +164,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         front: {
           en: '(Forward soon)',
+          ja: '(Forward soon)',
           ko: '(곧 앞으로, 보스 봐요)',
         },
         back: {
           en: '(Backward soon)',
+          ja: '(Backward soon)',
           ko: '(곧 뒤로, 벽 봐요)',
         },
         unknown: Outputs.unknown,
@@ -182,10 +186,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         front: {
           en: 'Move forward!',
+          ja: 'Move forward!',
           ko: '앞으로!',
         },
         back: {
           en: 'Move backward!',
+          ja: 'Move backward!',
           ko: '뒤로!',
         },
         unknown: Outputs.unknown,
@@ -199,6 +205,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Charge beams',
+          ja: 'Charge beams',
           ko: '연속 레이저',
         },
       },
@@ -331,6 +338,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Get Towers',
+          ja: 'Get Towers',
           ko: '타워 밟아요!',
         },
       },
@@ -344,10 +352,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         in: {
           en: 'In',
+          ja: 'In',
           ko: '도넛, 안으로!',
         },
         out: {
           en: 'Out',
+          ja: 'Out',
           ko: '십자, 모서리로!',
         },
       },
@@ -401,6 +411,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Beam',
+          ja: 'Beam',
           ko: '바깥 봐요!',
         },
       },
@@ -428,7 +439,6 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: 'Sides => middle',
           ja: 'サイド => 真ん中',
-          cn: '两侧 => 中间',
           ko: '옆에 있다 🔜 가운데로',
         },
       },
@@ -446,7 +456,6 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: 'Middle => sides',
           ja: '真ん中 => サイド',
-          cn: '中间 => 两侧',
           ko: '가운데 있다 🔜 옆으로',
         },
       },
@@ -460,6 +469,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Place Bramble',
+          ja: 'Place Bramble',
           ko: '씨앗 장판 버려요',
         },
       },
@@ -540,7 +550,6 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: 'Start ${first}',
           ja: '最初は ${first} から',
-          cn: '先 ${first}',
           ko: '시작: ${first}',
         },
         left: Outputs.right,
@@ -584,7 +593,6 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: '${first} => ${second} => ${third}',
           ja: '${first} => ${second} => ${third}',
-          cn: '${first} => ${second} => ${third}',
           ko: '${first} 🔜 ${second} 🔜 ${third}',
         },
         left: Outputs.right,
@@ -616,6 +624,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Align',
+          ja: 'Align',
           ko: '자리 정렬, 줄 준비',
         },
       },
@@ -630,7 +639,6 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: 'Chasing AoE on YOU',
           ja: '追跡AOE',
-          cn: '追踪AOE点名',
           ko: '내게 장판이 따라와요! 돌아요!',
         },
       },

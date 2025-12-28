@@ -42,11 +42,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Shields and Mitigation',
-          de: 'Schilde und Abschwächungen',
-          fr: 'Boucliers et mitigation',
           ja: 'ダメージ軽減とバリアを',
-          cn: '大AOE，刷盾减伤',
-          tc: '大AOE，刷盾減傷',
           ko: '아픈거 옴: 경감과 보호막',
         },
       },
@@ -60,11 +56,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Pop Eurekan Potions',
-          de: 'Eureka-Heiltränke benutzen',
-          fr: 'Utilisez potion d\'Eurêka',
           ja: 'エウレカ回復薬',
-          cn: '磕优雷卡回复药',
-          tc: '磕優雷卡回復藥',
           ko: '에우레카 포션 들이켜요',
         },
       },
@@ -77,11 +69,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Black Hole Soon',
-          de: 'Schwarzes Loch',
-          fr: 'Trou noir bientôt',
           ja: 'まもなくブラックホール',
-          cn: '黑洞警告',
-          tc: '黑洞警告',
           ko: '곧 블랙홀',
         },
       },
@@ -172,20 +160,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         awayFromOrbMarker: {
           en: 'Away From Orb Marker',
-          de: 'Weg vom Orb-Marker',
-          fr: 'Éloignez-vous du marquage Orbe',
           ja: '玉から離れる',
-          cn: '远离点名',
-          tc: '遠離點名',
           ko: '구슬에서 먼곳으로',
         },
         orbOnYou: {
           en: 'Orb on YOU',
-          de: 'Orb auf DIR',
-          fr: 'Orbe sur VOUS',
           ja: '自分に玉',
-          cn: '点名',
-          tc: '點名',
           ko: '내게 구슬',
         },
       },
@@ -229,11 +209,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Under Spears',
-          de: 'Unter einen Speer',
-          fr: 'En dessous des lances',
           ja: '妖槍旋',
-          cn: '枪脚下',
-          tc: '槍腳下',
           ko: '창 아래로',
         },
       },
@@ -275,20 +251,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         switchMagia: {
           en: 'Switch Magia',
-          de: 'Magia-Brett drehen',
-          fr: 'Changez de Magia',
           ja: 'マギアボードを切替',
-          cn: '切换元素板',
-          tc: '切換元素板',
           ko: '마기아 바꿔요',
         },
         getToIce: {
           en: 'Get to Ice',
-          de: 'Geh zum Eis',
-          fr: 'Allez à la glace',
           ja: '氷に',
-          cn: '冰',
-          tc: '冰',
           ko: '얼음 얻어요',
         },
       },
@@ -309,20 +277,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         switchMagia: {
           en: 'Switch Magia',
-          de: 'Magia-Brett drehen',
-          fr: 'Changez de Magia',
           ja: 'マギアボードを切替',
-          cn: '切换元素板',
-          tc: '切換元素板',
           ko: '마기아 바꿔요',
         },
         getToFire: {
           en: 'Get to Fire',
-          de: 'Geh zum Feuer',
-          fr: 'Allez au feu',
           ja: '火',
-          cn: '火',
-          tc: '火',
           ko: '불 얻어요',
         },
       },
@@ -414,11 +374,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Dark Bracelets',
-          de: 'Dunkle Armreife',
-          fr: 'Bracelets ténèbreux',
           ja: '黒リング',
-          cn: '黑光环',
-          tc: '黑光環',
           ko: '검은 팔찌',
         },
       },
@@ -433,11 +389,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Light Bracelets',
-          de: 'Helle Armreife',
-          fr: 'Bracelets lumineux',
           ja: '白リング',
-          cn: '白光环',
-          tc: '白光環',
           ko: '하얀 팔찌',
         },
       },
@@ -467,38 +419,22 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         awayFromLightCircles: {
           en: 'Away From Light Circles',
-          de: 'Weg von hellen Kreisen',
-          fr: 'Éloignez-vous des cercles lumineux',
           ja: '白リングから離れる',
-          cn: '远离白圈',
-          tc: '遠離白圈',
           ko: '하얀 동그라미에서 먼곳으로',
         },
         awayFromDarkCircles: {
           en: 'Away From Dark Circles',
-          de: 'Weg von dunklen Kreisen',
-          fr: 'Éloignez-vous des cercles ténèbreux',
           ja: '黒リングから離れる',
-          cn: '远离黑圈',
-          tc: '遠離黑圈',
           ko: '검은 동그라미에서 먼곳으로',
         },
         standByDarkCircles: {
           en: 'Stand By Dark Circles',
-          de: 'Zu den dunklen Kreisen',
-          fr: 'Placez-vous près des cercles ténèbreux',
           ja: '黒リングに近づく',
-          cn: '靠近黑圈',
-          tc: '靠近黑圈',
           ko: '검은 동그라미 근처로',
         },
         standByLightCircles: {
           en: 'Stand By Light Circles',
-          de: 'zu den hellen Kreisen',
-          fr: 'Placez-vous près des cercles lumineux',
           ja: '白リングに近づく',
-          cn: '靠近白圈',
-          tc: '靠近白圈',
           ko: '하얀 동그라미 근처로',
         },
       },
@@ -518,20 +454,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         dark: {
           en: 'Dark',
-          de: 'Dunkel',
-          fr: 'Ténèbres',
           ja: '黒',
-          cn: '黑',
-          tc: '黑',
           ko: '깜장',
         },
         light: {
           en: 'Light',
-          de: 'Hell',
-          fr: 'Lumière',
           ja: '白',
-          cn: '白',
-          tc: '白',
           ko: '하양',
         },
       },
@@ -594,20 +522,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         dark: {
           en: 'Dark',
-          de: 'Dunkel',
-          fr: 'Ténèbres',
           ja: '黒',
-          cn: '黑',
-          tc: '黑',
           ko: '깜장',
         },
         light: {
           en: 'Light',
-          de: 'Hell',
-          fr: 'Lumière',
           ja: '白',
-          cn: '白',
-          tc: '白',
           ko: '하양',
         },
       },
@@ -621,11 +541,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Orbs to Opposite Colors',
-          de: 'Kugeln zu umgekehrter Farbe',
-          fr: 'Orbes aux couleurs opposées',
           ja: '反対の色に',
-          cn: '连线去相反颜色',
-          tc: '連線去相反顏色',
           ko: '구슬 반대 색깔로',
         },
       },
@@ -649,11 +565,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         blackHole: {
           en: 'Black Hole ${num} / 6',
-          de: 'Schwarzes Loch ${num} / 6',
-          fr: 'Trou noir ${num} / 6',
           ja: 'ブラックホール: ${num} / 6',
-          cn: '黑洞 ${num} / 6',
-          tc: '黑洞 ${num} / 6',
           ko: '블랙홀: ${num} / 6',
         },
       },
@@ -672,11 +584,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Off the Platform',
-          de: 'Weg von der Fläche',
-          fr: 'Hors de la plateforme',
           ja: '回避',
-          cn: '远离平台',
-          tc: '遠離平台',
           ko: '통로로 가욧',
         },
       },
@@ -691,11 +599,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Spread for Bleed',
-          de: 'Blutung verteilen',
-          fr: 'Dispersez-vous pour le saignement',
           ja: '散開',
-          cn: '分散',
-          tc: '分散',
           ko: '흩어져요',
         },
       },
@@ -709,11 +613,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Go Far',
-          de: 'Weit weg',
-          fr: 'Éloignez-vous',
           ja: '離れる',
-          cn: '远离',
-          tc: '遠離',
           ko: '멀리가욧',
         },
       },
@@ -735,20 +635,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         stackIfNotTanking: {
           en: 'Stack (if not tanking)',
-          de: 'Stack (wenn nicht am tanken)',
-          fr: 'Packez-vous (sauf les tanks)',
           ja: '集合 (MTではないなら)',
-          cn: '集合（如果没在坦怪）',
-          tc: '集合（如果沒在坦怪）',
           ko: '뭉쳐요 (MT빼고)',
         },
         stackUp: {
           en: 'Stack Up',
-          de: 'Stacken',
-          fr: 'Packez-vous en haut',
           ja: '集合',
-          cn: '集合',
-          tc: '集合',
           ko: '뭉처요',
         },
       },
@@ -762,11 +654,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Get Close',
-          de: 'Nah dran',
-          fr: 'Rapprochez-vous',
           ja: '近づく',
-          cn: '靠近',
-          tc: '靠近',
           ko: '가까이',
         },
       },
@@ -790,20 +678,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         stackAwayFromTank: {
           en: 'Stack Away From Tank',
-          de: 'Weg vom Tank stacken',
-          fr: 'Packez-vous loin du tank',
           ja: 'タンクにから離れて集合',
-          cn: '远离坦克集合',
-          tc: '遠離坦克集合',
           ko: '뭉쳐요, MT랑 떨어져서',
         },
         offtanksGetOrbs: {
           en: 'Offtanks Get Orbs',
-          de: 'Offtanks holt Kugeln',
-          fr: 'Offtanks, prenez les orbes',
           ja: 'STは玉を処理',
-          cn: 'ST撞球',
-          tc: 'ST撞球',
           ko: 'ST는 구슬 처리',
         },
       },
@@ -818,11 +698,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Get Off',
-          de: 'Weg da',
-          fr: 'Descendez',
           ja: '回避',
-          cn: '远离平台',
-          tc: '遠離平台',
           ko: '통로로 가욧',
         },
       },
@@ -837,11 +713,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Get Close',
-          de: 'Nah dran',
-          fr: 'Rapprochez-vous',
           ja: '近づく',
-          cn: '靠近',
-          tc: '靠近',
           ko: '가까이',
         },
       },
@@ -856,11 +728,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Go Far',
-          de: 'Weit weg',
-          fr: 'Éloignez-vous',
           ja: '離れる',
-          cn: '远离',
-          tc: '遠離',
           ko: '멀리',
         },
       },

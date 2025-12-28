@@ -32,10 +32,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Look for Wave',
-          de: 'Nach der Welle schauen',
-          fr: 'Repérez la vague',
           ja: 'つなみ来るよ',
-          cn: '看浪',
           ko: '츠나미가 와요',
         },
       },
@@ -57,10 +54,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Get Middle',
-          de: 'In die Mitte gehen',
-          fr: 'Allez au milieu',
           ja: '中心へ',
-          cn: '中间',
           ko: '한가운데로',
         },
       },
@@ -80,10 +74,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Avoid Puddles and Dives',
-          de: 'Flächen und Leviathan ausweichen',
-          fr: 'Évitez les zones au sol et les piqués',
           ja: '円範囲から離れる',
-          cn: '躲圈闪避',
           ko: '돌진이랑 장판 피해요',
         },
       },
@@ -130,10 +121,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Donut on YOU',
-          de: 'Donut auf DIR',
-          fr: 'Donut sur VOUS',
           ja: '自分にドーナツ範囲',
-          cn: '月环点名',
           ko: '내게 도넛 장판',
         },
       },

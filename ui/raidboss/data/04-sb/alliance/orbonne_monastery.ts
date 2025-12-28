@@ -29,10 +29,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Get to your pads',
-          de: 'Geh auf Dein Feld',
-          fr: 'Allez sur votre tour',
           ja: '各サークルに入る',
-          cn: '踩塔',
           ko: '동그라미 들어가요',
         },
       },
@@ -45,10 +42,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Pick up tether',
-          de: 'Verbindung abnehmen',
-          fr: 'Prenez le lien',
           ja: '線を取る',
-          cn: '坦克接线',
           ko: '줄 채요',
         },
       },
@@ -82,10 +76,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Point opening at Mustadio',
-          de: 'Richte Öffnung auf Mustadio',
-          fr: 'Pointez l\'ouverture vers Mustadio',
           ja: '未解析の方角をボスに向ける',
-          cn: '脚下光环缺口对准boss',
           ko: '열린 곳을 보스쪽으로',
         },
       },
@@ -105,10 +96,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Searchlight on YOU',
-          de: 'Suchscheinwerfer auf DIR',
-          fr: 'Repérage sur VOUS',
           ja: '外に放置',
-          cn: '远离人群放圈',
           ko: '내게 서치라이트',
         },
       },
@@ -150,10 +138,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Pick up swords',
-          de: 'Schwerter aufnehmen',
-          fr: 'Prenez les épées',
           ja: 'ソード（剣）を取る',
-          cn: '进入附近的剑标记圈',
           ko: '칼 줏어요',
         },
       },
@@ -181,10 +166,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Use Swords On Jails',
-          de: 'Kristalle mit Schwert zerschlagen',
-          fr: 'Utilisez les épées sur les prisons',
           ja: '（コンテンツアクション）剣で模造聖域を破る',
-          cn: '使用额外技能攻击',
           ko: '칼로 감옥 부셔요',
         },
       },
@@ -198,10 +180,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Go To Center',
-          de: 'In die Mitte gehen',
-          fr: 'Allez au centre',
           ja: '中央に入る',
-          cn: '前往中间',
           ko: '한가운데로',
         },
       },
@@ -214,10 +193,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Get Shield',
-          de: 'Schild nehmen',
-          fr: 'Prenez un bouclier',
           ja: 'シールド（盾）を取る',
-          cn: '进入盾标记圈',
           ko: '방패 줏어요',
         },
       },
@@ -231,10 +207,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Use Shield, Face Knights',
-          de: 'Schild benutzen, Ritter anschauen',
-          fr: 'Utilisez un bouclier, face aux chevaliers',
           ja: '騎士に向けてシールドを使う',
-          cn: '面对剑骑使用盾牌',
           ko: '나이트 바라보고 방패 사용',
         },
       },
@@ -248,10 +221,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Kill shields with sword',
-          de: 'Schilde mit Schwert zerstören',
-          fr: 'Détruisez les boucliers avec les épées',
           ja: '剣で大盾を破れ',
-          cn: '用剑摧毁护盾',
           ko: '칼로 방패 부셔요',
         },
       },
@@ -264,10 +234,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Use shield, face boss',
-          de: 'Schild benutzen, Boss anschauen',
-          fr: 'Utilisez un bouclier, face au boss',
           ja: 'ボスに向いてシールドを使う',
-          cn: '面对boss使用盾牌',
           ko: '보스 바라보고 방패 사용',
         },
       },
@@ -280,10 +247,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Use shield if tethered',
-          de: 'Schild benutzen, wenn verbunden',
-          fr: 'Utilisez un bouclier si lié',
           ja: '線と繋ったらシールドを使う',
-          cn: '被连线使用盾牌',
           ko: '줄이 달렸다면 방패 사용',
         },
       },
@@ -304,10 +268,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Feint Tank Buster',
-          de: 'Tankbuster Zermürben',
-          fr: 'Évitez le Tank buster',
           ja: 'タンクバスター（牽制使って）',
-          cn: '坦克死刑',
           ko: '성천폭격탄',
         },
       },
@@ -328,10 +289,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Give Tether Away',
-          de: 'Verbindung abgeben',
-          fr: 'Éloignez-vous et donnez le lien',
           ja: '線を取らない！',
-          cn: '获取连线受到一次伤害后转给下一个',
           ko: '줄 받으면 안되요! 건네주고 튀어요',
         },
       },
@@ -345,10 +303,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Give Tether Away',
-          de: 'Verbindung abgeben',
-          fr: 'Éloignez-vous et donnez le lien',
           ja: '線を次の人と交代',
-          cn: '获取连线受到一次伤害后转给下一个',
           ko: '줄 건네주고 튀어요',
         },
       },
@@ -361,10 +316,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Kill Icewolf Adds',
-          de: 'Besiege die Eiswolf Adds',
-          fr: 'Tuez les Grêlons de glace',
           ja: '氷狼を討つ',
-          cn: '速度消灭冰狼',
           ko: '아이스울프 잡아요',
         },
       },
@@ -379,10 +331,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Heal To Full',
-          de: 'Vollheilen',
-          fr: 'Soignez complètement',
           ja: '全員のHPを全回復',
-          cn: '奶满全队',
           ko: 'HP 만땅으로!',
         },
       },
@@ -395,10 +344,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Stand on Pads',
-          de: 'Auf Felder stellen',
-          fr: 'Placez-vous sur les pads',
           ja: '各サークルに入る',
-          cn: '踩塔',
           ko: '동그라미 들어가요',
         },
       },
@@ -412,10 +358,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Drop Bubble In Back',
-          de: 'Blase hinten ablegen',
-          fr: 'Déposez les bulles derrière',
           ja: '後ろに捨てる',
-          cn: '将身上圆圈放在圆型区域后方',
           ko: '뒤쪽에 버블 버려요',
         },
       },
@@ -429,10 +372,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Bolt on YOU',
-          de: 'Blitz auf DIR',
-          fr: 'Éclair sur VOUS',
           ja: '自分に無双稲妻突き',
-          cn: '离开剑所指的区域',
           ko: '내게 볼트',
         },
       },
@@ -460,10 +400,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Point Line Outside',
-          de: 'Linie nach Außen',
-          fr: 'Pointez la ligne vers l\'extérieur',
           ja: '（線形AoE）外周に向かって捨てる',
-          cn: '向外远离',
           ko: '바깥쪽으로 줄 빼요',
         },
       },
@@ -499,12 +436,8 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          // e.g. E / NE / NW platforms
           en: 'Rotate right',
-          de: 'Im Uhrzeigersinn ausweichen',
-          fr: 'Tournez dans le sens anti-horaire',
           ja: '右へ（反時計回り）',
-          cn: '向右移动避开',
           ko: '오른쪽으로 돌아요',
         },
       },
@@ -516,12 +449,8 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          // NW / NE / E platforms
           en: 'Rotate left',
-          de: 'Schwertern im Uhrzeigersinn ausweichen',
-          fr: 'Tournez dans le sens horaire',
           ja: '左へ（時計回り）',
-          cn: '向左移动避开',
           ko: '왼쪽으로 돌아요',
         },
       },
@@ -548,10 +477,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Eruption on YOU',
-          de: 'Eruption auf DIR',
-          fr: 'Éruption sur vous',
           ja: '自分にエラプション',
-          cn: '地火喷发',
           ko: '내게 이럽션',
         },
       },
@@ -571,10 +497,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Stand on Slow Clock',
-          de: 'In der langsamen Uhr stehen',
-          fr: 'Placez-vous sur une horloge lente',
           ja: '遅い時計で待機（早い方が爆発したらすぐ安置へ）',
-          cn: '站慢速时钟等待快速爆炸后立即离开',
           ko: '느린 시계로',
         },
       },
@@ -587,10 +510,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Look for Hashmal dash',
-          de: 'Nach Hashmal-Dash ausschau halten',
-          fr: 'Repérez Hashmal pour la ruée',
           ja: 'ブーストエッジ見逃すな！',
-          cn: '观察场地三个大十字路径并远离',
           ko: '하시말 돌진 확인해요',
         },
       },
@@ -604,10 +524,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Heal Like Whoa',
-          de: 'Heilen was das Zeug hält',
-          fr: 'Soignez à mort',
           ja: 'ヒーラー頑張って！',
-          cn: '加大治疗',
           ko: '힐러 화이팅!',
         },
       },
@@ -623,10 +540,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Kill Ruination!',
-          de: 'Zerstörung vernichten',
-          fr: 'Tuez la Marque des déchus',
           ja: '堕天の証を倒す',
-          cn: '速度消灭堕天之证',
           ko: '루이네이션 잡아요!',
         },
       },

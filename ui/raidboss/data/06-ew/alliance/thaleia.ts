@@ -141,8 +141,6 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Look for knockback position',
-          de: 'Nach Rückstoß Position schauen',
-          fr: 'Repérez la zone de poussée',
           ja: 'ノックバック位置へ',
           ko: '넉백쪽으로',
         },
@@ -156,8 +154,6 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Knockback + Rolling stones',
-          de: 'Rückstoß + rollende Steine',
-          fr: 'Poussée + Rocher',
           ja: 'ノックバック + 石AOE',
           ko: '넉백 + 돌 굴러와요',
         },
@@ -171,10 +167,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Go to rotated safe zone',
-          de: 'Geh zum rotierten sicheren Feld',
-          fr: 'Allez dans une zone sûre',
-          ja: '安置へ移動', // FIXME
-          cn: '去旋转后的安全区',
+          ja: '安置へ移動', // FIXME,
           ko: '안전한 곳으로',
         },
       },
@@ -205,8 +198,6 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Knockback',
-          de: 'Rückstoß',
-          fr: 'Poussée',
           ja: 'まもなくノックバック',
           ko: '곧 넉백',
         },
@@ -220,8 +211,6 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Far knockback',
-          de: 'Weiter Rückstoß',
-          fr: 'Poussée au loin',
           ja: '遠くノックバック',
           ko: '멀리 넉백!',
         },
@@ -261,8 +250,6 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Last trident => 1st trident',
-          de: 'Letzer Dreizack => erster Dreizack',
-          fr: 'Dernier trident -> 1er trident',
           ja: '最後の槍 => 1番目の槍へ',
           ko: '마지막 창 🔜 첫번째 창으로',
         },
@@ -288,8 +275,6 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Go to side of the arrow (Boss doesn\'t move)',
-          de: 'Geh seitlich des Pfeils (Boss bewegt sich nicht)',
-          fr: 'Allez sur les côtés de la flèche (le boss ne bouge pas)',
           ja: '矢印の横へ (ボスは動かない)',
           ko: '화살표 찾아서 옆으로 (보스 안따라옴)',
         },
@@ -307,15 +292,11 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         one: {
           en: 'Go to side of the arrow',
-          de: 'Geh seitlich des Pfeils',
-          fr: 'Allez sur les côtés de la flèche',
           ja: '矢印の横へ',
           ko: '화살표 찾아서 옆으로 (보스 따라옴)',
         },
         two: {
           en: 'Corner between two arrows',
-          de: 'Ecke zwichen 2 Pfeilen',
-          fr: 'Coin entre les 2 flèches',
           ja: '2つの矢印の隅',
           ko: '두 화살표 사이가 안전 (보스 따라옴)',
         },
@@ -333,16 +314,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         stackMarkerOn: {
           en: '6x Stack on ${player}',
-          de: '6x Sammeln auf ${player}',
-          fr: 'Package x6 sur ${player}',
-          cn: '6x 分摊点 ${player}',
+          ja: '6x Stack on ${player}',
           ko: '6x 전체 공격: ${player}',
         },
         stackMarkerOnYou: {
           en: '6x Stack on You',
-          de: '6x Sammeln auf Dir',
-          fr: 'Package x6 sur Vous',
-          cn: '6x 分摊点名',
+          ja: '6x Stack on You',
           ko: '내게 6x 전체 공격',
         },
       },
@@ -391,8 +368,6 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Knockback to safe corner',
-          de: 'Rückstoß in die sichere Ecke',
-          fr: 'Poussée vers un coin sûr',
           ja: 'AOEがないどころへ + ノックバック',
           ko: '장판 없는 곳으로 + 넉백!',
         },
@@ -406,8 +381,6 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: '(second phase)',
-          de: 'Oschon zweite Phase',
-          fr: 'Oshon : deuxième phase',
           ja: 'すぐ大きくなる',
           ko: '인제 곧 커져요! 버프 넣지말것!',
         },
@@ -422,7 +395,6 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: '${front} / ${back}',
-          de: '${front} / ${back}',
           ja: '${front} / ${back}',
           ko: '${front} ${back}',
         },
@@ -439,7 +411,6 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: '${front} / ${back}',
-          de: '${front} / ${back}',
           ja: '${front} / ${back}',
           ko: '${front} ${back}',
         },
@@ -455,8 +426,6 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Go to safe zone',
-          de: 'Geh in den sicheren Bereich',
-          fr: 'Allez dans une zone sûre',
           ja: '安置で待機',
           ko: '안전한 곳 찾아요!',
         },
@@ -470,10 +439,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'South (away from orb)',
-          de: 'Süden (weg vom Orb)',
-          fr: 'Sud (loin de l\'orbe)',
           ja: '南、玉からはなれて',
-          cn: '下 (远离球)',
           ko: '남쪽! 구슬에서 먼곳으로!',
         },
       },
@@ -486,10 +452,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'North (away from orb)',
-          de: 'Norden (weg vom Orb)',
-          fr: 'Nord (loin de l\'orbe)',
           ja: '北、玉からはなれて',
-          cn: '上 (远离球)',
           ko: '북쪽! 구슬에서 먼곳으로!',
         },
       },
@@ -502,10 +465,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Knockback to south safe spot',
-          de: 'Rückstoß zum südlichen sicheren Zone',
-          fr: 'Poussée vers la zone sûre au Sud',
           ja: '南、安置へノックバック',
-          cn: '击退到下方安全区',
           ko: '남쪽! 넉백!',
         },
       },
@@ -518,10 +478,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Knockback to north safe spot',
-          de: 'Rückstoß zum nördliche sicheren Zone',
-          fr: 'Poussée vers la zone sûre au Nord',
           ja: '北、安置へノックバック',
-          cn: '击退到上方安全区',
           ko: '북쪽! 넉백!',
         },
       },
@@ -550,10 +507,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: '${form1} => ${form2} => ${form3}',
-          de: '${form1} => ${form2} => ${form3}',
-          fr: '${form1} => ${form2} => ${form3}',
           ja: '${form1} => ${form2} => ${form3}',
-          cn: '${form1} => ${form2} => ${form3}',
           ko: '${form1} 🔜 ${form2} 🔜 ${form3}',
         },
         left: Outputs.left,
@@ -577,10 +531,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Start from the bright moon',
-          de: 'Starte vom hellen Mond',
-          fr: 'Commencez depuis la lune pleine',
           ja: '明るい月から',
-          cn: '从亮月亮开始',
           ko: '밝은 것부터 터져요 🔜 하나씩 이동',
         },
       },
@@ -594,10 +545,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: '3 => 1 => 2',
-          de: '3 => 1 => 2',
-          fr: '3 -> 1 -> 2',
           ja: '3 => 1 => 2',
-          cn: '3 => 1 => 2',
           ko: '3 🔜 1 🔜 2',
         },
       },
@@ -611,10 +559,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Go to rotated safe zone',
-          de: 'Geh in den sicheren Bereich',
-          fr: 'Allez dans une zone sûre après rotation',
-          ja: '安置へ移動', // FIXME
-          cn: '去旋转后的安全区',
+          ja: '安置へ移動', // FIXME,
           ko: '안전한 곳으로',
         },
       },
@@ -627,10 +572,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Be on blue half',
-          de: 'Geh zur blauen Seite',
-          fr: 'Placez-vous sur la moitié bleue',
           ja: '青い安置',
-          cn: '站蓝色半场',
           ko: '파랑쪽이 안전',
         },
       },
@@ -643,10 +585,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Be on red half',
-          de: 'Geh zur roten Seite',
-          fr: 'Placez-vous sur la moitié rouge',
           ja: '赤い安置',
-          cn: '站红色半场',
           ko: '빨간쪽이 안전',
         },
       },
@@ -660,10 +599,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Last trident => 1st trident',
-          de: 'Letzer Dreizack => erster Dreizack',
-          fr: 'Dernier trident -> 1er trident',
           ja: '最後の槍 => 1番目の槍へ',
-          cn: '最后一个三叉戟 => 第一个三叉戟',
           ko: '마지막 창 🔜 첫번째 창으로',
         },
       },
@@ -682,10 +618,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Knockback (with lightning)',
-          de: 'Rückstoß (mit Blitzen)',
-          fr: 'Poussée (avec éclair)',
           ja: 'ノックバック (雷)',
-          cn: '击退 (带闪电)',
           ko: '넉백 (번개 조심)',
         },
       },
@@ -721,18 +654,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         red: {
           en: 'Blue is safe',
-          de: 'Blau ist sicher',
-          fr: 'Le bleu est sûr',
           ja: '青安置',
-          cn: '蓝色安全',
           ko: '파랑색이 안전',
         },
         blue: {
           en: 'Red is safe',
-          de: 'Rot ist sicher',
-          fr: 'Le rouge est sûr',
           ja: '赤安置',
-          cn: '橙色安全',
           ko: '빨강색이 안전',
         },
       },
@@ -773,6 +700,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Serpents come out!',
+          ja: 'Serpents come out!',
           ko: '뱀 나와요!',
         },
       },
@@ -786,6 +714,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Avoid puddles!',
+          ja: 'Avoid puddles!',
           ko: '연속 세로 장판, 피해요!',
         },
       },

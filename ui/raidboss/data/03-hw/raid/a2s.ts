@@ -28,10 +28,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Stun Soon',
-          de: 'Bald unterbrechen',
-          fr: 'Étourdissez bientôt',
           ja: 'まもなくスタン',
-          cn: '马上眩晕',
           ko: '곧 기절',
         },
       },
@@ -46,10 +43,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Bomb',
-          de: 'Bombe',
-          fr: 'Bombe',
           ja: '爆弾',
-          cn: '炸弹出现',
           ko: '폭탄',
         },
       },
@@ -65,10 +59,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Keep ${player} topped',
-          de: 'Halte HP von ${player} oben',
-          fr: 'Maintenez ${player} Max PV',
           ja: '${player}のHPを満タンに保つ',
-          cn: '保持${player}满血',
           ko: '"${player}" 풀피 유지',
         },
       },
@@ -83,10 +74,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Boomcannon on YOU',
-          de: 'Großeknall auf DIR',
-          fr: 'Double cannon sur VOUS',
           ja: '自分にブームカノン',
-          cn: '红球点名',
           ko: '우레 포격 대상자',
         },
       },
@@ -108,10 +96,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Stun Soldier',
-          de: 'unterbreche Soldat',
-          fr: 'Étourdissez le soldat',
           ja: 'スタン：ソルジャー',
-          cn: '眩晕士兵',
           ko: '병사 기절시키기',
         },
       },

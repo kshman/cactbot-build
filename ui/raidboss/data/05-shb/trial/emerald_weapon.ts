@@ -37,10 +37,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Get Near Tethered Mines',
-          de: 'Nahe den Bomben mit gleicher Polarisierung',
-          fr: 'Allez vers les mines de même polarité',
           ja: '同じ極性の爆雷に近づく',
-          cn: '靠近同级地雷',
           ko: '같은 극인 폭탄쪽으로',
         },
       },
@@ -80,10 +77,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Knockback Arrow on YOU',
-          de: 'Rückstoß-Pfeil auf DIR',
-          fr: 'Flèche-Poussée sur VOUS',
           ja: '自分に吹き飛ばし矢印',
-          cn: '击退箭头点名',
           ko: '내게 넉백 화살표',
         },
       },
@@ -97,10 +91,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Go Cardinal With Sword',
-          de: 'Geh mit dem Schwert zu Kardinalen',
-          fr: 'Allez au cardinal avec l\'épée',
           ja: '辺の中心に捨てる',
-          cn: '四边放刀',
           ko: '십자 + 밖으로 (❌)',
         },
       },
@@ -114,10 +105,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Go Intercardinal With Sword',
-          de: 'Geh mit dem Schwert zu Interkardinalen',
-          fr: 'Allez à l\'intercardinal avec l\'épée',
           ja: '四隅に捨てる',
-          cn: '四角放刀',
           ko: '비스듬 + 밖으로 (➕)',
         },
       },

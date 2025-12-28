@@ -34,11 +34,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Next Spin: In or Out',
-          de: 'Nächste Drehung: Rein oder raus',
-          fr: 'Tour suivant : Intérieur ou Extérieur',
           ja: '次: 中/外',
-          cn: '下一转:靠近或远离',
-          tc: '下一轉:靠近或遠離',
           ko: '다음 스핀: 안 또는 밖으로',
         },
       },
@@ -52,11 +48,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Next Spin: Corners',
-          de: 'Nächste Drehung: Ecken',
-          fr: 'Tour suivant : Coins',
           ja: '次: コーナー',
-          cn: '下一转:角落',
-          tc: '下一轉:角落',
           ko: '다음 스핀: 구석',
         },
       },
@@ -76,20 +68,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         getOut: {
           en: 'Get Out',
-          de: 'Raus da',
-          fr: 'Sortez',
           ja: '外へ',
-          cn: '远离',
-          tc: '遠離',
           ko: '밖으로',
         },
         goToCardinals: {
           en: 'Go To Cardinals',
-          de: 'Geh zu den Kanten',
-          fr: 'Allez sur un point cardinal',
           ja: '横や縦へ',
-          cn: '去正点',
-          tc: '去正點',
           ko: '십자로',
         },
       },
@@ -108,20 +92,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         getIn: {
           en: 'Get In',
-          de: 'Rein da',
-          fr: 'Passez en dessous',
           ja: '中へ',
-          cn: '靠近',
-          tc: '靠近',
           ko: '안으로',
         },
         goToCorners: {
           en: 'Go To Corners',
-          de: 'In die Ecken',
-          fr: 'Allez dans les coins',
           ja: '角へ',
-          cn: '去角落',
-          tc: '去角落',
           ko: '구석으로',
         },
       },
@@ -157,10 +133,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Drop Ice Outside',
-          de: 'Eis draußen ablegen',
-          fr: 'Déposez la glace à l\'extérieur',
-          cn: '把冰放在外面',
-          tc: '把冰放在外面',
+          ja: 'Drop Ice Outside',
           ko: '얼음! 바깥쪽에 버려요',
         },
       },

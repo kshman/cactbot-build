@@ -64,20 +64,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         moveLeft: {
           en: 'Move (Left)',
-          de: 'Bewegen (Links)',
-          fr: 'Bougez (À gauche)',
           ja: '反対へ (左)',
-          cn: '穿 (左边)',
-          tc: '穿 (左邊)',
           ko: '오른쪽으로',
         },
         stayLeft: {
           en: 'Stay (Left)',
-          de: 'Stehenbleiben (Links)',
-          fr: 'Restez (À gauche)',
           ja: 'そのまま (左)',
-          cn: '停 (左边)',
-          tc: '停 (左邊)',
           ko: '대기 (오른쪽)',
         },
       },
@@ -96,20 +88,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         stayRight: {
           en: 'Stay (Right)',
-          de: 'Stehenbleiben (Rechts)',
-          fr: 'Restez (À droite)',
           ja: 'そのまま (右)',
-          cn: '停 (右边)',
-          tc: '停 (右邊)',
           ko: '대기 (왼쪽)',
         },
         moveRight: {
           en: 'Move (Right)',
-          de: 'Bewegen (Rechts)',
-          fr: 'Bougez (À droite)',
           ja: '反対へ (右)',
-          cn: '穿 (右边)',
-          tc: '穿 (右邊)',
           ko: '왼쪽으로',
         },
       },
@@ -122,11 +106,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Left (then opposite)',
-          de: 'Links (dann umgekehrt)',
-          fr: 'À gauche (puis à l\'opposée)',
           ja: '左 (零式)',
-          cn: '左 (然后穿)',
-          tc: '左 (然後穿)',
           ko: '왼쪽으로 (바로 반대로)',
         },
       },
@@ -139,11 +119,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Right (then opposite)',
-          de: 'Rechts (dann umgekehrt)',
-          fr: 'À droite (puis à l\'opposée)',
           ja: '右 (零式)',
-          cn: '右 (然后穿)',
-          tc: '右 (然後穿)',
           ko: '오른쪽으로 (바로 반대로)',
         },
       },
@@ -157,11 +133,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Opposite (Left)',
-          de: 'Umgekehrt (Links)',
-          fr: 'À l\'opposée (À gauche)',
           ja: '反対へ (左)',
-          cn: '穿 (左边)',
-          tc: '穿 (左邊)',
           ko: '오른쪽으로',
         },
       },
@@ -175,11 +147,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Opposite (Right)',
-          de: 'Umgekehrt (Rechts)',
-          fr: 'À l\'opposée (À droite)',
           ja: '反対へ (右)',
-          cn: '穿 (右边)',
-          tc: '穿 (右邊)',
           ko: '왼쪽으로',
         },
       },

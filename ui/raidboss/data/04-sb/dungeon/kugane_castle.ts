@@ -48,10 +48,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Harakiri tether on YOU',
-          de: 'Harakiri Verbindung auf DIR',
-          fr: 'Lien Harakiri sur VOUS',
           ja: '自分にはらきり',
-          cn: '切腹点名',
           ko: '내게 하라키리 줄',
         },
       },
@@ -72,10 +69,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Grab gold piles',
-          de: 'Sammle die Goldhaufen',
-          fr: 'Prenez les pièces d\'or',
           ja: '大判小判を拾う',
-          cn: '捡金币',
           ko: '금화 은화 주워요',
         },
       },

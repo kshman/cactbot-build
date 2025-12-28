@@ -28,10 +28,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Get Puddles',
-          de: 'Flächen nehmen',
-          fr: 'Allez dans les zones au sol',
           ja: '踏む',
-          cn: '踩圈',
           ko: '바닥 징 밟기',
         },
       },
@@ -44,10 +41,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Stack With Partner',
-          de: 'Mit Partner stacken',
-          fr: 'Packez-vous avec votre partenaire',
           ja: '白黒合わせて',
-          cn: '黑白配',
           ko: '흑백 파트너랑 모이기',
         },
       },
@@ -102,10 +96,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Protean',
-          de: 'Himmelsrichtungen',
-          fr: 'Positions',
           ja: '散開',
-          cn: '分散站位',
           ko: '정해진 위치로 산개',
         },
       },
@@ -136,10 +127,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Away From Hand',
-          de: 'Weg von der Hand',
-          fr: 'Éloignez-vous de la main',
           ja: '手から離れ',
-          cn: '远离手',
           ko: '팔에서 멀어지기',
         },
       },
@@ -170,10 +158,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Delayed Stack',
-          de: 'Verzögertes stacken',
-          fr: 'Package retardé',
           ja: 'スタック(ディレイ)',
-          cn: '延迟集合',
           ko: '지연술 쉐어징',
         },
       },
@@ -211,10 +196,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Delayed Fire',
-          de: 'Verzögertes Feuer',
-          fr: 'Feu retardé',
           ja: 'マーカーついた(ディレイ)',
-          cn: '延迟火',
           ko: '지연술 파이가',
         },
       },
@@ -242,10 +224,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Eye on YOU',
-          de: 'Auge auf DIR',
-          fr: 'Œil de l\'ombre sur VOUS',
           ja: '自分に目',
-          cn: '石化眼点名',
           ko: '시선징 대상자',
         },
       },
@@ -269,10 +248,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Delayed Shadoweye',
-          de: 'Verzögertes Schattenauge',
-          fr: 'Œil de l\'ombre retardé',
           ja: 'シャドウアイ(ディレイ)',
-          cn: '延迟石化眼',
           ko: '지연술 시선징',
         },
       },
@@ -289,10 +265,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Eye on YOU',
-          de: 'Auge auf DIR',
-          fr: 'Œil sur VOUS',
           ja: '自分に目',
-          cn: '石化眼点名',
           ko: '시선징 대상자',
         },
       },
@@ -318,10 +291,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Flare',
-          de: 'Flare',
-          fr: 'Brasier',
           ja: 'フレア捨てて',
-          cn: '核爆',
           ko: '플레어',
         },
       },
@@ -345,10 +315,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Delayed Flare',
-          de: 'Verzögerte Flare',
-          fr: 'Brasier retardé',
           ja: 'フレア(ディレイ)',
-          cn: '延迟核爆',
           ko: '지연술 플레어',
         },
       },
@@ -362,10 +329,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Flare',
-          de: 'Flare',
-          fr: 'Brasier',
           ja: 'フレア捨てて',
-          cn: '核爆',
           ko: '플레어',
         },
       },
@@ -384,10 +348,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Flare aoes',
-          de: 'Flare aoes',
-          fr: 'Brasiers AoE',
           ja: 'フレア AoE',
-          cn: '核爆AOE',
           ko: '플레어 터짐',
         },
       },
@@ -403,10 +364,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Hell Wind: Get Out',
-          de: 'Höllenwind: Raus gehen',
-          fr: 'Vent infernal : À l\'extérieur',
           ja: 'ヘルウィンド: HP1になるよ',
-          cn: '地狱之风：远离',
           ko: '홍옥징 대상자',
         },
       },
@@ -438,10 +396,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Delayed Hell Wind',
-          de: 'Verzögerte Höllenwind',
-          fr: 'Vent infernal retardé',
           ja: 'ヘルウィンド(ディレイ)',
-          cn: '延迟地狱之风',
           ko: '지연술 홍옥징',
         },
       },
@@ -459,10 +414,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Hell Wind: wait for heals',
-          de: 'Höllenwind: Warte auf Heilung',
-          fr: 'Vent infernal : attendez pour soigner',
           ja: 'ヘルウィンド: HP戻ってから',
-          cn: '地狱之风：等奶',
           ko: '힐 받고 들어가기',
         },
       },
@@ -481,10 +433,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Heal Hell Wind Targets',
-          de: 'Heile Höllenwind Ziele',
-          fr: 'Soignez les cibles de Vent infernal',
           ja: 'HP戻して',
-          cn: '奶地狱之风目标',
           ko: '홍옥징 대상자 힐',
         },
       },
@@ -505,10 +454,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'In, Protean, Sides',
-          de: 'Rein, Himmelsrichtungen, Seiten',
-          fr: 'Intérieur, Positions, Côtés',
           ja: '中 => 散開 => 横',
-          cn: '脚下 => 站位 => 两侧',
           ko: '중앙 => 산개 => 측면',
         },
       },
@@ -521,10 +467,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Sides, In, Protean',
-          de: 'Seiten, Rein, Himmelsrichtungen',
-          fr: 'Côtés, Intérieur, Positions',
           ja: '横 => 中 => 散開',
-          cn: '两侧 => 脚下 => 站位',
           ko: '측면 => 중앙 => 산개',
         },
       },

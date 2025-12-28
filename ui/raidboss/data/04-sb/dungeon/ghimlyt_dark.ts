@@ -22,10 +22,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Avoid wall laser',
-          de: 'Weiche dem Wand-Laser aus',
-          fr: 'Évitez le laser du mur',
           ja: 'レーザーを避ける',
-          cn: '躲避墙壁激光',
           ko: '벽 레이저 피해요',
         },
       },
@@ -67,18 +64,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         left: {
           en: 'Rotate left',
-          de: 'Nach links rotieren',
-          fr: 'Tournez vers la gauche',
           ja: '左回転',
-          cn: '向左转',
           ko: '왼쪽으로 돌아요',
         },
         right: {
           en: 'Rotate right',
-          de: 'Nach rechts rotieren',
-          fr: 'Tournez vers la droite',
           ja: '右回転',
-          cn: '向右转',
           ko: '오른쪽으로 돌아요',
         },
       },

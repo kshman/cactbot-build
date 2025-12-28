@@ -73,11 +73,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         directions: {
           en: 'Back of head',
-          de: 'Zur Rückseite des Kopfes',
-          fr: 'Derrière la tête',
           ja: '頭の後ろへ',
-          cn: '去头的后面',
-          tc: '去頭的後面',
           ko: '머리 뒤쪽으로',
         },
       },
@@ -91,11 +87,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         directions: {
           en: 'Front of head',
-          de: 'Zur Vorderseite des Kopfes',
-          fr: 'Devant la tête',
           ja: '頭の前へ',
-          cn: '去头的前面',
-          tc: '去頭的前面',
           ko: '머리 앞쪽으로',
         },
       },
@@ -127,20 +119,12 @@ const triggerSet: TriggerSet<Data> = {
         output.responseOutputStrings = {
           marks: {
             en: 'Marks: ${player1}, ${player2}',
-            de: 'Marker: ${player1}, ${player2}',
-            fr: 'Marques sur : ${player1}, ${player2}',
             ja: 'マーカー: ${player1}, ${player2}',
-            cn: '大圈: ${player1}, ${player2}',
-            tc: '大圈: ${player1}, ${player2}',
             ko: '징: ${player1}, ${player2}',
           },
           avariceOnYou: {
             en: 'Avarice on YOU',
-            de: 'Marker auf DIR',
-            fr: 'Marque sur VOUS',
             ja: 'マーカーついた',
-            cn: '大圈点名',
-            tc: '大圈點名',
             ko: '내가 징 대상자',
           },
           unknown: Outputs.unknown,
@@ -201,20 +185,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         arrowFirst: {
           en: 'Arrow First',
-          de: 'Pfeil zuerst',
-          fr: 'Flèches en premières',
           ja: '突進→散開',
-          cn: '先对冲',
-          tc: '先對衝',
           ko: '화살표 처리 먼저',
         },
         spreadFirst: {
           en: 'Spread First',
-          de: 'Verteilen zuerst',
-          fr: 'Dispersez-vous en premier',
           ja: '散開→突進',
-          cn: '先散开',
-          tc: '先散開',
           ko: '산개 먼저',
         },
       },
@@ -255,11 +231,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Flare Tether',
-          de: 'Flare Verbindung',
-          fr: 'Lien Brasier',
           ja: 'フレアの線',
-          cn: '核爆连线',
-          tc: '核爆連線',
           ko: '플레어 선',
         },
       },
@@ -279,20 +251,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         flareLineStack: {
           en: 'Line Stack (behind tank)',
-          de: 'Linien-Sammeln (hinter dem Tank)',
-          fr: 'Package en ligne (derrière le tank)',
           ja: '直線頭割り（タンクより後ろ）',
-          cn: '直线分摊（站坦克后面）',
-          tc: '直線分攤（站坦克後面）',
           ko: '직선 쉐어 (탱커 뒤로)',
         },
         flareLineTank: {
           en: 'Line Stack (be in front)',
-          de: 'Linien-Sammeln (vorne sein)',
-          fr: 'Package en ligne (Placez-vous devant)',
           ja: '直線頭割り（みんなの前に）',
-          cn: '直线分摊（坦克站前面）',
-          tc: '直線分攤（坦克站前面）',
           ko: '직선 쉐어 (맨 앞으로)',
         },
       },
@@ -316,30 +280,18 @@ const triggerSet: TriggerSet<Data> = {
         output.responseOutputStrings = {
           squareAcross: {
             en: '#${num} Square, go across',
-            de: '#${num} Viereck, geh gegenüber',
-            fr: '#${num} Carré, allez à l\'opposé',
             ja: '四角 #${num}：ボスの対角へ',
-            cn: '连线 #${num}: 去Boss对角',
-            tc: '連線 #${num}: 去Boss對角',
             ko: '#${num} 네모, 보스 대각 발판으로',
           },
           // Trying not to confuse with boss/across
           squareBoss: {
             en: '#${num} Square, boss tile',
-            de: '#${num} Viereck, Boss Fläche',
-            fr: '#${num} Carré, case du boss',
             ja: '四角 #${num}：ボスの下へ',
-            cn: '连线 #${num}: 去Boss脚下',
-            tc: '連線 #${num}: 去Boss腳下',
             ko: '#${num} 네모, 보스 발판으로',
           },
           triangle: {
             en: '#${num} Triangle',
-            de: '#${num} Dreieck',
-            fr: '#${num} Triangle',
             ja: '三角 #${num}',
-            cn: '三角 #${num}',
-            tc: '三角 #${num}',
             ko: '#${num} 세모',
           },
         };

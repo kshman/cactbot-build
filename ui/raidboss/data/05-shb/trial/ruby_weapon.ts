@@ -21,10 +21,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Hide Behind Meteor',
-          de: 'Hinter Meteor verstecken',
-          fr: 'Cachez-vous derrière le météore',
           ja: 'コメットの後ろへ',
-          cn: '躲在陨石后',
           ko: '메테오 뒤로',
         },
       },
@@ -37,10 +34,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Away From Meteor',
-          de: 'Weg vom Meteor',
-          fr: 'Éloignez-vous du météore',
           ja: 'コメットから離れる',
-          cn: '远离陨石',
           ko: '메테오에게서 먼곳으로',
         },
       },
@@ -67,10 +61,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Away from Lines',
-          de: 'Weg von den Linien',
-          fr: 'Éloignez-vous des sillons',
           ja: '線から離れる',
-          cn: '远离线',
           ko: '줄 피해요',
         },
       },
@@ -83,10 +74,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Get On Lines',
-          de: 'Auf die Linien gehen',
-          fr: 'Allez sur les sillons',
           ja: '線の上へ',
-          cn: '靠近线',
           ko: '줄 올라타요',
         },
       },
@@ -135,10 +123,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Enrage!',
-          de: 'Finalangriff!',
-          fr: 'Enrage !',
           ja: '時間切れ！',
-          cn: '狂暴',
           ko: '곧 다 주거!',
         },
       },
@@ -172,10 +157,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Avoid meteors with laser',
-          de: 'Meteore mit Laser vermeiden',
-          fr: 'Évitez les météores avec votre laser',
           ja: 'レザーを避ける',
-          cn: '躲开激光点名',
           ko: '탱크 레이저 피해요',
         },
       },

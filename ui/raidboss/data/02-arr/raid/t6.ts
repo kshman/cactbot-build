@@ -71,34 +71,22 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         thornsOnYou: {
           en: 'Thorns on YOU',
-          de: 'Dornenpeitsche auf DIR',
-          fr: 'Ronces sur VOUS',
           ja: '自分にソーンウィップ',
-          cn: '荆棘点名',
           ko: '가시 대상자',
         },
         oneTether: {
           en: 'Thorns w/ (${player})',
-          de: 'Dornenpeitsche mit (${player})',
-          fr: 'Ronces avec (${player})',
           ja: '自分と (${player}) にソーンウィップ',
-          cn: '荆棘连 ${player}',
           ko: '가시 대상자 (${player})',
         },
         twoTethers: {
           en: 'Thorns w/ (${player1}, ${player2})',
-          de: 'Dornenpeitsche mit (${player1}, ${player2})',
-          fr: 'Ronces avec (${player1}, ${player2})',
           ja: '自分と (${player1}, ${player2}) にソーンウィップ',
-          cn: '荆棘连 ${player1}, ${player2}',
           ko: '가시 대상자 (${player1}, ${player2})',
         },
         threeOrMoreTethers: {
           en: 'Thorns (${num} people)',
-          de: 'Dornenpeitsche mit (${num} Personen)',
-          fr: 'Ronces (${num} personne)',
           ja: 'ソーンウィップ (${num}人)',
-          cn: '荆棘 (${num} 人)',
           ko: '가시 (${num}명)',
         },
       },
@@ -142,26 +130,17 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         avoidDevour: {
           en: 'Avoid Devour',
-          de: 'Weiche Verschlingen aus',
-          fr: 'Évitez Dévoration',
           ja: '捕食を避ける',
-          cn: '躲开捕食',
           ko: '포식 피해요',
         },
         jumpInNewThorns: {
           en: 'Devour: Jump In New Thorns',
-          de: 'Verschlingen: Spring in die neuen Dornen',
-          fr: 'Dévoration : Sautez dans les ronces',
           ja: '捕食: 新芽に乗る',
-          cn: '去新荆棘',
           ko: '포식: 가시장판 밟아요',
         },
         getEaten: {
           en: 'Devour: Get Eaten',
-          de: 'Verschlingen: Gefressen werden',
-          fr: 'Dévoration : Faites-vous manger',
           ja: '捕食: 捕食される',
-          cn: '捕食点名',
           ko: '포식: 잡아먹히기',
         },
       },
@@ -188,10 +167,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Stack for Acid',
-          de: 'Sammeln für Säure-Blubberblase',
-          fr: 'Packez-vous pour Pluie acide',
           ja: '集合、アシッドレインを誘導',
-          cn: '集合引导酸雨',
           ko: '모여서 산성비 장판 유도',
         },
       },
@@ -213,18 +189,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         swarmOn: {
           en: 'Swarm on ${player}',
-          de: 'Fähenfurz auf ${player}',
-          fr: 'Nuée sur ${player}',
           ja: '${player}にスウォーム',
-          cn: '蜂群点${player}',
           ko: '${player} 벌레',
         },
         swarmOnYou: {
           en: 'Swarm on YOU',
-          de: 'Fähenfurz auf DIR',
-          fr: 'Nuée sur VOUS',
           ja: '自分にスウォーム',
-          cn: '蜂群点名',
           ko: '벌레 대상자',
         },
       },
@@ -242,18 +212,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         shareLaserOnYou: {
           en: 'Share Laser (on YOU)',
-          de: 'Geteilter Laser (auf DIR)',
-          fr: 'Partagez le laser (sur VOUS)',
           ja: '(自分に)頭割りレーザー',
-          cn: '分摊激光点名',
           ko: '내게 레이져 (뭉쳐야함)',
         },
         shareLaserOn: {
           en: 'Share Laser (on ${player})',
-          de: 'Geteilter Laser (auf ${player})',
-          fr: 'Partage de laser (sur ${player})',
           ja: '(${player})に頭割りレーザー',
-          cn: '分摊激光点 ${player}',
           ko: '뭉쳐요: ${player}',
         },
       },

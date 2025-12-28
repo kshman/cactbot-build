@@ -52,10 +52,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Stand in blue',
-          de: 'Im Blauen stehen',
-          fr: 'Placez-vous dans le bleu',
           ja: '青色を踏む',
-          cn: '站在蓝色区域',
           ko: '🔵파랑 밟아요',
         },
       },
@@ -69,10 +66,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Stand in red',
-          de: 'Im Roten stehen',
-          fr: 'Placez-vous dans le rouge',
           ja: '赤色を踏む',
-          cn: '站在红色区域',
           ko: '🔴빨강 밟아요',
         },
       },
@@ -97,10 +91,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'watch for safe',
-          de: 'nach sicherer Position schauen',
-          fr: 'Trouvez une zone safe',
           ja: 'ブロックされてない方角から攻撃',
-          cn: '前往安全区',
           ko: '안전한 곳 찾아요',
         },
       },
@@ -121,10 +112,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Heal ${player} soon',
-          de: 'Bald ${player} heilen',
-          fr: 'Soignez ${player} bientôt',
           ja: 'すぐに${player}をヒール',
-          cn: '马上奶 ${player}',
           ko: '힐 준비: ${player}',
         },
       },
@@ -137,10 +125,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Avoid floating heads',
-          de: 'Weiche den fliegenden Köpfen aus',
-          fr: 'Évitez les têtes flottantes',
           ja: 'ヘッドを避ける',
-          cn: '避开漂浮的头',
           ko: '떠다니는 머리 피해요',
         },
       },
@@ -153,10 +138,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Away from marker',
-          de: 'Weg von den Markierungen',
-          fr: 'Éloignez-vous du marqueur',
           ja: 'マーカーから離れる',
-          cn: '远离标记',
           ko: '마커에서 먼곳으로',
         },
       },

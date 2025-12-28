@@ -35,10 +35,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Bennu Soon',
-          de: 'Bennu Add bald',
-          fr: 'Bénou bientôt',
           ja: 'まもなくベンヌ',
-          cn: '小鸟即将出现',
           ko: '곧 벤누 쫄',
         },
       },
@@ -58,18 +55,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         awayFromPlayer: {
           en: 'Away from ${player}',
-          de: 'Weg von ${player}',
-          fr: 'Éloignez-vous de ${player}',
           ja: '${player}から離れる',
-          cn: '远离${player}',
           ko: '"${player}"에게서 멀어지기',
         },
         revelationOnYou: {
           en: 'Revelation on YOU',
-          de: 'Offenbarung auf DIR',
-          fr: 'Révélation sur VOUS',
           ja: '自分にリヴァレーション',
-          cn: '天启点名',
           ko: '계시 대상자',
         },
       },
@@ -82,10 +73,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Blackfire Spread',
-          de: 'Schwarzfeuer verteilen',
-          fr: 'Flamme noire, dispersez-vous',
           ja: '漆黒の炎、散開',
-          cn: '黑火分散',
           ko: '칠흑의 불꽃 산개',
         },
       },
@@ -99,10 +87,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Whitefire on YOU',
-          de: 'Weißfeuer auf DIR',
-          fr: 'Flamme blanche sur VOUS',
           ja: '自分に白熱の炎',
-          cn: '白火点名',
           ko: '백열의 불꽃 대상자',
         },
       },
@@ -116,10 +101,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Bluefire Away',
-          de: 'Blaufeuer wegbringen',
-          fr: 'Flamme bleue, éloignez-vous',
           ja: '青碧の炎、離れる',
-          cn: '蓝火远离',
           ko: '청벽의 불꽃 대상자',
         },
       },
@@ -140,18 +122,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         chainOn: {
           en: 'Chain on ${player}',
-          de: 'Kette auf ${player}',
-          fr: 'Chaine sur ${player}',
           ja: '${player}に誘爆',
-          cn: '毒点名${player}',
           ko: '"${player}" 사슬 대상',
         },
         chainOnYou: {
           en: 'Chain on YOU',
-          de: 'Kette auf DIR',
-          fr: 'Chaine sur VOUS',
           ja: '自分に誘爆',
-          cn: '毒点名',
           ko: '내게 체인',
         },
       },

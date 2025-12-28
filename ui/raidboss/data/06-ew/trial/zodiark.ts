@@ -33,10 +33,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Go NE (knockback)',
-          de: 'Geh nach NO (Rückstoß)',
-          fr: 'Allez au NE (poussée)',
           ja: '北東へ (ノックバック)',
-          cn: '去右上 (东北)',
           ko: '북동쪽으로 가서 넉백',
         },
       },
@@ -49,10 +46,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Go NW (knockback)',
-          de: 'Geh nach NW (Rückstoß)',
-          fr: 'Allez au NO (poussée)',
           ja: '北西へ (ノックバック)',
-          cn: '去左上 (西北)',
           ko: '북서쪽으로 가서 넉백',
         },
       },

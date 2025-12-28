@@ -60,9 +60,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Go Front + Right',
-          de: 'Geh nach Vorne + Rechts',
-          cn: '去前面 + 右侧',
-          tc: '去前面 + 右側',
+          ja: 'Go Front + Right',
           ko: '앞+오른쪽으로',
         },
       },
@@ -75,9 +73,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Go Front + Left',
-          de: 'Geh nach Vorne + Links',
-          cn: '去前面 + 左侧',
-          tc: '去前面 + 左側',
+          ja: 'Go Front + Left',
           ko: '앞+왼쪽으로',
         },
       },
@@ -91,11 +87,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         breakLOS: {
           en: 'Break line-of-sight to ${name}',
-          de: 'Unterbreche Sichtlinie zu ${name}',
-          fr: 'Masquez le champ de vision vers ${name}',
           ja: '${name}の視線から隠れる',
-          cn: '利用掩体卡 ${name} 的视线',
-          tc: '利用掩體卡 ${name} 的視線',
           ko: '시선 잘라요: ${name}',
         },
       },
@@ -111,9 +103,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: '${count}x attacks => Out of Melee',
-          de: '${count}x Attacken => Raus aus Nahkampf',
-          cn: '${count}次攻击 => 离开近战范围',
-          tc: '${count}次攻擊 => 離開近戰範圍',
+          ja: '${count}x attacks => Out of Melee',
           ko: '공격x${count} 🔜 근접 피해요',
         },
       },
@@ -146,9 +136,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Avoid AoE',
-          de: 'Vermeide AoE',
-          cn: '避开AoE',
-          tc: '避開AoE',
+          ja: 'Avoid AoE',
           ko: '장판 피해욧',
         },
       },

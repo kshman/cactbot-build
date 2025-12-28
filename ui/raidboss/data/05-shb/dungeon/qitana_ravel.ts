@@ -32,10 +32,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Look for pillar',
-          de: 'Auf die Pfeiler schauen',
-          fr: 'Cherchez les piliers',
           ja: '光った像を避ける',
-          cn: '躲开发光石像的半场',
           ko: '빛나는 조각상 피해요',
         },
       },
@@ -50,10 +47,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Stay on left flank',
-          de: 'Auf seiner linken Seite stehen',
-          fr: 'Restez sur le flanc gauche',
           ja: 'ボスの左側へ',
-          cn: 'Boss左边躲避',
           ko: '왼쪽 옆으로',
         },
       },
@@ -68,10 +62,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Stay on right flank',
-          de: 'Auf seiner rechten Seite stehen',
-          fr: 'Restez sur le flanc droit',
           ja: 'ボスの右側へ',
-          cn: 'Boss右边躲避',
           ko: '오른쪽 옆으로',
         },
       },
@@ -115,10 +106,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Run Away From Boss',
-          de: 'Renn weg vom Boss',
-          fr: 'Courez loin du boss',
           ja: 'ボスから離れる',
-          cn: '远离Boss',
           ko: '보스에게서 먼곳으로',
         },
       },
@@ -132,10 +120,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Drop Poison Outside',
-          de: 'Gift am Rand ablegen',
-          fr: 'Déposez le poison à l\'extérieur',
           ja: '外周に捨てる',
-          cn: '远处放毒',
           ko: '독 장판, 바깥쪽에 버려요',
         },
       },
@@ -154,10 +139,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Spread to Sides',
-          de: 'Auf die Seiten verteilen',
-          fr: 'Dispersez-vous sur les côtés',
           ja: '横に散開',
-          cn: '两侧分散',
           ko: '옆쪽에서 흩어져요',
         },
       },

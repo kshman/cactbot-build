@@ -58,10 +58,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Canal Crew spawned, kill in order!',
-          de: 'Kanal-Mandragora erscheinen, in Reihenfolge besiegen!',
-          fr: 'Les mandragores du canal apparaissent, tuez les dans l\'ordre',
-          cn: '已生成 运河蔓德拉战队, 依次击杀!',
-          tc: '已生成 運河蔓德拉戰隊, 依次擊殺!',
+          ja: 'Canal Crew spawned, kill in order!',
           ko: '만드라즈 등장, 순서대로 잡아요!',
         },
       },

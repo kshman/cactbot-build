@@ -40,10 +40,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Spit on YOU',
-          de: 'Spucke auf DIR',
-          fr: 'Crachat sur VOUS',
           ja: '自分にリゴージ',
-          cn: '吐痰点名',
           ko: '나에게 침뱉기',
         },
       },
@@ -58,10 +55,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Split',
-          de: 'Teilen',
-          fr: 'Division',
           ja: '分裂',
-          cn: '分裂',
           ko: '분열',
         },
       },
@@ -77,10 +71,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Hood Swing in 10',
-          de: 'Kapuzenschwung in 10',
-          fr: 'Coup de capot dans 10s',
           ja: '十秒以内タンクバスター',
-          cn: '10秒内死刑',
           ko: '10초 이내에 머리 휘두르기',
         },
       },
@@ -96,10 +87,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Slime Soon',
-          de: 'Schleim bald',
-          fr: 'Gluant bientôt',
           ja: 'まもなくスライム',
-          cn: '软泥即将出现',
           ko: '곧 슬라임',
         },
       },
@@ -114,10 +102,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Slime Soon',
-          de: 'Schleim bald',
-          fr: 'Gluant bientôt',
           ja: 'まもなくスライム',
-          cn: '软泥即将出现',
           ko: '곧 슬라임',
         },
       },

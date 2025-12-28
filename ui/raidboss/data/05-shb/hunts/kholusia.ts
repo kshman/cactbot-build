@@ -86,9 +86,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'In => Sides',
-          de: 'Rein => Seiten',
-          fr: 'Intérieur => Côtés',
-          cn: '中间 => 两侧',
+          ja: 'In => Sides',
           ko: '안으로 🔜 옆으로',
         },
       },
@@ -102,9 +100,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Sides => Sides (again)',
-          de: 'Seiten => Seiten (nochmal)',
-          fr: 'Côtés => Côtés (encore)',
-          cn: '两侧 => 两侧 (重复)',
+          ja: 'Sides => Sides (again)',
           ko: '옆으로 🔜 옆으로 (반복)',
         },
       },

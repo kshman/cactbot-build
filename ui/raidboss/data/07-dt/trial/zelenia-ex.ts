@@ -205,6 +205,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         fiveAOE: {
           en: '5x AoEs',
+          ja: '5x AoEs',
           ko: '5x 전체공격',
         },
       },

@@ -42,20 +42,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         fireOnYou: {
           en: 'Fire Marker on YOU',
-          de: 'Feuer Marker auf DIR',
-          fr: 'Marqueur feu sur VOUS',
           ja: '自分にマーカー',
-          cn: '喷火点名',
-          tc: '噴火點名',
           ko: '불징 대상자',
         },
         fireOn: {
           en: 'Fire Marker on ${player}',
-          de: 'Feuer Markierung auf ${player}',
-          fr: 'Marqueur feu sur ${player}',
           ja: '${player} にマーカー',
-          cn: '喷火点${player}',
-          tc: '噴火點${player}',
           ko: '${player} 불징',
         },
       },
@@ -69,11 +61,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Death From Below',
-          de: 'Tod von unten',
-          fr: 'Désastre terrestre',
           ja: '地の災厄',
-          cn: '地之灾厄',
-          tc: '地之災厄',
           ko: '디버프 확인',
         },
       },
@@ -87,11 +75,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Death From Above',
-          de: 'Tod von oben',
-          fr: 'Désastre céleste',
           ja: '天の災厄',
-          cn: '天之灾厄',
-          tc: '天之災厄',
           ko: '디버프 확인',
         },
       },
@@ -119,11 +103,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Next Spin: In or Out',
-          de: 'Nächste Drehung: Rein oder Raus',
-          fr: 'Tour suivant : Intérieur ou Extérieur',
           ja: '次: 中/外',
-          cn: '下一转：靠近或远离',
-          tc: '下一轉：靠近或遠離',
           ko: '안쪽 / 바깥쪽',
         },
       },
@@ -137,11 +117,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Next Spin: Cardinals or Corners',
-          de: 'Nächste Drehung: Kanten oder Ecken',
-          fr: 'Tour suivant : Cardinal ou Coins',
           ja: '次: コーナー',
-          cn: '下一转：靠边或角落',
-          tc: '下一轉：靠邊或角落',
           ko: '십자 / 대각선',
         },
       },
@@ -160,20 +136,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         getOut: {
           en: 'Get Out',
-          de: 'Raus da',
-          fr: 'Sortez',
           ja: '外へ',
-          cn: '远离',
-          tc: '遠離',
           ko: '밖으로',
         },
         goToCardinals: {
           en: 'Go To Cardinals',
-          de: 'An die Kanten',
-          fr: 'Allez sur un cardinal',
           ja: '横や縦へ',
-          cn: '靠边',
-          tc: '靠邊',
           ko: '십자 산개',
         },
       },
@@ -192,20 +160,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         getIn: {
           en: 'Get In',
-          de: 'Rein da',
-          fr: 'Passez en dessous',
           ja: '中へ',
-          cn: '靠近',
-          tc: '靠近',
           ko: '안으로',
         },
         goToCorners: {
           en: 'Go To Corners',
-          de: 'In die Ecken',
-          fr: 'Allez dans les coins',
           ja: '角へ',
-          cn: '角落',
-          tc: '角落',
           ko: '구석 산개',
         },
       },

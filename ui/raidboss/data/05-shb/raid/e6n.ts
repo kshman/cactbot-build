@@ -39,10 +39,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Avoid green nails',
-          de: 'Weiche den grünen Nägeln aus',
-          fr: 'Évitez les griffes',
           ja: '緑の爪を避ける',
-          cn: '躲避风牙',
           ko: '초록 발톱 피해요',
         },
       },
@@ -61,18 +58,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         enumerationOnYou: {
           en: 'Enumeration on YOU',
-          de: 'Enumeration aud DIR',
-          fr: 'Énumération sur VOUS',
           ja: '自分にエアーバンプ',
-          cn: '蓝圈分摊点名',
           ko: '내게 에어 범프!',
         },
         enumeration: {
           en: 'Enumeration',
-          de: 'Enumeration',
-          fr: 'Énumération',
           ja: 'エアーバンプ',
-          cn: '蓝圈分摊',
           ko: '에어 범프',
         },
       },
@@ -108,10 +99,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         chargeOnYou: {
           en: 'Charge on YOU',
-          de: 'Ansturm auf DIR',
-          fr: 'Charge sur VOUS',
           ja: '自分に突進',
-          cn: '冲锋点名',
           ko: '내게 돌진',
         },
         tankSwap: Outputs.tankSwap,
@@ -139,10 +127,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Tether Marker on YOU',
-          de: 'Verbindung auf DIR',
-          fr: 'Marque de lien sur VOUS',
           ja: '自分に線マーカー',
-          cn: '连线点名',
           ko: '내게 줄 마커',
         },
       },
@@ -158,10 +143,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Move to Ifrit',
-          de: 'Zu Ifrit bewegen',
-          fr: 'Allez sur Ifrit',
           ja: 'イフリートところへ',
-          cn: '踢球 集合待机',
           ko: '이프리트로!',
         },
       },

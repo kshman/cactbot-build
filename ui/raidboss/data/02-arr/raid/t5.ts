@@ -60,10 +60,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Death Sentence Soon',
-          de: 'Todesurteil bald',
-          fr: 'Peine de mort bientôt',
           ja: 'まもなくデスセンテンス',
-          cn: '即将死刑',
           ko: '사형선고',
         },
       },
@@ -76,10 +73,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Liquid Hell',
-          de: 'Höllenschmelze',
-          fr: 'Enfer liquide',
           ja: 'ヘルリキッド',
-          cn: '液体地狱',
           ko: '지옥의 늪',
         },
       },
@@ -99,18 +93,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         fireballOn: {
           en: 'Fireball on ${player}',
-          de: 'Feuerball auf ${player}',
-          fr: 'Boule de feu sur ${player}',
           ja: '${player}にファイアボール',
-          cn: '火球点${player}',
           ko: '"${player}" 쉐어징',
         },
         fireballOnYou: {
           en: 'Fireball on YOU',
-          de: 'Feuerball auf DIR',
-          fr: 'Boule de feu sur VOUS',
           ja: '自分にファイアボール',
-          cn: '火球点名',
           ko: '나에게 화염구',
         },
       },
@@ -130,18 +118,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         conflagOn: {
           en: 'Conflag on ${player}',
-          de: 'Feuersturm auf ${player}',
-          fr: 'Tempête de feu sur ${player}',
           ja: '${player}にファイアストーム',
-          cn: '火焰流点${player}',
           ko: '불보라${player}',
         },
         conflagOnYou: {
           en: 'Conflag on YOU',
-          de: 'Feuersturm auf DIR',
-          fr: 'Tempête de feu sur VOUS',
           ja: '自分にファイアストーム',
-          cn: '火焰流点名',
           ko: '불보라 보스밑으로',
         },
       },
@@ -154,10 +136,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'DIVEBOMB',
-          de: 'STURZBOMBE',
-          fr: 'BOMBE PLONGEANTE',
           ja: 'ダイブボム',
-          cn: '俯冲',
           ko: '급강하',
         },
       },
@@ -172,10 +151,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Divebombs Soon',
-          de: 'Sturzbombe bald',
-          fr: 'Bombe plongeante bientôt',
           ja: 'まもなくダイブボム',
-          cn: '即将俯冲',
           ko: '급강하 준비',
         },
       },
@@ -194,18 +170,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         knightOnYou: {
           en: 'Knight on YOU',
-          de: 'Furchtritter auf DIR',
-          fr: 'Chevalier sur VOUS',
           ja: '自分にナイト',
-          cn: '骑士点名',
           ko: '드레드 대상자',
         },
         knightOn: {
           en: 'Knight on ${player}',
-          de: 'Furchtritter auf ${player}',
-          fr: 'Chevalier sur ${player}',
           ja: '${player}にナイト',
-          cn: '骑士点${player}',
           ko: '"${player}" 드래드 대상',
         },
       },
@@ -218,10 +188,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Twister!',
-          de: 'Wirbelsturm!',
-          fr: 'Tornade !',
           ja: 'ツイスター!',
-          cn: '旋风旋风！',
           ko: '회오리',
         },
       },
@@ -241,18 +208,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         hatchOn: {
           en: 'Hatch on ${player}',
-          de: 'Austritt auf ${player}',
-          fr: 'Éclosion sur ${player}',
           ja: '${player}に魔力爆散',
-          cn: '黑球点${player}',
           ko: '"${player}" 마력방출',
         },
         hatchOnYou: {
           en: 'Hatch on YOU',
-          de: 'Austritt auf DIR',
-          fr: 'Éclosion sur VOUS',
           ja: '自分に魔力爆散',
-          cn: '黑球点名',
           ko: '나에게 마력방출',
         },
       },

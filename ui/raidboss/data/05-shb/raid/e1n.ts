@@ -44,10 +44,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Tank Laser on YOU',
-          de: 'Tank Laser auf DIR',
-          fr: 'Tank laser sur VOUS',
           ja: '自分にタンクレーザー',
-          cn: '坦克射线点名',
           ko: '내게 탱크 레이저',
         },
       },
@@ -67,10 +64,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Drop Puddle, Run Middle',
-          de: 'Flächen ablegen, danach in die Mitte',
-          fr: 'Déposez les zones au sol, courez au milieu',
           ja: '捨て、そして中へ',
-          cn: '放圈，回中央',
           ko: '장판 깔고 한가운데로',
         },
       },

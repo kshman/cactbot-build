@@ -71,10 +71,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Altar Assembly spawned, kill in order!',
-          de: 'Altar-Mandragora erscheinen, in Reihenfolge besiegen!',
-          fr: 'Les mandragores d\'Altar apparaissent, tuez les dans l\'ordre',
-          cn: '已生成 神殿蔓德拉战队, 依次击杀!',
-          tc: '已生成 神殿蔓德拉戰隊, 依次擊殺!',
+          ja: 'Altar Assembly spawned, kill in order!',
           ko: '만드라즈 등장, 순서대로 잡아요!',
         },
       },
@@ -127,10 +124,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Bait three puddles',
-          de: '3 Flächen ködern',
-          fr: 'Déposez 3 flaques',
-          cn: '诱导三个圈圈',
-          tc: '誘導三個圈圈',
+          ja: 'Bait three puddles',
           ko: '장판 3개 유도',
         },
       },

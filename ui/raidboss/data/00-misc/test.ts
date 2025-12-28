@@ -126,20 +126,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         stack: {
           en: 'Stack for Angry Dummy',
-          de: 'Sammeln für Wütender Dummy',
-          fr: 'Packez-vous pour le Mannequin en colère',
           ja: '怒る木人に集合',
-          cn: '木人处集合',
-          tc: '木人處集合',
           ko: '화난 나무인형에 집합',
         },
         stackTTS: {
           en: 'Stack',
-          de: 'Sammeln',
-          fr: 'Packez-vous',
           ja: '集合',
-          cn: '集合',
-          tc: '集合',
           ko: '집합',
         },
       },
@@ -166,11 +158,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         elapsed: {
           en: 'Elapsed ms: ${elapsed}',
-          de: 'Abgelaufene ms: ${elapsed}',
-          fr: 'Expiré ms: ${elapsed}',
           ja: '経過時間：${elapsed}',
-          cn: '经过时间：${elapsed}',
-          tc: '經過時間：${elapsed}',
           ko: '경과 시간: ${elapsed}',
         },
       },
@@ -186,11 +174,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         poke: {
           en: 'poke #${numPokes}',
-          de: 'stups #${numPokes}',
-          fr: 'poussée #${numPokes}',
           ja: 'つつく #${numPokes}',
-          cn: '戳 #${numPokes}',
-          tc: '戳 #${numPokes}',
           ko: '${numPokes}번 찌름',
         },
       },
@@ -212,11 +196,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'PSYCH!!!',
-          de: 'AUF GEHTS!!!',
-          fr: 'MOTIVATION !!!',
           ja: '活を入れる！！',
-          cn: '激励！！',
-          tc: '激勵！！',
           ko: '힘내라!!',
         },
       },
@@ -239,11 +219,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'hahahahaha',
-          de: 'hahahahaha',
-          fr: 'hahahahaha',
           ja: 'ハハハハハ',
-          cn: '2333333333',
-          tc: '2333333333',
           ko: '푸하하하하핳',
         },
       },
@@ -258,11 +234,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'clapity clap',
-          de: 'klatschen',
-          fr: 'applaudissement',
           ja: '拍手',
-          cn: '鼓掌',
-          tc: '鼓掌',
           ko: '박수 짝짝짝',
         },
       },
@@ -276,11 +248,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Language: ${lang}',
-          de: 'Sprache: ${lang}',
-          fr: 'Langage: ${lang}',
           ja: '言語：${lang}',
-          cn: '语言: ${lang}',
-          tc: '語言: ${lang}',
           ko: '언어: ${lang}',
         },
       },
@@ -339,11 +307,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         close: {
           en: 'Dummy close!',
-          de: 'Puppe beendet!',
-          fr: 'Mannequin proche !',
           ja: '木人に近すぎ！',
-          cn: '靠近木人！',
-          tc: '靠近木人！',
           ko: '나무인형과 가까움!',
         },
       },
@@ -358,11 +322,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Config Value: ${value}',
-          de: 'Einstellungswert: ${value}',
-          fr: 'Valeur de configuration : ${value}',
           ja: '設定: ${value}',
-          cn: '配置值: ${value}',
-          tc: '配置值: ${value}',
           ko: '설정값: ${value}',
         },
       },
@@ -393,11 +353,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         casting: {
           en: 'ID ${id} is casting spell ID ${spellId}',
-          de: 'ID ${id} wirkt Zauber ID ${spellId}',
-          fr: 'ID ${id} incante le sort ID ${spellId}',
           ja: 'ID ${id} スペルID ${spellId}を詠唱中',
-          cn: 'ID ${id} 正在施法 ID ${spellId}',
-          tc: 'ID ${id} 正在施法 ID ${spellId}',
           ko: 'ID ${id}: 스킬 ID ${spellId}를 시전하는 중',
         },
       },
@@ -412,12 +368,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         countdown: {
           en: '${player} started ${seconds}s countdown',
-          // or inline: '${player} started {{CD}} countdown',
-          de: '${player} startet ${seconds}s countdown',
-          fr: '${player} a démarré un compte à rebours de ${seconds}s',
           ja: '${player} が ${seconds} 秒のカウントダウンを開始しました',
-          cn: '${player} 开始倒计时 ${seconds}秒',
-          tc: '${player} 開始倒數計時 ${seconds}秒',
           ko: '${player} ${seconds}초 초읽기를 시작했습니다',
         },
       },
@@ -431,11 +382,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         countdownFail: {
           en: '${player} failed to start countdown (result code: ${code})',
-          de: '${player} konnte Countdown nicht starten (Ergebniscode: ${code})',
-          fr: '${player} a échoué à démarrer un compte à rebours (result code: ${code})',
           ja: '${player} がカウントダウンを開始できませんでした (コード: ${code})',
-          cn: '${player} 开始倒计时失败 (结果代码: ${code})',
-          tc: '${player} 開始倒數計時失敗 (結果代碼: ${code})',
           ko: '${player} 초읽기를 시작하지 못했습니다 (반환 코드: ${code})',
         },
       },
@@ -448,11 +395,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         countdownCancel: {
           en: '${player} cancelled countdown',
-          de: '${player} hat den Countdown abgebrochen',
-          fr: '${player} a annulé le compte à rebours',
           ja: '${player} がカウントダウンをキャンセルしました',
-          cn: '${player} 取消倒计时',
-          tc: '${player} 取消倒數計時',
           ko: '${player} 초읽기를 취소했습니다',
         },
       },
@@ -474,11 +417,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'player = ${player}, player.job = ${player.job}, player.bogus = ${player.bogus}',
-          de: 'player = ${player}, player.job = ${player.job}, player.bogus = ${player.bogus}',
-          fr: 'player = ${player}, player.job = ${player.job}, player.bogus = ${player.bogus}',
           ja: 'player = ${player}, player.job = ${player.job}, player.bogus = ${player.bogus}',
-          cn: 'player = ${player}, player.job = ${player.job}, player.bogus = ${player.bogus}',
-          tc: 'player = ${player}, player.job = ${player.job}, player.bogus = ${player.bogus}',
           ko: 'player = ${player}, player.job = ${player.job}, player.bogus = ${player.bogus}',
         },
       },
@@ -500,10 +439,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Trigger countdown test',
-          de: 'Trigger countdown test',
-          fr: 'Test de décompte des triggers',
-          cn: '触发器倒计时测试',
-          tc: '觸發器倒數計時測試',
+          ja: 'Trigger countdown test',
           ko: '트리거 카운트다운 테스트',
         },
       },

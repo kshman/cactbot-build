@@ -35,18 +35,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         orbsOn: {
           en: 'Orbs on ${player}',
-          de: 'Orbs auf ${player}',
-          fr: 'Orbes sur ${player}',
           ja: '${player}に玉',
-          cn: '球点${player}',
           ko: '"${player}" 구슬',
         },
         orbsOnYou: {
           en: 'Orbs on YOU',
-          de: 'Orbs auf DIR',
-          fr: 'Orbes sur VOUS',
           ja: '自分に玉',
-          cn: '球点名',
           ko: '구슬 대상자',
         },
       },
@@ -61,10 +55,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Stun ${name}',
-          de: 'Unterbreche ${name}',
-          fr: 'Étourdissez ${name}',
           ja: 'スタン: ${name}',
-          cn: '眩晕${name}',
           ko: '${name}기절 시키기',
         },
       },
@@ -85,10 +76,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Laser Tethers',
-          de: 'Laser Verbindungen',
-          fr: 'Liens laser',
           ja: 'レーザー線',
-          cn: '激光连线',
           ko: '레이저 선',
         },
       },
@@ -102,10 +90,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Nisi A on YOU',
-          de: 'Nisi A auf DIR',
-          fr: 'Peine A sur VOUS',
           ja: '自分に仮判決α',
-          cn: '蓝BUFF点名',
           ko: '임시 판결 A 대상자',
         },
       },
@@ -119,10 +104,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Nisi B on YOU',
-          de: 'Nisi B auf DIR',
-          fr: 'Peine B sur VOUS',
           ja: '自分に仮判決β',
-          cn: '红BUFF点名',
           ko: '임시 판결 B 대상자',
         },
       },

@@ -119,10 +119,7 @@ const triggerSet: TriggerSet<Data> = {
         NW: Outputs.dirNW,
         safeCorner: {
           en: '${dir1} Corner (avoid poison)',
-          de: '${dir1} Ecke (vermeide das Gift)',
-          fr: 'Coin ${dir1} (évitez le poison)',
           ja: '${dir1}の隅へ (毒回避)',
-          cn: '${dir1} 角落 (避开毒)',
           ko: '${dir1} 구석 (독 피하기)',
         },
       },
@@ -255,10 +252,7 @@ const triggerSet: TriggerSet<Data> = {
         NW: Outputs.dirNW,
         text: {
           en: '${dir1} -> ${dir2} -> ${dir3} -> ${dir4}',
-          de: '${dir1} -> ${dir2} -> ${dir3} -> ${dir4}',
-          fr: '${dir1} -> ${dir2} -> ${dir3} -> ${dir4}',
           ja: '${dir1} -> ${dir2} -> ${dir3} -> ${dir4}',
-          cn: '${dir1} -> ${dir2} -> ${dir3} -> ${dir4}',
           ko: '${dir1} -> ${dir2} -> ${dir3} -> ${dir4}',
         },
       },
@@ -281,10 +275,7 @@ const triggerSet: TriggerSet<Data> = {
         spread: Outputs.spread,
         text: {
           en: '${dir1} -> Bait -> ${dir2}',
-          de: '${dir1} -> Ködern -> ${dir2}',
-          fr: '${dir1} -> Attendez -> ${dir2}',
           ja: '${dir1} -> 真ん中 -> ${dir2}',
-          cn: '${dir1} -> 诱导 -> ${dir2}',
           ko: '${dir1} -> 장판 유도 -> ${dir2}',
         },
       },
@@ -300,10 +291,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         groups: {
           en: 'Healer Groups on Topaz Stones',
-          de: 'Heilergruppen auf Topassteine',
-          fr: 'Groupes heal sur les Topazes',
           ja: 'トパーズの上でヒーラーと頭割り',
-          cn: '黄宝石处治疗分组分摊',
           ko: '돌 위에서 4:4 뭉쳐요',
         },
       },
@@ -323,10 +311,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         moveBehind: {
           en: 'Move Behind',
-          de: 'Nach Hinten bewegen',
-          fr: 'Allez derrière',
           ja: '背面へ',
-          cn: '去背面',
           ko: '보스 뒤로',
         },
       },
@@ -353,10 +338,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         moveFront: {
           en: 'Move Front',
-          de: 'Nach Vorne bewegen',
-          fr: 'Allez devant',
           ja: '前へ',
-          cn: '去正面',
           ko: '보스 앞으로',
         },
       },

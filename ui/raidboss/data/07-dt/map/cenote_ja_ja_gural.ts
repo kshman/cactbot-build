@@ -58,6 +58,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Tuligora Troupes spawned, kill in order!',
+          ja: 'Tuligora Troupes spawned, kill in order!',
           ko: '툴리고라 등장, 순서대로 잡아요',
         },
       },

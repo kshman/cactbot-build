@@ -61,11 +61,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         getOutOfFront: {
           en: 'Get out of front',
-          de: 'Weg von vorn',
-          fr: 'Éloignez-vous de l\'avant',
           ja: '正面から離れる',
-          cn: '远离正面',
-          tc: '遠離正面',
           ko: '정면 피해요',
         },
         tankBusterOnYou: Outputs.tankBusterOnYou,
@@ -97,20 +93,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         leftAndOut: {
           en: 'Left + Out',
-          de: 'Links + Raus',
-          fr: 'À gauche + Extérieur',
           ja: '左へ + 外へ',
-          cn: '左边 + 远离',
-          tc: '左邊 + 遠離',
           ko: '왼쪽 + 밖으로',
         },
         leftAndIn: {
           en: 'Left + In',
-          de: 'Links + Rein',
-          fr: 'À gauche + Intérieur',
           ja: '左へ + 中へ',
-          cn: '左边 + 靠近',
-          tc: '左邊 + 靠近',
           ko: '왼쪽 + 안으로',
         },
       },
@@ -127,20 +115,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         rightAndOut: {
           en: 'Right + Out',
-          de: 'Rechts + Raus',
-          fr: 'À droite + Extérieur',
           ja: '右へ + 外へ',
-          cn: '右边 + 远离',
-          tc: '右邊 + 遠離',
           ko: '오른쪽 + 밖으로',
         },
         rightAndIn: {
           en: 'Right + In',
-          de: 'Rechts + Rein',
-          fr: 'À droite + Intérieur',
           ja: '右へ + 中へ',
-          cn: '右边 + 靠近',
-          tc: '右邊 + 靠近',
           ko: '오른쪽 + 안으로',
         },
       },
@@ -216,11 +196,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Move to Black!',
-          de: 'In\'s schwarze laufen!',
-          fr: 'Allez en zone noire !',
           ja: '新月に！',
-          cn: '踩黑色！',
-          tc: '踩黑色！',
           ko: '깜장으로 가욧!',
         },
       },
@@ -255,11 +231,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Move to White!',
-          de: 'In\'s weiße laufen!',
-          fr: 'Allez en zone blanche !',
           ja: '満月に！',
-          cn: '踩白色！',
-          tc: '踩白色！',
           ko: '하양으로 가욧!',
         },
       },

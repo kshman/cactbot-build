@@ -30,9 +30,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Away from falling pillar',
-          de: 'Weg von der fallenden Säule',
-          fr: 'Éloignez-vous du pilier',
-          cn: '远离柱子落点',
+          ja: '落ちる柱から離れる',
           ko: '떨어지는 기둥 피해요',
         },
       },
@@ -158,9 +156,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Away from boss',
-          de: 'Weg vom Boss',
-          fr: 'Éloignez-vous du boss',
-          cn: '远离 BOSS',
+          ja: 'ボスから離れる',
           ko: '보스로 부터 먼 곳으로!',
         },
       },

@@ -31,10 +31,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Knockback (one row)',
-          de: 'Rückstoß (eine Reihe)',
-          fr: 'Poussée (une ligne)',
           ja: '一行ノックバック',
-          cn: '击退 (向后一行)',
           ko: '한 칸 넉백',
         },
       },
@@ -94,26 +91,17 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         smiley: {
           en: 'Get hit by blue smiley',
-          de: 'Von der blauen Grinsen treffen lassen',
-          fr: 'Faites-vous toucher par un sourir bleu',
           ja: 'ニコニコ(青)',
-          cn: '吃蓝脸AOE',
           ko: '파란 얼굴 맞아요',
         },
         frowny: {
           en: 'Get hit by red frowny',
-          de: 'Von dem roten Grimigen treffen lassen',
-          fr: 'Faites-vous toucher par un visage en colère rouge',
           ja: 'ムカムカ(赤)',
-          cn: '吃红脸AOE',
           ko: '빨간 얼굴 맞아요',
         },
         either: {
           en: 'Get hit by red or blue face',
-          de: 'Von irgendeiner Farbe treffen lassen',
-          fr: 'Faites-vous toucher par une couleur',
           ja: '青か赤の攻撃を受ける',
-          cn: '吃任意颜色脸的AOE',
           ko: '아무 얼굴이나 맞아요',
         },
       },

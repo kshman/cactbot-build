@@ -23,10 +23,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Limit break now!',
-          de: 'Limit break jetzt!',
-          fr: 'Transcendance maintenant !',
           ja: 'タンクLBを！',
-          cn: '坦克LB！',
           ko: '지금 탱크 리미트브레이크!',
         },
       },
@@ -69,10 +66,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Spread (Don\'t Stack!)',
-          de: 'Verteilen (Ohne stacken)',
-          fr: 'Dispersez-vous (Pas de package !)',
           ja: '散開（重ならないように）',
-          cn: '分散（不去分摊！）',
           ko: '흩어져요 (뭉치면 죽어요!)',
         },
       },
@@ -108,10 +102,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Lasers',
-          de: 'Laser',
-          fr: 'Lasers',
           ja: 'レーザー',
-          cn: '十字圣礼',
           ko: '십자 성례',
         },
       },
@@ -125,10 +116,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Puddle Tether on YOU',
-          de: 'Flächen-Verbindung auf dir',
-          fr: 'Lien Zone au sol sur VOUS',
           ja: '自分に線',
-          cn: '放圈连线点名',
           ko: '내게 장판 줄',
         },
       },

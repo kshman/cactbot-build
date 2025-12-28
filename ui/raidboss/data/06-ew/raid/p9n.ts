@@ -52,10 +52,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Drop Puddles Outside',
-          de: 'Flächen drausen ablegen',
-          fr: 'Déposez les zones au sol à l\'extérieur',
           ja: '散開',
-          cn: '散开',
           ko: '장판을 바깥에',
         },
       },
@@ -89,10 +86,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Get Behind and Under',
-          de: 'Geh nach Hinten und Unter den Boss',
-          fr: 'Allez derrière et sous le boss',
           ja: '後ろ => 中へ',
-          cn: '去背后靠近',
           ko: '안쪽 보스 뒤로',
         },
       },
@@ -105,9 +99,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Go Front and Under',
-          de: 'Geh nach Vorne und Unter den Boss',
           ja: '前 => 中へ',
-          cn: '去正面靠近',
           ko: '안쪽 보스 앞으로',
         },
       },
@@ -120,10 +112,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Get Behind and Out',
-          de: 'Geh nach Hinten und Raus',
-          fr: 'Allez derrière et à l\'extérieur',
           ja: '後ろの外側へ',
-          cn: '去背后远离',
           ko: '바깥 보스 뒤로',
         },
       },
@@ -136,10 +125,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Go Front and Out',
-          de: 'Geh nach Vorne und Raus',
-          fr: 'Allez devant et à l\'extérieur',
           ja: '前の外側へ',
-          cn: '去正面远离',
           ko: '바깥 보스 앞으로',
         },
       },
@@ -152,10 +138,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Hide behind unbroken meteor',
-          de: 'Hinter einem nicht zerbrochenen Meteor verstecken',
-          fr: 'Cachez-vous derrière le météore intact',
           ja: '壊れていないメテオの後ろへ',
-          cn: '躲在未破碎的陨石后',
           ko: '멀쩡한 돌 뒤에 숨어요',
         },
       },
@@ -180,18 +163,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         tankbusterOnYouStretchTethers: {
           en: 'Tankbuster on YOU -- stretch tether',
-          de: 'Tankbuster auf DIR -- Verbindung strecken',
-          fr: 'Tankbuster sur VOUS -- Étirez le lien',
           ja: 'タン強 -- 離れる',
-          cn: '坦克死刑 -- 远离',
           ko: '내게 탱크버스터 - 줄 늘려요',
         },
         tankbusterOn: {
           en: 'Tankbuster on ${player}',
-          de: 'Tankbuster auf ${player}',
-          fr: 'Tankbuster sur ${player}',
           ja: 'タン強: ${player}',
-          cn: '坦克死刑 ${player}',
           ko: '탱크버스터: ${player}',
         },
       },

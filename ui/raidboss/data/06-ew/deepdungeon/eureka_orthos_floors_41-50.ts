@@ -34,10 +34,7 @@ const triggerSet: TriggerSet<Data> = {
         out: Outputs.out,
         interruptOrOut: {
           en: 'Out or interrupt ${name}',
-          de: 'Raus oder unterbreche ${name}',
-          fr: 'Extérieur ou interrompez ${name}',
           ja: '沈黙: ${name}',
-          cn: '远离或打断 ${name}',
           ko: '밖으로 또는 인터럽트: ${name}',
         },
       },
@@ -70,10 +67,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Break line-of-sight to ${name}',
-          de: 'Unterbreche Sichtlinie zu ${name}',
-          fr: 'Masquez le champ de vision vers ${name}',
           ja: '${name}の視線から隠れる',
-          cn: '利用掩体卡 ${name} 的视线',
           ko: '시야 밖으로 숨어요: ${name}',
         },
       },
@@ -112,10 +106,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Run Away From Boss',
-          de: 'Renn weg vom Boss',
-          fr: 'Éloignez-vous du boss',
           ja: 'ボスから離れる',
-          cn: '远离Boss',
           ko: '보스에게서 멀리 떨어져요',
         },
       },
@@ -143,10 +134,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Orb on YOU',
-          de: 'Orb auf DIR',
-          fr: 'Orbe sur VOUS',
           ja: '自分に玉',
-          cn: '球点名',
           ko: '내게 구슬이',
         },
       },

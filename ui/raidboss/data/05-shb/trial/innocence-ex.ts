@@ -36,10 +36,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Swords!',
-          de: 'Schwerter!',
-          fr: 'Épées !',
           ja: '剣くるよ',
-          cn: '剑!',
           ko: '칼 돌아와요!',
         },
       },
@@ -65,42 +62,27 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         starbirthCorner: {
           en: 'Starbirth: Corner',
-          de: 'Sternengeburt: Ecken',
-          fr: 'Accouchement Stellaire : Coin',
           ja: 'スターバース: 角へ',
-          cn: '创星：角落躲避',
           ko: '스타버스: 구석으로',
         },
         starbirthAvoidCharge: {
           en: 'Starbirth: Avoid + Charge',
-          de: 'Sternengeburt: Ausweichen + Charge',
-          fr: 'Accouchement Stellaire : Évitez + Charge',
           ja: 'スターバース: 玉のない隅へ',
-          cn: '创星：躲避 + 冲锋',
           ko: '스타버스: 구슬없는 곳으로',
         },
         starbirthExplode: {
           en: 'Starbirth: Explode',
-          de: 'Sternengeburt: Explosion',
-          fr: 'Accouchement Stellaire : Explosion',
           ja: 'スターバース: 爆発',
-          cn: '创星：爆炸',
           ko: '스타버스: 폭파',
         },
         starbirthCharge: {
           en: 'Starbirth: Charge',
-          de: 'Sternengeburt: Charge',
-          fr: 'Accouchement Stellaire : Charge',
           ja: 'スターバース: 突進',
-          cn: '创星：冲锋',
           ko: '스타버스: 돌진',
         },
         starbirthEnrage: {
           en: 'Starbirth: Enrage',
-          de: 'Sternengeburt: Finalangriff',
-          fr: 'Accouchement Stellaire : Enrage',
           ja: 'スターバース: 時間切れ',
-          cn: '创星：狂暴',
           ko: '스타버스: 곧 다 죽어',
         },
       },
@@ -147,18 +129,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         avoidChargeAndOrbs: {
           en: 'Avoid Charge and Orbs',
-          de: 'Charge und Orbs ausweichen',
-          fr: 'Évitez les charges et les orbes',
           ja: '玉と突進避けて',
-          cn: '躲避冲锋与晶石',
           ko: '구슬과 돌진 피해요',
         },
         avoidCharge: {
           en: 'Avoid Charge',
-          de: 'Charge ausweichen',
-          fr: 'Évitez les charges',
           ja: '突進避けて',
-          cn: '躲避冲锋',
           ko: '돌진 피해요',
         },
       },
@@ -173,10 +149,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Get to Safe Corner',
-          de: 'Geh in die sichere Ecke',
-          fr: 'Allez au coin safe',
           ja: '安置へ',
-          cn: '去安全角落',
           ko: '안전한 구석으로',
         },
       },
@@ -190,10 +163,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Grab East/West Venery Adds',
-          de: 'Nehme östliches/westliches Wollust Add',
-          fr: 'Attrapez les adds en Est/Ouest',
           ja: '雑魚のタゲ取って',
-          cn: '接小怪仇恨',
           ko: '동서 쫄 잡아요',
         },
       },
@@ -220,26 +190,17 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         lineStack: {
           en: 'Line Stack',
-          de: 'Sammeln in einer Linie',
-          fr: 'Packez-vous en ligne',
           ja: 'シェア',
-          cn: '直线分摊',
           ko: '뭉쳐요',
         },
         aimLineAtBackOrb: {
           en: 'Aim Line At Back Orb',
-          de: 'Ziehle mit der Linie auf den entferntesten Orb',
-          fr: 'Visez avec la ligne à l\'arrière de l\'orbe',
           ja: '後ろの玉に当てて',
-          cn: '分摊瞄准后方晶石',
           ko: '뒤에 구슬 맞춰요',
         },
         avoidOrbsWithLine: {
           en: 'Avoid Orbs With Line',
-          de: 'Ziehle nicht auf einen Orb',
-          fr: 'Évitez l\'orbe avec la ligne',
           ja: '玉に当てるな',
-          cn: '躲开晶石与直线',
           ko: '구슬에 닿으면 안돼요',
         },
       },
@@ -254,10 +215,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Get to Safe Corner',
-          de: 'Geh in die sichere Ecke',
-          fr: 'Allez au coin safe',
           ja: '安置へ',
-          cn: '去安全角落',
           ko: '안전한 구석으로',
         },
       },
@@ -271,10 +229,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Tether on YOU',
-          de: 'Verbindung auf DIR',
-          fr: 'Lien sur VOUS',
           ja: '線ついた',
-          cn: '连线点名',
           ko: '내게 줄!',
         },
       },
@@ -293,18 +248,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         circleAvoidOrbs: {
           en: 'Circle, Avoid Orbs',
-          de: 'Kreis, vermeide Orbs',
-          fr: 'Cercle, Évitez les orbes',
           ja: 'オーブに当てないで',
-          cn: '圆圈点名，远离晶石',
           ko: '오브 피해요',
         },
         circleOnYou: {
           en: 'Circle on YOU',
-          de: 'Kreis auf DIR',
-          fr: 'Cercle sur vous',
           ja: 'サークルついた',
-          cn: '圆圈点名',
           ko: '내게 서클',
         },
       },
@@ -318,10 +267,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Avoid Swords then Ray',
-          de: 'Weiche den Schwertern aus, danach Strahl',
-          fr: 'Évitez l\'épée puis le rayon',
           ja: '剣避けてからピザカット',
-          cn: '躲避剑与激光',
           ko: '칼 먼저 피하고 바닥 피해요',
         },
       },
@@ -347,10 +293,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Rotate Left',
-          de: 'Links rum rotieren',
-          fr: 'Tournez vers la gauche',
           ja: '時針回り',
-          cn: '向左旋转',
           ko: '왼쪽으로 돌아요',
         },
       },
@@ -364,10 +307,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Rotate Right',
-          de: 'Rechts rum rotieren',
-          fr: 'Tournez vers la droite',
           ja: '逆時針回り',
-          cn: '向右旋转',
           ko: '오른쪽으로 돌아요',
         },
       },
@@ -381,10 +321,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Rotate Left',
-          de: 'Links rum rotieren',
-          fr: 'Tournez vers la gauche',
           ja: '時針回り',
-          cn: '向左旋转',
           ko: '왼쪽으로 돌아요',
         },
       },
@@ -398,10 +335,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Rotate Right',
-          de: 'Rechts rum rotieren',
-          fr: 'Tournez vers la droite',
           ja: '逆時針回り',
-          cn: '向右旋转',
           ko: '오른쪽으로 돌아요',
         },
       },

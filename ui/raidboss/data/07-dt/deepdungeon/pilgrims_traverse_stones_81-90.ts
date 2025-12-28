@@ -43,23 +43,17 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         maul: {
           en: 'Maul',
-          de: 'Zerknirscher',
-          cn: '咬杀',
-          tc: '咬殺',
+          ja: 'Maul',
           ko: '물어 죽이기',
         },
         maulOnYou: {
           en: 'Maul on YOU',
-          de: 'Zerknirscher auf DIR',
-          cn: '咬杀点名',
-          tc: '咬殺點名',
+          ja: 'Maul on YOU',
           ko: '내게 물어 죽이기',
         },
         maulOnPlayer: {
           en: 'Maul on ${player}',
-          de: 'Zerknirscher auf ${player}',
-          cn: '咬杀点 ${player}',
-          tc: '咬殺點 ${player}',
+          ja: 'Maul on ${player}',
           ko: '물어 죽이기: ${player}',
         },
       },
@@ -110,23 +104,17 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         heat: {
           en: 'Pyretic, Avoid AoE',
-          de: 'Pyretisch, vermeide AoE',
-          cn: '热病, 避开AoE',
-          tc: '熱病, 避開AoE',
+          ja: 'Pyretic, Avoid AoE',
           ko: '파이레틱, 장판 피해욧',
         },
         heatOnYou: {
           en: 'Pyretic on YOU, Away from Group => Stop Everything!',
-          de: 'Pyretisch auf DIR, Weg von der Gruppe => Stoppe Alles!',
-          cn: '热病点名, 远离小队成员 => 停止一切行动!',
-          tc: '熱病點名, 遠離小隊成員 => 停止一切行動!',
+          ja: 'Pyretic on YOU, Away from Group => Stop Everything!',
           ko: '내게 파이레틱, 혼자 멀리 🔜 그대로 멈춰욧!',
         },
         heatOnPlayer: {
           en: 'Pyretic on ${player}, Avoid AoE',
-          de: 'Pyretisch auf ${player}, vermeide AoE',
-          cn: '热病点 ${player}, 避开AoE',
-          tc: '熱病點 ${player}, 避開AoE',
+          ja: 'Pyretic on ${player}, Avoid AoE',
           ko: '파이레틱: ${player}, 장판 피해욧',
         },
       },
@@ -162,9 +150,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Avoid AoE',
-          de: 'Vermeide AoE',
-          cn: '避开AoE',
-          tc: '避開AoE',
+          ja: 'Avoid AoE',
           ko: '장판 피해욧',
         },
       },
@@ -192,9 +178,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: '${count}x attacks => Get Behind',
-          de: '${count}x Attacken => Geh Hinter',
-          cn: '${count}次攻击 => 靠近',
-          tc: '${count}次攻擊 => 靠近',
+          ja: '${count}x attacks => Get Behind',
           ko: '공격x${count} 🔜 엉댕이로',
         },
       },
@@ -220,11 +204,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         breakLOS: {
           en: 'Break line-of-sight to ${name}',
-          de: 'Unterbreche Sichtlinie zu ${name}',
-          fr: 'Masquez le champ de vision vers ${name}',
           ja: '${name}の視線から隠れる',
-          cn: '利用掩体卡 ${name} 的视线',
-          tc: '利用掩體卡 ${name} 的視線',
           ko: '시선 잘라요: ${name}',
         },
       },
@@ -251,9 +231,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Get Behind + Left',
-          de: 'Geh Hinten + Links',
-          cn: '去背后 + 左侧',
-          tc: '去背後 + 左側',
+          ja: 'Get Behind + Left',
           ko: '뒤+왼쪽으로',
         },
       },
@@ -266,9 +244,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Get Behind + Right',
-          de: 'Geh Hinten + Rechts',
-          cn: '去背后 + 右侧',
-          tc: '去背後 + 右側',
+          ja: 'Get Behind + Right',
           ko: '뒤+오른쪽으로',
         },
       },

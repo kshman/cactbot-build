@@ -61,9 +61,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Avoid jump => Out',
-          de: 'Sprung vermeiden => Raus',
-          cn: '避开跳跃 => 外',
-          tc: '避開跳躍 => 外',
+          ja: 'Avoid jump => Out',
           ko: '점프 피하고 🔜 밖으로',
         },
       },
@@ -99,9 +97,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: '${mech} x3',
-          de: '${mech} x3',
-          cn: '${mech} x3',
-          tc: '${mech} x3',
+          ja: '${mech} x3',
           ko: '${mech}x3',
         },
         knockback: Outputs.knockback,

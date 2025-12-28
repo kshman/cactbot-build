@@ -31,23 +31,17 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         enrage: {
           en: 'Parasitism',
-          de: 'Instinkt des Räubers',
-          cn: '捕食行动',
-          tc: '捕食行動',
+          ja: 'Parasitism',
           ko: '포식',
         },
         enrageOnYou: {
           en: 'Parasitism on YOU',
-          de: 'Instinkt des Räubers auf DIR',
-          cn: '捕食行动点名',
-          tc: '捕食行動點名',
+          ja: 'Parasitism on YOU',
           ko: '내게 포식!',
         },
         enrageOnPlayer: {
           en: 'Parasitism on ${player}',
-          de: 'Instinkt des Räubers auf ${player}',
-          cn: '捕食行动点 ${player}',
-          tc: '捕食行動點 ${player}',
+          ja: 'Parasitism on ${player}',
           ko: '포식: ${player}',
         },
       },
@@ -109,23 +103,17 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         middleOrOuter: {
           en: 'Get Middle or Outer ring',
-          de: 'Geh zum mittleren oder äußeren Ring',
-          cn: '去中圈或外圈',
-          tc: '去中圈或外圈',
+          ja: 'Get Middle or Outer ring',
           ko: '중간 / 바깥 링으로',
         },
         innerOrOuter: {
           en: 'Get Inner or Outer ring',
-          de: 'Geh zum inneren oder äußeren Ring',
-          cn: '去内圈或外圈',
-          tc: '去內圈或外圈',
+          ja: 'Get Inner or Outer ring',
           ko: '안쪽 / 바깥 링으로',
         },
         innerOrMiddle: {
           en: 'Get Inner or Middle ring',
-          de: 'Geh zum inneren oder mittleren Ring',
-          cn: '去内圈或中圈',
-          tc: '去內圈或中圈',
+          ja: 'Get Inner or Middle ring',
           ko: '안쪽 / 중간 링으로',
         },
       },
@@ -163,9 +151,7 @@ const triggerSet: TriggerSet<Data> = {
         right: Outputs.right,
         text: {
           en: '${dir}, Behind Hand',
-          de: '${dir}, hinter der Hand',
-          cn: '${dir}, 去手后',
-          tc: '${dir}, 去手後',
+          ja: '${dir}, Behind Hand',
           ko: '${dir}, 손 뒤로',
         },
       },
@@ -180,11 +166,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Chasing AoE on YOU',
-          de: 'Verfolgende AoE auf DIR',
-          fr: 'Ruée sur VOUS',
           ja: '追跡AOE',
-          cn: '追踪AOE点名',
-          tc: '追蹤AOE點名',
           ko: '내게 따라오는 장판',
         },
       },

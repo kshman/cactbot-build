@@ -149,42 +149,27 @@ const triggerSet: TriggerSet<Data> = {
           south: Outputs.south,
           twoPlatforms: {
             en: '${platform1} / ${platform2}',
-            de: '${platform1} / ${platform2}',
-            fr: '${platform1} / ${platform2}',
             ja: '${platform1} / ${platform2}',
-            cn: '${platform1} / ${platform2}',
             ko: '${platform1} / ${platform2}',
           },
           orientation: {
             en: 'Line Bull: ${location}',
-            de: 'Bullen-Linie: ${location}',
-            fr: 'Taureau Ligne : ${location}',
             ja: '線付き牛: ${location}',
-            cn: '连线牛: ${location}',
             ko: '줄 달린 소: ${location}',
           },
           famineOrientation: {
             en: 'Minotaurs without Bird: ${location}',
-            de: 'Minotauren ohne Vögel: ${location}',
-            fr: 'Minotaure sans oiseau : ${location}',
             ja: 'ミノがある場所: ${location}',
-            cn: '无鸟牛头人: ${location}',
             ko: '새 없는 곳: ${location}',
           },
           deathOrientation: {
             en: 'Lightning Bull: ${location}',
-            de: 'Blitz-Bulle: ${location}',
-            fr: 'Taureau éclair : ${location}',
             ja: '線付いてない牛: ${location}',
-            cn: '钢铁牛: ${location}',
             ko: '줄 안달린 소: ${location}',
           },
           warOrientation: {
             en: 'Bird with Minotaurs: ${location}',
-            de: 'Vögel mit Minotauren : ${location}',
-            fr: 'Oiseau sans Minotaure : ${location}',
             ja: 'ミノと鳥: ${location}',
-            cn: '有鸟牛头人: ${location}',
             ko: '새 + 미노타우로스: ${location}',
           },
         };
@@ -360,10 +345,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Split Tankbusters',
-          de: 'getrennte Tankbuster',
-          fr: 'Séparez des Tankbusters',
           ja: '2人同時タンク強攻撃',
-          cn: '分散死刑',
           ko: '따로맞는 탱버',
         },
       },
@@ -389,10 +371,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         baitSoon: {
           en: 'Bait on Empty Platform Soon',
-          de: 'Bald auf freier Plattform ködern',
-          fr: 'Déposez sur une plateforme vide bientôt',
           ja: '果実がない空きの円盤へ移動',
-          cn: '移动到空平台',
           ko: '빈 플랫폼에서 장판 유도 준비',
         },
       },
@@ -407,10 +386,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         separateHealerGroups: {
           en: 'Healer Group Platforms',
-          de: 'Heiler-Gruppen Plattformen',
-          fr: 'Groupes heals sur les plateformes',
           ja: '円盤の内でヒーラーと頭割り',
-          cn: '治疗分组平台',
           ko: '힐러 그룹별로 플랫폼',
         },
       },
@@ -492,74 +468,47 @@ const triggerSet: TriggerSet<Data> = {
         output.responseOutputStrings = {
           bullTether: {
             en: 'Bull Tether (Line AoE)',
-            de: 'Stier-Verbindung (Linien AoE)',
-            fr: 'Lien Taureau (AoE en ligne)',
             ja: '牛から直線',
-            cn: '牛连线 (直线AOE)',
             ko: '소 (직선 장판)',
           },
           deathBullTether: {
             en: 'Bull Tether (Line AoE)',
-            de: 'Stier-Verbindung (Linien AoE)',
-            fr: 'Lien Taureau (AoE en ligne)',
             ja: '牛から直線',
-            cn: '牛连线 (直线AOE)',
             ko: '소 (직선 장판)',
           },
           warBullTether: {
             en: 'Bull Tether (Line AoE)',
-            de: 'Stier-Verbindung (Linien AoE)',
-            fr: 'Lien Taureau (AoE en ligne)',
             ja: '牛から直線',
-            cn: '牛连线 (直线AOE)',
             ko: '소 (직선 장판)',
           },
           minotaurTether: {
             en: 'Minotaur Tether (Big Cleave)',
-            de: 'Minotaurus-Verbindung (Große Kegel-AoE)',
-            fr: 'Lien Minotaure (Gros Cleave)',
             ja: 'ミノから扇',
-            cn: '牛头人连线 (大顺劈)',
             ko: '미노타우로스 (부채꼴 장판)',
           },
           famineMinotaurTether: {
             en: 'Cross Minotaur Tethers (Big Cleave)',
-            de: 'Überkreuze Minotaurus-Verbindung (Große Kegel-AoE)',
-            fr: 'Lien Minotaure en croix (Gros Cleave)',
             ja: 'ミノからの扇を交える',
-            cn: '交叉牛头人连线 (大顺劈)',
             ko: '미노타우로스 선 교차시키기 (부채꼴 장판)',
           },
           warMinotaurTether: {
             en: 'Minotaur Tether (Big Cleave)',
-            de: 'Minotaurus-Verbindung (Große Kegel-AoE)',
-            fr: 'Lien Minotaure (Gros Cleave)',
             ja: 'ミノから扇',
-            cn: '牛头人连线 (大顺劈)',
             ko: '미노타우로스 (부채꼴 장판)',
           },
           warBirdTether: {
             en: 'Bird Tether',
-            de: 'Vogel-Verbindung',
-            fr: 'Lien Oiseau',
             ja: '鳥から線',
-            cn: '鸟连线',
             ko: '새',
           },
           noTether: {
             en: 'No Tether, Bait Minotaur Cleave (Middle)',
-            de: 'Keine Verbindung, Minotaurus-Verbindung ködern (Mitte)',
-            fr: 'Aucun lien, encaissez le cleave du Minotaure (Milieu)',
             ja: '線なし、中央で扇を誘導',
-            cn: '无连线，诱导牛头人顺劈 (中间)',
             ko: '선 없음, 미노타우로스 유도 (중앙)',
           },
           famineNoTether: {
             en: 'No Tether, Bait Minotaur Cleave',
-            de: 'Keine Verbindung, Minotaurus-Verbindung ködern',
-            fr: 'Aucun lien, encaissez le cleave du Minotaure',
             ja: '線なし、ミノからの扇を誘導',
-            cn: '无连线，诱导牛头人顺劈',
             ko: '선 없음, 미노타우로스 유도',
           },
         };
@@ -705,10 +654,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         comboText: {
           en: '${effect1} => ${effect2} => ${effect3} => ${effect4}',
-          de: '${effect1} => ${effect2} => ${effect3} => ${effect4}',
-          fr: '${effect1} => ${effect2} => ${effect3} => ${effect4}',
           ja: '${effect1} => ${effect2} => ${effect3} => ${effect4}',
-          cn: '${effect1} => ${effect2} => ${effect3} => ${effect4}',
           ko: '${effect1} 🔜 ${effect2} 🔜 ${effect3} 🔜 ${effect4}',
         },
         spread: Outputs.spread,
@@ -752,10 +698,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         bigAoEMiddle: {
           en: 'Big AOE, Get Middle',
-          de: 'Große AoE, geh in die Mitte',
-          fr: 'Grosse AoE, allez au milieu',
           ja: '強力な全体攻撃、真ん中へ',
-          cn: '超大伤害，去中间',
           ko: '아픈 광뎀, 중앙으로',
         },
       },

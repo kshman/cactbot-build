@@ -30,26 +30,17 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         dropMeteorWest: {
           en: 'Drop Meteor West',
-          de: 'Meteor im Westen ablegen',
-          fr: 'Déposez le météore à l\'ouest',
           ja: 'メテオを西に',
-          cn: '西侧放陨石',
           ko: '메테오 서쪽에 버려요',
         },
         dropMeteorEast: {
           en: 'Drop Meteor East',
-          de: 'Meteor im Osten ablegen',
-          fr: 'Déposez le météore à l\'est',
           ja: 'メテオを東に',
-          cn: '陨石放东边',
           ko: '메테오 동쪽에 버려요',
         },
         meteor: {
           en: 'Meteor',
-          de: 'Meteor',
-          fr: 'Météore',
           ja: 'メテオ',
-          cn: '陨石',
           ko: '메테오',
         },
       },
@@ -69,10 +60,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Hide Behind Boulder',
-          de: 'Hinter einem Felsen verstecken',
-          fr: 'Cachez-vous derrière un rocher',
           ja: '隕石の後ろに',
-          cn: '躲在岩石后',
           ko: '운석 뒤로',
         },
       },
@@ -91,10 +79,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Get Off',
-          de: 'Runter gehen',
-          fr: 'Descendez',
           ja: '横へ',
-          cn: '站左右小平台',
           ko: '바깥으로 피해요',
         },
       },

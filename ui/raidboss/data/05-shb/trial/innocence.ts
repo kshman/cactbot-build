@@ -26,10 +26,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Look Away, Get Towers',
-          de: 'Weg schauen, Türme nehmen',
-          fr: 'Regardez ailleurs, prenez une tour',
           ja: '背中を向けて、塔を踏む',
-          cn: '背对BOSS，踩塔',
           ko: '뒤돌아서서 타워 밟아요',
         },
       },
@@ -44,10 +41,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Swords!',
-          de: 'Schwerter!',
-          fr: 'Épées !',
           ja: '剣くるよ',
-          cn: '剑!',
           ko: '칼 돌아와요!',
         },
       },
@@ -73,10 +67,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Avoid Charge',
-          de: 'ausweichen',
-          fr: 'Évitez les charges',
           ja: '突進避けて',
-          cn: '躲避冲锋',
           ko: '돌진 피해요',
         },
       },
@@ -89,10 +80,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Line Stack',
-          de: 'In einer Linie sammeln',
-          fr: 'Packez-vous en ligne',
           ja: 'シェア',
-          cn: '直线分摊',
           ko: '뭉쳐요',
         },
       },
@@ -106,10 +94,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Circle on YOU',
-          de: 'Kreis auf DIR',
-          fr: 'Cercle sur vous',
           ja: 'サークルついた',
-          cn: '圈圈点名',
           ko: '내게 서클',
         },
       },
@@ -124,10 +109,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Rotate Right',
-          de: 'Rechts rum rotieren',
-          fr: 'Tournez vers la droite',
           ja: '時針回り',
-          cn: '向右旋转',
           ko: '오른쪽으로 돌아요',
         },
       },

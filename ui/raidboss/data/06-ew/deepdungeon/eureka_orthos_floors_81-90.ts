@@ -149,13 +149,8 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          // "Intercardinals" may confuse people between absolute and relative,
-          // so add in the "of boss" just to be extra clear.
           en: 'Go Intercardinal of Boss',
-          de: 'Geh in eine Intercardinale Himmelsrichtung vom Boss',
-          fr: 'Allez en intercardinal du boss',
           ja: 'ボスの斜めへ',
-          cn: '去Boss的斜角方向',
           ko: '보스 비스듬히 피해요',
         },
       },
@@ -257,10 +252,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: '${first} => ${second} => ${third}',
-          de: '${first} => ${second} => ${third}',
-          fr: '${first} => ${second} => ${third}',
           ja: '${first} => ${second} => ${third}',
-          cn: '${first} => ${second} => ${third}',
           ko: '${first} 🔜 ${second} 🔜 ${third}',
         },
       },
@@ -347,18 +339,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         between: {
           en: '${safe}, between eggs',
-          de: '${safe}, zwichen den Eiern',
-          fr: '${safe}, entre les œufs',
           ja: '${safe}, たまごの間',
-          cn: '${safe}, 蛋中间',
           ko: '${safe}, 알 사이',
         },
         safe: {
           en: '${safe}',
-          de: '${safe}',
-          fr: '${safe}',
           ja: '${safe}',
-          cn: '${safe}',
           ko: '${safe}',
         },
         northEast: Outputs.northeast,

@@ -44,18 +44,12 @@ const boundOfFaithLightningTetherResponse = (data: Data, _matches: unknown, outp
   output.responseOutputStrings = {
     onYou: {
       en: 'Take Lightning To Tanks',
-      de: 'Bring Blitz zu den Tanks',
-      fr: 'Donnez l\'Éclair au tanks',
       ja: 'タンクに近づく',
-      cn: '靠近坦克',
       ko: '번개징 탱커쪽으로',
     },
     tetherInfo: {
       en: 'Lightning on ${player}',
-      de: 'Blitz auf ${player}',
-      fr: 'Éclair sur ${player}',
       ja: '${player}に感電',
-      cn: '雷点${player}',
       ko: '"${player}" 번개징 대상자',
     },
     unknownTarget: Outputs.unknown,
@@ -98,10 +92,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Protean -> Partner Stacks',
-          de: 'Himmelsrichtung -> Auf Partner sammeln',
-          fr: 'Positions -> Packez-vous avec votre partenaire',
           ja: '8方向散開 -> ペア頭割り',
-          cn: '八方 -> 2人分摊',
           ko: '8산개 -> 파트너 쉐어뎀',
         },
       },
@@ -114,10 +105,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Protean -> Spread',
-          de: 'Himmelsrichtung -> Verteilen',
-          fr: 'Positions -> Dispersez-vous',
           ja: '8方向散開 -> 散開',
-          cn: '八方 -> 分散',
           ko: '8산개 -> 산개',
         },
       },
@@ -130,10 +118,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Protean -> Holy Groups',
-          de: 'Himmelsrichtung -> Sanctus Gruppen',
-          fr: 'Positions -> Groupes',
           ja: '8方向散開 -> 光3方向頭割り',
-          cn: '八方 -> 光三向分摊',
           ko: '8산개 -> 홀리 그룹 쉐어',
         },
       },
@@ -146,10 +131,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Line Cleave -> Knockback',
-          de: 'Linien AoE -> Rückstoß',
-          fr: 'AoE en ligne -> Poussée',
           ja: '直線範囲 -> ノックバック',
-          cn: '直线 -> 击退',
           ko: '직선 장판 -> 넉백',
         },
       },
@@ -162,10 +144,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Line Cleave -> Out',
-          de: 'Linien AoE -> Raus',
-          fr: 'AoE en ligne -> Extérieur',
           ja: '直線範囲 -> 離れる',
-          cn: '直线 -> 去外侧',
           ko: '직선 장판 -> 바깥으로',
         },
       },
@@ -178,10 +157,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Line Cleave + Bait',
-          de: 'Linien AoE -> Ködern',
-          fr: 'AoE en ligne -> Déposez au sol',
           ja: '直線範囲 -> AoE誘導',
-          cn: '直线 -> 光诱导',
           ko: '직선 장판 + 장판 유도',
         },
       },
@@ -233,26 +209,17 @@ const triggerSet: TriggerSet<Data> = {
         output.responseOutputStrings = {
           fireTetherOnYou: {
             en: 'Stack With Fire Tether',
-            de: 'Auf der Feuer-Verbindung sammeln',
-            fr: 'Packez-vous avec le lien de Feu',
             ja: '炎の線を頭割り',
-            cn: '火分摊点名',
             ko: '화염 선 대상자, 쉐어뎀',
           },
           lightningTetherOnYou: {
             en: 'Take Lightning To Tanks',
-            de: 'Bring Blitz zum Tank',
-            fr: 'Donnez l\'Éclair aux tanks',
             ja: 'タンクに近づく',
-            cn: '雷靠近坦克',
             ko: '번개 탱커한테 넘기기',
           },
           tetherInfo: {
             en: 'Lightning on ${player1}, Fire on ${player2}',
-            de: 'Blitz auf ${player1}, Feuer auf ${player2}',
-            fr: 'Éclair sur ${player1}, Feu sur ${player2}',
             ja: '${player1} に雷, ${player2} に炎',
-            cn: '雷点${player1}，火点${player2}',
             ko: '"${player1}" 번개, "${player2}" 화염',
           },
         };
@@ -303,19 +270,13 @@ const triggerSet: TriggerSet<Data> = {
         output.responseOutputStrings = {
           fireTetherOnYou: {
             en: 'Stack With Fire Tether',
-            de: 'Auf der Feuer-Verbindung sammeln',
-            fr: 'Packez-vous avec le lien de Feu',
             ja: '炎の線を頭割り',
-            cn: '火分摊点名',
             ko: '화염 선 대상자, 쉐어뎀',
           },
           holyTetherOnYou: Outputs.awayFromGroup,
           tetherInfo: {
             en: 'Holy on ${player1}, Fire on ${player2}',
-            de: 'Sanctus auf ${player1}, Feuer auf ${player2}',
-            fr: 'Sacre sur ${player1}, Feu sur ${player2}',
             ja: '${player1} に光, ${player2} に炎',
-            cn: '光点${player1}，火点${player2}',
             ko: '"${player1}" 홀리, "${player2}" 화염',
           },
         };
@@ -390,10 +351,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Fire: Go to Blue',
-          de: 'Feuer: Geh zu Blau',
-          fr: 'Feu : Allez sur le Bleu',
           ja: '炎: 安置は青',
-          cn: '火：去蓝圈',
           ko: '화염: 파랑으로',
         },
       },
@@ -407,10 +365,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Lightning: Go to Red',
-          de: 'Blitz: Geh zu Rot',
-          fr: 'Éclair : Allez sur le Rouge',
           ja: '雷: 安置は赤',
-          cn: '雷：去红圈',
           ko: '번개: 빨강으로',
         },
       },
@@ -424,10 +379,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Fire: Go to Blue',
-          de: 'Feuer: Geh zu Blau',
-          fr: 'Feu : Allez sur le Bleu',
           ja: '炎: 安置は青',
-          cn: '火：去蓝圈',
           ko: '화염: 파랑으로',
         },
       },
@@ -441,10 +393,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Lightning: Go to Red',
-          de: 'Blitz: Geh zu Rot',
-          fr: 'Éclair : Allez sur le Rouge',
           ja: '雷: 安置は赤',
-          cn: '雷：去红圈',
           ko: '번개: 빨강으로',
         },
       },
@@ -458,10 +407,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Fire: Go to Blue',
-          de: 'Feuer: Geh zu Blau',
-          fr: 'Feu : Allez sur le Bleu',
           ja: '炎: 安置は青',
-          cn: '火：去蓝门',
           ko: '화염: 파랑으로',
         },
       },
@@ -475,10 +421,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Lightning: Go to Red',
-          de: 'Blitz: Geh zu Rot',
-          fr: 'Éclair : Allez sur le Rouge',
           ja: '雷: 安置は赤',
-          cn: '雷：去红门',
           ko: '번개: 빨강으로',
         },
       },
@@ -492,10 +435,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Fire: Knockback To Red -> Go Blue',
-          de: 'Feuer: Rückstoß zu Rot -> Geh zu Blau',
-          fr: 'Feu : Poussée sur le Rouge -> Allez sur le Bleu',
           ja: '炎: 赤にノックバック -> 青へ',
-          cn: '火：向红门击退 -> 去蓝门',
           ko: '화염: 빨강으로 넉백 -> 파랑으로 이동',
         },
       },
@@ -509,10 +449,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Lightning: Knockback To Blue -> Go Red',
-          de: 'Blitz: Rückstoß zu Blau -> Geh zu Rot',
-          fr: 'Éclair : Poussée sur le Bleu -> Allez sur le Rouge',
           ja: '雷: 青にノックバック -> 赤へ',
-          cn: '雷：向蓝门击退 -> 去红门',
           ko: '번개: 파랑으로 넉백 -> 빨강으로 이동',
         },
       },
@@ -527,19 +464,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Protean -> Partner Stacks -> Line Cleave -> Knockback -> Stack',
-          de: 'Himmelsrichtung -> Auf Partner sammeln -> Linien AoE -> Rückstoß -> Sammeln',
-          fr:
-            'Positions -> Packez-vous avec votre partenaire -> Aoe en ligne -> Poussée -> Package',
           ja: '8方向散開 -> 2人頭割り -> 直線範囲 -> ノックバック -> 頭割り',
-          cn: '八方 -> 分摊 -> 直线 -> 击退 -> 集合',
           ko: '8산개 -> 파트너 쉐어뎀 -> 직선 장판 -> 넉백 -> 모이기',
         },
         ttsText: {
           en: 'Fire Cycle',
-          de: 'Mehrfache Vergeltung: Feuer',
-          fr: 'Multi-taillade : Feu',
           ja: '魔装連続剣：ファイア',
-          cn: '火连续剑',
           ko: '연속검: 화염',
         },
       },
@@ -561,18 +491,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Protean -> Spread -> Line Cleave -> Out -> Tank Cleaves',
-          de: 'Himmelsrichtung -> Verteilen -> Linien AoE -> Raus -> Tank AoEs',
-          fr: 'Positions -> Dispersez-vous -> AoE en ligne -> Extérieur -> Tank cleaves',
           ja: '8方向散開 -> 散開 -> 直線範囲 -> 離れる -> タンクに雷範囲',
-          cn: '八方 -> 分散 -> 直线 -> 远离直线 -> T接雷',
           ko: '8산개 -> 산개 -> 직선 장판 -> 밖으로 -> 광역 탱버',
         },
         ttsText: {
           en: 'Lightning Cycle',
-          de: 'Mehrfache Vergeltung : Blitz',
-          fr: 'Multi-taillade: Foudre',
           ja: '魔装連続剣：いなずま',
-          cn: '雷连续剑',
           ko: '연속검: 번개',
         },
       },
@@ -594,18 +518,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Protean -> Holy Groups -> Line Cleave -> Bait -> Away',
-          de: 'Himmelsrichtung -> Sanctus Gruppen -> Linien AoE -> Ködern -> Weg',
-          fr: 'Positions -> Groupes -> AoE en ligne -> Déposez au sol -> Éloignez-vous',
           ja: '8方向散開 -> 3方向頭割り -> 直線範囲 -> AoE誘導 -> 離れる',
-          cn: '八方 -> 光三向分摊 -> 直线 -> 光诱导 -> 连线远离人群',
           ko: '8산개 -> 홀리 그룹 쉐어 -> 직선 장판 -> 장판 유도 -> 피하기',
         },
         ttsText: {
           en: 'Holy Cycle',
-          de: 'Mehrfache Vergeltung: Sanctus',
-          fr: 'Multi-taillade : Lumière',
           ja: '魔装連続剣：ホーリー',
-          cn: '光连续剑',
           ko: '연속검: 홀리',
         },
       },

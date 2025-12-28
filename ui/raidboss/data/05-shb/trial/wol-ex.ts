@@ -112,29 +112,17 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         limitBreak1: {
           en: 'role positions',
-          de: 'Rollenposition',
-          fr: 'Positions par rôle',
           ja: 'ロール特定位置へ',
-          cn: '职能三刀站位',
-          tc: '職能三刀站位',
           ko: '직업군별 위치로',
         },
         limitBreak2: {
           en: 'healer stacks',
-          de: 'Heiler stacks',
-          fr: 'Packages sur les healers',
           ja: 'ヒーラーと集合',
-          cn: '双奶分组分摊',
-          tc: '雙奶分組分攤',
           ko: '좌우 산개',
         },
         limitBreak3: {
           en: 'meteor',
-          de: 'Meteor',
-          fr: 'Météore',
           ja: 'メテオ',
-          cn: '陨石',
-          tc: '隕石',
           ko: '메테오',
         },
       },
@@ -151,11 +139,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Heal All to Full',
-          de: 'Alle vollheilen',
-          fr: 'Soignez tout le monde complètement',
           ja: '全員のHPを満タンに！',
-          cn: '奶满全队',
-          tc: '奶滿全隊',
           ko: '전원 체력 풀피로',
         },
       },
@@ -168,11 +152,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Bait Confiteor',
-          de: 'Confiteor ködern',
-          fr: 'Attirez les zones au sol',
           ja: 'ソーレムコンフィテオル',
-          cn: '诱导庄严悔罪',
-          tc: '誘導莊嚴悔罪',
           ko: '장판 유도하기',
         },
       },
@@ -282,11 +262,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Avoid Wyrm Dash',
-          de: 'Wyrm-Ansturm ausweichen',
-          fr: 'Évitez la charge du Wyrm',
           ja: '竜を避ける',
-          cn: '躲避巴哈冲锋',
-          tc: '躲避巴哈衝鋒',
           ko: '용 돌진 피하기',
         },
       },
@@ -339,11 +315,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Interrupt',
-          de: 'Unterbreche',
-          fr: 'Interrompez',
           ja: '沈黙',
-          cn: '插言',
-          tc: '插言',
           ko: '기술 시전 끊기',
         },
       },
@@ -357,11 +329,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Flare on YOU',
-          de: 'Flare auf DIR',
-          fr: 'Brasier sur VOUS',
           ja: '自分にフレア',
-          cn: '核爆点名',
-          tc: '核爆點名',
           ko: '플레어 대상자',
         },
       },
@@ -376,11 +344,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Point Tether Out',
-          de: 'Verbindung nach draußen richten',
-          fr: 'Pointez le lien vers l\'extérieur',
           ja: '線を外に引く',
-          cn: '连线拉向场外',
-          tc: '連線拉向場外',
           ko: '선 연결 바깥으로 빼기',
         },
       },
@@ -402,11 +366,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'TANK LB!!',
-          de: 'TANK LB!!',
-          fr: 'LB TANK !!',
           ja: 'タンクLB!!',
-          cn: '坦克LB！！',
-          tc: '坦克LB！！',
           ko: '탱리밋!!',
         },
       },
@@ -422,11 +382,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Black Mage + White Mage',
-          de: 'Schwarzmagier + Weißmagier',
-          fr: 'Mage noir + Mage blanc',
           ja: '黒魔導士 + 白魔導士',
-          cn: '黑魔法师 + 白魔法师',
-          tc: '黑魔法師 + 白魔法師',
           ko: '흑마도사 + 백마도사',
         },
       },
@@ -442,11 +398,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Summoner + Warrior',
-          de: 'Beschwörer + Krieger',
-          fr: 'Invocateur + Guerrier',
           ja: '召喚師 + 戦士',
-          cn: '召唤师 + 战士',
-          tc: '召喚師 + 戰士',
           ko: '소환사 + 전사',
         },
       },
@@ -462,11 +414,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Dark Knight + Bard',
-          de: 'Dunkelritter + Barde',
-          fr: 'Chevalier noir + Barde',
           ja: '暗黒騎士 + 吟遊詩人',
-          cn: '暗黑骑士 + 吟游诗人',
-          tc: '暗黑騎士 + 吟遊詩人',
           ko: '암흑기사 + 음유시인',
         },
       },
@@ -483,11 +431,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Ninja',
-          de: 'Ninja',
-          fr: 'Ninja',
           ja: '忍者',
-          cn: '忍者',
-          tc: '忍者',
           ko: '닌자',
         },
       },
@@ -533,11 +477,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Warrior Cleave on YOU',
-          de: 'Krieger Cleave auf DIR',
-          fr: 'Cleave du Guerrier sur VOUS',
           ja: '自分に戦士の範囲攻撃',
-          cn: '战士扇形点名',
-          tc: '戰士扇形點名',
           ko: '전사 범위 공격 대상자',
         },
       },
@@ -551,11 +491,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Puddle on YOU',
-          de: 'Fläche auf DIR',
-          fr: 'Zone au sol sur VOUS',
           ja: '自分に水溜り',
-          cn: '扩散AOE点名',
-          tc: '擴散AOE點名',
           ko: '장판 대상자',
         },
       },
@@ -570,11 +506,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Flare on YOU',
-          de: 'Flare auf DIR',
-          fr: 'Brasier sur VOUS',
           ja: '自分にフレア',
-          cn: '核爆点名',
-          tc: '核爆點名',
           ko: '플레어 대상자',
         },
       },

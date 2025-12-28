@@ -348,9 +348,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         stacks: {
           en: 'Healer Groups (in water)',
-          de: 'Heiler Grußßen (ins Wasser)',
-          fr: 'Pack sur les heals (dans l\'eau)',
-          cn: '治疗分组分摊 (站在水里)',
+          ja: 'Healer Groups (in water)',
           ko: '물에서 힐러 그룹 쉐어',
         },
       },
@@ -364,9 +362,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         spread: {
           en: 'Spread (not in water)',
-          de: 'Verteilen (nicht ins Wasser)',
-          fr: 'Dispersion (hors de l\'eau)',
-          cn: '分散 (站在岸上)',
+          ja: 'Spread (not in water)',
           ko: '땅에서 산개',
         },
       },

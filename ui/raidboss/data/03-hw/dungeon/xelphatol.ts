@@ -71,10 +71,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Puddle on YOU',
-          de: 'Fläche auf DIR',
-          fr: 'Zone au sol sur VOUS',
           ja: '自分に風',
-          cn: '风圈点名',
           ko: '내게 에어로 장판',
         },
       },

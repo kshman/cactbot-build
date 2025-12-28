@@ -52,10 +52,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Out and Away',
-          de: 'Raus und Weg',
-          fr: 'Extérieur et loin',
           ja: '外へ',
-          cn: '外侧远离',
           ko: '밖으로 멀리',
         },
       },
@@ -68,10 +65,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Wall',
-          de: 'Wand',
-          fr: 'Mur',
           ja: '壁へ',
-          cn: '去场边',
           ko: '벽으로',
         },
       },
@@ -133,10 +127,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         flareOnYou: {
           en: 'Flare on YOU',
-          de: 'Flare auf DIR',
-          fr: 'Brasier sur VOUS',
           ja: '自分にフレア',
-          cn: '核爆点名',
           ko: '내게 플레어',
         },
       },

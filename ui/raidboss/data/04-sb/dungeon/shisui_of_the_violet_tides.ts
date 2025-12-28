@@ -19,10 +19,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         kill: {
           en: 'Kill ${name}',
-          de: 'Besiege ${name}',
-          fr: 'Tuez ${name}',
           ja: '${name}を倒す',
-          cn: '击杀 ${name}',
           ko: '잡아요: ${name}',
         },
       },
@@ -42,10 +39,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Get In Box',
-          de: 'Geh in die Box',
-          fr: 'Allez dans la boîte',
           ja: '箱に入る',
-          cn: '进盒子',
           ko: '상자 부비부비',
         },
       },
@@ -60,10 +54,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Chasing AOE on YOU',
-          de: 'Verfolgende AoE auf DIR',
-          fr: 'Ruée sur VOUS',
           ja: '追跡AOE',
-          cn: '追踪AOE点名',
           ko: '내게 연속 추적 장판',
         },
       },

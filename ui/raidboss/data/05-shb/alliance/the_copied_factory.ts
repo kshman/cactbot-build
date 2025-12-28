@@ -35,10 +35,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Be Near Boss',
-          de: 'sei in der Nähe des Bosses',
-          fr: 'Placez-vous près du boss',
           ja: 'ボスに貼りつく',
-          cn: '靠近Boss',
           ko: '보스 가까이',
         },
       },
@@ -51,10 +48,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Move to South Edge',
-          de: 'zur südlichen Kante',
-          fr: 'Allez vers le bord sud',
           ja: '南へ',
-          cn: '前往南侧边缘',
           ko: '남쪽 구석으로',
         },
       },
@@ -82,10 +76,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Look for Lasers',
-          de: 'Pass auf die Laser auf',
-          fr: 'Repérez les lasers',
           ja: 'レーザーを避ける',
-          cn: '小心激光',
           ko: '레이저 피해요',
         },
       },
@@ -131,10 +122,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Dodge Moving Circle',
-          de: 'Bewegenden Kreisen ausweichen',
-          fr: 'Esquivez les cercles mouvants',
           ja: '動いてるサークルを避ける',
-          cn: '躲避移动圆圈',
           ko: '움직이는 동글 피해요',
         },
       },
@@ -150,10 +138,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Look Behind For Flamethrowers',
-          de: 'Flammenwerfer hinter dir',
-          fr: 'Repérez les lance-flammes derrière',
           ja: '後ろに火炎放射器',
-          cn: '观察后方放火',
           ko: '뒷쪽 화염방사 피해요',
         },
       },
@@ -177,10 +162,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Dodge Falling Walls',
-          de: 'Den fallenden Wände asuweichen',
-          fr: 'Esquivez les murs tombants',
           ja: '倒れてくる壁を避ける',
-          cn: '躲避倒塌墙壁',
           ko: '넘어지는 벽 피해요',
         },
       },
@@ -192,12 +174,9 @@ const triggerSet: TriggerSet<Data> = {
       delaySeconds: 10,
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
-        text: { // In fact mostly Tank takes all tethers.
+        text: {
           en: 'Spread Tethers',
-          de: 'Verbindungen Verteilen',
-          fr: 'Dispersez les liens',
           ja: '線を重ならないように散開',
-          cn: '散开扯断连线',
           ko: '줄! 이건 탱크 혼자 처리',
         },
       },
@@ -227,10 +206,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Dodge Electric Floor',
-          de: 'Elektrischem Boden ausweichen',
-          fr: 'Esquivez le sol électrifié',
           ja: '電気床を避ける',
-          cn: '躲避带电地板',
           ko: '전기 바닥 피해요',
         },
       },
@@ -245,10 +221,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Conveyor Belts',
-          de: 'Förderbänder',
-          fr: 'Tapis roulant',
           ja: 'ローラーコンベア',
-          cn: '输送带',
           ko: '컨베이어 벨트',
         },
       },
@@ -265,10 +238,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Oil Vats',
-          de: 'Ölbehälter',
-          fr: 'Cuves à huile',
           ja: 'オイルが沸く',
-          cn: '油桶',
           ko: '기름이 끓어요',
         },
       },
@@ -284,10 +254,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Oil Vats',
-          de: 'Ölbehälter',
-          fr: 'Cuves à huile',
           ja: 'オイルが沸く',
-          cn: '油桶',
           ko: '기름이 끓어요',
         },
       },
@@ -301,10 +268,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Exploder on YOU',
-          de: 'Explosion auf DIR',
-          fr: 'Explosion sur VOUS',
           ja: '自分に自爆',
-          cn: '自爆点名',
           ko: '내게 폭발',
         },
       },
@@ -342,10 +306,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Front and Center',
-          de: 'Vorne und Mitte',
-          fr: 'Devant et au centre',
           ja: '前方の中へ',
-          cn: '前方中间',
           ko: '앞쪽 가운데로',
         },
       },
@@ -358,10 +319,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Back and Sides',
-          de: 'Hinten und Seiten',
-          fr: 'Derrière et sur les côtés',
           ja: '後方の横へ',
-          cn: '后方两侧',
           ko: '뒤쪽 옆으로',
         },
       },
@@ -374,10 +332,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Kill Claws',
-          de: 'Klauen töten',
-          fr: 'Tuez les pinces',
           ja: 'マルクスを倒す',
-          cn: '杀掉爪子',
           ko: '마르크스 잡아요',
         },
       },
@@ -406,10 +361,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Go Sides (Near Front)',
-          de: 'Zu den Seiten (Nahe der Front)',
-          fr: 'Allez sur les côtés (vers l\'avant)',
           ja: '横へ (前に近づく)',
-          cn: '两侧（靠近前方）',
           ko: '옆으로 (조금 앞쪽에서)',
         },
       },
@@ -423,10 +375,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Get Towers',
-          de: 'Türme nehmen',
-          fr: 'Prenez les tours',
           ja: '塔を踏む',
-          cn: '踩塔',
           ko: '타워 밟아요',
         },
       },
@@ -440,10 +389,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Puddle on YOU',
-          de: 'Fläche auf dir',
-          fr: 'Zone au sol sur VOUS',
           ja: '自分に水溜り',
-          cn: '水圈点名',
           ko: '내게 물 장판',
         },
       },
@@ -457,10 +403,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Get Out + Dodge Homing AoE',
-          de: 'Geh Raus + Zielsuch-AoE ausweichen',
-          fr: 'À l\'extérieur + Esquivez l\'AoE',
           ja: '外 + AoE',
-          cn: '远离 + 躲避弹幕',
           ko: '밖으로 + 호밍 AOE 피해요',
         },
       },
@@ -474,10 +417,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Adds (Ignore Small)',
-          de: 'Adds (kleine ignorieren)',
-          fr: 'Adds (ignorez les petits)',
           ja: '雑魚 (小さいのは無視)',
-          cn: '小怪（忽略小的）',
           ko: '큰 쫄 잡아요 (작은 쫄 무시)',
         },
       },
@@ -490,10 +430,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Front and Center',
-          de: 'Vorne und Mitte',
-          fr: 'Devant et au centre',
           ja: '前方の中へ',
-          cn: '前方中间',
           ko: '앞쪽 가운데로',
         },
       },
@@ -507,10 +444,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Look For Wall Saws',
-          de: 'Halt nach den kleinen Sägen ausschau',
-          fr: 'Repérez les scies murales',
           ja: 'マルクス突撃',
-          cn: '观察墙壁',
           ko: '바깥에 마르크스는 어디 있을까요',
         },
       },
@@ -549,10 +483,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Laser Buster on YOU',
-          de: 'Laser Tankbuster auf DIR',
-          fr: 'Tank buster laser sur VOUS',
           ja: '自分にレーザー',
-          cn: '激光点名',
           ko: '내게 레이저 버스터',
         },
       },
@@ -578,10 +509,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Dodge Overhead Saws',
-          de: 'Sägen über dem Kopf ausweichen',
-          fr: 'Esquivez les scies aériennes',
           ja: 'マルクス支援',
-          cn: '躲避头顶锯',
           ko: '마르크스 피해요',
         },
       },
@@ -608,10 +536,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Go Behind Untethered Tank',
-          de: 'Hinter den nicht verbundenen Panzer gehen',
-          fr: 'Allez derrière le tank non-lié',
           ja: '線のない戦車の後ろへ',
-          cn: '没连线的坦克后躲避',
           ko: '줄 없는 탱크 뒤에 숨어요',
         },
       },
@@ -632,10 +557,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Get in the bubble',
-          de: 'Geh in die Kuppel',
-          fr: 'Allez dans la bulle',
           ja: '泡に入る',
-          cn: '进入圈圈',
           ko: '버블 안으로',
         },
       },

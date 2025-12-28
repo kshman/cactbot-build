@@ -45,10 +45,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Party Share Tankbuster',
-          de: 'Tankbuster mit der Gruppe Teilen',
-          fr: 'Partagez le Tank buster avec le groupe',
           ja: '頭割りタンクバスター',
-          cn: '团队分摊死刑',
           ko: '뭉쳐서 탱크버스터',
         },
       },
@@ -72,18 +69,12 @@ const triggerSet: TriggerSet<Data> = {
         output.responseOutputStrings = {
           staffTankSwap: {
             en: 'Staff (Tank Swap)',
-            de: 'Stab (Tankwechsel)',
-            fr: 'Bâton (Tank Swap)',
             ja: '杖 (スイッチ)',
-            cn: '权杖（换T）',
             ko: '지팡이 (탱크 스위치)',
           },
           staff: {
             en: 'Staff',
-            de: 'Stab',
-            fr: 'Bâton',
             ja: '杖',
-            cn: '权杖',
             ko: '지팡이',
           },
         };
@@ -106,18 +97,12 @@ const triggerSet: TriggerSet<Data> = {
         output.responseOutputStrings = {
           swordTankSwap: {
             en: 'Sword (Tank Swap)',
-            de: 'Schwert (Tankwechsel)',
-            fr: 'Épée (Tank Swap)',
             ja: '剣 (スイッチ)',
-            cn: '剑（换T）',
             ko: '칼 (탱크 스위치)',
           },
           sword: {
             en: 'Sword',
-            de: 'Schwert',
-            fr: 'Épée',
             ja: '剣',
-            cn: '剑',
             ko: '칼',
           },
         };
@@ -212,10 +197,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Knockback Laser on YOU',
-          de: 'Rückstoß-Laser auf DIR',
-          fr: 'Poussée-Laser sur VOUS',
           ja: '自分にアバランチ',
-          cn: '击退激光点名',
           ko: '내게 아발란체',
         },
       },
@@ -229,10 +211,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Avoid Laser',
-          de: 'Laser ausweichen',
-          fr: 'Évitez le laser',
           ja: 'アバランチを避ける',
-          cn: '躲避击退激光',
           ko: '아발란체 피해요',
         },
       },
@@ -271,10 +250,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Free ${player}',
-          de: 'Befreie ${player}',
-          fr: 'Libérez ${player}',
           ja: '${player}を救って',
-          cn: '解救${player}',
           ko: '얼음: ${player}',
         },
       },

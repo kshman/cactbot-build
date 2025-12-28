@@ -206,6 +206,7 @@ const triggerSet: TriggerSet<Data> = {
         out: Outputs.out,
         outBuster: {
           en: 'Out => Shared Tankbuster',
+          ja: 'Out => Shared Tankbuster',
           ko: '밖으로 🔜 탱크 둘이 함께',
         },
       },
@@ -224,6 +225,7 @@ const triggerSet: TriggerSet<Data> = {
         in: Outputs.in,
         inBuster: {
           en: 'In => Shared Tankbuster',
+          ja: 'In => Shared Tankbuster',
           ko: '안으로 🔜 탱크 둘이 함께',
         },
       },
@@ -236,6 +238,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         stackThenOut: {
           en: 'Stack => Out',
+          ja: 'Stack => Out',
           ko: '뭉쳤다 🔜 밖으로',
         },
       },
@@ -248,6 +251,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Line of Sight Boss With Corpse',
+          ja: 'Line of Sight Boss With Corpse',
           ko: '쫄 시체 뒤로 숨어요',
         },
       },
@@ -260,6 +264,8 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Rotate away from proximity markers',
+          ja: 'Rotate away from proximity markers',
+          ko: 'Rotate away from proximity markers',
         },
       },
     },
@@ -271,6 +277,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Go North, Damage + Launch',
+          ja: 'Go North, Damage + Launch',
           ko: '북으로! 쿵해욧!',
         },
       },
@@ -283,6 +290,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Spread, away from front',
+          ja: 'Spread, away from front',
           ko: '앞쪽 직선 장판 + 흩어져요',
         },
       },
@@ -296,6 +304,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Flare Marker on YOU',
+          ja: 'Flare Marker on YOU',
           ko: '내게 플레어!',
         },
       },
@@ -320,6 +329,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Stack Marker in Middle',
+          ja: 'Stack Marker in Middle',
           ko: '타워 밟아요',
         },
       },

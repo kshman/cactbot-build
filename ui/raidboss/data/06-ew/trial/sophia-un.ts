@@ -112,10 +112,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Avoid Dash Attack',
-          de: 'Ansturm-Angriff ausweichen',
-          fr: 'Évitez l\'attaque Charge',
           ja: '突進回避',
-          cn: '躲避冲锋',
           ko: '돌진 공격 피해요',
         },
       },
@@ -134,10 +131,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Stack With Partner',
-          de: 'Mit Partner stacken',
-          fr: 'Packez-vous avec votre partenaire',
           ja: '白と黒で重なる',
-          cn: '黑白配',
           ko: '좌와벌: 페어',
         },
       },
@@ -150,10 +144,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Bait Quasar Meteors',
-          de: 'Quasar Meteore ködern',
-          fr: 'Attirez les météores du Quasar',
           ja: 'メテオを誘導',
-          cn: '诱导陨石',
           ko: '퀘이사 메테오 유도',
         },
       },
@@ -200,10 +191,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Get behind lancer',
-          de: 'Geh hinter dem 3. Demiurg',
-          fr: 'Passez derrière le lancier',
           ja: '三の従者の後ろに',
-          cn: '躲在3号小怪后',
           ko: '제3신도(창) 뒤로 가기',
         },
       },
@@ -221,18 +209,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         infusionOnYou: {
           en: 'Infusion on YOU',
-          de: 'Schneisenschläger auf DIR',
-          fr: 'Infusion sur VOUS',
           ja: '自分に猛突進',
-          cn: '冲锋点名',
           ko: '내게 맹돌진',
         },
         infusionOn: {
           en: 'Infusion on ${player}',
-          de: 'Schneisenschläger auf ${player}',
-          fr: 'Infusion sur ${player}',
           ja: '${player}に猛突進',
-          cn: '冲锋点${player}',
           ko: '맹돌진: ${player}',
         },
       },
@@ -334,10 +316,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Avoid head laser',
-          de: 'Kopflaser ausweichen',
-          fr: 'Évitez le laser de la tête',
           ja: '頭レーザー回避',
-          cn: '躲避人头炮',
           ko: '머리 레이저 피해요',
         },
       },
@@ -374,10 +353,7 @@ const triggerSet: TriggerSet<Data> = {
         southeast: Outputs.southeast,
         multiple: {
           en: '${dir1} / ${dir2}',
-          de: '${dir1} / ${dir2}',
-          fr: '${dir1} / ${dir2}',
           ja: '${dir1} / ${dir2}',
-          cn: '${dir1} / ${dir2}',
           ko: '${dir1} / ${dir2}',
         },
       },

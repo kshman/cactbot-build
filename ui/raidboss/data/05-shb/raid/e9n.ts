@@ -73,10 +73,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Wait Near Bramble',
-          de: 'Warte in der Nähe des Dornenstrauch',
-          fr: 'Attendez près des ronces',
           ja: '闇の茨へ、蔦を切るまで待つ',
-          cn: '靠近荆棘等待',
           ko: '가시 덤불 부근에서 기다려요',
         },
       },
@@ -98,10 +95,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Go Sides At Tethered Wall',
-          de: 'Geh seitlich der verundenen Wände',
-          fr: 'Allez vers les côtés du mur lié',
           ja: '線が繋がった外周の横へ',
-          cn: '去连线的墙壁两边',
           ko: '줄로 연결된 벽으로',
         },
       },
@@ -115,10 +109,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Away From Tethered Walls',
-          de: 'Weg von den verbundenen Wänden',
-          fr: 'Éloignez-vous des murs liés',
           ja: '線が繋がった外周から離れる',
-          cn: '远离连线的墙壁',
           ko: '줄로 연결된 벽에서 멀리멀리',
         },
       },
@@ -140,10 +131,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Get Towers',
-          de: 'Türme nehmen',
-          fr: 'Prenez les tours',
           ja: '塔を踏む',
-          cn: '踩塔',
           ko: '타워 밟아요',
         },
       },

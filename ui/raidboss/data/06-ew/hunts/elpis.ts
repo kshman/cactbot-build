@@ -67,18 +67,12 @@ const triggerSet: TriggerSet<Data> = {
         output.responseOutputStrings = {
           waterOnYou: {
             en: 'GTFO with water',
-            de: 'Geh mit Wasser raus',
-            fr: 'Partez avec l\'eau',
             ja: 'ボスから離れる',
-            cn: '快躲开水',
             ko: '물이다! 도망가욧!',
           },
           waterMarker: {
             en: 'Away from water marker',
-            de: 'Weg vom Wasser Marker',
-            fr: 'Éloignez-vous du marquage eau',
             ja: 'AOEから離れる',
-            cn: '躲开水标记',
             ko: '물 걸린 사람 피해욧',
           },
         };
@@ -133,10 +127,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Follow Jump => Under',
-          de: 'Sprung folgen => Unter den Boss',
-          fr: 'Suivre le saut => Sous le boss',
           ja: 'ジャンプ近づく => 下へ',
-          cn: '跟随跳跃 => 脚下',
           ko: '폴짝 뛰면 🔜 따라가서 밑으로',
         },
       },
@@ -151,10 +142,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Away From Jump',
-          de: 'Weg vom Sprung',
-          fr: 'Loin du saut',
           ja: 'ジャンプから離れる',
-          cn: '远离跳跃',
           ko: '착지점에서 떨어져욧',
         },
       },

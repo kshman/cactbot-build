@@ -45,10 +45,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Avoid Shadows',
-          de: 'Schatten ausweichen',
-          fr: 'Évitez les ombres',
           ja: '影を避ける',
-          cn: '避开阴影',
           ko: '그림자 피해요',
         },
       },
@@ -80,10 +77,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Forward March',
-          de: 'Marchiere Vorwärts',
-          fr: 'Marche avant forcée',
           ja: '強制移動: 前',
-          cn: '强制移动: 前',
           ko: '강제이동: 앞',
         },
       },
@@ -96,10 +90,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Backwards March',
-          de: 'Marchiere Rückwärts',
-          fr: 'Marche forcée en arrière',
           ja: '強制移動: 後ろ',
-          cn: '强制移动: 后',
           ko: '강제이동: 뒤',
         },
       },

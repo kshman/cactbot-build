@@ -50,11 +50,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'USE VRIL OR DIE',
-          de: 'BENUTZT VRIL ODER STIRB',
-          fr: 'UTILISEZ LE VRIL OU MOURREZ',
           ja: 'エーテル使って！！',
-          cn: '快用元气啊！！',
-          tc: '快用元氣啊！！',
           ko: '지금 브릴 써요! 아님 쥬금!',
         },
       },
@@ -67,11 +63,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Vril + Knockback',
-          de: 'Vril + Rückstoß',
-          fr: 'Vril + Poussée',
           ja: 'エーテル + 完全なる拒絶',
-          cn: '使用元气 + 击退',
-          tc: '使用元氣 + 擊退',
           ko: '브릴 + 넉백',
         },
       },
@@ -118,11 +110,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         dontStack: {
           en: 'Don\'t Stack!',
-          de: 'Nicht Sammeln!',
-          fr: 'Ne vous packez pas !',
           ja: '頭割りしないで！',
-          cn: '别去分摊！',
-          tc: '別去分攤！',
           ko: '뭉치면 안돼요!',
         },
         stackOnYou: Outputs.stackOnYou,
@@ -146,11 +134,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Cross Marker',
-          de: 'Kreuz-Marker',
-          fr: 'Marqueur croix',
           ja: '自分に右手',
-          cn: '十字点名',
-          tc: '十字點名',
           ko: '십자 장판',
         },
       },
@@ -170,20 +154,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         powerFlower: {
           en: 'Expanding Flower Marker',
-          de: 'Ausdehnender Blumen-Marker',
-          fr: 'Marqueur fleur en extension',
           ja: '自分に左手 (拡大する)',
-          cn: '扩大放圈点名',
-          tc: '擴大放圈點名',
           ko: '커지는 동글 장판',
         },
         flower: {
           en: 'Flower Marker',
-          de: 'Blumen-Marker',
-          fr: 'Marqueur fleur',
           ja: '自分に左手',
-          cn: '放圈点名',
-          tc: '放圈點名',
           ko: '동글 장판',
         },
       },

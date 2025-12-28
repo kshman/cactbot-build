@@ -51,11 +51,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         stackMarkerOnYou: {
           en: 'Stack marker on YOU',
-          de: 'Sammeln Marker auf DIR',
-          fr: 'Marqueur de package sur VOUS',
           ja: '自分に集合',
-          cn: '分摊点名',
-          tc: '分攤點名',
           ko: '내게 뭉쳐요',
         },
         stackOn: Outputs.stackOnPlayer,
@@ -70,11 +66,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Levitate',
-          de: 'Schweben',
-          fr: 'Lévitation',
           ja: '浮上',
-          cn: '浮空',
-          tc: '浮空',
           ko: '레비테이트',
         },
       },
@@ -93,11 +85,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: '-100 Gs: Go north/south',
-          de: '-100G: Nach Norden/Süden',
-          fr: 'Gravité -100 : Allez au nord/sud',
           ja: '-100 G: 北/南へ',
-          cn: '去上/下半场边缘',
-          tc: '去上/下半場邊緣',
           ko: '-100G: 남북으로',
         },
       },
@@ -123,20 +111,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         earthquake: {
           en: 'Earthquake',
-          de: 'Erdbeben',
-          fr: 'Grand séisme',
           ja: '地震',
-          cn: '地震',
-          tc: '地震',
           ko: '어스퀘이크',
         },
         levitate: {
           en: 'Levitate',
-          de: 'Schweben',
-          fr: 'Lévitation',
           ja: '浮上',
-          cn: '浮空',
-          tc: '浮空',
           ko: '레비테이트',
         },
       },
@@ -165,20 +145,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         sixFulmsUnder: {
           en: '6 Fulms Under',
-          de: 'Versinkend',
-          fr: 'Enfoncement',
           ja: '沈下',
-          cn: '下陷',
-          tc: '下陷',
           ko: '내려가요',
         },
         levitate: {
           en: 'Levitate',
-          de: 'Schweben',
-          fr: 'Lévitation',
           ja: '浮上',
-          cn: '浮空',
-          tc: '浮空',
           ko: '레비테이트',
         },
       },
@@ -219,38 +191,22 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         antilight: {
           en: 'Antilight',
-          de: 'Dunkellicht',
-          fr: 'Lumière obscure',
           ja: '暗黒光',
-          cn: '暗黑光',
-          tc: '暗黑光',
           ko: '안티라이트',
         },
         levitate: {
           en: 'Levitate',
-          de: 'Levitation',
-          fr: 'Lévitation',
           ja: '浮上',
-          cn: '浮空',
-          tc: '浮空',
           ko: '레비테이트',
         },
         goCenterAndDontLevitate: {
           en: 'Go center and don\'t levitate',
-          de: 'Geh in die Mitte und nicht schweben',
-          fr: 'Allez au centre et pas de lévitation',
           ja: '中央に浮かばず集合',
-          cn: '中间集合不要浮空',
-          tc: '中間集合不要浮空',
           ko: '한가운데 + 레비테이트 금지',
         },
         dontLevitate: {
           en: 'Don\'t levitate',
-          de: 'Nicht schweben',
-          fr: 'Pas de lévitation',
           ja: '浮上はしない',
-          cn: '不要浮空',
-          tc: '不要浮空',
           ko: '레비테이트 금지',
         },
       },

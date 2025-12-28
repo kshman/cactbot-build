@@ -24,14 +24,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Back Right / Front Left',
-          de: 'hinten rechts / vorne links',
-          fr: 'Derrière à droite / Devant à gauche',
           ja: '右下 / 左上',
-          cn: '右后 / 左前',
           ko: '오른쪽으로 (탱크 왼쪽)',
         },
         tank: {
           en: '❰❰❰Left',
+          ja: '❰❰❰Left',
           ko: '❰❰❰왼쪽으로',
         },
       },
@@ -44,14 +42,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Back Left / Front Right',
-          de: 'hinten links / vorne rechts',
-          fr: 'Derrière à gauche / Devant à droite',
           ja: '左下 / 右上',
-          cn: '左后 / 右前',
           ko: '왼쪽으로 (탱크 오른쪽)',
         },
         tank: {
           en: 'Right❱❱❱',
+          ja: 'Right❱❱❱',
           ko: '오른쪽으로❱❱❱',
         },
       },
@@ -82,10 +78,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Hide behind broken crystal',
-          de: 'Hinter dem gebrochenen Kristall verstecken',
-          fr: 'Cachez-vous derrière le cristal brisé',
           ja: '壊れたクリスタルの後ろ',
-          cn: '躲在破碎的水晶后',
           ko: '부서전 크리스탈 뒤로',
         },
       },
@@ -98,10 +91,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Away from Crosshairs',
-          de: 'Weg von den Zielmarkierungen',
-          fr: 'Éloignez-vous de la zone de ciblage',
           ja: 'ゆかから離れる',
-          cn: '远离准星',
           ko: '크로스헤어 피해요',
         },
       },
@@ -133,10 +123,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Hide Behind Ice',
-          de: 'hinter dem Eis verstecken',
-          fr: 'Cachez-vous derrière la glace',
           ja: '氷の後ろ',
-          cn: '躲在冰柱后面',
           ko: '얼음이 보호막, 뒤로',
         },
       },

@@ -25,11 +25,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'look for cloud',
-          de: 'Nach Wolke ausschau halten',
-          fr: 'Cherchez le nuage',
           ja: '雷雲を探せ',
-          cn: '确认雷云位置',
-          tc: '確認雷雲位置',
           ko: '구름 봐요',
         },
       },
@@ -98,20 +94,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         knockbackWithCloud: {
           en: 'Knockback on you (cloud)',
-          de: 'Rückstoss auf Dir (Wolke)',
-          fr: 'Poussée sur VOUS (nuage)',
           ja: '自分にノックバック (雷雲)',
-          cn: '击退点名（雷云）',
-          tc: '擊退點名（雷雲）',
           ko: '내게 넉백 (구름)',
         },
         knockbackWithDice: {
           en: 'Knockback + dice (STOP)',
-          de: 'Rückstoss + Würfel (STOPP)',
-          fr: 'Poussée + dé (ARRÊTEZ)',
           ja: 'ノックバック + 禍泡 (そのまま)',
-          cn: '击退 + 停手',
-          tc: '擊退 + 停手',
           ko: '넉백 + 카운트 (멈춰요)',
         },
         knockback: Outputs.knockbackOnYou,
@@ -137,20 +125,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         levinboltWithCloud: {
           en: 'Levinbolt on you (cloud)',
-          de: 'Blitz auf Dir (Wolke)',
-          fr: 'Fulguration sur VOUS (nuage)',
           ja: '自分に稲妻 (雷雲)',
-          cn: '闪电点名（雷云）',
-          tc: '閃電點名（雷雲）',
           ko: '내게 레빈볼트 (구름)',
         },
         levinboltOnYou: {
           en: 'Levinbolt on you',
-          de: 'Blitz auf dir',
-          fr: 'Fulguration sur VOUS',
           ja: '自分に稲妻',
-          cn: '闪电点名',
-          tc: '閃電點名',
           ko: '내게 레빈 볼트',
         },
       },
@@ -168,11 +148,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Stun: ${player}',
-          de: 'Paralyse ${player}',
-          fr: 'Étourdi(e) :  ${player}',
           ja: '${player}にスタン',
-          cn: '${player} 眩晕',
-          tc: '${player} 眩暈',
           ko: '스턴: ${player}',
         },
       },

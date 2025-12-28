@@ -19,10 +19,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Be On A Platform',
-          de: 'Sei auf einer Plattform',
-          fr: 'Restez sur une plateforme ',
           ja: '円形床の上へ',
-          cn: '站台子上',
           ko: '동그란 바닥 위로',
         },
       },
@@ -52,10 +49,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Sludge puddle on YOU',
-          de: 'Schlammfläche auf DIR',
-          fr: 'Zone de poison au sol sur VOUS',
           ja: '自分にスラッジボム',
-          cn: '泥浆炸弹点名',
           ko: '내게 슬러지 장판',
         },
       },
@@ -82,10 +76,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Get behind flower',
-          de: 'Geh hinter die Blume',
-          fr: 'Passez derrière la plante',
           ja: 'ボスの後ろへ',
-          cn: '躲背后',
           ko: '꽃 뒤로',
         },
       },
@@ -111,10 +102,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Conveyors: Avoid Golem Lines',
-          de: 'Transportbänder: Weiche den Golemlinien aus',
-          fr: 'Transporteurs : Évitez les lignes des golems',
           ja: '強制移動: ゴーレムの直線を避ける',
-          cn: '传送: 注意躲开巨像的直线AoE',
           ko: '강제이동: 골렘 줄 피해요',
         },
       },
@@ -147,10 +135,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Spread + Stay Off Platforms',
-          de: 'Verteilen + runter von den Plattformen',
-          fr: 'Dispersion + Restez hors des platesformes',
           ja: '散開、円形床に落とさないよう',
-          cn: '分散，出台子',
           ko: '흩어졌다 + 장판 피해요',
         },
       },
@@ -163,10 +148,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Push Mud Pie On Platform',
-          de: 'Schiebe Schlammklumpen auf eine Plattform',
-          fr: 'Poussez la Boule de boue sur la platesforme',
           ja: 'スライムを円形床に吹き飛ばす',
-          cn: '把小怪推到台子上',
           ko: '머드 파이를 바닥 위로 밀어요',
         },
       },
@@ -179,10 +161,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Push Mud Pie Out Of Cone',
-          de: 'Schiebe Schlammklumpen aus der Kegel-AoE',
-          fr: 'Poussez la Boule de boue hors du cône',
           ja: 'スライムを範囲外へ吹き飛ばす',
-          cn: '把小怪推出AoE',
           ko: '머드 파이를 부채꼴 범위 밖으로 밀어요',
         },
       },

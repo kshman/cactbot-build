@@ -66,10 +66,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: '5x chasing puddles on you!',
-          de: '5x verfolgende Flächen auf dir!',
-          fr: '5x zones au sol chainées sur vous !',
           ja: '5連続AOE回避',
-          cn: '5连追踪AOE点名!',
           ko: '내게 5x 연속 장판!',
         },
       },

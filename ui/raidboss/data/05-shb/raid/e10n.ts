@@ -48,10 +48,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Shadow Side',
-          de: 'Schatten Seite',
-          fr: 'Allez du côté de l\'ombre',
           ja: '影と同じ側へ',
-          cn: '影子同侧',
           ko: '그림자 쪽으로',
         },
       },
@@ -64,10 +61,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Opposite Shadow',
-          de: 'Gegenüber des Schattens',
-          fr: 'Allez du côté opposé à l\'ombre',
           ja: '影の反対側へ',
-          cn: '影子异侧',
           ko: '그림자 반대쪽으로',
         },
       },
@@ -93,18 +87,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         left: {
           en: 'Go Left of Shadows',
-          de: 'Geh links vom Schatten',
-          fr: 'Allez à gauche des ombres',
           ja: '影の左へ',
-          cn: '影子左侧',
           ko: '그림자 왼쪽',
         },
         right: {
           en: 'Go Right of Shadows',
-          de: 'Geh rechts vom Schatten',
-          fr: 'Allez à droite des ombres',
           ja: '影の右へ',
-          cn: '影子右侧',
           ko: '그림자 오른쪽',
         },
       },
@@ -124,10 +112,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Get Puddles',
-          de: 'Flächen nehmen',
-          fr: 'Allez dans les zones au sol',
           ja: '踏む',
-          cn: '踩圈',
           ko: '타워 밟아요',
         },
       },
@@ -140,10 +125,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Stand behind tethered dog',
-          de: 'Achte auf den verbundenen Hund',
-          fr: 'Allez derrière le chien lié',
-          ja: '線で繋がった分身を注視', // FIXME
-          cn: '站在连线狗后',
+          ja: '線で繋がった分身を注視', // FIXME,
           ko: '연결된 쫄 뒤로가기',
         },
       },
@@ -156,12 +138,8 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          // TODO: this could be better if we knew where the shadow was
           en: 'Away From Black Lines',
-          de: 'Weg von den schwarzen Linien',
-          fr: 'Éloignez-vous des lignes noires',
           ja: '黒い線から離れる',
-          cn: '远离黑线',
           ko: '그림자 피해요',
         },
       },

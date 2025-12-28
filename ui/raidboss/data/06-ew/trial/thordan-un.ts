@@ -81,10 +81,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         baitPuddles: {
           en: 'Bait puddles',
-          de: 'Flächen Ködern',
-          fr: 'Attirez les flaques',
           ja: 'AOE誘導',
-          cn: '诱导圈圈',
           ko: '장판 유도',
         },
       },
@@ -113,10 +110,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         baitPuddles: {
           en: 'Bait gravity puddles',
-          de: 'Köder Gravitationsflächen',
-          fr: 'Attirez les flaques de gravité',
           ja: '黒AOE誘導',
-          cn: '诱导黑圈',
           ko: '깜장 장판 유도',
         },
       },
@@ -130,10 +124,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         knockbackAoe: {
           en: 'AOE + knockback x7',
-          de: 'AoE + Rückstoß x7',
-          fr: 'AoE + Poussée x7',
           ja: '全体攻撃 + ノックバック x7',
-          cn: 'AOE + 击退 x7',
           ko: '전체 공격 + 넉백x7',
         },
       },
@@ -206,10 +197,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         breakChains: {
           en: 'Break chains with ${partner}',
-          de: 'Ketten mit ${partner} zerbrechen',
-          fr: 'Cassez les chaînes avec ${partner}',
           ja: '線切り: ${partner}',
-          cn: '与 ${partner} 拉断连线',
           ko: '줄 끊어요: ${partner}',
         },
       },
@@ -233,18 +221,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         singleGaze: {
           en: 'Look away from Thordan',
-          de: 'Schau weg von Thordan',
-          fr: 'Ne regardez pas Thordan',
           ja: 'ボスを見ないで',
-          cn: '背对托尔丹',
           ko: '토르당 보면 안되요!',
         },
         doubleGaze: {
           en: 'Look away from Thordan and Eye',
-          de: 'Schau weg von Thordan und dem Auge',
-          fr: 'Ne regardez pas Thordan ni l\'œil',
           ja: 'ボスと目を見ないで',
-          cn: '背对托尔丹和眼睛',
           ko: '토르당이랑 용눈 보면 안되요!',
         },
       },
@@ -290,10 +272,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         combined: {
           en: '${dir1} / ${dir2} Safe',
-          de: '${dir1} / ${dir2} Sicher',
-          fr: '${dir1} / ${dir2} Sûr',
           ja: '${dir1} / ${dir2} 安置',
-          cn: '${dir1} / ${dir2} 安全',
           ko: '안전: ${dir1} / ${dir2}',
         },
         ...Directions.outputStrings8Dir,
@@ -308,10 +287,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         attackSword: {
           en: 'Attack ${swordKnight}',
-          de: 'Greife ${swordKnight} an',
-          fr: 'Attaquez ${swordKnight}',
           ja: '攻撃: ${swordKnight}',
-          cn: '攻击 ${swordKnight}',
           ko: '공격해요: ${swordKnight}',
         },
       },
@@ -364,26 +340,17 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         unknownDance: {
           en: 'Heavy busters',
-          de: 'Harter Tankbuster',
-          fr: 'Gros busters',
           ja: 'タン強',
-          cn: '高伤死刑',
           ko: '아픈 탱크버스터',
         },
         singleDance: {
           en: '2x buster on ${target}',
-          de: '2x Tankbuster auf ${target}',
-          fr: 'Buster x2 sur ${target}',
           ja: '${target} タン強 x2',
-          cn: '双死刑点 ${target}',
           ko: '2x 탱크버스터: ${target}',
         },
         doubleDance: {
           en: 'Sword buster on ${sword} (shield on ${shield})',
-          de: 'Schwert-Tankbuster auf ${sword} (Schild auf ${shield})',
-          fr: 'Buster épée sur ${sword} (bouclier sur ${shield})',
           ja: '剣のタン強: ${sword} (盾: ${shield})',
-          cn: '剑死刑点 ${sword} (盾死刑点 ${shield})',
           ko: '칼 버스터: ${sword} (방패: ${shield})',
         },
       },
@@ -402,18 +369,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         defamationNoNumber: {
           en: 'Defamation on YOU',
-          de: 'Große AoE auf YOU',
-          fr: 'Diffamation sur VOUS',
           ja: '自分に青サークル',
-          cn: '穿天点名',
           ko: '내게 🔵폭탄!',
         },
         defamationCounted: {
           en: 'Defamation #${number} on YOU',
-          de: 'Große AoE #${number} auf DIR',
-          fr: 'Diffamation #${number} sur VOUS',
           ja: '自分に青サークル#${number}',
-          cn: '穿天 #${number} 点名',
           ko: '내게 ${number}번째 🔵폭탄!',
         },
       },
@@ -428,10 +389,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         pierceYou: {
           en: 'Line AoE on YOU',
-          de: 'Linien-AoE auf DIR',
-          fr: 'AoE en ligne sur VOUS',
           ja: '自分に直線AOE',
-          cn: '直线AOE点名',
           ko: '내게 줄! 스파이럴 피어스',
         },
       },
@@ -445,10 +403,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         icePuddleYou: {
           en: 'Ice puddle on YOU',
-          de: 'Eisfläche auf DIR',
-          fr: 'Flaque de glace sur VOUS',
           ja: '自分にAOE',
-          cn: '冰圈点名',
           ko: '내게 얼음 장판!',
         },
       },
@@ -462,10 +417,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         meteorYou: {
           en: '4x meteor puddles on YOU',
-          de: '4x Meteorflächen auf DIR',
-          fr: '4x Météore sur VOUS',
           ja: '自分に4xメテオ',
-          cn: '4连陨石点名',
           ko: '내게 4x 미티어 장판!',
         },
       },
@@ -494,26 +446,17 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         spearYou: {
           en: 'Wild Charge on YOU',
-          de: 'Ansturm auf DIR',
-          fr: 'Charge sauvage sur VOUS',
           ja: '自分に突進',
-          cn: '奶枪点名',
           ko: '내게 돌진!',
         },
         spearMainTank: {
           en: 'Wild Charge: STAY OUT',
-          de: 'Ansturm: BLEIB DRAUSEN',
-          fr: 'Charge sauvage : RESTEZ À L\'EXTÉRIEUR',
           ja: '突進: そのままヘイト取り',
-          cn: '奶枪: 保持远离',
           ko: '돌진: 계속 탱킹',
         },
         spearOther: {
           en: 'Wild Charge: Intercept ${spearTarget}',
-          de: 'Ansturm: Zwichen ${spearTarget} stehen',
-          fr: 'Charge sauvage : Interceptez ${spearTarget}',
           ja: '突進: ${spearTarget}のカバー',
-          cn: '奶枪: 挡住 ${spearTarget}',
           ko: '돌진: ${spearTarget}',
         },
       },
@@ -540,10 +483,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         combined: {
           en: '${dir1} / ${dir2} Unsafe',
-          de: '${dir1} / ${dir2} Nicht Sicher',
-          fr: '${dir1} / ${dir2} non-sûr',
           ja: '${dir1} / ${dir2} 危険場',
-          cn: '${dir1} / ${dir2} 危险',
           ko: '위험: ${dir1} / ${dir2}',
         },
         ...Directions.outputStrings8Dir,
@@ -564,10 +504,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         knockbackWarn: {
           en: 'Knockback from ${knightDir}',
-          de: 'Rückstoß von ${knightDir}',
-          fr: 'Poussée depuis ${knightDir}',
           ja: '${knightDir} ノックバック',
-          cn: '${knightDir} 击退',
           ko: '넉백: ${knightDir}',
         },
         ...fullDirNameMap,

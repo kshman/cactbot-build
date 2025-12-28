@@ -70,10 +70,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Break chain on ${player}',
-          de: 'Kette von ${player} brechen',
-          fr: 'Cassez les chaînes de ${player}',
           ja: '${player}の線を断つ',
-          cn: '截断${player}的线',
           ko: '체인 끊어요: ${player}',
         },
       },
@@ -93,10 +90,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Line Stack',
-          de: 'Sammeln in einer Linie',
-          fr: 'Packez-vous en ligne',
           ja: '頭割り',
-          cn: '直线分摊',
           ko: '뭉쳐요',
         },
       },

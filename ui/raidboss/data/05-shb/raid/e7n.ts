@@ -34,10 +34,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Teleporting Left',
-          de: 'Nach Links teleportieren',
-          fr: 'Téléportation à gauche',
           ja: '左にテレポ',
-          cn: '向左传送',
           ko: '왼쪽으로 순간이동',
         },
       },
@@ -51,10 +48,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Teleporting Right',
-          de: 'Nach Rechts teleportieren',
-          fr: 'Téléportation à droite',
           ja: '右にテレポ',
-          cn: '向右传送',
           ko: '오른쪽으로 순간이동',
         },
       },
@@ -68,10 +62,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Teleporting Forward',
-          de: 'Teleportation Vorwärts',
-          fr: 'Téléportation devant',
           ja: '前にテレポ',
-          cn: '向前传送',
           ko: '앞으로 순간이동',
         },
       },
@@ -85,10 +76,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Teleporting Back',
-          de: 'Teleportation Rückwärts',
-          fr: 'Téléportation derrière',
           ja: '後ろにテレポ',
-          cn: '向后传送',
           ko: '뒤로 순간이동',
         },
       },
@@ -102,10 +90,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Teleport into donut',
-          de: 'In den Donut teleportieren',
-          fr: 'Téléportez vous dans le donut',
           ja: 'ドーナツにテレポ',
-          cn: '传送进月环',
           ko: '도넛 안으로 순간이동',
         },
       },
@@ -138,10 +123,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Get hit by dark',
-          de: 'Vom Dunklen treffen lassen',
-          fr: 'Encaissez le noir',
           ja: '黒色を受ける',
-          cn: '吃黑色',
           ko: '깜장 맞아요',
         },
       },
@@ -163,10 +145,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Get hit by light',
-          de: 'Vom Hellen treffen lassen',
-          fr: 'Encaissez le blanc',
           ja: '白色を受ける',
-          cn: '吃白色',
           ko: '하양 맞아요',
         },
       },

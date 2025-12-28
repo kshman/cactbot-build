@@ -24,10 +24,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Get Behind or Look Away',
-          de: 'Geh hinter oder schau weg',
-          fr: 'Allez derrière ou Regardez ailleurs',
           ja: '背面へ、または視線をそらす',
-          cn: '去背后或背对',
           ko: '보스 뒤로 또는 뒤돌기',
         },
       },

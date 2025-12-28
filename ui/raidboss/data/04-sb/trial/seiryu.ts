@@ -24,11 +24,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'line stack',
-          de: 'Linien-Stack',
-          fr: 'Packez-vous en ligne',
           ja: 'スタック',
-          cn: '直线分摊',
-          tc: '直線分攤',
           ko: '뭉쳐요',
         },
       },
@@ -67,11 +63,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Get Towers',
-          de: 'Türme nehmen',
-          fr: 'Prenez les tours',
           ja: '塔を踏む',
-          cn: '踩塔',
-          tc: '踩塔',
           ko: '타워 밟아요',
         },
       },
@@ -116,10 +108,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Point Knockback Tether Outside',
-          de: 'Rückstoß-Verbindung nach draußen zeigen',
-          fr: 'Orientez les liens de poussée vers l\'extérieur',
-          cn: '将击退连线指向场外',
-          tc: '將擊退連線指向場外',
+          ja: 'Point Knockback Tether Outside',
           ko: '넉백 줄을 바깥으로 유도',
         },
       },
@@ -134,10 +123,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Point Cleave Tether Outside',
-          de: 'Cleave nach draußen zeigen',
-          fr: 'Orientez les liens de cleave vers l\'extérieur',
-          cn: '将顺劈连线指向场外',
-          tc: '將順劈連線指向場外',
+          ja: 'Point Cleave Tether Outside',
           ko: '쪼개기 줄을 바깥으로 유도',
         },
       },

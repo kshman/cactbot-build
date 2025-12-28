@@ -45,10 +45,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Out of blue circle',
-          de: 'Raus aus dem blauen Kreis',
-          fr: 'Sortez du cercle bleu',
           ja: '青い円から離れる',
-          cn: '离开蓝圈',
           ko: '🔵파란 동그라미 바깥으로',
         },
       },
@@ -67,10 +64,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Protean',
-          de: 'Um den Boss verteilen',
-          fr: 'Changement',
           ja: 'ボスを基準として散開',
-          cn: '和队友分散路径',
           ko: '흩어져요',
         },
       },
@@ -84,10 +78,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Face tether out',
-          de: 'Verbindung nach draußen richten',
-          fr: 'Lien vers l\'extérieur',
           ja: '線を外へ向ける',
-          cn: '离开人群背对连线',
           ko: '줄을 바깥쪽으로',
         },
       },

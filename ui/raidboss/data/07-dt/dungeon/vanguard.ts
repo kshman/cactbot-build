@@ -39,6 +39,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         corners: {
           en: 'Go outside (corners)',
+          ja: '外へ (角)',
           ko: '바깥으로 (모서리)',
         },
       },
@@ -54,6 +55,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         inside: {
           en: 'Go inside',
+          ja: '中へ',
           ko: '안으로',
         },
       },
@@ -70,10 +72,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         northSouth: {
           en: 'Dodge North/South line cleaves',
+          ja: '南北の線形範囲攻撃を避ける',
           ko: '남북 쪼개기 줄 피해요',
         },
         grid: {
           en: 'Spread + dodge grid cleaves',
+          ja: '散開 + 格子状の範囲攻撃を避ける',
           ko: '흩어졌다 🔜 격자 쪼개기 피해요',
         },
       },

@@ -69,11 +69,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Go E/W Sides',
-          de: 'Geh seitlich nach O/W',
-          fr: 'Allez côtés E/O',
           ja: '東/西側へ',
-          cn: '去左/右两侧',
-          tc: '去左/右兩側',
           ko: '안전: 동/서',
         },
       },
@@ -88,11 +84,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Go N/S Sides',
-          de: 'Geh seitlich nach N/S',
-          fr: 'Allez côtés N/S',
           ja: '北/南側へ',
-          cn: '去上/下两侧',
-          tc: '去上/下兩側',
           ko: '안전: 남/북',
         },
       },
@@ -136,11 +128,7 @@ const triggerSet: TriggerSet<Data> = {
         tankBuster: Outputs.tankBuster,
         avoidTankBuster: {
           en: 'Avoid tank buster',
-          de: 'Tank buster ausweichen',
-          fr: 'Évitez le tank buster',
           ja: 'タンクバスターを避ける',
-          cn: '远离坦克死刑',
-          tc: '遠離坦剋死刑',
           ko: '탱크버스터 피해요',
         },
       },
@@ -162,11 +150,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Knockback (from boss)',
-          de: 'Rückstoß (vom Boss)',
-          fr: 'Poussée (depuis le boss)',
           ja: 'ノックバック (ボスから)',
-          cn: '击退 (来自Boss)',
-          tc: '擊退 (來自Boss)',
           ko: '넉백 (보스)',
         },
       },
@@ -183,11 +167,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Knockback (from clone)',
-          de: 'Rückstoß (vom Klon)',
-          fr: 'Poussée (depuis le clone)',
           ja: 'ノックバック (複製体から)',
-          cn: '击退 (来自复制体)',
-          tc: '擊退 (來自複製體)',
           ko: '넉백 (클론)',
         },
       },
@@ -203,11 +183,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Knockback -> Get Middle',
-          de: 'Rückstoß -> Geh in die Mitte',
-          fr: 'Poussée -> Allez au milieu',
           ja: 'ノックバック -> 中へ',
-          cn: '击退 -> 去中间',
-          tc: '擊退 -> 去中間',
           ko: '넉백 -> 한가운데로',
         },
       },
@@ -222,11 +198,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Knockback -> Out of Middle',
-          de: 'Rückstoß -> Raus aus der Mitte',
-          fr: 'Poussée -> Sortez du milieu',
           ja: 'ノックバック -> 横へ',
-          cn: '击退 -> 去两侧',
-          tc: '擊退 -> 去兩側',
           ko: '넉백 -> 바깥쪽 (한가운데 있다가 죽어요)',
         },
       },
@@ -239,11 +211,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Attack Hansel',
-          de: 'Hänsel angreifen',
-          fr: 'Attaquez Hansel',
           ja: 'ヘンゼルに攻撃',
-          cn: '攻击韩塞尔',
-          tc: '攻擊韓塞爾',
           ko: '헨젤 쳐욧',
         },
       },
@@ -256,11 +224,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Attack Gretel',
-          de: 'Gretel angreifen',
-          fr: 'Attaquez Gretel',
           ja: 'グレーテルに攻撃',
-          cn: '攻击格雷特',
-          tc: '攻擊格雷特',
           ko: '그레텔 쳐욧',
         },
       },
@@ -363,18 +327,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         between: {
           en: 'Move between',
-          de: 'Laufe zwischen beide Bosse',
-          fr: 'Allez entre les boss',
-          cn: '去BOSS之间',
-          tc: '去BOSS之間',
+          ja: 'Move between',
           ko: '보스 사이로',
         },
         opposite: {
           en: 'Move opposite',
-          de: 'Laufe entgegengesetzt beider Bosse',
-          fr: 'Allez à l\'opposé des boss',
-          cn: '去BOSS对面',
-          tc: '去BOSS對面',
+          ja: 'Move opposite',
           ko: '보스 반대쪽으로',
         },
       },
@@ -398,11 +356,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Switch to white',
-          de: 'Auf Weiß wechseln',
-          fr: 'Changez en blanc',
           ja: '白に切替',
-          cn: '切换白',
-          tc: '切換白',
           ko: '햐양으로 바꿔요',
         },
       },
@@ -419,11 +373,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Switch to black',
-          de: 'Auf Schwarz wechseln',
-          fr: 'Changez en noir',
           ja: '黒に切替',
-          cn: '切换黑',
-          tc: '切換黑',
           ko: '깜장으로 바꿔요',
         },
       },
@@ -538,58 +488,37 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         center: {
           en: 'Go to Center',
-          de: 'Geh in die Mitte',
-          fr: 'Allez au centre',
-          cn: '去中间',
-          tc: '去中間',
+          ja: 'Go to Center',
           ko: '한가운데로',
         },
         northBoss: {
           en: 'Go to North Boss',
-          de: 'Geh zum nördlichen Boss',
-          fr: 'Allez au Nord (boss)',
-          cn: '去上半场BOSS脚下',
-          tc: '去上半場BOSS腳下',
+          ja: 'Go to North Boss',
           ko: '북쪽 보스로',
         },
         north: {
           en: 'Go North',
-          de: 'Geh nach Norden',
-          fr: 'Allez au Nord',
-          cn: '去上半场',
-          tc: '去上半場',
+          ja: 'Go North',
           ko: '북쪽으로',
         },
         westBoss: {
           en: 'Go to West Boss',
-          de: 'Geh zum westlichen Boss',
-          fr: 'Allez à l\'Ouest (boss)',
-          cn: '去左边BOSS脚下',
-          tc: '去左邊BOSS腳下',
+          ja: 'Go to West Boss',
           ko: '서쪽 보스로',
         },
         west: {
           en: 'Go West',
-          de: 'Geh nach Westen',
-          fr: 'Allez à l\'Ouest',
-          cn: '去左边',
-          tc: '去左邊',
+          ja: 'Go West',
           ko: '서쪽으로',
         },
         corner: {
           en: 'Go to Corner',
-          de: 'Geh in eine Ecke',
-          fr: 'Allez dans un coin',
-          cn: '去角落',
-          tc: '去角落',
+          ja: 'Go to Corner',
           ko: '구석으로',
         },
         oops: {
           en: 'Avoid line AOEs',
-          de: 'Weiche den Linien AoEs aus',
-          fr: 'Évitez les AoEs en ligne',
-          cn: '躲避直线AOE',
-          tc: '躲避直線AOE',
+          ja: 'Avoid line AOEs',
           ko: '레이저 피해요',
         },
       },
@@ -623,11 +552,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Lighter Note on YOU',
-          de: 'Weißer Choral auf DIR',
-          fr: 'Blanc : imprécation sur VOUS',
           ja: '自分に連続AoE',
-          cn: '地火点名',
-          tc: '地火點名',
           ko: '내게 라이터 노트 장판 설치',
         },
       },
@@ -670,11 +595,7 @@ const triggerSet: TriggerSet<Data> = {
         tankBuster: Outputs.tankBuster,
         avoidTankBuster: {
           en: 'Avoid tank buster',
-          de: 'Tank buster ausweichen',
-          fr: 'Évitez le tank buster',
           ja: 'タンクバスターを避ける',
-          cn: '远离坦克死刑',
-          tc: '遠離坦剋死刑',
           ko: '탱크버스터 피해요',
         },
       },
@@ -695,11 +616,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Dodge Building Below',
-          de: 'Gebäude unter einem ausweichen',
-          fr: 'Esquivez le bâtiment arrivant d\'en dessous',
           ja: '下の建物に当たらないように',
-          cn: '躲避下方建筑',
-          tc: '躲避下方建築',
           ko: '아래보고 빌딩 피해요',
         },
       },
@@ -723,11 +640,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Go To Red Light',
-          de: 'Geh zum roten Licht',
-          fr: 'Allez au feu rouge',
           ja: '赤信号の線路へ',
-          cn: '去红灯',
-          tc: '去紅燈',
           ko: '빨간 신호등으로',
         },
       },

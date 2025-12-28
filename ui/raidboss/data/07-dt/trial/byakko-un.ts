@@ -70,11 +70,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Provoke Boss',
-          de: 'Boss abspotten',
-          fr: 'Provoquez le Boss',
           ja: '挑発',
-          cn: '挑衅',
-          tc: '挑釁',
           ko: '보스 프로보크',
         },
       },
@@ -89,11 +85,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Provoke Boss',
-          de: 'Boss abspotten',
-          fr: 'Provoquez le Boss',
           ja: '挑発',
-          cn: '挑衅',
-          tc: '挑釁',
           ko: '보스 프로보크',
         },
       },
@@ -121,11 +113,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Tank LB NOW',
-          de: 'JETZT Tank LB',
-          fr: 'Transcendance Tank maintenant !',
           ja: '今タンクLB',
-          cn: '坦克LB',
-          tc: '坦克LB',
           ko: '지금 탱크 LB',
         },
       },
@@ -139,11 +127,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Drop bubble outside',
-          de: 'Blase außen ablegen',
-          fr: 'Déposez la bulle à l\'extérieur',
           ja: '外にマーカーを置く',
-          cn: '边缘放点名',
-          tc: '邊緣放點名',
           ko: '바깥에 버블 버려요',
         },
       },
@@ -157,11 +141,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Pink bubble',
-          de: 'Pinke Blase',
-          fr: 'Bulle violette',
           ja: '祟り目',
-          cn: '和其他泡泡散开',
-          tc: '和其他泡泡散開',
           ko: '핑크 버블',
         },
       },
@@ -175,11 +155,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Puddles on YOU',
-          de: 'Pfützen auf DIR',
-          fr: 'Zones au sol sur VOUS',
           ja: '自分に床範囲',
-          cn: '放圈点名',
-          tc: '放圈點名',
           ko: '내게 장판x3',
         },
       },
@@ -209,11 +185,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Tiger Add',
-          de: 'Tiger Add',
-          fr: 'Add Tigre',
           ja: '虎分離',
-          cn: '小老虎出现',
-          tc: '小老虎出現',
           ko: '호랑이 나와요',
         },
       },
@@ -241,11 +213,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Stack #${num}',
-          de: 'Stack #${num}',
-          fr: 'Packez-vous #${num}',
           ja: '頭割り #${num}',
-          cn: '分摊 #${num}',
-          tc: '分攤 #${num}',
           ko: '뭉쳐요#${num}',
         },
       },

@@ -85,6 +85,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         spreadPuddles: {
           en: 'Spread => Bait 3x Puddles',
+          ja: 'Spread => Bait 3x Puddles',
           ko: '흩어졌다 🔜 장판 3개 유도',
         },
       },
@@ -219,14 +220,17 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         northSouth: {
           en: 'Go N/S Mid',
+          ja: 'Go N/S Mid',
           ko: '안전: 남-북 가운데',
         },
         eastWest: {
           en: 'Go E/W Mid',
+          ja: 'Go E/W Mid',
           ko: '안전: 동-서 가운데',
         },
         unknownAvoid: {
           en: 'Avoid Exploding Lines',
+          ja: 'Avoid Exploding Lines',
           ko: '바닥 선 피해요',
         },
       },
@@ -270,14 +274,17 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         axe: {
           en: 'Out next',
+          ja: 'Out next',
           ko: '다음: 밖으로',
         },
         scythe: {
           en: 'In next',
+          ja: 'In next',
           ko: '다음: 안으로',
         },
         sword: {
           en: 'Intercards next',
+          ja: 'Intercards next',
           ko: '다음: 비스듬히',
         },
         unknown: Outputs.unknown,
@@ -345,6 +352,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         losMeteor: {
           en: 'LoS behind 2x meteor',
+          ja: 'LoS behind 2x meteor',
           ko: '돌 뒤로 두번 숨어요',
         },
       },
@@ -357,6 +365,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         flatliner: {
           en: 'Short knockback to sides',
+          ja: 'Short knockback to sides',
           ko: '옆으로 짧은 넉백',
         },
       },
@@ -369,6 +378,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         baitPuddles: {
           en: 'Bait 3x puddles',
+          ja: 'Bait 3x puddles',
           ko: '장판 3개 유도',
         },
       },
@@ -396,6 +406,7 @@ const triggerSet: TriggerSet<Data> = {
         se: Outputs.southeast,
         comboDir: {
           en: 'Proximity AoE; Go ${dir1}/${dir2}',
+          ja: 'Proximity AoE; Go ${dir1}/${dir2}',
           ko: '안전: ${dir1}/${dir2}',
         },
       },
@@ -409,6 +420,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         knockbackTowers: {
           en: 'Get Knockback Towers',
+          ja: 'Get Knockback Towers',
           ko: '넉백 타워 밟아요',
         },
       },
@@ -421,6 +433,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         westSafe: {
           en: 'Tower Knockback to West',
+          ja: 'Tower Knockback to West',
           ko: '타워 넉백: 서쪽으로',
         },
       },
@@ -433,6 +446,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         eastSafe: {
           en: 'Tower Knockback to East',
+          ja: 'Tower Knockback to East',
           ko: '타워 넉백: 동쪽으로',
         },
       },

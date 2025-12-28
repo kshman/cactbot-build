@@ -59,10 +59,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Knockback (with lightning)',
-          de: 'Rückstoß (mit Blitzen)',
-          fr: 'Poussée (avec éclair)',
           ja: 'ノックバック (雷)',
-          cn: '击退 (带闪电)',
           ko: '넉백 (번개 조심)',
         },
       },
@@ -81,10 +78,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Dodge normal -> glowing row',
-          de: 'Normal ausweichen -> leuchtende Reihe',
-          fr: 'Évitez normal -> ligne brillante',
           ja: '安置 -> ひかり',
-          cn: '去安全区 -> 发光行',
           ko: '늦게 오는데 있다가 -> 지나간 곳으로',
         },
       },
@@ -152,10 +146,7 @@ const triggerSet: TriggerSet<Data> = {
         knockback: Outputs.knockback,
         knockbackOrbs: {
           en: 'Knockback (avoid orbs)',
-          de: 'Rückstoßs (weiche den Orbs aus)',
-          fr: 'Poussée (évitez les orbes)',
           ja: 'ノックバック (玉回避)',
-          cn: '击退 (避开球)',
           ko: '넉백 (구슬 피해욧)',
         },
       },
@@ -192,18 +183,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         redSide: {
           en: 'Be on red half',
-          de: 'Geh zur roten Seite',
-          fr: 'Placez-vous sur la moitié rouge',
           ja: '赤い安置',
-          cn: '站红色半场',
           ko: '빨간쪽이 안전',
         },
         redSideAway: {
           en: 'Be on red half (away from portal)',
-          de: 'Geh zur roten Seite (weg vom Portal)',
-          fr: 'Placez-vous sur la moitié rouge (loin du portail)',
           ja: '赤い安置 (ポータルから離れる)',
-          cn: '站红色半场 (远离传送门)',
           ko: '빨간쪽이 안전 (포탈에서 떨어져욧)',
         },
       },
@@ -216,10 +201,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         blueSide: {
           en: 'Be on blue half',
-          de: 'Geh zur blauen Seite',
-          fr: 'Placez-vous sur la moitié bleue',
           ja: '青い安置',
-          cn: '站蓝色半场',
           ko: '파란쪽이 안전',
         },
       },
@@ -232,10 +214,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         nearRed: {
           en: 'Go near red portal',
-          de: 'Geh zum roten Portal',
-          fr: 'Allez sur le portail rouge',
           ja: '赤いポータルへ',
-          cn: '靠近红色传送门',
           ko: '빨간쪽 포탈로 가욧',
         },
       },
@@ -255,10 +234,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Under Lioness => Out',
-          de: 'Unter Löwin => Raus',
-          fr: 'Sous la Lionne => Extérieur',
           ja: 'ライオンの下 => 外へ',
-          cn: '去雌狮 => 外面',
           ko: '사자 밑에 있다가 🔜 밖으로',
         },
       },
@@ -271,10 +247,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Out => Under Lioness',
-          de: 'Raus => Unter Löwin',
-          fr: 'Extérieur => Sous la lionne',
           ja: '外 => ライオンの下へ',
-          cn: '外面 => 去雌狮',
           ko: '밖에 있다가 🔜 사자 밑',
         },
       },
@@ -330,10 +303,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Away from Orb',
-          de: 'Weg vom Orb',
-          fr: 'Éloignez-vous de l\'orbe',
           ja: '玉から離れる',
-          cn: '远离球',
           ko: '구슬에게서 먼곳으로',
         },
       },
@@ -372,10 +342,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Protean Spread on YOU',
-          de: 'Protean verteilen auf DIR',
-          fr: 'Position sur VOUS',
           ja: '自分に散会マーカー',
-          cn: '万变水波点名',
           ko: '내게 프로틴이니깐 흩어져욧',
         },
       },
@@ -421,18 +388,12 @@ const triggerSet: TriggerSet<Data> = {
         output.responseOutputStrings = {
           dropMarkerOutside: {
             en: 'Drop marker outside',
-            de: 'Marker draußen ablegen',
-            fr: 'Déposez les marqueurs à l\'extérieur',
             ja: '外側で捨てる',
-            cn: '人群外放置标记',
             ko: '바깥 쪽에서 버려욧',
           },
           ignoreLineStack: {
             en: 'Ignore fake stack',
-            de: 'Falsches Sammeln ignorieren',
-            fr: 'Ignorez le faux marqueur de package',
             ja: '偽頭割り無視',
-            cn: '忽略假点名',
             ko: '가짜 뭉침 표식이네',
           },
         };
@@ -463,10 +424,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         ignoreArrow: {
           en: 'Ignore fake arrow',
-          de: 'Falschen Pfeil ignorieren',
-          fr: 'Ignorez la fausse flèche',
           ja: '矢印は偽物',
-          cn: '忽略假箭头',
           ko: '가짜 화살표네',
         },
       },
@@ -486,10 +444,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         lineStackOn: {
           en: 'Line stack on ${player}',
-          de: 'In einer Linie auf ${player} sammeln',
-          fr: 'Packez-vous en ligne sur ${player}',
           ja: '${player}に直線頭割り',
-          cn: '${player} 直线分摊',
           ko: '한줄 뭉치기: ${player}',
         },
       },
@@ -506,10 +461,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Go to Blue Quadrant',
-          de: 'Geh zum blauen Quadrant',
-          fr: 'Allez sur le quart bleu',
           ja: '青い安置',
-          cn: '前往蓝色区域',
           ko: '파란 쪽으로!',
         },
       },
@@ -526,10 +478,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Go to Orange Quadrant',
-          de: 'Geh zum orangenen Quadrant',
-          fr: 'Allez sur le quart orange',
           ja: '赤い安置',
-          cn: '前往橙色区域',
           ko: '빨간 쪽으로!',
         },
       },
@@ -558,10 +507,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Stack groups',
-          de: 'Sammel Gruppen',
-          fr: 'Package en groupe',
           ja: 'グループで頭割り',
-          cn: '分组分摊',
           ko: '그룹끼리 뭉쳐요',
         },
       },
@@ -603,18 +549,12 @@ const triggerSet: TriggerSet<Data> = {
         output.responseOutputStrings = {
           dropMarkerOutside: {
             en: 'Under => Drop marker outside',
-            de: 'Unter ihn => Marker drausen ablegen',
-            fr: 'Dessous => Déposez le marqueur à l\'extérieur',
             ja: 'ボスの下 => 外側で捨てる',
-            cn: 'BOSS身下 => 人群外放置标记',
             ko: '밑에 있다가 🔜 바깥쪽에다 버려욧',
           },
           ignoreLineStack: {
             en: 'Under (ignore fake stack)',
-            de: 'Unter ihn (falsches Sammeln ignorieren)',
-            fr: 'Dessous (ignorez le faux package)',
             ja: 'ボスの下 (頭割りは偽物)',
-            cn: 'BOSS身下 (忽略假分摊)',
             ko: '밑에 있으면 되욧 (뭉치기가 페이크임)',
           },
         };
@@ -647,10 +587,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         ignoreArrow: {
           en: 'Out (ignore fake arrow)',
-          de: 'Raus (falschen Pfeil ignorieren)',
-          fr: 'Extérieur (ignorez la fausse flèche)',
           ja: '外側へ (矢印は偽物)',
-          cn: '去外面 (忽略假箭头)',
           ko: '밖으로 (화살표는 페이크임)',
         },
         out: Outputs.out,

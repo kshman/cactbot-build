@@ -112,11 +112,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Look Away From Statue',
-          de: 'Von Statue wegschauen',
-          fr: 'Ne regardez pas la statue',
           ja: '塔を見ない！',
-          cn: '背对神像',
-          tc: '背對神像',
           ko: '시선 피하기',
         },
       },
@@ -141,11 +137,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Look At Statue',
-          de: 'Statue anschauen',
-          fr: 'Regardez la statue',
           ja: '像を見る！',
-          cn: '面对神像',
-          tc: '面對神像',
           ko: '시선 바라보기',
         },
       },
@@ -158,11 +150,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Past: Stack and Stay',
-          de: 'Vergangenheit: Sammeln und Stehenbleiben',
-          fr: 'Passé : Packez-vous et restez',
           ja: '過去: スタックしてそのまま',
-          cn: '分摊然后不动',
-          tc: '分攤然後不動',
           ko: '과거: 맞고 가만히있기',
         },
       },
@@ -175,11 +163,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Future: Stack and Through',
-          de: 'Zukunft: Sammeln und Durchlaufen',
-          fr: 'Futur : Packez-vous et traversez',
           ja: '未来: 頭割り後ボスを通り抜ける',
-          cn: '分摊然后穿boss',
-          tc: '分攤然後穿boss',
           ko: '미래: 맞고 통과해가기',
         },
       },
@@ -194,11 +178,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Past: Bait, then through',
-          de: 'Vergangenheit : Anlocken und Durchlaufen',
-          fr: 'Passé : Attirez, puis traversez',
           ja: '過去: 飛んできたら反対に向ける',
-          cn: '诱导然后穿boss',
-          tc: '誘導然後穿boss',
           ko: '과거: 맞고, 이동',
         },
       },
@@ -213,11 +193,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Future: Bait, then stay',
-          de: 'Zukunft: Anlocken und Stehenbleiben',
-          fr: 'Futur : Attirez, puis restez',
           ja: '未来: 飛んできたらそのまま',
-          cn: '诱导然后不动',
-          tc: '誘導然後不動',
           ko: '미래: 맞고, 가만히',
         },
       },
@@ -244,20 +220,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         maxMeleeAvoidTanks: {
           en: 'Max Melee: Avoid Tanks',
-          de: 'Max Nahkampf: Weg von den Tanks',
-          fr: 'Max mêlée : éloignez-vous des tanks',
           ja: '近接最大レンジ タンクから離れる',
-          cn: '最大近战距离，避开坦克',
-          tc: '最大近戰距離，避開坦克',
           ko: '칼끝딜: 탱커 피하기',
         },
         wingsBeNearFar: {
           en: 'Wings: Be Near/Far',
-          de: 'Schwingen: Nah/Fern',
-          fr: 'Ailes : Placez-vous près/loin',
           ja: '翼: めり込む/離れる',
-          cn: '双翅膀：近或远',
-          tc: '雙翅膀：近或遠',
           ko: '양날개: 가까이/멀리',
         },
       },
@@ -270,11 +238,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Single Wing',
-          de: 'Einzelner Flügel',
-          fr: 'Aile unique',
           ja: '片翼',
-          cn: '单翅膀',
-          tc: '單翅膀',
           ko: '한쪽 날개',
         },
       },
@@ -298,20 +262,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         embraceOn: {
           en: 'Embrace on ${player}',
-          de: 'Umarmung auf ${player}',
-          fr: 'Étreinte sur ${player}',
           ja: '${player}に双腕',
-          cn: '分摊死刑点 ${player}',
-          tc: '分攤死刑點 ${player}',
           ko: '"${player}" 종말의 포옹',
         },
         embraceOnYou: {
           en: 'Embrace on YOU',
-          de: 'Umarmung auf DIR',
-          fr: 'Étreinte sur VOUS',
           ja: '自分に双腕',
-          cn: '分摊死刑点名',
-          tc: '分攤死刑點名',
           ko: '종말의 포옹 대상자',
         },
       },
@@ -332,11 +288,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Confusion: Go Outside',
-          de: 'Konfusion: Nach außen',
-          fr: 'Confusion : Allez à l\'extérieur',
           ja: '混乱: 外へ',
-          cn: '去外面',
-          tc: '去外面',
           ko: '혼란: 바깥으로',
         },
       },
@@ -350,11 +302,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Sleep: Go Inside',
-          de: 'Schlaf: Zur Mitte',
-          fr: 'Sommeil : Allez à l\'intérieur',
           ja: '睡眠: 中へ',
-          cn: '去中间',
-          tc: '去中間',
           ko: '수면: 안으로',
         },
       },
@@ -415,11 +363,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         thunderIce: {
           en: '${thunder}, ${dir}',
-          de: '${thunder}, ${dir}',
-          fr: '${thunder}, ${dir}',
           ja: '${thunder}, ${dir}',
-          cn: '${thunder}, ${dir}',
-          tc: '${thunder}, ${dir}',
           ko: '${thunder}, ${dir}',
         },
         fakeThunder: strings.fakeThunder,

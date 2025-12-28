@@ -42,10 +42,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Look for small spear',
-          de: 'Halt nach kleinem Speer ausschau',
-          fr: 'Allez sur la petite lance',
           ja: '低い杖を探す',
-          cn: '找短矛',
           ko: '작은 지팡이 찾아요',
         },
       },
@@ -58,10 +55,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Look for adds',
-          de: 'Halt nach dem Add ausschau',
-          fr: 'Cherchez les adds',
           ja: '雑魚に注意',
-          cn: '注意小怪',
           ko: '쫄 찾아요',
         },
       },
@@ -74,10 +68,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Fury\'s Bolt',
-          de: 'Wütender Blitz',
-          fr: 'Boule de foudre',
           ja: 'チャージボルト',
-          cn: '蓄雷',
           ko: '퓨리 볼트: 라무가 쎄져요',
         },
       },
@@ -97,10 +88,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Grab an orb',
-          de: 'Einen Orb nehmen',
-          fr: 'Prenez un orbe',
           ja: '雷玉を取る',
-          cn: '吃球',
           ko: '구슬 주워요',
         },
       },
@@ -114,10 +102,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Drop cloud outside',
-          de: 'Wolken draußen ablegen',
-          fr: 'Déposez le nuage à l\'extérieur',
           ja: '外に雷雲を捨てる',
-          cn: '外侧放雷云',
           ko: '바깥쪽에 구름 버려요',
         },
       },

@@ -51,10 +51,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Esuna ${player}',
-          de: 'Medica ${player}',
-          fr: 'Guérison sur ${player}',
           ja: '${player} にエスナ',
-          cn: '驱散: ${player}',
           ko: '에스나: ${player}',
         },
       },
@@ -93,10 +90,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Stand Between Bits',
-          de: 'Zwichen den Satelliten stehen',
-          fr: 'Placez-vous entre les drones',
           ja: '自動殺傷兵器の間に',
-          cn: '站在浮游炮间隙躲避激光',
           ko: '비트 사이에 자리잡아요',
         },
       },
@@ -117,26 +111,17 @@ const triggerSet: TriggerSet<Data> = {
         output.responseOutputStrings = {
           tankLaserOnYou: {
             en: 'Tank Laser on YOU',
-            de: 'Tank Laser auf DIR',
-            fr: 'Tank laser sur VOUS',
             ja: '自分に対人光線',
-            cn: '坦克激光点名',
             ko: '내게 탱크 레이저',
           },
           tankLaserOnPlayer: {
             en: 'Tank Laser on ${player}',
-            de: 'Tank Laser auf ${player}',
-            fr: 'Tank laser sur ${player}',
             ja: '${player} に対人光線',
-            cn: '坦克激光点名 ${player}',
             ko: '탱크 레이저: ${player}',
           },
           avoidLaserOnPlayer: {
             en: 'Avoid Laser on ${player}',
-            de: 'Weiche dem Laser von ${player} aus',
-            fr: 'Évitez le laser sur ${player}',
             ja: '${player} への対人光線を避ける',
-            cn: '远离激光点名: ${player}',
             ko: '탱크 레이저 피해요: ${player}',
           },
         };
@@ -213,10 +198,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         cleanse: {
           en: 'Heal ${player} to Full',
-          de: 'Heile ${player} voll',
-          fr: 'Soignez ${player} complètement',
           ja: '${player} をフル回復',
-          cn: '奶满 ${player}',
           ko: '만피: ${player}',
         },
       },

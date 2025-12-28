@@ -43,18 +43,22 @@ const getFacingDir = (pos: number, hdg: number): DirectionOutputIntercard => {
 const coldFeatOutputStrings = {
   start: {
     en: 'Start ${dir}',
+    ja: '開始 ${dir}',
     ko: '시작: ${dir}',
   },
   followup: {
     en: 'Go ${dir}',
+    ja: '移動 ${dir}',
     ko: '이동: ${dir}',
   },
   avoidStart: {
     en: 'Avoid cleaves from untethered adds',
+    ja: '線のない雑魚の範囲攻撃を避ける',
     ko: '줄 안달린 쫄 쪼개기 피해요',
   },
   avoidFollowup: {
     en: 'Avoid cleaves from remaining adds',
+    ja: '残った雑魚の範囲攻撃を避ける',
     ko: '남은 쫄 쪼개기 피해요',
   },
   or: Outputs.or,
@@ -236,6 +240,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         avoidAndSpread: {
           en: 'Avoid lines => Spread after',
+          ja: '線を避けて => あとで散開',
           ko: '줄 피해고 🔜 나중에 흩어져요',
         },
       },
@@ -266,10 +271,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         stackInHole: {
           en: 'Stack donuts in hole',
+          ja: '穴の中でドーナツに集合',
           ko: '도넛 안에서 뭉쳐요',
         },
         stackInLines: {
           en: 'Stack donuts in safe lines',
+          ja: '安全な線の中でドーナツに集合',
           ko: '안전 장소에서 도넛 뭉쳐요',
         },
       },
@@ -286,10 +293,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         spreadFromHole: {
           en: 'Spread + Away from puddle',
+          ja: '散開 + 水たまりから離れて',
           ko: '흩어지면서 + 장판 피해요',
         },
         spreadFromLines: {
           en: 'Spread + Away from lines',
+          ja: '散開 + 線から離れて',
           ko: '흩어지면서 + 선 피해요',
         },
       },
@@ -307,6 +316,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         combo: {
           en: '${inOut} + ${lookAway}',
+          ja: '${inOut} + ${lookAway}',
           ko: '${inOut} + ${lookAway}',
         },
         in: Outputs.in,
@@ -323,6 +333,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         spreadBreak: {
           en: 'Spread => Break crystals',
+          ja: '散開 => クリスタルを壊す',
           ko: '흩어졌다 🔜 크리스탈 부셔요',
         },
       },
@@ -350,6 +361,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         stack: {
           en: 'Stack (3 hits)',
+          ja: '集合 (3回)',
           ko: '뭉쳐요 (3번)',
         },
       },
@@ -363,6 +375,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         absorb: {
           en: 'Absorb all orbs',
+          ja: '全ての球を吸収',
           ko: '구슬 전부 문대요',
         },
       },
@@ -382,6 +395,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         kb: {
           en: 'Knockback (from West)',
+          ja: '西からのノックバック',
           ko: '서쪽에서 넉백',
         },
       },
@@ -399,6 +413,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         dodgeSpread: {
           en: 'Dodge toward fire crystal => Spread',
+          ja: '火のクリスタルに避けて => 散開',
           ko: '불 크리스탈로 피했다 🔜 흩어져요',
         },
       },
@@ -418,10 +433,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         kbEast: {
           en: 'Knockback (from East) to Fire crystal => Spread',
+          ja: '東からのノックバック => 火のクリスタルに避けて => 散開',
           ko: '동쪽에서 불 크리스탈로 넉백 🔜 흩어져요',
         },
         kbWest: {
           en: 'Knockback (from West) to Fire crystal => Spread',
+          ja: '西からのノックバック => 火のクリスタルに避けて => 散開',
           ko: '서쪽에서 불 크리스탈로 넉백 🔜 흩어져요',
         },
       },
@@ -435,6 +452,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         kbAoe: {
           en: 'Knockback + AoE',
+          ja: 'ノックバック + AoE',
           ko: '넉백 + AOE',
         },
       },
@@ -448,6 +466,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         kbAoe2: {
           en: 'Knockback + AoE (avoid tornadoes)',
+          ja: 'ノックバック + AoE (竜巻を避ける)',
           ko: '넉백 + AOE (회오리 피해요)',
         },
       },

@@ -61,10 +61,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Sluice on YOU',
-          de: 'Schleusenöffnung auf DIR',
-          fr: 'Éclusage sur Vous',
           ja: '自分にスルース',
-          cn: '蓝点名',
           ko: '내게 슬루스(봇물)',
         },
       },
@@ -80,10 +77,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: '3x Tank Cleave',
-          de: '3x Tank Cleave',
-          fr: 'Tank Cleave x3',
           ja: 'タンク強攻撃x3',
-          cn: '3x 顺劈',
           ko: '탱크 쪼개기 x3',
         },
       },
@@ -97,10 +91,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Repeated tank cleaves',
-          de: 'Wiederholte Tank Cleaves',
-          fr: 'Répétition de Tank cleaves',
           ja: '連続タンク強攻撃',
-          cn: '多重顺劈',
           ko: '탱크 쪼개기 반복',
         },
       },
@@ -114,10 +105,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Drainage on YOU',
-          de: 'Entwässerung auf DIR',
-          fr: 'Drainage sur VOUS',
           ja: '自分にドレナージ',
-          cn: '连线点名',
           ko: '내게 드레니지',
         },
       },
@@ -132,10 +120,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Get drainage tether',
-          de: 'Hole die Entwässerungs-Verbindung',
-          fr: 'Prenez un lien de drainage',
           ja: '線を取る',
-          cn: '接线',
           ko: '드레니지 줄 채요',
         },
       },
@@ -180,18 +165,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         repel: {
           en: 'Repel: close to ${player}',
-          de: 'Abstoß: nahe bei ${player}',
-          fr: 'Répulsion : Rapprochez-vous de ${player}',
           ja: '同じ極: ${player}に近づく',
-          cn: '同极：靠近${player}',
           ko: '같은 극! 붙어요: ${player}',
         },
         attract: {
           en: 'Attract: away from ${player}',
-          de: 'Anziehung: weg von ${player}',
-          fr: 'Attraction : Éloignez-vous de ${player}',
           ja: '異なる極: ${player}から離れる',
-          cn: '异极：远离${player}',
           ko: '다른 극! 떨어져요: ${player}',
         },
       },

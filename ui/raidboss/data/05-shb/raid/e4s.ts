@@ -72,10 +72,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Yellow Spread',
-          de: 'Gelb Verteilen',
-          fr: 'Dispersion des jaunes',
-          cn: '黄标分散',
-          tc: '黃標分散',
+          ja: 'Yellow Spread',
           ko: '노란색 산개',
         },
       },
@@ -89,11 +86,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Look for Evil Earth Marker',
-          de: 'Schau nach den Grimm der Erde Marker',
-          fr: 'Repérez une marque de Terre maléfique',
           ja: '範囲見て',
-          cn: '确认扩散标记位置',
-          tc: '確認擴散標記位置',
           ko: '사악한 대지 패턴 확인',
         },
       },
@@ -107,10 +100,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Orange Stack',
-          de: 'Orange Sammeln',
-          fr: 'Package des oranges',
-          cn: '橙标分摊',
-          tc: '橙標分攤',
+          ja: 'Orange Stack',
           ko: '주황색 쉐어',
         },
       },
@@ -135,11 +125,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Landslide: In Front',
-          de: 'Armberge: Vor ihm',
-          fr: 'Glissement : Devant',
           ja: 'ランスラ: 正面へ',
-          cn: '面前躲避',
-          tc: '面前躲避',
           ko: '완갑: 정면',
         },
       },
@@ -158,11 +144,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Back Corners',
-          de: 'Hintere Ecken',
-          fr: 'Coins arrière',
           ja: 'ランスラくるよ',
-          cn: '后方角落',
-          tc: '後方角落',
           ko: '뒤쪽 구석으로',
         },
       },
@@ -176,11 +158,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Bomb on YOU',
-          de: 'Bombe auf DIR',
-          fr: 'Bombe sur VOUS',
           ja: 'マーカーついた',
-          cn: '陨石点名',
-          tc: '隕石點名',
           ko: '거리감쇠 징 대상자',
         },
       },
@@ -226,38 +204,22 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         hideBehindEast: {
           en: 'Hide Behind East',
-          de: 'Im Osten vestecken',
-          fr: 'Cachez-vous derrière à l\'est',
           ja: '東',
-          cn: '右边躲避',
-          tc: '右邊躲避',
           ko: '동쪽으로',
         },
         hideBehindWest: {
           en: 'Hide Behind West',
-          de: 'Im Westen vestecken',
-          fr: 'Cachez-vous derrière à l\'ouest',
           ja: '西',
-          cn: '左边躲避',
-          tc: '左邊躲避',
           ko: '서쪽으로',
         },
         goCardinalsFirst: {
           en: 'Go Cardinals First',
-          de: 'Zuerst zu den Seiten gehen',
-          fr: 'Allez aux cardinaux en premier',
           ja: 'まずは十字',
-          cn: '先去正点',
-          tc: '先去正點',
           ko: '먼저 측면으로 이동',
         },
         goCornersFirst: {
           en: 'Go Corners First',
-          de: 'Zuerst in die Ecken gehen',
-          fr: 'Allez dans les coins en premier',
           ja: 'まずはコーナー',
-          cn: '先去角落',
-          tc: '先去角落',
           ko: '먼저 구석으로 이동',
         },
       },
@@ -270,11 +232,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Wheels: On Sides',
-          de: 'Räder: Zur Seite',
-          fr: 'Roues : Sur les côtés',
           ja: '車輪: 横へ',
-          cn: '车轮：两侧',
-          tc: '車輪：兩側',
           ko: '바퀴: 옆으로',
         },
       },
@@ -287,11 +245,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Tank Charge',
-          de: 'Tank wird angefahren',
-          fr: 'Charge tank',
           ja: 'タンクに突進',
-          cn: '坦克冲锋',
-          tc: '坦克衝鋒',
           ko: '탱커를 향해 돌진',
         },
       },
@@ -342,11 +296,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Left => Stay Left',
-          de: 'Links, Links bleiben',
-          fr: 'À gauche, puis restez',
           ja: 'ずっと左',
-          cn: '一直在左',
-          tc: '一直在左',
           ko: '왼쪽 => 왼쪽',
         },
       },
@@ -359,11 +309,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Right => Stay Right',
-          de: 'Rechts, Rechts bleiben',
-          fr: 'À droite, puis restez',
           ja: 'ずっと右',
-          cn: '一直在右',
-          tc: '一直在右',
           ko: '오른쪽 => 오른쪽',
         },
       },
@@ -383,10 +329,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Blue Weight',
-          de: 'Blau Gewicht',
-          fr: 'Poids bleu',
-          cn: '蓝标大陆之重',
-          tc: '藍標大陸之重',
+          ja: 'Blue Weight',
           ko: '파란징 대륙의 무게',
         },
       },
@@ -429,10 +372,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Gaol on YOU (w/${player})',
-          de: 'Gefängnis auf DIR (mit ${player})',
-          fr: 'Geôle sur VOUS (avec ${player})',
-          cn: '石牢点名 (与${player})',
-          tc: '石牢點名 (與${player})',
+          ja: 'Gaol on YOU (w/${player})',
           ko: '돌감옥 대상자 (+${player})',
         },
       },
@@ -454,11 +394,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         leftOrBack: {
           en: 'Left (or Back)',
-          de: 'Links (oder Hinten)',
-          fr: 'Gauche (ou Arrière)',
-          ja: '右前壊れるよ', // FIXME
-          cn: '左 (或 后)',
-          tc: '左 (或 後)',
+          ja: '右前壊れるよ', // FIXME,
           ko: '왼쪽 (또는 뒤)',
         },
         left: Outputs.left,
@@ -482,11 +418,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         leftOrFront: {
           en: 'Left (or Front)',
-          de: 'Links (oder Vorne)',
-          fr: 'Gauche (ou Devant)',
-          ja: '右後ろ壊れるよ', // FIXME
-          cn: '左 (或 前)',
-          tc: '左 (或 前)',
+          ja: '右後ろ壊れるよ', // FIXME,
           ko: '왼쪽 (또는 앞)',
         },
         left: Outputs.left,
@@ -510,11 +442,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         frontOrRight: {
           en: 'Right (or Front)',
-          de: 'Rechts (oder Vorne)',
-          fr: 'Droite (ou Devant)',
-          ja: '左後ろ壊れるよ', // FIXME
-          cn: '右 (或 前)',
-          tc: '右 (或 前)',
+          ja: '左後ろ壊れるよ', // FIXME,
           ko: '오른쪽 (또는 앞)',
         },
         right: Outputs.right,
@@ -538,11 +466,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         backOrRight: {
           en: 'Right (or Back)',
-          de: 'Rechts (oder Hinten)',
-          fr: 'Droite (ou Arrière)',
-          ja: '左前壊れるよ', // FIXME
-          cn: '右 (或 后)',
-          tc: '右 (或 後)',
+          ja: '左前壊れるよ', // FIXME,
           ko: '오른쪽 (또는 뒤)',
         },
         right: Outputs.right,

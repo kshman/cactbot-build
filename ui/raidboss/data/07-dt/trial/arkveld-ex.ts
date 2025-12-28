@@ -53,6 +53,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Go ${direction}',
+          ja: 'Go ${direction}',
           ko: '보스 ${direction}으로',
         },
         left: Outputs.left,
@@ -69,6 +70,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Sides => Middle',
+          ja: 'Sides => Middle',
           ko: '돌진 피하고 🔜 가운데로',
         },
       },
@@ -83,6 +85,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Stay sides',
+          ja: 'Stay sides',
           ko: '돌진 피하고 🔜 그대로 옆으로',
         },
       },
@@ -109,6 +112,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Boss Rush',
+          ja: 'Boss Rush',
           ko: '3단 도넛 돌진!',
         },
       },
@@ -156,6 +160,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Go Front / Sides',
+          ja: 'Go Front / Sides',
           ko: '꼬리치기 피해요',
         },
       },
@@ -175,6 +180,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Spread for towers',
+          ja: 'Spread for towers',
           ko: '타워 위치로!',
         },
       },
@@ -193,6 +199,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         tower: {
           en: 'Get towers',
+          ja: 'Get towers',
           ko: '타워 밟아요!',
         },
       },
@@ -221,10 +228,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         lower: {
           en: 'Dice ${num}',
+          ja: 'Dice ${num}',
           ko: '주사위 ${num}',
         },
         upper: {
           en: 'Dice ${num} (${lower})',
+          ja: 'Dice ${num} (${lower})',
           ko: '주사위 ${num} (${lower})',
         },
       },
@@ -323,6 +332,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Waves',
+          ja: 'Waves',
           ko: '연속 물결 장판',
         },
       },
@@ -335,6 +345,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'AoE + Exaflare',
+          ja: 'AoE + Exaflare',
           ko: '전체 공격 🔜 엑사플레어',
         },
       },

@@ -30,10 +30,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Stand on webs',
-          de: 'Auf den Spinnennetzen stehen',
-          fr: 'Placez-vous dans les toiles',
           ja: 'アンキレーウェブに入る',
-          cn: '站在网上',
           ko: '거미줄 위로',
         },
       },
@@ -46,10 +43,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Get Puddles',
-          de: 'Flächen nehmen',
-          fr: 'Allez dans les zones au sol',
           ja: '踏む',
-          cn: '踩圈',
           ko: '바닥 장판 밟아요',
         },
       },
@@ -136,10 +130,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Drop Web Outside',
-          de: 'Spinnennetz draußen ablegen',
-          fr: 'Déposez les toiles à l\'extérieur',
           ja: 'ウェブを外周に捨てる',
-          cn: '蛛网点名，放在场边',
           ko: '거미집을 바깥쪽에 버려요',
         },
       },
@@ -160,10 +151,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Puddles on YOU',
-          de: 'Pfützen auf DIR',
-          fr: 'Zones au sol sur VOUS',
           ja: '自分に床範囲',
-          cn: '圈圈点名',
           ko: '내게 장판',
         },
       },
@@ -197,10 +185,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Stand in one puddle',
-          de: 'In einer Fläche stehen',
-          fr: 'Placez-vous dans une zone au sol',
           ja: '範囲に入る',
-          cn: '站在圈里',
           ko: '장판 하나만 밟아요',
         },
       },
@@ -214,10 +199,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Drop meteor back or left',
-          de: 'Meteor hinten oder links ablegen',
-          fr: 'Déposez le météore derrière ou à gauche',
           ja: 'メテオ、後ろや左に置く',
-          cn: '流星点名，放在背后或左边',
           ko: '메테오를 뒤쪽/왼쪽에 버려요',
         },
       },
@@ -232,10 +214,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Get off rectangle platform',
-          de: 'Von der plattform runter gehen',
-          fr: 'Descendez de la plateforme rectangle',
           ja: '通路で回避',
-          cn: '离开平台',
           ko: '복도로 피해요!',
         },
       },
@@ -266,18 +245,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         tankLasers: {
           en: 'Tank lasers--Avoid party',
-          de: 'Tank lasers--Weg von der Party',
-          fr: 'Tank lasers - Évitez le groupe',
           ja: 'タンクレーザー - 外に',
-          cn: '坦克激光--远离人群',
           ko: '탱크 레이저 - 파티는 피해요',
         },
         avoidTanks: {
           en: 'Avoid tanks',
-          de: 'Weg von den Tanks',
-          fr: 'Évitez les tanks',
           ja: 'タンクから離れる',
-          cn: '远离坦克',
           ko: '탱크 피해요',
         },
       },
@@ -293,10 +266,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Get orbs',
-          de: 'Kugeln nehmen',
-          fr: 'Prenez les orbes',
           ja: '玉を取る',
-          cn: '撞球',
           ko: '구슬 처리',
         },
       },
@@ -350,10 +320,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Close to axes, avoid bulbs',
-          de: 'Nahe den Äxten, vermeide Knospen',
-          fr: 'Restez proche des haches, évitez les bulbes',
           ja: '刃物の髪に近づき、丸い髪から離れる',
-          cn: '靠近斧状发，远离球状发',
           ko: '도끼에 가까이, 덤불은 피해요',
         },
       },
@@ -367,10 +334,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Avoid scythe line AoEs',
-          de: 'Weiche den Sensen AOEs aus',
-          fr: 'Évitez les AoEs en lignes des faux',
           ja: '十字AoE',
-          cn: '躲避镰刀直线AOE',
           ko: '낫 직선 장판 피해요',
         },
       },
@@ -385,10 +349,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Avoid purple circles',
-          de: 'Vermeide die lilanen Flächen',
-          fr: 'Évitez les cercles violets',
           ja: '紫の円範囲を避ける',
-          cn: '远离紫圈',
           ko: '🟣보라 동그라미 피해요',
         },
       },
@@ -416,18 +377,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         skyLaserOnYou: {
           en: '16x Sky Laser on YOU!',
-          de: '16x Himmelslaser auf DIR!',
-          fr: '16x Lasers du ciel sur VOUS',
           ja: '自分に16連撃潜地式波動砲！',
-          cn: '16连追踪AOE点名',
           ko: '내게 16x 스카이 레이저!',
         },
         avoidSkyLasers: {
           en: 'Avoid Sky Lasers',
-          de: 'Himmelslaser ausweichen',
-          fr: 'Évitez les lasers du ciel',
           ja: '潜地式波動砲を避ける',
-          cn: '躲避追踪AOE',
           ko: '스카이 레이저 피해요',
         },
       },

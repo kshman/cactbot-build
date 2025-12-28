@@ -81,9 +81,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         frozen: {
           en: 'Frozen soon',
-          de: 'Bald einfrieren',
-          fr: 'Gelé bientôt',
-          cn: '即将冻结',
+          ja: 'Frozen soon',
           ko: '움직여요! (곧 얼어요)',
         },
       },
@@ -109,9 +107,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         iceLeft: {
           en: 'Right => Get Under',
-          de: 'Rechts => Geh unter den Gegner',
-          fr: 'Droite => Allez dessous',
-          cn: '右 => 身下',
+          ja: 'Right => Get Under',
           ko: '오른쪽 🔜 보스 밑으로',
         },
       },
@@ -125,9 +121,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         iceRight: {
           en: 'Left => Get Under',
-          de: 'Links => Geh unter den Gegner',
-          fr: 'Gauche => Allez dessous',
-          cn: '左 => 身下',
+          ja: 'Left => Get Under',
           ko: '왼쪽 🔜 보스 밑으로',
         },
       },
@@ -141,9 +135,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         fireRight: {
           en: 'Left => Out',
-          de: 'Links => Raus',
-          fr: 'Droite => Extérieur',
-          cn: '左 => 远离',
+          ja: 'Left => Out',
           ko: '왼쪽 🔜 밖으로',
         },
       },
@@ -157,9 +149,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         fireLeft: {
           en: 'Right => Out',
-          de: 'Rechts => Raus',
-          fr: 'Gauche => Extérieur',
-          cn: '右 => 远离',
+          ja: 'Right => Out',
           ko: '오른쪽 🔜 밖으로',
         },
       },

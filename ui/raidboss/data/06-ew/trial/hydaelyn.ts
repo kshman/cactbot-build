@@ -108,10 +108,7 @@ const triggerSet: TriggerSet<Data> = {
         ...comboOutputStrings,
         intercards: {
           en: 'Intercards',
-          de: 'Interkardinal',
-          fr: 'Intercardinal',
           ja: '斜めへ',
-          cn: '四角',
           ko: '비스듬히',
         },
       },
@@ -223,10 +220,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         avoid: {
           en: 'Avoid Line Ends',
-          de: 'Weiche den Enden der Linien aus',
-          fr: 'Évitez les fins de lignes',
           ja: '線の端から離れる',
-          cn: '远离线',
           ko: '선 끝자락 피해요',
         },
       },
@@ -239,10 +233,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Stack 5x',
-          de: '5x Sammeln',
-          fr: '5x Packages',
           ja: '頭割り５回',
-          cn: '5连分摊',
           ko: '5x 뭉쳐요',
         },
       },

@@ -42,10 +42,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Stop attacking ${target}',
-          de: 'Stoppe Angriffe auf ${target}',
-          fr: 'Arrêtez d\'attaquer ${target}',
           ja: '攻撃禁止: ${target}',
-          cn: '停止攻击 ${target}',
           ko: '반사! 공격 중지: ${target}',
         },
       },
@@ -60,10 +57,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Break line-of-sight to ${name}',
-          de: 'Unterbreche Sichtlinie zu ${name}',
-          fr: 'Masquez le champ de vision vers ${name}',
           ja: '${name}の視線から隠れる',
-          cn: '利用掩体卡 ${name} 的视线',
           ko: '시야 밖으로 숨어요: ${name}',
         },
       },
@@ -160,20 +154,17 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         repeat: {
           en: '${left} => ${front} x3 => ${left} => ${front} x3',
-          de: '${left} => ${front} x3 => ${left} => ${front} x3',
-          cn: '${left} => ${front} x3 => ${left} => ${front} x3',
+          ja: '${left} => ${front} x3 => ${left} => ${front} x3',
           ko: '${left} 🔜 ${front}x3 🔜 ${left} 🔜 ${front}x3',
         },
         rewind: {
           en: '${left} => ${front} x6 => ${left}',
-          de: '${left} => ${front} x6 => ${left}',
-          cn: '${left} => ${front} x6 => ${left}',
+          ja: '${left} => ${front} x6 => ${left}',
           ko: '${left} 🔜 ${front}x6 🔜 ${left}',
         },
         avoid: {
           en: 'Avoid swipes x8',
-          de: 'Vermeide Schwung x8',
-          cn: '避开顺劈 x8',
+          ja: 'Avoid swipes x8',
           ko: '스와이프x8 피해요!',
         },
         left: Outputs.left,

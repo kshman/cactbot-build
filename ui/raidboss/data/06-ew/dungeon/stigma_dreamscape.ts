@@ -54,10 +54,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Go front of boss',
-          de: 'Geh vor den Boss',
-          fr: 'Allez devant le boss',
           ja: 'ボスの前に',
-          cn: '去boss前面',
           ko: '보스 앞으로',
         },
       },
@@ -81,18 +78,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         target: {
           en: 'Stack + Knockback on YOU!',
-          de: 'Sammeln + Rückstoß auf DIR!',
-          fr: 'Package + Poussée sur VOUS !',
           ja: '頭割り + ノックバック',
-          cn: '分摊 + 击退点名',
           ko: '내게 뭉쳐서 넉백!',
         },
         allies: {
           en: 'Stack + knockback on ${target}',
-          de: 'Sammeln + Rückstoß auf ${target}',
-          fr: 'Package + Poussée sur ${target}',
           ja: '${target} に頭割り + ノックバック',
-          cn: '分摊 + 击退点名 ${target}',
           ko: '뭉쳐서 넉백: ${target}',
         },
       },
@@ -106,10 +97,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Guided Missile on YOU',
-          de: 'Geführte Rakete auf DIR',
-          fr: 'Missile guidé sur VOUS',
           ja: '誘導ミサイル',
-          cn: '导弹点名',
           ko: '내게 유도 미사일',
         },
       },
@@ -128,10 +116,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Get to wall at last dash',
-          de: 'Geh zur Wand des letzten Ansturms',
-          fr: 'Allez vers le mur après la dernière ruée',
           ja: '最後の突進先に移動',
-          cn: '靠近最后一次冲锋终点的墙壁',
           ko: '마지막 돌진한 곳 벽으로 가세욧',
         },
       },
@@ -148,10 +133,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: '#${num} laser on YOU!',
-          de: '#${num} Laser auf DIR!',
-          fr: '#${num} Laser sur VOUS !',
           ja: 'レーザー: #${num} 番',
-          cn: '激光点名 #${num}',
           ko: '내 레이저: #${num}번',
         },
       },
@@ -207,10 +189,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Avoid side dashes',
-          de: 'Weiche den Anstürmen von der Seite aus',
-          fr: 'Évitez les ruées sur les côtés',
           ja: '左右のロケットパンチを避ける',
-          cn: '躲避两侧冲锋',
           ko: '옆쪽 로켓 주먹 피해요',
         },
       },
@@ -250,10 +229,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Mindhack: Forward',
-          de: 'Geistlenkung: Vorwärts',
-          fr: 'Piratage mental : Vers l\'avant',
           ja: '強制移動 : 前',
-          cn: '强制移动 : 前',
           ko: '강제이동: 앞',
         },
       },
@@ -267,10 +243,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Mindhack: Back',
-          de: 'Geistlenkung: Rückwärts',
-          fr: 'Piratage mental : Vers l\'arrière',
           ja: '強制移動 : 後ろ',
-          cn: '强制移动 : 后',
           ko: '강제이동: 뒤',
         },
       },
@@ -284,10 +257,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Mindhack: Left',
-          de: 'Geistlenkung: Links',
-          fr: 'Piratage mental : Vers la gauche',
           ja: '強制移動 : 左',
-          cn: '强制移动 : 左',
           ko: '강제이동: 왼쪽',
         },
       },
@@ -301,10 +271,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Mindhack: Right',
-          de: 'Geistlenkung: Rechts',
-          fr: 'Piratage mental : Vers la droite',
           ja: '強制移動 : 右',
-          cn: '强制移动 : 右',
           ko: '강제이동: 오른쪽',
         },
       },

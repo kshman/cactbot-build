@@ -20,11 +20,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Run Marker Away',
-          de: 'Mit Marker weglaufen',
-          fr: 'Fuyez avec le marqueur',
           ja: 'マーカーから離れる',
-          cn: '远离人群',
-          tc: '遠離人群',
           ko: '점프 마커! 멀리 버려요!',
         },
       },
@@ -45,11 +41,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Gekko Marker',
-          de: 'Gekko Marker',
-          fr: 'Marqueur Gekkô',
           ja: '月光マーキング',
-          cn: '月光点名',
-          tc: '月光點名',
           ko: '월광 마커',
         },
       },

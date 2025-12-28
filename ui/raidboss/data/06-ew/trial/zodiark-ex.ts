@@ -255,10 +255,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         underQuetz: {
           en: 'Under NW Quetzalcoatl',
-          de: 'Unter NW Quetzalcoatl',
-          fr: 'Sous le Quetzalcóatl NO',
           ja: '北東の鳥の下',
-          cn: '站在左上 (西北) 鸟',
           ko: '북동쪽 케찰코아틀 아래로',
         },
       },
@@ -412,50 +409,32 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         outsideNorth: {
           en: 'Outside North',
-          de: 'Außen Norden',
-          fr: 'Nord Extérieur',
           ja: '北の外側',
-          cn: '上 (北) 外',
           ko: '북[밖]',
         },
         insideNorth: {
           en: 'Inside North',
-          de: 'Innen Norden',
-          fr: 'Nord Intérieur',
           ja: '北の内側',
-          cn: '上 (北) 内',
           ko: '북[안]',
         },
         outsideWest: {
           en: 'Outside West',
-          de: 'Außen Westen',
-          fr: 'Ouest Extérieur',
           ja: '西の外側',
-          cn: '左 (西) 外',
           ko: '서[밖]',
         },
         insideWest: {
           en: 'Inside West',
-          de: 'Innen Westen',
-          fr: 'Ouest Intérieur',
           ja: '西の内側',
-          cn: '左 (西) 内',
           ko: '서[안]',
         },
         outsideEast: {
           en: 'Outside East',
-          de: 'Außen Osten',
-          fr: 'Est Extérieur',
           ja: '東の外側',
-          cn: '右 (东) 外',
           ko: '동[밖]',
         },
         insideEast: {
           en: 'Inside East',
-          de: 'Innen Osten',
-          fr: 'Est Intérieur',
           ja: '東の内側',
-          cn: '右 (东) 内',
           ko: '동[안]',
         },
         ...paradeigmaLeanOutputStrings,
@@ -470,10 +449,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Stack x${num}',
-          de: 'Sammeln x${num}',
-          fr: 'Package x${num}',
           ja: '頭割り x${num}',
-          cn: '${num}次分摊',
           ko: '뭉쳐욧 x${num}',
         },
       },
@@ -505,21 +481,13 @@ const triggerSet: TriggerSet<Data> = {
       run: (data) => delete data.prevGreenSigil,
       outputStrings: {
         sides: {
-          // Specify "for laser" to disambiguate with the astral eclipse going on at the same time.
-          // Similarly, there's a Algedon knockback call too.
           en: 'sides (for laser)',
-          de: 'Seiten (für die Laser)',
-          fr: 'Côtés (pour les lasers)',
           ja: '横側 (レーザー回避)',
-          cn: '两边 (躲避激光)',
           ko: '옆으로 (레이저 피해요)',
         },
         middle: {
           en: 'middle (for laser)',
-          de: 'Mitte (für die Laser)',
-          fr: 'Milieu (pour les lasers)',
           ja: '真ん中 (レーザー回避)',
-          cn: '中间 (躲避激光)',
           ko: '한가운데로 (레이저 피해요)',
         },
       },
@@ -567,34 +535,22 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         northCone: {
           en: 'North Cone',
-          de: 'Nördliche Kegel-AoE',
-          fr: 'Cône Nord',
           ja: '北のさんかく',
-          cn: '上 (北) 扇形',
           ko: '북쪽 삼각 공격',
         },
         eastCone: {
           en: 'East Cone',
-          de: 'Östliche Kegel-AoE',
-          fr: 'Cône Est',
           ja: '東のさんかく',
-          cn: '右 (东) 扇形',
           ko: '동쪽 삼각 공격',
         },
         westCone: {
           en: 'West Cone',
-          de: 'Westliche Kegel-AoE',
-          fr: 'Cône Ouest',
           ja: '西のさんかく',
-          cn: '左 (西) 扇形',
           ko: '서쪽 삼각 공격',
         },
         southCone: {
           en: 'South Cone',
-          de: 'Südliche Kegel-AoE',
-          fr: 'Cône Sud',
           ja: '南のさんかく',
-          cn: '下 (南) 扇形',
           ko: '남쪽 삼각 공격',
         },
       },
@@ -655,10 +611,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Kill adds (back first)',
-          de: 'Adds besiegen (hinten zuerst)',
-          fr: 'Tuez les adds (arrière d\'abord)',
           ja: '雑魚から倒して (下の雑魚から)',
-          cn: '击杀小怪 (先打后方的)',
           ko: '구슬 잡아요! (뒤에꺼 먼저)',
         },
       },
@@ -731,44 +684,27 @@ const triggerSet: TriggerSet<Data> = {
         north: Outputs.north,
         frontsides: {
           en: 'front sides',
-          de: 'Vorne Seiten',
-          fr: 'Devant sur les côtés',
           ja: '前の横側',
-          cn: '前方两边',
           ko: '보스쪽 양옆',
         },
         backmiddle: {
           en: 'back middle',
-          de: 'Hinten Mitte',
-          fr: 'Arrière centre',
           ja: '後ろの真ん中',
-          cn: '后方中间',
           ko: '뒷쪽 가운데',
         },
         frontmiddle: {
           en: 'front middle',
-          de: 'Vorne Mitte',
-          fr: 'Avant centre',
           ja: '前の中央',
-          cn: '前方中间',
           ko: '보스쪽 가운데',
         },
         sides: {
-          // Specify "for laser" to disambiguate with the astral eclipse going on at the same time.
-          // Similarly, there's a Algedon knockback call too.
           en: 'sides (for laser)',
-          de: 'Seiten (für die Laser)',
-          fr: 'Côtés (pour les lasers)',
           ja: '横側 (レーザー回避)',
-          cn: '两边 (躲避激光)',
           ko: '옆으로 (레이저 피해요)',
         },
         middle: {
           en: 'middle (for laser)',
-          de: 'Mitte (für die Laser)',
-          fr: 'Milieu (pour les lasers)',
           ja: '真ん中 (レーザー回避)',
-          cn: '中间 (躲避激光)',
           ko: '한가운데 (레이저 피해요)',
         },
       },
@@ -833,18 +769,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         combo: {
           en: 'Go ${first} / ${second}',
-          de: 'Geh ${first} / ${second}',
-          fr: 'Allez ${first} / ${second}',
           ja: '${first} / ${second}',
-          cn: '去 ${first} / ${second}',
           ko: '가욧: ${first} / ${second}',
         },
         single: {
           en: 'Go ${dir} (lean ${lean})',
-          de: 'Geh nach ${dir} (nach ${lean} neigen)',
-          fr: 'Allez ${dir} (légèrement ${lean})',
           ja: '${dir}の鳥 (すこし${lean})',
-          cn: '去 ${dir} (偏 ${lean})',
           ko: '가욧: ${dir} (살짝 ${lean})',
         },
         ...paradeigmaLeanOutputStrings,
@@ -887,34 +817,22 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         adikia1: {
           en: 'Double fists (look for pythons)',
-          de: 'Doppel-Fäuste (halt Ausschau nach den Pythons)',
-          fr: 'Poings doubles (regardez les pythons)',
           ja: 'ダブルフィスト (ヘビー確認)',
-          cn: '双拳 (找蛇)',
           ko: '더블 피스트 (옆에 있는 파이튼도 확인)',
         },
         adikia1OutsideNorth: {
           en: 'Double fists (outside north)',
-          de: 'Doppel-Fäuste (nördlich außen)',
-          fr: 'Poings doubles (nord extérieur)',
           ja: 'ダブルフィスト (北の外側)',
-          cn: '双拳 (上北外)',
           ko: '더블 피스트 (북[밖])',
         },
         adikia1InsideNorth: {
           en: 'Double fists (inside north)',
-          de: 'Doppel-Fäuste (nördlich innen)',
-          fr: 'Poings doubles (nord intérieur)',
           ja: 'ダブルフィスト (北の内側)',
-          cn: '双拳 (上北内)',
           ko: '더블 피스트 (북[안])',
         },
         adikia2: {
           en: 'Double fists',
-          de: 'Doppel-Fäuste',
-          fr: 'Poings doubles',
           ja: 'ダブルフィスト',
-          cn: '双拳',
           ko: '더블 피스트',
         },
       },
@@ -983,10 +901,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         combo: {
           en: '${dir1} > ${dir2} > ${dir3}',
-          de: '${dir1} > ${dir2} > ${dir3}',
-          fr: '${dir1} > ${dir2} > ${dir3}',
           ja: '${dir1} > ${dir2} > ${dir3}',
-          cn: '${dir1} > ${dir2} > ${dir3}',
           ko: '${dir1} > ${dir2} > ${dir3}',
         },
         ...eclipseOutputStrings,

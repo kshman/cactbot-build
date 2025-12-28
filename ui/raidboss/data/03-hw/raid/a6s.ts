@@ -49,18 +49,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         getMines: {
           en: 'Get Mines',
-          de: 'Mienen nehmen',
-          fr: 'Prenez les mines',
           ja: '地雷を踏む',
-          cn: '踩雷',
           ko: '지뢰 밟아요',
         },
         avoidMines: {
           en: 'Avoid Mines',
-          de: 'Mienen vermeiden',
-          fr: 'Évitez les mines',
           ja: '地雷を踏まない',
-          cn: '躲开地雷',
           ko: '지뢰 피해요',
         },
       },
@@ -74,10 +68,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Dodge Mirage Charge',
-          de: 'Superladung ausweichen',
-          fr: 'Esquivez la charge de la réplique',
           ja: 'スーパーチャージを避ける',
-          cn: '躲开冲锋',
           ko: '환영 돌진 피해요',
         },
       },
@@ -91,10 +82,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Look Away from Mirage',
-          de: 'Von Replikant wegschauen',
-          fr: 'Ne regardez pas la réplique',
           ja: 'ミラージュを見ない',
-          cn: '背对幻象',
           ko: '환영 쳐다보지 않기',
         },
       },
@@ -108,10 +96,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Look Towards Mirage',
-          de: 'Von Replikant hinschauen',
-          fr: 'Regardez la réplique',
           ja: 'ミラージュを見る',
-          cn: '面向幻象',
           ko: '환영 쳐다보기',
         },
       },
@@ -126,10 +111,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Go High',
-          de: 'Geh Hoch',
-          fr: 'Allez en haut',
           ja: '高い床に乗る',
-          cn: '去高地',
           ko: '높은곳으로',
         },
       },
@@ -144,10 +126,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Go Low',
-          de: 'Geh Runter',
-          fr: 'Allez en bas',
           ja: '低い床に乗る',
-          cn: '去低地',
           ko: '낮은곳으로',
         },
       },
@@ -184,10 +163,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: '${player}: ${count}',
-          de: '${player}: ${count}',
-          fr: '${player}: ${count}',
           ja: '${player}: ${count}',
-          cn: '${player}: ${count}',
           ko: '${player}: ${count}',
         },
       },
@@ -206,10 +182,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Hide Behind Ice',
-          de: 'Hinter dem Eis verstecken',
-          fr: 'Cachez-vous derrière la glace',
           ja: '氷柱の後ろに',
-          cn: '躲在冰柱之后',
           ko: '얼음 뒤에 숨기',
         },
       },
@@ -223,10 +196,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Ice: Freeze Tornado',
-          de: 'Eis: Tornado einfrieren',
-          fr: 'Glace : Gelez la tornade',
           ja: '氷柱: 竜巻を凍結',
-          cn: '冰点名: 冻结龙卷风',
           ko: '얼음: 물기둥 얼리기',
         },
       },
@@ -241,10 +211,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Fire Beam on YOU',
-          de: 'Feuer Strahl auf DIR',
-          fr: 'Rayon de feu sur VOUS',
           ja: '自分にファイアビーム',
-          cn: '火焰光束点名',
           ko: '화염 광선 대상자',
         },
       },
@@ -259,10 +226,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Water on YOU',
-          de: 'Wasser auf DIR',
-          fr: 'Eau sur VOUS',
           ja: '自分に水',
-          cn: '水点名',
           ko: '물징 대상자',
         },
       },
@@ -288,10 +252,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Drop Water Soon',
-          de: 'Gleich Wasser ablegen',
-          fr: 'Déposez l\'eau bientôt',
           ja: '水来るよ',
-          cn: '即将水分摊',
           ko: '곧 물징 폭발',
         },
       },
@@ -306,10 +267,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Lightning on YOU',
-          de: 'Blitz auf DIR',
-          fr: 'Éclair sur VOUS',
           ja: '自分に雷',
-          cn: '雷点名',
           ko: '번개징 대상자',
         },
       },
@@ -335,10 +293,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Drop Lightning Soon',
-          de: 'Gleich Blitz ablegen',
-          fr: 'Déposez l\'éclair bientôt',
           ja: '雷来るよ',
-          cn: '即将雷分摊',
           ko: '곧 번개징 폭발',
         },
       },

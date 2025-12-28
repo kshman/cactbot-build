@@ -41,10 +41,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Stack Center for Dives',
-          de: 'In der Mitte sammeln für Sturzbombe',
-          fr: 'Packez-vous au centre pour les plongeons',
           ja: '中央待機、メガフレアダイブを待つ',
-          cn: '中间集合等待俯冲',
           ko: '기가플레어 집합',
         },
       },
@@ -65,18 +62,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         flattenOn: {
           en: 'Flatten on ${player}',
-          de: 'Einebnen auf ${player}',
-          fr: 'Compression sur ${player}',
           ja: '${player}にフラッテン',
-          cn: '死刑点${player}',
           ko: '짓뭉개기 ${player}',
         },
         flattenOnYou: {
           en: 'Flatten on YOU',
-          de: 'Einebnen auf DIR',
-          fr: 'Compression sur VOUS',
           ja: '自分にフラッテン',
-          cn: '死刑',
           ko: '짓뭉개기',
         },
       },
@@ -90,10 +81,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Megaflare Stack',
-          de: 'Megaflare Sammeln',
-          fr: 'MégaBrasier, Packez-vous',
           ja: 'メガフレア、集合',
-          cn: '百万核爆集合',
           ko: '메가플레어 쉐어',
         },
       },
@@ -114,10 +102,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Tempest Tether on YOU',
-          de: 'Sturm Verbindung auf DIR',
-          fr: 'Liens de tempête sur VOUS',
           ja: '自分にテンペストウィング',
-          cn: '风圈点名',
           ko: '폭풍 줄 대상자',
         },
       },
@@ -137,18 +122,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         akhMornOn: {
           en: 'Akh Morn on ${player}',
-          de: 'Akh Morn auf ${player}',
-          fr: 'Akh Morn sur ${player}',
           ja: '${player}にアク・モーン',
-          cn: '死亡轮回点${player}',
           ko: '"${player}" 아크몬',
         },
         akhMornOnYou: {
           en: 'Akh Morn on YOU',
-          de: 'Akh Morn auf DIR',
-          fr: 'Akh Morn sur VOUS',
           ja: '自分にアク・モーン',
-          cn: '死亡轮回点名',
           ko: '아크몬 대상자',
         },
       },

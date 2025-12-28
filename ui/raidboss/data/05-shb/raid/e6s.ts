@@ -115,18 +115,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         oneDir: {
           en: '${dir}',
-          de: '${dir}',
-          fr: '${dir}',
           ja: '${dir}へ',
-          cn: '去${dir}',
           ko: '${dir}으로',
         },
         twoDirs: {
           en: '${dir1}${dir2}',
-          de: '${dir1}${dir2}',
-          fr: '${dir1} ${dir2}',
           ja: '${dir1}${dir2}へ',
-          cn: '去${dir2}${dir1}',
           ko: '${dir1}${dir2}으로',
         },
         unknown: Outputs.unknown,
@@ -151,10 +145,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Avoid green nails',
-          de: 'Weiche den grünen Nägeln aus',
-          fr: 'Évitez les griffes',
           ja: '緑の杭に避け',
-          cn: '躲避风刃',
           ko: '초록 발톱 피하기',
         },
       },
@@ -173,18 +164,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         enumerationOnYou: {
           en: 'Enumeration on YOU',
-          de: 'Enumeration aud DIR',
-          fr: 'Énumération sur VOUS',
           ja: '自分にエアーバンプ',
-          cn: '蓝圈分摊点名',
           ko: '2인 장판 대상자',
         },
         enumeration: {
           en: 'Enumeration',
-          de: 'Enumeration',
-          fr: 'Énumération',
           ja: 'エアーバンプ',
-          cn: '蓝圈分摊',
           ko: '2인 장판',
         },
       },
@@ -226,10 +211,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         chargeOnYou: {
           en: 'Charge on YOU',
-          de: 'Ansturm auf DIR',
-          fr: 'Charge sur VOUS',
           ja: '自分に突進',
-          cn: '冲锋点名',
           ko: '나에게 보스 돌진',
         },
         tankSwap: Outputs.tankSwap,
@@ -263,10 +245,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Tether Marker on YOU',
-          de: 'Verbindung auf DIR',
-          fr: 'Marque de lien sur VOUS',
           ja: '自分に線マーカー',
-          cn: '连线点名',
           ko: '선 징 대상자',
         },
       },
@@ -286,10 +265,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Attack Garuda',
-          de: 'Greife Garuda an',
-          fr: 'Attaquez Garuda',
           ja: 'ガルーダに攻撃',
-          cn: '打风神',
           ko: '가루다 공격하기',
         },
       },
@@ -303,10 +279,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Attack Ifrit',
-          de: 'Greife Ifrit an',
-          fr: 'Attaquez Ifrit',
           ja: 'イフリートに攻撃',
-          cn: '打火神',
           ko: '이프리트 공격하기',
         },
       },
@@ -337,10 +310,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'go to spots for chains',
-          de: 'Gehe zu den Stellen für die Kette',
-          fr: 'Positions pour les chaines',
           ja: '安置へ、鎖が繋がれる',
-          cn: '连线站位',
           ko: '대화재 준비',
         },
       },
@@ -359,10 +329,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         tetheredToPlayer: {
           en: 'Tethered to ${player}',
-          de: 'Verbunden mit ${player}',
-          fr: 'Lié à ${player}',
           ja: '${player}と繋がった',
-          cn: '和${player}连线',
           ko: '선 연결 짝: ${player}',
         },
       },

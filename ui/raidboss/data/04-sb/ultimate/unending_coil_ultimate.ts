@@ -434,11 +434,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Twisters',
-          de: 'Wirbelstürme',
-          fr: 'Tornades',
           ja: '大竜巻',
-          cn: '旋风',
-          tc: '旋風',
           ko: '회오리',
         },
       },
@@ -467,11 +463,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Hatch on YOU',
-          de: 'Austritt auf DIR',
-          fr: 'Éclosion sur VOUS',
           ja: '自分に魔力爆散',
-          cn: '黑球点名',
-          tc: '黑球點名',
           ko: '나에게 마력연성',
         },
       },
@@ -491,11 +483,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Hatch: ${players}',
-          de: 'Austritt: ${players}',
-          fr: 'Éclosion : ${players}',
           ja: '魔力爆散${players}',
-          cn: '黑球点：${players}',
-          tc: '黑球點：${players}',
           ko: '마력연성: ${players}',
         },
       },
@@ -521,11 +509,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Phase ${num} Push',
-          de: 'Phase ${num} Stoß',
-          fr: 'Phase ${num} poussée',
           ja: 'フェーズ${num}',
-          cn: 'P${num}准备',
-          tc: 'P${num}準備',
           ko: '트윈 페이즈${num}',
         },
       },
@@ -543,11 +527,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Spread => In',
-          de: 'Verteilen => Rein',
-          fr: 'Dispersez-vous => Intérieur',
           ja: '散開 => 密着',
-          cn: '分散 => 靠近',
-          tc: '分散 => 靠近',
           ko: '산개 => 안으로',
         },
       },
@@ -563,11 +543,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Spread => Out',
-          de: 'Verteilen => Raus',
-          fr: 'Dispersez-vous => Extérieur',
           ja: '散開 => 離れ',
-          cn: '分散 => 远离',
-          tc: '分散 => 遠離',
           ko: '산개 => 밖으로',
         },
       },
@@ -583,11 +559,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Stack => In',
-          de: 'Sammeln => Rein',
-          fr: 'Packez-vous => Intérieur',
           ja: '頭割り => 密着',
-          cn: '分摊 => 靠近',
-          tc: '分攤 => 靠近',
           ko: '쉐어 => 안으로',
         },
       },
@@ -602,11 +574,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Stack => Out',
-          de: 'Sammeln => Raus',
-          fr: 'Packez-vous => Extérieur',
           ja: '頭割り => 離れ',
-          cn: '分摊 => 远离',
-          tc: '分攤 => 遠離',
           ko: '쉐어 => 밖으로',
         },
       },
@@ -621,11 +589,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'In => Stack',
-          de: 'Rein => Sammeln',
-          fr: 'Intérieur => Packez-vous',
           ja: '密着 => 頭割り',
-          cn: '靠近 => 分摊',
-          tc: '靠近 => 分攤',
           ko: '안으로 => 쉐어',
         },
       },
@@ -640,11 +604,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'In => Out',
-          de: 'Rein => Raus',
-          fr: 'Intérieur => Extérieur',
           ja: '密着 => 離れ',
-          cn: '靠近 => 远离',
-          tc: '靠近 => 遠離',
           ko: '안으로 => 밖으로',
         },
       },
@@ -662,11 +622,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Away from Tank => Stack',
-          de: 'Weg vom Tank => Sammeln',
-          fr: 'Éloignez-vous du tank => Packez-vous',
           ja: 'タンクから離れ => 頭割り',
-          cn: '远离坦克 => 分摊',
-          tc: '遠離坦克 => 分攤',
           ko: '탱커 피하기 => 쉐어',
         },
       },
@@ -684,11 +640,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Spread => Away from Tank',
-          de: 'Verteilen => Weg vom Tank',
-          fr: 'Dispersez-vous => Éloignez-vous du Tank',
           ja: '散開 => タンクから離れ',
-          cn: '分散 => 远离坦克',
-          tc: '分散 => 遠離坦克',
           ko: '산개 => 탱커 피하기',
         },
       },
@@ -704,11 +656,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Spread => In',
-          de: 'Verteilen => Rein',
-          fr: 'Dispersez-vous => Intérieur',
           ja: '散開 => 密着',
-          cn: '分散 => 靠近',
-          tc: '分散 => 靠近',
           ko: '산개 => 안으로',
         },
       },
@@ -724,11 +672,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'In => Spread',
-          de: 'Rein => Verteilen',
-          fr: 'Intérieur => Dispersez-vous',
           ja: '密着 => 散開',
-          cn: '靠近 => 分散',
-          tc: '靠近 => 分散',
           ko: '안으로 => 산개',
         },
       },
@@ -744,11 +688,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'In => Out => Spread',
-          de: 'Rein => Raus => Verteilen',
-          fr: 'Intérieur => Extérieur => Dispersion',
           ja: '密着 => 離れ => 散開',
-          cn: '靠近 => 远离 => 分散',
-          tc: '靠近 => 遠離 => 分散',
           ko: '안으로 => 밖으로 => 산개',
         },
       },
@@ -764,11 +704,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'In => Spread => Stack',
-          de: 'Rein => Verteilen => Sammeln',
-          fr: 'Intérieur => Dispersion => Package',
           ja: '密着 => 散開 => 頭割り',
-          cn: '靠近 => 分散 => 分摊',
-          tc: '靠近 => 分散 => 分攤',
           ko: '안으로 => 산개 => 쉐어',
         },
       },
@@ -784,11 +720,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Out => Stack => Spread',
-          de: 'Raus => Sammeln => Verteilen',
-          fr: 'Extérieur => Package => Dispersion',
           ja: '離れ => 頭割り => 散開',
-          cn: '远离 => 分摊 => 分散',
-          tc: '遠離 => 分攤 => 分散',
           ko: '밖으로 => 쉐어 => 산개',
         },
       },
@@ -804,11 +736,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Out => Spread => Stack',
-          de: 'Raus => Verteilen => Sammeln',
-          fr: 'Extérieur => Dispersion => Package',
           ja: '離れ => 散開 => 頭割り',
-          cn: '远离 => 分散 => 分摊',
-          tc: '遠離 => 分散 => 分攤',
           ko: '밖으로 => 산개 => 쉐어',
         },
       },
@@ -848,19 +776,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         thunderOnYou: {
           en: 'Thunder on YOU',
-          de: 'Blitz auf DIR',
-          fr: 'Foudre sur VOUS',
           ja: '自分にサンダー',
-          cn: '雷点名',
-          tc: '雷點名',
           ko: '나에게 번개',
         },
         thunderOnOthers: {
           en: 'Thunder on ${player1}, ${player2}',
-          de: 'Blitz auf ${player1}, ${player2}',
-          fr: 'Foudre sur ${player1}, ${player2}',
-          cn: '雷点 ${player1}, ${player2}',
-          tc: '雷點 ${player1}, ${player2}',
+          ja: 'Thunder on ${player1}, ${player2}',
           ko: '번개 ${player1}, ${player2}',
         },
       },
@@ -901,38 +822,22 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         doom1: {
           en: 'Doom #1 on YOU',
-          de: 'Verhängnis #1 auf DIR',
-          fr: 'Glas #1 sur VOUS',
           ja: '自分に一番目死の宣告',
-          cn: '死宣一号点名',
-          tc: '死宣一號點名',
           ko: '죽음의 선고 1번',
         },
         doom2: {
           en: 'Doom #2 on YOU',
-          de: 'Verhängnis #2 auf DIR',
-          fr: 'Glas #2 sur VOUS',
           ja: '自分に二番目死の宣告',
-          cn: '死宣二号点名',
-          tc: '死宣二號點名',
           ko: '죽음의 선고 2번',
         },
         doom3: {
           en: 'Doom #3 on YOU',
-          de: 'Verhängnis #3 auf DIR',
-          fr: 'Glas #3 sur VOUS',
           ja: '自分に三番目死の宣告',
-          cn: '死宣三号点名',
-          tc: '死宣三號點名',
           ko: '죽음의 선고 3번',
         },
         justNumber: {
           en: '${num}',
-          de: '${num}',
-          fr: '${num}',
           ja: '${num}',
-          cn: '${num}',
-          tc: '${num}',
           ko: '${num}',
         },
       },
@@ -983,11 +888,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Cleanse #${num}: ${player}',
-          de: 'Reinige #${num}: ${player}',
-          fr: 'Purifiez #${num}: ${player}',
           ja: '解除に番目${num}: ${player}',
-          cn: '解除死宣 #${num}: ${player}',
-          tc: '解除死宣 #${num}: ${player}',
           ko: '선고 해제 ${num}: ${player}',
         },
       },
@@ -1003,11 +904,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Fire IN',
-          de: 'Feuer INNEN',
-          fr: 'Feu à l\'INTÉRIEUR',
           ja: 'ファイアボールは密着',
-          cn: '人群火1',
-          tc: '人群火1',
           ko: '불 같이맞기',
         },
       },
@@ -1035,20 +932,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         fireOut: {
           en: 'Fire OUT',
-          de: 'Feuer AUßEN',
-          fr: 'Feu à l\'EXTÉRIEUR',
           ja: 'ファイアボールは離れ',
-          cn: '单吃火2',
-          tc: '單吃火2',
           ko: '불 대상자 밖으로',
         },
         fireOutBeInIt: {
           en: 'Fire OUT: Be in it',
-          de: 'Feuer AUßEN: Drin sein',
-          fr: 'Feu à l\'EXTÉRIEUR : Allez dessus',
           ja: 'ファイアボールは離れ: 自分に密着',
-          cn: '去吃火2',
-          tc: '去吃火2',
           ko: '불 대상자 밖으로: 나는 같이 맞기',
         },
       },
@@ -1082,29 +971,17 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         fireIn: {
           en: 'Fire IN',
-          de: 'Feuer INNEN',
-          fr: 'Feu à l\'INTÉRIEUR',
           ja: 'ファイアボールは密着',
-          cn: '人群火3',
-          tc: '人群火3',
           ko: '불 같이맞기',
         },
         fireInPlayersOut: {
           en: 'Fire IN (${players} out)',
-          de: 'Feuer INNEN (${players} raus)',
-          fr: 'Feu à l\'INTÉRIEUR (${players} évitez)',
           ja: 'ファイアボールは密着 (${players}は外へ)',
-          cn: '人群火3 (${players}躲避)',
-          tc: '人群火3 (${players}躲避)',
           ko: '불 같이맞기 (${players} 는 피하기)',
         },
         fireInAvoid: {
           en: 'Fire IN: AVOID!',
-          de: 'Feuer INNEN: AUSWEICHEN!',
-          fr: 'Feu à l\'INTÉRIEUR : ÉVITEZ !',
           ja: 'ファイアボールは密着: 自分に離れ',
-          cn: '躲避人群火3！',
-          tc: '躲避人群火3！',
           ko: '불 같이맞기: 나는 피하기',
         },
       },
@@ -1137,20 +1014,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         fireIn: {
           en: 'Fire IN',
-          de: 'Feuer INNEN',
-          fr: 'Feu à l\'INTÉRIEUR',
           ja: 'ファイアボール密着',
-          cn: '人群火4',
-          tc: '人群火4',
           ko: '불 같이맞기',
         },
         fireInAvoid: {
           en: 'Fire IN: AVOID!',
-          de: 'Feuer INNEN: AUSWEICHEN!',
-          fr: 'Feu à l\'INTÉRIEUR : ÉVITEZ !',
           ja: 'ファイアボールは密着: 自分に離れ',
-          cn: '躲避人群火4！',
-          tc: '躲避人群火4！',
           ko: '불 같이맞기: 나는 피하기',
         },
       },
@@ -1220,20 +1089,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         marks: {
           en: 'Marks: ${dive1}, ${dive2}, ${dive3}',
-          de: 'Markierungen : ${dive1}, ${dive2}, ${dive3}',
-          fr: 'Marque : ${dive1}, ${dive2}, ${dive3}',
           ja: 'マーカー: ${dive1}, ${dive2}, ${dive3}',
-          cn: '标记: ${dive1}, ${dive2}, ${dive3}',
-          tc: '標記: ${dive1}, ${dive2}, ${dive3}',
           ko: '징: ${dive1}, ${dive2}, ${dive3}',
         },
         marksWide: {
           en: 'Marks: ${dive1}, ${dive2}, ${dive3} (WIDE)',
-          de: 'Markierungen : ${dive1}, ${dive2}, ${dive3} (GROß)',
-          fr: 'Marque : ${dive1}, ${dive2}, ${dive3} (LARGE)',
           ja: 'マーカー: ${dive1}, ${dive2}, ${dive3} (広)',
-          cn: '标记: ${dive1}, ${dive2}, ${dive3} (大)',
-          tc: '標記: ${dive1}, ${dive2}, ${dive3} (大)',
           ko: '징: ${dive1}, ${dive2}, ${dive3} (넓음)',
         },
         ...Directions.outputStrings8Dir,
@@ -1253,11 +1114,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Go To ${dir} with marker',
-          de: 'Gehe nach ${dir} mit dem Marker',
-          fr: 'Allez direction ${dir} avec le marqueur',
           ja: 'マーカー付いたまま${dir}へ',
-          cn: '去 ${dir} 引导俯冲',
-          tc: '去 ${dir} 引導俯衝',
           ko: '${dir}으로 이동',
         },
         ...Directions.outputStrings8Dir,
@@ -1277,11 +1134,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Dive #${num}: ${player}',
-          de: 'Sturz #${num} : ${player}',
-          fr: 'Plongeon #${num} : ${player}',
           ja: 'ダイブ${num}番目:${player}',
-          cn: '第 ${num} 次俯冲点: ${player}',
-          tc: '第 ${num} 次俯衝點: ${player}',
           ko: '카탈 ${num}: ${player}',
         },
       },
@@ -1355,11 +1208,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: '${num}: ${player} (nael)',
-          de: '${num}: ${player} (nael)',
-          fr: '${num} : ${player} (nael)',
           ja: '${num}: ${player} (ネール)',
-          cn: '${num}: ${player} (奈尔)',
-          tc: '${num}: ${player} (奈爾)',
           ko: '${num}: ${player} (넬)',
         },
       },
@@ -1376,11 +1225,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: '${num}: ${player}',
-          de: '${num}: ${player}',
-          fr: '${num} : ${player}',
           ja: '${num}: ${player}',
-          cn: '${num}：${player}',
-          tc: '${num}：${player}',
           ko: '${num}: ${player}',
         },
       },
@@ -1397,11 +1242,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: '${num}: ${player} (baha)',
-          de: '${num}: ${player} (baha)',
-          fr: '${num} : ${player} (baha)',
           ja: '${num}: ${player} (バハ)',
-          cn: '${num}: ${player} (巴哈)',
-          tc: '${num}: ${player} (巴哈)',
           ko: '${num}: ${player} (바하)',
         },
       },
@@ -1429,18 +1270,12 @@ const triggerSet: TriggerSet<Data> = {
         unknown: Outputs.unknown,
         twinOnPlayer: {
           en: '${player} Bait Twin (${dir})',
-          de: '${player} Köder Twintania (${dir})',
-          fr: '${player} attire Twintania (${dir})',
-          cn: '${player} 诱导双塔尼亚 (${dir})',
-          tc: '${player} 誘導雙塔尼亞 (${dir})',
+          ja: '${player} Bait Twin (${dir})',
           ko: '${player} 트윈타니아 유도 (${dir})',
         },
         twinOnUnknown: {
           en: '${unknown} Bait Twin (${dir})',
-          de: '${unknown} Köder Twintania (${dir})',
-          fr: '${unknown} attire Twintania (${dir})',
-          cn: '${unknown} 诱导双塔尼亚 (${dir})',
-          tc: '${unknown} 誘導雙塔尼亞 (${dir})',
+          ja: '${unknown} Bait Twin (${dir})',
           ko: '${unknown} 트윈타니아 유도 (${dir})',
         },
       },
@@ -1454,11 +1289,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Twisters',
-          de: 'Wirbelstürme',
-          fr: 'Tornades',
           ja: 'ツイスター',
-          cn: '旋风',
-          tc: '旋風',
           ko: '회오리',
         },
       },
@@ -1478,11 +1309,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Gigaflare',
-          de: 'Gigaflare',
-          fr: 'GigaBrasier',
           ja: 'ギガフレア',
-          cn: '十亿核爆',
-          tc: '十億核爆',
           ko: '기가플레어',
         },
       },
@@ -1504,10 +1331,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         dive: {
           en: '${dir} Dive',
-          de: '${dir} Sturzbombe',
-          fr: 'Plongée ${dir}',
-          cn: '${dir} 俯冲',
-          tc: '${dir} 俯衝',
+          ja: '${dir} Dive',
           ko: '${dir} 다이브',
         },
         ...Directions.outputStrings8Dir,
@@ -1558,10 +1382,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         naelPosition: {
           en: 'Nael is ${dir}',
-          de: 'Nael ist im ${dir}',
-          fr: 'Nael est vers ${dir}',
-          cn: '奈尔在 ${dir}',
-          tc: '奈爾在 ${dir}',
+          ja: 'Nael is ${dir}',
           ko: '넬 ${dir}',
         },
         ...Directions.outputStrings8Dir,
@@ -1576,11 +1397,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Megaflare Stack',
-          de: 'Megaflare Sammeln',
-          fr: 'Mégabrasier, packez-vous',
           ja: 'メガフレア頭割り',
-          cn: '分摊百万核爆',
-          tc: '分攤百萬核爆',
           ko: '기가플레어 쉐어',
         },
       },
@@ -1620,38 +1437,22 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         blackfireTower: {
           en: 'Tower, bait hypernova',
-          de: 'Turm, Hypernova ködern',
-          fr: 'Tour, attirez la Supernova',
           ja: 'タワーやスーパーノヴァ',
-          cn: '踩塔, 引导超新星',
-          tc: '踩塔, 引導超新星',
           ko: '초신성 피하고 기둥 밟기',
         },
         octetTowerPlusTwin: {
           en: 'Bait Twin, then tower',
-          de: 'Twintania in Turm locken',
-          fr: 'Attirez Gémellia, puis tour',
           ja: 'タニアダイブやタワー',
-          cn: '引导双塔, 踩塔',
-          tc: '引導雙塔, 踩塔',
           ko: '트윈타니아 유도 후 기둥 밟기',
         },
         octetTower: {
           en: 'Get in a far tower',
-          de: 'Geh in entfernten Turm',
-          fr: 'Aller dans une tour lointaine',
           ja: '遠いタワー',
-          cn: '踩远处的塔',
-          tc: '踩遠處的塔',
           ko: '기둥 밟기',
         },
         towerTTS: {
           en: 'tower',
-          de: 'Turm',
-          fr: 'Tour',
           ja: 'タワー',
-          cn: '踩塔',
-          tc: '踩塔',
           ko: '기둥',
         },
       },
@@ -1677,20 +1478,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         twinHasMegaflare: {
           en: '${player} (twin) has megaflare',
-          de: '${player} (Twin) hat Megaflare',
-          fr: '${player} (Gémellia) a mégabrasier',
           ja: '${player} (ツインタニア) メガ頭割り',
-          cn: '双塔俯冲点分摊 （${player})',
-          tc: '雙塔俯衝點分攤 （${player})',
           ko: '${player} (트윈 징 대상자) => 쉐어',
         },
         twinHasTower: {
           en: '${player} (twin) needs tower',
-          de: '${player} (Twin) braucht einen Turm',
-          fr: '${player} (Gémellia) ont besoin d\'une tour',
           ja: '${player} (ツインタニア) 塔を踏む',
-          cn: '双塔俯冲点踩塔（${player}）',
-          tc: '雙塔俯衝點踩塔（${player}）',
           ko: '${player} (트윈 징 대상자) => 기둥',
         },
       },
@@ -1751,10 +1544,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         naelPosition: {
           en: '${dir} Nael',
-          de: '${dir} Nael',
-          fr: 'Nael ${dir}',
-          cn: '${dir} 奈尔',
-          tc: '${dir} 奈爾',
+          ja: '${dir} Nael',
           ko: '넬 ${dir}',
         },
         left: Outputs.left,
@@ -1807,10 +1597,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         tower: {
           en: 'Tower: ${dir}',
-          de: 'Turm: ${dir}',
-          fr: 'Tour : ${dir}',
-          cn: '塔: ${dir}',
-          tc: '塔: ${dir}',
+          ja: 'Tower: ${dir}',
           ko: '기둥: ${dir}',
         },
         ...Directions.outputStrings16Dir,
@@ -1859,29 +1646,17 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         quickmarchTankTether: {
           en: 'Pick up tether',
-          de: 'Verbindung holen',
-          fr: 'Prenez un lien',
           ja: 'テンペストウィング線',
-          cn: '接线',
-          tc: '接線',
           ko: '줄 가로채기',
         },
         quickmarchNotOnYou: {
           en: 'No shaker; stack south.',
-          de: 'Kein Erdstoß; im Süden sammeln',
-          fr: 'Pas de Secousse; packez-vous au Sud.',
           ja: 'シェイカーない；頭割りで南',
-          cn: '无点名，正下方分摊',
-          tc: '無點名，正下方分攤',
           ko: '징 없음, 모여서 쉐어',
         },
         tenstrikeNotOnYou: {
           en: 'Stack on safe spot',
-          de: 'In Sicherheit sammeln',
-          fr: 'Packez-vous au point safe',
           ja: '安置へ集合',
-          cn: '安全点集合',
-          tc: '安全點集合',
           ko: '안전장소에 모이기',
         },
       },
@@ -1979,10 +1754,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         grandOctet: {
           en: 'Bait dash, go ${startDir}, rotate ${path}',
-          de: 'Ansturm ködern, gehe nach ${startDir}, rotiere ${path}',
-          fr: 'Attirez le dash, allez ${startDir}, tournez ${path}',
-          cn: '诱导俯冲, 去 ${startDir}, ${path} 转',
-          tc: '誘導俯衝, 去 ${startDir}, ${path} 轉',
+          ja: 'Bait dash, go ${startDir}, rotate ${path}',
           ko: '돌진 유도, ${startDir}쪽으로, ${path}',
         },
         clockwise: Outputs.clockwise,
@@ -2008,20 +1780,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         mornAfahYou: {
           en: 'Morn Afah #${num} (YOU)',
-          de: 'Morn Afah #${num} (DU)',
-          fr: 'Morn Afah #${num} (VOUS)',
           ja: 'モーン・アファー${num}回 (自分)',
-          cn: '无尽顿悟 #${num}',
-          tc: '無盡頓悟 #${num}',
           ko: '몬 아파 ${num} (나에게)',
         },
         mornAfahPlayer: {
           en: 'Morn Afah #${num} (${player})',
-          de: 'Morn Afah #${num} (${player})',
-          fr: 'Morn Afah #${num} (${player})',
           ja: 'モーン・アファー${num}回 (${player})',
-          cn: '无尽顿悟 #${num} (${player})',
-          tc: '無盡頓悟 #${num} (${player})',
           ko: '몬 아파 ${num} (${player})',
         },
       },
@@ -2037,11 +1801,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Akh Morn #${num}',
-          de: 'Akh Morn #${num}',
-          fr: 'Akh Morn #${num}',
           ja: 'アク・モーン #${num}',
-          cn: '死亡轮回 #${num}',
-          tc: '死亡輪迴 #${num}',
           ko: '아크 몬 ${num}',
         },
       },
@@ -2077,18 +1837,12 @@ const triggerSet: TriggerSet<Data> = {
         ...Directions.outputStrings8Dir,
         text: {
           en: 'Exaflares ${dir1} -> ${dir2}',
-          de: 'Exaflares ${dir1} -> ${dir2}',
-          fr: 'Brasiers ${dir1} -> ${dir2}',
-          cn: '百京核爆 ${dir1} -> ${dir2}',
-          tc: '百京核爆 ${dir1} -> ${dir2}',
+          ja: 'Exaflares ${dir1} -> ${dir2}',
           ko: '엑사플레어 ${dir1} -> ${dir2}',
         },
         tts: {
           en: 'Exaflares ${dir1} towards ${dir2}',
-          de: 'Exaflares ${dir1} nach ${dir2}',
-          fr: 'Brasiers ${dir1} vers ${dir2}',
-          cn: '百京核爆 从 ${dir1} 到 ${dir2}',
-          tc: '百京核爆 從 ${dir1} 到 ${dir2}',
+          ja: 'Exaflares ${dir1} towards ${dir2}',
           ko: '엑사플레어 ${dir1}에서 ${dir2}',
         },
       },
@@ -2101,10 +1855,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Spread (Enrage)',
-          de: 'Verteilen (Finalangriff)',
-          fr: 'Dispersion (Enrage)',
-          cn: '分散 (狂暴)',
-          tc: '分散 (狂暴)',
+          ja: 'Spread (Enrage)',
           ko: '산개 (전멸기)',
         },
       },

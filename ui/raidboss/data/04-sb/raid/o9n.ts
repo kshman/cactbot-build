@@ -30,11 +30,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Orb Tethers',
-          de: 'Kugel-Verbindungen',
-          fr: 'Liens orbes',
           ja: '線',
-          cn: '接线',
-          tc: '接線',
           ko: '구슬 줄',
         },
       },
@@ -63,10 +59,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Stack for Donuts',
-          de: 'Für Donuts sammeln',
-          fr: 'Packez-vous pour les donuts',
-          cn: '集合放月环',
-          tc: '集合放月環',
+          ja: 'Stack for Donuts',
           ko: '도넛장판! 뭉쳐요',
         },
       },
@@ -109,14 +102,8 @@ const triggerSet: TriggerSet<Data> = {
       alarmText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          // This isn't quite "flare on you", because there's a follow-up large ground
-          // "Big Bang" circle that appears from where this is dropped, on top of the
-          // proximity damage.  So this is trying to communicate more of a GTFO.
           en: 'Drop Flare Away',
-          de: 'Flare weit weg ablegen',
-          fr: 'Déposez le brasier au loin',
-          cn: '核爆放在远处',
-          tc: '核爆放在遠處',
+          ja: 'Drop Flare Away',
           ko: '플레어 바깥에 버려요',
         },
       },
@@ -144,10 +131,7 @@ const triggerSet: TriggerSet<Data> = {
         stackOnYou: Outputs.stackOnYou,
         stackGroups: {
           en: 'Split into stack groups',
-          de: 'In Sammel-Gruppen aufteilen',
-          fr: 'Divisez-vous en groupes packés',
-          cn: '分组分摊',
-          tc: '分組分攤',
+          ja: 'Split into stack groups',
           ko: '4:4 뭉쳐요',
         },
       },

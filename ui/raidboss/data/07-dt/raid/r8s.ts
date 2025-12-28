@@ -92,6 +92,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Light Party Platform',
+          ja: 'Light Party Platform',
           ko: '(담당 플랫폼으로)',
         },
       },
@@ -108,10 +109,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         tank: {
           en: 'Tank Buster Platform',
+          ja: 'Tank Buster Platform',
           ko: '(탱크 버스터 플랫폼으로)',
         },
         other: {
           en: 'Avoid Tank Buster Platform',
+          ja: 'Avoid Tank Buster Platform',
           ko: '(버스터 플랫폼 피해요)',
         },
       },
@@ -124,6 +127,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'UV Positions',
+          ja: 'UV Positions',
           ko: '(나란히 나란히)',
         },
       },
@@ -136,6 +140,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'UV Positions',
+          ja: 'UV Positions',
           ko: '(나란히 나란히)',
         },
       },
@@ -148,6 +153,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Bait Mooncleaver',
+          ja: 'Bait Mooncleaver',
           ko: '(처음 플랫폼으로)',
         },
       },
@@ -167,18 +173,22 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Rise Positions - ${extra}',
+          ja: 'Rise Positions - ${extra}',
           ko: '(줄다리기 ${extra} 플랫폼으로)',
         },
         tank: {
           en: 'Left top',
+          ja: 'Left top',
           ko: '왼쪽 위🡼',
         },
         healer: {
           en: 'Base',
+          ja: 'Base',
           ko: '처음🡻',
         },
         dps: {
           en: 'Right',
+          ja: 'Right',
           ko: '오른쪽🡺',
         },
       },
@@ -190,6 +200,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Howling Eight Position',
+          ja: 'Howling Eight Position',
           ko: '(처음 플랫폼으로)',
         },
       },

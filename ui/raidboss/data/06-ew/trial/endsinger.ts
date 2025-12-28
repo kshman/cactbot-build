@@ -135,10 +135,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         avoidLasers: {
           en: 'Avoid Head Lasers',
-          de: 'Weiche den Kopflaser aus',
-          fr: 'Évitez les lasers des têtes',
           ja: '顔の直線AoEを避ける',
-          cn: '躲避头部激光',
           ko: '머리 빔 피해요',
         },
       },
@@ -168,18 +165,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         cardinal: {
           en: 'Cardinal edge',
-          de: 'Kardinaler Rand',
-          fr: 'Au bord cardinal',
           ja: '東西南北の端へ',
-          cn: '去四边',
           ko: '십자 방향 모서리 끝으로',
         },
         intercardinal: {
           en: 'Intercardinal edge',
-          de: 'Interkardinaler Rand',
-          fr: 'Au bord intercardinal',
           ja: '斜めの端へ',
-          cn: '去四角',
           ko: '비스듬 방향 구석 끝으로',
         },
       },
@@ -260,10 +251,7 @@ const triggerSet: TriggerSet<Data> = {
         northwest: Outputs.arrowNW,
         direction: {
           en: '${dir1} / ${dir2}',
-          de: '${dir1} / ${dir2}',
-          fr: '${dir1} / ${dir2}',
           ja: '${dir1} / ${dir2}',
-          cn: '${dir1} / ${dir2}',
           ko: '${dir1} 또는 ${dir2}',
         },
       },
@@ -292,10 +280,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Tank LB NOW',
-          de: 'JETZT Tank LB',
-          fr: 'Transcendance Tank maintenant !',
           ja: '今タンクLB',
-          cn: '坦克LB！',
           ko: '지금 탱크 리미트브레이크!',
         },
       },

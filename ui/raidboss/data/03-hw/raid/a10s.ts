@@ -54,10 +54,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Hit Adds With Weight Trap',
-          de: 'Adds mit Gewichtsfalle treffen',
-          fr: 'Frappez les Adds avec le Piège à poids',
           ja: '鉄球ギミックを使って雑魚を倒す',
-          cn: '使用铁球陷阱击中小怪',
           ko: '철퇴 함정으로 쫄 맞추기',
         },
       },
@@ -72,10 +69,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Floor Spikes',
-          de: 'Boden-Stachel',
-          fr: 'Pics au sol',
           ja: '罠: 棘',
-          cn: '地刺陷阱',
           ko: '가시 함정',
         },
       },
@@ -88,10 +82,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Frost Lasers',
-          de: 'Eislaser',
-          fr: 'Lasers de glace',
           ja: '罠: 氷',
-          cn: '冰晶陷阱',
           ko: '얼음화살 함정',
         },
       },
@@ -104,10 +95,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Ceiling Weight',
-          de: 'Gewichte von der Decke',
-          fr: 'Poids du plafond',
           ja: '罠: 鉄球',
-          cn: '铁球陷阱',
           ko: '철퇴 함정',
         },
       },
@@ -197,18 +185,12 @@ const triggerSet: TriggerSet<Data> = {
         tankSwap: Outputs.tankSwap,
         shieldPlayer: {
           en: 'Shield ${player}',
-          de: 'Schild ${player}',
-          fr: 'Bouclier ${player}',
           ja: '${player}にバリア',
-          cn: '单盾${player}',
           ko: '"${player}" 보호막',
         },
         tankSwapGetAway: {
           en: 'Tank Swap, Get Away',
-          de: 'Tankwechsel, geh weg',
-          fr: 'Tank swap, éloignez-vous',
           ja: 'タンクスイッチ、離れる',
-          cn: '换T并且远离',
           ko: '탱 교대, 멀리가기',
         },
       },
@@ -245,10 +227,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Prey on YOU',
-          de: 'Makierung auf DIR',
-          fr: 'Marquage sur VOUS',
           ja: '自分に狙い目',
-          cn: '火圈点名',
           ko: '징 대상자',
         },
       },
@@ -266,10 +245,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Pass Prey',
-          de: 'Makierung weitergeben',
-          fr: 'Passez la marque',
           ja: '狙い目を渡す',
-          cn: '传递点名',
           ko: '징 넘김',
         },
       },
@@ -282,10 +258,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Hit Floor Trap',
-          de: 'Aktiviere Bodenfalle',
-          fr: 'Activez le Piège au sol',
           ja: '棘を踏む',
-          cn: '踩地刺陷阱',
           ko: '가시함정 밟아요',
         },
       },
@@ -304,10 +277,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Hit Boss With Ice',
-          de: 'Boss mit Eis treffen',
-          fr: 'Frappez le boss avec la Glace',
           ja: '氷を踏んでボスを打つ',
-          cn: '使用冰晶陷阱击中boss',
           ko: '보스에게 얼음함정 맞히기',
         },
       },

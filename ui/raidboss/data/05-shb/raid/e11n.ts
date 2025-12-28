@@ -46,18 +46,12 @@ const boundOfFaithLightningTetherResponse = (data: Data, _matches: unknown, outp
   output.responseOutputStrings = {
     onYou: {
       en: 'Lightning on YOU',
-      de: 'Blitz auf DIR',
-      fr: 'Éclair sur VOUS',
       ja: '自分に感電',
-      cn: '雷点名',
       ko: '내게 번개',
     },
     tetherInfo: {
       en: 'Lightning on ${player}',
-      de: 'Blitz auf ${player}',
-      fr: 'Éclair sur ${player}',
       ja: '${player}に感電',
-      cn: '雷点${player}',
       ko: '번개: ${player}',
     },
     unknownTarget: Outputs.unknown,
@@ -123,10 +117,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Line Cleave -> Knockback',
-          de: 'Linien AoE -> Rückstoß',
-          fr: 'AoE en ligne -> Poussée',
           ja: '直線AoE -> ノックバック',
-          cn: '直线AoE -> 击退',
           ko: '직선 장판 🔜 넉백',
         },
       },
@@ -139,10 +130,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Line Cleave -> Out',
-          de: 'Linien AoE -> Raus',
-          fr: 'AoE en ligne -> Extérieur',
           ja: '直線AoE -> 離れる',
-          cn: '直线AoE -> 远离',
           ko: '직선 장판 🔜 바깥으로',
         },
       },
@@ -155,10 +143,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Line Cleave + Bait',
-          de: 'Linien AoE -> Ködern',
-          fr: 'AoE en ligne -> Déposez au sol',
           ja: '直線AoE -> 誘導',
-          cn: '直线AoE -> 引导黄圈',
           ko: '직선 장판 🔜 유도',
         },
       },
@@ -171,10 +156,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Dodge Lightning First -> Rotate For Fire',
-          de: 'Weiche zuerst Blitz aus -> Rotiere für Feuer',
-          fr: 'Évitez l\'éclair d\'abord -> Tournez pour le Feu',
           ja: '雷を避ける -> 炎 準備',
-          cn: '躲雷 -> 火击退',
           ko: '번개 피하고 🔜 돌면서 화염 피해요',
         },
       },
@@ -187,10 +169,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Fire Knockback After Lightning',
-          de: 'Feuer Rückstoß nach Blitz',
-          fr: 'Poussée du Feu après l\'Éclair',
           ja: '雷 -> 炎ノックバック',
-          cn: '雷 -> 火击退',
           ko: '번개 🔜 화염 넉백',
         },
       },
@@ -238,10 +217,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Fire: Go to Blue',
-          de: 'Feuer: Geh zu Blau',
-          fr: 'Feu : Allez sur le Bleu',
           ja: '炎: 雷側へ',
-          cn: '火：去蓝圈一侧',
           ko: '화염: 파랑으로',
         },
       },
@@ -255,10 +231,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Lightning: Go to Red',
-          de: 'Blitz: Geh zu Rot',
-          fr: 'Éclair : Allez sur le Rouge',
           ja: '雷: 炎側へ',
-          cn: '雷：去红圈一侧',
           ko: '번개: 빨강으로',
         },
       },

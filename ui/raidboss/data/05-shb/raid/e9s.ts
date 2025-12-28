@@ -191,10 +191,7 @@ const triggerSet: TriggerSet<Data> = {
         tankSwap: Outputs.tankSwap,
         avoidLaser: {
           en: 'Avoid Laser',
-          de: 'Laser ausweichen',
-          fr: 'Évitez le laser',
           ja: 'レーザー注意',
-          cn: '躲避死刑激光',
           ko: '레이저 피하기',
         },
       },
@@ -215,10 +212,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Place Bramble',
-          de: 'Dornenstrauch plazieren',
-          fr: 'Placez les ronces',
           ja: '苗木を捨てる',
-          cn: '击退放置树苗',
           ko: '장판 유도하기',
         },
       },
@@ -238,10 +232,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Away From Tethered Walls',
-          de: 'Weg von den verbundenen Wänden',
-          fr: 'Éloignez-vous des murs liés',
           ja: '線が繋がれなかった方へ',
-          cn: '远离连线的墙壁',
           ko: '보스 선 연결된 방향 피하기',
         },
       },
@@ -350,10 +341,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Start Left',
-          de: 'Starte Links',
-          fr: 'Commencez à gauche',
           ja: '左から',
-          cn: '左侧开始',
           ko: '왼쪽에서 시작',
         },
       },
@@ -374,10 +362,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Start Right',
-          de: 'Starte Rechts',
-          fr: 'Commencez à droite',
           ja: '右から',
-          cn: '右侧开始',
           ko: '오른쪽에서 시작',
         },
       },
@@ -466,10 +451,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Tile Positions',
-          de: 'Kachel Positionen',
-          fr: 'Positions',
           ja: '定めたパネルに待機',
-          cn: '上自己的方块',
           ko: '바닥 자리잡기',
         },
       },
@@ -484,10 +466,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Face Laser Out',
-          de: 'Laser nach draußen richten',
-          fr: 'Orientez le laser vers l\'extérieur',
           ja: 'レーザーを外に向ける',
-          cn: '向外引导激光',
           ko: '바깥 봐요 (레이저 유도)',
         },
       },
@@ -560,10 +539,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Start Left',
-          de: 'Starte Links',
-          fr: 'Commencez à gauche',
           ja: '左から',
-          cn: '左侧开始',
           ko: '왼쪽에서 시작',
         },
       },
@@ -581,10 +557,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Start Right',
-          de: 'Starte Rechts',
-          fr: 'Commencez à droite',
           ja: '右から',
-          cn: '右侧开始',
           ko: '오른쪽에서 시작',
         },
       },
@@ -599,10 +572,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Get Towers',
-          de: 'Türme nehmen',
-          fr: 'Prenez les tours',
           ja: '塔を踏む',
-          cn: '踩塔',
           ko: '기둥 들어가기',
         },
       },

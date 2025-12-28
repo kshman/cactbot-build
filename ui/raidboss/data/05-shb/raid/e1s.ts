@@ -146,10 +146,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Cross Spread',
-          de: 'Verteilen',
-          fr: 'Dispersez-vous en croix',
           ja: '散開',
-          cn: '四角躲避',
           ko: '산개',
         },
       },
@@ -167,18 +164,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         getInSpread: {
           en: 'Get In, Spread',
-          de: 'Rein gehen, verteilen',
-          fr: 'À l\'intérieur, dispersez-vous',
           ja: '中で散開',
-          cn: '中间散开',
           ko: '보스 가까이 탱 약산개',
         },
         inStackBehind: {
           en: 'In, Stack Behind',
-          de: 'Rein, hinten stacken',
-          fr: 'À l\'intérieur, packez derrière',
           ja: '背面集合',
-          cn: '背面集合',
           ko: '보스 가까이, 뒤에서 쉐어',
         },
       },
@@ -261,10 +252,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Puddle Spread',
-          de: 'Flächen verteilen',
-          fr: 'Dispersez les zones au sol',
           ja: '離れて散開',
-          cn: '分散放圈',
           ko: '장판 유도 산개',
         },
       },
@@ -277,10 +265,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Stack With Partner',
-          de: 'Mit Partner stacken',
-          fr: 'Packez-vous avec votre partenaire',
           ja: '相方とスタック',
-          cn: '与搭档集合',
           ko: '쉐어뎀 파트너랑 모이기',
         },
       },
@@ -294,10 +279,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Tank Laser on YOU',
-          de: 'Tank Laser auf DIR',
-          fr: 'Tank laser sur VOUS',
           ja: '自分にレーザー',
-          cn: '坦克射线',
           ko: '탱 레이저 대상자',
         },
       },
@@ -311,10 +293,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Stack in front of tank',
-          de: 'Vorne mit dem Tank stacken',
-          fr: 'Packez-vous devant le tank',
           ja: '左右に分かれて内側へ',
-          cn: 'T前集合',
           ko: '좌우 탱커 앞 산개',
         },
       },
@@ -333,18 +312,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         passPreyToDps: {
           en: 'Pass Prey to DPS',
-          de: 'Marker einem DPS geben',
-          fr: 'Passez la marque à un DPS',
           ja: 'DPSに移して',
-          cn: '传毒DPS',
           ko: '딜러한테 표식 넘기기',
         },
         passPreyToTank: {
           en: 'Pass Prey to Tank',
-          de: 'Marker einem Tank geben',
-          fr: 'Passez la marque à un Tank',
           ja: 'タンクに移して',
-          cn: '传毒坦克',
           ko: '탱커한테 표식 넘기기',
         },
       },
@@ -365,10 +338,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Take prey from healer',
-          de: 'Marker vom Heiler nehmen',
-          fr: 'Prenez la marque du healer',
           ja: 'ヒーラーからマーカー取って',
-          cn: '从奶妈拿毒',
           ko: '힐러한테서 표식 받기',
         },
       },
@@ -395,10 +365,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Get Outside Your Orb',
-          de: 'Geh zu deinem Orb',
-          fr: 'À l\'extérieur de votre orbe',
           ja: 'ピュアレイを外へ誘導',
-          cn: '球外站位',
           ko: '본인 레이저 바깥으로 유도',
         },
       },
@@ -411,10 +378,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Bait Orb Lasers Outside',
-          de: 'Laser nach drausen ködern',
-          fr: 'Orientez les lasers vers l\'extérieur',
           ja: 'レーザーを外に誘導',
-          cn: '外侧吃激光',
           ko: '원/힐 레이저 바깥으로 유도',
         },
       },

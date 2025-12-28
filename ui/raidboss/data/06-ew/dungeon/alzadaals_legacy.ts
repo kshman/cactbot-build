@@ -87,18 +87,12 @@ const triggerSet: TriggerSet<Data> = {
         SW: Outputs.dirSW,
         safe: {
           en: 'Go ${dir1}',
-          de: 'Geh nach ${dir1}',
-          fr: 'Allez ${dir1}',
           ja: '${dir1}へ',
-          cn: '去 ${dir1}',
           ko: '가욧: ${dir1}쪽',
         },
         default: {
           en: 'Avoid tentacle explosions',
-          de: 'Weiche Tentakel-Explosion aus',
-          fr: 'Évitez les explostions des tentacules',
           ja: '触手の爆発から離れる',
-          cn: '躲避触手爆炸',
           ko: '촉수가 멈추는 곳이 터져요! 피해요!',
         },
       },
@@ -169,18 +163,12 @@ const triggerSet: TriggerSet<Data> = {
         SW: Outputs.dirSW,
         safe: {
           en: 'Go ${dir1} / ${dir2}',
-          de: 'Geh nach ${dir1} / ${dir2}',
-          fr: 'Allez ${dir1} / ${dir2}',
           ja: '${dir1}/${dir2}へ',
-          cn: '去 ${dir1} / ${dir2}',
           ko: '가욧 ${dir1} / ${dir2}',
         },
         default: {
           en: 'Avoid tentacle explosions',
-          de: 'Weiche Tentakel-Explosion aus',
-          fr: 'Évitez les explostions des tentacules',
           ja: '触手の爆発から離れる',
-          cn: '躲避触手爆炸',
           ko: '촉수가 멈추는 곳이 터져요! 피해요!',
         },
       },
@@ -193,10 +181,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Dodge 3 to 1',
-          de: 'Weiche von 3 auf 1 aus',
-          fr: 'Esquivez de 3 vers 1',
           ja: '3から1へ',
-          cn: '3穿1躲避',
           ko: '3번째에서 1번째로',
         },
       },
@@ -222,10 +207,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Avoid bit lasers',
-          de: 'Weiche Drohnen-Laser aus',
-          fr: 'Évitez les lasers',
           ja: 'レーザー回避',
-          cn: '躲避浮游炮激光',
           ko: '비트 레이저 피해욧',
         },
       },
@@ -252,10 +234,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Steer away from spikes',
-          de: 'Weg von den Stacheln lenken',
-          fr: 'Ne tournez pas dans les pics',
           ja: 'スパイクのないマスへ移動',
-          cn: '躲避针刺',
           ko: '가시 피해서 운전 잘해욧',
         },
       },
@@ -268,10 +247,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Avoid tethered color',
-          de: 'Weiche der verbundenen Farbe aus',
-          fr: 'Allez sous la couleur non liée',
           ja: '逆の色へ',
-          cn: '躲避连线颜色',
           ko: '연결된 선과 반대 색이 안전',
         },
       },

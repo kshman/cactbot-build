@@ -34,10 +34,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Explode Landmines',
-          de: 'Landminen explodieren',
-          fr: 'Explosez les mines',
           ja: '地雷を踏む',
-          cn: '引爆地雷',
           ko: '지뢰 폭발시키기',
         },
       },
@@ -65,18 +62,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         landmine: {
           en: '${num} / 3',
-          de: '${num} / 3',
-          fr: '${num} / 3',
           ja: '${num} / 3',
-          cn: '${num} / 3',
           ko: '${num} / 3',
         },
         landmineTTS: {
           en: '${num}',
-          de: '${num}',
-          fr: '${num}',
           ja: '${num}',
-          cn: '${num}',
           ko: '${num}',
         },
       },
@@ -92,10 +83,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Missile Tether (on ${player})',
-          de: 'Raketen Tether (auf ${player})',
-          fr: 'Lien missile sur ${player}',
           ja: '${player}にミサイル',
-          cn: '导弹连线 ${player}',
           ko: '"${player}" 유도 미사일 대상',
         },
       },
@@ -115,18 +103,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         brainjackOn: {
           en: 'Brainjack on ${player}',
-          de: 'Gehirnwäsche auf ${player}',
-          fr: 'Détournement cérébral sur ${player}',
           ja: '${player}に混乱',
-          cn: '洗脑点${player}',
           ko: '"${player}" 두뇌 장악 대상',
         },
         brainjackOnYou: {
           en: 'Brainjack on YOU',
-          de: 'Gehirnwäsche auf DIR',
-          fr: 'Détournement cérébral sur VOUS',
           ja: '自分に混乱',
-          cn: '洗脑点名',
           ko: '두뇌 장악 대상자',
         },
       },
@@ -146,18 +128,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         allaganFieldOn: {
           en: 'Allagan Field on ${player}',
-          de: 'Allagisches Feld auf ${player}',
-          fr: 'Champ allagois sur ${player}',
           ja: '${player}にアラガンフィールド',
-          cn: '亚拉戈领域点${player}',
           ko: '"${player}" 알라그 필드 대상',
         },
         allaganFieldOnYou: {
           en: 'Allagan Field on YOU',
-          de: 'Allagisches Feld auf DIR',
-          fr: 'Champ allagois sur VOUS',
           ja: '自分にアラガンフィールド',
-          cn: '亚拉戈领域点名',
           ko: '알라그 필드 대상자',
         },
       },
@@ -170,10 +146,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Dreadnaught Add',
-          de: 'Brummonaut Add',
-          fr: 'Add Cuirassé',
           ja: '雑魚：ドレッドノート',
-          cn: '恐慌装甲出现',
           ko: '드레드노트 쫄',
         },
       },

@@ -23,11 +23,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Tank Tether',
-          de: 'Tank Verbindung',
-          fr: 'Lien tank',
           ja: 'タンク 線を取る',
-          cn: '坦克接线远离人群',
-          tc: '坦克接線遠離人群',
           ko: '탱크가 줄 채요',
         },
       },
@@ -91,20 +87,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         moveLeft: {
           en: 'Move (Left)',
-          de: 'Bewegen (Links)',
-          fr: 'Bougez (À gauche)',
           ja: '動け (左へ)',
-          cn: '穿（左边）',
-          tc: '穿（左邊）',
           ko: '왼쪽으로',
         },
         stayLeft: {
           en: 'Stay (Left)',
-          de: 'Stehenbleiben (Links)',
-          fr: 'Restez (À gauche)',
           ja: 'そのまま (左に)',
-          cn: '停（左边）',
-          tc: '停（左邊）',
           ko: '왼쪽에 그대로',
         },
       },
@@ -123,20 +111,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         stayRight: {
           en: 'Stay (Right)',
-          de: 'Stehenbleiben (Rechts)',
-          fr: 'Restez (À droite)',
           ja: 'そのまま (右に)',
-          cn: '停（右边）',
-          tc: '停（右邊）',
           ko: '오른쪽에 그대로',
         },
         moveRight: {
           en: 'Move (Right)',
-          de: 'Bewegen (Rechts)',
-          fr: 'Bougez (À droite)',
           ja: '動け (右へ)',
-          cn: '穿（右边）',
-          tc: '穿（右邊）',
           ko: '오른쪽으로',
         },
       },
@@ -150,10 +130,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Drop Fire Outside',
-          de: 'Feuer draußen ablegen',
-          fr: 'Déposez le feu à l\'extérieur',
-          cn: '远离放火圈',
-          tc: '遠離放火圈',
+          ja: 'Drop Fire Outside',
           ko: '바깥에 불 버려요',
         },
       },
@@ -173,10 +150,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Use duty action on Conductive Focus',
-          de: 'Benutze Spezialkommando auf "Ziel des Blitzstrahls"',
-          fr: 'Utilisez l\'action spéciale sur le Point de convergence électrique',
-          cn: '对雷力投射点使用任务指令',
-          tc: '對雷力投射點使用任務指令',
+          ja: 'Use duty action on Conductive Focus',
           ko: '듀티 액션 연타',
         },
       },

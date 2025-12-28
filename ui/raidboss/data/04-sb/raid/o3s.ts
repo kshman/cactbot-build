@@ -31,10 +31,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Dragon Cleave',
-          de: 'Drachen-Cleave',
-          fr: 'Cleave du dragon',
-          cn: '巨龙吐息',
-          tc: '巨龍吐息',
+          ja: 'Dragon Cleave',
           ko: '용 브레스',
         },
       },
@@ -104,11 +101,7 @@ const triggerSet: TriggerSet<Data> = {
         output.responseOutputStrings = {
           othersStackOnHoly: {
             en: '(others stack on ${player})',
-            de: 'andere stacken auf ${player}',
-            fr: 'Les autres se packent sur ${player}',
             ja: '他は${player}と頭割り',
-            cn: '(其他人与 ${player} 分摊)',
-            tc: '(其他人與 ${player} 分攤)',
             ko: '${player} 다른 쉐어징',
           },
           spread: Outputs.spread,
@@ -173,29 +166,17 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         goSouthStackOnYou: {
           en: 'Go South: Stack on YOU',
-          de: 'Nach Süden: stack auf DIR',
-          fr: 'Allez au sud : Package sur VOUS',
           ja: '南へ: 自分に頭割り',
-          cn: '去下半场，分摊点名',
-          tc: '去下半場，分攤點名',
           ko: '남쪽으로: 쉐어징 대상자',
         },
         goNorth: {
           en: 'Go North',
-          de: 'nach norden',
-          fr: 'Allez au nord',
           ja: '北へ',
-          cn: '去上半场',
-          tc: '去上半場',
           ko: '북쪽으로',
         },
         goSouthStackOnFriend: {
           en: 'Go South: Stack on Friend',
-          de: 'nach süden: stack auf freund',
-          fr: 'Allez au sud : Package sur un ami',
           ja: '南へ: 頭割り',
-          cn: '去下半场分摊',
-          tc: '去下半場分攤',
           ko: '남쪽으로: 쉐어징',
         },
       },
@@ -210,11 +191,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Mindjack: Right',
-          de: 'Geistlenkung: Rechts',
-          fr: 'Contrainte mentale : Vers la droite',
           ja: 'マインドジャック: 右折',
-          cn: '右',
-          tc: '右',
           ko: '정신장악: 오른쪽',
         },
       },
@@ -229,11 +206,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Mindjack: Forward',
-          de: 'Geistlenkung: Vorwärts',
-          fr: 'Contrainte mentale : Vers l\'avant',
           ja: 'マインドジャック: 前進',
-          cn: '前',
-          tc: '前',
           ko: '정신장악: 앞쪽',
         },
       },
@@ -248,11 +221,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Mindjack: Left',
-          de: 'Geistlenkung: Links',
-          fr: 'Contrainte mentale : Vers la gauche',
           ja: 'マインドジャック: 左折',
-          cn: '左',
-          tc: '左',
           ko: '정신장악: 왼쪽',
         },
       },
@@ -267,11 +236,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Mindjack: Back',
-          de: 'Geistlenkung: Zurück',
-          fr: 'Contrainte mentale : Vers l\'arrière',
           ja: 'マインドジャック: 後退',
-          cn: '后',
-          tc: '後',
           ko: '정신장악: 뒤쪽',
         },
       },
@@ -307,10 +272,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         kill: {
           en: 'Kill ${name}',
-          de: 'Töte ${name}',
-          fr: 'Tuez ${name}',
-          cn: '击杀 ${name}',
-          tc: '擊殺 ${name}',
+          ja: 'Kill ${name}',
           ko: '${name} 잡기',
         },
       },
@@ -324,10 +286,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         kill: {
           en: 'Kill Giant + Ninjas',
-          de: 'Töte Riese + Ninjas',
-          fr: 'Tuez le Géant + Ninjas',
-          cn: '击杀 巨人 + 忍者',
-          tc: '擊殺 巨人 + 忍者',
+          ja: 'Kill Giant + Ninjas',
           ko: '철거인 + 닌자 잡기',
         },
       },
@@ -350,19 +309,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         books: {
           en: 'Books (One Per Square)',
-          de: 'Bücher (Eins pro Feld)',
-          fr: 'Livres (Un par carré)',
-          ja: '女王の舞い: 本', // FIXME
-          cn: '中间两排分格站位',
-          tc: '中間兩排分格站位',
+          ja: '女王の舞い: 本', // FIXME,
           ko: '책 (칸마다 한명)',
         },
         magicHammer: {
           en: 'Books + Magic Hammer',
-          de: 'Bücher + Zauberhammer',
-          fr: 'Livres + Marteau magique',
-          cn: '书 + 魔法锤',
-          tc: '書 + 魔法錘',
+          ja: 'Books + Magic Hammer',
           ko: '책 + 마법망치',
         },
       },
@@ -375,11 +327,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Clock',
-          de: 'Himmelsrichtungen',
-          fr: 'Positions',
-          ja: '女王の舞い: 散開', // FIXME
-          cn: '八方站位',
-          tc: '八方站位',
+          ja: '女王の舞い: 散開', // FIXME,
           ko: '산개',
         },
       },
@@ -392,11 +340,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Be On Blue Square',
-          de: 'Stehe auf einem blauem Feld',
-          fr: 'Placez-vous sur un carré bleu',
-          ja: '女王の舞い: 床', // FIXME
-          cn: '站在蓝地板',
-          tc: '站在藍地板',
+          ja: '女王の舞い: 床', // FIXME,
           ko: '파란 바닥 위로',
         },
       },
@@ -409,11 +353,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Tethers',
-          de: 'Dornenranken-Verbindungen',
-          fr: 'Liens',
-          ja: '女王の舞い: 茨', // FIXME
-          cn: '先集中后扯线',
-          tc: '先集中後扯線',
+          ja: '女王の舞い: 茨', // FIXME,
           ko: '가시줄 끊기',
         },
       },
@@ -431,10 +371,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         breakTether: {
           en: 'Break Tether (${player})',
-          de: 'Verbindung trennen (${player})',
-          fr: 'Cassez le lien (${player})',
-          cn: '扯断连线 (${player})',
-          tc: '扯斷連線 (${player})',
+          ja: 'Break Tether (${player})',
           ko: '가시줄 끊기 ("${player}")',
         },
       },
@@ -488,34 +425,22 @@ const triggerSet: TriggerSet<Data> = {
         unknown: Outputs.unknown,
         nwOutside: {
           en: 'NW Outside',
-          de: 'NW Außen',
-          fr: 'NO Extérieur',
-          cn: '左上 外',
-          tc: '左上 外',
+          ja: 'NW Outside',
           ko: '북서쪽 바깥',
         },
         nwInside: {
           en: 'NW Inside',
-          de: 'NW Innen',
-          fr: 'NO Intérieur',
-          cn: '左上 内',
-          tc: '左上 內',
+          ja: 'NW Inside',
           ko: '북서쪽 안',
         },
         seInside: {
           en: 'SE Inside',
-          de: 'SO Innen',
-          fr: 'SE Intérieur',
-          cn: '右下 内',
-          tc: '右下 內',
+          ja: 'SE Inside',
           ko: '남동쪽 바깥',
         },
         seOutside: {
           en: 'SE Outside',
-          de: 'SO Außen',
-          fr: 'SE Intérieur',
-          cn: '右下 外',
-          tc: '右下 外',
+          ja: 'SE Outside',
           ko: '남동쪽 안',
         },
       },

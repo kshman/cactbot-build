@@ -77,10 +77,7 @@ const triggerSet: TriggerSet<Data> = {
         tankBuster: Outputs.tankBuster,
         avoidTankBuster: {
           en: 'Avoid tank buster',
-          de: 'Tank buster ausweichen',
-          fr: 'Évitez le tank buster',
           ja: 'タンクバスターを避ける',
-          cn: '远离坦克死刑',
           ko: '탱크버스터 피해요',
         },
       },
@@ -93,10 +90,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Go To Narrow Intersection',
-          de: 'Geh zu der nahen Überschneidung',
-          fr: 'Allez sur l\'intersection étroite',
           ja: '狭く重なっている範囲へ',
-          cn: '去窄交叉口',
           ko: '좁게 겹친 곳으로',
         },
       },
@@ -110,10 +104,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Chasing Laser: Get Away',
-          de: 'Verfolgende Laser: Weg gehen',
-          fr: 'Soutien aérien : Éloignez-vous',
           ja: 'レーザー: 外へ',
-          cn: '激光点名：快出去',
           ko: '추적 레이저: 도망가요',
         },
       },
@@ -126,10 +117,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Go Left, Behind Wing',
-          de: 'Geh links hinter den Flügel',
-          fr: 'Allez à gauche, derrière l\'aile',
           ja: '翼の左へ',
-          cn: '去左边，翅膀后',
           ko: '왼쪽으로, 날개 사이',
         },
       },
@@ -142,10 +130,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Go Right, Behind Wing',
-          de: 'Geh rechts hinter den Flügel',
-          fr: 'Allez à droite, derrière l\'aile',
           ja: '翼の右へ',
-          cn: '去右边，翅膀后',
           ko: '오른쪽으로, 날개 사이',
         },
       },
@@ -168,10 +153,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Dodge into ring gap',
-          de: 'In die Lücke des Ringes ausweichen',
-          fr: 'Esquivez dans les écarts de l\'anneau',
           ja: 'リングの切れ目へ',
-          cn: '躲入环形缺口',
           ko: '링 사이 빈곳으로 피해요',
         },
       },
@@ -257,10 +239,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Fire Puddle on YOU',
-          de: 'Feuer Fläche auf DIR',
-          fr: 'Zone au sol de feu sur VOUS',
           ja: '自分にファイヤ',
-          cn: '火圈点名',
           ko: '내게 불 장판',
         },
       },
@@ -275,10 +254,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Line Stack (Point Outside)',
-          de: 'Auf einer Linie sammeln (nach außen zeigen)',
-          fr: 'Package en ligne (orientez vers l\'extérieur)',
           ja: '直線頭割り (外に向ける)',
-          cn: '直线分摊（指向场外）',
           ko: '한줄 뭉쳐요 (바깥 유도)',
         },
       },
@@ -292,9 +268,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Move to Inside',
-          de: 'Nach Innen bewegen',
-          fr: 'Allez à l\'intérieur',
-          cn: '去里面',
+          ja: 'Move to Inside',
           ko: '안으로',
         },
       },
@@ -308,9 +282,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Move to Outside',
-          de: 'Nach Außen bewegen',
-          fr: 'Allez à l\'extérieur',
-          cn: '去外面',
+          ja: 'Move to Outside',
           ko: '밖으로',
         },
       },
@@ -353,10 +325,7 @@ const triggerSet: TriggerSet<Data> = {
         tankBuster: Outputs.tankBuster,
         avoidTankBuster: {
           en: 'Avoid tank buster',
-          de: 'Tank buster ausweichen',
-          fr: 'Évitez le tank buster',
           ja: 'タンクバスターを避ける',
-          cn: '远离坦克死刑',
           ko: '탱크버스터 피해요',
         },
       },
@@ -423,10 +392,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Get Outside Upper Laser',
-          de: 'Raus aus dem oberen Laser',
-          fr: 'À l\'extérieur des lasers supérieurs',
           ja: '高いレーザー放射装置の外へ',
-          cn: '躲避远程激光',
           ko: '위쪽 쏘는 레이저의 바깥쪽으로',
         },
       },
@@ -448,10 +414,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Voltage cleave on YOU',
-          de: 'Spannungs-Cleave auf DIR',
-          fr: 'Arcs : Cleave sur VOUS',
           ja: '自分に扇形AoE',
-          cn: '扇形AOE点名',
           ko: '내게 전압 쪼개기',
         },
       },
@@ -472,18 +435,12 @@ const triggerSet: TriggerSet<Data> = {
         output.responseOutputStrings = {
           tankCleaveOnYou: {
             en: 'Tank Laser Cleave on YOU',
-            de: 'Tank Laser cleave auf DIR',
-            fr: 'Tank laser cleave sur VOUS',
             ja: '自分にタンクレーザー',
-            cn: '坦克直线激光点名',
             ko: '내게 탱크 레이저 쪼개기',
           },
           avoidTankCleaves: {
             en: 'Avoid tank laser cleaves',
-            de: 'Tank Laser cleave ausweichen',
-            fr: 'Évitez les Tanks laser cleaves',
             ja: 'タンクレーザーを避ける',
-            cn: '躲避坦克直线激光',
             ko: '탱크 레이저 쪼개기 피해요',
           },
         };
@@ -513,18 +470,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         getOutsideBetweenPods: {
           en: 'Get Outside Between Pods',
-          de: 'Zwischen den Pods raus gehen',
-          fr: 'À l\'extérieur entre les Pods',
           ja: '外へ、二つのポッドの真ん中に',
-          cn: '去场边两个辅助机之间',
           ko: '바깥쪽 포드 사이로',
         },
         getBetweenLasersWatchTethers: {
           en: 'Get Between Lasers (Watch Tethers)',
-          de: 'Zwischen Laser gehen (auf die Verbindungen achten)',
-          fr: 'Allez entre les lasers (regardez les liens)',
           ja: 'レーザーの真ん中に (線を気にして)',
-          cn: '去激光之间（观察直线）',
           ko: '레이저 사이 가운데로 (줄 확인)',
         },
       },
@@ -538,10 +489,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Turn Towers Blue',
-          de: 'Türme zu Blau ändern',
-          fr: 'Changez les tours en bleu',
           ja: '塔を青色に',
-          cn: '多人踩圈至蓝色',
           ko: '타워를 파랗게',
         },
       },
@@ -555,10 +503,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Laser on YOU',
-          de: 'Laser auf DIR',
-          fr: 'Laser sur VOUS',
           ja: '自分にレーザー',
-          cn: '激光点名',
           ko: '내게 레이저',
         },
       },
@@ -675,18 +620,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         jump: {
           en: 'Jump #${num} on YOU',
-          de: 'Sprung #${num} auf DIR',
-          fr: 'Saut #${num} sur VOUS',
           ja: '自分にジャンプ #${num}',
-          cn: '单体跳砍#${num}点名',
           ko: '내게 점프 #${num}번',
         },
         cleave: {
           en: 'Cleave #${num} on YOU',
-          de: 'Cleave #${num} auf DIR',
-          fr: 'Cleave #${num} sur VOUS',
           ja: '自分に直線AoE #${num}',
-          cn: '直线劈砍#${num}点名',
           ko: '내게 쪼개기 #${num}번',
         },
         unknown: Outputs.unknown,
@@ -701,10 +640,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Get Towers',
-          de: 'Türme nehmen',
-          fr: 'Prenez les tours',
           ja: '塔を踏む',
-          cn: '踩塔',
           ko: '타워 밟아요',
         },
       },
@@ -719,10 +655,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Avoid Lasers',
-          de: 'Laser ausweichen',
-          fr: 'Évitez les lasers',
           ja: 'レーザーを避ける',
-          cn: '躲避激光',
           ko: '레이저 피해요',
         },
       },
@@ -738,10 +671,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Get Under Clone Corner',
-          de: 'Unter den Klon in einer Ecke gehen',
-          fr: 'Allez sous un clone dans un coin ',
           ja: 'コーナーの分裂体の下へ',
-          cn: '去分身脚下',
           ko: '구석에 있는 클론 발밑으로',
         },
       },
@@ -759,10 +689,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Get Under Cardinal Clone',
-          de: 'Unter den Klon in einer der Himmelsrichtungen gehen',
-          fr: 'Allez sous un clone sur un point cardinal',
           ja: '十字にいる分裂体の下へ',
-          cn: '去真分身脚下',
           ko: '십자로 있는 클론의 발밑으로',
         },
       },
@@ -779,10 +706,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Away From Clones',
-          de: 'Weg von den Klonen',
-          fr: 'Éloignez-vous des clones',
           ja: '分裂体から離れる',
-          cn: '远离分身',
           ko: '클론에게서 먼곳으로',
         },
       },

@@ -200,11 +200,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Move!',
-          de: 'Bewegen',
-          fr: 'Bougez !',
           ja: 'フェザーレイン',
-          cn: '躲羽毛',
-          tc: '躲羽毛',
           ko: '이동',
         },
       },
@@ -218,11 +214,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Eruption Baits',
-          de: 'Köder Eruption',
-          fr: 'Attirez les éruptions',
           ja: 'エラプション',
-          cn: '诱导地火',
-          tc: '誘導地火',
           ko: '용암 분출 유도',
         },
       },
@@ -338,11 +330,7 @@ const triggerSet: TriggerSet<Data> = {
           partyStack: Outputs.stackMarker,
           tankCleavePartyOut: {
             en: 'Tank Cleave (PARTY OUT)',
-            de: 'Tank Cleave (GRUPPE RAUS)',
-            fr: 'Tank cleave (Groupe à l\'extérieur)',
             ja: 'タンク頭割り (PTは外へ)',
-            cn: '坦克顺劈 (人群避开)',
-            tc: '坦克順劈 (人群避開)',
             ko: '광역 탱버 (본대 밖으로)',
           },
         };
@@ -370,11 +358,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Mistral on YOU',
-          de: 'Mistral-Song',
-          fr: 'Mistral sur VOUS',
           ja: 'ミストラルソング',
-          cn: '寒风之歌点名',
-          tc: '寒風之歌點名',
           ko: '삭풍 징',
         },
       },
@@ -389,11 +373,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Block Mistral Song',
-          de: 'Mistral-Song',
-          fr: 'Chant du mistral',
           ja: 'ミストラルソング',
-          cn: '寒风之歌',
-          tc: '寒風之歌',
           ko: '삭풍 징',
         },
       },
@@ -407,11 +387,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Spiny Plume Add',
-          de: 'Dorniger Federsturm',
-          fr: 'Add Plume perforante',
           ja: 'スパイニープルーム',
-          cn: '刺羽出现',
-          tc: '刺羽出現',
           ko: '가시돋힌 깃털 등장',
         },
       },
@@ -504,11 +480,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Sisters: ${dir1} / ${dir2}',
-          de: 'Schwestern: ${dir1} / ${dir2}',
-          fr: 'Sœurs : ${dir1} / ${dir2}',
           ja: '分身: ${dir1} / ${dir2}',
-          cn: '分身：${dir1} / ${dir2}',
-          tc: '分身：${dir1} / ${dir2}',
           ko: '분신: ${dir1} / ${dir2}',
         },
         // TODO: the lint fails if you `...Directions.outputStringsCardinalDir` :C
@@ -530,41 +502,25 @@ const triggerSet: TriggerSet<Data> = {
           // The person with two stacks must get a tether.
           garuda2: {
             en: 'Get Sister Tether!!!',
-            de: 'Nimm Verbindung von der Schwester!!!',
-            fr: 'Prenez le lien de la sœur !!!',
             ja: '分身の線を取って!!!',
-            cn: '接分身的线!!!',
-            tc: '接分身的線!!!',
             ko: '분신 줄 가져가기!!!',
           },
           // Other people with 1 stack can be informed about it.
           garuda1: {
             en: 'Sister Tethers',
-            de: 'Schwester Verbindungen',
-            fr: 'Lien de la sœur',
             ja: '分身の線',
-            cn: '分身连线',
-            tc: '分身連線',
             ko: '분신 줄',
           },
           // Usually static on a ranged.
           annihilation1: {
             en: 'Tether',
-            de: 'Verbindungen',
-            fr: 'Lien',
             ja: '線',
-            cn: '连线',
-            tc: '連線',
             ko: '줄',
           },
           // Late in the raid, so make sure anybody with a stack remembers this.
           suppression1: {
             en: 'Tether!!!',
-            de: 'Verbindungen!!!',
-            fr: 'Lien !!!',
             ja: '線!!!',
-            cn: '连线!!!',
-            tc: '連線!!!',
             ko: '줄!!!',
           },
         };
@@ -659,11 +615,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Ifrit ${dir}',
-          de: 'Ifrit ${dir}',
-          fr: 'Ifrit ${dir}',
           ja: 'イフリート ${dir}',
-          cn: '火神 ${dir}',
-          tc: '火神 ${dir}',
           ko: '이프리트 ${dir}',
         },
         unknown: Outputs.unknown,
@@ -778,11 +730,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Near: ${dir}',
-          de: 'Nahe: ${dir}',
-          fr: 'Proche : ${dir}',
           ja: '近いほう: ${dir}',
-          cn: '近: ${dir}',
-          tc: '近: ${dir}',
           ko: '가까운 기둥: ${dir}',
         },
         ...Directions.outputStrings16Dir,
@@ -865,11 +813,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         fetters: {
           en: 'Fetters (w/${player})',
-          de: 'Fesseln (mit ${player})',
-          fr: 'Entraves (avec ${player})',
           ja: '鎖 (相手: ${player})',
-          cn: '锁链 (与 /${player})',
-          tc: '鎖鏈 (與 /${player})',
           ko: '사슬 (+${player})',
         },
       },
@@ -883,11 +827,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Searing Wind on YOU',
-          de: 'Versengen auf DIR',
-          fr: 'Carbonisation sur VOUS',
           ja: '自分に灼熱',
-          cn: '灼热咆哮点名',
-          tc: '灼熱咆哮點名',
           ko: '작열 대상자',
         },
       },
@@ -959,11 +899,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         intercardSafeSpot: {
           en: '${dir1} / ${dir2}',
-          de: '${dir1} / ${dir2}',
-          fr: '${dir1} / ${dir2}',
           ja: '${dir1} / ${dir2}',
-          cn: '${dir1} / ${dir2}',
-          tc: '${dir1} / ${dir2}',
           ko: '${dir1} / ${dir2}',
         },
         ...Directions.outputStrings8Dir,
@@ -1017,11 +953,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Adjust 45° ${rotation}',
-          de: 'Rotiere 45° ${rotation}',
-          fr: 'Ajustez de 45° ${rotation}',
           ja: '45° ${rotation} に調整',
-          cn: '${rotation} 旋转 45°',
-          tc: '${rotation} 旋轉 45°',
           ko: '${rotation} 45° 이동',
         },
         clockwise: Outputs.clockwise,
@@ -1122,38 +1054,22 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         awokenDash1: {
           en: '${rotation} 45° to ${dir} (fast)',
-          de: '${rotation} 45° nach ${dir} (schnell)',
-          fr: '${rotation} 45° vers ${dir} (rapide)',
           ja: '${rotation} 45° ${dir} に (急)',
-          cn: '${rotation} 45° 到 ${dir} (快)',
-          tc: '${rotation} 45° 到 ${dir} (快)',
           ko: '${rotation} 45° ${dir}까지 (빠름)',
         },
         awokenDash2: {
           en: '${rotation} 90° to ${dir} (fast)',
-          de: '${rotation} 90° nach ${dir} (schnell)',
-          fr: '${rotation} 90° vers ${dir} (rapide)',
           ja: '${rotation} 90° ${dir} に (急)',
-          cn: '${rotation} 90° 到 ${dir} (快)',
-          tc: '${rotation} 90° 到 ${dir} (快)',
           ko: '${rotation} 90° ${dir}까지 (빠름)',
         },
         awokenDash3: {
           en: '${rotation} 45° to ${dir} (slow)',
-          de: '${rotation} 45° nach ${dir} (langsam)',
-          fr: '${rotation} 45° vers ${dir} (lent)',
           ja: '${rotation} 45° ${dir} に (遅)',
-          cn: '${rotation} 45° 到 ${dir} (慢)',
-          tc: '${rotation} 45° 到 ${dir} (慢)',
           ko: '${rotation} 45° ${dir}까지 (느림)',
         },
         awokenDash4: {
           en: '${rotation} 90° to ${dir} (slow)',
-          de: '${rotation} 90° nach ${dir} (langsam)',
-          fr: '${rotation} 90° vers ${dir} (lent)',
           ja: '${rotation} 90° ${dir} に (遅)',
-          cn: '${rotation} 90° 到 ${dir} (慢)',
-          tc: '${rotation} 90° 到 ${dir} (慢)',
           ko: '${rotation} 90° ${dir}까지 (느림)',
         },
         clockwise: Outputs.clockwise,
@@ -1169,11 +1085,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Stack',
-          de: 'Stack',
-          fr: 'Packez-vous',
           ja: '頭割り',
-          cn: '集合分摊',
-          tc: '集合分攤',
           ko: '집합',
         },
       },
@@ -1231,11 +1143,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         safe: {
           en: 'Safe: ${dir}',
-          de: 'Sicher: ${dir}',
-          fr: 'Sur : ${dir}',
           ja: '安地: ${dir}',
-          cn: '安全区: ${dir}',
-          tc: '安全區: ${dir}',
           ko: '안전: ${dir}',
         },
         unknown: Outputs.unknown,
@@ -1397,11 +1305,7 @@ const triggerSet: TriggerSet<Data> = {
         num3: Outputs.num3,
         text: {
           en: '${player1}, ${player2}, ${player3}',
-          de: '${player1}, ${player2}, ${player3}',
-          fr: '${player1}, ${player2}, ${player3}',
           ja: '${player1}, ${player2}, ${player3}',
-          cn: '${player1}, ${player2}, ${player3}',
-          tc: '${player1}, ${player2}, ${player3}',
           ko: '${player1}, ${player2}, ${player3}',
         },
       },
@@ -1426,11 +1330,7 @@ const triggerSet: TriggerSet<Data> = {
         num3: Outputs.num3,
         text: {
           en: 'Everyone to ${num} (${player} died)',
-          de: 'Alle zur ${num} (${player} ist gestorben)',
-          fr: 'Tout le monde sur ${num} (${player} est mort)',
           ja: '${num} で (${player} が死亡)',
-          cn: '所有人到 ${num} (${player}死亡)',
-          tc: '所有人到 ${num} (${player}死亡)',
           ko: '전부다 ${num} 쪽으로 (${player} 죽음)',
         },
       },
@@ -1456,11 +1356,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Caster LB NOW!',
-          de: 'Magier LB JETZT!',
-          fr: 'LB MAINTENANT !',
           ja: 'キャスLB！',
-          cn: '法系LB!',
-          tc: '法系LB!',
           ko: '캐스터 리밋!',
         },
       },
@@ -1476,11 +1372,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Healer LB NOW!',
-          de: 'Heiler LB JETZT!',
-          fr: 'Healer LB MAINTENANT !',
           ja: 'ヒラLB！',
-          cn: '奶妈LB!',
-          tc: '奶媽LB!',
           ko: '힐러 리밋!',
         },
       },
@@ -1495,11 +1387,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Melee LB NOW!',
-          de: 'Nahkämpfer LB JETZT!',
-          fr: 'LB melee MAINTENANT !',
           ja: '近接LB！',
-          cn: '近战LB!',
-          tc: '近戰LB!',
           ko: '근딜 리밋!',
         },
       },
@@ -1513,11 +1401,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Tank LB NOW',
-          de: 'JETZT Tank LB',
-          fr: 'LB Tank MAINTENANT !',
           ja: '今タンクLB',
-          cn: '坦克LB',
-          tc: '坦克LB',
           ko: '탱리밋',
         },
       },
@@ -1657,20 +1541,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         early: {
           en: '${dir} => ${rotation} (early safe)',
-          de: '${dir} => ${rotation} (früh sicher)',
-          fr: '${dir} => ${rotation} (sûr avant)',
           ja: '${dir} => ${rotation} (先安地)',
-          cn: '${dir} => ${rotation} (提前安全)',
-          tc: '${dir} => ${rotation} (提前安全)',
           ko: '${dir} => ${rotation} (안전)',
         },
         normal: {
           en: '${dir} => ${rotation}',
-          de: '${dir} => ${rotation}',
-          fr: '${dir} => ${rotation}',
           ja: '${dir} => ${rotation}',
-          cn: '${dir} => ${rotation}',
-          tc: '${dir} => ${rotation}',
           ko: '${dir} => ${rotation}',
         },
         clockwise: Outputs.clockwise,
@@ -1691,11 +1567,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Gaol on YOU',
-          de: 'Granitgefängnis',
-          fr: 'Geôle sur VOUS',
           ja: 'ジェイル',
-          cn: '石牢点名',
-          tc: '石牢點名',
           ko: '돌감옥 대상자',
         },
       },
@@ -1708,11 +1580,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Middle Laser',
-          de: 'Laser (Mitte)',
-          fr: 'Laser (Milieu)',
           ja: 'レーザー (中央)',
-          cn: '中间激光',
-          tc: '中間雷射',
           ko: '가운데 레이저',
         },
       },
@@ -1725,11 +1593,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'North Laser',
-          de: 'Laser (Norden)',
-          fr: 'Laser (Nord)',
           ja: 'レーザー (北)',
-          cn: '上半场激光',
-          tc: '上半場雷射',
           ko: '북쪽 레이저',
         },
       },
@@ -1742,11 +1606,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'East Laser',
-          de: 'Laser (Osten)',
-          fr: 'Laser (Est)',
           ja: 'レーザー (東)',
-          cn: '右半场激光',
-          tc: '右半場雷射',
           ko: '동쪽 레이저',
         },
       },
@@ -1761,11 +1621,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Garuda',
-          de: 'Garuda',
-          fr: 'Garuda',
           ja: 'ガルーダ',
-          cn: '迦楼罗',
-          tc: '迦樓羅',
           ko: '가루다',
         },
       },
@@ -1779,11 +1635,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Ifrit',
-          de: 'Ifrit',
-          fr: 'Ifrit',
           ja: 'イフリート',
-          cn: '伊弗利特',
-          tc: '伊弗利特',
           ko: '이프리트',
         },
       },
@@ -1797,11 +1649,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Titan',
-          de: 'Titan',
-          fr: 'Titan',
           ja: 'タイタン',
-          cn: '泰坦',
-          tc: '泰坦',
           ko: '타이탄',
         },
       },

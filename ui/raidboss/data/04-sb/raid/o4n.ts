@@ -23,11 +23,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Cleanse Doom soon',
-          de: 'Reinige Verhängnis bald',
-          fr: 'Guérison du Glas bientôt',
           ja: '死の宣告にエスナ',
-          cn: '驱散死宣',
-          tc: '驅散死宣',
           ko: '곧 둠, 에스나',
         },
       },
@@ -53,11 +49,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Move around',
-          de: 'Bewegen',
-          fr: 'Bougez',
           ja: '動き続ける',
-          cn: '不停移动',
-          tc: '不停移動',
           ko: '얼음: 계속 움직여요',
         },
       },
@@ -88,11 +80,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Stand in the gap',
-          de: 'In der Lücke stehen',
-          fr: 'Placez-vous à l\'écart',
           ja: '狭間に',
-          cn: '远离中间位置',
-          tc: '遠離中間位置',
           ko: '빈 틈으로',
         },
       },
@@ -106,11 +94,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Behind head--Avoid zombie breath',
-          de: 'Hinter den Kopf - Vermeide den Zombie-Atem',
-          fr: 'Derrière la tête - Évitez l\'haleine zombie',
           ja: '頭の後ろに - ゾンビブレス来るぞ',
-          cn: '站头后方',
-          tc: '站頭後方',
           ko: '머리 뒤로 - 좀비 트름 피해요',
         },
       },
@@ -123,11 +107,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Avoid black holes',
-          de: 'Weiche den Schwarzen Löchern aus',
-          fr: 'Évitez les trous noirs',
           ja: 'ブラックホールから離れる',
-          cn: '远离黑洞',
-          tc: '遠離黑洞',
           ko: '블랙홀 피해요',
         },
       },
@@ -147,11 +127,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Flare on YOU',
-          de: 'Flare auf DIR',
-          fr: 'Brasier sur VOUS',
           ja: '自分にフレア',
-          cn: '核爆点名',
-          tc: '核爆點名',
           ko: '내게 플레어',
         },
       },

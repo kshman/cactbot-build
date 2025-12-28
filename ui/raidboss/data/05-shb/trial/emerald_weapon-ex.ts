@@ -76,11 +76,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Get orbs',
-          de: 'Orbs nehmen',
-          fr: 'Prenez les orbes',
           ja: '玉を処理',
-          cn: '撞球',
-          tc: '撞球',
           ko: '구슬 부딪히기',
         },
       },
@@ -122,18 +118,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         clockwise: {
           en: 'Rotate Clockwise',
-          de: 'Im Uhrzeigersinn rotieren',
-          fr: 'Tournez dans le sens horaire',
-          cn: '顺时针转',
-          tc: '順時針轉',
+          ja: 'Rotate Clockwise',
           ko: '시계방향',
         },
         counterclock: {
           en: 'Rotate Counterclockwise',
-          de: 'Gegen den Uhrzeigersinn rotieren',
-          fr: 'Tournez dans le sens anti-horaire',
-          cn: '逆时针转',
-          tc: '逆時針轉',
+          ja: 'Rotate Counterclockwise',
           ko: '반시계방향',
         },
       },
@@ -146,10 +136,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Away From Red Circle',
-          de: 'Weg vom roten Kreis',
-          fr: 'Éloignez-vous du cercle rouge',
-          cn: '远离红圈',
-          tc: '遠離紅圈',
+          ja: 'Away From Red Circle',
           ko: '빨간 장판에서 멀리 떨어지기',
         },
       },
@@ -170,11 +157,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Get Near Same Polarity Mines',
-          de: 'Nahe den Bomben mit gleicher Polarisierung',
-          fr: 'Allez vers les mines de même polarité',
           ja: '同じ極性の爆雷に近づく',
-          cn: '靠近同级地雷',
-          tc: '靠近同級地雷',
           ko: '같은 극성 폭탄쪽으로',
         },
       },
@@ -202,11 +185,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Flare on YOU',
-          de: 'Flare auf DIR',
-          fr: 'Brasier sur VOUS',
           ja: '自分にフレア',
-          cn: '核爆点名',
-          tc: '核爆點名',
           ko: '플레어 대상자',
         },
       },
@@ -220,11 +199,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Bait Lines Away From Safe Spot',
-          de: 'Linien weg vom Safespot ködern',
-          fr: 'Orientez les lignes hors de la zone safe',
           ja: '線を安置に被らないように捨てる',
-          cn: '诱导直线，不要覆盖安全点',
-          tc: '誘導直線，不要覆蓋安全點',
           ko: '안전지대 밖으로 장판 유도',
         },
       },
@@ -247,11 +222,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         protean: {
           en: 'Protean',
-          de: 'Himmelsrichtungen',
-          fr: 'Positions',
           ja: '8方向散開',
-          cn: '分散站位',
-          tc: '分散站位',
           ko: '정해진 위치로 산개',
         },
         ...sharedOutputStrings,
@@ -279,10 +250,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Go ${dir}, Aim Across',
-          de: 'Geh nach ${dir}, schau Gegenüber',
-          fr: 'Allez direction ${dir}, visez en face',
-          cn: '去${dir}, 错开其他直线',
-          tc: '去${dir}, 錯開其他直線',
+          ja: 'Go ${dir}, Aim Across',
           ko: '${dir}으로 이동, 반대쪽 확인',
         },
         north: Outputs.north,
@@ -305,10 +273,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Dodge Arrow Lines',
-          de: 'Weiche den Pfeillinien aus',
-          fr: 'Esquivez les lignes fléchées',
-          cn: '避开箭头路径',
-          tc: '避開箭頭路徑',
+          ja: 'Dodge Arrow Lines',
           ko: '화살표 방향 피하기',
         },
       },
@@ -322,10 +287,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Watch for Swords',
-          de: 'Schau nach den Schwertern',
-          fr: 'Repérez les épées',
-          cn: '观察剑',
-          tc: '觀察劍',
+          ja: 'Watch for Swords',
           ko: '칼 떨어지는 위치 보기',
         },
       },
@@ -389,18 +351,12 @@ const triggerSet: TriggerSet<Data> = {
         middle: Outputs.middle,
         middleFirst: {
           en: '${middle} -> ${dir1} / ${dir2}',
-          de: '${middle} -> ${dir1} / ${dir2}',
-          fr: '${middle} -> ${dir1} / ${dir2}',
-          cn: '${middle} -> ${dir1} / ${dir2}',
-          tc: '${middle} -> ${dir1} / ${dir2}',
+          ja: '${middle} -> ${dir1} / ${dir2}',
           ko: '${middle} -> ${dir1} / ${dir2}',
         },
         middleLast: {
           en: '${dir1} / ${dir2} -> ${middle}',
-          de: '${dir1} / ${dir2} -> ${middle}',
-          fr: '${dir1} / ${dir2} -> ${middle}',
-          cn: '${dir1} / ${dir2} -> ${middle}',
-          tc: '${dir1} / ${dir2} -> ${middle}',
+          ja: '${dir1} / ${dir2} -> ${middle}',
           ko: '${dir1} / ${dir2} -> ${middle}',
         },
       },
@@ -433,10 +389,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Intercard + Out (Plus)',
-          de: 'Interkardinal + Raus (Plus)',
-          fr: 'Intercardinal + Extérieur (Plus)',
-          cn: '去场边角落 (十字)',
-          tc: '去場邊角落 (十字)',
+          ja: 'Intercard + Out (Plus)',
           ko: '대각선 밖으로 (십자)',
         },
       },
@@ -450,10 +403,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Cardinal + Out (Cross)',
-          de: 'Kardinal + Raus (Kreuz)',
-          fr: 'Cardinal + Extérieur (Croix)',
-          cn: '去场边正点 (X字)',
-          tc: '去場邊正點 (X字)',
+          ja: 'Cardinal + Out (Cross)',
           ko: '동서남북 밖으로 (X자)',
         },
       },
@@ -472,11 +422,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Go North; Dodge Soldiers/Divebombs',
-          de: 'Geh nach Norden; Achte auf die Lücken zwischen den Soldaten',
-          fr: 'Allez au Nord, esquivez les soldats et les bombes plongeantes',
-          ja: '飛行部隊と射撃部隊を見覚える', // FIXME
-          cn: '去上边缘；躲避士兵射击/飞机轰炸',
-          tc: '去上邊緣；躲避士兵射擊/飛機轟炸',
+          ja: '飛行部隊と射撃部隊を見覚える', // FIXME,
           ko: '북쪽으로 이동, 엑사플레어, 병사 사격 확인',
         },
       },

@@ -85,10 +85,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Twisters',
-          de: 'Wirbelstürme',
-          fr: 'Tornades',
           ja: '大竜巻',
-          cn: '旋风',
           ko: '트위스터',
         },
       },
@@ -101,10 +98,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'DIVEBOMB',
-          de: 'STURZBOMBE',
-          fr: 'BOMBE PLONGEANTE',
           ja: 'ダイブボム',
-          cn: '俯冲',
           ko: '다이브봄',
         },
       },
@@ -117,10 +111,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Twisters',
-          de: 'Wirbelstürme',
-          fr: 'Tornades',
           ja: 'ツイスター',
-          cn: '旋风',
           ko: '트위스터',
         },
       },

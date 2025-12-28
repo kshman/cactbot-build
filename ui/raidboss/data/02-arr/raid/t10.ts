@@ -37,18 +37,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         chargeOn: {
           en: 'Charge on ${player}',
-          de: 'Ansturm auf ${player}',
-          fr: 'Charge sur ${player}',
           ja: '${player}にワイルドチャージ',
-          cn: '蓝球点${player}',
           ko: '"${player}" 돌진 대상',
         },
         chargeOnYou: {
           en: 'Charge on YOU',
-          de: 'Ansturm auf DIR',
-          fr: 'Charge sur VOUS',
           ja: '自分にワイルドチャージ',
-          cn: '蓝球点名',
           ko: '내게 돌진',
         },
       },
@@ -74,18 +68,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         cyclonicOn: {
           en: 'Cyclonic on ${player}',
-          de: 'Zyklon-Chaos auf ${player}',
-          fr: 'Chaos cyclonique sur ${player}',
           ja: '${player}にサイクロニックカオス',
-          cn: '连线点${player}',
           ko: '${player} 휘몰아치는 혼돈',
         },
         cyclonicOnYou: {
           en: 'Cyclonic on YOU',
-          de: 'Zyklon-Chaos auf DIR',
-          fr: 'Chaos cyclonique sur VOUS',
           ja: '自分にサイクロニックカオス',
-          cn: '连线点名',
           ko: '휘몰아치는 혼돈 대상자',
         },
       },

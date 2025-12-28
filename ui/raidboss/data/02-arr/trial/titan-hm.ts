@@ -49,10 +49,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Cleanse ${player}',
-          de: 'Reinige ${player}',
-          fr: 'Guérison sur ${player}',
           ja: '${player}にエスナ',
-          cn: '康复${player}',
           ko: '에스나: ${player}',
         },
       },

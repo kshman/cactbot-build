@@ -60,10 +60,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Kill Chyme Add',
-          de: 'Brei Add töten',
-          fr: 'Tuez l\'add Chyme',
           ja: 'キームス・マウンテンを倒す',
-          cn: '击杀圣山之糜',
           ko: 'Chyme(산의 유미즙) 잡아요',
         },
       },

@@ -71,16 +71,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         safe: {
           en: 'Go ${safe} + Out',
-          de: 'Geh nach ${safe} + Raus',
-          cn: '去 ${safe} + 外',
-          tc: '去 ${safe} + 外',
+          ja: 'Go ${safe} + Out',
           ko: '${safe} + 밖으로',
         },
         unknownSafe: {
           en: 'Out + Avoid shrublet explosions',
-          de: 'Raus + Vermeide Blumling Explosionen',
-          cn: '外 + 避开花小人爆炸',
-          tc: '外 + 避開花小人爆炸',
+          ja: 'Out + Avoid shrublet explosions',
           ko: '밖으로 + 덤불 폭발 피해요',
         },
         ...Directions.outputStrings8Dir,
@@ -103,9 +99,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Away from jump x4',
-          de: 'Weg vom Sprung x4',
-          cn: '远离跳跃 x4',
-          tc: '遠離跳躍 x4',
+          ja: 'Away from jump x4',
           ko: '점프 피해요x4',
         },
       },

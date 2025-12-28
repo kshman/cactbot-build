@@ -102,10 +102,7 @@ const triggerSet: TriggerSet<Data> = {
         right: Outputs.right,
         text: {
           en: '${first} => ${second} => ${third}',
-          de: '${first} => ${second} => ${third}',
-          fr: '${first} => ${second} => ${third}',
           ja: '${first} => ${second} => ${third}',
-          cn: '${first} => ${second} => ${third}',
           ko: '${first} 🔜 ${second} 🔜 ${third}',
         },
       },
@@ -182,34 +179,22 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         superchain1: {
           en: 'Follow Donut',
-          de: 'Donut folgen',
-          fr: 'Suivez le donut',
           ja: 'ドーナツへ',
-          cn: '跟随月环',
           ko: '도넛 따라가요',
         },
         superchain2: {
           en: 'Short Donut => Long Donut',
-          de: 'Kurzer Donut => Langer Donut',
-          fr: 'Donut court => Donut long',
           ja: '早ドーナツ => 遅ドーナツ',
-          cn: '短月环 => 长月环',
           ko: '짧은 도넛 🔜 긴 도넛',
         },
         superchain3: {
           en: 'Follow Donut (avoid cleave)',
-          de: 'Donut folgen (Cleave ausweichen)',
-          fr: 'Suivez le donut (évitez le cleave)',
           ja: 'ボスの横からドーナツへ',
-          cn: '跟随月环（远离钢铁）',
           ko: '도넛 따라가요 (가운데 공격 피해요)',
         },
         superchain4: {
           en: 'Avoid Spheres',
-          de: 'Spheren vermeiden',
-          fr: 'Évitez les sphères',
           ja: 'オブ回避',
-          cn: '远离钢铁',
           ko: '동글이들 피해요',
         },
       },
@@ -228,10 +213,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Avoid Chained Platforms',
-          de: 'Vermeide angekettete Platformen',
-          fr: 'Évitez les plateformes enchaînées',
           ja: '壊れそうなマス回避',
-          cn: '远离连线地板',
           ko: '연결된 장소 피해요',
         },
       },

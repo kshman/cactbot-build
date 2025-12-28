@@ -84,10 +84,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         inLater: {
           en: '(In Later)',
-          de: '(später Rein)',
-          fr: '(Intérieur, plus tard)',
           ja: '(あとで内側)',
-          cn: '(稍后内侧)',
           ko: '(나중에 안)',
         },
       },
@@ -123,10 +120,7 @@ const triggerSet: TriggerSet<Data> = {
         ...Directions.outputStrings16Dir,
         inDir: {
           en: 'In ${dir}',
-          de: 'Rein ${dir}',
-          fr: 'Intérieur ${dir}',
           ja: '内側 ${dir}',
-          cn: '内侧 ${dir}',
           ko: '${dir} 안',
         },
       },
@@ -284,9 +278,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         behindClones: {
           en: 'Behind Clones',
-          de: 'Hinter den Klonen',
-          fr: 'Derrière les clones',
-          cn: '去分身后',
+          ja: 'Behind Clones',
           ko: '분신 뒤로',
         },
       },
@@ -318,10 +310,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         lines: {
           en: 'Avoid Lines',
-          de: 'Vermeide Linien',
-          fr: 'Évitez les lignes',
           ja: '直線攻撃を避ける',
-          cn: '躲避直线 AoE',
           ko: '직선장판 피하기',
         },
       },
@@ -341,10 +330,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         rotate: {
           en: 'Rotate',
-          de: 'Rotieren',
-          fr: 'Tournez',
           ja: '回転',
-          cn: '旋转',
           ko: '회전',
         },
       },
@@ -358,10 +344,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Stack x5',
-          de: 'Sammeln x5',
-          fr: 'Package x5',
           ja: '頭割り x5',
-          cn: '5次分摊',
           ko: '쉐어 5번',
         },
       },

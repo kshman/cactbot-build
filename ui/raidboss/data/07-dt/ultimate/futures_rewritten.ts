@@ -291,6 +291,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         ok: {
           en: 'Combat: ${moks}',
+          ja: 'Combat: ${moks}',
           ko: '시작: ${moks}',
         },
       },
@@ -513,22 +514,27 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         tt: {
           en: '(Tank-Tank)',
+          ja: '(Tank-Tank)',
           ko: '(탱크 조정)',
         },
         hh: {
           en: '(Healer-Healer)',
+          ja: '(Healer-Healer)',
           ko: '(힐러 조정)',
         },
         dps: {
           en: '(Dps)',
+          ja: '(Dps)',
           ko: '(DPS 조정)',
         },
         th: {
           en: '(Tank-Healer)',
+          ja: '(Tank-Healer)',
           ko: '(탱크/힐러 조정)',
         },
         none: {
           en: '(No adjust)',
+          ja: '(No adjust)',
           ko: '(조정 없음)',
         },
       },
@@ -983,6 +989,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         targetVeil: {
           en: 'Target Ice Veil',
+          ja: 'Target Ice Veil',
           ko: '큰 얼음 패요!',
         },
       },
@@ -1258,14 +1265,17 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         safe: {
           en: '(Apoc safe: ${dir1}, ${rot})',
+          ja: '(Apoc safe: ${dir1}, ${rot})',
           ko: '(아포: ${dir1} ${rot})',
         },
         cw: {
           en: 'cw',
+          ja: 'cw',
           ko: '🡸왼쪽', // '시계⤾',
         },
         ccw: {
           en: 'ccw',
+          ja: 'ccw',
           ko: '오른쪽🡺', // '반시계⤿',
         },
         ...AutumnDir.stringsAim,
@@ -1333,6 +1343,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         safe: {
           en: 'Safe: ${dir1} (lean ${dir2})',
+          ja: 'Safe: ${dir1} (lean ${dir2})',
           ko: '${dir1} ▶ ${dir2}',
         },
         ...AutumnDir.stringsAim,
@@ -1379,14 +1390,17 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         mesg: {
           en: '${safe} => Stacks',
+          ja: '${safe} => Stacks',
           ko: '${safe}뭉쳐요',
         },
         cardinals: {
           en: 'Cardinals',
+          ja: 'Cardinals',
           ko: '➕',
         },
         intercards: {
           en: 'Intercards',
+          ja: 'Intercards',
           ko: '❌',
         },
       },
@@ -1435,6 +1449,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: '(Fragment of Fate: ${dir})',
+          ja: '(Fragment of Fate: ${dir})',
           ko: '(구슬이: ${dir})',
         },
         north: Outputs.north,
@@ -1466,10 +1481,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         tank: {
           en: 'Out of center + Akh Mon',
+          ja: 'Out of center + Akh Mon',
           ko: '혼자 바깥쪽 + 램파트',
         },
         party: {
           en: 'Get Under + Share',
+          ja: 'Get Under + Share',
           ko: '보스 밑 + 뭉쳐요',
         },
       },
@@ -1792,6 +1809,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         combo: {
           en: '${dir} => Stacks',
+          ja: '${dir} => Stacks',
           ko: '${dir} 🔜 뭉쳐욧',
         },
         east: Outputs.east,
@@ -1810,6 +1828,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         tank: {
           en: 'Bait far + Tank buster',
+          ja: 'Bait far + Tank buster',
           ko: '멀리 유도 + 무적!',
         },
       },
@@ -1824,6 +1843,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         tank: {
           en: 'Close to Oracle',
+          ja: 'Close to Oracle',
           ko: '가이아 밑으로!',
         },
       },
@@ -1942,34 +1962,42 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         eruption: {
           en: '${arrow} Eruption',
+          ja: '${arrow} Eruption',
           ko: '${arrow} 🫂이럽션',
         },
         unholy: {
           en: '${arrow} Unholy',
+          ja: '${arrow} Unholy',
           ko: '${arrow} 🪜언홀리',
         },
         water: {
           en: '${arrow} Water',
+          ja: '${arrow} Water',
           ko: '${arrow} 💧워터',
         },
         bice: {
           en: '${arrow} Blizzard',
+          ja: '${arrow} Blizzard',
           ko: '${arrow} ❄️블리자드',
         },
         lrice: {
           en: 'Left Blizzard${arrow}',
+          ja: 'Left Blizzard${arrow}',
           ko: '🡸 ❄️블리자드${arrow}',
         },
         rrice: {
           en: 'Right Blizzard${arrow}',
+          ja: 'Right Blizzard${arrow}',
           ko: '🡺 ❄️블리자드${arrow}',
         },
         laero: {
           en: 'Left Aero${arrow}',
+          ja: 'Left Aero${arrow}',
           ko: '🡿 🍃에어로${arrow}',
         },
         raero: {
           en: 'Right Aero${arrow}',
+          ja: 'Right Aero${arrow}',
           ko: '🡾 🍃에어로${arrow}',
         },
         arrowNW: Outputs.arrowNW,
@@ -1995,34 +2023,42 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         eruption: {
           en: '(Stay)',
+          ja: '(Stay)',
           ko: '(그대로)',
         },
         unholy: {
           en: 'Stacks => Knockback',
+          ja: 'Stacks => Knockback',
           ko: '에어로 뭉치고 🔜 넉백',
         },
         water: {
           en: 'Stacks => Knockback',
+          ja: 'Stacks => Knockback',
           ko: '에어로 뭉치고 🔜 넉백',
         },
         bice: {
           en: 'Stacks => Knockback',
+          ja: 'Stacks => Knockback',
           ko: '에어로 뭉치고 🔜 넉백',
         },
         lrice: {
           en: 'Dragon head',
+          ja: 'Dragon head',
           ko: '용머리',
         },
         rrice: {
           en: 'Dragon head',
+          ja: 'Dragon head',
           ko: '용머리',
         },
         laero: {
           en: 'Cross point',
+          ja: 'Cross point',
           ko: '럭비공 모서리',
         },
         raero: {
           en: 'Cross point',
+          ja: 'Cross point',
           ko: '럭비공 모서리',
         },
         unknown: Outputs.unknown,
@@ -2045,34 +2081,42 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         eruption: {
           en: 'Stacks',
+          ja: 'Stacks',
           ko: '뭉치고 🔜 피해요',
         },
         unholy: {
           en: 'Stacks',
+          ja: 'Stacks',
           ko: '이럽션 뭉치고 🔜 피해요',
         },
         water: {
           en: 'Stacks',
+          ja: 'Stacks',
           ko: '이럽션 뭉치고 🔜 피해요',
         },
         bice: {
           en: 'Stacks',
+          ja: 'Stacks',
           ko: '이럽션 뭉치고 🔜 피해요',
         },
         lrice: {
           en: 'North',
+          ja: 'North',
           ko: '북쪽으로 🔜 피해요',
         },
         rrice: {
           en: 'North',
+          ja: 'North',
           ko: '북쪽으로 🔜 피해요',
         },
         laero: {
           en: 'Dragon head',
+          ja: 'Dragon head',
           ko: '피하면서 + 용머리',
         },
         raero: {
           en: 'Dragon head',
+          ja: 'Dragon head',
           ko: '피하면서 + 용머리',
         },
         unknown: Outputs.unknown,
@@ -2115,10 +2159,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         cleanse: {
           en: 'Cleanse',
+          ja: 'Cleanse',
           ko: '용머리 줏어요',
         },
         pick: {
           en: 'Cleanse ${num}',
+          ja: 'Cleanse ${num}',
           ko: '용머리 줏어요 ${num}',
         },
         mark1: Outputs.aimNE,
@@ -2147,18 +2193,22 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         mark1: {
           en: 'left',
+          ja: 'left',
           ko: '🡸🡸🡸🡸🡸🡸',
         },
         mark2: {
           en: 'left-top',
+          ja: 'left-top',
           ko: '🡼🡼🡼🡼🡼🡼',
         },
         mark3: {
           en: 'right-top',
+          ja: 'right-top',
           ko: '🡽🡽🡽🡽🡽🡽',
         },
         mark4: {
           en: 'right',
+          ja: 'right',
           ko: '🡺🡺🡺🡺🡺🡺',
         },
       },
@@ -2205,10 +2255,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         rewind: {
           en: 'Drop Rewind: ${spot}',
+          ja: 'Drop Rewind: ${spot}',
           ko: '리턴 설치 ${spot}',
         },
         arewind: {
           en: 'Drop Rewind: near ${spot}',
+          ja: 'Drop Rewind: near ${spot}',
           ko: '리턴 설치 ${spot}기준',
         },
         unknown: Outputs.unknown,
@@ -2227,10 +2279,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         tank: {
           en: 'Buf + Knockback',
+          ja: 'Buf + Knockback',
           ko: '경감 + 암렝!',
         },
         party: {
           en: 'Knockback',
+          ja: 'Knockback',
           ko: '암렝!',
         },
       },
@@ -2365,6 +2419,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Tank LB!',
+          ja: 'Tank LB!',
           ko: '탱크 리미트브레이크!',
         },
       },

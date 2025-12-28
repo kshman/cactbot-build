@@ -107,10 +107,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Look for Tsunami',
-          de: 'Auf Krug achten',
-          fr: 'Repérez le Tsunami',
           ja: '水瓶が向いてる方向から離れる',
-          cn: '离开水瓶口方向',
           ko: '츠나미 확인해요',
         },
       },
@@ -124,10 +121,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Look for Tsunami',
-          de: 'Auf Krug achten',
-          fr: 'Repérez le Tsunami',
           ja: '水瓶が向いてる方向から離れる',
-          cn: '离开水瓶口方向',
           ko: '츠나미 확인해요',
         },
       },
@@ -141,10 +135,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Look for Tsunami',
-          de: 'Auf Krug achten',
-          fr: 'Repérez le Tsunami',
           ja: '水瓶が向いてる方向から離れる',
-          cn: '离开水瓶口方向',
           ko: '츠나미 확인해요',
         },
       },
@@ -184,10 +175,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Stand on Slow Clock',
-          de: 'In der langsamen Uhr stehen',
-          fr: 'Placez-vous sur une horloge lente',
           ja: '遅い時計で待機（早い方が爆発したらすぐ安置へ）',
-          cn: '站慢速时钟等待',
           ko: '느린 시계로',
         },
       },
@@ -202,10 +190,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Stretch Tether Outside',
-          de: 'Verbindung nach außen strecken',
-          fr: 'Étirez le lien vers l\'exterieur',
           ja: '線を伸ばして外に向ける',
-          cn: '将连线朝外远离人群',
           ko: '줄 바깥쪽으로 늘려요',
         },
       },
@@ -218,10 +203,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Stop Clocks',
-          de: 'Uhrzeiger nach außen',
-          fr: 'Arrêtez les horloges',
           ja: '針を外に向ける',
-          cn: '定时炸弹',
           ko: '시침을 바깥쪽으로',
         },
       },
@@ -380,10 +362,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Move to Positive',
-          de: 'Ins Positive laufen',
-          fr: 'Allez sur le positif',
           ja: 'プラス（＋）へ',
-          cn: '移动到正极',
           ko: '플러스(+)로',
         },
       },
@@ -397,10 +376,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Move to Negative',
-          de: 'Ins Negative laufen',
-          fr: 'Allez sur le négatif',
           ja: 'マイナス（－）へ',
-          cn: '移动到负极',
           ko: '마이너스(-)로',
         },
       },
@@ -421,10 +397,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Kill Heart',
-          de: 'Herz',
-          fr: 'Tuer le cœur',
           ja: '心核を討つ',
-          cn: '消灭boss核心',
           ko: '심핵 잡아요',
         },
       },

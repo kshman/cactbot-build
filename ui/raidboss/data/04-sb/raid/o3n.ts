@@ -77,11 +77,7 @@ const triggerSet: TriggerSet<Data> = {
         stackOnYou: Outputs.stackOnYou,
         out: {
           en: 'Out',
-          de: 'Raus',
-          fr: 'Extérieur',
           ja: '外へ',
-          cn: '远离',
-          tc: '遠離',
           ko: '밖으로',
         },
         stackOnHolytargets: Outputs.stackOnPlayer,
@@ -118,20 +114,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         getOnCrystalSquare: {
           en: 'Get on crystal square',
-          de: 'Kristallfeld',
-          fr: 'Allez sur un carré de cristal',
           ja: '青い床に',
-          cn: '站在蓝地板',
-          tc: '站在藍地板',
           ko: '🟦파란 크리스탈 장판으로',
         },
         blueSquare: {
           en: 'blue square',
-          de: 'blaues feld',
-          fr: 'Carré bleu',
           ja: '青い床',
-          cn: '蓝地板',
-          tc: '藍地板',
           ko: '🟦파란 장판',
         },
       },
@@ -145,11 +133,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Grab dragon',
-          de: 'Drachen nehmen',
-          fr: 'Attrapez le dragon',
           ja: 'ドラゴンを取って',
-          cn: '拉住巨龙',
-          tc: '拉住巨龍',
           ko: '용부터 잡아요',
         },
       },
@@ -169,11 +153,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Get hit by Ribbit',
-          de: 'Lass dich von Quaaak treffen',
-          fr: 'Faites-vous frapper par Coâââ',
           ja: 'クルルルルを受ける',
-          cn: 'BOSS正面吃呱呱',
-          tc: 'BOSS正面吃呱呱',
           ko: '개굴 맞아요',
         },
       },
@@ -209,38 +189,22 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         standOnFrogTile: {
           en: 'Stand on frog tile',
-          de: 'Auf Frosch-Fläche stehen',
-          fr: 'Placez-vous sur la grenouille',
           ja: 'カエルパネルを踏む',
-          cn: '站在呱呱方块',
-          tc: '站在呱呱方塊',
           ko: '개굴 타일 밟아요',
         },
         standOnShield: {
           en: 'Stand on shield',
-          de: 'Auf Schild-Fläche stehen',
-          fr: 'Placez-vous sur le bouclier',
           ja: 'タンクパネルを踏む',
-          cn: '站在坦克方块',
-          tc: '站在坦克方塊',
           ko: '탱크 방패 밟아요',
         },
         standOnCross: {
           en: 'Stand on cross',
-          de: 'Auf Kreuz-Fläche stehen',
-          fr: 'Placez-vous sur la croix',
           ja: 'ヒーラーパネルを踏む',
-          cn: '站在治疗方块',
-          tc: '站在治療方塊',
           ko: '힐러 십자 밟아요',
         },
         standOnSword: {
           en: 'Stand on sword',
-          de: 'Auf Schwert-Fläche stehen',
-          fr: 'Placez-vous sur l\'épée',
           ja: 'DPSパネルを踏む',
-          cn: '站在DPS方块',
-          tc: '站在DPS方塊',
           ko: 'DPS 칼 밟아요',
         },
       },
@@ -253,11 +217,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Mindjack: Forward',
-          de: 'Geistlenkung: Vorwärts',
-          fr: 'Contrainte mentale : vers l\'avant',
           ja: 'マインドジャック: 前進',
-          cn: '精神控制：向前',
-          tc: '精神控制：向前',
           ko: '강제이동: 앞쪽',
         },
       },
@@ -270,11 +230,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Mindjack: Back',
-          de: 'Geistlenkung: Zurück',
-          fr: 'Contrainte mentale : vers l\'arrière',
           ja: 'マインドジャック: 後退',
-          cn: '精神控制：向后',
-          tc: '精神控制：向後',
           ko: '강제이동: 뒤쪽',
         },
       },
@@ -287,11 +243,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Mindjack: Left',
-          de: 'Geistlenkung: Links',
-          fr: 'Contrainte mentale : vers la gauche',
           ja: 'マインドジャック: 左折',
-          cn: '精神控制：向左',
-          tc: '精神控制：向左',
           ko: '강제이동: 왼쪽',
         },
       },
@@ -304,11 +256,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Mindjack: Right',
-          de: 'Geistlenkung: Rechts',
-          fr: 'Contrainte mentale : vers la droite',
           ja: 'マインドジャック: 右折',
-          cn: '精神控制：向右',
-          tc: '精神控制：向右',
           ko: '강제이동: 오른쪽',
         },
       },

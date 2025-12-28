@@ -63,9 +63,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Get Behind x4',
-          de: 'Geh hinter x4',
-          cn: '去背后4次',
-          tc: '去背後4次',
+          ja: 'Get Behind x4',
           ko: '엉댕이로x4',
         },
       },
@@ -103,11 +101,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         breakLOS: {
           en: 'Break line-of-sight to ${name}',
-          de: 'Unterbreche Sichtlinie zu ${name}',
-          fr: 'Masquez le champ de vision vers ${name}',
           ja: '${name}の視線から隠れる',
-          cn: '利用掩体卡 ${name} 的视线',
-          tc: '利用掩體卡 ${name} 的視線',
           ko: '시선 잘라요: ${name}',
         },
       },
@@ -133,9 +127,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Avoid AoE',
-          de: 'Vermeide AoE',
-          cn: '避开AoE',
-          tc: '避開AoE',
+          ja: 'Avoid AoE',
           ko: '장판 피해요!',
         },
       },
@@ -183,9 +175,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: '${in} + ${backFront}',
-          de: '${in} + ${backFront}',
-          cn: '${in} + ${backFront}',
-          tc: '${in} + ${backFront}',
+          ja: '${in} + ${backFront}',
           ko: '${backFront}+${in}',
         },
         back: Outputs.back,
@@ -212,9 +202,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: '${out} + ${backFront}',
-          de: '${out} + ${backFront}',
-          cn: '${out} + ${backFront}',
-          tc: '${out} + ${backFront}',
+          ja: '${out} + ${backFront}',
           ko: '${backFront}+${out}',
         },
         back: Outputs.back,
@@ -231,9 +219,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Avoid final AoE',
-          de: 'Vermeide finale AoE',
-          cn: '躲避终点AoE',
-          tc: '躲避終點AoE',
+          ja: 'Avoid final AoE',
           ko: '마지막 장판 피해요!',
         },
       },

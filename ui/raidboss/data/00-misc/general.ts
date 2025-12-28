@@ -43,11 +43,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Provoke: ${player}',
-          de: 'Herausforderung: ${player}',
-          fr: 'Provocation : ${player}',
           ja: '挑発: ${player}',
-          cn: '挑衅: ${player}',
-          tc: '挑釁: ${player}',
           ko: '프로보크: ${player}',
         },
       },
@@ -75,20 +71,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Provoke: ${player}',
-          de: 'Herausforderung: ${player}',
-          fr: 'Provocation : ${player}',
           ja: 'フロッグレッグ: ${player}',
-          cn: '挑衅: ${player}',
-          tc: '挑釁: ${player}',
           ko: '개구리: ${player}',
         },
         noTarget: {
           en: 'Provoke: ${player} (missed)',
-          de: 'Herausforderung: ${player} (verfehlt)',
-          fr: 'Provocation : ${player} (manquée)',
           ja: 'フロッグレッグ: ${player} (はずれ！)',
-          cn: '挑衅: ${player} (无目标)',
-          tc: '挑釁: ${player} (無目標)',
           ko: '개구리: ${player} (빗나갔네!)',
         },
       },
@@ -112,11 +100,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Shirk: ${player}',
-          de: 'Geteiltes Leid: ${player}',
-          fr: 'Dérobade : ${player}',
           ja: 'シャーク: ${player}',
-          cn: '退避: ${player}',
-          tc: '退避: ${player}',
           ko: '셔크: ${player}',
         },
       },
@@ -140,11 +124,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Holmgang: ${player}',
-          de: 'Holmgang: ${player}',
-          fr: 'Holmgang : ${player}',
           ja: 'ホルムギャング: ${player}',
-          cn: '死斗: ${player}',
-          tc: '死鬥: ${player}',
           ko: '홀름갱: ${player}',
         },
       },
@@ -168,11 +148,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Hallowed: ${player}',
-          de: 'Heiliger Boden: ${player}',
-          fr: 'Invincible : ${player}',
           ja: 'インビンシブル: ${player}',
-          cn: '神圣领域: ${player}',
-          tc: '神聖領域: ${player}',
           ko: '인빈시블 할로우드: ${player}',
         },
       },
@@ -196,11 +172,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Bolide: ${player}',
-          de: 'Meteoritenfall: ${player}',
-          fr: 'Bolide : ${player}',
           ja: 'ボーライド: ${player}',
-          cn: '超火流星: ${player}',
-          tc: '超火流星: ${player}',
           ko: '슈퍼 볼라이드: ${player}',
         },
       },
@@ -224,11 +196,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Living: ${player}',
-          de: 'Totenerweckung: ${player}',
-          fr: 'Mort-vivant : ${player}',
           ja: 'リビングデッド: ${player}',
-          cn: '行尸走肉: ${player}',
-          tc: '行屍走肉: ${player}',
           ko: '리빙 데드: ${player}',
         },
       },
@@ -252,11 +220,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Walking: ${player}',
-          de: 'Erweckter: ${player}',
-          fr: 'Marcheur des limbes : ${player}',
           ja: 'ウォーキングデッド: ${player}',
-          cn: '死而不僵: ${player}',
-          tc: '死而不僵: ${player}',
           ko: '워킹 데드: ${player}',
         },
       },
@@ -279,10 +243,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'What?! I\'m dead?!',
-          de: 'Ich bin tot! Wie kann das sein?!',
-          fr: 'Je suis mort ! Comment est-ce possible ?!',
           ja: '私が死ぬなんて！ありえない！！！',
-          cn: '我死了！怎么可能！！！',
           ko: '내가 죽다니!!! 이럴수가!!!',
         },
       },

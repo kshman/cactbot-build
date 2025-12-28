@@ -59,10 +59,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         positions: {
           en: 'Tile Positions',
-          de: 'Flächen-Positionen',
-          fr: 'Positions sur les cases',
           ja: '自分の担当マスへ',
-          cn: '上自己的方块',
           ko: '담당 타일로',
         },
       },
@@ -88,10 +85,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         closeShacklesOnYou: {
           en: 'Close Shackles on YOU',
-          de: 'Nahe Fesseln auf DIR',
-          fr: 'Chaînes proches sur VOUS',
           ja: '紫鎖（近い方）',
-          cn: '紫锁（近）点名',
           ko: '안쪽 쇠사슬(보라색)',
         },
       },
@@ -109,10 +103,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         farShacklesOnYou: {
           en: 'Far Shackles on YOU',
-          de: 'Entfernte Fesseln auf DIR',
-          fr: 'Chaînes éloignées sur VOUS',
           ja: '赤鎖（遠い方）',
-          cn: '红锁（远）点名',
           ko: '바깥쪽 쇠사슬(빨간색)',
         },
       },
@@ -149,26 +140,17 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         closeShacklesOn: {
           en: 'Close Shackles on ${close}',
-          de: 'Nahe Fesseln auf ${close}',
-          fr: 'Chaînes proches sur ${close}',
           ja: '紫鎖（近い方）：${close}',
-          cn: '紫锁（近）：${close}',
           ko: '안쪽 쇠사슬: ${close}',
         },
         farShacklesOn: {
           en: 'Far Shackles on ${far}',
-          de: 'Entfernte Fesseln auf ${far}',
-          fr: 'Chaînes éloignées sur ${far}',
           ja: '赤鎖（遠い方）：${far}',
-          cn: '红锁（远）：${far}',
           ko: '바깥쪽 쇠사슬: ${far}',
         },
         shacklesOn: {
           en: 'Close: ${close}, Far: ${far}',
-          de: 'Nahe: ${close}, Entfernt: ${far}',
-          fr: 'Proches : ${close}, Éloignées : ${far}',
           ja: '紫鎖（近い方）：${close}、赤鎖（遠い方）：${far}',
-          cn: '紫锁（近）：${close}、红锁（远）：${far}',
           ko: '안쪽: ${close}, 바깥쪽: ${far}',
         },
       },
@@ -234,10 +216,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         directions: {
           en: 'Tankbuster+Knockback => Stack',
-          de: 'Tankbuster+Rückstoß => Sammeln',
-          fr: 'Tank buster + Poussée => Packez-vous',
           ja: 'タンクバスター+ノックバック => 頭割り',
-          cn: '坦克死刑+击退 => 分摊',
           ko: '탱버 + 넉백 🔜 쉐어',
         },
       },
@@ -250,10 +229,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         directions: {
           en: 'Tankbuster+Knockback => Flare',
-          de: 'Tankbuster+Rückstoß => Flare',
-          fr: 'Tank buster + Poussée => Brasier',
           ja: 'タンクバスター+ノックバック => フレア',
-          cn: '坦克死刑+击退 => 核爆',
           ko: '탱버 + 넉백 🔜 플레어',
         },
       },
@@ -266,10 +242,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Bottom First',
-          de: 'Unten zuerst',
-          fr: 'Cube inférieur en premier',
           ja: '下から',
-          cn: '底部开始',
           ko: '아래부터',
         },
       },
@@ -282,10 +255,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Top First',
-          de: 'Oben zuerst',
-          fr: 'Cube supérieur en premier',
           ja: '上から',
-          cn: '顶部开始',
           ko: '위부터',
         },
       },
@@ -302,18 +272,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         red: {
           en: 'Get hit by red',
-          de: 'Von Rot treffen lassen',
-          fr: 'Faites-vous toucher par le rouge',
           ja: '炎に当たる',
-          cn: '去吃火',
           ko: '빨간색 맞기',
         },
         blue: {
           en: 'Get hit by blue',
-          de: 'Von Blau treffen lassen',
-          fr: 'Faites-vous toucher par le bleu',
           ja: '氷に当たる',
-          cn: '去吃冰',
           ko: '파란색 맞기',
         },
       },
@@ -340,18 +304,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         oppositePlayer: {
           en: 'Opposite color of ${player}',
-          de: 'Gegenteilige Farbe von ${player}',
-          fr: 'Couleur opposée de ${player}',
           ja: '${player}と反対の色へ',
-          cn: '${player}的相反颜色',
           ko: '${player}의 반대 색으로',
         },
         oppositeParty: {
           en: 'Opposite color of Party',
-          de: 'Gegenteilige Farbe von der Party',
-          fr: 'Couleur opposée à l\'équipe',
           ja: '他のメンバーと反対の色へ',
-          cn: '其他队友的相反颜色',
           ko: '혼자 반대 색으로',
         },
       },
@@ -366,10 +324,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Close (3s)',
-          de: 'Nahe (3s)',
-          fr: 'Proches (3s)',
           ja: '紫鎖（近い方） (3s)',
-          cn: '紫锁 (近) (3秒)',
           ko: '안쪽#1 (3초)',
         },
       },
@@ -384,10 +339,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Close (8s)',
-          de: 'Nahe (8s)',
-          fr: 'Proches (8s)',
           ja: '紫鎖（近い方） (8s)',
-          cn: '紫锁 (近) (8秒)',
           ko: '안쪽#2 (8초)',
         },
       },
@@ -402,10 +354,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Close (13s)',
-          de: 'Nahe (13s)',
-          fr: 'Proches (13s)',
           ja: '紫鎖（近い方） (13s)',
-          cn: '紫锁 (近) (13秒)',
           ko: '안쪽#3 (13초)',
         },
       },
@@ -420,10 +369,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Close (18s)',
-          de: 'Nahe (18s)',
-          fr: 'Proches (18s)',
           ja: '紫鎖（近い方） (18s)',
-          cn: '紫锁 (近) (18秒)',
           ko: '안쪽#4 (18초)',
         },
       },
@@ -438,10 +384,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Far (3s)',
-          de: 'Entfernt (3s)',
-          fr: 'Éloignées (3s)',
           ja: '赤鎖（遠い方） (3s)',
-          cn: '红锁 (远) (3秒)',
           ko: '바깥쪽#1 (3초)',
         },
       },
@@ -456,10 +399,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Far (8s)',
-          de: 'Entfernt (8s)',
-          fr: 'Éloignées (8s)',
           ja: '赤鎖（遠い方） (8s)',
-          cn: '红锁 (远) (8秒)',
           ko: '바깥쪽#2 (8초)',
         },
       },
@@ -474,10 +414,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Far (13s)',
-          de: 'Entfernt (13s)',
-          fr: 'Éloignées (13s)',
           ja: '赤鎖（遠い方） (13s)',
-          cn: '红锁 (远) (13秒)',
           ko: '바깥쪽#3 (13초)',
         },
       },
@@ -492,10 +429,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Far (18s)',
-          de: 'Entfernt (18s)',
-          fr: 'Éloignées (18s)',
           ja: '赤鎖（遠い方） (18s)',
-          cn: '红锁 (远) (18秒)',
           ko: '바깥쪽#4 (18초)',
         },
       },

@@ -328,6 +328,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         ok: {
           en: 'Combat: ${moks}',
+          ja: 'Combat: ${moks}',
           ko: '시작: ${moks}',
         },
       },
@@ -918,10 +919,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         shortStacks: {
           en: 'short ${times}',
+          ja: 'short ${times}',
           ko: '짧은 ${times} 스택',
         },
         longStacks: {
           en: 'long ${times}',
+          ja: 'long ${times}',
           ko: '긴 ${times} 스택',
         },
       },
@@ -943,18 +946,22 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         leftTop: {
           en: 'Left Top',
+          ja: 'Left Top',
           ko: '🡼왼쪽 위',
         },
         leftBottom: {
           en: 'Left Bottom',
+          ja: 'Left Bottom',
           ko: '🡿왼쪽 아래',
         },
         rightTop: {
           en: 'Right Top',
+          ja: 'Right Top',
           ko: '🡽오른쪽 위',
         },
         rightBottom: {
           en: 'Right Bottom',
+          ja: 'Right Bottom',
           ko: '🡾오른쪽 아래',
         },
       },
@@ -1019,22 +1026,27 @@ const triggerSet: TriggerSet<Data> = {
         },
         pairNorth: {
           en: 'Pair North',
+          ja: 'Pair North',
           ko: 'Ⓐ 둘이',
         },
         pairSouth: {
           en: 'Pair South',
+          ja: 'Pair South',
           ko: 'Ⓒ 둘이',
         },
         pairWest: {
           en: 'Pair South',
+          ja: 'Pair South',
           ko: 'Ⓓ 둘이',
         },
         pairEast: {
           en: 'Pair South',
+          ja: 'Pair South',
           ko: 'Ⓑ 둘이',
         },
         pairCenter: {
           en: 'Pair Center',
+          ja: 'Pair Center',
           ko: '한가운데 둘이',
         },
       },
@@ -2029,14 +2041,17 @@ const triggerSet: TriggerSet<Data> = {
         },
         long: {
           en: 'Soak Tower (${bait})',
+          ja: 'Soak Tower (${bait})',
           ko: '${bait}타워 밟아요',
         },
         yellow: {
           en: 'Blue Cannon (${loc})',
+          ja: 'Blue Cannon (${loc})',
           ko: '${loc}🟦빔',
         },
         blue: {
           en: 'Yellow Cannon (${loc})',
+          ja: 'Yellow Cannon (${loc})',
           ko: '${loc}🟨빔',
         },
         ...AutumnDir.stringsArrow,
@@ -2081,6 +2096,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Stack south',
+          ja: 'Stack south',
           ko: '아래쪽 가운데서 뭉쳐요',
         },
       },
@@ -2099,6 +2115,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Stack south',
+          ja: 'Stack south',
           ko: '아래쪽 가운데서 뭉쳐요',
         },
       },

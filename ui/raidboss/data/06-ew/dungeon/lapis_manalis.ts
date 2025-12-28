@@ -65,26 +65,17 @@ const triggerSet: TriggerSet<Data> = {
         unknown: Outputs.unknown,
         middlenorth: {
           en: 'Middle-North',
-          de: 'Norden-Mittig',
-          fr: 'Milieu-Nord',
           ja: '中央ー北',
-          cn: '中央-上 (北)',
           ko: '가운데-북쪽',
         },
         middlesouth: {
           en: 'Middle-South',
-          de: 'Süden-Mittig',
-          fr: 'Milieu-Sud',
           ja: '中央ー南',
-          cn: '中央-下 (南)',
           ko: '가운데-남쪽',
         },
         text: {
           en: 'Stampede from ${dir} (${row} Row)',
-          de: 'Stampede von ${dir} (${row} Reihe)',
-          fr: 'Ruée depuis ${dir} (${row})',
           ja: '${dir}から突進 (${row}行)',
-          cn: '${dir}冲锋 (${row} 行)',
           ko: '스탬피드 피해욧 (${dir} 줄:${row})',
         },
       },
@@ -115,9 +106,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Away from tethered rock',
-          de: 'Weg vom verbundenen Felsen',
           ja: '線の繋がる石回避',
-          cn: '躲避连线石头',
           ko: '줄 달린 돌에게서 먼곳으로',
         },
       },
@@ -137,10 +126,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Hide Behind Boulder',
-          de: 'Hinter Felsen verstecken',
-          fr: 'Cachez-vous derrière le rocher',
           ja: 'ボルダーの後ろに',
-          cn: '躲在石头后',
           ko: '돌 뒤에 숨어요',
         },
       },
@@ -181,10 +167,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Esuna ${player}',
-          de: 'Medica ${player}',
-          fr: 'Guérison sur ${player}',
           ja: '${player} にエスナ',
-          cn: '驱散: ${player}',
           ko: '에스나: ${player}',
         },
       },
@@ -207,10 +190,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Get towers',
-          de: 'Türme nehmen',
-          fr: 'Prenez les tours',
           ja: '塔へ',
-          cn: '踩塔',
           ko: '타워로',
         },
       },

@@ -82,10 +82,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Away from Right Flank',
-          de: 'Weg von der rechten Flanke',
-          fr: 'Éloignez-vous du flanc droit',
           ja: '右が危険',
-          cn: '远离右侧',
           ko: '오른쪽 피해요',
         },
       },
@@ -100,10 +97,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Away from Back',
-          de: 'Weg von hinter ihr',
-          fr: 'Éloignez-vous de l\'arrière',
           ja: '後ろが危険',
-          cn: '远离后方',
           ko: '뒷쪽 피해요',
         },
       },
@@ -118,10 +112,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Away from Left Flank',
-          de: 'Weg von der linker Flanke',
-          fr: 'Éloignez-vous du flanc gauche',
           ja: '左が危険',
-          cn: '远离左侧',
           ko: '왼쪽 피해요',
         },
       },
@@ -136,10 +127,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Away from Front',
-          de: 'Weg von Vorne',
-          fr: 'Éloignez-vous du devant',
           ja: '前方が危険',
-          cn: '远离前方',
           ko: '앞쪽 피해요',
         },
       },
@@ -230,10 +218,7 @@ const triggerSet: TriggerSet<Data> = {
         in: Outputs.in,
         joiner: {
           en: ' => ',
-          de: ' => ',
-          fr: ' => ',
           ja: ' => ',
-          cn: ' => ',
           ko: ' 🔜 ',
         },
         unknown: Outputs.unknown,

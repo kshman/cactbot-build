@@ -39,18 +39,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         getTower: {
           en: 'Get Tower',
-          de: 'Turm nehmen',
-          fr: 'Prenez la tour',
           ja: '塔を踏む',
-          cn: '踩塔',
           ko: '타워 밟아요',
         },
         getTowers: {
           en: 'Get Towers',
-          de: 'Türme nehmen',
-          fr: 'Prenez les tours',
           ja: '塔を踏む',
-          cn: '踩塔',
           ko: '각각 타워 밟아요',
         },
       },
@@ -72,10 +66,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Drop Charge Away',
-          de: 'Lege Markierung weit weg ab',
-          fr: 'Déposez la charge au loin',
           ja: 'マーカーを外に捨てる',
-          cn: '将标记放远',
           ko: '멀리 버리러 가요',
         },
       },

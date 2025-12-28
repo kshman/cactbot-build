@@ -43,10 +43,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Avoid Fire Orbs',
-          de: 'Weiche den Feuerorbs aus',
-          fr: 'Évitez les orbes de feu',
           ja: '火の玉を避ける',
-          cn: '躲避小火球',
           ko: '불구슬 피해요',
         },
       },
@@ -60,10 +57,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Away From Fireballs',
-          de: 'Weg von den Feuerkugeln',
-          fr: 'Éloignez-vous des boules de feu',
           ja: '(大きい)火の玉を避ける',
-          cn: '远离大火球',
           ko: '커다란 불구슬 피해요',
         },
       },
@@ -96,10 +90,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: '5x Puddles on YOU',
-          de: '5x Flächen auf DIR',
-          fr: '5x Zones au sol sur VOUS',
           ja: '自分に追尾AoE',
-          cn: '5连追踪AOE点名',
           ko: '내게 5연속 장판',
         },
       },
@@ -120,10 +111,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'OUT OF THE LAKE',
-          de: 'RAUS AUS DEM SEE',
-          fr: 'SORTEZ DU LAC',
           ja: '青いエリアを踏まない',
-          cn: '不要踩进水坑',
           ko: '물 구덩이에서 나와요',
         },
       },
@@ -182,18 +170,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         dynamo: {
           en: 'Close to blue staff',
-          de: 'Nahe am blauen Stab',
-          fr: 'Rapprochez-vous du bâton bleu',
           ja: '如意棒に近づく',
-          cn: '靠近蓝色大圣',
           ko: '파란 여의봉 근처로',
         },
         chariot: {
           en: 'Away from red staff',
-          de: 'Weg vom roten Stab',
-          fr: 'Éloignez-vous du bâton rouge',
           ja: '如意棒から離れる',
-          cn: '远离红色大圣',
           ko: '빨간 여의봉에서 먼곳으로',
         },
       },
@@ -242,26 +224,17 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         target: {
           en: 'Laser on YOU',
-          de: 'Laser auf DIR',
-          fr: 'Laser sur VOUS',
           ja: '自分にレーザー',
-          cn: '直线激光点名',
           ko: '내게 레이저',
         },
         knockback: {
           en: 'Knockback laser on YOU',
-          de: 'Rückstoßlaser auf DIR',
-          fr: 'Poussée laser sur VOUS',
           ja: '自分にノックバックレーザー',
-          cn: '击退激光点名',
           ko: '내게 넉백 레이저',
         },
         avoid: {
           en: 'Avoid tethers',
-          de: 'Vermeide die Verbindungen',
-          fr: 'Évitez les liens',
           ja: '線から離れる',
-          cn: '远离连线',
           ko: '줄 피해요',
         },
       },

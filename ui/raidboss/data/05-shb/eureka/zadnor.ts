@@ -171,40 +171,22 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         knockbackDonut: {
           en: 'Knockback + Stack Donuts Middle',
-          de: 'Rückstoß + Donuts mittig sammeln',
-          fr: 'Poussée + Packez les donuts au milieu',
           ja: 'ノックバック + ドーナツ中央集合',
-          cn: '月环集合击退',
-          tc: '月環集合擊退',
           ko: '넉백 + 도넛장판 피하기',
         },
         knockbackIntoCircle: {
           en: 'Knockback (towards first circles)',
-          de: 'Rückstoß (zu den ersten Kreisen)',
-          fr: 'Poussée (vers les premiers cercles)',
           ja: 'ノックバック (先の円へ)',
-          cn: '向先出现的黄圈击退',
-          tc: '向先出現的黃圈擊退',
           ko: '먼저 뜬 장판으로 넉백',
         },
         knockbackIntoSafe: {
           en: 'Knockback (towards open spots)',
-          de: 'Rückstoß (zum offenen Bereich)',
-          fr: 'Poussée (vers des endroits ouverts)',
           ja: 'ノックバック (空きへ)',
-          cn: '向空缺位置击退',
-          tc: '向空缺位置擊退',
           ko: '안전지대로 넉백',
         },
         knockbackExplosion: {
-          // Can't trust people to make a safe spot,
-          // so using knockback prevention is probably the best advice.
           en: 'Knockback (prevent)',
-          de: 'Rückstoß (verhindern)',
-          fr: 'Poussée (empêchez-là)',
           ja: 'ノックバック軽減',
-          cn: '防击退',
-          tc: '防擊退',
           ko: '넉백 (거리유지 추천)',
         },
       },
@@ -226,11 +208,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Chain Cannon on YOU',
-          de: 'Kettenkanone auf DIR',
-          fr: 'Canon en chaine sur VOUS',
           ja: '自分にチェーンキャノン',
-          cn: '直线点名',
-          tc: '直線點名',
           ko: '기관총 대상자',
         },
       },
@@ -246,11 +224,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Stay Out of Lasers',
-          de: 'Aus den Lasern gehen',
-          fr: 'Restez à l\'écart des lasers',
           ja: 'レーザーを避ける',
-          cn: '避开直线点名',
-          tc: '避開直線點名',
           ko: '레이저 피하기',
         },
       },
@@ -274,20 +248,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         dodge: {
           en: 'Dodge 4 Charges',
-          de: 'Weiche 4 Anstürmen aus',
-          fr: 'Esquivez les 4 charges',
           ja: '4連続突進を回避',
-          cn: '躲避4次冲锋',
-          tc: '躲避4次衝鋒',
           ko: '4연속 돌진 뒤돌아서 맞기',
         },
         point: {
           en: 'Point at 4 Charges',
-          de: 'Zeige auf dir 4 Anstürmen',
-          fr: 'Pointez à 4 charges',
           ja: '4連続突進を誘導',
-          cn: '将环缺口对准冲锋（4次）',
-          tc: '將環缺口對準衝鋒（4次）',
           ko: '4연속 돌진 쳐다보며 맞기',
         },
       },
@@ -350,11 +316,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Get Behind Hernais',
-          de: 'Geh hinter Hernais',
-          fr: 'Passez derrière Hernais',
           ja: 'エルネイスの後ろへ',
-          cn: '去腐犬背后',
-          tc: '去腐犬背後',
           ko: '에르네이스 뒤로',
         },
       },
@@ -399,38 +361,22 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         forward: {
           en: 'March Forward Into Middle',
-          de: 'Marchiere Vorwärts in die Mitte',
-          fr: 'Marche en avant vers le milieu',
           ja: '前へ進む (中央へ)',
-          cn: '强制移动: 前，去中间',
-          tc: '強制移動: 前，去中間',
           ko: '정신장악: 앞, 가운데로',
         },
         backward: {
           en: 'March Backward Into Middle',
-          de: 'Marchiere Rückwärts in die Mitte',
-          fr: 'Marche en arrière vers le milieu',
           ja: '後ろへ進む (中央へ)',
-          cn: '强制移动: 后，去中间',
-          tc: '強制移動: 後，去中間',
           ko: '정신장악: 뒤, 가운데로',
         },
         left: {
           en: 'March Left Into Middle',
-          de: 'Marchiere Links in die Mitte',
-          fr: 'Marche à gauche vers le milieu',
           ja: '左へ進む (中央へ)',
-          cn: '强制移动: 左，去中间',
-          tc: '強制移動: 左，去中間',
           ko: '정신장악: 왼쪽, 가운데로',
         },
         right: {
           en: 'March Right Into Middle',
-          de: 'Marchiere Rechts in die Mitte',
-          fr: 'Marche à droite vers le milieu',
           ja: '右へ進む (中央へ)',
-          cn: '强制移动: 右，去中间',
-          tc: '強制移動: 右，去中間',
           ko: '정신장악: 오른쪽, 가운데로',
         },
       },
@@ -474,11 +420,7 @@ const triggerSet: TriggerSet<Data> = {
         num4: Outputs.num4,
         text: {
           en: '${num} (spread for laser)',
-          de: '${num} (verteile für Laser)',
-          fr: '${num} (dispersion pour le laser)',
           ja: '${num} (レーザー散開)',
-          cn: '${num} (激光分散)',
-          tc: '${num} (雷射分散)',
           ko: '${num} (레이저 대비 산개)',
         },
       },
@@ -498,11 +440,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Avoid Lasers',
-          de: 'Laser ausweichen',
-          fr: 'Évitez les lasers',
           ja: 'レーザーを避ける',
-          cn: '躲避激光',
-          tc: '躲避雷射',
           ko: '레이저 피하기',
         },
       },
@@ -516,11 +454,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Hide Behind Silver Shard',
-          de: 'Hinter Silber-Splitter verstecken',
-          fr: 'Cachez-vous derrière l\'éclat argenté',
           ja: '銀色の欠片の後ろへ',
-          cn: '躲在银色碎片后',
-          tc: '躲在銀色碎片後',
           ko: '흰색 기둥 뒤로',
         },
       },
@@ -534,11 +468,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Hide Behind Gold Shard',
-          de: 'Hinter Gold-Splitter verstecken',
-          fr: 'Cachez-vous derrière l\'éclat doré',
           ja: '金色の欠片の後ろへ',
-          cn: '躲在金色碎片后',
-          tc: '躲在金色碎片後',
           ko: '노란 기둥 뒤로',
         },
       },
@@ -552,11 +482,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Away From Orbs',
-          de: 'Weg von den Orbs',
-          fr: 'Éloignez-vous des orbes',
           ja: '玉から離れる',
-          cn: '远离球球',
-          tc: '遠離球球',
           ko: '구체 피하기',
         },
       },
@@ -580,20 +506,12 @@ const triggerSet: TriggerSet<Data> = {
         output.responseOutputStrings = {
           avoidCharge: {
             en: 'Avoid Charge',
-            de: 'ausweichen',
-            fr: 'Évitez les charges',
             ja: '突進避けて',
-            cn: '躲避冲锋',
-            tc: '躲避衝鋒',
             ko: '돌진 피하기',
           },
           runAway: {
             en: 'Run Away From Boss',
-            de: 'Renn weg vom Boss',
-            fr: 'Courez loin du boss',
             ja: 'ボスから離れる',
-            cn: '远离Boss',
-            tc: '遠離Boss',
             ko: '보스와 거리 벌리기',
           },
         };
@@ -648,13 +566,8 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          // TODO: should this be a response/output?
           en: 'Out of Front',
-          de: 'Weg von Vorne',
-          fr: 'À l\'extérieur du devant',
           ja: '正面から離れる',
-          cn: '避开正面',
-          tc: '避開正面',
           ko: '정면 피하기',
         },
       },
@@ -699,11 +612,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Knockback (behind pillar)',
-          de: 'Rückstoß (hinter dem Eissplitter)',
-          fr: 'Poussée (derrière le pilier)',
           ja: 'ノックバック (柱の後ろへ)',
-          cn: '击退到柱子后',
-          tc: '擊退到柱子後',
           ko: '기둥 뒤로 넉백',
         },
       },
@@ -719,11 +628,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Hide Behind Pillar',
-          de: 'Hinter dem Eissplitter verstecken',
-          fr: 'Cachez-vous derrière le pilier',
           ja: '柱の後ろへ',
-          cn: '躲在柱子后',
-          tc: '躲在柱子後',
           ko: '기둥 뒤에 숨기',
         },
       },
@@ -752,11 +657,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Avoid Dashes',
-          de: 'Sprint ausweichen',
-          fr: 'Évitez les ruées',
           ja: 'ブレードを避ける',
-          cn: '躲开冲锋',
-          tc: '躲開衝鋒',
           ko: '돌진 피하기',
         },
       },
@@ -774,25 +675,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         twoClocks: {
           en: 'Go Perpendicular To Clock Hands',
-          de: 'Geh Senkrecht von den Uhrzeigern',
-          fr: 'Aller perpendiculairement aux aiguilles de l\'horloge',
           ja: '時計の針に対して垂直に移動',
-          cn: '垂直于时钟指针移动',
-          tc: '垂直於時鐘指針移動',
           ko: '시계바늘의 수직 방향으로 이동',
         },
         threeClocks: {
-          // This is...not the best instruction.  The real instruction is "if all clock hands are
-          // parallel then go perpendicular, HOWEVER if exactly one clock hand is perpendicular
-          // to the other two, then go where it points", which is several novels too long for
-          // trigger text.  However, given that we explain two clocks, it feels wrong to not
-          // have a trigger for three clocks.  "Mechanics Are Happening <se.6>"
           en: 'Dodge Three Clocks',
-          de: 'Weiche den 3 Uhren aus',
-          fr: 'Esquivez 3 horloges',
           ja: '時計3つを避ける',
-          cn: '躲避3个时钟',
-          tc: '躲避3個時鐘',
           ko: '시계 3개 피하기',
         },
       },
@@ -835,11 +723,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Follow Slow Orb',
-          de: 'Folge dem langsamen Orb',
-          fr: 'Suivez l\'orbe lente',
           ja: '遅い玉を追う',
-          cn: '跟随慢速球',
-          tc: '跟隨慢速球',
           ko: '느린 구체 따라가기',
         },
       },
@@ -854,11 +738,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Away From Orb',
-          de: 'Weg vom Orb',
-          fr: 'Éloignez-vous de l\'orbe',
           ja: '玉から離れる',
-          cn: '远离球球',
-          tc: '遠離球球',
           ko: '구체 피하기',
         },
       },
@@ -886,11 +766,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Find Phantom; Dodge Left',
-          de: 'Finde das Abbild; weiche Links aus',
-          fr: 'Trouvez le Double : Esquivez à gauche',
           ja: '分身を見つけて左へ避ける',
-          cn: '寻找幻影; 向左躲避',
-          tc: '尋找幻影; 向左躲避',
           ko: '분신 찾고, 왼쪽으로 피하기',
         },
       },
@@ -903,11 +779,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Find Phantom; Dodge Right',
-          de: 'Finde das Abbild; weiche Rechts aus',
-          fr: 'Trouvez le Double : Esquivez à droite',
           ja: '分身を見つけて右へ避ける',
-          cn: '寻找幻影; 向右躲避',
-          tc: '尋找幻影; 向右躲避',
           ko: '분신 찾고, 오른쪽으로 피하기',
         },
       },
@@ -920,11 +792,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Away From Hammer; Rotate Outside',
-          de: 'Weg vom Hammer; nach Außen rotieren',
-          fr: 'Éloignez-vous du marteau; Tournez à l\'extérieur',
           ja: 'ハンマーから離れ、外側へ回る',
-          cn: '远离锤子; 绕外圈旋转',
-          tc: '遠離錘子; 繞外圈旋轉',
           ko: '기둥에서 멀리 떨어지고, 바깥쪽 계속 돌기',
         },
       },
@@ -945,13 +813,8 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          // TODO: should this be a response/output?
           en: 'Get In Front',
-          de: 'Geh vor den Boss',
-          fr: 'Passez devant',
           ja: 'ボスの正面へ',
-          cn: '去Boss正面',
-          tc: '去Boss正面',
           ko: '정면에 서기',
         },
       },
@@ -993,11 +856,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Avoid Orbs -> Under Orbs',
-          de: 'Weiche Orbs aus -> Unter die Orbs',
-          fr: 'Évitez les orbes -> En dessous les orbes',
           ja: '玉を避けて、玉の下へ',
-          cn: '避开球 -> 去球下',
-          tc: '避開球 -> 去球下',
           ko: '구체 피하기 -> 구체 밑으로',
         },
       },
@@ -1010,13 +869,8 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          // TODO: this is also an aoe, and this is a pretty poor description.
           en: 'Go to small orb',
-          de: 'Geh zum kleinen Orb',
-          fr: 'Allez à la petite orbe',
           ja: '小さい玉へ',
-          cn: '去小球',
-          tc: '去小球',
           ko: '작은 구체쪽으로',
         },
       },
@@ -1037,11 +891,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Go to Slow Clocks',
-          de: 'Geh zu den langsamen Uhren',
-          fr: 'Allez sur les horloges lentes',
           ja: '遅い時計へ',
-          cn: '去慢时钟',
-          tc: '去慢時鐘',
           ko: '느린 시계로',
         },
       },
@@ -1054,11 +904,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Go to Fast Clocks',
-          de: 'Geh zu den schnellen Uhren',
-          fr: 'Allez sur les horloges rapides',
           ja: '速い時計へ',
-          cn: '去快时钟',
-          tc: '去快時鐘',
           ko: '빠른 시계로',
         },
       },
@@ -1071,11 +917,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Bird Dashes',
-          de: 'Vogel-Anstürme',
-          fr: 'Plongeons des oiseaux',
           ja: '鳥の突進',
-          cn: '躲避红鸟',
-          tc: '躲避紅鳥',
           ko: '붉은새 피하기',
         },
       },
@@ -1088,11 +930,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Get Towers',
-          de: 'Türme nehmen',
-          fr: 'Prenez les tours',
           ja: '塔を踏む',
-          cn: '踩塔',
-          tc: '踩塔',
           ko: '장판 하나씩 들어가기',
         },
       },
@@ -1148,11 +986,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Stack together to bait Ignis Est',
-          de: 'Versammeln um Ignis Est zu ködern',
-          fr: 'Packez-vous pour attirer l\'Ignis Est',
           ja: 'イグニス・エストを誘導するために集合',
-          cn: '集合诱导剑气',
-          tc: '集合誘導劍氣',
           ko: '보스 앞으로 모이기',
         },
       },
@@ -1172,11 +1006,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Get far away from X charges',
-          de: 'Weit weg von den X Anstürmen',
-          fr: 'Éloignez-vous des charges X',
           ja: 'X字から離れる',
-          cn: '远离剑气及其前方',
-          tc: '遠離劍氣及其前方',
           ko: 'X자에서 멀리 떨어지기',
         },
       },
@@ -1207,11 +1037,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Opening Toward Undodgeable Line',
-          de: 'Öffnen in Richtung der nicht ausweichbaren Linie',
-          fr: 'Ouverture dans une ligne inesquivable',
           ja: '避けられない線の方向へ',
-          cn: '环形缺口对准无法躲避的剑气方向',
-          tc: '環形缺口對準無法躲避的劍氣方向',
           ko: '피할 수 없는쪽으로 약점 방향 맞추기',
         },
       },
@@ -1231,11 +1057,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Get Towers',
-          de: 'Türme nehmen',
-          fr: 'Prenez les tours',
           ja: '塔を踏む',
-          cn: '踩塔',
-          tc: '踩塔',
           ko: '장판 하나씩 들어가기',
         },
       },
@@ -1249,11 +1071,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Stack + Knockback to Safe Spot',
-          de: 'Sammeln + Rückstoß in den sicheren Bereich',
-          fr: 'Package + Poussée vers un endroit safe',
           ja: '集合 + 安地へノックバック',
-          cn: '集合 + 向安全区击退',
-          tc: '集合 + 向安全區擊退',
           ko: '집합 + 안전장소로 넉백',
         },
       },
@@ -1276,11 +1094,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Away From Orb',
-          de: 'Weg vom Orb',
-          fr: 'Éloignez-vous de l\'orbe',
           ja: '玉から離れる',
-          cn: '远离球球',
-          tc: '遠離球球',
           ko: '구체 피하기',
         },
       },
@@ -1314,38 +1128,22 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         forward: {
           en: 'March Forward (avoid puddles)',
-          de: 'Marchiere Vorwärts (weiche den Flächen aus)',
-          fr: 'Marche en avant (évitez les zones au sol)',
           ja: '前へ進む (床範囲を避ける)',
-          cn: '强制移动: 前, 避开圈圈',
-          tc: '強制移動: 前, 避開圈圈',
           ko: '정신장악: 앞, 장판 피하기',
         },
         backward: {
           en: 'March Backward (avoid puddles)',
-          de: 'Marchiere Rückwärts (weiche den Flächen aus)',
-          fr: 'Marche en arrière (évitez les zones au sol)',
           ja: '後ろへ進む (床範囲を避ける)',
-          cn: '强制移动: 后, 避开圈圈',
-          tc: '強制移動: 後, 避開圈圈',
           ko: '정신장악: 뒤, 장판 피하기',
         },
         left: {
           en: 'March Left (avoid puddles)',
-          de: 'Marchiere Links (weiche den Flächen aus)',
-          fr: 'Marche à gauche (évitez les zones au sol)',
           ja: '左へ進む (床範囲を避ける)',
-          cn: '强制移动: 左, 避开圈圈',
-          tc: '強制移動: 左, 避開圈圈',
           ko: '정신장악: 왼쪽, 장판 피하기',
         },
         right: {
           en: 'March Right (avoid puddles)',
-          de: 'Marchiere Rechts (weiche den Flächen aus)',
-          fr: 'Marche à droite (évitez les zones au sol)',
           ja: '右へ進む (床範囲を避ける)',
-          cn: '强制移动: 右, 避开圈圈',
-          tc: '強制移動: 右, 避開圈圈',
           ko: '정신장악: 오른쪽, 장판 피하기',
         },
       },
@@ -1371,11 +1169,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Get In Puddle',
-          de: 'Geh in die Flächen',
-          fr: 'Prenez une zone au sol',
           ja: '床範囲へ',
-          cn: '进入圈圈',
-          tc: '進入圈圈',
           ko: '장판 밟기',
         },
       },
@@ -1389,11 +1183,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Avoid Chasing AOEs',
-          de: 'Weiche den verfolgenden AoEs aus',
-          fr: 'Évitez les AoEs',
           ja: '追尾範囲を避ける',
-          cn: '躲避追踪AOE',
-          tc: '躲避追蹤AOE',
           ko: '따라오는 장판 피하기',
         },
       },
@@ -1406,13 +1196,8 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          // TODO: this is "titan line bombs".  Is there a better wording here?
           en: 'Go to third line',
-          de: 'Geh zur 3. Linie',
-          fr: 'Allez à la troisième ligne',
           ja: '3本目の線へ',
-          cn: '去最后出现的黄圈（三穿一）',
-          tc: '去最後出現的黃圈（三穿一）',
           ko: '세번째 장판으로',
         },
       },
@@ -1444,11 +1229,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Go Intercardinals',
-          de: 'Geh zu Interkardinalen Richtungen',
-          fr: 'Allez en intercardinal',
           ja: '四隅へ',
-          cn: '去四角',
-          tc: '去四角',
           ko: '대각선으로',
         },
       },
@@ -1461,11 +1242,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Get Under (towards charge)',
-          de: 'Geh unter den Boss (zum Ansturm hin)',
-          fr: 'Passez en dessous (vers la charge)',
           ja: 'ボスの下へ (突進の方向へ)',
-          cn: '去脚下 (跟随冲锋)',
-          tc: '去腳下 (跟隨衝鋒)',
           ko: '보스 밑으로 (화살표 따라가기)',
         },
       },
@@ -1479,11 +1256,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Go Intercards (away from charge)',
-          de: 'Geh zu Interkardinalen Richtungen (weg vom Ansturm)',
-          fr: 'Allez en intercardinal (éloignez-vous de la charge)',
           ja: '四隅へ (突進から離れる)',
-          cn: '去四角 (躲避冲锋)',
-          tc: '去四角 (躲避衝鋒)',
           ko: '대각선으로 (화살표쪽 피하기)',
         },
       },
@@ -1509,13 +1282,8 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          // TODO: during spiral scourge could be "get under middle/outer light orb"?
           en: 'Get Under Light Orb',
-          de: 'Unter einem Lichtorb stellen',
-          fr: 'Allez sous un orbe lumineux',
           ja: '白玉へ',
-          cn: '靠近白球',
-          tc: '靠近白球',
           ko: '하얀 구슬 안으로',
         },
       },
@@ -1540,11 +1308,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Follow Dawon',
-          de: 'Folge Dawon',
-          fr: 'Suivez Dawon',
           ja: 'ドゥンを追う',
-          cn: '跟随小达温',
-          tc: '跟隨小達溫',
           ko: '다우언 따라가기',
         },
       },
@@ -1560,20 +1324,12 @@ const triggerSet: TriggerSet<Data> = {
         output.responseOutputStrings = {
           tankLaserOnYou: {
             en: 'Tank Laser on YOU',
-            de: 'Tank Laser auf DIR',
-            fr: 'Tank laser sur VOUS',
             ja: '自分にタンクレーザー',
-            cn: '坦克激光点名',
-            tc: '坦克雷射點名',
             ko: '탱 레이저 대상자',
           },
           avoidTankLaser: {
             en: 'Avoid Tank Laser',
-            de: 'Weiche dem Tanklaser aus',
-            fr: 'Évitez le tank laser',
             ja: 'タンクレーザーを避ける',
-            cn: '躲避坦克激光',
-            tc: '躲避坦克雷射',
             ko: '탱 레이저 피하기',
           },
         };
@@ -1607,11 +1363,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Avoid Growing Circles',
-          de: 'Weiche den wachsenden Kreisen aus',
-          fr: 'Évitez les cercles grandissants',
           ja: '拡大する円を避ける',
-          cn: '躲避变大圈圈',
-          tc: '躲避變大圈圈',
           ko: '커지는 장판 피하기',
         },
       },
@@ -1641,11 +1393,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Pop Balloons',
-          de: 'Orbs nehmen',
-          fr: 'Apparition des boules',
           ja: '風船を割る',
-          cn: '撞球',
-          tc: '撞球',
           ko: '구체 부딪히기',
         },
       },
@@ -1663,20 +1411,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         knockbackBits: {
           en: 'Knockback (away from bits)',
-          de: 'Rückstoß (Weg von den Magiteks)',
-          fr: 'Poussée (éloignez-vous des drones)',
           ja: 'ノックバック (ビットから離れる)',
-          cn: '击退 (避开浮游炮)',
-          tc: '擊退 (避開浮游炮)',
           ko: '넉백 (비트 피하기)',
         },
         knockbackNox: {
           en: 'Knockback (into empty corner)',
-          de: 'Rückstoß (in die leere Ecke)',
-          fr: 'Poussée (dans un coin vide)',
           ja: 'ノックバック (空いている隅へ)',
-          cn: '击退 (进入空角落)',
-          tc: '擊退 (進入空角落)',
           ko: '안전지대로 넉백',
         },
       },
@@ -1704,11 +1444,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Laser on YOU',
-          de: 'Laser auf DIR',
-          fr: 'Laser sur VOUS',
           ja: '自分にレーザー',
-          cn: '激光点名',
-          tc: '雷射點名',
           ko: '레이저 대상자',
         },
       },
@@ -1729,11 +1465,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Line Stack',
-          de: 'In einer Linie sammeln',
-          fr: 'Package en ligne',
           ja: '直線頭割り',
-          cn: '直线分摊',
-          tc: '直線分攤',
           ko: '직선 쉐어',
         },
       },
@@ -1752,20 +1484,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         dodgeFirst: {
           en: '(Dodge -> Stop)',
-          de: '(Ausweichen -> Stop)',
-          fr: '(Esquivez -> Arrêtez)',
           ja: '(回避 -> 停止)',
-          cn: '(先回避扇形，后停手)',
-          tc: '(先迴避扇形，後停手)',
           ko: '(피하기 -> 멈추기)',
         },
         dodgeSecond: {
           en: '(Stop -> Dodge)',
-          de: '(Stop -> Ausweichen)',
-          fr: '(Arrêtez -> Esquivez)',
           ja: '(停止 -> 回避)',
-          cn: '(先停手，后回避扇形)',
-          tc: '(先停手，後迴避扇形)',
           ko: '(멈추기 -> 피하기)',
         },
       },

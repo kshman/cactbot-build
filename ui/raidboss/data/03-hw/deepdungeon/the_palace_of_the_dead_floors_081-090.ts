@@ -26,10 +26,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         kill: {
           en: 'Kill ${name}',
-          de: 'Besiege ${name}',
-          fr: 'Tuez ${name}',
           ja: '${name}を倒す',
-          cn: '击杀 ${name}',
           ko: '${name} 잡아요',
         },
       },
@@ -46,10 +43,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         pushToBoss: {
           en: 'Push ${name} into boss',
-          de: 'Stoß ${name} in den Boss',
-          fr: 'Poussez ${name} sur le boss',
           ja: '${name}をボスに飛ばして',
-          cn: '将 ${name} 推至BOSS',
           ko: '보스쪽으로 ${name} 밀기',
         },
       },

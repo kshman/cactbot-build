@@ -153,11 +153,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         stored: {
           en: '(${mech} later)',
-          de: '(${mech} später)',
-          fr: '(${mech} après)',
           ja: '(あとで ${mech})',
-          cn: '(稍后 ${mech})',
-          tc: '(稍後 ${mech})',
           ko: '(나중에 ${mech})',
         },
         lightParty: Outputs.healerGroups,
@@ -183,11 +179,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         combo: {
           en: 'Start ${dir} (${num} hits) => ${mech}',
-          de: 'Start ${dir} (${num} Treffer) => ${mech}',
-          fr: 'Commencez ${dir} (${num} coups) => ${mech}',
           ja: '${dir} 開始 (${num} ポイント) からの ${mech}',
-          cn: '${dir} 开始 (打 ${num} 次) => ${mech}',
-          tc: '${dir} 開始 (打 ${num} 次) => ${mech}',
           ko: '${dir} 시작 (${num}번 공격) => ${mech}',
         },
         lightParty: Outputs.healerGroups,
@@ -230,20 +222,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         shortBurn: {
           en: '(short cleanse)',
-          de: '(kurze Reinigung)',
-          fr: '(compteur court)',
           ja: '(先にスポットライト)',
-          cn: '(短舞点名)',
-          tc: '(短舞點名)',
           ko: '(짧은 디버프)',
         },
         longBurn: {
           en: '(long cleanse)',
-          de: '(lange Reinigung)',
-          fr: '(compteur long)',
           ja: '(あとでスポットライト)',
-          cn: '(长舞点名)',
-          tc: '(長舞點名)',
           ko: '(긴 디버프)',
         },
       },
@@ -261,11 +245,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         cleanse: {
           en: 'Cleanse in spotlight',
-          de: 'Reinige im Scheinwerfer',
-          fr: 'Purifiez sous le projecteur',
           ja: 'スポットライトで浄化',
-          cn: '灯下跳舞',
-          tc: '燈下跳舞',
           ko: '스포트라이트에 서기',
         },
       },
@@ -287,20 +267,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         cleanse: {
           en: 'Cleanse in spotlight',
-          de: 'Reinige im Scheinwerfer',
-          fr: 'Purifiez sous le projecteur',
           ja: 'スポットライトで浄化',
-          cn: '灯下跳舞',
-          tc: '燈下跳舞',
           ko: '스포트라이트에 서기',
         },
         bait: {
           en: 'Bait Frog',
-          de: 'Frosch ködern',
-          fr: 'Prenez la grenouille',
           ja: 'カエル誘導',
-          cn: '引导青蛙',
-          tc: '引導青蛙',
           ko: '개구리 유도',
         },
       },
@@ -323,20 +295,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         cleanse: {
           en: 'Cleanse in spotlight',
-          de: 'Reinige im Scheinwerfer',
-          fr: 'Purifiez sous le projecteur',
           ja: 'スポットライトで浄化',
-          cn: '灯下跳舞',
-          tc: '燈下跳舞',
           ko: '스포트라이트에 서기',
         },
         bait: {
           en: 'Bait Frog',
-          de: 'Frosch ködern',
-          fr: 'Prenez la grenouille',
           ja: 'カエル誘導',
-          cn: '引导青蛙',
-          tc: '引導青蛙',
           ko: '개구리 유도',
         },
       },
@@ -350,11 +314,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         insideOut: {
           en: 'Max Melee => Under',
-          de: 'Max Nahkampf => Unter ihn',
-          fr: 'Max mêlée => Dessous',
           ja: '外からボス下に',
-          cn: '钢铁 => 月环',
-          tc: '鋼鐵 => 月環',
           ko: '칼끝딜 => 안으로',
         },
       },
@@ -368,11 +328,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         outsideIn: {
           en: 'Under => Max Melee',
-          de: 'Unter ihn => Max Nahkampf',
-          fr: 'Dessous => Max mêlée',
           ja: 'ボス下から外に',
-          cn: '月环 => 钢铁',
-          tc: '月環 => 鋼鐵',
           ko: '안으로 => 칼끝딜',
         },
       },
@@ -426,47 +382,27 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         merge: {
           en: '${order} merge',
-          de: '${order} berühren',
-          fr: '${order} fusion',
           ja: '${order} にペア割り',
-          cn: '${order} 撞毒',
-          tc: '${order} 撞毒',
           ko: '${order} 융합',
         },
         first: {
           en: 'First',
-          de: 'Erstes',
-          fr: 'Première',
           ja: '最初',
-          cn: '第1组',
-          tc: '第1組',
           ko: '첫번째',
         },
         second: {
           en: 'Second',
-          de: 'Zweites',
-          fr: 'Seconde',
           ja: '2番目',
-          cn: '第2组',
-          tc: '第2組',
           ko: '두번째',
         },
         third: {
           en: 'Third',
-          de: 'Drittes',
-          fr: 'Troisième',
           ja: '3番目',
-          cn: '第3组',
-          tc: '第3組',
           ko: '세번째',
         },
         fourth: {
           en: 'Fourth',
-          de: 'Viertes',
-          fr: 'Quatrième',
           ja: '4番目',
-          cn: '第4组',
-          tc: '第4組',
           ko: '네번째',
         },
         unknown: Outputs.unknown,
@@ -482,11 +418,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         merge: {
           en: 'Merge debuff',
-          de: 'Debuff berühren',
-          fr: 'Fusionner le debuff',
           ja: 'ペア割り',
-          cn: '撞毒',
-          tc: '撞毒',
           ko: '융합하기',
         },
       },

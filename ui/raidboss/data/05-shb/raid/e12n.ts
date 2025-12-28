@@ -189,11 +189,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Move to last explosions',
-          de: 'Zur letzten Explosion bewegen',
-          fr: 'Allez sur la dernière explosion',
           ja: 'ついさっき爆発した岩へ',
-          cn: '去刚才爆炸的区域',
-          tc: '去剛才爆炸的區域',
           ko: '마지막 폭발 위치로',
         },
       },
@@ -220,11 +216,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         stacks: {
           en: 'Stack (${players})',
-          de: 'Sammeln (${players})',
-          fr: 'Package sur (${players})',
           ja: '頭割り (${players})',
-          cn: '分摊 (${players})',
-          tc: '分攤 (${players})',
           ko: '뭉쳐요: ${players}',
         },
         stackOnYou: Outputs.stackOnYou,

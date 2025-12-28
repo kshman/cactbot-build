@@ -44,9 +44,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Move to safe quadrant',
-          de: 'Beweg dich in den sicheren Quadranten',
-          fr: 'Allez dans le quart sur',
-          cn: '移动到安全区域',
+          ja: 'Move to safe quadrant',
           ko: '안전한 지역으로 이동',
         },
       },
@@ -58,9 +56,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Bait toward puddle',
-          de: 'In Richtung Fläche ködern',
-          fr: 'Bait vers le puddle',
-          cn: '靠近圈圈集合诱导AOE',
+          ja: 'Bait toward puddle',
           ko: '장판 쪽으로 아인 유도',
         },
       },
@@ -77,16 +73,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         noPillar: {
           en: 'Bait Yesod',
-          de: 'Yesod ködern',
-          fr: 'Attirez Yesod',
-          cn: '集合诱导基盘碎击',
+          ja: 'Bait Yesod',
           ko: '예소드 붕괴 유도',
         },
         withPillar: {
           en: 'Bait Yesod inside puddle',
-          de: 'Yesod in die Fläche ködern',
-          fr: 'Attirez Yesod dans le puddle',
-          cn: '圈圈内集合诱导基盘碎击',
+          ja: 'Bait Yesod inside puddle',
           ko: '장판 안에 예소드 유도하기',
         },
       },
@@ -146,16 +138,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         noStack: {
           en: 'Don\'t Stack!',
-          de: 'Nicht sammeln!',
-          fr: 'Ne vous packez pas !',
-          cn: '别去分摊！',
+          ja: 'Don\'t Stack!',
           ko: '겹치면 안되요!',
         },
         stack: {
           en: 'Group Stacks',
-          de: 'In der Gruppe sammeln',
-          fr: 'Package en groupe',
-          cn: '分组分摊',
+          ja: 'Group Stacks',
           ko: '4:4 뭉쳐요',
         },
       },
@@ -189,10 +177,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Orange (${force})',
-          de: 'Orange (${force})',
-          fr: '${force} Orange',
-          ja: '自分に${force}', // FIXME
-          cn: '橙点名 ${force}',
+          ja: '自分に${force}', // FIXME,
           ko: '🟡노랑 (${force})',
         },
       },
@@ -207,10 +192,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Green (${force})',
-          de: 'Grün (${force})',
-          fr: '${force} Vert',
-          ja: '自分に${force}', // FIXME
-          cn: '绿点名 ${force}',
+          ja: '自分に${force}', // FIXME,
           ko: '🟢초록 (${force})',
         },
       },
@@ -263,16 +245,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         getTower: {
           en: 'Get a tower',
-          de: 'Nimm einen Turm',
-          fr: 'Prenez une tour',
-          cn: '踩塔',
+          ja: 'Get a tower',
           ko: '타워 밟아요',
         },
         avoidTower: {
           en: 'Avoid towers',
-          de: 'Turm meiden',
-          fr: 'Évitez les tours',
-          cn: '不去踩塔',
+          ja: 'Avoid towers',
           ko: '타워 피해요',
         },
       },
@@ -290,16 +268,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         might: {
           en: 'Get Away, Avoid Puddles + Tethers',
-          de: 'Geh weg, weiche Flächen und Verbindungen aus',
-          fr: 'Sortez, évitez les puddles et les liens',
-          cn: '远离, 躲避圈圈 + 连线',
+          ja: 'Get Away, Avoid Puddles + Tethers',
           ko: '물러나서 돔 + 줄 피해요',
         },
         magic: {
           en: 'Go Front; Get Tether',
-          de: 'Geh nach Vorne; Nimm eine Verbindung',
-          fr: 'Allez devant, prenez les liens',
-          cn: '去前面; 接线',
+          ja: 'Go Front; Get Tether',
           ko: '앞으로 가서 줄 채요',
         },
       },
@@ -333,16 +307,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         shakerTarget: {
           en: 'Earth Shaker (Max Melee)',
-          de: 'Erdstoß (Max Nahkampf)',
-          fr: 'Secousse (Max CàC)',
-          cn: '大地摇动 (最远近战距离)',
+          ja: 'Earth Shaker (Max Melee)',
           ko: '어스세이커 (칼 끝 거리)',
         },
         shakerAvoid: {
           en: 'Avoid Earth Shakers',
-          de: 'Weiche Erdstoß aus',
-          fr: 'Évitez les secousses',
-          cn: '躲避大地摇动',
+          ja: 'Avoid Earth Shakers',
           ko: '어스세이커 피해요',
         },
       },
@@ -362,9 +332,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Kill Storm of Words',
-          de: 'Wörtersturm besiegen',
-          fr: 'Tuez Tempête de mots ou mourrez',
-          cn: '击杀言语风暴!',
+          ja: 'Kill Storm of Words',
           ko: '뒤쪽 스톰(신언의 폭풍) 잡아요',
         },
       },

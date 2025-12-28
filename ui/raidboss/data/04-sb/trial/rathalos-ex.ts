@@ -28,10 +28,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Right Flank (or out)',
-          de: 'Rechte Flanke (oder raus gehen)',
-          fr: 'Flanc droit (ou extérieur)',
-          cn: '右侧 (或远离)',
-          tc: '右側 (或遠離)',
+          ja: 'Right Flank (or out)',
           ko: '오른쪽 옆 (또는 멀찍이)',
         },
       },
@@ -53,12 +50,8 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          // TODO: we could be fancier and say "Run through" or something for #2.
           en: 'Left Flank (or out)',
-          de: 'Linke Flanke (oder raus gehen)',
-          fr: 'Suivez le flanc gauche (ou extérieur)',
-          cn: '左侧 (或远离)',
-          tc: '左側 (或遠離)',
+          ja: 'Left Flank (or out)',
           ko: '왼쪽 옆 (또는 멀찍이)',
         },
       },
@@ -78,12 +71,8 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          // For ranged players, Rush is different than Flaming Recoil because they may have to move.
           en: 'Avoid Charge',
-          de: 'Weiche dem Ansturm aus',
-          fr: 'Évitez la charge',
-          cn: '避开冲锋',
-          tc: '避開衝鋒',
+          ja: 'Avoid Charge',
           ko: '돌진 피해요',
         },
       },
@@ -113,10 +102,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Use Foothold for QTE',
-          de: 'Benutze Standbein für QTE',
-          fr: 'Utilisez le point d\'appui',
-          cn: '上龙背QTE',
-          tc: '上龍背QTE',
+          ja: 'Use Foothold for QTE',
           ko: '발판 밟고 QTE (아님 그냥 바로 잡던가)',
         },
       },

@@ -105,34 +105,22 @@ const triggerSet: TriggerSet<Data> = {
         s: Outputs.south,
         nc: {
           en: 'North Corners',
-          de: 'nördliche Ecken',
-          fr: 'Au coin nord',
           ja: '北の角へ',
-          cn: '去上 (北) 边角落',
           ko: '북쪽 모서리',
         },
         ec: {
           en: 'East Corners',
-          de: 'östliche Ecken',
-          fr: 'Au coin est',
           ja: '東の角へ',
-          cn: '去右 (东) 边角落',
           ko: '동쪽 모서리',
         },
         sc: {
           en: 'South Corners',
-          de: 'südliche Ecken',
-          fr: 'Au coin sud',
           ja: '南の角へ',
-          cn: '去下 (南) 边角落',
           ko: '남쪽 모서리',
         },
         wc: {
           en: 'West Corners',
-          de: 'westliche Ecken',
-          fr: 'Au coin ouest',
           ja: '西の角へ',
-          cn: '去左 (西) 边角落',
           ko: '서쪽 모서리',
         },
       },
@@ -169,10 +157,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Flare on YOU',
-          de: 'Flare auf DIR',
-          fr: 'Brasier sur VOUS',
           ja: '自分にフレア',
-          cn: '核爆点名',
           ko: '내게 플레어',
         },
       },
@@ -188,10 +173,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         lineStackOn: {
           en: 'Line stack on ${player}',
-          de: 'In einer Linie auf ${player} sammeln',
-          fr: 'Packez-vous en ligne sur ${player}',
           ja: '${player}に直線頭割り',
-          cn: '${player} 直线分摊',
           ko: '뭉쳐요: ${player}',
         },
       },

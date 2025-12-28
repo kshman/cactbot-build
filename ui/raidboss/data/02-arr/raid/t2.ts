@@ -42,18 +42,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         rotOn: {
           en: 'Rot on ${player}',
-          de: 'Fäulnis auf ${player}',
-          fr: 'Pourriture sur ${player}',
           ja: '${player}にアラガンロット',
-          cn: '毒点 ${player}',
           ko: '${player} 알라그 부패',
         },
         rotOnYou: {
           en: 'Rot on YOU',
-          de: 'Fäulnis auf DIR',
-          fr: 'Pourriture sur VOUS',
           ja: '自分にアラガンロット',
-          cn: '毒点名',
           ko: '알라그 부패 대상자',
         },
       },
@@ -73,10 +67,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Pass Rot',
-          de: 'Fäulnis abgeben',
-          fr: 'Passez la pourriture',
           ja: 'ロットを移す',
-          cn: '传毒',
           ko: '부패 전달하기',
         },
       },

@@ -75,10 +75,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Bird Soon (Purple)',
-          de: 'Vogel bald (Lila)',
-          fr: 'Oiseau bientôt (Violet)',
           ja: 'まもなく鳥に変化 (紫の薬)',
-          cn: '准备变鸟（紫药）',
           ko: '새 변신 준비 (보라)',
         },
       },
@@ -92,10 +89,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Gorilla Soon (Red)',
-          de: 'Gorilla bald (Rot)',
-          fr: 'Gorille bientôt (Rouge)',
           ja: 'まもなくゴリラに変化 (赤の薬)',
-          cn: '准备变猩猩（红药）',
           ko: '고릴라 변신 준비 (빨강)',
         },
       },
@@ -109,10 +103,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'refresh debuff in puddle soon',
-          de: 'Debuff in der Fläche bald erneuern',
-          fr: 'Rafraîchissez le debuff dans la zone au sol bientôt',
           ja: '薬でデバフを更新',
-          cn: '踩圈刷新debuff',
           ko: '디버프 해제하기',
         },
       },
@@ -162,18 +153,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         knockBombsIntoSpikey: {
           en: 'Knock Bombs Into Spikey',
-          de: 'Bombe in die Spike-Bombe stoßen',
-          fr: 'Poussez les bombes dans la bombe à pointe',
           ja: 'トゲ爆弾を飛ばす',
-          cn: '把炸弹拍到地雷处',
           ko: '지뢰쪽으로 폭탄 밀기',
         },
         knockBombsOppositeSpikey: {
           en: 'Knock Bombs Opposite Spikey',
-          de: 'Bombe gegnüber der Spike-Bombe stoßen',
-          fr: 'Poussez les bombes à l\'opposé de la bombe à pointe',
           ja: 'トゲ爆弾を対角に飛ばす',
-          cn: '把炸弹拍到第一个地雷对角',
           ko: '지뢰 반대쪽으로 폭탄 밀기',
         },
       },
@@ -219,34 +204,22 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         northwestFirst: {
           en: 'NW first',
-          de: 'NW zuerst',
-          fr: 'NO en premier',
           ja: 'まずは北西',
-          cn: '先左上',
           ko: '북서쪽 먼저',
         },
         northeastFirst: {
           en: 'NE first',
-          de: 'NO zuerst',
-          fr: 'NE en premier',
           ja: 'まずは北東',
-          cn: '先右上',
           ko: '북동쪽 먼저',
         },
         southwestFirst: {
           en: 'SW first',
-          de: 'SW zuerst',
-          fr: 'SO en premier',
           ja: 'まずは南西',
-          cn: '先左下',
           ko: '남서쪽 먼저',
         },
         southeastFirst: {
           en: 'SE first',
-          de: 'SO zuerst',
-          fr: 'SE en premier',
           ja: 'まずは南東',
-          cn: '先右下',
           ko: '남동쪽 먼저',
         },
       },
@@ -260,10 +233,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Get Away',
-          de: 'Weg gehen',
-          fr: 'Éloignez-vous',
           ja: '外へ',
-          cn: '远离boss和人群',
           ko: '멀리 떨어져요',
         },
       },
@@ -279,10 +249,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Shield ${player}',
-          de: 'Schild ${player}',
-          fr: 'Bouclier sur ${player}',
           ja: '${player}にバリア',
-          cn: '给${player}单盾',
           ko: '"${player}" 에게 보호막',
         },
       },
@@ -296,10 +263,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'GLOOPYGLOOP~',
-          de: 'GLOOPYGLOOP~',
-          fr: 'Gobacide gluant',
           ja: '強酸性劇物薬',
-          cn: '场边放毒圈',
           ko: '강산성 극약',
         },
       },
@@ -330,10 +294,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Cleanse (Green)',
-          de: 'Reinigen (Grün)',
-          fr: 'Purifiez-vous (Vert)',
           ja: 'エスナ (緑の薬)',
-          cn: '解毒（绿药）',
           ko: '디버프 해제 (초록)',
         },
       },
@@ -351,10 +312,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Break Tether (Blue)',
-          de: 'Verbindungen brechen (Blau)',
-          fr: 'Cassez le lien (Bleu)',
           ja: '線を断つ (青の薬)',
-          cn: '消除连线（蓝药）',
           ko: '선 끊기 (파랑)',
         },
       },

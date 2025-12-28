@@ -47,10 +47,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Clock',
-          de: 'Uhr',
-          fr: 'Sens horaire',
           ja: '照準 (時針回り)',
-          cn: '九连环',
           ko: '시계방향',
         },
       },
@@ -69,10 +66,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Bait Optical Sight',
-          de: 'Köder Visier',
-          fr: 'Attirez la Visée optique',
           ja: '照準AoEを誘導',
-          cn: '诱导AOE',
           ko: '유도 장판',
         },
       },
@@ -104,10 +98,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Kill Add',
-          de: 'Add besiegen',
-          fr: 'Tuez l\'Add',
           ja: 'イーディーディーを倒す',
-          cn: '击杀小怪',
           ko: '쫄 없애기',
         },
       },
@@ -120,10 +111,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Break Pauldron',
-          de: 'Schulterplatte zerstören',
-          fr: 'Brisez la Protection',
           ja: 'アーマーを破壊する',
-          cn: '击破护盾',
           ko: '견갑부 부수기',
         },
       },
@@ -147,18 +135,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         gaOn: {
           en: 'GA-100 on ${player}',
-          de: 'GA-100 on ${player}',
-          fr: 'GA-100 sur ${player}',
           ja: '${player}にGA-100',
-          cn: 'GA-100点${player}',
           ko: '"${player}" GA-100',
         },
         gaOnYou: {
           en: 'GA-100 on YOU',
-          de: 'GA-100 auf DIR',
-          fr: 'GA-100 sur VOUS',
           ja: '自分にGA-100',
-          cn: 'GA-100点名',
           ko: 'GA-100 대상자',
         },
       },
@@ -212,10 +194,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: '${num}',
-          de: '${num}',
-          fr: '${num}',
           ja: '${num}',
-          cn: '${num}',
           ko: '${num}',
         },
       },
@@ -246,26 +225,17 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         knockbackCleave: {
           en: 'Knockback Cleave; Face Outside',
-          de: 'Rückstoß Cleave; nach Außen schauen',
-          fr: 'Poussée Cleave; Regardez vers l\'extérieur',
           ja: 'ノックバック ソード; 外を向く',
-          cn: '击退顺劈; 面向外侧',
           ko: '넉백 소드; 바깥쪽 바라보기',
         },
         knockbackCharge: {
           en: 'Knockback Charge',
-          de: 'Rückstoß Charge',
-          fr: 'Poussée Charge',
           ja: 'ノックバック チャージ',
-          cn: '击退冲锋',
           ko: '넉백 차지',
         },
         facePlayer: {
           en: 'Face ${player}',
-          de: 'Schaue zu ${player}',
-          fr: 'Regardez ${player}',
           ja: '${player} に向かう',
-          cn: '面向${player}',
           ko: '"${player}" 바라보기',
         },
       },
@@ -295,18 +265,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         sharedTankbusterOnYou: {
           en: 'Shared Tankbuster on YOU',
-          de: 'Geteilter Tankbuster auf DIR',
-          fr: 'Tank buster à partager sur VOUS',
           ja: '自分に頭割りタンクバスター',
-          cn: '分摊死刑点名',
           ko: '쉐어 탱버 대상자',
         },
         sharedTankbusterOn: {
           en: 'Shared Tankbuster on ${player}',
-          de: 'Geteilter Tankbuster auf ${player}',
-          fr: 'Tank buster à partager sur ${player}',
           ja: '${player}に頭割りタンクバスター',
-          cn: '分摊死刑点${player}',
           ko: '"${player}" 쉐어 탱버',
         },
       },
@@ -319,10 +283,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Hide Behind Tower',
-          de: 'Hinter dem Tower verstecken',
-          fr: 'Cachez-vous derrière la tour',
           ja: '塔の後ろに',
-          cn: '躲在塔后',
           ko: '타워 뒤에 숨기',
         },
       },
@@ -335,10 +296,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Break Shield From Front',
-          de: 'Schild von vorne zerstören',
-          fr: 'Brisez le Bouclier par l\'avant',
           ja: 'シールドを正面から破壊する',
-          cn: '正面击破护盾',
           ko: '정면에서 방어막 부수기',
         },
       },
@@ -369,18 +327,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         chargeOn: {
           en: 'Charge on ${player}',
-          de: 'Ansturm auf ${player}',
-          fr: 'Charge sur ${player}',
           ja: '${player}にチャージ',
-          cn: '冲锋点${player}',
           ko: '"${player}" 돌진',
         },
         chargeOnYou: {
           en: 'Charge on YOU',
-          de: 'Ansturm auf DIR',
-          fr: 'Charge sur VOUS',
           ja: '自分にチャージ',
-          cn: '冲锋点名',
           ko: '내게 돌진',
         },
       },

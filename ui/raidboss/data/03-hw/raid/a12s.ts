@@ -53,10 +53,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Scourge on YOU',
-          de: 'Licht auf DIR',
-          fr: 'Lumière sur VOUS',
           ja: '自分に白光の鞭',
-          cn: '白光之鞭点名',
           ko: '성광의 채찍 대상자',
         },
       },
@@ -93,10 +90,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Scourge: ${players}',
-          de: 'Licht: ${players}',
-          fr: 'Lumière : ${players}',
           ja: '${players}に白光の鞭',
-          cn: '白光之鞭点:${players}',
           ko: '성광의 채찍:${players}',
         },
       },
@@ -121,10 +115,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Lasers',
-          de: 'Laser',
-          fr: 'Lasers',
           ja: '十字の秘蹟',
-          cn: '十字圣礼',
           ko: '십자 성례',
         },
       },
@@ -147,10 +138,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Close Tethers (${player})',
-          de: 'Nahe Verbindungen (${player})',
-          fr: 'Liens proches (${player})',
           ja: '(${player})に近づく',
-          cn: '靠近连线 (${player})',
           ko: '강제접근: 상대와 가까이 붙기 (${player})',
         },
       },
@@ -167,10 +155,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Far Tethers (${player})',
-          de: 'Entfernte Verbindungen (${player})',
-          fr: 'Liens éloignés (${player})',
           ja: ' (${player})から離れる',
-          cn: '远离连线 (${player})',
           ko: '접근금지: 상대와 떨어지기 (${player})',
         },
       },
@@ -184,10 +169,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Shared Sentence',
-          de: 'Urteil Kollektivstrafe',
-          fr: 'Partagez peine collective',
           ja: '集団罰',
-          cn: '集团罪',
           ko: '집단형: 쉐어',
         },
       },
@@ -201,10 +183,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Defamation',
-          de: 'Ehrenstrafe',
-          fr: 'Diffamation',
           ja: '名誉罰',
-          cn: '名誉罪',
           ko: '명예형: 멀리가기',
         },
       },
@@ -218,10 +197,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Crystal on YOU',
-          de: 'Kristall auf DIR',
-          fr: 'Cristal sur VOUS',
           ja: '自分に結晶',
-          cn: '结晶点名',
           ko: '나에게 수정',
         },
       },
@@ -234,10 +210,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Shared Tankbuster',
-          de: 'geteilter Tankbuster',
-          fr: 'Partagez le Tank buster',
           ja: '頭割りタンクバスター',
-          cn: '分摊死刑',
           ko: '쉐어 탱크버스터',
         },
       },
@@ -257,10 +230,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Puddle Tether on YOU',
-          de: 'Flächen-Verbindung auf dir',
-          fr: 'Lien Zone au sol sur VOUS',
           ja: '自分に線',
-          cn: '放圈连线点名',
           ko: '장판 남기는 선 대상자',
         },
       },

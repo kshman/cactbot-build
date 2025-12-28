@@ -87,9 +87,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Away from jump => Get Under or Out',
-          de: 'Weg vom Sprung => Geh Unter oder Raus',
-          cn: '远离跳跃 => 去脚下或外面',
-          tc: '遠離跳躍 => 去腳下或外面',
+          ja: 'Away from jump => Get Under or Out',
           ko: '점프 먼곳으로 🔜 밑이나 밖으로',
         },
       },
@@ -140,23 +138,17 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         sting: {
           en: 'Final Sting',
-          de: 'Schlussstich',
-          cn: '终极针',
-          tc: '終極針',
+          ja: 'Final Sting',
           ko: '파이널 스팅',
         },
         stingOnYou: {
           en: 'Final Sting on YOU',
-          de: 'Schlussstich auf DIR',
-          cn: '终极针点名',
-          tc: '終極針點名',
+          ja: 'Final Sting on YOU',
           ko: '내게 파이널 스팅!',
         },
         stingOnPlayer: {
           en: 'Final Sting on ${player}',
-          de: 'Schlussstich auf ${player}',
-          cn: '终极针点${player}',
-          tc: '終極針點${player}',
+          ja: 'Final Sting on ${player}',
           ko: '파이널 스팅: ${player}',
         },
       },
@@ -211,23 +203,17 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Dodge ${dir}',
-          de: 'Ausweichen ${dir}',
-          cn: '${dir} 躲避',
-          tc: '${dir} 躲避',
+          ja: 'Dodge ${dir}',
           ko: '${dir} 피해요!',
         },
         backFront: {
           en: 'Back-to-front',
-          de: 'Hinten-nach-Vorne',
-          cn: '后到前',
-          tc: '後到前',
+          ja: 'Back-to-front',
           ko: '앞에서 뒤로',
         },
         frontBack: {
           en: 'Front-to-back',
-          de: 'Vorne-nach-Hinten',
-          cn: '前到后',
-          tc: '前到後',
+          ja: 'Front-to-back',
           ko: '뒤에서 앞으로',
         },
       },
@@ -250,9 +236,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Dodge ${dir}',
-          de: 'Ausweichen ${dir}',
-          cn: '${dir} 躲避',
-          tc: '${dir} 躲避',
+          ja: 'Dodge ${dir}',
           ko: '${dir}으로 피해요!',
         },
         clockwise: Outputs.clockwise,
@@ -332,23 +316,17 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         repeat: {
           en: '${dir4} => ${dir1} x3 => ${dir8} => ${dir5} x3',
-          de: '${dir4} => ${dir1} x3 => ${dir8} => ${dir5} x3',
-          cn: '${dir4} => ${dir1} x3 => ${dir8} => ${dir5} x3',
-          tc: '${dir4} => ${dir1} x3 => ${dir8} => ${dir5} x3',
+          ja: '${dir4} => ${dir1} x3 => ${dir8} => ${dir5} x3',
           ko: '${dir4} 🔜 ${dir1}x3 🔜 ${dir8} 🔜 ${dir5}x3',
         },
         rewind: {
           en: '${dir4} => ${dir1} x6 => ${dir4}',
-          de: '${dir4} => ${dir1} x6 => ${dir4}',
-          cn: '${dir4} => ${dir1} x6 => ${dir4}',
-          tc: '${dir4} => ${dir1} x6 => ${dir4}',
+          ja: '${dir4} => ${dir1} x6 => ${dir4}',
           ko: '${dir4} 🔜 ${dir1}x6 🔜 ${dir4}',
         },
         avoid: {
           en: 'Avoid swipes x8',
-          de: 'Vermeide Schwung x8',
-          cn: '避开顺劈 x8',
-          tc: '避開順劈 x8',
+          ja: 'Avoid swipes x8',
           ko: '스와이프x8 피해요!',
         },
         left: Outputs.left,

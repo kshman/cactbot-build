@@ -69,10 +69,7 @@ const triggerSet: TriggerSet<Data> = {
         ...comboOutputStrings,
         intercards: {
           en: 'Intercards',
-          de: 'Interkardinal',
-          fr: 'Intercardinal',
           ja: '斜めへ',
-          cn: '四角',
           ko: '비스듬히 피해욧',
         },
       },
@@ -257,18 +254,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         dirCrystals: {
           en: '${dir} Crystals first',
-          de: 'Kristall im ${dir} zuerst',
-          fr: 'Premiers cristaux au ${dir} ',
           ja: '${dir}のクリスタルから',
-          cn: '先攻击 ${dir} 水晶',
           ko: '${dir} 크리스탈부터',
         },
         dirEchoes: {
           en: 'Move Echoes ${dir} first',
-          de: 'Bewege Echoes zuerst nach ${dir}',
-          fr: 'Déplacez les échos au ${dir} en premier',
           ja: '${dir}に誘導',
-          cn: '先拉回声到 ${dir} ',
           ko: '먼저 ${dir}로 데려가욧',
         },
         north: Outputs.north,
@@ -310,10 +301,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         rolePositions: {
           en: 'Role positions',
-          de: 'Rollenposition',
-          fr: 'Positions par rôle',
           ja: 'ロール特定位置へ',
-          cn: '去指定位置',
           ko: '롤 위치로',
         },
       },
@@ -338,10 +326,7 @@ const triggerSet: TriggerSet<Data> = {
         ...comboOutputStrings,
         avoid: {
           en: 'Avoid Line Ends',
-          de: 'Weiche den Enden der Linien aus',
-          fr: 'Évitez les fins de lignes',
           ja: '線の端から離れる',
-          cn: '远离线',
           ko: '줄 끝 쪽 피해욧',
         },
       },
@@ -354,10 +339,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Stack 5x',
-          de: '5x Sammeln',
-          fr: '5x Packages',
           ja: '頭割り５回',
-          cn: '5连分摊',
           ko: '5x 뭉쳐요',
         },
       },

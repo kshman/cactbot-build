@@ -55,10 +55,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Silence Ram\'s Voice',
-          de: 'Verstumme Stimme des Widders',
-          fr: 'Interrompez Voix du bélier',
           ja: '沈黙: 氷結の咆哮',
-          cn: '沉默寒冰咆哮',
           ko: '빙결의 포효 침묵시키기',
         },
       },
@@ -73,10 +70,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Silence Dragon\'s Voice',
-          de: 'Verstumme Stimme des Drachens',
-          fr: 'Interrompez Voix du dragon',
           ja: '沈黙: 雷電の咆哮',
-          cn: '沉默雷电咆哮',
           ko: '뇌전의 포효 침묵시키기',
         },
       },
@@ -92,10 +86,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Tail Slap in 10',
-          de: 'Schweifklapser in 10',
-          fr: 'Gifle caudale dans 10s',
           ja: 'まもなくテールスラップ',
-          cn: '10秒内死刑',
           ko: '10초 안에 꼬리치기',
         },
       },
@@ -108,10 +99,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Renaud Add',
-          de: 'Renaud Add',
-          fr: 'Add Renaud',
           ja: '雑魚：ルノー',
-          cn: '雷诺出现',
           ko: '르노 쫄',
         },
       },
@@ -126,10 +114,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Voice Soon',
-          de: 'Stimme Der Verwünschung bald',
-          fr: 'Voix du maléfice bientôt',
           ja: 'まもなく呪詛の声',
-          cn: '诅咒之声即将判定',
           ko: '곧 저주의 목소리',
         },
       },
@@ -150,18 +135,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         shriekOn: {
           en: 'Shriek on ${player}',
-          de: 'Schrei Der Verwünschung auf ${player}',
-          fr: 'Cri du maléfice sur ${player}',
           ja: '${player}に呪詛の叫声',
-          cn: '诅咒之嚎点${player}',
           ko: '"${player}" 저주의 외침 대상',
         },
         shriekOnYou: {
           en: 'Shriek on YOU',
-          de: 'Schrei Der Verwünschung auf DIR',
-          fr: 'Cri du maléfice sur VOUS',
           ja: '自分に呪詛の叫声',
-          cn: '诅咒之嚎点名',
           ko: '저주의 외침 대상자',
         },
       },
@@ -181,18 +160,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         shriekSoon: {
           en: 'Shriek Soon',
-          de: 'Schrei Der Verwünschung bald',
-          fr: 'Cri du maléfice bientôt',
           ja: 'まもなく呪詛の叫声',
-          cn: '诅咒之嚎即将判定',
           ko: '곧 저주의 외침 발동',
         },
         dodgeShriek: {
           en: 'Dodge Shriek',
-          de: 'Schrei Der Verwünschung ausweichen',
-          fr: 'Esquivez le cri maudit',
           ja: '呪詛の叫声を避ける',
-          cn: '躲避诅咒之嚎',
           ko: '저주의 외침 피해요',
         },
       },
@@ -217,10 +190,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Venomous Tail',
-          de: 'Venomschweif',
-          fr: 'Queue venimeuse',
           ja: 'ベノモステール',
-          cn: '猛毒之尾',
           ko: '맹독 꼬리',
         },
       },

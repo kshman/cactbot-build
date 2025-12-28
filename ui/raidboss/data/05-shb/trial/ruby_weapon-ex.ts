@@ -30,10 +30,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Hide Behind Meteor',
-          de: 'Hinter dem Meteor verstecken',
-          fr: 'Cachez-vous derrière le météore',
           ja: 'メテオの後ろに',
-          cn: '躲在陨石后',
           ko: '메테오 뒤로',
         },
       },
@@ -46,10 +43,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Away From Meteor',
-          de: 'Weg vom Meteor',
-          fr: 'Éloignez-vous du météore',
           ja: 'メテオから離れる',
-          cn: '远离陨石',
           ko: '메테오에게서 먼곳으로',
         },
       },
@@ -76,10 +70,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Away From Line Ends',
-          de: 'Weg von den Linienenden',
-          fr: 'Éloignez-vous des fins de lignes',
           ja: '線の端から避ける',
-          cn: '远离线末端',
           ko: '줄 끝부분 피해요',
         },
       },
@@ -92,10 +83,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Away from Lines',
-          de: 'Weg von den Linien',
-          fr: 'Éloignez-vous des sillons',
           ja: '線から離れる',
-          cn: '远离线',
           ko: '줄 피해요',
         },
       },
@@ -108,10 +96,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Get On Lines',
-          de: 'Auf die Linien gehen',
-          fr: 'Allez sur les sillons',
           ja: '線を踏む',
-          cn: '靠近线',
           ko: '줄 올라타요',
         },
       },
@@ -130,10 +115,7 @@ const triggerSet: TriggerSet<Data> = {
         getMiddle: Outputs.goIntoMiddle,
         outOfMiddle: {
           en: 'Out Of Middle',
-          de: 'Raus aus der Mitte',
-          fr: 'Sortez du milieu',
           ja: '横へ',
-          cn: '远离中间',
           ko: '가운데 피해요, 옆으로',
         },
       },
@@ -167,10 +149,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Enrage!',
-          de: 'Finalangriff!',
-          fr: 'Enrage !',
           ja: '時間切れ!',
-          cn: '狂暴',
           ko: '곧 다 주거!',
         },
       },
@@ -207,10 +186,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Attack Blue (East)',
-          de: 'Greife Blau an (Osten)',
-          fr: 'Attaquez le bleu (Est)',
           ja: '青色に攻撃 (東)',
-          cn: '攻击蓝色(东)',
           ko: '파랑 공격▷▶▷',
         },
       },
@@ -231,10 +207,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Attack Red (West)',
-          de: 'Greife Rot an (Westen)',
-          fr: 'Attaquez le rouge (Ouest)',
           ja: '赤色に攻撃 (西)',
-          cn: '攻击红色(西)',
           ko: '◁◀◁빨강 공격',
         },
       },
@@ -309,36 +282,24 @@ const triggerSet: TriggerSet<Data> = {
         output.responseOutputStrings = {
           text: {
             en: '${dir} (${suffix})',
-            de: '${dir} (${suffix})',
-            fr: '${dir} (${suffix})',
             ja: '${dir} (${suffix})',
-            cn: '${dir} (${suffix})',
             ko: '${dir} (${suffix})',
           },
           out: Outputs.out,
           in: Outputs.in,
           blueSuffix: {
             en: 'blue',
-            de: 'Blau',
-            fr: 'Bleu',
             ja: '青',
-            cn: '蓝',
             ko: '파랑',
           },
           redSuffix: {
             en: 'red',
-            de: 'Rot',
-            fr: 'Rouge',
             ja: '赤',
-            cn: '红',
             ko: '빨강',
           },
           bothSuffix: {
             en: 'both',
-            de: 'Beides',
-            fr: 'Les deux',
             ja: '両方',
-            cn: '全部',
             ko: '둘 다',
           },
         };
@@ -419,18 +380,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         attackRedEast: {
           en: 'Attack Red (East)',
-          de: 'Greife Rot an (Osten)',
-          fr: 'Attaquez le rouge (Est)',
           ja: '赤色に攻撃 (東)',
-          cn: '攻击红色(东)',
           ko: '빨강 공격▷▶▷',
         },
         attackBlueWest: {
           en: 'Attack Blue (West)',
-          de: 'Greife Blau an (Westen)',
-          fr: 'Attaquez le bleu (Ouest)',
           ja: '青色に攻撃 (西)',
-          cn: '攻击蓝色(西)',
           ko: '◁◀◁파랑 공격',
         },
       },
@@ -448,10 +403,7 @@ const triggerSet: TriggerSet<Data> = {
         output.responseOutputStrings = {
           text: {
             en: 'Blue Head (Go East)',
-            de: 'Blauer Kopf (Geh nach Osten)',
-            fr: 'Tête bleu (Allez à l\'est)',
             ja: '青いヘッド (東へ)',
-            cn: '蓝头 (去东边)',
             ko: '파랑 머리, 동쪽으로',
           },
         };
@@ -474,10 +426,7 @@ const triggerSet: TriggerSet<Data> = {
         output.responseOutputStrings = {
           text: {
             en: 'Red Head (Go West)',
-            de: 'Roter Kopf (Geh nach Westen)',
-            fr: 'Tête rouge (Allez à l\'ouest)',
             ja: '赤いヘッド (西へ)',
-            cn: '红头 (去西边)',
             ko: '빨강 머리, 서쪽으로',
           },
         };
@@ -503,10 +452,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: '${num}',
-          de: '${num}',
-          fr: '${num}',
           ja: '${num}',
-          cn: '${num}',
           ko: '${num}번',
         },
       },
@@ -525,10 +471,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Away from Meteor!',
-          de: 'Weg vom Meteor!',
-          fr: 'Éloignez-vous du météore !',
           ja: 'メテオから離れる',
-          cn: '远离陨石',
           ko: '메테오에게서 먼곳으로!',
         },
       },
@@ -543,10 +486,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Stand in Meteor Tankbuster',
-          de: 'Stehe im Meteor - Tankbuster',
-          fr: 'Tank buster, Restez dans la comète',
           ja: 'タンクバスター、メテオへ',
-          cn: '接刀',
           ko: '탱크버스터, 메테오로',
         },
       },
@@ -561,10 +501,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Kill Meteor Adds',
-          de: 'Besiege die Meteor Adds',
-          fr: 'Tuez les comètes',
           ja: 'メテオを処理',
-          cn: '击杀陨石',
           ko: '메테오 처리',
         },
       },
@@ -578,10 +515,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Avoid tanks with laser',
-          de: 'Tanks nicht mit dem Laser treffen',
-          fr: 'Évitez les tanks avec votre laser',
           ja: 'タンクレーザーを避け',
-          cn: '躲开坦克激光',
           ko: '탱크 레이저 피해요',
         },
       },
@@ -602,18 +536,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         cometsNorthSouth: {
           en: 'Comets N/S',
-          de: 'Meteor N/S',
-          fr: 'Comètes N/S',
           ja: 'コメット 北/南',
-          cn: '彗星 北/南',
           ko: '남북 코멧',
         },
         cometsEastWest: {
           en: 'Comets E/W',
-          de: 'Meteor O/W',
-          fr: 'Comètes E/O',
           ja: 'コメット 東/西',
-          cn: '彗星 东/西',
           ko: '동서 코멧',
         },
       },

@@ -73,9 +73,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Stand on a rock',
-          de: 'Steh auf einem Stein',
-          cn: '站在一块岩石上',
-          tc: '站在一塊岩石上',
+          ja: 'Stand on a rock',
           ko: '바위 위로 올라서요',
         },
       },
@@ -89,10 +87,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: '4x Chasing AoE on YOU',
-          de: '4x verfolgende AoE auf DIR',
-          fr: '4x AoE sur VOUS',
-          cn: '四连追踪 AOE 点名',
-          tc: '四連追蹤 AOE 點名',
+          ja: '4x Chasing AoE on YOU',
           ko: '따라오는 장판 x4',
         },
       },
@@ -107,9 +102,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Stand in quicksand',
-          de: 'Im Treibsand stehen',
-          cn: '站在流沙里',
-          tc: '站在流沙裡',
+          ja: 'Stand in quicksand',
           ko: '모래 웅덩이에 올라서요',
         },
       },

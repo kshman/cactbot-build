@@ -19,11 +19,8 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Eat Fruit',
-          de: 'Frucht essen',
-          fr: 'Mangez un fruit',
           ja: '果実を食べる',
-          cn: '吃果实',
-          ko: '열매 먹기',
+          ko: '열매 들이켜요',
         },
       },
     },

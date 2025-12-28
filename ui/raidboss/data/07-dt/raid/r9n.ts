@@ -268,7 +268,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         dodge: {
           en: 'Dodge Lines',
-          cn: '避开直线',
+          ja: 'Dodge Lines',
           ko: '직선 장핀 피해요',
         },
       },
@@ -302,7 +302,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: '${dir1} max melee => ${dir2} max melee',
-          cn: '${dir1} 最大近战距离 => ${dir2} 最大近战距离',
+          ja: '${dir1} max melee => ${dir2} max melee',
           ko: '${dir1} 🔜 ${dir2}',
         },
         left: Outputs.left,
@@ -374,7 +374,7 @@ const triggerSet: TriggerSet<Data> = {
         ...Directions.outputStrings16Dir,
         away: {
           en: 'Away from bats ${dir1}/${dir2}',
-          cn: '远离蝙蝠 ${dir1}/${dir2}',
+          ja: 'Away from bats ${dir1}/${dir2}',
           ko: '박쥐 피해요: ${dir1}/${dir2}',
         },
       },
@@ -402,7 +402,7 @@ const triggerSet: TriggerSet<Data> = {
         ...Directions.outputStrings16Dir,
         away: {
           en: 'Away from bats ${dir1}/${dir2}/${dir3}',
-          cn: '远离蝙蝠 ${dir1}/${dir2}/${dir3}',
+          ja: 'Away from bats ${dir1}/${dir2}/${dir3}',
           ko: '박쥐 피해요: ${dir1}/${dir2}/${dir3}',
         },
       },
@@ -498,17 +498,17 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Flails ${flail1Dist} ${flail1Dir}/${flail2Dist} ${flail2Dir}',
-          cn: '刺锤 ${flail1Dist} ${flail1Dir}/${flail2Dist} ${flail2Dir}',
+          ja: 'Flails ${flail1Dist} ${flail1Dir}/${flail2Dist} ${flail2Dir}',
           ko: '플레일: ${flail1Dist} ${flail1Dir}/${flail2Dist} ${flail2Dir}',
         },
         near: {
           en: 'Near',
-          cn: '近',
+          ja: 'Near',
           ko: '가까이',
         },
         far: {
           en: 'Far',
-          cn: '远',
+          ja: 'Far',
           ko: '멀리',
         },
         ...Directions.outputStringsIntercardDir,

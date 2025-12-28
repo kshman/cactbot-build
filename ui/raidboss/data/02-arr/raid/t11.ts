@@ -27,10 +27,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Stun on ${player}',
-          de: 'Stun auf ${player}',
-          fr: 'Stun sur ${player}',
           ja: '${player}にスタン',
-          cn: '击昏${player}',
           ko: '"${player}" 기절',
         },
       },
@@ -89,10 +86,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Out of Middle',
-          de: 'Raus aus der Mitte',
-          fr: 'Sortez du milieu',
           ja: '中央から離れる',
-          cn: '离开中间',
           ko: '중앙에서 벗어나기',
         },
       },
@@ -106,10 +100,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Lightning on YOU',
-          de: 'Blitz auf DIR',
-          fr: 'Éclair sur VOUS',
           ja: '自分にフォークライトニング',
-          cn: '雷点名',
           ko: '갈래 번개 대상자',
         },
       },
@@ -123,10 +114,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Final Phase',
-          de: 'Finale Phase',
-          fr: 'Phase finale',
           ja: 'フェイス３',
-          cn: 'P3',
           ko: '마지막 페이즈',
         },
       },
@@ -169,10 +157,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Red Tethers With ${player}',
-          de: 'Rote Verbindung mit ${player}',
-          fr: 'Liens rouges avec ${player}',
           ja: '${player}に赤い線',
-          cn: '红线连${player}',
           ko: '"${player}"와 빨간 선',
         },
       },
@@ -199,10 +184,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Blue Tethers With ${player}',
-          de: 'Blaue Verbindung mit ${player}',
-          fr: 'Liens bleus avec ${player}',
           ja: '${player}に青い線',
-          cn: '蓝线连${player}',
           ko: '"${player}"와 파랑 선',
         },
       },

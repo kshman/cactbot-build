@@ -94,8 +94,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         knockbackFrom: {
           en: 'Knockback from ${dir}',
-          de: 'Rückstoß von ${dir}',
-          cn: '从 ${dir} 击退',
+          ja: 'Knockback from ${dir}',
           ko: '${dir}에서 넉백',
         },
         dirN: Outputs.north,
@@ -171,8 +170,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         cleanse: {
           en: 'Cleanse ${target}',
-          de: 'Reinige ${target}',
-          cn: '康复 ${target}',
+          ja: 'Cleanse ${target}',
           ko: '에스나: ${target}',
         },
       },
@@ -214,8 +212,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         avoidFlails: {
           en: 'Away from flails',
-          de: 'Weg vom Flegel',
-          cn: '远离铁球',
+          ja: 'Away from flails',
           ko: '플레일 피해요',
         },
       },
@@ -251,8 +248,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         cleanseDoom: {
           en: 'Cleanse ${target}',
-          de: 'Reinige ${target}',
-          cn: '康复 ${target}',
+          ja: 'Cleanse ${target}',
           ko: '에스나: ${target}',
         },
       },
@@ -343,8 +339,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         staticBombardment: {
           en: 'Go ${safe}; Avoid small AoE',
-          de: 'Geh nach ${safe}; Vermeide kleine AoE',
-          cn: '前往 ${safe}; 避开小范围 AoE',
+          ja: 'Go ${safe}; Avoid small AoE',
           ko: '${safe}으로 가욧! 작은 장판은 피해요',
         },
         west: Outputs.west,
@@ -380,8 +375,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         knockbackBombardment: {
           en: 'Knockback to ${safe}; Avoid AoE',
-          de: 'Rückstoß nach ${safe}; Vermeide AoE',
-          cn: '击退到 ${safe}; 避开 AoE',
+          ja: 'Knockback to ${safe}; Avoid AoE',
           ko: '${safe}으로 넉백! 장판은 피해요',
         },
         northwest: Outputs.northwest,
@@ -464,14 +458,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         leanLeft: {
           en: 'Front + Lean Left; or Southwest',
-          de: 'Vorne + Links halten; oder Süd-Westen',
-          cn: '前方 + 偏左; 或左下',
+          ja: 'Front + Lean Left; or Southwest',
           ko: '앞 + 왼쪽으로 살짝 또는 남서쪽',
         },
         leanRight: {
           en: 'Front + Lean Right; or Southeast',
-          de: 'Vorne + Rechts halten; oder Süd-Osten',
-          cn: '前方 + 偏右; 或右下',
+          ja: 'Front + Lean Right; or Southeast',
           ko: '앞 + 오른쪽으로 살짝 또는 남동쪽',
         },
         dirNW: Outputs.northwest,

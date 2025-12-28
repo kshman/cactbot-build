@@ -35,10 +35,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Knockback on YOU',
-          de: 'Rückstoß auf DIR',
-          fr: 'Poussée sur VOUS',
-          cn: '击退点名',
-          tc: '擊退點名',
+          ja: 'Knockback on YOU',
           ko: '내게 넉백',
         },
       },

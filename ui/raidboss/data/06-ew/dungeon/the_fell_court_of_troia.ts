@@ -20,10 +20,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Avoid Eye Lasers',
-          de: 'Weiche dem Augenlaser aus',
-          fr: 'Évitez les lasers',
           ja: '目からビーム',
-          cn: '躲避视线激光',
           ko: '눈에서 빔 피해욧',
         },
       },
@@ -44,10 +41,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Kill One Eye',
-          de: 'Besiege ein Auge',
-          fr: 'Tuez une tête',
           ja: '安置になる目を攻撃',
-          cn: '击杀一只小怪',
           ko: '눈깔 하나 잡아욧',
         },
       },
@@ -68,10 +62,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Look Away from Rings',
-          de: 'Schau von den Ringen weg',
-          fr: 'Ne regardez pas l\'anneau',
           ja: '輪の目から視線回避',
-          cn: '视线避开圆环',
           ko: '고리 시선 잘 피해욧',
         },
       },
@@ -84,10 +75,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Away From Exploding Lines',
-          de: 'Weg von den explodierenden Linien',
-          fr: 'Éloignez-vous des lignes explosives',
           ja: '線から離れる',
-          cn: '避开即将爆炸的线',
           ko: '터지는 선 순서 보고 피해요',
         },
       },
@@ -139,10 +127,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Knockback Into Wall',
-          de: 'Rückstoß in eine Wand',
-          fr: 'Faites-vous pousser sur un mur',
           ja: '壁にノックバック',
-          cn: '击退到护栏',
           ko: '벽으로 넉백 당해욧',
         },
       },
@@ -155,10 +140,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Get Behind and Out',
-          de: 'Geh nach Hinten und Raus',
-          fr: 'Passez derrière et extérieur',
           ja: '後ろの外側へ',
-          cn: '去背后远离',
           ko: '뒤로 그리고 밖으로',
         },
       },

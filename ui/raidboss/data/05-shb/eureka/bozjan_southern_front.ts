@@ -237,10 +237,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Stand in dive charge',
-          de: 'Stehe im Ansturm',
-          fr: 'Restez dans la charge',
           ja: '直線頭割りに入る',
-          cn: '进入直线分摊',
           ko: '다이브 돌진에 서요',
         },
       },
@@ -262,10 +259,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Take one tether',
-          de: 'Nimm eine´Verbindung',
-          fr: 'Prenez un lien',
           ja: '線を取る',
-          cn: '接线',
           ko: '줄 하나 채요',
         },
       },
@@ -308,10 +302,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Kill Magitek Core',
-          de: 'Besiege Magitek-Reaktor',
-          fr: 'Tuez le Cœur magitek',
           ja: '魔導コアを撃破',
-          cn: '击杀魔导核心',
           ko: '마지텍 코어 잡아요',
         },
       },
@@ -346,18 +337,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         getUnderOrb: {
           en: 'Get Under Orb',
-          de: 'Geh unter einem Orb',
-          fr: 'Allez sous l\'Orbe',
           ja: '白玉に安置',
-          cn: '靠近白球',
           ko: '구슬 아래로',
         },
         goCorner: {
           en: 'Go To Corner',
-          de: 'Geh in die Ecken',
-          fr: 'Allez dans un coin',
           ja: 'コーナーへ',
-          cn: '去角落',
           ko: '구석으로',
         },
       },
@@ -399,10 +384,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Kill Meteors',
-          de: 'Besiege die Meteore',
-          fr: 'Tuez les météores',
           ja: 'メテオを撃破',
-          cn: '击杀陨石',
           ko: '메테오 잡아요',
         },
       },
@@ -552,44 +534,28 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         unknown: {
-          // "Follow Other People ;)"
           en: 'Go ???',
-          de: 'Gehe nach ???',
-          fr: 'Allez au ???',
           ja: '??? へ',
-          cn: '去 ???',
           ko: '???쪽으로',
         },
         northeast: {
           en: 'Go northeast',
-          de: 'Gehe nach Nordosten',
-          fr: 'Allez au nord-est',
           ja: '北東へ',
-          cn: '去右上(东北)',
           ko: '북동쪽으로',
         },
         southeast: {
           en: 'Go southeast',
-          de: 'Gehe nach Südosten',
-          fr: 'Allez au sud-est',
           ja: '南東へ',
-          cn: '去右下(东南)',
           ko: '남동쪽으로',
         },
         southwest: {
           en: 'Go southwest',
-          de: 'Gehe nach Südwesten',
-          fr: 'Allez au sud-ouest',
           ja: '南西へ',
-          cn: '去左下(西南)',
           ko: '남서쪽으로',
         },
         northwest: {
           en: 'Go northwest',
-          de: 'Gehe nach Nordwesten',
-          fr: 'Allez au nord-ouest',
           ja: '北西へ',
-          cn: '去左上(西北)',
           ko: '북서쪽으로',
         },
       },
@@ -615,18 +581,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         justOrb: {
           en: 'Get Under Light Orb',
-          de: 'Unter einem Lichtorb stellen',
-          fr: 'Allez sous un Orbe lumineux',
           ja: '白玉へ',
-          cn: '靠近白球',
           ko: '하얀 구슬 안으로',
         },
         orbWithFlutter: {
           en: 'Get Under Blown Light Orb',
-          de: 'Zu einem weggeschleuderten Lichtorb gehen',
-          fr: 'Allez sous un Orbe lumineux soufflé',
           ja: '吹き飛ばされた白玉へ',
-          cn: '靠近吹动后的白球',
           ko: '하얀 구슬이 이동할 위치로',
         },
       },
@@ -647,10 +607,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Follow Boss',
-          de: 'Folge dem Boss',
-          fr: 'Suivez le Boss',
           ja: 'ボスの後ろに追う',
-          cn: '跟紧在Boss身后',
           ko: '보스 따라가기',
         },
       },
@@ -665,10 +622,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Lyon Passage Open',
-          de: 'Lyon Zugang offen',
-          fr: 'Passage du Lyon ouvert',
           ja: '獣王ライオンフェイス開始',
-          cn: '挑战兽王莱昂',
           ko: '라이언 포탈 개방',
         },
       },

@@ -46,11 +46,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Light',
-          de: 'Licht',
-          fr: 'Lumière',
           ja: '魔界の光',
-          cn: '距离衰减点名',
-          tc: '距離衰減點名',
           ko: '빛장판',
         },
       },
@@ -64,11 +60,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Wind',
-          de: 'Wind',
-          fr: 'Vent',
           ja: '魔界の風',
-          cn: '圆圈点名',
-          tc: '圓圈點名',
           ko: '초록징',
         },
       },

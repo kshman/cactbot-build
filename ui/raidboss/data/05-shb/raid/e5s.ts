@@ -51,11 +51,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Look for small spear',
-          de: 'Halt nach kleinem Speer ausschau',
-          fr: 'Allez sur la petite lance',
           ja: '低い杖を探す',
-          cn: '找短矛',
-          tc: '找短矛',
           ko: '작은 지팡이 확인',
         },
       },
@@ -77,29 +73,17 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         lookForAdds: {
           en: 'Look for adds',
-          de: 'Halt nach dem Add ausschau',
-          fr: 'Cherchez les adds',
           ja: '雑魚に注意',
-          cn: '注意小怪冲锋',
-          tc: '注意小怪衝鋒',
           ko: '쫄 위치 확인',
         },
         bigKnockback: {
           en: 'Big Knockback',
-          de: 'Weiter Rückstoß',
-          fr: 'Forte poussée',
           ja: '遠いノックバック',
-          cn: '长击退',
-          tc: '長擊退',
           ko: '긴 넉백',
         },
         shortKnockback: {
           en: 'Short Knockback',
-          de: 'Kurzer Rückstoß',
-          fr: 'Faible poussée',
           ja: '短いノックバック',
-          cn: '短击退',
-          tc: '短擊退',
           ko: '짧은 넉백',
         },
       },
@@ -116,11 +100,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Grab an orb',
-          de: 'Einen Orb nehmen',
-          fr: 'Prenez un orbe',
           ja: '雷玉を取る',
-          cn: '吃球',
-          tc: '吃球',
           ko: '구슬 줍기',
         },
       },
@@ -150,11 +130,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Grab an orb',
-          de: 'Einen Orb nehmen',
-          fr: 'Prenez un orbe',
           ja: '雷玉を取る',
-          cn: '吃球',
-          tc: '吃球',
           ko: '구슬 줍기',
         },
       },
@@ -179,20 +155,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         readySpread: {
           en: 'Ready Spread',
-          de: 'Bereitmachen zum Verteilen',
-          fr: 'Dispersion bientôt',
           ja: '散開準備',
-          cn: '准备分散',
-          tc: '準備分散',
           ko: '산개 준비',
         },
         donutAoe: {
           en: 'donut AoE',
-          de: 'Donut AoE',
-          fr: 'AoE en donut',
           ja: 'ドーナツ範囲',
-          cn: '环形AOE',
-          tc: '環形AOE',
           ko: '도넛 장판',
         },
       },
@@ -225,11 +193,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Position for Stormcloud',
-          de: 'Position für die Wolke',
-          fr: 'Positions pour les nuages',
           ja: '雷雲散開',
-          cn: '雷云站位',
-          tc: '雷雲站位',
           ko: '번개 구름 위치 잡기',
         },
       },
@@ -244,11 +208,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Cleanse In Cloud',
-          de: 'In der Wolke reinigen',
-          fr: 'Purifiez-vous dans le nuage',
           ja: '雷雲の範囲攻撃でデバフ解除',
-          cn: '雷云清Debuff',
-          tc: '雷雲清Debuff',
           ko: '디버프 제거하기',
         },
       },
@@ -262,11 +222,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Drop Cloud Away',
-          de: 'Wolke drausen ablegen',
-          fr: 'Déposez le nuage à l\'extérieur',
           ja: '外に雷雲を捨てる',
-          cn: '远离放雷云',
-          tc: '遠離放雷雲',
           ko: '번개 구름 소환자',
         },
       },
@@ -279,11 +235,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Be in your position',
-          de: 'Befinde dich auf deiner Position!',
-          fr: 'Placez-vous à votre position',
           ja: '突進、自分の位置へ',
-          cn: '冲锋站位',
-          tc: '衝鋒站位',
           ko: '자기 위치에 있기',
         },
       },
@@ -296,11 +248,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Ready for Chain',
-          de: 'Bereit für Kettenblitz',
-          fr: 'Préparez-vous pour la chaine',
           ja: 'チェインライトニング準備',
-          cn: '雷光链',
-          tc: '雷光鏈',
           ko: '체인 라이트닝 준비',
         },
       },

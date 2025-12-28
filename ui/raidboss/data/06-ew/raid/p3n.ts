@@ -22,10 +22,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         startMiddle: {
           en: 'Start Middle',
-          de: 'Starte mittig',
-          fr: 'Commencez au milieu',
           ja: '中央から',
-          cn: '从中间开始',
           ko: '한가운데부터',
         },
       },
@@ -40,10 +37,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         outOfMiddle: {
           en: 'Out Of Middle Soon',
-          de: 'Bald raus aus der Mitte',
-          fr: 'Sortez du milieu bientôt',
           ja: '中央から離れて',
-          cn: '远离中间',
           ko: '곧 바깥으로',
         },
       },
@@ -72,10 +66,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Stand on Darkened Fire',
-          de: 'Auf einer Schwarzen Lohe stehen',
-          fr: 'Placez-vous sur une flamme sombre',
           ja: '黒い炎の上へ',
-          cn: '站在黑色火焰',
           ko: '검은 불꽃 위로',
         },
       },
@@ -103,10 +94,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         avoidCharge: {
           en: 'Avoid Charge',
-          de: 'Charge ausweichen',
-          fr: 'Évitez les charges',
           ja: '突進避けて',
-          cn: '躲避冲锋',
           ko: '돌진 피해요',
         },
       },
@@ -124,10 +112,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         tank: {
           en: 'Pull add circles apart',
-          de: 'Zieh die Kreise der Adds auseinander',
-          fr: 'Attaquez les adds séparément',
           ja: '雑魚を離れさせる',
-          cn: '拉开小怪',
           ko: '동그라미 안겹치게 떨어져요',
         },
         text: Outputs.killAdds,
@@ -194,10 +179,7 @@ const triggerSet: TriggerSet<Data> = {
         s: Outputs.south,
         combo: {
           en: '${first} => ${second}',
-          de: '${first} => ${second}',
-          fr: '${first} => ${second}',
           ja: '${first} => ${second}',
-          cn: '${first} => ${second}',
           ko: '${first} 🔜 ${second}',
         },
       },
@@ -212,10 +194,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Split Intercardinals',
-          de: 'Interkardinal aufteilen',
-          fr: 'Dispersez-vous en intercardinal',
           ja: 'フィールド十字分断',
-          cn: '分割场地',
           ko: '비스듬하게 흩어져요',
         },
       },

@@ -44,10 +44,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Go Front / Sides',
-          de: 'Gehe nach Vorne/ zu den Seiten',
-          fr: 'Allez devant / sur les côtés',
           ja: '前 / 横　へ',
-          cn: '来 前方 / 两侧',
           ko: '앞이나 옆으로',
         },
       },
@@ -74,10 +71,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Get behind, then South',
-          de: 'Gehe nach Hinten, danach in den Süden',
-          fr: 'Passez derrière, puis au Sud',
           ja: '後ろに、そして南へ',
-          cn: '背面 => 南方',
           ko: '보스 뒤로 🔜 남쪽으로',
         },
       },
@@ -91,10 +85,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Go Front / Sides, then North',
-          de: 'Gehe nach Vorne, danach in den Norden',
-          fr: 'Allez devant / sur les côtés, puis au Nord',
           ja: '前 / 横、そして北へ',
-          cn: '前/侧面 => 北方',
           ko: '앞이나 옆으로 🔜 북쪽으로',
         },
       },
@@ -115,10 +106,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Close to mirrors',
-          de: 'Nahe zu den Spiegeln',
-          fr: 'Près des mirroirs',
           ja: '鏡に近づく',
-          cn: '靠近镜子',
           ko: '거울 밑으로',
         },
       },
@@ -158,10 +146,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Flare on YOU',
-          de: 'Flare auf DIR',
-          fr: 'Brasier sur VOUS',
           ja: '自分にフレア',
-          cn: '核爆点名',
           ko: '내게 플레어',
         },
       },
@@ -182,10 +167,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: '3x puddles on YOU',
-          de: '3x Fläche auf DIR',
-          fr: '3x Zones au sol sur vous',
           ja: '自分に３回円範囲',
-          cn: '三次放圈点名',
           ko: '내게 3연속 장판',
         },
       },
@@ -226,18 +208,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         coneOnYouAvoidTowers: {
           en: 'Cone on YOU -- avoid towers',
-          de: 'Kegel AoE auf DIR -- Turm vermeiden',
-          fr: 'Cône sur Vous -- évitez les tours',
           ja: '自分に範囲攻撃 (塔に当たらないように)',
-          cn: '三角点名 -- 躲开塔',
           ko: '내게 부채꼴 (탑에 닿지 않게 유도)',
         },
         standInATower: {
           en: 'Stand in a tower',
-          de: 'Im Turm stehen',
-          fr: 'Placez-vous dans une tour',
           ja: '塔を踏む',
-          cn: '踩塔',
           ko: '타워 밟아요',
         },
       },

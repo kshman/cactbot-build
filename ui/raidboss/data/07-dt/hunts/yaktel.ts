@@ -114,9 +114,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         stackThenBehind: {
           en: 'Stack => Away From Front',
-          de: 'Sammeln => Weg von Vorne',
-          fr: 'Package => Loin du devant',
-          cn: '集合 => 远离正面',
+          ja: 'Stack => Away From Front',
           ko: '뭉쳤다 🔜 앞쪽은 피해요',
         },
       },

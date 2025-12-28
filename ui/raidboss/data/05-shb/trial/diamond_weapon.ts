@@ -61,10 +61,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Flare on YOU',
-          de: 'Flare auf DIR',
-          fr: 'Brasier sur VOUS',
           ja: '自分にフレア',
-          cn: '核爆点名',
           ko: '내게 플레어',
         },
       },
@@ -114,10 +111,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Diamond Shrapnel on YOU',
-          de: 'Diamantschub auf DIR',
-          fr: 'Salve adamantine sur VOUS',
           ja: '自分にダイヤバースト',
-          cn: '钻石爆发点名',
           ko: '내게 다아아버스트',
         },
       },
@@ -130,10 +124,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Avoid Bits',
-          de: 'Weiche den Satelliten aus',
-          fr: 'Évitez les bras',
           ja: 'ビームを避ける',
-          cn: '躲避浮游炮激光',
           ko: '비트 피해요',
         },
       },
@@ -147,10 +138,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Get Towers',
-          de: 'Türme nehmen',
-          fr: 'Prenez les tours',
           ja: '塔を踏む',
-          cn: '踩塔',
           ko: '타워 밟아요',
         },
       },

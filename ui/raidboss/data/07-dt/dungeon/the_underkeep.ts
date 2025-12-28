@@ -98,9 +98,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Watch boss for dash',
-          de: 'Boss anschauen für Ansturm',
-          fr: 'Regardez la position du boss pour la ruée',
-          cn: '观察 BOSS 冲锋',
+          ja: 'ボスの突進に注意',
           ko: '보스 돌진 조심!',
         },
       },
@@ -160,9 +158,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         spread: {
           en: 'Spread in ${quad} quadrant',
-          de: 'Im ${quad} Quadranten verteilen',
-          fr: 'Écartez-vous dans le quandrant ${quad}',
-          cn: '在 ${quad} 象限分散',
+          ja: '${quad}の方向に散開',
           ko: '${quad}쪽에서 흩어져요',
         },
         dirNE: Outputs.dirNE,
@@ -228,9 +224,7 @@ const triggerSet: TriggerSet<Data> = {
         ...Directions.outputStrings8Dir,
         cleave: {
           en: '${dir} half safe',
-          de: '${dir} Hälfte sicher',
-          fr: '${dir} moitié sûre',
-          cn: '${dir} 半安全',
+          ja: '${dir}半分安全',
           ko: '${dir}쪽 절반 안전',
         },
       },
@@ -255,9 +249,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Dodge wall turrets',
-          de: 'Wand-Geschützturm ausweichen',
-          fr: 'Esquivez les tourelles murales',
-          cn: '躲避墙壁炮台',
+          ja: '壁のタレットを避ける',
           ko: '벽 레이저 피해요',
         },
       },
@@ -270,9 +262,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Spread (all cones expand!)',
-          de: 'Verteilen (Alle Kegel langziehen!)',
-          fr: 'Écartez-vous (les cônes s\'agrandissent)',
-          cn: '分散 (所有扇形扩大!)',
+          ja: '散開 (全ての扇形が拡大！)',
           ko: '흩어져요! (부채꼴 장판 커져요)',
         },
       },
@@ -285,9 +275,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Get behind + Spread',
-          de: 'geh Hinter + Verteilen',
-          fr: 'Allez derrière + Dispersion',
-          cn: '后 + 分散',
+          ja: 'ボスの後ろへ + 散開',
           ko: '보스 뒤로 + 흩어져요',
         },
       },
@@ -302,10 +290,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         lineStackOn: {
           en: 'Line stack on ${player}',
-          de: 'In einer Linie auf ${player} sammeln',
-          fr: 'Packez-vous en ligne sur ${player}',
           ja: '${player}に直線頭割り',
-          cn: '${player} 直线分摊',
           ko: '${player} 한줄로 뭉쳐요',
         },
       },
@@ -388,23 +373,17 @@ const triggerSet: TriggerSet<Data> = {
         unknown: Outputs.unknown,
         dodge: {
           en: 'Inner ${first} => Inner ${second} ${move}',
-          de: 'Innen ${first} => Innen ${second} ${move}',
-          fr: 'Intérieur ${first} => Intérieur ${second} ${move}',
-          cn: '内 ${first} => 内 ${second} ${move}',
+          ja: '内側 ${first} => 内側 ${second} ${move}',
           ko: '안쪽 ${first} => 안쪽 ${second} ${move}',
         },
         moveAfterLaser: {
           en: '(after wall laser)',
-          de: '(nach dem Wand-Laser)',
-          fr: '(après les lasers)',
-          cn: '(然后墙壁激光)',
+          ja: '(壁のレーザーの後)',
           ko: '(벽 레이저 쏜 다음)',
         },
         moveAfterOrb: {
           en: '(after orb explosion)',
-          de: '(nach Orb-Explosion)',
-          fr: '(après les explosions des orbes)',
-          cn: '(然后球爆炸)',
+          ja: '(球の爆発の後)',
           ko: '(구슬 터지고 난 다음)',
         },
       },

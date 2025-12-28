@@ -45,10 +45,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Swindler Soon',
-          de: 'Bald Schwindler',
-          fr: 'Arnaqueur bientôt',
           ja: 'まもなくスウィンドラー',
-          cn: '欺诈者即将出现',
           ko: '곧 조작자 등장',
         },
       },
@@ -61,10 +58,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Vortexer Soon',
-          de: 'Bald Vortexer',
-          fr: 'Tourbillonneur bientôt',
           ja: 'まもなくボルテッカー',
-          cn: '环旋者即将出现',
           ko: '곧 교반자 등장',
         },
       },
@@ -83,10 +77,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Bait Super Jump',
-          de: 'Supersprung ködern',
-          fr: 'Attirez le Super saut',
           ja: 'スーパージャンプを誘導',
-          cn: '引导超级跳',
           ko: '슈퍼 점프',
         },
       },
@@ -102,10 +93,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Megabeamu~',
-          de: 'Megalaser~',
-          fr: 'Mégarayon~',
           ja: 'メガビーム～',
-          cn: '巨型光束炮~',
           ko: '고출력 광선~',
         },
       },
@@ -118,10 +106,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Megabeamu~!',
-          de: 'Megalaser~!',
-          fr: 'Mégarayon~ !',
           ja: 'メガビーム～',
-          cn: '巨型光束炮~!',
           ko: '고출력 광선~!',
         },
       },
@@ -135,10 +120,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Kill Regulators',
-          de: 'Dampfregler besiegen',
-          fr: 'Tuez les Régulateurs',
           ja: 'スチームジャッジを倒す',
-          cn: '击杀小怪',
           ko: '증기 감독 없애기',
         },
       },
@@ -158,10 +140,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Mirage',
-          de: 'Mirage',
-          fr: 'Mirage',
           ja: 'ミラージュ',
-          cn: '幻象',
           ko: '환영',
         },
       },
@@ -178,10 +157,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Orb on YOU',
-          de: 'Orb auf DIR',
-          fr: 'Orbe sur VOUS',
           ja: '自分に玉',
-          cn: '球点名',
           ko: '구슬 대상자',
         },
       },
@@ -205,10 +181,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Get High',
-          de: 'Geh nach Oben',
-          fr: 'Montez',
           ja: '高い床に乗る',
-          cn: '去高地',
           ko: '높은곳으로',
         },
       },
@@ -224,10 +197,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Get Down',
-          de: 'Geh nach Unten',
-          fr: 'Descendez',
           ja: '低い床に乗る',
-          cn: '去低地',
           ko: '낮은곳으로',
         },
       },
@@ -262,18 +232,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         thunderOn: {
           en: 'Thunder on ${player}',
-          de: 'Blitz auf ${player}',
-          fr: 'Foudre sur ${player}',
           ja: '${player}に雷',
-          cn: '雷点${player}',
           ko: '"${player}" 번개징',
         },
         thunderOnYou: {
           en: 'Thunder on YOU',
-          de: 'Blitz auf DIR',
-          fr: 'Foudre sur VOUS',
           ja: '自分に雷',
-          cn: '雷点名',
           ko: '번개징 대상자',
         },
       },
@@ -296,10 +260,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Thunder Soon on ${player}',
-          de: 'Blitz bald auf ${player}',
-          fr: 'Foudre bientôt sur ${player}',
           ja: '${player}に雷頭割り',
-          cn: '即将雷分摊： ${player}',
           ko: '"${player}" 번개징 곧 터짐',
         },
       },
@@ -316,10 +277,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: '${player}: ${count}',
-          de: '${player}: ${count}',
-          fr: '${player}: ${count}',
           ja: '${player}: ${count}',
-          cn: '${player}: ${count}',
           ko: '${player}: ${count}',
         },
       },
@@ -338,18 +296,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         sharedTankbusterOnYou: {
           en: 'Shared Tankbuster on YOU',
-          de: 'geteilter Tankbuster auf DIR',
-          fr: 'Tank buster à partager sur VOUS',
           ja: '自分にタンクシェア',
-          cn: '分摊死刑点名',
           ko: '쉐어 탱버 대상자',
         },
         sharedTankbusterOn: {
           en: 'Shared Tankbuster on ${player}',
-          de: 'geteilter Tankbuster on ${player}',
-          fr: 'Tank buster à partager sur ${player}',
           ja: '${player} にタンクシェア',
-          cn: '分摊死刑点 ${player}',
           ko: '"${player}" 쉐어 탱버',
         },
       },
@@ -400,10 +352,7 @@ const triggerSet: TriggerSet<Data> = {
         stackOn: Outputs.stackOnPlayer,
         preyGetOut: {
           en: 'Prey: Get Out',
-          de: 'Makiert: Geh raus',
-          fr: 'Marquage : À l\'extérieur',
           ja: '赤いマーク: 外へ',
-          cn: '红点名离开人群',
           ko: '빨간징: 밖으로',
         },
       },
@@ -425,18 +374,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         superJumpOn: {
           en: 'Super Jump on ${player}',
-          de: 'Supersprung auf ${player}',
-          fr: 'Super saut sur ${player}',
           ja: '${player}にスーパージャンプ',
-          cn: '超级跳点${player}',
           ko: '"${player}" 슈퍼 점프',
         },
         superJumpOnYou: {
           en: 'Super Jump on YOU',
-          de: 'Supersprung auf DIR',
-          fr: 'Super saut sur VOUS',
           ja: '自分にスーパージャンプ',
-          cn: '超级跳点名',
           ko: '슈퍼 점프 대상자',
         },
       },
@@ -450,10 +393,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Mirage on YOU',
-          de: 'Mirage auf DIR',
-          fr: 'Mirage sur VOUS',
           ja: '自分にミラージュ',
-          cn: '分身点名',
           ko: '환영 징 대상자',
         },
       },
@@ -467,10 +407,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Ice Missile on YOU',
-          de: 'Eis-Rakete auf DIR',
-          fr: 'Missile de glace sur VOUS',
           ja: '自分にアイスミサイル',
-          cn: '冰点名',
           ko: '얼음 미사일 대상자',
         },
       },
@@ -487,10 +424,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Get Mines',
-          de: 'Mienen nehmen',
-          fr: 'Prenez les mines',
           ja: '地雷を踏む',
-          cn: '踩雷',
           ko: '지뢰 밟아요',
         },
       },
@@ -504,10 +438,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Look Away from Mirage',
-          de: 'Von Replikant wegschauen',
-          fr: 'Ne regardez pas la Réplique',
           ja: 'ミラージュを見ない',
-          cn: '背对幻象',
           ko: '환영 쳐다보지 않기',
         },
       },
@@ -521,10 +452,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Look Towards Mirage',
-          de: 'Zu Replikant hinschauen',
-          fr: 'Regardez la Réplique',
           ja: 'ミラージュを見る',
-          cn: '面向幻象',
           ko: '환영 쳐다보기',
         },
       },
@@ -545,10 +473,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Min HP: Provoke Boss => Late NE Tornado',
-          de: 'Min HP: Boss herrausfordern => Später No Tornado',
-          fr: 'PV Min : Provocation Boss => Cyclone NE en retard',
           ja: 'HP最小: ボスに挑発 => 北東竜巻',
-          cn: '最少HP: 挑衅BOSS => 右上龙卷风',
           ko: 'HP 최소: 보스 도발 🔜 북동쪽 회오리',
         },
       },
@@ -569,10 +494,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Get NE Tornado',
-          de: 'Nimm NO Tornado',
-          fr: 'Prenez le Cyclone NE',
           ja: '北東竜巻に',
-          cn: '去右上龙卷风',
           ko: '북동쪽 회오리 밟아요',
         },
       },
@@ -592,10 +514,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Max HP: Provoke Boss Second',
-          de: 'Max HP: Boss als Zweites herrausfordern',
-          fr: 'PV Max : Seconde Provocation Boss',
           ja: 'HP最大: 第二のボスを挑発',
-          cn: '最多HP: 第二个挑衅BOSS',
           ko: 'HP 최대: 두번째로 보스 도발',
         },
       },
@@ -612,10 +531,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Provoke Boss',
-          de: 'Boss herrausfordern',
-          fr: 'Provocation Boss',
           ja: 'ボスを挑発',
-          cn: '挑衅BOSS',
           ko: '보스 도발',
         },
       },
@@ -630,10 +546,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Use Devour',
-          de: 'Benutze Verschlingen',
-          fr: 'Utilisez Dévoration',
           ja: '捕食を使う',
-          cn: '使用捕食',
           ko: '포식 사용하기',
         },
       },
@@ -650,10 +563,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Penalty 1: SW orb -> Share 2x North Orbs',
-          de: 'Schwächung 1: SW orb -> 2x nördliche Orbs teilen',
-          fr: 'Altération 1 : Orbe SO -> Partagez 2x Orbes Nord',
           ja: '1番: 南西にいる玉を喰らう => 北にいる玉と頭割り',
-          cn: '1buff：吃左下球然后分摊上半场双球',
           ko: '약화 1: 남서쪽 구슬 -> 북쪽 구슬 2개',
         },
       },
@@ -667,10 +577,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Penalty 2: NW Tornado',
-          de: 'Schwächung 2: NW Tornado',
-          fr: 'Altérations 2 : Cyclone NO',
           ja: '2番: 北西竜巻',
-          cn: '2buff：左上龙卷风',
           ko: '약화 2: 북서쪽 회오리',
         },
       },
@@ -684,10 +591,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Penalty 3: Get a South Tornado',
-          de: 'Schwächung 3: Nimm südlichen Tornado',
-          fr: 'Altérations 3 : Prenez le Cyclone Sud',
           ja: '3番: 南竜巻',
-          cn: '3buff：下半场龙卷风',
           ko: '약화 3: 남쪽 회오리 중 하나 밟아요',
         },
       },
@@ -704,10 +608,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Share last orb after gavel',
-          de: 'Orn mach Prozessende teilen',
-          fr: 'Partagez l\'orbe après le procès',
           ja: 'そして最後の玉と頭割り',
-          cn: '等待闭庭判定后分摊最后球',
           ko: '폐정 이후 구슬 남은거 처리',
         },
       },
@@ -724,10 +625,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Blue Regulator -> Share 1x North Orb',
-          de: 'Blauer Dampfregler -> 1x nördlichen Orb teilen',
-          fr: 'Régulateur bleu -> Partagez 1x Orbe Nord',
           ja: '青いスチームジャッジ => 北の玉と頭割り',
-          cn: '蓝色小怪然后上半场分摊球',
           ko: '파란색 쫄 -> 북쪽 구슬 하나 처리',
         },
       },
@@ -741,10 +639,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Red Regulator -> Share 1x North Orb',
-          de: 'Roter Dampfregler -> 1x nördlichen Orb teilen',
-          fr: 'Régulateur rouge -> Partagez 1x Orbe Nord',
           ja: '赤いスチームジャッジ => 北の玉と頭割り',
-          cn: '红色小怪然后上半场分摊球',
           ko: '빨간색 쫄 -> 북쪽 구슬 하나 처리',
         },
       },
@@ -765,18 +660,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         waterOn: {
           en: 'Water on ${player}',
-          de: 'Wasser auf ${player}',
-          fr: 'Eau sur ${player}',
           ja: '${player}に水',
-          cn: '水点${player}',
           ko: '"${player}" 물징',
         },
         waterOnYou: {
           en: 'Water on YOU',
-          de: 'Wasser auf DIR',
-          fr: 'Eau sur VOUS',
           ja: '自分に水',
-          cn: '水点名',
           ko: '물징 대상자',
         },
       },
@@ -802,10 +691,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Water Soon on ${player}',
-          de: 'Wasser bald auf ${player}',
-          fr: 'Eau bientôt sur ${player}',
           ja: 'まもなく、${player}に頭割り',
-          cn: '即将水分摊： ${player}',
           ko: '"${player}" 물징 곧 터짐',
         },
       },
@@ -825,10 +711,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Stack for Final Beam',
-          de: 'Stack für Finaler Megastrahl',
-          fr: 'Packez-vous pour Mégarayon final',
           ja: 'ファイナルメガビームに頭割り',
-          cn: '集合分摊',
           ko: '최후의 고출력 광선 쉐어',
         },
       },

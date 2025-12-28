@@ -31,10 +31,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'swipe',
-          de: 'Hieb',
-          fr: 'Fauche',
           ja: 'スワイプ',
-          cn: '去目标背后',
           ko: '스와이프',
         },
       },
@@ -47,10 +44,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'swipe',
-          de: 'Hieb',
-          fr: 'Fauche',
           ja: 'スワイプ',
-          cn: '去目标背后',
           ko: '스와이프',
         },
       },
@@ -63,10 +57,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Swing',
-          de: 'Schwung',
-          fr: 'Swing',
           ja: 'スウィング',
-          cn: '远离目标',
           ko: '스윙 (밖으로)',
         },
       },
@@ -79,10 +70,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Swing',
-          de: 'Schwung',
-          fr: 'Swing',
           ja: 'スウィング',
-          cn: '远离目标',
           ko: '스윙 (밖으로)',
         },
       },
@@ -95,10 +83,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Dragon\'s Voice',
-          de: 'Stimme Des Drachen',
-          fr: 'Voix Du Dragon',
           ja: '雷電の咆哮',
-          cn: '靠近奇美拉',
           ko: '드래곤즈 보이스 (안으로)',
         },
       },
@@ -111,10 +96,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Ram\'s Voice',
-          de: 'Stimme Des Widders',
-          fr: 'Voix Du Bélier',
           ja: '氷結の咆哮',
-          cn: '远离奇美拉',
           ko: '램즈 보이스 (밖으로)',
         },
       },
@@ -127,10 +109,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Ram\'s Voice',
-          de: 'Stimme Des Widders',
-          fr: 'Voix Du Bélier',
           ja: '氷結の咆哮',
-          cn: '远离奇美拉',
           ko: '램즈 보이스 (밖으로)',
         },
       },
@@ -168,10 +147,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Puddle on YOU',
-          de: 'Fläche auf DIR',
-          fr: 'Zone au sol sur VOUS',
           ja: '自分に円範囲',
-          cn: '圈圈点名',
           ko: '내게 장판',
         },
       },
@@ -202,10 +178,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Stack with ${player}',
-          de: 'Sammeln mit ${player}',
-          fr: 'Packez-vous avec ${player}',
           ja: '${player}と頭割り',
-          cn: '靠近${player}集合',
           ko: '뭉쳐요: ${player}',
         },
       },
@@ -246,18 +219,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         standOnRedCircle: {
           en: 'Stand on red circle',
-          de: 'Im roten Kreis stehen',
-          fr: 'Restez dans le cercle rouge',
           ja: '赤い輪に',
-          cn: '站在红圈',
           ko: '🔴빨간 동그라미 밟아요',
         },
         standOnBlueCircle: {
           en: 'Stand on blue circle',
-          de: 'Im blauen Kreis stehen',
-          fr: 'Restez dans le cercle bleu',
           ja: '青い輪に',
-          cn: '站在蓝圈',
           ko: '🔵파란 동그라미 밟아요',
         },
       },

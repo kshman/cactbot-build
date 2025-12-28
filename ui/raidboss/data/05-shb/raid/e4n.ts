@@ -36,10 +36,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Stand In Front',
-          de: 'Vor ihm stehen',
-          fr: 'Placez-vous devant',
           ja: 'Bossの前に',
-          cn: '面前躲避',
           ko: '보스랑 같은 줄',
         },
       },
@@ -54,10 +51,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Hide Behind Boulder',
-          de: 'Hinter Felsen verstecken',
-          fr: 'Cachez-vous derrière le rocher',
           ja: 'ボルダーの後ろに',
-          cn: '躲在石头后',
           ko: '볼더 뒤로',
         },
       },
@@ -76,10 +70,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Stand On Flank',
-          de: 'Auf seiner Flanke stehen',
-          fr: 'Placez-vous sur le flanc',
           ja: '横へ',
-          cn: '两侧躲避',
           ko: '보스 옆 줄',
         },
       },

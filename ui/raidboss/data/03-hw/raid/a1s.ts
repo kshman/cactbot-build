@@ -29,10 +29,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Liftoff Soon',
-          de: 'Bald abheben',
-          fr: 'Décollage bientôt',
           ja: '緊急上昇',
-          cn: '即将上天',
           ko: '긴급 상승',
         },
       },
@@ -60,10 +57,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Hydrothermal on You',
-          de: 'Hydrothermales auf DIR',
-          fr: 'Missile hydrothermique sur Vous',
           ja: '自分に蒸気ミサイル',
-          cn: '导弹点名',
           ko: '증기 미사일 대상자',
         },
       },
@@ -81,10 +75,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Hydrothermal on ${players}',
-          de: 'Hydrothermales auf ${players}',
-          fr: 'Missile hydrothermique sur ${players}',
           ja: '${players}に蒸気ミサイル',
-          cn: '导弹点${players}',
           ko: '"${players}" 증기 미사일',
         },
       },
@@ -104,10 +95,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Bait Resin Bomb',
-          de: 'Köder Pechbombe',
-          fr: 'Attirez Bombe de résine',
           ja: '粘着弾',
-          cn: '粘着弹',
           ko: '점착탄',
         },
       },

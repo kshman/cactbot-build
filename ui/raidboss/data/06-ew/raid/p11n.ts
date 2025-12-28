@@ -28,10 +28,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Line Cleave -> In',
-          de: 'Linien AoE -> Rein',
-          fr: 'AoE en ligne -> Intérieur',
           ja: '直線AOE -> 内側へ',
-          cn: '直线AoE -> 靠近',
           ko: '가운데 장판 -> 안으로',
         },
       },
@@ -44,10 +41,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Line Cleave -> Out',
-          de: 'Linien AoE -> Raus',
-          fr: 'AoE en ligne -> Extérieur',
           ja: '直線AOE -> 離れる',
-          cn: '直线AoE -> 远离',
           ko: '가운데 장판 -> 밖으로',
         },
       },
@@ -61,10 +55,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Get in light puddle',
-          de: 'Geh in die Licht-Fläche',
-          fr: 'Allez dans la flaque de lumière',
           ja: 'ひかりの内側へ',
-          cn: '前往光区域',
           ko: '노란 장판으로',
         },
       },
@@ -78,10 +69,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Get in dark puddle',
-          de: 'Geh in die Dunkel-Fläche',
-          fr: 'Allez dans la flaque sombre',
           ja: 'やみの内側へ',
-          cn: '前往暗区域',
           ko: '보라 장판으로',
         },
       },
@@ -94,10 +82,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Bait puddles x2',
-          de: 'Köder Fläche x2',
-          fr: 'Déposez les flaques x2',
           ja: 'AOE誘導 x2',
-          cn: '放置点名 x2',
           ko: '장판 두번 깔아요',
         },
       },
@@ -110,10 +95,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Knockback -> get in',
-          de: 'Rückstoß -> geh rein',
-          fr: 'Poussée -> Intérieur',
           ja: 'ノックバック => 内側へ',
-          cn: '击退 -> 去脚下',
           ko: '넉백 -> 안으로',
         },
       },
@@ -126,10 +108,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Knockback -> stay out',
-          de: 'Rückstoß -> bleib außen',
-          fr: 'Poussée -> Restez à l\'extérieur',
           ja: 'ノックバック => そのまま',
-          cn: '击退 -> 远离',
           ko: '넉백 -> 그대로 밖에서',
         },
       },
@@ -172,18 +151,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         avoidCleave: {
           en: 'Cleaving ${target} -> get in',
-          de: 'Cleave auf ${target} -> geh Rein',
-          fr: 'Cleave sur ${target} -> Intérieur',
           ja: '${target}が対象 => 内側へ',
-          cn: '引导 ${target} -> 去脚下',
           ko: '쪼개기: ${target} -> 안으로',
         },
         cleaveOnYou: {
           en: 'Cleave on YOU -> stay in',
-          de: 'Cleave auf DIR -> bleib drin',
-          fr: 'Cleave sur VOUS -> Restez à l\'intérieur',
           ja: '自分が対象 => 内側へ',
-          cn: '引导 -> 站在脚下',
           ko: '내게 쪼개기 -> 그대로 안으로',
         },
       },
@@ -198,10 +171,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Stack on ${target} -> get out',
-          de: 'Auf ${target} Sammeln -> geh raus',
-          fr: 'Package sur ${target} -> Extérieur',
           ja: '${target}とあたまわり => 外側へ',
-          cn: '分摊 ${target} -> 远离',
           ko: '뭉쳐요: ${target} -> 밖으로',
         },
       },
@@ -227,10 +197,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Line Cleave -> In on dark adds',
-          de: 'Linien AoE -> Rein auf dunkle Adds',
-          fr: 'AoE en ligne -> Intérieur sur les adds sombres',
           ja: '直線AOE -> やみ回避',
-          cn: '直线AoE -> 呆在暗区域',
           ko: '가운데 장판 -> 보라 쪽으로',
         },
       },

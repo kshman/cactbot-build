@@ -29,11 +29,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Hallowed Wind Stack',
-          de: 'Heiliger Boden Wind',
-          fr: 'Packez-vous dans le vent',
           ja: '隅で頭割り',
-          cn: '风分摊',
-          tc: '風分攤',
           ko: '쉐어징',
         },
       },
@@ -47,11 +43,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Demonic Stone on YOU',
-          de: 'Dämonischer Stein auf DIR',
-          fr: 'Pierre démoniaque sur VOUS',
           ja: '自分にデモニックストーン',
-          cn: '引导5连追踪aoe',
-          tc: '引導5連追蹤aoe',
           ko: '악령의 돌 장판 대상자',
         },
       },
@@ -71,11 +63,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Last Kiss on YOU',
-          de: 'Letzter Kuss auf DIR',
-          fr: 'Baiser fatal sur VOUS',
           ja: '自分に口づけ',
-          cn: '死亡之吻点名',
-          tc: '死亡之吻點名',
           ko: '죽음의 입맞춤 대상자',
         },
       },
@@ -93,11 +81,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Last Kiss on YOU',
-          de: 'Letzter Kuss auf DIR',
-          fr: 'Baiser fatal sur VOUS',
           ja: '自分に口づけ',
-          cn: '死亡之吻点名',
-          tc: '死亡之吻點名',
           ko: '죽음의 입맞춤 대상자',
         },
       },

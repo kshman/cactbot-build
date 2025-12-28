@@ -184,11 +184,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Out + Spread',
-          de: 'Raus + Verteilen',
-          fr: 'Extérieur + Dispersion',
           ja: '外側 + 散開',
-          cn: '钢铁 + 八方分散',
-          tc: '鋼鐵 + 八方分散',
           ko: '밖으로 + 산개',
         },
       },
@@ -201,11 +197,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'In + Spread',
-          de: 'Rein + Verteilen',
-          fr: 'Intérieur + Dispersion',
           ja: '内側 + 散開',
-          cn: '月环 + 八方分散',
-          tc: '月環 + 八方分散',
           ko: '안으로 + 산개',
         },
       },
@@ -218,11 +210,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Away + Spread',
-          de: 'Weg + Verteilen',
-          fr: 'Loin + Dispersion',
           ja: '離れて + 散開',
-          cn: '远离 + 分散',
-          tc: '遠離 + 分散',
           ko: '멀리 + 산개',
         },
       },
@@ -235,11 +223,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Knockback + Spread',
-          de: 'Rückstoß + Verteilen',
-          fr: 'Poussée + Dispersion',
           ja: 'ノックバック + 散開',
-          cn: '击退 + 分散',
-          tc: '擊退 + 分散',
           ko: '넉백 + 산개',
         },
       },
@@ -285,11 +269,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Away + Partners',
-          de: 'Weg + Partner',
-          fr: 'Loin + Partenaires',
           ja: '離れて + ペア',
-          cn: '远离 + 双人分摊',
-          tc: '遠離 + 雙人分攤',
           ko: '멀리 + 쉐어',
         },
       },
@@ -302,11 +282,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Knockback + Partners',
-          de: 'Rückstoß + Partner',
-          fr: 'Poussée + Partenaires',
           ja: 'ノックバック + ペア',
-          cn: '击退 + 双人分摊',
-          tc: '擊退 + 雙人分攤',
           ko: '넉백 + 쉐어',
         },
       },
@@ -319,11 +295,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Out + Partners',
-          de: 'Raus + Partner',
-          fr: 'Extérieur + Partenaires',
           ja: '外側 + ペア',
-          cn: '钢铁 + 双人分摊',
-          tc: '鋼鐵 + 雙人分攤',
           ko: '밖으로 + 쉐어',
         },
       },
@@ -336,11 +308,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'In + Partners',
-          de: 'Rein + Partner',
-          fr: 'Intérieur + Partenaires',
           ja: '内側 + ペア',
-          cn: '月环 + 双人分摊',
-          tc: '月環 + 雙人分攤',
           ko: '안으로 + 쉐어',
         },
       },
@@ -354,11 +322,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Short Fuse',
-          de: 'Kurze Lunte',
-          fr: 'Mèche courte',
           ja: '短い導火線',
-          cn: '短引线点名',
-          tc: '短引線點名',
           ko: '짧은 도화선',
         },
       },
@@ -372,11 +336,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Long Fuse',
-          de: 'Lange Lunte',
-          fr: 'Mèche longue',
           ja: '長い導火線',
-          cn: '长引线点名',
-          tc: '長引線點名',
           ko: '긴 도화선',
         },
       },
@@ -394,20 +354,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         short: {
           en: 'Short Fuse',
-          de: 'Kurze Lunte',
-          fr: 'Mèche courte',
           ja: '短い導火線',
-          cn: '短引线点名',
-          tc: '短引線點名',
           ko: '짧은 도화선',
         },
         long: {
           en: 'Long Fuse',
-          de: 'Lange Lunte',
-          fr: 'Mèche longue',
           ja: '長い導火線',
-          cn: '长引线点名',
-          tc: '長引線點名',
           ko: '긴 도화선',
         },
       },
@@ -420,11 +372,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Out => In => Knockback => Spread',
-          de: 'Raus => Rein => Rückstoß => Verteilen',
-          fr: 'Extérieur => Intérieur => Poussée => Dispersion',
           ja: '外側 => 内側 => ノックバック => 散開',
-          cn: '钢铁 => 月环 => 击退 => 分散',
-          tc: '鋼鐵 => 月環 => 擊退 => 分散',
           ko: '밖으로 => 안으로 => 넉백 => 산개',
         },
       },
@@ -448,11 +396,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Out => In => Knockback => Partners',
-          de: 'Raus => Rein => Rückstoß => Partner',
-          fr: 'Extérieur => Intérieur => Poussée => Partenaires',
           ja: '外側 => 内側 => ノックバック => ペア',
-          cn: '钢铁 => 月环 => 击退 => 双人分摊',
-          tc: '鋼鐵 => 月環 => 擊退 => 雙人分攤',
           ko: '밖으로 => 안으로 => 넉백 => 쉐어',
         },
       },
@@ -497,11 +441,7 @@ const triggerSet: TriggerSet<Data> = {
         ...Directions.outputStringsCardinalDir,
         tetheredTo: {
           en: 'Tethered to ${dir} clone',
-          de: 'Vrebindung zum ${dir} Klon',
-          fr: 'Lié au clone ${dir}',
           ja: '${dir} の分身に繋がれた',
-          cn: '连线分身: ${dir}',
-          tc: '連線分身: ${dir}',
           ko: '${dir}쪽 분신과 선 연결',
         },
       },
@@ -691,20 +631,12 @@ const triggerSet: TriggerSet<Data> = {
         ...Directions.outputStrings8Dir,
         comboGo: {
           en: 'Knockback ${firstDir1}/${firstDir2} => Go ${secondDir}',
-          de: 'Rückstoß ${firstDir1}/${firstDir2} => Geh nach ${secondDir}',
-          fr: 'Poussée ${firstDir1}/${firstDir2} => Allez ${secondDir}',
           ja: 'ノックバック ${firstDir1}/${firstDir2} => ${secondDir} へ移動',
-          cn: '击退 ${firstDir1}/${firstDir2} => 穿 ${secondDir}',
-          tc: '擊退 ${firstDir1}/${firstDir2} => 穿 ${secondDir}',
           ko: '${firstDir1}/${firstDir2} 넉백 => ${secondDir} 으로 이동',
         },
         comboStay: {
           en: 'Knockback ${firstDir1}/${firstDir2}, Stay ${secondDir}',
-          de: 'Rückstoß ${firstDir1}/${firstDir2} => Bleibe im ${secondDir}',
-          fr: 'Poussée ${firstDir1}/${firstDir2} => Restez ${secondDir}',
           ja: 'ノックバック ${firstDir1}/${firstDir2} => ${secondDir} で待機',
-          cn: '击退 ${firstDir1}/${firstDir2}, 停 ${secondDir}',
-          tc: '擊退 ${firstDir1}/${firstDir2}, 停 ${secondDir}',
           ko: '${firstDir1}/${firstDir2} 넉백 => ${secondDir} 그대로 있기',
         },
       },

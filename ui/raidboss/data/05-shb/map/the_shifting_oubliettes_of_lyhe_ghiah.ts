@@ -68,9 +68,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Dungeon Crew spawned, kill in order!',
-          de: 'Verlies-Mandragora erscheinen, in Reihenfolge besiegen!',
-          fr: 'L\'équipe du donjon vient d\'apparaitre, tuez les dans l\'ordre !',
-          cn: '已生成 宝库蔓德拉战队, 依次击杀!',
+          ja: 'Dungeon Crew spawned, kill in order!',
           ko: '만드라즈 등장, 순서대로 잡아요!',
         },
       },
@@ -232,10 +230,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         stackOnAndLookAway: {
           en: 'Stack on ${player} and look away',
-          de: 'Sammeln bei ${player} und wewg schauen',
-          fr: 'Packez-vous sur ${player} et regardez ailleurs',
           ja: '${player}に頭割り、見ない',
-          cn: '靠近并背对${player}分摊',
           ko: '뭉치고 바라보면 안되요: ${player}',
         },
       },

@@ -26,10 +26,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         pullOrb: {
           en: 'Pull orb to an empty hole',
-          de: 'Orb in ein Loch lenken',
-          fr: 'Tirez l\'orbe vers un trou vide',
           ja: '泥団子を四隅の穴に誘導',
-          cn: '诱导泥球到无敌人的风圈',
           ko: '빈 구멍으로 진흙 구슬 유도',
         },
       },
@@ -66,10 +63,7 @@ const triggerSet: TriggerSet<Data> = {
         tankBuster: Outputs.tankBuster,
         avoidTether: {
           en: 'Avoid ${player} and tethers',
-          de: 'Weiche ${player} und Verbindungen aus',
-          fr: 'Évitez ${player} et les liens',
           ja: '${player}と線から離れる',
-          cn: '远离${player}及其连线',
           ko: '피해요: 줄 그리고, ${player}',
         },
       },
@@ -82,10 +76,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         avoidWall: {
           en: 'Avoid Wall Flush',
-          de: 'Weiche den Wand-Stömmungen aus',
-          fr: 'Évitez le jet d\'eau',
           ja: '光ってない横列に移動',
-          cn: '站在墙壁未发光的一列',
           ko: '벽 물줄기 피해요',
         },
       },
@@ -100,10 +91,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         stepIn: {
           en: 'Step in Puddle near the Cloud',
-          de: 'In einer Fläche nahe der Wolke stehen',
-          fr: 'Marchez dans la zone au sol près du nuage',
           ja: '雲に近い水を踏む',
-          cn: '站在靠近云朵的水流里等待浮空',
           ko: '구름 가까이 물줄기 밟아요',
         },
       },
@@ -122,10 +110,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         getKnocked: {
           en: 'Get Knocked into Safe (no anti-knockback)',
-          de: 'Lass dich in den Safespot zurückstoßen (kein Rückstoßschutz)',
-          fr: 'Faites-vous pousser en zone safe (pas d\'anti-poussée)',
           ja: 'ボスの正面に (堅実魔効かない)',
-          cn: '站在Boss正面 (防击退无效)',
           ko: '안전한 쪽으로 넉백 (넉백 방지 안됨)',
         },
       },
@@ -138,10 +123,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         awayFromAoe: {
           en: 'Go to Opposite Side',
-          de: 'Geh auf die andere Seite',
-          fr: 'Allez du côté opposé',
           ja: '反対側へ',
-          cn: '对面躲避坠落',
           ko: '반대편으로',
         },
       },
@@ -155,10 +137,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         runAway: {
           en: 'RUN AWAY',
-          de: 'RENN WEG',
-          fr: 'FUYEZ',
           ja: 'ボスから離れる',
-          cn: '远离即死区',
           ko: '보스가 빨아들여요! 도망!',
         },
       },
@@ -178,10 +157,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         goBoss: {
           en: 'Go to Boss',
-          de: 'Gehe zum Boss',
-          fr: 'Allez vers le boss',
           ja: 'ボスの場所に移動',
-          cn: '站在Boss正下方',
           ko: '보스쪽으로',
         },
       },

@@ -56,10 +56,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Dive on Main Tank',
-          de: 'Sturz auf den Main Tank',
-          fr: 'Plongeon sur le Main Tank',
           ja: 'MTに飛んでくる',
-          cn: '凶鸟跳点MT',
           ko: '탱크 쪼개기',
         },
       },
@@ -72,10 +69,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Bait Super Novas Outside',
-          de: 'Köder Supernova draußen',
-          fr: 'Attirez les Supernovas à l\'extérieur',
           ja: 'スーパーノヴァを外に設置',
-          cn: '人群外放黑洞',
           ko: '초신성 외곽으로 유도',
         },
       },
@@ -93,10 +87,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Blight on YOU',
-          de: 'Pestschwinge auf DIR',
-          fr: 'Bile de rapace sur VOUS',
           ja: '自分に凶鳥毒気',
-          cn: '毒气点名',
           ko: '흉조의 독 대상자',
         },
       },
@@ -113,10 +104,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Blight on ${player}',
-          de: 'Pestschwinge auf ${player}',
-          fr: 'Bile de rapace sur ${player}',
           ja: '${player}に凶鳥毒気',
-          cn: '毒气点${player}',
           ko: '${player} 흉조의 독',
         },
       },
@@ -148,10 +136,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         thermoOnYou: {
           en: 'Thermo on YOU',
-          de: 'Thermo auf DIR',
-          fr: 'Thermo sur VOUS',
           ja: '自分に頭割り',
-          cn: '分摊点名',
           ko: '쉐어징 대상자',
         },
         stackOn: Outputs.stackOnPlayer,
@@ -183,10 +168,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Silence Blue Golem',
-          de: 'Blauen Golem verstummen',
-          fr: 'Interrompez le Golem bleu',
           ja: '沈黙：青ゴーレム',
-          cn: '沉默蓝色小怪',
           ko: '파란골렘 기술끊기',
         },
       },
@@ -199,10 +181,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Heavensfall',
-          de: 'Himmelssturz',
-          fr: 'Destruction universelle',
           ja: '天地崩壊',
-          cn: '击退AOE',
           ko: '천지붕괴',
         },
       },
@@ -217,10 +196,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Garotte on YOU',
-          de: 'Leicht fixierbar auf DIR',
-          fr: 'Sangle accélérée sur VOUS',
           ja: '自分に拘束加速',
-          cn: '拘束加速点名',
           ko: '구속 가속',
         },
       },
@@ -234,10 +210,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Cleanse Garotte',
-          de: 'reinige Leicht fixierbar',
-          fr: 'Dissipez Sangle accélérée',
           ja: '白い床に乗る',
-          cn: '踩白圈',
           ko: '흰색 장판 밟아요',
         },
       },
@@ -351,10 +324,7 @@ const triggerSet: TriggerSet<Data> = {
         ...diveDirections,
         marks: {
           en: 'Marks: ${dir1}, ${dir2}',
-          de: 'Markierungen : ${dir1}, ${dir2}',
-          fr: 'Marques : ${dir1}, ${dir2}',
           ja: 'マーカー: ${dir1}, ${dir2}',
-          cn: '标记： ${dir1}, ${dir2}',
           ko: '카탈징: ${dir1}, ${dir2}',
         },
       },
@@ -386,34 +356,22 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         fireOutOnYou: {
           en: 'Fire Out (on YOU)',
-          de: 'Feuer raus (auf DIR)',
-          fr: 'Feu extérieur (sur VOUS)',
           ja: 'ファイヤ、外に (自分)',
-          cn: '火球单吃点名',
           ko: '불 대상자 밖으로',
         },
         fireInOnYou: {
           en: 'Fire In (on YOU)',
-          de: 'Feuer rein (auf DIR)',
-          fr: 'Feu intérieur (sur VOUS)',
           ja: 'ファイヤ、頭割り (自分)',
-          cn: '火球集合点名',
           ko: '불 대상자 같이맞기',
         },
         fireOutOn: {
           en: 'Fire Out (on ${player})',
-          de: 'Feuer raus (auf ${player})',
-          fr: 'Feu extérieur (sur ${player})',
           ja: 'ファイヤ、外に (${player})',
-          cn: '火球单吃点${player}',
           ko: '${player} 불 밖으로',
         },
         fireInOn: {
           en: 'Fire In (on ${player})',
-          de: 'Feuer rein (auf ${player})',
-          fr: 'Feu intérieur (sur ${player})',
           ja: 'ファイヤ、頭割り (${player})',
-          cn: '火球集合点${player}',
           ko: '${player} 불 같이맞기',
         },
       },
@@ -427,10 +385,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Thunder on YOU',
-          de: 'Blitz auf DIR',
-          fr: 'Foudre sur VOUS',
           ja: '自分にサンダー',
-          cn: '雷点名',
           ko: '번개 대상자',
         },
       },
@@ -448,10 +403,7 @@ const triggerSet: TriggerSet<Data> = {
         ...diveDirections,
         safeZone: {
           en: 'Safe zone: ${dir}',
-          de: 'Sichere Zone: ${dir}',
-          fr: 'Zone safe : ${dir}',
           ja: '安置: ${dir}',
-          cn: '安全点在：${dir}',
           ko: '안전 지대: ${dir}',
         },
       },
@@ -478,18 +430,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         goToMarkerInDir: {
           en: 'Go To ${marker} (in ${dir})',
-          de: 'Gehe zu ${marker} (im ${dir})',
-          fr: 'Allez en ${marker} (direction ${dir})',
           ja: '${marker}に行く' + ' (あと ${dir}秒)',
-          cn: '去${marker} (在 ${dir})',
           ko: '${marker}로 이동' + ' (${dir}쪽)',
         },
         goToMarker: {
           en: 'Go To ${marker}',
-          de: 'Gehe zu ${marker}',
-          fr: 'Allez en ${marker}',
           ja: '${marker}行くよ',
-          cn: '去${marker}',
           ko: '${marker}로 이동',
         },
       },

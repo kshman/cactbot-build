@@ -202,11 +202,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Tether ${num}',
-          de: 'Verbindung ${num}',
-          fr: 'Lien ${num}',
           ja: '線 ${num}',
-          cn: '第 ${num} 次截线',
-          tc: '第 ${num} 次截線',
           ko: '선: ${num}',
         },
       },
@@ -250,18 +246,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         scytheNext: {
           en: '(under boss => under mirrors soon)',
-          de: '(unter den Boss => gleich unter den Spiegel)',
-          fr: '(sous le boss => sous les miroirs bientôt',
-          cn: '(BOSS 下方 => 即将去镜子下方)',
-          tc: '(BOSS 下方 => 即將去鏡子下方)',
+          ja: '(under boss => under mirrors soon)',
           ko: '(보스 밑 => 이후 거울 밑)',
         },
         axeNext: {
           en: '(out => middle soon)',
-          de: '(raus => gleich Mitte)',
-          fr: '(extérieur => milieu bientôt)',
-          cn: '(外 => 即将去中间)',
-          tc: '(外 => 即將去中間)',
+          ja: '(out => middle soon)',
           ko: '(밖 => 이후 중앙)',
         },
       },
@@ -294,18 +284,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         redMirrorWest: {
           en: 'Behind => SW',
-          de: 'Hinten => SW',
-          fr: 'Derrière => SO',
-          cn: '后 => 左下',
-          tc: '後 => 左下',
+          ja: 'Behind => SW',
           ko: '뒤 => 남서',
         },
         redMirrorEast: {
           en: 'Behind => SE',
-          de: 'Hinten => SO',
-          fr: 'Derrière => SE',
-          cn: '后 => 右下',
-          tc: '後 => 右下',
+          ja: 'Behind => SE',
           ko: '뒤 => 남동',
         },
         getBehind: Outputs.getBehind,
@@ -326,18 +310,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         redMirrorEast: {
           en: 'Front => NW',
-          de: 'Vorne => NW',
-          fr: 'Devant => NO',
-          cn: '前 => 左上',
-          tc: '前 => 左上',
+          ja: 'Front => NW',
           ko: '앞 => 북서',
         },
         redMirrorWest: {
           en: 'Front => NE',
-          de: 'Vorne => NO',
-          fr: 'Devant => NE',
-          cn: '前 => 右上',
-          tc: '前 => 右上',
+          ja: 'Front => NE',
           ko: '앞 => 북동',
         },
         goFront: Outputs.goFront,
@@ -352,11 +330,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Swap Sides',
-          de: 'Seiten wechseln',
-          fr: 'Changez de côté',
           ja: '反対側へ',
-          cn: '换边',
-          tc: '換邊',
           ko: '반대로 이동',
         },
       },
@@ -404,20 +378,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         bitingFrostNext: {
           en: 'Biting Next (face outward)',
-          de: 'Frosthieb als nächstes (nach außen drehen)',
-          fr: 'Taillade de givre (pointez vers l\'extérieur)',
-          ja: '次はフロストスラッシュ', // FIXME
-          cn: '即将冰霜斩 (拉背对人群)',
-          tc: '即將冰霜斬 (拉背對人群)',
+          ja: '次はフロストスラッシュ', // FIXME,
           ko: '서리 참격 (뒤로)',
         },
         drivingFrostNext: {
           en: 'Driving Next (face inward)',
-          de: 'Froststoß als nächstes (nach innen drehen)',
-          fr: 'Percée de givre (pointez vers l\'intérieur)',
-          ja: '次はフロストスラスト', // FIXME
-          cn: '即将冰霜刺 (拉面对人群)',
-          tc: '即將冰霜刺 (拉麵對人群)',
+          ja: '次はフロストスラスト', // FIXME,
           ko: '서리 일격 (앞으로)',
         },
       },
@@ -448,10 +414,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         cleanse: {
           en: 'Cleanse: ${players}',
-          de: 'Reinige: ${players}',
-          fr: 'Guérison : ${players}',
-          cn: '驱散: ${players}',
-          tc: '驅散: ${players}',
+          ja: 'Cleanse: ${players}',
           ko: '에스나: ${players}',
         },
       },
@@ -465,10 +428,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Star on YOU',
-          de: 'Stern auf DIR',
-          fr: 'Étoile sur VOUS',
-          cn: '冰花点名',
-          tc: '冰花點名',
+          ja: 'Star on YOU',
           ko: '별 징 대상자',
         },
       },
@@ -490,20 +450,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         northSouth: {
           en: 'North / South',
-          de: 'Norden / Süden',
-          fr: 'Nord / Sud',
           ja: '南 / 北',
-          cn: '上/下站位',
-          tc: '上/下站位',
           ko: '남 / 북',
         },
         eastWest: {
           en: 'East / West',
-          de: 'Osten / Westen',
-          fr: 'Est / Ouest',
           ja: '東 / 西',
-          cn: '左/右站位',
-          tc: '左/右站位',
           ko: '동 / 서',
         },
       },
@@ -526,20 +478,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         northSouth: {
           en: 'North / South',
-          de: 'Norden / Süden',
-          fr: 'Nord / Sud',
           ja: '南 / 北',
-          cn: '上/下站位',
-          tc: '上/下站位',
           ko: '남 / 북',
         },
         eastWest: {
           en: 'East / West',
-          de: 'Osten / Westen',
-          fr: 'Est / Ouest',
           ja: '東 / 西',
-          cn: '左/右站位',
-          tc: '左/右站位',
           ko: '동 / 서',
         },
       },
@@ -564,10 +508,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         outThenMiddle: {
           en: 'Out => Middle',
-          de: 'Raus => Mitte',
-          fr: 'Extérieur => Milieu',
-          cn: '远离 => 中间',
-          tc: '遠離 => 中間',
+          ja: 'Out => Middle',
           ko: '밖 => 중앙',
         },
         out: Outputs.out,
@@ -591,26 +532,17 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         getUnderCards: {
           en: 'Under => Under Cardinal Mirrors',
-          de: 'Unter den Boss => Unter Kardinal-Spiegel',
-          fr: 'Dessous => Sous les miroirs cardinaux',
-          cn: '脚下 => 正点镜下方',
-          tc: '腳下 => 正點鏡下方',
+          ja: 'Under => Under Cardinal Mirrors',
           ko: '보스 밑 => 십자 방향 거울 밑',
         },
         getUnderIntercards: {
           en: 'Under => Under Intercard Mirrors',
-          de: 'Unter den Boss => Unter Interkardinal-Spiegel',
-          fr: 'Dessous => Sous les miroirs intercardinaux',
-          cn: '脚下 => 斜点镜下方',
-          tc: '腳下 => 斜點鏡下方',
+          ja: 'Under => Under Intercard Mirrors',
           ko: '보스 밑 => 대각선 방향 거울 밑',
         },
         getUnderUnknown: {
           en: 'Under Boss => Under Mirrors',
-          de: 'Unter den Boss => Unter Spiegel',
-          fr: 'Sous le boss => Sous les miroirs',
-          cn: 'BOSS 脚下 => 镜下方',
-          tc: 'BOSS 腳下 => 鏡下方',
+          ja: 'Under Boss => Under Mirrors',
           ko: '보스 밑 => 거울 밑',
         },
         getUnder: Outputs.getUnder,
@@ -632,11 +564,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Chain on YOU',
-          de: 'Kette auf DIR',
-          fr: 'Chaîne sur VOUS',
           ja: '自分に鎖',
-          cn: '连线点名',
-          tc: '連線點名',
           ko: '사슬 대상자',
         },
       },
@@ -650,11 +578,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Orb on YOU',
-          de: 'Orb auf DIR',
-          fr: 'Orbe sur VOUS',
           ja: '自分に玉',
-          cn: '拉球点名',
-          tc: '拉球點名',
           ko: '구슬 대상자',
         },
       },
@@ -679,18 +603,10 @@ const triggerSet: TriggerSet<Data> = {
         output.responseOutputStrings = {
           getFinalTower: {
             en: 'Get Final Tower',
-            de: 'Nimm letzten Turm',
-            fr: 'Prenez la tour finale',
-            cn: '踩最后塔',
-            tc: '踩最後塔',
             ko: '마지막 기둥 들어가기',
           },
           avoidFinalTower: {
             en: 'Avoid Final Tower',
-            de: 'Vermeide letzten Turm',
-            fr: 'Évitez la tour finale',
-            cn: '躲最后塔',
-            tc: '躲最後塔',
             ko: '마지막 기둥 피하기',
           },
         };
@@ -741,10 +657,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Stun Aqueous Aether',
-          de: 'Wasseräther unterbrechen',
-          fr: 'Étourdissez l\'ether aqueux',
-          cn: '眩晕水以太',
-          tc: '眩暈水以太',
+          ja: 'Stun Aqueous Aether',
           ko: '물 에테르 기절',
         },
       },
@@ -774,20 +687,12 @@ const triggerSet: TriggerSet<Data> = {
         output.responseOutputStrings = {
           akhMornOnYou: {
             en: 'Akh Morn on YOU',
-            de: 'Akh Morn auf DIR',
-            fr: 'Akh Morn sur VOUS',
             ja: '自分にアク・モーン',
-            cn: '死亡轮回点名',
-            tc: '死亡輪迴點名',
             ko: '아크몬 대상자',
           },
           akhMornOn: {
             en: 'Akh Morn: ${players}',
-            de: 'Akh Morn: ${players}',
-            fr: 'Akh Morn : ${players}',
             ja: 'アク・モーン: ${players}',
-            cn: '死亡轮回: ${players}',
-            tc: '死亡輪迴: ${players}',
             ko: '아크몬 : ${players}',
           },
         };
@@ -824,20 +729,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         mornAfahOnYou: {
           en: 'Morn Afah on YOU',
-          de: 'Morn Afah auf DIR',
-          fr: 'Morn Afah sur VOUS',
           ja: '自分にモーン・アファー',
-          cn: '无尽顿悟点名',
-          tc: '無盡頓悟點名',
           ko: '몬아파 대상자',
         },
         mornAfahOn: {
           en: 'Morn Afah on ${player}',
-          de: 'Morn Afah auf ${player}',
-          fr: 'Morn Afah sur ${player}',
           ja: '${player}にモーン・アファー',
-          cn: '无尽顿悟点 ${player}',
-          tc: '無盡頓悟點 ${player}',
           ko: '"${player}" 몬 아파',
         },
       },
@@ -919,18 +816,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         slowText: {
           en: '${dir1} => ${dir2} => ${dir3} (slow)',
-          de: '${dir1} => ${dir2} => ${dir3} (langsam)',
-          fr: '${dir1} => ${dir2} => ${dir3} (lent)',
-          cn: '${dir1} => ${dir2} => ${dir3} (慢)',
-          tc: '${dir1} => ${dir2} => ${dir3} (慢)',
+          ja: '${dir1} => ${dir2} => ${dir3} (slow)',
           ko: '${dir1} => ${dir2} => ${dir3} (느림)',
         },
         fastText: {
           en: '${dir1} => ${dir2} => ${dir3} (fast)',
-          de: '${dir1} => ${dir2} => ${dir3} (schnell)',
-          fr: '${dir1} => ${dir2} => ${dir3} (rapide)',
-          cn: '${dir1} => ${dir2} => ${dir3} (快)',
-          tc: '${dir1} => ${dir2} => ${dir3} (快)',
+          ja: '${dir1} => ${dir2} => ${dir3} (fast)',
           ko: '${dir1} => ${dir2} => ${dir3} (빠름)',
         },
         dirNW: Outputs.dirNW,
@@ -1065,11 +956,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Red #${num}',
-          de: 'Rot #${num}',
-          fr: 'Rouge #${num}',
           ja: '赤 #${num}',
-          cn: '红色 #${num}',
-          tc: '紅色 #${num}',
           ko: '빨강 ${num}번',
         },
       },
@@ -1101,11 +988,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Blue #${num}',
-          de: 'Blau #${num}',
-          fr: 'Bleu #${num}',
           ja: '青 #${num}',
-          cn: '蓝色 #${num}',
-          tc: '藍色 #${num}',
           ko: '파랑 ${num}번',
         },
       },
@@ -1126,18 +1009,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         redDragonHead: {
           en: 'Pop Head #${num}',
-          de: 'Nimm Kopf #${num}',
-          fr: 'Tête #${num}',
-          cn: '撞头 #${num}',
-          tc: '撞頭 #${num}',
+          ja: 'Pop Head #${num}',
           ko: '${num}번 머리 부딪히기',
         },
         bluePuddle: {
           en: 'Get Puddle #${num}',
-          de: 'Nimm Fläche #${num}',
-          fr: 'Prenez le puddle #${num}',
-          cn: '踩圈 #${num}',
-          tc: '踩圈 #${num}',
+          ja: 'Get Puddle #${num}',
           ko: '${num}번 장판 밟기',
         },
       },
@@ -1204,19 +1081,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         cleanseOnlyDPS: {
           en: 'Cleanse DPS Only',
-          de: 'Nur DPS reinigen',
-          fr: 'Guérison => DPS seulement',
           ja: 'エスナ (DPSのみ)',
-          cn: '驱散DPS',
-          tc: '驅散DPS',
           ko: '딜러만 에스나',
         },
         bluCleanse: {
           en: 'Exuviation',
-          de: 'Exuviation',
-          fr: 'Exuviation',
-          cn: '蜕皮',
-          tc: '蛻皮',
+          ja: 'Exuviation',
           ko: '허물 벗기',
         },
       },
@@ -1230,11 +1100,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Tank Stack in Tower',
-          de: 'Auf Tank im Turm sammeln',
-          fr: 'Package tanks dans la tour',
           ja: 'タンクは塔に頭割り',
-          cn: '坦克塔内分摊',
-          tc: '坦克塔內分攤',
           ko: '탱커 쉐어',
         },
       },
@@ -1248,11 +1114,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Tank Spread in Tower',
-          de: 'Tank im Turm verteilen',
-          fr: 'Dispersion tanks dans la tour',
           ja: 'タンクは塔に散開',
-          cn: '坦克塔内分散',
-          tc: '坦克塔內分散',
           ko: '탱커 산개',
         },
       },
@@ -1270,18 +1132,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         proteanGetFinalTower: {
           en: 'Protean => Get Final Tower',
-          de: 'Himmelsrichtung => Nimm letzten Turm',
-          fr: 'Positions => Prenez la tour finale',
-          cn: '八方分散 => 踩最后塔',
-          tc: '八方分散 => 踩最後塔',
+          ja: 'Protean => Get Final Tower',
           ko: '8방향 산개 => 마지막 기둥 들어가기',
         },
         proteanAvoidFinalTower: {
           en: 'Protean => Avoid Final Tower',
-          de: 'Himmelsrichtung => Vermeide letzten Turm',
-          fr: 'Position => Évitez la tour finale',
-          cn: '八方分散 => 躲最后塔',
-          tc: '八方分散 => 躲最後塔',
+          ja: 'Protean => Avoid Final Tower',
           ko: '8방향 산개 => 마지막 기둥 피하기',
         },
       },
