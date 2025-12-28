@@ -270,7 +270,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       'replaceText': {
         '\\(Knockback\\)': '(击退)',
-        '\\(Spread\\)': '(扩散)',
+        '\\(Spread\\)': '(分散)',
         '--meteor': '--陨石',
         'Aether Siphon': '属性吸收',
         'Aether Spray': '属性放出',

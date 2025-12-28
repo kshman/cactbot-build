@@ -1,4 +1,3 @@
-import { AutumnCond } from '../../../../../resources/autumn';
 import Conditions from '../../../../../resources/conditions';
 import Outputs from '../../../../../resources/outputs';
 import { Responses } from '../../../../../resources/responses';
@@ -14,6 +13,8 @@ export interface Data extends RaidbossData {
   partnersSpreadCounter: number;
   storedPartnersSpread?: 'partners' | 'spread';
   beat?: 1 | 2 | 3;
+  beatTwoOneStart?: boolean;
+  beatTwoSpreadCollect: string[];
   tankLaserCollect: string[];
   poisonDebuff?: 'short' | 'long';
   beelovedDebuffs: {
@@ -21,10 +22,6 @@ export interface Data extends RaidbossData {
     beta: string[];
   };
   beelovedType?: 'alpha' | 'beta';
-  //
-  myHearts: number;
-  heartShed: string[];
-  poisonPop?: number;
 }
 
 const headMarkerData = {
@@ -44,13 +41,21 @@ const poisonOutputStrings = {
   defamationOnYou: Outputs.defamationOnYou,
   defamations: {
     en: 'Defamations',
+    de: 'Große AoE auf dir',
+    fr: 'Grosse AoE sur vous',
     ja: '自分に巨大な爆発',
-    ko: '대폭발! 바깥으로',
+    cn: '大圈点名',
+    tc: '大圈點名',
+    ko: '광역 대상자',
   },
   in: {
     en: 'In (Avoid Defamations)',
+    de: 'Mitte (weiche den AoEs aus)',
+    fr: 'Intérieur (évitez les AoE)',
     ja: '中央へ (巨大な爆発を避けて)',
-    ko: '한가운데 (곧 타워)',
+    cn: '去脚下 (远离大圈)',
+    tc: '去腳下 (遠離大圈)',
+    ko: '안으로 (광역 피하기)',
   },
 };
 
@@ -62,13 +67,12 @@ const triggerSet: TriggerSet<Data> = {
   timelineFile: 'r2s.txt',
   initData: () => ({
     partnersSpreadCounter: 0,
+    beatTwoSpreadCollect: [],
     tankLaserCollect: [],
     beelovedDebuffs: {
       alpha: Array(4).map(() => ''),
       beta: Array(4).map(() => ''),
     },
-    myHearts: 0,
-    heartShed: [],
   }),
   triggers: [
     {
@@ -82,14 +86,70 @@ const triggerSet: TriggerSet<Data> = {
           data.beat = 2;
         else
           data.beat = 3;
-        data.heartShed = [];
+      },
+    },
+    {
+      id: 'R2S Heart Debuff',
+      type: 'GainsEffect',
+      netRegex: { effectId: ['F52', 'F53', 'F54'], capture: true },
+      condition: Conditions.targetIsYou(),
+      delaySeconds: (data) => data.beat === 1 ? 17 : 0,
+      suppressSeconds: (data) => {
+        if (data.beat === 1)
+          return 120;
+        if (data.beat === 2)
+          return 70;
+
+        // We don't care about heart stacks during beat 3
+        return 9999;
+      },
+      infoText: (data, matches, output) => {
+        if (data.beat === 1) {
+          return output.beatOne!();
+        }
+        if (data.beat === 2) {
+          if (matches.effectId === 'F52')
+            return output.beatTwoZeroHearts!();
+          if (matches.effectId === 'F53') {
+            data.beatTwoOneStart = true;
+            return output.beatTwoOneHearts!();
+          }
+        }
+      },
+      outputStrings: {
+        beatOne: {
+          en: 'Soak towers - need 2-3 hearts',
+          de: 'Nimm Türme - benötigt 2-3 Herzen',
+          fr: 'Prenez les tours - 2-3 cœurs nécessaires',
+          ja: '塔を踏む - 2-3個のハートに調整',
+          cn: '踩塔 - 踩到2-3颗心',
+          tc: '踩塔 - 踩到2-3顆心',
+          ko: '기둥 들어가기 - 하트 2-3개 유지하기',
+        },
+        beatTwoZeroHearts: {
+          en: 'Puddles & Stacks',
+          de: 'Flächen + sammeln',
+          fr: 'Puddles + Package',
+          ja: '集合捨てと頭割り',
+          cn: '集合分摊放圈',
+          tc: '集合分攤放圈',
+          ko: '장판 피하기 + 쉐어',
+        },
+        beatTwoOneHearts: {
+          en: 'Spreads & Towers',
+          de: 'Verteilen + Türme',
+          fr: 'Dispersion + Tours',
+          ja: '散開 / 塔踏み',
+          cn: '分散 / 踩塔',
+          tc: '分散 / 踩塔',
+          ko: '산개 / 기둥',
+        },
       },
     },
     {
       id: 'R2S Headmarker Shared Tankbuster',
       type: 'HeadMarker',
       netRegex: { id: headMarkerData.sharedBuster, capture: true },
-      suppressSeconds: 5,
       response: Responses.sharedTankBuster(),
     },
     {
@@ -107,8 +167,8 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (data, _matches, output) => {
         if (data.tankLaserCollect.includes(data.me))
           return output.cleaveOnYou!();
-        if (!data.options.AutumnOnly)
-          return output.avoidCleave!();
+
+        return output.avoidCleave!();
       },
       run: (data) => data.tankLaserCollect = [],
       outputStrings: {
@@ -117,39 +177,38 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: 'R2S Headmarker Spread',
+      id: 'R2S Headmarker Spread Collect',
       type: 'HeadMarker',
       netRegex: { id: headMarkerData.spreadMarker2, capture: true },
-      condition: (data, matches) => {
-        if (data.myHearts !== 1)
-          return false;
-        data.heartShed.push(matches.target);
-        return data.heartShed.length === 2;
+      run: (data, matches) => data.beatTwoSpreadCollect.push(matches.target),
+    },
+    {
+      id: 'R2S Headmarker Spread',
+      type: 'HeadMarker',
+      netRegex: { id: headMarkerData.spreadMarker2, capture: false },
+      delaySeconds: 0.1,
+      suppressSeconds: 1,
+      alertText: (data, _matches, output) => {
+        if (data.beatTwoSpreadCollect.includes(data.me))
+          return output.avoidTowers!();
+        else if (data.beatTwoOneStart)
+          return output.towers!();
       },
-      infoText: (data, _matches, output) => {
-        const dps = data.party.isDPS(data.me);
-        if (data.heartShed.includes(data.me))
-          return dps ? output.bairDps!() : output.baitTh!();
-        return dps ? output.towerDps!() : output.towerTh!();
+      run: (data) => {
+        data.beatTwoSpreadCollect = [];
+        data.beatTwoOneStart = false;
       },
-      run: (data) => data.heartShed = [],
       outputStrings: {
-        baitTh: {
-          en: 'Drop west',
-          ko: '서쪽 바깥에 장판 버려요!',
+        avoidTowers: {
+          en: 'Spread -- Avoid Towers',
+          de: 'Verteilen -- Vermeide Türme',
+          fr: 'Dispersion -- Évitez les tours',
+          ja: '散開 -- 塔は避けて',
+          cn: '分散 - 躲开塔',
+          tc: '分散 - 躲開塔',
+          ko: '산개 -- 기둥 피하기',
         },
-        bairDps: {
-          en: 'Drop east',
-          ko: '동쪽 바깥에 장판 버려요!',
-        },
-        towerTh: {
-          en: 'N/W tower',
-          ko: '북/서 타워 밟아요',
-        },
-        towerDps: {
-          en: 'S/E tower',
-          ko: '남/동 타워 밟아요',
-        },
+        towers: Outputs.getTowers,
       },
     },
     {
@@ -161,45 +220,23 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Drop Puddle Outside',
+          de: 'Lege Fläche außen ab',
+          fr: 'Déposez le puddle à l\'extérieur',
           ja: '外側に捨てて',
-          ko: '바깥에 장판 버려요!',
+          cn: '在场边放毒圈',
+          tc: '在場邊放毒圈',
+          ko: '바깥쪽에 장판 놓기',
         },
       },
     },
     {
       id: 'R2S Headmarker Party Stacks',
       type: 'HeadMarker',
-      netRegex: { id: headMarkerData.heartStackMarker, capture: true },
-      condition: (data, matches) => {
-        if (data.beat === 1)
-          return true;
-        if (data.beat === 2 && data.myHearts === 0) {
-          data.heartShed.push(matches.target);
-          return data.heartShed.length === 2;
-        }
-        return false;
-      },
-      infoText: (data, matches, output) => {
-        if (data.beat === 1) {
-          const target = data.party.member(matches.target);
-          return output.stacks1!({ target: target });
-        }
-        if (data.beat === 2 && data.heartShed.length === 2) {
-          const target1 = data.party.member(data.heartShed[0]);
-          const target2 = data.party.member(data.heartShed[1]);
-          return output.stacks2!({ target1: target1, target2: target2 });
-        }
-      },
-      run: (data) => data.heartShed = [],
+      netRegex: { id: headMarkerData.heartStackMarker, capture: false },
+      suppressSeconds: 1,
+      infoText: (_data, _matches, output) => output.stacks!(),
       outputStrings: {
-        stacks1: {
-          en: 'Stacks: ${target}',
-          ko: '뭉쳐요: ${target}',
-        },
-        stacks2: {
-          en: 'Stacks: ${target1}/${target2}',
-          ko: '뭉쳐요: ${target1}/${target2}',
-        },
+        stacks: Outputs.stacks,
       },
     },
     {
@@ -215,30 +252,74 @@ const triggerSet: TriggerSet<Data> = {
       run: (data) => data.partnersSpreadCounter++,
     },
     {
-      id: 'R2S Drop of Venom/Love',
+      id: 'R2S Drop of Venom',
       type: 'StartsUsing',
-      netRegex: { id: ['9185', '9B09'], source: 'Honey B. Lovely', capture: false },
+      netRegex: { id: '9185', source: 'Honey B. Lovely', capture: false },
       infoText: (_data, _matches, output) => output.text!(),
       run: (data) => data.storedPartnersSpread = 'partners',
       outputStrings: {
         text: {
           en: 'Stored: Partners',
+          de: 'Gespeichert: Partner',
+          fr: 'Enregistré : Partenaires',
           ja: 'あとでペア',
-          ko: '(나중에 둘이 페어)',
+          cn: '存储分摊',
+          tc: '儲存分攤',
+          ko: '나중에 쉐어',
         },
       },
     },
     {
-      id: 'R2S Splash of Venom/Love',
+      id: 'R2S Splash of Venom',
       type: 'StartsUsing',
-      netRegex: { id: ['9184', '9B08'], source: 'Honey B. Lovely', capture: false },
+      netRegex: { id: '9184', source: 'Honey B. Lovely', capture: false },
       infoText: (_data, _matches, output) => output.text!(),
       run: (data) => data.storedPartnersSpread = 'spread',
       outputStrings: {
         text: {
           en: 'Stored: Spread',
+          de: 'Gespeichert: Verteilen',
+          fr: 'Enregistré : Dispersion',
           ja: 'あとで散開',
-          ko: '(나중에 흩어져요)',
+          cn: '存储分散',
+          tc: '儲存分散',
+          ko: '나중에 산개',
+        },
+      },
+    },
+    {
+      id: 'R2S Drop of Love',
+      type: 'StartsUsing',
+      netRegex: { id: '9B09', source: 'Honey B. Lovely', capture: false },
+      infoText: (_data, _matches, output) => output.text!(),
+      run: (data) => data.storedPartnersSpread = 'partners',
+      outputStrings: {
+        text: {
+          en: 'Stored: Partners',
+          de: 'Gespeichert: Partner',
+          fr: 'Enregistré : Partenaires',
+          ja: 'あとでペア',
+          cn: '存储分摊',
+          tc: '儲存分攤',
+          ko: '나중에 쉐어',
+        },
+      },
+    },
+    {
+      id: 'R2S Spread Love',
+      type: 'StartsUsing',
+      netRegex: { id: '9B08', source: 'Honey B. Lovely', capture: false },
+      infoText: (_data, _matches, output) => output.text!(),
+      run: (data) => data.storedPartnersSpread = 'spread',
+      outputStrings: {
+        text: {
+          en: 'Stored: Spread',
+          de: 'Gespeichert: Verteilen',
+          fr: 'Enregistré : Dispersion',
+          ja: 'あとで散開',
+          cn: '存储分散',
+          tc: '儲存分散',
+          ko: '나중에 산개',
         },
       },
     },
@@ -260,18 +341,30 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         middle: {
           en: '(middle after)',
+          de: '(danach mitte)',
+          fr: '(milieu après)',
           ja: '(後で内側へ)',
-          ko: '(나중에 가운데로)',
+          cn: '(稍后场中)',
+          tc: '(稍後場中)',
+          ko: '(나중에 중앙으로)',
         },
         partners: {
           en: '(middle + partners after)',
+          de: '(mitte + danach mit partner sammeln)',
+          fr: '(milieu + partenaires après)',
           ja: '(後で内側へ + ペア)',
-          ko: '(나중에 가운데 + 둘이)',
+          cn: '(稍后场中 + 分摊)',
+          tc: '(稍後場中 + 分攤)',
+          ko: '(나중에 중앙으로 + 쉐어)',
         },
         spread: {
           en: '(middle + spread after)',
+          de: '(mitte + danach verteilen)',
+          fr: '(milieu + dispersion après)',
           ja: '(後で内側へ + 散開)',
-          ko: '(나중에 가운데 + 흩어져요)',
+          cn: '(稍后场中 + 分散)',
+          tc: '(稍後場中 + 分散)',
+          ko: '(나중에 중앙으로 + 산개)',
         },
       },
     },
@@ -290,17 +383,29 @@ const triggerSet: TriggerSet<Data> = {
         middle: Outputs.middle,
         spread: {
           en: 'Spread',
+          de: 'Verteilen',
+          fr: 'Dispersion',
           ja: '散開',
-          ko: '흩어져요',
+          cn: '分散',
+          tc: '分散',
+          ko: '산개',
         },
         partners: {
           en: 'Partners',
+          de: 'Partner',
+          fr: 'Partenaires',
           ja: 'ペア',
-          ko: '둘이 함께',
+          cn: '分摊',
+          tc: '分攤',
+          ko: '쉐어',
         },
         combo: {
           en: '${next} + ${mech}',
+          de: '${next} + ${mech}',
+          fr: '${next} + ${mech}',
           ja: '${next} + ${mech}',
+          cn: '${next} + ${mech}',
+          tc: '${next} + ${mech}',
           ko: '${next} + ${mech}',
         },
       },
@@ -323,18 +428,30 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         out: {
           en: '(out after)',
+          de: '(danach raus)',
+          fr: '(extérieur après)',
           ja: '(後で外側へ)',
-          ko: '(나중에 바깥으로)',
+          cn: '(稍后远离)',
+          tc: '(稍後遠離)',
+          ko: '(나중에 밖으로)',
         },
         partners: {
           en: '(out + partners after)',
+          de: '(raus + danach mit partner sammeln)',
+          fr: '(extérieur + partenaires après)',
           ja: '(後で外側へ + ペア)',
-          ko: '(나중에 바깥 + 둘이)',
+          cn: '(稍后远离 + 分摊)',
+          tc: '(稍後遠離 + 分攤)',
+          ko: '(나중에 밖으로 + 쉐어)',
         },
         spread: {
           en: '(out + spread after)',
+          de: '(raus + danach verteilen)',
+          fr: '(extérieur + dispersion après)',
           ja: '(後で外側へ + 散開)',
-          ko: '(나중에 바깥 + 흩어져요)',
+          cn: '(稍后远离 + 分散)',
+          tc: '(稍後遠離 + 分散)',
+          ko: '(나중에 밖으로 + 산개)',
         },
       },
     },
@@ -353,25 +470,49 @@ const triggerSet: TriggerSet<Data> = {
         out: Outputs.out,
         spread: {
           en: 'Spread',
+          de: 'Verteilen',
+          fr: 'Dispersion',
           ja: '散開',
-          ko: '흩어져요',
+          cn: '分散',
+          tc: '分散',
+          ko: '산개',
         },
         partners: {
           en: 'Partners',
+          de: 'Partner',
+          fr: 'Partenaires',
           ja: 'ペア',
-          ko: '둘이 페어',
+          cn: '分摊',
+          tc: '分攤',
+          ko: '쉐어',
         },
         combo: {
           en: '${next} + ${mech}',
+          de: '${next} + ${mech}',
+          fr: '${next} + ${mech}',
           ja: '${next} + ${mech}',
+          cn: '${next} + ${mech}',
+          tc: '${next} + ${mech}',
           ko: '${next} + ${mech}',
         },
       },
     },
     {
-      id: 'R2S Honey B. Live Beats',
+      id: 'R2S Honey B. Live: 1st Beat',
       type: 'StartsUsing',
-      netRegex: { id: ['9C24', '9C25', '9C26'], source: 'Honey B. Lovely', capture: false },
+      netRegex: { id: '9C24', source: 'Honey B. Lovely', capture: false },
+      response: Responses.aoe(),
+    },
+    {
+      id: 'R2S Honey B. Live: 2nd Beat',
+      type: 'StartsUsing',
+      netRegex: { id: '9C25', source: 'Honey B. Lovely', capture: false },
+      response: Responses.aoe(),
+    },
+    {
+      id: 'R2S Honey B. Live: 3rd Beat',
+      type: 'StartsUsing',
+      netRegex: { id: '9C26', source: 'Honey B. Lovely', capture: false },
       response: Responses.aoe(),
     },
     {
@@ -384,14 +525,17 @@ const triggerSet: TriggerSet<Data> = {
       id: 'R2S Centerstage Combo',
       type: 'StartsUsing',
       netRegex: { id: '91AC', source: 'Honey B. Lovely', capture: false },
-      condition: AutumnCond.notOnlyAutumn(),
       durationSeconds: 9,
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
           en: 'Under Intercards => Out => Cards',
+          de: 'Rein Interkardinal => Raus => Kardinal',
+          fr: 'Dessous intercardinal => Extérieur => Cardinal',
           ja: '斜め内側 => 外側 => 十字',
-          ko: '밑❌ 🔜 바깥❌ 🔜 바깥➕',
+          cn: '内斜角 => 外斜角 => 外正点',
+          tc: '內斜角 => 外斜角 => 外正點',
+          ko: '보스 아래 대각 => 밖으로 => 십자',
         },
       },
     },
@@ -399,14 +543,17 @@ const triggerSet: TriggerSet<Data> = {
       id: 'R2S Outerstage Combo',
       type: 'StartsUsing',
       netRegex: { id: '91AD', source: 'Honey B. Lovely', capture: false },
-      condition: AutumnCond.notOnlyAutumn(),
       durationSeconds: 9,
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
           en: 'Out Cards => Intercards => Under',
+          de: 'Raus Kardinal => Interkardinal => Rein',
+          fr: 'Extérieur cardinal => Intercardinal => Dessous',
           ja: '外十字 => 外斜め => 内側',
-          ko: '바깥➕ 🔜 바깥❌ 🔜 밑❌',
+          cn: '外正点 => 外斜角 => 内斜角',
+          tc: '外正點 => 外斜角 => 內斜角',
+          ko: '칼끝딜 십자 => 밖으로 => 보스 아래 대각',
         },
       },
     },
@@ -517,8 +664,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         merge: {
           en: 'Merge Soon w/ ${player}',
+          de: 'Bald berühren mit ${player}',
+          fr: 'Fusion bientôt avec ${player}',
           ja: '${player} と重なって',
-          ko: '문대요: ${player}',
+          cn: '准备和 ${player} 撞毒',
+          tc: '準備和 ${player} 撞毒',
+          ko: '${player} 과 융합하기',
         },
         unknown: Outputs.unknown,
       },
@@ -549,52 +700,15 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         merge: {
           en: 'Merge: ${alpha} + ${beta}',
+          de: 'Berühren: ${alpha} + ${beta}',
+          fr: 'Fusion : ${alpha} + ${beta}',
           ja: '組み合わせ: ${alpha} + ${beta}',
-          ko: '문댈 차례: ${alpha} + ${beta}',
+          cn: '撞毒: ${alpha} + ${beta}',
+          tc: '撞毒: ${alpha} + ${beta}',
+          ko: '융합: ${alpha} + ${beta}',
         },
         unknown: Outputs.unknown,
       },
-    },
-    {
-      id: 'R2S no Heart',
-      type: 'GainsEffect',
-      netRegex: { effectId: 'F52' },
-      condition: (data, matches) => data.me === matches.target,
-      infoText: (data, _matches, output) => {
-        if (data.beat === 2)
-          return output.live2!();
-      },
-      run: (data) => data.myHearts = 0,
-      outputStrings: {
-        live2: {
-          en: 'Bait AOE',
-          ko: '한가운데로 🔜 장판 유도',
-        },
-      },
-    },
-    {
-      id: 'R2S Infatuated Heart',
-      type: 'GainsEffect',
-      netRegex: { effectId: 'F53' },
-      condition: (data, matches) => data.me === matches.target,
-      infoText: (data, _matches, output) => {
-        if (data.beat === 2)
-          return output.live2!();
-      },
-      run: (data) => data.myHearts = 1,
-      outputStrings: {
-        live2: {
-          en: 'Tower or bait AOE',
-          ko: '남쪽으로 🔜 타워 또는 장판',
-        },
-      },
-    },
-    {
-      id: 'R2S Head Over Heels Heart',
-      type: 'GainsEffect',
-      netRegex: { effectId: 'F54' },
-      condition: (data, matches) => data.me === matches.target,
-      run: (data) => data.myHearts = 2,
     },
   ],
   timelineReplace: [

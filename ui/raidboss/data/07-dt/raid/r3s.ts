@@ -1,4 +1,3 @@
-import { AutumnCond } from '../../../../../resources/autumn';
 import Conditions from '../../../../../resources/conditions';
 import Outputs from '../../../../../resources/outputs';
 import { callOverlayHandler } from '../../../../../resources/overlay_plugin_api';
@@ -8,30 +7,21 @@ import ZoneId from '../../../../../resources/zone_id';
 import { RaidbossData } from '../../../../../types/data';
 import { TriggerSet } from '../../../../../types/trigger';
 
-type Phase = 'final' | 'field' | 'foe';
-
 type TagTeamClone = {
   dir: number;
   cleave: number;
 };
 
 export interface Data extends RaidbossData {
+  readonly triggerSetConfig: {
+    barbarousBarrageKnockback: 'none' | 'first' | 'two' | 'all';
+  };
   phaseTracker: number;
   tagTeamCloneTethered?: number;
   tagTeamClones: TagTeamClone[];
-  //
-  phase?: Phase;
-  fieldList: string[];
 }
 
 // TODO: <foo>boom Special delayed in/out triggers?
-
-const getMarkerFromDir = (dir: number): string => {
-  const markers = ['Ⓐ', '②', 'Ⓑ', '③', 'Ⓒ', '④', 'Ⓓ', '①'] as const;
-  // const markers = ['Ⓐ', '①', 'Ⓑ', '②', 'Ⓒ', '③', 'Ⓓ', '④'] as const;
-  const res = markers[dir];
-  return res !== undefined ? res : '???';
-};
 
 const getSafeSpotsFromClones = (
   myClone: TagTeamClone,
@@ -70,8 +60,6 @@ const getSafeSpotsFromClones = (
   }
 
   const lastSafeSpot = (lastSafeSpots.findIndex((count) => count === 0) + 4) % 8;
-  // 십자는 빼자
-  safeSpots = safeSpots.filter((spot) => spot % 2 !== 0);
 
   return [safeSpots, lastSafeSpot];
 };
@@ -80,40 +68,96 @@ const tagTeamOutputStrings = {
   ...Directions.outputStrings8Dir,
   safeDirs: {
     en: 'Safe: ${dirs} => ${last}',
+    de: 'Sicher: ${dirs} => ${last}',
+    fr: 'Sur : ${dirs} => ${last}',
     ja: '安地: ${dirs} => ${last}',
-    ko: '안전: ${dirs} 🔜 ${last}',
+    cn: '安全区: ${dirs} => ${last}',
+    tc: '安全區: ${dirs} => ${last}',
+    ko: '안전: ${dirs} => ${last}',
   },
   separator: {
     en: '/',
+    de: '/',
+    fr: '/',
     ja: '/',
-    ko: ' / ',
+    cn: '/',
+    tc: '/',
+    ko: '/',
   },
 } as const;
 
 const triggerSet: TriggerSet<Data> = {
   id: 'AacLightHeavyweightM3Savage',
   zoneId: ZoneId.AacLightHeavyweightM3Savage,
+  config: [
+    {
+      id: 'barbarousBarrageKnockback',
+      name: {
+        en: 'Barbarous Barrage Uptime Knockback',
+        de: 'Brutalo-Bomben Uptime Rückstoß',
+        fr: 'Bombardement Brutal Anti-poussée Uptime',
+        ja: 'ボンバリアンボムのアムレン/堅実 限界タイミング通知',
+        cn: '击退塔uptime打法击退提示时机调整功能',
+        tc: '擊退塔uptime打法擊退提示時機調整功能',
+        ko: '봄바리안 봄 업타임 넉백 설정',
+      },
+      comment: {
+        en: 'Select towers to dodge with knockback immunity.',
+        de: 'Wähle welche Türme mit Rückstoß-Immunität genommen werden.',
+        fr: 'Sélectionnez les tours à esquiver avec l\'anti-repoussement.',
+        ja: '吹き飛ばし無効で避ける塔を選択してください',
+        cn: '选择防击退覆盖的塔。',
+        tc: '選擇防擊退覆蓋的塔。',
+        ko: '넉백 무효기술로 처리할 기둥을 선택하세요.',
+      },
+      type: 'select',
+      options: {
+        en: {
+          'None (No Callout)': 'none',
+          'First Tower': 'first',
+          'First Two Towers (Recommended)': 'two',
+          'All three towers': 'all',
+        },
+        de: {
+          'Keine (keine Ansage)': 'none',
+          'Erster Turm': 'first',
+          'Ersten zwei Türme (empfohlen)': 'two',
+          'Alle drei Türme': 'all',
+        },
+        fr: {
+          'Aucune': 'none',
+          'Première tour': 'first',
+          'Seconde tour (Recommandé)': 'two',
+          'Les trois tours': 'all',
+        },
+        ja: {
+          'なし (コールなし)': 'none',
+          '最初の塔': 'first',
+          '最初の2つ (推奨)': 'two',
+          '全ての塔': 'all',
+        },
+        cn: {
+          '关闭功能': 'none',
+          '第一个塔': 'first',
+          '前两个塔 (推荐)': 'two',
+          '全部塔': 'all',
+        },
+        ko: {
+          '없음 (알림 없음)': 'none',
+          '1번째 기둥': 'first',
+          '1, 2번째 기둥 (권장)': 'two',
+          '세 기둥 전부': 'all',
+        },
+      },
+      default: 'none',
+    },
+  ],
   timelineFile: 'r3s.txt',
   initData: () => ({
     phaseTracker: 0,
     tagTeamClones: [],
-    //
-    fieldList: [],
   }),
   triggers: [
-    {
-      id: 'R3S Phase',
-      type: 'StartsUsing',
-      netRegex: { id: ['9403', '9406', '93EE'], source: 'Brute Bomber' },
-      run: (data, matches) => {
-        const map: { [id: string]: Phase } = {
-          '9403': 'foe',
-          '9406': 'final',
-          '93EE': 'field',
-        } as const;
-        data.phase = map[matches.id];
-      },
-    },
     {
       id: 'R3S Phase Tracker',
       type: 'GainsEffect',
@@ -130,14 +174,7 @@ const triggerSet: TriggerSet<Data> = {
       id: 'R3S Brutal Impact',
       type: 'StartsUsing',
       netRegex: { id: '9425', source: 'Brute Bomber', capture: false },
-      infoText: (_data, _matches, output) => output.text!(),
-      outputStrings: {
-        text: {
-          en: 'AoE',
-          ja: '連続全体攻撃',
-          ko: '연속 전체 공격',
-        },
-      },
+      response: Responses.aoe(),
     },
     {
       id: 'R3S Octuple Lariat Out',
@@ -147,8 +184,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Out + Spread',
+          de: 'Raus + Verteilen',
+          fr: 'Extérieur + Dispersion',
           ja: '外側 + 散開',
-          ko: '밖으로 + 흩어져요',
+          cn: '钢铁 + 八方分散',
+          tc: '鋼鐵 + 八方分散',
+          ko: '밖으로 + 산개',
         },
       },
     },
@@ -160,8 +201,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'In + Spread',
+          de: 'Rein + Verteilen',
+          fr: 'Intérieur + Dispersion',
           ja: '内側 + 散開',
-          ko: '안으로 + 흩어져요',
+          cn: '月环 + 八方分散',
+          tc: '月環 + 八方分散',
+          ko: '안으로 + 산개',
         },
       },
     },
@@ -173,8 +218,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Away + Spread',
+          de: 'Weg + Verteilen',
+          fr: 'Loin + Dispersion',
           ja: '離れて + 散開',
-          ko: '멀리가서 + 흩어져요',
+          cn: '远离 + 分散',
+          tc: '遠離 + 分散',
+          ko: '멀리 + 산개',
         },
       },
     },
@@ -186,9 +235,46 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Knockback + Spread',
+          de: 'Rückstoß + Verteilen',
+          fr: 'Poussée + Dispersion',
           ja: 'ノックバック + 散開',
-          ko: '넉백 + 흩어져요',
+          cn: '击退 + 分散',
+          tc: '擊退 + 分散',
+          ko: '넉백 + 산개',
         },
+      },
+    },
+    {
+      id: 'R3S Barbarous Barrage Uptime Knockback',
+      type: 'StartsUsing',
+      netRegex: { id: '93FB', source: 'Brute Bomber', capture: false },
+      delaySeconds: (data) => {
+        switch (data.triggerSetConfig.barbarousBarrageKnockback) {
+          case 'first':
+            return 9;
+          case 'two':
+            return 12;
+          case 'all':
+            return 15;
+          case 'none':
+            return 0;
+        }
+      },
+      infoText: (data, _matches, output) => {
+        if (data.triggerSetConfig.barbarousBarrageKnockback !== 'none')
+          return output.knockback!();
+      },
+      outputStrings: {
+        knockback: Outputs.knockback,
+      },
+    },
+    {
+      id: 'R3S Murderous Mist',
+      type: 'StartsUsing',
+      netRegex: { id: '93FE', source: 'Brute Bomber', capture: false },
+      infoText: (_data, _matches, output) => output.getBehind!(),
+      outputStrings: {
+        getBehind: Outputs.getBehind,
       },
     },
     {
@@ -199,8 +285,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Away + Partners',
+          de: 'Weg + Partner',
+          fr: 'Loin + Partenaires',
           ja: '離れて + ペア',
-          ko: '멀리가서 + 둘이 함께',
+          cn: '远离 + 双人分摊',
+          tc: '遠離 + 雙人分攤',
+          ko: '멀리 + 쉐어',
         },
       },
     },
@@ -212,8 +302,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Knockback + Partners',
+          de: 'Rückstoß + Partner',
+          fr: 'Poussée + Partenaires',
           ja: 'ノックバック + ペア',
-          ko: '넉백 + 둘이 함께',
+          cn: '击退 + 双人分摊',
+          tc: '擊退 + 雙人分攤',
+          ko: '넉백 + 쉐어',
         },
       },
     },
@@ -225,8 +319,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Out + Partners',
+          de: 'Raus + Partner',
+          fr: 'Extérieur + Partenaires',
           ja: '外側 + ペア',
-          ko: '밖으로 + 둘이 함께',
+          cn: '钢铁 + 双人分摊',
+          tc: '鋼鐵 + 雙人分攤',
+          ko: '밖으로 + 쉐어',
         },
       },
     },
@@ -238,8 +336,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'In + Partners',
+          de: 'Rein + Partner',
+          fr: 'Intérieur + Partenaires',
           ja: '内側 + ペア',
-          ko: '안으로 + 둘이 함께',
+          cn: '月环 + 双人分摊',
+          tc: '月環 + 雙人分攤',
+          ko: '안으로 + 쉐어',
         },
       },
     },
@@ -247,13 +349,17 @@ const triggerSet: TriggerSet<Data> = {
       id: 'R3S Short Fuse',
       type: 'GainsEffect',
       netRegex: { effectId: 'FB8', capture: true },
-      condition: (data, matches) => data.phase === 'final' && data.me === matches.target,
+      condition: Conditions.targetIsYou(),
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
           en: 'Short Fuse',
+          de: 'Kurze Lunte',
+          fr: 'Mèche courte',
           ja: '短い導火線',
-          ko: '먼저 흩어져요! (짧은 도화선)',
+          cn: '短引线点名',
+          tc: '短引線點名',
+          ko: '짧은 도화선',
         },
       },
     },
@@ -261,13 +367,17 @@ const triggerSet: TriggerSet<Data> = {
       id: 'R3S Long Fuse',
       type: 'GainsEffect',
       netRegex: { effectId: 'FB9', capture: true },
-      condition: (data, matches) => data.phase === 'final' && data.me === matches.target,
+      condition: Conditions.targetIsYou(),
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
           en: 'Long Fuse',
+          de: 'Lange Lunte',
+          fr: 'Mèche longue',
           ja: '長い導火線',
-          ko: '먼저 뭉쳐요! (긴 도화선)',
+          cn: '长引线点名',
+          tc: '長引線點名',
+          ko: '긴 도화선',
         },
       },
     },
@@ -276,47 +386,29 @@ const triggerSet: TriggerSet<Data> = {
       type: 'GainsEffect',
       netRegex: { effectId: 'FB4' },
       condition: Conditions.targetIsYou(),
-      infoText: (data, matches, output) => {
-        // MT>ST>H1>H2／D1>D2>D3>D4
-        const thFirst = ['ST', 'H1', 'H2', 'D1', 'D2', 'D3', 'D4'];
-        const dpsFirst = ['D2', 'D3', 'D4', 'MT', 'ST', 'H1', 'H2'];
-        if (parseFloat(matches.duration) < 30) {
-          data.fieldList = data.party.isDPS(data.me) ? dpsFirst : thFirst;
+      alertText: (_data, matches, output) => {
+        if (parseFloat(matches.duration) < 30)
           return output.short!();
-        }
-        data.fieldList = data.party.isDPS(data.me) ? thFirst : dpsFirst;
         return output.long!();
       },
       outputStrings: {
         short: {
           en: 'Short Fuse',
+          de: 'Kurze Lunte',
+          fr: 'Mèche courte',
           ja: '短い導火線',
+          cn: '短引线点名',
+          tc: '短引線點名',
           ko: '짧은 도화선',
         },
         long: {
           en: 'Long Fuse',
+          de: 'Lange Lunte',
+          fr: 'Mèche longue',
           ja: '長い導火線',
+          cn: '长引线点名',
+          tc: '長引線點名',
           ko: '긴 도화선',
-        },
-      },
-    },
-    {
-      id: 'R3S Fuse Field Next',
-      type: 'GainsEffect',
-      netRegex: { effectId: 'B7D', capture: false },
-      condition: (data) => data.phase === 'field' && data.fieldList.length > 0,
-      delaySeconds: 2,
-      durationSeconds: 2,
-      suppressSeconds: 1,
-      infoText: (data, _matches, output) => {
-        const target = data.fieldList.shift();
-        return output.text!({ target: target });
-      },
-      outputStrings: {
-        text: {
-          en: '${target}',
-          ja: '${target}',
-          ko: '${target}',
         },
       },
     },
@@ -324,13 +416,16 @@ const triggerSet: TriggerSet<Data> = {
       id: 'R3S Octoboom Bombarian Special',
       type: 'StartsUsing',
       netRegex: { id: '9752', source: 'Brute Bomber', capture: false },
-      condition: AutumnCond.notOnlyAutumn(),
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
           en: 'Out => In => Knockback => Spread',
+          de: 'Raus => Rein => Rückstoß => Verteilen',
+          fr: 'Extérieur => Intérieur => Poussée => Dispersion',
           ja: '外側 => 内側 => ノックバック => 散開',
-          ko: '밖에서 🔜 안으로 🔜 넉백 🔜 흩어져요',
+          cn: '钢铁 => 月环 => 击退 => 分散',
+          tc: '鋼鐵 => 月環 => 擊退 => 分散',
+          ko: '밖으로 => 안으로 => 넉백 => 산개',
         },
       },
     },
@@ -340,22 +435,25 @@ const triggerSet: TriggerSet<Data> = {
       netRegex: { id: '9752', source: 'Brute Bomber', capture: false },
       delaySeconds: 20,
       durationSeconds: 7,
-      infoText: (_data, _matches, output) => output.positions!(),
+      alertText: (_data, _matches, output) => output.spread!(),
       outputStrings: {
-        positions: Outputs.positions,
+        spread: Outputs.spread,
       },
     },
     {
       id: 'R3S Quadroboom Bombarian Special',
       type: 'StartsUsing',
       netRegex: { id: '940A', source: 'Brute Bomber', capture: false },
-      condition: AutumnCond.notOnlyAutumn(),
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
           en: 'Out => In => Knockback => Partners',
+          de: 'Raus => Rein => Rückstoß => Partner',
+          fr: 'Extérieur => Intérieur => Poussée => Partenaires',
           ja: '外側 => 内側 => ノックバック => ペア',
-          ko: '밖에서 🔜 안으로 🔜 넉백 🔜 둘이 함께',
+          cn: '钢铁 => 月环 => 击退 => 双人分摊',
+          tc: '鋼鐵 => 月環 => 擊退 => 雙人分攤',
+          ko: '밖으로 => 안으로 => 넉백 => 쉐어',
         },
       },
     },
@@ -365,7 +463,7 @@ const triggerSet: TriggerSet<Data> = {
       netRegex: { id: '940A', source: 'Brute Bomber', capture: false },
       delaySeconds: 20,
       durationSeconds: 7,
-      infoText: (_data, _matches, output) => output.stack!(),
+      alertText: (_data, _matches, output) => output.stack!(),
       outputStrings: {
         stack: Outputs.stackPartner,
       },
@@ -399,8 +497,12 @@ const triggerSet: TriggerSet<Data> = {
         ...Directions.outputStringsCardinalDir,
         tetheredTo: {
           en: 'Tethered to ${dir} clone',
+          de: 'Vrebindung zum ${dir} Klon',
+          fr: 'Lié au clone ${dir}',
           ja: '${dir} の分身に繋がれた',
-          ko: '분신 줄: ${dir}',
+          cn: '连线分身: ${dir}',
+          tc: '連線分身: ${dir}',
+          ko: '${dir}쪽 분신과 선 연결',
         },
       },
     },
@@ -454,8 +556,10 @@ const triggerSet: TriggerSet<Data> = {
         const [safeSpots, lastSafeSpot] = getSafeSpotsFromClones(myClone, otherClone);
 
         return output.safeDirs!({
-          dirs: safeSpots.map((dir) => getMarkerFromDir(dir)).join(''),
-          last: getMarkerFromDir(lastSafeSpot),
+          dirs: safeSpots
+            .map((dir) => output[Directions.outputFrom8DirNum(dir)]!())
+            .join(output.separator!()),
+          last: output[Directions.outputFrom8DirNum(lastSafeSpot)]!(),
         });
       },
       run: (data) => {
@@ -496,8 +600,10 @@ const triggerSet: TriggerSet<Data> = {
         );
 
         return output.safeDirs!({
-          dirs: safeSpots.map((dir) => getMarkerFromDir(dir)).join(''),
-          last: getMarkerFromDir(lastSafeSpot),
+          dirs: safeSpots
+            .map((dir) => output[Directions.outputFrom8DirNum(dir)]!())
+            .join(output.separator!()),
+          last: output[Directions.outputFrom8DirNum(lastSafeSpot)]!(),
         });
       },
       run: (data) => {
@@ -569,37 +675,37 @@ const triggerSet: TriggerSet<Data> = {
         }
 
         if (firstCleaveDir === secondCleaveDir) {
-          return output.aGo!({
-            firstDir1: getMarkerFromDir(firstDir1),
-            firstDir2: getMarkerFromDir(firstDir2),
-            secondDir: getMarkerFromDir(secondDir),
+          return output.comboGo!({
+            firstDir1: output[Directions.outputFrom8DirNum(firstDir1)]!(),
+            firstDir2: output[Directions.outputFrom8DirNum(firstDir2)]!(),
+            secondDir: output[Directions.outputFrom8DirNum(secondDir)]!(),
           });
         }
-        return output.aStay!({
-          firstDir1: getMarkerFromDir(firstDir1),
-          firstDir2: getMarkerFromDir(firstDir2),
-          secondDir: getMarkerFromDir(secondDir),
+        return output.comboStay!({
+          firstDir1: output[Directions.outputFrom8DirNum(firstDir1)]!(),
+          firstDir2: output[Directions.outputFrom8DirNum(firstDir2)]!(),
+          secondDir: output[Directions.outputFrom8DirNum(secondDir)]!(),
         });
       },
       outputStrings: {
         ...Directions.outputStrings8Dir,
         comboGo: {
           en: 'Knockback ${firstDir1}/${firstDir2} => Go ${secondDir}',
+          de: 'Rückstoß ${firstDir1}/${firstDir2} => Geh nach ${secondDir}',
+          fr: 'Poussée ${firstDir1}/${firstDir2} => Allez ${secondDir}',
           ja: 'ノックバック ${firstDir1}/${firstDir2} => ${secondDir} へ移動',
-          ko: '넉백: ${firstDir1}/${firstDir2} 🔜 ${secondDir}쪽',
+          cn: '击退 ${firstDir1}/${firstDir2} => 穿 ${secondDir}',
+          tc: '擊退 ${firstDir1}/${firstDir2} => 穿 ${secondDir}',
+          ko: '${firstDir1}/${firstDir2} 넉백 => ${secondDir} 으로 이동',
         },
         comboStay: {
           en: 'Knockback ${firstDir1}/${firstDir2}, Stay ${secondDir}',
+          de: 'Rückstoß ${firstDir1}/${firstDir2} => Bleibe im ${secondDir}',
+          fr: 'Poussée ${firstDir1}/${firstDir2} => Restez ${secondDir}',
           ja: 'ノックバック ${firstDir1}/${firstDir2} => ${secondDir} で待機',
-          ko: '넉백: ${firstDir1}/${firstDir2}, 그대로 ${secondDir}쪽',
-        },
-        aGo: {
-          en: 'Knockback ${firstDir1}/${firstDir2} => Go ${secondDir}',
-          ko: '넉백: ${firstDir1}/${firstDir2} 🔜 ${secondDir}',
-        },
-        aStay: {
-          en: 'Knockback ${firstDir1}/${firstDir2}, Stay ${secondDir}',
-          ko: '넉백: ${firstDir1}/${firstDir2}, 그대로 ${secondDir}',
+          cn: '击退 ${firstDir1}/${firstDir2}, 停 ${secondDir}',
+          tc: '擊退 ${firstDir1}/${firstDir2}, 停 ${secondDir}',
+          ko: '${firstDir1}/${firstDir2} 넉백 => ${secondDir} 그대로 있기',
         },
       },
     },

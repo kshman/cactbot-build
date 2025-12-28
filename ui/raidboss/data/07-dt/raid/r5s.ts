@@ -1,153 +1,202 @@
-import { AutumnDir } from '../../../../../resources/autumn';
+import Conditions from '../../../../../resources/conditions';
 import Outputs from '../../../../../resources/outputs';
 import { Responses } from '../../../../../resources/responses';
-import { DirectionOutputCardinal } from '../../../../../resources/util';
+import {
+  DirectionOutput16,
+  DirectionOutputCardinal,
+  Directions,
+} from '../../../../../resources/util';
 import ZoneId from '../../../../../resources/zone_id';
 import { RaidbossData } from '../../../../../types/data';
 import { NetMatches } from '../../../../../types/net_matches';
 import { TriggerSet } from '../../../../../types/trigger';
 
-type News = 'north' | 'east' | 'south' | 'west' | 'unknown';
+// TODOs:
+// - Arcady Night Fever/Get Down - dodge followup cleave call
+// - Frogtourage 1 - E+W or N+S safe
+// - Frogtourage 3 - inside/outside + baits
 
-const snapTwistIds: { [id: string]: [number, News] } = {
-  'A728': [2, 'west'],
-  'A729': [2, 'west'],
-  'A72A': [2, 'west'],
-  'A4DB': [2, 'west'],
-  'A72B': [2, 'east'],
-  'A72C': [2, 'east'],
-  'A72D': [2, 'east'],
-  'A4DC': [2, 'east'],
-  'A730': [3, 'west'],
-  'A731': [3, 'west'],
-  'A732': [3, 'west'],
-  'A4DE': [3, 'west'],
-  'A733': [3, 'east'],
-  'A734': [3, 'east'],
-  'A735': [3, 'east'],
-  'A4DD': [3, 'east'],
-  'A739': [4, 'west'],
-  'A73A': [4, 'west'],
-  'A73B': [4, 'west'],
-  'A4DF': [4, 'west'],
-  'A73C': [4, 'east'],
-  'A73D': [4, 'east'],
-  'A73E': [4, 'east'],
-  'A4E0': [4, 'east'],
+type EastWest = 'east' | 'west';
+type SnapCount = 'two' | 'three' | 'four';
+
+// map of ids to number of hits and first safe side
+const snapTwistIdMap: { [id: string]: [SnapCount, EastWest] } = {
+  // 2-snap Twist & Drop the Needle
+  'A728': ['two', 'west'],
+  'A729': ['two', 'west'],
+  'A72A': ['two', 'west'],
+  'A4DB': ['two', 'west'],
+  'A72B': ['two', 'east'],
+  'A72C': ['two', 'east'],
+  'A72D': ['two', 'east'],
+  'A4DC': ['two', 'east'],
+  // 3-snap Twist & Drop the Needle
+  'A730': ['three', 'west'],
+  'A731': ['three', 'west'],
+  'A732': ['three', 'west'],
+  'A4DD': ['three', 'west'],
+  'A733': ['three', 'east'],
+  'A734': ['three', 'east'],
+  'A735': ['three', 'east'],
+  'A4DE': ['three', 'east'],
+  // 4-snap Twist & Drop the Needle
+  'A739': ['four', 'west'],
+  'A73A': ['four', 'west'],
+  'A73B': ['four', 'west'],
+  'A4DF': ['four', 'west'],
+  'A73C': ['four', 'east'],
+  'A73D': ['four', 'east'],
+  'A73E': ['four', 'east'],
+  'A4E0': ['four', 'east'],
 };
-const frogIds: { [id: string]: News } = {
-  'A70A': 'north',
-  'A70B': 'south',
-  'A70C': 'west',
-  'A70D': 'east',
+
+// map of Frogtourage cast ids to safe dirs
+const feverIdMap: { [id: string]: DirectionOutputCardinal } = {
+  'A70A': 'dirN', // south cleave
+  'A70B': 'dirS', // north cleave
+  'A70C': 'dirW', // east cleave
+  'A70D': 'dirE', // west cleave
 };
-const dthIds: { [id: string]: 'left' | 'right' } = {
+
+const hustleMap: { [id: string]: 'left' | 'right' } = {
+  // Frogtourage clones:
   'A775': 'right',
   'A776': 'left',
+  // Boss:
   'A724': 'right',
   'A725': 'left',
 };
-const dancedIds = [
-  '9BE2',
-  '9BE3',
-  'A36C',
-  'A36D',
-  'A36E',
-  'A36F',
-] as const;
 
-const getHustleDir = (matches: NetMatches['StartsUsing']): DirectionOutputCardinal[] => {
-  const left = dthIds[matches.id] === 'left';
-  const headingAdjust = left ? -(Math.PI / 8) : (Math.PI / 8);
+export interface Data extends RaidbossData {
+  deepCutTargets: string[];
+  storedABSideMech?: 'lightParty' | 'roleGroup';
+  discoInfernalCount: number;
+  feverSafeDirs: DirectionOutputCardinal[];
+  wavelengthCount: {
+    alpha: number;
+    beta: number;
+  };
+  storedHustleCleaves: NetMatches['StartsUsing'][];
+  hustleCleaveCount: number;
+}
+
+const getSafeDirsForCloneCleave = (
+  matches: NetMatches['StartsUsing'],
+): DirectionOutputCardinal[] => {
+  const isLeftCleave = hustleMap[matches.id] === 'left';
+
+  // Snap the frog to the nearest cardinal in the direction of their cleave
+  const headingAdjust = isLeftCleave ? -(Math.PI / 8) : (Math.PI / 8);
   let snappedHeading = (parseFloat(matches.heading) + headingAdjust) % Math.PI;
   if (snappedHeading < -Math.PI)
     snappedHeading = Math.PI - snappedHeading;
-  snappedHeading %= Math.PI;
-  const snapped = AutumnDir.hdgNum4(snappedHeading);
-  const other = ((snapped + 4) + (left ? 1 : -1)) % 4;
+  snappedHeading = snappedHeading % Math.PI;
+
+  // Frog's snapped heading and the next one CW or CCW depending on cleave direction are safe
+  const snappedFrogDir = Directions.hdgTo4DirNum(snappedHeading);
+  const otherSafeDir = ((snappedFrogDir + 4) + (isLeftCleave ? 1 : -1)) % 4;
+
   return [
-    AutumnDir.outputDirPlus[snapped] ?? 'unknown',
-    AutumnDir.outputDirPlus[other] ?? 'unknown',
+    Directions.outputCardinalDir[snappedFrogDir] ?? 'unknown',
+    Directions.outputCardinalDir[otherSafeDir] ?? 'unknown',
   ];
 };
-
-export interface Data extends RaidbossData {
-  deepcs: string[];
-  side?: 'role' | 'light';
-  infernal: number;
-  frogs: News[];
-  waves: { alpha: number; beta: number };
-  order?: number;
-  hustles: NetMatches['StartsUsing'][];
-  hustlecnt: number;
-}
 
 const triggerSet: TriggerSet<Data> = {
   id: 'AacCruiserweightM1Savage',
   zoneId: ZoneId.AacCruiserweightM1Savage,
   timelineFile: 'r5s.txt',
   initData: () => ({
-    deepcs: [],
-    infernal: 0,
-    frogs: [],
-    waves: { alpha: 0, beta: 0 },
-    hustles: [],
-    hustlecnt: 0,
+    deepCutTargets: [],
+    discoInfernalCount: 0,
+    feverSafeDirs: [],
+    wavelengthCount: {
+      alpha: 0,
+      beta: 0,
+    },
+    storedHustleCleaves: [],
+    hustleCleaveCount: 0,
   }),
   triggers: [
     {
+      // headmarkers with self-targeted cast
       id: 'R5S Deep Cut',
       type: 'HeadMarker',
       netRegex: { id: '01D7' },
-      response: (data, matches, output) => {
-        // cactbot-builtin-response
-        output.responseOutputStrings = {
-          cleaveOnYou: Outputs.tankCleaveOnYou,
-          avoidCleave: Outputs.avoidTankCleave,
-        };
-        data.deepcs.push(matches.target);
-        if (data.deepcs.length < 2)
+      infoText: (data, matches, output) => {
+        data.deepCutTargets.push(matches.target);
+        if (data.deepCutTargets.length < 2)
           return;
-        if (data.deepcs.includes(data.me))
-          return { alertText: output.cleaveOnYou!() };
-        return { infoText: output.avoidCleave!() };
+
+        if (data.deepCutTargets.includes(data.me))
+          return output.cleaveOnYou!();
+        return output.avoidCleave!();
       },
       run: (data) => {
-        if (data.deepcs.length >= 2)
-          data.deepcs = [];
+        if (data.deepCutTargets.length >= 2)
+          data.deepCutTargets = [];
+      },
+      outputStrings: {
+        cleaveOnYou: Outputs.tankCleaveOnYou,
+        avoidCleave: Outputs.avoidTankCleave,
       },
     },
     {
-      id: 'R5S Flip to Side',
+      id: 'R5S Flip to AB Side',
       type: 'StartsUsing',
       netRegex: { id: ['A780', 'A781'], source: 'Dancing Green' },
-      run: (data, matches) => data.side = matches.id === 'A780' ? 'role' : 'light',
+      infoText: (data, matches, output) => {
+        // A780 = Flip to A-side, A781 = Flip to B-side
+        data.storedABSideMech = matches.id === 'A780' ? 'roleGroup' : 'lightParty';
+        return output.stored!({ mech: output[data.storedABSideMech]!() });
+      },
+      outputStrings: {
+        stored: {
+          en: '(${mech} later)',
+          de: '(${mech} später)',
+          fr: '(${mech} après)',
+          ja: '(あとで ${mech})',
+          cn: '(稍后 ${mech})',
+          tc: '(稍後 ${mech})',
+          ko: '(나중에 ${mech})',
+        },
+        lightParty: Outputs.healerGroups,
+        roleGroup: Outputs.rolePositions,
+      },
     },
     {
-      id: 'R5S Snap Twist',
+      id: 'R5S X-Snap Twist',
       type: 'StartsUsing',
-      netRegex: { id: Object.keys(snapTwistIds), source: 'Dancing Green' },
+      netRegex: { id: Object.keys(snapTwistIdMap), source: 'Dancing Green' },
       durationSeconds: 10,
-      infoText: (data, matches, output) => {
-        const st = snapTwistIds[matches.id];
-        if (st === undefined)
+      alertText: (data, matches, output) => {
+        const snapTwist = snapTwistIdMap[matches.id];
+        if (!snapTwist)
           return;
-        const cnt = st[0];
-        const dir = output[st[1]]!();
-        const mech = output[data.side ?? 'unknown']!();
-        return output.text!({ dir: dir, cnt: cnt, mech: mech });
+
+        const snapCountStr = output[snapTwist[0]]!();
+        const safeDirStr = output[snapTwist[1]]!();
+        const mechStr = output[data.storedABSideMech ?? 'unknown']!();
+        return output.combo!({ dir: safeDirStr, num: snapCountStr, mech: mechStr });
       },
-      run: (data) => delete data.side,
+      run: (data) => delete data.storedABSideMech,
       outputStrings: {
-        text: {
-          en: '${dir} (${cnt} hits) => ${mech}',
-          ja: '${dir}x${cnt} 🔜 ${mech}',
-          ko: '${dir}x${cnt} 🔜 ${mech}',
+        combo: {
+          en: 'Start ${dir} (${num} hits) => ${mech}',
+          de: 'Start ${dir} (${num} Treffer) => ${mech}',
+          fr: 'Commencez ${dir} (${num} coups) => ${mech}',
+          ja: '${dir} 開始 (${num} ポイント) からの ${mech}',
+          cn: '${dir} 开始 (打 ${num} 次) => ${mech}',
+          tc: '${dir} 開始 (打 ${num} 次) => ${mech}',
+          ko: '${dir} 시작 (${num}번 공격) => ${mech}',
         },
+        lightParty: Outputs.healerGroups,
+        roleGroup: Outputs.rolePositions,
         east: Outputs.east,
         west: Outputs.west,
-        role: Outputs.rolePositions,
-        light: Outputs.healerGroups,
+        two: Outputs.num2,
+        three: Outputs.num3,
+        four: Outputs.num4,
         unknown: Outputs.unknown,
       },
     },
@@ -155,84 +204,140 @@ const triggerSet: TriggerSet<Data> = {
       id: 'R5S Celebrate Good Times',
       type: 'StartsUsing',
       netRegex: { id: 'A723', source: 'Dancing Green', capture: false },
-      durationSeconds: 5,
-      response: Responses.aoe(),
+      response: Responses.bigAoe(),
     },
     {
-      id: 'R5S Disco Infernal',
+      id: 'R5S Disco Inferno',
       type: 'StartsUsing',
       netRegex: { id: 'A756', source: 'Dancing Green', capture: false },
-      durationSeconds: 5,
-      response: Responses.aoe(),
-      run: (data) => data.infernal++,
+      response: Responses.bigAoe(),
+      run: (data) => data.discoInfernalCount++,
     },
     {
-      id: 'R5S Burn Baby Burn 1',
+      id: 'R5S Burn Baby Burn 1 Early',
       type: 'GainsEffect',
       netRegex: { effectId: '116D' },
-      condition: (data, matches) => data.infernal === 1 && data.me === matches.target,
-      delaySeconds: (_data, matches) => parseFloat(matches.duration) - 5,
-      countdownSeconds: 5,
-      alertText: (_data, _matches, output) => output.text!(),
+      condition: (data, matches) =>
+        data.discoInfernalCount === 1 &&
+        data.me === matches.target,
+      durationSeconds: 7,
+      infoText: (_data, matches, output) => {
+        // During Disco 1, debuffs are by role: 23.5s or 31.5s
+        if (parseFloat(matches.duration) < 25)
+          return output.shortBurn!();
+        return output.longBurn!();
+      },
       outputStrings: {
-        text: {
-          en: 'Go to spotlight',
-          ja: 'スポットライトへ',
-          ko: '조명 밟아요',
+        shortBurn: {
+          en: '(short cleanse)',
+          de: '(kurze Reinigung)',
+          fr: '(compteur court)',
+          ja: '(先にスポットライト)',
+          cn: '(短舞点名)',
+          tc: '(短舞點名)',
+          ko: '(짧은 디버프)',
+        },
+        longBurn: {
+          en: '(long cleanse)',
+          de: '(lange Reinigung)',
+          fr: '(compteur long)',
+          ja: '(あとでスポットライト)',
+          cn: '(长舞点名)',
+          tc: '(長舞點名)',
+          ko: '(긴 디버프)',
         },
       },
     },
     {
-      id: 'R5S Burn Baby Burn 2-1',
+      id: 'R5S Burn Baby Burn 1 Cleanse',
       type: 'GainsEffect',
       netRegex: { effectId: '116D' },
-      condition: (data, matches) => data.infernal === 2 && data.me === matches.target,
+      condition: (data, matches) =>
+        data.discoInfernalCount === 1 &&
+        data.me === matches.target,
+      delaySeconds: (_data, matches) => parseFloat(matches.duration) - 5,
+      countdownSeconds: 5,
+      alertText: (_data, _matches, output) => output.cleanse!(),
+      outputStrings: {
+        cleanse: {
+          en: 'Cleanse in spotlight',
+          de: 'Reinige im Scheinwerfer',
+          fr: 'Purifiez sous le projecteur',
+          ja: 'スポットライトで浄化',
+          cn: '灯下跳舞',
+          tc: '燈下跳舞',
+          ko: '스포트라이트에 서기',
+        },
+      },
+    },
+    {
+      id: 'R5S Burn Baby Burn 2 First',
+      type: 'GainsEffect',
+      netRegex: { effectId: '116D' },
+      condition: (data, matches) =>
+        data.discoInfernalCount === 2 &&
+        data.me === matches.target,
       durationSeconds: 9,
-      countdownSeconds: 9,
       alertText: (_data, matches, output) => {
+        // During Disco 2, debuffs are by role: 9s or 19s
         if (parseFloat(matches.duration) < 14)
-          return output.spot!();
+          return output.cleanse!();
         return output.bait!();
       },
       outputStrings: {
-        spot: {
-          en: 'Go to spotlight',
-          ja: 'スポットライトへ',
-          ko: '조명 밟아요',
+        cleanse: {
+          en: 'Cleanse in spotlight',
+          de: 'Reinige im Scheinwerfer',
+          fr: 'Purifiez sous le projecteur',
+          ja: 'スポットライトで浄化',
+          cn: '灯下跳舞',
+          tc: '燈下跳舞',
+          ko: '스포트라이트에 서기',
         },
         bait: {
           en: 'Bait Frog',
-          ja: 'カエルの扇誘導',
-          ko: '개굴 부채 유도',
+          de: 'Frosch ködern',
+          fr: 'Prenez la grenouille',
+          ja: 'カエル誘導',
+          cn: '引导青蛙',
+          tc: '引導青蛙',
+          ko: '개구리 유도',
         },
-        card: Outputs.cardinals,
-        inter: Outputs.intercards,
-        unknown: Outputs.unknown,
       },
     },
     {
-      id: 'R5S Burn Baby Burn 2-2',
+      id: 'R5S Burn Baby Burn 2 Second',
       type: 'GainsEffect',
       netRegex: { effectId: '116D' },
-      condition: (data, matches) => data.infernal === 2 && data.me === matches.target,
+      condition: (data, matches) =>
+        data.discoInfernalCount === 2 &&
+        data.me === matches.target,
       delaySeconds: 11,
       durationSeconds: 8,
-      countdownSeconds: 8,
       alertText: (_data, matches, output) => {
+        // During Disco 2, debuffs are by role: 9s or 19s
         if (parseFloat(matches.duration) < 14)
           return output.bait!();
-        return output.spot!();
+        return output.cleanse!();
       },
       outputStrings: {
-        spot: {
-          en: 'Go to spotlight',
-          ja: 'スポットライトへ',
-          ko: '조명 밟아요',
+        cleanse: {
+          en: 'Cleanse in spotlight',
+          de: 'Reinige im Scheinwerfer',
+          fr: 'Purifiez sous le projecteur',
+          ja: 'スポットライトで浄化',
+          cn: '灯下跳舞',
+          tc: '燈下跳舞',
+          ko: '스포트라이트에 서기',
         },
         bait: {
           en: 'Bait Frog',
-          ja: 'カエルの扇誘導',
-          ko: '개굴 부채 유도',
+          de: 'Frosch ködern',
+          fr: 'Prenez la grenouille',
+          ja: 'カエル誘導',
+          cn: '引导青蛙',
+          tc: '引導青蛙',
+          ko: '개구리 유도',
         },
       },
     },
@@ -240,192 +345,290 @@ const triggerSet: TriggerSet<Data> = {
       id: 'R5S Inside Out',
       type: 'StartsUsing',
       netRegex: { id: 'A77C', source: 'Dancing Green', capture: false },
-      durationSeconds: 4.9,
-      countdownSeconds: 4.9,
-      response: Responses.getOutThenIn(),
-    },
-    {
-      id: 'R5S Inside Get Out',
-      type: 'Ability',
-      netRegex: { id: 'A77C', source: 'Dancing Green', capture: false },
-      response: Responses.getIn(),
+      durationSeconds: 8.5,
+      alertText: (_data, _matches, output) => output.insideOut!(),
+      outputStrings: {
+        insideOut: {
+          en: 'Max Melee => Under',
+          de: 'Max Nahkampf => Unter ihn',
+          fr: 'Max mêlée => Dessous',
+          ja: '外からボス下に',
+          cn: '钢铁 => 月环',
+          tc: '鋼鐵 => 月環',
+          ko: '칼끝딜 => 안으로',
+        },
+      },
     },
     {
       id: 'R5S Outside In',
       type: 'StartsUsing',
       netRegex: { id: 'A77E', source: 'Dancing Green', capture: false },
-      durationSeconds: 4.9,
-      countdownSeconds: 4.9,
-      response: Responses.getInThenOut(),
-    },
-    {
-      id: 'R5S Outside Get In',
-      type: 'Ability',
-      netRegex: { id: 'A77E', source: 'Dancing Green', capture: false },
-      response: Responses.getOut(),
-    },
-    {
-      id: 'R5S Arcady Night Fever', // +Arcady Night Encore
-      type: 'StartsUsing',
-      netRegex: { id: ['A760', 'A370'], source: 'Dancing Green', capture: false },
-      run: (data) => {
-        data.frogs = [];
-        delete data.order;
+      durationSeconds: 8.5,
+      alertText: (_data, _matches, output) => output.outsideIn!(),
+      outputStrings: {
+        outsideIn: {
+          en: 'Under => Max Melee',
+          de: 'Unter ihn => Max Nahkampf',
+          fr: 'Dessous => Max mêlée',
+          ja: 'ボス下から外に',
+          cn: '月环 => 钢铁',
+          tc: '月環 => 鋼鐵',
+          ko: '안으로 => 칼끝딜',
+        },
       },
     },
     {
+      // Wavelength α debuff timers are applied with 40.5, 25.5, 25.5, 30.5 or
+      //  38.0, 23.0, 23.0, 28.0 durations depending on which group gets hit first
+      //
+      // Wavelength β debuff timers are applied with 45.5, 30.5, 20.5, 25.5 or
+      //  43.0, 28.0, 18.0, 23.0 durations depending on which group gets hit first
       id: 'R5S Wavelength Merge Order',
       type: 'GainsEffect',
       netRegex: { effectId: ['116E', '116F'] },
-      run: (data, matches) => {
-        matches.effectId === '116E' ? data.waves.alpha++ : data.waves.beta++;
-        if (data.me !== matches.target)
-          return;
-        if (matches.effectId === '116E') {
-          const alphas: { [num: number]: number } = { 1: 3, 2: 1, 3: 2, 4: 4 } as const;
-          data.order = alphas[data.waves.alpha];
-        } else {
-          const betas: { [num: number]: number } = { 1: 4, 2: 2, 3: 1, 4: 3 } as const;
-          data.order = betas[data.waves.beta];
+      preRun: (data, matches) => {
+        matches.effectId === '116E' ? data.wavelengthCount.alpha++ : data.wavelengthCount.beta++;
+      },
+      durationSeconds: (_data, matches) => parseFloat(matches.duration),
+      infoText: (data, matches, output) => {
+        if (matches.target === data.me) {
+          if (matches.effectId === '116E') {
+            const count = data.wavelengthCount.alpha;
+            switch (count) {
+              case 1:
+                return output.merge!({ order: output.third!() });
+              case 2:
+                return output.merge!({ order: output.first!() });
+              case 3:
+                return output.merge!({ order: output.second!() });
+              case 4:
+                return output.merge!({ order: output.fourth!() });
+              default:
+                return output.merge!({ order: output.unknown!() });
+            }
+          } else {
+            const count = data.wavelengthCount.beta;
+            switch (count) {
+              case 1:
+                return output.merge!({ order: output.fourth!() });
+              case 2:
+                return output.merge!({ order: output.second!() });
+              case 3:
+                return output.merge!({ order: output.first!() });
+              case 4:
+                return output.merge!({ order: output.third!() });
+              default:
+                return output.merge!({ order: output.unknown!() });
+            }
+          }
         }
       },
-    },
-    {
-      id: 'R5S Frog Dance Collect',
-      type: 'StartsUsing',
-      netRegex: { id: Object.keys(frogIds), source: 'Frogtourage' },
-      run: (data, matches) => data.frogs.push(frogIds[matches.id] ?? 'unknown'),
-    },
-    {
-      id: 'R5S Let\'s Dance!', // +Let's Dance Remix
-      type: 'StartsUsing',
-      netRegex: { id: ['A76A', 'A390'], source: 'Dancing Green', capture: false },
-      delaySeconds: 2,
-      durationSeconds: 4,
-      infoText: (data, _matches, output) => {
-        const curr = data.frogs[0];
-        if (curr === undefined) // 이게 없을리가 있나
-          return output.unknown!();
-        if (data.order !== undefined)
-          return output.combo!({ dir: output[curr]!(), order: data.order });
-        return output.text!({ dir: output[curr]!() });
-      },
       outputStrings: {
-        text: {
-          en: '${dir}',
-          ja: '${dir}へ',
-          ko: '${dir}으로',
+        merge: {
+          en: '${order} merge',
+          de: '${order} berühren',
+          fr: '${order} fusion',
+          ja: '${order} にペア割り',
+          cn: '${order} 撞毒',
+          tc: '${order} 撞毒',
+          ko: '${order} 융합',
         },
-        combo: {
-          en: '${dir} (${order})',
-          ja: '${dir} (${order}番目)',
-          ko: '${dir}으로 (${order}번째)',
+        first: {
+          en: 'First',
+          de: 'Erstes',
+          fr: 'Première',
+          ja: '最初',
+          cn: '第1组',
+          tc: '第1組',
+          ko: '첫번째',
         },
-        east: Outputs.east,
-        west: Outputs.west,
-        north: Outputs.north,
-        south: Outputs.south,
+        second: {
+          en: 'Second',
+          de: 'Zweites',
+          fr: 'Seconde',
+          ja: '2番目',
+          cn: '第2组',
+          tc: '第2組',
+          ko: '두번째',
+        },
+        third: {
+          en: 'Third',
+          de: 'Drittes',
+          fr: 'Troisième',
+          ja: '3番目',
+          cn: '第3组',
+          tc: '第3組',
+          ko: '세번째',
+        },
+        fourth: {
+          en: 'Fourth',
+          de: 'Viertes',
+          fr: 'Quatrième',
+          ja: '4番目',
+          cn: '第4组',
+          tc: '第4組',
+          ko: '네번째',
+        },
         unknown: Outputs.unknown,
       },
     },
     {
-      id: 'R5S Frog Dance',
-      type: 'Ability',
-      netRegex: { id: dancedIds, capture: false },
-      durationSeconds: 2,
-      response: (data, _matches, output) => {
-        // cactbot-builtin-response
-        output.responseOutputStrings = {
-          text: {
-            en: '${dir}',
-            ja: '${dir}へ',
-            ko: '${dir}으로',
-          },
-          stay: {
-            en: '(Stay)',
-            ja: '(そのまま)',
-            ko: '(그대로)',
-          },
-          east: Outputs.east,
-          west: Outputs.west,
-          north: Outputs.north,
-          south: Outputs.south,
-        };
-        const prev = data.frogs.shift();
-        const curr = data.frogs[0];
-        if (curr === undefined)
-          return;
-        if (prev === curr)
-          return { infoText: output.stay!() };
-        return { alertText: output.text!({ dir: output[curr]!() }) };
+      id: 'R5S Wavelength Merge Reminder',
+      type: 'GainsEffect',
+      netRegex: { effectId: ['116E', '116F'] },
+      condition: Conditions.targetIsYou(),
+      delaySeconds: (_data, matches) => parseFloat(matches.duration) - 5,
+      alertText: (_data, _matches, output) => output.merge!(),
+      outputStrings: {
+        merge: {
+          en: 'Merge debuff',
+          de: 'Debuff berühren',
+          fr: 'Fusionner le debuff',
+          ja: 'ペア割り',
+          cn: '撞毒',
+          tc: '撞毒',
+          ko: '융합하기',
+        },
       },
     },
     {
-      id: 'R5S Beats',
+      id: 'R5S Quarter Beats',
       type: 'StartsUsing',
-      netRegex: { id: ['A75B', 'A75D'], source: 'Dancing Green' },
-      infoText: (_data, matches, output) => matches.id === 'A75B' ? output.b4!() : output.b8!(),
+      netRegex: { id: 'A75B', source: 'Dancing Green', capture: false },
+      infoText: (_data, _matches, output) => output.quarterBeats!(),
       outputStrings: {
-        b4: Outputs.stackPartner,
-        b8: Outputs.protean,
+        quarterBeats: Outputs.stackPartner,
       },
+    },
+    {
+      id: 'R5S Eighth Beats',
+      type: 'StartsUsing',
+      netRegex: { id: 'A75D', source: 'Dancing Green', capture: false },
+      infoText: (_data, _matches, output) => output.eighthBeats!(),
+      outputStrings: {
+        eighthBeats: Outputs.spread,
+      },
+    },
+    {
+      // cast order of the 8 adds is always W->E, same as firing order
+      id: 'R5S Arcady Night Fever + Encore Collect',
+      type: 'StartsUsing',
+      netRegex: { id: Object.keys(feverIdMap), source: 'Frogtourage' },
+      run: (data, matches) => data.feverSafeDirs.push(feverIdMap[matches.id] ?? 'unknown'),
+    },
+    {
+      id: 'R5S Let\'s Dance!',
+      type: 'StartsUsing',
+      // A76A - Let's Dance!; A390 - Let's Dance! Remix
+      // Remix is faster, so use a shorter duration
+      netRegex: { id: ['A76A', 'A390'], source: 'Dancing Green' },
+      durationSeconds: (_data, matches) => matches.id === 'A76A' ? 23 : 18,
+      infoText: (data, _matches, output) => {
+        if (data.feverSafeDirs.length < 8)
+          return output['unknown']!();
+        const dirStr = data.feverSafeDirs.map((dir) => output[dir]!()).join(output.next!());
+        return dirStr;
+      },
+      run: (data) => data.feverSafeDirs = [],
+      outputStrings: {
+        ...Directions.outputStringsCardinalDir,
+        next: Outputs.next,
+      },
+    },
+    {
+      id: 'R5S Let\'s Pose',
+      type: 'StartsUsing',
+      netRegex: { id: 'A770', source: 'Dancing Green', capture: false },
+      response: Responses.bigAoe(),
     },
     {
       id: 'R5S Do the Hustle',
       type: 'StartsUsing',
-      netRegex: { id: Object.keys(dthIds) },
-      preRun: (data, matches) => data.hustles.push(matches),
-      infoText: (data, _matches, output) => {
+      netRegex: { id: Object.keys(hustleMap) },
+      preRun: (data, matches) => data.storedHustleCleaves.push(matches),
+      infoText: (data, _matches, outputs) => {
         // Order is double cleave, double cleave, single cleave, triple cleave
-        const expected = [2, 2, 1, 3] as const;
-        if (data.hustles.length < (expected[data.hustlecnt] ?? 0))
+        const expectedCountMap = [
+          2,
+          2,
+          1,
+          3,
+        ];
+        if (
+          data.storedHustleCleaves.length <
+            (expectedCountMap[data.hustleCleaveCount] ?? 0)
+        )
           return;
 
-        const cleaves = data.hustles;
-        const count = data.hustlecnt;
-        data.hustles = [];
-        data.hustlecnt++;
+        const cleaves = data.storedHustleCleaves;
+        const currentCleaveCount = data.hustleCleaveCount;
+        data.storedHustleCleaves = [];
+        ++data.hustleCleaveCount;
 
         // Double cleaves from clones
-        if (count === 0 || count === 1) {
+        if (currentCleaveCount === 0 || currentCleaveCount === 1) {
           const [cleave1, cleave2] = cleaves;
           if (cleave1 === undefined || cleave2 === undefined)
             return;
-          const safe1 = getHustleDir(cleave1);
-          const safe2 = getHustleDir(cleave2);
-          for (const dir of safe1) {
-            if (safe2.includes(dir))
-              return output[dir]!();
+
+          const safeDirs1 = getSafeDirsForCloneCleave(cleave1);
+          const safeDirs2 = getSafeDirsForCloneCleave(cleave2);
+          for (const dir of safeDirs1) {
+            if (safeDirs2.includes(dir)) {
+              return outputs[dir]!();
+            }
           }
-          return output['unknown']!();
+          return outputs['unknown']!();
         }
 
         // Single boss cleave
-        if (count === 2) {
+        if (currentCleaveCount === 2) {
           const [cleave1] = cleaves;
           if (cleave1 === undefined)
             return;
-          return dthIds[cleave1.id] === 'left' ? output['dirE']!() : output['dirW']!();
+
+          return hustleMap[cleave1.id] === 'left' ? outputs['dirE']!() : outputs['dirW']!();
         }
 
         // Double cleaves from clones plus boss cleave
-        if (count === 3) {
+        if (currentCleaveCount === 3) {
           const cleave3 = cleaves.find((cleave) => ['A724', 'A725'].includes(cleave.id));
           const [cleave1, cleave2] = cleaves.filter((c) => c !== cleave3);
           if (cleave1 === undefined || cleave2 === undefined || cleave3 === undefined)
             return;
-          const safe1 = getHustleDir(cleave1);
-          const safe2 = getHustleDir(cleave2);
-          let safe: DirectionOutputCardinal = 'unknown';
-          for (const dir of safe1) {
-            if (safe2.includes(dir))
-              safe = dir;
+
+          const safeDirs1 = getSafeDirsForCloneCleave(cleave1);
+          const safeDirs2 = getSafeDirsForCloneCleave(cleave2);
+
+          let safeDir: DirectionOutput16 = 'unknown';
+
+          for (const dir of safeDirs1) {
+            if (safeDirs2.includes(dir)) {
+              safeDir = dir;
+            }
           }
-          return output[safe]!();
+
+          const isBossLeftCleave = hustleMap[cleave3.id] === 'left';
+
+          // safeDir should be either 'dirN' or 'dirS' at this point, adjust with boss left/right
+          if (safeDir === 'dirN') {
+            if (isBossLeftCleave)
+              return outputs['dirNNE']!();
+            return outputs['dirNNW']!();
+          }
+          if (safeDir === 'dirS') {
+            if (isBossLeftCleave)
+              return outputs['dirSSE']!();
+            return outputs['dirSSW']!();
+          }
+
+          return outputs['unknown']!();
         }
-        return output['unknown']!();
+        return outputs['unknown']!();
       },
-      outputStrings: AutumnDir.stringsAimPlus,
+      outputStrings: {
+        ...Directions.outputStrings16Dir,
+      },
     },
   ],
   timelineReplace: [

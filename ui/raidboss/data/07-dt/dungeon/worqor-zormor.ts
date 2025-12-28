@@ -497,7 +497,6 @@ const triggerSet: TriggerSet<Data> = {
     },
     {
       'locale': 'fr',
-      'missingTranslations': true,
       'replaceSync': {
         'Gurfurlur': 'Gurfurlur',
         'Kahderyor': 'Kahderyor',

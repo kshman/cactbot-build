@@ -555,8 +555,6 @@ const triggerSet: TriggerSet<Data> = {
         'The Cloven Crystal Square': 'クリスタル広場',
       },
       'replaceText': {
-        '\\(cast\\)': '(詠唱)',
-        '\\(spread\\)': '(散会)',
         'Abyssal Outburst': '暗黒波動',
         'Antipodal Assault': 'アンティポディース・スラスト',
         'Antlion March': 'アントリオンマーチ',

@@ -53,6 +53,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         wave: {
           en: 'Look away from party',
+          ja: 'パーティメンバーを見ない',
           ko: '파티 보면 안되요',
         },
       },
@@ -65,6 +66,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         avoid: {
           en: 'Avoid bubbles',
+          ja: '泡を避ける',
           ko: '거품 피해요',
         },
       },
@@ -77,6 +79,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         avoid: {
           en: 'Avoid bubbles',
+          ja: '泡を避ける',
           ko: '거품 피해요',
         },
       },
@@ -147,10 +150,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         avoidDir: {
           en: 'Safe: ${dir} (on hitbox)',
+          ja: '安全: ${dir} (判定内)',
           ko: '안전: ${dir} (히트박스 밟아요)',
         },
         avoid: {
           en: 'Avoid shifting bubbles',
+          ja: '動く泡を避ける',
           ko: '이동 거품 피해요',
         },
         ...Directions.outputStringsIntercardDir,
@@ -182,10 +187,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         awayFromOrb: {
           en: 'North + Away from orb',
+          ja: '上 + 玉から離れる',
           ko: '북쪽 + 구슬에서 멀어져요',
         },
         nearOrb: {
           en: 'Be close to North orb',
+          ja: '上の玉に近づく',
           ko: '북쪽 구슬 가까이로',
         },
       },
@@ -198,6 +205,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         tiles: {
           en: 'Avoid exploding rows/columns',
+          ja: '横/縦に伸びる床を避ける',
           ko: '폭발 장소 피해요',
         },
       },
@@ -220,10 +228,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         stackThree: {
           en: 'Stack (3 hits)',
+          ja: '頭割り (3回)',
           ko: '뭉쳐요 (3번)',
         },
         stackFive: {
           en: 'Stack (5 hits)',
+          ja: '頭割り (5回)',
           ko: '뭉쳐요 (5번)',
         },
       },
@@ -252,6 +262,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         kbAoeSpread: {
           en: 'Knockback (AoE) => Spread',
+          ja: 'ノックバック (AoE) => 散開',
           ko: '넉백 (AOE) 🔜 흩어져요',
         },
       },
@@ -265,6 +276,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         dodgeSides: {
           en: 'Avoid AoEs (sides after)',
+          ja: 'AOEを避ける (その後、横へ)',
           ko: 'AOE 피해요 (그리고 옆으로)',
         },
       },
@@ -286,6 +298,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         dodgeMiddle: {
           en: 'Avoid AoEs (middle after)',
+          ja: 'AOEを避ける (その後、中央へ)',
           ko: 'AOE 피해요 (그리고 가운데로)',
         },
       },
@@ -311,10 +324,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         east: {
           en: '<== Knockback Back Left (Right After)',
+          ja: '<== 左後ノックバック (その後、右へ)',
           ko: '❰❰❰ 왼쪽뒤로 넉백 (그리고 오른쪽으로)',
         },
         west: {
           en: 'Knockback Back Right (Left After) ==>',
+          ja: '右後ノックバック (その後、左へ) ==>',
           ko: '오른쪽뒤로 넉백 (그리고 왼쪽으로) ❱❱❱',
         },
       },
@@ -331,6 +346,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         knockback: {
           en: 'Knockback (to ${dir})',
+          ja: 'ノックバック (${dir}へ)',
           ko: '넉백 (→ ${dir})',
         },
         dirNE: Outputs.dirNE,
@@ -348,6 +364,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         spreadAfter: {
           en: '(spread after)',
+          ja: '(あとで散開)',
           ko: '(나중에 흩어져요)',
         },
       },
@@ -362,6 +379,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         stackAfter: {
           en: '(stack after)',
+          ja: '(あとで頭割り)',
           ko: '(나중에 뭉쳐요)',
         },
       },
@@ -422,7 +440,6 @@ const triggerSet: TriggerSet<Data> = {
     },
     {
       'locale': 'fr',
-      'missingTranslations': true,
       'replaceSync': {
         'Airy Bubble': 'bulle irisée',
         'Feather Ray': 'raie manta',
@@ -430,6 +447,10 @@ const triggerSet: TriggerSet<Data> = {
         'Maulskull': 'Cabosseur',
       },
       'replaceText': {
+        '\\(boss\\)': '(Boss)',
+        '\\(first\\)': '(Premier)',
+        '\\(party\\)': '(groupe)',
+        '\\(second\\)': '(Deuxième)',
         'Ancient Artillery': 'Activation du canon',
         '(?<! )Artillery': 'Tir d\'artillerie',
         'Ashlayer': 'Rayonnement calorifique',
@@ -464,7 +485,6 @@ const triggerSet: TriggerSet<Data> = {
     },
     {
       'locale': 'ja',
-      'missingTranslations': true,
       'replaceSync': {
         'Airy Bubble': '水泡',
         'Feather Ray': 'フェザーサークル',
@@ -472,6 +492,10 @@ const triggerSet: TriggerSet<Data> = {
         'Maulskull': 'モールスカル',
       },
       'replaceText': {
+        '\\(boss\\)': '(ボス)',
+        '\\(first\\)': '(1)',
+        '\\(party\\)': '(パーティ)',
+        '\\(second\\)': '(2)',
         'Ancient Artillery': '火砲起動',
         '(?<! )Artillery': '火砲',
         'Ashlayer': '熱放射',

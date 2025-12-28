@@ -207,10 +207,12 @@ const triggerSet: TriggerSet<Data> = {
       id: 'chasmVollokPriority',
       name: {
         en: 'Chasm Of Vollok Safe Spot Priority',
+        ja: 'ピット・オブ・ヴォロク：安地優先順位',
         ko: '볼로크의 함정 안전지대 우선순위',
       },
       comment: {
         en: 'Select which safe spots have priority during callouts.',
+        ja: 'コール時に優先する安地の位置を選択します。',
         ko: '안전지대 중 호출 우선순위가 높은 곳을 선택하세요.',
       },
       type: 'select',
@@ -220,6 +222,12 @@ const triggerSet: TriggerSet<Data> = {
           'North and South Corner': 'northSouth',
           'North Corner': 'north',
           'South Corner': 'south',
+        },
+        ja: {
+          '内側の床': 'inside',
+          '北と南の隅': 'northSouth',
+          '北の隅': 'north',
+          '南の隅': 'south',
         },
         ko: {
           '중앙': 'inside',
@@ -524,22 +532,27 @@ const triggerSet: TriggerSet<Data> = {
         },
         insideN: {
           en: 'Inner North Diamond - ${lean}',
+          ja: '内側 北の床へ - ${lean}',
           ko: '안쪽칸 🡹위로 (${lean})',
         },
         insideS: {
           en: 'Inner South Diamond - ${lean}',
+          ja: '内側 南の床へ - ${lean}',
           ko: '안쪽칸 🡻아래로 (${lean})',
         },
         cornerNS: {
           en: 'North/South Corner Diamonds - ${lean}',
+          ja: '北/南の隅の床へ - ${lean}',
           ko: '⇅위아래 구석 (${lean})',
         },
         cornerN: {
           en: 'North Corner Diamond - ${lean}',
+          ja: '北の隅の床へ - ${lean}',
           ko: '🡹위쪽 구석 (${lean})',
         },
         cornerS: {
           en: 'South Corner Diamond - ${lean}',
+          ja: '南の隅の床へ - ${lean}',
           ko: '🡻아래쪽 구석 (${lean})',
         },
         leanWest: {

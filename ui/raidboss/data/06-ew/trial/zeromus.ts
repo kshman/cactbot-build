@@ -339,7 +339,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       'replaceText': {
         '\\(cast\\)': '(咏唱)',
-        '\\(proximity\\)': '(接近)',
+        '\\(proximity\\)': '(距离衰减)',
         'Abyssal Echoes': '深渊回声',
         'Abyssal Nox': '深渊之夜',
         'Big Bang': '宇宙大爆炸',

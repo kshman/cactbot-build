@@ -16,7 +16,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Stack (ignore adds)',
-          ja: '頭割り (雑魚無視)',
+          ja: '集合 (雑魚無視)',
           ko: '뭉쳐요 (쫄은 무시)',
         },
       },

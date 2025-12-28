@@ -841,6 +841,7 @@ const triggerSet: TriggerSet<Data> = {
           fr: '${dir1} / ${dir2}',
           ja: '${dir1} / ${dir2}',
           cn: '${dir1} / ${dir2}',
+          tc: '${dir1} / ${dir2}',
           ko: '${dir1} 또는 ${dir2}',
         },
       },
@@ -961,11 +962,10 @@ const triggerSet: TriggerSet<Data> = {
     },
     {
       'locale': 'fr',
-      'missingTranslations': true,
       'replaceSync': {
-        'Azure Star': 'astre azuré',
-        'Fiery Star': 'astre incarnat',
-        'The Endsinger': 'chantre de l\'anéantissement',
+        'Azure Star': 'Astre azuré',
+        'Fiery Star': 'Astre incarnat',
+        'The Endsinger': 'Chantre de l\'anéantissement',
       },
       'replaceText': {
         'Befoulment': 'Bombe de pus',
@@ -980,8 +980,10 @@ const triggerSet: TriggerSet<Data> = {
         '(?<! )Fatalism(?!e)': 'Fatalisme',
         'Grip of Despair': 'Chaînes du désespoir',
         'Hubris': 'Hubris',
+        'Star Collision': 'Collision d\'étoile',
         'Telomania': 'Télomanie',
         'Telos': 'Télos',
+        'Tower Explosion': 'Explosion de tour',
         'Theological Fatalism': 'Fatalisme théologique',
         'Twinsong\'s Aporrhoia': 'Chœur aporétique',
         'Ultimate Fate': 'Ultime destin',

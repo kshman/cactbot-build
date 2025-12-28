@@ -120,6 +120,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         avoidFront: {
           en: '${dir} (Avoid Front)',
+          ja: '${dir} (正面を避ける)',
           ko: '${dir} (앞쪽 피해요)',
         },
         cleaveRight: Outputs.left,
@@ -155,6 +156,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         avoidRear: {
           en: '${dir} (Avoid Rear)',
+          ja: '${dir} (背面を避ける)',
           ko: '${dir} (뒤쪽 피해요)',
         },
         cleaveRight: Outputs.left,
@@ -186,6 +188,7 @@ const triggerSet: TriggerSet<Data> = {
         cleaveLeft: Outputs.right,
         cleaveRear: {
           en: 'Avoid Rear',
+          ja: '背面を避ける',
           ko: '뒤쪽 피해요',
         },
         next: Outputs.next,
@@ -225,14 +228,17 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         combo: {
           en: '${dir} + Avoid Droid Cleaves',
+          ja: '${dir} + ロボの範囲攻撃を避ける',
           ko: '${dir} + 드로이드 쪼개기 피해요',
         },
         frontLeft: {
           en: 'Back Right / Front Left',
+          ja: '右後 / 左前',
           ko: '뒤 오른쪽 / 앞 왼쪽',
         },
         frontRight: {
           en: 'Back Left / Front Right',
+          ja: '左後 / 右前',
           ko: '뒤 왼쪽 / 앞 오른쪽',
         },
       },
@@ -249,6 +255,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         avoid: {
           en: 'Stand in line with flickering droid',
+          ja: '点滅しているロボの列に立つ',
           ko: '깜빡이는 드로이드 줄로',
         },
       },
@@ -305,24 +312,29 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         middleLanes: {
           en: 'Middle lanes (${side} turrets)',
+          ja: '中央の2列 (${side} 砲台)',
           ko: '가운데 줄 (${side} 포탑)',
         },
         farLanes: {
           en: 'Far N/S lanes (${side} turrets)',
+          ja: '南北の列 (${side} 砲台)',
           ko: '남북 바깥쪽 줄 (${side} 포탑)',
         },
         middleNorth: {
           en: 'Middle North lane (${side} turrets)',
+          ja: '中央の北列 (${side} 砲台)',
           ko: '가운데 윗 줄 (${side} 포탑)',
         },
         middleSouth: {
           en: 'Middle South lane (${side} turrets)',
+          ja: '中央の南列 (${side} 砲台)',
           ko: '가운데 아랫 줄 (${side} 포탑)',
         },
         east: Outputs.east,
         west: Outputs.west,
         avoid: {
           en: 'Stand in line with flickering turrets',
+          ja: '点滅している砲台の列に立つ',
           ko: '깜빡이는 포탑 줄로',
         },
       },
@@ -346,6 +358,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         safeTurret: {
           en: 'Knockback into real turret => Spread',
+          ja: '本物の砲台にノックバック => 散開',
           ko: '진짜 포탑으로 넉백 🔜 흩어져요',
         },
       },
@@ -372,14 +385,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         right: {
           en: '(Far North lane: Knockback Right) ==>',
-          fr: '(Ligne nord éloignée : Poussée droite) ==>',
-          cn: '(第一行: 向右击退) ==>',
+          ja: '(北の列: 右へノックバック) ==>',
           ko: '(북쪽 바깥쪽 줄: 오른쪽 넉백 ❱❱❱)',
         },
         left: {
           en: '<== (Far North lane: Knockback Left)',
-          fr: '<== (Ligne sur éloignée : Poussée gauche)',
-          cn: '<== (第一行: 向左击退)',
+          ja: '<== (北の列: 左へノックバック)',
           ko: '(❰❰❰ 북쪽 바깥쪽 줄: 왼쪽 넉백)',
         },
       },
@@ -437,6 +448,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         spread: {
           en: '${dir} => Spread',
+          ja: '${dir} => 散開',
           ko: '${dir} 🔜 흩어져요',
         },
         north: Outputs.north,
@@ -452,6 +464,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         kb: {
           en: 'Knockback N/S',
+          ja: '南北へノックバック',
           ko: '남북 넉백',
         },
       },
@@ -466,10 +479,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         kbSpread: {
           en: 'Knockback to behind boss => Spread',
+          ja: 'ボス背面にノックバック => 散開',
           ko: '보스 뒤로 넉백 🔜 흩어져요',
         },
         kb: {
           en: 'Knockback to behind boss',
+          ja: 'ボス背面にノックバック',
           ko: '보스 뒤로 넉백',
         },
       },
@@ -484,6 +499,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         avoid: {
           en: 'Avoid lance zig-zag',
+          ja: 'ジグザグ槍を避ける',
           ko: '지그재그 장판 피해요',
         },
       },
@@ -554,7 +570,6 @@ const triggerSet: TriggerSet<Data> = {
     },
     {
       'locale': 'fr',
-      'missingTranslations': true,
       'replaceSync': {
         'Ambrose the Undeparted': 'Ambrose',
         'Deceiver': 'Mystificatrix',
@@ -563,6 +578,11 @@ const triggerSet: TriggerSet<Data> = {
         'Origenics Sentry G9': 'sentinelle de l\'Origenèse G9',
       },
       'replaceText': {
+        '--mid-north--': '--Milieu Nord--',
+        '\\(cages\\)': '(Cages)',
+        '\\(lance\\)': '(Lance)',
+        '\\(puddle drop\\)': '(Dépose des flaques)',
+        '\\(spread\\)': '(Dispersion)',
         'Bionic Thrash': 'Bras bionique',
         'Collective Agony': 'Agonie collective',
         'Convulsive Crush': 'Rouste',
@@ -596,7 +616,6 @@ const triggerSet: TriggerSet<Data> = {
     },
     {
       'locale': 'ja',
-      'missingTranslations': true,
       'replaceSync': {
         'Ambrose the Undeparted': '実験体アンブローズ',
         'Deceiver': 'ディシーバー',
@@ -605,6 +624,11 @@ const triggerSet: TriggerSet<Data> = {
         'Origenics Sentry G9': 'オリジェニクス・セントリーG9',
       },
       'replaceText': {
+        '--mid-north--': '--北中央--',
+        '\\(cages\\)': '(檻)',
+        '\\(lance\\)': '(槍)',
+        '\\(puddle drop\\)': '(床設置)',
+        '\\(spread\\)': '(散開)',
         'Bionic Thrash': 'スイングアーム',
         'Collective Agony': '念波動',
         'Convulsive Crush': '殴撃',

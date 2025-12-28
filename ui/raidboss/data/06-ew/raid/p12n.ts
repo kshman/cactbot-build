@@ -344,7 +344,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       'replaceText': {
         '\\(spread\\)': '(分散)',
-        '\\(stack\\)': '(集合)',
+        '\\(stack\\)': '(分摊)',
         'Clear Cut': '横斩',
         'Dialogos': '对话',
         'Glaukopis': '明眸',

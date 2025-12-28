@@ -417,7 +417,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       'replaceText': {
         '\\(big\\)': '(大)',
-        '\\(cast\\)': '(投掷)',
+        '\\(cast\\)': '(咏唱)',
         '\\(small\\)': '(小)',
         'Aporrhoia': '流溢',
         'Crash': '冲撞',

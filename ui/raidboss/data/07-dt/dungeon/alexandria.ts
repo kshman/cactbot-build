@@ -52,6 +52,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         avoid: {
           en: 'Avoid',
+          ja: '避ける',
           ko: '피해요',
         },
         in: Outputs.in,
@@ -76,10 +77,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         combo: {
           en: '${calls}',
+          ja: '${calls}',
           ko: '${calls}',
         },
         separator: {
           en: ' => ',
+          ja: ' => ',
           ko: ' 🔜 ',
         },
       },
@@ -94,6 +97,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         spreadDontStack: {
           en: 'Cleave -- Don\'t stack!',
+          ja: 'タンク強攻撃 -- 散開！',
           ko: '쪼개기 -- 뭉치면 안되요!',
         },
       },
@@ -133,6 +137,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         avoidLightning: {
           en: 'Out of lightning triangle',
+          ja: '雷の三角形から離れる',
           ko: '전기 삼각형 피해요',
         },
       },
@@ -146,6 +151,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         avoidLasers: {
           en: 'Avoid Wall Lasers',
+          ja: '壁のレーザーを避ける',
           ko: '벽 레이저 피해요',
         },
       },
@@ -216,6 +222,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         avoidHand: {
           en: 'Avoid hand laser',
+          ja: '手のレーザーを避ける',
           ko: '손 레이저 피해요',
         },
       },
@@ -229,7 +236,8 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         underElimbit: {
           en: 'Get under Elimbit',
-          ko: 'Elimbit 아래로',
+          ja: 'エリミネーターの下へ',
+          ko: '엘림비트 아래로',
         },
       },
     },
@@ -284,6 +292,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         dodgeLasers: {
           en: 'Dodge Multiple Lasers',
+          ja: '多重レーザーを避ける',
           ko: '여러 레이저 피하기',
         },
       },
@@ -429,6 +438,11 @@ const triggerSet: TriggerSet<Data> = {
         'Terminate': 'ターミネーション',
         'Ternary Charge': 'トライバースト',
         'Voltburst': 'ボルトバースト',
+        '\\(corners\\)': '(かど)',
+        '\\(front\\)': '(前)',
+        '\\(lasers\\)': '(レーザー)',
+        '\\(sides\\)': '(横)',
+        '\\(triangle\\)': '(三角)',
       },
     },
     {

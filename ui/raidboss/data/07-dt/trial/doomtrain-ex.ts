@@ -688,7 +688,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Tower x6 => Enrage!',
+          en: 'Tower x6 => Enrage',
           de: 'Turm x6 => Finalangriff',
           cn: '踩塔 x6 => 狂暴',
           ko: '모여서 타워x6 🔜 전멸!',

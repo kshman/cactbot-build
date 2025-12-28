@@ -40,6 +40,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         nightmare: {
           en: 'Avoid nightmare puddles',
+          ja: '落ちてくる頭を避ける',
           ko: '나이트메어 장판 피해요',
         },
       },
@@ -52,6 +53,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         charge: {
           en: 'Avoid charging dolls',
+          ja: '突進してくる人形を避ける',
           ko: '돌진 인형 피해요',
         },
       },
@@ -64,6 +66,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         exaflares: {
           en: 'Avoid exaflares',
+          ja: 'エクサフレアを避ける',
           ko: '엑사플레어 피해요',
         },
       },
@@ -77,6 +80,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         chasingPuddles: {
           en: 'Chasing puddles on YOU',
+          ja: '自分に AOE 追従',
           ko: '내게 쫒아오는 장판!',
         },
       },
@@ -132,10 +136,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         ghostTether: {
           en: 'Stretch tether',
+          ja: '線を伸ばす',
           ko: '줄 늘려요!',
         },
         fleshTether: {
           en: 'Become ghost => stretch tether',
+          ja: '幽霊状態になってから => 線を伸ばす',
           ko: '유령으로 🔜 줄 늘려요!',
         },
       },
@@ -157,10 +163,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         becomeGhost: {
           en: 'Become a ghost',
+          ja: '幽霊状態になる',
           ko: '유령으로',
         },
         stayGhost: {
           en: 'Stay a ghost',
+          ja: '幽霊状態を維持',
           ko: '그대로 유령으로',
         },
       },
@@ -185,10 +193,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         becomeFlesh: {
           en: 'Clear ghost status',
+          ja: '幽霊状態を解除',
           ko: '사람으로',
         },
         stayFlesh: {
           en: 'Avoid ghost tiles',
+          ja: '幽霊床を避ける',
           ko: '사람 그대로 (유령되면 안돼요)',
         },
       },
@@ -227,6 +237,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         dodgeLines: {
           en: 'Start mid => Dodge lines',
+          ja: '真ん中スタート => 直線を避ける',
           ko: '한가운데 🔜 선 피해요',
         },
       },
@@ -351,7 +362,6 @@ const triggerSet: TriggerSet<Data> = {
     },
     {
       'locale': 'ja',
-      'missingTranslations': true,
       'replaceSync': {
         'His Royal Headness Leonogg I': 'ノッギン・ザ・ナイスヘッド',
         'Jack-in-the-Pot': 'ジャック・イン・ザ・ポット',
@@ -362,6 +372,13 @@ const triggerSet: TriggerSet<Data> = {
         'Träumerei': 'トロイメライ',
       },
       'replaceText': {
+        '\\(cast\\)': '(詠唱)',
+        '\\(lines 1\\)': '(直線床 1)',
+        '\\(lines 2\\)': '(直線床 2)',
+        '\\(middle/sides\\)': '(中央/両端)',
+        '\\(plonk\\)': '(落下)',
+        '\\(sides\\)': '(両端)',
+        '\\(solid lines\\)': '(半面床)',
         'Bitter Regret': 'ビターメモリーズ',
         'Evil Scheme': 'イービルスキーム',
         'Falling Nightmare': 'ナイトメアフォール',

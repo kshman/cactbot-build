@@ -332,7 +332,9 @@ const triggerSet: TriggerSet<Data> = {
       id: 'R12N Cruel Coil Collector',
       type: 'Ability',
       netRegex: { id: ['B11B', 'B11C'], source: 'Lindwurm', capture: true },
+      // Delay 3s to let bind happen
       delaySeconds: 3,
+      // Display for 3s after the first rotation
       durationSeconds: 6.1,
       alertText: (_data, matches, output) =>
         output.text!({
@@ -424,8 +426,10 @@ const triggerSet: TriggerSet<Data> = {
 
         if (head1Pos.startsWith('out') && head2Pos.startsWith('out'))
           return output.middle!();
+
         if (head1Pos.endsWith('E') && head2Pos.endsWith('E'))
           return output.west!();
+
         if (head1Pos.endsWith('W') && head2Pos.endsWith('W'))
           return output.east!();
 
@@ -487,13 +491,6 @@ const triggerSet: TriggerSet<Data> = {
           ko: '연속 장판 피해요',
         },
       },
-    },
-    {
-      id: 'R12N Dramatic Lysis',
-      type: 'StartsUsing',
-      netRegex: { id: 'BCF3', source: 'Lindwurm', capture: false },
-      suppressSeconds: 1,
-      response: Responses.spread(),
     },
     {
       id: 'R12N Mindless Flesh Huge',

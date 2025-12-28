@@ -81,17 +81,17 @@ const triggerSet: TriggerSet<Data> = {
       },
       run: (data) => data.tentacleEffects = [],
       outputStrings: {
-        NW: Outputs.arrowNW,
-        NE: Outputs.arrowNE,
-        SE: Outputs.arrowSE,
-        SW: Outputs.arrowSW,
+        NW: Outputs.dirNW,
+        NE: Outputs.dirNE,
+        SE: Outputs.dirSE,
+        SW: Outputs.dirSW,
         safe: {
           en: 'Go ${dir1}',
           de: 'Geh nach ${dir1}',
           fr: 'Allez ${dir1}',
           ja: '${dir1}へ',
           cn: '去 ${dir1}',
-          ko: '가욧: ${dir1}',
+          ko: '가욧: ${dir1}쪽',
         },
         default: {
           en: 'Avoid tentacle explosions',
