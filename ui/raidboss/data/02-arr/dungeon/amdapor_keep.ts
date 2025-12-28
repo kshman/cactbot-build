@@ -13,19 +13,19 @@ const triggerSet: TriggerSet<Data> = {
       id: 'Amdapor Keep Liquefy Middle',
       type: 'StartsUsing',
       netRegex: { id: '415', source: 'Demon Wall', capture: false },
-      response: Responses.goSides('info'),
+      response: Responses.goSides(),
     },
     {
       id: 'Amdapor Keep Liquefy Sides',
       type: 'StartsUsing',
       netRegex: { id: '416', source: 'Demon Wall', capture: false },
-      response: Responses.goMiddle('info'),
+      response: Responses.goMiddle(),
     },
     {
       id: 'Amdapor Keep Repel',
       type: 'StartsUsing',
       netRegex: { id: '417', source: 'Demon Wall', capture: false },
-      response: Responses.knockback('info'),
+      response: Responses.knockback(),
     },
   ],
   timelineReplace: [
@@ -51,6 +51,12 @@ const triggerSet: TriggerSet<Data> = {
       'locale': 'cn',
       'replaceSync': {
         'Demon Wall': '恶魔墙',
+      },
+    },
+    {
+      'locale': 'tc',
+      'replaceSync': {
+        'Demon Wall': '惡魔牆',
       },
     },
     {

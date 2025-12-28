@@ -13,6 +13,11 @@ const triggerSet: TriggerSet<Data> = {
   zoneId: ZoneId.Lakeland,
   comments: {
     en: 'A Rank Hunts',
+    de: 'A Rang Hohe Jagd',
+    fr: 'Chasse de rang A',
+    cn: 'A级狩猎怪',
+    tc: 'A級狩獵怪',
+    ko: 'A급 마물',
   },
   triggers: [
     {
@@ -197,6 +202,14 @@ const triggerSet: TriggerSet<Data> = {
         'Nariphon': '纳里蓬',
         'Nuckelavee': '纳克拉维',
         'Tyger': '戾虫',
+      },
+    },
+    {
+      'locale': 'tc',
+      'replaceSync': {
+        'Nariphon': '納里蓬',
+        'Nuckelavee': '納克拉維',
+        'Tyger': '戾蟲',
       },
     },
     {

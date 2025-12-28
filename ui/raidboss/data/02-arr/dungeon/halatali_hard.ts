@@ -12,7 +12,7 @@ const triggerSet: TriggerSet<Data> = {
       id: 'Hataliti Hard Demon Eye',
       type: 'StartsUsing',
       netRegex: { id: '833', source: 'Catoblepas', capture: false },
-      infoText: (_data, _matches, output) => output.text!(),
+      alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
           en: 'Use the Orb',
@@ -25,7 +25,7 @@ const triggerSet: TriggerSet<Data> = {
       id: 'Hataliti Hard Standstill',
       type: 'StartsUsing',
       netRegex: { id: '84F', source: 'Mumuepo the Beholden', capture: false },
-      infoText: (_data, _matches, output) => output.text!(),
+      alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
           en: 'Use the Nail',
@@ -62,6 +62,13 @@ const triggerSet: TriggerSet<Data> = {
       'replaceSync': {
         'Catoblepas': '卡托布莱帕斯',
         'Mumuepo the Beholden': '退位主教 穆穆埃珀',
+      },
+    },
+    {
+      'locale': 'tc',
+      'replaceSync': {
+        'Catoblepas': '卡托佈雷帕斯',
+        'Mumuepo the Beholden': '退位主教 穆穆艾珀',
       },
     },
     {

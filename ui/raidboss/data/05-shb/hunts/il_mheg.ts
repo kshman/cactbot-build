@@ -10,6 +10,11 @@ const triggerSet: TriggerSet<Data> = {
   zoneId: ZoneId.IlMheg,
   comments: {
     en: 'A Rank Hunts',
+    de: 'A Rang Hohe Jagd',
+    fr: 'Chasse de rang A',
+    cn: 'A级狩猎怪',
+    tc: 'A級狩獵怪',
+    ko: 'A급 마물',
   },
   triggers: [
     {
@@ -120,6 +125,14 @@ const triggerSet: TriggerSet<Data> = {
       'replaceSync': {
         'Aglaope': '阿格拉俄珀',
         'O Poorest Pauldia': '保尔迪雅',
+        'The Mudman': '泥人',
+      },
+    },
+    {
+      'locale': 'tc',
+      'replaceSync': {
+        'Aglaope': '阿格拉俄珀',
+        'O Poorest Pauldia': '保爾迪雅',
         'The Mudman': '泥人',
       },
     },

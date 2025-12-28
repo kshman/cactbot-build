@@ -12,6 +12,11 @@ const triggerSet: TriggerSet<Data> = {
   zoneId: ZoneId.AmhAraeng,
   comments: {
     en: 'A Rank Hunts',
+    de: 'A Rang Hohe Jagd',
+    fr: 'Chasse de rang A',
+    cn: 'A级狩猎怪',
+    tc: 'A級狩獵怪',
+    ko: 'A급 마물',
   },
   triggers: [
     {
@@ -132,6 +137,14 @@ const triggerSet: TriggerSet<Data> = {
         'Maliktender': '马利克巨人掌',
         'Sugaar': '休格尔',
         'Tarchia': '多智兽',
+      },
+    },
+    {
+      'locale': 'tc',
+      'replaceSync': {
+        'Maliktender': '馬利克巨人掌',
+        'Sugaar': '休格爾',
+        'Tarchia': '多智獸',
       },
     },
     {

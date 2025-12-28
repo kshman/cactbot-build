@@ -13,6 +13,11 @@ const triggerSet: TriggerSet<Data> = {
   zoneId: ZoneId.TheRaktikaGreatwood,
   comments: {
     en: 'A Rank Hunts',
+    de: 'A Rang Hohe Jagd',
+    fr: 'Chasse de rang A',
+    cn: 'A级狩猎怪',
+    tc: 'A級狩獵怪',
+    ko: 'A급 마물',
   },
   triggers: [
     {
@@ -176,6 +181,14 @@ const triggerSet: TriggerSet<Data> = {
         'Grassman': '格拉斯曼',
         'Ixtab': '伊休妲',
         'Supay': '苏帕伊',
+      },
+    },
+    {
+      'locale': 'tc',
+      'replaceSync': {
+        'Grassman': '格拉斯曼',
+        'Ixtab': '伊休妲',
+        'Supay': '蘇帕伊',
       },
     },
     {

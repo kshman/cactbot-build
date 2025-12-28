@@ -15,6 +15,11 @@ const triggerSet: TriggerSet<Data> = {
   zoneId: ZoneId.TheTempest,
   comments: {
     en: 'A Rank Hunts, missing Archaeotania boss FATE',
+    de: 'A Rang Hohe Jagd, Archaeotania Boss FATE fehlt',
+    fr: 'Chasse de rang A, boss ALÉA Archaeotania manquant',
+    cn: 'A级狩猎怪, 缺失特殊FATE',
+    tc: 'A級狩獵怪, 缺失特殊FATE',
+    ko: 'A급 마물, 특수돌발 누락.',
   },
   triggers: [
     {
@@ -160,6 +165,14 @@ const triggerSet: TriggerSet<Data> = {
         'Baal': '巴力',
         'Gunitt': '顾尼图',
         'Rusalka': '卢莎卡',
+      },
+    },
+    {
+      'locale': 'tc',
+      'replaceSync': {
+        'Baal': '巴力',
+        'Gunitt': '顧尼圖',
+        'Rusalka': '盧莎卡',
       },
     },
     {

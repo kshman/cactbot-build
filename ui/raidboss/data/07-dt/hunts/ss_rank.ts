@@ -191,6 +191,12 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
+      'locale': 'tc',
+      'replaceSync': {
+        'Arch Aethereater': '水晶化身之王',
+      },
+    },
+    {
       'locale': 'ko',
       'replaceSync': {
         'Arch Aethereater': '크리스탈라이저 군주',

@@ -462,13 +462,7 @@ const triggerSet: TriggerSet<Data> = {
       type: 'StartsUsing',
       netRegex: { id: 'B3FF', source: 'The Tyrant', capture: false },
       durationSeconds: 9,
-      alertText: (_data, _matches, output) => output.stack!(),
-      outputStrings: {
-        stack: {
-          en: 'Stack in Tower',
-          ko: '타워에서 뭉쳐요',
-        },
-      },
+      response: Responses.stackInTower(),
     },
     {
       id: 'R11N Great Wall Of Fire',

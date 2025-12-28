@@ -78,6 +78,12 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
+      'locale': 'tc',
+      'replaceSync': {
+        'Siren': '賽蓮',
+      },
+    },
+    {
       'locale': 'ko',
       'replaceSync': {
         'Siren': '세이렌',

@@ -13,6 +13,11 @@ const triggerSet: TriggerSet<Data> = {
   zoneId: ZoneId.Kholusia,
   comments: {
     en: 'A Rank Hunts, missing Formidable boss FATE',
+    de: 'A Rang Hohe Jagd, Ein formidabler Kampf Boss FATE fehlt',
+    fr: 'Chasse de rang A, ALÉA boss Formidable manquant',
+    cn: 'A级狩猎怪, 缺失特殊FATE',
+    tc: 'A級狩獵怪, 缺失特殊FATE',
+    ko: 'A급 마물, 특수돌발 누락.',
   },
   triggers: [
     {
@@ -185,6 +190,14 @@ const triggerSet: TriggerSet<Data> = {
         'Forgiven Pedantry': '得到宽恕的炫学',
         'Huracan': '乌拉坎',
         'Li\'l Murderer': '小小杀手',
+      },
+    },
+    {
+      'locale': 'tc',
+      'replaceSync': {
+        'Forgiven Pedantry': '得到寬恕的炫學',
+        'Huracan': '烏拉坎',
+        'Li\'l Murderer': '小小殺手',
       },
     },
     {

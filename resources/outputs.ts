@@ -304,6 +304,10 @@ export default {
     tc: '中間集合',
     ko: '가운데서 뭉쳐요',
   },
+  stackInTower: {
+    en: 'Stack in Tower',
+    ko: '타워에서 뭉쳐요',
+  },
   baitPuddles: {
     en: 'Bait Puddles',
     de: 'Flächen Ködern',
