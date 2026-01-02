@@ -16,6 +16,7 @@ const triggerSet: TriggerSet<Data> = {
     fr: 'Avant le remaniement 6.1',
     cn: '6.1改版前',
     ko: '6.1 개편 전',
+    tc: '6.1改版前',
   },
   initData: () => {
     return {

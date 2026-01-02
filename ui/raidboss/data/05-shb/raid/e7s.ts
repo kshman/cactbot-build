@@ -22,8 +22,8 @@ const colorMap = {
     fr: 'Noir',
     ja: '黒',
     cn: '黑色',
-    tc: '黑色',
     ko: '어둠',
+    tc: '黑色',
   },
   dark: {
     en: 'Light',
@@ -31,8 +31,8 @@ const colorMap = {
     fr: 'Blanc',
     ja: '白',
     cn: '白色',
-    tc: '白色',
     ko: '빛',
+    tc: '白色',
   },
 } as const;
 

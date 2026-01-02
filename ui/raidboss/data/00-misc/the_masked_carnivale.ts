@@ -25,16 +25,16 @@ const triggerSet: TriggerSet<Data> = {
     fr: 'Le carnaval masqué',
     ja: 'マスクド・カーニバル',
     cn: '假面狂欢',
-    tc: '假面狂歡',
     ko: '가면 무투회',
+    tc: '假面狂歡',
   },
   comments: {
     en: 'BLU Masked Carnivale Stages 1-32',
     de: 'BLU Große Maskerade Stufe 1-32',
     fr: 'MBU Carnival masqué Niveau 1-32',
     cn: '青魔法师假面狂欢关卡 1-32',
-    tc: '青魔法師假面狂歡關卡 1-32',
     ko: '청마도사 가면 무투회 스테이지 1-32',
+    tc: '青魔法師假面狂歡關卡 1-32',
   },
   triggers: [
     // ================ Stage 01 Act 1 ================

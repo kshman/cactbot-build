@@ -10,8 +10,8 @@ const numberToOutputString = function(n: number): FullLocaleText {
     fr: str,
     ja: str,
     cn: str,
-    tc: str,
     ko: str,
+    tc: str,
   };
 };
 
@@ -36,6 +36,11 @@ export default {
     en: 'AoE + Bleed',
     ja: '全体攻撃 + DoT',
     ko: '전체 공격 + 출혈',
+  },
+  hpTo1Aoe: {
+    en: 'HP to 1',
+    ja: '体力１!',
+    ko: 'HP 1',
   },
   tankBuster: {
     en: 'Tank Buster',
@@ -182,6 +187,7 @@ export default {
   },
   stackInTower: {
     en: 'Stack in Tower',
+    ja: '塔で頭割り',
     ko: '타워에서 뭉쳐요',
   },
   baitPuddles: {

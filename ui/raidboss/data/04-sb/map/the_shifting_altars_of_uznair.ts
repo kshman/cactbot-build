@@ -13,16 +13,16 @@ const uznairOutputStrings = {
     de: '${name} erscheint!',
     fr: '${name} apparaît !',
     cn: '已生成 ${name}!',
-    tc: '已生成 ${name}!',
     ko: '${name} 등장!',
+    tc: '已生成 ${name}!',
   },
   adds: {
     en: 'Adds soon',
     de: 'Bald Adds',
     fr: 'Adds bientôt',
     cn: '小怪即将出现',
-    tc: '小怪即將出現',
     ko: '곧 쫄 나와요',
+    tc: '小怪即將出現',
   },
 } as const;
 

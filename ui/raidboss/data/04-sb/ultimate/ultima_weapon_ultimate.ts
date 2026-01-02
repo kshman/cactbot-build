@@ -104,8 +104,8 @@ const gaolConfig = (id: GaolKey): NamedConfigEntry<GaolKey> => {
       fr: `Ordre geôle de Titan ${numStr}`,
       ja: `ジェイルの順番 ${numStr}`,
       cn: `泰坦石牢顺序 ${numStr}`,
-      tc: `泰坦石牢順序 ${numStr}`,
       ko: `돌감옥 순서 ${numStr}`,
+      tc: `泰坦石牢順序 ${numStr}`,
     },
     type: 'string',
     default: '',
@@ -134,10 +134,10 @@ const triggerSet: TriggerSet<Data> = {
           '各項目は、3文字のジョブ名（例: "war" または "SGE"）またはフルネーム（例: "Tini Poutini"）のいずれかを入力できます。大文字小文字は区別されません。番号の小さい順にジェイルの順番リストに登録されます。重複するジョブは名前順に並べ替えられます。リストされていないプレイヤーは名前順に最後に追加されます。空白の項目は無視されます。プレイヤーが名前またはジョブで複数回登録されている場合、小さいほうの番号が使用されます。',
         cn:
           '每个条目可以是三个字母的职业缩写 (例如 "war" 或  "SGE") 或玩家全名（例如 "Tini Poutini"），所有字母不区分大小写。编号较小的将在石牢顺序中排列在前。重复的职业将按姓名字母顺序对玩家进行排序。未列出的队员将按字母顺序添加到末尾。空白条目将被忽略。如果玩家按姓名或职业被多次列出，则以较小编号为准。',
-        tc:
-          '每個條目可以是三個字母的職業縮寫 (例如 "war" 或  "SGE") 或玩家全名（例如 "Tini Poutini"），所有字母不區分大小寫。編號較小的將在石牢順序中排列在前。重複的職業將按姓名字母順序對玩家進行排序。未列出的隊員將按字母順序添加到末尾。空白條目將被忽略。如果玩家按姓名或職業被多次列出，則以較小編號為準。',
         ko:
           '각 항목에는 대소문자를 구분하지 않는 세 글자 직업명(예: "war" 또는 "SGE") 또는 전체 이름(예: "빛의전사")을 입력할 수 있습니다. 먼저 입력된 항목이 감옥 순서에서 먼저 나열됩니다. 직업이 중복된 경우에는  알파벳 순(가나다 순)으로 나타납니다. 목록에 없는 사람은 알파벳 순으로 맨 끝에 추가됩니다. 빈 칸은 무시됩니다. 플레이어가 이름 또는 직업별로 여러 번 나열된 경우, 먼저 입력된 항목이 사용됩니다.',
+        tc:
+          '每個條目可以是三個字母的職業縮寫 (例如 "war" 或  "SGE") 或玩家全名（例如 "Tini Poutini"），所有字母不區分大小寫。編號較小的將在石牢順序中排列在前。重複的職業將按姓名字母順序對玩家進行排序。未列出的隊員將按字母順序添加到末尾。空白條目將被忽略。如果玩家按姓名或職業被多次列出，則以較小編號為準。',
       },
     },
     gaolConfig('gaolOrder2'),
@@ -426,8 +426,8 @@ const triggerSet: TriggerSet<Data> = {
           'L\'emplacement des deux sœurs à bloquer pour les tanks. dir1 est toujours le premier emplacement de la sœur en commençant par le nord et en allant dans le sens des aiguilles d\'une montre.',
         ja: 'タンクがブロックする2人の分身の位置。dir1 は基本的に「北」から始まり、時計回りに最初の分身の位置に戻ります。',
         cn: '两分身待坦克阻挡的位置。dir1 始终是从地图上方开始顺时针方向的第一个分身位置',
-        tc: '兩分身待坦克阻擋的位置。dir1 始終是從地圖上方開始順時針方向的第一個分身位置',
         ko: '탱커가 막을 두 분신의 위치. dir1은 북쪽에서 시계방향으로 도는 것을 기준으로 항상 첫 번째 분신의 위치입니다',
+        tc: '兩分身待坦克阻擋的位置。dir1 始終是從地圖上方開始順時針方向的第一個分身位置',
       },
       type: 'StartsUsing',
       netRegex: { id: '2B55', source: 'Garuda', capture: false },
@@ -870,6 +870,9 @@ const triggerSet: TriggerSet<Data> = {
         ko: `첫 번째 기둥이 남동쪽인 경우, 역방향 Z와 일반 Z 모두에 대해 남동/북서를 호출합니다.
              첫 번째 기둥이 남쪽인 경우, 역방향 Z는 남동/북서를, 일반 Z는 남서/북동를 호출합니다.
              다른 기둥 순서도 지원되며, 이는 예시일 뿐입니다.`,
+        tc: `如果第一個火神柱在右下，則反向 Z 和正常 Z 都會提示右下/左上
+             如果第一個火神柱在下, 則反向 Z 將提示右下/左上，正常 Z 將提示左下/右上。
+             這些只是舉例, 其他火神柱順序也支持。`,
       },
       type: 'NameToggle',
       netRegex: { name: 'Ifrit', toggle: '00', capture: false },
@@ -928,6 +931,9 @@ const triggerSet: TriggerSet<Data> = {
         ko: `첫 번째 기둥이 대각선에 있으면 첫 번째 이프리트 돌진도 대각선에 있으며,
              이 알람은 첫 번째 돌진 옆으로 이동하라는 것이 됩니다.
              이미 안전하다면 이 알람은 호출되지 않습니다.`,
+        tc: `如果第一個火神柱在對角線上，那麼第一次火神沖也在對角線上。
+             這個可選提示會提示你移動到第一次火神沖附近的位置。
+             如果你已在安全區，則不會輸出此提示。`,
       },
       type: 'NameToggle',
       netRegex: { name: 'Ifrit', toggle: '00', capture: false },
@@ -989,6 +995,10 @@ const triggerSet: TriggerSet<Data> = {
              본대와 힐러 모두 45도 또는 90도로 움직입니다.
              이프리트의 후속 돌진을 피하기 위해 빠르게 이동해야 하는 경우 "빠른" 이동입니다.
              시간적 여유가 있다면 "느린" 이동입니다.`,
+        tc: `這是從第一次火神沖附近開始的火神沖主要移動。
+             人群和奶媽都將移動 45 度或 90 度。
+             "快" 表示需要快速移動才能躲開火神沖。
+             "慢" 表示移動時間相對比較充足。`,
       },
       type: 'NameToggle',
       netRegex: { name: 'Ifrit', toggle: '00', capture: false },
@@ -1415,8 +1425,8 @@ const triggerSet: TriggerSet<Data> = {
           '"früh sicher" bedeutet hier, dass man such auch schon for dem ersten Ifrit Dash bewegen kann.',
         fr: '"sûr avant" veut dire que vous pouvez bouger avant le dash d\'Ifrit.',
         cn: '这里的 "提前安全" 指你可以在伊弗利特第一次冲锋前移动。',
-        tc: '這裡的 "提前安全" 指你可以在伊弗利特第一次衝鋒前移動。',
         ko: '여기서 "안전"이란 첫 이프리트 돌진 전에 미리 가 있어도 된다는 의미입니다.',
+        tc: '這裡的 "提前安全" 指你可以在伊弗利特第一次衝鋒前移動。',
       },
       type: 'StartsUsing',
       netRegex: { id: '2B76', source: 'The Ultima Weapon', capture: false },

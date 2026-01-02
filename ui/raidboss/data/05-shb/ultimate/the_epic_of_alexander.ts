@@ -104,8 +104,8 @@ const ordainedOutputStrings = {
     fr: '${action1}, ${action2}',
     ja: '${action1}, ${action2}',
     cn: '${action1}, ${action2}',
-    tc: '${action1}, ${action2}',
     ko: '${action1}, ${action2}',
+    tc: '${action1}, ${action2}',
   },
   motionFirst: {
     en: 'Motion first',
@@ -113,8 +113,8 @@ const ordainedOutputStrings = {
     fr: 'Mouvement en premier',
     ja: '最初は動く',
     cn: '先行动',
-    tc: '先行動',
     ko: '우선 움직이기',
+    tc: '先行動',
   },
   stillnessFirst: {
     en: 'Stillness first',
@@ -122,8 +122,8 @@ const ordainedOutputStrings = {
     fr: 'Immobilité en premier',
     ja: '最初は止まる',
     cn: '先静止',
-    tc: '先靜止',
     ko: '우선 멈추기',
+    tc: '先靜止',
   },
   motionSecond: {
     en: 'Motion second',
@@ -131,8 +131,8 @@ const ordainedOutputStrings = {
     fr: 'Mouvement en deuxième',
     ja: '最後は動く',
     cn: '后行动',
-    tc: '後行動',
     ko: '마지막엔 움직이기',
+    tc: '後行動',
   },
   stillnessSecond: {
     en: 'Stillness second',
@@ -140,8 +140,8 @@ const ordainedOutputStrings = {
     fr: 'Immobilité en deuxième',
     ja: '最後は止まる',
     cn: '后静止',
-    tc: '後靜止',
     ko: '마지막엔 멈추기',
+    tc: '後靜止',
   },
   unknown: Outputs.unknown,
 };
@@ -153,8 +153,8 @@ const radiantOutputStrings = {
     fr: 'Sacrement Nord',
     ja: '拝火は北',
     cn: '月环上',
-    tc: '月環上',
     ko: '성례: 북',
+    tc: '月環上',
   },
   east: {
     en: 'Sacrament East',
@@ -162,8 +162,8 @@ const radiantOutputStrings = {
     fr: 'Sacrement Est',
     ja: '拝火は東',
     cn: '月环右',
-    tc: '月環右',
     ko: '성례: 동',
+    tc: '月環右',
   },
   south: {
     en: 'Sacrament South',
@@ -171,8 +171,8 @@ const radiantOutputStrings = {
     fr: 'Sacrement Sud',
     ja: '拝火は南',
     cn: '月环下',
-    tc: '月環下',
     ko: '성례: 남',
+    tc: '月環下',
   },
   west: {
     en: 'Sacrament West',
@@ -180,8 +180,8 @@ const radiantOutputStrings = {
     fr: 'Sacrement Ouest',
     ja: '拝火は西',
     cn: '月环左',
-    tc: '月環左',
     ko: '성례: 서',
+    tc: '月環左',
   },
   unknown: Outputs.unknown,
 };
@@ -193,8 +193,8 @@ const nisiTypes = {
     fr: 'Bleu α',
     ja: '青 α',
     cn: '蓝 α',
-    tc: '藍 α',
     ko: '파랑 α',
+    tc: '藍 α',
   },
   orangeBeta: {
     en: 'Orange β',
@@ -202,8 +202,8 @@ const nisiTypes = {
     fr: 'Orange β',
     ja: 'オレンジ β',
     cn: '橙 β',
-    tc: '橙 β',
     ko: '노랑 β',
+    tc: '橙 β',
   },
   purpleGamma: {
     en: 'Purple γ',
@@ -211,8 +211,8 @@ const nisiTypes = {
     fr: 'Violet γ',
     ja: '紫 γ',
     cn: '紫 γ',
-    tc: '紫 γ',
     ko: '보라 γ',
+    tc: '紫 γ',
   },
   greenDelta: {
     en: 'Green δ',
@@ -220,8 +220,8 @@ const nisiTypes = {
     fr: 'Vert δ',
     ja: '緑 δ',
     cn: '绿 δ',
-    tc: '綠 δ',
     ko: '녹색 δ',
+    tc: '綠 δ',
   },
 };
 
@@ -233,8 +233,8 @@ const nisiPassOutputStrings = {
     fr: 'Prenez Peine finale (?)',
     ja: '最後のナイサイを取得 (?)',
     cn: '接毒 (?)',
-    tc: '接毒 (?)',
     ko: '마지막 나이사이 받기 (?)',
+    tc: '接毒 (?)',
   },
   passNisi: {
     en: 'Pass ${type} Nisi',
@@ -242,8 +242,8 @@ const nisiPassOutputStrings = {
     fr: 'Passez ${type} Peine',
     ja: '${type} を渡す',
     cn: '传 ${type}',
-    tc: '傳 ${type}',
     ko: '나이사이 건네기: ${type}',
+    tc: '傳 ${type}',
   },
   passNisiTo: {
     en: 'Pass ${type} to ${players}',
@@ -251,8 +251,8 @@ const nisiPassOutputStrings = {
     fr: 'Passez ${type} à ${players}',
     ja: '${type} を ${players} に渡す',
     cn: '将 ${type} 传给 ${players}',
-    tc: '將 ${type} 傳給 ${players}',
     ko: '나이사이 건네기: ${type} → ${players}',
+    tc: '將 ${type} 傳給 ${players}',
   },
   getNisi: {
     en: 'Get ${type}',
@@ -260,8 +260,8 @@ const nisiPassOutputStrings = {
     fr: 'Prenez ${type}',
     ja: '${type} を取る',
     cn: '接 ${type}',
-    tc: '接 ${type}',
     ko: '나이사이 가져오기: ${type}',
+    tc: '接 ${type}',
   },
   getNisiFrom: {
     en: 'Get ${type} from ${player}',
@@ -269,8 +269,8 @@ const nisiPassOutputStrings = {
     fr: 'Prenez ${type} de ${player}',
     ja: '${player} から ${type} を取る',
     cn: '从 ${player} 接 ${type}',
-    tc: '從 ${player} 接 ${type}',
     ko: '나이사이 가져오기: ${type} ← ${player}',
+    tc: '從 ${player} 接 ${type}',
   },
 };
 
@@ -380,8 +380,8 @@ const triggerSet: TriggerSet<Data> = {
           'Activer cactbot pour la strat Wormhole : https://ff14.toolboxgaming.space/?id=17050133675751&preview=1',
         ja: '絶アレキサンダー討滅戦：cactbot「次元断絶のマーチ」ギミック', // FIXME
         cn: '启用 cactbot 次元断绝策略: https://ff14.toolboxgaming.space/?id=17050133675751&preview=1',
-        tc: '啟用 cactbot 次元斷絕策略: https://ff14.toolboxgaming.space/?id=17050133675751&preview=1',
         ko: 'cactbot 웜홀 공략방식 사용: https://ff14.toolboxgaming.space/?id=17050133675751&preview=1',
+        tc: '啟用 cactbot 次元斷絕策略: https://ff14.toolboxgaming.space/?id=17050133675751&preview=1',
       },
       type: 'checkbox',
       default: (options) => {
@@ -1672,8 +1672,8 @@ const triggerSet: TriggerSet<Data> = {
         fr: 'Orange',
         ja: '接触禁止',
         cn: '小光',
-        tc: '小光',
         ko: '접촉금지',
+        tc: '小光',
       },
       outputStrings: {
         text: {
@@ -1709,8 +1709,8 @@ const triggerSet: TriggerSet<Data> = {
         fr: 'Violet',
         ja: '逃亡禁止',
         cn: '小暗',
-        tc: '小暗',
         ko: '도망금지',
+        tc: '小暗',
       },
       outputStrings: {
         text: {

@@ -112,14 +112,16 @@ const ttokrroneDustdevilOutputStrings = {
     ko: '히트박스 밖으로 + 그대로 바깥',
   },
   rotateFront: {
-    en: 'Rotating frontal cleave', // ${dir}'
+    en: 'Rotating frontal cleave',
+    // ${dir}'
     de: 'Rotierende Frontal-Cleaves',
     fr: 'Cleave frontal tournant',
     cn: '旋转正面顺劈',
     ko: '전방 회전 쪼개기', // ${dir}'
   },
   rotateRear: {
-    en: 'Rotating rear cleave', // ${dir}'
+    en: 'Rotating rear cleave',
+    // ${dir}'
     de: 'Rotierende Hinten-Cleaves',
     fr: 'Cleave arrière tournant',
     cn: '旋转背后顺劈',

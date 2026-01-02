@@ -174,7 +174,8 @@ const triggerSet: TriggerSet<Data> = {
       delaySeconds: 10,
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
-        text: { // In fact mostly Tank takes all tethers.
+        text: {
+          // In fact mostly Tank takes all tethers.
           en: 'Spread Tethers',
           ja: '線を重ならないように散開',
           ko: '줄! 이건 탱크 혼자 처리',

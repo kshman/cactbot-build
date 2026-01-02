@@ -323,7 +323,6 @@ const triggerSet: TriggerSet<Data> = {
     },
     {
       'locale': 'tc',
-      'missingTranslations': true,
       'replaceSync': {
         'Aetherial Tear': '次元裂縫',
         'Dawn Knight': '拂曉騎士',
@@ -356,7 +355,7 @@ const triggerSet: TriggerSet<Data> = {
         'Holy Chain': '聖鎖',
         'Holy Shield Bash': '聖盾猛擊',
         'Hyperdimensional Slash': '多維空間斬',
-        // 'Knights Appear': '', // FIXME '骑士出现'
+        'Knights Appear': '騎士出現',
         'Overpower': '超壓斧',
         'Retreat': '撤退',
         'Rive': '撕裂斧',

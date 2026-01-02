@@ -72,8 +72,8 @@ const tagTeamOutputStrings = {
     fr: 'Sur : ${dirs} => ${last}',
     ja: '安地: ${dirs} => ${last}',
     cn: '安全区: ${dirs} => ${last}',
-    tc: '安全區: ${dirs} => ${last}',
     ko: '안전: ${dirs} => ${last}',
+    tc: '安全區: ${dirs} => ${last}',
   },
   separator: {
     en: '/',
@@ -81,8 +81,8 @@ const tagTeamOutputStrings = {
     fr: '/',
     ja: '/',
     cn: '/',
-    tc: '/',
     ko: '/',
+    tc: '/',
   },
 } as const;
 
@@ -98,8 +98,8 @@ const triggerSet: TriggerSet<Data> = {
         fr: 'Bombardement Brutal Anti-poussée Uptime',
         ja: 'ボンバリアンボムのアムレン/堅実 限界タイミング通知',
         cn: '击退塔uptime打法击退提示时机调整功能',
-        tc: '擊退塔uptime打法擊退提示時機調整功能',
         ko: '봄바리안 봄 업타임 넉백 설정',
+        tc: '擊退塔uptime打法擊退提示時機調整功能',
       },
       comment: {
         en: 'Select towers to dodge with knockback immunity.',
@@ -107,8 +107,8 @@ const triggerSet: TriggerSet<Data> = {
         fr: 'Sélectionnez les tours à esquiver avec l\'anti-repoussement.',
         ja: '吹き飛ばし無効で避ける塔を選択してください',
         cn: '选择防击退覆盖的塔。',
-        tc: '選擇防擊退覆蓋的塔。',
         ko: '넉백 무효기술로 처리할 기둥을 선택하세요.',
+        tc: '選擇防擊退覆蓋的塔。',
       },
       type: 'select',
       options: {
@@ -147,6 +147,12 @@ const triggerSet: TriggerSet<Data> = {
           '1번째 기둥': 'first',
           '1, 2번째 기둥 (권장)': 'two',
           '세 기둥 전부': 'all',
+        },
+        tc: {
+          '關閉功能': 'none',
+          '第一個塔': 'first',
+          '前兩個塔 (推薦)': 'two',
+          '全部塔': 'all',
         },
       },
       default: 'none',

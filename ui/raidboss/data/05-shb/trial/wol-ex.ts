@@ -25,8 +25,8 @@ const sharedOutputStrings = {
     fr: 'Stop',
     ja: '動かない',
     cn: '停停停',
-    tc: '停停停',
     ko: '멈추기',
+    tc: '停停停',
   },
   blizzard: {
     en: 'Move',
@@ -34,8 +34,8 @@ const sharedOutputStrings = {
     fr: 'Bougez',
     ja: '動け',
     cn: '动动动',
-    tc: '動動動',
     ko: '움직이기',
+    tc: '動動動',
   },
   holy: {
     en: 'Stack',
@@ -43,8 +43,8 @@ const sharedOutputStrings = {
     fr: 'Packez-vous',
     ja: 'スタック',
     cn: '集合',
-    tc: '集合',
     ko: '쉐어',
+    tc: '集合',
   },
   stone: {
     en: 'Protean',
@@ -52,8 +52,8 @@ const sharedOutputStrings = {
     fr: 'Positions',
     ja: '散開',
     cn: '八方分散',
-    tc: '八方分散',
     ko: '위치 산개',
+    tc: '八方分散',
   },
 };
 
@@ -67,8 +67,8 @@ const imbuedOutputStrings = {
     fr: 'Exterieur',
     ja: '外へ',
     cn: '远离',
-    tc: '遠離',
     ko: '밖으로',
+    tc: '遠離',
   },
 };
 
@@ -81,8 +81,8 @@ const quintupleOutputStrings = {
     fr: 'Regardez ailleurs',
     ja: '見ない',
     cn: '背对',
-    tc: '背對',
     ko: '뒤돌기',
+    tc: '背對',
   },
 };
 

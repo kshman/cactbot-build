@@ -45,8 +45,8 @@ const poisonOutputStrings = {
     fr: 'Grosse AoE sur vous',
     ja: '自分に巨大な爆発',
     cn: '大圈点名',
-    tc: '大圈點名',
     ko: '광역 대상자',
+    tc: '大圈點名',
   },
   in: {
     en: 'In (Avoid Defamations)',
@@ -54,8 +54,8 @@ const poisonOutputStrings = {
     fr: 'Intérieur (évitez les AoE)',
     ja: '中央へ (巨大な爆発を避けて)',
     cn: '去脚下 (远离大圈)',
-    tc: '去腳下 (遠離大圈)',
     ko: '안으로 (광역 피하기)',
+    tc: '去腳下 (遠離大圈)',
   },
 };
 

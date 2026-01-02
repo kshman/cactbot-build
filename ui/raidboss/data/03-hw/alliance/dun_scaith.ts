@@ -958,7 +958,6 @@ const triggerSet: TriggerSet<Data> = {
     },
     {
       'locale': 'tc',
-      'missingTranslations': true,
       'replaceSync': {
         'Aether(?! |ial)': '乙太晶球',
         'Aether Collector': '乙太收集器',
@@ -984,10 +983,10 @@ const triggerSet: TriggerSet<Data> = {
         'Wailing Atomos': '虛聲的亞特蒙斯',
       },
       'replaceText': {
-        // '--deathgate spawn--': '', // FIXME '--召唤之门出现--'
-        // '--lifegate spawn--': '', // FIXME '--魔力之门出现--'
-        // '--shadows gather--': '', // FIXME '--影之力--'
-        // '--towers appear--': '', // FIXME '--塔出现--'
+        '--deathgate spawn--': '--召喚之門出現--',
+        '--lifegate spawn--': '--魔力之門出現--',
+        '--shadows gather--': '--影之力--',
+        '--towers appear--': '--塔出現--',
         'Aether Bend': '乙太曲折',
         'Aetherial Pool': '乙太池',
         'Aetherochemical Flare': '魔科學火光',

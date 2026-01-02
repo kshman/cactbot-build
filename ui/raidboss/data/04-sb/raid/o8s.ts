@@ -22,8 +22,8 @@ const strings = {
     fr: '${type}: ${dir}',
     ja: '${type}: ${dir}',
     cn: '${type}: ${dir}',
-    tc: '${type}: ${dir}',
     ko: '${type}: ${dir}',
+    tc: '${type}: ${dir}',
   },
   spread: Outputs.spread,
   stack: {
@@ -32,8 +32,8 @@ const strings = {
     fr: 'Packez-vous',
     ja: 'スタック',
     cn: '集合',
-    tc: '集合',
     ko: '집합',
+    tc: '集合',
   },
   getOut: {
     en: 'Get Out',
@@ -41,8 +41,8 @@ const strings = {
     fr: 'Sortez',
     ja: '外へ',
     cn: '远离',
-    tc: '遠離',
     ko: '밖으로',
+    tc: '遠離',
   },
   getIn: {
     en: 'Get In',
@@ -50,8 +50,8 @@ const strings = {
     fr: 'À l\'intérieur',
     ja: '中へ',
     cn: '靠近',
-    tc: '靠近',
     ko: '안으로',
+    tc: '靠近',
   },
   trueThunder: {
     en: 'True Thunder',
@@ -59,8 +59,8 @@ const strings = {
     fr: 'Vraie foudre',
     ja: '真サンダガ',
     cn: '真雷',
-    tc: '真雷',
     ko: '진실 선더가',
+    tc: '真雷',
   },
   fakeThunder: {
     en: 'Fake Thunder',
@@ -68,8 +68,8 @@ const strings = {
     fr: 'Fausse foudre',
     ja: 'にせサンダガ',
     cn: '假雷',
-    tc: '假雷',
     ko: '거짓 선더가',
+    tc: '假雷',
   },
   trueIce: {
     en: 'True Ice',
@@ -77,8 +77,8 @@ const strings = {
     fr: 'Vraie glace',
     ja: '真ブリザガ',
     cn: '真冰',
-    tc: '真冰',
     ko: '진실 블리자가',
+    tc: '真冰',
   },
   fakeIce: {
     en: 'Fake Ice',
@@ -86,8 +86,8 @@ const strings = {
     fr: 'Fausse glace',
     ja: 'にせブリザガ',
     cn: '假冰',
-    tc: '假冰',
     ko: '거짓 블리자가',
+    tc: '假冰',
   },
 };
 

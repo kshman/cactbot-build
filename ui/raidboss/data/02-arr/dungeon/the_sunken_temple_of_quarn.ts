@@ -14,6 +14,7 @@ const triggerSet: TriggerSet<Data> = {
     fr: 'Avant le remaniement 7.2',
     cn: '7.2改版前',
     ko: '7.2 개편 전',
+    tc: '7.2改版前',
   },
   triggers: [
     {

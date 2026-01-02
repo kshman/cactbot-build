@@ -116,8 +116,8 @@ const chainsOfCondemnationOutputStrings = {
     de: 'AoE + Nicht Bewegen!',
     ja: '全体攻撃 + 止まれ!',
     cn: 'AOE + 停止移动!',
-    tc: 'AOE + 停止移動!',
     ko: '전체 공격 + 움직이지마!',
+    tc: 'AOE + 停止移動!',
   },
 } as const;
 
@@ -142,8 +142,8 @@ const triggerSet: TriggerSet<Data> = {
     en: 'Pilgrim\'s Traverse Stone 99/The Final Verse',
     de: 'Pilgers Pfad Stein 99/Eminente Trauer',
     cn: '朝圣交错路 第99朝圣路/卓异的悲寂歼灭战',
-    tc: '朝聖交錯路 第99朝聖路/卓異的悲寂殲滅戰',
     ko: '필그림 트래버스 99층/최종장',
+    tc: '朝聖交錯路 第99朝聖路/卓異的悲寂殲滅戰',
   },
 
   initData: () => ({

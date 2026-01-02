@@ -11,8 +11,8 @@ const strikingDummyNames: LocaleText = {
   fr: 'Mannequin d\'entraînement',
   ja: '木人',
   cn: '木人',
-  tc: '木人',
   ko: '나무인형',
+  tc: '木人',
 };
 
 export type ConfigIds = 'testTriggerOutput';
@@ -33,8 +33,8 @@ const triggerSet: TriggerSet<Data> = {
     de: 'Cactbot Test Trigger',
     fr: 'Test des triggers Cactbot',
     cn: 'Cactbot测试触发器',
-    tc: 'Cactbot測試觸發器',
     ko: 'Cactbot 테스트 트리거',
+    tc: 'Cactbot測試觸發器',
   },
   comments: {
     en:
@@ -45,10 +45,10 @@ const triggerSet: TriggerSet<Data> = {
       'Test/Dépannage des triggers (voir : <a href="https://github.com/OverlayPlugin/cactbot/blob/main/docs/FAQ-Troubleshooting.md#summerford-farms-raidboss-test">Vergers d\'Estival Raidboss Test</a>)',
     cn:
       '测试/排错触发器（参见：<a href="https://github.com/OverlayPlugin/cactbot/blob/main/docs/FAQ-Troubleshooting.md#summerford-farms-raidboss-test">Summerford Farms Raidboss Test</a>',
-    tc:
-      '測試/排錯觸發器（參見：<a href="https://github.com/OverlayPlugin/cactbot/blob/main/docs/FAQ-Troubleshooting.md#summerford-farms-raidboss-test">Summerford Farms Raidboss Test</a>',
     ko:
       '테스트/문제확인 트리거 (참고: <a href="https://github.com/OverlayPlugin/cactbot/blob/main/docs/FAQ-Troubleshooting.md#summerford-farms-raidboss-test">여름여울 농장 Raidboss 테스트</a>)',
+    tc:
+      '測試/排錯觸發器（參見：<a href="https://github.com/OverlayPlugin/cactbot/blob/main/docs/FAQ-Troubleshooting.md#summerford-farms-raidboss-test">Summerford Farms Raidboss Test</a>',
   },
   config: [
     {
@@ -59,8 +59,8 @@ const triggerSet: TriggerSet<Data> = {
         fr: 'Sortie pour "/echo cactbot test config"',
         ja: '"/echo cactbot test config"のアウトプット',
         cn: '输出 "/echo cactbot测试配置"',
-        tc: '輸出 "/echo cactbot測試配置',
         ko: '"/echo cactbot 설정 테스트" 출력값',
+        tc: '輸出 "/echo cactbot測試配置',
       },
       type: 'string',
       default: () => {
@@ -190,8 +190,8 @@ const triggerSet: TriggerSet<Data> = {
         fr: 'motivation',
         ja: '活を入れる',
         cn: '激励',
-        tc: '激勵',
         ko: '힘내라!',
+        tc: '激勵',
       },
       outputStrings: {
         text: {
@@ -213,8 +213,8 @@ const triggerSet: TriggerSet<Data> = {
         fr: 'hahahahaha',
         ja: 'ハハハハハ',
         cn: '哈哈哈哈哈哈',
-        tc: '哈哈哈哈哈哈',
         ko: '푸하하하하핳',
+        tc: '哈哈哈哈哈哈',
       },
       outputStrings: {
         text: {

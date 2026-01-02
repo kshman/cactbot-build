@@ -173,9 +173,7 @@ const triggerSet: TriggerSet<Data> = {
       id: 'Weeping City Hell Wind',
       type: 'StartsUsing',
       netRegex: { id: '17CB', source: 'Forgall', capture: false },
-      // Hell Wind sets HP to single digits, so mitigations don't work. Don't notify non-healers.
-      condition: (data) => data.role === 'healer' || data.job === 'BLU',
-      response: Responses.aoe(),
+      response: Responses.hpTo1Aoe(),
     },
     {
       id: 'Weeping City Mega Death',
@@ -696,7 +694,6 @@ const triggerSet: TriggerSet<Data> = {
     },
     {
       'locale': 'tc',
-      'missingTranslations': true,
       'replaceSync': {
         'Arachne Eve': '阿剌克涅',
         'Calofisteri': '卡洛菲斯提莉',
@@ -747,7 +744,7 @@ const triggerSet: TriggerSet<Data> = {
         'Mega Death': '超致死一擊',
         'Megiddo Flame': '米吉多火光',
         'Meteor(?![\\w\\s])': '隕石',
-        // 'Meteor Headmarkers': '', // FIXME '陨石点名'
+        'Meteor Headmarkers': '隕石點名',
         'Meteor Impact': '隕石衝擊',
         'Necropurge': '死靈潛質',
         'Penetration': '透耳尖嘯',
@@ -756,10 +753,10 @@ const triggerSet: TriggerSet<Data> = {
         'Pyramid': '三角錐形態',
         'Shadow Burst': '暗影爆',
         'Silken Spray': '噴吐蛛絲',
-        // 'Sphere': '', // FIXME '球形态'
+        'Sphere': '球形態',
         'Split End': '髮梢分裂',
         'Sticky Wicket': '黏液彈',
-        // 'Tank Lasers': '', // FIXME '坦克激光'
+        'Tank Lasers': '坦克雷射',
         'The Widow\'s Embrace': '大蜘蛛陷阱',
         'The Widow\'s Kiss': '蜘蛛陷阱',
         'Transfiguration': '形態變化',

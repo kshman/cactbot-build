@@ -30,8 +30,8 @@ const triggerSet: TriggerSet<Data> = {
           fr: 'Ifrit',
           ja: 'イフリート',
           cn: '伊弗利特',
-          tc: '伊弗利特',
           ko: '이프리트',
+          tc: '伊弗利特',
         };
 
         const raktapaksaLocaleNames = {
@@ -40,8 +40,8 @@ const triggerSet: TriggerSet<Data> = {
           fr: 'Raktapaksa',
           ja: 'ラクタパクシャ',
           cn: '赤翼罗羯坨博叉',
-          tc: '赤翼罗羯坨博叉',
           ko: '락타팍샤',
+          tc: '赤翼罗羯坨博叉',
         };
 
         // select the 4 most recent Ifrit or Raktapaksa's depending on phase

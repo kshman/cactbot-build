@@ -4356,7 +4356,7 @@ const triggerSet: TriggerSet<Data> = {
         '\\(Floor Drop\\)': '(地板坠落)',
         '\\(cast\\)': '(咏唱)',
         '\\(enrage\\)': '(狂暴)',
-        '\\(proximity\\)': '(近)',
+        '\\(proximity\\)': '(距离衰减)',
         '\\(spread\\)': '(分散)',
         '--tethers--': '--连线--',
         'Apodialogos': '远距离对话',

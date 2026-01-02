@@ -64,7 +64,7 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: 'Point laser away from rocks',
           ja: 'レーザーを岩に当てないように誘導',
-          ko: '레이저를 바위에 닿지 않게 유도해요',
+          ko: '레이저가 바위에 닿으면 안되요!',
         },
       },
     },

@@ -89,8 +89,8 @@ const primalOutputStrings = {
     fr: 'Intercardinal',
     ja: '斜め',
     cn: '四角',
-    tc: '四角',
     ko: '대각',
+    tc: '四角',
   },
   // Tether combos.
   '008E008F': {
@@ -99,8 +99,8 @@ const primalOutputStrings = {
     fr: 'En dessous + côtés',
     ja: '真ん中 + 横へ',
     cn: '正中间两侧',
-    tc: '正中間兩側',
     ko: '보스 안쪽 + 양옆',
+    tc: '正中間兩側',
   },
   '008E0090': {
     en: 'North/South + Out',
@@ -108,8 +108,8 @@ const primalOutputStrings = {
     fr: 'Nord/Sud + Extérieur',
     ja: '北/南 + 外へ',
     cn: '上/下远离',
-    tc: '上/下遠離',
     ko: '남/북 + 바깥',
+    tc: '上/下遠離',
   },
   '008E0091': {
     en: 'Under + Intercards',
@@ -117,8 +117,8 @@ const primalOutputStrings = {
     fr: 'En dessous + Intercardinal',
     ja: '真ん中 + 斜め',
     cn: '正中间四角',
-    tc: '正中間四角',
     ko: '보스 안쪽 + 대각',
+    tc: '正中間四角',
   },
   // Text output.
   'combined': {
@@ -127,8 +127,8 @@ const primalOutputStrings = {
     fr: '${safespot1} + ${safespot2}',
     ja: '${safespot1} + ${safespot2}',
     cn: '${safespot1} + ${safespot2}',
-    tc: '${safespot1} + ${safespot2}',
     ko: '${safespot1} + ${safespot2}',
+    tc: '${safespot1} + ${safespot2}',
   },
   'stock': {
     en: 'Stock: ${text}',
@@ -136,8 +136,8 @@ const primalOutputStrings = {
     fr: 'Stocker : ${text}',
     ja: 'ストック: ${text}',
     cn: '暂存: ${text}',
-    tc: '暫存: ${text}',
     ko: '저장: ${text}',
+    tc: '暫存: ${text}',
   },
   'junctionSuffix': {
     en: '${text} (${junction})',
@@ -145,8 +145,8 @@ const primalOutputStrings = {
     fr: '${text} (${junction})',
     ja: '${text} (${junction})',
     cn: '${text} (${junction})',
-    tc: '${text} (${junction})',
     ko: '${text} (${junction})',
+    tc: '${text} (${junction})',
   },
   // Junctions.
   'spread': {
@@ -156,8 +156,8 @@ const primalOutputStrings = {
     fr: 'dispersez-vous',
     ja: '散開',
     cn: '散开',
-    tc: '散開',
     ko: '산개',
+    tc: '散開',
   },
   'stacks': {
     // Titan healer stacks.
@@ -166,8 +166,8 @@ const primalOutputStrings = {
     fr: 'packez-vous',
     ja: 'ヒラ頭割り',
     cn: '双奶分组分摊',
-    tc: '雙奶分組分攤',
     ko: '그룹 쉐어',
+    tc: '雙奶分組分攤',
   },
   'stack': {
     // Obliterate whole group laser stack.
@@ -177,8 +177,8 @@ const primalOutputStrings = {
     fr: 'package en groupe',
     ja: '全体頭割り',
     cn: '全体分摊',
-    tc: '全體分攤',
     ko: '쉐어',
+    tc: '全體分攤',
   },
 };
 
@@ -217,8 +217,8 @@ const intermediateRelativityOutputStringsRaw = {
     fr: 'Brasier',
     ja: 'フレア',
     cn: '核爆',
-    tc: '核爆',
     ko: '플레어',
+    tc: '核爆',
   },
   stack: {
     en: 'Stack',
@@ -226,8 +226,8 @@ const intermediateRelativityOutputStringsRaw = {
     fr: 'Packez-vous',
     ja: '頭割り',
     cn: '分摊',
-    tc: '分攤',
     ko: '쉐어',
+    tc: '分攤',
   },
   shadoweye: {
     en: 'Gaze',
@@ -235,8 +235,8 @@ const intermediateRelativityOutputStringsRaw = {
     fr: 'Regard',
     ja: 'シャドウアイ',
     cn: '暗黑眼',
-    tc: '暗黑眼',
     ko: '마안',
+    tc: '暗黑眼',
   },
   eruption: Outputs.spread,
   blizzard: {
@@ -245,8 +245,8 @@ const intermediateRelativityOutputStringsRaw = {
     fr: 'Glace',
     ja: 'ブリザガ',
     cn: '冰环',
-    tc: '冰環',
     ko: '블리자가',
+    tc: '冰環',
   },
   aero: {
     en: 'Aero',
@@ -254,8 +254,8 @@ const intermediateRelativityOutputStringsRaw = {
     fr: 'Vent',
     ja: 'エアロガ',
     cn: '风击退',
-    tc: '風擊退',
     ko: '에어로가',
+    tc: '風擊退',
   },
 };
 type InterStrings = { [id in keyof typeof intermediateRelativityOutputStringsRaw]: LocaleText };
@@ -393,8 +393,8 @@ const triggerSet: TriggerSet<Data> = {
             fr: 'Bleu (avec ${player})',
             ja: '青、重圧 (${player}と)',
             cn: '蓝色重压 (与${player})',
-            tc: '藍色重壓 (與${player})',
             ko: '파랑 (다른 대상자: ${player})',
+            tc: '藍色重壓 (與${player})',
           },
           titanOrangeStack: {
             en: 'Orange Stack',
@@ -402,8 +402,8 @@ const triggerSet: TriggerSet<Data> = {
             fr: 'Orange, packez-vous',
             ja: '橙、頭割り',
             cn: '橙色分摊',
-            tc: '橙色分攤',
             ko: '주황: 집합',
+            tc: '橙色分攤',
           },
           titanYellowSpread: {
             en: 'Yellow Spread',
@@ -411,8 +411,8 @@ const triggerSet: TriggerSet<Data> = {
             fr: 'Jaune, dispersez-vous',
             ja: '黄、散開',
             cn: '黄色散开',
-            tc: '黃色散開',
             ko: '노랑: 산개',
+            tc: '黃色散開',
           },
         };
 

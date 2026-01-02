@@ -30,6 +30,7 @@ const interceptionOutputStrings: { [label: string]: LocaleText } = {
     ja: 'たまご',
     cn: '蛋',
     ko: '알',
+    tc: '蛋',
   },
   cube: {
     en: 'cubes',
@@ -38,14 +39,17 @@ const interceptionOutputStrings: { [label: string]: LocaleText } = {
     ja: '四角',
     cn: '方块',
     ko: '큐브',
+    tc: '方塊',
   },
   ball: {
     en: 'ball',
     de: 'Ball',
     fr: 'Balle',
     ja: '円', // 〇
+    // 〇
     cn: '球',
     ko: '동글',
+    tc: '球',
   },
 } as const;
 

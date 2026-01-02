@@ -479,7 +479,6 @@ const triggerSet: TriggerSet<Data> = {
     },
     {
       'locale': 'tc',
-      'missingTranslations': true,
       'replaceSync': {
         'Blaster Mirage': '爆破者幻象',
         'Blaster(?! Mirage)': '爆破者',
@@ -492,8 +491,8 @@ const triggerSet: TriggerSet<Data> = {
         'Vortexer': '環旋者',
       },
       'replaceText': {
-        // '--orbs--': '', // FIXME '--球--'
-        // '--regulator check--': '', // FIXME '--调节器检查--'
+        '--orbs--': '--球--',
+        '--regulator check--': '--調節器檢查--',
         '100-Megatonze Shock': '億萬噸震盪',
         'Apocalyptic Ray': '末世宣言',
         'Attachment': '配件更換',

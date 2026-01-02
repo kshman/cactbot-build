@@ -810,13 +810,14 @@ const triggerSet: TriggerSet<Data> = {
     },
     {
       'locale': 'fr',
-      'missingTranslations': true,
       'replaceSync': {
-        'Aether': 'sphère éthérée',
+        'Aether': 'Sphère éthérée',
         'Doomtrain': 'Glasya-Labolas',
-        'Kinematic Turret': 'tourelle d\'escorte',
+        'Kinematic Turret': 'Tourelle d\'escorte',
       },
       'replaceText': {
+        '\\(bait\\)': '(déposez)',
+        '\\(detonate\\)': '(explosion)',
         'Aetherial Ray': 'Rayon éthéré',
         'Aetherochar': 'Rayon éthéré',
         'Aetherosote': 'Choc éthéré',

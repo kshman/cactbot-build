@@ -269,7 +269,7 @@ const triggerSet: TriggerSet<Data> = {
         dodge: {
           en: 'Dodge Lines',
           ja: 'Dodge Lines',
-          ko: '직선 장핀 피해요',
+          ko: '바닥 장판 피해요',
         },
       },
     },

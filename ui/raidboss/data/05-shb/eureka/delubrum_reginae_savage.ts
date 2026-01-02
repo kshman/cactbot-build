@@ -1613,8 +1613,8 @@ const triggerSet: TriggerSet<Data> = {
           fr: 'Trinité féale',
           ja: 'トリニティ・アヴァウ',
           cn: '誓约之三位一体',
-          tc: '誓約之三位一體',
           ko: '맹세의 삼위일체',
+          tc: '誓約之三位一體',
         };
 
         const avatarLocaleNames: LocaleText = {
@@ -1623,8 +1623,8 @@ const triggerSet: TriggerSet<Data> = {
           fr: 'Clone de la Trinité féale',
           ja: 'アヴァウドの分体',
           cn: '誓约之分身',
-          tc: '誓約之分身',
           ko: '맹세의 분열체',
+          tc: '誓約之分身',
         };
 
         // select the Trinity and Avatars
