@@ -313,6 +313,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Spread Fire Cone',
+          ja: '火炎拡散',
           ko: '불 꼬깔 피해 흩어져요',
         },
       },
@@ -365,7 +366,8 @@ const triggerSet: TriggerSet<Data> = {
         middle: Outputs.middle,
         text: {
           en: 'KB from ${dir1} + away from ${dir2}',
-          ko: '넉백은 ${dir1} + ${dir2} 피해요',
+          ja: '${dir1}ノックバック (${dir2}回避)',
+          ko: '${dir1}넉백 (${dir2}피해요)',
         },
         ...Directions.outputStringsCardinalDir,
       },
@@ -385,22 +387,22 @@ const triggerSet: TriggerSet<Data> = {
         dirN: {
           en: 'Go North Edge',
           ja: '北側へ',
-          ko: '북쪽 구석으로',
+          ko: '🡹북쪽 구석으로',
         },
         dirE: {
           en: 'Go East Edge',
           ja: '東側へ',
-          ko: '동쪽 구석으로',
+          ko: '🡺동쪽 구석으로',
         },
         dirS: {
           en: 'Go South Edge',
           ja: '南側へ',
-          ko: '남쪽 구석으로',
+          ko: '🡻남쪽 구석으로',
         },
         dirW: {
           en: 'Go West Edge',
           ja: '西側へ',
-          ko: '서쪽 구석으로',
+          ko: '🡸서쪽 구석으로',
         },
         unknown: {
           en: 'Cone cleave from ???',
@@ -417,7 +419,8 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Go N/S + Big AoE',
-          ko: '남북으로 + 아픈 전체 공격',
+          ja: '全体攻撃！南🡻北🡹へ',
+          ko: '전체 공격! 남🡻북🡹으로',
         },
       },
     },
@@ -430,6 +433,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Soak Towers',
+          ja: '塔を踏む',
           ko: '타워 밟아요',
         },
       },
@@ -447,6 +451,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Away from exploding orbs',
+          ja: '爆発玉から離れる',
           ko: '폭발 구슬 피해요',
         },
       },
@@ -461,6 +466,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Dodge Cones x2',
+          ja: '扇x2回避',
           ko: '꼬깔x2 피해요',
         },
       },
@@ -481,6 +487,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Baiting fire cones',
+          ja: '火炎扇誘導',
           ko: '불 꼬깔 유도해요',
         },
       },
@@ -495,6 +502,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Baiting water cones',
+          ja: '流水扇誘導',
           ko: '물 꼬깔 유도해요',
         },
       },
@@ -542,19 +550,23 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Bait ${elem} cone from ${dir}',
+          ja: '${elem}扇誘導: ${dir}',
           ko: '${elem} 꼬깔 유도: ${dir}',
         },
         ...Directions.outputStrings8Dir,
         water: {
           en: 'Water',
+          ja: '流水',
           ko: '물',
         },
         fire: {
           en: 'Fire',
+          ja: '火炎',
           ko: '불',
         },
         middle: {
           en: 'Middle',
+          ja: '中央',
           ko: '가운데',
         },
       },

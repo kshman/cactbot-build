@@ -298,12 +298,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         moveAway: {
           en: 'Away from expanding blobs',
-          ja: 'Away from expanding blobs',
+          ja: '大きくなる肉塊から離れる',
           ko: '커지는 살덩이 피해요',
         },
         launchAway: {
           en: 'Launch away from expanding blobs',
-          ja: 'Launch away from expanding blobs',
+          ja: '大きくなる肉塊から離れてノックバック',
           ko: '커지는 살덩이 피해 넉백',
         },
       },
@@ -320,12 +320,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         forward: {
           en: 'Launching forward',
-          ja: 'Launching forward',
+          ja: '前方にノックバック',
           ko: '앞으로 넉백',
         },
         back: {
           en: 'Launching backward',
-          ja: 'Launching backward',
+          ja: '後方にノックバック',
           ko: '뒤로 넉백',
         },
       },
@@ -347,7 +347,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Escape (${dir} CW)',
-          ja: 'Escape (${dir} CW)',
+          ja: '逃げる (${dir} 時計回り)',
           ko: '피해요: ${dir}쪽',
         },
         ...Directions.outputStringsIntercardDir,
@@ -378,7 +378,7 @@ const triggerSet: TriggerSet<Data> = {
         left: Outputs.left,
         text: {
           en: 'Cleaving ${dir}, point out',
-          ja: 'Cleaving ${dir}, point out',
+          ja: '扇形範囲 ${dir}、外向きに',
           ko: '부채꼴: ${dir}',
         },
       },
@@ -401,7 +401,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Away from snakes, platform breaking',
-          ja: 'Away from snakes, platform breaking',
+          ja: 'ヘビートンネルに注意',
           ko: '뱀 터널 피해요',
         },
       },
@@ -462,22 +462,22 @@ const triggerSet: TriggerSet<Data> = {
         west: Outputs.getLeftAndWest,
         outW: {
           en: 'Out West',
-          ja: 'Out West',
+          ja: '1列',
           ko: '1열',
         },
         inW: {
           en: 'In West',
-          ja: 'In West',
+          ja: '2列',
           ko: '2열',
         },
         inE: {
           en: 'In East',
-          ja: 'In East',
+          ja: '3列',
           ko: '3열',
         },
         outE: {
           en: 'Out East',
-          ja: 'Out East',
+          ja: '4列',
           ko: '4열',
         },
         text: {
@@ -500,7 +500,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Dodge lines',
-          ja: 'Dodge lines',
+          ja: '線を避ける',
           ko: '연속 장판 피해요',
         },
       },

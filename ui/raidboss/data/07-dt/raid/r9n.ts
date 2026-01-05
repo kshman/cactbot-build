@@ -268,7 +268,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         dodge: {
           en: 'Dodge Lines',
-          ja: 'Dodge Lines',
+          ja: '線を避ける',
           ko: '바닥 장판 피해요',
         },
       },
@@ -302,7 +302,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: '${dir1} max melee => ${dir2} max melee',
-          ja: '${dir1} max melee => ${dir2} max melee',
+          ja: '${dir1} 最大近接 => ${dir2} 最大近接',
           ko: '${dir1} 🔜 ${dir2}',
         },
         left: Outputs.left,
@@ -374,8 +374,8 @@ const triggerSet: TriggerSet<Data> = {
         ...Directions.outputStrings16Dir,
         away: {
           en: 'Away from bats ${dir1}/${dir2}',
-          ja: 'Away from bats ${dir1}/${dir2}',
-          ko: '박쥐 피해요: ${dir1}/${dir2}',
+          ja: 'ゴモリー: ${dir1} ${dir2}',
+          ko: '박쥐 장판: ${dir1} ${dir2}',
         },
       },
     },
@@ -402,8 +402,8 @@ const triggerSet: TriggerSet<Data> = {
         ...Directions.outputStrings16Dir,
         away: {
           en: 'Away from bats ${dir1}/${dir2}/${dir3}',
-          ja: 'Away from bats ${dir1}/${dir2}/${dir3}',
-          ko: '박쥐 피해요: ${dir1}/${dir2}/${dir3}',
+          ja: 'ゴモリー: ${dir1} ${dir2} ${dir3}',
+          ko: '박쥐 장판: ${dir1} ${dir2} ${dir3}',
         },
       },
     },
@@ -430,10 +430,7 @@ const triggerSet: TriggerSet<Data> = {
       id: 'R9N Penetrating Pitch',
       type: 'StartsUsing',
       netRegex: { id: 'B364', source: 'Vamp Fatale', capture: false },
-      infoText: (_data, _matches, output) => output.stacks!(),
-      outputStrings: {
-        stacks: Outputs.healerGroups,
-      },
+      response: Responses.healerGroups(),
     },
     {
       id: 'R9N Crowd Kill',
@@ -498,17 +495,17 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Flails ${flail1Dist} ${flail1Dir}/${flail2Dist} ${flail2Dir}',
-          ja: 'Flails ${flail1Dist} ${flail1Dir}/${flail2Dist} ${flail2Dir}',
-          ko: '플레일: ${flail1Dist} ${flail1Dir}/${flail2Dist} ${flail2Dir}',
+          ja: '鉄球 ${flail1Dist} ${flail1Dir}/${flail2Dist} ${flail2Dir}',
+          ko: '철퇴: ${flail1Dist} ${flail1Dir}/${flail2Dist} ${flail2Dir}',
         },
         near: {
           en: 'Near',
-          ja: 'Near',
+          ja: '近く',
           ko: '가까이',
         },
         far: {
           en: 'Far',
-          ja: 'Far',
+          ja: '遠く',
           ko: '멀리',
         },
         ...Directions.outputStringsIntercardDir,

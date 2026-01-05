@@ -85,7 +85,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         spreadPuddles: {
           en: 'Spread => Bait 3x Puddles',
-          ja: 'Spread => Bait 3x Puddles',
+          ja: '散開 => 水たまり誘導x3',
           ko: '흩어졌다 🔜 장판x3',
         },
       },
@@ -438,7 +438,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         westSafe: {
           en: 'Tower Knockback to West',
-          ja: 'タワーのノックバックは西へ',
+          ja: '塔のノックバックは西へ',
           ko: '타워 넉백: 서쪽으로',
         },
       },
@@ -451,7 +451,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         eastSafe: {
           en: 'Tower Knockback to East',
-          ja: 'タワーのノックバックは東へ',
+          ja: '塔のノックバックは東へ',
           ko: '타워 넉백: 동쪽으로',
         },
       },

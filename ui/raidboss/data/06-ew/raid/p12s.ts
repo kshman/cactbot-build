@@ -174,37 +174,22 @@ const superchainNpcBaseIds: readonly string[] = Object.values(superchainNpcBaseI
 const whiteFlameDelayOutputStrings = {
   delay1: {
     en: 'now',
-    de: 'jetzt',
-    fr: 'Maintenant',
-    cn: '现在!',
     ko: '지금 당장',
   },
   delay2: {
     en: 'soon',
-    de: 'bald',
-    fr: 'Bientôt',
-    cn: '等1只小怪',
     ko: '첫번째',
   },
   delay3: {
     en: 'delayed',
-    de: 'verzögert',
-    fr: 'Retardé',
-    cn: '等2只小怪',
     ko: '두번째',
   },
   delay4: {
     en: 'very delayed',
-    de: 'sehr verzögert',
-    fr: 'Très retardé',
-    cn: '等3只小怪',
     ko: '세번째',
   },
   delay5: {
     en: 'verrry delayed',
-    de: 'seeeeehr verzögert',
-    fr: 'Trèèèès retardé',
-    cn: '等4只小怪',
     ko: '네번째',
   },
 } as const;
@@ -414,12 +399,6 @@ export type LimitCutCombatantState = PluginCombatantState & {
 };
 
 export interface Data extends RaidbossData {
-  //
-  prsTrinityInvul?: boolean;
-  prsApoPeri?: number;
-  prsNorth?: boolean;
-  prsUltima?: number;
-  //
   readonly triggerSetConfig: {
     engravement1DropTower: 'quadrant' | 'clockwise' | 'tower' | 'tetherbase';
     classicalConceptsPairOrder: 'xsct' | 'cxts' | 'ctsx' | 'ctxs' | 'tcxs' | 'shapeAndDebuff';
@@ -486,6 +465,11 @@ export interface Data extends RaidbossData {
   gaiaochosTetherCollect: string[];
   seenSecondTethers: boolean;
   geocentrism2OutputStr?: string;
+  //
+  prsTrinityInvul?: boolean;
+  prsApoPeri?: number;
+  prsNorth?: boolean;
+  prsUltima?: number;
 }
 
 const triggerSet: TriggerSet<Data> = {
@@ -500,7 +484,8 @@ const triggerSet: TriggerSet<Data> = {
         fr: 'Paradeigma Stratégie 2 Tours',
         ja: 'パラデイグマ2の塔処理方法',
         cn: '范式 2 踩塔方法',
-        ko: '파라데이그마 2 타워 공략',
+        ko: '파라데이그마 2 기둥 공략',
+        tc: '範式 2 踩塔方法',
       },
       type: 'select',
       options: {
@@ -533,10 +518,16 @@ const triggerSet: TriggerSet<Data> = {
           '仅提示塔颜色': 'tower',
         },
         ko: {
-          '줄 기준': 'tetherbase',
-          '게임8': 'quadrant',
-          '줄 기준 시계방향': 'clockwise',
-          '공략 없음: 그냥 타워 색만 알림': 'tower',
+          '선 위치 기반': 'tetherbase',
+          '반대편 + 가까운 사분면의 기둥 (Game8)': 'quadrant',
+          '선 연결된 곳의 시계방향': 'clockwise',
+          '공략 없음: 그냥 기둥 색만 알림': 'tower',
+        },
+        tc: {
+          '看小怪位置(菓子)': 'tetherbase',
+          '垂直拉線 (Game8)': 'quadrant',
+          '對角拉線': 'clockwise',
+          '僅提示塔顏色': 'tower',
         },
       },
       default: 'quadrant',
@@ -546,8 +537,10 @@ const triggerSet: TriggerSet<Data> = {
       name: {
         en: 'Classical Concepts: Pairs Order (Left->Right)',
         de: 'Elementarschöpfung: Ordnen nach Paaren (Links->Rechts)',
+        fr: 'Concepts élémentaires : Ordre des paires (Gauche->Droite)',
         cn: '经典概念 索尼顺序（左->右）',
         ko: 'Classical Concepts: 도형 순서 (왼 -> 오)',
+        tc: '經典概念 索尼順序（左->右）',
       },
       type: 'select',
       options: {
@@ -591,29 +584,44 @@ const triggerSet: TriggerSet<Data> = {
           'Δ○X□ (TOXS)': 'tcxs',
           '모양과 디버프만 알림': 'shapeAndDebuff',
         },
+        tc: {
+          'X□○Δ (BPOG)': 'xsct',
+          '○XΔ□ (1234筆畫)': 'cxts',
+          '○Δ□X (Rocketship)': 'ctsx',
+          '○ΔX□ (彩虹)': 'ctxs',
+          'Δ○X□ (TOXS)': 'tcxs',
+          '只報形狀和debuff': 'shapeAndDebuff',
+        },
       },
       default: 'cxts',
     },
     {
       id: 'classicalConcepts2ActualNoFlip',
       comment: {
-        en:
-          'Only calls final position immediately in chosen pair order with no flip. For example, for BPOG, the blue X (crosses) will be far west. <a href="https://quisquous.github.io/cactbot/resources/images/06ew_raid_p12s_classic2_noflip.webp" target="_blank">Visual</a>',
-        de:
-          'Nennt die endgültige Position nur sofort in der gewählten Paarreihenfolge ohne Flip.“ Bei BPOG beispielsweise befindet sich das blaue X (Kreuze) weit westlich. <a href="https://quisquous.github.io/cactbot/resources/images/06ew_raid_p12s_classic2_noflip.webp" target="_blank">Visual</a>',
+        en: `Only calls final position immediately in chosen pair order with no flip.
+             For example, for BPOG, the blue X (crosses) will be far west.
+             <a href="https://overlayplugin.github.io/cactbot/resources/images/06ew_raid_p12s_classic2_noflip.webp" target="_blank">Visual</a>`,
+        de: `Nennt die endgültige Position nur sofort in der gewählten Paarreihenfolge ohne Flip.
+             Bei BPOG beispielsweise befindet sich das blaue X (Kreuze) weit westlich.
+             <a href="https://overlayplugin.github.io/cactbot/resources/images/06ew_raid_p12s_classic2_noflip.webp" target="_blank">Visual</a>`,
         fr:
-          'Afficher la position finale uniquement dans l\'ordre des paires choisies, sans inversion. Par exemple, pour le BPOG, le X bleu (croix) sera loin à l\'ouest. <a href="https://quisquous.github.io/cactbot/resources/images/06ew_raid_p12s_classic2_noflip.webp" target="_blank">Visual</a>',
-        cn:
-          '只报自己图案的最终位置，没有位置变换。例如，对于 BPOG 打法，蓝 X 是第一列（西面最远）。 <a href="https://quisquous.github.io/cactbot/resources/images/06ew_raid_p12s_classic2_noflip.webp" target="_blank">Visual</a>',
-        ko:
-          '선택한 도형 순서에 따른 최종 위치만 알립니다. 예시에서 파보빨초를 기준으로 파랑 X는 1열이 됩니다. <a href="https://quisquous.github.io/cactbot/resources/images/06ew_raid_p12s_classic2_noflip.webp" target="_blank">Visual</a>',
+          `Afficher la position finale uniquement dans l\'ordre des paires choisies, sans inversion.
+            Par exemple, pour le BPOG, le X bleu (croix) sera loin à l\'ouest.
+            <a href="https://overlayplugin.github.io/cactbot/resources/images/06ew_raid_p12s_classic2_noflip.webp" target="_blank">Visual</a>`,
+        cn: `直接报自己图案的最终位置，不报变换前的。例如，对于 BPOG 打法，蓝 X 会直接报第一列（西面最远）。
+            <a href="https://overlayplugin.github.io/cactbot/resources/images/06ew_raid_p12s_classic2_noflip.webp" target="_blank">Visual</a>`,
+        ko: `선택한 도형 순서에 따른 최종 위치만 알립니다. 예시에서 파보빨초를 기준으로 파랑 X는 1열이 됩니다.
+            <a href="https://overlayplugin.github.io/cactbot/resources/images/06ew_raid_p12s_classic2_noflip.webp" target="_blank">Visual</a>`,
+        tc: `直接報自己圖案的最終位置，不報變換前的。例如，對於 BPOG 打法，藍 X 會直接報第一列（西面最遠）。
+            <a href="https://overlayplugin.github.io/cactbot/resources/images/06ew_raid_p12s_classic2_noflip.webp" target="_blank">Visual</a>`,
       },
       name: {
         en: 'Classical Concepts 2: Actual only & no inversion',
         de: 'Classical Concepts 2: Nur tatsächlich & keine Umkehrung',
         fr: 'Classical Concepts 2 : Actuel uniquement & pas d\'inversion',
-        cn: '经典概念2: 实际位置 (没有位置变换)',
+        cn: '经典概念2: 直接报最终位置 (不报变换)',
         ko: '원소 이데아 2: 반전 없이 실제 위치만 알림',
+        tc: '經典概念2: 直接報最終位置 (不報變換)',
       },
       type: 'checkbox',
       default: false,
@@ -626,6 +634,7 @@ const triggerSet: TriggerSet<Data> = {
         fr: 'Pangenesis: Première tour',
         cn: '黑白塔',
         ko: '범생설(Pangenesis): 첫번째 기둥',
+        tc: '黑白塔',
       },
       type: 'select',
       options: {
@@ -652,6 +661,11 @@ const triggerSet: TriggerSet<Data> = {
         ko: {
           '교체가 필요할 때만 알림': 'agnostic',
           '0+2 (빠른 융합)': 'not',
+          '1+2 (Yuki/Rinon)': 'one',
+        },
+        tc: {
+          '只提示交換顏色': 'agnostic',
+          '0+2 (HRT)': 'not',
           '1+2 (Yuki/Rinon)': 'one',
         },
       },
