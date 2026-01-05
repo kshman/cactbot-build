@@ -695,7 +695,6 @@ const triggerSet: TriggerSet<Data> = {
     },
     {
       'locale': 'tc',
-      'missingTranslations': true,
       'replaceSync': {
         'Cocoon': '光繭',
         'Icicle': '冰柱',
@@ -712,13 +711,13 @@ const triggerSet: TriggerSet<Data> = {
         'Akh Rhai': '天光輪迴',
         'Atomic Ray': '原子射線',
         'Benighting Breath': '黑暗吐息',
-        // 'Cocoon Markers': '', // FIXME '光茧点名'
+        'Cocoon Markers': '光繭點名',
         'Dark Matter': '黑暗物質',
         'Diamond Dust': '鑽石星塵',
         'Dragonfist': '龍掌',
         'Earth Breath': '大地吐息',
         'Earthen Fury': '大地之怒',
-        // 'First Wing': '', // FIXME '第一只翅膀'
+        'First Wing': '第一隻翅膀',
         'Gyre Charge': '螺旋衝鋒',
         'Hellfire': '地獄之火炎',
         'Hypernova': '超新星',
@@ -727,20 +726,20 @@ const triggerSet: TriggerSet<Data> = {
         'Judgment Bolt': '制裁之雷',
         'Levinbolt': '閃電',
         'Meteor Impact': '隕石衝擊',
-        // 'Phase': '', // FIXME '阶段'
+        'Phase': '階段',
         'Protostar': '原恆星',
-        // 'Reiryu Adds': '', // FIXME '灵龙出现'
-        // 'Second Wing': '', // FIXME '第二只翅膀'
+        'Reiryu Adds': '靈龍出現',
+        'Second Wing': '第二隻翅膀',
         'Shatter': '破碎',
         'Spikesicle': '冰柱突刺',
         'Summon Icicle': '召喚冰柱',
         'Super Cyclone': '超級颶風',
-        // 'TAP BUTTON OR ELSE': '', // FIXME 'XJB按'
-        // 'Tail Marker': '', // FIXME '尾巴点名'
+        'TAP BUTTON OR ELSE': '按按鈕！',
+        'Tail Marker': '尾巴點名',
         'Tail Slap': '尾部猛擊',
         'Tail Spit': '尾部重擊',
         'Tera Slash': '萬億斬擊',
-        // 'Tethers': '', // FIXME '连线'
+        'Tethers': '連線',
         'Tidal Wave': '巨浪',
         'Touchdown': '空降',
         'Wormwail': '神龍嘯',

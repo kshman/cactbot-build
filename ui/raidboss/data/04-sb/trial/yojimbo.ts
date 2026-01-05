@@ -185,7 +185,6 @@ const triggerSet: TriggerSet<Data> = {
     },
     {
       'locale': 'tc',
-      'missingTranslations': true,
       'replaceSync': {
         'Electrogenetic Force': '電擊',
         'Embodiment': '吉爾伽美什的分身',
@@ -204,7 +203,7 @@ const triggerSet: TriggerSet<Data> = {
         'Epic Stormsplitter': '我流破浪斬',
         'Gekko': '月光',
         'Giga Jump': '●分身出現',
-        // 'Hell\'s Gate': '', // FIXME '狱门'
+        'Hell\'s Gate': '獄門',
         'Inoshikacho': '豬鹿蝶',
         'Kasha': '花車',
         'Masamune': '正宗',

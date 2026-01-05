@@ -977,7 +977,6 @@ const triggerSet: TriggerSet<Data> = {
     },
     {
       'locale': 'tc',
-      'missingTranslations': true,
       'replaceSync': {
         'Agrias': '聖騎士阿格莉亞絲',
         'Aspersory': '聖雲水瓶',
@@ -991,7 +990,7 @@ const triggerSet: TriggerSet<Data> = {
         'Ephemeral Knight': '幻影騎士',
         'Halidom': '仿製聖域',
         'Harpy': '哈比鳥',
-        // 'I see it now': '', // FIXME '我将释放全部力量……'
+        'I see it now': '我將釋放全部力量……',
         'Iron Construct': '勞動型鐵巨人',
         'Mustadio': '機工士姆斯塔迪奧',
         'Ramza': '勇者拉姆札',
@@ -1005,8 +1004,8 @@ const triggerSet: TriggerSet<Data> = {
         'Ultima, the High Seraph': '聖天使阿爾蒂瑪',
       },
       'replaceText': {
-        // '--ghost stun--': '', // FIXME '幽灵击晕'
-        // '--crystal stun--': '', // FIXME '水晶击晕'
+        '--ghost stun--': '幽靈擊暈',
+        '--crystal stun--': '水晶擊暈',
         'Analysis': '分析',
         'Arm Shot': '擊腕',
         'Auralight': '聖石光',
@@ -1030,16 +1029,16 @@ const triggerSet: TriggerSet<Data> = {
         'Demi-Aquarius': '亞靈水瓶座',
         'Demi-Aries': '亞靈牡羊座',
         'Demi-Leo': '亞靈獅子座',
-        'Demi-Virgo Feet': '亞靈處女座',
-        // 'Demi-Virgo Line(?!\/)': '', // FIXME '亚灵室女座 直线'
-        'Demi-Virgo Line/Tether': '亞靈處女座',
-        // 'Demi-Virgo Tether(?!\/)': '', // FIXME '亚灵室女座 连线'
-        'Demi-Virgo Tether/Feet': '亞靈處女座',
+        'Demi-Virgo Feet': '亞靈處女座 (腳)',
+        'Demi-Virgo Line(?!\/)': '亞靈處女座 (直線)',
+        'Demi-Virgo Line/Tether': '亞靈處女座 (直線/連線)',
+        'Demi-Virgo Tether(?!\/)': '亞靈處女座 (連線)',
+        'Demi-Virgo Tether/Feet': '亞靈處女座 (連線/腳)',
         'Divine Light': '幻光波',
         'Divine Ruination': '聖光爆裂破',
         'Duskblade': '暗影之劍',
         'Earth Hammer': '大地之錘',
-        // 'East/West March': '', // FIXME '东/西进军'
+        'East/West March': '東/西進軍',
         'Embrace': '抱擁',
         'Energy Burst': '能量爆發',
         '(?<![\\w| ])Eruption': '噴發',
@@ -1052,7 +1051,7 @@ const triggerSet: TriggerSet<Data> = {
         'Holy IV': '極聖',
         'Infernal Wave': '地獄波動',
         'Judgment Blade': '不動無明劍',
-        // 'L/R Handgonne': '', // FIXME '左/右舷扫射'
+        'L/R Handgonne': '左/右舷掃射',
         'Last Testament': '最終聖約',
         'Leg Shot': '擊足',
         'Maintenance': '維護',
@@ -1068,10 +1067,10 @@ const triggerSet: TriggerSet<Data> = {
         'Shadowblade': '暗黑之劍',
         'Shockwave': '衝擊波',
         'Stack': '無雙閃電突刺',
-        // 'Sword In/Out': '', // FIXME '剑 靠近/远离'
-        // 'Sword L/R': '', // FIXME '剑 左/右'
-        // 'Sword Out/In': '', // FIXME '剑 远离/靠近'
-        // 'Sword Three In A Row': '', // FIXME '一行三剑'
+        'Sword In/Out': '劍 (靠近/遠離)',
+        'Sword L/R': '劍 (左/右)',
+        'Sword Out/In': '劍 (遠離/靠近)',
+        'Sword Three In A Row': '一行三劍',
         'Thunder Slash': '雷鳴劍',
         'Time Eruption': '時空噴發',
         'Towerfall': '崩塌',

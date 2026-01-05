@@ -454,18 +454,17 @@ const triggerSet: TriggerSet<Data> = {
     },
     {
       'locale': 'tc',
-      'missingTranslations': true,
       'replaceSync': {
         'Catastrophe': '災變者',
         'Fleshy Member': '觸手',
       },
       'replaceText': {
-        // '\\(T/H\\)': '', // FIXME '(T/奶)'
+        '\\(T/H\\)': '(坦/補)',
         '-100 Gs': '重力-100',
         '(?<!-)100 Gs': '重力100',
         'Antilight': '暗黑光',
         'Death\'s Gaze': '死神之瞳',
-        // 'Double Stack': '', // FIXME '二连分摊'
+        'Double Stack': '二連分攤',
         'Earthquake': '大地震',
         'Epicenter': '震源製造',
         'Evilsphere': '邪球',
@@ -473,7 +472,7 @@ const triggerSet: TriggerSet<Data> = {
         'Gravitational Wave': '重力波',
         'Long Drop': '自由落體',
         'Paranormal Wave': '詛咒波',
-        // 'Probes': '', // FIXME '引导'
+        'Probes': '引導',
         'Unstable Gravity': '重力爆發',
         'Tremblor': '地震',
         'Gravitational Manipulation': '重力操縱',

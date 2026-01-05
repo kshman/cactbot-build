@@ -663,26 +663,25 @@ const triggerSet: TriggerSet<Data> = {
     },
     {
       'locale': 'tc',
-      'missingTranslations': true,
       'replaceSync': {
         'Halicarnassus': '哈利卡納蘇斯',
         'Apanda': '阿班達',
         'Soul Reaper': '靈魂收割者',
       },
       'replaceText': {
-        // '\\(Apanda\\)': '', // FIXME '(阿班达)'
-        // '\\(Books\\)': '', // FIXME '(图书)'
-        // '\\(Cave\\)': '', // FIXME '(墓地)'
-        // '\\(Clock\\)': '', // FIXME '(八方)'
-        // '\\(Crystals\\)': '', // FIXME '(水晶)'
-        // '\\(Great Dragon\\)': '', // FIXME '(巨龙)'
-        // '\\(library\\)': '', // FIXME '(图书馆)'
-        // '\\(Ninjas/Giant\\)': '', // FIXME '(忍者/巨人)'
-        // '\\(Random\\)': '', // FIXME '(随机)'
-        // '\\(Soul Reapers\\)': '', // FIXME '(死神)'
-        // '\\(Spellblade Books\\)': '', // FIXME '(魔法剑)'
-        // '\\(Thorns\\)': '', // FIXME '(荆棘)'
-        // '\\(White Flame\\)': '', // FIXME '(白焰)'
+        '\\(Apanda\\)': '(阿班達)',
+        '\\(Books\\)': '(圖書)',
+        '\\(Cave\\)': '(墓地)',
+        '\\(Clock\\)': '(八方)',
+        '\\(Crystals\\)': '(水晶)',
+        '\\(Great Dragon\\)': '(巨龍)',
+        '\\(library\\)': '(圖書館)',
+        '\\(Ninjas/Giant\\)': '(忍者/巨人)',
+        '\\(Random\\)': '(隨機)',
+        '\\(Soul Reapers\\)': '(死神)',
+        '\\(Spellblade Books\\)': '(魔法劍)',
+        '\\(Thorns\\)': '(荊棘)',
+        '\\(White Flame\\)': '(白焰)',
         'Blizzard': '暴雪',
         'Critical Hit': '暴擊',
         'Dimensional Wave': '次元波動',
@@ -694,15 +693,15 @@ const triggerSet: TriggerSet<Data> = {
         'Panel Swap': '刷新面板',
         'Place Dark Token': '召喚死形',
         'Place Token': '召喚魔形',
-        // '(The )?Queen\'s Waltz': '', // FIXME '女王之舞'
+        '(The )?Queen\'s Waltz': '女王之舞',
         'Ribbit': '呱呱呱呱呱！',
         'Spellblade Holy': '魔法劍·神聖',
         'Squelch': '喀喀喀喀喀！',
-        // 'Tethers': '', // FIXME '连线'
+        'Tethers': '連線',
         'The Game': '遊戲開始',
         'The Playing Field': '遊戲面板',
         'Thunder': '雷電',
-        // 'Cross Reaper': '', // FIXME '交叉斩击'
+        'Cross Reaper': '交錯收割',
         'Frost Breath': '寒霜吐息',
         'Grand Sword': '巨劍攻擊',
         'Gusting Gouge': '削風',

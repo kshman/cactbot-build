@@ -342,7 +342,6 @@ const triggerSet: TriggerSet<Data> = {
     },
     {
       'locale': 'tc',
-      'missingTranslations': true,
       'replaceSync': {
         'Cocoon': '光繭',
         'Left Wing': '左翼',
@@ -353,7 +352,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       'replaceText': {
         'Akh Morn': '死亡輪迴',
-        // 'Elemental Attack': '', // FIXME '元素攻击'
+        'Elemental Attack': '元素攻擊',
         'Dark Matter': '黑暗物質',
         'Dragonfist': '龍掌',
         'Earth Breath': '大地吐息',
@@ -368,7 +367,7 @@ const triggerSet: TriggerSet<Data> = {
         'Protostar': '原恆星',
         'Spikesicle': '冰柱突刺',
         'Summon Icicle': '召喚冰柱',
-        // 'TAP BUTTON OR ELSE': '', // FIXME 'XJB按'
+        'TAP BUTTON OR ELSE': '按按鈕！',
         'Tail Slap': '尾部猛擊',
         'Tidal Wave': '巨浪',
       },

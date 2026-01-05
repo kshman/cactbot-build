@@ -328,7 +328,6 @@ const triggerSet: TriggerSet<Data> = {
     },
     {
       'locale': 'tc',
-      'missingTranslations': true,
       'replaceSync': {
         'Level Checker': '等級檢測儀',
         'Omega': '歐米茄',
@@ -362,8 +361,8 @@ const triggerSet: TriggerSet<Data> = {
         'Repel': '相斥',
         'Reset': '初始化',
         'Rush': '突進',
-        // 'Starboard/Larboard Cannon': '', // FIXME '右/左舷齐射·波动炮'
-        // 'Starboard/Larboard Surge': '', // FIXME '右/左舷齐射·零式波动炮'
+        'Starboard/Larboard Cannon': '右/左舷齊射·波動砲',
+        'Starboard/Larboard Surge': '右/左舷齊射·零式波動砲',
         '(?<! )Storage Violation': '清除記憶污染S',
         'Unmitigated Explosion': '大爆炸',
         'Update Program': '更新循環程式',

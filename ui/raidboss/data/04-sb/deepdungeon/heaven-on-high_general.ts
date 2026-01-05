@@ -29,6 +29,7 @@ const triggerSet: TriggerSet<Data> = {
     ja: 'アメノミハシラ (全階層)',
     cn: '天之御柱 (全楼层)',
     ko: '천궁탑 (전체 층)',
+    tc: '天之御柱 (全樓層)',
   },
 
   triggers: [

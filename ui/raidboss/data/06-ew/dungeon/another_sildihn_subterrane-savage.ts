@@ -771,14 +771,7 @@ const triggerSet: TriggerSet<Data> = {
       type: 'StartsUsing',
       netRegex: { id: '7984', source: 'Sil\'dihn Armor', capture: false },
       condition: (data) => data.role === 'healer' || data.job === 'BLU',
-      infoText: (_data, _matches, output) => output.text!(),
-      outputStrings: {
-        text: {
-          en: 'HP to 1',
-          ja: '体力１!',
-          ko: 'HP 1',
-        },
-      },
+      response: Responses.hpTo1Aoe(),
     },
     {
       id: 'ASSS Infernal Weight',

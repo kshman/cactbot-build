@@ -298,7 +298,6 @@ const triggerSet: TriggerSet<Data> = {
     },
     {
       'locale': 'tc',
-      'missingTranslations': true,
       'replaceSync': {
         'Arbuda': '額部陀',
         'Coeurl Smriti': '凶豹所憶',
@@ -309,13 +308,13 @@ const triggerSet: TriggerSet<Data> = {
         'Tourmaline Pond': '水苔池',
       },
       'replaceText': {
-        // '--Smriti Appears--': '', // FIXME '--凶豹出现--'
+        '--Smriti Appears--': '--凶豹出現--',
         'Basic Instinct': '鬥爭本能',
         'Cardinal Shift': '四劍大迴旋',
         'Coeurl Whisper': '雙豹招來',
         'Electric Burst': '電流爆裂',
         'Fourfold Shear': '四連雙斬',
-        // 'Front/Back\\?Sides\\?': '', // FIXME '前/后?两侧?'
+        'Front/Back\\?Sides\\?': '前/後?兩側?',
         'Furious Fists': '雙豹蒼連擊',
         'Heat Lightning': '驚電',
         'Hellseal': '試煉刻印',

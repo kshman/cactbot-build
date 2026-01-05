@@ -564,7 +564,6 @@ const triggerSet: TriggerSet<Data> = {
     },
     {
       'locale': 'tc',
-      'missingTranslations': true,
       'replaceSync': {
         'Chaos': '卡奧斯',
       },
@@ -577,8 +576,8 @@ const triggerSet: TriggerSet<Data> = {
         'Damning Edict': '詛咒敕令',
         'Earthquake': '地震',
         'Fiendish Orbs': '追蹤',
-        // 'Knock(?! )': '', // FIXME '轰击'
-        // 'Long/Lat Implosion': '', // FIXME '经/纬聚爆'
+        'Knock(?! )': '轟擊',
+        'Long/Lat Implosion': '經/緯度聚爆',
         'Soul of Chaos': '混沌之魂',
         'Stray Earth': '混沌之土',
         'Stray Flames': '混沌之炎',
@@ -586,7 +585,7 @@ const triggerSet: TriggerSet<Data> = {
         'Stray Spray': '混沌之水',
         'Tsunami': '海嘯',
         'Umbra Smash': '本影爆碎',
-        // '\\(ALL\\)': '', // FIXME '\\(全部\\)'
+        '\\(ALL\\)': '(全部)',
       },
     },
     {
