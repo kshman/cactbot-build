@@ -1,0 +1,147 @@
+### AAC HEAVYWEIGHT M1 (SAVAGE)
+# ZoneId: 1321
+
+hideall "--Reset--"
+hideall "--sync--"
+
+0.0 "--Reset--" ActorControl { command: "4000000F" } window 0,100000 jump 0
+
+0.0 "--sync--" InCombat { inGameCombat: "1" } window 0,1
+3.4 "--sync--" Ability { id: "BBA7", source: "Vamp Fatale" }
+10.4 "Killer Voice" Ability { id: "B384", source: "Vamp Fatale" }
+18.3 "Hardcore" Ability { id: "B35A", source: "Vamp Fatale" }
+29.7 "Vamp Stomp" Ability { id: "B34A", source: "Vamp Fatale" }
+33.6 "Blast Beat" #Ability { id: "B376", source: "Vamp Fatale" }
+34.0 "Blast Beat" #Ability { id: "B376", source: "Vamp Fatale" }
+35.8 "--sync--" Ability { id: "BBA7", source: "Vamp Fatale" }
+36.0 "Blast Beat" #Ability { id: "B376", source: "Vamp Fatale" }
+36.8 "Blast Beat" #Ability { id: "B376", source: "Vamp Fatale" }
+37.2 "Blast Beat" #Ability { id: "B376", source: "Vamp Fatale" }
+38.2 "Blast Beat" #Ability { id: "B376", source: "Vamp Fatale" }
+38.6 "--sync--" Ability { id: "BBA7", source: "Vamp Fatale" }
+39.0 "Blast Beat" #Ability { id: "B376", source: "Vamp Fatale" }
+40.2 "Blast Beat" #Ability { id: "B376", source: "Vamp Fatale" }
+45.3 "Brutal Rain" Ability { id: "B35D", source: "Vamp Fatale" }
+59.7 "Sadistic Screech" Ability { id: "B333", source: "Vamp Fatale" }
+74.2 "Half Moon" Ability { id: ["B34E", "B350"], source: "Vamp Fatale" }
+91.8 "Half Moon" Ability { id: ["B34E", "B350"], source: "Vamp Fatale" }
+109.3 "Half Moon" Ability { id: ["B34E", "B350"], source: "Vamp Fatale" }
+119.5 "Half Moon" Ability { id: ["B34E", "B350"], source: "Vamp Fatale" }
+137.4 "Sadistic Screech" Ability { id: "B333", source: "Vamp Fatale" }
+147.1 "Crowd Kill" Ability { id: "B33E", source: "Vamp Fatale" }
+170.1 "Finale Fatale" Ability { id: ["B340", "B341"], source: "Vamp Fatale" }
+176.2 "Pulping Pulse" Ability { id: "B373", source: "Vamp Fatale" }
+189.4 "Aetherletting" Ability { id: "B38F", source: "Vamp Fatale" }
+190.2 "Aetherletting" #Ability { id: "B391", source: "Vamp Fatale" }
+191.7 "Aetherletting" #Ability { id: "B390", source: "Vamp Fatale" }
+192.4 "Aetherletting" #Ability { id: "B391", source: "Vamp Fatale" }
+192.4 "Aetherletting" #Ability { id: "B392", source: "Vamp Fatale" }
+193.7 "Aetherletting" #Ability { id: "B390", source: "Vamp Fatale" }
+194.4 "Aetherletting" #Ability { id: "B391", source: "Vamp Fatale" }
+194.4 "Aetherletting" #Ability { id: "B392", source: "Vamp Fatale" }
+195.7 "Aetherletting" #Ability { id: "B390", source: "Vamp Fatale" }
+196.4 "Aetherletting" #Ability { id: "B392", source: "Vamp Fatale" }
+196.4 "Aetherletting" #Ability { id: "B391", source: "Vamp Fatale" }
+198.4 "Aetherletting" #Ability { id: "B392", source: "Vamp Fatale" }
+206.7 "Aetherletting" #Ability { id: "B393", source: "Vamp Fatale" }
+208.7 "Aetherletting" #Ability { id: "B393", source: "Vamp Fatale" }
+210.7 "Aetherletting" #Ability { id: "B393", source: "Vamp Fatale" }
+212.7 "Aetherletting" #Ability { id: "B393", source: "Vamp Fatale" }
+217.7 "Hardcore" Ability { id: "B35A", source: "Vamp Fatale" }
+224.7 "Pulping Pulse" Ability { id: "B373", source: "Vamp Fatale" }
+228.9 "Vamp Stomp" Ability { id: "B34A", source: "Vamp Fatale" }
+232.2 "Blast Beat" #Ability { id: "B376", source: "Vamp Fatale" }
+234.0 "Blast Beat" #Ability { id: "B375", source: "Vampette Fatale" }
+234.8 "Blast Beat" #Ability { id: "B376", source: "Vamp Fatale" }
+235.0 "--sync--" Ability { id: "BBA7", source: "Vamp Fatale" }
+235.2 "Blast Beat" #Ability { id: "B376", source: "Vamp Fatale" }
+236.6 "Blast Beat" #Ability { id: "B376", source: "Vamp Fatale" }
+236.8 "Blast Beat" #Ability { id: "B376", source: "Vamp Fatale" }
+237.1 "Blast Beat" #Ability { id: "B376", source: "Vamp Fatale" }
+237.3 "Blast Beat" #Ability { id: "B375", source: "Vampette Fatale" }
+237.6 "Blast Beat" #Ability { id: "B376", source: "Vamp Fatale" }
+237.7 "--sync--" Ability { id: "BBA7", source: "Vamp Fatale" }
+238.1 "Blast Beat" #Ability { id: "B376", source: "Vamp Fatale" }
+240.7 "Blast Beat" #Ability { id: "B375", source: "Vampette Fatale" }
+244.9 "Half Moon" Ability { id: ["B34E", "B350"], source: "Vamp Fatale" }
+254.6 "Brutal Rain" Ability { id: "B35D", source: "Vamp Fatale" }
+266.5 "Insatiable Thirst" Ability { id: "B344", source: "Vamp Fatale" }
+282.1 "Sadistic Screech" Ability { id: "B333", source: "Vamp Fatale" }
+303.7 "Killer Voice" Ability { id: "B384", source: "Vamp Fatale" }
+306.5 "Gravegrazer" Duration 5 #Ability { id: "B36B", source: "トーチャー・ファタール" }
+306.6 "--sync--" Ability { id: "B7C8", source: "Vamp Fatale" }
+309.5 "--sync--" Ability { id: "B7C8", source: "Vamp Fatale" }
+312.4 "Electrocution" #Ability { id: "B709", source: "ロッド・ファタール" }
+312.4 "--sync--" Ability { id: "B7C8", source: "Vamp Fatale" }
+312.8 "Gravegrazer" Duration 5 #Ability { id: "B36C", source: "チャクラム・ファタール" }
+315.4 "--sync--" Ability { id: "B7C8", source: "Vamp Fatale" }
+321.8 "Killer Voice" Ability { id: "B384", source: "Vamp Fatale" }
+324.0 "--sync--" Ability { id: "B7C8", source: "Vamp Fatale" }
+327.2 "--sync--" Ability { id: "B7C8", source: "Vamp Fatale" }
+330.1 "--sync--" Ability { id: "B7C8", source: "Vamp Fatale" }
+330.5 "Gravegrazer" Duration 5 #Ability { id: "B36C", source: "チャクラム・ファタール" }
+330.9 "Electrocution" #Ability { id: "B709", source: "ロッド・ファタール" }
+333.0 "--sync--" Ability { id: "B7C8", source: "Vamp Fatale" }
+336.0 "--sync--" Ability { id: "B7C8", source: "Vamp Fatale" }
+339.0 "--sync--" Ability { id: "B7C8", source: "Vamp Fatale" }
+339.1 "Gravegrazer" Duration 5 #Ability { id: "B36B", source: "トーチャー・ファタール" }
+342.0 "--sync--" Ability { id: "B7C8", source: "Vamp Fatale" }
+344.9 "--sync--" Ability { id: "B7C8", source: "Vamp Fatale" }
+345.1 "Gravegrazer" Duration 6 #Ability { id: "B36C", source: "チャクラム・ファタール" }
+347.8 "--sync--" Ability { id: "B7C8", source: "Vamp Fatale" }
+353.3 "Sadistic Screech" Ability { id: "B333", source: "Vamp Fatale" }
+355.5 "--sync--" Ability { id: "BBA7", source: "Vamp Fatale" }
+358.5 "--sync--" Ability { id: "BBA7", source: "Vamp Fatale" }
+363.1 "Crowd Kill" Ability { id: "B33E", source: "Vamp Fatale" }
+371.0 "--sync--" Ability { id: "BBA7", source: "Vamp Fatale" }
+374.1 "--sync--" Ability { id: "BBA7", source: "Vamp Fatale" }
+377.0 "--sync--" Ability { id: "BBA7", source: "Vamp Fatale" }
+386.2 "Finale Fatale" Ability { id: ["B340", "B341"], source: "Vamp Fatale" }
+389.3 "--sync--" Ability { id: "B7C8", source: "Vamp Fatale" }
+392.3 "Pulping Pulse" Ability { id: "B373", source: "Vamp Fatale" }
+392.3 "--sync--" Ability { id: "B7C8", source: "Vamp Fatale" }
+397.2 "Hell in a Cell" Ability { id: "B395", source: "Vamp Fatale" }
+398.5 "Bloody Bondage" #Ability { id: "B396", source: "Vamp Fatale" }
+405.8 "Sonic" Ability { id: ["B39C", "B39D"], source: "Vamp Fatale" }
+413.0 "Sonic" Ability { id: ["B39C", "B39D"], source: "Vamp Fatale" }
+420.0 "Hell in a Cell" Ability { id: "B395", source: "Vamp Fatale" }
+421.2 "Bloody Bondage" #Ability { id: "B396", source: "Vamp Fatale" }
+428.4 "Sonic" Ability { id: ["B39C", "B39D"], source: "Vamp Fatale" }
+435.7 "Sonic" Ability { id: ["B39C", "B39D"], source: "Vamp Fatale" }
+438.3 "--sync--" Ability { id: "B7C8", source: "Vamp Fatale" }
+441.3 "--sync--" Ability { id: "B7C8", source: "Vamp Fatale" }
+441.5 "Pulping Pulse" Ability { id: "B373", source: "Vamp Fatale" }
+444.2 "--sync--" Ability { id: "B7C8", source: "Vamp Fatale" }
+445.4 "Pulping Pulse" Ability { id: "B373", source: "Vamp Fatale" }
+450.4 "Undead Deathmatch" Ability { id: "B3A0", source: "Vamp Fatale" }
+451.6 "Bloody Bondage" #Ability { id: "B3A1", source: "Vamp Fatale" }
+453.6 "--sync--" Ability { id: "B7C8", source: "Vamp Fatale" }
+457.9 "Sanguine Scratch" Duration 10 #Ability { id: "B3A4", source: "Vamp Fatale" }
+461.2 "Explosion" Ability { id: "B3A3", source: "Vamp Fatale" }
+470.1 "--sync--" Ability { id: "B7C8", source: "Vamp Fatale" }
+470.8 "Explosion" Ability { id: "B3A3", source: "Vamp Fatale" }
+471.5 "Breakwing Beat" #Ability { id: ["B3A9", "B3AB"], source: "Vampette Fatale" }
+473.1 "--sync--" Ability { id: "B7C8", source: "Vamp Fatale" }
+476.4 "Sanguine Scratch" Duration 10 #Ability { id: "B3A4", source: "Vamp Fatale" }
+488.4 "--sync--" Ability { id: "B7C8", source: "Vamp Fatale" }
+489.6 "Breakwing Beat" #Ability { id: "B3AB", source: "Vampette Fatale" }
+495.2 "Brutal Rain" Ability { id: "B35D", source: "Vamp Fatale" }
+501.4 "--sync--" Ability { id: "BBA7", source: "Vamp Fatale" }
+504.4 "--sync--" Ability { id: "BBA7", source: "Vamp Fatale" }
+508.5 "Vamp Stomp" Ability { id: "B34A", source: "Vamp Fatale" }
+511.5 "--sync--" Ability { id: "BBA7", source: "Vamp Fatale" }
+513.2 "Blast Beat" #Ability { id: "B376", source: "Vamp Fatale" }
+514.5 "--sync--" Ability { id: "BBA7", source: "Vamp Fatale" }
+515.2 "Blast Beat" #Ability { id: "B376", source: "Vamp Fatale" }
+517.2 "Blast Beat" #Ability { id: "B376", source: "Vamp Fatale" }
+517.6 "--sync--" Ability { id: "BBA7", source: "Vamp Fatale" }
+517.6 "Blast Beat" #Ability { id: "B376", source: "Vamp Fatale" }
+518.4 "Blast Beat" #Ability { id: "B376", source: "Vamp Fatale" }
+524.6 "Half Moon" Ability { id: "B351", source: "Vamp Fatale" }
+533.5 "Hardcore" Ability { id: "B35A", source: "Vamp Fatale" }
+537.5 "--sync--" Ability { id: "BBA7", source: "Vamp Fatale" }
+540.5 "Pulping Pulse" Ability { id: "B373", source: "Vamp Fatale" }
+540.5 "--sync--" Ability { id: "BBA7", source: "Vamp Fatale" }
+546.9 "Sanguine Scratch" Duration 10 #Ability { id: "B3A4", source: "Vamp Fatale" }
+558.8 "--sync--" Ability { id: "BBA7", source: "Vamp Fatale" }
+564.7 "Insatiable Thirst" Ability { id: "B344", source: "Vamp Fatale" }
