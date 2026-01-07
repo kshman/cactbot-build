@@ -229,9 +229,9 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         spread: {
-          en: 'Spread for boss',
-          ja: '散会して扇誘導',
-          ko: '흩어져 꼬깔 유도',
+          en: 'Role spread for boss',
+          ja: 'ロール散会して扇誘導',
+          ko: '롤끼리 모여 꼬깔 유도',
         },
       },
     },
@@ -248,7 +248,7 @@ const triggerSet: TriggerSet<Data> = {
         stack: {
           en: 'Stack for boss',
           ja: '集まって扇誘導',
-          ko: '뭉쳐서 꼬깔 유도',
+          ko: '모두 뭉쳐서 꼬깔 유도',
         },
       },
     },
