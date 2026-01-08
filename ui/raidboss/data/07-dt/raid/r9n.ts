@@ -514,6 +514,15 @@ const triggerSet: TriggerSet<Data> = {
   ],
   timelineReplace: [
     {
+      'locale': 'ja',
+      'replaceSync': {
+        'Coffinmaker': 'コフィンメーカー',
+        'Fatal Flail': 'フェイタルフレイル',
+        'Vamp Fatale': 'ヴァンプ・ファタール',
+        'Vampette Fatale': 'ファタールバット',
+      },
+    },
+    {
       'locale': 'cn',
       'replaceSync': {
         'Coffinmaker': '致命刑锯',

@@ -5,19 +5,15 @@ import ZoneId from '../../../../../resources/zone_id';
 import { RaidbossData } from '../../../../../types/data';
 import { TriggerSet } from '../../../../../types/trigger';
 
-type TeamName = 'MT' | 'ST';
-
 export interface Data extends RaidbossData {
-  team?: TeamName;
   brutalRain: number;
-  cellTeam?: TeamName;
+  hells: number;
+  hellAdds: boolean;
 }
 
 const headMarkers = {
   'fourHitStack': '0131',
   'hardCore': '01D4',
-  'brutalRain': '0131', // 안씀
-  'aetherletting': '028C', // 안씀
 } as const;
 
 const triggerSet: TriggerSet<Data> = {
@@ -26,26 +22,10 @@ const triggerSet: TriggerSet<Data> = {
   timelineFile: 'r9s.txt',
   initData: () => ({
     brutalRain: 2,
+    hells: 0,
+    hellAdds: false,
   }),
   triggers: [
-    {
-      id: 'R9S 시작!',
-      type: 'InCombat',
-      netRegex: { inGameCombat: '1', capture: false },
-      durationSeconds: 2,
-      infoText: (data, _matches, output) => {
-        const sts = ['ST', 'H2', 'D2', 'D4'];
-        data.team = sts.includes(data.moks) ? 'ST' : 'MT';
-        return output.ok!({ moks: data.moks, team: data.team });
-      },
-      outputStrings: {
-        ok: {
-          en: 'Combat: ${moks}/${team}',
-          ja: '1層開始: ${moks}/${team}組',
-          ko: 'R9S 시작: ${moks}/${team}팀',
-        },
-      },
-    },
     {
       id: 'R9S Headmarker Party Multi Stack',
       type: 'HeadMarker',
@@ -155,7 +135,7 @@ const triggerSet: TriggerSet<Data> = {
       id: 'R9S Sadistic Screech',
       type: 'StartsUsing',
       netRegex: { id: 'B333', source: 'Vamp Fatale', capture: false },
-      response: Responses.aoe(),
+      response: Responses.bigAoe(),
     },
     {
       id: 'R9S Insatiable Thirst',
@@ -168,37 +148,11 @@ const triggerSet: TriggerSet<Data> = {
       type: 'StartsUsing',
       netRegex: { id: 'B395', source: 'Vamp Fatale', capture: false },
       infoText: (data, _matches, output) => {
-        // Determine which team is assigned for adds on this cast based on
-        // the current `cellTeam` (before `run` toggles it).
-        let assigned: TeamName | undefined;
-        if (data.cellTeam === undefined)
-          assigned = 'MT';
-        else if (data.cellTeam === 'MT')
-          assigned = 'ST';
-        else
-          assigned = undefined;
-
-        // If we don't know the player's team, show explicit assignment to all.
-        if (data.team === undefined) {
-          if (assigned === 'MT')
-            return output.mt!();
-          if (assigned === 'ST')
-            return output.st!();
-          return;
-        }
-
-        // When player's team matches the assigned team, show adds to them only.
-        if (assigned && data.team === assigned)
-          return output.adds!();
-        return;
-      },
-      run: (data) => {
-        if (data.cellTeam === undefined)
-          data.cellTeam = 'MT';
-        else if (data.cellTeam === 'MT')
-          data.cellTeam = 'ST';
-        else
-          data.cellTeam = undefined;
+        data.hells++;
+        if (data.hells === 1)
+          return output.mt!();
+        if (data.hells === 2)
+          return output.st!();
       },
       outputStrings: {
         mt: {
@@ -211,44 +165,46 @@ const triggerSet: TriggerSet<Data> = {
           ja: 'ST組雑魚処理',
           ko: 'ST팀 쫄 쳐요',
         },
-        adds: {
-          en: 'Adds',
-          ja: '雑魚処理',
-          ko: '맡은 쫄 쳐요',
-        },
       },
     },
     {
-      id: 'R9S Split Sonic',
+      id: 'R9S Hell Adds Gain',
+      type: 'GainsEffect',
+      netRegex: { effectId: '127A', capture: true },
+      condition: Conditions.targetIsYou(),
+      run: (data) => data.hellAdds = true,
+    },
+    {
+      id: 'R9S Hell Adds Lost',
+      type: 'GainsEffect',
+      netRegex: { effectId: '127A', capture: true },
+      condition: Conditions.targetIsYou(),
+      delaySeconds: 13,
+      run: (data) => data.hellAdds = false,
+    },
+    {
+      id: 'R9S Ultrasonic Spread',
       type: 'StartsUsing',
       netRegex: { id: 'B39C', source: 'Vamp Fatale', capture: false },
+      condition: (data) => !data.hellAdds,
       durationSeconds: 4,
-      alertText: (data, _matches, output) => {
-        if (data.team === undefined || data.cellTeam !== data.team)
-          return output.spread!();
-      },
+      alertText: (_data, _matches, output) => output.rolePositions!(),
       outputStrings: {
-        spread: {
-          en: 'Role spread for boss',
-          ja: 'ロール散会して扇誘導',
-          ko: '롤끼리 모여 꼬깔 유도',
-        },
+        rolePositions: Outputs.rolePositions,
       },
     },
     {
-      id: 'R9S Agree Gate Sonic',
+      id: 'R9S Ultrasonic Amp',
       type: 'StartsUsing',
       netRegex: { id: 'B39D', source: 'Vamp Fatale', capture: false },
+      condition: (data) => !data.hellAdds,
       durationSeconds: 4,
-      alertText: (data, _matches, output) => {
-        if (data.team === undefined || data.cellTeam !== data.team)
-          return output.stack!();
-      },
+      alertText: (_data, _matches, output) => output.stack!(),
       outputStrings: {
         stack: {
-          en: 'Stack for boss',
-          ja: '集まって扇誘導',
-          ko: '모두 뭉쳐서 꼬깔 유도',
+          en: 'Stack',
+          ja: 'タンクと頭割り',
+          ko: '탱크랑 뭉쳐요',
         },
       },
     },
@@ -256,29 +212,9 @@ const triggerSet: TriggerSet<Data> = {
       id: 'R9S Undead Deathmatch',
       type: 'StartsUsing',
       netRegex: { id: 'B3A0', source: 'Vamp Fatale', capture: false },
-      infoText: (data, _matches, output) => {
-        if (data.team === undefined)
-          return output.tower!();
-        if (data.team === 'MT')
-          return output.left!();
-        return output.right!();
-      },
+      infoText: (_data, _matches, output) => output.tower!(),
       outputStrings: {
-        tower: {
-          en: 'Tower',
-          ja: '塔踏み',
-          ko: '타워 밟아요',
-        },
-        left: {
-          en: 'Left tower',
-          ja: '左塔踏み',
-          ko: '🡸타워 밟아요',
-        },
-        right: {
-          en: 'Right tower',
-          ja: '右塔踏み',
-          ko: '타워🡺 밟아요',
-        },
+        tower: Outputs.stackInTower,
       },
     },
   ],
