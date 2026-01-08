@@ -694,6 +694,11 @@ export default {
   num9: numberToOutputString(9),
 
   // 어듬이 추가
+  test: {
+    en: 'test',
+    ja: 'テスト',
+    ko: '테스트',
+  },
   sharedOrInvinTankbusterOnYou: {
     en: 'Share Tank Buster',
     ja: '自分にタンクシェア',

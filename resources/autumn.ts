@@ -163,6 +163,33 @@ const stringsAimCross: OutputStrings = {
   unknown: Outputs.unknown,
 };
 
+// 방향지시
+const stringsDir: OutputStrings = {
+  dirN: Outputs.dirN,
+  dirNE: Outputs.dirNE,
+  dirE: Outputs.dirE,
+  dirSE: Outputs.dirSE,
+  dirS: Outputs.dirS,
+  dirSW: Outputs.dirSW,
+  dirW: Outputs.dirW,
+  dirNW: Outputs.dirNW,
+  unknown: Outputs.unknown,
+};
+const stringsDirPlus: OutputStrings = {
+  dirN: Outputs.dirN,
+  dirE: Outputs.dirE,
+  dirS: Outputs.dirS,
+  dirW: Outputs.dirW,
+  unknown: Outputs.unknown,
+};
+const stringsDirCross: OutputStrings = {
+  dirNE: Outputs.dirNE,
+  dirSE: Outputs.dirSE,
+  dirSW: Outputs.dirSW,
+  dirNW: Outputs.dirNW,
+  unknown: Outputs.unknown,
+};
+
 // 어듬이 뱡향 지시
 export const AutumnDir = {
   posConv8: posConv8,
@@ -191,6 +218,10 @@ export const AutumnDir = {
   stringsAim: stringsAim,
   stringsAimPlus: stringsAimPlus,
   stringsAimCross: stringsAimCross,
+
+  stringsDir: stringsDir,
+  stringsDirPlus: stringsDirPlus,
+  stringsDirCross: stringsDirCross,
 };
 
 // 파라미터
@@ -219,6 +250,7 @@ const teamStMoks: readonly string[] = ['ST', 'H2', 'D2', 'D4'];
 
 // 몫 타입
 export type AutumnMoks = 'MT' | 'ST' | 'H1' | 'H2' | 'D1' | 'D2' | 'D3' | 'D4' | 'none';
+export type AutumnTeams = 'MT' | 'ST';
 
 // 어듬이 유틸
 const Autumn = {
@@ -234,6 +266,7 @@ const Autumn = {
   isRange: (moksName: string) => moksRanges.includes(moksName),
   inMainTeam: (moksName: string) => teamMtMoks.includes(moksName),
   inSubTeam: (moksName: string) => teamStMoks.includes(moksName),
+  getTeam: (moks: AutumnMoks): AutumnTeams => teamMtMoks.includes(moks) ? 'MT' : 'ST',
 
   getParams: getParam,
   testParam: testParam,
