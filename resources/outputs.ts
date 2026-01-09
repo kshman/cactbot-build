@@ -658,6 +658,16 @@ export default {
     ja: 'ヒーラー',
     ko: '힐러',
   },
+  melee: {
+    en: 'Melee',
+    ja: '近接',
+    ko: '근접',
+  },
+  ranged: {
+    en: 'Ranged',
+    ja: '遠隔',
+    ko: '원거리',
+  },
   dps: {
     en: 'DPS',
     ja: 'DPS',
