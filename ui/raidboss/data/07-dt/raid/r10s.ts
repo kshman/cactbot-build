@@ -17,7 +17,7 @@ export interface Data extends RaidbossData {
   dares: number;
   snakings: SnakingFlagsType[string][];
   snakingCount: number;
-  mySnaking?: 'water' | 'fire';
+  snakingCurrent?: 'water' | 'fire';
 }
 
 const center = {
@@ -36,9 +36,8 @@ const floaterTetherMap: { [effectId: string]: number } = {
 const sickestTakeoffMap: { [id: string]: string } = {
   '3ED': 'healerGroups',
   '3EE': 'spread',
-  // 아래 두개 반대인거 같음 (현재 반대로 해둔 상황)
-  '3EF': 'waterSpread',
-  '3F0': 'waterStack',
+  '3EF': 'waterStack',
+  '3F0': 'waterSpread',
 } as const;
 
 const snakingSlots = {
@@ -153,9 +152,9 @@ const triggerSet: TriggerSet<Data> = {
       netRegex: { id: 'B5C0', source: 'Red Hot', capture: false },
       durationSeconds: 4.5,
       alertText: (data, _matches, output) => {
-        if (data.mySnaking === 'fire')
+        if (data.snakingCurrent === 'fire')
           return output.fire!();
-        if (data.mySnaking === 'water')
+        if (data.snakingCurrent === 'water')
           return;
         return output.spread!();
       },
@@ -177,10 +176,10 @@ const triggerSet: TriggerSet<Data> = {
       id: 'R10S Alley-oop',
       type: 'StartsUsing',
       netRegex: { id: ['B5DD', 'B5E0'], source: 'Deep Blue', capture: true },
-      condition: (data) => data.mySnaking !== 'fire',
+      condition: (data) => data.snakingCurrent !== 'fire',
       durationSeconds: 4.5,
       infoText: (data, matches, output) => {
-        if (data.mySnaking === 'water')
+        if (data.snakingCurrent === 'water')
           return output.water!();
         const mech = matches.id === 'B5DD' ? output.move!() : output.stay!();
         return output.text!({ protean: output.protean!(), mech: mech });
@@ -215,8 +214,11 @@ const triggerSet: TriggerSet<Data> = {
       netRegex: { id: 'B5C9', source: 'Red Hot', capture: false },
       durationSeconds: 5,
       infoText: (data, _matches, output) => {
-        if (data.mySnaking !== undefined)
-          return output.cone!();
+        if (data.snakingCurrent !== undefined) {
+          // return output.cone!();
+          // 일단 이거 출력하니 뭔가 이상하니 안하는 걸로
+          return;
+        }
         return output.stack!();
       },
       outputStrings: {
@@ -293,23 +295,6 @@ const triggerSet: TriggerSet<Data> = {
           ja: 'ノックバック: ${dir}',
           ko: '넉백: ${dir}쪽',
         },
-      },
-    }, */
-    /* 아래 가져온거랑 페이즈 뒷부분에서 다름.
-    일단 아래꺼 같게 나오도록 처리해둠
-    {
-      id: 'R10S Sickest Take-off Id',
-      type: 'StartsUsing',
-      netRegex: { id: ['B592', 'B5CD'], source: 'Deep Blue', capture: true },
-      durationSeconds: 5,
-      alertText: (_data, matches, output) => {
-        if (matches.id === 'B5CD')
-          return output.stack!();
-        return output.spread!();
-      },
-      outputStrings: {
-        stack: Outputs.healerGroups,
-        spread: Outputs.spread,
       },
     }, */
     {
@@ -417,6 +402,7 @@ const triggerSet: TriggerSet<Data> = {
         if (snaking.elem === 'fire' && (snaking.mech !== 'buster' || data.snakingCount < 4))
           data.snakingCount++;
       },
+      durationSeconds: 7,
       infoText: (data, _matches, output) => {
         const [snaking1, snaking2] = data.snakings;
         if (snaking1 === undefined || snaking2 === undefined)
@@ -428,13 +414,13 @@ const triggerSet: TriggerSet<Data> = {
             : [snaking2, snaking1];
 
           let my = undefined;
-          if (data.mySnaking === undefined) {
+          if (data.snakingCurrent === undefined) {
             // insane air 일 경우
             const team = Autumn.getTeam(data.moks);
             my = team === 'MT' ? water : fire;
           } else {
             // snaking 일 경우
-            my = data.mySnaking === 'water' ? water : fire;
+            my = data.snakingCurrent === 'water' ? water : fire;
           }
 
           if (my === undefined) {
@@ -504,12 +490,13 @@ const triggerSet: TriggerSet<Data> = {
       type: 'GainsEffect',
       netRegex: { effectId: ['136E', '136F'], capture: true },
       condition: Conditions.targetIsYou(),
+      durationSeconds: 6,
       infoText: (data, matches, output) => {
         if (matches.effectId === '136E') {
-          data.mySnaking = 'fire';
+          data.snakingCurrent = 'fire';
           return output.fire!();
         }
-        data.mySnaking = 'water';
+        data.snakingCurrent = 'water';
         return output.water!();
       },
       outputStrings: {
@@ -530,7 +517,7 @@ const triggerSet: TriggerSet<Data> = {
       type: 'LosesEffect',
       netRegex: { effectId: ['136E', '136F'], capture: true },
       condition: Conditions.targetIsYou(),
-      run: (data) => data.mySnaking = undefined,
+      run: (data) => data.snakingCurrent = undefined,
     },
     {
       id: 'R10S Deep Varial',
@@ -540,34 +527,43 @@ const triggerSet: TriggerSet<Data> = {
         flags: ['00800040', '08000400'],
         capture: true,
       },
+      durationSeconds: 10,
       infoText: (data, matches, output) => {
         const dir = matches.location === '02' ? 'north' : 'south';
         const mech = matches.flags === '00800040' ? 'stack' : 'spread';
-        if (data.mySnaking === undefined)
+        if (data.snakingCurrent === undefined)
           return output.text!({ dir: output[dir]!(), mech: output[mech]!() });
-        if (data.mySnaking === 'water')
+        if (data.snakingCurrent === 'water')
           return output.water!({ dir: output[dir]!(), mech: output[mech]!() });
         return output.fire!({ dir: output[dir]!() });
       },
       outputStrings: {
-        north: Outputs.aimN,
-        south: Outputs.aimS,
+        north: {
+          en: '🡹N',
+          ja: '🡹北',
+          ko: '🄰북쪽',
+        },
+        south: {
+          en: '🡻S',
+          ja: '🡻南',
+          ko: '🄲남쪽',
+        },
         stack: Outputs.stacks,
         spread: Outputs.spread,
         text: {
           en: '${dir} + Water ${mech} + Fire Spread',
           ja: '${dir} + 水は${mech} + 火は散開',
-          ko: '${dir}쪽 + ${mech} + 🔥흩어져요',
+          ko: '${dir} + ${mech} + 🔥흩어져요',
         },
         water: {
           en: '${dir} + Water ${mech}',
           ja: '${dir} + 水は${mech}',
-          ko: '${dir}쪽 + 💧${mech}',
+          ko: '${dir} + 💧${mech}',
         },
         fire: {
           en: '${dir} + Fire Spread',
           ja: '${dir} + 火は散開',
-          ko: '${dir}쪽 + 🔥흩어져요',
+          ko: '${dir} + 🔥흩어져요',
         },
       },
     },
@@ -575,14 +571,14 @@ const triggerSet: TriggerSet<Data> = {
       id: 'R10S Hot Aerial',
       type: 'StartsUsing',
       netRegex: { id: 'B5C4', source: 'Red Hot', capture: false },
-      condition: (data) => data.mySnaking === 'fire',
+      condition: (data) => data.snakingCurrent === 'fire',
       durationSeconds: 4,
       infoText: (_data, _matches, output) => output.bait!(),
       outputStrings: {
         bait: {
           en: 'Bait Hot Aerial',
           ja: 'フレイムエアリアル誘導',
-          ko: '(플레임 에이리얼 유도 해야해요!)',
+          ko: '(플레임 에이리얼 유도)',
         },
       },
     },
