@@ -358,4 +358,4 @@ hideall "--sync--"
 # B709 Electrocution
 # B7C8 --sync--
 # B883 Ultrasonic Spread (tank targetted)
-# BBA7 --sync--
+# BBA7 --sync-
