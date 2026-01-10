@@ -547,12 +547,32 @@ const triggerSet: TriggerSet<Data> = {
       netRegex: { id: 'B5C4', source: 'Red Hot', capture: false },
       condition: (data) => data.snakingMine === 'fire',
       durationSeconds: 4,
-      infoText: (_data, _matches, output) => output.bait!(),
+      infoText: (data, _matches, output) => {
+        if (data.role === 'tank')
+          return output.north!();
+        if (data.role === 'healer')
+          return output.south!();
+        if (data.moks === 'D1' || data.moks === 'D2')
+          return output.north!();
+        if (data.moks === 'D3' || data.moks === 'D4')
+          return output.south!();
+        return output.bait!();
+      },
       outputStrings: {
         bait: {
           en: 'Bait Hot Aerial',
           ja: 'フレイムエアリアル誘導',
           ko: '(플레임 에이리얼 유도)',
+        },
+        north: {
+          en: 'Bait Hot Aerial North',
+          ja: '🡹北でフレイムエアリアル誘導',
+          ko: '🄰북쪽으로 불장판 유도',
+        },
+        south: {
+          en: 'Bait Hot Aerial South',
+          ja: '🡻南でフレイムエアリアル誘導',
+          ko: '🄲남쪽으로 불장판 유도',
         },
       },
     },
