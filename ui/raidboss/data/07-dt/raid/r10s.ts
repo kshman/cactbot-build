@@ -81,6 +81,9 @@ const snakingFlags: SnakingFlagsType = {
 
 const headMarkers = {
   'hotImpact': '0103',
+  'blueTether': '027B',
+  'redTether': '027C',
+  'partnerStack': '0293',
 } as const;
 
 const triggerSet: TriggerSet<Data> = {
@@ -214,23 +217,15 @@ const triggerSet: TriggerSet<Data> = {
       netRegex: { id: 'B5C9', source: 'Red Hot', capture: false },
       durationSeconds: 5,
       infoText: (data, _matches, output) => {
-        if (data.snakingMine !== undefined) {
-          // return output.cone!();
-          // 일단 이거 출력하니 뭔가 이상하니 안하는 걸로
+        if (data.snakingMine === 'water')
           return;
-        }
         return output.stack!();
       },
       outputStrings: {
         stack: {
-          en: 'Stack => Opposite',
-          ja: '全員で集合 🔜 反対側の安置へ',
-          ko: '모두 모였다 🔜 엉댕이 쪽 안전 꼬깔로',
-        },
-        cone: {
-          en: 'Go to safe cone',
-          ja: '安置の扇へ',
-          ko: '엉댕이 쪽 안전 꼬깔로',
+          en: 'Bait cleave towards Fire',
+          ja: 'みんなで扇誘導',
+          ko: '모두 모여 꼬깔 유도',
         },
       },
     },
@@ -277,10 +272,15 @@ const triggerSet: TriggerSet<Data> = {
       type: 'GainsEffect',
       netRegex: { effectId: '808', count: Object.keys(sickestTakeoffMap), capture: true },
       durationSeconds: 5,
-      alertText: (_data, matches, output) => {
-        const mech = sickestTakeoffMap[matches.count];
-        if (mech !== undefined)
+      alertText: (data, matches, output) => {
+        let mech = sickestTakeoffMap[matches.count];
+        if (mech === undefined)
+          return;
+        if (!mech.startsWith('water'))
           return output[mech]!();
+        if (data.snakingMine === 'fire')
+          mech = mech.replace('water', 'fire');
+        return output[mech]!();
       },
       outputStrings: {
         healerGroups: Outputs.healerGroups,
@@ -290,10 +290,16 @@ const triggerSet: TriggerSet<Data> = {
           ja: '水は頭割り',
           ko: '💧뭉쳐요',
         },
-        waterSpread: {
-          en: 'Water Spread',
-          ja: '水は散開',
-          ko: '💧흩어져요',
+        waterSpread: Outputs.spread,
+        fireStack: {
+          en: 'Water Stack',
+          ja: '(💧頭割り)',
+          ko: '(💧뭉쳐요)',
+        },
+        fireSpread: {
+          en: 'Avoid Waters',
+          ja: '(さんかい💧避けて)',
+          ko: '(흩어지는💧피해요!)',
         },
       },
     },
@@ -576,6 +582,32 @@ const triggerSet: TriggerSet<Data> = {
           en: 'Bait Hot Aerial South',
           ja: '🡻南でフレイムエアリアル誘導',
           ko: '🄲남쪽으로 불장판 유도',
+        },
+      },
+    },
+    {
+      id: 'R10S Xtreme Wave Tethers',
+      type: 'HeadMarker',
+      netRegex: {
+        id: [headMarkers['redTether'], headMarkers['blueTether']],
+        capture: true,
+      },
+      condition: Conditions.targetIsYou(),
+      alertText: (_data, matches, output) => {
+        if (matches.id === headMarkers['redTether'])
+          return output.redTether!();
+        return output.blueTether!();
+      },
+      outputStrings: {
+        redTether: {
+          en: 'Red Tether on YOU',
+          ja: '自分に赤い線🔥',
+          ko: '내게 불🔥 줄',
+        },
+        blueTether: {
+          en: 'Blue Tether on YOU',
+          ja: '自分に青い線💧',
+          ko: '내게 물💧 줄',
         },
       },
     },

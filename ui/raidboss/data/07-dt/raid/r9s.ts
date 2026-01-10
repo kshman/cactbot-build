@@ -437,12 +437,12 @@ const triggerSet: TriggerSet<Data> = {
         mt: {
           en: 'Adds for MT team',
           ja: 'MT組雑魚処理',
-          ko: 'MT팀 쫄 쳐요',
+          ko: 'MT팀이 타워로!',
         },
         st: {
           en: 'Adds for ST team',
           ja: 'ST組雑魚処理',
-          ko: 'ST팀 쫄 쳐요',
+          ko: 'ST팀이 타워로!',
         },
       },
     },
