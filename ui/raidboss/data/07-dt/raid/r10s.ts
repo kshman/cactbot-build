@@ -327,8 +327,11 @@ const triggerSet: TriggerSet<Data> = {
             ko: '탱크 돌진 버스터 피해요',
           },
         };
-        if (data.role === 'tank')
-          return { alertText: output.tank!() };
+        if (data.role === 'tank') {
+          // 색깔 있을 때는 파란 탱크에게만
+          if (data.snakingMine === undefined || data.snakingMine === 'water')
+            return { alertText: output.tank!() };
+        }
         if (data.role === 'healer')
           return { infoText: output.healer!() };
         return { infoText: output.dps!() };
