@@ -14,10 +14,14 @@ type SnakingFlagsType = {
 };
 
 export interface Data extends RaidbossData {
+  readonly triggerSetConfig: {
+    snakingSecond: 'static' | 'game8';
+  };
   dares: number;
   snakings: SnakingFlagsType[string][];
   snakingCount: number;
   snakingMine?: 'water' | 'fire';
+  snakingSpread: boolean;
 }
 
 const center = {
@@ -89,12 +93,39 @@ const headMarkers = {
 const triggerSet: TriggerSet<Data> = {
   id: 'AacHeavyweightM2Savage',
   zoneId: ZoneId.AacHeavyweightM2Savage,
+  config: [
+    {
+      id: 'snakingSecond',
+      name: {
+        en: 'Snaking Second Mechanic',
+        ja: 'スネーク2回目の処理方法',
+        ko: '스네이크 2번째 기믹 처리 방법',
+      },
+      type: 'select',
+      options: {
+        en: {
+          'Static Callouts (Healer/Melee/Ranged)': 'static',
+          'Game 8 Style': 'game8',
+        },
+        ja: {
+          '固定（ヒーラー/近接/遠隔）': 'static',
+          'Game 8 指定': 'game8',
+        },
+        ko: {
+          '고정 (힐러/근접/원거리)': 'static',
+          'Game 8 스타일': 'game8',
+        },
+      },
+      default: 'game8',
+    },
+  ],
   timelineFile: 'r10s.txt',
   initData: () => ({
     actorPositions: {},
     dares: 0,
     snakings: [],
     snakingCount: 0,
+    snakingSpread: false,
   }),
   triggers: [
     {
@@ -165,7 +196,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         fire: {
           en: 'Bait fire puddle',
-          ja: '火の床誘導',
+          ja: '🔥AOE誘導',
           ko: '🔥장판 유도',
         },
         spread: {
@@ -287,7 +318,7 @@ const triggerSet: TriggerSet<Data> = {
         spread: Outputs.spread,
         waterStack: {
           en: 'Water Stack',
-          ja: '水は頭割り',
+          ja: '💧頭割り',
           ko: '💧뭉쳐요',
         },
         waterSpread: Outputs.spread,
@@ -386,7 +417,48 @@ const triggerSet: TriggerSet<Data> = {
           data.snakingCount++;
       },
       durationSeconds: 7,
-      infoText: (data, _matches, output) => {
+      response: (data, _matches, output) => {
+        // cactbot-builtin-response
+        output.responseOutputStrings = {
+          both: {
+            en: '${elem1}: ${mech1}/${elem2}: ${mech2}',
+            ja: '${elem1}-${mech1} / ${elem2}-${mech2}',
+            ko: '${elem1}${mech1} / ${elem2}${mech2}',
+          },
+          combo: {
+            en: '${elem}: ${mech}',
+            ja: '${elem}-${mech}',
+            ko: '${elem}${mech}',
+          },
+          roleSwap: {
+            en: '${mech} (${role} swap)',
+            ja: '${mech}（${role}交代）',
+            ko: '${mech} (${role} 교대)',
+          },
+          mySwap: {
+            en: 'Swap: ${elem}: ${mech}',
+            ja: '交代: ${elem}-${mech}',
+            ko: '교대해요! ${elem}${mech}',
+          },
+          water: {
+            en: 'Water',
+            ja: '💧',
+            ko: '💧',
+          },
+          fire: {
+            en: 'Fire',
+            ja: '🔥',
+            ko: '🔥',
+          },
+          protean: Outputs.spread,
+          stack: Outputs.stackMarker,
+          buster: Outputs.tankBuster,
+          tank: Outputs.tank,
+          healer: Outputs.healer,
+          melee: Outputs.melee,
+          ranged: Outputs.ranged,
+        };
+
         const [snaking1, snaking2] = data.snakings;
         if (snaking1 === undefined || snaking2 === undefined)
           return;
@@ -407,19 +479,56 @@ const triggerSet: TriggerSet<Data> = {
           }
 
           if (my === undefined) {
-            return output.both!({
-              elem1: output[water.elem]!(),
-              mech1: output[water.mech]!(),
-              elem2: output[fire.elem]!(),
-              mech2: output[fire.mech]!(),
-            });
+            return {
+              infoText: output.both!({
+                elem1: output[water.elem]!(),
+                mech1: output[water.mech]!(),
+                elem2: output[fire.elem]!(),
+                mech2: output[fire.mech]!(),
+              }),
+            };
           }
-          return output.combo!({
-            elem: output[my.elem]!(),
-            mech: output[my.mech]!(),
-          });
+          return {
+            infoText: output.combo!({
+              elem: output[my.elem]!(),
+              mech: output[my.mech]!(),
+            }),
+          };
         }
 
+        // game8 방식
+        if (data.triggerSetConfig.snakingSecond === 'game8') {
+          let mine = false;
+          if (snaking1.mech === 'buster') {
+            mine = data.role === 'tank';
+          } else if (snaking1.mech === 'stack') {
+            mine = data.role === 'healer';
+          } else if (data.snakingSpread) {
+            mine = data.moks === 'D3' || data.moks === 'D4';
+          } else {
+            mine = data.moks === 'D1' || data.moks === 'D2';
+            data.snakingSpread = true;
+          }
+          if (mine) {
+            data.snakingMine = data.snakingMine === 'water' ? 'fire' : 'water';
+            return {
+              alertText: output.mySwap!({
+                elem: output[data.snakingMine]!(),
+                mech: output[snaking1.mech]!(),
+              }),
+            };
+          }
+          if (data.snakingMine === undefined)
+            return { infoText: output[snaking1.mech]!() };
+          return {
+            infoText: output.combo!({
+              elem: output[data.snakingMine]!(),
+              mech: output[snaking1.mech]!(),
+            }),
+          };
+        }
+
+        // static 방식
         const role = (snaking1.mech === 'buster')
           ? output.tank!()
           : (data.snakingCount === 5)
@@ -427,45 +536,11 @@ const triggerSet: TriggerSet<Data> = {
           : (data.snakingCount === 6)
           ? output.melee!()
           : output.ranged!();
-        return output.swap!({ mech: output[snaking1.mech]!(), role: role });
+        return { infoText: output.roleSwap!({ mech: output[snaking1.mech]!(), role: role }) };
       },
       run: (data) => {
         if (data.snakings.length > 1)
           data.snakings = [];
-      },
-      outputStrings: {
-        both: {
-          en: '${elem1}: ${mech1}/${elem2}: ${mech2}',
-          ja: '${elem1}-${mech1} / ${elem2}-${mech2}',
-          ko: '${elem1}${mech1} / ${elem2}${mech2}',
-        },
-        combo: {
-          en: '${elem}: ${mech}',
-          ja: '${elem}-${mech}',
-          ko: '${elem}${mech}',
-        },
-        swap: {
-          en: '${mech} (${role} swap)',
-          ja: '${mech}（${role}交代）',
-          ko: '${mech} (${role} 교대)',
-        },
-        water: {
-          en: 'Water',
-          ja: '水',
-          ko: '💧',
-        },
-        fire: {
-          en: 'Fire',
-          ja: '火',
-          ko: '🔥',
-        },
-        protean: Outputs.spread,
-        stack: Outputs.stackMarker,
-        buster: Outputs.tankBuster,
-        tank: Outputs.tank,
-        healer: Outputs.healer,
-        melee: Outputs.melee,
-        ranged: Outputs.ranged,
       },
     },
     {
@@ -484,13 +559,13 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         water: {
-          en: 'You have Water Snaking',
-          ja: '自分に水のスネーク',
+          en: 'Water Snaking on YOU',
+          ja: '自分に💧',
           ko: '내게 물💧',
         },
         fire: {
-          en: 'You have Fire Snaking',
-          ja: '自分に火のスネーク',
+          en: 'Fire Snaking on YOU',
+          ja: '自分に🔥',
           ko: '내게 불🔥',
         },
       },
@@ -502,6 +577,41 @@ const triggerSet: TriggerSet<Data> = {
       condition: Conditions.targetIsYou(),
       run: (data) => data.snakingMine = undefined,
     },
+    {
+      id: 'R10S Xtreme Snaking Gain',
+      type: 'GainsEffect',
+      netRegex: { effectId: ['12DB', '12DC'], capture: true },
+      condition: Conditions.targetIsYou(),
+      durationSeconds: 5,
+      infoText: (data, matches, output) => {
+        if (matches.effectId === '12DB') {
+          data.snakingMine = 'fire';
+          return output.fire!();
+        }
+        data.snakingMine = 'water';
+        return output.water!();
+      },
+      outputStrings: {
+        water: {
+          en: 'Water Snaking on YOU',
+          ja: '自分に💧',
+          ko: '내게 물💧',
+        },
+        fire: {
+          en: 'Fire Snaking on YOU',
+          ja: '自分に🔥',
+          ko: '내게 불🔥',
+        },
+      },
+    },
+    /* 어짜피 이 뒤에 안쓰니깐 냅두자
+    {
+      id: 'R10S Xtreme Snaking Lost',
+      type: 'LosesEffect',
+      netRegex: { effectId: ['12DB', '12DC'], capture: true },
+      condition: Conditions.targetIsYou(),
+      run: (data) => data.snakingMine = undefined,
+    }, */
     {
       id: 'R10S Deep Varial',
       type: 'MapEffect',
@@ -535,17 +645,17 @@ const triggerSet: TriggerSet<Data> = {
         spread: Outputs.spread,
         text: {
           en: '${dir} + Water ${mech} + Fire Spread',
-          ja: '${dir} + 水は${mech} + 火は散開',
+          ja: '${dir} + ${mech} + 🔥散開',
           ko: '${dir} + ${mech} + 🔥흩어져요',
         },
         water: {
           en: '${dir} + Water ${mech}',
-          ja: '${dir} + 水は${mech}',
+          ja: '${dir} + 💧${mech}',
           ko: '${dir} + 💧${mech}',
         },
         fire: {
           en: '${dir} + Fire Spread',
-          ja: '${dir} + 火は散開',
+          ja: '${dir} + 🔥散開',
           ko: '${dir} + 🔥흩어져요',
         },
       },
@@ -570,7 +680,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         bait: {
           en: 'Bait Hot Aerial',
-          ja: 'フレイムエアリアル誘導',
+          ja: '(フレイムエアリアル誘導)',
           ko: '(플레임 에이리얼 유도)',
         },
         north: {
@@ -582,6 +692,20 @@ const triggerSet: TriggerSet<Data> = {
           en: 'Bait Hot Aerial South',
           ja: '🡻南でフレイムエアリアル誘導',
           ko: '🄲남쪽으로 불장판 유도',
+        },
+      },
+    },
+    {
+      id: 'R10S Deep Aerial Tower',
+      type: 'StartsUsing',
+      netRegex: { id: 'B5E3', source: 'Deep Blue', capture: false },
+      condition: (data) => data.role === 'healer',
+      infoText: (_data, _matches, output) => output.getTower!(),
+      outputStrings: {
+        getTower: {
+          en: 'Get Tower',
+          ja: '水牢へ',
+          ko: '물감옥으로',
         },
       },
     },
@@ -601,15 +725,46 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         redTether: {
           en: 'Red Tether on YOU',
-          ja: '自分に赤い線🔥',
+          ja: '自分に🔥線',
           ko: '내게 불🔥 줄',
         },
         blueTether: {
           en: 'Blue Tether on YOU',
-          ja: '自分に青い線💧',
+          ja: '自分に💧線',
           ko: '내게 물💧 줄',
         },
       },
+    },
+    {
+      id: 'R10S Firesnaking/WaterSnaking',
+      type: 'StartsUsing',
+      netRegex: { id: 'B381', source: 'Red Hot', capture: false },
+      response: Responses.bigAoe(),
+    },
+    {
+      id: 'R10S Xtreme Firesnaking/WaterSnaking',
+      type: 'StartsUsing',
+      netRegex: { id: 'B5AE', source: 'Red Hot', capture: false },
+      response: Responses.bigAoe(),
+    },
+    {
+      id: 'R10S Flame Floater Split',
+      type: 'StartsUsing',
+      netRegex: { id: 'B5D4', source: 'Red Hot', capture: false },
+      infoText: (_data, _matches, output) => output.outOfMiddle!(),
+      outputStrings: {
+        outOfMiddle: {
+          en: 'E/W Groups + Out of Middle',
+          ja: '分断、組み合わせて散会',
+          ko: '분단, 팀 단위로 피해요',
+        },
+      },
+    },
+    {
+      id: 'R10S Epic Brotherhood',
+      type: 'Ability',
+      netRegex: { id: 'B57B', source: 'Deep Blue', capture: false },
+      run: (data) => data.snakingMine = undefined,
     },
   ],
   timelineReplace: [
