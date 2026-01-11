@@ -86,7 +86,7 @@ export default {
   tankBusterCleaves: {
     en: 'Tank Buster Cleaves',
     ja: 'MT・ST同時範囲攻撃',
-    ko: '탱크 동시에 쪼개기',
+    ko: '두 탱크 동시에 쪼개기',
   },
   tankBusterCleavesOnYou: {
     en: 'Tank Cleaves on YOU',
@@ -183,7 +183,7 @@ export default {
   stackMiddle: {
     en: 'Stack in Middle',
     ja: '中央で頭割り',
-    ko: '가운데서 뭉쳐요',
+    ko: '한가운데서 뭉쳐요',
   },
   stackInTower: {
     en: 'Stack in Tower',
