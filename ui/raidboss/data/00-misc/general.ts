@@ -248,6 +248,107 @@ const triggerSet: TriggerSet<Data> = {
         },
       },
     },
+    {
+      id: 'General 에코',
+      type: 'GameLog',
+      netRegex: { line: 'pcecho.*?' },
+      durationSeconds: 2,
+      infoText: (_data, matches, output) => {
+        const param = matches.line.slice(5);
+        return output.text!({ param });
+      },
+      outputStrings: {
+        text: {
+          en: 'Echo: ${param}',
+          ja: '${param}',
+          ko: '${param}',
+        },
+      },
+    },
+    {
+      id: 'General 동작 하고 있나?',
+      type: 'GameLog',
+      netRegex: { line: 'pctest.*?', capture: false },
+      durationSeconds: 4,
+      response: (data, _matches, output) => {
+        // cactbot-builtin-response
+        output.responseOutputStrings = {
+          forAlarm: {
+            en: '[Alarm] I am operational',
+            ja: '[アラーム] 動作しています',
+            ko: '[알람] 동작하고 있어요',
+          },
+          forAlert: {
+            en: '[Alert] My info: ${job}/${role}/${moks}',
+            ja: '[アラート] 自分の情報: ${job}/${role}/${moks}',
+            ko: '[얼럿] 내 정보: ${job}/${role}/${moks}',
+          },
+          forInfo: {
+            en: '[Info] Autumn param: ${autumnParam}',
+            ja: '[インフォ] アウトゥムン引数: ${autumnParam}',
+            ko: '[인포] 어드미 인수: ${autumnParam}',
+          },
+          forTts: {
+            en: 'I am operational',
+            ja: '動いています',
+            ko: '動いています',
+          },
+          noneParam: {
+            en: 'N/A',
+            ja: '該当なし',
+            ko: '(인수가 없어요)',
+          },
+        };
+        const param = (data.options.AutumnParam !== undefined)
+          ? data.options.AutumnParam
+          : output.noneParam!();
+        return {
+          alarmText: output.forAlarm!(),
+          alertText: output.forAlert!({
+            job: data.job,
+            role: data.role,
+            moks: data.moks,
+          }),
+          infoText: output.forInfo!({ autumnParam: param }),
+          tts: output.forTts!(),
+        };
+      },
+    },
+    {
+      id: 'General 어드미 인수 넣기',
+      type: 'GameLog',
+      netRegex: { line: 'pcparam.*?' },
+      durationSeconds: 2,
+      infoText: (data, matches, output) => {
+        data.options.AutumnParam = matches.line.slice(8);
+        const param = data.options.AutumnParam;
+        return output.text!({ param });
+      },
+      outputStrings: {
+        text: {
+          en: 'Autumn param set: ${param}',
+          ja: 'アウトゥムン引数を設定: ${param}',
+          ko: '어드미 인수 설정: ${param}',
+        },
+      },
+    },
+    {
+      id: 'General 어드미 인수 리셋',
+      type: 'GameLog',
+      netRegex: { line: 'pcreset.*?', capture: false },
+      durationSeconds: 2,
+      infoText: (data, _matches, output) => {
+        delete data.options.AutumnParam;
+        return output.text!();
+      },
+      outputStrings: {
+        text: {
+          en: 'Autumn param reset',
+          ja: 'アウトゥムン引数をリセット',
+          ko: '어드미 인수 리셋',
+        },
+      },
+    },
   ],
   timelineReplace: [
     {

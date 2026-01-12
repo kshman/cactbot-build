@@ -6,6 +6,8 @@ import ZoneId from '../../../../../resources/zone_id';
 import { RaidbossData } from '../../../../../types/data';
 import { TriggerSet } from '../../../../../types/trigger';
 
+type Phase = 'entry' | 'snaking' | 'split' | 'xtreme';
+
 type SnakingFlagsType = {
   [flags: string]: {
     elem: 'water' | 'fire';
@@ -17,6 +19,7 @@ export interface Data extends RaidbossData {
   readonly triggerSetConfig: {
     snakingSecond: 'static' | 'game8';
   };
+  phase: Phase;
   dares: number;
   snakings: SnakingFlagsType[string][];
   snakingCount: number;
@@ -29,6 +32,12 @@ const center = {
   y: 100,
 };
 console.assert(center);
+
+const phaseMap: { [id: string]: Phase } = {
+  'B381': 'snaking', // Firesnaking
+  'B5D4': 'split', // Flame Floater
+  'B5AE': 'xtreme', // Xtreme Firesnaking
+} as const;
 
 const floaterTetherMap: { [effectId: string]: number } = {
   'BBC': 1,
@@ -121,6 +130,7 @@ const triggerSet: TriggerSet<Data> = {
   ],
   timelineFile: 'r10s.txt',
   initData: () => ({
+    phase: 'entry',
     actorPositions: {},
     dares: 0,
     snakings: [],
@@ -128,6 +138,17 @@ const triggerSet: TriggerSet<Data> = {
     snakingSpread: false,
   }),
   triggers: [
+    {
+      id: 'R10S Phase Tracker',
+      type: 'StartsUsing',
+      netRegex: { id: Object.keys(phaseMap), source: 'Red Hot' },
+      suppressSeconds: 1,
+      run: (data, matches) => {
+        const phase = phaseMap[matches.id];
+        if (phase !== undefined)
+          data.phase = phase;
+      },
+    },
     {
       id: 'R10S Hot Impact Buster',
       type: 'HeadMarker',
@@ -307,6 +328,8 @@ const triggerSet: TriggerSet<Data> = {
         let mech = sickestTakeoffMap[matches.count];
         if (mech === undefined)
           return;
+        if (data.phase === 'split')
+          return output.splitPair!();
         if (!mech.startsWith('water'))
           return output[mech]!();
         if (data.snakingMine === 'fire')
@@ -332,6 +355,11 @@ const triggerSet: TriggerSet<Data> = {
           ja: '(さんかい💧避けて)',
           ko: '(흩어지는💧피해요!)',
         },
+        splitPair: {
+          en: 'Split Pairs',
+          ja: '分断ペア',
+          ko: '분단 둘이 페어!',
+        },
       },
     },
     {
@@ -353,25 +381,31 @@ const triggerSet: TriggerSet<Data> = {
             ja: 'ノックバックでタン强誘導',
             ko: '돌진 넉백 버스터 유도',
           },
+          water: {
+            en: 'Bait water tank buster far away',
+            ja: '💧ノックバックでタン强誘導',
+            ko: '내가💧돌진 넉백 버스터 유도!',
+          },
           healer: {
             en: 'Care for buster bait',
             ja: 'タン强に注意',
             ko: '탱크 돌진 버스터 주의',
           },
-          dps: {
+          avoid: {
             en: 'Buster on tank',
             ja: 'タン强に注意',
             ko: '탱크 돌진 버스터 피해요',
           },
         };
         if (data.role === 'tank') {
-          // 색깔 있을 때는 파란 탱크에게만
-          if (data.snakingMine === undefined || data.snakingMine === 'water')
+          if (data.snakingMine === undefined)
             return { alertText: output.tank!() };
+          if (data.snakingMine === 'water')
+            return { alertText: output.water!() };
         }
         if (data.role === 'healer')
           return { infoText: output.healer!() };
-        return { infoText: output.dps!() };
+        return { infoText: output.avoid!() };
       },
     },
     {
@@ -754,7 +788,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.outOfMiddle!(),
       outputStrings: {
         outOfMiddle: {
-          en: 'E/W Groups + Out of Middle',
+          en: 'E/W Groups, Out of Middle',
           ja: '分断、組み合わせて散会',
           ko: '분단, 팀 단위로 피해요',
         },
