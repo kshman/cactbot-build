@@ -86,7 +86,7 @@ export default {
   tankBusterCleaves: {
     en: 'Tank Buster Cleaves',
     ja: 'MT・ST同時範囲攻撃',
-    ko: '두 탱크 동시에 쪼개기',
+    ko: '탱크 둘에게 동시 쪼개기 공격',
   },
   tankBusterCleavesOnYou: {
     en: 'Tank Cleaves on YOU',
