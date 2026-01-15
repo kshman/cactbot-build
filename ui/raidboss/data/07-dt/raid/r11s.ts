@@ -35,6 +35,9 @@ export interface Data extends RaidbossData {
   hasAtomic: boolean;
   meteowrathTetherDirNum?: number;
   heartbreakerCount: number;
+  meteorCount: number;
+  explosionTowerCount: number;
+  majesticTethers: string[];
 }
 
 const center = {
@@ -169,6 +172,9 @@ const triggerSet: TriggerSet<Data> = {
     fireballCount: 0,
     hasAtomic: false,
     heartbreakerCount: 0,
+    meteorCount: 0,
+    explosionTowerCount: 0,
+    majesticTethers: [],
   }),
   timelineTriggers: [
     {
@@ -372,14 +378,7 @@ const triggerSet: TriggerSet<Data> = {
       type: 'HeadMarker',
       netRegex: { id: headMarkerData['cometSpread'], capture: true },
       condition: Conditions.targetIsYou(),
-      infoText: (_data, _matches, output) => output.spread!(),
-      outputStrings: {
-        spread: {
-          en: 'Comet Spread',
-          ja: 'コメット散開',
-          ko: '흩어지는 혜성!',
-        },
-      },
+      response: Responses.spread(),
     },
     {
       id: 'R11S Crushing Comet',
@@ -462,10 +461,10 @@ const triggerSet: TriggerSet<Data> = {
           ja: '${dir}基準 + 東西',
           ko: '${dir}기준 + 동서',
         },
-        dirN: '북🄰',
-        dirE: '동🄱',
-        dirS: '남🄲',
-        dirW: '서🄳',
+        dirN: '🄰🡹북',
+        dirE: '🄱🡺동',
+        dirS: '🄲🡻남',
+        dirW: '🄳🡸서',
         unknown: Outputs.unknown,
       },
     },
@@ -498,6 +497,30 @@ const triggerSet: TriggerSet<Data> = {
       response: Responses.goSides(),
     },
     {
+      id: 'R11S Meteorain',
+      type: 'StartsUsing',
+      netRegex: { id: 'B434', source: 'The Tyrant', capture: false },
+      response: (data, _matches, output) => {
+        // cactbot-builtin-response
+        output.responseOutputStrings = {
+          healer: {
+            en: 'Bait meteor #1',
+            ja: 'メテオ誘導 #1',
+            ko: '메테오 받아요! #1',
+          },
+          others: {
+            en: 'Avoid middle!',
+            ja: '中央を避けて！',
+            ko: '서클 밖으로!',
+          },
+        };
+        data.meteorCount = 1;
+        if (data.role === 'healer')
+          return { alertText: output.healer!() };
+        return { infoText: output.others!() };
+      },
+    },
+    {
       id: 'R11S Meteor',
       type: 'HeadMarker',
       netRegex: { id: headMarkerData['meteor'], capture: true },
@@ -506,7 +529,7 @@ const triggerSet: TriggerSet<Data> = {
           return true;
         return false;
       },
-      response: Responses.meteorOnYou(),
+      // response: Responses.meteorOnYou(),
       run: (data) => data.hasMeteor = true,
     },
     {
@@ -518,7 +541,7 @@ const triggerSet: TriggerSet<Data> = {
         return !data.hasMeteor;
       },
       delaySeconds: 0.1, // Delay for meteor headmarkers
-      alertText: (data, _matches, output) => {
+      infoText: (data, _matches, output) => {
         if (data.fireballCount === 1) {
           if (data.role === 'tank')
             return output.wildChargeTank!();
@@ -538,7 +561,7 @@ const triggerSet: TriggerSet<Data> = {
         wildChargeMeteor: {
           en: 'Wild Charge (behind meteor)',
           ja: '一列に並んで（隕石の後ろへ）',
-          ko: '한줄 뭉쳐요 (혜성 뒤로)',
+          ko: '한줄 뭉쳐요 (돌 뒤로)',
         },
         wildChargeTank: {
           en: 'Wild Charge (be in front)',
@@ -564,8 +587,8 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         losMeteor: {
           en: 'LoS behind 3x meteor',
-          ja: '隕石3つの後ろに隠れる',
-          ko: '혜성으로 메테오 피해요 x3',
+          ja: '一番後ろのメテオに隠れる',
+          ko: '메테오 맨 뒤로 피해욧!',
         },
       },
     },
@@ -576,9 +599,9 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.flatliner!(),
       outputStrings: {
         flatliner: {
-          en: 'Short knockback to sides',
-          ja: '横へ短いノックバック',
-          ko: '옆쪽으로 짧은 넉백',
+          en: 'AoE + Short knockback',
+          ja: '全体攻撃 + 短いノックバック',
+          ko: '전체 공격 + 짧은 넉백',
         },
       },
     },
@@ -586,14 +609,25 @@ const triggerSet: TriggerSet<Data> = {
       id: 'R11S Explosion Towers', // Knockback towers
       type: 'StartsUsing',
       netRegex: { id: 'B444', source: 'The Tyrant', capture: false },
-      durationSeconds: 10,
+      durationSeconds: 9.5,
+      countdownSeconds: 9.5,
       suppressSeconds: 1,
-      alertText: (_data, _matches, output) => output.knockbackTowers!(),
+      alertText: (data, _matches, output) => {
+        data.explosionTowerCount++;
+        if (data.explosionTowerCount === 3)
+          return output.safeKnockbackTowers!();
+        return output.knockbackTowers!();
+      },
       outputStrings: {
         knockbackTowers: {
           en: 'Get Knockback Towers',
           ja: 'ノックバック塔を踏む',
           ko: '넉백 타워 들어가요!',
+        },
+        safeKnockbackTowers: {
+          en: 'Find Safe Knockback Towers',
+          ja: '安全なノックバック塔へ',
+          ko: '안전한 곳 확인하고 넉백 타워로',
         },
       },
     },
@@ -638,7 +672,7 @@ const triggerSet: TriggerSet<Data> = {
         westSafe: {
           en: 'Tower Knockback to West',
           ja: '塔ノックバック🄳西へ',
-          ko: '타워 넉백 🄳서쪽으로',
+          ko: '타워 넉백 🄳🡸서쪽으로',
         },
       },
     },
@@ -651,7 +685,7 @@ const triggerSet: TriggerSet<Data> = {
         eastSafe: {
           en: 'Tower Knockback to East',
           ja: '塔ノックバック🄱東へ',
-          ko: '타워 넉백 🄱동쪽으로',
+          ko: '타워 넉백 🄱🡺동쪽으로',
         },
       },
     },
@@ -664,8 +698,8 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         goNorth: {
           en: '🡹North',
-          ja: '🄰北',
-          ko: '🄰북쪽',
+          ja: '🄰🡹北',
+          ko: '🄰🡹북쪽',
         },
       },
     },
@@ -678,8 +712,8 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         goSouth: {
           en: '🡻South',
-          ja: '🄲南',
-          ko: '🄲남쪽',
+          ja: '🄲🡻南',
+          ko: '🄲🡻남쪽',
         },
       },
     },
@@ -835,7 +869,7 @@ const triggerSet: TriggerSet<Data> = {
         fourWayAtomic: {
           en: 'Stay Corner, Intercardinal Line Stack',
           ja: '隅に、斜め一列頭割り',
-          ko: '모서리로, 비스듬히 한줄 뭉쳐요',
+          ko: '구석으로, 비스듬히 한줄 뭉쳐요',
         },
       },
     },
@@ -899,6 +933,74 @@ const triggerSet: TriggerSet<Data> = {
           ja: '${tower} 🔜 ${stack}',
           ko: '${tower} 🔜 ${stack}',
         },
+      },
+    },
+    // //////////////////////////////////////
+    {
+      id: 'R11S Next Meteor',
+      type: 'Ability',
+      netRegex: { id: 'B439', source: 'The Tyrant', capture: false },
+      durationSeconds: 3,
+      alertText: (data, _matches, output) => {
+        data.meteorCount++;
+        if (data.meteorCount === 2) {
+          if (data.moks === 'D3' || data.moks === 'D4')
+            return output.next!({ num: '2' });
+        }
+        if (data.meteorCount === 3) {
+          if (data.moks === 'D1' || data.moks === 'D2')
+            return output.next!({ num: '3' });
+        }
+      },
+      outputStrings: {
+        next: {
+          en: 'Bait meteor #${num}',
+          ja: 'メテオ誘導 #${num}',
+          ko: '메테오 받아요! #${num}',
+        },
+      },
+    },
+    {
+      id: 'R11S Majestic Tether',
+      type: 'Tether',
+      // 참고로 00F9는 줄이 길어져서 안전해지면 바뀌는 tether id임
+      netRegex: { id: '0039', capture: true },
+      run: (data, matches) => data.majesticTethers.push(matches.target),
+    },
+    {
+      id: 'R11S Majestic Tether Result',
+      type: 'Tether',
+      netRegex: { id: '0039', capture: false },
+      delaySeconds: 0.2,
+      durationSeconds: 5,
+      suppressSeconds: 1,
+      infoText: (data, _matches, output) => {
+        if (data.majesticTethers.length !== 4)
+          return;
+        if (data.majesticTethers.includes(data.me))
+          return output.tetherOn!();
+        return output.noTether!();
+      },
+      outputStrings: {
+        tetherOn: {
+          en: 'Majestic Tether on YOU',
+          ja: '自分に線',
+          ko: '내게 줄!',
+        },
+        noTether: {
+          en: '(Bait aoe, later)',
+          ja: '(あとでマーカー受ける)',
+          ko: '(나중에 마커 받아요)',
+        },
+      },
+    },
+    {
+      id: 'R11S Fire Breath Cleanup',
+      type: 'StartsUsing',
+      netRegex: { id: 'B446', source: 'The Tyrant', capture: false },
+      run: (data, _matches) => {
+        // 줄 정리만 한다
+        data.majesticTethers = [];
       },
     },
   ],
