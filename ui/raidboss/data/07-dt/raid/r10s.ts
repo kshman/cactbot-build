@@ -719,12 +719,12 @@ const triggerSet: TriggerSet<Data> = {
         },
         north: {
           en: 'Bait Hot Aerial North',
-          ja: '🡹北でフレイムエアリアル誘導',
+          ja: '🄰北でフレイムエアリアル誘導',
           ko: '🄰북쪽으로 불장판 유도',
         },
         south: {
           en: 'Bait Hot Aerial South',
-          ja: '🡻南でフレイムエアリアル誘導',
+          ja: '🄲南でフレイムエアリアル誘導',
           ko: '🄲남쪽으로 불장판 유도',
         },
       },
@@ -790,7 +790,7 @@ const triggerSet: TriggerSet<Data> = {
         outOfMiddle: {
           en: 'E/W Groups, Out of Middle',
           ja: '分断、組み合わせて散会',
-          ko: '분단, 팀 단위로 피해요',
+          ko: '분단, 맡은 팀으로',
         },
       },
     },
@@ -807,6 +807,7 @@ const triggerSet: TriggerSet<Data> = {
       'replaceText': {
         'Reverse Alley-oop/Alley-oop Double-dip': 'Reverse Alley-oop/Double-dip',
         'Awesome Splash/Awesome Slab': 'Awesome Splash/Slab',
+        'Blasting Snap/Plunging Snap/Re-entry Blast': 'Blasting/Plunging/Re-entry',
       },
     },
     {
@@ -818,6 +819,7 @@ const triggerSet: TriggerSet<Data> = {
       'replaceText': {
         'Reverse Alley-oop/Alley-oop Double-dip': 'リバース/ダブルディップ',
         'Awesome Splash/Awesome Slab': 'スプラッシュ/スラブ',
+        'Blasting Snap/Plunging Snap/Re-entry Blast': 'ブラスティング/プランジング/リ-エントリー',
       },
     },
   ],

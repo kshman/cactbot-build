@@ -1,5 +1,6 @@
 import { AutumnDir } from '../../../../../resources/autumn';
 import Conditions from '../../../../../resources/conditions';
+import { UnreachableCode } from '../../../../../resources/not_reached';
 import Outputs from '../../../../../resources/outputs';
 import { callOverlayHandler } from '../../../../../resources/overlay_plugin_api';
 import { Responses } from '../../../../../resources/responses';
@@ -192,8 +193,10 @@ const triggerSet: TriggerSet<Data> = {
       suppressSeconds: 1,
       run: (data, matches) => {
         const phase = phaseMap[matches.id];
-        if (phase !== undefined)
-          data.phase = phase;
+        if (phase === undefined)
+          throw new UnreachableCode();
+
+        data.phase = phase;
       },
     },
     {
@@ -301,6 +304,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       infoText: (data, matches, output) => {
         const actor = data.actorPositions[matches.id];
+
         if (actor === undefined)
           return;
 
@@ -312,7 +316,6 @@ const triggerSet: TriggerSet<Data> = {
           dir: Math.atan2(actor.x - center.x, actor.y - center.y),
           actor: actor,
         });
-
         // Have info for 1st or 2nd mech
         if (data.weaponMechCount < 2 && data.weapons.length > 2) {
           data.weaponMechCount++;
@@ -450,12 +453,12 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         northSouth: {
-          en: '${dir} + N/S Mid',
+          en: 'N/S Mid / ${dir} Outer + Partner Stacks',
           ja: '${dir}基準 + 南北',
           ko: '${dir}기준 + 남북',
         },
         eastWest: {
-          en: '${dir} + E/W Mid',
+          en: 'E/W Mid / ${dir} Outer + Partner Stacks',
           ja: '${dir}基準 + 東西',
           ko: '${dir}기준 + 동서',
         },
