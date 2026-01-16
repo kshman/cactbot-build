@@ -400,7 +400,7 @@ const triggerSet: TriggerSet<Data> = {
         },
       },
     },
-        {
+    {
       id: 'R11S Dance Of Domination Trophy Big AoE',
       type: 'StartsUsing',
       netRegex: { id: 'B7BB', source: 'The Tyrant', capture: false },
@@ -624,8 +624,8 @@ const triggerSet: TriggerSet<Data> = {
       type: 'StartsUsing',
       netRegex: { id: 'B444', source: 'The Tyrant', capture: false },
       durationSeconds: 9.5,
-      countdownSeconds: 9.5,
       suppressSeconds: 1,
+      countdownSeconds: 9.5,
       alertText: (data, _matches, output) => {
         data.explosionTowerCount++;
         if (data.explosionTowerCount === 3)
