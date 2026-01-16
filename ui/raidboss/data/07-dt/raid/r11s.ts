@@ -1,10 +1,14 @@
-import { AutumnDir } from '../../../../../resources/autumn';
+import Autumn, { AutumnDir } from '../../../../../resources/autumn';
 import Conditions from '../../../../../resources/conditions';
 import { UnreachableCode } from '../../../../../resources/not_reached';
 import Outputs from '../../../../../resources/outputs';
 import { callOverlayHandler } from '../../../../../resources/overlay_plugin_api';
 import { Responses } from '../../../../../resources/responses';
-import { DirectionOutputCardinal, Directions } from '../../../../../resources/util';
+import Util, {
+  DirectionOutputCardinal,
+  DirectionOutputIntercard,
+  Directions,
+} from '../../../../../resources/util';
 import ZoneId from '../../../../../resources/zone_id';
 import { RaidbossData } from '../../../../../types/data';
 import { TriggerSet } from '../../../../../types/trigger';
@@ -15,6 +19,7 @@ export interface Data extends RaidbossData {
   readonly triggerSetConfig: {
     trophyDisplay: 'full' | 'simple';
     dominationStyle: 'none' | 'moks';
+    stampedeStyle: 'static' | 'dxa';
   };
   phase: Phase;
   actorPositions: { [id: string]: { x: number; y: number; heading: number } };
@@ -36,8 +41,10 @@ export interface Data extends RaidbossData {
   meteowrathTetherDirNum?: number;
   heartbreakerCount: number;
   meteorCount: number;
-  explosionTowerCount: number;
   majesticTethers: string[];
+  atomicList: string[];
+  atomicPartner?: string;
+  fireballPosition?: DirectionOutputIntercard;
 }
 
 const center = {
@@ -104,6 +111,50 @@ const trophyStrings = {
   },
 } as const;
 
+const markerStrings = {
+  dirN: {
+    en: '🡹North',
+    ja: '🄰🡹北',
+    ko: '🄰🡹북',
+  },
+  dirE: {
+    en: '🡺East',
+    ja: '🄱🡺東',
+    ko: '🄱🡺동',
+  },
+  dirS: {
+    en: '🡻South',
+    ja: '🄲🡻南',
+    ko: '🄲🡻남',
+  },
+  dirW: {
+    en: '🡸West',
+    ja: '🄳🡸西',
+    ko: '🄳🡸서',
+  },
+  dirNW: {
+    en: '🡼NW',
+    ja: '➊🡼北西',
+    ko: '➊🡼북서',
+  },
+  dirNE: {
+    en: '🡽NE',
+    ja: '➋🡽北東',
+    ko: '➋🡽북동',
+  },
+  dirSE: {
+    en: '🡾SE',
+    ja: '➌🡾南東',
+    ko: '➌🡾남동',
+  },
+  dirSW: {
+    en: '🡿SW',
+    ja: '➍🡿南西',
+    ko: '➍🡿남서',
+  },
+  unknown: Outputs.unknown,
+} as const;
+
 const triggerSet: TriggerSet<Data> = {
   id: 'AacHeavyweightM3Savage',
   zoneId: ZoneId.AacHeavyweightM3Savage,
@@ -156,6 +207,30 @@ const triggerSet: TriggerSet<Data> = {
       },
       default: 'none',
     },
+    {
+      id: 'stampedeStyle',
+      name: {
+        en: 'Ecliptic Stampede Display Style',
+        ja: 'メテオスタンピード 表示方法',
+        ko: '메테오 스탬피드 표시 방법',
+      },
+      type: 'select',
+      options: {
+        en: {
+          'Static': 'static',
+          'DXA Method': 'dxa',
+        },
+        ja: {
+          '固定表示': 'static',
+          'DXA方式': 'dxa',
+        },
+        ko: {
+          '고정 표시': 'static',
+          'DXA 방식': 'dxa',
+        },
+      },
+      default: 'static',
+    },
   ],
   timelineFile: 'r11s.txt',
   initData: () => ({
@@ -175,6 +250,7 @@ const triggerSet: TriggerSet<Data> = {
     meteorCount: 0,
     explosionTowerCount: 0,
     majesticTethers: [],
+    atomicList: [],
   }),
   timelineTriggers: [
     {
@@ -475,11 +551,7 @@ const triggerSet: TriggerSet<Data> = {
           ja: '${dir}基準 + 東西',
           ko: '${dir}기준 + 동서',
         },
-        dirN: '🄰🡹북',
-        dirE: '🄱🡺동',
-        dirS: '🄲🡻남',
-        dirW: '🄳🡸서',
-        unknown: Outputs.unknown,
+        ...markerStrings,
       },
     },
     {
@@ -626,22 +698,12 @@ const triggerSet: TriggerSet<Data> = {
       durationSeconds: 9.5,
       suppressSeconds: 1,
       countdownSeconds: 9.5,
-      alertText: (data, _matches, output) => {
-        data.explosionTowerCount++;
-        if (data.explosionTowerCount === 3)
-          return output.safeKnockbackTowers!();
-        return output.knockbackTowers!();
-      },
+      alertText: (_data, _matches, output) => output.knockbackTowers!(),
       outputStrings: {
         knockbackTowers: {
           en: 'Get Knockback Towers',
           ja: 'ノックバック塔を踏む',
           ko: '넉백 타워 들어가요!',
-        },
-        safeKnockbackTowers: {
-          en: 'Find Safe Knockback Towers',
-          ja: '安全なノックバック塔へ',
-          ko: '안전한 곳 확인하고 넉백 타워로',
         },
       },
     },
@@ -681,26 +743,62 @@ const triggerSet: TriggerSet<Data> = {
       id: 'R11S Arcadion Avalanche West Safe',
       type: 'StartsUsing',
       netRegex: { id: ['B44E', 'B450'], source: 'The Tyrant', capture: false },
-      infoText: (_data, _matches, output) => output.westSafe!(),
+      infoText: (data, _matches, output) => {
+        const west = output.west!();
+        if (Autumn.inMainTeam(data.moks))
+          return output.mtStay!({ dir: west });
+        if (Autumn.inSubTeam(data.moks))
+          return output.stWest!({ dir: west });
+        return output.westSafe!({ dir: west });
+      },
       outputStrings: {
         westSafe: {
-          en: 'Tower Knockback to West',
-          ja: '塔ノックバック🄳西へ',
-          ko: '타워 넉백 🄳🡸서쪽으로',
+          en: 'Tower Knockback to ${dir}',
+          ja: '塔ノックバック${dir}へ',
+          ko: '타워 넉백 ${dir}쪽으로',
         },
+        mtStay: {
+          en: 'Tower Knockback to West',
+          ja: 'MT組: そのまま${dir}',
+          ko: 'MT팀: 그대로 ${dir}쪽',
+        },
+        stWest: {
+          en: 'Tower Knockback to West',
+          ja: 'ST組: ${dir}へノックバック',
+          ko: 'ST팀: ${dir}쪽으로 이동 넉백',
+        },
+        west: markerStrings.dirW,
       },
     },
     {
       id: 'R11S Arcadion Avalanche East Safe',
       type: 'StartsUsing',
       netRegex: { id: ['B44A', 'B44C'], source: 'The Tyrant', capture: false },
-      infoText: (_data, _matches, output) => output.eastSafe!(),
+      infoText: (data, _matches, output) => {
+        const east = output.east!();
+        if (Autumn.inMainTeam(data.moks))
+          return output.mtEast!({ dir: east });
+        if (Autumn.inSubTeam(data.moks))
+          return output.stStay!({ dir: east });
+        return output.eastSafe!({ dir: east });
+      },
       outputStrings: {
         eastSafe: {
-          en: 'Tower Knockback to East',
-          ja: '塔ノックバック🄱東へ',
-          ko: '타워 넉백 🄱🡺동쪽으로',
+          en: 'Tower Knockback to ${dir}',
+          ja: '塔ノックバック${dir}へ',
+          ko: '타워 넉백 ${dir}쪽으로',
         },
+        mtEast: {
+          en: 'Tower Knockback to ${dir}',
+          ja: 'MT組: ${dir}へノックバック',
+          ko: 'MT팀: ${dir}쪽으로 이동 넉백',
+        },
+        stStay: {
+          en: 'Tower Knockback to ${dir}',
+          ja: 'ST組: そのまま${dir}',
+          ko: 'ST팀: 그대로 ${dir}쪽',
+        },
+        east: markerStrings.dirE,
       },
     },
     {
@@ -712,8 +810,8 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         goNorth: {
           en: '🡹North',
-          ja: '🄰🡹北',
-          ko: '🄰🡹북쪽',
+          ja: '安置: 🡹北',
+          ko: '안전: 🡹북쪽',
         },
       },
     },
@@ -726,8 +824,8 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         goSouth: {
           en: '🡻South',
-          ja: '🄲🡻南',
-          ko: '🄲🡻남쪽',
+          ja: '安置: 🡻南',
+          ko: '안전: 🡻남쪽',
         },
       },
     },
@@ -735,8 +833,13 @@ const triggerSet: TriggerSet<Data> = {
       id: 'R11S Atomic Impact Collect',
       type: 'HeadMarker',
       netRegex: { id: headMarkerData['atomicImpact'], capture: true },
-      condition: Conditions.targetIsYou(),
-      run: (data) => data.hasAtomic = true,
+      run: (data, matches) => {
+        if (data.me === matches.target)
+          data.hasAtomic = true;
+        else
+          data.atomicPartner = matches.target;
+        data.atomicList.push(matches.target);
+      },
     },
     {
       id: 'R11S Mammoth Meteor',
@@ -753,6 +856,35 @@ const triggerSet: TriggerSet<Data> = {
         const meteorY = parseFloat(matches.y);
         const meteorQuad = Directions.xyToIntercardDirOutput(meteorX, meteorY, center.x, center.y);
         if (data.hasAtomic) {
+          const pj = data.atomicPartner === undefined
+            ? undefined
+            : data.party.jobName(data.atomicPartner);
+          if (pj !== undefined) {
+            let north: boolean | undefined = undefined;
+            if (data.moks === 'H1')
+              north = true;
+            else if (data.moks === 'D3')
+              north = !Autumn.isPureHealerJob(pj);
+            else if (data.moks === 'H2')
+              north = Util.isCasterDpsJob(pj);
+            else if (data.moks === 'D4')
+              north = false;
+            else {
+              // 뭐여 이건
+              // 이건 무슨 잡이 미스를 내는 소린가
+            }
+            if (north !== undefined) {
+              if (north) {
+                if (meteorQuad === 'dirNE' || meteorQuad === 'dirSW')
+                  return output.dir!({ dir: output.nw!() });
+                return output.dir!({ dir: output.ne!() });
+              }
+              if (meteorQuad === 'dirNE' || meteorQuad === 'dirSW')
+                return output.dir!({ dir: output.se!() });
+              return output.dir!({ dir: output.sw!() });
+            }
+          }
+
           if (meteorQuad === 'dirNE' || meteorQuad === 'dirSW')
             return output.comboDir!({ dir1: output.nw!(), dir2: output.se!() });
           return output.comboDir!({ dir1: output.ne!(), dir2: output.sw!() });
@@ -764,6 +896,11 @@ const triggerSet: TriggerSet<Data> = {
         ne: Outputs.aimNE,
         sw: Outputs.aimSW,
         se: Outputs.aimSE,
+        dir: {
+          en: 'Go ${dir} => Bait Impacts, Avoid Corners',
+          ja: '${dir}へ 🔜 着弾誘導',
+          ko: '${dir}쪽 🔜 착탄 유도',
+        },
         comboDir: {
           en: 'Go ${dir1}/${dir2} => Bait Impacts, Avoid Corners',
           ja: '${dir1} ${dir2} 🔜 着弾誘導',
@@ -771,8 +908,8 @@ const triggerSet: TriggerSet<Data> = {
         },
         getMiddle: {
           en: 'Proximity AoE; Get Middle => Bait Puddles',
-          ja: '近接AoE、中央へ 🔜 AoE誘導',
-          ko: '근접 장판, 한가운데로 🔜 장판 유도',
+          ja: '連続AOE! 真ん中から',
+          ko: '연속 장판! 한가운데서 시작',
         },
       },
     },
@@ -786,7 +923,95 @@ const triggerSet: TriggerSet<Data> = {
         return true;
       },
       suppressSeconds: 1,
-      response: Responses.getTowers(),
+      alertText: (data, _matches, output) => {
+        if (data.atomicList.length === 2) {
+          if (data.role === 'tank') {
+            // 탱크는 비교할게 탱크뿐
+            const dir = data.moks === 'MT' ? output.right!() : output.left!();
+            return output.pillar!({ dir: dir });
+          } else if (Util.isHealerJob(data.job)) {
+            if (data.triggerSetConfig.stampedeStyle === 'dxa')
+              return output.pillarInner!({ dir: output.left!() });
+            // H1는 최우선 순위
+            if (data.moks === 'H1') {
+              data.fireballPosition = 'dirNW';
+              return output.pillarInner!({ dir: output.right!() });
+            }
+            // H2는 H1, D3이 없어야 오른쪽, 아니면 왼쪽
+            const [j1, j2] = data.atomicList.map((n) => data.party.jobName(n));
+            if (j1 !== undefined && j2 !== undefined) {
+              let c = 0;
+              if (Util.isHealerJob(j1) || Util.isHealerJob(j2))
+                c++;
+              if (Util.isRangedDpsJob(j1) || Util.isRangedDpsJob(j2))
+                c++;
+              if (c === 2) {
+                data.fireballPosition = 'dirNW';
+                return output.pillarInner!({ dir: output.right!() });
+              }
+              data.fireballPosition = 'dirSE';
+              return output.pillarInner!({ dir: output.left!() });
+            }
+          } else if (data.moks === 'D1' || data.moks === 'D2') {
+            if (data.triggerSetConfig.stampedeStyle === 'dxa')
+              return output.pillarOuter!({ dir: output.right!() });
+            // D1 오른쪽
+            if (data.moks === 'D1') {
+              data.fireballPosition = 'dirNE';
+              return output.pillarOuter!({ dir: output.right!() });
+            }
+            // D2 왼쪽
+            data.fireballPosition = 'dirSW';
+            return output.pillarOuter!({ dir: output.left!() });
+          } else if (data.moks === 'D3') {
+            if (data.triggerSetConfig.stampedeStyle === 'dxa')
+              return output.pillarInner!({ dir: output.left!() });
+            // D3은 H1이 없어야 오른쪽, 아니면 왼쪽
+            const [j1, j2] = data.atomicList.map((n) => data.party.jobName(n));
+            if (j1 !== undefined && j2 !== undefined) {
+              if (Autumn.isPureHealerJob(j1) || Autumn.isPureHealerJob(j2)) {
+                data.fireballPosition = 'dirSE';
+                return output.pillarInner!({ dir: output.left!() });
+              }
+              data.fireballPosition = 'dirNW';
+              return output.pillarInner!({ dir: output.right!() });
+            }
+          } else if (data.moks === 'D4') {
+            // D4는 항상 왼쪽
+            data.fireballPosition = 'dirSE';
+            return output.pillarInner!({ dir: output.left!() });
+          }
+        }
+        return output.getTowers!();
+      },
+      outputStrings: {
+        getTowers: Outputs.getTowers,
+        left: {
+          en: 'CCW',
+          ja: '🡸反時計回り',
+          ko: '🡸반시계방향',
+        },
+        right: {
+          en: 'CW',
+          ja: '時計回り🡺',
+          ko: '시계방향🡺',
+        },
+        pillar: {
+          en: 'Get ${dir} Pillar Tower',
+          ja: '${dir}の塔を踏む',
+          ko: '${dir}, 타워 밟아요',
+        },
+        pillarInner: {
+          en: 'Get ${dir} Middle of Pillar Tower',
+          ja: '${dir}の塔の真ん中を踏む',
+          ko: '${dir}, 타워 <한가운데> 밟아요',
+        },
+        pillarOuter: {
+          en: 'Get ${dir} Outer of Pillar Tower',
+          ja: '${dir}の塔の外側を踏む',
+          ko: '${dir}, 타워 <바깥쪽> 밟아요',
+        },
+      },
     },
     {
       id: 'R11S Majestic Meteowrath Tethers',
@@ -839,7 +1064,7 @@ const triggerSet: TriggerSet<Data> = {
         stretchTetherDir: {
           en: 'Stretch Tether ${dir}',
           ja: '線を伸ばす: ${dir}',
-          ko: '줄 늘려요: ${dir}',
+          ko: '줄 늘려요: ${dir}쪽',
         },
       },
     },
@@ -847,10 +1072,15 @@ const triggerSet: TriggerSet<Data> = {
       id: 'R11S Two-way Fireball',
       type: 'StartsUsing',
       netRegex: { id: 'B7BD', source: 'The Tyrant', capture: false },
+      durationSeconds: 5,
       alertText: (data, _matches, output) => {
         if (data.hasAtomic)
           return output.twoWayAtomic!();
-        return output.twoWay!();
+        const pos = data.fireballPosition;
+        if (pos === undefined)
+          return output.twoWay!();
+        const dir = (pos === 'dirNE' || pos === 'dirSE') ? output.east!() : output.west!();
+        return output.twoWayDir!({ dir: dir });
       },
       outputStrings: {
         twoWay: {
@@ -860,9 +1090,16 @@ const triggerSet: TriggerSet<Data> = {
         },
         twoWayAtomic: {
           en: 'Move; East/West Line Stack',
-          ja: '逃げて、東西一列頭割り',
-          ko: '피하고, 동서로 한줄 뭉쳐요',
+          ja: '東西一列頭割り',
+          ko: '동서로 한줄 뭉쳐요',
         },
+        twoWayDir: {
+          en: '${dir} Line Stack',
+          ja: '${dir}で一列頭割り',
+          ko: '${dir}쪽 한줄 뭉쳐요',
+        },
+        east: markerStrings.dirE,
+        west: markerStrings.dirW,
       },
     },
     {
@@ -872,19 +1109,28 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (data, _matches, output) => {
         if (data.hasAtomic)
           return output.fourWayAtomic!();
-        return output.fourWay!();
+        const pos = data.fireballPosition;
+        if (pos === undefined)
+          return output.fourWay!();
+        return output.fourWayDir!({ dir: output[pos]!() });
       },
       outputStrings: {
         fourWay: {
           en: 'Intercardinal Line Stack',
-          ja: '斜め一列頭割り',
-          ko: '비스듬히 한줄 뭉쳐요',
+          ja: '斜め一列ペア',
+          ko: '❌로 한줄 페어',
         },
         fourWayAtomic: {
           en: 'Stay Corner, Intercardinal Line Stack',
-          ja: '隅に、斜め一列頭割り',
-          ko: '구석으로, 비스듬히 한줄 뭉쳐요',
+          ja: '斜め一列ペア',
+          ko: '❌로 한줄 페어',
         },
+        fourWayDir: {
+          en: '${dir} Intercardinal Line Stack',
+          ja: '${dir}で斜め一列ペア',
+          ko: '${dir}쪽 ❌로 한줄 뭉쳐요',
+        },
+        ...markerStrings,
       },
     },
     {
