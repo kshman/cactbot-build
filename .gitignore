@@ -27,6 +27,9 @@ venv/
 npm-package/
 .eslintcache
 
+ui/raidboss/data/99-custom/*
+!ui/raidboss/data/99-custom/readme.txt
+
 # PRs
 build/백업
 build/작업

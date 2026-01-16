@@ -390,8 +390,22 @@ const triggerSet: TriggerSet<Data> = {
       id: 'R11S Dance Of Domination Trophy',
       type: 'StartsUsing',
       netRegex: { id: 'B7BB', source: 'The Tyrant', capture: false },
-      durationSeconds: 10.9,
-      response: Responses.bigAoe(),
+      durationSeconds: 7, // 10.9s overall
+      infoText: (_data, _matches, output) => output.text!(),
+      outputStrings: {
+        text: {
+          en: 'AoE x6 => Big AoE',
+          ja: '全体攻撃 x6 🔜 大きな全体攻撃',
+          ko: '전체 공격 x6 🔜 아주 아픈 전체 공격',
+        },
+      },
+    },
+        {
+      id: 'R11S Dance Of Domination Trophy Big AoE',
+      type: 'StartsUsing',
+      netRegex: { id: 'B7BB', source: 'The Tyrant', capture: false },
+      delaySeconds: 3.9, // This gives a 7s warning
+      response: Responses.bigAoe('alert'),
     },
     {
       // Adapted from normal mode

@@ -258,6 +258,7 @@ export type LooseTriggerSet =
     timelineTriggers?: LooseTimelineTrigger[];
     filename?: string;
     isUserTriggerSet?: boolean;
+    overriddenByFile?: string;
   };
 
 export interface RaidbossFileData {
