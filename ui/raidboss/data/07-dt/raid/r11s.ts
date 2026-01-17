@@ -29,6 +29,7 @@ export interface Data extends RaidbossData {
     dir: number;
     actor: { x: number; y: number; heading: number };
   }[];
+  voidStardust?: 'spread' | 'stack';
   weaponMechCount: number;
   domDirectionCount: {
     vertCount: number;
@@ -254,6 +255,30 @@ const triggerSet: TriggerSet<Data> = {
   }),
   timelineTriggers: [
     {
+      id: 'R11S Void Stardust End',
+      regex: /^Crushing Comet/,
+      beforeSeconds: 11.1,
+      suppressSeconds: 3,
+      infoText: (data, _matches, output) => {
+        if (data.voidStardust === 'spread')
+          return output.baitPuddlesThenStack!();
+        if (data.voidStardust === 'stack')
+          return output.baitPuddlesThenSpread!();
+      },
+      outputStrings: {
+        baitPuddlesThenStack: {
+          en: 'Bait 3x Puddles => Stack',
+          ja: 'AOE誘導 x3 🔜 頭割り',
+          ko: '장판 유도 x3 🔜 뭉쳐요',
+        },
+        baitPuddlesThenSpread: {
+          en: 'Bait 3x Puddles => Spread',
+          ja: 'AOE誘導 x3 🔜 散開',
+          ko: '장판 유도 x3 🔜 흩어져요',
+        },
+      },
+    },
+    {
       id: 'R11S Powerful Gust',
       regex: /Powerful Gust/,
       beforeSeconds: 6.3,
@@ -450,11 +475,37 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
+      id: 'R11S Void Stardust',
+      type: 'StartsUsing',
+      netRegex: { id: 'B412', source: 'The Tyrant', capture: false },
+      infoText: (_data, _matches, output) => output.baitPuddles!(),
+      outputStrings: {
+        baitPuddles: {
+          en: 'Bait 3x puddles',
+          ja: 'AOE誘導 x3',
+          ko: '장판 유도 x3',
+        },
+      },
+    },
+    {
+      id: 'R11S Comet Spread Collect',
+      type: 'HeadMarker',
+      netRegex: { id: headMarkerData['cometSpread'], capture: false },
+      suppressSeconds: 1,
+      run: (data) => data.voidStardust = 'spread',
+    },
+    {
       id: 'R11S Comet Spread',
       type: 'HeadMarker',
       netRegex: { id: headMarkerData['cometSpread'], capture: true },
       condition: Conditions.targetIsYou(),
       response: Responses.spread(),
+    },
+    {
+      id: 'R11S Crushing Comet Collect',
+      type: 'StartsUsing',
+      netRegex: { id: 'B415', source: 'The Tyrant', capture: false },
+      run: (data) => data.voidStardust = 'stack',
     },
     {
       id: 'R11S Crushing Comet',
@@ -464,11 +515,10 @@ const triggerSet: TriggerSet<Data> = {
     },
     {
       id: 'R11S Dance Of Domination Trophy',
-      // 2s cast, but B41F damage cast (0.5s) starts ~6s later.
       type: 'StartsUsing',
       netRegex: { id: 'B7BB', source: 'The Tyrant', capture: false },
-      delaySeconds: 3.7, // 5s before AoEs start
-      durationSeconds: 5,
+      delaySeconds: 1,
+      durationSeconds: 7.7,
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
@@ -477,15 +527,6 @@ const triggerSet: TriggerSet<Data> = {
           ko: '전체 공격 x6 🔜 아주 아픈 전체 공격',
         },
       },
-    },
-    {
-      id: 'R11S Dance Of Domination Trophy Big AoE',
-      // There are 12.9s from B7BB startsUsing to bigAoe B7EA Ability
-      type: 'StartsUsing',
-      netRegex: { id: 'B7BB', source: 'The Tyrant', capture: false },
-      delaySeconds: 8.7, // Around the first hit (B41F)
-      durationSeconds: 4.2,
-      response: Responses.bigAoe('alert'),
     },
     {
       // Adapted from normal mode
