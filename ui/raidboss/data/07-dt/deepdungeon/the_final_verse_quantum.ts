@@ -1252,9 +1252,9 @@ const triggerSet: TriggerSet<Data> = {
       'locale': 'fr',
       'missingTranslations': true,
       'replaceSync': {
-        'Devoured Eater': 'purgateur dévoré',
+        'Devoured Eater': 'Purgateur dévoré',
         'Eminent Grief': 'Pontife du Chagrin',
-        'Flameborn': 'division de flamme',
+        'Flameborn': 'Division de flamme',
       },
       'replaceText': {
         'Abyssal Blaze': 'Feu abyssal',

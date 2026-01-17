@@ -157,10 +157,10 @@ const triggerSet: TriggerSet<Data> = {
       response: Responses.sharedTankBuster(),
     },
     {
-      id: 'R10S Floater Tethers',
+      id: 'R10S Flame Floater Order',
       type: 'GainsEffect',
       netRegex: { effectId: Object.keys(floaterTetherMap), capture: true },
-      condition: (data, matches) => matches.target === data.me,
+      condition: Conditions.targetIsYou(),
       alertText: (_data, matches, output) => {
         const index = floaterTetherMap[matches.effectId];
         if (index === undefined)
@@ -187,9 +187,9 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: 'R10S Escape from Fire',
-      // Fire Resistance Down II
+      id: 'R10S when Fire Resistance Down II',
       type: 'GainsEffect',
+      // Fire Resistance Down II
       netRegex: { effectId: 'B79', capture: true },
       condition: Conditions.targetIsYou(),
       infoText: (_data, _matches, output) => output.move!(),
@@ -289,7 +289,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.move!(),
       outputStrings: {
         move: {
-          en: 'AOE + Move Away',
+          en: 'AOE + Bait puddles',
           ja: 'みんなでAOE誘導',
           ko: '모여서 장판 유도 x3',
         },
@@ -498,6 +498,7 @@ const triggerSet: TriggerSet<Data> = {
           return;
 
         if (data.snakingCount < 5) {
+          // 어 이거 1번이 물, 2번이 불 고정같은데?
           const [water, fire] = snaking1.elem === 'water'
             ? [snaking1, snaking2]
             : [snaking2, snaking1];

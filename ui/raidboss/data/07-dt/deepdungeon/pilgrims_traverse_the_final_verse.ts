@@ -597,7 +597,7 @@ const triggerSet: TriggerSet<Data> = {
     {
       'locale': 'fr',
       'replaceSync': {
-        'Devoured Eater': 'purgateur dévoré',
+        'Devoured Eater': 'Purgateur dévoré',
         'Eminent Grief': 'Pontife du Chagrin',
       },
     },

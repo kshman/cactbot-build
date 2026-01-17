@@ -114,9 +114,8 @@ const triggerSet: TriggerSet<Data> = {
     },
     {
       'locale': 'fr',
-      'missingTranslations': true,
       'replaceSync': {
-        'Ornamental Leafman': 'enfleuri',
+        'Ornamental Leafman': 'Enfleuri',
       },
     },
     {

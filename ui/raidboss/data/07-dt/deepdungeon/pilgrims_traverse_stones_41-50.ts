@@ -123,15 +123,14 @@ const triggerSet: TriggerSet<Data> = {
     },
     {
       'locale': 'fr',
-      'missingTranslations': true,
       'replaceSync': {
         'Ogbunabali': 'Ogbunabali',
-        'Traverse Anaconda': 'anaconda du pèlerinage',
-        'Traverse Petreffigy': 'effigie du pèlerinage',
-        'Traverse Pincerbeak': 'bec-pinceur du pèlerinage',
-        'Traverse Tolba': 'tolba du pèlerinage',
-        'Traverse Triffid': 'triffide du pèlerinage',
-        'Traverse Weapon': 'arme du pèlerinage',
+        'Traverse Anaconda': 'Anaconda du pèlerinage',
+        'Traverse Petreffigy': 'Effigie du pèlerinage',
+        'Traverse Pincerbeak': 'Bec-pinceur du pèlerinage',
+        'Traverse Tolba': 'Tolba du pèlerinage',
+        'Traverse Triffid': 'Triffide du pèlerinage',
+        'Traverse Weapon': 'Arme du pèlerinage',
       },
     },
     {

@@ -114,9 +114,8 @@ const triggerSet: TriggerSet<Data> = {
     },
     {
       'locale': 'fr',
-      'missingTranslations': true,
       'replaceSync': {
-        'Forgiven Emulation': 'imitation pardonnée',
+        'Forgiven Emulation': 'Imitation pardonnée',
       },
     },
     {

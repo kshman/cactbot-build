@@ -636,7 +636,7 @@ const triggerSet: TriggerSet<Data> = {
         'Insane Air': 'Figure démentielle',
         'Plunging Snap': 'Claquement hydrique',
         'Pyrotation': 'Rotation enflammée',
-        'Sick Swell': 'lame de fond',
+        'Sick Swell': 'Lame de fond',
         'Sickest Take-off': 'Ascension déchaînée',
         'Steam Burst': 'Déflagration combinée',
         'Watersnaking': 'Ondulation hydrique',

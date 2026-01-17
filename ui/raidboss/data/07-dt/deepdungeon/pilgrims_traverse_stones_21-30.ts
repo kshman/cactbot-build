@@ -184,12 +184,11 @@ const triggerSet: TriggerSet<Data> = {
     },
     {
       'locale': 'fr',
-      'missingTranslations': true,
       'replaceSync': {
-        'Forgiven Ambition': 'ambition pardonnée',
-        'Forgiven Intolerance': 'intolérance pardonnée',
-        'Forgiven Treachery': 'traîtrise pardonnée',
-        'Traverse Clionid': 'clionide du pèlerinage',
+        'Forgiven Ambition': 'Ambition pardonnée',
+        'Forgiven Intolerance': 'Intolérance pardonnée',
+        'Forgiven Treachery': 'Traîtrise pardonnée',
+        'Traverse Clionid': 'Clionide du pèlerinage',
       },
     },
     {

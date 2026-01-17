@@ -132,15 +132,14 @@ const triggerSet: TriggerSet<Data> = {
     },
     {
       'locale': 'fr',
-      'missingTranslations': true,
       'replaceSync': {
-        'Forgiven Naivety': 'naïveté pardonnée',
-        'Forgiven Petulance': 'irascibilité pardonnée',
-        'Forgiven Plague': 'peste pardonnée',
-        'Forgiven Prejudice': 'préjugé pardonné',
-        'Traverse Inquisitor': 'inquisiteur du pèlerinage',
-        'Traverse Pegasus': 'pégase du pèlerinage',
-        'Traverse Soldierstone': 'soldat de pierre du pèlerinage',
+        'Forgiven Naivety': 'Naïveté pardonnée',
+        'Forgiven Petulance': 'Irascibilité pardonnée',
+        'Forgiven Plague': 'Peste pardonnée',
+        'Forgiven Prejudice': 'Préjugé pardonné',
+        'Traverse Inquisitor': 'Inquisiteur du pèlerinage',
+        'Traverse Pegasus': 'Pégase du pèlerinage',
+        'Traverse Soldierstone': 'Soldat de pierre du pèlerinage',
       },
     },
     {

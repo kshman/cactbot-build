@@ -163,15 +163,14 @@ const triggerSet: TriggerSet<Data> = {
     },
     {
       'locale': 'fr',
-      'missingTranslations': true,
       'replaceSync': {
         'Ancestral Maliktender': 'Malikpampa l\'ancien',
-        'Traverse Gigant': 'géant du pèlerinage',
-        'Traverse Howler': 'hurleur du pèlerinage',
-        'Traverse Monitor': 'varan du pèlerinage',
-        'Traverse Phorusrhacos': 'phorusrhacos du pèlerinage',
-        'Traverse Saichania': 'saichania du pèlerinage',
-        'Traverse Sand Serpent': 'serpent des sables du pèlerinage',
+        'Traverse Gigant': 'Géant du pèlerinage',
+        'Traverse Howler': 'Hurleur du pèlerinage',
+        'Traverse Monitor': 'Varan du pèlerinage',
+        'Traverse Phorusrhacos': 'Phorusrhacos du pèlerinage',
+        'Traverse Saichania': 'Saichania du pèlerinage',
+        'Traverse Sand Serpent': 'Serpent des sables du pèlerinage',
       },
     },
     {
