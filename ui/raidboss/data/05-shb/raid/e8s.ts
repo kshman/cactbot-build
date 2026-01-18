@@ -139,10 +139,10 @@ const triggerSet: TriggerSet<Data> = {
              탱커 한 명은 파티 사이에, 다른 한 명은 초록 거울에 가장 가까운 곳에 위치해야 합니다.
              초록 거울이 발동하면 탱커는 빨강 거울에 맞춰 위치를 조정합니다.`,
         tc: `此選項可讓 cactbot 提示第四次鏡中奇遇的雙擊退。
-             會在 BOSS 轉身期間或之後播報提示, 需要小於 1.4 秒
+             會在 Boss 轉身期間或之後播報提示, 需要小於 1.4 秒
              的反應時間來同時躲避綠鏡和紅鏡擊退。
              示例: https://clips.twitch.tv/CreativeDreamyAsparagusKlappa
-             人群在 BOSS 瞬移後分成兩組, 分別站在 BOSS 身後。
+             人群在 Boss 瞬移後分成兩組, 分別站在 Boss 身後。
              坦克根據紅鏡和綠鏡的位置進行調整。
              一個坦克必須在分組中間，另一個坦克最靠近綠鏡。
              綠鏡消失後，坦克調整到紅鏡位置。`,
@@ -1414,7 +1414,6 @@ const triggerSet: TriggerSet<Data> = {
     },
     {
       'locale': 'tc',
-      'missingTranslations': true,
       'replaceSync': {
         'Earthen Aether': '土乙太',
         'Frozen Mirror': '冰面鏡',
@@ -1426,9 +1425,9 @@ const triggerSet: TriggerSet<Data> = {
       'replaceText': {
         'Absolute Zero': '絕對零度',
         'Mirror, Mirror': '鏡中奇遇',
-        // 'Biting/Driving Frost': '', // FIXME '冰霜斩/刺'
-        // 'Reflected Frost \\(G\\)': '', // FIXME '连锁反斩(绿)'
-        // 'Reflected Frost \\(R\\)': '', // FIXME '连锁反斩(红)'
+        'Biting/Driving Frost': '冰霜斬/刺',
+        'Reflected Frost \\(G\\)': '連鎖反斬(綠)',
+        'Reflected Frost \\(R\\)': '連鎖反斬(紅)',
         'Diamond Frost': '鑽石星塵',
         'Frigid Stone': '冰石',
         'Icicle Impact': '冰柱衝擊',
@@ -1436,15 +1435,15 @@ const triggerSet: TriggerSet<Data> = {
         'Frigid Needle': '冰針',
         'Frigid Water': '冰霜',
         'Frigid Eruption': '極冰噴發',
-        // 'Driving/Biting Frost': '', // FIXME '冰霜刺/斩'
+        'Driving/Biting Frost': '冰霜刺/斬',
         'Double Slap': '雙劍斬',
         'Shining Armor': '閃光護甲',
-        // 'Axe/Scythe Kick': '', // FIXME '阔斧/镰形回旋踢'
+        'Axe/Scythe Kick': '闊斧/鐮形迴旋踢',
         'Light Rampant': '光之失控',
         'Bright Hunger': '侵蝕光',
         'The Path Of Light': '光之波動',
-        // 'Scythe/Axe Kick': '', // FIXME '镰形/阔斧回旋踢'
-        // 'Reflected Kick \\(G\\)': '', // FIXME '连锁反踢(绿)'
+        'Scythe/Axe Kick': '鐮形/闊斧迴旋踢',
+        'Reflected Kick \\(G\\)': '連鎖反踢(綠)',
         'Banish III': '強放逐',
         'Shattered World': '世界分斷',
         'Heart Asunder': '心碎',
@@ -1453,28 +1452,28 @@ const triggerSet: TriggerSet<Data> = {
         'Akh Morn': '死亡輪迴',
         'Morn Afah': '無盡頓悟',
         'Hallowed Wings': '神聖之翼',
-        // 'Reflected Wings \\(B\\)': '', // FIXME '连锁反翼(蓝)'
-        // 'Reflected Wings \\(G\\)': '', // FIXME '连锁反翼(绿)'
-        // 'Reflected Wings \\(R\\)': '', // FIXME '连锁反翼(红)'
+        'Reflected Wings \\(B\\)': '連鎖反翼(藍)',
+        'Reflected Wings \\(G\\)': '連鎖反翼(綠)',
+        'Reflected Wings \\(R\\)': '連鎖反翼(紅)',
         'Wyrm\'s Lament': '聖龍咆哮',
         '(?<! )Frost Armor': '冰霜護甲',
-        // 'Twin Silence/Stillness': '', // FIXME '闲寂/静寂的双剑技'
-        // 'Twin Stillness/Silence': '', // FIXME '静寂/闲寂的双剑技'
+        'Twin Silence/Stillness': '閒寂/寂靜的雙劍技',
+        'Twin Stillness/Silence': '寂靜/閒寂的雙劍技',
         'Drachen Armor': '聖龍護甲',
         'Akh Rhai': '天光輪迴',
-        // 'Reflected Armor \\(B\\)': '', // FIXME '连锁反甲(蓝)'
-        // 'Reflected Armor \\(G\\)': '', // FIXME '连锁反甲(绿)'
-        // 'Reflected Armor \\(R\\)': '', // FIXME '连锁反甲(红)'
+        'Reflected Armor \\(B\\)': '連鎖反甲(藍)',
+        'Reflected Armor \\(G\\)': '連鎖反甲(綠)',
+        'Reflected Armor \\(R\\)': '連鎖反甲(紅)',
         'Holy': '神聖',
-        // 'Embittered/Spiteful Dance': '', // FIXME '严峻/冷峻之舞'
-        // 'Spiteful/Embittered Dance': '', // FIXME '冷峻/严峻之舞'
+        'Embittered/Spiteful Dance': '嚴峻/冷峻之舞',
+        'Spiteful/Embittered Dance': '冷峻/嚴峻之舞',
         'Reflected Drachen': '連鎖反射：聖龍護甲',
         'Icelit Dragonsong': '冰與光的龍詩',
         'Draconic Strike': '聖龍一擊',
         'Banish(?! )': '放逐',
         'Inescapable Illumination': '曝露光',
         'The House Of Light': '光之海嘯',
-        // 'Reflected Frost Armor \\(R\\)': '', // FIXME '连锁反冰甲(红)'
+        'Reflected Frost Armor \\(R\\)': '連鎖反冰甲(紅)',
       },
     },
     {

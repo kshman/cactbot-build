@@ -280,7 +280,6 @@ const triggerSet: TriggerSet<Data> = {
     },
     {
       'locale': 'tc',
-      'missingTranslations': true,
       'replaceSync': {
         'Shadowkeeper': '影之王',
       },
@@ -293,11 +292,11 @@ const triggerSet: TriggerSet<Data> = {
         'Distant Scream': '影之狂吠',
         'Fade To Shadow': '潛影',
         'Forward Implosion': '前向心聚爆',
-        // 'Forward/Backward Implosion': '', // FIXME '前/后向心聚爆'
+        'Forward/Backward Implosion': '前/後向心聚爆',
         'Forward Shadow Implosion': '影·前向心聚爆',
-        // 'Front/Back Shadow Implosion': '', // FIXME '影·前/后向心聚爆'
-        // 'Left/Right Giga Slash': '', // FIXME '左/右十亿斩击'
-        // 'Left/Right Shadow Slash': '', // FIXME '影·左/右十亿斩击'
+        'Front/Back Shadow Implosion': '影·前/後向心聚爆',
+        'Left/Right Giga Slash': '左/右十億斬擊',
+        'Left/Right Shadow Slash': '影·左/右十億斬擊',
         'Shadow Warrior': '影武者',
         'Shadow\'s Edge': '影之斬擊',
         'Shadowy Eruption': '影之噴發',

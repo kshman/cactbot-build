@@ -302,7 +302,6 @@ const triggerSet: TriggerSet<Data> = {
     },
     {
       'locale': 'tc',
-      'missingTranslations': true,
       'replaceSync': {
         'vitalized reptoid': '活力化爬蟲半人馬',
         'The Tycoon': '泰空',
@@ -340,8 +339,8 @@ const triggerSet: TriggerSet<Data> = {
         'Augurium': '預兆',
         'Artificial Gravity': '人造重力',
         'Allagan Thunder': '亞拉戈雷電',
-        // '(?<! )Gravity': '', // FIXME '(?<! )重力'
-        // '(?<! )Crossray': '', // FIXME '(?<! )交叉激光'
+        '(?<! )Gravity': '重力',
+        '(?<! )Crossray': '交叉雷射',
       },
     },
     {

@@ -1626,7 +1626,6 @@ const triggerSet: TriggerSet<Data> = {
     },
     {
       'locale': 'tc',
-      'missingTranslations': true,
       'replaceSync': {
         'Seeker Avatar': '求道之分身',
         'Aetherial Bolt': '魔彈',
@@ -1659,9 +1658,9 @@ const triggerSet: TriggerSet<Data> = {
         'Trinity Seeker': '求道之三位一體',
       },
       'replaceText': {
-        '--explosion--': '北斗骨碎斬',
-        // '--stunned--': '', // FIXME '--眩晕--'
-        // '--unstunned--': '', // FIXME '--眩晕结束--'
+        '--explosion--': '--爆炸--',
+        '--stunned--': '--眩暈--',
+        '--unstunned--': '--眩暈結束--',
         'Above Board': '浮游波',
         'Act Of Mercy': '破天慈刃風',
         'Allegiant Arsenal': '變換武器',

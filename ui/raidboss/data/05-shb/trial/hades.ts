@@ -431,14 +431,13 @@ const triggerSet: TriggerSet<Data> = {
     },
     {
       'locale': 'tc',
-      'missingTranslations': true,
       'replaceSync': {
         'Hades': '黑迪斯',
-        // 'Shadow .f .he Ancients': '', // FIXME '古代人之影'
+        'Shadow .f .he Ancients': '古代人之影',
       },
       'replaceText': {
-        // 'Adds': '', // FIXME '小怪'
-        // 'Gaol Add': '', // FIXME '监狱'
+        'Adds': '小怪',
+        'Gaol Add': '監獄',
         'Ancient Aero': '古代勁風',
         'Ancient Dark IV': '古代冥暗',
         'Ancient Darkness': '古代黑暗',
@@ -463,7 +462,7 @@ const triggerSet: TriggerSet<Data> = {
         'Stream/Purgation?': '暗影流',
         'The Dark Devours': '黑暗侵蝕',
         'Titanomachy': '諸神之戰',
-        // '--fetters--': '', // FIXME '--锁链--'
+        '--fetters--': '--鎖鏈--',
         'Wail Of The Lost': '逝者的哀嚎',
       },
     },

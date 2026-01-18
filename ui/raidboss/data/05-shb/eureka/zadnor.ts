@@ -2041,7 +2041,6 @@ const triggerSet: TriggerSet<Data> = {
     },
     {
       'locale': 'tc',
-      'missingTranslations': true,
       'replaceSync': {
         '4Th Legion Augur': '第四軍團先知',
         '4Th Legion Blackburn': '第四軍團黑色燃焰',
@@ -2082,8 +2081,8 @@ const triggerSet: TriggerSet<Data> = {
         'Waveborne Zirnitra': '波濤札尼爾查妖蛇',
       },
       'replaceText': {
-        '--lasers--': '太陽之柱',
-        '--line stack--': '太陽之柱',
+        '--lasers--': '--雷射--',
+        '--line stack--': '--直線分攤--',
         '74 Degrees': '射水',
         'Advanced Death IV': '強化極死',
         'Advanced Death Ray': '強化死亡射線',
@@ -2132,7 +2131,7 @@ const triggerSet: TriggerSet<Data> = {
         'Nihility\'s Song': '虛無之歌',
         'North Wind': '北風',
         'Obey': '服從',
-        // '(?<!Verd)Orb': '', // FIXME '球'
+        '(?<!Verd)Orb': '球',
         'Pain Storm': '痛苦風暴',
         'Painful Gust': '極痛突風',
         'Pentagust': '五向突風',
@@ -2145,7 +2144,7 @@ const triggerSet: TriggerSet<Data> = {
         '(?<![-r])Pyroplexy': '火卒',
         'Raw Heat': '大火焰破',
         'Read Orders: Field Support': '作戰指示：步兵支援',
-        // 'Reverse Time Eruption': '', // FIXME '时空地火喷发·逆转'
+        'Reverse Time Eruption': '時空噴發·逆轉',
         'Right Brand': '右印',
         'Ruinous Pseudomen': '魔科學式破滅預兆',
         'Sanctified Quake III': '聖化爆震',

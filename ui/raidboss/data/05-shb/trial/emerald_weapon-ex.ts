@@ -599,7 +599,7 @@ const triggerSet: TriggerSet<Data> = {
         'The Emerald Weapon': '綠寶石武器',
       },
       'replaceText': {
-        '--cutscene--': '妨礙思念',
+        '--cutscene--': '--過場動畫---',
         'Aetheroplasm Production': '生成炸彈',
         'Aire Tam Storm': '綠寶石大爆炸',
         'Bit Storm': '浮游砲：圓形射擊',

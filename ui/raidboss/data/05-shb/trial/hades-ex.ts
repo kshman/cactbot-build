@@ -870,7 +870,6 @@ const triggerSet: TriggerSet<Data> = {
     },
     {
       'locale': 'tc',
-      'missingTranslations': true,
       'replaceSync': {
         'Aetherial Gaol': '乙太牢獄',
         'Arcane Font': '立體魔法陣',
@@ -914,23 +913,23 @@ const triggerSet: TriggerSet<Data> = {
         'Forked Lightning': '叉形閃電',
         'Gigantomachy': '巨人之戰',
         'Height Of Chaos': '混沌之巔',
-        'Magic Chakram/Spear': '魔法輪',
-        'Magic Spear/Chakram': '魔法矛',
+        'Magic Chakram/Spear': '魔法輪/矛',
+        'Magic Spear/Chakram': '魔法矛/輪',
         'Megiddo Flame': '米吉多火光',
         'Nether Blast': '幽冥衝擊',
-        // 'Purgation': '', // FIXME '冥王净化'
+        'Purgation': '冥王淨化',
         'Quake III': '大地槌',
         'Ravenous Assault': '貪婪突襲',
         'Shadow Flare': '暗影火光',
         'Shadow Spread': '暗影擴散',
-        // 'Stream': '', // FIXME '暗影流'
+        'Stream': '暗影流',
         'Titanomachy': '諸神之戰',
         'Universal Manipulation': '法則變更',
         'Wail Of The Lost': '逝者的哀嚎',
         'Comet': '隕星',
-        'Quadrastrike Tower': '四重強擊',
-        'Quadrastrike Bleed': '四重強擊',
-        // 'Quadrastrike(?! [^0-9])': '', // FIXME '四重强袭'
+        'Quadrastrike Tower': '四重強擊 塔',
+        'Quadrastrike Bleed': '四重強擊 流血',
+        'Quadrastrike(?! [^0-9])': '四重強擊',
       },
     },
     {

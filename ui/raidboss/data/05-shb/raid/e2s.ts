@@ -598,7 +598,6 @@ const triggerSet: TriggerSet<Data> = {
     },
     {
       'locale': 'tc',
-      'missingTranslations': true,
       'replaceSync': {
         'The Hand Of Erebos': '厄瑞玻斯的巨腕',
         'Voidwalker': '虛無行者',
@@ -617,7 +616,7 @@ const triggerSet: TriggerSet<Data> = {
         'Flare': '火光',
         'Guillotine/Cleaver?': '復仇連續劍',
         'Hell Wind': '地獄之風',
-        // 'Light/Dark Circles': '', // FIXME '黑白圈'
+        'Light/Dark Circles': '黑白圈',
         'Punishing Ray': '懲戒之光',
         'Quietus': '寂滅',
         'Shadoweye': '暗影之眼',

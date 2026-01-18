@@ -637,7 +637,6 @@ const triggerSet: TriggerSet<Data> = {
     },
     {
       'locale': 'tc',
-      'missingTranslations': true,
       'replaceSync': {
         'Bomb Boulder': '爆破岩石',
         'Titan(?! )': '泰坦',
@@ -653,7 +652,7 @@ const triggerSet: TriggerSet<Data> = {
         'Earthen Fury': '大地之怒',
         'Earthen Gauntlets': '大地之手甲',
         'Earthen Wheels(?!/)': '大地之車輪',
-        // 'Earthen Wheels/Gauntlets': '', // FIXME '大地之车轮/手甲'
+        'Earthen Wheels/Gauntlets': '大地之車輪/手甲',
         'Evil Earth': '邪土',
         'Force of the Land': '大地轟鳴',
         'Geocrush': '大地撞擊',
@@ -663,7 +662,7 @@ const triggerSet: TriggerSet<Data> = {
         'Orogenesis': '造山',
         'Plate Fracture': '岩盤粉碎',
         'Pulse of the Land': '大地之響',
-        // 'Right/Left Landslide': '', // FIXME '右/左地裂'
+        'Right/Left Landslide': '右/左地裂',
         'Rock Throw': '花崗岩牢獄',
         'Seismic Wave': '地震波',
         'Stonecrusher': '崩岩',

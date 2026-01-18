@@ -647,7 +647,6 @@ const triggerSet: TriggerSet<Data> = {
     },
     {
       'locale': 'tc',
-      'missingTranslations': true,
       'replaceSync': {
         'The Idol Of Darkness': '暗黑心象',
         'Unforgiven Idolatry': '未被寬恕的盲崇',
@@ -681,7 +680,7 @@ const triggerSet: TriggerSet<Data> = {
         'Unjoined Aspect': '屬性變動',
         'Words Of Unity': '強襲號令',
         'Words Of Entrapment': '包圍號令',
-        // 'White/Black Smoke': '', // FIXME '白光/黑暗之火'
+        'White/Black Smoke': '白光/黑暗之火',
         'Boundless Light': '白光激流',
         'Words Of Night': '夜襲號令',
         'False Dawn': '黎明機動',

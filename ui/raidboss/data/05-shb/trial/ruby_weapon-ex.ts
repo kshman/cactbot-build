@@ -767,7 +767,6 @@ const triggerSet: TriggerSet<Data> = {
     },
     {
       'locale': 'tc',
-      'missingTranslations': true,
       'replaceSync': {
         'The Ruby Weapon': '紅寶石武器',
         'Ruby Bit': '紅寶石浮游砲',
@@ -778,7 +777,7 @@ const triggerSet: TriggerSet<Data> = {
         'White Fury': '奈爾的憤怒',
       },
       'replaceText': {
-        // '--cutscene--': '', // FIXME '--过场动画--'
+        '--cutscene--': '--過場動畫--',
         'Optimized Ultima': '魔導究極',
         'Magitek Bit': '浮游砲射出',
         'Flexiclaw': '潛地爪',
@@ -795,14 +794,14 @@ const triggerSet: TriggerSet<Data> = {
         'Ruby Dynamics': '紅寶石電圈',
         'High-Powered Homing Lasers': '高功率誘導射線',
         'Cut And Run': '利爪突進',
-        // '(?<! )Homing Lasers': '', // FIXME '诱导射线'
+        '(?<! )Homing Lasers': '誘導射線',
         'Magitek Charge': '魔導炸彈',
         'Meteor Project': '隕石計畫',
         'Negative Personae': '消極人格',
         'Meteor Stream': '隕石流',
         'Greater Memory': '記憶增幅',
-        // 'Chariot': '', // FIXME '钢铁'
-        // 'Dynamo': '', // FIXME '月环'
+        'Chariot': '鋼鐵',
+        'Dynamo': '月環',
         'Negative Affect': '消極情感',
         'Ruby Claw x5': '紅寶石之爪',
         'Change Of Heart': '感情變化',
@@ -814,7 +813,7 @@ const triggerSet: TriggerSet<Data> = {
         'Burst x8': '爆炸',
         'Magitek Meteor': '魔導隕石',
         'Mark II Magitek Comet': '魔導隕星II',
-        // 'Tank Comets': '', // FIXME '坦克彗星'
+        'Tank Comets': '坦克隕星',
         'Bradamante': '布拉達曼特',
         'Outrage': '震怒',
       },

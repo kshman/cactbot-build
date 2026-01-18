@@ -220,7 +220,6 @@ const triggerSet: TriggerSet<Data> = {
     },
     {
       'locale': 'tc',
-      'missingTranslations': true,
       'replaceSync': {
         'The First Beast': '第一之獸',
         'The Face of the Beast': '災獸之面',
@@ -234,7 +233,7 @@ const triggerSet: TriggerSet<Data> = {
         'The Third Doom': '第三之災難',
       },
       'replaceText': {
-        // 'Adds': '', // FIXME '小怪'
+        'Adds': '小怪',
         'The Final Sky': '末日流星',
         'The Falling Sky': '災厄流星',
         'The Burning Sky': '災變流星',

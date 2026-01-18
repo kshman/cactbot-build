@@ -1092,7 +1092,6 @@ const triggerSet: TriggerSet<Data> = {
     },
     {
       'locale': 'tc',
-      'missingTranslations': true,
       'replaceSync': {
         '2P-Operated Flight Unit': '2P：裝備飛行裝置',
         'Beyond': '塔頂',
@@ -1119,7 +1118,7 @@ const triggerSet: TriggerSet<Data> = {
         'Hansel & Gretel': '韓塞爾與格雷特',
       },
       'replaceText': {
-        // '--targetable\\?--': '', // FIXME '--可选中?--'
+        '--targetable\\?--': '--可選中?--',
         'Black Dissonance': '侵蝕：黑',
         '(?<!Tandem Assault: )Bloody Sweep': '橫掃',
         '(?<!Tandem Assault: )Breakthrough': '重突進',

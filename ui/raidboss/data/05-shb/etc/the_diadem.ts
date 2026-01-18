@@ -82,7 +82,9 @@ const triggerSet: TriggerSet<Data> = {
     {
       'locale': 'tc',
       'missingTranslations': true,
-      'replaceSync': {},
+      'replaceSync': {
+        'The Diadem': '雲冠群島',
+      },
     },
     {
       'locale': 'ko',

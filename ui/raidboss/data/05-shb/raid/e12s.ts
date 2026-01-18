@@ -2011,7 +2011,6 @@ const triggerSet: TriggerSet<Data> = {
     },
     {
       'locale': 'tc',
-      'missingTranslations': true,
       'replaceSync': {
         'Beastly Sculpture': '被創造的獅子',
         'Bomb Boulder': '爆破岩石',
@@ -2034,9 +2033,9 @@ const triggerSet: TriggerSet<Data> = {
         'Dark Aero III': '黑暗大勁風',
         'Dark Current': '黑暗奔流',
         '(?<! )Dark Eruption(?! )': '暗炎噴發',
-        // 'Dark Eruption / Dark Water III': '', // FIXME '暗炎喷发/黑暗狂水'
+        'Dark Eruption / Dark Water III': '暗炎噴發/黑暗大水花',
         'Dark Fire III': '黑暗大火焰',
-        // 'Dark Water III / Dark Eruption': '', // FIXME '黑暗狂水/暗炎喷发'
+        'Dark Water III / Dark Eruption': '黑暗大水花/暗炎噴發',
         '(?<! )Dark Water III(?! )': '黑暗大水花',
         'Darkest Dance': '暗夜舞蹈',
         'Diamond Dust': '鑽石星塵',

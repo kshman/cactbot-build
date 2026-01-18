@@ -306,7 +306,6 @@ const triggerSet: TriggerSet<Data> = {
     },
     {
       'locale': 'tc',
-      'missingTranslations': true,
       'replaceSync': {
         'Titania': '緹坦妮雅',
         'Puck': '派克',
@@ -330,7 +329,7 @@ const triggerSet: TriggerSet<Data> = {
         'Love-In-Idleness': '愛懶花',
         'Midsummer Night\'s Dream': '仲夏夜之夢',
         'Mist Rune': '水之符文',
-        // '(?<! )Pease(?!\\w)': '', // FIXME '(?<! )爆炸(?!\\w)'
+        '(?<! )Pease(?!\\w)': '豌豆爆炸',
         'Peasebomb': '豌豆炸彈',
         'Phantom Rune': '幻之符文',
         'Puck\'s Breath': '派克的吐息',

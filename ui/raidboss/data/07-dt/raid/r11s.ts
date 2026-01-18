@@ -36,6 +36,7 @@ export interface Data extends RaidbossData {
     horizCount: number;
     outerSafe: DirectionOutputCardinal[];
   };
+  maelstromCount: number;
   hasMeteor: boolean;
   fireballCount: number;
   hasAtomic: boolean;
@@ -244,6 +245,7 @@ const triggerSet: TriggerSet<Data> = {
       vertCount: 0,
       outerSafe: ['dirN', 'dirE', 'dirS', 'dirW'],
     },
+    maelstromCount: 0,
     hasMeteor: false,
     fireballCount: 0,
     hasAtomic: false,
@@ -256,6 +258,8 @@ const triggerSet: TriggerSet<Data> = {
   timelineTriggers: [
     {
       id: 'R11S Void Stardust End',
+      // The second set of Crushing Comet/Comet does not have a related startsUsing cast
+      // Timing is on the last Assault Evolved
       regex: /^Crushing Comet/,
       beforeSeconds: 11.1,
       suppressSeconds: 3,
@@ -275,19 +279,6 @@ const triggerSet: TriggerSet<Data> = {
           en: 'Bait 3x Puddles => Spread',
           ja: 'AOE誘導 x3 🔜 散開',
           ko: '장판 유도 x3 🔜 흩어져요',
-        },
-      },
-    },
-    {
-      id: 'R11S Powerful Gust',
-      regex: /Powerful Gust/,
-      beforeSeconds: 6.3,
-      alertText: (_data, _matches, output) => output.text!(),
-      outputStrings: {
-        text: {
-          en: 'Bait Gust',
-          ja: '風誘導',
-          ko: '돌풍 꼬깔 유도해요!',
         },
       },
     },
@@ -387,10 +378,32 @@ const triggerSet: TriggerSet<Data> = {
         const mechanic = matches.param1 === '11D1'
           ? 'healerGroups'
           : (matches.param1 === '11D2' ? 'stack' : 'protean');
+        if (data.weaponMechCount === 7)
+          return output.mechanicThenBait!({ mech: output[mechanic]!(), bait: output.bait!() });
+        if (data.weaponMechCount > 3)
+          return output.mechanicThenMove!({ mech: output[mechanic]!(), move: output.move!() });
         return output[mechanic]!();
       },
       run: (data) => data.weaponMechCount++,
-      outputStrings: trophyStrings,
+      outputStrings: {
+        ...trophyStrings,
+        move: Outputs.moveAway,
+        bait: {
+          en: 'Bait Gust',
+          ja: '風誘導',
+          ko: '돌풍 꼬깔 유도해요!',
+        },
+        mechanicThenMove: {
+          en: '${mech} => ${move}',
+          ja: '${mech} 🔜 ${move}',
+          ko: '${mech} 🔜 ${move}',
+        },
+        mechanicThenBait: {
+          en: '${mech} => ${bait}',
+          ja: '${mech} 🔜 ${bait}',
+          ko: '${mech} 🔜 ${bait}',
+        },
+      },
     },
     {
       id: 'R11S Trophy Weapons',
@@ -604,6 +617,33 @@ const triggerSet: TriggerSet<Data> = {
       type: 'StartsUsing',
       netRegex: { id: 'B425', source: 'The Tyrant', capture: false },
       response: Responses.hpTo1Aoe(),
+    },
+    {
+      id: 'R11S Maelstrom Count',
+      type: 'AddedCombatant',
+      netRegex: { name: 'Maelstrom', capture: false },
+      run: (data) => data.maelstromCount = data.maelstromCount + 1,
+    },
+    {
+      id: 'R11S Maelstrom 3 Reminder',
+      type: 'AddedCombatant',
+      netRegex: { name: 'Maelstrom', capture: false },
+      condition: (data) => data.maelstromCount === 3,
+      response: Responses.moveAway(),
+    },
+    {
+      id: 'R11S Powerful Gust Reminder',
+      type: 'AddedCombatant',
+      netRegex: { name: 'Maelstrom', capture: false },
+      condition: (data) => data.maelstromCount === 4,
+      infoText: (_data, _matches, output) => output.bait!(),
+      outputStrings: {
+        bait: {
+          en: 'Bait Gust',
+          ja: '風誘導',
+          ko: '돌풍 꼬깔 유도해요!',
+        },
+      },
     },
     {
       id: 'R11S One and Only',

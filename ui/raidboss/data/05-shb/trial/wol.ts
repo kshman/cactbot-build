@@ -488,7 +488,6 @@ const triggerSet: TriggerSet<Data> = {
     },
     {
       'locale': 'tc',
-      'missingTranslations': true,
       'replaceSync': {
         'Spectral Bard': '幻光吟遊詩人',
         'Spectral Black Mage': '幻光黑魔道士',
@@ -501,10 +500,10 @@ const triggerSet: TriggerSet<Data> = {
         'Wyrm Of Light': '光之真龍',
       },
       'replaceText': {
-        // '--active time event--': '', // FIXME '--XJB按--'
+        '--active time event--': '--按按鈕!--',
         'Absolute Blizzard III': '絕對大暴雪',
         'Absolute Fire III': '絕對大火焰',
-        // 'Absolute Fire/Blizzard': '', // FIXME '绝对爆炎/绝对冰封'
+        'Absolute Fire/Blizzard': '絕對大火焰/絕對大暴雪',
         'Absolute Holy': '絕對神聖',
         'Absolute Teleport': '絕對傳送',
         'Ascendance': '生辰星位',
@@ -515,7 +514,7 @@ const triggerSet: TriggerSet<Data> = {
         'Elddragon Dive': '遠古龍炎衝',
         'Flare Breath': '火光吐息',
         'Imbued Coruscance': '魔法劍技·光明利劍',
-        // 'Imbued Fire/Blizzard': '', // FIXME '魔法剑·绝对爆炎/绝对冰封'
+        'Imbued Fire/Blizzard': '魔法劍·絕對大火焰/絕對大暴雪',
         'Katon: San': '三式火遁之術',
         'Meteor Impact': '隕石衝擊',
         'Perfect Decimation': '完美地毀人亡',

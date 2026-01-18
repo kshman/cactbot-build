@@ -268,14 +268,13 @@ const triggerSet: TriggerSet<Data> = {
     },
     {
       'locale': 'tc',
-      'missingTranslations': true,
       'replaceSync': {
         'Articulated Bit': '飛手浮游砲',
         'The Diamond Weapon': '鑽石武器',
       },
       'replaceText': {
-        // '\\(Jump\\)': '', // FIXME '(跳)'
-        // '\\(Cleave\\)': '', // FIXME '(冲锋)'
+        '\\(Jump\\)': '(跳)',
+        '\\(Cleave\\)': '(衝鋒)',
         'Adamant Purge': '裝甲展開',
         'Adamant Sphere': '鑽石球',
         'Aetherial Bullet': '乙太砲',

@@ -3206,7 +3206,6 @@ const triggerSet: TriggerSet<Data> = {
     },
     {
       'locale': 'tc',
-      'missingTranslations': true,
       'replaceSync': {
         '(?<!Crowned )Marchosias': '馬可西亞斯',
         'Aetherial Bolt': '魔彈',
@@ -3253,18 +3252,18 @@ const triggerSet: TriggerSet<Data> = {
         'Trinity Avowed': '誓約之三位一體',
         'Trinity Seeker': '求道之三位一體',
         'Viscous Clot': '黏液凝塊',
-        // 'Why\\.\\.\\.won\'t\\.\\.\\.you\\.\\.\\.': '', // FIXME '呜哦哦哦哦…… 难道会……输掉吗……'
+        'Why\\.\\.\\.won\'t\\.\\.\\.you\\.\\.\\.': '嗚哦哦哦哦…… 難道會……輸掉嗎……',
       },
       'replaceText': {
         '(?<!C)Rush': '突進',
         '(?<!Inescapable )Entrapment': '設置陷阱',
-        // '--Spite Check--': '', // FIXME '--斗气波--'
-        // '--adds--': '', // FIXME '--小怪--'
-        // '--bleed--': '', // FIXME '--出血--'
-        // '--chains--': '', // FIXME '--锁链--'
-        // '--stunned--': '', // FIXME '--眩晕--'
-        // '--tethers--': '', // FIXME '--连线--'
-        // '--unstunned--': '', // FIXME '--眩晕结束--'
+        '--Spite Check--': '--鬥氣波--',
+        '--adds--': '--小怪--',
+        '--bleed--': '--出血--',
+        '--chains--': '--鎖鏈--',
+        '--stunned--': '--眩暈--',
+        '--tethers--': '--連線--',
+        '--unstunned--': '--眩暈結束--',
         '1111-Tonze Swing': '千百十一噸迴轉',
         'Above Board': '浮游波',
         'Act Of Mercy': '破天慈刃風',
