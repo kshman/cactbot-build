@@ -40,7 +40,7 @@ export default {
   hpTo1Aoe: {
     en: 'HP to 1',
     ja: '体力１!',
-    ko: 'HP 1',
+    ko: '체력이 1이 됐어요',
   },
   tankBuster: {
     en: 'Tank Buster',

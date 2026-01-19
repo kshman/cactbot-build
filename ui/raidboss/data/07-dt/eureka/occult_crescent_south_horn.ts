@@ -563,6 +563,11 @@ const triggerSet: TriggerSet<Data> = {
           'Waymark: Call the ABBA/FOE/CAFE Waymark of the safe spot.': 'waymark',
           'Both: Call both direction and waymark of the safe spot.': 'both',
         },
+        cn: {
+          '方向: 仅提示安全点八方方向。': 'direction',
+          '标点: 根据 ABBA/FOE/CAFE 坐标播报安全点。': 'waymark',
+          '全部: 同时播报安全点的方向和标点。': 'both',
+        },
       },
       default: 'direction',
     },
