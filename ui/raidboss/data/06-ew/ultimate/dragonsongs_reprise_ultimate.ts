@@ -3644,7 +3644,6 @@ const triggerSet: TriggerSet<Data> = {
     },
     {
       'locale': 'tc',
-      'missingTranslations': true,
       'replaceSync': {
         'Darkscale': '暗鱗黑龍',
         'Dragon-king Thordan': '龍威騎神托爾丹',
@@ -3768,7 +3767,7 @@ const triggerSet: TriggerSet<Data> = {
         'The Dragon\'s Gaze': '龍眼之邪',
         'The Dragon\'s Glory': '邪龍目光',
         'The Dragon\'s Rage': '邪龍魔炎',
-        // 'Tower': '', // FIXME '塔'
+        'Tower': '塔',
         'Touchdown': '空降',
         'Trinity': '三劍一體',
         'Twisting Dive': '旋風衝',
@@ -3901,7 +3900,7 @@ const triggerSet: TriggerSet<Data> = {
         'The Dragon\'s Gaze': '용의 마안',
         'The Dragon\'s Glory': '사룡의 눈빛',
         'The Dragon\'s Rage': '사룡의 마염',
-        'Tower': '타워',
+        'Tower': '기둥',
         'Touchdown': '착지',
         'Trinity': '삼위일체',
         'Twisting Dive': '회오리 강하',

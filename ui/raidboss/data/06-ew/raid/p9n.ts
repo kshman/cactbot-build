@@ -350,7 +350,6 @@ const triggerSet: TriggerSet<Data> = {
     },
     {
       'locale': 'tc',
-      'missingTranslations': true,
       'replaceSync': {
         'Comet': '隕星',
         'Fire Sphere': '烈火晶球',
@@ -358,11 +357,11 @@ const triggerSet: TriggerSet<Data> = {
         'Kokytos': '克邱特斯',
       },
       'replaceText': {
-        // '\\(Behemoth\\)': '', // FIXME '(野兽)'
-        // '\\(Fighter\\)': '', // FIXME '(武术家)'
-        // '\\(Mage\\)': '', // FIXME '(魔法师)'
-        // '\\(cast\\)': '', // FIXME '(咏唱)'
-        // '\\(resolve\\)': '', // FIXME '(判定)'
+        '\\(Behemoth\\)': '(野獸)',
+        '\\(Fighter\\)': '(武術家)',
+        '\\(Mage\\)': '(魔法師)',
+        '\\(cast\\)': '(詠唱)',
+        '\\(resolve\\)': '(判定)',
         'Archaic Demolish': '古式破碎拳',
         'Archaic Rockbreaker': '古式地烈勁',
         'Ascendant Fist': '穿升拳',

@@ -1486,14 +1486,13 @@ const triggerSet: TriggerSet<Data> = {
     },
     {
       'locale': 'tc',
-      'missingTranslations': true,
       'replaceSync': {
         'Hesperos': '赫斯珀洛斯',
       },
       'replaceText': {
-        // '--debuffs--': '', // FIXME '--Debuff--'
-        // '--element debuffs--': '', // FIXME '--元素Debuff--'
-        // '--role debuffs--': '', // FIXME '--职能Debuff--'
+        '--debuffs--': '--Debuff--',
+        '--element debuffs--': '--元素Debuff--',
+        '--role debuffs--': '--職能Debuff--',
         'Acid Pinax': '劇毒板畫',
         'Aetheric Chlamys': '乙太斗篷',
         'Akanthai: Act 1': '荊棘悲劇：序幕',

@@ -2977,7 +2977,6 @@ const triggerSet: TriggerSet<Data> = {
     },
     {
       'locale': 'tc',
-      'missingTranslations': true,
       'replaceSync': {
         '(?<!Illusory )Hephaistos': '赫淮斯托斯',
         'Gorgon': '戈爾貢',
@@ -2985,8 +2984,8 @@ const triggerSet: TriggerSet<Data> = {
         'Suneater': '炎靈蛇',
       },
       'replaceText': {
-        // 'line': '', // FIXME '直线'
-        // '--auto--': '', // FIXME '--平A--'
+        'line': '直線',
+        '--auto--': '--平A--',
         'Abyssal Fires': '火炎風暴',
         'Aionagonia': '永恆之苦',
         'Aioniopyr': '永恆之火',
@@ -3003,7 +3002,7 @@ const triggerSet: TriggerSet<Data> = {
         'Conceptual Tetraflare': '四分火光之念',
         'Creation on Command': '創造命令',
         'Crown of the Gorgon': '戈爾貢石光',
-        // 'Cthonic Vent': '', // FIXME '喷炎升蛇'
+        'Cthonic Vent': '噴炎升蛇',
         'Deconceptualize': '概念消除',
         'Dominion': '支配者的一擊',
         'Ego Death': '自我概念崩壞',
@@ -3047,7 +3046,7 @@ const triggerSet: TriggerSet<Data> = {
         'Stomp Dead': '致命踐踏',
         'Sun\'s Pinion': '炎之翼',
         'Sunforge': '創獸炎舞',
-        // '(?<! )Tetraflare': '', // FIXME '四分核爆之念'
+        '(?<! )Tetraflare': '四分火光',
         'Torch Flame': '灼炎',
         'Trailblaze': '踏火尋跡',
         'Twist Nature': '強制詠唱',

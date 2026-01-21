@@ -2066,11 +2066,10 @@ const triggerSet: TriggerSet<Data> = {
     },
     {
       'locale': 'tc',
-      'missingTranslations': true,
       'replaceSync': {
         'Aloalo Golem': '阿羅阿羅樹木魔像',
         'Aloalo Islekeeper': '阿羅阿羅守衛',
-        // 'Aloalo Kiwakin': '', // FIXME '阿罗阿罗奇瓦金'
+        'Aloalo Kiwakin': '阿羅阿羅奇窪金',
         'Aloalo Monk': '阿羅阿羅鬼魚',
         'Aloalo Ray': '阿羅阿羅鬼蝠魟',
         'Aloalo Snipper': '阿羅阿羅利螯陸蟹',
@@ -2093,8 +2092,8 @@ const triggerSet: TriggerSet<Data> = {
         'The Midnight Trial': '夜色的試煉',
       },
       'replaceText': {
-        // '\\(buff\\)': '', // FIXME '(强化)'
-        // '\\(cast\\)': '', // FIXME '(咏唱)'
+        '\\(buff\\)': '(強化)',
+        '\\(cast\\)': '(詠唱)',
         'Aero II': '中勁風',
         'Aero IV': '超勁風',
         'Analysis': '分析',
@@ -2112,7 +2111,7 @@ const triggerSet: TriggerSet<Data> = {
         'Burning Chains': '火焰鏈',
         'Burst': '爆炸',
         'Constructive Figure': '召喚人偶',
-        // 'Dartboard of Dancing Explosives': '', // FIXME '飞镖·炸弹·转转转'
+        'Dartboard of Dancing Explosives': '飛鏢·炸彈·轉轉轉',
         'Encroaching Twintides': '環浪連潮',
         'Explosive Theorem': '魔爆法',
         'Faerie Ring': '仙女環',

@@ -390,32 +390,34 @@ const triggerSet: TriggerSet<Data> = {
       id: 'Thaleia Oschon Piton Pull NE/SW',
       type: 'StartsUsing',
       netRegex: { id: '89A9', source: 'Oschon', capture: false },
-      alertText: (_data, _matches, output) =>
-        output.text!({ front: output.dirNE!(), back: output.dirSW!() }),
+      alertText: (_data, _matches, output) => {
+        return output.text!({ front: output.dirNE!(), back: output.dirSW!() });
+      },
       outputStrings: {
         text: {
           en: '${front} / ${back}',
           ja: '${front} / ${back}',
-          ko: '${front} ${back}',
+          ko: '${front} / ${back}',
         },
-        dirNE: Outputs.aimNE,
-        dirSW: Outputs.aimSW,
+        dirNE: Outputs.dirNE,
+        dirSW: Outputs.dirSW,
       },
     },
     {
       id: 'Thaleia Oschon Piton Pull NW/SE',
       type: 'StartsUsing',
       netRegex: { id: '89AA', source: 'Oschon', capture: false },
-      alertText: (_data, _matches, output) =>
-        output.text!({ front: output.dirNW!(), back: output.dirSE!() }),
+      alertText: (_data, _matches, output) => {
+        return output.text!({ front: output.dirNW!(), back: output.dirSE!() });
+      },
       outputStrings: {
         text: {
           en: '${front} / ${back}',
           ja: '${front} / ${back}',
-          ko: '${front} ${back}',
+          ko: '${front} / ${back}',
         },
-        dirNW: Outputs.aimNW,
-        dirSE: Outputs.aimSE,
+        dirNW: Outputs.dirNW,
+        dirSE: Outputs.dirSE,
       },
     },
     {
@@ -681,43 +683,7 @@ const triggerSet: TriggerSet<Data> = {
       type: 'StartsUsing',
       netRegex: { id: '8A2C', source: 'Eulogia', capture: false },
       durationSeconds: 18,
-      alertText: (_data, _matches, output) => output.text!(),
-      outputStrings: {
-        text: {
-          en: 'AoE',
-          ja: '連続全体攻撃',
-          ko: '지속적으로 전체 공격!',
-        },
-      },
-    },
-    // ---------------------------------------------------------------------
-    {
-      id: 'Thaleia 어듬이 Llymlaen Denizens of the Deep',
-      type: 'StartsUsing',
-      netRegex: { id: '8820', source: 'Llymlaen', capture: false },
-      durationSeconds: 8,
-      infoText: (_data, _matches, output) => output.text!(),
-      outputStrings: {
-        text: {
-          en: 'Serpents come out!',
-          ja: 'Serpents come out!',
-          ko: '뱀 나와요!',
-        },
-      },
-    },
-    {
-      id: 'Thaleia 어듬이 Oschon Arrow Trail',
-      type: 'StartsUsing',
-      netRegex: { id: '89B2', source: 'Oschon', capture: false },
-      durationSeconds: 10,
-      infoText: (_data, _matches, output) => output.text!(),
-      outputStrings: {
-        text: {
-          en: 'Avoid puddles!',
-          ja: 'Avoid puddles!',
-          ko: '연속 세로 장판, 피해요!',
-        },
-      },
+      response: Responses.aoe(),
     },
   ],
   timelineReplace: [
@@ -1136,7 +1102,6 @@ const triggerSet: TriggerSet<Data> = {
     },
     {
       'locale': 'tc',
-      'missingTranslations': true,
       'replaceSync': {
         'Eulogia': '歐羅基亞',
         'Llymlaen(?!\')': '利姆萊茵',
@@ -1217,7 +1182,7 @@ const triggerSet: TriggerSet<Data> = {
         'The Keeper\'s Gravity': '阿爾基克之重力',
         'The Lover\'s Devotion': '梅茵菲娜之慈愛',
         'The Matron\'s Plenty': '諾菲卡之豐饒',
-        // 'The Navigator\'s Command': '', // FIXME '莉姆莱茵之敕令'
+        'The Navigator\'s Command': '利姆萊茵之敕令',
         'The Scholar\'s Wisdom': '沙利亞克之靈慧',
         'The Spinner\'s Cunning': '妮美雅之精巧',
         'The Traders\' Equity': '納爾札爾之公正',

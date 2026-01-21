@@ -2933,7 +2933,6 @@ const triggerSet: TriggerSet<Data> = {
     },
     {
       'locale': 'tc',
-      'missingTranslations': true,
       'replaceSync': {
         'Ashigaru Kyuhei': '足輕弓兵',
         'Ball of Levin': '閃電球',
@@ -2954,8 +2953,8 @@ const triggerSet: TriggerSet<Data> = {
         'The Trial Of Wisdom': '智德的試煉',
       },
       'replaceText': {
-        // '\\(circles\\)': '', // FIXME '(圆圈)'
-        // '\\(lines\\)': '', // FIXME '(直线)'
+        '\\(circles\\)': '(圓圈)',
+        '\\(lines\\)': '(直線)',
         'Azure Auspice': '青帝劍氣',
         'Boundless Azure': '青帝空閃刃',
         'Boundless Scarlet': '赤帝空閃刃',

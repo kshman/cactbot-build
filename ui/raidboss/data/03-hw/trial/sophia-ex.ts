@@ -48,34 +48,22 @@ const callSafeDir = (callIndex: number, output: Output) => {
 const tiltOutputStrings = {
   goEastHardTilt: {
     en: 'Go East (Hard Tilt)',
-    de: 'Nach Osten gehen (starke Neigung)',
-    fr: 'Allez à l\'Est (Inclinaison forte)',
     ja: '東へ (大きい斜め)',
-    cn: '去右边（大倾斜）',
     ko: '동쪽으로 (크게 기울어요)',
   },
   goEastSoftTilt: {
     en: 'Go East (Soft Tilt)',
-    de: 'Nach Osten gehen (leichte Neigung)',
-    fr: 'Allez à l\'Est (Inclinaison faible)',
     ja: '東へ (小さい斜め)',
-    cn: '去右边（小倾斜）',
     ko: '동쪽으로 (작게 기울어요)',
   },
   goWestHardTilt: {
     en: 'Go West (Hard Tilt)',
-    de: 'Nach Westen gehen (starke Neigung)',
-    fr: 'Allez à l\'Ouest (Inclinaison forte)',
     ja: '西へ (大きい斜め)',
-    cn: '去左边（大倾斜）',
     ko: '서쪽으로 (크게 기울어요)',
   },
   goWestSoftTilt: {
     en: 'Go West (Soft Tilt)',
-    de: 'Nach Westen gehen (leichte Neigung)',
-    fr: 'Allez à l\'Ouest (Inclinaison faible)',
     ja: '西へ (小さい斜め)',
-    cn: '去左边（小倾斜）',
     ko: '서쪽으로 (작게 기울어요)',
   },
 };

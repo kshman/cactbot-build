@@ -320,13 +320,12 @@ const triggerSet: TriggerSet<Data> = {
     },
     {
       'locale': 'tc',
-      'missingTranslations': true,
       'replaceSync': {
         'Hesperos': '赫斯珀洛斯',
       },
       'replaceText': {
-        // '\\(cleave\\)': '', // FIXME '(扇形)'
-        // '\\(knockback\\)': '', // FIXME '(击退)'
+        '\\(cleave\\)': '(扇形)',
+        '\\(knockback\\)': '(擊退)',
         'Acid Pinax': '劇毒板畫',
         'Belone Bursts': '附魔佩羅涅·爆炸',
         'Belone Coils': '附魔佩羅涅·場地',

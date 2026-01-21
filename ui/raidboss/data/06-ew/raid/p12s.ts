@@ -4437,7 +4437,6 @@ const triggerSet: TriggerSet<Data> = {
     },
     {
       'locale': 'tc',
-      'missingTranslations': true,
       'replaceSync': {
         '(?<! )Athena': '雅典娜',
         'Anthropos': '人',
@@ -4450,22 +4449,22 @@ const triggerSet: TriggerSet<Data> = {
         'Thymou Idea': '激情理念',
       },
       'replaceText': {
-        // '\\(Floor Drop\\)': '', // FIXME '(地板坠落)'
-        // '\\(cast\\)': '', // FIXME '(咏唱)'
-        // '\\(enrage\\)': '', // FIXME '(狂暴)'
-        // '\\(proximity\\)': '', // FIXME '(距离衰减)'
-        // '\\(spread\\)': '', // FIXME '(分散)'
-        // '--tethers--': '', // FIXME '--连线--'
+        '\\(Floor Drop\\)': '(地板墜落)',
+        '\\(cast\\)': '(詠唱)',
+        '\\(enrage\\)': '(狂暴)',
+        '\\(proximity\\)': '(距離衰減)',
+        '\\(spread\\)': '(分散)',
+        '--tethers--': '--連線--',
         'Apodialogos': '遠距離對話',
         'Astral Advance': '星極進升',
         'Astral Advent': '星極臨',
         'Astral Glow': '星極熾光',
         'Astral Impact': '星擊',
-        // 'Buster': '', // FIXME '死刑'
+        'Buster': '死刑',
         'Caloric Theory': '熱質說',
         'Crush Helm': '星天爆擊打',
         'Demi Parhelion': '亞幻日',
-        // '(?<!(Apo|Peri))Dialogos': '', // FIXME '对话'
+        '(?<!(Apo|Peri))Dialogos': '對話',
         'Divine Excoriation': '神罰',
         'Dynamic Atmosphere': '衝風',
         'Ekpyrosis': '宇宙火劫',
@@ -4506,7 +4505,7 @@ const triggerSet: TriggerSet<Data> = {
         'Theos\'s Saltire': '神之交錯',
         'Theos\'s Ultima': '神之究極',
         'Trinity of Souls': '三魂一體',
-        // '(?<! )Ultima(?! (B|R))': '', // FIXME '究极'
+        '(?<! )Ultima(?! (B|R))': '最終究極',
         'Ultima Blade': '究極之刃',
         'Ultima Blow': '究極強擊',
         'Ultima Ray': '究極射線',

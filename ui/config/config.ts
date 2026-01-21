@@ -142,6 +142,11 @@ export const kPrefixToCategory = {
     ko: '황금의 유산 (7.x)',
     tc: '黃金遺產 (7.x)',
   },
+  '99-custom': {
+    en: 'Custom Developer Triggers',
+    ja: '開発者用カスタムトリガー',
+    ko: '개발용 사용자 지정 트리거',
+  },
   'user': {
     en: 'User Triggers',
     de: 'Benutzer Trigger',

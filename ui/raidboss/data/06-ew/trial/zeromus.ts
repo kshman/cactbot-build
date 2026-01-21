@@ -349,14 +349,13 @@ const triggerSet: TriggerSet<Data> = {
     },
     {
       'locale': 'tc',
-      'missingTranslations': true,
       'replaceSync': {
         'Comet': '隕星',
         'Zeromus': '澤羅姆斯',
       },
       'replaceText': {
-        // '\\(cast\\)': '', // FIXME '(咏唱)'
-        // '\\(proximity\\)': '', // FIXME '(距离衰减)'
+        '\\(cast\\)': '(詠唱)',
+        '\\(proximity\\)': '(距離衰減)',
         'Abyssal Echoes': '深淵回聲',
         'Abyssal Nox': '深淵之夜',
         'Big Bang': '宇宙大爆炸',

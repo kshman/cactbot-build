@@ -578,7 +578,6 @@ const triggerSet: TriggerSet<Data> = {
     },
     {
       'locale': 'tc',
-      'missingTranslations': true,
       'replaceSync': {
         'Erichthonios': '艾里克托尼奧斯',
       },
@@ -589,8 +588,8 @@ const triggerSet: TriggerSet<Data> = {
         'First Element': '魔力解放·火',
         'Fourfold Shackles': '結咒四連魔鎖',
         'Gaoler\'s Flail(?! [IO])': '懲罰抽擊',
-        // 'Gaoler\'s Flail In/Out': '', // FIXME '惩罚抽击 内/外'
-        // 'Gaoler\'s Flail Out/In': '', // FIXME '惩罚抽击 外/内'
+        'Gaoler\'s Flail In/Out': '懲罰抽擊 內/外',
+        'Gaoler\'s Flail Out/In': '懲罰抽擊 外/內',
         'Heavy Hand': '掌摑',
         'Inevitable Flame': '限時炎爆',
         'Inevitable Light': '限時光爆',

@@ -471,7 +471,6 @@ const triggerSet: TriggerSet<Data> = {
     },
     {
       'locale': 'tc',
-      'missingTranslations': true,
       'replaceSync': {
         'Gorgon': '戈爾貢',
         '(?<!Illusory )Hephaistos': '赫淮斯托斯',
@@ -481,7 +480,7 @@ const triggerSet: TriggerSet<Data> = {
       'replaceText': {
         'Abyssal Fires': '火炎風暴',
         'Blazing Footfalls': '熾熱踐踏',
-        // 'Cthonic Vent': '', // FIXME '喷炎升蛇'
+        'Cthonic Vent': '噴炎升蛇',
         'Ektothermos': '爆熱波動',
         'Flameviper': '炎蛇砲',
         'Fourfold Fires': '四重火炎風暴',

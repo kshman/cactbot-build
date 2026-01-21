@@ -1164,7 +1164,6 @@ const triggerSet: TriggerSet<Data> = {
     },
     {
       'locale': 'tc',
-      'missingTranslations': true,
       'replaceSync': {
         'Aetheric Charge': '魔力球',
         'Aloalo Ahool': '阿羅阿羅阿胡',
@@ -1198,7 +1197,7 @@ const triggerSet: TriggerSet<Data> = {
         'Zeal-blind Zozone': '糊塗蛋 佐佐涅',
       },
       'replaceText': {
-        // '--cleanse--': '', // FIXME '--解除--'
+        '--cleanse--': '--解除--',
         '4-tonze Weight': '4星噸',
         'Aero II': '中勁風',
         'Aero IV': '超勁風',

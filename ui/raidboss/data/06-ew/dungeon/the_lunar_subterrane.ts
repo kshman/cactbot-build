@@ -612,7 +612,6 @@ const triggerSet: TriggerSet<Data> = {
     },
     {
       'locale': 'tc',
-      'missingTranslations': true,
       'replaceSync': {
         'Aetheric Charge': '魔力球',
         'Damcyan Antlion': '達姆希安蟻獅',
@@ -625,8 +624,8 @@ const triggerSet: TriggerSet<Data> = {
         'The Cloven Crystal Square': '水晶廣場',
       },
       'replaceText': {
-        // '\\(cast\\)': '', // FIXME '(咏唱)'
-        // '\\(spread\\)': '', // FIXME '(分散)'
+        '\\(cast\\)': '(詠唱)',
+        '\\(spread\\)': '(分散)',
         'Abyssal Outburst': '黑暗爆發',
         'Antipodal Assault': '對蹠強刺',
         'Antlion March': '蟻獅行軍',

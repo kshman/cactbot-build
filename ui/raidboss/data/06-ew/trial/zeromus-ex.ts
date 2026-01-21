@@ -888,7 +888,6 @@ const triggerSet: TriggerSet<Data> = {
     },
     {
       'locale': 'tc',
-      'missingTranslations': true,
       'replaceSync': {
         'Comet': '隕星',
         'Toxic Bubble': '有毒瓦斯泡',
@@ -896,7 +895,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       'replaceText': {
         '--spread--': '宇宙大爆炸',
-        // '--towers--': '', // FIXME '--塔--'
+        '--towers--': '--塔--',
         'Abyssal Echoes': '深淵回聲',
         'Abyssal Nox': '深淵之夜',
         'Akh Rhai': '天光輪迴',
@@ -925,7 +924,7 @@ const triggerSet: TriggerSet<Data> = {
         'Sparking Flare': '火光火花',
         'The Dark Beckons': '黑暗侵蝕：重擊',
         'The Dark Divides': '黑暗侵蝕：飛散',
-        // 'Umbral Prism': '', // FIXME '暗之重波动'
+        'Umbral Prism': '暗之重波動',
         'Umbral Rays': '暗之波動',
         'Visceral Whirl': '旋骨利爪',
         'Void Bio': '虛空毒化',

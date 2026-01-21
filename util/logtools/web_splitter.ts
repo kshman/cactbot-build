@@ -362,7 +362,7 @@ const downloadFile = (output: string[], filename: string): void => {
 };
 
 const onLoaded = () => {
-  const lang = browserLanguagesToLang(navigator.languages);
+  const lang = browserLanguagesToLang();
 
   const table = getElement('fight-table');
   const fileDrop = getElement('filedrop');

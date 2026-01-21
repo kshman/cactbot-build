@@ -1089,7 +1089,6 @@ const triggerSet: TriggerSet<Data> = {
     },
     {
       'locale': 'tc',
-      'missingTranslations': true,
       'replaceSync': {
         'Hegemone': '赫革摩涅',
         'Parasitos': '寄生生物',
@@ -1111,7 +1110,7 @@ const triggerSet: TriggerSet<Data> = {
         'Pathogenic Cells': '軟體細胞流',
         'Polyominoid Sigma': '乙太方陣Σ',
         'Polyominous Dark IV': '多連方冥暗',
-        // '(?<!Dual )Predation': '', // FIXME '双击'
+        '(?<!Dual )Predation': '甲軟雙擊',
         'Ptera Ixou': '寄生之翼',
         'Reek Havoc': '噴氣',
         'Synergy': '協同',

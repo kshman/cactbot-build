@@ -287,12 +287,11 @@ const triggerSet: TriggerSet<Data> = {
     },
     {
       'locale': 'tc',
-      'missingTranslations': true,
       'replaceSync': {
         'Hippokampos': '馬頭魚尾怪',
       },
       'replaceText': {
-        // '\\(knockback\\)': '', // FIXME '(击退)'
+        '\\(knockback\\)': '(擊退)',
         'Coherence Flare': '連貫攻擊',
         'Coherence Line': '連貫攻擊',
         'Dissociation(?! Dive)': '分離',

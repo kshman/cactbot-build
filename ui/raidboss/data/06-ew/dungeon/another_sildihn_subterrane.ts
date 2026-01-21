@@ -2378,7 +2378,6 @@ const triggerSet: TriggerSet<Data> = {
     },
     {
       'locale': 'tc',
-      'missingTranslations': true,
       'replaceSync': {
         'Aqueduct Belladonna': '水道劇毒美人',
         'Aqueduct Dryad': '水道樹妖',
@@ -2426,7 +2425,7 @@ const triggerSet: TriggerSet<Data> = {
         'Fizzling Suds': '電氣泡泡',
         'Flash of Steel': '鬥士波動',
         'Fresh Puff': '創造絨球',
-        // 'Gold Flame': '', // FIXME '黄金闪火'
+        'Gold Flame': '黃金閃火',
         'Hateful Visage': '啟動咒像',
         'Infern Brand': '設置咒具',
         'Infern Ward': '咒具警陣',

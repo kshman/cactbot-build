@@ -1084,7 +1084,6 @@ const triggerSet: TriggerSet<Data> = {
     },
     {
       'locale': 'tc',
-      'missingTranslations': true,
       'replaceSync': {
         'Arcane Sigil': '秘紋',
         'Behemoth': '凶惡巨獸',
@@ -1101,7 +1100,7 @@ const triggerSet: TriggerSet<Data> = {
         'Astral Eclipse': '星蝕',
         'Astral Flow': '星極超流',
         'Esoteric Dyad': '神秘二分',
-        // 'Esoteric Pattern': '', // FIXME '秘纹图案'
+        'Esoteric Pattern': '秘紋圖案',
         '(?<!Triple )Esoteric Ray': '神秘光線',
         'Esoteric Sect': '神秘切割',
         'Esoterikos': '內紋',

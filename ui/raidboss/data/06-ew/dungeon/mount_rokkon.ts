@@ -1258,7 +1258,6 @@ const triggerSet: TriggerSet<Data> = {
     },
     {
       'locale': 'tc',
-      'missingTranslations': true,
       'replaceSync': {
         'Ancient Katana': '古刀',
         'Ashigaru Kyuhei': '足輕弓兵',
@@ -1287,7 +1286,7 @@ const triggerSet: TriggerSet<Data> = {
         'Yozakura the Fleeting': '花遁之夜櫻',
       },
       'replaceText': {
-        // '\\(cast\\)': '', // FIXME '(咏唱)'
+        '\\(cast\\)': '(詠唱)',
         'Art of the Fireblossom': '火花之術',
         'Art of the Fluff': '茸茸之術',
         'Art of the Windblossom': '風花之術',
@@ -1347,12 +1346,12 @@ const triggerSet: TriggerSet<Data> = {
         'Rousing Reincarnation': '變見的詛咒',
         'Rush': '突進',
         'Scarlet Auspice': '赤帝劍氣',
-        // 'Seal Marker': '', // FIXME '花印标记'
+        'Seal Marker': '花印標記',
         'Seal of Riotous Bloom': '花印齊放',
-        // 'Seal of the Blossom': '', // FIXME '花印开放'
+        'Seal of the Blossom': '花印開放',
         'Seal of the Fleeting': '花印之術',
-        // 'Season Indicator': '', // FIXME '四君子指示'
-        // 'Season of Element': '', // FIXME '四君子元素'
+        'Season Indicator': '四君子指示',
+        'Season of Element': '四君子元素',
         'Seasons of the Fleeting': '四君子之術',
         'Self-destruct': '自爆',
         'Shadowflight': '影襲',

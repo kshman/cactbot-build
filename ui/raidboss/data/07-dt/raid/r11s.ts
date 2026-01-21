@@ -2,7 +2,6 @@ import Autumn from '../../../../../resources/autumn';
 import Conditions from '../../../../../resources/conditions';
 import { UnreachableCode } from '../../../../../resources/not_reached';
 import Outputs from '../../../../../resources/outputs';
-import { callOverlayHandler } from '../../../../../resources/overlay_plugin_api';
 import { Responses } from '../../../../../resources/responses';
 import Util, { DirectionOutputCardinal, Directions } from '../../../../../resources/util';
 import ZoneId from '../../../../../resources/zone_id';
@@ -37,7 +36,6 @@ export interface Data extends RaidbossData {
   hasMeteor: boolean;
   fireballCount: number;
   hasAtomic: boolean;
-  meteowrathTetherDirNum?: number;
   heartbreakerCount: number;
   meteorCount: number;
   majesticTethers: string[];
@@ -47,7 +45,6 @@ export interface Data extends RaidbossData {
   atomicNorth?: boolean;
   fireballPosition?: string;
   hasStretchTether: boolean;
-  stampedeStyle?: 'static' | 'totan' | 'dxa';
 }
 
 const center = {
@@ -84,7 +81,7 @@ const trophyStrings = {
   healerGroups: {
     en: 'Healer Groups',
     ja: 'ヒラに頭割り',
-    ko: '칼:4:4',
+    ko: '칼:4-4',
   },
   stack: {
     en: 'Stack in Middle',
@@ -219,19 +216,19 @@ const triggerSet: TriggerSet<Data> = {
       type: 'select',
       options: {
         en: {
-          'Static': 'static',
-          'Totan v2': 'totan',
-          'DXA Method': 'dxa',
+          'Totan V3': 'static',
+          'Totan V2': 'totan',
+          'DXA': 'dxa',
         },
         ja: {
-          'とたんV3方式': 'static',
-          'とたんV2方式': 'totan',
-          'DXA方式': 'dxa',
+          'とたんV3': 'static',
+          'とたんV2': 'totan',
+          'DXA': 'dxa',
         },
         ko: {
-          '토탄V3 방식': 'static',
-          '토탄V2 방식': 'totan',
-          'DXA 방식': 'dxa',
+          '토탄V3': 'static',
+          '토탄V2': 'totan',
+          'DXA': 'dxa',
         },
       },
       default: 'static',
@@ -272,9 +269,6 @@ const triggerSet: TriggerSet<Data> = {
           throw new UnreachableCode();
 
         data.phase = phase;
-
-        data.stampedeStyle = data.triggerSetConfig.stampedeStyle;
-        data.stampedeStyle = 'static'; // 임시 고정
       },
     },
     {
@@ -522,11 +516,11 @@ const triggerSet: TriggerSet<Data> = {
       type: 'StartsUsing',
       netRegex: { id: ['B418', 'B419', 'B41A'], source: 'The Tyrant', capture: true },
       condition: (data) => {
-        if (data.voidStardust !== undefined) {
-          data.assaultEvolvedCount = data.assaultEvolvedCount + 1;
-          if (data.assaultEvolvedCount === 3)
-            return true;
-        }
+        if (data.voidStardust === undefined)
+          return false;
+        data.assaultEvolvedCount++;
+        if (data.assaultEvolvedCount === 3)
+          return true;
         return false;
       },
       delaySeconds: (_data, matches) => parseFloat(matches.castTime),
@@ -560,33 +554,27 @@ const triggerSet: TriggerSet<Data> = {
         // Determine whether the AoE is orthogonal or diagonal
         // Discard diagonal headings, then count orthogonals.
         const headingDirNum = Directions.hdgTo8DirNum(parseFloat(matches.heading));
-        if (headingDirNum % 2 === 0) {
-          const isVert = headingDirNum % 4 === 0;
-          const isHoriz = headingDirNum % 4 === 2;
-          if (isVert) {
-            data.domDirectionCount.vertCount += 1;
-            if (parseFloat(matches.x) < center.x - 5)
-              data.domDirectionCount.outerSafe = data.domDirectionCount.outerSafe.filter((dir) =>
-                dir !== 'dirW'
-              );
-            else if (parseFloat(matches.x) > center.x + 5)
-              data.domDirectionCount.outerSafe = data.domDirectionCount.outerSafe.filter((dir) =>
-                dir !== 'dirE'
-              );
-          } else if (isHoriz) {
-            data.domDirectionCount.horizCount += 1;
-            if (parseFloat(matches.y) < center.y - 5)
-              data.domDirectionCount.outerSafe = data.domDirectionCount.outerSafe.filter((dir) =>
-                dir !== 'dirN'
-              );
-            else if (parseFloat(matches.y) > center.y + 5)
-              data.domDirectionCount.outerSafe = data.domDirectionCount.outerSafe.filter((dir) =>
-                dir !== 'dirS'
-              );
-          } else {
-            console.error(`Bad Domination heading data: ${matches.heading}`);
-          }
+        if (headingDirNum % 2 !== 0)
+          return;
+        const isVert = headingDirNum % 4 === 0;
+        let dangerDir: DirectionOutputCardinal | undefined = undefined;
+        if (isVert) {
+          data.domDirectionCount.vertCount += 1;
+          if (parseFloat(matches.x) < center.x - 5)
+            dangerDir = 'dirW';
+          else if (parseFloat(matches.x) > center.x + 5)
+            dangerDir = 'dirE';
+        } else {
+          data.domDirectionCount.horizCount += 1;
+          if (parseFloat(matches.y) < center.y - 5)
+            dangerDir = 'dirN';
+          else if (parseFloat(matches.y) > center.y + 5)
+            dangerDir = 'dirS';
         }
+        if (dangerDir !== undefined)
+          data.domDirectionCount.outerSafe = data.domDirectionCount.outerSafe.filter((dir) =>
+            dir !== dangerDir
+          );
       },
       infoText: (data, _matches, output) => {
         if (data.domDirectionCount.outerSafe.length !== 1)
@@ -1004,12 +992,16 @@ const triggerSet: TriggerSet<Data> = {
               : undefined;
             if (data.atomicNorth !== undefined) {
               if (data.atomicNorth) {
-                data.fireballPosition = data.stampedeStyle !== 'static' ? 'dirNW' : 'dirN';
+                data.fireballPosition = data.triggerSetConfig.stampedeStyle !== 'static'
+                  ? 'dirNW'
+                  : 'dirN';
                 if (meteorQuad === 'dirNE' || meteorQuad === 'dirSW')
                   return { alertText: output.dir!({ dir: output.nw!() }) };
                 return { alertText: output.dir!({ dir: output.ne!() }) };
               }
-              data.fireballPosition = data.stampedeStyle !== 'static' ? 'dirSE' : 'dirS';
+              data.fireballPosition = data.triggerSetConfig.stampedeStyle !== 'static'
+                ? 'dirSE'
+                : 'dirS';
               if (meteorQuad === 'dirNE' || meteorQuad === 'dirSW')
                 return { alertText: output.dir!({ dir: output.se!() }) };
               return { alertText: output.dir!({ dir: output.sw!() }) };
@@ -1035,7 +1027,7 @@ const triggerSet: TriggerSet<Data> = {
       durationSeconds: 4,
       suppressSeconds: 1,
       infoText: (data, _matches, output) => {
-        if (data.stampedeStyle === 'dxa') {
+        if (data.triggerSetConfig.stampedeStyle === 'dxa') {
           // DXA 스타일
           if (data.role === 'tank')
             return output.pillar!({ dir: data.moks === 'MT' ? output.right!() : output.left!() });
@@ -1056,7 +1048,10 @@ const triggerSet: TriggerSet<Data> = {
             data.fireballPosition = 'dirSW';
             return output.pillar!({ dir: output.left!() });
           }
-        } else if (data.stampedeStyle === 'totan' || data.stampedeStyle === 'static') {
+        } else if (
+          data.triggerSetConfig.stampedeStyle === 'totan' ||
+          data.triggerSetConfig.stampedeStyle === 'static'
+        ) {
           // 토탄V2/V3 스타일
           if (data.role === 'tank')
             return output.pillar!({ dir: data.moks === 'MT' ? output.right!() : output.left!() });
@@ -1073,10 +1068,14 @@ const triggerSet: TriggerSet<Data> = {
               return output.pillar!({ dir: dir });
             }
           } else if (data.moks === 'D1') {
-            data.fireballPosition = data.stampedeStyle === 'totan' ? 'dirNE' : 'dirN';
+            data.fireballPosition = data.triggerSetConfig.stampedeStyle === 'totan'
+              ? 'dirNE'
+              : 'dirN';
             return output.pillar!({ dir: output.right!() });
           } else if (data.moks === 'D2') {
-            data.fireballPosition = data.stampedeStyle === 'totan' ? 'dirSW' : 'dirS';
+            data.fireballPosition = data.triggerSetConfig.stampedeStyle === 'totan'
+              ? 'dirSW'
+              : 'dirS';
             return output.pillar!({ dir: output.left!() });
           } else if (data.moks === 'D3') {
             // D3은 H1이 없어야 오른쪽, 아니면 왼쪽
@@ -1117,34 +1116,19 @@ const triggerSet: TriggerSet<Data> = {
       type: 'Tether',
       netRegex: { id: [headMarkerData.closeTether, headMarkerData.farTether], capture: true },
       condition: (data, matches) => {
-        if (
-          data.me === matches.target &&
-          data.phase === 'ecliptic' &&
-          data.meteowrathTetherDirNum === undefined
-        )
+        if (data.me === matches.target && data.phase === 'ecliptic')
           return true;
         return false;
       },
       suppressSeconds: 99,
-      promise: async (data, matches) => {
-        const actors = (await callOverlayHandler({
-          call: 'getCombatants',
-          ids: [parseInt(matches.sourceId, 16)],
-        })).combatants;
-        const actor = actors[0];
-        if (actors.length !== 1 || actor === undefined) {
-          console.error(
-            `R11S Majestic Meteowrath Tethers: Wrong actor count ${actors.length}`,
-          );
+      infoText: (data, matches, output) => {
+        const actor = data.actorPositions[matches.sourceId];
+        if (actor === undefined)
           return;
-        }
+        const dirNum = Directions.xyTo8DirNum(actor.x, actor.y, center.x, center.y);
+        if (dirNum === undefined)
+          return;
 
-        const dirNum = Directions.xyTo8DirNum(actor.PosX, actor.PosY, center.x, center.y);
-        data.meteowrathTetherDirNum = dirNum;
-      },
-      infoText: (data, _matches, output) => {
-        if (data.meteowrathTetherDirNum === undefined)
-          return;
         type dirNumStretchMap = {
           [key: number]: string;
         };
@@ -1155,7 +1139,7 @@ const triggerSet: TriggerSet<Data> = {
           4: 'dirNE',
           6: 'dirSE',
         };
-        const stretchDir = stretchCW[data.meteowrathTetherDirNum];
+        const stretchDir = stretchCW[dirNum];
         if (stretchDir !== undefined)
           data.fireballPosition = stretchDir;
         data.hasStretchTether = true;
@@ -1178,8 +1162,10 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (data, _matches, output) => {
         const pos = data.fireballPosition;
         if (pos === undefined)
-          return data.stampedeStyle === 'static' ? output.nsWay!() : output.ewWay!();
-        if (data.stampedeStyle === 'static' && data.hasStretchTether) {
+          return data.triggerSetConfig.stampedeStyle === 'static'
+            ? output.nsWay!()
+            : output.ewWay!();
+        if (data.triggerSetConfig.stampedeStyle === 'static' && data.hasStretchTether) {
           const rotMap: { [key: string]: string } = {
             'dirSW': 'dirS',
             'dirNW': 'dirN',
@@ -1222,8 +1208,10 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (data, _matches, output) => {
         const pos = data.fireballPosition;
         if (pos === undefined)
-          return data.stampedeStyle === 'static' ? output.plusWay!() : output.crossWay!();
-        if (data.stampedeStyle === 'static') {
+          return data.triggerSetConfig.stampedeStyle === 'static'
+            ? output.plusWay!()
+            : output.crossWay!();
+        if (data.triggerSetConfig.stampedeStyle === 'static') {
           const rotMap: { [key: string]: string } = {
             'dirSW': 'dirW',
             'dirNW': 'dirN',
