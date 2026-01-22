@@ -113,15 +113,15 @@ const triggerSet: TriggerSet<Data> = {
       type: 'select',
       options: {
         en: {
-          'Static Callouts (Healer/Melee/Ranged)': 'static',
+          'Role Static (Healer>Melee>Ranged)': 'static',
           'Game 8 Style': 'game8',
         },
         ja: {
-          '固定（ヒーラー/近接/遠隔）': 'static',
+          'ロール固定（ヒーラー＞近接＞遠隔）': 'static',
           'Game 8 指定': 'game8',
         },
         ko: {
-          '고정 (힐러/근접/원거리)': 'static',
+          '역할 고정 (힐러＞근접＞원거리)': 'static',
           'Game 8 스타일': 'game8',
         },
       },

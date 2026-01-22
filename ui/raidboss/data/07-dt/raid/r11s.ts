@@ -10,10 +10,14 @@ import { TriggerSet } from '../../../../../types/trigger';
 
 type Phase = 'one' | 'arenaSplit' | 'ecliptic';
 
+type WeaponInfo = {
+  delay: number;
+  duration: number;
+};
+
 export interface Data extends RaidbossData {
   readonly triggerSetConfig: {
     trophyDisplay: 'full' | 'simple';
-    dominationStyle: 'none' | 'moks';
     stampedeStyle: 'static' | 'totan' | 'dxa';
   };
   phase: Phase;
@@ -77,11 +81,40 @@ const headMarkerData = {
   'farTether': '00F9',
 } as const;
 
+const ultimateTrophyWeaponsMap: (WeaponInfo | undefined)[] = [
+  undefined,
+  undefined,
+  {
+    delay: 0,
+    duration: 8.7,
+  },
+  {
+    delay: 4.7,
+    duration: 5.1,
+  },
+  {
+    delay: 5.8,
+    duration: 5.1,
+  },
+  {
+    delay: 6.9,
+    duration: 5.1,
+  },
+  {
+    delay: 8,
+    duration: 5.1,
+  },
+  {
+    delay: 9.1,
+    duration: 5.1,
+  },
+];
+
 const trophyStrings = {
   healerGroups: {
     en: 'Healer Groups',
     ja: 'ヒラに頭割り',
-    ko: '칼:4-4',
+    ko: '칼:44',
   },
   stack: {
     en: 'Stack in Middle',
@@ -181,30 +214,6 @@ const triggerSet: TriggerSet<Data> = {
         },
       },
       default: 'full',
-    },
-    {
-      id: 'dominationStyle',
-      name: {
-        en: 'Domination Safe Spot Style',
-        ja: '支配の踊り 安全地帯表示方法',
-        ko: '도미네이션 안전지대 표시 방법',
-      },
-      type: 'select',
-      options: {
-        en: {
-          'Just hint': 'none',
-          'Advise by your moks': 'moks',
-        },
-        ja: {
-          'ヒントのみ': 'none',
-          '自分のモクスでアドバイス': 'moks',
-        },
-        ko: {
-          '힌트만': 'none',
-          '자기 몫에 따라 조언': 'moks',
-        },
-      },
-      default: 'none',
     },
     {
       id: 'stampedeStyle',
@@ -327,21 +336,9 @@ const triggerSet: TriggerSet<Data> = {
       type: 'ActorControlExtra',
       netRegex: { category: '0197', param1: ['11D1', '11D2', '11D3'], capture: true },
       condition: (data) => data.weaponMechCount > 1,
-      delaySeconds: (data) => {
-        if (data.weaponMechCount > 2)
-          return 3.7;
-        return 0;
-      },
-      durationSeconds: (data) => {
-        if (data.weaponMechCount < 3)
-          return 8.7;
-        return 5;
-      },
-      countdownSeconds: (data) => {
-        if (data.weaponMechCount < 3)
-          return 8.7;
-        return 5;
-      },
+      delaySeconds: (data) => ultimateTrophyWeaponsMap[data.weaponMechCount]?.delay ?? 0,
+      durationSeconds: (data) => ultimateTrophyWeaponsMap[data.weaponMechCount]?.duration ?? 0,
+      countdownSeconds: (data) => ultimateTrophyWeaponsMap[data.weaponMechCount]?.duration ?? 0,
       infoText: (data, matches, output) => {
         if (data.triggerSetConfig.trophyDisplay === 'simple') {
           const simple = matches.param1 === '11D1'
@@ -352,10 +349,12 @@ const triggerSet: TriggerSet<Data> = {
         const mechanic = matches.param1 === '11D1'
           ? 'healerGroups'
           : (matches.param1 === '11D2' ? 'stack' : 'protean');
-        if (data.weaponMechCount === 7)
-          return output.mechanicThenBait!({ mech: output[mechanic]!() });
-        if (data.weaponMechCount > 3)
-          return output.mechanicThenMove!({ mech: output[mechanic]!() });
+        if (!data.options.AutumnOnly) {
+          if (data.weaponMechCount === 7)
+            return output.mechanicThenBait!({ mech: output[mechanic]!() });
+          if (data.weaponMechCount > 3)
+            return output.mechanicThenMove!({ mech: output[mechanic]!() });
+        }
         return output[mechanic]!();
       },
       run: (data) => data.weaponMechCount++,
@@ -363,8 +362,8 @@ const triggerSet: TriggerSet<Data> = {
         ...trophyStrings,
         mechanicThenMove: {
           en: '${mech} => Move',
-          ja: '${mech}', // 이동 제거, 지저분하다
-          ko: '${mech}', // 이동 제거, 마찬가지의 이유
+          ja: '${mech} 🔜 移動',
+          ko: '${mech} 🔜 이동',
         },
         mechanicThenBait: {
           en: '${mech} => Bait Gust',
@@ -1175,28 +1174,38 @@ const triggerSet: TriggerSet<Data> = {
           const npos = rotMap[pos] ?? pos;
           return output.wait!({ dir: output[npos]!() });
         }
+        if (data.triggerSetConfig.stampedeStyle === 'totan') {
+          const rotMap: { [key: string]: string } = {
+            'dirSW': 'dirW',
+            'dirNW': 'dirW',
+            'dirNE': 'dirE',
+            'dirSE': 'dirE',
+          };
+          const npos = rotMap[pos] ?? pos;
+          return output.twoWay!({ dir: output[npos]!() });
+        }
         return output.twoWay!({ dir: output[pos]!() });
       },
       outputStrings: {
         wait: {
           en: 'Wait, ${dir} Line Stack',
           ja: '隅み待機 (${dir})',
-          ko: '모서리 대기 (${dir}쪽)',
+          ko: '2웨이: 모서리 대기 (${dir}쪽)',
         },
         ewWay: {
           en: 'East/West Line Stack',
           ja: '東西一列頭割り',
-          ko: '동서로 한줄 뭉쳐요',
+          ko: '2웨이: 동서로 한줄 뭉쳐요',
         },
         nsWay: {
           en: 'North/South Line Stack',
           ja: '南北一列頭割り',
-          ko: '남북으로 한줄 뭉쳐요',
+          ko: '2웨이: 남북으로 한줄 뭉쳐요',
         },
         twoWay: {
           en: '${dir} Line Stack',
           ja: '${dir}で一列頭割り',
-          ko: '${dir}쪽 한줄 뭉쳐요',
+          ko: '2웨이: ${dir}쪽 한줄 뭉쳐요',
         },
         ...markerStrings,
       },
@@ -1233,27 +1242,27 @@ const triggerSet: TriggerSet<Data> = {
         wait: {
           en: 'Wait, ${dir} Line Stack',
           ja: '隅み待機 (${dir})',
-          ko: '모서리 대기 (${dir}쪽)',
+          ko: '4웨이: 모서리 대기 (${dir}쪽)',
         },
         crossWay: {
           en: 'Intercardinal Line Stack',
           ja: '斜めペア',
-          ko: '❌페어',
+          ko: '4웨이: ❌페어',
         },
         plusWay: {
           en: 'Cardinal Line Stack',
           ja: '十字ペア',
-          ko: '➕페어',
+          ko: '4웨이: ➕페어',
         },
         fourCrossWay: {
           en: '${dir} Intercardinal Line Stack',
           ja: '${dir}で斜めペア',
-          ko: '${dir}쪽 ❌페어',
+          ko: '4웨이: ${dir}쪽 ❌페어',
         },
         fourPlusWay: {
           en: '${dir} Cardinal Line Stack',
           ja: '${dir}で十字ペア',
-          ko: '${dir}쪽 ➕페어',
+          ko: '4웨이: ${dir}쪽 ➕페어',
         },
         ...markerStrings,
       },
