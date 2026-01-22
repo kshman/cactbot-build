@@ -26,6 +26,8 @@ export interface Data extends RaidbossData {
   myMitoticPhase?: string;
   hasRot: boolean;
   // Phase 2
+  // prt
+  mortals: string[];
 }
 
 const headMarkerData = {
@@ -68,6 +70,8 @@ const triggerSet: TriggerSet<Data> = {
     cellChainCount: 0,
     hasRot: false,
     // Phase 2
+    // prt
+    mortals: [],
   }),
   triggers: [
     {
@@ -81,6 +85,7 @@ const triggerSet: TriggerSet<Data> = {
           throw new UnreachableCode();
 
         data.phase = phase;
+        data.mortals = [];
       },
     },
     {
@@ -503,11 +508,11 @@ const triggerSet: TriggerSet<Data> = {
         ...Directions.outputStringsIntercardDir,
         innerBlobTower: {
           en: 'Blob Tower ${num} Inner ${dir} (later)',
-          ko: '(살덩이 타워 #${num} ${dir}안쪽)',
+          ko: '(나중에, 살덩이 타워 #${num} ${dir}안쪽)',
         },
         outerBlobTower: {
           en: 'Blob Tower ${num} Outer ${dir} (later)',
-          ko: '(살덩이 타워 #${num} ${dir}바깥)',
+          ko: '(나중에, 살덩이 타워 #${num} ${dir}바깥)',
         },
       },
     },
@@ -1067,7 +1072,7 @@ const triggerSet: TriggerSet<Data> = {
         },
         party: {
           en: 'Spread, Away from heads',
-          ko: '머리 먼 곳에서 흩어져요',
+          ko: '흩어져요 (머리와 먼 곳으로)',
         },
       },
     },
@@ -1243,6 +1248,18 @@ const triggerSet: TriggerSet<Data> = {
       type: 'StartsUsing',
       netRegex: { id: 'B520', source: 'Lindwurm', capture: true },
       response: Responses.tankCleave(),
+    },
+    // ////////////////////////////////
+    {
+      id: 'R12S Mortal Slayer',
+      type: 'AddedCombatant',
+      // 19200 보라 탱크용
+      // 19201 초록 힐딜용
+      netRegex: { name: 'Lindwurm', npcNameId: ['19200', '19201'], capture: true },
+      run: (data, matches) => {
+        // 일단 저장만
+        data.mortals.push(matches.npcNameId);
+      },
     },
   ],
   timelineReplace: [
