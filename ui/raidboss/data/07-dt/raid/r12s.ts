@@ -21,8 +21,8 @@ export interface Data extends RaidbossData {
   inLine: { [name: string]: number };
   blobTowerDirs: string[];
   fleshBondsCount: number;
+  skinsplitterCount: number;
   cellChainCount: number;
-  cellTowerCount: number;
   myMitoticPhase?: string;
   hasRot: boolean;
   // Phase 2
@@ -63,9 +63,9 @@ const triggerSet: TriggerSet<Data> = {
     // Phase 1
     inLine: {},
     blobTowerDirs: [],
+    skinsplitterCount: 0,
     fleshBondsCount: 0,
     cellChainCount: 0,
-    cellTowerCount: 0,
     hasRot: false,
     // Phase 2
   }),
@@ -163,33 +163,33 @@ const triggerSet: TriggerSet<Data> = {
         stackOnPlayer: Outputs.stackOnPlayer,
         frontCleave: {
           en: 'Front Cleave',
-          ja: '前方扇',
-          ko: '전방 쪼개기',
+          ja: '前方',
+          ko: '앞쪽',
         },
         rearCleave: {
           en: 'Rear Cleave',
-          ja: '後方扇',
-          ko: '후방 쪼개기',
+          ja: '後方',
+          ko: '뒷쪽',
         },
         leftCleave: {
           en: 'Left Cleave',
-          ja: '左半面へ攻撃',
-          ko: '왼쪽 쪼개기',
+          ja: '左方',
+          ko: '왼쪽',
         },
         rightCleave: {
           en: 'Right Cleave',
-          ja: '右半面へ攻撃',
-          ko: '오른쪽 쪼개기',
+          ja: '右方',
+          ko: '오른쪽',
         },
         baitThenStack: {
           en: 'Bait 4x Puddles => ${stack}',
           ja: 'AOE誘導 x4 🔜 ${stack}',
-          ko: '장판 유도 x4 🔜 ${stack}',
+          ko: '장판 x4 🔜 ${stack}',
         },
         baitThenStackCleave: {
           en: 'Bait 4x Puddles => ${stack} + ${cleave}',
-          ja: 'AOE誘導 x4 🔜 ${cleave} + ${stack}',
-          ko: '장판 유도 x4 🔜 ${cleave} + ${stack}',
+          ja: 'AOE誘導 x4 🔜 ${stack} (+${cleave})',
+          ko: '장판 x4 🔜 ${stack} (+${cleave})',
         },
       },
     },
@@ -213,33 +213,33 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         frontCleave: {
           en: 'Front Cleave',
-          ja: '前方扇',
-          ko: '전방 쪼개기',
+          ja: '前方',
+          ko: '앞쪽',
         },
         rearCleave: {
           en: 'Rear Cleave',
-          ja: '後方扇',
-          ko: '후방 쪼개기',
+          ja: '後方',
+          ko: '뒷쪽',
         },
         leftCleave: {
           en: 'Left Cleave',
-          ja: '左半面へ攻撃',
-          ko: '왼쪽 쪼개기',
+          ja: '左方',
+          ko: '왼쪽',
         },
         rightCleave: {
           en: 'Right Cleave',
-          ja: '右半面へ攻撃',
-          ko: '오른쪽 쪼개기',
+          ja: '右方',
+          ko: '오른쪽',
         },
         baitThenSpread: {
           en: 'Bait 4x Puddles => Spread',
           ja: 'AOE誘導 x4 🔜 散開',
-          ko: '장판 유도 x4 🔜 흩어져요',
+          ko: '장판 x4 🔜 흩어져요',
         },
         baitThenSpreadCleave: {
           en: 'Bait 4x Puddles => Spread + ${cleave}',
-          ja: 'AOE誘導 x4 🔜 散開 + ${cleave}',
-          ko: '장판 유도 x4 🔜 흩어져요 + ${cleave}',
+          ja: 'AOE誘導 x4 🔜 散開 (+${cleave})',
+          ko: '장판 x4 🔜 흩어져요 (+${cleave})',
         },
         spreadCurtain: {
           en: 'Spread Debuff on YOU',
@@ -357,36 +357,40 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         alpha1: {
           en: '1α: Wait for Tether 1',
+          ko: '1α: 줄 대기 #1',
         },
         alpha2: {
           en: '2α: Wait for Tether 2',
+          ko: '2α: 줄 대기 #2',
         },
         alpha3: {
           en: '3α: Blob Tower 1',
+          ko: '3α: 살덩이 타워 #1',
         },
         alpha4: {
           en: '4α: Blob Tower 2',
+          ko: '4α: 살덩이 타워 #2',
         },
         beta1: {
           en: '1β: Wait for Tether 1',
+          ko: '1β: 줄 대기 #1',
         },
         beta2: {
           en: '2β: Wait for Tether 2',
+          ko: '2β: 줄 대기 #2',
         },
         beta3: {
           en: '3β: Chain Tower 1',
+          ko: '3β: 연쇄 타워 #1',
         },
         beta4: {
           en: '4β: Chain Tower 2',
+          ko: '4β: 연쇄 타워 #2',
         },
         order: {
           en: '${num}',
-          de: '${num}',
-          fr: '${num}',
           ja: '${num}',
-          cn: '${num}',
           ko: '${num}',
-          tc: '${num}',
         },
         unknown: Outputs.unknown,
       },
@@ -499,9 +503,11 @@ const triggerSet: TriggerSet<Data> = {
         ...Directions.outputStringsIntercardDir,
         innerBlobTower: {
           en: 'Blob Tower ${num} Inner ${dir} (later)',
+          ko: '(살덩이 타워 #${num} ${dir}안쪽)',
         },
         outerBlobTower: {
           en: 'Blob Tower ${num} Outer ${dir} (later)',
+          ko: '(살덩이 타워 #${num} ${dir}바깥)',
         },
       },
     },
@@ -511,9 +517,24 @@ const triggerSet: TriggerSet<Data> = {
       // Delayed additionally to reduce overlap with alpha tower location calls
       type: 'Ability',
       netRegex: { id: 'B4B6', capture: false },
-      delaySeconds: 4, // 4s warning
+      delaySeconds: 3, // 5s warning
       suppressSeconds: 10,
       response: Responses.knockback(),
+    },
+    {
+      id: 'R12S Skinsplitter Counter',
+      // These occur every 5s
+      // Useful for blob tower tracking that happen 2s after
+      // 2: Tether 1
+      // 3: Tether 2 + Blob Tower 1
+      // 4: Tether 3 + Blob Tower 2
+      // 5: Tether 4 + Blob Tower 3
+      // 6: Blob Tower 4
+      // 7: Last time to exit
+      type: 'Ability',
+      netRegex: { id: 'B4BC', capture: false },
+      suppressSeconds: 1,
+      run: (data) => data.skinsplitterCount = data.skinsplitterCount + 1,
     },
     {
       id: 'R12S Cell Chain Counter',
@@ -563,24 +584,24 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         tether: {
           en: 'Tether ${num}',
-          de: 'Verbindung ${num}',
-          fr: 'Lien ${num}',
           ja: '線 ${num}',
-          cn: '线 ${num}',
-          ko: '선 ${num}',
-          tc: '線 ${num}',
+          ko: '줄 #${num}',
         },
         beta1Tower: {
           en: '${tether} => Chain Tower 3',
+          ko: '${tether} 🔜 연쇄 타워 #3',
         },
         beta2Tower: {
           en: '${tether} => Chain Tower 4',
+          ko: '${tether} 🔜 연쇄 타워 #4',
         },
         beta3Tower: {
           en: '${tether} => Chain Tower 1',
+          ko: '${tether} 🔜 연쇄 타워 #1',
         },
         beta4Tower: {
           en: '${tether} => Chain Tower 2',
+          ko: '${tether} 🔜 연쇄 타워 #2',
         },
       },
     },
@@ -621,66 +642,8 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         tower: {
           en: 'Get Chain Tower ${num}',
+          ko: '연쇄 타워 #${num} 밟아요',
         },
-      },
-    },
-    {
-      id: 'R12S Chain Tower Counter',
-      // Using B4B3 Roiling Mass to detect chain tower soak
-      // Also using B4B2 Unmitigated Explosion if missed tower
-      type: 'Ability',
-      netRegex: { id: ['B4B3', 'B4B2'], capture: false },
-      suppressSeconds: 1,
-      run: (data) => data.cellTowerCount = data.cellTowerCount + 1,
-    },
-    {
-      id: 'R12S Chain Tower Followup',
-      // Using B4B3 Roiling Mass to detect chain tower soak
-      // Beta player leaving early may get hit by alpha's chain break aoe
-      type: 'Ability',
-      netRegex: { id: 'B4B3', capture: true },
-      condition: (data, matches) => {
-        if (data.myFleshBonds === 'beta' && data.me === matches.target)
-          return true;
-        return false;
-      },
-      infoText: (data, _matches, output) => {
-        const mechanicNum = data.cellTowerCount;
-        const myNum = data.inLine[data.me];
-        if (myNum === undefined)
-          return;
-
-        type index = {
-          [key: number]: number;
-        };
-        const myNumToOrder: index = {
-          1: 3,
-          2: 4,
-          3: 1,
-          4: 2,
-        };
-
-        const myOrder = myNumToOrder[myNum];
-        if (myOrder === undefined)
-          return;
-
-        if (myOrder === mechanicNum) {
-          if (mechanicNum < 4)
-            return output.goIntoMiddle!();
-          return output.getOut!();
-        }
-      },
-      outputStrings: {
-        getOut: {
-          en: 'Get Out',
-          de: 'Raus da',
-          fr: 'Sortez',
-          ja: '外へ',
-          cn: '远离',
-          ko: '밖으로',
-          tc: '遠離',
-        },
-        goIntoMiddle: Outputs.goIntoMiddle,
       },
     },
     {
@@ -699,11 +662,12 @@ const triggerSet: TriggerSet<Data> = {
       },
       delaySeconds: (_data, matches) => {
         const duration = parseFloat(matches.duration);
-        if (duration > 35)
-          return 27;
-        return 34;
+        // The following gives 5s warning to take tower
+        if (duration > 37)
+          return 31; // Alpha4 Time
+        return 26; // Alpha3 Time
       },
-      infoText: (data, matches, output) => {
+      alertText: (data, matches, output) => {
         const duration = parseFloat(matches.duration);
         const dir = data.blobTowerDirs[duration > 40 ? 1 : 0];
         if (duration > 40) {
@@ -719,15 +683,19 @@ const triggerSet: TriggerSet<Data> = {
         ...Directions.outputStringsIntercardDir,
         alpha3: {
           en: 'Get Blob Tower 1',
+          ko: '살덩이 타워 #1 밟아요',
         },
         alpha4: {
           en: 'Get Blob Tower 2',
+          ko: '살덩이 타워 #2 밟아요',
         },
         alpha3Dir: {
-          en: 'Blob Tower 1 (Inner ${dir})',
+          en: 'Get Blob Tower 1 (Inner ${dir})',
+          ko: '살덩이 타워 #1 밟아요 (${dir}안쪽)',
         },
         alpha4Dir: {
-          en: 'Blob Tower 2 (Inner ${dir})',
+          en: 'Get Blob Tower 2 (Inner ${dir})',
+          ko: '살덩이 타워 #2 밟아요 (${dir}안쪽)',
         },
       },
     },
@@ -740,7 +708,7 @@ const triggerSet: TriggerSet<Data> = {
           return true;
         return false;
       },
-      infoText: (data, matches, output) => {
+      alertText: (data, matches, output) => {
         const myNum = data.inLine[data.me];
         const flesh = matches.effectId === '1291' ? 'alpha' : 'beta';
         if (flesh === 'alpha') {
@@ -791,34 +759,147 @@ const triggerSet: TriggerSet<Data> = {
         getTowers: Outputs.getTowers,
         alpha1: {
           en: '${chains} 1 + Blob Tower 3 (Outer)',
+          ko: '${chains} #1 + 살덩이 타워 #3 (바깥)',
         },
         alpha1Dir: {
           en: '${chains} 1 + Blob Tower 3 (Outer ${dir})',
+          ko: '${chains} #1 + 살덩이 타워 #3 (${dir}바깥)',
         },
         alpha2: {
           en: '${chains} 2 + Blob Tower 4 (Outer)',
+          ko: '${chains} #2 + 살덩이 타워 #4 (바깥)',
         },
         alpha2Dir: {
           en: '${chains} 2 + Blob Tower 4 (Outer ${dir})',
+          ko: '${chains} #2 + 살덩이 타워 #4 (${dir}바깥)',
         },
         alpha3: {
           en: '${chains} 3 + Get Out',
+          ko: '${chains} #3 + 바깥으로',
         },
         alpha4: {
           en: '${chains} 4 + Get Out',
+          ko: '${chains} #4 + 바깥으로',
         },
         beta1: {
           en: '${chains} 1 => Get Middle',
+          ko: '${chains} #1 🔜 가운데로',
         },
         beta2: {
           en: '${chains} 2 => Get Middle',
+          ko: '${chains} #2 🔜 가운데로',
         },
         beta3: {
           en: '${chains} 3 => Wait for last pair',
+          ko: '${chains} #3 🔜 마지막 페어 기다려요',
         },
         beta4: {
-          en: '${chains} 4 + Get Out',
+          en: '${chains} 4 => Get Out',
+          ko: '${chains} #4 🔜 바깥으로',
         },
+      },
+    },
+    {
+      id: 'R12S Chain Tower Followup',
+      // Using B4B3 Roiling Mass to detect chain tower soak
+      // Beta player leaving early may get hit by alpha's chain break aoe
+      type: 'Ability',
+      netRegex: { id: 'B4B3', capture: true },
+      condition: (data, matches) => {
+        if (data.myFleshBonds === 'beta' && data.me === matches.target)
+          return true;
+        return false;
+      },
+      infoText: (data, _matches, output) => {
+        // Possibly the count could be off if break late (giving damage and damage down)
+        // Ideal towers are soaked:
+        // Beta 1 at 5th Skinsplitter
+        // Beta 2 at 6th Skinsplitter
+        // Beta 3 at 3rd Skinsplitter
+        // Beta 4 at 4rth Skinsplitter
+        const mechanicNum = data.skinsplitterCount;
+        const myNum = data.inLine[data.me];
+        if (myNum === undefined) {
+          // This can be corrected by the player later
+          if (mechanicNum < 5)
+            return output.goIntoMiddle!();
+          return output.getOut!();
+        }
+
+        if (mechanicNum < 5) {
+          if (myNum === 1)
+            return output.beta1Middle!();
+          if (myNum === 2)
+            return output.beta2Middle!();
+          if (myNum === 3)
+            return output.beta3Middle!();
+          if (myNum === 4)
+            return output.beta4Middle!();
+        }
+        if (myNum === 1)
+          return output.beta1Out!();
+        if (myNum === 2)
+          return output.beta2Out!();
+        if (myNum === 3)
+          return output.beta3Out!();
+        if (myNum === 4)
+          return output.beta4Out!();
+      },
+      outputStrings: {
+        getOut: {
+          en: 'Get Out',
+          ja: '外へ',
+          ko: '바깥으로',
+        },
+        goIntoMiddle: Outputs.goIntoMiddle,
+        beta1Middle: Outputs.goIntoMiddle,
+        beta2Middle: Outputs.goIntoMiddle, // Should not happen under ideal situation
+        beta3Middle: Outputs.goIntoMiddle,
+        beta4Middle: Outputs.goIntoMiddle,
+        beta1Out: { // Should not happen under ideal situation
+          en: 'Get Out',
+          ja: '外へ',
+          ko: '바깥으로',
+        },
+        beta2Out: {
+          en: 'Get Out',
+          ja: '外へ',
+          ko: '바깥으로',
+        },
+        beta3Out: { // Should not happen under ideal situation
+          en: 'Get Out',
+          ja: '外へ',
+          ko: '바깥으로',
+        },
+        beta4Out: { // Should not happen under ideal situation
+          en: 'Get Out',
+          ja: '外へ',
+          ko: '바깥으로',
+        },
+      },
+    },
+    {
+      id: 'R12S Blob Tower Followup',
+      // Using B4B7 Roiling Mass to detect chain tower soak
+      // Alpha 3 and Alpha 4 get the inner towers before their chains
+      type: 'Ability',
+      netRegex: { id: 'B4B7', capture: true },
+      condition: (data, matches) => {
+        if (data.myFleshBonds === 'alpha' && data.me === matches.target)
+          return true;
+        return false;
+      },
+      infoText: (data, _matches, output) => {
+        const mechanicNum = data.skinsplitterCount;
+        const myNum = data.inLine[data.me];
+        if (myNum === undefined)
+          return;
+
+        if (myNum === mechanicNum)
+          return output.goIntoMiddle!();
+      },
+      outputStrings: {
+        goIntoMiddle: Outputs.goIntoMiddle,
       },
     },
     {
@@ -850,15 +931,19 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         frontTower: {
           en: 'Tower (S/SW)',
+          ko: '타워 (🡻남/🡿남서)',
         },
         rearTower: {
           en: 'Tower (N/NE)',
+          ko: '타워 (🡹북/🡽북동)',
         },
         leftTower: {
           en: 'Tower (E/SE)',
+          ko: '타워 (🡺동/🡾남동)',
         },
         rightTower: {
           en: 'Tower (W/NW)',
+          ko: '타워 (🡸서/🡼북서)',
         },
       },
     },
@@ -918,6 +1003,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Rotting Flesh on YOU',
+          ko: '내게 썩은 살덩이',
         },
       },
     },
@@ -926,7 +1012,7 @@ const triggerSet: TriggerSet<Data> = {
       type: 'GainsEffect',
       netRegex: { effectId: '129B', capture: true },
       condition: Conditions.targetIsYou(),
-      run: (data) => data.hasRot === true,
+      run: (data) => data.hasRot = true,
     },
     {
       id: 'R12S Ravenous Reach 2',
@@ -938,22 +1024,26 @@ const triggerSet: TriggerSet<Data> = {
       condition: (data) => data.phase === 'curtainCall',
       alertText: (data, matches, output) => {
         if (matches.id === 'B49A') {
-          return data.hasRot ? output.safeWest!() : output.getHitEast!();
+          return data.hasRot ? output.getHitEast!() : output.safeWest!();
         }
-        return data.hasRot ? output.safeEast!() : output.getHitWest!();
+        return data.hasRot ? output.getHitWest!() : output.safeEast!();
       },
       outputStrings: {
         getHitWest: {
-          en: 'Spread in West Breadth',
+          en: 'Spread in West Cleave',
+          ko: '서쪽 공간에서 흩어져요',
         },
         getHitEast: {
-          en: 'Spread in East Breadth',
+          en: 'Spread in East Cleave',
+          ko: '동쪽 공간에서 흩어져요',
         },
         safeEast: {
           en: 'Spread East',
+          ko: '동쪽에서 흩어져요',
         },
         safeWest: {
           en: 'Spread West',
+          ko: '서쪽에서 흩어져요',
         },
       },
     },
@@ -973,9 +1063,11 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         tank: {
           en: 'Bait Line AoE from heads',
+          ko: '머리 빔 유도',
         },
         party: {
           en: 'Spread, Away from heads',
+          ko: '머리 먼 곳에서 흩어져요',
         },
       },
     },
@@ -985,7 +1077,10 @@ const triggerSet: TriggerSet<Data> = {
       netRegex: { id: 'BEC0', source: 'Lindwurm', capture: false },
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
-        text: 'Bait 5x Puddles',
+        text: {
+          en: 'Bait 5x Puddles',
+          ko: '장판 유도 x5',
+        },
       },
     },
     {
@@ -1019,15 +1114,19 @@ const triggerSet: TriggerSet<Data> = {
         breakChains: Outputs.breakChains,
         safeSpots: {
           en: 'Avoid Blobs',
+          ko: '살덩이 피해요',
         },
         alphaChains: {
           en: '${chains} => ${safe}',
+          ko: '${chains} 🔜 ${safe}',
         },
         betaChains: {
           en: '${chains} => ${safe}',
+          ko: '${chains} 🔜 ${safe}',
         },
         unknownChains: {
           en: '${chains} => ${safe}',
+          ko: '${chains} 🔜 ${safe}',
         },
       },
     },
@@ -1093,11 +1192,12 @@ const triggerSet: TriggerSet<Data> = {
       type: 'Ability',
       netRegex: { id: 'B4CC', source: 'Lindwurm', capture: false },
       condition: (data) => data.phase === 'slaughtershed',
-      durationSeconds: 12,
+      durationSeconds: 15,
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
           en: 'Northwest: Knockback to Northeast',
+          ko: '🡼북서로: 넉백 받아 북동으로',
         },
       },
     },
@@ -1107,16 +1207,52 @@ const triggerSet: TriggerSet<Data> = {
       type: 'Ability',
       netRegex: { id: 'B4CE', source: 'Lindwurm', capture: false },
       condition: (data) => data.phase === 'slaughtershed',
-      durationSeconds: 12,
+      durationSeconds: 15,
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
           en: 'Northeast: Knockback to Northwest',
+          ko: '🡽북동으로: 넉백 받아 북서로',
         },
       },
     },
+    {
+      id: 'R12S Refreshing Overkill',
+      // 10s castTime that could end with enrage or raidwide
+      type: 'StartsUsing',
+      netRegex: { id: 'B538', source: 'Lindwurm', capture: true },
+      delaySeconds: (_data, matches) => parseFloat(matches.castTime) - 4,
+      durationSeconds: 4.7,
+      response: Responses.bigAoe('alert'),
+    },
+    // Phase 2
+    {
+      id: 'R12S Arcadia Aflame',
+      type: 'StartsUsing',
+      netRegex: { id: 'B528', source: 'Lindwurm', capture: false },
+      response: Responses.bigAoe('alert'),
+    },
+    {
+      id: 'R12S Snaking Kick',
+      type: 'StartsUsing',
+      netRegex: { id: 'B527', source: 'Lindwurm', capture: false },
+      response: Responses.getBehind(),
+    },
+    {
+      id: 'R12S Double Sobat',
+      type: 'StartsUsing',
+      netRegex: { id: 'B520', source: 'Lindwurm', capture: true },
+      response: Responses.tankCleave(),
+    },
   ],
-  timelineReplace: [],
+  timelineReplace: [
+    {
+      'locale': 'ja',
+      'replaceSync': {
+        'Lindwurm': 'リンドブルム',
+      },
+    },
+  ],
 };
 
 export default triggerSet;
