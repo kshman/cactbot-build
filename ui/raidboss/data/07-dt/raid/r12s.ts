@@ -9,6 +9,11 @@ import { TriggerSet } from '../../../../../types/trigger';
 
 export type Phase = 'doorboss' | 'curtainCall' | 'slaughtershed' | 'two';
 
+type MortalInfo = {
+  purple: boolean;
+  left: boolean;
+};
+
 export interface Data extends RaidbossData {
   phase: Phase;
   // Phase 1
@@ -27,7 +32,9 @@ export interface Data extends RaidbossData {
   hasRot: boolean;
   // Phase 2
   // prt
-  mortals: string[];
+  mortalList: MortalInfo[];
+  mortalLeft: string[]; // 역할 이름 배열 (예: 'H1', 'D1', 'MT', 'ST')
+  mortalRight: string[]; // 역할 이름 배열 (예: 'H2', 'D2', 'D4', 'D3')
 }
 
 const headMarkerData = {
@@ -56,6 +63,14 @@ const phaseMap: { [id: string]: Phase } = {
   'B4C6': 'slaughtershed',
 };
 
+const dirAimStrings = {
+  dirNE: Outputs.aimNE,
+  dirSE: Outputs.aimSE,
+  dirSW: Outputs.aimSW,
+  dirNW: Outputs.aimNW,
+  unknown: Outputs.unknown,
+};
+
 const triggerSet: TriggerSet<Data> = {
   id: 'AacHeavyweightM4Savage',
   zoneId: ZoneId.AacHeavyweightM4Savage,
@@ -71,7 +86,9 @@ const triggerSet: TriggerSet<Data> = {
     hasRot: false,
     // Phase 2
     // prt
-    mortals: [],
+    mortalList: [],
+    mortalLeft: [],
+    mortalRight: [],
   }),
   triggers: [
     {
@@ -85,7 +102,6 @@ const triggerSet: TriggerSet<Data> = {
           throw new UnreachableCode();
 
         data.phase = phase;
-        data.mortals = [];
       },
     },
     {
@@ -140,41 +156,40 @@ const triggerSet: TriggerSet<Data> = {
           });
         }
 
-        const player = data.party.member(target);
         const isDPS = data.party.isDPS(target);
         if (isDPS && data.role === 'dps') {
           if (cleave === undefined)
             return output.baitThenStack!({
-              stack: output.stackOnPlayer!({ player: player }),
+              stack: output.stack!(),
             });
           return output.baitThenStackCleave!({
-            stack: output.stackOnPlayer!({ player: player }),
+            stack: output.stack!(),
             cleave: output[cleave]!(),
           });
         }
         if (!isDPS && data.role !== 'dps') {
           if (cleave === undefined)
             return output.baitThenStack!({
-              stack: output.stackOnPlayer!({ player: player }),
+              stack: output.stack!(),
             });
           return output.baitThenStackCleave!({
-            stack: output.stackOnPlayer!({ player: player }),
+            stack: output.stack!(),
             cleave: output[cleave]!(),
           });
         }
       },
       outputStrings: {
+        stack: Outputs.stacks,
         stackOnYou: Outputs.stackOnYou,
-        stackOnPlayer: Outputs.stackOnPlayer,
         frontCleave: {
           en: 'Front Cleave',
           ja: '前方',
-          ko: '앞쪽',
+          ko: '앞',
         },
         rearCleave: {
           en: 'Rear Cleave',
           ja: '後方',
-          ko: '뒷쪽',
+          ko: '뒤',
         },
         leftCleave: {
           en: 'Left Cleave',
@@ -193,8 +208,8 @@ const triggerSet: TriggerSet<Data> = {
         },
         baitThenStackCleave: {
           en: 'Bait 4x Puddles => ${stack} + ${cleave}',
-          ja: 'AOE誘導 x4 🔜 ${stack} (+${cleave})',
-          ko: '장판 x4 🔜 ${stack} (+${cleave})',
+          ja: 'AOE誘導 x4 🔜 ${stack} + ${cleave}扇',
+          ko: '장판 x4 🔜 ${stack} + ${cleave} 꼬깔',
         },
       },
     },
@@ -219,12 +234,12 @@ const triggerSet: TriggerSet<Data> = {
         frontCleave: {
           en: 'Front Cleave',
           ja: '前方',
-          ko: '앞쪽',
+          ko: '앞',
         },
         rearCleave: {
           en: 'Rear Cleave',
           ja: '後方',
-          ko: '뒷쪽',
+          ko: '뒤',
         },
         leftCleave: {
           en: 'Left Cleave',
@@ -243,8 +258,8 @@ const triggerSet: TriggerSet<Data> = {
         },
         baitThenSpreadCleave: {
           en: 'Bait 4x Puddles => Spread + ${cleave}',
-          ja: 'AOE誘導 x4 🔜 散開 (+${cleave})',
-          ko: '장판 x4 🔜 흩어져요 (+${cleave})',
+          ja: 'AOE誘導 x4 🔜 散開 + ${cleave}扇',
+          ko: '장판 x4 🔜 흩어져요 + ${cleave} 꼬깔',
         },
         spreadCurtain: {
           en: 'Spread Debuff on YOU',
@@ -262,11 +277,14 @@ const triggerSet: TriggerSet<Data> = {
       netRegex: { id: ['B49A', 'B49B'], source: 'Lindwurm', capture: true },
       condition: (data) => data.phase === 'doorboss',
       infoText: (_data, matches, output) => {
-        if (matches.id === 'B49A')
-          return output.goWest!();
-        return output.goEast!();
+        const dir = matches.id === 'B49A' ? output.goWest!() : output.goEast!();
+        return output.safe!({ dir: dir });
       },
       outputStrings: {
+        safe: {
+          en: '${dir} Safe',
+          ko: '안전: ${dir}',
+        },
         goEast: Outputs.east,
         goWest: Outputs.west,
       },
@@ -362,35 +380,35 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         alpha1: {
           en: '1α: Wait for Tether 1',
-          ko: '1α: 줄 대기 #1',
+          ko: '1α: 줄 #1',
         },
         alpha2: {
           en: '2α: Wait for Tether 2',
-          ko: '2α: 줄 대기 #2',
+          ko: '2α: 줄 #2',
         },
         alpha3: {
           en: '3α: Blob Tower 1',
-          ko: '3α: 살덩이 타워 #1',
+          ko: '3α: 살덩이 #1',
         },
         alpha4: {
           en: '4α: Blob Tower 2',
-          ko: '4α: 살덩이 타워 #2',
+          ko: '4α: 살덩이 #2',
         },
         beta1: {
           en: '1β: Wait for Tether 1',
-          ko: '1β: 줄 대기 #1',
+          ko: '1β: 줄 #1',
         },
         beta2: {
           en: '2β: Wait for Tether 2',
-          ko: '2β: 줄 대기 #2',
+          ko: '2β: 줄 #2',
         },
         beta3: {
           en: '3β: Chain Tower 1',
-          ko: '3β: 연쇄 타워 #1',
+          ko: '3β: 타워 #1',
         },
         beta4: {
           en: '4β: Chain Tower 2',
-          ko: '4β: 연쇄 타워 #2',
+          ko: '4β: 타워 #2',
         },
         order: {
           en: '${num}',
@@ -505,14 +523,14 @@ const triggerSet: TriggerSet<Data> = {
         return output.outerBlobTower!({ num: towerNum, dir: output[dir]!() });
       },
       outputStrings: {
-        ...Directions.outputStringsIntercardDir,
+        ...dirAimStrings,
         innerBlobTower: {
           en: 'Blob Tower ${num} Inner ${dir} (later)',
-          ko: '(나중에, 살덩이 타워 #${num} ${dir}안쪽)',
+          ko: '(나중에 살덩이 #${num}, 안쪽 ${dir})',
         },
         outerBlobTower: {
           en: 'Blob Tower ${num} Outer ${dir} (later)',
-          ko: '(나중에, 살덩이 타워 #${num} ${dir}바깥)',
+          ko: '(나중에 살덩이 #${num}, 바깥 ${dir})',
         },
       },
     },
@@ -594,19 +612,19 @@ const triggerSet: TriggerSet<Data> = {
         },
         beta1Tower: {
           en: '${tether} => Chain Tower 3',
-          ko: '${tether} 🔜 연쇄 타워 #3',
+          ko: '${tether} 🔜 타워 #3',
         },
         beta2Tower: {
           en: '${tether} => Chain Tower 4',
-          ko: '${tether} 🔜 연쇄 타워 #4',
+          ko: '${tether} 🔜 타워 #4',
         },
         beta3Tower: {
           en: '${tether} => Chain Tower 1',
-          ko: '${tether} 🔜 연쇄 타워 #1',
+          ko: '${tether} 🔜 타워 #1',
         },
         beta4Tower: {
           en: '${tether} => Chain Tower 2',
-          ko: '${tether} 🔜 연쇄 타워 #2',
+          ko: '${tether} 🔜 타워 #2',
         },
       },
     },
@@ -647,7 +665,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         tower: {
           en: 'Get Chain Tower ${num}',
-          ko: '연쇄 타워 #${num} 밟아요',
+          ko: '타워 #${num} 밟아요',
         },
       },
     },
@@ -685,22 +703,22 @@ const triggerSet: TriggerSet<Data> = {
         return output.alpha3!();
       },
       outputStrings: {
-        ...Directions.outputStringsIntercardDir,
+        ...dirAimStrings,
         alpha3: {
           en: 'Get Blob Tower 1',
-          ko: '살덩이 타워 #1 밟아요',
+          ko: '살덩이 #1 문대요',
         },
         alpha4: {
           en: 'Get Blob Tower 2',
-          ko: '살덩이 타워 #2 밟아요',
+          ko: '살덩이 #2 문대요',
         },
         alpha3Dir: {
           en: 'Get Blob Tower 1 (Inner ${dir})',
-          ko: '살덩이 타워 #1 밟아요 (${dir}안쪽)',
+          ko: '살덩이 #1 문대요 (안쪽 ${dir})',
         },
         alpha4Dir: {
           en: 'Get Blob Tower 2 (Inner ${dir})',
-          ko: '살덩이 타워 #2 밟아요 (${dir}안쪽)',
+          ko: '살덩이 #2 문대요 (안쪽 ${dir})',
         },
       },
     },
@@ -759,48 +777,48 @@ const triggerSet: TriggerSet<Data> = {
         return output.getTowers!();
       },
       outputStrings: {
-        ...Directions.outputStringsIntercardDir,
+        ...dirAimStrings,
         breakChains: Outputs.breakChains,
         getTowers: Outputs.getTowers,
         alpha1: {
           en: '${chains} 1 + Blob Tower 3 (Outer)',
-          ko: '${chains} #1 + 살덩이 타워 #3 (바깥)',
+          ko: '나가서 ${chains} #1 + 살덩이 #3',
         },
         alpha1Dir: {
           en: '${chains} 1 + Blob Tower 3 (Outer ${dir})',
-          ko: '${chains} #1 + 살덩이 타워 #3 (${dir}바깥)',
+          ko: '나가서 ${chains} #1 + 살덩이 #3 (${dir})',
         },
         alpha2: {
           en: '${chains} 2 + Blob Tower 4 (Outer)',
-          ko: '${chains} #2 + 살덩이 타워 #4 (바깥)',
+          ko: '나가서 ${chains} #2 + 살덩이 #4',
         },
         alpha2Dir: {
           en: '${chains} 2 + Blob Tower 4 (Outer ${dir})',
-          ko: '${chains} #2 + 살덩이 타워 #4 (${dir}바깥)',
+          ko: '나가서 ${chains} #2 + 살덩이 #4 (${dir})',
         },
         alpha3: {
           en: '${chains} 3 + Get Out',
-          ko: '${chains} #3 + 바깥으로',
+          ko: '나가서 ${chains} #3',
         },
         alpha4: {
           en: '${chains} 4 + Get Out',
-          ko: '${chains} #4 + 바깥으로',
+          ko: '나가서 ${chains} #4',
         },
         beta1: {
           en: '${chains} 1 => Get Middle',
-          ko: '${chains} #1 🔜 가운데로',
+          ko: '가운데서 ${chains} #1',
         },
         beta2: {
           en: '${chains} 2 => Get Middle',
-          ko: '${chains} #2 🔜 가운데로',
+          ko: '가운데서 ${chains} #2',
         },
         beta3: {
           en: '${chains} 3 => Wait for last pair',
-          ko: '${chains} #3 🔜 마지막 페어 기다려요',
+          ko: '마지막 페어 기다리면서 ${chains} #3',
         },
         beta4: {
           en: '${chains} 4 => Get Out',
-          ko: '${chains} #4 🔜 바깥으로',
+          ko: '나가서 ${chains} #4',
         },
       },
     },
@@ -1252,13 +1270,158 @@ const triggerSet: TriggerSet<Data> = {
     // ////////////////////////////////
     {
       id: 'R12S Mortal Slayer',
+      type: 'StartsUsing',
+      netRegex: { id: 'B495', source: 'Lindwurm', capture: false },
+      run: (data) => {
+        data.mortalList = [];
+        data.mortalLeft = [];
+        data.mortalRight = [];
+      },
+    },
+    {
+      id: 'R12S Mortal Slayer 모으기',
       type: 'AddedCombatant',
       // 19200 보라 탱크용
       // 19201 초록 힐딜용
-      netRegex: { name: 'Lindwurm', npcNameId: ['19200', '19201'], capture: true },
-      run: (data, matches) => {
-        // 일단 저장만
-        data.mortals.push(matches.npcNameId);
+      netRegex: { npcBaseId: ['19200', '19201'], capture: true },
+      condition: (data, matches) => {
+        // 구슬 모으기
+        const x = parseFloat(matches.x);
+        data.mortalList.push({ purple: matches.npcBaseId === '19200', left: x < center.x });
+        if (data.mortalList.length < 8)
+          return false;
+
+        // 연산
+        const totalPurples = data.mortalList.filter((m) => m.purple && m.left).length;
+        const baseLeft = ['H1', 'D1', 'D3', 'D4'];
+        const baseRight = ['H2', 'D2', 'D4', 'D3'];
+        let leftGreen = 0;
+        let rightGreen = 0;
+
+        if (totalPurples === 1) {
+          // 왼쪽, 오른쪽에 각각 보라 1개
+          for (const m of data.mortalList) {
+            if (m.left) {
+              // 왼쪽
+              if (m.purple)
+                data.mortalLeft.push('MT');
+              else {
+                data.mortalLeft.push(baseLeft[leftGreen]!);
+                leftGreen++;
+              }
+            } else {
+              // 오른쪽
+              if (m.purple)
+                data.mortalRight.push('ST');
+              else {
+                data.mortalRight.push(baseRight[rightGreen]!);
+                rightGreen++;
+              }
+            }
+          }
+        } else if (totalPurples === 2) {
+          // 왼쪽에 보라 2개
+          let leftPurple = 0;
+          for (const m of data.mortalList) {
+            if (m.left) {
+              // 왼쪽
+              if (m.purple) {
+                // 보라: MT, ST 순서대로
+                data.mortalLeft.push(leftPurple === 0 ? 'MT' : 'ST');
+                leftPurple++;
+              } else {
+                // 녹색: H1, D1 순서대로
+                data.mortalLeft.push(baseLeft[leftGreen]!);
+                leftGreen++;
+              }
+            } else {
+              // 오른쪽, 보라색은 없고 녹색 4개: H2, D2, D4, D3
+              data.mortalRight.push(baseRight[rightGreen]!);
+              rightGreen++;
+            }
+          }
+        } else {
+          // 오른쪽에 보라 2개
+          let rightPurple = 0;
+          for (const m of data.mortalList) {
+            if (m.left) {
+              // 왼쪽, 보라색은 없고 녹색 4개: H1, D1, D3, D4
+              data.mortalLeft.push(baseLeft[leftGreen]!);
+              leftGreen++;
+            } else {
+              // 오른쪽
+              if (m.purple) {
+                // 보라: ST, MT 순서대로
+                data.mortalRight.push(rightPurple === 0 ? 'ST' : 'MT');
+                rightPurple++;
+              } else {
+                // 녹색: H2, D2, D4, D3 순서대로
+                data.mortalRight.push(baseRight[rightGreen]!);
+                rightGreen++;
+              }
+            }
+          }
+        }
+        return true;
+      },
+      response: (data, _matches, output) => {
+        // cactbot-builtin-response
+        output.responseOutputStrings = {
+          left: {
+            en: 'Go left side of front',
+            ko: '내 차례: 🡸왼쪽으로',
+          },
+          right: {
+            en: 'Go right side of front',
+            ko: '내 차례: 🡺오른쪽으로',
+          },
+          text: {
+            en: 'Left: ${left} / Right: ${right}',
+            ko: '${left} 🡸 🡺 ${right}',
+          },
+          unknown: Outputs.unknown,
+        };
+        const left = data.mortalLeft.shift() ?? output.unknown!();
+        const right = data.mortalRight.shift() ?? output.unknown!();
+        if (left === data.moks)
+          return { alertText: output.left!() };
+        if (right === data.moks)
+          return { alertText: output.right!() };
+        return { infoText: output.text!({ left: left, right: right }) };
+      },
+    },
+    {
+      id: 'R12S Mortal Slayer 다음',
+      type: 'Ability',
+      // B496 녹색
+      // B498 보라
+      netRegex: { id: ['B496', 'B498'], source: 'Lindwurm', capture: false },
+      suppressSeconds: 1,
+      response: (data, _matches, output) => {
+        // cactbot-builtin-response
+        output.responseOutputStrings = {
+          left: {
+            en: 'Go left side of front',
+            ko: '내 차례: 🡸왼쪽으로',
+          },
+          right: {
+            en: 'Go right side of front',
+            ko: '내 차례: 🡺오른쪽으로',
+          },
+          text: {
+            en: 'Left: ${left} / Right: ${right}',
+            ko: '${left} 🡸 🡺 ${right}',
+          },
+        };
+        const left = data.mortalLeft.shift();
+        const right = data.mortalRight.shift();
+        if (left === undefined || right === undefined)
+          return;
+        if (left === data.moks)
+          return { alertText: output.left!() };
+        if (right === data.moks)
+          return { alertText: output.right!() };
+        return { infoText: output.text!({ left: left, right: right }) };
       },
     },
   ],
