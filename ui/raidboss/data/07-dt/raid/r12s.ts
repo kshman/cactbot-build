@@ -33,8 +33,8 @@ export interface Data extends RaidbossData {
   // Phase 2
   // prt
   mortalList: MortalInfo[];
-  mortalLeft: string[]; // 역할 이름 배열 (예: 'H1', 'D1', 'MT', 'ST')
-  mortalRight: string[]; // 역할 이름 배열 (예: 'H2', 'D2', 'D4', 'D3')
+  mortalLeft: string[];
+  mortalRight: string[];
 }
 
 const headMarkerData = {
@@ -51,6 +51,8 @@ const headMarkerData = {
   'slaughterSpread': '0177',
   'cellChainTether': '016E',
   // Phase 2
+  // VFX: sharelaser2tank5sec_c0k1, used by Double Sobat (B520)
+  'sharedTankbuster': '0256',
 } as const;
 
 const center = {
@@ -530,7 +532,7 @@ const triggerSet: TriggerSet<Data> = {
         },
         outerBlobTower: {
           en: 'Blob Tower ${num} Outer ${dir} (later)',
-          ko: '(나중에 살덩이 #${num}, 바깥 ${dir})',
+          ko: '(나중에 살덩이 #${num}, 바깥쪽 ${dir})',
         },
       },
     },
@@ -714,11 +716,11 @@ const triggerSet: TriggerSet<Data> = {
         },
         alpha3Dir: {
           en: 'Get Blob Tower 1 (Inner ${dir})',
-          ko: '살덩이 #1 문대요 (안쪽 ${dir})',
+          ko: '안쪽 살덩이 #1 문대요 (${dir})',
         },
         alpha4Dir: {
           en: 'Get Blob Tower 2 (Inner ${dir})',
-          ko: '살덩이 #2 문대요 (안쪽 ${dir})',
+          ko: '안쪽 살덩이 #2 문대요 (${dir})',
         },
       },
     },
@@ -778,47 +780,51 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         ...dirAimStrings,
-        breakChains: Outputs.breakChains,
+        breakChains: {
+          en: 'Break Chains',
+          ja: '線を切る',
+          ko: '줄',
+        },
         getTowers: Outputs.getTowers,
         alpha1: {
           en: '${chains} 1 + Blob Tower 3 (Outer)',
-          ko: '나가서 ${chains} #1 + 살덩이 #3',
+          ko: '나가면서 ${chains} #1 끊고 + 살덩이 #3',
         },
         alpha1Dir: {
           en: '${chains} 1 + Blob Tower 3 (Outer ${dir})',
-          ko: '나가서 ${chains} #1 + 살덩이 #3 (${dir})',
+          ko: '나가면서 ${chains} #1 끊고 + 살덩이 #3 (${dir})',
         },
         alpha2: {
           en: '${chains} 2 + Blob Tower 4 (Outer)',
-          ko: '나가서 ${chains} #2 + 살덩이 #4',
+          ko: '나가면서 ${chains} #2 끊고 + 살덩이 #4',
         },
         alpha2Dir: {
           en: '${chains} 2 + Blob Tower 4 (Outer ${dir})',
-          ko: '나가서 ${chains} #2 + 살덩이 #4 (${dir})',
+          ko: '나가면서 ${chains} #2 끊고 + 살덩이 #4 (${dir})',
         },
         alpha3: {
           en: '${chains} 3 + Get Out',
-          ko: '나가서 ${chains} #3',
+          ko: '나가면서 ${chains} #3 끊어요',
         },
         alpha4: {
           en: '${chains} 4 + Get Out',
-          ko: '나가서 ${chains} #4',
+          ko: '나가면서 ${chains} #4 끊어요',
         },
         beta1: {
           en: '${chains} 1 => Get Middle',
-          ko: '가운데서 ${chains} #1',
+          ko: '${chains} #1 끊고, 가운데로',
         },
         beta2: {
           en: '${chains} 2 => Get Middle',
-          ko: '가운데서 ${chains} #2',
+          ko: '${chains} #2 끊고, 가운데로',
         },
         beta3: {
           en: '${chains} 3 => Wait for last pair',
-          ko: '마지막 페어 기다리면서 ${chains} #3',
+          ko: '${chains} #3 끊고, 마지막 페어',
         },
         beta4: {
           en: '${chains} 4 => Get Out',
-          ko: '나가서 ${chains} #4',
+          ko: '나가면서 ${chains} #4 끊어요',
         },
       },
     },
@@ -1006,14 +1012,14 @@ const triggerSet: TriggerSet<Data> = {
         }
       },
       outputStrings: {
-        frontIntercards: Outputs.southwest,
-        rearIntercards: Outputs.northeast,
-        leftIntercards: Outputs.southeast,
-        rightIntercards: Outputs.northwest,
-        frontCardinals: Outputs.south,
-        rearCardinals: Outputs.north,
-        leftCardinals: Outputs.east,
-        rightCardinals: Outputs.west,
+        frontIntercards: Outputs.aimSW,
+        rearIntercards: Outputs.aimNE,
+        leftIntercards: Outputs.aimSE,
+        rightIntercards: Outputs.aimNW,
+        frontCardinals: Outputs.aimS,
+        rearCardinals: Outputs.aimN,
+        leftCardinals: Outputs.aimE,
+        rightCardinals: Outputs.aimW,
       },
     },
     {
@@ -1054,11 +1060,11 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         getHitWest: {
           en: 'Spread in West Cleave',
-          ko: '서쪽 공간에서 흩어져요',
+          ko: '서쪽 안전한 곳에서 흩어져요',
         },
         getHitEast: {
           en: 'Spread in East Cleave',
-          ko: '동쪽 공간에서 흩어져요',
+          ko: '동쪽 안전한 곳에서 흩어져요',
         },
         safeEast: {
           en: 'Spread East',
@@ -1263,9 +1269,11 @@ const triggerSet: TriggerSet<Data> = {
     },
     {
       id: 'R12S Double Sobat',
-      type: 'StartsUsing',
-      netRegex: { id: 'B520', source: 'Lindwurm', capture: true },
-      response: Responses.tankCleave(),
+      // Two half-room cleaves
+      // First hit targets highest emnity target, second targets second highest
+      type: 'HeadMarker',
+      netRegex: { id: headMarkerData['sharedTankbuster'], capture: true },
+      response: Responses.sharedTankBuster(),
     },
     // ////////////////////////////////
     {
@@ -1369,11 +1377,11 @@ const triggerSet: TriggerSet<Data> = {
         output.responseOutputStrings = {
           left: {
             en: 'Go left side of front',
-            ko: '내 차례: 🡸왼쪽으로',
+            ko: '🡸왼쪽으로 들어가요',
           },
           right: {
             en: 'Go right side of front',
-            ko: '내 차례: 🡺오른쪽으로',
+            ko: '🡺오른쪽으로 들어가요',
           },
           text: {
             en: 'Left: ${left} / Right: ${right}',
@@ -1402,11 +1410,11 @@ const triggerSet: TriggerSet<Data> = {
         output.responseOutputStrings = {
           left: {
             en: 'Go left side of front',
-            ko: '내 차례: 🡸왼쪽으로',
+            ko: '🡸왼쪽으로 들어가요',
           },
           right: {
             en: 'Go right side of front',
-            ko: '내 차례: 🡺오른쪽으로',
+            ko: '🡺오른쪽으로 들어가요',
           },
           text: {
             en: 'Left: ${left} / Right: ${right}',
