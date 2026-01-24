@@ -410,16 +410,16 @@ const triggerSet: TriggerSet<Data> = {
         },
         beta3: {
           en: '3β: Chain Tower 1',
-          ko: '3β: 타워 #1',
+          ko: '3β: 생성 타워 #1',
         },
         beta4: {
           en: '4β: Chain Tower 2',
-          ko: '4β: 타워 #2',
+          ko: '4β: 생성 타워 #2',
         },
         order: {
           en: '${num}',
           ja: '${num}',
-          ko: '${num}',
+          ko: '#${num}',
         },
         unknown: Outputs.unknown,
       },
@@ -621,23 +621,23 @@ const triggerSet: TriggerSet<Data> = {
         tether: {
           en: 'Tether ${num}',
           ja: '線 ${num}',
-          ko: '줄 #${num}',
+          ko: '(줄 #${num})',
         },
         beta1Tower: {
           en: '${tether} => Chain Tower 3',
-          ko: '${tether} 🔜 타워 #3',
+          ko: '(${tether} 🔜 타워 #3)',
         },
         beta2Tower: {
           en: '${tether} => Chain Tower 4',
-          ko: '${tether} 🔜 타워 #4',
+          ko: '(${tether} 🔜 타워 #4)',
         },
         beta3Tower: {
           en: '${tether} => Chain Tower 1',
-          ko: '${tether} 🔜 타워 #1',
+          ko: '(${tether} 🔜 타워 #1)',
         },
         beta4Tower: {
           en: '${tether} => Chain Tower 2',
-          ko: '${tether} 🔜 타워 #2',
+          ko: '(${tether} 🔜 타워 #2)',
         },
       },
     },
@@ -678,7 +678,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         tower: {
           en: 'Get Chain Tower ${num}',
-          ko: '타워 #${num} 밟아요',
+          ko: '생성 타워 #${num} 밟아요',
         },
       },
     },
@@ -719,19 +719,19 @@ const triggerSet: TriggerSet<Data> = {
         ...dirAimStrings,
         alpha3: {
           en: 'Get Blob Tower 1',
-          ko: '살덩이 #1 문대요',
+          ko: '살덩이 #1 밟아요',
         },
         alpha4: {
           en: 'Get Blob Tower 2',
-          ko: '살덩이 #2 문대요',
+          ko: '살덩이 #2 밟아요',
         },
         alpha3Dir: {
           en: 'Get Blob Tower 1 (Inner ${dir})',
-          ko: '안쪽 살덩이 #1 문대요 (${dir})',
+          ko: '안쪽 살덩이 #1 밟아요 (${dir})',
         },
         alpha4Dir: {
           en: 'Get Blob Tower 2 (Inner ${dir})',
-          ko: '안쪽 살덩이 #2 문대요 (${dir})',
+          ko: '안쪽 살덩이 #2 밟아요 (${dir})',
         },
       },
     },
@@ -827,11 +827,11 @@ const triggerSet: TriggerSet<Data> = {
         },
         beta2: {
           en: '${chains} 2 => Get Middle',
-          ko: '${chains} #2 끊고, 가운데로',
+          ko: '${chains} #2 끊고 🔜 가운데로',
         },
         beta3: {
           en: '${chains} 3 => Wait for last pair',
-          ko: '${chains} #3 끊고, 마지막 페어',
+          ko: '${chains} #3 끊고 🔜 마지막 페어',
         },
         beta4: {
           en: '${chains} 4 => Get Out',
@@ -889,7 +889,7 @@ const triggerSet: TriggerSet<Data> = {
         getOut: {
           en: 'Get Out',
           ja: '外へ',
-          ko: '바깥으로',
+          ko: '밖으로 나가요',
         },
         goIntoMiddle: Outputs.goIntoMiddle,
         beta1Middle: Outputs.goIntoMiddle,
@@ -899,22 +899,22 @@ const triggerSet: TriggerSet<Data> = {
         beta1Out: { // Should not happen under ideal situation
           en: 'Get Out',
           ja: '外へ',
-          ko: '바깥으로',
+          ko: '밖으로 나가요',
         },
         beta2Out: {
           en: 'Get Out',
           ja: '外へ',
-          ko: '바깥으로',
+          ko: '밖으로 나가요',
         },
         beta3Out: { // Should not happen under ideal situation
           en: 'Get Out',
           ja: '外へ',
-          ko: '바깥으로',
+          ko: '밖으로 나가요',
         },
         beta4Out: { // Should not happen under ideal situation
           en: 'Get Out',
           ja: '外へ',
-          ko: '바깥으로',
+          ko: '밖으로 나가요',
         },
       },
     },
@@ -971,19 +971,19 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         frontTower: {
           en: 'Tower (S/SW)',
-          ko: '타워 (🡻남/🡿남서)',
+          ko: '내 바닥: 🡻남/🡿남서',
         },
         rearTower: {
           en: 'Tower (N/NE)',
-          ko: '타워 (🡹북/🡽북동)',
+          ko: '내 바닥: 🡹북/🡽북동',
         },
         leftTower: {
           en: 'Tower (E/SE)',
-          ko: '타워 (🡺동/🡾남동)',
+          ko: '내 바닥: 🡺동/🡾남동',
         },
         rightTower: {
           en: 'Tower (W/NW)',
-          ko: '타워 (🡸서/🡼북서)',
+          ko: '내 바닥: 🡸서/🡼북서',
         },
       },
     },
@@ -1017,11 +1017,11 @@ const triggerSet: TriggerSet<Data> = {
         rightCardinals: Outputs.aimW,
         typeCardinals: {
           en: 'Cardinal: ${dir}',
-          ko: '십자➕: ${dir}쪽',
+          ko: '십자➕: ${dir}쪽으로',
         },
         typeIntercards: {
           en: 'Intercardinal: ${dir}',
-          ko: '비스듬히✖️: ${dir}쪽',
+          ko: '비스듬히✖️: ${dir}쪽으로',
         },
         unknown: Outputs.unknown,
       },

@@ -332,7 +332,7 @@ export default {
   goIntoMiddle: {
     en: 'Get Middle',
     ja: '中へ',
-    ko: '가운데로',
+    ko: '한가운데로',
   },
   front: {
     en: 'Front',
