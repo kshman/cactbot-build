@@ -12,6 +12,7 @@ export type Phase = 'doorboss' | 'curtainCall' | 'slaughtershed' | 'two';
 type MortalInfo = {
   purple: boolean;
   left: boolean;
+  moks: string;
 };
 
 export interface Data extends RaidbossData {
@@ -33,8 +34,6 @@ export interface Data extends RaidbossData {
   // Phase 2
   // prt
   mortalList: MortalInfo[];
-  mortalLeft: string[];
-  mortalRight: string[];
 }
 
 const headMarkerData = {
@@ -65,6 +64,13 @@ const phaseMap: { [id: string]: Phase } = {
   'B4C6': 'slaughtershed',
 };
 
+const grandCountMap: { [id: string]: string } = {
+  '436': 'front',
+  '437': 'right',
+  '438': 'rear',
+  '439': 'left',
+};
+
 const dirAimStrings = {
   dirNE: Outputs.aimNE,
   dirSE: Outputs.aimSE,
@@ -89,8 +95,6 @@ const triggerSet: TriggerSet<Data> = {
     // Phase 2
     // prt
     mortalList: [],
-    mortalLeft: [],
-    mortalRight: [],
   }),
   triggers: [
     {
@@ -536,6 +540,7 @@ const triggerSet: TriggerSet<Data> = {
         },
       },
     },
+    /* 이거 필요없을거 같은데
     {
       id: 'R12S Cursed Coil Bind Knocbkack',
       // Using Phagocyte Spotlight, 1st one happens 7s before bind
@@ -544,8 +549,14 @@ const triggerSet: TriggerSet<Data> = {
       netRegex: { id: 'B4B6', capture: false },
       delaySeconds: 3, // 5s warning
       suppressSeconds: 10,
-      response: Responses.knockback(),
-    },
+      infoText: (_data, _matches, output) => output.knockback!(),
+      outputStrings: {
+        knockback: {
+          en: 'Knockback',
+          ko: '강제로 한가운데',
+        },
+      },
+    }, */
     {
       id: 'R12S Skinsplitter Counter',
       // These occur every 5s
@@ -988,28 +999,12 @@ const triggerSet: TriggerSet<Data> = {
         const count = data.myMitoticPhase;
         if (count === undefined)
           return;
-        if (matches.id === 'B4A1') {
-          switch (count) {
-            case '436':
-              return output.frontCardinals!();
-            case '437':
-              return output.rightCardinals!();
-            case '438':
-              return output.rearCardinals!();
-            case '439':
-              return output.leftCardinals!();
-          }
-        }
-        switch (count) {
-          case '436':
-            return output.frontIntercards!();
-          case '437':
-            return output.rightIntercards!();
-          case '438':
-            return output.rearIntercards!();
-          case '439':
-            return output.leftIntercards!();
-        }
+        const dir = grandCountMap[count];
+        if (dir === undefined)
+          return output.unknown!();
+        const type = matches.id === 'B4A1' ? 'Cardinals' : 'Intercards';
+        const res = output[`${dir}${type}`]!();
+        return output[`type${type}`]!({ dir: res });
       },
       outputStrings: {
         frontIntercards: Outputs.aimSW,
@@ -1020,6 +1015,15 @@ const triggerSet: TriggerSet<Data> = {
         rearCardinals: Outputs.aimN,
         leftCardinals: Outputs.aimE,
         rightCardinals: Outputs.aimW,
+        typeCardinals: {
+          en: 'Cardinal: ${dir}',
+          ko: '십자➕: ${dir}쪽',
+        },
+        typeIntercards: {
+          en: 'Intercardinal: ${dir}',
+          ko: '비스듬히✖️: ${dir}쪽',
+        },
+        unknown: Outputs.unknown,
       },
     },
     {
@@ -1096,7 +1100,7 @@ const triggerSet: TriggerSet<Data> = {
         },
         party: {
           en: 'Spread, Away from heads',
-          ko: '흩어져요 (머리와 먼 곳으로)',
+          ko: '흩어져요 (머리쪽은 안되요)',
         },
       },
     },
@@ -1125,37 +1129,23 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, matches, output) => {
         const flesh = matches.effectId === '1291' ? 'alpha' : 'beta';
         if (flesh === 'alpha')
-          return output.alphaChains!({
-            chains: output.breakChains!(),
-            safe: output.safeSpots!(),
-          });
+          return output.alphaChains!();
         if (flesh === 'beta')
-          return output.betaChains!({
-            chains: output.breakChains!(),
-            safe: output.breakChains!(),
-          });
-        return output.unknownChains!({
-          chains: output.breakChains!(),
-          safe: output.breakChains!(),
-        });
+          return output.betaChains!();
+        return output.unknownChains!();
       },
       outputStrings: {
-        breakChains: Outputs.breakChains,
-        safeSpots: {
-          en: 'Avoid Blobs',
-          ko: '살덩이 피해요',
-        },
         alphaChains: {
-          en: '${chains} => ${safe}',
-          ko: '${chains} 🔜 ${safe}',
+          en: 'Break Chains => Avoid Blobs',
+          ko: '줄 끊고 🔜 살덩이 피해요',
         },
         betaChains: {
-          en: '${chains} => ${safe}',
-          ko: '${chains} 🔜 ${safe}',
+          en: 'Break Chains => Avoid Blobs',
+          ko: '줄 끊고 🔜 살덩이 피해요',
         },
         unknownChains: {
-          en: '${chains} => ${safe}',
-          ko: '${chains} 🔜 ${safe}',
+          en: 'Break Chains => Avoid Blobs',
+          ko: '줄 끊고 🔜 살덩이 피해요',
         },
       },
     },
@@ -1226,7 +1216,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Northwest: Knockback to Northeast',
-          ko: '🡼북서로: 넉백 받아 북동으로',
+          ko: '🡼북서로: 넉백 당하고 북동으로',
         },
       },
     },
@@ -1241,7 +1231,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Northeast: Knockback to Northwest',
-          ko: '🡽북동으로: 넉백 받아 북서로',
+          ko: '🡽북동으로: 넉백 당하고 북서로',
         },
       },
     },
@@ -1282,8 +1272,6 @@ const triggerSet: TriggerSet<Data> = {
       netRegex: { id: 'B495', source: 'Lindwurm', capture: false },
       run: (data) => {
         data.mortalList = [];
-        data.mortalLeft = [];
-        data.mortalRight = [];
       },
     },
     {
@@ -1293,81 +1281,58 @@ const triggerSet: TriggerSet<Data> = {
       // 19201 초록 힐딜용
       netRegex: { npcBaseId: ['19200', '19201'], capture: true },
       condition: (data, matches) => {
-        // 구슬 모으기
-        const x = parseFloat(matches.x);
-        data.mortalList.push({ purple: matches.npcBaseId === '19200', left: x < center.x });
+        // 구슬 모으기 (순서 추적)
+        data.mortalList.push({
+          purple: matches.npcBaseId === '19200',
+          left: parseFloat(matches.x) < center.x,
+          moks: '', // 나중에 할당
+        });
         if (data.mortalList.length < 8)
           return false;
 
-        // 연산
-        const totalPurples = data.mortalList.filter((m) => m.purple && m.left).length;
-        const baseLeft = ['H1', 'D1', 'D3', 'D4'];
-        const baseRight = ['H2', 'D2', 'D4', 'D3'];
-        let leftGreen = 0;
-        let rightGreen = 0;
+        // 왼쪽 보라 개수 확인 (전체 패턴 판단용)
+        const leftPurpleCount = data.mortalList.filter((m) => m.purple && m.left).length;
 
-        if (totalPurples === 1) {
-          // 왼쪽, 오른쪽에 각각 보라 1개
-          for (const m of data.mortalList) {
-            if (m.left) {
-              // 왼쪽
-              if (m.purple)
-                data.mortalLeft.push('MT');
-              else {
-                data.mortalLeft.push(baseLeft[leftGreen]!);
-                leftGreen++;
-              }
-            } else {
-              // 오른쪽
-              if (m.purple)
-                data.mortalRight.push('ST');
-              else {
-                data.mortalRight.push(baseRight[rightGreen]!);
-                rightGreen++;
-              }
-            }
-          }
-        } else if (totalPurples === 2) {
-          // 왼쪽에 보라 2개
-          let leftPurple = 0;
-          for (const m of data.mortalList) {
-            if (m.left) {
-              // 왼쪽
-              if (m.purple) {
-                // 보라: MT, ST 순서대로
-                data.mortalLeft.push(leftPurple === 0 ? 'MT' : 'ST');
-                leftPurple++;
-              } else {
-                // 녹색: H1, D1 순서대로
-                data.mortalLeft.push(baseLeft[leftGreen]!);
-                leftGreen++;
-              }
-            } else {
-              // 오른쪽, 보라색은 없고 녹색 4개: H2, D2, D4, D3
-              data.mortalRight.push(baseRight[rightGreen]!);
-              rightGreen++;
-            }
-          }
+        // 역할 큐 준비
+        let leftTanks: string[];
+        let leftOthers: string[];
+        let rightTanks: string[];
+        let rightOthers: string[];
+
+        if (leftPurpleCount === 2) {
+          // 왼쪽에 보라 2개 패턴
+          leftTanks = ['MT', 'ST'];
+          leftOthers = ['H1', 'D1'];
+          rightTanks = [];
+          rightOthers = ['H2', 'D2', 'D4', 'D3'];
+        } else if (leftPurpleCount === 0) {
+          // 오른쪽에 보라 2개 패턴
+          leftTanks = [];
+          leftOthers = ['H1', 'D1', 'D3', 'D4'];
+          rightTanks = ['ST', 'MT'];
+          rightOthers = ['H2', 'D2'];
         } else {
-          // 오른쪽에 보라 2개
-          let rightPurple = 0;
-          for (const m of data.mortalList) {
-            if (m.left) {
-              // 왼쪽, 보라색은 없고 녹색 4개: H1, D1, D3, D4
-              data.mortalLeft.push(baseLeft[leftGreen]!);
-              leftGreen++;
-            } else {
-              // 오른쪽
-              if (m.purple) {
-                // 보라: ST, MT 순서대로
-                data.mortalRight.push(rightPurple === 0 ? 'ST' : 'MT');
-                rightPurple++;
-              } else {
-                // 녹색: H2, D2, D4, D3 순서대로
-                data.mortalRight.push(baseRight[rightGreen]!);
-                rightGreen++;
-              }
-            }
+          // 왼쪽, 오른쪽에 각각 보라 1개
+          leftTanks = ['MT'];
+          leftOthers = ['H1', 'D1', 'D3'];
+          rightTanks = ['ST'];
+          rightOthers = ['H2', 'D2', 'D4'];
+        }
+
+        // 각 구슬에 역할 할당 (보라/녹색에 따라 다른 큐 사용)
+        for (const orb of data.mortalList) {
+          if (orb.purple) {
+            // 보라 구슬 - 탱크
+            if (orb.left)
+              orb.moks = leftTanks.shift()!;
+            else
+              orb.moks = rightTanks.shift()!;
+          } else {
+            // 녹색 구슬 - 힐딜
+            if (orb.left)
+              orb.moks = leftOthers.shift()!;
+            else
+              orb.moks = rightOthers.shift()!;
           }
         }
         return true;
@@ -1384,18 +1349,23 @@ const triggerSet: TriggerSet<Data> = {
             ko: '🡺오른쪽으로 들어가요',
           },
           text: {
-            en: 'Left: ${left} / Right: ${right}',
-            ko: '${left} 🡸 🡺 ${right}',
+            en: '${left} / ${right}',
+            ko: '${left} / ${right}',
           },
           unknown: Outputs.unknown,
         };
-        const left = data.mortalLeft.shift() ?? output.unknown!();
-        const right = data.mortalRight.shift() ?? output.unknown!();
-        if (left === data.moks)
-          return { alertText: output.left!() };
-        if (right === data.moks)
-          return { alertText: output.right!() };
-        return { infoText: output.text!({ left: left, right: right }) };
+
+        const orb1 = data.mortalList.shift();
+        const orb2 = data.mortalList.shift();
+        if (orb1 === undefined || orb2 === undefined)
+          return;
+
+        if (orb1.moks === data.moks)
+          return { alertText: orb1.left ? output.left!() : output.right!() };
+        if (orb2.moks === data.moks)
+          return { alertText: orb2.left ? output.left!() : output.right!() };
+
+        return { infoText: output.text!({ left: orb1.moks, right: orb2.moks }) };
       },
     },
     {
@@ -1417,19 +1387,37 @@ const triggerSet: TriggerSet<Data> = {
             ko: '🡺오른쪽으로 들어가요',
           },
           text: {
-            en: 'Left: ${left} / Right: ${right}',
-            ko: '${left} 🡸 🡺 ${right}',
+            en: '${left} / ${right}',
+            ko: '${left} / ${right}',
           },
         };
-        const left = data.mortalLeft.shift();
-        const right = data.mortalRight.shift();
-        if (left === undefined || right === undefined)
+
+        const orb1 = data.mortalList.shift();
+        const orb2 = data.mortalList.shift();
+        if (orb1 === undefined || orb2 === undefined)
           return;
-        if (left === data.moks)
-          return { alertText: output.left!() };
-        if (right === data.moks)
-          return { alertText: output.right!() };
-        return { infoText: output.text!({ left: left, right: right }) };
+
+        if (orb1.moks === data.moks)
+          return { alertText: orb1.left ? output.left!() : output.right!() };
+        if (orb2.moks === data.moks)
+          return { alertText: orb2.left ? output.left!() : output.right!() };
+
+        return { infoText: output.text!({ left: orb1.moks, right: orb2.moks }) };
+      },
+    },
+    {
+      id: 'R12S Burst 2',
+      type: 'Ability',
+      netRegex: { id: ['B49A', 'B49B'], source: 'Lindwurm', capture: true },
+      condition: (data) => data.phase === 'curtainCall',
+      delaySeconds: 10,
+      infoText: (_data, _matches, output) => output.middle!(),
+      outputStrings: {
+        middle: {
+          en: 'Get Middle',
+          ja: '中へ',
+          ko: '(한가운데서 줄 끊을 준비)',
+        },
       },
     },
   ],
