@@ -395,7 +395,7 @@ const triggerSet: TriggerSet<Data> = {
         bigHalfmoonCombined: {
           en: '${coffin1} + ${dir1} (big) => ${coffin2} + ${dir2} (big)',
           ja: '[大範囲] ${coffin1} + ${dir1} 🔜 ${coffin2} + ${dir2}',
-          ko: '[큰거] ${coffin1} + ${dir1} 🔜 ${coffin2} + ${dir2}',
+          ko: '${coffin1} + ${dir1} 🔜 ${coffin2} + ${dir2}',
         },
         rightThenLeft: Outputs.rightThenLeft,
         leftThenRight: Outputs.leftThenRight,
@@ -416,22 +416,22 @@ const triggerSet: TriggerSet<Data> = {
         outerWest: {
           en: 'Outer West',
           ja: '外側西',
-          ko: '서쪽 밖',
+          ko: '1열',
         },
         innerWest: {
           en: 'Inner West',
           ja: '内側西',
-          ko: '서쪽 안',
+          ko: '2열',
         },
         innerEast: {
           en: 'Inner East',
           ja: '内側東',
-          ko: '동쪽 안',
+          ko: '3열',
         },
         outerEast: {
           en: 'Outer East',
           ja: '外側東',
-          ko: '동쪽 밖',
+          ko: '4열',
         },
         bigHalfmoonNoCoffin: {
           en: '${dir1} max melee => ${dir2} max melee',

@@ -7,6 +7,8 @@
 hideall "--Reset--"
 hideall "--sync--"
 
+0.0 "--Reset--" ActorControl { command: "4000000F" } window 0,100000 jump 0
+
 # NOTE: A rough description of the layout for this timeline is as follows:
 # Timeline reaches Raw Steel Branch point
 #   "r11s-raw-steel-axe-1": Raw Steel Axe First
@@ -22,25 +24,25 @@ hideall "--sync--"
 # "r11s-charybdistopia": Label for the end of Raw Steel branch
 # Timeline continues
 
-0.0 "--Reset--" ActorControl { command: "4000000F" } window 0,100000 jump 0
+0.0 "--sync--" InCombat { inGameCombat: "1" } window 0,1
 5.6 "--sync--" StartsUsing { id: "B406", source: "The Tyrant" } window 10,10
 10.6 "Crown of Arcadia" Ability { id: "B406", source: "The Tyrant" }
 
 # Branch for Raw Steel Axe or Raw Steel Scythe First
-15.7 "--sync--" StartsUsing { id: "B422", source: "The Tyrant" } jump "r11s-raw-steel-axe-1"
-15.7 "--sync--" StartsUsing { id: "B423", source: "The Tyrant" } jump "r11s-raw-steel-scythe-1"
+15.7 "--sync--" StartsUsing { id: "B422", source: "The Tyrant" } window 15.7,5 jump "r11s-raw-steel-axe-1"
+15.7 "--sync--" StartsUsing { id: "B423", source: "The Tyrant" } window 15.7,5 jump "r11s-raw-steel-scythe-1"
 17.7 "Raw Steel Trophy (Scythe/Axe)" #Ability { id: ["B423", "B422"], source: "The Tyrant" }
-24.0 "Raw Steel?" #Ability { id: "B40B", source: "The Tyrant" } # Only tanks
-25.1 "Heavy Hitter/Impact x6" #Ability { id: ["B410", "B40C"], source: "The Tyrant" } # Only non-tanks
-25.1 "Raw Steel x2?" #Ability { id: "B40F", source: "The Tyrant" } # Only tanks
+24.0 "Raw Steel (Axe)?" #Ability { id: "B40B", source: "The Tyrant" } # Only tanks
+25.1 "Heavy Hitter (Scythe)/Impact x6 (Axe)" #Ability { id: ["B410", "B40C"], source: "The Tyrant" } # Only non-tanks
+25.1 "Raw Steel x2 (Scythe)?" #Ability { id: "B40F", source: "The Tyrant" } # Only tanks
 33.1 "--middle--" #Ability { id: "B404", source: "The Tyrant" }
 38.4 "Trophy Weapons" #Ability { id: "B416", source: "The Tyrant" }
 
 # Raw Steel Axe First
 115.7 label "r11s-raw-steel-axe-1"
 117.7 "Raw Steel Trophy Axe" Ability { id: "B422", source: "The Tyrant" }
-124.0 "Raw Steel" Ability { id: "B40B", source: "The Tyrant" } # Only tanks
-125.1 "Impact x6" Ability { id: "B40C", source: "The Tyrant" } # Only non-tanks
+124.0 "Raw Steel (Axe)" Ability { id: "B40B", source: "The Tyrant" } # Only tanks
+125.1 "Impact x6 (Axe)" Ability { id: "B40C", source: "The Tyrant" } # Only non-tanks
 133.1 "--middle--" Ability { id: "B404", source: "The Tyrant" }
 138.4 "Trophy Weapons" Ability { id: "B416", source: "The Tyrant" }
 148.2 "Assault Evolved" Ability { id: "B417", source: "The Tyrant" }
@@ -127,8 +129,8 @@ hideall "--sync--"
 550.7 "Explosion" Ability { id: "B420", source: "The Tyrant" }
 551.1 "Explosion" Ability { id: "B7BC", source: "The Tyrant" }
 556.4 "Raw Steel Trophy Scythe" Ability { id: "B423", source: "The Tyrant" }
-563.8 "Heavy Hitter" Ability { id: "B410", source: "The Tyrant" } # Only non-tanks
-563.8 "Raw Steel x2" #Ability { id: "B40F", source: "The Tyrant" } # Only tanks
+563.8 "Heavy Hitter (Scythe)" Ability { id: "B410", source: "The Tyrant" } # Only non-tanks
+563.8 "Raw Steel x2 (Scythe)" #Ability { id: "B40F", source: "The Tyrant" } # Only tanks
 571.8 "--middle--" Ability { id: "B404", source: "The Tyrant" }
 
 # Ultimate Trophy Weapons (Axe)
@@ -138,8 +140,8 @@ hideall "--sync--"
 # Raw Steel Scythe First
 715.7 label "r11s-raw-steel-scythe-1"
 717.7 "Raw Steel Trophy Scythe" Ability { id: "B423", source: "The Tyrant" }
-725.1 "Heavy Hitter" Ability { id: "B410", source: "The Tyrant" } # Only non-tanks
-725.1 "Raw Steel x2" #Ability { id: "B40F", source: "The Tyrant" } # Only tanks
+725.1 "Heavy Hitter (Scythe)" Ability { id: "B410", source: "The Tyrant" } # Only non-tanks
+725.1 "Raw Steel x2 (Scythe)" #Ability { id: "B40F", source: "The Tyrant" } # Only tanks
 733.1 "--middle--" Ability { id: "B404", source: "The Tyrant" }
 
 # Trophy Weapons 1 (Scythe)
@@ -227,8 +229,8 @@ hideall "--sync--"
 1150.7 "Explosion" Ability { id: "B420", source: "The Tyrant" }
 1151.1 "Explosion" Ability { id: "B7BC", source: "The Tyrant" }
 1156.4 "Raw Steel Trophy Axe" Ability { id: "B422", source: "The Tyrant" }
-1162.7 "Raw Steel" Ability { id: "B40B", source: "The Tyrant" } # Only tanks
-1163.8 "Impact x6" Ability { id: "B40C", source: "The Tyrant" } # Only non-tanks
+1162.7 "Raw Steel (Axe)" Ability { id: "B40B", source: "The Tyrant" } # Only tanks
+1163.8 "Impact x6 (Axe)" Ability { id: "B40C", source: "The Tyrant" } # Only non-tanks
 1171.8 "--middle--" Ability { id: "B404", source: "The Tyrant" }
 
 # Ultimate Trophy Weapons
@@ -276,11 +278,16 @@ hideall "--sync--"
 # Meteorain
 1285.0 "--middle--" Ability { id: "B404", source: "The Tyrant" }
 1292.1 "Meteorain" Ability { id: "B434", source: "The Tyrant" }
+1293.2 "--Meteor Markers 1--" HeadMarker { id: "00F4" }
 1300.1 "Fearsome Fireball" Ability { id: "B43A", source: "The Tyrant" }
 1301.3 "Cosmic Kiss" Ability { id: "B435", source: "Comet" }
+1303.1 "--Meteor Markers 2--" HeadMarker { id: "00F4" }
+1303.5 "--tethers--"
 1309.3 "Foregone Fatality" Ability { id: "B436", source: "The Tyrant" }
 1310.2 "Fearsome Fireball" Ability { id: "B43A", source: "The Tyrant" }
 1311.4 "Cosmic Kiss" Ability { id: "B435", source: "Comet" }
+1313.1 "--Meteor Markers 3--" HeadMarker { id: "00F4" }
+1313.5 "--tethers--"
 1314.0 "Explosion" Ability { id: "B438", source: "Comet" }
 1319.3 "Foregone Fatality" Ability { id: "B436", source: "The Tyrant" }
 1320.2 "Fearsome Fireball" Ability { id: "B43A", source: "The Tyrant" }
@@ -301,29 +308,29 @@ hideall "--sync--"
 
 # Arena Split
 # NOTE: Need to move to safe spot at meteor 3
-1359.8 "Flatliner (castbar)" Ability { id: "B43F", source: "The Tyrant" } window 360,10
+1359.8 "--sync--" Ability { id: "B43F", source: "The Tyrant" } window 360,10
 1361.8 "Flatliner (split)" Ability { id: "BA90", source: "The Tyrant" }
 1375.9 "Majestic Meteor" Ability { id: "B440", source: "The Tyrant" }
+1377.0 "--tethers--"
 1389.0 "Explosion" Ability { id: "B444", source: "The Tyrant" }
+1394.9 "--Fire Breath Markers--" HeadMarker { id: '00F4' }
 1397.0 "--meteor 1--" #StartsUsing { id: "B441", source: "The Tyrant" }
 1399.0 "--meteor 2--" #StartsUsing { id: "B441", source: "The Tyrant" }
 1400.0 "Majestic Meteor 1" #Ability { id: "B441", source: "The Tyrant" }
 1401.1 "--meteor 3--" #StartsUsing { id: "B441", source: "The Tyrant" }
 1402.0 "Majestic Meteor 2" #Ability { id: "B441", source: "The Tyrant" }
-1403.9 "Majestic Meteowrath x4" #Ability { id: "B443", source: "The Tyrant" }
-1403.9 "Majestic Meteorain x2" Ability { id: "B442", source: "The Tyrant" }
-1403.9 "Fire Breath x4" #Ability { id: "B447", source: "The Tyrant" }
+1403.9 "Majestic Meteowrath/Majestic Meteorain/Fire Breath" Ability { id: ["B442", "B443", "B447"], source: "The Tyrant" }
 1404.1 "Majestic Meteor 3" #Ability { id: "B441", source: "The Tyrant" }
-1421.1 "Explosion" Ability { id: "B444", source: "The Tyrant" }
 
+1409.0 "--tethers--"
+1421.1 "Explosion" Ability { id: "B444", source: "The Tyrant" }
+1427.0 "--Fire Breath Markers--" HeadMarker { id: '00F4' }
 1429.1 "--meteor 1--" #StartsUsing { id: "B441", source: "The Tyrant" }
 1431.1 "--meteor 2--" #StartsUsing { id: "B441", source: "The Tyrant" }
 1432.1 "Majestic Meteor 1" #Ability { id: "B441", source: "The Tyrant" }
 1433.1 "--meteor 3--" #StartsUsing { id: "B441", source: "The Tyrant" }
 1434.1 "Majestic Meteor 2" #Ability { id: "B441", source: "The Tyrant" }
-1436.0 "Majestic Meteowrath x4" #Ability { id: "B443", source: "The Tyrant" }
-1436.0 "Majestic Meteorain x2" Ability { id: "B442", source: "The Tyrant" }
-1436.0 "Fire Breath x4" #Ability { id: "B447", source: "The Tyrant" }
+1436.0 "Majestic Meteowrath/Majestic Meteorain/Fire Breath" Ability { id: ["B442", "B443", "B447"], source: "The Tyrant" }
 1436.1 "Majestic Meteor 3" #Ability { id: "B441", source: "The Tyrant" }
 1445.3 "Massive Meteor (castbar)" Ability { id: "B448", source: "The Tyrant" }
 1446.4 "Massive Meteor x5" #Ability { id: "B449", source: "The Tyrant" } duration 5.6
@@ -360,6 +367,7 @@ hideall "--sync--"
 1556.2 "Atomic Impact 6" Ability { id: "B454", source: "The Tyrant" }
 1557.2 "Cosmic Kiss" Ability { id: "B456", source: "The Tyrant" }
 1557.2 "Weighty Impact" #Ability { id: "B457", source: "The Tyrant" }
+1559.7 "--tethers--"
 1566.8 "Majestic Meteowrath x4" Ability { id: "B459", source: "The Tyrant" }
 1570.2 "Two-way Fireball / Four-way Fireball (castbar)" Ability { id: ["B7BD", "B45A"], source: "The Tyrant" }
 1571.1 "Two-way Fireball / Four-way Fireball" Ability { id: ["B7BE", "B45B"], source: "The Tyrant" }
@@ -395,7 +403,7 @@ hideall "--sync--"
 1651.6 "--sync--" StartsUsing { id: "B462", source: "The Tyrant" }
 1659.6 "Heartbreaker (Enrage)" Ability { id: "B462", source: "The Tyrant" }
 1659.6 "--untargetable--"
-1659.8 "Heartbreaker (Enrage)" Ability { id: "B463", source: "The Tyrant" }
+1659.8 "Heartbreaker (Enrage)" #Ability { id: "B463", source: "The Tyrant" }
 
 # IGNORED ABILITIES
 # B40A Raw Steel: VFX for Axe
@@ -519,4 +527,3 @@ hideall "--sync--"
 # B7ED Ultimate Trophy Weapons
 # B7EE Assault Apex
 # BA90 Flatliner
-

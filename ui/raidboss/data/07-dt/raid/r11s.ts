@@ -352,7 +352,7 @@ const triggerSet: TriggerSet<Data> = {
         if (!data.options.AutumnOnly) {
           if (data.weaponMechCount === 7)
             return output.mechanicThenBait!({ mech: output[mechanic]!() });
-          if (data.weaponMechCount > 3)
+          if (data.weaponMechCount > 3 && mechanic !== 'stack')
             return output.mechanicThenMove!({ mech: output[mechanic]!() });
         }
         return output[mechanic]!();
@@ -1127,30 +1127,18 @@ const triggerSet: TriggerSet<Data> = {
           return true;
         return false;
       },
-      suppressSeconds: 99,
+      suppressSeconds: 9999,
       infoText: (data, matches, output) => {
         const actor = data.actorPositions[matches.sourceId];
         if (actor === undefined)
           return;
-        const dirNum = Directions.xyTo8DirNum(actor.x, actor.y, center.x, center.y);
-        if (dirNum === undefined)
-          return;
+        const portalDirNum = Directions.xyTo8DirNum(actor.x, actor.y, center.x, center.y);
 
-        type dirNumStretchMap = {
-          [key: number]: string;
-        };
         // TODO: Make config for options?
-        const stretchCW: dirNumStretchMap = {
-          0: 'dirSW',
-          2: 'dirNW',
-          4: 'dirNE',
-          6: 'dirSE',
-        };
-        const stretchDir = stretchCW[dirNum];
-        if (stretchDir !== undefined)
-          data.fireballPosition = stretchDir;
-        data.hasStretchTether = true;
-        return output.stretchTetherDir!({ dir: output[stretchDir ?? '???']!() });
+        const stretchDirNum = (portalDirNum + 5) % 8;
+        const stretchDir = Directions.output8Dir[stretchDirNum] ?? 'unknown';
+
+        return output.stretchTetherDir!({ dir: output[stretchDir]!() });
       },
       outputStrings: {
         ...markerStrings,
@@ -1379,10 +1367,19 @@ const triggerSet: TriggerSet<Data> = {
   ],
   timelineReplace: [
     {
+      'locale': 'en',
+      'replaceText': {
+        'Majestic Meteowrath/Majestic Meteorain/Fire Breath': 'Fire Breath + Meteor Lines',
+      },
+    },
+    {
       'locale': 'ja',
       'replaceSync': {
         'Comet': 'コメット',
         'The Tyrant': 'ザ・タイラント',
+      },
+      'replaceText': {
+        'Majestic Meteowrath/Majestic Meteorain/Fire Breath': 'ファイアブレス＋メテオライン',
       },
     },
   ],
