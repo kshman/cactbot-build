@@ -7,7 +7,13 @@ import ZoneId from '../../../../../resources/zone_id';
 import { RaidbossData } from '../../../../../types/data';
 import { TriggerSet } from '../../../../../types/trigger';
 
-export type Phase = 'doorboss' | 'curtainCall' | 'slaughtershed' | 'two';
+export type Phase =
+  | 'doorboss'
+  | 'curtainCall'
+  | 'slaughtershed'
+  | 'replication1'
+  | 'replication2'
+  | 'idyllic';
 
 type MortalInfo = {
   purple: boolean;
@@ -16,6 +22,9 @@ type MortalInfo = {
 };
 
 export interface Data extends RaidbossData {
+  readonly triggerSetConfig: {
+    showGrotesquerieAct2Progress: boolean;
+  };
   phase: Phase;
   // Phase 1
   grotesquerieCleave?:
@@ -32,6 +41,10 @@ export interface Data extends RaidbossData {
   myMitoticPhase?: string;
   hasRot: boolean;
   // Phase 2
+  actorPositions: { [id: string]: { x: number; y: number; heading: number } };
+  replication1Debuff?: 'fire' | 'dark';
+  replication1FireActor?: string;
+  replication1FollowUp: boolean;
   // prt
   mortalList: MortalInfo[];
 }
@@ -82,6 +95,18 @@ const dirAimStrings = {
 const triggerSet: TriggerSet<Data> = {
   id: 'AacHeavyweightM4Savage',
   zoneId: ZoneId.AacHeavyweightM4Savage,
+  config: [
+    {
+      id: 'showGrotesquerieAct2Progress',
+      name: {
+        en: 'Display Grotesquerie Act 2 Progress',
+        ja: '細胞付着・中期進行状況表示',
+        ko: '세포부착 중기 진행 상황 표시',
+      },
+      type: 'checkbox',
+      default: false,
+    },
+  ],
   timelineFile: 'r12s.txt',
   initData: () => ({
     phase: 'doorboss',
@@ -93,6 +118,8 @@ const triggerSet: TriggerSet<Data> = {
     cellChainCount: 0,
     hasRot: false,
     // Phase 2
+    actorPositions: {},
+    replication1FollowUp: false,
     // prt
     mortalList: [],
   }),
@@ -109,6 +136,63 @@ const triggerSet: TriggerSet<Data> = {
 
         data.phase = phase;
       },
+    },
+    {
+      id: 'R12S Phase Two Replication Tracker',
+      // B4D8 Replication happens more than once, only track the first one
+      type: 'StartsUsing',
+      netRegex: { id: 'B4D8', source: 'Lindwurm', capture: false },
+      suppressSeconds: 9999,
+      run: (data) => data.phase = 'replication1',
+    },
+    {
+      id: 'R12S Phase Two Staging Tracker',
+      // B4E1 Staging happens more than once, only track the first one
+      type: 'StartsUsing',
+      netRegex: { id: 'B4E1', source: 'Lindwurm', capture: false },
+      condition: (data) => data.phase === 'replication1',
+      suppressSeconds: 9999,
+      run: (data) => data.phase = 'replication2',
+    },
+    {
+      id: 'R12S Phase Two ActorSetPos Tracker',
+      type: 'ActorSetPos',
+      netRegex: { id: '4[0-9A-Fa-f]{7}', capture: true },
+      condition: (data) => {
+        if (
+          data.phase === 'replication1' ||
+          data.phase === 'replication2' ||
+          data.phase === 'idyllic'
+        )
+          return true;
+        return false;
+      },
+      run: (data, matches) =>
+        data.actorPositions[matches.id] = {
+          x: parseFloat(matches.x),
+          y: parseFloat(matches.y),
+          heading: parseFloat(matches.heading),
+        },
+    },
+    {
+      id: 'R12S Phase Two ActorMove Tracker',
+      type: 'ActorMove',
+      netRegex: { id: '4[0-9A-Fa-f]{7}', capture: true },
+      condition: (data) => {
+        if (
+          data.phase === 'replication1' ||
+          data.phase === 'replication2' ||
+          data.phase === 'idyllic'
+        )
+          return true;
+        return false;
+      },
+      run: (data, matches) =>
+        data.actorPositions[matches.id] = {
+          x: parseFloat(matches.x),
+          y: parseFloat(matches.y),
+          heading: parseFloat(matches.heading),
+        },
     },
     {
       id: 'R12S The Fixer',
@@ -282,17 +366,23 @@ const triggerSet: TriggerSet<Data> = {
       type: 'Ability',
       netRegex: { id: ['B49A', 'B49B'], source: 'Lindwurm', capture: true },
       condition: (data) => data.phase === 'doorboss',
+      durationSeconds: 6,
       infoText: (_data, matches, output) => {
-        const dir = matches.id === 'B49A' ? output.goWest!() : output.goEast!();
-        return output.safe!({ dir: dir });
+        if (matches.id === 'B49A')
+          return output.goWest!();
+        return output.goEast!();
       },
       outputStrings: {
-        safe: {
-          en: '${dir} Safe',
-          ko: '안전: ${dir}',
+        goEast: {
+          en: 'East',
+          ja: '安置: 🡺東',
+          ko: '안전: 🡺동쪽',
         },
-        goEast: Outputs.east,
-        goWest: Outputs.west,
+        goWest: {
+          en: 'West',
+          ja: '安置: 🡸西',
+          ko: '안전: 🡸서쪽',
+        },
       },
     },
     {
@@ -394,11 +484,11 @@ const triggerSet: TriggerSet<Data> = {
         },
         alpha3: {
           en: '3α: Blob Tower 1',
-          ko: '3α: 살덩이 #1',
+          ko: '3α: 안쪽 살덩이 #1',
         },
         alpha4: {
           en: '4α: Blob Tower 2',
-          ko: '4α: 살덩이 #2',
+          ko: '4α: 안쪽 살덩이 #2',
         },
         beta1: {
           en: '1β: Wait for Tether 1',
@@ -410,11 +500,11 @@ const triggerSet: TriggerSet<Data> = {
         },
         beta3: {
           en: '3β: Chain Tower 1',
-          ko: '3β: 생성 타워 #1',
+          ko: '3β: 돌출 타워 #1',
         },
         beta4: {
           en: '4β: Chain Tower 2',
-          ko: '4β: 생성 타워 #2',
+          ko: '4β: 돌출 타워 #2',
         },
         order: {
           en: '${num}',
@@ -587,7 +677,7 @@ const triggerSet: TriggerSet<Data> = {
       netRegex: { id: headMarkerData['cellChainTether'], capture: false },
       condition: (data) => {
         if (data.phase === 'doorboss' && data.myFleshBonds === 'beta')
-          return true;
+          return data.triggerSetConfig.showGrotesquerieAct2Progress;
         return false;
       },
       infoText: (data, _matches, output) => {
@@ -595,22 +685,13 @@ const triggerSet: TriggerSet<Data> = {
         const num = data.cellChainCount;
         if (myNum !== num) {
           if (myNum === 1 && num === 3)
-            return output.beta1Tower!({
-              tether: output.tether!({ num: num }),
-            });
+            return output.beta1Tower!({ num: num });
           if (myNum === 2 && num === 4)
-            return output.beta2Tower!({
-              tether: output.tether!({ num: num }),
-            });
+            return output.beta2Tower!({ num: num });
           if (myNum === 3 && num === 1)
-            return output.beta3Tower!({
-              tether: output.tether!({ num: num }),
-            });
+            return output.beta3Tower!({ num: num });
           if (myNum === 4 && num === 2)
-            return output.beta4Tower!({
-              tether: output.tether!({ num: num }),
-            });
-
+            return output.beta4Tower!({ num: num });
           return output.tether!({ num: num });
         }
 
@@ -624,20 +705,20 @@ const triggerSet: TriggerSet<Data> = {
           ko: '(줄 #${num})',
         },
         beta1Tower: {
-          en: '${tether} => Chain Tower 3',
-          ko: '(${tether} 🔜 타워 #3)',
+          en: 'Tether ${num} => Chain Tower 3',
+          ko: '(줄 #${num} 🔜 돌출 타워 #3)',
         },
         beta2Tower: {
-          en: '${tether} => Chain Tower 4',
-          ko: '(${tether} 🔜 타워 #4)',
+          en: 'Tether ${num} => Chain Tower 4',
+          ko: '(줄 #${num} 🔜 돌출 타워 #4)',
         },
         beta3Tower: {
-          en: '${tether} => Chain Tower 1',
-          ko: '(${tether} 🔜 타워 #1)',
+          en: 'Tether ${num} => Chain Tower 1',
+          ko: '(줄 #${num} 🔜 돌출 타워 #1)',
         },
         beta4Tower: {
-          en: '${tether} => Chain Tower 2',
-          ko: '(${tether} 🔜 타워 #2)',
+          en: 'Tether ${num} => Chain Tower 2',
+          ko: '(줄 #${num} 🔜 돌출 타워 #2)',
         },
       },
     },
@@ -678,7 +759,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         tower: {
           en: 'Get Chain Tower ${num}',
-          ko: '생성 타워 #${num} 밟아요',
+          ko: '밟아요: 돌출 타워 #${num}',
         },
       },
     },
@@ -719,19 +800,19 @@ const triggerSet: TriggerSet<Data> = {
         ...dirAimStrings,
         alpha3: {
           en: 'Get Blob Tower 1',
-          ko: '살덩이 #1 밟아요',
+          ko: '밟아요: 살덩이 #1',
         },
         alpha4: {
           en: 'Get Blob Tower 2',
-          ko: '살덩이 #2 밟아요',
+          ko: '밟아요: 살덩이 #2',
         },
         alpha3Dir: {
           en: 'Get Blob Tower 1 (Inner ${dir})',
-          ko: '안쪽 살덩이 #1 밟아요 (${dir})',
+          ko: '밟아요: 안쪽 살덩이 #1 (${dir})',
         },
         alpha4Dir: {
           en: 'Get Blob Tower 2 (Inner ${dir})',
-          ko: '안쪽 살덩이 #2 밟아요 (${dir})',
+          ko: '밟아요: 안쪽 살덩이 #2 (${dir})',
         },
       },
     },
@@ -751,91 +832,80 @@ const triggerSet: TriggerSet<Data> = {
           if (myNum === 1) {
             const dir = data.blobTowerDirs[2];
             if (dir !== undefined)
-              return output.alpha1Dir!({
-                chains: output.breakChains!(),
-                dir: output[dir]!(),
-              });
+              return output.alpha1Dir!({ dir: output[dir]!() });
           }
           if (myNum === 2) {
             const dir = data.blobTowerDirs[3];
             if (dir !== undefined)
-              return output.alpha2Dir!({
-                chains: output.breakChains!(),
-                dir: output[dir]!(),
-              });
+              return output.alpha2Dir!({ dir: output[dir]!() });
           }
 
           // dir undefined or 3rd/4rth in line
           switch (myNum) {
             case 1:
-              return output.alpha1!({ chains: output.breakChains!() });
+              return output.alpha1!();
             case 2:
-              return output.alpha2!({ chains: output.breakChains!() });
+              return output.alpha2!();
             case 3:
-              return output.alpha3!({ chains: output.breakChains!() });
+              return output.alpha3!();
             case 4:
-              return output.alpha4!({ chains: output.breakChains!() });
+              return output.alpha4!();
           }
         }
         switch (myNum) {
           case 1:
-            return output.beta1!({ chains: output.breakChains!() });
+            return output.beta1!();
           case 2:
-            return output.beta2!({ chains: output.breakChains!() });
+            return output.beta2!();
           case 3:
-            return output.beta3!({ chains: output.breakChains!() });
+            return output.beta3!();
           case 4:
-            return output.beta4!({ chains: output.breakChains!() });
+            return output.beta4!();
         }
         return output.getTowers!();
       },
       outputStrings: {
         ...dirAimStrings,
-        breakChains: {
-          en: 'Break Chains',
-          ja: '線を切る',
-          ko: '줄',
-        },
         getTowers: Outputs.getTowers,
         alpha1: {
-          en: '${chains} 1 + Blob Tower 3 (Outer)',
-          ko: '나가면서 ${chains} #1 끊고 + 살덩이 #3',
+          en: 'Break Chains 1 + Blob Tower 3 (Outer)',
+          ko: '나가면서 끊어요: 줄 #1 🔜 살덩이 #3',
         },
         alpha1Dir: {
-          en: '${chains} 1 + Blob Tower 3 (Outer ${dir})',
-          ko: '나가면서 ${chains} #1 끊고 + 살덩이 #3 (${dir})',
+          en: 'Break Chains 1 + Blob Tower 3 (Outer ${dir})',
+          ko: '나가면서 끊어요: 줄 #1 🔜 살덩이 #3 (${dir})',
         },
         alpha2: {
-          en: '${chains} 2 + Blob Tower 4 (Outer)',
-          ko: '나가면서 ${chains} #2 끊고 + 살덩이 #4',
+          en: 'Break Chains 2 + Blob Tower 4 (Outer)',
+          ko: '나가면서 끊어요: 줄 #2 🔜 살덩이 #4',
         },
         alpha2Dir: {
-          en: '${chains} 2 + Blob Tower 4 (Outer ${dir})',
-          ko: '나가면서 ${chains} #2 끊고 + 살덩이 #4 (${dir})',
+          en: 'Break Chains 2 + Blob Tower 4 (Outer ${dir})',
+          ko: '나가면서 끊어요: 줄 #2 🔜 살덩이 #4 (${dir})',
         },
         alpha3: {
-          en: '${chains} 3 + Get Out',
-          ko: '나가면서 ${chains} #3 끊어요',
+          en: 'Break Chains 3 + Get Out',
+          ko: '나가면서 끊어요: 줄 #3',
         },
         alpha4: {
-          en: '${chains} 4 + Get Out',
-          ko: '나가면서 ${chains} #4 끊어요',
+          en: 'Break Chains 4 + Get Out',
+          ko: '나가면서 끊어요: 줄 #4',
         },
         beta1: {
-          en: '${chains} 1 => Get Middle',
-          ko: '${chains} #1 끊고, 가운데로',
+          en: 'Break Chains 1 => Get Middle',
+          ko: '안에서 끊어요: 줄 #1 🔜 가운데로',
         },
         beta2: {
-          en: '${chains} 2 => Get Middle',
-          ko: '${chains} #2 끊고 🔜 가운데로',
+          en: 'Break Chains 2 => Get Middle',
+          ko: '안에서 끊어요: 줄 #2 🔜 가운데로',
         },
         beta3: {
-          en: '${chains} 3 => Wait for last pair',
-          ko: '${chains} #3 끊고 🔜 마지막 페어',
+          en: 'Break Chains 3 => Wait for last pair',
+          ko: '안에서 끊어요: 줄 #3 🔜 마지막에 탈출',
         },
         beta4: {
-          en: '${chains} 4 => Get Out',
-          ko: '나가면서 ${chains} #4 끊어요',
+          en: 'Break Chains 4 => Get Out',
+          ko: '안에서 끊어요: 줄 #4 🔜 탈출해요!',
         },
       },
     },
@@ -1252,10 +1322,204 @@ const triggerSet: TriggerSet<Data> = {
       response: Responses.bigAoe('alert'),
     },
     {
+      id: 'R12S Winged Scourge',
+      // B4DA E/W clones Facing S, Cleaving Front/Back (North/South)
+      // B4DB N/S clones Facing W, Cleaving Front/Back (East/West)
+      type: 'StartsUsing',
+      netRegex: { id: ['B4DA', 'B4DB'], source: 'Lindschrat', capture: true },
+      suppressSeconds: 1,
+      infoText: (data, matches, output) => {
+        if (matches.id === 'B4DA') {
+          if (data.replication1FollowUp)
+            return output.northSouthCleaves2!();
+          return output.northSouthCleaves!();
+        }
+        if (data.replication1FollowUp)
+          return output.eastWestCleaves2!();
+        return output.eastWestCleaves!();
+      },
+      outputStrings: {
+        northSouthCleaves: {
+          en: 'North/South Cleaves',
+          ko: '남북으로 쪼개기',
+        },
+        eastWestCleaves: {
+          en: 'East/West Cleaves',
+          ko: '동서로 쪼개기',
+        },
+        northSouthCleaves2: {
+          en: 'North/South Cleaves',
+          ko: '남북으로 쪼개기',
+        },
+        eastWestCleaves2: {
+          en: 'East/West Cleaves',
+          ko: '동서로 쪼개기',
+        },
+      },
+    },
+    {
+      id: 'R12S Fire and Dark Resistance Down II Collector',
+      // CFB Dark Resistance Down II
+      // B79 Fire Resistance Down II
+      type: 'GainsEffect',
+      netRegex: { effectId: ['CFB', 'B79'], capture: true },
+      condition: Conditions.targetIsYou(),
+      suppressSeconds: 9999,
+      run: (data, matches) => {
+        data.replication1Debuff = matches.effectId === 'CFB' ? 'dark' : 'fire';
+      },
+    },
+    {
+      id: 'R12S Fire and Dark Resistance Down II',
+      // CFB Dark Resistance Down II
+      // B79 Fire Resistance Down II
+      type: 'GainsEffect',
+      netRegex: { effectId: ['CFB', 'B79'], capture: true },
+      condition: (data, matches) => {
+        if (data.me === matches.target)
+          return !data.replication1FollowUp;
+        return false;
+      },
+      suppressSeconds: 9999,
+      infoText: (_data, matches, output) => {
+        return matches.effectId === 'CFB' ? output.dark!() : output.fire!();
+      },
+      outputStrings: {
+        fire: {
+          en: 'Fire Debuff: Spread near Dark Clone (later)',
+          ko: '(불 디버프: 나중에 어둠 클론 부근에서 흩어져요)',
+        },
+        dark: {
+          en: 'Dark Debuff: Stack near Fire Clone (later)',
+          ko: '(어둠 디버프: 나중에 불 클론 부근에서 뭉쳐요)',
+        },
+      },
+    },
+    {
+      id: 'R12S Fake Fire Resistance Down II',
+      // Two players will not receive a debuff, they will need to act as if they had
+      type: 'GainsEffect',
+      netRegex: { effectId: ['CFB', 'B79'], capture: false },
+      condition: (data) => !data.replication1FollowUp,
+      delaySeconds: 0.3, // Delay for debuff/damage propagation
+      suppressSeconds: 9999,
+      infoText: (data, _matches, output) => {
+        if (data.replication1Debuff === undefined)
+          return output.noDebuff!();
+      },
+      outputStrings: {
+        noDebuff: {
+          en: 'No Debuff: Spread near Dark Clone (later)',
+          ko: '(디버프 없음: 나중에 어둠 클론 부근에서 흩어져요)',
+        },
+      },
+    },
+    {
       id: 'R12S Snaking Kick',
       type: 'StartsUsing',
       netRegex: { id: 'B527', source: 'Lindwurm', capture: false },
       response: Responses.getBehind(),
+      run: (data) => data.replication1FollowUp = true,
+    },
+    {
+      id: 'R12S Replication 1 Follow-up Tracker',
+      // Tracking from B527 Snaking Kick
+      type: 'StartsUsing',
+      netRegex: { id: 'B527', source: 'Lindwurm', capture: false },
+      suppressSeconds: 9999,
+      run: (data) => data.replication1FollowUp = true,
+    },
+    {
+      id: 'R12S Top-Tier Slam Actor Collect',
+      // Fire NPCs always move in the first Set
+      // Locations are static
+      // Fire => Dark => Fire => Dark
+      // Dark => Fire => Dark => Fire
+      // The other 4 cleave in a line
+      // (90, 90)           (110, 90)
+      //      (95, 95)  (105, 95)
+      //             Boss
+      //      (95, 100) (105, 105)
+      // (90, 110)          (110, 110)
+      // ActorMove ~0.3s later will have the data
+      // ActorSet from the clones splitting we can infer the fire entities since their positions and headings are not perfect
+      type: 'Ability',
+      netRegex: { id: 'B4D9', source: 'Lindschrat', capture: true },
+      condition: (data, matches) => {
+        if (data.replication1FollowUp) {
+          const pos = data.actorPositions[matches.sourceId];
+          if (pos === undefined)
+            return false;
+          // These values should be 0 if coords are x.0000
+          const xFilter = pos.x % 1;
+          const yFilter = pos.y % 1;
+          if (xFilter === 0 && yFilter === 0 && pos.heading === -0.0001)
+            return false;
+          return true;
+        }
+        return false;
+      },
+      suppressSeconds: 9999, // Only need one of the two
+      run: (data, matches) => data.replication1FireActor = matches.sourceId,
+    },
+    {
+      id: 'R12S Top-Tier Slam/Mighty Magic Locations',
+      type: 'Ability',
+      netRegex: { id: 'B4D9', source: 'Lindschrat', capture: false },
+      condition: (data) => {
+        if (data.replication1FollowUp && data.replication1FireActor !== undefined)
+          return true;
+        return false;
+      },
+      delaySeconds: 1, // Data is sometimes not available right away
+      suppressSeconds: 9999,
+      infoText: (data, _matches, output) => {
+        const fireId = data.replication1FireActor;
+        if (fireId === undefined)
+          return;
+
+        const actor = data.actorPositions[fireId];
+        if (actor === undefined)
+          return;
+
+        const x = actor.x;
+        const dirNum = Directions.xyTo8DirNum(x, actor.y, center.x, center.y);
+        const dir1 = Directions.output8Dir[dirNum] ?? 'unknown';
+        const dirNum2 = (dirNum + 4) % 8;
+        const dir2 = Directions.output8Dir[dirNum2] ?? 'unknown';
+
+        // Check if combatant moved to inner or outer
+        const isIn = (x > 94 && x < 106);
+        const fireIn = isIn ? dir1 : dir2;
+        const fireOut = isIn ? dir2 : dir1;
+
+        if (data.replication1Debuff === 'dark')
+          return output.fire!({
+            dir1: output[fireIn]!(),
+            dir2: output[fireOut]!(),
+          });
+
+        // Dark will be opposite pattern of Fire
+        const darkIn = isIn ? dir2 : dir1;
+        const darkOut = isIn ? dir1 : dir2;
+
+        // Fire debuff players and unmarked bait Dark
+        return output.dark!({
+          dir1: output[darkIn]!(),
+          dir2: output[darkOut]!(),
+        });
+      },
+      outputStrings: {
+        ...dirAimStrings, // Cardinals should result in '???'
+        fire: {
+          en: 'Bait Fire near In ${dir1}/Out ${dir2} (Partners)',
+          ko: '불 유도: 안쪽 ${dir1}, 바깥쪽 ${dir2} (페어)',
+        },
+        dark: {
+          en: 'Bait Dark near In ${dir1}/Out ${dir2} (Solo)',
+          ko: '어둠 유도: 안쪽 ${dir1}, 바깥쪽 ${dir2} (홀로)',
+        },
+      },
     },
     {
       id: 'R12S Double Sobat',
@@ -1263,7 +1527,7 @@ const triggerSet: TriggerSet<Data> = {
       // First hit targets highest emnity target, second targets second highest
       type: 'HeadMarker',
       netRegex: { id: headMarkerData['sharedTankbuster'], capture: true },
-      response: Responses.sharedTankBuster(),
+      response: Responses.sharedOrInvinTankBuster(),
     },
     // ////////////////////////////////
     {
