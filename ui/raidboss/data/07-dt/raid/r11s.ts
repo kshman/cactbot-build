@@ -18,7 +18,7 @@ type WeaponInfo = {
 export interface Data extends RaidbossData {
   readonly triggerSetConfig: {
     trophyDisplay: 'full' | 'simple';
-    stampedeStyle: 'static' | 'totan' | 'dxa';
+    stampedeStyle: 'totan' | 'dxa';
   };
   phase: Phase;
   actorPositions: { [id: string]: { x: number; y: number; heading: number } };
@@ -40,7 +40,9 @@ export interface Data extends RaidbossData {
   hasMeteor: boolean;
   fireballCount: number;
   hasAtomic: boolean;
+  hadEclipticTether: boolean;
   heartbreakerCount: number;
+  //
   meteorCount: number;
   majesticTethers: string[];
   avalancheSafe?: 'east' | 'west';
@@ -48,14 +50,12 @@ export interface Data extends RaidbossData {
   atomicPartner?: string;
   atomicNorth?: boolean;
   fireballPosition?: string;
-  hasStretchTether: boolean;
 }
 
 const center = {
   x: 100,
   y: 100,
 };
-console.assert(center);
 
 const phaseMap: { [id: string]: Phase } = {
   'B43F': 'arenaSplit', // Flatliner
@@ -225,22 +225,19 @@ const triggerSet: TriggerSet<Data> = {
       type: 'select',
       options: {
         en: {
-          'Totan V3': 'static',
           'Totan V2': 'totan',
           'DXA': 'dxa',
         },
         ja: {
-          'とたんV3': 'static',
           'とたんV2': 'totan',
           'DXA': 'dxa',
         },
         ko: {
-          '토탄V3': 'static',
           '토탄V2': 'totan',
           'DXA': 'dxa',
         },
       },
-      default: 'static',
+      default: 'totan',
     },
   ],
   timelineFile: 'r11s.txt',
@@ -259,13 +256,15 @@ const triggerSet: TriggerSet<Data> = {
     hasMeteor: false,
     fireballCount: 0,
     hasAtomic: false,
+    hadEclipticTether: false,
     heartbreakerCount: 0,
+    //
     meteorCount: 0,
     explosionTowerCount: 0,
     majesticTethers: [],
     atomicList: [],
-    hasStretchTether: false,
   }),
+  timelineTriggers: [],
   triggers: [
     {
       id: 'R11S Phase Tracker',
@@ -336,9 +335,15 @@ const triggerSet: TriggerSet<Data> = {
       type: 'ActorControlExtra',
       netRegex: { category: '0197', param1: ['11D1', '11D2', '11D3'], capture: true },
       condition: (data) => data.weaponMechCount > 1,
-      delaySeconds: (data) => ultimateTrophyWeaponsMap[data.weaponMechCount]?.delay ?? 0,
-      durationSeconds: (data) => ultimateTrophyWeaponsMap[data.weaponMechCount]?.duration ?? 0,
-      countdownSeconds: (data) => ultimateTrophyWeaponsMap[data.weaponMechCount]?.duration ?? 0,
+      delaySeconds: (data) => {
+        return ultimateTrophyWeaponsMap[data.weaponMechCount]?.delay ?? 0;
+      },
+      durationSeconds: (data) => {
+        return ultimateTrophyWeaponsMap[data.weaponMechCount]?.duration ?? 0;
+      },
+      countdownSeconds: (data) => {
+        return ultimateTrophyWeaponsMap[data.weaponMechCount]?.duration ?? 0;
+      },
       infoText: (data, matches, output) => {
         if (data.triggerSetConfig.trophyDisplay === 'simple') {
           const simple = matches.param1 === '11D1'
@@ -369,6 +374,53 @@ const triggerSet: TriggerSet<Data> = {
           en: '${mech} => Bait Gust',
           ja: '${mech} 🔜 風誘導',
           ko: '${mech} 🔜 돌풍 유도!',
+        },
+      },
+    },
+    {
+      id: 'R11S Trophy Weapons 2 Early Calls',
+      type: 'ActorControlExtra',
+      netRegex: { category: '0197', param1: ['11D1', '11D2', '11D3'], capture: true },
+      condition: (data, matches) => {
+        if (data.weaponMechCount !== 1)
+          return false;
+
+        const actor = data.actorPositions[matches.id];
+
+        if (actor === undefined)
+          return false;
+
+        const actorDir = Math.atan2(actor.x - center.x, actor.y - center.y);
+
+        if ((Math.abs(actorDir - actor.heading) % Math.PI) < 0.1)
+          return true;
+        return false;
+      },
+      suppressSeconds: 9999,
+      infoText: (data, matches, output) => {
+        const actor = data.actorPositions[matches.id];
+
+        if (actor === undefined)
+          return;
+
+        const mechanic = matches.param1 === '11D1'
+          ? 'healerGroups'
+          : (matches.param1 === '11D2' ? 'stack' : 'protean');
+
+        const dir = Directions.xyTo8DirOutput(actor.x, actor.y, center.x, center.y);
+
+        return output.text!({
+          dir: output[dir]!(),
+          weapon: output[mechanic]!(),
+        });
+      },
+      outputStrings: {
+        ...trophyStrings,
+        ...markerStrings,
+        text: {
+          en: '${dir}: ${weapon} (1st later)',
+          ja: '(${dir} ${weapon})',
+          ko: '(${dir}쪽 ${weapon})',
         },
       },
     },
@@ -628,14 +680,6 @@ const triggerSet: TriggerSet<Data> = {
       netRegex: { name: 'Maelstrom', capture: false },
       run: (data) => data.maelstromCount = data.maelstromCount + 1,
     },
-    /* 이거 표시할 이유가 없다
-    {
-      id: 'R11S Maelstrom 3 Reminder',
-      type: 'AddedCombatant',
-      netRegex: { name: 'Maelstrom', capture: false },
-      condition: (data) => data.maelstromCount === 3,
-      response: Responses.moveAway(),
-    }, */
     {
       id: 'R11S Powerful Gust Reminder',
       type: 'AddedCombatant',
@@ -690,30 +734,6 @@ const triggerSet: TriggerSet<Data> = {
       type: 'StartsUsing',
       netRegex: { id: 'B42F', source: 'The Tyrant', capture: false },
       response: Responses.goSides(),
-    },
-    {
-      id: 'R11S Meteorain',
-      type: 'StartsUsing',
-      netRegex: { id: 'B434', source: 'The Tyrant', capture: false },
-      response: (data, _matches, output) => {
-        // cactbot-builtin-response
-        output.responseOutputStrings = {
-          healer: {
-            en: 'Bait meteor #1',
-            ja: 'メテオ誘導 #1',
-            ko: '메테오 받아요! #1',
-          },
-          others: {
-            en: 'Avoid middle!',
-            ja: '中央を避けて！',
-            ko: '서클 밖으로!',
-          },
-        };
-        data.meteorCount = 1;
-        if (data.role === 'healer')
-          return { alertText: output.healer!() };
-        return { infoText: output.others!() };
-      },
     },
     {
       id: 'R11S Meteor',
@@ -794,7 +814,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.flatliner!(),
       outputStrings: {
         flatliner: {
-          en: 'AoE + Short knockback',
+          en: 'Short knockback to sides',
           ja: '全体攻撃 + 短いノックバック',
           ko: '전체 공격 + 짧은 넉백',
         },
@@ -999,16 +1019,12 @@ const triggerSet: TriggerSet<Data> = {
               : undefined;
             if (data.atomicNorth !== undefined) {
               if (data.atomicNorth) {
-                data.fireballPosition = data.triggerSetConfig.stampedeStyle !== 'static'
-                  ? 'dirNW'
-                  : 'dirN';
+                data.fireballPosition = 'dirNW';
                 if (meteorQuad === 'dirNE' || meteorQuad === 'dirSW')
                   return { alertText: output.dir!({ dir: output.nw!() }) };
                 return { alertText: output.dir!({ dir: output.ne!() }) };
               }
-              data.fireballPosition = data.triggerSetConfig.stampedeStyle !== 'static'
-                ? 'dirSE'
-                : 'dirS';
+              data.fireballPosition = 'dirSE';
               if (meteorQuad === 'dirNE' || meteorQuad === 'dirSW')
                 return { alertText: output.dir!({ dir: output.se!() }) };
               return { alertText: output.dir!({ dir: output.sw!() }) };
@@ -1035,7 +1051,7 @@ const triggerSet: TriggerSet<Data> = {
       suppressSeconds: 1,
       infoText: (data, _matches, output) => {
         if (data.triggerSetConfig.stampedeStyle === 'dxa') {
-          // DXA 스타일
+          // DXA
           if (data.role === 'tank')
             return output.pillar!({ dir: data.moks === 'MT' ? output.right!() : output.left!() });
           else if (data.role === 'healer') {
@@ -1055,11 +1071,8 @@ const triggerSet: TriggerSet<Data> = {
             data.fireballPosition = 'dirSW';
             return output.pillar!({ dir: output.left!() });
           }
-        } else if (
-          data.triggerSetConfig.stampedeStyle === 'totan' ||
-          data.triggerSetConfig.stampedeStyle === 'static'
-        ) {
-          // 토탄V2/V3 스타일
+        } else {
+          // 토탄V2
           if (data.role === 'tank')
             return output.pillar!({ dir: data.moks === 'MT' ? output.right!() : output.left!() });
           else if (data.role === 'healer') {
@@ -1075,14 +1088,10 @@ const triggerSet: TriggerSet<Data> = {
               return output.pillar!({ dir: dir });
             }
           } else if (data.moks === 'D1') {
-            data.fireballPosition = data.triggerSetConfig.stampedeStyle === 'totan'
-              ? 'dirNE'
-              : 'dirN';
+            data.fireballPosition = 'dirNE';
             return output.pillar!({ dir: output.right!() });
           } else if (data.moks === 'D2') {
-            data.fireballPosition = data.triggerSetConfig.stampedeStyle === 'totan'
-              ? 'dirSW'
-              : 'dirS';
+            data.fireballPosition = 'dirSW';
             return output.pillar!({ dir: output.left!() });
           } else if (data.moks === 'D3') {
             // D3은 H1이 없어야 오른쪽, 아니면 왼쪽
@@ -1119,11 +1128,29 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
+      id: 'R11S Majestic Meteowrath Tether Collect',
+      type: 'Tether',
+      netRegex: { id: [headMarkerData.closeTether, headMarkerData.farTether], capture: true },
+      condition: (data, matches) => {
+        if (
+          data.me === matches.target &&
+          data.phase === 'ecliptic'
+        )
+          return true;
+        return false;
+      },
+      suppressSeconds: 9999,
+      run: (data) => data.hadEclipticTether = true,
+    },
+    {
       id: 'R11S Majestic Meteowrath Tethers',
       type: 'Tether',
       netRegex: { id: [headMarkerData.closeTether, headMarkerData.farTether], capture: true },
       condition: (data, matches) => {
-        if (data.me === matches.target && data.phase === 'ecliptic')
+        if (
+          data.me === matches.target &&
+          data.phase === 'ecliptic'
+        )
           return true;
         return false;
       },
@@ -1132,12 +1159,11 @@ const triggerSet: TriggerSet<Data> = {
         const actor = data.actorPositions[matches.sourceId];
         if (actor === undefined)
           return;
-        const portalDirNum = Directions.xyTo8DirNum(actor.x, actor.y, center.x, center.y);
 
+        const portalDirNum = Directions.xyTo8DirNum(actor.x, actor.y, center.x, center.y);
         // TODO: Make config for options?
         const stretchDirNum = (portalDirNum + 5) % 8;
         const stretchDir = Directions.output8Dir[stretchDirNum] ?? 'unknown';
-
         return output.stretchTetherDir!({ dir: output[stretchDir]!() });
       },
       outputStrings: {
@@ -1155,53 +1181,39 @@ const triggerSet: TriggerSet<Data> = {
       netRegex: { id: 'B7BD', source: 'The Tyrant', capture: false },
       durationSeconds: 5,
       alertText: (data, _matches, output) => {
+        const act = data.hadEclipticTether ? output.behind!() : output.front!();
         const pos = data.fireballPosition;
         if (pos === undefined)
-          return data.triggerSetConfig.stampedeStyle === 'static'
-            ? output.nsWay!()
-            : output.ewWay!();
-        if (data.triggerSetConfig.stampedeStyle === 'static' && data.hasStretchTether) {
-          const rotMap: { [key: string]: string } = {
-            'dirSW': 'dirS',
-            'dirNW': 'dirN',
-            'dirNE': 'dirN',
-            'dirSE': 'dirS',
-          };
-          const npos = rotMap[pos] ?? pos;
-          return output.wait!({ dir: output[npos]!() });
-        }
-        if (data.triggerSetConfig.stampedeStyle === 'totan') {
-          const rotMap: { [key: string]: string } = {
-            'dirSW': 'dirW',
-            'dirNW': 'dirW',
-            'dirNE': 'dirE',
-            'dirSE': 'dirE',
-          };
-          const npos = rotMap[pos] ?? pos;
-          return output.twoWay!({ dir: output[npos]!() });
-        }
-        return output.twoWay!({ dir: output[pos]!() });
+          return output.twoWay!({ act: act });
+        const rotMap: { [key: string]: string } = {
+          'dirSW': 'dirW',
+          'dirNW': 'dirW',
+          'dirNE': 'dirE',
+          'dirSE': 'dirE',
+        };
+        const npos = rotMap[pos] ?? pos;
+        return output.twoWayDir!({ dir: output[npos]!(), act: act });
       },
       outputStrings: {
-        wait: {
-          en: 'Wait, ${dir} Line Stack',
-          ja: '隅み待機 (${dir})',
-          ko: '2웨이: 모서리 대기 (${dir}쪽)',
-        },
-        ewWay: {
-          en: 'East/West Line Stack',
-          ja: '東西一列頭割り',
-          ko: '2웨이: 동서로 한줄 뭉쳐요',
-        },
-        nsWay: {
-          en: 'North/South Line Stack',
-          ja: '南北一列頭割り',
-          ko: '2웨이: 남북으로 한줄 뭉쳐요',
-        },
         twoWay: {
-          en: '${dir} Line Stack',
-          ja: '${dir}で一列頭割り',
-          ko: '2웨이: ${dir}쪽 한줄 뭉쳐요',
+          en: 'East/West Line Stack, ${act}',
+          ja: '東西一列頭割り (${act})',
+          ko: '2웨이: 동서로 한줄 뭉쳐요 (${act})',
+        },
+        twoWayDir: {
+          en: '${dir} Line Stack, ${act}',
+          ja: '${dir}で一列頭割り (${act})',
+          ko: '2웨이: ${dir}쪽 한줄 뭉쳐요 (${act})',
+        },
+        front: {
+          en: 'Be in Front',
+          ja: '前へ',
+          ko: '앞에서 막아요',
+        },
+        behind: {
+          en: 'Get Behind',
+          ja: '後ろへ',
+          ko: '뒤로 피해요',
         },
         ...markerStrings,
       },
@@ -1211,54 +1223,32 @@ const triggerSet: TriggerSet<Data> = {
       type: 'StartsUsing',
       netRegex: { id: 'B45A', source: 'The Tyrant', capture: false },
       alertText: (data, _matches, output) => {
+        const act = data.hadEclipticTether ? output.behind!() : output.front!();
         const pos = data.fireballPosition;
         if (pos === undefined)
-          return data.triggerSetConfig.stampedeStyle === 'static'
-            ? output.plusWay!()
-            : output.crossWay!();
-        if (data.triggerSetConfig.stampedeStyle === 'static') {
-          const rotMap: { [key: string]: string } = {
-            'dirSW': 'dirW',
-            'dirNW': 'dirN',
-            'dirNE': 'dirE',
-            'dirSE': 'dirS',
-          };
-          let npos = rotMap[pos] ?? pos;
-          if (data.hasStretchTether)
-            return output.wait!({ dir: output[npos]!() });
-          if (data.moks === 'D1' && npos === 'dirN')
-            npos = 'dirW';
-          else if (data.moks === 'D2' && npos === 'dirS')
-            npos = 'dirE';
-          return output.fourPlusWay!({ dir: output[npos]!() });
-        }
-        return output.fourCrossWay!({ dir: output[pos]!() });
+          return output.fourWay!({ act: act });
+        return output.fourWayDir!({ dir: output[pos]!(), act: act });
       },
       outputStrings: {
-        wait: {
-          en: 'Wait, ${dir} Line Stack',
-          ja: '隅み待機 (${dir})',
-          ko: '4웨이: 모서리 대기 (${dir}쪽)',
+        fourWay: {
+          en: 'Intercardinal Line Stack, ${act}',
+          ja: '斜めペア (${act})',
+          ko: '4웨이: ❌페어 (${act})',
         },
-        crossWay: {
-          en: 'Intercardinal Line Stack',
-          ja: '斜めペア',
-          ko: '4웨이: ❌페어',
+        fourWayDir: {
+          en: '${dir} Intercardinal Line Stack, ${act}',
+          ja: '${dir}で斜めペア (${act})',
+          ko: '4웨이: ${dir}쪽 페어 (${act})',
         },
-        plusWay: {
-          en: 'Cardinal Line Stack',
-          ja: '十字ペア',
-          ko: '4웨이: ➕페어',
+        front: {
+          en: 'Be in Front',
+          ja: '前へ',
+          ko: '앞에서 막아요',
         },
-        fourCrossWay: {
-          en: '${dir} Intercardinal Line Stack',
-          ja: '${dir}で斜めペア',
-          ko: '4웨이: ${dir}쪽 ❌페어',
-        },
-        fourPlusWay: {
-          en: '${dir} Cardinal Line Stack',
-          ja: '${dir}で十字ペア',
-          ko: '4웨이: ${dir}쪽 ➕페어',
+        behind: {
+          en: 'Get Behind',
+          ja: '後ろへ',
+          ko: '뒤로 피해요',
         },
         ...markerStrings,
       },
@@ -1297,6 +1287,30 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     // //////////////////////////////////////
+    {
+      id: 'R11S Meteorain',
+      type: 'StartsUsing',
+      netRegex: { id: 'B434', source: 'The Tyrant', capture: false },
+      response: (data, _matches, output) => {
+        // cactbot-builtin-response
+        output.responseOutputStrings = {
+          healer: {
+            en: 'Bait meteor #1',
+            ja: 'メテオ誘導 #1',
+            ko: '메테오 받아요! #1',
+          },
+          others: {
+            en: 'Avoid middle!',
+            ja: '中央を避けて！',
+            ko: '서클 밖으로!',
+          },
+        };
+        data.meteorCount = 1;
+        if (data.role === 'healer')
+          return { alertText: output.healer!() };
+        return { infoText: output.others!() };
+      },
+    },
     {
       id: 'R11S Next Meteor',
       type: 'Ability',

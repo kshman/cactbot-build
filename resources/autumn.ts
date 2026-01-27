@@ -240,13 +240,15 @@ const healerBarrierJobs: Job[] = ['SCH', 'SGE'];
 // 몫 이름
 const moksTanks: readonly string[] = ['MT', 'ST'] as const;
 const moksHealers: readonly string[] = ['H1', 'H2'] as const;
-const moksMelees: readonly string[] = ['D1', 'D2'];
-const moksRanges: readonly string[] = ['D3', 'D4'];
-const moksDps: readonly string[] = [...moksMelees, ...moksRanges] as const;
+const moksDpsMelees: readonly string[] = ['D1', 'D2'] as const;
+const moksDpsRanges: readonly string[] = ['D3', 'D4'] as const;
+const moksDps: readonly string[] = [...moksDpsMelees, ...moksDpsRanges] as const;
 const moksTanksAndHealers: readonly string[] = [...moksTanks, ...moksHealers] as const;
+const moksMelee: readonly string[] = [...moksTanks, ...moksDpsMelees] as const;
+const moksRange: readonly string[] = [...moksHealers, ...moksDpsRanges] as const;
 const moksNames: readonly string[] = [...moksTanks, ...moksHealers, ...moksDps] as const;
-const teamMtMoks: readonly string[] = ['MT', 'H1', 'D1', 'D3'];
-const teamStMoks: readonly string[] = ['ST', 'H2', 'D2', 'D4'];
+const moksMainTeam: readonly string[] = ['MT', 'H1', 'D1', 'D3'] as const;
+const moksSubTeam: readonly string[] = ['ST', 'H2', 'D2', 'D4'] as const;
 
 // 몫 타입
 export type AutumnMoks = 'MT' | 'ST' | 'H1' | 'H2' | 'D1' | 'D2' | 'D3' | 'D4' | 'none';
@@ -262,11 +264,13 @@ const Autumn = {
   isHealer: (moksName: string) => moksHealers.includes(moksName),
   isSupport: (moksName: string) => moksTanksAndHealers.includes(moksName),
   isDps: (moksName: string) => moksDps.includes(moksName),
-  isMelee: (moksName: string) => moksMelees.includes(moksName),
-  isRange: (moksName: string) => moksRanges.includes(moksName),
-  inMainTeam: (moksName: string) => teamMtMoks.includes(moksName),
-  inSubTeam: (moksName: string) => teamStMoks.includes(moksName),
-  getTeam: (moks: AutumnMoks): AutumnTeams => teamMtMoks.includes(moks) ? 'MT' : 'ST',
+  isDpsMelee: (moksName: string) => moksDpsMelees.includes(moksName),
+  isDpsRange: (moksName: string) => moksDpsRanges.includes(moksName),
+  inMelee: (moksName: string) => moksMelee.includes(moksName),
+  inRange: (moksName: string) => moksRange.includes(moksName),
+  inMainTeam: (moksName: string) => moksMainTeam.includes(moksName),
+  inSubTeam: (moksName: string) => moksSubTeam.includes(moksName),
+  getTeam: (moks: AutumnMoks): AutumnTeams => moksMainTeam.includes(moks) ? 'MT' : 'ST',
 
   getParams: getParam,
   testParam: testParam,

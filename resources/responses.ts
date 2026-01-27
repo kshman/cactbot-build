@@ -623,7 +623,9 @@ export const Responses = {
   },
   wakeUp: (sev?: Severity) => staticResponse(defaultAlarmText(sev), Outputs.wakeUp),
   getTowers: (sev?: Severity) => staticResponse(defaultInfoText(sev), Outputs.getTowers),
+  // PRS
   test: (sev?: Severity) => staticResponse(defaultInfoText(sev), Outputs.test),
+  positions: (sev?: Severity) => staticResponse(defaultInfoText(sev), Outputs.positions),
   sharedOrInvinTankBuster: (targetSev?: Severity, otherSev?: Severity) => {
     const outputStrings = {
       sharedOrInvinTankbusterOnYou: Outputs.sharedOrInvinTankbusterOnYou,

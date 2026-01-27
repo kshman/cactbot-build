@@ -1,8 +1,14 @@
+import Autumn from '../../../../../resources/autumn';
 import Conditions from '../../../../../resources/conditions';
 import { UnreachableCode } from '../../../../../resources/not_reached';
 import Outputs from '../../../../../resources/outputs';
 import { Responses } from '../../../../../resources/responses';
-import { Directions } from '../../../../../resources/util';
+import {
+  DirectionOutput8,
+  DirectionOutputCardinal,
+  DirectionOutputIntercard,
+  Directions,
+} from '../../../../../resources/util';
 import ZoneId from '../../../../../resources/zone_id';
 import { RaidbossData } from '../../../../../types/data';
 import { TriggerSet } from '../../../../../types/trigger';
@@ -13,7 +19,12 @@ export type Phase =
   | 'slaughtershed'
   | 'replication1'
   | 'replication2'
-  | 'idyllic';
+  | 'reenactment1'
+  | 'idyllic'
+  | 'reenactment2';
+
+type DirectionCardinal = Exclude<DirectionOutputCardinal, 'unknown'>;
+type DirectionIntercard = Exclude<DirectionOutputIntercard, 'unknown'>;
 
 type MortalInfo = {
   purple: boolean;
@@ -23,6 +34,7 @@ type MortalInfo = {
 
 export interface Data extends RaidbossData {
   readonly triggerSetConfig: {
+    uptimeKnockbackStrat: true | false;
     showGrotesquerieAct2Progress: boolean;
   };
   phase: Phase;
@@ -42,11 +54,33 @@ export interface Data extends RaidbossData {
   hasRot: boolean;
   // Phase 2
   actorPositions: { [id: string]: { x: number; y: number; heading: number } };
+  replicationCounter: number;
   replication1Debuff?: 'fire' | 'dark';
   replication1FireActor?: string;
   replication1FollowUp: boolean;
+  replication2TetherMap: { [dirNum: string]: string };
+  replication2BossId?: string;
+  myReplication2Tether?: string;
+  netherwrathFollowup: boolean;
+  myMutation?: 'alpha' | 'beta';
+  manaSpheres: {
+    [id: string]: 'lightning' | 'fire' | 'water' | 'wind' | 'blackHole';
+  };
+  westManaSpheres: { [id: string]: { x: number; y: number } };
+  eastManaSpheres: { [id: string]: { x: number; y: number } };
+  closeManaSphereIds: string[];
+  firstBlackHole?: 'east' | 'west';
+  manaSpherePopSide?: 'east' | 'west';
+  twistedVisionCounter: number;
+  replication3CloneOrder: number[];
+  idyllicVision2NorthSouthCleaveSpot?: 'north' | 'south';
+  replication4TetherMap: { [dirNum: string]: string };
+  myReplication4Tether?: string;
+  hasLightResistanceDown: boolean;
+  doomPlayers: string[];
   // prt
   mortalList: MortalInfo[];
+  ushikoDir: DirectionOutput8;
 }
 
 const headMarkerData = {
@@ -65,6 +99,12 @@ const headMarkerData = {
   // Phase 2
   // VFX: sharelaser2tank5sec_c0k1, used by Double Sobat (B520)
   'sharedTankbuster': '0256',
+  // Replication 2 Tethers
+  'lockedTether': '0175', // Clone tethers
+  'projectionTether': '016F', // Comes from Lindschrat, B4EA Grotesquerie + B4EB Hemorrhagic Projection cleave based on player facing
+  'manaBurstTether': '0170', // Comes from Lindschrat, B4E7 Mana Burst defamation
+  'heavySlamTether': '0171', // Comes from Lindschrat, B4E8 Heavy Slam stack with projection followup
+  'fireballSplashTether': '0176', // Comes from the boss, B4E4 Fireball Splash baited jump
 } as const;
 
 const center = {
@@ -75,6 +115,7 @@ const center = {
 const phaseMap: { [id: string]: Phase } = {
   'BEC0': 'curtainCall',
   'B4C6': 'slaughtershed',
+  'B509': 'idyllic',
 };
 
 const grandCountMap: { [id: string]: string } = {
@@ -85,17 +126,89 @@ const grandCountMap: { [id: string]: string } = {
 };
 
 const dirAimStrings = {
+  dirN: Outputs.aimN,
+  dirS: Outputs.aimS,
+  dirE: Outputs.aimE,
+  dirW: Outputs.aimW,
   dirNE: Outputs.aimNE,
   dirSE: Outputs.aimSE,
   dirSW: Outputs.aimSW,
   dirNW: Outputs.aimNW,
   unknown: Outputs.unknown,
+} as const;
+
+const markerStrings = {
+  dirN: {
+    en: '🡹North',
+    ja: '🄰🡹北',
+    ko: '🄰🡹북',
+  },
+  dirE: {
+    en: '🡺East',
+    ja: '🄱🡺東',
+    ko: '🄱🡺동',
+  },
+  dirS: {
+    en: '🡻South',
+    ja: '🄲🡻南',
+    ko: '🄲🡻남',
+  },
+  dirW: {
+    en: '🡸West',
+    ja: '🄳🡸西',
+    ko: '🄳🡸서',
+  },
+  dirNW: {
+    en: '🡼NW',
+    ja: '➊🡼北西',
+    ko: '➊🡼북서',
+  },
+  dirNE: {
+    en: '🡽NE',
+    ja: '➋🡽北東',
+    ko: '➋🡽북동',
+  },
+  dirSE: {
+    en: '🡾SE',
+    ja: '➌🡾南東',
+    ko: '➌🡾남동',
+  },
+  dirSW: {
+    en: '🡿SW',
+    ja: '➍🡿南西',
+    ko: '➍🡿남서',
+  },
+  unknown: Outputs.unknown,
+} as const;
+
+const isCardinalDir = (dir: DirectionOutput8): dir is DirectionCardinal => {
+  return (Directions.outputCardinalDir as string[]).includes(dir);
+};
+
+const isIntercardDir = (dir: DirectionOutput8): dir is DirectionIntercard => {
+  return (Directions.outputIntercardDir as string[]).includes(dir);
 };
 
 const triggerSet: TriggerSet<Data> = {
   id: 'AacHeavyweightM4Savage',
   zoneId: ZoneId.AacHeavyweightM4Savage,
   config: [
+    {
+      id: 'uptimeKnockbackStrat',
+      name: {
+        en: 'Enable uptime knockback strat',
+        ja: 'エデン零式共鳴編４層：cactbot「ヘヴンリーストライク (ノックバック)」ギミック', // FIXME
+        ko: '정확한 타이밍 넉백방지 공략 사용',
+      },
+      comment: {
+        en: `If you want cactbot to callout Raptor Knuckles double knockback, enable this option.
+             Callout happens during/after first animation and requires <1.8s reaction time
+             to avoid both Northwest and Northeast knockbacks.
+             NOTE: This will call for each set.`,
+      },
+      type: 'checkbox',
+      default: false,
+    },
     {
       id: 'showGrotesquerieAct2Progress',
       name: {
@@ -119,9 +232,22 @@ const triggerSet: TriggerSet<Data> = {
     hasRot: false,
     // Phase 2
     actorPositions: {},
+    replicationCounter: 0,
     replication1FollowUp: false,
+    replication2TetherMap: {},
+    netherwrathFollowup: false,
+    manaSpheres: {},
+    westManaSpheres: {},
+    eastManaSpheres: {},
+    closeManaSphereIds: [],
+    twistedVisionCounter: 0,
+    replication3CloneOrder: [],
+    replication4TetherMap: {},
+    hasLightResistanceDown: false,
+    doomPlayers: [],
     // prt
     mortalList: [],
+    ushikoDir: 'unknown',
   }),
   triggers: [
     {
@@ -138,21 +264,53 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: 'R12S Phase Two Replication Tracker',
-      // B4D8 Replication happens more than once, only track the first one
-      type: 'StartsUsing',
-      netRegex: { id: 'B4D8', source: 'Lindwurm', capture: false },
-      suppressSeconds: 9999,
-      run: (data) => data.phase = 'replication1',
+      id: 'R12S Phase Two Staging Tracker',
+      // Due to the way the combatants are added in prior to the cast of Staging, this is used to set the phase
+      type: 'AddedCombatant',
+      netRegex: { name: 'Understudy', capture: false },
+      condition: (data) => data.phase === 'replication1',
+      run: (data) => data.phase = 'replication2',
     },
     {
-      id: 'R12S Phase Two Staging Tracker',
-      // B4E1 Staging happens more than once, only track the first one
+      id: 'R12S Phase Two Replication Tracker',
       type: 'StartsUsing',
-      netRegex: { id: 'B4E1', source: 'Lindwurm', capture: false },
-      condition: (data) => data.phase === 'replication1',
+      netRegex: { id: 'B4D8', source: 'Lindwurm', capture: false },
+      run: (data) => {
+        if (data.replicationCounter === 0)
+          data.phase = 'replication1';
+        data.replicationCounter = data.replicationCounter + 1;
+      },
+    },
+    {
+      id: 'R12S Phase Two Boss ID Collect',
+      // Store the boss' id later for checking against tether
+      // Using first B4E1 Staging
+      type: 'StartsUsing',
+      netRegex: { id: 'B4E1', source: 'Lindwurm', capture: true },
+      condition: (data) => data.phase === 'replication2',
       suppressSeconds: 9999,
-      run: (data) => data.phase = 'replication2',
+      run: (data, matches) => data.replication2BossId = matches.sourceId,
+    },
+    {
+      id: 'R12S Phase Two Reenactment Tracker',
+      type: 'StartsUsing',
+      netRegex: { id: 'B4EC', source: 'Lindwurm', capture: false },
+      run: (data) => {
+        if (data.phase === 'replication1') {
+          data.phase = 'reenactment1';
+          return;
+        }
+        data.phase = 'reenactment2';
+      },
+    },
+    {
+      id: 'R12S Phase Two Twisted Vision Tracker',
+      // Used for keeping track of phases in idyllic
+      type: 'StartsUsing',
+      netRegex: { id: 'BBE2', source: 'Lindwurm', capture: false },
+      run: (data) => {
+        data.twistedVisionCounter = data.twistedVisionCounter + 1;
+      },
     },
     {
       id: 'R12S Phase Two ActorSetPos Tracker',
@@ -177,6 +335,26 @@ const triggerSet: TriggerSet<Data> = {
     {
       id: 'R12S Phase Two ActorMove Tracker',
       type: 'ActorMove',
+      netRegex: { id: '4[0-9A-Fa-f]{7}', capture: true },
+      condition: (data) => {
+        if (
+          data.phase === 'replication1' ||
+          data.phase === 'replication2' ||
+          data.phase === 'idyllic'
+        )
+          return true;
+        return false;
+      },
+      run: (data, matches) =>
+        data.actorPositions[matches.id] = {
+          x: parseFloat(matches.x),
+          y: parseFloat(matches.y),
+          heading: parseFloat(matches.heading),
+        },
+    },
+    {
+      id: 'R12S Phase Two AddedCombatant Tracker',
+      type: 'AddedCombatant',
       netRegex: { id: '4[0-9A-Fa-f]{7}', capture: true },
       condition: (data) => {
         if (
@@ -632,20 +810,14 @@ const triggerSet: TriggerSet<Data> = {
     },
     /* 이거 필요없을거 같은데
     {
-      id: 'R12S Cursed Coil Bind Knocbkack',
+      id: 'R12S Cursed Coil Bind Draw-in',
       // Using Phagocyte Spotlight, 1st one happens 7s before bind
       // Delayed additionally to reduce overlap with alpha tower location calls
       type: 'Ability',
       netRegex: { id: 'B4B6', capture: false },
       delaySeconds: 3, // 5s warning
       suppressSeconds: 10,
-      infoText: (_data, _matches, output) => output.knockback!(),
-      outputStrings: {
-        knockback: {
-          en: 'Knockback',
-          ko: '강제로 한가운데',
-        },
-      },
+      response: Responses.drawIn(),
     }, */
     {
       id: 'R12S Skinsplitter Counter',
@@ -1087,11 +1259,11 @@ const triggerSet: TriggerSet<Data> = {
         rightCardinals: Outputs.aimW,
         typeCardinals: {
           en: 'Cardinal: ${dir}',
-          ko: '십자➕: ${dir}쪽으로',
+          ko: '➕십자 ${dir}쪽으로',
         },
         typeIntercards: {
           en: 'Intercardinal: ${dir}',
-          ko: '비스듬히✖️: ${dir}쪽으로',
+          ko: '❌비스듬히 ${dir}쪽으로',
         },
         unknown: Outputs.unknown,
       },
@@ -1106,7 +1278,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Rotting Flesh on YOU',
-          ko: '내게 썩은 살덩이',
+          ko: '🟣보라, 공격 맞아요!',
         },
       },
     },
@@ -1134,19 +1306,19 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         getHitWest: {
           en: 'Spread in West Cleave',
-          ko: '서쪽 안전한 곳에서 흩어져요',
+          ko: '🡸서쪽에서 흩어져요 + 공격 맞아요',
         },
         getHitEast: {
           en: 'Spread in East Cleave',
-          ko: '동쪽 안전한 곳에서 흩어져요',
+          ko: '🡺동쪽에서 흩어져요 + 공격 맞아요',
         },
         safeEast: {
-          en: 'Spread East',
-          ko: '동쪽에서 흩어져요',
+          en: 'Spread East + Avoid Cleave',
+          ko: '🡺동쪽에서 흩어져요',
         },
         safeWest: {
-          en: 'Spread West',
-          ko: '서쪽에서 흩어져요',
+          en: 'Spread West + Avoid Cleave',
+          ko: '🡸서쪽에서 흩어져요',
         },
       },
     },
@@ -1154,23 +1326,29 @@ const triggerSet: TriggerSet<Data> = {
       id: 'R12S Split Scourge and Venomous Scourge',
       // B4AB Split Scourge and B4A8 Venomous Scourge are instant casts
       // This actor control happens along with boss becoming targetable
+      // Seems there are two different data0 values possible:
+      // 1E01: Coming back from Cardinal platforms
+      // 1E001: Coming back from Intercardinal platforms
       type: 'ActorControl',
-      netRegex: { command: '8000000D', data0: '1E01', capture: false },
+      netRegex: { command: '8000000D', data0: ['1E01', '1E001'], capture: false },
       durationSeconds: 9,
-      suppressSeconds: 1,
+      suppressSeconds: 9999,
       infoText: (data, _matches, output) => {
         if (data.role === 'tank')
           return output.tank!();
+        if (data.role === 'healer')
+          return output.healer!();
         return output.party!();
       },
       outputStrings: {
         tank: {
           en: 'Bait Line AoE from heads',
-          ko: '머리 빔 유도',
+          ko: '맨 앞에서 머리 빔 무적',
         },
+        healer: Outputs.goIntoMiddle,
         party: {
           en: 'Spread, Away from heads',
-          ko: '흩어져요 (머리쪽은 안되요)',
+          ko: '맡은 자리로 흩어져요',
         },
       },
     },
@@ -1187,33 +1365,21 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: 'R12S Curtain Call: Unbreakable Flesh α/β Chains',
+      id: 'R12S Curtain Call: Unbreakable Flesh α Chains',
+      // All players, including dead, receive α debuffs
       // TODO: Find safe spots
       type: 'GainsEffect',
-      netRegex: { effectId: ['1291', '1293'], capture: true },
+      netRegex: { effectId: '1291', capture: true },
       condition: (data, matches) => {
         if (matches.target === data.me && data.phase === 'curtainCall')
           return true;
         return false;
       },
-      infoText: (_data, matches, output) => {
-        const flesh = matches.effectId === '1291' ? 'alpha' : 'beta';
-        if (flesh === 'alpha')
-          return output.alphaChains!();
-        if (flesh === 'beta')
-          return output.betaChains!();
-        return output.unknownChains!();
+      infoText: (_data, _matches, output) => {
+        return output.alphaChains!();
       },
       outputStrings: {
         alphaChains: {
-          en: 'Break Chains => Avoid Blobs',
-          ko: '줄 끊고 🔜 살덩이 피해요',
-        },
-        betaChains: {
-          en: 'Break Chains => Avoid Blobs',
-          ko: '줄 끊고 🔜 살덩이 피해요',
-        },
-        unknownChains: {
           en: 'Break Chains => Avoid Blobs',
           ko: '줄 끊고 🔜 살덩이 피해요',
         },
@@ -1238,7 +1404,7 @@ const triggerSet: TriggerSet<Data> = {
           return true;
         return false;
       },
-      durationSeconds: 5.1,
+      durationSeconds: 4.5,
       response: Responses.stackMarkerOn(),
     },
     {
@@ -1247,7 +1413,7 @@ const triggerSet: TriggerSet<Data> = {
       type: 'HeadMarker',
       netRegex: { id: headMarkerData['slaughterSpread'], capture: true },
       condition: Conditions.targetIsYou(),
-      durationSeconds: 5.1,
+      durationSeconds: 4.5,
       suppressSeconds: 1,
       response: Responses.spread(),
     },
@@ -1257,7 +1423,8 @@ const triggerSet: TriggerSet<Data> = {
       type: 'Ability',
       netRegex: { id: 'B4CB', source: 'Lindwurm', capture: false },
       condition: (data) => data.phase === 'slaughtershed',
-      durationSeconds: 12,
+      delaySeconds: 6.5,
+      durationSeconds: 5,
       infoText: (_data, _matches, output) => output.rightThenLeft!(),
       outputStrings: {
         rightThenLeft: Outputs.rightThenLeft,
@@ -1269,7 +1436,8 @@ const triggerSet: TriggerSet<Data> = {
       type: 'Ability',
       netRegex: { id: 'B4CD', source: 'Lindwurm', capture: false },
       condition: (data) => data.phase === 'slaughtershed',
-      durationSeconds: 12,
+      delaySeconds: 6.5,
+      durationSeconds: 5,
       infoText: (_data, _matches, output) => output.leftThenRight!(),
       outputStrings: {
         leftThenRight: Outputs.leftThenRight,
@@ -1281,12 +1449,13 @@ const triggerSet: TriggerSet<Data> = {
       type: 'Ability',
       netRegex: { id: 'B4CC', source: 'Lindwurm', capture: false },
       condition: (data) => data.phase === 'slaughtershed',
-      durationSeconds: 15,
+      delaySeconds: 5,
+      durationSeconds: 10,
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Northwest: Knockback to Northeast',
-          ko: '🡼북서로: 넉백 당하고 북동으로',
+          en: 'Knockback from Northwest => Knockback from Northeast',
+          ko: '🡼북서 넉백 🔜 🡽북동 넉백',
         },
       },
     },
@@ -1296,14 +1465,33 @@ const triggerSet: TriggerSet<Data> = {
       type: 'Ability',
       netRegex: { id: 'B4CE', source: 'Lindwurm', capture: false },
       condition: (data) => data.phase === 'slaughtershed',
-      durationSeconds: 15,
+      delaySeconds: 5,
+      durationSeconds: 10,
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Northeast: Knockback to Northwest',
-          ko: '🡽북동으로: 넉백 당하고 북서로',
+          en: 'Knockback from Northeast => Knockback from Northwest',
+          ko: '🡽북동 넉백 🔜 🡼북서 넉백',
         },
       },
+    },
+    {
+      id: 'R12S Raptor Knuckles Uptime Knockback',
+      // First knockback is at ~13.374s
+      // Second knockback is at ~17.964s
+      // Use knockback at ~11.5s to hit both with ~1.8s leniency
+      // ~11.457s before is too late as it comes off the same time as hit
+      // ~11.554s before works (surecast ends ~0.134 after hit)
+      type: 'Ability',
+      netRegex: { id: ['B4CC', 'B4CE'], source: 'Lindwurm', capture: false },
+      condition: (data) => {
+        if (data.phase === 'slaughtershed' && data.triggerSetConfig.uptimeKnockbackStrat)
+          return true;
+        return false;
+      },
+      delaySeconds: 11.5,
+      durationSeconds: 1.8,
+      response: Responses.knockback(),
     },
     {
       id: 'R12S Refreshing Overkill',
@@ -1386,22 +1574,23 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         fire: {
-          en: 'Fire Debuff: Spread near Dark Clone (later)',
-          ko: '(불 디버프: 나중에 어둠 클론 부근에서 흩어져요)',
+          en: 'Fire Debuff: Spread near Dark (later)',
+          ko: '(🔥불: 어둠에서 흩어져요)',
         },
         dark: {
-          en: 'Dark Debuff: Stack near Fire Clone (later)',
-          ko: '(어둠 디버프: 나중에 불 클론 부근에서 뭉쳐요)',
+          en: 'Dark Debuff: Stack near Fire (later)',
+          ko: '(🟣어둠: 불에서 페어)',
         },
       },
     },
     {
       id: 'R12S Fake Fire Resistance Down II',
       // Two players will not receive a debuff, they will need to act as if they had
+      // Mechanics happen across 1.1s
       type: 'GainsEffect',
       netRegex: { effectId: ['CFB', 'B79'], capture: false },
       condition: (data) => !data.replication1FollowUp,
-      delaySeconds: 0.3, // Delay for debuff/damage propagation
+      delaySeconds: 1.2, // +0.1s Delay for debuff/damage propagation
       suppressSeconds: 9999,
       infoText: (data, _matches, output) => {
         if (data.replication1Debuff === undefined)
@@ -1409,22 +1598,49 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         noDebuff: {
-          en: 'No Debuff: Spread near Dark Clone (later)',
-          ko: '(디버프 없음: 나중에 어둠 클론 부근에서 흩어져요)',
+          en: 'No Debuff: Spread near Dark (later)',
+          ko: '(무직: 어둠에서 흩어져요)',
         },
       },
     },
     {
       id: 'R12S Snaking Kick',
+      // Targets random player
       type: 'StartsUsing',
-      netRegex: { id: 'B527', source: 'Lindwurm', capture: false },
-      response: Responses.getBehind(),
-      run: (data) => data.replication1FollowUp = true,
+      netRegex: { id: 'B527', source: 'Lindwurm', capture: true },
+      condition: (data) => {
+        // Use Grotesquerie trigger for projection tethered players
+        const ability = data.myReplication2Tether;
+        if (ability === headMarkerData['projectionTether'])
+          return false;
+        return true;
+      },
+      delaySeconds: 0.1, // Need to delay for actor position update
+      alertText: (data, matches, output) => {
+        const actor = data.actorPositions[matches.sourceId];
+        if (actor === undefined)
+          return output.getBehind!();
+
+        const dirNum = (Directions.hdgTo16DirNum(actor.heading) + 8) % 16;
+        const dir = Directions.output16Dir[dirNum] ?? 'unknown';
+        return output.getBehindDir!({
+          dir: output[dir]!(),
+          mech: output.getBehind!(),
+        });
+      },
+      outputStrings: {
+        ...Directions.outputStrings16Dir,
+        getBehind: Outputs.getBehind,
+        getBehindDir: {
+          en: '${dir}: ${mech}',
+          ko: '${dir} ${mech}',
+        },
+      },
     },
     {
       id: 'R12S Replication 1 Follow-up Tracker',
       // Tracking from B527 Snaking Kick
-      type: 'StartsUsing',
+      type: 'Ability',
       netRegex: { id: 'B527', source: 'Lindwurm', capture: false },
       suppressSeconds: 9999,
       run: (data) => data.replication1FollowUp = true,
@@ -1493,41 +1709,1284 @@ const triggerSet: TriggerSet<Data> = {
         const fireIn = isIn ? dir1 : dir2;
         const fireOut = isIn ? dir2 : dir1;
 
-        if (data.replication1Debuff === 'dark')
+        if (data.replication1Debuff === 'dark') {
+          if (Autumn.inMelee(data.moks))
+            return output.fireAt!({ dir: output[fireIn]!() });
+          if (Autumn.inRange(data.moks))
+            return output.fireAt!({ dir: output[fireOut]!() });
           return output.fire!({
             dir1: output[fireIn]!(),
             dir2: output[fireOut]!(),
           });
+        }
 
         // Dark will be opposite pattern of Fire
         const darkIn = isIn ? dir2 : dir1;
         const darkOut = isIn ? dir1 : dir2;
 
         // Fire debuff players and unmarked bait Dark
+        if (Autumn.inMelee(data.moks))
+          return output.darkAt!({ dir: output[darkIn]!() });
+        if (Autumn.inRange(data.moks))
+          return output.darkAt!({ dir: output[darkOut]!() });
         return output.dark!({
           dir1: output[darkIn]!(),
           dir2: output[darkOut]!(),
         });
       },
       outputStrings: {
-        ...dirAimStrings, // Cardinals should result in '???'
+        ...markerStrings, // Cardinals should result in '???'
         fire: {
-          en: 'Bait Fire near In ${dir1}/Out ${dir2} (Partners)',
-          ko: '불 유도: 안쪽 ${dir1}, 바깥쪽 ${dir2} (페어)',
+          en: 'Bait Fire In ${dir1}/Out ${dir2} (Partners)',
+          ko: '🔥불 페어: ${dir1} ${dir2}',
         },
         dark: {
-          en: 'Bait Dark near In ${dir1}/Out ${dir2} (Solo)',
-          ko: '어둠 유도: 안쪽 ${dir1}, 바깥쪽 ${dir2} (홀로)',
+          en: 'Bait Dark In ${dir1}/Out ${dir2} (Solo)',
+          ko: '🟣어둠 홀로: ${dir1} ${dir2}',
+        },
+        fireAt: {
+          en: 'Bait Fire ${dir}',
+          ko: '🔥불 페어: ${dir}쪽',
+        },
+        darkAt: {
+          en: 'Bait Dark ${dir}',
+          ko: '🟣어둠 홀로: ${dir}쪽',
         },
       },
     },
     {
       id: 'R12S Double Sobat',
-      // Two half-room cleaves
-      // First hit targets highest emnity target, second targets second highest
+      // Shared half-room cleave on tank => random turn half-room cleave =>
+      // Esoteric Finisher big circle aoes that hits two highest emnity targets
       type: 'HeadMarker',
       netRegex: { id: headMarkerData['sharedTankbuster'], capture: true },
-      response: Responses.sharedOrInvinTankBuster(),
+      response: Responses.sharedTankBuster(),
+    },
+    {
+      id: 'R12S Double Sobat 2',
+      // Followup half-room cleave:
+      // B521 Double Sobat: 0 degree left turn then B525
+      // B522 Double Sobat: 90 degree left turn then B525
+      // B523 Double Sobat: 180 degree left turn then B525
+      // B524 Double Sobat: 270 degree left turn (this ends up 90 degrees to the right)
+      type: 'Ability',
+      netRegex: { id: ['B521', 'B522', 'B523', 'B524'], source: 'Lindwurm', capture: true },
+      suppressSeconds: 1,
+      alertText: (_data, matches, output) => {
+        const hdg = parseFloat(matches.heading);
+        const dirNum = Directions.hdgTo16DirNum(hdg);
+        const getNewDirNum = (
+          dirNum: number,
+          id: string,
+        ): number => {
+          switch (id) {
+            case 'B521':
+              return dirNum;
+            case 'B522':
+              return dirNum - 4;
+            case 'B523':
+              return dirNum - 8;
+            case 'B524':
+              return dirNum - 12;
+          }
+          throw new UnreachableCode();
+        };
+
+        // Adding 16 incase of negative values
+        const newDirNum = (getNewDirNum(dirNum, matches.id) + 16 + 8) % 16;
+
+        const dir = Directions.output16Dir[newDirNum] ?? 'unknown';
+        return output.getBehindDir!({
+          dir: output[dir]!(),
+          mech: output.getBehind!(),
+        });
+      },
+      outputStrings: {
+        ...Directions.outputStrings16Dir,
+        getBehind: Outputs.getBehind,
+        getBehindDir: {
+          en: '${dir}: ${mech}',
+          ko: '${dir} ${mech}',
+        },
+      },
+    },
+    {
+      id: 'R12S Esoteric Finisher',
+      // After Double Sobat 2, boss hits targets highest emnity target, second targets second highest
+      type: 'StartsUsing',
+      netRegex: { id: 'B525', source: 'Lindwurm', capture: true },
+      delaySeconds: (_data, matches) => parseFloat(matches.castTime),
+      response: (data, _matches, output) => {
+        // cactbot-builtin-response
+        output.responseOutputStrings = {
+          tankBusterCleaves: Outputs.tankBusterCleaves,
+          avoidTankCleaves: Outputs.avoidTankCleaves,
+        };
+
+        if (data.role === 'tank' || data.role === 'healer') {
+          if (data.role === 'healer')
+            return { infoText: output.tankBusterCleaves!() };
+          return { alertText: output.tankBusterCleaves!() };
+        }
+        return { infoText: output.avoidTankCleaves!() };
+      },
+    },
+    {
+      id: 'R12S Replication 2 Tethered Clone',
+      // Combatants are added ~4s before Staging starts casting
+      // Same tether ID is used for "locked" ability tethers
+      type: 'Tether',
+      netRegex: { id: headMarkerData['lockedTether'], capture: true },
+      condition: Conditions.targetIsYou(),
+      durationSeconds: 10,
+      suppressSeconds: 9999,
+      infoText: (data, matches, output) => {
+        const actor = data.actorPositions[matches.sourceId];
+        if (actor === undefined)
+          return output.cloneTether!();
+
+        const dirNum = Directions.xyTo8DirNum(actor.x, actor.y, center.x, center.y);
+        data.ushikoDir = Directions.output8Dir[dirNum] ?? 'unknown';
+        return output.cloneTetherDir!({ dir: output[data.ushikoDir]!() });
+      },
+      outputStrings: {
+        unknown: Outputs.unknown,
+        dirN: {
+          en: 'West Cone',
+          ko: '🄰🡸 꼬깔 (반시계)',
+        },
+        dirE: {
+          en: 'North Boss',
+          ko: '🄱🡹 보스',
+        },
+        dirS: {
+          en: 'East Cone',
+          ko: '🄲🡺 꼬깔 (시계)',
+        },
+        dirW: {
+          en: 'South None',
+          ko: '🄳🡻 무직',
+        },
+        dirNW: {
+          en: 'Southwest Defamation',
+          ko: '➊🡿 큰폭발 (반시계◉︎)',
+        },
+        dirNE: {
+          en: 'Northwest Stack',
+          ko: '➋🡼 뭉쳐요 (반시계🀜)',
+        },
+        dirSE: {
+          en: 'Northeast Stack',
+          ko: '➌🡽 뭉쳐요 (시계🀜)',
+        },
+        dirSW: {
+          en: 'Southeast Defamation',
+          ko: '➍🡾 큰폭발 (시계◉︎)',
+        },
+        cloneTether: {
+          en: 'Tethered to Clone',
+          ko: '내 분신 쪽으로',
+        },
+        cloneTetherDir: {
+          en: 'Tethered to ${dir} Clone',
+          ko: '${dir}',
+        },
+      },
+    },
+    {
+      id: 'R12S Replication 2 and Replication 4 Ability Tethers Collect',
+      // Record and store a map of where the tethers come from and what they do for later
+      // Boss tether handled separately since boss can move around
+      type: 'Tether',
+      netRegex: {
+        id: [
+          headMarkerData['projectionTether'],
+          headMarkerData['manaBurstTether'],
+          headMarkerData['heavySlamTether'],
+        ],
+        capture: true,
+      },
+      condition: (data) => {
+        if (data.phase === 'replication2' || data.phase === 'idyllic')
+          return true;
+        return false;
+      },
+      run: (data, matches) => {
+        const actor = data.actorPositions[matches.sourceId];
+        if (actor === undefined)
+          return;
+        const dirNum = Directions.xyTo8DirNum(actor.x, actor.y, center.x, center.y);
+        if (data.phase === 'replication2')
+          data.replication2TetherMap[dirNum] = matches.id;
+        if (data.phase === 'idyllic')
+          data.replication4TetherMap[dirNum] = matches.id;
+      },
+    },
+    /* {
+      id: 'R12S Replication 2 Ability Tethers Initial Call',
+      이거는 써봣자 혼란만 올뿐.
+    }, */
+    {
+      id: 'R12S Replication 2 Locked Tether 2 Collect',
+      type: 'Tether',
+      netRegex: { id: headMarkerData['lockedTether'], capture: true },
+      condition: (data, matches) => {
+        if (
+          data.phase === 'replication2' &&
+          data.replicationCounter === 2 &&
+          data.me === matches.target
+        )
+          return true;
+        return false;
+      },
+      run: (data, matches) => {
+        // Check if boss tether
+        if (data.replication2BossId === matches.sourceId) {
+          data.myReplication2Tether = headMarkerData['fireballSplashTether'];
+          return;
+        }
+
+        const actor = data.actorPositions[matches.sourceId];
+        if (actor === undefined) {
+          // Setting to use that we know we have a tether but couldn't determine what ability it is
+          data.myReplication2Tether = 'unknown';
+          return;
+        }
+
+        const dirNum = Directions.xyTo8DirNum(
+          actor.x,
+          actor.y,
+          center.x,
+          center.y,
+        );
+
+        // Lookup what the tether was at the same location
+        const ability = data.replication2TetherMap[dirNum];
+        if (ability === undefined) {
+          // Setting to use that we know we have a tether but couldn't determine what ability it is
+          data.myReplication2Tether = 'unknown';
+          return;
+        }
+        data.myReplication2Tether = ability;
+      },
+    },
+    {
+      id: 'R12S Replication 2 Locked Tether 2',
+      type: 'Tether',
+      netRegex: { id: headMarkerData['lockedTether'], capture: true },
+      condition: (data, matches) => {
+        if (
+          data.phase === 'replication2' &&
+          data.replicationCounter === 2 &&
+          data.me === matches.target
+        )
+          return true;
+        return false;
+      },
+      delaySeconds: 0.1,
+      infoText: (data, matches, output) => {
+        // Check if it's the boss
+        if (data.replication2BossId === matches.sourceId)
+          return output.fireballSplashTether!();
+
+        switch (data.myReplication2Tether) {
+          case headMarkerData['projectionTether']:
+            return output.projectionTether!();
+          case headMarkerData['manaBurstTether']:
+            return output.manaBurstTether!();
+          case headMarkerData['heavySlamTether']:
+            return output.heavySlamTether!();
+        }
+      },
+      outputStrings: {
+        projectionTether: {
+          en: 'Cone Tether: Bait Protean from Boss',
+          ko: '바깥 꼬깔 유도: 외측',
+        },
+        manaBurstTether: {
+          en: 'Defamation Tether',
+          ko: '큰폭발 유도',
+        },
+        heavySlamTether: {
+          en: 'Cone Tether: Bait Protean from Boss',
+          ko: '바깥 꼬깔 유도: 내측',
+        },
+        fireballSplashTether: {
+          en: 'Boss Tether: Bait Jump',
+          ko: '보스 줄: 점프 유도',
+        },
+      },
+    },
+    {
+      id: 'R12S Replication 2 Mana Burst Target',
+      // A player without a tether will be target for defamation
+      type: 'Tether',
+      netRegex: { id: headMarkerData['lockedTether'], capture: false },
+      condition: (data) => {
+        if (data.phase === 'replication2' && data.replicationCounter === 2)
+          return true;
+        return false;
+      },
+      delaySeconds: 0.2,
+      suppressSeconds: 1,
+      infoText: (data, _matches, output) => {
+        if (data.myReplication2Tether !== undefined)
+          return;
+        return output.noTether!();
+      },
+      outputStrings: {
+        noTether: {
+          en: 'Bait Defamation => Stack Groups',
+          ko: '🄳🡻 큰폭발 유도 🔜 ➋ 뭉쳐요',
+        },
+      },
+    },
+    {
+      id: 'R12S Heavy Slam',
+      // After B4E7 Mana Burst, Groups must stack up on the heavy slam targetted players
+      type: 'Ability',
+      netRegex: { id: 'B4E7', source: 'Lindwurm', capture: false },
+      suppressSeconds: 1,
+      alertText: (data, _matches, output) => {
+        let side = '';
+        const ability = data.myReplication2Tether;
+        switch (ability) {
+          case headMarkerData['projectionTether']:
+            if (data.ushikoDir === 'dirS')
+              side = output.mark3!();
+            else if (data.ushikoDir === 'dirN')
+              side = output.mark2!();
+            break;
+          case headMarkerData['manaBurstTether']:
+            if (data.ushikoDir === 'dirSW')
+              side = output.mark3!();
+            else if (data.ushikoDir === 'dirNW')
+              side = output.mark2!();
+            break;
+          case headMarkerData['heavySlamTether']:
+            if (data.ushikoDir === 'dirSE')
+              side = output.mark3!();
+            else if (data.ushikoDir === 'dirNE')
+              side = output.mark2!();
+            break;
+          case headMarkerData['fireballSplashTether']:
+            side = output.mark3!();
+            break;
+          default: // 무직
+            side = output.mark2!();
+            break;
+        }
+        return output.text!({ side: side });
+      },
+      outputStrings: {
+        mark2: {
+          en: 'Left Side',
+          ko: '➋',
+        },
+        mark3: {
+          en: 'Right Side',
+          ko: '➌',
+        },
+        text: {
+          en: '${side} Stack Groups => Get Behind',
+          ko: '${side} 뭉쳤다 🔜 엉댕이로',
+        },
+      },
+    },
+    {
+      id: 'R12S Grotesquerie',
+      // This seems to be the point at which the look for the Snaking Kick is snapshot
+      // The VFX B4E9 happens ~0.6s before Snaking Kick
+      // B4EA has the targetted player in it
+      // B4EB Hemorrhagic Projection conal aoe goes off ~0.5s after in the direction the player was facing
+      type: 'Ability',
+      netRegex: { id: 'B4EA', source: 'Lindwurm', capture: true },
+      condition: Conditions.targetIsYou(),
+      alertText: (data, _matches, output) => {
+        // Get Boss facing
+        const bossId = data.replication2BossId;
+        if (bossId === undefined)
+          return output.getBehind!();
+
+        const actor = data.actorPositions[bossId];
+        if (actor === undefined)
+          return output.getBehind!();
+
+        const dirNum = (Directions.hdgTo16DirNum(actor.heading) + 8) % 16;
+        const dir = Directions.output16Dir[dirNum] ?? 'unknown';
+        return output.getBehindDir!({
+          dir: output[dir]!(),
+          mech: output.getBehind!(),
+        });
+      },
+      outputStrings: {
+        ...Directions.outputStrings16Dir,
+        getBehind: Outputs.getBehind,
+        getBehindDir: {
+          en: '${dir}: ${mech}',
+          ko: '${dir} ${mech}',
+        },
+      },
+    },
+    {
+      id: 'R12S Netherwrath Near/Far',
+      // Boss jumps onto clone of player that took Firefall Splash, there is an aoe around the clone + proteans
+      type: 'StartsUsing',
+      netRegex: { id: ['B52E', 'B52F'], source: 'Lindwurm', capture: false },
+      infoText: (data, _matches, output) => {
+        switch (data.myReplication2Tether) {
+          case headMarkerData['projectionTether']:
+            return output.projectionTether!();
+          case headMarkerData['heavySlamTether']:
+            return output.heavySlamTether!();
+        }
+        return output.others!();
+      },
+      outputStrings: {
+        projectionTether: {
+          en: 'Bait Cone',
+          ko: '바깥 페어: 서클 바깥',
+        },
+        heavySlamTether: {
+          en: 'Pair',
+          ko: '바깥 페어: 서클 안',
+        },
+        others: {
+          en: 'Inner',
+          ko: '안쪽 넷이 뭉쳐요',
+        },
+      },
+    },
+    {
+      id: 'R12S Reenactment 1 Scalding Waves Collect',
+      // Players need to wait for BBE3 Mana Burst Defamations on the clones to complete before next mechanic
+      // NOTE: This is used with DN Strategy
+      type: 'Ability',
+      netRegex: { id: 'B8E1', source: 'Lindwurm', capture: false },
+      condition: (data) => data.phase === 'reenactment1',
+      suppressSeconds: 9999,
+      run: (data) => data.netherwrathFollowup = true,
+    },
+    {
+      id: 'R12S Reenactment 1 Clone Stacks',
+      // Players need to wait for BBE3 Mana Burst defamations on clones to complete
+      // This happens three times during reenactment and the third one (which is after the proteans) is the trigger
+      // NOTE: This is used with DN Strategy
+      type: 'Ability',
+      netRegex: { id: 'BBE3', source: 'Lindwurm', capture: false },
+      condition: (data) => data.netherwrathFollowup,
+      suppressSeconds: 9999,
+      alertText: (_data, _matches, output) => output.text!(),
+      outputStrings: {
+        text: {
+          en: 'East/West Clone Stacks',
+          ko: '동서 분신 뭉쳐요',
+        },
+      },
+    },
+    {
+      id: 'R12S Reenactment 1 Final Defamation Dodge Reminder',
+      // Players need to run back to north after clone stacks (BE5D Heavy Slam)
+      // The clone stacks become a defamation and the other a cleave going East or West through the room
+      // NOTE: This is used with DN Strategy
+      type: 'Ability',
+      netRegex: { id: 'BE5D', source: 'Lindwurm', capture: false },
+      condition: (data) => data.netherwrathFollowup,
+      suppressSeconds: 9999,
+      alertText: (_data, _matches, output) => output.north!(),
+      outputStrings: {
+        north: Outputs.north,
+      },
+    },
+    {
+      id: 'R12S Mana Sphere Collect and Label',
+      // Combatants Spawn ~3s before B505 Mutating Cells startsUsing
+      // Their positions are available at B4FD in the 264 AbilityExtra lines and updated periodically after with 270 lines
+      // 19208 => Lightning Bowtie (N/S Cleave)
+      // 19209 => Fire Bowtie (E/W Cleave)
+      // 19205 => Black Hole
+      // 19206 => Water Sphere/Chariot
+      // 19207 => Wind Donut
+      // Position at add is center, so not useful here yet
+      type: 'AddedCombatant',
+      netRegex: { name: 'Mana Sphere', capture: true },
+      run: (data, matches) => {
+        const id = matches.id;
+        const npcBaseId = parseInt(matches.npcBaseId);
+        switch (npcBaseId) {
+          case 19205:
+            data.manaSpheres[id] = 'blackHole';
+            return;
+          case 19206:
+            data.manaSpheres[id] = 'water';
+            return;
+          case 19207:
+            data.manaSpheres[id] = 'wind';
+            return;
+          case 19208:
+            data.manaSpheres[id] = 'lightning';
+            return;
+          case 19209:
+            data.manaSpheres[id] = 'fire';
+            return;
+        }
+      },
+    },
+    {
+      id: 'R12S Mutation α/β Collect',
+      // Used in Blood Mana / Blood Awakening Mechanics
+      // 12A1 Mutation α: Don't get hit
+      // 12A3 Mutation β: Get Hit
+      // Players will get opposite debuff after Blood Mana
+      type: 'GainsEffect',
+      netRegex: { effectId: ['12A1', '12A3'], capture: true },
+      condition: Conditions.targetIsYou(),
+      run: (data, matches) => {
+        data.myMutation = matches.effectId === '12A1' ? 'alpha' : 'beta';
+      },
+    },
+    {
+      id: 'R12S Mutation α/β',
+      type: 'GainsEffect',
+      netRegex: { effectId: ['12A1', '12A3'], capture: true },
+      condition: Conditions.targetIsYou(),
+      infoText: (_data, matches, output) => {
+        if (matches.effectId === '12A1')
+          return output.alpha!();
+        return output.beta!();
+      },
+      outputStrings: {
+        alpha: {
+          en: 'Mutation α on YOU',
+          ko: '변이 α',
+        },
+        beta: {
+          en: 'Mutation β on YOU',
+          ko: '변이 β',
+        },
+      },
+    },
+    {
+      id: 'R12S Mana Sphere Position Collect',
+      // BCB0 Black Holes:
+      // These are (90, 100) and (110, 100)
+      // B4FD Shapes
+      // Side that needs to be exploded will have pairs with 2 of the same x or y coords
+      // Side to get the shapes to explode will be closest distance to black hole
+      type: 'AbilityExtra',
+      netRegex: { id: 'B4FD', capture: true },
+      run: (data, matches) => {
+        // Calculate Distance to Black Hole
+        const getDistance = (
+          x: number,
+          y: number,
+        ): number => {
+          const blackHoleX = x < 100 ? 90 : 110;
+          const dx = x - blackHoleX;
+          const dy = y - 100;
+          return Math.round(Math.sqrt(dx * dx + dy * dy));
+        };
+        const x = parseFloat(matches.x);
+        const y = parseFloat(matches.y);
+        const d = getDistance(x, y);
+        const id = matches.sourceId;
+
+        // Put into different objects for easier lookup
+        if (x < 100) {
+          data.westManaSpheres[id] = { x: x, y: y };
+        }
+        data.eastManaSpheres[id] = { x: x, y: y };
+
+        // Shapes with 6 distance are close, Shapes with 12 are far
+        if (d < 7) {
+          data.closeManaSphereIds.push(id);
+
+          // Have enough data to solve at this point
+          if (data.closeManaSphereIds.length === 2) {
+            const popSide = x < 100 ? 'east' : 'west';
+            data.manaSpherePopSide = popSide;
+
+            const sphereId1 = data.closeManaSphereIds[0];
+            const sphereId2 = id;
+            if (sphereId1 === undefined)
+              return;
+
+            const sphereType1 = data.manaSpheres[sphereId1];
+            const sphereType2 = data.manaSpheres[sphereId2];
+            if (sphereType1 === undefined || sphereType2 === undefined)
+              return;
+
+            // If you see Water, pop side first
+            // If you see Wind, non-pop side
+            // Can't be Lightning + Wind because Fire hits the donut
+            // Fire + Lightning would hit whole room
+            // Water + Wind would hit whole room
+            const nonPopSide = popSide === 'east' ? 'west' : 'east';
+            const first = [sphereType1, sphereType2];
+            const dir2 = first.includes('water') ? popSide : nonPopSide;
+            data.firstBlackHole = dir2;
+          }
+        }
+      },
+    },
+    {
+      id: 'R12S Black Hole and Shapes',
+      // Black Holes and shapes
+      type: 'Ability',
+      netRegex: { id: 'B4FD', source: 'Mana Sphere', capture: false },
+      delaySeconds: 0.1,
+      durationSeconds: 8.3,
+      suppressSeconds: 9999,
+      infoText: (data, _matches, output) => {
+        const popSide = data.manaSpherePopSide;
+        const blackHole = data.firstBlackHole;
+        const sphereId1 = data.closeManaSphereIds[0];
+        const sphereId2 = data.closeManaSphereIds[1];
+        if (
+          popSide === undefined ||
+          blackHole === undefined ||
+          sphereId1 === undefined ||
+          sphereId2 === undefined
+        )
+          return data.myMutation === 'alpha' ? output.alpha!() : output.beta!();
+
+        const sphereType1 = data.manaSpheres[sphereId1];
+        const sphereType2 = data.manaSpheres[sphereId2];
+        if (sphereType1 === undefined || sphereType2 === undefined)
+          return data.myMutation === 'alpha' ? output.alpha!() : output.beta!();
+
+        if (data.myMutation === 'alpha')
+          return output.alphaDir!({
+            dir1: output[popSide]!(),
+            dir2: output[blackHole]!(),
+          });
+        return output.betaDir!({
+          dir1: output[popSide]!(),
+          shape1: output[sphereType1]!(),
+          shape2: output[sphereType2]!(),
+          dir2: output[blackHole]!(),
+        });
+      },
+      outputStrings: {
+        east: Outputs.aimE,
+        west: Outputs.aimW,
+        northSouth: {
+          en: 'N/S',
+          ko: '남북',
+        },
+        water: {
+          en: 'Orb',
+          ko: '구슬',
+        },
+        lightning: {
+          en: 'Lightning',
+          ko: '번개',
+        },
+        fire: {
+          en: 'Fire',
+          ko: '불',
+        },
+        wind: {
+          en: 'Donut',
+          ko: '도넛',
+        },
+        alpha: {
+          en: 'Avoid Shape AoEs, Wait by Black Hole',
+          ko: '피하면서, 블랙홀 쪽에서 기다려요',
+        },
+        beta: {
+          en: 'Shared Shape Soak => Get by Black Hole',
+          ko: '물체 문대고 🔜 블랙홀로',
+        },
+        alphaDir: {
+          en: 'Avoid ${dir1} Shape AoEs => ${dir2} Black Hole',
+          ko: '${dir1}쪽 피하면서 🔜 ${dir2}쪽 블랙홀',
+        },
+        betaDir: {
+          en: 'Share ${dir1} ${shape1}/${shape2} => ${dir2} Black Hole',
+          ko: '${dir1}쪽 ${shape1}/${shape2} 문대고 🔜 ${dir2}쪽 블랙홀',
+        },
+      },
+    },
+    {
+      id: 'R12S Dramatic Lysis Black Hole 1 Reminder',
+      // This may not happen if all shapes are failed
+      type: 'Ability',
+      netRegex: { id: ['B507'], source: 'Lindwurm', capture: false },
+      suppressSeconds: 9999,
+      alertText: (data, _matches, output) => {
+        const blackHole = data.firstBlackHole;
+        if (blackHole === undefined)
+          return data.myMutation === 'alpha' ? output.alpha!() : output.beta!();
+        return data.myMutation === 'alpha'
+          ? output.alphaDir!({
+            northSouth: output.northSouth!(),
+            dir2: output[blackHole]!(),
+          })
+          : output.betaDir!({
+            northSouth: output.northSouth!(),
+            dir2: output[blackHole]!(),
+          });
+      },
+      outputStrings: {
+        east: Outputs.east,
+        west: Outputs.west,
+        northSouth: {
+          en: 'N/S',
+          ko: '남북',
+        },
+        alpha: {
+          en: 'Get by Black Hole',
+          ko: '블랙홀 쪽으로',
+        },
+        beta: {
+          en: 'Get by Black Hole',
+          ko: '블랙홀 쪽으로',
+        },
+        alphaDir: {
+          en: '${dir2} Black Hole + ${northSouth}',
+          ko: '${dir2} 블랙홀 + ${northSouth}으로',
+        },
+        betaDir: {
+          en: '${dir2} Black Hole + ${northSouth}',
+          ko: '${dir2} 블랙홀 + ${northSouth}으로',
+        },
+      },
+    },
+    {
+      id: 'R12S Blood Wakening Followup',
+      // Run to the other Black Hole after abilities go off
+      // B501 Lindwurm's Water III
+      // B502 Lindwurm's Aero III
+      // B503 Straightforward Thunder II
+      // B504 Sideways Fire II
+      type: 'Ability',
+      netRegex: { id: ['B501', 'B502', 'B503', 'B504'], source: 'Lindwurm', capture: false },
+      suppressSeconds: 9999,
+      alertText: (data, _matches, output) => {
+        const blackHole = data.firstBlackHole;
+        if (blackHole === undefined)
+          return output.move!();
+        const next = blackHole === 'east' ? 'west' : 'east';
+        return output.moveDir!({
+          northSouth: output.northSouth!(),
+          dir: output[next]!(),
+        });
+      },
+      outputStrings: {
+        east: Outputs.east,
+        west: Outputs.west,
+        northSouth: {
+          en: 'N/S',
+          ko: '남북',
+        },
+        move: {
+          en: 'Move to other Black Hole',
+          ko: '다른 블랙홀로 이동',
+        },
+        moveDir: {
+          en: '${dir} Black Hole + ${northSouth}',
+          ko: '${dir} 블랙홀 + ${northSouth}으로',
+        },
+      },
+    },
+    {
+      id: 'R12S Netherworld Near/Far',
+      type: 'StartsUsing',
+      netRegex: { id: ['B52B', 'B52C'], source: 'Lindwurm', capture: true },
+      alertText: (data, matches, output) => {
+        if (matches.id === 'B52B')
+          return data.myMutation === 'beta'
+            ? output.betaNear!({ mech: output.getUnder!() })
+            : output.alphaNear!({ mech: output.maxMelee!() });
+        return data.myMutation === 'beta'
+          ? output.betaFar!({ mech: output.maxMelee!() })
+          : output.alphaFar!({ mech: output.getUnder!() });
+      },
+      outputStrings: {
+        getUnder: Outputs.getUnder,
+        maxMelee: {
+          en: 'Max Melee',
+          ko: '근접 최대',
+        },
+        alphaNear: {
+          en: '${mech} (Avoid Near Stack)',
+          ja: '${mech} (近い頭割りを避ける)',
+          ko: '${mech} (니어 피해요)',
+        },
+        alphaFar: {
+          en: '${mech} (Avoid Far Stack)',
+          ja: '${mech} (遠い頭割りを避ける)',
+          ko: '${mech} (파 피해요)',
+        },
+        betaNear: {
+          en: 'Near β Stack: ${mech}',
+          ja: '近いβ頭割り: ${mech}',
+          ko: '니어β 스택: ${mech}',
+        },
+        betaFar: {
+          en: 'Far β Stack: ${mech}',
+          ja: '遠いβ頭割り: ${mech}',
+          ko: '파β 스택: ${mech}',
+        },
+      },
+    },
+    {
+      id: 'R12S Idyllic Dream',
+      type: 'StartsUsing',
+      netRegex: { id: 'B509', source: 'Lindwurm', capture: false },
+      durationSeconds: 4.7,
+      response: Responses.bigAoe('alert'),
+    },
+    {
+      id: 'R12S Idyllic Dream Replication Clone Order Collect',
+      type: 'ActorControlExtra',
+      netRegex: { category: '0197', param1: '11D2', capture: true },
+      condition: (data) => {
+        if (data.phase === 'idyllic' && data.replicationCounter === 2)
+          return true;
+        return false;
+      },
+      run: (data, matches) => {
+        const actor = data.actorPositions[matches.id];
+        if (actor === undefined)
+          return;
+        const dirNum = Directions.xyTo8DirNum(actor.x, actor.y, center.x, center.y);
+        data.replication3CloneOrder.push(dirNum);
+      },
+    },
+    {
+      id: 'R12S Idyllic Dream Replication First Clone Cardinal/Intercardinal',
+      type: 'ActorControlExtra',
+      netRegex: { category: '0197', param1: '11D2', capture: true },
+      condition: (data) => {
+        if (data.phase === 'idyllic' && data.replicationCounter === 2)
+          return true;
+        return false;
+      },
+      suppressSeconds: 9999,
+      infoText: (data, matches, output) => {
+        const actor = data.actorPositions[matches.id];
+        if (actor === undefined)
+          return;
+
+        const dirNum = Directions.xyTo8DirNum(actor.x, actor.y, center.x, center.y);
+        const dir = Directions.output8Dir[dirNum] ?? 'unknown';
+
+        if (isCardinalDir(dir))
+          return output.firstClone!({ cards: output.cardinals!() });
+        if (isIntercardDir(dir))
+          return output.firstClone!({ cards: output.intercards!() });
+        return output.firstClone!({ cards: output.unknown!() });
+      },
+      outputStrings: {
+        unknown: Outputs.unknown,
+        cardinals: Outputs.cardinals,
+        intercards: Outputs.intercards,
+        firstClone: {
+          en: 'First Clone: ${cards}',
+          ko: '첫 번째 분신: ${cards}',
+        },
+      },
+    },
+    {
+      id: 'R12S Idyllic Dream Replication Tethered Clone',
+      type: 'Tether',
+      netRegex: { id: headMarkerData['lockedTether'], capture: true },
+      condition: (data, matches) => {
+        if (
+          data.phase === 'idyllic' &&
+          data.replicationCounter === 2 &&
+          data.me === matches.target
+        )
+          return true;
+        return false;
+      },
+      suppressSeconds: 9999,
+      infoText: (data, matches, output) => {
+        const actor = data.actorPositions[matches.sourceId];
+        if (actor === undefined)
+          return output.cloneTether!();
+
+        const dirNum = Directions.xyTo8DirNum(actor.x, actor.y, center.x, center.y);
+        const dir = Directions.output8Dir[dirNum] ?? 'unknown';
+        return output.cloneTetherDir!({ dir: output[dir]!() });
+      },
+      outputStrings: {
+        ...Directions.outputStrings8Dir,
+        cloneTether: {
+          en: 'Tethered to Clone',
+          ko: '분신 줄 잡아요',
+        },
+        cloneTetherDir: {
+          en: 'Tethered to ${dir} Clone',
+          ko: '${dir}쪽 분신 줄 잡아요',
+        },
+      },
+    },
+    {
+      id: 'R12S Idyllic Dream Power Gusher Collect',
+      // Need to know this for later
+      // B511 Snaking Kick
+      // B512 from boss is the VFX and has headings that show directions for B50F and B510
+      // B50F Power Gusher is the East/West caster
+      // B510 Power Gusher is the North/South caster
+      // Right now just the B510 caster is needed to resolve
+      type: 'StartsUsing',
+      netRegex: { id: 'B510', source: 'Lindschrat', capture: true },
+      run: (data, matches) => {
+        const y = parseFloat(matches.y);
+        data.idyllicVision2NorthSouthCleaveSpot = y < center.y ? 'north' : 'south';
+      },
+    },
+    {
+      id: 'R12S Idyllic Dream Power Gusher Vision',
+      // Call where the E/W safe spots will be later
+      type: 'StartsUsing',
+      netRegex: { id: 'B510', source: 'Lindschrat', capture: true },
+      infoText: (_data, matches, output) => {
+        const y = parseFloat(matches.y);
+        const dir = y < center.y ? 'north' : 'south';
+        return output.text!({ dir: output[dir]!(), sides: output.sides!() });
+      },
+      outputStrings: {
+        north: Outputs.north,
+        south: Outputs.south,
+        sides: Outputs.sides,
+        text: {
+          en: '${dir} + ${sides} (later)',
+        },
+      },
+    },
+    {
+      id: 'R12S Replication 4 Ability Tethers Initial Call',
+      type: 'Tether',
+      netRegex: {
+        id: [
+          headMarkerData['manaBurstTether'],
+          headMarkerData['heavySlamTether'],
+        ],
+        capture: true,
+      },
+      condition: (data, matches) => {
+        if (data.me === matches.target && data.phase === 'idyllic')
+          return true;
+        return false;
+      },
+      suppressSeconds: 9999, // Can get spammy if players have more than 1 tether or swap a lot
+      infoText: (data, matches, output) => {
+        // Get direction of the tether
+        const actor = data.actorPositions[matches.sourceId];
+        if (actor === undefined) {
+          switch (matches.id) {
+            case headMarkerData['manaBurstTether']:
+              return output.manaBurstTether!();
+            case headMarkerData['heavySlamTether']:
+              return output.heavySlamTether!();
+          }
+          return;
+        }
+
+        const dirNum = Directions.xyTo8DirNum(actor.x, actor.y, center.x, center.y);
+        const dir = Directions.output8Dir[dirNum] ?? 'unknown';
+
+        switch (matches.id) {
+          case headMarkerData['manaBurstTether']:
+            return output.manaBurstTetherDir!({ dir: output[dir]!() });
+          case headMarkerData['heavySlamTether']:
+            return output.heavySlamTetherDir!({ dir: output[dir]!() });
+        }
+      },
+      outputStrings: {
+        ...Directions.outputStrings8Dir,
+        manaBurstTether: {
+          en: 'Defamation Tether on YOU',
+          ja: 'デファメ線が自分に',
+          ko: '디파메이션 줄 잡아요',
+        },
+        manaBurstTetherDir: {
+          en: '${dir} Defamation Tether on YOU',
+          ja: '${dir}デファメ線が自分に',
+          ko: '${dir}쪽 디파메이션 줄 잡아요',
+        },
+        heavySlamTether: {
+          en: 'Stack Tether on YOU',
+          ja: '頭割り線が自分に',
+          ko: '스택 줄 잡아요',
+        },
+        heavySlamTetherDir: {
+          en: '${dir} Stack Tether on YOU',
+          ja: '${dir}頭割り線が自分に',
+          ko: '${dir}쪽 스택 줄 잡아요',
+        },
+      },
+    },
+    {
+      id: 'R12S Replication 4 Locked Tether 2 Collect',
+      type: 'Tether',
+      netRegex: { id: headMarkerData['lockedTether'], capture: true },
+      condition: (data, matches) => {
+        if (
+          data.phase === 'idyllic' &&
+          data.replicationCounter === 4 &&
+          data.me === matches.target
+        )
+          return true;
+        return false;
+      },
+      run: (data, matches) => {
+        const actor = data.actorPositions[matches.sourceId];
+        if (actor === undefined) {
+          // Setting to use that we know we have a tether but couldn't determine what ability it is
+          data.myReplication4Tether = 'unknown';
+          return;
+        }
+
+        const dirNum = Directions.xyTo8DirNum(
+          actor.x,
+          actor.y,
+          center.x,
+          center.y,
+        );
+
+        // Lookup what the tether was at the same location
+        const ability = data.replication4TetherMap[dirNum];
+        if (ability === undefined) {
+          // Setting to use that we know we have a tether but couldn't determine what ability it is
+          data.myReplication4Tether = 'unknown';
+          return;
+        }
+        data.myReplication4Tether = ability;
+      },
+    },
+    {
+      id: 'R12S Replication 4 Locked Tether 2',
+      // At this point the player needs to dodge the north/south cleaves + chariot
+      // Simultaneously there will be a B4F2 Lindwurm's Meteor bigAoe that ends with room split
+      type: 'Tether',
+      netRegex: { id: headMarkerData['lockedTether'], capture: true },
+      condition: (data, matches) => {
+        if (
+          data.phase === 'idyllic' &&
+          data.twistedVisionCounter === 3 &&
+          data.me === matches.target
+        )
+          return true;
+        return false;
+      },
+      delaySeconds: 0.1,
+      durationSeconds: 8,
+      alertText: (data, matches, output) => {
+        const meteorAoe = output.meteorAoe!({
+          bigAoe: output.bigAoe!(),
+          groups: output.healerGroups!(),
+        });
+        const cleaveOrigin = data.idyllicVision2NorthSouthCleaveSpot;
+        // Get direction of the tether
+        const actor = data.actorPositions[matches.sourceId];
+        if (actor === undefined || cleaveOrigin === undefined) {
+          switch (data.myReplication4Tether) {
+            case headMarkerData['manaBurstTether']:
+              return output.manaBurstTether!({ meteorAoe: meteorAoe });
+            case headMarkerData['heavySlamTether']:
+              return output.heavySlamTether!({ meteorAoe: meteorAoe });
+          }
+          return;
+        }
+
+        const dirNum = Directions.xyTo8DirNum(actor.x, actor.y, center.x, center.y);
+        const dir = Directions.output8Dir[dirNum] ?? 'unknown';
+
+        const dodge = output.dodgeCleaves!({
+          dir: output[cleaveOrigin]!(),
+          sides: output.sides!(),
+        });
+
+        switch (data.myReplication4Tether) {
+          case headMarkerData['manaBurstTether']:
+            return output.manaBurstTetherDir!({
+              dir: output[dir]!(),
+              dodgeCleaves: dodge,
+              meteorAoe: meteorAoe,
+            });
+          case headMarkerData['heavySlamTether']:
+            return output.heavySlamTetherDir!({
+              dir: output[dir]!(),
+              dodgeCleaves: dodge,
+              meteorAoe: meteorAoe,
+            });
+        }
+      },
+      outputStrings: {
+        ...Directions.outputStrings8Dir,
+        north: Outputs.north,
+        south: Outputs.south,
+        sides: Outputs.sides,
+        bigAoe: Outputs.bigAoe,
+        healerGroups: Outputs.healerGroups,
+        meteorAoe: {
+          en: '${bigAoe} + ${groups}',
+          ja: '${bigAoe} + ${groups}',
+          ko: '${bigAoe} + ${groups}',
+        },
+        dodgeCleaves: {
+          en: '${dir} + ${sides}',
+          ja: '${dir} + ${sides}',
+          ko: '${dir} + ${sides}',
+        },
+        manaBurstTetherDir: {
+          en: '${dodgeCleaves} (${dir} Defamation Tether)  => ${meteorAoe}',
+          ja: '${dodgeCleaves} (${dir}デファメ線)  => ${meteorAoe}',
+          ko: '${dodgeCleaves} (${dir}쪽 디파메이션 줄)  => ${meteorAoe}',
+        },
+        manaBurstTether: {
+          en: ' N/S Clone (Defamation Tether) => ${meteorAoe}',
+          ja: '南北分身 (デファメ線) => ${meteorAoe}',
+          ko: '남북 분신 (디파메이션 줄) => ${meteorAoe}',
+        },
+        heavySlamTetherDir: {
+          en: '${dodgeCleaves} (${dir} Stack Tether)  => ${meteorAoe}',
+          ja: '${dodgeCleaves} (${dir}頭割り線)  => ${meteorAoe}',
+          ko: '${dodgeCleaves} (${dir}쪽 스택 줄)  => ${meteorAoe}',
+        },
+        heavySlamTether: {
+          en: ' N/S Clone (Stack Tether) => ${meteorAoe}',
+          ja: '南北分身 (頭割り線) => ${meteorAoe}',
+          ko: '남북 분신 (스택 줄) => ${meteorAoe}',
+        },
+      },
+    },
+    {
+      id: 'R12S Arcadian Arcanum',
+      // Players hit will receive 1044 Light Resistance Down II debuff
+      type: 'StartsUsing',
+      netRegex: { id: 'B529', source: 'Lindwurm', capture: false },
+      response: Responses.spread(),
+    },
+    {
+      id: 'R12S Light Resistance Down II Collect',
+      // Players cannot soak a tower that has holy (triple element towers)
+      type: 'GainsEffect',
+      netRegex: { effectId: '1044', capture: true },
+      condition: Conditions.targetIsYou(),
+      run: (data) => data.hasLightResistanceDown = true,
+    },
+    {
+      id: 'R12S Light Resistance Down II',
+      type: 'GainsEffect',
+      netRegex: { effectId: '1044', capture: true },
+      condition: Conditions.targetIsYou(),
+      infoText: (_data, _matches, output) => output.text!(),
+      outputStrings: {
+        text: {
+          en: 'Soak Fire/Earth Meteor',
+          ja: '火/土メテオに当たる',
+          ko: '불/땅 메테오 맞아요',
+        },
+      },
+    },
+    {
+      id: 'R12S No Light Resistance Down II',
+      type: 'GainsEffect',
+      netRegex: { effectId: '1044', capture: false },
+      delaySeconds: 0.1,
+      suppressSeconds: 9999,
+      infoText: (data, _matches, output) => {
+        if (!data.hasLightResistanceDown)
+          return output.text!();
+      },
+      outputStrings: {
+        text: {
+          en: 'Soak a White/Star Meteor',
+          ja: '白/星メテオに当たる',
+          ko: '하얀/별 메테오 맞아요',
+        },
+      },
+    },
+    {
+      id: 'R12S Doom Collect',
+      type: 'GainsEffect',
+      netRegex: { effectId: 'D24', capture: true },
+      run: (data, matches) => data.doomPlayers.push(matches.target),
+    },
+    {
+      id: 'R12S Doom Cleanse',
+      type: 'GainsEffect',
+      netRegex: { effectId: 'D24', capture: false },
+      condition: (data) => data.CanCleanse(),
+      delaySeconds: 0.1,
+      suppressSeconds: 1,
+      infoText: (data, _matches, output) => {
+        const players = data.doomPlayers;
+        if (players.length === 2) {
+          const target1 = data.party.member(data.doomPlayers[0]);
+          const target2 = data.party.member(data.doomPlayers[1]);
+          return output.cleanseDoom2!({ target1: target1, target2: target2 });
+        }
+        if (players.length === 1) {
+          const target1 = data.party.member(data.doomPlayers[0]);
+          return output.cleanseDoom!({ target: target1 });
+        }
+      },
+      outputStrings: {
+        cleanseDoom: {
+          en: 'Cleanse ${target}',
+          de: 'Reinige ${target}',
+          fr: 'Guérison sur ${target}',
+          cn: '康复 ${target}',
+          ko: '${target} 에스나',
+          tc: '康復 ${target}',
+        },
+        cleanseDoom2: {
+          en: 'Cleanse ${target1}/${target2}',
+          ko: '${target1}/${target2} 에스나',
+        },
+      },
+    },
+    {
+      id: 'R12S Doom Cleanup',
+      type: 'LosesEffect',
+      netRegex: { effectId: 'D24', capture: true },
+      run: (data, matches) => {
+        data.doomPlayers = data.doomPlayers.filter(
+          (player) => player === matches.target,
+        );
+      },
+    },
+    {
+      id: 'R12S Hot-blooded',
+      // Player can still cast, but shouldn't move for 5s duration
+      type: 'GainsEffect',
+      netRegex: { effectId: '12A0', capture: true },
+      condition: Conditions.targetIsYou(),
+      durationSeconds: (_data, matches) => parseFloat(matches.duration),
+      response: Responses.stopMoving(),
+    },
+    {
+      id: 'R12S Idyllic Dream Replication Clone Cardinal/Intercardinal Reminder',
+      // Using Temporal Curtain
+      type: 'StartsUsing',
+      netRegex: { id: 'B51C', source: 'Lindwurm', capture: false },
+      infoText: (data, _matches, output) => {
+        const firstClone = data.replication3CloneOrder[0];
+        if (firstClone === undefined)
+          return;
+        const actor = data.actorPositions[firstClone];
+        if (actor === undefined)
+          return;
+
+        const dirNum = Directions.xyTo8DirNum(actor.x, actor.y, center.x, center.y);
+        const dir = Directions.output8Dir[dirNum] ?? 'unknown';
+
+        if (isCardinalDir(dir))
+          return output.cardinals!();
+        if (isIntercardDir(dir))
+          return output.intercards!();
+      },
+      outputStrings: {
+        cardinals: Outputs.cardinals,
+        intercards: Outputs.intercards,
+      },
     },
     // ////////////////////////////////
     {
@@ -1548,7 +3007,8 @@ const triggerSet: TriggerSet<Data> = {
         // 구슬 모으기 (순서 추적)
         data.mortalList.push({
           purple: matches.npcBaseId === '19200',
-          left: parseFloat(matches.x) < center.x,
+          // 한가운데는 100으로 추정되는데 100이 왼쪽에 뜬다. 그래서 101을 기준으로 해봄
+          left: parseFloat(matches.x) < 101,
           moks: '', // 나중에 할당
         });
         if (data.mortalList.length < 8)
@@ -1606,14 +3066,17 @@ const triggerSet: TriggerSet<Data> = {
         output.responseOutputStrings = {
           left: {
             en: 'Go left side of front',
+            ja: '前方左側へ',
             ko: '🡸왼쪽으로 들어가요',
           },
           right: {
             en: 'Go right side of front',
+            ja: '前方右側へ',
             ko: '🡺오른쪽으로 들어가요',
           },
           text: {
             en: '${left} / ${right}',
+            ja: '${left} / ${right}',
             ko: '${left} / ${right}',
           },
           unknown: Outputs.unknown,
@@ -1644,14 +3107,17 @@ const triggerSet: TriggerSet<Data> = {
         output.responseOutputStrings = {
           left: {
             en: 'Go left side of front',
+            ja: '前方左側へ',
             ko: '🡸왼쪽으로 들어가요',
           },
           right: {
             en: 'Go right side of front',
+            ja: '前方右側へ',
             ko: '🡺오른쪽으로 들어가요',
           },
           text: {
             en: '${left} / ${right}',
+            ja: '${left} / ${right}',
             ko: '${left} / ${right}',
           },
         };
@@ -1684,12 +3150,52 @@ const triggerSet: TriggerSet<Data> = {
         },
       },
     },
+    {
+      id: 'R12S Netherwrath After',
+      type: 'Ability',
+      netRegex: { id: ['B52E', 'B52F'], source: 'Lindwurm', capture: false },
+      delaySeconds: 2,
+      infoText: (data, _matches, output) => {
+        switch (data.myReplication2Tether) {
+          case headMarkerData['projectionTether']:
+            return output.projectionTether!();
+          case headMarkerData['heavySlamTether']:
+            return output.heavySlamTether!();
+        }
+        return output.others!();
+      },
+      outputStrings: {
+        projectionTether: {
+          en: 'Cone Tether: Bait Protean from Boss',
+          ko: '바깥 꼬깔 유도: 외측',
+        },
+        heavySlamTether: {
+          en: 'Cone Tether: Bait Protean from Boss',
+          ko: '바깥 꼬깔 유도: 내측',
+        },
+        others: {
+          en: 'Inner',
+          ko: '➋ 뭉쳤다 🔜 ➌ 뭉쳐요',
+        },
+      },
+    },
   ],
   timelineReplace: [
+    {
+      'locale': 'en',
+      'replaceText': {
+        'Netherwrath Near/Netherwrath Far': 'Netherwrath Near/Far',
+        'Netherworld Near/Netherwworld Far': 'Netherworld Near/Far',
+      },
+    },
     {
       'locale': 'ja',
       'replaceSync': {
         'Lindwurm': 'リンドブルム',
+      },
+      'replaceText': {
+        'Netherwrath Near/Netherwrath Far': 'ネザーラス 近/遠',
+        'Netherworld Near/Netherwworld Far': 'Netherworld Near/Far',
       },
     },
   ],
