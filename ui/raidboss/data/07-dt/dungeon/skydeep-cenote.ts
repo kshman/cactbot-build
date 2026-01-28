@@ -575,7 +575,6 @@ const triggerSet: TriggerSet<Data> = {
     },
     {
       'locale': 'tc',
-      'missingTranslations': true,
       'replaceSync': {
         'Airy Bubble': '水泡',
         'Feather Ray': '羽環魟',
@@ -583,10 +582,10 @@ const triggerSet: TriggerSet<Data> = {
         'Maulskull': '錘顱巨兵',
       },
       'replaceText': {
-        // '\\(boss\\)': '', // FIXME '(BOSS)'
-        // '\\(first\\)': '', // FIXME '(一)'
-        // '\\(party\\)': '', // FIXME '(玩家)'
-        // '\\(second\\)': '', // FIXME '(二)'
+        '\\(boss\\)': '(Boss)',
+        '\\(first\\)': '(一)',
+        '\\(party\\)': '(玩家)',
+        '\\(second\\)': '(二)',
         'Ancient Artillery': '火砲啟動',
         '(?<! )Artillery': '火砲',
         'Ashlayer': '熱能放射',

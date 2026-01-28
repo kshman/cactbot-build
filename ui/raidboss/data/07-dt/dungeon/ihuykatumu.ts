@@ -399,24 +399,23 @@ const triggerSet: TriggerSet<Data> = {
     },
     {
       'locale': 'tc',
-      'missingTranslations': true,
       'replaceSync': {
         'Apollyon': '亞巴頓',
         'Drowsie': '瞌睡怪',
         'Green Clot': '綠色凝塊',
         'Ihuykatumu Flytrap': '生息陷阱草',
-        // 'Ihuykatumu Ivy': '', // FIXME '生息藤蔓大口花'
+        'Ihuykatumu Ivy': '生息藤蔓食腐獸',
         'Ihuykatumu Sandworm': '生息沙蟲',
         'Prime Punutiy': '首領海牛',
         '(?<! )Punutiy': '海牛',
       },
       'replaceText': {
-        // '\\(cast\\)': '', // FIXME '(咏唱)'
-        // '\\(inner ring\\)': '', // FIXME '(内环)'
-        // '\\(large\\)': '', // FIXME '(大)'
-        // '\\(outer ring\\)': '', // FIXME '(外环)'
-        // '\\(puddle\\)': '', // FIXME '(圈)'
-        // '\\(small\\)': '', // FIXME '(小)'
+        '\\(cast\\)': '(詠唱)',
+        '\\(inner ring\\)': '(內環)',
+        '\\(large\\)': '(大)',
+        '\\(outer ring\\)': '(外環)',
+        '\\(puddle\\)': '(圈)',
+        '\\(small\\)': '(小)',
         'Arise': '出現',
         'Blade(?!s )': '鐮擊',
         'Blades of Famine': '飛蝗之刃',

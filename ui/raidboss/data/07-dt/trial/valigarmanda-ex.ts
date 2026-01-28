@@ -1070,7 +1070,6 @@ const triggerSet: TriggerSet<Data> = {
     },
     {
       'locale': 'tc',
-      'missingTranslations': true,
       'replaceSync': {
         'Arcane Sphere': '立體魔法陣',
         'Feather of Ruin': '艷羽',
@@ -1109,15 +1108,15 @@ const triggerSet: TriggerSet<Data> = {
         'Valigarmanda': '艷翼蛇鳥',
         'Volcanic Drop': '火山彈',
         'Wrath Unfurled': '怒不可遏',
-        // '\\(cast\\)': '', // FIXME '(咏唱)'
-        // '\\(damage\\)': '', // FIXME '(伤害)'
-        // '\\(enrage\\)': '', // FIXME '(狂暴)'
-        // '\\(fire phase\\)': '', // FIXME '(火阶段)'
-        // '\\(ice phase\\)': '', // FIXME '(冰阶段)'
-        // '\\(ice or storm phase\\?\\)': '', // FIXME '(冰或风暴阶段)'
-        // '\\(knockback\\)': '', // FIXME '(击退)'
-        // '\\(storm phase\\)': '', // FIXME '(风暴阶段)'
-        // '\\(tower\\)': '', // FIXME '(塔)'
+        '\\(cast\\)': '(詠唱)',
+        '\\(damage\\)': '(傷害)',
+        '\\(enrage\\)': '(狂暴)',
+        '\\(fire phase\\)': '(火階段)',
+        '\\(ice phase\\)': '(冰階段)',
+        '\\(ice or storm phase\\?\\)': '(冰或風暴階段)',
+        '\\(knockback\\)': '(擊退)',
+        '\\(storm phase\\)': '(風暴階段)',
+        '\\(tower\\)': '(塔)',
       },
     },
     {

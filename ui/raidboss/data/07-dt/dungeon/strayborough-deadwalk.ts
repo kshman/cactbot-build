@@ -447,7 +447,6 @@ const triggerSet: TriggerSet<Data> = {
     },
     {
       'locale': 'tc',
-      'missingTranslations': true,
       'replaceSync': {
         'His Royal Headness Leonogg I': '好腦袋大王',
         'Jack-in-the-Pot': '茶壺裡的小丑',
@@ -458,12 +457,12 @@ const triggerSet: TriggerSet<Data> = {
         'Träumerei': '夢像',
       },
       'replaceText': {
-        // '\\(cast\\)': '', // FIXME '(咏唱)'
-        // '\\(lines\\)': '', // FIXME '(直线)'
-        // '\\(middle/sides\\)': '', // FIXME '(中间/两侧)'
-        // '\\(plonk\\)': '', // FIXME '(砸下)'
-        // '\\(sides\\)': '', // FIXME '(两侧)'
-        // '\\(solid lines\\)': '', // FIXME '(半场)'
+        '\\(cast\\)': '(詠唱)',
+        '\\(lines\\)': '(直線)',
+        '\\(middle/sides\\)': '(中間/兩側)',
+        '\\(plonk\\)': '(砸下)',
+        '\\(sides\\)': '(兩側)',
+        '\\(solid lines\\)': '(半場)',
         'Bitter Regret': '消極回憶',
         'Evil Scheme': '邪惡詭計',
         'Falling Nightmare': '惡夢降臨',

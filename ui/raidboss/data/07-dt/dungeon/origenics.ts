@@ -708,7 +708,6 @@ const triggerSet: TriggerSet<Data> = {
     },
     {
       'locale': 'tc',
-      'missingTranslations': true,
       'replaceSync': {
         'Ambrose the Undeparted': '實驗體安波羅修',
         'Deceiver': '欺騙者',
@@ -717,11 +716,11 @@ const triggerSet: TriggerSet<Data> = {
         'Origenics Sentry G9': '創生哨兵G9',
       },
       'replaceText': {
-        // '--mid-north--': '', // FIXME '--北边中央--'
-        // '\\(cages\\)': '', // FIXME '(笼子)'
-        // '\\(lance\\)': '', // FIXME '(雷枪)'
-        // '\\(puddle drop\\)': '', // FIXME '(放置毒球)'
-        // '\\(spread\\)': '', // FIXME '(分散)'
+        '--mid-north--': '--北邊中央--',
+        '\\(cages\\)': '(籠子)',
+        '\\(lance\\)': '(雷槍)',
+        '\\(puddle drop\\)': '(放置毒球)',
+        '\\(spread\\)': '(分散)',
         'Bionic Thrash': '迴旋臂',
         'Collective Agony': '念力波動',
         'Convulsive Crush': '毆打',

@@ -1501,16 +1501,15 @@ const triggerSet: TriggerSet<Data> = {
     },
     {
       'locale': 'tc',
-      'missingTranslations': true,
       'replaceSync': {
         'Fang': '雙牙劍',
         'Zoraal Ja': '佐拉加',
       },
       'replaceText': {
-        // '\\(cast\\)': '', // FIXME '(咏唱)'
-        // '\\(damage\\)': '', // FIXME '(伤害)'
-        // '\\(enrage\\)': '', // FIXME '(狂暴)'
-        // '\\(lines drop\\)': '', // FIXME '(放置直线)'
+        '\\(cast\\)': '(詠唱)',
+        '\\(damage\\)': '(傷害)',
+        '\\(enrage\\)': '(狂暴)',
+        '\\(lines drop\\)': '(放置直線)',
         'Actualize': '自我實現',
         'Aero III': '大勁風',
         'Backward Edge': '後向斬',

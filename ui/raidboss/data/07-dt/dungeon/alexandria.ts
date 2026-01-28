@@ -493,7 +493,6 @@ const triggerSet: TriggerSet<Data> = {
     },
     {
       'locale': 'tc',
-      'missingTranslations': true,
       'replaceSync': {
         'Amalgam': '軟性融合體',
         'Antivirus X': '反病毒程式X',
@@ -531,11 +530,11 @@ const triggerSet: TriggerSet<Data> = {
         'Terminate': '終結',
         'Ternary Charge': '三重放電',
         'Voltburst': '電擊爆發',
-        // '\\(corners\\)': '', // FIXME '(四角)'
-        // '\\(front\\)': '', // FIXME '(前方)'
-        // '\\(lasers\\)': '', // FIXME '(激光)'
-        // '\\(sides\\)': '', // FIXME '(两侧)'
-        // '\\(triangle\\)': '', // FIXME '(三角)'
+        '\\(corners\\)': '(四角)',
+        '\\(front\\)': '(前方)',
+        '\\(lasers\\)': '(雷射)',
+        '\\(sides\\)': '(兩側)',
+        '\\(triangle\\)': '(三角)',
       },
     },
     {
