@@ -136,7 +136,7 @@ export default {
   defamationOnYou: {
     en: 'Defamation on YOU',
     ja: '自分に巨大な爆発',
-    ko: '내게 대폭발',
+    ko: '내게 큰폭발',
   },
   protean: {
     en: 'Protean',
@@ -531,12 +531,12 @@ export default {
   cardinals: {
     en: 'Cardinals',
     ja: '十字回避',
-    ko: '십자로',
+    ko: '십자로➕',
   },
   intercards: {
     en: 'Intercards',
     ja: '斜めへ',
-    ko: '비스듬히',
+    ko: '비스듬히❌',
   },
   north: {
     en: 'North',

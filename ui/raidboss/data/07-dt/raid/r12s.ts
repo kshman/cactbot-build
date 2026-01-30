@@ -73,8 +73,12 @@ export interface Data extends RaidbossData {
   manaSpherePopSide?: 'east' | 'west';
   twistedVisionCounter: number;
   replication3CloneOrder: number[];
+  replication3CloneDirNumPlayers: { [dirNum: number]: string };
   idyllicVision2NorthSouthCleaveSpot?: 'north' | 'south';
-  replication4TetherMap: { [dirNum: string]: string };
+  replication4DirNumAbility: { [dirNum: number]: string };
+  replication4PlayerAbilities: { [player: string]: string };
+  replication4PlayerOrder: string[];
+  replication4AbilityOrder: string[];
   myReplication4Tether?: string;
   hasLightResistanceDown: boolean;
   doomPlayers: string[];
@@ -242,7 +246,11 @@ const triggerSet: TriggerSet<Data> = {
     closeManaSphereIds: [],
     twistedVisionCounter: 0,
     replication3CloneOrder: [],
-    replication4TetherMap: {},
+    replication3CloneDirNumPlayers: {},
+    replication4DirNumAbility: {},
+    replication4PlayerAbilities: {},
+    replication4PlayerOrder: [],
+    replication4AbilityOrder: [],
     hasLightResistanceDown: false,
     doomPlayers: [],
     // prt
@@ -1919,7 +1927,7 @@ const triggerSet: TriggerSet<Data> = {
         if (data.phase === 'replication2')
           data.replication2TetherMap[dirNum] = matches.id;
         if (data.phase === 'idyllic')
-          data.replication4TetherMap[dirNum] = matches.id;
+          data.replication4DirNumAbility[dirNum] = matches.id;
       },
     },
     /* {
@@ -2370,10 +2378,6 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         east: Outputs.aimE,
         west: Outputs.aimW,
-        northSouth: {
-          en: 'N/S',
-          ko: '남북',
-        },
         water: {
           en: 'Orb',
           ko: '구슬',
@@ -2392,7 +2396,7 @@ const triggerSet: TriggerSet<Data> = {
         },
         alpha: {
           en: 'Avoid Shape AoEs, Wait by Black Hole',
-          ko: '피하면서, 블랙홀 쪽에서 기다려요',
+          ko: '피하고, 블랙홀 대기',
         },
         beta: {
           en: 'Shared Shape Soak => Get by Black Hole',
@@ -2400,11 +2404,11 @@ const triggerSet: TriggerSet<Data> = {
         },
         alphaDir: {
           en: 'Avoid ${dir1} Shape AoEs => ${dir2} Black Hole',
-          ko: '${dir1}쪽 피하면서 🔜 ${dir2}쪽 블랙홀',
+          ko: '${dir1}쪽 피하서 🔜 ${dir2}쪽 블랙홀 남북',
         },
         betaDir: {
           en: 'Share ${dir1} ${shape1}/${shape2} => ${dir2} Black Hole',
-          ko: '${dir1}쪽 ${shape1}/${shape2} 문대고 🔜 ${dir2}쪽 블랙홀',
+          ko: '${dir1}쪽 ${shape1}/${shape2} 문대고 🔜 ${dir2}쪽 블랙홀 남북',
         },
       },
     },
@@ -2420,21 +2424,15 @@ const triggerSet: TriggerSet<Data> = {
           return data.myMutation === 'alpha' ? output.alpha!() : output.beta!();
         return data.myMutation === 'alpha'
           ? output.alphaDir!({
-            northSouth: output.northSouth!(),
             dir2: output[blackHole]!(),
           })
           : output.betaDir!({
-            northSouth: output.northSouth!(),
             dir2: output[blackHole]!(),
           });
       },
       outputStrings: {
-        east: Outputs.east,
-        west: Outputs.west,
-        northSouth: {
-          en: 'N/S',
-          ko: '남북',
-        },
+        east: Outputs.aimE,
+        west: Outputs.aimW,
         alpha: {
           en: 'Get by Black Hole',
           ko: '블랙홀 쪽으로',
@@ -2444,12 +2442,12 @@ const triggerSet: TriggerSet<Data> = {
           ko: '블랙홀 쪽으로',
         },
         alphaDir: {
-          en: '${dir2} Black Hole + ${northSouth}',
-          ko: '${dir2} 블랙홀 + ${northSouth}으로',
+          en: '${dir2} Black Hole + N/S',
+          ko: '${dir2}쪽 블랙홀 남북으로',
         },
         betaDir: {
-          en: '${dir2} Black Hole + ${northSouth}',
-          ko: '${dir2} 블랙홀 + ${northSouth}으로',
+          en: '${dir2} Black Hole + N/S',
+          ko: '${dir2}쪽 블랙홀 남북으로',
         },
       },
     },
@@ -2469,24 +2467,19 @@ const triggerSet: TriggerSet<Data> = {
           return output.move!();
         const next = blackHole === 'east' ? 'west' : 'east';
         return output.moveDir!({
-          northSouth: output.northSouth!(),
           dir: output[next]!(),
         });
       },
       outputStrings: {
-        east: Outputs.east,
-        west: Outputs.west,
-        northSouth: {
-          en: 'N/S',
-          ko: '남북',
-        },
+        east: Outputs.aimE,
+        west: Outputs.aimW,
         move: {
           en: 'Move to other Black Hole',
           ko: '다른 블랙홀로 이동',
         },
         moveDir: {
-          en: '${dir} Black Hole + ${northSouth}',
-          ko: '${dir} 블랙홀 + ${northSouth}으로',
+          en: '${dir} Black Hole + N/S',
+          ko: '${dir}쪽 블랙홀 남북으로',
         },
       },
     },
@@ -2522,12 +2515,12 @@ const triggerSet: TriggerSet<Data> = {
         betaNear: {
           en: 'Near β Stack: ${mech}',
           ja: '近いβ頭割り: ${mech}',
-          ko: '니어β 스택: ${mech}',
+          ko: '니어β 뭉쳐요: ${mech}',
         },
         betaFar: {
           en: 'Far β Stack: ${mech}',
           ja: '遠いβ頭割り: ${mech}',
-          ko: '파β 스택: ${mech}',
+          ko: '파β 뭉쳐요: ${mech}',
         },
       },
     },
@@ -2590,7 +2583,29 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: 'R12S Idyllic Dream Replication Tethered Clone',
+      id: 'R12S Idyllic Dream Staging 2 Tethered Clone Collect',
+      // Map the locations to a player name
+      type: 'Tether',
+      netRegex: { id: headMarkerData['lockedTether'], capture: true },
+      condition: (data) => {
+        if (
+          data.phase === 'idyllic' &&
+          data.replicationCounter === 2
+        )
+          return true;
+        return false;
+      },
+      run: (data, matches) => {
+        const actor = data.actorPositions[matches.sourceId];
+        if (actor === undefined)
+          return;
+
+        const dirNum = Directions.xyTo8DirNum(actor.x, actor.y, center.x, center.y);
+        data.replication3CloneDirNumPlayers[dirNum] = matches.target;
+      },
+    },
+    {
+      id: 'R12S Idyllic Dream Staging 2 Tethered Clone',
       type: 'Tether',
       netRegex: { id: headMarkerData['lockedTether'], capture: true },
       condition: (data, matches) => {
@@ -2616,11 +2631,11 @@ const triggerSet: TriggerSet<Data> = {
         ...Directions.outputStrings8Dir,
         cloneTether: {
           en: 'Tethered to Clone',
-          ko: '분신 줄 잡아요',
+          ko: '내 분신 쪽으로',
         },
         cloneTetherDir: {
           en: 'Tethered to ${dir} Clone',
-          ko: '${dir}쪽 분신 줄 잡아요',
+          ko: '${dir}쪽으로',
         },
       },
     },
@@ -2655,6 +2670,7 @@ const triggerSet: TriggerSet<Data> = {
         sides: Outputs.sides,
         text: {
           en: '${dir} + ${sides} (later)',
+          ko: '(나중에 ${dir} ${sides})',
         },
       },
     },
@@ -2698,26 +2714,22 @@ const triggerSet: TriggerSet<Data> = {
         }
       },
       outputStrings: {
-        ...Directions.outputStrings8Dir,
+        ...markerStrings,
         manaBurstTether: {
           en: 'Defamation Tether on YOU',
-          ja: 'デファメ線が自分に',
-          ko: '디파메이션 줄 잡아요',
+          ko: '큰폭발 줄 채요',
         },
         manaBurstTetherDir: {
           en: '${dir} Defamation Tether on YOU',
-          ja: '${dir}デファメ線が自分に',
-          ko: '${dir}쪽 디파메이션 줄 잡아요',
+          ko: '${dir}쪽 큰폭발 줄 채요',
         },
         heavySlamTether: {
           en: 'Stack Tether on YOU',
-          ja: '頭割り線が自分に',
-          ko: '스택 줄 잡아요',
+          ko: '뭉쳐 줄 채요',
         },
         heavySlamTetherDir: {
           en: '${dir} Stack Tether on YOU',
-          ja: '${dir}頭割り線が自分に',
-          ko: '${dir}쪽 스택 줄 잡아요',
+          ko: '${dir}쪽 뭉쳐 줄 채요',
         },
       },
     },
@@ -2725,20 +2737,21 @@ const triggerSet: TriggerSet<Data> = {
       id: 'R12S Replication 4 Locked Tether 2 Collect',
       type: 'Tether',
       netRegex: { id: headMarkerData['lockedTether'], capture: true },
-      condition: (data, matches) => {
+      condition: (data) => {
         if (
           data.phase === 'idyllic' &&
-          data.replicationCounter === 4 &&
-          data.me === matches.target
+          data.replicationCounter === 4
         )
           return true;
         return false;
       },
       run: (data, matches) => {
         const actor = data.actorPositions[matches.sourceId];
+        const target = matches.target;
         if (actor === undefined) {
           // Setting to use that we know we have a tether but couldn't determine what ability it is
-          data.myReplication4Tether = 'unknown';
+          if (data.me === target)
+            data.replication4PlayerAbilities[target] = 'unknown';
           return;
         }
 
@@ -2750,13 +2763,33 @@ const triggerSet: TriggerSet<Data> = {
         );
 
         // Lookup what the tether was at the same location
-        const ability = data.replication4TetherMap[dirNum];
+        const ability = data.replication4DirNumAbility[dirNum];
         if (ability === undefined) {
           // Setting to use that we know we have a tether but couldn't determine what ability it is
-          data.myReplication4Tether = 'unknown';
+          data.replication4PlayerAbilities[target] = 'unknown';
           return;
         }
-        data.myReplication4Tether = ability;
+        data.replication4PlayerAbilities[target] = ability;
+
+        // Create ability order once we have all 8 players
+        // If players had more than one tether previously, the extra tethers are randomly assigned
+        if (Object.keys(data.replication4PlayerAbilities).length === 8) {
+          const abilities = data.replication4PlayerAbilities;
+          const order = data.replication3CloneOrder; // Order in which clones spawned
+          const players = data.replication3CloneDirNumPlayers; // Direction of player's clone
+
+          // Mechanics are resolved clockwise, get create order based on cards/inters
+          const first = order[0];
+          if (first === undefined)
+            return;
+          const dirNumOrder = first % 2 === 0 ? [0, 2, 4, 6, 1, 3, 5, 7] : [1, 3, 5, 7, 0, 2, 4, 6];
+          for (const dirNum of dirNumOrder) {
+            const player = players[dirNum] ?? 'unknown';
+            const ability = abilities[player] ?? 'unknown';
+            data.replication4PlayerOrder.push(player);
+            data.replication4AbilityOrder.push(ability);
+          }
+        }
       },
     },
     {
@@ -2777,15 +2810,13 @@ const triggerSet: TriggerSet<Data> = {
       delaySeconds: 0.1,
       durationSeconds: 8,
       alertText: (data, matches, output) => {
-        const meteorAoe = output.meteorAoe!({
-          bigAoe: output.bigAoe!(),
-          groups: output.healerGroups!(),
-        });
+        const meteorAoe = output.meteorAoe!();
         const cleaveOrigin = data.idyllicVision2NorthSouthCleaveSpot;
+        const myAbility = data.replication4PlayerAbilities[data.me];
         // Get direction of the tether
         const actor = data.actorPositions[matches.sourceId];
         if (actor === undefined || cleaveOrigin === undefined) {
-          switch (data.myReplication4Tether) {
+          switch (myAbility) {
             case headMarkerData['manaBurstTether']:
               return output.manaBurstTether!({ meteorAoe: meteorAoe });
             case headMarkerData['heavySlamTether']:
@@ -2799,10 +2830,9 @@ const triggerSet: TriggerSet<Data> = {
 
         const dodge = output.dodgeCleaves!({
           dir: output[cleaveOrigin]!(),
-          sides: output.sides!(),
         });
 
-        switch (data.myReplication4Tether) {
+        switch (myAbility) {
           case headMarkerData['manaBurstTether']:
             return output.manaBurstTetherDir!({
               dir: output[dir]!(),
@@ -2818,41 +2848,33 @@ const triggerSet: TriggerSet<Data> = {
         }
       },
       outputStrings: {
-        ...Directions.outputStrings8Dir,
-        north: Outputs.north,
-        south: Outputs.south,
-        sides: Outputs.sides,
-        bigAoe: Outputs.bigAoe,
-        healerGroups: Outputs.healerGroups,
+        ...markerStrings,
+        north: Outputs.aimN,
+        south: Outputs.aimS,
         meteorAoe: {
-          en: '${bigAoe} + ${groups}',
-          ja: '${bigAoe} + ${groups}',
-          ko: '${bigAoe} + ${groups}',
+          en: 'big AoE + Healer Groups',
+          ko: '4:4 + 전체 공격',
         },
         dodgeCleaves: {
-          en: '${dir} + ${sides}',
-          ja: '${dir} + ${sides}',
-          ko: '${dir} + ${sides}',
+          en: '${dir} + Sides',
+          ko: '${dir}쪽 옆으로',
         },
         manaBurstTetherDir: {
           en: '${dodgeCleaves} (${dir} Defamation Tether)  => ${meteorAoe}',
-          ja: '${dodgeCleaves} (${dir}デファメ線)  => ${meteorAoe}',
-          ko: '${dodgeCleaves} (${dir}쪽 디파메이션 줄)  => ${meteorAoe}',
+          ko: '${dodgeCleaves} (${dir}쪽 큰폭발 줄) 🔜 ${meteorAoe}',
         },
         manaBurstTether: {
           en: ' N/S Clone (Defamation Tether) => ${meteorAoe}',
-          ja: '南北分身 (デファメ線) => ${meteorAoe}',
-          ko: '남북 분신 (디파메이션 줄) => ${meteorAoe}',
+          ko: '남북 분신 (큰폭발 줄) 🔜 ${meteorAoe}',
         },
         heavySlamTetherDir: {
           en: '${dodgeCleaves} (${dir} Stack Tether)  => ${meteorAoe}',
-          ja: '${dodgeCleaves} (${dir}頭割り線)  => ${meteorAoe}',
-          ko: '${dodgeCleaves} (${dir}쪽 스택 줄)  => ${meteorAoe}',
+          ko: '${dodgeCleaves} (${dir}쪽 뭉쳐 줄) 🔜 ${meteorAoe}',
         },
         heavySlamTether: {
           en: ' N/S Clone (Stack Tether) => ${meteorAoe}',
           ja: '南北分身 (頭割り線) => ${meteorAoe}',
-          ko: '남북 분신 (스택 줄) => ${meteorAoe}',
+          ko: '남북 분신 (뭉쳐 줄) 🔜 ${meteorAoe}',
         },
       },
     },
@@ -2879,9 +2901,8 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Soak Fire/Earth Meteor',
-          ja: '火/土メテオに当たる',
-          ko: '불/땅 메테오 맞아요',
+          en: 'Soak Fire/Earth Meteor (later)',
+          ko: '(나중에 불/땅 밟아요)',
         },
       },
     },
@@ -2897,10 +2918,182 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         text: {
-          en: 'Soak a White/Star Meteor',
-          ja: '白/星メテオに当たる',
-          ko: '하얀/별 메테오 맞아요',
+          en: 'Soak a White/Star Meteor (later)',
+          ko: '(나중에 하양/별 밟아요)',
         },
+      },
+    },
+    {
+      id: 'R12S Twisted Vision 4 Stack/Defamation 1',
+      // Used for keeping track of phases in idyllic
+      type: 'StartsUsing',
+      netRegex: { id: 'BBE2', source: 'Lindwurm', capture: false },
+      condition: (data) => data.twistedVisionCounter === 4,
+      response: (data, _matches, output) => {
+        // cactbot-builtin-response
+        output.responseOutputStrings = {
+          ...markerStrings,
+          stacks: Outputs.stacks,
+          avoidDefamation: {
+            en: 'Avoid Defamation',
+            ko: '큰폭발 피해요',
+          },
+          avoidStack: {
+            en: 'Avoid Stack',
+            ko: '뭉치면 안되요',
+          },
+          defamationOnYou: Outputs.defamationOnYou,
+          stackOnYou: Outputs.stackOnYou,
+          defamations: {
+            en: 'Defamations',
+            ja: '巨大な爆発',
+            ko: '큰폭발',
+          },
+          oneMechThenOne: {
+            en: '${mech1} => ${mech2}',
+            ko: '${mech1} 🔜 ${mech2}',
+          },
+          oneMechThenTwo: {
+            en: '${mech1} => ${mech2} + ${mech3}',
+            ko: '${mech1} 🔜 ${mech2} + ${mech3}',
+          },
+          twoMechsThenOne: {
+            en: '${mech1} + ${mech2} => ${mech3}',
+            ko: '${mech1} + ${mech2} 🔜 ${mech3}',
+          },
+          twoMechsThenTwo: {
+            en: '${mech1} + ${mech2} => ${mech3} + ${mech4}',
+            ko: '${mech1} + ${mech2} 🔜 ${mech3} + ${mech4}',
+          },
+        };
+        const abilityOrder = data.replication4AbilityOrder;
+        const playerOrder = data.replication4PlayerOrder;
+        if (
+          abilityOrder === undefined ||
+          playerOrder === undefined
+        )
+          return;
+
+        const ability1 = abilityOrder[0];
+        const ability2 = abilityOrder[1];
+        const player1 = playerOrder[0];
+        const player2 = playerOrder[1];
+
+        // Get Stack/Defamation #2 details
+        const ability3 = abilityOrder[2];
+        const ability4 = abilityOrder[3];
+        const player3 = playerOrder[2];
+        const player4 = playerOrder[3];
+
+        // Handle some obscure strategies or mistakes
+        const isThisSame = ability1 === ability2;
+        const isNextSame = ability3 === ability4;
+        const defamation = headMarkerData['manaBurstTether'];
+        let this1;
+        let this2;
+        let next1;
+        let next2;
+        // Handle This Set
+        if (player1 === data.me) {
+          this1 = ability1 === defamation ? 'defamationOnYou' : 'stackOnYou';
+          if (!isThisSame)
+            this2 = ability2 === defamation ? 'avoidDefamation' : 'avoidStack';
+        } else if (player2 === data.me) {
+          if (!isThisSame) {
+            this1 = ability1 === defamation ? 'avoidDefamation' : 'avoidStack';
+            this2 = ability2 === defamation ? 'defamationOnYou' : 'stackOnYou';
+          } else {
+            this1 = ability1 === defamation ? 'defamationOnYou' : 'stackOnYou';
+          }
+        } else if (isThisSame) {
+          this1 = ability1 === defamation ? 'defamations' : 'stacks';
+        } else if (!isThisSame) {
+          this1 = ability1 === defamation ? 'avoidDefamation' : 'stack';
+          this2 = ability2 === defamation ? 'avoidDefamation' : 'stack';
+        }
+
+        // Handle Next Set
+        if (player3 === data.me) {
+          next1 = ability3 === defamation ? 'defamationOnYou' : 'stackOnYou';
+          if (!isThisSame)
+            next2 = ability4 === defamation ? 'avoidDefamation' : 'avoidStack';
+        } else if (player4 === data.me) {
+          if (!isThisSame) {
+            next1 = ability4 === defamation ? 'avoidDefamation' : 'avoidStack';
+            next2 = ability4 === defamation ? 'defamationOnYou' : 'stackOnYou';
+          } else {
+            next1 = ability4 === defamation ? 'defamationOnYou' : 'stackOnYou';
+          }
+        } else if (isNextSame) {
+          next1 = ability3 === defamation ? 'defamations' : 'stacks';
+        } else if (!isNextSame) {
+          next1 = ability3 === defamation ? 'avoidDefamation' : 'stack';
+          next2 = ability4 === defamation ? 'avoidDefamation' : 'stack';
+        }
+
+        // Build output
+        if (this1 === undefined || next1 === undefined)
+          return;
+        const text = (player1 === data.me || player2 === data.me) ? 'alertText' : 'infoText';
+        if (isThisSame && isNextSame) {
+          return {
+            [text]: output.oneMechThenOne!({
+              mech1: output[this1]!(),
+              mech2: output[next1]!(),
+            }),
+          };
+        }
+
+        if (isThisSame && !isNextSame) {
+          if (next2 === undefined)
+            return;
+          return {
+            [text]: output.oneMechThenTwo!({
+              mech1: output[this1]!(),
+              mech2: next1 === 'stack'
+                ? output.stacks!()
+                : output[next1]!(),
+              mech3: next2 === 'stack'
+                ? output.stacks!()
+                : output[next2]!(),
+            }),
+          };
+        }
+
+        if (!isThisSame && isNextSame) {
+          if (this2 === undefined)
+            return;
+          return {
+            [text]: output.twoMechsThenOne!({
+              mech1: this1 === 'stack'
+                ? output.stacks!()
+                : output[this1]!(),
+              mech2: this2 === 'stack'
+                ? output.stacks!()
+                : output[this2]!(),
+              mech3: output[next1]!(),
+            }),
+          };
+        }
+
+        if (this2 === undefined || next2 === undefined)
+          return;
+        return {
+          [text]: output.twoMechsThenTwo!({
+            mech1: this1 === 'stack'
+              ? output.stacks!()
+              : output[this1]!(),
+            mech2: this2 === 'stack'
+              ? output.stacks!()
+              : output[this2]!(),
+            mech3: next1 === 'stack'
+              ? output.stacks!()
+              : output[next1]!(),
+            mech4: next2 === 'stack'
+              ? output.stacks!()
+              : output[next2]!(),
+          }),
+        };
       },
     },
     {
@@ -2931,15 +3124,11 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         cleanseDoom: {
           en: 'Cleanse ${target}',
-          de: 'Reinige ${target}',
-          fr: 'Guérison sur ${target}',
-          cn: '康复 ${target}',
-          ko: '${target} 에스나',
-          tc: '康復 ${target}',
+          ko: '에스나: ${target}',
         },
         cleanseDoom2: {
           en: 'Cleanse ${target1}/${target2}',
-          ko: '${target1}/${target2} 에스나',
+          ko: '에스나: ${target1}, ${target2}',
         },
       },
     },
