@@ -1,4 +1,4 @@
-import Autumn from '../../../../../resources/autumn';
+import Autumn, { AutumnDir } from '../../../../../resources/autumn';
 import Conditions from '../../../../../resources/conditions';
 import { UnreachableCode } from '../../../../../resources/not_reached';
 import Outputs from '../../../../../resources/outputs';
@@ -36,6 +36,7 @@ export interface Data extends RaidbossData {
   readonly triggerSetConfig: {
     uptimeKnockbackStrat: true | false;
     showGrotesquerieAct2Progress: boolean;
+    topTierStatic: boolean;
   };
   phase: Phase;
   // Phase 1
@@ -81,10 +82,12 @@ export interface Data extends RaidbossData {
   replication4AbilityOrder: string[];
   myReplication4Tether?: string;
   hasLightResistanceDown: boolean;
+  twistedVision4MechCounter: number;
   doomPlayers: string[];
   // prt
   mortalList: MortalInfo[];
-  ushikoDir: DirectionOutput8;
+  clonePos: DirectionOutput8;
+  rep4CheckSwap: boolean;
 }
 
 const headMarkerData = {
@@ -128,18 +131,6 @@ const grandCountMap: { [id: string]: string } = {
   '438': 'rear',
   '439': 'left',
 };
-
-const dirAimStrings = {
-  dirN: Outputs.aimN,
-  dirS: Outputs.aimS,
-  dirE: Outputs.aimE,
-  dirW: Outputs.aimW,
-  dirNE: Outputs.aimNE,
-  dirSE: Outputs.aimSE,
-  dirSW: Outputs.aimSW,
-  dirNW: Outputs.aimNW,
-  unknown: Outputs.unknown,
-} as const;
 
 const markerStrings = {
   dirN: {
@@ -223,6 +214,16 @@ const triggerSet: TriggerSet<Data> = {
       type: 'checkbox',
       default: false,
     },
+    {
+      id: 'topTierStatic',
+      name: {
+        en: 'Call Top-Tier by static strat',
+        ja: 'レプリケーションを位置固定式で呼ぶ',
+        ko: '리프리케이션을 위치 고정식으로 알려주기',
+      },
+      type: 'checkbox',
+      default: true,
+    },
   ],
   timelineFile: 'r12s.txt',
   initData: () => ({
@@ -252,10 +253,12 @@ const triggerSet: TriggerSet<Data> = {
     replication4PlayerOrder: [],
     replication4AbilityOrder: [],
     hasLightResistanceDown: false,
+    twistedVision4MechCounter: 0,
     doomPlayers: [],
     // prt
     mortalList: [],
-    ushikoDir: 'unknown',
+    clonePos: 'unknown',
+    rep4CheckSwap: false,
   }),
   triggers: [
     {
@@ -670,11 +673,11 @@ const triggerSet: TriggerSet<Data> = {
         },
         alpha3: {
           en: '3α: Blob Tower 1',
-          ko: '3α: 안쪽 살덩이 #1',
+          ko: '3α: 살덩이 #1',
         },
         alpha4: {
           en: '4α: Blob Tower 2',
-          ko: '4α: 안쪽 살덩이 #2',
+          ko: '4α: 살덩이 #2',
         },
         beta1: {
           en: '1β: Wait for Tether 1',
@@ -805,7 +808,7 @@ const triggerSet: TriggerSet<Data> = {
         return output.outerBlobTower!({ num: towerNum, dir: output[dir]!() });
       },
       outputStrings: {
-        ...dirAimStrings,
+        ...AutumnDir.stringsAimCross,
         innerBlobTower: {
           en: 'Blob Tower ${num} Inner ${dir} (later)',
           ko: '(나중에 살덩이 #${num}, 안쪽 ${dir})',
@@ -977,7 +980,7 @@ const triggerSet: TriggerSet<Data> = {
         return output.alpha3!();
       },
       outputStrings: {
-        ...dirAimStrings,
+        ...AutumnDir.stringsAimCross,
         alpha3: {
           en: 'Get Blob Tower 1',
           ko: '밟아요: 살덩이 #1',
@@ -988,11 +991,11 @@ const triggerSet: TriggerSet<Data> = {
         },
         alpha3Dir: {
           en: 'Get Blob Tower 1 (Inner ${dir})',
-          ko: '밟아요: 안쪽 살덩이 #1 (${dir})',
+          ko: '밟아요: ${dir}쪽 살덩이 #1',
         },
         alpha4Dir: {
           en: 'Get Blob Tower 2 (Inner ${dir})',
-          ko: '밟아요: 안쪽 살덩이 #2 (${dir})',
+          ko: '밟아요: ${dir}쪽 살덩이 #2',
         },
       },
     },
@@ -1045,47 +1048,47 @@ const triggerSet: TriggerSet<Data> = {
         return output.getTowers!();
       },
       outputStrings: {
-        ...dirAimStrings,
+        ...AutumnDir.stringsAimCross,
         getTowers: Outputs.getTowers,
         alpha1: {
           en: 'Break Chains 1 + Blob Tower 3 (Outer)',
-          ko: '나가면서 끊어요: 줄 #1 🔜 살덩이 #3',
+          ko: '나가요: 줄 #1 🔜 살덩이 #3',
         },
         alpha1Dir: {
           en: 'Break Chains 1 + Blob Tower 3 (Outer ${dir})',
-          ko: '나가면서 끊어요: 줄 #1 🔜 살덩이 #3 (${dir})',
+          ko: '나가요: 줄 #1 🔜 ${dir}쪽 살덩이 #3',
         },
         alpha2: {
           en: 'Break Chains 2 + Blob Tower 4 (Outer)',
-          ko: '나가면서 끊어요: 줄 #2 🔜 살덩이 #4',
+          ko: '나가요: 줄 #2 🔜 살덩이 #4',
         },
         alpha2Dir: {
           en: 'Break Chains 2 + Blob Tower 4 (Outer ${dir})',
-          ko: '나가면서 끊어요: 줄 #2 🔜 살덩이 #4 (${dir})',
+          ko: '나가요: 줄 #2 🔜 ${dir}쪽 살덩이 #4',
         },
         alpha3: {
           en: 'Break Chains 3 + Get Out',
-          ko: '나가면서 끊어요: 줄 #3',
+          ko: '나가요: 줄 #3',
         },
         alpha4: {
           en: 'Break Chains 4 + Get Out',
-          ko: '나가면서 끊어요: 줄 #4',
+          ko: '나가요: 줄 #4',
         },
         beta1: {
           en: 'Break Chains 1 => Get Middle',
-          ko: '안에서 끊어요: 줄 #1 🔜 가운데로',
+          ko: '끊어요: 줄 #1 🔜 가운데로',
         },
         beta2: {
           en: 'Break Chains 2 => Get Middle',
-          ko: '안에서 끊어요: 줄 #2 🔜 가운데로',
+          ko: '끊어요: 줄 #2 🔜 가운데로',
         },
         beta3: {
           en: 'Break Chains 3 => Wait for last pair',
-          ko: '안에서 끊어요: 줄 #3 🔜 마지막에 탈출',
+          ko: '끊어요: 줄 #3 🔜 마지막에 탈출',
         },
         beta4: {
           en: 'Break Chains 4 => Get Out',
-          ko: '안에서 끊어요: 줄 #4 🔜 탈출해요!',
+          ko: '끊어요: 줄 #4 🔜 탈출해요!',
         },
       },
     },
@@ -1139,7 +1142,7 @@ const triggerSet: TriggerSet<Data> = {
         getOut: {
           en: 'Get Out',
           ja: '外へ',
-          ko: '밖으로 나가요',
+          ko: '나가요',
         },
         goIntoMiddle: Outputs.goIntoMiddle,
         beta1Middle: Outputs.goIntoMiddle,
@@ -1149,22 +1152,22 @@ const triggerSet: TriggerSet<Data> = {
         beta1Out: { // Should not happen under ideal situation
           en: 'Get Out',
           ja: '外へ',
-          ko: '밖으로 나가요',
+          ko: '나가요',
         },
         beta2Out: {
           en: 'Get Out',
           ja: '外へ',
-          ko: '밖으로 나가요',
+          ko: '나가요',
         },
         beta3Out: { // Should not happen under ideal situation
           en: 'Get Out',
           ja: '外へ',
-          ko: '밖으로 나가요',
+          ko: '나가요',
         },
         beta4Out: { // Should not happen under ideal situation
           en: 'Get Out',
           ja: '外へ',
-          ko: '밖으로 나가요',
+          ko: '나가요',
         },
       },
     },
@@ -1221,19 +1224,19 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         frontTower: {
           en: 'Tower (S/SW)',
-          ko: '내 바닥: 🡻남/🡿남서',
+          ko: '내 바닥: 🡻남쪽 또는 🡿남서쪽',
         },
         rearTower: {
           en: 'Tower (N/NE)',
-          ko: '내 바닥: 🡹북/🡽북동',
+          ko: '내 바닥: 🡹북쪽 또는 🡽북동쪽',
         },
         leftTower: {
           en: 'Tower (E/SE)',
-          ko: '내 바닥: 🡺동/🡾남동',
+          ko: '내 바닥: 🡺동쪽 또는 🡾남동쪽',
         },
         rightTower: {
           en: 'Tower (W/NW)',
-          ko: '내 바닥: 🡸서/🡼북서',
+          ko: '내 바닥: 🡸서쪽 또는 🡼북서쪽',
         },
       },
     },
@@ -1286,7 +1289,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Rotting Flesh on YOU',
-          ko: '🟣보라, 공격 맞아요!',
+          ko: '내게 맞아요 🟣보라',
         },
       },
     },
@@ -1389,7 +1392,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         alphaChains: {
           en: 'Break Chains => Avoid Blobs',
-          ko: '줄 끊고 🔜 살덩이 피해요',
+          ko: '줄 끊고 🔜 안전한 곳으로',
         },
       },
     },
@@ -1463,7 +1466,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Knockback from Northwest => Knockback from Northeast',
-          ko: '🡼북서 넉백 🔜 🡽북동 넉백',
+          ko: '➊🡼북서 넉백 🔜 북동 넉백',
         },
       },
     },
@@ -1479,7 +1482,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Knockback from Northeast => Knockback from Northwest',
-          ko: '🡽북동 넉백 🔜 🡼북서 넉백',
+          ko: '➋🡽북동 넉백 🔜 북서 넉백',
         },
       },
     },
@@ -1537,19 +1540,19 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         northSouthCleaves: {
           en: 'North/South Cleaves',
-          ko: '남북으로 쪼개기',
+          ko: '남북 쪼개기',
         },
         eastWestCleaves: {
           en: 'East/West Cleaves',
-          ko: '동서로 쪼개기',
+          ko: '동서 쪼개기',
         },
         northSouthCleaves2: {
           en: 'North/South Cleaves',
-          ko: '남북으로 쪼개기',
+          ko: '남북 쪼개기',
         },
         eastWestCleaves2: {
           en: 'East/West Cleaves',
-          ko: '동서로 쪼개기',
+          ko: '동서 쪼개기',
         },
       },
     },
@@ -1641,7 +1644,7 @@ const triggerSet: TriggerSet<Data> = {
         getBehind: Outputs.getBehind,
         getBehindDir: {
           en: '${dir}: ${mech}',
-          ko: '${dir} ${mech}',
+          ko: '${dir}쪽 ${mech}',
         },
       },
     },
@@ -1714,29 +1717,77 @@ const triggerSet: TriggerSet<Data> = {
 
         // Check if combatant moved to inner or outer
         const isIn = (x > 94 && x < 106);
+
+        if (data.triggerSetConfig.topTierStatic) {
+          // 위치고정 방식으로 알려주기 -> 바깥 어둠을 북쪽으로 놓고 알려줌
+          const debuff = data.replication1Debuff;
+          const north = isIn ? dir2 : dir1;
+
+          if (debuff === 'dark') {
+            if (Autumn.inMelee(data.moks))
+              return output.fireAt!({ dir: output[north ?? 'unknown']!() });
+            else if (Autumn.inRange(data.moks)) {
+              const rangeFireMap: { [dir: string]: string } = {
+                'dirNE': 'dirS',
+                'dirSE': 'dirW',
+                'dirSW': 'dirN',
+                'dirNW': 'dirE',
+              };
+              return output.fireAt!({ dir: output[rangeFireMap[north] ?? 'unknown']!() });
+            }
+          } else if (debuff === 'fire' || debuff === undefined) {
+            if (Autumn.isTank(data.moks)) {
+              const tankDarkMap: { [dir: string]: string } = {
+                'dirNE': 'dirS',
+                'dirSE': 'dirW',
+                'dirSW': 'dirN',
+                'dirNW': 'dirE',
+              };
+              return output.darkAt!({ dir: output[tankDarkMap[north] ?? 'unknown']!() });
+            } else if (Autumn.isDpsMelee(data.moks)) {
+              const meleeDarkMap: { [dir: string]: string } = {
+                'dirNE': 'dirW',
+                'dirSE': 'dirN',
+                'dirSW': 'dirE',
+                'dirNW': 'dirS',
+              };
+              return output.darkAt!({ dir: output[meleeDarkMap[north] ?? 'unknown']!() });
+            } else if (Autumn.isHealer(data.moks)) {
+              const healerDarkMap: { [dir: string]: string } = {
+                'dirNE': 'dirN',
+                'dirSE': 'dirE',
+                'dirSW': 'dirS',
+                'dirNW': 'dirW',
+              };
+              return output.darkAt!({ dir: output[healerDarkMap[north] ?? 'unknown']!() });
+            } else if (Autumn.isDpsRange(data.moks)) {
+              const rangeDarkMap: { [dir: string]: string } = {
+                'dirNE': 'dirE',
+                'dirSE': 'dirS',
+                'dirSW': 'dirW',
+                'dirNW': 'dirN',
+              };
+              return output.darkAt!({ dir: output[rangeDarkMap[north] ?? 'unknown']!() });
+            }
+          }
+
+          return output.north!({ dir: output[north ?? 'unknown']!() });
+        }
+
         const fireIn = isIn ? dir1 : dir2;
         const fireOut = isIn ? dir2 : dir1;
 
-        if (data.replication1Debuff === 'dark') {
-          if (Autumn.inMelee(data.moks))
-            return output.fireAt!({ dir: output[fireIn]!() });
-          if (Autumn.inRange(data.moks))
-            return output.fireAt!({ dir: output[fireOut]!() });
+        if (data.replication1Debuff === 'dark')
           return output.fire!({
             dir1: output[fireIn]!(),
             dir2: output[fireOut]!(),
           });
-        }
 
         // Dark will be opposite pattern of Fire
         const darkIn = isIn ? dir2 : dir1;
         const darkOut = isIn ? dir1 : dir2;
 
         // Fire debuff players and unmarked bait Dark
-        if (Autumn.inMelee(data.moks))
-          return output.darkAt!({ dir: output[darkIn]!() });
-        if (Autumn.inRange(data.moks))
-          return output.darkAt!({ dir: output[darkOut]!() });
         return output.dark!({
           dir1: output[darkIn]!(),
           dir2: output[darkOut]!(),
@@ -1759,6 +1810,10 @@ const triggerSet: TriggerSet<Data> = {
         darkAt: {
           en: 'Bait Dark ${dir}',
           ko: '🟣어둠 홀로: ${dir}쪽',
+        },
+        north: {
+          en: 'North Dark: ${dir}',
+          ko: '기준 🟣어둠: ${dir}쪽',
         },
       },
     },
@@ -1814,7 +1869,7 @@ const triggerSet: TriggerSet<Data> = {
         getBehind: Outputs.getBehind,
         getBehindDir: {
           en: '${dir}: ${mech}',
-          ko: '${dir} ${mech}',
+          ko: '${dir}쪽 ${mech}',
         },
       },
     },
@@ -1846,7 +1901,7 @@ const triggerSet: TriggerSet<Data> = {
       type: 'Tether',
       netRegex: { id: headMarkerData['lockedTether'], capture: true },
       condition: Conditions.targetIsYou(),
-      durationSeconds: 10,
+      durationSeconds: 16.5,
       suppressSeconds: 9999,
       infoText: (data, matches, output) => {
         const actor = data.actorPositions[matches.sourceId];
@@ -1854,42 +1909,42 @@ const triggerSet: TriggerSet<Data> = {
           return output.cloneTether!();
 
         const dirNum = Directions.xyTo8DirNum(actor.x, actor.y, center.x, center.y);
-        data.ushikoDir = Directions.output8Dir[dirNum] ?? 'unknown';
-        return output.cloneTetherDir!({ dir: output[data.ushikoDir]!() });
+        data.clonePos = Directions.output8Dir[dirNum] ?? 'unknown';
+        return output.cloneTetherDir!({ dir: output[data.clonePos]!() });
       },
       outputStrings: {
         unknown: Outputs.unknown,
         dirN: {
           en: 'West Cone',
-          ko: '🄰🡸 꼬깔 (반시계)',
+          ko: '꼬깔 (🄰 ↪반시계)',
         },
         dirE: {
           en: 'North Boss',
-          ko: '🄱🡹 보스',
+          ko: '보스 (🄱)',
         },
         dirS: {
           en: 'East Cone',
-          ko: '🄲🡺 꼬깔 (시계)',
+          ko: '꼬깔 (🄲 시계↩)',
         },
         dirW: {
           en: 'South None',
-          ko: '🄳🡻 무직',
+          ko: '무직 (🄳)',
         },
         dirNW: {
           en: 'Southwest Defamation',
-          ko: '➊🡿 큰폭발 (반시계◉︎)',
+          ko: '◉︎큰폭발 (➊ ↪반시계)',
         },
         dirNE: {
           en: 'Northwest Stack',
-          ko: '➋🡼 뭉쳐요 (반시계🀜)',
+          ko: '🀜뭉쳐요 (➋ ↪반시계)',
         },
         dirSE: {
           en: 'Northeast Stack',
-          ko: '➌🡽 뭉쳐요 (시계🀜)',
+          ko: '🀜뭉쳐요 (➌ 시계↩)',
         },
         dirSW: {
           en: 'Southeast Defamation',
-          ko: '➍🡾 큰폭발 (시계◉︎)',
+          ko: '◉︎큰폭발 (➍ 시계↩)',
         },
         cloneTether: {
           en: 'Tethered to Clone',
@@ -1992,7 +2047,8 @@ const triggerSet: TriggerSet<Data> = {
         return false;
       },
       delaySeconds: 0.1,
-      infoText: (data, matches, output) => {
+      durationSeconds: 4.5,
+      alertText: (data, matches, output) => {
         // Check if it's the boss
         if (data.replication2BossId === matches.sourceId)
           return output.fireballSplashTether!();
@@ -2021,7 +2077,7 @@ const triggerSet: TriggerSet<Data> = {
         },
         fireballSplashTether: {
           en: 'Boss Tether: Bait Jump',
-          ko: '보스 줄: 점프 유도',
+          ko: '🄱 안쪽 보스 유도',
         },
       },
     },
@@ -2036,8 +2092,9 @@ const triggerSet: TriggerSet<Data> = {
         return false;
       },
       delaySeconds: 0.2,
+      durationSeconds: 4.5,
       suppressSeconds: 1,
-      infoText: (data, _matches, output) => {
+      alertText: (data, _matches, output) => {
         if (data.myReplication2Tether !== undefined)
           return;
         return output.noTether!();
@@ -2045,7 +2102,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         noTether: {
           en: 'Bait Defamation => Stack Groups',
-          ko: '🄳🡻 큰폭발 유도 🔜 ➋ 뭉쳐요',
+          ko: '🄳 큰폭발 🔜 ➋ 뭉쳐요',
         },
       },
     },
@@ -2060,21 +2117,21 @@ const triggerSet: TriggerSet<Data> = {
         const ability = data.myReplication2Tether;
         switch (ability) {
           case headMarkerData['projectionTether']:
-            if (data.ushikoDir === 'dirS')
+            if (data.clonePos === 'dirS')
               side = output.mark3!();
-            else if (data.ushikoDir === 'dirN')
+            else if (data.clonePos === 'dirN')
               side = output.mark2!();
             break;
           case headMarkerData['manaBurstTether']:
-            if (data.ushikoDir === 'dirSW')
+            if (data.clonePos === 'dirSW')
               side = output.mark3!();
-            else if (data.ushikoDir === 'dirNW')
+            else if (data.clonePos === 'dirNW')
               side = output.mark2!();
             break;
           case headMarkerData['heavySlamTether']:
-            if (data.ushikoDir === 'dirSE')
+            if (data.clonePos === 'dirSE')
               side = output.mark3!();
-            else if (data.ushikoDir === 'dirNE')
+            else if (data.clonePos === 'dirNE')
               side = output.mark2!();
             break;
           case headMarkerData['fireballSplashTether']:
@@ -2088,11 +2145,11 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         mark2: {
-          en: 'Left Side',
+          en: 'North Side',
           ko: '➋',
         },
         mark3: {
-          en: 'Right Side',
+          en: 'South Side',
           ko: '➌',
         },
         text: {
@@ -2132,7 +2189,7 @@ const triggerSet: TriggerSet<Data> = {
         getBehind: Outputs.getBehind,
         getBehindDir: {
           en: '${dir}: ${mech}',
-          ko: '${dir} ${mech}',
+          ko: '${dir}쪽 ${mech}',
         },
       },
     },
@@ -2141,7 +2198,8 @@ const triggerSet: TriggerSet<Data> = {
       // Boss jumps onto clone of player that took Firefall Splash, there is an aoe around the clone + proteans
       type: 'StartsUsing',
       netRegex: { id: ['B52E', 'B52F'], source: 'Lindwurm', capture: false },
-      infoText: (data, _matches, output) => {
+      durationSeconds: 4.5,
+      alertText: (data, _matches, output) => {
         switch (data.myReplication2Tether) {
           case headMarkerData['projectionTether']:
             return output.projectionTether!();
@@ -2376,27 +2434,35 @@ const triggerSet: TriggerSet<Data> = {
         });
       },
       outputStrings: {
-        east: Outputs.aimE,
-        west: Outputs.aimW,
+        east: {
+          en: 'East',
+          ja: '🄱東',
+          ko: '🄱동쪽',
+        },
+        west: {
+          en: 'West',
+          ja: '🄳西',
+          ko: '🄳서쪽',
+        },
         water: {
           en: 'Orb',
-          ko: '구슬',
+          ko: '🔵파랑',
         },
         lightning: {
           en: 'Lightning',
-          ko: '번개',
+          ko: '🟪보라',
         },
         fire: {
           en: 'Fire',
-          ko: '불',
+          ko: '🟥빨강',
         },
         wind: {
           en: 'Donut',
-          ko: '도넛',
+          ko: '🟢도넛',
         },
         alpha: {
           en: 'Avoid Shape AoEs, Wait by Black Hole',
-          ko: '피하고, 블랙홀 대기',
+          ko: '피하면서, 블랙홀 대기',
         },
         beta: {
           en: 'Shared Shape Soak => Get by Black Hole',
@@ -2404,11 +2470,11 @@ const triggerSet: TriggerSet<Data> = {
         },
         alphaDir: {
           en: 'Avoid ${dir1} Shape AoEs => ${dir2} Black Hole',
-          ko: '${dir1}쪽 피하서 🔜 ${dir2}쪽 블랙홀 남북',
+          ko: '${dir1}에서 피하면서 🔜 ${dir2} 남북',
         },
         betaDir: {
           en: 'Share ${dir1} ${shape1}/${shape2} => ${dir2} Black Hole',
-          ko: '${dir1}쪽 ${shape1}/${shape2} 문대고 🔜 ${dir2}쪽 블랙홀 남북',
+          ko: '${dir1} ${shape1}/${shape2} 🔜 ${dir2} 남북',
         },
       },
     },
@@ -2417,6 +2483,7 @@ const triggerSet: TriggerSet<Data> = {
       // This may not happen if all shapes are failed
       type: 'Ability',
       netRegex: { id: ['B507'], source: 'Lindwurm', capture: false },
+      durationSeconds: 6.5,
       suppressSeconds: 9999,
       alertText: (data, _matches, output) => {
         const blackHole = data.firstBlackHole;
@@ -2431,8 +2498,16 @@ const triggerSet: TriggerSet<Data> = {
           });
       },
       outputStrings: {
-        east: Outputs.aimE,
-        west: Outputs.aimW,
+        east: {
+          en: 'East',
+          ja: '🄱東',
+          ko: '🄱동쪽',
+        },
+        west: {
+          en: 'West',
+          ja: '🄳西',
+          ko: '🄳서쪽',
+        },
         alpha: {
           en: 'Get by Black Hole',
           ko: '블랙홀 쪽으로',
@@ -2443,11 +2518,11 @@ const triggerSet: TriggerSet<Data> = {
         },
         alphaDir: {
           en: '${dir2} Black Hole + N/S',
-          ko: '${dir2}쪽 블랙홀 남북으로',
+          ko: '${dir2} 남북',
         },
         betaDir: {
           en: '${dir2} Black Hole + N/S',
-          ko: '${dir2}쪽 블랙홀 남북으로',
+          ko: '${dir2} 남북',
         },
       },
     },
@@ -2460,6 +2535,7 @@ const triggerSet: TriggerSet<Data> = {
       // B504 Sideways Fire II
       type: 'Ability',
       netRegex: { id: ['B501', 'B502', 'B503', 'B504'], source: 'Lindwurm', capture: false },
+      durationSeconds: 3.5,
       suppressSeconds: 9999,
       alertText: (data, _matches, output) => {
         const blackHole = data.firstBlackHole;
@@ -2471,15 +2547,23 @@ const triggerSet: TriggerSet<Data> = {
         });
       },
       outputStrings: {
-        east: Outputs.aimE,
-        west: Outputs.aimW,
+        east: {
+          en: 'East',
+          ja: '🄱東',
+          ko: '🄱동쪽',
+        },
+        west: {
+          en: 'West',
+          ja: '🄳西',
+          ko: '🄳서쪽',
+        },
         move: {
           en: 'Move to other Black Hole',
-          ko: '다른 블랙홀로 이동',
+          ko: '반대쪽 블랙홀로',
         },
         moveDir: {
           en: '${dir} Black Hole + N/S',
-          ko: '${dir}쪽 블랙홀 남북으로',
+          ko: '${dir} 남북',
         },
       },
     },
@@ -2500,7 +2584,7 @@ const triggerSet: TriggerSet<Data> = {
         getUnder: Outputs.getUnder,
         maxMelee: {
           en: 'Max Melee',
-          ko: '근접 최대',
+          ko: '센터 서클 바깥',
         },
         alphaNear: {
           en: '${mech} (Avoid Near Stack)',
@@ -2578,7 +2662,7 @@ const triggerSet: TriggerSet<Data> = {
         intercards: Outputs.intercards,
         firstClone: {
           en: 'First Clone: ${cards}',
-          ko: '첫 번째 분신: ${cards}',
+          ko: '(첫 번째: ${cards})',
         },
       },
     },
@@ -2617,6 +2701,7 @@ const triggerSet: TriggerSet<Data> = {
           return true;
         return false;
       },
+      durationSeconds: 7,
       suppressSeconds: 9999,
       infoText: (data, matches, output) => {
         const actor = data.actorPositions[matches.sourceId];
@@ -2625,10 +2710,20 @@ const triggerSet: TriggerSet<Data> = {
 
         const dirNum = Directions.xyTo8DirNum(actor.x, actor.y, center.x, center.y);
         const dir = Directions.output8Dir[dirNum] ?? 'unknown';
+        switch (data.clonePos = dir) {
+          case 'dirNW':
+            return output.swapPosition!({ src: '➊북서', dst: '🄱🡺동' });
+          case 'dirE':
+            return output.swapPosition!({ src: '🄱동', dst: '➊🡼북서' });
+          case 'dirSW':
+            return output.swapPosition!({ src: '➍남서', dst: '🄲🡻남' });
+          case 'dirS':
+            return output.swapPosition!({ src: '🄲남', dst: '➍🡿남서' });
+        }
         return output.cloneTetherDir!({ dir: output[dir]!() });
       },
       outputStrings: {
-        ...Directions.outputStrings8Dir,
+        ...markerStrings,
         cloneTether: {
           en: 'Tethered to Clone',
           ko: '내 분신 쪽으로',
@@ -2636,6 +2731,10 @@ const triggerSet: TriggerSet<Data> = {
         cloneTetherDir: {
           en: 'Tethered to ${dir} Clone',
           ko: '${dir}쪽으로',
+        },
+        swapPosition: {
+          en: 'Swap ${src} and ${dst}',
+          ko: '${dst}쪽으로 (원래 ${src}쪽)',
         },
       },
     },
@@ -2676,6 +2775,7 @@ const triggerSet: TriggerSet<Data> = {
     },
     {
       id: 'R12S Replication 4 Ability Tethers Initial Call',
+      // 용도 완전 변경 북쪽이 구슬 4개냐 1개냐 검출이 되면 자리 바꿈 알려줌
       type: 'Tether',
       netRegex: {
         id: [
@@ -2684,52 +2784,48 @@ const triggerSet: TriggerSet<Data> = {
         ],
         capture: true,
       },
-      condition: (data, matches) => {
-        if (data.me === matches.target && data.phase === 'idyllic')
+      condition: (data) => {
+        if (!data.rep4CheckSwap && data.phase === 'idyllic')
           return true;
         return false;
       },
-      suppressSeconds: 9999, // Can get spammy if players have more than 1 tether or swap a lot
       infoText: (data, matches, output) => {
-        // Get direction of the tether
         const actor = data.actorPositions[matches.sourceId];
-        if (actor === undefined) {
-          switch (matches.id) {
-            case headMarkerData['manaBurstTether']:
-              return output.manaBurstTether!();
-            case headMarkerData['heavySlamTether']:
-              return output.heavySlamTether!();
-          }
+        if (actor === undefined)
           return;
-        }
 
         const dirNum = Directions.xyTo8DirNum(actor.x, actor.y, center.x, center.y);
-        const dir = Directions.output8Dir[dirNum] ?? 'unknown';
+        if (dirNum !== 0)
+          return;
 
-        switch (matches.id) {
-          case headMarkerData['manaBurstTether']:
-            return output.manaBurstTetherDir!({ dir: output[dir]!() });
-          case headMarkerData['heavySlamTether']:
-            return output.heavySlamTetherDir!({ dir: output[dir]!() });
-        }
+        data.rep4CheckSwap = true;
+
+        if (matches.id !== headMarkerData['manaBurstTether'])
+          return output.stay!();
+
+        const map: { [key: string]: string } = {
+          'dirN': 'dirNE',
+          'dirNE': 'dirN',
+          'dirE': 'dirSE',
+          'dirSE': 'dirE',
+          'dirS': 'dirSW',
+          'dirSW': 'dirS',
+          'dirW': 'dirNW',
+          'dirNW': 'dirW',
+          'unknown': 'unknown',
+        };
+        const pos = map[data.clonePos ?? 'unknown'] ?? 'unknown';
+        return output.switchPosition!({ pos: output[pos]!() });
       },
       outputStrings: {
         ...markerStrings,
-        manaBurstTether: {
-          en: 'Defamation Tether on YOU',
-          ko: '큰폭발 줄 채요',
+        stay: {
+          en: 'Stay in Position',
+          ko: '(그자리 그대로)',
         },
-        manaBurstTetherDir: {
-          en: '${dir} Defamation Tether on YOU',
-          ko: '${dir}쪽 큰폭발 줄 채요',
-        },
-        heavySlamTether: {
-          en: 'Stack Tether on YOU',
-          ko: '뭉쳐 줄 채요',
-        },
-        heavySlamTetherDir: {
-          en: '${dir} Stack Tether on YOU',
-          ko: '${dir}쪽 뭉쳐 줄 채요',
+        switchPosition: {
+          en: 'Switch Position to ${pos}',
+          ko: '짝꿍과 자리 바꿔요: ${pos}쪽',
         },
       },
     },
@@ -2809,72 +2905,26 @@ const triggerSet: TriggerSet<Data> = {
       },
       delaySeconds: 0.1,
       durationSeconds: 8,
-      alertText: (data, matches, output) => {
-        const meteorAoe = output.meteorAoe!();
+      alertText: (data, _matches, output) => {
         const cleaveOrigin = data.idyllicVision2NorthSouthCleaveSpot;
-        const myAbility = data.replication4PlayerAbilities[data.me];
-        // Get direction of the tether
-        const actor = data.actorPositions[matches.sourceId];
-        if (actor === undefined || cleaveOrigin === undefined) {
-          switch (myAbility) {
-            case headMarkerData['manaBurstTether']:
-              return output.manaBurstTether!({ meteorAoe: meteorAoe });
-            case headMarkerData['heavySlamTether']:
-              return output.heavySlamTether!({ meteorAoe: meteorAoe });
-          }
-          return;
-        }
+        if (cleaveOrigin === undefined)
+          return output.infoOnly!();
 
-        const dirNum = Directions.xyTo8DirNum(actor.x, actor.y, center.x, center.y);
-        const dir = Directions.output8Dir[dirNum] ?? 'unknown';
-
-        const dodge = output.dodgeCleaves!({
-          dir: output[cleaveOrigin]!(),
-        });
-
-        switch (myAbility) {
-          case headMarkerData['manaBurstTether']:
-            return output.manaBurstTetherDir!({
-              dir: output[dir]!(),
-              dodgeCleaves: dodge,
-              meteorAoe: meteorAoe,
-            });
-          case headMarkerData['heavySlamTether']:
-            return output.heavySlamTetherDir!({
-              dir: output[dir]!(),
-              dodgeCleaves: dodge,
-              meteorAoe: meteorAoe,
-            });
-        }
+        const team = Autumn.getTeam(data.moks);
+        const cleaveDest = team === 'MT'
+          ? (cleaveOrigin === 'north' ? 'dirNW' : 'dirSW')
+          : (cleaveOrigin === 'north' ? 'dirNE' : 'dirSE');
+        return output.infoDir!({ dir: output[cleaveDest]!() });
       },
       outputStrings: {
         ...markerStrings,
-        north: Outputs.aimN,
-        south: Outputs.aimS,
-        meteorAoe: {
-          en: 'big AoE + Healer Groups',
-          ko: '4:4 + 전체 공격',
+        infoOnly: {
+          en: 'N/S Clone => 4:4 + Big AoE',
+          ko: '남북 분신 🔜 전체 공격 4:4',
         },
-        dodgeCleaves: {
-          en: '${dir} + Sides',
-          ko: '${dir}쪽 옆으로',
-        },
-        manaBurstTetherDir: {
-          en: '${dodgeCleaves} (${dir} Defamation Tether)  => ${meteorAoe}',
-          ko: '${dodgeCleaves} (${dir}쪽 큰폭발 줄) 🔜 ${meteorAoe}',
-        },
-        manaBurstTether: {
-          en: ' N/S Clone (Defamation Tether) => ${meteorAoe}',
-          ko: '남북 분신 (큰폭발 줄) 🔜 ${meteorAoe}',
-        },
-        heavySlamTetherDir: {
-          en: '${dodgeCleaves} (${dir} Stack Tether)  => ${meteorAoe}',
-          ko: '${dodgeCleaves} (${dir}쪽 뭉쳐 줄) 🔜 ${meteorAoe}',
-        },
-        heavySlamTether: {
-          en: ' N/S Clone (Stack Tether) => ${meteorAoe}',
-          ja: '南北分身 (頭割り線) => ${meteorAoe}',
-          ko: '남북 분신 (뭉쳐 줄) 🔜 ${meteorAoe}',
+        infoDir: {
+          en: '${dir} => 4:4 + Big AoE',
+          ko: '${dir}쪽 🔜 전체 공격 4:4',
         },
       },
     },
@@ -2886,18 +2936,14 @@ const triggerSet: TriggerSet<Data> = {
       response: Responses.spread(),
     },
     {
-      id: 'R12S Light Resistance Down II Collect',
-      // Players cannot soak a tower that has holy (triple element towers)
-      type: 'GainsEffect',
-      netRegex: { effectId: '1044', capture: true },
-      condition: Conditions.targetIsYou(),
-      run: (data) => data.hasLightResistanceDown = true,
-    },
-    {
       id: 'R12S Light Resistance Down II',
       type: 'GainsEffect',
       netRegex: { effectId: '1044', capture: true },
-      condition: Conditions.targetIsYou(),
+      condition: (data, matches) => {
+        if (data.twistedVisionCounter === 3 && data.me === matches.target)
+          return true;
+        return false;
+      },
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
@@ -2910,6 +2956,7 @@ const triggerSet: TriggerSet<Data> = {
       id: 'R12S No Light Resistance Down II',
       type: 'GainsEffect',
       netRegex: { effectId: '1044', capture: false },
+      condition: (data) => data.twistedVisionCounter === 3,
       delaySeconds: 0.1,
       suppressSeconds: 9999,
       infoText: (data, _matches, output) => {
@@ -2925,7 +2972,6 @@ const triggerSet: TriggerSet<Data> = {
     },
     {
       id: 'R12S Twisted Vision 4 Stack/Defamation 1',
-      // Used for keeping track of phases in idyllic
       type: 'StartsUsing',
       netRegex: { id: 'BBE2', source: 'Lindwurm', capture: false },
       condition: (data) => data.twistedVisionCounter === 4,
@@ -3097,7 +3143,289 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
+      id: 'R12S Twisted Vision 4 Stack/Defamation 2-4',
+      // Used for keeping of which Twisted Vision 4 mechanic we are on
+      // Note: B519 Heavy Slam and B517 Mana Burst cast regardless of players alive
+      //       A B4F0 Unmitigated Impact will occur should the stack be missed
+      // Note2: B518 Mana Burst seems to not cast if the target is dead, and there doesn't seem to be repercussions
+      type: 'Ability',
+      netRegex: { id: ['B519', 'B517'], source: 'Lindschrat', capture: false },
+      condition: (data) => data.twistedVisionCounter === 4 && data.twistedVision4MechCounter < 6,
+      suppressSeconds: 1,
+      response: (data, _matches, output) => {
+        // cactbot-builtin-response
+        output.responseOutputStrings = {
+          ...Directions.outputStrings8Dir,
+          stacks: Outputs.stacks,
+          towers: {
+            en: 'Tower Positions',
+            de: 'Turm Positionen',
+            fr: 'Position tour',
+            ja: '塔の位置へ',
+            cn: '八人塔站位',
+            ko: '기둥 자리잡기',
+            tc: '八人塔站位',
+          },
+          avoidDefamation: {
+            en: 'Avoid Defamation',
+          },
+          avoidStack: {
+            en: 'Avoid Stack',
+            de: 'Vermeide Sammeln',
+            fr: 'Évitez le package',
+            cn: '远离分摊',
+            ko: '쉐어징 피하기',
+            tc: '遠離分攤',
+          },
+          defamationOnYou: Outputs.defamationOnYou,
+          stackOnYou: Outputs.stackOnYou,
+          stackOnPlayer: Outputs.stackOnPlayer,
+          defamations: {
+            en: 'Defamations',
+            de: 'Große AoE auf dir',
+            fr: 'Grosse AoE sur vous',
+            ja: '自分に巨大な爆発',
+            cn: '大圈点名',
+            ko: '광역 대상자',
+            tc: '大圈點名',
+          },
+          oneMechThenOne: {
+            en: '${mech1} => ${mech2}',
+          },
+          oneMechThenTwo: {
+            en: '${mech1} => ${mech2} + ${mech3}',
+          },
+          twoMechsThenOne: {
+            en: '${mech1} + ${mech2} => ${mech3}',
+          },
+          twoMechsThenTwo: {
+            en: '${mech1} + ${mech2} => ${mech3} + ${mech4}',
+          },
+          oneMechThenTowers: {
+            en: '${mech1} => ${towers}',
+          },
+          twoMechsThenTowers: {
+            en: '${mech1} + ${mech2} => ${towers}',
+          },
+        };
+        data.twistedVision4MechCounter = data.twistedVision4MechCounter + 2; // Mechanic is done in pairs
+        // Don't output for first one as it was called 1s prior to this trigger
+        if (data.twistedVision4MechCounter < 2)
+          return;
+        const count = data.twistedVision4MechCounter;
+        const abilityOrder = data.replication4AbilityOrder;
+        const playerOrder = data.replication4PlayerOrder;
+        if (
+          abilityOrder === undefined ||
+          playerOrder === undefined
+        )
+          return;
+
+        const ability1 = abilityOrder[0 + count];
+        const ability2 = abilityOrder[1 + count];
+        const player1 = playerOrder[0 + count];
+        const player2 = playerOrder[1 + count];
+        let this1;
+        let this2;
+        const defamation = headMarkerData['manaBurstTether'];
+        const isThisSame = ability1 === ability2;
+        const shortPlayer1 = data.party.member(player1);
+        const shortPlayer2 = data.party.member(player2);
+        const text = (player1 === data.me || player2 === data.me) ? 'alertText' : 'infoText';
+
+        // Handle This Set
+        if (player1 === data.me) {
+          this1 = ability1 === defamation ? 'defamationOnYou' : 'stackOnYou';
+          if (!isThisSame)
+            this2 = ability2 === defamation ? 'avoidDefamation' : 'avoidStack';
+        } else if (player2 === data.me) {
+          if (!isThisSame) {
+            this1 = ability1 === defamation ? 'avoidDefamation' : 'avoidStack';
+            this2 = ability2 === defamation ? 'defamationOnYou' : 'stackOnYou';
+          } else {
+            this1 = ability1 === defamation ? 'defamationOnYou' : 'stackOnYou';
+          }
+        } else if (isThisSame) {
+          this1 = ability1 === defamation ? 'defamations' : 'stacks';
+        } else if (!isThisSame) {
+          this1 = ability1 === defamation ? 'avoidDefamation' : 'stack';
+          this2 = ability2 === defamation ? 'avoidDefamation' : 'stack';
+        }
+
+        if (count < 6) {
+          // Handle next set
+          // Get Stack/Defamation #2 details
+          const ability3 = abilityOrder[2 + count];
+          const ability4 = abilityOrder[3 + count];
+          const player3 = playerOrder[2 + count];
+          const player4 = playerOrder[3 + count];
+
+          // Handle some obscure strategies or mistakes
+          const isNextSame = ability3 === ability4;
+          let next1;
+          let next2;
+
+          if (player3 === data.me) {
+            next1 = ability3 === defamation ? 'defamationOnYou' : 'stackOnYou';
+            if (!isThisSame)
+              next2 = ability4 === defamation ? 'avoidDefamation' : 'avoidStack';
+          } else if (player4 === data.me) {
+            if (!isThisSame) {
+              next1 = ability4 === defamation ? 'avoidDefamation' : 'avoidStack';
+              next2 = ability4 === defamation ? 'defamationOnYou' : 'stackOnYou';
+            } else {
+              next1 = ability4 === defamation ? 'defamationOnYou' : 'stackOnYou';
+            }
+          } else if (isNextSame) {
+            next1 = ability3 === defamation ? 'defamations' : 'stacks';
+          } else if (!isNextSame) {
+            next1 = ability3 === defamation ? 'avoidDefamation' : 'stack';
+            next2 = ability4 === defamation ? 'avoidDefamation' : 'stack';
+          }
+
+          // Build output
+          if (this1 === undefined || next1 === undefined)
+            return;
+          if (isThisSame && isNextSame) {
+            return {
+              [text]: output.oneMechThenOne!({
+                mech1: output[this1]!(),
+                mech2: output[next1]!(),
+              }),
+            };
+          }
+
+          const shortPlayer3 = data.party.member(player3);
+          const shortPlayer4 = data.party.member(player4);
+          if (isThisSame && !isNextSame) {
+            if (next2 === undefined)
+              return;
+            return {
+              [text]: output.oneMechThenTwo!({
+                mech1: output[this1]!(),
+                mech2: next1 === 'stack'
+                  ? output.stackOnPlayer!({ player: shortPlayer3 })
+                  : output[next1]!(),
+                mech3: next2 === 'stack'
+                  ? output.stackOnPlayer!({ player: shortPlayer4 })
+                  : output[next2]!(),
+              }),
+            };
+          }
+
+          if (!isThisSame && isNextSame) {
+            if (this2 === undefined)
+              return;
+            return {
+              [text]: output.twoMechsThenOne!({
+                mech1: this1 === 'stack'
+                  ? output.stackOnPlayer!({ player: shortPlayer1 })
+                  : output[this1]!(),
+                mech2: this2 === 'stack'
+                  ? output.stackOnPlayer!({ player: shortPlayer2 })
+                  : output[this2]!(),
+                mech3: output[next1]!(),
+              }),
+            };
+          }
+
+          if (this2 === undefined || next2 === undefined)
+            return;
+          return {
+            [text]: output.twoMechsThenTwo!({
+              mech1: this1 === 'stack'
+                ? output.stackOnPlayer!({ player: shortPlayer1 })
+                : output[this1]!(),
+              mech2: this2 === 'stack'
+                ? output.stackOnPlayer!({ player: shortPlayer2 })
+                : output[this2]!(),
+              mech3: next1 === 'stack'
+                ? output.stackOnPlayer!({ player: shortPlayer3 })
+                : output[next1]!(),
+              mech4: next2 === 'stack'
+                ? output.stackOnPlayer!({ player: shortPlayer4 })
+                : output[next2]!(),
+            }),
+          };
+        }
+        // Build output for last mechanic set to warn of towers
+        if (this1 === undefined)
+          return;
+        if (isThisSame) {
+          return {
+            [text]: output.oneMechThenTowers!({
+              mech1: output[this1]!(),
+              towers: output.towers!(),
+            }),
+          };
+        }
+        if (!isThisSame) {
+          if (this2 === undefined)
+            return;
+          return {
+            [text]: output.twoMechsThenTowers!({
+              mech1: this1 === 'stack'
+                ? output.stackOnPlayer!({ player: shortPlayer1 })
+                : output[this1]!(),
+              mech2: this2 === 'stack'
+                ? output.stackOnPlayer!({ player: shortPlayer2 })
+                : output[this2]!(),
+              towers: output.towers!(),
+            }),
+          };
+        }
+      },
+    },
+    {
+      id: 'R12S Twisted Vision 5 Towers',
+      // TODO: Get Position of the towers and player side and state the front/left back/right
+      // Towers aren't visible until after cast, but you would have 4.4s to adjust if the trigger was delayed
+      // 4s castTime
+      type: 'StartsUsing',
+      netRegex: { id: 'BBE2', source: 'Lindwurm', capture: true },
+      condition: (data) => data.twistedVisionCounter === 5,
+      durationSeconds: (_data, matches) => parseFloat(matches.castTime) + 4.1,
+      alertText: (data, _matches, output) => {
+        if (data.hasLightResistanceDown)
+          return output.fireEarthTower!();
+        return output.holyTower!();
+      },
+      outputStrings: {
+        fireEarthTower: {
+          en: 'Soak Fire/Earth Meteor',
+        },
+        holyTower: {
+          en: 'Soak a White/Star Meteor',
+        },
+      },
+    },
+    {
+      id: 'R12S Hot-blooded',
+      // Player can still cast, but shouldn't move for 5s duration
+      type: 'GainsEffect',
+      netRegex: { effectId: '12A0', capture: true },
+      condition: Conditions.targetIsYou(),
+      durationSeconds: (_data, matches) => parseFloat(matches.duration),
+      response: Responses.stopMoving(),
+    },
+    {
+      id: 'R12S Idyllic Dream Lindwurm\'s Stone III',
+      // TODO: Get their target locations and output avoid
+      // 5s castTime
+      type: 'StartsUsing',
+      netRegex: { id: 'B4F7', source: 'Lindwurm', capture: true },
+      durationSeconds: (_data, matches) => parseFloat(matches.castTime),
+      suppressSeconds: 1,
+      infoText: (_data, _matches, output) => output.avoidEarthTower!(),
+      outputStrings: {
+        avoidEarthTower: {
+          en: 'Avoid Earth Tower',
+        },
+      },
+    },
+    {
       id: 'R12S Doom Collect',
+      // Happens about 1.3s after Dark Tower when it casts B4F6 Lindwurm's Dark II
       type: 'GainsEffect',
       netRegex: { effectId: 'D24', capture: true },
       run: (data, matches) => data.doomPlayers.push(matches.target),
@@ -3133,48 +3461,193 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: 'R12S Doom Cleanup',
-      type: 'LosesEffect',
-      netRegex: { effectId: 'D24', capture: true },
-      run: (data, matches) => {
-        data.doomPlayers = data.doomPlayers.filter(
-          (player) => player === matches.target,
-        );
-      },
-    },
-    {
-      id: 'R12S Hot-blooded',
-      // Player can still cast, but shouldn't move for 5s duration
+      id: 'R12S Nearby and Faraway Portent',
+      // 129D Lindwurm's Portent prevents stacking the portents
+      // 129E Farwaway Portent
+      // 129F Nearby Portent
+      // 10s duration, need to delay to avoid earth + doom trigger overlap
+      // TODO: Configure for element tower they soaked
       type: 'GainsEffect',
-      netRegex: { effectId: '12A0', capture: true },
+      netRegex: { effectId: ['129E', '129F'], capture: true },
       condition: Conditions.targetIsYou(),
-      durationSeconds: (_data, matches) => parseFloat(matches.duration),
-      response: Responses.stopMoving(),
-    },
-    {
-      id: 'R12S Idyllic Dream Replication Clone Cardinal/Intercardinal Reminder',
-      // Using Temporal Curtain
-      type: 'StartsUsing',
-      netRegex: { id: 'B51C', source: 'Lindwurm', capture: false },
-      infoText: (data, _matches, output) => {
-        const firstClone = data.replication3CloneOrder[0];
-        if (firstClone === undefined)
-          return;
-        const actor = data.actorPositions[firstClone];
-        if (actor === undefined)
-          return;
-
-        const dirNum = Directions.xyTo8DirNum(actor.x, actor.y, center.x, center.y);
-        const dir = Directions.output8Dir[dirNum] ?? 'unknown';
-
-        if (isCardinalDir(dir))
-          return output.cardinals!();
-        if (isIntercardDir(dir))
-          return output.intercards!();
+      delaySeconds: (_data, matches) => parseFloat(matches.duration) - 5.3,
+      infoText: (_data, matches, output) => {
+        if (matches.id === '129E')
+          return output.farOnYou!();
+        return output.nearOnYou!();
       },
       outputStrings: {
+        nearOnYou: {
+          en: 'Near on YOU: Be on Middle Hitbox',
+        },
+        farOnYou: {
+          en: 'Far on YOU: Be on N/S Hitbox', // Most parties probably put this North?
+        },
+      },
+    },
+    {
+      id: 'R12S Nearby and Faraway Portent Baits',
+      // TODO: Configure for element tower they soaked
+      type: 'GainsEffect',
+      netRegex: { effectId: ['129E', '129F'], capture: true },
+      condition: (data) => data.hasLightResistanceDown,
+      delaySeconds: (_data, matches) => parseFloat(matches.duration) - 5.3,
+      suppressSeconds: 1,
+      infoText: (_data, _matches, output) => output.bait!(),
+      outputStrings: {
+        bait: {
+          en: 'Bait Cone',
+          de: 'Köder Kegel-AoE',
+          cn: '诱导扇形',
+          ko: '부채꼴 유도',
+          tc: '誘導扇形',
+        },
+      },
+    },
+    {
+      id: 'R12S Twisted Vision 6 Light Party Stacks',
+      // At end of cast it's cardinal or intercard
+      type: 'Ability',
+      netRegex: { id: 'BBE2', source: 'Lindwurm', capture: false },
+      condition: (data) => data.twistedVisionCounter === 6,
+      infoText: (data, _matches, output) => {
+        const first = data.replication3CloneOrder[0];
+        if (first === undefined)
+          return;
+        const dirNumOrder = first % 2 === 0 ? [0, 2, 4, 6] : [1, 3, 5, 7];
+
+        // Need to lookup what ability is at each dir, only need cards or intercard dirs
+        const abilities = data.replication4AbilityOrder.splice(0, 4);
+        const stackDirs = [];
+        let i = 0;
+
+        // Find first all stacks in cards or intercards
+        // Incorrect amount means players made an unsolvable? run
+        for (const dirNum of dirNumOrder) {
+          if (abilities[i++] === headMarkerData['heavySlamTether'])
+            stackDirs.push(dirNum);
+        }
+        // Only grabbing first two
+        const dirNum1 = stackDirs[0];
+        const dirNum2 = stackDirs[1];
+
+        // If we failed to get two stacks, just output generic cards/intercards reminder
+        if (dirNum1 === undefined || dirNum2 === undefined) {
+          return first % 2 === 0 ? output.cardinals!() : output.intercards!();
+        }
+        const dir1 = Directions.output8Dir[dirNum1];
+        const dir2 = Directions.output8Dir[dirNum2];
+        return output.stack!({ dir1: dir1, dir2: dir2 });
+      },
+      outputStrings: {
+        ...Directions.outputStrings8Dir,
         cardinals: Outputs.cardinals,
         intercards: Outputs.intercards,
+        stack: {
+          en: 'Stack ${dir1}/${dir2} + Lean Middle Out',
+        },
+      },
+    },
+    {
+      id: 'R12S Twisted Vision 7 Safe Platform',
+      // TODO: Get direction of the safe platform + N/S or E/W?
+      type: 'StartsUsing',
+      netRegex: { id: 'BBE2', source: 'Lindwurm', capture: true },
+      condition: (data) => data.twistedVisionCounter === 7,
+      durationSeconds: (_data, matches) => parseFloat(matches.castTime) + 3,
+      infoText: (data, _matches, output) => {
+        const first = data.replication3CloneOrder[0];
+        if (first === undefined)
+          return;
+        const dirNumOrder = first % 2 !== 0 ? [0, 2, 4, 6] : [1, 3, 5, 7];
+
+        // Need to lookup what ability is at each dir, only need cards or intercard dirs
+        const abilities = data.replication4AbilityOrder.slice(4, 8);
+        const stackDirs = [];
+        let i = 0;
+
+        // Find first all stacks in cards or intercards
+        // Incorrect amount means players made an unsolvable? run
+        for (const dirNum of dirNumOrder) {
+          if (abilities[i++] === headMarkerData['heavySlamTether'])
+            stackDirs.push(dirNum);
+        }
+        // Only grabbing first two
+        const dirNum1 = stackDirs[0];
+        const dirNum2 = stackDirs[1];
+
+        // If we failed to get two stacks, just output generic cards/intercards reminder
+        if (dirNum1 === undefined || dirNum2 === undefined) {
+          const card = first % 2 !== 0 ? 'cardinals' : 'intercards';
+          return output.platformThenStack!({
+            platform: output.safePlatform!(),
+            stack: output[card]!(),
+          });
+        }
+        const dir1 = Directions.output8Dir[dirNum1];
+        const dir2 = Directions.output8Dir[dirNum2];
+        return output.platformThenStack!({
+          platform: output.safePlatform!(),
+          stack: output.stack!({ dir1: dir1, dir2: dir2 }),
+        });
+      },
+      outputStrings: {
+        ...Directions.outputStrings8Dir,
+        cardinals: Outputs.cardinals,
+        intercards: Outputs.intercards,
+        safePlatform: {
+          en: 'Safe Platform',
+        },
+        stack: {
+          en: 'Stack ${dir1}/${dir2}',
+        },
+        platformThenStack: {
+          en: '${platform} => ${stack}',
+        },
+      },
+    },
+    {
+      id: 'R12S Twisted Vision 8 Light Party Stacks',
+      // At end of cast it's cardinal or intercard
+      type: 'StartsUsing',
+      netRegex: { id: 'BBE2', source: 'Lindwurm', capture: false },
+      condition: (data) => data.twistedVisionCounter === 8,
+      alertText: (data, _matches, output) => {
+        const first = data.replication3CloneOrder[0];
+        if (first === undefined)
+          return;
+        const dirNumOrder = first % 2 !== 0 ? [0, 2, 4, 6] : [1, 3, 5, 7];
+
+        // Need to lookup what ability is at each dir, only need cards or intercard dirs
+        const abilities = data.replication4AbilityOrder.slice(4, 8);
+        const stackDirs = [];
+        let i = 0;
+
+        // Find first all stacks in cards or intercards
+        // Incorrect amount means players made an unsolvable? run
+        for (const dirNum of dirNumOrder) {
+          if (abilities[i++] === headMarkerData['heavySlamTether'])
+            stackDirs.push(dirNum);
+        }
+        // Only grabbing first two
+        const dirNum1 = stackDirs[0];
+        const dirNum2 = stackDirs[1];
+
+        // If we failed to get two stacks, just output generic cards/intercards reminder
+        if (dirNum1 === undefined || dirNum2 === undefined) {
+          return first % 2 !== 0 ? output.cardinals!() : output.intercards!();
+        }
+        const dir1 = Directions.output8Dir[dirNum1];
+        const dir2 = Directions.output8Dir[dirNum2];
+        return output.stack!({ dir1: dir1, dir2: dir2 });
+      },
+      outputStrings: {
+        ...Directions.outputStrings8Dir,
+        cardinals: Outputs.cardinals,
+        intercards: Outputs.intercards,
+        stack: {
+          en: 'Stack ${dir1}/${dir2} + Lean Middle Out',
+        },
       },
     },
     // ////////////////////////////////
@@ -3344,7 +3817,8 @@ const triggerSet: TriggerSet<Data> = {
       type: 'Ability',
       netRegex: { id: ['B52E', 'B52F'], source: 'Lindwurm', capture: false },
       delaySeconds: 2,
-      infoText: (data, _matches, output) => {
+      durationSeconds: 6,
+      alertText: (data, _matches, output) => {
         switch (data.myReplication2Tether) {
           case headMarkerData['projectionTether']:
             return output.projectionTether!();
@@ -3368,6 +3842,19 @@ const triggerSet: TriggerSet<Data> = {
         },
       },
     },
+    {
+      id: 'R12S Twisted Vision 1 Markers',
+      type: 'Ability',
+      netRegex: { id: 'BBE2', source: 'Lindwurm', capture: false },
+      condition: (data) => data.twistedVisionCounter === 1,
+      infoText: (_data, _matches, output) => output.markers!(),
+      outputStrings: {
+        markers: {
+          en: 'Marking yourself',
+          ko: '(마커 달아요)',
+        },
+      },
+    },
   ],
   timelineReplace: [
     {
@@ -3384,7 +3871,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       'replaceText': {
         'Netherwrath Near/Netherwrath Far': 'ネザーラス 近/遠',
-        'Netherworld Near/Netherwworld Far': 'Netherworld Near/Far',
+        'Netherworld Near/Netherwworld Far': 'ネザーウォールド 近/遠',
       },
     },
   ],

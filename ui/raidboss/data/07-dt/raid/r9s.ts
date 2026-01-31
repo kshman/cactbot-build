@@ -588,6 +588,7 @@ const triggerSet: TriggerSet<Data> = {
         tower: Outputs.stackInTower,
       },
     },
+    // /////////////
     {
       id: 'R9S Brutal Rain',
       type: 'StartsUsing',
@@ -745,6 +746,8 @@ const triggerSet: TriggerSet<Data> = {
         'Vampette Fatale': 'ファタールバット',
       },
       'replaceText': {
+        'Aetherletting(?! Proteans)': 'エーテルレッティング',
+        'Aetherletting Proteans': 'エーテルレッティング 扇形',
         'Blast Beat': '共振波',
         'Bloody Bondage': 'ブラッディボンテージ',
         'Breakdown Drop': 'ブレイクダウン',

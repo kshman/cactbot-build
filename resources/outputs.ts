@@ -101,7 +101,7 @@ export default {
   avoidTankCleaves: {
     en: 'Avoid Tank Cleaves',
     ja: '範囲攻撃を避けて',
-    ko: '탱크 쪼개기 피해욧',
+    ko: '두 탱크 쪽에 가면 안되욧',
   },
   tankCleaveOnYou: {
     en: 'Tank Cleave on YOU',
@@ -276,7 +276,7 @@ export default {
   getUnder: {
     en: 'Get Under',
     ja: 'ボスに貼り付く',
-    ko: '바로 밑으로',
+    ko: '보스 밑으로',
   },
   // in is more like "get close but maybe even melee range is fine"
   in: {
@@ -424,7 +424,7 @@ export default {
   awayFromFront: {
     en: 'Away From Front',
     ja: '前方から離れる',
-    ko: '앞쪽은 피해요',
+    ko: '앞쪽에 있으면 안되욧',
   },
   sleepTarget: {
     en: 'Sleep ${name}',
