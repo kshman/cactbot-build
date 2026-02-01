@@ -307,7 +307,7 @@ const triggerSet: TriggerSet<Data> = {
       type: 'StartsUsing',
       netRegex: { id: 'B4EC', source: 'Lindwurm', capture: false },
       run: (data) => {
-        if (data.phase === 'replication1') {
+        if (data.phase === 'replication2') {
           data.phase = 'reenactment1';
           return;
         }
@@ -2154,7 +2154,7 @@ const triggerSet: TriggerSet<Data> = {
         },
         text: {
           en: '${side} Stack Groups => Get Behind',
-          ko: '${side} 뭉쳤다 🔜 엉댕이로',
+          ko: '${side} 뭉쳤다 🔜 (반드시 기다렸다) 엉댕이로',
         },
       },
     },
@@ -2233,37 +2233,14 @@ const triggerSet: TriggerSet<Data> = {
       suppressSeconds: 9999,
       run: (data) => data.netherwrathFollowup = true,
     },
-    {
+    /* {
       id: 'R12S Reenactment 1 Clone Stacks',
-      // Players need to wait for BBE3 Mana Burst defamations on clones to complete
-      // This happens three times during reenactment and the third one (which is after the proteans) is the trigger
-      // NOTE: This is used with DN Strategy
-      type: 'Ability',
-      netRegex: { id: 'BBE3', source: 'Lindwurm', capture: false },
-      condition: (data) => data.netherwrathFollowup,
-      suppressSeconds: 9999,
-      alertText: (_data, _matches, output) => output.text!(),
-      outputStrings: {
-        text: {
-          en: 'East/West Clone Stacks',
-          ko: '동서 분신 뭉쳐요',
-        },
-      },
-    },
-    {
+      우시코는 안쓴다
+    }, */
+    /* {
       id: 'R12S Reenactment 1 Final Defamation Dodge Reminder',
-      // Players need to run back to north after clone stacks (BE5D Heavy Slam)
-      // The clone stacks become a defamation and the other a cleave going East or West through the room
-      // NOTE: This is used with DN Strategy
-      type: 'Ability',
-      netRegex: { id: 'BE5D', source: 'Lindwurm', capture: false },
-      condition: (data) => data.netherwrathFollowup,
-      suppressSeconds: 9999,
-      alertText: (_data, _matches, output) => output.north!(),
-      outputStrings: {
-        north: Outputs.north,
-      },
-    },
+      우시코는 안쓴다
+    }, */
     {
       id: 'R12S Mana Sphere Collect and Label',
       // Combatants Spawn ~3s before B505 Mutating Cells startsUsing
@@ -2571,6 +2548,7 @@ const triggerSet: TriggerSet<Data> = {
       id: 'R12S Netherworld Near/Far',
       type: 'StartsUsing',
       netRegex: { id: ['B52B', 'B52C'], source: 'Lindwurm', capture: true },
+      durationSeconds: 8,
       alertText: (data, matches, output) => {
         if (matches.id === 'B52B')
           return data.myMutation === 'beta'
@@ -2710,16 +2688,21 @@ const triggerSet: TriggerSet<Data> = {
 
         const dirNum = Directions.xyTo8DirNum(actor.x, actor.y, center.x, center.y);
         const dir = Directions.output8Dir[dirNum] ?? 'unknown';
-        switch (data.clonePos = dir) {
+        switch (dir) {
           case 'dirNW':
+            data.clonePos = 'dirE';
             return output.swapPosition!({ src: '➊북서', dst: '🄱🡺동' });
           case 'dirE':
+            data.clonePos = 'dirNW';
             return output.swapPosition!({ src: '🄱동', dst: '➊🡼북서' });
           case 'dirSW':
+            data.clonePos = 'dirS';
             return output.swapPosition!({ src: '➍남서', dst: '🄲🡻남' });
           case 'dirS':
+            data.clonePos = 'dirSW';
             return output.swapPosition!({ src: '🄲남', dst: '➍🡿남서' });
         }
+        data.clonePos = dir;
         return output.cloneTetherDir!({ dir: output[dir]!() });
       },
       outputStrings: {
@@ -2821,11 +2804,11 @@ const triggerSet: TriggerSet<Data> = {
         ...markerStrings,
         stay: {
           en: 'Stay in Position',
-          ko: '(그자리 그대로)',
+          ko: '(북쪽🀜 🔜 그자리 그대로)',
         },
         switchPosition: {
           en: 'Switch Position to ${pos}',
-          ko: '짝꿍과 자리 바꿔요: ${pos}쪽',
+          ko: '북쪽◉︎ 🔜 자리 바꿔요: ${pos}쪽',
         },
       },
     },
@@ -3159,53 +3142,49 @@ const triggerSet: TriggerSet<Data> = {
           stacks: Outputs.stacks,
           towers: {
             en: 'Tower Positions',
-            de: 'Turm Positionen',
-            fr: 'Position tour',
             ja: '塔の位置へ',
-            cn: '八人塔站位',
-            ko: '기둥 자리잡기',
-            tc: '八人塔站位',
+            ko: '타워로',
           },
           avoidDefamation: {
             en: 'Avoid Defamation',
+            ko: '큰폭발 피해요',
           },
           avoidStack: {
             en: 'Avoid Stack',
-            de: 'Vermeide Sammeln',
-            fr: 'Évitez le package',
-            cn: '远离分摊',
-            ko: '쉐어징 피하기',
-            tc: '遠離分攤',
+            ko: '뭉치면 안되요',
           },
           defamationOnYou: Outputs.defamationOnYou,
           stackOnYou: Outputs.stackOnYou,
           stackOnPlayer: Outputs.stackOnPlayer,
           defamations: {
             en: 'Defamations',
-            de: 'Große AoE auf dir',
-            fr: 'Grosse AoE sur vous',
             ja: '自分に巨大な爆発',
-            cn: '大圈点名',
-            ko: '광역 대상자',
+            ko: '내게 큰폭발',
             tc: '大圈點名',
           },
           oneMechThenOne: {
             en: '${mech1} => ${mech2}',
+            ko: '${mech1} 🔜 ${mech2}',
           },
           oneMechThenTwo: {
             en: '${mech1} => ${mech2} + ${mech3}',
+            ko: '${mech1} 🔜 ${mech2} + ${mech3}',
           },
           twoMechsThenOne: {
             en: '${mech1} + ${mech2} => ${mech3}',
+            ko: '${mech1} + ${mech2} 🔜 ${mech3}',
           },
           twoMechsThenTwo: {
             en: '${mech1} + ${mech2} => ${mech3} + ${mech4}',
+            ko: '${mech1} + ${mech2} 🔜 ${mech3} + ${mech4}',
           },
           oneMechThenTowers: {
             en: '${mech1} => ${towers}',
+            ko: '${mech1} 🔜 ${towers}',
           },
           twoMechsThenTowers: {
             en: '${mech1} + ${mech2} => ${towers}',
+            ko: '${mech1} + ${mech2} 🔜 ${towers}',
           },
         };
         data.twistedVision4MechCounter = data.twistedVision4MechCounter + 2; // Mechanic is done in pairs
@@ -3393,9 +3372,11 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         fireEarthTower: {
           en: 'Soak Fire/Earth Meteor',
+          ko: '불/땅 메테오 밟아요',
         },
         holyTower: {
           en: 'Soak a White/Star Meteor',
+          ko: '하양/별 메테오 밟아요',
         },
       },
     },
@@ -3420,6 +3401,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         avoidEarthTower: {
           en: 'Avoid Earth Tower',
+          ko: '땅 타워 피해요',
         },
       },
     },
@@ -3479,9 +3461,11 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         nearOnYou: {
           en: 'Near on YOU: Be on Middle Hitbox',
+          ko: '내게 니어 🔜 센터 서클 한가운데로',
         },
         farOnYou: {
           en: 'Far on YOU: Be on N/S Hitbox', // Most parties probably put this North?
+          ko: '내게 파: 센터 서클 남북',
         },
       },
     },
@@ -3497,10 +3481,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         bait: {
           en: 'Bait Cone',
-          de: 'Köder Kegel-AoE',
-          cn: '诱导扇形',
-          ko: '부채꼴 유도',
-          tc: '誘導扇形',
+          ko: '꼬깔 유도',
         },
       },
     },
@@ -3545,6 +3526,7 @@ const triggerSet: TriggerSet<Data> = {
         intercards: Outputs.intercards,
         stack: {
           en: 'Stack ${dir1}/${dir2} + Lean Middle Out',
+          ko: '뭉쳐요: ${dir1}${dir2} + 가운데 바깥으로 기울이기',
         },
       },
     },
@@ -3597,12 +3579,15 @@ const triggerSet: TriggerSet<Data> = {
         intercards: Outputs.intercards,
         safePlatform: {
           en: 'Safe Platform',
+          ko: '안전한 플랫폼',
         },
         stack: {
           en: 'Stack ${dir1}/${dir2}',
+          ko: '뭉쳐요: ${dir1}${dir2}',
         },
         platformThenStack: {
           en: '${platform} => ${stack}',
+          ko: '${platform} 🔜 ${stack}',
         },
       },
     },
@@ -3647,6 +3632,7 @@ const triggerSet: TriggerSet<Data> = {
         intercards: Outputs.intercards,
         stack: {
           en: 'Stack ${dir1}/${dir2} + Lean Middle Out',
+          ko: '뭉쳐요: ${dir1}${dir2} + 가운데 바깥으로 기울이기',
         },
       },
     },
