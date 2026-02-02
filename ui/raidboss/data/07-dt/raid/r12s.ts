@@ -92,6 +92,7 @@ export interface Data extends RaidbossData {
   idyllicVision7SafePlatform?: 'east' | 'west';
   // prt
   mortalList: MortalInfo[];
+  snakings: number;
   clonePos: DirectionOutput8;
   rep4CheckSwap: boolean;
 }
@@ -258,6 +259,7 @@ const triggerSet: TriggerSet<Data> = {
     doomPlayers: [],
     // prt
     mortalList: [],
+    snakings: 0,
     clonePos: 'unknown',
     rep4CheckSwap: false,
   }),
@@ -1628,6 +1630,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       delaySeconds: 0.1, // Need to delay for actor position update
       alertText: (data, matches, output) => {
+        data.snakings++;
         const actor = data.actorPositions[matches.sourceId];
         if (actor === undefined)
           return output.getBehind!();
@@ -2114,9 +2117,11 @@ const triggerSet: TriggerSet<Data> = {
       suppressSeconds: 1,
       alertText: (data, _matches, output) => {
         let side = '';
+        let cone = output.checkCone!();
         const ability = data.myReplication2Tether;
         switch (ability) {
           case headMarkerData['projectionTether']:
+            cone = output.haveCone!();
             if (data.clonePos === 'dirS')
               side = output.mark3!();
             else if (data.clonePos === 'dirN')
@@ -2141,7 +2146,9 @@ const triggerSet: TriggerSet<Data> = {
             side = output.mark2!();
             break;
         }
-        return output.text!({ side: side });
+        if (data.options.AutumnOnly)
+          return output.burst!({ cone: cone, side: side });
+        return output.text!({ cone: cone, side: side });
       },
       outputStrings: {
         mark2: {
@@ -2152,9 +2159,21 @@ const triggerSet: TriggerSet<Data> = {
           en: 'South Side',
           ko: '➌',
         },
+        checkCone: {
+          en: 'Stack Groups',
+          ko: '꼬깔 보고',
+        },
+        haveCone: {
+          en: 'Front Stack Groups',
+          ko: '내게 꼬깔, 선두로',
+        },
         text: {
-          en: '${side} Stack Groups => Get Behind',
-          ko: '${side} 뭉쳤다 🔜 (반드시 기다렸다) 엉댕이로',
+          en: '${side} ${cone} => Get Behind',
+          ko: '${side} ${cone} 🔜 엉댕이로',
+        },
+        burst: {
+          en: '${side} ${cone} => Get Behind',
+          ko: '${side} ${cone} 🔜 💥빡딜💥 + 엉댕이로',
         },
       },
     },
@@ -3809,6 +3828,22 @@ const triggerSet: TriggerSet<Data> = {
           en: 'Get Middle',
           ja: '中へ',
           ko: '(한가운데서 줄 끊을 준비)',
+        },
+      },
+    },
+    {
+      id: 'R12S Replication 2 빡딜 금지',
+      type: 'Tether',
+      netRegex: { id: headMarkerData['lockedTether'], capture: true },
+      condition: Conditions.targetIsYou(),
+      delaySeconds: 5,
+      durationSeconds: 5,
+      suppressSeconds: 9999,
+      infoText: (_data, _matches, output) => output.text!(),
+      outputStrings: {
+        text: {
+          en: 'Do NOT DPS Boss until Snaking',
+          ko: '🚫킥까지 빡딜 금지🚫',
         },
       },
     },
