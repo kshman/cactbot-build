@@ -951,7 +951,7 @@ const triggerSet: TriggerSet<Data> = {
         // While these are inter inter cards, furthest stretch will be an intercard
         const stretchDirNum = (portalDirNum + 2) % 4;
         const dir = Directions.outputIntercardDir[stretchDirNum];
-        return output.stretchTetherDirLater!({ dir: output[dir ?? '???']!() });
+        return output.stretchTetherDirLater!({ dir: output[dir ?? 'unknown']!() });
       },
       outputStrings: {
         ...markerStrings,
@@ -1178,7 +1178,7 @@ const triggerSet: TriggerSet<Data> = {
         const dirNum = data.arenaSplitStretchDirNum;
         const myPlatform = data.myPlatform;
         if (dirNum !== undefined && myPlatform !== undefined) {
-          const dir1 = Directions.outputIntercardDir[dirNum] ?? '???';
+          const dir1 = Directions.outputIntercardDir[dirNum] ?? 'unknown';
           if (myPlatform === 'west') {
             const dir2 = isWestIn ? 'front' : 'back';
             return output.tetherMechsPlayerWest!({

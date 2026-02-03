@@ -1673,6 +1673,15 @@ const triggerSet: TriggerSet<Data> = {
       // (90, 110)          (110, 110)
       // ActorMove ~0.3s later will have the data
       // ActorSet from the clones splitting we can infer the fire entities since their positions and headings are not perfect
+      // For first set there are two patterns that use these coordinates:
+      //           (100, 86)
+      // (86, 100)           (114, 100)
+      //           (100, 114)
+      // Either N/S are clones casting Winged Scourge, or the E/W clones cast Winged Scourge
+      // Each pattern has its own pattern for IDs of the clones, in order
+      // N/S will have Fire -5 and -6 of its original
+      // E/W will have Fire -6 and -7 of its original
+      // Could use -6 to cover both cases, but that doesn't determine which add jumps first
       type: 'Ability',
       netRegex: { id: 'B4D9', source: 'Lindschrat', capture: true },
       condition: (data, matches) => {
@@ -1680,7 +1689,8 @@ const triggerSet: TriggerSet<Data> = {
           const pos = data.actorPositions[matches.sourceId];
           if (pos === undefined)
             return false;
-          // These values should be 0 if coords are x.0000
+          // These values should be 0 when x or y coord has non-zero decimal values
+          // Heading is also checked as the non fire clones all face a perfect heading
           const xFilter = pos.x % 1;
           const yFilter = pos.y % 1;
           if (xFilter === 0 && yFilter === 0 && pos.heading === -0.0001)
@@ -2790,7 +2800,6 @@ const triggerSet: TriggerSet<Data> = {
     },
     {
       id: 'R12S Replication 4 Ability Tethers Initial Call',
-      // 용도 완전 변경 북쪽이 구슬 4개냐 1개냐 검출이 되면 자리 바꿈 알려줌
       type: 'Tether',
       netRegex: {
         id: [
@@ -2804,7 +2813,19 @@ const triggerSet: TriggerSet<Data> = {
           return true;
         return false;
       },
-      infoText: (data, matches, output) => {
+      response: (data, matches, output) => {
+        // cactbot-builtin-response
+        output.responseOutputStrings = {
+          stay: {
+            en: 'Stay in Position',
+            ko: '🀜그대로 줄 채요',
+          },
+          switchPosition: {
+            en: 'Switch Position',
+            ko: '◉︎자리 바꿔 줄 채요',
+          },
+        };
+
         const actor = data.actorPositions[matches.sourceId];
         if (actor === undefined)
           return;
@@ -2816,32 +2837,8 @@ const triggerSet: TriggerSet<Data> = {
         data.rep4CheckSwap = true;
 
         if (matches.id !== headMarkerData['manaBurstTether'])
-          return output.stay!();
-
-        const map: { [key: string]: string } = {
-          'dirN': 'dirNE',
-          'dirNE': 'dirN',
-          'dirE': 'dirSE',
-          'dirSE': 'dirE',
-          'dirS': 'dirSW',
-          'dirSW': 'dirS',
-          'dirW': 'dirNW',
-          'dirNW': 'dirW',
-          'unknown': 'unknown',
-        };
-        const pos = map[data.clonePos ?? 'unknown'] ?? 'unknown';
-        return output.switchPosition!({ pos: output[pos]!() });
-      },
-      outputStrings: {
-        ...markerStrings,
-        stay: {
-          en: 'Stay in Position',
-          ko: '(북쪽🀜 🔜 그대로)',
-        },
-        switchPosition: {
-          en: 'Switch Position to ${pos}',
-          ko: '북쪽◉︎ 🔜 자리 바꿔요: ${pos}쪽',
-        },
+          return { infoText: output.stay!() };
+        return { alertText: output.switchPosition!() };
       },
     },
     {
@@ -3467,7 +3464,7 @@ const triggerSet: TriggerSet<Data> = {
             return;
           case data.idyllicDreamActorSnaking: {
             const x = parseFloat(matches.x);
-            data.idyllicVision7SafePlatform = x < 100 ? 'west' : 'east';
+            data.idyllicVision7SafePlatform = x < 100 ? 'east' : 'west';
           }
         }
       },
@@ -3477,8 +3474,6 @@ const triggerSet: TriggerSet<Data> = {
       // Describe actor going into portal
       type: 'AbilityExtra',
       netRegex: { id: 'B4D9', capture: false },
-      delaySeconds: 0.1,
-      suppressSeconds: 9999,
       infoText: (data, _matches, output) => {
         if (data.idyllicVision7SafeSides === 'frontBack') {
           if (data.idyllicVision7SafePlatform === 'east')
@@ -3651,12 +3646,15 @@ const triggerSet: TriggerSet<Data> = {
       // Trigger on Clone's BE5D Heavy Slam
       type: 'Ability',
       netRegex: { id: 'BE5D', source: 'Lindwurm', capture: false },
-      suppressSeconds: 9999,
       alertText: (data, _matches, output) => {
         if (data.idyllicVision8SafeSides === 'sides')
           return output.sides!();
         if (data.idyllicVision8SafeSides === 'frontBack')
           return output.frontBack!();
+      },
+      run: (data) => {
+        // Prevent re-execution of output
+        delete data.idyllicVision8SafeSides;
       },
       outputStrings: {
         sides: {
