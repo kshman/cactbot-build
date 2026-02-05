@@ -489,7 +489,7 @@ hideall "--sync--"
 # This is because mana burts hits will knockback and heavy slams give Magic Vulns
 # In theory you could do somehow get here and survive with:
 # 3x Mana Burst + 1 Heavy Slam => 3x Heavy Slam + 1 Mana Burst or
-# 3x Heavy Slam + 1 Mana Burst => 3x Mana Burst + 1 Heavy Slam
+# 3x Heavy Slam + 1 Mana Burst => 3x Mana Burst + 1 Heavy Slam 
 # But those would probably require lots of mit and tank immune probably on 2/3 of the heavy slams in the 3 set
 3429.6 "Twisted Vision 6" Ability { id: "BBE2", source: "Lindwurm" }
 3430.6 "Power Gusher" Ability { id: "B50F", source: "Lindschrat" }
@@ -559,7 +559,7 @@ hideall "--sync--"
 # B4F1 Grotesquerie: VFX used in Reenactment
 # B4EE Mana Burst: VFX used in Reenactment
 # B4EF Heavy Slam: VFX used in Reenactment
-# B508 Unmitigated Explosion: Getting hit when you have Mitigation �� or failing to get hit with Mitigation ��, applies 30s damage down
+# B508 Unmitigated Explosion: Getting hit when you have Mitigation α or failing to get hit with Mitigation β, applies 30s damage down
 # B4FF --sync--: VFX Mana Spheres eaten by Black Hole
 # BCB0 --sync--: VFX Black Hole light eruption
 # B4F5 Unmitigated Explosion: Missing Cosmic Kiss Tower (Twisted Vision 5)
@@ -569,7 +569,6 @@ hideall "--sync--"
 # B515 Snaking Kick: VFX during Twisted Vision 3
 # B4F9 Pyretic Wurm: Damage suffered when player moves while under affect of 12A0 Hot-blooded
 # B51B Power Gusher: VFX during Twisted Vision 8, related to B516
-
 
 # ALL ENCOUNTER ABILITIES
 # Phase 1

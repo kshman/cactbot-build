@@ -83,8 +83,8 @@ const dirFromNum = (num: number): DirectionOutput8 => {
 
 // 방향 지정
 const outputNum: number[] = [0, 1, 2, 3, 4, 5, 6, 7];
-const outputNumPlus: number[] = [0, 1, 2, 3];
-const outputNumCross: number[] = [0, 1, 2, 3];
+const outputNumOfPlus: number[] = [0, 2, 4, 6];
+const outputNumOfCross: number[] = [1, 3, 5, 7];
 
 const outputDir: DirectionOutput8[] = [
   'dirN',
@@ -190,7 +190,19 @@ const stringsDirCross: OutputStrings = {
   unknown: Outputs.unknown,
 };
 
-// 어듬이 뱡향 지시
+//
+const alignDirPriorityMap: { [dir: number]: number } = {
+  0: 6,
+  1: 4,
+  2: 1,
+  3: 0,
+  4: 2,
+  5: 3,
+  6: 5,
+  7: 7,
+};
+
+// 어듬이 방향 지시
 export const AutumnDir = {
   posConv8: posConv8,
   posConv4: posConv4,
@@ -204,8 +216,6 @@ export const AutumnDir = {
   dirFromNum: dirFromNum,
 
   outputNum: outputNum,
-  outputNumPlus: outputNumPlus,
-  outputNumCross: outputNumCross,
 
   outputDir: outputDir,
   outputDirPlus: outputDirPlus,
@@ -222,6 +232,37 @@ export const AutumnDir = {
   stringsDir: stringsDir,
   stringsDirPlus: stringsDirPlus,
   stringsDirCross: stringsDirCross,
+
+  alignDir: (dir1: number, dir2: number): [number, number] => {
+    const priority = (dir: number): number => alignDirPriorityMap[dir] ?? 0;
+    const p1 = priority(dir1);
+    const p2 = priority(dir2);
+    return p1 >= p2 ? [dir1, dir2] : [dir2, dir1];
+  },
+};
+
+// 방향과 숫자 매핑
+export const AutumnNumDir = {
+  north: 0,
+  northEast: 1,
+  east: 2,
+  southEast: 3,
+  south: 4,
+  southWest: 5,
+  west: 6,
+  northWest: 7,
+
+  N: 0,
+  NE: 1,
+  E: 2,
+  SE: 3,
+  S: 4,
+  SW: 5,
+  W: 6,
+  NW: 7,
+
+  isPlus: (dirNum: number): boolean => outputNumOfPlus.includes(dirNum),
+  isCross: (dirNum: number): boolean => outputNumOfCross.includes(dirNum),
 };
 
 // 파라미터
