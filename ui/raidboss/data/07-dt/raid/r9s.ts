@@ -173,7 +173,7 @@ const triggerSet: TriggerSet<Data> = {
       durationSeconds: 5.5,
       suppressSeconds: 1,
       infoText: (data, _matches, output) => {
-        const [dir1, dir2] = data.bats.inner;
+        const [dir1, dir2] = data.bats.inner.sort(Directions.compareDirectionOutput);
 
         return output.away!({
           dir1: output[dir1 ?? 'unknown']!(),
@@ -200,7 +200,7 @@ const triggerSet: TriggerSet<Data> = {
       durationSeconds: 3.4,
       suppressSeconds: 1,
       infoText: (data, _matches, output) => {
-        const [dir1, dir2, dir3] = data.bats.middle;
+        const [dir1, dir2, dir3] = data.bats.middle.sort(Directions.compareDirectionOutput);
 
         return output.away!({
           dir1: output[dir1 ?? 'unknown']!(),
@@ -809,6 +809,48 @@ const triggerSet: TriggerSet<Data> = {
         'Ultrasonic Spread': '音速流散',
         'Undead Deathmatch': '血蝠死斗',
         'Vamp Stomp': '血魅的靴踏音',
+      },
+    },
+    {
+      'locale': 'ko',
+      'missingTranslations': true,
+      'replaceSync': {
+        'Charnel Cell': '파탈 감옥',
+        'Coffinmaker': '파탈 톱',
+        'Deadly Doornail': '파탈 지팡이',
+        'Fatal Flail': '파탈 철퇴',
+        'Vamp Fatale': '뱀프 파탈',
+        'Vampette Fatale': '파탈 박쥐',
+      },
+      'replaceText': {
+        '--coffinmaker--': '--파탈 톱--',
+        '--cell': '--감옥',
+        '--flail': '--철퇴',
+        '--nail--': '--지팡이--',
+        'Aetherletting(?! Proteans)': '에테르 해방',
+        'Aetherletting Proteans': '에테르 해방 부채꼴',
+        'Blast Beat': '공진파',
+        'Bloody Bondage': '피의 결박',
+        'Breakdown Drop': '파괴 선율',
+        'Breakwing Beat': '파괴 박자',
+        'Brutal Rain': '잔혹한 비',
+        'Coffinfiller': '톱날 돌출',
+        'Crowd Kill': '생명력 갈취',
+        'Dead Wake': '전진',
+        'Finale Fatale': '파멸적 최후',
+        'Half Moon': '반달차기',
+        'Hardcore': '과격성',
+        'Hell in a Cell': '헬 인 어 셀',
+        'Insatiable Thirst': '채워지지 않는 갈증',
+        'Killer Voice': '뇌쇄적인 목소리',
+        'Plummet': '낙하',
+        'Pulping Pulse': '분쇄 파동',
+        'Sadistic Screech': '가학적인 웃음',
+        'Sanguine Scratch': '붉은 생채기',
+        // 'Ultrasonic Amp': 'Ultrasonic Amp',
+        // 'Ultrasonic Spread': 'Ultrasonic Spread',
+        'Undead Deathmatch': '박쥐 데스매치',
+        'Vamp Stomp': '요염한 짓밟기',
       },
     },
   ],

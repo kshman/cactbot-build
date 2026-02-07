@@ -25,7 +25,7 @@ export type Phase =
 
 type DirectionCardinal = Exclude<DirectionOutputCardinal, 'unknown'>;
 type DirectionIntercard = Exclude<DirectionOutputIntercard, 'unknown'>;
-type CardinalDirection = 'front' | 'rear' | 'left' | 'right';
+type CardinalFacing = 'front' | 'rear' | 'left' | 'right';
 type SphereType = 'lightning' | 'fire' | 'water' | 'wind' | 'blackHole';
 type MortalInfo = {
   purple: boolean;
@@ -40,11 +40,10 @@ export interface Data extends RaidbossData {
   };
   phase: Phase;
   // Phase 1
-  grotesquerieCleave?: CardinalDirection;
+  grotesquerieCleave?: CardinalFacing;
   myFleshBonds?: 'alpha' | 'beta';
   inLine: { [name: string]: number };
   blobTowerDirs: string[];
-  fleshBondsCount: number;
   skinsplitterCount: number;
   cellChainCount: number;
   myMitoticPhase?: string;
@@ -54,16 +53,12 @@ export interface Data extends RaidbossData {
   replicationCounter: number;
   replication1Debuff?: 'fire' | 'dark';
   replication1FireActor?: string;
-  replication1FireActor2?: string;
   replication1FollowUp: boolean;
-  replication2CloneDirNumPlayers: { [dirNum: number]: string };
   replication2DirNumAbility: { [dirNum: number]: string };
-  replication2hasInitialAbilityTether: boolean;
   replication2PlayerAbilities: { [player: string]: string };
   replication2BossId?: string;
   // replication2PlayerOrder: string[];
   // replication2AbilityOrder: string[];
-  netherwrathFollowup: boolean;
   myMutation?: 'alpha' | 'beta';
   manaSpheres: { [id: string]: SphereType };
   westManaSpheres: { [id: string]: { x: number; y: number } };
@@ -81,8 +76,6 @@ export interface Data extends RaidbossData {
   replication4DirNumAbility: { [dirNum: number]: string };
   replication4PlayerAbilities: { [player: string]: string };
   replication4BossCloneDirNumPlayers: { [dirNum: number]: string };
-  replication4PlayerOrder: string[];
-  replication4AbilityOrder: string[];
   hasLightResistanceDown: boolean;
   twistedVision4MechCounter: number;
   doomPlayers: string[];
@@ -264,18 +257,14 @@ const triggerSet: TriggerSet<Data> = {
     inLine: {},
     blobTowerDirs: [],
     skinsplitterCount: 0,
-    fleshBondsCount: 0,
     cellChainCount: 0,
     hasRot: false,
     // Phase 2
     actorPositions: {},
     replicationCounter: 0,
     replication1FollowUp: false,
-    replication2CloneDirNumPlayers: {},
     replication2DirNumAbility: {},
-    replication2hasInitialAbilityTether: false,
     replication2PlayerAbilities: {},
-    netherwrathFollowup: false,
     manaSpheres: {},
     westManaSpheres: {},
     eastManaSpheres: {},
@@ -286,8 +275,6 @@ const triggerSet: TriggerSet<Data> = {
     replication4DirNumAbility: {},
     replication4PlayerAbilities: {},
     replication4BossCloneDirNumPlayers: {},
-    replication4PlayerOrder: [],
-    replication4AbilityOrder: [],
     hasLightResistanceDown: false,
     twistedVision4MechCounter: 0,
     doomPlayers: [],
@@ -435,7 +422,7 @@ const triggerSet: TriggerSet<Data> = {
       netRegex: { effectId: 'DE6', capture: true },
       condition: Conditions.targetIsYou(),
       run: (data, matches) => {
-        const cleaveMap: { [key: string]: CardinalDirection } = {
+        const cleaveMap: { [key: string]: CardinalFacing } = {
           '40C': 'front',
           '40D': 'right',
           '40E': 'rear',
@@ -1259,7 +1246,7 @@ const triggerSet: TriggerSet<Data> = {
       durationSeconds: 10,
       infoText: (data, matches, output) => {
         data.myMitoticPhase = matches.count;
-        const cntMap: { [cnt: string]: CardinalDirection } = {
+        const cntMap: { [cnt: string]: CardinalFacing } = {
           '436': 'front',
           '437': 'right',
           '438': 'rear',
@@ -1305,7 +1292,7 @@ const triggerSet: TriggerSet<Data> = {
         const count = data.myMitoticPhase;
         if (count === undefined)
           return;
-        const cntMap: { [id: string]: CardinalDirection } = {
+        const cntMap: { [id: string]: CardinalFacing } = {
           '436': 'front',
           '437': 'right',
           '438': 'rear',
@@ -1920,21 +1907,6 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: 'R12S Staging 1 Tethered Clone Collect',
-      // Map the locations to a player name
-      type: 'Tether',
-      netRegex: { id: headMarkerData['lockedTether'], capture: true },
-      condition: (data) => data.replicationCounter === 1,
-      run: (data, matches) => {
-        const actor = data.actorPositions[matches.sourceId];
-        if (actor === undefined)
-          return;
-
-        const dirNum = Directions.xyTo8DirNum(actor.x, actor.y, center.x, center.y);
-        data.replication2CloneDirNumPlayers[dirNum] = matches.target;
-      },
-    },
-    {
       id: 'R12S Staging 1 Tethered Clone',
       // Combatants are added ~4s before Staging starts casting
       // Same tether ID is used for "locked" ability tethers
@@ -2050,8 +2022,6 @@ const triggerSet: TriggerSet<Data> = {
           // Handle boss tether separately as its direction location is unimportant
           if (matches.id !== headMarkerData['fireballSplashTether'])
             data.replication2DirNumAbility[dirNum] = matches.id;
-          if (data.me === matches.target)
-            data.replication2hasInitialAbilityTether = true;
         }
         if (data.phase === 'idyllic')
           data.replication4DirNumAbility[dirNum] = matches.id;
@@ -2354,16 +2324,6 @@ const triggerSet: TriggerSet<Data> = {
           ko: '➋ 뭉쳤다 🔜 ➌ 뭉쳐요',
         },
       },
-    },
-    {
-      id: 'R12S Reenactment 1 Scalding Waves Collect',
-      // Players need to wait for BBE3 Mana Burst Defamations on the clones to complete before next mechanic
-      // NOTE: This is used with DN Strategy
-      type: 'Ability',
-      netRegex: { id: 'B8E1', source: 'Lindwurm', capture: false },
-      condition: (data) => data.phase === 'reenactment1',
-      suppressSeconds: 9999,
-      run: (data) => data.netherwrathFollowup = true,
     },
     {
       id: 'R12S Mana Sphere Collect and Label',
@@ -3004,27 +2964,6 @@ const triggerSet: TriggerSet<Data> = {
           return;
         }
         data.replication4PlayerAbilities[target] = ability;
-
-        // Create ability order once we have all 8 players
-        // If players had more than one tether previously, the extra tethers are randomly assigned
-        if (Object.keys(data.replication4PlayerAbilities).length === 8) {
-          // Used for Twisted Vision 7 and 8 mechanics
-          const abilities = data.replication4PlayerAbilities;
-          const order = data.replication3CloneOrder; // Order in which clones spawned
-          const players = data.replication3CloneDirNumPlayers; // Direction of player's clone
-
-          // Mechanics are resolved clockwise, create order based on cards/inters
-          const first = order[0];
-          if (first === undefined)
-            return;
-          const dirNumOrder = first % 2 === 0 ? [0, 2, 4, 6, 1, 3, 5, 7] : [1, 3, 5, 7, 0, 2, 4, 6];
-          for (const dirNum of dirNumOrder) {
-            const player = players[dirNum] ?? 'unknown';
-            const ability = abilities[player] ?? 'unknown';
-            data.replication4PlayerOrder.push(player);
-            data.replication4AbilityOrder.push(ability);
-          }
-        }
       },
     },
     {
