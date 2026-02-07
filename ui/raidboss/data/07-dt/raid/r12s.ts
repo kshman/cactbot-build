@@ -3,12 +3,7 @@ import Conditions from '../../../../../resources/conditions';
 import { UnreachableCode } from '../../../../../resources/not_reached';
 import Outputs from '../../../../../resources/outputs';
 import { Responses } from '../../../../../resources/responses';
-import {
-  DirectionOutput8,
-  DirectionOutputCardinal,
-  DirectionOutputIntercard,
-  Directions,
-} from '../../../../../resources/util';
+import { DirectionOutput8, Directions } from '../../../../../resources/util';
 import ZoneId from '../../../../../resources/zone_id';
 import { RaidbossData } from '../../../../../types/data';
 import { TriggerSet } from '../../../../../types/trigger';
@@ -23,8 +18,6 @@ export type Phase =
   | 'idyllic'
   | 'reenactment2';
 
-type DirectionCardinal = Exclude<DirectionOutputCardinal, 'unknown'>;
-type DirectionIntercard = Exclude<DirectionOutputIntercard, 'unknown'>;
 type CardinalFacing = 'front' | 'rear' | 'left' | 'right';
 type SphereType = 'lightning' | 'fire' | 'water' | 'wind' | 'blackHole';
 type MortalInfo = {
@@ -36,7 +29,6 @@ type MortalInfo = {
 export interface Data extends RaidbossData {
   readonly triggerSetConfig: {
     uptimeKnockbackStrat: true | false;
-    showGrotesquerieAct2Progress: boolean;
   };
   phase: Phase;
   // Phase 1
@@ -217,11 +209,11 @@ const twistedVisionStrings = {
   },
 } as const;
 
-const isCardinalDir = (dir: DirectionOutput8): dir is DirectionCardinal => {
+const isCardinalDir = (dir: DirectionOutput8) => {
   return (Directions.outputCardinalDir as string[]).includes(dir);
 };
 
-const isIntercardDir = (dir: DirectionOutput8): dir is DirectionIntercard => {
+const isIntercardDir = (dir: DirectionOutput8) => {
   return (Directions.outputIntercardDir as string[]).includes(dir);
 };
 
@@ -235,16 +227,6 @@ const triggerSet: TriggerSet<Data> = {
         en: 'Enable uptime knockback strat',
         ja: '正確なタイミングノックバック回避攻略を使用',
         ko: '정확한 타이밍 넉백방지 공략 사용',
-      },
-      type: 'checkbox',
-      default: false,
-    },
-    {
-      id: 'showGrotesquerieAct2Progress',
-      name: {
-        en: 'Display Grotesquerie Act 2 Progress',
-        ja: '細胞付着・中期進行状況表示',
-        ko: '세포부착 중기 진행 상황 표시',
       },
       type: 'checkbox',
       default: false,
@@ -563,31 +545,38 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: 'R12S Shared Grotesquerie',
+      id: 'R12S Grotesquerie 뭉쳐/흩어져',
       type: 'GainsEffect',
-      netRegex: { effectId: '129A', capture: true },
+      netRegex: { effectId: ['1299', '129A'], capture: true },
       delaySeconds: 0.2,
       durationSeconds: 17,
       infoText: (data, matches, output) => {
         const cleave = data.grotesquerieCleave;
         const target = matches.target;
-        if (target === data.me) {
+        const face = cleave === undefined ? output.unknown!() : output[cleave]!();
+
+        // Spread debuff (1299)
+        if (matches.effectId === '1299') {
+          if (target !== data.me)
+            return;
           if (cleave === undefined)
-            return output.baitThenStack!();
-          return output.baitThenStackCleave!({ cleave: output[cleave]!() });
+            return data.phase === 'doorboss'
+              ? output.baitSpread!({ cleave: face })
+              : output.curtainSpread!();
+          return data.phase === 'doorboss'
+            ? output.baitSpread!({ cleave: face })
+            : output.curtainSpread!();
         }
 
+        // Stack debuff (129A)
+        if (target === data.me)
+          return output.baitStack!({ cleave: face });
+
         const isDPS = data.party.isDPS(target);
-        if (isDPS && data.role === 'dps') {
-          if (cleave === undefined)
-            return output.baitThenStack!();
-          return output.baitThenStackCleave!({ cleave: output[cleave]!() });
-        }
-        if (!isDPS && data.role !== 'dps') {
-          if (cleave === undefined)
-            return output.baitThenStack!();
-          return output.baitThenStackCleave!({ cleave: output[cleave]!() });
-        }
+        if (isDPS && data.role === 'dps')
+          return output.baitStack!({ cleave: face });
+        if (!isDPS && data.role !== 'dps')
+          return output.baitStack!({ cleave: face });
       },
       outputStrings: {
         front: {
@@ -610,71 +599,22 @@ const triggerSet: TriggerSet<Data> = {
           ja: '🡺右扇',
           ko: '🡺오른쪽 꼬깔',
         },
-        baitThenStack: {
-          en: 'Bait 4x Puddles => Stack',
-          ja: 'AOE誘導 x4 🔜 頭割り',
-          ko: '장판 x4 🔜 뭉쳐요',
-        },
-        baitThenStackCleave: {
+        baitStack: {
           en: 'Bait 4x Puddles => Stack + ${cleave}',
           ja: 'AOE誘導 x4 🔜 頭割り + ${cleave}',
           ko: '장판 x4 🔜 뭉쳐요 + ${cleave}',
         },
-      },
-    },
-    {
-      id: 'R12S Bursting Grotesquerie',
-      type: 'GainsEffect',
-      netRegex: { effectId: '1299', capture: true },
-      condition: Conditions.targetIsYou(),
-      delaySeconds: 0.2,
-      durationSeconds: 17,
-      infoText: (data, _matches, output) => {
-        const cleave = data.grotesquerieCleave;
-        if (cleave === undefined)
-          return data.phase === 'doorboss'
-            ? output.baitThenSpread!()
-            : output.spreadCurtain!();
-        return data.phase === 'doorboss'
-          ? output.baitThenSpreadCleave!({ cleave: output[cleave]!() })
-          : output.spreadCurtain!();
-      },
-      outputStrings: {
-        front: {
-          en: 'Front Cleave',
-          ja: '🡹前扇',
-          ko: '🡹앞 꼬깔',
-        },
-        rear: {
-          en: 'Rear Cleave',
-          ja: '🡻後ろ扇',
-          ko: '🡻뒤 꼬깔',
-        },
-        left: {
-          en: 'Left Cleave',
-          ja: '🡸左扇',
-          ko: '🡸왼쪽 꼬깔',
-        },
-        right: {
-          en: 'Right Cleave',
-          ja: '🡺右扇',
-          ko: '🡺오른쪽 꼬깔',
-        },
-        baitThenSpread: {
-          en: 'Bait 4x Puddles => Spread',
-          ja: 'AOE誘導 x4 🔜 散開',
-          ko: '장판 x4 🔜 흩어져요',
-        },
-        baitThenSpreadCleave: {
+        baitSpread: {
           en: 'Bait 4x Puddles => Spread + ${cleave}',
           ja: 'AOE誘導 x4 🔜 散開 + ${cleave}',
           ko: '장판 x4 🔜 흩어져요 + ${cleave}',
         },
-        spreadCurtain: {
+        curtainSpread: {
           en: 'Spread Debuff on YOU',
-          ja: '自分に散開デバフ',
-          ko: '내게 흩어져요',
+          ja: '(自分に散開)',
+          ko: '(내게 흩어져요)',
         },
+        unknown: Outputs.unknown,
       },
     },
     {
@@ -942,63 +882,6 @@ const triggerSet: TriggerSet<Data> = {
       run: (data) => data.cellChainCount = data.cellChainCount + 1,
     },
     {
-      id: 'R12S Cell Chain Tether Number',
-      // Helpful for players to keep track of which chain tower is next
-      // Does not output when it is their turn to break the tether
-      type: 'Tether',
-      netRegex: { id: headMarkerData['cellChainTether'], capture: false },
-      condition: (data) => {
-        if (data.phase === 'doorboss' && data.myFleshBonds === 'beta')
-          return data.triggerSetConfig.showGrotesquerieAct2Progress;
-        return false;
-      },
-      infoText: (data, _matches, output) => {
-        const myNum = data.inLine[data.me];
-        const num = data.cellChainCount;
-        if (myNum !== num) {
-          if (myNum === 1 && num === 3)
-            return output.beta1Tower!({ num: num });
-          if (myNum === 2 && num === 4)
-            return output.beta2Tower!({ num: num });
-          if (myNum === 3 && num === 1)
-            return output.beta3Tower!({ num: num });
-          if (myNum === 4 && num === 2)
-            return output.beta4Tower!({ num: num });
-          return output.tether!({ num: num });
-        }
-
-        if (myNum === undefined)
-          return output.tether!({ num: num });
-      },
-      outputStrings: {
-        tether: {
-          en: 'Tether ${num}',
-          ja: '(線 #${num})',
-          ko: '(줄 #${num})',
-        },
-        beta1Tower: {
-          en: 'Tether ${num} => Chain Tower 3',
-          ja: '(線 #${num} 🔜 出現塔 #3)',
-          ko: '(줄 #${num} 🔜 돌출 타워 #3)',
-        },
-        beta2Tower: {
-          en: 'Tether ${num} => Chain Tower 4',
-          ja: '(線 #${num} 🔜 出現塔 #4)',
-          ko: '(줄 #${num} 🔜 돌출 타워 #4)',
-        },
-        beta3Tower: {
-          en: 'Tether ${num} => Chain Tower 1',
-          ja: '(線 #${num} 🔜 出現塔 #1)',
-          ko: '(줄 #${num} 🔜 돌출 타워 #1)',
-        },
-        beta4Tower: {
-          en: 'Tether ${num} => Chain Tower 2',
-          ja: '(線 #${num} 🔜 出現塔 #2)',
-          ko: '(줄 #${num} 🔜 돌출 타워 #2)',
-        },
-      },
-    },
-    {
       id: 'R12S Chain Tower Number',
       // Using B4B4 Dramatic Lysis to detect chain broken
       type: 'Ability',
@@ -1221,9 +1104,6 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (data, _matches, output) => {
         const mechanicNum = data.skinsplitterCount;
         const myNum = data.inLine[data.me];
-        if (myNum === undefined)
-          return;
-
         if (myNum === mechanicNum)
           return output.goIntoMiddle!();
       },
@@ -1337,8 +1217,8 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Rotting Flesh on YOU',
-          ja: '🟣扇のなかへ',
-          ko: '🟣 꼬깔 맞아요',
+          ja: '(🟣扇へ)',
+          ko: '(🟣 꼬깔 맞아요)',
         },
       },
     },
@@ -2708,8 +2588,8 @@ const triggerSet: TriggerSet<Data> = {
         intercards: Outputs.intercards,
         firstClone: {
           en: 'First Clone: ${cards}',
-          ja: '(1: ${cards})',
-          ko: '(1: ${cards})',
+          ja: '(予告: ${cards})',
+          ko: '(예고: ${cards})',
         },
       },
     },
@@ -2750,61 +2630,55 @@ const triggerSet: TriggerSet<Data> = {
       },
       durationSeconds: 7,
       suppressSeconds: 9999,
-      infoText: (data, matches, output) => {
+      response: (data, matches, output) => {
+        // cactbot-builtin-response
+        output.responseOutputStrings = {
+          ...markerStrings,
+          position: {
+            en: 'Tethered to ${dir} (Position)',
+            ja: 'その場で: ${dir}',
+            ko: '맡은 자리로: ${dir}',
+          },
+          swap: {
+            en: 'Tethered to ${dir} (Swap)',
+            ja: '入れ替え: ${dir}',
+            ko: '자리 바꿔요: ${dir}',
+          },
+        };
+
         const actor = data.actorPositions[matches.sourceId];
         if (actor === undefined)
-          return output.cloneTether!();
+          return { infoText: output.position!({ dir: output.unknown!() }) };
 
         const dirNum = Directions.xyTo8DirNum(actor.x, actor.y, center.x, center.y);
-        let act;
+        let swap;
         switch (dirNum) {
           case AutumnNumDir.NW:
             data.clonePos = AutumnNumDir.E;
-            act = output.swap!();
+            swap = true;
             break;
           case AutumnNumDir.E:
             data.clonePos = AutumnNumDir.NW;
-            act = output.swap!();
+            swap = true;
             break;
           case AutumnNumDir.SW:
             data.clonePos = AutumnNumDir.S;
-            act = output.swap!();
+            swap = true;
             break;
           case AutumnNumDir.S:
             data.clonePos = AutumnNumDir.SW;
-            act = output.swap!();
+            swap = true;
             break;
           default:
             data.clonePos = dirNum;
-            act = output.position!();
+            swap = false;
             break;
         }
         data.isLeft = data.clonePos >= AutumnNumDir.S && data.clonePos <= AutumnNumDir.NW;
         const dir = Directions.output8Dir[data.clonePos] ?? 'unknown';
-        return output.cloneTetherDir!({ dir: output[dir]!(), act: act });
-      },
-      outputStrings: {
-        ...markerStrings,
-        cloneTether: {
-          en: 'Tethered to Clone',
-          ja: '分身へ',
-          ko: '내 분신 쪽으로',
-        },
-        cloneTetherDir: {
-          en: 'Tethered to ${dir} Clone${act}',
-          ja: '${act}: ${dir}',
-          ko: '${act}: ${dir}',
-        },
-        position: {
-          en: '',
-          ja: 'その場で',
-          ko: '맡은 자리로',
-        },
-        swap: {
-          en: ' (Swapped)',
-          ja: '入れ替え',
-          ko: '자리 바꿔요',
-        },
+        if (swap)
+          return { alertText: output.swap!({ dir: output[dir]!() }) };
+        return { infoText: output.position!({ dir: output[dir]!() }) };
       },
     },
     {
@@ -2873,8 +2747,8 @@ const triggerSet: TriggerSet<Data> = {
         sides: Outputs.sides,
         text: {
           en: '${dir} + ${sides} (later)',
-          ja: '(2: ${dir} ${sides})',
-          ko: '(2: ${dir} ${sides})',
+          ja: '(予告: ${dir} ${sides})',
+          ko: '(예고: ${dir} ${sides})',
         },
       },
     },
@@ -2978,11 +2852,11 @@ const triggerSet: TriggerSet<Data> = {
       durationSeconds: 8,
       alertText: (data, _matches, output) => {
         const spot = data.idyllicVision2NorthSouthCleaveSpot;
-        if (spot === undefined)
-          return output.infoOnly!();
-        return output.infoDir!({ dir: output[spot]!() });
+        const dir = spot === undefined ? 'unknown' : spot;
+        return output.text!({ dir: output[dir]!() });
       },
       outputStrings: {
+        unknown: Outputs.unknown,
         north: {
           en: 'North',
           ja: '北➊➋',
@@ -2993,12 +2867,7 @@ const triggerSet: TriggerSet<Data> = {
           ja: '南➌➍',
           ko: '남쪽➌➍',
         },
-        infoOnly: {
-          en: 'N/S Clone => 4:4 + Big AoE',
-          ja: '南北分身へ 🔜 分断 + 全体攻撃',
-          ko: '남북 분신으로 🔜 분단 + 전체 공격',
-        },
-        infoDir: {
+        text: {
           en: '${dir} => 4:4 + Big AoE',
           ja: '${dir} 🔜 分断 + 全体攻撃',
           ko: '${dir} 바깥 🔜 분단 + 전체 공격',
@@ -3039,8 +2908,8 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Soak Fire/Earth Meteor (later)',
-          ja: '(3: 🔥火または🟤土の塔)',
-          ko: '(3: 🔥불 또는 🟤땅 타워)',
+          ja: '(予告: 🔥火または🟤土の塔)',
+          ko: '(예고: 🔥불 또는 🟤땅 타워)',
         },
       },
     },
@@ -3058,8 +2927,8 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Soak a White/Star Meteor (later)',
-          ja: '(3: ⚪白または⭐星の塔)',
-          ko: '(3: ⚪빛 또는 ⭐별 타워)',
+          ja: '(予告: ⚪白または⭐星の塔)',
+          ko: '(예고: ⚪빛 또는 ⭐별 타워)',
         },
       },
     },
@@ -3400,13 +3269,13 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         frontBackLater: {
           en: 'Portal + Front/Back Clone (later)',
-          ja: '(4: ポータル + ↔️東西安全)',
-          ko: '(4: 포탈 + ↔️동서 안전)',
+          ja: '(予告: ポータル + ↔️東西安全)',
+          ko: '(예고: 포탈 + ↔️동서 안전)',
         },
         sidesLater: {
           en: 'Portal + Sides Clone (later)',
-          ja: '(4: ポータル + ↕️南北安全)',
-          ko: '(4: 포탈 + ↕️남북 안전)',
+          ja: '(予告: ポータル + ↕️南北安全)',
+          ko: '(예고: 포탈 + ↕️남북 안전)',
         },
       },
     },
@@ -3452,23 +3321,23 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         frontBackWestLater: {
           en: 'West Platform => Front/Back Clone (later)',
-          ja: '(5: 🄳🡸 島 🔜 ↔️東西安全)',
-          ko: '(5: 🄳🡸 섬 🔜 ↔️동서 안전)',
+          ja: '(予告: 🄳🡸 島 🔜 ↔️東西安全)',
+          ko: '(예고: 🄳🡸 섬 🔜 ↔️동서 안전)',
         },
         sidesWestLater: {
           en: 'West Platform => Sides Clone (later)',
-          ja: '(5: 🄳🡸 島 🔜 ↕️南北安全)',
-          ko: '(5: 🄳🡸 섬 🔜 ↕️남북 안전)',
+          ja: '(予告: 🄳🡸 島 🔜 ↕️南北安全)',
+          ko: '(예고: 🄳🡸 섬 🔜 ↕️남북 안전)',
         },
         frontBackEastLater: {
           en: 'East Platform => Front/Back Clone (later)',
-          ja: '(5: 🄱🡺 島 🔜 ↔️東西安全)',
-          ko: '(5: 🄱🡺 섬 🔜 ↔️동서 안전)',
+          ja: '(予告: 🄱🡺 島 🔜 ↔️東西安全)',
+          ko: '(예고: 🄱🡺 섬 🔜 ↔️동서 안전)',
         },
         sidesEastLater: {
           en: 'East Platform => Sides Clone (later)',
-          ja: '(5: 🄱🡺 島 🔜 ↕️南北安全)',
-          ko: '(5: 🄱🡺 섬 🔜 ↕️남북 안전)',
+          ja: '(予告: 🄱🡺 島 🔜 ↕️南北安全)',
+          ko: '(예고: 🄱🡺 섬 🔜 ↕️남북 안전)',
         },
       },
     },
