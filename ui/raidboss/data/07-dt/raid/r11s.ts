@@ -18,7 +18,6 @@ type WeaponInfo = {
 
 export interface Data extends RaidbossData {
   readonly triggerSetConfig: {
-    trophyDisplay: 'full' | 'simple';
     stampedeStyle: 'totan' | 'dxa';
   };
   phase: Phase;
@@ -132,22 +131,7 @@ const trophyStrings = {
   protean: {
     en: 'Protean',
     ja: '基本さんかい',
-    ko: '낫:위치로',
-  },
-  healerGroupsSimple: {
-    en: 'Healer',
-    ja: '4:4',
-    ko: '4:4',
-  },
-  stackSimple: {
-    en: 'Middle',
-    ja: '中央',
-    ko: '한가운데',
-  },
-  proteanSimple: {
-    en: 'Protean',
-    ja: '内側散会',
-    ko: '안쪽 산개',
+    ko: '낫:안으로',
   },
 } as const;
 
@@ -199,30 +183,6 @@ const triggerSet: TriggerSet<Data> = {
   id: 'AacHeavyweightM3Savage',
   zoneId: ZoneId.AacHeavyweightM3Savage,
   config: [
-    {
-      id: 'trophyDisplay',
-      name: {
-        en: 'Trophy Weapon Mechanic Display',
-        ja: 'トロフィー表示方法',
-        ko: '트로피 표시 방법',
-      },
-      type: 'select',
-      options: {
-        en: {
-          'Full Display': 'full',
-          'Simple Display': 'simple',
-        },
-        ja: {
-          'フル表示': 'full',
-          '簡易表示': 'simple',
-        },
-        ko: {
-          '전체 표시': 'full',
-          '간이 표시': 'simple',
-        },
-      },
-      default: 'full',
-    },
     {
       id: 'stampedeStyle',
       name: {
@@ -355,38 +315,14 @@ const triggerSet: TriggerSet<Data> = {
       countdownSeconds: (data) => {
         return ultimateTrophyWeaponsMap[data.weaponMechCount]?.duration ?? 0;
       },
-      infoText: (data, matches, output) => {
-        if (data.triggerSetConfig.trophyDisplay === 'simple') {
-          const simple = matches.param1 === '11D1'
-            ? 'healerGroupsSimple'
-            : (matches.param1 === '11D2' ? 'stackSimple' : 'proteanSimple');
-          return output[simple]!();
-        }
+      infoText: (_data, matches, output) => {
         const mechanic = matches.param1 === '11D1'
           ? 'healerGroups'
           : (matches.param1 === '11D2' ? 'stack' : 'protean');
-        if (!data.options.AutumnOnly) {
-          if (data.weaponMechCount === 7)
-            return output.mechanicThenBait!({ mech: output[mechanic]!() });
-          if (data.weaponMechCount > 3 && mechanic !== 'stack')
-            return output.mechanicThenMove!({ mech: output[mechanic]!() });
-        }
         return output[mechanic]!();
       },
       run: (data) => data.weaponMechCount++,
-      outputStrings: {
-        ...trophyStrings,
-        mechanicThenMove: {
-          en: '${mech} => Move',
-          ja: '${mech} 🔜 移動',
-          ko: '${mech} 🔜 이동',
-        },
-        mechanicThenBait: {
-          en: '${mech} => Bait Gust',
-          ja: '${mech} 🔜 風誘導',
-          ko: '${mech} 🔜 돌풍 유도!',
-        },
-      },
+      outputStrings: trophyStrings,
     },
     {
       id: 'R11S Trophy Weapons 2 Early Calls',
@@ -410,20 +346,15 @@ const triggerSet: TriggerSet<Data> = {
       suppressSeconds: 9999,
       infoText: (data, matches, output) => {
         const actor = data.actorPositions[matches.id];
-
         if (actor === undefined)
           return;
 
         const mechanic = matches.param1 === '11D1'
           ? 'healerGroups'
           : (matches.param1 === '11D2' ? 'stack' : 'protean');
-
         const dir = Directions.xyTo8DirOutput(actor.x, actor.y, center.x, center.y);
 
-        return output.text!({
-          dir: output[dir]!(),
-          weapon: output[mechanic]!(),
-        });
+        return output.text!({ dir: output[dir]!(), weapon: output[mechanic]!() });
       },
       outputStrings: {
         ...trophyStrings,
@@ -431,7 +362,7 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: '${dir}: ${weapon} (1st later)',
           ja: '(${dir} ${weapon})',
-          ko: '(${dir}쪽 ${weapon})',
+          ko: '(${dir} ${weapon})',
         },
       },
     },
@@ -491,16 +422,6 @@ const triggerSet: TriggerSet<Data> = {
           const weapon3 = candidates.find((c) => c !== weapon2);
           if (weapon2 === undefined || weapon3 === undefined)
             return;
-          if (data.triggerSetConfig.trophyDisplay === 'simple') {
-            const sw1 = `${weapon1.type}Simple`;
-            const sw2 = `${weapon2.type}Simple`;
-            const sw3 = `${weapon3.type}Simple`;
-            return output.text!({
-              weapon1: output[sw1]!(),
-              weapon2: output[sw2]!(),
-              weapon3: output[sw3]!(),
-            });
-          }
           return output.text!({
             weapon1: output[weapon1.type]!(),
             weapon2: output[weapon2.type]!(),
@@ -669,12 +590,12 @@ const triggerSet: TriggerSet<Data> = {
         northSouth: {
           en: 'N/S Mid / ${dir} Outer + Partner Stacks',
           ja: '${dir}基準',
-          ko: '${dir}쪽 기준',
+          ko: '${dir} 기준',
         },
         eastWest: {
           en: 'E/W Mid / ${dir} Outer + Partner Stacks',
           ja: '${dir}基準',
-          ko: '${dir}쪽 기준',
+          ko: '${dir} 기준',
         },
         ...markerStrings,
       },
@@ -721,7 +642,7 @@ const triggerSet: TriggerSet<Data> = {
         baitAt: {
           en: 'Bait Gust at ${dir}',
           ja: '風誘導: ${dir}',
-          ko: '돌풍 유도: ${dir}쪽',
+          ko: '돌풍 유도: ${dir}',
         },
         ...markerStrings,
       },
@@ -1250,7 +1171,7 @@ const triggerSet: TriggerSet<Data> = {
         stretchTetherDir: {
           en: 'Stretch ${dir}',
           ja: '線を${dir}へ伸ばす',
-          ko: '${dir}쪽으로 🪢줄',
+          ko: '${dir} 🪢줄',
         },
         tetherMechsPlayerEast: {
           en: '${mech1} => ${mech2} + ${dir}',
@@ -1306,7 +1227,7 @@ const triggerSet: TriggerSet<Data> = {
         westSafe: {
           en: 'Tower Knockback to ${dir}',
           ja: '${dir}へ',
-          ko: '${dir}쪽으로',
+          ko: '넉백: ${dir}',
         },
         west: markerStrings.dirW,
       },
@@ -1324,7 +1245,7 @@ const triggerSet: TriggerSet<Data> = {
         eastSafe: {
           en: 'Tower Knockback to ${dir}',
           ja: '${dir}へ',
-          ko: '${dir}쪽으로',
+          ko: '넉백: ${dir}',
         },
         east: markerStrings.dirE,
       },
@@ -1350,7 +1271,7 @@ const triggerSet: TriggerSet<Data> = {
         goNorth: {
           en: 'Go to ${dir}',
           ja: '${dir}へ',
-          ko: '${dir}쪽!',
+          ko: '${dir}!',
         },
       },
     },
@@ -1375,7 +1296,7 @@ const triggerSet: TriggerSet<Data> = {
         goSouth: {
           en: 'Go to ${dir}',
           ja: '${dir}へ',
-          ko: '${dir}쪽!',
+          ko: '${dir}!',
         },
       },
     },
@@ -1408,7 +1329,7 @@ const triggerSet: TriggerSet<Data> = {
           dir: {
             en: 'Go ${dir} => Bait Impacts, Avoid Corners',
             ja: '${dir}へ',
-            ko: '${dir}쪽으로',
+            ko: '${dir}',
           },
           comboDir: {
             en: 'Go ${dir1}/${dir2} => Bait Impacts, Avoid Corners',
@@ -1632,7 +1553,7 @@ const triggerSet: TriggerSet<Data> = {
         twoWayDir: {
           en: '${dir} Line Stack, ${act}',
           ja: '${dir}で一列頭割り (${act})',
-          ko: '2웨이🟰 ${act}: ${dir}쪽 한줄',
+          ko: '2웨이🟰 ${act}: ${dir} 한줄',
         },
         front: {
           en: 'Be in Front',
@@ -1667,7 +1588,7 @@ const triggerSet: TriggerSet<Data> = {
         fourWayDir: {
           en: '${dir} Intercardinal Line Stack, ${act}',
           ja: '${dir}で斜めペア (${act})',
-          ko: '4웨이❌ ${act}: ${dir}쪽 페어',
+          ko: '4웨이❌ ${act}: ${dir} 페어',
         },
         front: {
           en: 'Be in Front',
@@ -1817,13 +1738,23 @@ const triggerSet: TriggerSet<Data> = {
     },
     {
       'locale': 'de',
-      'missingTranslations': true,
       'replaceSync': {
         'Comet': 'Komet',
         'Maelstrom': 'Mahlstrom',
         'The Tyrant': '(?:der|die|das) Tyrann',
       },
       'replaceText': {
+        '\\(Axe\\)': '(Axt)',
+        '\\(Scythe\\)': '(Sense)',
+        '\\(Scythe/Axe\\)': '(Sense/Axt)',
+        '\\(castbar\\)': '(wirken)',
+        '\\(split\\)': '(teilen)',
+        '--Fire Breath Markers--': '--Feueratem Markierungen--',
+        '--Meteor Markers': '--Meteor Markierungen',
+        '--Meteor(?! Markers)': '--Meteor',
+        '--jump ': '--Sprung',
+        'scythe--': 'Sense--',
+        '--tethers--': '--Verbindungen--',
         'Arcadion Avalanche': 'Arkadionbruch',
         'Assault Apex': 'Waffenlawine',
         'Assault Evolved': 'Waffensturm',
@@ -1840,10 +1771,11 @@ const triggerSet: TriggerSet<Data> = {
         'Explosion': 'Explosion',
         'Eye of the Hurricane': 'Hurrikan des Herrschers',
         'Fearsome Fireball': 'Fürstliches Feuer',
-        'Fire Breath': 'Feueratem',
+        '(?<!--)Fire Breath': 'Feueratem',
         'Fire and Fury': 'Feueratem & Flammenschweif',
         'Flatliner': 'Herzstopper',
         'Foregone Fatality': 'Strahl der Verdammnis',
+        'Four-way Fireball': 'Vierfaches Drehfeuer',
         'Great Wall of Fire': 'Feuerstrom',
         'Heartbreak Kick': 'Herzensbrecher-Kick',
         'Heartbreaker': 'Herzensbrecher',
@@ -1859,11 +1791,15 @@ const triggerSet: TriggerSet<Data> = {
         'One and Only': 'Alles für einen',
         'Orbital Omen': 'Orbitalachse',
         'Powerful Gust': 'Starke Bö',
-        'Raw Steel(?! Trophy)': 'Waffenspalter',
+        'Raw Steel(?! )': 'Waffenspalter',
         'Raw Steel Trophy': 'Spaltende Waffenkunst',
+        'Shockwave': 'Schockwelle',
+        'Triple Tyrannhilation': 'Drillingsstern-Tyrannensturz',
         '(?<! )Trophy Weapons': 'Waffentrophäen',
+        'Two-way Fireball': 'Zweifaches Drehfeuer',
         'Ultimate Trophy Weapons': 'Unantastbare Waffentrophäen',
         'Void Stardust': 'Kometenschauer',
+        '(?<! )Weapon(?!s)': 'Waffe',
         'Weighty Impact': 'Mega-Einschlag',
       },
     },
@@ -1881,7 +1817,7 @@ const triggerSet: TriggerSet<Data> = {
         'Assault Evolved': 'Arsenal d\'assaut',
         'Atomic Impact': 'Impact de canon dissolvant',
         'Charybdistopia': 'Maelström',
-        '(?<! )Comet(?!ite)': 'Comète',
+        '(?<! )Comet(?!ite)': 'comète',
         'Cometite': 'Petite comète',
         'Cosmic Kiss': 'Impact de canon',
         'Crown of Arcadia': 'Souverain de l\'Arcadion',
@@ -1911,8 +1847,9 @@ const triggerSet: TriggerSet<Data> = {
         'One and Only': 'Seul et unique',
         'Orbital Omen': 'Pluie orbitale',
         'Powerful Gust': 'Ouragan violent',
-        'Raw Steel(?! Trophy)': 'Écrasement du tyran',
+        'Raw Steel(?! )': 'Écrasement du tyran',
         'Raw Steel Trophy': 'Génération d\'arme : écrasement',
+        'Shockwave': 'Onde de choc',
         '(?<! )Trophy Weapons': 'Armes trophées',
         'Ultimate Trophy Weapons': 'Armes trophées ultimes',
         'Void Stardust': 'Pluie de comètes',
@@ -1963,7 +1900,7 @@ const triggerSet: TriggerSet<Data> = {
         'One and Only': 'ワン・アンド・オンリー',
         'Orbital Omen': 'オービタルライン',
         'Powerful Gust': '強風',
-        'Raw Steel(?! Trophy)': 'ウェポンバスター',
+        'Raw Steel(?! )': 'ウェポンバスター',
         'Raw Steel Trophy': 'ウェポンジェネレート：バスター',
         'Shockwave': '衝撃波',
         '(?<! )Trophy Weapons': 'トロフィーウェポンズ',
@@ -2104,7 +2041,7 @@ const triggerSet: TriggerSet<Data> = {
         'Raw Steel Trophy Axe': '무기 생성: 맹격 도끼',
         'Raw Steel Trophy Scythe': '무기 생성: 맹격 낫',
         'Shockwave': '충격파',
-        // 'Triple Tyrannhilation': 'Triple Tyrannhilation',
+        'Triple Tyrannhilation': '폭군 강하: 삼형제별',
         '(?<! )Trophy Weapons': '무기 트로피',
         // 'Two-way Fireball': 'Two-way Fireball',
         'Ultimate Trophy Weapons': '궁극의 무기 트로피',

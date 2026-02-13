@@ -16,13 +16,9 @@ type SnakingFlagsType = {
 };
 
 export interface Data extends RaidbossData {
-  readonly triggerSetConfig: {
-    snakingSecond: 'static' | 'game8';
-  };
   phase: Phase;
   dares: number;
   snakings: SnakingFlagsType[string][];
-  snakingCount: number;
   snakingMine?: 'water' | 'fire';
   snakingSpread: boolean;
 }
@@ -102,32 +98,6 @@ const headMarkers = {
 const triggerSet: TriggerSet<Data> = {
   id: 'AacHeavyweightM2Savage',
   zoneId: ZoneId.AacHeavyweightM2Savage,
-  config: [
-    {
-      id: 'snakingSecond',
-      name: {
-        en: 'Snaking Second Mechanic',
-        ja: 'スネーク2回目の処理方法',
-        ko: '스네이크 2번째 기믹 처리 방법',
-      },
-      type: 'select',
-      options: {
-        en: {
-          'Role Static (Healer>Melee>Ranged)': 'static',
-          'Game 8 Style': 'game8',
-        },
-        ja: {
-          'ロール固定（ヒーラー＞近接＞遠隔）': 'static',
-          'Game 8 指定': 'game8',
-        },
-        ko: {
-          '역할 고정 (힐러＞근접＞원거리)': 'static',
-          'Game 8 스타일': 'game8',
-        },
-      },
-      default: 'game8',
-    },
-  ],
   timelineFile: 'r10s.txt',
   initData: () => ({
     phase: 'entry',
@@ -418,7 +388,7 @@ const triggerSet: TriggerSet<Data> = {
         aoe: {
           en: 'Large AOE',
           ja: '南北へ！大きな連続全体攻撃',
-          ko: '남북으로! 큰 연속 전체 공격',
+          ko: '남쪽 모서리로! 큰 연속 전체 공격',
         },
       },
     },
@@ -446,28 +416,15 @@ const triggerSet: TriggerSet<Data> = {
           data.snakings = [snaking, ...data.snakings];
         else
           data.snakings.push(snaking);
-
-        if (snaking.elem === 'fire' && (snaking.mech !== 'buster' || data.snakingCount < 4))
-          data.snakingCount++;
       },
       durationSeconds: 7,
       response: (data, _matches, output) => {
         // cactbot-builtin-response
         output.responseOutputStrings = {
-          both: {
-            en: '${elem1}: ${mech1}/${elem2}: ${mech2}',
-            ja: '${elem1}-${mech1} / ${elem2}-${mech2}',
-            ko: '${elem1}${mech1} / ${elem2}${mech2}',
-          },
           combo: {
             en: '${elem}: ${mech}',
             ja: '${elem}-${mech}',
             ko: '${elem}${mech}',
-          },
-          roleSwap: {
-            en: '${mech} (${role} swap)',
-            ja: '${mech}（${role}交代）',
-            ko: '${mech} (${role} 교대)',
           },
           mySwap: {
             en: 'Swap: ${elem}: ${mech}',
@@ -497,15 +454,15 @@ const triggerSet: TriggerSet<Data> = {
         if (snaking1 === undefined || snaking2 === undefined)
           return;
 
-        if (data.snakingCount < 5) {
+        if (data.phase !== 'xtreme') {
           // 어 이거 1번이 물, 2번이 불 고정같은데?
           const [water, fire] = snaking1.elem === 'water'
             ? [snaking1, snaking2]
             : [snaking2, snaking1];
 
-          let my = undefined;
+          let my;
           if (data.snakingMine === undefined) {
-            // insane air 일 경우
+            // insane air #1 일 경우
             const team = Autumn.getTeam(data.moks);
             my = team === 'MT' ? water : fire;
           } else {
@@ -513,16 +470,6 @@ const triggerSet: TriggerSet<Data> = {
             my = data.snakingMine === 'water' ? water : fire;
           }
 
-          if (my === undefined) {
-            return {
-              infoText: output.both!({
-                elem1: output[water.elem]!(),
-                mech1: output[water.mech]!(),
-                elem2: output[fire.elem]!(),
-                mech2: output[fire.mech]!(),
-              }),
-            };
-          }
           return {
             infoText: output.combo!({
               elem: output[my.elem]!(),
@@ -531,47 +478,35 @@ const triggerSet: TriggerSet<Data> = {
           };
         }
 
-        // game8 방식
-        if (data.triggerSetConfig.snakingSecond === 'game8') {
-          let mine = false;
-          if (snaking1.mech === 'buster') {
-            mine = data.role === 'tank';
-          } else if (snaking1.mech === 'stack') {
-            mine = data.role === 'healer';
-          } else if (data.snakingSpread) {
-            mine = data.moks === 'D3' || data.moks === 'D4';
-          } else {
-            mine = data.moks === 'D1' || data.moks === 'D2';
-            data.snakingSpread = true;
-          }
-          if (mine) {
-            data.snakingMine = data.snakingMine === 'water' ? 'fire' : 'water';
-            return {
-              alertText: output.mySwap!({
-                elem: output[data.snakingMine]!(),
-                mech: output[snaking1.mech]!(),
-              }),
-            };
-          }
-          if (data.snakingMine === undefined)
-            return { infoText: output[snaking1.mech]!() };
+        // 익스트림
+        let mine = false;
+        if (snaking1.mech === 'buster') {
+          mine = data.role === 'tank';
+        } else if (snaking1.mech === 'stack') {
+          mine = data.role === 'healer';
+        } else if (data.snakingSpread) {
+          mine = data.moks === 'D3' || data.moks === 'D4';
+        } else {
+          mine = data.moks === 'D1' || data.moks === 'D2';
+          data.snakingSpread = true;
+        }
+        if (mine) {
+          data.snakingMine = data.snakingMine === 'water' ? 'fire' : 'water';
           return {
-            infoText: output.combo!({
+            alertText: output.mySwap!({
               elem: output[data.snakingMine]!(),
               mech: output[snaking1.mech]!(),
             }),
           };
         }
-
-        // static 방식
-        const role = (snaking1.mech === 'buster')
-          ? output.tank!()
-          : (data.snakingCount === 5)
-          ? output.healer!()
-          : (data.snakingCount === 6)
-          ? output.melee!()
-          : output.ranged!();
-        return { infoText: output.roleSwap!({ mech: output[snaking1.mech]!(), role: role }) };
+        if (data.snakingMine === undefined)
+          return { infoText: output[snaking1.mech]!() };
+        return {
+          infoText: output.combo!({
+            elem: output[data.snakingMine]!(),
+            mech: output[snaking1.mech]!(),
+          }),
+        };
       },
       run: (data) => {
         if (data.snakings.length > 1)
@@ -707,9 +642,9 @@ const triggerSet: TriggerSet<Data> = {
         if (data.role === 'healer')
           return output.south!();
         if (data.moks === 'D1' || data.moks === 'D2')
-          return output.north!();
-        if (data.moks === 'D3' || data.moks === 'D4')
           return output.south!();
+        if (data.moks === 'D3' || data.moks === 'D4')
+          return output.north!();
         return output.bait!();
       },
       outputStrings: {
@@ -813,7 +748,6 @@ const triggerSet: TriggerSet<Data> = {
     },
     {
       'locale': 'de',
-      'missingTranslations': true,
       'replaceSync': {
         'Deep Blue': 'Indigowelle',
         'Red Hot': 'Scharlachflamme',
@@ -821,13 +755,28 @@ const triggerSet: TriggerSet<Data> = {
         'Watery Grave': 'Wasserkerker',
       },
       'replaceText': {
+        '--add-targetable--': '--add anvisierbar--',
+        '--add-untargetable--': '--add nicht anvisierbar--',
+        '--blue east/west--': '--blau osten/westen--',
+        '--blue targetable--': '--blau anvisierbar--',
+        '--blue untargetable--': '--blau nicht anvisierbar--',
+        '--hot jump--': '--Flammensprung--',
+        '--intercardinal--': '--interkardinal--',
+        '--red north--': '--rot norden--',
+        '\\(bait\\)': '(Ködern)',
+        '\\(big\\)': '(Groß)',
+        '\\(cone\\)': '(Kegel)',
+        '\\(damage': '(Schaden',
+        '\\(enrage\\)': '(Finalangriff)',
+        '\\(line\\)': '(Linie)',
+        '\\(tower\\)': '(Turm)',
+        'Alley-oop Double-dip': 'Doppel-Alley-Oop',
         'Alley-oop Inferno': 'Flammen-Alley-Oop',
         'Awesome Slab': 'Heftiger Hydroplatscher',
         'Awesome Splash': 'Hydroplatscher',
+        'Bailout': 'Abstieg',
         'Blasting Snap': 'Flammenruck',
         'Cutback Blaze': 'Flammen-Rückschnitt',
-        'Deep Aerial': 'Hydrosprung',
-        'Deep Impact': 'Hydroklopper',
         'Deep Varial': 'Hydro-Halbdreher',
         'Divers\' Dare': 'Brodelnder Kampfgeist',
         'Epic Brotherhood': 'Brüderbund',
@@ -836,16 +785,18 @@ const triggerSet: TriggerSet<Data> = {
         'Freaky Pyrotation': 'Abgefahrener Pyro-Dreher',
         'Hot Aerial': 'Flammensprung',
         'Hot Impact': 'Flammenklopper',
-        'Impact Zone': 'Mega-Platzer',
         'Insane Air': 'Wahnsinnsritt',
-        'Over the Falls': 'Extremer Wellensog',
         'Plunging Snap': 'Hydroruck',
         '(?<! )Pyrotation': 'Pyrodreher',
+        'Reverse Alley-oop': 'Umgekehrter Alley-Oop',
         'Scathing Steam': 'Mischexplosion',
         'Sick Swell': 'Fette Welle',
         'Sickest Take-off': 'Fetter Absprung',
+        'stun\\)': 'Betäuben)',
         '(?<! )Watersnaking': 'Hydro-Schlängeln',
+        'Xtreme Firesnaking': 'Extremes Flammen-Schlängeln',
         'Xtreme Spectacular': 'Ultimatives Extremmanöver',
+        'Xtreme Watersnaking': 'Extremes Hydro-Schlängeln',
         'Xtreme Wave': 'Extremwelle',
       },
     },
@@ -986,7 +937,6 @@ const triggerSet: TriggerSet<Data> = {
     },
     {
       'locale': 'ko',
-      'missingTranslations': true,
       'replaceSync': {
         'Deep Blue': '딥 블루',
         'Red Hot': '레드 핫',
@@ -1010,11 +960,11 @@ const triggerSet: TriggerSet<Data> = {
         '\\(line\\)': '(직선)',
         'stun\\)': '기절)',
         '\\(tower\\)': '(탑)',
-        // 'Alley-oop Double-dip': 'Alley-oop Double-dip',
+        'Alley-oop Double-dip': '연속 뛰어들기',
         'Alley-oop Inferno': '불꽃 뛰어돌기',
         'Awesome Slab': '물결 뒤덮기',
         'Awesome Splash': '물결 덮기',
-        // 'Bailout': 'Bailout',
+        'Bailout': '자진 이탈',
         'Blasting Snap': '불꽃 급선회',
         'Cutback Blaze': '불꽃 되돌기',
         'Deep Aerial': '물결 공중회전',
@@ -1032,15 +982,15 @@ const triggerSet: TriggerSet<Data> = {
         'Over the Falls': '집어삼키는 파도',
         'Plunging Snap': '물결 급선회',
         '(?<! )Pyrotation': '화염 회전',
-        // 'Re-entry Blast': 'Re-entry Blast',
-        // 'Reverse Alley-oop': 'Reverse Alley-oop',
+        'Re-entry Blast': '불꽃 오르내리기',
+        'Reverse Alley-oop': '반전 뛰어들기',
         'Scathing Steam': '물불 작렬',
         'Sick Swell': '끝내주는 파도',
         'Sickest Take-off': '끝내주는 파도오름',
         '(?<! )Watersnaking': '물결 선점',
-        // 'Xtreme Firesnaking': 'Xtreme Firesnaking',
+        'Xtreme Firesnaking': '극한의 불꽃 선점',
         'Xtreme Spectacular': '익스트림 스펙터클',
-        // 'Xtreme Watersnaking': 'Xtreme Watersnaking',
+        'Xtreme Watersnaking': '극한의 물결 선점',
         'Xtreme Wave': '익스트림 웨이브',
       },
     },

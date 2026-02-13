@@ -3,7 +3,11 @@ import Conditions from '../../../../../resources/conditions';
 import { UnreachableCode } from '../../../../../resources/not_reached';
 import Outputs from '../../../../../resources/outputs';
 import { Responses } from '../../../../../resources/responses';
-import { DirectionOutput8, Directions } from '../../../../../resources/util';
+import {
+  DirectionOutput8,
+  DirectionOutputIntercard,
+  Directions,
+} from '../../../../../resources/util';
 import ZoneId from '../../../../../resources/zone_id';
 import { RaidbossData } from '../../../../../types/data';
 import { TriggerSet } from '../../../../../types/trigger';
@@ -18,13 +22,13 @@ export type Phase =
   | 'idyllic'
   | 'reenactment2';
 
-type CardinalFacing = 'front' | 'rear' | 'left' | 'right';
-type SphereType = 'lightning' | 'fire' | 'water' | 'wind' | 'blackHole';
 type MortalInfo = {
   purple: boolean;
   left: boolean;
   moks: string;
 };
+type CardinalFacing = 'front' | 'rear' | 'left' | 'right';
+type SphereType = 'lightning' | 'fire' | 'water' | 'wind' | 'blackHole';
 
 export interface Data extends RaidbossData {
   readonly triggerSetConfig: {
@@ -35,7 +39,7 @@ export interface Data extends RaidbossData {
   grotesquerieCleave?: CardinalFacing;
   myFleshBonds?: 'alpha' | 'beta';
   inLine: { [name: string]: number };
-  blobTowerDirs: string[];
+  blobTowerDirs: DirectionOutputIntercard[];
   skinsplitterCount: number;
   cellChainCount: number;
   myMitoticPhase?: string;
@@ -119,92 +123,55 @@ const phaseMap: { [id: string]: Phase } = {
 };
 
 const markerStrings = {
-  dirN: {
-    en: '🡹North',
-    ja: '🄰🡹',
-    ko: '🄰🡹',
-  },
-  dirE: {
-    en: '🡺East',
-    ja: '🄱🡺',
-    ko: '🄱🡺',
-  },
-  dirS: {
-    en: '🡻South',
-    ja: '🄲🡻',
-    ko: '🄲🡻',
-  },
-  dirW: {
-    en: '🡸West',
-    ja: '🄳🡸',
-    ko: '🄳🡸',
-  },
-  dirNW: {
-    en: '🡼NW',
-    ja: '➊🡼',
-    ko: '➊🡼',
-  },
-  dirNE: {
-    en: '🡽NE',
-    ja: '➋🡽',
-    ko: '➋🡽',
-  },
-  dirSE: {
-    en: '🡾SE',
-    ja: '➌🡾',
-    ko: '➌🡾',
-  },
-  dirSW: {
-    en: '🡿SW',
-    ja: '➍🡿',
-    ko: '➍🡿',
-  },
+  dirN: '🄰🡹',
+  dirE: '🄱🡺',
+  dirS: '🄲🡻',
+  dirW: '🄳🡸',
+  dirNW: '➊🡼',
+  dirNE: '➋🡽',
+  dirSE: '➌🡾',
+  dirSW: '➍🡿',
   unknown: Outputs.unknown,
 } as const;
 
 const twistedVisionStrings = {
-  stackLeft: {
-    en: 'Left',
-    ko: '➍',
-  },
-  stackRight: {
-    en: 'Right',
-    ko: '➌',
-  },
-  defaLeft: {
-    en: 'Left',
-    ko: '➊',
-  },
-  defaRight: {
-    en: 'Right',
-    ko: '➋',
-  },
+  stackLeft: '➍',
+  stackRight: '➌',
+  defaLeft: '➊',
+  defaRight: '➋',
   stackDefa: {
     en: 'Stack ${pos1} => Defamation ${pos2}',
+    ja: '${pos1}で頭割り 🔜 ${pos2}に捨てる',
     ko: '${pos1} 뭉쳤다 🔜 ${pos2} 큰폭발 버려요',
   },
   stackAvoid: {
     en: 'Stack ${pos} => Avoid Defamations',
+    ja: '${pos}で頭割り 🔜 🄲で回避',
     ko: '${pos} 뭉쳤다 🔜 🄲 큰폭발 피해요',
   },
   stackTower: {
     en: 'Stack ${pos} => Tower Position',
+    ja: '${pos}で頭割り 🔜 自分の島へ',
     ko: '${pos} 뭉쳤다 🔜 자기 섬 타워로',
   },
   defaStack: {
     en: 'Defamation ${pos1} => Stack ${pos2}',
+    ja: '${pos1}に捨てる 🔜 ${pos2}で頭割り',
     ko: '${pos1} 큰폭발 버리고 🔜 ${pos2} 뭉쳐요',
   },
   avoidStack: {
     en: 'Avoid Defamations => Stack ${pos}',
+    ja: '🄲で回避 🔜 ${pos}で頭割り',
     ko: '🄲 큰폭발 피하고 🔜 ${pos} 뭉쳐요',
   },
   defaTower: {
     en: 'Defamation ${pos} => Tower Position',
+    ja: '${pos}に捨てる 🔜 自分の島へ',
     ko: '${pos} 큰폭발 버리고 🔜 자기 섬 타워로',
   },
   avoidTower: {
     en: 'Avoid Defamations => Tower Position',
+    ja: '🄲で回避 🔜 自分の島へ',
     ko: '🄲 큰폭발 피하고 🔜 자기 섬 타워로',
   },
 } as const;
@@ -761,7 +728,7 @@ const triggerSet: TriggerSet<Data> = {
     },
     {
       id: 'R12S Phagocyte Spotlight Blob Tower Location Collect',
-      // StartsUsing and StartsUsingExtra can have bad data, there is enough time that Ability is sufficient
+      // StartsUsing can have bad data
       // Pattern 1
       // Blob 1: (104, 104) SE Inner
       // Blob 2: (96, 96) NW Inner
@@ -782,7 +749,7 @@ const triggerSet: TriggerSet<Data> = {
       // Blob 2: (104, 96) NE Inner
       // Blob 3: (115, 110) SE Outer
       // Blob 4: (86, 90) NW Outer
-      type: 'Ability',
+      type: 'StartsUsingExtra',
       netRegex: { id: 'B4B6', capture: true },
       suppressSeconds: 10,
       run: (data, matches) => {
@@ -814,7 +781,7 @@ const triggerSet: TriggerSet<Data> = {
       id: 'R12S Phagocyte Spotlight Blob Tower Location (Early)',
       // 23.8s until B4B7 Rolling Mass Blob Tower Hit
       // Only need to know first blob location
-      type: 'Ability',
+      type: 'StartsUsingExtra',
       netRegex: { id: 'B4B6', capture: false },
       condition: (data) => data.myFleshBonds === 'alpha',
       delaySeconds: 0.1,
@@ -909,6 +876,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         tower: {
           en: 'Get Chain Tower ${num}',
+          ja: '出現塔踏み #${num}',
           ko: '밟아요: 돌출 타워 #${num}',
         },
       },
@@ -936,37 +904,22 @@ const triggerSet: TriggerSet<Data> = {
       },
       alertText: (data, matches, output) => {
         const duration = parseFloat(matches.duration);
-        const dir = data.blobTowerDirs[duration > 40 ? 1 : 0];
-        if (duration > 40) {
-          if (dir !== undefined)
-            return output.alpha4Dir!({ dir: output[dir]!() });
-          return output.alpha4!();
-        }
-        if (dir !== undefined)
-          return output.alpha3Dir!({ dir: output[dir]!() });
-        return output.alpha3!();
+        const dir = data.blobTowerDirs[duration > 40 ? 1 : 0] ?? 'unknown';
+        if (duration > 40)
+          return output.alpha4!({ dir: output[dir]!() });
+        return output.alpha3!({ dir: output[dir]!() });
       },
       outputStrings: {
         ...AutumnDir.stringsAimCross,
         alpha3: {
-          en: 'Get Blob Tower 1',
-          ja: '肉塔踏み #1',
-          ko: '밟아요: 살덩이 #1',
-        },
-        alpha4: {
-          en: 'Get Blob Tower 2',
-          ja: '肉塔踏み #2',
-          ko: '밟아요: 살덩이 #2',
-        },
-        alpha3Dir: {
           en: 'Get Blob Tower 1 (Inner ${dir})',
           ja: '肉塔踏み #1 (${dir}内側)',
-          ko: '밟아요: ${dir}쪽 살덩이 #1',
+          ko: '밟아요: 살덩이 #1 (안쪽 ${dir})',
         },
-        alpha4Dir: {
+        alpha4: {
           en: 'Get Blob Tower 2 (Inner ${dir})',
           ja: '肉塔踏み #2 (${dir}内側)',
-          ko: '밟아요: ${dir}쪽 살덩이 #2',
+          ko: '밟아요: 살덩이 #2 (안쪽 ${dir})',
         },
       },
     },
@@ -987,14 +940,12 @@ const triggerSet: TriggerSet<Data> = {
         const isAlpha = matches.effectId === '1291';
         if (isAlpha) {
           if (myNum === 1) {
-            const dir = data.blobTowerDirs[2];
-            if (dir !== undefined)
-              return output.alpha1Dir!({ dir: output[dir]!() });
+            const dir = data.blobTowerDirs[2] ?? 'unknown';
+            return output.alpha1!({ dir: output[dir]!() });
           }
           if (myNum === 2) {
-            const dir = data.blobTowerDirs[3];
-            if (dir !== undefined)
-              return output.alpha2Dir!({ dir: output[dir]!() });
+            const dir = data.blobTowerDirs[3] ?? 'unknown';
+            return output.alpha2!({ dir: output[dir]!() });
           }
 
           // dir undefined or 3rd/4rth in line
@@ -1007,24 +958,14 @@ const triggerSet: TriggerSet<Data> = {
         ...AutumnDir.stringsAimCross,
         getTowers: Outputs.getTowers,
         alpha1: {
-          en: 'Break Chains 1 + Blob Tower 3 (Outer)',
-          ja: '線切り #1 🔜 肉塔 #3',
-          ko: '나가요: 줄 #1 🔜 살덩이 #3',
-        },
-        alpha1Dir: {
           en: 'Break Chains 1 + Blob Tower 3 (Outer ${dir})',
           ja: '線切り #1 🔜 肉塔 #3 (${dir}外側)',
-          ko: '나가요: 줄 #1 🔜 ${dir}쪽 살덩이 #3',
+          ko: '나가요: 줄 #1 🔜 살덩이 #3 (바깥 ${dir})',
         },
         alpha2: {
-          en: 'Break Chains 2 + Blob Tower 4 (Outer)',
-          ja: '線切り #2 🔜 肉塔 #4',
-          ko: '나가요: 줄 #2 🔜 살덩이 #4',
-        },
-        alpha2Dir: {
           en: 'Break Chains 2 + Blob Tower 4 (Outer ${dir})',
           ja: '線切り #2 🔜 肉塔 #4 (${dir}外側)',
-          ko: '나가요: 줄 #2 🔜 ${dir}쪽 살덩이 #4',
+          ko: '나가요: 줄 #2 🔜 살덩이 #4 (바깥 ${dir})',
         },
         alpha3: {
           en: 'Break Chains 3 + Get Out',
@@ -1141,22 +1082,22 @@ const triggerSet: TriggerSet<Data> = {
         front: {
           en: 'Tower (S/SW)',
           ja: '🡻南または🡿南西',
-          ko: '🡻남쪽 또는 🡿남서쪽',
+          ko: '🡻남 또는 🡿남서',
         },
         rear: {
           en: 'Tower (N/NE)',
           ja: '🡹北または🡽北東',
-          ko: '🡹북쪽 또는 🡽북동쪽',
+          ko: '🡹북 또는 🡽북동',
         },
         left: {
           en: 'Tower (E/SE)',
           ja: '🡺東または🡾南東',
-          ko: '🡺동쪽 또는 🡾남동쪽',
+          ko: '🡺동 또는 🡾남동',
         },
         right: {
           en: 'Tower (W/NW)',
           ja: '🡸西または🡼北西',
-          ko: '🡸서쪽 또는 🡼북서쪽',
+          ko: '🡸서 또는 🡼북서',
         },
       },
     },
@@ -1197,12 +1138,12 @@ const triggerSet: TriggerSet<Data> = {
         typeCardinals: {
           en: 'Cardinal: ${dir}',
           ja: '➕十字: ${dir}',
-          ko: '➕십자: ${dir}쪽',
+          ko: '➕십자: ${dir}',
         },
         typeIntercards: {
           en: 'Intercardinal: ${dir}',
           ja: '❌斜め: ${dir}',
-          ko: '❌비스듬: ${dir}쪽',
+          ko: '❌비스듬: ${dir}',
         },
         unknown: Outputs.unknown,
       },
@@ -1218,7 +1159,7 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: 'Rotting Flesh on YOU',
           ja: '(🟣扇へ)',
-          ko: '(🟣 꼬깔 맞아요)',
+          ko: '(🟣꼬깔 맞아요)',
         },
       },
     },
@@ -1246,22 +1187,22 @@ const triggerSet: TriggerSet<Data> = {
         getHitWest: {
           en: 'Spread in West Cleave',
           ja: '🡸西で散開 + 扇当たる',
-          ko: '🡸서쪽에서 흩어지고 + 꼬깔 맞아요',
+          ko: '🡸서쪽 흩어지고 + 꼬깔 맞아요',
         },
         getHitEast: {
           en: 'Spread in East Cleave',
           ja: '🡺東で散開 + 扇当たる',
-          ko: '🡺동쪽에서 흩어지고 + 꼬깔 맞아요',
+          ko: '🡺동쪽 흩어지고 + 꼬깔 맞아요',
         },
         safeEast: {
           en: 'Spread East + Avoid Cleave',
           ja: '🡺東で散開',
-          ko: '🡺동쪽에서 흩어져요',
+          ko: '🡺동쪽 흩어져요',
         },
         safeWest: {
           en: 'Spread West + Avoid Cleave',
           ja: '🡸西で散開',
-          ko: '🡸서쪽에서 흩어져요',
+          ko: '🡸서쪽 흩어져요',
         },
       },
     },
@@ -1287,9 +1228,7 @@ const triggerSet: TriggerSet<Data> = {
           'D3': 'dirSW',
           'D4': 'dirSE',
         };
-        const dir = moksMap[data.moks];
-        if (dir === undefined)
-          return output.party!();
+        const dir = moksMap[data.moks] ?? 'unknown';
         return output.dps!({ dir: output[dir]!() });
       },
       outputStrings: {
@@ -1299,20 +1238,16 @@ const triggerSet: TriggerSet<Data> = {
           ko: '무적으로 빔 유도',
         },
         healer: Outputs.goIntoMiddle,
-        party: {
-          en: 'Spread, Away from heads',
-          ja: '散開、頭から離れて',
-          ko: '맡은 자리로',
-        },
         dps: {
           en: 'Spread to ${dir}',
           ja: '散開: ${dir}',
           ko: '맡은 자리로: ${dir}',
         },
-        dirW: markerStrings.dirW,
-        dirE: markerStrings.dirE,
-        dirSW: markerStrings.dirSW,
-        dirSE: markerStrings.dirSE,
+        dirW: Outputs.aimW,
+        dirE: Outputs.aimE,
+        dirSW: Outputs.aimSW,
+        dirSE: Outputs.aimSE,
+        unknown: Outputs.unknown,
       },
     },
     {
@@ -1398,59 +1333,41 @@ const triggerSet: TriggerSet<Data> = {
       response: Responses.spread('alert'),
     },
     {
-      id: 'R12S Serpintine Scourge Right Hand First',
-      // Left Hand first, then Right Hand
+      id: 'R12S Serpintine Scourge',
       type: 'Ability',
-      netRegex: { id: 'B4CB', source: 'Lindwurm', capture: false },
+      netRegex: { id: ['B4CB', 'B4CD'], source: 'Lindwurm', capture: true },
       condition: (data) => data.phase === 'slaughtershed',
       delaySeconds: 6.5,
       durationSeconds: 5,
-      infoText: (_data, _matches, output) => output.rightThenLeft!(),
+      infoText: (_data, matches, output) => {
+        if (matches.id === 'B4CB')
+          return output.rightThenLeft!();
+        return output.leftThenRight!();
+      },
       outputStrings: {
         rightThenLeft: Outputs.rightThenLeft,
-      },
-    },
-    {
-      id: 'R12S Serpintine Scourge Left Hand First',
-      // Right Hand first, then Left Hand
-      type: 'Ability',
-      netRegex: { id: 'B4CD', source: 'Lindwurm', capture: false },
-      condition: (data) => data.phase === 'slaughtershed',
-      delaySeconds: 6.5,
-      durationSeconds: 5,
-      infoText: (_data, _matches, output) => output.leftThenRight!(),
-      outputStrings: {
         leftThenRight: Outputs.leftThenRight,
       },
     },
     {
-      id: 'R12S Raptor Knuckles Right Hand First',
-      // Right Hand first, then Left Hand
+      id: 'R12S Raptor Knuckles',
       type: 'Ability',
-      netRegex: { id: 'B4CC', source: 'Lindwurm', capture: false },
+      netRegex: { id: ['B4CC', 'B4CE'], source: 'Lindwurm', capture: true },
       condition: (data) => data.phase === 'slaughtershed',
       delaySeconds: 5,
       durationSeconds: 10,
-      infoText: (_data, _matches, output) => output.text!(),
+      infoText: (_data, matches, output) => {
+        if (matches.id === 'B4CC')
+          return output.left!();
+        return output.right!();
+      },
       outputStrings: {
-        text: {
+        left: {
           en: 'Knockback from Northwest => Knockback from Northeast',
           ja: '➊🡼北西ノックバック 🔜 北東ノックバック',
           ko: '➊🡼북서 넉백 🔜 북동 넉백',
         },
-      },
-    },
-    {
-      id: 'R12S Raptor Knuckles Left Hand First',
-      // Left Hand first, then Right Hand
-      type: 'Ability',
-      netRegex: { id: 'B4CE', source: 'Lindwurm', capture: false },
-      condition: (data) => data.phase === 'slaughtershed',
-      delaySeconds: 5,
-      durationSeconds: 10,
-      infoText: (_data, _matches, output) => output.text!(),
-      outputStrings: {
-        text: {
+        right: {
           en: 'Knockback from Northeast => Knockback from Northwest',
           ja: '➋🡽北東ノックバック 🔜 北西ノックバック',
           ko: '➋🡽북동 넉백 🔜 북서 넉백',
@@ -1477,7 +1394,6 @@ const triggerSet: TriggerSet<Data> = {
     },
     {
       id: 'R12S Refreshing Overkill',
-      // 10s castTime that could end with enrage or raidwide
       type: 'StartsUsing',
       netRegex: { id: 'B538', source: 'Lindwurm', capture: true },
       delaySeconds: (_data, matches) => parseFloat(matches.castTime) - 4,
@@ -1612,7 +1528,7 @@ const triggerSet: TriggerSet<Data> = {
         getBehindDir: {
           en: '${dir}',
           ja: '安全: ${dir}',
-          ko: '안전: ${dir}쪽',
+          ko: '안전: ${dir}',
         },
       },
     },
@@ -1761,7 +1677,7 @@ const triggerSet: TriggerSet<Data> = {
         getBehindDir: {
           en: '${dir}',
           ja: '安全: ${dir}',
-          ko: '안전: ${dir}쪽',
+          ko: '안전: ${dir}',
         },
       },
     },
@@ -2133,7 +2049,7 @@ const triggerSet: TriggerSet<Data> = {
         getBehindDir: {
           en: '${dir}',
           ja: '安全: ${dir}',
-          ko: '안전: ${dir}쪽',
+          ko: '안전: ${dir}',
         },
       },
     },
@@ -2447,7 +2363,7 @@ const triggerSet: TriggerSet<Data> = {
         safe: {
           en: 'Get by Black Hole',
           ja: 'ブラックホールへ',
-          ko: '블랙홀 쪽으로',
+          ko: '블랙홀로',
         },
         safeDir: {
           en: '${dir} Black Hole + N/S',
@@ -2737,12 +2653,12 @@ const triggerSet: TriggerSet<Data> = {
         north: {
           en: 'North',
           ja: '北➊➋',
-          ko: '북쪽➊➋',
+          ko: '북➊➋',
         },
         south: {
           en: 'South',
           ja: '南➌➍',
-          ko: '남쪽➌➍',
+          ko: '남➌➍',
         },
         sides: Outputs.sides,
         text: {
@@ -2860,12 +2776,12 @@ const triggerSet: TriggerSet<Data> = {
         north: {
           en: 'North',
           ja: '北➊➋',
-          ko: '북쪽➊➋',
+          ko: '북➊➋',
         },
         south: {
           en: 'South',
           ja: '南➌➍',
-          ko: '남쪽➌➍',
+          ko: '남➌➍',
         },
         text: {
           en: '${dir} => 4:4 + Big AoE',
