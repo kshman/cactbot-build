@@ -190,6 +190,33 @@ const stringsDirCross: OutputStrings = {
   unknown: Outputs.unknown,
 };
 
+// 마커 방향
+const stringMarker1A2Dir: OutputStrings = {
+  dirN: Outputs.m1A2N,
+  dirE: Outputs.m1A2E,
+  dirS: Outputs.m1A2S,
+  dirW: Outputs.m1A2W,
+  dirNW: Outputs.m1A2NW,
+  dirNE: Outputs.m1A2NE,
+  dirSE: Outputs.m1A2SE,
+  dirSW: Outputs.m1A2SW,
+  unknown: Outputs.unknown,
+};
+const stringMarker1A2DirPlus: OutputStrings = {
+  dirN: Outputs.m1A2N,
+  dirE: Outputs.m1A2E,
+  dirS: Outputs.m1A2S,
+  dirW: Outputs.m1A2W,
+  unknown: Outputs.unknown,
+};
+const stringMarker1A2DirCross: OutputStrings = {
+  dirNW: Outputs.m1A2NW,
+  dirNE: Outputs.m1A2NE,
+  dirSE: Outputs.m1A2SE,
+  dirSW: Outputs.m1A2SW,
+  unknown: Outputs.unknown,
+};
+
 //
 const alignDirPriorityMap: { [dir: number]: number } = {
   0: 6,
@@ -232,6 +259,10 @@ export const AutumnDir = {
   stringsDir: stringsDir,
   stringsDirPlus: stringsDirPlus,
   stringsDirCross: stringsDirCross,
+
+  stringMarker1A2Dir: stringMarker1A2Dir,
+  stringMarker1A2DirPlus: stringMarker1A2DirPlus,
+  stringMarker1A2DirCross: stringMarker1A2DirCross,
 
   alignDir: (dir1: number, dir2: number): [number, number] => {
     const priority = (dir: number): number => alignDirPriorityMap[dir] ?? 0;

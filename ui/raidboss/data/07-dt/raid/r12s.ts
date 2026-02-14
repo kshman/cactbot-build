@@ -122,23 +122,27 @@ const phaseMap: { [id: string]: Phase } = {
   'B509': 'idyllic',
 };
 
-const markerStrings = {
-  dirN: '🄰🡹',
-  dirE: '🄱🡺',
-  dirS: '🄲🡻',
-  dirW: '🄳🡸',
-  dirNW: '➊🡼',
-  dirNE: '➋🡽',
-  dirSE: '➌🡾',
-  dirSW: '➍🡿',
-  unknown: Outputs.unknown,
-} as const;
-
 const twistedVisionStrings = {
-  stackLeft: '➍',
-  stackRight: '➌',
-  defaLeft: '➊',
-  defaRight: '➋',
+  stackLeft: {
+    en: 'Left',
+    ja: '➍',
+    ko: '➍',
+  },
+  stackRight: {
+    en: 'Right',
+    ja: '➌',
+    ko: '➌',
+  },
+  defaLeft: {
+    en: 'Left',
+    ja: '➊',
+    ko: '➊',
+  },
+  defaRight: {
+    en: 'Right',
+    ja: '➋',
+    ko: '➋',
+  },
   stackDefa: {
     en: 'Stack ${pos1} => Defamation ${pos2}',
     ja: '${pos1}で頭割り 🔜 ${pos2}に捨てる',
@@ -1619,7 +1623,7 @@ const triggerSet: TriggerSet<Data> = {
         });
       },
       outputStrings: {
-        ...markerStrings, // Cardinals should result in '???'
+        ...AutumnDir.stringMarker1A2Dir,
         dark: {
           en: 'Dark In ${dir1}/Out ${dir2}',
           ja: '🟣闇: ${dir1} ${dir2}',
@@ -2006,7 +2010,7 @@ const triggerSet: TriggerSet<Data> = {
         haveCone: {
           en: 'Front Stack Groups',
           ja: '自分に扇、先頭へ',
-          ko: '내게 꼬깔, 선두로',
+          ko: '꼬깔, 선두로',
         },
         text: {
           en: '${side} ${cone} => Get Behind',
@@ -2295,8 +2299,8 @@ const triggerSet: TriggerSet<Data> = {
         });
       },
       outputStrings: {
-        east: markerStrings.dirE,
-        west: markerStrings.dirW,
+        east: Outputs.m1A2E,
+        west: Outputs.m1A2W,
         water: {
           en: 'Orb',
           ja: '💧水',
@@ -2330,7 +2334,7 @@ const triggerSet: TriggerSet<Data> = {
         alphaDir: {
           en: 'Avoid Shape AoEs (Black Hole: ${dir})',
           ja: '形状回避 (ブラックホール: ${dir})',
-          ko: '물체 피해요 (블랙홀: ${dir}쪽)',
+          ko: '물체 피해요 (블랙홀: ${dir})',
         },
         betaDir: {
           en: 'Share ${dir} ${shape1}/${shape2}',
@@ -2358,8 +2362,8 @@ const triggerSet: TriggerSet<Data> = {
         return output.safeDir!({ dir: output[blackHole]!() });
       },
       outputStrings: {
-        east: markerStrings.dirE,
-        west: markerStrings.dirW,
+        east: Outputs.m1A2E,
+        west: Outputs.m1A2W,
         safe: {
           en: 'Get by Black Hole',
           ja: 'ブラックホールへ',
@@ -2393,8 +2397,8 @@ const triggerSet: TriggerSet<Data> = {
         });
       },
       outputStrings: {
-        east: markerStrings.dirE,
-        west: markerStrings.dirW,
+        east: Outputs.m1A2E,
+        west: Outputs.m1A2W,
         move: {
           en: 'Move to other Black Hole',
           ja: '反対側のブラックホールへ',
@@ -2549,7 +2553,7 @@ const triggerSet: TriggerSet<Data> = {
       response: (data, matches, output) => {
         // cactbot-builtin-response
         output.responseOutputStrings = {
-          ...markerStrings,
+          ...AutumnDir.stringMarker1A2Dir,
           position: {
             en: 'Tethered to ${dir} (Position)',
             ja: 'その場で: ${dir}',

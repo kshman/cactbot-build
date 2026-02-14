@@ -1,4 +1,4 @@
-import Autumn from '../../../../../resources/autumn';
+import Autumn, { AutumnDir } from '../../../../../resources/autumn';
 import Conditions from '../../../../../resources/conditions';
 import { UnreachableCode } from '../../../../../resources/not_reached';
 import Outputs from '../../../../../resources/outputs';
@@ -133,50 +133,6 @@ const trophyStrings = {
     ja: '基本さんかい',
     ko: '낫:안으로',
   },
-} as const;
-
-const markerStrings = {
-  dirN: {
-    en: '🡹North',
-    ja: '🄰🡹北',
-    ko: '🄰🡹북',
-  },
-  dirE: {
-    en: '🡺East',
-    ja: '🄱🡺東',
-    ko: '🄱🡺동',
-  },
-  dirS: {
-    en: '🡻South',
-    ja: '🄲🡻南',
-    ko: '🄲🡻남',
-  },
-  dirW: {
-    en: '🡸West',
-    ja: '🄳🡸西',
-    ko: '🄳🡸서',
-  },
-  dirNW: {
-    en: '🡼NW',
-    ja: '➊🡼北西',
-    ko: '➊🡼북서',
-  },
-  dirNE: {
-    en: '🡽NE',
-    ja: '➋🡽北東',
-    ko: '➋🡽북동',
-  },
-  dirSE: {
-    en: '🡾SE',
-    ja: '➌🡾南東',
-    ko: '➌🡾남동',
-  },
-  dirSW: {
-    en: '🡿SW',
-    ja: '➍🡿南西',
-    ko: '➍🡿남서',
-  },
-  unknown: Outputs.unknown,
 } as const;
 
 const triggerSet: TriggerSet<Data> = {
@@ -358,7 +314,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         ...trophyStrings,
-        ...markerStrings,
+        ...AutumnDir.stringMarker1A2Dir,
         text: {
           en: '${dir}: ${weapon} (1st later)',
           ja: '(${dir} ${weapon})',
@@ -597,7 +553,7 @@ const triggerSet: TriggerSet<Data> = {
           ja: '${dir}基準',
           ko: '${dir} 기준',
         },
-        ...markerStrings,
+        ...AutumnDir.stringMarker1A2Dir,
       },
     },
     {
@@ -644,7 +600,7 @@ const triggerSet: TriggerSet<Data> = {
           ja: '風誘導: ${dir}',
           ko: '돌풍 유도: ${dir}',
         },
-        ...markerStrings,
+        ...AutumnDir.stringMarker1A2Dir,
       },
     },
     {
@@ -876,7 +832,7 @@ const triggerSet: TriggerSet<Data> = {
         return output.stretchTetherDirLater!({ dir: output[dir ?? 'unknown']!() });
       },
       outputStrings: {
-        ...markerStrings,
+        ...AutumnDir.stringMarker1A2Dir,
         stretchTetherDirLater: {
           en: 'Tether on YOU: Stretch ${dir} (later)',
           ja: '(後で線を伸ばす: ${dir})',
@@ -1137,7 +1093,7 @@ const triggerSet: TriggerSet<Data> = {
         });
       },
       outputStrings: {
-        ...markerStrings,
+        ...AutumnDir.stringMarker1A2Dir,
         bait3Puddles: {
           en: 'Bait Puddles x3',
           ja: 'AOE誘導 x3',
@@ -1229,7 +1185,7 @@ const triggerSet: TriggerSet<Data> = {
           ja: '${dir}へ',
           ko: '넉백: ${dir}',
         },
-        west: markerStrings.dirW,
+        west: Outputs.m1A2W,
       },
     },
     {
@@ -1247,7 +1203,7 @@ const triggerSet: TriggerSet<Data> = {
           ja: '${dir}へ',
           ko: '넉백: ${dir}',
         },
-        east: markerStrings.dirE,
+        east: Outputs.m1A2E,
       },
     },
     {
@@ -1265,9 +1221,9 @@ const triggerSet: TriggerSet<Data> = {
       },
       run: (data) => delete data.avalancheSafe,
       outputStrings: {
-        north: markerStrings.dirN,
-        northWest: markerStrings.dirNW,
-        northEast: markerStrings.dirNE,
+        north: Outputs.m1A2N,
+        northWest: Outputs.m1A2NW,
+        northEast: Outputs.m1A2NE,
         goNorth: {
           en: 'Go to ${dir}',
           ja: '${dir}へ',
@@ -1290,9 +1246,9 @@ const triggerSet: TriggerSet<Data> = {
       },
       run: (data) => delete data.avalancheSafe,
       outputStrings: {
-        south: markerStrings.dirS,
-        southWest: markerStrings.dirSW,
-        southEast: markerStrings.dirSE,
+        south: Outputs.m1A2S,
+        southWest: Outputs.m1A2SW,
+        southEast: Outputs.m1A2SE,
         goSouth: {
           en: 'Go to ${dir}',
           ja: '${dir}へ',
@@ -1517,7 +1473,7 @@ const triggerSet: TriggerSet<Data> = {
         return output.stretchTetherDir!({ dir: output[stretchDir]!() });
       },
       outputStrings: {
-        ...markerStrings,
+        ...AutumnDir.stringMarker1A2Dir,
         stretchTetherDir: {
           en: 'Stretch Tether ${dir}',
           ja: '${dir}へ',
@@ -1565,7 +1521,7 @@ const triggerSet: TriggerSet<Data> = {
           ja: '後ろへ',
           ko: '뒤로',
         },
-        ...markerStrings,
+        ...AutumnDir.stringMarker1A2Dir,
       },
     },
     {
@@ -1600,7 +1556,7 @@ const triggerSet: TriggerSet<Data> = {
           ja: '後ろへ',
           ko: '뒤로',
         },
-        ...markerStrings,
+        ...AutumnDir.stringMarker1A2Dir,
       },
     },
     {
