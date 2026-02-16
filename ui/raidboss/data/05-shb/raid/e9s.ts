@@ -596,6 +596,7 @@ const triggerSet: TriggerSet<Data> = {
           ja: '暗闇の雲',
           cn: '暗黑之云',
           ko: '어둠의 구름',
+          tc: '暗黑之雲',
         };
 
         const bossData = await callOverlayHandler({
@@ -621,6 +622,7 @@ const triggerSet: TriggerSet<Data> = {
           ja: '幻影の雲',
           cn: '幻影之云',
           ko: '환영의 구름',
+          tc: '幻影之雲',
         };
 
         const cloneData = await callOverlayHandler({
