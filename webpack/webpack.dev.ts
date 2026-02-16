@@ -33,7 +33,6 @@ const tsConfigOverride = {
         options: {
           compilerOptions: {
             declaration: true,
-            declarationMap: true,
           },
         },
       },

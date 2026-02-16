@@ -2100,12 +2100,12 @@ const triggerSet: TriggerSet<Data> = {
         projectionTether: {
           en: 'Bait Cone',
           ja: '端扇ペア: サークル外側',
-          ko: '끝단 페어: 서클 바깥',
+          ko: '파: 서클 바깥',
         },
         heavySlamTether: {
           en: 'Pair',
           ja: '端扇ペア: サークル内側',
-          ko: '끝단 페어: 서클 안',
+          ko: '니어: 서클 안',
         },
         others: {
           en: 'Inner',
@@ -3132,23 +3132,23 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         nearOnYouWind: {
           en: 'Wind: Near on YOU',
-          ja: 'ニア🟢風: 数字の端に',
-          ko: '니어 🟢바람: 숫자 모서리',
+          ja: '🟢ニア: 南の数字マーカーへ',
+          ko: '🟢니어: 남쪽 숫자 마커 모서리로',
         },
         nearOnYouDark: {
           en: 'Dark: Near on YOU',
-          ja: 'ニア🟣闇: 数字の端に',
-          ko: '니어 🟣어둠: 숫자 모서리',
+          ja: '🟣ニア: 南の数字マーカーへ',
+          ko: '🟣니어: 남쪽 숫자 마커 모서리로',
         },
         farOnYouWind: {
           en: 'Wind: Far on YOU',
-          ja: 'ファー🟢風: サークル内へ',
-          ko: '파 🟢바람: 남쪽 서클 안으로',
+          ja: '🟢ファー: サークル内へ',
+          ko: '🟢파: 남쪽 서클 안으로',
         },
         farOnYouDark: {
           en: 'Dark: Far on YOU',
-          ja: 'ファー🟣闇: サークル内へ',
-          ko: '파 🟣어둠: 남쪽 서클 안으로',
+          ja: '🟣ファー: サークル内へ',
+          ko: '🟣파: 남쪽 서클 안으로',
         },
       },
     },
@@ -3168,13 +3168,13 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         baitFire: {
           en: 'Fire: Bait Cone',
-          ja: '無職 🔥火: 北扇誘導',
-          ko: '무직 🔥불: 북쪽 파 유도',
+          ja: '🔥無職: 北で扇誘導',
+          ko: '🔥무직: 북쪽 파 유도',
         },
         baitEarth: {
           en: 'Earth: Bait Cone',
-          ja: '無職 🟤土: 南扇誘導',
-          ko: '무직 🟤땅: 남쪽 니어 유도',
+          ja: '🟤無職: 南で扇誘導',
+          ko: '🟤무직: 남쪽 니어 유도',
         },
       },
     },
