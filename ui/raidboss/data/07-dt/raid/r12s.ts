@@ -193,6 +193,12 @@ const triggerSet: TriggerSet<Data> = {
         ja: '正確なタイミングでアムレン(堅実)を使用',
         ko: '정확한 타이밍 넉백방지 공략 사용',
       },
+      comment: {
+        en: `If you want cactbot to callout Raptor Knuckles double knockback, enable this option.
+             Callout happens during/after first animation and requires <1.8s reaction time
+             to avoid both Northwest and Northeast knockbacks.
+             NOTE: This will call for each set.`,
+      },
       type: 'checkbox',
       default: false,
     },
@@ -364,21 +370,6 @@ const triggerSet: TriggerSet<Data> = {
       response: Responses.bigAoe('alert'),
     },
     {
-      id: 'R12S Directed Grotesquerie Direction Collect',
-      type: 'GainsEffect',
-      netRegex: { effectId: 'DE6', capture: true },
-      condition: Conditions.targetIsYou(),
-      run: (data, matches) => {
-        const cleaveMap: { [key: string]: CardinalFacing } = {
-          '40C': 'front',
-          '40D': 'right',
-          '40E': 'rear',
-          '40F': 'left',
-        };
-        data.grotesquerieCleave = cleaveMap[matches.count];
-      },
-    },
-    {
       id: 'R12S Mortal Slayer',
       type: 'StartsUsing',
       netRegex: { id: 'B495', source: 'Lindwurm', capture: false },
@@ -506,6 +497,21 @@ const triggerSet: TriggerSet<Data> = {
           return { alertText: orb2.left ? output.left!() : output.right!() };
 
         return { infoText: output.text!({ left: orb1.moks, right: orb2.moks }) };
+      },
+    },
+    {
+      id: 'R12S Directed Grotesquerie Direction Collect',
+      type: 'GainsEffect',
+      netRegex: { effectId: 'DE6', capture: true },
+      condition: Conditions.targetIsYou(),
+      run: (data, matches) => {
+        const cleaveMap: { [key: string]: CardinalFacing } = {
+          '40C': 'front',
+          '40D': 'right',
+          '40E': 'rear',
+          '40F': 'left',
+        };
+        data.grotesquerieCleave = cleaveMap[matches.count];
       },
     },
     {
@@ -1073,6 +1079,20 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         goIntoMiddle: Outputs.goIntoMiddle,
+      },
+    },
+    {
+      id: 'R12S Skinsplitter Out of Coil Reminder',
+      type: 'Ability',
+      netRegex: { id: 'B4BC', capture: false },
+      condition: (data) => data.skinsplitterCount === 7,
+      suppressSeconds: 1,
+      alertText: (_data, _matches, output) => output.outOfCoil!(),
+      outputStrings: {
+        outOfCoil: {
+          en: 'Out of Coil',
+          ko: '밖으로 나가요',
+        },
       },
     },
     {
