@@ -3070,6 +3070,14 @@ const triggerSet: TriggerSet<Data> = {
       // 5s castTime
       type: 'StartsUsing',
       netRegex: { id: 'B4F7', source: 'Lindwurm', capture: true },
+      condition: (data) => {
+        // Avoid simultaneous trigger for Pyretic player as they wouldn't be at the earth location
+        if (data.hasPyretic)
+          return false;
+        // Handle this in Doom clense instead
+        if (data.CanCleanse())
+          return false;
+      },
       delaySeconds: 0.1,
       durationSeconds: (_data, matches) => parseFloat(matches.castTime),
       suppressSeconds: 1,
@@ -3086,15 +3094,39 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
+      id: 'R12S Doom Tower Soak Collect',
+      // Abilities such as Warden's Paean can prevent Doom GainsEffect
+      type: 'Ability',
+      netRegex: { id: 'B4F6', capture: true },
+      condition: Conditions.targetIsYou(),
+      run: (data, matches) => {
+        // Only record those players standing near the Doom tower
+        const getDistance = (
+          x: number,
+          y: number,
+          targetX: number,
+          targetY: number,
+        ): number => {
+          const dx = x - targetX;
+          const dy = y - targetY;
+          return Math.round(Math.sqrt(dx * dx + dy * dy));
+        };
+        const x = parseFloat(matches.x);
+        const y = parseFloat(matches.y);
+        const targetX = parseFloat(matches.targetX);
+        const targetY = parseFloat(matches.targetY);
+        const d = getDistance(x, y, targetX, targetY);
+
+        if (d < 4)
+          data.hasDoom = true;
+      },
+    },
+    {
       id: 'R12S Doom Collect',
       // Happens about 1.3s after Dark Tower when it casts B4F6 Lindwurm's Dark II
       type: 'GainsEffect',
       netRegex: { effectId: 'D24', capture: true },
-      run: (data, matches) => {
-        data.doomPlayers.push(matches.target);
-        if (data.me === matches.target)
-          data.hasDoom = true;
-      },
+      run: (data, matches) => data.doomPlayers.push(matches.target),
     },
     {
       id: 'R12S Doom Cleanse',
@@ -3108,11 +3140,17 @@ const triggerSet: TriggerSet<Data> = {
         if (players.length === 2) {
           const target1 = data.party.member(data.doomPlayers[0]);
           const target2 = data.party.member(data.doomPlayers[1]);
-          return output.cleanseDoom2!({ target1: target1, target2: target2 });
+          return output.mech!({
+            cleanse: output.cleanseDoom2!({ target1: target1, target2: target2 }),
+            avoid: output.avoidEarthTower!(),
+          });
         }
         if (players.length === 1) {
           const target1 = data.party.member(data.doomPlayers[0]);
-          return output.cleanseDoom!({ target: target1 });
+          return output.mech!({
+            cleanse: output.cleanseDoom!({ target: target1 }),
+            avoid: output.avoidEarthTower!(),
+          });
         }
       },
       outputStrings: {
@@ -3125,6 +3163,35 @@ const triggerSet: TriggerSet<Data> = {
           en: 'Cleanse ${target1}/${target2}',
           ja: 'エスナ: ${target1}/${target2}',
           ko: '에스나: ${target1}, ${target2}',
+        },
+        avoidEarthTower: {
+          en: 'Avoid Earth Tower',
+          ja: '土の塔を回避',
+          ko: '땅 기둥 피해요',
+        },
+        mech: {
+          en: '${cleanse} + ${avoid}',
+        },
+      },
+    },
+    {
+      id: 'R12S Avoid Earth Tower (Missing Dooms)',
+      // Handle scenario where both Dooms end up not being applied
+      // Triggering on the Lindwurm's Dark II ability that would apply Doom
+      type: 'Ability',
+      netRegex: { id: 'B4F6', capture: false },
+      condition: (data) => data.CanCleanse(),
+      delaySeconds: 0.5, // Time until after Doom was expected
+      suppressSeconds: 9999,
+      infoText: (data, _matches, output) => {
+        if (data.doomPlayers[0] === undefined)
+          return output.avoidEarthTower!();
+      },
+      outputStrings: {
+        avoidEarthTower: {
+          en: 'Avoid Earth Tower',
+          ja: '土の塔を回避',
+          ko: '곧 땅 기둥, 피해요',
         },
       },
     },
