@@ -6,7 +6,7 @@ import ZoneId from './zone_id';
 // any ui that is dealing with multiple zones / triggers.
 //
 // These are not things that cactbot necessarily supports, but things that it
-// theoretically could be supporting in the future with raidboss and oopsy.
+// theoretically could be supporting in the future with raidboss.
 //
 // Miscellaneous things like maps, hunts, carnivale, pvp, eureka
 // should not be added here yet.

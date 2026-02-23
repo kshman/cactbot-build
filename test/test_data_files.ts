@@ -4,7 +4,6 @@ import Mocha from 'mocha';
 
 import { walkDirSync } from '../util/file_utils';
 
-import testOopsyFiles from './helper/test_oopsy';
 import testTimelineFiles from './helper/test_timeline';
 import testTriggerFiles from './helper/test_trigger';
 
@@ -12,7 +11,6 @@ export type TestMochaGlobal = typeof global & {
   triggerFiles?: string[];
   manifestFiles?: string[];
   timelineFiles?: string[];
-  oopsyFiles?: string[];
 };
 
 // This file runs in one of two ways:
@@ -33,12 +31,11 @@ const mocha = new Mocha();
 
 const timelineFiles: string[] = [];
 const triggerFiles: string[] = [];
-const oopsyFiles: string[] = [];
 
 const processInputs = (inputPath: string[]) => {
   inputPath.forEach((path: string) => {
     walkDirSync(path, (filepath) => {
-      if (/\/(?:raidboss|oopsy)_manifest.txt/.test(filepath) || /\/99-custom\//.test(filepath)) {
+      if (/\/raidboss_manifest.txt/.test(filepath) || /\/99-custom\//.test(filepath)) {
         return;
       }
       if (/\/raidboss\/data\/.*\.txt/.test(filepath)) {
@@ -47,10 +44,6 @@ const processInputs = (inputPath: string[]) => {
       }
       if (/\/raidboss\/data\/.*\.[jt]s/.test(filepath)) {
         triggerFiles.push(filepath);
-        return;
-      }
-      if (/\/oopsyraidsy\/data\/.*\.[jt]s/.test(filepath)) {
-        oopsyFiles.push(filepath);
         return;
       }
     });
@@ -62,7 +55,7 @@ const insideMocha = typeof global.describe === 'function';
 // Run automatically via mocha, but also allow for running individual
 // directories / files via the command-line.
 // TODO: use this with lint-staged to run on individual file changes.
-const defaultInput = ['ui/raidboss/data', 'ui/oopsyraidsy/data'];
+const defaultInput = ['ui/raidboss/data'];
 const inputs: string[] = !insideMocha && process.argv.length > 2
   ? process.argv.slice(1)
   : defaultInput;
@@ -71,7 +64,6 @@ processInputs(inputs);
 if (insideMocha) {
   testTriggerFiles(triggerFiles);
   testTimelineFiles(timelineFiles);
-  testOopsyFiles(oopsyFiles);
 } else {
   const annotatedGlobal: TestMochaGlobal = global;
 
@@ -80,7 +72,6 @@ if (insideMocha) {
   // passed via globals.  We can't add files after Mocha has started, unfortunately.
   annotatedGlobal.timelineFiles = timelineFiles;
   annotatedGlobal.triggerFiles = triggerFiles;
-  annotatedGlobal.oopsyFiles = oopsyFiles;
   mocha.addFile(path.posix.join(path.relative(process.cwd(), './test/helper/test_data_runner.ts')));
 
   mocha.loadFilesAsync()

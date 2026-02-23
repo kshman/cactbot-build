@@ -20,7 +20,7 @@ export interface PartyMemberParamObject
   toString: () => string;
 }
 
-// This is a partial interface of both RaidbossOptions and OopsyOptions.
+// This is a partial interface
 export interface PartyTrackerOptions extends BaseOptions {
   DefaultPlayerLabel: PartyMemberParamObjectKeys;
   PlayerNicks: { [gameName: string]: string };

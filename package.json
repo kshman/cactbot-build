@@ -150,7 +150,7 @@
       "eslint --max-warnings=0 --plugin tsc --rule 'tsc/config: [2, {configFile: \"./tsconfig.eslint.json\"}]'"
     ],
     "*.md": "markdownlint",
-    "ui/(raidboss|oopsyraidsy)/data/**": [
+    "ui/raidboss/data/**": [
       "node --loader=ts-node/esm test/test_data_files.ts"
     ]
   },

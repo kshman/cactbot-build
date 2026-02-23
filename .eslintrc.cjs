@@ -280,7 +280,7 @@ const overrides = [
     },
   },
   {
-    'files': ['**/oopsyraidsy/data/**/*.ts', '**/raidboss/data/**/*.ts'],
+    'files': ['**/raidboss/data/**/*.ts'],
     'rules': {
       // Raidboss data files always export a trigger set, and explicit types are noisy.
       '@typescript-eslint/explicit-module-boundary-types': 'off',
@@ -304,13 +304,6 @@ const overrides = [
       'rulesdir/cactbot-party-member-property-access': 'error',
       'rulesdir/cactbot-trigger-property-order': ['warn', { 'module': 'raidboss' }],
       'rulesdir/cactbot-triggerset-property-order': ['warn', { 'module': 'raidboss' }],
-    },
-  },
-  {
-    'files': ['**/oopsyraidsy/data/**/*'],
-    'rules': {
-      'rulesdir/cactbot-trigger-property-order': ['warn', { 'module': 'oopsyraidsy' }],
-      'rulesdir/cactbot-triggerset-property-order': ['warn', { 'module': 'oopsyraidsy' }],
     },
   },
 ];

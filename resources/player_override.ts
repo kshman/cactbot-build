@@ -60,7 +60,7 @@ export const addPlayerChangedOverrideListener = (
 };
 
 // Common UI for selecting a player.
-// Only used for raidboss, but could ostensibly be reused for oopsy,
+// Only used for raidboss,
 // if there's ever player specific stuff.
 // TODO: it would be nice to show the "connected / not connected" bit in the UI.
 export const addRemotePlayerSelectUI = (lang: Lang): void => {

@@ -16,7 +16,7 @@ module.exports = {
         'type': 'object',
         'properties': {
           'module': {
-            'enum': ['oopsyraidsy', 'raidboss'],
+            'enum': ['raidboss'],
           },
         },
         'additionalProperties': false,
@@ -42,22 +42,10 @@ module.exports = {
       'triggers',
       'timelineReplace',
     ];
-    const oopsyraidsyOrderList = [
-      'zoneId',
-      'damageWarn',
-      'damageFail',
-      'gainsEffectWarn',
-      'gainsEffectFail',
-      'shareWarn',
-      'shareFail',
-      'soloWarn',
-      'soloFail',
-      'triggers',
-    ];
     const optionModule = context.options[0] ? context.options[0].module : undefined;
-    if (!optionModule || optionModule !== 'oopsyraidsy' && optionModule !== 'raidboss')
+    if (!optionModule || optionModule !== 'raidboss')
       return;
-    const orderList = optionModule === 'oopsyraidsy' ? oopsyraidsyOrderList : raidbossOrderList;
+    const orderList = raidbossOrderList;
     return {
       'VariableDeclarator[id.name=\'triggerSet\'] > ObjectExpression': (node) => {
         const properties = node.properties;

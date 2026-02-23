@@ -16,7 +16,7 @@ module.exports = {
         'type': 'object',
         'properties': {
           'module': {
-            'enum': ['oopsyraidsy', 'raidboss'],
+            'enum': ['raidboss'],
           },
         },
         'additionalProperties': false,
@@ -53,27 +53,10 @@ module.exports = {
       'run',
       'outputStrings',
     ];
-    const oopsyraidsyOrderList = [
-      'id',
-      'comment',
-      'netRegex',
-      'regex',
-      'damageRegex',
-      'healRegex',
-      'gainsEffectRegex',
-      'losesEffectRegex',
-      'abilityRegex',
-      'condition',
-      'delaySeconds',
-      'suppressSeconds',
-      'deathReason',
-      'mistake',
-      'run',
-    ];
     const optionModule = context.options[0] ? context.options[0].module : undefined;
-    if (!optionModule || optionModule !== 'oopsyraidsy' && optionModule !== 'raidboss')
+    if (!optionModule || optionModule !== 'raidboss')
       return;
-    const orderList = optionModule === 'oopsyraidsy' ? oopsyraidsyOrderList : raidbossOrderList;
+    const orderList = raidbossOrderList;
     return {
       'Property[key.name=/(timelineTriggers|triggers)/] > ArrayExpression > ObjectExpression': (
         node,

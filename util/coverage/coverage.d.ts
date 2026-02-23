@@ -14,9 +14,6 @@ export type CoverageEntry = {
     duration?: number;
     entries?: number;
   };
-  oopsy?: {
-    num: number;
-  };
   translationCount?: {
     [type in MissingTranslationErrorType]?: number;
   };
@@ -41,7 +38,6 @@ export type Coverage = { [zoneId: string]: CoverageEntry };
 
 export type CoverageTotalEntry = {
   raidboss: number;
-  oopsy: number;
   total: number;
 };
 

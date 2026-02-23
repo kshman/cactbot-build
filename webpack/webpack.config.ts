@@ -33,9 +33,6 @@ export default (
         'config',
         'coverage',
         'eureka',
-        'oopsyraidsyLive',
-        'oopsyraidsySummary',
-        'oopsyraidsyViewer',
         'raidboss',
         'raidemulator',
         'test',
@@ -95,11 +92,6 @@ export default (
           'raidboss_data': {
             test: /[\\/]ui[\\/]raidboss[\\/]data[\\/]/,
             name: cactbotChunks.raidbossData,
-            chunks: 'all',
-          },
-          'oopsyraidsy_data': {
-            test: /[\\/]ui[\\/]oopsyraidsy[\\/]data[\\/]/,
-            name: cactbotChunks.oopsyraidsyData,
             chunks: 'all',
           },
         },

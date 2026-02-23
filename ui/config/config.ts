@@ -13,7 +13,6 @@ import UserConfig, {
 import ZoneInfo from '../../resources/zone_info';
 import { BaseOptions } from '../../types/data';
 import { SavedConfig, SavedConfigEntry } from '../../types/event';
-import { LooseOopsyTrigger, LooseOopsyTriggerSet } from '../../types/oopsy';
 import {
   LocaleObject,
   LocaleText,
@@ -27,7 +26,6 @@ import defaultOptions, { ConfigOptions } from './config_options';
 // Load other config files
 import './general_config';
 import '../eureka/eureka_config';
-import '../oopsyraidsy/oopsyraidsy_config';
 import '../raidboss/raidboss_config';
 
 import '../../resources/defaults.css';
@@ -308,16 +306,9 @@ export type ConfigLooseTrigger = LooseTrigger & LooseTimelineTrigger & {
 
 export type ConfigLooseTriggerSet = LooseTriggerSet;
 
-export type ConfigLooseOopsyTrigger = LooseOopsyTrigger;
-
-export type ConfigLooseOopsyTriggerSet = LooseOopsyTriggerSet & {
-  filename?: string;
-  isUserTriggerSet?: boolean;
-};
-
 export type ConfigContents = { [group: string]: OptionsTemplate[] };
 
-export type ConfigProcessedFile<T extends ConfigLooseOopsyTriggerSet | ConfigLooseTriggerSet> = {
+export type ConfigProcessedFile<T extends ConfigLooseTriggerSet> = {
   filename: string;
   fileKey: string;
   prefixKey: string;
@@ -328,12 +319,11 @@ export type ConfigProcessedFile<T extends ConfigLooseOopsyTriggerSet | ConfigLoo
   triggerSet: T;
   zoneId?: number;
   triggers?: {
-    [id: string]: T extends ConfigLooseOopsyTriggerSet ? ConfigLooseOopsyTrigger
-      : ConfigLooseTrigger;
+    [id: string]: ConfigLooseTrigger;
   };
 };
 
-export type ConfigProcessedFileMap<T extends ConfigLooseOopsyTriggerSet | ConfigLooseTriggerSet> = {
+export type ConfigProcessedFileMap<T extends ConfigLooseTriggerSet> = {
   [filename: string]: ConfigProcessedFile<T>;
 };
 
@@ -1019,7 +1009,7 @@ export class CactbotConfigurator {
     }
   }
 
-  processFiles<T extends ConfigLooseTriggerSet | ConfigLooseOopsyTriggerSet>(
+  processFiles<T extends ConfigLooseTriggerSet>(
     files: { [filename: string]: T },
     userTriggerSets?: T[],
   ): ConfigProcessedFileMap<T> {

@@ -27,7 +27,6 @@ import './coverage.css';
 
 const emptyTotal: CoverageTotalEntry = {
   raidboss: 0,
-  oopsy: 0,
   total: 0,
 };
 
@@ -436,15 +435,6 @@ const zoneGridHeaders = {
     ko: '타임라인',
     tc: '時間軸',
   },
-  oopsy: {
-    en: 'Oopsy',
-    de: 'Oopsy',
-    fr: 'Oopsy',
-    ja: 'Oopsy',
-    cn: '犯错监控',
-    ko: 'Oopsy',
-    tc: '犯錯監控',
-  },
   translated: {
     en: 'Translated',
     de: 'Übersetzt',
@@ -492,10 +482,6 @@ const miscStrings = {
     cn: '总览',
     ko: '전체',
     tc: '總覽',
-  },
-  // Oopsy label for the expansion table.
-  oopsy: {
-    ...zoneGridHeaders.oopsy,
   },
   // Description about release and latest version differences.
   description: {
@@ -567,14 +553,6 @@ const miscStrings = {
     cn: 'Raidboss触发器数量',
     ko: '레이드보스 트리거 수',
     tc: 'Raidboss觸發器數量',
-  },
-  oopsyTriggerCount: {
-    en: 'Oopsy Trigger Count',
-    de: 'Oopsy Trigger Anzahl',
-    fr: 'Total trigger Oopsy',
-    cn: 'Oopsy触发器数量',
-    ko: 'Oopsy 트리거 수',
-    tc: 'Oopsy觸發器數量',
   },
   none: {
     en: 'None',
@@ -725,7 +703,6 @@ const buildExpansionTable = (container: HTMLElement, lang: Lang, totals: Coverag
     const text = label !== undefined ? translate(label, lang) : undefined;
     headerCells += `<th>${text}</th>`;
   }
-  headerCells += `<th>${translate(miscStrings.oopsy, lang)}</th>`;
   container.appendChild(templateHtmlToDom(`
 <thead>
   <tr>${headerCells}</tr>
@@ -752,7 +729,6 @@ const buildExpansionTable = (container: HTMLElement, lang: Lang, totals: Coverag
       rowCells += `<td>${text}</td>`;
     }
 
-    rowCells += `<td>${overall.oopsy} / ${overall.total}</td>`;
     tableRows += `<tr>${rowCells}</tr>`;
   }
 
@@ -763,7 +739,6 @@ const buildExpansionTable = (container: HTMLElement, lang: Lang, totals: Coverag
     const text = accum.total ? `${accum.raidboss} / ${accum.total}` : '';
     rowCells += `<td>${text}</td>`;
   }
-  rowCells += `<td>${totals.overall.oopsy} / ${totals.overall.total}</td>`;
   tableRows += `<tr>${rowCells}</tr>`;
 
   container.appendChild(templateHtmlToDom(`<tbody>${tableRows}</tbody>`));
@@ -838,7 +813,6 @@ const buildZoneTableContentRow = (
   coverage: Coverage,
 ) => {
   const zoneCoverage: CoverageEntry = coverage[zoneId] ?? {
-    oopsy: { num: 0 },
     triggers: { num: 0 },
     timeline: {},
     files: [],
@@ -859,10 +833,9 @@ const buildZoneTableContentRow = (
   const unreleased = version?.tagName === undefined ||
     (version?.tagDate ?? 0) < zoneCoverage.lastModified;
 
-  const hasOopsy = zoneCoverage.oopsy && zoneCoverage.oopsy.num > 0;
   const hasTriggers = zoneCoverage.triggers.num > 0;
 
-  const unsupported = !hasTriggers && !hasOopsy && !zoneCoverage.timeline.hasFile &&
+  const unsupported = !hasTriggers && !zoneCoverage.timeline.hasFile &&
     openPRs.length === 0;
 
   let name = translate(zoneCoverage.label ?? zone.name, lang);
@@ -912,10 +885,6 @@ const buildZoneTableContentRow = (
         emoji = '✔️';
 
       return `<td class="emoji zone-table-timeline">${emoji}</td>`;
-    },
-    oopsy: () => {
-      const emoji = zoneCoverage.oopsy && zoneCoverage.oopsy.num > 0 ? '✔️' : '';
-      return `<td class="emoji zone-table-oopsy">${emoji}</td>`;
     },
     translated: () => {
       let emoji = '';
@@ -1004,9 +973,6 @@ aria-expanded="${
           <tr><th>${
     translate(miscStrings.raidbossTriggerCount, lang)
   }:</th><td>${zoneCoverage.triggers.num}</td></tr>
-          <tr><th>${translate(miscStrings.oopsyTriggerCount, lang)}:</th><td>${
-    zoneCoverage.oopsy?.num ?? 0
-  }</td></tr>
           <tr><th>${translate(miscStrings.timelineEntries, lang)}:</th><td>${
     zoneCoverage.timeline?.entries ?? 0
   }</td></tr>

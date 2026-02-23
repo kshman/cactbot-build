@@ -10,7 +10,6 @@ export const coverageTotals: CoverageTotals = {
   byContentType: {},
   overall: {
     raidboss: 0,
-    oopsy: 0,
     total: 0,
   },
 };

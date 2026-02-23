@@ -649,7 +649,6 @@ namespace Cactbot {
       RegisterPreset("Raidboss", width:1100, height:300, Strings.PresetRaidbossAlertOnly, "raidboss_alerts_only");
       RegisterPreset("Raidboss", width:320, height:220, Strings.PresetRaidbossTimelineOnly, "raidboss_timeline_only");
       RegisterPreset("Eureka", width:400, height:400, Strings.PresetEureka);
-      RegisterPreset("OopsyRaidsy", width:400, height:400, Strings.PresetOopsyRaidsy);
       RegisterPreset("Test", width:300, height:300, Strings.PresetTest);
       // External Overlays using Cactbot Plugin
       RegisterExternalPreset(Strings.PresetZeffUI, "https://zeffuro.github.io/ZeffUI/", width: 800, height: 600);

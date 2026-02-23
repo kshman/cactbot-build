@@ -37,8 +37,6 @@ describe('config tests', () => {
   it('user files are filtered correctly', () => {
     const keys = [
       'ignoreme/raidboss/ignored.js',
-      'oopsyraidsy/turnoffjunk/raidboss.js',
-      'oopsyraidsy/turnoffjunk/stuff.js',
       'raidboss/mystatic/subfolder/raidboss.js',
       'raidboss/mystatic/strat1.js',
       'raidboss/MyStatic/strat2.js',
@@ -48,7 +46,6 @@ describe('config tests', () => {
       'raidboss/prettytimelines/something.css',
       'raidboss/prettytimelines/something else.css',
       'ignored_root_file.js',
-      'oopsyraidsy.js',
       'raidbossy.js',
       'raidboss.js',
       'raidboss.css',
@@ -57,12 +54,6 @@ describe('config tests', () => {
     ];
 
     assert.deepEqual(UserConfig.filterUserFiles(keys, 'config', '.js'), []);
-    assert.deepEqual(UserConfig.filterUserFiles(keys, 'oopsyraidsy', '.js'), [
-      'oopsyraidsy/turnoffjunk/raidboss.js',
-      'oopsyraidsy/turnoffjunk/stuff.js',
-      'oopsyraidsy.js',
-    ]);
-    assert.deepEqual(UserConfig.filterUserFiles(keys, 'oopsyraidsy', '.css'), []);
     assert.deepEqual(UserConfig.filterUserFiles(keys, 'raidboss', '.js'), [
       'raidboss/mystatic/subfolder/raidboss.js',
       'raidboss/mystatic/strat1.js',

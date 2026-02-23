@@ -1,6 +1,5 @@
 import { TestMochaGlobal } from '../test_data_files';
 
-import testOopsyFiles from './test_oopsy';
 import testTimelineFiles from './test_timeline';
 import testTriggerFiles from './test_trigger';
 
@@ -16,4 +15,3 @@ const annotatedGlobal: TestMochaGlobal = global;
 
 testTriggerFiles(annotatedGlobal.triggerFiles ?? []);
 testTimelineFiles(annotatedGlobal.timelineFiles ?? []);
-testOopsyFiles(annotatedGlobal.oopsyFiles ?? []);

@@ -11,9 +11,7 @@ import ContentType from '../resources/content_type';
 import { isLang, Lang, languages } from '../resources/languages';
 import ZoneId from '../resources/zone_id';
 import ZoneInfo from '../resources/zone_info';
-import { LooseOopsyTriggerSet } from '../types/oopsy';
 import { LooseTriggerSet } from '../types/trigger';
-import { oopsyTriggerSetFields } from '../ui/oopsyraidsy/oopsy_fields';
 import { TimelineParser } from '../ui/raidboss/timeline_parser';
 
 import {
@@ -54,7 +52,6 @@ const notUndefined = <T>(v: T | undefined): v is T => v !== undefined;
 // We can't import the manifest directly from util/ because that's webpack magic,
 // so need to do the same processing its loader would do.
 const raidbossManifest = '../ui/raidboss/data/raidboss_manifest.txt';
-const oopsyManifest = '../ui/oopsyraidsy/data/oopsy_manifest.txt';
 const outputFileName = 'coverage/coverage_report.ts';
 
 const missingOutputFileNames = {
@@ -222,71 +219,6 @@ const processRaidbossCoverage = async (
   }
 };
 
-const processOopsyFile = (
-  triggerFileName: string,
-  _triggerFile: string,
-  zoneId: number,
-  triggerSet: LooseOopsyTriggerSet,
-  coverage: Coverage,
-) => {
-  let numTriggers = 0;
-
-  for (const field of oopsyTriggerSetFields) {
-    const obj = triggerSet[field];
-    if (obj === undefined || obj === null)
-      continue;
-    if (typeof obj !== 'object')
-      continue;
-    // These can be either arrays or objects.
-    numTriggers += Object.keys(obj).length;
-  }
-
-  // TODO: have find_missing_timeline_translations.js return a set of
-  // translations that are missing so that we can include percentage translated
-  // here as well.
-
-  const thisCoverage = coverage[zoneId] ??= emptyCoverage();
-  thisCoverage.oopsy = { num: numTriggers };
-  thisCoverage.files?.push({
-    name: triggerFileName.replace(/^\.\.\//, ''),
-  });
-};
-
-const processOopsyCoverage = async (manifest: string, coverage: Coverage) => {
-  const manifestLines = findManifestFiles(manifest);
-  const dataDir = path.dirname(manifest);
-  for (const line of manifestLines) {
-    if (!line.endsWith('.js') && !line.endsWith('.ts'))
-      continue;
-    const triggerFileName = path.join(dataDir, line).replace(/\\/g, '/');
-
-    // Dynamic imports don't have a type, so add type assertion.
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-    const triggerSet = (await import(triggerFileName)).default as LooseOopsyTriggerSet;
-
-    const zoneId = triggerSet.zoneId;
-    if (zoneId === undefined) {
-      console.error(`${line}: Missing ZoneId`);
-      continue;
-    }
-
-    // Only process real zones.
-    if (zoneId === ZoneId.MatchAll)
-      continue;
-    if (!Array.isArray(zoneId) && !ZoneInfo[zoneId])
-      continue;
-
-    if (Array.isArray(zoneId)) {
-      for (const id of zoneId) {
-        if (id !== ZoneId.MatchAll)
-          processOopsyFile(triggerFileName, line, id, triggerSet, coverage);
-      }
-    } else {
-      processOopsyFile(triggerFileName, line, zoneId, triggerSet, coverage);
-    }
-  }
-};
-
 const buildTotals = (coverage: Coverage, missingTranslations: MissingTranslationsDict) => {
   // Find the set of content types and versions that appear.
   const contentTypeSet = new Set<number>();
@@ -304,7 +236,7 @@ const buildTotals = (coverage: Coverage, missingTranslations: MissingTranslation
   const contentTypes = Array.from(contentTypeSet);
   const versions = Array.from(versionSet);
 
-  const defaultTotal = { raidboss: 0, oopsy: 0, total: 0 };
+  const defaultTotal = { raidboss: 0, total: 0 };
 
   const defaultTranslationTotal = { totalFiles: 0, translatedFiles: 0, missingFiles: 0, errors: 0 };
   const translationTotals: TranslationTotals = {
@@ -343,7 +275,6 @@ const buildTotals = (coverage: Coverage, missingTranslations: MissingTranslation
 
     const emptyTotal = {
       raidboss: 0,
-      oopsy: 0,
       total: 0,
     };
 
@@ -384,12 +315,6 @@ const buildTotals = (coverage: Coverage, missingTranslations: MissingTranslation
       versionInfo.overall.raidboss++;
       totalsByContentType.raidboss++;
       totals.overall.raidboss++;
-    }
-    if ((thisCoverage?.oopsy?.num ?? 0) > 0) {
-      accum.oopsy++;
-      versionInfo.overall.oopsy++;
-      totalsByContentType.oopsy++;
-      totals.overall.oopsy++;
     }
 
     for (const lang in translationTotals) {
@@ -665,10 +590,7 @@ const extractTagsAndPulls = async (git: SimpleGit) => {
     const files = pullFiles.map((f) => f.filename);
 
     const zones = pullFiles
-      .filter((f) =>
-        (f.filename.startsWith('ui/raidboss/data') ||
-          f.filename.startsWith('ui/oopsyraidsy/data')) && f.filename.endsWith('.ts')
-      )
+      .filter((f) => f.filename.startsWith('ui/raidboss/data') && f.filename.endsWith('.ts'))
       .map((f) => /ZoneId\.([a-zA-Z0-9]+)/.exec(f.patch ?? '')?.[1])
       .filter(notUndefined)
       .map((zoneId) =>
@@ -709,7 +631,6 @@ const extractTagsAndPulls = async (git: SimpleGit) => {
   process.chdir(path.dirname(currentPathAndFile));
   const coverage: Coverage = {};
   await processRaidbossCoverage(raidbossManifest, coverage, missingTranslations);
-  await processOopsyCoverage(oopsyManifest, coverage);
 
   await mapCoverageTags(coverage, git, tags);
 

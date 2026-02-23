@@ -27,8 +27,6 @@ const zoneReplace: ZoneReplace[] = [
     fileMap: {
       'ui/raidboss/data/06-ew/dungeon/another_sildihn_subterrane.ts':
         'ui/raidboss/data/06-ew/dungeon/another_sildihn_subterrane-savage.ts',
-      'ui/oopsyraidsy/data/06-ew/dungeon/another_sildihn_subterrane.ts':
-        'ui/oopsyraidsy/data/06-ew/dungeon/another_sildihn_subterrane-savage.ts',
       'ui/raidboss/data/06-ew/dungeon/another_sildihn_subterrane.txt':
         'ui/raidboss/data/06-ew/dungeon/another_sildihn_subterrane-savage.txt',
     },
@@ -155,8 +153,6 @@ const zoneReplace: ZoneReplace[] = [
     fileMap: {
       'ui/raidboss/data/03-hw/trial/sophia-ex.ts': 'ui/raidboss/data/06-ew/trial/sophia-un.ts',
       'ui/raidboss/data/03-hw/trial/sophia-ex.txt': 'ui/raidboss/data/06-ew/trial/sophia-un.txt',
-      'ui/oopsyraidsy/data/03-hw/trial/sophia-ex.ts':
-        'ui/oopsyraidsy/data/06-ew/trial/sophia-un.ts',
     },
     prefix: {
       'SophiaEX': 'SophiaUN',
@@ -216,8 +212,6 @@ const zoneReplace: ZoneReplace[] = [
     fileMap: {
       'ui/raidboss/data/03-hw/trial/zurvan-ex.ts': 'ui/raidboss/data/06-ew/trial/zurvan-un.ts',
       'ui/raidboss/data/03-hw/trial/zurvan-ex.txt': 'ui/raidboss/data/06-ew/trial/zurvan-un.txt',
-      'ui/oopsyraidsy/data/03-hw/trial/zurvan-ex.ts':
-        'ui/oopsyraidsy/data/06-ew/trial/zurvan-un.ts',
     },
     prefix: { 'ZurvanEX': 'ZurvanUN' },
     other: {
@@ -278,8 +272,6 @@ const zoneReplace: ZoneReplace[] = [
     fileMap: {
       'ui/raidboss/data/06-ew/dungeon/another_mount_rokkon.ts':
         'ui/raidboss/data/06-ew/dungeon/another_mount_rokkon-savage.ts',
-      'ui/oopsyraidsy/data/06-ew/dungeon/another_mount_rokkon.ts':
-        'ui/oopsyraidsy/data/06-ew/dungeon/another_mount_rokkon-savage.ts',
       'ui/raidboss/data/06-ew/dungeon/another_mount_rokkon.txt':
         'ui/raidboss/data/06-ew/dungeon/another_mount_rokkon-savage.txt',
     },
@@ -483,8 +475,6 @@ const zoneReplace: ZoneReplace[] = [
     fileMap: {
       'ui/raidboss/data/03-hw/trial/thordan-ex.ts': 'ui/raidboss/data/06-ew/trial/thordan-un.ts',
       'ui/raidboss/data/03-hw/trial/thordan-ex.txt': 'ui/raidboss/data/06-ew/trial/thordan-un.txt',
-      'ui/oopsyraidsy/data/03-hw/trial/thordan-ex.ts':
-        'ui/oopsyraidsy/data/06-ew/trial/thordan-un.ts',
     },
     prefix: { 'ThordanEX': 'ThordanUN' },
     other: {
@@ -560,8 +550,6 @@ const zoneReplace: ZoneReplace[] = [
     fileMap: {
       'ui/raidboss/data/06-ew/dungeon/another_aloalo_island.ts':
         'ui/raidboss/data/06-ew/dungeon/another_aloalo_island-savage.ts',
-      'ui/oopsyraidsy/data/06-ew/dungeon/another_aloalo_island.ts':
-        'ui/oopsyraidsy/data/06-ew/dungeon/another_aloalo_island-savage.ts',
       'ui/raidboss/data/06-ew/dungeon/another_aloalo_island.txt':
         'ui/raidboss/data/06-ew/dungeon/another_aloalo_island-savage.txt',
     },
@@ -730,8 +718,6 @@ const zoneReplace: ZoneReplace[] = [
     fileMap: {
       'ui/raidboss/data/04-sb/trial/byakko-ex.ts': 'ui/raidboss/data/07-dt/trial/byakko-un.ts',
       'ui/raidboss/data/04-sb/trial/byakko-ex.txt': 'ui/raidboss/data/07-dt/trial/byakko-un.txt',
-      'ui/oopsyraidsy/data/04-sb/trial/byakko-ex.ts':
-        'ui/oopsyraidsy/data/07-dt/trial/byakko-un.ts',
     },
     prefix: { 'ByakkoEx': 'ByakkoUn' },
     other: {
@@ -783,8 +769,6 @@ const zoneReplace: ZoneReplace[] = [
     fileMap: {
       'ui/raidboss/data/04-sb/trial/suzaku-ex.ts': 'ui/raidboss/data/07-dt/trial/suzaku-un.ts',
       'ui/raidboss/data/04-sb/trial/suzaku-ex.txt': 'ui/raidboss/data/07-dt/trial/suzaku-un.txt',
-      'ui/oopsyraidsy/data/04-sb/trial/suzaku-ex.ts':
-        'ui/oopsyraidsy/data/07-dt/trial/suzaku-un.ts',
     },
     prefix: { 'SuzakuEx': 'SuzakuUn' },
     other: {
@@ -830,8 +814,6 @@ const zoneReplace: ZoneReplace[] = [
     fileMap: {
       'ui/raidboss/data/04-sb/trial/seiryu-ex.ts': 'ui/raidboss/data/07-dt/trial/seiryu-un.ts',
       'ui/raidboss/data/04-sb/trial/seiryu-ex.txt': 'ui/raidboss/data/07-dt/trial/seiryu-un.txt',
-      'ui/oopsyraidsy/data/04-sb/trial/seiryu-ex.ts':
-        'ui/oopsyraidsy/data/07-dt/trial/seiryu-un.ts',
     },
     prefix: { 'SeiryuEx': 'SeiryuUn' },
     other: {
@@ -915,8 +897,6 @@ const zoneReplace: ZoneReplace[] = [
         'ui/raidboss/data/07-dt/trial/tsukuyomi-un.ts',
       'ui/raidboss/data/04-sb/trial/tsukuyomi-ex.txt':
         'ui/raidboss/data/07-dt/trial/tsukuyomi-un.txt',
-      'ui/oopsyraidsy/data/04-sb/trial/tsukuyomi-ex.ts':
-        'ui/oopsyraidsy/data/07-dt/trial/tsukuyomi-un.ts',
     },
     prefix: { 'TsukuyomiEx': 'TsukuyomiUn' },
     other: {
