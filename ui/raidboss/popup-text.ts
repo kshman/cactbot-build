@@ -31,6 +31,7 @@ import {
   ResponseOutput,
   TimelineField,
   TimelineFunc,
+  TimelineReplacement,
   TriggerAutoConfig,
   TriggerField,
   TriggerOutput,
@@ -41,7 +42,6 @@ import AutoplayHelper from './autoplay_helper';
 import BrowserTTSEngine from './browser_tts_engine';
 import { PerTriggerAutoConfig, PerTriggerOption, RaidbossOptions } from './raidboss_options';
 import { TimelineLoader } from './timeline';
-import { TimelineReplacement } from './timeline_parser';
 
 const isRaidbossLooseTimelineTrigger = (
   trigger: ProcessedTrigger,
