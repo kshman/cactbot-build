@@ -2,6 +2,7 @@ import Autumn, { AutumnDir, AutumnNumDir } from '../../../../../resources/autumn
 import Conditions from '../../../../../resources/conditions';
 import { UnreachableCode } from '../../../../../resources/not_reached';
 import Outputs from '../../../../../resources/outputs';
+import { callOverlayHandler } from '../../../../../resources/overlay_plugin_api';
 import { Responses } from '../../../../../resources/responses';
 import {
   DirectionOutput8,
@@ -36,6 +37,10 @@ export interface Data extends RaidbossData {
   };
   phase: Phase;
   // Phase 1
+  ravenousReach1SafeSide?: 'east' | 'west';
+  act1SafeCorner?: 'northeast' | 'northwest';
+  curtainCallSafeCorner?: 'northeast' | 'northwest';
+  splattershedStackDir?: 'northeast' | 'northwest';
   grotesquerieCleave?: CardinalFacing;
   myFleshBonds?: 'alpha' | 'beta';
   inLine: { [name: string]: number };
@@ -45,6 +50,7 @@ export interface Data extends RaidbossData {
   cellChainCount: number;
   myMitoticPhase?: string;
   hasRot: boolean;
+  myCurtainCallSafeSpot?: 'northeast' | 'southeast' | 'southwest' | 'northwest';
   // Phase 2
   actorPositions: { [id: string]: { x: number; y: number; heading: number } };
   replicationCounter: number;
@@ -500,6 +506,95 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
+      id: 'R12S CombatantMemory Blob Tracker',
+      // Appears in Act 1, Curtain Call, and Slaughtershed phases
+      // 1EBF29 are the blobs
+      //
+      // Act 1 Pattern 1 (NW/E):
+      //                      (112.5, 88.63)
+      //        (95.93, 91.36)
+      //    (89.93, 100.13)
+      //                   (109.18, 109.63)
+      //     (90.67, 112.13)
+      //
+      // Act 1 Pattern 2 (NE/W) + a sliver of space along NE to E:
+      //    (88.42, 89.19)
+      //                 (107.02, 92.19)
+      //                      (112.5, 105.69)
+      //         (94.02, 108.53)
+      // (82.34, 113.53)
+      //
+      // Curtain Call Pattern 1 (NW/SE):
+      //                  (110, 87)
+      // (85, 100) (100, 100) (115, 100)
+      //      (91, 113)
+      //
+      // Curtain Call Pattern 2 (NE/SW):
+      //      (91, 87)
+      // (85, 100) (100, 100) (115, 100)
+      //                 (109, 113)
+      //
+      // Splattershed (Two Patterns):
+      //   Blob at (110.75, 96.50) => Spreads Northwest, Stacks Northeast
+      //   Blob at (89.25, 96.40) => Spreads Northeast, Stacks Northwest
+      //   The remaining blobs are always in these locations:
+      //                   (100.8, 92)
+      //   (86.5, 105.9) (102.5, 106.4) (118.5, 106.16)
+      type: 'CombatantMemory',
+      netRegex: {
+        change: 'Add',
+        pair: [{ key: 'BNpcID', value: '1EBF29' }],
+        capture: true,
+      },
+      run: (data, matches) => {
+        // No need to check remaining blobs if we already found safe spot
+        if (data.splattershedStackDir)
+          return;
+        const x = parseFloat(matches.pairPosX ?? '0');
+        const y = parseFloat(matches.pairPosY ?? '0');
+
+        // The following are unique coordinates for each phase
+        // Undefined checks to skip additional position checking
+        if (data.act1SafeCorner === undefined && y > 87.9 && y < 89.7) {
+          // Act 1 Safe Corner
+          // Most strategies have tanks move and stack tankbusters regardless of pattern
+          // Defining safe corner for purpose of labelling the pattern
+          if (x > 112)
+            data.act1SafeCorner = 'northwest';
+          else if (x < 89)
+            data.act1SafeCorner = 'northeast';
+        } else if (
+          data.act1SafeCorner !== undefined &&
+          data.curtainCallSafeCorner === undefined &&
+          y > 86.5 && y < 87.5
+        ) {
+          // Curtain Call Safe Spots
+          if (x < 92)
+            data.curtainCallSafeCorner = 'northwest';
+          else if (x > 109)
+            data.curtainCallSafeCorner = 'northeast';
+        } else if (
+          data.act1SafeCorner !== undefined &&
+          data.curtainCallSafeCorner !== undefined &&
+          y > 96 && y < 97
+        ) {
+          // Splattershed Stack Spot
+          if (x > 88.75 && x < 89.75)
+            data.splattershedStackDir = 'northwest';
+          else if (x > 110.25 && x < 111.25)
+            data.splattershedStackDir = 'northeast';
+        }
+      },
+    },
+    {
+      id: 'R12S Splattershed Safe Spot Cleanup',
+      // Only Splattershed value needs to be reset
+      type: 'HeadMarker',
+      netRegex: { id: headMarkerData['slaughterStack'], capture: false },
+      delaySeconds: 0.1,
+      run: (data) => delete data.splattershedStackDir,
+    },
+    {
       id: 'R12S Directed Grotesquerie Direction Collect',
       type: 'GainsEffect',
       netRegex: { effectId: 'DE6', capture: true },
@@ -588,6 +683,18 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
+      id: 'R12S Ravenous Reach 1 Safe Side Collect',
+      // These two syncs indicate the animation of where the head will go to cleave
+      // B49A => West Safe
+      // B49B => East Safe
+      type: 'Ability',
+      netRegex: { id: ['B49A', 'B49B'], source: 'Lindwurm', capture: true },
+      condition: (data) => data.phase === 'doorboss',
+      run: (data, matches) => {
+        data.ravenousReach1SafeSide = matches.id === 'B49A' ? 'west' : 'east';
+      },
+    },
+    {
       id: 'R12S Ravenous Reach 1 Safe Side',
       // These two syncs indicate the animation of where the head will go to cleave
       // B49A => West Safe
@@ -617,14 +724,56 @@ const triggerSet: TriggerSet<Data> = {
     {
       id: 'R12S Fourth-wall Fusion Stack',
       type: 'HeadMarker',
-      netRegex: { id: headMarkerData['stack'], capture: true },
+      netRegex: { id: headMarkerData['stack'], capture: false },
       condition: (data) => {
         if (data.role === 'tank')
           return false;
         return true;
       },
       durationSeconds: 5.1,
-      response: Responses.stackMarkerOn(),
+      alertText: (data, _matches, output) => {
+        const reach = data.ravenousReach1SafeSide;
+        const dir1 = data.act1SafeCorner;
+        const dir2 = dir1 === 'northwest' ? 'east' : 'west'; // NOTE: Not checking undefined here
+
+        // Safe spot of side party is assumed to be on
+        const dir = dir1 === undefined
+          ? dir1
+          : reach === dir2
+          ? dir2
+          : reach === dir1.slice(5)
+          ? dir1
+          : undefined;
+
+        if (dir1) {
+          if (dir)
+            return output.stackSafe!({ safe: output[dir]!() });
+          return output.stackSafe!({
+            safe: output.stackDirs!({
+              dir1: output[dir1]!(),
+              dir2: output[dir2]!(),
+            }),
+          });
+        }
+        return output.stacks!();
+      },
+      outputStrings: {
+        northeast: Outputs.aimNE,
+        east: Outputs.aimE,
+        west: Outputs.aimW,
+        northwest: Outputs.aimNW,
+        stacks: Outputs.stacks,
+        stackSafe: {
+          en: 'Stack + ${safe}',
+          ja: '頭割り: ${safe}',
+          ko: '뭉쳐요: ${safe}',
+        },
+        stackDirs: {
+          en: '${dir1}/${dir2}',
+          ja: '${dir1}/${dir2}',
+          ko: '${dir1} 또는 ${dir2}',
+        },
+      },
     },
     {
       id: 'R12S Tankbuster',
@@ -632,7 +781,48 @@ const triggerSet: TriggerSet<Data> = {
       netRegex: { id: headMarkerData['tankbuster'], capture: true },
       condition: Conditions.targetIsYou(),
       durationSeconds: 5.1,
-      response: Responses.tankBuster(),
+      alertText: (data, _matches, output) => {
+        const reach = data.ravenousReach1SafeSide;
+        const dir1 = data.act1SafeCorner;
+        const dir2 = dir1 === 'northwest' ? 'east' : 'west'; // NOTE: Not checking undefined here
+
+        // Safe spot of opposite assumed side party will be
+        const dir = dir1 === undefined
+          ? dir1
+          : reach === dir2
+          ? dir1
+          : reach === dir1.slice(5)
+          ? dir2
+          : undefined;
+        if (dir1) {
+          if (dir)
+            return output.busterSafe!({ safe: output[dir]!() });
+          return output.busterSafe!({
+            safe: output.busterDirs!({
+              dir1: output[dir1]!(),
+              dir2: output[dir2]!(),
+            }),
+          });
+        }
+        return output.busterOnYou!();
+      },
+      outputStrings: {
+        northeast: Outputs.aimNE,
+        east: Outputs.aimE,
+        west: Outputs.aimW,
+        northwest: Outputs.aimNW,
+        busterOnYou: Outputs.tankBusterOnYou,
+        busterSafe: {
+          en: 'Tank Buster on YOU + ${safe}',
+          ja: '自分に強攻撃: ${safe}',
+          ko: '내게 탱크버스터: ${safe}',
+        },
+        busterDirs: {
+          en: '${dir1}/${dir2}',
+          ja: '${dir1}/${dir2}',
+          ko: '${dir1} 또는 ${dir2}',
+        },
+      },
     },
     {
       id: 'R12S In Line Debuff Collector',
@@ -1324,7 +1514,6 @@ const triggerSet: TriggerSet<Data> = {
     {
       id: 'R12S Curtain Call: Unbreakable Flesh α Chains',
       // All players, including dead, receive α debuffs
-      // TODO: Find safe spots
       type: 'GainsEffect',
       netRegex: { effectId: '1291', capture: true },
       condition: (data, matches) => {
@@ -1334,16 +1523,104 @@ const triggerSet: TriggerSet<Data> = {
       },
       infoText: (data, _matches, output) => {
         const dir = Autumn.isSupport(data.moks) ? output.west!() : output.east!();
-        return output.alphaChains!({ dir: dir });
+        const dir1 = data.curtainCallSafeCorner;
+        const dir2 = dir1 === 'northwest' ? 'southeast' : 'southwest'; // NOTE: Not checking for undefined
+
+        if (dir1) {
+          return output.alphaChains!({
+            dir: dir,
+            safe: output.safeSpots!({
+              dir1: output[dir1]!(),
+              dir2: output[dir2]!(),
+            }),
+          });
+        }
+
+        return output.alphaChains!({ dir: dir, safe: output.avoidBlobs!() });
       },
       outputStrings: {
-        alphaChains: {
-          en: 'Break Chains (${dir}) => Avoid Blobs',
-          ja: '線切り: ${dir} 🔜 安置へ',
-          ko: '줄 끊고: ${dir} 🔜 안전한 곳으로',
-        },
         west: Outputs.aimW,
         east: Outputs.aimE,
+        northeast: Outputs.aimNE,
+        southeast: Outputs.aimSE,
+        southwest: Outputs.aimSW,
+        northwest: Outputs.aimNW,
+        safeSpots: {
+          en: '${dir1}/${dir2}',
+          ja: '${dir1}/${dir2}',
+          ko: '${dir1} 또는 ${dir2}',
+        },
+        avoidBlobs: {
+          en: 'Avoid Blobs',
+          ja: '安置へ',
+          ko: '안전한 곳으로',
+        },
+        alphaChains: {
+          en: 'Break Chains (${dir}) => ${safe}',
+          ja: '線切り: ${dir} 🔜 ${safe}',
+          ko: '줄 끊고: ${dir} 🔜 ${safe}',
+        },
+      },
+    },
+    {
+      id: 'R12S Curtain Call Safe Spot',
+      type: 'LosesEffect',
+      netRegex: { effectId: '1291', capture: true },
+      condition: (data, matches) => {
+        if (matches.target === data.me && data.phase === 'curtainCall')
+          return true;
+        return false;
+      },
+      promise: async (data) => {
+        const dir1 = data.curtainCallSafeCorner;
+        const dir2 = dir1 === 'northwest' ? 'southeast' : 'southwest'; // NOTE: Not checking for undefined
+        const combatants = (await callOverlayHandler({
+          call: 'getCombatants',
+          names: [data.me],
+        })).combatants;
+        const me = combatants[0];
+        if (combatants.length !== 1 || me === undefined) {
+          console.error(
+            `R12S Curtain Call Safe Spot: Wrong combatants count ${combatants.length}`,
+          );
+          return;
+        }
+
+        const x = me.PosX;
+        const y = me.PosY;
+        // Loose detection for "closeness"
+        if (y > 100) {
+          // Southern most players, check if they should run north or south
+          if (x < 100)
+            data.myCurtainCallSafeSpot = dir1 === 'northeast' ? dir2 : dir1;
+          else if (x >= 100)
+            data.myCurtainCallSafeSpot = dir1 === 'northeast' ? dir1 : dir2;
+        } else if (y <= 100) {
+          // Northern most players run to the northern most safe spot
+          data.myCurtainCallSafeSpot = dir1;
+        }
+      },
+      alertText: (data, _matches, output) => {
+        const myCurtainCallSafeSpot = data.myCurtainCallSafeSpot;
+        if (myCurtainCallSafeSpot === undefined)
+          return output.avoidBlobs!();
+        return output.safe!({ safe: output[myCurtainCallSafeSpot]!() });
+      },
+      outputStrings: {
+        northeast: Outputs.aimNE,
+        southeast: Outputs.aimSE,
+        southwest: Outputs.aimSW,
+        northwest: Outputs.aimNW,
+        avoidBlobs: {
+          en: 'Avoid Blobs',
+          ja: '安置へ',
+          ko: '안전한 곳으로',
+        },
+        safe: {
+          en: '${safe}',
+          ja: '安置: ${safe}',
+          ko: '안전: ${safe}',
+        },
       },
     },
     {
@@ -1354,7 +1631,6 @@ const triggerSet: TriggerSet<Data> = {
     },
     {
       id: 'R12S Slaughtershed Stack',
-      // TODO: Get Safe spot
       type: 'HeadMarker',
       netRegex: { id: headMarkerData['slaughterStack'], capture: true },
       condition: (data, matches) => {
@@ -1366,17 +1642,51 @@ const triggerSet: TriggerSet<Data> = {
         return false;
       },
       durationSeconds: 4.5,
-      response: Responses.stackMarkerOn(),
+      alertText: (data, _matches, output) => {
+        const dir = data.splattershedStackDir;
+        if (dir)
+          return output.stackDir!({ dir: output[dir]!() });
+        return output.stacks!();
+      },
+      outputStrings: {
+        northeast: Outputs.aimNE,
+        northwest: Outputs.aimNW,
+        stacks: Outputs.stacks,
+        stackDir: {
+          en: 'Stacks ${dir}',
+          ja: '頭割り: ${dir}',
+          ko: '뭉쳐요: ${dir}',
+        },
+      },
     },
     {
       id: 'R12S Slaughtershed Spread',
-      // TODO: Get Safe spot
       type: 'HeadMarker',
       netRegex: { id: headMarkerData['slaughterSpread'], capture: true },
       condition: Conditions.targetIsYou(),
       durationSeconds: 4.5,
       suppressSeconds: 1,
-      response: Responses.spread('alert'),
+      alertText: (data, _matches, output) => {
+        const stackDir = data.splattershedStackDir;
+        const dir = stackDir === 'northwest'
+          ? 'northeast'
+          : stackDir === 'northeast'
+          ? 'northwest'
+          : undefined;
+        if (dir)
+          return output.spreadDir!({ dir: output[dir]!() });
+        return output.spread!();
+      },
+      outputStrings: {
+        northeast: Outputs.aimNE,
+        northwest: Outputs.aimNW,
+        spread: Outputs.spread,
+        spreadDir: {
+          en: 'Spread ${dir}',
+          ja: '散開: ${dir}',
+          ko: '흩어져요: ${dir}',
+        },
+      },
     },
     {
       id: 'R12S Serpintine Scourge',
