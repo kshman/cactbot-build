@@ -366,8 +366,8 @@ const triggerSet: TriggerSet<Data> = {
         middle: Outputs.middle,
         text: {
           en: 'KB from ${dir1} + away from ${dir2}',
-          ja: '${dir1}ノックバック (${dir2}回避)',
-          ko: '${dir1}넉백 (${dir2}피해요)',
+          ja: 'ノックバック: ${dir1} (${dir2})',
+          ko: '넉백: ${dir1} (${dir2})',
         },
         ...Directions.outputStringsCardinalDir,
       },

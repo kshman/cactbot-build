@@ -101,7 +101,7 @@ export default {
   avoidTankCleaves: {
     en: 'Avoid Tank Cleaves',
     ja: '範囲攻撃を避けて',
-    ko: '두 탱크 쪽에 가면 안되욧',
+    ko: '탱크 쪽으로 가면 안되욧',
   },
   tankCleaveOnYou: {
     en: 'Tank Cleave on YOU',

@@ -30,6 +30,7 @@ type MortalInfo = {
 };
 type CardinalFacing = 'front' | 'rear' | 'left' | 'right';
 type SphereType = 'lightning' | 'fire' | 'water' | 'wind' | 'blackHole';
+type SlaughterDir = 'left' | 'right' | 'northeastKnockback' | 'northwestKnockback';
 
 export interface Data extends RaidbossData {
   readonly triggerSetConfig: {
@@ -51,6 +52,7 @@ export interface Data extends RaidbossData {
   myMitoticPhase?: string;
   hasRot: boolean;
   myCurtainCallSafeSpot?: 'northeast' | 'southeast' | 'southwest' | 'northwest';
+  slaughtershed?: SlaughterDir;
   // Phase 2
   actorPositions: { [id: string]: { x: number; y: number; heading: number } };
   replicationCounter: number;
@@ -154,37 +156,37 @@ const twistedVisionStrings = {
   stackDefa: {
     en: 'Stack ${pos1} => Defamation ${pos2}',
     ja: '${pos1}で頭割り 🔜 ${pos2}に捨てる',
-    ko: '${pos1} 뭉쳤다 🔜 ${pos2} 큰폭발 버려요',
+    ko: '${pos1} 뭉쳤다 🔜 ${pos2} 큰폭발',
   },
   stackAvoid: {
     en: 'Stack ${pos} => Avoid Defamations',
     ja: '${pos}で頭割り 🔜 🄲で回避',
-    ko: '${pos} 뭉쳤다 🔜 🄲 큰폭발 피해요',
+    ko: '${pos} 뭉쳤다 🔜 🄲 피해요',
   },
   stackTower: {
     en: 'Stack ${pos} => Tower Position',
     ja: '${pos}で頭割り 🔜 自分の島へ',
-    ko: '${pos} 뭉쳤다 🔜 자기 섬 타워로',
+    ko: '${pos} 뭉쳤다 🔜 자기 섬으로',
   },
   defaStack: {
     en: 'Defamation ${pos1} => Stack ${pos2}',
     ja: '${pos1}に捨てる 🔜 ${pos2}で頭割り',
-    ko: '${pos1} 큰폭발 버리고 🔜 ${pos2} 뭉쳐요',
+    ko: '${pos1} 큰폭발 🔜 ${pos2} 뭉쳐요',
   },
   avoidStack: {
     en: 'Avoid Defamations => Stack ${pos}',
     ja: '🄲で回避 🔜 ${pos}で頭割り',
-    ko: '🄲 큰폭발 피하고 🔜 ${pos} 뭉쳐요',
+    ko: '🄲 피하고 🔜 ${pos} 뭉쳐요',
   },
   defaTower: {
     en: 'Defamation ${pos} => Tower Position',
     ja: '${pos}に捨てる 🔜 自分の島へ',
-    ko: '${pos} 큰폭발 버리고 🔜 자기 섬 타워로',
+    ko: '${pos} 큰폭발 🔜 자기 섬으로',
   },
   avoidTower: {
     en: 'Avoid Defamations => Tower Position',
     ja: '🄲で回避 🔜 自分の島へ',
-    ko: '🄲 큰폭발 피하고 🔜 자기 섬 타워로',
+    ko: '🄲 피하고 🔜 자기 섬으로',
   },
 } as const;
 
@@ -437,12 +439,12 @@ const triggerSet: TriggerSet<Data> = {
           left: {
             en: 'Go left side',
             ja: '🡸左側へ',
-            ko: '🡸왼쪽으로 들어가요',
+            ko: '🡸왼쪽으로',
           },
           right: {
             en: 'Go right side',
             ja: '🡺右側へ',
-            ko: '🡺오른쪽으로 들어가요',
+            ko: '🡺오른쪽으로',
           },
           text: {
             en: '${left} / ${right}',
@@ -478,12 +480,12 @@ const triggerSet: TriggerSet<Data> = {
           left: {
             en: 'Go left side',
             ja: '🡸左側へ',
-            ko: '🡸왼쪽으로 들어가요',
+            ko: '🡸왼쪽으로',
           },
           right: {
             en: 'Go right side',
             ja: '🡺右側へ',
-            ko: '🡺오른쪽으로 들어가요',
+            ko: '🡺오른쪽으로',
           },
           text: {
             en: '${left} / ${right}',
@@ -712,12 +714,12 @@ const triggerSet: TriggerSet<Data> = {
         goEast: {
           en: 'East',
           ja: '安置: 🡺東',
-          ko: '안전: 🡺동쪽',
+          ko: '안전: 🡺동',
         },
         goWest: {
           en: 'West',
           ja: '安置: 🡸西',
-          ko: '안전: 🡸서쪽',
+          ko: '안전: 🡸서',
         },
       },
     },
@@ -731,49 +733,7 @@ const triggerSet: TriggerSet<Data> = {
         return true;
       },
       durationSeconds: 5.1,
-      alertText: (data, _matches, output) => {
-        const reach = data.ravenousReach1SafeSide;
-        const dir1 = data.act1SafeCorner;
-        const dir2 = dir1 === 'northwest' ? 'east' : 'west'; // NOTE: Not checking undefined here
-
-        // Safe spot of side party is assumed to be on
-        const dir = dir1 === undefined
-          ? dir1
-          : reach === dir2
-          ? dir2
-          : reach === dir1.slice(5)
-          ? dir1
-          : undefined;
-
-        if (dir1) {
-          if (dir)
-            return output.stackSafe!({ safe: output[dir]!() });
-          return output.stackSafe!({
-            safe: output.stackDirs!({
-              dir1: output[dir1]!(),
-              dir2: output[dir2]!(),
-            }),
-          });
-        }
-        return output.stacks!();
-      },
-      outputStrings: {
-        northeast: Outputs.aimNE,
-        east: Outputs.aimE,
-        west: Outputs.aimW,
-        northwest: Outputs.aimNW,
-        stacks: Outputs.stacks,
-        stackSafe: {
-          en: 'Stack + ${safe}',
-          ja: '頭割り: ${safe}',
-          ko: '뭉쳐요: ${safe}',
-        },
-        stackDirs: {
-          en: '${dir1}/${dir2}',
-          ja: '${dir1}/${dir2}',
-          ko: '${dir1} 또는 ${dir2}',
-        },
-      },
+      response: Responses.stackMarkerOn(),
     },
     {
       id: 'R12S Tankbuster',
@@ -781,48 +741,7 @@ const triggerSet: TriggerSet<Data> = {
       netRegex: { id: headMarkerData['tankbuster'], capture: true },
       condition: Conditions.targetIsYou(),
       durationSeconds: 5.1,
-      alertText: (data, _matches, output) => {
-        const reach = data.ravenousReach1SafeSide;
-        const dir1 = data.act1SafeCorner;
-        const dir2 = dir1 === 'northwest' ? 'east' : 'west'; // NOTE: Not checking undefined here
-
-        // Safe spot of opposite assumed side party will be
-        const dir = dir1 === undefined
-          ? dir1
-          : reach === dir2
-          ? dir1
-          : reach === dir1.slice(5)
-          ? dir2
-          : undefined;
-        if (dir1) {
-          if (dir)
-            return output.busterSafe!({ safe: output[dir]!() });
-          return output.busterSafe!({
-            safe: output.busterDirs!({
-              dir1: output[dir1]!(),
-              dir2: output[dir2]!(),
-            }),
-          });
-        }
-        return output.busterOnYou!();
-      },
-      outputStrings: {
-        northeast: Outputs.aimNE,
-        east: Outputs.aimE,
-        west: Outputs.aimW,
-        northwest: Outputs.aimNW,
-        busterOnYou: Outputs.tankBusterOnYou,
-        busterSafe: {
-          en: 'Tank Buster on YOU + ${safe}',
-          ja: '自分に強攻撃: ${safe}',
-          ko: '내게 탱크버스터: ${safe}',
-        },
-        busterDirs: {
-          en: '${dir1}/${dir2}',
-          ja: '${dir1}/${dir2}',
-          ko: '${dir1} 또는 ${dir2}',
-        },
-      },
+      response: Responses.tankBuster(),
     },
     {
       id: 'R12S In Line Debuff Collector',
@@ -874,43 +793,43 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         alpha1: {
           en: '1α: Wait for Tether 1',
-          ja: '1α: 線待ち #1',
+          ja: '1α: 線 #1',
           ko: '1α: 줄 #1',
         },
         alpha2: {
           en: '2α: Wait for Tether 2',
-          ja: '2α: 線待ち #2',
+          ja: '2α: 線 #2',
           ko: '2α: 줄 #2',
         },
         alpha3: {
           en: '3α: Blob Tower 1',
-          ja: '3α: 肉塔 #1',
+          ja: '3α: 肉 #1',
           ko: '3α: 살덩이 #1',
         },
         alpha4: {
           en: '4α: Blob Tower 2',
-          ja: '4α: 肉塔 #2',
+          ja: '4α: 肉 #2',
           ko: '4α: 살덩이 #2',
         },
         beta1: {
           en: '1β: Wait for Tether 1',
-          ja: '1β: 線待ち #1',
+          ja: '1β: 線 #1',
           ko: '1β: 줄 #1',
         },
         beta2: {
           en: '2β: Wait for Tether 2',
-          ja: '2β: 線待ち #2',
+          ja: '2β: 線 #2',
           ko: '2β: 줄 #2',
         },
         beta3: {
           en: '3β: Chain Tower 1',
-          ja: '3β: 出現塔 #1',
-          ko: '3β: 돌출 타워 #1',
+          ja: '3β: 塔 #1',
+          ko: '3β: 타워 #1',
         },
         beta4: {
           en: '4β: Chain Tower 2',
-          ja: '4β: 出現塔 #2',
-          ko: '4β: 돌출 타워 #2',
+          ja: '4β: 塔 #2',
+          ko: '4β: 타워 #2',
         },
         order: {
           en: '${num}',
@@ -1087,8 +1006,8 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         tower: {
           en: 'Get Chain Tower ${num}',
-          ja: '出現塔踏み #${num}',
-          ko: '밟아요: 돌출 타워 #${num}',
+          ja: '塔踏み: #${num}',
+          ko: '밟아요: 타워 #${num}',
         },
       },
     },
@@ -1124,12 +1043,12 @@ const triggerSet: TriggerSet<Data> = {
         ...AutumnDir.stringsAimCross,
         alpha3: {
           en: 'Get Blob Tower 1 (Inner ${dir})',
-          ja: '肉塔踏み #1 (${dir}内側)',
+          ja: '肉踏み #1 (${dir}内側)',
           ko: '밟아요: 살덩이 #1 (안쪽 ${dir})',
         },
         alpha4: {
           en: 'Get Blob Tower 2 (Inner ${dir})',
-          ja: '肉塔踏み #2 (${dir}内側)',
+          ja: '肉踏み #2 (${dir}内側)',
           ko: '밟아요: 살덩이 #2 (안쪽 ${dir})',
         },
       },
@@ -1178,12 +1097,12 @@ const triggerSet: TriggerSet<Data> = {
         getTowers: Outputs.getTowers,
         alpha1: {
           en: 'Break Chains 1 (${exit}) + Blob Tower 3 (Outer ${dir})',
-          ja: '線切り #1: ${exit} 🔜 肉塔 #3 (${dir}外側)',
+          ja: '線切り #1: ${exit} 🔜 肉 #3 (${dir}外側)',
           ko: '나가요 #1: ${exit} 🔜 살덩이 #3 (바깥 ${dir})',
         },
         alpha2: {
           en: 'Break Chains 2 (${exit}) + Blob Tower 4 (Outer ${dir})',
-          ja: '線切り #2: ${exit} 🔜 肉塔 #4 (${dir}外側)',
+          ja: '線切り #2: ${exit} 🔜 肉 #4 (${dir}外側)',
           ko: '나가요 #2: ${exit} 🔜 살덩이 #4 (바깥 ${dir})',
         },
         alpha3: {
@@ -1209,12 +1128,12 @@ const triggerSet: TriggerSet<Data> = {
         beta3: {
           en: 'Break Chains 3 (${bait}) => Wait for last pair',
           ja: '線切り #3: ${bait} 🔜 最後のペア待ち',
-          ko: '끊어요 #3: ${bait} 🔜 마지막에 탈출',
+          ko: '끊어요 #3: ${bait} 🔜 막판 탈출',
         },
         beta4: {
           en: 'Break Chains 4 (${bait}) => Get Out',
           ja: '線切り #4: ${bait} 🔜 外へ',
-          ko: '끊어요 #4: ${bait} 🔜 탈출해요!',
+          ko: '끊어요 #4: ${bait} 🔜 탈출!',
         },
       },
     },
@@ -1272,20 +1191,6 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: 'R12S Skinsplitter Out of Coil Reminder',
-      type: 'Ability',
-      netRegex: { id: 'B4BC', capture: false },
-      condition: (data) => data.skinsplitterCount === 7,
-      suppressSeconds: 1,
-      alertText: (_data, _matches, output) => output.outOfCoil!(),
-      outputStrings: {
-        outOfCoil: {
-          en: 'Out of Coil',
-          ko: '밖으로 나가요',
-        },
-      },
-    },
-    {
       id: 'R12S Splattershed',
       type: 'StartsUsing',
       netRegex: { id: ['B9C3', 'B9C4'], source: 'Lindwurm', capture: false },
@@ -1315,22 +1220,22 @@ const triggerSet: TriggerSet<Data> = {
         front: {
           en: 'Tower (S/SW)',
           ja: '🡻南または🡿南西',
-          ko: '🡻남 또는 🡿남서',
+          ko: '🡻남 🡿남서',
         },
         rear: {
           en: 'Tower (N/NE)',
           ja: '🡹北または🡽北東',
-          ko: '🡹북 또는 🡽북동',
+          ko: '🡹북 🡽북동',
         },
         left: {
           en: 'Tower (E/SE)',
           ja: '🡺東または🡾南東',
-          ko: '🡺동 또는 🡾남동',
+          ko: '🡺동 🡾남동',
         },
         right: {
           en: 'Tower (W/NW)',
           ja: '🡸西または🡼北西',
-          ko: '🡸서 또는 🡼북서',
+          ko: '🡸서 🡼북서',
         },
       },
     },
@@ -1420,22 +1325,22 @@ const triggerSet: TriggerSet<Data> = {
         getHitWest: {
           en: 'Spread in West Cleave',
           ja: '🡸西で散開 + 扇当たる',
-          ko: '🡸서쪽 흩어지고 + 꼬깔 맞아요',
+          ko: '꼬깔로: 🡸서',
         },
         getHitEast: {
           en: 'Spread in East Cleave',
           ja: '🡺東で散開 + 扇当たる',
-          ko: '🡺동쪽 흩어지고 + 꼬깔 맞아요',
+          ko: '꼬깔로: 🡺동',
         },
         safeEast: {
           en: 'Spread East + Avoid Cleave',
           ja: '🡺東で散開',
-          ko: '🡺동쪽 흩어져요',
+          ko: '흩어져요: 🡺동',
         },
         safeWest: {
           en: 'Spread West + Avoid Cleave',
           ja: '🡸西で散開',
-          ko: '🡸서쪽 흩어져요',
+          ko: '흩어져요: 🡸서',
         },
       },
     },
@@ -1500,7 +1405,7 @@ const triggerSet: TriggerSet<Data> = {
       id: 'R12S Curtain Call: Chain Soon',
       type: 'Ability',
       netRegex: { id: ['B49A', 'B49B'], source: 'Lindwurm', capture: true },
-      condition: (data) => data.phase === 'curtainCall',
+      condition: (data) => data.phase === 'curtainCall' && !data.options.AutumnOnly,
       delaySeconds: 10,
       infoText: (_data, _matches, output) => output.middle!(),
       outputStrings: {
@@ -1548,7 +1453,7 @@ const triggerSet: TriggerSet<Data> = {
         safeSpots: {
           en: '${dir1}/${dir2}',
           ja: '${dir1}/${dir2}',
-          ko: '${dir1} 또는 ${dir2}',
+          ko: '${dir1} ${dir2}',
         },
         avoidBlobs: {
           en: 'Avoid Blobs',
@@ -1628,6 +1533,30 @@ const triggerSet: TriggerSet<Data> = {
       type: 'StartsUsing',
       netRegex: { id: ['B4C6', 'B4C3'], source: 'Lindwurm', capture: false },
       response: Responses.bigAoe('alert'),
+    },
+    {
+      id: 'R12S Serpintine Scourge/Raptor Knuckles Collect',
+      // 이거 쓰는 걸로 고쳐야 한다.
+      // B4CB Serpintine Scourge Left Hand first, then Right Hand
+      // B4CD Serpintine Scourge Right Hand first, then Left Hand
+      // B4CC Raptor Knuckles Right Hand first, then Left Hand
+      // B4CE Raptor Knuckles Left Hand first, then Right Hand
+      type: 'Ability',
+      netRegex: {
+        id: ['B4CB', 'B4CD', 'B4CC', 'B4CE'],
+        source: 'Lindwurm',
+        capture: true,
+      },
+      condition: (data) => data.phase === 'slaughtershed',
+      run: (data, matches) => {
+        const idMap: { [id: string]: SlaughterDir } = {
+          'B4CB': 'right',
+          'B4CD': 'left',
+          'B4CC': 'northwestKnockback',
+          'B4CE': 'northeastKnockback',
+        };
+        data.slaughtershed = idMap[matches.id];
+      },
     },
     {
       id: 'R12S Slaughtershed Stack',
@@ -1720,13 +1649,13 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         left: {
           en: 'Knockback from Northwest => Knockback from Northeast',
-          ja: '➊🡼北西ノックバック 🔜 北東ノックバック',
-          ko: '➊🡼북서 넉백 🔜 북동 넉백',
+          ja: '🡼北西ノックバック 🔜 北東ノックバック',
+          ko: '🡼북서 넉백 🔜 북동 넉백',
         },
         right: {
           en: 'Knockback from Northeast => Knockback from Northwest',
-          ja: '➋🡽北東ノックバック 🔜 北西ノックバック',
-          ko: '➋🡽북동 넉백 🔜 북서 넉백',
+          ja: '🡽北東ノックバック 🔜 北西ノックバック',
+          ko: '🡽북동 넉백 🔜 북서 넉백',
         },
       },
     },
@@ -2272,7 +2201,7 @@ const triggerSet: TriggerSet<Data> = {
         fireballSplashTether: {
           en: 'Boss Tether: Bait Jump',
           ja: '🄱 ボス誘導',
-          ko: '🄱 안쪽 보스 유도',
+          ko: '🄱 보스 유도',
         },
       },
     },
@@ -3517,35 +3446,31 @@ const triggerSet: TriggerSet<Data> = {
       condition: Conditions.targetIsYou(),
       delaySeconds: (_data, matches) => parseFloat(matches.duration) - 5.3,
       alertText: (data, matches, output) => {
-        if (matches.id === '129E') {
-          if (data.hasDoom)
-            return output.farOnYouDark!();
-          return output.farOnYouWind!();
-        }
-        if (data.hasDoom)
-          return output.nearOnYouDark!();
-        return output.nearOnYouWind!();
+        const color = data.hasDoom ? output.dark!() : output.wind!();
+        if (matches.id === '129E')
+          return output.far!({ color: color });
+        return output.near!({ color: color });
       },
       outputStrings: {
-        nearOnYouWind: {
-          en: 'Wind: Near on YOU',
-          ja: '🟢ニア: 南の数字マーカーへ',
-          ko: '🟢니어: 남쪽 숫자 마커 모서리로',
+        dark: {
+          en: 'Dark',
+          ja: '🟣',
+          ko: '🟣',
         },
-        nearOnYouDark: {
-          en: 'Dark: Near on YOU',
-          ja: '🟣ニア: 南の数字マーカーへ',
-          ko: '🟣니어: 남쪽 숫자 마커 모서리로',
+        wind: {
+          en: 'Wind',
+          ja: '🟢',
+          ko: '🟢',
         },
-        farOnYouWind: {
-          en: 'Wind: Far on YOU',
-          ja: '🟢ファー: サークル内へ',
-          ko: '🟢파: 남쪽 서클 안으로',
+        near: {
+          en: '${color}: Near on YOU',
+          ja: '${color}ニア: 南へ扇',
+          ko: '${color}니어: 남쪽으로 꼬깔',
         },
-        farOnYouDark: {
-          en: 'Dark: Far on YOU',
-          ja: '🟣ファー: サークル内へ',
-          ko: '🟣파: 남쪽 서클 안으로',
+        far: {
+          en: '${color}: Far on YOU',
+          ja: '${color}ファー: 反対の島へ扇',
+          ko: '${color}파: 반대 섬으로 꼬깔',
         },
       },
     },
