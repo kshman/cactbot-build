@@ -6,7 +6,7 @@ import ZoneId from './zone_id';
 // any ui that is dealing with multiple zones / triggers.
 //
 // These are not things that cactbot necessarily supports, but things that it
-// theoretically could be supporting in the future with raidboss.
+// theoretically could be supporting in the future with raidboss and oopsy.
 //
 // Miscellaneous things like maps, hunts, carnivale, pvp, eureka
 // should not be added here yet.
@@ -467,6 +467,9 @@ const contentList: (ZoneIdType)[] = [
   ZoneId.AloaloIsland,
   ZoneId.AnotherAloaloIsland,
   ZoneId.AnotherAloaloIslandSavage,
+  ZoneId.TheMerchantsTale,
+  ZoneId.TheMerchantsTaleAdvanced,
+  ZoneId.AnotherMerchantsTale,
 
   // Chaotic Alliance Raids
   ZoneId.TheCloudOfDarknessChaotic,
