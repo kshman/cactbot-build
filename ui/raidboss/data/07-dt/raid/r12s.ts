@@ -572,9 +572,9 @@ const triggerSet: TriggerSet<Data> = {
         ) {
           // Curtain Call Safe Spots
           if (x < 92)
-            data.curtainCallSafeCorner = 'northwest';
-          else if (x > 109)
             data.curtainCallSafeCorner = 'northeast';
+          else if (x > 109)
+            data.curtainCallSafeCorner = 'northwest';
         } else if (
           data.act1SafeCorner !== undefined &&
           data.curtainCallSafeCorner !== undefined &&
@@ -590,10 +590,9 @@ const triggerSet: TriggerSet<Data> = {
     },
     {
       id: 'R12S Splattershed Safe Spot Cleanup',
-      // Only Splattershed value needs to be reset
       type: 'HeadMarker',
       netRegex: { id: headMarkerData['slaughterStack'], capture: false },
-      delaySeconds: 0.1,
+      delaySeconds: 0.2,
       run: (data) => delete data.splattershedStackDir,
     },
     {
@@ -1676,6 +1675,17 @@ const triggerSet: TriggerSet<Data> = {
       delaySeconds: 11.5,
       durationSeconds: 1.8,
       response: Responses.knockback('alarm'),
+    },
+    {
+      id: 'R12S Slaughtershed Cleanup',
+      type: 'Ability',
+      netRegex: { id: ['B4D1', 'B4D2', 'B4D0', 'B4CF'], source: 'Lindwurm', capture: false },
+      condition: (data) => {
+        if (data.slaughtershed)
+          return true;
+        return false;
+      },
+      run: (data) => delete data.slaughtershed,
     },
     {
       id: 'R12S Refreshing Overkill',
@@ -3765,6 +3775,7 @@ const triggerSet: TriggerSet<Data> = {
     },
     {
       'locale': 'ko',
+      'missingTranslations': true,
       'replaceSync': {
         'Blood Vessel': '연환세포',
         'Lindschrat': '인간형 분열체',
@@ -3774,7 +3785,6 @@ const triggerSet: TriggerSet<Data> = {
       },
       'replaceText': {
         '--bind--': '--속박--',
-        '--knockback--': '--넉백--',
         '--untargetable\\?--': '--타겟 불가능?--',
         '--clones move': '--분신 이동',
         '--clones x': '--분신 x',

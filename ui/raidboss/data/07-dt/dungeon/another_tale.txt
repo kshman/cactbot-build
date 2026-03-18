@@ -1,0 +1,8 @@
+### ANOTHERMERCHANTSTAIL
+# ZoneId: 1317
+
+hideall "--Reset--"
+hideall "--sync--"
+
+# .*is no longer sealed
+0.0 "--Reset--" SystemLogMessage { id: "7DE" } window 0,100000 jump 0

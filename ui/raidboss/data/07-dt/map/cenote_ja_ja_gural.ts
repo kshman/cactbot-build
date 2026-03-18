@@ -12,6 +12,7 @@ const cenoteJaJaOutputStrings = {
     ja: '${name} 現れる！',
     cn: '已生成 ${name}!',
     ko: '나타났어요: ${name}',
+    tc: '已生成 ${name}!',
   },
 } as const;
 
@@ -135,8 +136,10 @@ const triggerSet: TriggerSet<Data> = {
     },
     {
       'locale': 'tc',
-      'missingTranslations': true,
-      'replaceSync': {},
+      'replaceSync': {
+        'Bull Apollyon': '莽撞亞巴頓',
+        'Golden Molter': '黃金蛻皮蜥',
+      },
     },
     {
       'locale': 'ko',
