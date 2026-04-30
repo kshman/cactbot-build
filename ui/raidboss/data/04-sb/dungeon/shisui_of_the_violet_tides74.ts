@@ -7,50 +7,54 @@ import { TriggerSet } from '../../../../../types/trigger';
 export type Data = RaidbossData;
 
 const triggerSet: TriggerSet<Data> = {
-  id: 'ShisuiOfTheVioletTides',
-  zoneId: ZoneId.ShisuiOfTheVioletTides,
-  comments: {
-    en: 'pre-7.5 rework',
-    cn: '7.5改版前',
-  },
-  timelineFile: 'shisui_of_the_violet_tides.txt',
+  id: 'ShisuiOfTheVioletTides74',
+  zoneId: ZoneId.ShisuiOfTheVioletTides74,
+  timelineFile: 'shisui_of_the_violet_tides74.txt',
   triggers: [
     {
-      id: 'Shisui Amikiri Kamikiri Add',
+      id: 'Shisui74 Amikiri Kamikiri Add',
       type: 'AddedCombatant',
       netRegex: { npcNameId: '6238' },
       alertText: (_data, matches, output) => output.kill!({ name: matches.name }),
       outputStrings: {
         kill: {
           en: 'Kill ${name}',
+          de: 'Besiege ${name}',
+          fr: 'Tuez ${name}',
           ja: '${name}を倒す',
-          ko: '잡아요: ${name}',
+          cn: '击杀 ${name}',
+          ko: '${name} 처치',
+          tc: '擊殺 ${name}',
         },
       },
     },
     {
-      id: 'Shisui Amikiri Digestive Fluid',
+      id: 'Shisui74 Amikiri Digestive Fluid',
       type: 'HeadMarker',
       netRegex: { id: '000E' },
       condition: Conditions.targetIsYou(),
       response: Responses.spread(),
     },
     {
-      id: 'Shisui Ruby Princess Seduce',
+      id: 'Shisui74 Ruby Princess Seduce',
       type: 'StartsUsing',
       netRegex: { source: 'Ruby Princess', id: '1F7A', capture: false },
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
           en: 'Get In Box',
+          de: 'Geh in die Box',
+          fr: 'Allez dans la boîte',
           ja: '箱に入る',
-          ko: '상자 부비부비',
+          cn: '进盒子',
+          ko: '상자에 들어가기',
+          tc: '進盒子',
         },
       },
     },
     {
       // This is what it's called!
-      id: 'Shisui Ruby Princess Geothermal Flatulence',
+      id: 'Shisui74 Ruby Princess Geothermal Flatulence',
       type: 'HeadMarker',
       netRegex: { id: '0001' },
       condition: Conditions.targetIsYou(),
@@ -58,19 +62,23 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Chasing AOE on YOU',
+          de: 'Verfolgende AoE auf DIR',
+          fr: 'Ruée sur VOUS',
           ja: '追跡AOE',
-          ko: '내게 연속 추적 장판',
+          cn: '追踪AOE点名',
+          ko: '연속장판 대상자',
+          tc: '追蹤AOE點名',
         },
       },
     },
     {
-      id: 'Shisui Shisui Yohi Naishi-No-Kami',
+      id: 'Shisui74 Shisui Yohi Naishi-No-Kami',
       type: 'AddedCombatant',
       netRegex: { npcNameId: '6244', capture: false },
       response: Responses.killAdds(),
     },
     {
-      id: 'Shisui Shisui Yohi Mad Stare',
+      id: 'Shisui74 Shisui Yohi Mad Stare',
       type: 'StartsUsing',
       netRegex: { source: 'Shisui Yohi', id: '1F82', capture: false },
       response: Responses.lookAway(),

@@ -11,6 +11,9 @@ hideall "--sync--"
 # -it "Lindwurm"
 
 0.0 "--sync--" InCombat { inGameCombat: "1" } window 0,1
+# P2 ActorControl director update corresponds to "Alas, the battle isn't over yet... But don't despair, Champion!"
+0.0 "--sync--" ActorControl { command: '80000027', data0: '15', data1: '02', data2: '330A' } window 0,1 jump "r12s-p2-start"
+# P2 Additional later sync in case above line happens before in combat
 1.0 "--sync--" AddedCombatant { npcNameId: "14380", name: "Lindschrat", job: "00", level: "64", ownerId: "0{4}", worldId: "00" } window 10,3 jump "r12s-p2-start" # Sync to P2 immediately through AddCombatant.
 10.6 "--sync--" StartsUsing { id: "B4D7", source: "Lindwurm" } window 15,10
 15.6 "The Fixer" Ability { id: "B4D7", source: "Lindwurm" }
@@ -336,12 +339,12 @@ hideall "--sync--"
 
 ### Phase 2: Lindwurm II
 # -p B528:3015.7
-# -ii B51F B4DA B4DB B4DD B4DF B4E3 B4E6 B4F0 B4E9 B4F1 B4EE B4EF B508 B4F5 B512 B513 B514 B515 B4F9 B51B
+# -ii B51F B4DA B4DB B4DD B4DF B4E3 B4E6 B4F0 B4E9 B8E1 B4EA B922 BE5D BBE3 B508 B4F5 B512 B513 B514 B515 B4F9 B51B
 # -it "Lindwurm"
 3000.5 label "r12s-p2-start"
 3010.7 "--sync--" StartsUsing { id: "B528", source: "Lindwurm" } window 3100,10
 3015.7 "Arcadia Aflame" Ability { id: "B528", source: "Lindwurm" }
-3022.9 "--middle--" Ability { id: "B4D9", source: "Lindwurm" }
+3022.9 "--middle--" Ability { id: "B4D9", source: "Lindwurm" } window 5,5
 3028.0 "Replication 1" Ability { id: "B4D8", source: "Lindwurm" }
 3039.7 "Top-tier Slam x2" Ability { id: "B4DE", source: "Lindschrat" }
 3040.5 "Winged Scourge x4" Ability { id: "B4DC", source: "Lindwurm" }
@@ -357,8 +360,6 @@ hideall "--sync--"
 3074.6 "Double Sobat 2" Ability { id: "B525", source: "Lindwurm" }
 3077.0 "Esoteric Finisher" Ability { id: "B526", source: "Lindwurm" }
 
-# NOTE: Depending on clone order and tethers player takes, spells at each instance will differ
-# TBD: Generalize these?
 3091.2 "Staging" Ability { id: "B4E1", source: "Lindwurm" }
 3092.5 "--clones x2 1--" #ActorControlExtra { category: "0197", param1: "11D2" }
 3094.0 "--clones x2 2--" #ActorControlExtra { category: "0197", param1: "11D2" }
@@ -378,23 +379,30 @@ hideall "--sync--"
 3137.3 "Hemorrhagic Projection x2" Ability { id: "B4EB", source: "Lindwurm" }
 3141.1 "Snaking Kick" Ability { id: "B527", source: "Lindwurm" }
 
+# Reenactment 1
+# NOTE: Order dependent on tethers during and Staging 1 and Replication 2
+# Initial VFX spells happen at same time, but damage casts differ:
+# +0s B4ED Fireball Splash (Initial VFX abilities also happen here)
+# +1.2s BBE3 Mana Burst
+# +1.4s BE5D Heavy Slam, B8E1 Scalding Waves
+# +1.6s B922 Hemorrhagic Projection
+# These Abilities Sync same time:
+# B4ED Fireball Splash
+# B4EE Mana Burst (VFX)
+# B4EF Heavy Slam (VFX)
+# B4F1 Grotesquerie (VFX)
 3151.3 "Reenactment 1" Ability { id: "B4EC", source: "Lindwurm" }
-3159.4 "Firefall Splash" #Ability { id: "B4ED", source: "Lindschrat" }
+3159.4 "--n/s clones--" duration 1.6
 3159.4 "Netherwrath Near/Netherwrath Far" Ability { id: ["B52E", "B52F"], source: "Lindwurm" }
-3160.6 "Mana Burst 1" Ability { id: "BBE3", source: "Lindwurm" }
 3160.6 "Timeless Spite x2" Ability { id: "B530", source: "Lindwurm" }
-3160.7 "Scalding Waves x4" #Ability { id: "B8E1", source: "Lindwurm" }
-3164.5 "Grotesquerie 1" #Ability { id: "B4EA", source: "Lindwurm" }
-3164.5 "Mana Burst 2" Ability { id: "BBE3", source: "Lindwurm" }
-3165.1 "Hemorrhagic Projection 1" Ability { id: "B922", source: "Lindwurm" }
-3168.8 "Heavy Slam x2" Ability { id: "BE5D", source: "Lindwurm" }
-3172.6 "Mana Burst 3" Ability { id: "BBE3", source: "Lindwurm" }
-3172.6 "Grotesquerie 2" #Ability { id: "B4EA", source: "Lindwurm" }
-3173.2 "Hemorrhagic Projection 2" Ability { id: "B922", source: "Lindwurm" }
-3178.6 "--middle--" Ability { id: "B4D9", source: "Lindwurm" }
+3163.3 "--ne/sw clones--" Ability { id: ["B4ED", "B4EE", "B4EF", "B4F1"], source: "Lindschrat" } duration 1.6
+3167.4 "--e/w clones--" Ability { id: ["B4ED", "B4EE", "B4EF", "B4F1"], source: "Lindschrat" } duration 1.6
+3171.4 "--se/nw clones--" Ability { id: ["B4ED", "B4EE", "B4EF", "B4F1"], source: "Lindschrat" } duration 1.6
+
+3178.6 "--middle--" Ability { id: "B4D9", source: "Lindwurm" } window 5,5
 
 # Blood Mana / Blood Wakening Phase (Superchain)
-3183.8 "Mutating Cells" Ability { id: "B505", source: "Lindwurm" }
+3183.8 "Mutating Cells" Ability { id: "B505", source: "Lindwurm" } window 10,10
 3185.0 "--sync--" Ability { id: "B506", source: "Lindwurm" }
 3190.0 "Blood Mana" Ability { id: "B4FB", source: "Lindwurm" }
 3193.3 "--black holes--" Ability { id: "BCB0", source: "Mana Sphere" }
@@ -406,7 +414,7 @@ hideall "--sync--"
 3206.2 "--far shapes eaten--" Ability { id: "B4FF", source: "Mana Sphere" }
 3207.0 "--sync--" Ability { id: "BCB0", source: "Mana Sphere" } # Blackhole 2
 3209.2 "--soaked shapes eaten--" Ability { id: "B4FF", source: "Mana Sphere" }
-3210.1 "--sync--" Ability { id: "BCB0", source: "Mana Sphere" } # blackhole 1
+3210.1 "--sync--" Ability { id: "BCB0", source: "Mana Sphere" } # Blackhole 1
 
 3216.7 "Blood Wakening" Ability { id: "B500", source: "Lindwurm" }
 3217.9 "--sync--" Ability { id: "B4FC", source: "Mana Sphere" }
@@ -421,7 +429,8 @@ hideall "--sync--"
 3245.6 "Double Sobat 1" Ability { id: ["B521", "B522", "B523", "B524"], source: "Lindwurm" }
 3250.2 "Double Sobat 2" Ability { id: "B525", source: "Lindwurm" }
 3252.6 "Esoteric Finisher" Ability { id: "B526", source: "Lindwurm" }
-3260.7 "--middle--" Ability { id: "B4D9", source: "Lindwurm" }
+# NOTE: Sync commented to avoid jumps before Idyllic Dream B509
+3260.7 "--middle--" #Ability { id: "B4D9", source: "Lindwurm" } window 5,5
 
 # Idyllic Dream
 3268.8 "Idyllic Dream" Ability { id: "B509", source: "Lindwurm" }
@@ -486,7 +495,7 @@ hideall "--sync--"
 # 3x Heavy Slam + 1 Mana Burst => 3x Mana Burst + 1 Heavy Slam 
 # But those would probably require lots of mit and tank immune probably on 2/3 of the heavy slams in the 3 set
 3429.6 "Twisted Vision 6" Ability { id: "BBE2", source: "Lindwurm" }
-3430.6 "Power Gusher" Ability { id: "B50F", source: "Lindschrat" }
+3430.6 "Power Gusher" Ability { id: ["B50F", "B510"], source: "Lindschrat" }
 3430.6 "Snaking Kick" Ability { id: "BCAF", source: "Lindschrat" }
 3435.7 "Reenactment 2" Ability { id: "B4EC", source: "Lindwurm" }
 3439.0 "Clone Mana Burst x2" Ability { id: "BBE3", source: "Lindwurm" }
@@ -552,9 +561,11 @@ hideall "--sync--"
 # B4E6 Mana Burst: VFX
 # B4F0 Unmitigated Impact: No one stacked in a Heavy Slam, causes 1035 Sustained Damage DoT
 # B4E9 Grotesquerie: VFX
-# B4F1 Grotesquerie: VFX used in Reenactment
-# B4EE Mana Burst: VFX used in Reenactment
-# B4EF Heavy Slam: VFX used in Reenactment
+# B8E1 Scalding Waves: Used in Reenactment (Proteans), Ignored due to timing being strategy-based
+# B4EA Grotesquerie: Used in Reenactment, Ignored due to timing being strategy-based
+# BBE3 Mana Burst: Used in Reenactment (Damage + Knockback), Ignored due to timing being strategy-based
+# BE5D Heavy Slam: Used in Reenactment (Stack with Clone, requires at least 1 player), Ignored due to timing being strategy-based
+# B922 Hemorrhagic Projection: Used in Reenactment (Damage), Ignored due to timing being strategy-based
 # B508 Unmitigated Explosion: Getting hit when you have Mitigation α or failing to get hit with Mitigation β, applies 30s damage down
 # B4FF --sync--: VFX Mana Spheres eaten by Black Hole
 # BCB0 --sync--: VFX Black Hole light eruption
@@ -679,16 +690,16 @@ hideall "--sync--"
 # B4E6 Mana Burst
 # B4E7 Mana Burst
 # B51F --sync--
-# B4E8 Heavy Slam
+# B4E8 Heavy Slam: Stack on Player, requires at least 1 additional player
 # B4E9 Grotesquerie
-# B4EA Grotesquerie
+# B4EA Grotesquerie: Used in Reenactment
 # B4EB Hemorrhagic Projection
 # B4EC Reenactment
-# B4ED Firefall Splash
-# B4EE Mana Burst
-# B4EF Heavy Slam
+# B4ED Firefall Splash: Used in Reenactment (Damage)
+# B4EE Mana Burst: VFX used in Reenactment
+# B4EF Heavy Slam: VFX used in Reenactment
 # B4F0 Unmitigated Impact
-# B4F1 Grotesquerie
+# B4F1 Grotesquerie: VFX used in Reenactment
 # B4F2 Lindwurm's Meteor
 # B4F3 Downfall
 # B4F4 Cosmic Kiss
@@ -749,13 +760,13 @@ hideall "--sync--"
 # B534 Arcadian Hell
 # B535 Arcadian Hell
 # B537 Arcadian Hell
-# B8E1 Scalding Waves
-# B922 Hemorrhagic Projection
+# B8E1 Scalding Waves: Used in Reenactment (Proteans)
+# B922 Hemorrhagic Projection: Used in Reenactment (Damage)
 # B9D9 Arcadian Arcanum
 # BBE2 Twisted Vision
-# BBE3 Mana Burst
+# BBE3 Mana Burst: Used in Reenactment (Damage + Knockback)
 # BCAF Snaking Kick
 # BCB0 --sync--: Blackhole spawn
-# BE5D Heavy Slam
+# BE5D Heavy Slam: Used in Reenactment (Stack with Clone, requires at least 1 player)
 # BE95 Snaking Kick
 # BEC1 Arcadian Hell
