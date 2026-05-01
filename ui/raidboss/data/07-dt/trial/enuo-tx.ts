@@ -6,6 +6,8 @@ import { TriggerSet } from '../../../../../types/trigger';
 
 export interface Data extends RaidbossData {
   grows: 'stack' | 'group' | 'unknown';
+  towerer: string[];
+  chains: number;
 }
 
 const triggerSet: TriggerSet<Data> = {
@@ -14,6 +16,8 @@ const triggerSet: TriggerSet<Data> = {
   timelineFile: 'enuo-tx.txt',
   initData: () => ({
     grows: 'unknown',
+    towerer: [],
+    chains: 0,
   }),
   triggers: [
     {
@@ -39,7 +43,8 @@ const triggerSet: TriggerSet<Data> = {
     {
       id: 'EnuoEx Naught Grows',
       type: 'StartsUsing',
-      netRegex: { id: 'C337', source: 'Enuo', capture: false },
+      netRegex: { id: ['C337', 'C338'], source: 'Enuo', capture: false },
+      // C337은 전반 1개 C338은 후반 2개
       infoText: (data, _matches, output) => {
         const action = output[data.grows]!();
         return output.text!({ action: action });
@@ -127,6 +132,104 @@ const triggerSet: TriggerSet<Data> = {
         other: {
           en: 'Avoid',
           ko: '피하고 + 계속 움직여요',
+        },
+      },
+    },
+    {
+      id: 'EnuoEx Towerer',
+      type: 'HeadMarker',
+      netRegex: { id: '02D1' },
+      condition: (data, matches) => {
+        data.towerer.push(matches.target);
+        return data.towerer.length === 4;
+      },
+      infoText: (data, _matches, output) => {
+        const action = data.towerer.includes(data.me) ? output.bait!() : output.tower!();
+        data.towerer = [];
+        return action;
+      },
+      outputStrings: {
+        tower: Outputs.getTowers,
+        bait: {
+          en: 'Bait cone',
+          ko: '꼬깔 유도해요',
+        },
+      },
+    },
+    {
+      id: 'EnuoEx Beacon in the Dark',
+      type: 'AddedCombatant',
+      netRegex: { npcNameId: '14754', capture: false },
+      infoText: (_data, _matches, output) => output.text!(),
+      outputStrings: {
+        text: {
+          en: 'Attack the Beacon',
+          ko: '거울 매우처요!',
+        },
+      },
+    },
+    {
+      id: 'EnuoEx Lightless World',
+      type: 'StartsUsing',
+      netRegex: { id: 'C36D', source: 'Enuo', capture: false },
+      response: Responses.bigAoe(),
+    },
+    {
+      id: 'EnuoEx Almagest',
+      type: 'StartsUsing',
+      netRegex: { id: 'C334', source: 'Enuo', capture: false },
+      response: Responses.bigAoe(),
+    },
+    {
+      id: 'EnuoEx Passage of Naught',
+      type: 'StartsUsing',
+      netRegex: { id: 'C343', source: 'Enuo', capture: false },
+      suppressSeconds: 1,
+      infoText: (_data, _matches, output) => output.text!(),
+      outputStrings: {
+        text: {
+          en: 'Go to safe spot',
+          ko: '안전한 곳으로!',
+        },
+      },
+    },
+    {
+      id: 'EnuoEx Shrouded Holy',
+      type: 'StartsUsing',
+      netRegex: { id: 'C37D', source: 'Enuo', capture: false },
+      response: Responses.healerGroups(),
+    },
+    {
+      id: 'EnuoEx Dimension Zero',
+      type: 'StartsUsing',
+      netRegex: { id: 'C37F', source: 'Enuo', capture: false },
+      alertText: (_data, _matches, output) => output.text!(),
+      outputStrings: {
+        text: {
+          en: 'Stacks x3',
+          ko: '뭉쳐요 x3',
+        },
+      },
+    },
+    {
+      id: 'EnuoEx Naught Chains',
+      type: 'HeadMarker',
+      netRegex: { id: '00AC' },
+      condition: (data, matches) => {
+        data.chains++;
+        return data.me === matches.target;
+      },
+      durationSeconds: 8,
+      infoText: (data, _matches, output) => {
+        const isCw = data.chains % 4 === 1 || data.chains % 4 === 2;
+        return output.text!({ dir: isCw ? output.cw!() : output.ccw!() });
+      },
+      outputStrings: {
+        cw: Outputs.clockwise,
+        ccw: Outputs.counterclockwise,
+        text: {
+          en: 'Go ${dir}',
+          ko: '${dir}으로',
         },
       },
     },
