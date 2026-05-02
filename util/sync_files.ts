@@ -963,6 +963,70 @@ const zoneReplace: ZoneReplace[] = [
       '2EB2': 'B16A', // Torment unto Death
     },
   },
+  {
+    // Shinryu Unreal
+    fileMap: {
+      'ui/raidboss/data/04-sb/trial/shinryu-ex.ts': 'ui/raidboss/data/07-dt/trial/shinryu-un.ts',
+      'ui/raidboss/data/04-sb/trial/shinryu-ex.txt': 'ui/raidboss/data/07-dt/trial/shinryu-un.txt',
+    },
+    prefix: { 'ShinryuEx': 'ShinryuUn' },
+    other: {
+      'TheMinstrelsBalladShinryusDomain': 'ShinryusDomainUnreal',
+      'Shinryu Extreme': 'Shinryu Unreal',
+      'shinryu-ex.txt': 'shinryu-un.txt',
+    },
+    id: {
+      // '1FA8': 'C45F', // Divebomb
+      // '1FF4': 'C45F', // Divebomb
+      '25D9': 'C435', // --sync--
+      '25DA': 'C436', // Tidal Wave
+      '25DB': 'C437', // Hellfire
+      '25DC': 'C438', // Judgment Bolt
+      '25DD': 'C439', // Diamond Dust
+      '25DE': 'C43A', // Earthen Fury
+      '25E2': 'C43E', // Tail Slap
+      '25E4': 'C440', // Protostar
+      '25E5': 'C441', // Meteor Impact
+      '25E7': 'C443', // Dark Matter
+      '25E8': 'C445', // Hypernova
+      '25EA': 'C446', // Levinbolt
+      '25EC': 'C448', // Earth Breath
+      '25EE': 'C44A', // Summon Icicle
+      '25EF': 'C44B', // Icicle Impact
+      '25F0': 'C44C', // Spikesicle
+      '25F1': 'C44D', // Ice Storm
+      '25F3': 'C44F', // Akh Morn
+      '25F5': 'C451', // Akh Rhai
+      '25F7': 'C453', // --sync-- / Gyre Charge (볼일이 없어서 정확하지 않음)
+      '25F9': 'C436', // Tidal Wave
+      '25FA': 'C457', // Judgment Bolt
+      '25FC': 'C458', // Diamond Dust
+      '25FD': 'C459', // --sync-- / Earthen Fury
+      '25FE': 'C45A', // Aerial Blast
+      '2603': 'C45F', // Gyre Charge / Divebomb (볼일이 없었음 정확하지 않음)
+      '2605': 'C461', // --sync-- (정확하지는 않으나 맞을거임)
+      '260A': 'C466', // Death Sentence
+      '260C': 'C468', // Super Cyclone
+      '260D': 'C464', // Spiked Tail
+      '2610': 'C46C', // Dragonfist
+      '2611': 'C46D', // Dragonfist
+      '2613': 'C46F', // Touchdown
+      '2615': 'C471', // Tail Spit
+      '2617': 'C473', // Shatter
+      '2648': 'C475', // Wormwail
+      '2649': 'C476', // Benighting Breath
+      '264A': 'C474', // Aetherial Ray
+      '264B': 'C478', // Tera Slash
+      '264C': 'C479', // Atomic Ray
+      '264E': 'C455', // Tidal Wave
+      '2718': 'C47D', // Judgment Bolt (정확하지 않음)
+      '2719': 'C47E', // Judgment Bolt (정확하지 않음)
+      '271F': 'C481', // Hypernova
+      '2720': 'C447', // Levinbolt
+      '2722': 'C484', // Ice Storm
+      '2725': 'C447', // Levinbolt
+    },
+  },
 ];
 
 const processFile = (filename: string, zone: ZoneReplace, inputText: string): string => {
