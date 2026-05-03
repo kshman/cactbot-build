@@ -1,4 +1,4 @@
-import Autumn, { AutumnMoks } from '../../../../../resources/autumn';
+import Autumn, { AutumnDir, AutumnMoks } from '../../../../../resources/autumn';
 import Conditions from '../../../../../resources/conditions';
 import Outputs from '../../../../../resources/outputs';
 import { Responses } from '../../../../../resources/responses';
@@ -60,6 +60,12 @@ const moksToTurbulenceNo = (moks: AutumnMoks) => {
   return 0;
 };
 
+const calcOppositePosition8 = (pos: Positions8): Positions8 => {
+  if (pos === 'middle')
+    return 'middle';
+  return Directions.output8Dir[(Directions.output8Dir.indexOf(pos) + 4) % 8] ?? 'unknown';
+};
+
 // Get a sparsely populated array indicating the 16-dir positions for each mechanic in add phase
 const getEmptyAddPhaseData = () => {
   const ret: Data['addPhasePositions'] = [];
@@ -73,51 +79,6 @@ const getEmptyAddPhaseData = () => {
 
 const adjustDirNum = (pos: number, by: number, max: number) => {
   return (pos + max + by) % max;
-};
-
-const filterUnsafeBig = (safeDirs: number[], pos: number) => {
-  // Around source
-  safeDirs = safeDirs.filter((dir) => dir !== adjustDirNum(pos, -2, 16));
-  safeDirs = safeDirs.filter((dir) => dir !== adjustDirNum(pos, -1, 16));
-  safeDirs = safeDirs.filter((dir) => dir !== pos);
-  safeDirs = safeDirs.filter((dir) => dir !== adjustDirNum(pos, 1, 16));
-  safeDirs = safeDirs.filter((dir) => dir !== adjustDirNum(pos, 2, 16));
-
-  // Around destination
-  safeDirs = safeDirs.filter((dir) => dir !== adjustDirNum(pos, 6, 16));
-  safeDirs = safeDirs.filter((dir) => dir !== adjustDirNum(pos, 7, 16));
-  safeDirs = safeDirs.filter((dir) => dir !== adjustDirNum(pos, 8, 16));
-  safeDirs = safeDirs.filter((dir) => dir !== adjustDirNum(pos, 9, 16));
-  safeDirs = safeDirs.filter((dir) => dir !== adjustDirNum(pos, 10, 16));
-
-  return safeDirs;
-};
-
-const filterUnsafeSmall = (
-  safeDirs: number[],
-  line1: Data['passageOfNaughtPositions'][number],
-  line2: Data['passageOfNaughtPositions'][number],
-) => {
-  // Find the center between the smalls
-  const cX = (line1.x + line2.x) / 2;
-  const cY = (line1.y + line2.y) / 2;
-  const dirNum = Directions.xyTo8DirNum(cX, cY, center.x, center.y);
-
-  // Remove positions that don't align with center
-  // CW from source
-  safeDirs = safeDirs.filter((dir) => dir !== adjustDirNum(dirNum, 2, 16));
-  safeDirs = safeDirs.filter((dir) => dir !== adjustDirNum(dirNum, 3, 16));
-  safeDirs = safeDirs.filter((dir) => dir !== adjustDirNum(dirNum, 4, 16));
-  safeDirs = safeDirs.filter((dir) => dir !== adjustDirNum(dirNum, 5, 16));
-  safeDirs = safeDirs.filter((dir) => dir !== adjustDirNum(dirNum, 6, 16));
-
-  // CW from destination
-  safeDirs = safeDirs.filter((dir) => dir !== adjustDirNum(dirNum, 10, 16));
-  safeDirs = safeDirs.filter((dir) => dir !== adjustDirNum(dirNum, 11, 16));
-  safeDirs = safeDirs.filter((dir) => dir !== adjustDirNum(dirNum, 12, 16));
-  safeDirs = safeDirs.filter((dir) => dir !== adjustDirNum(dirNum, 13, 16));
-  safeDirs = safeDirs.filter((dir) => dir !== adjustDirNum(dirNum, 14, 16));
-  return safeDirs;
 };
 
 const triggerSet: TriggerSet<Data> = {
@@ -206,27 +167,23 @@ const triggerSet: TriggerSet<Data> = {
         // Two possible patterns: Single, Under Boss, Under Void
         // Single
         if (pos2 === undefined) {
-          if (pos1.type === 'aoe')
-            return output.awayFrom!({ dir: output[pos1.pos]!(), mech: mech });
-          return output.under!({ dir: output[pos1.pos]!(), mech: mech });
+          const dir = pos1.type === 'aoe' ? calcOppositePosition8(pos1.pos) : pos1.pos;
+          return output.move!({ dir: output[dir]!(), mech: mech });
         }
 
         const middleDir = pos2.pos === 'middle' ? pos2 : pos1;
         const voidDir = pos1.pos === 'middle' ? pos2 : pos1;
         // Under Boss
         if (middleDir.type === 'donut') {
-          return output.underBossAndAway!({
-            dir: output[voidDir.pos]!(),
+          return output.under!({
+            dir: output[calcOppositePosition8(voidDir.pos)]!(),
             mech: mech,
           });
         }
-        return output.underPortalAndAway!({
-          dir: output[voidDir.pos]!(),
-          mech: mech,
-        });
+        return output.move!({ dir: output[voidDir.pos]!(), mech: mech });
       },
       outputStrings: {
-        ...Directions.outputStrings8Dir,
+        ...AutumnDir.stringMarker1A2Dir,
         middle: Outputs.middle,
         healerStacks: {
           en: '4:4 stacks',
@@ -236,20 +193,12 @@ const triggerSet: TriggerSet<Data> = {
           en: 'Stacks',
           ko: '모두 뭉쳐요',
         },
-        awayFrom: {
-          en: 'Away from ${dir} + ${mech}',
-          ko: '${dir} 멀리 + ${mech}',
-        },
-        under: {
+        move: {
           en: '${dir} + ${mech}',
           ko: '${dir} + ${mech}',
         },
-        underBossAndAway: {
-          en: 'Under Boss + Away from ${dir} + ${mech}',
-          ko: '보스 밑 ${dir} 멀리 + ${mech}',
-        },
-        underPortalAndAway: {
-          en: '${dir} + Away from Boss + ${mech}',
+        under: {
+          en: 'Under Boss + ${dir} + ${mech}',
           ko: '보스 밑 ${dir} + ${mech}',
         },
       },
@@ -278,7 +227,7 @@ const triggerSet: TriggerSet<Data> = {
         },
       },
     },
-    {
+    /* {
       id: 'EnuoEx Meltdown Chains of Condemnation',
       type: 'Ability',
       netRegex: { id: 'C378', source: 'Enuo', capture: false },
@@ -293,8 +242,8 @@ const triggerSet: TriggerSet<Data> = {
           ko: '⛔️멈추고! 🔜 흩어져요',
         },
       },
-    },
-    /* {
+    }, */
+    {
       id: 'EnuoEx Meltdown Stop',
       type: 'GainsEffect',
       netRegex: { effectId: '11D2', source: 'Enuo', capture: false },
@@ -321,7 +270,7 @@ const triggerSet: TriggerSet<Data> = {
           ko: '밖으로 🔜 흩어져요',
         },
       },
-    }, */
+    },
     {
       id: 'EnuoEx Airy Emptiness',
       type: 'StartsUsing',
@@ -384,7 +333,7 @@ const triggerSet: TriggerSet<Data> = {
         });
       },
       outputStrings: {
-        ...Directions.outputStrings8Dir,
+        ...AutumnDir.stringMarker1A2Dir,
         CW: Outputs.clockwise,
         CCW: Outputs.counterclockwise,
         text: {
@@ -493,7 +442,7 @@ const triggerSet: TriggerSet<Data> = {
         }
       },
       outputStrings: {
-        ...Directions.outputStrings16Dir,
+        ...AutumnDir.stringMarker1A2Dir,
         unknown: Outputs.unknown,
         tankOrbsDir: {
           en: 'Tank orbs ${dir}',
@@ -522,16 +471,15 @@ const triggerSet: TriggerSet<Data> = {
         // Due to needing to bait Meltdown puddles later, just call the close safe position
         const x = parseFloat(matches.x);
         const y = parseFloat(matches.y);
-        const dangerDirNum = Directions.xyTo16DirNum(x, y, center.x, center.y);
-        const closeDirNum = Directions.output16Dir[(dangerDirNum + 9) % 16] ?? 'unknown';
+        const dangerDirNum = Directions.xyTo8DirNum(x, y, center.x, center.y);
+        const closeDirNum = Directions.output8Dir[(dangerDirNum + 9) % 8] ?? 'unknown';
 
         return output.text!({
           dir3: output[closeDirNum]!(),
         });
       },
       outputStrings: {
-        ...Directions.outputStrings8Dir,
-        ...Directions.outputStrings16Dir,
+        ...AutumnDir.stringMarker1A2Dir,
         text: {
           en: '${dir3} Close',
           ko: '${dir3} 가까이',
@@ -658,34 +606,34 @@ const triggerSet: TriggerSet<Data> = {
           case 1:
             if (cone)
               return output.conePos!({
-                dir: output[Directions.output16Dir[pos1Cone * 2 + 1] ?? 'unknown']!(),
+                dir: output[Directions.output8Dir[pos1Cone] ?? 'unknown']!(),
               });
             return output.towerPos!({
-              dir: output[Directions.output16Dir[pos1Tower * 2 + 1] ?? 'unknown']!(),
+              dir: output[Directions.output8Dir[pos1Tower] ?? 'unknown']!(),
             });
           case 2:
             if (cone)
               return output.conePos!({
-                dir: output[Directions.output16Dir[pos2Cone * 2 + 1] ?? 'unknown']!(),
+                dir: output[Directions.output8Dir[pos2Cone] ?? 'unknown']!(),
               });
             return output.towerPos!({
-              dir: output[Directions.output16Dir[pos2Tower * 2 + 1] ?? 'unknown']!(),
+              dir: output[Directions.output8Dir[pos2Tower] ?? 'unknown']!(),
             });
           case 3:
             if (cone)
               return output.conePos!({
-                dir: output[Directions.output16Dir[pos3Cone * 2 + 1] ?? 'unknown']!(),
+                dir: output[Directions.output8Dir[pos3Cone] ?? 'unknown']!(),
               });
             return output.towerPos!({
-              dir: output[Directions.output16Dir[pos3Tower * 2 + 1] ?? 'unknown']!(),
+              dir: output[Directions.output8Dir[pos3Tower] ?? 'unknown']!(),
             });
           case 4:
             if (cone)
               return output.conePos!({
-                dir: output[Directions.output16Dir[pos4Cone * 2 + 1] ?? 'unknown']!(),
+                dir: output[Directions.output8Dir[pos4Cone] ?? 'unknown']!(),
               });
             return output.towerPos!({
-              dir: output[Directions.output16Dir[pos4Tower * 2 + 1] ?? 'unknown']!(),
+              dir: output[Directions.output8Dir[pos4Tower] ?? 'unknown']!(),
             });
           default:
             return output.unknown!();
@@ -696,7 +644,7 @@ const triggerSet: TriggerSet<Data> = {
         data.addPhasePositions = getEmptyAddPhaseData();
       },
       outputStrings: {
-        ...Directions.outputStrings16Dir,
+        ...AutumnDir.stringMarker1A2Dir,
         unknown: Outputs.unknown,
         cone: {
           en: 'Cone on YOU',
@@ -808,35 +756,29 @@ const triggerSet: TriggerSet<Data> = {
         if (line4 !== undefined)
           return output.under!();
 
-        let safeDirs = [...Array(16).keys()];
-
-        const small1 = line1.type === 'small' ? line1 : line2;
-        const small2 = line2.type === 'small' ? line2 : line3;
+        // We're only concerned with the "big" line, as max melee perpindicular to that line will be safe
         const big = line1.type === 'big' ? line1 : (line2.type === 'big' ? line2 : line3);
 
-        safeDirs = filterUnsafeBig(
-          safeDirs,
-          Directions.xyTo16DirNum(big.x, big.y, center.x, center.y),
-        );
+        const bigDirNum = Directions.xyTo8DirNum(big.x, big.y, center.x, center.y);
 
-        safeDirs = filterUnsafeSmall(safeDirs, small1, small2);
+        const safe1 = adjustDirNum(bigDirNum, 2, 8);
+        const safe2 = adjustDirNum(bigDirNum, 6, 8);
 
-        // We should have two safe dirs left at the end
-        const [safe1, safe2] = safeDirs;
+        // Sort directions N CW
 
-        if (safe1 === undefined || safe2 === undefined)
-          return;
+        const safe1Sorted = safe1 > safe2 ? safe2 : safe1;
+        const safe2Sorted = safe1 === safe1Sorted ? safe2 : safe1;
 
         return output.go!({
-          dir1: output[Directions.output16Dir[safe1] ?? 'unknown']!(),
-          dir2: output[Directions.output16Dir[safe2] ?? 'unknown']!(),
+          dir1: output[Directions.output8Dir[safe1Sorted] ?? 'unknown']!(),
+          dir2: output[Directions.output8Dir[safe2Sorted] ?? 'unknown']!(),
         });
       },
       outputStrings: {
-        ...Directions.outputStrings16Dir,
+        ...AutumnDir.stringMarker1A2Dir,
         intercards: Outputs.intercards,
         cardinals: Outputs.cardinals,
-        under: Outputs.getUnder,
+        under: Outputs.goIntoMiddle,
         go: {
           en: 'Go ${dir1} / ${dir2}',
           ko: '안전: ${dir1} / ${dir2}',
@@ -875,6 +817,228 @@ const triggerSet: TriggerSet<Data> = {
           en: 'Chasing puddle on you',
           ko: '내게 장판이 따라와요!',
         },
+      },
+    },
+  ],
+  timelineReplace: [
+    {
+      'locale': 'de',
+      'missingTranslations': true,
+      'replaceSync': {
+        'Aggressive Shadow': 'strafend(?:e|er|es|en) Hand',
+        'Enuo': 'Enuo',
+        'Looming Shadow': 'groß(?:e|er|es|en) Nichts-Silhouette',
+        'Protective Shadow': 'beschützend(?:e|er|es|en) Hand',
+        'Soothing Shadow': 'heilend(?:e|er|es|en) Hand',
+        '(?<! )Void': 'Nichtswirbel',
+        'Yawning Void': 'groß(?:e|er|es|en) Nichtswirbel',
+      },
+      'replaceText': {
+        'Airy Emptiness': 'Streuende Welle',
+        'All for Naught': 'Nichts-Territorium',
+        'Almagest': 'Almagest',
+        'Curse of the Flesh': 'Miasma-Fluch',
+        'Deep Freeze': 'Tiefenfrost',
+        'Demon Eye': 'Dämonenauge',
+        'Dense Emptiness': 'Sammelnde Welle',
+        'Dimension Zero': 'Dimension Null',
+        'Empty Shadow': 'Last der Leere',
+        'Endless Chase': 'Suchende Welle',
+        'Gaze of the Void': 'Chaotischer Strom',
+        'Great Return to Nothing': 'Große Welle der Wiederkehr',
+        'Lightless World': 'Lichtlose Welt',
+        'Looming Emptiness': 'Schwere Last der Leere',
+        'Meltdown': 'Komplettschmelze',
+        'Meteorain': 'Meteorregen',
+        'Naught Grows': 'Anschwellen des Nichts',
+        'Naught Hunts': 'Verfolgung des Nichts',
+        'Nothingness': 'Welle der Leere',
+        'Passage of Naught': 'Sammelwelle',
+        '(?<! )Return to Nothing': 'Welle der Wiederkehr',
+        'Shrouded Holy': 'Schattenheiligtum',
+        'Silent Torrent': 'Reißender Strom',
+        'Voidal Turbulence': 'Nichtsstrudel',
+        'Weight of Nothing': 'Hochdruckwelle',
+      },
+    },
+    {
+      'locale': 'fr',
+      'missingTranslations': true,
+      'replaceSync': {
+        'Aggressive Shadow': 'main assaillante de l\'ombre insondable',
+        'Enuo': 'Énuo',
+        'Looming Shadow': 'grande ombre insondable',
+        'Protective Shadow': 'main protectrice de l\'ombre insondable',
+        'Soothing Shadow': 'main guérisseuse de l\'ombre insondable',
+        '(?<! )Void': 'vortex de néant',
+        'Yawning Void': 'grand vortex de néant',
+      },
+      'replaceText': {
+        'Airy Emptiness': 'Onde diffusée',
+        'All for Naught': 'Domaine du néant',
+        'Almagest': 'Almageste',
+        'Curse of the Flesh': 'Malédiction pathogène',
+        'Deep Freeze': 'Congélation ancestrale',
+        'Demon Eye': 'Œil diabolique',
+        'Dense Emptiness': 'Onde concentrée',
+        'Dimension Zero': 'Dimension zéro',
+        'Empty Shadow': 'Impact de vacuité',
+        'Endless Chase': 'Néant traqueur',
+        'Gaze of the Void': 'Torrents chaotiques',
+        'Great Return to Nothing': 'Grande onde régressive',
+        'Lightless World': 'Monde sans Lumière',
+        'Looming Emptiness': 'Grand impact de vacuité',
+        'Meltdown': 'Fusion ancestrale',
+        'Meteorain': 'Pluie de météorites',
+        'Naught Grows': 'Abcès du néant',
+        'Naught Hunts': 'Poursuite du néant',
+        'Nothingness': 'Rayon du néant',
+        'Passage of Naught': 'Onde accumulatrice',
+        '(?<! )Return to Nothing': 'Onde régressive',
+        'Shrouded Holy': 'Miracle d\'ombre',
+        'Silent Torrent': 'Flot d\'énergie',
+        'Voidal Turbulence': 'Maelström du néant',
+        'Weight of Nothing': 'Onde de particules haute tension',
+      },
+    },
+    {
+      'locale': 'ja',
+      'missingTranslations': true,
+      'replaceSync': {
+        'Aggressive Shadow': '虚ろなる影の攻め手',
+        'Enuo': 'エヌオー',
+        'Looming Shadow': '虚ろなる巨影',
+        'Protective Shadow': '虚ろなる影の護り手',
+        'Soothing Shadow': '虚ろなる影の癒し手',
+        '(?<! )Void': '無の渦',
+        'Yawning Void': '無の大渦',
+      },
+      'replaceText': {
+        'Airy Emptiness': '拡散波動',
+        'All for Naught': '無の領域',
+        'Almagest': 'アルマゲスト',
+        'Curse of the Flesh': '病の呪詛',
+        'Deep Freeze': 'ディープフリーズ',
+        'Demon Eye': '悪魔の瞳',
+        'Dense Emptiness': '集束波動',
+        'Dimension Zero': 'ディメンションゼロ',
+        'Empty Shadow': '虚ろなる衝撃',
+        'Endless Chase': '追尾波動',
+        'Gaze of the Void': '混沌の激流',
+        'Great Return to Nothing': '回帰の重波動',
+        'Lightless World': 'ライトレス・ワールド',
+        'Looming Emptiness': '虚ろなる大衝撃',
+        'Meltdown': 'メルトダウン',
+        'Meteorain': 'メテオレイン',
+        'Naught Grows': '無の肥大',
+        'Naught Hunts': '無の追跡',
+        'Nothingness': '無の波動',
+        'Passage of Naught': '集積波動',
+        '(?<! )Return to Nothing': '回帰の波動',
+        'Shrouded Holy': 'シャドウホーリー',
+        'Silent Torrent': '奔流',
+        'Voidal Turbulence': '無の渦流',
+        'Weight of Nothing': '高圧波動',
+      },
+    },
+    {
+      'locale': 'cn',
+      'replaceSync': {
+        'Aggressive Shadow': '虚无之攻影',
+        'Enuo': '恩欧',
+        'Looming Shadow': '虚无巨影',
+        'Protective Shadow': '虚无之防影',
+        'Soothing Shadow': '虚无之疗影',
+        '(?<! )Void': '无之漩涡',
+        'Yawning Void': '无之巨漩涡',
+      },
+      'replaceText': {
+        '--Add': '--小怪',
+        '--Tower adds': '--塔小怪',
+        '(?<!un)targetable--': '可选中--',
+        '\\(active\\)': '(激活)',
+        '\\(castbar\\)': '(咏唱栏)',
+        '\\(enrage\\)': '(狂暴)',
+        '\\(lines\\)': '(直线)',
+        '\\(puddles\\)': '(黄圈)',
+        '\\(puddle baits': '(诱导黄圈',
+        '\\(puddle explodes\\)': '(黄圈爆炸)',
+        'pyretic\\)': '热病)',
+        '\\(spread\\)': '(分散)',
+        'Airy Emptiness': '扩散波动',
+        'Almagest': '至高无上',
+        'All for Naught': '无之领域',
+        'Curse of the Flesh': '疫病诅咒',
+        'Deep Freeze': '深度冻结',
+        'Demon Eye': '恶魔之瞳',
+        'Dense Emptiness': '集束波动',
+        'Dimension Zero': '零次元',
+        'Empty Shadow': '虚无冲击',
+        'Endless Chase': '追尾波动',
+        'Gaze of the Void': '混沌激流',
+        'Great Return to Nothing': '回归重波动',
+        'Lightless World': '无光的世界',
+        'Looming Emptiness': '虚无大冲击',
+        'Meltdown': '核心熔毁',
+        'Meteorain': '流星雨',
+        'Naught Grows': '无之膨胀',
+        'Naught Hunts': '无之追踪',
+        'Nothingness': '无之波动',
+        'Passage of Naught': '聚能波动',
+        '(?<!Great )Return to Nothing': '回归波动',
+        'Shrouded Holy': '暗影神圣',
+        'Silent Torrent': '奔流',
+        'Voidal Turbulence': '无之涡流',
+        'Weight of Nothing': '高压波动',
+      },
+    },
+    {
+      'locale': 'ko',
+      'replaceSync': {
+        'Aggressive Shadow': '공허한 그림자의 공격수',
+        'Enuo': '에누오',
+        'Looming Shadow': '공허한 큰 그림자',
+        'Protective Shadow': '공허한 그림자의 수호자',
+        'Soothing Shadow': '공허한 그림자의 치유사',
+        '(?<! )Void': '무의 소용돌이',
+        'Yawning Void': '무의 큰 소용돌이',
+      },
+      'replaceText': {
+        '--Add': '--쫄',
+        '--Tower adds': '--탑 쫄',
+        '(?<= )targetable--': '타겟가능--',
+        '\\(puddle baits \\+ pyretic\\)': '(장판 유도 + 열병)',
+        '\\(puddle explodes\\)': '(장판 폭발)',
+        '\\(spread\\)': '(산개)',
+        '\\(lines\\)': '(선)',
+        '\\(puddles\\)': '(장판)',
+        '\\(big\\)': '(강력)',
+        '\\(active\\)': '(활성)',
+        'Airy Emptiness': '확산 파동',
+        'All for Naught': '무의 영역',
+        'Almagest': '알마게스트',
+        'Curse of the Flesh': '질병의 저주',
+        'Deep Freeze': '극한 동결',
+        'Demon Eye': '악마의 눈동자',
+        'Dense Emptiness': '집속 파동',
+        'Dimension Zero': '0차원',
+        'Empty Shadow': '공허한 충격',
+        'Endless Chase': '추적 파동',
+        'Gaze of the Void': '혼돈의 격류',
+        'Great Return to Nothing': '회귀의 대파동',
+        'Lightless World': '빛이 없는 세계',
+        'Looming Emptiness': '공허한 대충격',
+        'Meltdown': '용융',
+        'Meteorain': '메테오 레인',
+        'Naught Grows': '무의 비대',
+        'Naught Hunts': '무의 추적',
+        'Nothingness': '무의 파동',
+        'Passage of Naught': '집적 파동',
+        '(?<! )Return to Nothing': '회귀의 파동',
+        'Shrouded Holy': '섀도우 홀리',
+        'Silent Torrent': '급류',
+        'Voidal Turbulence': '무의 맴돌이',
+        'Weight of Nothing': '고압 파동',
       },
     },
   ],

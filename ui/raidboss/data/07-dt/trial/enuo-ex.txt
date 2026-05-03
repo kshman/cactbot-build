@@ -1,6 +1,10 @@
 ### THE UNMAKING (EXTREME)
 # ZoneId: 1362
 
+# -ii C0D9 C311 C312 C335 C336 C337 C338 C34A C34C C34D C34F C350 C351 C352 C353 C354 C356 C357 C35B C35C C35F C360 C364 C366 C368 C36D C370 C371 C374 C37B C37D C37F C63F C640 C641
+# -it "Enuo" "Looming Shadow" "Aggressive Shadow" "Soothing Shadow" "Protective Shadow" "Beacon in the Dark"
+# -p C36D:500
+
 hideall "--Reset--"
 hideall "--sync--"
 
@@ -45,8 +49,8 @@ hideall "--sync--"
 174.9 "Looming Emptiness" Ability { id: "C33E", source: "Looming Shadow" }
 174.9 "--Add targetable--"
 # Loop towers from early cast sync
-176.9 "--sync--" StartsUsing { id: "C35D", source: "Looming Shadow" } window 2.5,120
-183.9 "Empty Shadow" Ability { id: "C35D", source: "Looming Shadow" }
+176.9 "--sync--" StartsUsing { id: "C35D", source: ["Aggressive Shadow", "Soothing Shadow", "Protective Shadow"] } window 2.5,120
+183.9 "Empty Shadow" Ability { id: "C35D", source: ["Aggressive Shadow", "Soothing Shadow", "Protective Shadow"] }
 184.2 "Voidal Turbulence" #Ability { id: "C376", source: "Enuo" }
 185.4 "--Tower adds targetable--"
 # It is expected that the following three lines miss syncs in timeline testing, as which ability happens depends
@@ -79,6 +83,7 @@ hideall "--sync--"
 533.5 "Naught Grows x2" #Ability { id: "C33B", source: "Enuo" }
 534.2 "Return to Nothing/Great Return to Nothing" Ability { id: ["C33F", "C340"], source: "Void" }
 549.6 "Passage of Naught" #Ability { id: "C343", source: "Enuo" }
+560.9 "Passage of Naught" #Ability { id: "C342", source: "Yawning Void" }
 566.9 "Shrouded Holy" Ability { id: "C37E", source: "Enuo" }
 
 572.1 "--middle--" Ability { id: "C307", source: "Enuo" }
