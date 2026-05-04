@@ -384,62 +384,19 @@ const triggerSet: TriggerSet<Data> = {
           });
         }
 
-        let trimmedOrbs = orbs.slice(firstTankOrb, firstTankOrb + 8);
-
-        const orb1Light = trimmedOrbs.findIndex((orb) => orb.color === 'light');
-        const orb1Dark = trimmedOrbs.findIndex((orb) => orb.color === 'dark');
-
-        trimmedOrbs = trimmedOrbs.filter((_orb, index) =>
-          index !== orb1Light && index !== orb1Dark
-        );
-
-        const orb2Light = trimmedOrbs.findIndex((orb) => orb.color === 'light');
-        const orb2Dark = trimmedOrbs.findIndex((orb) => orb.color === 'dark');
-
-        trimmedOrbs = trimmedOrbs.filter((_orb, index) =>
-          index !== orb2Light && index !== orb2Dark
-        );
-
-        const orb3Light = trimmedOrbs.findIndex((orb) => orb.color === 'light');
-        const orb3Dark = trimmedOrbs.findIndex((orb) => orb.color === 'dark');
-
-        trimmedOrbs = trimmedOrbs.filter((_orb, index) =>
-          index !== orb3Light && index !== orb3Dark
-        );
-
-        const orb4Light = trimmedOrbs.findIndex((orb) => orb.color === 'light');
-        const orb4Dark = trimmedOrbs.findIndex((orb) => orb.color === 'dark');
-
-        switch (strategy) {
-          /* case 1:
-            return output.orbSoaks!({
-              dir1: output[Directions.output8Dir[(firstTankOrb + orb1Light) % 8] ?? 'unknown']!(),
-              dir2: output[Directions.output8Dir[(firstTankOrb + orb1Dark) % 8] ?? 'unknown']!(),
-            });*/
-          case 2:
-            return output.orbSoaks!({
-              dir1:
-                output[Directions.output8Dir[(firstTankOrb + orb2Light + 2) % 8] ?? 'unknown']!(),
-              dir2:
-                output[Directions.output8Dir[(firstTankOrb + orb2Dark + 2) % 8] ?? 'unknown']!(),
-            });
-          case 3:
-            return output.orbSoaks!({
-              dir1:
-                output[Directions.output8Dir[(firstTankOrb + orb3Light + 4) % 8] ?? 'unknown']!(),
-              dir2:
-                output[Directions.output8Dir[(firstTankOrb + orb3Dark + 4) % 8] ?? 'unknown']!(),
-            });
-          case 4:
-            return output.orbSoaks!({
-              dir1:
-                output[Directions.output8Dir[(firstTankOrb + orb4Light + 6) % 8] ?? 'unknown']!(),
-              dir2:
-                output[Directions.output8Dir[(firstTankOrb + orb4Dark + 6) % 8] ?? 'unknown']!(),
-            });
-          default:
-            return output.unknown!();
+        const indexes = { light: 0, dark: 0 };
+        const dirs = { light: -1, dark: -1 };
+        for (let dir = firstTankOrb; dir < firstTankOrb + 8; dir++) {
+          const { color } = orbs[dir]!;
+          indexes[color]++;
+          if (indexes[color] === strategy) {
+            dirs[color] = dir % 8;
+          }
         }
+        return output.orbSoaks!({
+          dir1: output[Directions.output8Dir[dirs.light] ?? 'unknown']!(),
+          dir2: output[Directions.output8Dir[dirs.dark] ?? 'unknown']!(),
+        });
       },
       outputStrings: {
         ...AutumnDir.stringMarker1A2Dir,
@@ -780,7 +737,7 @@ const triggerSet: TriggerSet<Data> = {
         cardinals: Outputs.cardinals,
         under: Outputs.goIntoMiddle,
         go: {
-          en: 'Go ${dir1} / ${dir2}',
+          en: 'Safe: ${dir1} / ${dir2}',
           ko: '안전: ${dir1} / ${dir2}',
         },
       },
@@ -823,7 +780,6 @@ const triggerSet: TriggerSet<Data> = {
   timelineReplace: [
     {
       'locale': 'de',
-      'missingTranslations': true,
       'replaceSync': {
         'Aggressive Shadow': 'strafend(?:e|er|es|en) Hand',
         'Enuo': 'Enuo',
@@ -834,6 +790,16 @@ const triggerSet: TriggerSet<Data> = {
         'Yawning Void': 'groß(?:e|er|es|en) Nichtswirbel',
       },
       'replaceText': {
+        '--Add': '--Add',
+        '--Tower adds': '--Turm Add',
+        '(?<= )targetable--': 'anvisierbar--',
+        '\\(active\\)': '(aktiv)',
+        '\\(big\\)': '(groß)',
+        '\\(lines\\)': '(Linien)',
+        '\\(puddles\\)': '(Flächen)',
+        '\\(puddle baits \\+ pyretic\\)': '(Flächen ködern + Pyretisch)',
+        '\\(puddle explodes\\)': '(Flächen explodieren)',
+        '\\(spread\\)': '(verteilen)',
         'Airy Emptiness': 'Streuende Welle',
         'All for Naught': 'Nichts-Territorium',
         'Almagest': 'Almagest',
@@ -955,15 +921,13 @@ const triggerSet: TriggerSet<Data> = {
       'replaceText': {
         '--Add': '--小怪',
         '--Tower adds': '--塔小怪',
-        '(?<!un)targetable--': '可选中--',
+        '(?<= )targetable--': '可选中--',
         '\\(active\\)': '(激活)',
-        '\\(castbar\\)': '(咏唱栏)',
-        '\\(enrage\\)': '(狂暴)',
+        '\\(big\\)': '(大)',
         '\\(lines\\)': '(直线)',
         '\\(puddles\\)': '(黄圈)',
-        '\\(puddle baits': '(诱导黄圈',
+        '\\(puddle baits \\+ pyretic\\)': '(诱导黄圈 + 热病)',
         '\\(puddle explodes\\)': '(黄圈爆炸)',
-        'pyretic\\)': '热病)',
         '\\(spread\\)': '(分散)',
         'Airy Emptiness': '扩散波动',
         'Almagest': '至高无上',

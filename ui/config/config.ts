@@ -142,6 +142,7 @@ export const kPrefixToCategory = {
   },
   '99-custom': {
     en: 'Custom Developer Triggers',
+    de: 'Benutzerdefinierte Entwickler Trigger',
     ja: '開発者用カスタムトリガー',
     ko: '개발용 사용자 지정 트리거',
   },

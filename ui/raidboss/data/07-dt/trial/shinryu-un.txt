@@ -8,7 +8,7 @@
 #
 # -p C43A:21.3 C443:503 C440:806 C478:859.5
 # -it Shinryu
-# -ii C459 C436 25E9 25EB C46D 25FF 2616 1DD1 2614 C437 25F6 25F4 25F2 25DF 25ED 260E C439 260F 2608 2609 C466 260B 25E6 25E3 2618 C438 1DD3 264D 2612 C447 25E0 25E1 2600 2601
+# -ii C459 C436 C445 C447 C46D C45B C472 BC2D C470 C437 C452 C450 C44E C43B C449 C46A C439 C46B C464 C465 C466 C467 C442 C43F C474 C438 BC2F C47A C46E C486 C43C C43D C45C C45D
 
 hideall "--Reset--"
 hideall "--sync--"
@@ -21,21 +21,21 @@ hideall "--sync--"
 11.3 "--sync--" StartsUsing { id: "C459", source: "Shinryu" } window 20,20
 21.3 "Earthen Fury" Ability { id: "C43A", source: "Shinryu" }
 36.4 "--Tethers--" # Burning Chains (301) effect
-44.5 "Tidal Wave" Ability { id: "C436", source: "Shinryu" }
+44.5 "Tidal Wave" Ability { id: "C455", source: "Shinryu" }
 49.7 "--Tail Marker (healer)--" # 007E headmarker
 61.7 "Summon Icicle" Ability { id: "C44A", source: "Left Wing" }
 62.4 "Icicle Impact" Ability { id: "C44B", source: "Icicle" }
 67.0 "Spikesicle" Ability { id: "C44C", source: "Icicle" }
 67.9 "Tail Slap" Ability { id: "C43E", source: "Tail" }
-79.8 "Hypernova / Levinbolt" Ability { id: ["C445", "C446"], source: "Right Wing" }
+79.8 "Hypernova / Levinbolt" Ability { id: ["C444", "C446"], source: "Right Wing" }
 90.9 "Dragonfist" Ability { id: "C46C", source: "Shinryu" }
-97.8 "Ice Storm" Ability { id: "C44D", source: "Left Wing" } # sometimes 3 seconds earlier?
+94.8 "Ice Storm" Ability { id: "C44D", source: "Left Wing" }
 108.0 "Akh Morn 1" Ability { id: "C44F", source: "Shinryu" } duration 3.2
 110.1 "Akh Rhai" Ability { id: "C451", source: "Shinryu" } duration 5.3
 116.3 "Summon Icicle" Ability { id: "C44A", source: "Left Wing" }
 116.9 "Icicle Impact" Ability { id: "C44B", source: "Icicle" }
 121.4 "Spikesicle" Ability { id: "C44C", source: "Icicle" }
-123.3 "Judgment Bolt / Hellfire" Ability { id: ["C457", "C438"], source: "Shinryu" }
+123.3 "Judgment Bolt / Hellfire" Ability { id: ["C456", "C438"], source: "Shinryu" }
 
 138.4 "--Tail Marker (dps)--"
 149.5 "Levinbolt" Ability { id: "C446", source: "Right Wing" }
@@ -50,12 +50,14 @@ hideall "--sync--"
 208.2 "Diamond Dust" Ability { id: "C458", source: "Shinryu" }
 224.9 "--Reiryu Adds--"
 
+# The timing on the Icicle here appears to be here or 3s later.
+# We leave the earlier visual in place to let players anticipate it.
 233.3 "--Tail Marker (tank)--"
-251.5 "Tail Slap" Ability { id: "C464", source: "Tail" }
-268.5 "Summon Icicle" Ability { id: "C44A", source: "Left Wing" }
-269.1 "Icicle Impact" Ability { id: "C44B", source: "Icicle" }
+251.5 "Tail Slap" Ability { id: "C43E", source: "Tail" }
+268.5 "Summon Icicle" #Ability { id: "C44A", source: "Left Wing" }
+269.1 "Icicle Impact" #Ability { id: "C44B", source: "Icicle" }
 272.4 "Akh Morn 3" Ability { id: "C44F", source: "Shinryu" } duration 3.2
-273.6 "Spikesicle" Ability { id: "C44C", source: "Icicle" }
+273.6 "Spikesicle" #Ability { id: "C44C", source: "Icicle" }
 274.5 "Akh Rhai" Ability { id: "C451", source: "Shinryu" } duration 5.3
 285.3 "Super Cyclone 1" #Ability { id: "C468", source: "Shinryu" }
 287.4 "Super Cyclone 2" #Ability { id: "C468", source: "Shinryu" }
@@ -70,11 +72,11 @@ hideall "--sync--"
 335.9 "Gyre Charge" Ability { id: "C45F", source: "Shinryu" }
 341.8 "--targetable--"
 
-350.9 "Hypernova" Ability { id: "C445", source: "Right Wing" }
+350.9 "Hypernova" Ability { id: "C444", source: "Right Wing" }
 363.0 "Akh Morn 4" Ability { id: "C44F", source: "Shinryu" } duration 4.3
 365.1 "Akh Rhai" Ability { id: "C451", source: "Shinryu" } duration 5.3
-378.3 "Hypernova / Levinbolt" Ability { id: ["C445", "C446"], source: "Right Wing" }
-384.3 "Tidal Wave" Ability { id: "C436", source: "Shinryu" }
+378.3 "Hypernova / Levinbolt" Ability { id: ["C444", "C446"], source: "Right Wing" }
+384.3 "Tidal Wave" Ability { id: "C455", source: "Shinryu" }
 387.4 "--untargetable--"
 394.8 "Dark Matter" #Ability { id: "C443", source: "Shinryu" }
 
@@ -107,7 +109,7 @@ hideall "--sync--"
 859.5 "Tera Slash" Ability { id: "C478", source: "Shinryu" }
 868.2 "Atomic Ray" Ability { id: "C479", source: "Shinryu" }
 885.9 "Ice Storm" Ability { id: "C484", source: "Left Wing" }
-889.9 "Levinbolt / Hypernova" Ability { id: ["C447", "C481"], source: "Right Wing" }
+889.9 "Levinbolt / Hypernova" Ability { id: ["C482", "C481"], source: "Right Wing" }
 897.9 "Wormwail / Benighting Breath" Ability { id: ["C475", "C476"], source: "Shinryu" }
 907.1 "Tera Slash" Ability { id: "C478", source: "Shinryu" }
 910.8 "--Reiryu Adds--"
@@ -116,14 +118,14 @@ hideall "--sync--"
 957.4 "Tera Slash" Ability { id: "C478", source: "Shinryu" } window 20,20
 966.1 "Atomic Ray" Ability { id: "C479", source: "Shinryu" }
 983.8 "Ice Storm" Ability { id: "C484", source: "Left Wing" }
-987.8 "Levinbolt / Hypernova" Ability { id: ["C447", "C481"], source: "Right Wing" }
+987.8 "Levinbolt / Hypernova" Ability { id: ["C482", "C481"], source: "Right Wing" }
 995.9 "Wormwail / Benighting Breath" Ability { id: ["C475", "C476"], source: "Shinryu" }
 1005.1 "Tera Slash" Ability { id: "C478", source: "Shinryu" }
 1009.1 "--Reiryu Adds--"
 
 ### PHASE 4: Race to the finish!
 ###
-1046.0 "--sync--" StartsUsing { id: "C455", source: "Shinryu" } window 300,300
+1046.0 "--sync--" StartsUsing { id: "C47B", source: "Shinryu" } window 300,300
 1085.0 "First Wing" # 35 second cast, starts 4 seconds later, C47D/C47E
 1090.0 "Second Wing" # 35 second cast, starts 9 seconds later, C47E/C47D
-1116.0 "Tidal Wave" Ability { id: "C455", source: "Shinryu" } # 70 second cast
+1116.0 "Tidal Wave" Ability { id: "C47B", source: "Shinryu" } # 70 second cast

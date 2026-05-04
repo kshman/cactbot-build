@@ -976,55 +976,86 @@ const zoneReplace: ZoneReplace[] = [
       'shinryu-ex.txt': 'shinryu-un.txt',
     },
     id: {
-      // '1FA8': 'C45F', // Divebomb
-      // '1FF4': 'C45F', // Divebomb
-      '25D9': 'C435', // --sync--
+      '1DD1': 'BC2D', // Tail Spit, not seen in current logs. Possibly normal mode?
+      '1DD3': 'BC2F', // Dragonflight, not seen in current logs. Possibly normal mode?
+      '1FA8': 'BFEB', // Gyre Charge, not seen in current logs. Possibly normal mode?
+      '1FF4': 'BFEC', // Gyre Charge, not seen in current logs. Possibly normal mode?
+      '25D7': 'C433', // Tail Spit
+      '25D9': 'C435', // Enhanced Aetheric Burst
       '25DA': 'C436', // Tidal Wave
       '25DB': 'C437', // Hellfire
       '25DC': 'C438', // Judgment Bolt
       '25DD': 'C439', // Diamond Dust
       '25DE': 'C43A', // Earthen Fury
+      '25DF': 'C43B', // Aerial Blast
+      '25E0': 'C43C', // Enhanced Dexterity
+      '25E1': 'C43D', // All Fours
       '25E2': 'C43E', // Tail Slap
+      '25E3': 'C43F', // Enhanced Sneak Attack
       '25E4': 'C440', // Protostar
       '25E5': 'C441', // Meteor Impact
+      '25E6': 'C442', // Explosive Hatch, not seen in current logs. Possibly normal mode or mechanical failure?
       '25E7': 'C443', // Dark Matter
-      '25E8': 'C445', // Hypernova
+      '25E8': 'C444', // Hypernova
+      '25E9': 'C445', // Hypernova
       '25EA': 'C446', // Levinbolt
+      '25EB': 'C447', // Levinbolt
       '25EC': 'C448', // Earth Breath
+      '25ED': 'C449', // Earth Breath
       '25EE': 'C44A', // Summon Icicle
       '25EF': 'C44B', // Icicle Impact
       '25F0': 'C44C', // Spikesicle
       '25F1': 'C44D', // Ice Storm
+      '25F2': 'C44E', // Ice Storm
       '25F3': 'C44F', // Akh Morn
+      '25F4': 'C450', // Akh Morn
       '25F5': 'C451', // Akh Rhai
+      '25F6': 'C452', // Akh Rai
       '25F7': 'C453', // --sync-- / Gyre Charge (볼일이 없어서 정확하지 않음)
-      '25F9': 'C436', // Tidal Wave
-      '25FA': 'C457', // Judgment Bolt
+      '25F9': 'C455', // Tidal Wave
+      '25FA': 'C456', // Hellfire
+      '25FB': 'C457', // Judgment Bolt
       '25FC': 'C458', // Diamond Dust
       '25FD': 'C459', // --sync-- / Earthen Fury
       '25FE': 'C45A', // Aerial Blast
+      '25FF': 'C45B', // Protostar
+      '2600': 'C45C', // Gulleye V
+      '2601': 'C45D', // Cloudfishing
+      '2602': 'C45E', // Burning Chains
       '2603': 'C45F', // Gyre Charge / Divebomb (볼일이 없었음 정확하지 않음)
+      '2604': 'C460', // Enhanced Stealth IV
       '2605': 'C461', // --sync-- (정확하지는 않으나 맞을거임)
+      '2608': 'C464', // Spiked Tail
+      '2609': 'C465', // Blazing Trail
       '260A': 'C466', // Death Sentence
+      '260B': 'C467', // Fireball
       '260C': 'C468', // Super Cyclone
-      '260D': 'C464', // Spiked Tail
+      '260D': 'C469', // Spiked Tail
+      '260E': 'C46A', // Hasty Reprisal
+      '260F': 'C46B', // Meteor Impact
       '2610': 'C46C', // Dragonfist
       '2611': 'C46D', // Dragonfist
+      '2612': 'C46E', // Dragon Spirit
       '2613': 'C46F', // Touchdown
+      '2614': 'C470', // Touchdown
       '2615': 'C471', // Tail Spit
+      '2616': 'C472', // Tail Spit
       '2617': 'C473', // Shatter
+      '2618': 'C474', // Aetherial Ray
       '2648': 'C475', // Wormwail
       '2649': 'C476', // Benighting Breath
-      '264A': 'C474', // Aetherial Ray
+      '264A': 'C477', // Benighting Breath
       '264B': 'C478', // Tera Slash
       '264C': 'C479', // Atomic Ray
-      '264E': 'C455', // Tidal Wave
-      '2718': 'C47D', // Judgment Bolt (정확하지 않음)
-      '2719': 'C47E', // Judgment Bolt (정확하지 않음)
+      '264D': 'C47A', // Atomic Ray
+      '264E': 'C47B', // Tidal Wave Enrage
+      '2718': 'C47D', // Judgment Bolt Enrage
+      '2719': 'C47E', // Hellfire Enrage
       '271F': 'C481', // Hypernova
-      '2720': 'C447', // Levinbolt
+      '2720': 'C482', // Levinbolt
       '2722': 'C484', // Ice Storm
-      '2725': 'C447', // Levinbolt
+      '2723': 'C485', // Levinbolt
+      '2725': 'C486', // Levinbolt, not seen in modern logs. Possibly normal mode?
     },
   },
 ];
