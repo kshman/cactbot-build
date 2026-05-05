@@ -187,18 +187,22 @@ const triggerSet: TriggerSet<Data> = {
         middle: Outputs.middle,
         healerStacks: {
           en: '4:4 stacks',
+          ja: '4:4 頭割り',
           ko: '4:4 뭉쳐요',
         },
         stack: {
           en: 'Stacks',
+          ja: '頭割り',
           ko: '모두 뭉쳐요',
         },
         move: {
           en: '${dir} + ${mech}',
+          ja: '${dir} + ${mech}',
           ko: '${dir} + ${mech}',
         },
         under: {
           en: 'Under Boss + ${dir} + ${mech}',
+          ja: 'ボスの下 + ${dir} + ${mech}',
           ko: '보스 밑 ${dir} + ${mech}',
         },
       },
@@ -223,6 +227,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Bait Puddles => Stop Moving => Spread',
+          ja: 'ボスの下 + ゆか捨て',
           ko: '보스 밑으로 + 장판 버려요',
         },
       },
@@ -239,7 +244,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Stop Moving => Spread',
-          ko: '⛔️멈추고! 🔜 흩어져요',
+          ko: '⛔️멈췄다 🔜 맡은자리로',
         },
       },
     }, */
@@ -254,6 +259,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Stop moving',
+          ja: '⛔️止まれ！',
           ko: '⛔️멈춰요!',
         },
       },
@@ -267,7 +273,8 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Spread out',
-          ko: '밖으로 🔜 흩어져요',
+          ja: '散開！',
+          ko: '맡은자리로!',
         },
       },
     },
@@ -338,6 +345,7 @@ const triggerSet: TriggerSet<Data> = {
         CCW: Outputs.counterclockwise,
         text: {
           en: '${dir1} ${rotation} => ${dir2}',
+          ja: '${dir1} ${rotation} 🔜 ${dir2}',
           ko: '${dir1} ${rotation} 🔜 ${dir2}',
         },
       },
@@ -403,10 +411,12 @@ const triggerSet: TriggerSet<Data> = {
         unknown: Outputs.unknown,
         tankOrbsDir: {
           en: 'Tank orbs ${dir}',
+          ja: 'タンク玉 ${dir}',
           ko: '탱크 구슬: ${dir}',
         },
         orbSoaks: {
           en: '${dir1} => ${dir2}',
+          ja: '${dir1} 🔜 ${dir2}',
           ko: '${dir1} 🔜 ${dir2}',
         },
       },
@@ -439,6 +449,7 @@ const triggerSet: TriggerSet<Data> = {
         ...AutumnDir.stringMarker1A2Dir,
         text: {
           en: '${dir3} Close',
+          ja: '${dir3} 近い',
           ko: '${dir3} 가까이',
         },
       },
@@ -465,10 +476,12 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         tankFlareOnYou: {
           en: 'Tank Flare on YOU => Keep Moving',
+          ja: '自分にタンクフレア 🔜 動き続けて',
           ko: '내게 탱크 플레어 🔜 계속 움직여요',
         },
         awayFromFlares: {
           en: 'Away from tank flares => Keep Moving',
+          ja: 'フレアから離れて 🔜 動き続けて',
           ko: '플레어 피하면서 🔜 계속 움직여요',
         },
       },
@@ -605,18 +618,22 @@ const triggerSet: TriggerSet<Data> = {
         unknown: Outputs.unknown,
         cone: {
           en: 'Cone on YOU',
+          ja: '扇誘導',
           ko: '꼬깔 유도해요',
         },
         tower: {
           en: 'Soak Tower',
+          ja: '塔踏み',
           ko: '타워 밟아요',
         },
         conePos: {
           en: 'Aim Cone ${dir}',
+          ja: '扇誘導: ${dir}',
           ko: '꼬깔 유도: ${dir}',
         },
         towerPos: {
           en: 'Soak Tower ${dir}',
+          ja: '塔踏み: ${dir}',
           ko: '타워: ${dir}',
         },
       },
@@ -630,6 +647,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         cleanse: {
           en: 'Cleanse Debuff',
+          ja: 'エスナ！',
           ko: '에스나!',
         },
       },
@@ -658,6 +676,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         lookMiddle: {
           en: 'Look Middle',
+          ja: '中央を見て',
           ko: '한가운데 바라봐요',
         },
       },
@@ -670,6 +689,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Attack the Beacon',
+          ja: '鏡を攻撃！',
           ko: '거울 매우처요!',
         },
       },
@@ -738,6 +758,7 @@ const triggerSet: TriggerSet<Data> = {
         under: Outputs.goIntoMiddle,
         go: {
           en: 'Safe: ${dir1} / ${dir2}',
+          ja: '安全: ${dir1} / ${dir2}',
           ko: '안전: ${dir1} / ${dir2}',
         },
       },
@@ -756,6 +777,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Stacks x3',
+          ja: '頭割り x3',
           ko: '뭉쳐요 x3',
         },
       },
@@ -772,6 +794,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         chasingPuddle: {
           en: 'Chasing puddle on you',
+          ja: '自分に追尾AOE',
           ko: '내게 장판이 따라와요!',
         },
       },

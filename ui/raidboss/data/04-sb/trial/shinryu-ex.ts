@@ -61,7 +61,7 @@ const triggerSet: TriggerSet<Data> = {
         akhRhaiSpreadAndMove: {
           en: 'Akh Rhai: spread and move',
           ja: 'アク・ラーイ: 散開 動け',
-          ko: '아크 라이: 흩어지면서 움직여요',
+          ko: '아크라이: 터지면 피해요',
         },
         akhMornOnYou: {
           en: 'Akh Morn on YOU',
@@ -84,7 +84,7 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: 'Ice: Stack + don\'t move',
           ja: '氷: スタック 動かない',
-          ko: '얼음: 뭉치고 + 멈춰요!',
+          ko: '한가운데로 🔜 멈춰요!',
         },
       },
     },
@@ -111,7 +111,7 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: 'Get in water',
           ja: '水に入る',
-          ko: '물로 들어가요',
+          ko: '웅덩이 안으로!',
         },
       },
     },
@@ -132,12 +132,12 @@ const triggerSet: TriggerSet<Data> = {
         stopToGetFrozen: {
           en: 'Stop + Get frozen',
           ja: '止まれ、凍結',
-          ko: '멈춰서 그대로 얼어요',
+          ko: '멈추고 + 그대로 얼어요',
         },
         stackInWater: {
           en: 'Stack in water',
           ja: '水に集合',
-          ko: '물에서 뭉쳐요',
+          ko: '웅덩이 안에서 뭉쳐요',
         },
       },
     },
@@ -151,7 +151,7 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: 'Out of water',
           ja: '水から離れ',
-          ko: '물 밖으로',
+          ko: '웅덩이 밖으로',
         },
       },
     },
@@ -180,7 +180,7 @@ const triggerSet: TriggerSet<Data> = {
         spreadOutNoWater: {
           en: 'Spread out, no water',
           ja: '散開、水に入らない',
-          ko: '흩어져요, 물에는 들어가지 말고',
+          ko: '흩어져요, 웅덩이 밖에서',
         },
       },
     },
@@ -195,7 +195,7 @@ const triggerSet: TriggerSet<Data> = {
       },
       condition: (data) => data.phase === 3,
       delaySeconds: 9.5,
-      response: Responses.moveAway('alarm'),
+      response: Responses.moveAway('alert'),
     },
     {
       id: 'ShinryuEx Icicle Left',
@@ -205,12 +205,12 @@ const triggerSet: TriggerSet<Data> = {
         return Math.round(parseFloat(matches.x)) === -30 &&
           Math.round(parseFloat(matches.y)) === -15;
       },
-      alarmText: (_data, _matches, output) => output.text!(),
+      alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
           en: 'Icicle, lean west',
           ja: 'アイシクル: 西へ',
-          ko: '아이시클: 서쪽으로',
+          ko: '뒷쪽 고드름: 서쪽으로',
         },
       },
     },
@@ -222,12 +222,12 @@ const triggerSet: TriggerSet<Data> = {
         return Math.round(parseFloat(matches.x)) === -30 &&
           Math.round(parseFloat(matches.y)) === -25;
       },
-      alarmText: (_data, _matches, output) => output.text!(),
+      alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
           en: 'Icicle, lean east',
           ja: 'アイシクル: 東へ',
-          ko: '아이시클: 동쪽으로',
+          ko: '뒤쪽 고드름: 동쪽으로',
         },
       },
     },
@@ -249,7 +249,7 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: 'no more heals needed',
           ja: 'ヒールはもう要らない',
-          ko: '힐 그만 해도 되요',
+          ko: '힐은 이제 그만',
         },
       },
     },
@@ -281,7 +281,7 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: 'Heart: Switch targets',
           ja: '心核: タゲチェンジ',
-          ko: '심장 나왔네, 잡아요',
+          ko: '심장 나왔네, 매우 쳐요!',
         },
       },
     },
@@ -290,7 +290,7 @@ const triggerSet: TriggerSet<Data> = {
       id: 'ShinryuEx Gyre Charge',
       type: 'StartsUsing',
       netRegex: { id: ['1FA8', '1FF4', '2603'], source: 'Shinryu', capture: false },
-      alarmText: (_data, _matches, output) => output.text!(),
+      alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
           en: 'Avoid divebomb',
@@ -355,7 +355,7 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: 'Kill left first',
           ja: 'レフトウィングに攻撃',
-          ko: '왼쪽 날개 먼저 잡아요',
+          ko: '왼쪽 날개부터 매우 쳐요!',
         },
       },
     },
@@ -370,7 +370,7 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: 'Kill right first',
           ja: 'ライトウィングに攻撃',
-          ko: '오른쪽 날개 먼저 잡아요',
+          ko: '오른쪽 날개부터 매우 쳐요!',
         },
       },
     },
@@ -404,7 +404,7 @@ const triggerSet: TriggerSet<Data> = {
       type: 'HeadMarker',
       netRegex: { id: '007E' },
       condition: Conditions.targetIsYou(),
-      alarmText: (_data, _matches, output) => output.text!(),
+      alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
           en: 'Tail marker on YOU',
@@ -422,11 +422,9 @@ const triggerSet: TriggerSet<Data> = {
         data.shakerTargets.push(matches.target);
         return data.shakerTargets.length === 2;
       },
-      alarmText: (data, _matches, output) => {
+      alertText: (data, _matches, output) => {
         if (data.shakerTargets?.includes(data.me))
           return output.earthshakerOnYou!();
-      },
-      alertText: (data, _matches, output) => {
         if (!data.shakerTargets || !data.shakerTargets.includes(data.me))
           return output.avoidEarthshakers!();
       },
@@ -716,7 +714,6 @@ const triggerSet: TriggerSet<Data> = {
     },
     {
       'locale': 'ko',
-      'missingTranslations': true,
       'replaceSync': {
         'Hakkinryu': '백금룡',
         'Left Wing': '왼쪽 날개',
